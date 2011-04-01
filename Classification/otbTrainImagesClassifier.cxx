@@ -84,7 +84,6 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
 {
   // Input Image
   //typedef double                                          ValueType;
-  //typedef unsigned short                                  PixelType; // def by manuel
   typedef float                                           PixelType;
   typedef otb::VectorImage<PixelType,2>                   VectorImageType;
   typedef otb::Image<PixelType,2>                         ImageType;
@@ -109,9 +108,9 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
   // Statistic XML file Reader 
   typedef otb::StatisticsXMLFileReader<MeasurementType>     StatisticsReader;
 
+  // Enhance List Sample
   typedef otb::Statistics::ListSampleToBalancedListSampleFilter<
       ListSampleType, LabelListSampleType>                  BalancingListSampleFilterType;
-
   typedef otb::Statistics::ShiftScaleSampleListFilter<
       ListSampleType, ListSampleType>                       ShiftScaleFilterType;
 
@@ -124,9 +123,11 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
       MeasurementVectorFunctorType>                         SVMEstimatorType;
   typedef otb::SVMClassifier<ListSampleType, LabelType::ValueType>     ClassifierType;
 
+  // Estimate performance on validation sample
   typedef otb::ConfusionMatrixCalculator<LabelListSampleType,
       LabelListSampleType>                                  ConfusionMatrixCalculatorType;
   typedef ClassifierType::OutputType ClassifierOutputType;
+
 
   //Create training and validation for list samples and label list samples
   ConcatenateLabelListSampleFilterType::Pointer concatenateTrainingLabels =
@@ -144,6 +145,8 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
   const long int maxValidationSize = 100;
   const double validationTrainingProportion = 0.5;
 
+  //--------------------------
+  // Load measurements from images
   unsigned int nbBands = 0;
   //Iterate over all input images
   for(int imgIndex = 0; imgIndex<parseResult->GetNumberOfParameters("InputImages");++imgIndex)
@@ -196,6 +199,7 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
   concatenateValidationSamples->Update();
   concatenateValidationLabels->Update();
 
+  //--------------------------
   // Normalize the samples
   // Read the mean and variance form the XML file (estimate with the otbEstimateImagesStatistics application)
   MeasurementType  meanMeasurentVector;
@@ -234,6 +238,8 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
   ListSampleType::Pointer listSample;
   LabelListSampleType::Pointer labelListSample;
 
+  //--------------------------
+  // Balancing training sample (if needed)
   if(parseResult->IsOptionPresent("Balancing"))
     {
     // Balance the list sample.
@@ -254,7 +260,8 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
     std::cout<<"Number of training samples: "<<concatenateTrainingSamples->GetOutputSampleList()->Size()<<std::endl;
     }
 
-  // split the data set into training/validation set
+  //--------------------------
+  // Split the data set into training/validation set
   ListSampleType::Pointer trainingListSample = listSample;
   ListSampleType::Pointer validationListSample = validationShiftScaleFilter->GetOutputSampleList();
   LabelListSampleType::Pointer trainingLabeledListSample = labelListSample;
@@ -265,6 +272,7 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
   std::cout<<"Size of labeled training set: "<<trainingLabeledListSample->Size()<<std::endl;
   std::cout<<"Size of labeled validation set: "<<validationLabeledListSample->Size()<<std::endl;
 
+  //--------------------------
   // Estimate SVM model
   SVMEstimatorType::Pointer svmestimator = SVMEstimatorType::New();
   svmestimator->SetInputSampleList(trainingListSample);
@@ -346,8 +354,6 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
   std::cout << "Kappa index: " << confMatCalc->GetKappaIndex() << std::endl;
 
   // TODO: implement hyperplan distance classifier and performance validation (cf. object detection) ?
-
-
 
   return EXIT_SUCCESS;
 }
