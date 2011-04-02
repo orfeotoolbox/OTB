@@ -68,9 +68,9 @@ int otbAngularProjectionBinaryImageFilterTest ( int argc, char * argv[] )
     return EXIT_FAILURE;
   }
 
-  const char * inputImageName1 = parseResult->GetParameterString("--InputImages",0);
-  const char * inputImageName2 = parseResult->GetParameterString("--InputImages",1);
-  const char * outputImageName = parseResult->GetParameterString("--OutputImages");
+  const char * inputImageName1 = parseResult->GetParameterString("--InputImages",0).c_str();
+  const char * inputImageName2 = parseResult->GetParameterString("--InputImages",1).c_str();
+  const char * outputImageName = parseResult->GetParameterString("--OutputImages").c_str();
 
   // Main type definition
   const unsigned int Dimension = 2;
@@ -104,14 +104,14 @@ int otbAngularProjectionBinaryImageFilterTest ( int argc, char * argv[] )
 
   filter->Update();
 
-  typedef otb::ImageFileWriter< ImageType > ImageWriterType;
+  typedef otb::ImageFileWriter< ImageType > WriterType;
   std::vector< WriterType::Pointer > writers;
   writers.resize( filter->GetNumberOfOutputs() );
 
   for ( unsigned int i = 0; i < filter->GetNumberOfOutputs(); i++ )
   {
     itk::OStringStream title;
-    title << outputFileName << "_" << i << ".hdr";
+    title << outputImageName << "_" << i << ".hdr";
 
     writers[i] = WriterType::New();
     writers[i]->SetFileName( title.str().c_str() );

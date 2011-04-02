@@ -20,7 +20,9 @@
 
 #include "otbMacro.h"
 #include "itkImageToImageFilter.h"
-#include "otbWaveletTransformImageFilter.h"
+#include "otbWaveletOperator.h"
+#include "otbWaveletFilterBank.h"
+#include "otbWaveletTransform.h"
 #include "otbSparseWvltToAngleMapperListFilter.h"
 #include "otbImageList.h"
 #include "itkListSample.h"
@@ -69,14 +71,14 @@ public:
   typedef TInputImage  InputImageType;
   typedef TOutputImage OutputImageType;
   typedef TPrecision PrecisionType;
-  typedef TMotherWaveletOperator MotherWaveletOperatorID;
+  static const Wavelet::Wavelet MotherWaveletOperatorID = TMotherWaveletOperator;
 
   /** Filter types and related */
   typedef Image< PrecisionType, InputImageDimension > InternalImageType;
 
-  typedef WaveletOperator< MotherWaveletOperatorID, Wavelet::FORWARD, Precision, InputImageDimension > WaveletOperator;
-  typedef WaveletFilterBank< InputImageType, InternalImageType, WaveletOperator, Wavelet::FORWARD > FilterBankType;
-  typedef WaveletTransform< InputImageType, InternalImageType, FilterBankType, Wavelet::FORWARD > WvltFilterType;
+  typedef WaveletOperator< MotherWaveletOperatorID, Wavelet::FORWARD, PrecisionType, InputImageDimension > WaveletOperatorType;
+  typedef WaveletFilterBank< InternalImageType, InternalImageType, WaveletOperatorType, Wavelet::FORWARD > FilterBankType;
+  typedef WaveletTransform< InternalImageType, InternalImageType, FilterBankType, Wavelet::FORWARD > WvltFilterType;
   typedef typename WvltFilterType::Pointer WvltFilterPointerType;
   typedef typename WvltFilterType::OutputImageListType InternalImageListType;
 
@@ -88,7 +90,7 @@ public:
   typedef typename itk::Statistics::Histogram< PrecisionType > HistogramType;
   typedef typename HistogramType::Pointer HistogramPointerType;
 
-  typedef AngularProjectionBinaryImageFilter< InternalImageType, OutputImageType, PrecisionType > TransformFilterType;
+  typedef AngularProjectionBinaryImageFilter< InputImageType, OutputImageType, PrecisionType > TransformFilterType;
   typedef typename TransformFilterType::Pointer TransformFilterPointerType;
 
   /** Sets/Gets */
@@ -141,7 +143,7 @@ protected:
   virtual ~SparseUnmixingImageFilter() { }
 
   virtual void GenerateData();
-  virtual void GenerateNumberOfComponentsRequired () const;
+  virtual void GenerateNumberOfComponentsRequired ();
 private:
   SparseUnmixingImageFilter(const Self &); // not implemented
   void operator=(const Self &);

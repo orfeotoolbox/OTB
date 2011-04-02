@@ -59,7 +59,7 @@ AngularProjectionBinaryImageFilter< TInputImage, TOutputImage, TPrecision >
     return 0;
   }
 
-  return static_cast<const InputImageType * > (this->GetInput(0) );
+  return static_cast<const TInputImage * > (this->itk::ProcessObject::GetInput(0) );
 }
 
 template < class TInputImage, class TOutputImage, class TPrecision >
@@ -72,7 +72,7 @@ AngularProjectionBinaryImageFilter< TInputImage, TOutputImage, TPrecision >
     return 0;
   }
 
-  return static_cast<const InputImageType * > (this->GetInput(1) );
+  return static_cast<const TInputImage * > (this->itk::ProcessObject::GetInput(1));
 }
 
 template < class TInputImage, class TOutputImage, class TPrecision >
@@ -106,7 +106,7 @@ template < class TInputImage, class TOutputImage, class TPrecision >
 void
 AngularProjectionBinaryImageFilter< TInputImage, TOutputImage, TPrecision >
 ::ThreadedGenerateData 
-  ( const OutputImageRegionType & outputRegionForThread, int threadID )
+  ( const OutputImageRegionType & outputRegionForThread, int threadId )
 {
   itk::ProgressReporter reporter(this, threadId,
                                  outputRegionForThread.GetNumberOfPixels() );
@@ -135,8 +135,8 @@ AngularProjectionBinaryImageFilter< TInputImage, TOutputImage, TPrecision >
   {
     for ( unsigned int i = 0; i < outIter.size(); i++ )
     {
-      outIter[i] = vcl_cos( m_AngleSet[i] ) * *iter1
-                  + vcl_sin( m_AngleSet[i] ) * *iter2;
+      outIter[i].Set( vcl_cos( m_AngleSet[i] ) * iter1.Get()
+                      + vcl_sin( m_AngleSet[i] ) * iter2.Get() );
       ++outIter[i];
     }
 
@@ -147,5 +147,8 @@ AngularProjectionBinaryImageFilter< TInputImage, TOutputImage, TPrecision >
   }
 }
 
+} // end of namespace otb 
+
 #endif
+
 

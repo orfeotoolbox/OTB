@@ -20,7 +20,7 @@
 #include "otbSparseUnmixingImageFilter.h"
 
 #include "otbMath.h"
-#include "itkProcessAccumulator.h"
+#include "itkProcessObject.h"
 
 namespace otb {
 
@@ -34,10 +34,10 @@ SparseUnmixingImageFilter< TInputImage, TOutputImage, TPrecision, TMotherWavelet
   m_NumberOfComponentsRequired = 0;
 
   m_WvltFilter1 = WvltFilterType::New();
-  m_WvltFilter1->SetNumberOfDecomposition(2);
+  m_WvltFilter1->SetNumberOfDecompositions(2);
 
   m_WvltFilter2 = WvltFilterType::New();
-  m_WvltFilter2->SetNumberOfDecomposition( m_WvltFilter1->GetNumberOfDecomposition() );
+  m_WvltFilter2->SetNumberOfDecompositions( m_WvltFilter1->GetNumberOfDecompositions() );
 
   m_ListFilter = ListFilterType::New();
   m_ListFilter->GetFunctor().SetLowerThreshold(10.);
@@ -129,12 +129,10 @@ SparseUnmixingImageFilter< TInputImage, TOutputImage, TPrecision, TMotherWavelet
   progress->RegisterInternalFilter(m_ListFilter,0.25f);
   m_ListFilter->Update();
 
-  typename InternalSampleListType::iterator angleIter = m_ListFilter->GetOutputSampleList()->Begin();
+  typename InternalSampleListType::Iterator angleIter = m_ListFilter->GetOutputSampleList()->Begin();
   while ( angleIter != m_ListFilter->GetOutputSampleList()->End() )
   {
-    typename InternalSampleListType::OutputMeasurementVectorType angleMeasure 
-      = angleIter.GetMeasurementVector();
-    m_Histogram->IncreaseFrequency( angleMeasure[0], 1 );
+    m_Histogram->IncreaseFrequency( angleIter.GetMeasurementVector()[0], 1 );
     ++angleIter;
   }
 
@@ -143,8 +141,8 @@ SparseUnmixingImageFilter< TInputImage, TOutputImage, TPrecision, TMotherWavelet
 
   m_Transformer->SetInput1( this->GetInput1() );
   m_Transformer->SetInput2( this->GetInput2() );
-  m_Transformer->SetAngularProjectors( m_AngleValue );
-    progress->RegisterInternalFilter(m_Transformer,0.25f);
+  m_Transformer->SetAngleSet( m_AngleValue );
+  progress->RegisterInternalFilter(m_Transformer,0.25f);
   
   this->SetNumberOfOutputs( m_Transformer->GetNumberOfOutputs() );
   for ( unsigned int i = 0; i < this->GetNumberOfOutputs(); i++ )
@@ -163,16 +161,25 @@ SparseUnmixingImageFilter< TInputImage, TOutputImage, TPrecision, TMotherWavelet
 
 template < class TInputImage, class TOutputImage, 
             class TPrecision, Wavelet::Wavelet TMotherWaveletOperator >
-unsigned int
+void
 SparseUnmixingImageFilter< TInputImage, TOutputImage, TPrecision, TMotherWaveletOperator >
-::GenerateNumberOfComponentsRequired () const
+::GenerateNumberOfComponentsRequired () 
 {
   std::vector<PrecisionType> angles;
 
-  typename HistogramType::Itertor prevHist = m_Histogram->End();
-  --prevHist;
-  typename HistogramType::Itertor curHist = m_Histogram->Begin();
-  typename HistogramType::Itertor nextHist = m_Histogram->Begin();
+  typename HistogramType::Iterator prevHist = m_Histogram->Begin();
+  typename HistogramType::Iterator curHist = m_Histogram->Begin();
+  /** Since operator-- does not exists in itk::Histgram, we have 
+   * to reach the end step by step
+   */
+  ++curHist;
+  while ( curHist != m_Histogram->End() )
+  {
+    ++curHist;
+    ++prevHist;
+  }
+  curHist = m_Histogram->Begin();
+  typename HistogramType::Iterator nextHist = m_Histogram->Begin();
   ++nextHist;
 
   if ( prevHist.GetFrequency() < curHist.GetFrequency()

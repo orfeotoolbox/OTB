@@ -22,6 +22,7 @@
 
 #include "itkImageToImageFilter.h"
 
+
 namespace otb {
 /** \class AngularProjectionBinaryImageFilter
  * \brief Performs \f$ y_i = \cos \theta_i x_1 + \sin \theta_i x_2\f$
@@ -36,7 +37,7 @@ class ITK_EXPORT AngularProjectionBinaryImageFilter
 {
 public:
   /** Standard typedefs */
-  typedef WaveletFilterBank                                  Self;
+  typedef AngularProjectionBinaryImageFilter                 Self;
   typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
   typedef itk::SmartPointer<Self>                            Pointer;
   typedef itk::SmartPointer<const Self>                      ConstPointer;
@@ -45,7 +46,7 @@ public:
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(WaveletFilterBank, ImageToImageFilter);
+  itkTypeMacro(AngularProjectionBinaryImageFilter, ImageToImageFilter);
 
   /** Template parameters typedefs */
   typedef TInputImage                         InputImageType;
@@ -69,7 +70,10 @@ public:
   itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
   /** Set/Get Angle set */
-  itkGetMacro(AngleSet,std::vector<PrecisionType>);
+  std::vector<PrecisionType> GetAngleSet() const
+  {
+    return m_AngleSet;
+  }
   void SetAngleSet ( std::vector<PrecisionType> & angle );
 
   void SetInput1 ( const InputImageType * );
