@@ -11,20 +11,24 @@
 //*******************************************************************
 //  $Id: ossimTileMapTileSource.cpp 10752 2007-04-23 16:50:08Z dburken $
 
-#include <ossim/imaging/ossimTileMapTileSource.h>
+#include "ossimTileMapTileSource.h"
+
+#include "ossimTileMapModel.h"
+
 #include <ossim/base/ossimDirectory.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimNotifyContext.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/imaging/ossimImageGeometryRegistry.h>
-#include <ossim/projection/ossimTileMapModel.h>
 
-RTTI_DEF1_INST(ossimTileMapTileSource,
-               "ossimTileMapTileSource",
-               ossimGeneralRasterTileSource)
 
 static ossimTrace traceDebug("ossimTileMapTileSource:debug");
 
+namespace ossimplugins
+{
+RTTI_DEF1_INST(ossimTileMapTileSource,
+               "ossimTileMapTileSource",
+               ossimGeneralRasterTileSource)
 
 //*******************************************************************
 // Public Constructor:
@@ -141,5 +145,4 @@ ossimString  ossimTileMapTileSource::className() const
    return ossimString("ossimTileMapTileSource");
 }
 
-
-
+} // End: namespace ossimplugins

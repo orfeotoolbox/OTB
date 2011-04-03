@@ -26,7 +26,7 @@
 #include "otbInverseSensorModel.h"
 #include "otbExtractROI.h"
 #include "otbImageFileWriter.h"
-#include "ossim/projection/ossimTileMapModel.h"
+#include "ossimTileMapModel.h"
 
 int otbTileMapImageIOTest(int argc, char* argv[])
 {
@@ -64,7 +64,7 @@ int otbTileMapImageIOTest(int argc, char* argv[])
   ModelType::Pointer model = ModelType::New();
 
   model->SetImageGeometry(readerTile->GetOutput()->GetImageKeywordlist());
-  dynamic_cast<ossimTileMapModel*>(model->GetOssimModel())->setDepth(depth);
+  dynamic_cast<ossimplugins::ossimTileMapModel*>(model->GetOssimModel())->setDepth(depth);
   if (!model)
     {
     std::cerr << "Unable to create a model" << std::endl;
