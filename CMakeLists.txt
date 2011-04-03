@@ -56,6 +56,7 @@ OPTION(BUILD_TESTING  "Build testing." OFF)
 OPTION(BUILD_EXAMPLES "Build the Examples directory." OFF)
 
 INCLUDE(${CMAKE_ROOT}/Modules/Dart.cmake)
+CONFIGURE_FILE(CMake/CTestCustom.cmake.in CTestCustom.cmake)
 MARK_AS_ADVANCED(TCL_TCLSH DART_ROOT)
 ENABLE_TESTING()
 IF(BUILD_TESTING)
