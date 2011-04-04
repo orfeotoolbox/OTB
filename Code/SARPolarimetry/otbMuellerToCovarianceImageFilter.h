@@ -30,12 +30,12 @@ namespace Functor {
  * \brief Evaluate the  MLC image from the Mueller image
  *
  * Output value are:
- *   channel #0  : \f$ M_{11} + M_{22} + 2*M_{12} \f$
- *   channel #1  : \f$ M_{11} - M_{22}            \f$
- *   channel #2  : \f$ M_{11} + M_{22} - 2*M_{12} \f$
- *   channel #3  : \f$ M_{13} + M_{23}            + i*(M_{14}+M_{24}) \f$
- *   channel #4  : \f$ M_{3Coherency3} - M_{44}            - 2*i*M_{34}        \f$
- *   channel #5  : \f$ M_{13} - M_{23}            - i*(M_{14}-M_{24}) \f$
+ *   channel #0  : \f$ M_{11} + M_{22} + 2*M_{12} \f$ \\
+ *   channel #1  : \f$ M_{11} - M_{22} \f$ \\
+ *   channel #2  : \f$ M_{11} + M_{22} - 2*M_{12} \f$ \\
+ *   channel #3  : \f$ M_{13} + M_{23} + i*(M_{14}+M_{24}) \f$ \\
+ *   channel #4  : \f$ M_{3Coherency3} - M_{44} - 2*i*M_{34} \f$ \\
+ *   channel #5  : \f$ M_{13} - M_{23} - i*(M_{14}-M_{24}) \f$ \\
  *
  * Where \f$ M_{ij} are the coefficients of the input Mueeler matrix.
  * Input pixel must have 10 channels (one for each Mueller matrix coeffcients).

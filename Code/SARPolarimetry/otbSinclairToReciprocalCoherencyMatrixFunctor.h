@@ -29,12 +29,12 @@ namespace Functor
  *  with Sinclair matrix information.
  *
  *  Output value are:
- *   channel #0 : \f$ (S_{hh}+S_{vv}).(S_{hh}+S_{vv})^{*} \f$
- *   channel #1 : \f$ (S_{hh}+S_{vv}).(S_{hh}-S_{vv})^{*} \f$
- *   channel #2 : \f$ (S_{hh}+S_{vv}).(2*S_{hv})^{*} \f$
- *   channel #3 : \f$ (S_{hh}-S_{vv}).(S_{hh}-S_{vv})^{*} \f$
- *   channel #4 : \f$ (S_{hh}-S_{vv}).(2*S_{hv})^{*} \f$
- *   channel #5 : \f$ (2*S_{hv}).(2*S_{hv})^{*} \f$
+ *   channel #0 : \f$ (S_{hh}+S_{vv}).(S_{hh}+S_{vv})^{*} \f$ \\
+ *   channel #1 : \f$ (S_{hh}+S_{vv}).(S_{hh}-S_{vv})^{*} \f$ \\
+ *   channel #2 : \f$ (S_{hh}+S_{vv}).(2*S_{hv})^{*} \f$ \\
+ *   channel #3 : \f$ (S_{hh}-S_{vv}).(S_{hh}-S_{vv})^{*} \f$ \\
+ *   channel #4 : \f$ (S_{hh}-S_{vv}).(2*S_{hv})^{*} \f$ \\
+ *   channel #5 : \f$ (2*S_{hv}).(2*S_{hv})^{*} \f$ \\
  *
  * This is a adaptation of the SinclairToCoherencyFunctor, where \f$ S_{hv}=S_{vh} \f$.
  *

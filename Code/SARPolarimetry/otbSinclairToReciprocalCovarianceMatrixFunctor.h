@@ -29,12 +29,12 @@ namespace Functor
  *  with Sinclair matrix information.
  *
  *  Output value are:
- *   channel #0 : \f$ S_{hh}.S_{hh}^{*} \f$
- *   channel #1 : \f$ S_{hh}.S_{hv}^{*} \f$
- *   channel #2 : \f$ S_{hh}.S_{vv}^{*} \f$
- *   channel #3 : \f$ S_{hv}.S_{hv}^{*} \f$
- *   channel #4 : \f$ S_{hv}.S_{vv}^{*} \f$
- *   channel #5 : \f$ S_{vv}.S_{vv}^{*} \f$
+ *   channel #0 : \f$ S_{hh}.S_{hh}^{*} \f$ \\
+ *   channel #1 : \f$ S_{hh}.S_{hv}^{*} \f$ \\
+ *   channel #2 : \f$ S_{hh}.S_{vv}^{*} \f$ \\
+ *   channel #3 : \f$ S_{hv}.S_{hv}^{*} \f$ \\
+ *   channel #4 : \f$ S_{hv}.S_{vv}^{*} \f$ \\
+ *   channel #5 : \f$ S_{vv}.S_{vv}^{*} \f$ \\
  *
  * This is a adaptation of the SinclairToCovarianceMatrixFunctor, where \f$ S_{hv}=S_{vh} \f$.
  *
