@@ -166,9 +166,6 @@ public:
   virtual void SetInput(const InputImageType *input);
   virtual const InputImageType * GetInput(void);
 
-  itkSetMacro(ImageSize, SizeType);
-  itkGetMacro(ImageSize, SizeType);
-
   /** Custom Get methods to access intermediate data*/
   LabelImagePointerType GetMap()
   {
@@ -187,8 +184,8 @@ protected:
   LineSegmentDetector();
   virtual ~LineSegmentDetector() {}
 
-  /** Before Generate Data method*/
-  virtual void BeforeGenerateData();
+  virtual void GenerateInputRequestedRegion();
+
   /** Generate Data method*/
   virtual void GenerateData();
 
@@ -265,12 +262,6 @@ private:
   double       m_Prec;
   double       m_DirectionsAllowed;
   unsigned int m_MinimumRegionSize;
-  unsigned int m_NumberOfImagePixels;
-
-  /** The image size has to be the LargestPosssibleRegion in the case
-   * (streaming uses (streaming decorator).
-   */
-  SizeType m_ImageSize;
 
   /** Gradient filter */
   GradientFilterPointerType m_GradientFilter;
