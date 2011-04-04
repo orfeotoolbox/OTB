@@ -40,6 +40,11 @@ PersistentLineSegmentDetector<TInputImage, TPrecision>
   this->SetNumberOfRequiredOutputs(3);
   this->itk::ProcessObject::SetNthOutput(1, this->MakeOutput(1).GetPointer());
   this->itk::ProcessObject::SetNthOutput(2, this->MakeOutput(2).GetPointer());
+
+  // Set the number of threads to 1 by default to avoid oversegmentation
+  // There also seem to be a bug in the underlying LineSegmentDetector
+  // for small regions (probably when a stream does not contain segment)
+  this->SetNumberOfThreads(1);
 }
 
 template<class TInputImage, class TPrecision>
@@ -116,20 +121,24 @@ PersistentLineSegmentDetector<TInputImage, TPrecision>
 {
   int nbThread = this->GetNumberOfThreads();
 
-  m_ExtractorList.clear();
-  m_RegionList.clear();
-  m_LineDetectorList.clear();
   m_VectorDataList.clear();
-
   m_VectorDataList.resize(nbThread);
-  m_RegionList.resize(nbThread);
 
-  for (int p = 0; p < nbThread; ++p)
-    {
-    m_ExtractorList.push_back(ExtractorType::New());
-    m_LineDetectorList.push_back(LineDetectorType::New());
-    m_LineDetectorList[p]->SetImageSize(this->GetInput()->GetLargestPossibleRegion().GetSize());
-    }
+  // merge all lines in a single vector data
+  VectorDataType* outputVData = this->GetOutputVectorData();
+
+  // Retrieving root node
+  DataNodePointerType root = outputVData->GetDataTree()->GetRoot()->Get();
+  // Create the document node
+  DataNodePointerType document = DataNodeType::New();
+  document->SetNodeType(otb::DOCUMENT);
+  DataNodePointerType folder = DataNodeType::New();
+  folder->SetNodeType(otb::FOLDER);
+  m_Folder = folder;
+  // Adding the layer to the data tree
+  outputVData->GetDataTree()->Add(document, root);
+  outputVData->GetDataTree()->Add(folder, document);
+
 
 }
 
@@ -138,36 +147,6 @@ void
 PersistentLineSegmentDetector<TInputImage, TPrecision>
 ::Synthetize()
 {
-  // merge all lines in a single vector data
-  VectorDataType* outputVData = this->GetOutputVectorData();
-  
-  // Retrieving root node
-  DataNodePointerType root = outputVData->GetDataTree()->GetRoot()->Get();
-  // Create the document node
-  DataNodePointerType document = DataNodeType::New();
-  document->SetNodeType(otb::DOCUMENT);
-  DataNodePointerType folder = DataNodeType::New();
-  folder->SetNodeType(otb::FOLDER);
-  // Adding the layer to the data tree
-  outputVData->GetDataTree()->Add(document, root);
-  outputVData->GetDataTree()->Add(folder, document);
-
-  for (unsigned int threadId = 0; threadId < m_VectorDataList.size(); ++threadId)
-    {
-    TreeIteratorType itCurrentVData(m_VectorDataList[threadId]->GetDataTree());
-    itCurrentVData.GoToBegin();
-    while (!itCurrentVData.IsAtEnd())
-      {
-      if (itCurrentVData.Get()->IsLineFeature())
-        {
-        outputVData->GetDataTree()->Add(itCurrentVData.Get(), folder);
-        }
-      itCurrentVData ++;
-      }
-    }
-  
-  this->GetOutputVectorData()->SetMetaDataDictionary(m_VectorDataList[0]->GetMetaDataDictionary());
-
 }
 
 template<class TInputImage, class TPrecision>
@@ -187,9 +166,20 @@ PersistentLineSegmentDetector<TInputImage, TPrecision>
 
   if (this->GetInput())
     {
-    ImagePointerType image = const_cast<ImageType *>(this->GetInput());
-    image->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
+    ImagePointerType input = const_cast<ImageType *>(this->GetInput());
+
+    RegionType region = this->GetOutput()->GetRequestedRegion();
+    region.PadByRadius(1);
+    region.Crop(input->GetLargestPossibleRegion());
+    input->SetRequestedRegion(region);
     }
+}
+
+template<class TInputImage, class TPrecision>
+void
+PersistentLineSegmentDetector<TInputImage, TPrecision>
+::BeforeThreadedGenerateData()
+{
 }
 
 template<class TInputImage, class TPrecision>
@@ -197,32 +187,63 @@ void
 PersistentLineSegmentDetector<TInputImage, TPrecision>
 ::ThreadedGenerateData(const RegionType& outputRegionForThread, int threadId)
 {
-  ImagePointerType inputPtr = const_cast<TInputImage *>(this->GetInput());
-  
-  RegionType region = outputRegionForThread;
-  region.PadByRadius((unsigned int)(1));
-  region.Crop(inputPtr->GetLargestPossibleRegion());
-  
-  inputPtr->SetRequestedRegion(region);
-  inputPtr->PropagateRequestedRegion();
-  inputPtr->UpdateOutputData();
+  try
+  {
+    ImagePointerType inputPtr = const_cast<TInputImage *>(this->GetInput());
 
-  m_ExtractorList[threadId]->SetInput(this->GetInput());
-  m_ExtractorList[threadId]->SetExtractionRegion(region);
-  //m_ExtractorList[threadId]->SetExtractionRegion(outputRegionForThread);
-  m_ExtractorList[threadId]->UpdateOutputInformation();
-  
-  m_LineDetectorList[threadId]->SetInput(m_ExtractorList[threadId]->GetOutput());
-  m_LineDetectorList[threadId]->Update();
-  
-  m_RegionList[threadId] = outputRegionForThread;
-  m_VectorDataList[threadId] =  m_LineDetectorList[threadId]->GetOutput();
+    RegionType region = outputRegionForThread;
+    region.PadByRadius((unsigned int)(1));
+    region.Crop(inputPtr->GetLargestPossibleRegion());
+
+    inputPtr->SetRequestedRegion(region);
+    inputPtr->PropagateRequestedRegion();
+    inputPtr->UpdateOutputData();
+
+    typename ExtractorType::Pointer extractFilter = ExtractorType::New();
+    extractFilter->SetInput(this->GetInput());
+    extractFilter->SetExtractionRegion(region);
+    extractFilter->Update();
+
+    typename LineDetectorType::Pointer lineDetector = LineDetectorType::New();
+    lineDetector->SetInput(extractFilter->GetOutput());
+    lineDetector->Update();
+
+    m_VectorDataList[threadId] = lineDetector->GetOutput();
+  }
+  catch (itk::ExceptionObject& e)
+  {
+    std::cout << "Exception : " << e;
+    throw;
+  }
 }
 
+template<class TInputImage, class TPrecision>
+void
+PersistentLineSegmentDetector<TInputImage, TPrecision>
+::AfterThreadedGenerateData()
+{
+  // merge all lines in a single vector data
+  VectorDataType* outputVData = this->GetOutputVectorData();
+  outputVData->GetDataTree();
+
+  for (unsigned int threadId = 0; threadId < m_VectorDataList.size(); ++threadId)
+    {
+    TreeIteratorType itCurrentVData(m_VectorDataList[threadId]->GetDataTree());
+    itCurrentVData.GoToBegin();
+    while (!itCurrentVData.IsAtEnd())
+      {
+      if (itCurrentVData.Get()->IsLineFeature())
+        {
+        outputVData->GetDataTree()->Add(itCurrentVData.Get(), m_Folder);
+        }
+      itCurrentVData ++;
+      }
+    }
+
+  this->GetOutputVectorData()->SetMetaDataDictionary(m_VectorDataList[0]->GetMetaDataDictionary());
+}
 
 // end of class PersistentLineSegmentDetector
-
-/**===========================================================================*/
 
 template<class TInputImage, class TPrecision>
 StreamingLineSegmentDetector<TInputImage, TPrecision>
@@ -235,19 +256,6 @@ StreamingLineSegmentDetector<TInputImage, TPrecision>
 ::~StreamingLineSegmentDetector()
 {
 }
-
-/**
- * The aim here is to gathered each thread output into a vector data.
- * For that we have to fuse different thread output, in particular for line that throw thread.
- * For that, for each thread and each detected line, we look if one of its extrema is over a thread lower limit (RegionList.GetSize()[1]).
- * If yes, we store the line. If no, we add it to the vector data.
- * At the next loop (ie. next thread), for each line, we check that it doesn't have a point in common with lines that end at the end of
- * the previous thread.
- * If yes we compute the extrema (one point ineach thread).
- * If not, we add it to the vector data, else we store it.
- * And so on.
- * m_ThreadDistanceThreshold allows a tolerance over the commmon point spatial distance when 2 lines are fused.
- */
 
 } // end namespace otb
 #endif
