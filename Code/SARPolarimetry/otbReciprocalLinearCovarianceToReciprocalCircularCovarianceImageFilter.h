@@ -31,23 +31,23 @@ namespace Functor {
  *  Extract from Antennas for radar and communications Harold Mott p 317.
  *
  *  Output value are:
- *   channel #0 : \f$ 0.25 * (C_{1}+C_{3}+4*C_{2}-2*C_{6}-4*C_{5}-4*C_{9}) \f$
- *   channel #1 : \f$ 0.25 * (C_{1}-C_{3}+2*C_{5}+2*C_{9} - 0.5\mathcal{i}.(C_{4}+C_{7}+C_{8}) \f$
- *   channel #2 : \f$ 0.25 * (C_{1}+C_{3}-4*C_{2}-2*C_{6} - \mathcal{i}.(C_{4}+C_{8}) \f$
- *   channel #3 : \f$ 0.25 * (C_{1}+C_{3}+2*C_{6} \f$
- *   channel #4 : \f$ 0.25 * (C_{1}-C_{3}+2*C_{5}-2*C_{9} - 0.5\mathcal{i}.(C_{4}-C_{7}+C_{8}) \f$
- *   channel #5 : \f$ 0.25 * (C_{1}+C_{3}+4*C_{2}-2*C_{6}+4*C_{5}+4*C_{9}) \f$
+ *   channel #0 : \f$ 0.25 * (C_{1}+C_{3}+4*C_{2}-2*C_{6}-4*C_{5}-4*C_{9}) \f$ \\
+ *   channel #1 : \f$ 0.25 * (C_{1}-C_{3}+2*C_{5}+2*C_{9} - 0.5\mathcal{i}.(C_{4}+C_{7}+C_{8}) \f$ \\
+ *   channel #2 : \f$ 0.25 * (C_{1}+C_{3}-4*C_{2}-2*C_{6} - \mathcal{i}.(C_{4}+C_{8}) \f$ \\
+ *   channel #3 : \f$ 0.25 * (C_{1}+C_{3}+2*C_{6} \f$ \\
+ *   channel #4 : \f$ 0.25 * (C_{1}-C_{3}+2*C_{5}-2*C_{9} - 0.5\mathcal{i}.(C_{4}-C_{7}+C_{8}) \f$ \\
+ *   channel #5 : \f$ 0.25 * (C_{1}+C_{3}+4*C_{2}-2*C_{6}+4*C_{5}+4*C_{9}) \f$ \\
  *
  *  Where:
- *   \f$ C_{1} = S_{hh}*S_{hh}}^{*} = \mathcal{Re}(input[0]) \f$
- *   \f$ C_{2} = S_{hv}*S_{hv}}^{*} = \mathcal{Re}(input[3]) \f$
- *   \f$ C_{3} = S_{vv}*S_{vv}}^{*} = \mathcal{Re}(input[5]) \f$
- *   \f$ C_{4} = \mathcal{Re}(S_{hh}*S_{hv}}^{*}) = \mathcal{Re}(input[1]) \f$
- *   \f$ C_{5} = \mathcal{Im}(S_{hh}*S_{hv}}^{*}) = \mathcal{Im}(input[1]) \f$
- *   \f$ C_{6} = \mathcal{Re}(S_{hh}*S_{vv}}^{*}) = \mathcal{Re}(input[2]) \f$
- *   \f$ C_{7} = \mathcal{Im}(S_{hh}*S_{vv}}^{*}) = \mathcal{Im}(input[2]) \f$
- *   \f$ C_{8} = \mathcal{Re}(S_{hv}*S_{vv}}^{*}) = \mathcal{Re}(input[4]) \f$
- *   \f$ C_{9} = \mathcal{Im}(S_{hv}*S_{vv}}^{*} = \mathcal{Im}(input[4])) \f$
+ *   \f$ C_{1} = S_{hh}*S_{hh}}^{*} = \mathcal{Re}(input[0]) \f$ \\
+ *   \f$ C_{2} = S_{hv}*S_{hv}}^{*} = \mathcal{Re}(input[3]) \f$ \\
+ *   \f$ C_{3} = S_{vv}*S_{vv}}^{*} = \mathcal{Re}(input[5]) \f$ \\
+ *   \f$ C_{4} = \mathcal{Re}(S_{hh}*S_{hv}}^{*}) = \mathcal{Re}(input[1]) \f$ \\
+ *   \f$ C_{5} = \mathcal{Im}(S_{hh}*S_{hv}}^{*}) = \mathcal{Im}(input[1]) \f$ \\
+ *   \f$ C_{6} = \mathcal{Re}(S_{hh}*S_{vv}}^{*}) = \mathcal{Re}(input[2]) \f$ \\
+ *   \f$ C_{7} = \mathcal{Im}(S_{hh}*S_{vv}}^{*}) = \mathcal{Im}(input[2]) \f$ \\
+ *   \f$ C_{8} = \mathcal{Re}(S_{hv}*S_{vv}}^{*}) = \mathcal{Re}(input[4]) \f$ \\
+ *   \f$ C_{9} = \mathcal{Im}(S_{hv}*S_{vv}}^{*} = \mathcal{Im}(input[4])) \f$ \\
  *
  * \infgroup Functor
  * \ingroup SARPolarimetry

@@ -32,6 +32,9 @@ namespace otb
  * the type of the output image.  It is also parameterized by the
  * operation to be applied, using a Functor style.
  *
+  * The output image has 10 channels : the diagonal and the upper element of the matrix.
+ * Element a sotored from left to right, line by line.
+ *
  *  \ingroup SARPolarimetry
  *
  *  \sa SinclairImageFilter

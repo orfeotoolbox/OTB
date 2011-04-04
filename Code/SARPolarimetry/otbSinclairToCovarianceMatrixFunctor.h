@@ -29,17 +29,17 @@ namespace Functor
  *  with Sinclair matrix information.
  *
  *  Output value are:
- *   channel #0 : \f$ S_{hh}.S_{hh}^{*} \f$
- *   channel #1 : \f$ S_{hh}.S_{hv}^{*} \f$
- *   channel #2 : \f$ S_{hh}.S_{vh}^{*} \f$
- *   channel #3 : \f$ S_{hh}.S_{vv}^{*} \f$
- *   channel #4 : \f$ S_{hv}.S_{hv}^{*} \f$
- *   channel #5 : \f$ S_{hv}.S_{vh}^{*} \f$
- *   channel #6 : \f$ S_{hv}.S_{vv}^{*} \f$
- *   channel #7 : \f$ S_{vh}.S_{vh}^{*} \f$
- *   channel #8 : \f$ S_{vh}.S_{vv}^{*} \f$
- *   channel #9 : \f$ S_{vv}.S_{vv}^{*} \f$
- *
+ *   channel #0 : \f$ S_{hh}.S_{hh}^{*} \f$ \\
+ *   channel #1 : \f$ S_{hh}.S_{hv}^{*} \f$ \\
+ *   channel #2 : \f$ S_{hh}.S_{vh}^{*} \f$ \\
+ *   channel #3 : \f$ S_{hh}.S_{vv}^{*} \f$ \\
+ *   channel #4 : \f$ S_{hv}.S_{hv}^{*} \f$ \\
+ *   channel #5 : \f$ S_{hv}.S_{vh}^{*} \f$ \\
+ *   channel #6 : \f$ S_{hv}.S_{vv}^{*} \f$ \\
+ *   channel #7 : \f$ S_{vh}.S_{vh}^{*} \f$ \\
+ *   channel #8 : \f$ S_{vh}.S_{vv}^{*} \f$ \\
+ *   channel #9 : \f$ S_{vv}.S_{vv}^{*} \f$ \\
+ * 
  *  \ingroup Functor
  *  \ingroup SARPolarimetry
  *
