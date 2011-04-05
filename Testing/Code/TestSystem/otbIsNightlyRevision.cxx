@@ -24,6 +24,7 @@ int otbIsNightlyRevision(int argc, char * argv[])
 {
   if (argc != 3)
     {
+    std::cerr << argv[0] << " revision_number http_address_of_nightlynumber" << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -44,5 +45,4 @@ int otbIsNightlyRevision(int argc, char * argv[])
     std::cerr << "Nightly revision is " << nightlyRevision << " but working copy revision is " << wcRevision << std::endl;
     return EXIT_FAILURE;
     }
-
 }
