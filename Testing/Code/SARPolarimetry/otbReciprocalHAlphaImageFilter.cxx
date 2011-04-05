@@ -83,7 +83,6 @@ int otbReciprocalHAlphaImageFilter(int argc, char * argv[])
 
   FilterType::Pointer filter = FilterType::New();
   filter->SetInput(sinclairToCoherencyFilter->GetOutput());
-  filter->SetNumberOfThreads(1);
 
   ExtractType::Pointer extract = ExtractType::New();
   extract->SetInput(filter->GetOutput());
