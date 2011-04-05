@@ -36,7 +36,7 @@ class ITK_EXPORT DragFullWindowActionHandler
 {
 public:
   /** Standard class typedefs */
-  typedef DragFullWindowActionHandler        Self;
+  typedef DragFullWindowActionHandler   Self;
   typedef ImageWidgetActionHandler      Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
