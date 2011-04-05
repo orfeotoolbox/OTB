@@ -140,6 +140,15 @@ int otbOpticalDefaultImageMetadataInterface(int argc, char* argv[])
     return EXIT_FAILURE;
     }
 
+  try
+      {
+        std::cout << obj->GetSpectralSensitivity() << std::endl;
+      }
+    catch (itk::ExceptionObject& err)
+      {
+      std::cout << "ExceptionObject caught for GetSpectralSensitivity() !" << std::endl;
+      std::cout << err << std::endl;
+      }
 
   return EXIT_SUCCESS;
 
