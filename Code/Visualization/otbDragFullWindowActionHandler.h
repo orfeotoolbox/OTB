@@ -95,8 +95,8 @@ public:
           indexEnd[0] = indexBegin[0] + m_Model->GetExtractRegion().GetSize()[0];
           indexEnd[1] = indexBegin[1] + m_Model->GetExtractRegion().GetSize()[1];
 
-          if (indexEnd[0] < m_Model->GetLayer(0)->GetExtent().GetSize()[0] && indexEnd[1]
-              < m_Model->GetLayer(0)->GetExtent().GetSize()[1] && indexBegin[0]
+          if (indexEnd[0] < static_cast<unsigned int> (m_Model->GetLayer(0)->GetExtent().GetSize()[0]) && indexEnd[1]
+              < static_cast<unsigned int> (m_Model->GetLayer(0)->GetExtent().GetSize()[1]) && indexBegin[0]
               > static_cast<unsigned int> (m_Model->GetLayer(0)->GetExtent().GetIndex()[0]) && indexBegin[1]
               > static_cast<unsigned int> (m_Model->GetLayer(0)->GetExtent().GetIndex()[1]))
             {
