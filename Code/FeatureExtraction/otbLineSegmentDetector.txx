@@ -158,7 +158,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   RegionType largestRegion = this->GetInput()->GetLargestPossibleRegion();
 
   // Compute the minimum region size
-  double logNT = 5. * vcl_log10( largestRegion.GetNumberOfPixels() ) / 2.;
+  double logNT = 5. * vcl_log10( static_cast<double>(largestRegion.GetNumberOfPixels()) ) / 2.;
   double log1_p = vcl_log10(m_DirectionsAllowed);
   double rapport = logNT / log1_p;
   m_MinimumRegionSize = static_cast<unsigned int>(-rapport);
