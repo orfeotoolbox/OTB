@@ -77,11 +77,11 @@ int generic_SinclairImageFilter(int argc, char * argv[])
   typename ExtractROIType::Pointer  extract3 = ExtractROIType::New();
   extract1->SetStartX(10);
   extract1->SetStartY(10);
-  extract1->SetSizeX(30); 
+  extract1->SetSizeX(30);
   extract1->SetSizeY(30);
   extract2->SetStartX(10);
   extract2->SetStartY(10);
-  extract2->SetSizeX(30); 
+  extract2->SetSizeX(30);
   extract2->SetSizeY(30);
   extract3->SetStartX(10);
   extract3->SetStartY(10);
@@ -92,7 +92,7 @@ int generic_SinclairImageFilter(int argc, char * argv[])
   reader3->SetFileName(inputFilename3);
   extract1->SetInput(reader1->GetOutput());
   extract2->SetInput(reader3->GetOutput());
-  extract3->SetInput(reader3->GetOutput()); 
+  extract3->SetInput(reader3->GetOutput());
   filter->SetInputHH(extract1->GetOutput());
   filter->SetInputHV(extract2->GetOutput());
   filter->SetInputVH(extract2->GetOutput());
@@ -136,11 +136,11 @@ int generic_SinclairImageFilterWithCast(int argc, char * argv[])
   typename ExtractROIType::Pointer  extract3 = ExtractROIType::New();
   extract1->SetStartX(10);
   extract1->SetStartY(10);
-  extract1->SetSizeX(30); 
+  extract1->SetSizeX(30);
   extract1->SetSizeY(30);
   extract2->SetStartX(10);
   extract2->SetStartY(10);
-  extract2->SetSizeX(30); 
+  extract2->SetSizeX(30);
   extract2->SetSizeY(30);
   extract3->SetStartX(10);
   extract3->SetStartY(10);
@@ -151,7 +151,7 @@ int generic_SinclairImageFilterWithCast(int argc, char * argv[])
   reader3->SetFileName(inputFilename3);
   extract1->SetInput(reader1->GetOutput());
   extract2->SetInput(reader3->GetOutput());
-  extract3->SetInput(reader3->GetOutput()); 
+  extract3->SetInput(reader3->GetOutput());
   filter->SetInputHH(extract1->GetOutput());
   filter->SetInputHV(extract2->GetOutput());
   filter->SetInputVH(extract2->GetOutput());

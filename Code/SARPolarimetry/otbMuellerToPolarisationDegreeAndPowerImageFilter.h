@@ -35,7 +35,7 @@ namespace Functor {
  *   from the Mueller image
  *
  * The order of the channels of the input image corresponds to :
- * \f$  \begin{pmatrix} 
+ * \f$  \begin{pmatrix}
  * {channel #0 }&{channel #1 }&{channel #2 }&{channel #3 } \\
  * {channel #4 }&{channel #5 }&{channel #6 }&{channel #7 } \\
  * {channel #8 }&{channel #9 }&{channel #10}&{channel #11} \\

@@ -31,7 +31,7 @@ namespace otb
  * \brief This class computes the polarimetric synthesis from two to four radar images, depening on the polarimetric architecture.
  *
  * It has the same behaviour as the PolarimetricSynthesisImageFilter expect the fact that it
- * considers a VectorImage as input which each channels is HH, HV, VH and VV (in this particular order). 
+ * considers a VectorImage as input which each channels is HH, HV, VH and VV (in this particular order).
  *
  * \ingroup SARPolarimetry
  * \sa PolarimetricSynthesisFilter

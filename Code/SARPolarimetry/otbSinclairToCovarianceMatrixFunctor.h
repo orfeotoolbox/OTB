@@ -39,7 +39,7 @@ namespace Functor
  *   channel #7 : \f$ S_{vh}.S_{vh}^{*} \f$ \\
  *   channel #8 : \f$ S_{vh}.S_{vv}^{*} \f$ \\
  *   channel #9 : \f$ S_{vv}.S_{vv}^{*} \f$ \\
- * 
+ *
  * The output pixel has 10 channels : the diagonal and the upper element of the matrix.
  * Element are stored from left to right, line by line.
  *
