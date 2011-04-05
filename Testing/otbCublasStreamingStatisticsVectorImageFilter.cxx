@@ -48,7 +48,7 @@ int otbCublasStreamingStatisticsVectorImageFilterTest(int argc, char * argv[])
   reader->SetFileName(infname);
 
   //filter->GetStreamer()->SetStreamingMode(otb::SET_NUMBER_OF_STREAM_DIVISIONS);
-  filter->GetStreamer()->SetBufferMemorySize(100 * 1024 * 1024);
+  //filter->GetStreamer()->SetBufferMemorySize(100 * 1024 * 1024);
   //filter->GetStreamer()->SetNumberOfStreamDivisions(2);
   filter->SetInput(reader->GetOutput());
   filter->Update();
