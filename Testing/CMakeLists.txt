@@ -29,9 +29,9 @@ SET( otbHyperTests1_SRC
   otbMNFImageFilter.cxx
   otbNAPCAImageFilter.cxx
   otbFastICAImageFilter.cxx
-  otbSparseWvltToAngleMapperListFilter.cxx
-  otbAngularProjectionBinaryImageFilter.cxx
-  otbSparseUnmixingImageFilter.cxx
+#  otbSparseWvltToAngleMapperListFilter.cxx
+#  otbAngularProjectionBinaryImageFilter.cxx
+#  otbSparseUnmixingImageFilter.cxx
 )
 
 ADD_EXECUTABLE(otbHyperTests1 ${otbHyperTests1_SRC} otbHyperTests1.cxx)
