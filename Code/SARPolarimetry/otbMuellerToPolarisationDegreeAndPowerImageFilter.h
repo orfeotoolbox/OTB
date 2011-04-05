@@ -42,7 +42,7 @@ namespace Functor {
  * {channel #12}&{channel #13}&{channel #14}&{channel #15} \\
  * \end{pmatrix}
  *
- * The class process step by step while \f$ \tau <= 45°\f$ and for each \f$ \tau \f$, while \f$ \psi <= 90 \f :
+ * The class process step by step while \f$ \tau <= 45 \f$ and for each \f$ \tau \f$, while \f$ \psi <= 90 \f :
  * \begin{itemize}
  * \item Define the incident Stokes vector:
  *   \f$ Si_{0} = 1 \f$ \\
