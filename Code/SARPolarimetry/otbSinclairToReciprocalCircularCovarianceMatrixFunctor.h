@@ -39,6 +39,9 @@ namespace Functor
  *
  * This is a adaptation of the SinclairToCircularCovarianceMatrixFunctor, where \f$ S_{hv}=S_{vh} \f$.
  *
+ * The output pixel has 6 channels : the diagonal and the upper element of the reciprocal matrix.
+ * Element are stored from left to right, line by line.
+ *
  *  \ingroup Functor
  *  \ingroup SARPolarimetry
  *

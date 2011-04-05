@@ -26,14 +26,14 @@ namespace otb
 {
 
 /** \class SinclairImageFilter
- * \brief Convert the Sinclair matrix
+ * \brief Computes the Covariance matrix for the sinclair one.
  *
  * This class is parameterized over the type of the input images and
- * the type of the output image.  It is also parameterized by the
+ * the type of the output image. It is also parameterized by the
  * operation to be applied, using a Functor style.
  *
-  * The output image has 10 channels : the diagonal and the upper element of the matrix.
- * Element a sotored from left to right, line by line.
+ * The output image has 10 channels : the diagonal and the upper element of the matrix.
+ * Element are stored from left to right, line by line.
  *
  *  \ingroup SARPolarimetry
  *

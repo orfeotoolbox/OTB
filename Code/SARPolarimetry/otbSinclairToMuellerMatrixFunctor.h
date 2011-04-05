@@ -53,7 +53,14 @@ namespace Functor
  * \f$ T_{yx} = -S_{vh} \f$ \\
  * \f$ T_{yy} = -S_{vv} \f$ \\
  *
- * Output is a not a complex.
+ * Output is a not a complex. The output pixel has 16 channels : each element of the Mueller matrix.
+ * The order of the channels corresponds to :
+ * \f$  \begin{pmatrix} 
+ * {channel #0 }&{channel #1 }&{channel #2 }&{channel #3 } \\
+ * {channel #4 }&{channel #5 }&{channel #6 }&{channel #7 } \\
+ * {channel #8 }&{channel #9 }&{channel #10}&{channel #11} \\
+ * {channel #12}&{channel #13}&{channel #14}&{channel #15} \\
+ * \end{pmatrix}
  *
  *  \ingroup Functor
  *  \ingroup SARPolarimetry

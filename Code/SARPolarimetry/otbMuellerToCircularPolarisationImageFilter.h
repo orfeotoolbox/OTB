@@ -27,8 +27,21 @@ namespace otb
 namespace Functor {
 
 /** \class otbMuellerToCircularPolarisationFunctor
- * \brief Evaluate the  Circular Polarisation image
- * (3 channels : LL, RR and LR)  from the Mueller image
+ * \brief Evaluate the  Circular Polarisation image from the Mueller image.
+ *
+ * The input Mueller image has 16 channels, one for each matrix element.
+ * The order of the channels corresponds to :
+ * \f$  \begin{pmatrix} 
+ * {channel #0 }&{channel #1 }&{channel #2 }&{channel #3 } \\
+ * {channel #4 }&{channel #5 }&{channel #6 }&{channel #7 } \\
+ * {channel #8 }&{channel #9 }&{channel #10}&{channel #11} \\
+ * {channel #12}&{channel #13}&{channel #14}&{channel #15} \\
+ * \end{pmatrix}
+ *
+ *  Output value are:
+ *   channel #0 : \f$ LL = M_{11}+M_{14}+M_{41}+M_{44} \f$ \\
+ *   channel #1 : \f$ RR = M_{11}-M_{14}+M_{41}+M_{44} \f$ \\
+ *   channel #2 : \f$ LR = M_{11}-M_{44}\f$ \\
  *
  * \ingroup Functor
  * \ingroup SARPolarimetry

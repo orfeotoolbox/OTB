@@ -57,6 +57,7 @@ namespace otb
  *
  * \ingroup SARPolarimetry
  * \sa PolarimetricSynthesisFunctor
+ * \sa MultiChannelsPolarimetricSynthesisFilter
  *
  */
 

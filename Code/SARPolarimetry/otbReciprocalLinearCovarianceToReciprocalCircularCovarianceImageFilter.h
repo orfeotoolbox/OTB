@@ -49,6 +49,9 @@ namespace Functor {
  *   \f$ C_{8} = \mathcal{Re}(S_{hv}*S_{vv}}^{*}) = \mathcal{Re}(input[4]) \f$ \\
  *   \f$ C_{9} = \mathcal{Im}(S_{hv}*S_{vv}}^{*} = \mathcal{Im}(input[4])) \f$ \\
  *
+ * The output pixel has 6 channels : the diagonal and the upper element of the reciprocal matrix.
+ * Element are stored from left to right, line by line.
+ *
  * \infgroup Functor
  * \ingroup SARPolarimetry
  *

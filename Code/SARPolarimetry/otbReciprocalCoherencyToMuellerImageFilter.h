@@ -49,6 +49,9 @@ namespace Functor {
  *   channel #4 : \f$ (S_{hh}-S_{vv}).(2*S_{hv})^{*} \f$ \\
  *   channel #5 : \f$ (2*S_{hv}).(2*S_{hv})^{*} \f$ \\
  *
+ * The output pixel has 10 channels : the diagonal and the upper element of the matrix.
+ * Element are stored from left to right, line by line.
+ *
  * \ingroup SARPolarimetry
  */
 template< class TInput, class TOutput>

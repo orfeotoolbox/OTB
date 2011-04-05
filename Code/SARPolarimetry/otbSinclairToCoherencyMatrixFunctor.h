@@ -40,6 +40,9 @@ namespace Functor
  *   channel #8 : \f$ (S_{hv}+S_{vh}).(j(S_{hv}-S_{vh}))^{*} \f$ \\
  *   channel #9 : \f$ j(S_{hv}-S_{vh}).(j(S_{hv}-S_{vh}))^{*} \f$ \\
  *
+ * The output pixel has 10 channels : the diagonal and the upper element of the matrix.
+ * Element are stored from left to right, line by line.
+ *
  *  \ingroup Functor
  *  \ingroup SARPolarimetry
  *
