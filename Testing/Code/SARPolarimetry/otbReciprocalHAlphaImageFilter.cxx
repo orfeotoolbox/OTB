@@ -28,8 +28,6 @@
 #include "otbReciprocalHAlphaImageFilter.h"
 #include "otbSinclairReciprocalImageFilter.h"
 #include "otbSinclairToReciprocalCoherencyMatrixFunctor.h"
-#include "itkMeanImageFilter.h"
-#include "otbPerBandVectorImageFilter.h"
 #include "otbMultiChannelExtractROI.h"
 
 int otbReciprocalHAlphaImageFilter(int argc, char * argv[])
@@ -59,10 +57,6 @@ int otbReciprocalHAlphaImageFilter(int argc, char * argv[])
                       InputImageType, InputImageType,
                       ImageType, FunctionType >  SinclairToCoherencyFilterType;
 
-  typedef itk::MeanImageFilter<InputImageType, InputImageType>  MeanFilterType;
-  typedef otb::PerBandVectorImageFilter<ImageType, ImageType,
-                      MeanFilterType>   PerBandMeanFilterType;
-
   typedef otb::ReciprocalHAlphaImageFilter<ImageType, RealImageType> FilterType;
   typedef otb::MultiChannelExtractROI<PixelType, PixelType> ExtractType;
 
@@ -87,11 +81,8 @@ int otbReciprocalHAlphaImageFilter(int argc, char * argv[])
   sinclairToCoherencyFilter->SetInputVH(reader3->GetOutput());
   sinclairToCoherencyFilter->SetInputVV(reader4->GetOutput());
 
-  PerBandMeanFilterType::Pointer perBandMeanFilter = PerBandMeanFilterType::New();
-  perBandMeanFilter->SetInput(sinclairToCoherencyFilter->GetOutput());
- 
   FilterType::Pointer filter = FilterType::New();
-  filter->SetInput(perBandMeanFilter->GetOutput());
+  filter->SetInput(sinclairToCoherencyFilter->GetOutput());
   filter->SetNumberOfThreads(1);
 
   ExtractType::Pointer extract = ExtractType::New();
@@ -103,8 +94,6 @@ int otbReciprocalHAlphaImageFilter(int argc, char * argv[])
 
   writer->SetFileName(outputFilename);
   writer->SetInput(extract->GetOutput());
-  writer->SetNumberOfThreads(1);
-writer->SetNumberOfStreamDivisions(1);
   writer->Update();
 
   return EXIT_SUCCESS;
