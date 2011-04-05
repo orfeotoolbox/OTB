@@ -3,14 +3,14 @@ IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
 SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
 SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
-#Images de teledetection (grosses images )
+#Remote sensing images (large dataset)
 IF(OTB_DATA_USE_LARGEINPUT)
   SET(LARGEINPUT ${OTB_DATA_LARGEINPUT_ROOT} )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
 
-#Tolerance sur diff pixel image
+#Tolerance between pixel values 
 SET(NOTOL 0.0)
 SET(EPSILON_4 0.0001)
 SET(EPSILON_6 0.000001)
