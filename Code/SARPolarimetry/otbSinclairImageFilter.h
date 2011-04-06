@@ -35,6 +35,15 @@ namespace otb
  * The output image has 10 channels : the diagonal and the upper element of the matrix.
  * Element are stored from left to right, line by line.
  *
+ * The class is templated by the 4 input image (HH, HV, VH and VV) and the used functor.
+ * Available functors are :
+ * \begin{itemize}
+ * \item SinclairToCircularCovarianceMatrixFunctor (default one)
+ * \item SinclairToCoherencyMatrixFunctor
+ * \item SinclairToCovarianceMatrixFunctor
+ * \item SinclairToMuelleMatrixrFunctor
+ * \end{itemize}
+ *
  *  \ingroup SARPolarimetry
  *
  *  \sa SinclairImageFilter
