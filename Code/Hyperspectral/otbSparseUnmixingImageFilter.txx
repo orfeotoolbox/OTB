@@ -35,9 +35,11 @@ SparseUnmixingImageFilter< TInputImage, TOutputImage, TPrecision, TMotherWavelet
 
   m_WvltFilter1 = WvltFilterType::New();
   m_WvltFilter1->SetNumberOfDecompositions(2);
+  m_WvltFilter1->SetSubsampleImageFactor( 1 );
 
   m_WvltFilter2 = WvltFilterType::New();
   m_WvltFilter2->SetNumberOfDecompositions( m_WvltFilter1->GetNumberOfDecompositions() );
+  m_WvltFilter2->SetSubsampleImageFactor( m_WvltFilter1->GetSubsampleImageFactor() );
 
   m_ListFilter = ListFilterType::New();
   m_ListFilter->GetFunctor().SetLowerThreshold(10.);

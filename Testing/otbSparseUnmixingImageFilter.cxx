@@ -29,7 +29,7 @@
 int otbSparseUnmixingImageFilterNewTest ( int argc, char * argv[] )
 {
   const unsigned int Dimension = 2;
-  typedef float PixelType;
+  typedef double PixelType;
   typedef otb::Image< PixelType, Dimension > ImageType;
   typedef double PrecisionType;
 

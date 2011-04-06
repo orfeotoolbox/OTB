@@ -35,7 +35,7 @@ SET( otbHyperTests1_SRC
 )
 
 ADD_EXECUTABLE(otbHyperTests1 ${otbHyperTests1_SRC} otbHyperTests1.cxx)
-TARGET_LINK_LIBRARIES(otbHyperTests1 OTBCommon OTBIO OTBBasicFilters OTBTesting)
+TARGET_LINK_LIBRARIES(otbHyperTests1 OTBCommon OTBIO OTBBasicFilters OTBMultiScale OTBTesting)
 
 ADD_TEST(vahineVCA1
          ${TESTEXE_DIR}/otbHyperTests1

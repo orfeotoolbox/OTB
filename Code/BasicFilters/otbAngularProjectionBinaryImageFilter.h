@@ -84,7 +84,7 @@ public:
 
 protected:
   AngularProjectionBinaryImageFilter();
-  virtual ~AngularProjectionBinaryImageFilter();
+  virtual ~AngularProjectionBinaryImageFilter() { }
 
   virtual void GenerateOutputInformation();
   virtual void ThreadedGenerateData( const OutputImageRegionType & outputRegionForThread, int threadID );
