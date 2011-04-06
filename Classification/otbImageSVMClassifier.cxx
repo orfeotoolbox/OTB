@@ -43,6 +43,7 @@
 #include "itkTimeProbe.h"
 #include "otbStandardFilterWatcher.h"
 
+#include "otbMultiChannelExtractROI.h"
 
 namespace otb
 {
@@ -59,6 +60,14 @@ int ImageSVMClassifier::Describe(ApplicationDescriptor* descriptor)
                         "svm", 1, true, ApplicationDescriptor::FileName);
   descriptor->AddOption("OutputLabeledImage", "Output labeled image",
                         "out", 1, true, ApplicationDescriptor::FileName);
+  descriptor->AddOption("ROIStartX", "",
+                        "x", 1, false, ApplicationDescriptor::Integer);
+  descriptor->AddOption("ROIStartY", "",
+                        "y", 1, false, ApplicationDescriptor::Integer);
+  descriptor->AddOption("ROISizeX", "",
+                        "sx", 1, false, ApplicationDescriptor::Integer);
+  descriptor->AddOption("ROISizeY", "",
+                        "sy", 1, false, ApplicationDescriptor::Integer);
   return EXIT_SUCCESS;
 }
 
@@ -73,6 +82,9 @@ int ImageSVMClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
 
   typedef otb::ImageFileReader<VectorImageType>    ReaderType;
   typedef otb::ImageFileWriter<VectorImageType>    WriterType;
+
+  //typedef otb::ExtractROIBase<VectorImageType, VectorImageType>          ExtractROIType;
+  typedef otb::MultiChannelExtractROI<PixelType, PixelType>  ExtractROIType;
 
   // Statistic XML file Reader
   typedef itk::VariableLengthVector<PixelType>                          MeasurementType;
@@ -137,21 +149,39 @@ int ImageSVMClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
   changeLabelFilter->SetInput(classificationFilter->GetOutput());
   changeLabelFilter->SetNumberOfComponentsPerPixel(3);
 
-  /*for (ClassesMapType::iterator it = m_ClassesMap.begin(); it != m_ClassesMap.end(); ++it)
-    {
-    OverlayImageType::PixelType color(3);
-
-    color[0] = static_cast<unsigned char>((*it)->GetColor()[0] * 255);
-    color[1] = static_cast<unsigned char>((*it)->GetColor()[1] * 255);
-    color[2] = static_cast<unsigned char>((*it)->GetColor()[2] * 255);
-    changeLabelFilter->SetChange((*it)->GetId(), color);
-    }*/
-
   //--------------------------
   // Save labeled Image
   WriterType::Pointer    writer  = WriterType::New();
   writer->SetFileName(parseResult->GetParameterString("OutputLabeledImage"));
-  writer->SetInput(changeLabelFilter->GetOutput());
+
+  // Extract ROI if needed
+  if ( (parseResult->IsOptionPresent("ROIStartX")) &&
+       (parseResult->IsOptionPresent("ROIStartY")) &&
+       (parseResult->IsOptionPresent("ROISizeX")) &&
+       (parseResult->IsOptionPresent("ROISizeY")) )
+    {
+    ExtractROIType::Pointer extract =  ExtractROIType::New();
+    extract->SetInput(changeLabelFilter->GetOutput());
+
+    std::cout << parseResult->GetParameterUInt("ROIStartX") << ", "
+              << parseResult->GetParameterUInt("ROIStartY") << ", "
+              << parseResult->GetParameterUInt("ROISizeX") << ", "
+              << parseResult->GetParameterUInt("ROISizeY") << std::endl;
+
+    extract->SetStartX((unsigned long) parseResult->GetParameterUInt("ROIStartX"));
+    extract->SetStartY((unsigned long) parseResult->GetParameterUInt("ROIStartY"));
+    extract->SetSizeX((unsigned long) parseResult->GetParameterUInt("ROISizeX"));
+    extract->SetSizeY((unsigned long) parseResult->GetParameterUInt("ROISizeY"));
+
+    extract->Update();
+
+    writer->SetInput(extract->GetOutput());
+    }
+  else
+    {
+    writer->SetInput(changeLabelFilter->GetOutput());
+    }
+
   writer->Update();
 
   std::cout<<"Classification done ... "<<std::endl;
