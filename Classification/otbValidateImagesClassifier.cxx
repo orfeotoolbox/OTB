@@ -170,6 +170,7 @@ int ValidateImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult
     vproj->SetInputProjectionRef(vdreader->GetOutput()->GetProjectionRef());
     vproj->SetOutputKeywordList(reader->GetOutput()->GetImageKeywordlist());
     vproj->SetOutputProjectionRef(reader->GetOutput()->GetProjectionRef());
+    // TODO add DEM support
     vproj->Update();
 
     //Sample list generator
