@@ -64,7 +64,7 @@ int generic_SinclairReciprocalImageFilter(int argc, char * argv[])
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
   
   typedef otb::MultiChannelExtractROI<TOutputPixel, TOutputPixel > ExtractROIType;
-  typedef otb::SinclairReciprocalImageFilter<InputImageType, InputImageType, InputImageType, OutputImageType, TFunction> FilterType; 
+  typedef otb::SinclairReciprocalImageFilter<InputImageType, InputImageType, InputImageType, OutputImageType, TFunction> FilterType;
   
   typename FilterType::Pointer filter = FilterType::New();
   typename ReaderType::Pointer reader1 = ReaderType::New();

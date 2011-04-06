@@ -32,7 +32,7 @@ namespace otb
 {
 
 template<class TInputImage, class TPrecision>
-PersistentStreamingStatisticsVectorImageFilter<TInputImage,TPrecision>
+PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
 ::PersistentStreamingStatisticsVectorImageFilter()
  : m_EnableMinMax(true),
    m_EnableFirstOrderStats(true),
@@ -51,7 +51,7 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage,TPrecision>
 
 template<class TInputImage, class TPrecision>
 itk::DataObject::Pointer
-PersistentStreamingStatisticsVectorImageFilter<TInputImage,TPrecision>
+PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
 ::MakeOutput(unsigned int output)
 {
   switch (output)
@@ -82,96 +82,96 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage,TPrecision>
 }
 
 template<class TInputImage, class TPrecision>
-typename PersistentStreamingStatisticsVectorImageFilter<TInputImage,TPrecision>::PixelObjectType*
-PersistentStreamingStatisticsVectorImageFilter<TInputImage,TPrecision>
+typename PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>::PixelObjectType*
+PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
 ::GetMinimumOutput()
 {
   return static_cast<PixelObjectType*>(this->itk::ProcessObject::GetOutput(1));
 }
 
 template<class TInputImage, class TPrecision>
-const typename PersistentStreamingStatisticsVectorImageFilter<TInputImage,TPrecision>::PixelObjectType*
-PersistentStreamingStatisticsVectorImageFilter<TInputImage,TPrecision>
+const typename PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>::PixelObjectType*
+PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
 ::GetMinimumOutput() const
 {
   return static_cast<const PixelObjectType*>(this->itk::ProcessObject::GetOutput(1));
 }
 
 template<class TInputImage, class TPrecision>
-typename PersistentStreamingStatisticsVectorImageFilter<TInputImage,TPrecision>::PixelObjectType*
-PersistentStreamingStatisticsVectorImageFilter<TInputImage,TPrecision>
+typename PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>::PixelObjectType*
+PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
 ::GetMaximumOutput()
 {
   return static_cast<PixelObjectType*>(this->itk::ProcessObject::GetOutput(2));
 }
 
 template<class TInputImage, class TPrecision>
-const typename PersistentStreamingStatisticsVectorImageFilter<TInputImage,TPrecision>::PixelObjectType*
-PersistentStreamingStatisticsVectorImageFilter<TInputImage,TPrecision>
+const typename PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>::PixelObjectType*
+PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
 ::GetMaximumOutput() const
 {
   return static_cast<const PixelObjectType*>(this->itk::ProcessObject::GetOutput(2));
 }
 
 template<class TInputImage, class TPrecision>
-typename PersistentStreamingStatisticsVectorImageFilter<TInputImage,TPrecision>::RealPixelObjectType*
-PersistentStreamingStatisticsVectorImageFilter<TInputImage,TPrecision>
+typename PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>::RealPixelObjectType*
+PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
 ::GetMeanOutput()
 {
   return static_cast<RealPixelObjectType*>(this->itk::ProcessObject::GetOutput(3));
 }
 
 template<class TInputImage, class TPrecision>
-const typename PersistentStreamingStatisticsVectorImageFilter<TInputImage,TPrecision>::RealPixelObjectType*
-PersistentStreamingStatisticsVectorImageFilter<TInputImage,TPrecision>
+const typename PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>::RealPixelObjectType*
+PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
 ::GetMeanOutput() const
 {
   return static_cast<const RealPixelObjectType*>(this->itk::ProcessObject::GetOutput(3));
 }
 
 template<class TInputImage, class TPrecision>
-typename PersistentStreamingStatisticsVectorImageFilter<TInputImage,TPrecision>::RealPixelObjectType*
-PersistentStreamingStatisticsVectorImageFilter<TInputImage,TPrecision>
+typename PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>::RealPixelObjectType*
+PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
 ::GetSumOutput()
 {
   return static_cast<RealPixelObjectType*>(this->itk::ProcessObject::GetOutput(4));
 }
 
 template<class TInputImage, class TPrecision>
-const typename PersistentStreamingStatisticsVectorImageFilter<TInputImage,TPrecision>::RealPixelObjectType*
-PersistentStreamingStatisticsVectorImageFilter<TInputImage,TPrecision>
+const typename PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>::RealPixelObjectType*
+PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
 ::GetSumOutput() const
 {
   return static_cast<const RealPixelObjectType*>(this->itk::ProcessObject::GetOutput(4));
 }
 
 template<class TInputImage, class TPrecision>
-typename PersistentStreamingStatisticsVectorImageFilter<TInputImage,TPrecision>::MatrixObjectType*
-PersistentStreamingStatisticsVectorImageFilter<TInputImage,TPrecision>
+typename PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>::MatrixObjectType*
+PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
 ::GetCorrelationOutput()
 {
   return static_cast<MatrixObjectType*>(this->itk::ProcessObject::GetOutput(5));
 }
 
 template<class TInputImage, class TPrecision>
-const typename PersistentStreamingStatisticsVectorImageFilter<TInputImage,TPrecision>::MatrixObjectType*
-PersistentStreamingStatisticsVectorImageFilter<TInputImage,TPrecision>
+const typename PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>::MatrixObjectType*
+PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
 ::GetCorrelationOutput() const
 {
   return static_cast<const MatrixObjectType*>(this->itk::ProcessObject::GetOutput(5));
 }
 
 template<class TInputImage, class TPrecision>
-typename PersistentStreamingStatisticsVectorImageFilter<TInputImage,TPrecision>::MatrixObjectType*
-PersistentStreamingStatisticsVectorImageFilter<TInputImage,TPrecision>
+typename PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>::MatrixObjectType*
+PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
 ::GetCovarianceOutput()
 {
   return static_cast<MatrixObjectType*>(this->itk::ProcessObject::GetOutput(6));
 }
 
 template<class TInputImage, class TPrecision>
-const typename PersistentStreamingStatisticsVectorImageFilter<TInputImage,TPrecision>::MatrixObjectType*
-PersistentStreamingStatisticsVectorImageFilter<TInputImage,TPrecision>
+const typename PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>::MatrixObjectType*
+PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
 ::GetCovarianceOutput() const
 {
   return static_cast<const MatrixObjectType*>(this->itk::ProcessObject::GetOutput(6));
@@ -179,7 +179,7 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage,TPrecision>
 
 template<class TInputImage, class TPrecision>
 void
-PersistentStreamingStatisticsVectorImageFilter<TInputImage,TPrecision>
+PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
 ::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
@@ -197,7 +197,7 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage,TPrecision>
 
 template<class TInputImage, class TPrecision>
 void
-PersistentStreamingStatisticsVectorImageFilter<TInputImage,TPrecision>
+PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
 ::AllocateOutputs()
 {
   // This is commented to prevent the streaming of the whole image for the first stream strip
@@ -209,7 +209,7 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage,TPrecision>
 
 template<class TInputImage, class TPrecision>
 void
-PersistentStreamingStatisticsVectorImageFilter<TInputImage,TPrecision>
+PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
 ::Reset()
 {
   TInputImage * inputPtr = const_cast<TInputImage *>(this->GetInput());
@@ -271,7 +271,7 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage,TPrecision>
 
 template<class TInputImage, class TPrecision>
 void
-PersistentStreamingStatisticsVectorImageFilter<TInputImage,TPrecision>
+PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
 ::Synthetize()
 {
   TInputImage * inputPtr = const_cast<TInputImage *>(this->GetInput());
@@ -353,7 +353,7 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage,TPrecision>
 
 template<class TInputImage, class TPrecision>
 void
-PersistentStreamingStatisticsVectorImageFilter<TInputImage,TPrecision>
+PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
 ::ThreadedGenerateData(const RegionType& outputRegionForThread, int threadId)
 {
   // Support progress methods/callbacks
@@ -398,7 +398,7 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage,TPrecision>
         {
         for (unsigned int c = 0; c < threadSecondOrder.Cols(); ++c)
           {
-          threadSecondOrder(r,c) += vectorValue[r] * vectorValue[c];
+          threadSecondOrder(r, c) += vectorValue[r] * vectorValue[c];
           }
         }
       }
@@ -408,7 +408,7 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage,TPrecision>
 
 template <class TImage, class TPrecision>
 void
-PersistentStreamingStatisticsVectorImageFilter<TImage,TPrecision>
+PersistentStreamingStatisticsVectorImageFilter<TImage, TPrecision>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);

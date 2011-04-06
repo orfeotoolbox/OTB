@@ -86,7 +86,7 @@ int generic_SinclairImageFilter(int argc, char * argv[])
   typename ExtractROIType::Pointer  extract = ExtractROIType::New();
   extract->SetStartX(10);
   extract->SetStartY(10);
-  extract->SetSizeX(30); 
+  extract->SetSizeX(30);
   extract->SetSizeY(30);
   extract->SetInput(filter->GetOutput());
 

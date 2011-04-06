@@ -36,7 +36,7 @@ int otbShiftScaleVectorImageFilterTest(int argc, char * argv[])
   typedef float                                                                   OutputPixelType;
   typedef otb::VectorImage<InputPixelType, Dimension>                             InputImageType;
   typedef otb::VectorImage<OutputPixelType, Dimension>                            OutputImageType;
-  typedef otb::Image<InputPixelType,2>                                            ImageType;
+  typedef otb::Image<InputPixelType, 2>                                            ImageType;
   typedef otb::ImageList<ImageType>                                               ImageListType;
   typedef otb::VectorImageToImageListFilter<InputImageType, ImageListType>        VI2ILFilterType;
   //Statistics estimator

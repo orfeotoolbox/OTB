@@ -109,7 +109,7 @@ private:
  * from the Covariance image (6 complex channels)
  *
  * For more details, please refer to the class ReciprocalCovarianceToReciprocalCoherencyFunctor.
- * 
+ *
  * \ingroup SARPolarimetry
  * \sa ReciprocalCovarianceToReciprocalCoherencyFunctor
  */

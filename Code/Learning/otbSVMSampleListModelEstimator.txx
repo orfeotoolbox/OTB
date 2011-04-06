@@ -74,7 +74,7 @@ SVMSampleListModelEstimator<TInputSampleList, TTrainingSampleList, TMeasurementF
       __FILE__,
       __LINE__,
       "Input pointset size is not the same as the training pointset size.",
-      ITK_LOCATION);*/
+      ITK_LOCATION); */
     itkExceptionMacro(<< "Input pointset size is not the same as the training pointset size ("
                       << inputSampleListSize << " vs "<< trainingSampleListSize << ").");
     }

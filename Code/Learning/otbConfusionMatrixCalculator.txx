@@ -168,14 +168,14 @@ ConfusionMatrixCalculator<TRefListLabel, TProdListLabel>
     /*std::cout << "TP= " << this->m_TruePositiveValue << std::endl;
     std::cout << "FN= " << this->m_FalseNegativeValue << std::endl;
     std::cout << "FP= " << this->m_FalsePositiveValue << std::endl;
-    std::cout << "TN= " << this->m_TrueNegativeValue << std::endl;*/
+    std::cout << "TN= " << this->m_TrueNegativeValue << std::endl; */
     }
   else
     {
     /*std::cout << "TP= " << this->m_TruePositiveValues << std::endl;
     std::cout << "FN= " << this->m_FalseNegativeValues << std::endl;
     std::cout << "FP= " << this->m_FalsePositiveValues << std::endl;
-    std::cout << "TN= " << this->m_TrueNegativeValues << std::endl;*/
+    std::cout << "TN= " << this->m_TrueNegativeValues << std::endl; */
     }
 
   m_Precisions = MeasurementType(m_NumberOfClasses);
