@@ -60,13 +60,13 @@ int ImageSVMClassifier::Describe(ApplicationDescriptor* descriptor)
                         "svm", 1, true, ApplicationDescriptor::FileName);
   descriptor->AddOption("OutputLabeledImage", "Output labeled image",
                         "out", 1, true, ApplicationDescriptor::FileName);
-  descriptor->AddOption("ROIStartX", "",
+  descriptor->AddOption("ROIStartX", "Start X of the ROI",
                         "x", 1, false, ApplicationDescriptor::Integer);
-  descriptor->AddOption("ROIStartY", "",
+  descriptor->AddOption("ROIStartY", "Start Y of the ROI",
                         "y", 1, false, ApplicationDescriptor::Integer);
-  descriptor->AddOption("ROISizeX", "",
+  descriptor->AddOption("ROISizeX", "Size X of the ROI",
                         "sx", 1, false, ApplicationDescriptor::Integer);
-  descriptor->AddOption("ROISizeY", "",
+  descriptor->AddOption("ROISizeY", "Size Y of the ROI",
                         "sy", 1, false, ApplicationDescriptor::Integer);
   return EXIT_SUCCESS;
 }
