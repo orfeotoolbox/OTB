@@ -300,7 +300,7 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
     svmestimator->SetC(parseResult->GetParameterDouble("Margin"));
     }
 
-  if(parseResult->IsOptionPresent("Margin"))
+  if(parseResult->IsOptionPresent("SVM_Kernel"))
     {
     switch (parseResult->GetParameterInt("SVM_Kernel"))
       {
