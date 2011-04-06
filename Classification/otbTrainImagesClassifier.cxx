@@ -80,6 +80,15 @@ int TrainImagesClassifier::Describe(ApplicationDescriptor* descriptor)
                         "b", 1, false, ApplicationDescriptor::Integer);
   descriptor->AddOption("SVM_Kernel", "Type of kernel use to estimate SVM model : 0 = LINEAR (default), 1 = RBF,  2 = POLY, 3 = SIGMOID",
                         "k", 1, false, ApplicationDescriptor::Integer);
+  descriptor->AddOption("MaxTrainingSize", "Maximum size ot the training sample (default = -1)",
+                        "mt", 1, false, ApplicationDescriptor::Integer);
+  descriptor->AddOption("MaxValidationSize", "Maximum size of the validation sample (default = -1)",
+                        "mv", 1, false, ApplicationDescriptor::Integer);
+  descriptor->AddOption("ValidationTrainingRatio", "Ratio between training and validation sample (0.0 = all training, 1.0 = all validation) default = 0.5",
+                        "vtr", 1, false, ApplicationDescriptor::Real);
+  descriptor->AddOption("SVMParamOptim", "Use SVM parameters optimization",
+                        "opt", 1, false, ApplicationDescriptor::Integer);
+
   return EXIT_SUCCESS;
 }
 
@@ -145,12 +154,6 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
   ConcatenateListSampleFilterType::Pointer concatenateValidationSamples =
                                             ConcatenateListSampleFilterType::New();
 
-  //Set the size of training and validation set
-  //TODO use default parameters of the filter?
-  const long int maxTrainingSize = 100;
-  const long int maxValidationSize = 100;
-  const double validationTrainingProportion = 0.5;
-
   //--------------------------
   // Load measurements from images
   unsigned int nbBands = 0;
@@ -181,6 +184,7 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
     vproj->SetInputProjectionRef(vdreader->GetOutput()->GetProjectionRef());
     vproj->SetOutputKeywordList(reader->GetOutput()->GetImageKeywordlist());
     vproj->SetOutputProjectionRef(reader->GetOutput()->GetProjectionRef());
+    // TODO add DEM support
     vproj->Update();
 
     //Sample list generator
@@ -190,10 +194,22 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
     //TODO the ListSampleGenerator perform UpdateOutputData over the input image (need a persistent implementation)
     sampleGenerator->SetInput(reader->GetOutput());
     sampleGenerator->SetInputVectorData(vproj->GetOutput());
-    sampleGenerator->SetMaxTrainingSize(maxTrainingSize);
-    sampleGenerator->SetMaxValidationSize(maxValidationSize);
-    sampleGenerator->SetValidationTrainingProportion(validationTrainingProportion);
-
+    if (parseResult->IsOptionPresent("MaxTrainingSize"))
+      {
+      sampleGenerator->SetMaxTrainingSize(parseResult->GetParameterInt("MaxTrainingSize"));
+      }
+    if (parseResult->IsOptionPresent("MaxValidationSize"))
+      {
+      sampleGenerator->SetMaxValidationSize(parseResult->GetParameterInt("MaxValidationSize"));
+      }
+    if (parseResult->IsOptionPresent("ValidationTrainingRatio"))
+      {
+      sampleGenerator->SetValidationTrainingProportion(parseResult->GetParameterDouble("ValidationTrainingRatio"));
+      }
+    else
+      {
+      sampleGenerator->SetValidationTrainingProportion(0.5);
+      }
     sampleGenerator->SetClassKey("Class");
 
     sampleGenerator->Update();
@@ -291,9 +307,13 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
   SVMEstimatorType::Pointer svmestimator = SVMEstimatorType::New();
   svmestimator->SetInputSampleList(trainingListSample);
   svmestimator->SetTrainingSampleList(trainingLabeledListSample);
-  svmestimator->SetParametersOptimization(true);
 
-  //TODO : Add some other options
+  //SVM Option
+  //TODO : Add some other options ?
+  if(parseResult->IsOptionPresent("SVMParamOptim"))
+    {
+    svmestimator->SetParametersOptimization(true);
+    }
 
   if(parseResult->IsOptionPresent("Margin"))
     {
