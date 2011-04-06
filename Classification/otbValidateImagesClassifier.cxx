@@ -57,6 +57,9 @@
 // Classification filter
 #include "otbSVMImageClassificationFilter.h"
 
+// VectorData projection filter
+#include "otbVectorDataProjectionFilter.h"
+
 namespace otb
 {
 
@@ -129,6 +132,8 @@ int ValidateImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult
       LabelListSampleType>                                  ConfusionMatrixCalculatorType;
   typedef ClassifierType::OutputType ClassifierOutputType;
 
+  // Projection of a vectorData
+  typedef otb::VectorDataProjectionFilter<VectorDataType, VectorDataType>     VectorDataProjectionFilterType;
 
   //Create validation list samples and validation label list samples
   ConcatenateLabelListSampleFilterType::Pointer concatenateValidationLabels =
@@ -159,13 +164,21 @@ int ValidateImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult
     vdreader->Update();
     std::cout<<"Set VectorData filename: "<< parseResult->GetParameterString("VectorDataSamples",imgIndex) <<std::endl;
 
+    // Project the vectorData in the Image Coodinate system
+    VectorDataProjectionFilterType::Pointer vproj = VectorDataProjectionFilterType::New();
+    vproj->SetInput(vdreader->GetOutput());
+    vproj->SetInputProjectionRef(vdreader->GetOutput()->GetProjectionRef());
+    vproj->SetOutputKeywordList(reader->GetOutput()->GetImageKeywordlist());
+    vproj->SetOutputProjectionRef(reader->GetOutput()->GetProjectionRef());
+    vproj->Update();
+
     //Sample list generator
     ListSampleGeneratorType::Pointer sampleGenerator = ListSampleGeneratorType::New();
 
     //Set inputs of the sample generator
     //TODO the ListSampleGenerator perform UpdateOutputData over the input image (need a persistent implementation)
     sampleGenerator->SetInput(reader->GetOutput());
-    sampleGenerator->SetInputVectorData(vdreader->GetOutput());
+    sampleGenerator->SetInputVectorData(vproj->GetOutput());
     sampleGenerator->SetValidationTrainingProportion(1.0); // All in validation
 
     sampleGenerator->SetClassKey("Class");
