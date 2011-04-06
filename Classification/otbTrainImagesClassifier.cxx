@@ -56,6 +56,9 @@
 // Balancing ListSample
 #include "otbListSampleToBalancedListSampleFilter.h"
 
+// VectorData projection filter
+#include "otbVectorDataProjectionFilter.h"
+
 namespace otb
 {
 
@@ -128,6 +131,9 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
       LabelListSampleType>                                  ConfusionMatrixCalculatorType;
   typedef ClassifierType::OutputType ClassifierOutputType;
 
+  // VectorData projection filter
+  typedef otb::VectorDataProjectionFilter<VectorDataType, VectorDataType>     VectorDataProjectionFilterType;
+
 
   //Create training and validation for list samples and label list samples
   ConcatenateLabelListSampleFilterType::Pointer concatenateTrainingLabels =
@@ -169,13 +175,21 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
     vdreader->Update();
     std::cout<<"Set VectorData filename: "<< parseResult->GetParameterString("VectorDataSamples",imgIndex) <<std::endl;
 
+    // Project the vectorData in the Image Coodinate system
+    VectorDataProjectionFilterType::Pointer vproj = VectorDataProjectionFilterType::New();
+    vproj->SetInput(vdreader->GetOutput());
+    vproj->SetInputProjectionRef(vdreader->GetOutput()->GetProjectionRef());
+    vproj->SetOutputKeywordList(reader->GetOutput()->GetImageKeywordlist());
+    vproj->SetOutputProjectionRef(reader->GetOutput()->GetProjectionRef());
+    vproj->Update();
+
     //Sample list generator
     ListSampleGeneratorType::Pointer sampleGenerator = ListSampleGeneratorType::New();
 
     //Set inputs of the sample generator
     //TODO the ListSampleGenerator perform UpdateOutputData over the input image (need a persistent implementation)
     sampleGenerator->SetInput(reader->GetOutput());
-    sampleGenerator->SetInputVectorData(vdreader->GetOutput());
+    sampleGenerator->SetInputVectorData(vproj->GetOutput());
     sampleGenerator->SetMaxTrainingSize(maxTrainingSize);
     sampleGenerator->SetMaxValidationSize(maxValidationSize);
     sampleGenerator->SetValidationTrainingProportion(validationTrainingProportion);
