@@ -55,6 +55,8 @@ public:
   typedef VectorDataType::PolygonType  PolygonType;
   typedef VectorDataType::LineType     LineType;
   typedef PolygonType::VertexType      VertexType;
+  typedef PolygonType::VertexListConstIteratorType
+                                       VertexListConstIteratorType;
 
   /** Runtime information */
   itkTypeMacro(VectorDataModel, Object);
