@@ -372,7 +372,6 @@ template<class ImageType, class RemoteSensingRegionType>
 typename ImageType::RegionType
 TransformPhysicalRegionToIndexRegion(const RemoteSensingRegionType& region, const ImageType* image)
 {
-  std::cout << "TransformPhysicalRegionToIndexRegion" <<std::endl;
   typename ImageType::RegionType outputRegion;
   typename ImageType::RegionType::IndexType index;
   typename ImageType::RegionType::IndexType index2;
@@ -381,7 +380,6 @@ TransformPhysicalRegionToIndexRegion(const RemoteSensingRegionType& region, cons
   point[0] = region.GetIndex()[0];
   point[1] = region.GetIndex()[1];
   image->TransformPhysicalPointToIndex(point, index);
-  std::cout <<" physicalPoint : "<< point << " --> index "<< index  << std::endl;
 
   point[0] = region.GetIndex()[0] + region.GetSize()[0];
   point[1] = region.GetIndex()[1] + region.GetSize()[1];

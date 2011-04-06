@@ -27,7 +27,7 @@
 namespace otb
 {
 
-template <class TVectorData>
+/*template <class TVectorData>
 void printVectorData(TVectorData * vectorData, string msg = "")
 {
   typedef TVectorData VectorDataType;
@@ -54,7 +54,7 @@ void printVectorData(TVectorData * vectorData, string msg = "")
       }
     ++itVector;
     }
-}
+}*/
 
 template<class TImage, class TVectorData>
 ListSampleGenerator<TImage, TVectorData>
@@ -104,13 +104,10 @@ void
 ListSampleGenerator<TImage, TVectorData>
 ::SetInputVectorData(const VectorDataType * vectorData)
 {
-  std::cout << "ListSampleGenerator::SetInputVectorData BEGIN ..." << std::endl;
-
   this->ProcessObject::SetNthInput(1, const_cast<VectorDataType *>(vectorData));
 
-  printVectorData(vectorData);
+  //printVectorData(vectorData);
 
-  std::cout << "ListSampleGenerator::SetInputVectorData ... END" << std::endl;
 }
 
 template <class TImage, class TVectorData>
@@ -155,8 +152,6 @@ void
 ListSampleGenerator<TImage, TVectorData>
 ::GenerateData()
 {
-  std::cout << "ListSampleGenerator::GenerateData() : BEGIN ..." <<std::endl;
-
   ImagePointerType image = const_cast<ImageType*>(this->GetInput());
 
   VectorDataPointerType vectorData = const_cast<VectorDataType*>(this->GetInputVectorData());
@@ -188,12 +183,12 @@ ListSampleGenerator<TImage, TVectorData>
         otb::TransformPhysicalRegionToIndexRegion(itVector.Get()->GetPolygonExteriorRing()->GetBoundingRegion(),
                                                   image.GetPointer());
 
-      std::cout << "Image region from polygon:\n" << polygonRegion <<  std::endl;
-      std::cout << "Image largest possible region:\n" << image->GetLargestPossibleRegion() <<  std::endl;
+      //std::cout << "Image region from polygon:\n" << polygonRegion <<  std::endl;
+      //std::cout << "Image largest possible region:\n" << image->GetLargestPossibleRegion() <<  std::endl;
       image->SetRequestedRegion(polygonRegion);
       image->PropagateRequestedRegion();
       image->UpdateOutputData();
-      std::cout << "Image region requested:\n" << image->GetRequestedRegion() <<  std::endl;
+      //std::cout << "Image region requested:\n" << image->GetRequestedRegion() <<  std::endl;
 
       typedef itk::ImageRegionConstIteratorWithIndex<ImageType> IteratorType;
       IteratorType it(image, polygonRegion);
@@ -203,7 +198,6 @@ ListSampleGenerator<TImage, TVectorData>
         itk::ContinuousIndex<double, 2> point;
         image->TransformIndexToPhysicalPoint(it.GetIndex(), point);
         //std::cout << it.GetIndex() << " -> " << point << std::endl;
-        //if (itVector.Get()->GetPolygonExteriorRing()->IsInside(it.GetIndex()))
         if (itVector.Get()->GetPolygonExteriorRing()->IsInside(point))
           {
           double randomValue = m_RandomGenerator->GetUniformVariate(0.0, 1.0);
@@ -233,7 +227,6 @@ ListSampleGenerator<TImage, TVectorData>
   assert(m_TrainingListSample->Size() == m_TrainingListLabel->Size());
   assert(m_ValidationListSample->Size() == m_ValidationListLabel->Size());
 
-  std::cout << "ListSampleGenerator::GenerateData() : ... END" <<std::endl;
 }
 
 template <class TImage, class TVectorData>
@@ -241,7 +234,6 @@ void
 ListSampleGenerator<TImage, TVectorData>
 ::GenerateClassStatistics()
 {
-  std::cout << "ListSampleGenerator::GenerateClassStatistics() : BEGIN ..." <<std::endl;
   m_ClassesSize.clear();
 
   //Compute pixel area:
@@ -277,8 +269,6 @@ ListSampleGenerator<TImage, TVectorData>
 
   m_ClassMinSize = minSize;
   m_NumberOfClasses = m_ClassesSize.size();
-  std::cout <<   "m_ClassMinSize: " << m_ClassMinSize << ", m_NumberOfClasses: " << m_NumberOfClasses <<std::endl;
-  std::cout << "ListSampleGenerator::GenerateClassStatistics() : ... END" <<std::endl;
 }
 
 template <class TImage, class TVectorData>
