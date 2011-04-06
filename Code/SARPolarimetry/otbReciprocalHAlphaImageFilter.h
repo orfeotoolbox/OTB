@@ -32,21 +32,21 @@ namespace Functor {
 /** \class otbHAlphaFunctor
  * \brief Evaluate the H-Alpha parameters from the reciprocal coherency matrix image.
  *
- * To process, we diagonalise the complex coherency matrix (size 3*3). We call \f$ SortedEigenValues \f$ the list that contains the 
+ * To process, we diagonalise the complex coherency matrix (size 3*3). We call \f$ SortedEigenValues \f$ the list that contains the
  * eigen values of the matrix sorted in decrease order. \f$ SortedEigenVector \f$ the corresponding list
  * of eigen vector.
- * 
+ *
  *   Output value are:
  *   channel #0 : \f$ entropy = -\sum_{i=0}^{2}{p[i].\log{p[i]}} / \log{3} \f$ \\
  *   channel #1 : \f$ \alpha = \sum_{i=0}^{2}{p[i].\alpha_{i} \f$ \\
  *   channel #2 : \f$ anisotropy = \frac {SortedEigenValues[1] - SortedEigenValues[2]}{SortedEigenValues[1] + SortedEigenValues[2]} \f$ \\
- * 
+ *
  * Where:
  * \f$ p[i] = \max{SortedEigenValues[i], 0} / \sum_{i=0}^{2, SortedEigenValues[i]>0}{SortedEigenValues[i]} \f$ \\
  * Then, \f$ if p[i] < 0, p[i]=0, if p[i] > 1, p[i]=1. \f$ \\
  * \f$ \alpha_{i} = \left| SortedEigenVector[i] \right|* \frac{180}{\pi}\f$ \\
  * Then, \f$ if \alpha_{i} > 90, \alpha_{i}=90. \f$ \\
- * 
+ *
  * \ingroup SARPolarimetry
  *
  */
