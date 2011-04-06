@@ -350,14 +350,14 @@ ADD_TEST(saTvMuellerToPolarisationDegreeAndPowerImageFilter ${SARPOLARIMETRY_TES
 	)
 
 # Mueller To Covariance Image Filter
-ADD_TEST(saTuMuellerToCovarianceImageFilterNew ${SARPOLARIMETRY_TESTS2}
-		otbMuellerToCovarianceImageFilterNew
+ADD_TEST(saTuMuellerToReciprocalCovarianceImageFilterNew ${SARPOLARIMETRY_TESTS2}
+		otbMuellerToReciprocalCovarianceImageFilterNew
 )
 
-ADD_TEST(saTvMuellerToCovarianceImageFilter ${SARPOLARIMETRY_TESTS2}
+ADD_TEST(saTvMuellerToReciprocalCovarianceImageFilter ${SARPOLARIMETRY_TESTS2}
   --compare-image ${EPSILON_12}   ${BASELINE}/saTvMuellerToMLCImageFilter.tif
                     ${TEMP}/saTvMuellerToMLCImageFilter.tif
-        otbMuellerToCovarianceImageFilter
+        otbMuellerToReciprocalCovarianceImageFilter
         ${BASELINE}/saTvSinclairImageFilter_SinclairToMueller.tif
         ${TEMP}/saTvMuellerToMLCImageFilter.tif
 	)
@@ -412,8 +412,8 @@ otbMuellerToCircularPolarisationImageFilterNew.cxx
 otbMuellerToCircularPolarisationImageFilter.cxx
 otbMuellerToPolarisationDegreeAndPowerImageFilterNew.cxx
 otbMuellerToPolarisationDegreeAndPowerImageFilter.cxx
-otbMuellerToCovarianceImageFilterNew.cxx
-otbMuellerToCovarianceImageFilter.cxx
+otbMuellerToReciprocalCovarianceImageFilterNew.cxx
+otbMuellerToReciprocalCovarianceImageFilter.cxx
 otbPolarimetricData.cxx
 )
 

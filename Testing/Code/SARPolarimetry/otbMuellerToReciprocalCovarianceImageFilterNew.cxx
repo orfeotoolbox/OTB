@@ -23,9 +23,9 @@
 #include <iostream>
 
 #include "otbVectorImage.h"
-#include "otbMuellerToCovarianceImageFilter.h"
+#include "otbMuellerToReciprocalCovarianceImageFilter.h"
 
-int otbMuellerToCovarianceImageFilterNew(int argc, char * argv[])
+int otbMuellerToReciprocalCovarianceImageFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
 
@@ -34,7 +34,7 @@ int otbMuellerToCovarianceImageFilterNew(int argc, char * argv[])
   typedef otb::VectorImage<PixelType, Dimension>        ImageType;
   typedef otb::VectorImage<ComplexPixelType, Dimension> ComplexImageType;
 
-  typedef otb::MuellerToCovarianceImageFilter<ImageType, ComplexImageType> FilterType;
+  typedef otb::MuellerToReciprocalCovarianceImageFilter<ImageType, ComplexImageType> FilterType;
 
   FilterType::Pointer filter = FilterType::New();
 

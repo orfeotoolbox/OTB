@@ -121,16 +121,22 @@ private:
 
 /** \class otbReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter
  * \brief Compute the reciprocal Covariance circular matrix image from the reciprocal Covariance linear matrix image.
+ * For more details, please refer to the class ReciprocalLinearCovarianceToReciprocalCircularCovarianceFunctor.
+ *
+ * \ingroup SARPolarimetry
+ * \sa ReciprocalLinearCovarianceToReciprocalCircularCovarianceFunctor
  */
-template <class TInputImage, class TOutputImage, class TFunction = Functor::ReciprocalLinearCovarianceToReciprocalCircularCovarianceFunctor<
-    ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
+ template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter :
-   public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction>
+   public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage, Functor::ReciprocalLinearCovarianceToReciprocalCircularCovarianceFunctor<
+    ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
 {
 public:
    /** Standard class typedefs. */
    typedef ReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter  Self;
-   typedef itk::UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction> Superclass;
+   typedef typename Functor::ReciprocalLinearCovarianceToReciprocalCircularCovarianceFunctor<
+     typename TInputImage::PixelType, typename TOutputImage::PixelType> FunctionType;
+   typedef itk::UnaryFunctorImageFilter<TInputImage, TOutputImage, FunctionType> Superclass;
    typedef itk::SmartPointer<Self>        Pointer;
    typedef itk::SmartPointer<const Self>  ConstPointer;
 

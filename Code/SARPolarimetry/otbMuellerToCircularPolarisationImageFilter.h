@@ -46,7 +46,7 @@ namespace Functor {
  * \ingroup Functor
  * \ingroup SARPolarimetry
  *
- * \sa MuellerToMLCImageFilter
+ * \sa MuellerToReciprocalCovarianceFunctor
  * \sa MuellerToPolarisationDegreeAndPowerImageFilter
  *
  */
@@ -94,16 +94,23 @@ private:
 /** \class otbMuellerToCircularPolarisationImageFilter
  * \brief Compute the circular polarisation image (3 channels : LL, RR and LR)
  * from the Mueller image (16 real channels)
+ * For more details, please refer to the class MuellerToCircularPolarisationFunctor.
+ *
+ * \ingroup SARPolarimetry
+ * \sa MuellerToCircularPolarisationFunctor
+ *
  */
-template <class TInputImage, class TOutputImage, class TFunction = Functor::MuellerToCircularPolarisationFunctor<
-    ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
+template <class TInputImage, class TOutputImage>
 class ITK_EXPORT MuellerToCircularPolarisationImageFilter :
-   public UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction>
+   public UnaryFunctorImageFilter<TInputImage, TOutputImage, Functor::MuellerToCircularPolarisationFunctor<
+    ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
 {
 public:
    /** Standard class typedefs. */
    typedef MuellerToCircularPolarisationImageFilter  Self;
-   typedef UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction> Superclass;
+   typedef typename Functor::MuellerToCircularPolarisationFunctor<
+     typename TInputImage::PixelType, typename TOutputImage::PixelType> FunctionType;
+   typedef UnaryFunctorImageFilter<TInputImage, TOutputImage, FunctionType> Superclass;
    typedef itk::SmartPointer<Self>        Pointer;
    typedef itk::SmartPointer<const Self>  ConstPointer;
 

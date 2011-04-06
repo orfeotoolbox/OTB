@@ -109,16 +109,23 @@ private:
 /** \class otbReciprocalCovarianceToCoherencyDegreeImageFilter
  * \brief Compute the Coherency Degree coefficient
  * from the MLC image (6 complex channels)
+ * For more details, lease refer to the class ReciprocalCovarianceToCoherencyDegreeFunctor.
+ *
+ * \ingroup SARPolarimetry
+ * \sa ReciprocalCovarianceToCoherencyDegreeFunctor
+ *
  */
-template <class TInputImage, class TOutputImage, class TFunction = Functor::ReciprocalCovarianceToCoherencyDegreeFunctor<
-    ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
+template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ReciprocalCovarianceToCoherencyDegreeImageFilter :
-   public UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction>
+   public UnaryFunctorImageFilter<TInputImage, TOutputImage, Functor::ReciprocalCovarianceToCoherencyDegreeFunctor<
+    ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
 {
 public:
    /** Standard class typedefs. */
    typedef ReciprocalCovarianceToCoherencyDegreeImageFilter  Self;
-   typedef UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction> Superclass;
+   typedef typename Functor::ReciprocalCovarianceToCoherencyDegreeFunctor<
+     typename TInputImage::PixelType, typename TOutputImage::PixelType> FunctionType;
+   typedef UnaryFunctorImageFilter<TInputImage, TOutputImage, FunctionType> Superclass;
    typedef itk::SmartPointer<Self>        Pointer;
    typedef itk::SmartPointer<const Self>  ConstPointer;
 

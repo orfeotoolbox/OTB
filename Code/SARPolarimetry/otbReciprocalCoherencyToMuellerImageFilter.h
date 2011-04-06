@@ -102,18 +102,26 @@ private:
 
 
 /** \class otbReciprocalCoherencyToMuellerImageFilter
- * \brief Compute the Mueller matrix image (9 real channels)
+ * \brief Compute the Mueller matrix image (10 real channels)
  * from the Reciprocal coherency image (6 complex channels)
+ *
+ * For more datails, please refer to ReciprocalCoherencyToMuellerFunctor.
+ *
+ * \ingroup SARPolarimetry
+ * \sa ReciprocalCoherencyToMuellerFunctor
+ *
  */
-template <class TInputImage, class TOutputImage, class TFunction = Functor::ReciprocalCoherencyToMuellerFunctor<
-    ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
+template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ReciprocalCoherencyToMuellerImageFilter :
-   public otb::UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction>
+   public UnaryFunctorImageFilter<TInputImage, TOutputImage, Functor::ReciprocalCoherencyToMuellerFunctor<
+    ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
 {
 public:
    /** Standard class typedefs. */
    typedef ReciprocalCoherencyToMuellerImageFilter  Self;
-   typedef otb::UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction> Superclass;
+   typedef typename Functor::ReciprocalCoherencyToMuellerFunctor<
+     typename TInputImage::PixelType, typename TOutputImage::PixelType> FunctionType;
+   typedef UnaryFunctorImageFilter<TInputImage, TOutputImage, FunctionType> Superclass;
    typedef itk::SmartPointer<Self>        Pointer;
    typedef itk::SmartPointer<const Self>  ConstPointer;
 
@@ -127,6 +135,7 @@ public:
 protected:
    ReciprocalCoherencyToMuellerImageFilter() {}
   virtual ~ReciprocalCoherencyToMuellerImageFilter() {}
+
 
 private:
   ReciprocalCoherencyToMuellerImageFilter(const Self&); //purposely not implemented

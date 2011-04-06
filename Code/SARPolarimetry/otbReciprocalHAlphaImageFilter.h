@@ -202,16 +202,23 @@ private:
 /** \class otbHAlphaImageFilter
  * \brief Compute the H-Alpha image (3 channels)
  * from the Reciprocal coherency image (6 complex channels)
+ *
+ * For more details, please refer to the class ReciprocalHAlphaFunctor.
+ *
+ * \ingroup SARPOlarimetry
+ * \sa ReciprocalHAlphaFunctor
  */
-template <class TInputImage, class TOutputImage, class TFunction = Functor::ReciprocalHAlphaFunctor<
-    ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
+template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ReciprocalHAlphaImageFilter :
-   public otb::UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction>
+   public otb::UnaryFunctorImageFilter<TInputImage, TOutputImage, Functor::ReciprocalHAlphaFunctor<
+    ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
 {
 public:
    /** Standard class typedefs. */
    typedef ReciprocalHAlphaImageFilter  Self;
-   typedef otb::UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction> Superclass;
+   typedef typename Functor::ReciprocalHAlphaFunctor<
+     typename TInputImage::PixelType, typename TOutputImage::PixelType> FunctionType;
+   typedef otb::UnaryFunctorImageFilter<TInputImage, TOutputImage, FunctionType> Superclass;
    typedef itk::SmartPointer<Self>        Pointer;
    typedef itk::SmartPointer<const Self>  ConstPointer;
 
