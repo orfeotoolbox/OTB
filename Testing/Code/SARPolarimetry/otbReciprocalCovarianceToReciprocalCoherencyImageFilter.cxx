@@ -25,7 +25,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbReciprocalCovarianceToReciprocalCoherencyImageFilter.h"
-#include "otbComplexToVectorImageCastFilter.h"
+
 
 int otbReciprocalCovarianceToReciprocalCoherencyImageFilter(int argc, char * argv[])
 {
@@ -40,13 +40,10 @@ int otbReciprocalCovarianceToReciprocalCoherencyImageFilter(int argc, char * arg
 
   typedef otb::ReciprocalCovarianceToReciprocalCoherencyImageFilter<ImageType, ImageType> FilterType;
 
-
   typedef otb::ImageFileReader<ImageType>  ReaderType;
-  typedef otb::ImageFileWriter<RealImageType> WriterType;
-  typedef otb::ComplexToVectorImageCastFilter<ImageType, RealImageType> CasterType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
-  CasterType::Pointer caster = CasterType::New();
   WriterType::Pointer writer = WriterType::New();
 
   reader->SetFileName(inputFilename);
@@ -54,10 +51,8 @@ int otbReciprocalCovarianceToReciprocalCoherencyImageFilter(int argc, char * arg
   FilterType::Pointer filter = FilterType::New();
   filter->SetInput(reader->GetOutput());
 
-  caster->SetInput(filter->GetOutput());
-
   writer->SetFileName(outputFilename);
-  writer->SetInput(caster->GetOutput());
+  writer->SetInput(filter->GetOutput());
   writer->Update();
 
   return EXIT_SUCCESS;

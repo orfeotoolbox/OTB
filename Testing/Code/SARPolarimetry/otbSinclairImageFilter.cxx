@@ -32,8 +32,8 @@
 #include "otbSinclairToCircularCovarianceMatrixFunctor.h"
 #include "otbSinclairToCoherencyMatrixFunctor.h"
 #include "otbSinclairToMuellerMatrixFunctor.h"
-#include "otbComplexToVectorImageCastFilter.h"
-#include "otbExtractROI.h"
+#include "otbMultiChannelExtractROI.h"
+
 
 int otbSinclairImageFilterNew(int argc, char * argv[])
 {
@@ -66,110 +66,38 @@ int generic_SinclairImageFilter(int argc, char * argv[])
   typedef otb::Image<TInputPixel> InputImageType;
   typedef otb::VectorImage<TOutputPixel> OutputImageType;
   typedef otb::ImageFileReader<InputImageType> ReaderType;
-  typedef otb::ExtractROI<TInputPixel, TInputPixel > ExtractROIType;
+  typedef otb::MultiChannelExtractROI<TOutputPixel, TOutputPixel > ExtractROIType;
   typedef otb::SinclairImageFilter<InputImageType, InputImageType, InputImageType, InputImageType, OutputImageType, TFunction> FilterType;
   typename FilterType::Pointer filter = FilterType::New();
   typename ReaderType::Pointer reader1 = ReaderType::New();
   typename ReaderType::Pointer reader2 = ReaderType::New();
   typename ReaderType::Pointer reader3 = ReaderType::New();
-  typename ExtractROIType::Pointer  extract1 = ExtractROIType::New();
-  typename ExtractROIType::Pointer  extract2 = ExtractROIType::New();
-  typename ExtractROIType::Pointer  extract3 = ExtractROIType::New();
-  extract1->SetStartX(10);
-  extract1->SetStartY(10);
-  extract1->SetSizeX(30); 
-  extract1->SetSizeY(30);
-  extract2->SetStartX(10);
-  extract2->SetStartY(10);
-  extract2->SetSizeX(30); 
-  extract2->SetSizeY(30);
-  extract3->SetStartX(10);
-  extract3->SetStartY(10);
-  extract3->SetSizeX(30);
-  extract3->SetSizeY(30);
+  
   reader1->SetFileName(inputFilename1);
   reader2->SetFileName(inputFilename2);
   reader3->SetFileName(inputFilename3);
-  extract1->SetInput(reader1->GetOutput());
-  extract2->SetInput(reader3->GetOutput());
-  extract3->SetInput(reader3->GetOutput()); 
-  filter->SetInputHH(extract1->GetOutput());
-  filter->SetInputHV(extract2->GetOutput());
-  filter->SetInputVH(extract2->GetOutput());
-  filter->SetInputVV(extract3->GetOutput());
+  filter->SetInputHH(reader1->GetOutput());
+  filter->SetInputHV(reader2->GetOutput());
+  filter->SetInputVH(reader2->GetOutput());
+  filter->SetInputVV(reader3->GetOutput());
+  
   filter->UpdateOutputInformation();
   
+  typename ExtractROIType::Pointer  extract = ExtractROIType::New();
+  extract->SetStartX(10);
+  extract->SetStartY(10);
+  extract->SetSizeX(30); 
+  extract->SetSizeY(30);
+  extract->SetInput(filter->GetOutput());
+
   typename WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outputFilename);
 
-  writer->SetInput( filter->GetOutput() );
+  writer->SetInput( extract->GetOutput() );
   writer->Update();
 
   return EXIT_SUCCESS;
 }
-
-template<class TInputPixel, class TOutputPixel, class TFunction>
-int generic_SinclairImageFilterWithCast(int argc, char * argv[])
-{
-  const char * outputFilename = argv[4];
-
-  typedef otb::VectorImage<TOutputPixel> OutputImageType;
-  typedef otb::VectorImage<typename TOutputPixel::value_type> OutputRealImageType;
-  typedef otb::ImageFileWriter<OutputRealImageType> WriterType;
-  typedef typename otb::ComplexToVectorImageCastFilter<OutputImageType, OutputRealImageType>  CasterType;
-
-  const char * inputFilename1  = argv[1];
-  const char * inputFilename2  = argv[2];
-  const char * inputFilename3  = argv[3];
-
-  typedef otb::Image<TInputPixel> InputImageType;
-  typedef otb::VectorImage<TOutputPixel> OutputImageType;
-  typedef otb::ImageFileReader<InputImageType> ReaderType;
-  typedef otb::ExtractROI<TInputPixel, TInputPixel > ExtractROIType;
-  typedef otb::SinclairImageFilter<InputImageType, InputImageType, InputImageType, InputImageType, OutputImageType, TFunction> FilterType;
-  typename FilterType::Pointer filter = FilterType::New();
-  typename ReaderType::Pointer reader1 = ReaderType::New();
-  typename ReaderType::Pointer reader2 = ReaderType::New();
-  typename ReaderType::Pointer reader3 = ReaderType::New();
-  typename ExtractROIType::Pointer  extract1 = ExtractROIType::New();
-  typename ExtractROIType::Pointer  extract2 = ExtractROIType::New();
-  typename ExtractROIType::Pointer  extract3 = ExtractROIType::New();
-  extract1->SetStartX(10);
-  extract1->SetStartY(10);
-  extract1->SetSizeX(30); 
-  extract1->SetSizeY(30);
-  extract2->SetStartX(10);
-  extract2->SetStartY(10);
-  extract2->SetSizeX(30); 
-  extract2->SetSizeY(30);
-  extract3->SetStartX(10);
-  extract3->SetStartY(10);
-  extract3->SetSizeX(30);
-  extract3->SetSizeY(30);
-  reader1->SetFileName(inputFilename1);
-  reader2->SetFileName(inputFilename2);
-  reader3->SetFileName(inputFilename3);
-  extract1->SetInput(reader1->GetOutput());
-  extract2->SetInput(reader3->GetOutput());
-  extract3->SetInput(reader3->GetOutput()); 
-  filter->SetInputHH(extract1->GetOutput());
-  filter->SetInputHV(extract2->GetOutput());
-  filter->SetInputVH(extract2->GetOutput());
-  filter->SetInputVV(extract3->GetOutput());
-  filter->UpdateOutputInformation();
-
-  typename WriterType::Pointer writer = WriterType::New();
-  typename CasterType::Pointer caster = CasterType::New();
-
-  writer->SetFileName(outputFilename);
-  
-  caster->SetInput( filter->GetOutput() );
-  writer->SetInput( caster->GetOutput() );
-  writer->Update();
-  
-  return EXIT_SUCCESS;
-}
-
 
 int otbSinclairImageFilter(int argc, char * argv[])
 {
@@ -186,7 +114,7 @@ int otbSinclairImageFilter(int argc, char * argv[])
   argc--;
   argv++;
   if (strArgv == "SinclairToCovarianceMatrix")
-    return (generic_SinclairImageFilterWithCast<InputPixelType, OutputPixelType,
+    return (generic_SinclairImageFilter<InputPixelType, OutputPixelType,
                 otb::Functor::SinclairToCovarianceMatrixFunctor<InputImageType::PixelType,
                                     InputImageType::PixelType,
                                     InputImageType::PixelType,
@@ -194,7 +122,7 @@ int otbSinclairImageFilter(int argc, char * argv[])
                                     OutputImageType::PixelType> >
                   (argc, argv));
   else  if (strArgv == "SinclairToCircularCovarianceMatrix")
-    return (generic_SinclairImageFilterWithCast<InputPixelType, OutputPixelType,
+    return (generic_SinclairImageFilter<InputPixelType, OutputPixelType,
                 otb::Functor::SinclairToCircularCovarianceMatrixFunctor<InputImageType::PixelType,
                                     InputImageType::PixelType,
                                     InputImageType::PixelType,
@@ -202,7 +130,7 @@ int otbSinclairImageFilter(int argc, char * argv[])
                                     OutputImageType::PixelType> >
                   (argc, argv));
   else  if (strArgv == "SinclairToCoherencyMatrix")
-    return (generic_SinclairImageFilterWithCast<InputPixelType, OutputPixelType,
+    return (generic_SinclairImageFilter<InputPixelType, OutputPixelType,
                 otb::Functor::SinclairToCoherencyMatrixFunctor<InputImageType::PixelType,
                                     InputImageType::PixelType,
                                     InputImageType::PixelType,

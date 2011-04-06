@@ -280,10 +280,7 @@ ADD_TEST(saTvReciprocalCovarianceToCoherencyDegreeImageFilter ${SARPOLARIMETRY_T
   --compare-image ${EPSILON_12}   ${BASELINE}/saTvMLCToCoherencyDegreeImageFilter.tif
                     ${TEMP}/saTvMLCToCoherencyDegreeImageFilter.tif
         otbReciprocalCovarianceToCoherencyDegreeImageFilter
-        ${INPUTDATA}/RSAT_imagery_HH.tif
-        ${INPUTDATA}/RSAT_imagery_HV.tif
-        ${INPUTDATA}/RSAT_imagery_HV.tif
-        ${INPUTDATA}/RSAT_imagery_VV.tif
+        ${BASELINE}/saTvSinclairImageFilter_SinclairToReciprocalCovariance.tif
         ${TEMP}/saTvMLCToCoherencyDegreeImageFilter.tif
 	)
 
@@ -296,10 +293,7 @@ ADD_TEST(saTvReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter
   --compare-image ${EPSILON_12}   ${BASELINE}/saTvMLCToCircularCoherencyDegreeImageFilter.tif
                     ${TEMP}/saTvMLCToCircularCoherencyDegreeImageFilter.tif
         otbReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter
-        ${INPUTDATA}/RSAT_imagery_HH.tif
-        ${INPUTDATA}/RSAT_imagery_HV.tif
-        ${INPUTDATA}/RSAT_imagery_HV.tif
-        ${INPUTDATA}/RSAT_imagery_VV.tif
+        ${BASELINE}/saTvSinclairImageFilter_SinclairToReciprocalCovariance.tif
         ${TEMP}/saTvMLCToCircularCoherencyDegreeImageFilter.tif
 	)
 
@@ -312,10 +306,7 @@ ADD_TEST(saTvReciprocalHAlphaImageFilter ${SARPOLARIMETRY_TESTS2}
   --compare-image ${EPSILON_12}   ${BASELINE}/saTvReciprocalHAlphaImageFilter.tif
                     ${TEMP}/saTvReciprocalHAlphaImageFilter.tif
         otbReciprocalHAlphaImageFilter
-        ${INPUTDATA}/RSAT_imagery_HH.tif
-        ${INPUTDATA}/RSAT_imagery_HV.tif
-        ${INPUTDATA}/RSAT_imagery_HV.tif
-        ${INPUTDATA}/RSAT_imagery_VV.tif
+        ${BASELINE}/saTvSinclairImageFilter_SinclairToReciprocalCoherency.tif
         ${TEMP}/saTvReciprocalHAlphaImageFilter.tif
 	)
 
@@ -328,10 +319,7 @@ ADD_TEST(saTvReciprocalCoherencyToMuellerImageFilter ${SARPOLARIMETRY_TESTS2}
   --compare-image ${EPSILON_12}   ${BASELINE}/saTvReciprocalCoherencyToMuellerImageFilter.tif
                     ${TEMP}/saTvReciprocalCoherencyToMuellerImageFilter.tif
         otbReciprocalCoherencyToMuellerImageFilter
-        ${INPUTDATA}/RSAT_imagery_HH.tif
-        ${INPUTDATA}/RSAT_imagery_HV.tif
-        ${INPUTDATA}/RSAT_imagery_HV.tif
-        ${INPUTDATA}/RSAT_imagery_VV.tif
+        ${BASELINE}/saTvSinclairImageFilter_SinclairToReciprocalCoherency.tif
         ${TEMP}/saTvReciprocalCoherencyToMuellerImageFilter.tif
 	)
 
