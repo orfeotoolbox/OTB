@@ -21,7 +21,7 @@ SET(EPSILON_3 0.001)
 SET(TESTSYSTEM_TESTS ${CXX_TEST_PATH}/otbTestSystemTests)
 
 #Test if the current working copy corresponds to the nightly revision number
-ADD_TEST(tsTuIsNightlyRevision ${TESTSYSTEM_TESTS}   
+ADD_TEST(tsTvIsNightlyRevision ${TESTSYSTEM_TESTS}   
          otbIsNightlyRevision
          ${OTB_WC_REVISION}
          http://www.orfeo-toolbox.org/nightly/libNightlyNumber )

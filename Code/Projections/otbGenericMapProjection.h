@@ -101,6 +101,11 @@ public:
 
   const MapProjectionWrapper* GetMapProjection() const;
 
+  virtual bool IsProjectionDefined() const;
+
+  void SetParameter(std::string key, std::string value);
+  std::string GetParameter(std::string key) const;
+
 protected:
   GenericMapProjection();
   virtual ~GenericMapProjection();

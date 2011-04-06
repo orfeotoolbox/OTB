@@ -23,6 +23,8 @@
 
 class ossimMapProjection;
 
+namespace ossimplugins
+{
 //******************************************************************************
 //*
 //* CLASS:  ossimTileMapModel
@@ -59,6 +61,10 @@ public:
    */
   virtual std::ostream& print(std::ostream& out) const;
   
+
+
+  bool open(const ossimFilename& file);
+
   /*!
    * Fulfills ossimObject base-class pure virtuals. Loads and saves geometry
    * KWL files. Returns true if successful.
@@ -155,5 +161,5 @@ protected:
   
 
 };
-
+} // End: namespace ossimplugins
 #endif

@@ -30,16 +30,25 @@ namespace Functor {
  * \brief Evaluate the  MLC image from the Mueller image
  *
  * Output value are:
- *   channel #0  : \f$ M_{11} + M_{22} + 2*M_{12} \f$
- *   channel #1  : \f$ M_{11} - M_{22}            \f$
- *   channel #2  : \f$ M_{11} + M_{22} - 2*M_{12} \f$
- *   channel #3  : \f$ M_{13} + M_{23}            + i*(M_{14}+M_{24}) \f$
- *   channel #4  : \f$ M_{3Coherency3} - M_{44}            - 2*i*M_{34}        \f$
- *   channel #5  : \f$ M_{13} - M_{23}            - i*(M_{14}-M_{24}) \f$
+ *   channel #0 : \f$ M_{11} + M_{22} + 2*M_{12} \f$ \\
+ *   channel #1 : \f$ M_{11} - M_{22} \f$ \\
+ *   channel #2 : \f$ M_{11} + M_{22} - 2*M_{12} \f$ \\
+ *   channel #3 : \f$ M_{13} + M_{23} + i*(M_{14}+M_{24}) \f$ \\
+ *   channel #4 : \f$ M_{3Coherency3} - M_{44} - 2*i*M_{34} \f$ \\
+ *   channel #5 : \f$ M_{13} - M_{23} - i*(M_{14}-M_{24}) \f$ \\
  *
- * Where \f$ M_{ij} are the coefficients of the input Mueeler matrix.
+ * Where \f$ M_{ij} are the coefficients of the input Mueller matrix.
  * Input pixel must have 10 channels (one for each Mueller matrix coeffcients).
- * The returned output pixel have 6 channles.
+  * The order of the channels corresponds to :
+ * \f$  \begin{pmatrix}
+ * {channel #0 }&{channel #1 }&{channel #2 }&{channel #3 } \\
+ * {channel #4 }&{channel #5 }&{channel #6 }&{channel #7 } \\
+ * {channel #8 }&{channel #9 }&{channel #10}&{channel #11} \\
+ * {channel #12}&{channel #13}&{channel #14}&{channel #15} \\
+ * \end{pmatrix}
+ *
+ * The output image has 6 channels : the diagonal and the upper element of the reciprocal matrix.
+ * Element are stored from left to right, line by line.
  *
  * \ingroup Functor
  * \ingroup SARPolarimetry

@@ -30,23 +30,26 @@ namespace Functor
  *  with Sinclair matrix information.
  *
  *  Output value are:
- *   channel #0 : \f$ S_{ll}.S_{ll}^{*} \f$
- *   channel #1 : \f$ S_{ll}.S_{lr}^{*} \f$
- *   channel #2 : \f$ S_{ll}.S_{rl}^{*} \f$
- *   channel #3 : \f$ S_{ll}.S_{rr}^{*} \f$
- *   channel #4 : \f$ S_{lr}.S_{lr}^{*} \f$
- *   channel #5 : \f$ S_{lr}.S_{rl}^{*} \f$
- *   channel #6 : \f$ S_{lr}.S_{rr}^{*} \f$
- *   channel #7 : \f$ S_{rl}.S_{rl}^{*} \f$
- *   channel #8 : \f$ S_{rl}.S_{rr}^{*} \f$
- *   channel #9 : \f$ S_{rr}.S_{rr}^{*} \f$
+ *   channel #0 : \f$ S_{ll}.S_{ll}^{*} \f$ \\
+ *   channel #1 : \f$ S_{ll}.S_{lr}^{*} \f$ \\
+ *   channel #2 : \f$ S_{ll}.S_{rl}^{*} \f$ \\
+ *   channel #3 : \f$ S_{ll}.S_{rr}^{*} \f$ \\
+ *   channel #4 : \f$ S_{lr}.S_{lr}^{*} \f$ \\
+ *   channel #5 : \f$ S_{lr}.S_{rl}^{*} \f$ \\
+ *   channel #6 : \f$ S_{lr}.S_{rr}^{*} \f$ \\
+ *   channel #7 : \f$ S_{rl}.S_{rl}^{*} \f$ \\
+ *   channel #8 : \f$ S_{rl}.S_{rr}^{*} \f$ \\
+ *   channel #9 : \f$ S_{rr}.S_{rr}^{*} \f$ \\
  *
  * With:
- * \f$ S_{ll} = 0.5 * (-S_{hh}-i*S_{hv}-i*S_{vh}+S_{vv}) \f$
- * \f$ S_{lr} = 0.5 * (-S_{hh}+i*S_{hv}-i*S_{vh}+S_{vv}) \f$
- * \f$ S_{rl} = 0.5 * (-S_{hh}-i*S_{hv}+i*S_{vh}-S_{vv}) \f$
- * \f$ S_{rr} = 0.5 * (-S_{hh}+i*S_{hv}+i*S_{vh}+S_{vv}) \f$
+ * \f$ S_{ll} = 0.5 * (-S_{hh}-i*S_{hv}-i*S_{vh}+S_{vv}) \f$ \\
+ * \f$ S_{lr} = 0.5 * (-S_{hh}+i*S_{hv}-i*S_{vh}+S_{vv}) \f$ \\
+ * \f$ S_{rl} = 0.5 * (-S_{hh}-i*S_{hv}+i*S_{vh}-S_{vv}) \f$ \\
+ * \f$ S_{rr} = 0.5 * (-S_{hh}+i*S_{hv}+i*S_{vh}+S_{vv}) \f$ \\
  * Extract from Antennas for radar and communications Harold Mott p 317.
+ *
+ * The output pixel has 10 channels : the diagonal and the upper element of the matrix.
+ * Element are stored from left to right, line by line.
  *
  *  \ingroup Functor
  *  \ingroup SARPolarimetry

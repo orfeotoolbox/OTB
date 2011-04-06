@@ -281,7 +281,8 @@ public:
 
     for (unsigned int i = 0; i < channels.size(); ++i)
       {
-      oss << channels[i] << " ";
+      //Describe the channel selection (numbering starts with 1)
+      oss << channels[i] + 1 << " ";
       }
     oss << std::endl;
 

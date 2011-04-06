@@ -33,8 +33,8 @@ ImageRegionSquareTileSplitter<VImageDimension>
   unsigned int theoricalNbPixelPerTile = region.GetNumberOfPixels() / requestedNumber;
   unsigned int theoricalTileDimension = static_cast<unsigned int> (vcl_sqrt(static_cast<double>(theoricalNbPixelPerTile)) );
 
-  // Take the previous multiple of m_TileSizeAlignment (eventually generate more splits than requested)
-  m_TileDimension = theoricalTileDimension / m_TileSizeAlignment * m_TileSizeAlignment;
+  // Take the next multiple of m_TileSizeAlignment (eventually generate more splits than requested)
+  m_TileDimension = (theoricalTileDimension + m_TileSizeAlignment - 1) / m_TileSizeAlignment * m_TileSizeAlignment;
 
   // Minimal tile size is m_TileSizeAlignment * m_TileSizeAlignment
   if (m_TileDimension < m_TileSizeAlignment)

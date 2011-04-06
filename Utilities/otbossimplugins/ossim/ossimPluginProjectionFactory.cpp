@@ -22,6 +22,7 @@
 #include "ossimErsSarModel.h"
 #include "ossimAlosPalsarModel.h"
 #include <ossim/base/ossimNotifyContext.h>
+#include "ossimTileMapModel.h"
 
 //***
 // Define Trace flags for use within this file:
@@ -210,6 +211,27 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
       }
    }
 
+   if(traceDebug())
+   {
+    	ossimNotify(ossimNotifyLevel_DEBUG)
+        	   << MODULE << " DEBUG: testing ossimTileMapModel" << std::endl;
+   }
+
+   if (!projection)
+   {
+     ossimRefPtr<ossimTileMapModel> model = new ossimTileMapModel();
+     if (model->open(filename))
+     {
+       projection = model.get();
+     }
+     else
+     {
+       model = 0;
+     }
+   }
+
+
+
    return projection.release();
 }
 
@@ -255,6 +277,10 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
    else if (name == STATIC_TYPE_NAME(ossimFormosatModel))
    {
      return new ossimFormosatModel;
+   }
+   else if (name == STATIC_TYPE_NAME(ossimTileMapModel))
+   {
+     return new ossimTileMapModel;
    }
 
    if(traceDebug())
@@ -339,6 +365,15 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
             result = 0;
          }
       }
+      else if (type == "ossimTileMapModel")
+      {
+         result = new ossimTileMapModel();
+         if ( !result->loadState(kwl, prefix) )
+         {
+            result = 0;
+         }
+      }
+
    }
 
    if(traceDebug())
@@ -373,5 +408,26 @@ void ossimPluginProjectionFactory::getTypeNameList(std::vector<ossimString>& typ
    typeList.push_back(STATIC_TYPE_NAME(ossimErsSarModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimAlosPalsarModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimFormosatModel));
+   typeList.push_back(STATIC_TYPE_NAME(ossimTileMapModel));
 }
+
+bool ossimPluginProjectionFactory::isTileMap(const ossimFilename& filename)const
+{
+  ossimFilename temp(filename);
+  temp.downcase();
+  
+  ossimString os = temp.beforePos(4);
+  
+  if(temp.ext()=="otb")
+  {
+    return true;
+  }
+  else if(os == "http")
+  {
+    return true;
+  }
+  return false;
+}
+
+
 }

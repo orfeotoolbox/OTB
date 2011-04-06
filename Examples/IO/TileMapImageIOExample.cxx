@@ -59,7 +59,7 @@
 #include "otbForwardSensorModel.h"
 #include "otbExtractROI.h"
 #include "otbImageFileWriter.h"
-#include "ossim/projection/ossimTileMapModel.h"
+#include "ossimTileMapModel.h"
 #include "otbWorldFile.h"
 // Software Guide : EndCodeSnippet
 
@@ -141,7 +141,7 @@ int main(int argc, char* argv[])
   ModelType::Pointer model = ModelType::New();
 
   model->SetImageGeometry(readerTile->GetOutput()->GetImageKeywordlist());
-  dynamic_cast<ossimTileMapModel*>(model->GetOssimModel())->setDepth(depth);
+  dynamic_cast<ossimplugins::ossimTileMapModel*>(model->GetOssimModel())->setDepth(depth);
   if (!model)
     {
     std::cerr << "Unable to create a model" << std::endl;
@@ -214,7 +214,7 @@ int main(int argc, char* argv[])
   ForwardModelType::Pointer modelForward = ForwardModelType::New();
 
   modelForward->SetImageGeometry(readerTile->GetOutput()->GetImageKeywordlist());
-  dynamic_cast<ossimTileMapModel*>(modelForward->GetOssimModel())->setDepth(
+  dynamic_cast<ossimplugins::ossimTileMapModel*>(modelForward->GetOssimModel())->setDepth(
     depth);
   if (!modelForward)
     {

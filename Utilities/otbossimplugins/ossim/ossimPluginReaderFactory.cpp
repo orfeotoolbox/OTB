@@ -20,6 +20,7 @@
 #include <ossim/imaging/ossimImageHandler.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimKeywordNames.h>
+#include "ossimTileMapTileSource.h"
 
 namespace ossimplugins
 {
@@ -129,7 +130,7 @@ ossimImageHandler* ossimPluginReaderFactory::open(const ossimKeywordlist& kwl,
          << "ossimPluginReaderFactory::open(kwl, prefix) DEBUG: leaving..."
          << std::endl;
    }
-   
+
    return reader.release();
 }
 
@@ -145,6 +146,11 @@ ossimObject* ossimPluginReaderFactory::createObject(
    {
       result = new ossimTerraSarTiffReader;
    }
+   if(typeName == "ossimTileMapTileSource")
+   {
+      result =  new ossimTileMapTileSource;
+   }
+
    return result.release();
 }
 
@@ -159,12 +165,14 @@ void ossimPluginReaderFactory::getTypeNameList(
 {
    typeList.push_back(ossimString("ossimRadarSat2TiffReader"));
    typeList.push_back(ossimString("ossimTerraSarTiffReader"));
+   typeList.push_back(ossimString("ossimTileMapTileSource"));
 }
 
 void ossimPluginReaderFactory::getSupportedExtensions(
    ossimImageHandlerFactoryBase::UniqueStringList& extensionList)const
 {
    extensionList.push_back(ossimString("xml"));
+   extensionList.push_back("otb");
 }
 
 ossimPluginReaderFactory::ossimPluginReaderFactory(){}

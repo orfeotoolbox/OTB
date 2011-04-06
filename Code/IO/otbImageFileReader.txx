@@ -40,7 +40,7 @@
 
 #include "otbTileMapImageIO.h" //FIXME find a better way
 #include "otbGDALImageIO.h" //FIXME find a better way
-#include "projection/ossimTileMapModel.h"
+#include "ossimTileMapModel.h"
 
 #include <itksys/SystemTools.hxx>
 #include <fstream>
@@ -427,7 +427,7 @@ ImageFileReader<TOutputImage>
           typename TileMapImageIO::Pointer imageIO = dynamic_cast<TileMapImageIO*>(this->GetImageIO());
           if (imageIO.IsNotNull())
             {
-            dynamic_cast<ossimTileMapModel*>(projection)->setDepth(imageIO->GetDepth());
+            dynamic_cast<ossimplugins::ossimTileMapModel*>(projection)->setDepth(imageIO->GetDepth());
             }
           }
         hasMetaData = projection->saveState(geom_kwl);

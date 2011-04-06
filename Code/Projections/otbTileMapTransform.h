@@ -30,7 +30,7 @@
 #include "base/ossimEllipsoid.h"
 #include "base/ossimEllipsoidFactory.h"
 #include "base/ossimString.h"
-#include "ossim/projection/ossimTileMapModel.h"
+#include "ossimTileMapModel.h"
 #include "otbMapProjection.h"
 // The keyword "Try" is exported by OSSIM's headers but clashes with Boost
 // Spirit. It needs to be undefined.
@@ -60,7 +60,7 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   typedef typename Superclass::ScalarType           ScalarType;
-  typedef ossimTileMapModel                         OssimTileMapTransformType;
+  typedef ossimplugins::ossimTileMapModel           OssimTileMapTransformType;
   typedef itk::Point<ScalarType, NInputDimensions>  InputPointType;
   typedef itk::Point<ScalarType, NOutputDimensions> OutputPointType;
 

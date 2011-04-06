@@ -34,6 +34,35 @@ namespace Functor {
  * \brief Evaluate the  min and max polarisation degree and min and max power
  *   from the Mueller image
  *
+ * The order of the channels of the input image corresponds to :
+ * \f$  \begin{pmatrix}
+ * {channel #0 }&{channel #1 }&{channel #2 }&{channel #3 } \\
+ * {channel #4 }&{channel #5 }&{channel #6 }&{channel #7 } \\
+ * {channel #8 }&{channel #9 }&{channel #10}&{channel #11} \\
+ * {channel #12}&{channel #13}&{channel #14}&{channel #15} \\
+ * \end{pmatrix}
+ *
+ * The class process step by step while \f$ \tau <= 45 \f$ and for each \f$ \tau \f$, while \f$ \psi <= 90 \f :
+ * \begin{itemize}
+ * \item Define the incident Stokes vector:
+ *   \f$ Si_{0} = 1 \f$ \\
+ *   \f$ Si_{1} = \cos{\psi * \frac{\pi}{90}} * \cos{\tau *  \frac{\pi}{90}} \f$ \\
+ *   \f$ Si_{2} = \sin{\psi * \frac{\pi}{90}} * \cos{\tau *  \frac{\pi}{90}} \f$ \\
+ *   \f$ Si_{3} = \sin{\tau * \frac{\pi}{90}}\f$ \\
+ * \item Evaluate the received Stokes vector
+ *   \f$ Sr = Si * MuellerMatrix \f$ \\
+ * \item Evaluate power \f$ P \f$  and polarisation degree \f$ DegP \f$ \\
+ *   \f$ P = \max{0, Sr_0} \f$ \\
+ *   \f$ DegP =  \sqrt{Sr_{1}^{2} + Sr_{2}^{2} + Sr_{3}^{2}} / Sr_{0} \f$ \\
+ * \item Keep le smaller and the bigger power (\f$ P_{min}, P_{max} \f$) and \f$\f$ ) and polarisation degree (\f$ DegP_{min}, DegP_{max} \f$) ).
+ * \end{itemize}
+ *
+ *  Output value are:
+ *   channel #0 : \f$ P_{min} \f$ \\
+ *   channel #1 : \f$ P_{max} \f$ \\
+ *   channel #2 : \f$ DegP_{min} \f$ \\
+ *   channel #3 : \f$ DegP_{max} \f$ \\
+ *
  * \ingroup Functor
  * \ingroup SARPolarimetry
  *
@@ -58,10 +87,10 @@ public:
     StokesVectorType Si;
     StokesVectorType Sr;
 
-    double m_PowerMin(itk::NumericTraits<double>::max());
-    double m_PowerMax(itk::NumericTraits<double>::min());
-    double m_PolarisationDegreeMin(itk::NumericTraits<double>::max());
-    double m_PolarisationDegreeMax(itk::NumericTraits<double>::min());
+    double l_PowerMin(itk::NumericTraits<double>::max());
+    double l_PowerMax(itk::NumericTraits<double>::min());
+    double l_PolarisationDegreeMin(itk::NumericTraits<double>::max());
+    double l_PolarisationDegreeMax(itk::NumericTraits<double>::min());
 
      TOutput result;
     result.SetSize(m_NumberOfComponentsPerPixel);
@@ -111,32 +140,32 @@ public:
                 deg_pol = vcl_sqrt(Sr[1] * Sr[1] + Sr[2] * Sr[2] + Sr[3] * Sr[3]) / Sr[0];
               }
             
-            if (P > m_PowerMax)
+            if (P > l_PowerMax)
               {
-                m_PowerMax = P;
+                l_PowerMax = P;
               }
             else
               {
-                m_PowerMin = P;
+                l_PowerMin = P;
               }
             
-            if (deg_pol > m_PolarisationDegreeMax)
+            if (deg_pol > l_PolarisationDegreeMax)
               {
-                m_PolarisationDegreeMax = deg_pol;
+                l_PolarisationDegreeMax = deg_pol;
               }
             else
               {
-                m_PolarisationDegreeMin = deg_pol;
+                l_PolarisationDegreeMin = deg_pol;
               }
             psi += 5.0;
           }
         tau += 5.0;
       }
     
-    result[0] = m_PowerMin;
-    result[1] = m_PowerMax;
-    result[2] = m_PolarisationDegreeMin;
-    result[3] = m_PolarisationDegreeMax;
+    result[0] = l_PowerMin;
+    result[1] = l_PowerMax;
+    result[2] = l_PolarisationDegreeMin;
+    result[3] = l_PolarisationDegreeMax;
     
     
     return result;
@@ -162,7 +191,7 @@ private:
 
 
 /** \class otbMuellerToPolarisationDegreeAndPowerImageFilter
- * \brief Compute the circular polarisation image (3 channels : LL, RR and LR)
+ * \brief Compute the polarization degree and power (4 channels : Power min and max, Polarization degree min and max)
  * from the Mueller image (16 real channels)
  */
 template <class TInputImage, class TOutputImage, class TFunction = Functor::MuellerToPolarisationDegreeAndPowerFunctor<

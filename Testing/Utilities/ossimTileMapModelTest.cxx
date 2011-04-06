@@ -5,7 +5,7 @@
 #include <cstdlib>
 
 #include "base/ossimString.h"
-#include "projection/ossimTileMapModel.h"
+#include "ossimTileMapModel.h"
 #include <ossim/base/ossimGpt.h>
 #include <ossim/base/ossimDpt.h>
 
@@ -19,7 +19,7 @@ int ossimTileMapModelTest(int argc, char* argv[])
   else
   {
     // Ossim containers and tileMapModel
-    ossimRefPtr<ossimTileMapModel> tileMapModel = new ossimTileMapModel;
+    ossimRefPtr<ossimplugins::ossimTileMapModel> tileMapModel = new ossimplugins::ossimTileMapModel;
     ossimGpt gpt;
     ossimDpt dpt;
     

@@ -124,21 +124,21 @@ protected:
 
   void GenerateInputRequestedRegion();
   
+  void BeforeThreadedGenerateData();
+
   /** Multi-thread version GenerateData. */
   void  ThreadedGenerateData(const RegionType& outputRegionForThread,
                              int threadId);
+
+  void AfterThreadedGenerateData();
 
 private:
   PersistentLineSegmentDetector(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  // region extractor
-  ExtractorListType             m_ExtractorList;
-  // store requested region for each threads
-  RegionListType                m_RegionList;
-  // line detector filters
-  LineDetectorListType          m_LineDetectorList;
-  // store each thread output
+  /** the "Folder" node of the output vector data */
+  DataNodePointerType           m_Folder;
+  /** store each thread output */
   VectorDataListType            m_VectorDataList;
   /** tolerance to fuse 2 lines in 2 threads. */
   double                        m_ThreadDistanceThreshold;
