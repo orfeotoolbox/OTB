@@ -1,0 +1,235 @@
+ahk@ubuntu:~/OTB/Examples/ProjetCnes/AnomalyDetection$ ./Mdmd cupriteSubHsi.tif mdmdTest.tif 5
+normX = 603654
+Iteration = 0
+Criterion = 9.00947e+10
+statGradS = 1.28532e+09
+gradS(0,0) = -1.70619e+06
+alphS = 1
+normS = 150
+S(0,0) = 1
+alphS = 1.08086e-07
+normS = 281.442
+S(0,0) = 1.18442
+gradA(0,0) = 9.9575e+06
+alphA = 1
+normA = 2345.21
+A(0,0) = 100
+alphA = 3.03687e-05
+normA = 2153.76
+A(0,0) = 0
+critA value: 500
+critS value: 2.31013
+crit value: 500
+criterion value: 1.53093e+10
+
+Iteration = 10
+Criterion = 2.68652e+09
+statGradS = 7.83454e+08
+gradS(0,0) = -1.95985e+06
+alphS = 1.49246e-08
+normS = 73.6866
+S(0,0) = 0.479355
+alphS = 1.28361e-08
+normS = 68.5867
+S(0,0) = 0.504512
+gradA(0,0) = 167473
+alphA = 0.000363524
+normA = 8647.92
+A(0,0) = 501.015
+alphA = 0.000422674
+normA = 9203.98
+A(0,0) = 430.229
+critA value: 159.607
+critS value: 0.269527
+crit value: 159.607
+criterion value: 2.33655e+09
+
+Iteration = 20
+Criterion = 1.59508e+09
+statGradS = 5.146e+08
+gradS(0,0) = -2.39745e+06
+alphS = 1.08201e-08
+normS = 64.548
+S(0,0) = 0.438478
+alphS = 1.11513e-08
+normS = 66.372
+S(0,0) = 0.465212
+gradA(0,0) = 72818.6
+alphA = 0.000472083
+normA = 9358.43
+A(0,0) = 493.849
+alphA = 0.000444457
+normA = 9100.01
+A(0,0) = 461.484
+critA value: 150.078
+critS value: 0.237329
+crit value: 150.078
+criterion value: 1.46217e+09
+
+Iteration = 30
+Criterion = 1.06721e+09
+statGradS = 1.73285e+08
+gradS(0,0) = 2.69726e+06
+alphS = 1.52277e-08
+normS = 74.949
+S(0,0) = 0.460691
+alphS = 1.52277e-08
+normS = 74.2361
+S(0,0) = 0.419618
+gradA(0,0) = -42883.7
+alphA = 0.00035629
+normA = 8210.26
+A(0,0) = 382.699
+alphA = 0.000359889
+normA = 8301.62
+A(0,0) = 398.132
+critA value: 175.94
+critS value: 0.19938
+crit value: 175.94
+criterion value: 1.03154e+09
+
+Iteration = 40
+Criterion = 7.03605e+08
+statGradS = 3.30188e+08
+gradS(0,0) = 8.8162e+06
+alphS = 9.98416e-09
+normS = 60.47
+S(0,0) = 0.342045
+alphS = 9.39989e-09
+normS = 58.9103
+S(0,0) = 0.259174
+gradA(0,0) = -32395.9
+alphA = 0.000548896
+normA = 10317.8
+A(0,0) = 468.965
+alphA = 0.000583014
+normA = 10586.9
+A(0,0) = 487.853
+critA value: 154.074
+critS value: 0.192659
+crit value: 154.074
+criterion value: 6.79176e+08
+
+Iteration = 50
+Criterion = 4.98772e+08
+statGradS = 4.30776e+08
+gradS(0,0) = 1.33197e+07
+alphS = 6.54621e-09
+normS = 49.9772
+S(0,0) = 0.22549
+alphS = 6.48075e-09
+normS = 49.4899
+S(0,0) = 0.139169
+gradA(0,0) = 12714.6
+alphA = 0.000845623
+normA = 12509.6
+A(0,0) = 534.193
+alphA = 0.000871508
+normA = 12626
+A(0,0) = 523.113
+critA value: 105.851
+critS value: 0.190364
+crit value: 105.851
+criterion value: 4.93914e+08
+
+Iteration = 60
+Criterion = 3.80354e+08
+statGradS = 3.93095e+08
+gradS(0,0) = 1.0988e+07
+alphS = 6.54621e-09
+normS = 50.6818
+S(0,0) = 0.162198
+alphS = 6.74659e-09
+normS = 51.3901
+S(0,0) = 0.0880664
+gradA(0,0) = 61111.5
+alphA = 0.000812302
+normA = 12271.6
+A(0,0) = 452.376
+alphA = 0.000788176
+normA = 12084.9
+A(0,0) = 404.209
+critA value: 70.2173
+critS value: 0.196986
+crit value: 70.2173
+criterion value: 3.70205e+08
+
+Iteration = 70
+Criterion = 2.30588e+08
+statGradS = 2.47836e+08
+gradS(0,0) = 5.30463e+06
+alphS = 9.68762e-09
+normS = 61.4907
+S(0,0) = 0.148233
+alphS = 9.98416e-09
+normS = 62.7932
+S(0,0) = 0.095271
+gradA(0,0) = 90569.3
+alphA = 0.000532594
+normA = 10102.7
+A(0,0) = 270.97
+alphA = 0.000516775
+normA = 9893.02
+A(0,0) = 224.166
+critA value: 55.3946
+critS value: 0.180005
+crit value: 55.3946
+criterion value: 2.17339e+08
+
+Iteration = 80
+Criterion = 1.34165e+08
+statGradS = 1.39846e+08
+gradS(0,0) = 2.40736e+06
+alphS = 1.43366e-08
+normS = 74.8298
+S(0,0) = 0.158344
+alphS = 1.47754e-08
+normS = 76.0876
+S(0,0) = 0.122774
+gradA(0,0) = 95683.9
+alphA = 0.000359889
+normA = 8361.74
+A(0,0) = 136.831
+alphA = 0.0003492
+normA = 8229.55
+A(0,0) = 103.418
+critA value: 33.8398
+critS value: 0.152228
+crit value: 33.8398
+criterion value: 1.2713e+08
+
+Iteration = 90
+Criterion = 8.73534e+07
+statGradS = 7.57751e+07
+gradS(0,0) = 1.06525e+06
+alphS = 1.93816e-08
+normS = 86.0671
+S(0,0) = 0.178105
+alphS = 1.95773e-08
+normS = 87.0371
+S(0,0) = 0.15725
+gradA(0,0) = 95819.8
+alphA = 0.000271615
+normA = 7334.9
+A(0,0) = 60.3666
+alphA = 0.000263548
+normA = 7259.52
+A(0,0) = 35.1135
+critA value: 27.7495
+critS value: 0.111613
+crit value: 27.7495
+criterion value: 8.41154e+07
+
+Number of iterations: 100
+14.7873 173.733 391.879 610.024 828.17 
+67.4916 368.579 733.588 1098.6 1463.61 
+60.5014 429.145 866.819 1304.49 1742.17 
+235.566 561.825 939.885 1317.94 1696 
+737.104 876.644 1022.73 1168.81 1314.89 
+1134.32 1117.62 1060.56 1003.51 946.456 
+1231.9 1183.13 1082.53 981.923 881.319 
+912.844 911.043 872.836 834.629 796.422 
+896.43 939.267 937.997 936.726 935.456 
+737.206 808.711 849.732 890.753 931.774 
+
+ahk@ubuntu:~/OTB/Examples/ProjetCnes/AnomalyDetection$ 
