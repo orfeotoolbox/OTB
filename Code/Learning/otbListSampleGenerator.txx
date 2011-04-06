@@ -22,9 +22,40 @@
 
 #include "itkImageRegionConstIteratorWithIndex.h"
 #include "otbRemoteSensingRegion.h"
+#include "otbVectorDataProjectionFilter.h"
 
 namespace otb
 {
+
+template <class TVectorData>
+void printVectorData(TVectorData * vectorData, string msg = "")
+{
+  typedef TVectorData VectorDataType;
+  typedef itk::PreOrderTreeIterator<typename VectorDataType::DataTreeType> TreeIteratorType;
+
+  TreeIteratorType itVector(vectorData->GetDataTree());
+  itVector.GoToBegin();
+
+  if (!msg.empty())
+  {
+    std::cout<< msg << std::endl;
+  }
+
+  while (!itVector.IsAtEnd())
+    {
+    if (itVector.Get()->IsPolygonFeature())
+      {
+      std::cout << itVector.Get()->GetNodeTypeAsString() << std::endl;
+      for (unsigned int itPoints = 0; itPoints < itVector.Get()->GetPolygonExteriorRing()->GetVertexList()->Size(); itPoints++)
+        {
+        std::cout << "vertex[" << itPoints << "]: " << itVector.Get()->GetPolygonExteriorRing()->GetVertexList()->GetElement(itPoints) <<std::endl;
+        }
+      std::cout << "Polygon bounding region:\n" << itVector.Get()->GetPolygonExteriorRing()->GetBoundingRegion() <<  std::endl;
+      }
+    ++itVector;
+    }
+}
+
 template<class TImage, class TVectorData>
 ListSampleGenerator<TImage, TVectorData>
 ::ListSampleGenerator() :
@@ -77,25 +108,8 @@ ListSampleGenerator<TImage, TVectorData>
 
   this->ProcessObject::SetNthInput(1, const_cast<VectorDataType *>(vectorData));
 
-  TreeIteratorType itVector(vectorData->GetDataTree());
-  itVector.GoToBegin();
+  printVectorData(vectorData);
 
-  int idPolygon=1;
-  while (!itVector.IsAtEnd())
-    {
-    if (itVector.Get()->IsPolygonFeature())
-      {
-      std::cout << "POLYGON " << idPolygon << ": " <<std::endl;
-      for (unsigned int itPoints = 0; itPoints < itVector.Get()->GetPolygonExteriorRing()->GetVertexList()->Size(); itPoints++)
-        {
-        std::cout << "vertex[" << itPoints << "]: " << itVector.Get()->GetPolygonExteriorRing()->GetVertexList()->GetElement(itPoints) <<std::endl;
-        }
-      std::cout << "Polygon region: " << itVector.Get()->GetPolygonExteriorRing()->GetBoundingRegion() <<  std::endl;
-      ++idPolygon;
-      }
-    ++itVector;
-
-    }
   std::cout << "ListSampleGenerator::SetInputVectorData ... END" << std::endl;
 }
 
@@ -145,9 +159,6 @@ ListSampleGenerator<TImage, TVectorData>
 
   ImagePointerType image = const_cast<ImageType*>(this->GetInput());
 
-  // Reproject VectorData
-  this->ReprojectVectorData(image, const_cast<VectorDataType*>(this->GetInputVectorData()));
-
   VectorDataPointerType vectorData = const_cast<VectorDataType*>(this->GetInputVectorData());
 
   //Gather some information about the relative size of the classes
@@ -173,21 +184,16 @@ ListSampleGenerator<TImage, TVectorData>
     {
     if (itVector.Get()->IsPolygonFeature())
       {
-      /*typename ImageType::RegionType polygonRegion =
-        otb::TransformPhysicalRegionToIndexRegion(itVector.Get()->GetPolygonExteriorRing()->GetBoundingRegion(),
-                                                  image.GetPointer());*/
-
       typename ImageType::RegionType polygonRegion =
-              otb::TransformContinousRegionToIndexRegion(itVector.Get()->GetPolygonExteriorRing()->GetBoundingRegion(),
-                                                        image.GetPointer());
+        otb::TransformPhysicalRegionToIndexRegion(itVector.Get()->GetPolygonExteriorRing()->GetBoundingRegion(),
+                                                  image.GetPointer());
 
-
-      std::cout << "Image region from polygon: " << polygonRegion <<  std::endl;
-      std::cout << "Image region : " << image->GetLargestPossibleRegion() <<  std::endl;
+      std::cout << "Image region from polygon:\n" << polygonRegion <<  std::endl;
+      std::cout << "Image largest possible region:\n" << image->GetLargestPossibleRegion() <<  std::endl;
       image->SetRequestedRegion(polygonRegion);
       image->PropagateRequestedRegion();
       image->UpdateOutputData();
-      std::cout << "Image region requested: " << image->GetRequestedRegion() <<  std::endl;
+      std::cout << "Image region requested:\n" << image->GetRequestedRegion() <<  std::endl;
 
       typedef itk::ImageRegionConstIteratorWithIndex<ImageType> IteratorType;
       IteratorType it(image, polygonRegion);
@@ -197,8 +203,8 @@ ListSampleGenerator<TImage, TVectorData>
         itk::ContinuousIndex<double, 2> point;
         image->TransformIndexToPhysicalPoint(it.GetIndex(), point);
         //std::cout << it.GetIndex() << " -> " << point << std::endl;
-        if (itVector.Get()->GetPolygonExteriorRing()->IsInside(it.GetIndex()))
-        //if (itVector.Get()->GetPolygonExteriorRing()->IsInside(point))
+        //if (itVector.Get()->GetPolygonExteriorRing()->IsInside(it.GetIndex()))
+        if (itVector.Get()->GetPolygonExteriorRing()->IsInside(point))
           {
           double randomValue = m_RandomGenerator->GetUniformVariate(0.0, 1.0);
           if (randomValue < m_ClassesProbTraining[itVector.Get()->GetFieldAsInt(m_ClassKey)])
@@ -233,81 +239,6 @@ ListSampleGenerator<TImage, TVectorData>
 template <class TImage, class TVectorData>
 void
 ListSampleGenerator<TImage, TVectorData>
-::ReprojectVectorData(const ImagePointerType image, VectorDataPointerType vectorROIs)
-{
-  typedef typename ImageType::IndexType       IndexType;
-  typedef typename ImageType::PointType       PointType;
-
-  if(image.IsNull())
-    {
-    itkExceptionMacro("Invalid input image.");
-    }
-
-  // Vector data reprojection
-  typename VectorDataProjectionFilterType::Pointer vproj;
-  typename VectorDataExtractROIType::Pointer       vdextract;
-
-  // Extract The part of the VectorData that actually overlaps with
-  // the image extent
-  vdextract = VectorDataExtractROIType::New();
-  vdextract->SetInput(vectorROIs);
-
-  // Find the geographic region of interest
-
-  // Ge the index of the corner of the image
-  IndexType ul, ur, ll, lr;
-  PointType pul, pur, pll, plr;
-  ul = image->GetLargestPossibleRegion().GetIndex();
-  ur = ul;
-  ll = ul;
-  lr = ul;
-  ur[0] += image->GetLargestPossibleRegion().GetSize()[0];
-  lr[0] += image->GetLargestPossibleRegion().GetSize()[0];
-  lr[1] += image->GetLargestPossibleRegion().GetSize()[1];
-  ll[1] += image->GetLargestPossibleRegion().GetSize()[1];
-
-  // Transform to physical point
-  image->TransformIndexToPhysicalPoint(ul, pul);
-  image->TransformIndexToPhysicalPoint(ur, pur);
-  image->TransformIndexToPhysicalPoint(ll, pll);
-  image->TransformIndexToPhysicalPoint(lr, plr);
-
-  // Build the cartographic region
-  RemoteSensingRegionType                     rsRegion;
-  typename RemoteSensingRegionType::IndexType rsOrigin;
-  typename RemoteSensingRegionType::SizeType  rsSize;
-  rsOrigin[0] = min(pul[0], plr[0]);
-  rsOrigin[1] = min(pul[1], plr[1]);
-  rsSize[0] = vcl_abs(pul[0] - plr[0]);
-  rsSize[1] = vcl_abs(pul[1] - plr[1]);
-
-  rsRegion.SetOrigin(rsOrigin);
-  rsRegion.SetSize(rsSize);
-  rsRegion.SetRegionProjection(image->GetProjectionRef());
-  rsRegion.SetKeywordList(image->GetImageKeywordlist());
-
-  // Set the cartographic region to the extract roi filter
-  vdextract->SetRegion(rsRegion);
-
-  // Reproject VectorData in image projection
-  vproj = VectorDataProjectionFilterType::New();
-  vproj->SetInput(vdextract->GetOutput());
-  vproj->SetInputProjectionRef(vectorROIs->GetProjectionRef());
-  vproj->SetOutputKeywordList(image->GetImageKeywordlist());
-  vproj->SetOutputProjectionRef(image->GetProjectionRef());
-  vproj->SetOutputOrigin(image->GetOrigin());
-  vproj->SetOutputSpacing(image->GetSpacing());
-
-  vproj->Update();
-
-  // Update InputData
-  std::cout<< "-----REPROJECTED VECTOR DATA-----" << std::endl;
-  this->SetInputVectorData(vproj->GetOutput());
-}
-
-template <class TImage, class TVectorData>
-void
-ListSampleGenerator<TImage, TVectorData>
 ::GenerateClassStatistics()
 {
   std::cout << "ListSampleGenerator::GenerateClassStatistics() : BEGIN ..." <<std::endl;
@@ -325,7 +256,6 @@ ListSampleGenerator<TImage, TVectorData>
     {
     if (itVector.Get()->IsPolygonFeature())
       {
-      std::cout << itVector.Get()->GetNodeTypeAsString() << std::endl;
       m_ClassesSize[itVector.Get()->GetFieldAsInt(m_ClassKey)] +=
         itVector.Get()->GetPolygonExteriorRing()->GetArea() / pixelArea; // in pixel
       std::cout << "Area = "<<itVector.Get()->GetPolygonExteriorRing()->GetArea() << std::endl;

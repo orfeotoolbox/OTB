@@ -381,6 +381,7 @@ TransformPhysicalRegionToIndexRegion(const RemoteSensingRegionType& region, cons
   point[0] = region.GetIndex()[0];
   point[1] = region.GetIndex()[1];
   image->TransformPhysicalPointToIndex(point, index);
+  std::cout <<" physicalPoint : "<< point << " --> index "<< index  << std::endl;
 
   point[0] = region.GetIndex()[0] + region.GetSize()[0];
   point[1] = region.GetIndex()[1] + region.GetSize()[1];
@@ -398,42 +399,6 @@ TransformPhysicalRegionToIndexRegion(const RemoteSensingRegionType& region, cons
   return outputRegion;
 }
 
-template<class ImageType, class RemoteSensingRegionType>
-typename ImageType::RegionType
-TransformContinousRegionToIndexRegion(const RemoteSensingRegionType& region, const ImageType* image)
-{
-  std::cout << "TransformContinousRegionToIndexRegion" <<std::endl;
-  typename ImageType::RegionType outputRegion;
-  typename ImageType::RegionType::IndexType index;
-  typename ImageType::RegionType::IndexType index2;
-
-  typedef typename ImageType::RegionType::IndexType   ImageIndexType;
-  typedef typename ImageIndexType::IndexValueType     ImageIndexValueType;
-
-  typename ImageType::PointType point;
-  point[0] = region.GetIndex()[0];
-  point[1] = region.GetIndex()[1];
-
-  index[0] = static_cast<ImageIndexValueType>(point[0]);
-  index[1] = static_cast<ImageIndexValueType>(point[1]);
-
-  point[0] = region.GetIndex()[0] + region.GetSize()[0];
-  point[1] = region.GetIndex()[1] + region.GetSize()[1];
-
-  index2[0] = static_cast<ImageIndexValueType>(point[0]);
-  index2[1] = static_cast<ImageIndexValueType>(point[1]);
-
-  typename ImageType::RegionType::SizeType size;
-  size[0] = std::abs(index2[0] - index[0]);
-  size[1] = std::abs(index2[1] - index[1]);
-
-  index[0] = std::min(index2[0], index[0]);
-  index[1] = std::min(index2[1], index[1]);
-
-  outputRegion.SetIndex(index);
-  outputRegion.SetSize(size);
-  return outputRegion;
-}
 
 } // end namespace otb
 

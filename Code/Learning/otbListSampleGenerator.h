@@ -24,10 +24,6 @@
 #include "itkPreOrderTreeIterator.h"
 #include "itkMersenneTwisterRandomVariateGenerator.h"
 
-#include "otbVectorDataProjectionFilter.h"
-#include "otbVectorDataExtractROI.h"
-
-
 namespace otb
 {
 /** \class ListSampleGenerator
@@ -84,12 +80,6 @@ public:
   typedef itk::Statistics::ListSample<LabelType> ListLabelType;
   typedef typename ListLabelType::Pointer        ListLabelPointerType;
 
-  // Reprojection filter
-  typedef VectorDataProjectionFilter<VectorDataType,VectorDataType>
-                                                          VectorDataProjectionFilterType;
-  typedef VectorDataExtractROI<VectorDataType>            VectorDataExtractROIType;
-  typedef typename VectorDataExtractROIType::RegionType   RemoteSensingRegionType;
-
   /** Connects the input image for which the sample list is going to be extracted */
   void SetInput(const ImageType *);
   const ImageType * GetInput() const;
@@ -143,8 +133,6 @@ public:
   }
 
   void GenerateClassStatistics();
-
-  void ReprojectVectorData(const ImagePointerType image, VectorDataPointerType vectorDataInput);
 
 protected:
   ListSampleGenerator();
