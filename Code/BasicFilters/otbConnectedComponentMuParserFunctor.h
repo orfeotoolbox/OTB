@@ -97,7 +97,7 @@ namespace otb
           }
 
         m_Distance = 0.0;
-        for(unsigned int i = 0; i<m_NbOfBands;++i)
+        for(unsigned int i = 0; i<m_NbOfBands; ++i)
           {
           m_Distance +=(p1[i]-p2[i])*(p1[i]-p2[i]);
           }
@@ -136,15 +136,15 @@ namespace otb
         std::ostringstream varName;
 
 
-        m_AImageP1.resize(NbOfBands,0.0);
-        m_AImageP2.resize(NbOfBands,0.0);
+        m_AImageP1.resize(NbOfBands, 0.0);
+        m_AImageP2.resize(NbOfBands, 0.0);
 
-        for(unsigned int i=0;i<NbOfBands;i++)
+        for(unsigned int i=0; i<NbOfBands; i++)
           {
-          varName << "p1b" << i+1 ;
+          varName << "p1b" << i+1;
           m_Parser->DefineVar(varName.str(), &(m_AImageP1[i]));
           varName.str("");
-          varName << "p2b" << i+1 ;
+          varName << "p2b" << i+1;
           m_Parser->DefineVar(varName.str(), &(m_AImageP2[i]));
           varName.str("");
           }
@@ -171,7 +171,7 @@ namespace otb
 
     private:
 
-      ConnectedComponentMuParserFunctor(const Self &);//purposely not implemented
+      ConnectedComponentMuParserFunctor(const Self &); //purposely not implemented
       void operator =(const Self &);    //purposely not implemented
 
       std::string m_Expression;

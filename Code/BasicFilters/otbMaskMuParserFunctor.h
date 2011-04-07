@@ -69,7 +69,7 @@ typedef itk::SmartPointer<const Self>            ConstPointer;
 itkNewMacro(Self);
 
 /** Run-time type information (and related methods). */
-itkTypeMacro(MaskMuParserFunctor,itk::LightObject);
+itkTypeMacro(MaskMuParserFunctor, itk::LightObject);
 
 inline bool operator()(const TInput &p)
 {
@@ -128,7 +128,7 @@ void SetNumberOfBands(unsigned int NumberOfBands)
 {
   m_NbVar=NumberOfBands;
   m_VarName.resize(NumberOfBands,"");
-  m_AImage.resize(NumberOfBands,0.0);
+  m_AImage.resize(NumberOfBands, 0.0);
 }
 
 /** Check the expression */
@@ -165,7 +165,7 @@ m_Parser = ParserType::New();
 
 private:
 
-MaskMuParserFunctor(const Self &);//purposely not implemented
+MaskMuParserFunctor(const Self &); //purposely not implemented
 void operator =(const Self &);    //purposely not implemented
 
 std::string m_Expression;

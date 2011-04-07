@@ -31,8 +31,8 @@ namespace otb
 {
 
 // constructor
-template 	< class TInputImage,class TOutputImage,class TFunction>
-MaskMuParserFilter<TInputImage,TOutputImage,TFunction>::MaskMuParserFilter()
+template        < class TInputImage, class TOutputImage, class TFunction>
+MaskMuParserFilter<TInputImage, TOutputImage, TFunction>::MaskMuParserFilter()
 {
   m_UnderflowCount = 0;
   m_OverflowCount = 0;
@@ -41,14 +41,14 @@ MaskMuParserFilter<TInputImage,TOutputImage,TFunction>::MaskMuParserFilter()
 }
 
 // Destructor
-template 	< class TInputImage,class TOutputImage,class TFunction>
-MaskMuParserFilter<TInputImage,TOutputImage,TFunction>::~MaskMuParserFilter()
+template        < class TInputImage, class TOutputImage, class TFunction>
+MaskMuParserFilter<TInputImage, TOutputImage, TFunction>::~MaskMuParserFilter()
 {
 
 }
 
-template 	< class TInputImage,class TOutputImage,class TFunction>
-void MaskMuParserFilter<TInputImage,TOutputImage,TFunction>::PrintSelf(std::ostream& os, itk::Indent indent) const
+template        < class TInputImage, class TOutputImage, class TFunction>
+void MaskMuParserFilter<TInputImage, TOutputImage, TFunction>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 
@@ -56,9 +56,8 @@ void MaskMuParserFilter<TInputImage,TOutputImage,TFunction>::PrintSelf(std::ostr
 }
 
 
-
-template< class TInputImage,class TOutputImage,class TFunction>
-void MaskMuParserFilter<TInputImage,TOutputImage,TFunction>
+template< class TInputImage, class TOutputImage, class TFunction>
+void MaskMuParserFilter<TInputImage, TOutputImage, TFunction>
 ::SetExpression(const std::string expression)
  {
   if (m_Expression != expression)
@@ -66,8 +65,8 @@ void MaskMuParserFilter<TInputImage,TOutputImage,TFunction>
   this->Modified();
  }
 
-template< class TInputImage,class TOutputImage,class TFunction>
-std::string MaskMuParserFilter<TInputImage,TOutputImage,TFunction>
+template< class TInputImage, class TOutputImage, class TFunction>
+std::string MaskMuParserFilter<TInputImage, TOutputImage, TFunction>
 ::GetExpression() const
  {
   return m_Expression;
@@ -77,8 +76,8 @@ std::string MaskMuParserFilter<TInputImage,TOutputImage,TFunction>
 /**
  * BeforeThreadedGenerateData
  */
-template 	< class TInputImage,class TOutputImage,class TFunction>
-void MaskMuParserFilter<TInputImage,TOutputImage,TFunction>
+template        < class TInputImage, class TOutputImage, class TFunction>
+void MaskMuParserFilter<TInputImage, TOutputImage, TFunction>
 ::BeforeThreadedGenerateData()
  {
 
@@ -108,10 +107,10 @@ void MaskMuParserFilter<TInputImage,TOutputImage,TFunction>
     m_VFunctor.at(thread_index)->SetExpression(m_Expression);
     m_VFunctor.at(thread_index)->SetNumberOfBands(nbOfBands);
     // we associate image band with its name im1b1 for band 1
-    for(unsigned int i=0;i<nbOfBands;i++)
+    for(unsigned int i=0; i<nbOfBands; i++)
       {
       varName << "b" << i+1; // +1 var[0]=im1b1
-      m_VFunctor.at(thread_index)->SetVarName(i,varName.str());
+      m_VFunctor.at(thread_index)->SetVarName(i, varName.str());
       varName.str("");
       }
 
@@ -123,9 +122,9 @@ void MaskMuParserFilter<TInputImage,TOutputImage,TFunction>
 
  }
 
-template 	< class TInputImage,class TOutputImage,class TFunction>
-void MaskMuParserFilter<TInputImage,TOutputImage,TFunction>
-::ThreadedGenerateData( const OutputImageRegionType &outputRegionForThread,int threadId)
+template        < class TInputImage, class TOutputImage, class TFunction>
+void MaskMuParserFilter<TInputImage, TOutputImage, TFunction>
+::ThreadedGenerateData( const OutputImageRegionType &outputRegionForThread, int threadId)
  {
 
 
@@ -158,8 +157,8 @@ void MaskMuParserFilter<TInputImage,TOutputImage,TFunction>
     }
  }
 
-template 	< class TInputImage,class TOutputImage,class TFunction>
-void MaskMuParserFilter<TInputImage,TOutputImage,TFunction>
+template        < class TInputImage, class TOutputImage, class TFunction>
+void MaskMuParserFilter<TInputImage, TOutputImage, TFunction>
 ::AfterThreadedGenerateData()
  {
  }

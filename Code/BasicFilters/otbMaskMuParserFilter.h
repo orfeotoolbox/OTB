@@ -70,9 +70,8 @@ namespace otb
  */
 
 
-
-template< class TInputImage,class TOutputImage,class TFunction=Functor::MaskMuParserFunctor<
-	    typename TInputImage::PixelType > >
+template< class TInputImage, class TOutputImage, class TFunction=Functor::MaskMuParserFunctor<
+           typename TInputImage::PixelType > >
 class ITK_EXPORT MaskMuParserFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
@@ -99,10 +98,10 @@ public:
 
   typedef typename    OutputImageType::Pointer    OutputImagePointer;
 
-  typedef TFunction						                    FunctorType;
+  typedef TFunction                                                              FunctorType;
   typedef typename    FunctorType::Pointer        FunctorPointer;
 
-  typedef MaskMuParserFilter<InputImageType,OutputImageType,FunctorType>  MaskMuParserFilterType;
+  typedef MaskMuParserFilter<InputImageType, OutputImageType, FunctorType>  MaskMuParserFilterType;
 
 
   /** Set the expression to be parsed */
@@ -117,7 +116,7 @@ protected :
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
    void BeforeThreadedGenerateData();
-   void ThreadedGenerateData( const OutputImageRegionType &outputRegionForThread,int threadId);
+   void ThreadedGenerateData( const OutputImageRegionType &outputRegionForThread, int threadId);
    void AfterThreadedGenerateData();
 
 

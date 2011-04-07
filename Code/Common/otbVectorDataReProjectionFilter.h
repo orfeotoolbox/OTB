@@ -63,7 +63,6 @@ public:
   typedef typename TInputImage::Pointer                        ImagePointerType;
 
 
-
   // use to display vectordata
   typedef itk::PreOrderTreeIterator<typename InputVectorDataType::DataTreeType> TreeIteratorType;
 
