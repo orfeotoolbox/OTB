@@ -22,9 +22,40 @@
 
 #include "itkImageRegionConstIteratorWithIndex.h"
 #include "otbRemoteSensingRegion.h"
+#include "otbVectorDataProjectionFilter.h"
 
 namespace otb
 {
+
+/*template <class TVectorData>
+void printVectorData(TVectorData * vectorData, string msg = "")
+{
+  typedef TVectorData VectorDataType;
+  typedef itk::PreOrderTreeIterator<typename VectorDataType::DataTreeType> TreeIteratorType;
+
+  TreeIteratorType itVector(vectorData->GetDataTree());
+  itVector.GoToBegin();
+
+  if (!msg.empty())
+  {
+    std::cout<< msg << std::endl;
+  }
+
+  while (!itVector.IsAtEnd())
+    {
+    if (itVector.Get()->IsPolygonFeature())
+      {
+      std::cout << itVector.Get()->GetNodeTypeAsString() << std::endl;
+      for (unsigned int itPoints = 0; itPoints < itVector.Get()->GetPolygonExteriorRing()->GetVertexList()->Size(); itPoints++)
+        {
+        std::cout << "vertex[" << itPoints << "]: " << itVector.Get()->GetPolygonExteriorRing()->GetVertexList()->GetElement(itPoints) <<std::endl;
+        }
+      std::cout << "Polygon bounding region:\n" << itVector.Get()->GetPolygonExteriorRing()->GetBoundingRegion() <<  std::endl;
+      }
+    ++itVector;
+    }
+}*/
+
 template<class TImage, class TVectorData>
 ListSampleGenerator<TImage, TVectorData>
 ::ListSampleGenerator() :
@@ -74,6 +105,9 @@ ListSampleGenerator<TImage, TVectorData>
 ::SetInputVectorData(const VectorDataType * vectorData)
 {
   this->ProcessObject::SetNthInput(1, const_cast<VectorDataType *>(vectorData));
+
+  //printVectorData(vectorData);
+
 }
 
 template <class TImage, class TVectorData>
@@ -88,6 +122,7 @@ ListSampleGenerator<TImage, TVectorData>
 
   return static_cast<const VectorDataType *>(this->ProcessObject::GetInput(1));
 }
+
 
 /**
  *
@@ -117,9 +152,9 @@ void
 ListSampleGenerator<TImage, TVectorData>
 ::GenerateData()
 {
-  typename VectorDataType::ConstPointer vectorData = this->GetInputVectorData();
+  ImagePointerType image = const_cast<ImageType*>(this->GetInput());
 
-  typename ImageType::Pointer image = const_cast<ImageType*>(this->GetInput());
+  VectorDataPointerType vectorData = const_cast<VectorDataType*>(this->GetInputVectorData());
 
   //Gather some information about the relative size of the classes
   //we would like to have the same number of samples per class
@@ -144,14 +179,16 @@ ListSampleGenerator<TImage, TVectorData>
     {
     if (itVector.Get()->IsPolygonFeature())
       {
-
       typename ImageType::RegionType polygonRegion =
         otb::TransformPhysicalRegionToIndexRegion(itVector.Get()->GetPolygonExteriorRing()->GetBoundingRegion(),
                                                   image.GetPointer());
 
+      //std::cout << "Image region from polygon:\n" << polygonRegion <<  std::endl;
+      //std::cout << "Image largest possible region:\n" << image->GetLargestPossibleRegion() <<  std::endl;
       image->SetRequestedRegion(polygonRegion);
       image->PropagateRequestedRegion();
       image->UpdateOutputData();
+      //std::cout << "Image region requested:\n" << image->GetRequestedRegion() <<  std::endl;
 
       typedef itk::ImageRegionConstIteratorWithIndex<ImageType> IteratorType;
       IteratorType it(image, polygonRegion);
@@ -160,6 +197,7 @@ ListSampleGenerator<TImage, TVectorData>
         {
         itk::ContinuousIndex<double, 2> point;
         image->TransformIndexToPhysicalPoint(it.GetIndex(), point);
+        //std::cout << it.GetIndex() << " -> " << point << std::endl;
         if (itVector.Get()->GetPolygonExteriorRing()->IsInside(point))
           {
           double randomValue = m_RandomGenerator->GetUniformVariate(0.0, 1.0);
@@ -188,6 +226,7 @@ ListSampleGenerator<TImage, TVectorData>
 
   assert(m_TrainingListSample->Size() == m_TrainingListLabel->Size());
   assert(m_ValidationListSample->Size() == m_ValidationListLabel->Size());
+
 }
 
 template <class TImage, class TVectorData>
@@ -200,6 +239,7 @@ ListSampleGenerator<TImage, TVectorData>
   //Compute pixel area:
   typename ImageType::Pointer image = const_cast<ImageType*>(this->GetInput());
   double                      pixelArea = vcl_abs(image->GetSpacing()[0] * image->GetSpacing()[1]);
+  std::cout<< "Pixel area: " << pixelArea << std::endl;
 
   typename VectorDataType::ConstPointer vectorData = this->GetInputVectorData();
   TreeIteratorType itVector(vectorData->GetDataTree());
@@ -210,6 +250,7 @@ ListSampleGenerator<TImage, TVectorData>
       {
       m_ClassesSize[itVector.Get()->GetFieldAsInt(m_ClassKey)] +=
         itVector.Get()->GetPolygonExteriorRing()->GetArea() / pixelArea; // in pixel
+      std::cout << "Area = "<<itVector.Get()->GetPolygonExteriorRing()->GetArea() << std::endl;
       }
     ++itVector;
     }

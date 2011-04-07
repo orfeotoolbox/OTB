@@ -304,6 +304,22 @@ ADD_TEST(bfTVectorRescaleIntensityImageFilter ${BASICFILTERS_TESTS3}
 		    0 255
 )
 
+# -------            otb::ShiftScaleVectorImageFilter   ----------------------------
+
+ADD_TEST(bfTuShiftScaleVectorImageFilterNew ${BASICFILTERS_TESTS3}
+         otbShiftScaleVectorImageFilterNew)
+
+
+ADD_TEST(bfTvShiftScaleVectorImageFilter ${BASICFILTERS_TESTS3}
+		--compare-image ${EPSILON_7}
+		    ${BASELINE}/bfTvShiftScaleVImageOutput.tif
+		    ${TEMP}/bfTvShiftScaleVImageOutput.tif
+		otbShiftScaleVectorImageFilterTest
+		    ${INPUTDATA}/qb_RoadExtract.img.hdr
+	        ${TEMP}/bfTvShiftScaleVImageOutput.tif
+)
+
+
 # -------            otb::VectorImageToImageListFilter   ----------------------------
 
 ADD_TEST(bfTuVectorImageToImageListFilterNew ${BASICFILTERS_TESTS3}
@@ -1883,6 +1899,8 @@ otbVectorImageToImageListFilter.cxx
 otbImageListToVectorImageFilterNew.cxx
 otbImageListToVectorImageFilter.cxx
 otbImageListToVectorImageFilter2.cxx
+otbShiftScaleVectorImageFilterNew.cxx
+otbShiftScaleVectorImageFilterTest.cxx
 )
 
 # A enrichir

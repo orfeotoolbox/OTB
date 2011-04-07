@@ -22,7 +22,6 @@
 #include <ossim/imaging/ossimGeneralRasterTileSource.h>
 #include <ossim/imaging/ossimERSTileSource.h>
 #include <ossim/imaging/ossimVpfTileSource.h>
-#include <ossim/imaging/ossimTileMapTileSource.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/imaging/ossimJpegTileSource.h>
@@ -73,7 +72,7 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName)
       // for all of our imagehandlers the filename must exist.
       // if we have any imagehandlers that require an encoded string and is contrlled in this factory then
       // we need to move this.
-//      if (!copyFilename.exists())  break;
+      if (!copyFilename.exists())  break;
 
       ossimString ext = copyFilename.ext().downcase();
       if(ext == "gz")
@@ -169,10 +168,6 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName)
 
       if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying CCF...";
       result = new ossimCcfTileSource();
-      if (result->open(copyFilename))  break;
-
-      if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying TileMap...";
-      result = new ossimTileMapTileSource();
       if (result->open(copyFilename))  break;
 
       result = 0;
@@ -271,10 +266,6 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimKeywordlist& kwl,
 
       if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"trying ossimQbTileFilesHandler..."<<std::endl;
       result = new ossimQbTileFilesHandler;
-      if (result->loadState(kwl, prefix))  break;
-
-      if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying TileMap...";
-      result = new ossimTileMapTileSource();
       if (result->loadState(kwl, prefix))  break;
 
       result = 0;
@@ -494,10 +485,6 @@ ossimObject* ossimImageHandlerFactory::createObject(const ossimString& typeName)
    {
       return new ossimQbTileFilesHandler();
    }
-   if(STATIC_TYPE_NAME(ossimTileMapTileSource) == typeName)
-   {
-      return new ossimTileMapTileSource();
-   }
 
    return (ossimObject*)0;
 }
@@ -526,7 +513,6 @@ void ossimImageHandlerFactory::getSupportedExtensions(ossimImageHandlerFactoryBa
    extensionList.push_back("nitf");
    extensionList.push_back("ntf");
    extensionList.push_back("til");
-   extensionList.push_back("otb");
 }
 
 void ossimImageHandlerFactory::getImageHandlersBySuffix(ossimImageHandlerFactoryBase::ImageHandlerList& result, const ossimString& ext)const
@@ -644,12 +630,6 @@ void ossimImageHandlerFactory::getImageHandlersBySuffix(ossimImageHandlerFactory
       result.push_back(new ossimQbTileFilesHandler);
       return;
    }
-   if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Testing OTB..."<<std::endl;
-   if (testExt == "otb")
-   {
-      result.push_back(new ossimTileMapTileSource);
-      return;
-   }
 }
 
 void ossimImageHandlerFactory::getImageHandlersByMimeType(ossimImageHandlerFactoryBase::ImageHandlerList& result, const ossimString& mimeType)const
@@ -703,10 +683,6 @@ ossimObject* ossimImageHandlerFactory::createObject(const ossimKeywordlist& kwl,
          }
       }
    }
-   if(ossimString(type).trim() == STATIC_TYPE_NAME(ossimTileMapTileSource))
-   {
-      return new ossimTileMapTileSource();
-   }
 
    if(traceDebug())
    {
@@ -731,7 +707,6 @@ void ossimImageHandlerFactory::getTypeNameList(std::vector<ossimString>& typeLis
    typeList.push_back(STATIC_TYPE_NAME(ossimERSTileSource));
    typeList.push_back(STATIC_TYPE_NAME(ossimSrtmTileSource));
    typeList.push_back(STATIC_TYPE_NAME(ossimGeneralRasterTileSource));
-   typeList.push_back(STATIC_TYPE_NAME(ossimTileMapTileSource));
    typeList.push_back(STATIC_TYPE_NAME(ossimQuickbirdNitfTileSource));
    typeList.push_back(STATIC_TYPE_NAME(ossimQuickbirdTiffTileSource));
    typeList.push_back(STATIC_TYPE_NAME(ossimQbTileFilesHandler));

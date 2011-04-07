@@ -22,6 +22,8 @@
 
 class ossimFfL7;
 
+namespace ossimplugins
+{
 class OSSIM_DLL ossimTileMapTileSource : public ossimGeneralRasterTileSource
 {
 public:
@@ -58,5 +60,5 @@ private:
 
    TYPE_DATA
 };
-
+} // End: namespace ossimplugins
 #endif

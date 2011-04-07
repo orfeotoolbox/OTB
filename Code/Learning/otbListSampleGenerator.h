@@ -61,6 +61,9 @@ public:
   itkNewMacro(Self);
 
   typedef TImage                           ImageType;
+  typedef typename ImageType::Pointer      ImagePointerType;
+  typedef typename ImageType::IndexType    ImageIndexType;
+  typedef typename ImageType::RegionType   ImageRegionType;
   typedef TVectorData                      VectorDataType;
   typedef typename VectorDataType::Pointer VectorDataPointerType;
 

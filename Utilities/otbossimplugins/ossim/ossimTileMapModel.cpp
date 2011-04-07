@@ -12,14 +12,13 @@
 //
 //*****************************************************************************
 
-#include <ossim/projection/ossimTileMapModel.h>
+#include "ossimTileMapModel.h"
 
-RTTI_DEF1(ossimTileMapModel, "ossimTileMapModel", ossimSensorModel);
+#include <stdio.h>
+#include <cstdlib>
 
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimKeywordNames.h>
-#include <stdio.h>
-#include <cstdlib>
 
 //***
 // Define Trace flags for use within this file:
@@ -28,6 +27,10 @@ RTTI_DEF1(ossimTileMapModel, "ossimTileMapModel", ossimSensorModel);
 static ossimTrace traceExec  ("ossimTileMapModel:exec");
 static ossimTrace traceDebug ("ossimTileMapModel:debug");
 
+namespace ossimplugins
+{
+
+RTTI_DEF1(ossimTileMapModel, "ossimTileMapModel", ossimSensorModel);
 
 //*****************************************************************************
 //  DEFAULT CONSTRUCTOR: ossimTileMapModel()
@@ -46,6 +49,26 @@ ossimTileMapModel::ossimTileMapModel()
 //    std::cout << "TileMapModel constructor" << std::endl;
 
    if (traceExec()) ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimTileMapModel::ossimTileMapModel: returning..." << std::endl;
+}
+
+
+bool ossimTileMapModel::open(const ossimFilename& file)
+{
+  static const char MODULE[] = "ossimTileMapModel::open";
+
+  ossimString os = file.beforePos(4);
+  
+   if (traceDebug())
+   {
+      CLOG << " Entered..." << std::endl
+           << " trying to open file " << file << std::endl;
+   }
+   if(os == "http" || file.ext() == "otb")
+   {
+     return true;
+   }
+  
+   return false;
 }
 
 
@@ -262,3 +285,4 @@ void ossimTileMapModel::writeGeomTemplate(ostream& os)
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimTileMapModel::writeGeomTemplate: returning..." << std::endl;
    return;
 }
+} // End: namespace ossimplugins

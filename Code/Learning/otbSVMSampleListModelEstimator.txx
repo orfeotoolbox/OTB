@@ -69,11 +69,15 @@ SVMSampleListModelEstimator<TInputSampleList, TTrainingSampleList, TMeasurementF
 
   // Check if size of the two inputs are same
   if (inputSampleListSize != trainingSampleListSize)
-    throw itk::ExceptionObject(
+    {
+    /*throw itk::ExceptionObject(
       __FILE__,
       __LINE__,
       "Input pointset size is not the same as the training pointset size.",
-      ITK_LOCATION);
+      ITK_LOCATION); */
+    itkExceptionMacro(<< "Input pointset size is not the same as the training pointset size ("
+                      << inputSampleListSize << " vs "<< trainingSampleListSize << ").");
+    }
 
   // Declaration of the iterators on the input and training images
   InputSampleListIteratorType    inIt = inputSampleList->Begin();

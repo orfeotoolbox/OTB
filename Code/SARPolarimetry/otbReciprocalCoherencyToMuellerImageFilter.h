@@ -30,24 +30,27 @@ namespace Functor {
  * \brief Evaluate the Mueller matrix from the reciprocal coherency matrix image
  *
  * Outpus are:
- *   channel #0 : \f$ 0.5*\mathcal{Re}( Coherency[0]+Coherency[3]+Coherency[5]) \f$
- *   channel #1 : \f$ 0.5*\mathcal{Re}( Coherency[0]+Coherency[3]-Coherency[5]) \f$
- *   channel #2 : \f$ 0.5*\mathcal{Re}( Coherency[0]-Coherency[3]+Coherency[5]) \f$
- *   channel #3 : \f$ 0.5*\mathcal{Re}(-Coherency[0]+Coherency[3]+Coherency[5]) \f$
- *   channel #4 : \f$ \mathcal{Re}(Coherency[1]) \f$
- *   channel #5 : \f$ \mathcal{Re}(Coherency[2]) \f$
- *   channel #6 : \f$ \mathcal{Im}(Coherency[4]) \f$
- *   channel #7 : \f$ \mathcal{Re}(Coherency[4]) \f$
- *   channel #8 : \f$ \mathcal{Im}(Coherency[2]) \f$
- *   channel #9 : \f$ \mathcal{Im}(Coherency[1]) \f$
+ *   channel #0 : \f$ 0.5*\mathcal{Re}( Coherency[0]+Coherency[3]+Coherency[5]) \f$ \\
+ *   channel #1 : \f$ 0.5*\mathcal{Re}( Coherency[0]+Coherency[3]-Coherency[5]) \f$ \\
+ *   channel #2 : \f$ 0.5*\mathcal{Re}( Coherency[0]-Coherency[3]+Coherency[5]) \f$ \\
+ *   channel #3 : \f$ 0.5*\mathcal{Re}(-Coherency[0]+Coherency[3]+Coherency[5]) \f$ \\
+ *   channel #4 : \f$ \mathcal{Re}(Coherency[1]) \f$ \\
+ *   channel #5 : \f$ \mathcal{Re}(Coherency[2]) \f$ \\
+ *   channel #6 : \f$ \mathcal{Im}(Coherency[4]) \f$ \\
+ *   channel #7 : \f$ \mathcal{Re}(Coherency[4]) \f$ \\
+ *   channel #8 : \f$ \mathcal{Im}(Coherency[2]) \f$ \\
+ *   channel #9 : \f$ \mathcal{Im}(Coherency[1]) \f$ \\
  *
  * Where Coherency is the input pixel and contains:
- *   channel #0 : \f$ (S_{hh}+S_{vv}).(S_{hh}+S_{vv})^{*} \f$
- *   channel #1 : \f$ (S_{hh}+S_{vv}).(S_{hh}-S_{vv})^{*} \f$
- *   channel #2 : \f$ (S_{hh}+S_{vv}).(2*S_{hv})^{*} \f$
- *   channel #3 : \f$ (S_{hh}-S_{vv}).(S_{hh}-S_{vv})^{*} \f$
- *   channel #4 : \f$ (S_{hh}-S_{vv}).(2*S_{hv})^{*} \f$
- *   channel #5 : \f$ (2*S_{hv}).(2*S_{hv})^{*} \f$
+ *   channel #0 : \f$ (S_{hh}+S_{vv}).(S_{hh}+S_{vv})^{*} \f$ \\
+ *   channel #1 : \f$ (S_{hh}+S_{vv}).(S_{hh}-S_{vv})^{*} \f$ \\
+ *   channel #2 : \f$ (S_{hh}+S_{vv}).(2*S_{hv})^{*} \f$ \\
+ *   channel #3 : \f$ (S_{hh}-S_{vv}).(S_{hh}-S_{vv})^{*} \f$ \\
+ *   channel #4 : \f$ (S_{hh}-S_{vv}).(2*S_{hv})^{*} \f$ \\
+ *   channel #5 : \f$ (2*S_{hv}).(2*S_{hv})^{*} \f$ \\
+ *
+ * The output pixel has 10 channels : the diagonal and the upper element of the matrix.
+ * Element are stored from left to right, line by line.
  *
  * \ingroup SARPolarimetry
  */
@@ -99,18 +102,26 @@ private:
 
 
 /** \class otbReciprocalCoherencyToMuellerImageFilter
- * \brief Compute the Mueller matrix image (9 real channels)
+ * \brief Compute the Mueller matrix image (10 real channels)
  * from the Reciprocal coherency image (6 complex channels)
+ *
+ * For more datails, please refer to ReciprocalCoherencyToMuellerFunctor.
+ *
+ * \ingroup SARPolarimetry
+ * \sa ReciprocalCoherencyToMuellerFunctor
+ *
  */
-template <class TInputImage, class TOutputImage, class TFunction = Functor::ReciprocalCoherencyToMuellerFunctor<
-    ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
+template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ReciprocalCoherencyToMuellerImageFilter :
-   public otb::UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction>
+   public UnaryFunctorImageFilter<TInputImage, TOutputImage, Functor::ReciprocalCoherencyToMuellerFunctor<
+    ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
 {
 public:
    /** Standard class typedefs. */
    typedef ReciprocalCoherencyToMuellerImageFilter  Self;
-   typedef otb::UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction> Superclass;
+   typedef typename Functor::ReciprocalCoherencyToMuellerFunctor<
+     typename TInputImage::PixelType, typename TOutputImage::PixelType> FunctionType;
+   typedef UnaryFunctorImageFilter<TInputImage, TOutputImage, FunctionType> Superclass;
    typedef itk::SmartPointer<Self>        Pointer;
    typedef itk::SmartPointer<const Self>  ConstPointer;
 
@@ -124,6 +135,7 @@ public:
 protected:
    ReciprocalCoherencyToMuellerImageFilter() {}
   virtual ~ReciprocalCoherencyToMuellerImageFilter() {}
+
 
 private:
   ReciprocalCoherencyToMuellerImageFilter(const Self&); //purposely not implemented

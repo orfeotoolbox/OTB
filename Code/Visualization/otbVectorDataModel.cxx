@@ -134,7 +134,9 @@ void VectorDataModel::EndGeometry(bool callUpdate)
       itkExceptionMacro(<< "Polygon must have at least 3 points");
       }
     otbMsgDevMacro(<< "VectorDataModel::EndGeometry: Ending polygon and adding to vector data");
-
+    VertexListConstIteratorType it = m_CurrentGeometry->GetPolygonExteriorRing()->GetVertexList()->Begin();
+    VertexType firstVertex = it.Value();
+    m_CurrentGeometry->GetPolygonExteriorRing()->AddVertex(firstVertex);
     m_CurrentGeometry = NULL;
     }
   else if (m_CurrentGeometry->GetNodeType() == FEATURE_LINE)

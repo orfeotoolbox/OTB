@@ -29,8 +29,19 @@ namespace otb
  * \brief Convert the Sinclair reciprocal matrix.
  *
  * This class is parameterized over the type of the input images and
- * the type of the output image.  It is also parameterized by the
+ * the type of the output image. It is also parameterized by the
  * operation to be applied, using a Functor style.
+ *
+ * The output image has 6 channels : the diagonal and the upper element of the reciprocal matrix.
+ * Element a sotored from left to right, line by line.
+ *
+ * The class is templated by the 4 input image (HH, HV, VH and VV) and the used functor.
+ * Available functors are :
+ * \begin{itemize}
+ * \item SinclairToReciprocalCovarianceMatrixFunctor (default one)
+ * \item SinclairToReciprocalCircularCovarianceMatrixFunctor
+ * \item SinclairToReciprocalCoherencyMatrixFunctor
+ * \end{itemize}
  *
  *  \ingroup SARPolarimetry
  *

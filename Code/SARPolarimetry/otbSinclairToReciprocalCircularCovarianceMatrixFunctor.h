@@ -30,14 +30,17 @@ namespace Functor
  *  with Sinclair matrix information.
  *
  *  Output value are:
- *   channel #0 : \f$ S_{ll}.S_{ll}^{*} \f$
- *   channel #1 : \f$ S_{ll}.S_{lr}^{*} \f$
- *   channel #2 : \f$ S_{ll}.S_{rr}^{*} \f$
- *   channel #3 : \f$ S_{lr}.S_{lr}^{*} \f$
- *   channel #4 : \f$ S_{lr}.S_{rr}^{*} \f$
- *   channel #5 : \f$ S_{rr}.S_{rr}^{*} \f$
+ *   channel #0 : \f$ S_{ll}.S_{ll}^{*} \f$ \\
+ *   channel #1 : \f$ S_{ll}.S_{lr}^{*} \f$ \\
+ *   channel #2 : \f$ S_{ll}.S_{rr}^{*} \f$ \\
+ *   channel #3 : \f$ S_{lr}.S_{lr}^{*} \f$ \\
+ *   channel #4 : \f$ S_{lr}.S_{rr}^{*} \f$ \\
+ *   channel #5 : \f$ S_{rr}.S_{rr}^{*} \f$ \\
  *
  * This is a adaptation of the SinclairToCircularCovarianceMatrixFunctor, where \f$ S_{hv}=S_{vh} \f$.
+ *
+ * The output pixel has 6 channels : the diagonal and the upper element of the reciprocal matrix.
+ * Element are stored from left to right, line by line.
  *
  *  \ingroup Functor
  *  \ingroup SARPolarimetry

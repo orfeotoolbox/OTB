@@ -63,8 +63,6 @@ LineSegmentDetector<TInputImage, TPrecision>
 
   /** Image to store the pixels used 0:NOTUSED 127:NOTINIT  255:USED*/
   m_UsedPointImage  = LabelImageType::New();
-
-  m_ImageSize.Fill(0);
 }
 
 template <class TInputImage, class TPrecision>
@@ -92,17 +90,23 @@ LineSegmentDetector<TInputImage, TPrecision>
 template <class TInputImage, class TPrecision>
 void
 LineSegmentDetector<TInputImage, TPrecision>
-::BeforeGenerateData()
+::GenerateInputRequestedRegion(void)
 {
-  if (this->GetInput()->GetRequestedRegion() != this->GetInput()->GetLargestPossibleRegion())
+  // call the superclass' implementation of this method
+  Superclass::GenerateInputRequestedRegion();
+
+  // get pointers to the inputs
+  typename InputImageType::Pointer input  =
+    const_cast<InputImageType *> (this->GetInput());
+
+  if ( !input )
     {
-    itkExceptionMacro(<< "No streamed filter. ERROR : requested region is not the largest possible region.");
+    return;
     }
 
-  /** Allocate memory for the temporary label Image*/
-  m_UsedPointImage->SetRegions(this->GetInput()->GetLargestPossibleRegion());
-  m_UsedPointImage->Allocate();
-  m_UsedPointImage->FillBuffer(0);
+  // The input is necessarily the largest possible region.
+  // For a streamed implementation, use the StreamingLineSegmentDetector filter
+  input->SetRequestedRegionToLargestPossibleRegion();
 }
 
 template <class TInputImage, class TPrecision>
@@ -110,7 +114,15 @@ void
 LineSegmentDetector<TInputImage, TPrecision>
 ::GenerateData()
 {
-  this->BeforeGenerateData();
+  if (this->GetInput()->GetRequestedRegion() != this->GetInput()->GetLargestPossibleRegion())
+    {
+    itkExceptionMacro(<< "Not streamed filter. ERROR : requested region is not the largest possible region.");
+    }
+
+  /** Allocate memory for the temporary label Image*/
+  m_UsedPointImage->SetRegions(this->GetInput()->GetLargestPossibleRegion());
+  m_UsedPointImage->Allocate();
+  m_UsedPointImage->FillBuffer(0);
 
   /** Cast the MagnitudeOutput Image in */
   typedef itk::CastImageFilter<InputImageType, OutputImageType> castFilerType;
@@ -143,20 +155,13 @@ typename LineSegmentDetector<TInputImage, TPrecision>
 LineSegmentDetector<TInputImage, TPrecision>
 ::SortImageByModulusValue(MagnitudeImagePointerType modulusImage)
 {
-  if (m_ImageSize[0] == 0 && m_ImageSize[1] == 0) m_ImageSize = this->GetInput()->GetLargestPossibleRegion().GetSize();
-
-  m_NumberOfImagePixels  = static_cast<unsigned int>(m_ImageSize[1] * m_ImageSize[0]);
+  RegionType largestRegion = this->GetInput()->GetLargestPossibleRegion();
 
   // Compute the minimum region size
-  double logNT = 5. *
-                 (vcl_log10(static_cast<double>(m_ImageSize[0])) + vcl_log10(static_cast<double>(m_ImageSize[1]))) / 2.;
+  double logNT = 5. * vcl_log10( static_cast<double>(largestRegion.GetNumberOfPixels()) ) / 2.;
   double log1_p = vcl_log10(m_DirectionsAllowed);
   double rapport = logNT / log1_p;
-  m_MinimumRegionSize = -1 * static_cast<unsigned int>(rapport);
-
-  // Definition of the min & the max of an image
-  OutputPixelType min = itk::NumericTraits<TPrecision>::Zero;
-  OutputPixelType max = itk::NumericTraits<TPrecision>::Zero;
+  m_MinimumRegionSize = static_cast<unsigned int>(-rapport);
 
   // Computing the min & max of the image
   typedef  itk::MinimumMaximumImageCalculator<OutputImageType> MinMaxCalculatorFilter;
@@ -164,9 +169,9 @@ LineSegmentDetector<TInputImage, TPrecision>
 
   minmaxCalculator->SetImage(modulusImage);
   minmaxCalculator->ComputeMinimum();
-  min = minmaxCalculator->GetMinimum();
+  OutputPixelType min = minmaxCalculator->GetMinimum();
   minmaxCalculator->ComputeMaximum();
-  max = minmaxCalculator->GetMaximum();
+  OutputPixelType max = minmaxCalculator->GetMaximum();
 
   /** Compute the threshold on the gradient*/
   m_Threshold = m_Threshold * ((max - min) / 255.);     // threshold normalized with min & max of the values
@@ -188,10 +193,11 @@ LineSegmentDetector<TInputImage, TPrecision>
     id[0]++;
     size[0]--;
     if (modulusImage->GetRequestedRegion().GetSize()[0] + modulusImage->GetRequestedRegion().GetIndex()[0] ==
-        m_ImageSize[0]) size[0]--;
+        largestRegion.GetSize(0))
+      size[0]--;
     }
   else if (modulusImage->GetRequestedRegion().GetSize()[0] + modulusImage->GetRequestedRegion().GetIndex()[0] ==
-           m_ImageSize[0])
+      largestRegion.GetSize(0))
     {
     size[0]--;
     }
@@ -201,10 +207,10 @@ LineSegmentDetector<TInputImage, TPrecision>
     id[1]++;
     size[1]--;
     if (modulusImage->GetRequestedRegion().GetSize()[1] + modulusImage->GetRequestedRegion().GetIndex()[1] ==
-        m_ImageSize[1]) size[1]--;
+        largestRegion.GetSize(1)) size[1]--;
     }
   else if (modulusImage->GetRequestedRegion().GetSize()[1] + modulusImage->GetRequestedRegion().GetIndex()[1] ==
-           m_ImageSize[1])
+      largestRegion.GetSize(1))
     {
     size[1]--;
     }
@@ -642,11 +648,10 @@ LineSegmentDetector<TInputImage, TPrecision>
   typedef itk::ConstNeighborhoodIterator<OutputImageType> NeighborhoodIteratorType;
   typename NeighborhoodIteratorType::SizeType radius;
   radius.Fill(1);
-  NeighborhoodIteratorType                                itNeigh(radius, m_MagnitudeFilter->GetOutput(),
-                                                                  m_MagnitudeFilter->GetOutput()->GetRequestedRegion());
-  NeighborhoodIteratorType                                itNeighDir(radius, m_OrientationFilter->GetOutput(),
-                                                                     m_OrientationFilter->GetOutput()->
-                                                                     GetRequestedRegion());
+  NeighborhoodIteratorType itNeigh(radius, m_MagnitudeFilter->GetOutput(),
+                                   m_MagnitudeFilter->GetOutput()->GetRequestedRegion());
+  NeighborhoodIteratorType itNeighDir(radius, m_OrientationFilter->GetOutput(),
+                                      m_OrientationFilter->GetOutput()-> GetRequestedRegion());
 
   /** Vector where to store the point belonging to the current region*/
   unsigned int    neighSize  = itNeigh.GetSize()[0] * itNeigh.GetSize()[1];
@@ -684,7 +689,9 @@ LineSegmentDetector<TInputImage, TPrecision>
       ++s;
       }
     } /** End Searching loop*/
-  if (region.size() > m_MinimumRegionSize && region.size() < static_cast<unsigned int>(m_NumberOfImagePixels / 4))
+
+  unsigned int nbPixels = this->GetInput()->GetLargestPossibleRegion().GetNumberOfPixels();
+  if (region.size() > m_MinimumRegionSize && region.size() < nbPixels / 4)
     {
     return EXIT_SUCCESS;
     }
@@ -764,9 +771,11 @@ LineSegmentDetector<TInputImage, TPrecision>
   /* Length & Width of the rectangle **/
   typedef std::vector<MagnitudePixelType> MagnitudeVector;
 
+  RegionType largestRegion = this->GetInput()->GetLargestPossibleRegion();
   unsigned int Diagonal =
-    static_cast<unsigned int>(vnl_math_hypot(static_cast<double>(m_ImageSize[1]), static_cast<double>(
-                                               m_ImageSize[0])) + 2);
+    static_cast<unsigned int>(vnl_math_hypot(static_cast<double>(largestRegion.GetSize(1)), static_cast<double>(
+        largestRegion.GetSize(0))) + 2);
+
   MagnitudeVector sum_l(2*Diagonal, itk::NumericTraits<MagnitudePixelType>::Zero);
   MagnitudeVector sum_w(2*Diagonal, itk::NumericTraits<MagnitudePixelType>::Zero);
 
@@ -827,9 +836,10 @@ LineSegmentDetector<TInputImage, TPrecision>
   RectangleType          rec(8, 0.);       // Definition of a
                                            // rectangle : 8 components
   
-  if (vcl_abs(wl -
-              wr) - vcl_sqrt(static_cast<double>(m_ImageSize[1] * m_ImageSize[1] + m_ImageSize[0] * m_ImageSize[0])) <
-      1e-10)
+  if (vcl_abs(wl - wr)
+      - vcl_sqrt( static_cast<double> (largestRegion.GetSize(0) * largestRegion.GetSize(0) +
+                                       largestRegion.GetSize(1) * largestRegion.GetSize(1)))
+      < 1e-10 )
     {
     rec[0] = (x + lb * dx > 0) ? x + lb * dx : 0.;
     rec[1] = (y + lb * dy > 0) ? y + lb * dy : 0.;
@@ -867,8 +877,8 @@ LineSegmentDetector<TInputImage, TPrecision>
   typedef itk::ConstNeighborhoodIterator<OutputImageType> NeighborhoodIteratorType;
   typename NeighborhoodIteratorType::SizeType radius;
   radius.Fill(0);
-  NeighborhoodIteratorType                                itNeigh(radius, m_MagnitudeFilter->GetOutput(),
-                                                                  m_MagnitudeFilter->GetOutput()->GetRequestedRegion());
+  NeighborhoodIteratorType itNeigh(radius, m_MagnitudeFilter->GetOutput(),
+                                   m_MagnitudeFilter->GetOutput()->GetRequestedRegion());
 
   /** Computing the center of the rectangle*/
   IndexVectorIteratorType it = region.begin();
@@ -983,8 +993,8 @@ LineSegmentDetector<TInputImage, TPrecision>
     }
 
   /** Compute the NFA from the rectangle computed below*/
-  double logNT = 5. *
-                 (vcl_log10(static_cast<double>(m_ImageSize[1])) + vcl_log10(static_cast<double>(m_ImageSize[0]))) / 2.;
+  RegionType largestRegion = const_cast<Self*>(this)->GetInput()->GetLargestPossibleRegion();
+  double logNT = 5. * vcl_log10( static_cast<double>(largestRegion.GetNumberOfPixels()) ) / 2.;
 
   nfa_val = NFA(pts, NbAligned, m_DirectionsAllowed, logNT);
 

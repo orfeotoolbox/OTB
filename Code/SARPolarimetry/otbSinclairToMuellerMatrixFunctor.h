@@ -30,30 +30,37 @@ namespace Functor
  *  Harold Mott p 503
  *
  *  Output value are:
- *   channel #0  : \f$ 0.5 * \mathcal{Re}( T_{xx}.T_{xx}^{*} + T_{xy}.T_{xy}^{*} + T_{yx}.T_{yx}^{*} + T_{yy}.T_{yy}^{*} ) \f$
- *   channel #1  : \f$ 0.5 * \mathcal{Re}( T_{xx}.T_{xx}^{*} - T_{xy}.T_{xy}^{*} + T_{yx}.T_{yx}^{*} - T_{yy}.T_{yy}^{*} ) \f$
- *   channel #2  : \f$ \mathcal{Re}( T_{xx}.T_{xy}^{*} + T_{yx}.T_{yy}^{*} ) \f$
- *   channel #3  : \f$ \mathcal{Im}( T_{xx}.T_{xy}^{*} + T_{yx}.T_{yy}^{*} ) \f$
- *   channel #4  : \f$ 0.5 * \mathcal{Re}( T_{xx}.T_{xx}^{*} + T_{xy}.T_{xy}^{*} - T_{yx}.T_{yx}^{*} - T_{yy}.T_{yy}^{*} ) \f$
- *   channel #5  : \f$ 0.5 * \mathcal{Re}( T_{xx}.T_{xx}^{*} - T_{xy}.T_{xy}^{*} - T_{yx}.T_{yx}^{*} + T_{yy}.T_{yy}^{*} ) \f$
- *   channel #6  : \f$ \mathcal{Re}( T_{xx}.T_{xy}^{*} - T_{yx}.T_{yy}^{*} ) \f$
- *   channel #7  : \f$ \mathcal{Im}( T_{xx}.T_{xy}^{*} - T_{yx}.T_{yy}^{*} ) \f$
- *   channel #8  : \f$ \mathcal{Re}( T_{xx}.T_{yx}^{*} + T_{xy}.T_{yy}^{*} ) \f$
- *   channel #9  : \f$ \mathcal{Im}( T_{xx}.T_{yx}^{*} - T_{xy}.T_{yy}^{*} ) \f$
- *   channel #10 : \f$ \mathcal{Re}( T_{xx}.T_{yy}^{*} + T_{xy}.T_{yx}^{*} ) \f$
- *   channel #11 : \f$ \mathcal{Im}( T_{xx}.T_{yy}^{*} - T_{xy}.T_{yx}^{*} ) \f$
- *   channel #12 : \f$ \mathcal{Re}( T_{xx}.T_{yx}^{*} + T_{xy}.T_{yy}^{*} ) \f$
- *   channel #13 : \f$ \mathcal{Im}( T_{xx}.T_{yx}^{*} - T_{xy}.T_{yy}^{*} ) \f$
- *   channel #14 : \f$ \mathcal{Re}( T_{xx}.T_{yy}^{*} + T_{xy}.T_{yx}^{*} ) \f$
- *   channel #15 : \f$ \mathcal{Im}( T_{xx}.T_{yy}^{*} - T_{xy}.T_{yx}^{*} ) \f$
+ *   channel #0  : \f$ 0.5 * \mathcal{Re}( T_{xx}.T_{xx}^{*} + T_{xy}.T_{xy}^{*} + T_{yx}.T_{yx}^{*} + T_{yy}.T_{yy}^{*} ) \f$ \\
+ *   channel #1  : \f$ 0.5 * \mathcal{Re}( T_{xx}.T_{xx}^{*} - T_{xy}.T_{xy}^{*} + T_{yx}.T_{yx}^{*} - T_{yy}.T_{yy}^{*} ) \f$ \\
+ *   channel #2  : \f$ \mathcal{Re}( T_{xx}.T_{xy}^{*} + T_{yx}.T_{yy}^{*} ) \f$ \\
+ *   channel #3  : \f$ \mathcal{Im}( T_{xx}.T_{xy}^{*} + T_{yx}.T_{yy}^{*} ) \f$ \\
+ *   channel #4  : \f$ 0.5 * \mathcal{Re}( T_{xx}.T_{xx}^{*} + T_{xy}.T_{xy}^{*} - T_{yx}.T_{yx}^{*} - T_{yy}.T_{yy}^{*} ) \f$ \\
+ *   channel #5  : \f$ 0.5 * \mathcal{Re}( T_{xx}.T_{xx}^{*} - T_{xy}.T_{xy}^{*} - T_{yx}.T_{yx}^{*} + T_{yy}.T_{yy}^{*} ) \f$ \\
+ *   channel #6  : \f$ \mathcal{Re}( T_{xx}.T_{xy}^{*} - T_{yx}.T_{yy}^{*} ) \f$ \\
+ *   channel #7  : \f$ \mathcal{Im}( T_{xx}.T_{xy}^{*} - T_{yx}.T_{yy}^{*} ) \f$ \\
+ *   channel #8  : \f$ \mathcal{Re}( T_{xx}.T_{yx}^{*} + T_{xy}.T_{yy}^{*} ) \f$ \\
+ *   channel #9  : \f$ \mathcal{Im}( T_{xx}.T_{yx}^{*} - T_{xy}.T_{yy}^{*} ) \f$ \\
+ *   channel #10 : \f$ \mathcal{Re}( T_{xx}.T_{yy}^{*} + T_{xy}.T_{yx}^{*} ) \f$ \\
+ *   channel #11 : \f$ \mathcal{Im}( T_{xx}.T_{yy}^{*} - T_{xy}.T_{yx}^{*} ) \f$ \\
+ *   channel #12 : \f$ \mathcal{Re}( T_{xx}.T_{yx}^{*} + T_{xy}.T_{yy}^{*} ) \f$ \\
+ *   channel #13 : \f$ \mathcal{Im}( T_{xx}.T_{yx}^{*} - T_{xy}.T_{yy}^{*} ) \f$ \\
+ *   channel #14 : \f$ \mathcal{Re}( T_{xx}.T_{yy}^{*} + T_{xy}.T_{yx}^{*} ) \f$ \\
+ *   channel #15 : \f$ \mathcal{Im}( T_{xx}.T_{yy}^{*} - T_{xy}.T_{yx}^{*} ) \f$ \\
  *
  * With :
- * \f$ T_{xx} = -S_{hh} \f$
- * \f$ T_{xy} = -S_{hv} \f$
- * \f$ T_{yx} = -S_{vh} \f$
- * \f$ T_{yy} = -S_{vv} \f$
+ * \f$ T_{xx} = -S_{hh} \f$ \\
+ * \f$ T_{xy} = -S_{hv} \f$ \\
+ * \f$ T_{yx} = -S_{vh} \f$ \\
+ * \f$ T_{yy} = -S_{vv} \f$ \\
  *
- * Output is a not a complex.
+ * Output is a not a complex. The output pixel has 16 channels : each element of the Mueller matrix.
+ * The order of the channels corresponds to :
+ * \f$  \begin{pmatrix}
+ * {channel #0 }&{channel #1 }&{channel #2 }&{channel #3 } \\
+ * {channel #4 }&{channel #5 }&{channel #6 }&{channel #7 } \\
+ * {channel #8 }&{channel #9 }&{channel #10}&{channel #11} \\
+ * {channel #12}&{channel #13}&{channel #14}&{channel #15} \\
+ * \end{pmatrix}
  *
  *  \ingroup Functor
  *  \ingroup SARPolarimetry

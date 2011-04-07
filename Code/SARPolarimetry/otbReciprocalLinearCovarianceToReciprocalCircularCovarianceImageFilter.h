@@ -31,23 +31,26 @@ namespace Functor {
  *  Extract from Antennas for radar and communications Harold Mott p 317.
  *
  *  Output value are:
- *   channel #0 : \f$ 0.25 * (C_{1}+C_{3}+4*C_{2}-2*C_{6}-4*C_{5}-4*C_{9}) \f$
- *   channel #1 : \f$ 0.25 * (C_{1}-C_{3}+2*C_{5}+2*C_{9} - 0.5\mathcal{i}.(C_{4}+C_{7}+C_{8}) \f$
- *   channel #2 : \f$ 0.25 * (C_{1}+C_{3}-4*C_{2}-2*C_{6} - \mathcal{i}.(C_{4}+C_{8}) \f$
- *   channel #3 : \f$ 0.25 * (C_{1}+C_{3}+2*C_{6} \f$
- *   channel #4 : \f$ 0.25 * (C_{1}-C_{3}+2*C_{5}-2*C_{9} - 0.5\mathcal{i}.(C_{4}-C_{7}+C_{8}) \f$
- *   channel #5 : \f$ 0.25 * (C_{1}+C_{3}+4*C_{2}-2*C_{6}+4*C_{5}+4*C_{9}) \f$
+ *   channel #0 : \f$ 0.25 * (C_{1}+C_{3}+4*C_{2}-2*C_{6}-4*C_{5}-4*C_{9}) \f$ \\
+ *   channel #1 : \f$ 0.25 * (C_{1}-C_{3}+2*C_{5}+2*C_{9} - 0.5\mathcal{i}.(C_{4}+C_{7}+C_{8}) \f$ \\
+ *   channel #2 : \f$ 0.25 * (C_{1}+C_{3}-4*C_{2}-2*C_{6} - \mathcal{i}.(C_{4}+C_{8}) \f$ \\
+ *   channel #3 : \f$ 0.25 * (C_{1}+C_{3}+2*C_{6} \f$ \\
+ *   channel #4 : \f$ 0.25 * (C_{1}-C_{3}+2*C_{5}-2*C_{9} - 0.5\mathcal{i}.(C_{4}-C_{7}+C_{8}) \f$ \\
+ *   channel #5 : \f$ 0.25 * (C_{1}+C_{3}+4*C_{2}-2*C_{6}+4*C_{5}+4*C_{9}) \f$ \\
  *
  *  Where:
- *   \f$ C_{1} = S_{hh}*S_{hh}}^{*} = \mathcal{Re}(input[0]) \f$
- *   \f$ C_{2} = S_{hv}*S_{hv}}^{*} = \mathcal{Re}(input[3]) \f$
- *   \f$ C_{3} = S_{vv}*S_{vv}}^{*} = \mathcal{Re}(input[5]) \f$
- *   \f$ C_{4} = \mathcal{Re}(S_{hh}*S_{hv}}^{*}) = \mathcal{Re}(input[1]) \f$
- *   \f$ C_{5} = \mathcal{Im}(S_{hh}*S_{hv}}^{*}) = \mathcal{Im}(input[1]) \f$
- *   \f$ C_{6} = \mathcal{Re}(S_{hh}*S_{vv}}^{*}) = \mathcal{Re}(input[2]) \f$
- *   \f$ C_{7} = \mathcal{Im}(S_{hh}*S_{vv}}^{*}) = \mathcal{Im}(input[2]) \f$
- *   \f$ C_{8} = \mathcal{Re}(S_{hv}*S_{vv}}^{*}) = \mathcal{Re}(input[4]) \f$
- *   \f$ C_{9} = \mathcal{Im}(S_{hv}*S_{vv}}^{*} = \mathcal{Im}(input[4])) \f$
+ *   \f$ C_{1} = S_{hh}*S_{hh}}^{*} = \mathcal{Re}(input[0]) \f$ \\
+ *   \f$ C_{2} = S_{hv}*S_{hv}}^{*} = \mathcal{Re}(input[3]) \f$ \\
+ *   \f$ C_{3} = S_{vv}*S_{vv}}^{*} = \mathcal{Re}(input[5]) \f$ \\
+ *   \f$ C_{4} = \mathcal{Re}(S_{hh}*S_{hv}}^{*}) = \mathcal{Re}(input[1]) \f$ \\
+ *   \f$ C_{5} = \mathcal{Im}(S_{hh}*S_{hv}}^{*}) = \mathcal{Im}(input[1]) \f$ \\
+ *   \f$ C_{6} = \mathcal{Re}(S_{hh}*S_{vv}}^{*}) = \mathcal{Re}(input[2]) \f$ \\
+ *   \f$ C_{7} = \mathcal{Im}(S_{hh}*S_{vv}}^{*}) = \mathcal{Im}(input[2]) \f$ \\
+ *   \f$ C_{8} = \mathcal{Re}(S_{hv}*S_{vv}}^{*}) = \mathcal{Re}(input[4]) \f$ \\
+ *   \f$ C_{9} = \mathcal{Im}(S_{hv}*S_{vv}}^{*} = \mathcal{Im}(input[4])) \f$ \\
+ *
+ * The output pixel has 6 channels : the diagonal and the upper element of the reciprocal matrix.
+ * Element are stored from left to right, line by line.
  *
  * \infgroup Functor
  * \ingroup SARPolarimetry
@@ -118,16 +121,22 @@ private:
 
 /** \class otbReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter
  * \brief Compute the reciprocal Covariance circular matrix image from the reciprocal Covariance linear matrix image.
+ * For more details, please refer to the class ReciprocalLinearCovarianceToReciprocalCircularCovarianceFunctor.
+ *
+ * \ingroup SARPolarimetry
+ * \sa ReciprocalLinearCovarianceToReciprocalCircularCovarianceFunctor
  */
-template <class TInputImage, class TOutputImage, class TFunction = Functor::ReciprocalLinearCovarianceToReciprocalCircularCovarianceFunctor<
-    ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
+ template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter :
-   public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction>
+   public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage, Functor::ReciprocalLinearCovarianceToReciprocalCircularCovarianceFunctor<
+    ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
 {
 public:
    /** Standard class typedefs. */
    typedef ReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter  Self;
-   typedef itk::UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction> Superclass;
+   typedef typename Functor::ReciprocalLinearCovarianceToReciprocalCircularCovarianceFunctor<
+     typename TInputImage::PixelType, typename TOutputImage::PixelType> FunctionType;
+   typedef itk::UnaryFunctorImageFilter<TInputImage, TOutputImage, FunctionType> Superclass;
    typedef itk::SmartPointer<Self>        Pointer;
    typedef itk::SmartPointer<const Self>  ConstPointer;
 

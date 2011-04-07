@@ -30,12 +30,15 @@ namespace Functor {
  * \brief Evaluate the Coherency matrix from the Covariance image
  *
  *   Output value are:
- *   channel #0 : \f$ 0.5 * (S_{hh}+S_{vv}.(S_{hh}+S_{vv})^{*} \f$
- *   channel #1 : \f$ 0.5 * (S_{hh}+S_{vv}.(S_{hh}-S_{vv})^{*} \f$
- *   channel #2 : \f$ (S_{hh}+S_{vv}.(S_{hv})^{*} \f$
- *   channel #3 : \f$ 0.5 * (S_{hh}-S_{vv}.(S_{hh}-S_{vv})^{*} \f$
- *   channel #4 : \f$ (S_{hh}-S_{vv}.(S_{hv})^{*}  \f$
- *   channel #5 : \f$ 2.0*S_{hv}.S_{hv}^{*} \f$
+ *   channel #0 : \f$ 0.5 * (S_{hh}+S_{vv}.(S_{hh}+S_{vv})^{*} \f$ \\
+ *   channel #1 : \f$ 0.5 * (S_{hh}+S_{vv}.(S_{hh}-S_{vv})^{*} \f$ \\
+ *   channel #2 : \f$ (S_{hh}+S_{vv}.(S_{hv})^{*} \f$ \\
+ *   channel #3 : \f$ 0.5 * (S_{hh}-S_{vv}.(S_{hh}-S_{vv})^{*} \f$ \\
+ *   channel #4 : \f$ (S_{hh}-S_{vv}.(S_{hv})^{*}  \f$ \\
+ *   channel #5 : \f$ 2.0*S_{hv}.S_{hv}^{*} \f$ \\
+ *
+ * The output pixel has 6 channels : the diagonal and the upper element of the reciprocal matrix.
+ * Element are stored from left to right, line by line.
  *
  * \infgroup Functor
  * \ingroup SARPolarimetry
@@ -104,16 +107,23 @@ private:
 /** \class otbReciprocalCovarianceToReciprocalCoherencyImageFilter
  * \brief Compute the Coherency image (6 complex channels)
  * from the Covariance image (6 complex channels)
+ *
+ * For more details, please refer to the class ReciprocalCovarianceToReciprocalCoherencyFunctor.
+ *
+ * \ingroup SARPolarimetry
+ * \sa ReciprocalCovarianceToReciprocalCoherencyFunctor
  */
-template <class TInputImage, class TOutputImage, class TFunction = Functor::ReciprocalCovarianceToReciprocalCoherencyFunctor<
-    ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
+template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ReciprocalCovarianceToReciprocalCoherencyImageFilter :
-   public UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction>
+   public UnaryFunctorImageFilter<TInputImage, TOutputImage, Functor::ReciprocalCovarianceToReciprocalCoherencyFunctor<
+    ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
 {
 public:
    /** Standard class typedefs. */
    typedef ReciprocalCovarianceToReciprocalCoherencyImageFilter  Self;
-   typedef UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction> Superclass;
+   typedef Functor::ReciprocalCovarianceToReciprocalCoherencyFunctor<
+     typename TInputImage::PixelType, typename TOutputImage::PixelType> FunctorType;
+   typedef UnaryFunctorImageFilter<TInputImage, TOutputImage, FunctorType> Superclass;
    typedef itk::SmartPointer<Self>        Pointer;
    typedef itk::SmartPointer<const Self>  ConstPointer;
 
