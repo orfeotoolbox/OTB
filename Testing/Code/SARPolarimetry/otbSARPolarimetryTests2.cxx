@@ -36,8 +36,6 @@ void RegisterTests()
   REGISTER_TEST(otbReciprocalHAlphaImageFilter);
   REGISTER_TEST(otbReciprocalCoherencyToMuellerImageFilterNew);
   REGISTER_TEST(otbReciprocalCoherencyToMuellerImageFilter);
-  REGISTER_TEST(otbMuellerToCircularPolarisationImageFilterNew);
-  REGISTER_TEST(otbMuellerToCircularPolarisationImageFilter);
   REGISTER_TEST(otbMuellerToPolarisationDegreeAndPowerImageFilterNew);
   REGISTER_TEST(otbMuellerToPolarisationDegreeAndPowerImageFilter);
   REGISTER_TEST(otbMuellerToReciprocalCovarianceImageFilterNew);
