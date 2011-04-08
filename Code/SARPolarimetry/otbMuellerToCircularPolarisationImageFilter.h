@@ -64,14 +64,17 @@ public:
 
     const RealType M11 =  static_cast<RealType>(Mueller[0]);
     const RealType M14 =  static_cast<RealType>(Mueller[3]);
+    const RealType M24 =  static_cast<RealType>(Mueller[7]);
+    const RealType M33 =  static_cast<RealType>(Mueller[10]);
     const RealType M41 =  static_cast<RealType>(Mueller[12]);
-    const RealType M44 =  static_cast<RealType>(Mueller[15]);
+    const RealType M42 =  static_cast<RealType>(Mueller[13]);
+    const RealType M44=  static_cast<RealType>(Mueller[15]);
 
-    result[0] = static_cast<OutputValueType>( M11 + M14 + M41 + M44 ); // LL
-    result[1] = static_cast<OutputValueType>( M11 - M14 - M41 + M44 ); // RR
-    result[2] = static_cast<OutputValueType>( M11 -M44 );              // LR
+    result[0] = static_cast<OutputValueType>( M11 - M14 + M41 + M44 ); // LL
+    result[1] = static_cast<OutputValueType>( M11 - M42 - M24 + M33 ); // RR
+    result[2] = static_cast<OutputValueType>( M11 + M41 - M14 - M44 ); // LR
 
-    return result;
+    return 0.5*result;
     }
 
    unsigned int GetOutputSize()

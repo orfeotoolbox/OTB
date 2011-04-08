@@ -1458,8 +1458,9 @@ std::string GDALImageIO::FilenameToGdalDriverShortName(std::string name)
     gdalDriverShortName="JPEG";
   else if ( extension == "pix" )
     gdalDriverShortName="PCIDSK";
-  else if ( extension == "ras" )
-    gdalDriverShortName="GTiff";
+  // Sun raster format
+  else if ( extension == "ras" || extension == "sum" )
+    gdalDriverShortName="ENVI";
   else
     gdalDriverShortName = "NOT-FOUND";
 
@@ -1474,7 +1475,15 @@ std::string GDALImageIO::GetGdalWriteImageFileName(std::string& gdalDriverShortN
   // Suppress hdr extension for ENVI format
   if (gdalDriverShortName == "ENVI")
     {
-    gdalFileName = System::GetRootName(filename);
+      std::string extension;
+      // Get extension in lowercase
+      extension = otb::System::SetToLower( System::GetExtension(filename));
+      if(  extension != "ras" && extension != "sum" )
+        {
+          std::cout<<filename<<std::endl;
+          gdalFileName = System::GetRootName(filename);
+          std::cout<<gdalFileName<<std::endl;
+        }
     }
   return gdalFileName;
 }

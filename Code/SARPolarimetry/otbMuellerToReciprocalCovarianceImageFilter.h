@@ -30,12 +30,12 @@ namespace Functor {
  * \brief Evaluate the  MLC image from the Mueller image
  *
  * Output value are:
- *   channel #0 : \f$ M_{11} + M_{22} + 2*M_{12} \f$ \\
- *   channel #1 : \f$ M_{11} - M_{22} \f$ \\
- *   channel #2 : \f$ M_{11} + M_{22} - 2*M_{12} \f$ \\
- *   channel #3 : \f$ M_{13} + M_{23} + i*(M_{14}+M_{24}) \f$ \\
- *   channel #4 : \f$ M_{33} - M_{44} - 2*i*M_{34} \f$ \\
- *   channel #5 : \f$ M_{13} - M_{23} - i*(M_{14}-M_{24}) \f$ \\
+ *   channel #0 : \f$ 0.5*(M_{11} + M_{22} + 2*M_{12}) \f$ \\
+ *   channel #1 : \f$ 0.5*(M_{11} - M_{22}) \f$ \\
+ *   channel #2 : \f$ 0.5*(M_{11} + M_{22} - 2*M_{12}) \f$ \\
+ *   channel #3 : \f$ 0.5*(M_{13} + M_{23} + i*(M_{14}+M_{24})) \f$ \\
+ *   channel #4 : \f$ 0.5*(M_{33} - M_{44} - 2*i*M_{34}) \f$ \\
+ *   channel #5 : \f$ 0.5*(M_{13} - M_{23} - i*(M_{14}-M_{24})) \f$ \\
  *
  * Where \f$ M_{ij} are the coefficients of the input Mueller matrix.
  * Input pixel must have 10 channels (one for each Mueller matrix coeffcients).
@@ -76,19 +76,25 @@ public:
     const double M12 =  static_cast<double>(Mueller[1]);
     const double M13 =  static_cast<double>(Mueller[2]);
     const double M14 =  static_cast<double>(Mueller[3]);
+    const double M21 =  static_cast<double>(Mueller[4]);
     const double M22 =  static_cast<double>(Mueller[5]);
     const double M23 =  static_cast<double>(Mueller[6]);
     const double M24 =  static_cast<double>(Mueller[7]);
+    const double M31 =  static_cast<double>(Mueller[8]);
+    const double M32 =  static_cast<double>(Mueller[9]);
     const double M33 =  static_cast<double>(Mueller[10]);
     const double M34 =  static_cast<double>(Mueller[11]);
+    const double M41 =  static_cast<double>(Mueller[12]);
+    const double M42 =  static_cast<double>(Mueller[13]);
+    const double M43 =  static_cast<double>(Mueller[14]);
     const double M44 =  static_cast<double>(Mueller[15]);
     
-    const ComplexType hhhh(M11+M22+2.*M12, 0.0);
-    const ComplexType hvhv(M11-M22, 0.0);
-    const ComplexType vvvv(M11+M22-2.*M12, 0.0);
+    const ComplexType hhhh(M11+M22+M12+M21, 0.0);
+    const ComplexType hvhv(M11+M12-M21-M22, 0.0);
+    const ComplexType vvvv(M11+M22-M12-M21, 0.0);
     const ComplexType hhhv(M13+M23, M14+M24);
-    const ComplexType hhvv(-M33-M44, -2.*M34);
-    const ComplexType hvvv(M13-M23, M14-M24);
+    const ComplexType hhvv(-M33-M44, M43-M34);
+    const ComplexType hvvv(M32-M31, M41-M42);
     
     result[0] = static_cast<OutputValueType>( hhhh );
     result[1] = static_cast<OutputValueType>( 2.* hhhv );
@@ -97,7 +103,7 @@ public:
     result[4] = static_cast<OutputValueType>( 2.* hvvv );
     result[5] = static_cast<OutputValueType>( vvvv );
     
-    return result;
+    return 0.5*result;
   }
   
   unsigned int GetOutputSize()
