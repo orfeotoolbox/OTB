@@ -1458,8 +1458,6 @@ std::string GDALImageIO::FilenameToGdalDriverShortName(std::string name)
     gdalDriverShortName="JPEG";
   else if ( extension == "pix" )
     gdalDriverShortName="PCIDSK";
-  else if ( extension == "ras" )
-    gdalDriverShortName="GTiff";
   else
     gdalDriverShortName = "NOT-FOUND";
 
