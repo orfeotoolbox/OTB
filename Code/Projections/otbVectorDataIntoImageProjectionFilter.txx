@@ -15,10 +15,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataReProjectionFilter_txx
-#define __otbVectorDataReProjectionFilter_txx
+#ifndef __otbVectorDataIntoImageProjectionFilter_txx
+#define __otbVectorDataIntoImageProjectionFilter_txx
 
-#include "otbVectorDataReProjectionFilter.h"
+#include "otbVectorDataIntoImageProjectionFilter.h"
 
 namespace otb
 {
@@ -26,13 +26,83 @@ namespace otb
    * Constructor
  */
 template <class TInputVectorData, class TInputImage>
-VectorDataReProjectionFilter<TInputVectorData, TInputImage>
-::VectorDataReProjectionFilter() : m_DEMDirectory("")
+VectorDataIntoImageProjectionFilter<TInputVectorData, TInputImage>
+::VectorDataIntoImageProjectionFilter() : m_DEMDirectory("")
 {
+  m_OutputSpacing.Fill(1);
+  m_OutputOrigin.Fill(0);
+  m_UseOutputSpacingAndOriginFromImage = false;
+
   m_VdExtractFilter = VectorDataExtractROIType::New();
   m_VdProjFilter    = VectorDataProjectionFilterType::New();
 
   m_VdProjFilter->SetInput(m_VdExtractFilter->GetOutput());
+}
+
+template <class TInputVectorData, class TInputImage>
+void
+VectorDataIntoImageProjectionFilter<TInputVectorData, TInputImage>
+::SetUseOutputSpacingAndOriginFromImage(bool flag)
+{
+  m_UseOutputSpacingAndOriginFromImage = flag;
+}
+
+//----------------------------------------------------------------------------
+template <class TInputVectorData, class TOutputVectorData>
+void
+VectorDataIntoImageProjectionFilter<TInputVectorData, TOutputVectorData>
+::SetOutputSpacing(const SpacingType& spacing)
+{
+  itkDebugMacro("setting Spacing to " << spacing);
+  if (this->m_OutputSpacing != spacing)
+    {
+    this->m_OutputSpacing = spacing;
+    this->Modified();
+    }
+}
+
+//----------------------------------------------------------------------------
+template <class TInputVectorData, class TOutputVectorData>
+void
+VectorDataIntoImageProjectionFilter<TInputVectorData, TOutputVectorData>
+::SetOutputSpacing(const double spacing[2])
+{
+  SpacingType s(spacing);
+  this->SetOutputSpacing(s);
+}
+
+//----------------------------------------------------------------------------
+template <class TInputVectorData, class TOutputVectorData>
+void
+VectorDataIntoImageProjectionFilter<TInputVectorData, TOutputVectorData>
+::SetOutputSpacing(const float spacing[2])
+{
+  itk::Vector<float, 2> sf(spacing);
+  SpacingType s;
+  s.CastFrom(sf);
+  this->SetOutputSpacing(s);
+}
+
+//----------------------------------------------------------------------------
+template <class TInputVectorData, class TOutputVectorData>
+void
+VectorDataIntoImageProjectionFilter<TInputVectorData, TOutputVectorData>
+::SetOutputOrigin(const double origin[2])
+{
+  OriginType p(origin);
+  this->SetOutputOrigin(p);
+}
+
+//----------------------------------------------------------------------------
+template <class TInputVectorData, class TOutputVectorData>
+void
+VectorDataIntoImageProjectionFilter<TInputVectorData, TOutputVectorData>
+::SetOutputOrigin(const float origin[2])
+{
+  itk::Point<float, 2> of(origin);
+  OriginType p;
+  p.CastFrom(of);
+  this->SetOutputOrigin(p);
 }
 
 
@@ -41,14 +111,9 @@ VectorDataReProjectionFilter<TInputVectorData, TInputImage>
  */
 template <class TInputVectorData, class TInputImage>
 void
-VectorDataReProjectionFilter<TInputVectorData, TInputImage>
+VectorDataIntoImageProjectionFilter<TInputVectorData, TInputImage>
 ::GenerateData(void)
 {
-  //this->AllocateOutputs();
-  //InputVectorDataPointer  inputPtr = this->GetInput();
-
-  //InputVectorDataPointer outputPtr = this->GetOutput();
-
   m_VdExtractFilter->SetInput(this->GetInput());
 
   typedef typename ImageType::IndexType       IndexType;
@@ -111,13 +176,21 @@ VectorDataReProjectionFilter<TInputVectorData, TInputImage>
     m_VdExtractFilter->SetDEMDirectory(m_DEMDirectory);
     }
 
-
   // Reproject VectorData in image projection
   m_VdProjFilter->SetInputProjectionRef(this->GetInput()->GetProjectionRef());
   m_VdProjFilter->SetOutputKeywordList(m_InputImage->GetImageKeywordlist());
   m_VdProjFilter->SetOutputProjectionRef(m_InputImage->GetProjectionRef());
-  m_VdProjFilter->SetOutputOrigin(m_InputImage->GetOrigin());
-  m_VdProjFilter->SetOutputSpacing(m_InputImage->GetSpacing());
+
+  if (m_UseOutputSpacingAndOriginFromImage)
+  {
+    m_VdProjFilter->SetOutputOrigin(m_InputImage->GetOrigin());
+    m_VdProjFilter->SetOutputSpacing(m_InputImage->GetSpacing());
+  }
+  else
+    {
+    m_VdProjFilter->SetOutputOrigin(this->GetOutputOrigin());
+    m_VdProjFilter->SetOutputSpacing(this->GetOutputSpacing());
+  }
 
   if (!m_DEMDirectory.empty())
     {

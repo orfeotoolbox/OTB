@@ -922,6 +922,16 @@ ADD_TEST(prTvVectorDataProjectionFilterFromMapToImage ${PROJECTIONS_TESTS3}
         ${TEMP}/prTvVectorDataProjectionFilterFromMapToImage.kml
 )
 
+ADD_TEST(prTvVectorDataIntoImageProjectionFilter ${PROJECTIONS_TESTS3}
+        #--compare-ascii ${NOTOL}
+          #${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToImage.kml
+          #${TEMP}/prTvVectorDataProjectionFilterFromMapToImage.kml
+        otbVectorDataIntoImageProjectionFilterTest
+          ${INPUTDATA}/Classification/QB_1_ortho.tif
+          ${INPUTDATA}/Classification/VectorData_QB1.shp
+)
+
+
 
 ADD_TEST(prTuGeocentricTransformNew ${PROJECTIONS_TESTS3}  otbGeocentricTransformNew )
 
@@ -1105,6 +1115,7 @@ otbVectorDataProjectionFilter.cxx
 otbVectorDataProjectionFilterFromMapToSensor.cxx
 otbVectorDataProjectionFilterFromMapToGeo.cxx
 otbVectorDataProjectionFilterFromMapToImage.cxx
+otbVectorDataIntoImageProjectionFilterTest.cxx
 otbGeocentricTransformNew.cxx
 otbGeocentricTransform.cxx
 otbTileMapTransform.cxx

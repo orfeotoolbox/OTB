@@ -44,4 +44,5 @@ void RegisterTests()
   REGISTER_TEST(otbGeocentricTransform);
   REGISTER_TEST(otbTileMapTransform);
   REGISTER_TEST(otbVectorDataExtractROIandProjection);
+  REGISTER_TEST(otbVectorDataIntoImageProjectionFilterTest);
 }

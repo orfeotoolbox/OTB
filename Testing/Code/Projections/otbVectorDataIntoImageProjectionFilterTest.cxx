@@ -24,9 +24,9 @@
 #include "otbVectorData.h"
 #include "otbVectorDataFileReader.h"
 
-#include "otbVectorDataReProjectionFilter.h"
+#include "otbVectorDataIntoImageProjectionFilter.h"
 
-int otbVectorDataReProject(int argc, char * argv[])
+int otbVectorDataIntoImageProjectionFilterTest(int argc, char * argv[])
 {
   typedef float                                           PixelType;
   typedef otb::VectorImage<PixelType,2>                   VectorImageType;
@@ -38,7 +38,7 @@ int otbVectorDataReProject(int argc, char * argv[])
   typedef otb::VectorDataFileReader<VectorDataType>       VectorDataReaderType;
 
   //
-  typedef otb::VectorDataReProjectionFilter<VectorDataType, VectorImageType>
+  typedef otb::VectorDataIntoImageProjectionFilter<VectorDataType, VectorImageType>
                                                           VectorDataReProjFilter;
 
   typedef itk::PreOrderTreeIterator<VectorDataType::DataTreeType> TreeIteratorType;
@@ -84,6 +84,8 @@ int otbVectorDataReProject(int argc, char * argv[])
   vdReProjFilter->SetInputImage(reader->GetOutput());
 
   vdReProjFilter->SetInputVectorData(vdReader->GetOutput());
+
+  vdReProjFilter->SetUseOutputSpacingAndOriginFromImage(true);
 
   //----------
   // UPDATE
