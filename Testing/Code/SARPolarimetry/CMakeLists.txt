@@ -337,6 +337,10 @@ ADD_TEST(saTvMuellerToPolarisationDegreeAndPowerImageFilter ${SARPOLARIMETRY_TES
 	)
 
 # Mueller To Covariance Image Filter
+ADD_TEST(saTvMuellerToReciprocalCovarianceFunctor ${SARPOLARIMETRY_TESTS2}
+		otbMuellerToReciprocalCovarianceFunctor
+)
+
 ADD_TEST(saTuMuellerToReciprocalCovarianceImageFilterNew ${SARPOLARIMETRY_TESTS2}
 		otbMuellerToReciprocalCovarianceImageFilterNew
 )
@@ -397,6 +401,7 @@ otbReciprocalCoherencyToMuellerImageFilterNew.cxx
 otbReciprocalCoherencyToMuellerImageFilter.cxx
 otbMuellerToPolarisationDegreeAndPowerImageFilterNew.cxx
 otbMuellerToPolarisationDegreeAndPowerImageFilter.cxx
+otbMuellerToReciprocalCovarianceFunctor.cxx
 otbMuellerToReciprocalCovarianceImageFilterNew.cxx
 otbMuellerToReciprocalCovarianceImageFilter.cxx
 otbPolarimetricData.cxx
