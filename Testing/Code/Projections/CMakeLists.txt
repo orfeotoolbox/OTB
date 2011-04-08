@@ -180,13 +180,22 @@ ADD_TEST(prTvSensorModelAlosPalsar ${PROJECTIONS_TESTS1}
          ${TEMP}/prTvSensorModelAlosPalsar.txt
 )
 
-ADD_TEST(prTvSensorModelRadarSat1 ${PROJECTIONS_TESTS1}
+ADD_TEST(prTvSensorModelRadarSat1_GOMA ${PROJECTIONS_TESTS1}
   --ignore-order --compare-ascii ${NOTOL}
-         ${BASELINE_FILES}/prTvSensorModelRadarSat1.txt
-         ${TEMP}/prTvSensorModelRadarSat1.txt
+         ${BASELINE_FILES}/prTvSensorModelRadarSat1_GOMA.txt
+         ${TEMP}/prTvSensorModelRadarSat1_GOMA.txt
     otbSensorModel
          ${LARGEINPUT}/RADARSAT1/GOMA/SCENE01/DAT_01.001
-         ${TEMP}/prTvSensorModelRadarSat1.txt
+         ${TEMP}/prTvSensorModelRadarSat1_GOMA.txt
+)
+
+ADD_TEST(prTvSensorModelRadarSat1_SARDEGNA ${PROJECTIONS_TESTS1}
+  --ignore-order --compare-ascii ${NOTOL}
+         ${BASELINE_FILES}/prTvSensorModelRadarSat1_SARDEGNA.txt
+         ${TEMP}/prTvSensorModelRadarSat1_SARDEGNA.txt
+    otbSensorModel
+         ${LARGEINPUT}/RADARSAT1/SARDEGNA/scene01/dat_01.001
+         ${TEMP}/prTvSensorModelRadarSat1_SARDEGNA.txt
 )
 
 ADD_TEST(prTvSensorModelRadarSat2 ${PROJECTIONS_TESTS1}
