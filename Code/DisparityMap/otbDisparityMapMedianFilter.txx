@@ -170,7 +170,7 @@ DisparityMapMedianFilter<TInputImage, TOutputImage, TMask>
   inputRequestedRegion = inputPtr->GetRequestedRegion();
 
   // pad the input requested region by the operator radius
-  inputRequestedRegion.PadByRadius( m_Radius );
+  inputRequestedRegion.PadByRadius( m_Radius);
 
   // crop the input requested region at the input's largest possible region
   if ( inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()) )
