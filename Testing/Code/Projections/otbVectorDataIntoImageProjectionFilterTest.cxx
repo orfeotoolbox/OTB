@@ -29,8 +29,8 @@
 int otbVectorDataIntoImageProjectionFilterTest(int argc, char * argv[])
 {
   typedef float                                           PixelType;
-  typedef otb::VectorImage<PixelType,2>                   VectorImageType;
-  typedef otb::Image<PixelType,2>                         ImageType;
+  typedef otb::VectorImage<PixelType, 2>                   VectorImageType;
+  typedef otb::Image<PixelType, 2>                         ImageType;
   typedef otb::ImageFileReader<VectorImageType>           ReaderType;
 
   // Vector Data
