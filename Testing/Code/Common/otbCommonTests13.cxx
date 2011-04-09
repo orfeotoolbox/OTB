@@ -26,7 +26,11 @@
 
 void RegisterTests()
 {
-  //  REGISTER_TEST(otbGISTableSourceNew);
   REGISTER_TEST(otbPipelineMemoryPrintCalculatorNew);
   REGISTER_TEST(otbPipelineMemoryPrintCalculatorTest);
+  REGISTER_TEST(otbStreamingManagerNew);
+  REGISTER_TEST(otbNumberOfLinesStrippedStreamingManager);
+  REGISTER_TEST(otbRAMDrivenStrippedStreamingManager);
+  REGISTER_TEST(otbTileDimensionTiledStreamingManager);
+  REGISTER_TEST(otbRAMDrivenTiledStreamingManager);
 }

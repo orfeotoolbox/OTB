@@ -45,7 +45,7 @@ StreamingShrinkStreamingManager<TImage>::PrepareStreaming( itk::DataObject * inp
   splitter->SetTileSizeAlignment(m_ShrinkFactor);
   this->m_Splitter = splitter;
 
-  unsigned long nbDivisions = EstimateOptimalNumberOfDivisions(input, region);
+  unsigned long nbDivisions = this->EstimateOptimalNumberOfDivisions(input, region, 0);
   this->m_ComputedNumberOfSplits = this->m_Splitter->GetNumberOfSplits(region, nbDivisions);
   otbMsgDevMacro(<< "Number of split : " << this->m_ComputedNumberOfSplits)
 

@@ -21,9 +21,9 @@ for details.
 #ifndef __otbStreamingMinMaxImageFilter_h
 #define __otbStreamingMinMaxImageFilter_h
 
+#include <vector>
 #include "otbPersistentImageFilter.h"
 #include "itkNumericTraits.h"
-#include "itkArray.h"
 #include "itkSimpleDataObjectDecorator.h"
 #include "otbPersistentFilterStreamingDecorator.h"
 
@@ -34,7 +34,7 @@ namespace otb
  * \brief Compute min. max of an image using the output requested region.
  *
  *  This filter persists its temporary data. It means that if you Update it n times on n different
- * requested regions, the output statistics will be the statitics of the whole set of n regions.
+ * requested regions, the output min/max will be the statistics of the whole set of n regions.
  *
  * To reset the temporary data, one should call the Reset() function.
  *
@@ -78,15 +78,12 @@ public:
   itkStaticConstMacro(ImageDimension, unsigned int,
                       TInputImage::ImageDimension);
 
-  /** Type to use for computations. */
-  typedef typename itk::NumericTraits<PixelType>::RealType RealType;
-
   /** Smart Pointer type to a DataObject. */
   typedef typename itk::DataObject::Pointer DataObjectPointer;
 
   /** Type of DataObjects used for scalar outputs */
-  typedef itk::SimpleDataObjectDecorator<RealType>  RealObjectType;
   typedef itk::SimpleDataObjectDecorator<PixelType> PixelObjectType;
+  typedef itk::SimpleDataObjectDecorator<IndexType> IndexObjectType;
 
   /** Return the computed Minimum. */
   PixelType GetMinimum() const
@@ -103,6 +100,23 @@ public:
   }
   PixelObjectType* GetMaximumOutput();
   const PixelObjectType* GetMaximumOutput() const;
+
+  /** Return the computed Minimum. */
+  IndexType GetMinimumIndex() const
+  {
+    return this->GetMinimumIndexOutput()->Get();
+  }
+  IndexObjectType* GetMinimumIndexOutput();
+  const IndexObjectType* GetMinimumIndexOutput() const;
+
+  /** Return the computed Maximum. */
+  IndexType GetMaximumIndex() const
+  {
+    return this->GetMaximumIndexOutput()->Get();
+  }
+  IndexObjectType* GetMaximumIndexOutput();
+  const IndexObjectType* GetMaximumIndexOutput() const;
+
 
   /** Make a DataObject of the correct type to be used as the specified
    * output. */
@@ -130,20 +144,21 @@ private:
   PersistentMinMaxImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  itk::Array<PixelType> m_ThreadMin;
-  itk::Array<PixelType> m_ThreadMax;
+  std::vector<PixelType> m_ThreadMin;
+  std::vector<PixelType> m_ThreadMax;
+  std::vector<IndexType> m_ThreadMinIndex;
+  std::vector<IndexType> m_ThreadMaxIndex;
 }; // end of class PersistentMinMaxImageFilter
 
-/*===========================================================================*/
 
 /** \class StreamingMinMaxImageFilter
  * \brief This class streams the whole input image through the PersistentMinMaxImageFilter.
  *
- * This way, it allows to compute the first order global statistics of this image. It calls the
- * Reset() method of the PersistentMinMaxImageFilter before streaming the image and the
- * Synthetize() method of the PersistentMinMaxImageFilter after having streamed the image
- * to compute the statistics. The accessor on the results are wrapping the accessors of the
- * internal PersistentMinMaxImageFilter.
+ * This way, it allows to compute the minimum and maximum of this image.
+ *
+ * It calls the Reset() method of the PersistentMinMaxImageFilter before streaming
+ * the image and the Synthetize() method of the PersistentMinMaxImageFilter after
+ * having streamed the image to compute the statistics.
  *
  * This filter can be used as:
  * \code
@@ -153,6 +168,8 @@ private:
  * minmax->Update();
  * std::cout << minmax-> GetMaximum() << std::endl;
  * std::cout << minmax-> GetMinimum() << std::endl;
+ * std::cout << minmax-> GetMaximumIndex() << std::endl;
+ * std::cout << minmax-> GetMinimumIndex() << std::endl;
  * \endcode
  *
  * \sa PersistentMinMaxImageFilter
@@ -182,14 +199,12 @@ public:
   /** Creation through object factory macro */
   itkTypeMacro(StreamingMinMaxImageFilter, PersistentFilterStreamingDecorator);
 
-  typedef typename Superclass::FilterType    StatFilterType;
-  typedef typename StatFilterType::PixelType PixelType;
-  typedef typename StatFilterType::RealType  RealType;
-  typedef TInputImage                        InputImageType;
-
-  /** Type of DataObjects used for scalar outputs */
-  typedef itk::SimpleDataObjectDecorator<RealType>  RealObjectType;
-  typedef itk::SimpleDataObjectDecorator<PixelType> PixelObjectType;
+  typedef typename Superclass::FilterType          StatFilterType;
+  typedef typename StatFilterType::PixelType       PixelType;
+  typedef typename StatFilterType::IndexType       IndexType;
+  typedef typename StatFilterType::PixelObjectType PixelObjectType;
+  typedef typename StatFilterType::IndexObjectType IndexObjectType;
+  typedef TInputImage                              InputImageType;
 
   void SetInput(InputImageType * input)
   {
@@ -227,9 +242,35 @@ public:
     return this->GetFilter()->GetMaximumOutput();
   }
 
+  /** Return the computed Minimum. */
+  IndexType GetMinimumIndex() const
+  {
+    return this->GetFilter()->GetMinimumIndexOutput()->Get();
+  }
+  IndexObjectType* GetMinimumIndexOutput()
+  {
+    return this->GetFilter()->GetMinimumIndexOutput();
+  }
+  const IndexObjectType* GetMinimumIndexOutput() const
+  {
+    return this->GetFilter()->GetMinimumIndexOutput();
+  }
+  /** Return the computed Maximum. */
+  IndexType GetMaximumIndex() const
+  {
+    return this->GetFilter()->GetMaximumIndexOutput()->Get();
+  }
+  IndexObjectType* GetMaximumIndexOutput()
+  {
+    return this->GetFilter()->GetMaximumIndexOutput();
+  }
+  const IndexObjectType* GetMaximumIndexOutput() const
+  {
+    return this->GetFilter()->GetMaximumIndexOutput();
+  }
 protected:
   /** Constructor */
-  StreamingMinMaxImageFilter() {};
+  StreamingMinMaxImageFilter() {}
   /** Destructor */
   virtual ~StreamingMinMaxImageFilter() {}
 

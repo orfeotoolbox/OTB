@@ -49,7 +49,7 @@ int otbMatrixTransposeMatrixImageFilter(int argc, char * argv[])
   reader1->SetFileName(infname1);
   reader2->SetFileName(infname2);
 
-  filter->GetStreamer()->GetStreamingManager()->SetStrippedNumberOfLinesStreamingMode(200);
+  filter->GetStreamer()->SetNumberOfLinesStrippedStreaming( 10 );
   filter->SetFirstInput(reader1->GetOutput());
   filter->SetSecondInput(reader2->GetOutput());
   filter->SetUsePadFirstInput(true);

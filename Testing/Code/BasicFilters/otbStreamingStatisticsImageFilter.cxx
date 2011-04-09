@@ -42,7 +42,7 @@ int otbStreamingStatisticsImageFilter(int argc, char * argv[])
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
 
-  filter->GetStreamer()->GetStreamingManager()->SetStrippedNumberOfLinesStreamingMode(200);
+  filter->GetStreamer()->SetNumberOfLinesStrippedStreaming( 10 );
   filter->SetInput(reader->GetOutput());
   filter->Update();
 
