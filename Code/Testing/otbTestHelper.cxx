@@ -1219,6 +1219,7 @@ void TestHelper::AddWhiteSpace(std::string strIn, std::string &strOut) const
   keys.push_back(",");
   keys.push_back("=");
   keys.push_back(":");
+  keys.push_back(";");
 
   std::vector<std::string> keysOut;
   keysOut.push_back("[ ");
@@ -1228,6 +1229,7 @@ void TestHelper::AddWhiteSpace(std::string strIn, std::string &strOut) const
   keysOut.push_back(" , ");
   keysOut.push_back(" = ");
   keysOut.push_back(" : ");
+  keysOut.push_back(" ; ");
 
   for (unsigned int it = 0; it < keys.size(); it++)
     {

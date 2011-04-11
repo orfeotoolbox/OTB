@@ -122,15 +122,19 @@ SET_TESTS_PROPERTIES(tsTvCompareAscii4epsilon3 PROPERTIES WILL_FAIL true)
 ADD_TEST(tsTvCompareAsciiepsilon3_WhiteSpaceOK ${TESTSYSTEM_TESTS}
    --compare-ascii ${EPSILON_3}
        ${BASELINE_FILES}/tsTvCompareAsciiEpsilon3_Base.txt
-       ${INPUTDATA}/tsTvCompareAsciiEpsilon3_TestOK.txt
+       ${TEMP}/tsTvCompareAsciiEpsilon3_TestOK.txt
      otbCompareAsciiTestsEpsilon3_WhiteSpace
+       ${INPUTDATA}/tsTvCompareAsciiEpsilon3_TestOK.txt
+       ${TEMP}/tsTvCompareAsciiEpsilon3_TestOK.txt
   )
 # sould be ko  
 ADD_TEST(tsTvCompareAsciiepsilon3_WhiteSpaceKO ${TESTSYSTEM_TESTS}
    --compare-ascii ${EPSILON_3}
        ${BASELINE_FILES}/tsTvCompareAsciiEpsilon3_Base.txt
-       ${INPUTDATA}/tsTvCompareAsciiEpsilon3_TestKO.txt
+       ${TEMP}/tsTvCompareAsciiEpsilon3_TestKO.txt
      otbCompareAsciiTestsEpsilon3_WhiteSpace
+       ${INPUTDATA}/tsTvCompareAsciiEpsilon3_TestKO.txt
+       ${TEMP}/tsTvCompareAsciiEpsilon3_TestKO.txt
   )
 SET_TESTS_PROPERTIES(tsTvCompareAsciiepsilon3_WhiteSpaceKO PROPERTIES WILL_FAIL true)
 
