@@ -43,6 +43,6 @@ SET(CTEST_CUSTOM_COVERAGE_EXCLUDE
 
 SET(CTEST_CUSTOM_WARNING_EXCEPTION
   ${CTEST_CUSTOM_WARNING_EXCEPTION}
-  "vcl_deprecated_header.h.*warning.*deprecated.*"
+  "vcl_deprecated_header"
   )
 
