@@ -1496,7 +1496,7 @@ ADD_TEST(bfTvFunctionWithNeighborhoodToImageFilter ${BASICFILTERS_TESTS11}
 	    ${TEMP}/bfTvFunctionWithNeighborhoodToImageFilterTest.tif
         otbFunctionWithNeighborhoodToImageFilter
 	    ${INPUTDATA}/poupees_1canal.hd
-matriximagef    ${TEMP}/bfTvFunctionWithNeighborhoodToImageFilterTest.tif
+        ${TEMP}/bfTvFunctionWithNeighborhoodToImageFilterTest.tif
 	    2 # radius
 )
 
