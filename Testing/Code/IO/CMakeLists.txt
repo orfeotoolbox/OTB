@@ -485,6 +485,8 @@ ADD_TEST(ioTvImageFileReaderPNG2ENVI ${IO_TESTS3}
         otbImageFileReaderTest
         ${INPUTDATA}/cthead1.png
         ${TEMP}/ioImageFileReaderPNG2ENVI.hdr )
+SET_TESTS_PROPERTIES(ioTvImageFileReaderPNG2ENVI PROPERTIES DEPENDS ioTvImageFileReaderPNG2BSQ)
+
 
 ADD_TEST(ioTvImageFileReaderBSQ2PNG ${IO_TESTS3}
   --compare-image ${EPSILON_9}        ${INPUTDATA}/poupees_1canal.hd
