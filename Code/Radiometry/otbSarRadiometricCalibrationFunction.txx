@@ -85,12 +85,7 @@ typename SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
 SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
 ::Evaluate(const PointType& point) const
 {
-  RealType result;
-  result = itk::NumericTraits<RealType>::Zero;
-
   IndexType index;
-  this->GetInputImage()->TransformPhysicalPointToIndex(point, index);
-
 
   if (!this->GetInputImage())
     {
@@ -102,36 +97,21 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
     return (itk::NumericTraits<OutputType>::max());
     }
 
-
-  FunctorRealType noise;
-  FunctorRealType antennaPatternNewGain;
-  FunctorRealType antennaPatternOldGain;
-  FunctorRealType incidenceAngle;
-  FunctorRealType rangeSpreadLoss;
-
-  if (m_EnableNoise)
-    {
-    noise = static_cast<FunctorRealType>(m_Noise->Evaluate(point));
-    }
-  antennaPatternNewGain = static_cast<FunctorRealType>(m_AntennaPatternNewGain->Evaluate(point));
-  antennaPatternOldGain = static_cast<FunctorRealType>(m_AntennaPatternOldGain->Evaluate(point));
-  incidenceAngle = static_cast<FunctorRealType>(m_IncidenceAngle->Evaluate(point));
-  rangeSpreadLoss = static_cast<FunctorRealType>(m_RangeSpreadLoss->Evaluate(point));
+  this->GetInputImage()->TransformPhysicalPointToIndex(point, index);
 
   FunctorType functor;
   if (m_EnableNoise)
     {
-    functor.SetNoise(noise);
+    functor.SetNoise(static_cast<FunctorRealType>(m_Noise->Evaluate(point)));
     }
   functor.SetScale(m_Scale);
-  functor.SetAntennaPatternNewGain(antennaPatternNewGain);
-  functor.SetAntennaPatternOldGain(antennaPatternOldGain);
-  functor.SetIncidenceAngle(incidenceAngle);
-  functor.SetRangeSpreadLoss(rangeSpreadLoss);
-
+  functor.SetAntennaPatternNewGain(static_cast<FunctorRealType>(m_AntennaPatternNewGain->Evaluate(point)));
+  functor.SetAntennaPatternOldGain(static_cast<FunctorRealType>(m_AntennaPatternOldGain->Evaluate(point)));
+  functor.SetIncidenceAngle(static_cast<FunctorRealType>(m_IncidenceAngle->Evaluate(point)));
+  functor.SetRangeSpreadLoss(static_cast<FunctorRealType>(m_RangeSpreadLoss->Evaluate(point)));
 
   const RealType value = static_cast<RealType>(vcl_abs(this->GetInputImage()->GetPixel(index)));
-  result = functor(value);
+  RealType result = functor(value);
 
   return static_cast<OutputType>(result);
 }
