@@ -110,7 +110,7 @@ ADD_TEST(FA-00006-io_Radarsat_UI2_Int2Int ${COMMON_TESTS}
          -int ${TEMP}/FA-00006-io_Radarsat_2559_3591_337_280_i4.hdr
          -startX 2559 -startY 3591 -sizeX 337 -sizeY 280 )
 
-ADD_TEST(FA-00006-io_Radarsat_UI2_Double2Double_ ${COMMON_TESTS}
+ADD_TEST(FA-00006-io_Radarsat_UI2_Double2Double ${COMMON_TESTS}
          otbMultiToMonoChannelExtractROI
          -double ${IMAGEDATA}/RADARSAT1/GOMA/SCENE01/
          -double ${TEMP}/FA-00006-io_Radarsat_2559_3591_337_280_r8.hdr
@@ -123,6 +123,7 @@ ADD_TEST(FA-00006-io_Radarsat_I4_Int2Double ${COMMON_TESTS}
          -int    ${TEMP}/FA-00006-io_Radarsat_2559_3591_337_280_i4.hdr
          -double ${TEMP}/FA-00006-io_Radarsat_2559_3591_337_280_r8_bis.hdr
          )
+SET_TESTS_PROPERTIES(FA-00006-io_Radarsat_I4_Int2Double DEPENDS FA-00006-io_Radarsat_UI2_Int2Int)
 
 ADD_TEST(FA-00006-io_Radarsat_I4_Double2Double ${COMMON_TESTS}
 #     --compare-image ${TOL}  ${TEMP}/FA-00006-io_Radarsat_2559_3591_337_280_r8.hdr
@@ -131,6 +132,7 @@ ADD_TEST(FA-00006-io_Radarsat_I4_Double2Double ${COMMON_TESTS}
          -double ${TEMP}/FA-00006-io_Radarsat_2559_3591_337_280_i4.hdr
          -double ${TEMP}/FA-00006-io_Radarsat_2559_3591_337_280_r8_ter.hdr
          )
+SET_TESTS_PROPERTIES(FA-00006-io_Radarsat_I4_Double2Double PROPERTIES DEPENDS FA-00006-io_Radarsat_UI2_Int2Int)
 
 ADD_TEST(FA-00006-io_Radarsat_R8_Double2Double ${COMMON_TESTS}
 #    --compare-image ${TOL}  ${TEMP}/FA-00006-io_Radarsat_2559_3591_337_280_r8.hdr
@@ -139,6 +141,7 @@ ADD_TEST(FA-00006-io_Radarsat_R8_Double2Double ${COMMON_TESTS}
          -double ${TEMP}/FA-00006-io_Radarsat_2559_3591_337_280_r8.hdr
          -double ${TEMP}/FA-00006-io_Radarsat_2559_3591_337_280_r8_4.hdr
          )
+SET_TESTS_PROPERTIES(FA-00006-io_Radarsat_R8_Double2Double PROPERTIES DEPENDS FA-00006-io_Radarsat_UI2_Double2Double)
 
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
