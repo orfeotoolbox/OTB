@@ -36,4 +36,5 @@ void RegisterTests()
   REGISTER_TEST(otbImageIOFactoryNew);
   REGISTER_TEST(otbImageFileReaderWithComplexPixelTest);
   REGISTER_TEST(otbCompareWritingComplexImageTest);
+  REGISTER_TEST(otbVectorImageFileReaderWithComplexPixelTest);
 }
