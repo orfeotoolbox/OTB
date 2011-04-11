@@ -118,16 +118,21 @@ ADD_TEST(tsTvCompareAscii4epsilon3 ${TESTSYSTEM_TESTS}
 SET_TESTS_PROPERTIES(tsTvCompareAscii4epsilon3 PROPERTIES WILL_FAIL true)
 
 # Tests about precision (10^-3) and strings with white space
-ADD_TEST(tsTvCompareAsciiepsilon3_WhiteSpace ${TESTSYSTEM_TESTS}
+# sould be ok
+ADD_TEST(tsTvCompareAsciiepsilon3_WhiteSpaceOK ${TESTSYSTEM_TESTS}
    --compare-ascii ${EPSILON_3}
        ${BASELINE_FILES}/tsTvCompareAsciiEpsilon3_Base.txt
-       ${INPUTDATA}/tsTvCompareAsciiEpsilon3_Test.txt
-       #${TEMP}/tsTvCompareAsciiRefepsilon3_WS.txt
-       #${TEMP}/tsTvCompareAsciiTestepsilon3_WS.txt
+       ${INPUTDATA}/tsTvCompareAsciiEpsilon3_TestOK.txt
      otbCompareAsciiTestsEpsilon3_WhiteSpace
-       #${TEMP}/tsTvCompareAsciiRefepsilon3_WS.txt
-       #${TEMP}/tsTvCompareAsciiTestepsilon3_WS.txt
   )
+# sould be ko  
+ADD_TEST(tsTvCompareAsciiepsilon3_WhiteSpaceKO ${TESTSYSTEM_TESTS}
+   --compare-ascii ${EPSILON_3}
+       ${BASELINE_FILES}/tsTvCompareAsciiEpsilon3_Base.txt
+       ${INPUTDATA}/tsTvCompareAsciiEpsilon3_TestKO.txt
+     otbCompareAsciiTestsEpsilon3_WhiteSpace
+  )
+SET_TESTS_PROPERTIES(tsTvCompareAsciiepsilon3_WhiteSpaceKO PROPERTIES WILL_FAIL true)
 
 #Check that the order and the tolerance works together
 ADD_TEST(tsTvCompareAscii5epsilon2 ${TESTSYSTEM_TESTS}
