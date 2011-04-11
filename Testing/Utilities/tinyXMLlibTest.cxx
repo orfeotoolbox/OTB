@@ -99,6 +99,8 @@ int tinyXMLlibTest(int argc, char *argv[] )
 	// We start with the 'demoStart' todo list. Process it. And
 	// should hopefully end up with the todo list as illustrated.
 	//
+
+
 	const char* demoStart =
 		"<?xml version=\"1.0\"  standalone='no' >\n"
 		"<!-- Our to do list data -->"
@@ -737,20 +739,17 @@ int tinyXMLlibTest(int argc, char *argv[] )
 							"</xmlElement>";
 		TiXmlDocument doc;
 		doc.Parse( str );
-		doc.Print();
-
+		//doc.Print();
 		XmlTest(file, "CDATA parse.", doc.FirstChildElement()->FirstChild()->Value(),
 								 "I am > the rules!\n...since I make symbolic puns",
 								 true );
 
 		#ifdef TIXML_USE_STL
-		//cout << doc << '\n';
 
 		doc.Clear();
 
 		istringstream parse0( str );
 		parse0 >> doc;
-		//cout << doc << '\n';
 
 		XmlTest(file, "CDATA stream.", doc.FirstChildElement()->FirstChild()->Value(),
 								 "I am > the rules!\n...since I make symbolic puns",
@@ -759,7 +758,6 @@ int tinyXMLlibTest(int argc, char *argv[] )
 
 		TiXmlDocument doc1 = doc;
 		//doc.Print();
-
 		XmlTest(file, "CDATA copy.", doc1.FirstChildElement()->FirstChild()->Value(),
 								 "I am > the rules!\n...since I make symbolic puns",
 								 true );
@@ -804,7 +802,7 @@ int tinyXMLlibTest(int argc, char *argv[] )
 							"</xmlElement>";
 		TiXmlDocument doc;
 		doc.Parse( str );
-		doc.Print();
+		//doc.Print();
 
 		XmlTest(file, "CDATA parse. [ 1480107 ]", doc.FirstChildElement()->FirstChild()->Value(),
 								 "<b>I am > the rules!</b>\n...since I make symbolic puns",
@@ -1084,8 +1082,9 @@ int tinyXMLlibTest(int argc, char *argv[] )
 		TiXmlDocument doc;
 		doc.Parse( doctype );
 
-		XmlTest(file, "Parsing repeated attributes.", 0, (int)doc.Error() );	// not an  error to tinyxml
-		XmlTest(file, "Parsing repeated attributes.", "blue", doc.FirstChildElement( "element" )->Attribute( "attr" ) );
+
+		XmlTest(file, "Parsing repeated attributes.", true, doc.Error() ); // is an  error to tinyxml (didn't use to be, but caused issues)
+		//XmlTest(file, "Parsing repeated attributes.", "blue", doc.FirstChildElement( "element" )->Attribute( "attr" ) );
 	}
 
 	{
@@ -1109,19 +1108,19 @@ int tinyXMLlibTest(int argc, char *argv[] )
             // Legacy mode test. (This test may only pass on a western system)
             const char* str =
                         "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>"
-                        "<ä>"
-                        "CöntäntßäöüÄÖÜ"
-                        "</ä>";
+                        "<ï¿½>"
+                        "Cï¿½ntï¿½ntï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"
+                        "</ï¿½>";
 
             TiXmlDocument doc;
             doc.Parse( str );
 
             TiXmlHandle docHandle( &doc );
-            TiXmlHandle aHandle = docHandle.FirstChildElement( "ä" );
+            TiXmlHandle aHandle = docHandle.FirstChildElement( "ï¿½" );
             TiXmlHandle tHandle = aHandle.Child( 0 );
             assert( aHandle.Element() );
             assert( tHandle.Text() );
-            XmlTest(file, "ISO-8859-1 Parsing.", "CöntäntßäöüÄÖÜ", tHandle.Text()->Value() );
+            XmlTest(file, "ISO-8859-1 Parsing.", "Cï¿½ntï¿½ntï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", tHandle.Text()->Value() );
     }
 
 	{
@@ -1160,10 +1159,12 @@ int tinyXMLlibTest(int argc, char *argv[] )
 	{
 		// Low entities
 		TiXmlDocument xml;
+
 		xml.Parse( "<test>&#x0e;</test>" );
 		const char result[] = { 0x0e, 0 };
 		XmlTest(file, "Low entities.", xml.FirstChildElement()->GetText(), result );
-		xml.Print();
+		//xml.Print();
+
 	}
 	{
 		// Bug [ 1451649 ] Attribute values with trailing quotes not handled correctly
