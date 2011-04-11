@@ -49,3 +49,4 @@ RAMDrivenStrippedStreamingManager<TImage>::PrepareStreaming( itk::DataObject * i
 } // End namespace otb
 
 #endif
+

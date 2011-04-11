@@ -56,3 +56,4 @@ TileDimensionTiledStreamingManager<TImage>::PrepareStreaming( itk::DataObject * 
 } // End namespace otb
 
 #endif
+

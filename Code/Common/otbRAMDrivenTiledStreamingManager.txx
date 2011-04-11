@@ -50,3 +50,4 @@ RAMDrivenTiledStreamingManager<TImage>::PrepareStreaming( itk::DataObject * inpu
 } // End namespace otb
 
 #endif
+

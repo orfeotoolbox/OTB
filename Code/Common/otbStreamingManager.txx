@@ -165,3 +165,4 @@ StreamingManager<TImage>::GetSplit(unsigned int i)
 } // End namespace otb
 
 #endif
+
