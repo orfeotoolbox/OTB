@@ -36,6 +36,7 @@
 
 #include "projection/ossimUtmProjection.h"
 #include "projection/ossimLambertConformalConicProjection.h"
+#include "projection/ossimTransMercatorProjection.h"
 
 namespace otb
 {
@@ -156,6 +157,15 @@ std::string MapProjectionWrapper::GetParameter(std::string key) const
     return Utils::ConvertToString(projection->getDecimalDegreesPerPixel());
     }
 
+  // Apply parameters to transmercator
+  if (projectionName.compare("ossimTransMercatorProjection") == 0)
+    {
+    const ossimTransMercatorProjection* projection = dynamic_cast<const ossimTransMercatorProjection*>(this->GetMapProjection());
+    if (key.compare("ScaleFactor") == 0)
+      {
+      return Utils::ConvertToString(projection->getScaleFactor());
+      }
+    }
 
   // Apply parameters to Utm
   if (projectionName.compare("ossimUtmProjection") == 0)
@@ -344,6 +354,17 @@ void MapProjectionWrapper::ApplyParametersToProjection()
       }
     }
 
+  // Apply parameters to trasnmercator
+  if (projectionName.compare("ossimTransMercatorProjection") == 0)
+    {
+    ossimTransMercatorProjection* projection = dynamic_cast<ossimTransMercatorProjection*>(this->GetMapProjection());
+    it = m_ParameterStore.find("ScaleFactor");
+    if (it != m_ParameterStore.end())
+      {
+      double scale = atof((*it).second.c_str());
+      projection->setScaleFactor(scale);
+      }
+    }
 
   // Apply parameters to Utm
   if (projectionName.compare("ossimUtmProjection") == 0)

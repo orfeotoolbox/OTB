@@ -24,65 +24,62 @@
 namespace otb
 {
 
-template <TransformDirection::TransformationDirection transform>
-Eckert4MapProjection<transform>
+template <TransformDirection::TransformationDirection TTransform>
+Eckert4MapProjection<TTransform>
 ::Eckert4MapProjection()
 {
+  this->SetWkt("ossimEckert4Projection");
 }
 
-template <TransformDirection::TransformationDirection transform>
-Eckert4MapProjection<transform>
+template <TransformDirection::TransformationDirection TTransform>
+Eckert4MapProjection<TTransform>
 ::~Eckert4MapProjection()
 {
 }
 
 ///False easting specification
-template <TransformDirection::TransformationDirection transform>
-void Eckert4MapProjection<transform>
+template <TransformDirection::TransformationDirection TTransform>
+void Eckert4MapProjection<TTransform>
 ::SetFalseEasting(double falseEasting)
 {
-  this->m_MapProjection->setFalseEasting(falseEasting);
+  this->SetParameter("FalseEasting", Utils::ConvertToString(falseEasting));
+  this->Modified();
 }
 
 ///False Northing specification
-template <TransformDirection::TransformationDirection transform>
-void Eckert4MapProjection<transform>
+template <TransformDirection::TransformationDirection TTransform>
+void Eckert4MapProjection<TTransform>
 ::SetFalseNorthing(double falseNorthing)
 {
-  this->m_MapProjection->setFalseNorthing(falseNorthing);
-}
-
-///Set the defaul parameters
-template <TransformDirection::TransformationDirection transform>
-void Eckert4MapProjection<transform>
-::SetDefaults()
-{
-  this->m_MapProjection->setDefaults();
+  this->SetParameter("FalseNorthing", Utils::ConvertToString(falseNorthing));
+  this->Modified();
 }
 
 ///Get the false northing coordinates (avoid negative values)
-template <TransformDirection::TransformationDirection transform>
-double Eckert4MapProjection<transform>
+template <TransformDirection::TransformationDirection TTransform>
+double Eckert4MapProjection<TTransform>
 ::GetFalseNorthing() const
 {
-  double falseNorthing = this->m_MapProjection->getFalseNorthing();
+  double falseNorthing = atoi(this->GetParameter("FalseNorthing").c_str());
   return falseNorthing;
 }
 
 ///Get the false easting coordinates (avoid negative values)
-template <TransformDirection::TransformationDirection transform>
-double Eckert4MapProjection<transform>
+template <TransformDirection::TransformationDirection TTransform>
+double Eckert4MapProjection<TTransform>
 ::GetFalseEasting() const
 {
-  double falseEasting = this->m_MapProjection->getFalseEasting();
+  double falseEasting = atoi(this->GetParameter("FalseEasting").c_str());
   return falseEasting;
 }
 
-template <TransformDirection::TransformationDirection transform>
-void Eckert4MapProjection<transform>
+template <TransformDirection::TransformationDirection TTransform>
+void Eckert4MapProjection<TTransform>
 ::SetParameters(double falseEasting, double falseNorthing)
 {
-  this->m_MapProjection->setFalseEastingNorthing(falseEasting, falseNorthing);
+  this->SetParameter("FalseEasting", Utils::ConvertToString(falseEasting));
+  this->SetParameter("FalseNorthing", Utils::ConvertToString(falseNorthing));
+  this->Modified();
 }
 
 } // namespace otb

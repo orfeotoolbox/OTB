@@ -64,7 +64,7 @@ template <TransformDirection::TransformationDirection TTransform>
 void LambertConformalConicMapProjection<TTransform>
 ::SetFalseEasting(double falseEasting)
 {
-  this->SetParameter("falseEasting", Utils::ConvertToString(falseEasting));
+  this->SetParameter("FalseEasting", Utils::ConvertToString(falseEasting));
   this->Modified();
 }
 
@@ -73,7 +73,7 @@ template <TransformDirection::TransformationDirection TTransform>
 void LambertConformalConicMapProjection<TTransform>
 ::SetFalseNorthing(double falseNorthing)
 {
-  this->SetParameter("falseNorthing", Utils::ConvertToString(falseNorthing));
+  this->SetParameter("FalseNorthing", Utils::ConvertToString(falseNorthing));
   this->Modified();
 }
 
@@ -84,8 +84,8 @@ void LambertConformalConicMapProjection<TTransform>
 {
   this->SetParameter("StandardParallel1", Utils::ConvertToString(parallel1Degree));
   this->SetParameter("StandardParallel2", Utils::ConvertToString(parallel2Degree));
-  this->SetParameter("falseEasting", Utils::ConvertToString(falseEasting));
-  this->SetParameter("falseNorthing", Utils::ConvertToString(falseNorthing));
+  this->SetParameter("FalseEasting", Utils::ConvertToString(falseEasting));
+  this->SetParameter("FalseNorthing", Utils::ConvertToString(falseNorthing));
   this->Modified();
 }
 

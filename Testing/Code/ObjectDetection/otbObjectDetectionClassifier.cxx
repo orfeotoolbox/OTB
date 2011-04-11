@@ -134,9 +134,7 @@ int otbObjectDetectionClassifier(int argc, char* argv[])
   classifier->SetClassKey("Class");
   classifier->SetShifts(statisticsReader->GetStatisticVectorByName("mean"));
   classifier->SetScales(statisticsReader->GetStatisticVectorByName("stddev"));
-
-  // 0 means no streaming
-  classifier->GetStreamer()->GetStreamingManager()->SetStrippedNumberOfLinesStreamingMode(streaming);
+  classifier->GetStreamer()->SetNumberOfLinesStrippedStreaming( streaming );
   classifier->Update();
 
   std::vector<ObjectDetectionClassifierType::PointType> points;

@@ -58,6 +58,8 @@
 #include "otbMollweidMapProjection.h"
 #include "otbSVY21MapProjection.h"
 
+#include "otbMapProjection.h"
+
 namespace otb
 {
 

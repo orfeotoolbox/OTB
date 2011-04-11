@@ -35,7 +35,15 @@ namespace otb
  *  This filter is not intended to be used with classic ImageToImageFilter, though it
  *  will not generate any error.
  *
- *  This filter proposes the same streaming setup methods than the StreamingImageFileWriter.
+ *  The computation of divisions can be done following different strategies
+ *  by setting the StreamingManager attributes with SetStreamingManager.
+ *  A set of behaviors are available with the following methods :
+ *  \begin{itemize}
+ *  \item SetNumberOfLinesStrippedStreaming : divide by strips, according to a number of lines
+ *  \item SetAutomaticStrippedStreaming : divide by strips, according to available RAM
+ *  \item SetTileDimensionTiledStreaming : divide by tiles, according to a desired tile dimension
+ *  \item SetAutomaticTiledStreaming : divide by tiles, according to available RAM
+ *  \end{itemize}
  *
  *  It is used in the PersistentFilterStreamingDecorator helper class to propose an easy
  *  way to stream an image through a persistent filter.
@@ -44,7 +52,7 @@ namespace otb
  * \sa PersistentStatisticsImageFilter
  * \sa PersistentImageStreamingDecorator.
  */
-template <class TInputImage, class TStreamingManager = StreamingManager<TInputImage> >
+template <class TInputImage >
 class ITK_EXPORT StreamingImageVirtualWriter : public itk::ImageToImageFilter<TInputImage, TInputImage>
 {
 public:
@@ -66,8 +74,8 @@ public:
   typedef typename InputImageType::RegionType InputImageRegionType;
   typedef typename InputImageType::PixelType  InputImagePixelType;
 
-  /** Streaming traits helper typedef */
-  typedef TStreamingManager                      StreamingManagerType;
+  /** Streaming manager base class pointer */
+  typedef StreamingManager<InputImageType>       StreamingManagerType;
   typedef typename StreamingManagerType::Pointer StreamingManagerPointerType;
 
   /** Dimension of input image. */
@@ -83,6 +91,14 @@ public:
     {
     m_StreamingManager = streamingManager;
     }
+
+  void SetNumberOfLinesStrippedStreaming(unsigned int nbLinesPerStrip);
+
+  void SetAutomaticStrippedStreaming(unsigned int availableRAM);
+
+  void SetTileDimensionTiledStreaming(unsigned int tileDimension);
+
+  void SetAutomaticTiledStreaming(unsigned int availableRAM);
 
 protected:
   StreamingImageVirtualWriter();
@@ -108,7 +124,9 @@ private:
 
     itk::ProcessObject* processObject = dynamic_cast<itk::ProcessObject*>(object);
     if (processObject)
+      {
       m_DivisionProgress = processObject->GetProgress();
+      }
 
     this->UpdateFilterProgress();
   }

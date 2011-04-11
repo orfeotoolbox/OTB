@@ -24,67 +24,62 @@
 namespace otb
 {
 
-template <TransformDirection::TransformationDirection transform>
-SinusoidalMapProjection<transform>
+template <TransformDirection::TransformationDirection TTransform>
+SinusoidalMapProjection<TTransform>
 ::SinusoidalMapProjection()
 {
+  this->SetWkt("ossimSinusoidalProjection");
 }
 
-template <TransformDirection::TransformationDirection transform>
-SinusoidalMapProjection<transform>
+template <TransformDirection::TransformationDirection TTransform>
+SinusoidalMapProjection<TTransform>
 ::~SinusoidalMapProjection()
 {
 }
 
 ///Set the false Easting
-template <TransformDirection::TransformationDirection transform>
-void SinusoidalMapProjection<transform>
+template <TransformDirection::TransformationDirection TTransform>
+void SinusoidalMapProjection<TTransform>
 ::SetFalseEasting(double falseEasting)
 {
-  this->m_MapProjection->setFalseEasting(falseEasting);
+  this->SetParameter("FalseEasting", Utils::ConvertToString(falseEasting));
+  this->Modified();
 }
 
 ///Set the False Northing
-template <TransformDirection::TransformationDirection transform>
-void SinusoidalMapProjection<transform>
+template <TransformDirection::TransformationDirection TTransform>
+void SinusoidalMapProjection<TTransform>
 ::SetFalseNorthing(double falseNorthing)
 {
-  this->m_MapProjection->setFalseNorthing(falseNorthing);
-}
-
-///Set the default parameter
-template <TransformDirection::TransformationDirection transform>
-void SinusoidalMapProjection<transform>
-::SetDefaults()
-{
-  this->m_MapProjection->setDefaults();
+  this->SetParameter("FalseNorthing", Utils::ConvertToString(falseNorthing));
+  this->Modified();
 }
 
 ///\return the False Northing (avoid negative coordinates)
-template <TransformDirection::TransformationDirection transform>
-double SinusoidalMapProjection<transform>
+template <TransformDirection::TransformationDirection TTransform>
+double SinusoidalMapProjection<TTransform>
 ::GetFalseNorthing() const
 {
-  double falseNorthing = this->m_MapProjection->getFalseNorthing();
-
+  double falseNorthing = atoi(this->GetParameter("FalseNorthing").c_str());
   return falseNorthing;
 }
 
 ///\return the False Easting (avoid negative coordinates)
-template <TransformDirection::TransformationDirection transform>
-double SinusoidalMapProjection<transform>
+template <TransformDirection::TransformationDirection TTransform>
+double SinusoidalMapProjection<TTransform>
 ::GetFalseEasting() const
 {
-  double falseEasting = this->m_MapProjection->getFalseEasting();
-
+  double falseEasting = atoi(this->GetParameter("FalseEasting").c_str());
   return falseEasting;
 }
 
-template <TransformDirection::TransformationDirection transform>
-void SinusoidalMapProjection<transform>
+template <TransformDirection::TransformationDirection TTransform>
+void SinusoidalMapProjection<TTransform>
 ::SetParameters(double falseEasting, double falseNorthing)
 {
-  this->m_MapProjection->setFalseEastingNorthing(falseEasting, falseNorthing);
+  this->SetParameter("FalseEasting", Utils::ConvertToString(falseEasting));
+  this->SetParameter("FalseNorthing", Utils::ConvertToString(falseNorthing));
+  this->Modified();
 }
 
 }

@@ -23,33 +23,52 @@
 #include "otbConfigure.h"
 #include "itkCommand.h"
 
+#include "otbNumberOfLinesStrippedStreamingManager.h"
+#include "otbRAMDrivenStrippedStreamingManager.h"
+#include "otbTileDimensionTiledStreamingManager.h"
+#include "otbRAMDrivenTiledStreamingManager.h"
+
 namespace otb
 {
 
-template <class TInputImage, class TStreamingManager>
-StreamingImageVirtualWriter<TInputImage, TStreamingManager>
+template <class TInputImage>
+StreamingImageVirtualWriter<TInputImage>
 ::StreamingImageVirtualWriter()
 {
-  m_StreamingManager = StreamingManagerType::New();
+  // By default, we use tiled streaming, with automatic tile size
+  // We don't set any parameter, so the memory size is retrieved rom the OTB configuration options
+  m_StreamingManager = otb::RAMDrivenTiledStreamingManager<TInputImage>::New();
 }
 
-template <class TInputImage, class TStreamingManager>
-StreamingImageVirtualWriter<TInputImage, TStreamingManager>
+template <class TInputImage>
+StreamingImageVirtualWriter<TInputImage>
 ::~StreamingImageVirtualWriter()
 {
 }
 
-template <class TInputImage, class TStreamingManager>
+template <class TInputImage>
 void
-StreamingImageVirtualWriter<TInputImage, TStreamingManager>
+StreamingImageVirtualWriter<TInputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }
 
-template <class TInputImage, class TStreamingManager>
+template <class TInputImage>
 void
-StreamingImageVirtualWriter<TInputImage, TStreamingManager>
+StreamingImageVirtualWriter<TInputImage>
+::SetNumberOfLinesStrippedStreaming(unsigned int nbLinesPerStrip)
+{
+  typedef NumberOfLinesStrippedStreamingManager<TInputImage> NumberOfLinesStrippedStreamingManagerType;
+  typename NumberOfLinesStrippedStreamingManagerType::Pointer streamingManager = NumberOfLinesStrippedStreamingManagerType::New();
+  streamingManager->SetNumberOfLinesPerStrip(nbLinesPerStrip);
+
+  m_StreamingManager = streamingManager;
+}
+
+template <class TInputImage>
+void
+StreamingImageVirtualWriter<TInputImage>
 ::GenerateInputRequestedRegion(void)
 {
   InputImagePointer                        inputPtr = const_cast<InputImageType *>(this->GetInput(0));
@@ -65,9 +84,9 @@ StreamingImageVirtualWriter<TInputImage, TStreamingManager>
   inputPtr->SetRequestedRegion(region);
 }
 
-template<class TInputImage, class TStreamingManager>
+template<class TInputImage>
 void
-StreamingImageVirtualWriter<TInputImage, TStreamingManager>
+StreamingImageVirtualWriter<TInputImage>
 ::GenerateData(void)
 {
   /**
