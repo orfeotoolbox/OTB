@@ -69,10 +69,9 @@ int otbLabeledSampleLocalizationGenerator(int argc, char* argv[])
   generator->SetInhibitionRadius(5);
   generator->SetRandomLocalizationDensity(0.004);
   generator->SetNbMaxIteration(1000);
+  generator->SetNumberOfPositiveSamplesPerPoint(2);
 
   generator->Update();
-
-  //std::cout << generator << std::endl;
 
   writer->SetFileName(outputVD);
   writer->SetInput(generator->GetOutput());
