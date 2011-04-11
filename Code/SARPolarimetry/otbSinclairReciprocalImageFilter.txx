@@ -63,6 +63,17 @@ SinclairReciprocalImageFilter<TInputImageHH, TInputImageHV_VH, TInputImageVV, TO
 template <class TInputImageHH, class TInputImageHV_VH, class TInputImageVV, class TOutputImage, class TFunction>
 void
 SinclairReciprocalImageFilter<TInputImageHH, TInputImageHV_VH, TInputImageVV, TOutputImage, TFunction>
+::SetInputHV_VH(const TInputImageHV_VH * image)
+{
+  this->SetInput2(image);
+}
+
+/**
+ * Connect one of the operands for pixel-wise addition
+ */
+template <class TInputImageHH, class TInputImageHV_VH, class TInputImageVV, class TOutputImage, class TFunction>
+void
+SinclairReciprocalImageFilter<TInputImageHH, TInputImageHV_VH, TInputImageVV, TOutputImage, TFunction>
 ::SetInputVV(const TInputImageVV * image)
 {
   this->SetInput3(image);

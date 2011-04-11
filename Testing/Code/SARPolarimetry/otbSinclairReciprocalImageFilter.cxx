@@ -76,8 +76,7 @@ int generic_SinclairReciprocalImageFilter(int argc, char * argv[])
   reader3->SetFileName(inputFilename3);
   
   filter->SetInputHH(reader1->GetOutput());
-  filter->SetInputHV(reader2->GetOutput());
-  filter->SetInputVH(reader2->GetOutput());
+  filter->SetInputHV_VH(reader2->GetOutput());
   filter->SetInputVV(reader3->GetOutput());
   
   typename ExtractROIType::Pointer  extract = ExtractROIType::New();

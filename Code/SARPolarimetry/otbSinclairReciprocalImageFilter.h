@@ -35,7 +35,7 @@ namespace otb
  * The output image has 6 channels : the diagonal and the upper element of the reciprocal matrix.
  * Element a sotored from left to right, line by line.
  *
- * The class is templated by the 4 input image (HH, HV, VH and VV) and the used functor.
+ * The class is templated by the 3 input image (HH, HV_VH and VV) and the used functor.
  * Available functors are :
  * \begin{itemize}
  * \item SinclairToReciprocalCovarianceMatrixFunctor (default one)
@@ -95,6 +95,8 @@ public:
   void SetInputHV(const TInputImageHV_VH * image);
   // This method set the second input, same as SetInputHV
   void SetInputVH(const TInputImageHV_VH * image);
+  // This method set the second input, same as SetInputHV and SetInputHV
+  void SetInputHV_VH(const TInputImageHV_VH * image);
   void SetInputVV(const TInputImageVV * image);
 
 
