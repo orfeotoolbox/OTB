@@ -47,7 +47,7 @@ unsigned int
 StreamingManager<TImage>::EstimateOptimalNumberOfDivisions(itk::DataObject * input, const RegionType &region,
                                                            unsigned int availableRAM)
 {
-  otbMsgDevMacro(<< "m_AvailableRAMInMB " << m_AvailableRAMInMB)
+  otbMsgDevMacro(<< "availableRAM " << availableRAM)
   unsigned int availableRAMInBytes = availableRAM * 1024 * 1024;
 
   if (availableRAMInBytes == 0)
