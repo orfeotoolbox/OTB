@@ -37,6 +37,9 @@
 #include "projection/ossimUtmProjection.h"
 #include "projection/ossimLambertConformalConicProjection.h"
 #include "projection/ossimTransMercatorProjection.h"
+#include "projection/ossimEckert4Projection.h"
+#include "projection/ossimMollweidProjection.h"
+#include "projection/ossimSinusoidalProjection.h"
 
 namespace otb
 {
@@ -351,6 +354,63 @@ void MapProjectionWrapper::ApplyParametersToProjection()
       {
       double value = atof((*it).second.c_str());
       projection->setStandardParallel2(value);
+      }
+    }
+
+  // Apply parameters to Eckert4
+  if (projectionName.compare("ossimEckert4Projection") == 0)
+    {
+    ossimEckert4Projection* projection = dynamic_cast<ossimEckert4Projection*>(this->GetMapProjection());
+
+    it = m_ParameterStore.find("FalseNorthing");
+    if (it != m_ParameterStore.end())
+      {
+      double value = atof((*it).second.c_str());
+      projection->setFalseNorthing(value);
+      }
+    it = m_ParameterStore.find("FalseEasting");
+    if (it != m_ParameterStore.end())
+      {
+      double value = atof((*it).second.c_str());
+      projection->setFalseEasting(value);
+      }
+    }
+
+  // Apply parameters to Mollweid
+  if (projectionName.compare("ossimMollweidProjection") == 0)
+    {
+    ossimMollweidProjection* projection = dynamic_cast<ossimMollweidProjection*>(this->GetMapProjection());
+
+    it = m_ParameterStore.find("FalseNorthing");
+    if (it != m_ParameterStore.end())
+      {
+      double value = atof((*it).second.c_str());
+      projection->setFalseNorthing(value);
+      }
+    it = m_ParameterStore.find("FalseEasting");
+    if (it != m_ParameterStore.end())
+      {
+      double value = atof((*it).second.c_str());
+      projection->setFalseEasting(value);
+      }
+    }
+
+  // Apply parameters to Sinusoidal
+  if (projectionName.compare("ossimSinusoidalProjection") == 0)
+    {
+    ossimSinusoidalProjection* projection = dynamic_cast<ossimSinusoidalProjection*>(this->GetMapProjection());
+
+    it = m_ParameterStore.find("FalseNorthing");
+    if (it != m_ParameterStore.end())
+      {
+      double value = atof((*it).second.c_str());
+      projection->setFalseNorthing(value);
+      }
+    it = m_ParameterStore.find("FalseEasting");
+    if (it != m_ParameterStore.end())
+      {
+      double value = atof((*it).second.c_str());
+      projection->setFalseEasting(value);
       }
     }
 
