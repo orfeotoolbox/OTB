@@ -18,9 +18,7 @@
 #ifndef __otbTransMercatorMapProjection_h
 #define __otbTransMercatorMapProjection_h
 
-#include "projection/ossimMapProjection.h"
-#include "projection/ossimTransMercatorProjection.h"
-#include "otbMapProjection.h"
+#include "otbGenericMapProjection.h"
 
 namespace otb
 {
@@ -29,16 +27,16 @@ namespace otb
  * It converts coordinates in longitude, latitude (WGS84) to TransMercator map coordinates.
  *
  */
-template <TransformDirection::TransformationDirection transform>
-class ITK_EXPORT TransMercatorMapProjection : public MapProjection<ossimTransMercatorProjection, transform>
+template <TransformDirection::TransformationDirection TTransform>
+class ITK_EXPORT TransMercatorMapProjection : public GenericMapProjection<TTransform>
 {
 public:
 
   /** Standard class typedefs. */
-  typedef TransMercatorMapProjection                             Self;
-  typedef MapProjection<ossimTransMercatorProjection, transform> Superclass;
-  typedef itk::SmartPointer<Self>                                Pointer;
-  typedef itk::SmartPointer<const Self>                          ConstPointer;
+  typedef TransMercatorMapProjection        Self;
+  typedef GenericMapProjection<TTransform>  Superclass;
+  typedef itk::SmartPointer<Self>           Pointer;
+  typedef itk::SmartPointer<const Self>     ConstPointer;
 
   typedef typename Superclass::ScalarType ScalarType;
   typedef itk::Point<ScalarType, 2>       InputPointType;
@@ -48,12 +46,11 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(TransMercatorMapProjection, MapProjection);
+  itkTypeMacro(TransMercatorMapProjection, GenericMapProjection);
   virtual void SetFalseEasting(double falseEasting);
   virtual void SetFalseNorthing(double falseNorthing);
   virtual void SetScaleFactor(double scaleFactor);
   virtual void SetParameters(double falseEasting, double falseNorthing, double scaleFactor);
-  virtual void SetDefaults();
   virtual double GetFalseNorthing() const;
   virtual double GetFalseEasting() const;
   virtual double GetScaleFactor() const;

@@ -123,7 +123,6 @@ int otbMapProjectionsTest(int argc, char * argv[])
   file.open(filename);
 
   otb::Eckert4InverseProjection::Pointer lEckert4Projection = otb::Eckert4InverseProjection::New();
-  lEckert4Projection->SetDefaults();
   file << lEckert4Projection->GetFalseEasting() << std::endl;
   file << lEckert4Projection->GetFalseNorthing() << std::endl;
   lEckert4Projection->SetFalseEasting(500000);
@@ -135,7 +134,6 @@ int otbMapProjectionsTest(int argc, char * argv[])
   file << lEckert4Projection->GetFalseNorthing() << std::endl;
 
   otb::Eckert4ForwardProjection::Pointer               lEckert4Projection2 = otb::Eckert4ForwardProjection::New();
-  lEckert4Projection2->SetDefaults();
   file << lEckert4Projection2->GetFalseEasting() << std::endl;
   file << lEckert4Projection2->GetFalseNorthing() << std::endl;
   lEckert4Projection2->SetFalseEasting(500000);
@@ -148,7 +146,6 @@ int otbMapProjectionsTest(int argc, char * argv[])
 
 
   otb::MollweidInverseProjection::Pointer          lMollweidProjection = otb::MollweidInverseProjection::New();
-  lMollweidProjection->SetDefaults();
   file << lMollweidProjection->GetFalseEasting() << std::endl;
   file << lMollweidProjection->GetFalseNorthing() << std::endl;
   lMollweidProjection->SetFalseEasting(500000);
@@ -161,7 +158,6 @@ int otbMapProjectionsTest(int argc, char * argv[])
 
 
   otb::MollweidForwardProjection::Pointer          lMollweidProjection2 = otb::MollweidForwardProjection::New();
-  lMollweidProjection2->SetDefaults();
   file << lMollweidProjection2->GetFalseEasting() << std::endl;
   file << lMollweidProjection2->GetFalseNorthing() << std::endl;
   lMollweidProjection2->SetFalseEasting(500000);
@@ -173,7 +169,6 @@ int otbMapProjectionsTest(int argc, char * argv[])
   file << lMollweidProjection2->GetFalseNorthing() << std::endl;
 
   otb::SinusoidalInverseProjection::Pointer           lSinusoidalProjection = otb::SinusoidalInverseProjection::New();
-  lSinusoidalProjection->SetDefaults();
   file << lSinusoidalProjection->GetFalseEasting() << std::endl;
   file << lSinusoidalProjection->GetFalseNorthing() << std::endl;
   lSinusoidalProjection->SetFalseEasting(500000);
@@ -185,7 +180,6 @@ int otbMapProjectionsTest(int argc, char * argv[])
   file << lSinusoidalProjection->GetFalseNorthing() << std::endl;
 
   otb::SinusoidalForwardProjection::Pointer           lSinusoidalProjection2 = otb::SinusoidalForwardProjection::New();
-  lSinusoidalProjection2->SetDefaults();
   file << lSinusoidalProjection2->GetFalseEasting() << std::endl;
   file << lSinusoidalProjection2->GetFalseNorthing() << std::endl;
   lSinusoidalProjection2->SetFalseEasting(500000);

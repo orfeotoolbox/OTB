@@ -18,7 +18,7 @@
 #ifndef __otbSVY21MapProjection_h
 #define __otbSVY21MapProjection_h
 
-#include "otbMapProjection.h"
+#include "otbTransMercatorMapProjection.h"
 
 namespace otb
 {
@@ -48,8 +48,16 @@ public:
   itkTypeMacro(SVY21MapProjection, TransMercatorMapProjection);
 
 protected:
-  SVY21MapProjection();
-  virtual ~SVY21MapProjection();
+  SVY21MapProjection()
+  {
+    this->SetParameter("OriginX", "103.83333333333333");
+    this->SetParameter("OriginY", "1.3666666666666667");
+    this->SetParameter("Datum", "WE");
+    this->SetParameter("FalseNorthing", "38744.572");
+    this->SetParameter("FalseEasting", "28001.642");
+    this->SetParameter("ScaleFactor", "1.00");
+  }
+  virtual ~SVY21MapProjection() {}
 
 private:
   SVY21MapProjection(const Self &); //purposely not implemented
@@ -57,9 +65,5 @@ private:
 };
 
 } // namespace otb
-
-#ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSVY21MapProjection.txx"
-#endif
 
 #endif
