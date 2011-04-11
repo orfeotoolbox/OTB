@@ -49,7 +49,6 @@ namespace otb
  *  - GetOutputMask() provides the mask associated to the disparity map after adhesion correction
  *  - GetOutputRiskEdges() provides the map of risk edges
  *
- * \example DisparityMap/AdhesionCorrectionFilterExample.cxx
  *
  * \sa      FineRegistrationImageFilter, FastCorrelationImageFilter, DisparityMapEstimationMethod, DisparityMapAndMaskEstimationFilter
  * \ingroup IntensityImageFilters, Streamed
@@ -90,10 +89,10 @@ public:
   typedef itk::ConstNeighborhoodIterator<TImage>             NeighborhoodIteratorType; 
 
   //typedef otb::Image<int, 2> 											AuxImageType;
-  typedef otb::Image<double, 2> 											AuxImageType;
-  typedef typename AuxImageType::Pointer 					AuxImagePointerType;
+  typedef otb::Image<double, 2> AuxImageType;
+  typedef typename AuxImageType::Pointer AuxImagePointerType;
   
-  typedef std::vector<int>                                     IntVectorType;
+  typedef std::vector<int>  IntVectorType;
   
     /** Set input images **/
   void SetMedianDisparityInput( const TImage * medianmap);
