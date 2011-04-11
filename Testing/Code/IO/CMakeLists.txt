@@ -130,6 +130,15 @@ ADD_TEST(ioTvImageFileReaderWithComplexPixel_RADARSAT ${IO_TESTS1}
             ${LARGEDATA}/RADARSAT1/GOMA/SCENE01/
             ${TEMP}/ioImageFileReaderWithComplexPixel_RADARSAT.tif
             0 0 100 100)
+            
+ADD_TEST(ioTvVectorImageFileReaderWithComplexPixel_RADARSAT2 ${IO_TESTS1}
+        --compare-image ${EPSILON_9} 
+            ${BASELINE}/ioImageFileReaderWithComplexPixel_RADARSAT2.tif
+            ${TEMP}/ioImageFileReaderWithComplexPixel_RADARSAT2.tif
+        otbVectorImageFileReaderWithComplexPixelTest
+            ${LARGEDATA}/RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/product.xml
+            ${TEMP}/ioImageFileReaderWithComplexPixel_RADARSAT2.tif
+            0 0 100 100)
 
 ADD_TEST(ioTvCompareWritingComplexImage_TIF ${IO_TESTS1}
         otbCompareWritingComplexImageTest
