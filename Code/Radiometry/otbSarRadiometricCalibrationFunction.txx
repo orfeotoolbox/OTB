@@ -90,13 +90,13 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
 
   if (!this->GetInputImage())
     {
-    std::cerr << "ERROR with GetInputImage()" <<std::endl;
+    itkDebugMacro( <<"ERROR with GetInputImage()");
     return (itk::NumericTraits<OutputType>::max());
     }
 
   if (!this->IsInsideBuffer(index))
     {
-    std::cerr << "ERROR with IsInsideBuffer" <<std::endl;
+    itkDebugMacro( << "ERROR with IsInsideBuffer");
     return (itk::NumericTraits<OutputType>::max());
     }
 
