@@ -69,6 +69,42 @@ StreamingImageVirtualWriter<TInputImage>
 template <class TInputImage>
 void
 StreamingImageVirtualWriter<TInputImage>
+::SetAutomaticStrippedStreaming(unsigned int availableRAM)
+{
+  typedef RAMDrivenStrippedStreamingManager<TInputImage> RAMDrivenStrippedStreamingManagerType;
+  typename RAMDrivenStrippedStreamingManagerType::Pointer streamingManager = RAMDrivenStrippedStreamingManagerType::New();
+  streamingManager->SetAvailableRAMInMB(availableRAM);
+
+  m_StreamingManager = streamingManager;
+}
+
+template <class TInputImage>
+void
+StreamingImageVirtualWriter<TInputImage>
+::SetTileDimensionTiledStreaming(unsigned int tileDimension)
+{
+  typedef TileDimensionTiledStreamingManager<TInputImage> TileDimensionTiledStreamingManagerType;
+  typename TileDimensionTiledStreamingManagerType::Pointer streamingManager = TileDimensionTiledStreamingManagerType::New();
+  streamingManager->SetTileDimension(tileDimension);
+
+  m_StreamingManager = streamingManager;
+}
+
+template <class TInputImage>
+void
+StreamingImageVirtualWriter<TInputImage>
+::SetAutomaticTiledStreaming(unsigned int availableRAM)
+{
+  typedef RAMDrivenTiledStreamingManager<TInputImage> RAMDrivenTiledStreamingManagerType;
+  typename RAMDrivenTiledStreamingManagerType::Pointer streamingManager = RAMDrivenTiledStreamingManagerType::New();
+  streamingManager->SetAvailableRAMInMB(availableRAM);
+
+  m_StreamingManager = streamingManager;
+}
+
+template <class TInputImage>
+void
+StreamingImageVirtualWriter<TInputImage>
 ::GenerateInputRequestedRegion(void)
 {
   InputImagePointer                        inputPtr = const_cast<InputImageType *>(this->GetInput(0));
