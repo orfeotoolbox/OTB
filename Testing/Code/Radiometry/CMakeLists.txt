@@ -1527,19 +1527,19 @@ ADD_TEST(raTuSarRadiometricCalibrationFunctorWithoutNoise ${RADIOMETRY_TESTS9}
 # -------            SarRadiometricCalibrationFunction   ------------------------------
 ADD_TEST(raTvSarRadiometricCalibrationFunction ${RADIOMETRY_TESTS9}
 	--compare-ascii ${NOTOL}
-		    ${BASELINE_FILES}/raTvSarRadiometricCalibrationFunctionOutputAscii.txt
-	    	${TEMP}/raTvSarRadiometricCalibrationFunctionOutputAscii.txt
+		  ${BASELINE_FILES}/raTvSarRadiometricCalibrationFunctionOutputAscii.txt
+	      ${TEMP}/raTvSarRadiometricCalibrationFunctionOutputAsciiWithNoise.txt
         otbSarRadiometricCalibrationFunction
-	 	${INPUTDATA}/scene.png
-	 	${TEMP}/raTvSarRadiometricCalibrationFunctionOutputAscii.txt
+	 	  ${INPUTDATA}/scene.png
+	 	  ${TEMP}/raTvSarRadiometricCalibrationFunctionOutputAsciiWithNoise.txt
 )
 ADD_TEST(raTvSarRadiometricCalibrationFunctionWithoutNoise ${RADIOMETRY_TESTS9}
 	--compare-ascii ${NOTOL}
-		    ${BASELINE_FILES}/raTvSarRadiometricCalibrationFunctionOutputAscii.txt
-	    	${TEMP}/raTvSarRadiometricCalibrationFunctionOutputAscii.txt
+		  ${BASELINE_FILES}/raTvSarRadiometricCalibrationFunctionOutputAscii.txt
+	      ${TEMP}/raTvSarRadiometricCalibrationFunctionOutputAsciiWithoutNoise.txt
         otbSarRadiometricCalibrationFunctionWithoutNoise
-	 	${INPUTDATA}/scene.png
-	 	${TEMP}/raTvSarRadiometricCalibrationFunctionOutputAscii.txt
+	 	  ${INPUTDATA}/scene.png
+	 	  ${TEMP}/raTvSarRadiometricCalibrationFunctionOutputAsciiWithoutNoise.txt
 )
 
 # -------  SarRadiometricCalibrationToImageFilter   ------------------------------
@@ -1639,19 +1639,19 @@ ADD_TEST(raTuSarBrightnessFunctorWithoutNoise ${RADIOMETRY_TESTS9}
 ADD_TEST(raTvSarBrightnessFunction ${RADIOMETRY_TESTS9}
 	--compare-ascii ${NOTOL}
 	    	${BASELINE_FILES}/raTvSarBrightnessFunctionOutputAscii.txt
-	    	${TEMP}/raTvSarBrightnessFunctionOutputAscii.txt
+	    	${TEMP}/raTvSarBrightnessFunctionOutputAsciiWithNoise.txt
         otbSarBrightnessFunction
 	 	${INPUTDATA}/scene.png
-	 	${TEMP}/raTvSarBrightnessFunctionOutputAscii.txt
+	 	${TEMP}/raTvSarBrightnessFunctionOutputAsciiWithNoise.txt
 )
 
 ADD_TEST(raTvSarBrightnessFunctionWithoutNoise ${RADIOMETRY_TESTS9}
 	--compare-ascii ${NOTOL}
 	    	${BASELINE_FILES}/raTvSarBrightnessFunctionOutputAscii.txt
-	    	${TEMP}/raTvSarBrightnessFunctionOutputAscii.txt
+	    	${TEMP}/raTvSarBrightnessFunctionOutputAsciiWithoutNoise.txt
         otbSarBrightnessFunctionWithoutNoise
 	 	${INPUTDATA}/scene.png
-	 	${TEMP}/raTvSarBrightnessFunctionOutputAscii.txt
+	 	${TEMP}/raTvSarBrightnessFunctionOutputAsciiWithoutNoise.txt
 )
 
 # ------- SarBrightnessToImageFilter   ------------------------------
