@@ -27,7 +27,9 @@
 namespace otb
 {
 /** \class CanopyBidirectionalReflectance
-   * \brief this class implements the CanopyBidirectionalReflectance lib.
+   * \brief This class implements the CanopyBidirectionalReflectance lib.
+   *
+   * It computes ..
    *
    * \sa itk::DataObject
  */

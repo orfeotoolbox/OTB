@@ -29,8 +29,9 @@
 namespace otb
 {
 /** \class ProspectModel
-   * \brief this class implements the Prospect Model,
-   * \brief which computes leaf reflectance and transmittance from a set of parameters (contained in an otbLeafPrameters)
+   * \brief This class implements the Prospect Model (see http://teledetection.ipgp.jussieu.fr/prosail/),
+   *
+   * It computes leaf reflectance and transmittance from a set of parameters (contained in a LeafParameters class)
    *
    * \sa itk::DataObject
  */

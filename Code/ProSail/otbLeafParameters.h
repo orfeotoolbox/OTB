@@ -27,7 +27,7 @@
 namespace otb
 {
 /** \class LeafParameters
-   * \brief data class containing Leaf Parameters.
+   * \brief Data class containing Leaf Parameters.
    *
    * \sa itk::DataObject
  */
@@ -57,15 +57,15 @@ class ITK_EXPORT LeafParameters : public itk::DataObject
       itkSetMacro(CBrown, double);
       itkGetMacro(CBrown, double);
       
-      /** Set/Get EWT (cm)*/
+      /** Set/Get equivalent leaf water thickness,EWT (cm)*/
       itkSetMacro(Cw, double);
       itkGetMacro(Cw, double);
       
-      /** Set/Get LMA (g/cm²)*/
+      /** Set/Get leaf dry matter, LMA (g/cm²)*/
       itkSetMacro(Cm, double);
       itkGetMacro(Cm, double);
       
-      /** Set/Get structure coef*/
+      /** Set/Get leaf structure coef*/
       itkSetMacro(N, double);
       itkGetMacro(N, double);
       

@@ -28,8 +28,9 @@
 namespace otb
 {
 /** \class SailModel
-   * \brief this class implements the Sail lib.
-   * hemispherical and viewing reflectance are computed from 400 to 2500 nm (step 1nm).
+   * \brief This class implements the SAIL model (see http://teledetection.ipgp.jussieu.fr/prosail/).
+   *
+   * Hemispherical and viewing reflectance are computed from 400 to 2500 nm (step 1nm).
    * Input Reflectance and transmittance must be spectrum (otbSpectralResponse) from 400 nm to 2500 nm with step 1nm.
    * \sa itk::ProcessObject
  */

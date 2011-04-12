@@ -27,7 +27,7 @@
 namespace otb
 {
 /** \class LeafOpticalProperties
-   * \brief this class implements the LeafOpticalProperties lib.
+   * \brief This class implements the LeafOpticalProperties from SAIL code (see http://teledetection.ipgp.jussieu.fr/prosail/).
    *
    * \sa itk::DataObject
  */

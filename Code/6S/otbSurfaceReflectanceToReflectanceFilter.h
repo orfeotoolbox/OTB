@@ -69,7 +69,7 @@ public:
   };
 
   /**
-   * Set/Get Coefficient, computed from AtmosphericRadiativeTermsPointerType datas.
+   * Set/Get Coefficient, computed from AtmosphericRadiativeTermsPointerType data.
    */
   void SetCoefficient(double coef)
   {
@@ -81,7 +81,7 @@ public:
   };
 
   /**
-   * Set/Get Residu, computed from AtmosphericRadiativeTermsPointerType datas.
+   * Set/Get Residu, computed from AtmosphericRadiativeTermsPointerType data.
    */
   void SetResidu(double res)
   {
@@ -272,7 +272,7 @@ private:
   bool m_IsSetAtmosphericRadiativeTerms;
   /** Path to an Aeronet data file, allows to compute aerosol optical and water vapor amounts. */
   std::string m_AeronetFileName;
-  /** Path to an filter function values file. */
+  /** Path to a filter function values file. */
   std::string m_FilterFunctionValuesFileName;
   /** Contains the filter function values (each element is a vector and represnts the values for each channel) */
   FilterFunctionCoefVectorType m_FilterFunctionCoef;
