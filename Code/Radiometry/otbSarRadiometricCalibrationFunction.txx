@@ -86,6 +86,7 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
 ::Evaluate(const PointType& point) const
 {
   IndexType index;
+  this->GetInputImage()->TransformPhysicalPointToIndex(point, index);
 
   if (!this->GetInputImage())
     {
@@ -96,8 +97,6 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>
     {
     return (itk::NumericTraits<OutputType>::max());
     }
-
-  this->GetInputImage()->TransformPhysicalPointToIndex(point, index);
 
   FunctorType functor;
   if (m_EnableNoise)
