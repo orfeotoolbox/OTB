@@ -18,9 +18,9 @@
 #include "itkExceptionObject.h"
 #include "otbMacro.h"
 
-#include "otbAtmosphericCorrectionsReduceSpectralResponse.h"
 #include "otbSatelliteRSR.h"
 #include "otbSpectralResponse.h"
+#include "otbReduceSpectralResponse.h"
 
 #include "otbSVMSampleListModelEstimator.h"
 #include "otbSVMClassifier.h"
