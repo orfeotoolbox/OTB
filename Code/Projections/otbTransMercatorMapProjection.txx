@@ -96,7 +96,7 @@ template <TransformDirection::TransformationDirection TTransform>
 double TransMercatorMapProjection<TTransform>
 ::GetFalseNorthing() const
 {
-  double falseNorthing = atoi(this->GetParameter("FalseNorthing").c_str());
+  double falseNorthing = atof(this->GetParameter("FalseNorthing").c_str());
   return falseNorthing;
 }
 
@@ -105,7 +105,7 @@ template <TransformDirection::TransformationDirection TTransform>
 double TransMercatorMapProjection<TTransform>
 ::GetFalseEasting() const
 {
-  double falseEasting = atoi(this->GetParameter("FalseEasting").c_str());
+  double falseEasting = atof(this->GetParameter("FalseEasting").c_str());
   return falseEasting;
 }
 
