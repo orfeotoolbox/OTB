@@ -294,7 +294,7 @@ MassOfBelief<TLabel, TMass>
       std::set_intersection(labelSet.begin(), labelSet.end(), it->begin(), it->end(), interIt);
 
       // If labelSet inter (*it) != {}, then (*it) intersects labelSet
-      if(intersectionSet.empty())
+      if(!intersectionSet.empty())
         {
         intersectedSet.insert((*it));
         }
