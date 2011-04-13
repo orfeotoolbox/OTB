@@ -1977,9 +1977,17 @@ ADD_TEST(raTvLandsatTMSpectralRuleBasedClassifierTest ${RADIOMETRY_TESTS10}
 
 
 # A enrichir
-
+SET(Radiometry_SRCS1
+otbRadiometryTests1.cxx
+otbMultiChannelRAndNIRVegetationIndexImageFilterNew.cxx
+otbMultiChannelRAndNIRVegetationIndexImageFilter.cxx
+)
 SET(Radiometry_SRCS2
 otbRadiometryTests2.cxx
+otbRAndBAndNIRVegetationIndexImageFilterNew.cxx
+otbRAndBAndNIRVegetationIndexImageFilter.cxx
+otbMultiChannelRAndBAndNIRVegetationIndexImageFilterNew.cxx
+otbMultiChannelRAndBAndNIRVegetationIndexImageFilter.cxx
 otbImageToLuminanceImageFilterNew.cxx
 otbImageToLuminanceImageFilter.cxx
 otbImageToLuminanceImageFilterAuto.cxx
@@ -2017,6 +2025,8 @@ otbTSARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter.cxx
 
 SET(Radiometry_SRCS5
 otbRadiometryTests5.cxx
+otbRAndNIRVegetationIndexImageFilterNew.cxx
+otbRAndNIRVegetationIndexImageFilter.cxx
 otbSpectralSensitivityReaderNew.cxx
 otbSpectralSensitivityReaderTest.cxx
 )
@@ -2025,6 +2035,8 @@ SET(Radiometry_SRCS6
 otbRadiometryTests6.cxx
 otbSetASetBRAndNIRVegetationIndexImageFilter.cxx
 otbSetASetBMultiChannelRAndNIRVegetationIndexImageFilter.cxx
+otbRAndGAndNIRVegetationIndexImageFilterNew.cxx
+otbMultiChannelRAndGAndNIRIndexImageFilterNew.cxx
 otbAVIRAndGAndNIRVegetationIndexImageFilter.cxx
 otbAVIMultiChannelRAndGAndNIRVegetationIndexImageFilter.cxx
 otbWDVIRAndNIRVegetationIndexImageFilter.cxx
@@ -2114,6 +2126,7 @@ otbLandsatTMSpectralRuleBasedClassifierTest.cxx
 )
 
 
+OTB_ADD_EXECUTABLE(otbRadiometryTests1 "${Radiometry_SRCS1}" "OTBRadiometry;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbRadiometryTests2 "${Radiometry_SRCS2}" "OTBRadiometry;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbRadiometryTests3 "${Radiometry_SRCS3}" "OTBRadiometry;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbRadiometryTests4 "${Radiometry_SRCS4}" "OTBRadiometry;OTBIO;OTBTesting")
