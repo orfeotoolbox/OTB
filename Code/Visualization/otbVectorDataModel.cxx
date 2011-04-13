@@ -27,6 +27,12 @@ VectorDataModel::VectorDataModel() :
   m_Origin.Fill(0.);
   m_Spacing.Fill(1.);
 
+  // Initialize vectordata
+  this->ResetVectorData();
+}
+
+void VectorDataModel::ResetVectorData(void)
+{
   m_VectorData = VectorDataType::New();
   m_CurrentRootNode = DataNodeType::New();
   m_CurrentRootNode->SetNodeId("DOCUMENT");
@@ -34,7 +40,6 @@ VectorDataModel::VectorDataModel() :
   m_VectorData->GetDataTree()->Add(
     m_CurrentRootNode,
     m_VectorData->GetDataTree()->GetRoot()->Get());
-
 }
 
 void VectorDataModel::Update(void)
