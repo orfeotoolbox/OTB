@@ -31,6 +31,7 @@ int otbInnerProductPCAImageFilter(int argc, char* argv[])
   const bool         generateMeanComponent(atoi(argv[3]));
   const bool         centerdata = atoi(argv[4]);
   const unsigned int numberOfPrincipalComponentsRequired(atoi(argv[5]));
+  const bool         useUnbiasedEstimator = atoi(argv[6]);
 
   typedef otb::Image<PixelType, Dimension>                      MonoImageType;
   typedef otb::VectorImage<PixelType, Dimension>                ImageType;
@@ -50,6 +51,8 @@ int otbInnerProductPCAImageFilter(int argc, char* argv[])
   pcafilter->SetGenerateMeanComponent(generateMeanComponent);
   pcafilter->SetCenterData(centerdata);
   pcafilter->SetInput(reader->GetOutput());
+  pcafilter->SetUseUnbiasedEstimator(useUnbiasedEstimator);
+
   writer->SetInput(pcafilter->GetOutput());
   writer->Update();
 
@@ -65,7 +68,7 @@ int otbInnerProductPCAImageFilter(int argc, char* argv[])
     extractROIFilter->SetChannel(cpt + 1);
     writer2->SetInput(extractROIFilter->GetOutput());
 
-    writer2->SetFileName(argv[cpt + 6]);
+    writer2->SetFileName(argv[cpt + 7]);
     writer2->Update();
     }
 

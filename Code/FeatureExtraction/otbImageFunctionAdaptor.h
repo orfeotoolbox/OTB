@@ -28,7 +28,18 @@
 
 namespace otb
 {
-
+/**
+ * \class ImageFunctionAdaptor
+ * \brief Adapt the output of the internal image function to be a
+ * itk::VariableLengthVector. 
+ * 
+ * This class is templated over the ImageFunction type and the
+ * coordinate representation type.
+ * 
+ *
+ *
+ * \ingroup ImageFunctions
+ */
 
 template< class TInternalImageFunctionType, class TOutputPrecision = double >
 class ITK_EXPORT ImageFunctionAdaptor :

@@ -235,9 +235,14 @@ LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
         ++it;
         }
       }
+
+    // if no label object  is present on current line we skip the process
+    if(currentLine.size()>0)
+      {
     // Parse lines for adjacency
     this->ParseLine(currentLine, threadId);
     this->ParseConsecutiveLines(previousLine, currentLine, threadId);
+      }
 
     // Store previous line
     previousLine = currentLine;

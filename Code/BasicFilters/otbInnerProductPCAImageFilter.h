@@ -113,6 +113,10 @@ public:
   itkGetMacro(CenterData, bool);
   itkBooleanMacro(CenterData);
 
+  /** Get the NormalizeInnerProductPCAImage filter */
+  otbSetObjectMemberMacro(NormalizePCAFilter, UseUnbiasedEstimator, bool);
+  otbGetObjectMemberMacro(NormalizePCAFilter, UseUnbiasedEstimator, bool);
+
 protected:
   /** GenerateData */
   virtual void GenerateData(void);

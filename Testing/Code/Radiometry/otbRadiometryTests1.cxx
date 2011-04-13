@@ -26,18 +26,6 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(otbBandMathImageFilterNew);
-  REGISTER_TEST(otbBandMathImageFilter);
-  REGISTER_TEST(otbBandMathImageFilterWithIdx);
-  REGISTER_TEST(otbComplexToIntensityFilterTest);
-  REGISTER_TEST(otbRealAndImaginaryImageToComplexImageFilterTest);
-  REGISTER_TEST(otbRealImageToComplexImageFilterTest);
-  REGISTER_TEST(otbImaginaryImageToComplexImageFilterTest);
-  REGISTER_TEST(otbComplexToVectorImageCastFilterNew);
-  REGISTER_TEST(otbComplexToVectorImageCastFilterTest);
-  REGISTER_TEST(otbLog10ThresholdedImageFilterTest);
-  REGISTER_TEST(otbMatrixImageFilterNew);
-  REGISTER_TEST(otbMatrixImageFilterTest);
-  REGISTER_TEST(otbMaskMuParserFilterNew);
-  REGISTER_TEST(otbMaskMuParserFilterTest);
+  REGISTER_TEST(otbMultiChannelRAndNIRVegetationIndexImageFilterNew);
+  REGISTER_TEST(otbMultiChannelRAndNIRVegetationIndexImageFilter);
 }
