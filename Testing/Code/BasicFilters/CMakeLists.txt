@@ -1597,6 +1597,7 @@ ADD_TEST(bfTvInnerProductPCAImageFilter ${BASICFILTERS_TESTS11}
     0 # Flag generate Mean component ?
     1 #center data
     3 # Nb Of Principal Components
+    1 # use unbiased estimator
     ${TEMP}/bfInnerProductPCAImageFilter_pc1.tif
     ${TEMP}/bfInnerProductPCAImageFilter_pc2.tif
     ${TEMP}/bfInnerProductPCAImageFilter_pc3.tif
@@ -1612,6 +1613,7 @@ ADD_TEST(bfTvInnerProductPCAImageFilterDisableCenterData ${BASICFILTERS_TESTS11}
     0 # Flag generate Mean component ?
     0 #center data
     3 # Nb Of Principal Components
+    1 # use unbiased estimator
     ${TEMP}/bfInnerProductPCAImageFilterDisableCenterData_pc1.tif
     ${TEMP}/bfInnerProductPCAImageFilterDisableCenterData_pc2.tif
     ${TEMP}/bfInnerProductPCAImageFilterDisableCenterData_pc3.tif
@@ -1627,6 +1629,7 @@ ADD_TEST(bfTvInnerProductPCAImageFilter_PC1 ${BASICFILTERS_TESTS11}
     0 # Flag generate Mean component ?
     1 #center data
     1 # Nb Of Principal Components
+    1 # use unbiased estimator
     ${TEMP}/bfInnerProductPCAImageFilter_PC1_1.tif
 )
 ADD_TEST(bfTvInnerProductPCAImageFilter_PC12 ${BASICFILTERS_TESTS11}
@@ -1639,6 +1642,7 @@ ADD_TEST(bfTvInnerProductPCAImageFilter_PC12 ${BASICFILTERS_TESTS11}
     0 # Flag generate Mean component ?
     1 #center data
     2 # Nb Of Principal Components
+    1 # use unbiased estimator
     ${TEMP}/bfInnerProductPCAImageFilter_PC12_1.tif
     ${TEMP}/bfInnerProductPCAImageFilter_PC12_2.tif
 )
@@ -1653,23 +1657,41 @@ ADD_TEST(bfTvInnerProductPCAImageFilterAllsOutputs ${BASICFILTERS_TESTS11}
     1 # Flag generate Mean component ?
     1 #center data
     3 # Nb Of Principal Components
+    1 # use unbiased estimator (default mode)
     ${TEMP}/bfInnerProductPCAImageFilterAllsOutputs_pc1.tif
     ${TEMP}/bfInnerProductPCAImageFilterAllsOutputs_pc2.tif
     ${TEMP}/bfInnerProductPCAImageFilterAllsOutputs_pc3.tif
     ${TEMP}/bfInnerProductPCAImageFilterAllsOutputs_MEAN.tif
 )
 
+ADD_TEST(bfTvInnerProductPCAImageFilterAllsOutputsWithoutUnbiasedEstimator ${BASICFILTERS_TESTS11}
+    --compare-image ${EPSILON_7}
+    ${BASELINE}/bfInnerProductPCAImageFilterAllsOutputs.tif
+    ${TEMP}/bfInnerProductPCAImageFilterAllsOutputs.tif
+    otbInnerProductPCAImageFilter
+    ${INPUTDATA}/poupees_sub_3c.png
+    ${TEMP}/bfInnerProductPCAImageFilterAllsOutputs.tif
+    1 # Flag generate Mean component ?
+    1 #center data
+    3 # Nb Of Principal Components
+    0 # do not use unbiased estimator (use in bfTvItkImagePCAShapeModelEstimatorTest to compare results with ITK PCA filter)
+    ${TEMP}/bfInnerProductPCAImageFilterAllsOutputsWithoutUnbiasedEstimator_pc1.tif
+    ${TEMP}/bfInnerProductPCAImageFilterAllsOutputsWithoutUnbiasedEstimator_pc2.tif
+    ${TEMP}/bfInnerProductPCAImageFilterAllsOutputsWithoutUnbiasedEstimator_pc3.tif
+    ${TEMP}/bfInnerProductPCAImageFilterAllsOutputsWithoutUnbiasedEstimator_MEAN.tif
+)
+
 # -------    Check PCA Implementation with ITK ImagePCAShapeModelEstimator class ----------------------------
 ADD_TEST(bfTvItkImagePCAShapeModelEstimatorTest ${BASICFILTERS_TESTS11}
     --compare-n-images ${EPSILON_7} 4
     ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_eigen_vectors1.tif
-    ${TEMP}/bfInnerProductPCAImageFilterAllsOutputs_pc1.tif
+    ${TEMP}/bfInnerProductPCAImageFilterAllsOutputsWithoutUnbiasedEstimator_pc1.tif
     ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_eigen_vectors2.tif
-    ${TEMP}/bfInnerProductPCAImageFilterAllsOutputs_pc2.tif
+    ${TEMP}/bfInnerProductPCAImageFilterAllsOutputsWithoutUnbiasedEstimator_pc2.tif
     ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_eigen_vectors3.tif
-    ${TEMP}/bfInnerProductPCAImageFilterAllsOutputs_pc3.tif
-    ${TEMP}/bfInnerProductPCAImageFilterAllsOutputs_MEAN.tif
+    ${TEMP}/bfInnerProductPCAImageFilterAllsOutputsWithoutUnbiasedEstimator_pc3.tif
     ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_mean.tif
+    ${TEMP}/bfInnerProductPCAImageFilterAllsOutputsWithoutUnbiasedEstimator_MEAN.tif
     otbImagePCAShapeModelEstimatorTest
     ${INPUTDATA}/poupees_sub_c1.png
     ${INPUTDATA}/poupees_sub_c2.png

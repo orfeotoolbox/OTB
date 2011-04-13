@@ -160,6 +160,9 @@ public:
   itkSetMacro(EnableSecondOrderStats, bool);
   itkGetMacro(EnableSecondOrderStats, bool);
 
+  itkSetMacro(UseUnbiasedEstimator, bool);
+  itkGetMacro(UseUnbiasedEstimator, bool);
+
 protected:
   PersistentStreamingStatisticsVectorImageFilter();
 
@@ -185,6 +188,9 @@ private:
   bool m_EnableMinMax;
   bool m_EnableFirstOrderStats;
   bool m_EnableSecondOrderStats;
+
+  /* use an unbiased estimator to compute the covariance */
+  bool m_UseUnbiasedEstimator;
 
   std::vector<PixelType>     m_ThreadMin;
   std::vector<PixelType>     m_ThreadMax;
@@ -344,6 +350,9 @@ public:
   otbSetObjectMemberMacro(Filter, EnableSecondOrderStats, bool);
   otbGetObjectMemberMacro(Filter, EnableSecondOrderStats, bool);
 
+  otbSetObjectMemberMacro(Filter, UseUnbiasedEstimator, bool);
+  otbGetObjectMemberMacro(Filter, UseUnbiasedEstimator, bool);
+
 protected:
   /** Constructor */
   StreamingStatisticsVectorImageFilter() {}
@@ -354,6 +363,7 @@ protected:
 private:
   StreamingStatisticsVectorImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
+
 };
 
 } // end namespace otb
