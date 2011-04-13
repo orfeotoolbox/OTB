@@ -36,7 +36,8 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
 ::PersistentStreamingStatisticsVectorImageFilter()
  : m_EnableMinMax(true),
    m_EnableFirstOrderStats(true),
-   m_EnableSecondOrderStats(true)
+   m_EnableSecondOrderStats(true),
+   m_UseUnbiasedEstimator(true)
 {
   // first output is a copy of the image, DataObject created by
   // superclass
@@ -338,7 +339,13 @@ PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
     this->GetCorrelationOutput()->Set(cor);
 
     const RealPixelType& mean = this->GetMeanOutput()->Get();
-    const double regul = static_cast<double>(nbPixels) / (nbPixels - 1);
+    double regul = static_cast<double>(nbPixels) / (nbPixels - 1);
+
+    if (!m_UseUnbiasedEstimator)
+      {
+        regul = 1;
+      }
+
     MatrixType cov  = cor;
     for (unsigned int r = 0; r < numberOfComponent; ++r)
       {

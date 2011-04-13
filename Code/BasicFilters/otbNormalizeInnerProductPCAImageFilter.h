@@ -74,6 +74,9 @@ public:
   typedef typename StreamingStatisticsVectorImageFilterType::RealPixelType RealPixelType;
   typedef typename StreamingStatisticsVectorImageFilterType::MatrixType    MatrixType;
 
+  itkSetMacro(UseUnbiasedEstimator, bool);
+  itkGetMacro(UseUnbiasedEstimator, bool);
+
 protected:
   NormalizeInnerProductPCAImageFilter();
   virtual ~NormalizeInnerProductPCAImageFilter() {}
@@ -110,6 +113,8 @@ private:
   /** Contains normalization coefficient input image */
   RealPixelType m_CoefNorm;
 
+  /* use an unbiased estimator to compute the covariance */
+  bool m_UseUnbiasedEstimator;
 };
 
 } // end namespace otb
