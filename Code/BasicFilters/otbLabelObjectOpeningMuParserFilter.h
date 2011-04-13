@@ -62,9 +62,8 @@ namespace otb
  */
 
 
-
-template< class TImage,class TFunction=Functor::OBIAMuParserFunctor<
-	    typename TImage::LabelObjectType > >
+template< class TImage, class TFunction=Functor::OBIAMuParserFunctor<
+           typename TImage::LabelObjectType > >
 class ITK_EXPORT LabelObjectOpeningMuParserFilter :
   public itk::InPlaceLabelMapFilter<TImage>
 {
@@ -94,7 +93,6 @@ public:
 
  /** Runtime information support. */
  itkTypeMacro(LabelObjectOpeningMuParserFilter, InPlaceLabelMapFilter);
-
 
 
   /** Set the expression to be parsed */

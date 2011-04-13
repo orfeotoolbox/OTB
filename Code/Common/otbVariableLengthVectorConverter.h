@@ -64,7 +64,7 @@ public:
   {
     OutputType  output;
     output.SetSize(1);
-    output.SetElement(0,static_cast<OutputPrecisionType>(input));
+    output.SetElement(0, static_cast<OutputPrecisionType>(input));
     return output;
   }
 

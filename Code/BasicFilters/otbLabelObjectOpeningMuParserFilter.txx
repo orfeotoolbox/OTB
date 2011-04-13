@@ -31,8 +31,8 @@ namespace otb
 {
 
 // constructor
-template 	< class TImage,class TFunction>
-LabelObjectOpeningMuParserFilter<TImage,TFunction>::LabelObjectOpeningMuParserFilter()
+template        < class TImage, class TFunction>
+LabelObjectOpeningMuParserFilter<TImage, TFunction>::LabelObjectOpeningMuParserFilter()
 {
 
   // create the output image for the removed objects
@@ -41,14 +41,14 @@ LabelObjectOpeningMuParserFilter<TImage,TFunction>::LabelObjectOpeningMuParserFi
 }
 
 // Destructor
-template 	< class TImage,class TFunction>
-LabelObjectOpeningMuParserFilter<TImage,TFunction>::~LabelObjectOpeningMuParserFilter()
+template        < class TImage, class TFunction>
+LabelObjectOpeningMuParserFilter<TImage, TFunction>::~LabelObjectOpeningMuParserFilter()
 {
 
 }
 
-template 	< class TImage,class TFunction>
-void LabelObjectOpeningMuParserFilter<TImage,TFunction>::PrintSelf(std::ostream& os, itk::Indent indent) const
+template        < class TImage, class TFunction>
+void LabelObjectOpeningMuParserFilter<TImage, TFunction>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 
@@ -56,9 +56,8 @@ void LabelObjectOpeningMuParserFilter<TImage,TFunction>::PrintSelf(std::ostream&
 }
 
 
-
-template< class TImage,class TFunction>
-void LabelObjectOpeningMuParserFilter<TImage,TFunction>
+template< class TImage, class TFunction>
+void LabelObjectOpeningMuParserFilter<TImage, TFunction>
 ::SetExpression(const std::string expression)
  {
   if (m_Expression != expression)
@@ -67,16 +66,16 @@ void LabelObjectOpeningMuParserFilter<TImage,TFunction>
   this->Modified();
  }
 
-template< class TImage,class TFunction>
-std::string LabelObjectOpeningMuParserFilter<TImage,TFunction>
+template< class TImage, class TFunction>
+std::string LabelObjectOpeningMuParserFilter<TImage, TFunction>
 ::GetExpression() const
  {
   return m_Expression;
  }
 
 
-template  < class TImage,class TFunction>
-void LabelObjectOpeningMuParserFilter<TImage,TFunction>
+template  < class TImage, class TFunction>
+void LabelObjectOpeningMuParserFilter<TImage, TFunction>
  ::GenerateData()
     {
 
@@ -120,7 +119,6 @@ void LabelObjectOpeningMuParserFilter<TImage,TFunction>
 
 
       }
-
 
 
 
