@@ -525,7 +525,7 @@ ADD_TEST(raTvFilterFunctionValuesDigitalGlobeWV1Test ${RADIOMETRY_TESTS3}
 )
 
 ADD_TEST(raTvFilterFunctionValuesDigitalGlobeWV2Test ${RADIOMETRY_TESTS3}
-    --compare-ascii ${EPSILON_6} ${BASELINE_FILES}/raTvFilterFunctionValuesDigitalGlobeWV2Test.txt
+    --compare-ascii ${EPSILON_5} ${BASELINE_FILES}/raTvFilterFunctionValuesDigitalGlobeWV2Test.txt
                            ${TEMP}/raTvFilterFunctionValuesDigitalGlobeWV2Test.txt
         otbFilterFunctionValuesDigitalGlobeTest
     ${INPUTDATA}/Radiometry/DigitalGlobe/radiance_response_WV2.txt
