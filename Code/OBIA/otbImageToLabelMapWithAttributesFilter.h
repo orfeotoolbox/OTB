@@ -32,7 +32,7 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 
-/** \class LabelImageToLabelMapWithAdjacencyFilter
+/** \class ImageToLabelMapWithAttributesFilter
  * \brief Convert a labeled image to a label map with adjacency information
  *        and computes feature attributes for each LabelObject
  *

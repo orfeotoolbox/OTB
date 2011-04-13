@@ -109,7 +109,7 @@ bool MSTARImageIO::CanReadFile(const char* filename)
       * parameters....                                   *
    ****************************************************/
 
-  fread(tbuff, sizeof(char), 1024, MSTARfp);
+  int returnVal = fread(tbuff, sizeof(char), 1024, MSTARfp);
   rewind(MSTARfp);
 
   /* Extract Phoenix Summary header length */
@@ -247,7 +247,7 @@ void MSTARImageIO::Read(void* buffer)
       * parameters....                                   *
    ****************************************************/
 
-  fread(tbuff, sizeof(char), 1024, MSTARfp);
+  int returnVal = fread(tbuff, sizeof(char), 1024, MSTARfp);
   rewind(MSTARfp);
 
   /* Extract Phoenix Summary header length */
@@ -403,9 +403,10 @@ void MSTARImageIO::Read(void* buffer)
         case LSB_FIRST: /* Little-endian..do byteswap */
 
           otbMsgDevMacro(<< "Performing auto-byteswap...\n");
+          int returnVal;
           for (i = 0; i < totchunks; ++i)
             {
-            fread(bigfloatbuf, sizeof(char), 4, MSTARfp);
+            returnVal = fread(bigfloatbuf, sizeof(char), 4, MSTARfp);
             littlefloatval = byteswap_SR_IR(bigfloatbuf);
             CHIPdata[i] = littlefloatval;
             }
@@ -447,9 +448,10 @@ void MSTARImageIO::Read(void* buffer)
         {
         case LSB_FIRST: /* Little-endian..do byteswap */
           otbMsgDevMacro(<< "Performing auto-byteswap...");
+          int returnVal;
           for (i = 0; i < nchunks; ++i)
             {
-            fread(bigushortbuf, sizeof(char), 2, MSTARfp);
+            returnVal = fread(bigushortbuf, sizeof(char), 2, MSTARfp);
             littleushortval = byteswap_SUS_IUS(bigushortbuf);
             FSCENEdata[i] = littleushortval;
             }
@@ -488,9 +490,10 @@ void MSTARImageIO::Read(void* buffer)
         {
         case LSB_FIRST: /* Little-endian..do byteswap */
           otbMsgDevMacro(<< "Performing auto-byteswap...");
+          int returnVal;
           for (i = 0; i < nchunks; ++i)
             {
-            fread(bigushortbuf, sizeof(char), 2, MSTARfp);
+            returnVal = fread(bigushortbuf, sizeof(char), 2, MSTARfp);
             littleushortval = byteswap_SUS_IUS(bigushortbuf);
             FSCENEdata[i] = littleushortval;
             }
@@ -554,7 +557,7 @@ void MSTARImageIO::ReadImageInformation()
       * parameters....                                   *
    ****************************************************/
 
-  fread(tbuff, sizeof(char), 1024, MSTARfp);
+  int returnVal = fread(tbuff, sizeof(char), 1024, MSTARfp);
   rewind(MSTARfp);
 
   /* Extract Phoenix Summary header length */

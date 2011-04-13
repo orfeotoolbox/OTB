@@ -38,4 +38,6 @@ void RegisterTests()
   REGISTER_TEST(otbLog10ThresholdedImageFilterTest);
   REGISTER_TEST(otbMatrixImageFilterNew);
   REGISTER_TEST(otbMatrixImageFilterTest);
+  REGISTER_TEST(otbMaskMuParserFilterNew);
+  REGISTER_TEST(otbMaskMuParserFilterTest);
 }
