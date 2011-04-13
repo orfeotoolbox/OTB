@@ -161,6 +161,7 @@ void TileMapImageIO::Read(void* buffer)
   m_ListURLs.clear();
   m_ListTiles.clear();
 
+
   //Read all the required tiles
   for (int numTileY = 0; numTileY < nTilesY; numTileY++)
     {
@@ -345,6 +346,7 @@ void TileMapImageIO::ReadTile(std::string filename, void * buffer)
 
   itk::ImageIOBase::Pointer imageIO;
   imageIO = otb::GDALImageIO::New();
+
   bool lCanRead = imageIO->CanReadFile(filename.c_str());
 
   if (lCanRead == true)
@@ -357,6 +359,7 @@ void TileMapImageIO::ReadTile(std::string filename, void * buffer)
     ioRegion.SetSize(0, 256);
     ioRegion.SetSize(1, 256);
     imageIO->SetIORegion(ioRegion);
+
     imageIO->Read(buffer);
     }
   else
@@ -387,7 +390,14 @@ void TileMapImageIO::BuildFileName(const std::ostringstream& quad, std::ostrings
     directory << (quad.str().c_str())[i];
     i++;
     }
+
   ossimFilename directoryOssim(directory.str().c_str());
+  // If the directory already exists, remove it.
+  if( directoryOssim.exists() == true )
+    {
+      directoryOssim.remove();
+    }
+  
   directoryOssim.createDirectory();
 
   filename << directory.str();
@@ -666,6 +676,7 @@ void TileMapImageIO::InternalWrite(double x, double y, const void* buffer)
       ioRegion.SetSize(i, 256);
       ioRegion.SetIndex(i, 0);
       }
+    
     imageIO->SetIORegion(ioRegion);
 
     imageIO->Write(buffer);
