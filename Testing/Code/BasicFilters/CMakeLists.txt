@@ -1861,6 +1861,8 @@ ADD_TEST(bfTuMatrixImageFilterNew ${BASICFILTERS_TESTS13}
   otbMatrixImageFilterNew
 )
 
+
+
 ADD_TEST(bfTvMatrixImageFilterTest ${BASICFILTERS_TESTS13}
   --compare-image ${NOTOL}
   ${TEMP}/bfTvMatrixImageFilterTest.tif
@@ -1869,6 +1871,22 @@ ADD_TEST(bfTvMatrixImageFilterTest ${BASICFILTERS_TESTS13}
     ${INPUTDATA}/poupees.tif
     ${TEMP}/bfTvMatrixImageFilterTest.tif
 )
+
+
+ADD_TEST(bfTuMaskMuParserFilterNew ${BASICFILTERS_TESTS13}
+  otbMaskMuParserFilterNew
+)
+
+ADD_TEST(bfTvMaskMuParserFilterTest ${BASICFILTERS_TESTS13}
+  --compare-image ${NOTOL}
+  ${TEMP}/bfTvMaskMuParserFilterTest.tif
+  ${BASELINE}/bfTvMaskMuParserFilterTest.tif
+	otbMaskMuParserFilterTest
+    ${INPUTDATA}/ROI_QB_MUL_4.tif 
+    ${TEMP}/bfTvMaskMuParserFilterTest.tif
+    "(b1>100)*(b2>120)"
+)
+
 
 
 # A enrichir
@@ -2126,6 +2144,8 @@ otbImaginaryImageToComplexImageFilterTest.cxx
 otbComplexToVectorImageCastFilter.cxx
 otbLog10ThresholdedImageFilterTest.cxx
 otbMatrixImageFilterTest.cxx
+otbMaskMuParserFilterTest.cxx
+otbMaskMuParserFilterNew.cxx
 )
 
 
