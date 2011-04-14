@@ -29,6 +29,7 @@ SET(BASICFILTERS_TESTS10 ${CXX_TEST_PATH}/otbBasicFiltersTests10)
 SET(BASICFILTERS_TESTS11 ${CXX_TEST_PATH}/otbBasicFiltersTests11)
 SET(BASICFILTERS_TESTS12 ${CXX_TEST_PATH}/otbBasicFiltersTests12)
 SET(BASICFILTERS_TESTS13 ${CXX_TEST_PATH}/otbBasicFiltersTests13)
+SET(BASICFILTERS_TESTS14 ${CXX_TEST_PATH}/otbBasicFiltersTests14)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests1 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1355,7 +1356,7 @@ ADD_TEST(bfTvPersistentVectorizationImageFilter ${BASICFILTERS_TESTS10}
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests10 ~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests11 ~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # -------     Combination ExtractROI and StremingResample   ----------------------------
@@ -1847,6 +1848,8 @@ ADD_TEST(bfTvMatrixImageFilterTest ${BASICFILTERS_TESTS13}
 )
 
 
+# ----------------------------     otbMaskMuParserFilter   ----------------------------
+
 ADD_TEST(bfTuMaskMuParserFilterNew ${BASICFILTERS_TESTS13}
   otbMaskMuParserFilterNew
 )
@@ -1860,6 +1863,36 @@ ADD_TEST(bfTvMaskMuParserFilterTest ${BASICFILTERS_TESTS13}
     ${TEMP}/bfTvMaskMuParserFilterTest.tif
     "(b1>100)*(b2>120)"
 )
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests14 ~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# ----------------------------     otbConnectedComponentMuParserFunctor   ----------------------------
+
+ADD_TEST(bfTvConnectedComponentMuParserFunctorTest ${BASICFILTERS_TESTS14}
+  --compare-image ${NOTOL}
+  ${TEMP}/bfTvConnectedComponentMuParserFunctorTest_1.tif
+  ${BASELINE}/bfTvConnectedComponentMuParserFunctorTest_1.tif
+	otbConnectedComponentMuParserFunctorTest
+    ${INPUTDATA}/ROI_QB_MUL_4.tif 
+    ${TEMP}/bfTvConnectedComponentMuParserFunctorTest_1.tif
+    "distance<40"
+)
+
+
+
+ADD_TEST(bfTvConnectedComponentMuParserFunctorTestMask ${BASICFILTERS_TESTS14}
+  --compare-image ${NOTOL}
+  ${TEMP}/bfTvConnectedComponentMuParserFunctorTest_2.tif
+  ${BASELINE}/bfTvConnectedComponentMuParserFunctorTest_2.tif
+	otbConnectedComponentMuParserFunctorTest
+    ${INPUTDATA}/ROI_QB_MUL_4.tif 
+    ${TEMP}/bfTvConnectedComponentMuParserFunctorTest_2.tif
+    "distance<40"
+    ${INPUTDATA}/ROI_QB_MUL_4_Mask.tif 
+)
+
 
 
 
@@ -2112,6 +2145,11 @@ otbMaskMuParserFilterTest.cxx
 otbMaskMuParserFilterNew.cxx
 )
 
+SET(BasicFilters_SRCS14
+otbBasicFiltersTests14.cxx
+otbConnectedComponentMuParserFunctorTest.cxx
+)
+
 
 OTB_ADD_EXECUTABLE(otbBasicFiltersTests1 "${BasicFilters_SRCS1}" "OTBBasicFilters;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbBasicFiltersTests2 "${BasicFilters_SRCS2}" "OTBBasicFilters;OTBIO;OTBTesting")
@@ -2126,5 +2164,6 @@ OTB_ADD_EXECUTABLE(otbBasicFiltersTests10 "${BasicFilters_SRCS10}" "OTBBasicFilt
 OTB_ADD_EXECUTABLE(otbBasicFiltersTests11 "${BasicFilters_SRCS11}" "OTBBasicFilters;ITKAlgorithms;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbBasicFiltersTests12 "${BasicFilters_SRCS12}" "OTBBasicFilters;ITKAlgorithms;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbBasicFiltersTests13 "${BasicFilters_SRCS13}" "OTBBasicFilters;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbBasicFiltersTests14 "${BasicFilters_SRCS14}" "OTBBasicFilters;OTBIO;OTBTesting")
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
