@@ -96,7 +96,7 @@ void LabelObjectOpeningMuParserFilter<TImage, TFunction>
         itk::ProgressReporter progress( this, 0, labelObjectContainer.size() );
 
         typename ImageType::LabelObjectContainerType::const_iterator it = labelObjectContainer.begin();
-       unsigned int nb=0;
+
         while( it != labelObjectContainer.end() )
           {
           typename LabelObjectType::LabelType label = it->first;
