@@ -29,14 +29,11 @@
 #include <sys/stat.h>
 
 #include "otbTileMapImageIO.h"
-#include "otbMacro.h"
 #include "otbSystem.h"
 
 //#include "itkPNGImageIO.h"
 //#include "itkJPEGImageIO.h"
 #include "otbGDALImageIO.h"
-
-#include "base/ossimFilename.h"
 
 #include "itkTimeProbe.h"
 #include "otbCurlHelper.h"
@@ -392,12 +389,6 @@ void TileMapImageIO::BuildFileName(const std::ostringstream& quad, std::ostrings
     }
 
   ossimFilename directoryOssim(directory.str().c_str());
-  // If the directory already exists, remove it.
-  if( directoryOssim.exists() == true )
-    {
-      directoryOssim.remove();
-    }
-  
   directoryOssim.createDirectory();
 
   filename << directory.str();
@@ -581,7 +572,7 @@ void TileMapImageIO::Write(const void* buffer)
       //Set tile buffer to 0
       for (int iInit = 0; iInit < 256 * 256 * nComponents; iInit++)
         {
-        bufferTile[iInit] = 0;
+       bufferTile[iInit] = 0;
         }
 
       for (int tileJ = 0; tileJ < 256; tileJ++)
@@ -646,6 +637,13 @@ void TileMapImageIO::InternalWrite(double x, double y, const void* buffer)
 
   if (lCanWrite)
     {
+      ossimFilename fileOssim(filename.str().c_str());
+      // If the file already exists, remove it.
+      if( fileOssim.exists() == true )
+        {
+          fileOssim.remove();
+        }
+
     imageIO->CanStreamWrite();
     imageIO->SetNumberOfDimensions(2);
     imageIO->SetDimensions(0, 256);
