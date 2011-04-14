@@ -114,11 +114,11 @@ std::string GetExpression() const
 void ParseAttributeName(std::string &attributeName)
 {
 
-  for(unsigned int i=0;i<attributeName.size();i++)
+  for(unsigned int i=0; i<attributeName.size(); i++)
   {
       if(attributeName[i]==':')
         {
-         attributeName.erase(i,1);
+         attributeName.erase(i, 1);
          attributeName[i]='_';
         }
   }
@@ -128,16 +128,15 @@ void ParseAttributeName(std::string &attributeName)
 }
 
 
-
 void SetAttributes(const TLabelObject &a)
 {
 
   m_NbOfAttributes=a.GetNumberOfAttributes();
 
-  m_AAttributes.resize(m_NbOfAttributes,0.0);
+  m_AAttributes.resize(m_NbOfAttributes, 0.0);
   m_AttributesName.resize(m_NbOfAttributes,"");
   m_AttributesName = a.GetAvailableAttributes();
-  for(unsigned int i=0;i<m_NbOfAttributes;i++)
+  for(unsigned int i=0; i<m_NbOfAttributes; i++)
    {
      std::string attributeName=m_AttributesName.at(i);
      ParseAttributeName(attributeName); //eliminate '::' from string name
@@ -181,7 +180,7 @@ protected:
 
 private:
 
-OBIAMuParserFunctor(const Self &);//purposely not implemented
+OBIAMuParserFunctor(const Self &); //purposely not implemented
 void operator =(const Self &);    //purposely not implemented
 
 std::string m_Expression;

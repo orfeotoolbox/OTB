@@ -1137,16 +1137,6 @@ ADD_TEST(raTvAeronet_ArcachonLevel10_ExtractData ${RADIOMETRY_TESTS8}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbRADIOMETRY_TESTS9 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# -------            TerraSarCalibrationFunctor   ------------------------------
-ADD_TEST(raTvTerraSarCalibrationFunctor ${RADIOMETRY_TESTS9}
-        otbTerraSarCalibrationFunctor
-)
-
-# -------            TerraSarCalibrationImageFilter   ------------------------------
-ADD_TEST(raTuTerraSarCalibrationImageFilterNew ${RADIOMETRY_TESTS9}
-       otbTerraSarCalibrationImageFilterNew
-)
-
 IF(OTB_DATA_USE_LARGEINPUT)
 
 ADD_TEST(raTvTerraSarCalibrationImageFilterTestUPSALACoarse ${RADIOMETRY_TESTS9}
@@ -1968,10 +1958,6 @@ otbAeronetExtractDataBadData.cxx
 
 SET(Radiometry_SRCS9
 otbRadiometryTests9.cxx
-otbTerraSarCalibrationFunctor.cxx
-otbTerraSarCalibrationImageFilterNew.cxx
-otbTerraSarCalibrationImageFilterTest.cxx
-otbTerraSarCalibrationImageComplexFilterTest.cxx
 otbTerraSarBrightnessFunctor.cxx
 otbTerraSarBrightnessImageFilterNew.cxx
 otbTerraSarBrightnessImageFilterTest.cxx

@@ -31,11 +31,11 @@ namespace otb
 /**
  * \class ImageFunctionAdaptor
  * \brief Adapt the output of the internal image function to be a
- * itk::VariableLengthVector. 
- * 
+ * itk::VariableLengthVector.
+ *
  * This class is templated over the ImageFunction type and the
  * coordinate representation type.
- * 
+ *
  *
  *
  * \ingroup ImageFunctions

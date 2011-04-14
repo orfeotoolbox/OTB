@@ -48,9 +48,9 @@ int otbMaskMuParserFilterTest(int argc, char * argv[])
 
   typedef otb::VectorImage<InputPixelType,  Dimension>      InputVectorImageType;
   typedef otb::ImageFileReader<InputVectorImageType>        ReaderType;
-  typedef otb::Image<unsigned int,Dimension>                OutputImageType;
+  typedef otb::Image<unsigned int, Dimension>                OutputImageType;
   typedef otb::ImageFileWriter<OutputImageType>             WriterType;
-  typedef otb::MaskMuParserFilter<InputVectorImageType,OutputImageType>  FilterType;
+  typedef otb::MaskMuParserFilter<InputVectorImageType, OutputImageType>  FilterType;
 
 
   ReaderType::Pointer reader = ReaderType::New();

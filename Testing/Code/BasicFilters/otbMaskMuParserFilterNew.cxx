@@ -16,7 +16,7 @@
 
 =========================================================================*/
 
-#include "otbVectorImage.h""
+#include "otbVectorImage.h"
 #include "otbImage.h"
 #include "otbMaskMuParserFilter.h"
 
@@ -27,8 +27,8 @@ int otbMaskMuParserFilterNew( int argc, char* argv[])
   const unsigned int     Dimension = 2;
 
   typedef otb::VectorImage<InputPixelType,  Dimension>      InputVectorImageType;
-  typedef otb::Image<unsigned int,Dimension>                OutputImageType;
-  typedef otb::MaskMuParserFilter<InputVectorImageType,OutputImageType>  FilterType;
+  typedef otb::Image<unsigned int, Dimension>                OutputImageType;
+  typedef otb::MaskMuParserFilter<InputVectorImageType, OutputImageType>  FilterType;
 
 
    FilterType::Pointer   filter       = FilterType::New();

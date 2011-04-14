@@ -1257,32 +1257,6 @@ ADD_TEST(bfTvEdgeDensityImageFilter ${BASICFILTERS_TESTS9}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests10 ~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-IF (OTB_USE_DEPRECATED)
-ADD_TEST(bfTuScalarImageTextureFunctorNew ${BASICFILTERS_TESTS10}
-        otbScalarImageTextureFunctorNew )
-ADD_TEST(bfTvScalarImageTextureFunctor ${BASICFILTERS_TESTS10}
-        --compare-image ${NOTOL}
-            ${BASELINE}/bfScalarImageTextureFunctorTest.tif
-            ${TEMP}/bfScalarImageTextureFunctorTest.tif
-        otbScalarImageTextureFunctor
-	    ${INPUTDATA}/small_poupees_1canal.hd
-	    ${TEMP}/bfScalarImageTextureFunctorTest.tif
-	    2 # radius
-            0 # index feature
-)
-ADD_TEST(bfTuScalarVectorImageTextureFunctorNew ${BASICFILTERS_TESTS10}
-        otbScalarVectorImageTextureFunctorNew )
-
-ADD_TEST(bfTvScalarVectorImageTextureFunctor ${BASICFILTERS_TESTS10}
-        --compare-image ${NOTOL}
-            ${BASELINE}/bfScalarImageTextureFunctorTest.tif # It the same of  bfTvScalarImageTextureFunctor test
-            ${TEMP}/bfScalarVectorImageTextureFunctorTest.tif
-        otbScalarVectorImageTextureFunctor
-	    ${INPUTDATA}/small_poupees_1canal.hd
-	    ${TEMP}/bfScalarVectorImageTextureFunctorTest.tif
-	    2 # radius
-)
-ENDIF (OTB_USE_DEPRECATED)
 
 # -------            otb::GaborFilterGenerator   ----------------------------
 
@@ -2073,16 +2047,6 @@ otbClosePathFunctor.cxx
 otbPersistentVectorizationFilterNew.cxx
 otbPersistentVectorizationFilter.cxx
 )
-
-IF (OTB_USE_DEPRECATED)
-SET(BasicFilters_SRCS10
-${BasicFilters_SRCS10}
-otbScalarImageTextureFunctorNew.cxx
-otbScalarImageTextureFunctor.cxx
-otbScalarVectorImageTextureFunctorNew.cxx
-otbScalarVectorImageTextureFunctor.cxx
-)
-ENDIF (OTB_USE_DEPRECATED)
 
 IF(USE_FFTWD)
 SET(BasicFilters_SRCS10
