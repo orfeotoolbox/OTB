@@ -74,7 +74,6 @@ void MatrixImageFilter<TInputImage, TOutputImage, TMatrix>::ThreadedGenerateData
   inIt.GoToBegin();
   outIt.GoToBegin();
   
-  const unsigned int inSize =  m_Matrix.cols();
   const unsigned int outSize =  m_Matrix.rows();
 
   VectorType inVect(outSize, InputRealType(0.));
