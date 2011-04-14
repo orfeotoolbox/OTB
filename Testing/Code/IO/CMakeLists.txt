@@ -1138,20 +1138,22 @@ ADD_TEST(ioTvOtbImageTestSAR_ERS ${IO_TESTS9}
 
 # ---  Otb::Image Test  ---
 ADD_TEST(ioTvOtbImageTestRadarsat ${IO_TESTS9}
-   --compare-ascii ${EPSILON_3}  ${BASELINE_FILES}/ioOtbImageTestRadarsat.txt
-                     ${TEMP}/ioOtbImageTestRadarsat.txt
-        otbImageTest
-       	${LARGEDATA}/RADARSAT1/GOMA/SCENE01/
-        ${TEMP}/ioOtbImageTestRadarsat.txt)
+   --compare-ascii ${EPSILON_3}  
+     ${BASELINE_FILES}/ioOtbImageTestRadarsat.txt
+     ${TEMP}/ioOtbImageTestRadarsat.txt
+   otbImageTest
+     ${LARGEDATA}/RADARSAT1/GOMA/SCENE01/
+     ${TEMP}/ioOtbImageTestRadarsat.txt)
 
 # ---  Otb::VectorImage Test  ---
 ADD_TEST(ioTvOtbVectorImageTestRadarsat ${IO_TESTS9}
-   --compare-ascii ${EPSILON_3}  ${TEMP}/ioOtbImageTestRadarsat.txt
-                     ${TEMP}/ioOtbVectorImageTestRadarsat.txt
-        otbVectorImageLegacyTest
-        ${LARGEDATA}/RADARSAT1/GOMA/SCENE01/
-        ${TEMP}/ioOtbVectorImageTestRadarsat.txt)
-
+   --compare-ascii ${EPSILON_3}  
+     ${TEMP}/ioOtbImageTestRadarsat.txt
+     ${TEMP}/ioOtbVectorImageTestRadarsat.txt
+   otbVectorImageLegacyTest
+     ${LARGEDATA}/RADARSAT1/GOMA/SCENE01/
+     ${TEMP}/ioOtbVectorImageTestRadarsat.txt)
+SET_TESTS_PROPERTIES(ioTvOtbVectorImageTestRadarsat PROPERTIES DEPENDS ioTvOtbImageTestRadarsat)
 
 # ---  Otb::VectorImage Test  ---
 ADD_TEST(ioTvOtbVectorImageTestSpot5 ${IO_TESTS9}
