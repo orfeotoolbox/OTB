@@ -56,9 +56,6 @@ TARGET_LINK_LIBRARIES(VectorDataIOExample OTBCommon OTBIO)
 ADD_EXECUTABLE(DEMToImageGenerator DEMToImageGenerator.cxx )
 TARGET_LINK_LIBRARIES(DEMToImageGenerator OTBProjections OTBIO OTBCommon )
 
-ADD_EXECUTABLE(DEMToOrthoImageGenerator DEMToOrthoImageGenerator.cxx )
-TARGET_LINK_LIBRARIES(DEMToOrthoImageGenerator OTBProjections OTBIO OTBCommon )
-
 IF(OTB_USE_LIBLAS)
   ADD_EXECUTABLE(LidarReaderExample LidarReaderExample.cxx )
   TARGET_LINK_LIBRARIES(LidarReaderExample OTBIO OTBCommon )

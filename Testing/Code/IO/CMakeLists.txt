@@ -1629,74 +1629,6 @@ ADD_TEST(ioTvMapProjectionWrapperTest ${IO_TESTS12}
 
 
 
-# ---  otb::DEMToOrthoImageGenerator ---
-ADD_TEST(ioTuDEMToOrthoImageGeneratorNew ${IO_TESTS12}
-      otbDEMToOrthoImageGeneratorNew )
-
-ADD_TEST(ioTvDEMToOrthoImageGeneratorObsoleteTest ${IO_TESTS12}
---compare-image ${EPSILON_9}  ${BASELINE}/ioTvDEMToOrthoImageGenerator.tif
-                        ${TEMP}/ioTvDEMToOrthoImageGenerator.tif
-        otbDEMToOrthoImageGeneratorTest
-         ${INPUTDATA}/DEM/srtm_directory
-         ${TEMP}/ioTvDEMToOrthoImageGenerator.tif
-         778245.3501 #6.5
-         4933369.633 #44.5
-         500
-         500
-         30 #resolution in m
-         -30 #resolution in m
-	 31 # utm zone
-         N # hemisphere
-)
-
-ADD_TEST(ioTvDEMToOrthoImageGeneratorTest ${IO_TESTS12}
---compare-image ${EPSILON_9}  ${BASELINE}/ioTvDEMToOrthoImageGenerator.tif
-                        ${TEMP}/ioTvDEMToOrthoImageGenerator.tif
-        otbDEMToOrthoImageGeneratorTest2
-         ${INPUTDATA}/DEM/srtm_directory
-         ${TEMP}/ioTvDEMToOrthoImageGenerator.tif
-         778245.3501 #6.5
-         4933369.633 #44.5
-         500
-         500
-         30 #resolution in m
-         -30 #resolution in m
-    	 31 # utm zone
-         N # hemisphere
-)
-
-
-#Big extend
-ADD_TEST(ioTvDEMToOrthoImageGeneratorObsoleteTest2 ${IO_TESTS12}
---compare-image ${EPSILON_9}  ${BASELINE}/ioTvDEMToOrthoImageGenerator2.tif
-                        ${TEMP}/ioTvDEMToOrthoImageGenerator2.tif
-        otbDEMToOrthoImageGeneratorTest
-         ${INPUTDATA}/DEM/srtm_directory
-         ${TEMP}/ioTvDEMToOrthoImageGenerator2.tif
-         576378.080 5763132.837 232 422 2000 -2000 30 N
-)
-
-ADD_TEST(ioTvDEMToOrthoImageGeneratorTest2 ${IO_TESTS12}
---compare-image ${EPSILON_9}  ${BASELINE}/ioTvDEMToOrthoImageGenerator2.tif
-                        ${TEMP}/ioTvDEMToOrthoImageGenerator2.tif
-        otbDEMToOrthoImageGeneratorTest2
-         ${INPUTDATA}/DEM/srtm_directory
-         ${TEMP}/ioTvDEMToOrthoImageGenerator2.tif
-         576378.080 5763132.837 232 422 2000 -2000 30 N
-)
-
-
-IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(ioTvDEMToOrthoImageGeneratorWithInputImage ${IO_TESTS12}
---compare-image ${EPSILON_9}  ${BASELINE}/ioTvDEMToOrthoImageGeneratorWithInputImage.tif
-                        ${TEMP}/ioTvDEMToOrthoImageGeneratorWithInputImage.tif
-        otbDEMToOrthoImageGeneratorWithInputImageTest
-         ${INPUTDATA}/DEM/srtm_directory/
-         ${LARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
-         ${TEMP}/ioTvDEMToOrthoImageGeneratorWithInputImage.tif
-)
-ENDIF(OTB_DATA_USE_LARGEINPUT)
-
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -3289,10 +3221,6 @@ otbOssimElevManagerTest.cxx
 otbOssimElevManagerTest2.cxx
 otbOssimElevManagerTest4.cxx
 otbMapProjectionWrapperTest.cxx
-otbDEMToOrthoImageGeneratorNew.cxx
-otbDEMToOrthoImageGeneratorTest.cxx
-otbDEMToOrthoImageGeneratorTest2.cxx
-otbDEMToOrthoImageGeneratorWithInputImageTest.cxx
 )
 
 
