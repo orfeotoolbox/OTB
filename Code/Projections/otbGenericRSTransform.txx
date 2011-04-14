@@ -22,6 +22,7 @@
 #include "otbMacro.h"
 #include "otbMetaDataKey.h"
 #include "itkMetaDataObject.h"
+#include "itkExceptionObject.h"
 
 #include "ogr_spatialref.h"
 
@@ -137,9 +138,11 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
       sensorModel->SetImageGeometry(m_InputKeywordList);
       imageGeometrySet = true;
       }
-    catch( itk::ExceptionObject& e)
+    catch (itk::ExceptionObject& e)
       {
-      otbMsgDevMacro(<< "Unable to instanciate a sensor model with the provided keyword list. Exception caught : " << e)
+	  itk::OStringStream oss;
+	  oss << "Unable to instanciate a sensor model with the provided keyword list. Exception caught : " << e;
+	  otbMsgDevMacro(<< oss );
       }
 
     if (imageGeometrySet)
@@ -215,9 +218,11 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
       sensorModel->SetImageGeometry(m_OutputKeywordList);
       imageGeometrySet = true;
       }
-    catch( itk::ExceptionObject& e)
+    catch( itk::ExceptionObject & e )
       {
-      otbMsgDevMacro(<< "Unable to instanciate a sensor model with the provided output keyword list. Exception caught : " << e)
+		itk::OStringStream oss;
+		oss << "Unable to instanciate a sensor model with the provided keyword list. Exception caught : " << e;
+		otbMsgDevMacro(<< oss );
       }
 
     
