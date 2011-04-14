@@ -140,9 +140,9 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
       }
     catch (itk::ExceptionObject& e)
       {
-	  itk::OStringStream oss;
-	  oss << "Unable to instanciate a sensor model with the provided keyword list. Exception caught : " << e;
-	  otbMsgDevMacro(<< oss );
+         itk::OStringStream oss;
+         oss << "Unable to instanciate a sensor model with the provided keyword list. Exception caught : " << e;
+         otbMsgDevMacro(<< oss );
       }
 
     if (imageGeometrySet)
@@ -220,9 +220,9 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
       }
     catch( itk::ExceptionObject & e )
       {
-		itk::OStringStream oss;
-		oss << "Unable to instanciate a sensor model with the provided keyword list. Exception caught : " << e;
-		otbMsgDevMacro(<< oss );
+              itk::OStringStream oss;
+              oss << "Unable to instanciate a sensor model with the provided keyword list. Exception caught : " << e;
+              otbMsgDevMacro(<< oss );
       }
 
     

@@ -43,7 +43,7 @@ int otbLabelObjectOpeningMuParserFilterTest(int argc, char * argv[])
   const unsigned int     Dimension = 2;
 
 
-  typedef otb::Image<unsigned int,Dimension>                   LabelImageType;
+  typedef otb::Image<unsigned int, Dimension>                   LabelImageType;
   typedef otb::VectorImage<InputPixelType,  Dimension>         InputVectorImageType;
   typedef otb::ImageFileReader<InputVectorImageType>           ReaderType;
 
@@ -55,13 +55,13 @@ int otbLabelObjectOpeningMuParserFilterTest(int argc, char * argv[])
   typedef otb::LabelMapWithAdjacency<AttributesMapLabelObjectType>        AttributesLabelMapType;
   typedef otb::LabelObjectOpeningMuParserFilter<AttributesLabelMapType>   FilterType;
 
-  typedef otb::LabelImageToLabelMapWithAdjacencyFilter<LabelImageType,AttributesLabelMapType> LabelImageToLabelMapFilterType;
+  typedef otb::LabelImageToLabelMapWithAdjacencyFilter<LabelImageType, AttributesLabelMapType> LabelImageToLabelMapFilterType;
 
   typedef otb::ShapeAttributesLabelMapFilter<AttributesLabelMapType>  ShapeLabelMapFilterType;
 
   typedef otb::BandsStatisticsAttributesLabelMapFilter<AttributesLabelMapType, InputVectorImageType> RadiometricLabelMapFilterType;
 
-  typedef itk::LabelMapToLabelImageFilter<AttributesLabelMapType,LabelImageType> LabelMapToLabelImageFilterType;
+  typedef itk::LabelMapToLabelImageFilter<AttributesLabelMapType, LabelImageType> LabelMapToLabelImageFilterType;
 
 
   ImageReaderType::Pointer imageReader = ImageReaderType::New();

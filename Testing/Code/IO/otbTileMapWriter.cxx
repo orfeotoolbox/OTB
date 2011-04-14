@@ -140,7 +140,7 @@ int otbTileMapWriter(int argc, char *argv[])
       extractor->SetStartX(atoi(argv[4]));
       extractor->SetStartY(atoi(argv[5]));
       extractor->SetSizeX(atoi(argv[6]));
-      extractor->SetSizeY(atoi(argv[7]));  
+      extractor->SetSizeY(atoi(argv[7]));
       extractor->SetInput(orthoRectifXSVector->GetOutput());
 
       printable->SetInput(extractor->GetOutput());

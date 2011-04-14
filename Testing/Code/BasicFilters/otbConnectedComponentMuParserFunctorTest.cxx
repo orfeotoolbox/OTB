@@ -44,18 +44,18 @@ int otbConnectedComponentMuParserFunctorTest(int argc, char * argv[])
    // maskFilename option is present
    if (argc == 5)
    {
-	maskFilename = argv[4];
+       maskFilename = argv[4];
    }
    else
-	{
-	maskFilename = NULL;
-	}
+       {
+       maskFilename = NULL;
+       }
 
   typedef float InputPixelType;
   const unsigned int     Dimension = 2;
 
   typedef otb::VectorImage<InputPixelType,  Dimension>      InputVectorImageType;
-  typedef otb::Image<unsigned int,Dimension>                InputMaskImageType;
+  typedef otb::Image<unsigned int, Dimension>                InputMaskImageType;
   typedef otb::ImageFileReader<InputVectorImageType>        ReaderType;
   typedef otb::ImageFileReader<InputMaskImageType>          MaskReaderType;
   typedef otb::Image<unsigned int, Dimension>               OutputImageType;
@@ -63,7 +63,7 @@ int otbConnectedComponentMuParserFunctorTest(int argc, char * argv[])
   typedef otb::ImageFileWriter<OutputImageType>             WriterType;
 
   typedef otb::Functor::ConnectedComponentMuParserFunctor<InputVectorImageType::PixelType>  FunctorType;
-  typedef itk::ConnectedComponentFunctorImageFilter<InputVectorImageType,OutputImageType,FunctorType,InputMaskImageType> FilterType;
+  typedef itk::ConnectedComponentFunctorImageFilter<InputVectorImageType, OutputImageType, FunctorType, InputMaskImageType> FilterType;
 
   
   MaskReaderType::Pointer maskReader;

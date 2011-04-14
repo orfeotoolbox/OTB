@@ -121,7 +121,6 @@ void LabelObjectOpeningMuParserFilter<TImage, TFunction>
       }
 
 
-
 } // end namespace otb
 
 #endif
