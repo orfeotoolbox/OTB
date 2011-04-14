@@ -22,22 +22,9 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#include "otbConfigure.h"
-
 #include "otbTestMain.h"
 
 void RegisterTests()
 {
-  REGISTER_TEST(otbGaborFilterGeneratorNew);
-  REGISTER_TEST(otbGaborFilterGenerator);
-#if defined(USE_FFTWD)
-  REGISTER_TEST(otbOverlapSaveConvolutionImageFilterNew);
-  REGISTER_TEST(otbOverlapSaveConvolutionImageFilter);
-  REGISTER_TEST(otbCompareOverlapSaveAndClassicalConvolutionWithGaborFilter);
-#endif
-  REGISTER_TEST(otbPolygonCompacityFunctor);
-  REGISTER_TEST(otbPathLengthFunctor);
-  REGISTER_TEST(otbClosePathFunctor);
-  REGISTER_TEST(otbPersistentVectorizationFilterNew);
-  REGISTER_TEST(otbPersistentVectorizationFilter);
+  REGISTER_TEST(otbConnectedComponentMuParserFunctorTest);
 }
