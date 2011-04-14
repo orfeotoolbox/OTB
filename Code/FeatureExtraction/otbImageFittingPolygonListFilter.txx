@@ -88,7 +88,6 @@ ImageFittingPolygonListFilter<TPath, TImage>
   while (it != inputPtr->End())
     {
     PathPointerType polygon = it.Get();
-
     if (polygon->GetVertexList()->Size() > 2)
       {
       for (unsigned int iteration = 0; iteration < m_NumberOfIterations; ++iteration)
@@ -105,7 +104,6 @@ ImageFittingPolygonListFilter<TPath, TImage>
         while (vertexIt != polygon->GetVertexList()->End())
           {
           VertexType nextPoint = vertexIt.Value();
-
           /** try all the possible neighbor for the current point
            * to factorize
            * */
@@ -244,24 +242,24 @@ ImageFittingPolygonListFilter<TPath, TImage>
   nextIndex[1] = static_cast<long int>(nextPoint[1]);
   double       currentValue = 0.0;
   unsigned int count = 0;
-    { //compute for first segment
-    LineConstIteratorType itLine(image, previousIndex, middleIndex);
-    while (!itLine.IsAtEnd())
-      {
-      currentValue += itLine.Get();
-      ++count;
-      ++itLine;
-      }
+  //compute for first segment
+  LineConstIteratorType itLineFirst(image, previousIndex, middleIndex);
+  while (!itLineFirst.IsAtEnd())
+    {
+    currentValue += itLineFirst.Get();
+    ++count;
+    ++itLineFirst;
     }
-    { //compute for second segment
-    LineConstIteratorType itLine(image, nextIndex, middleIndex);
-    while (!itLine.IsAtEnd())
-      {
-      currentValue += itLine.Get();
-      ++count;
-      ++itLine;
-      }
+
+  //compute for second segment
+  LineConstIteratorType itLineSecond(image, nextIndex, middleIndex);
+  while (!itLineSecond.IsAtEnd())
+    {
+    currentValue += itLineSecond.Get();
+    ++count;
+    ++itLineSecond;
     }
+
   return currentValue / count;
 }
 
