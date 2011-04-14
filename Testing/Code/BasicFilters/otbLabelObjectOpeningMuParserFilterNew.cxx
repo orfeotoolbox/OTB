@@ -30,8 +30,8 @@ int otbLabelObjectOpeningMuParserFilterNew( int argc, char* argv[])
   typedef otb::LabelMapWithAdjacency<AttributesMapLabelObjectType>        AttributesLabelMapType;
   typedef otb::LabelObjectOpeningMuParserFilter<AttributesLabelMapType>   FilterType;
 
-   FilterType::Pointer   filter       = FilterType::New();
+  FilterType::Pointer   filter       = FilterType::New();
 
-   return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 
 }
