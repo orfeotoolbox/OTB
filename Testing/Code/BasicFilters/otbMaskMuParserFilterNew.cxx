@@ -16,7 +16,7 @@
 
 =========================================================================*/
 
-#include "otbVectorImage.h""
+#include "otbVectorImage.h"
 #include "otbImage.h"
 #include "otbMaskMuParserFilter.h"
 
