@@ -55,6 +55,8 @@ public:
   virtual char GetHemisphere() const;
 
   virtual void SetZoneAndHemisphereFromGeoPoint(const InputPointType& geoPoint);
+
+  /** DEPRECATED: should be replaced by Utils::GetZoneFromGeoPoint() */
   itkLegacyMacro(virtual int GetZoneFromGeoPoint(const InputPointType& geoPoint) const);
 
 protected:
