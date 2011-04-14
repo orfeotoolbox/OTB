@@ -240,7 +240,8 @@ ImageLayer<TImage, TOutputImage>
                      << " Sample list generated (" << m_ListSample->Size() << " samples, " << sampleSize << " bands)");
 
       m_RenderingFunction->SetListSample(m_ListSample);
-
+      // Init the rendering function with the input metadata dictionary
+      m_RenderingFunction->Initialize(m_Image->GetMetaDataDictionary());
       }
     }
 }
