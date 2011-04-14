@@ -27,4 +27,6 @@
 void RegisterTests()
 {
   REGISTER_TEST(otbConnectedComponentMuParserFunctorTest);
+  REGISTER_TEST(otbLabelObjectOpeningMuParserFilterNew);
+  REGISTER_TEST(otbLabelObjectOpeningMuParserFilterTest);
 }

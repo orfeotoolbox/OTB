@@ -1893,6 +1893,24 @@ ADD_TEST(bfTvConnectedComponentMuParserFunctorTestMask ${BASICFILTERS_TESTS14}
     ${INPUTDATA}/ROI_QB_MUL_4_Mask.tif 
 )
 
+# ----------------------------     otbLabelObjectOpeningMuParserFilter   ----------------------------
+
+
+ADD_TEST(bfTuLabelObjectOpeningMuParserFilterNew ${BASICFILTERS_TESTS14}
+  otbLabelObjectOpeningMuParserFilterNew
+)
+
+
+ADD_TEST(bfTvLabelObjectOpeningMuParserFilterTest ${BASICFILTERS_TESTS14}
+  --compare-image ${NOTOL}
+  ${TEMP}/bfTvLabelObjectOpeningMuParserFilterTest.tif
+  ${BASELINE}/bfTvLabelObjectOpeningMuParserFilterTest.tif
+	otbLabelObjectOpeningMuParserFilterTest
+    ${INPUTDATA}/ROI_QB_MUL_4.tif 
+    ${INPUTDATA}/ROI_QB_MUL_4_Label.tif 
+    ${TEMP}/bfTvLabelObjectOpeningMuParserFilterTest.tif
+    "SHAPE_Elongation>8"
+)
 
 
 
@@ -2148,6 +2166,8 @@ otbMaskMuParserFilterNew.cxx
 SET(BasicFilters_SRCS14
 otbBasicFiltersTests14.cxx
 otbConnectedComponentMuParserFunctorTest.cxx
+otbLabelObjectOpeningMuParserFilterNew.cxx
+otbLabelObjectOpeningMuParserFilterTest.cxx
 )
 
 
