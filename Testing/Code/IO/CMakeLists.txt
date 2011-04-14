@@ -2659,6 +2659,10 @@ ADD_TEST(ioTvTileMapWriter ${IO_TESTS19}
 #       ${LARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
        ${OTB_DATA_ROOT}/Input/DEM/srtm_directory
        ${TEMP}
+       500 # extract index[0]
+       500 # extract index[1]
+       200 # extract size[0]
+       200 # extract size[1]
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
