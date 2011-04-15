@@ -31,6 +31,8 @@
 #include "init/ossimInit.h"
 #include "projection/ossimUtmProjection.h"
 
+#include "otbUtils.h"
+
 
 
 int main(int argc, char* argv[])
@@ -78,7 +80,7 @@ int main(int argc, char* argv[])
     geoPoint[0]=parseResult->GetParameterDouble("--Longitude");
     geoPoint[1]=parseResult->GetParameterDouble("--Latitude");
 
-    int utmZone = utmProjection->GetZoneFromGeoPoint(geoPoint);
+    int utmZone = otb::Utils::GetZoneFromGeoPoint(geoPoint[0], geoPoint[1]);
 
     if (!parseResult->IsOptionPresent("--OTBTesting"))
     {
