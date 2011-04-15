@@ -86,14 +86,14 @@ public:
   /* Get an ossimModel */
   ossimProjection* GetOssimModel(void);
 
-  /* 
-   * Set the Imagekeywordlist and affect the ossim projection ( m_Model) 
+  /*
+   * Set the Imagekeywordlist and affect the ossim projection ( m_Model)
    * Return false if not model found.
    */
   virtual bool SetImageGeometry(const ImageKeywordlist& image_kwl);
 
-  /* 
-   * Set the Imagekeywordlist and affect the ossim projection ( m_Model) 
+  /*
+   * Set the Imagekeywordlist and affect the ossim projection ( m_Model)
    * Return false if not model found.
    */
   virtual bool SetImageGeometry(const ossimKeywordlist& geom_kwl);

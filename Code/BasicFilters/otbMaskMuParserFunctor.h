@@ -151,7 +151,6 @@ void SetNumberOfBands(unsigned int NbOfBands)
 }
 
 
-
 /** Check the expression */
 bool CheckExpression()
 {
