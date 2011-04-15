@@ -63,7 +63,13 @@ int otbTileMapImageIOTest(int argc, char* argv[])
   typedef otb::InverseSensorModel<double> ModelType;
   ModelType::Pointer model = ModelType::New();
 
-  model->SetImageGeometry(readerTile->GetOutput()->GetImageKeywordlist());
+  bool resModel = model->SetImageGeometry(readerTile->GetOutput()->GetImageKeywordlist());
+  if( resModel == false )
+    {
+      std::cout<<"Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!"<<std::endl;
+     return EXIT_FAILURE;
+    }
+
   dynamic_cast<ossimplugins::ossimTileMapModel*>(model->GetOssimModel())->setDepth(depth);
   if (!model)
     {

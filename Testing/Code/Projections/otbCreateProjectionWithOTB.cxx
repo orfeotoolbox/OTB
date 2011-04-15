@@ -23,8 +23,8 @@
  *
  * PURPOSE:
  *
- * Application pour projeter une r�gion d'une image en coordonn�es g�ographiques
- * en utilisant un Interpolator+regionextractor et un Iterator.
+ * Application to rproject an image region into gepgraphical coordinates
+ * usinf un Interpolator+regionextractor and an Iterator.
  *
  */
 
@@ -78,17 +78,6 @@ int otbCreateProjectionWithOTB(int argc, char* argv[])
 
   otbGenericMsgDebugMacro(<< "ossim Keywordlist:" << geom);
 
-  /*
-    typedef otb::InverseSensorModel<double>  ModelType;
-    ModelType::Pointer   model= ModelType::New();
-    otbGenericMsgDebugMacro(<< "Model set geometry " );
-    model->SetImageGeometry(geom_kwl); //Notre mod�le est cr�� � ce niveau.
-    if(!model)
-    {
-    otbGenericMsgDebugMacro(<< "Unable to create a model");
-    return 1;
-    }
-  */
   ossimGpt          ossimGPoint(0, 0);
   ossimDpt          ossimDPoint;
   ossimProjection * model = NULL;

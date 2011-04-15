@@ -140,9 +140,9 @@ int main(int argc, char* argv[])
   typedef otb::InverseSensorModel<double> ModelType;
   ModelType::Pointer model = ModelType::New();
 
-  model->SetImageGeometry(readerTile->GetOutput()->GetImageKeywordlist());
+  bool resInvModel = model->SetImageGeometry(readerTile->GetOutput()->GetImageKeywordlist());
   dynamic_cast<ossimplugins::ossimTileMapModel*>(model->GetOssimModel())->setDepth(depth);
-  if (!model)
+  if (!resInvModel)
     {
     std::cerr << "Unable to create a model" << std::endl;
     return 1;
@@ -213,10 +213,10 @@ int main(int argc, char* argv[])
   typedef otb::ForwardSensorModel<double> ForwardModelType;
   ForwardModelType::Pointer modelForward = ForwardModelType::New();
 
-  modelForward->SetImageGeometry(readerTile->GetOutput()->GetImageKeywordlist());
+  bool resFwdModel = modelForward->SetImageGeometry(readerTile->GetOutput()->GetImageKeywordlist());
   dynamic_cast<ossimplugins::ossimTileMapModel*>(modelForward->GetOssimModel())->setDepth(
     depth);
-  if (!modelForward)
+  if (!resFwdModel)
     {
     std::cerr << "Unable to create a forward model" << std::endl;
     return 1;

@@ -79,9 +79,16 @@ int otbSensorModel(int argc, char* argv[])
 
   file << "\n*** TRANSFORM ***\n";
 
+  bool resModel = false;
+
   typedef otb::ForwardSensorModel<double> ForwardSensorModelType;
   ForwardSensorModelType::Pointer forwardSensorModel = ForwardSensorModelType::New();
-  forwardSensorModel->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
+  resModel = forwardSensorModel->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
+  if( resModel == false )
+   {
+     std::cout<<"Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!"<<std::endl;
+     return EXIT_FAILURE;
+   }
   forwardSensorModel->SetAverageElevation(16.19688987731934);
 
   itk::Point<double, 2> imagePoint;
@@ -96,7 +103,12 @@ int otbSensorModel(int argc, char* argv[])
   file << "Image to geo: " << imagePoint << " -> " << geoPoint << "\n";
   typedef otb::InverseSensorModel<double> InverseSensorModelType;
   InverseSensorModelType::Pointer inverseSensorModel = InverseSensorModelType::New();
-  inverseSensorModel->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
+  resModel = inverseSensorModel->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
+  if( resModel == false )
+   {
+     std::cout<<"Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!"<<std::endl;
+     return EXIT_FAILURE;
+   }
   inverseSensorModel->SetAverageElevation(16.19688987731934);
 
   itk::Point<double, 2> reversedImagePoint;

@@ -96,32 +96,32 @@ SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>
 template <class TScalarType,
     unsigned int NInputDimensions,
     unsigned int NOutputDimensions>
-void
+bool
 SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>
 ::SetImageGeometry(const ImageKeywordlist& image_kwl)
 {
   m_ImageKeywordlist = image_kwl;
-  CreateProjection(m_ImageKeywordlist);
+  return CreateProjection(m_ImageKeywordlist);
 }
 
 /** Set the Imagekeywordlist and affect the ossim projection ( m_Model) */
 template <class TScalarType,
     unsigned int NInputDimensions,
     unsigned int NOutputDimensions>
-void
+bool
 SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>
 ::SetImageGeometry(const ossimKeywordlist& geom_kwl)
 {
   m_ImageKeywordlist.Clear();
   m_ImageKeywordlist.SetKeywordlist(geom_kwl);
-  CreateProjection(m_ImageKeywordlist);
+  return CreateProjection(m_ImageKeywordlist);
 }
 
 /** Instatiate the sensor model from metadata. */
 template <class TScalarType,
     unsigned int NInputDimensions,
     unsigned int NOutputDimensions>
-void
+bool
 SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>
 ::CreateProjection(const ImageKeywordlist& image_kwl)
 {
@@ -138,8 +138,9 @@ SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>
     }
   if (m_Model == NULL)
     {
-    itkExceptionMacro(<< "Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!");
+      return false;
     }
+  return true;
 }
 
 /**

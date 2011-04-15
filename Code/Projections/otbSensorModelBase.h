@@ -86,11 +86,17 @@ public:
   /* Get an ossimModel */
   ossimProjection* GetOssimModel(void);
 
-  /* Set the Imagekeywordlist and affect the ossim projection ( m_Model) */
-  virtual void SetImageGeometry(const ImageKeywordlist& image_kwl);
+  /* 
+   * Set the Imagekeywordlist and affect the ossim projection ( m_Model) 
+   * Return false if not model found.
+   */
+  virtual bool SetImageGeometry(const ImageKeywordlist& image_kwl);
 
-  /* Set the Imagekeywordlist and affect the ossim projection ( m_Model) */
-  virtual void SetImageGeometry(const ossimKeywordlist& geom_kwl);
+  /* 
+   * Set the Imagekeywordlist and affect the ossim projection ( m_Model) 
+   * Return false if not model found.
+   */
+  virtual bool SetImageGeometry(const ossimKeywordlist& geom_kwl);
 
   /** Set/Get the average elevation if the DEM is not used*/
   itkSetMacro(AverageElevation, TScalarType);
@@ -127,7 +133,7 @@ protected:
   virtual ~SensorModelBase();
 
   /** Create the projection ( m_Model). Called by the SetImageGeometry methods */
-  void CreateProjection(const ImageKeywordlist& image_kwl);
+  bool CreateProjection(const ImageKeywordlist& image_kwl);
 
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
