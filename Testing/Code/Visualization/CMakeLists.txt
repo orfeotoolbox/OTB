@@ -91,6 +91,27 @@ ${TEMP}/vrTvImageLayerVectorScaledExtractOutput.png
 50 200 #min/max
 )
 
+IF(OTB_DATA_USE_LARGEINPUT)
+ADD_TEST(vrTvImageLayerCheckChannelDisplay ${VISUALIZATION_TESTS1}
+--compare-n-images ${NOTOL} 3
+${BASELINE}/vrTvImageLayerCheckChannelDisplayQuicklookOutput.png
+${TEMP}/vrTvImageLayerCheckChannelDisplayQuicklookOutput.png
+${BASELINE}/vrTvImageLayerCheckChannelDisplayExtractOutput.png
+${TEMP}/vrTvImageLayerCheckChannelDisplayExtractOutput.png
+${BASELINE}/vrTvImageLayerCheckChannelDisplayScaledExtractOutput.png
+${TEMP}/vrTvImageLayerCheckChannelDisplayScaledExtractOutput.png
+otbImageLayerVector
+${LARGEINPUTDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+${TEMP}/vrTvImageLayerCheckChannelDisplayQuicklookOutput.png
+${TEMP}/vrTvImageLayerCheckChannelDisplayExtractOutput.png
+${TEMP}/vrTvImageLayerCheckChannelDisplayScaledExtractOutput.png
+20 # sampling rate
+100 1900 #min/max
+100 1900 #min/max
+100 1900 #min/max
+)
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
 #------------ otb::StandardRenderingFunction ------------
 
 ADD_TEST(vrTuStandardRenderingFunctionNew ${VISUALIZATION_TESTS1}
