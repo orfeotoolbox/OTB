@@ -170,6 +170,7 @@ bool CheckExpression()
   }
   catch(itk::ExceptionObject& err)
   {
+    itkExceptionMacro(<< err);
     return false;
   }
 
