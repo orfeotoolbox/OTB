@@ -61,14 +61,18 @@ public:
 
   /** Try to open the DEM directory. */
   virtual void OpenDEMDirectory(const char* DEMDirectory);
+  virtual void OpenDEMDirectory(const std::string& DEMDirectory);
 
   /** Open geoid file. */
   virtual void OpenGeoidFile(const char* geoidFile);
+  virtual void OpenGeoidFile(const std::string& geoidFile);
 
   /** Compute the height above MSL(Mean Sea Level) of a geographic point. */
+  virtual double GetHeightAboveMSL(double lon, double lat) const;
   virtual double GetHeightAboveMSL(const PointType& geoPoint) const;
 
   /** Compute the height above ellipsoid of a geographic point. */
+  virtual double GetHeightAboveEllipsoid(double lon, double lat) const;
   virtual double GetHeightAboveEllipsoid(const PointType& geoPoint) const;
 
   /** Set the default height above ellipsoid in case no information is available*/
