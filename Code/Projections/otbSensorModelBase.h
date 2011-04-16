@@ -26,7 +26,7 @@
 #include "itkFunctionBase.h"
 #include "otbElevDatabaseHeightAboveMSLFunction.h"
 
-#include "projection/ossimProjection.h"
+#include "otbSensorModelWrapper.h"
 
 #include "itkTransform.h"
 #include "itkSmartPointer.h"
@@ -82,9 +82,9 @@ public:
   /* Get the ImageKeywordlist */
   ImageKeywordlist GetImageGeometryKeywordlist(void) const;
   /* Get an ossimKeywordlist */
-  ossimKeywordlist GetOssimKeywordlist(void);
+  ossimKeywordlist GetOssimKeywordlist(void); //FIXME leaking interface
   /* Get an ossimModel */
-  ossimProjection* GetOssimModel(void);
+  ossimProjection* GetOssimModel(void); //FIXME leaking interface
 
   /*
    * Set the Imagekeywordlist and affect the ossim projection ( m_Model)
@@ -102,38 +102,11 @@ public:
   itkSetMacro(AverageElevation, TScalarType);
   itkGetMacro(AverageElevation, TScalarType);
 
-  /** Set/Get the DEM Function. */
-  itkSetObjectMacro(DEMFunction, DEMFunctionBaseType);
-  itkGetConstObjectMacro(DEMFunction, DEMFunctionBaseType);
-
-
-  virtual void SetDEMDirectory(const std::string& directory)
-  {
-    typename SRTMFunctionType::Pointer  srtmFunction = SRTMFunctionType::New();
-    srtmFunction->OpenDEMDirectory(directory);
-    this->SetDEMFunction( srtmFunction.GetPointer() );
-    m_DEMIsLoaded = true;
-    this->EnableDEM();
-  }
-
-  virtual void DisableDEM()
-  {
-    m_UseDEM = false;
-    this->Modified();
-  }
-
-  virtual void EnableDEM()
-  {
-    if (m_DEMIsLoaded) m_UseDEM = true;
-    this->Modified();
-  }
+  virtual void SetDEMDirectory(const std::string& directory);
 
 protected:
   SensorModelBase();
   virtual ~SensorModelBase();
-
-  /** Create the projection ( m_Model). Called by the SetImageGeometry methods */
-  bool CreateProjection(const ImageKeywordlist& image_kwl);
 
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
@@ -141,19 +114,10 @@ protected:
   /** ImageKeywordlist */
   ImageKeywordlist m_ImageKeywordlist;
   /** Pointer on an ossim projection (created with the keywordlist) */
-  ossimProjection * m_Model;
-
-  /** Specify if DEM is used in Point Transformation */
-  bool m_UseDEM;
-
-  /** DEM Function : evaluate the height value from a DEM */
-  DEMFunctionBasePointer  m_DEMFunction;
+  SensorModelWrapper::Pointer m_Model;
 
   /** Specify an average elevation to use */
   TScalarType m_AverageElevation;
-
-  /** Specify if DEM is loaded */
-  bool m_DEMIsLoaded;
 
 private:
   SensorModelBase(const Self &); //purposely not implemented

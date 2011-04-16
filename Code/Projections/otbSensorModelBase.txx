@@ -23,9 +23,8 @@
 #include "otbMacro.h"
 #include "itkExceptionObject.h"
 
-#include "projection/ossimSensorModelFactory.h"
+
 #include "base/ossimKeywordlist.h"
-#include "ossim/ossimPluginProjectionFactory.h"
 
 namespace otb
 {
@@ -34,12 +33,10 @@ template <class TScalarType,
     unsigned int NInputDimensions,
     unsigned int NOutputDimensions>
 SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>
-::SensorModelBase() : Superclass(OutputSpaceDimension, 0)
+::SensorModelBase() : Superclass(OutputSpaceDimension, 0) //FIXME
 {
-  m_Model = NULL;
-  m_UseDEM = false;
-  m_DEMIsLoaded = false;
-  m_AverageElevation = 0.0;
+  m_Model = SensorModelWrapper::New();
+    m_AverageElevation = -32768;
 }
 
 template <class TScalarType,
@@ -47,13 +44,7 @@ template <class TScalarType,
     unsigned int NOutputDimensions>
 SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>
 ::~SensorModelBase()
-{
-  if (m_Model != NULL)
-    {
-    delete m_Model;
-    m_Model = NULL;
-    }
-}
+{}
 
 /// Get the Geometry Keyword list
 template <class TScalarType,
@@ -89,7 +80,7 @@ SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>
 ::GetOssimModel(void)
 {
 
-  return m_Model;
+  return m_Model->GetOssimModel(); // FIXME 
 }
 
 /** Set the Imagekeywordlist and affect the ossim projection ( m_Model) */
@@ -101,7 +92,7 @@ SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>
 ::SetImageGeometry(const ImageKeywordlist& image_kwl)
 {
   m_ImageKeywordlist = image_kwl;
-  return CreateProjection(m_ImageKeywordlist);
+  return m_Model->CreateProjection(m_ImageKeywordlist);
 }
 
 /** Set the Imagekeywordlist and affect the ossim projection ( m_Model) */
@@ -114,34 +105,19 @@ SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>
 {
   m_ImageKeywordlist.Clear();
   m_ImageKeywordlist.SetKeywordlist(geom_kwl);
-  return CreateProjection(m_ImageKeywordlist);
+  return m_Model->CreateProjection(m_ImageKeywordlist);
 }
 
-/** Instatiate the sensor model from metadata. */
 template <class TScalarType,
     unsigned int NInputDimensions,
     unsigned int NOutputDimensions>
-bool
+void 
 SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>
-::CreateProjection(const ImageKeywordlist& image_kwl)
+::SetDEMDirectory(const std::string& directory)
 {
-  ossimKeywordlist geom;
-
-  image_kwl.convertToOSSIMKeywordlist(geom);
-  otbMsgDevMacro(<< "CreateProjection()");
-  otbMsgDevMacro(<< "* type: " << geom.find("type"));
-
-  m_Model = ossimSensorModelFactory::instance()->createProjection(geom);
-  if (m_Model == NULL)
-    {
-    m_Model = ossimplugins::ossimPluginProjectionFactory::instance()->createProjection(geom);
-    }
-  if (m_Model == NULL)
-    {
-      return false;
-    }
-  return true;
+  m_Model->SetDEMDirectory(directory);
 }
+
 
 /**
  * PrintSelf method
