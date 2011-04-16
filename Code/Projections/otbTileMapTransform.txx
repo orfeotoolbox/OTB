@@ -21,6 +21,10 @@
 #include "otbTileMapTransform.h"
 #include "otbMacro.h"
 
+#include "ossimTileMapModel.h"
+#include "base/ossimGpt.h"
+#include "base/ossimDpt.h"
+
 namespace otb
 {
 
