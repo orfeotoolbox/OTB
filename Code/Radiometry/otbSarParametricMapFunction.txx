@@ -26,7 +26,6 @@
 #include "itkMetaDataObject.h"
 #include "otbMetaDataKey.h"
 #include "otbImageKeywordlist.h"
-#include "base/ossimKeywordlist.h"
 
 #include <vnl/algo/vnl_svd.h>
 
@@ -127,16 +126,14 @@ SarParametricMapFunction<TInputImage, TCoordRep>
     {
     // Get input region for normalization of coordinates
     const itk::MetaDataDictionary& dict = this->GetInputImage()->GetMetaDataDictionary();
-    ImageKeywordlist imageKeywordlist;
     if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
       {
+      ImageKeywordlist imageKeywordlist;
       itk::ExposeMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-      ossimKeywordlist kwl;
-      imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-      ossimString nbLinesValue = kwl.find("number_lines");
-      ossimString nbSamplesValue = kwl.find("number_samples");
-      m_ProductWidth = nbSamplesValue.toDouble();
-      m_ProductHeight = nbLinesValue.toDouble();
+      std::string nbLinesValue = imageKeywordlist.GetMetadataByKey("number_lines");
+      std::string nbSamplesValue = imageKeywordlist.GetMetadataByKey("number_samples");
+      m_ProductWidth = atof(nbSamplesValue.c_str());
+      m_ProductHeight = atof(nbLinesValue.c_str());
       }
     else
       {
