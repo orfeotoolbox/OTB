@@ -96,10 +96,10 @@ SarBrightnessFunction<TInputImage, TCoordRep>
     }
 
 
-  FunctorRealType noise;
-  FunctorRealType antennaPatternNewGain;
-  FunctorRealType antennaPatternOldGain;
-  FunctorRealType rangeSpreadLoss;
+  FunctorRealType noise = itk::NumericTraits<FunctorRealType>::Zero;
+  FunctorRealType antennaPatternNewGain = itk::NumericTraits<FunctorRealType>::Zero;
+  FunctorRealType antennaPatternOldGain = itk::NumericTraits<FunctorRealType>::Zero;
+  FunctorRealType rangeSpreadLoss = itk::NumericTraits<FunctorRealType>::Zero;
 
   if (m_EnableNoise)
     {
