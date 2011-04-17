@@ -137,7 +137,6 @@ int main(int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef otb::TileMapTransform<otb::TransformDirection::FORWARD> TransformType;
   TransformType::Pointer transform = TransformType::New();
   transform->SetDepth(depth);
@@ -204,7 +203,6 @@ int main(int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef otb::TileMapTransform<otb::TransformDirection::INVERSE> InverseTransformType;
   InverseTransformType::Pointer transformInverse = InverseTransformType::New();
   transformInverse->SetDepth(depth);

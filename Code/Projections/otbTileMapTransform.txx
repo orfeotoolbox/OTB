@@ -59,8 +59,8 @@ TileMapTransform<TTransformDirection, TScalarType, NInputDimensions, NOutputDime
     y *= 1.0/(2 * M_PI); // scale factor from radians to normalized
     y += 0.5; // and make y range from 0 - 1
 
-    outputPoint[0] = floor(x*pow(2.,static_cast<double>(m_Depth))*256);
-    outputPoint[1] = floor(y*pow(2.,static_cast<double>(m_Depth))*256);
+    outputPoint[0] = floor(x*pow(2., static_cast<double>(m_Depth))*256);
+    outputPoint[1] = floor(y*pow(2., static_cast<double>(m_Depth))*256);
     }
   return outputPoint;
 }
