@@ -59,7 +59,7 @@ int ImageSVMClassifier::Describe(ApplicationDescriptor* descriptor)
   descriptor->AddOption("SVMmodel", "Estimated model previously computed",
                         "svm", 1, true, ApplicationDescriptor::FileName);
   descriptor->AddOption("OutputLabeledImage", "Output labeled image",
-                        "out", 1, true, ApplicationDescriptor::FileName);
+                        "out", 1, true, ApplicationDescriptor::OutputImage);
   descriptor->AddOption("ROIStartX", "Start X of the ROI",
                         "x", 1, false, ApplicationDescriptor::Integer);
   descriptor->AddOption("ROIStartY", "Start Y of the ROI",
