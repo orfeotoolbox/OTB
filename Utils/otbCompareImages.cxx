@@ -31,8 +31,8 @@ int CompareImages::Describe(ApplicationDescriptor* descriptor)
 {
   descriptor->SetName("CompareImages");
   descriptor->SetDescription("Estimator between 2 images");
-  descriptor->AddOption("InputReference","The reference image","inR", 1, true,ApplicationDescriptor::FileName);
-  descriptor->AddOption("InputMeasured","The measured image","inM", 1, true,ApplicationDescriptor::FileName);
+  descriptor->AddOption("InputReference","The reference image","inR", 1, true,ApplicationDescriptor::InputImage);
+  descriptor->AddOption("InputMeasured","The measured image","inM", 1, true,ApplicationDescriptor::InputImage);
   descriptor->AddOption("NumBandRefImage","The channel number to compare in the reference image (between 1 and number of channels)","chR", 1, false,ApplicationDescriptor::Integer);
   descriptor->AddOption("NumBandMeasuredImage","The channel number to compare in the measured image (between 1 and number of channels)","chM", 1, false,ApplicationDescriptor::Integer);
   descriptor->AddOption("StartX", "first point in x-axis ", "x0", 1, false, ApplicationDescriptor::Real);
