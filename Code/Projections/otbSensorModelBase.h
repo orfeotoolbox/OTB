@@ -22,10 +22,6 @@
 
 #include "otbMacro.h"
 #include "otbImageKeywordlist.h"
-
-#include "itkFunctionBase.h"
-#include "otbElevDatabaseHeightAboveMSLFunction.h"
-
 #include "otbSensorModelWrapper.h"
 
 #include "itkTransform.h"
@@ -36,8 +32,9 @@ namespace otb
 {
 /** \class SensorModelBase
  *  \brief Base class for the sensor model projection classes.
- *  This class allows to transform a geographic point in (lat, long) to a point in the sensor geometry.
- *  (lat, lon) -> (i, j) ou (lat, lon, h) -> (i, j)
+ *
+ *  This class allows to transform a geographic point in (lat, long) to a point
+ *  in the sensor geometry.  (lat, lon) -> (i, j) ou (lat, lon, h) -> (i, j)
  *
  * \ingroup Projection
  *
@@ -64,11 +61,6 @@ public:
   typedef itk::Point<TScalarType, NOutputDimensions> OutputPointType;
 
   typedef TScalarType                                      PixelType;
-  typedef itk::FunctionBase< OutputPointType, PixelType>   DEMFunctionBaseType;
-  typedef typename DEMFunctionBaseType::Pointer            DEMFunctionBasePointer;
-  typedef otb::ElevDatabaseHeightAboveMSLFunction<PixelType,
-                        typename OutputPointType::ValueType>     SRTMFunctionType;
-
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -81,22 +73,12 @@ public:
 
   /* Get the ImageKeywordlist */
   ImageKeywordlist GetImageGeometryKeywordlist(void) const;
-  /* Get an ossimKeywordlist */
-  ossimKeywordlist GetOssimKeywordlist(void); //FIXME leaking interface
-  /* Get an ossimModel */
-  ossimProjection* GetOssimModel(void); //FIXME leaking interface
 
   /*
    * Set the Imagekeywordlist and affect the ossim projection ( m_Model)
    * Return false if not model found.
    */
   virtual bool SetImageGeometry(const ImageKeywordlist& image_kwl);
-
-  /*
-   * Set the Imagekeywordlist and affect the ossim projection ( m_Model)
-   * Return false if not model found.
-   */
-  virtual bool SetImageGeometry(const ossimKeywordlist& geom_kwl);
 
   /** Set/Get the average elevation if the DEM is not used*/
   itkSetMacro(AverageElevation, TScalarType);

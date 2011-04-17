@@ -23,6 +23,7 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbTileMapImageIO.h"
+#include "otbTileMapTransform.h"
 #include "otbInverseSensorModel.h"
 #include "otbExtractROI.h"
 #include "otbImageFileWriter.h"
@@ -60,22 +61,9 @@ int otbTileMapImageIOTest(int argc, char* argv[])
   readerTile->SetFileName(inputFilename);
   readerTile->UpdateOutputInformation();
 
-  typedef otb::InverseSensorModel<double> ModelType;
-  ModelType::Pointer model = ModelType::New();
-
-  bool resModel = model->SetImageGeometry(readerTile->GetOutput()->GetImageKeywordlist());
-  if( resModel == false )
-    {
-      std::cout<<"Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!"<<std::endl;
-     return EXIT_FAILURE;
-    }
-
-  dynamic_cast<ossimplugins::ossimTileMapModel*>(model->GetOssimModel())->setDepth(depth);
-  if (!model)
-    {
-    std::cerr << "Unable to create a model" << std::endl;
-    return 1;
-    }
+  typedef otb::TileMapTransform<otb::TransformDirection::FORWARD> TransformType;
+  TransformType::Pointer transform = TransformType::New();
+  transform->SetDepth(depth);
 
   typedef itk::Point <double, 2> PointType;
   PointType lonLatPoint;
@@ -83,7 +71,7 @@ int otbTileMapImageIOTest(int argc, char* argv[])
   lonLatPoint[1] = lat;
 
   PointType tilePoint;
-  tilePoint = model->TransformPoint(lonLatPoint);
+  tilePoint = transform->TransformPoint(lonLatPoint);
 
   long int startX = static_cast<long int>(tilePoint[0]);
   long int startY = static_cast<long int>(tilePoint[1]);
