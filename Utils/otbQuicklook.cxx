@@ -204,7 +204,7 @@ int Quicklook::Execute(otb::ApplicationOptionsResult* parseResult)
     }
   catch ( itk::ExceptionObject & err )
     {
-    std::cout << "Following otbException catch :" << std::endl;
+    std::cout << "Exception caught :" << std::endl;
     std::cout << err << std::endl;
     return EXIT_FAILURE;
     }
