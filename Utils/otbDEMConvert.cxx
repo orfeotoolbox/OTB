@@ -66,7 +66,7 @@ int generic_convert_to_tif(otb::ApplicationOptionsResult* parseResult, ossimFile
 int DEMConvert::Describe(ApplicationDescriptor* descriptor)
 {
   descriptor->SetName("DEMConvertApplication");
-  descriptor->SetDescription("Convert a DEM file into a general raster (.ras, .geom and .omd). To be used, those files has to be in a stand alone directory");
+  descriptor->SetDescription("Convert a DEM file into a general raster (.ras, .geom and .omd). To be used, those files have to be in a stand alone directory");
   descriptor->AddInputImage();
   descriptor->AddOption("OutputPath", "The filename (or path filename) of the output. It generates a Output.geom, Output.omd and Output.ras file.","out", 1, true,ApplicationDescriptor::String);
   descriptor->AddOption("KeepTif", "Keep the temporary generate tif file.","ktif", 0, false,ApplicationDescriptor::Boolean);
