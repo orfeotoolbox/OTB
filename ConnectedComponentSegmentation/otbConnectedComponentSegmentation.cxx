@@ -138,10 +138,8 @@ namespace otb
   {
     descriptor->SetName("Connected Component Segmentation");
     descriptor->SetDescription("Connected Component Segmentation, which take mathematical formula as an Neighborhood thresholding criteria.");
-    descriptor->AddOption("InputImageFileName", "Input frame file name",
-                          "in",  1, true, ApplicationDescriptor::FileName);
-    descriptor->AddOption("OutputFileName", "Output file name",
-                          "out", 1, true, ApplicationDescriptor::FileName);
+    descriptor->AddInputImage();
+    descriptor->AddOutputImage();
     descriptor->AddOption("OutputShapeFileName", "Output Shape file name",
                           "outshape", 1, true, ApplicationDescriptor::FileName);
     descriptor->AddOption("Expression", "Formula",
@@ -149,7 +147,7 @@ namespace otb
     descriptor->AddOption("MinSize", "Min object size (area in pixel)",
                           "minsize", 1, false, ApplicationDescriptor::Real);
     descriptor->AddOption("InputImageMaskFileName", "Image for mask computation",
-                          "inmask", 1, false, ApplicationDescriptor::FileName);
+                        "inmask", 1, false, ApplicationDescriptor::InputImage);
     descriptor->AddOption("MaskExpression", "Mask expression (only if support image is given)",
                           "maskexpression", 1, false, ApplicationDescriptor::String);
     descriptor->AddOption("OBIAExpression", "OBIA Mu Parser expression",
@@ -166,7 +164,7 @@ namespace otb
     ConnectedComponentFilterType::Pointer connected = ConnectedComponentFilterType::New();
 
     // Read the input image
-    std::string inFileName = parseResult->GetParameterString("InputImageFileName");
+    std::string inFileName = parseResult->GetParameterString("InputImage");
 
     ReaderType::Pointer reader = ReaderType::New();
     reader->SetFileName(inFileName);
@@ -363,7 +361,7 @@ namespace otb
     vdwriter->Update();
 
     // Instantiate the writer
-    std::string outFilename = parseResult->GetParameterString("OutputFileName");
+    std::string outFilename = parseResult->GetParameterString("OutputImage");
 
     writer->SetInput(labelMapToLabelImage->GetOutput());
     writer->SetFileName(outFilename);
