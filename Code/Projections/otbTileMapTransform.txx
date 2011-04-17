@@ -21,28 +21,20 @@
 #include "otbTileMapTransform.h"
 #include "otbMacro.h"
 
-#include "ossimTileMapModel.h"
-#include "base/ossimGpt.h"
-#include "base/ossimDpt.h"
-
 namespace otb
 {
 
 template<TransformDirection::TransformationDirection TTransformDirection, class TScalarType,
     unsigned int NInputDimensions, unsigned int NOutputDimensions>
 TileMapTransform<TTransformDirection, TScalarType, NInputDimensions, NOutputDimensions>
-::TileMapTransform() : Superclass(SpaceDimension, ParametersDimension)
-{
-  m_TileMapTransform =  new OssimTileMapTransformType();
-}
+::TileMapTransform() : Superclass(SpaceDimension, ParametersDimension), m_Depth(0)
+{}
 
 template<TransformDirection::TransformationDirection TTransformDirection, class TScalarType,
     unsigned int NInputDimensions, unsigned int NOutputDimensions>
 TileMapTransform<TTransformDirection, TScalarType, NInputDimensions, NOutputDimensions>
 ::~TileMapTransform()
-{
-  delete m_TileMapTransform;
-}
+{}
 
 template<TransformDirection::TransformationDirection TTransformDirection, class TScalarType,
     unsigned int NInputDimensions, unsigned int NOutputDimensions>
@@ -54,56 +46,23 @@ TileMapTransform<TTransformDirection, TScalarType, NInputDimensions, NOutputDime
 
   if (DirectionOfMapping == TransformDirection::INVERSE)
     {
-//         otbMsgDevMacro(<< "Cartographic coordinates: (" << point[0] << "," << point[1] << ")");
-
-    //from "itk::point" to "ossim::ossimDpt"
-    ossimDpt ossimDPoint(point[0], point[1]);
-
-    //map projection
-    ossimGpt ossimGPoint;
-//         ossimGPoint=m_TileMapTransform->inverse(ossimDPoint);
-    m_TileMapTransform->lineSampleToWorld(ossimDPoint, ossimGPoint);
-//     otbGenericMsgDebugMacro(<< "Inverse : " << std::endl << m_TileMapTransform->print(std::cout));
-
-    outputPoint[0] = ossimGPoint.lon;
-    outputPoint[1] = ossimGPoint.lat;
-//         otbMsgDevMacro(<< "Geographic coordinates (long/lat) : (" << outputPoint[0] << "," << outputPoint[1] << ")");
+    outputPoint[0] = static_cast<double>(point[0])/(1 << m_Depth)/256 *360.0-180.0;
+    double y = static_cast<double>(point[1])/(1 << m_Depth)/256;
+    double ex = exp(4*M_PI*(y-0.5));
+    outputPoint[1] = -180.0/M_PI*asin((ex-1)/(ex+1));
     }
   if (DirectionOfMapping == TransformDirection::FORWARD)
     {
-//         otbMsgDevMacro(<< "Geographic coordinates (long/lat) : (" << point[1] << "," << point[0] << ")");
-    //from "itk::point" to "ossim::ossimGpt"
-    ossimGpt ossimGPoint(point[1], point[0]);
+    double x = (180.0 + point[0]) / 360.0;
+    double y = - point[1] * M_PI / 180; // convert to radians
+    y = 0.5 * log((1+sin(y)) / (1 - sin(y)));
+    y *= 1.0/(2 * M_PI); // scale factor from radians to normalized
+    y += 0.5; // and make y range from 0 - 1
 
-    //map projection
-    ossimDpt ossimDPoint;
-//         ossimDPoint=m_TileMapTransform->forward(ossimGPoint);
-    m_TileMapTransform->worldToLineSample(ossimGPoint, ossimDPoint);
-//     otbGenericMsgDebugMacro(<< "Forward : ========================= \n"
-//                             << m_TileMapTransform->print(std::cout));
-    outputPoint[0] = ossimDPoint.x;
-    outputPoint[1] = ossimDPoint.y;
-
-//         otbMsgDevMacro(<< "Cartographic coordinates: (" << outputPoint[0] << "," << outputPoint[1] << ")");
-
+    outputPoint[0] = floor(x*pow(2.,static_cast<double>(m_Depth))*256);
+    outputPoint[1] = floor(y*pow(2.,static_cast<double>(m_Depth))*256);
     }
-
   return outputPoint;
-}
-
-///\return The geographic point corresponding to (0, 0)
-template<TransformDirection::TransformationDirection TTransformDirection, class TScalarType,
-    unsigned int NInputDimensions, unsigned int NOutputDimensions>
-typename TileMapTransform<TTransformDirection, TScalarType, NInputDimensions, NOutputDimensions>::InputPointType
-TileMapTransform<TTransformDirection, TScalarType, NInputDimensions, NOutputDimensions>
-::Origin()
-{
-  ossimGpt       ossimOrigin = m_TileMapTransform->origin();
-  InputPointType otbOrigin;
-  otbOrigin[0] = ossimOrigin.lat;
-  otbOrigin[1] = ossimOrigin.lon;
-
-  return otbOrigin;
 }
 
 template<TransformDirection::TransformationDirection TTransformDirection, class TScalarType,
@@ -111,16 +70,14 @@ template<TransformDirection::TransformationDirection TTransformDirection, class 
 void
 TileMapTransform<TTransformDirection, TScalarType, NInputDimensions, NOutputDimensions>
 ::PrintMap() const
-{
-  std::cout << m_TileMapTransform->print(std::cout);
-}
+{}
 
 template<TransformDirection::TransformationDirection TTransformDirection, class TScalarType,
     unsigned int NInputDimensions, unsigned int NOutputDimensions>
 void TileMapTransform<TTransformDirection, TScalarType, NInputDimensions, NOutputDimensions>
 ::SetLevel(unsigned int level)
 {
-  m_TileMapTransform->setDepth(level);
+  this->SetDepth(level);
 }
 
 template<TransformDirection::TransformationDirection TTransformDirection, class TScalarType,
@@ -128,7 +85,7 @@ template<TransformDirection::TransformationDirection TTransformDirection, class 
 unsigned int TileMapTransform<TTransformDirection, TScalarType, NInputDimensions, NOutputDimensions>
 ::GetLevel() const
 {
-  return m_TileMapTransform->getDepth();
+  return this->GetDepth();
 }
 
 } // namespace otb
