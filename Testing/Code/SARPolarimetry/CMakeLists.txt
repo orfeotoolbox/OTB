@@ -99,7 +99,7 @@ ADD_TEST(saTvVectorMultiChannelsPolarimetricSynthesisFilter ${SARPOLARIMETRY_TES
  --compare-image ${EPSILON_12}   ${BASELINE}/saTvMultiPolarimetricSynthesis1.tif
                    ${TEMP}/resMultiPolarimetricSynthesis1.tif
        otbVectorMultiChannelsPolarimetricSynthesisFilter
-       ${INPUTDATA}/RSAT_imagery_vector.tif.hdr
+       ${INPUTDATA}/RSAT2_AltonaExtract_1000_1000_100_100.hdr
        ${TEMP}/resMultiPolarimetricSynthesis1.tif
          10.0     # PsiI
          0.0     # KhiI
