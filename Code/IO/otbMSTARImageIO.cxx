@@ -112,9 +112,9 @@ bool MSTARImageIO::CanReadFile(const char* filename)
   int returnVal = fread(tbuff, sizeof(char), 1024, MSTARfp);
   if (returnVal != 1024)
     {
-    itkExceptionMacro(<< "\nError: Unable in reading [" << MSTARname << "] header... Only read ["<< returnVal <<" of 1024 bytes !\n");
+    otbMsgDevMacro(<< "\nError: Unable in reading [" << MSTARname << "] header... Only read ["<< returnVal <<" of 1024 bytes !\n");
     fclose(MSTARfp);
-	return false;
+    return false;
     }
   rewind(MSTARfp);
 
@@ -255,9 +255,8 @@ void MSTARImageIO::Read(void* buffer)
   int returnVal = fread(tbuff, sizeof(char), 1024, MSTARfp);
   if (returnVal != 1024)
     {
-    itkExceptionMacro(<< "\nError: Unable in reading [" << MSTARname << "] header... Only read ["<< returnVal <<" of 1024 bytes !\n");
     fclose(MSTARfp);
-	return false;
+    itkExceptionMacro(<< "\nError: Unable in reading [" << MSTARname << "] header... Only read ["<< returnVal <<" of 1024 bytes !\n");
     }
   rewind(MSTARfp);
 
@@ -265,9 +264,8 @@ void MSTARImageIO::Read(void* buffer)
   tptr = (char *) strstr(tbuff, "PhoenixHeaderLength= ");
   if (tptr == (char *) NULL)
     {
-    itkExceptionMacro(<< "Error: Can not determine Phoenix header length!");
-
     fclose(MSTARfp);
+    itkExceptionMacro(<< "Error: Can not determine Phoenix header length!");
     }
   else
     {
@@ -571,9 +569,8 @@ void MSTARImageIO::ReadImageInformation()
   int returnVal = fread(tbuff, sizeof(char), 1024, MSTARfp);
   if (returnVal != 1024)
     {
-    itkExceptionMacro(<< "\nError: Unable in reading [" << MSTARname << "] header... Only read ["<< returnVal <<" of 1024 bytes !\n");
     fclose(MSTARfp);
-	return false;
+    itkExceptionMacro(<< "\nError: Unable in reading [" << MSTARname << "] header... Only read ["<< returnVal <<" of 1024 bytes !\n");
     }
   rewind(MSTARfp);
 
@@ -581,9 +578,8 @@ void MSTARImageIO::ReadImageInformation()
   tptr = (char *) strstr(tbuff, "PhoenixHeaderLength= ");
   if (tptr == (char *) NULL)
     {
-    itkExceptionMacro(<< "Error: Can not determine Phoenix header length!");
-
     fclose(MSTARfp);
+    itkExceptionMacro(<< "Error: Can not determine Phoenix header length!");
     }
   else
     {
