@@ -83,8 +83,6 @@ void MaskMuParserFilter<TInputImage, TOutputImage, TFunction>
 
   typename std::vector<FunctorPointer>::iterator        itFunctor;
   unsigned int nbThreads = this->GetNumberOfThreads();
-  unsigned int nbInputImages = this->GetNumberOfInputs();
-  unsigned int nbOfBands =this->GetInput()->GetNumberOfComponentsPerPixel();
   unsigned int thread_index;
   std::ostringstream varName;
 
