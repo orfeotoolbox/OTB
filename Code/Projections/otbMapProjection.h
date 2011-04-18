@@ -18,6 +18,9 @@
 #ifndef __otbMapProjection_h
 #define __otbMapProjection_h
 
+//Use GenericMapProjection instead
+#include "vcl_deprecated_header.h"
+
 #include <iostream>
 #include <sstream>
 #include <stdio.h>
@@ -35,7 +38,7 @@ namespace otb
 {
 
 /** \class MapProjection
- *  \brief This is the base class for all geographic projections (UTM, Lambert, ...)
+ *  \brief <b>DEPRECATED</b> (use GenericMapProjection instead): This is the base class for all geographic projections (UTM, Lambert, ...)
  *
  * The forward transformation will transform the coordinate for the geographic to the
  * cartographic. The inverse model will transform from the cartographic to the geographic.

@@ -25,7 +25,6 @@
 #include "itkProcessObject.h"
 #include "otbMacro.h"
 #include "otbAeronetData.h"
-#include "base/ossimDate.h"
 
 namespace otb
 {
@@ -134,9 +133,6 @@ private:
 
   /** Parse the string and return a list of strings which separated by ',' char */
   VectorString ParseLine(const std::string& line) const;
-
-  /** Parse the string and return the date and time */
-  ossimLocalTm ParseDate(const std::string& date, const std::string& time) const;
 
 /**
  * Parse valid line method

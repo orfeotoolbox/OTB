@@ -103,21 +103,7 @@ void MaskMuParserFilter<TInputImage, TOutputImage, TFunction>
 
   for(thread_index = 0; thread_index < nbThreads; thread_index++)
     {
-
     m_VFunctor.at(thread_index)->SetExpression(m_Expression);
-    m_VFunctor.at(thread_index)->SetNumberOfBands(nbOfBands);
-    // we associate image band with its name im1b1 for band 1
-    for(unsigned int i=0; i<nbOfBands; i++)
-      {
-      varName << "b" << i+1; // +1 var[0]=im1b1
-      m_VFunctor.at(thread_index)->SetVarName(i, varName.str());
-      varName.str("");
-      }
-
-    if(!m_VFunctor.at(thread_index)->CheckExpression())
-      {
-      std::cerr<<"parser can't evaluate formula "<<this->GetExpression()<<"in thread "<<thread_index<<std::endl;
-      }
     }
 
  }

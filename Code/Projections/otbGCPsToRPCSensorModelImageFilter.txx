@@ -22,9 +22,6 @@
 
 #include "itkMetaDataObject.h"
 
-#include "projection/ossimRpcSolver.h"
-#include "imaging/ossimImageGeometry.h"
-
 namespace otb {
 
 template <class TImage>
@@ -48,7 +45,7 @@ GCPsToRPCSensorModelImageFilter<TImage>
   this->ClearGCPs();
 
   // Create projection
-  m_RpcProjection = new ossimRpcProjection();
+  m_RpcProjection = RPCProjectionWrapper::New();
 
   /** Create the DEM handler */
   m_DEMHandler = DEMHandler::New();
@@ -228,25 +225,11 @@ void
 GCPsToRPCSensorModelImageFilter<TImage>
 ::TransformPoint(const Point2DType sensorPoint, Point3DType& groundPoint, double height)
 {
-  ossimDpt spoint(sensorPoint[0], sensorPoint[1]);
-  ossimGpt gpoint;
-
-  gpoint.hgt = height;
-
-  if (m_RpcProjection != NULL)
-    {
-    m_RpcProjection->lineSampleToWorld(spoint, gpoint);
-
-    groundPoint[0] = gpoint.lon;
-    groundPoint[1] = gpoint.lat;
-    groundPoint[2] = gpoint.hgt;
-    }
-  else
-    {
-    groundPoint[0] = 0.;
-    groundPoint[1] = 0.;
-    groundPoint[2] = 0.;
-    }
+  double lon, lat, h;
+  m_RpcProjection->TransformPoint(sensorPoint[0], sensorPoint[1], height, lon, lat, h);
+  groundPoint[0] = lon;
+  groundPoint[1] = lat;
+  groundPoint[2] = h;
 }
 
 template <class TImage>
@@ -311,58 +294,15 @@ GCPsToRPCSensorModelImageFilter<TImage>
   // First, retrieve the image pointer
   typename TImage::Pointer imagePtr = this->GetOutput();
 
-  // The vector where geo and sensor points are stored
-  std::vector<ossimDpt> sensorPoints;
-  std::vector<ossimGpt> geoPoints;
-
-  // Temporary points variable
-  ossimDpt sensorPoint;
-  ossimGpt geoPoint;
-
-  // Retrieve the additional GCPs
-  typename GCPsContainerType::const_iterator gcpIt;
-  for (gcpIt = m_GCPsContainer.begin(); gcpIt != m_GCPsContainer.end(); ++gcpIt)
-    {
-    // Fill sensor point
-    sensorPoint = ossimDpt(gcpIt->first[0], gcpIt->first[1]);
-
-    // Fill geo point (lat, lon, elev)
-    geoPoint =  ossimGpt(gcpIt->second[1], gcpIt->second[0], gcpIt->second[2]);
-
-    // Add the sensor point to the list
-    sensorPoints.push_back(sensorPoint);
-
-    // Add the geo point to the list
-    geoPoints.push_back(geoPoint);
-    }
-
-  // Build the ossim rpc solver
-  ossimRefPtr<ossimRpcSolver> rpcSolver = new ossimRpcSolver(true, false);
-
-  // Call the solve method
-  rpcSolver->solveCoefficients(sensorPoints, geoPoints);
+  double rmsError;
+  ImageKeywordlist otb_kwl;
+  m_RpcProjection->Solve(m_GCPsContainer, rmsError, otb_kwl);
 
   // Retrieve the residual ground error
-  m_RMSGroundError = rpcSolver->getRmsError();
+  m_RMSGroundError = rmsError;
 
-  // Retrieve the output RPC projection
-  ossimRefPtr<ossimRpcModel> rpcModel = dynamic_cast<ossimRpcModel*>(rpcSolver->createRpcModel()->getProjection());
-
-  // Export the sensor model in an ossimKeywordlist
-  ossimKeywordlist geom_kwl;
-  rpcModel->saveState(geom_kwl);
-
-  // Compute projection
-  m_RpcProjection = dynamic_cast<ossimRpcProjection*>(
-    rpcSolver->createRpcProjection()->getProjection());
-  ossimKeywordlist kwl;
-  m_RpcProjection->saveState(kwl);
   // Compute errors
   this->ComputeErrors();
-
-  // Build an otb::ImageKeywordList
-  ImageKeywordlist otb_kwl;
-  otb_kwl.SetKeywordlist(geom_kwl);
 
   m_Keywordlist = otb_kwl;
 

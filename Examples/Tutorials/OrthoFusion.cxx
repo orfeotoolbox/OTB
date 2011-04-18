@@ -36,7 +36,7 @@
 #include "otbStreamingImageFileWriter.h"
 
 #include "otbOrthoRectificationFilter.h"
-#include "otbMapProjections.h"
+#include "otbGenericMapProjection.h"
 
 #include "otbSimpleRcsPanSharpeningFusionImageFilter.h"
 #include "otbStandardFilterWatcher.h"
@@ -115,11 +115,11 @@ int main(int argc, char* argv[])
   //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef otb::UtmInverseProjection utmMapProjectionType;
-  utmMapProjectionType::Pointer utmMapProjection =
-    utmMapProjectionType::New();
-  utmMapProjection->SetZone(atoi(argv[4]));
-  utmMapProjection->SetHemisphere(*(argv[5]));
+  typedef otb::GenericMapProjection<otb::TransformDirection::INVERSE> InverseProjectionType;
+  InverseProjectionType::Pointer utmMapProjection = InverseProjectionType::New();
+  utmMapProjection->SetWkt("Utm");
+  utmMapProjection->SetParameter("Zone", argv[4]);
+  utmMapProjection->SetParameter("Hemisphere", argv[5]);
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -156,7 +156,7 @@ int main(int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::OrthoRectificationFilter<ImageType, DoubleImageType,
-      utmMapProjectionType>
+      InverseProjectionType>
   OrthoRectifFilterType;
 
   OrthoRectifFilterType::Pointer orthoRectifPAN =
@@ -179,7 +179,7 @@ int main(int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::OrthoRectificationFilter<VectorImageType,
-      DoubleVectorImageType, utmMapProjectionType>
+      DoubleVectorImageType, InverseProjectionType>
   VectorOrthoRectifFilterType;
 
 

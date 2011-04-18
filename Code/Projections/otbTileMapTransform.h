@@ -18,23 +18,10 @@
 #ifndef __otbTileMapTransform_h
 #define __otbTileMapTransform_h
 
-#include <iostream>
-#include <sstream>
-#include <stdio.h>
 #include "itkTransform.h"
-#include "itkExceptionObject.h"
-#include "itkMacro.h"
-#include "base/ossimGpt.h"
-#include "base/ossimDpt.h"
-#include "projection/ossimProjection.h"
-#include "base/ossimEllipsoid.h"
-#include "base/ossimEllipsoidFactory.h"
-#include "base/ossimString.h"
-#include "ossimTileMapModel.h"
-#include "otbMapProjection.h"
-// The keyword "Try" is exported by OSSIM's headers but clashes with Boost
-// Spirit. It needs to be undefined.
-#undef Try
+
+// Only for the enum definition
+#include "otbGenericMapProjection.h"
 
 namespace otb
 {
@@ -60,7 +47,6 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   typedef typename Superclass::ScalarType           ScalarType;
-  typedef ossimplugins::ossimTileMapModel           OssimTileMapTransformType;
   typedef itk::Point<ScalarType, NInputDimensions>  InputPointType;
   typedef itk::Point<ScalarType, NOutputDimensions> OutputPointType;
 
@@ -77,11 +63,13 @@ public:
   itkStaticConstMacro(SpaceDimension, unsigned int, NInputDimensions);
   itkStaticConstMacro(ParametersDimension, unsigned int, NInputDimensions * (NInputDimensions + 1));
 
+  itkGetConstMacro(Depth, int);
+  itkSetMacro(Depth, int);
+
   void SetLevel(unsigned int level);
   unsigned int GetLevel() const;
 
   OutputPointType TransformPoint(const InputPointType& point) const;
-  virtual InputPointType Origin();
 
   virtual void PrintMap() const;
 
@@ -94,11 +82,12 @@ public:
 protected:
   TileMapTransform();
   virtual ~TileMapTransform();
-  OssimTileMapTransformType* m_TileMapTransform;
 
 private:
   TileMapTransform(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
+
+  int m_Depth;
 };
 
 } // namespace otb
