@@ -110,6 +110,12 @@ bool MSTARImageIO::CanReadFile(const char* filename)
    ****************************************************/
 
   int returnVal = fread(tbuff, sizeof(char), 1024, MSTARfp);
+  if (returnVal != 1024)
+    {
+    itkExceptionMacro(<< "\nError: Unable in reading [" << MSTARname << "] header... Only read ["<< returnVal <<" of 1024 bytes !\n");
+    fclose(MSTARfp);
+	return false;
+    }
   rewind(MSTARfp);
 
   /* Extract Phoenix Summary header length */
@@ -158,7 +164,6 @@ bool MSTARImageIO::CanReadFile(const char* filename)
     {
     otbMsgDevMacro(<< "Error: Can not determine MSTAR image height!");
     fclose(MSTARfp);
-    return false;
     }
   else
     {
@@ -248,6 +253,12 @@ void MSTARImageIO::Read(void* buffer)
    ****************************************************/
 
   int returnVal = fread(tbuff, sizeof(char), 1024, MSTARfp);
+  if (returnVal != 1024)
+    {
+    itkExceptionMacro(<< "\nError: Unable in reading [" << MSTARname << "] header... Only read ["<< returnVal <<" of 1024 bytes !\n");
+    fclose(MSTARfp);
+	return false;
+    }
   rewind(MSTARfp);
 
   /* Extract Phoenix Summary header length */
@@ -558,6 +569,12 @@ void MSTARImageIO::ReadImageInformation()
    ****************************************************/
 
   int returnVal = fread(tbuff, sizeof(char), 1024, MSTARfp);
+  if (returnVal != 1024)
+    {
+    itkExceptionMacro(<< "\nError: Unable in reading [" << MSTARname << "] header... Only read ["<< returnVal <<" of 1024 bytes !\n");
+    fclose(MSTARfp);
+	return false;
+    }
   rewind(MSTARfp);
 
   /* Extract Phoenix Summary header length */
