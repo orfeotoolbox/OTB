@@ -59,6 +59,9 @@
 // VectorData projection filter
 #include "otbVectorDataProjectionFilter.h"
 
+// Extrat a ROI of the vectordata
+#include "otbVectorDataExtractROI.h"
+
 namespace otb
 {
 
@@ -143,6 +146,10 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
   // VectorData projection filter
   typedef otb::VectorDataProjectionFilter<VectorDataType, VectorDataType>     VectorDataProjectionFilterType;
 
+  // Extract ROI
+  typedef otb::VectorDataExtractROI<VectorDataType>            VectorDataExtractROIType;
+  typedef VectorDataExtractROIType::RegionType                 RemoteSensingRegionType;
+
 
   //Create training and validation for list samples and label list samples
   ConcatenateLabelListSampleFilterType::Pointer concatenateTrainingLabels =
@@ -178,14 +185,60 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
     vdreader->Update();
     std::cout<<"Set VectorData filename: "<< parseResult->GetParameterString("VectorDataSamples",imgIndex) <<std::endl;
 
+    // Extract a ROI corresponding to the Extent of the image
+    VectorDataExtractROIType::Pointer  vdextract = VectorDataExtractROIType::New();
+    vdextract = VectorDataExtractROIType::New();
+    vdextract->SetInput(vdreader->GetOutput());
+
+    // Ge the index of the corner of the image
+    ImageType::IndexType ul, ur, ll, lr;
+    ImageType::PointType pul, pur, pll, plr;
+    ul = reader->GetOutput()->GetLargestPossibleRegion().GetIndex();
+    ur = ul;
+    ll = ul;
+    lr = ul;
+    ur[0] += reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0];
+    lr[0] += reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0];
+    lr[1] += reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1];
+    ll[1] += reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1];
+
+    // Transform to physical point
+    reader->GetOutput()->TransformIndexToPhysicalPoint(ul, pul);
+    reader->GetOutput()->TransformIndexToPhysicalPoint(ur, pur);
+    reader->GetOutput()->TransformIndexToPhysicalPoint(ll, pll);
+    reader->GetOutput()->TransformIndexToPhysicalPoint(lr, plr);
+
+    // Build the cartographic region
+    RemoteSensingRegionType                     rsRegion;
+    RemoteSensingRegionType::IndexType rsOrigin;
+    RemoteSensingRegionType::SizeType  rsSize;
+    rsOrigin[0] = min(pul[0], plr[0]);
+    rsOrigin[1] = min(pul[1], plr[1]);
+    rsSize[0] = vcl_abs(pul[0] - plr[0]);
+    rsSize[1] = vcl_abs(pul[1] - plr[1]);
+
+    rsRegion.SetOrigin(rsOrigin);
+    rsRegion.SetSize(rsSize);
+    rsRegion.SetRegionProjection(reader->GetOutput()->GetProjectionRef());
+    rsRegion.SetKeywordList(reader->GetOutput()->GetImageKeywordlist());
+
+    // Set the cartographic region to the extract roi filter
+    vdextract->SetRegion(rsRegion);
+
+
     // Project the vectorData in the Image Coodinate system
     VectorDataProjectionFilterType::Pointer vproj = VectorDataProjectionFilterType::New();
-    vproj->SetInput(vdreader->GetOutput());
+    vproj->SetInput(vdextract->GetOutput());
     vproj->SetInputProjectionRef(vdreader->GetOutput()->GetProjectionRef());
     vproj->SetOutputKeywordList(reader->GetOutput()->GetImageKeywordlist());
     vproj->SetOutputProjectionRef(reader->GetOutput()->GetProjectionRef());
+    // The 2 following lines are necessary in the case where the vectordata is used with a viewer
+    // with listSampleGenerator we don't need this parameters.
+    //vproj->SetOutputOrigin(reader->GetOutput()->GetOrigin());
+    //vproj->SetOutputSpacing(reader->GetOutput()->GetSpacing());
     // TODO add DEM support
     vproj->Update();
+
 
     //Sample list generator
     ListSampleGeneratorType::Pointer sampleGenerator = ListSampleGeneratorType::New();
