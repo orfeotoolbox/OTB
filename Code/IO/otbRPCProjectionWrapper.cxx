@@ -78,7 +78,7 @@ RPCProjectionWrapper::Solve(const GCPsContainerType& gcpContainer,
   ossimGpt geoPoint;
 
   // Retrieve the additional GCPs
-  typename GCPsContainerType::const_iterator gcpIt;
+  GCPsContainerType::const_iterator gcpIt;
   for (gcpIt = gcpContainer.begin(); gcpIt != gcpContainer.end(); ++gcpIt)
     {
     // Fill sensor point
