@@ -31,7 +31,7 @@ namespace otb
 
 namespace Wavelet
 {
-enum WaveletDirection {FORWARD, INVERSE};
+enum WaveletDirection {FORWARD = 0, INVERSE = 1};
 }
 
 /**
