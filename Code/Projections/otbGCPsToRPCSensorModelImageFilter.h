@@ -21,8 +21,7 @@
 #include "itkCastImageFilter.h"
 #include "otbDEMHandler.h"
 
-#include "projection/ossimRpcProjection.h"
-#include "projection/ossimProjection.h"
+#include "otbRPCProjectionWrapper.h"
 
 namespace otb {
 
@@ -210,7 +209,7 @@ private:
   GCPsContainerType m_GCPsContainer;
 
   /** RPC Projection */
-  ossimRefPtr<ossimRpcProjection> m_RpcProjection;
+  RPCProjectionWrapper::Pointer m_RpcProjection;
 
   /** Keywordlist */
   ImageKeywordlist m_Keywordlist;
