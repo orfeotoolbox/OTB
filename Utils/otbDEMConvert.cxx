@@ -213,10 +213,10 @@ int DEMConvert::Execute(otb::ApplicationOptionsResult* parseResult)
       {
          writer->execute();
       }
-      catch(std::exception& e)
+      catch(std::exception& err)
       {
-        itkExceptionMacro("Error occurs writing the ouput image...");
-        return EXIT_FAILURE;
+      itkExceptionMacro("Error occurs writing the ouput image: " << err);
+      return EXIT_FAILURE;
       }
       
    }
