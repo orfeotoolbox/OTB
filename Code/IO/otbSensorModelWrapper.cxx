@@ -148,6 +148,15 @@ void SensorModelWrapper::InverseTransformPoint(double lon, double lat, double h,
     itkExceptionMacro(<< "InverseTransformPoint(): Invalid Model pointer m_SensorModel == NULL !");
     }
 
+  if (ossimGPoint.hgt == -32768)
+    {
+    ossimGPoint.hgt = ossim::nan();
+    }
+
+  // Note: the -32768 is only here to show unknown altitude and should never be
+  // passed to ossim
+  assert(ossim::isnan(ossimGPoint.hgt) || (ossimGPoint.hgt > -1000));
+
   this->m_SensorModel->worldToLineSample(ossimGPoint, ossimDPoint); //"worldToLineSample" call "lineSampleHeightToWorld" method for take in care elevation information.
 
   x = ossimDPoint.x;
