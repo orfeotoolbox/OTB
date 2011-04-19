@@ -24,6 +24,7 @@
 #include "itkSymmetricSecondRankTensor.h"
 #include "otbHessianToScalarImageFilter.h"
 #include "otbMultiplyByScalarImageFilter.h"
+#include "otbMath.h"
 
 namespace otb
 {
@@ -38,7 +39,7 @@ the smoothing of the image is performed by convolving with a
 Gaussian kernel of variance \f$\sigma_I\f$ (integration
 scale). This allows the computation of the following matrix:
 \f[
-\mu(\mathbf{x},\sigma_I,\sigma_D) = \sigma_D^2 g(\sigma_I)\star
+\mu(\mathbf{x},\sigma_I,\sigma_D) = \sigma_D^4 g(\sigma_I)\star
 \left[\begin{array}{cc} L_x^2(\mathbf{x},\sigma_D) &
 L_xL_y^2(\mathbf{x},\sigma_D)\\ L_xL_y^2(\mathbf{x},\sigma_D)&
 L_y^2(\mathbf{x},\sigma_D) \end{array}\right] \f]
@@ -115,7 +116,8 @@ private:
   double m_Alpha;
 
   typename HessianFilterType::Pointer m_HessianFilter;
-  typename GaussianFilterType::Pointer m_GaussianFilter;
+  typename GaussianFilterType::Pointer m_GaussianFilter0;
+  typename GaussianFilterType::Pointer m_GaussianFilter1;
   typename HessianToScalarFilterType::Pointer m_HessianToScalarFilter;
   typename MultiplyScalarFilterType::Pointer m_MultiplyScalarFilter;
 };

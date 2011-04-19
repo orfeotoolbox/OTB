@@ -35,7 +35,8 @@ HarrisImageFilter<TInputImage, TOutputImage>
   m_Alpha  = 1.0;
 
   m_HessianFilter         = HessianFilterType::New();
-  m_GaussianFilter        = GaussianFilterType::New();
+  m_GaussianFilter0       = GaussianFilterType::New();
+  m_GaussianFilter1       = GaussianFilterType::New();
   m_HessianToScalarFilter = HessianToScalarFilterType::New();
   m_MultiplyScalarFilter  = MultiplyScalarFilterType::New();
 }
@@ -49,16 +50,22 @@ HarrisImageFilter<TInputImage, TOutputImage>
   m_HessianFilter->SetSigma(this->m_SigmaD);
   m_HessianFilter->SetNormalizeAcrossScale(false);
 
-  m_GaussianFilter->SetInput(m_HessianFilter->GetOutput());
-  m_GaussianFilter->SetSigma(this->m_SigmaI);
-  m_GaussianFilter->SetOrder(GaussianFilterType::ZeroOrder);
-  m_GaussianFilter->SetNormalizeAcrossScale(false);
-
-  m_HessianToScalarFilter->SetInput(m_GaussianFilter->GetOutput());
+  m_GaussianFilter0->SetInput(m_HessianFilter->GetOutput());
+  m_GaussianFilter0->SetSigma(this->m_SigmaI);
+  m_GaussianFilter0->SetOrder(GaussianFilterType::ZeroOrder);
+  m_GaussianFilter0->SetNormalizeAcrossScale(false);
+  
+  m_GaussianFilter1->SetInput(m_GaussianFilter0->GetOutput());
+  m_GaussianFilter1->SetSigma(this->m_SigmaI);
+  m_GaussianFilter1->SetOrder(GaussianFilterType::ZeroOrder);
+  m_GaussianFilter1->SetNormalizeAcrossScale(false);
+  m_GaussianFilter1->SetDirection(1);
+  
+  m_HessianToScalarFilter->SetInput(m_GaussianFilter1->GetOutput());
   m_HessianToScalarFilter->SetAlpha(this->m_Alpha);
 
   m_MultiplyScalarFilter->SetInput(m_HessianToScalarFilter->GetOutput());
-  m_MultiplyScalarFilter->SetCoef((m_SigmaD * m_SigmaD));
+  m_MultiplyScalarFilter->SetCoef(vcl_pow(m_SigmaD, 2.0));
 
   m_MultiplyScalarFilter->GraftOutput(this->GetOutput());
   m_MultiplyScalarFilter->Update();
