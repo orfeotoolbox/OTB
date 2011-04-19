@@ -374,9 +374,49 @@ ImageFileReader<TOutputImage>
   output->SetOrigin(origin);         // Set the image origin
   output->SetDirection(direction);   // Set the image direction cosines
 
+  // Update otb Keywordlist
+  ImageKeywordlist otb_kwl = GenerateKeywordList(lFileNameOssimKeywordlist);
+
+  // Update itk MetaData Dictionary
+
+  itk::MetaDataDictionary& dict = this->m_ImageIO->GetMetaDataDictionary();
+
+  itk::EncapsulateMetaData<ImageKeywordlist>(dict,
+                                             MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
+
+  //Copy MetaDataDictionary from instantiated reader to output image.
+  output->SetMetaDataDictionary(this->m_ImageIO->GetMetaDataDictionary());
+  this->SetMetaDataDictionary(this->m_ImageIO->GetMetaDataDictionary());
+
+  typedef typename TOutputImage::IndexType IndexType;
+
+  IndexType start;
+  start.Fill(0);
+
+  ImageRegionType region;
+  region.SetSize(dimSize);
+  region.SetIndex(start);
+
+// THOMAS : ajout
+// If a VectorImage, this requires us to set the
+// VectorLength before allocate
+  if (strcmp(output->GetNameOfClass(), "VectorImage") == 0)
+    {
+    typedef typename TOutputImage::AccessorFunctorType AccessorFunctorType;
+    AccessorFunctorType::SetVectorLength(output, this->m_ImageIO->GetNumberOfComponents());
+    }
+
+  output->SetLargestPossibleRegion(region);
+
+}
+template <class TOutputImage>
+ImageKeywordlist
+ImageFileReader<TOutputImage>
+::GenerateKeywordList(const std::string& filename)
+{
   // Trying to read ossim MetaData
   bool             hasMetaData = false;
-  ossimKeywordlist geom_kwl, tmp_kwl, tmp_kwl2; // = new ossimKeywordlist();
+  ossimKeywordlist geom_kwl; // = new ossimKeywordlist();
 
   // Test the plugins factory
   /** Before, the pluginfactory was tested if the ossim one returned false.
@@ -384,7 +424,7 @@ ImageFileReader<TOutputImage>
       thus a TSX tif image wasn't read with TSX Model. We don't use the ossimRegisteryFactory
       because the default include factory contains ossimQuickbirdTiffTileSource. */
   ossimProjection * projection = ossimplugins::ossimPluginProjectionFactory::instance()
-                                 ->createProjection(ossimFilename(lFileNameOssimKeywordlist.c_str()), 0);
+                                 ->createProjection(ossimFilename(filename.c_str()), 0);
 
   if (!projection)
     {
@@ -405,7 +445,7 @@ ImageFileReader<TOutputImage>
     // ossimImageHandlerRegistry::instance()->addFactory(ossimImageHandlerSarFactory::instance());
 
     ossimImageHandler* handler = ossimImageHandlerRegistry::instance()
-                                 ->open(ossimFilename(lFileNameOssimKeywordlist.c_str()));
+                                 ->open(ossimFilename(filename.c_str()));
     if (!handler)
       {
       otbMsgDevMacro(<< "OSSIM Open Image FAILED ! ");
@@ -446,43 +486,12 @@ ImageFileReader<TOutputImage>
     {
     otbMsgDevMacro(<< "OSSIM MetaData present ! ");
     otbMsgDevMacro(<< geom_kwl);
-
-    // Update otb Keywordlist
-    ImageKeywordlist otb_kwl;
-    otb_kwl.SetKeywordlist(geom_kwl);
-
-    // Update itk MetaData Dictionary
-
-    itk::MetaDataDictionary& dict = this->m_ImageIO->GetMetaDataDictionary();
-
-    itk::EncapsulateMetaData<ImageKeywordlist>(dict,
-                                               MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
-
     }
 
-  //Copy MetaDataDictionary from instantiated reader to output image.
-  output->SetMetaDataDictionary(this->m_ImageIO->GetMetaDataDictionary());
-  this->SetMetaDataDictionary(this->m_ImageIO->GetMetaDataDictionary());
-
-  typedef typename TOutputImage::IndexType IndexType;
-
-  IndexType start;
-  start.Fill(0);
-
-  ImageRegionType region;
-  region.SetSize(dimSize);
-  region.SetIndex(start);
-
-// THOMAS : ajout
-// If a VectorImage, this requires us to set the
-// VectorLength before allocate
-  if (strcmp(output->GetNameOfClass(), "VectorImage") == 0)
-    {
-    typedef typename TOutputImage::AccessorFunctorType AccessorFunctorType;
-    AccessorFunctorType::SetVectorLength(output, this->m_ImageIO->GetNumberOfComponents());
-    }
-
-  output->SetLargestPossibleRegion(region);
+  // TODO: check if the empty case is handled properly
+  ImageKeywordlist otb_kwl;
+  otb_kwl.SetKeywordlist(geom_kwl);
+  return otb_kwl;
 
 }
 
