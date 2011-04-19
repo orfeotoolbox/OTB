@@ -63,7 +63,7 @@ public:
   void SetDEMDirectory(const std::string& directory);
 
   /** Create the projection ( m_Model). Called by the SetImageGeometry methods */
-  bool CreateProjection(const ImageKeywordlist& image_kwl);
+  void CreateProjection(const ImageKeywordlist& image_kwl);
   // FIXME check if it should be protected instead
 
   void ForwardTransformPoint(double x, double y, double z,
@@ -73,6 +73,9 @@ public:
                              double& x, double& y, double& z) const;
 
   ossimProjection* GetOssimModel(); // FIXME temporary only
+
+  /** Is sensor model valid method. return false if the m_SensorModel is null*/
+  bool IsValidSensorModel();
 
 protected:
   SensorModelWrapper();

@@ -70,18 +70,17 @@ int otbCreateInverseForwardSensorModel(int argc, char* argv[])
   reader->GenerateOutputInformation();
   ImageType::Pointer inputImage = reader->GetOutput();
 
-  bool resModel = true;
   otbGenericMsgDebugMacro(<< "Inverse model creation...");
-  resModel = inverse_model->SetImageGeometry(inputImage->GetImageKeywordlist());
-  if( resModel == false )
+  inverse_model->SetImageGeometry(inputImage->GetImageKeywordlist());
+  if( inverse_model->IsValidSensorModel() == false )
     {
       std::cout<<"Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!"<<std::endl;
       return EXIT_FAILURE;
     }
   
   otbGenericMsgDebugMacro(<< "Foreward model creation...");
-  resModel = forward_model->SetImageGeometry(inputImage->GetImageKeywordlist());
-  if( resModel == false )
+  forward_model->SetImageGeometry(inputImage->GetImageKeywordlist());
+  if( forward_model->IsValidSensorModel() == false )
     {
       std::cout<<"Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!"<<std::endl;
       return EXIT_FAILURE;

@@ -79,12 +79,10 @@ int otbSensorModel(int argc, char* argv[])
 
   file << "\n*** TRANSFORM ***\n";
 
-  bool resModel = false;
-
   typedef otb::ForwardSensorModel<double> ForwardSensorModelType;
   ForwardSensorModelType::Pointer forwardSensorModel = ForwardSensorModelType::New();
-  resModel = forwardSensorModel->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
-  if( resModel == false )
+  forwardSensorModel->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
+  if( forwardSensorModel->IsValidSensorModel() == false )
    {
      std::cout<<"Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!"<<std::endl;
      return EXIT_FAILURE;
@@ -103,8 +101,8 @@ int otbSensorModel(int argc, char* argv[])
   file << "Image to geo: " << imagePoint << " -> " << geoPoint << "\n";
   typedef otb::InverseSensorModel<double> InverseSensorModelType;
   InverseSensorModelType::Pointer inverseSensorModel = InverseSensorModelType::New();
-  resModel = inverseSensorModel->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
-  if( resModel == false )
+  inverseSensorModel->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
+  if( inverseSensorModel->IsValidSensorModel() == false )
    {
      std::cout<<"Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!"<<std::endl;
      return EXIT_FAILURE;

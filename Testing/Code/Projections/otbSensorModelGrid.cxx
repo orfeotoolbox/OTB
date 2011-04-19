@@ -79,12 +79,10 @@ int otbSensorModelGrid(int argc, char* argv[])
 
   double averageElevation = 16.19688987731934;
 
-  bool resModel = true;
-
   typedef otb::ForwardSensorModel<double> ForwardSensorModelType;
   ForwardSensorModelType::Pointer forwardSensorModel = ForwardSensorModelType::New();
-  resModel = forwardSensorModel->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
-  if( resModel == false )
+  forwardSensorModel->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
+  if( forwardSensorModel->IsValidSensorModel() == false )
     {
       std::cout<<"Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!"<<std::endl;
       return EXIT_FAILURE;
@@ -94,8 +92,8 @@ int otbSensorModelGrid(int argc, char* argv[])
 
   typedef otb::InverseSensorModel<double> InverseSensorModelType;
   InverseSensorModelType::Pointer inverseSensorModel = InverseSensorModelType::New();
-  resModel = inverseSensorModel->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
-  if( resModel == false )
+  inverseSensorModel->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
+  if( inverseSensorModel->IsValidSensorModel() == false )
     {
       std::cout<<"Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!"<<std::endl;
       return EXIT_FAILURE;

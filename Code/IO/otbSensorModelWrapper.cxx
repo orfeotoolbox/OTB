@@ -42,7 +42,7 @@ SensorModelWrapper::~SensorModelWrapper()
     }
 }
 
-bool SensorModelWrapper::CreateProjection(const ImageKeywordlist& image_kwl)
+void SensorModelWrapper::CreateProjection(const ImageKeywordlist& image_kwl)
 {
   ossimKeywordlist geom;
 
@@ -53,14 +53,22 @@ bool SensorModelWrapper::CreateProjection(const ImageKeywordlist& image_kwl)
   m_SensorModel = ossimSensorModelFactory::instance()->createProjection(geom);
   if (m_SensorModel == NULL)
     {
-    m_SensorModel = ossimplugins::ossimPluginProjectionFactory::instance()->createProjection(geom);
+      m_SensorModel = ossimplugins::ossimPluginProjectionFactory::instance()->createProjection(geom);
     }
+}
+
+bool SensorModelWrapper::IsValidSensorModel()
+{
   if (m_SensorModel == NULL)
     {
       return false;
     }
-  return true;
+  else
+    {
+      return true;
+    }
 }
+
 
 void SensorModelWrapper::SetDEMDirectory(const std::string& directory)
 {
