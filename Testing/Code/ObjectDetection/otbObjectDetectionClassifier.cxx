@@ -135,6 +135,7 @@ int otbObjectDetectionClassifier(int argc, char* argv[])
   classifier->SetShifts(statisticsReader->GetStatisticVectorByName("mean"));
   classifier->SetScales(statisticsReader->GetStatisticVectorByName("stddev"));
   classifier->GetStreamer()->SetNumberOfLinesStrippedStreaming( streaming );
+  classifier->SetGridStep(neighborhood/2);
   classifier->Update();
 
   std::vector<ObjectDetectionClassifierType::PointType> points;
