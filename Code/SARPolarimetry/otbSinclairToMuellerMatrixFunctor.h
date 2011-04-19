@@ -60,7 +60,7 @@ namespace Functor
  * {channel #4 }&{channel #5 }&{channel #6 }&{channel #7 } \\
  * {channel #8 }&{channel #9 }&{channel #10}&{channel #11} \\
  * {channel #12}&{channel #13}&{channel #14}&{channel #15} \\
- * \end{pmatrix}
+ * \end{pmatrix}  \f$
  *
  *  \ingroup Functor
  *  \ingroup SARPolarimetry

@@ -101,6 +101,9 @@ public:
 
   void CopyFields( TreeNodeType * node );
 
+  /** Reset the VectorData stored in the class */
+  void ResetVectorData();
+
 protected:
   /** Constructor */
   VectorDataModel();

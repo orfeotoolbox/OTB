@@ -126,6 +126,7 @@ ADD_TEST(srTvRCC8GraphFileReader ${SPATIALREASONING_TESTS2}
 	 otbRCC8GraphFileReader
 			${TEMP}/srRCC8GraphWriterOutput1.dot
 )
+SET_TESTS_PROPERTIES(srTvRCC8GraphFileReader PROPERTIES DEPENDS srTvRCC8GraphFileWriter)
 
 ADD_TEST(srTvRCC8GraphIOEndToEnd ${SPATIALREASONING_TESTS2}
 	--compare-ascii	${NOTOL}

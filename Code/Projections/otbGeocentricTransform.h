@@ -20,8 +20,7 @@
 
 #include "itkTransform.h"
 #include "otbGenericMapProjection.h"
-
-#include "base/ossimEllipsoid.h"
+#include "otbEllipsoidWrapper.h"
 
 namespace otb
 {
@@ -34,21 +33,19 @@ template <TransformDirection::TransformationDirection TDirectionOfMapping,
     class TScalarType = double,
     unsigned int NInputDimensions = 3,
     unsigned int NOutputDimensions = 3>
-class ITK_EXPORT GeocentricTransform : public itk::Transform<TScalarType,            // Data type for scalars
-      NInputDimensions,                                                        // Number of dimensions in the input space
-      NOutputDimensions>                                                        // Number of dimensions in the output space
+class ITK_EXPORT GeocentricTransform :
+    public itk::Transform<TScalarType,  // Data type for scalars
+                          NInputDimensions,  // Number of dimensions in the input space
+                          NOutputDimensions>  // Number of dimensions in the output space
 {
 public:
   /** Standard class typedefs. */
-  typedef itk::Transform<TScalarType,
-      NInputDimensions,
-      NOutputDimensions>       Superclass;
-  typedef GeocentricTransform           Self;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef GeocentricTransform                                              Self;
+  typedef itk::Transform<TScalarType, NInputDimensions, NOutputDimensions> Superclass;
+  typedef itk::SmartPointer<Self>                                          Pointer;
+  typedef itk::SmartPointer<const Self>                                    ConstPointer;
 
   typedef typename Superclass::ScalarType           ScalarType;
-  typedef ossimProjection                           OssimMapProjectionType;
   typedef itk::Point<ScalarType, NInputDimensions>  InputPointType;
   typedef itk::Point<ScalarType, NOutputDimensions> OutputPointType;
 
@@ -70,7 +67,7 @@ public:
 protected:
   GeocentricTransform();
   virtual ~GeocentricTransform();
-  ossimEllipsoid* m_Ellipsoid;
+  EllipsoidWrapper::Pointer m_Ellipsoid;
 
 private:
   GeocentricTransform(const Self &);        //purposely not implemented

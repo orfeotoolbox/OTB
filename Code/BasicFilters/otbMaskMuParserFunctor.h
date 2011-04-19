@@ -76,19 +76,25 @@ inline bool operator()(const TInput &p)
 
   double value;
 
-  if(p.Size() !=m_NbVar)
+  if(p.Size() !=m_NbOfBands)
     {
-    itkExceptionMacro(<< "wrong number of bands" << std::endl);
+    this->SetNumberOfBands(p.GetSize());
     }
 
   // we fill the buffer
-  for(unsigned int i=0; i<m_NbVar; i++)
+  for(unsigned int i=0; i<m_NbOfBands; i++)
     {
-
     m_AImage[i]= static_cast<double> (p[i]);
     }
 
-  // cast
+  // user defined variables
+  m_Intensity = 0.0;
+  for(unsigned int i = 0; i<m_NbOfBands; ++i)
+    {
+    m_Intensity +=p[i];
+    }
+  m_Intensity  = m_Intensity/(static_cast<double> (m_NbOfBands));
+
   try
   {
     value = m_Parser->Eval();
@@ -113,32 +119,48 @@ std::string GetExpression() const
   return m_Expression;
 }
 
-void SetVarName(unsigned int idx, const std::string varName)
+//void SetVarName(unsigned int idx, const std::string varName)
+//{//
+// m_VarName[idx] = varName;
+// m_Parser->DefineVar(m_VarName[idx], &(m_AImage[idx]));
+//}
+
+//std::string GetVarName(unsigned int idx)
+//{
+//  return m_VarName[idx];
+//}
+
+void SetNumberOfBands(unsigned int NbOfBands)
 {
-  m_VarName[idx] = varName;
-  m_Parser->DefineVar(m_VarName[idx], &(m_AImage[idx]));
+
+  m_NbOfBands=NbOfBands;
+  std::ostringstream varName;
+
+  m_AImage.resize(NbOfBands, 0.0);
+
+  for(unsigned int i=0; i<NbOfBands; i++)
+    {
+    varName << "b" << i+1;
+    m_Parser->DefineVar(varName.str(), &(m_AImage[i]));
+    varName.str("");
+    }
+  // customized data
+  //m_NbVar++;
+  //this->SetDataSize(m_NbVar);
+  m_Parser->DefineVar("intensity", &m_Intensity);
 }
 
-std::string GetVarName(unsigned int idx)
-{
-  return m_VarName[idx];
-}
-
-void SetNumberOfBands(unsigned int NumberOfBands)
-{
-  m_NbVar=NumberOfBands;
-  m_VarName.resize(NumberOfBands,"");
-  m_AImage.resize(NumberOfBands, 0.0);
-}
 
 /** Check the expression */
 bool CheckExpression()
 {
 
-  for(unsigned int i=0; i<m_NbVar; i++)
+  for(unsigned int i=0; i<m_NbOfBands; i++)
     {
     m_AImage[i]=0;
     }
+
+  m_Intensity=0.0;
 
   try
   {
@@ -147,6 +169,7 @@ bool CheckExpression()
   }
   catch(itk::ExceptionObject& err)
   {
+    itkExceptionMacro(<< err);
     return false;
   }
 
@@ -157,6 +180,7 @@ protected:
 MaskMuParserFunctor()
 {
 m_Parser = ParserType::New();
+m_NbOfBands=0;
 };
 
 ~MaskMuParserFunctor()
@@ -171,9 +195,13 @@ void operator =(const Self &);    //purposely not implemented
 std::string m_Expression;
 ParserType::Pointer m_Parser;
 std::vector<double> m_AImage;
-std::vector<std::string > m_VarName;
-unsigned int m_NbVar;
+//std::vector<std::string > m_VarName;
+unsigned int m_NbOfBands;
+//unsigned int m_NbVar;
 double m_ParserResult;
+
+//user defined variables
+double m_Intensity;
 
 };
 } // end of Functor namespace

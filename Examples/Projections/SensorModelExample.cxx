@@ -117,7 +117,7 @@ int main(int argc, char* argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  model->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
+  bool resModel = model->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -128,7 +128,7 @@ int main(int argc, char* argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  if (!model)
+  if (!resModel)
     {
     std::cerr << "Unable to create a model" << std::endl;
     return 1;

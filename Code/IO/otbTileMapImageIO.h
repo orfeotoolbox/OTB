@@ -27,10 +27,13 @@
 #include "stdlib.h"
 
 /* ITK Libraries */
+#include "otbMacro.h"
 #include "itkImageIOBase.h"
 #include "otbImageRegionTileMapSplitter.h"
 
 #include "otbCurlHelperInterface.h"
+
+#include "base/ossimFilename.h"
 
 namespace otb
 {
@@ -82,13 +85,20 @@ public:
       }
     if (_arg)
       {
-      this->m_CacheDirectory = _arg;
-      this->m_UseCache = true;
+        // Check the directory write permission
+        ossimFilename directoryOssim(_arg);
+        if( directoryOssim.isWriteable() == false )
+          {
+            itkExceptionMacro( "Error, no write permission in given CacheDirectory "<<m_CacheDirectory<<".");
+          }
+        
+        this->m_CacheDirectory = _arg;
+        this->m_UseCache = true;
       }
     else
       {
-      this->m_CacheDirectory = "";
-      this->m_UseCache = false;
+        this->m_CacheDirectory = "";
+        this->m_UseCache = false;
       }
     this->Modified();
   }

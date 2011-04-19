@@ -15,18 +15,19 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbList_h
-#define __otbList_h
 
-#include "vcl_deprecated_header.h"
-
-namespace otb
-{
-//For backward compatibility only
-// otb::List is deprecated and otb::ObjectList should be used instead
-template <class TObject>
-class ITK_EXPORT List : public ObjectList<TObject>
-{};
-}
-
+// this file defines the otbCommonTest for the test driver
+// and all it expects is that you have a function called RegisterTests
+#if defined(_MSC_VER)
+#pragma warning ( disable : 4786 )
 #endif
+
+#include "otbTestMain.h"
+
+void RegisterTests()
+{
+  REGISTER_TEST(otbVectorDataModelNew);
+  REGISTER_TEST(otbVectorDataModelTest);
+  REGISTER_TEST(otbVectorDataModelAddVectorDataTest);
+  REGISTER_TEST(otbAmplitudeFunctorTest);
+}

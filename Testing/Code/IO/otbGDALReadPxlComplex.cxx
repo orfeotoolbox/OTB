@@ -103,7 +103,7 @@ int otbGDALReadPxlComplexGeneric(int argc, char * argv[])
     int indB = (int)itPxl - (int)((int) (itPxl) / nbBand) * nbBand;
     count = 2*( sizeImgX*sizeImgY*indB + sizeImgX*(posY + indY) + (posX + indX));
     pxlValue[itPxl] = *(static_cast<ComplexType*>( static_cast<void*>(loadBuffer)) + itPxl );
-    expectedValue = ComplexType(count, count+1);
+    expectedValue = ComplexType(static_cast<float>(count), static_cast<float>(count+1));
     std::cout << "loadBuffer["<< itPxl << "] or " \
               << "pxlValue[" << posX + indX << "," << posY + indY << "," << indB << "]" \
               << "= " << pxlValue[itPxl] \
@@ -141,7 +141,7 @@ int otbGDALReadPxlComplexGeneric(int argc, char * argv[])
       int indY = (int) ((int)itPxl/sizeX);
       int indX = itPxl - indY * sizeX;
       count = 2*( sizeImgX*sizeImgY*itBand + sizeImgX*(posY + indY) + (posX + indX));
-      expectedValue = ComplexType(count, count+1);
+      expectedValue = ComplexType(static_cast<float>(count), static_cast<float>(count+1));
       std::cout << "pixelValue [" << posX + indX << "," << posY + indY << "," << itBand << "] = " \
                 << pPixelValue[itBand*nbPixelToRead + indX + indY * sizeX] \
                 << " -> expectedValue = " << expectedValue \

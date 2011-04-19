@@ -61,7 +61,13 @@ int otbCompositeTransform(int argc, char* argv[])
 
   typedef otb::InverseSensorModel<double> SensorModelType;
   SensorModelType::Pointer sensorModel = SensorModelType::New();
-  sensorModel->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
+  bool resModel = sensorModel->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
+
+  if( resModel == false )
+   {
+     std::cout<<"Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!"<<std::endl;
+     return EXIT_FAILURE;
+   }
 
   typedef otb::CompositeTransform<MapProjectionType, SensorModelType> CompositeTransformType;
   CompositeTransformType::Pointer compositeTransform = CompositeTransformType::New();

@@ -109,7 +109,13 @@ bool MSTARImageIO::CanReadFile(const char* filename)
       * parameters....                                   *
    ****************************************************/
 
-  fread(tbuff, sizeof(char), 1024, MSTARfp);
+  int returnVal = fread(tbuff, sizeof(char), 1024, MSTARfp);
+  if (returnVal != 1024)
+    {
+    otbMsgDevMacro(<< "\nError: Unable in reading [" << MSTARname << "] header... Only read ["<< returnVal <<" of 1024 bytes !\n");
+    fclose(MSTARfp);
+    return false;
+    }
   rewind(MSTARfp);
 
   /* Extract Phoenix Summary header length */
@@ -158,7 +164,6 @@ bool MSTARImageIO::CanReadFile(const char* filename)
     {
     otbMsgDevMacro(<< "Error: Can not determine MSTAR image height!");
     fclose(MSTARfp);
-    return false;
     }
   else
     {
@@ -247,16 +252,20 @@ void MSTARImageIO::Read(void* buffer)
       * parameters....                                   *
    ****************************************************/
 
-  fread(tbuff, sizeof(char), 1024, MSTARfp);
+  int returnVal = fread(tbuff, sizeof(char), 1024, MSTARfp);
+  if (returnVal != 1024)
+    {
+    fclose(MSTARfp);
+    itkExceptionMacro(<< "\nError: Unable in reading [" << MSTARname << "] header... Only read ["<< returnVal <<" of 1024 bytes !\n");
+    }
   rewind(MSTARfp);
 
   /* Extract Phoenix Summary header length */
   tptr = (char *) strstr(tbuff, "PhoenixHeaderLength= ");
   if (tptr == (char *) NULL)
     {
-    itkExceptionMacro(<< "Error: Can not determine Phoenix header length!");
-
     fclose(MSTARfp);
+    itkExceptionMacro(<< "Error: Can not determine Phoenix header length!");
     }
   else
     {
@@ -403,9 +412,10 @@ void MSTARImageIO::Read(void* buffer)
         case LSB_FIRST: /* Little-endian..do byteswap */
 
           otbMsgDevMacro(<< "Performing auto-byteswap...\n");
+          int returnVal;
           for (i = 0; i < totchunks; ++i)
             {
-            fread(bigfloatbuf, sizeof(char), 4, MSTARfp);
+            returnVal = fread(bigfloatbuf, sizeof(char), 4, MSTARfp);
             littlefloatval = byteswap_SR_IR(bigfloatbuf);
             CHIPdata[i] = littlefloatval;
             }
@@ -447,9 +457,10 @@ void MSTARImageIO::Read(void* buffer)
         {
         case LSB_FIRST: /* Little-endian..do byteswap */
           otbMsgDevMacro(<< "Performing auto-byteswap...");
+          int returnVal;
           for (i = 0; i < nchunks; ++i)
             {
-            fread(bigushortbuf, sizeof(char), 2, MSTARfp);
+            returnVal = fread(bigushortbuf, sizeof(char), 2, MSTARfp);
             littleushortval = byteswap_SUS_IUS(bigushortbuf);
             FSCENEdata[i] = littleushortval;
             }
@@ -488,9 +499,10 @@ void MSTARImageIO::Read(void* buffer)
         {
         case LSB_FIRST: /* Little-endian..do byteswap */
           otbMsgDevMacro(<< "Performing auto-byteswap...");
+          int returnVal;
           for (i = 0; i < nchunks; ++i)
             {
-            fread(bigushortbuf, sizeof(char), 2, MSTARfp);
+            returnVal = fread(bigushortbuf, sizeof(char), 2, MSTARfp);
             littleushortval = byteswap_SUS_IUS(bigushortbuf);
             FSCENEdata[i] = littleushortval;
             }
@@ -554,16 +566,20 @@ void MSTARImageIO::ReadImageInformation()
       * parameters....                                   *
    ****************************************************/
 
-  fread(tbuff, sizeof(char), 1024, MSTARfp);
+  int returnVal = fread(tbuff, sizeof(char), 1024, MSTARfp);
+  if (returnVal != 1024)
+    {
+    fclose(MSTARfp);
+    itkExceptionMacro(<< "\nError: Unable in reading [" << MSTARname << "] header... Only read ["<< returnVal <<" of 1024 bytes !\n");
+    }
   rewind(MSTARfp);
 
   /* Extract Phoenix Summary header length */
   tptr = (char *) strstr(tbuff, "PhoenixHeaderLength= ");
   if (tptr == (char *) NULL)
     {
-    itkExceptionMacro(<< "Error: Can not determine Phoenix header length!");
-
     fclose(MSTARfp);
+    itkExceptionMacro(<< "Error: Can not determine Phoenix header length!");
     }
   else
     {

@@ -20,6 +20,7 @@
 
 #include "itkImageFileReader.h"
 #include "otbCurlHelperInterface.h"
+#include "otbImageKeywordlist.h"
 
 namespace otb
 {
@@ -95,6 +96,8 @@ private:
       doesn't exist or it is not readable, and exception with an
       approriate message will be thrown. */
   void TestFileExistanceAndReadability();
+
+  ImageKeywordlist GenerateKeywordList(const std::string& filename);
 
   /** Generate the filename (for GDALImageI for example). If filename is a directory, look if is a
     * CEOS product (file "DAT...") In this case, the GdalFileName contain the open image file.

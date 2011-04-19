@@ -29,14 +29,11 @@
 #include <sys/stat.h>
 
 #include "otbTileMapImageIO.h"
-#include "otbMacro.h"
 #include "otbSystem.h"
 
 //#include "itkPNGImageIO.h"
 //#include "itkJPEGImageIO.h"
 #include "otbGDALImageIO.h"
-
-#include "base/ossimFilename.h"
 
 #include "itkTimeProbe.h"
 #include "otbCurlHelper.h"
@@ -160,6 +157,7 @@ void TileMapImageIO::Read(void* buffer)
   m_ListFilename.clear();
   m_ListURLs.clear();
   m_ListTiles.clear();
+
 
   //Read all the required tiles
   for (int numTileY = 0; numTileY < nTilesY; numTileY++)
@@ -345,6 +343,7 @@ void TileMapImageIO::ReadTile(std::string filename, void * buffer)
 
   itk::ImageIOBase::Pointer imageIO;
   imageIO = otb::GDALImageIO::New();
+
   bool lCanRead = imageIO->CanReadFile(filename.c_str());
 
   if (lCanRead == true)
@@ -357,6 +356,7 @@ void TileMapImageIO::ReadTile(std::string filename, void * buffer)
     ioRegion.SetSize(0, 256);
     ioRegion.SetSize(1, 256);
     imageIO->SetIORegion(ioRegion);
+
     imageIO->Read(buffer);
     }
   else
@@ -387,6 +387,7 @@ void TileMapImageIO::BuildFileName(const std::ostringstream& quad, std::ostrings
     directory << (quad.str().c_str())[i];
     i++;
     }
+
   ossimFilename directoryOssim(directory.str().c_str());
   directoryOssim.createDirectory();
 
@@ -571,7 +572,7 @@ void TileMapImageIO::Write(const void* buffer)
       //Set tile buffer to 0
       for (int iInit = 0; iInit < 256 * 256 * nComponents; iInit++)
         {
-        bufferTile[iInit] = 0;
+       bufferTile[iInit] = 0;
         }
 
       for (int tileJ = 0; tileJ < 256; tileJ++)
@@ -636,6 +637,13 @@ void TileMapImageIO::InternalWrite(double x, double y, const void* buffer)
 
   if (lCanWrite)
     {
+      ossimFilename fileOssim(filename.str().c_str());
+      // If the file already exists, remove it.
+      if( fileOssim.exists() == true )
+        {
+          fileOssim.remove();
+        }
+
     imageIO->CanStreamWrite();
     imageIO->SetNumberOfDimensions(2);
     imageIO->SetDimensions(0, 256);
@@ -666,6 +674,7 @@ void TileMapImageIO::InternalWrite(double x, double y, const void* buffer)
       ioRegion.SetSize(i, 256);
       ioRegion.SetIndex(i, 0);
       }
+    
     imageIO->SetIORegion(ioRegion);
 
     imageIO->Write(buffer);

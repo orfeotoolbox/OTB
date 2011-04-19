@@ -22,8 +22,46 @@
 #include <iomanip>
 #include "otbMath.h"
 
+#include "base/ossimDate.h"
+
 namespace otb
 {
+
+namespace internal
+{
+/**
+ * Generate date method
+ */
+ossimLocalTm
+ParseDate(const std::string& date, const std::string& time)
+{
+  ossimLocalTm currentDate;
+  ossimString  word("");
+  word = date[0];
+  word += date[1];
+  currentDate.setDay(word.toInt());
+  word = date[3];
+  word += date[4];
+  currentDate.setMonth(word.toInt());
+  word =  date[6];
+  word += date[7];
+  word += date[8];
+  word += date[9];
+  currentDate.setYear(word.toInt());
+
+  word = time[0];
+  word += time[1];
+  currentDate.setHour(word.toInt());
+  word = time[3];
+  word += time[4];
+  currentDate.setMin(word.toInt());
+  word =  time[6];
+  word += time[7];
+  currentDate.setSec(word.toInt());
+
+  return currentDate;
+}
+}
 
 /**
  * Constructor
@@ -98,40 +136,6 @@ AeronetFileReader
 }
 
 /**
- * Generate date method
- */
-ossimLocalTm
-AeronetFileReader
-::ParseDate(const std::string& date, const std::string& time) const
-{
-  ossimLocalTm currentDate;
-  ossimString  word("");
-  word = date[0];
-  word += date[1];
-  currentDate.setDay(word.toInt());
-  word = date[3];
-  word += date[4];
-  currentDate.setMonth(word.toInt());
-  word =  date[6];
-  word += date[7];
-  word += date[8];
-  word += date[9];
-  currentDate.setYear(word.toInt());
-
-  word = time[0];
-  word += time[1];
-  currentDate.setHour(word.toInt());
-  word = time[3];
-  word += time[4];
-  currentDate.setMin(word.toInt());
-  word =  time[6];
-  word += time[7];
-  currentDate.setSec(word.toInt());
-
-  return currentDate;
-}
-
-/**
  * Parse a valid line method
  */
 void
@@ -152,7 +156,7 @@ AeronetFileReader
   unsigned int col_vapor            = 19;
   unsigned int col_solarZenithAngle = 44;
 
-  ossimLocalTm current_date = ParseDate(line[col_date], line[col_time]);
+  ossimLocalTm current_date = internal::ParseDate(line[col_date], line[col_time]);
   double       dcurrent_date = current_date.getJulian();
   // Check hour +/- epsilon
   if (vcl_abs(dcurrent_date - ref_date) < epsilon)
@@ -287,7 +291,7 @@ AeronetFileReader
     // Select only valid lines: good day
     if (listStr.size() > 0)
       {
-      ossimLocalTm currentDate = ParseDate(listStr[col_date], listStr[col_time]);
+      ossimLocalTm currentDate = internal::ParseDate(listStr[col_date], listStr[col_time]);
       if ((listStr[col_670] != "N/A") &&
           (listStr[col_440] != "N/A") &&
           (static_cast<int>(currentDate.getJulian()) == static_cast<int>(dinputDate))
@@ -328,7 +332,7 @@ AeronetFileReader
   for (unsigned int idCurrentLine = 0; idCurrentLine < tabStr.size(); idCurrentLine++)
     {
     VectorString current_line2 = tabStr[idCurrentLine];
-    ossimLocalTm currentDate = ParseDate(current_line2[col_date], current_line2[col_time]);
+    ossimLocalTm currentDate = internal::ParseDate(current_line2[col_date], current_line2[col_time]);
     ParseValidLine(dinputDate, current_line2, epsilon, water, angst, tau_day, solarZenithAngle);
     }
 

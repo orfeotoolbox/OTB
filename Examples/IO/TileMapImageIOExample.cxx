@@ -59,7 +59,7 @@
 #include "otbForwardSensorModel.h"
 #include "otbExtractROI.h"
 #include "otbImageFileWriter.h"
-#include "ossimTileMapModel.h"
+#include "otbTileMapTransform.h"
 #include "otbWorldFile.h"
 // Software Guide : EndCodeSnippet
 
@@ -137,16 +137,9 @@ int main(int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::InverseSensorModel<double> ModelType;
-  ModelType::Pointer model = ModelType::New();
-
-  model->SetImageGeometry(readerTile->GetOutput()->GetImageKeywordlist());
-  dynamic_cast<ossimplugins::ossimTileMapModel*>(model->GetOssimModel())->setDepth(depth);
-  if (!model)
-    {
-    std::cerr << "Unable to create a model" << std::endl;
-    return 1;
-    }
+  typedef otb::TileMapTransform<otb::TransformDirection::FORWARD> TransformType;
+  TransformType::Pointer transform = TransformType::New();
+  transform->SetDepth(depth);
 
   typedef itk::Point <double, 2> PointType;
   PointType lonLatPoint;
@@ -154,7 +147,7 @@ int main(int argc, char* argv[])
   lonLatPoint[1] = lat;
 
   PointType tilePoint;
-  tilePoint = model->TransformPoint(lonLatPoint);
+  tilePoint = transform->TransformPoint(lonLatPoint);
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -204,33 +197,27 @@ int main(int argc, char* argv[])
   // new image in a GIS system. For this, we need to compute the coordinates
   // of the top left corner and the spacing in latitude and longitude.
   //
-  // For that, we use the forward model to convert the corner coordinates into
+  // For that, we use the inverse transform to convert the corner coordinates into
   // latitude and longitude.
   //
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::ForwardSensorModel<double> ForwardModelType;
-  ForwardModelType::Pointer modelForward = ForwardModelType::New();
+  typedef otb::TileMapTransform<otb::TransformDirection::INVERSE> InverseTransformType;
+  InverseTransformType::Pointer transformInverse = InverseTransformType::New();
+  transformInverse->SetDepth(depth);
 
-  modelForward->SetImageGeometry(readerTile->GetOutput()->GetImageKeywordlist());
-  dynamic_cast<ossimplugins::ossimTileMapModel*>(modelForward->GetOssimModel())->setDepth(
-    depth);
-  if (!modelForward)
-    {
-    std::cerr << "Unable to create a forward model" << std::endl;
-    return 1;
-    }
+
   double lonUL, latUL, lonSpacing, latSpacing;
 
   tilePoint[0] = startX - sizeX / 2;
   tilePoint[1] = startY - sizeY / 2;
-  lonLatPoint = modelForward->TransformPoint(tilePoint);
+  lonLatPoint = transformInverse->TransformPoint(tilePoint);
   lonUL = lonLatPoint[0];
   latUL = lonLatPoint[1];
   tilePoint[0] = startX + sizeX / 2;
   tilePoint[1] = startY + sizeY / 2;
-  lonLatPoint = modelForward->TransformPoint(tilePoint);
+  lonLatPoint = transformInverse->TransformPoint(tilePoint);
   lonSpacing = (lonLatPoint[0] - lonUL) / (sizeX - 1);
   latSpacing = (lonLatPoint[1] - latUL) / (sizeY - 1);
   // Software Guide : EndCodeSnippet

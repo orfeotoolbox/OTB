@@ -30,13 +30,14 @@
 #include "itkRescaleIntensityImageFilter.h"
 #include "otbPerBandVectorImageFilter.h"
 #include "otbPrintableImageFilter.h"
+#include "otbMultiChannelExtractROI.h"
 
 int otbTileMapWriter(int argc, char *argv[])
 {
-  if (argc != 4)
+  if (argc != 4 && argc != 8)
     {
     std::cerr << "Usage: " << argv[0]
-              << "<image> <SRTM directory> <output directory>" << std::endl;
+              << "<image> <SRTM directory> <output directory> <extract star index X (optional)> <extract star index Y(optional)> <extract star index X(optional)> <extract star index Y(optional)>" << std::endl;
     return EXIT_FAILURE;
 
     }
@@ -125,12 +126,31 @@ int otbTileMapWriter(int argc, char *argv[])
   orthoRectifXS->SetOutputOrigin(pointULexact);
   orthoRectifXS->SetDEMDirectory(argv[2]);
 
+  typedef otb::MultiChannelExtractROI<DoubleVectorImageType::InternalPixelType, DoubleVectorImageType::InternalPixelType> ExtractorType;
+  ExtractorType::Pointer extractor = ExtractorType::New();
+
   typedef otb::PrintableImageFilter<DoubleVectorImageType> PrintableImageFilterType;
   PrintableImageFilterType::Pointer printable = PrintableImageFilterType::New();
-  printable->SetInput(orthoRectifXSVector->GetOutput());
   printable->SetChannel(1);
   printable->SetChannel(2);
   printable->SetChannel(3);
+
+  if(argc==8)
+    {
+      extractor->SetStartX(atoi(argv[4]));
+      extractor->SetStartY(atoi(argv[5]));
+      extractor->SetSizeX(atoi(argv[6]));
+      extractor->SetSizeY(atoi(argv[7]));
+      extractor->SetInput(orthoRectifXSVector->GetOutput());
+
+      printable->SetInput(extractor->GetOutput());
+
+    }
+  else
+    {
+      printable->SetInput(orthoRectifXSVector->GetOutput());
+    }
+
 
   typedef otb::ImageRegionTileMapSplitter<2> SplitterType;
   SplitterType::Pointer splitter = SplitterType::New();

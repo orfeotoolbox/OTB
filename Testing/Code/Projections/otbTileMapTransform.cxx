@@ -16,11 +16,12 @@
 
 =========================================================================*/
 
+#include <fstream>
+#include <iomanip>
 #include "otbTileMapTransform.h"
 
 int otbTileMapTransform(int argc, char* argv[])
 {
-
   const char *  outFileName = argv[1];
   std::ofstream file;
   file.open(outFileName);

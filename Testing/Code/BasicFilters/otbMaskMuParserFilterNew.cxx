@@ -15,22 +15,23 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "itkExceptionObject.h"
 
-#include "otbDEMToOrthoImageGenerator.h"
-#include "otbMapProjections.h"
+#include "otbVectorImage.h"
 #include "otbImage.h"
+#include "otbMaskMuParserFilter.h"
 
-int otbDEMToOrthoImageGeneratorNew(int argc, char * argv[])
+int otbMaskMuParserFilterNew( int argc, char* argv[])
 {
-  const unsigned int Dimension = 2;
-  typedef otb::Image<unsigned char, Dimension>                                ImageType;
-  typedef otb::DEMToOrthoImageGenerator<ImageType, otb::UtmForwardProjection> DEMToImageGeneratorType;
 
-  // Instantiating object
-  DEMToImageGeneratorType::Pointer object = DEMToImageGeneratorType::New();
+  typedef float InputPixelType;
+  const unsigned int     Dimension = 2;
 
-  std::cout << object << std::endl;
+  typedef otb::VectorImage<InputPixelType,  Dimension>      InputVectorImageType;
+  typedef otb::Image<unsigned int, Dimension>                OutputImageType;
+  typedef otb::MaskMuParserFilter<InputVectorImageType, OutputImageType>  FilterType;
 
-  return EXIT_SUCCESS;
+
+   FilterType::Pointer   filter       = FilterType::New();
+
+   return EXIT_SUCCESS;
 }

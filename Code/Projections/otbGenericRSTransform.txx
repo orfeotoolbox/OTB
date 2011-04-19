@@ -22,6 +22,7 @@
 #include "otbMacro.h"
 #include "otbMetaDataKey.h"
 #include "itkMetaDataObject.h"
+#include "itkExceptionObject.h"
 
 #include "ogr_spatialref.h"
 
@@ -131,16 +132,7 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
     typedef otb::ForwardSensorModel<double, InputSpaceDimension, InputSpaceDimension> ForwardSensorModelType;
     typename ForwardSensorModelType::Pointer sensorModel = ForwardSensorModelType::New();
 
-    bool imageGeometrySet = false;
-    try
-      {
-      sensorModel->SetImageGeometry(m_InputKeywordList);
-      imageGeometrySet = true;
-      }
-    catch( itk::ExceptionObject& e)
-      {
-      otbMsgDevMacro(<< "Unable to instanciate a sensor model with the provided keyword list. Exception caught : " << e)
-      }
+    bool imageGeometrySet = sensorModel->SetImageGeometry(m_InputKeywordList);
 
     if (imageGeometrySet)
       {
@@ -209,17 +201,7 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
     typedef otb::InverseSensorModel<double, InputSpaceDimension, OutputSpaceDimension> InverseSensorModelType;
     typename InverseSensorModelType::Pointer sensorModel = InverseSensorModelType::New();
     
-    bool imageGeometrySet = false;
-    try
-      {
-      sensorModel->SetImageGeometry(m_OutputKeywordList);
-      imageGeometrySet = true;
-      }
-    catch( itk::ExceptionObject& e)
-      {
-      otbMsgDevMacro(<< "Unable to instanciate a sensor model with the provided output keyword list. Exception caught : " << e)
-      }
-
+    bool imageGeometrySet = sensorModel->SetImageGeometry(m_OutputKeywordList);
     
     if (imageGeometrySet)
       {
