@@ -83,8 +83,8 @@ int main(int argc, char* argv[])
 
     typedef otb::ForwardSensorModel<double> ModelType;
     ModelType::Pointer model = ModelType::New();
-    bool resModel = model->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
-    if (!resModel)
+    model->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
+    if ( model->IsValidSensorModel() == false )
       {
         std::cerr << "Unable to create a model" << std::endl;
         return 1;
