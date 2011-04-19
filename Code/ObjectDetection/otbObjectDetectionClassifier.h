@@ -148,8 +148,8 @@ public:
   itkSetMacro(Scales, DescriptorType);
 
   /** Set/Get the grid step for detection */
-  itkSetMacro(GridStep,unsigned int);
-  itkGetMacro(GridStep,unsigned int);
+  itkSetMacro(GridStep, unsigned int);
+  itkGetMacro(GridStep, unsigned int);
 
   /** Make a DataObject of the correct type to be used as the specified
    * output. */
@@ -357,8 +357,8 @@ public:
     otbSetObjectMemberMacro(Filter, Scales, DescriptorType);
 
     /** Set/Get the grid step for detection */
-    otbSetObjectMemberMacro(Filter,GridStep,unsigned int);
-    otbGetObjectMemberMacro(Filter,GridStep,unsigned int);
+    otbSetObjectMemberMacro(Filter, GridStep, unsigned int);
+    otbGetObjectMemberMacro(Filter, GridStep, unsigned int);
 
 
   protected:
