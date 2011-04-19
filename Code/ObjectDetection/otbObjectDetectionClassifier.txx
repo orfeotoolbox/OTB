@@ -258,7 +258,7 @@ PersistentObjectDetectionClassifier<TInputImage, TOutputVectorData, TLabel, TFun
     {
     if (current[1] % step == 0)
       {
-      for(current[0] = 0; current[0] != end[0]; current[0]++)
+      for(current[0] = begin[0]; current[0] != end[0]; current[0]++)
         {
         if (current[0] % step == 0)
           {
