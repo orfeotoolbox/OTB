@@ -147,6 +147,10 @@ public:
   itkGetMacro(Scales, DescriptorType);
   itkSetMacro(Scales, DescriptorType);
 
+  /** Set/Get the grid step for detection */
+  itkSetMacro(GridStep,unsigned int);
+  itkGetMacro(GridStep,unsigned int);
+
   /** Make a DataObject of the correct type to be used as the specified
    * output. */
   itk::DataObject::Pointer MakeOutput(unsigned int idx);
@@ -223,6 +227,10 @@ private:
   DescriptorType m_Shifts;
   DescriptorType m_Scales;
   DescriptorType m_InvertedScales;
+
+  /** Step of the detection grid */
+  unsigned int m_GridStep;
+
 };
 
 
@@ -347,6 +355,11 @@ public:
     /** Set/Get the Scales for this sample list */
     otbGetObjectMemberMacro(Filter, Scales, DescriptorType);
     otbSetObjectMemberMacro(Filter, Scales, DescriptorType);
+
+    /** Set/Get the grid step for detection */
+    otbSetObjectMemberMacro(Filter,GridStep,unsigned int);
+    otbGetObjectMemberMacro(Filter,GridStep,unsigned int);
+
 
   protected:
     /** Constructor */
