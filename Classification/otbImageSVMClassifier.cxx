@@ -44,6 +44,7 @@
 #include "otbStandardFilterWatcher.h"
 
 #include "otbMultiChannelExtractROI.h"
+#include "otbExtractROI.h"
 
 namespace otb
 {
@@ -81,10 +82,10 @@ int ImageSVMClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
   typedef otb::Image<LabeledPixelType, 2>          LabeledImageType;
 
   typedef otb::ImageFileReader<VectorImageType>    ReaderType;
-  typedef otb::ImageFileWriter<VectorImageType>    WriterType;
+  typedef otb::ImageFileWriter<LabeledImageType>   WriterType;
 
-  //typedef otb::ExtractROIBase<VectorImageType, VectorImageType>          ExtractROIType;
-  typedef otb::MultiChannelExtractROI<PixelType, PixelType>  ExtractROIType;
+  typedef otb::ExtractROI<LabeledPixelType, LabeledPixelType>  ExtractROIType;
+  //typedef otb::MultiChannelExtractROI<PixelType, PixelType>  ExtractROIType;
 
   // Statistic XML file Reader
   typedef itk::VariableLengthVector<PixelType>                          MeasurementType;
@@ -96,8 +97,8 @@ int ImageSVMClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
   typedef ClassificationFilterType::Pointer                                      ClassificationFilterPointerType;
   typedef ClassificationFilterType::ModelType                                    ModelType;
   typedef ModelType::Pointer                                                     ModelPointerType;
-  typedef otb::ChangeLabelImageFilter<LabeledImageType, VectorImageType>         ChangeLabelFilterType;
-  typedef ChangeLabelFilterType::Pointer                                         ChangeLabelFilterPointerType;
+//  typedef otb::ChangeLabelImageFilter<LabeledImageType, VectorImageType>         ChangeLabelFilterType;
+//  typedef ChangeLabelFilterType::Pointer                                         ChangeLabelFilterPointerType;
 
 
   //--------------------------
@@ -145,9 +146,9 @@ int ImageSVMClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
     classificationFilter->SetInput(reader->GetOutput());
     }
 
-  ChangeLabelFilterPointerType changeLabelFilter = ChangeLabelFilterType::New();
-  changeLabelFilter->SetInput(classificationFilter->GetOutput());
-  changeLabelFilter->SetNumberOfComponentsPerPixel(3);
+  //ChangeLabelFilterPointerType changeLabelFilter = ChangeLabelFilterType::New();
+  //changeLabelFilter->SetInput(classificationFilter->GetOutput());
+  //changeLabelFilter->SetNumberOfComponentsPerPixel(3);
 
   //--------------------------
   // Save labeled Image
@@ -161,7 +162,7 @@ int ImageSVMClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
        (parseResult->IsOptionPresent("ROISizeY")) )
     {
     ExtractROIType::Pointer extract =  ExtractROIType::New();
-    extract->SetInput(changeLabelFilter->GetOutput());
+    extract->SetInput(classificationFilter->GetOutput());
 
     std::cout << parseResult->GetParameterUInt("ROIStartX") << ", "
               << parseResult->GetParameterUInt("ROIStartY") << ", "
@@ -179,7 +180,7 @@ int ImageSVMClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
     }
   else
     {
-    writer->SetInput(changeLabelFilter->GetOutput());
+    writer->SetInput(classificationFilter->GetOutput());
     }
 
   writer->Update();
