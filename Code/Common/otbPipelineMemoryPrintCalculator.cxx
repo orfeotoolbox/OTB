@@ -119,18 +119,21 @@ PipelineMemoryPrintCalculator
     // Retrieve the data object
     DataObjectType * input = inputs[i];
 
-    // Retrieve possible source
-    ProcessObjectType * source = input->GetSource();
-
-    // If data object has a source
-    if(source)
+    if( input )
       {
-      print += this->EvaluateMemoryPrint(source);
-      }
-    else
-      {
-      MemoryPrintType localPrint = this->EvaluateDataObjectPrint(input);
-      print += localPrint;
+        // Retrieve possible source
+        ProcessObjectType * source = input->GetSource();
+        
+        // If data object has a source
+        if(source)
+          {
+            print += this->EvaluateMemoryPrint(source);
+          }
+        else
+          {
+            MemoryPrintType localPrint = this->EvaluateDataObjectPrint(input);
+            print += localPrint;
+          }
       }
     }
   // Retrieve the output array
@@ -139,8 +142,8 @@ PipelineMemoryPrintCalculator
   // Now, evaluate the current object print
   for(unsigned int i = 0; i < process->GetNumberOfOutputs(); ++i)
     {
-    MemoryPrintType localPrint = this->EvaluateDataObjectPrint(outputs[0]);
-    print += localPrint;
+      MemoryPrintType localPrint = this->EvaluateDataObjectPrint(outputs[0]);
+      print += localPrint;
     }
 
   // Finally, return the total print
