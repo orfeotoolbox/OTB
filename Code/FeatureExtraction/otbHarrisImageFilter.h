@@ -39,7 +39,7 @@ the smoothing of the image is performed by convolving with a
 Gaussian kernel of variance \f$\sigma_I\f$ (integration
 scale). This allows the computation of the following matrix:
 \f[
-\mu(\mathbf{x},\sigma_I,\sigma_D) = \sigma_D^4 g(\sigma_I)\star
+\mu(\mathbf{x},\sigma_I,\sigma_D) = \sigma_D^2 g(\sigma_I)\star
 \left[\begin{array}{cc} L_x^2(\mathbf{x},\sigma_D) &
 L_xL_y^2(\mathbf{x},\sigma_D)\\ L_xL_y^2(\mathbf{x},\sigma_D)&
 L_y^2(\mathbf{x},\sigma_D) \end{array}\right] \f]
