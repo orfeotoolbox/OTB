@@ -225,6 +225,9 @@ protected:
    * through */
   virtual void CopyInformation(itk::DataObject * data)
   {
+    // Call superclass implementation
+    Superclass::CopyInformation(data);
+
     // Try to cast to LabelMapWithAdjacency
     const Self * selfData = dynamic_cast<const Self *>(data);
 
