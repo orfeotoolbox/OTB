@@ -221,6 +221,18 @@ protected:
     Superclass::PrintSelf(os, indent);
   }
 
+  /** Re-implement CopyInformation to pass the adjancency graph
+   * through */
+  virtual void CopyInformation(itk::DataObject * data)
+  {
+    // Try to cast to LabelMapWithAdjacency
+    const Self * selfData = dynamic_cast<const Self *>(data);
+
+    // If cast succeed
+    if(selfData)
+      m_AdjacencyMap = selfData->m_AdjacencyMap;
+  }
+
 private:
   LabelMapWithAdjacency(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
