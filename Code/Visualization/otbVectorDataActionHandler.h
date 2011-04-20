@@ -123,7 +123,16 @@ public:
         {
         otbMsgDevMacro(
           << "VectorDataActionHandler::HandleWidgetEvent(): right click handling (" << widgetId << ", " << event << ")");
-        m_Model->EndGeometry();
+        try
+          {
+          m_Model->EndGeometry();
+          }
+        catch(itk::ExceptionObject& err)
+          {
+          std::stringstream msg;
+          msg << err.GetDescription();
+          otbGenericMsgDebugMacro(<< msg.str());
+          }
         // Update model
         m_Model->Update();
         return true;

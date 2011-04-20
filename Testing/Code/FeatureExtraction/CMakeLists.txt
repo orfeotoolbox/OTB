@@ -1040,7 +1040,7 @@ ADD_TEST(feTvImageToSURFKeyPointSetFilterSceneOutputInterestPointAscii ${FEATURE
          otbImageToSURFKeyPointSetFilterOutputInterestPointAscii
   ${INPUTDATA}/scene.png
   ${TEMP}/feTvImageToSURFKeyPointSetFilterSceneKeysOutputInterestPoint.txt
-  1 3
+  3 3
 )
 
 ADD_TEST(feTvImageToSURFKeyPointSetFilterSceneOutputDescriptorAscii ${FEATUREEXTRACTION_TESTS10}
@@ -1050,7 +1050,7 @@ ADD_TEST(feTvImageToSURFKeyPointSetFilterSceneOutputDescriptorAscii ${FEATUREEXT
          otbImageToSURFKeyPointSetFilterOutputDescriptorAscii
   ${INPUTDATA}/scene.png
   ${TEMP}/feTvImageToSURFKeyPointSetFilterSceneKeysOutputDescriptor.txt
-  1 3
+  3 3
 )
 
 
