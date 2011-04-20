@@ -198,7 +198,7 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
           typename InputImageType::IndexType indexKeyPoint;
           indexKeyPoint[0]=keyPoint[0];
           indexKeyPoint[1]=keyPoint[1];
-          m_ImageCurrent->TransformIndexToPhysicalPoint(indexKeyPoint,physicalKeyPoint);
+          m_ImageCurrent->TransformIndexToPhysicalPoint(indexKeyPoint, physicalKeyPoint);
 
           outputPointSet->SetPoint(m_NumberOfPoints, physicalKeyPoint);
 
