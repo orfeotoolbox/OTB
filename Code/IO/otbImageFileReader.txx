@@ -381,8 +381,12 @@ ImageFileReader<TOutputImage>
 
   itk::MetaDataDictionary& dict = this->m_ImageIO->GetMetaDataDictionary();
 
-  itk::EncapsulateMetaData<ImageKeywordlist>(dict,
-                                             MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
+  // Don't add an empty ossim keyword list
+  if( otb_kwl.GetSize() != 0 )
+    {
+      itk::EncapsulateMetaData<ImageKeywordlist>(dict,
+                                                 MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
+    }
 
   //Copy MetaDataDictionary from instantiated reader to output image.
   output->SetMetaDataDictionary(this->m_ImageIO->GetMetaDataDictionary());
@@ -491,8 +495,8 @@ ImageFileReader<TOutputImage>
   // TODO: check if the empty case is handled properly
   ImageKeywordlist otb_kwl;
   otb_kwl.SetKeywordlist(geom_kwl);
-  return otb_kwl;
 
+  return otb_kwl;
 }
 
 template <class TOutputImage>
