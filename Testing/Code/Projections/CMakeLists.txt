@@ -1037,7 +1037,7 @@ otbImageToEnvelopeVectorDataFilterNew)
 
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(prTvImageToEnvelopeVectorDataFilter ${PROJECTIONS_TESTS4}
---compare-ascii ${NOTOL}
+--compare-ascii ${EPSILON_6}
   ${BASELINE_FILES}/prTvImageToEnvelopeVectorDataFilterOutput.kml
   ${TEMP}/prTvImageToEnvelopeVectorDataFilterOutput.kml
   otbImageToEnvelopeVectorDataFilter
