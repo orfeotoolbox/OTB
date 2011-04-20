@@ -15,26 +15,25 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperStringParameter_h
-#define __otbWrapperStringParameter_h
+#ifndef __otbWrapperInputVectorDataParameter_h
+#define __otbWrapperInputVectorDataParameter_h
 
-#include <string>
+#include "otbVectorData.h"
 #include "otbWrapperParameter.h"
 
 namespace otb
 {
 namespace Wrapper
 {
-
-/** \class StringParameter
- *  \brief This class represent a string parameter for the wrapper framework
+/** \class InputVectorDataParameter
+ *  \brief This class represents a InputVectorData parameter
  */
-class StringParameter
-  : public Parameter
+
+class ITK_EXPORT InputVectorDataParameter : public Parameter
 {
 public:
   /** Standard class typedef */
-  typedef StringParameter               Self;
+  typedef InputVectorDataParameter      Self;
   typedef Parameter                     Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -43,46 +42,34 @@ public:
   itkNewMacro(Self);
 
   /** RTTI support */
-  itkTypeMacro(StringParameter, Parameter);
+  itkTypeMacro(InputVectorDataParameter,Parameter);
 
-  /** Set any value */
-  virtual void SetAnyValue(boost::any v)
-  {
-    // Perform any cast
-    m_Value = boost::any_cast<std::string>(v);
-
-    // Call Modified();
-    this->Modified();
-  }
-
-  /** Return any value */
-  virtual boost::any GetAnyValue()
-  {
-    return boost::any(m_Value);
-  }
+  typedef double CoordinatePrecisionType;
+  typedef double ValuePrecisionType;
+  typedef otb::VectorData<CoordinatePrecisionType, 2, ValuePrecisionType>  VectorDataType;
 
   /** Set the value */
-  itkSetMacro(Value,std::string);
+  itkSetObjectMacro(VectorData, VectorDataType);
 
   /** Get the value */
-  itkGetMacro(Value,std::string);
+  itkGetObjectMacro(VectorData, VectorDataType);
 
 protected:
   /** Constructor */
-  StringParameter()
+  InputVectorDataParameter()
   {}
 
   /** Destructor */
-  virtual ~StringParameter()
+  virtual ~InputVectorDataParameter()
   {}
 
 private:
-  StringParameter(const StringParameter &); //purposely not implemented
-  void operator =(const StringParameter&); //purposely not implemented
+  InputVectorDataParameter(const Parameter &); //purposely not implemented
+  void operator =(const Parameter&); //purposely not implemented
 
-  std::string m_Value;
+  VectorDataType::Pointer m_VectorData;
 
-}; // End class Parameter
+};
 
 } // End namespace Wrapper
 } // End namespace otb

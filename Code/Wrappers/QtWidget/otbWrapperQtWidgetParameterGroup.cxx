@@ -24,7 +24,7 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetParameterGroup::QtWidgetParameterGroup(ParameterList::Pointer paramList, QtWidgetModel* m)
+QtWidgetParameterGroup::QtWidgetParameterGroup(ParameterGroup::Pointer paramList, QtWidgetModel* m)
 : QtWidgetParameterBase(m),
   m_ParamList(paramList)
 {

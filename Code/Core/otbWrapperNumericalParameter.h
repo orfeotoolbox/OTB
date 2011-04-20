@@ -57,7 +57,7 @@ public:
   virtual void SetAnyValue(boost::any v)
   {
     // Perform any cast
-    m_Value=boost::any_cast<T>(v);
+    m_Value = boost::any_cast<T>(v);
 
     // Call Modified();
     this->Modified();
@@ -97,9 +97,9 @@ protected:
   /** Constructor */
   NumericalParameter() 
     : m_Value(itk::NumericTraits<T>::Zero),
-    m_DefaultValue(itk::NumericTraits<T>::Zero),
-    m_MinimumValue(itk::NumericTraits<T>::min()),
-    m_MaximumValue(itk::NumericTraits<T>::max())
+      m_DefaultValue(itk::NumericTraits<T>::Zero),
+      m_MinimumValue(itk::NumericTraits<T>::min()),
+      m_MaximumValue(itk::NumericTraits<T>::max())
   {}
 
   /** Destructor */

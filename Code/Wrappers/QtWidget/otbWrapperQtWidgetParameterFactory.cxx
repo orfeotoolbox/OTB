@@ -65,12 +65,12 @@ QtWidgetParameterFactory::CreateQtWidget( Parameter* param, QtWidgetModel* model
 {
   QWidget* widget = 0;
 
-  typedef QtWidgetParameterGenericFactory<EmptyParameter, QtWidgetEmptyParameter>   EmptyWidgetFactory;
-  typedef QtWidgetParameterGenericFactory<IntParameter, QtWidgetIntParameter>       IntWidgetFactory;
-  typedef QtWidgetParameterGenericFactory<FloatParameter, QtWidgetFloatParameter>   FloatWidgetFactory;
-  typedef QtWidgetParameterGenericFactory<StringParameter, QtWidgetStringParameter> StringWidgetFactory;
-  typedef QtWidgetParameterGenericFactory<ChoiceParameter, QtWidgetChoiceParameter> ChoiceWidgetFactory;
-  typedef QtWidgetParameterGenericFactory<ParameterList, QtWidgetParameterGroup> GroupWidgetFactory;
+  typedef QtWidgetParameterGenericFactory<EmptyParameter,  QtWidgetEmptyParameter>   EmptyWidgetFactory;
+  typedef QtWidgetParameterGenericFactory<IntParameter,    QtWidgetIntParameter>     IntWidgetFactory;
+  typedef QtWidgetParameterGenericFactory<FloatParameter,  QtWidgetFloatParameter>   FloatWidgetFactory;
+  typedef QtWidgetParameterGenericFactory<StringParameter, QtWidgetStringParameter>  StringWidgetFactory;
+  typedef QtWidgetParameterGenericFactory<ChoiceParameter, QtWidgetChoiceParameter>  ChoiceWidgetFactory;
+  typedef QtWidgetParameterGenericFactory<ParameterGroup,  QtWidgetParameterGroup>   GroupWidgetFactory;
 
   if ( EmptyWidgetFactory::CanCreate(param) )
     {

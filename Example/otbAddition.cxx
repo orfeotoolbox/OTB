@@ -36,7 +36,7 @@ Addition::~Addition()
 void Addition::DoCreateParameters()
 {
   std::cout << "Addition::DoCreateParameters" << std::endl;
-  ParameterList* params = GetParameterList();
+  ParameterGroup* params = GetParameterList();
   otb::Wrapper::FloatParameter::Pointer a = otb::Wrapper::FloatParameter::New();
   otb::Wrapper::FloatParameter::Pointer b = otb::Wrapper::FloatParameter::New();
 
@@ -53,7 +53,7 @@ void Addition::DoExecute()
 {
   std::cout << "Addition::DoExecute" << std::endl;
 
-  ParameterList* params = GetParameterList();
+  ParameterGroup* params = GetParameterList();
 
   otb::Wrapper::FloatParameter* pa = dynamic_cast<otb::Wrapper::FloatParameter*>(params->GetParameter(0).GetPointer());
   boost::any avalue = pa->GetAnyValue();

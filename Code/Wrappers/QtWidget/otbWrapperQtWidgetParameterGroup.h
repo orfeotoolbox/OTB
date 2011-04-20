@@ -19,7 +19,7 @@
 #define __otbWrapperQtWidgetParameterGroup_h
 
 #include <QtGui>
-#include "otbWrapperParameterList.h"
+#include "otbWrapperParameterGroup.h"
 #include "otbWrapperQtWidgetParameterBase.h"
 
 namespace otb
@@ -34,7 +34,7 @@ class QtWidgetParameterGroup : public QtWidgetParameterBase
 {
   Q_OBJECT
 public:
-  QtWidgetParameterGroup(ParameterList::Pointer, QtWidgetModel*);
+  QtWidgetParameterGroup(ParameterGroup::Pointer, QtWidgetModel*);
   virtual ~QtWidgetParameterGroup();
 
 private:
@@ -43,7 +43,7 @@ private:
 
   void CreateWidget();
 
-  ParameterList::Pointer m_ParamList;
+  ParameterGroup::Pointer m_ParamList;
 
 };
 

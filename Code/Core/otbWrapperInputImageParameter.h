@@ -18,6 +18,7 @@
 #ifndef __otbWrapperInputImageParameter_h
 #define __otbWrapperInputImageParameter_h
 
+#include "otbVectorImage.h"
 #include "otbWrapperParameter.h"
 
 namespace otb
@@ -43,6 +44,15 @@ public:
   /** RTTI support */
   itkTypeMacro(InputImageParameter,Parameter);
 
+  typedef float                          PixelType;
+  typedef otb::VectorImage<PixelType, 2> VectorImageType;
+
+  /** Set the value */
+  itkSetObjectMacro(Image, VectorImageType);
+
+  /** Get the value */
+  itkGetObjectMacro(Image, VectorImageType);
+
 protected:
   /** Constructor */
   InputImageParameter()
@@ -55,6 +65,8 @@ protected:
 private:
   InputImageParameter(const Parameter &); //purposely not implemented
   void operator =(const Parameter&); //purposely not implemented
+
+  VectorImageType::Pointer m_Image;
 
 }; // End class InputImage Parameter
 
