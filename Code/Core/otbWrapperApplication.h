@@ -21,7 +21,7 @@
 #include <string>
 #include "otbMacro.h"
 #include "itkObject.h"
-#include "otbWrapperParameterList.h"
+#include "otbWrapperParameterGroup.h"
 #include "itkObjectFactory.h"
 
 namespace otb
@@ -63,7 +63,7 @@ public:
 
   void Init()
   {
-    m_ParameterList = ParameterList::New();
+    m_ParameterList = ParameterGroup::New();
     this->DoCreateParameters();
   }
 
@@ -77,7 +77,7 @@ public:
     this->DoExecute();
   }
 
-  ParameterList* GetParameterList()
+  ParameterGroup* GetParameterList()
   {
     return m_ParameterList;
   }
@@ -101,7 +101,7 @@ private:
 
   std::string m_Name;
   std::string m_Description;
-  ParameterList::Pointer m_ParameterList;
+  ParameterGroup::Pointer m_ParameterList;
 
 }; //end class
 
