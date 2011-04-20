@@ -129,7 +129,9 @@ public:
           }
         catch(itk::ExceptionObject& err)
           {
-          otbGenericMsgDebugMacro(<< err.GetDescription());
+          std::stringstream msg;
+          msg << err.GetDescription();
+          otbGenericMsgDebugMacro(<< msg.str());
           }
         // Update model
         m_Model->Update();
