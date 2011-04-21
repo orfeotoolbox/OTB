@@ -70,9 +70,9 @@ public:
   itkTypeMacro(DecisionTree, DataObject);
 
   typedef typename std::pair< AttributeValueType, DecisionTreeTestType > KeyType;
-  typedef typename std::map< KeyType, Pointer > TreeMapType;
-  typedef typename std::map< KeyType, LabelType > LabelMapType;
-  typedef std::vector<AttributeValueType> ExampleType;
+  typedef typename std::map< KeyType, Pointer >                          TreeMapType;
+  typedef typename std::map< KeyType, LabelType >                        LabelMapType;
+  typedef std::vector<AttributeValueType>                                ExampleType;
 
   itkSetMacro(Attribute, unsigned int);
   itkGetMacro(Attribute, unsigned int);
