@@ -492,7 +492,6 @@ ImageFileReader<TOutputImage>
     otbMsgDevMacro(<< geom_kwl);
     }
 
-  // TODO: check if the empty case is handled properly
   ImageKeywordlist otb_kwl;
   otb_kwl.SetKeywordlist(geom_kwl);
 
