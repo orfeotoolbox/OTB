@@ -41,6 +41,9 @@ ADD_TEST(fzTvMassOfBelief ${Fuzzy_TESTS1}
 ADD_TEST(fzTvJointMassOfBeliefFilter ${Fuzzy_TESTS1}
         otbJointMassOfBeliefFilter)
 
+ADD_TEST(fzTvJointMassOfBeliefFilterLimit ${Fuzzy_TESTS1}
+        otbJointMassOfBeliefFilterLimit)
+
 # FuzzyTests2
 ADD_TEST(fzTvFuzzyVariableDSApplied ${Fuzzy_TESTS2}
         otbFuzzyVariableDSApplied)
