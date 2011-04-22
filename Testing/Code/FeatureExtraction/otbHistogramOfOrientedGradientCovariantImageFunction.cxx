@@ -54,7 +54,7 @@ int otbHistogramOfOrientedGradientCovariantImageFunctionNew(int argc, char * arg
 int otbHistogramOfOrientedGradientCovariantImageFunction(int argc, char * argv[])
 {
   ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName(argv[1]);
+  reader->SetFileName("C:/ORFEO/OTB-Data/Input/ROI_IKO_PAN_LesHalles.tif");
 
   GradientFilterType::Pointer gradient = GradientFilterType::New();
   gradient->SetInput(reader->GetOutput());
@@ -67,15 +67,15 @@ int otbHistogramOfOrientedGradientCovariantImageFunction(int argc, char * argv[]
   
   InputImageType::IndexType index;
   
-  unsigned int radius = atoi(argv[3]);
-  index[0] = atoi(argv[4]);
-  index[1] = atoi(argv[5]);
+  unsigned int radius = 2;//atoi(argv[3]);
+  index[0] = 273;//atoi(argv[4]);
+  index[1] = 64;//atoi(argv[5]);
 
   function->SetNeighborhoodRadius(radius);
 
   FunctionType::OutputType value = function->EvaluateAtIndex(index);
 
-  std::ofstream ofs(argv[2]);
+  std::ofstream ofs("feTvHistogramOfOrientedGradientCovariantImageFunction.txt");
 
   for(unsigned i = 0; i < 5; ++i)
     {
@@ -87,6 +87,8 @@ int otbHistogramOfOrientedGradientCovariantImageFunction(int argc, char * argv[]
     }
 
   ofs.close();
+
+  std::cout<<"OKKKKKKKKKKKKKKKKKKKKKKKKKKKKK"<<std::endl;
 
   return EXIT_SUCCESS;
 }

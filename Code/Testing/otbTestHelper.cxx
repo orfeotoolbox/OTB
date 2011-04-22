@@ -1116,7 +1116,10 @@ bool TestHelper::isNumeric(std::string str) const
 
 bool TestHelper::isScientificNumeric(std::string str) const
 {
-
+	if(str.size() == 0)
+	{
+		return false;
+	}
   int number(0);
   number = str[0];
   bool pointDetected(false);
@@ -1176,6 +1179,11 @@ bool TestHelper::isHexaPointerAddress(std::string str) const
   unsigned int size(0);
   bool         result(false);
   unsigned int start(0);
+
+  if( str.size() < 2 )
+  {
+	return false;
+  }
   //If (0xadresss)
   if ((str[0] == 40) && (str[str.size() - 1] == 41) && (str[1] == 48) && (str[2] == 120))
     {
