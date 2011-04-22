@@ -125,10 +125,7 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
         // lies in [-pi, pi]
         unsigned int binIndex = vcl_floor((otb::CONST_PI + angle)/orientationBinWidth);
 
- std::cout<<std::setprecision(15)<<gradient[1] <<"  "<<gradient[0]<<std::endl;
- std::cout<<std::setprecision(15)<<otb::CONST_PI <<"  "<<angle<<"  "<<orientationBinWidth<<" = "<<(otb::CONST_PI + angle)/orientationBinWidth<<std::endl;
-
-        // Cumulate values
+         // Cumulate values
         globalOrientationHistogram[binIndex]+= magnitude * gWeight;
         }
       }
