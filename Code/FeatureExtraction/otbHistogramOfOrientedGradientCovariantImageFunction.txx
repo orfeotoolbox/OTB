@@ -113,10 +113,10 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
 
         // Then, compute the gradient orientation
         double angle = 0.;
-		if( gradient[1] != 0 )
-		{
-			angle = vcl_atan2(gradient[1], gradient[0]);
-		}
+              if( gradient[1] != 0 )
+              {
+                     angle = vcl_atan2(gradient[1], gradient[0]);
+              }
 
         // Also compute its magnitude
         TOutputPrecision magnitude = vcl_sqrt(gradient[0]*gradient[0]+gradient[1]*gradient[1]);

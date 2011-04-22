@@ -67,9 +67,9 @@ int otbHistogramOfOrientedGradientCovariantImageFunction(int argc, char * argv[]
   
   InputImageType::IndexType index;
   
-  unsigned int radius = 2;//atoi(argv[3]);
-  index[0] = 273;//atoi(argv[4]);
-  index[1] = 64;//atoi(argv[5]);
+  unsigned int radius = 2; //atoi(argv[3]);
+  index[0] = 273; //atoi(argv[4]);
+  index[1] = 64; //atoi(argv[5]);
 
   function->SetNeighborhoodRadius(radius);
 
