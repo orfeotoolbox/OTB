@@ -15,12 +15,13 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperQtWidgetChoiceParameter_h
-#define __otbWrapperQtWidgetChoiceParameter_h
+#ifndef __otbWrapperQtWidgetInputImageParameter_h
+#define __otbWrapperQtWidgetInputImageParameter_h
 
 #include <QtGui>
-#include "otbWrapperChoiceParameter.h"
+#include "otbWrapperInputImageParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
+
 
 namespace otb
 {
@@ -30,24 +31,25 @@ namespace Wrapper
 /** \class
  * \brief
  */
-class QtWidgetChoiceParameter : public QtWidgetParameterBase
+class QtWidgetInputImageParameter : public QtWidgetParameterBase
 {
   Q_OBJECT
 public:
-  QtWidgetChoiceParameter(ChoiceParameter*, QtWidgetModel*);
-  virtual ~QtWidgetChoiceParameter();
+  QtWidgetInputImageParameter(InputImageParameter*, QtWidgetModel*);
+  virtual ~QtWidgetInputImageParameter();
 
 protected slots:
-  void SetValue( int value );
+  void SetFileName( const QString& value );
+  void SelectFile();
 
 protected:
   void CreateWidget();
 
-  ChoiceParameter::Pointer m_ChoiceParam;
-
 private:
-  QtWidgetChoiceParameter(const QtWidgetChoiceParameter&); //purposely not implemented
-  void operator=(const QtWidgetChoiceParameter&); //purposely not implemented
+  QtWidgetInputImageParameter(const QtWidgetInputImageParameter&); //purposely not implemented
+  void operator=(const QtWidgetInputImageParameter&); //purposely not implemented
+
+  InputImageParameter::Pointer m_InputImageParam;
 };
 
 

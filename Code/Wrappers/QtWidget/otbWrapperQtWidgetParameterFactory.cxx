@@ -22,6 +22,8 @@
 #include "otbWrapperQtWidgetFloatParameter.h"
 #include "otbWrapperQtWidgetStringParameter.h"
 #include "otbWrapperQtWidgetChoiceParameter.h"
+#include "otbWrapperQtWidgetInputImageParameter.h"
+#include "otbWrapperQtWidgetOutputImageParameter.h"
 #include "otbWrapperQtWidgetParameterGroup.h"
 
 namespace otb
@@ -63,41 +65,30 @@ QtWidgetParameterFactory::~QtWidgetParameterFactory()
 QWidget*
 QtWidgetParameterFactory::CreateQtWidget( Parameter* param, QtWidgetModel* model )
 {
+
+
+#define CREATEWIDGET( ParameterType, WidgetType ) \
+  else if ( QtWidgetParameterGenericFactory<ParameterType,  WidgetType>::CanCreate(param) ) \
+    { \
+    widget = QtWidgetParameterGenericFactory<ParameterType,  WidgetType>::Create(param, model); \
+    }
+
   QWidget* widget = 0;
 
-  typedef QtWidgetParameterGenericFactory<EmptyParameter,  QtWidgetEmptyParameter>   EmptyWidgetFactory;
-  typedef QtWidgetParameterGenericFactory<IntParameter,    QtWidgetIntParameter>     IntWidgetFactory;
-  typedef QtWidgetParameterGenericFactory<FloatParameter,  QtWidgetFloatParameter>   FloatWidgetFactory;
-  typedef QtWidgetParameterGenericFactory<StringParameter, QtWidgetStringParameter>  StringWidgetFactory;
-  typedef QtWidgetParameterGenericFactory<ChoiceParameter, QtWidgetChoiceParameter>  ChoiceWidgetFactory;
-  typedef QtWidgetParameterGenericFactory<ParameterGroup,  QtWidgetParameterGroup>   GroupWidgetFactory;
-
-  if ( EmptyWidgetFactory::CanCreate(param) )
-    {
-    widget = EmptyWidgetFactory::Create(param, model);
-    }
-  else if ( IntWidgetFactory::CanCreate(param) )
-    {
-    widget = IntWidgetFactory::Create(param, model);
-    }
-  else if ( FloatWidgetFactory::CanCreate(param) )
-    {
-    widget = FloatWidgetFactory::Create(param, model);
-    }
-  else if ( ChoiceWidgetFactory::CanCreate(param) )
-    {
-    widget = ChoiceWidgetFactory::Create(param, model);
-    }
-  else if ( StringWidgetFactory::CanCreate(param) )
-    {
-    widget = StringWidgetFactory::Create(param, model);
-    }
-  else if ( GroupWidgetFactory::CanCreate(param) )
-    {
-    widget = GroupWidgetFactory::Create(param, model);
-    }
+  if (0) {}
+  CREATEWIDGET(EmptyParameter,       QtWidgetEmptyParameter)
+  CREATEWIDGET(IntParameter,         QtWidgetIntParameter)
+  CREATEWIDGET(FloatParameter,       QtWidgetFloatParameter)
+  CREATEWIDGET(StringParameter,      QtWidgetStringParameter)
+  CREATEWIDGET(ChoiceParameter,      QtWidgetChoiceParameter)
+  CREATEWIDGET(InputImageParameter,  QtWidgetInputImageParameter)
+  CREATEWIDGET(OutputImageParameter, QtWidgetOutputImageParameter)
+  CREATEWIDGET(EmptyParameter,       QtWidgetEmptyParameter)
+  CREATEWIDGET(ParameterGroup,       QtWidgetParameterGroup)
 
   return widget;
+
+#undef CREATEWIDGET
 }
 
 

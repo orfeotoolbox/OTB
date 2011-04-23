@@ -15,25 +15,26 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperInputVectorDataParameter_h
-#define __otbWrapperInputVectorDataParameter_h
+#ifndef __otbWrapperFilenameParameter_h
+#define __otbWrapperFilenameParameter_h
 
-#include "otbVectorData.h"
+#include <string>
 #include "otbWrapperParameter.h"
 
 namespace otb
 {
 namespace Wrapper
 {
-/** \class InputVectorDataParameter
- *  \brief This class represents a InputVectorData parameter
- */
 
-class ITK_EXPORT InputVectorDataParameter : public Parameter
+/** \class FilenameParameter
+ *  \brief This class represent a string parameter for the wrapper framework
+ */
+class FilenameParameter
+  : public Parameter
 {
 public:
   /** Standard class typedef */
-  typedef InputVectorDataParameter      Self;
+  typedef FilenameParameter               Self;
   typedef Parameter                     Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -42,43 +43,46 @@ public:
   itkNewMacro(Self);
 
   /** RTTI support */
-  itkTypeMacro(InputVectorDataParameter,Parameter);
+  itkTypeMacro(FilenameParameter, Parameter);
 
-  typedef double CoordinatePrecisionType;
-  typedef double ValuePrecisionType;
-  typedef otb::VectorData<CoordinatePrecisionType, 2, ValuePrecisionType>  VectorDataType;
+  /** Set any value */
+  virtual void SetAnyValue(boost::any v)
+  {
+    // Perform any cast
+    m_Value = boost::any_cast<std::string>(v);
 
-  /** Set the value */
-  itkSetObjectMacro(VectorData, VectorDataType);
-
-  /** Get the value */
-  itkGetObjectMacro(VectorData, VectorDataType);
+    // Call Modified();
+    this->Modified();
+  }
 
   /** Return any value */
   virtual boost::any GetAnyValue()
   {
-    return boost::any(m_VectorData);
+    return boost::any(m_Value);
   }
+
+  /** Set the value */
+  itkSetMacro(Value,std::string);
+
+  /** Get the value */
+  itkGetMacro(Value,std::string);
 
 protected:
   /** Constructor */
-  InputVectorDataParameter()
-  {
-    this->SetName("Input Vector Data");
-    this->SetKey("ivd");
-  }
-
-  /** Destructor */
-  virtual ~InputVectorDataParameter()
+  FilenameParameter()
   {}
 
-  VectorDataType::Pointer m_VectorData;
+  /** Destructor */
+  virtual ~FilenameParameter()
+  {}
+
+  std::string m_Value;
 
 private:
-  InputVectorDataParameter(const Parameter &); //purposely not implemented
-  void operator =(const Parameter&); //purposely not implemented
+  FilenameParameter(const FilenameParameter &); //purposely not implemented
+  void operator =(const FilenameParameter&); //purposely not implemented
 
-};
+}; // End class Parameter
 
 } // End namespace Wrapper
 } // End namespace otb

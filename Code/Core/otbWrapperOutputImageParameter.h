@@ -15,25 +15,25 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperInputVectorDataParameter_h
-#define __otbWrapperInputVectorDataParameter_h
+#ifndef __otbWrapperOutputImageParameter_h
+#define __otbWrapperOutputImageParameter_h
 
-#include "otbVectorData.h"
+#include "otbVectorImage.h"
 #include "otbWrapperParameter.h"
 
 namespace otb
 {
 namespace Wrapper
 {
-/** \class InputVectorDataParameter
- *  \brief This class represents a InputVectorData parameter
+/** \class OutputImageParameter
+ *  \brief This class represents a OutputImage parameter
  */
 
-class ITK_EXPORT InputVectorDataParameter : public Parameter
+class ITK_EXPORT OutputImageParameter : public Parameter
 {
 public:
   /** Standard class typedef */
-  typedef InputVectorDataParameter      Self;
+  typedef OutputImageParameter           Self;
   typedef Parameter                     Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -42,43 +42,42 @@ public:
   itkNewMacro(Self);
 
   /** RTTI support */
-  itkTypeMacro(InputVectorDataParameter,Parameter);
+  itkTypeMacro(OutputImageParameter,Parameter);
 
-  typedef double CoordinatePrecisionType;
-  typedef double ValuePrecisionType;
-  typedef otb::VectorData<CoordinatePrecisionType, 2, ValuePrecisionType>  VectorDataType;
+  typedef float                          PixelType;
+  typedef otb::VectorImage<PixelType, 2> VectorImageType;
 
   /** Set the value */
-  itkSetObjectMacro(VectorData, VectorDataType);
+  itkSetObjectMacro(Image, VectorImageType);
 
   /** Get the value */
-  itkGetObjectMacro(VectorData, VectorDataType);
+  itkGetObjectMacro(Image, VectorImageType);
 
   /** Return any value */
   virtual boost::any GetAnyValue()
   {
-    return boost::any(m_VectorData);
+    return boost::any(m_Image);
   }
 
 protected:
   /** Constructor */
-  InputVectorDataParameter()
+  OutputImageParameter()
   {
-    this->SetName("Input Vector Data");
-    this->SetKey("ivd");
+    this->SetName("Output Image");
+    this->SetKey("out");
   }
 
   /** Destructor */
-  virtual ~InputVectorDataParameter()
+  virtual ~OutputImageParameter()
   {}
 
-  VectorDataType::Pointer m_VectorData;
+  VectorImageType::Pointer m_Image;
 
 private:
-  InputVectorDataParameter(const Parameter &); //purposely not implemented
+  OutputImageParameter(const Parameter &); //purposely not implemented
   void operator =(const Parameter&); //purposely not implemented
 
-};
+}; // End class OutputImage Parameter
 
 } // End namespace Wrapper
 } // End namespace otb

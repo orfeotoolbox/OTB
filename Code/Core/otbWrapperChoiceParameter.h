@@ -107,12 +107,8 @@ protected:
   {}
 
   /** Destructor */
-  ~ChoiceParameter()
+  virtual ~ChoiceParameter()
   {}
-
-private:
-  ChoiceParameter(const ChoiceParameter &); //purposely not implemented
-  void operator =(const ChoiceParameter&); //purposely not implemented
 
   typedef std::pair<std::string, Parameter::Pointer> Choice;
 
@@ -120,6 +116,10 @@ private:
   ChoiceList m_ChoiceList;
 
   unsigned int m_CurrentChoice;
+
+private:
+  ChoiceParameter(const ChoiceParameter &); //purposely not implemented
+  void operator =(const ChoiceParameter&); //purposely not implemented
 
 }; // End class Parameter
 

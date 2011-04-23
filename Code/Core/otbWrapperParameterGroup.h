@@ -67,11 +67,11 @@ protected:
   virtual ~ParameterGroup()
   {}
 
+  std::vector<Parameter::Pointer> m_ParameterList;
+
 private:
   ParameterGroup(const ParameterGroup &); //purposely not implemented
   void operator =(const ParameterGroup&); //purposely not implemented
-
-  std::vector<Parameter::Pointer> m_ParameterList;
 
 };
 

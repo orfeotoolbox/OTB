@@ -19,6 +19,8 @@
 #define __otbWrapperInputImageParameter_h
 
 #include "otbVectorImage.h"
+#include "otbImageFileReader.h"
+
 #include "otbWrapperParameter.h"
 
 namespace otb
@@ -53,20 +55,39 @@ public:
   /** Get the value */
   itkGetObjectMacro(Image, VectorImageType);
 
+  /** Set value from filename */
+  void SetFromFileName(const std::string& filename)
+  {
+    typedef otb::ImageFileReader<VectorImageType> ImageFileReaderType;
+    ImageFileReaderType::Pointer reader = ImageFileReaderType::New();
+    reader->SetFileName(filename);
+    reader->UpdateOutputInformation();
+    m_Image = reader->GetOutput();
+  }
+
+  /** Return any value */
+  virtual boost::any GetAnyValue()
+  {
+    return boost::any(m_Image);
+  }
+
 protected:
   /** Constructor */
   InputImageParameter()
-  {}
+  {
+    this->SetName("Input Image");
+    this->SetKey("in");
+  }
 
   /** Destructor */
   virtual ~InputImageParameter()
   {}
 
+  VectorImageType::Pointer m_Image;
+
 private:
   InputImageParameter(const Parameter &); //purposely not implemented
   void operator =(const Parameter&); //purposely not implemented
-
-  VectorImageType::Pointer m_Image;
 
 }; // End class InputImage Parameter
 

@@ -76,11 +76,11 @@ protected:
   virtual ~StringParameter()
   {}
 
+  std::string m_Value;
+
 private:
   StringParameter(const StringParameter &); //purposely not implemented
   void operator =(const StringParameter&); //purposely not implemented
-
-  std::string m_Value;
 
 }; // End class Parameter
 

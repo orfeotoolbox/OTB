@@ -60,13 +60,15 @@ ADD_TEST(owTuApplication ${OTB_WRAPPER_TESTS}
 SET(Wrapper_SRCS
 otbWrapperCoreTests.cxx
 
-otbWrapperParameterTest.cxx
-otbWrapperNumericalParameterTest.cxx
-otbWrapperEmptyParameterTest.cxx
 otbWrapperApplicationTest.cxx
-otbWrapperParameterListTest.cxx
+otbWrapperChoiceParameterTest.cxx
+otbWrapperEmptyParameterTest.cxx
 otbWrapperInputImageParameterTest.cxx
 otbWrapperInputVectorDataParameterTest.cxx
+otbWrapperNumericalParameterTest.cxx
+otbWrapperOutputImageParameterTest.cxx
+otbWrapperParameterListTest.cxx
+otbWrapperParameterTest.cxx
 )
 
 ADD_EXECUTABLE(otbWrapperTests ${Wrapper_SRCS})

@@ -21,8 +21,23 @@
 #include <string>
 #include "otbMacro.h"
 #include "itkObject.h"
-#include "otbWrapperParameterGroup.h"
 #include "itkObjectFactory.h"
+
+#include "otbWrapperParameterGroup.h"
+
+// include all parameters type for easy use when defining the application
+#include "otbWrapperChoiceParameter.h"
+#include "otbWrapperDirectoryParameter.h"
+#include "otbWrapperEmptyParameter.h"
+#include "otbWrapperFilenameParameter.h"
+#include "otbWrapperInputComplexImageParameter.h"
+#include "otbWrapperInputImageParameter.h"
+#include "otbWrapperInputVectorDataParameter.h"
+#include "otbWrapperNumericalParameter.h"
+#include "otbWrapperOutputImageParameter.h"
+#include "otbWrapperOutputVectorDataParameter.h"
+#include "otbWrapperRadiusParameter.h"
+#include "otbWrapperStringParameter.h"
 
 namespace otb
 {
@@ -88,14 +103,13 @@ protected:
 
   virtual ~Application();
 
-protected:
+private:
   virtual void DoCreateParameters() = 0;
 
   virtual void DoUpdateParameters() = 0;
 
   virtual void DoExecute() = 0;
 
-private:
   Application(const Application &); //purposely not implemented
   void operator =(const Application&); //purposely not implemented
 

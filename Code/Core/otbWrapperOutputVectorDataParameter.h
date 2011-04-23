@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperInputVectorDataParameter_h
-#define __otbWrapperInputVectorDataParameter_h
+#ifndef __otbWrapperOutputVectorDataParameter_h
+#define __otbWrapperOutputVectorDataParameter_h
 
 #include "otbVectorData.h"
 #include "otbWrapperParameter.h"
@@ -25,15 +25,15 @@ namespace otb
 {
 namespace Wrapper
 {
-/** \class InputVectorDataParameter
- *  \brief This class represents a InputVectorData parameter
+/** \class OutputVectorDataParameter
+ *  \brief This class represents a OutputVectorData parameter
  */
 
-class ITK_EXPORT InputVectorDataParameter : public Parameter
+class ITK_EXPORT OutputVectorDataParameter : public Parameter
 {
 public:
   /** Standard class typedef */
-  typedef InputVectorDataParameter      Self;
+  typedef OutputVectorDataParameter      Self;
   typedef Parameter                     Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -42,7 +42,7 @@ public:
   itkNewMacro(Self);
 
   /** RTTI support */
-  itkTypeMacro(InputVectorDataParameter,Parameter);
+  itkTypeMacro(OutputVectorDataParameter,Parameter);
 
   typedef double CoordinatePrecisionType;
   typedef double ValuePrecisionType;
@@ -62,20 +62,20 @@ public:
 
 protected:
   /** Constructor */
-  InputVectorDataParameter()
+  OutputVectorDataParameter()
   {
-    this->SetName("Input Vector Data");
-    this->SetKey("ivd");
+    this->SetName("Output Vector Data");
+    this->SetKey("outvd");
   }
 
   /** Destructor */
-  virtual ~InputVectorDataParameter()
+  virtual ~OutputVectorDataParameter()
   {}
 
   VectorDataType::Pointer m_VectorData;
 
 private:
-  InputVectorDataParameter(const Parameter &); //purposely not implemented
+  OutputVectorDataParameter(const Parameter &); //purposely not implemented
   void operator =(const Parameter&); //purposely not implemented
 
 };

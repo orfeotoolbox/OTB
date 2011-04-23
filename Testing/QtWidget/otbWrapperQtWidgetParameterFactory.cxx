@@ -52,33 +52,26 @@ public:
 protected:
   StubApplication()
   {
-
   }
 
   virtual ~StubApplication()
   {
-
   }
 
   void DoCreateParameters()
   {
-
   }
 
   void DoUpdateParameters()
   {
-
   }
 
   void DoExecute()
   {
-
   }
-
 };
 
 }
-
 }
 
 
@@ -115,7 +108,7 @@ int otbWrapperQtWidgetParameterFactory(int argc, char* argv[])
   emptyParam->SetKey("empty");
 
   choiceParam->SetName("Choice parameter");
-  choiceParam->SetDescription("This is an choice parameter");
+  choiceParam->SetDescription("This is a choice parameter");
   choiceParam->SetKey("choice");
   choiceParam->AddChoice("choice1", 0);
   choiceParam->AddChoice("choice2", 0);

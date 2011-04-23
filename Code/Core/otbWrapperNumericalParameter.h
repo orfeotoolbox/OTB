@@ -106,10 +106,6 @@ protected:
   virtual ~NumericalParameter()
   {}
 
-private:
-  NumericalParameter(const Parameter &); //purposely not implemented
-  void operator =(const Parameter&); //purposely not implemented
-  
   /** Value */
   ScalarType m_Value;
 
@@ -121,6 +117,10 @@ private:
 
   /** Maximum value */
   ScalarType m_MaximumValue;
+
+private:
+  NumericalParameter(const Parameter &); //purposely not implemented
+  void operator =(const Parameter&); //purposely not implemented
 
 }; // End class Numerical Parameter
 

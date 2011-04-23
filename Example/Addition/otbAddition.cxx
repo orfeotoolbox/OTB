@@ -37,8 +37,14 @@ void Addition::DoCreateParameters()
 {
   std::cout << "Addition::DoCreateParameters" << std::endl;
   ParameterGroup* params = GetParameterList();
+
   otb::Wrapper::FloatParameter::Pointer a = otb::Wrapper::FloatParameter::New();
+  a->SetKey("a");
+  a->SetName("First number");
+
   otb::Wrapper::FloatParameter::Pointer b = otb::Wrapper::FloatParameter::New();
+  b->SetKey("b");
+  b->SetName("Second number");
 
   params->AddParameter(a.GetPointer());
   params->AddParameter(b.GetPointer());

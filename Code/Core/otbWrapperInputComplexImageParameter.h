@@ -15,25 +15,25 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperInputVectorDataParameter_h
-#define __otbWrapperInputVectorDataParameter_h
+#ifndef __otbWrapperInputComplexImageParameter_h
+#define __otbWrapperInputComplexImageParameter_h
 
-#include "otbVectorData.h"
+#include "otbVectorImage.h"
 #include "otbWrapperParameter.h"
 
 namespace otb
 {
 namespace Wrapper
 {
-/** \class InputVectorDataParameter
- *  \brief This class represents a InputVectorData parameter
+/** \class InputComplexImageParameter
+ *  \brief This class represents a InputComplexImage parameter
  */
 
-class ITK_EXPORT InputVectorDataParameter : public Parameter
+class ITK_EXPORT InputComplexImageParameter : public Parameter
 {
 public:
   /** Standard class typedef */
-  typedef InputVectorDataParameter      Self;
+  typedef InputComplexImageParameter           Self;
   typedef Parameter                     Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -42,43 +42,36 @@ public:
   itkNewMacro(Self);
 
   /** RTTI support */
-  itkTypeMacro(InputVectorDataParameter,Parameter);
+  itkTypeMacro(InputComplexImageParameter,Parameter);
 
-  typedef double CoordinatePrecisionType;
-  typedef double ValuePrecisionType;
-  typedef otb::VectorData<CoordinatePrecisionType, 2, ValuePrecisionType>  VectorDataType;
+  typedef float                          PixelType;
+  typedef otb::VectorImage<PixelType, 2> VectorImageType;
 
   /** Set the value */
-  itkSetObjectMacro(VectorData, VectorDataType);
+  itkSetObjectMacro(Image, VectorImageType);
 
   /** Get the value */
-  itkGetObjectMacro(VectorData, VectorDataType);
-
-  /** Return any value */
-  virtual boost::any GetAnyValue()
-  {
-    return boost::any(m_VectorData);
-  }
+  itkGetObjectMacro(Image, VectorImageType);
 
 protected:
   /** Constructor */
-  InputVectorDataParameter()
+  InputComplexImageParameter()
   {
-    this->SetName("Input Vector Data");
-    this->SetKey("ivd");
+    this->SetName("Input Image");
+    this->SetKey("in");
   }
 
   /** Destructor */
-  virtual ~InputVectorDataParameter()
+  virtual ~InputComplexImageParameter()
   {}
 
-  VectorDataType::Pointer m_VectorData;
+  VectorImageType::Pointer m_Image;
 
 private:
-  InputVectorDataParameter(const Parameter &); //purposely not implemented
+  InputComplexImageParameter(const Parameter &); //purposely not implemented
   void operator =(const Parameter&); //purposely not implemented
 
-};
+}; // End class InputComplexImage Parameter
 
 } // End namespace Wrapper
 } // End namespace otb

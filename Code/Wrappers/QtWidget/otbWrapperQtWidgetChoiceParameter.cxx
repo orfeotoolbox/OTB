@@ -58,7 +58,6 @@ void QtWidgetChoiceParameter::CreateWidget()
 
 void QtWidgetChoiceParameter::SetValue(int value)
 {
-  std::cout << "QtWidgetChoiceParameter::SetValue " << value << std::endl;
   m_ChoiceParam->SetValue( value );
 }
 
