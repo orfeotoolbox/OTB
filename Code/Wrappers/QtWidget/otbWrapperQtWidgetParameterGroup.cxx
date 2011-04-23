@@ -49,8 +49,7 @@ void QtWidgetParameterGroup::CreateWidget()
     QWidget* label = new QtWidgetParameterLabel( param );
     gridLayout->addWidget(label, i, 0);
     QWidget* specificWidget = QtWidgetParameterFactory::CreateQtWidget( param, GetModel() );
-    //if (specificWidget)
-      gridLayout->addWidget(specificWidget, i, 1);
+    gridLayout->addWidget(specificWidget, i, 1);
     }
 
   this->setLayout(gridLayout);

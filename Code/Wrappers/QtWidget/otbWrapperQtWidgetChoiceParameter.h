@@ -48,8 +48,15 @@ protected:
 private:
   QtWidgetChoiceParameter(const QtWidgetChoiceParameter&); //purposely not implemented
   void operator=(const QtWidgetChoiceParameter&); //purposely not implemented
-};
 
+  QHBoxLayout*    m_MainHLayout;
+
+  QComboBox*      m_ComboBox;
+  QStackedWidget* m_StackWidget;
+
+  QVBoxLayout*    m_VLayout;
+  QGroupBox*      m_VLayoutGroup;
+};
 
 }
 }
