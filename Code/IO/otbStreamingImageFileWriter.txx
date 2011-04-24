@@ -26,9 +26,6 @@
 #include "itkImageRegionMultidimensionalSplitter.h"
 #include "otbImageIOFactory.h"
 
-#include "base/ossimKeywordlist.h"
-#include "base/ossimFilename.h"
-
 #include "itkMetaDataObject.h"
 #include "otbImageKeywordlist.h"
 #include "otbMetaDataKey.h"
@@ -545,13 +542,14 @@ StreamingImageFileWriter<TInputImage>
     }
 
   // Write the image keyword list if any
-  ossimKeywordlist geom_kwl;
-  ImageKeywordlist otb_kwl;
+  // ossimKeywordlist geom_kwl;
+  // ImageKeywordlist otb_kwl;
 
-  itk::MetaDataDictionary dict = this->GetInput()->GetMetaDataDictionary();
-  itk::ExposeMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
-  otb_kwl.convertToOSSIMKeywordlist(geom_kwl);
+  // itk::MetaDataDictionary dict = this->GetInput()->GetMetaDataDictionary();
+  // itk::ExposeMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
+  // otb_kwl.convertToOSSIMKeywordlist(geom_kwl);
   //FIXME: why nothing is done with otb_kwl in that case???
+  // If required, put a call to WriteGeometry() here
 
   /**
    * Release any inputs if marked for release
@@ -605,24 +603,6 @@ StreamingImageFileWriter<TInputImage>
     itk::MetaDataDictionary dict = this->GetInput()->GetMetaDataDictionary();
     itk::ExposeMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
     WriteGeometry(otb_kwl, this->GetFileName());
-    }
-}
-
-template <class TInputImage>
-void
-StreamingImageFileWriter<TInputImage>
-::WriteGeometry(const ImageKeywordlist& otb_kwl, const std::string& filename) const
-{
-  // Write the image keyword list if any
-  ossimKeywordlist geom_kwl;
-  otb_kwl.convertToOSSIMKeywordlist(geom_kwl);
-
-  if (geom_kwl.getSize() > 0)
-    {
-    otbMsgDevMacro(<< "Exporting keywordlist ...");
-    ossimFilename geomFileName(filename);
-    geomFileName.setExtension(".geom");
-    geom_kwl.write(geomFileName.chars());
     }
 }
 

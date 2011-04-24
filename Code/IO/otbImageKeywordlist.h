@@ -104,6 +104,10 @@ private:
 
 std::ostream & operator <<(std::ostream& os, const ImageKeywordlist& kwl);
 
+// Free function to handle the keywordlist <-> files
+ImageKeywordlist ReadGeometry(const std::string& filename);
+void WriteGeometry(const ImageKeywordlist& otb_kwl, const std::string& filename);
+
 } //namespace otb
 
 #endif // __otbImageKeywordlist_h

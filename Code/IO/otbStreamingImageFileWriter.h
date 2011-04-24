@@ -194,8 +194,6 @@ private:
   /** This method calculate the number of stream divisions, by using the CalculationDivision type */
   unsigned long CalculateNumberOfStreamDivisions(void);
 
-  void WriteGeometry(const ImageKeywordlist& otb_kwl, const std::string& filename) const;
-
   /** Use to define the method used to calculate number of divisions */
   unsigned long m_BufferMemorySize;
   unsigned long m_BufferNumberOfLinesDivisions;
