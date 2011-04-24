@@ -19,11 +19,13 @@
 #pragma warning ( disable : 4786 )
 #endif
 
+#include <fstream>
+#include <iomanip>
+
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbGenericRSTransform.h"
 #include <ogr_spatialref.h>
-#include <fstream>
 #include "itkEuclideanDistance.h"
 
 

@@ -19,10 +19,11 @@
 #pragma warning ( disable : 4786 )
 #endif
 
+#include <iostream>
+#include <fstream>
+
 #include "itkExceptionObject.h"
 #include "itkImage.h"
-#include <iostream>
-
 #include "otbMapProjections.h"
 
 int otbMapProjectionsNew(int argc, char* argv[])
