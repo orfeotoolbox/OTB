@@ -37,6 +37,7 @@
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
+#include <ios>
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbGCPsToRPCSensorModelImageFilter.h"
@@ -155,7 +156,7 @@ int main(int argc, char* argv[])
   ofs.open(outfname);
 
   // Set floatfield to format properly
-  ofs.setf(ios::fixed, ios::floatfield);
+  ofs.setf(std::ios::fixed, std::ios::floatfield);
   ofs.precision(10);
 
   ofs << (ImageType::Pointer) rpcEstimator->GetOutput() << std::endl;
