@@ -16,6 +16,8 @@
 
 =========================================================================*/
 
+#include <fstream>
+
 #include "otbMacro.h"
 #include "otbImage.h"
 #include "otbMapProjections.h"
