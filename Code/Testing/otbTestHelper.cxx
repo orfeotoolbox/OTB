@@ -24,6 +24,7 @@
 #include <iostream>
 #include <fstream>
 #include <cctype>
+#include <algorithm>
 
 #include "otbImage.h"
 #include "otbVectorImage.h"
@@ -435,7 +436,7 @@ int TestHelper::RegressionTestImage(int cpt, const char *testImageFilename, cons
       {
       rescale->SetInput(diff->GetOutput());
 
-      for (unsigned int i = 1; i <= min(diff->GetOutput()->GetNumberOfComponentsPerPixel(), 3U); ++i)
+      for (unsigned int i = 1; i <= std::min(diff->GetOutput()->GetNumberOfComponentsPerPixel(), 3U); ++i)
         {
         rescale->SetChannel(i);
         }
