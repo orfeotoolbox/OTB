@@ -40,6 +40,9 @@
 
 #include "otbLogo.inc"
 
+// we should be using itksys instead here!
+#include "base/ossimFilename.h"
+
 namespace otb
 {
 
@@ -797,6 +800,38 @@ void TileMapImageIO::FillCacheFaults(void* buffer) const
     memcpy(((unsigned char *) buffer) + line * 256 * 3 + 64 * 3 * 3, kLogoOtb + (line % 64) * 64 * 3, 64 * 3);
     }
 
+}
+
+void TileMapImageIO::SetCacheDirectory(const char* _arg)
+{
+  if (_arg && (_arg == this->m_CacheDirectory))
+    {
+    return;
+    }
+  if (_arg)
+    {
+    // Check the directory write permission
+    ossimFilename directoryOssim(_arg);
+    if( directoryOssim.isWriteable() == false )
+      {
+      itkExceptionMacro( "Error, no write permission in given CacheDirectory "<<m_CacheDirectory<<".");
+      }
+    this->m_CacheDirectory = _arg;
+    this->m_UseCache = true;
+    }
+  else
+    {
+    this->m_CacheDirectory = "";
+    this->m_UseCache = false;
+    }
+  this->Modified();
+}
+
+void TileMapImageIO::SetCacheDirectory(const std::string& _arg)
+{
+  this->SetCacheDirectory(_arg.c_str());
+  //this->m_UseCache = true; FIXME: why this was even here??? we don't want a
+  //different behavior from the method above!
 }
 
 } // end namespace otb
