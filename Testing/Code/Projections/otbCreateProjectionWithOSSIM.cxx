@@ -23,7 +23,7 @@
  *
  * PURPOSE:
  *
- * Application pour projeter une r�gion d'une image en coordonn�es g�ographiques
+ * Application pour projeter une region d'une image en coordonnees geographiques
  * en utilisant un Interpolator+regionextractor et un Iterator.
  *
  */
@@ -46,6 +46,12 @@
 #include "itkLinearInterpolateImageFunction.h"
 
 #include "otbInverseSensorModel.h"
+
+#include "init/ossimInit.h"
+#include "imaging/ossimImageHandler.h"
+#include "base/ossimKeywordlist.h"
+#include "imaging/ossimImageHandlerRegistry.h"
+#include "projection/ossimProjectionFactoryRegistry.h"
 
 // this is the most important class and is called as the first line of all applications.
 // without this all the important factories are not created.

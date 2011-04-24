@@ -22,6 +22,8 @@
 #include "otbImageFileReader.h"
 #include "otbImageKeywordlist.h"
 
+#include "base/ossimKeywordlist.h"
+
 int otbImportGeoInformationImageFilterWithKeywordList(int argc, char * argv[])
 {
   const char * infname = argv[1];
