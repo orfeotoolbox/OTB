@@ -375,7 +375,7 @@ ImageFileReader<TOutputImage>
   output->SetDirection(direction);   // Set the image direction cosines
 
   // Update otb Keywordlist
-  ImageKeywordlist otb_kwl = GenerateKeywordList(lFileNameOssimKeywordlist);
+  ImageKeywordlist otb_kwl = ReadGeometry(lFileNameOssimKeywordlist);
 
   // Update itk MetaData Dictionary
 
@@ -416,7 +416,7 @@ ImageFileReader<TOutputImage>
 template <class TOutputImage>
 ImageKeywordlist
 ImageFileReader<TOutputImage>
-::GenerateKeywordList(const std::string& filename)
+::ReadGeometry(const std::string& filename)
 {
   // Trying to read ossim MetaData
   bool             hasMetaData = false;
@@ -465,14 +465,16 @@ ImageFileReader<TOutputImage>
         {
         if (projection->getClassName() == "ossimTileMapModel")
           {
-          //FIXME find a better way to do that
           //we need to pass the depth information which in on the IO to the projection
           //to be handle throught the kwl
-          typename TileMapImageIO::Pointer imageIO = dynamic_cast<TileMapImageIO*>(this->GetImageIO());
-          if (imageIO.IsNotNull())
-            {
-            dynamic_cast<ossimplugins::ossimTileMapModel*>(projection)->setDepth(imageIO->GetDepth());
-            }
+          typename TileMapImageIO::Pointer imageIO = TileMapImageIO::New();
+          imageIO->SetFileName(filename);
+          // if we are here, we instanciated an ossimTileMapModel, so we should
+          // be able to create a TileMapImageIO
+          assert(!imageIO->CanReadFile(filename.c_str()));
+          imageIO->ReadImageInformation();
+          int depth = imageIO->GetDepth();
+          dynamic_cast<ossimplugins::ossimTileMapModel*>(projection)->setDepth(depth);
           }
         hasMetaData = projection->saveState(geom_kwl);
 //             delete projection; //FIXME find out where this should occur

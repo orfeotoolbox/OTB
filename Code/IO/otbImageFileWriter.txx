@@ -88,7 +88,7 @@ ImageFileWriter<TInputImage>
     ImageKeywordlist otb_kwl;
     itk::MetaDataDictionary dict = this->GetInput()->GetMetaDataDictionary();
     itk::ExposeMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
-    WriteGeom(otb_kwl, this->GetFileName());
+    WriteGeometry(otb_kwl, this->GetFileName());
 
     }
 }
@@ -96,7 +96,7 @@ ImageFileWriter<TInputImage>
 template <class TInputImage>
 void
 ImageFileWriter<TInputImage>
-::WriteGeom(const ImageKeywordlist& otb_kwl, const std::string& filename) const
+::WriteGeometry(const ImageKeywordlist& otb_kwl, const std::string& filename) const
 {
   // Write the image keyword list if any
   ossimKeywordlist geom_kwl;
