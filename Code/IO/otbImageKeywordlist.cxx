@@ -175,7 +175,7 @@ ReadGeometry(const std::string& filename)
           {
           //we need to pass the depth information which in on the IO to the projection
           //to be handle throught the kwl
-          typename TileMapImageIO::Pointer imageIO = TileMapImageIO::New();
+          TileMapImageIO::Pointer imageIO = TileMapImageIO::New();
           imageIO->SetFileName(filename);
           // if we are here, we instanciated an ossimTileMapModel, so we should
           // be able to create a TileMapImageIO
