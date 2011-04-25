@@ -16,6 +16,7 @@
 
 =========================================================================*/
 #include "otbWrapperQtWidgetParameterGroup.h"
+#include "otbWrapperQtWidgetChoiceParameter.h"
 #include "otbWrapperQtWidgetParameterLabel.h"
 #include "otbWrapperQtWidgetParameterFactory.h"
 
@@ -28,16 +29,24 @@ QtWidgetParameterGroup::QtWidgetParameterGroup(ParameterGroup::Pointer paramList
 : QtWidgetParameterBase(m),
   m_ParamList(paramList)
 {
-  this->CreateWidget();
 }
 
 QtWidgetParameterGroup::~QtWidgetParameterGroup()
 {
 }
 
-void QtWidgetParameterGroup::CreateWidget()
+void QtWidgetParameterGroup::DoUpdateGUI()
 {
-  // a GridLayout with two colums : parameter label / parameter widget
+  WidgetListIteratorType it = m_WidgetList.begin();
+  for (it = m_WidgetList.begin(); it != m_WidgetList.end(); ++it)
+    {
+    (*it)->UpdateGUI();
+    }
+}
+
+void QtWidgetParameterGroup::DoCreateWidget()
+{
+  // a GridLayout with two columns : parameter label / parameter widget
   QGridLayout *gridLayout = new QGridLayout;
   gridLayout->setSpacing(1);
   gridLayout->setContentsMargins(0,0,0,0);
@@ -46,10 +55,34 @@ void QtWidgetParameterGroup::CreateWidget()
   for (unsigned int i = 0; i < nbParams; ++i)
     {
     Parameter* param = m_ParamList->GetParameter(i);
-    QWidget* label = new QtWidgetParameterLabel( param );
-    gridLayout->addWidget(label, i, 0);
-    QWidget* specificWidget = QtWidgetParameterFactory::CreateQtWidget( param, GetModel() );
-    gridLayout->addWidget(specificWidget, i, 1);
+
+    if (param != 0)
+      {
+      ParameterGroup* paramAsGroup = dynamic_cast<ParameterGroup*>(param);
+      ChoiceParameter* paramAsChoice = dynamic_cast<ChoiceParameter*>(param);
+
+      if (paramAsGroup == 0 && paramAsChoice == 0)
+        {
+        QWidget* label = new QtWidgetParameterLabel( param );
+        gridLayout->addWidget(label, i, 0);
+        QtWidgetParameterBase* specificWidget = QtWidgetParameterFactory::CreateQtWidget( param, GetModel() );
+        gridLayout->addWidget(specificWidget, i, 1);
+        m_WidgetList.push_back(specificWidget);
+        }
+      else
+        {
+        QtWidgetParameterBase* specificWidget = QtWidgetParameterFactory::CreateQtWidget( param, GetModel() );
+
+        QVBoxLayout* vboxLayout = new QVBoxLayout;
+        vboxLayout->addWidget(specificWidget);
+        QGroupBox* group = new QGroupBox;
+        group->setLayout(vboxLayout);
+        group->setTitle(param->GetName());
+        gridLayout->addWidget(group, i, 0, 1, -1);
+
+        m_WidgetList.push_back(specificWidget);
+        }
+      }
     }
 
   this->setLayout(gridLayout);

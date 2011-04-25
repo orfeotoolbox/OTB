@@ -19,13 +19,17 @@
 #define __otbWrapperQtWidgetFactory_h
 
 #include <QtGui>
-#include "otbWrapperParameter.h"
-#include "otbWrapperQtWidgetModel.h"
+#include "itkObject.h"
+#include "itkObjectFactory.h"
 
 namespace otb
 {
 namespace Wrapper
 {
+
+class Parameter;
+class QtWidgetModel;
+class QtWidgetParameterBase;
 
 /** \class ImageIOFactory
  * \brief Create instances of ImageIO objects using an object factory.
@@ -46,7 +50,7 @@ public:
   itkTypeMacro(QtWidgetParameterFactory, Object);
 
   /** Create the appropriate ImageIO depending on the particulars of the file. */
-  static QWidget* CreateQtWidget( Parameter* param, QtWidgetModel* model );
+  static QtWidgetParameterBase* CreateQtWidget( Parameter* param, QtWidgetModel* model );
 
 protected:
   QtWidgetParameterFactory();

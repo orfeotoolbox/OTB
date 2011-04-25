@@ -19,6 +19,7 @@
 #define __otbWrapperChoiceParameter_h
 
 #include "otbWrapperParameter.h"
+#include "otbWrapperParameterGroup.h"
 
 namespace otb
 {
@@ -48,19 +49,39 @@ public:
   itkTypeMacro(ChoiceParameter, Parameter);
 
   /** Add a value to the choice */
-  void AddChoice( std::string key, Parameter::Pointer param )
+  void AddChoice( std::string key, std::string name, Parameter* param )
   {
-    m_ChoiceList.push_back(std::make_pair(key, param));
+    ParameterGroup* paramAsGroup = dynamic_cast<ParameterGroup*>(param);
+    if ( paramAsGroup != 0 )
+      {
+      Choice choice;
+      choice.m_Key = key;
+      choice.m_Name = name;
+      choice.m_AssociatedParameter = paramAsGroup;
+      m_ChoiceList.push_back(choice);
+      }
+    else
+      {
+      // wrap in  group first
+      ParameterGroup::Pointer group = ParameterGroup::New();
+      group->AddParameter(param);
+      AddChoice(key, name, group.GetPointer());
+      }
   }
 
   std::string GetChoiceKey( int i )
   {
-    return m_ChoiceList[i].first;
+    return m_ChoiceList[i].m_Key;
   }
 
-  Parameter::Pointer GetChoiceAssociatedParameter( int i )
+  std::string GetChoiceName( int i )
   {
-    return m_ChoiceList[i].second;
+    return m_ChoiceList[i].m_Name;
+  }
+
+  ParameterGroup::Pointer GetChoiceAssociatedParameter( int i )
+  {
+    return m_ChoiceList[i].m_AssociatedParameter;
   }
 
   unsigned int GetNbChoices( void )
@@ -73,7 +94,6 @@ public:
   {
     // Perform any cast
     m_CurrentChoice = v;
-
     // Call Modified();
     this->Modified();
   }
@@ -88,7 +108,14 @@ public:
   virtual void SetAnyValue(boost::any v)
   {
     // Perform any cast
-    m_CurrentChoice = boost::any_cast<unsigned int>(v);
+    unsigned int val = boost::any_cast<unsigned int>(v);
+
+    if ( val >= GetNbChoices() )
+      {
+      itkExceptionMacro(<< "Invalid choice value : " << val)
+      }
+
+    m_CurrentChoice = val;
 
     // Call Modified();
     this->Modified();
@@ -104,13 +131,21 @@ public:
 protected:
   /** Constructor */
   ChoiceParameter()
+    : m_CurrentChoice(0)
   {}
 
   /** Destructor */
   virtual ~ChoiceParameter()
   {}
 
-  typedef std::pair<std::string, Parameter::Pointer> Choice;
+  struct Choice
+  {
+    Choice() {}
+
+    std::string             m_Key;
+    std::string             m_Name;
+    ParameterGroup::Pointer m_AssociatedParameter;
+  };
 
   typedef std::vector<Choice> ChoiceList;
   ChoiceList m_ChoiceList;

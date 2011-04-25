@@ -42,14 +42,19 @@ protected slots:
   void SetFileName( const QString& value );
   void SelectFile();
 
-protected:
-  void CreateWidget();
-
 private:
   QtWidgetInputImageParameter(const QtWidgetInputImageParameter&); //purposely not implemented
   void operator=(const QtWidgetInputImageParameter&); //purposely not implemented
 
+  virtual void DoCreateWidget();
+
+  virtual void DoUpdateGUI();
+
   InputImageParameter::Pointer m_InputImageParam;
+
+  QHBoxLayout * m_HLayout;
+  QLineEdit*    m_Input;
+  QPushButton * m_Button;
 };
 
 

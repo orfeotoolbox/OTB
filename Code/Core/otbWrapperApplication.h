@@ -76,21 +76,11 @@ public:
   /** Get the parameter description */
   itkGetStringMacro(Description);
 
-  void Init()
-  {
-    m_ParameterList = ParameterGroup::New();
-    this->DoCreateParameters();
-  }
+  void Init();
 
-  void UpdateParameters()
-  {
-    this->DoUpdateParameters();
-  }
+  void UpdateParameters();
 
-  void Execute()
-  {
-    this->DoExecute();
-  }
+  void Execute();
 
   ParameterGroup* GetParameterList()
   {

@@ -41,9 +41,15 @@ private:
   QtWidgetParameterGroup(const QtWidgetParameterGroup&); //purposely not implemented
   void operator=(const QtWidgetParameterGroup&); //purposely not implemented
 
-  void CreateWidget();
+  void DoCreateWidget();
+
+  virtual void DoUpdateGUI();
 
   ParameterGroup::Pointer m_ParamList;
+
+  typedef std::vector<QtWidgetParameterBase*> WidgetListType;
+  typedef WidgetListType::iterator WidgetListIteratorType;
+  WidgetListType m_WidgetList;
 
 };
 

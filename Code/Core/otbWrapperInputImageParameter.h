@@ -62,6 +62,7 @@ public:
     ImageFileReaderType::Pointer reader = ImageFileReaderType::New();
     reader->SetFileName(filename);
     reader->UpdateOutputInformation();
+    m_Reader = reader;
     m_Image = reader->GetOutput();
   }
 
@@ -84,6 +85,7 @@ protected:
   {}
 
   VectorImageType::Pointer m_Image;
+  itk::ProcessObject::Pointer m_Reader;
 
 private:
   InputImageParameter(const Parameter &); //purposely not implemented

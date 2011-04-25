@@ -26,33 +26,37 @@ QtWidgetOutputImageParameter::QtWidgetOutputImageParameter(OutputImageParameter*
 : QtWidgetParameterBase(m),
   m_OutputImageParam(param)
 {
-  this->CreateWidget();
 }
 
 QtWidgetOutputImageParameter::~QtWidgetOutputImageParameter()
 {
 }
 
-void QtWidgetOutputImageParameter::CreateWidget()
+void QtWidgetOutputImageParameter::DoUpdateGUI()
+{
+
+}
+
+void QtWidgetOutputImageParameter::DoCreateWidget()
 {
   // Set up input text edit
-  QHBoxLayout *hLayout = new QHBoxLayout;
-  hLayout->setSpacing(0);
-  hLayout->setContentsMargins(0,0,0,0);
-  QLineEdit* input = new QLineEdit;
-  input->setToolTip( m_OutputImageParam->GetDescription() );
-  connect( input, SIGNAL(textChanged(const QString&)), this, SLOT(SetFileName(const QString&)) );
-  hLayout->addWidget(input);
+  m_HLayout = new QHBoxLayout;
+  m_HLayout->setSpacing(0);
+  m_HLayout->setContentsMargins(0,0,0,0);
+  m_Input = new QLineEdit;
+  m_Input->setToolTip( m_OutputImageParam->GetDescription() );
+  connect( m_Input, SIGNAL(textChanged(const QString&)), this, SLOT(SetFileName(const QString&)) );
+  m_HLayout->addWidget(m_Input);
 
   // Set up input text edit
-  QPushButton *button = new QPushButton;
-  button->setText("...");
-  button->setToolTip("Select output filename...");
-  button->setMaximumWidth(button->width());
-  connect( button, SIGNAL(clicked()), this, SLOT(SelectFile()) );
-  hLayout->addWidget(button);
+  m_Button = new QPushButton;
+  m_Button->setText("...");
+  m_Button->setToolTip("Select output filename...");
+  m_Button->setMaximumWidth(m_Button->width());
+  connect( m_Button, SIGNAL(clicked()), this, SLOT(SelectFile()) );
+  m_HLayout->addWidget(m_Button);
 
-  this->setLayout(hLayout);
+  this->setLayout(m_HLayout);
 }
 
 void QtWidgetOutputImageParameter::SelectFile()
@@ -64,7 +68,8 @@ void QtWidgetOutputImageParameter::SelectFile()
 
   if (fileDialog.exec())
     {
-    this->SetFileName(fileDialog.selectedFiles().at(0));
+    //this->SetFileName(fileDialog.selectedFiles().at(0));
+    m_Input->setText(fileDialog.selectedFiles().at(0));
     }
 }
 
@@ -72,6 +77,8 @@ void QtWidgetOutputImageParameter::SetFileName(const QString& value)
 {
   // save value
   m_FileName = value.toStdString();
+
+  m_OutputImageParam->SetFileName(m_FileName);
 
   // notify of value change
   QString key( QString::fromStdString(m_OutputImageParam->GetKey()) );

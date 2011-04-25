@@ -59,6 +59,21 @@ public:
     return boost::any(m_Image);
   }
 
+  /** Return any value */
+  void SetValue(VectorImageType* image)
+  {
+    m_Image = image;
+  }
+
+  /** Return any value */
+  VectorImageType* GetValue( void )
+  {
+    return m_Image;
+  }
+
+  itkSetStringMacro(FileName);
+  itkGetStringMacro(FileName);
+
 protected:
   /** Constructor */
   OutputImageParameter()
@@ -72,6 +87,7 @@ protected:
   {}
 
   VectorImageType::Pointer m_Image;
+  std::string m_FileName;
 
 private:
   OutputImageParameter(const Parameter &); //purposely not implemented

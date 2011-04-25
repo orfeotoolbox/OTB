@@ -50,6 +50,8 @@ private:
 
   void DoExecute();
 
+  itk::ProcessObject::Pointer ref;
+
 };
 
 }

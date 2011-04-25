@@ -42,6 +42,9 @@ private:
   QtWidgetEmptyParameter(const QtWidgetEmptyParameter&); //purposely not implemented
   void operator=(const QtWidgetEmptyParameter&); //purposely not implemented
 
+  virtual void DoCreateWidget();
+
+  virtual void DoUpdateGUI();
 };
 
 

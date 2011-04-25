@@ -17,6 +17,11 @@
 =========================================================================*/
 #include "otbWrapperQtWidgetParameterFactory.h"
 
+#include "otbWrapperParameter.h"
+#include "otbWrapperQtWidgetModel.h"
+
+#include "otbWrapperQtWidgetParameterBase.h"
+
 #include "otbWrapperQtWidgetEmptyParameter.h"
 #include "otbWrapperQtWidgetIntParameter.h"
 #include "otbWrapperQtWidgetFloatParameter.h"
@@ -41,9 +46,9 @@ public:
     return dynamic_cast<TParameterType *>(param) != 0;
   }
 
-  static QWidget* Create( Parameter* param, QtWidgetModel* model )
+  static QtWidgetParameterBase* Create( Parameter* param, QtWidgetModel* model )
   {
-    QWidget* widget = 0;
+    QtWidgetParameterBase* widget = 0;
     TParameterType* specificParam = dynamic_cast<TParameterType *>(param);
 
     if (specificParam)
@@ -62,18 +67,16 @@ QtWidgetParameterFactory::~QtWidgetParameterFactory()
 {
 }
 
-QWidget*
+QtWidgetParameterBase*
 QtWidgetParameterFactory::CreateQtWidget( Parameter* param, QtWidgetModel* model )
 {
-
+  QtWidgetParameterBase* widget = 0;
 
 #define CREATEWIDGET( ParameterType, WidgetType ) \
   else if ( QtWidgetParameterGenericFactory<ParameterType,  WidgetType>::CanCreate(param) ) \
     { \
     widget = QtWidgetParameterGenericFactory<ParameterType,  WidgetType>::Create(param, model); \
     }
-
-  QWidget* widget = 0;
 
   if (0) {}
   CREATEWIDGET(EmptyParameter,       QtWidgetEmptyParameter)
@@ -86,9 +89,17 @@ QtWidgetParameterFactory::CreateQtWidget( Parameter* param, QtWidgetModel* model
   CREATEWIDGET(EmptyParameter,       QtWidgetEmptyParameter)
   CREATEWIDGET(ParameterGroup,       QtWidgetParameterGroup)
 
+#undef CREATEWIDGET
+
+  if (widget)
+    {
+    widget->CreateWidget();
+    widget->UpdateGUI();
+    }
+
   return widget;
 
-#undef CREATEWIDGET
+
 }
 
 

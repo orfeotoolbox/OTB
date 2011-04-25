@@ -110,9 +110,9 @@ int otbWrapperQtWidgetParameterFactory(int argc, char* argv[])
   choiceParam->SetName("Choice parameter");
   choiceParam->SetDescription("This is a choice parameter");
   choiceParam->SetKey("choice");
-  choiceParam->AddChoice("choice1", 0);
-  choiceParam->AddChoice("choice2", 0);
-  choiceParam->AddChoice("choice3", 0);
+  choiceParam->AddChoice("choice1", "Choice 1", 0);
+  choiceParam->AddChoice("choice2", "Choice 2", 0);
+  choiceParam->AddChoice("choice3", "Choice 3", 0);
 
   QWidget * intWidget   = factory->CreateQtWidget(intParam, model);
   QWidget * floatWidget = factory->CreateQtWidget(floatParam, model);
@@ -173,9 +173,9 @@ int otbWrapperQtWidgetParameterGroup(int argc, char* argv[])
   choiceParam->SetName("Choice parameter");
   choiceParam->SetDescription("This is an choice parameter");
   choiceParam->SetKey("choice");
-  choiceParam->AddChoice("choice1", 0);
-  choiceParam->AddChoice("choice2", 0);
-  choiceParam->AddChoice("choice3", 0);
+  choiceParam->AddChoice("choice1", "Choice 1", 0);
+  choiceParam->AddChoice("choice2", "Choice 2", 0);
+  choiceParam->AddChoice("choice3", "Choice 3", 0);
 
   stringParam->SetName("String parameter");
   stringParam->SetDescription("This is a string parameter");
@@ -217,9 +217,9 @@ int otbWrapperQtWidgetParameterGroup(int argc, char* argv[])
   choiceParam2->SetName("Choice parameter");
   choiceParam2->SetDescription("This is an choice parameter");
   choiceParam2->SetKey("choice2");
-  choiceParam2->AddChoice("choice1", 0);
-  choiceParam2->AddChoice("choice2", 0);
-  choiceParam2->AddChoice("choice3", 0);
+  choiceParam2->AddChoice("choice1", "Choice 1", 0);
+  choiceParam2->AddChoice("choice2", "Choice 2", 0);
+  choiceParam2->AddChoice("choice3", "Choice 3", 0);
 
   stringParam2->SetName("String parameter");
   stringParam2->SetDescription("This is a string parameter");

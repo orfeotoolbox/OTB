@@ -26,45 +26,50 @@ QtWidgetInputImageParameter::QtWidgetInputImageParameter(InputImageParameter* pa
 : QtWidgetParameterBase(m),
   m_InputImageParam(param)
 {
-  this->CreateWidget();
 }
 
 QtWidgetInputImageParameter::~QtWidgetInputImageParameter()
 {
 }
 
-void QtWidgetInputImageParameter::CreateWidget()
+void QtWidgetInputImageParameter::DoUpdateGUI()
+{
+
+}
+
+void QtWidgetInputImageParameter::DoCreateWidget()
 {
   // Set up input text edit
-  QHBoxLayout *hLayout = new QHBoxLayout;
-  hLayout->setSpacing(0);
-  hLayout->setContentsMargins(0,0,0,0);
-  QLineEdit* input = new QLineEdit;
-  input->setToolTip( m_InputImageParam->GetDescription() );
-  connect( input, SIGNAL(textChanged(const QString&)), this, SLOT(SetFileName(const QString&)) );
-  hLayout->addWidget(input);
+  m_HLayout = new QHBoxLayout;
+  m_HLayout->setSpacing(0);
+  m_HLayout->setContentsMargins(0,0,0,0);
+  m_Input = new QLineEdit;
+  m_Input->setToolTip( m_InputImageParam->GetDescription() );
+  connect( m_Input, SIGNAL(textChanged(const QString&)), this, SLOT(SetFileName(const QString&)) );
+  m_HLayout->addWidget(m_Input);
 
   // Set up input text edit
-  QPushButton *button = new QPushButton;
-  button->setText("...");
-  button->setToolTip("Select file...");
-  button->setMaximumWidth(button->width());
-  connect( button, SIGNAL(clicked()), this, SLOT(SelectFile()) );
-  hLayout->addWidget(button);
+  m_Button = new QPushButton;
+  m_Button->setText("...");
+  m_Button->setToolTip("Select file...");
+  m_Button->setMaximumWidth(m_Button->width());
+  connect( m_Button, SIGNAL(clicked()), this, SLOT(SelectFile()) );
+  m_HLayout->addWidget(m_Button);
 
-  this->setLayout(hLayout);
+  this->setLayout(m_HLayout);
 }
 
 void QtWidgetInputImageParameter::SelectFile()
 {
   QFileDialog fileDialog;
   fileDialog.setConfirmOverwrite(true);
-  fileDialog.setFileMode(QFileDialog::AnyFile);
+  fileDialog.setFileMode(QFileDialog::ExistingFile);
   fileDialog.setNameFilter("Raster files (*)");
 
   if (fileDialog.exec())
     {
-    this->SetFileName(fileDialog.selectedFiles().at(0));
+    //this->SetFileName(fileDialog.selectedFiles().at(0));
+    m_Input->setText(fileDialog.selectedFiles().at(0));
     }
 }
 

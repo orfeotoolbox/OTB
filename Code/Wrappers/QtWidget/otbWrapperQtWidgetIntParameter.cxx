@@ -26,31 +26,41 @@ QtWidgetIntParameter::QtWidgetIntParameter(IntParameter* param, QtWidgetModel* m
 : QtWidgetParameterBase(m),
   m_IntParam(param)
 {
-  // Set up input text edit
-  QHBoxLayout *hLayout = new QHBoxLayout;
-  hLayout->setSpacing(0);
-  hLayout->setContentsMargins(0,0,0,0);
-
-  QSpinBox* input = new QSpinBox;
-  input->setRange(param->GetMinimumValue(), param->GetMaximumValue());
-  input->setToolTip(param->GetDescription());
-
-  connect( input, SIGNAL(valueChanged(int)), this, SLOT(SetValue(int)) );
-  connect( input, SIGNAL(valueChanged(int)), GetModel(), SLOT(NotifyUpdate()) );
-
-  hLayout->addWidget(input);
-  hLayout->addStretch();
-
-  this->setLayout(hLayout);
 }
 
 QtWidgetIntParameter::~QtWidgetIntParameter()
 {
 }
 
+void QtWidgetIntParameter::DoCreateWidget()
+{
+  // Set up input text edit
+  m_QHBoxLayout = new QHBoxLayout;
+  m_QHBoxLayout->setSpacing(0);
+  m_QHBoxLayout->setContentsMargins(0,0,0,0);
+
+  m_QSpinBox = new QSpinBox;
+  m_QSpinBox->setRange(m_IntParam->GetMinimumValue(), m_IntParam->GetMaximumValue());
+  m_QSpinBox->setToolTip(m_IntParam->GetDescription());
+
+  connect( m_QSpinBox, SIGNAL(valueChanged(int)), this, SLOT(SetValue(int)) );
+  connect( m_QSpinBox, SIGNAL(valueChanged(int)), GetModel(), SLOT(NotifyUpdate()) );
+
+  m_QHBoxLayout->addWidget(m_QSpinBox);
+  m_QHBoxLayout->addStretch();
+
+  this->setLayout(m_QHBoxLayout);
+}
+
+void QtWidgetIntParameter::DoUpdateGUI()
+{
+  bool signalsBlocked = m_QSpinBox->blockSignals( true );
+  m_QSpinBox->setValue(m_IntParam->GetValue());
+  m_QSpinBox->blockSignals( signalsBlocked );
+}
+
 void QtWidgetIntParameter::SetValue(int value)
 {
-  std::cout << "QtWidgetIntParameter::SetValue " << value << std::endl;
   m_IntParam->SetValue(value);
 }
 

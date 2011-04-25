@@ -31,6 +31,16 @@ QtWidgetParameterBase::~QtWidgetParameterBase()
 {
 }
 
+void QtWidgetParameterBase::CreateWidget()
+{
+  this->DoCreateWidget();
+}
+
+void QtWidgetParameterBase::UpdateGUI()
+{
+  this->DoUpdateGUI();
+}
+
 void QtWidgetParameterBase::ParameterChanged(const QString& key)
 {
 

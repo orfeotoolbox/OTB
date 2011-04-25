@@ -44,7 +44,9 @@ private:
   QtWidgetStringParameter(const QtWidgetStringParameter&); //purposely not implemented
   void operator=(const QtWidgetStringParameter&); //purposely not implemented
 
-  void CreateWidget();
+  virtual void DoCreateWidget();
+
+  virtual void DoUpdateGUI();
 
   StringParameter::Pointer m_StringParam;
 };

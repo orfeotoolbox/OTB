@@ -26,7 +26,6 @@ QtWidgetStringParameter::QtWidgetStringParameter(StringParameter* param, QtWidge
 : QtWidgetParameterBase(m),
   m_StringParam(param)
 {
-  this->CreateWidget();
 }
 
 QtWidgetStringParameter::~QtWidgetStringParameter()
@@ -34,7 +33,12 @@ QtWidgetStringParameter::~QtWidgetStringParameter()
 }
 
 
-void QtWidgetStringParameter::CreateWidget()
+void QtWidgetStringParameter::DoUpdateGUI()
+{
+
+}
+
+void QtWidgetStringParameter::DoCreateWidget()
 {
   // Set up input text edit
   QHBoxLayout *hLayout = new QHBoxLayout;
