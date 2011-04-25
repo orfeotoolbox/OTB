@@ -62,7 +62,7 @@ int generic_main_carto_geo(TMapProjection* mapProjection, otb::CommandLineArgume
     {
       std::string outputTestFileName = parseResult->GetParameterString("--OTBTesting",0);
 
-      ofstream outputTestFile;
+      std::ofstream outputTestFile;
       outputTestFile.open(outputTestFileName.c_str());
 
       outputTestFile << std::setprecision(10) << "Cartographic Point  (x , y)  : (" << cartoPoint[0] << "," << cartoPoint[1] << ")" << std::endl;
