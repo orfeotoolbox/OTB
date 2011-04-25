@@ -408,7 +408,7 @@ ImageAlternateViewer<TPixel>
     if (m_SpacingZoomFactor > 1)
       {
       numberOfSplits =
-        max((static_cast<unsigned int>(m_SpacingZoomFactor)) * (static_cast<unsigned int>(m_SpacingZoomFactor)), 1U);
+        std::max((static_cast<unsigned int>(m_SpacingZoomFactor)) * (static_cast<unsigned int>(m_SpacingZoomFactor)), 1U);
       interpolator = m_ZoomOutInterpolator;
       }
     else
@@ -554,57 +554,57 @@ ImageAlternateViewer<TPixel>
     {
     case 0:
       index   = deUL;
-      size[0] = max(bufUL[0] - deUL[0], 0L);
-      size[1] = max(bufUL[1] - deUL[1], 0L);
+      size[0] = std::max(bufUL[0] - deUL[0], 0L);
+      size[1] = std::max(bufUL[1] - deUL[1], 0L);
       break;
 
     case 1:
-      index[0] = max(deUL[0], bufUL[0]);
+      index[0] = std::max(deUL[0], bufUL[0]);
       index[1] = deUL[1];
-      size[0]  = min(bufLR[0] - max(bufUL[0], 0L), deLR[0] - index[0]);
-      size[1]  = max(bufUL[1] - deUL[1], 0L);
+      size[0]  = std::min(bufLR[0] - std::max(bufUL[0], 0L), deLR[0] - index[0]);
+      size[1]  = std::max(bufUL[1] - deUL[1], 0L);
       break;
 
     case 2:
-      index[0] = min(bufLR[0], deLR[0]);
+      index[0] = std::min(bufLR[0], deLR[0]);
       index[1] = deUL[1];
-      size[0]  = max(deLR[0] - bufLR[0], 0L);
-      size[1]  = max(bufUL[1] - deUL[1], 0L);
+      size[0]  = std::max(deLR[0] - bufLR[0], 0L);
+      size[1]  = std::max(bufUL[1] - deUL[1], 0L);
       break;
 
     case 3:
       index[0] = deUL[0];
-      index[1] = max(bufUL[1], 0L);
-      size[0]  = max(bufUL[0] - deUL[0], 0L);
-      size[1]  = min(bufLR[1] - max(bufUL[1], 0L), deLR[1] - index[1]);
+      index[1] = std::max(bufUL[1], 0L);
+      size[0]  = std::max(bufUL[0] - deUL[0], 0L);
+      size[1]  = std::min(bufLR[1] - std::max(bufUL[1], 0L), deLR[1] - index[1]);
       break;
 
     case 4:
-      index[0] = min(bufLR[0], deLR[0]);
-      index[1] = max(bufUL[1], deUL[0]);
-      size[0]  = max(deLR[0] - bufLR[0], 0L);
-      size[1]  = min(bufLR[1] - max(bufUL[1], 0L), deLR[1] - index[1]);
+      index[0] = std::min(bufLR[0], deLR[0]);
+      index[1] = std::max(bufUL[1], deUL[0]);
+      size[0]  = std::max(deLR[0] - bufLR[0], 0L);
+      size[1]  = std::min(bufLR[1] - std::max(bufUL[1], 0L), deLR[1] - index[1]);
       break;
 
     case 5:
       index[0] = deUL[0];
-      index[1] = min(deLR[1], bufLR[1]);
-      size[0]  = max(bufUL[0] - deUL[0], 0L);
-      size[1]  = max(deLR[1] - bufLR[1], 0L);
+      index[1] = std::min(deLR[1], bufLR[1]);
+      size[0]  = std::max(bufUL[0] - deUL[0], 0L);
+      size[1]  = std::max(deLR[1] - bufLR[1], 0L);
       break;
 
     case 6:
-      index[0] = max(deUL[0], bufUL[0]);
-      index[1] = min(deLR[1], bufLR[1]);
-      size[0]  = min(bufLR[0] - max(bufUL[0], 0L), deLR[0] - index[0]);
-      size[1]  = max(deLR[1] - bufLR[1], 0L);
+      index[0] = std::max(deUL[0], bufUL[0]);
+      index[1] = std::min(deLR[1], bufLR[1]);
+      size[0]  = std::min(bufLR[0] - std::max(bufUL[0], 0L), deLR[0] - index[0]);
+      size[1]  = std::max(deLR[1] - bufLR[1], 0L);
       break;
 
     case 7:
-      index[0] = min(bufLR[0], deLR[0]);
-      index[1] = min(deLR[1], bufLR[1]);
-      size[0]  = max(deLR[0] - bufLR[0], 0L);
-      size[1]  = max(deLR[1] - bufLR[1], 0L);
+      index[0] = std::min(bufLR[0], deLR[0]);
+      index[1] = std::min(deLR[1], bufLR[1]);
+      size[0]  = std::max(deLR[0] - bufLR[0], 0L);
+      size[1]  = std::max(deLR[1] - bufLR[1], 0L);
     }
   region.SetSize(size);
   region.SetIndex(index);
@@ -695,7 +695,7 @@ ImageAlternateViewer<TPixel>
   if (m_SpacingZoomFactor > 1)
     {
     numberOfSplits =
-      max((static_cast<unsigned int>(m_SpacingZoomFactor)) * (static_cast<unsigned int>(m_SpacingZoomFactor)), 1U);
+      std::max((static_cast<unsigned int>(m_SpacingZoomFactor)) * (static_cast<unsigned int>(m_SpacingZoomFactor)), 1U);
     interpolator = m_ZoomOutInterpolator;
     }
   else
@@ -1015,11 +1015,11 @@ ImageAlternateViewer<TPixel>
       }
     }
 
-  unsigned int lineOffset = static_cast<unsigned int>(-min(0L, m_BufferedRegion.GetIndex()[0]));
+  unsigned int lineOffset = static_cast<unsigned int>(-std::min(0L, m_BufferedRegion.GetIndex()[0]));
   unsigned int lineOffsetEnd =
-    static_cast<unsigned int>(-min(0L, static_cast<long>(m_DisplayExtent.GetSize()[0]) -
+    static_cast<unsigned int>(-std::min(0L, static_cast<long>(m_DisplayExtent.GetSize()[0]) -
                                    m_BufferedRegion.GetIndex()[0] - static_cast<long>(m_BufferedRegion.GetSize()[0])));
-  unsigned int columnOffset = static_cast<unsigned int>(-min(0L, m_BufferedRegion.GetIndex()[1]));
+  unsigned int columnOffset = static_cast<unsigned int>(-std::min(0L, m_BufferedRegion.GetIndex()[1]));
   unsigned int offsety = columnOffset * (static_cast<int>(m_BufferedRegion.GetSize()[0])) * 3;
   unsigned int offsetx = lineOffset * 3;
 
