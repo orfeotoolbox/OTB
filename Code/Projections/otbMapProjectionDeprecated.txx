@@ -168,7 +168,6 @@ inline std::string GetMapProjectionDeprecatedString<MapProjectionType::VANDERGRI
 }
 
 
-
 template <MapProjectionType::MapProj TMapProj,
           TransformDirection::TransformationDirection TTransform>
 MapProjectionDeprecated<TMapProj, TTransform>
