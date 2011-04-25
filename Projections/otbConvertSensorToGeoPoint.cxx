@@ -147,7 +147,7 @@ int main(int argc, char* argv[])
         {
         std::string outputTestFileName = parseResult->GetParameterString("--OTBTesting", 0);
 
-        ofstream outputTestFile;
+        std::ofstream outputTestFile;
         outputTestFile.open(outputTestFileName.c_str());
 
         outputTestFile << std::setprecision(10) << "Sensor Point  (x , y)  : (" << points[i][0] << ", "
