@@ -41,12 +41,8 @@
 #include "otbInverseSensorModel.h"
 #include "otbForwardSensorModel.h"
 
-#include "init/ossimInit.h"
-
 int otbCreateInverseForwardSensorModel(int argc, char* argv[])
 {
-  ossimInit::instance()->initialize(argc, argv);
-
   if (argc != 2)
     {
     std::cout << argv[0] << " <input filename>" << std::endl;

@@ -22,8 +22,6 @@
 #include "otbImageFileReader.h"
 #include "otbImageKeywordlist.h"
 
-#include "base/ossimKeywordlist.h"
-
 int otbImportGeoInformationImageFilterWithKeywordList(int argc, char * argv[])
 {
   const char * infname = argv[1];
@@ -61,15 +59,12 @@ int otbImportGeoInformationImageFilterWithKeywordList(int argc, char * argv[])
   otb::ImageKeywordlist otb_tmp_image;
   otb_tmp_image = import->GetOutput()->GetImageKeywordlist();
 
-  ossimKeywordlist ossim_kwl_image;
-  otb_tmp_image.convertToOSSIMKeywordlist(ossim_kwl_image);
-
-  std::cout << " -> otbImage Ossim key word list copy : " << ossim_kwl_image << std::endl;
+  std::cout << " -> otbImage Ossim key word list copy : " << otb_tmp_image << std::endl;
 
   std::ofstream file;
   file.open(outputAsciiFilenameOtbImage);
   file << "--- OSSIM KEYWORDLIST ---" << std::endl;
-  file << ossim_kwl_image;
+  file << otb_tmp_image;
   file.close();
 
   return EXIT_SUCCESS;

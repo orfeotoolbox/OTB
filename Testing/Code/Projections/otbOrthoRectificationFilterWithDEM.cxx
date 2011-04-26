@@ -43,12 +43,8 @@
 #include "otbOrthoRectificationFilter.h"
 #include "otbMapProjections.h"
 
-#include "init/ossimInit.h"
-
 int otbOrthoRectificationFilterWithDEM(int argc, char* argv[])
 {
-  ossimInit::instance()->initialize(argc, argv);
-
   if (argc != 13)
     {
     std::cout << argv[0] <<
