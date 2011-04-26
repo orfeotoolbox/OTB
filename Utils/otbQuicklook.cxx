@@ -196,7 +196,6 @@ int Quicklook::Execute(otb::ApplicationOptionsResult* parseResult)
 
     otb::StandardFilterWatcher watcher (resamplingFilter->GetStreamer(), "Quicklook generation");
     resamplingFilter->Update();
-    otbGenericMsgDebugMacro(<<resamplingFilter->GetOutput()->GetLargestPossibleRegion());
 
     writer->SetInput(resamplingFilter->GetOutput() );
     writer->Update();
