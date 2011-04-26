@@ -113,11 +113,7 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
         InputPixelType gradient = it.GetPixel(offset);
 
         // Then, compute the gradient orientation
-        double angle = 0.;
-              if( gradient[1] != 0 )
-              {
-                     angle = vcl_atan2(gradient[1], gradient[0]);
-              }
+        double angle = vcl_atan2(gradient[1], gradient[0]);
 
         // Also compute its magnitude
         TOutputPrecision magnitude = vcl_sqrt(gradient[0]*gradient[0]+gradient[1]*gradient[1]);
@@ -125,6 +121,10 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
         // Determine the bin index (shift of otb::CONST_PI since atan2 values
         // lies in [-pi, pi]
         unsigned int binIndex = vcl_floor((otb::CONST_PI + angle)/orientationBinWidth);
+
+        // Handle special case where angle = pi, and binIndex is out-of-bound
+        if(binIndex == m_NumberOfOrientationBins)
+          binIndex=0;
 
          // Cumulate values
         globalOrientationHistogram[binIndex]+= magnitude * gWeight;
