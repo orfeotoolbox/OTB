@@ -52,7 +52,7 @@ public:
   /** Creation through object factory macro */
   itkNewMacro(Self);
 
-  typedef double                                  WavelengthSpectralBandType;
+  typedef float                                   WavelengthSpectralBandType;
   typedef std::vector<WavelengthSpectralBandType> ValuesVectorType;
 
   /** Set vector that contains the filter function value. */

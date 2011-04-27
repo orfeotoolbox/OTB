@@ -41,13 +41,13 @@ FilterFunctionValues
   // filter. The computation is done each time the value is requested.
   // It is anticipated that this method won't be called much and that
   // the cost will be negligible compared to the rest of the processing
-  double total = 0;
+  WavelengthSpectralBandType total = 0;
   for (unsigned int i = 0; i < m_FilterFunctionValues6S.size(); ++i)
     {
     total += m_FilterFunctionValues6S[i];
     }
   unsigned int centerIndex = 0;
-  double       total2 = 0;
+  WavelengthSpectralBandType total2 = 0;
   for (centerIndex = 0; centerIndex < m_FilterFunctionValues6S.size(); ++centerIndex)
     {
     total2 += m_FilterFunctionValues6S[centerIndex];
