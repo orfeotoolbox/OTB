@@ -34,7 +34,7 @@ namespace otb
  *
  * \brief Class to generate an image from DEM data
  *
- * This class is based on ossimElevManager. It takes in input the upper left longitude
+ * This class is based on DEMHandler. It takes in input the upper left longitude
  * and latitude, the spacing and the output image size.
  * Handle DTED and SRTM formats.
  *
@@ -102,6 +102,8 @@ public:
   itkSetObjectMacro(Transform, GenericRSTransformType);
   itkGetConstObjectMacro(Transform, GenericRSTransformType);
 
+  void InstanciateTransform();
+
   /** Set the DEM directory. */
   virtual void SetDEMDirectoryPath(const char* DEMDirectory);
   virtual void SetDEMDirectoryPath(const std::string& DEMDirectory);
@@ -166,6 +168,8 @@ public:
     this->SetOutputSize ( image->GetLargestPossibleRegion().GetSize() );
     this->SetOutputProjectionRef(image->GetProjectionRef());
     this->SetOutputKeywordList(image->GetImageKeywordlist());
+
+    InstanciateTransform();
     }
 
 protected:

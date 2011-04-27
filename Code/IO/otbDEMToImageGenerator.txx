@@ -81,12 +81,19 @@ void DEMToImageGenerator<TDEMImage>
   output->SetOrigin(m_OutputOrigin);
 }
 
+// GenerateOutputInformation method
+template <class TDEMImage>
+void DEMToImageGenerator<TDEMImage>
+::InstanciateTransform()
+{
+  m_Transform->InstanciateTransform();
+}
 
 template <class TDEMImage>
 void DEMToImageGenerator<TDEMImage>
 ::BeforeThreadedGenerateData()
 {
-  m_Transform->InstanciateTransform();
+  InstanciateTransform();
   DEMImagePointerType DEMImage = this->GetOutput();
 
   // allocate the output buffer
