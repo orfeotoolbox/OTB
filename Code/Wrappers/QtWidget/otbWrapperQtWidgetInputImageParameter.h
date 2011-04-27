@@ -15,12 +15,13 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperQtWidgetStringParameter_h
-#define __otbWrapperQtWidgetStringParameter_h
+#ifndef __otbWrapperQtWidgetInputImageParameter_h
+#define __otbWrapperQtWidgetInputImageParameter_h
 
 #include <QtGui>
-#include "otbWrapperStringParameter.h"
+#include "otbWrapperInputImageParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
+
 
 namespace otb
 {
@@ -30,25 +31,30 @@ namespace Wrapper
 /** \class
  * \brief
  */
-class QtWidgetStringParameter : public QtWidgetParameterBase
+class QtWidgetInputImageParameter : public QtWidgetParameterBase
 {
   Q_OBJECT
 public:
-  QtWidgetStringParameter(StringParameter*, QtWidgetModel*);
-  virtual ~QtWidgetStringParameter();
+  QtWidgetInputImageParameter(InputImageParameter*, QtWidgetModel*);
+  virtual ~QtWidgetInputImageParameter();
 
 protected slots:
-  void SetValue( const QString& value );
+  void SetFileName( const QString& value );
+  void SelectFile();
 
 private:
-  QtWidgetStringParameter(const QtWidgetStringParameter&); //purposely not implemented
-  void operator=(const QtWidgetStringParameter&); //purposely not implemented
+  QtWidgetInputImageParameter(const QtWidgetInputImageParameter&); //purposely not implemented
+  void operator=(const QtWidgetInputImageParameter&); //purposely not implemented
 
   virtual void DoCreateWidget();
 
   virtual void DoUpdateGUI();
 
-  StringParameter::Pointer m_StringParam;
+  InputImageParameter::Pointer m_InputImageParam;
+
+  QHBoxLayout * m_HLayout;
+  QLineEdit*    m_Input;
+  QPushButton * m_Button;
 };
 
 

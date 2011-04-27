@@ -45,6 +45,13 @@ private:
   QtWidgetIntParameter(const QtWidgetIntParameter&); //purposely not implemented
   void operator=(const QtWidgetIntParameter&); //purposely not implemented
 
+  virtual void DoCreateWidget();
+
+  virtual void DoUpdateGUI();
+
+  QHBoxLayout * m_QHBoxLayout;
+  QSpinBox * m_QSpinBox;
+
   IntParameter::Pointer m_IntParam;
 };
 

@@ -24,12 +24,11 @@
 #include "otbWrapperNumericalParameter.h"
 #include "otbWrapperChoiceParameter.h"
 #include "otbWrapperStringParameter.h"
-#include "otbWrapperQtWidgetParameterGroup.h"
+#include "otbWrapperParameterGroup.h"
 
 #include "otbWrapperQtWidgetModel.h"
 
-
-
+#include "otbWrapperQtWidgetParameterGroup.h"
 
 namespace otb
 {
@@ -53,33 +52,26 @@ public:
 protected:
   StubApplication()
   {
-
   }
 
   virtual ~StubApplication()
   {
-
   }
 
   void DoCreateParameters()
   {
-
   }
 
   void DoUpdateParameters()
   {
-
   }
 
   void DoExecute()
   {
-
   }
-
 };
 
 }
-
 }
 
 
@@ -116,11 +108,11 @@ int otbWrapperQtWidgetParameterFactory(int argc, char* argv[])
   emptyParam->SetKey("empty");
 
   choiceParam->SetName("Choice parameter");
-  choiceParam->SetDescription("This is an choice parameter");
+  choiceParam->SetDescription("This is a choice parameter");
   choiceParam->SetKey("choice");
-  choiceParam->AddChoice("choice1", 0);
-  choiceParam->AddChoice("choice2", 0);
-  choiceParam->AddChoice("choice3", 0);
+  choiceParam->AddChoice("choice1", "Choice 1", 0);
+  choiceParam->AddChoice("choice2", "Choice 2", 0);
+  choiceParam->AddChoice("choice3", "Choice 3", 0);
 
   QWidget * intWidget   = factory->CreateQtWidget(intParam, model);
   QWidget * floatWidget = factory->CreateQtWidget(floatParam, model);
@@ -181,16 +173,16 @@ int otbWrapperQtWidgetParameterGroup(int argc, char* argv[])
   choiceParam->SetName("Choice parameter");
   choiceParam->SetDescription("This is an choice parameter");
   choiceParam->SetKey("choice");
-  choiceParam->AddChoice("choice1", 0);
-  choiceParam->AddChoice("choice2", 0);
-  choiceParam->AddChoice("choice3", 0);
+  choiceParam->AddChoice("choice1", "Choice 1", 0);
+  choiceParam->AddChoice("choice2", "Choice 2", 0);
+  choiceParam->AddChoice("choice3", "Choice 3", 0);
 
   stringParam->SetName("String parameter");
   stringParam->SetDescription("This is a string parameter");
   stringParam->SetKey("string");
   stringParam->SetValue("test value");
 
-  otb::Wrapper::ParameterList::Pointer list = otb::Wrapper::ParameterList::New();
+  otb::Wrapper::ParameterGroup::Pointer list = otb::Wrapper::ParameterGroup::New();
   list->AddParameter(otb::Wrapper::Parameter::Pointer(intParam.GetPointer()));
   list->AddParameter(otb::Wrapper::Parameter::Pointer(floatParam.GetPointer()));
   list->AddParameter(otb::Wrapper::Parameter::Pointer(emptyParam.GetPointer()));
@@ -225,28 +217,28 @@ int otbWrapperQtWidgetParameterGroup(int argc, char* argv[])
   choiceParam2->SetName("Choice parameter");
   choiceParam2->SetDescription("This is an choice parameter");
   choiceParam2->SetKey("choice2");
-  choiceParam2->AddChoice("choice1", 0);
-  choiceParam2->AddChoice("choice2", 0);
-  choiceParam2->AddChoice("choice3", 0);
+  choiceParam2->AddChoice("choice1", "Choice 1", 0);
+  choiceParam2->AddChoice("choice2", "Choice 2", 0);
+  choiceParam2->AddChoice("choice3", "Choice 3", 0);
 
   stringParam2->SetName("String parameter");
   stringParam2->SetDescription("This is a string parameter");
   stringParam2->SetKey("string2");
   stringParam2->SetValue("test value");
 
-  otb::Wrapper::ParameterList::Pointer list2 = otb::Wrapper::ParameterList::New();
-  list2->SetName("Group parameter");
-  list2->SetDescription("This is a group parameter");
-  list2->SetKey("group2");
+  otb::Wrapper::ParameterGroup::Pointer group2 = otb::Wrapper::ParameterGroup::New();
+  group2->SetName("Group parameter");
+  group2->SetDescription("This is a group parameter");
+  group2->SetKey("group2");
 
-  list2->AddParameter(otb::Wrapper::Parameter::Pointer(intParam2.GetPointer()));
-  list2->AddParameter(otb::Wrapper::Parameter::Pointer(floatParam2.GetPointer()));
-  list2->AddParameter(otb::Wrapper::Parameter::Pointer(emptyParam2.GetPointer()));
-  list2->AddParameter(otb::Wrapper::Parameter::Pointer(choiceParam2.GetPointer()));
-  list2->AddParameter(otb::Wrapper::Parameter::Pointer(stringParam2.GetPointer()));
-  list2->AddParameter(otb::Wrapper::Parameter::Pointer(list.GetPointer()));
+  group2->AddParameter(otb::Wrapper::Parameter::Pointer(intParam2.GetPointer()));
+  group2->AddParameter(otb::Wrapper::Parameter::Pointer(floatParam2.GetPointer()));
+  group2->AddParameter(otb::Wrapper::Parameter::Pointer(emptyParam2.GetPointer()));
+  group2->AddParameter(otb::Wrapper::Parameter::Pointer(choiceParam2.GetPointer()));
+  group2->AddParameter(otb::Wrapper::Parameter::Pointer(stringParam2.GetPointer()));
+  group2->AddParameter(otb::Wrapper::Parameter::Pointer(list.GetPointer()));
 
-  QWidget * group = new otb::Wrapper::QtWidgetParameterGroup(list2, model);
+  QWidget * group = new otb::Wrapper::QtWidgetParameterGroup(group2, model);
 
   if(group)
     {

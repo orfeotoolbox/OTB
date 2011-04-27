@@ -44,6 +44,13 @@ private:
   QtWidgetFloatParameter(const QtWidgetFloatParameter&); //purposely not implemented
   void operator=(const QtWidgetFloatParameter&); //purposely not implemented
 
+  virtual void DoCreateWidget();
+
+  virtual void DoUpdateGUI();
+
+  QHBoxLayout * m_QHBoxLayout;
+  QDoubleSpinBox * m_QDoubleSpinBox;
+
   FloatParameter::Pointer m_FloatParam;
 };
 

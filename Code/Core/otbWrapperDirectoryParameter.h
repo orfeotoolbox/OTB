@@ -15,9 +15,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperEmptyParameter_h
-#define __otbWrapperEmptyParameter_h
+#ifndef __otbWrapperDirectoryParameter_h
+#define __otbWrapperDirectoryParameter_h
 
+#include <string>
 #include "otbWrapperParameter.h"
 
 namespace otb
@@ -25,15 +26,15 @@ namespace otb
 namespace Wrapper
 {
 
-/** \class EmptyParameter
- *  \brief This class represent an empty parameter for the wrapper framework (boolean value)
+/** \class DirectoryParameter
+ *  \brief This class represent a string parameter for the wrapper framework
  */
-class EmptyParameter
+class DirectoryParameter
   : public Parameter
 {
 public:
   /** Standard class typedef */
-  typedef EmptyParameter                Self;
+  typedef DirectoryParameter               Self;
   typedef Parameter                     Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -42,13 +43,13 @@ public:
   itkNewMacro(Self);
 
   /** RTTI support */
-  itkTypeMacro(EmptyParameter, Parameter);
+  itkTypeMacro(DirectoryParameter, Parameter);
 
   /** Set any value */
   virtual void SetAnyValue(boost::any v)
   {
     // Perform any cast
-    m_Value = boost::any_cast<bool>(v);
+    m_Value = boost::any_cast<std::string>(v);
 
     // Call Modified();
     this->Modified();
@@ -61,26 +62,25 @@ public:
   }
 
   /** Set the value */
-  itkSetMacro(Value,bool);
+  itkSetMacro(Value,std::string);
 
   /** Get the value */
-  itkGetMacro(Value,bool);
-
+  itkGetMacro(Value,std::string);
 
 protected:
   /** Constructor */
-  EmptyParameter()
+  DirectoryParameter()
   {}
 
   /** Destructor */
-  virtual ~EmptyParameter()
+  virtual ~DirectoryParameter()
   {}
 
-  bool m_Value;
+  std::string m_Value;
 
 private:
-  EmptyParameter(const EmptyParameter &); //purposely not implemented
-  void operator =(const EmptyParameter&); //purposely not implemented
+  DirectoryParameter(const DirectoryParameter &); //purposely not implemented
+  void operator =(const DirectoryParameter&); //purposely not implemented
 
 }; // End class Parameter
 

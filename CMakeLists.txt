@@ -41,14 +41,8 @@ IF(WIN32)
 ENDIF(WIN32)
 
 # Link to the Orfeo ToolBox
-FIND_PACKAGE(OTB PATHS /usr/lib/otb)
-IF(OTB_FOUND)
-  INCLUDE(${OTB_USE_FILE})
-ELSE(OTB_FOUND)
-  MESSAGE(FATAL_ERROR
-          "OTB not found. Please set OTB_DIR")
-ENDIF(OTB_FOUND)
-
+FIND_PACKAGE(OTB REQUIRED PATHS /usr/lib/otb )
+INCLUDE(${OTB_USE_FILE})
 
 
 OPTION(OTB_USE_QT "Generate Qt wrappers for Applications" ON)

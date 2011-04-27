@@ -21,8 +21,23 @@
 #include <string>
 #include "otbMacro.h"
 #include "itkObject.h"
-#include "otbWrapperParameterList.h"
 #include "itkObjectFactory.h"
+
+#include "otbWrapperParameterGroup.h"
+
+// include all parameters type for easy use when defining the application
+#include "otbWrapperChoiceParameter.h"
+#include "otbWrapperDirectoryParameter.h"
+#include "otbWrapperEmptyParameter.h"
+#include "otbWrapperFilenameParameter.h"
+#include "otbWrapperInputComplexImageParameter.h"
+#include "otbWrapperInputImageParameter.h"
+#include "otbWrapperInputVectorDataParameter.h"
+#include "otbWrapperNumericalParameter.h"
+#include "otbWrapperOutputImageParameter.h"
+#include "otbWrapperOutputVectorDataParameter.h"
+#include "otbWrapperRadiusParameter.h"
+#include "otbWrapperStringParameter.h"
 
 namespace otb
 {
@@ -61,23 +76,13 @@ public:
   /** Get the parameter description */
   itkGetStringMacro(Description);
 
-  void Init()
-  {
-    m_ParameterList = ParameterList::New();
-    this->DoCreateParameters();
-  }
+  void Init();
 
-  void UpdateParameters()
-  {
-    this->DoUpdateParameters();
-  }
+  void UpdateParameters();
 
-  void Execute()
-  {
-    this->DoExecute();
-  }
+  void Execute();
 
-  ParameterList* GetParameterList()
+  ParameterGroup* GetParameterList()
   {
     return m_ParameterList;
   }
@@ -88,20 +93,19 @@ protected:
 
   virtual ~Application();
 
-protected:
+private:
   virtual void DoCreateParameters() = 0;
 
   virtual void DoUpdateParameters() = 0;
 
   virtual void DoExecute() = 0;
 
-private:
   Application(const Application &); //purposely not implemented
   void operator =(const Application&); //purposely not implemented
 
   std::string m_Name;
   std::string m_Description;
-  ParameterList::Pointer m_ParameterList;
+  ParameterGroup::Pointer m_ParameterList;
 
 }; //end class
 

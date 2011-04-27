@@ -18,6 +18,7 @@
 #ifndef __otbWrapperStringParameter_h
 #define __otbWrapperStringParameter_h
 
+#include <string>
 #include "otbWrapperParameter.h"
 
 namespace otb
@@ -75,11 +76,11 @@ protected:
   virtual ~StringParameter()
   {}
 
+  std::string m_Value;
+
 private:
   StringParameter(const StringParameter &); //purposely not implemented
   void operator =(const StringParameter&); //purposely not implemented
-
-  std::string m_Value;
 
 }; // End class Parameter
 

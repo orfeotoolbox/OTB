@@ -25,6 +25,19 @@ namespace Wrapper
 QtWidgetEmptyParameter::QtWidgetEmptyParameter(EmptyParameter* emptyParam, QtWidgetModel* m)
 : QtWidgetParameterBase(m)
 {
+}
+
+QtWidgetEmptyParameter::~QtWidgetEmptyParameter()
+{
+}
+
+void QtWidgetEmptyParameter::DoUpdateGUI()
+{
+
+}
+
+void QtWidgetEmptyParameter::DoCreateWidget()
+{
   // Set up input text edit
   QHBoxLayout *hLayout = new QHBoxLayout;
   hLayout->setSpacing(0);
@@ -38,10 +51,6 @@ QtWidgetEmptyParameter::QtWidgetEmptyParameter(EmptyParameter* emptyParam, QtWid
   hLayout->addStretch();
 
   this->setLayout(hLayout);
-}
-
-QtWidgetEmptyParameter::~QtWidgetEmptyParameter()
-{
 }
 
 }

@@ -15,25 +15,25 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperEmptyParameter_h
-#define __otbWrapperEmptyParameter_h
+#ifndef __otbWrapperOutputVectorDataParameter_h
+#define __otbWrapperOutputVectorDataParameter_h
 
+#include "otbVectorData.h"
 #include "otbWrapperParameter.h"
 
 namespace otb
 {
 namespace Wrapper
 {
-
-/** \class EmptyParameter
- *  \brief This class represent an empty parameter for the wrapper framework (boolean value)
+/** \class OutputVectorDataParameter
+ *  \brief This class represents a OutputVectorData parameter
  */
-class EmptyParameter
-  : public Parameter
+
+class ITK_EXPORT OutputVectorDataParameter : public Parameter
 {
 public:
   /** Standard class typedef */
-  typedef EmptyParameter                Self;
+  typedef OutputVectorDataParameter      Self;
   typedef Parameter                     Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -42,47 +42,43 @@ public:
   itkNewMacro(Self);
 
   /** RTTI support */
-  itkTypeMacro(EmptyParameter, Parameter);
+  itkTypeMacro(OutputVectorDataParameter,Parameter);
 
-  /** Set any value */
-  virtual void SetAnyValue(boost::any v)
-  {
-    // Perform any cast
-    m_Value = boost::any_cast<bool>(v);
+  typedef double CoordinatePrecisionType;
+  typedef double ValuePrecisionType;
+  typedef otb::VectorData<CoordinatePrecisionType, 2, ValuePrecisionType>  VectorDataType;
 
-    // Call Modified();
-    this->Modified();
-  }
+  /** Set the value */
+  itkSetObjectMacro(VectorData, VectorDataType);
+
+  /** Get the value */
+  itkGetObjectMacro(VectorData, VectorDataType);
 
   /** Return any value */
   virtual boost::any GetAnyValue()
   {
-    return boost::any(m_Value);
+    return boost::any(m_VectorData);
   }
-
-  /** Set the value */
-  itkSetMacro(Value,bool);
-
-  /** Get the value */
-  itkGetMacro(Value,bool);
-
 
 protected:
   /** Constructor */
-  EmptyParameter()
-  {}
+  OutputVectorDataParameter()
+  {
+    this->SetName("Output Vector Data");
+    this->SetKey("outvd");
+  }
 
   /** Destructor */
-  virtual ~EmptyParameter()
+  virtual ~OutputVectorDataParameter()
   {}
 
-  bool m_Value;
+  VectorDataType::Pointer m_VectorData;
 
 private:
-  EmptyParameter(const EmptyParameter &); //purposely not implemented
-  void operator =(const EmptyParameter&); //purposely not implemented
+  OutputVectorDataParameter(const Parameter &); //purposely not implemented
+  void operator =(const Parameter&); //purposely not implemented
 
-}; // End class Parameter
+};
 
 } // End namespace Wrapper
 } // End namespace otb

@@ -20,6 +20,7 @@
 
 #include <QtGui>
 #include "otbWrapperChoiceParameter.h"
+#include "otbWrapperParameterGroup.h"
 #include "otbWrapperQtWidgetParameterBase.h"
 
 namespace otb
@@ -44,11 +45,24 @@ private:
   QtWidgetChoiceParameter(const QtWidgetChoiceParameter&); //purposely not implemented
   void operator=(const QtWidgetChoiceParameter&); //purposely not implemented
 
-  void CreateWidget();
+  virtual void DoCreateWidget();
+
+  virtual void DoUpdateGUI();
 
   ChoiceParameter::Pointer m_ChoiceParam;
-};
 
+  QHBoxLayout*    m_MainHLayout;
+
+  QComboBox*      m_ComboBox;
+  QStackedWidget* m_StackWidget;
+
+  QVBoxLayout*    m_VLayout;
+  QGroupBox*      m_VLayoutGroup;
+
+  typedef std::vector<QtWidgetParameterBase*> WidgetListType;
+  typedef WidgetListType::iterator WidgetListIteratorType;
+  WidgetListType m_WidgetList;
+};
 
 }
 }

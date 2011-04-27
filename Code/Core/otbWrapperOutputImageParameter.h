@@ -15,27 +15,25 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperInputImageParameter_h
-#define __otbWrapperInputImageParameter_h
+#ifndef __otbWrapperOutputImageParameter_h
+#define __otbWrapperOutputImageParameter_h
 
 #include "otbVectorImage.h"
-#include "otbImageFileReader.h"
-
 #include "otbWrapperParameter.h"
 
 namespace otb
 {
 namespace Wrapper
 {
-/** \class InputImageParameter
- *  \brief This class represents a InputImage parameter
+/** \class OutputImageParameter
+ *  \brief This class represents a OutputImage parameter
  */
 
-class ITK_EXPORT InputImageParameter : public Parameter
+class ITK_EXPORT OutputImageParameter : public Parameter
 {
 public:
   /** Standard class typedef */
-  typedef InputImageParameter           Self;
+  typedef OutputImageParameter           Self;
   typedef Parameter                     Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -44,7 +42,7 @@ public:
   itkNewMacro(Self);
 
   /** RTTI support */
-  itkTypeMacro(InputImageParameter,Parameter);
+  itkTypeMacro(OutputImageParameter,Parameter);
 
   typedef float                          PixelType;
   typedef otb::VectorImage<PixelType, 2> VectorImageType;
@@ -55,43 +53,47 @@ public:
   /** Get the value */
   itkGetObjectMacro(Image, VectorImageType);
 
-  /** Set value from filename */
-  void SetFromFileName(const std::string& filename)
-  {
-    typedef otb::ImageFileReader<VectorImageType> ImageFileReaderType;
-    ImageFileReaderType::Pointer reader = ImageFileReaderType::New();
-    reader->SetFileName(filename);
-    reader->UpdateOutputInformation();
-    m_Reader = reader;
-    m_Image = reader->GetOutput();
-  }
-
   /** Return any value */
   virtual boost::any GetAnyValue()
   {
     return boost::any(m_Image);
   }
 
+  /** Return any value */
+  void SetValue(VectorImageType* image)
+  {
+    m_Image = image;
+  }
+
+  /** Return any value */
+  VectorImageType* GetValue( void )
+  {
+    return m_Image;
+  }
+
+  itkSetStringMacro(FileName);
+  itkGetStringMacro(FileName);
+
 protected:
   /** Constructor */
-  InputImageParameter()
+  OutputImageParameter()
   {
-    this->SetName("Input Image");
-    this->SetKey("in");
+    this->SetName("Output Image");
+    this->SetKey("out");
   }
 
   /** Destructor */
-  virtual ~InputImageParameter()
+  virtual ~OutputImageParameter()
   {}
 
   VectorImageType::Pointer m_Image;
-  itk::ProcessObject::Pointer m_Reader;
+  std::string m_FileName;
 
 private:
-  InputImageParameter(const Parameter &); //purposely not implemented
+  OutputImageParameter(const Parameter &); //purposely not implemented
   void operator =(const Parameter&); //purposely not implemented
 
-}; // End class InputImage Parameter
+}; // End class OutputImage Parameter
 
 } // End namespace Wrapper
 } // End namespace otb

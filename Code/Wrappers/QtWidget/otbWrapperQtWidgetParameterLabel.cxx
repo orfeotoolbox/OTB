@@ -30,10 +30,10 @@ QtWidgetParameterLabel::QtWidgetParameterLabel(Parameter* param)
   label->setText(param->GetName());
   label->setToolTip(param->GetName());
 
-  QHBoxLayout *labelLayout = new QHBoxLayout;
+  QVBoxLayout *labelLayout = new QVBoxLayout;
   labelLayout->setSpacing(0);
   labelLayout->setContentsMargins(0,0,0,0);
-  labelLayout->addWidget(label);
+  labelLayout->addWidget(label, 0);
 
   this->setLayout(labelLayout);
 }

@@ -37,6 +37,9 @@ public:
   QtWidgetParameterBase(QtWidgetModel*);
   virtual ~QtWidgetParameterBase();
 
+  void CreateWidget();
+  void UpdateGUI();
+
 protected slots:
   void ParameterChanged(const QString& key);
 
@@ -46,6 +49,10 @@ protected:
 private:
   QtWidgetParameterBase(const QtWidgetParameterBase&); //purposely not implemented
   void operator=(const QtWidgetParameterBase&); //purposely not implemented
+
+  virtual void DoUpdateGUI() = 0;
+
+  virtual void DoCreateWidget() = 0;
 
   QtWidgetModel* m_Model;
 };

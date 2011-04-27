@@ -17,7 +17,6 @@
 =========================================================================*/
 #include "otbWrapperApplication.h"
 
-
 namespace otb
 {
 namespace Wrapper
@@ -28,7 +27,24 @@ Application::Application(): m_Name(""), m_Description("")
 }
 
 Application::~Application()
-{}
+{
+}
+
+void Application::Init()
+{
+  m_ParameterList = ParameterGroup::New();
+  this->DoCreateParameters();
+}
+
+void Application::UpdateParameters()
+{
+  this->DoUpdateParameters();
+}
+
+void Application::Execute()
+{
+  this->DoExecute();
+}
 
 }
 }

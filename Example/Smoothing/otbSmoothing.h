@@ -24,11 +24,11 @@ namespace otb
 namespace Wrapper
 {
 
-class ITK_EXPORT Addition : public Application
+class ITK_EXPORT Smoothing : public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef Addition                      Self;
+  typedef Smoothing                      Self;
   typedef Application                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -39,15 +39,18 @@ public:
   itkTypeMacro(Self, otb::Application);
 
 protected:
-  Addition();
+  Smoothing();
 
-  virtual ~Addition();
+  virtual ~Smoothing();
 
+private:
   void DoCreateParameters();
 
   void DoUpdateParameters();
 
   void DoExecute();
+
+  itk::ProcessObject::Pointer ref;
 
 };
 

@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperParameterList_h
-#define __otbWrapperParameterList_h
+#ifndef __otbWrapperParameterGroup_h
+#define __otbWrapperParameterGroup_h
 
 #include "itkObject.h"
 #include "otbWrapperParameter.h"
@@ -28,13 +28,13 @@ namespace Wrapper
 {
 
 /**
- * \class WrapperParameterList
+ * \class Group
  */
-class ITK_EXPORT ParameterList
+class ITK_EXPORT ParameterGroup
   : public Parameter
 {
 public:
-  typedef ParameterList                        Self;
+  typedef ParameterGroup                       Self;
   typedef Parameter                            Superclass;
   typedef itk::SmartPointer<Self>              Pointer;
   typedef itk::SmartPointer<const Self>        ConstPointer;
@@ -61,17 +61,17 @@ public:
   }
 
 protected:
-  ParameterList()
+  ParameterGroup()
   {}
 
-  virtual ~ParameterList()
+  virtual ~ParameterGroup()
   {}
-
-private:
-  ParameterList(const ParameterList &); //purposely not implemented
-  void operator =(const ParameterList&); //purposely not implemented
 
   std::vector<Parameter::Pointer> m_ParameterList;
+
+private:
+  ParameterGroup(const ParameterGroup &); //purposely not implemented
+  void operator =(const ParameterGroup&); //purposely not implemented
 
 };
 

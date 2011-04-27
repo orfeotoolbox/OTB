@@ -17,6 +17,9 @@
 =========================================================================*/
 #include "otbWrapperQtWidgetChoiceParameter.h"
 
+#include "otbWrapperQtWidgetParameterLabel.h"
+#include "otbWrapperQtWidgetParameterFactory.h"
+
 namespace otb
 {
 namespace Wrapper
@@ -26,42 +29,62 @@ QtWidgetChoiceParameter::QtWidgetChoiceParameter(ChoiceParameter* param, QtWidge
 : QtWidgetParameterBase(m),
   m_ChoiceParam(param)
 {
-  this->CreateWidget();
 }
 
 QtWidgetChoiceParameter::~QtWidgetChoiceParameter()
 {
-
 }
 
-void QtWidgetChoiceParameter::CreateWidget()
+void QtWidgetChoiceParameter::DoUpdateGUI()
 {
-  // Set up input text edit
-  QHBoxLayout *hLayout = new QHBoxLayout;
-  hLayout->setSpacing(0);
-  hLayout->setContentsMargins(0,0,0,0);
+  // Update the combobox value
+  unsigned int value = m_ChoiceParam->GetValue( );
+  m_ComboBox->setCurrentIndex(value);
 
-  QComboBox* combobox = new QComboBox;
-  combobox->setToolTip(m_ChoiceParam->GetDescription());
+  // Update the choice subparameters
+  WidgetListIteratorType it = m_WidgetList.begin();
+  for (it = m_WidgetList.begin(); it != m_WidgetList.end(); ++it)
+    {
+    (*it)->UpdateGUI();
+    }
+}
+
+void QtWidgetChoiceParameter::DoCreateWidget()
+{
+  m_ComboBox = new QComboBox;
+  m_ComboBox->setToolTip(m_ChoiceParam->GetDescription());
+
+  m_StackWidget = new QStackedWidget;
 
   for (unsigned int i = 0; i < m_ChoiceParam->GetNbChoices(); ++i)
     {
-    QString key = QString::fromStdString( m_ChoiceParam->GetChoiceKey(i) );
-    combobox->addItem( key, QVariant(key) );
+    QString key = QString::fromStdString( m_ChoiceParam->GetChoiceName(i) );
+    m_ComboBox->addItem( key, QVariant(key) );
+
+    ParameterGroup::Pointer param = m_ChoiceParam->GetChoiceAssociatedParameter(i);
+    if (param.IsNotNull())
+      {
+      QtWidgetParameterBase* widget = QtWidgetParameterFactory::CreateQtWidget( param, GetModel() );
+      m_StackWidget->addWidget(widget);
+      m_WidgetList.push_back(widget);
+      }
     }
 
-  connect( combobox, SIGNAL(currentIndexChanged(int)), this, SLOT(SetValue(int)) );
+  connect( m_ComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(SetValue(int)) );
+  connect( m_ComboBox, SIGNAL(currentIndexChanged(int)), m_StackWidget, SLOT(setCurrentIndex(int)) );
 
-  hLayout->addWidget(combobox);
-  this->setLayout(hLayout);
+  m_VLayout = new QVBoxLayout;
+  m_VLayout->addWidget(m_ComboBox);
+  m_VLayout->addWidget(m_StackWidget);
+  m_VLayout->addStretch();
+
+  this->setLayout(m_VLayout);
 }
 
 void QtWidgetChoiceParameter::SetValue(int value)
 {
-  std::cout << "QtWidgetChoiceParameter::SetValue " << value << std::endl;
   m_ChoiceParam->SetValue( value );
 }
-
 
 }
 }

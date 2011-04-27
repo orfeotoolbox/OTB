@@ -19,14 +19,18 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#include "otbWrapperParameterList.h"
+#include "otbWrapperChoiceParameter.h"
 
-int otbWrapperParameterListNew(int argc, char* argv[])
+int otbWrapperChoiceParameterNew(int argc, char* argv[])
 {
-  typedef otb::Wrapper::ParameterList ParameterListType;
-  ParameterListType::Pointer parameters = ParameterListType::New();
-
-  //std::cout << parameter << std::endl;
+  typedef otb::Wrapper::ChoiceParameter ChoiceParameterType;
+  ChoiceParameterType::Pointer parameter = ChoiceParameterType::New();
 
   return EXIT_SUCCESS;
+}
+
+int otbWrapperChoiceParameterTest1(int argc, char* argv[])
+{
+  // TODO
+  return EXIT_FAILURE;
 }

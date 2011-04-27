@@ -18,6 +18,7 @@
 #include "otbWrapperQtWidgetView.h"
 
 #include "otbWrapperQtWidgetParameterGroup.h"
+#include "otbWrapperQtWidgetParameterFactory.h"
 
 namespace otb
 {
@@ -103,7 +104,7 @@ QWidget* QtWidgetView::CreateHeader()
 
 QWidget* QtWidgetView::CreateInputWidgets()
 {
-  QWidget* params = new QtWidgetParameterGroup( m_Model->GetApplication()->GetParameterList(), m_Model );
+  QtWidgetParameterBase* params = QtWidgetParameterFactory::CreateQtWidget(m_Model->GetApplication()->GetParameterList(), m_Model);
   return params;
 }
 

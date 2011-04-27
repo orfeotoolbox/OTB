@@ -15,9 +15,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperEmptyParameter_h
-#define __otbWrapperEmptyParameter_h
+#ifndef __otbWrapperFilenameParameter_h
+#define __otbWrapperFilenameParameter_h
 
+#include <string>
 #include "otbWrapperParameter.h"
 
 namespace otb
@@ -25,15 +26,15 @@ namespace otb
 namespace Wrapper
 {
 
-/** \class EmptyParameter
- *  \brief This class represent an empty parameter for the wrapper framework (boolean value)
+/** \class FilenameParameter
+ *  \brief This class represent a string parameter for the wrapper framework
  */
-class EmptyParameter
+class FilenameParameter
   : public Parameter
 {
 public:
   /** Standard class typedef */
-  typedef EmptyParameter                Self;
+  typedef FilenameParameter               Self;
   typedef Parameter                     Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -42,13 +43,13 @@ public:
   itkNewMacro(Self);
 
   /** RTTI support */
-  itkTypeMacro(EmptyParameter, Parameter);
+  itkTypeMacro(FilenameParameter, Parameter);
 
   /** Set any value */
   virtual void SetAnyValue(boost::any v)
   {
     // Perform any cast
-    m_Value = boost::any_cast<bool>(v);
+    m_Value = boost::any_cast<std::string>(v);
 
     // Call Modified();
     this->Modified();
@@ -61,26 +62,25 @@ public:
   }
 
   /** Set the value */
-  itkSetMacro(Value,bool);
+  itkSetMacro(Value,std::string);
 
   /** Get the value */
-  itkGetMacro(Value,bool);
-
+  itkGetMacro(Value,std::string);
 
 protected:
   /** Constructor */
-  EmptyParameter()
+  FilenameParameter()
   {}
 
   /** Destructor */
-  virtual ~EmptyParameter()
+  virtual ~FilenameParameter()
   {}
 
-  bool m_Value;
+  std::string m_Value;
 
 private:
-  EmptyParameter(const EmptyParameter &); //purposely not implemented
-  void operator =(const EmptyParameter&); //purposely not implemented
+  FilenameParameter(const FilenameParameter &); //purposely not implemented
+  void operator =(const FilenameParameter&); //purposely not implemented
 
 }; // End class Parameter
 

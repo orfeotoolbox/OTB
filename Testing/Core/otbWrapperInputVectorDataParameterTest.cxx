@@ -15,42 +15,16 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbWrapperQtWidgetParameterBase.h"
+#if defined(_MSC_VER)
+#pragma warning ( disable : 4786 )
+#endif
 
-namespace otb
+#include "otbWrapperInputVectorDataParameter.h"
+
+int otbWrapperInputVectorDataParameterNew(int argc, char* argv[])
 {
-namespace Wrapper
-{
+  typedef otb::Wrapper::InputVectorDataParameter InputVectorDataParameterType;
+  InputVectorDataParameterType::Pointer parameter = InputVectorDataParameterType::New();
 
-QtWidgetParameterBase::QtWidgetParameterBase(QtWidgetModel* m)
-  : m_Model(m)
-{
-}
-
-QtWidgetParameterBase::~QtWidgetParameterBase()
-{
-}
-
-void QtWidgetParameterBase::CreateWidget()
-{
-  this->DoCreateWidget();
-}
-
-void QtWidgetParameterBase::UpdateGUI()
-{
-  this->DoUpdateGUI();
-}
-
-void QtWidgetParameterBase::ParameterChanged(const QString& key)
-{
-
-}
-
-QtWidgetModel* QtWidgetParameterBase::GetModel()
-{
-  return m_Model;
-}
-
-}
-
+  return EXIT_SUCCESS;
 }

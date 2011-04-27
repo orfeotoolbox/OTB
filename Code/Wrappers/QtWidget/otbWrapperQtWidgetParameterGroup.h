@@ -19,7 +19,7 @@
 #define __otbWrapperQtWidgetParameterGroup_h
 
 #include <QtGui>
-#include "otbWrapperParameterList.h"
+#include "otbWrapperParameterGroup.h"
 #include "otbWrapperQtWidgetParameterBase.h"
 
 namespace otb
@@ -34,16 +34,22 @@ class QtWidgetParameterGroup : public QtWidgetParameterBase
 {
   Q_OBJECT
 public:
-  QtWidgetParameterGroup(ParameterList::Pointer, QtWidgetModel*);
+  QtWidgetParameterGroup(ParameterGroup::Pointer, QtWidgetModel*);
   virtual ~QtWidgetParameterGroup();
 
 private:
   QtWidgetParameterGroup(const QtWidgetParameterGroup&); //purposely not implemented
   void operator=(const QtWidgetParameterGroup&); //purposely not implemented
 
-  void CreateWidget();
+  void DoCreateWidget();
 
-  ParameterList::Pointer m_ParamList;
+  virtual void DoUpdateGUI();
+
+  ParameterGroup::Pointer m_ParamList;
+
+  typedef std::vector<QtWidgetParameterBase*> WidgetListType;
+  typedef WidgetListType::iterator WidgetListIteratorType;
+  WidgetListType m_WidgetList;
 
 };
 
