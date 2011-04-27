@@ -717,6 +717,51 @@ SpotImageMetadataInterface
 {
   //TODO tabulate spectral responses
   WavelengthSpectralBandVectorType wavelengthSpectralBand = InternalWavelengthSpectralBandVectorType::New();
+
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
+    {
+    itkExceptionMacro(<< "Invalid Metadata, no Spot Image");
+    }
+
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+    {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+    }
+
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key = "support_data.number_bands";
+  int         nbBands = ossimString(kwl.find(key.c_str())).toInt();
+  std::string sensorId = this->GetSensorID();
+
+  // Panchromatic case
+  if (nbBands == 1)
+    {
+    if (sensorId == "SPOT4")
+      {
+
+      }
+    else if (sensorId == "SPOT5")
+      {
+
+      }
+    else
+      {
+      itkExceptionMacro(<< "Invalid Spot Sensor ID");
+      }
+    }
+  else if (nbBands > 1 && nbBands < 5)
+    {
+    //FIXME add other instrument relative spectral response (not only HRG)
+    }
+  else
+    {
+    itkExceptionMacro(<< "Invalid number of bands...");
+    }
+
   return wavelengthSpectralBand;
 }
 
