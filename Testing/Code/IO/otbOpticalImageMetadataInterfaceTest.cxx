@@ -56,6 +56,7 @@ int otbOpticalImageMetadataInterfaceTest(int argc, char* argv[])
   file << "GetSolarIrradiance:  " << lImageMetadata->GetSolarIrradiance() << std::endl;
   file << "GetFirstWavelengths: " << lImageMetadata->GetFirstWavelengths() << std::endl;
   file << "GetLastWavelengths:  " << lImageMetadata->GetLastWavelengths() << std::endl;
+  file << "GetSpectralSensitivity:  " << lImageMetadata->GetSpectralSensitivity() << std::endl;
   file.close();
 
   std::cout << lImageMetadata << std::endl;
