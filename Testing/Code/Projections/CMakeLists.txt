@@ -1027,10 +1027,6 @@ ENDFOREACH( file ${SENSOR_TYPES})
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 
-ADD_TEST(prTuElevDatabaseHeightAboveMSLFunction ${PROJECTIONS_TESTS4}
-   otbElevDatabaseHeightAboveMSLFunction
-)
-
 #------ otb::ImageToEnvelopeVectorDataFilter ---------------------
 ADD_TEST(prTuImageToEnvelopeVectorDataFilterNew ${PROJECTIONS_TESTS4}
 otbImageToEnvelopeVectorDataFilterNew)
@@ -1136,7 +1132,6 @@ SET(Projections_SRCS4
 otbProjectionsTests4.cxx
 otbPhysicalToRPCSensorModelImageFilter.cxx
 otbGenericRSResampleImageFilter.cxx
-otbElevDatabaseHeightAboveMSLFunction.cxx
 otbImageToEnvelopeVectorDataFilter.cxx
 otbImageToGenericRSOutputParameters.cxx
 otbRationalTransform.cxx
