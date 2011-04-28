@@ -155,8 +155,8 @@ VectorDataIntoImageProjectionFilter<TInputVectorData, TInputImage>
   RemoteSensingRegionType rsRegion;
   typename RemoteSensingRegionType::IndexType rsOrigin;
   typename RemoteSensingRegionType::SizeType  rsSize;
-  rsOrigin[0] = min(pul[0], plr[0]);
-  rsOrigin[1] = min(pul[1], plr[1]);
+  rsOrigin[0] = std::min(pul[0], plr[0]);
+  rsOrigin[1] = std::min(pul[1], plr[1]);
   rsSize[0] = vcl_abs(pul[0] - plr[0]);
   rsSize[1] = vcl_abs(pul[1] - plr[1]);
 

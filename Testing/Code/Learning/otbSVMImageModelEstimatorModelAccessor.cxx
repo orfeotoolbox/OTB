@@ -20,11 +20,13 @@
 #pragma warning ( disable : 4786 )
 #endif
 
+#include <iomanip>
+#include <iostream>
+#include <fstream>
+
 #include "itkExceptionObject.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
-#include <iostream>
-#include <fstream>
 
 #include "otbSVMModel.h"
 #include "otbSVMImageModelEstimator.h"

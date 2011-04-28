@@ -22,6 +22,7 @@
 #include "itkConstNeighborhoodIterator.h"
 #include "itkNumericTraits.h"
 #include "itkMacro.h"
+#include "otbMath.h"
 
 namespace otb
 {
@@ -112,11 +113,7 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
         InputPixelType gradient = it.GetPixel(offset);
 
         // Then, compute the gradient orientation
-        double angle = 0.;
-		if( gradient[1] != 0 )
-		{
-			angle = vcl_atan2(gradient[1], gradient[0]);
-		}
+        double angle = vcl_atan2(gradient[1], gradient[0]);
 
         // Also compute its magnitude
         TOutputPrecision magnitude = vcl_sqrt(gradient[0]*gradient[0]+gradient[1]*gradient[1]);
@@ -125,10 +122,11 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
         // lies in [-pi, pi]
         unsigned int binIndex = vcl_floor((otb::CONST_PI + angle)/orientationBinWidth);
 
- std::cout<<std::setprecision(15)<<gradient[1] <<"  "<<gradient[0]<<std::endl;
- std::cout<<std::setprecision(15)<<otb::CONST_PI <<"  "<<angle<<"  "<<orientationBinWidth<<" = "<<(otb::CONST_PI + angle)/orientationBinWidth<<std::endl;
+        // Handle special case where angle = pi, and binIndex is out-of-bound
+        if(binIndex == m_NumberOfOrientationBins)
+          binIndex=m_NumberOfOrientationBins-1;
 
-        // Cumulate values
+         // Cumulate values
         globalOrientationHistogram[binIndex]+= magnitude * gWeight;
         }
       }

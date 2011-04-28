@@ -20,12 +20,15 @@
 #pragma warning ( disable : 4786 )
 #endif
 
+#include <iomanip>
 #include <iostream>
 
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbForwardSensorModel.h"
 #include "otbInverseSensorModel.h"
+
+#include "base/ossimKeywordlist.h"
 
 int otbSensorModel(int argc, char* argv[])
 {

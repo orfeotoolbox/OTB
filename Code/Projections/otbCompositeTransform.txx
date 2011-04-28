@@ -19,7 +19,7 @@
 #define __otbCompositeTransform_txx
 
 #include "otbCompositeTransform.h"
-#include "otbMapProjections.h"
+
 #include "otbGenericMapProjection.h"
 #include "otbForwardSensorModel.h"
 #include "otbInverseSensorModel.h"

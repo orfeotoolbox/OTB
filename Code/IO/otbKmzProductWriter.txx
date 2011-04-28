@@ -175,8 +175,10 @@ KmzProductWriter<TInputImage>
     logoFilename << m_Path;
     logoFilename << "/logo.jpeg";
     
-    ossimFilename cachingDir(m_Path);
-    cachingDir.createDirectory();
+    if (!itksys::SystemTools::MakeDirectory(m_Path.c_str()))
+      {
+      itkExceptionMacro(<< "Error while creating cache directory" << m_Path);
+      }
     
     typename CastFilterType::Pointer castFiler = CastFilterType::New();
     castFiler->SetInput(m_Logo);
@@ -275,7 +277,7 @@ KmzProductWriter<TInputImage>
 
   // Compute max depth
   int maxDepth =
-    static_cast<int>(max(vcl_ceil(vcl_log(static_cast<float>(sizeX) / static_cast<float>(m_TileSize)) / vcl_log(2.0)),
+    static_cast<int>(std::max(vcl_ceil(vcl_log(static_cast<float>(sizeX) / static_cast<float>(m_TileSize)) / vcl_log(2.0)),
                          vcl_ceil(vcl_log(static_cast<float>(sizeY) / static_cast<float>(m_TileSize)) / vcl_log(2.0))));
   m_MaxDepth = maxDepth;
   m_CurIdx = 0;
@@ -392,11 +394,12 @@ KmzProductWriter<TInputImage>
           }
 
         // Generate pathname
+        if (!itksys::SystemTools::MakeDirectory(m_Path.c_str()))
+          {
+          itkExceptionMacro(<< "Error while creating cache directory" << m_Path);
+          }
         std::ostringstream path;
         path << m_Path;
-  
-        ossimFilename cachingDir(path.str());
-        cachingDir.createDirectory();
 
         // Generate Tile filename
         std::ostringstream ossFileName;
@@ -632,7 +635,7 @@ KmzProductWriter<TInputImage>
   kmlname << m_FileName;
   kmlname << m_KmlExtension;
   m_RootKmlFile.open(kmlname.str().c_str());
-  m_RootKmlFile << fixed << setprecision(6);
+  m_RootKmlFile << std::fixed << std::setprecision(6);
 
   m_RootKmlFile << "<?xml version=\"1.0\" encoding=\"utf-8\"?>" << std::endl;
   m_RootKmlFile << "<kml xmlns=\"http://www.opengis.net/kml/2.2\"" << std::endl;
@@ -920,7 +923,7 @@ KmzProductWriter<TInputImage>
   kmlname << y << "xt.kml";
   std::ofstream fileTest(kmlname.str().c_str());
 
-  fileTest << fixed << setprecision(6);
+  fileTest << std::fixed << std::setprecision(6);
 
   fileTest << "<?xml version=\"1.0\" encoding=\"utf-8\"?>" << std::endl;
   fileTest << "<kml xmlns=\"http://www.opengis.net/kml/2.2\"" << std::endl;
@@ -973,7 +976,7 @@ KmzProductWriter<TInputImage>
   kmlname << y << ".kml";
   std::ofstream fileTest(kmlname.str().c_str());
 
-  fileTest << fixed << setprecision(6);
+  fileTest << std::fixed << std::setprecision(6);
 
   fileTest << "<?xml version=\"1.0\" encoding=\"utf-8\"?>" << std::endl;
   fileTest << "<kml xmlns=\"http://www.opengis.net/kml/2.2\"" << std::endl;
@@ -1026,7 +1029,7 @@ KmzProductWriter<TInputImage>
   kmlname << y << "xt.kml";
   std::ofstream fileTest(kmlname.str().c_str());
 
-  fileTest << fixed << setprecision(6);
+  fileTest << std::fixed << std::setprecision(6);
 
   fileTest << "<?xml version=\"1.0\" encoding=\"utf-8\"?>" << std::endl;
   fileTest << "<kml xmlns=\"http://www.opengis.net/kml/2.2\"" << std::endl;
@@ -1209,7 +1212,7 @@ KmzProductWriter<TInputImage>
   kmlname << y << ".kml";
   std::ofstream fileTest(kmlname.str().c_str());
 
-  fileTest << fixed << setprecision(6);
+  fileTest << std::fixed << std::setprecision(6);
 
   fileTest << "<?xml version=\"1.0\" encoding=\"utf-8\"?>" << std::endl;
   fileTest << "<kml xmlns=\"http://www.opengis.net/kml/2.2\"" << std::endl;
@@ -1387,7 +1390,7 @@ KmzProductWriter<TInputImage>
   kmlname << "bound_0" << m_KmlExtension;
   std::ofstream fileTest(kmlname.str().c_str());
 
-  fileTest << fixed << setprecision(6);
+  fileTest << std::fixed << std::setprecision(6);
 
   fileTest << "<?xml version=\"1.0\" encoding=\"utf-8\"?>" << std::endl;
   fileTest << "<kml xmlns=\"http://www.opengis.net/kml/2.2\"" << std::endl;

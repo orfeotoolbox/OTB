@@ -82,7 +82,7 @@ struct ComparePoint
   }
 };
 
-ostream &operator<<(ostream &stream, PointType p)
+std::ostream &operator<<(std::ostream &stream, PointType p)
 {
   stream << p[0] << " " << p[1];
   return stream;

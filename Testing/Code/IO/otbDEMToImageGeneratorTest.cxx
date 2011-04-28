@@ -63,6 +63,7 @@ int otbDEMToImageGeneratorTest(int argc, char * argv[])
   object->SetOutputOrigin(origin);
   object->SetOutputSize(size);
   object->SetOutputSpacing(spacing);
+  object->SetDefaultUnknownValue(0);
 
   std::cout << object << std::endl;
 

@@ -97,8 +97,6 @@ private:
       approriate message will be thrown. */
   void TestFileExistanceAndReadability();
 
-  ImageKeywordlist GenerateKeywordList(const std::string& filename);
-
   /** Generate the filename (for GDALImageI for example). If filename is a directory, look if is a
     * CEOS product (file "DAT...") In this case, the GdalFileName contain the open image file.
     */

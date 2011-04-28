@@ -47,6 +47,12 @@
 
 #include "otbInverseSensorModel.h"
 
+#include "init/ossimInit.h"
+#include "base/ossimKeywordlist.h"
+#include "base/ossimGpt.h"
+#include "projection/ossimProjectionFactoryRegistry.h"
+#include "imaging/ossimImageHandlerRegistry.h"
+
 // this is the most important class and is called as the first line of all applications.
 // without this all the important factories are not created.
 //#include "init/ossimInit.h"

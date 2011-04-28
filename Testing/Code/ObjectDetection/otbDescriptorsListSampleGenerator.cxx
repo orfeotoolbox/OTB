@@ -105,7 +105,7 @@ struct CompareSampleEntry
   }
 };
 
-ostream &operator<<(ostream &stream, SampleEntry entry)
+std::ostream &operator<<(std::ostream &stream, SampleEntry entry)
 {
   stream << "---" << std::endl
          << "Label        : " << entry.label << std::endl

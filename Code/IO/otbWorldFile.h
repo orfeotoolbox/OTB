@@ -18,6 +18,8 @@
 #ifndef __otbWorldFile_h
 #define __otbWorldFile_h
 
+#include <iomanip>
+
 #include "itkObject.h"
 
 namespace otb {

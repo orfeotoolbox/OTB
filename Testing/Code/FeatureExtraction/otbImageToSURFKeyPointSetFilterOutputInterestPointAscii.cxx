@@ -17,6 +17,11 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+
+#include <iomanip>
+#include <iostream>
+#include <fstream>
+
 #include "otbImageToSURFKeyPointSetFilter.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
@@ -25,9 +30,6 @@
 #include "itkVariableLengthVector.h"
 #include "itkRGBPixel.h"
 #include "itkImageRegionIterator.h"
-
-#include <iostream>
-#include <fstream>
 
 int otbImageToSURFKeyPointSetFilterOutputInterestPointAscii(int argc, char * argv[])
 {

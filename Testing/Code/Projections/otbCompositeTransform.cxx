@@ -19,10 +19,11 @@
 #pragma warning ( disable : 4786 )
 #endif
 
+#include <iostream>
+#include <iomanip>
+
 #include "itkExceptionObject.h"
 #include "itkImage.h"
-#include <iostream>
-
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 

@@ -24,6 +24,7 @@
 #include <iostream>
 #include <fstream>
 #include <cctype>
+#include <algorithm>
 
 #include "otbImage.h"
 #include "otbVectorImage.h"
@@ -435,7 +436,7 @@ int TestHelper::RegressionTestImage(int cpt, const char *testImageFilename, cons
       {
       rescale->SetInput(diff->GetOutput());
 
-      for (unsigned int i = 1; i <= min(diff->GetOutput()->GetNumberOfComponentsPerPixel(), 3U); ++i)
+      for (unsigned int i = 1; i <= std::min(diff->GetOutput()->GetNumberOfComponentsPerPixel(), 3U); ++i)
         {
         rescale->SetChannel(i);
         }
@@ -1116,7 +1117,10 @@ bool TestHelper::isNumeric(std::string str) const
 
 bool TestHelper::isScientificNumeric(std::string str) const
 {
-
+       if(str.size() == 0)
+       {
+              return false;
+       }
   int number(0);
   number = str[0];
   bool pointDetected(false);
@@ -1176,6 +1180,11 @@ bool TestHelper::isHexaPointerAddress(std::string str) const
   unsigned int size(0);
   bool         result(false);
   unsigned int start(0);
+
+  if( str.size() < 2 )
+  {
+       return false;
+  }
   //If (0xadresss)
   if ((str[0] == 40) && (str[str.size() - 1] == 41) && (str[1] == 48) && (str[2] == 120))
     {
