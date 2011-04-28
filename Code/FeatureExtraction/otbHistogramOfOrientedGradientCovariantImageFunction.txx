@@ -124,7 +124,7 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
 
         // Handle special case where angle = pi, and binIndex is out-of-bound
         if(binIndex == m_NumberOfOrientationBins)
-          binIndex=0;
+          binIndex=m_NumberOfOrientationBins-1;
 
          // Cumulate values
         globalOrientationHistogram[binIndex]+= magnitude * gWeight;
