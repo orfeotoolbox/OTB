@@ -188,11 +188,11 @@ SVMModelEstimator<InputPixelType, LabelPixelType>
     //otbMsgDevMacro(
     std::cout
       << "Coarse minimum accuracy: " << coarseOptimizer->GetMinimumMetricValue() << " " <<
-      coarseOptimizer->GetMinimumMetricValuePosition()<< std::endl;//);
+      coarseOptimizer->GetMinimumMetricValuePosition()<< std::endl; //);
     //otbMsgDevMacro(
     std::cout
       << "Coarse maximum accuracy: " << coarseOptimizer->GetMaximumMetricValue() << " " <<
-      coarseOptimizer->GetMaximumMetricValuePosition() << std::endl;//);
+      coarseOptimizer->GetMaximumMetricValuePosition() << std::endl; //);
 
     typename ExhaustiveExponentialOptimizer::Pointer fineOptimizer = ExhaustiveExponentialOptimizer::New();
     typename ExhaustiveExponentialOptimizer::StepsType fineNbSteps(initialParameters.Size());
@@ -210,11 +210,11 @@ SVMModelEstimator<InputPixelType, LabelPixelType>
     //otbMsgDevMacro(
         std::cout
       << "Fine minimum accuracy: " << fineOptimizer->GetMinimumMetricValue() << " " <<
-      fineOptimizer->GetMinimumMetricValuePosition()<< std::endl;//);
+      fineOptimizer->GetMinimumMetricValuePosition()<< std::endl; //);
       //otbMsgDevMacro(
           std::cout
       << "Fine maximum accuracy: " << fineOptimizer->GetMaximumMetricValue() << " " <<
-      fineOptimizer->GetMaximumMetricValuePosition()<< std::endl;//);
+      fineOptimizer->GetMaximumMetricValuePosition()<< std::endl; //);
 
     fineBestParameters = fineOptimizer->GetMaximumMetricValuePosition();
 
