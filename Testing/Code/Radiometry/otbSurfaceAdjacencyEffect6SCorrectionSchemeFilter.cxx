@@ -138,12 +138,15 @@ int otbSurfaceAdjacencyEffect6SCorrectionSchemeFilter(int argc, char * argv[])
     fin >> minSpectralValue; //wlinf;
     fin >> maxSpectralValue; //wlsup;
 
-    while (!fin.eof() && fin.good())
+    std::string line;
+    std::getline(fin, line);
+    while (std::getline(fin, line) )
       {
-      fin >> value;
+      value = atof(line.c_str());
       vect.push_back(value);
+      std::cout << "value " << value << std::endl;
       }
-
+    std::cout << "vec size " << vect.size()<< std::endl;
     fin.close();
     functionValues->SetFilterFunctionValues(vect);
     functionValues->SetMinSpectralValue(minSpectralValue);
