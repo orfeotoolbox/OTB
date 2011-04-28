@@ -184,7 +184,7 @@ SIXSTraits::ComputeWavelengthSpectralBandValuesFor6S(
     ValuesVectorType values(1, FilterFunctionValues[0]); //vector size 1 with the value vect[0]
 
     // Stop the interpolation at the max spectral value.
-    value = i * SIXSStepOfWavelengthSpectralBandValues;
+    value = SIXSStepOfWavelengthSpectralBandValues;
     while (L_min + value <= L_max)
       {
       // Search the User interval that surround the StepOfWavelengthSpectralBandValues current value.
@@ -200,7 +200,7 @@ SIXSTraits::ComputeWavelengthSpectralBandValuesFor6S(
         {
         itkGenericExceptionMacro(
           << "Index " << j << " out of bound for FilterFunctionValues vector (size: " << FilterFunctionValues.size() <<
-          ").");
+          ")." << " and value is " << value << " and SIXSStepOfWavelengthSpectralBandValues is " << SIXSStepOfWavelengthSpectralBandValues<< " and i is " << i);
         }
 
       double valueTemp;
@@ -211,7 +211,7 @@ SIXSTraits::ComputeWavelengthSpectralBandValuesFor6S(
       values.push_back(static_cast<WavelengthSpectralBandType>(valueTemp));
 
       ++i;
-      value = i * SIXSStepOfWavelengthSpectralBandValues;
+      value += SIXSStepOfWavelengthSpectralBandValues;
       }
 
     if (L_min + (i - 1) * SIXSStepOfWavelengthSpectralBandValues != L_max)

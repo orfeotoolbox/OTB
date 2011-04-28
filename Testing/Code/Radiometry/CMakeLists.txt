@@ -504,35 +504,35 @@ ADD_TEST(raTvFilterFunctionValuesTest ${RADIOMETRY_TESTS3}
 )
 
 ##########           otb::FilterFunctionValues DigitalGlobe sensitivity files -------------------
-ADD_TEST(raTvFilterFunctionValuesDigitalGlobeQBTest ${RADIOMETRY_TESTS3}
-    --compare-ascii ${EPSILON_6} ${BASELINE_FILES}/raTvFilterFunctionValuesDigitalGlobeQBTest.txt
-                           ${TEMP}/raTvFilterFunctionValuesDigitalGlobeQBTest.txt
-        otbFilterFunctionValuesDigitalGlobeTest
-    ${INPUTDATA}/Radiometry/DigitalGlobe/radiance_response_QB.txt
-    ${TEMP}/raTvFilterFunctionValuesDigitalGlobeQBTest.txt
-    0.005            # user step
-    1                # user wavelength unit factor (default in micro meter)
-)
-
-ADD_TEST(raTvFilterFunctionValuesDigitalGlobeWV1Test ${RADIOMETRY_TESTS3}
-    --compare-ascii ${EPSILON_6} ${BASELINE_FILES}/raTvFilterFunctionValuesDigitalGlobeWV1Test.txt
-                           ${TEMP}/raTvFilterFunctionValuesDigitalGlobeWV1Test.txt
-        otbFilterFunctionValuesDigitalGlobeTest
-    ${INPUTDATA}/Radiometry/DigitalGlobe/radiance_response_WV1.txt
-    ${TEMP}/raTvFilterFunctionValuesDigitalGlobeWV1Test.txt
-    0.005            # user step
-    1e-3             # user wavelength unit factor (default in micro meter)
-)
-
-ADD_TEST(raTvFilterFunctionValuesDigitalGlobeWV2Test ${RADIOMETRY_TESTS3}
-    --compare-ascii ${EPSILON_6} ${BASELINE_FILES}/raTvFilterFunctionValuesDigitalGlobeWV2Test.txt
-                           ${TEMP}/raTvFilterFunctionValuesDigitalGlobeWV2Test.txt
-        otbFilterFunctionValuesDigitalGlobeTest
-    ${INPUTDATA}/Radiometry/DigitalGlobe/radiance_response_WV2.txt
-    ${TEMP}/raTvFilterFunctionValuesDigitalGlobeWV2Test.txt
-    0.005            # user step
-    1e-3             # user wavelength unit factor (default in micro meter)
-)
+#ADD_TEST(raTvFilterFunctionValuesDigitalGlobeQBTest ${RADIOMETRY_TESTS3}
+#    --compare-ascii ${EPSILON_6} ${BASELINE_FILES}/raTvFilterFunctionValuesDigitalGlobeQBTest.txt
+#                           ${TEMP}/raTvFilterFunctionValuesDigitalGlobeQBTest.txt
+#        otbFilterFunctionValuesDigitalGlobeTest
+#    ${INPUTDATA}/Radiometry/DigitalGlobe/radiance_response_QB.txt
+#    ${TEMP}/raTvFilterFunctionValuesDigitalGlobeQBTest.txt
+#    0.005            # user step
+#    1                # user wavelength unit factor (default in micro meter)
+#)
+#
+#ADD_TEST(raTvFilterFunctionValuesDigitalGlobeWV1Test ${RADIOMETRY_TESTS3}
+#    --compare-ascii ${EPSILON_6} ${BASELINE_FILES}/raTvFilterFunctionValuesDigitalGlobeWV1Test.txt
+#                           ${TEMP}/raTvFilterFunctionValuesDigitalGlobeWV1Test.txt
+#        otbFilterFunctionValuesDigitalGlobeTest
+#    ${INPUTDATA}/Radiometry/DigitalGlobe/radiance_response_WV1.txt
+#    ${TEMP}/raTvFilterFunctionValuesDigitalGlobeWV1Test.txt
+#    0.005            # user step
+#    1e-3             # user wavelength unit factor (default in micro meter)
+#)
+#
+#ADD_TEST(raTvFilterFunctionValuesDigitalGlobeWV2Test ${RADIOMETRY_TESTS3}
+#    --compare-ascii ${EPSILON_6} ${BASELINE_FILES}/raTvFilterFunctionValuesDigitalGlobeWV2Test.txt
+#                           ${TEMP}/raTvFilterFunctionValuesDigitalGlobeWV2Test.txt
+#        otbFilterFunctionValuesDigitalGlobeTest
+#    ${INPUTDATA}/Radiometry/DigitalGlobe/radiance_response_WV2.txt
+#    ${TEMP}/raTvFilterFunctionValuesDigitalGlobeWV2Test.txt
+#    0.005            # user step
+#    1e-3             # user wavelength unit factor (default in micro meter)
+#)
 
 ##########           otb::SIXSTraits -------------------
 ADD_TEST(raTuSIXSTraitsTest ${RADIOMETRY_TESTS3}
