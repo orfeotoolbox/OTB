@@ -176,6 +176,7 @@ SVMModelEstimator<InputPixelType, LabelPixelType>
     typename ExhaustiveExponentialOptimizer::Pointer coarseOptimizer = ExhaustiveExponentialOptimizer::New();
     typename ExhaustiveExponentialOptimizer::StepsType coarseNbSteps(initialParameters.Size());
     coarseNbSteps.Fill(m_CoarseOptimizationNumberOfSteps);
+    std::cout << m_CoarseOptimizationNumberOfSteps << std::endl;
 
     coarseOptimizer->SetNumberOfSteps(coarseNbSteps);
     coarseOptimizer->SetCostFunction(crossValidationFunction);
@@ -184,16 +185,19 @@ SVMModelEstimator<InputPixelType, LabelPixelType>
 
     coarseBestParameters = coarseOptimizer->GetMaximumMetricValuePosition();
 
-    otbMsgDevMacro(
+    //otbMsgDevMacro(
+    std::cout
       << "Coarse minimum accuracy: " << coarseOptimizer->GetMinimumMetricValue() << " " <<
-      coarseOptimizer->GetMinimumMetricValuePosition());
-    otbMsgDevMacro(
+      coarseOptimizer->GetMinimumMetricValuePosition()<< std::endl;//);
+    //otbMsgDevMacro(
+    std::cout
       << "Coarse maximum accuracy: " << coarseOptimizer->GetMaximumMetricValue() << " " <<
-      coarseOptimizer->GetMaximumMetricValuePosition());
+      coarseOptimizer->GetMaximumMetricValuePosition() << std::endl;//);
 
     typename ExhaustiveExponentialOptimizer::Pointer fineOptimizer = ExhaustiveExponentialOptimizer::New();
     typename ExhaustiveExponentialOptimizer::StepsType fineNbSteps(initialParameters.Size());
     fineNbSteps.Fill(m_FineOptimizationNumberOfSteps);
+    std::cout << m_FineOptimizationNumberOfSteps << std::endl;
 
     double stepLength = 1. / static_cast<double>(m_FineOptimizationNumberOfSteps);
 
@@ -203,16 +207,19 @@ SVMModelEstimator<InputPixelType, LabelPixelType>
     fineOptimizer->SetInitialPosition(coarseBestParameters);
     fineOptimizer->StartOptimization();
 
-    otbMsgDevMacro(
+    //otbMsgDevMacro(
+        std::cout
       << "Fine minimum accuracy: " << fineOptimizer->GetMinimumMetricValue() << " " <<
-      fineOptimizer->GetMinimumMetricValuePosition());
-    otbMsgDevMacro(
+      fineOptimizer->GetMinimumMetricValuePosition()<< std::endl;//);
+      //otbMsgDevMacro(
+          std::cout
       << "Fine maximum accuracy: " << fineOptimizer->GetMaximumMetricValue() << " " <<
-      fineOptimizer->GetMaximumMetricValuePosition());
+      fineOptimizer->GetMaximumMetricValuePosition()<< std::endl;//);
 
     fineBestParameters = fineOptimizer->GetMaximumMetricValuePosition();
 
     m_FinalCrossValidationAccuracy = fineOptimizer->GetMaximumMetricValue();
+    std::cout << m_FinalCrossValidationAccuracy << std::endl;
 
     switch (this->GetModel()->GetKernelType())
       {

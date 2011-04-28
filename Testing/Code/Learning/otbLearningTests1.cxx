@@ -35,4 +35,5 @@ void RegisterTests()
   REGISTER_TEST(otbSVMImageModelEstimatorTrain);
   REGISTER_TEST(otbSVMImageModelEstimatorTrainOneClass);
   REGISTER_TEST(otbSVMImageModelEstimatorModelAccessor);
+  REGISTER_TEST(otbSVMModelOptimizationOnly);
 }
