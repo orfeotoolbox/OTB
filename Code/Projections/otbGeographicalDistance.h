@@ -40,7 +40,7 @@ namespace otb
  *
  * Please note that the computation makes use of the earth radius in
  * meters. Mean radius (6371 km) is used as a default value, but one
- * might use local values from spheroïd or geoïd for better precision.
+ * might use local values from spheroid or geoid for better precision.
  *
  */
 template <class TVector>
