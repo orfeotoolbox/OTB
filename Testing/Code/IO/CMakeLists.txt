@@ -3093,7 +3093,7 @@ ADD_TEST(raTuSpectralSensitivityReaderNew ${IO_TESTS23}
 )
 
 ADD_TEST(raTvSpectralSensitivityReaderTest ${IO_TESTS23}
-     --compare-ascii ${NOTOL}
+     --compare-ascii ${EPSILON_5}
         ${BASELINE_FILES}/raTvSpectralSensitivityReaderGenericTest.txt
         ${TEMP}/rcTuSpectralSensitivityReaderTest.txt
      --ignore-lines-with 2 DataPath FileName
@@ -3105,7 +3105,7 @@ ADD_TEST(raTvSpectralSensitivityReaderTest ${IO_TESTS23}
 
 
 ADD_TEST(raTvSpectralSensitivityReaderGenericTest ${IO_TESTS23}
-     --compare-ascii ${NOTOL}
+     --compare-ascii ${EPSILON_5}
       ${BASELINE_FILES}/raTvSpectralSensitivityReaderGenericTest.txt
         ${TEMP}/raTvSpectralSensitivityReaderGenericTest.txt
      --ignore-lines-with 2 DataPath FileName
