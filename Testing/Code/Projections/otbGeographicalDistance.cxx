@@ -20,7 +20,7 @@
 
 int otbGeographicalDistanceNew(int argc, char * argv[])
 {
-  typedef itk::Point<double,2> PointType;
+  typedef itk::Point<double, 2> PointType;
   typedef otb::GeographicalDistance<PointType> DistanceType;
 
   // Instantiation
@@ -31,7 +31,7 @@ int otbGeographicalDistanceNew(int argc, char * argv[])
 
 int otbGeographicalDistance(int argc, char * argv[])
 {
-  typedef itk::Point<double,2> PointType;
+  typedef itk::Point<double, 2> PointType;
   typedef otb::GeographicalDistance<PointType> GeoDistanceType;
 
   GeoDistanceType::Pointer geoDistance = GeoDistanceType::New();
@@ -49,8 +49,8 @@ int otbGeographicalDistance(int argc, char * argv[])
   double expectedDistance = atof(argv[5]);
   double tolerance = atof(argv[6]);
 
-  double distEvaluate2 = geoDistance->Evaluate(a,b);
-  double distEvaluate2Null = geoDistance->Evaluate(a,a);
+  double distEvaluate2 = geoDistance->Evaluate(a, b);
+  double distEvaluate2Null = geoDistance->Evaluate(a, a);
 
   geoDistance->SetOrigin(o);
   double distEvaluate1 = geoDistance->Evaluate(a);

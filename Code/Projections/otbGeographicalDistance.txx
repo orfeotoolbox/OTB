@@ -47,7 +47,7 @@ GeographicalDistance<TVector>
   origin[0]=this->GetOrigin()[0];
   origin[1]=this->GetOrigin()[1];
  
-  return this->Evaluate(origin,x);
+  return this->Evaluate(origin, x);
 }
 
 template <class TVector>
@@ -84,7 +84,7 @@ GeographicalDistance<TVector>
 ::PrintSelf(std::ostream & os, itk::Indent indent) const
 {
   // Call superclass implementation
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 
   // Earth radius
   os<<indent<<"Earth radius: "<<m_EarthRadius<<std::endl;

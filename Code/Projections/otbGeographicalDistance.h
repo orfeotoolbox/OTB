@@ -31,10 +31,10 @@ namespace otb
  *
  * Vector lenght must be at least two, otherwise the Evaluate method
  * will throw an exception.
- * 
+ *
  * First dimension is assumed to be the longitude, and second
  * dimension is assumed to be the latitude.
- * 
+ *
  * This distance uses the Haversine formula, which can be found here:
  * http://www.movable-type.co.uk/scripts/latlong.html
  *
@@ -71,7 +71,7 @@ public:
   virtual double Evaluate(const VectorType & x, const VectorType & y) const;
 
   /** Set the earth radius */
-  itkSetMacro(EarthRadius,double);
+  itkSetMacro(EarthRadius, double);
 
   /** Get the earth radius */
   itkGetMacro(EarthRadius, double);
