@@ -87,9 +87,12 @@ int otbSIXSTraitsComputeAtmosphericParametersTest(int argc, char * argv[])
   fin >> MinSpectralValue; //wlinf;
   fin >> MaxSpectralValue; //wlsup;
 
-  while (!fin.eof() && fin.good())
+  std::string line;
+  std::getline(fin, line);
+
+  while (std::getline(fin, line))
     {
-    fin >> value;
+    value = atof(line.c_str());
     vect.push_back(value);
     }
   fin.close();
