@@ -93,6 +93,9 @@ void SensorModelWrapper::ForwardTransformPoint(double x, double y, double z,
   if (this->m_UseDEM)
     {
     this->m_SensorModel->lineSampleToWorld(ossimPoint, ossimGPoint);
+    lon = ossimGPoint.lon;
+    lat = ossimGPoint.lat;
+
     ossimGpt ossimGPointRef = ossimGPoint;
     double height(0.), heightTmp(0.);
     double                diffHeight = 100; // arbitrary value
