@@ -117,7 +117,12 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
         {
         functionValues->SetMinSpectralValue(imageMetadataInterface->GetFirstWavelengths()[i]);
         functionValues->SetMaxSpectralValue(imageMetadataInterface->GetLastWavelengths()[i]);
-        functionValues->SetUserStep(functionValues->GetMaxSpectralValue() - functionValues->GetMinSpectralValue() / 2.);
+        //By default the function values size is 3, set the step to feet with min and max spectral value
+        functionValues->SetUserStep((functionValues->GetMaxSpectralValue() - functionValues->GetMinSpectralValue()) / 2.);
+        std::cout << "functionValues->GetMaxSpectralValue(): " << functionValues->GetMaxSpectralValue() << std::endl;
+        std::cout << "functionValues->GetMinSpectralValue(): " << functionValues->GetMinSpectralValue() << std::endl;
+        std::cout << "functionValues->GetUserStep(): " << functionValues->GetUserStep() << std::endl;
+        std::cout << "functionValues size: " << functionValues->GetFilterFunctionValues().size() << std::endl;
         }
 
       m_CorrectionParameters->SetWavelengthSpectralBandWithIndex(i, functionValues);
