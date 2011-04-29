@@ -24,8 +24,10 @@
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
-#include "otbImageFileWriter.h"
+#include "otbStreamingImageFileWriter.h"
 #include "otbChangeLabelImageFilter.h"
+#include "otbPipelineMemoryPrintCalculator.h"
+#include "otbStandardWriterWatcher.h"
 
 // itk
 #include "itkVariableLengthVector.h"
@@ -69,6 +71,7 @@ int ImageSVMClassifier::Describe(ApplicationDescriptor* descriptor)
                         "sx", 1, false, ApplicationDescriptor::Integer);
   descriptor->AddOption("ROISizeY", "Size Y of the ROI",
                         "sy", 1, false, ApplicationDescriptor::Integer);
+  descriptor->AddOption("AvailableMemory","Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default)","ram",1,false, otb::ApplicationDescriptor::Integer);
   return EXIT_SUCCESS;
 }
 
@@ -82,10 +85,13 @@ int ImageSVMClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
   typedef otb::Image<LabeledPixelType, 2>          LabeledImageType;
 
   typedef otb::ImageFileReader<VectorImageType>    ReaderType;
-  typedef otb::ImageFileWriter<LabeledImageType>   WriterType;
+  typedef otb::StreamingImageFileWriter<LabeledImageType>   WriterType;
 
   typedef otb::ExtractROI<LabeledPixelType, LabeledPixelType>  ExtractROIType;
-  //typedef otb::MultiChannelExtractROI<PixelType, PixelType>  ExtractROIType;
+  //typedef otb::MultiChannelExtractROI<PixelType, PixelType>
+  //ExtractROIType;
+  typedef otb::PipelineMemoryPrintCalculator        MemoryCalculatorType;
+
 
   // Statistic XML file Reader
   typedef itk::VariableLengthVector<PixelType>                          MeasurementType;
@@ -180,8 +186,31 @@ int ImageSVMClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
     }
   else
     {
+    //Instantiate the pipeline memory print estimator
+    MemoryCalculatorType::Pointer calculator = MemoryCalculatorType::New();
+    const double byteToMegabyte = 1./vcl_pow(2.0, 20);
+    
+    if (parseResult->IsOptionPresent("AvailableMemory"))
+      {
+      long long int memory = static_cast <long long int> (parseResult->GetParameterUInt("AvailableMemory"));
+      calculator->SetAvailableMemory(memory / byteToMegabyte);
+      }
+    else
+      {
+      calculator->SetAvailableMemory(256 * byteToMegabyte);
+      }
+    
+    calculator->SetDataToWrite(classificationFilter->GetOutput());
+    calculator->Compute();
+    
+    writer->SetTilingStreamDivisions(calculator->GetOptimalNumberOfStreamDivisions());
+    
+
     writer->SetInput(classificationFilter->GetOutput());
     }
+
+  
+  otb::StandardWriterWatcher watcher(writer,"Classification");
 
   writer->Update();
 
