@@ -81,17 +81,6 @@ ADD_TEST(leTvSVMImageModelEstimatorTrain ${LEARNING_TESTS1}
  ${TEMP}/leTvsvm_model_image
  0 )
  
- ADD_TEST(leTvSVMImageModelEstimatorTrainWithOnlyOptimization ${LEARNING_TESTS1}
-   --compare-ascii ${EPSILON_3}  
-     ${BASELINE_FILES}/leTvsvm_model_image
-     ${TEMP}/leTvsvm_model_image
-   otbSVMModelOptimizationOnly
-     ${INPUTDATA}/ROI_QB_MUL_4.tif
-     ${INPUTDATA}/ROI_QB_MUL_4_train.c1.hdr
-     ${BASELINE_FILES}/leTvsvm_model_image.3
-     ${TEMP}/leTvsvm_model_image_opt_only
-     )
-
 ADD_TEST(leTlSVMImageModelEstimatorTrainWithOptimization ${LEARNING_TESTS1}
 --compare-ascii ${EPSILON_3}  ${BASELINE_FILES}/leTvsvm_model_image_opt
                         ${TEMP}/leTvsvm_model_image_opt
@@ -99,8 +88,7 @@ ADD_TEST(leTlSVMImageModelEstimatorTrainWithOptimization ${LEARNING_TESTS1}
  ${INPUTDATA}/ROI_QB_MUL_4.tif
  ${INPUTDATA}/ROI_QB_MUL_4_train.c1.hdr
  ${TEMP}/leTvsvm_model_image_opt
- 1 
- ${TEMP}/leTvsvm_model_image_wo_opt)
+ 1)
 
 ADD_TEST(leTvSVMImageModelEstimatorTrainOneClass ${LEARNING_TESTS1}
 --compare-ascii ${EPSILON_3}  ${BASELINE_FILES}/leTvsvm_model_image_one_class
@@ -668,7 +656,6 @@ otbSVMImageModelEstimatorNew.cxx
 otbSVMImageModelEstimatorTrain.cxx
 otbSVMImageModelEstimatorTrainOneClass.cxx
 otbSVMImageModelEstimatorModelAccessor.cxx
-otbSVMModelOptimizationOnly.cxx
 )
 SET(BasicLearning_SRCS2
 otbLearningTests2.cxx
