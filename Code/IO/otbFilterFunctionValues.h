@@ -109,7 +109,7 @@ private:
 
   /** Vector that contains the filter function value. */
   ValuesVectorType m_FilterFunctionValues;
-  /** Vector that contains the filter function value in 6S format (step of 0.0025µm).
+  /** Vector that contains the filter function value in 6S format (step of 0.0025 micro m).
     * There values a computed by 6S. If the UserStep is 0.0025µm, then m_FilterFunctionValues is identical as m_FilterFunctionValues6S
     */
   ValuesVectorType m_FilterFunctionValues6S;
