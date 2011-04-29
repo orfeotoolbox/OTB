@@ -1074,6 +1074,17 @@ ${TEMP}/otbRationalTransformOutput.txt
 -10 -10
 )
 
+#----- otb::GeographicalDistance ---------------------
+ADD_TEST(prTuGeographicalDistanceNew ${PROJECTIONS_TESTS4}
+  otbGeographicalDistanceNew)
+
+ADD_TEST(prTvGeographicalDistance ${PROJECTIONS_TESTS4}
+  otbGeographicalDistance
+  -1.84944 53.14722 
+   0.14056 52.20444 
+   170254.85084
+  ${EPSILON_4}
+)
 
 #=======================================================================================
 SET(Projections_SRCS1
@@ -1135,6 +1146,7 @@ otbGenericRSResampleImageFilter.cxx
 otbImageToEnvelopeVectorDataFilter.cxx
 otbImageToGenericRSOutputParameters.cxx
 otbRationalTransform.cxx
+otbGeographicalDistance.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbProjectionsTests1 "${Projections_SRCS1}" "OTBProjections;OTBIO;OTBTesting")
