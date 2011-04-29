@@ -19,157 +19,87 @@
 #define __otbStreamingImageVirtualWriter_txx
 #include "otbStreamingImageVirtualWriter.h"
 
-#include "itkCommand.h"
-#include "itkImageRegionIterator.h"
-#include "itkObjectFactoryBase.h"
-#include "itkImageFileWriter.h"
-#include "itkImageRegionMultidimensionalSplitter.h"
-
 #include "otbMacro.h"
 #include "otbConfigure.h"
+#include "itkCommand.h"
+
+#include "otbNumberOfLinesStrippedStreamingManager.h"
+#include "otbRAMDrivenStrippedStreamingManager.h"
+#include "otbTileDimensionTiledStreamingManager.h"
+#include "otbRAMDrivenTiledStreamingManager.h"
 
 namespace otb
 {
-/**
- *
- */
+
 template <class TInputImage>
 StreamingImageVirtualWriter<TInputImage>
 ::StreamingImageVirtualWriter()
 {
-  m_BufferMemorySize = 0;
-  m_BufferNumberOfLinesDivisions = 0;
-  // default to 10 divisions
-  m_NumberOfStreamDivisions = 0;
-  // default to AUTOMATIC_NUMBER_OF_DIVISIONS
-  m_CalculationDivision = SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS;
-
-  // create default region splitter
-  m_RegionSplitter = itk::ImageRegionSplitter<InputImageDimension>::New();
+  // By default, we use tiled streaming, with automatic tile size
+  // We don't set any parameter, so the memory size is retrieved rom the OTB configuration options
+  m_StreamingManager = otb::RAMDrivenTiledStreamingManager<TInputImage>::New();
 }
 
-/**
- *
- */
 template <class TInputImage>
 StreamingImageVirtualWriter<TInputImage>
 ::~StreamingImageVirtualWriter()
 {
 }
 
-/**
- *
- */
 template <class TInputImage>
 void
 StreamingImageVirtualWriter<TInputImage>
-::SetBufferMemorySize(unsigned long memory_size_divisions)
+::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  m_BufferMemorySize = memory_size_divisions;
-  m_CalculationDivision = SET_BUFFER_MEMORY_SIZE;
-  this->Modified();
-}
-
-/**
- *
- */
-template <class TInputImage>
-void
-StreamingImageVirtualWriter<TInputImage>
-::SetBufferNumberOfLinesDivisions(unsigned long nb_lines_divisions)
-{
-  m_BufferNumberOfLinesDivisions = nb_lines_divisions;
-  m_CalculationDivision = SET_BUFFER_NUMBER_OF_LINES;
-  this->Modified();
-}
-
-/**
- *
- */
-template <class TInputImage>
-void
-StreamingImageVirtualWriter<TInputImage>
-::SetNumberOfStreamDivisions(unsigned long nb_divisions)
-{
-  m_NumberOfStreamDivisions = nb_divisions;
-  m_CalculationDivision = SET_NUMBER_OF_STREAM_DIVISIONS;
-  this->Modified();
-}
-
-/**
- *
- */
-template <class TInputImage>
-void
-StreamingImageVirtualWriter<TInputImage>
-::SetAutomaticNumberOfStreamDivisions(void)
-{
-  m_CalculationDivision = SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS;
-  this->Modified();
-}
-
-/**
- *
- */
-template <class TInputImage>
-void
-StreamingImageVirtualWriter<TInputImage>
-::SetTilingStreamDivisions(void)
-{
-  m_CalculationDivision = SET_TILING_WITH_SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS;
-  m_RegionSplitter = itk::ImageRegionMultidimensionalSplitter<InputImageDimension>::New();
-  this->Modified();
+  Superclass::PrintSelf(os, indent);
 }
 
 template <class TInputImage>
 void
 StreamingImageVirtualWriter<TInputImage>
-::SetTilingStreamDivisions(unsigned long nb_divisions)
+::SetNumberOfLinesStrippedStreaming(unsigned int nbLinesPerStrip)
 {
-  m_CalculationDivision = SET_TILING_WITH_SET_NUMBER_OF_STREAM_DIVISIONS;
-  m_NumberOfStreamDivisions = nb_divisions;
-  m_RegionSplitter = itk::ImageRegionMultidimensionalSplitter<InputImageDimension>::New();
-  this->Modified();
+  typedef NumberOfLinesStrippedStreamingManager<TInputImage> NumberOfLinesStrippedStreamingManagerType;
+  typename NumberOfLinesStrippedStreamingManagerType::Pointer streamingManager = NumberOfLinesStrippedStreamingManagerType::New();
+  streamingManager->SetNumberOfLinesPerStrip(nbLinesPerStrip);
+
+  m_StreamingManager = streamingManager;
 }
 
 template <class TInputImage>
 void
 StreamingImageVirtualWriter<TInputImage>
-::SetInput(const InputImageType *input)
+::SetAutomaticStrippedStreaming(unsigned int availableRAM)
 {
-  this->SetNthInput(0, input);
+  typedef RAMDrivenStrippedStreamingManager<TInputImage> RAMDrivenStrippedStreamingManagerType;
+  typename RAMDrivenStrippedStreamingManagerType::Pointer streamingManager = RAMDrivenStrippedStreamingManagerType::New();
+  streamingManager->SetAvailableRAMInMB(availableRAM);
+
+  m_StreamingManager = streamingManager;
 }
 
 template <class TInputImage>
 void
 StreamingImageVirtualWriter<TInputImage>
-::SetNthInput(unsigned int idx, const InputImageType *input)
+::SetTileDimensionTiledStreaming(unsigned int tileDimension)
 {
-  // ProcessObject is not const_correct so this cast is required here.
-  this->itk::ProcessObject::SetNthInput(idx,
-                                        const_cast<TInputImage *>(input));
+  typedef TileDimensionTiledStreamingManager<TInputImage> TileDimensionTiledStreamingManagerType;
+  typename TileDimensionTiledStreamingManagerType::Pointer streamingManager = TileDimensionTiledStreamingManagerType::New();
+  streamingManager->SetTileDimension(tileDimension);
+
+  m_StreamingManager = streamingManager;
 }
 
 template <class TInputImage>
-const typename StreamingImageVirtualWriter<TInputImage>::InputImageType *
+void
 StreamingImageVirtualWriter<TInputImage>
-::GetInput(void)
+::SetAutomaticTiledStreaming(unsigned int availableRAM)
 {
-  if (this->GetNumberOfInputs() < 1)
-    {
-    return 0;
-    }
+  typedef RAMDrivenTiledStreamingManager<TInputImage> RAMDrivenTiledStreamingManagerType;
+  typename RAMDrivenTiledStreamingManagerType::Pointer streamingManager = RAMDrivenTiledStreamingManagerType::New();
+  streamingManager->SetAvailableRAMInMB(availableRAM);
 
-  return static_cast<TInputImage*>
-           (this->itk::ProcessObject::GetInput(0));
-}
-
-template <class TInputImage>
-const typename StreamingImageVirtualWriter<TInputImage>::InputImageType *
-StreamingImageVirtualWriter<TInputImage>
-::GetInput(unsigned int idx)
-{
-  return static_cast<TInputImage*> (this->itk::ProcessObject::GetInput(idx));
+  m_StreamingManager = streamingManager;
 }
 
 template <class TInputImage>
@@ -178,69 +108,18 @@ StreamingImageVirtualWriter<TInputImage>
 ::GenerateInputRequestedRegion(void)
 {
   InputImagePointer                        inputPtr = const_cast<InputImageType *>(this->GetInput(0));
+
+  InputImageRegionType                     region;
   typename InputImageRegionType::SizeType  size;
   typename InputImageRegionType::IndexType index;
-  InputImageRegionType                     region;
+
   index.Fill(0);
   size.Fill(0);
   region.SetSize(size);
   region.SetIndex(index);
   inputPtr->SetRequestedRegion(region);
 }
-/**
- *
- */
-template <class TInputImage>
-unsigned long
-StreamingImageVirtualWriter<TInputImage>
-::GetNumberOfStreamDivisions(void)
-{
-  return (CalculateNumberOfStreamDivisions());
-}
-template<class TInputImage>
-unsigned long
-StreamingImageVirtualWriter<TInputImage>
-::CalculateNumberOfStreamDivisions(void)
-{
-  return StreamingTraitsType
-         ::CalculateNumberOfStreamDivisions(this->GetInput(),
-                                            this->GetInput()->GetLargestPossibleRegion(),
-                                            m_RegionSplitter,
-                                            m_CalculationDivision,
-                                            m_NumberOfStreamDivisions,
-                                            m_BufferMemorySize,
-                                            m_BufferNumberOfLinesDivisions);
-}
-/**
- *
- */
-template <class TInputImage>
-std::string
-StreamingImageVirtualWriter<TInputImage>
-::GetMethodUseToCalculateNumberOfStreamDivisions(void)
-{
-  return (StreamingTraitsType::GetMethodUseToCalculateNumberOfStreamDivisions(m_CalculationDivision));
-}
-/**
- *
- */
-template <class TInputImage>
-void
-StreamingImageVirtualWriter<TInputImage>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
-{
-  Superclass::PrintSelf(os, indent);
-  os << indent << "Number of stream divisions: " << m_NumberOfStreamDivisions
-     << std::endl;
-  if (m_RegionSplitter)
-    {
-    os << indent << "Region splitter:" << m_RegionSplitter << std::endl;
-    }
-  else
-    {
-    os << indent << "Region splitter: (none)" << std::endl;
-    }
-}
+
 template<class TInputImage>
 void
 StreamingImageVirtualWriter<TInputImage>
@@ -257,6 +136,7 @@ StreamingImageVirtualWriter<TInputImage>
    * Tell all Observers that the filter is starting
    */
   this->InvokeEvent(itk::StartEvent());
+
   /**
    * Grab the input
    */
@@ -267,25 +147,47 @@ StreamingImageVirtualWriter<TInputImage>
    * minimum of what the user specified via SetNumberOfStreamDivisions()
    * and what the Splitter thinks is a reasonable value.
    */
-  unsigned int numDivisions;
-  numDivisions = static_cast<unsigned int>(CalculateNumberOfStreamDivisions());
+  m_StreamingManager->PrepareStreaming(inputPtr, outputRegion);
+  m_NumberOfDivisions = m_StreamingManager->GetNumberOfSplits();
+
+  /**
+   * Register to the ProgressEvent of the source filter
+   */
+  // Get the source process object
+  itk::ProcessObject* source = inputPtr->GetSource();
+
+  // Check if source exists
+  if(source)
+    {
+    typedef itk::MemberCommand<Self> CommandType;
+    typedef typename CommandType::Pointer CommandPointerType;
+
+    CommandPointerType command = CommandType::New();
+    command->SetCallbackFunction(this, &Self::ObserveSourceFilterProgress);
+
+    source->AddObserver(itk::ProgressEvent(), command);
+    }
+  else
+    {
+    itkWarningMacro(<< "Could not get the source process object. Progress report might be buggy");
+    }
 
   /**
    * Loop over the number of pieces, execute the upstream pipeline on each
    * piece, and copy the results into the output image.
    */
   InputImageRegionType streamRegion;
-  unsigned int         piece;
-  for (piece = 0;
-       piece < numDivisions && !this->GetAbortGenerateData();
-       piece++)
+  for (m_CurrentDivision = 0;
+       m_CurrentDivision < m_NumberOfDivisions && !this->GetAbortGenerateData();
+       m_CurrentDivision++, m_DivisionProgress = 0, this->UpdateFilterProgress())
     {
-    streamRegion = m_RegionSplitter->GetSplit(piece, numDivisions, outputRegion);
+    streamRegion = m_StreamingManager->GetSplit(m_CurrentDivision);
+    otbMsgDevMacro(<< "Processing region : " << streamRegion )
     inputPtr->ReleaseData();
     inputPtr->SetRequestedRegion(streamRegion);
     inputPtr->Update();
-    this->UpdateProgress((float) piece / numDivisions);
     }
+
   /**
    * If we ended due to aborting, push the progress up to 1.0 (since
    * it probably didn't end there)
@@ -308,11 +210,14 @@ StreamingImageVirtualWriter<TInputImage>
       this->GetOutput(idx)->DataHasBeenGenerated();
       }
     }
+
   /**
    * Release any inputs if marked for release
    */
   this->ReleaseInputs();
 }
+
+
 } // end namespace otb
 
 #endif

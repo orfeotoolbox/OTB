@@ -29,14 +29,20 @@ namespace otb
  * Some usefull utilities in use across the library
  *
  */
-class ITK_EXPORT Utils
+namespace Utils
 {
-public:
-
   /** Check that the values for lon, lat are reasonable */
-  static bool IsLonLatValid(double lon, double lat);
+  bool IsLonLatValid(double lon, double lat);
 
-};
+  template <class T>
+    inline std::string ConvertToString (const T& v)
+  {
+    std::stringstream s;
+    s << v;
+    return s.str();
+  }
+
+}
 
 } // namespace otb
 

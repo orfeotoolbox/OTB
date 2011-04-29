@@ -128,7 +128,7 @@ int main(int argc, char* argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  if (!model)
+  if (model->IsValidSensorModel() == false)
     {
     std::cerr << "Unable to create a model" << std::endl;
     return 1;

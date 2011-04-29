@@ -129,7 +129,7 @@ ossimImageHandler* ossimPluginReaderFactory::open(const ossimKeywordlist& kwl,
          << "ossimPluginReaderFactory::open(kwl, prefix) DEBUG: leaving..."
          << std::endl;
    }
-   
+
    return reader.release();
 }
 
@@ -145,6 +145,7 @@ ossimObject* ossimPluginReaderFactory::createObject(
    {
       result = new ossimTerraSarTiffReader;
    }
+
    return result.release();
 }
 

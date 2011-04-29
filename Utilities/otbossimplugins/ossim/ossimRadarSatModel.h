@@ -43,6 +43,9 @@ public:
   /** @brief Constructor */
   ossimRadarSatModel();
 
+  /** @brief copy constructor */
+  ossimRadarSatModel(const ossimRadarSatModel& rhs);
+
   /** @brief Destructor */
   virtual ~ossimRadarSatModel();
 
@@ -135,6 +138,24 @@ private:
    * @brief Initializes the Slant Range for each Ground Range data sets : _n_srgr,_srgr_coefset,_srgr_update,_pixel_spacing,_isProductGeoreferenced
    */
   virtual bool InitSRGR(const ossimKeywordlist &kwl, const char *prefix);
+
+  /**
+   * @brief Method to save object state to a keyword list.
+   * @param kwl Keyword list to save to.
+   * @param prefix added to keys when saved.
+   * @return true on success, false on error.
+   */
+  virtual bool internalSaveState(ossimKeywordlist& kwl,
+                         const char* prefix=0) const;
+
+  /**
+   * @brief Method to the load (recreate) the state of the object from a
+   * keyword list. Return true if ok or false on error.
+   * @return true if load OK, false on error
+   */
+  virtual bool internalLoadState (const ossimKeywordlist &kwl, const char *prefix=0);
+
+
   /**
    * @brief Finds the SRGR data set which update time is the closest to the center scene time
    */

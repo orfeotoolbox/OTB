@@ -65,6 +65,9 @@ int otbLabelMapToSampleListFilter(int argc, char* argv[])
 
    ShapeLabelMapFilterType::Pointer shapeLabelMapFilter = ShapeLabelMapFilterType::New();
    shapeLabelMapFilter->SetInput(labelMapFilter->GetOutput());
+   shapeLabelMapFilter->SetReducedAttributeSet(false);
+   shapeLabelMapFilter->SetComputePerimeter(true);
+   shapeLabelMapFilter->SetComputeFeretDiameter(true);
    shapeLabelMapFilter->Update();
 
    LabelMap2ListSampleFilterType::Pointer filter = LabelMap2ListSampleFilterType::New();

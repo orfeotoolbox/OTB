@@ -62,6 +62,52 @@ public:
   
   OutputType Convert (InputType input)
   {
+    OutputType  output;
+    output.SetSize(1);
+    output.SetElement(0, static_cast<OutputPrecisionType>(input));
+    return output;
+  }
+
+protected:
+  VariableLengthVectorConverter(){}
+  virtual ~VariableLengthVectorConverter(){}
+  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
+  {
+    Superclass::PrintSelf(os, indent);
+    os << "Attempt to use inexistant implementation of the converter!"
+       << std::endl;
+  }
+
+private:
+  VariableLengthVectorConverter(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
+};
+
+// VariableLengthVector
+template< class TInternalInputType, class TPrecisionType>
+class ITK_EXPORT VariableLengthVectorConverter< itk::VariableLengthVector< TInternalInputType > ,
+                                               TPrecisionType > :
+public itk::ProcessObject
+{
+public:
+  /** Standard class typedefs */
+  typedef VariableLengthVectorConverter                Self;
+  typedef itk::ProcessObject                           Superclass;
+  typedef itk::SmartPointer<Self>                      Pointer;
+  typedef itk::SmartPointer<const Self>                ConstPointer;
+ 
+  /** Run-time type information (and related methods). */
+  itkTypeMacro(VariableLengthVectorConverter, ProcessObject);
+
+  /** Method for creation through the object factory. */
+  itkNewMacro(Self);
+
+  typedef TPrecisionType                                            OutputPrecisionType;
+  typedef typename itk::VariableLengthVector<OutputPrecisionType>   OutputType;
+  typedef itk::VariableLengthVector<TInternalInputType>             InputType;
+  
+  OutputType Convert (InputType input)
+  {
     return static_cast<OutputType>(input);
   }
 

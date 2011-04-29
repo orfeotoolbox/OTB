@@ -161,7 +161,7 @@ private:
  * perimeter (if activated) and roundness (if activated).
  *
  * For the sake of speed optimization, the original label image must
- * be giben to the filter. If not, the filter will convert the
+ * be given to the filter. If not, the filter will convert the
  * LabelObjectMap back to a LabelImage structure.
  *
  * \sa itk::ShapeLabelMapFilter

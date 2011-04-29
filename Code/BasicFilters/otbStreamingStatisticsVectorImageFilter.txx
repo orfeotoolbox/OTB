@@ -31,40 +31,28 @@ for details.
 namespace otb
 {
 
-template<class TInputImage>
-PersistentStatisticsVectorImageFilter<TInputImage>
-::PersistentStatisticsVectorImageFilter()
+template<class TInputImage, class TPrecision>
+PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
+::PersistentStreamingStatisticsVectorImageFilter()
+ : m_EnableMinMax(true),
+   m_EnableFirstOrderStats(true),
+   m_EnableSecondOrderStats(true),
+   m_UseUnbiasedEstimator(true)
 {
   // first output is a copy of the image, DataObject created by
   // superclass
-  //
-  // allocate the data objects for the outputs which are
-  // just decorators around pixel types
 
-  for (int i = 1; i < 3; ++i)
+  // allocate the data objects for the outputs which are
+  // just decorators around vector/matrix types
+  for (unsigned int i = 1; i < 7; ++i)
     {
-    typename PixelObjectType::Pointer output = static_cast<PixelObjectType*>(this->MakeOutput(i).GetPointer());
-    this->itk::ProcessObject::SetNthOutput(i, output.GetPointer());
+    this->itk::ProcessObject::SetNthOutput(i, this->MakeOutput(i).GetPointer());
     }
-
-  // allocate the data objects for the outputs which are
-  // just decorators around real types
-
-  for (int i = 3; i < 5; ++i)
-    {
-    typename RealPixelObjectType::Pointer output = static_cast<RealPixelObjectType*>(this->MakeOutput(i).GetPointer());
-    this->itk::ProcessObject::SetNthOutput(i, output.GetPointer());
-    }
-
-  // allocate the data objects for the outputs which are
-  // just decorators around matrix types
-  typename MatrixObjectType::Pointer output = static_cast<MatrixObjectType*>(this->MakeOutput(5).GetPointer());
-  this->itk::ProcessObject::SetNthOutput(5, output.GetPointer());
 }
 
-template<class TInputImage>
+template<class TInputImage, class TPrecision>
 itk::DataObject::Pointer
-PersistentStatisticsVectorImageFilter<TInputImage>
+PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
 ::MakeOutput(unsigned int output)
 {
   switch (output)
@@ -74,13 +62,17 @@ PersistentStatisticsVectorImageFilter<TInputImage>
       break;
     case 1:
     case 2:
+      // min/max
       return static_cast<itk::DataObject*>(PixelObjectType::New().GetPointer());
       break;
     case 3:
     case 4:
+      // mean / sum
       return static_cast<itk::DataObject*>(RealPixelObjectType::New().GetPointer());
       break;
     case 5:
+    case 6:
+      // covariance / correlation
       return static_cast<itk::DataObject*>(MatrixObjectType::New().GetPointer());
       break;
     default:
@@ -88,92 +80,107 @@ PersistentStatisticsVectorImageFilter<TInputImage>
       return static_cast<itk::DataObject*>(TInputImage::New().GetPointer());
       break;
     }
-
 }
 
-template<class TInputImage>
-typename PersistentStatisticsVectorImageFilter<TInputImage>::PixelObjectType*
-PersistentStatisticsVectorImageFilter<TInputImage>
+template<class TInputImage, class TPrecision>
+typename PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>::PixelObjectType*
+PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
 ::GetMinimumOutput()
 {
   return static_cast<PixelObjectType*>(this->itk::ProcessObject::GetOutput(1));
 }
 
-template<class TInputImage>
-const typename PersistentStatisticsVectorImageFilter<TInputImage>::PixelObjectType*
-PersistentStatisticsVectorImageFilter<TInputImage>
+template<class TInputImage, class TPrecision>
+const typename PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>::PixelObjectType*
+PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
 ::GetMinimumOutput() const
 {
   return static_cast<const PixelObjectType*>(this->itk::ProcessObject::GetOutput(1));
 }
 
-template<class TInputImage>
-typename PersistentStatisticsVectorImageFilter<TInputImage>::PixelObjectType*
-PersistentStatisticsVectorImageFilter<TInputImage>
+template<class TInputImage, class TPrecision>
+typename PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>::PixelObjectType*
+PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
 ::GetMaximumOutput()
 {
   return static_cast<PixelObjectType*>(this->itk::ProcessObject::GetOutput(2));
 }
 
-template<class TInputImage>
-const typename PersistentStatisticsVectorImageFilter<TInputImage>::PixelObjectType*
-PersistentStatisticsVectorImageFilter<TInputImage>
+template<class TInputImage, class TPrecision>
+const typename PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>::PixelObjectType*
+PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
 ::GetMaximumOutput() const
 {
   return static_cast<const PixelObjectType*>(this->itk::ProcessObject::GetOutput(2));
 }
 
-template<class TInputImage>
-typename PersistentStatisticsVectorImageFilter<TInputImage>::RealPixelObjectType*
-PersistentStatisticsVectorImageFilter<TInputImage>
+template<class TInputImage, class TPrecision>
+typename PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>::RealPixelObjectType*
+PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
 ::GetMeanOutput()
 {
   return static_cast<RealPixelObjectType*>(this->itk::ProcessObject::GetOutput(3));
 }
 
-template<class TInputImage>
-const typename PersistentStatisticsVectorImageFilter<TInputImage>::RealPixelObjectType*
-PersistentStatisticsVectorImageFilter<TInputImage>
+template<class TInputImage, class TPrecision>
+const typename PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>::RealPixelObjectType*
+PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
 ::GetMeanOutput() const
 {
   return static_cast<const RealPixelObjectType*>(this->itk::ProcessObject::GetOutput(3));
 }
 
-template<class TInputImage>
-typename PersistentStatisticsVectorImageFilter<TInputImage>::RealPixelObjectType*
-PersistentStatisticsVectorImageFilter<TInputImage>
+template<class TInputImage, class TPrecision>
+typename PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>::RealPixelObjectType*
+PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
 ::GetSumOutput()
 {
   return static_cast<RealPixelObjectType*>(this->itk::ProcessObject::GetOutput(4));
 }
 
-template<class TInputImage>
-const typename PersistentStatisticsVectorImageFilter<TInputImage>::RealPixelObjectType*
-PersistentStatisticsVectorImageFilter<TInputImage>
+template<class TInputImage, class TPrecision>
+const typename PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>::RealPixelObjectType*
+PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
 ::GetSumOutput() const
 {
   return static_cast<const RealPixelObjectType*>(this->itk::ProcessObject::GetOutput(4));
 }
 
-template<class TInputImage>
-typename PersistentStatisticsVectorImageFilter<TInputImage>::MatrixObjectType*
-PersistentStatisticsVectorImageFilter<TInputImage>
-::GetCovarianceOutput()
+template<class TInputImage, class TPrecision>
+typename PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>::MatrixObjectType*
+PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
+::GetCorrelationOutput()
 {
   return static_cast<MatrixObjectType*>(this->itk::ProcessObject::GetOutput(5));
 }
 
-template<class TInputImage>
-const typename PersistentStatisticsVectorImageFilter<TInputImage>::MatrixObjectType*
-PersistentStatisticsVectorImageFilter<TInputImage>
-::GetCovarianceOutput() const
+template<class TInputImage, class TPrecision>
+const typename PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>::MatrixObjectType*
+PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
+::GetCorrelationOutput() const
 {
   return static_cast<const MatrixObjectType*>(this->itk::ProcessObject::GetOutput(5));
 }
 
-template<class TInputImage>
+template<class TInputImage, class TPrecision>
+typename PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>::MatrixObjectType*
+PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
+::GetCovarianceOutput()
+{
+  return static_cast<MatrixObjectType*>(this->itk::ProcessObject::GetOutput(6));
+}
+
+template<class TInputImage, class TPrecision>
+const typename PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>::MatrixObjectType*
+PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
+::GetCovarianceOutput() const
+{
+  return static_cast<const MatrixObjectType*>(this->itk::ProcessObject::GetOutput(6));
+}
+
+template<class TInputImage, class TPrecision>
 void
-PersistentStatisticsVectorImageFilter<TInputImage>
+PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
 ::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
@@ -189,9 +196,9 @@ PersistentStatisticsVectorImageFilter<TInputImage>
     }
 }
 
-template<class TInputImage>
+template<class TInputImage, class TPrecision>
 void
-PersistentStatisticsVectorImageFilter<TInputImage>
+PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
 ::AllocateOutputs()
 {
   // This is commented to prevent the streaming of the whole image for the first stream strip
@@ -201,9 +208,9 @@ PersistentStatisticsVectorImageFilter<TInputImage>
   // Nothing that needs to be allocated for the remaining outputs
 }
 
-template<class TInputImage>
+template<class TInputImage, class TPrecision>
 void
-PersistentStatisticsVectorImageFilter<TInputImage>
+PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
 ::Reset()
 {
   TInputImage * inputPtr = const_cast<TInputImage *>(this->GetInput());
@@ -212,255 +219,212 @@ PersistentStatisticsVectorImageFilter<TInputImage>
   unsigned int numberOfThreads = this->GetNumberOfThreads();
   unsigned int numberOfComponent = inputPtr->GetNumberOfComponentsPerPixel();
 
-  // Variable Initialization
-  PixelType tempPixel;
-  tempPixel.SetSize(numberOfComponent);
-  tempPixel.Fill(itk::NumericTraits<InternalPixelType>::NonpositiveMin());
-  this->GetMaximumOutput()->Set(tempPixel);
+  if (m_EnableMinMax)
+    {
+    PixelType tempPixel;
+    tempPixel.SetSize(numberOfComponent);
 
-  tempPixel.Fill(itk::NumericTraits<InternalPixelType>::max());
-  this->GetMinimumOutput()->Set(tempPixel);
+    tempPixel.Fill(itk::NumericTraits<InternalPixelType>::max());
+    this->GetMinimumOutput()->Set(tempPixel);
 
-  RealPixelType tempRealPixel;
-  tempRealPixel.SetSize(numberOfComponent);
-  tempRealPixel.Fill(itk::NumericTraits<RealType>::max());
-  this->GetMeanOutput()->Set(tempRealPixel);
+    tempPixel.Fill(itk::NumericTraits<InternalPixelType>::NonpositiveMin());
+    this->GetMaximumOutput()->Set(tempPixel);
 
-  tempRealPixel.Fill(itk::NumericTraits<RealType>::Zero);
-  this->GetMeanOutput()->Set(tempRealPixel);
+    PixelType tempTemporiesPixel;
+    tempTemporiesPixel.SetSize(numberOfComponent);
+    tempTemporiesPixel.Fill(itk::NumericTraits<InternalPixelType>::max());
+    m_ThreadMin = std::vector<PixelType>(numberOfThreads, tempTemporiesPixel);
 
-  MatrixType tempMatrix;
-  tempMatrix.SetSize(numberOfComponent, numberOfComponent);
-  tempMatrix.Fill(itk::NumericTraits<RealType>::Zero);
+    tempTemporiesPixel.Fill(itk::NumericTraits<InternalPixelType>::NonpositiveMin());
+    m_ThreadMax = std::vector<PixelType>(numberOfThreads, tempTemporiesPixel);
+    }
 
-  // Initialize the tempories
-  m_Count.SetSize(numberOfThreads);
-  m_Count.Fill(itk::NumericTraits<long>::Zero);
+  if (m_EnableSecondOrderStats)
+    {
+    m_EnableFirstOrderStats = true;
+    }
 
-  PixelType tempTemporiesPixel;
-  tempTemporiesPixel.SetSize(numberOfComponent);
-  tempTemporiesPixel.Fill(itk::NumericTraits<InternalPixelType>::max());
-  m_ThreadMin = ArrayPixelType(numberOfThreads, tempTemporiesPixel);
+  if (m_EnableFirstOrderStats)
+    {
+    RealPixelType zeroRealPixel;
+    zeroRealPixel.SetSize(numberOfComponent);
+    zeroRealPixel.Fill(itk::NumericTraits<PrecisionType>::Zero);
+    this->GetMeanOutput()->Set(zeroRealPixel);
+    this->GetSumOutput()->Set(zeroRealPixel);
 
-  tempTemporiesPixel.Fill(itk::NumericTraits<InternalPixelType>::NonpositiveMin());
-  m_ThreadMax = ArrayPixelType(numberOfThreads, tempTemporiesPixel);
+    m_ThreadFirstOrderAccumulators.resize(numberOfThreads);
+    std::fill(m_ThreadFirstOrderAccumulators.begin(), m_ThreadFirstOrderAccumulators.end(), zeroRealPixel);
+    }
 
-  RealPixelType tempTemporiesRealPixel;
-  tempTemporiesRealPixel.SetSize(numberOfComponent);
-  tempTemporiesRealPixel.Fill(itk::NumericTraits<RealType>::Zero);
-  m_ThreadSum = ArrayRealPixelType(numberOfThreads, tempTemporiesRealPixel);
+  if (m_EnableSecondOrderStats)
+    {
+    MatrixType zeroMatrix;
+    zeroMatrix.SetSize(numberOfComponent, numberOfComponent);
+    zeroMatrix.Fill(itk::NumericTraits<PrecisionType>::Zero);
+    this->GetCovarianceOutput()->Set(zeroMatrix);
+    this->GetCorrelationOutput()->Set(zeroMatrix);
 
-  m_XX = ArrayMatrixType(numberOfThreads, tempMatrix);
+    m_ThreadSecondOrderAccumulators.resize(numberOfThreads);
+    std::fill(m_ThreadSecondOrderAccumulators.begin(), m_ThreadSecondOrderAccumulators.end(), zeroMatrix);
+    }
+
 }
 
-template<class TInputImage>
+template<class TInputImage, class TPrecision>
 void
-PersistentStatisticsVectorImageFilter<TInputImage>
+PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
 ::Synthetize()
 {
-  int  i;
-  long count;
+  TInputImage * inputPtr = const_cast<TInputImage *>(this->GetInput());
+  const unsigned int nbPixels = inputPtr->GetLargestPossibleRegion().GetNumberOfPixels();
+  const unsigned int numberOfComponent = inputPtr->GetNumberOfComponentsPerPixel();
 
-  int          numberOfThreads = this->GetNumberOfThreads();
-  unsigned int numberOfComponent = this->GetInput()->GetNumberOfComponentsPerPixel();
+  PixelType minimum;
+  minimum.SetSize(numberOfComponent);
+  minimum.Fill(itk::NumericTraits<InternalPixelType>::max());
+  PixelType maximum;
+  maximum.SetSize(numberOfComponent);
+  maximum.Fill(itk::NumericTraits<InternalPixelType>::NonpositiveMin());
 
-  PixelType minimumVector;
-  minimumVector.SetSize(numberOfComponent);
-  minimumVector.Fill(itk::NumericTraits<InternalPixelType>::max());
+  RealPixelType streamFirstOrderAccumulator(numberOfComponent);
+  streamFirstOrderAccumulator.Fill(itk::NumericTraits<PrecisionType>::Zero);
+  MatrixType    streamSecondOrderAccumulator(numberOfComponent, numberOfComponent);
+  streamSecondOrderAccumulator.Fill(itk::NumericTraits<PrecisionType>::Zero);
 
-  PixelType maximumVector;
-  maximumVector.SetSize(numberOfComponent);
-  maximumVector.Fill(itk::NumericTraits<InternalPixelType>::NonpositiveMin());
-
-  RealPixelType sumVector;
-  sumVector.SetSize(numberOfComponent);
-  sumVector.Fill(itk::NumericTraits<RealType>::Zero);
-
-  RealPixelType meanVector;
-  meanVector.SetSize(numberOfComponent);
-  MatrixType crossedMatrix;
-  crossedMatrix.SetSize(numberOfComponent, numberOfComponent);
-  crossedMatrix.Fill(itk::NumericTraits<RealType>::Zero);
-  count = 0;
-
-  // Find the min/max over all threads and accumulate count, sum and
-  // sum of squares
-  for (i = 0; i < numberOfThreads; ++i)
+  // Accumulate results from all threads
+  const unsigned int numberOfThreads = this->GetNumberOfThreads();
+  for (unsigned int threadId = 0; threadId < numberOfThreads; ++threadId)
     {
-    count += m_Count[i];
-    /** TODO
-     *  To modify using + method operator. If we use it now -> exceptionmacro (no GetClassName...)
-     * crossedMatrix += m_XX[i];
-     **/
-    if ((m_XX[i].Rows() != crossedMatrix.Rows()) || (m_XX[i].Cols() != crossedMatrix.Cols()))
+    if (m_EnableMinMax)
       {
-      itkExceptionMacro(<< "Matrix with size (" << m_XX[i].Rows() << "," <<
-                        m_XX[i].Cols() << ") cannot be subtracted from matrix with size (" <<
-                        crossedMatrix.Rows() << "," << crossedMatrix.Cols());
-      }
+      const PixelType& threadMin  = m_ThreadMin [threadId];
+      const PixelType& threadMax  = m_ThreadMax [threadId];
 
-    for (unsigned int r = 0; r < m_XX[i].Rows(); ++r)
-      {
-      for (unsigned int c = 0; c < m_XX[i].Cols(); ++c)
+      for (unsigned int j = 0; j < numberOfComponent; ++j)
         {
-        crossedMatrix(r, c) += m_XX[i](r, c);
+        if (threadMin[j] < minimum[j])
+          {
+          minimum[j] = threadMin[j];
+          }
+        if (threadMax[j] > maximum[j])
+          {
+          maximum[j] = threadMax[j];
+          }
         }
       }
-    //**** END TODO ****
 
-    for (unsigned int j = 0; j < numberOfComponent; ++j)
+    if (m_EnableFirstOrderStats)
+      streamFirstOrderAccumulator   += m_ThreadFirstOrderAccumulators [threadId];
+
+    if (m_EnableSecondOrderStats)
+      streamSecondOrderAccumulator  += m_ThreadSecondOrderAccumulators[threadId];
+    }
+
+  // Final calculations
+  if (m_EnableMinMax)
+    {
+    this->GetMinimumOutput()->Set(minimum);
+    this->GetMaximumOutput()->Set(maximum);
+    }
+
+  if (m_EnableFirstOrderStats)
+    {
+    this->GetMeanOutput()->Set(streamFirstOrderAccumulator / nbPixels);
+    this->GetSumOutput()->Set(streamFirstOrderAccumulator);
+    }
+
+  if (m_EnableSecondOrderStats)
+    {
+    MatrixType cor = streamSecondOrderAccumulator / nbPixels;
+    this->GetCorrelationOutput()->Set(cor);
+
+    const RealPixelType& mean = this->GetMeanOutput()->Get();
+    double regul = static_cast<double>(nbPixels) / (nbPixels - 1);
+
+    if (!m_UseUnbiasedEstimator)
       {
-      sumVector[j] += m_ThreadSum[i][j];
-      if (m_ThreadMin[i][j] < minimumVector[j])
+        regul = 1;
+      }
+
+    MatrixType cov  = cor;
+    for (unsigned int r = 0; r < numberOfComponent; ++r)
+      {
+      for (unsigned int c = 0; c < numberOfComponent; ++c)
         {
-        minimumVector[j] = m_ThreadMin[i][j];
-        }
-      if (m_ThreadMax[i][j] > maximumVector[j])
-        {
-        maximumVector[j] = m_ThreadMax[i][j];
+        cov(r, c) = regul * (cov(r, c) - mean[r] * mean[c]);
         }
       }
-    } // end for( i = 0; i < numberOfThreads; ++i)
-
-  for (unsigned int j = 0; j < numberOfComponent; ++j)
-    {
-    // compute statistics
-    meanVector[j] = sumVector[j] / static_cast<RealType>(count);
+    this->GetCovarianceOutput()->Set(cov);
     }
-
-  // Compute Matrix Covariance
-  MatrixType pixelSumMatrix;
-  pixelSumMatrix.SetSize(static_cast<unsigned int>(numberOfComponent), 1);
-  pixelSumMatrix.Fill(itk::NumericTraits<RealType>::Zero);
-  for (unsigned int j = 0; j < numberOfComponent; ++j)
-    {
-    pixelSumMatrix(j, 0) = sumVector[j];
-    }
-
-  MatrixType covMatrix, covMatrixTemp, tempTranspose;
-  covMatrix.SetSize(static_cast<unsigned int>(numberOfComponent), static_cast<unsigned int>(numberOfComponent));
-  covMatrixTemp.SetSize(static_cast<unsigned int>(numberOfComponent), static_cast<unsigned int>(numberOfComponent));
-  tempTranspose.SetSize(1, static_cast<unsigned int>(numberOfComponent));
-
-  covMatrix = crossedMatrix / static_cast<RealType>(count);
-  pixelSumMatrix /= static_cast<RealType>(count);
-  tempTranspose = pixelSumMatrix.GetTranspose();
-  covMatrixTemp = pixelSumMatrix * tempTranspose;
-  /** TODO
-   *  To modify using - method operator. If we use it now -> exceptionmacro (no GetClassName...)
-   *covMatrix -= covMatrixTemp;
-   **/
-  if ((covMatrix.Rows() != covMatrixTemp.Rows()) || (covMatrix.Cols() != covMatrixTemp.Cols()))
-    {
-    itkExceptionMacro(<< "Matrix with size (" << covMatrix.Rows() << "," <<
-                      covMatrix.Cols() << ") cannot be subtracted from matrix with size (" <<
-                      covMatrixTemp.Rows() << "," << covMatrixTemp.Cols());
-    }
-
-  for (unsigned int r = 0; r < covMatrix.Rows(); ++r)
-    {
-    for (unsigned int c = 0; c < covMatrix.Cols(); ++c)
-      {
-      covMatrix(r, c) -= covMatrixTemp(r, c);
-      }
-    }
-  //**** END TODO ****/
-
-  // Set the outputs
-  this->GetMinimumOutput()->Set(minimumVector);
-  this->GetMaximumOutput()->Set(maximumVector);
-  this->GetMeanOutput()->Set(meanVector);
-  this->GetSumOutput()->Set(sumVector);
-  this->GetCovarianceOutput()->Set(covMatrix);
 }
 
-template<class TInputImage>
+template<class TInputImage, class TPrecision>
 void
-PersistentStatisticsVectorImageFilter<TInputImage>
+PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision>
 ::ThreadedGenerateData(const RegionType& outputRegionForThread, int threadId)
 {
-  /**
-   * Grab the input
-   */
-  InputImagePointer inputPtr = const_cast<TInputImage *>(this->GetInput());
-  // support progress methods/callbacks
+  // Support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
-  MatrixType pixelVector, pixelTransposeVector, pixelSumVector, tempMatrix;
-
-  pixelVector.SetSize(this->GetInput()->GetNumberOfComponentsPerPixel(), 1);
-  pixelVector.Fill(itk::NumericTraits<RealType>::Zero);
-  pixelTransposeVector.SetSize(1, this->GetInput()->GetNumberOfComponentsPerPixel());
-  pixelTransposeVector.Fill(itk::NumericTraits<RealType>::Zero);
-  pixelSumVector.SetSize(this->GetInput()->GetNumberOfComponentsPerPixel(),
-                         this->GetInput()->GetNumberOfComponentsPerPixel());
-  pixelSumVector.Fill(itk::NumericTraits<RealType>::Zero);
-  tempMatrix.SetSize(this->GetInput()->GetNumberOfComponentsPerPixel(), this->GetInput()->GetNumberOfComponentsPerPixel());
+  // Grab the input
+  InputImagePointer inputPtr = const_cast<TInputImage *>(this->GetInput());
+  PixelType& threadMin  = m_ThreadMin [threadId];
+  PixelType& threadMax  = m_ThreadMax [threadId];
+  RealPixelType& threadFirstOrder  = m_ThreadFirstOrderAccumulators [threadId];
+  MatrixType&    threadSecondOrder = m_ThreadSecondOrderAccumulators[threadId];
 
   itk::ImageRegionConstIteratorWithIndex<TInputImage> it(inputPtr, outputRegionForThread);
-  it.GoToBegin();
-  // do the work
-  while (!it.IsAtEnd())
+
+  for (it.GoToBegin(); !it.IsAtEnd(); ++it, progress.CompletedPixel())
     {
-    IndexType index = it.GetIndex();
-    PixelType vectorValue = it.Get();
-    for (unsigned int j = 0; j < vectorValue.GetSize(); ++j)
-      {
-      InternalPixelType value = vectorValue[j];
+    const PixelType& vectorValue = it.Get();
 
-      RealType realValue = static_cast<RealType>(value);
-      if (value < m_ThreadMin[threadId][j])
-        {
-        m_ThreadMin[threadId][j] = value;
-        }
-      if (value > m_ThreadMax[threadId][j])
-        {
-        m_ThreadMax[threadId][j] = value;
-        }
-      m_ThreadSum[threadId][j] += realValue;
-      pixelVector(j, 0) = realValue;
-      }
-
-    ++it;
-    progress.CompletedPixel();
-    pixelTransposeVector = pixelVector.GetTranspose();
-    /** TODO
-     *  To modify using + method operator. If we use it now -> exceptionmacro (no GetClassName...)
-    * m_XX[threadId]+=pixelVector*pixelTransposeVector;
-    **/
-    tempMatrix = pixelVector * pixelTransposeVector;
-    if ((m_XX[threadId].Rows() != tempMatrix.Rows()) || (m_XX[threadId].Cols() != tempMatrix.Cols()))
+    if (m_EnableMinMax)
       {
-      itkExceptionMacro(<< "Matrix with size (" << m_XX[threadId].Rows() << "," <<
-                        m_XX[threadId].Cols() << ") cannot be subtracted from matrix with size (" <<
-                        tempMatrix.Rows() << "," << tempMatrix.Cols());
-      }
-
-    for (unsigned int r = 0; r < m_XX[threadId].Rows(); ++r)
-      {
-      for (unsigned int c = 0; c < m_XX[threadId].Cols(); ++c)
+      for (unsigned int j = 0; j < vectorValue.GetSize(); ++j)
         {
-        m_XX[threadId](r, c) += tempMatrix(r, c);
+        if (vectorValue[j] < threadMin[j])
+          {
+          threadMin[j] = vectorValue[j];
+          }
+        if (vectorValue[j] > threadMax[j])
+          {
+          threadMax[j] = vectorValue[j];
+          }
         }
       }
-    //**** END TODO ****
-    m_Count[threadId]++;
+
+    if (m_EnableFirstOrderStats)
+      {
+      threadFirstOrder += vectorValue;
+      }
+
+    if (m_EnableSecondOrderStats)
+      {
+      for (unsigned int r = 0; r < threadSecondOrder.Rows(); ++r)
+        {
+        for (unsigned int c = 0; c < threadSecondOrder.Cols(); ++c)
+          {
+          threadSecondOrder(r, c) += vectorValue[r] * vectorValue[c];
+          }
+        }
+      }
+
     }
 }
 
-template <class TImage>
+template <class TImage, class TPrecision>
 void
-PersistentStatisticsVectorImageFilter<TImage>
+PersistentStreamingStatisticsVectorImageFilter<TImage, TPrecision>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "Minimum: "  << this->GetMinimumOutput()->Get() << std::endl;
-  os << indent << "Maximum: " <<  this->GetMaximumOutput()->Get() << std::endl;
-  os << indent << "Sum: "      << this->GetSumOutput()->Get() << std::endl;
-  os << indent << "Mean: "     << this->GetMeanOutput()->Get() << std::endl;
-  os << indent << "Covariance: " << this->GetCovarianceOutput()->Get() << std::endl;
-
+  os << indent << "Min: "         << this->GetMinimumOutput()->Get()     << std::endl;
+  os << indent << "Max: "         << this->GetMaximumOutput()->Get()     << std::endl;
+  os << indent << "Mean: "        << this->GetMeanOutput()->Get()        << std::endl;
+  os << indent << "Covariance: "  << this->GetCovarianceOutput()->Get()  << std::endl;
+  os << indent << "Correlation: " << this->GetCorrelationOutput()->Get() << std::endl;
 }
 
 } // end namespace otb

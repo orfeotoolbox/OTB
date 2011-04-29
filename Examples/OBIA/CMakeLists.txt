@@ -60,7 +60,7 @@ ADD_TEST(trTeOBIARadiometricAttributesLabelMapFilterTest ${EXE_TESTS}
 	${TEMP}/OBIARadiometricAttributes.tif
 	${TEMP}/qb_RoadExtract_Radiometry_pretty.png
 	STATS::Band1::Mean
-	0.0
+	0
 	0.5
 	16
 	16

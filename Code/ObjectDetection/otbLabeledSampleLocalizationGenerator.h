@@ -116,7 +116,9 @@ protected:
   /** Triggers the Computation of the sample list */
   void GenerateData(void);
 
-  std::pair<PointVectorType, PointVectorType> RandomPointsGenerator(DataNodeType * node);
+  PointVectorType RandomPointsGenerator(DataNodeType * node);
+
+  PointVectorType PointDensification(DataNodeType * node);
   
 private:
   LabeledSampleLocalizationGenerator(const Self &); //purposely not implemented

@@ -165,7 +165,7 @@ SubsampleImageFilter<TInputImage, TOutputImage, TDirectionOfTransformation>
 
   switch (DirectionOfTransformation)
     {
-    case Wavelet::FORWARD:
+    case static_cast<int>(Wavelet::FORWARD):
       {
       inputIter.SetSubsampleFactor(GetSubsampleFactor());
       inputIter.GoToBegin();
@@ -181,7 +181,7 @@ SubsampleImageFilter<TInputImage, TOutputImage, TDirectionOfTransformation>
 
       break;
       }
-    case Wavelet::INVERSE:
+    case static_cast<int>(Wavelet::INVERSE):
       {
       inputIter.SetSubsampleFactor(1);
       inputIter.GoToBegin();

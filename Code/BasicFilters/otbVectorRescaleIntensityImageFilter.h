@@ -85,7 +85,7 @@ public:
 
   bool operator !=(const VectorAffineTransform& other) const
   {
-    if (m_OutputMaximum.Size() == other.GetOutputMinimum().Size())
+    if (m_OutputMinimum.Size() == other.GetOutputMinimum().Size())
       {
       for (unsigned int i = 0; i < m_OutputMinimum.Size(); ++i)
         {

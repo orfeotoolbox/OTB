@@ -80,7 +80,7 @@ ADD_TEST(leTvSVMImageModelEstimatorTrain ${LEARNING_TESTS1}
  ${INPUTDATA}/ROI_QB_MUL_4_train.c1.hdr
  ${TEMP}/leTvsvm_model_image
  0 )
-
+ 
 ADD_TEST(leTlSVMImageModelEstimatorTrainWithOptimization ${LEARNING_TESTS1}
 --compare-ascii ${EPSILON_3}  ${BASELINE_FILES}/leTvsvm_model_image_opt
                         ${TEMP}/leTvsvm_model_image_opt
@@ -88,7 +88,7 @@ ADD_TEST(leTlSVMImageModelEstimatorTrainWithOptimization ${LEARNING_TESTS1}
  ${INPUTDATA}/ROI_QB_MUL_4.tif
  ${INPUTDATA}/ROI_QB_MUL_4_train.c1.hdr
  ${TEMP}/leTvsvm_model_image_opt
- 1 )
+ 1)
 
 ADD_TEST(leTvSVMImageModelEstimatorTrainOneClass ${LEARNING_TESTS1}
 --compare-ascii ${EPSILON_3}  ${BASELINE_FILES}/leTvsvm_model_image_one_class

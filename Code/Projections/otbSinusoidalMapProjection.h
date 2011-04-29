@@ -18,9 +18,7 @@
 #ifndef __otbSinusoidalMapProjection_h
 #define __otbSinusoidalMapProjection_h
 
-#include "projection/ossimMapProjection.h"
-#include "projection/ossimSinusoidalProjection.h"
-#include "otbMapProjection.h"
+#include "otbGenericMapProjection.h"
 
 namespace otb
 {
@@ -29,16 +27,16 @@ namespace otb
  *  \brief This class implements the Sinusoidal map projection.
  *  It converts coordinates in longitude, latitude (WGS84) to Sinusoidal map coordinates.
  */
-template <Transform::TransformationDirection transform>
-class ITK_EXPORT SinusoidalMapProjection : public MapProjection<ossimSinusoidalProjection, transform>
+template <TransformDirection::TransformationDirection TTransform>
+class ITK_EXPORT SinusoidalMapProjection : public GenericMapProjection<TTransform>
 {
 public:
 
   /** Standard class typedefs. */
-  typedef SinusoidalMapProjection                             Self;
-  typedef MapProjection<ossimSinusoidalProjection, transform> Superclass;
-  typedef itk::SmartPointer<Self>                             Pointer;
-  typedef itk::SmartPointer<const Self>                       ConstPointer;
+  typedef SinusoidalMapProjection           Self;
+  typedef GenericMapProjection<TTransform>  Superclass;
+  typedef itk::SmartPointer<Self>           Pointer;
+  typedef itk::SmartPointer<const Self>     ConstPointer;
 
   typedef typename Superclass::ScalarType ScalarType;
   typedef itk::Point<ScalarType, 2>       InputPointType;
@@ -48,14 +46,13 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(SinusoidalMapProjection, MapProjection);
+  itkTypeMacro(SinusoidalMapProjection, GenericMapProjection);
 
   virtual void SetFalseEasting(double falseEasting);
   virtual void SetFalseNorthing(double falseNorthing);
   virtual double GetFalseNorthing() const;
   virtual double GetFalseEasting() const;
   virtual void SetParameters(double falseEasting, double falseNorthing);
-  virtual void SetDefaults();
 
 protected:
   SinusoidalMapProjection();

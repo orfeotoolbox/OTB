@@ -17,17 +17,23 @@
 =========================================================================*/
 
 #include "otbUtils.h"
+#include <sstream>
 
 namespace otb
 {
 
-bool Utils::IsLonLatValid(double lon, double lat)
+namespace Utils
+{
+
+bool IsLonLatValid(double lon, double lat)
 {
   if (lon < -180.0) return false;
   if (lon > 180.0) return false;
   if (lat < -90.0) return false;
   if (lat > 90.0) return false;
   return true;
+}
+
 }
 
 }

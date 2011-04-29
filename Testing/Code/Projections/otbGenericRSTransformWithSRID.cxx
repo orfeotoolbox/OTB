@@ -19,10 +19,12 @@
 #pragma warning ( disable : 4786 )
 #endif
 
+#include <fstream>
+#include <iostream>
+
 #include "otbGenericRSTransform.h"
 #include "otbGeoInformationConversion.h"
 #include <ogr_spatialref.h>
-#include <fstream>
 
 /**
   * This test is the same than the otbGenericRSTransform
@@ -136,11 +138,11 @@ int otbGenericRSTransformWithSRID(int argc, char* argv[])
   TransformType::Pointer tmt2lambert    = TransformType::New();
   lambert2tmt->GetInverse(tmt2lambert);
 
-  ofstream ofs;
+  std::ofstream ofs;
   ofs.open(outfname);
 
   // Set floatfield to format writing properly
-  ofs.setf(ios::fixed, ios::floatfield);
+  ofs.setf(std::ios::fixed, std::ios::floatfield);
   ofs.precision(10);
 
   ofs << "Testing geopoint: " << geoPoint << std::endl << std::endl;

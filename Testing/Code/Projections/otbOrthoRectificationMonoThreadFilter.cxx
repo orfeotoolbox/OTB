@@ -35,11 +35,8 @@
 #include "otbOrthoRectificationFilter.h"
 #include "otbMapProjections.h"
 
-#include "init/ossimInit.h"
-
 int otbOrthoRectificationMonoThreadFilter(int argc, char* argv[])
 {
-  ossimInit::instance()->initialize(argc, argv);
   if (argc != 12)
     {
     std::cout << argv[0] <<

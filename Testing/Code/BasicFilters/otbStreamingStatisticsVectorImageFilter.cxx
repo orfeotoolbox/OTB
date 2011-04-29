@@ -41,8 +41,7 @@ int otbStreamingStatisticsVectorImageFilter(int argc, char * argv[])
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
 
-  //filter->SetStreamingMode(otb::SET_NUMBER_OF_STREAM_DIVISIONS);
-  filter->GetStreamer()->SetNumberOfStreamDivisions(200);
+  filter->GetStreamer()->SetNumberOfLinesStrippedStreaming( 10 );
   filter->SetInput(reader->GetOutput());
   filter->Update();
 

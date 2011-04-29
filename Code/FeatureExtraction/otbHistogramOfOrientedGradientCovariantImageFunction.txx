@@ -22,6 +22,7 @@
 #include "itkConstNeighborhoodIterator.h"
 #include "itkNumericTraits.h"
 #include "itkMacro.h"
+#include "otbMath.h"
 
 namespace otb
 {
@@ -89,7 +90,7 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
   std::vector<TOutputPrecision> globalOrientationHistogram(m_NumberOfOrientationBins, 0.);
 
   // Compute the orientation bin width
-  double orientationBinWidth = 2 * M_PI / m_NumberOfOrientationBins;
+  double orientationBinWidth = otb::CONST_2PI / m_NumberOfOrientationBins;
 
   // Build the global orientation histogram
   for(int i = -(int)m_NeighborhoodRadius; i< (int)m_NeighborhoodRadius; ++i)
@@ -102,7 +103,7 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
         {
         // If so, compute the gaussian weighting (this could be
         // computed once for all for the sake of optimisation)
-        double gWeight = (1/vcl_sqrt(2*M_PI*squaredSigma)) * vcl_exp(- currentSquaredRadius/(2*squaredSigma));
+        double gWeight = (1/vcl_sqrt(otb::CONST_2PI*squaredSigma)) * vcl_exp(- currentSquaredRadius/(2*squaredSigma));
 
         // Compute pixel location
         offset[0]=i;
@@ -117,11 +118,15 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
         // Also compute its magnitude
         TOutputPrecision magnitude = vcl_sqrt(gradient[0]*gradient[0]+gradient[1]*gradient[1]);
 
-        // Determine the bin index (shift of M_PI since atan2 values
+        // Determine the bin index (shift of otb::CONST_PI since atan2 values
         // lies in [-pi, pi]
-        unsigned int binIndex = vcl_floor((M_PI + angle)/orientationBinWidth);
- 
-        // Cumulate values
+        unsigned int binIndex = vcl_floor((otb::CONST_PI + angle)/orientationBinWidth);
+
+        // Handle special case where angle = pi, and binIndex is out-of-bound
+        if(binIndex == m_NumberOfOrientationBins)
+          binIndex=m_NumberOfOrientationBins-1;
+
+         // Cumulate values
         globalOrientationHistogram[binIndex]+= magnitude * gWeight;
         }
       }
@@ -146,7 +151,7 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
     }
 
   // Derive principal orientation
-  double principalOrientation = maxOrientationHistogramBin * orientationBinWidth - M_PI;
+  double principalOrientation = maxOrientationHistogramBin * orientationBinWidth - otb::CONST_PI;
 
   // Initialize the five spatial bins
   std::vector<TOutputPrecision> centerHistogram(m_NumberOfOrientationBins, 0.);
@@ -166,7 +171,7 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
         {
         // If so, compute the gaussian weighting (this could be
         // computed once for all for the sake of optimisation)
-        double gWeight = (1/vcl_sqrt(2*M_PI*squaredSigma)) * vcl_exp(- currentSquaredRadius/(2*squaredSigma));
+        double gWeight = (1/vcl_sqrt(otb::CONST_2PI * squaredSigma)) * vcl_exp(- currentSquaredRadius/(2*squaredSigma));
 
         // Compute pixel location
         offset[0]=i;
@@ -180,34 +185,34 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
 
         // Angle is supposed to lie with [-pi, pi], so we ensure that
         // compenstation did not introduce out-of-range values
-        if(angle > M_PI)
+        if(angle > otb::CONST_PI)
           {
-          angle -= 2*M_PI;
+          angle -= otb::CONST_2PI;
           }
-        else if(angle < -M_PI)
+        else if(angle < -otb::CONST_PI)
           {
-          angle += 2*M_PI;
+          angle += otb::CONST_2PI;
           }
 
         // Also compute its magnitude
         TOutputPrecision magnitude = vcl_sqrt(gradient[0]*gradient[0]+gradient[1]*gradient[1]);
 
-        // Determine the bin index (shift of M_PI since atan2 values
+        // Determine the bin index (shift of otb::CONST_PI since atan2 values
         // lies in [-pi, pi]
-        unsigned int binIndex = vcl_floor((M_PI + angle)/orientationBinWidth);
+        unsigned int binIndex = vcl_floor((otb::CONST_PI + angle)/orientationBinWidth);
 
         // Compute the angular position
         double angularPosition = vcl_atan2((double)j, (double)i) - principalOrientation;
 
         // Angle is supposed to lie within [-pi, pi], so we ensure that
         // the compensation did not introduce out-of-range values
-        if(angularPosition > M_PI)
+        if(angularPosition > otb::CONST_PI)
           {
-          angularPosition -= 2*M_PI;
+          angularPosition -= otb::CONST_2PI;
           }
-        else if(angularPosition < -M_PI)
+        else if(angularPosition < -otb::CONST_PI)
           {
-          angularPosition += 2*M_PI;
+          angularPosition += otb::CONST_2PI;
           }
 
         // Check if we lie in center bin
@@ -217,7 +222,7 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
           }
         else if(angularPosition > 0)
           {
-          if(angularPosition < M_PI/2)
+          if(angularPosition < otb::CONST_PI_2)
             {
             upperRightHistogram[binIndex]+= magnitude * gWeight;
             }
@@ -228,7 +233,7 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
           }
         else
           {
-          if(angularPosition > -M_PI/2)
+          if(angularPosition > -otb::CONST_PI_2)
             {
             lowerRightHistogram[binIndex]+= magnitude * gWeight;
             }

@@ -24,6 +24,7 @@
 #include <iostream>
 #include <fstream>
 #include <cctype>
+#include <algorithm>
 
 #include "otbImage.h"
 #include "otbVectorImage.h"
@@ -134,7 +135,7 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
     strfileref = *itRef;
     strfiletest = *itTest;
 
-    otbMsgDevMacro(<< "Comparing " << strfileref << " -with- " << strfiletest);
+    //otbMsgDevMacro(<< "Comparing " << strfileref << " -with- " << strfiletest);
 
     //Check is the current line should be ignored
     bool ignoreCurrentLineRef = false;
@@ -435,7 +436,7 @@ int TestHelper::RegressionTestImage(int cpt, const char *testImageFilename, cons
       {
       rescale->SetInput(diff->GetOutput());
 
-      for (unsigned int i = 1; i <= min(diff->GetOutput()->GetNumberOfComponentsPerPixel(), 3U); ++i)
+      for (unsigned int i = 1; i <= std::min(diff->GetOutput()->GetNumberOfComponentsPerPixel(), 3U); ++i)
         {
         rescale->SetChannel(i);
         }
@@ -1116,7 +1117,10 @@ bool TestHelper::isNumeric(std::string str) const
 
 bool TestHelper::isScientificNumeric(std::string str) const
 {
-
+       if(str.size() == 0)
+       {
+              return false;
+       }
   int number(0);
   number = str[0];
   bool pointDetected(false);
@@ -1176,6 +1180,11 @@ bool TestHelper::isHexaPointerAddress(std::string str) const
   unsigned int size(0);
   bool         result(false);
   unsigned int start(0);
+
+  if( str.size() < 2 )
+  {
+       return false;
+  }
   //If (0xadresss)
   if ((str[0] == 40) && (str[str.size() - 1] == 41) && (str[1] == 48) && (str[2] == 120))
     {
@@ -1207,6 +1216,44 @@ bool TestHelper::isHexaPointerAddress(std::string str) const
   return result;
 }
 
+void TestHelper::AddWhiteSpace(std::string strIn, std::string &strOut) const
+{
+  std::string strLine = strIn;
+
+  std::vector<std::string> keys;
+  keys.push_back("[");
+  keys.push_back("]");
+  keys.push_back("(");
+  keys.push_back(")");
+  keys.push_back(",");
+  keys.push_back("=");
+  keys.push_back(":");
+  keys.push_back(";");
+
+  std::vector<std::string> keysOut;
+  keysOut.push_back("[ ");
+  keysOut.push_back(" ]");
+  keysOut.push_back("( ");
+  keysOut.push_back(" )");
+  keysOut.push_back(" , ");
+  keysOut.push_back(" = ");
+  keysOut.push_back(" : ");
+  keysOut.push_back(" , ");
+
+  for (unsigned int it = 0; it < keys.size(); it++)
+    {
+    size_t found;
+    found=strLine.find(keys[it]);
+    while (found!=string::npos)
+      {
+        strLine.replace(found, 1, keysOut[it]);
+        found=strLine.find(keys[it], found + keysOut[it].size());
+      }
+    }
+
+  strOut = strLine;
+}
+
 bool TestHelper::CompareLines(std::string strfileref,
                               std::string strfiletest,
                               int& nbdiff,
@@ -1216,9 +1263,16 @@ bool TestHelper::CompareLines(std::string strfileref,
                               std::vector<std::string>& listStrDiffLineFileTest,
                               double epsilon) const
 {
+  // add white spaces
+  std::string strLineRef;
+  std::string strLineTest;
+  AddWhiteSpace(strfileref, strLineRef);
+  AddWhiteSpace(strfiletest, strLineTest);
+  //otbMsgDevMacro(<<"Comparing (after replace) : " << strLineRef << " vs " << strLineTest);
+
   otb::StringStream buffstreamRef, buffstreamTest;
-  buffstreamRef << strfileref;
-  buffstreamTest << strfiletest;
+  buffstreamRef << strLineRef;
+  buffstreamTest << strLineTest;
   //Number of differences in the current line
   bool differenceFoundInCurrentLine = false;
 
@@ -1241,7 +1295,7 @@ bool TestHelper::CompareLines(std::string strfileref,
 
     buffstreamRef >> strRef;
     buffstreamTest >> strTest;
-    otbMsgDevMacro(<< "sub comparison of the line, strRef: " << strRef << " || strTest: " << strTest);
+    //otbMsgDevMacro(<< "sub comparison of the line, strRef: " << strRef << " || strTest: " << strTest);
 
     bool        chgt = false;
     std::string charTmpRef = "";
@@ -1268,6 +1322,9 @@ bool TestHelper::CompareLines(std::string strfileref,
           float vRef = atof(strRef.c_str());
           float vTest = atof(strTest.c_str());
           float vNorm = (vcl_abs(vRef) + vcl_abs(vTest))/2;
+          //otbMsgDevMacro(<< "numerical comparison: " <<vRef << " vs " <<vTest << " -> "
+          //               << "vNorm= " << vNorm << ", " << vcl_abs(vRef-vTest) << " > "<< epsilon * vNorm
+          //               << "? -> " << (vcl_abs(vRef-vTest) > epsilon * vNorm ));
           if ((vNorm > m_EpsilonBoundaryChecking) //make sure that either the test of the ref are non 0
               && (vcl_abs(vRef-vTest) > epsilon * vNorm)) //epsilon as relative error
             {
@@ -1293,7 +1350,7 @@ bool TestHelper::CompareLines(std::string strfileref,
             charTmpTest = strTest[i];
             }
 
-          otbMsgDevMacro(<< "characterRef: " << charTmpRef << " || characterTest: " << charTmpTest );
+          //otbMsgDevMacro(<< "characterRef: " << charTmpRef << " || characterTest: " << charTmpTest );
 
           if (isNumeric(charTmpRef)) etatCour = ETAT_NUM;
           else etatCour = ETAT_CHAR;

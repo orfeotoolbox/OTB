@@ -36,6 +36,8 @@ void RegisterTests()
   REGISTER_TEST(otbComplexToVectorImageCastFilterNew);
   REGISTER_TEST(otbComplexToVectorImageCastFilterTest);
   REGISTER_TEST(otbLog10ThresholdedImageFilterTest);
-  REGISTER_TEST(otbApplyTransitionMatrixImageFilterNew);
-  REGISTER_TEST(otbApplyTransitionMatrixImageFilterTest);
+  REGISTER_TEST(otbMatrixImageFilterNew);
+  REGISTER_TEST(otbMatrixImageFilterTest);
+  REGISTER_TEST(otbMaskMuParserFilterNew);
+  REGISTER_TEST(otbMaskMuParserFilterTest);
 }

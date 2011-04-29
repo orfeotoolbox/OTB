@@ -20,7 +20,6 @@
 
 #include "otbDEMToImageGenerator.h"
 #include "otbMacro.h"
-#include "base/ossimCommon.h"
 #include "itkProgressReporter.h"
 
 namespace otb
@@ -30,6 +29,7 @@ template<class TDEMImage>
 DEMToImageGenerator<TDEMImage>
 ::DEMToImageGenerator()
 {
+  m_DEMHandler = DEMHandlerType::New();
   m_OutputSpacing[0] = 0.0001;
   m_OutputSpacing[1] = -0.0001;
   m_OutputSize[0] = 1;
@@ -37,9 +37,10 @@ DEMToImageGenerator<TDEMImage>
   m_OutputOrigin[0] = 0;
   m_OutputOrigin[1] = 0;
 
-  m_Transform         = GenericRSTransformType::New();
-  m_DEMFunction       = SRTMFunctionType::New();
+  // Value defined in the norm for points SRTM doesn't have information.
+  m_DefaultUnknownValue = static_cast<PixelType>(-32768);
 
+  m_Transform         = GenericRSTransformType::New();
 }
 
 // DEM folder specification method
@@ -48,12 +49,8 @@ void
 DEMToImageGenerator<TDEMImage>::
 SetDEMDirectoryPath(const char* DEMDirectory)
 {
-  typename SRTMFunctionType::Pointer  srtmFunction = SRTMFunctionType::New();
-  srtmFunction->OpenDEMDirectory(DEMDirectory);
-  this->SetDEMFunction( srtmFunction.GetPointer() );
+  m_DEMHandler->OpenDEMDirectory(DEMDirectory);
 }
-
-
 template<class TDEMImage>
 void
 DEMToImageGenerator<TDEMImage>::
@@ -84,12 +81,19 @@ void DEMToImageGenerator<TDEMImage>
   output->SetOrigin(m_OutputOrigin);
 }
 
+// GenerateOutputInformation method
+template <class TDEMImage>
+void DEMToImageGenerator<TDEMImage>
+::InstanciateTransform()
+{
+  m_Transform->InstanciateTransform();
+}
 
 template <class TDEMImage>
 void DEMToImageGenerator<TDEMImage>
 ::BeforeThreadedGenerateData()
 {
-  m_Transform->InstanciateTransform();
+  InstanciateTransform();
   DEMImagePointerType DEMImage = this->GetOutput();
 
   // allocate the output buffer
@@ -116,6 +120,7 @@ DEMToImageGenerator<TDEMImage>
   // Walk the output image, evaluating the height at each pixel
   IndexType currentindex;
   PointType phyPoint;
+  double    height;
   PointType geoPoint;
 
   for (outIt.GoToBegin(); !outIt.IsAtEnd(); ++outIt)
@@ -123,14 +128,32 @@ DEMToImageGenerator<TDEMImage>
     currentindex = outIt.GetIndex();
     DEMImage->TransformIndexToPhysicalPoint(currentindex, phyPoint);
 
+
     if(m_Transform.IsNotNull())
       {
         geoPoint = m_Transform->TransformPoint(phyPoint);
-        DEMImage->SetPixel(currentindex, m_DEMFunction->Evaluate(geoPoint) );
+        height = m_DEMHandler->GetHeightAboveMSL(geoPoint); // Altitude calculation
       }
     else
       {
-        DEMImage->SetPixel(currentindex, m_DEMFunction->Evaluate(phyPoint) );
+        height = m_DEMHandler->GetHeightAboveMSL(phyPoint); // Altitude calculation
+      }
+/*    otbMsgDevMacro(<< "Index : (" << currentindex[0]<< "," << currentindex[1] << ") -> PhyPoint : ("
+                   << phyPoint[0] << "," << phyPoint[1] << ") -> GeoPoint: ("
+                   << geoPoint[0] << "," << geoPoint[1] << ") -> height" << height);
+*/
+//       otbMsgDevMacro(<< "height" << height);
+    // DEM sets a default value (-32768) at point where it doesn't have altitude information.
+    // OSSIM has chosen to change this default value in OSSIM_DBL_NAN (-4.5036e15).
+    if (!vnl_math_isnan(height))
+      {
+      // Fill the image
+      DEMImage->SetPixel(currentindex, static_cast<PixelType>(height));
+      }
+    else
+      {
+      // Back to the MNT default value
+      DEMImage->SetPixel(currentindex, m_DefaultUnknownValue);
       }
     progress.CompletedPixel();
     }

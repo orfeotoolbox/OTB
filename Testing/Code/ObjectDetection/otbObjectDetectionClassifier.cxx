@@ -82,7 +82,7 @@ struct ComparePoint
   }
 };
 
-ostream &operator<<(ostream &stream, PointType p)
+std::ostream &operator<<(std::ostream &stream, PointType p)
 {
   stream << p[0] << " " << p[1];
   return stream;
@@ -134,16 +134,8 @@ int otbObjectDetectionClassifier(int argc, char* argv[])
   classifier->SetClassKey("Class");
   classifier->SetShifts(statisticsReader->GetStatisticVectorByName("mean"));
   classifier->SetScales(statisticsReader->GetStatisticVectorByName("stddev"));
-
-  if (streaming == 0)
-    {
-    classifier->GetStreamer()->SetNumberOfStreamDivisions(1);
-    }
-  else
-    {
-    classifier->GetStreamer()->SetNumberOfStreamDivisions(streaming);
-    }
-
+  classifier->GetStreamer()->SetNumberOfLinesStrippedStreaming( streaming );
+  classifier->SetGridStep(neighborhood/2);
   classifier->Update();
 
   std::vector<ObjectDetectionClassifierType::PointType> points;

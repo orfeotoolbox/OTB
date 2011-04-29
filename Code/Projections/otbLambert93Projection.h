@@ -18,9 +18,7 @@
 #ifndef __otbLambert93Projection_h
 #define __otbLambert93Projection_h
 
-#include "projection/ossimMapProjection.h"
-#include "projection/ossimLambertConformalConicProjection.h"
-#include "otbMapProjection.h"
+#include "otbLambertConformalConicMapProjection.h"
 
 namespace otb
 {
@@ -29,19 +27,15 @@ namespace otb
 * It converts coordinates in longitude, latitude (WGS84) to Lambert 93 map coordinates.
 *
  */
-template <Transform::TransformationDirection transform>
-class ITK_EXPORT Lambert93Projection : public LambertConformalConicMapProjection<transform>
+template <TransformDirection::TransformationDirection TTransform>
+class ITK_EXPORT Lambert93Projection : public LambertConformalConicMapProjection<TTransform>
 {
 public:
   /** Standard class typedefs. */
-  typedef Lambert93Projection                           Self;
-  typedef LambertConformalConicMapProjection<transform> Superclass;
-  typedef itk::SmartPointer<Self>                       Pointer;
-  typedef itk::SmartPointer<const Self>                 ConstPointer;
-
-  typedef typename Superclass::ScalarType ScalarType;
-  typedef itk::Point<ScalarType, 2>       InputPointType;
-  typedef itk::Point<ScalarType, 2>       OutputPointType;
+  typedef Lambert93Projection                            Self;
+  typedef LambertConformalConicMapProjection<TTransform> Superclass;
+  typedef itk::SmartPointer<Self>                        Pointer;
+  typedef itk::SmartPointer<const Self>                  ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -50,18 +44,24 @@ public:
   itkTypeMacro(Lambert93Projection, LambertConformalConicMapProjection);
 
 protected:
-  Lambert93Projection();
-  virtual ~Lambert93Projection();
+  Lambert93Projection()
+  {
+    this->SetParameter("OriginX", "3");
+    this->SetParameter("OriginY", "46.5");
+    this->SetParameter("Datum", "WE");
+    this->SetParameter("FalseNorthing", "6600000");
+    this->SetParameter("FalseEasting", "700000");
+    this->SetParameter("StandardParallel1", "44");
+    this->SetParameter("StandardParallel2", "49");
+  }
+
+  virtual ~Lambert93Projection() {}
 
 private:
   Lambert93Projection(const Self &); //purposely not implemented
-  void operator =(const Self&);                       //purposely not implemented
+  void operator =(const Self&);      //purposely not implemented
 };
 
 } // namespace otb
-
-#ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLambert93Projection.txx"
-#endif
 
 #endif

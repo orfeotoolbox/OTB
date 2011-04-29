@@ -168,8 +168,8 @@ StandardImageViewer<TImage, TVectorData, TWidgetManager>
     RemoteSensingRegionType                     rsRegion;
     typename RemoteSensingRegionType::IndexType rsOrigin;
     typename RemoteSensingRegionType::SizeType  rsSize;
-    rsOrigin[0] = min(pul[0], plr[0]);
-    rsOrigin[1] = min(pul[1], plr[1]);
+    rsOrigin[0] = std::min(pul[0], plr[0]);
+    rsOrigin[1] = std::min(pul[1], plr[1]);
     rsSize[0] = vcl_abs(pul[0] - plr[0]);
     rsSize[1] = vcl_abs(pul[1] - plr[1]);
 
@@ -206,7 +206,7 @@ StandardImageViewer<TImage, TVectorData, TWidgetManager>
   // Generate the layer
   ImageLayerGeneratorPointerType generator = ImageLayerGeneratorType::New();
   generator->SetImage(m_Image);
-  FltkFilterWatcher qlwatcher(generator->GetResampler(), 0, 0, 200, 20, "Generating QuickLook ...");
+  FltkFilterWatcher qlwatcher(generator->GetProgressSource(), 0, 0, 200, 20, "Generating QuickLook ...");
   generator->GenerateLayer();
   m_ImageLayer = generator->GetLayer();
   m_RenderingFunction = generator->GetRenderingFunction();

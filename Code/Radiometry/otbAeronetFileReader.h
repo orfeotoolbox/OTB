@@ -18,13 +18,13 @@
 #ifndef __otbAeronetFileReader_h
 #define __otbAeronetFileReader_h
 
+#include <string>
+#include <vector>
+
 #include "itkExceptionObject.h"
 #include "itkProcessObject.h"
 #include "otbMacro.h"
 #include "otbAeronetData.h"
-#include <string>
-#include <vector>
-#include <ossim/base/ossimDate.h>
 
 namespace otb
 {
@@ -133,9 +133,6 @@ private:
 
   /** Parse the string and return a list of strings which separated by ',' char */
   VectorString ParseLine(const std::string& line) const;
-
-  /** Parse the string and return the date and time */
-  ossimLocalTm ParseDate(const std::string& date, const std::string& time) const;
 
 /**
  * Parse valid line method

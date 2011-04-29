@@ -42,6 +42,8 @@ int otbStreamingShrinkImageFilter(int argc, char * argv[])
   shrink->SetShrinkFactor(shrinkFactor);
 
   shrink->SetInput(reader->GetOutput());
+  shrink->Update();
+
   writer->SetInput(shrink->GetOutput());
 
   writer->Update();

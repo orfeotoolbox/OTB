@@ -52,7 +52,7 @@ public:
    virtual void getTypeNameList(std::vector<ossimString>& typeList)const;
 protected:
    ossimPluginProjectionFactory(){}
-
+   bool isTileMap(const ossimFilename& filename) const;
 };
 }
 

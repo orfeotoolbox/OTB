@@ -23,7 +23,6 @@
 #include <stdio.h>
 #include "itkTransform.h"
 #include "itkMacro.h"
-#include "otbMapProjection.h"
 
 namespace otb
 {

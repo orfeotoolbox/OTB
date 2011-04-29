@@ -20,6 +20,7 @@
 
 #include "itkImageFileReader.h"
 #include "otbCurlHelperInterface.h"
+#include "otbImageKeywordlist.h"
 
 namespace otb
 {

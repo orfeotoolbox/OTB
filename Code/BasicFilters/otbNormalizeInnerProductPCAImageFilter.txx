@@ -37,6 +37,8 @@ NormalizeInnerProductPCAImageFilter<TInputImage, TOutputImage>
   this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfRequiredOutputs(1);
   this->InPlaceOff();
+
+  m_UseUnbiasedEstimator = true;
 }
 
 /**
@@ -60,6 +62,9 @@ NormalizeInnerProductPCAImageFilter<TInputImage, TOutputImage>
 {
   StreamingStatisticsVectorImageFilterPointer stats = StreamingStatisticsVectorImageFilterType::New();
   stats->SetInput(const_cast<InputImageType*>(this->GetInput()));
+  //set the normalization method to compute covariance to the StreamingStatisticsVectorImage filter
+  stats->SetUseUnbiasedEstimator(m_UseUnbiasedEstimator);
+
   stats->Update();
 
   RealPixelType means = stats->GetMean();

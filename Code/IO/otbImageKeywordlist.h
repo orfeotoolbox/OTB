@@ -24,8 +24,6 @@
 #include "itkObject.h"
 #include "itkObjectFactory.h"
 
-#include "base/ossimString.h"
-
 //forward declaration
 class ossimKeywordlist;
 
@@ -50,7 +48,7 @@ public:
   //virtual const char *GetNameOfClass() const
   //{return "ImageKeywordlist"; }
 
-  typedef std::map<ossimString, ossimString> KeywordlistMap;
+  typedef std::map<std::string, std::string> KeywordlistMap;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(ImageKeywordlist, ImageKeywordlist);
@@ -74,7 +72,7 @@ public:
   }
 
   /** Get the Data object descriptor corresponding to the given key */
-  const ossimString& GetMetadataByKey(const ossimString& key) const;
+  const std::string& GetMetadataByKey(const std::string& key) const;
 
   virtual void convertToOSSIMKeywordlist(ossimKeywordlist& kwl) const;
 
@@ -105,6 +103,10 @@ private:
 };
 
 std::ostream & operator <<(std::ostream& os, const ImageKeywordlist& kwl);
+
+// Free function to handle the keywordlist <-> files
+ImageKeywordlist ReadGeometry(const std::string& filename);
+void WriteGeometry(const ImageKeywordlist& otb_kwl, const std::string& filename);
 
 } //namespace otb
 

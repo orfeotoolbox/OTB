@@ -24,6 +24,7 @@
 #include "itkSymmetricSecondRankTensor.h"
 #include "otbHessianToScalarImageFilter.h"
 #include "otbMultiplyByScalarImageFilter.h"
+#include "otbMath.h"
 
 namespace otb
 {
@@ -115,7 +116,8 @@ private:
   double m_Alpha;
 
   typename HessianFilterType::Pointer m_HessianFilter;
-  typename GaussianFilterType::Pointer m_GaussianFilter;
+  typename GaussianFilterType::Pointer m_GaussianFilter0;
+  typename GaussianFilterType::Pointer m_GaussianFilter1;
   typename HessianToScalarFilterType::Pointer m_HessianToScalarFilter;
   typename MultiplyScalarFilterType::Pointer m_MultiplyScalarFilter;
 };

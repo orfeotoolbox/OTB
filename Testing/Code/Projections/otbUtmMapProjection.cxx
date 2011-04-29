@@ -16,9 +16,12 @@
 
 =========================================================================*/
 
+#include <fstream>
+
 #include "otbMacro.h"
 #include "otbImage.h"
 #include "otbMapProjections.h"
+#include "otbUtils.h"
 
 int otbUtmMapProjection(int argc, char* argv[])
 {
@@ -71,11 +74,11 @@ int otbUtmMapProjection(int argc, char* argv[])
 
   groundPoint[0] = 1.5;
   groundPoint[1] = 43.5;
-  file << "Zone should be 31: " <<  lUtmProjection2->GetZoneFromGeoPoint(groundPoint) << "\n";
+  file << "Zone should be 31: " <<  otb::Utils::GetZoneFromGeoPoint(groundPoint[0], groundPoint[1]) << "\n";
 
   groundPoint[0] = 5;
   groundPoint[1] = 60;
-  file << "Zone should be 32 (exception near Norway): " <<  lUtmProjection2->GetZoneFromGeoPoint(groundPoint) << "\n";
+  file << "Zone should be 32 (exception near Norway): " << otb::Utils::GetZoneFromGeoPoint(groundPoint[0], groundPoint[1]) << "\n";
 
   file.close();
   return EXIT_SUCCESS;

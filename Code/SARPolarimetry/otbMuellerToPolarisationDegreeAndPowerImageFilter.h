@@ -34,40 +34,65 @@ namespace Functor {
  * \brief Evaluate the  min and max polarisation degree and min and max power
  *   from the Mueller image
  *
+ * The order of the channels of the input image corresponds to :
+ * \f$  \begin{pmatrix}
+ * {channel #0 }&{channel #1 }&{channel #2 }&{channel #3 } \\
+ * {channel #4 }&{channel #5 }&{channel #6 }&{channel #7 } \\
+ * {channel #8 }&{channel #9 }&{channel #10}&{channel #11} \\
+ * {channel #12}&{channel #13}&{channel #14}&{channel #15} \\
+ * \end{pmatrix}
+ *
+ * The class process step by step while \f$ \tau <= 45 \f$ and for each \f$ \tau \f$, while \f$ \psi <= 90 \f :
+ * \begin{itemize}
+ * \item Define the incident Stokes vector:
+ *   \f$ Si_{0} = 1 \f$ \\
+ *   \f$ Si_{1} = \cos{\psi * \frac{\pi}{90}} * \cos{\tau *  \frac{\pi}{90}} \f$ \\
+ *   \f$ Si_{2} = \sin{\psi * \frac{\pi}{90}} * \cos{\tau *  \frac{\pi}{90}} \f$ \\
+ *   \f$ Si_{3} = \sin{\tau * \frac{\pi}{90}}\f$ \\
+ * \item Evaluate the received Stokes vector
+ *   \f$ Sr = Si * MuellerMatrix \f$ \\
+ * \item Evaluate power \f$ P \f$  and polarisation degree \f$ DegP \f$ \\
+ *   \f$ P = \max{0, Sr_0} \f$ \\
+ *   \f$ DegP =  \sqrt{Sr_{1}^{2} + Sr_{2}^{2} + Sr_{3}^{2}} / Sr_{0} \f$ \\
+ * \item Keep le smaller and the bigger power (\f$ P_{min}, P_{max} \f$) and \f$\f$ ) and polarisation degree (\f$ DegP_{min}, DegP_{max} \f$) ).
+ * \end{itemize}
+ *
+ *  Output value are:
+ *   channel #0 : \f$ P_{min} \f$ \\
+ *   channel #1 : \f$ P_{max} \f$ \\
+ *   channel #2 : \f$ DegP_{min} \f$ \\
+ *   channel #3 : \f$ DegP_{max} \f$ \\
+ *
  * \ingroup Functor
  * \ingroup SARPolarimetry
  *
  * \sa MuellerToCircularPolarisationImageFilter
- * \sa MuellerToMLCImageFilter
+ * \sa MuellerToReciprocalCovarianceFunctor
  *
  */
 template< class TInput, class TOutput>
 class MuellerToPolarisationDegreeAndPowerFunctor
 {
 public:
-  typedef double                                    RealType;
   typedef typename TOutput::ValueType               OutputValueType;
-  typedef itk::Matrix<RealType, 4, 4>                 MuellerMatrixType;
-  typedef itk::Vector<RealType, 4>                   StokesVectorType;
+  typedef itk::Matrix<double, 4, 4>                 MuellerMatrixType;
+  typedef itk::Vector<double, 4>                   StokesVectorType;
 
   inline TOutput operator()( const TInput & Mueller ) const
     {
-    RealType P;
-    RealType deg_pol;
-    RealType tau;
-    RealType psi;
+    double P;
+    double deg_pol;
+    double tau;
+    double psi;
     StokesVectorType Si;
     StokesVectorType Sr;
 
-    RealType m_PowerMin(itk::NumericTraits<RealType>::max());
-    RealType m_PowerMax(itk::NumericTraits<RealType>::min());
-    RealType m_PolarisationDegreeMin(itk::NumericTraits<RealType>::max());
-    RealType m_PolarisationDegreeMax(itk::NumericTraits<RealType>::min());
+    double l_PowerMin(itk::NumericTraits<double>::max());
+    double l_PowerMax(itk::NumericTraits<double>::min());
+    double l_PolarisationDegreeMin(itk::NumericTraits<double>::max());
+    double l_PolarisationDegreeMax(itk::NumericTraits<double>::min());
 
-    RealType PI_90;
-    PI_90 = static_cast<RealType>( 2 * CONST_PI_180);
-
-    TOutput result;
+     TOutput result;
     result.SetSize(m_NumberOfComponentsPerPixel);
 
     MuellerMatrixType muellerMatrix;
@@ -91,60 +116,58 @@ public:
     tau = -45.0;
     while (tau < 46.0)
       {
-      psi = -90.0;
-      while (psi < 91.0)
-        {
-        // Define the incident Stokes vector
-        Si[0] = 1.0;
-        Si[1] = cos(psi * PI_90) * cos(tau * PI_90);
-        Si[2] = sin(psi * PI_90) * cos(tau * PI_90);
-        Si[3] = sin(tau * PI_90);
-
-        // Evaluate the received Stokes vector
-        Sr = muellerMatrix * Si;
-
-        //Evaluate Power and Polarisation degree
-        P = Sr[0];
-
-        if (P < 0.00001)
+        psi = -90.0;
+        while (psi < 91.0)
           {
-          deg_pol = 0.;
+            // Define the incident Stokes vector
+            Si[0] = 1.0;
+            Si[1] = cos(psi * m_PI_90) * cos(tau * m_PI_90);
+            Si[2] = sin(psi * m_PI_90) * cos(tau * m_PI_90);
+            Si[3] = sin(tau * m_PI_90);
+            
+            // Evaluate the received Stokes vector
+            Sr = muellerMatrix * Si;
+            
+            //Evaluate Power and Polarisation degree
+            P = Sr[0];
+            
+            if (P < m_Epsilon)
+              {
+                deg_pol = 0.;
+              }
+            else
+              {
+                deg_pol = vcl_sqrt(Sr[1] * Sr[1] + Sr[2] * Sr[2] + Sr[3] * Sr[3]) / Sr[0];
+              }
+            
+            if (P > l_PowerMax)
+              {
+                l_PowerMax = P;
+              }
+            else
+              {
+                l_PowerMin = P;
+              }
+            
+            if (deg_pol > l_PolarisationDegreeMax)
+              {
+                l_PolarisationDegreeMax = deg_pol;
+              }
+            else
+              {
+                l_PolarisationDegreeMin = deg_pol;
+              }
+            psi += 5.0;
           }
-        else
-          {
-          deg_pol = vcl_sqrt(Sr[1] * Sr[1] + Sr[2] * Sr[2] + Sr[3] * Sr[3]) / Sr[0];
-          }
-
-        if (P > m_PowerMax)
-          {
-          m_PowerMax = P;
-          }
-
-        if (P < m_PowerMin)
-          {
-          m_PowerMin = P;
-          }
-
-        if (deg_pol > m_PolarisationDegreeMax)
-          {
-          m_PolarisationDegreeMax = deg_pol;
-          }
-
-        if (deg_pol < m_PolarisationDegreeMin)
-          {
-          m_PolarisationDegreeMin = deg_pol;
-          }
-        psi += 5.0;
-        }
-      tau += 5.0;
+        tau += 5.0;
       }
-
-    result[0] = m_PowerMin;
-    result[1] = m_PowerMax;
-    result[2] = m_PolarisationDegreeMin;
-    result[3] = m_PolarisationDegreeMax;
-
-
+    
+    result[0] = l_PowerMin;
+    result[1] = l_PowerMax;
+    result[2] = l_PolarisationDegreeMin;
+    result[3] = l_PolarisationDegreeMax;
+    
+    
     return result;
     }
 
@@ -154,31 +177,39 @@ public:
   }
 
    /** Constructor */
-   MuellerToPolarisationDegreeAndPowerFunctor() : m_NumberOfComponentsPerPixel(4) {}
+   MuellerToPolarisationDegreeAndPowerFunctor() : m_NumberOfComponentsPerPixel(4), m_Epsilon(1e-6), m_PI_90(2*CONST_PI_180) {}
 
    /** Destructor */
    virtual ~MuellerToPolarisationDegreeAndPowerFunctor() {}
 
 private:
     unsigned int m_NumberOfComponentsPerPixel;
-
+    const double m_Epsilon;
+    const double m_PI_90;
 };
 }
 
 
 /** \class otbMuellerToPolarisationDegreeAndPowerImageFilter
- * \brief Compute the circular polarisation image (3 channels : LL, RR and LR)
+ * \brief Compute the polarization degree and power (4 channels : Power min and max, Polarization degree min and max)
  * from the Mueller image (16 real channels)
+ * For more details, please refer to the class MuellerToPolarisationDegreeAndPowerFunctor.
+ *
+ * \ingroup SARPolarimetry
+ * \sa MuellerToPolarisationDegreeAndPowerFunctor
+ *
  */
-template <class TInputImage, class TOutputImage, class TFunction = Functor::MuellerToPolarisationDegreeAndPowerFunctor<
-    ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
+template <class TInputImage, class TOutputImage>
 class ITK_EXPORT MuellerToPolarisationDegreeAndPowerImageFilter :
-   public UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction>
+   public UnaryFunctorImageFilter<TInputImage, TOutputImage, Functor::MuellerToPolarisationDegreeAndPowerFunctor<
+    ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
 {
 public:
    /** Standard class typedefs. */
    typedef MuellerToPolarisationDegreeAndPowerImageFilter  Self;
-   typedef UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction> Superclass;
+  typedef typename Functor::MuellerToPolarisationDegreeAndPowerFunctor<
+     typename TInputImage::PixelType, typename TOutputImage::PixelType> FunctionType;
+   typedef UnaryFunctorImageFilter<TInputImage, TOutputImage, FunctionType> Superclass;
    typedef itk::SmartPointer<Self>        Pointer;
    typedef itk::SmartPointer<const Self>  ConstPointer;
 

@@ -50,7 +50,6 @@ static ossimTrace traceDebug = ossimTrace("ossimSensorModelFactory:debug");
 #include <ossim/projection/ossimApplanixEcefModel.h>
 #include <ossim/support_data/ossimFfL7.h>
 #include <ossim/support_data/ossimFfL5.h>
-#include <ossim/projection/ossimTileMapModel.h>
 
 //***
 // ADD_MODEL: List names of all sensor models produced by this factory:
@@ -189,10 +188,6 @@ ossimSensorModelFactory::createProjection(const ossimString &name) const
       return new ossimSpot5Model;
    }
 
-   if(name==STATIC_TYPE_NAME(ossimTileMapModel))
-    {
-      return new ossimTileMapModel;
-    }
    if(name == STATIC_TYPE_NAME(ossimSarModel))
    {
       return new ossimSarModel;
@@ -244,7 +239,6 @@ ossimSensorModelFactory::getTypeNameList(std::vector<ossimString>& typeList)
    typeList.push_back(STATIC_TYPE_NAME(ossimFcsiModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimSpot5Model));
    typeList.push_back(STATIC_TYPE_NAME(ossimSarModel));
-   typeList.push_back(STATIC_TYPE_NAME(ossimTileMapModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimBuckeyeSensor));
    //***
    // ADD_MODEL: Please leave this comment for the next programmer. Add above.
@@ -479,24 +473,6 @@ ossimProjection* ossimSensorModelFactory::createProjection(
       model = 0;
    }
    return model.release();
-}
-
-bool ossimSensorModelFactory::isTileMap(const ossimFilename& filename)const
-{
-  ossimFilename temp(filename);
-  temp.downcase();
-  
-  ossimString os = temp.beforePos(4);
-  
-  if(temp.ext()=="otb")
-  {
-    return true;
-  }
-  else if(os == "http")
-  {
-    return true;
-  }
-  return false;
 }
    
 bool ossimSensorModelFactory::isNitf(const ossimFilename& filename)const

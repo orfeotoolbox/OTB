@@ -190,23 +190,23 @@ public:
 
     typename LabelPairVectorType::iterator lpit1, lpit2;
 
-    for(lpit1 = internalLabelPairs.begin(); lpit1 != internalLabelPairs.end(); ++lpit1)
+    for (lpit1 = internalLabelPairs.begin(); lpit1 != internalLabelPairs.end(); ++lpit1)
       {
       // Merge the current label pair
       this->MergeLabels(lpit1->first, lpit1->second);
 
       // Update the remaining label pairs
-      for(lpit2 = lpit1+1; lpit2 != internalLabelPairs.end(); ++lpit2)
-  {
-  if(lpit2->first == lpit1->second)
-    {
-    lpit2->first = lpit1->first;
-    }
-  if(lpit2->second == lpit1->second)
-    {
-    lpit2->second = lpit1->first;
-    }
-  }
+      for (lpit2 = lpit1 + 1; lpit2 != internalLabelPairs.end(); ++lpit2)
+        {
+        if (lpit2->first == lpit1->second)
+          {
+          lpit2->first = lpit1->first;
+          }
+        if (lpit2->second == lpit1->second)
+          {
+          lpit2->second = lpit1->first;
+          }
+        }
       }
   }
 
@@ -219,6 +219,21 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
     Superclass::PrintSelf(os, indent);
+  }
+
+  /** Re-implement CopyInformation to pass the adjancency graph
+   * through */
+  virtual void CopyInformation(itk::DataObject * data)
+  {
+    // Call superclass implementation
+    Superclass::CopyInformation(data);
+
+    // Try to cast to LabelMapWithAdjacency
+    const Self * selfData = dynamic_cast<const Self *>(data);
+
+    // If cast succeed
+    if(selfData)
+      m_AdjacencyMap = selfData->m_AdjacencyMap;
   }
 
 private:

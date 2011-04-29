@@ -24,17 +24,11 @@
 #include <iostream>
 
 #include "otbMapProjections.h"
-#include "otbMapToMapProjection.h"
 
 int otbProjectionBaseNew(int argc, char* argv[])
 {
   otb::AlbersInverseProjection::Pointer      lAlbersProjection = otb::AlbersInverseProjection::New();
   otb::AzimEquDistForwardProjection::Pointer lAzimEquDistProjection = otb::AzimEquDistForwardProjection::New();
-  typedef otb::MapToMapProjection<otb::AlbersInverseProjection,
-      otb::AzimEquDistForwardProjection> MapToMapProjectionType;
-  MapToMapProjectionType::Pointer projection = MapToMapProjectionType::New();
-
-  std::cout << projection << std::endl;
 
   return EXIT_SUCCESS;
 }

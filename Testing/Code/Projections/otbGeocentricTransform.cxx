@@ -19,6 +19,9 @@
 #pragma warning ( disable : 4786 )
 #endif
 
+#include <fstream>
+#include <iomanip>
+
 #include "otbMacro.h"
 #include "otbImage.h"
 #include "otbGeocentricTransform.h"
@@ -29,7 +32,7 @@ int otbGeocentricTransform(int argc, char* argv[])
   std::ofstream file;
   file.open(outFileName);
 
-  typedef otb::GeocentricTransform<otb::Transform::FORWARD> ProjectionType;
+  typedef otb::GeocentricTransform<otb::TransformDirection::FORWARD> ProjectionType;
   ProjectionType::Pointer projection = ProjectionType::New();
 
   file << std::setprecision(15);
@@ -52,7 +55,7 @@ int otbGeocentricTransform(int argc, char* argv[])
   file << projection->TransformPoint(point);
   file << std::endl << std::endl;
 
-  typedef otb::GeocentricTransform<otb::Transform::INVERSE> InverseProjectionType;
+  typedef otb::GeocentricTransform<otb::TransformDirection::INVERSE> InverseProjectionType;
   InverseProjectionType::Pointer inverseProjection = InverseProjectionType::New();
 
   file << "Inverse projection: " << std::endl;

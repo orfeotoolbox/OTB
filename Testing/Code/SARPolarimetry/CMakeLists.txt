@@ -23,6 +23,9 @@ SET(SARPOLARIMETRY_TESTS2 ${CXX_TEST_PATH}/otbSARPolarimetryTests2)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbSARPolarimetry_TESTS1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+ADD_TEST(saTuPolarimetricSynthesisFunctor ${SARPOLARIMETRY_TESTS1}
+        otbPolarimetricSynthesisFunctor )
+
 
 ADD_TEST(saTuPolarimetricSynthesisFilterNew ${SARPOLARIMETRY_TESTS1}
         otbPolarimetricSynthesisFilterNew )
@@ -96,7 +99,7 @@ ADD_TEST(saTvVectorMultiChannelsPolarimetricSynthesisFilter ${SARPOLARIMETRY_TES
  --compare-image ${EPSILON_12}   ${BASELINE}/saTvMultiPolarimetricSynthesis1.tif
                    ${TEMP}/resMultiPolarimetricSynthesis1.tif
        otbVectorMultiChannelsPolarimetricSynthesisFilter
-       ${INPUTDATA}/RSAT_imagery_vector.tif.hdr
+       ${INPUTDATA}/RSAT2_AltonaExtract_1000_1000_100_100.hdr
        ${TEMP}/resMultiPolarimetricSynthesis1.tif
          10.0     # PsiI
          0.0     # KhiI
@@ -126,19 +129,19 @@ ADD_TEST(saTuSinclairToCircularCovarianceMatrixFunctor ${SARPOLARIMETRY_TESTS1}
 		otbSinclairToCircularCovarianceMatrixFunctor
 )
 
-# otbSinclairToMuellerFunctor
-ADD_TEST(saTuSinclairToMuellerFunctor ${SARPOLARIMETRY_TESTS1}
-		otbSinclairToMuellerFunctor
+# otbSinclairToMuellerMatrixFunctor
+ADD_TEST(saTuSinclairToMuellerMatrixFunctor ${SARPOLARIMETRY_TESTS1}
+		otbSinclairToMuellerMatrixFunctor
 )
 
-# otbSinclairToReciprocalCovarianceFunctor
-ADD_TEST(saTuSinclairToReciprocalCovarianceFunctor ${SARPOLARIMETRY_TESTS1}
-		otbSinclairToReciprocalCovarianceFunctor
+# otbSinclairToReciprocalCovariancMatrixeFunctor
+ADD_TEST(saTuSinclairToReciprocalCovarianceMatrixFunctor ${SARPOLARIMETRY_TESTS1}
+		otbSinclairToReciprocalCovarianceMatrixFunctor
 )
 
 # otbSinclairToCoherencyFunctor
-ADD_TEST(saTuSinclairToCoherencyFunctor ${SARPOLARIMETRY_TESTS1}
-		otbSinclairToCoherencyFunctor
+ADD_TEST(saTuSinclairToCoherencyMatrixFunctor ${SARPOLARIMETRY_TESTS1}
+		otbSinclairToCoherencyMatrixFunctor
 )
 
 # otbSinclairToReciprocalCircularCovarianceMatrixFunctor
@@ -147,34 +150,25 @@ ADD_TEST(saTuSinclairToReciprocalCircularCovarianceMatrixFunctor ${SARPOLARIMETR
 )
 
 # otbSinclairToCovarianceFunctor
-ADD_TEST(saTuSinclairToCovarianceFunctor ${SARPOLARIMETRY_TESTS1}
-		otbSinclairToCovarianceFunctor
+ADD_TEST(saTuSinclairToCovarianceMatrixFunctor ${SARPOLARIMETRY_TESTS1}
+		otbSinclairToCovarianceMatrixFunctor
 )
 
 # otbSinclairToReciprocalCoherencyFunctor
-ADD_TEST(saTuSinclairToReciprocalCoherencyFunctor ${SARPOLARIMETRY_TESTS1}
-		otbSinclairToReciprocalCoherencyFunctor
+ADD_TEST(saTuSinclairToReciprocalCoherencyMatrixFunctor ${SARPOLARIMETRY_TESTS1}
+		otbSinclairToReciprocalCoherencyMatrixFunctor
 )
 
-
-# Sinclair To Reciprocal Covariance Image Filter
-ADD_TEST(saTvSinclairImageFilter_SinclairToReciprocalCovariance ${SARPOLARIMETRY_TESTS1}
-  --compare-image ${EPSILON_12}   ${BASELINE}/saTvSinclairImageFilter_SinclairToReciprocalCovariance.tif
-                    ${TEMP}/saTvSinclairImageFilter_SinclairToReciprocalCovariance.tif
-        otbSinclairImageFilter
-        SinclairToReciprocalCovariance
-        ${INPUTDATA}/RSAT_imagery_HH.tif
-        ${INPUTDATA}/RSAT_imagery_HV.tif
-        ${INPUTDATA}/RSAT_imagery_VV.tif
-        ${TEMP}/saTvSinclairImageFilter_SinclairToReciprocalCovariance.tif
-	)
+ADD_TEST(saTuSinclairImageFilterNew ${SARPOLARIMETRY_TESTS1}
+		otbSinclairImageFilterNew
+)
 
 # Sinclair To Covariance Image Filter
 ADD_TEST(saTvSinclairImageFilter_SinclairToCovariance ${SARPOLARIMETRY_TESTS1}
   --compare-image ${EPSILON_12}   ${BASELINE}/saTvSinclairImageFilter_SinclairToCovariance.tif
                     ${TEMP}/saTvSinclairImageFilter_SinclairToCovariance.tif
         otbSinclairImageFilter
-        SinclairToCovariance
+        SinclairToCovarianceMatrix
         ${INPUTDATA}/RSAT_imagery_HH.tif
         ${INPUTDATA}/RSAT_imagery_HV.tif
         ${INPUTDATA}/RSAT_imagery_VV.tif
@@ -193,36 +187,12 @@ ADD_TEST(saTvSinclairImageFilter_SinclairToCircularCovarianceMatrix ${SARPOLARIM
         ${TEMP}/saTvSinclairImageFilter_SinclairToCircularCovarianceMatrix.tif
 	)
 
-# Sinclair To Reciprocal Circular Covariance Image Filter
-ADD_TEST(saTvSinclairImageFilter_SinclairToReciprocalCircularCovarianceMatrix ${SARPOLARIMETRY_TESTS1}
-  --compare-image ${EPSILON_12}   ${BASELINE}/saTvSinclairImageFilter_SinclairToReciprocalCircularCovarianceMatrix.tif
-                    ${TEMP}/saTvSinclairImageFilter_SinclairToReciprocalCircularCovarianceMatrix.tif
-        otbSinclairImageFilter
-        SinclairToReciprocalCircularCovarianceMatrix
-        ${INPUTDATA}/RSAT_imagery_HH.tif
-        ${INPUTDATA}/RSAT_imagery_HV.tif
-        ${INPUTDATA}/RSAT_imagery_VV.tif
-        ${TEMP}/saTvSinclairImageFilter_SinclairToReciprocalCircularCovarianceMatrix.tif
-	)
-
-# Sinclair To Reciprocal Coherency Image Filter
-ADD_TEST(saTvSinclairImageFilter_SinclairToReciprocalCoherency ${SARPOLARIMETRY_TESTS1}
-  --compare-image ${EPSILON_12}   ${BASELINE}/saTvSinclairImageFilter_SinclairToReciprocalCoherency.tif
-                    ${TEMP}/saTvSinclairImageFilter_SinclairToReciprocalCoherency.tif
-        otbSinclairImageFilter
-        SinclairToReciprocalCoherency
-        ${INPUTDATA}/RSAT_imagery_HH.tif
-        ${INPUTDATA}/RSAT_imagery_HV.tif
-        ${INPUTDATA}/RSAT_imagery_VV.tif
-        ${TEMP}/saTvSinclairImageFilter_SinclairToReciprocalCoherency.tif
-	)
-
 # Sinclair To Coherency Image Filter
 ADD_TEST(saTvSinclairImageFilter_SinclairToCoherency ${SARPOLARIMETRY_TESTS1}
   --compare-image ${EPSILON_12}   ${BASELINE}/saTvSinclairImageFilter_SinclairToCoherency.tif
                     ${TEMP}/saTvSinclairImageFilter_SinclairToCoherency.tif
         otbSinclairImageFilter
-        SinclairToCoherency
+        SinclairToCoherencyMatrix
         ${INPUTDATA}/RSAT_imagery_HH.tif
         ${INPUTDATA}/RSAT_imagery_HV.tif
         ${INPUTDATA}/RSAT_imagery_VV.tif
@@ -234,7 +204,7 @@ ADD_TEST(saTvSinclairImageFilter_SinclairToMueller ${SARPOLARIMETRY_TESTS1}
   --compare-image ${EPSILON_12}   ${BASELINE}/saTvSinclairImageFilter_SinclairToMueller.tif
                     ${TEMP}/saTvSinclairImageFilter_SinclairToMueller.tif
         otbSinclairImageFilter
-        SinclairToMueller
+        SinclairToMuellerMatrix
         ${INPUTDATA}/RSAT_imagery_HH.tif
         ${INPUTDATA}/RSAT_imagery_HV.tif
         ${INPUTDATA}/RSAT_imagery_VV.tif
@@ -242,61 +212,92 @@ ADD_TEST(saTvSinclairImageFilter_SinclairToMueller ${SARPOLARIMETRY_TESTS1}
 	)
 
 
+ADD_TEST(saTuSinclairReciprocalImageFilterNew ${SARPOLARIMETRY_TESTS1}
+		otbSinclairReciprocalImageFilterNew
+)
+
+# Sinclair To Reciprocal Covariance Image Filter
+ADD_TEST(saTvSinclairReciprocalImageFilter_SinclairToReciprocalCovariance ${SARPOLARIMETRY_TESTS1}
+  --compare-image ${EPSILON_12}   ${BASELINE}/saTvSinclairImageFilter_SinclairToReciprocalCovariance.tif
+                    ${TEMP}/saTvSinclairImageFilter_SinclairToReciprocalCovariance.tif
+        otbSinclairReciprocalImageFilter
+        SinclairToReciprocalCovarianceMatrix
+        ${INPUTDATA}/RSAT_imagery_HH.tif
+        ${INPUTDATA}/RSAT_imagery_HV.tif
+        ${INPUTDATA}/RSAT_imagery_VV.tif
+        ${TEMP}/saTvSinclairImageFilter_SinclairToReciprocalCovariance.tif
+	)
+
+# Sinclair To Reciprocal Circular Covariance Image Filter
+ADD_TEST(saTvSinclairReciprocalImageFilter_SinclairToReciprocalCircularCovarianceMatrix ${SARPOLARIMETRY_TESTS1}
+  --compare-image ${EPSILON_12}   ${BASELINE}/saTvSinclairImageFilter_SinclairToReciprocalCircularCovarianceMatrix.tif
+                    ${TEMP}/saTvSinclairImageFilter_SinclairToReciprocalCircularCovarianceMatrix.tif
+        otbSinclairReciprocalImageFilter
+        SinclairToReciprocalCircularCovarianceMatrix
+        ${INPUTDATA}/RSAT_imagery_HH.tif
+        ${INPUTDATA}/RSAT_imagery_HV.tif
+        ${INPUTDATA}/RSAT_imagery_VV.tif
+        ${TEMP}/saTvSinclairImageFilter_SinclairToReciprocalCircularCovarianceMatrix.tif
+	)
+
+# Sinclair To Reciprocal Coherency Image Filter
+ADD_TEST(saTvSinclairReciprocalImageFilter_SinclairToReciprocalCoherency ${SARPOLARIMETRY_TESTS1}
+  --compare-image ${EPSILON_12}   ${BASELINE}/saTvSinclairImageFilter_SinclairToReciprocalCoherency.tif
+                    ${TEMP}/saTvSinclairImageFilter_SinclairToReciprocalCoherency.tif
+        otbSinclairReciprocalImageFilter
+        SinclairToReciprocalCoherencyMatrix
+        ${INPUTDATA}/RSAT_imagery_HH.tif
+        ${INPUTDATA}/RSAT_imagery_HV.tif
+        ${INPUTDATA}/RSAT_imagery_VV.tif
+        ${TEMP}/saTvSinclairImageFilter_SinclairToReciprocalCoherency.tif
+	)
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbSARPolarimetry_TESTS2 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-# MLC To Coherency Image Filter
-ADD_TEST(saTuMLCToCoherencyImageFilterNew ${SARPOLARIMETRY_TESTS2}
-		otbMLCToCoherencyImageFilterNew
+# Reciprocal Covariance To Coherency Image Filter
+ADD_TEST(saTuReciprocalCovarianceToReciprocalCoherencyImageFilterNew ${SARPOLARIMETRY_TESTS2}
+		otbReciprocalCovarianceToReciprocalCoherencyImageFilterNew
 )
 
-ADD_TEST(saTvMLCToCoherencyImageFilter ${SARPOLARIMETRY_TESTS2}
+ADD_TEST(saTvReciprocalCovarianceToReciprocalCoherencyImageFilter ${SARPOLARIMETRY_TESTS2}
   --compare-image ${EPSILON_12}   ${BASELINE}/saTvMLCToCoherencyImageFilter.tif
                     ${TEMP}/saTvMLCToCoherencyImageFilter.tif
-        otbMLCToCoherencyImageFilter
-        ${INPUTDATA}/RSAT_imagery_HH.tif
-        ${INPUTDATA}/RSAT_imagery_HV.tif
-        ${INPUTDATA}/RSAT_imagery_HV.tif
-        ${INPUTDATA}/RSAT_imagery_VV.tif
+        otbReciprocalCovarianceToReciprocalCoherencyImageFilter
+        ${BASELINE}/saTvSinclairImageFilter_SinclairToReciprocalCovariance.tif
         ${TEMP}/saTvMLCToCoherencyImageFilter.tif
 	)
 
-# MLC To Coherency Degree Image Filter
-ADD_TEST(saTuMLCToCoherencyDegreeImageFilterNew ${SARPOLARIMETRY_TESTS2}
-		otbMLCToCoherencyDegreeImageFilterNew
+# Reciprocal Covariance To Coherency Degree Image Filter
+ADD_TEST(saTuReciprocalCovarianceToCoherencyDegreeImageFilterNew ${SARPOLARIMETRY_TESTS2}
+		otbReciprocalCovarianceToCoherencyDegreeImageFilterNew
 )
 
-ADD_TEST(saTvMLCToCoherencyDegreeImageFilter ${SARPOLARIMETRY_TESTS2}
+ADD_TEST(saTvReciprocalCovarianceToCoherencyDegreeImageFilter ${SARPOLARIMETRY_TESTS2}
   --compare-image ${EPSILON_12}   ${BASELINE}/saTvMLCToCoherencyDegreeImageFilter.tif
                     ${TEMP}/saTvMLCToCoherencyDegreeImageFilter.tif
-        otbMLCToCoherencyDegreeImageFilter
-        ${INPUTDATA}/RSAT_imagery_HH.tif
-        ${INPUTDATA}/RSAT_imagery_HV.tif
-        ${INPUTDATA}/RSAT_imagery_HV.tif
-        ${INPUTDATA}/RSAT_imagery_VV.tif
+        otbReciprocalCovarianceToCoherencyDegreeImageFilter
+        ${BASELINE}/saTvSinclairImageFilter_SinclairToReciprocalCovariance.tif
         ${TEMP}/saTvMLCToCoherencyDegreeImageFilter.tif
 	)
 
-# MLC To Circular Coherency Degree Image Filter
-ADD_TEST(saTuMLCToCircularCoherencyDegreeImageFilterNew ${SARPOLARIMETRY_TESTS2}
-		otbMLCToCircularCoherencyDegreeImageFilterNew
+# Reciprocal Covariance To Circular Coherency Degree Image Filter
+ADD_TEST(saTuReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilterNew ${SARPOLARIMETRY_TESTS2}
+		otbReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilterNew
 )
 
-ADD_TEST(saTvMLCToCircularCoherencyDegreeImageFilter ${SARPOLARIMETRY_TESTS2}
+ADD_TEST(saTvReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter ${SARPOLARIMETRY_TESTS2}
   --compare-image ${EPSILON_12}   ${BASELINE}/saTvMLCToCircularCoherencyDegreeImageFilter.tif
                     ${TEMP}/saTvMLCToCircularCoherencyDegreeImageFilter.tif
-        otbMLCToCircularCoherencyDegreeImageFilter
-        ${INPUTDATA}/RSAT_imagery_HH.tif
-        ${INPUTDATA}/RSAT_imagery_HV.tif
-        ${INPUTDATA}/RSAT_imagery_HV.tif
-        ${INPUTDATA}/RSAT_imagery_VV.tif
+        otbReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter
+        ${BASELINE}/saTvSinclairImageFilter_SinclairToReciprocalCovariance.tif
         ${TEMP}/saTvMLCToCircularCoherencyDegreeImageFilter.tif
 	)
 
-# H Alpha Image Filter
+# Reciprocal H Alpha Image Filter
 ADD_TEST(saTuReciprocalHAlphaImageFilterNew ${SARPOLARIMETRY_TESTS2}
 		otbReciprocalHAlphaImageFilterNew
 )
@@ -305,10 +306,7 @@ ADD_TEST(saTvReciprocalHAlphaImageFilter ${SARPOLARIMETRY_TESTS2}
   --compare-image ${EPSILON_12}   ${BASELINE}/saTvReciprocalHAlphaImageFilter.tif
                     ${TEMP}/saTvReciprocalHAlphaImageFilter.tif
         otbReciprocalHAlphaImageFilter
-        ${INPUTDATA}/RSAT_imagery_HH.tif
-        ${INPUTDATA}/RSAT_imagery_HV.tif
-        ${INPUTDATA}/RSAT_imagery_HV.tif
-        ${INPUTDATA}/RSAT_imagery_VV.tif
+        ${BASELINE}/saTvSinclairImageFilter_SinclairToReciprocalCoherency.tif
         ${TEMP}/saTvReciprocalHAlphaImageFilter.tif
 	)
 
@@ -321,27 +319,8 @@ ADD_TEST(saTvReciprocalCoherencyToMuellerImageFilter ${SARPOLARIMETRY_TESTS2}
   --compare-image ${EPSILON_12}   ${BASELINE}/saTvReciprocalCoherencyToMuellerImageFilter.tif
                     ${TEMP}/saTvReciprocalCoherencyToMuellerImageFilter.tif
         otbReciprocalCoherencyToMuellerImageFilter
-        ${INPUTDATA}/RSAT_imagery_HH.tif
-        ${INPUTDATA}/RSAT_imagery_HV.tif
-        ${INPUTDATA}/RSAT_imagery_HV.tif
-        ${INPUTDATA}/RSAT_imagery_VV.tif
+        ${BASELINE}/saTvSinclairImageFilter_SinclairToReciprocalCoherency.tif
         ${TEMP}/saTvReciprocalCoherencyToMuellerImageFilter.tif
-	)
-
-# Mueller To Circular polarisation Image Filter
-ADD_TEST(saTuMuellerToCircularPolarisationImageFilterNew ${SARPOLARIMETRY_TESTS2}
-		otbMuellerToCircularPolarisationImageFilterNew
-)
-
-ADD_TEST(saTvMuellerToCircularPolarisationImageFilter ${SARPOLARIMETRY_TESTS2}
-  --compare-image ${EPSILON_12}   ${BASELINE}/saTvMuellerToCircularPolarisationImageFilter.tif
-                    ${TEMP}/saTvMuellerToCircularPolarisationImageFilter.tif
-        otbMuellerToCircularPolarisationImageFilter
-        ${INPUTDATA}/RSAT_imagery_HH.tif
-        ${INPUTDATA}/RSAT_imagery_HV.tif
-        ${INPUTDATA}/RSAT_imagery_HV.tif
-        ${INPUTDATA}/RSAT_imagery_VV.tif
-        ${TEMP}/saTvMuellerToCircularPolarisationImageFilter.tif
 	)
 
 # Mueller To polarisation degree and power Image Filter
@@ -353,36 +332,41 @@ ADD_TEST(saTvMuellerToPolarisationDegreeAndPowerImageFilter ${SARPOLARIMETRY_TES
   --compare-image ${EPSILON_12}   ${BASELINE}/saTvMuellerToPolarisationDegreeAndPowerImageFilter.tif
                     ${TEMP}/saTvMuellerToPolarisationDegreeAndPowerImageFilter.tif
         otbMuellerToPolarisationDegreeAndPowerImageFilter
-        ${INPUTDATA}/RSAT_imagery_HH.tif
-        ${INPUTDATA}/RSAT_imagery_HV.tif
-        ${INPUTDATA}/RSAT_imagery_HV.tif
-        ${INPUTDATA}/RSAT_imagery_VV.tif
+        ${BASELINE}/saTvSinclairImageFilter_SinclairToMueller.tif
         ${TEMP}/saTvMuellerToPolarisationDegreeAndPowerImageFilter.tif
 	)
 
-# Mueller To MLC Image Filter
-ADD_TEST(saTuMuellerToMLCImageFilterNew ${SARPOLARIMETRY_TESTS2}
-		otbMuellerToMLCImageFilterNew
+# Mueller To Covariance Image Filter
+ADD_TEST(saTvMuellerToReciprocalCovarianceFunctor ${SARPOLARIMETRY_TESTS2}
+		otbMuellerToReciprocalCovarianceFunctor
 )
 
-ADD_TEST(saTvMuellerToMLCImageFilter ${SARPOLARIMETRY_TESTS2}
+ADD_TEST(saTuMuellerToReciprocalCovarianceImageFilterNew ${SARPOLARIMETRY_TESTS2}
+		otbMuellerToReciprocalCovarianceImageFilterNew
+)
+
+ADD_TEST(saTvMuellerToReciprocalCovarianceImageFilter ${SARPOLARIMETRY_TESTS2}
   --compare-image ${EPSILON_12}   ${BASELINE}/saTvMuellerToMLCImageFilter.tif
                     ${TEMP}/saTvMuellerToMLCImageFilter.tif
-        otbMuellerToMLCImageFilter
-        ${INPUTDATA}/RSAT_imagery_HH.tif
-        ${INPUTDATA}/RSAT_imagery_HV.tif
-        ${INPUTDATA}/RSAT_imagery_HV.tif
-        ${INPUTDATA}/RSAT_imagery_VV.tif
+        otbMuellerToReciprocalCovarianceImageFilter
+        ${BASELINE}/saTvSinclairImageFilter_SinclairToMueller.tif
         ${TEMP}/saTvMuellerToMLCImageFilter.tif
 	)
-# Hermitian eigen analysis class
-ADD_TEST(saTvHermitianEigenAnalysisTest ${SARPOLARIMETRY_TESTS2}
-		otbHermitianEigenAnalysisTest
+
+# Polarimetric Data
+ADD_TEST(saTuPolarimetricDataNew ${SARPOLARIMETRY_TESTS2}
+		otbPolarimetricDataNew
 )
+
+ADD_TEST(saTvPolarimetricDataTest ${SARPOLARIMETRY_TESTS2}
+		otbPolarimetricDataTest
+)
+
 
 # A enrichir
 SET(SARPOLARIMETRY_SRCS1
 otbSARPolarimetryTests1.cxx
+otbPolarimetricSynthesisFunctor.cxx
 otbPolarimetricSynthesisFilterNew.cxx
 otbPolarimetricSynthesisFilter.cxx
 otbHHnHVnVVPolarimetricSynthesisFilter.cxx
@@ -392,35 +376,35 @@ otbMultiChannelsPolarimetricSynthesisFilterNew.cxx
 otbMultiChannelsPolarimetricSynthesisFilter.cxx
 otbVectorMultiChannelsPolarimetricSynthesisFilter.cxx
 otbSinclairToCircularCovarianceMatrixFunctor.cxx
-otbSinclairToMuellerFunctor.cxx
-otbSinclairToReciprocalCovarianceFunctor.cxx
-otbSinclairToCoherencyFunctor.cxx
+otbSinclairToMuellerMatrixFunctor.cxx
+otbSinclairToReciprocalCovarianceMatrixFunctor.cxx
+otbSinclairToCoherencyMatrixFunctor.cxx
 otbSinclairToReciprocalCircularCovarianceMatrixFunctor.cxx
-otbSinclairToCovarianceFunctor.cxx
-otbSinclairToReciprocalCoherencyFunctor.cxx
+otbSinclairToCovarianceMatrixFunctor.cxx
+otbSinclairToReciprocalCoherencyMatrixFunctor.cxx
 otbSinclairImageFilter.cxx
+otbSinclairReciprocalImageFilter.cxx
 )
 
 
 SET(SARPOLARIMETRY_SRCS2
 otbSARPolarimetryTests2.cxx
-otbMLCToCoherencyImageFilterNew.cxx
-otbMLCToCoherencyImageFilter.cxx
-otbMLCToCoherencyDegreeImageFilterNew.cxx
-otbMLCToCoherencyDegreeImageFilter.cxx
-otbMLCToCircularCoherencyDegreeImageFilterNew.cxx
-otbMLCToCircularCoherencyDegreeImageFilter.cxx
+otbReciprocalCovarianceToReciprocalCoherencyImageFilterNew.cxx
+otbReciprocalCovarianceToReciprocalCoherencyImageFilter.cxx
+otbReciprocalCovarianceToCoherencyDegreeImageFilterNew.cxx
+otbReciprocalCovarianceToCoherencyDegreeImageFilter.cxx
+otbReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilterNew.cxx
+otbReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter.cxx
 otbReciprocalHAlphaImageFilterNew.cxx
 otbReciprocalHAlphaImageFilter.cxx
 otbReciprocalCoherencyToMuellerImageFilterNew.cxx
 otbReciprocalCoherencyToMuellerImageFilter.cxx
-otbMuellerToCircularPolarisationImageFilterNew.cxx
-otbMuellerToCircularPolarisationImageFilter.cxx
 otbMuellerToPolarisationDegreeAndPowerImageFilterNew.cxx
 otbMuellerToPolarisationDegreeAndPowerImageFilter.cxx
-otbMuellerToMLCImageFilterNew.cxx
-otbMuellerToMLCImageFilter.cxx
-otbHermitianEigenAnalysisTest.cxx
+otbMuellerToReciprocalCovarianceFunctor.cxx
+otbMuellerToReciprocalCovarianceImageFilterNew.cxx
+otbMuellerToReciprocalCovarianceImageFilter.cxx
+otbPolarimetricData.cxx
 )
 
 

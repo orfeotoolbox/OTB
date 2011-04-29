@@ -80,16 +80,6 @@ public:
   void SetLastChannel(unsigned int id);
   itkGetConstMacro(LastChannel, unsigned int);
 
-  /** MultiChannelExtractROI can produce an image which is a different
-   * resolution than its input image.  As such, MultiChannelExtractROI
-   * needs to provide an implementation for
-   * GenerateOutputInformation() in order to inform the pipeline
-   * execution model.  The original documentation of this method is
-   * below.
-   *
-   * \sa ProcessObject::GenerateOutputInformaton()  */
-  virtual void GenerateOutputInformation();
-
   /** Typedef Liste des canaux */
   typedef typename std::vector<unsigned int> ChannelsType;
 
@@ -122,6 +112,16 @@ protected:
   MultiChannelExtractROI();
   virtual ~MultiChannelExtractROI() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
+
+  /** MultiChannelExtractROI can produce an image which is a different
+   * resolution than its input image.  As such, MultiChannelExtractROI
+   * needs to provide an implementation for
+   * GenerateOutputInformation() in order to inform the pipeline
+   * execution model.  The original documentation of this method is
+   * below.
+   *
+   * \sa ProcessObject::GenerateOutputInformaton()  */
+  virtual void GenerateOutputInformation();
 
   /** Reinitialize channels vector for multiple Update.*/
   void ChannelsReInitialization();

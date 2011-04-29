@@ -92,7 +92,7 @@ public:
    * SCALAR pixel type or elements of a compound pixel.
    */
   typedef  enum {UNKNOWNCOMPONENTTYPE,UCHAR,CHAR,USHORT,SHORT,UINT,INT,
-                 ULONG,LONG, FLOAT,DOUBLE, CFLOAT, CDOUBLE} IOComponentType;
+                 ULONG,LONG, FLOAT,DOUBLE, CSHORT, CINT, CFLOAT, CDOUBLE} IOComponentType;
 
   /** Set/Get the number of independent variables (dimensions) in the
    * image being read or written. Note this is not necessarily what

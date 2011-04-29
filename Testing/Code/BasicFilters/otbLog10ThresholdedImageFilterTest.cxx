@@ -16,20 +16,19 @@
 
 =========================================================================*/
 
+#include <iostream>
+#include <fstream>
+
 #include "otbImage.h"
 #include "itkImageRegionIterator.h"
 #include "otbLog10ThresholdedImageFilter.h"
-#include <math.h>
-#include "base/ossimCommon.h"
-#include <iostream>
-#include <fstream>
 
 int otbLog10ThresholdedImageFilterTest(int argc, char* argv[])
 {
   if (argc != 2)
     {
     std::cout << "Invalid arguments -> need only output filename" << std::endl;
-    return 1;
+    return EXIT_FAILURE;
     }
 
   // TYPEDEFS
@@ -70,7 +69,7 @@ int otbLog10ThresholdedImageFilterTest(int argc, char* argv[])
     {
     val = 0.000001 * (double) pow((double) 10.0, (int) (it.GetIndex()[0] + it.GetIndex()[1]));
     if (it.GetIndex()[0] + it.GetIndex()[1] > 6)
-      it.Set(ossim::nan());
+      it.Set(itk::NumericTraits<PixelType>::quiet_NaN());
     else it.Set(static_cast<PixelType> (val));
 
     ++it;
@@ -96,4 +95,3 @@ int otbLog10ThresholdedImageFilterTest(int argc, char* argv[])
   file.close();
   return EXIT_SUCCESS;
 }
-

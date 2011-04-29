@@ -307,8 +307,8 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
     /*
     // moments computation
     // ****************************************************************
-    // that commented code is the basic implementation. The next peace of code
-    // give the same result in a much efficient way, by using expended formulae
+    // that commented code is the basic implementation. The next piece of code
+    // give the same result in a much efficient way, by using expanded formulae
     // allowed by the binary case instead of loops.
     // ****************************************************************
          long endIdx0 = idx[0] + length;
@@ -588,14 +588,14 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
     lo->SetAttribute("SHAPE::FeretDiameter", feretDiameter);
     }
 
-  // be sure tha the calculator has the perimeter estimation for that label.
+  // be sure that the calculator has the perimeter estimation for that label.
   // The calculator may not have the label if the object is only on a border.
-  // It will occurre for sure when processing a 2D image with a 3D filter.
+  // It will occur for sure when processing a 2D image with a 3D filter.
   if (m_ComputePerimeter && m_PerimeterCalculator->HasLabel(label))
     {
     double perimeter = m_PerimeterCalculator->GetPerimeter(label);
     lo->SetAttribute("SHAPE::Perimeter", perimeter);
-    lo->SetAttribute("SHAPE::Roudness", equivalentPerimeter / perimeter);
+    lo->SetAttribute("SHAPE::Roundness", equivalentPerimeter / perimeter);
     }
 
   // Complete feature set
@@ -675,7 +675,7 @@ double ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
     }
   else
     {
-    return vcl_sqrt(M_PI) * doubleFactorial(n) / vcl_pow(2, (n + 1) / 2.0);
+    return otb::CONST_SQRTPI * doubleFactorial(n) / vcl_pow(2, (n + 1) / 2.0);
     }
 }
 
@@ -684,7 +684,7 @@ template <class TLabelObject, class TLabelImage>
 double ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
 ::hyperSphereVolume(double radius)
 {
-  return vcl_pow(M_PI, LabelObjectType::ImageDimension /
+  return vcl_pow(otb::CONST_PI, LabelObjectType::ImageDimension /
                  2.0) * vcl_pow(radius, LabelObjectType::ImageDimension) / gammaN2p1(LabelObjectType::ImageDimension);
 }
 
@@ -702,7 +702,7 @@ double ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
 ::hyperSphereRadiusFromVolume(double volume)
 {
   return vcl_pow(volume * gammaN2p1(LabelObjectType::ImageDimension) /
-                 vcl_pow(M_PI, LabelObjectType::ImageDimension / 2.0), 1.0 / LabelObjectType::ImageDimension);
+                 vcl_pow(otb::CONST_PI, LabelObjectType::ImageDimension / 2.0), 1.0 / LabelObjectType::ImageDimension);
 }
 
 } // End namespace Functor

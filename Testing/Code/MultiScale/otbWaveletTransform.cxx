@@ -39,6 +39,12 @@ int otbWaveletTransform_generic(int argc, char * argv[])
   const unsigned int level = atoi(argv[3]);
   const unsigned int decimFactor = atoi(argv[4]);
 
+  if (argc == 7)
+  {
+       unsigned int  NbOfThreads = atoi(argv[6]);
+       itk::MultiThreader::SetGlobalDefaultNumberOfThreads(NbOfThreads);
+  }
+
   const int Dimension = 2;
   typedef double                           PixelType;
   typedef otb::Image<PixelType, Dimension> ImageType;
@@ -47,7 +53,6 @@ int otbWaveletTransform_generic(int argc, char * argv[])
   /* Reading */
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(inputFileName);
-
   /* Wavelet choice */
   const otb::Wavelet::Wavelet wvltID = TWavelet;
 
@@ -84,10 +89,10 @@ int otbWaveletTransform_generic(int argc, char * argv[])
 
 int otbWaveletTransform(int argc, char * argv[])
 {
-  if (argc != 6)
+  if ((argc > 7) || (argc<6))
     {
     std::cerr << "Usage: " << argv[0]
-              << "<InputImage> <OutputImage> <level> <decimFactor> <waveletType>" << std::endl;
+              << "<InputImage> <OutputImage> <level> <decimFactor> <waveletType> (optional)<NumberOfThreads>" << std::endl;
     return EXIT_FAILURE;
     }
   int waveletType = atoi(argv[5]);

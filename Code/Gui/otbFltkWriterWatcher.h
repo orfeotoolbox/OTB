@@ -55,54 +55,25 @@ public:
   /** Destructor. */
   virtual ~FltkWriterWatcher();
 
-  /** Callback method to show the EndEvent */
-  virtual void EndWriter()
-  {
-    m_Window->hide();
-  }
-
-  virtual void EndFilter()
-  {}
-
 protected:
 
-  /** Callback method to show the ProgressEvent */
-  virtual void ShowFilterProgress()
-  {
-    if (m_SourceProcess)
-      {
-      m_FilterProgress->value(m_SourceProcess->GetProgress());
-      Fl::check();
-      }
-  }
+  /** Callback method to show the ProgressEvent from the writer */
+  virtual void ShowWriterProgress();
 
-  /** Callback method to show the ProgressEvent */
-  virtual void ShowWriterProgress()
-  {
-    if (m_Process)
-      {
-      m_WriterProgress->value(m_Process->GetProgress());
-      Fl::check();
-      }
-  }
+  /** Callback method to show the StartEvent from the writer*/
+  virtual void StartWriter();
 
-  /** Callback method to show the StartEvent */
-  virtual void StartWriter()
-  {
-    m_Window->show();
-    m_FilterProgress->show();
-    m_WriterProgress->show();
-    Fl::check();
-  }
+  /** Callback method to show the EndEvent from the writer*/
+  virtual void EndWriter();
 
-  /** Callback method to show the StartEvent */
-  virtual void StartFilter()
-  {
-    m_Window->show();
-    m_FilterProgress->show();
-    m_WriterProgress->show();
-    Fl::check();
-  }
+  /** Callback method to show the ProgressEvent from the filter */
+  virtual void ShowFilterProgress();
+
+  /** Callback method to show the StartEvent from the filter*/
+  virtual void StartFilter();
+
+  /** Callback method to show the EndEvent from the filter*/
+  virtual void EndFilter();
 
   void BuildGUI(int x, int y, int w, int h, const char * comment);
 
@@ -111,6 +82,9 @@ private:
   Fl_Window *   m_Window;
   Fl_Progress * m_WriterProgress;
   Fl_Progress * m_FilterProgress;
+
+  double m_CurrentFilterProgress;
+  double m_CurrentWriterProgress;
 };
 
 } // end namespace otb

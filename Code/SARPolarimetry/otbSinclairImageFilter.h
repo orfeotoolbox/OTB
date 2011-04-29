@@ -19,35 +19,43 @@
 #define __otbSinclairImageFilter_h
 
 #include "otbQuaternaryFunctorImageFilter.h"
-#include "otbSinclairToReciprocalCovarianceFunctor.h"
-#include "itkFixedArray.h"
+#include "otbSinclairToCovarianceMatrixFunctor.h"
 #include <complex>
 
 namespace otb
 {
 
 /** \class SinclairImageFilter
- * \brief Convert the Sinclair matrix
+ * \brief Computes the Covariance matrix for the sinclair one.
  *
  * This class is parameterized over the type of the input images and
- * the type of the output image.  It is also parameterized by the
+ * the type of the output image. It is also parameterized by the
  * operation to be applied, using a Functor style.
+ *
+ * The output image has 10 channels : the diagonal and the upper element of the matrix.
+ * Element are stored from left to right, line by line.
+ *
+ * The class is templated by the 4 input image (HH, HV, VH and VV) and the used functor.
+ * Available functors are :
+ * \begin{itemize}
+ * \item SinclairToCircularCovarianceMatrixFunctor (default one)
+ * \item SinclairToCoherencyMatrixFunctor
+ * \item SinclairToCovarianceMatrixFunctor
+ * \item SinclairToMuelleMatrixrFunctor
+ * \end{itemize}
  *
  *  \ingroup SARPolarimetry
  *
  *  \sa SinclairImageFilter
  *  \sa SinclairToCircularCovarianceMatrixFunctor
- *  \sa SinclairToCoherencyFunctor
- *  \sa SinclairToCovarianceFunctor
- *  \sa SinclairToMuellerFunctor
- *  \sa SinclairToReciprocalCircularCovarianceMatrixFunctor
- *  \sa SinclairToReciprocalCoherencyFunctor
- *  \sa SinclairToReciprocalCovarianceFunctor
+ *  \sa SinclairToCoherencyMatrixFunctor
+ *  \sa SinclairToCovarianceMatrixFunctor
+ *  \sa SinclairToMuelleMatrixrFunctor
  */
 
 template <class TInputImageHH, class TInputImageHV,
           class TInputImageVH, class TInputImageVV, class TOutputImage,
-    class TFunction = Functor::SinclairToReciprocalCovarianceFunctor<
+    class TFunction = Functor::SinclairToCovarianceMatrixFunctor<
         typename TInputImageHH::PixelType,
         typename TInputImageHV::PixelType,
         typename TInputImageVH::PixelType,
@@ -109,6 +117,7 @@ private:
   void operator =(const Self&); //purposely not implemented
 
 };
+
 
 } // end namespace otb
 

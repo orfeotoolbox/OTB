@@ -397,6 +397,7 @@ TransformPhysicalRegionToIndexRegion(const RemoteSensingRegionType& region, cons
   return outputRegion;
 }
 
+
 } // end namespace otb
 
 #endif

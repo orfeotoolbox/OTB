@@ -20,12 +20,15 @@
 #pragma warning ( disable : 4786 )
 #endif
 
+#include <iomanip>
 #include <iostream>
 
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbForwardSensorModel.h"
 #include "otbInverseSensorModel.h"
+
+#include "base/ossimKeywordlist.h"
 
 int otbSensorModel(int argc, char* argv[])
 {
@@ -82,6 +85,11 @@ int otbSensorModel(int argc, char* argv[])
   typedef otb::ForwardSensorModel<double> ForwardSensorModelType;
   ForwardSensorModelType::Pointer forwardSensorModel = ForwardSensorModelType::New();
   forwardSensorModel->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
+  if( forwardSensorModel->IsValidSensorModel() == false )
+   {
+     std::cout<<"Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!"<<std::endl;
+     return EXIT_FAILURE;
+   }
   forwardSensorModel->SetAverageElevation(16.19688987731934);
 
   itk::Point<double, 2> imagePoint;
@@ -97,6 +105,11 @@ int otbSensorModel(int argc, char* argv[])
   typedef otb::InverseSensorModel<double> InverseSensorModelType;
   InverseSensorModelType::Pointer inverseSensorModel = InverseSensorModelType::New();
   inverseSensorModel->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
+  if( inverseSensorModel->IsValidSensorModel() == false )
+   {
+     std::cout<<"Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!"<<std::endl;
+     return EXIT_FAILURE;
+   }
   inverseSensorModel->SetAverageElevation(16.19688987731934);
 
   itk::Point<double, 2> reversedImagePoint;

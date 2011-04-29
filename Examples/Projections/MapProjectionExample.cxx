@@ -46,6 +46,9 @@
 //
 // Software Guide : EndLatex
 
+#include <fstream>
+#include <iomanip>
+
 // Software Guide : BeginCodeSnippet
 #include "otbMapProjections.h"
 #include "otbGenericMapProjection.h"
@@ -173,7 +176,7 @@ int main(int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::GenericMapProjection<otb::Transform::FORWARD> GenericMapProjection;
+  typedef otb::GenericMapProjection<otb::TransformDirection::FORWARD> GenericMapProjection;
   GenericMapProjection::Pointer genericMapProjection =
     GenericMapProjection::New();
   genericMapProjection->SetWkt(projectionRefWkt);
@@ -205,7 +208,7 @@ int main(int argc, char* argv[])
   //   Forward Lambert93 projection:
   //      [1.4835345, 43.55968261] -> [577437.889798954, 6274578.791561]
   //
-  //   Forward gerenic projection:
+  //   Forward generic projection:
   //      [1.4835345, 43.55968261] -> [377522.448427013, 4824086.71129131]
   //   \end{verbatim}
   //

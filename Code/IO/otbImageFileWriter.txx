@@ -24,11 +24,6 @@
 #include "itkObjectFactoryBase.h"
 #include "vnl/vnl_vector.h"
 
-#include "imaging/ossimImageHandlerRegistry.h"
-#include "imaging/ossimImageHandler.h"
-#include "init/ossimInit.h"
-#include "base/ossimKeywordlist.h"
-
 #include "itkMetaDataObject.h"
 #include "otbImageKeywordlist.h"
 #include "otbMetaDataKey.h"
@@ -87,23 +82,14 @@ ImageFileWriter<TInputImage>
 
   if (m_WriteGeomFile)
     {
-    // Write the image keyword list if any
-    ossimKeywordlist geom_kwl;
     ImageKeywordlist otb_kwl;
-
     itk::MetaDataDictionary dict = this->GetInput()->GetMetaDataDictionary();
     itk::ExposeMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
-    otb_kwl.convertToOSSIMKeywordlist(geom_kwl);
+    WriteGeometry(otb_kwl, this->GetFileName());
 
-    if (geom_kwl.getSize() > 0)
-      {
-      otbMsgDevMacro(<< "Exporting keywordlist ...");
-      ossimFilename geomFileName(this->GetFileName());
-      geomFileName.setExtension(".geom");
-      geom_kwl.write(geomFileName.chars());
-      }
     }
 }
+
 
 /**
  *

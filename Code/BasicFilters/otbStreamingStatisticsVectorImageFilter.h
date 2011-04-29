@@ -33,8 +33,8 @@
 namespace otb
 {
 
-/** \class PersistentStatisticsVectorImageFilter
- * \brief Compute min. max, covariance of a large image using streaming
+/** \class PersistentStreamingStatisticsVectorImageFilter
+ * \brief Compute covariance & correlation of a large image using streaming
  *
  *  This filter persists its temporary data. It means that if you Update it n times on n different
  * requested regions, the output statistics will be the statitics of the whole set of n regions.
@@ -49,13 +49,13 @@ namespace otb
  * \ingroup MathematicalStatisticsImageFilters
  *
  */
-template<class TInputImage>
-class ITK_EXPORT PersistentStatisticsVectorImageFilter :
+template<class TInputImage, class TPrecision >
+class ITK_EXPORT PersistentStreamingStatisticsVectorImageFilter :
   public PersistentImageFilter<TInputImage, TInputImage>
 {
 public:
   /** Standard Self typedef */
-  typedef PersistentStatisticsVectorImageFilter           Self;
+  typedef PersistentStreamingStatisticsVectorImageFilter           Self;
   typedef PersistentImageFilter<TInputImage, TInputImage> Superclass;
   typedef itk::SmartPointer<Self>                         Pointer;
   typedef itk::SmartPointer<const Self>                   ConstPointer;
@@ -64,56 +64,53 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(PersistentStatisticsVectorImageFilter, PersistentImageFilter);
+  itkTypeMacro(PersistentStreamingStatisticsVectorImageFilter, PersistentImageFilter);
 
   /** Image related typedefs. */
-  typedef TInputImage                             ImageType;
-  typedef typename TInputImage::Pointer           InputImagePointer;
-  typedef typename TInputImage::RegionType        RegionType;
-  typedef typename TInputImage::SizeType          SizeType;
-  typedef typename TInputImage::IndexType         IndexType;
-  typedef typename TInputImage::PixelType         PixelType;
-  typedef typename TInputImage::InternalPixelType InternalPixelType;
+  typedef TInputImage                           ImageType;
+  typedef typename ImageType::Pointer           InputImagePointer;
+  typedef typename ImageType::RegionType        RegionType;
+  typedef typename ImageType::SizeType          SizeType;
+  typedef typename ImageType::IndexType         IndexType;
+  typedef typename ImageType::PixelType         PixelType;
+  typedef typename ImageType::InternalPixelType InternalPixelType;
 
-  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
+  typedef TPrecision                            PrecisionType;
+  typedef PrecisionType                         RealType;
 
   /** Image related typedefs. */
   itkStaticConstMacro(ImageDimension, unsigned int, TInputImage::ImageDimension);
 
-  /** Type to use for computations. */
-  typedef typename itk::NumericTraits<InternalPixelType>::RealType RealType;
-  typedef itk::VariableLengthVector<RealType>                      RealPixelType;
-
   /** Smart Pointer type to a DataObject. */
   typedef typename itk::DataObject::Pointer DataObjectPointer;
 
-  /** Type of DataObjects used for scalar outputs */
-  typedef typename itk::VariableSizeMatrix<RealType>    MatrixType;
-  typedef typename std::vector<MatrixType>              ArrayMatrixType;
-  typedef typename itk::Array<long>                     ArrayLongPixelType;
-  typedef typename std::vector<RealPixelType>           ArrayRealPixelType;
-  typedef typename std::vector<PixelType>               ArrayPixelType;
-  typedef itk::SimpleDataObjectDecorator<RealPixelType> RealPixelObjectType;
+  /** Type to use for computations. */
+  typedef itk::VariableSizeMatrix<PrecisionType>        MatrixType;
+  typedef itk::VariableLengthVector<PrecisionType>      RealPixelType;
+
+  /** Type of DataObjects used for outputs */
+  typedef itk::SimpleDataObjectDecorator<IndexType>     IndexObjectType;
   typedef itk::SimpleDataObjectDecorator<PixelType>     PixelObjectType;
+  typedef itk::SimpleDataObjectDecorator<RealPixelType> RealPixelObjectType;
   typedef itk::SimpleDataObjectDecorator<MatrixType>    MatrixObjectType;
 
-  /** Return the computed Minimum. */
+  /** Return the computed Min */
   PixelType GetMinimum() const
   {
-    return this->GetMinimumOutput()->Get();
+    return this->GetMinOutput()->Get();
   }
   PixelObjectType* GetMinimumOutput();
   const PixelObjectType* GetMinimumOutput() const;
 
-  /** Return the computed Maximum. */
+  /** Return the computed Max index */
   PixelType GetMaximum() const
   {
-    return this->GetMaximumOutput()->Get();
+    return this->GetMaxOutput()->Get();
   }
   PixelObjectType* GetMaximumOutput();
   const PixelObjectType* GetMaximumOutput() const;
 
-  /** Return the computed Mean. */
+ /** Return the computed Mean. */
   RealPixelType GetMean() const
   {
     return this->GetMeanOutput()->Get();
@@ -121,13 +118,21 @@ public:
   RealPixelObjectType* GetMeanOutput();
   const RealPixelObjectType* GetMeanOutput() const;
 
-  /** Return the compute Sum. */
+  /** Return the computed Sum. */
   RealPixelType GetSum() const
   {
     return this->GetSumOutput()->Get();
   }
   RealPixelObjectType* GetSumOutput();
   const RealPixelObjectType* GetSumOutput() const;
+
+  /** Return the computed Covariance. */
+  MatrixType GetCorrelation() const
+  {
+    return this->GetCorrelation()->Get();
+  }
+  MatrixObjectType* GetCorrelationOutput();
+  const MatrixObjectType* GetCorrelationOutput() const;
 
   /** Return the computed Covariance. */
   MatrixType GetCovariance() const
@@ -142,45 +147,70 @@ public:
    */
   virtual DataObjectPointer MakeOutput(unsigned int idx);
 
+  virtual void Reset(void);
+
+  virtual void Synthetize(void);
+
+  itkSetMacro(EnableMinMax, bool);
+  itkGetMacro(EnableMinMax, bool);
+
+  itkSetMacro(EnableFirstOrderStats, bool);
+  itkGetMacro(EnableFirstOrderStats, bool);
+
+  itkSetMacro(EnableSecondOrderStats, bool);
+  itkGetMacro(EnableSecondOrderStats, bool);
+
+  itkSetMacro(UseUnbiasedEstimator, bool);
+  itkGetMacro(UseUnbiasedEstimator, bool);
+
+protected:
+  PersistentStreamingStatisticsVectorImageFilter();
+
+  virtual ~PersistentStreamingStatisticsVectorImageFilter() {}
+
   /** Pass the input through unmodified. Do this by Grafting in the
    *  AllocateOutputs method.
    */
   virtual void AllocateOutputs();
-  virtual void GenerateOutputInformation();
-  virtual void Synthetize(void);
-  virtual void Reset(void);
 
-protected:
-  PersistentStatisticsVectorImageFilter();
-  virtual ~PersistentStatisticsVectorImageFilter() {}
+  virtual void GenerateOutputInformation();
+
+
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+
   /** Multi-thread version GenerateData. */
   void  ThreadedGenerateData(const RegionType& outputRegionForThread, int threadId);
 
 private:
-  PersistentStatisticsVectorImageFilter(const Self &); //purposely not implemented
+  PersistentStreamingStatisticsVectorImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  ArrayRealPixelType m_ThreadSum;
-  ArrayLongPixelType m_Count;
-  ArrayPixelType     m_ThreadMin;
-  ArrayPixelType     m_ThreadMax;
-  ArrayMatrixType    m_XX;
+  bool m_EnableMinMax;
+  bool m_EnableFirstOrderStats;
+  bool m_EnableSecondOrderStats;
 
-}; // end of class PersistentStatisticsVectorImageFilter
+  /* use an unbiased estimator to compute the covariance */
+  bool m_UseUnbiasedEstimator;
+
+  std::vector<PixelType>     m_ThreadMin;
+  std::vector<PixelType>     m_ThreadMax;
+  std::vector<RealPixelType> m_ThreadFirstOrderAccumulators;
+  std::vector<MatrixType>    m_ThreadSecondOrderAccumulators;
+
+}; // end of class PersistentStreamingStatisticsVectorImageFilter
 
 /**===========================================================================*/
 
 /** \class StreamingStatisticsVectorImageFilter
  * \brief This class streams the whole input image through the PersistentStatisticsImageFilter.
  *
- * This way, it allows to compute the first order global statistics of this image. It calls the
- * Reset() method of the PersistentStatisticsImageFilter before streaming the image and the
- * Synthetize() method of the PersistentStatisticsImageFilter after having streamed the image
+ * This way, it allows to compute the first and second order global statistics of this image. It calls the
+ * Reset() method of the PersistentStreamingStatisticsVectorImageFilter before streaming the image and the
+ * Synthetize() method of the PersistentStreamingStatisticsVectorImageFilter after having streamed the image
  * to compute the statistics. The accessor on the results are wrapping the accessors of the
- * internal PersistentStatisticsImageFilter.
+ * internal PersistentStreamingStatisticsVectorImageFilter.
  *
- * \sa PersistentStatisticsVectorImageFilter
+ * \sa PersistentStreamingStatisticsVectorImageFilter
  * \sa PersistentImageFilter
  * \sa PersistentFilterStreamingDecorator
  * \sa StreamingImageVirtualWriter
@@ -189,15 +219,15 @@ private:
  * \ingroup MathematicalStatisticsImageFilters
  */
 
-template<class TInputImage>
+template<class TInputImage, class TPrecision = typename itk::NumericTraits<typename TInputImage::InternalPixelType>::RealType>
 class ITK_EXPORT StreamingStatisticsVectorImageFilter :
-  public PersistentFilterStreamingDecorator<PersistentStatisticsVectorImageFilter<TInputImage> >
+  public PersistentFilterStreamingDecorator<PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision> >
 {
 public:
   /** Standard Self typedef */
   typedef StreamingStatisticsVectorImageFilter Self;
   typedef PersistentFilterStreamingDecorator
-  <PersistentStatisticsVectorImageFilter<TInputImage> > Superclass;
+  <PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision> > Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -209,18 +239,13 @@ public:
 
   typedef TInputImage                                 InputImageType;
   typedef typename Superclass::FilterType             StatFilterType;
-  typedef typename StatFilterType::PixelType          PixelType;
-  typedef typename StatFilterType::RealType           RealType;
-  typedef typename StatFilterType::RealPixelType      RealPixelType;
-  typedef typename StatFilterType::MatrixType         MatrixType;
-  typedef typename StatFilterType::ArrayMatrixType    ArrayMatrixType;
-  typedef typename StatFilterType::ArrayLongPixelType ArrayLongPixelType;
-  typedef typename StatFilterType::ArrayRealPixelType ArrayRealPixelType;
-  typedef typename StatFilterType::ArrayPixelType     ArrayPixelType;
 
-  /** Type of DataObjects used for scalar outputs */
+  /** Type of DataObjects used for outputs */
+  typedef typename StatFilterType::PixelType           PixelType;
+  typedef typename StatFilterType::RealType            RealType;
+  typedef typename StatFilterType::RealPixelType       RealPixelType;
   typedef typename StatFilterType::RealPixelObjectType RealPixelObjectType;
-  typedef typename StatFilterType::PixelObjectType     PixelObjectType;
+  typedef typename StatFilterType::MatrixType          MatrixType;
   typedef typename StatFilterType::MatrixObjectType    MatrixObjectType;
 
   void SetInput(InputImageType * input)
@@ -232,30 +257,30 @@ public:
     return this->GetFilter()->GetInput();
   }
 
-  /** Return the computed Minimum. */
-  PixelType GetMinimum() const
+  /** Return the computed Mean. */
+  RealPixelType GetMinimum() const
   {
     return this->GetFilter()->GetMinimumOutput()->Get();
   }
-  PixelObjectType* GetMinimumOutput()
+  RealPixelObjectType* GetMinimumOutput()
   {
     return this->GetFilter()->GetMinimumOutput();
   }
-  const PixelObjectType* GetMinimumOutput() const
+  const RealPixelObjectType* GetMinimumOutput() const
   {
     return this->GetFilter()->GetMinimumOutput();
   }
 
-  /** Return the computed Maximum. */
-  PixelType GetMaximum() const
+  /** Return the computed Mean. */
+  RealPixelType GetMaximum() const
   {
     return this->GetFilter()->GetMaximumOutput()->Get();
   }
-  PixelObjectType* GetMaximumOutput()
+  RealPixelObjectType* GetMaximumOutput()
   {
     return this->GetFilter()->GetMaximumOutput();
   }
-  const PixelObjectType* GetMaximumOutput() const
+  const RealPixelObjectType* GetMaximumOutput() const
   {
     return this->GetFilter()->GetMaximumOutput();
   }
@@ -274,7 +299,7 @@ public:
     return this->GetFilter()->GetMeanOutput();
   }
 
-  /** Return the compute Sum. */
+  /** Return the computed Mean. */
   RealPixelType GetSum() const
   {
     return this->GetFilter()->GetSumOutput()->Get();
@@ -302,15 +327,43 @@ public:
     return this->GetFilter()->GetCovarianceOutput();
   }
 
+  /** Return the computed Covariance. */
+  MatrixType GetCorrelation() const
+  {
+    return this->GetFilter()->GetCorrelationOutput()->Get();
+  }
+  MatrixObjectType* GetCorrelationOutput()
+  {
+    return this->GetFilter()->GetCorrelationOutput();
+  }
+  const MatrixObjectType* GetCorrelationOutput() const
+  {
+    return this->GetFilter()->GetCorrelationOutput();
+  }
+
+  otbSetObjectMemberMacro(Filter, EnableMinMax, bool);
+  otbGetObjectMemberMacro(Filter, EnableMinMax, bool);
+
+  otbSetObjectMemberMacro(Filter, EnableFirstOrderStats, bool);
+  otbGetObjectMemberMacro(Filter, EnableFirstOrderStats, bool);
+
+  otbSetObjectMemberMacro(Filter, EnableSecondOrderStats, bool);
+  otbGetObjectMemberMacro(Filter, EnableSecondOrderStats, bool);
+
+  otbSetObjectMemberMacro(Filter, UseUnbiasedEstimator, bool);
+  otbGetObjectMemberMacro(Filter, UseUnbiasedEstimator, bool);
+
 protected:
   /** Constructor */
-  StreamingStatisticsVectorImageFilter() {};
+  StreamingStatisticsVectorImageFilter() {}
+
   /** Destructor */
   virtual ~StreamingStatisticsVectorImageFilter() {}
 
 private:
   StreamingStatisticsVectorImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
+
 };
 
 } // end namespace otb

@@ -49,6 +49,13 @@ DEMHandler
 
 void
 DEMHandler
+::OpenDEMDirectory(const std::string& DEMDirectory)
+{
+  OpenDEMDirectory(DEMDirectory.c_str());
+}
+
+void
+DEMHandler
 ::OpenGeoidFile(const char* geoidFile)
 {
   if ((ossimGeoidManager::instance()->findGeoidByShortName("geoid1996")) == 0)
@@ -70,15 +77,42 @@ DEMHandler
     }
 }
 
+void
+DEMHandler
+::OpenGeoidFile(const std::string& geoidFile)
+{
+  OpenGeoidFile(geoidFile.c_str());
+}
+
+double
+DEMHandler
+::GetHeightAboveMSL(double lon, double lat) const
+{
+  double   height;
+  ossimGpt ossimWorldPoint;
+  ossimWorldPoint.lon = lon;
+  ossimWorldPoint.lat = lat;
+  height = m_ElevManager->getHeightAboveMSL(ossimWorldPoint);
+  return height;
+}
+
 double
 DEMHandler
 ::GetHeightAboveMSL(const PointType& geoPoint) const
 {
+  return GetHeightAboveMSL(geoPoint[0], geoPoint[1]);
+}
+
+double
+DEMHandler
+::GetHeightAboveEllipsoid(double lon, double lat) const
+{
   double   height;
   ossimGpt ossimWorldPoint;
-  ossimWorldPoint.lon = geoPoint[0];
-  ossimWorldPoint.lat = geoPoint[1];
-  height = m_ElevManager->getHeightAboveMSL(ossimWorldPoint);
+  ossimWorldPoint.lon = lon;
+  ossimWorldPoint.lat = lat;
+  otbMsgDevMacro(<< "Geoid offset: " << ossimGeoidManager::instance()->offsetFromEllipsoid(ossimWorldPoint));
+  height = m_ElevManager->getHeightAboveEllipsoid(ossimWorldPoint);
   return height;
 }
 
@@ -86,13 +120,7 @@ double
 DEMHandler
 ::GetHeightAboveEllipsoid(const PointType& geoPoint) const
 {
-  double   height;
-  ossimGpt ossimWorldPoint;
-  ossimWorldPoint.lon = geoPoint[0];
-  ossimWorldPoint.lat = geoPoint[1];
-  otbMsgDevMacro(<< "Geoid offset: " << ossimGeoidManager::instance()->offsetFromEllipsoid(ossimWorldPoint));
-  height = m_ElevManager->getHeightAboveEllipsoid(ossimWorldPoint);
-  return height;
+  return GetHeightAboveEllipsoid(geoPoint[0], geoPoint[1]);
 }
 
 void

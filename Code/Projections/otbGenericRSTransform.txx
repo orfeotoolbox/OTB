@@ -21,9 +21,10 @@
 #include "otbGenericRSTransform.h"
 #include "otbMacro.h"
 #include "otbMetaDataKey.h"
-// #include "projection/ossimMapProjectionFactory.h"
-// #include "projection/ossimMapProjection.h"
 #include "itkMetaDataObject.h"
+#include "itkExceptionObject.h"
+
+#include "ogr_spatialref.h"
 
 //TODO OTB wrapper around the WKT/ossimProjection/isGeographic, etc.
 
@@ -113,11 +114,11 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
     // First, try to make a geo transform
   if (!m_InputProjectionRef.empty()) //map projection
     {
-    typedef otb::GenericMapProjection<Transform::INVERSE, ScalarType, InputSpaceDimension, InputSpaceDimension>
+    typedef otb::GenericMapProjection<TransformDirection::INVERSE, ScalarType, InputSpaceDimension, InputSpaceDimension>
         InverseMapProjectionType;
     typename InverseMapProjectionType::Pointer mapTransform = InverseMapProjectionType::New();
     mapTransform->SetWkt(m_InputProjectionRef);
-    if (mapTransform->GetMapProjection() != NULL)
+    if (mapTransform->IsProjectionDefined())
       {
       m_InputTransform = mapTransform.GetPointer();
       inputTransformIsMap = true;
@@ -131,18 +132,9 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
     typedef otb::ForwardSensorModel<double, InputSpaceDimension, InputSpaceDimension> ForwardSensorModelType;
     typename ForwardSensorModelType::Pointer sensorModel = ForwardSensorModelType::New();
 
-    bool imageGeometrySet = false;
-    try
-      {
-      sensorModel->SetImageGeometry(m_InputKeywordList);
-      imageGeometrySet = true;
-      }
-    catch( itk::ExceptionObject& e)
-      {
-      otbMsgDevMacro(<< "Unable to instanciate a sensor model with the provided keyword list. Exception caught : " << e)
-      }
+    sensorModel->SetImageGeometry(m_InputKeywordList);
 
-    if (imageGeometrySet)
+    if (sensorModel->IsValidSensorModel())
       {
       if (!m_DEMDirectory.empty())
         {
@@ -191,11 +183,11 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
   //*****************************
   if (!m_OutputProjectionRef.empty()) //map projection
     {
-    typedef otb::GenericMapProjection<Transform::FORWARD, ScalarType, InputSpaceDimension,
+    typedef otb::GenericMapProjection<TransformDirection::FORWARD, ScalarType, InputSpaceDimension,
     OutputSpaceDimension> ForwardMapProjectionType;
     typename ForwardMapProjectionType::Pointer mapTransform = ForwardMapProjectionType::New();
     mapTransform->SetWkt(m_OutputProjectionRef);
-    if (mapTransform->GetMapProjection() != NULL)
+    if (mapTransform->IsProjectionDefined())
       {
       m_OutputTransform = mapTransform.GetPointer();
       outputTransformIsMap = true;
@@ -209,19 +201,9 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
     typedef otb::InverseSensorModel<double, InputSpaceDimension, OutputSpaceDimension> InverseSensorModelType;
     typename InverseSensorModelType::Pointer sensorModel = InverseSensorModelType::New();
     
-    bool imageGeometrySet = false;
-    try
-      {
-      sensorModel->SetImageGeometry(m_OutputKeywordList);
-      imageGeometrySet = true;
-      }
-    catch( itk::ExceptionObject& e)
-      {
-      otbMsgDevMacro(<< "Unable to instanciate a sensor model with the provided output keyword list. Exception caught : " << e)
-      }
-
+    sensorModel->SetImageGeometry(m_OutputKeywordList);
     
-    if (imageGeometrySet)
+    if (sensorModel->IsValidSensorModel())
       {
       if (!m_DEMDirectory.empty())
         {

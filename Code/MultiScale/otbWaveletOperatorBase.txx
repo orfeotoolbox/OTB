@@ -57,12 +57,11 @@ WaveletOperatorBase<TMotherWaveletOperator, TPixel, VDimension, TAllocator>
   unsigned long radius = static_cast<unsigned long>(coeff.size()) >> 1;
   unsigned long upSampleRadius = radius * m_UpSampleFactor;
 
-  CoefficientVector upSampledCoeff;
-  upSampledCoeff.resize(2 * upSampleRadius + 1);
-  upSampledCoeff.assign(2 * upSampleRadius, 0.);
+  CoefficientVector upSampledCoeff ( 2 * upSampleRadius + 1 );
+  upSampledCoeff.assign(2 * upSampleRadius + 1, 0.);
   upSampledCoeff[upSampleRadius] = coeff[radius];
 
-  for (unsigned int i = 0; i <= radius; ++i)
+  for (unsigned int i = 1; i <= radius; ++i)
     {
     upSampledCoeff[upSampleRadius + m_UpSampleFactor * i] = coeff[radius + i];
     upSampledCoeff[upSampleRadius - m_UpSampleFactor * i] = coeff[radius - i];

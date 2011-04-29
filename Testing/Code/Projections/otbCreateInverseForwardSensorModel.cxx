@@ -23,8 +23,8 @@
  *
  * PURPOSE:
  *
- * Application pour projeter une rï¿½gion d'une image en coordonnï¿½es gï¿½ographiques
- * en utilisant un Interpolator+regionextractor et un Iterator.
+ * Application to rproject an image region into gepgraphical coordinates
+ * usinf un Interpolator+regionextractor and an Iterator.
  *
  */
 
@@ -41,12 +41,8 @@
 #include "otbInverseSensorModel.h"
 #include "otbForwardSensorModel.h"
 
-#include "init/ossimInit.h"
-
 int otbCreateInverseForwardSensorModel(int argc, char* argv[])
 {
-  ossimInit::instance()->initialize(argc, argv);
-
   if (argc != 2)
     {
     std::cout << argv[0] << " <input filename>" << std::endl;
@@ -70,11 +66,21 @@ int otbCreateInverseForwardSensorModel(int argc, char* argv[])
   reader->GenerateOutputInformation();
   ImageType::Pointer inputImage = reader->GetOutput();
 
-  //Leve une exception si le model n'est pas créé
   otbGenericMsgDebugMacro(<< "Inverse model creation...");
   inverse_model->SetImageGeometry(inputImage->GetImageKeywordlist());
+  if( inverse_model->IsValidSensorModel() == false )
+    {
+      std::cout<<"Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!"<<std::endl;
+      return EXIT_FAILURE;
+    }
+  
   otbGenericMsgDebugMacro(<< "Foreward model creation...");
   forward_model->SetImageGeometry(inputImage->GetImageKeywordlist());
+  if( forward_model->IsValidSensorModel() == false )
+    {
+      std::cout<<"Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!"<<std::endl;
+      return EXIT_FAILURE;
+    }
 
   return EXIT_SUCCESS;
 }

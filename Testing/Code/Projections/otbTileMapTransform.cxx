@@ -16,16 +16,17 @@
 
 =========================================================================*/
 
+#include <fstream>
+#include <iomanip>
 #include "otbTileMapTransform.h"
 
 int otbTileMapTransform(int argc, char* argv[])
 {
-
   const char *  outFileName = argv[1];
   std::ofstream file;
   file.open(outFileName);
 
-  typedef otb::TileMapTransform<otb::Transform::FORWARD> ProjectionType;
+  typedef otb::TileMapTransform<otb::TransformDirection::FORWARD> ProjectionType;
   ProjectionType::Pointer projection = ProjectionType::New();
   projection->SetLevel(10);
 
@@ -46,7 +47,7 @@ int otbTileMapTransform(int argc, char* argv[])
   file << projection->TransformPoint(point);
   file << std::endl << std::endl;
 
-  typedef otb::TileMapTransform<otb::Transform::INVERSE> InverseProjectionType;
+  typedef otb::TileMapTransform<otb::TransformDirection::INVERSE> InverseProjectionType;
   InverseProjectionType::Pointer inverseProjection = InverseProjectionType::New();
   inverseProjection->SetLevel(10);
 

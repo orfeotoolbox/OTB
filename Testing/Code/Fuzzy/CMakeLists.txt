@@ -41,12 +41,44 @@ ADD_TEST(fzTvMassOfBelief ${Fuzzy_TESTS1}
 ADD_TEST(fzTvJointMassOfBeliefFilter ${Fuzzy_TESTS1}
         otbJointMassOfBeliefFilter)
 
+ADD_TEST(fzTvJointMassOfBeliefFilterLimit ${Fuzzy_TESTS1}
+        otbJointMassOfBeliefFilterLimit)
+
 # FuzzyTests2
 ADD_TEST(fzTvFuzzyVariableDSApplied ${Fuzzy_TESTS2}
         otbFuzzyVariableDSApplied)
 
-ADD_TEST(fzTvMassOfBeliefDSApplied ${Fuzzy_TESTS2}
-        otbMassOfBeliefDSApplied)
+ADD_TEST(fzTvMassOfBeliefDSApplied-H1H2 ${Fuzzy_TESTS2}
+        otbMassOfBeliefDSApplied
+        "H1"  # describe the hypothesis
+        "H2"  # here the hypothesis is {H1, H2}
+        0.9
+        0.9
+        )
+
+ADD_TEST(fzTvMassOfBeliefDSApplied-H1H2_ ${Fuzzy_TESTS2}
+        otbMassOfBeliefDSApplied
+        "H1"
+        "H2_"  # here the hypothesis is {H1, H2_}
+        0.9
+        0.9
+        )
+
+ADD_TEST(fzTvMassOfBeliefDSApplied-H1_H2 ${Fuzzy_TESTS2}
+        otbMassOfBeliefDSApplied
+        "H1_"
+        "H2"  # here the hypothesis is {H1_, H2}
+        0.9
+        0.9
+        )
+
+ADD_TEST(fzTvMassOfBeliefDSApplied-H1_H2_ ${Fuzzy_TESTS2}
+        otbMassOfBeliefDSApplied
+        "H1_"
+        "H2_" # here the hypothesis is {H1_, H2_}
+        0.9
+        0.9
+        )
 
 #ADD_TEST(fzTuVectorDataToSpecificDescriptionFilterBaseNew ${Fuzzy_TESTS2}
 #        otbVectorDataToSpecificDescriptionFilterBaseNew)

@@ -21,70 +21,75 @@
 
 #include "otbUtmMapProjection.h"
 
+#include "otbUtils.h"
+
 namespace otb
 {
 
+template <TransformDirection::TransformationDirection TTransform>
+UtmMapProjection<TTransform>
+::UtmMapProjection()
+{
+  this->SetWkt("ossimUtmProjection");
+}
+
+
 ///Set the zone
-template <Transform::TransformationDirection TTransform>
+template <TransformDirection::TransformationDirection TTransform>
 void UtmMapProjection<TTransform>
 ::SetZone(long zone)
 {
-  this->m_MapProjection->setZone(zone);
+  this->SetParameter("Zone", Utils::ConvertToString(zone));
   this->Modified();
 }
 
 ///Set the hemisphere
-template <Transform::TransformationDirection TTransform>
+template <TransformDirection::TransformationDirection TTransform>
 void UtmMapProjection<TTransform>
 ::SetHemisphere(char hemisphere)
 {
-  this->m_MapProjection->setHemisphere(hemisphere);
+  this->SetParameter("Hemisphere", Utils::ConvertToString(hemisphere));
   this->Modified();
 }
 
-template <Transform::TransformationDirection TTransform>
+template <TransformDirection::TransformationDirection TTransform>
 void UtmMapProjection<TTransform>
 ::SetZoneAndHemisphereFromGeoPoint(const InputPointType& geoPoint)
 {
-  char hemisphere;
+  if (geoPoint[1] > 0.) this->SetParameter("Hemisphere", "N");
+  else this->SetParameter("Hemisphere", "S");
 
-  if (geoPoint[1] > 0.) hemisphere = 'N';
-  else hemisphere = 'S';
-  this->SetHemisphere(hemisphere);
-
-  int zone = this->GetZoneFromGeoPoint(geoPoint);
-  this->SetZone(zone);
+  int zone = Utils::GetZoneFromGeoPoint(geoPoint[0], geoPoint[1]);
+  this->SetParameter("Zone", Utils::ConvertToString(zone));
 }
 
 ///\return the zone
-template <Transform::TransformationDirection TTransform>
+template <TransformDirection::TransformationDirection TTransform>
 int UtmMapProjection<TTransform>
 ::GetZone() const
 {
-  int zone = this->m_MapProjection->getZone();
-
+  int zone = atoi(this->GetParameter("Zone").c_str());
   return zone;
 }
 
 ///\return the hemisphere
-template <Transform::TransformationDirection TTransform>
-const char UtmMapProjection<TTransform>
+template <TransformDirection::TransformationDirection TTransform>
+char UtmMapProjection<TTransform>
 ::GetHemisphere() const
 {
-  char hemisphere = this->m_MapProjection->getHemisphere();
+  //If this happens, we have to better control the instanciation of
+  //the projection.
+  assert(this->GetParameter("Hemisphere").size() > 0);
+  char hemisphere = this->GetParameter("Hemisphere")[0];
 
   return hemisphere;
 }
 
-template <Transform::TransformationDirection TTransform>
+template <TransformDirection::TransformationDirection TTransform>
 int UtmMapProjection<TTransform>
 ::GetZoneFromGeoPoint(const InputPointType& geoPoint) const
 {
-  //use ossim to handle the special case of UTM
-  ossimGpt point(geoPoint[1],  geoPoint[0]);
-  int zone = this->m_MapProjection->computeZone(point);
-
-  return zone;
+  return Utils::GetZoneFromGeoPoint(geoPoint[0], geoPoint[1]);
 }
 
 }

@@ -21,7 +21,7 @@ SET(EPSILON_3 0.001)
 SET(TESTSYSTEM_TESTS ${CXX_TEST_PATH}/otbTestSystemTests)
 
 #Test if the current working copy corresponds to the nightly revision number
-ADD_TEST(tsTuIsNightlyRevision ${TESTSYSTEM_TESTS}   
+ADD_TEST(tsTvIsNightlyRevision ${TESTSYSTEM_TESTS}   
          otbIsNightlyRevision
          ${OTB_WC_REVISION}
          http://www.orfeo-toolbox.org/nightly/libNightlyNumber )
@@ -118,14 +118,25 @@ ADD_TEST(tsTvCompareAscii4epsilon3 ${TESTSYSTEM_TESTS}
 SET_TESTS_PROPERTIES(tsTvCompareAscii4epsilon3 PROPERTIES WILL_FAIL true)
 
 # Tests about precision (10^-3) and strings with white space
-ADD_TEST(tsTvCompareAsciiepsilon3_WhiteSpace ${TESTSYSTEM_TESTS}
+# sould be ok
+ADD_TEST(tsTvCompareAsciiepsilon3_WhiteSpaceOK ${TESTSYSTEM_TESTS}
    --compare-ascii ${EPSILON_3}
-       ${TEMP}/tsTvCompareAsciiRefepsilon3_WS.txt
-       ${TEMP}/tsTvCompareAsciiTestepsilon3_WS.txt
+       ${BASELINE_FILES}/tsTvCompareAsciiEpsilon3_Base.txt
+       ${TEMP}/tsTvCompareAsciiEpsilon3_TestOK.txt
      otbCompareAsciiTestsEpsilon3_WhiteSpace
-       ${TEMP}/tsTvCompareAsciiRefepsilon3_WS.txt
-       ${TEMP}/tsTvCompareAsciiTestepsilon3_WS.txt
+       ${INPUTDATA}/tsTvCompareAsciiEpsilon3_TestOK.txt
+       ${TEMP}/tsTvCompareAsciiEpsilon3_TestOK.txt
   )
+# sould be ko  
+ADD_TEST(tsTvCompareAsciiepsilon3_WhiteSpaceKO ${TESTSYSTEM_TESTS}
+   --compare-ascii ${EPSILON_3}
+       ${BASELINE_FILES}/tsTvCompareAsciiEpsilon3_Base.txt
+       ${TEMP}/tsTvCompareAsciiEpsilon3_TestKO.txt
+     otbCompareAsciiTestsEpsilon3_WhiteSpace
+       ${INPUTDATA}/tsTvCompareAsciiEpsilon3_TestKO.txt
+       ${TEMP}/tsTvCompareAsciiEpsilon3_TestKO.txt
+  )
+SET_TESTS_PROPERTIES(tsTvCompareAsciiepsilon3_WhiteSpaceKO PROPERTIES WILL_FAIL true)
 
 #Check that the order and the tolerance works together
 ADD_TEST(tsTvCompareAscii5epsilon2 ${TESTSYSTEM_TESTS}
@@ -137,6 +148,15 @@ ADD_TEST(tsTvCompareAscii5epsilon2 ${TESTSYSTEM_TESTS}
        ${TEMP}/tsTvCompareAsciiTest5epsilon2.txt
   )
 
+#Check the case of scientific notation 1e25 vs 1E025
+ADD_TEST(tsTvCompareAsciiScientificNotation ${TESTSYSTEM_TESTS}
+    --compare-ascii ${EPSILON_2}
+       ${TEMP}/tsTvCompareAsciiRef_SN.txt
+       ${TEMP}/tsTvCompareAsciiTest_SN.txt
+     otbCompareAsciiTestScientificNotation
+       ${TEMP}/tsTvCompareAsciiRef_SN.txt
+       ${TEMP}/tsTvCompareAsciiTest_SN.txt
+  )
 
 # -------       CXX source files -----------------------------------
 SET(TESTSYSTEM_SRCS
@@ -148,6 +168,7 @@ otbCompareAsciiTests3.cxx
 otbCompareAsciiTests4.cxx
 otbCompareAsciiTests5.cxx
 otbCompareAsciiTestsEpsilon3_WhiteSpace.cxx
+otbCompareAsciiTestScientificNotation.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbTestSystemTests "${TESTSYSTEM_SRCS}" "OTBTesting;OTBCommon;OTBIO")

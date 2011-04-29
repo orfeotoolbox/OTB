@@ -74,7 +74,7 @@ int otbGCPsToRPCSensorModelImageFilterWithoutDEM(int argc, char* argv[])
   ofs.open(outfname);
 
   // Set floatfield to format properly
-  ofs.setf(ios::fixed, ios::floatfield);
+  ofs.setf(std::ios::fixed, std::ios::floatfield);
   ofs.precision(10);
 
   ofs << rpcEstimator->GetOutput()->GetImageKeywordlist() << std::endl;

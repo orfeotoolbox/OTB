@@ -12,11 +12,11 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 #Tolerance sur diff pixel image
 SET(NOTOL 0.0)
 SET(EPSILON_4  0.0001)
+SET(EPSILON_5  0.00001)
 SET(EPSILON_6  0.000001)
 SET(EPSILON_8  0.00000001)
 SET(EPSILON_10 0.0000000001)
 SET(EPSILON_12 0.000000000001)
-SET(RADIOMETRY_TESTS1 ${CXX_TEST_PATH}/otbRadiometryTests1)
 SET(RADIOMETRY_TESTS2 ${CXX_TEST_PATH}/otbRadiometryTests2)
 SET(RADIOMETRY_TESTS3 ${CXX_TEST_PATH}/otbRadiometryTests3)
 SET(RADIOMETRY_TESTS4 ${CXX_TEST_PATH}/otbRadiometryTests4)
@@ -27,108 +27,6 @@ SET(RADIOMETRY_TESTS8 ${CXX_TEST_PATH}/otbRadiometryTests8)
 SET(RADIOMETRY_TESTS9 ${CXX_TEST_PATH}/otbRadiometryTests9)
 SET(RADIOMETRY_TESTS10 ${CXX_TEST_PATH}/otbRadiometryTests10)
 
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbRADIOMETRY_TESTS1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-# -------            otb::MultiChannelRAndNIRVegetationIndexImageFilter   ------------------------------
-
-ADD_TEST(raTuMultiChannelRAndNIRVegetationIndexImageFilterNew ${RADIOMETRY_TESTS1}
-        otbMultiChannelRAndNIRVegetationIndexImageFilterNew )
-
-ADD_TEST(raTvNDVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}
-  --compare-image ${NOTOL}   ${BASELINE}/raMultiChannelRAndNIRVegetationIndex_NDVI_verySmallFSATSWcRcNir.tif
-                    ${TEMP}/raMultiChannelRAndNIRVegetationIndex_NDVI_verySmallFSATSWcRcNir.tif
-        otbMultiChannelRAndNIRVegetationIndexImageFilter
-        NDVI
-	${INPUTDATA}/verySmallFSATSW.tif
-	${TEMP}/raMultiChannelRAndNIRVegetationIndex_NDVI_verySmallFSATSWcRcNir.tif
-	3 4
-	)
-ADD_TEST(raTvRVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}
-  --compare-image ${NOTOL}   ${BASELINE}/raMultiChannelRAndNIRVegetationIndex_RVI_verySmallFSATSWcRcNir.tif
-                    ${TEMP}/raMultiChannelRAndNIRVegetationIndex_RVI_verySmallFSATSWcRcNir.tif
-        otbMultiChannelRAndNIRVegetationIndexImageFilter
-        RVI
-	${INPUTDATA}/verySmallFSATSW.tif
-	${TEMP}/raMultiChannelRAndNIRVegetationIndex_RVI_verySmallFSATSWcRcNir.tif
-	3 4
-	)
-
-ADD_TEST(raTvSAVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}
-  --compare-image ${NOTOL}   ${BASELINE}/raMultiChannelRAndNIRVegetationIndex_SAVI_verySmallFSATSWcRcNir.tif
-                    ${TEMP}/raMultiChannelRAndNIRVegetationIndex_SAVI_verySmallFSATSWcRcNir.tif
-        otbMultiChannelRAndNIRVegetationIndexImageFilter
-        SAVI
-	${INPUTDATA}/verySmallFSATSW.tif
-	${TEMP}/raMultiChannelRAndNIRVegetationIndex_SAVI_verySmallFSATSWcRcNir.tif
-	3 4
-	)
-
-ADD_TEST(raTvMSAVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}
-  --compare-image ${EPSILON_10}   ${BASELINE}/raMultiChannelRAndNIRVegetationIndex_MSAVI_qb_RoadExtract2sub200x200.tif
-                    ${TEMP}/raMultiChannelRAndNIRVegetationIndex_MSAVI_qb_RoadExtract2sub200x200.tif
-        otbMultiChannelRAndNIRVegetationIndexImageFilter
-        MSAVI
-        ${INPUTDATA}/qb_RoadExtract2sub200x200.tif
-        ${TEMP}/raMultiChannelRAndNIRVegetationIndex_MSAVI_qb_RoadExtract2sub200x200.tif
-        3 4
-    )
-
-ADD_TEST(raTvMSAVI2_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}
-  --compare-image ${EPSILON_8}   ${BASELINE}/raMultiChannelRAndNIRVegetationIndex_MSAVI2_verySmallFSATSWcRcNir.tif
-                    ${TEMP}/raMultiChannelRAndNIRVegetationIndex_MSAVI2_verySmallFSATSWcRcNir.tif
-        otbMultiChannelRAndNIRVegetationIndexImageFilter
-        MSAVI2
-	    ${INPUTDATA}/verySmallFSATSW.tif
-	    ${TEMP}/raMultiChannelRAndNIRVegetationIndex_MSAVI2_verySmallFSATSWcRcNir.tif
-	    3 4
-	)
-
-ADD_TEST(raTvTSAVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}
-  --compare-image ${EPSILON_12}   ${BASELINE}/raMultiChannelRAndNIRVegetationIndex_TSAVI_verySmallFSATSWcRcNir.tif
-                    ${TEMP}/raMultiChannelRAndNIRVegetationIndex_TSAVI_verySmallFSATSWcRcNir.tif
-        otbMultiChannelRAndNIRVegetationIndexImageFilter
-        TSAVI
-        ${INPUTDATA}/verySmallFSATSW.tif
-        ${TEMP}/raMultiChannelRAndNIRVegetationIndex_TSAVI_verySmallFSATSWcRcNir.tif
-        3 4
-)
-
-# -------            IPVI MultiChannelRAndNIRVegetationIndexImageFilter   ------------------------------
-ADD_TEST(raTvIPVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}
- --compare-image ${EPSILON_12}   ${BASELINE}/raMultiChannelRAndNIRVegetationIndex_IPVI_qb_RoadExtract.tif
-                   ${TEMP}/raMultiChannelRAndNIRVegetationIndex_IPVI_qb_RoadExtract.tif
-        otbMultiChannelRAndNIRVegetationIndexImageFilter
-        IPVI
-        ${INPUTDATA}/qb_RoadExtract2sub200x200.tif
-        ${TEMP}/raMultiChannelRAndNIRVegetationIndex_IPVI_qb_RoadExtract.tif
-        3 4  # red nir
-)
-
-# -------            TNDVI MultiChannelRAndNIRVegetationIndexImageFilter   ------------------------------
-ADD_TEST(raTvTNDVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}
- --compare-image ${EPSILON_12}   ${BASELINE}/raMultiChannelRAndNIRVegetationIndex_TNDVI_qb_RoadExtract.tif
-                   ${TEMP}/raMultiChannelRAndNIRVegetationIndex_TNDVI_qb_RoadExtract.tif
-        otbMultiChannelRAndNIRVegetationIndexImageFilter
-        TNDVI
-        ${INPUTDATA}/qb_RoadExtract2sub200x200.tif
-        ${TEMP}/raMultiChannelRAndNIRVegetationIndex_TNDVI_qb_RoadExtract.tif
-        3 4
-)
-
-# -------            GEMI MultiChannelRAndNIRVegetationIndexImageFilter   ------------------------------
-ADD_TEST(raTvGEMI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}
- --compare-image ${EPSILON_12}   ${BASELINE}/raMultiChannelRAndNIRVegetationIndex_GEMI_qb_RoadExtract.tif
-                   ${TEMP}/raMultiChannelRAndNIRVegetationIndex_GEMI_qb_RoadExtract.tif
-        otbMultiChannelRAndNIRVegetationIndexImageFilter
-        GEMI
-        ${INPUTDATA}/qb_RoadExtract.img
-        ${TEMP}/raMultiChannelRAndNIRVegetationIndex_GEMI_qb_RoadExtract.tif
-        3 4   # red nir
-)
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1216,198 +1114,6 @@ ADD_TEST(raTvAeronet_ArcachonLevel10_ExtractData ${RADIOMETRY_TESTS8}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbRADIOMETRY_TESTS9 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# -------            TerraSarCalibrationFunctor   ------------------------------
-ADD_TEST(raTvTerraSarCalibrationFunctor ${RADIOMETRY_TESTS9}
-        otbTerraSarCalibrationFunctor
-)
-
-# -------            TerraSarCalibrationImageFilter   ------------------------------
-ADD_TEST(raTuTerraSarCalibrationImageFilterNew ${RADIOMETRY_TESTS9}
-       otbTerraSarCalibrationImageFilterNew
-)
-
-IF(OTB_DATA_USE_LARGEINPUT)
-
-ADD_TEST(raTvTerraSarCalibrationImageFilterTestUPSALACoarse ${RADIOMETRY_TESTS9}
- --compare-image ${EPSILON_12}  
-                 ${BASELINE}/raTvTerraSarCalibrationImageFilterTest_UPSALACoarse.tif
-                 ${TEMP}/raTvTerraSarCalibrationImageFilterTest_UPSALACoarse.tif
-        otbTerraSarCalibrationImageFilterTest
-                ${LARGEINPUT}/TERRASARX/UPSALA_GLACIER/TSX1_SAR__MGD/IMAGEDATA/IMAGE_HH_SRA_strip_012.tif
-		${TEMP}/raTvTerraSarCalibrationImageFilterTest_UPSALACoarse.tif
-		1 # Use fast calibration
-		0 # Results in linear scale
-		2000 2000 250 250 # Extract
-)
-
-ADD_TEST(raTvTerraSarCalibrationImageComplexFilterTestTORONTOCoarse ${RADIOMETRY_TESTS9}
- --compare-image ${EPSILON_12}  
-                 ${BASELINE}/raTvTerraSarCalibrationImageComplexFilterTest_TORONTOCoarse.tif
-                 ${TEMP}/raTvTerraSarCalibrationImageComplexFilterTest_TORONTOCoarse.tif
-        otbTerraSarCalibrationImageComplexFilterTest
-                ${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
-		${TEMP}/raTvTerraSarCalibrationImageComplexFilterTest_TORONTOCoarse.tif
-		1 # Use fast calibration
-		0 # Results in linear scale
-		2000 2000 250 250 # Extract
-)
-
-ADD_TEST(raTvTerraSarCalibrationImageFilterTestUPSALA ${RADIOMETRY_TESTS9}
- --compare-image ${EPSILON_12}  
-                 ${BASELINE}/raTvTerraSarCalibrationImageFilterTest_UPSALA.tif
-                 ${TEMP}/raTvTerraSarCalibrationImageFilterTest_UPSALA.tif
-        otbTerraSarCalibrationImageFilterTest
-                ${LARGEINPUT}/TERRASARX/UPSALA_GLACIER/TSX1_SAR__MGD/IMAGEDATA/IMAGE_HH_SRA_strip_012.tif
-		${TEMP}/raTvTerraSarCalibrationImageFilterTest_UPSALA.tif
-		0 # No fast calibration
-		0 # Results in linear scale
-		2000 2000 250 250 # Extract
-)
-
-ADD_TEST(raTvTerraSarCalibrationImageComplexFilterTestTORONTO ${RADIOMETRY_TESTS9}
- --compare-image ${EPSILON_12}  
-                 ${BASELINE}/raTvTerraSarCalibrationImageComplexFilterTest_TORONTO.tif
-                 ${TEMP}/raTvTerraSarCalibrationImageComplexFilterTest_TORONTO.tif
-        otbTerraSarCalibrationImageComplexFilterTest
-                ${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
-		${TEMP}/raTvTerraSarCalibrationImageComplexFilterTest_TORONTO.tif
-		0 # No fast calibration
-		0 # Results in linear scale
-		2000 2000 250 250 # Extract
-)
-
-
-ADD_TEST(raTvTerraSarCalibrationImageFilterTestUPSALADb ${RADIOMETRY_TESTS9}
- --compare-image ${EPSILON_12}  
-                 ${BASELINE}/raTvTerraSarCalibrationImageFilterTest_UPSALADb.tif
-                 ${TEMP}/raTvTerraSarCalibrationImageFilterTest_UPSALADb.tif
-        otbTerraSarCalibrationImageFilterTest
-                ${LARGEINPUT}/TERRASARX/UPSALA_GLACIER/TSX1_SAR__MGD/IMAGEDATA/IMAGE_HH_SRA_strip_012.tif
-		${TEMP}/raTvTerraSarCalibrationImageFilterTest_UPSALADb.tif
-		0 # No fast calibration
-		1 # Results in logarithmic
-		2000 2000 250 250 # Extract
-)
-
-ADD_TEST(raTvTerraSarCalibrationImageComplexFilterTestTORONTODb ${RADIOMETRY_TESTS9}
- --compare-image ${EPSILON_12}  
-                 ${BASELINE}/raTvTerraSarCalibrationImageComplexFilterTest_TORONTODb.tif
-                 ${TEMP}/raTvTerraSarCalibrationImageComplexFilterTest_TORONTODb.tif
-        otbTerraSarCalibrationImageComplexFilterTest
-                ${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
-		${TEMP}/raTvTerraSarCalibrationImageComplexFilterTest_TORONTODb.tif
-		0 # No fast calibration
-		1 # Results in logarithmic scale
-		2000 2000 250 250 # Extract
-)
-
-
-# -------            PANGKALANBUUNU TSX-1 Test    ------------------------------
-
-ADD_TEST(raTvTerraSarCalibrationImageComplexFilterTestPANGKALANBUUNUsingXmlFileCoarse ${RADIOMETRY_TESTS9}
-        otbTerraSarCalibrationImageComplexFilterTest
-                ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/TSX1_SAR__SSC______SM_D_SRA_20080313T221955_20080313T222003.xml
-		${TEMP}/raTvTerraSarCalibrationImageComplexFilterTest_PANGHALANBUUNUCoarse.tif
-		1 # No fast calibration
-		0 # Results in logarithmic scale
-		2000 2000 250 250 # Extract
-)
-ADD_TEST(raTvTerraSarCalibrationImageComplexFilterTestPANGKALANBUUNUsingXmlFileCoarseLog ${RADIOMETRY_TESTS9}
-        otbTerraSarCalibrationImageComplexFilterTest
-                ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/TSX1_SAR__SSC______SM_D_SRA_20080313T221955_20080313T222003.xml
-		${TEMP}/raTvTerraSarCalibrationImageComplexFilterTest_PANGHALANBUUNUCoarseLog.tif
-		1 # No fast calibration
-		1 # Results in logarithmic scale
-		2000 2000 250 250 # Extract
-)
-ADD_TEST(raTvTerraSarCalibrationImageComplexFilterTestPANGKALANBUUNUsingXmlFile ${RADIOMETRY_TESTS9}
-        otbTerraSarCalibrationImageComplexFilterTest
-                ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/TSX1_SAR__SSC______SM_D_SRA_20080313T221955_20080313T222003.xml
-		${TEMP}/raTvTerraSarCalibrationImageComplexFilterTest_PANGHALANBUUNU.tif
-		0 # No fast calibration
-		0 # Results in logarithmic scale
-		2000 2000 250 250 # Extract
-)
-ADD_TEST(raTvTerraSarCalibrationImageComplexFilterTestPANGKALANBUUNUsingXmlFileb ${RADIOMETRY_TESTS9}
-        otbTerraSarCalibrationImageComplexFilterTest
-                ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/TSX1_SAR__SSC______SM_D_SRA_20080313T221955_20080313T222003.xml
-		${TEMP}/raTvTerraSarCalibrationImageComplexFilterTest_PANGHALANBUUNUb.tif
-		0 # No fast calibration
-		1 # Results in logarithmic scale
-		2000 2000 250 250 # Extract
-)
-
-ADD_TEST(raTvTerraSarCalibrationImageComplexFilterTestPANGKALANBUUNUsingHHFileCoarse ${RADIOMETRY_TESTS9}
-        otbTerraSarCalibrationImageComplexFilterTest
-                ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
-		${TEMP}/raTvTerraSarCalibrationImageComplexFilterTest_PANGHALANBUUNUCoarse.tif
-		1 # No fast calibration
-		0 # Results in logarithmic scale
-		2000 2000 250 250 # Extract
-)
-ADD_TEST(raTvTerraSarCalibrationImageComplexFilterTestPANGKALANBUUNUsingHHFileCoarseLog ${RADIOMETRY_TESTS9}
-        otbTerraSarCalibrationImageComplexFilterTest
-                ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
-		${TEMP}/raTvTerraSarCalibrationImageComplexFilterTest_PANGHALANBUUNUCoarseLog.tif
-		1 # No fast calibration
-		1 # Results in logarithmic scale
-		2000 2000 250 250 # Extract
-)
-ADD_TEST(raTvTerraSarCalibrationImageComplexFilterTestPANGKALANBUUNUsingHHFile ${RADIOMETRY_TESTS9}
-        otbTerraSarCalibrationImageComplexFilterTest
-                ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
-		${TEMP}/raTvTerraSarCalibrationImageComplexFilterTest_PANGHALANBUUNU.tif
-		0 # No fast calibration
-		0 # Results in logarithmic scale
-		2000 2000 250 250 # Extract
-)
-ADD_TEST(raTvTerraSarCalibrationImageComplexFilterTestPANGKALANBUUNUsingHHFileb ${RADIOMETRY_TESTS9}
-        otbTerraSarCalibrationImageComplexFilterTest
-                ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
-		${TEMP}/raTvTerraSarCalibrationImageComplexFilterTest_PANGHALANBUUNUb.tif
-		0 # No fast calibration
-		1 # Results in logarithmic scale
-		2000 2000 250 250 # Extract
-)
-
-ADD_TEST(raTvTerraSarCalibrationImageComplexFilterTestPANGKALANBUUNUsingVVFileCoarse ${RADIOMETRY_TESTS9}
-        otbTerraSarCalibrationImageComplexFilterTest
-                ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_VV_SRA_stripFar_008.cos
-		${TEMP}/raTvTerraSarCalibrationImageComplexFilterTest_PANGHALANBUUNUCoarse.tif
-		1 # No fast calibration
-		0 # Results in logarithmic scale
-		2000 2000 250 250 # Extract
-)
-ADD_TEST(raTvTerraSarCalibrationImageComplexFilterTestPANGKALANBUUNUsingVVFileCoarseLog ${RADIOMETRY_TESTS9}
-        otbTerraSarCalibrationImageComplexFilterTest
-                ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_VV_SRA_stripFar_008.cos
-		${TEMP}/raTvTerraSarCalibrationImageComplexFilterTest_PANGHALANBUUNUCoarseLog.tif
-		1 # No fast calibration
-		1 # Results in logarithmic scale
-		2000 2000 250 250 # Extract
-)
-ADD_TEST(raTvTerraSarCalibrationImageComplexFilterTestPANGKALANBUUNUsingVVFile ${RADIOMETRY_TESTS9}
-        otbTerraSarCalibrationImageComplexFilterTest
-                ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_VV_SRA_stripFar_008.cos
-		${TEMP}/raTvTerraSarCalibrationImageComplexFilterTest_PANGHALANBUUNU.tif
-		0 # No fast calibration
-		0 # Results in logarithmic scale
-		2000 2000 250 250 # Extract
-)
-ADD_TEST(raTvTerraSarCalibrationImageComplexFilterTestPANGKALANBUUNUsingVVFileb ${RADIOMETRY_TESTS9}
-        otbTerraSarCalibrationImageComplexFilterTest
-                ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_VV_SRA_stripFar_008.cos
-		${TEMP}/raTvTerraSarCalibrationImageComplexFilterTest_PANGHALANBUUNUb.tif
-		0 # No fast calibration
-		1 # Results in logarithmic scale
-		2000 2000 250 250 # Extract
-)
-
-
-ENDIF(OTB_DATA_USE_LARGEINPUT)
-
-
-
 # -------            TerraSarBrightnessFunctor   ------------------------------
 ADD_TEST(raTvTerraSarBrightnessFunctor ${RADIOMETRY_TESTS9}
  --compare-ascii ${EPSILON_12}  
@@ -1503,80 +1209,103 @@ ADD_TEST(raTuSarRadiometricCalibrationFunctorWithoutNoise ${RADIOMETRY_TESTS9}
 # -------            SarRadiometricCalibrationFunction   ------------------------------
 ADD_TEST(raTvSarRadiometricCalibrationFunction ${RADIOMETRY_TESTS9}
 	--compare-ascii ${NOTOL}
-		    ${BASELINE_FILES}/raTvSarRadiometricCalibrationFunctionOutputAscii.txt
-	    	${TEMP}/raTvSarRadiometricCalibrationFunctionOutputAscii.txt
+		  ${BASELINE_FILES}/raTvSarRadiometricCalibrationFunctionOutputAscii.txt
+	      ${TEMP}/raTvSarRadiometricCalibrationFunctionOutputAsciiWithNoise.txt
         otbSarRadiometricCalibrationFunction
-	 	${INPUTDATA}/scene.png
-	 	${TEMP}/raTvSarRadiometricCalibrationFunctionOutputAscii.txt
+	 	  ${INPUTDATA}/scene.png
+	 	  ${TEMP}/raTvSarRadiometricCalibrationFunctionOutputAsciiWithNoise.txt
 )
 ADD_TEST(raTvSarRadiometricCalibrationFunctionWithoutNoise ${RADIOMETRY_TESTS9}
 	--compare-ascii ${NOTOL}
-		    ${BASELINE_FILES}/raTvSarRadiometricCalibrationFunctionOutputAscii.txt
-	    	${TEMP}/raTvSarRadiometricCalibrationFunctionOutputAscii.txt
+		  ${BASELINE_FILES}/raTvSarRadiometricCalibrationFunctionOutputAscii.txt
+	      ${TEMP}/raTvSarRadiometricCalibrationFunctionOutputAsciiWithoutNoise.txt
         otbSarRadiometricCalibrationFunctionWithoutNoise
-	 	${INPUTDATA}/scene.png
-	 	${TEMP}/raTvSarRadiometricCalibrationFunctionOutputAscii.txt
+	 	  ${INPUTDATA}/scene.png
+	 	  ${TEMP}/raTvSarRadiometricCalibrationFunctionOutputAsciiWithoutNoise.txt
 )
 
 # -------  SarRadiometricCalibrationToImageFilter   ------------------------------
 
 IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(raTvSarRadiometricCalibrationToImageWithComplexPixelFilter_TSX_PANGKALANBUUN  ${RADIOMETRY_TESTS9}
-	--compare-image ${EPSILON_12}
+
+# Read data with a complex IFreader (Input data type = CInt16) and done ExtractROIFilter 
+# after RadiometricCalibFilter.
+  ADD_TEST(raTvSarRadiometricCalibrationToImageWithComplexPixelFilter_TSX_PANGKALANBUUN  ${RADIOMETRY_TESTS9}
+	    --compare-image ${EPSILON_12}
 	    	${BASELINE}/raTvSarRadiometricCalibrationToImageFilter_TSX_PANGKALANBUUN_HH.tif
 	    	${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_PANGKALANBUUN_HH.tif
         otbSarRadiometricCalibrationToImageFilterWithComplexPixelTest
-	    ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
-	    ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_PANGKALANBUUN_HH.tif
-	    1000 1000 250 250 # Extract
-)
+	        ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
+	        ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_PANGKALANBUUN_HH.tif
+	        1000 1000 250 250 # Extract
+          )
 
-ADD_TEST(raTvSarRadiometricCalibrationToImageWithComplexPixelFilterWithoutNoise_TSX_PANGKALANBUUN  ${RADIOMETRY_TESTS9}
-	--compare-image ${EPSILON_12}
+# Read data with a complex IFreader (Input data type = CInt16) and done ExtractROIFilter 
+# after RadiometricCalibFilter without take into account Noise. 
+  ADD_TEST(raTvSarRadiometricCalibrationToImageWithComplexPixelFilterWithoutNoise_TSX_PANGKALANBUUN  ${RADIOMETRY_TESTS9}
+	    --compare-image ${EPSILON_12}
 	    	${BASELINE}/raTvSarRadiometricCalibrationToImageFilter_TSX_PANGKALANBUUN_HH_WN.tif
 	    	${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_PANGKALANBUUN_HH_WN.tif
         otbSarRadiometricCalibrationToImageFilterWithComplexPixelTestWithoutNoise
-	    ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
-	    ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_PANGKALANBUUN_HH_WN.tif
-	    1000 1000 250 250 # Extract
-)
+	        ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
+	        ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_PANGKALANBUUN_HH_WN.tif
+	        1000 1000 250 250 # Extract
+          )    
 
-ADD_TEST(raTvSarRadiometricCalibrationToImagePixelFilterWithExtractROIBefore_TSX_PANGKALANBUUN  ${RADIOMETRY_TESTS9}
-	--compare-image ${EPSILON_12}
+# Read data with a scalar IFreader (Input data type = CInt16) and done ExtractROIFilter 
+# after RadiometricCalibFilter. 
+  ADD_TEST(raTvSarRadiometricCalibrationToImageWithRealPixelFilter_TSX_PANGKALANBUUN  ${RADIOMETRY_TESTS9}
+	    --compare-image ${EPSILON_12}
+	    	${BASELINE}/raTvSarRadiometricCalibrationToImageFilter_TSX_PANGKALANBUUN_HH.tif
+	    	${TEMP}/raTvSarRadiometricCalibrationToImageFilterRealPixel_TSX_PANGKALANBUUN_HH.tif
+        otbSarRadiometricCalibrationToImageFilterWithRealPixelTest
+	        ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
+	        ${TEMP}/raTvSarRadiometricCalibrationToImageFilterRealPixel_TSX_PANGKALANBUUN_HH.tif
+	         1000 1000 250 250 # Extract
+          )
+          
+# Read data with a complex IFreader (Input data type = CInt16) and done ExtractROIFilter 
+# before RadiometricCalibFilter. 
+  ADD_TEST(raTvSarRadiometricCalibrationToImagePixelFilterWithExtractROIBefore_TSX_PANGKALANBUUN  ${RADIOMETRY_TESTS9}
+	    --compare-image ${EPSILON_12}
 	    	${BASELINE}/raTvSarRadiometricCalibrationToImageFilterWithExtractROIBefore_TSX_PANGKALANBUUN_HH.tif
 	    	${TEMP}/raTvSarRadiometricCalibrationToImageFilterWithExtractROIBefore_TSX_PANGKALANBUUN_HH.tif
         otbSarRadiometricCalibrationToImageFilterWithExtractROIBeforeTest
 	    ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
-	    ${TEMP}/raTvSarRadiometricCalibrationToImageFilterWithExtractROIBefore_TSX_PANGKALANBUUN_HH.tif
-	    1000 1000 250 250 # Extract
-)
+	        ${TEMP}/raTvSarRadiometricCalibrationToImageFilterWithExtractROIBefore_TSX_PANGKALANBUUN_HH.tif
+	        1000 1000 250 250 # Extract
+          )
 
-ADD_TEST(raTvSarRadiometricCalibrationToImageCompareFilter_TSX_PANGKALANBUUN  ${RADIOMETRY_TESTS9}
+# Read data with a complex IFreader (Input data type = CInt16) and compare the result of 
+# CReader->SarRadiometricCalibFilter with CReader->ModulusFilter->SarRadiometricCalibFilter 
+  ADD_TEST(raTvSarRadiometricCalibrationToImageCompareFilter_TSX_PANGKALANBUUN  ${RADIOMETRY_TESTS9}
         otbSarRadiometricCalibrationToImageFilterCompareTest
-	    ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
-	    1000 1000 250 250 # Extract
-)
+	       ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
+	       1000 1000 250 250 # Extract
+          )
 
 
-ADD_TEST(raTvSarRadiometricCalibrationToImageWithComplexPixelFilter_TSX_TORONTO ${RADIOMETRY_TESTS9}
-    --compare-image ${EPSILON_12}  
-                ${BASELINE}/raTvSarRadiometricCalibrationToImageFilter_TSX_TORONTO.tif
-                ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_TORONTO.tif
+# Read data with a complex IFreader (Input data type = CInt16)
+  ADD_TEST(raTvSarRadiometricCalibrationToImageWithComplexPixelFilter_TSX_TORONTO ${RADIOMETRY_TESTS9}
+        --compare-image ${EPSILON_12}  
+           ${BASELINE}/raTvSarRadiometricCalibrationToImageFilter_TSX_TORONTO.tif
+           ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_TORONTO.tif
         otbSarRadiometricCalibrationToImageFilterWithComplexPixelTest
-        ${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
-        ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_TORONTO.tif
-		2000 2000 250 250 # Extract
-)
+           ${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
+           ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_TORONTO.tif
+		   2000 2000 250 250 # Extract
+          )
 
-ADD_TEST(raTvSarRadiometricCalibrationToImageWithRealPixelFilter_TSX_UPSALA ${RADIOMETRY_TESTS9}
-    --compare-image ${EPSILON_12}  
-                ${BASELINE}/raTvSarRadiometricCalibrationToImageFilter_TSX_UPSALA.tif
-                ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_UPSALA.tif
+# Read data with a scalar IFreader (Input data type = UInt16)
+  ADD_TEST(raTvSarRadiometricCalibrationToImageWithRealPixelFilter_TSX_UPSALA ${RADIOMETRY_TESTS9}
+        --compare-image ${EPSILON_12}  
+           ${BASELINE}/raTvSarRadiometricCalibrationToImageFilter_TSX_UPSALA.tif
+           ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_UPSALA.tif
         otbSarRadiometricCalibrationToImageFilterWithRealPixelTest
-        ${LARGEINPUT}/TERRASARX/UPSALA_GLACIER/TSX1_SAR__MGD/IMAGEDATA/IMAGE_HH_SRA_strip_012.tif
-        ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_UPSALA.tif
-	2000 2000 250 250 # Extract
-)
+           ${LARGEINPUT}/TERRASARX/UPSALA_GLACIER/TSX1_SAR__MGD/IMAGEDATA/IMAGE_HH_SRA_strip_012.tif
+           ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_UPSALA.tif
+	       2000 2000 250 250 # Extract
+          )
 
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
@@ -1592,42 +1321,58 @@ ADD_TEST(raTuSarBrightnessFunctorWithoutNoise ${RADIOMETRY_TESTS9}
 ADD_TEST(raTvSarBrightnessFunction ${RADIOMETRY_TESTS9}
 	--compare-ascii ${NOTOL}
 	    	${BASELINE_FILES}/raTvSarBrightnessFunctionOutputAscii.txt
-	    	${TEMP}/raTvSarBrightnessFunctionOutputAscii.txt
+	    	${TEMP}/raTvSarBrightnessFunctionOutputAsciiWithNoise.txt
         otbSarBrightnessFunction
 	 	${INPUTDATA}/scene.png
-	 	${TEMP}/raTvSarBrightnessFunctionOutputAscii.txt
+	 	${TEMP}/raTvSarBrightnessFunctionOutputAsciiWithNoise.txt
 )
 
 ADD_TEST(raTvSarBrightnessFunctionWithoutNoise ${RADIOMETRY_TESTS9}
 	--compare-ascii ${NOTOL}
 	    	${BASELINE_FILES}/raTvSarBrightnessFunctionOutputAscii.txt
-	    	${TEMP}/raTvSarBrightnessFunctionOutputAscii.txt
+	    	${TEMP}/raTvSarBrightnessFunctionOutputAsciiWithoutNoise.txt
         otbSarBrightnessFunctionWithoutNoise
 	 	${INPUTDATA}/scene.png
-	 	${TEMP}/raTvSarBrightnessFunctionOutputAscii.txt
+	 	${TEMP}/raTvSarBrightnessFunctionOutputAsciiWithoutNoise.txt
 )
 
 # ------- SarBrightnessToImageFilter   ------------------------------
 IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(raTvSarBrightnessToImageFilter  ${RADIOMETRY_TESTS9}
-	--compare-image ${EPSILON_12}
+
+# Read data with a scalar IFreader (Input data type = CInt16)
+  ADD_TEST(raTvSarBrightnessToImageFilter  ${RADIOMETRY_TESTS9}
+	    --compare-image ${EPSILON_12}
 	    	${BASELINE}/raTvSarBrightnessToImageFilter_TSX_PANGKALANBUUN_HH.tif
 	    	${TEMP}/raTvSarBrightnessToImageFilter_TSX_PANGKALANBUUN_HH.tif
         otbSarBrightnessToImageFilterTest
-	    ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
-	    ${TEMP}/raTvSarBrightnessToImageFilter_TSX_PANGKALANBUUN_HH.tif
-	    1000 1000 250 250 # Extract
-)
+	        ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
+	        ${TEMP}/raTvSarBrightnessToImageFilter_TSX_PANGKALANBUUN_HH.tif
+	        1000 1000 250 250 # Extract
+          )
 
-ADD_TEST(raTvSarBrightnessToImageFilterWithoutNoise  ${RADIOMETRY_TESTS9}
-	--compare-image ${EPSILON_12}
+# Read data with a real IFreader (Input data type = CInt16) and done ExtractROIFilter 
+# after BrightnessCalibFilter without take into account Noise. 
+  ADD_TEST(raTvSarBrightnessToImageFilterWithoutNoise  ${RADIOMETRY_TESTS9}
+	    --compare-image ${EPSILON_12}
 	    	${BASELINE}/raTvSarBrightnessToImageFilter_TSX_PANGKALANBUUN_HH_WN.tif
 	    	${TEMP}/raTvSarBrightnessToImageFilter_TSX_PANGKALANBUUN_HH_WN.tif
         otbSarBrightnessToImageFilterTestWithoutNoise
-	    ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
-	    ${TEMP}/raTvSarBrightnessToImageFilter_TSX_PANGKALANBUUN_HH_WN.tif
-	    1000 1000 250 250 # Extract
-)
+	        ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
+	        ${TEMP}/raTvSarBrightnessToImageFilter_TSX_PANGKALANBUUN_HH_WN.tif
+	        1000 1000 250 250 # Extract
+          )
+
+# Read data with a scalar IFreader (Input data type = CInt16)
+ADD_TEST(raTvSarBrightnessToImageWithComplexPixelFilter  ${RADIOMETRY_TESTS9}
+	    --compare-image ${EPSILON_12}
+	    	${BASELINE}/raTvSarBrightnessToImageFilter_TSX_PANGKALANBUUN_HH.tif
+	    	${TEMP}/raTvSarBrightnessToImageFilterComplexPixel_TSX_PANGKALANBUUN_HH.tif
+        otbSarBrightnessToImageWithComplexPixelFilterTest
+	        ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
+	        ${TEMP}/raTvSarBrightnessToImageFilterComplexPixel_TSX_PANGKALANBUUN_HH.tif
+	        1000 1000 250 250 # Extract
+        )
+
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 
@@ -2006,10 +1751,6 @@ otbAeronetExtractDataBadData.cxx
 
 SET(Radiometry_SRCS9
 otbRadiometryTests9.cxx
-otbTerraSarCalibrationFunctor.cxx
-otbTerraSarCalibrationImageFilterNew.cxx
-otbTerraSarCalibrationImageFilterTest.cxx
-otbTerraSarCalibrationImageComplexFilterTest.cxx
 otbTerraSarBrightnessFunctor.cxx
 otbTerraSarBrightnessImageFilterNew.cxx
 otbTerraSarBrightnessImageFilterTest.cxx
@@ -2033,6 +1774,7 @@ otbSarBrightnessFunction.cxx
 otbSarBrightnessFunctionWithoutNoise.cxx
 otbSarBrightnessToImageFilterTest.cxx
 otbSarBrightnessToImageFilterTestWithoutNoise.cxx
+otbSarBrightnessToImageWithComplexPixelFilterTest.cxx
 )
 
 SET(Radiometry_SRCS10

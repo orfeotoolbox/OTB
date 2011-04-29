@@ -208,7 +208,7 @@ MapFileProductWriter<TInputImage>
 
   // Compute max depth
   unsigned int maxDepth =
-    static_cast<unsigned int>(max(vcl_ceil(vcl_log(static_cast<float>(sizeX) / static_cast<float>(m_TileSize)) / vcl_log(2.0)),
+    static_cast<unsigned int>(std::max(vcl_ceil(vcl_log(static_cast<float>(sizeX) / static_cast<float>(m_TileSize)) / vcl_log(2.0)),
                                   vcl_ceil(vcl_log(static_cast<float>(sizeY) / static_cast<float>(m_TileSize)) / vcl_log(2.0))));
   
   // Extract size & index
@@ -237,6 +237,7 @@ MapFileProductWriter<TInputImage>
 
       m_StreamingShrinkImageFilter->SetShrinkFactor(sampleRatioValue);
       m_StreamingShrinkImageFilter->SetInput(m_VectorImage);
+      m_StreamingShrinkImageFilter->Update();
 
       m_VectorRescaleIntensityImageFilter = VectorRescaleIntensityImageFilterType::New();
       m_VectorRescaleIntensityImageFilter->SetInput(m_StreamingShrinkImageFilter->GetOutput());
@@ -289,8 +290,10 @@ MapFileProductWriter<TInputImage>
     std::ostringstream path;
     path << m_ShapeIndexPath<<"/tiles";
 
-    ossimFilename cachingDir(path.str());
-    cachingDir.createDirectory();
+    if (!itksys::SystemTools::MakeDirectory(path.str().c_str()))
+      {
+      itkExceptionMacro(<< "Error while creating cache directory" << path.str());
+      }
     
     // Tiling resample image
     for (unsigned int tx = 0; tx < sizeX; tx += m_TileSize)
@@ -488,12 +491,14 @@ MapFileProductWriter<TInputImage>
   std::ostringstream path;
   path << itksys::SystemTools::GetFilenamePath(m_FileName);
   
-  ossimFilename cachingDir(path.str());
-  cachingDir.createDirectory();
+  if (!itksys::SystemTools::MakeDirectory(path.str().c_str()))
+    {
+    itkExceptionMacro(<< "Error while creating cache directory" << path.str());
+    }
 
   // Create a mapfile
   m_File.open(m_FileName.c_str());
-  m_File << fixed << setprecision(6);
+  m_File << std::fixed << std::setprecision(6);
   
   // Get the name of the layer
   std::ostringstream tempIndexShapeName;

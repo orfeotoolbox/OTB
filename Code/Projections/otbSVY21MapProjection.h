@@ -18,9 +18,7 @@
 #ifndef __otbSVY21MapProjection_h
 #define __otbSVY21MapProjection_h
 
-#include "projection/ossimMapProjection.h"
-#include "projection/ossimTransMercatorProjection.h"
-#include "otbMapProjection.h"
+#include "otbTransMercatorMapProjection.h"
 
 namespace otb
 {
@@ -29,15 +27,15 @@ namespace otb
 * It converts coordinates in longitude, latitude (WGS84) to SVY21 map coordinates.
 *
  */
-template <Transform::TransformationDirection transform>
-class ITK_EXPORT SVY21MapProjection : public TransMercatorMapProjection<transform>
+template <TransformDirection::TransformationDirection TTransform>
+class ITK_EXPORT SVY21MapProjection : public TransMercatorMapProjection<TTransform>
 {
 public:
   /** Standard class typedefs. */
-  typedef SVY21MapProjection                    Self;
-  typedef TransMercatorMapProjection<transform> Superclass;
-  typedef itk::SmartPointer<Self>               Pointer;
-  typedef itk::SmartPointer<const Self>         ConstPointer;
+  typedef SVY21MapProjection                     Self;
+  typedef TransMercatorMapProjection<TTransform> Superclass;
+  typedef itk::SmartPointer<Self>                Pointer;
+  typedef itk::SmartPointer<const Self>          ConstPointer;
 
   typedef typename Superclass::ScalarType ScalarType;
   typedef itk::Point<ScalarType, 2>       InputPointType;
@@ -50,18 +48,22 @@ public:
   itkTypeMacro(SVY21MapProjection, TransMercatorMapProjection);
 
 protected:
-  SVY21MapProjection();
-  virtual ~SVY21MapProjection();
+  SVY21MapProjection()
+  {
+    this->SetParameter("OriginX", "103.83333333333333");
+    this->SetParameter("OriginY", "1.3666666666666667");
+    this->SetParameter("Datum", "WE");
+    this->SetParameter("FalseNorthing", "38744.572");
+    this->SetParameter("FalseEasting", "28001.642");
+    this->SetParameter("ScaleFactor", "1.00");
+  }
+  virtual ~SVY21MapProjection() {}
 
 private:
   SVY21MapProjection(const Self &); //purposely not implemented
-  void operator =(const Self&);                       //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 };
 
 } // namespace otb
-
-#ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSVY21MapProjection.txx"
-#endif
 
 #endif

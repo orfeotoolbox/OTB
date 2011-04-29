@@ -51,9 +51,9 @@ int otbImageLayerVector(int argc, char * argv[])
   reader->SetFileName(argv[1]);
   reader->GenerateOutputInformation();
 
-  unsigned int nbComponents = reader->GetOutput()->GetNumberOfComponentsPerPixel();
-  // min & max
+  unsigned int nbComponents = 3;
 
+  // min & max
   ParametersType parameters(2 * nbComponents);
   for (unsigned int i = 0; i < parameters.Size(); ++i)
     {
@@ -65,6 +65,7 @@ int otbImageLayerVector(int argc, char * argv[])
   // Quicklook
   shrinker->SetInput(reader->GetOutput());
   shrinker->SetShrinkFactor(ssrate);
+  shrinker->Update();
 
   // new layer
   LayerType::Pointer layer = LayerType::New();
@@ -127,7 +128,7 @@ int otbImageLayerVector(int argc, char * argv[])
   writer->SetInput(layer->GetRenderedExtract());
   writer->SetFileName(extoutfname);
   writer->Update();
-
+  
   writer = WriterType::New();
   writer->SetInput(layer->GetRenderedScaledExtract());
   writer->SetFileName(sextoutfname);

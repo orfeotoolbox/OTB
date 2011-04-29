@@ -736,6 +736,19 @@ ADD_TEST(coTvImageRegionTileMapSplitter ${COMMON_TESTS8}
         ${TEMP}/coImageRegionTileMapSplitter.txt
 )
 
+# -------------  otb::ImageRegionSquareTileSplitter ----------------------------
+ADD_TEST(coTuImageRegionSquareTileSplitterNew ${COMMON_TESTS8}
+         otbImageRegionSquareTileSplitterNew
+)
+
+ADD_TEST(coTvImageRegionSquareTileSplitter ${COMMON_TESTS8}
+    --compare-ascii ${NOTOL}
+        ${BASELINE_FILES}/coImageRegionSquareTileSplitter.txt
+        ${TEMP}/coImageRegionSquareTileSplitter.txt
+    otbImageRegionSquareTileSplitter
+        ${TEMP}/coImageRegionSquareTileSplitter.txt
+)
+
 # -------------  otb::ImageOfVectorsToMonoChannelExtractROI ----------------------------
 ADD_TEST(coTuImageOfVectorsToMonoChannelExtractROINew ${COMMON_TESTS8}
 otbImageOfVectorsToMonoChannelExtractROINew
@@ -990,12 +1003,47 @@ ADD_TEST(coTuPipelineMemoryPrintCalculatorNew ${COMMON_TESTS13}
 
 ADD_TEST(coTvPipelineMemoryPrintCalculator ${COMMON_TESTS13}
   --compare-ascii ${NOTOL}
-  ${BASELINE_FILES}//coTvPipelineMemoryPrintCalculatorOutput.txt
+  ${BASELINE_FILES}/coTvPipelineMemoryPrintCalculatorOutput.txt
   ${TEMP}/coTvPipelineMemoryPrintCalculatorOutput.txt
   otbPipelineMemoryPrintCalculatorTest
   ${INPUTDATA}/qb_RoadExtract.img
   ${TEMP}/coTvPipelineMemoryPrintCalculatorOutput.txt
 )
+
+ADD_TEST(coTuStreamingManagerNew ${COMMON_TESTS13}
+  otbStreamingManagerNew
+)
+
+ADD_TEST(coTvNumberOfLinesStrippedStreamingManager ${COMMON_TESTS13}
+  --compare-ascii ${NOTOL}
+    ${BASELINE_FILES}/coTvNumberOfLinesStrippedStreamingManager.txt
+    ${TEMP}/coTvNumberOfLinesStrippedStreamingManager.txt
+  otbNumberOfLinesStrippedStreamingManager
+    ${TEMP}/coTvNumberOfLinesStrippedStreamingManager.txt
+)
+ADD_TEST(coTvRAMDrivenStrippedStreamingManager ${COMMON_TESTS13}
+  --compare-ascii ${NOTOL}
+    ${BASELINE_FILES}/coTvRAMDrivenStrippedStreamingManager.txt
+    ${TEMP}/coTvRAMDrivenStrippedStreamingManager.txt
+  otbRAMDrivenStrippedStreamingManager
+    ${TEMP}/coTvRAMDrivenStrippedStreamingManager.txt
+)
+ADD_TEST(coTvTileDimensionTiledStreamingManager ${COMMON_TESTS13}
+  --compare-ascii ${NOTOL}
+    ${BASELINE_FILES}/coTvTileDimensionTiledStreamingManager.txt
+    ${TEMP}/coTvTileDimensionTiledStreamingManager.txt
+  otbTileDimensionTiledStreamingManager
+    ${TEMP}/coTvTileDimensionTiledStreamingManager.txt
+)
+ADD_TEST(coTvRAMDrivenTiledStreamingManager ${COMMON_TESTS13}
+  --compare-ascii ${NOTOL}
+    ${BASELINE_FILES}/coTvRAMDrivenTiledStreamingManager.txt
+    ${TEMP}/coTvRAMDrivenTiledStreamingManager.txt
+  otbRAMDrivenTiledStreamingManager
+    ${TEMP}/coTvRAMDrivenTiledStreamingManager.txt
+)
+
+
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS1
@@ -1103,6 +1151,7 @@ otbQuickLookImageGeneratorNew.cxx
 otbQuickLookImageGenerator.cxx
 otbImageRegionTileMapSplitterNew.cxx
 otbImageRegionTileMapSplitter.cxx
+otbImageRegionSquareTileSplitter.cxx
 otbImageOfVectorsToMonoChannelExtractROINew.cxx
 otbImageOfVectorsToMonoChannelExtractROI.cxx
 otbImageRegionNonUniformMultidimensionalSplitterNew.cxx
@@ -1156,7 +1205,9 @@ otbRGBAPixelConverter.cxx
 
 SET(BasicCommon_SRCS13
 otbCommonTests13.cxx
-otbPipelineMemoryPrintCalculatorTest.cxx)
+otbPipelineMemoryPrintCalculatorTest.cxx
+otbStreamingManager.cxx
+)
 
 
 OTB_ADD_EXECUTABLE(otbCommonTests1 "${BasicCommon_SRCS1}" "OTBIO;OTBTesting")

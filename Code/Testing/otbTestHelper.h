@@ -117,6 +117,7 @@ private:
   bool   m_ReportErrors;
   bool   m_IgnoreLineOrder;
 
+  void AddWhiteSpace(std::string strIn, std::string &strOut) const;
 };
 }
 

@@ -18,8 +18,7 @@
 #ifndef __otbUtmMapProjection_h
 #define __otbUtmMapProjection_h
 
-#include "projection/ossimUtmProjection.h"
-#include "otbMapProjection.h"
+#include "otbGenericMapProjection.h"
 
 namespace otb
 {
@@ -29,16 +28,16 @@ namespace otb
  * It converts coordinates in longitude, latitude (WGS84) to UTM map coordinates.
  *
  */
-template <Transform::TransformationDirection TTransform>
-class ITK_EXPORT UtmMapProjection : public MapProjection<ossimUtmProjection, TTransform>
+template <TransformDirection::TransformationDirection TTransform>
+class ITK_EXPORT UtmMapProjection : public GenericMapProjection<TTransform>
 {
 public:
 
   /** Standard class typedefs. */
-  typedef UtmMapProjection                              Self;
-  typedef MapProjection<ossimUtmProjection, TTransform> Superclass;
-  typedef itk::SmartPointer<Self>                       Pointer;
-  typedef itk::SmartPointer<const Self>                 ConstPointer;
+  typedef UtmMapProjection                  Self;
+  typedef GenericMapProjection<TTransform>  Superclass;
+  typedef itk::SmartPointer<Self>           Pointer;
+  typedef itk::SmartPointer<const Self>     ConstPointer;
 
   typedef typename Superclass::ScalarType ScalarType;
   typedef itk::Point<ScalarType, 2>       InputPointType;
@@ -48,18 +47,20 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(UtmMapProjection, MapProjection);
+  itkTypeMacro(UtmMapProjection, GenericMapProjection);
 
   virtual void SetZone(long zone);
   virtual void SetHemisphere(char hemisphere);
   virtual int GetZone() const;
-  virtual const char GetHemisphere() const;
+  virtual char GetHemisphere() const;
 
   virtual void SetZoneAndHemisphereFromGeoPoint(const InputPointType& geoPoint);
-  virtual int GetZoneFromGeoPoint(const InputPointType& geoPoint) const;
+
+  /** DEPRECATED: should be replaced by Utils::GetZoneFromGeoPoint() */
+  itkLegacyMacro(virtual int GetZoneFromGeoPoint(const InputPointType& geoPoint) const);
 
 protected:
-  UtmMapProjection() {};
+  UtmMapProjection();
   virtual ~UtmMapProjection() {};
 
 private:

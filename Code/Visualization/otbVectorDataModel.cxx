@@ -27,6 +27,12 @@ VectorDataModel::VectorDataModel() :
   m_Origin.Fill(0.);
   m_Spacing.Fill(1.);
 
+  // Initialize vectordata
+  this->ResetVectorData();
+}
+
+void VectorDataModel::ResetVectorData(void)
+{
   m_VectorData = VectorDataType::New();
   m_CurrentRootNode = DataNodeType::New();
   m_CurrentRootNode->SetNodeId("DOCUMENT");
@@ -34,7 +40,6 @@ VectorDataModel::VectorDataModel() :
   m_VectorData->GetDataTree()->Add(
     m_CurrentRootNode,
     m_VectorData->GetDataTree()->GetRoot()->Get());
-
 }
 
 void VectorDataModel::Update(void)
@@ -134,7 +139,9 @@ void VectorDataModel::EndGeometry(bool callUpdate)
       itkExceptionMacro(<< "Polygon must have at least 3 points");
       }
     otbMsgDevMacro(<< "VectorDataModel::EndGeometry: Ending polygon and adding to vector data");
-
+    VertexListConstIteratorType it = m_CurrentGeometry->GetPolygonExteriorRing()->GetVertexList()->Begin();
+    VertexType firstVertex = it.Value();
+    m_CurrentGeometry->GetPolygonExteriorRing()->AddVertex(firstVertex);
     m_CurrentGeometry = NULL;
     }
   else if (m_CurrentGeometry->GetNodeType() == FEATURE_LINE)

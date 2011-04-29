@@ -26,7 +26,6 @@ int otbSarBrightnessToImageFilterTestWithoutNoise(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
   typedef float                                                            RealType;
-  //typedef std::complex<RealType>                                         PixelType;
   typedef RealType                                                         PixelType;
   typedef otb::Image<PixelType, Dimension>                                 InputImageType;
   typedef otb::Image<RealType, Dimension>                                  OutputImageType;

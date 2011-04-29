@@ -33,8 +33,5 @@ void RegisterTests()
   REGISTER_TEST(otbOssimElevManagerTest);
   REGISTER_TEST(otbOssimElevManagerTest2);
   REGISTER_TEST(otbOssimElevManagerTest4);
-  REGISTER_TEST(otbDEMToOrthoImageGeneratorNew);
-  REGISTER_TEST(otbDEMToOrthoImageGeneratorTest);
-  REGISTER_TEST(otbDEMToOrthoImageGeneratorTest2);
-  REGISTER_TEST(otbDEMToOrthoImageGeneratorWithInputImageTest);
+  REGISTER_TEST(otbMapProjectionWrapperTest);
 }

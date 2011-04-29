@@ -78,7 +78,7 @@ int otbGCPsToRPCSensorModelImageFilterAndOrtho(int argc, char* argv[])
   rpcEstimator->GetOutput()->UpdateOutputInformation();
 
   // Set floatfield to format properly
-  std::cout.setf(ios::fixed, ios::floatfield);
+  std::cout.setf(std::ios::fixed, std::ios::floatfield);
   std::cout.precision(10);
 
   std::cout << rpcEstimator->GetOutput()->GetImageKeywordlist() << std::endl;

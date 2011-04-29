@@ -18,9 +18,7 @@
 #ifndef __otbLambert2EtenduProjection_h
 #define __otbLambert2EtenduProjection_h
 
-#include "projection/ossimMapProjection.h"
-#include "projection/ossimLambertConformalConicProjection.h"
-#include "otbMapProjection.h"
+#include "otbLambertConformalConicMapProjection.h"
 
 namespace otb
 {
@@ -29,19 +27,15 @@ namespace otb
 * It converts coordinates in longitude, latitude (WGS84) to Lambert 2 Etendu map coordinates.
 *
  */
-template <Transform::TransformationDirection transform>
-class ITK_EXPORT Lambert2EtenduProjection : public LambertConformalConicMapProjection<transform>
+template <TransformDirection::TransformationDirection TTransform>
+class ITK_EXPORT Lambert2EtenduProjection : public LambertConformalConicMapProjection<TTransform>
 {
 public:
   /** Standard class typedefs. */
-  typedef Lambert2EtenduProjection                      Self;
-  typedef LambertConformalConicMapProjection<transform> Superclass;
-  typedef itk::SmartPointer<Self>                       Pointer;
-  typedef itk::SmartPointer<const Self>                 ConstPointer;
-
-  typedef typename Superclass::ScalarType ScalarType;
-  typedef itk::Point<ScalarType, 2>       InputPointType;
-  typedef itk::Point<ScalarType, 2>       OutputPointType;
+  typedef Lambert2EtenduProjection                       Self;
+  typedef LambertConformalConicMapProjection<TTransform> Superclass;
+  typedef itk::SmartPointer<Self>                        Pointer;
+  typedef itk::SmartPointer<const Self>                  ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -50,18 +44,24 @@ public:
   itkTypeMacro(Lambert2EtenduProjection, LambertConformalConicMapProjection);
 
 protected:
-  Lambert2EtenduProjection();
-  virtual ~Lambert2EtenduProjection();
+  Lambert2EtenduProjection()
+  {
+    this->SetParameter("OriginX", "2.33722778");
+    this->SetParameter("OriginY", "46.8");
+    this->SetParameter("Datum", "NTF");
+    this->SetParameter("FalseNorthing", "2200000");
+    this->SetParameter("FalseEasting", "600000");
+    this->SetParameter("StandardParallel1", "45.89891944");
+    this->SetParameter("StandardParallel2", "47.69601389");
+  }
+
+  virtual ~Lambert2EtenduProjection() {}
 
 private:
   Lambert2EtenduProjection(const Self &); //purposely not implemented
-  void operator =(const Self&);                       //purposely not implemented
+  void operator =(const Self&);           //purposely not implemented
 };
 
 } // namespace otb
-
-#ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLambert2EtenduProjection.txx"
-#endif
 
 #endif

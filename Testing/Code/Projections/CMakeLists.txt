@@ -180,13 +180,22 @@ ADD_TEST(prTvSensorModelAlosPalsar ${PROJECTIONS_TESTS1}
          ${TEMP}/prTvSensorModelAlosPalsar.txt
 )
 
-ADD_TEST(prTvSensorModelRadarSat1 ${PROJECTIONS_TESTS1}
+ADD_TEST(prTvSensorModelRadarSat1_GOMA ${PROJECTIONS_TESTS1}
   --ignore-order --compare-ascii ${NOTOL}
-         ${BASELINE_FILES}/prTvSensorModelRadarSat1.txt
-         ${TEMP}/prTvSensorModelRadarSat1.txt
+         ${BASELINE_FILES}/prTvSensorModelRadarSat1_GOMA.txt
+         ${TEMP}/prTvSensorModelRadarSat1_GOMA.txt
     otbSensorModel
          ${LARGEINPUT}/RADARSAT1/GOMA/SCENE01/DAT_01.001
-         ${TEMP}/prTvSensorModelRadarSat1.txt
+         ${TEMP}/prTvSensorModelRadarSat1_GOMA.txt
+)
+
+ADD_TEST(prTvSensorModelRadarSat1_SARDEGNA ${PROJECTIONS_TESTS1}
+  --ignore-order --compare-ascii ${NOTOL}
+         ${BASELINE_FILES}/prTvSensorModelRadarSat1_SARDEGNA.txt
+         ${TEMP}/prTvSensorModelRadarSat1_SARDEGNA.txt
+    otbSensorModel
+         ${LARGEINPUT}/RADARSAT1/SARDEGNA/scene01/dat_01.001
+         ${TEMP}/prTvSensorModelRadarSat1_SARDEGNA.txt
 )
 
 ADD_TEST(prTvSensorModelRadarSat2 ${PROJECTIONS_TESTS1}
@@ -409,6 +418,25 @@ ADD_TEST(prTlOrthoRectificationSPOT5 ${PROJECTIONS_TESTS2}
         5
         )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
+
+#============= Test for bug 253 ===============================================
+ADD_TEST(prTvOrthoRectificationCoastalZoneWithSRTMNoData ${PROJECTIONS_TESTS2}
+ --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationCoastalZoneWithSRTMNoData.tif
+                               ${TEMP}/prTvOrthoRectificationCoastalZoneWithSRTMNoData.tif
+        otbOrthoRectificationFilterWithDEM
+        ${INPUTDATA}/qb_coastal.tif
+        ${TEMP}/prTvOrthoRectificationCoastalZoneWithSRTMNoData.tif
+        536724
+        4.07959e+06
+        741
+        781
+        24
+        -24
+        31
+        N
+        ${INPUTDATA}/DEM/srtm_directory/
+        24
+        )
 
 
 #========================= Ortho rectif SAR data  ===============================
@@ -823,6 +851,21 @@ ADD_TEST(prTvGenericRSTransformFromImage ${PROJECTIONS_TESTS3}
 	       otbGenericRSTransformFromImage
 	       ${INPUTDATA}/WithoutProjRefWithKeywordlist.tif)
 
+IF(OTB_DATA_USE_LARGEINPUT)
+ADD_TEST(prTvGenericRSTransformQuickbirdToulouseGeodesicPointChecking ${PROJECTIONS_TESTS3}
+otbGenericRSTransformImageAndMNTToWGS84ConversionChecking
+${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+${INPUTDATA}/DEM/srtm_directory/
+${INPUTDATA}/DEM/egm96.grd
+16271 15647 # IGN reference point in front of st sernin church pointed in image
+1.48353 43.55968 # IGN reference point lon/lat
+192.205 # IGN reference point elevation (prec < 10 cm)
+24 # Tolerance in pixels according to DigitalGlobe specification
+23 # Tolerance in meters according to DigitalGlobe specification
+)
+
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
 ADD_TEST(prTuVectorDataProjectionFilterNew ${PROJECTIONS_TESTS3}  otbVectorDataProjectionFilterNew )
 
 #test points
@@ -888,6 +931,16 @@ ADD_TEST(prTvVectorDataProjectionFilterFromMapToImage ${PROJECTIONS_TESTS3}
         ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif 
         ${TEMP}/prTvVectorDataProjectionFilterFromMapToImage.kml
 )
+
+ADD_TEST(prTvVectorDataIntoImageProjectionFilter ${PROJECTIONS_TESTS3}
+        #--compare-ascii ${NOTOL}
+          #${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToImage.kml
+          #${TEMP}/prTvVectorDataProjectionFilterFromMapToImage.kml
+        otbVectorDataIntoImageProjectionFilterTest
+          ${INPUTDATA}/Classification/QB_1_ortho.tif
+          ${INPUTDATA}/Classification/VectorData_QB1.shp
+)
+
 
 
 ADD_TEST(prTuGeocentricTransformNew ${PROJECTIONS_TESTS3}  otbGeocentricTransformNew )
@@ -975,17 +1028,13 @@ ENDFOREACH( file ${SENSOR_TYPES})
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 
-ADD_TEST(prTuElevDatabaseHeightAboveMSLFunction ${PROJECTIONS_TESTS4}
-   otbElevDatabaseHeightAboveMSLFunction
-)
-
 #------ otb::ImageToEnvelopeVectorDataFilter ---------------------
 ADD_TEST(prTuImageToEnvelopeVectorDataFilterNew ${PROJECTIONS_TESTS4}
 otbImageToEnvelopeVectorDataFilterNew)
 
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(prTvImageToEnvelopeVectorDataFilter ${PROJECTIONS_TESTS4}
---compare-ascii ${NOTOL}
+--compare-ascii ${EPSILON_6}
   ${BASELINE_FILES}/prTvImageToEnvelopeVectorDataFilterOutput.kml
   ${TEMP}/prTvImageToEnvelopeVectorDataFilterOutput.kml
   otbImageToEnvelopeVectorDataFilter
@@ -1026,6 +1075,17 @@ ${TEMP}/otbRationalTransformOutput.txt
 -10 -10
 )
 
+#----- otb::GeographicalDistance ---------------------
+ADD_TEST(prTuGeographicalDistanceNew ${PROJECTIONS_TESTS4}
+  otbGeographicalDistanceNew)
+
+ADD_TEST(prTvGeographicalDistance ${PROJECTIONS_TESTS4}
+  otbGeographicalDistance
+  -1.84944 53.14722 
+   0.14056 52.20444 
+   170254.85084
+  ${EPSILON_4}
+)
 
 #=======================================================================================
 SET(Projections_SRCS1
@@ -1072,6 +1132,7 @@ otbVectorDataProjectionFilter.cxx
 otbVectorDataProjectionFilterFromMapToSensor.cxx
 otbVectorDataProjectionFilterFromMapToGeo.cxx
 otbVectorDataProjectionFilterFromMapToImage.cxx
+otbVectorDataIntoImageProjectionFilterTest.cxx
 otbGeocentricTransformNew.cxx
 otbGeocentricTransform.cxx
 otbTileMapTransform.cxx
@@ -1083,10 +1144,10 @@ SET(Projections_SRCS4
 otbProjectionsTests4.cxx
 otbPhysicalToRPCSensorModelImageFilter.cxx
 otbGenericRSResampleImageFilter.cxx
-otbElevDatabaseHeightAboveMSLFunction.cxx
 otbImageToEnvelopeVectorDataFilter.cxx
 otbImageToGenericRSOutputParameters.cxx
 otbRationalTransform.cxx
+otbGeographicalDistance.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbProjectionsTests1 "${Projections_SRCS1}" "OTBProjections;OTBIO;OTBTesting")

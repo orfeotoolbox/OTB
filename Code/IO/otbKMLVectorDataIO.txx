@@ -32,10 +32,6 @@
 #include "kml/dom/kml_cast.h"
 #include "kml/engine/kml_file.h"
 
-#include "projection/ossimProjection.h"
-#include "projection/ossimMapProjection.h"
-#include "projection/ossimMapProjectionFactory.h"
-#include "gdal/ossimOgcWktTranslator.h"
 #include "otbMetaDataKey.h"
 
 #include "itkTimeProbe.h"

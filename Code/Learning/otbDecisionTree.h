@@ -9,8 +9,6 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom; Telecom bretagne. All rights reserved.
-  See ITCopyright.txt for details.
 
      This software is distributed WITHOUT ANY WARRANTY; without even
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
@@ -72,9 +70,9 @@ public:
   itkTypeMacro(DecisionTree, DataObject);
 
   typedef typename std::pair< AttributeValueType, DecisionTreeTestType > KeyType;
-  typedef typename std::map< KeyType, Pointer > TreeMapType;
-  typedef typename std::map< KeyType, LabelType > LabelMapType;
-  typedef std::vector<AttributeValueType> ExampleType;
+  typedef typename std::map< KeyType, Pointer >                          TreeMapType;
+  typedef typename std::map< KeyType, LabelType >                        LabelMapType;
+  typedef std::vector<AttributeValueType>                                ExampleType;
 
   itkSetMacro(Attribute, unsigned int);
   itkGetMacro(Attribute, unsigned int);

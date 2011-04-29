@@ -33,4 +33,5 @@ void RegisterTests()
   REGISTER_TEST(otbCompareAsciiTests4);
   REGISTER_TEST(otbCompareAsciiTests5);
   REGISTER_TEST(otbCompareAsciiTestsEpsilon3_WhiteSpace);
+  REGISTER_TEST(otbCompareAsciiTestScientificNotation);
 }

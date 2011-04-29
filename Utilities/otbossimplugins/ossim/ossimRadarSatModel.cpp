@@ -46,12 +46,24 @@ RTTI_DEF1(ossimRadarSatModel, "ossimRadarSatModel", ossimGeometricSarSensorModel
 static ossimTrace traceDebug("ossimRadarSatModel:debug");
 
 ossimRadarSatModel::ossimRadarSatModel():
+  ossimGeometricSarSensorModel(),
   _n_srgr(0),
   _pixel_spacing(0),
   _data(NULL),
   _leader(NULL),
   _trailer(NULL),
   _volumeDir(NULL)
+{
+}
+
+ossimRadarSatModel::ossimRadarSatModel(const ossimRadarSatModel& rhs):
+  ossimGeometricSarSensorModel(rhs),
+  _n_srgr(rhs._n_srgr),
+  _pixel_spacing(rhs._pixel_spacing),
+  _data(new Data(*(rhs._data))),
+  _leader(new Leader(*(rhs._leader))),
+  _trailer(new Trailer(*(rhs._trailer))),
+  _volumeDir(new VolumeDir(*(rhs._volumeDir)))
 {
 }
 
@@ -280,7 +292,16 @@ bool ossimRadarSatModel::open(const ossimFilename& file)
             dataFile>>*_data;
             dataFile.close();
 
-            _data->InsertRecord(headerDAT.get_rec_seq(), recordDAT);
+            /*
+             * Commenting this line :
+             * With SARDEGNA file (a corrupted file without number of lines)
+             * this line makes disappear the auto-computation of number of lines
+             * by file seeking.
+             * It does not seem to add any information either (same keywordlist)
+             *
+             * TODO : investigate : what is it supposed to do ?
+             */
+            //_data->InsertRecord(headerDAT.get_rec_seq(), recordDAT);
 
             if(traceDebug())
               {
@@ -382,16 +403,40 @@ bool ossimRadarSatModel::open(const ossimFilename& file)
       }
     }
 
+  ossimKeywordlist geom_kwl;
+  this->internalSaveState(geom_kwl);
+  this->internalLoadState(geom_kwl);
+
+  // Assign the ossimSensorModel::theBoundGndPolygon
+  ossimGpt ul;
+  ossimGpt ur;
+  ossimGpt lr;
+  ossimGpt ll;
+  lineSampleToWorld(theImageClipRect.ul(), ul);
+  lineSampleToWorld(theImageClipRect.ur(), ur);
+  lineSampleToWorld(theImageClipRect.lr(), lr);
+  lineSampleToWorld(theImageClipRect.ll(), ll);
+  setGroundRect(ul, ur, lr, ll);  // ossimSensorModel method.
+
   if(traceDebug())
     {
-    ossimNotify(ossimNotifyLevel_DEBUG) << "ossimRadarSatTileSource::open() DEBUG: returning..." << std::endl;
+    ossimNotify(ossimNotifyLevel_DEBUG) << "ossimRadarSatModel::open() DEBUG: returning..." << std::endl;
     }
+
   return retValue;
 }
 
-bool ossimRadarSatModel::saveState(ossimKeywordlist& kwl,
-                                                 const char* prefix) const
+
+bool ossimRadarSatModel::internalSaveState(ossimKeywordlist& kwl,
+                                           const char* prefix) const
 {
+  static const char MODULE[] = "ossimRadarSatModel::internalSaveState";
+
+  if (traceDebug())
+  {
+     ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " entered...\n";
+  }
+
   char name[64];
 
     kwl.add(prefix, ossimKeywordNames::TYPE_KW, "ossimRadarSatModel", true);
@@ -406,9 +451,6 @@ bool ossimRadarSatModel::saveState(ossimKeywordlist& kwl,
       return false;
     }
 
-    /*
-     * Ajout des donn�es n�cessaires au mod�le de capteur dans la liste des mots clefs
-     */
     DataSetSummary * datasetSummary = _leader->get_DataSetSummary();
     if(datasetSummary == NULL)
       {
@@ -473,9 +515,6 @@ bool ossimRadarSatModel::saveState(ossimKeywordlist& kwl,
       return false;
     }
 
-    /*
-     * Ajout des donn�es n�cessaires au mod�le de capteur dans la liste des mots clefs
-     */
     ProcessingParameters * processingParameters = _leader->get_ProcessingParameters();
     if(processingParameters == NULL)
       {
@@ -516,9 +555,6 @@ bool ossimRadarSatModel::saveState(ossimKeywordlist& kwl,
       return false;
     }
 
-    /*
-     * Ajout des donn�es n�cessaires au mod�le de capteur dans la liste des mots clefs
-     */
     PlatformPositionData * platformPositionData = _leader->get_PlatformPositionData();
     if(platformPositionData != NULL)
     {
@@ -586,7 +622,7 @@ bool ossimRadarSatModel::saveState(ossimKeywordlist& kwl,
     }
 
     ProcessedDataRecord * lastProcessedDataRecord = _data->get_LastProcessedDataRecord();
-    if(firstProcessedDataRecord != NULL)
+    if(lastProcessedDataRecord != NULL)
     {
       sprintf(name,"cornersLon%i",2);
       kwl.add(prefix, name,((float) (lastProcessedDataRecord->get_lon_first()))/1000000.0,true);
@@ -607,16 +643,76 @@ bool ossimRadarSatModel::saveState(ossimKeywordlist& kwl,
     return true;
 }
 
-bool ossimRadarSatModel::loadState (const ossimKeywordlist &kwl,
-                                                  const char *prefix)
+bool ossimRadarSatModel::saveState(ossimKeywordlist& kwl,
+                                                 const char* prefix) const
 {
+  bool result = this->internalSaveState(kwl, prefix);
 
-  InitSRGR(kwl, prefix);
-  InitSensorParams(kwl, prefix);
-  InitPlatformPosition(kwl, prefix);
-  InitRefPoint(kwl, prefix);
+  if (result)
+  {
+    result = ossimGeometricSarSensorModel::saveState(kwl, prefix);
+  }
 
+  return result;
+}
+
+bool ossimRadarSatModel::internalLoadState (const ossimKeywordlist &kwl,
+                                            const char *prefix)
+{
+  static const char MODULE[] = "ossimRadarSatModel::internalLoadState";
+  if (traceDebug())
+  {
+     ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
+  }
+
+  this->InitSRGR(kwl, prefix);
+  this->InitSensorParams(kwl, prefix);
+  this->InitPlatformPosition(kwl, prefix);
+  this->InitRefPoint(kwl, prefix);
+
+  if (traceDebug())
+  {
+     ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " exit...\n";
+  }
   return true;
+}
+
+bool ossimRadarSatModel::loadState (const ossimKeywordlist &kwl,
+                                    const char *prefix)
+{
+  static const char MODULE[] = "ossimRadarSatModel::loadState";
+  if (traceDebug())
+  {
+     ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
+  }
+
+  const char* lookup = 0;
+  ossimString s;
+
+  // Check the type first.
+  lookup = kwl.find(prefix, ossimKeywordNames::TYPE_KW);
+  if (lookup)
+  {
+     s = lookup;
+     if (s != getClassName())
+     {
+        return false;
+     }
+  }
+
+  //bool result = ossimGeometricSarSensorModel::loadState(kwl, prefix);
+
+  bool result = true;
+  if (result)
+    {
+    result = this->internalLoadState(kwl, prefix);
+    }
+
+  if (traceDebug())
+  {
+     ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " exit...\n";
+  }
+  return result;
 }
 
 bool ossimRadarSatModel::InitSensorParams(const ossimKeywordlist &kwl, const char *prefix)
@@ -955,9 +1051,10 @@ bool ossimRadarSatModel::InitRefPoint(const ossimKeywordlist &kwl, const char *p
   // in order to use ossimSensorModel::lineSampleToWorld
   const char* nbCol_str = kwl.find(prefix,"nbCol");
   const char* nbLin_str = kwl.find(prefix,"nbLin");
+
   theImageSize.x      = atoi(nbCol_str);
-   theImageSize.y      = atoi(nbLin_str);
-   theImageClipRect    = ossimDrect(0, 0, theImageSize.x-1, theImageSize.y-1);
+  theImageSize.y      = atoi(nbLin_str);
+  theImageClipRect    = ossimDrect(0, 0, theImageSize.x-1, theImageSize.y-1);
 
   // sensor PRF update in the case of ground projected products
   if (_isProductGeoreferenced) {
@@ -1034,7 +1131,7 @@ bool ossimRadarSatModel::InitSRGR(const ossimKeywordlist &kwl, const char *prefi
   format[3] = '\0';
   std::string format_str(format);
 
-  _isProductGeoreferenced = (format_str=="SGX") || (format_str=="SGF");
+  _isProductGeoreferenced = (format_str=="SGX") || (format_str=="SGF") || (format_str=="SCW");
 
   // pixel spacing
   const char* pixel_spacing_str = kwl.find(prefix,"pixel_spacing");

@@ -34,14 +34,14 @@ namespace otb
  * depening on the polarimetric architecture:
  *
  *    - HH_HV : two channels are available: \f$ S_{HH} \f$  and  \f$ S_{HV} \f$ .
- *                  Emit polarisation is fixed to horizontal orientation:  \f$ \psi_{i}=0 \f$  and  \f$ \chi_{i}=0 \f$ .
+ *                  Emit polarisation is fixed to horizontal orientation:  \f$ \psi_{i}=0 \f$  and  \f$ \chi_{i}=0 \f$ . \\
  *    - VV_VH : two channels are available:  \f$ S_{VV} \f$  and  \f$ S_{VH} \f$ .
- *                  Emit polarisation is fixed to vertical orientation:  \f$ \psi_{i}=90^\circ \f$  and  \f$ \chi_{i}=0 \f$ .
+ *                  Emit polarisation is fixed to vertical orientation:  \f$ \psi_{i}=90^\circ \f$  and  \f$ \chi_{i}=0 \f$ . \\
  *    - HH_HV_VV : three channels are available:  \f$ S_{HH} \f$ ,  \f$ S_{HV} \f$  and  \f$ S_{VV} \f$ .
- *                     we make the assumption that cross polarisation are reciprocal ( \f$ S_{HV} =  S_{VH} \f$ ).
- *    - HH_HV_VH_VV: four channels are available  \f$ S_{HH} \f$ ,  \f$ S_{HV} \f$ ,  \f$ S_{VH} \f$  and  \f$ S_{VV} \f$ .
+ *                     we make the assumption that cross polarisation are reciprocal ( \f$ S_{HV} =  S_{VH} \f$ ). \\
+ *    - HH_HV_VH_VV: four channels are available  \f$ S_{HH} \f$ ,  \f$ S_{HV} \f$ ,  \f$ S_{VH} \f$  and  \f$ S_{VV} \f$ . \\
  *
- * To resolve the synthesis, four parameters are required:  \f$ \psi_{i} \f$  ,  \f$ \chi_{i} \f$ ,  \f$ \psi_{r} \f$  and  \f$ \chi_{r} \f$ .
+ * To resolve the synthesis, four parameters are required:  \f$ \psi_{i} \f$  ,  \f$ \chi_{i} \f$ ,  \f$ \psi_{r} \f$  and  \f$ \chi_{r} \f$ . \\
  * These parameters depend on the polarimetric architecture describe below.
  *
  * The result of the synthesis is a scalar image. Three modes are available:
@@ -57,6 +57,7 @@ namespace otb
  *
  * \ingroup SARPolarimetry
  * \sa PolarimetricSynthesisFunctor
+ * \sa MultiChannelsPolarimetricSynthesisFilter
  *
  */
 

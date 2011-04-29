@@ -21,12 +21,10 @@
 #include <iostream>
 #include <sstream>
 #include <stdio.h>
-#include "projection/ossimProjection.h"
 #include "itkTransform.h"
 #include "itkExceptionObject.h"
 #include "itkMacro.h"
 #include "otbCompositeTransform.h"
-#include "ogr_spatialref.h"
 
 namespace otb
 {
@@ -62,7 +60,6 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   typedef typename Superclass::ScalarType           ScalarType;
-  typedef ossimProjection                           OssimMapProjectionType;
   typedef itk::Point<ScalarType, NInputDimensions>  InputPointType;
   typedef itk::Point<ScalarType, NOutputDimensions> OutputPointType;
 
@@ -82,7 +79,7 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(GenericRSTransform, itk::Transform);
 
-  typedef Transform::TransformationDirection DirectionOfMappingEnumType;
+  typedef TransformDirection::TransformationDirection DirectionOfMappingEnumType;
 
   itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
   itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);

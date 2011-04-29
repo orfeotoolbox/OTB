@@ -19,6 +19,7 @@
 #define __otbSinclairToReciprocalCircularCovarianceMatrixFunctor_h
 
 #include "vcl_complex.h"
+#include "otbSinclairToReciprocalCovarianceMatrixFunctor.h"
 
 namespace otb
 {
@@ -29,26 +30,30 @@ namespace Functor
  *  with Sinclair matrix information.
  *
  *  Output value are:
- *   channel #0 : \f$ S_{ll}.S_{ll}^{*} \f$
- *   channel #1 : \f$ S_{ll}.S_{lr}^{*} \f$
- *   channel #2 : \f$ S_{ll}.S_{rr}^{*} \f$
- *   channel #3 : \f$ S_{lr}.S_{lr}^{*} \f$
- *   channel #4 : \f$ S_{lr}.S_{rr}^{*} \f$
- *   channel #5 : \f$ S_{rr}.S_{rr}^{*} \f$
+ *   channel #0 : \f$ S_{ll}.S_{ll}^{*} \f$ \\
+ *   channel #1 : \f$ S_{ll}.S_{lr}^{*} \f$ \\
+ *   channel #2 : \f$ S_{ll}.S_{rr}^{*} \f$ \\
+ *   channel #3 : \f$ S_{lr}.S_{lr}^{*} \f$ \\
+ *   channel #4 : \f$ S_{lr}.S_{rr}^{*} \f$ \\
+ *   channel #5 : \f$ S_{rr}.S_{rr}^{*} \f$ \\
+ *
+ * This is a adaptation of the SinclairToCircularCovarianceMatrixFunctor, where \f$ S_{hv}=S_{vh} \f$.
+ *
+ * The output pixel has 6 channels : the diagonal and the upper element of the reciprocal matrix.
+ * Element are stored from left to right, line by line.
  *
  *  \ingroup Functor
  *  \ingroup SARPolarimetry
  *
+ *  \sa SinclairToCircularCovarianceMatrixFunctor
  *  \sa SinclairImageFilter
- *  \sa SinclairToCoherencyFunctor
- *  \sa SinclairToCovarianceFunctor
- *  \sa SinclairToMuellerFunctor
- *  \sa SinclairToReciprocalCircularCovarianceMatrixFunctor
- *  \sa SinclairToReciprocalCoherencyFunctor
- *  \sa SinclairToReciprocalCovarianceFunctor
+ *  \sa SinclairToCoherencyMatrixFunctor
+ *  \sa SinclairToCovarianceMatrixFunctor
+ *  \sa SinclairToMuellerMatrixFunctor
+ *  \sa SinclairToReciprocalCoherencyMatrixFunctor
+ *  \sa SinclairToReciprocalCovarianceMatrixFunctor
  */
-template <class TInput1, class TInput2, class TInput3,
-          class TInput4, class TOutput>
+template <class TInput1, class TInput2, class TInput3, class TOutput>
 class SinclairToReciprocalCircularCovarianceMatrixFunctor
 {
 public:
@@ -56,8 +61,9 @@ public:
   typedef double                                   RealType;
   typedef std::complex <RealType>                  ComplexType;
   typedef typename TOutput::ValueType              OutputValueType;
-  inline TOutput operator ()(const TInput1& Shh, const TInput2& Shv,
-                             const TInput3& Svh, const TInput4& Svv)
+  typedef SinclairToReciprocalCovarianceMatrixFunctor<ComplexType, ComplexType, ComplexType, TOutput> SinclairToReciprocalCovarianceFunctorType;
+
+  inline TOutput operator ()(const TInput1& Shh, const TInput2& Shv, const TInput3& Svv)
   {
     TOutput result;
 
@@ -66,29 +72,22 @@ public:
 
     const ComplexType S_hh = static_cast<ComplexType>(Shh);
     const ComplexType S_hv = static_cast<ComplexType>(Shv);
-    const ComplexType S_vh = static_cast<ComplexType>(Svh);
     const ComplexType S_vv = static_cast<ComplexType>(Svv);
 
     const ComplexType coef(0.5);
 
     const ComplexType j2S_hv = S_hv * ComplexType(0.0, 2.0);
 
-    const ComplexType Sll = coef * (-S_hh-j2S_hv+S_vv );
-    const ComplexType Slr = coef * (-S_hh+S_vv );
-    const ComplexType Srr = vcl_conj(Sll);
+    const ComplexType Sll = coef * ( -S_hh-j2S_hv+S_vv );
+    const ComplexType Slr = coef * ( -S_hh+-S_vv );
+    const ComplexType Srr = coef * ( -S_hh+j2S_hv+S_vv );
 
     const ComplexType conjSll = vcl_conj(Sll);
     const ComplexType conjSlr = vcl_conj(Slr);
     const ComplexType conjSrr = vcl_conj(Srr);
 
-    result[0]  = static_cast<OutputValueType>( std::norm(Sll) );
-    result[1]  = static_cast<OutputValueType>( Sll * conjSlr  );
-    result[2]  = static_cast<OutputValueType>( Sll * conjSrr  );
-    result[3]  = static_cast<OutputValueType>( std::norm(Slr) );
-    result[4]  = static_cast<OutputValueType>( Slr * conjSrr  );
-    result[5]  = static_cast<OutputValueType>( std::norm(Srr) );
-
-    return (result);
+    SinclairToReciprocalCovarianceFunctorType funct;
+    return ( funct(Sll, Slr, Srr ) );
   }
 
   unsigned int GetNumberOfComponentsPerPixel()

@@ -30,7 +30,8 @@ PersistentObjectDetectionClassifier<TInputImage, TOutputVectorData, TLabel, TFun
 ::PersistentObjectDetectionClassifier()
   : m_NeighborhoodRadius(0),
     m_ClassKey("Class"),
-    m_NoClassLabel(0)
+    m_NoClassLabel(0),
+    m_GridStep(10)
 {
   // Need 2 inputs : a vector image, and a SVMModel
   this->SetNumberOfRequiredInputs(2);
@@ -251,16 +252,14 @@ PersistentObjectDetectionClassifier<TInputImage, TOutputVectorData, TLabel, TFun
   end[0] += outputRegionForThread.GetSize(0);
   end[1] += outputRegionForThread.GetSize(1);
 
-  unsigned int step = m_NeighborhoodRadius/2;
-
   IndexType current = begin;
   for (; current[1] != end[1]; current[1]++)
     {
-    if (current[1] % step == 0)
+    if (current[1] % m_GridStep == 0)
       {
-      for(current[0] = 0; current[0] != end[0]; current[0]++)
+      for(current[0] = begin[0]; current[0] != end[0]; current[0]++)
         {
-        if (current[0] % step == 0)
+        if (current[0] % m_GridStep == 0)
           {
           DescriptorsFunctionPointType point;
           input->TransformIndexToPhysicalPoint(current, point);

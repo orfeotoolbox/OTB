@@ -27,6 +27,7 @@
 #include "stdlib.h"
 
 /* ITK Libraries */
+#include "otbMacro.h"
 #include "itkImageIOBase.h"
 #include "otbImageRegionTileMapSplitter.h"
 
@@ -74,30 +75,9 @@ public:
   itkSetMacro(MaxConnect, int);
   itkGetMacro(MaxConnect, int);
 
-  virtual void SetCacheDirectory(const char* _arg)
-  {
-    if (_arg && (_arg == this->m_CacheDirectory))
-      {
-      return;
-      }
-    if (_arg)
-      {
-      this->m_CacheDirectory = _arg;
-      this->m_UseCache = true;
-      }
-    else
-      {
-      this->m_CacheDirectory = "";
-      this->m_UseCache = false;
-      }
-    this->Modified();
-  }
+  virtual void SetCacheDirectory(const char* _arg);
+  virtual void SetCacheDirectory(const std::string& _arg);
 
-  virtual void SetCacheDirectory(const std::string& _arg)
-  {
-    this->SetCacheDirectory(_arg.c_str());
-    this->m_UseCache = true;
-  }
   itkGetStringMacro(CacheDirectory);
 
   itkSetMacro(Depth, int);

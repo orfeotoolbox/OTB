@@ -26,7 +26,6 @@
 
 #include "itkProgressAccumulator.h"
 
-#include "projection/ossimUtmProjection.h"
 #include "itkPoint.h"
 #include "itkNumericTraits.h"
 
@@ -303,11 +302,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
     {
     // Build the UTM transform : Need the zone & the hemisphere
     // For this we us the geographic coordinate of the input UL corner
-    typedef ossimRefPtr<ossimUtmProjection>       OssimMapProjectionPointerType;
     typedef itk::Point<double, 2>                  GeoPointType;
-  
-    // instanciate the projection to get the utm zone
-    OssimMapProjectionPointerType  utmMapProjection =  new ossimUtmProjection();
   
     // get the utm zone and hemisphere using the input UL corner
     // geographic coordinates
@@ -322,8 +317,7 @@ GenericRSResampleImageFilter<TInputImage, TOutputImage>
     geoPoint = invTransform->GetTransform()->GetFirstTransform()->TransformPoint(pSrc);
   
     // Guess the zone and the hemisphere
-    ossimGpt point(geoPoint[1],  geoPoint[0]);
-    int zone = utmMapProjection->computeZone(point);
+    int zone = Utils::GetZoneFromGeoPoint(geoPoint[0], geoPoint[1]);
     bool hem = (geoPoint[1]>1e-10)?true:false;
   
     // Build the output UTM projection ref
