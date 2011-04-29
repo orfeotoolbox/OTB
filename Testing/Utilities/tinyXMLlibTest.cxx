@@ -1120,7 +1120,7 @@ int tinyXMLlibTest(int argc, char *argv[] )
             TiXmlHandle tHandle = aHandle.Child( 0 );
             assert( aHandle.Element() );
             assert( tHandle.Text() );
-            XmlTest(file, "ISO-8859-1 Parsing.", "CntXntX", tHandle.Text()->Value() );
+            XmlTest(file, "ISO-8859-1 Parsing.", "CXntXntX", tHandle.Text()->Value() );
     }
 
 	{
