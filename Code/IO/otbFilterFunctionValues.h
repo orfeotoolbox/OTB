@@ -113,11 +113,11 @@ private:
     * There values a computed by 6S. If the UserStep is 0.0025 micro m, then m_FilterFunctionValues is identical as m_FilterFunctionValues6S
     */
   ValuesVectorType m_FilterFunctionValues6S;
-  /** Minimum spectral value (in µm). */
+  /** Minimum spectral value (in  micro m). */
   WavelengthSpectralBandType m_MinSpectralValue;
-  /** Maximum spectral value (in µm). */
+  /** Maximum spectral value (in  micro m). */
   WavelengthSpectralBandType m_MaxSpectralValue;
-  /** User step between each wavelength spectral band values. (in  micro m) */
+  /** User step between each wavelength spectral band values. (in  micro micro m) */
   WavelengthSpectralBandType m_UserStep;
 };
 
