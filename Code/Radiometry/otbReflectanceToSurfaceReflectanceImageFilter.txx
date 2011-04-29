@@ -119,10 +119,6 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
         functionValues->SetMaxSpectralValue(imageMetadataInterface->GetLastWavelengths()[i]);
         //By default the function values size is 3, set the step to feet with min and max spectral value
         functionValues->SetUserStep((functionValues->GetMaxSpectralValue() - functionValues->GetMinSpectralValue()) / 2.);
-        std::cout << "functionValues->GetMaxSpectralValue(): " << functionValues->GetMaxSpectralValue() << std::endl;
-        std::cout << "functionValues->GetMinSpectralValue(): " << functionValues->GetMinSpectralValue() << std::endl;
-        std::cout << "functionValues->GetUserStep(): " << functionValues->GetUserStep() << std::endl;
-        std::cout << "functionValues size: " << functionValues->GetFilterFunctionValues().size() << std::endl;
         }
 
       m_CorrectionParameters->SetWavelengthSpectralBandWithIndex(i, functionValues);
@@ -152,7 +148,6 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
 {
     Parameters2RadiativeTermsPointerType param2Terms = Parameters2RadiativeTermsType::New();
     param2Terms->SetInput(m_CorrectionParameters);
-    //std::cout << " in GenerateAtmosphericRadiativeTerms before update vector values size before sixtraits " << m_CorrectionParameters->GetWavelengthSpectralBand()->GetNthElement(0)->GetFilterFunctionValues().size() << std::endl;
     param2Terms->Update();
     m_AtmosphericRadiativeTerms = param2Terms->GetOutput();
 }
