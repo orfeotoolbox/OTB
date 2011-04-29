@@ -36,4 +36,6 @@ void RegisterTests()
   REGISTER_TEST(otbImageToGenericRSOutputParameters);
   REGISTER_TEST(otbRationalTransformNew);
   REGISTER_TEST(otbRationalTransform);
+  REGISTER_TEST(otbGeographicalDistanceNew);
+  REGISTER_TEST(otbGeographicalDistance);
 }

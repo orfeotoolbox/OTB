@@ -856,11 +856,12 @@ ADD_TEST(prTvGenericRSTransformQuickbirdToulouseGeodesicPointChecking ${PROJECTI
 otbGenericRSTransformImageAndMNTToWGS84ConversionChecking
 ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
 ${INPUTDATA}/DEM/srtm_directory/
+${INPUTDATA}/DEM/egm96.grd
 16271 15647 # IGN reference point in front of st sernin church pointed in image
 1.48353 43.55968 # IGN reference point lon/lat
 192.205 # IGN reference point elevation (prec < 10 cm)
-5
-0.00001
+24 # Tolerance in pixels according to DigitalGlobe specification
+23 # Tolerance in meters according to DigitalGlobe specification
 )
 
 ENDIF(OTB_DATA_USE_LARGEINPUT)
@@ -1074,6 +1075,17 @@ ${TEMP}/otbRationalTransformOutput.txt
 -10 -10
 )
 
+#----- otb::GeographicalDistance ---------------------
+ADD_TEST(prTuGeographicalDistanceNew ${PROJECTIONS_TESTS4}
+  otbGeographicalDistanceNew)
+
+ADD_TEST(prTvGeographicalDistance ${PROJECTIONS_TESTS4}
+  otbGeographicalDistance
+  -1.84944 53.14722 
+   0.14056 52.20444 
+   170254.85084
+  ${EPSILON_4}
+)
 
 #=======================================================================================
 SET(Projections_SRCS1
@@ -1135,6 +1147,7 @@ otbGenericRSResampleImageFilter.cxx
 otbImageToEnvelopeVectorDataFilter.cxx
 otbImageToGenericRSOutputParameters.cxx
 otbRationalTransform.cxx
+otbGeographicalDistance.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbProjectionsTests1 "${Projections_SRCS1}" "OTBProjections;OTBIO;OTBTesting")
