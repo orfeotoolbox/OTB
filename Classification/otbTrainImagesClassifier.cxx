@@ -183,7 +183,7 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
     VectorDataReaderType::Pointer vdreader = VectorDataReaderType::New();
     vdreader->SetFileName(parseResult->GetParameterString("VectorDataSamples",imgIndex));
     vdreader->Update();
-    std::cout<<"Set VectorData filename: "<< parseResult->GetParameterString("VectorDataSamples",imgIndex) <<std::endl;
+    std::cout<<"Processing vectordata ("<<imgIndex<<"): "<< parseResult->GetParameterString("VectorDataSamples",imgIndex) <<std::endl;
 
     // Extract a ROI corresponding to the Extent of the image
     VectorDataExtractROIType::Pointer  vdextract = VectorDataExtractROIType::New();
@@ -266,8 +266,6 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
     sampleGenerator->SetClassKey("Class");
 
     sampleGenerator->Update();
-
-    std::cout << "output size: " << sampleGenerator->GetTrainingListLabel()->GetMeasurementVectorSize() <<std::endl;
 
     //Concatenate training and validation samples from the image
     concatenateTrainingLabels->AddInput(sampleGenerator->GetTrainingListLabel());
@@ -435,9 +433,9 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
 
   std::cout<< "confusion matrix: \n" << confMatCalc->GetConfusionMatrix() << std::endl;
 
-  std::cout << "Precision of the different class: " << confMatCalc->GetPrecisions() << std::endl;
-  std::cout << "Recall of the different class: " << confMatCalc->GetRecalls() << std::endl;
-  std::cout << "F-score of the different class: " << confMatCalc->GetFScores() << std::endl;
+  std::cout << "Precision of the different classes: " << confMatCalc->GetPrecisions() << std::endl;
+  std::cout << "Recall of the different classes: " << confMatCalc->GetRecalls() << std::endl;
+  std::cout << "F-score of the different classes: " << confMatCalc->GetFScores() << std::endl;
   std::cout << "Kappa index: " << confMatCalc->GetKappaIndex() << std::endl;
 
   // TODO: implement hyperplan distance classifier and performance validation (cf. object detection) ?
