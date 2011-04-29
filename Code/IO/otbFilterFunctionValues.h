@@ -32,7 +32,7 @@ namespace otb
 /** \class FilterFunctionValues
  *  \brief This class contains the values of the filter function for the processed spectral band.
  *
- * The step between 2 values is 0.0025µm. The class contains the min and the max value.
+ * The step between 2 values is 0.0025 micro meter. The class contains the min and the max value.
  * Those value can be directly read from the image metadatas.
  *
  * \ingroup IO

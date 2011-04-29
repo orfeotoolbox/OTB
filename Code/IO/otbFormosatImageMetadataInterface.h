@@ -115,7 +115,7 @@ public:
 
   bool CanRead() const;
 
-  /** Vector that contains the filter function value in 6S format (step of 0.0025µm).
+  /** Vector that contains the filter function value in 6S format (step of 0.0025 micro m).
    * There values a computed by 6S. */
   WavelengthSpectralBandVectorType GetSpectralSensitivity()  const;
 
