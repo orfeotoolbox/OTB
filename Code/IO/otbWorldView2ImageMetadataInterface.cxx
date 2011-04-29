@@ -145,8 +145,6 @@ WorldView2ImageMetadataInterface::GetDay() const
   ossimString              keywordString = kwl.find(key.c_str());
   std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
 
-  std::cout << "WorldView2ImageMetadataInterface::GetDay" << keywordString << std::endl;
-
   if (keywordStrings.size() <= 2) itkExceptionMacro(<< "Invalid Day");
 
   ossimString day = keywordStrings[2];

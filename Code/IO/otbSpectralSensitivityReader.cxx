@@ -65,7 +65,7 @@ SpectralSensitivityReader
 void
 SpectralSensitivityReader
 ::FindFileName()
-{ std::cout << "begin to find file" << std::endl;
+{
   if (m_Image.IsNull())
     {
     itkExceptionMacro(<< "An input image has to be set or set directly the filename");
