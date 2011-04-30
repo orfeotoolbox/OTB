@@ -47,10 +47,9 @@ typedef otb::VectorData<>                                              VectorDat
 typedef otb::RadiometricMomentsImageFunction<ImageType, CoordRepType>  FunctionType;
 typedef otb::ImageFunctionAdaptor<FunctionType, FunctionPrecisionType> AdapatedFunctionType;
 
-//typedef FunctionType::OutputType                      SampleType;
 typedef itk::VariableLengthVector<FunctionPrecisionType> SampleType;
 typedef itk::Statistics::ListSample<SampleType>          ListSampleType;
-typedef itk::FixedArray<LabelType>                       LabelSampleType;
+typedef itk::FixedArray<LabelType, 1>                    LabelSampleType;
 typedef itk::Statistics::ListSample<LabelSampleType>     LabelListSampleType;
 
 typedef otb::DescriptorsListSampleGenerator
