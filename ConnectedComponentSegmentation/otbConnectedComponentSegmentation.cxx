@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -83,55 +83,55 @@ namespace otb
   typedef otb::VectorImage<InputPixelType,  Dimension>         InputVectorImageType;
   typedef otb::ImageFileReader<InputVectorImageType>           ReaderType;
 
-  typedef otb::Image<unsigned int,Dimension>                   InputMaskImageType;
+  typedef otb::Image<unsigned int, Dimension>                   InputMaskImageType;
 
   typedef otb::ImageFileReader<InputMaskImageType>             MaskReaderType;
 
-  typedef otb::Image<unsigned int,Dimension>                   OutputImageType;
-  typedef otb::Image<unsigned int,Dimension>                   LabelImageType;
+  typedef otb::Image<unsigned int, Dimension>                   OutputImageType;
+  typedef otb::Image<unsigned int, Dimension>                   LabelImageType;
 
-  typedef otb::ImageFileWriter<OutputImageType> 							 WriterType;
+  typedef otb::ImageFileWriter<OutputImageType>                                                   WriterType;
   typedef Functor::ConnectedComponentMuParserFunctor<InputVectorImageType::PixelType>  FunctorType;
 
-  typedef itk::ConnectedComponentFunctorImageFilter<InputVectorImageType,OutputImageType,FunctorType,InputMaskImageType> ConnectedComponentFilterType;
+  typedef itk::ConnectedComponentFunctorImageFilter<InputVectorImageType, OutputImageType, FunctorType, InputMaskImageType> ConnectedComponentFilterType;
 
   // Labelization
-  typedef itk::RelabelComponentImageFilter<LabelImageType,LabelImageType> RelabelComponentFilterType;
+  typedef itk::RelabelComponentImageFilter<LabelImageType, LabelImageType> RelabelComponentFilterType;
   typedef otb::AttributesMapLabelObject<unsigned int, Dimension, double>     AttributesMapLabelObjectType;
-  typedef itk::AttributeLabelObject<unsigned int, Dimension,double>   AttributesLabelObjectType;
+  typedef itk::AttributeLabelObject<unsigned int, Dimension, double>   AttributesLabelObjectType;
 
 
   typedef otb::LabelMapWithAdjacency<AttributesMapLabelObjectType>                             AttributesLabelMapType;
-  typedef otb::LabelImageToLabelMapWithAdjacencyFilter<LabelImageType,AttributesLabelMapType>            LabelImageToLabelMapFilterType;
+  typedef otb::LabelImageToLabelMapWithAdjacencyFilter<LabelImageType, AttributesLabelMapType>            LabelImageToLabelMapFilterType;
 
 
   typedef otb::BandsStatisticsAttributesLabelMapFilter<AttributesLabelMapType, InputVectorImageType> RadiometricLabelMapFilterType;
   typedef otb::ShapeAttributesLabelMapFilter<AttributesLabelMapType>  ShapeLabelMapFilterType;
-  typedef itk::ShapeLabelObject<unsigned int,Dimension>                            ShapeLabelObjectType;
-  typedef itk::LabelObject<unsigned int,Dimension>                            LabelObjectType;
+  typedef itk::ShapeLabelObject<unsigned int, Dimension>                            ShapeLabelObjectType;
+  typedef itk::LabelObject<unsigned int, Dimension>                            LabelObjectType;
   typedef itk::LabelMap<ShapeLabelObjectType>                                     ShapeLabelMapType;
 
-  typedef itk::LabelImageToShapeLabelMapFilter<OutputImageType,ShapeLabelMapType> LabelImageToShapeLabelMapFilterType;
+  typedef itk::LabelImageToShapeLabelMapFilter<OutputImageType, ShapeLabelMapType> LabelImageToShapeLabelMapFilterType;
 
   // colored label image typedef
   typedef itk::Functor::ScalarToRGBPixelFunctor<unsigned long>  ColorMapFunctorType;
   typedef itk::UnaryFunctorImageFilter<OutputImageType, RGBImageType, ColorMapFunctorType> ColorMapFilterType;
 
   // mask typedef
-  typedef otb::MaskMuParserFilter<InputVectorImageType,OutputImageType>  MaskMuParserFilterType;
+  typedef otb::MaskMuParserFilter<InputVectorImageType, OutputImageType>  MaskMuParserFilterType;
 
   typedef otb::LabelObjectOpeningMuParserFilter<AttributesLabelMapType>                      LabelObjectOpeningFilterType;
 
-  typedef itk::LabelMapToLabelImageFilter<AttributesLabelMapType,OutputImageType> LabelMapToLabelImageFilterType;
+  typedef itk::LabelMapToLabelImageFilter<AttributesLabelMapType, OutputImageType> LabelMapToLabelImageFilterType;
 
 
   /** Vector data handling */
-  typedef otb::VectorData<double,2>                                  VectorDataType;
+  typedef otb::VectorData<double, 2>                                  VectorDataType;
   typedef VectorDataType::Pointer                                    VectorDataPointerType;
   typedef otb::VectorDataFileWriter<VectorDataType>                  VectorDataFileWriterType;
   typedef VectorDataFileWriterType::Pointer                          VectorDataFileWriterPointerType;
 
-  typedef otb::LabelMapToVectorDataFilter<AttributesLabelMapType,VectorDataType>                          LabelMapToVectorDataFilterType;
+  typedef otb::LabelMapToVectorDataFilter<AttributesLabelMapType, VectorDataType>                          LabelMapToVectorDataFilterType;
 
 
   int ConnectedComponentSegmentation::Describe(ApplicationDescriptor* descriptor)
@@ -354,7 +354,6 @@ namespace otb
     std::string vdoutFilename = parseResult->GetParameterString("OutputShapeFileName");
 
 
-
     VectorDataFileWriterPointerType vdwriter = VectorDataFileWriterType::New();
     vdwriter->SetInput(vectorData);
     vdwriter->SetFileName(vdoutFilename);
@@ -370,11 +369,6 @@ namespace otb
     return EXIT_SUCCESS;
   }
 }
-
-
-
-
-
 
 
 
