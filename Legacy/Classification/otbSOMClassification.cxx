@@ -25,19 +25,19 @@ int main(int argc, char * argv[])
   parser->SetProgramDescription("Unsupervised Self Organizing Map image classification");
   parser->AddInputImage();
   parser->AddOutputImage();
-  parser->AddOption("--ValidityMask","Validity mask","-vm",1,true);
-  parser->AddOption("--MaxTrainingSetSize","Size of the training set","-ts",1,true);
-  parser->AddOption("--TrainingSetProbability","Probability for a sample to be selected in the training set","-tp",1,true);
-  parser->AddOption("--StreamingNumberOfLines","Number of lined for each streaming block","-sl",1,true);
-  parser->AddOption("--SOMMap","Output SOM map","-sm",1,true);
-  parser->AddOption("--SizeX","X size of the SOM map","-sx",1,true);
-  parser->AddOption("--SizeY","Y size of the SOM map","-sy",1,true);
-  parser->AddOption("--NeighborhoodInitX","X initial neighborhood of the SOM map","-nx",1,true);
-  parser->AddOption("--NeighborhoodInitY","Y initial neighborhood of the SOM map","-ny",1,true);
-  parser->AddOption("--NumberOfIterations","Number of iterations of the SOM learning","-ni",1,true);
-  parser->AddOption("--BetaInit","Initial beta value","-bi",1,true);
-  parser->AddOption("--BetaFinal","Final beta value","-be",1,true);
-  parser->AddOption("--InitValue","Initial value","-iv",1,true);
+  parser->AddOption("--ValidityMask","Validity mask","-vm", 1, true);
+  parser->AddOption("--MaxTrainingSetSize","Size of the training set","-ts", 1, true);
+  parser->AddOption("--TrainingSetProbability","Probability for a sample to be selected in the training set","-tp", 1, true);
+  parser->AddOption("--StreamingNumberOfLines","Number of lined for each streaming block","-sl", 1, true);
+  parser->AddOption("--SOMMap","Output SOM map","-sm", 1, true);
+  parser->AddOption("--SizeX","X size of the SOM map","-sx", 1, true);
+  parser->AddOption("--SizeY","Y size of the SOM map","-sy", 1, true);
+  parser->AddOption("--NeighborhoodInitX","X initial neighborhood of the SOM map","-nx", 1, true);
+  parser->AddOption("--NeighborhoodInitY","Y initial neighborhood of the SOM map","-ny", 1, true);
+  parser->AddOption("--NumberOfIterations","Number of iterations of the SOM learning","-ni", 1, true);
+  parser->AddOption("--BetaInit","Initial beta value","-bi", 1, true);
+  parser->AddOption("--BetaFinal","Final beta value","-be", 1, true);
+  parser->AddOption("--InitValue","Initial value","-iv", 1, true);
 
 
   typedef otb::CommandLineArgumentParseResult ParserResultType;
@@ -45,7 +45,7 @@ int main(int argc, char * argv[])
 
   try
   {
-    parser->ParseCommandLine(argc,argv,parseResult);
+    parser->ParseCommandLine(argc, argv, parseResult);
   }
   catch ( itk::ExceptionObject & err )
   {
@@ -65,9 +65,9 @@ int main(int argc, char * argv[])
   srand(time(NULL));
 
   std::string infname = parseResult->GetInputImage();
-  std::string maskfname = parseResult->GetParameterString("--ValidityMask",0);
+  std::string maskfname = parseResult->GetParameterString("--ValidityMask", 0);
   std::string outfname = parseResult->GetOutputImage();
-  std::string somfname = parseResult->GetParameterString("--SOMMap",0);
+  std::string somfname = parseResult->GetParameterString("--SOMMap", 0);
   const unsigned int nbsamples = parseResult->GetParameterUInt("--MaxTrainingSetSize");
   const double trainingProb =parseResult->GetParameterDouble("--TrainingSetProbability");
   const unsigned int nbLinesForStreaming = parseResult->GetParameterUInt("--StreamingNumberOfLines");
@@ -83,17 +83,17 @@ int main(int argc, char * argv[])
   typedef float PixelType;
   typedef unsigned short LabeledPixelType;
 
-  typedef otb::VectorImage<PixelType,2> ImageType;
-  typedef otb::Image<LabeledPixelType,2> LabeledImageType;
+  typedef otb::VectorImage<PixelType, 2> ImageType;
+  typedef otb::Image<LabeledPixelType, 2> LabeledImageType;
   typedef otb::ImageFileReader<ImageType> ImageReaderType;
   typedef otb::ImageFileReader<LabeledImageType> LabeledImageReaderType;
   typedef otb::StreamingImageFileWriter<LabeledImageType> WriterType;
 
   typedef itk::VariableLengthVector<double> SampleType;
   typedef itk::Statistics::EuclideanDistance<SampleType> DistanceType;
-  typedef otb::SOMMap<SampleType,DistanceType,2> SOMMapType;
+  typedef otb::SOMMap<SampleType, DistanceType, 2> SOMMapType;
   typedef itk::Statistics::ListSample<SampleType> ListSampleType;
-  typedef otb::SOM<ListSampleType,SOMMapType> EstimatorType;
+  typedef otb::SOM<ListSampleType, SOMMapType> EstimatorType;
   typedef otb::ImageFileWriter<ImageType> SOMMapWriterType;
 
   typedef otb::StreamingTraits<ImageType> StreamingTraitsType;
@@ -104,7 +104,7 @@ int main(int argc, char * argv[])
   typedef itk::ImageRegionConstIterator<LabeledImageType> LabeledIteratorType;
   typedef itk::ImageRegionConstIterator<SOMMapType> SOMIteratorType;
 
-  typedef otb::SOMImageClassificationFilter<ImageType,LabeledImageType,SOMMapType> ClassificationFilterType;
+  typedef otb::SOMImageClassificationFilter<ImageType, LabeledImageType, SOMMapType> ClassificationFilterType;
 
 
   ImageReaderType::Pointer reader = ImageReaderType::New();
@@ -140,7 +140,7 @@ int main(int argc, char * argv[])
                                          largestRegion,
                                          splitter,
                                          otb::SET_BUFFER_NUMBER_OF_LINES,
-                                         0,0,nbLinesForStreaming);
+                                         0, 0, nbLinesForStreaming);
 
   std::cout<<"The images will be streamed into "<<numberOfStreamDivisions<<" parts."<<std::endl;
 
@@ -160,7 +160,7 @@ int main(int argc, char * argv[])
   {
     piece = static_cast<unsigned int>(static_cast<double>(numberOfStreamDivisions)*rand()/(RAND_MAX));
 
-    streamingRegion = splitter->GetSplit(piece,numberOfStreamDivisions,largestRegion);
+    streamingRegion = splitter->GetSplit(piece, numberOfStreamDivisions, largestRegion);
 
     std::cout<<"Processing region: "<<streamingRegion<<std::endl;
 
@@ -172,8 +172,8 @@ int main(int argc, char * argv[])
     maskReader->GetOutput()->PropagateRequestedRegion();
     maskReader->GetOutput()->UpdateOutputData();
 
-    IteratorType it(reader->GetOutput(),streamingRegion);
-    LabeledIteratorType maskIt(maskReader->GetOutput(),streamingRegion);
+    IteratorType it(reader->GetOutput(), streamingRegion);
+    LabeledIteratorType maskIt(maskReader->GetOutput(), streamingRegion);
 
     it.GoToBegin();
     maskIt.GoToBegin();
@@ -192,7 +192,7 @@ int main(int argc, char * argv[])
           newSample.SetSize(sampleSize);
           // build the sample
           newSample.Fill(0);
-          for (unsigned int i = 0;i<sampleSize;++i)
+          for (unsigned int i = 0; i<sampleSize; ++i)
           {
             newSample[i]=it.Get()[i];
           }
@@ -251,15 +251,15 @@ int main(int argc, char * argv[])
   black.Fill(0);
   vectormap->FillBuffer(black);
 
-  SOMIteratorType somIt(estimator->GetOutput(),estimator->GetOutput()->GetLargestPossibleRegion());
-  IteratorType vectorIt(vectormap,estimator->GetOutput()->GetLargestPossibleRegion());
+  SOMIteratorType somIt(estimator->GetOutput(), estimator->GetOutput()->GetLargestPossibleRegion());
+  IteratorType vectorIt(vectormap, estimator->GetOutput()->GetLargestPossibleRegion());
 
   somIt.GoToBegin();
   vectorIt.GoToBegin();
 
   while (!somIt.IsAtEnd() && !vectorIt.IsAtEnd())
   {
-    for (unsigned int i = 0;i<somIt.Get().GetSize();++i)
+    for (unsigned int i = 0; i<somIt.Get().GetSize(); ++i)
     {
       vectorIt.Get()[i]=somIt.Get()[i];
     }
