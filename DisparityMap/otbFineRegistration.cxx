@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -49,20 +49,20 @@ namespace otb
 const unsigned int Dimension = 2;
 typedef double     PixelType;
 
-typedef itk::FixedArray<PixelType,Dimension>                                 DeformationValueType;
+typedef itk::FixedArray<PixelType, Dimension>                                 DeformationValueType;
 typedef otb::Image< PixelType,  Dimension >                                  ImageType;
-typedef otb::VectorImage<PixelType,Dimension>                                VectorImageType;
+typedef otb::VectorImage<PixelType, Dimension>                                VectorImageType;
 typedef otb::ImageList<ImageType>                                            ImageListType;
-typedef otb::ImageListToVectorImageFilter<ImageListType,VectorImageType>     IL2VIFilterType;
-typedef otb::Image<DeformationValueType,Dimension>                           FieldImageType;
+typedef otb::ImageListToVectorImageFilter<ImageListType, VectorImageType>     IL2VIFilterType;
+typedef otb::Image<DeformationValueType, Dimension>                           FieldImageType;
 typedef otb::ImageFileReader< ImageType >                                    ReaderType;
 typedef otb::ImageFileReader< VectorImageType >                              VectorReaderType;
 typedef otb::StreamingImageFileWriter< VectorImageType >                     WriterType;
-typedef otb::FineRegistrationImageFilter<ImageType,ImageType,FieldImageType> RegistrationFilterType;
-typedef itk::DiscreteGaussianImageFilter<ImageType,ImageType>                GaussianFilterType;
-typedef itk::VectorIndexSelectionCastImageFilter<FieldImageType,ImageType>   VectorImageToImageFilterType;
-typedef itk::AbsImageFilter<ImageType,ImageType>                             AbsFilterType;
-typedef itk::BinaryThresholdImageFilter<ImageType,ImageType>                 BinaryThresholdImageFilterType;
+typedef otb::FineRegistrationImageFilter<ImageType, ImageType, FieldImageType> RegistrationFilterType;
+typedef itk::DiscreteGaussianImageFilter<ImageType, ImageType>                GaussianFilterType;
+typedef itk::VectorIndexSelectionCastImageFilter<FieldImageType, ImageType>   VectorImageToImageFilterType;
+typedef itk::AbsImageFilter<ImageType, ImageType>                             AbsFilterType;
+typedef itk::BinaryThresholdImageFilter<ImageType, ImageType>                 BinaryThresholdImageFilterType;
 
 template<class TVLV, class TFixedArray>
 class VLVToFixedArray
@@ -81,9 +81,9 @@ int FineRegistration::Describe(ApplicationDescriptor* descriptor)
 {
   descriptor->SetName("FineRegistration");
   descriptor->SetDescription("Estimate disparity map between two images. Output image contain x offset, y offset and metric value.");
-  descriptor->AddOption("Reference", "The reference image", 
-                        "ref", 1, true, ApplicationDescriptor::InputImage);  
-  descriptor->AddOption("Secondary", "The secondary image", 
+  descriptor->AddOption("Reference", "The reference image",
+                        "ref", 1, true, ApplicationDescriptor::InputImage);
+  descriptor->AddOption("Secondary", "The secondary image",
                         "sec", 1, true, ApplicationDescriptor::InputImage);
   descriptor->AddOption("OutputImage", "The output image",
                         "out", 1, true, ApplicationDescriptor::OutputImage);
@@ -92,23 +92,23 @@ int FineRegistration::Describe(ApplicationDescriptor* descriptor)
   descriptor->AddOption("WarpOutput", "The output warped image",
                         "wo", 1, false, ApplicationDescriptor::OutputImage);
   descriptor->AddOption("ExplorationRadius","Radius (in pixels) of the exploration window",
-                        "er",2,true, ApplicationDescriptor::Integer);
+                        "er", 2, true, ApplicationDescriptor::Integer);
   descriptor->AddOption("MetricRadius","Radius (in pixels) of the metric computation window",
-                        "mr",2,true, ApplicationDescriptor::Integer);
-  descriptor->AddOption("CoarseOffset","(optional) Coarse offset (in physical space) between the two images. Default is [0,0].",
-                        "co",2,false, ApplicationDescriptor::Real);
+                        "mr", 2, true, ApplicationDescriptor::Integer);
+  descriptor->AddOption("CoarseOffset","(optional) Coarse offset (in physical space) between the two images. Default is [0, 0].",
+                        "co", 2, false, ApplicationDescriptor::Real);
   descriptor->AddOption("SubSamplingRate","(optional) Generate a result at a coarser resolution with a given sub-sampling rate in each direction (in pixels). Default is no sub-sampling",
-                        "ssr",2,false, ApplicationDescriptor::Real);
+                        "ssr", 2, false, ApplicationDescriptor::Real);
   descriptor->AddOption("ReferenceGaussianSmoothing","(optional) Perform a gaussian smoothing of the reference image. Parameters are gaussian sigma (in pixels) in each direction. Default is no smoothing.",
-                        "rgs",2,false, ApplicationDescriptor::Real);
+                        "rgs", 2, false, ApplicationDescriptor::Real);
   descriptor->AddOption("SecondaryGaussianSmoothing","(optional) Perform a gaussian smoothing of the secondary image. Parameters are gaussian sigma (in pixels) in each direction. Default is no smoothing.",
-                        "sgs",2,false, ApplicationDescriptor::Real);
+                        "sgs", 2, false, ApplicationDescriptor::Real);
   descriptor->AddOption("Metric","(optional) Choose the metric used for block matching. Available metrics are cross-correlation (CC), cross-correlation with subtracted mean (CCSM), mean-square difference (MSD), mean reciprocal square difference (MRSD) and mutual information (MI). Default is cross-correlation",
-                        "m",1,false, ApplicationDescriptor::String);
+                        "m", 1, false, ApplicationDescriptor::String);
   descriptor->AddOption("SubPixelAccuracy","(optional) Metric extrema location will be refined up to the given accuracy. Default is 0.01",
-                        "spa",1,false, ApplicationDescriptor::Real);
+                        "spa", 1, false, ApplicationDescriptor::Real);
   descriptor->AddOption("ValidityMask","(optional) Threshold to obtain a validity mask. Params are lowerThan or greaterThan and a threshold",
-                        "vm",2,false, ApplicationDescriptor::Real);
+                        "vm", 2, false, ApplicationDescriptor::Real);
   return EXIT_SUCCESS;
 }
 
@@ -127,10 +127,10 @@ int FineRegistration::Execute(otb::ApplicationOptionsResult* parseResult)
   // Retrieve main registration parameters
   RegistrationFilterType::SizeType radius, sradius;
   ImageType::OffsetType ssrate;
-  sradius[0] = parseResult->GetParameterULong("ExplorationRadius",0);
-  sradius[1] = parseResult->GetParameterULong("ExplorationRadius",1);
-  radius[0] = parseResult->GetParameterULong("MetricRadius",0);
-  radius[1] = parseResult->GetParameterULong("MetricRadius",1);
+  sradius[0] = parseResult->GetParameterULong("ExplorationRadius", 0);
+  sradius[1] = parseResult->GetParameterULong("ExplorationRadius", 1);
+  radius[0] = parseResult->GetParameterULong("MetricRadius", 0);
+  radius[1] = parseResult->GetParameterULong("MetricRadius", 1);
 
   double accuracy = 0.01;
   if(parseResult->IsOptionPresent("SubPixelAccuracy"))
@@ -140,15 +140,15 @@ int FineRegistration::Execute(otb::ApplicationOptionsResult* parseResult)
   ssrate.Fill(1);
   if(parseResult->IsOptionPresent("SubSamplingRate"))
     {
-    ssrate[0] = parseResult->GetParameterDouble("SubSamplingRate",0);
-    ssrate[1] = parseResult->GetParameterDouble("SubSamplingRate",1);
+    ssrate[0] = parseResult->GetParameterDouble("SubSamplingRate", 0);
+    ssrate[1] = parseResult->GetParameterDouble("SubSamplingRate", 1);
     }
   RegistrationFilterType::SpacingType initialOffset;
   initialOffset.Fill(0);
   if(parseResult->IsOptionPresent("CoarseOffset"))
     {
-    initialOffset[0] = parseResult->GetParameterDouble("CoarseOffset",0);
-    initialOffset[1] = parseResult->GetParameterDouble("CoarseOffset",1);
+    initialOffset[0] = parseResult->GetParameterDouble("CoarseOffset", 0);
+    initialOffset[1] = parseResult->GetParameterDouble("CoarseOffset", 1);
     }
 
   // Display info
@@ -169,15 +169,15 @@ int FineRegistration::Execute(otb::ApplicationOptionsResult* parseResult)
   registration->SetGridStep(ssrate);
   registration->SetInitialOffset(initialOffset);
 
-  GaussianFilterType::Pointer refGaussianFilter,secGaussianFilter;
+  GaussianFilterType::Pointer refGaussianFilter, secGaussianFilter;
 
   if(parseResult->IsOptionPresent("ReferenceGaussianSmoothing"))
     {
     refGaussianFilter = GaussianFilterType::New();
     refGaussianFilter->SetInput(freader->GetOutput());
     GaussianFilterType::ArrayType sigma;
-    sigma[0] = parseResult->GetParameterDouble("ReferenceGaussianSmoothing",0);
-    sigma[1] = parseResult->GetParameterDouble("ReferenceGaussianSmoothing",1);
+    sigma[0] = parseResult->GetParameterDouble("ReferenceGaussianSmoothing", 0);
+    sigma[1] = parseResult->GetParameterDouble("ReferenceGaussianSmoothing", 1);
     refGaussianFilter->SetVariance(sigma);
     refGaussianFilter->SetUseImageSpacingOff();
     std::cout<<"Reference image gaussian smoothing on."<<std::endl;
@@ -195,8 +195,8 @@ int FineRegistration::Execute(otb::ApplicationOptionsResult* parseResult)
       secGaussianFilter = GaussianFilterType::New();
       secGaussianFilter->SetInput(mreader->GetOutput());
       GaussianFilterType::ArrayType sigma;
-      sigma[0] = parseResult->GetParameterDouble("SecondaryGaussianSmoothing",0);
-      sigma[1] = parseResult->GetParameterDouble("SecondaryGaussianSmoothing",1);
+      sigma[0] = parseResult->GetParameterDouble("SecondaryGaussianSmoothing", 0);
+      sigma[1] = parseResult->GetParameterDouble("SecondaryGaussianSmoothing", 1);
       secGaussianFilter->SetVariance(sigma);
       secGaussianFilter->SetUseImageSpacingOff();
       std::cout<<"Secondary image gaussian smoothing on."<<std::endl;
@@ -219,7 +219,7 @@ int FineRegistration::Execute(otb::ApplicationOptionsResult* parseResult)
   if(metricId == "CC")
     {
     std::cout<<"Metric            : Cross-correlation"<<std::endl;
-    typedef itk::NormalizedCorrelationImageToImageMetric<ImageType,ImageType> NCCType;
+    typedef itk::NormalizedCorrelationImageToImageMetric<ImageType, ImageType> NCCType;
     NCCType::Pointer metricPtr = NCCType::New();
     metricPtr->SubtractMeanOff();
     registration->SetMetric(metricPtr);
@@ -228,7 +228,7 @@ int FineRegistration::Execute(otb::ApplicationOptionsResult* parseResult)
   else if(metricId == "CCSM")
     {
     std::cout<<"Metric            : Cross-correlation (mean subtracted)"<<std::endl;
-    typedef itk::NormalizedCorrelationImageToImageMetric<ImageType,ImageType> NCCType;
+    typedef itk::NormalizedCorrelationImageToImageMetric<ImageType, ImageType> NCCType;
     NCCType::Pointer metricPtr = NCCType::New();
     metricPtr->SubtractMeanOn();
     registration->SetMetric(metricPtr);
@@ -237,7 +237,7 @@ int FineRegistration::Execute(otb::ApplicationOptionsResult* parseResult)
   else if(metricId == "MSD")
     {
     std::cout<<"Metric            : Mean square difference"<<std::endl;
-    typedef itk::MeanSquaresImageToImageMetric<ImageType,ImageType> MeanSquareType;
+    typedef itk::MeanSquaresImageToImageMetric<ImageType, ImageType> MeanSquareType;
     MeanSquareType::Pointer metricPtr = MeanSquareType::New();
     registration->SetMetric(metricPtr);
     registration->MinimizeOn();
@@ -245,7 +245,7 @@ int FineRegistration::Execute(otb::ApplicationOptionsResult* parseResult)
   else if(metricId == "MRSD")
     {
     std::cout<<"Metric            : Mean reciprocal square difference"<<std::endl;
-    typedef itk::MeanReciprocalSquareDifferenceImageToImageMetric<ImageType,ImageType> MRSDType;
+    typedef itk::MeanReciprocalSquareDifferenceImageToImageMetric<ImageType, ImageType> MRSDType;
     MRSDType::Pointer metricPtr = MRSDType::New();
     registration->SetMetric(metricPtr);
     registration->MinimizeOff();
@@ -253,7 +253,7 @@ int FineRegistration::Execute(otb::ApplicationOptionsResult* parseResult)
   else if(metricId == "MI")
     {
     std::cout<<"Metric            : Mutual information"<<std::endl;
-    typedef itk::MattesMutualInformationImageToImageMetric<ImageType,ImageType> MIType;
+    typedef itk::MattesMutualInformationImageToImageMetric<ImageType, ImageType> MIType;
     MIType::Pointer metricPtr = MIType::New();
     registration->SetMetric(metricPtr);
     registration->MinimizeOn();
@@ -305,13 +305,13 @@ int FineRegistration::Execute(otb::ApplicationOptionsResult* parseResult)
       {
       threshold->SetInput(registration->GetOutput());
       }
-    if(parseResult->GetParameterString("ValidityMask",0)=="greaterThan")
+    if(parseResult->GetParameterString("ValidityMask", 0)=="greaterThan")
       {
-      threshold->SetLowerThreshold(parseResult->GetParameterDouble("ValidityMask",1));
+      threshold->SetLowerThreshold(parseResult->GetParameterDouble("ValidityMask", 1));
       }
-    else if(parseResult->GetParameterString("ValidityMask",0)=="lowerThan")
+    else if(parseResult->GetParameterString("ValidityMask", 0)=="lowerThan")
       {
-      threshold->SetUpperThreshold(parseResult->GetParameterDouble("ValidityMask",1));
+      threshold->SetUpperThreshold(parseResult->GetParameterDouble("ValidityMask", 1));
       }
     else
       {
@@ -320,8 +320,8 @@ int FineRegistration::Execute(otb::ApplicationOptionsResult* parseResult)
       }
 
     std::cout<<"A validity mask will be produced as the 4th band (valid pixels = 1.0, not valid = 0.0)."<<std::endl;
-    std::cout<<"Pixels are considered valid if metric is "<<parseResult->GetParameterString("ValidityMask",0)<<" ";
-    std::cout<<parseResult->GetParameterDouble("ValidityMask",1)<<std::endl;
+    std::cout<<"Pixels are considered valid if metric is "<<parseResult->GetParameterString("ValidityMask", 0)<<" ";
+    std::cout<<parseResult->GetParameterDouble("ValidityMask", 1)<<std::endl;
 
     threshold->SetInsideValue(1.0);
     threshold->SetOutsideValue(0.);
@@ -336,7 +336,7 @@ int FineRegistration::Execute(otb::ApplicationOptionsResult* parseResult)
   writer->SetInput(il2vi->GetOutput());
 
   std::cout<<std::endl;
-  otb::StandardWriterWatcher watcher(writer,registration,"Fine Registration");
+  otb::StandardWriterWatcher watcher(writer, registration,"Fine Registration");
 
   writer->Update();
 
@@ -360,7 +360,7 @@ int FineRegistration::Execute(otb::ApplicationOptionsResult* parseResult)
     VectorReaderType::Pointer imageToWarpReader = VectorReaderType::New();
     imageToWarpReader->SetFileName(parseResult->GetParameterString("ImageToWarp"));
 
-    typedef StreamingWarpImageFilter<VectorImageType,VectorImageType,FieldImageType> WarpFilterType;
+    typedef StreamingWarpImageFilter<VectorImageType, VectorImageType, FieldImageType> WarpFilterType;
     WarpFilterType::Pointer warp = WarpFilterType::New();
 
     warp->SetDeformationField(cast->GetOutput());
@@ -370,7 +370,7 @@ int FineRegistration::Execute(otb::ApplicationOptionsResult* parseResult)
     WriterType::Pointer wrappedWriter = WriterType::New();
     wrappedWriter->SetFileName(parseResult->GetParameterString("WarpOutput"));
     wrappedWriter->SetInput(warp->GetOutput());
-    otb::StandardWriterWatcher watcher2(wrappedWriter,warp,"Warp");
+    otb::StandardWriterWatcher watcher2(wrappedWriter, warp,"Warp");
     wrappedWriter->Update();
     }
 
