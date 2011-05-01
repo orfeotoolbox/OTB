@@ -71,7 +71,7 @@ int ImageSVMClassifier::Describe(ApplicationDescriptor* descriptor)
                         "sx", 1, false, ApplicationDescriptor::Integer);
   descriptor->AddOption("ROISizeY", "Size Y of the ROI",
                         "sy", 1, false, ApplicationDescriptor::Integer);
-  descriptor->AddOption("AvailableMemory","Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default)","ram",1,false, otb::ApplicationDescriptor::Integer);
+  descriptor->AddOption("AvailableMemory","Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default)","ram", 1, false, otb::ApplicationDescriptor::Integer);
   return EXIT_SUCCESS;
 }
 
