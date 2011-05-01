@@ -23,12 +23,12 @@ int main(int argc, char * argv[])
   parser->SetProgramDescription("Unsupervised KMeans image classification");
   parser->AddInputImage();
   parser->AddOutputImage();
-  parser->AddOption("--ValidityMask","Validity mask","-vm",1,true);
-  parser->AddOption("--MaxTrainingSetSize","Size of the training set","-ts",1,true);
-  parser->AddOption("--TrainingSetProbability","Probability for a sample to be selected in the training set","-tp",1,true);
-  parser->AddOption("--NumberOfClasses","Number of classes","-nc",1,true);
-  parser->AddOption("--InitialCentroidProbability","Probability for a pixel to be selected as an initial class centroid","-cp",1,true);
-  parser->AddOption("--StreamingNumberOfLines","Number of lined for each streaming block","-sl",1,true);
+  parser->AddOption("--ValidityMask","Validity mask","-vm", 1, true);
+  parser->AddOption("--MaxTrainingSetSize","Size of the training set","-ts", 1, true);
+  parser->AddOption("--TrainingSetProbability","Probability for a sample to be selected in the training set","-tp", 1, true);
+  parser->AddOption("--NumberOfClasses","Number of classes","-nc", 1, true);
+  parser->AddOption("--InitialCentroidProbability","Probability for a pixel to be selected as an initial class centroid","-cp", 1, true);
+  parser->AddOption("--StreamingNumberOfLines","Number of lined for each streaming block","-sl", 1, true);
 
 
   typedef otb::CommandLineArgumentParseResult ParserResultType;
@@ -36,7 +36,7 @@ int main(int argc, char * argv[])
 
   try
   {
-    parser->ParseCommandLine(argc,argv,parseResult);
+    parser->ParseCommandLine(argc, argv, parseResult);
   }
   catch ( itk::ExceptionObject & err )
   {
@@ -56,7 +56,7 @@ int main(int argc, char * argv[])
   srand(time(NULL));
 
   std::string infname = parseResult->GetInputImage();
-  std::string maskfname = parseResult->GetParameterString("--ValidityMask",0);
+  std::string maskfname = parseResult->GetParameterString("--ValidityMask", 0);
   std::string outfname = parseResult->GetOutputImage();
   const unsigned int nbsamples = parseResult->GetParameterUInt("--MaxTrainingSetSize");
   const double trainingProb =parseResult->GetParameterDouble("--TrainingSetProbability");
@@ -67,13 +67,13 @@ int main(int argc, char * argv[])
   typedef unsigned short PixelType;
   typedef unsigned short LabeledPixelType;
 
-  typedef otb::VectorImage<PixelType,2> ImageType;
-  typedef otb::Image<LabeledPixelType,2> LabeledImageType;
+  typedef otb::VectorImage<PixelType, 2> ImageType;
+  typedef otb::Image<LabeledPixelType, 2> LabeledImageType;
   typedef otb::ImageFileReader<ImageType> ImageReaderType;
   typedef otb::ImageFileReader<LabeledImageType> LabeledImageReaderType;
   typedef otb::StreamingImageFileWriter<LabeledImageType> WriterType;
 
-  typedef itk::FixedArray<PixelType,108> SampleType;
+  typedef itk::FixedArray<PixelType, 108> SampleType;
   typedef itk::Statistics::ListSample<SampleType> ListSampleType;
   typedef itk::Statistics::WeightedCentroidKdTreeGenerator<ListSampleType>   TreeGeneratorType;
   typedef  TreeGeneratorType::KdTreeType                                     TreeType;
@@ -86,7 +86,7 @@ int main(int argc, char * argv[])
   typedef itk::ImageRegionConstIterator<ImageType> IteratorType;
   typedef itk::ImageRegionConstIterator<LabeledImageType> LabeledIteratorType;
 
-  typedef otb::KMeansImageClassificationFilter<ImageType,LabeledImageType,108> ClassificationFilterType;
+  typedef otb::KMeansImageClassificationFilter<ImageType, LabeledImageType, 108> ClassificationFilterType;
 
 
   ImageReaderType::Pointer reader = ImageReaderType::New();
@@ -122,7 +122,7 @@ int main(int argc, char * argv[])
                                          largestRegion,
                                          splitter,
                                          otb::SET_BUFFER_NUMBER_OF_LINES,
-                                         0,0,nbLinesForStreaming);
+                                         0, 0, nbLinesForStreaming);
 
   std::cout<<"The images will be streamed into "<<numberOfStreamDivisions<<" parts."<<std::endl;
 
@@ -134,7 +134,7 @@ int main(int argc, char * argv[])
 
   // Sample dimension and max dimension
   unsigned int maxDimension = SampleType::Dimension;
-  unsigned int sampleSize = std::min(reader->GetOutput()->GetNumberOfComponentsPerPixel(),maxDimension);
+  unsigned int sampleSize = std::min(reader->GetOutput()->GetNumberOfComponentsPerPixel(), maxDimension);
   unsigned int totalSamples = 0;
   std::cout<<"Sample max possible dimension: "<<maxDimension<<std::endl;
   std::cout<<"The following sample size will be used: "<<sampleSize<<std::endl;
@@ -147,7 +147,7 @@ int main(int argc, char * argv[])
   {
     piece = static_cast<unsigned int>(static_cast<double>(numberOfStreamDivisions)*rand()/(RAND_MAX));
 
-    streamingRegion = splitter->GetSplit(piece,numberOfStreamDivisions,largestRegion);
+    streamingRegion = splitter->GetSplit(piece, numberOfStreamDivisions, largestRegion);
 
     std::cout<<"Processing region: "<<streamingRegion<<std::endl;
 
@@ -159,8 +159,8 @@ int main(int argc, char * argv[])
     maskReader->GetOutput()->PropagateRequestedRegion();
     maskReader->GetOutput()->UpdateOutputData();
 
-    IteratorType it(reader->GetOutput(),streamingRegion);
-    LabeledIteratorType maskIt(maskReader->GetOutput(),streamingRegion);
+    IteratorType it(reader->GetOutput(), streamingRegion);
+    LabeledIteratorType maskIt(maskReader->GetOutput(), streamingRegion);
 
     it.GoToBegin();
     maskIt.GoToBegin();
@@ -179,7 +179,7 @@ int main(int argc, char * argv[])
 
           // build the sample
           newSample.Fill(0);
-          for (unsigned int i = 0;i<sampleSize;++i)
+          for (unsigned int i = 0; i<sampleSize; ++i)
           {
             newSample[i]=it.Get()[i];
           }
@@ -190,7 +190,7 @@ int main(int argc, char * argv[])
         }
         else if ((init_means_index<108*nb_classes)&&(rand()<initProb*RAND_MAX))
         {
-          for (unsigned int i = 0;i<sampleSize;++i)
+          for (unsigned int i = 0; i<sampleSize; ++i)
           {
             initialMeans[init_means_index+i]=it.Get()[i];
           }
@@ -220,10 +220,10 @@ int main(int argc, char * argv[])
 
   std::cout<<"Initial centroids are: "<<std::endl;
 
-  for (unsigned int i=0;i<nb_classes;++i)
+  for (unsigned int i=0; i<nb_classes; ++i)
   {
     std::cout<<"Class "<<i<<": ";
-    for (unsigned int j = 0;j<sampleSize;++j)
+    for (unsigned int j = 0; j<sampleSize; ++j)
     {
       std::cout<<initialMeans[i*108+j]<<"\t";
     }
@@ -252,10 +252,10 @@ int main(int argc, char * argv[])
   std::cout<<std::endl;
   std::cout<<"Estimated centroids are: "<<std::endl;
 
-  for (unsigned int i=0;i<nb_classes;++i)
+  for (unsigned int i=0; i<nb_classes; ++i)
   {
     std::cout<<"Class "<<i<<": ";
-    for (unsigned int j = 0;j<sampleSize;++j)
+    for (unsigned int j = 0; j<sampleSize; ++j)
     {
       std::cout<<estimatedMeans[i*108+j]<<"\t";
     }
