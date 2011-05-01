@@ -47,7 +47,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MsgReporter,Object);
+  itkTypeMacro(MsgReporter, Object);
 
   /** Get the unique instance of the model */
   static Pointer GetInstance();
