@@ -59,7 +59,7 @@ int generic_main(otb::ApplicationOptionsResult* parseResult,
     typedef otb::BCOInterpolateImageFunction<ImageType>                     BCOInterpolationType;
 
     typedef otb::PipelineMemoryPrintCalculator           MemoryCalculatorType;
-    typedef itk::ExtractImageFilter<ImageType,ImageType> ExtractFilterType;
+    typedef itk::ExtractImageFilter<ImageType, ImageType> ExtractFilterType;
 
     // Read input image information
     ReaderType::Pointer reader=ReaderType::New();
@@ -89,15 +89,15 @@ int generic_main(otb::ApplicationOptionsResult* parseResult,
     ImageType::SpacingType spacing;
     if(parseResult->IsOptionPresent("OutputSpacing"))
       {
-      spacing[0]= parseResult->GetParameterDouble("OutputSpacing",0);
-      spacing[1]= parseResult->GetParameterDouble("OutputSpacing",1);
+      spacing[0]= parseResult->GetParameterDouble("OutputSpacing", 0);
+      spacing[1]= parseResult->GetParameterDouble("OutputSpacing", 1);
       }
     else
       {
       typedef otb::ImageMetadataInterfaceBase ImageMetadataInterfaceType;
       ImageMetadataInterfaceType::Pointer metadataInterface = ImageMetadataInterfaceFactory::CreateIMI(
           reader->GetOutput()->GetMetaDataDictionary());
-      double isotropicSpacing = max(metadataInterface->GetXPixelSpacing(),metadataInterface->GetYPixelSpacing());
+      double isotropicSpacing = max(metadataInterface->GetXPixelSpacing(), metadataInterface->GetYPixelSpacing());
 
       spacing[0] =  isotropicSpacing;
       spacing[1] = -isotropicSpacing;
@@ -122,8 +122,8 @@ int generic_main(otb::ApplicationOptionsResult* parseResult,
     ImageType::PointType origin;
     if(parseResult->IsOptionPresent("UpperLeft"))
       {
-      origin[0]= parseResult->GetParameterDouble("UpperLeft",0);
-      origin[1]= parseResult->GetParameterDouble("UpperLeft",1);
+      origin[0]= parseResult->GetParameterDouble("UpperLeft", 0);
+      origin[1]= parseResult->GetParameterDouble("UpperLeft", 1);
       }
     else
       {
@@ -135,11 +135,11 @@ int generic_main(otb::ApplicationOptionsResult* parseResult,
     ImageType::SizeType size;
     if(parseResult->IsOptionPresent("OutputSize"))
       {
-      size[0]= parseResult->GetParameterDouble("OutputSize",0);
-      size[1]= parseResult->GetParameterDouble("OutputSize",1);
+      size[0]= parseResult->GetParameterDouble("OutputSize", 0);
+      size[1]= parseResult->GetParameterDouble("OutputSize", 1);
       genericRSEstimator->ForceSizeTo(size);
       }
-    else 
+    else
       {
       size = genericRSEstimator->GetOutputSize();
       }
@@ -155,7 +155,7 @@ int generic_main(otb::ApplicationOptionsResult* parseResult,
     // Generate deformation field
     if(parseResult->IsOptionPresent("DEMDirectory"))
       {
-      orthoFilter->SetDEMDirectory(parseResult->GetParameterString("DEMDirectory",0));
+      orthoFilter->SetDEMDirectory(parseResult->GetParameterString("DEMDirectory", 0));
       }
 
     // Set the output map projection
@@ -189,7 +189,7 @@ int generic_main(otb::ApplicationOptionsResult* parseResult,
         {
         BCOInterpolationType::Pointer interpolator = BCOInterpolationType::New();
         if( nbInterpParams == 1)
-          interpolator->SetRadius(parseResult->GetParameterUInt("InterpolatorType",1));
+          interpolator->SetRadius(parseResult->GetParameterUInt("InterpolatorType", 1));
         orthoFilter->SetInterpolator(interpolator);
         }
       else if (typeInterpolator == "NEARESTNEIGHBOR" && nbInterpParams == 0)
@@ -272,7 +272,7 @@ int generic_main(otb::ApplicationOptionsResult* parseResult,
 
     writer->SetTilingStreamDivisions(memoryPrintCalculator->GetOptimalNumberOfStreamDivisions());
 
-    otb::StandardWriterWatcher watcher(writer,orthoFilter,"Orthorectification");
+    otb::StandardWriterWatcher watcher(writer, orthoFilter,"Orthorectification");
 
     writer->Update();
   }
@@ -303,18 +303,18 @@ int OrthoRectification::Describe(ApplicationDescriptor* descriptor)
   descriptor->SetDescription("Using available image metadata to determine the sensor model, computes a cartographic projection of the image");
   descriptor->AddInputImage();
   descriptor->AddOutputImage();
-  descriptor->AddOption("UpperLeft","Cartographic X/Y coordinate of upper left corner ","ul",2, false, otb::ApplicationDescriptor::Real);
-  descriptor->AddOption("OutputSize","Size of result image in X/Y","size",2, false, otb::ApplicationDescriptor::Integer);
-  descriptor->AddOption("OutputSpacing","Spacing resolution in meters on X/Y Axis","spacing",2, false, otb::ApplicationDescriptor::Real);
-  descriptor->AddOption("DEMDirectory","Directory where to find the DEM tiles","dem",1,false, otb::ApplicationDescriptor::DirectoryName);
+  descriptor->AddOption("UpperLeft","Cartographic X/Y coordinate of upper left corner ","ul", 2, false, otb::ApplicationDescriptor::Real);
+  descriptor->AddOption("OutputSize","Size of result image in X/Y","size", 2, false, otb::ApplicationDescriptor::Integer);
+  descriptor->AddOption("OutputSpacing","Spacing resolution in meters on X/Y Axis","spacing", 2, false, otb::ApplicationDescriptor::Real);
+  descriptor->AddOption("DEMDirectory","Directory where to find the DEM tiles","dem", 1, false, otb::ApplicationDescriptor::DirectoryName);
   descriptor->AddOptionNParams("MapProjectionType",
                                "Type (UTM/LAMBERT/LAMBERT2/LAMBERT93/SINUS/ECKERT4/TRANSMERCATOR/MOLLWEID) and parameters of map projection used",
-                               "mapProj",false, otb::ApplicationDescriptor::String);
-  descriptor->AddOption("RPC","Activate RPC sensor model estimation. Parameter is the number of control points per axis.","rpc",1,false, otb::ApplicationDescriptor::Integer);
-  descriptor->AddOption("LocMapSpacing","Generate a coarser deformation field with the given spacing.","lmSpacing",1,false, otb::ApplicationDescriptor::Real);
+                               "mapProj", false, otb::ApplicationDescriptor::String);
+  descriptor->AddOption("RPC","Activate RPC sensor model estimation. Parameter is the number of control points per axis.","rpc", 1, false, otb::ApplicationDescriptor::Integer);
+  descriptor->AddOption("LocMapSpacing","Generate a coarser deformation field with the given spacing.","lmSpacing", 1, false, otb::ApplicationDescriptor::Real);
   descriptor->AddOptionNParams("InterpolatorType",
                                "Type LINEAR/BCO/NEARESTNEIGHBOR (optional, BCO by default)","interp", false, otb::ApplicationDescriptor::String);
-  descriptor->AddOption("AvailableMemory","Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default)","ram",1,false, otb::ApplicationDescriptor::Integer);
+  descriptor->AddOption("AvailableMemory","Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default)","ram", 1, false, otb::ApplicationDescriptor::Integer);
 
   return EXIT_SUCCESS;
 }
@@ -323,14 +323,14 @@ int OrthoRectification::Execute(otb::ApplicationOptionsResult* parseResult)
 {
   if ( parseResult->IsOptionPresent("MapProjectionType"))
     {
-    std::string typeMap = parseResult->GetParameterString("MapProjectionType",0);
+    std::string typeMap = parseResult->GetParameterString("MapProjectionType", 0);
     int nbParams = parseResult->GetNumberOfParameters("MapProjectionType");
     nbParams--;
 
     if ((typeMap == "UTM")&&(nbParams==2))
       {
-      int numZone = parseResult->GetParameterUInt("MapProjectionType",1);
-      char hemisphere = parseResult->GetParameterChar("MapProjectionType",2);
+      int numZone = parseResult->GetParameterUInt("MapProjectionType", 1);
+      char hemisphere = parseResult->GetParameterChar("MapProjectionType", 2);
 
       typedef otb::UtmInverseProjection UtmProjectionType;
       UtmProjectionType::Pointer utmProjection = UtmProjectionType::New();
@@ -338,7 +338,7 @@ int OrthoRectification::Execute(otb::ApplicationOptionsResult* parseResult)
       utmProjection->SetZone(numZone);
       utmProjection->SetHemisphere(hemisphere);
 
-      return generic_main<UtmProjectionType>(parseResult,utmProjection );
+      return generic_main<UtmProjectionType>(parseResult, utmProjection );
       }
     else
       {
@@ -346,7 +346,7 @@ int OrthoRectification::Execute(otb::ApplicationOptionsResult* parseResult)
 
       for (int i=1; i<nbParams+1; i++)
         {
-        parameters.push_back(parseResult->GetParameterDouble("MapProjectionType",i));
+        parameters.push_back(parseResult->GetParameterDouble("MapProjectionType", i));
         }
 
       if ((typeMap == "LAMBERT")&&(nbParams==4))
@@ -354,7 +354,7 @@ int OrthoRectification::Execute(otb::ApplicationOptionsResult* parseResult)
         typedef otb::LambertConformalConicInverseProjection LambertProjectionType;
         LambertProjectionType::Pointer lambertProjection = LambertProjectionType::New();
 
-        lambertProjection->SetParameters(parameters[0],parameters[1],parameters[2],parameters[3]);
+        lambertProjection->SetParameters(parameters[0], parameters[1], parameters[2], parameters[3]);
 
         return generic_main<LambertProjectionType>(parseResult, lambertProjection);
         }
@@ -363,39 +363,39 @@ int OrthoRectification::Execute(otb::ApplicationOptionsResult* parseResult)
         typedef otb::Lambert2EtenduInverseProjection Lambert2ProjectionType;
         Lambert2ProjectionType::Pointer lambert2Projection = Lambert2ProjectionType::New();
 
-        return generic_main<Lambert2ProjectionType>(parseResult,lambert2Projection);
+        return generic_main<Lambert2ProjectionType>(parseResult, lambert2Projection);
         }
       else if ((typeMap == "LAMBERT93")&&(nbParams==0))
         {
         typedef otb::Lambert93InverseProjection Lambert93ProjectionType;
         Lambert93ProjectionType::Pointer lambert93Projection = Lambert93ProjectionType::New();
 
-        return generic_main<Lambert93ProjectionType>(parseResult,lambert93Projection);
+        return generic_main<Lambert93ProjectionType>(parseResult, lambert93Projection);
         }
       else if ((typeMap == "SINUS")&&(nbParams==2))
         {
         typedef otb::SinusoidalInverseProjection SinusoidalProjectionType;
         SinusoidalProjectionType::Pointer sinusoidalProjection = SinusoidalProjectionType::New();
 
-        sinusoidalProjection->SetParameters(parameters[0],parameters[1]);
+        sinusoidalProjection->SetParameters(parameters[0], parameters[1]);
 
-        return generic_main<SinusoidalProjectionType>(parseResult,sinusoidalProjection);
+        return generic_main<SinusoidalProjectionType>(parseResult, sinusoidalProjection);
         }
       else if ((typeMap == "ECKERT4")&&(nbParams==2))
         {
         typedef otb::Eckert4InverseProjection Eckert4ProjectionType;
         Eckert4ProjectionType::Pointer eckert4Projection = Eckert4ProjectionType::New();
 
-        eckert4Projection->SetParameters(parameters[0],parameters[1]);
+        eckert4Projection->SetParameters(parameters[0], parameters[1]);
 
-        return generic_main<Eckert4ProjectionType>(parseResult,eckert4Projection);
+        return generic_main<Eckert4ProjectionType>(parseResult, eckert4Projection);
         }
       else if ((typeMap == "TRANSMERCATOR")&&(nbParams==3))
         {
         typedef otb::TransMercatorInverseProjection TransMercatorProjectionType;
         TransMercatorProjectionType::Pointer transMercatorProjection = TransMercatorProjectionType::New();
 
-        transMercatorProjection->SetParameters(parameters[0],parameters[1],parameters[2]);
+        transMercatorProjection->SetParameters(parameters[0], parameters[1], parameters[2]);
 
         return generic_main<TransMercatorProjectionType>(parseResult, transMercatorProjection);
         }
@@ -404,9 +404,9 @@ int OrthoRectification::Execute(otb::ApplicationOptionsResult* parseResult)
         typedef otb::MollweidInverseProjection MollweidProjectionType;
         MollweidProjectionType::Pointer mollweidProjection = MollweidProjectionType::New();
 
-        mollweidProjection->SetParameters(parameters[0],parameters[1]);
+        mollweidProjection->SetParameters(parameters[0], parameters[1]);
 
-        return generic_main<MollweidProjectionType>(parseResult,mollweidProjection);
+        return generic_main<MollweidProjectionType>(parseResult, mollweidProjection);
         }
       else
         {
@@ -477,7 +477,7 @@ int OrthoRectification::Execute(otb::ApplicationOptionsResult* parseResult)
 
     otbMsgDevMacro(<< "Guess the UTM parameters, zone: " << zone << " hemisphere: " << hem);
 
-    return generic_main<UtmProjectionType>(parseResult,utmProjection);
+    return generic_main<UtmProjectionType>(parseResult, utmProjection);
     }
 }
 } // namespace otb
