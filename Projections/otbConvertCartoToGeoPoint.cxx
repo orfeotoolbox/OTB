@@ -56,17 +56,17 @@ int generic_main_carto_geo(TMapProjection* mapProjection, otb::CommandLineArgume
     if (!parseResult->IsOptionPresent("--OTBTesting"))
     {
       std::cout << std::setprecision(10) << "Cartographic Point  (x , y)  : (" << cartoPoint[0] << ", " << cartoPoint[1] << ")" << std::endl;
-      std::cout << std::setprecision(10) << "Geographic   Point (Lat,Lon) : (" << geoPoint[1] << ", " <<  geoPoint[0] << ")" << std::endl;
+      std::cout << std::setprecision(10) << "Geographic   Point (Lat, Lon) : (" << geoPoint[1] << ", " <<  geoPoint[0] << ")" << std::endl;
     }
     else
     {
-      std::string outputTestFileName = parseResult->GetParameterString("--OTBTesting",0);
+      std::string outputTestFileName = parseResult->GetParameterString("--OTBTesting", 0);
 
       std::ofstream outputTestFile;
       outputTestFile.open(outputTestFileName.c_str());
 
       outputTestFile << std::setprecision(10) << "Cartographic Point  (x , y)  : (" << cartoPoint[0] << "," << cartoPoint[1] << ")" << std::endl;
-      outputTestFile << std::setprecision(10) << "Geographic   Point (Lat,Lon) : (" << geoPoint[1] << "," <<  geoPoint[0] << ")" << std::endl;
+      outputTestFile << std::setprecision(10) << "Geographic   Point (Lat, Lon) : (" << geoPoint[1] << "," <<  geoPoint[0] << ")" << std::endl;
 
       outputTestFile.close();
     }
@@ -95,7 +95,6 @@ int generic_main_carto_geo(TMapProjection* mapProjection, otb::CommandLineArgume
 
 
 
-
 int main(int argc, char* argv[])
 {
   try
@@ -116,7 +115,7 @@ int main(int argc, char* argv[])
 
     try
     {
-      parser->ParseCommandLine(argc,argv,parseResult);
+      parser->ParseCommandLine(argc, argv, parseResult);
     }
     catch ( itk::ExceptionObject & err )
     {
@@ -135,14 +134,14 @@ int main(int argc, char* argv[])
 
     // Code
 
-    std::string typeMap = parseResult->GetParameterString("--MapProjectionType",0);
+    std::string typeMap = parseResult->GetParameterString("--MapProjectionType", 0);
     int nbParams = parseResult->GetNumberOfParameters("--MapProjectionType");
     nbParams--;
 
     if ((typeMap == "UTM")&&(nbParams==2))
     {
-      int numZone = parseResult->GetParameterUInt("--MapProjectionType",1);
-      char hemisphere = parseResult->GetParameterChar("--MapProjectionType",2);
+      int numZone = parseResult->GetParameterUInt("--MapProjectionType", 1);
+      char hemisphere = parseResult->GetParameterChar("--MapProjectionType", 2);
 
       typedef otb::UtmInverseProjection UtmProjectionType;
       UtmProjectionType::Pointer utmProjection = UtmProjectionType::New();
@@ -154,11 +153,11 @@ int main(int argc, char* argv[])
     }
     else
     {
-      std::vector<double> parameters ;
+      std::vector<double> parameters;
 
       for (int i=1; i<nbParams+1; i++)
       {
-        parameters.push_back(parseResult->GetParameterDouble("--MapProjectionType",i));
+        parameters.push_back(parseResult->GetParameterDouble("--MapProjectionType", i));
       }
 
       if ((typeMap == "LAMBERT")&&(nbParams==4))
@@ -166,7 +165,7 @@ int main(int argc, char* argv[])
         typedef otb::LambertConformalConicInverseProjection LambertProjectionType;
         LambertProjectionType::Pointer lambertProjection = LambertProjectionType::New();
 
-        lambertProjection->SetParameters(parameters[0],parameters[1],parameters[2],parameters[3]);
+        lambertProjection->SetParameters(parameters[0], parameters[1], parameters[2], parameters[3]);
 
         return generic_main_carto_geo<LambertProjectionType>(lambertProjection, parseResult);
       }
@@ -189,7 +188,7 @@ int main(int argc, char* argv[])
         typedef otb::SinusoidalInverseProjection SinusoidalProjectionType;
         SinusoidalProjectionType::Pointer sinusoidalProjection = SinusoidalProjectionType::New();
 
-        sinusoidalProjection->SetParameters(parameters[0],parameters[1]);
+        sinusoidalProjection->SetParameters(parameters[0], parameters[1]);
 
         return generic_main_carto_geo<SinusoidalProjectionType>(sinusoidalProjection, parseResult);
       }
@@ -198,7 +197,7 @@ int main(int argc, char* argv[])
         typedef otb::Eckert4InverseProjection Eckert4ProjectionType;
         Eckert4ProjectionType::Pointer eckert4Projection = Eckert4ProjectionType::New();
 
-        eckert4Projection->SetParameters(parameters[0],parameters[1]);
+        eckert4Projection->SetParameters(parameters[0], parameters[1]);
 
         return generic_main_carto_geo<Eckert4ProjectionType>(eckert4Projection, parseResult);
       }
@@ -207,7 +206,7 @@ int main(int argc, char* argv[])
         typedef otb::TransMercatorInverseProjection TransMercatorProjectionType;
         TransMercatorProjectionType::Pointer transMercatorProjection = TransMercatorProjectionType::New();
 
-        transMercatorProjection->SetParameters(parameters[0],parameters[1],parameters[2]);
+        transMercatorProjection->SetParameters(parameters[0], parameters[1], parameters[2]);
 
         return generic_main_carto_geo<TransMercatorProjectionType>(transMercatorProjection, parseResult);
       }
@@ -216,7 +215,7 @@ int main(int argc, char* argv[])
         typedef otb::MollweidInverseProjection MollweidProjectionType;
         MollweidProjectionType::Pointer mollweidProjection = MollweidProjectionType::New();
 
-        mollweidProjection->SetParameters(parameters[0],parameters[1]);
+        mollweidProjection->SetParameters(parameters[0], parameters[1]);
 
         return generic_main_carto_geo<MollweidProjectionType>(mollweidProjection, parseResult);
       }
