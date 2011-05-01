@@ -84,8 +84,8 @@ int ValidateImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult
 {
   // Input Image
   typedef float                                           PixelType;
-  typedef otb::VectorImage<PixelType,2>                   VectorImageType;
-  typedef otb::Image<PixelType,2>                         ImageType;
+  typedef otb::VectorImage<PixelType, 2>                   VectorImageType;
+  typedef otb::Image<PixelType, 2>                         ImageType;
   typedef otb::ImageFileReader<VectorImageType>           ReaderType;
   typedef int                                             LabeledPixelType;
   typedef otb::Image<LabeledPixelType, 2>                 LabeledImageType;
@@ -144,11 +144,11 @@ int ValidateImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult
   // Load measuremnts from input images
   unsigned int nbBands = 0;
   //Iterate over all input images
-  for(int imgIndex = 0; imgIndex < parseResult->GetNumberOfParameters("InputImages");++imgIndex)
+  for(int imgIndex = 0; imgIndex < parseResult->GetNumberOfParameters("InputImages"); ++imgIndex)
     {
     // Read the image
     ReaderType::Pointer    reader  = ReaderType::New();
-    reader->SetFileName(parseResult->GetParameterString("InputImages",imgIndex));
+    reader->SetFileName(parseResult->GetParameterString("InputImages", imgIndex));
     reader->UpdateOutputInformation();
 
     std::cout<<"Processing image ("<<imgIndex<<"): "<<reader->GetFileName()<<std::endl;
@@ -160,9 +160,9 @@ int ValidateImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult
 
     // read the Vectordata
     VectorDataReaderType::Pointer vdreader = VectorDataReaderType::New();
-    vdreader->SetFileName(parseResult->GetParameterString("VectorDataSamples",imgIndex));
+    vdreader->SetFileName(parseResult->GetParameterString("VectorDataSamples", imgIndex));
     vdreader->Update();
-    std::cout<<"Set VectorData filename: "<< parseResult->GetParameterString("VectorDataSamples",imgIndex) <<std::endl;
+    std::cout<<"Set VectorData filename: "<< parseResult->GetParameterString("VectorDataSamples", imgIndex) <<std::endl;
 
     // Project the vectorData in the Image Coodinate system
     VectorDataProjectionFilterType::Pointer vproj = VectorDataProjectionFilterType::New();
