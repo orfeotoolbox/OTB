@@ -34,7 +34,6 @@
 #include "otbUtils.h"
 
 
-
 int main(int argc, char* argv[])
 {
   try
@@ -54,7 +53,7 @@ int main(int argc, char* argv[])
 
     try
     {
-      parser->ParseCommandLine(argc,argv,parseResult);
+      parser->ParseCommandLine(argc, argv, parseResult);
     }
     catch ( itk::ExceptionObject & err )
     {
@@ -84,17 +83,17 @@ int main(int argc, char* argv[])
 
     if (!parseResult->IsOptionPresent("--OTBTesting"))
     {
-      std::cout << "Geographic   Point (Lat,Lon) : (" << geoPoint[1] << "," << geoPoint[0] << ")" << std::endl;
+      std::cout << "Geographic   Point (Lat, Lon) : (" << geoPoint[1] << "," << geoPoint[0] << ")" << std::endl;
       std::cout << "UTM Corresponding Zone       : ==> " << utmZone << " <=="  << std::endl;
     }
     else
     {
-      std::string outputTestFileName = parseResult->GetParameterString("--OTBTesting",0);
+      std::string outputTestFileName = parseResult->GetParameterString("--OTBTesting", 0);
 
       ofstream outputTestFile;
       outputTestFile.open(outputTestFileName.c_str());
 
-      outputTestFile << "Geographic   Point (Lat,Lon) : (" << geoPoint[1] << "," << geoPoint[0] << ")" << std::endl;
+      outputTestFile << "Geographic   Point (Lat, Lon) : (" << geoPoint[1] << "," << geoPoint[0] << ")" << std::endl;
       outputTestFile << "UTM Corresponding Zone       : ==> " << utmZone << " <=="  << std::endl;
 
       outputTestFile.close();
