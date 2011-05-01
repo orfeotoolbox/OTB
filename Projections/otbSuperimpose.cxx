@@ -36,11 +36,11 @@ int Superimpose::Describe(ApplicationDescriptor* descriptor)
 {
   descriptor->SetName("Superimpose");
   descriptor->SetDescription("Using available image metadata, project one image onto another one");
-  descriptor->AddOption("DEMDirectory","Directory were to find the DEM tiles","dem",1,false,otb::ApplicationDescriptor::DirectoryName);
-  descriptor->AddOption("NumStreamDivisions","Number of streaming divisions (optional)","stream",1,false,otb::ApplicationDescriptor::Integer);
-  descriptor->AddOption("LocMapSpacing","Generate a coarser deformation field with the given spacing.","lmSpacing",1,false,otb::ApplicationDescriptor::Real);
-  descriptor->AddOption("ReferenceInput","The reference input","inR", 1,true,otb::ApplicationDescriptor::InputImage);
-  descriptor->AddOption("MovingInput","The image to reproject","inM", 1,true,otb::ApplicationDescriptor::InputImage);
+  descriptor->AddOption("DEMDirectory","Directory were to find the DEM tiles","dem", 1, false, otb::ApplicationDescriptor::DirectoryName);
+  descriptor->AddOption("NumStreamDivisions","Number of streaming divisions (optional)","stream", 1, false, otb::ApplicationDescriptor::Integer);
+  descriptor->AddOption("LocMapSpacing","Generate a coarser deformation field with the given spacing.","lmSpacing", 1, false, otb::ApplicationDescriptor::Real);
+  descriptor->AddOption("ReferenceInput","The reference input","inR", 1, true, otb::ApplicationDescriptor::InputImage);
+  descriptor->AddOption("MovingInput","The image to reproject","inM", 1, true, otb::ApplicationDescriptor::InputImage);
   descriptor->AddOutputImage();
 
   return EXIT_SUCCESS;
@@ -58,7 +58,7 @@ int Superimpose::Execute(otb::ApplicationOptionsResult* parseResult)
     typedef otb::StreamingImageFileWriter<ImageType>      WriterType;
     typedef otb::BCOInterpolateImageFunction<ImageType>   InterpolatorType;
 
-    typedef otb::GenericRSResampleImageFilter<ImageType,ImageType>  ResamplerType;
+    typedef otb::GenericRSResampleImageFilter<ImageType, ImageType>  ResamplerType;
 
     // Read input images information
     ReaderType::Pointer refReader = ReaderType::New();
@@ -69,7 +69,7 @@ int Superimpose::Execute(otb::ApplicationOptionsResult* parseResult)
     movingReader->SetFileName(parseResult->GetParameterString("MovingInput"));
     movingReader->GenerateOutputInformation();
     
-    // Resample filter 
+    // Resample filter
     ResamplerType::Pointer    resampler = ResamplerType::New();
     InterpolatorType::Pointer interpolator = InterpolatorType::New();
     resampler->SetInterpolator(interpolator);
@@ -77,7 +77,7 @@ int Superimpose::Execute(otb::ApplicationOptionsResult* parseResult)
     // Add DEM if any
     if(parseResult->IsOptionPresent("DEMDirectory"))
       {
-      resampler->SetDEMDirectory(parseResult->GetParameterString("DEMDirectory",0));
+      resampler->SetDEMDirectory(parseResult->GetParameterString("DEMDirectory", 0));
       }
     
     // Set up output image informations
@@ -123,7 +123,7 @@ int Superimpose::Execute(otb::ApplicationOptionsResult* parseResult)
     writer->SetInput(resampler->GetOutput());
     writer->SetWriteGeomFile(true);
 
-    otb::StandardWriterWatcher w4(writer,resampler,"Superimposition");
+    otb::StandardWriterWatcher w4(writer, resampler,"Superimposition");
 
     otb::PipelineMemoryPrintCalculator::Pointer memoryPrintCalculator = otb::PipelineMemoryPrintCalculator::New();
     const double byteToMegabyte = 1./vcl_pow(2.0, 20);
