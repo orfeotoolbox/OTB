@@ -43,14 +43,14 @@ int VectorDataExtractROIApplication::Describe(ApplicationDescriptor* descriptor)
 {
   descriptor->SetName("VectorDataExtractROIApplication");
   descriptor->SetDescription("Perform an extract ROI on the input vector data according to the input image extent");
-  descriptor->AddOption("InputVData", "The input vector data", 
+  descriptor->AddOption("InputVData", "The input vector data",
                         "in",  1, true, ApplicationDescriptor::FileName);
-  descriptor->AddOption("InputImage", "The support image", 
+  descriptor->AddOption("InputImage", "The support image",
                         "img",  1, true, ApplicationDescriptor::InputImage);
-  descriptor->AddOption("DEMPath", "The DEM directory", 
+  descriptor->AddOption("DEMPath", "The DEM directory",
                         "dem",  1, false, ApplicationDescriptor::DirectoryName);
-  descriptor->AddOption("OutputVData", "The output vector data", 
-                        "out",  1, true, ApplicationDescriptor::FileName);  
+  descriptor->AddOption("OutputVData", "The output vector data",
+                        "out",  1, true, ApplicationDescriptor::FileName);
 
   return EXIT_SUCCESS;
 }
@@ -72,7 +72,7 @@ int VectorDataExtractROIApplication::Execute(otb::ApplicationOptionsResult* pars
   typedef otb::VectorDataFileReader<VectorDataType>       VectorDataReaderType;
   typedef otb::VectorDataFileWriter<VectorDataType>       VectorDataWriterType;
   typedef VectorDataProjectionFilter<
-    VectorDataType,VectorDataType>                        VectorDataProjectionFilterType;
+    VectorDataType, VectorDataType>                        VectorDataProjectionFilterType;
   typedef VectorDataExtractROI<VectorDataType>            VectorDataExtractROIType;
 
   // Misc
