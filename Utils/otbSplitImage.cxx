@@ -38,7 +38,7 @@ int generic_main_split(otb::ApplicationOptionsResult* parseResult)
   size_t pointPos = baseName.rfind(".");
   if (pointPos != std::string::npos)
     {
-    base = baseName.substr(0,pointPos);
+    base = baseName.substr(0, pointPos);
     extension = baseName.substr(pointPos);
     }
   else
@@ -68,9 +68,9 @@ int generic_main_split(otb::ApplicationOptionsResult* parseResult)
        i < reader->GetOutput()->GetNumberOfComponentsPerPixel();
        ++i )
     {
-    std::stringstream filename;// = baseName + "-" + str()
+    std::stringstream filename; // = baseName + "-" + str()
     filename << base << "-" << i << extension;
-    filter->SetChannel(i+1);//FIXME change the convention
+    filter->SetChannel(i+1); //FIXME change the convention
     writer->SetFileName(filename.str());
     otb::StandardFilterWatcher watcher(writer, "Writing "+filename.str());
     writer->Update();
@@ -84,11 +84,11 @@ int SplitImage::Describe(ApplicationDescriptor* descriptor)
   descriptor->SetName("SplitImage");
   descriptor->SetDescription("Split a N multiband image into N images");
   descriptor->AddInputImage();
-  descriptor->AddOption("OutputImagesBaseName", "Base name for the output images", "on", 1,true,ApplicationDescriptor::String);
+  descriptor->AddOption("OutputImagesBaseName", "Base name for the output images", "on", 1, true, ApplicationDescriptor::String);
   descriptor->AddOption("OutputPixelType",
                     "OutputPixelType: unsigned char (1), short int (2), int (3), float (4),"
                     " double (5), unsigned short int (12), unsigned int (13); default 1",
-                    "t", 1, false,ApplicationDescriptor::Integer);
+                    "t", 1, false, ApplicationDescriptor::Integer);
   
   return EXIT_SUCCESS;
 }
