@@ -44,7 +44,7 @@ int main(int argc, char* argv[])
     ParserType::Pointer parser = ParserType::New();
 
     parser->SetProgramDescription("Sensor to geographic coordinates conversion. "
-        "If x,y are not provided, convert the four corners");
+        "If x, y are not provided, convert the four corners");
     parser->AddOption("--data","sensor image","-in");
     parser->AddOption("--sample","X value of desired point","-x", 1, false);
     parser->AddOption("--line","Y value of desired point","-y", 1, false);
@@ -54,7 +54,7 @@ int main(int argc, char* argv[])
 
     try
     {
-      parser->ParseCommandLine(argc,argv,parseResult);
+      parser->ParseCommandLine(argc, argv, parseResult);
     }
     catch ( itk::ExceptionObject & err )
     {
