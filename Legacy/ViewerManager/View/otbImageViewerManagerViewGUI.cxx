@@ -441,7 +441,6 @@ ImageViewerManagerViewGUI
 
 
 
-
    curveWidget->ClearAllCurves();
 
    if (pRenderingFunction->GetPixelRepresentationSize() >=3)
