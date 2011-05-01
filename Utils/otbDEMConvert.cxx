@@ -54,7 +54,7 @@ int generic_convert_to_tif(otb::ApplicationOptionsResult* parseResult, ossimFile
   typename WriterType::Pointer writer = WriterType::New();
 
   reader->SetFileName(parseResult->GetInputImage().c_str());
-  writer->SetFileName(tempFilename); 
+  writer->SetFileName(tempFilename);
 
   writer->SetInput(reader->GetOutput());
   writer->Update();
@@ -68,8 +68,8 @@ int DEMConvert::Describe(ApplicationDescriptor* descriptor)
   descriptor->SetName("DEMConvertApplication");
   descriptor->SetDescription("Convert a DEM file into a general raster (.ras, .geom and .omd). To be used, those files have to be in a stand alone directory");
   descriptor->AddInputImage();
-  descriptor->AddOption("OutputPath", "The filename (or path filename) of the output. It generates a Output.geom, Output.omd and Output.ras file.","out", 1, true,ApplicationDescriptor::String);
-  descriptor->AddOption("KeepTif", "Keep the temporary generate tif file.","ktif", 0, false,ApplicationDescriptor::Boolean);
+  descriptor->AddOption("OutputPath", "The filename (or path filename) of the output. It generates a Output.geom, Output.omd and Output.ras file.","out", 1, true, ApplicationDescriptor::String);
+  descriptor->AddOption("KeepTif", "Keep the temporary generate tif file.","ktif", 0, false, ApplicationDescriptor::Boolean);
   
   return EXIT_SUCCESS;
 }
@@ -89,7 +89,7 @@ int DEMConvert::Execute(otb::ApplicationOptionsResult* parseResult)
   ossimFilename tempFilename(parseResult->GetParameterString("OutputPath"));
   tempFilename += "_DEMConvert.tif";
   
-  // Search for the input 
+  // Search for the input
   typedef otb::VectorImage<double, 2> InputImageType;
   typedef otb::ImageFileReader<InputImageType> ReaderType;
   ReaderType::Pointer reader=ReaderType::New();
@@ -156,10 +156,10 @@ int DEMConvert::Execute(otb::ApplicationOptionsResult* parseResult)
    // Get an image handler for the input file.
    ossimRefPtr<ossimImageHandler> ih = ossimImageHandlerRegistry::instance()->open(tempFilename);
    
-   // Initialize the 
+   // Initialize the
    if (ih->getErrorStatus() == ossimErrorCodes::OSSIM_ERROR)
    {
-     itkExceptionMacro("Error reading image:  " << input_file << "Exiting application..."); 
+     itkExceptionMacro("Error reading image:  " << input_file << "Exiting application...");
      return EXIT_FAILURE;
    }
    
@@ -227,7 +227,6 @@ int DEMConvert::Execute(otb::ApplicationOptionsResult* parseResult)
        itkExceptionMacro("Error detected in the image writer...");
        return EXIT_FAILURE;
      }
-
 
 
    if ( parseResult->IsOptionPresent("KeepTif") == false)
