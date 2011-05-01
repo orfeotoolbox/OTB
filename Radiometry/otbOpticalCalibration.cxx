@@ -44,28 +44,28 @@ int OpticalCalibration::Describe(ApplicationDescriptor* descriptor)
   descriptor->AddOptionNParams("Level",
                                "Level of calibration TOA(Top Of Atmosphere) or TOC(Top Of Canopy) (default is TOA)",
                                "level", false, otb::ApplicationDescriptor::String);
-  descriptor->AddOption("RelativeSpectralResponseFile","Sensor relative spectral response file(by default the application gets these informations in the metadata)","rsr",1,false, otb::ApplicationDescriptor::FileName);
+  descriptor->AddOption("RelativeSpectralResponseFile","Sensor relative spectral response file(by default the application gets these informations in the metadata)","rsr", 1, false, otb::ApplicationDescriptor::FileName);
   descriptor->AddOption("AerosolModel","AerosolModel: NO_AEROSOL(0), CONTINENTAL(1), MARITIME(2), URBAN(3), DESERTIC(5); default 0","aerosol", 1, false, otb::ApplicationDescriptor::Integer);
   descriptor->AddOption("OzoneAmount","Amount of Ozone ","oz", 1, false, otb::ApplicationDescriptor::Real);
   descriptor->AddOption("WaterVaporAmount","WaterVaporAmount ","wa", 1, false, otb::ApplicationDescriptor::Real);
   descriptor->AddOption("AtmosphericPressure","Atmospheric pressure ","atmo", 1, false, otb::ApplicationDescriptor::Real);
   descriptor->AddOption("AerosolOptical","AerosolOptical ","opt", 1, false, otb::ApplicationDescriptor::Real);
-  descriptor->AddOption("AeronetFile","Aeronet file to get atmospheric parameters","aeronet",1,false, otb::ApplicationDescriptor::FileName);
-  descriptor->AddOption("AvailableMemory","Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default)","ram",1,false, otb::ApplicationDescriptor::Integer);
+  descriptor->AddOption("AeronetFile","Aeronet file to get atmospheric parameters","aeronet", 1, false, otb::ApplicationDescriptor::FileName);
+  descriptor->AddOption("AvailableMemory","Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default)","ram", 1, false, otb::ApplicationDescriptor::Integer);
   return EXIT_SUCCESS;
 }
 
 int OpticalCalibration::Execute(otb::ApplicationOptionsResult* parseResult)
 {
   typedef otb::VectorImage<unsigned short int, 2>       ImageType;
-  typedef otb::VectorImage<float,2>                     FloatImageType;
+  typedef otb::VectorImage<float, 2>                     FloatImageType;
   typedef otb::ImageFileReader<ImageType>               ReaderType;
   typedef otb::StreamingImageFileWriter<ImageType>      WriterType;
 
   typedef ImageToLuminanceImageFilter<ImageType, FloatImageType> ImageToLuminanceImageFilterType;
   typedef LuminanceToReflectanceImageFilter<FloatImageType,
       FloatImageType>                      LuminanceToReflectanceImageFilterType;
-  typedef otb::MultiplyByScalarImageFilter<FloatImageType,ImageType> ScaleFilterType;
+  typedef otb::MultiplyByScalarImageFilter<FloatImageType, ImageType> ScaleFilterType;
   typedef ReflectanceToSurfaceReflectanceImageFilter<FloatImageType,
       FloatImageType>             ReflectanceToSurfaceReflectanceImageFilterType;
   typedef ReflectanceToSurfaceReflectanceImageFilterType::FilterFunctionValuesType  FilterFunctionValuesType;
@@ -171,7 +171,7 @@ int OpticalCalibration::Execute(otb::ApplicationOptionsResult* parseResult)
 
     if (parseResult->IsOptionPresent("RelativeSpectralResponseFile"))
       {
-      reflectanceToSurfaceReflectanceFilter->SetFilterFunctionValuesFileName(parseResult->GetParameterString("RelativeSpectralResponseFile",0));
+      reflectanceToSurfaceReflectanceFilter->SetFilterFunctionValuesFileName(parseResult->GetParameterString("RelativeSpectralResponseFile", 0));
       }
     else
       {
@@ -180,7 +180,7 @@ int OpticalCalibration::Execute(otb::ApplicationOptionsResult* parseResult)
 
     if (parseResult->IsOptionPresent("AeronetFile"))
       {
-      reflectanceToSurfaceReflectanceFilter->SetAeronetFileName(parseResult->GetParameterString("AeronetFile",0));
+      reflectanceToSurfaceReflectanceFilter->SetAeronetFileName(parseResult->GetParameterString("AeronetFile", 0));
       }
 
     AtmosphericRadiativeTerms::Pointer radTerms = AtmosphericRadiativeTerms::New();
