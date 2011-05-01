@@ -94,7 +94,6 @@ int generic_main_carto_geo(TMapProjection* mapProjection, otb::CommandLineArgume
 }//End main()
 
 
-
 int main(int argc, char* argv[])
 {
   try
