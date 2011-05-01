@@ -25,14 +25,14 @@
 #include "otbCommandLineArgumentParser.h"
 
 typedef unsigned short                            PixelType;
-typedef otb::Image<PixelType,2>                   ImageType;
+typedef otb::Image<PixelType, 2>                   ImageType;
 typedef otb::ImageFileReader<ImageType>           ReaderType;
 typedef otb::VectorData<>                         VectorDataType;
 typedef otb::VectorDataFileWriter<VectorDataType> WriterType;
 typedef otb::ImageToEnvelopeVectorDataFilter
-    <ImageType,VectorDataType>                    FilterType;
+    <ImageType, VectorDataType>                    FilterType;
 
-int main(int argc,char* argv[])
+int main(int argc, char* argv[])
 {
 
   // Parse command line parameters
@@ -41,14 +41,14 @@ int main(int argc,char* argv[])
 
   parser->SetProgramDescription("Write a vector file containing a polygon corresponding to the imate envelope.");
   parser->AddInputImage();
-  parser->AddOption("--OutputVectorData","Vector Data file containg the envelope.","-out",1,true);
+  parser->AddOption("--OutputVectorData","Vector Data file containg the envelope.","-out", 1, true);
 
   typedef otb::CommandLineArgumentParseResult ParserResultType;
   ParserResultType::Pointer  parseResult = ParserResultType::New();
 
   try
   {
-    parser->ParseCommandLine(argc,argv,parseResult);
+    parser->ParseCommandLine(argc, argv, parseResult);
   }
   catch ( itk::ExceptionObject & err )
   {
