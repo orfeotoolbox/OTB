@@ -380,6 +380,3 @@ namespace otb
 
 
 
-
-
-
