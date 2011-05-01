@@ -33,14 +33,14 @@ int main(int argc, char* argv[])
 //   ParserType::Pointer parser = ParserType::New();
 
 //   //parser->AddInputImage(false); //Optionnal parameter
-//   parser->AddOptionNParams("--InputImage","Input Images","-in",false);
+//   parser->AddOptionNParams("--InputImage","Input Images","-in", false);
 
 //   typedef otb::CommandLineArgumentParseResult ParserResultType;
 //   ParserResultType::Pointer  parseResult = ParserResultType::New();
 
 //   try
 //   {
-//     parser->ParseCommandLine(argc,argv,parseResult);
+//     parser->ParseCommandLine(argc, argv, parseResult);
 //   }
 //   catch ( itk::ExceptionObject & err )
 //   {
@@ -68,17 +68,17 @@ int main(int argc, char* argv[])
 
   //
   view->Show();
-  for (int i = 1; i<argc;++i)
+  for (int i = 1; i<argc; ++i)
     {
       view->OpenImage(argv[i]);
     }
 
 //   if ( parseResult->IsOptionInputImagePresent() )
 //     {
-//       for(int i = 0; i<parseResult->GetNumberOfParameters("--InputImage") ; i++ )
-// 	{
-// 	  view->OpenImage(parseResult->GetParameterString("--InputImage",i).c_str());
-// 	}
+//       for(int i = 0; i<parseResult->GetNumberOfParameters("--InputImage"); i++ )
+//        {
+//          view->OpenImage(parseResult->GetParameterString("--InputImage", i).c_str());
+//        }
 //     }
   Fl::check();
 

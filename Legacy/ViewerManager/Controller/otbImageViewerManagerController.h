@@ -28,7 +28,6 @@ See OTBCopyright.txt for details.
 #include "otbAutoScaleActionHandler.h"
 
 
-
 #include "otbObjectList.h"
 
 namespace otb
@@ -58,17 +57,17 @@ public:
   
   typedef ObjectList<VisuControllerType>                                VisuControllerListType;
   
-  typedef WidgetResizingActionHandler<VisuModelType,VisuViewType>       ResizingHandlerType;
+  typedef WidgetResizingActionHandler<VisuModelType, VisuViewType>       ResizingHandlerType;
   typedef ResizingHandlerType::Pointer                                  ResizingHandlerPointerType;
 
-  typedef ChangeExtractRegionActionHandler<VisuModelType,VisuViewType>  ChangeExtractRegionHandlerType;
+  typedef ChangeExtractRegionActionHandler<VisuModelType, VisuViewType>  ChangeExtractRegionHandlerType;
   typedef ChangeExtractRegionHandlerType::Pointer                       ChangeExtractRegionHandlerPointerType;
   
   typedef AutoScaleActionHandler<ViewType::ImageWidgetType>             AutoScaleHandlerType;
   typedef AutoScaleHandlerType::Pointer                                 AutoScaleHandlerPointerType;
   
   /** Standard type macros */
-  itkTypeMacro(ImageViewerManagerController,Superclass);
+  itkTypeMacro(ImageViewerManagerController, Superclass);
   itkNewMacro(Self);
 
   /** NewVisu */
@@ -98,13 +97,13 @@ public:
 /*   } */
   
   
-  //virtual void AddController(VisuModelPointerType  modelRenderingLayer  ,VisuViewPointerType visuView);
+  //virtual void AddController(VisuModelPointerType  modelRenderingLayer  , VisuViewPointerType visuView);
 
   virtual unsigned int OpenInputImage(const char * filename);
   virtual void CloseImage(unsigned int selectedItem);
   virtual void UpdateRGBChannelOrder(int redChoice , int greenChoice, int BlueChoice, unsigned int selectedItem);
   virtual void UpdateGrayScaleChannelOrder(int choice, unsigned int selectedItem );
-  virtual void UpdateAmplitudeChannelOrder(int realChoice , int imChoice ,unsigned int selectedItem );
+  virtual void UpdateAmplitudeChannelOrder(int realChoice , int imChoice , unsigned int selectedItem );
   virtual void UpdatePhaseChannelOrder(int realChoice , int imChoice, unsigned int selectedItem);
   virtual void Link(unsigned int leftChoice, unsigned int rightChoice , OffsetType offset);
   virtual void UpdateImageViewController(unsigned int selectedItem);

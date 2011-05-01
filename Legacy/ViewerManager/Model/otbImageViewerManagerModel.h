@@ -77,11 +77,11 @@ public:
   /**  Image Type*/
   typedef VectorImage<PixelType , 2>                                                ImageType;
   typedef itk::RGBAPixel<unsigned char>                                              RGBPixelType;
-  typedef Image<RGBPixelType,2>                                                     ViewerImageType;
+  typedef Image<RGBPixelType, 2>                                                     ViewerImageType;
   typedef ImageType::Pointer                                                        ImagePointerType;
 
   /** typedef support for layers */
-  typedef otb::ImageLayer<ImageType,ViewerImageType>                                 LayerType;
+  typedef otb::ImageLayer<ImageType, ViewerImageType>                                 LayerType;
   typedef LayerType::Pointer                                                         LayerPointerType;
 
   typedef otb::ImageLayerGenerator<LayerType>                                        LayerGeneratorType;
@@ -110,17 +110,17 @@ public:
   typedef ImageWidgetController                                                       WidgetControllerType;
   typedef WidgetControllerType::Pointer                                               WidgetControllerPointerType;
 
-  typedef WidgetResizingActionHandler<VisuModelType,VisuViewType>                     ResizingHandlerType;
+  typedef WidgetResizingActionHandler<VisuModelType, VisuViewType>                     ResizingHandlerType;
   typedef ResizingHandlerType::Pointer                                                ResizingHandlerPointerType;
-  typedef otb::ChangeScaledExtractRegionActionHandler<VisuModelType,VisuViewType>     ChangeScaledRegionHandlerType;
-  typedef otb::ChangeExtractRegionActionHandler<VisuModelType,VisuViewType>           ChangeRegionHandlerType;
-  typedef otb::ChangeScaleActionHandler<VisuModelType,VisuViewType>                   ChangeScaleHandlerType;
-  typedef otb::ArrowKeyMoveActionHandler<VisuModelType,VisuViewType>                  ArrowKeyMoveActionHandlerType;
+  typedef otb::ChangeScaledExtractRegionActionHandler<VisuModelType, VisuViewType>     ChangeScaledRegionHandlerType;
+  typedef otb::ChangeExtractRegionActionHandler<VisuModelType, VisuViewType>           ChangeRegionHandlerType;
+  typedef otb::ChangeScaleActionHandler<VisuModelType, VisuViewType>                   ChangeScaleHandlerType;
+  typedef otb::ArrowKeyMoveActionHandler<VisuModelType, VisuViewType>                  ArrowKeyMoveActionHandlerType;
 
   typedef otb::PixelDescriptionModel<ViewerImageType>                                 PixelDescriptionModelType;
   typedef PixelDescriptionModelType::Pointer                                          PixelDescriptionModelPointerType;
   typedef PixelDescriptionView<PixelDescriptionModelType>                             PixelDescriptionViewType;
-  typedef otb::PixelDescriptionActionHandler<PixelDescriptionModelType,VisuViewType>  PixelDescriptionActionHandlerType;
+  typedef otb::PixelDescriptionActionHandler<PixelDescriptionModelType, VisuViewType>  PixelDescriptionActionHandlerType;
 
   typedef Curves2DWidget                                                              CurvesWidgetType;
 
@@ -157,8 +157,8 @@ public:
   virtual void CloseImage(unsigned int selectedItem);
   virtual void UpdateRGBChannelOrder(int redChoice , int greenChoice, int BlueChoice, unsigned int selectedItem);
   virtual void UpdateGrayScaleChannelOrder(int choice, unsigned int selectedItem);
-  virtual void UpdateAmplitudeChannelOrder(int realChoice , int imChoice,unsigned int selectedItem );
-  virtual void UpdatePhaseChannelOrder(int realChoice , int imChoice,unsigned int selectedItem );
+  virtual void UpdateAmplitudeChannelOrder(int realChoice , int imChoice, unsigned int selectedItem );
+  virtual void UpdatePhaseChannelOrder(int realChoice , int imChoice, unsigned int selectedItem );
   virtual void Link(unsigned int leftChoice, unsigned int rightChoice, OffsetType offset);
   virtual void InitializeImageViewController(unsigned int selectedItem);
 
@@ -169,8 +169,8 @@ public:
     }
 
    /** Boolean Flags */
-   itkGetMacro(HasImageOpened,bool);
-   itkGetMacro(HasChangedChannelOrder,bool);
+   itkGetMacro(HasImageOpened, bool);
+   itkGetMacro(HasChangedChannelOrder, bool);
 
 protected:
   /** This is protected for the singleton. Use GetInstance() instead. */
@@ -204,7 +204,6 @@ private:
   /** The manipuleted list*/
   ObjectTrackedList                          m_ObjectTrackedList;
 };
-
 
 
 }

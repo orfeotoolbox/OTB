@@ -69,7 +69,7 @@ public:
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(ImageViewerManagerViewGUI,Object);
+  itkTypeMacro(ImageViewerManagerViewGUI, Object);
 
   /** Controller */
   typedef ImageViewerManagerControllerInterface::Pointer  ImageViewerManagerControllerInterfacePointerType;
@@ -110,7 +110,7 @@ public:
   /** vector to store the status of images : diplayed or not displayed*/
   //---> Note : if the packed view is selected : 2nd boolean false, Splitted view : 2nd boolean true
   typedef std::pair<bool, bool>                                   PairType;
-  typedef std::pair<unsigned int ,unsigned int>                   UIntPairType;
+  typedef std::pair<unsigned int , unsigned int>                   UIntPairType;
   typedef std::vector<PairType>                                   BoolVector;
   typedef std::vector<UIntPairType>                               UIntPairVector;
 
@@ -120,7 +120,7 @@ public:
 
 
   /** Method to set the controller*/
-  itkGetObjectMacro(ImageViewerManagerController,ImageViewerManagerControllerInterface);
+  itkGetObjectMacro(ImageViewerManagerController, ImageViewerManagerControllerInterface);
 
   void SetImageViewerManagerController(ImageViewerManagerControllerInterface *pController)
   {
@@ -130,8 +130,8 @@ public:
   }
 
   // Visu
-  itkGetMacro(VisuView,VisuViewPointerType);
-  itkGetMacro(PreviewWidget,ImageWidgetPointerType );
+  itkGetMacro(VisuView, VisuViewPointerType);
+  itkGetMacro(PreviewWidget, ImageWidgetPointerType );
 
   // Show()
   virtual void Show();
@@ -209,7 +209,7 @@ private:
   UIntPairVector                                 m_LinkedImageList;
   std::string                                    m_TemplateViewerName;
   std::string                                    m_DisplayedLabel;
-  std::string                                    m_UndisplayedLabel ;
+  std::string                                    m_UndisplayedLabel;
 
   //Widget Manager
   WidgetManagerList::Pointer                     m_WidgetManagerList;

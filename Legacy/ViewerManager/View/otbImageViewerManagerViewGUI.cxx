@@ -29,8 +29,8 @@ namespace otb
  */
 
 ImageViewerManagerViewGUI
-::ImageViewerManagerViewGUI():m_TemplateViewerName(""),m_DisplayedLabel("+ "),
-			      m_UndisplayedLabel("- "),m_DiaporamaCurrentIndex(0)
+::ImageViewerManagerViewGUI():m_TemplateViewerName(""), m_DisplayedLabel("+ "),
+                           m_UndisplayedLabel("- "), m_DiaporamaCurrentIndex(0)
 {
 
   m_VisuView               =  VisuViewType::New();
@@ -88,13 +88,13 @@ ImageViewerManagerViewGUI
 ::OpenImage()
 {
   std::string pikedFileName="";
-  char * cfname ;
-  cfname = fl_file_chooser("Pick an image file", "*.*",pikedFileName.c_str());
+  char * cfname;
+  cfname = fl_file_chooser("Pick an image file", "*.*", pikedFileName.c_str());
 
   if (cfname == NULL || strlen(cfname)<1)
     {
       otbMsgDebugMacro(<<"Empty file name!");
-      return ;
+      return;
     }
 
   Fl::check();
@@ -116,7 +116,7 @@ ImageViewerManagerViewGUI
   for ( unsigned int i = 0; i < numberOfOpenedImages; i++ )
   {
     //Initialise the boolean pair
-    PairType      pair(false,false); //(Not displayed , Packed View)
+    PairType      pair(false, false); //(Not displayed , Packed View)
 
     //Put a new WidgetManager in the list
     if(bSplitted->value() && !bPacked->value())
@@ -166,17 +166,17 @@ ImageViewerManagerViewGUI
     {
       unsigned int selectedItem = guiImageList->value();
       if (selectedItem == 0)
-	return;        // no image selected, return
+       return;        // no image selected, return
 
       //DipalyPreviewWidget
       this->DisplayPreviewWidget(selectedItem);
 
       //Update the widget dispalyed
       if(m_DisplayStatusList[selectedItem-1].first)
-	{
-	  m_WidgetManagerList->GetNthElement(selectedItem-1)->Refresh();
-	  this->Display(m_WidgetManagerList,selectedItem);
-	}
+       {
+         m_WidgetManagerList->GetNthElement(selectedItem-1)->Refresh();
+         this->Display(m_WidgetManagerList, selectedItem);
+       }
 
       this->UpdateInformation(selectedItem);
     }
@@ -204,15 +204,15 @@ ImageViewerManagerViewGUI
   if(guiLinkSetupWindow->shown() != 0)
     {
       if(guiImageList->size() > 1)
-	{
-	  if(m_LinkedDisplayStatusList[selectedItem-1])
-	    for(unsigned int i = 0; i<m_LinkedDisplayStatusList.size() ; i++)
-	      if(m_LinkedDisplayStatusList[i])
-		{
-		  m_LinkWidgetManagerList->GetNthElement(i)->Hide();
-		  m_LinkedDisplayStatusList[i] = false;
-		}
-	}
+       {
+         if(m_LinkedDisplayStatusList[selectedItem-1])
+           for(unsigned int i = 0; i<m_LinkedDisplayStatusList.size(); i++)
+             if(m_LinkedDisplayStatusList[i])
+              {
+                m_LinkWidgetManagerList->GetNthElement(i)->Hide();
+                m_LinkedDisplayStatusList[i] = false;
+              }
+       }
     }
 
 
@@ -223,7 +223,7 @@ ImageViewerManagerViewGUI
   //Link when all images are closed
   if(guiLinkSetupWindow->shown() != 0)
       if(guiImageList->size()  == 0)
-	this->LinkSetupOk();
+       this->LinkSetupOk();
 
   //Erase from the lists
   m_DisplayStatusList.erase( m_DisplayStatusList.begin()+(selectedItem-1));
@@ -236,43 +236,43 @@ ImageViewerManagerViewGUI
   if(guiDiaporama->shown() != 0)
     {
       if(guiImageList->size() > 0)
-	{
-	  //If the closed image is the current showed in the diaporama
-	  if(selectedItem == m_DiaporamaCurrentIndex+1)
-	    {
-	      //if the closed image is the last one in the diapo : show the previous
-	      if(selectedItem -1 == static_cast<unsigned int>(guiImageList->size()))
-		{
-		  this->DiaporamaPrevious();
-		}
-	      else
-		{
-		  //if the closed image is the first one : show the next one
-		  this->UpdateDiaporamaProgressBar();
-		  ++m_DiaporamaCurrentIndex;            //Increment to show the next image
-		  this->DisplayDiaporama();
-		  --m_DiaporamaCurrentIndex;            //Decrement because we remove the first image, so the current display become the first
-		}
-	    }
-	  else
-	    {
-	      if(selectedItem < m_DiaporamaCurrentIndex+1)
-		{
-		  --m_DiaporamaCurrentIndex;         //Increment the current index because an image before the one displayed is removed
-		}
-	      this->UpdateDiaporamaProgressBar();
-	    }
-	}
+       {
+         //If the closed image is the current showed in the diaporama
+         if(selectedItem == m_DiaporamaCurrentIndex+1)
+           {
+             //if the closed image is the last one in the diapo : show the previous
+             if(selectedItem -1 == static_cast<unsigned int>(guiImageList->size()))
+              {
+                this->DiaporamaPrevious();
+              }
+             else
+              {
+                //if the closed image is the first one : show the next one
+                this->UpdateDiaporamaProgressBar();
+                ++m_DiaporamaCurrentIndex;            //Increment to show the next image
+                this->DisplayDiaporama();
+                --m_DiaporamaCurrentIndex;            //Decrement because we remove the first image, so the current display become the first
+              }
+           }
+         else
+           {
+             if(selectedItem < m_DiaporamaCurrentIndex+1)
+              {
+                --m_DiaporamaCurrentIndex;         //Increment the current index because an image before the one displayed is removed
+              }
+             this->UpdateDiaporamaProgressBar();
+           }
+       }
     }
 
     //Case all Images closed
     if(guiDiaporama->shown() != 0)
     {
       if(m_DisplayStatusList.size() == 0)
-	{
-	  m_DiaporamaCurrentIndex=0;
-	  this->DiaporamaQuit();          //If no image to display anymore : quit the diaporamaGUI
-	}
+       {
+         m_DiaporamaCurrentIndex=0;
+         this->DiaporamaQuit();          //If no image to display anymore : quit the diaporamaGUI
+       }
     }
 
     //
@@ -285,7 +285,6 @@ ImageViewerManagerViewGUI
 
   //Update the Link Setup
   this->UpdateLinkSetupWindow();
-
 
 
  }
@@ -310,11 +309,11 @@ ImageViewerManagerViewGUI
    //Update the Image List widget
    unsigned int len     = m_ImageViewerManagerModel->GetObjectList().size();
    std::string fileName = m_ImageViewerManagerModel->GetObjectList().at(len-1).fileName;
-   int slashIndex       = fileName.find_last_of("/",fileName.size());
+   int slashIndex       = fileName.find_last_of("/", fileName.size());
 
    itk::OStringStream oss;
    oss<<m_UndisplayedLabel;
-   oss<<m_TemplateViewerName<<fileName.substr(slashIndex+1,fileName.size());
+   oss<<m_TemplateViewerName<<fileName.substr(slashIndex+1, fileName.size());
    guiImageList->add(oss.str().c_str());
    guiImageList->redraw();
  }
@@ -378,7 +377,6 @@ ImageViewerManagerViewGUI
  }
 
 
-
  /**
   * Compute the size of the
   */
@@ -392,7 +390,7 @@ ImageViewerManagerViewGUI
    double zoomW = static_cast<double>(w)/static_cast<double>(size[0]);
    double zoomH = static_cast<double>(h)/static_cast<double>(size[1]);
 
-   return std::min(zoomW,zoomH);
+   return std::min(zoomW, zoomH);
  }
 
  /**
@@ -412,18 +410,18 @@ ImageViewerManagerViewGUI
      {
        //check what to do
        if(!m_DisplayStatusList[selectedItem-1].first)
-	 {
-	   //New Display
-	   m_DisplayStatusList[selectedItem-1].first = true;
-	   this->UpdateImageListShowed(selectedItem, m_DisplayedLabel);
-	   this->Display(m_WidgetManagerList,selectedItem);
-	 }
+        {
+          //New Display
+          m_DisplayStatusList[selectedItem-1].first = true;
+          this->UpdateImageListShowed(selectedItem, m_DisplayedLabel);
+          this->Display(m_WidgetManagerList, selectedItem);
+        }
        else
-	 {
-	   m_DisplayStatusList[selectedItem-1].first = false;
-	   this->UpdateImageListShowed(selectedItem, m_UndisplayedLabel);
-	   this->Undisplay(selectedItem);
-	 }
+        {
+          m_DisplayStatusList[selectedItem-1].first = false;
+          this->UpdateImageListShowed(selectedItem, m_UndisplayedLabel);
+          this->Undisplay(selectedItem);
+        }
      }
  }
 
@@ -440,7 +438,6 @@ ImageViewerManagerViewGUI
 
    //First get the histogram list
    RenderingFunctionType::Pointer pRenderingFunction = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFunction;
-
 
 
 
@@ -521,11 +518,11 @@ ImageViewerManagerViewGUI
 
    SplittedWidgetManagerType::Pointer widgetManager  =  SplittedWidgetManagerType::New();
    m_WidgetManagerList->GetNthElement(selectedItem-1)->Hide();
-   m_WidgetManagerList->SetNthElement(selectedItem-1,widgetManager);
+   m_WidgetManagerList->SetNthElement(selectedItem-1, widgetManager);
 
    //Update the list link
    m_LinkWidgetManagerList->GetNthElement(selectedItem-1)->Hide();
-   m_LinkWidgetManagerList->SetNthElement(selectedItem-1,widgetManager);
+   m_LinkWidgetManagerList->SetNthElement(selectedItem-1, widgetManager);
 
    if(m_LinkedDisplayStatusList[selectedItem-1])
      {
@@ -537,16 +534,16 @@ ImageViewerManagerViewGUI
      {
        //Update the view mode if the link mode is not updated
        if(!m_DisplayStatusList[selectedItem-1].first && !m_LinkedDisplayStatusList[selectedItem-1])
-	 {
-	   m_DisplayStatusList[selectedItem-1].second = true;
-	 }
+        {
+          m_DisplayStatusList[selectedItem-1].second = true;
+        }
 
        //If already displayed : update the view mode and display the new viewMode
        if(m_DisplayStatusList[selectedItem-1].first && !m_LinkedDisplayStatusList[selectedItem-1] )
-	 {
-	   m_DisplayStatusList[selectedItem-1].second = true;
-	   this->Display(m_WidgetManagerList, selectedItem);
-	 }
+        {
+          m_DisplayStatusList[selectedItem-1].second = true;
+          this->Display(m_WidgetManagerList, selectedItem);
+        }
      }
  }
 
@@ -567,11 +564,11 @@ ImageViewerManagerViewGUI
    //
    PackedWidgetManagerType::Pointer widgetManager  =  PackedWidgetManagerType::New();
    m_WidgetManagerList->GetNthElement(selectedItem-1)->Hide();
-   m_WidgetManagerList->SetNthElement(selectedItem-1,widgetManager);
+   m_WidgetManagerList->SetNthElement(selectedItem-1, widgetManager);
 
    //Update the link list
    m_LinkWidgetManagerList->GetNthElement(selectedItem-1)->Hide();
-   m_LinkWidgetManagerList->SetNthElement(selectedItem-1,widgetManager);
+   m_LinkWidgetManagerList->SetNthElement(selectedItem-1, widgetManager);
 
    if(m_LinkedDisplayStatusList[selectedItem-1])
      {
@@ -584,16 +581,16 @@ ImageViewerManagerViewGUI
      {
        //Update the view mode
        if(!m_DisplayStatusList[selectedItem-1].first && !m_LinkedDisplayStatusList[selectedItem-1])
-	 {
-	   m_DisplayStatusList[selectedItem-1].second = false;
-	 }
+        {
+          m_DisplayStatusList[selectedItem-1].second = false;
+        }
 
        //If already displayed : update the view mode and display the new viewMode
        if(m_DisplayStatusList[selectedItem-1].first && !m_LinkedDisplayStatusList[selectedItem-1] )
-	 {
-	   m_DisplayStatusList[selectedItem-1].second = false;
-	   this->Display(m_WidgetManagerList, selectedItem);
-	 }
+        {
+          m_DisplayStatusList[selectedItem-1].second = false;
+          this->Display(m_WidgetManagerList, selectedItem);
+        }
      }
  }
 
@@ -607,12 +604,12 @@ ImageViewerManagerViewGUI
  {
    /* Update the ImageList using the status label "+" or "-" */
    std::string fileName = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).fileName;
-   int slashIndex = fileName.find_last_of("/",fileName.size());
+   int slashIndex = fileName.find_last_of("/", fileName.size());
 
    itk::OStringStream oss;
    oss<<status;
-   oss<<m_TemplateViewerName<<fileName.substr(slashIndex+1,fileName.size());
-   guiImageList->text(selectedItem,oss.str().c_str());
+   oss<<m_TemplateViewerName<<fileName.substr(slashIndex+1, fileName.size());
+   guiImageList->text(selectedItem, oss.str().c_str());
    oss.str("");
  }
 
@@ -648,18 +645,18 @@ ImageViewerManagerViewGUI
  ::CloseAllDisplayedImages(bool showHideEvent)
  {
    // Set the display Label to undislayed
-   for(unsigned int i = 0; i<m_DisplayStatusList.size() ; i++)
+   for(unsigned int i = 0; i<m_DisplayStatusList.size(); i++)
      {
        if(m_DisplayStatusList[i].first)
-	 {
-	   if(showHideEvent)
-	     {
-	       this->UpdateImageListShowed(i+1, m_UndisplayedLabel);
-	       m_DisplayStatusList[i].first = false;
-	     }
-	   m_WidgetManagerList->GetNthElement(i)->Hide();
-	   m_WidgetManagerList->GetNthElement(i)->UnRegisterAll();
-	 }
+        {
+          if(showHideEvent)
+            {
+              this->UpdateImageListShowed(i+1, m_UndisplayedLabel);
+              m_DisplayStatusList[i].first = false;
+            }
+          m_WidgetManagerList->GetNthElement(i)->Hide();
+          m_WidgetManagerList->GetNthElement(i)->UnRegisterAll();
+        }
      }
  }
 
@@ -670,9 +667,9 @@ ImageViewerManagerViewGUI
  ImageViewerManagerViewGUI
  ::ShowTemporaryClosedDisplay()
  {
-   for(unsigned int i = 0; i<m_DisplayStatusList.size() ; i++)
+   for(unsigned int i = 0; i<m_DisplayStatusList.size(); i++)
      if(m_DisplayStatusList[i].first )
-       this->Display(m_WidgetManagerList,i+1);
+       this->Display(m_WidgetManagerList, i+1);
  }
 
 
@@ -685,11 +682,11 @@ ImageViewerManagerViewGUI
  {
    guiMainWindow->hide();
 
-   for(unsigned int i = 0; i<m_DisplayStatusList.size() ; i++)
+   for(unsigned int i = 0; i<m_DisplayStatusList.size(); i++)
      if(m_DisplayStatusList[i].first)
        {
-	 m_WidgetManagerList->GetNthElement(i)->Hide();
-	 m_WidgetManagerList->GetNthElement(i)->UnRegisterAll();
+        m_WidgetManagerList->GetNthElement(i)->Hide();
+        m_WidgetManagerList->GetNthElement(i)->UnRegisterAll();
        }
 
    //Quit the Diaporama if shown
@@ -704,11 +701,11 @@ ImageViewerManagerViewGUI
      {
        guiLinkSetupWindow->hide();
        //Close the  displays linked
-       for(unsigned int i = 0; i<m_LinkedDisplayStatusList.size() ; i++)
-	 if(m_LinkedDisplayStatusList[i])
-	   {
-	     m_LinkWidgetManagerList->GetNthElement(i)->Hide();
-	   }
+       for(unsigned int i = 0; i<m_LinkedDisplayStatusList.size(); i++)
+        if(m_LinkedDisplayStatusList[i])
+          {
+            m_LinkWidgetManagerList->GetNthElement(i)->Hide();
+          }
      }
 
  }
@@ -724,7 +721,7 @@ ImageViewerManagerViewGUI
    oss.str("");
    std::string selectedImageName = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).fileName;
    // Clear the info buffer
-   guiViewerInformation->buffer()->remove(0,guiViewerInformation->buffer()->length());
+   guiViewerInformation->buffer()->remove(0, guiViewerInformation->buffer()->length());
    oss<<"Filename: "<<selectedImageName<<std::endl;
    guiViewerInformation->insert(oss.str().c_str());
    oss.str("");
@@ -840,9 +837,9 @@ ImageViewerManagerViewGUI
      ++i;
    }
 
-   guiRedChannelChoice->value(std::min(channels[0] + 1,nbComponent));
-   guiGreenChannelChoice->value(std::min(channels[1] + 1,nbComponent));
-   guiBlueChannelChoice->value(std::min(channels[2] + 1,nbComponent));
+   guiRedChannelChoice->value(std::min(channels[0] + 1, nbComponent));
+   guiGreenChannelChoice->value(std::min(channels[1] + 1, nbComponent));
+   guiBlueChannelChoice->value(std::min(channels[2] + 1, nbComponent));
 
  }
 
@@ -886,7 +883,7 @@ ImageViewerManagerViewGUI
      channels.push_back(0);
    }
 
-   guiGrayscaleChannelChoice->value(std::min(channels[0] + 1,nbComponent));
+   guiGrayscaleChannelChoice->value(std::min(channels[0] + 1, nbComponent));
  }
 
 
@@ -927,8 +924,8 @@ ImageViewerManagerViewGUI
      ++i;
    }
 
-   guiRealChannelChoice->value(std::min(channels[0] + 1,nbComponent));
-   guiImaginaryChannelChoice->value(std::min(channels[1] + 1,nbComponent));
+   guiRealChannelChoice->value(std::min(channels[0] + 1, nbComponent));
+   guiImaginaryChannelChoice->value(std::min(channels[1] + 1, nbComponent));
  }
 
 
@@ -976,13 +973,13 @@ ImageViewerManagerViewGUI
      int realChoice = static_cast<int>(guiRealChannelChoice->value() - 1);
      int imagChoice = static_cast<int>(guiImaginaryChannelChoice->value() - 1);
      if (bAmplitude->value())
-	     {
- 	     m_ImageViewerManagerController->UpdateAmplitudeChannelOrder(realChoice, imagChoice, selectedItem);
-	     }
+            {
+             m_ImageViewerManagerController->UpdateAmplitudeChannelOrder(realChoice, imagChoice, selectedItem);
+            }
        else
-	     {
-	     m_ImageViewerManagerController->UpdatePhaseChannelOrder(realChoice, imagChoice, selectedItem);
-	     }
+            {
+            m_ImageViewerManagerController->UpdatePhaseChannelOrder(realChoice, imagChoice, selectedItem);
+            }
      }
  }
 
@@ -992,7 +989,6 @@ ImageViewerManagerViewGUI
  {
    guiViewerSetupWindow->hide();
  }
-
 
 
  void
@@ -1028,8 +1024,8 @@ ImageViewerManagerViewGUI
  ::CutFileName(unsigned int selectedItem)
  {
    std::string fileName     = m_ImageViewerManagerModel->GetObjectList().at(selectedItem).fileName;
-   int slashIndex           =  fileName.find_last_of("/",fileName.size());
-   std::string  fileNameCut = fileName.substr(slashIndex+1,fileName.size());
+   int slashIndex           =  fileName.find_last_of("/", fileName.size());
+   std::string  fileNameCut = fileName.substr(slashIndex+1, fileName.size());
 
    return fileNameCut.c_str();
  }
@@ -1176,7 +1172,7 @@ ImageViewerManagerViewGUI
 
   //Fill the guiLinkList
 
-  for (int i = 0 ; i < guiImageList->size() ; i++)
+  for (int i = 0; i < guiImageList->size(); i++)
     {
       oss.str("");
       oss<<this->CutFileName(i);
@@ -1213,7 +1209,7 @@ ImageViewerManagerViewGUI
       //Update a list to
 
       //Call the controller
-      this->m_ImageViewerManagerController->Link(leftChoice, rightChoice,offSet);
+      this->m_ImageViewerManagerController->Link(leftChoice, rightChoice, offSet);
 
       //Close the temporary Showed images without clearing the showed list
       this->CloseAllDisplayedImages(false);
@@ -1223,7 +1219,7 @@ ImageViewerManagerViewGUI
       m_LinkedDisplayStatusList[rightChoice-1] = true;
 
       //store  the images linked together
-      UIntPairType        linkPair(leftChoice,rightChoice);
+      UIntPairType        linkPair(leftChoice, rightChoice);
       m_LinkedImageList.push_back(linkPair);
 
       //Diplay the Linked images
@@ -1242,13 +1238,13 @@ ImageViewerManagerViewGUI
   guiLinkSetupWindow->hide();
 
   //Close the  displays linked
-  for(unsigned int i = 0; i<m_LinkedDisplayStatusList.size() ; i++)
+  for(unsigned int i = 0; i<m_LinkedDisplayStatusList.size(); i++)
     {
       if(m_LinkedDisplayStatusList[i])
-	{
-	  m_LinkWidgetManagerList->GetNthElement(i)->Hide();
-	  m_LinkedDisplayStatusList[i] = false;
-	}
+       {
+         m_LinkWidgetManagerList->GetNthElement(i)->Hide();
+         m_LinkedDisplayStatusList[i] = false;
+       }
     }
   //Display temporary closed displays if any
   if(guiImageList->size()>0)
@@ -1263,11 +1259,11 @@ ImageViewerManagerViewGUI
 ::LinkSetupRemove()
 {
   //Close the  displays linked
-  for(unsigned int i = 0; i<m_LinkedDisplayStatusList.size() ; i++)
+  for(unsigned int i = 0; i<m_LinkedDisplayStatusList.size(); i++)
     if(m_LinkedDisplayStatusList[i])
       {
-	m_LinkWidgetManagerList->GetNthElement(i)->Hide();
-	m_LinkedDisplayStatusList[i] = false;
+       m_LinkWidgetManagerList->GetNthElement(i)->Hide();
+       m_LinkedDisplayStatusList[i] = false;
       }
 }
 
@@ -1280,24 +1276,24 @@ ImageViewerManagerViewGUI
 {
   std::vector<unsigned int>  tempElementToRemove;
 
-  for(unsigned int i = 0 ; i< m_LinkedImageList.size(); i++ )
+  for(unsigned int i = 0; i< m_LinkedImageList.size(); i++ )
     {
       if(m_LinkedImageList[i].first == selectedItem || m_LinkedImageList[i].second == selectedItem)
-	{
+       {
 
-	  if(m_LinkedImageList[i].first == selectedItem )
-	    m_ImageViewerManagerController->UpdateImageViewController(m_LinkedImageList[i].second);
+         if(m_LinkedImageList[i].first == selectedItem )
+           m_ImageViewerManagerController->UpdateImageViewController(m_LinkedImageList[i].second);
 
-	  if(m_LinkedImageList[i].second == selectedItem)
-	    m_ImageViewerManagerController->UpdateImageViewController(m_LinkedImageList[i].first);
+         if(m_LinkedImageList[i].second == selectedItem)
+           m_ImageViewerManagerController->UpdateImageViewController(m_LinkedImageList[i].first);
 
-	  tempElementToRemove.push_back(i);
-	}
+         tempElementToRemove.push_back(i);
+       }
     }
 
   //Remove element from the list
   unsigned counter = 0;
-  for(unsigned int p = 0; p < tempElementToRemove.size() ; p ++ )
+  for(unsigned int p = 0; p < tempElementToRemove.size(); p ++ )
     {
       m_LinkedImageList.erase(m_LinkedImageList.begin()+tempElementToRemove[p] - counter); // counter because the size of the list is decreasing after each iteration
       counter++;

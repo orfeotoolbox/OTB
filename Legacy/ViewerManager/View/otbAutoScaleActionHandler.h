@@ -24,7 +24,7 @@ namespace otb
 {
 /** \class AutoScaleActionHandler
 *   \brief Implements basic Scroll, Full and Zoom  widgets resizing.
-* 
+*
 *   \sa ImageWidgetController
 *   \sa ImageWidgetActionHandler
 */
@@ -44,7 +44,7 @@ public:
   itkNewMacro(Self);
   
   /** Runtime information */
-  itkTypeMacro(AutoScaleActionHandler,ImageWidgetActionHandler);
+  itkTypeMacro(AutoScaleActionHandler, ImageWidgetActionHandler);
 
   /** Preview Typedef typedefs */
   typedef TWidgetType                         WidgetType;
@@ -61,21 +61,21 @@ public:
   {
     if(widgetId == m_PreviewWidget->GetIdentifier() )
       {
-	otbMsgDevMacro(<<"AutoScaleActionHandler::HandleWidgetResize(): handling ("<<widgetId<<", "<<w<<", "<<h<<")");
-	typename WidgetType::SizeType    size = m_PreviewWidget->GetOpenGlBufferedRegion().GetSize();
-	
-	double zoomW = static_cast<double>(w)/static_cast<double>(size[0]);
-	double zoomH = static_cast<double>(h)/static_cast<double>(size[1]);
-	m_PreviewWidget->SetIsotropicZoom(std::min(zoomW,zoomH));
-	
-	return true;
+       otbMsgDevMacro(<<"AutoScaleActionHandler::HandleWidgetResize(): handling ("<<widgetId<<", "<<w<<", "<<h<<")");
+       typename WidgetType::SizeType    size = m_PreviewWidget->GetOpenGlBufferedRegion().GetSize();
+       
+       double zoomW = static_cast<double>(w)/static_cast<double>(size[0]);
+       double zoomH = static_cast<double>(h)/static_cast<double>(size[1]);
+       m_PreviewWidget->SetIsotropicZoom(std::min(zoomW, zoomH));
+       
+       return true;
       }
     
     return false;
   }
   
   /** Set/Get the pointer to PreviewWidget */
- itkSetObjectMacro(PreviewWidget,WidgetType);
+ itkSetObjectMacro(PreviewWidget, WidgetType);
 
 protected:
   /** Constructor */
@@ -87,7 +87,7 @@ protected:
   /** Printself method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
-    Superclass::PrintSelf(os,indent);
+    Superclass::PrintSelf(os, indent);
   }
  
 private:
@@ -96,7 +96,7 @@ private:
   
   WidgetPointerType              m_PreviewWidget;
   
-}; // end class 
+}; // end class
 } // end namespace otb
 #endif
 

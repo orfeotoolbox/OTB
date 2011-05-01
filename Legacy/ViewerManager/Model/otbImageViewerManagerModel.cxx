@@ -43,7 +43,6 @@ ImageViewerManagerModel
 ::~ImageViewerManagerModel(){}
 
 
-
 /** Manage the singleton */
 ImageViewerManagerModel::Pointer
 ImageViewerManagerModel::GetInstance()
@@ -74,7 +73,7 @@ ImageViewerManagerModel
   /** Generate the layer*/
   LayerGeneratorPointerType visuGenerator = LayerGeneratorType::New();
   visuGenerator->SetImage(reader->GetOutput());
-  FltkFilterWatcher qlwatcher(visuGenerator->GetProgressSource(),0,0,200,20,"Generating QuickLook ...");
+  FltkFilterWatcher qlwatcher(visuGenerator->GetProgressSource(), 0, 0, 200, 20,"Generating QuickLook ...");
   visuGenerator->GenerateLayer();
   RenderingFunctionType::Pointer  rendrerFunction  = visuGenerator->GetRenderingFunction();
 
@@ -94,7 +93,7 @@ ImageViewerManagerModel
   pixelView->SetModel(pixelModel);
 
   /** Controller*/
-  WidgetControllerPointerType controller = this->BuiltController(rendering, visuView ,pixelModel );
+  WidgetControllerPointerType controller = this->BuiltController(rendering, visuView , pixelModel );
 
   /** Finish Builting the visu*/
   visuView->SetController(controller);
@@ -138,7 +137,7 @@ ImageViewerManagerModel
 
 /**
  * Read a series of images, including cropping facilities throught
- * the ImageSeriesFileReader 
+ * the ImageSeriesFileReader
  */
 unsigned int
 ImageViewerManagerModel
@@ -155,7 +154,7 @@ ImageViewerManagerModel
     /** Generate the layer*/
     LayerGeneratorPointerType visuGenerator = LayerGeneratorType::New();
     visuGenerator->SetImage(reader->GetOutput()->GetNthElement(i));
-    FltkFilterWatcher qlwatcher(visuGenerator->GetProgressSource(),0,0,200,20,"Generating QuickLook ...");
+    FltkFilterWatcher qlwatcher(visuGenerator->GetProgressSource(), 0, 0, 200, 20,"Generating QuickLook ...");
     visuGenerator->GenerateLayer();
     RenderingFunctionType::Pointer  rendrerFunction  = visuGenerator->GetRenderingFunction();
 
@@ -175,7 +174,7 @@ ImageViewerManagerModel
     pixelView->SetModel(pixelModel);
 
     /** Controller*/
-    WidgetControllerPointerType controller = this->BuiltController(rendering, visuView ,pixelModel );
+    WidgetControllerPointerType controller = this->BuiltController(rendering, visuView , pixelModel );
 
     /** Finish Builting the visu*/
     visuView->SetController(controller);
@@ -186,7 +185,7 @@ ImageViewerManagerModel
     /** Store all the information in the structure*/
     ObjectsTracked currentComponent;
 
-    currentComponent.fileName   = reader->GetFileName(i); 
+    currentComponent.fileName   = reader->GetFileName(i);
     currentComponent.pLayer     = visuGenerator->GetLayer();
     currentComponent.pReader    = reader->GetImageFileReader(i);
     currentComponent.pRendering = rendering;
@@ -389,7 +388,6 @@ ImageViewerManagerModel
   phaseFunction->SetChannelList(channels);
 
 
-
   //Update the layer
   m_ObjectTrackedList.at(selectedItem-1).pLayer->SetRenderingFunction(phaseFunction);
   m_ObjectTrackedList.at(selectedItem-1).pRenderFunction = phaseFunction;
@@ -424,7 +422,7 @@ ImageViewerManagerModel
   VisuModelPointerType leftRenderModel        = m_ObjectTrackedList.at(leftChoice-1).pRendering;
 
   //Get the views related to the choosen images
-  VisuViewPointerType  pRightVisuView         = m_ObjectTrackedList.at(rightChoice-1).pVisuView;;
+  VisuViewPointerType  pRightVisuView         = m_ObjectTrackedList.at(rightChoice-1).pVisuView; ;
   VisuViewPointerType  pLeftVisuView          = m_ObjectTrackedList.at(leftChoice-1).pVisuView;
 
   //Pixel View
@@ -510,7 +508,7 @@ ImageViewerManagerModel
   VisuViewPointerType   view   = m_ObjectTrackedList.at(selectedItem-1).pVisuView;
   PixelDescriptionModelPointerType pixelModel = m_ObjectTrackedList.at(selectedItem-1).pPixelModel;
 
-  m_ObjectTrackedList.at(selectedItem-1).pWidgetController = this->BuiltController(render,view,pixelModel);
+  m_ObjectTrackedList.at(selectedItem-1).pWidgetController = this->BuiltController(render, view, pixelModel);
   m_ObjectTrackedList.at(selectedItem-1).pVisuView->SetController(m_ObjectTrackedList.at(selectedItem-1).pWidgetController);
 }
 

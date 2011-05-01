@@ -23,7 +23,6 @@ See OTBCopyright.txt for details.
 #include "otbImageViewerManagerModel.h"
 
 
-
 /** NewVisu */
 #include "otbImageWidgetController.h"
 #include "otbImageWidget.h"
@@ -65,15 +64,15 @@ public:
   typedef WidgetType::Pointer                       VisuWidgetPointerType;
 
   /** Standard type macros */
-  itkTypeMacro(ImageViewerManagerControllerInterface,Superclass);
+  itkTypeMacro(ImageViewerManagerControllerInterface, Superclass);
 
   /** Users actions */
   virtual unsigned int OpenInputImage(const char * filename) =0;
   virtual void CloseImage(unsigned int selectedItem) = 0;
   virtual void UpdateRGBChannelOrder(int redChoice , int greenChoice, int BlueChoice, unsigned int selectedItem) = 0;
-  virtual void UpdateGrayScaleChannelOrder(int choice, unsigned int selectedItem) = 0; 
-  virtual void UpdateAmplitudeChannelOrder(int realChoice , int imChoice,unsigned int selectedItem) = 0; 
-  virtual void UpdatePhaseChannelOrder(int realChoice , int imChoice, unsigned int selectedItem) = 0; 
+  virtual void UpdateGrayScaleChannelOrder(int choice, unsigned int selectedItem) = 0;
+  virtual void UpdateAmplitudeChannelOrder(int realChoice , int imChoice, unsigned int selectedItem) = 0;
+  virtual void UpdatePhaseChannelOrder(int realChoice , int imChoice, unsigned int selectedItem) = 0;
   virtual void Link(unsigned int leftChoice, unsigned int rightChoice , OffsetType offset) = 0;
   virtual void UpdateImageViewController(unsigned int selectedItem) = 0;
   /** NewVisu */

@@ -39,7 +39,6 @@ ImageViewerManagerController
 }
 
 
-
 unsigned int
 ImageViewerManagerController
 ::OpenInputImage(const char * filename)
@@ -90,7 +89,7 @@ ImageViewerManagerController
   try
     {
 
-    m_Model->UpdateRGBChannelOrder(redChoice,greenChoice,BlueChoice, selectedItem);
+    m_Model->UpdateRGBChannelOrder(redChoice, greenChoice, BlueChoice, selectedItem);
   }
   catch (itk::ExceptionObject & err)
   {
@@ -119,7 +118,7 @@ ImageViewerManagerController
 {
   try
     {
-      m_Model->UpdateAmplitudeChannelOrder(realChoice,imChoice, selectedItem);
+      m_Model->UpdateAmplitudeChannelOrder(realChoice, imChoice, selectedItem);
     }
   catch (itk::ExceptionObject & err)
     {
@@ -133,7 +132,7 @@ ImageViewerManagerController
 {
   try
     {
-      m_Model->UpdatePhaseChannelOrder(realChoice,imChoice, selectedItem);
+      m_Model->UpdatePhaseChannelOrder(realChoice, imChoice, selectedItem);
     }
   catch (itk::ExceptionObject & err)
     {
@@ -147,7 +146,7 @@ ImageViewerManagerController
 {
   try
     {
-      m_Model->Link(leftChoice,rightChoice,offset);
+      m_Model->Link(leftChoice, rightChoice, offset);
     }
   catch (itk::ExceptionObject & err)
     {
