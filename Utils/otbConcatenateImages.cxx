@@ -99,7 +99,7 @@ int ConcatenateImages::Describe(ApplicationDescriptor* descriptor)
 {
   descriptor->SetName("ConcatenateImages");
   descriptor->SetDescription("Concatenate n images in a multiband image");
-  descriptor->AddOptionNParams("InputImagesList", "Images list to concatenate", "il", true,ApplicationDescriptor::InputImage);
+  descriptor->AddOptionNParams("InputImagesList", "Images list to concatenate", "il", true, ApplicationDescriptor::InputImage);
   descriptor->AddOutputImage();
   descriptor->AddOption("OutputPixelType",
                         "OutputPixelType: unsigned char (1), short int (2), int (3), float (4),"
@@ -107,7 +107,7 @@ int ConcatenateImages::Describe(ApplicationDescriptor* descriptor)
                         "t", 1, false, ApplicationDescriptor::Integer);
   descriptor->AddOption("OutputNameList",
                         "Text file containing the name of the images used to generate the output in the same order",
-                        "ot", 1, false,ApplicationDescriptor::String);
+                        "ot", 1, false, ApplicationDescriptor::String);
 
   return EXIT_SUCCESS;
 }
