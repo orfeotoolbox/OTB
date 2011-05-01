@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -49,28 +49,28 @@ int Rasterization::Describe(ApplicationDescriptor* descriptor)
 {
   descriptor->SetName("Rasterization");
   descriptor->SetDescription("Reproject and Rasterize a Vector Data.");
-  descriptor->AddOption("InputVData", "The input vector data to be rasterized", 
-                        "in",  1, true, ApplicationDescriptor::FileName);  
+  descriptor->AddOption("InputVData", "The input vector data to be rasterized",
+                        "in",  1, true, ApplicationDescriptor::FileName);
   descriptor->AddOption("OutputImage", "An output image containing the rasterized vector data",
                         "out", 1, true, ApplicationDescriptor::OutputImage);
-  descriptor->AddOption("SizeX", "OutputSize[0]", 
+  descriptor->AddOption("SizeX", "OutputSize[0]",
                         "szx", 1, true, ApplicationDescriptor::Real);
-  descriptor->AddOption("SizeY", "OutputSize[1]", 
+  descriptor->AddOption("SizeY", "OutputSize[1]",
                         "szy", 1, true, ApplicationDescriptor::Real);
 
   // Optional
-  descriptor->AddOption("OriginX", "OutputOrigin[0] (optional)", 
+  descriptor->AddOption("OriginX", "OutputOrigin[0] (optional)",
                         "orx", 1, false, ApplicationDescriptor::Real);
-  descriptor->AddOption("OriginY", "OutputOrigin[1] (optional)", 
+  descriptor->AddOption("OriginY", "OutputOrigin[1] (optional)",
                         "ory", 1, false, ApplicationDescriptor::Real);
-  descriptor->AddOption("SpacingX", "OutputSpacing[0] (optional)", 
+  descriptor->AddOption("SpacingX", "OutputSpacing[0] (optional)",
                         "spx", 1, false, ApplicationDescriptor::Real);
-  descriptor->AddOption("SpacingY", "OutputSpacing[1] (optional)", 
+  descriptor->AddOption("SpacingY", "OutputSpacing[1] (optional)",
                         "spy", 1, false, ApplicationDescriptor::Real);
-  descriptor->AddOption("ProjRef", "Projection (optional)", 
+  descriptor->AddOption("ProjRef", "Projection (optional)",
                         "pr",  1, false, ApplicationDescriptor::String);
   descriptor->AddOption("AvailableMemory", "Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default)",
-                        "ram",1,false, otb::ApplicationDescriptor::Integer);
+                        "ram", 1, false, otb::ApplicationDescriptor::Integer);
   
   return EXIT_SUCCESS;
 }
@@ -95,12 +95,12 @@ int Rasterization::Execute(otb::ApplicationOptionsResult* parseResult)
   typedef otb::VectorDataFileReader<VectorDataType>       VectorDataReaderType;
   typedef otb::VectorDataFileWriter<VectorDataType>       VectorDataWriterType;
   typedef VectorDataProjectionFilter<
-    VectorDataType,VectorDataType>                        VectorDataProjectionFilterType;
+    VectorDataType, VectorDataType>                        VectorDataProjectionFilterType;
   typedef VectorDataExtractROI<VectorDataType>            VectorDataExtractROIType;
   typedef VectorDataProperties<VectorDataType>            VectorDataPropertiesType;
 
   // Rasterization
-  typedef otb::VectorDataToImageFilter<VectorDataType, 
+  typedef otb::VectorDataToImageFilter<VectorDataType,
     ImageType>                                      VectorDataToImageFilterType;
 
   // Misc
@@ -217,6 +217,6 @@ int Rasterization::Execute(otb::ApplicationOptionsResult* parseResult)
   
   oWriter->Update();
 
-  return EXIT_SUCCESS;  
+  return EXIT_SUCCESS;
 }
 }
