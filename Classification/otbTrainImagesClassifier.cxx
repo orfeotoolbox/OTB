@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -20,7 +20,7 @@
 #include <iostream>
 #include "otbCommandLineArgumentParser.h"
 
-//Image 
+//Image
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
@@ -69,9 +69,9 @@ int TrainImagesClassifier::Describe(ApplicationDescriptor* descriptor)
 {
   descriptor->SetName("TrainImagesClassifier");
   descriptor->SetDescription("Perform SVM training from multiple input images and multiple vector data.");
-  descriptor->AddOptionNParams("InputImages", "A list of images", 
+  descriptor->AddOptionNParams("InputImages", "A list of images",
                                "in", true, ApplicationDescriptor::InputImage);
-  descriptor->AddOptionNParams("VectorDataSamples", "Vector Data of sample used to train the estimator", 
+  descriptor->AddOptionNParams("VectorDataSamples", "Vector Data of sample used to train the estimator",
                                "vd", true, ApplicationDescriptor::FileName);
   descriptor->AddOption("ImagesStatistics", "XML file containing mean and variance of input images.",
                         "is", 1, false, ApplicationDescriptor::FileName);
@@ -100,8 +100,8 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
   // Input Image
   //typedef double                                          ValueType;
   typedef float                                           PixelType;
-  typedef otb::VectorImage<PixelType,2>                   VectorImageType;
-  typedef otb::Image<PixelType,2>                         ImageType;
+  typedef otb::VectorImage<PixelType, 2>                   VectorImageType;
+  typedef otb::Image<PixelType, 2>                         ImageType;
   typedef otb::ImageFileReader<VectorImageType>           ReaderType;
 
   // Training vectordata
@@ -120,7 +120,7 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
   typedef otb::Statistics::ConcatenateSampleListFilter
       <LabelListSampleType>                                 ConcatenateLabelListSampleFilterType;
 
-  // Statistic XML file Reader 
+  // Statistic XML file Reader
   typedef otb::StatisticsXMLFileReader<MeasurementType>     StatisticsReader;
 
   // Enhance List Sample
@@ -165,11 +165,11 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
   // Load measurements from images
   unsigned int nbBands = 0;
   //Iterate over all input images
-  for(int imgIndex = 0; imgIndex<parseResult->GetNumberOfParameters("InputImages");++imgIndex)
+  for(int imgIndex = 0; imgIndex<parseResult->GetNumberOfParameters("InputImages"); ++imgIndex)
     {
     // Read the image
     ReaderType::Pointer    reader  = ReaderType::New();
-    reader->SetFileName(parseResult->GetParameterString("InputImages",imgIndex));
+    reader->SetFileName(parseResult->GetParameterString("InputImages", imgIndex));
     reader->UpdateOutputInformation();
 
     std::cout<<"Processing image ("<<imgIndex<<"): "<<reader->GetFileName()<<std::endl;
@@ -181,9 +181,9 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
 
     // read the Vectordata
     VectorDataReaderType::Pointer vdreader = VectorDataReaderType::New();
-    vdreader->SetFileName(parseResult->GetParameterString("VectorDataSamples",imgIndex));
+    vdreader->SetFileName(parseResult->GetParameterString("VectorDataSamples", imgIndex));
     vdreader->Update();
-    std::cout<<"Processing vectordata ("<<imgIndex<<"): "<< parseResult->GetParameterString("VectorDataSamples",imgIndex) <<std::endl;
+    std::cout<<"Processing vectordata ("<<imgIndex<<"): "<< parseResult->GetParameterString("VectorDataSamples", imgIndex) <<std::endl;
 
     // Extract a ROI corresponding to the Extent of the image
     VectorDataExtractROIType::Pointer  vdextract = VectorDataExtractROIType::New();
