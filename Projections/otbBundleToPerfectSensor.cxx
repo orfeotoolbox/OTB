@@ -45,11 +45,11 @@ int BundleToPerfectSensor::Describe(ApplicationDescriptor* descriptor)
   descriptor->SetName("BundleToSensorModel");
   descriptor->SetDescription("Using available image metadata to determine the sensor model, computes a cartographic projection of the image");
 
-  descriptor->AddOption("InputPanchro","The input panchromatic image","inP", 1,true,otb::ApplicationDescriptor::InputImage);
-  descriptor->AddOption("InputXS","The input multi-spectral image","inXS", 1,true,otb::ApplicationDescriptor::InputImage);
-  descriptor->AddOption("DEMDirectory","Directory were to find the DEM tiles","dem",1,false,otb::ApplicationDescriptor::DirectoryName);
-  descriptor->AddOption("LocMapSpacing","Generate a coarser deformation field with the given spacing.","lmSpacing",1,false,otb::ApplicationDescriptor::Real);
-  descriptor->AddOption("AvailableMemory","Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default)","ram",1,false, otb::ApplicationDescriptor::Integer);
+  descriptor->AddOption("InputPanchro","The input panchromatic image","inP", 1, true, otb::ApplicationDescriptor::InputImage);
+  descriptor->AddOption("InputXS","The input multi-spectral image","inXS", 1, true, otb::ApplicationDescriptor::InputImage);
+  descriptor->AddOption("DEMDirectory","Directory were to find the DEM tiles","dem", 1, false, otb::ApplicationDescriptor::DirectoryName);
+  descriptor->AddOption("LocMapSpacing","Generate a coarser deformation field with the given spacing.","lmSpacing", 1, false, otb::ApplicationDescriptor::Real);
+  descriptor->AddOption("AvailableMemory","Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default)","ram", 1, false, otb::ApplicationDescriptor::Integer);
 
   descriptor->AddOutputImage();
 
@@ -64,17 +64,17 @@ int BundleToPerfectSensor::Execute(otb::ApplicationOptionsResult* parseResult)
     typedef unsigned short int PixelType;
 
     typedef otb::VectorImage<PixelType, 2>                XsImageType;
-    typedef otb::Image<PixelType,2>                       PanImageType;
+    typedef otb::Image<PixelType, 2>                       PanImageType;
     typedef otb::ImageFileReader<XsImageType>             XsReaderType;
     typedef otb::ImageFileReader<PanImageType>            PanReaderType;
     typedef otb::StreamingImageFileWriter<XsImageType>    WriterType;
     typedef otb::BCOInterpolateImageFunction<XsImageType> InterpolatorType;
 
-    typedef otb::GenericRSResampleImageFilter<XsImageType,XsImageType>  ResamplerType;
+    typedef otb::GenericRSResampleImageFilter<XsImageType, XsImageType>  ResamplerType;
 
-    typedef otb::SimpleRcsPanSharpeningFusionImageFilter<PanImageType,XsImageType,XsImageType> FusionFilterType;
+    typedef otb::SimpleRcsPanSharpeningFusionImageFilter<PanImageType, XsImageType, XsImageType> FusionFilterType;
 
-    typedef itk::ExtractImageFilter<XsImageType,XsImageType> ExtractFilterType;
+    typedef itk::ExtractImageFilter<XsImageType, XsImageType> ExtractFilterType;
 
     // Read input images information
     PanReaderType::Pointer preader= PanReaderType::New();
@@ -85,7 +85,7 @@ int BundleToPerfectSensor::Execute(otb::ApplicationOptionsResult* parseResult)
     xsreader->SetFileName(parseResult->GetParameterString("InputXS"));
     xsreader->GenerateOutputInformation();
     
-    // Resample filter 
+    // Resample filter
     ResamplerType::Pointer    resampler = ResamplerType::New();
     InterpolatorType::Pointer interpolator = InterpolatorType::New();
     resampler->SetInterpolator(interpolator);
@@ -93,7 +93,7 @@ int BundleToPerfectSensor::Execute(otb::ApplicationOptionsResult* parseResult)
     // Add DEM if any
     if(parseResult->IsOptionPresent("DEMDirectory"))
       {
-      resampler->SetDEMDirectory(parseResult->GetParameterString("DEMDirectory",0));
+      resampler->SetDEMDirectory(parseResult->GetParameterString("DEMDirectory", 0));
       }
     
     // Set up output image informations
@@ -144,7 +144,7 @@ int BundleToPerfectSensor::Execute(otb::ApplicationOptionsResult* parseResult)
     writer->SetInput(fusionFilter->GetOutput());
     writer->SetWriteGeomFile(true);
 
-    otb::StandardWriterWatcher w4(writer,resampler,"Perfect sensor fusion");
+    otb::StandardWriterWatcher w4(writer, resampler,"Perfect sensor fusion");
 
     // Estimate memory print
     otb::PipelineMemoryPrintCalculator::Pointer memoryPrintCalculator = otb::PipelineMemoryPrintCalculator::New();
