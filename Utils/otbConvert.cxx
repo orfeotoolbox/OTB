@@ -72,7 +72,7 @@ int generic_main_convert(otb::ApplicationOptionsResult* parseResult)
 
     //define the transfer log
     typedef otb::Functor::LogFunctor<InputImageType::InternalPixelType> TransferLogFunctor;
-    typedef otb::UnaryImageFunctorWithVectorImageFilter<InputImageType,InputImageType,TransferLogFunctor> TransferLogType;
+    typedef otb::UnaryImageFunctorWithVectorImageFilter<InputImageType, InputImageType, TransferLogFunctor> TransferLogType;
     TransferLogType::Pointer transferLog = TransferLogType::New();
     transferLog->SetInput(reader->GetOutput());
     transferLog->UpdateOutputInformation();
@@ -101,7 +101,7 @@ int generic_main_convert(otb::ApplicationOptionsResult* parseResult)
 
     writer->SetInput(rescaler->GetOutput());
 
-    otb::StandardWriterWatcher watcher(writer,rescaler,"Conversion");
+    otb::StandardWriterWatcher watcher(writer, rescaler,"Conversion");
 
     writer->Update();
     }
@@ -126,15 +126,15 @@ int Convert::Describe(ApplicationDescriptor* descriptor)
   descriptor->AddInputImage();
   descriptor->AddOutputImage();
   descriptor->AddOption("OutputPixelType","OutputPixelType: unsigned char (1), short int (2), int (3), float (4),"
-                        " double (5), unsigned short int (12), unsigned int (13); default 1","t", 1, false,ApplicationDescriptor::Integer);
-  descriptor->AddOption("UseRescale", "Rescale value between output type min and max","r", 0, false,ApplicationDescriptor::Boolean);
-  descriptor->AddOption("RescaleType", "Transfer function for the rescaling: linear (1), log (2); default 1","rt", 1, false,ApplicationDescriptor::Integer);
+                        " double (5), unsigned short int (12), unsigned int (13); default 1","t", 1, false, ApplicationDescriptor::Integer);
+  descriptor->AddOption("UseRescale", "Rescale value between output type min and max","r", 0, false, ApplicationDescriptor::Boolean);
+  descriptor->AddOption("RescaleType", "Transfer function for the rescaling: linear (1), log (2); default 1","rt", 1, false, ApplicationDescriptor::Integer);
   
   return EXIT_SUCCESS;
 }
 
 int Convert::Execute(otb::ApplicationOptionsResult* parseResult)
-{ 
+{
 
   try
     {
