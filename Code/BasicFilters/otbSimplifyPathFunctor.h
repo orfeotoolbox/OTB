@@ -77,24 +77,28 @@ public:
     newPath->Initialize();
     // Getting the verices list of the current input paths
     VertexListConstPointerType  vertexList = input->GetVertexList();
-    VertexListConstIteratorType beginIt = vertexList->Begin();
-    VertexListConstIteratorType beforeTheEndIt = --(vertexList->End());
-
-    // Add the first vertex
-    newPath->AddVertex(beginIt.Value());
-
-    while (beginIt != beforeTheEndIt)
+    if(vertexList->Size()>0)
       {
-      VertexListConstIteratorType endIt = beforeTheEndIt;
-      // while the segment is not consistent, decrement endIt
-      while (!this->TestPathConsistency(beginIt, endIt))
+      VertexListConstIteratorType beginIt = vertexList->Begin();
+      VertexListConstIteratorType beforeTheEndIt = --(vertexList->End());
+
+      // Add the first vertex
+      newPath->AddVertex(beginIt.Value());
+
+      while (beginIt != beforeTheEndIt)
         {
-        --endIt;
+        VertexListConstIteratorType endIt = beforeTheEndIt;
+        // while the segment is not consistent, decrement endIt
+        while (!this->TestPathConsistency(beginIt, endIt))
+          {
+          --endIt;
+          }
+        // Add the final vertex
+        newPath->AddVertex(endIt.Value());
+        beginIt = endIt;
         }
-      // Add the final vertex
-      newPath->AddVertex(endIt.Value());
-      beginIt = endIt;
       }
+
     newPath->SetMetaDataDictionary(input->GetMetaDataDictionary());
     return newPath;
 
