@@ -45,9 +45,6 @@
 #include "itkTimeProbe.h"
 #include "otbStandardFilterWatcher.h"
 
-#include "otbMultiChannelExtractROI.h"
-#include "otbExtractROI.h"
-
 namespace otb
 {
 
@@ -57,20 +54,14 @@ int ImageSVMClassifier::Describe(ApplicationDescriptor* descriptor)
   descriptor->SetDescription("Perform SVM classification based a previous computed svm model to an new input image.");
   descriptor->AddOption("InputImage", "A new image to classify",
                         "in", 1, true, ApplicationDescriptor::InputImage);
+  descriptor->AddOption("InputImageMask", "A mask associated with the new image to classify",
+                        "inm", 1, false, ApplicationDescriptor::InputImage);
   descriptor->AddOption("ImageStatistics", "a XML file containing mean and variance of input images used to train svm model.",
                         "is", 1, false, ApplicationDescriptor::FileName);
   descriptor->AddOption("SVMmodel", "Estimated model previously computed",
                         "svm", 1, true, ApplicationDescriptor::FileName);
   descriptor->AddOption("OutputLabeledImage", "Output labeled image",
                         "out", 1, true, ApplicationDescriptor::OutputImage);
-  descriptor->AddOption("ROIStartX", "Start X of the ROI",
-                        "x", 1, false, ApplicationDescriptor::Integer);
-  descriptor->AddOption("ROIStartY", "Start Y of the ROI",
-                        "y", 1, false, ApplicationDescriptor::Integer);
-  descriptor->AddOption("ROISizeX", "Size X of the ROI",
-                        "sx", 1, false, ApplicationDescriptor::Integer);
-  descriptor->AddOption("ROISizeY", "Size Y of the ROI",
-                        "sy", 1, false, ApplicationDescriptor::Integer);
   descriptor->AddOption("AvailableMemory","Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default)","ram",1,false, otb::ApplicationDescriptor::Integer);
   return EXIT_SUCCESS;
 }
@@ -85,13 +76,10 @@ int ImageSVMClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
   typedef otb::Image<LabeledPixelType, 2>          LabeledImageType;
 
   typedef otb::ImageFileReader<VectorImageType>    ReaderType;
+  typedef otb::ImageFileReader<LabeledImageType>   LabeledReaderType;
   typedef otb::StreamingImageFileWriter<LabeledImageType>   WriterType;
 
-  typedef otb::ExtractROI<LabeledPixelType, LabeledPixelType>  ExtractROIType;
-  //typedef otb::MultiChannelExtractROI<PixelType, PixelType>
-  //ExtractROIType;
   typedef otb::PipelineMemoryPrintCalculator        MemoryCalculatorType;
-
 
   // Statistic XML file Reader
   typedef itk::VariableLengthVector<PixelType>                          MeasurementType;
@@ -136,8 +124,8 @@ int ImageSVMClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
     statisticsReader->SetFileName(parseResult->GetParameterString("ImageStatistics"));
     meanMeasurementVector     = statisticsReader->GetStatisticVectorByName("mean");
     varianceMeasurementVector = statisticsReader->GetStatisticVectorByName("variance");
-    std::cout << "mean: " << meanMeasurementVector << std::endl;
-    std::cout << "variance: " << varianceMeasurementVector << std::endl;
+    std::cout << "mean used: " << meanMeasurementVector << std::endl;
+    std::cout << "variance used: " << varianceMeasurementVector << std::endl;
     std::cout << "Shift and scale of the input image !" << std::endl;
     // Rescale vector image
     rescaler->SetScale(varianceMeasurementVector);
@@ -152,6 +140,17 @@ int ImageSVMClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
     classificationFilter->SetInput(reader->GetOutput());
     }
 
+  LabeledReaderType::Pointer readerMask = LabeledReaderType::New();
+  //--------------------------
+  // Set an input mask to exclude some areas (optional)
+  if (parseResult->IsOptionPresent("InputImageMask"))
+    {
+    readerMask->SetFileName(parseResult->GetParameterString("InputImageMask"));
+    readerMask->UpdateOutputInformation();
+    classificationFilter->SetInputMask(readerMask->GetOutput());
+    std::cout << "Set an input image mask!" << std::endl;
+    }
+
   //ChangeLabelFilterPointerType changeLabelFilter = ChangeLabelFilterType::New();
   //changeLabelFilter->SetInput(classificationFilter->GetOutput());
   //changeLabelFilter->SetNumberOfComponentsPerPixel(3);
@@ -161,55 +160,27 @@ int ImageSVMClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
   WriterType::Pointer    writer  = WriterType::New();
   writer->SetFileName(parseResult->GetParameterString("OutputLabeledImage"));
 
-  // Extract ROI if needed
-  if ( (parseResult->IsOptionPresent("ROIStartX")) &&
-       (parseResult->IsOptionPresent("ROIStartY")) &&
-       (parseResult->IsOptionPresent("ROISizeX")) &&
-       (parseResult->IsOptionPresent("ROISizeY")) )
+  //Instantiate the pipeline memory print estimator
+  MemoryCalculatorType::Pointer calculator = MemoryCalculatorType::New();
+  const double byteToMegabyte = 1./vcl_pow(2.0, 20);
+
+  if (parseResult->IsOptionPresent("AvailableMemory"))
     {
-    ExtractROIType::Pointer extract =  ExtractROIType::New();
-    extract->SetInput(classificationFilter->GetOutput());
-
-    std::cout << parseResult->GetParameterUInt("ROIStartX") << ", "
-              << parseResult->GetParameterUInt("ROIStartY") << ", "
-              << parseResult->GetParameterUInt("ROISizeX") << ", "
-              << parseResult->GetParameterUInt("ROISizeY") << std::endl;
-
-    extract->SetStartX((unsigned long) parseResult->GetParameterUInt("ROIStartX"));
-    extract->SetStartY((unsigned long) parseResult->GetParameterUInt("ROIStartY"));
-    extract->SetSizeX((unsigned long) parseResult->GetParameterUInt("ROISizeX"));
-    extract->SetSizeY((unsigned long) parseResult->GetParameterUInt("ROISizeY"));
-
-    extract->Update();
-
-    writer->SetInput(extract->GetOutput());
+    long long int memory = static_cast <long long int> (parseResult->GetParameterUInt("AvailableMemory"));
+    calculator->SetAvailableMemory(memory / byteToMegabyte);
     }
   else
     {
-    //Instantiate the pipeline memory print estimator
-    MemoryCalculatorType::Pointer calculator = MemoryCalculatorType::New();
-    const double byteToMegabyte = 1./vcl_pow(2.0, 20);
-    
-    if (parseResult->IsOptionPresent("AvailableMemory"))
-      {
-      long long int memory = static_cast <long long int> (parseResult->GetParameterUInt("AvailableMemory"));
-      calculator->SetAvailableMemory(memory / byteToMegabyte);
-      }
-    else
-      {
-      calculator->SetAvailableMemory(256 * byteToMegabyte);
-      }
-    
-    calculator->SetDataToWrite(classificationFilter->GetOutput());
-    calculator->Compute();
-    
-    writer->SetTilingStreamDivisions(calculator->GetOptimalNumberOfStreamDivisions());
-    
-
-    writer->SetInput(classificationFilter->GetOutput());
+    calculator->SetAvailableMemory(256 * byteToMegabyte);
     }
-
-  
+    
+  calculator->SetDataToWrite(classificationFilter->GetOutput());
+  calculator->Compute();
+    
+  writer->SetTilingStreamDivisions(calculator->GetOptimalNumberOfStreamDivisions());
+    
+  writer->SetInput(classificationFilter->GetOutput());
+    
   otb::StandardWriterWatcher watcher(writer,"Classification");
 
   writer->Update();
