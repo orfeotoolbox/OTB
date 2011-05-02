@@ -105,13 +105,13 @@ bool CheckExpression();
 
 
 /** Manual variables setting **/
-void SetAttributes(std::vector<std::string> shapeAttributes,std::vector<std::string> statAttributes,int nbOfBands);
+void SetAttributes(std::vector<std::string> shapeAttributes, std::vector<std::string> statAttributes, int nbOfBands);
 
 /** Display varname and address **/
 void DisplayVar() const;
 
 /** return list of Mu Parser varialbes and address**/
-const std::map<std::string,double*>& GetVar() const;
+const std::map<std::string, double*>& GetVar() const;
 
 void GenerateData();
 

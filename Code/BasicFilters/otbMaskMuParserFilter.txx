@@ -74,7 +74,7 @@ std::string MaskMuParserFilter<TInputImage, TOutputImage, TFunction>
  }
 
 template< class TInputImage, class TOutputImage, class TFunction>
-const std::map<std::string,double*>& MaskMuParserFilter<TInputImage, TOutputImage, TFunction>::GetVar()
+const std::map<std::string, double*>& MaskMuParserFilter<TInputImage, TOutputImage, TFunction>::GetVar()
 {
   FunctorPointer tempFunctor= FunctorType::New();
   tempFunctor->SetExpression(m_Expression);
@@ -83,7 +83,7 @@ const std::map<std::string,double*>& MaskMuParserFilter<TInputImage, TOutputImag
 
 
      // Define the iterators
-  itk::ImageConstIterator<TInputImage> inputIt(inputPtr ,inputPtr->GetRequestedRegion());
+  itk::ImageConstIterator<TInputImage> inputIt(inputPtr , inputPtr->GetRequestedRegion());
  inputIt.GoToBegin();
 
      FunctorType&   functor = *tempFunctor;
@@ -104,7 +104,6 @@ const std::map<std::string,double*>& MaskMuParserFilter<TInputImage, TOutputImag
 
 
 
-
 template< class TInputImage, class TOutputImage, class TFunction>
 bool MaskMuParserFilter<TInputImage, TOutputImage, TFunction>
 ::CheckExpression()
@@ -116,8 +115,7 @@ bool MaskMuParserFilter<TInputImage, TOutputImage, TFunction>
     InputImageConstPointer  inputPtr = this->GetInput();
 
 
-
- itk::ImageConstIterator<TInputImage> inputIt( inputPtr,inputPtr->GetRequestedRegion());
+ itk::ImageConstIterator<TInputImage> inputIt( inputPtr, inputPtr->GetRequestedRegion());
     inputIt.GoToBegin();
 
     FunctorType&   functor = *checkFunctor;
@@ -132,7 +130,7 @@ bool MaskMuParserFilter<TInputImage, TOutputImage, TFunction>
       itkWarningMacro(<< err);
       return false;
     }
-    return true ;
+    return true;
  }
 
 /**

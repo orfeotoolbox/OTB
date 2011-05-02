@@ -141,11 +141,10 @@ void Parser::ExceptionHandler(ParserType::ExceptionType &e)
 
 
 // Get the map with the variables
-const std::map<std::string,Parser::ValueType*>& Parser::GetVar() const
+const std::map<std::string, Parser::ValueType*>& Parser::GetVar() const
 {
   return m_InternalParser.GetVar();
 }
-
 
 
 }//end namespace otb

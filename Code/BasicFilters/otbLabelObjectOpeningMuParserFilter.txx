@@ -75,7 +75,7 @@ std::string LabelObjectOpeningMuParserFilter<TImage, TFunction>
 
 
 template< class TImage, class TFunction>
-const std::map<std::string,double*>& LabelObjectOpeningMuParserFilter<TImage, TFunction>::GetVar() const
+const std::map<std::string, double*>& LabelObjectOpeningMuParserFilter<TImage, TFunction>::GetVar() const
 {
   return this->m_Functor.GetVar();
 }
@@ -83,11 +83,11 @@ const std::map<std::string,double*>& LabelObjectOpeningMuParserFilter<TImage, TF
 template< class TImage, class TFunction>
 void LabelObjectOpeningMuParserFilter<TImage, TFunction>::DisplayVar() const
 {
-  const std::map<std::string,double*>& variables = this->m_Functor.GetVar();
+  const std::map<std::string, double*>& variables = this->m_Functor.GetVar();
 
   std::cout<<"nb var "<<variables.size()<<std::endl;
   // Get the number of variables
-  std::map<std::string,double*>::const_iterator item = variables.begin();
+  std::map<std::string, double*>::const_iterator item = variables.begin();
 
   // Query the variables
   for (; item!=variables.end(); ++item)
@@ -113,9 +113,9 @@ bool LabelObjectOpeningMuParserFilter<TImage, TFunction>::CheckExpression()
 }
 
 template< class TImage, class TFunction>
-void LabelObjectOpeningMuParserFilter<TImage, TFunction>::SetAttributes(std::vector<std::string> shapeAttributes,std::vector<std::string> statAttributes,int nbOfBands)
+void LabelObjectOpeningMuParserFilter<TImage, TFunction>::SetAttributes(std::vector<std::string> shapeAttributes, std::vector<std::string> statAttributes, int nbOfBands)
 {
-  this->m_Functor.SetAttributes(shapeAttributes,statAttributes,nbOfBands);
+  this->m_Functor.SetAttributes(shapeAttributes, statAttributes, nbOfBands);
 }
 
 template  < class TImage, class TFunction>

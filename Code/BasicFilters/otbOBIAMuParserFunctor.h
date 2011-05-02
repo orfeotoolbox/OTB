@@ -146,7 +146,7 @@ public:
 
   }
 
-  void SetAttributes(std::vector<std::string> shapeAttributes,std::vector<std::string> statAttributes,unsigned int nbOfBands)
+  void SetAttributes(std::vector<std::string> shapeAttributes, std::vector<std::string> statAttributes, unsigned int nbOfBands)
   {
     int index=0;
     m_NbOfAttributes=shapeAttributes.size()+statAttributes.size()*nbOfBands;
@@ -168,7 +168,7 @@ public:
       }
     for(unsigned int i=0; i<statAttributes.size(); i++)
       {
-      for(unsigned int bandIndex=1;bandIndex<=nbOfBands;bandIndex++)
+      for(unsigned int bandIndex=1; bandIndex<=nbOfBands; bandIndex++)
         {
         varName<<"STATS::Band"<<bandIndex<<"::"<<statAttributes.at(i);
         m_AttributesName.at(index)=varName.str();
@@ -182,14 +182,13 @@ public:
   }
 
 
-
   /** Check the expression */
   bool CheckExpression()
   {
     return m_Parser->CheckExpr();
   }
 
- const std::map<std::string,Parser::ValueType*>& GetVar() const
+ const std::map<std::string, Parser::ValueType*>& GetVar() const
   {
     return this->m_Parser->GetVar();
   }

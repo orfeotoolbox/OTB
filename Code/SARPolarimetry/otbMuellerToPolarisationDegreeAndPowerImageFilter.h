@@ -40,7 +40,7 @@ namespace Functor {
  * {channel #4 }&{channel #5 }&{channel #6 }&{channel #7 } \\
  * {channel #8 }&{channel #9 }&{channel #10}&{channel #11} \\
  * {channel #12}&{channel #13}&{channel #14}&{channel #15} \\
- * \end{pmatrix} \f$ 
+ * \end{pmatrix} \f$
  *
  * The class process step by step while \f$ \tau <= 45 \f$ and for each \f$ \tau \f$, while \f$ \psi <= 90 \f$ :
  * 1. Define the incident Stokes vector:

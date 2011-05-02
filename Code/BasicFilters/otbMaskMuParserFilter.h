@@ -99,7 +99,7 @@ public:
   typedef typename    OutputImageType::RegionType OutputImageRegionType;
 
   typedef typename    OutputImageType::Pointer    OutputImagePointer;
-  typedef otb::ExtractROI<InputImageType,InputImageType> ExtractROIFilterType;
+  typedef otb::ExtractROI<InputImageType, InputImageType> ExtractROIFilterType;
   typedef typename    ExtractROIFilterType::Pointer      ExtractROIFilterPointer;
   typedef TFunction                                                              FunctorType;
   typedef typename    FunctorType::Pointer        FunctorPointer;
@@ -116,8 +116,7 @@ public:
   /** Return the expression to be parsed */
   std::string GetExpression() const;
 
-  const std::map<std::string,double*>&GetVar();
-
+  const std::map<std::string, double*>&GetVar();
 
 
 protected :

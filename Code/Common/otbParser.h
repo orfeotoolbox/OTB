@@ -76,7 +76,7 @@ public:
   const std::string& GetExpr() const;
 
   /** Return the list of variables */
-  const std::map<std::string,ValueType*>& GetVar() const;
+  const std::map<std::string, ValueType*>& GetVar() const;
 
   /**  Check Expression **/
   bool CheckExpr();

@@ -139,7 +139,6 @@ namespace otb
       }
 
 
-
       void SetNumberOfBands(unsigned int NbOfBands)
       {
 
@@ -171,7 +170,7 @@ namespace otb
       }
 
 
-      const std::map<std::string,Parser::ValueType*>& GetVar() const
+      const std::map<std::string, Parser::ValueType*>& GetVar() const
        {
          return this->m_Parser->GetVar();
        }
