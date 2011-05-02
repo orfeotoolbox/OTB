@@ -43,25 +43,23 @@ namespace Functor {
  * \end{pmatrix}
  *
  * The class process step by step while \f$ \tau <= 45 \f$ and for each \f$ \tau \f$, while \f$ \psi <= 90 \f :
- * \begin{itemize}
- * \item Define the incident Stokes vector:
- *   \f$ Si_{0} = 1 \f$ \\
- *   \f$ Si_{1} = \cos{\psi * \frac{\pi}{90}} * \cos{\tau *  \frac{\pi}{90}} \f$ \\
- *   \f$ Si_{2} = \sin{\psi * \frac{\pi}{90}} * \cos{\tau *  \frac{\pi}{90}} \f$ \\
- *   \f$ Si_{3} = \sin{\tau * \frac{\pi}{90}}\f$ \\
- * \item Evaluate the received Stokes vector
- *   \f$ Sr = Si * MuellerMatrix \f$ \\
- * \item Evaluate power \f$ P \f$  and polarisation degree \f$ DegP \f$ \\
- *   \f$ P = \max{0, Sr_0} \f$ \\
- *   \f$ DegP =  \sqrt{Sr_{1}^{2} + Sr_{2}^{2} + Sr_{3}^{2}} / Sr_{0} \f$ \\
- * \item Keep le smaller and the bigger power (\f$ P_{min}, P_{max} \f$) and \f$\f$ ) and polarisation degree (\f$ DegP_{min}, DegP_{max} \f$) ).
- * \end{itemize}
+ * 1. Define the incident Stokes vector:
+ * - \f$ Si_{0} = 1 \f$ \\
+ * - \f$ Si_{1} = \cos{\psi * \frac{\pi}{90}} * \cos{\tau *  \frac{\pi}{90}} \f$
+ * - \f$ Si_{2} = \sin{\psi * \frac{\pi}{90}} * \cos{\tau *  \frac{\pi}{90}} \f$
+ * - \f$ Si_{3} = \sin{\tau * \frac{\pi}{90}}\f$
+ * 2. Evaluate the received Stokes vector :
+ * - \f$ Sr = Si * MuellerMatrix \f$
+ * 3. Evaluate power \f$ P \f$  and polarisation degree \f$ DegP \f$:
+ * - \f$ P = \max{0, Sr_0} \f$
+ * - \f$ DegP =  \sqrt{Sr_{1}^{2} + Sr_{2}^{2} + Sr_{3}^{2}} / Sr_{0} \f$
+ * 4. Keep le smaller and the bigger power (\f$ P_{min}, P_{max} \f$) and \f$\f$ ) and polarisation degree (\f$ DegP_{min}, DegP_{max} \f$) ).
  *
- *  Output value are:
- *   channel #0 : \f$ P_{min} \f$ \\
- *   channel #1 : \f$ P_{max} \f$ \\
- *   channel #2 : \f$ DegP_{min} \f$ \\
- *   channel #3 : \f$ DegP_{max} \f$ \\
+ * Output value are:
+ * - channel #0 : \f$ P_{min} \f$
+ * - channel #1 : \f$ P_{max} \f$
+ * - channel #2 : \f$ DegP_{min} \f$
+ * - channel #3 : \f$ DegP_{max} \f$
  *
  * \ingroup Functor
  * \ingroup SARPolarimetry

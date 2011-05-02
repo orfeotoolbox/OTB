@@ -37,12 +37,10 @@ namespace otb
  *
  * The class is templated by the 4 input image (HH, HV, VH and VV) and the used functor.
  * Available functors are :
- * \begin{itemize}
- * \item SinclairToCircularCovarianceMatrixFunctor (default one)
- * \item SinclairToCoherencyMatrixFunctor
- * \item SinclairToCovarianceMatrixFunctor
- * \item SinclairToMuelleMatrixrFunctor
- * \end{itemize}
+ * - SinclairToCircularCovarianceMatrixFunctor (default one)
+ * - SinclairToCoherencyMatrixFunctor
+ * - SinclairToCovarianceMatrixFunctor
+ * - SinclairToMuelleMatrixrFunctor
  *
  *  \ingroup SARPolarimetry
  *
@@ -51,6 +49,7 @@ namespace otb
  *  \sa SinclairToCoherencyMatrixFunctor
  *  \sa SinclairToCovarianceMatrixFunctor
  *  \sa SinclairToMuelleMatrixrFunctor
+ *
  */
 
 template <class TInputImageHH, class TInputImageHV,
