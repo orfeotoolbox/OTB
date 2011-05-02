@@ -377,6 +377,3 @@ namespace otb
 
 
 
-
-
-
