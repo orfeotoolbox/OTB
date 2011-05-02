@@ -38,6 +38,7 @@ MaskMuParserFilter<TInputImage, TOutputImage, TFunction>::MaskMuParserFilter()
   m_OverflowCount = 0;
   m_ThreadUnderflow.SetSize(1);
   m_ThreadOverflow.SetSize(1);
+
 }
 
 // Destructor
@@ -72,6 +73,67 @@ std::string MaskMuParserFilter<TInputImage, TOutputImage, TFunction>
   return m_Expression;
  }
 
+template< class TInputImage, class TOutputImage, class TFunction>
+const std::map<std::string,double*>& MaskMuParserFilter<TInputImage, TOutputImage, TFunction>::GetVar()
+{
+  FunctorPointer tempFunctor= FunctorType::New();
+  tempFunctor->SetExpression(m_Expression);
+
+  InputImageConstPointer  inputPtr = this->GetInput();
+
+
+     // Define the iterators
+  itk::ImageConstIterator<TInputImage> inputIt(inputPtr ,inputPtr->GetRequestedRegion());
+ inputIt.GoToBegin();
+
+     FunctorType&   functor = *tempFunctor;
+
+     try
+         {
+          functor(inputIt.Get());
+           //functor(inputPtr->GetPixel(pixelIndex));
+         }
+     catch(itk::ExceptionObject& err)
+         {
+           itkWarningMacro(<< err);
+
+         }
+
+     return functor.GetVar();
+}
+
+
+
+
+template< class TInputImage, class TOutputImage, class TFunction>
+bool MaskMuParserFilter<TInputImage, TOutputImage, TFunction>
+::CheckExpression()
+ {
+    FunctorPointer checkFunctor= FunctorType::New();
+    checkFunctor->SetExpression(m_Expression);
+
+    //initialize
+    InputImageConstPointer  inputPtr = this->GetInput();
+
+
+
+ itk::ImageConstIterator<TInputImage> inputIt( inputPtr,inputPtr->GetRequestedRegion());
+    inputIt.GoToBegin();
+
+    FunctorType&   functor = *checkFunctor;
+
+    try
+    {
+    functor(inputIt.Get());
+
+    }
+    catch(itk::ExceptionObject& err)
+    {
+      itkWarningMacro(<< err);
+      return false;
+    }
+    return true ;
+ }
 
 /**
  * BeforeThreadedGenerateData
@@ -95,9 +157,8 @@ void MaskMuParserFilter<TInputImage, TOutputImage, TFunction>
 
 
   for(itFunctor = m_VFunctor.begin(); itFunctor < m_VFunctor.end(); itFunctor++)
-    {
     *itFunctor = FunctorType::New();
-    }
+
 
   for(thread_index = 0; thread_index < nbThreads; thread_index++)
     {

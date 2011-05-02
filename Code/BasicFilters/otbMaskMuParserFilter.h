@@ -37,6 +37,7 @@
 
 #include "itkImageToImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
+#include "otbExtractROI.h"
 
 namespace otb
 {
@@ -91,13 +92,15 @@ public:
   typedef TInputImage                             InputImageType;
   typedef typename    InputImageType::RegionType  InputImageRegionType;
   typedef typename    InputImageType::PixelType           PixelType;
+  typedef typename    InputImageType::IndexType   IndexType;
   typedef typename    InputImageType::Pointer     InputImagePointer;
   typedef typename    InputImageType::ConstPointer     InputImageConstPointer;
   typedef TOutputImage                            OutputImageType;
   typedef typename    OutputImageType::RegionType OutputImageRegionType;
 
   typedef typename    OutputImageType::Pointer    OutputImagePointer;
-
+  typedef otb::ExtractROI<InputImageType,InputImageType> ExtractROIFilterType;
+  typedef typename    ExtractROIFilterType::Pointer      ExtractROIFilterPointer;
   typedef TFunction                                                              FunctorType;
   typedef typename    FunctorType::Pointer        FunctorPointer;
 
@@ -107,8 +110,15 @@ public:
   /** Set the expression to be parsed */
   void SetExpression(const std::string expression);
 
+  /**Check  expression  */
+  bool  CheckExpression();
+
   /** Return the expression to be parsed */
   std::string GetExpression() const;
+
+  const std::map<std::string,double*>&GetVar();
+
+
 
 protected :
   MaskMuParserFilter();
