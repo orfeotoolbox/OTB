@@ -270,7 +270,7 @@ int ValidateImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult
 
   std::cout << "*** SVM training performances ***\n" <<"Confusion matrix:\n" << confMatCalc->GetConfusionMatrix() << std::endl;
 
-    for (unsigned int itClasses = 0; itClasses < modelSVM->GetNumberOfClasses() ; itClasses++)
+    for (unsigned int itClasses = 0; itClasses < modelSVM->GetNumberOfClasses(); itClasses++)
       {
       std::cout << "Precision of class [" << itClasses << "] vs all: " << confMatCalc->GetPrecisions()[itClasses] << std::endl;
       std::cout << "Recall of class [" << itClasses << "] vs all: "  << confMatCalc->GetRecalls()[itClasses] << std::endl;
