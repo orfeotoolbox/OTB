@@ -180,6 +180,10 @@ public:
   itkGetMacro(Shift, InputPixelType);
   itkSetMacro(Shift, InputPixelType);
 
+protected:
+  ShiftScaleVectorImageFilter() {}
+  virtual ~ShiftScaleVectorImageFilter() {}
+
   /** Process to execute before entering the multithreaded section */
   void BeforeThreadedGenerateData(void);
 
@@ -188,10 +192,6 @@ public:
 
   /** Generate input requested region */
   void GenerateInputRequestedRegion(void);
-
-protected:
-  ShiftScaleVectorImageFilter() {}
-  virtual ~ShiftScaleVectorImageFilter() {}
 
 private:
   ShiftScaleVectorImageFilter(const Self&); //purposely not implemented

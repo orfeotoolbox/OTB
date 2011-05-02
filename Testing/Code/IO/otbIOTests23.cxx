@@ -16,13 +16,12 @@
 
 =========================================================================*/
 
-// this file defines the otbCommonTest for the test driver
-// and all it expects is that you have a function called RegisterTests
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
 #endif
 
 #include "otbTestMain.h"
+
 
 void RegisterTests()
 {
@@ -123,4 +122,12 @@ void RegisterTests()
   REGISTER_TEST(otbVectorImageStreamingFileWriterComplexTestWithoutInputInt);
   REGISTER_TEST(otbVectorImageStreamingFileWriterComplexTestWithoutInputFloat);
   REGISTER_TEST(otbVectorImageStreamingFileWriterComplexTestWithoutInputDouble);
+ 
+  //merge filter function values tests in IOTests23
+  REGISTER_TEST(otbSpectralSensitivityReaderNew);
+  REGISTER_TEST(otbSpectralSensitivityReaderTest);
+  REGISTER_TEST(otbSpectralSensitivityReaderGenericTest);
+  REGISTER_TEST(otbFilterFunctionValuesNew);
+  REGISTER_TEST(otbWavelengthSpectralBandsNew);
+
 }

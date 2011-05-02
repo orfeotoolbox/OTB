@@ -15,6 +15,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#include <iomanip>
+
 #include "itkExceptionObject.h"
 
 #include "otbFourierMellinDescriptorsImageFunction.h"

@@ -18,35 +18,8 @@
 #ifndef __otbMapProjections_h
 #define __otbMapProjections_h
 
-#include "projection/ossimAlbersProjection.h"
-#include "projection/ossimAzimEquDistProjection.h"
-#include "projection/ossimBngProjection.h"
-#include "projection/ossimBonneProjection.h"
-#include "projection/ossimCadrgProjection.h"
-#include "projection/ossimCassiniProjection.h"
-#include "projection/ossimCylEquAreaProjection.h"
-#include "projection/ossimEckert4Projection.h"
-#include "projection/ossimEckert6Projection.h"
-#include "projection/ossimGnomonicProjection.h"
-#include "projection/ossimLambertConformalConicProjection.h"
-#include "projection/ossimLlxyProjection.h"
-#include "projection/ossimEquDistCylProjection.h"
-#include "projection/ossimMercatorProjection.h"
-#include "projection/ossimMillerProjection.h"
-#include "projection/ossimMollweidProjection.h"
-#include "projection/ossimNewZealandMapGridProjection.h"
-#include "projection/ossimObliqueMercatorProjection.h"
-#include "projection/ossimOrthoGraphicProjection.h"
-#include "projection/ossimPolarStereoProjection.h"
-#include "projection/ossimPolyconicProjection.h"
-#include "projection/ossimSinusoidalProjection.h"
-#include "projection/ossimSpaceObliqueMercatorProjection.h"
-#include "projection/ossimStereographicProjection.h"
-#include "projection/ossimTransCylEquAreaProjection.h"
-#include "projection/ossimTransMercatorProjection.h"
-#include "projection/ossimUpsProjection.h"
-#include "projection/ossimUtmProjection.h"
-#include "projection/ossimVanDerGrintenProjection.h"
+#include "otbMapProjectionDeprecated.h"
+
 #include "otbUtmMapProjection.h"
 #include "otbLambertConformalConicMapProjection.h"
 #include "otbLambert2EtenduProjection.h"
@@ -58,31 +31,11 @@
 #include "otbMollweidMapProjection.h"
 #include "otbSVY21MapProjection.h"
 
-#include "otbMapProjection.h"
-
 namespace otb
 {
 
-typedef MapProjection<ossimAlbersProjection, TransformDirection::INVERSE>               AlbersInverseProjection;
-typedef MapProjection<ossimAlbersProjection, TransformDirection::FORWARD>               AlbersForwardProjection;
-typedef MapProjection<ossimAzimEquDistProjection, TransformDirection::INVERSE>          AzimEquDistInverseProjection;
-typedef MapProjection<ossimAzimEquDistProjection, TransformDirection::FORWARD>          AzimEquDistForwardProjection;
-typedef MapProjection<ossimBngProjection, TransformDirection::INVERSE>                  BngInverseProjection;
-typedef MapProjection<ossimBngProjection, TransformDirection::FORWARD>                  BngForwardProjection;
-typedef MapProjection<ossimBonneProjection, TransformDirection::INVERSE>                BonneInverseProjection;
-typedef MapProjection<ossimBonneProjection, TransformDirection::FORWARD>                BonneForwardProjection;
-typedef MapProjection<ossimCadrgProjection, TransformDirection::INVERSE>                CadrgInverseProjection;
-typedef MapProjection<ossimCadrgProjection, TransformDirection::FORWARD>                CadrgForwardProjection;
-typedef MapProjection<ossimCassiniProjection, TransformDirection::INVERSE>              CassiniInverseProjection;
-typedef MapProjection<ossimCassiniProjection, TransformDirection::FORWARD>              CassiniForwardProjection;
-typedef MapProjection<ossimCylEquAreaProjection, TransformDirection::INVERSE>           CylEquAreaInverseProjection;
-typedef MapProjection<ossimCylEquAreaProjection, TransformDirection::FORWARD>           CylEquAreaForwardProjection;
 typedef Eckert4MapProjection<TransformDirection::INVERSE>                               Eckert4InverseProjection;
 typedef Eckert4MapProjection<TransformDirection::FORWARD>                               Eckert4ForwardProjection;
-typedef MapProjection<ossimEckert6Projection, TransformDirection::INVERSE>              Eckert6InverseProjection;
-typedef MapProjection<ossimEckert6Projection, TransformDirection::FORWARD>              Eckert6ForwardProjection;
-typedef MapProjection<ossimGnomonicProjection, TransformDirection::INVERSE>             GnomonicInverseProjection;
-typedef MapProjection<ossimGnomonicProjection, TransformDirection::FORWARD>             GnomonicForwardProjection;
 typedef LambertConformalConicMapProjection<TransformDirection::INVERSE>                 LambertConformalConicInverseProjection;
 typedef LambertConformalConicMapProjection<TransformDirection::FORWARD>                 LambertConformalConicForwardProjection;
 typedef Lambert2EtenduProjection<TransformDirection::INVERSE>                           Lambert2EtenduInverseProjection;
@@ -93,42 +46,63 @@ typedef Lambert93Projection<TransformDirection::INVERSE>                        
 typedef Lambert93Projection<TransformDirection::FORWARD>                                Lambert93ForwardProjection;
 typedef SVY21MapProjection<TransformDirection::INVERSE>                                 SVY21InverseProjection;
 typedef SVY21MapProjection<TransformDirection::FORWARD>                                 SVY21ForwardProjection;
-typedef MapProjection<ossimLlxyProjection, TransformDirection::INVERSE>                 LlxyInverseProjection;
-typedef MapProjection<ossimLlxyProjection, TransformDirection::FORWARD>                 LlxyForwardProjection;
-typedef MapProjection<ossimEquDistCylProjection, TransformDirection::INVERSE>           EquDistCylInverseProjection;
-typedef MapProjection<ossimEquDistCylProjection, TransformDirection::FORWARD>           EquDistCylForwardProjection;
-typedef MapProjection<ossimMercatorProjection, TransformDirection::INVERSE>             MercatorInverseProjection;
-typedef MapProjection<ossimMercatorProjection, TransformDirection::FORWARD>             MercatorForwardProjection;
-typedef MapProjection<ossimMillerProjection, TransformDirection::INVERSE>               MillerInverseProjection;
-typedef MapProjection<ossimMillerProjection, TransformDirection::FORWARD>               MillerForwardProjection;
 typedef MollweidMapProjection<TransformDirection::INVERSE>                              MollweidInverseProjection;
 typedef MollweidMapProjection<TransformDirection::FORWARD>                              MollweidForwardProjection;
-typedef MapProjection<ossimNewZealandMapGridProjection, TransformDirection::INVERSE>    NewZealandMapGridInverseProjection;
-typedef MapProjection<ossimNewZealandMapGridProjection, TransformDirection::FORWARD>    NewZealandMapGridForwardProjection;
-typedef MapProjection<ossimObliqueMercatorProjection, TransformDirection::INVERSE>      ObliqueMercatorInverseProjection;
-typedef MapProjection<ossimObliqueMercatorProjection, TransformDirection::FORWARD>      ObliqueMercatorForwardProjection;
-typedef MapProjection<ossimOrthoGraphicProjection, TransformDirection::INVERSE>         OrthoGraphicInverseProjection;
-typedef MapProjection<ossimOrthoGraphicProjection, TransformDirection::FORWARD>         OrthoGraphicForwardProjection;
-typedef MapProjection<ossimPolarStereoProjection, TransformDirection::INVERSE>          PolarStereoInverseProjection;
-typedef MapProjection<ossimPolarStereoProjection, TransformDirection::FORWARD>          PolarStereoForwardProjection;
-typedef MapProjection<ossimPolyconicProjection, TransformDirection::INVERSE>            PolyconicInverseProjection;
-typedef MapProjection<ossimPolyconicProjection, TransformDirection::FORWARD>            PolyconicForwardProjection;
 typedef SinusoidalMapProjection<TransformDirection::INVERSE>                            SinusoidalInverseProjection;
 typedef SinusoidalMapProjection<TransformDirection::FORWARD>                            SinusoidalForwardProjection;
-typedef MapProjection<ossimSpaceObliqueMercatorProjection, TransformDirection::INVERSE> SpaceObliqueMercatorInverseProjection;
-typedef MapProjection<ossimSpaceObliqueMercatorProjection, TransformDirection::FORWARD> SpaceObliqueMercatorForwardProjection;
-typedef MapProjection<ossimStereographicProjection, TransformDirection::INVERSE>        StereographicInverseProjection;
-typedef MapProjection<ossimStereographicProjection, TransformDirection::FORWARD>        StereographicForwardProjection;
-typedef MapProjection<ossimTransCylEquAreaProjection, TransformDirection::INVERSE>      TransCylEquAreaInverseProjection;
-typedef MapProjection<ossimTransCylEquAreaProjection, TransformDirection::FORWARD>      TransCylEquAreaForwardProjection;
 typedef TransMercatorMapProjection<TransformDirection::INVERSE>                         TransMercatorInverseProjection;
 typedef TransMercatorMapProjection<TransformDirection::FORWARD>                         TransMercatorForwardProjection;
-typedef MapProjection<ossimUpsProjection, TransformDirection::INVERSE>                  UpsInverseProjection;
-typedef MapProjection<ossimUpsProjection, TransformDirection::FORWARD>                  UpsForwardProjection;
 typedef UtmMapProjection<TransformDirection::INVERSE>                                   UtmInverseProjection;
 typedef UtmMapProjection<TransformDirection::FORWARD>                                   UtmForwardProjection;
-typedef MapProjection<ossimVanDerGrintenProjection, TransformDirection::INVERSE>        VanDerGrintenInverseProjection;
-typedef MapProjection<ossimVanDerGrintenProjection, TransformDirection::FORWARD>        VanDerGrintenForwardProjection;
+
+// Definitions to maintain backward compatibility, but the GenericMapProjection
+// should be used instead.
+typedef MapProjectionDeprecated<MapProjectionType::ALBERS, TransformDirection::INVERSE>               AlbersInverseProjection;
+typedef MapProjectionDeprecated<MapProjectionType::ALBERS, TransformDirection::FORWARD>               AlbersForwardProjection;
+typedef MapProjectionDeprecated<MapProjectionType::AZIMEQUDIST, TransformDirection::INVERSE>          AzimEquDistInverseProjection;
+typedef MapProjectionDeprecated<MapProjectionType::AZIMEQUDIST, TransformDirection::FORWARD>          AzimEquDistForwardProjection;
+typedef MapProjectionDeprecated<MapProjectionType::BNG, TransformDirection::INVERSE>                  BngInverseProjection;
+typedef MapProjectionDeprecated<MapProjectionType::BNG, TransformDirection::FORWARD>                  BngForwardProjection;
+typedef MapProjectionDeprecated<MapProjectionType::BONNE, TransformDirection::INVERSE>                BonneInverseProjection;
+typedef MapProjectionDeprecated<MapProjectionType::BONNE, TransformDirection::FORWARD>                BonneForwardProjection;
+typedef MapProjectionDeprecated<MapProjectionType::CADRG, TransformDirection::INVERSE>                CadrgInverseProjection;
+typedef MapProjectionDeprecated<MapProjectionType::CADRG, TransformDirection::FORWARD>                CadrgForwardProjection;
+typedef MapProjectionDeprecated<MapProjectionType::CASSINI, TransformDirection::INVERSE>              CassiniInverseProjection;
+typedef MapProjectionDeprecated<MapProjectionType::CASSINI, TransformDirection::FORWARD>              CassiniForwardProjection;
+typedef MapProjectionDeprecated<MapProjectionType::CYLEQUAREA, TransformDirection::INVERSE>           CylEquAreaInverseProjection;
+typedef MapProjectionDeprecated<MapProjectionType::CYLEQUAREA, TransformDirection::FORWARD>           CylEquAreaForwardProjection;
+typedef MapProjectionDeprecated<MapProjectionType::ECKERT6, TransformDirection::INVERSE>              Eckert6InverseProjection;
+typedef MapProjectionDeprecated<MapProjectionType::ECKERT6, TransformDirection::FORWARD>              Eckert6ForwardProjection;
+typedef MapProjectionDeprecated<MapProjectionType::GNOMONIC, TransformDirection::INVERSE>             GnomonicInverseProjection;
+typedef MapProjectionDeprecated<MapProjectionType::GNOMONIC, TransformDirection::FORWARD>             GnomonicForwardProjection;
+typedef MapProjectionDeprecated<MapProjectionType::LLXY, TransformDirection::INVERSE>                 LlxyInverseProjection;
+typedef MapProjectionDeprecated<MapProjectionType::LLXY, TransformDirection::FORWARD>                 LlxyForwardProjection;
+typedef MapProjectionDeprecated<MapProjectionType::EQUDISTCYL, TransformDirection::INVERSE>           EquDistCylInverseProjection;
+typedef MapProjectionDeprecated<MapProjectionType::EQUDISTCYL, TransformDirection::FORWARD>           EquDistCylForwardProjection;
+typedef MapProjectionDeprecated<MapProjectionType::MERCATOR, TransformDirection::INVERSE>             MercatorInverseProjection;
+typedef MapProjectionDeprecated<MapProjectionType::MERCATOR, TransformDirection::FORWARD>             MercatorForwardProjection;
+typedef MapProjectionDeprecated<MapProjectionType::MILLER, TransformDirection::INVERSE>               MillerInverseProjection;
+typedef MapProjectionDeprecated<MapProjectionType::MILLER, TransformDirection::FORWARD>               MillerForwardProjection;
+typedef MapProjectionDeprecated<MapProjectionType::NEWZEALANDMAPGRID, TransformDirection::INVERSE>    NewZealandMapGridInverseProjection;
+typedef MapProjectionDeprecated<MapProjectionType::NEWZEALANDMAPGRID, TransformDirection::FORWARD>    NewZealandMapGridForwardProjection;
+typedef MapProjectionDeprecated<MapProjectionType::OBLIQUEMERCATOR, TransformDirection::INVERSE>      ObliqueMercatorInverseProjection;
+typedef MapProjectionDeprecated<MapProjectionType::OBLIQUEMERCATOR, TransformDirection::FORWARD>      ObliqueMercatorForwardProjection;
+typedef MapProjectionDeprecated<MapProjectionType::ORTHOGRAPHIC, TransformDirection::INVERSE>         OrthoGraphicInverseProjection;
+typedef MapProjectionDeprecated<MapProjectionType::ORTHOGRAPHIC, TransformDirection::FORWARD>         OrthoGraphicForwardProjection;
+typedef MapProjectionDeprecated<MapProjectionType::POLARSTEREO, TransformDirection::INVERSE>          PolarStereoInverseProjection;
+typedef MapProjectionDeprecated<MapProjectionType::POLARSTEREO, TransformDirection::FORWARD>          PolarStereoForwardProjection;
+typedef MapProjectionDeprecated<MapProjectionType::POLYCONIC, TransformDirection::INVERSE>            PolyconicInverseProjection;
+typedef MapProjectionDeprecated<MapProjectionType::POLYCONIC, TransformDirection::FORWARD>            PolyconicForwardProjection;
+typedef MapProjectionDeprecated<MapProjectionType::SPACEOBLIQUEMERCATOR, TransformDirection::INVERSE> SpaceObliqueMercatorInverseProjection;
+typedef MapProjectionDeprecated<MapProjectionType::SPACEOBLIQUEMERCATOR, TransformDirection::FORWARD> SpaceObliqueMercatorForwardProjection;
+typedef MapProjectionDeprecated<MapProjectionType::STEREOGRAPHIC, TransformDirection::INVERSE>        StereographicInverseProjection;
+typedef MapProjectionDeprecated<MapProjectionType::STEREOGRAPHIC, TransformDirection::FORWARD>        StereographicForwardProjection;
+typedef MapProjectionDeprecated<MapProjectionType::TRANSCYLEQUAREA, TransformDirection::INVERSE>      TransCylEquAreaInverseProjection;
+typedef MapProjectionDeprecated<MapProjectionType::TRANSCYLEQUAREA, TransformDirection::FORWARD>      TransCylEquAreaForwardProjection;
+typedef MapProjectionDeprecated<MapProjectionType::UPS, TransformDirection::INVERSE>                  UpsInverseProjection;
+typedef MapProjectionDeprecated<MapProjectionType::UPS, TransformDirection::FORWARD>                  UpsForwardProjection;
+typedef MapProjectionDeprecated<MapProjectionType::VANDERGRINTEN, TransformDirection::INVERSE>        VanDerGrintenInverseProjection;
+typedef MapProjectionDeprecated<MapProjectionType::VANDERGRINTEN, TransformDirection::FORWARD>        VanDerGrintenForwardProjection;
 
 } //namespace otb
 #endif

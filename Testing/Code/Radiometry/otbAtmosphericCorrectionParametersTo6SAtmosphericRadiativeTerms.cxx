@@ -89,10 +89,11 @@ int otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms(int argc, ch
   fin >> minSpectralValue; //wlinf;
   fin >> maxSpectralValue; //wlsup;
 
-  //fin.open(wavelenghFiles[i]);
-  while (fin.good())
+  std::string line;
+  std::getline(fin, line);
+  while (std::getline(fin, line))
     {
-    fin >> value;
+    value = atof(line.c_str());
     vect.push_back(value);
     }
 

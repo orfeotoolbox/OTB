@@ -3083,6 +3083,38 @@ FOREACH(DATA_PIXELTYPE ${DATA_PIXELTYPES_LIST})
                   ${NBBANDS}
                ) 
       
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS23 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Tests about relative sepctral responses from file or OpticalMetadataInterface 
+
+ADD_TEST(raTuSpectralSensitivityReaderNew ${IO_TESTS23}
+     otbSpectralSensitivityReaderNew
+)
+
+ADD_TEST(raTvSpectralSensitivityReaderTest ${IO_TESTS23}
+     --compare-ascii ${EPSILON_5}
+        ${BASELINE_FILES}/raTvSpectralSensitivityReaderGenericTest.txt
+        ${TEMP}/rcTuSpectralSensitivityReaderTest.txt
+     --ignore-lines-with 2 DataPath FileName
+     otbSpectralSensitivityReaderTest
+	${INPUTDATA}/Radiometry
+	${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/Arcachon_extrait_3852_3319_546_542.tif
+        ${TEMP}/rcTuSpectralSensitivityReaderTest.txt	  
+)
+
+
+ADD_TEST(raTvSpectralSensitivityReaderGenericTest ${IO_TESTS23}
+     --compare-ascii ${EPSILON_5}
+      ${BASELINE_FILES}/raTvSpectralSensitivityReaderGenericTest.txt
+        ${TEMP}/raTvSpectralSensitivityReaderGenericTest.txt
+     --ignore-lines-with 2 DataPath FileName
+     otbSpectralSensitivityReaderGenericTest
+    ${INPUTDATA}/Radiometry/SPOT5/HRG1/rep6S.dat
+    ${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/Arcachon_extrait_3852_3319_546_542.tif
+        ${TEMP}/raTvSpectralSensitivityReaderGenericTest.txt     
+)
+
       ADD_TEST(ioTvStreamingWriteVectorImageComplex${DATA_PIXELTYPE}${NBBANDS}Bands
                ${IO_TESTS23}
                --compare-image ${NOTOL}
@@ -3106,6 +3138,15 @@ FOREACH(DATA_PIXELTYPE ${DATA_PIXELTYPES_LIST})
                 50
                 ${NBBANDS}
              )
+       
+
+ADD_TEST(raTuFilterFunctionValuesNew ${IO_TESTS23}
+     otbFilterFunctionValuesNew
+)
+
+ADD_TEST(raTuWavelengthSpectralBandsNew ${IO_TESTS23}
+     otbWavelengthSpectralBandsNew
+)
       
       ADD_TEST(ioTvStreamingWriteVectorImageComplex${DATA_PIXELTYPE}${NBBANDS}Bands
                ${IO_TESTS23}
@@ -3345,6 +3386,8 @@ ENDIF(CHECK_GDAL_BUILDED_WITH_HDF)
 
 SET(BasicIO_SRCS23
 otbIOTests23.cxx
+otbSpectralSensitivityReaderTest.cxx
+otbWavelengthSpectralBandsTest.cxx
 otbComplexImageManipulationTest.cxx
 otbImageFileWriterTestWithoutInput.cxx
 otbVectorImageFileWriterTestWithoutInput.cxx
@@ -3365,8 +3408,6 @@ OTB_ADD_EXECUTABLE(otbIOTests9 "${BasicIO_SRCS9}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbIOTests10 "${BasicIO_SRCS10}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbIOTests11 "${BasicIO_SRCS11}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbIOTests12 "${BasicIO_SRCS12}" "OTBIO;OTBTesting")
-
-
 
 # Case for releae 2.2.1
 IF(OTB_COMPILE_JPEG2000)

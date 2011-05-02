@@ -15,6 +15,11 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#include <iomanip>
+#include <iostream>
+#include <fstream>
+#include <algorithm>
+
 #include "otbSiftFastImageFilter.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
@@ -23,10 +28,6 @@
 #include "itkVariableLengthVector.h"
 #include "itkRGBPixel.h"
 #include "itkImageRegionIterator.h"
-
-#include <iostream>
-#include <fstream>
-#include <algorithm>
 
 bool CMP(std::vector<float>  a, std::vector<float>  b)
 {
@@ -107,7 +108,7 @@ int otbImageToFastSIFTKeyPointSetFilterOutputInterestPointAscii(int argc, char *
   while (itData != imageData.end())
     {
     outfile << "[" << std::fixed << std::setprecision(1) << (*itData)[0] << ", " << std::setprecision(1) <<
-    (*itData)[1] << "]" << endl;
+      (*itData)[1] << "]" << std::endl;
 
     ++itData;
     }

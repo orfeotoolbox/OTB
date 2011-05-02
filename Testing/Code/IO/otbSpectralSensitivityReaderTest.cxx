@@ -23,6 +23,16 @@
 
 using namespace otb;
 
+int otbSpectralSensitivityReaderNew(int argc, char* argv[])
+{
+
+  SpectralSensitivityReader::Pointer spectSen = SpectralSensitivityReader::New();
+
+  std::cout << spectSen << std::endl;
+
+  return EXIT_SUCCESS;
+}
+
 int otbSpectralSensitivityReaderTest(int argc, char* argv[])
 {
   const char * dataPath  = argv[1];

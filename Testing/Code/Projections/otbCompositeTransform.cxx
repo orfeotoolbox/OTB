@@ -19,10 +19,11 @@
 #pragma warning ( disable : 4786 )
 #endif
 
+#include <iostream>
+#include <iomanip>
+
 #include "itkExceptionObject.h"
 #include "itkImage.h"
-#include <iostream>
-
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 
@@ -61,9 +62,9 @@ int otbCompositeTransform(int argc, char* argv[])
 
   typedef otb::InverseSensorModel<double> SensorModelType;
   SensorModelType::Pointer sensorModel = SensorModelType::New();
-  bool resModel = sensorModel->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
+  sensorModel->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
 
-  if( resModel == false )
+  if( sensorModel->IsValidSensorModel() == false )
    {
      std::cout<<"Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!"<<std::endl;
      return EXIT_FAILURE;

@@ -53,7 +53,6 @@ ForwardSensorModel<TScalarType, NInputDimensions, NOutputDimensions>
   OutputPointType outputPoint;
   outputPoint[0] = lon;
   outputPoint[1] = lat;
-  outputPoint[2] = 0;
 
   if (OutputPointType::PointDimension == 3)
     {

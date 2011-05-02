@@ -80,8 +80,8 @@ int otbForwardSensorModelGrid(int argc, char* argv[])
 
   typedef otb::ForwardSensorModel<double> ForwardSensorModelType;
   ForwardSensorModelType::Pointer forwardSensorModel = ForwardSensorModelType::New();
-   bool resModel = forwardSensorModel->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
-   if( resModel == false )
+  forwardSensorModel->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
+  if( forwardSensorModel->IsValidSensorModel() == false )
      {
        std::cout<<"Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!"<<std::endl;
        return EXIT_FAILURE;

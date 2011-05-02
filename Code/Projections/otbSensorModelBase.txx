@@ -58,12 +58,12 @@ SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>
 template <class TScalarType,
     unsigned int NInputDimensions,
     unsigned int NOutputDimensions>
-bool
+void
 SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>
 ::SetImageGeometry(const ImageKeywordlist& image_kwl)
 {
   m_ImageKeywordlist = image_kwl;
-  return m_Model->CreateProjection(m_ImageKeywordlist);
+  m_Model->CreateProjection(m_ImageKeywordlist);
 }
 
 template <class TScalarType,

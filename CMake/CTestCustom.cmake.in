@@ -45,5 +45,6 @@ SET(CTEST_CUSTOM_WARNING_EXCEPTION
   ${CTEST_CUSTOM_WARNING_EXCEPTION}
   "vcl_deprecated_header"
   "backward_warning"
+  "Utilities"
   )
 

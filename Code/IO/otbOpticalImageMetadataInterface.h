@@ -28,6 +28,7 @@
 #include "otbImageKeywordlist.h"
 #include "otbImageMetadataInterfaceBase.h"
 #include "itkPointSet.h"
+#include "otbFilterFunctionValues.h"
 
 #include <string>
 
@@ -59,6 +60,9 @@ public:
   typedef itk::PointSet<double, 2>                   PointSetType;
   typedef PointSetType::Pointer                      PointSetPointer;
 
+  typedef FilterFunctionValues                              FilterFunctionValuesType;
+  typedef otb::ObjectList <FilterFunctionValuesType>        InternalWavelengthSpectralBandVectorType;
+  typedef InternalWavelengthSpectralBandVectorType::Pointer WavelengthSpectralBandVectorType;
 
   /** Get the sun elevation from the ossim metadata */
   double GetSunElevation() const;
@@ -93,7 +97,9 @@ public:
    *  proper band. */
   virtual unsigned int BandIndexToWavelengthPosition(unsigned int i) const;
 
-
+  /** Vector that contains the filter function value in 6S format (step of 0.0025 micro m).
+   * There values a computed by 6S. */
+  virtual WavelengthSpectralBandVectorType GetSpectralSensitivity ()  const = 0;
 protected:
   OpticalImageMetadataInterface();
   virtual ~OpticalImageMetadataInterface() {}

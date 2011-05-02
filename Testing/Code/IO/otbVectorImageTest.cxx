@@ -24,6 +24,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <iomanip>
 
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"

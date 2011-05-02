@@ -22,9 +22,6 @@
 #include <sstream>
 #include <stdio.h>
 
-#include "otbMapProjection.h"
-#include "otbInverseSensorModel.h"
-//#include "otbStreamingResampleImageFilter.h"
 #include "otbGenericRSResampleImageFilter.h"
 #include "otbCompositeTransform.h"
 #include "otbInverseSensorModel.h"

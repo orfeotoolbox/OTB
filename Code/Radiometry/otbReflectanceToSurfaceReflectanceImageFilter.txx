@@ -117,7 +117,8 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
         {
         functionValues->SetMinSpectralValue(imageMetadataInterface->GetFirstWavelengths()[i]);
         functionValues->SetMaxSpectralValue(imageMetadataInterface->GetLastWavelengths()[i]);
-        functionValues->SetUserStep(functionValues->GetMaxSpectralValue() - functionValues->GetMinSpectralValue() / 2.);
+        //By default the function values size is 3, set the step to feet with min and max spectral value
+        functionValues->SetUserStep((functionValues->GetMaxSpectralValue() - functionValues->GetMinSpectralValue()) / 2.);
         }
 
       m_CorrectionParameters->SetWavelengthSpectralBandWithIndex(i, functionValues);
@@ -138,6 +139,17 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
 {
   Superclass::GenerateOutputInformation();
   if (m_UseGenerateParameters) this->GenerateParameters();
+}
+
+template <class TInputImage, class TOutputImage>
+void
+ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
+::GenerateAtmosphericRadiativeTerms()
+{
+    Parameters2RadiativeTermsPointerType param2Terms = Parameters2RadiativeTermsType::New();
+    param2Terms->SetInput(m_CorrectionParameters);
+    param2Terms->Update();
+    m_AtmosphericRadiativeTerms = param2Terms->GetOutput();
 }
 
 template <class TInputImage, class TOutputImage>

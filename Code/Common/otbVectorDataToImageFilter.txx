@@ -257,7 +257,7 @@ VectorDataToImageFilter<TVectorData, TImage>
   RegionType   requestedRegion = output->GetRequestedRegion();
   otbMsgDevMacro("requestedRegion: " << requestedRegion);
   
-  m_NbTile = (vcl_pow(max(vcl_floor((double)requestedRegion.GetSize()[0] / 16000),
+  m_NbTile = (vcl_pow(std::max(vcl_floor((double)requestedRegion.GetSize()[0] / 16000),
                           vcl_floor((double)requestedRegion.GetSize()[1] / 16000))+1, 2));
   
   //std::cout << "nbTile: " << m_NbTile << std::endl;
@@ -291,8 +291,8 @@ VectorDataToImageFilter<TVectorData, TImage>
         index[0] = requestedRegion.GetIndex()[0] + i * stdXOffset;
         index[1] = requestedRegion.GetIndex()[1] + j * stdYOffset;
         
-        size[0] = min((unsigned int)(requestedRegion.GetSize()[0] - index[0]), stdXOffset);
-        size[1] = min((unsigned int)(requestedRegion.GetSize()[1] - index[1]), stdYOffset);
+        size[0] = std::min((unsigned int)(requestedRegion.GetSize()[0] - index[0]), stdXOffset);
+        size[1] = std::min((unsigned int)(requestedRegion.GetSize()[1] - index[1]), stdYOffset);
         }
       m_TilingRegions[tilingRegionsIdx].SetIndex(index);
       m_TilingRegions[tilingRegionsIdx].SetSize(size);

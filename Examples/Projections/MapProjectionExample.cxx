@@ -46,6 +46,9 @@
 //
 // Software Guide : EndLatex
 
+#include <fstream>
+#include <iomanip>
+
 // Software Guide : BeginCodeSnippet
 #include "otbMapProjections.h"
 #include "otbGenericMapProjection.h"

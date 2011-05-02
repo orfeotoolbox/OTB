@@ -20,6 +20,8 @@
 #pragma warning ( disable : 4786 )
 #endif
 
+#include <iomanip>
+
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbLocalHistogramImageFunction.h"

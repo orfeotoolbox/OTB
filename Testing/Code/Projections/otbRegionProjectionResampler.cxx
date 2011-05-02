@@ -101,9 +101,9 @@ int otbRegionProjectionResampler(int argc, char* argv[])
   reader->GenerateOutputInformation();
   ImageType::ConstPointer inputImage = reader->GetOutput();
 
- bool resModel = model->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
+ model->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
  
- if( resModel == false )
+ if( model->IsValidSensorModel() == false )
    {
      std::cout<<"Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!"<<std::endl;
      return EXIT_FAILURE;

@@ -316,9 +316,7 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
 
   if (m_OutputKeywordList.GetSize() != 0)
     {
-    ossimKeywordlist kwl;
-    m_OutputKeywordList.convertToOSSIMKeywordlist (kwl);
-    itk::EncapsulateMetaData<ossimKeywordlist>(outputDict, MetaDataKey::OSSIMKeywordlistKey, kwl);
+    itk::EncapsulateMetaData<ImageKeywordlist>(outputDict, MetaDataKey::OSSIMKeywordlistKey, m_OutputKeywordList);
     }
   if (!m_OutputProjectionRef.empty())
     {

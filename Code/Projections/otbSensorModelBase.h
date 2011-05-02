@@ -78,13 +78,19 @@ public:
    * Set the Imagekeywordlist and affect the ossim projection ( m_Model)
    * Return false if not model found.
    */
-  virtual bool SetImageGeometry(const ImageKeywordlist& image_kwl);
+  virtual void SetImageGeometry(const ImageKeywordlist& image_kwl);
 
   /** Set/Get the average elevation if the DEM is not used*/
   itkSetMacro(AverageElevation, TScalarType);
   itkGetMacro(AverageElevation, TScalarType);
 
   virtual void SetDEMDirectory(const std::string& directory);
+
+  /** Is sensor model valid method. return false if the sensor model is null */
+  bool IsValidSensorModel()
+  {
+    return m_Model->IsValidSensorModel();
+  }
 
 protected:
   SensorModelBase();

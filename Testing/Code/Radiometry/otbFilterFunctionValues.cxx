@@ -82,7 +82,6 @@ int otbFilterFunctionValuesDigitalGlobeTest(int argc, char * argv[])
   const char *       outname   = argv[2];
   const double       userStep  = atof(argv[3]);
   const double wavelengthFactor = atof(argv[4]);
-  //std::cout << "wavelengthFactor " << wavelengthFactor << std::endl;
   const double SIXSStepOfWavelengthSpectralBandValues(0.0025);
 
   typedef otb::FilterFunctionValues FilterFunctionValuesType;
@@ -134,8 +133,8 @@ int otbFilterFunctionValuesDigitalGlobeTest(int argc, char * argv[])
       {
       mini = keywordStrings[0].toDouble() * wavelengthFactor;
       nbBands = keywordStrings.size() - 1;
-      //std::cout << "firstline " << " mini " << mini <<  " nbBands "<< nbBands << std::endl;
-      //std::cout << "keywordStrings[nbBands] "  << keywordStrings[nbBands] << std::endl;
+      std::cout << "firstline " << " mini " << mini <<  " nbBands "<< nbBands << std::endl;
+      std::cout << "keywordStrings[nbBands] "  << keywordStrings[nbBands] << std::endl;
       for (unsigned int j = 0; j < nbBands; j++)
         {
         wavelengthSpectralBand->PushBack(FilterFunctionValuesType::New());
@@ -153,12 +152,13 @@ int otbFilterFunctionValuesDigitalGlobeTest(int argc, char * argv[])
     for (unsigned int i = 0; i < nbBands; ++i)
       {
       valuesVector[i].push_back(keywordStrings[i + 1].toDouble());
-      //std::cout << "vector values " << keywordStrings[i + 1].toDouble();
+      //std::cout << "vector values " << keywordStrings[i + 1].toDouble() << " ";
       }
 
 
     maxi = keywordStrings[0].toDouble() * wavelengthFactor;
-    //std::cout << " maxi " << maxi << std::endl;
+    std::cout << " maxi " << maxi << std::endl;
+    std::cout << " vector values[0] size " << valuesVector[0].size() << std::endl;
     }
 
   // Call interpolate

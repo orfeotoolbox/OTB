@@ -239,7 +239,6 @@ ListSampleGenerator<TImage, TVectorData>
   //Compute pixel area:
   typename ImageType::Pointer image = const_cast<ImageType*>(this->GetInput());
   double                      pixelArea = vcl_abs(image->GetSpacing()[0] * image->GetSpacing()[1]);
-  std::cout<< "Pixel area: " << pixelArea << std::endl;
 
   typename VectorDataType::ConstPointer vectorData = this->GetInputVectorData();
   TreeIteratorType itVector(vectorData->GetDataTree());
@@ -250,7 +249,6 @@ ListSampleGenerator<TImage, TVectorData>
       {
       m_ClassesSize[itVector.Get()->GetFieldAsInt(m_ClassKey)] +=
         itVector.Get()->GetPolygonExteriorRing()->GetArea() / pixelArea; // in pixel
-      std::cout << "Area = "<<itVector.Get()->GetPolygonExteriorRing()->GetArea() << std::endl;
       }
     ++itVector;
     }

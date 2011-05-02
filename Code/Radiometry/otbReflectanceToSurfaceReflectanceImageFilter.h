@@ -205,6 +205,9 @@ public:
     return m_FilterFunctionCoef;
   }
 
+  /** Generate radiative terms from the atmospheric parameters */
+  void GenerateAtmosphericRadiativeTerms();
+
   /** Compute radiative terms if necessary and then update functors attributs. */
   void GenerateParameters();
 

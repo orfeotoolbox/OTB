@@ -33,11 +33,8 @@
 #include "otbOrthoRectificationFilter.h"
 #include "otbMapProjections.h"
 
-#include "init/ossimInit.h"
-
 int otbOrthoRectificationFilter(int argc, char* argv[])
 {
-  ossimInit::instance()->initialize(argc, argv);
   if (argc != 12)
     {
     std::cout << argv[0] <<
@@ -109,7 +106,6 @@ int otbOrthoRectificationFilter(int argc, char* argv[])
 
 int otbOrthoRectificationComplexFilter(int argc, char* argv[])
 {
-  ossimInit::instance()->initialize(argc, argv);
   if (argc != 12)
     {
     std::cout << argv[0] <<

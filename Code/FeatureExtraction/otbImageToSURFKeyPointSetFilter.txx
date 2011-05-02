@@ -194,7 +194,13 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
           double orientationDetected = AssignOrientation(itNeighOrientation.GetNeighborhood(), sigmaDetected);
 
           /*Filling the Point pointSet Part*/
-          outputPointSet->SetPoint(m_NumberOfPoints, keyPoint);
+          typename InputImageType::PointType physicalKeyPoint;
+          typename InputImageType::IndexType indexKeyPoint;
+          indexKeyPoint[0]=keyPoint[0];
+          indexKeyPoint[1]=keyPoint[1];
+          m_ImageCurrent->TransformIndexToPhysicalPoint(indexKeyPoint, physicalKeyPoint);
+
+          outputPointSet->SetPoint(m_NumberOfPoints, physicalKeyPoint);
 
           /*----------------------------------------*/
           /*  Descriptor Computation                */

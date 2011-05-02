@@ -27,7 +27,6 @@
 #include "otbInverseSensorModel.h"
 #include "otbExtractROI.h"
 #include "otbImageFileWriter.h"
-#include "ossimTileMapModel.h"
 
 int otbTileMapImageIOTest(int argc, char* argv[])
 {

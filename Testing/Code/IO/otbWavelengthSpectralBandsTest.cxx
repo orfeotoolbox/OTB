@@ -16,16 +16,24 @@
 
 =========================================================================*/
 
-#include "otbMacro.h"
-#include "otbElevDatabaseHeightAboveMSLFunction.h"
-#include "otbImage.h"
+#include "otbFilterFunctionValues.h"
+#include "otbWavelengthSpectralBands.h"
 
-int otbElevDatabaseHeightAboveMSLFunction(int argc, char* argv[])
+using namespace otb;
+
+int otbFilterFunctionValuesNew(int argc, char* argv[])
 {
-  typedef otb::ElevDatabaseHeightAboveMSLFunction<float>   SrtmFunctionType;
 
-  SrtmFunctionType::Pointer srtmDem;
+  FilterFunctionValues::Pointer spectSen = FilterFunctionValues::New();
 
   return EXIT_SUCCESS;
-
 }
+
+int otbWavelengthSpectralBandsNew(int argc, char* argv[])
+{
+
+  WavelengthSpectralBands::Pointer spectSen = WavelengthSpectralBands::New();
+
+  return EXIT_SUCCESS;
+}
+

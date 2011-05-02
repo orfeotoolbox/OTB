@@ -24,9 +24,9 @@
 #include "itkIndent.h"
 #include "itkImageSource.h"
 #include "otbImage.h"
+#include "otbDEMHandler.h"
 #include "itkImageRegionIteratorWithIndex.h"
 #include "otbGenericRSTransform.h"
-#include "otbElevDatabaseHeightAboveMSLFunction.h"
 
 namespace otb
 {
@@ -34,7 +34,7 @@ namespace otb
  *
  * \brief Class to generate an image from DEM data
  *
- * This class is based on ossimElevManager. It takes in input the upper left longitude
+ * This class is based on DEMHandler. It takes in input the upper left longitude
  * and latitude, the spacing and the output image size.
  * Handle DTED and SRTM formats.
  *
@@ -53,13 +53,11 @@ public:
   typedef typename DEMImageType::Pointer   DEMImagePointerType;
   typedef typename DEMImageType::PixelType PixelType;
 
-
   typedef DEMToImageGenerator            Self;
   typedef itk::ImageSource<DEMImageType> Superclass;
   typedef itk::SmartPointer<Self>        Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
   typedef DEMImageType                   OutputImageType;
-  //typedef typename DEMImageType::InternalPixelType        PixelValueType;
 
   typedef typename Superclass::Pointer                    OutputImagePointer;
   typedef typename OutputImageType::SpacingType           SpacingType;
@@ -69,9 +67,7 @@ public:
   typedef typename Superclass::OutputImageRegionType      OutputImageRegionType;
   typedef itk::ImageRegionIteratorWithIndex<DEMImageType> ImageIteratorType;
 
-  typedef typename PointType::ValueType                           PixelValueType;
-
-//  typedef otb::DEMHandler DEMHandlerType;
+  typedef otb::DEMHandler DEMHandlerType;
 
   /** Specialisation of OptResampleFilter with a remote
     * sensing  transform
@@ -79,13 +75,6 @@ public:
   typedef GenericRSTransform<>                       GenericRSTransformType;
   typedef typename GenericRSTransformType::Pointer   GenericRSTransformPointerType;
 
-  //typedef itk::FunctionBase< PointType, PixelType>         DEMFunctionBaseType;
-  //typedef typename DEMFunctionBaseType::Pointer            DEMFunctionBasePointer;
-  typedef otb::ElevDatabaseHeightAboveMSLFunction<PixelType,
-                          typename PointType::ValueType>     SRTMFunctionType;
-  typedef otb::ElevDatabaseHeightAboveMSLFunction<PixelType,
-                        typename PointType::ValueType>       DEMFunctionBaseType;
-  typedef typename DEMFunctionBaseType::Pointer              DEMFunctionBasePointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -106,21 +95,18 @@ public:
   itkGetConstReferenceMacro(OutputSpacing, SpacingType);
 
   /** Set/Get the Default Unknown Value. */
+  itkSetMacro(DefaultUnknownValue, PixelType);
+  itkGetConstReferenceMacro(DefaultUnknownValue, PixelType);
+
+  /** Set/Get the Default Unknown Value. */
   itkSetObjectMacro(Transform, GenericRSTransformType);
-  itkGetObjectMacro(Transform, GenericRSTransformType);
   itkGetConstObjectMacro(Transform, GenericRSTransformType);
+
+  void InstanciateTransform();
 
   /** Set the DEM directory. */
   virtual void SetDEMDirectoryPath(const char* DEMDirectory);
   virtual void SetDEMDirectoryPath(const std::string& DEMDirectory);
-
-  /** Set/Get the DEM Function. */
-  itkSetObjectMacro(DEMFunction, DEMFunctionBaseType);
-  itkGetConstObjectMacro(DEMFunction, DEMFunctionBaseType);
-
-  /** Set/Get the DEM Default unknown elevation value. */
-    itkSetMacro(UnknownDefaultElevationValue, PixelValueType);
-    itkGetConstMacro(UnknownDefaultElevationValue, PixelValueType);
 
   /**
    * Set/Get input & output projections.
@@ -182,6 +168,8 @@ public:
     this->SetOutputSize ( image->GetLargestPossibleRegion().GetSize() );
     this->SetOutputProjectionRef(image->GetProjectionRef());
     this->SetOutputKeywordList(image->GetImageKeywordlist());
+
+    InstanciateTransform();
     }
 
 protected:
@@ -194,18 +182,17 @@ protected:
                             int threadId);
   virtual void GenerateOutputInformation();
 
+  DEMHandlerType::Pointer m_DEMHandler;
   PointType               m_OutputOrigin;
   SpacingType             m_OutputSpacing;
   SizeType                m_OutputSize;
-  DEMFunctionBasePointer  m_DEMFunction;
+  PixelType               m_DefaultUnknownValue;
 
 private:
   DEMToImageGenerator(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
   GenericRSTransformPointerType      m_Transform;
-  PixelValueType          m_UnknownDefaultElevationValue;
-
 };
 
 } // namespace otb

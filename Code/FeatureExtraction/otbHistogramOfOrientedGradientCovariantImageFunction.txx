@@ -22,6 +22,7 @@
 #include "itkConstNeighborhoodIterator.h"
 #include "itkNumericTraits.h"
 #include "itkMacro.h"
+#include "otbMath.h"
 
 namespace otb
 {
@@ -120,8 +121,12 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
         // Determine the bin index (shift of otb::CONST_PI since atan2 values
         // lies in [-pi, pi]
         unsigned int binIndex = vcl_floor((otb::CONST_PI + angle)/orientationBinWidth);
- 
-        // Cumulate values
+
+        // Handle special case where angle = pi, and binIndex is out-of-bound
+        if(binIndex == m_NumberOfOrientationBins)
+          binIndex=m_NumberOfOrientationBins-1;
+
+         // Cumulate values
         globalOrientationHistogram[binIndex]+= magnitude * gWeight;
         }
       }

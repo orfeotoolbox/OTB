@@ -132,9 +132,9 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
     typedef otb::ForwardSensorModel<double, InputSpaceDimension, InputSpaceDimension> ForwardSensorModelType;
     typename ForwardSensorModelType::Pointer sensorModel = ForwardSensorModelType::New();
 
-    bool imageGeometrySet = sensorModel->SetImageGeometry(m_InputKeywordList);
+    sensorModel->SetImageGeometry(m_InputKeywordList);
 
-    if (imageGeometrySet)
+    if (sensorModel->IsValidSensorModel())
       {
       if (!m_DEMDirectory.empty())
         {
@@ -201,9 +201,9 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
     typedef otb::InverseSensorModel<double, InputSpaceDimension, OutputSpaceDimension> InverseSensorModelType;
     typename InverseSensorModelType::Pointer sensorModel = InverseSensorModelType::New();
     
-    bool imageGeometrySet = sensorModel->SetImageGeometry(m_OutputKeywordList);
+    sensorModel->SetImageGeometry(m_OutputKeywordList);
     
-    if (imageGeometrySet)
+    if (sensorModel->IsValidSensorModel())
       {
       if (!m_DEMDirectory.empty())
         {

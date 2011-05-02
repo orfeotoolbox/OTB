@@ -27,20 +27,7 @@
 #include "otbImageKeywordlist.h"
 #include "otbMetaDataKey.h"
 
-
-#include "base/ossimKeywordlist.h"
-#include "projection/ossimProjection.h"
-#include "ossim/ossimPluginProjectionFactory.h"
-
-#include "imaging/ossimImageHandlerRegistry.h"
-#include "imaging/ossimImageHandler.h"
-#include "init/ossimInit.h"
-#include "projection/ossimProjectionFactoryRegistry.h"
-
-
-#include "otbTileMapImageIO.h" //FIXME find a better way
 #include "otbGDALImageIO.h" //FIXME find a better way
-#include "ossimTileMapModel.h"
 
 #include <itksys/SystemTools.hxx>
 #include <fstream>
@@ -375,14 +362,18 @@ ImageFileReader<TOutputImage>
   output->SetDirection(direction);   // Set the image direction cosines
 
   // Update otb Keywordlist
-  ImageKeywordlist otb_kwl = GenerateKeywordList(lFileNameOssimKeywordlist);
+  ImageKeywordlist otb_kwl = ReadGeometry(lFileNameOssimKeywordlist);
 
   // Update itk MetaData Dictionary
 
   itk::MetaDataDictionary& dict = this->m_ImageIO->GetMetaDataDictionary();
 
-  itk::EncapsulateMetaData<ImageKeywordlist>(dict,
-                                             MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
+  // Don't add an empty ossim keyword list
+  if( otb_kwl.GetSize() != 0 )
+    {
+      itk::EncapsulateMetaData<ImageKeywordlist>(dict,
+                                                 MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
+    }
 
   //Copy MetaDataDictionary from instantiated reader to output image.
   output->SetMetaDataDictionary(this->m_ImageIO->GetMetaDataDictionary());
@@ -407,91 +398,6 @@ ImageFileReader<TOutputImage>
     }
 
   output->SetLargestPossibleRegion(region);
-
-}
-template <class TOutputImage>
-ImageKeywordlist
-ImageFileReader<TOutputImage>
-::GenerateKeywordList(const std::string& filename)
-{
-  // Trying to read ossim MetaData
-  bool             hasMetaData = false;
-  ossimKeywordlist geom_kwl; // = new ossimKeywordlist();
-
-  // Test the plugins factory
-  /** Before, the pluginfactory was tested if the ossim one returned false.
-      But in the case TSX, the images tif were considered as ossimQuickbirdTiffTileSource
-      thus a TSX tif image wasn't read with TSX Model. We don't use the ossimRegisteryFactory
-      because the default include factory contains ossimQuickbirdTiffTileSource. */
-  ossimProjection * projection = ossimplugins::ossimPluginProjectionFactory::instance()
-                                 ->createProjection(ossimFilename(filename.c_str()), 0);
-
-  if (!projection)
-    {
-    otbMsgDevMacro(<< "OSSIM Instantiate projection FAILED ! ");
-    }
-  else
-    {
-    otbMsgDevMacro(<< "OSSIM Instantiate projection SUCCESS ! ");
-    hasMetaData = projection->saveState(geom_kwl);
-
-    // Free memory
-    delete projection;
-    }
-
-  if (!hasMetaData)
-    {
-    // Add the radar factory
-    // ossimImageHandlerRegistry::instance()->addFactory(ossimImageHandlerSarFactory::instance());
-
-    ossimImageHandler* handler = ossimImageHandlerRegistry::instance()
-                                 ->open(ossimFilename(filename.c_str()));
-    if (!handler)
-      {
-      otbMsgDevMacro(<< "OSSIM Open Image FAILED ! ");
-      }
-
-    else
-      {
-      otbMsgDevMacro(<< "OSSIM Open Image SUCCESS ! ");
-      //     hasMetaData = handler->getImageGeometry(geom_kwl);
-      ossimProjection* projection = handler->getImageGeometry()->getProjection();
-
-      if (projection)
-        {
-        if (projection->getClassName() == "ossimTileMapModel")
-          {
-          //FIXME find a better way to do that
-          //we need to pass the depth information which in on the IO to the projection
-          //to be handle throught the kwl
-          typename TileMapImageIO::Pointer imageIO = dynamic_cast<TileMapImageIO*>(this->GetImageIO());
-          if (imageIO.IsNotNull())
-            {
-            dynamic_cast<ossimplugins::ossimTileMapModel*>(projection)->setDepth(imageIO->GetDepth());
-            }
-          }
-        hasMetaData = projection->saveState(geom_kwl);
-//             delete projection; //FIXME find out where this should occur
-        }
-      }
-    // Free memory
-    delete handler;
-    }
-
-  if (!hasMetaData)
-    {
-    otbMsgDevMacro(<< "OSSIM MetaData not present ! ");
-    }
-  else
-    {
-    otbMsgDevMacro(<< "OSSIM MetaData present ! ");
-    otbMsgDevMacro(<< geom_kwl);
-    }
-
-  // TODO: check if the empty case is handled properly
-  ImageKeywordlist otb_kwl;
-  otb_kwl.SetKeywordlist(geom_kwl);
-  return otb_kwl;
 
 }
 
