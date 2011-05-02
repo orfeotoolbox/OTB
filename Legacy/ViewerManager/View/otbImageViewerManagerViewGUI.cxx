@@ -440,7 +440,6 @@ ImageViewerManagerViewGUI
    RenderingFunctionType::Pointer pRenderingFunction = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFunction;
 
 
-
    curveWidget->ClearAllCurves();
 
    if (pRenderingFunction->GetPixelRepresentationSize() >=3)
