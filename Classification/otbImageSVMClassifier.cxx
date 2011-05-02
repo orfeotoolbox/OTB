@@ -62,7 +62,7 @@ int ImageSVMClassifier::Describe(ApplicationDescriptor* descriptor)
                         "svm", 1, true, ApplicationDescriptor::FileName);
   descriptor->AddOption("OutputLabeledImage", "Output labeled image",
                         "out", 1, true, ApplicationDescriptor::OutputImage);
-  descriptor->AddOption("AvailableMemory","Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default)","ram",1,false, otb::ApplicationDescriptor::Integer);
+  descriptor->AddOption("AvailableMemory","Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default)","ram", 1, false, otb::ApplicationDescriptor::Integer);
   return EXIT_SUCCESS;
 }
 
