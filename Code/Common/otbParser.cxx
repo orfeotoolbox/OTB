@@ -104,9 +104,28 @@ void Parser::ClearVar()
   m_InternalParser.ClearVar();
 }
 
+bool Parser::CheckExpr()
+{
+  Parser::ValueType result = 0.0;
+
+  try
+  {
+    result = m_InternalParser.Eval();
+  }
+ catch(ParserType::ExceptionType &e)
+  {
+   ExceptionHandler(e);
+   return false;
+  }
+
+  return true;
+}
+
+
 const std::string& Parser::GetExpr() const
 {
   return m_InternalParser.GetExpr();
+
 }
 
 void Parser::ExceptionHandler(ParserType::ExceptionType &e)
@@ -119,6 +138,14 @@ void Parser::ExceptionHandler(ParserType::ExceptionType &e)
                << std::endl);
 //        << "Errc:        "   << e.GetCode()  << std::endl);
 }
+
+
+// Get the map with the variables
+const std::map<std::string,Parser::ValueType*>& Parser::GetVar() const
+{
+  return m_InternalParser.GetVar();
+}
+
 
 
 }//end namespace otb

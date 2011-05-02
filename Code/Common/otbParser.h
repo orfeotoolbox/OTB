@@ -75,6 +75,12 @@ public:
   /** Return the expression to be parsed */
   const std::string& GetExpr() const;
 
+  /** Return the list of variables */
+  const std::map<std::string,ValueType*>& GetVar() const;
+
+  /**  Check Expression **/
+  bool CheckExpr();
+
   /** Convert parser specific exception into itk exception */
   virtual void ExceptionHandler(ExceptionType &e);
 
