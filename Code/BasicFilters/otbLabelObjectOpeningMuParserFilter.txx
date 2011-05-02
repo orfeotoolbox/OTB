@@ -74,9 +74,52 @@ std::string LabelObjectOpeningMuParserFilter<TImage, TFunction>
  }
 
 
+template< class TImage, class TFunction>
+const std::map<std::string,double*>& LabelObjectOpeningMuParserFilter<TImage, TFunction>::GetVar() const
+{
+  return this->m_Functor.GetVar();
+}
+
+template< class TImage, class TFunction>
+void LabelObjectOpeningMuParserFilter<TImage, TFunction>::DisplayVar() const
+{
+  const std::map<std::string,double*>& variables = this->m_Functor.GetVar();
+
+  std::cout<<"nb var "<<variables.size()<<std::endl;
+  // Get the number of variables
+  std::map<std::string,double*>::const_iterator item = variables.begin();
+
+  // Query the variables
+  for (; item!=variables.end(); ++item)
+  {
+    std::cout << "Name: " << item->first << " Address: [0x" << item->second << "]\n";
+  }
+
+}
+
+template< class TImage, class TFunction>
+bool LabelObjectOpeningMuParserFilter<TImage, TFunction>::CheckExpression()
+{
+  try
+  {
+    this->m_Functor.CheckExpression();
+  }
+  catch(itk::ExceptionObject& err)
+  {
+    itkWarningMacro(<< err);
+    return false;
+  }
+  return true;
+}
+
+template< class TImage, class TFunction>
+void LabelObjectOpeningMuParserFilter<TImage, TFunction>::SetAttributes(std::vector<std::string> shapeAttributes,std::vector<std::string> statAttributes,int nbOfBands)
+{
+  this->m_Functor.SetAttributes(shapeAttributes,statAttributes,nbOfBands);
+}
+
 template  < class TImage, class TFunction>
-void LabelObjectOpeningMuParserFilter<TImage, TFunction>
- ::GenerateData()
+void LabelObjectOpeningMuParserFilter<TImage, TFunction>::GenerateData()
     {
 
     ImageConstPointer  inputPtr = this->GetInput();
