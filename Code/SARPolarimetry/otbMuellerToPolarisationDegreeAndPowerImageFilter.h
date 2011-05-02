@@ -35,25 +35,25 @@ namespace Functor {
  *   from the Mueller image
  *
  * The order of the channels of the input image corresponds to :
- * \f$  \begin{pmatrix}
+ * \f$ \begin{pmatrix}
  * {channel #0 }&{channel #1 }&{channel #2 }&{channel #3 } \\
  * {channel #4 }&{channel #5 }&{channel #6 }&{channel #7 } \\
  * {channel #8 }&{channel #9 }&{channel #10}&{channel #11} \\
  * {channel #12}&{channel #13}&{channel #14}&{channel #15} \\
- * \end{pmatrix}
+ * \end{pmatrix} \f$ 
  *
- * The class process step by step while \f$ \tau <= 45 \f$ and for each \f$ \tau \f$, while \f$ \psi <= 90 \f :
+ * The class process step by step while \f$ \tau <= 45 \f$ and for each \f$ \tau \f$, while \f$ \psi <= 90 \f$ :
  * 1. Define the incident Stokes vector:
- * - \f$ Si_{0} = 1 \f$ \\
+ * - \f$ Si_{0} = 1 \f$
  * - \f$ Si_{1} = \cos{\psi * \frac{\pi}{90}} * \cos{\tau *  \frac{\pi}{90}} \f$
  * - \f$ Si_{2} = \sin{\psi * \frac{\pi}{90}} * \cos{\tau *  \frac{\pi}{90}} \f$
- * - \f$ Si_{3} = \sin{\tau * \frac{\pi}{90}}\f$
+ * - \f$ Si_{3} = \sin{\tau * \frac{\pi}{90}} \f$
  * 2. Evaluate the received Stokes vector :
  * - \f$ Sr = Si * MuellerMatrix \f$
  * 3. Evaluate power \f$ P \f$  and polarisation degree \f$ DegP \f$:
  * - \f$ P = \max{0, Sr_0} \f$
  * - \f$ DegP =  \sqrt{Sr_{1}^{2} + Sr_{2}^{2} + Sr_{3}^{2}} / Sr_{0} \f$
- * 4. Keep le smaller and the bigger power (\f$ P_{min}, P_{max} \f$) and \f$\f$ ) and polarisation degree (\f$ DegP_{min}, DegP_{max} \f$) ).
+ * 4. Keep the smallest and the biggest power (\f$ P_{min}, P_{max} \f$) and polarisation degree (\f$ DegP_{min}, DegP_{max} \f$) ).
  *
  * Output value are:
  * - channel #0 : \f$ P_{min} \f$
