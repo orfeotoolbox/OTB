@@ -300,8 +300,8 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
     varianceMeasurentVector.Fill(1.);
     }
 
-  std::cout << "MeanVector: " << meanMeasurentVector  << std::endl;
-  std::cout << "Variance Vector: " << varianceMeasurentVector  << std::endl;
+  std::cout << "Mean vector loaded and used: " << meanMeasurentVector  << std::endl;
+  std::cout << "Variance vector loaded and used: " << varianceMeasurentVector  << std::endl;
 
   // Shift scale the samples
   ShiftScaleFilterType::Pointer trainingShiftScaleFilter = ShiftScaleFilterType::New();
@@ -431,12 +431,15 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
 
   confMatCalc->Update();
 
-  std::cout<< "confusion matrix: \n" << confMatCalc->GetConfusionMatrix() << std::endl;
+  std::cout << "*** SVM training performances ***\n" <<"Confusion matrix:\n" << confMatCalc->GetConfusionMatrix() << std::endl;
 
-  std::cout << "Precision of the different classes: " << confMatCalc->GetPrecisions() << std::endl;
-  std::cout << "Recall of the different classes: " << confMatCalc->GetRecalls() << std::endl;
-  std::cout << "F-score of the different classes: " << confMatCalc->GetFScores() << std::endl;
-  std::cout << "Kappa index: " << confMatCalc->GetKappaIndex() << std::endl;
+  for (unsigned int itClasses = 0; itClasses < svmestimator->GetModel()->GetNumberOfClasses() ; itClasses++)
+    {
+    std::cout << "Precision of class [" << itClasses << "] vs all: " << confMatCalc->GetPrecisions()[itClasses] << std::endl;
+    std::cout << "Recall of class [" << itClasses << "] vs all: "  << confMatCalc->GetRecalls()[itClasses] << std::endl;
+    std::cout << "F-score of class [" << itClasses << "] vs all: "  << confMatCalc->GetFScores()[itClasses] << "\n" << std::endl;
+    }
+  std::cout << "Global performance, Kappa index: " << confMatCalc->GetKappaIndex() << std::endl;
 
   // TODO: implement hyperplan distance classifier and performance validation (cf. object detection) ?
 
