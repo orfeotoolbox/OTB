@@ -215,8 +215,8 @@ int ValidateImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult
     varianceMeasurentVector.Fill(1.);
     }
 
-  std::cout << "MeanVector: " << meanMeasurentVector  << std::endl;
-  std::cout << "Variance Vector: " << varianceMeasurentVector  << std::endl;
+  std::cout << "Mean vector loaded and used: " << meanMeasurentVector  << std::endl;
+  std::cout << "Variance vector loaded and used: " << varianceMeasurentVector  << std::endl;
 
   // Shift scale the samples
   ShiftScaleFilterType::Pointer validationShiftScaleFilter = ShiftScaleFilterType::New();
@@ -268,12 +268,15 @@ int ValidateImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult
 
   confMatCalc->Update();
 
-  std::cout<< "confusion matrix: \n" << confMatCalc->GetConfusionMatrix() << std::endl;
+  std::cout << "*** SVM training performances ***\n" <<"Confusion matrix:\n" << confMatCalc->GetConfusionMatrix() << std::endl;
 
-  std::cout << "Precision of the different class: " << confMatCalc->GetPrecisions() << std::endl;
-  std::cout << "Recall of the different class: " << confMatCalc->GetRecalls() << std::endl;
-  std::cout << "F-score of the different class: " << confMatCalc->GetFScores() << std::endl;
-  std::cout << "Kappa index: " << confMatCalc->GetKappaIndex() << std::endl;
+    for (unsigned int itClasses = 0; itClasses < modelSVM->GetNumberOfClasses() ; itClasses++)
+      {
+      std::cout << "Precision of class [" << itClasses << "] vs all: " << confMatCalc->GetPrecisions()[itClasses] << std::endl;
+      std::cout << "Recall of class [" << itClasses << "] vs all: "  << confMatCalc->GetRecalls()[itClasses] << std::endl;
+      std::cout << "F-score of class [" << itClasses << "] vs all: "  << confMatCalc->GetFScores()[itClasses] << "\n" << std::endl;
+      }
+    std::cout << "Global performance, Kappa index: " << confMatCalc->GetKappaIndex() << std::endl;
 
   //--------------------------
   // Save output in a ascii file (if needed)
