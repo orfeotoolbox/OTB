@@ -41,7 +41,7 @@ int main(int argc, char* argv[])
 
   parser->SetProgramDescription("Write a vector file containing a polygon corresponding to the image envelope.");
   parser->AddInputImage();
-  parser->AddOption("--OutputVectorData","Vector Data file containg the envelope","-out",1,true);
+  parser->AddOption("--OutputVectorData","Vector Data file containg the envelope","-out", 1, true);
 
   typedef otb::CommandLineArgumentParseResult ParserResultType;
   ParserResultType::Pointer  parseResult = ParserResultType::New();
