@@ -95,17 +95,20 @@ inline bool operator()(const TInput &p)
     }
   m_Intensity  = m_Intensity/(static_cast<double> (m_NbOfBands));
 
-  try
-  {
+
     value = m_Parser->Eval();
-  }
-  catch(itk::ExceptionObject& err)
-  {
-    itkExceptionMacro(<< err);
-  }
+
   return static_cast<bool> (value);
 
 }
+
+
+const std::map<std::string,Parser::ValueType*>& GetVar() const
+ {
+   return this->m_Parser->GetVar();
+ }
+
+
 
 void SetExpression(const std::string expression)
 {
@@ -154,26 +157,7 @@ void SetNumberOfBands(unsigned int NbOfBands)
 /** Check the expression */
 bool CheckExpression()
 {
-
-  for(unsigned int i=0; i<m_NbOfBands; i++)
-    {
-    m_AImage[i]=0;
-    }
-
-  m_Intensity=0.0;
-
-  try
-  {
-    m_Parser->Eval();
-
-  }
-  catch(itk::ExceptionObject& err)
-  {
-    itkExceptionMacro(<< err);
-    return false;
-  }
-
-  return true;
+  return m_Parser->CheckExpr();
 }
 
 protected:
