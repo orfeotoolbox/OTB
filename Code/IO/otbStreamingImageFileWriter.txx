@@ -424,7 +424,6 @@ StreamingImageFileWriter<TInputImage>
     e.SetLocation(ITK_LOCATION);
     throw e;
     }
-  std::cout << "========End of Prepare ImageIO" << std::endl;
   /** End of Prepare ImageIO  : create ImageFactory */
 
   /**
