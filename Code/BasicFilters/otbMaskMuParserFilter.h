@@ -69,73 +69,71 @@ namespace otb
  * \ingroup Threaded
  */
 
-
-template< class TInputImage, class TOutputImage, class TFunction=Functor::MaskMuParserFunctor<
-           typename TInputImage::PixelType > >
-class ITK_EXPORT MaskMuParserFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
+template<class TInputImage, class TOutputImage, class TFunction = Functor::MaskMuParserFunctor<
+    typename TInputImage::PixelType> >
+class ITK_EXPORT MaskMuParserFilter: public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef MaskMuParserFilter                Self;
-  typedef itk::ImageToImageFilter< TInputImage, TOutputImage>             Superclass;
-  typedef itk::SmartPointer< Self >                     Pointer;
-  typedef itk::SmartPointer< const Self >               ConstPointer;
+  typedef MaskMuParserFilter Self;
+  typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self> Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
-  itkNewMacro(Self);
+  itkNewMacro(Self)
+  ;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MaskMuParserFilter, itk::ImageToImageFilter);
+  itkTypeMacro(MaskMuParserFilter, itk::ImageToImageFilter)
+  ;
 
   /** Some convenient typedefs. */
-  typedef TInputImage                             InputImageType;
-  typedef typename    InputImageType::RegionType  InputImageRegionType;
-  typedef typename    InputImageType::PixelType           PixelType;
-  typedef typename    InputImageType::IndexType   IndexType;
-  typedef typename    InputImageType::Pointer     InputImagePointer;
-  typedef typename    InputImageType::ConstPointer     InputImageConstPointer;
-  typedef TOutputImage                            OutputImageType;
-  typedef typename    OutputImageType::RegionType OutputImageRegionType;
+  typedef TInputImage InputImageType;
+  typedef typename InputImageType::RegionType InputImageRegionType;
+  typedef typename InputImageType::PixelType PixelType;
+  typedef typename InputImageType::IndexType IndexType;
+  typedef typename InputImageType::Pointer InputImagePointer;
+  typedef typename InputImageType::ConstPointer InputImageConstPointer;
+  typedef TOutputImage OutputImageType;
+  typedef typename OutputImageType::RegionType OutputImageRegionType;
 
-  typedef typename    OutputImageType::Pointer    OutputImagePointer;
-  typedef TFunction                                                              FunctorType;
-  typedef typename    FunctorType::Pointer        FunctorPointer;
+  typedef typename OutputImageType::Pointer OutputImagePointer;
+  typedef TFunction FunctorType;
+  typedef typename FunctorType::Pointer FunctorPointer;
 
-  typedef MaskMuParserFilter<InputImageType, OutputImageType, FunctorType>  MaskMuParserFilterType;
-
+  typedef MaskMuParserFilter<InputImageType, OutputImageType, FunctorType> MaskMuParserFilterType;
 
   /** Set the expression to be parsed */
   void SetExpression(const std::string expression);
 
   /**Check  expression  */
-  bool  CheckExpression();
+  bool CheckExpression();
 
   /** Return the expression to be parsed */
   std::string GetExpression() const;
 
   const std::map<std::string, double*>&GetVar();
 
-
-protected :
+protected:
   MaskMuParserFilter();
   virtual ~MaskMuParserFilter();
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-   void BeforeThreadedGenerateData();
-   void ThreadedGenerateData( const OutputImageRegionType &outputRegionForThread, int threadId);
-   void AfterThreadedGenerateData();
+  void BeforeThreadedGenerateData();
+  void ThreadedGenerateData(const OutputImageRegionType &outputRegionForThread, int threadId);
+  void AfterThreadedGenerateData();
 
-
-private :
+private:
   MaskMuParserFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  std::vector<FunctorPointer>           m_VFunctor;
-  std::string                           m_Expression;
-  long                                  m_UnderflowCount;
-  long                                  m_OverflowCount;
-  itk::Array<long>                      m_ThreadUnderflow;
-  itk::Array<long>                      m_ThreadOverflow;
+  std::vector<FunctorPointer> m_VFunctor;
+  std::string m_Expression;
+  long m_UnderflowCount;
+  long m_OverflowCount;
+  itk::Array<long> m_ThreadUnderflow;
+  itk::Array<long> m_ThreadOverflow;
 };
 
 }//end namespace otb
