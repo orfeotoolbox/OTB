@@ -32,6 +32,11 @@
 
 #include "otbConfigure.h"
 
+#include "otbNumberOfLinesStrippedStreamingManager.h"
+#include "otbRAMDrivenStrippedStreamingManager.h"
+#include "otbTileDimensionTiledStreamingManager.h"
+#include "otbRAMDrivenTiledStreamingManager.h"
+
 namespace otb
 {
 
@@ -40,21 +45,25 @@ namespace otb
  */
 template <class TInputImage>
 StreamingImageFileWriter<TInputImage>
-::StreamingImageFileWriter():m_WriteGeomFile(false)
+::StreamingImageFileWriter()
+  : m_WriteGeomFile(false)
 {
-  m_BufferMemorySize = 0;
-  m_BufferNumberOfLinesDivisions = 0;
+//  m_BufferMemorySize = 0;
+//  m_BufferNumberOfLinesDivisions = 0;
   // default to 10 divisions
-  m_NumberOfStreamDivisions = 0;
+//  m_NumberOfStreamDivisions = 0;
   // default to AUTOMATIC_NUMBER_OF_DIVISIONS
-  m_CalculationDivision = SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS;
+//  m_CalculationDivision = SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS;
 
   // create default region splitter
-  m_RegionSplitter = itk::ImageRegionSplitter<InputImageDimension>::New();
+//  m_RegionSplitter = itk::ImageRegionSplitter<InputImageDimension>::New();
 
   m_UserSpecifiedIORegion = true;
   m_FactorySpecifiedImageIO = false;
 
+  // By default, we use tiled streaming, with automatic tile size
+  // We don't set any parameter, so the memory size is retrieved from the OTB configuration options
+  m_StreamingManager = otb::RAMDrivenTiledStreamingManager<TInputImage>::New();
 }
 
 /**
@@ -66,6 +75,54 @@ StreamingImageFileWriter<TInputImage>
 {
 }
 
+template <class TInputImage>
+void
+StreamingImageFileWriter<TInputImage>
+::SetNumberOfLinesStrippedStreaming(unsigned int nbLinesPerStrip)
+{
+  typedef NumberOfLinesStrippedStreamingManager<TInputImage> NumberOfLinesStrippedStreamingManagerType;
+  typename NumberOfLinesStrippedStreamingManagerType::Pointer streamingManager = NumberOfLinesStrippedStreamingManagerType::New();
+  streamingManager->SetNumberOfLinesPerStrip(nbLinesPerStrip);
+
+  m_StreamingManager = streamingManager;
+}
+
+template <class TInputImage>
+void
+StreamingImageFileWriter<TInputImage>
+::SetAutomaticStrippedStreaming(unsigned int availableRAM)
+{
+  typedef RAMDrivenStrippedStreamingManager<TInputImage> RAMDrivenStrippedStreamingManagerType;
+  typename RAMDrivenStrippedStreamingManagerType::Pointer streamingManager = RAMDrivenStrippedStreamingManagerType::New();
+  streamingManager->SetAvailableRAMInMB(availableRAM);
+
+  m_StreamingManager = streamingManager;
+}
+
+template <class TInputImage>
+void
+StreamingImageFileWriter<TInputImage>
+::SetTileDimensionTiledStreaming(unsigned int tileDimension)
+{
+  typedef TileDimensionTiledStreamingManager<TInputImage> TileDimensionTiledStreamingManagerType;
+  typename TileDimensionTiledStreamingManagerType::Pointer streamingManager = TileDimensionTiledStreamingManagerType::New();
+  streamingManager->SetTileDimension(tileDimension);
+
+  m_StreamingManager = streamingManager;
+}
+
+template <class TInputImage>
+void
+StreamingImageFileWriter<TInputImage>
+::SetAutomaticTiledStreaming(unsigned int availableRAM)
+{
+  typedef RAMDrivenTiledStreamingManager<TInputImage> RAMDrivenTiledStreamingManagerType;
+  typename RAMDrivenTiledStreamingManagerType::Pointer streamingManager = RAMDrivenTiledStreamingManagerType::New();
+  streamingManager->SetAvailableRAMInMB(availableRAM);
+
+  m_StreamingManager = streamingManager;
+}
+
 /**
  *
  */
@@ -74,9 +131,11 @@ void
 StreamingImageFileWriter<TInputImage>
 ::SetBufferMemorySize(unsigned long memory_size_divisions)
 {
-  m_BufferMemorySize = memory_size_divisions;
-  m_CalculationDivision = SET_BUFFER_MEMORY_SIZE;
-  this->Modified();
+  itkWarningMacro("SetNumberOfStreamDivisions is DEPRECATED."
+                  "Use one of SetNumberOfLinesStrippedStreaming, "
+                  "SetAutomaticStrippedStreaming, SetTileDimensionTiledStreaming, "
+                  "or SetAutomaticTiledStreaming." );
+  this->SetAutomaticStrippedStreaming(memory_size_divisions / 1024 / 1024);
 }
 
 /**
@@ -87,9 +146,11 @@ void
 StreamingImageFileWriter<TInputImage>
 ::SetBufferNumberOfLinesDivisions(unsigned long nb_lines_divisions)
 {
-  m_BufferNumberOfLinesDivisions = nb_lines_divisions;
-  m_CalculationDivision = SET_BUFFER_NUMBER_OF_LINES;
-  this->Modified();
+  itkWarningMacro("SetNumberOfStreamDivisions is DEPRECATED."
+                  "Use one of SetNumberOfLinesStrippedStreaming, "
+                  "SetAutomaticStrippedStreaming, SetTileDimensionTiledStreaming, "
+                  "or SetAutomaticTiledStreaming." );
+  this->SetNumberOfLinesStrippedStreaming(nb_lines_divisions);
 }
 
 /**
@@ -100,9 +161,11 @@ void
 StreamingImageFileWriter<TInputImage>
 ::SetNumberOfStreamDivisions(unsigned long nb_divisions)
 {
-  m_NumberOfStreamDivisions = nb_divisions;
-  m_CalculationDivision = SET_NUMBER_OF_STREAM_DIVISIONS;
-  this->Modified();
+  itkWarningMacro("SetNumberOfStreamDivisions is DEPRECATED."
+                  "Use one of SetNumberOfLinesStrippedStreaming, "
+                  "SetAutomaticStrippedStreaming, SetTileDimensionTiledStreaming, "
+                  "or SetAutomaticTiledStreaming." );
+  this->SetNumberOfLinesStrippedStreaming(nb_divisions);
 }
 
 /**
@@ -113,8 +176,11 @@ void
 StreamingImageFileWriter<TInputImage>
 ::SetAutomaticNumberOfStreamDivisions(void)
 {
-  m_CalculationDivision = SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS;
-  this->Modified();
+  itkWarningMacro("SetNumberOfStreamDivisions is DEPRECATED. "
+                  "Use one of SetNumberOfLinesStrippedStreaming, "
+                  "SetAutomaticStrippedStreaming, SetTileDimensionTiledStreaming, "
+                  "or SetAutomaticTiledStreaming." );
+  this->SetAutomaticStrippedStreaming(0);
 }
 
 /**
@@ -125,9 +191,11 @@ void
 StreamingImageFileWriter<TInputImage>
 ::SetTilingStreamDivisions(void)
 {
-  m_CalculationDivision = SET_TILING_WITH_SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS;
-  m_RegionSplitter = itk::ImageRegionMultidimensionalSplitter<InputImageDimension>::New();
-  this->Modified();
+  itkWarningMacro("SetNumberOfStreamDivisions is DEPRECATED. "
+                  "Use one of SetNumberOfLinesStrippedStreaming, "
+                  "SetAutomaticStrippedStreaming, SetTileDimensionTiledStreaming, "
+                  "or SetAutomaticTiledStreaming." );
+  this->SetAutomaticTiledStreaming(0);
 }
 
 template <class TInputImage>
@@ -135,10 +203,11 @@ void
 StreamingImageFileWriter<TInputImage>
 ::SetTilingStreamDivisions(unsigned long nb_divisions)
 {
-  m_CalculationDivision = SET_TILING_WITH_SET_NUMBER_OF_STREAM_DIVISIONS;
-  m_NumberOfStreamDivisions = nb_divisions;
-  m_RegionSplitter = itk::ImageRegionMultidimensionalSplitter<InputImageDimension>::New();
-  this->Modified();
+  itkWarningMacro("SetNumberOfStreamDivisions is DEPRECATED. "
+                  "Use one of SetNumberOfLinesStrippedStreaming, "
+                  "SetAutomaticStrippedStreaming, SetTileDimensionTiledStreaming, "
+                  "or SetAutomaticTiledStreaming." );
+  this->SetTileDimensionTiledStreaming(nb_divisions);
 }
 
 /**
@@ -149,7 +218,7 @@ unsigned long
 StreamingImageFileWriter<TInputImage>
 ::GetNumberOfStreamDivisions(void)
 {
-  return (CalculateNumberOfStreamDivisions());
+  return m_StreamingManager->GetNumberOfSplits();
 }
 
 /**
@@ -160,7 +229,10 @@ std::string
 StreamingImageFileWriter<TInputImage>
 ::GetMethodUseToCalculateNumberOfStreamDivisions(void)
 {
-  return (StreamingTraitsType::GetMethodUseToCalculateNumberOfStreamDivisions(m_CalculationDivision));
+  itkWarningMacro("GetMethodUseToCalculateNumberOfStreamDivisions is DEPRECATED");
+
+  //return (StreamingTraitsType::GetMethodUseToCalculateNumberOfStreamDivisions(m_CalculationDivision));
+  return "TODO-NOT-IMPLEMENTED";
 }
 
 /**
@@ -215,6 +287,7 @@ StreamingImageFileWriter<TInputImage>
     os << indent << "FactorySpecifiedmageIO: Off\n";
     }
 
+  /*
   os << indent << "Number of stream divisions: " << m_NumberOfStreamDivisions
      << std::endl;
   if (m_RegionSplitter)
@@ -225,6 +298,7 @@ StreamingImageFileWriter<TInputImage>
     {
     os << indent << "Region splitter: (none)" << std::endl;
     }
+  */
 }
 
 //---------------------------------------------------------
@@ -242,9 +316,8 @@ StreamingImageFileWriter<TInputImage>
     }
 }
 
-/**
- *
- */
+/*
+
 template<class TInputImage>
 unsigned long
 StreamingImageFileWriter<TInputImage>
@@ -260,6 +333,8 @@ StreamingImageFileWriter<TInputImage>
                                             m_BufferMemorySize,
                                             m_BufferNumberOfLinesDivisions);
 }
+*/
+
 
 template<class TInputImage>
 void
@@ -406,21 +481,21 @@ StreamingImageFileWriter<TInputImage>
   /** Control if the ImageIO is CanStreamWrite */
   if (m_ImageIO->CanStreamWrite() == false)
     {
-    otbMsgDebugMacro(
-      << "WARNING : The ImageFactory selected for the image file <" << m_FileName.c_str() <<
-      "> is not StreamWrite. So, the streaming method is not use.");
+    otbWarningMacro(
+      << "The ImageFactory selected for the image file <" << m_FileName.c_str() <<
+      "> does not support streaming.");
     numDivisions = 1;
     }
   else if (inputPtr->GetBufferedRegion() == inputPtr->GetLargestPossibleRegion())
     {
-    otbMsgDebugMacro(<< "WARNING : Buffered region is the largest possible region, there is no need for streaming.");
+    otbMsgDevMacro(<< "Buffered region is the largest possible region, there is no need for streaming.");
     numDivisions = 1;
-
     }
   else
     {
-    numDivisions = static_cast<unsigned int>(CalculateNumberOfStreamDivisions());
     /*
+    numDivisions = static_cast<unsigned int>(CalculateNumberOfStreamDivisions());
+
                             otbDebugMacro(<< "NumberOfStreamDivisions : " << numDivisions);
                             numDivisionsFromSplitter = m_RegionSplitter->GetNumberOfSplits(outputRegion, numDivisions);
                             otbDebugMacro(<< "NumberOfStreamSplitterDivisions : " << numDivisionsFromSplitter);
@@ -439,7 +514,7 @@ StreamingImageFileWriter<TInputImage>
    */
   InputImageRegionType streamRegion;
 
-  // On s'appuie sur 'outputPtr' pour d�terminer les initialiser le 'm_ImageIO'
+  // On s'appuie sur 'outputPtr' pour determiner les initialiser le 'm_ImageIO'
   // Setup the ImageIO
   //
   m_ImageIO->SetNumberOfDimensions(TInputImage::ImageDimension);
@@ -477,7 +552,7 @@ StreamingImageFileWriter<TInputImage>
    * Loop over the number of pieces, execute the upstream pipeline on each
    * piece, and copy the results into the output image.
    */
-  otbMsgDebugMacro(<< "Number Of Stream Divisions : " << numDivisions);
+//  otbMsgDebugMacro(<< "Number Of Stream Divisions : " << numDivisions);
 
   // Notify end event observers
   this->InvokeEvent(itk::StartEvent());
@@ -489,6 +564,8 @@ StreamingImageFileWriter<TInputImage>
        piece < numDivisions && !this->GetAbortGenerateData();
        piece++)
     {
+    streamRegion = m_StreamingManager->GetSplit(m_CurrentDivision);
+/*
     streamRegion = m_RegionSplitter->GetSplit(piece, numDivisions,
                                               outputRegion);
 
@@ -497,7 +574,7 @@ StreamingImageFileWriter<TInputImage>
                      << "," << streamRegion.GetIndex()[1]
                      << ") Size(" << streamRegion.GetSize()[0]
                      << "," << streamRegion.GetSize()[1] << ")");
-
+*/
     inputPtr->SetRequestedRegion(streamRegion);
     inputPtr->PropagateRequestedRegion();
     inputPtr->UpdateOutputData();

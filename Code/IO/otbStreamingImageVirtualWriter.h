@@ -80,22 +80,41 @@ public:
   itkStaticConstMacro(InputImageDimension, unsigned int,
                       InputImageType::ImageDimension);
 
+  /**  Return the StreamingManager object responsible for dividing
+   *   the region to write */
   StreamingManagerType* GetStreamingManager(void)
     {
     return m_StreamingManager;
     }
 
+  /**  Set a user-specific implementation of StreamingManager
+   *   used to divide the largest possible region in several divisions */
   void SetStreamingManager(StreamingManagerType* streamingManager)
     {
     m_StreamingManager = streamingManager;
     }
 
+  /**  Set the streaming mode to 'stripped' and configure the number of strips
+   *   which will be used to stream the image */
   void SetNumberOfLinesStrippedStreaming(unsigned int nbLinesPerStrip);
 
+  /**  Set the streaming mode to 'stripped' and configure the number of MB
+   *   available. The actual number of divisions is computed automatically
+   *   by estimating the memory consumption of the pipeline.
+   *   Setting the availableRAM parameter to 0 means that the available RAM
+   *   is set from the CMake configuration option */
   void SetAutomaticStrippedStreaming(unsigned int availableRAM);
 
+  /**  Set the streaming mode to 'tiled' and configure the dimension of the tiles
+   *   in pixels for each dimension (square tiles will be generated) */
   void SetTileDimensionTiledStreaming(unsigned int tileDimension);
 
+  /**  Set the streaming mode to 'tiled' and configure the number of MB
+   *   available. The actual number of divisions is computed automatically
+   *   by estimating the memory consumption of the pipeline.
+   *   Tiles will be square.
+   *   Setting the availableRAM parameter to 0 means that the available RAM
+   *   is set from the CMake configuration option */
   void SetAutomaticTiledStreaming(unsigned int availableRAM);
 
 protected:
