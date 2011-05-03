@@ -15,15 +15,15 @@
      PURPOSE.  See the above copyright notices for more information.
 
    =========================================================================*/
-#ifndef __otbNumberOfLinesStrippedStreamingManager_h
-#define __otbNumberOfLinesStrippedStreamingManager_h
+#ifndef __otbNumberOfDivisionsStrippedStreamingManager_h
+#define __otbNumberOfDivisionsStrippedStreamingManager_h
 
 #include "otbStreamingManager.h"
 
 namespace otb
 {
 
-/** \class NumberOfLinesStrippedStreamingManager
+/** \class NumberOfDivisionsStrippedStreamingManager
  *  \brief This class computes the divisions needed to stream an image by strips,
  *  driven by a user-defined desired number of lines per strips.
  *
@@ -34,11 +34,11 @@ namespace otb
  * \sa StreamingImageVirtualFileWriter
  */
 template<class TImage>
-class ITK_EXPORT NumberOfLinesStrippedStreamingManager : public StreamingManager<TImage>
+class ITK_EXPORT NumberOfDivisionsStrippedStreamingManager : public StreamingManager<TImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef NumberOfLinesStrippedStreamingManager Self;
+  typedef NumberOfDivisionsStrippedStreamingManager Self;
   typedef StreamingManager<TImage>              Superclass;
   typedef itk::SmartPointer<Self>               Pointer;
   typedef itk::SmartPointer<const Self>         ConstPointer;
@@ -50,40 +50,40 @@ public:
   itkNewMacro(Self);
 
   /** Type macro */
-  itkTypeMacro(NumberOfLinesStrippedStreamingManager, itk::LightObject);
+  itkTypeMacro(NumberOfDivisionsStrippedStreamingManager, itk::LightObject);
 
   /** Dimension of input image. */
   itkStaticConstMacro(ImageDimension, unsigned int, ImageType::ImageDimension);
 
   /** The number of lines per strip desired */
-  itkSetMacro(NumberOfLinesPerStrip, unsigned int);
+  itkSetMacro(NumberOfDivisions, unsigned int);
 
   /** The number of lines per strip desired */
-  itkGetMacro(NumberOfLinesPerStrip, unsigned int);
+  itkGetMacro(NumberOfDivisions, unsigned int);
 
   /** Actually computes the stream divisions, according to the specified streaming mode,
    * eventually using the input parameter to estimate memory consumption */
   virtual void PrepareStreaming(itk::DataObject * input, const RegionType &region);
 
 protected:
-  NumberOfLinesStrippedStreamingManager();
-  virtual ~NumberOfLinesStrippedStreamingManager();
+  NumberOfDivisionsStrippedStreamingManager();
+  virtual ~NumberOfDivisionsStrippedStreamingManager();
 
   /** The splitter type used to generate the different strips */
   typedef itk::ImageRegionSplitter<itkGetStaticConstMacro(ImageDimension)> SplitterType;
 
   /** The number of lines per strip desired by the user.
    *  This may be different than the one computed by the Splitter */
-  unsigned int m_NumberOfLinesPerStrip;
+  unsigned int m_NumberOfDivisions;
 private:
-  NumberOfLinesStrippedStreamingManager(const NumberOfLinesStrippedStreamingManager &);
-  void operator =(const NumberOfLinesStrippedStreamingManager&);
+  NumberOfDivisionsStrippedStreamingManager(const NumberOfDivisionsStrippedStreamingManager &);
+  void operator =(const NumberOfDivisionsStrippedStreamingManager&);
 };
 
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbNumberOfLinesStrippedStreamingManager.txx"
+#include "otbNumberOfDivisionsStrippedStreamingManager.txx"
 #endif
 
 #endif

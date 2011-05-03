@@ -21,8 +21,7 @@
 #include "otbMacro.h"
 #include "itkImageIOBase.h"
 #include "itkImageToImageFilter.h"
-#include "itkImageRegionSplitter.h"
-#include "otbStreamingTraits.h"
+#include "otbStreamingManager.h"
 
 namespace otb
 {
@@ -34,14 +33,15 @@ namespace otb
  * StreamingImageFileWriter interfaces with an ImageIO class to write out the
  * data whith streaming process.
  *
- * StreamingImageFileWriter will divide the output into severalpieces
- * (controlled by SetNumberOfStreamDivisions), and call the upstream
- * pipeline for each piece, tiling the individual outputs into one large
+ * StreamingImageFileWriter will divide the output into several pieces
+ * (controlled by SetNumberOfDivisionsStrippedStreaming, SetNumberOfLinesStrippedStreaming,
+ * SetAutomaticStrippedStreaming, SetTileDimensionTiledStreaming or SetAutomaticTiledStreaming),
+ * and call the upstream pipeline for each piece, tiling the individual outputs into one large
  * output. This reduces the memory footprint for the application since
  * each filter does not have to process the entire dataset at once.
- * StreamingImageFileWriter will write directly the streaming buffer in the image file.
- * The output image is not completely allocated; just streaming size,
- * calculate whith the NumberOfStreamDivisions, is allocate.
+ *
+ * StreamingImageFileWriter will write directly the streaming buffer in the image file, so
+ * that the output image never needs to be completely allocated
  *
  * \sa ImageFileWriter
  * \sa ImageSeriesReader
@@ -74,50 +74,83 @@ public:
   typedef typename OutputImageType::PixelType    OutputImagePixelType;
   typedef typename Superclass::DataObjectPointer DataObjectPointer;
 
-  /** Streaming traits helper typedef */
-  typedef StreamingTraits<InputImageType> StreamingTraitsType;
-
   /** Dimension of input image. */
   itkStaticConstMacro(InputImageDimension, unsigned int,
                       InputImageType::ImageDimension);
 
-  /** SmartPointer to a region splitting object */
-  typedef itk::ImageRegionSplitter<itkGetStaticConstMacro(InputImageDimension)> SplitterType;
-  typedef typename SplitterType::Pointer                                        RegionSplitterPointer;
+  /** Streaming manager base class pointer */
+  typedef StreamingManager<InputImageType>       StreamingManagerType;
+  typedef typename StreamingManagerType::Pointer StreamingManagerPointerType;
+
+  /**  Return the StreamingManager object responsible for dividing
+   *   the region to write */
+  StreamingManagerType* GetStreamingManager(void)
+    {
+    return m_StreamingManager;
+    }
+
+  /**  Set a user-specified implementation of StreamingManager
+   *   used to divide the largest possible region in several divisions */
+  void SetStreamingManager(StreamingManagerType* streamingManager)
+    {
+    m_StreamingManager = streamingManager;
+    }
+
+  /**  Set the streaming mode to 'stripped' and configure the number of strips
+   *   which will be used to stream the image */
+  void SetNumberOfDivisionsStrippedStreaming(unsigned int nbDivisions);
+
+  /**  Set the streaming mode to 'stripped' and configure the number of strips
+   *   which will be used to stream the image with respect to a number of line
+   *   per strip */
+  void SetNumberOfLinesStrippedStreaming(unsigned int nbLinesPerStrip);
+
+  /**  Set the streaming mode to 'stripped' and configure the number of MB
+   *   available. The actual number of divisions is computed automatically
+   *   by estimating the memory consumption of the pipeline.
+   *   Setting the availableRAM parameter to 0 means that the available RAM
+   *   is set from the CMake configuration option */
+  void SetAutomaticStrippedStreaming(unsigned int availableRAM);
+
+  /**  Set the streaming mode to 'tiled' and configure the dimension of the tiles
+   *   in pixels for each dimension (square tiles will be generated) */
+  void SetTileDimensionTiledStreaming(unsigned int tileDimension);
+
+  /**  Set the streaming mode to 'tiled' and configure the number of MB
+   *   available. The actual number of divisions is computed automatically
+   *   by estimating the memory consumption of the pipeline.
+   *   Tiles will be square.
+   *   Setting the availableRAM parameter to 0 means that the available RAM
+   *   is set from the CMake configuration option */
+  void SetAutomaticTiledStreaming(unsigned int availableRAM);
 
   /**  Set buffer memory size (in bytes) use to calculate the number of stream divisions */
-  void SetBufferMemorySize(unsigned long);
+  itkLegacyMacro( void SetBufferMemorySize(unsigned long) );
 
   /**  Set the buffer number of lines use to calculate the number of stream divisions */
-  void SetBufferNumberOfLinesDivisions(unsigned long);
+  itkLegacyMacro( void SetBufferNumberOfLinesDivisions(unsigned long) );
 
   /**  The number of stream divisions is calculate by using
    * OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING and
    * OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING cmake variables.
    */
-  void SetAutomaticNumberOfStreamDivisions(void);
+  itkLegacyMacro( void SetAutomaticNumberOfStreamDivisions(void) );
 
   /** Set the tiling automatic mode for streaming division */
-  void SetTilingStreamDivisions(void);
+  itkLegacyMacro( void SetTilingStreamDivisions(void) );
   /** Choose number of divisions in tiling streaming division */
-  void SetTilingStreamDivisions(unsigned long);
+  itkLegacyMacro( void SetTilingStreamDivisions(unsigned long) );
 
   /** Return the string to indicate the method use to calculate number of stream divisions. */
-  std::string GetMethodUseToCalculateNumberOfStreamDivisions(void);
+  itkLegacyMacro( std::string GetMethodUseToCalculateNumberOfStreamDivisions(void) );
 
   /** Set the number of pieces to divide the input.  The upstream pipeline
    * will be executed this many times. */
-  void SetNumberOfStreamDivisions(unsigned long);
+  itkLegacyMacro( void SetNumberOfStreamDivisions(unsigned long) );
 
   /** Get the number of pieces to divide the input. The upstream pipeline
    * will be executed this many times. */
-  unsigned long GetNumberOfStreamDivisions(void);
-
-  /** Set the helper class for dividing the input into chunks. */
-  itkSetObjectMacro(RegionSplitter, SplitterType);
-
-  /** Get the helper class for dividing the input into chunks. */
-  itkGetObjectMacro(RegionSplitter, SplitterType);
+  itkLegacyMacro( unsigned long GetNumberOfStreamDivisions(void) );
 
   /** Override UpdateOutputData() from ProcessObject to divide upstream
    * updates into pieces. This filter does not have a GenerateData()
@@ -166,9 +199,6 @@ public:
   itkGetObjectMacro(ImageIO, itk::ImageIOBase);
   itkGetConstObjectMacro(ImageIO, itk::ImageIOBase);
 
-  /** Type use to define number of divisions */
-  typedef StreamingMode CalculationDivisionEnumType;
-
   /**
    * Enable/disable writing of a .geom file with the ossim keyword list along with the written image
    */
@@ -191,18 +221,30 @@ private:
   StreamingImageFileWriter(const StreamingImageFileWriter &); //purposely not implemented
   void operator =(const StreamingImageFileWriter&); //purposely not implemented
 
-  /** This method calculate the number of stream divisions, by using the CalculationDivision type */
-  unsigned long CalculateNumberOfStreamDivisions(void);
+  void ObserveSourceFilterProgress(itk::Object* object, const itk::EventObject & event )
+  {
+    if (typeid(event) != typeid(itk::ProgressEvent))
+      {
+      return;
+      }
 
-  /** Use to define the method used to calculate number of divisions */
-  unsigned long m_BufferMemorySize;
-  unsigned long m_BufferNumberOfLinesDivisions;
-  unsigned long m_NumberOfStreamDivisions;
+    itk::ProcessObject* processObject = dynamic_cast<itk::ProcessObject*>(object);
+    if (processObject)
+      {
+      m_DivisionProgress = processObject->GetProgress();
+      }
 
-  RegionSplitterPointer m_RegionSplitter;
+    this->UpdateFilterProgress();
+  }
 
-  /** Use to determine method of calculation number of divisions */
-  CalculationDivisionEnumType m_CalculationDivision;
+  void UpdateFilterProgress()
+  {
+    this->UpdateProgress( (m_DivisionProgress + m_CurrentDivision) / m_NumberOfDivisions );
+  }
+
+  unsigned int m_NumberOfDivisions;
+  unsigned int m_CurrentDivision;
+  float m_DivisionProgress;
 
   /** ImageFileWriter Parameters */
   std::string m_FileName;
@@ -212,8 +254,7 @@ private:
   bool m_UserSpecifiedImageIO; //track whether the ImageIO is user specified
 
   itk::ImageIORegion m_IORegion;
-  bool               m_UserSpecifiedIORegion; //
-  //track whether the region is user specified
+  bool               m_UserSpecifiedIORegion; // track whether the region is user specified
   bool m_FactorySpecifiedImageIO; //track whether the factory mechanism set the ImageIO
   bool m_UseCompression;
   bool m_UseInputMetaDataDictionary; // whether to use the
@@ -221,6 +262,8 @@ private:
                                      // input or not.
   
   bool m_WriteGeomFile;              // Write a geom file to store the kwl
+
+  StreamingManagerPointerType m_StreamingManager;
 };
 
 } // end namespace otb
