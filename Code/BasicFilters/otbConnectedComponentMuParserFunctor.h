@@ -97,21 +97,24 @@ namespace otb
           }
 
         m_Distance = 0.0;
+        m_IntensityP1=0.0;
+        m_IntensityP2=0.0;
+
         for(unsigned int i = 0; i<m_NbOfBands; ++i)
           {
           m_Distance +=(p1[i]-p2[i])*(p1[i]-p2[i]);
+          m_IntensityP1+=p1[i];
+          m_IntensityP2+=p2[i];
           }
+
+        m_IntensityP1=m_IntensityP1/(static_cast<double>(m_NbOfBands));
+        m_IntensityP2=m_IntensityP2/(static_cast<double>(m_NbOfBands));
+
         m_Distance  = vcl_sqrt(m_Distance);
 
-        // cast
-        try
-        {
+        //TODO JGU compute spectraldistance
+
           value = m_Parser->Eval();
-        }
-        catch(itk::ExceptionObject& err)
-        {
-          itkExceptionMacro(<< err);
-        }
 
         return static_cast<bool> (value);
       }
@@ -128,6 +131,13 @@ namespace otb
       {
         return m_Expression;
       }
+
+      /** Check the expression */
+      bool CheckExpression()
+      {
+        return m_Parser->CheckExpr();
+      }
+
 
       void SetNumberOfBands(unsigned int NbOfBands)
       {
@@ -153,9 +163,18 @@ namespace otb
         //this->SetDataSize(m_NbVar);
         m_Parser->DefineVar("distance", &m_Distance);
         m_Parser->DefineVar("spectralAngle", &m_SpectralAngle);
+        m_Parser->DefineVar("intensity_p1", &m_IntensityP1);
+        m_Parser->DefineVar("intensity_p2", &m_IntensityP2);
         //this->SetVarName(m_NbVar-1,"spectralDistance");
 
       }
+
+
+      const std::map<std::string, Parser::ValueType*>& GetVar() const
+       {
+         return this->m_Parser->GetVar();
+       }
+
 
       ConnectedComponentMuParserFunctor()
       {
@@ -179,6 +198,8 @@ namespace otb
       std::vector<double> m_AImageP1;
       std::vector<double> m_AImageP2;
       double m_Distance;
+      double m_IntensityP1;
+      double m_IntensityP2;
       double m_SpectralAngle;
       std::vector<std::string > m_VarName;
       unsigned int m_NbOfBands;

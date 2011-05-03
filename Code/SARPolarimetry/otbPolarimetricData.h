@@ -24,8 +24,8 @@
 
 namespace otb
 {
-/**
- * This enumeration describes the different architectures we can find in polarimetry.
+/** \enum ArchitectureType
+ * \brief This enumeration describes the different architectures we can find in polarimetry.
  *  HH_HV_VH_VV (0), HH_HV_VV (1), HH_VH_VV (2), HH_HV(3), VH_VV (4), HH_VV (5).
  */
 typedef enum

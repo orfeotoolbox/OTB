@@ -680,7 +680,7 @@ IkonosImageMetadataInterface
        0.118682,   0.111158,   0.103634,   0.0963653,   0
       };
 
-      for (unsigned int i = 0;i<275;++i)
+      for (unsigned int i = 0; i<275; ++i)
         {
         b0[i] = tmp[i];
         }
@@ -737,7 +737,7 @@ IkonosImageMetadataInterface
        0.00194551,   0.00218138,   0.00241724,   0.00185843,   0
       };
 
-      for (unsigned int i = 0;i<275;++i)
+      for (unsigned int i = 0; i<275; ++i)
         {
         b0[i] = tmp[i];
         }
@@ -794,7 +794,7 @@ IkonosImageMetadataInterface
        0.00221828,   0.00179734,   0.00137641,   0.00148945,   0
       };
 
-      for (unsigned int i = 0;i<275;++i)
+      for (unsigned int i = 0; i<275; ++i)
         {
         b0[i] = tmp[i];
         }
@@ -851,7 +851,7 @@ IkonosImageMetadataInterface
        0.00125963,   0.00107872,   0.000897814,   0.000448907,   0
       };
 
-      for (unsigned int i = 0;i<275;++i)
+      for (unsigned int i = 0; i<275; ++i)
         {
         b0[i] = tmp[i];
         }
@@ -908,7 +908,7 @@ IkonosImageMetadataInterface
        0.0027541,   0.00137705,   0,   0,   0
       };
 
-      for (unsigned int i = 0;i<275;++i)
+      for (unsigned int i = 0; i<275; ++i)
         {
         b0[i] = tmp[i];
         }

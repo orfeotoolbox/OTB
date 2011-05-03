@@ -29,12 +29,12 @@ namespace Functor
 /** \class PolarimetricSynthesisFunctor
  *  \brief Calculate the polarimetric synthesis
  *
- * This functor calculate the polarimetric synthesis
- *  using the electroMagneticField vectors as follow:
- *  \f$ \sigma(\psi_{i},\chi_{i},\psi_{r},\chi_{r}) = \vec(E_{r})\cdot\left[ S \right] \vec(E_{i}) \f$
+ * This functor calculate the polarimetric synthesis using the electroMagneticField vectors as follow:
+ * \f$ \sigma(\psi_{i},\chi_{i},\psi_{r},\chi_{r}) = \vec(E_{r})\cdot\left[ S \right] \vec(E_{i}) \f$
  *
  *  \ingroup Functor
  *  \ingroup SARPolarimetry
+ *
  */
 template <class TInput1, class TInput2, class TInput3, class TInput4, class TOutput>
 class PolarimetricSynthesisFunctor

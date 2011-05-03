@@ -29,18 +29,20 @@ namespace Functor {
 /** \class otbReciprocalCovarianceToCoherencyDegreeFunctor
  * \brief Evaluate the Coherency Degree coefficient from from the MLC image
  *
- *   Output value are:
- *   channel #0 : \f$ abs(S_{hh}*S_{vv}}^{*}) / sqrt(S_{hh}*S_{hh}}^{*}) / sqrt(S_{vv}*S_{vv}}^{*}) \f$ \\
- *   channel #1 : \f$ abs(S_{hv}*S_{vv}}^{*}) / sqrt(S_{hv}*S_{hv}}^{*}) / sqrt(S_{vv}*S_{vv}}^{*}) \f$ \\
- *   channel #2 : \f$ abs(S_{hh}*S_{hv}}^{*}) / sqrt(S_{hh}*S_{hh}}^{*}) / sqrt(S_{hv}*S_{hv}}^{*}) \f$ \\
+ * Output value are:
+ * - channel #0 : \f$ abs(S_{hh}*S_{vv}}^{*}) / sqrt(S_{hh}*S_{hh}}^{*}) / sqrt(S_{vv}*S_{vv}}^{*}) \f$
+ * - channel #1 : \f$ abs(S_{hv}*S_{vv}}^{*}) / sqrt(S_{hv}*S_{hv}}^{*}) / sqrt(S_{vv}*S_{vv}}^{*}) \f$
+ * - channel #2 : \f$ abs(S_{hh}*S_{hv}}^{*}) / sqrt(S_{hh}*S_{hh}}^{*}) / sqrt(S_{hv}*S_{hv}}^{*}) \f$
  *
  *
- * \infgroup Functor
+ * \ingroup Functor
  * \ingroup SARPolarimetry
  *
  * \sa MLCToCircularCoherencyDegreeImageFilter
  * \sa ReciprocalCovarianceToCoherencyImageFilter
+ *
  */
+
 template< class TInput, class TOutput>
 class ReciprocalCovarianceToCoherencyDegreeFunctor
 {

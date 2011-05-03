@@ -30,12 +30,12 @@ namespace Functor {
  * \brief Evaluate the  MLC image from the Mueller image
  *
  * Output value are:
- *   channel #0 : \f$ 0.5*(M_{11} + M_{22} + 2*M_{12}) \f$ \\
- *   channel #1 : \f$ 0.5*(M_{11} - M_{22}) \f$ \\
- *   channel #2 : \f$ 0.5*(M_{11} + M_{22} - 2*M_{12}) \f$ \\
- *   channel #3 : \f$ 0.5*(M_{13} + M_{23} + i*(M_{14}+M_{24})) \f$ \\
- *   channel #4 : \f$ 0.5*(M_{33} - M_{44} - 2*i*M_{34}) \f$ \\
- *   channel #5 : \f$ 0.5*(M_{13} - M_{23} - i*(M_{14}-M_{24})) \f$ \\
+ * - channel #0 : \f$ 0.5*(M_{11} + M_{22} + 2*M_{12}) \f$
+ * - channel #1 : \f$ 0.5*(M_{11} - M_{22}) \f$
+ * - channel #2 : \f$ 0.5*(M_{11} + M_{22} - 2*M_{12}) \f$
+ * - channel #3 : \f$ 0.5*(M_{13} + M_{23} + i*(M_{14}+M_{24})) \f$
+ * - channel #4 : \f$ 0.5*(M_{33} - M_{44} - 2*i*M_{34}) \f$
+ * - channel #5 : \f$ 0.5*(M_{13} - M_{23} - i*(M_{14}-M_{24})) \f$
  *
  * Where \f$ M_{ij} are the coefficients of the input Mueller matrix.
  * Input pixel must have 10 channels (one for each Mueller matrix coeffcients).

@@ -1,4 +1,4 @@
-/*=========================================================================
+ /*=========================================================================
 
   Program:   ORFEO Toolbox
   Language:  C++
@@ -52,16 +52,19 @@ public:
     newPath->Initialize();
     typename TInput::VertexType lastVertex;
 
-    for (VertexListConstIteratorType vertexIt = input->GetVertexList()->Begin();
-         vertexIt != input->GetVertexList()->End();
-         ++vertexIt)
+    if(input->GetVertexList()->Size()>0)
       {
-      newPath->AddVertex(vertexIt.Value());
-      lastVertex = vertexIt.Value();
-      }
-    if (lastVertex != input->GetVertexList()->Begin().Value())
-      {
-      newPath->AddVertex(input->GetVertexList()->Begin().Value());
+      for (VertexListConstIteratorType vertexIt = input->GetVertexList()->Begin();
+          vertexIt != input->GetVertexList()->End();
+          ++vertexIt)
+        {
+        newPath->AddVertex(vertexIt.Value());
+        lastVertex = vertexIt.Value();
+        }
+      if (lastVertex != input->GetVertexList()->Begin().Value())
+        {
+        newPath->AddVertex(input->GetVertexList()->Begin().Value());
+        }
       }
 
     newPath->SetMetaDataDictionary(input->GetMetaDataDictionary());

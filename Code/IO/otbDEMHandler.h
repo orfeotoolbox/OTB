@@ -63,6 +63,9 @@ public:
   virtual void OpenDEMDirectory(const char* DEMDirectory);
   virtual void OpenDEMDirectory(const std::string& DEMDirectory);
 
+  /** return true if the directoty contain DEM */
+  virtual bool IsValidDEMDirectory(const char* DEMDirectory);
+
   /** Open geoid file. */
   virtual void OpenGeoidFile(const char* geoidFile);
   virtual void OpenGeoidFile(const std::string& geoidFile);

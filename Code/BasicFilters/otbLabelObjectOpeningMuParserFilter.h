@@ -63,59 +63,70 @@ namespace otb
 
 
 template< class TImage, class TFunction=Functor::OBIAMuParserFunctor<
-           typename TImage::LabelObjectType > >
+    typename TImage::LabelObjectType > >
 class ITK_EXPORT LabelObjectOpeningMuParserFilter :
-  public itk::InPlaceLabelMapFilter<TImage>
+public itk::InPlaceLabelMapFilter<TImage>
 {
 public:
 /** Standard class typedefs. */
- typedef LabelObjectOpeningMuParserFilter    Self;
- typedef itk::InPlaceLabelMapFilter<TImage> Superclass;
- typedef itk::SmartPointer<Self>            Pointer;
- typedef itk::SmartPointer<const Self>      ConstPointer;
+typedef LabelObjectOpeningMuParserFilter    Self;
+typedef itk::InPlaceLabelMapFilter<TImage> Superclass;
+typedef itk::SmartPointer<Self>            Pointer;
+typedef itk::SmartPointer<const Self>      ConstPointer;
 
- /** Some convenient typedefs. */
- typedef TImage                              ImageType;
- typedef typename ImageType::Pointer         ImagePointer;
- typedef typename ImageType::ConstPointer    ImageConstPointer;
- typedef typename ImageType::PixelType       PixelType;
- typedef typename ImageType::IndexType       IndexType;
- typedef typename ImageType::LabelObjectType LabelObjectType;
- typedef typename LabelObjectType::ConstPointer    LabelObjectConstPointer;
- typedef  TFunction                            FunctorType;
- typedef typename LabelObjectType::AttributeType AttributeType;
+/** Some convenient typedefs. */
+typedef TImage                              ImageType;
+typedef typename ImageType::Pointer         ImagePointer;
+typedef typename ImageType::ConstPointer    ImageConstPointer;
+typedef typename ImageType::PixelType       PixelType;
+typedef typename ImageType::IndexType       IndexType;
+typedef typename ImageType::LabelObjectType LabelObjectType;
+typedef typename LabelObjectType::ConstPointer    LabelObjectConstPointer;
+typedef  TFunction                            FunctorType;
+typedef typename LabelObjectType::AttributeType AttributeType;
 
- /** ImageDimension constants */
- itkStaticConstMacro(ImageDimension, unsigned int, TImage::ImageDimension);
+/** ImageDimension constants */
+itkStaticConstMacro(ImageDimension, unsigned int, TImage::ImageDimension);
 
- /** Standard New method. */
- itkNewMacro(Self);
+/** Standard New method. */
+itkNewMacro(Self);
 
- /** Runtime information support. */
- itkTypeMacro(LabelObjectOpeningMuParserFilter, InPlaceLabelMapFilter);
+/** Runtime information support. */
+itkTypeMacro(LabelObjectOpeningMuParserFilter, InPlaceLabelMapFilter);
+
+/** Set the expression to be parsed */
+void SetExpression(const std::string expression);
+
+/** Return the expression to be parsed */
+std::string GetExpression() const;
+
+/** Check expression to be parsed **/
+bool CheckExpression();
 
 
-  /** Set the expression to be parsed */
-  void SetExpression(const std::string expression);
+/** Manual variables setting **/
+void SetAttributes(std::vector<std::string> shapeAttributes, std::vector<std::string> statAttributes, int nbOfBands);
 
-  /** Return the expression to be parsed */
-  std::string GetExpression() const;
+/** Display varname and address **/
+void DisplayVar() const;
 
-  void GenerateData();
+/** return list of Mu Parser varialbes and address**/
+const std::map<std::string, double*>& GetVar() const;
 
+void GenerateData();
 
 protected :
-  LabelObjectOpeningMuParserFilter();
-  virtual ~LabelObjectOpeningMuParserFilter();
-  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+LabelObjectOpeningMuParserFilter();
+virtual ~LabelObjectOpeningMuParserFilter();
+virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 
 private :
-  LabelObjectOpeningMuParserFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+LabelObjectOpeningMuParserFilter(const Self&); //purposely not implemented
+void operator=(const Self&); //purposely not implemented
 
-  FunctorType                           m_Functor;
-  std::string                           m_Expression;
+FunctorType                           m_Functor;
+std::string                           m_Expression;
 
 };
 

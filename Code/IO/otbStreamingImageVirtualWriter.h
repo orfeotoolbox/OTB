@@ -38,12 +38,10 @@ namespace otb
  *  The computation of divisions can be done following different strategies
  *  by setting the StreamingManager attributes with SetStreamingManager.
  *  A set of behaviors are available with the following methods :
- *  \begin{itemize}
- *  \item SetNumberOfLinesStrippedStreaming : divide by strips, according to a number of lines
- *  \item SetAutomaticStrippedStreaming : divide by strips, according to available RAM
- *  \item SetTileDimensionTiledStreaming : divide by tiles, according to a desired tile dimension
- *  \item SetAutomaticTiledStreaming : divide by tiles, according to available RAM
- *  \end{itemize}
+ *  - SetNumberOfLinesStrippedStreaming : divide by strips, according to a number of lines
+ *  - SetAutomaticStrippedStreaming : divide by strips, according to available RAM
+ *  - SetTileDimensionTiledStreaming : divide by tiles, according to a desired tile dimension
+ *  - SetAutomaticTiledStreaming : divide by tiles, according to available RAM
  *
  *  It is used in the PersistentFilterStreamingDecorator helper class to propose an easy
  *  way to stream an image through a persistent filter.
