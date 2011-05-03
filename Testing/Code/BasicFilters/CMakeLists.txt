@@ -1112,7 +1112,7 @@ ADD_TEST(bfTvContinuousMinimumMaximumImageCalculatorTest ${BASICFILTERS_TESTS9}
 
 ADD_TEST(bfTuMeanShiftImageFilterNew ${BASICFILTERS_TESTS9}
         otbMeanShiftImageFilterNew )
-
+# Nb Stream = not defined and Nb Thread = not defined 
 ADD_TEST(bfTvMeanShiftImageFilter ${BASICFILTERS_TESTS9}
 --compare-n-images ${EPSILON_7} 4
 		${BASELINE}/bfMeanShiftImageFilterOutput.tif
@@ -1129,9 +1129,9 @@ ADD_TEST(bfTvMeanShiftImageFilter ${BASICFILTERS_TESTS9}
 	${TEMP}/bfMeanShiftImageFilterClusteredOutput.tif
 	${TEMP}/bfMeanShiftImageFilterLabeledClusteredOutput.tif
 	${TEMP}/bfMeanShiftImageFilterClusterBoundariesOutput.tif
-	16 16 10 1.0 1 1
+	16 16 10 1.0 0 0
 	)
-
+# Nb Stream = 1 and Nb Thread = 1
 ADD_TEST(bfTvMeanShiftImageFilterNotStreamedNotThreaded ${BASICFILTERS_TESTS9}
 --compare-n-images ${EPSILON_7} 4
 		${BASELINE}/bfMeanShiftImageFilterOutput.tif
@@ -1148,7 +1148,84 @@ ADD_TEST(bfTvMeanShiftImageFilterNotStreamedNotThreaded ${BASICFILTERS_TESTS9}
 	${TEMP}/bfMeanShiftImageFilterNotStreamedNotThreadedClusteredOutput.tif
 	${TEMP}/bfMeanShiftImageFilterNotStreamedNotThreadedLabeledClusteredOutput.tif
 	${TEMP}/bfMeanShiftImageFilterNotStreamedNotThreadedClusterBoundariesOutput.tif
-	16 16 10 1.0 0 0
+	16 16 10 1.0 1 1
+	)
+# Nb Stream = 4 and Nb Thread = 1
+ADD_TEST(bfTvMeanShiftImageFilterStreamed4_Threaded1 ${BASICFILTERS_TESTS9}
+--compare-n-images ${EPSILON_7} 4
+		${BASELINE}/bfMeanShiftImageFilterOutput.tif
+		${TEMP}/bfMeanShiftImageFilterStreamed4Threaded1Output.tif
+		${BASELINE}/bfMeanShiftImageFilterClusteredOutput.tif
+		${TEMP}/bfMeanShiftImageFilterStreamed4Threaded1ClusteredOutput.tif
+		${BASELINE}/bfMeanShiftImageFilterLabeledClusteredOutput.tif
+		${TEMP}/bfMeanShiftImageFilterStreamed4Threaded1LabeledClusteredOutput.tif
+		${BASELINE}/bfMeanShiftImageFilterClusterBoundariesOutput.tif
+		${TEMP}/bfMeanShiftImageFilterStreamed4Threaded1ClusterBoundariesOutput.tif
+        otbMeanShiftImageFilter
+	${INPUTDATA}/QB_Suburb.png
+	${TEMP}/bfMeanShiftImageFilterStreamed4Threaded1Output.tif
+	${TEMP}/bfMeanShiftImageFilterStreamed4Threaded1ClusteredOutput.tif
+	${TEMP}/bfMeanShiftImageFilterStreamed4Threaded1LabeledClusteredOutput.tif
+	${TEMP}/bfMeanShiftImageFilterStreamed4Threaded1ClusterBoundariesOutput.tif
+	16 16 10 1.0 4 1
+	)
+# Nb Stream = 1 and Nb Thread = 4
+ADD_TEST(bfTvMeanShiftImageFilterStreamed1_Threaded4 ${BASICFILTERS_TESTS9}
+--compare-n-images ${EPSILON_7} 4
+		${BASELINE}/bfMeanShiftImageFilterOutput.tif
+		${TEMP}/bfMeanShiftImageFilterStreamed1Threaded4Output.tif
+		${BASELINE}/bfMeanShiftImageFilterClusteredOutput.tif
+		${TEMP}/bfMeanShiftImageFilterStreamed1Threaded4ClusteredOutput.tif
+		${BASELINE}/bfMeanShiftImageFilterLabeledClusteredOutput.tif
+		${TEMP}/bfMeanShiftImageFilterStreamed1Threaded4LabeledClusteredOutput.tif
+		${BASELINE}/bfMeanShiftImageFilterClusterBoundariesOutput.tif
+		${TEMP}/bfMeanShiftImageFilterStreamed1Threaded4ClusterBoundariesOutput.tif
+        otbMeanShiftImageFilter
+	${INPUTDATA}/QB_Suburb.png
+	${TEMP}/bfMeanShiftImageFilterStreamed1Threaded4Output.tif
+	${TEMP}/bfMeanShiftImageFilterStreamed1Threaded4ClusteredOutput.tif
+	${TEMP}/bfMeanShiftImageFilterStreamed1Threaded4LabeledClusteredOutput.tif
+	${TEMP}/bfMeanShiftImageFilterStreamed1Threaded4ClusterBoundariesOutput.tif
+	16 16 10 1.0 1 4
+	)
+# Nb Stream = 2 and Nb Thread = 2	
+ADD_TEST(bfTvMeanShiftImageFilterStreamed2_Threaded2 ${BASICFILTERS_TESTS9}
+--compare-n-images ${EPSILON_7} 4
+		${BASELINE}/bfMeanShiftImageFilterOutput.tif
+		${TEMP}/bfMeanShiftImageFilterStreamed2Threaded2Output.tif
+		${BASELINE}/bfMeanShiftImageFilterClusteredOutput.tif
+		${TEMP}/bfMeanShiftImageFilterStreamed2Threaded2ClusteredOutput.tif
+		${BASELINE}/bfMeanShiftImageFilterLabeledClusteredOutput.tif
+		${TEMP}/bfMeanShiftImageFilterStreamed2Threaded2LabeledClusteredOutput.tif
+		${BASELINE}/bfMeanShiftImageFilterClusterBoundariesOutput.tif
+		${TEMP}/bfMeanShiftImageFilterStreamed2Threaded2ClusterBoundariesOutput.tif
+        otbMeanShiftImageFilter
+	${INPUTDATA}/QB_Suburb.png
+	${TEMP}/bfMeanShiftImageFilterStreamed2Threaded2Output.tif
+	${TEMP}/bfMeanShiftImageFilterStreamed2Threaded2ClusteredOutput.tif
+	${TEMP}/bfMeanShiftImageFilterStreamed2Threaded2LabeledClusteredOutput.tif
+	${TEMP}/bfMeanShiftImageFilterStreamed2Threaded2ClusterBoundariesOutput.tif
+	16 16 10 1.0 2 2
+	)
+
+# Nb Stream = 4 and Nb Thread = 4
+ADD_TEST(bfTvMeanShiftImageFilterStreamed4_Threaded4 ${BASICFILTERS_TESTS9}
+--compare-n-images ${EPSILON_7} 4
+		${BASELINE}/bfMeanShiftImageFilterOutput.tif
+		${TEMP}/bfMeanShiftImageFilterStreamed4Threaded4Output.tif
+		${BASELINE}/bfMeanShiftImageFilterClusteredOutput.tif
+		${TEMP}/bfMeanShiftImageFilterStreamed4Threaded4ClusteredOutput.tif
+		${BASELINE}/bfMeanShiftImageFilterLabeledClusteredOutput.tif
+		${TEMP}/bfMeanShiftImageFilterStreamed4Threaded4LabeledClusteredOutput.tif
+		${BASELINE}/bfMeanShiftImageFilterClusterBoundariesOutput.tif
+		${TEMP}/bfMeanShiftImageFilterStreamed4Threaded4ClusterBoundariesOutput.tif
+        otbMeanShiftImageFilter
+	${INPUTDATA}/QB_Suburb.png
+	${TEMP}/bfMeanShiftImageFilterStreamed4Threaded4Output.tif
+	${TEMP}/bfMeanShiftImageFilterStreamed4Threaded4ClusteredOutput.tif
+	${TEMP}/bfMeanShiftImageFilterStreamed4Threaded4LabeledClusteredOutput.tif
+	${TEMP}/bfMeanShiftImageFilterStreamed4Threaded4ClusterBoundariesOutput.tif
+	16 16 10 1.0 4 4
 	)
 
 ADD_TEST(bfTuMeanShiftVectorImageFilterNew ${BASICFILTERS_TESTS9}

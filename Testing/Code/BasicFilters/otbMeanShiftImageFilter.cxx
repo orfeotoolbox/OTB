@@ -41,8 +41,8 @@ int otbMeanShiftImageFilter(int argc, char * argv[])
   const double       rangeRadius            = atof(argv[7]);
   const unsigned int minRegionSize          = atoi(argv[8]);
   const double       scale                  = atoi(argv[9]);
-  bool               streamed               = atoi(argv[10]);
-  bool               threaded               = atoi(argv[11]);
+  const int          streamNumber               = atoi(argv[10]);
+  const int          threadNumber               = atoi(argv[11]);
 
   const unsigned int Dimension = 2;
   typedef float                                           PixelType;
@@ -66,56 +66,37 @@ int otbMeanShiftImageFilter(int argc, char * argv[])
   filter->SetMinimumRegionSize(minRegionSize);
   filter->SetScale(scale);
 
-  if (!threaded)
+  if (threadNumber > 0)
     {
-    filter->SetNumberOfThreads(1);
+    filter->SetNumberOfThreads(threadNumber);
     }
 
   filter->SetInput(reader->GetOutput());
 
-  if (streamed)
+  StreamingWriterType::Pointer writer1 = StreamingWriterType::New();
+  StreamingWriterType::Pointer writer2 = StreamingWriterType::New();
+  LabeledStreamingWriterType::Pointer writer3 = LabeledStreamingWriterType::New();
+  LabeledStreamingWriterType::Pointer writer4 = LabeledStreamingWriterType::New();
+  writer1->SetFileName(filteredfname);
+  writer2->SetFileName(clusteredfname);
+  writer3->SetFileName(labeledclusteredfname);
+  writer4->SetFileName(clusterboundariesfname);
+  if (streamNumber > 0)
     {
-
-    StreamingWriterType::Pointer        writer1 = StreamingWriterType::New();
-    StreamingWriterType::Pointer        writer2 = StreamingWriterType::New();
-    LabeledStreamingWriterType::Pointer writer3 = LabeledStreamingWriterType::New();
-    LabeledStreamingWriterType::Pointer writer4 = LabeledStreamingWriterType::New();
-    writer1->SetFileName(filteredfname);
-    writer2->SetFileName(clusteredfname);
-    writer3->SetFileName(labeledclusteredfname);
-    writer4->SetFileName(clusterboundariesfname);
-    writer1->SetInput(filter->GetOutput());
-    writer2->SetInput(filter->GetClusteredOutput());
-    writer3->SetInput(filter->GetLabeledClusteredOutput());
-    writer4->SetInput(filter->GetClusterBoundariesOutput());
-    writer1->Update();
-    writer2->Update();
-    writer3->Update();
-    writer4->Update();
-
+    writer1->SetNumberOfStreamDivisions(streamNumber);
+    writer2->SetNumberOfStreamDivisions(streamNumber);
+    writer3->SetNumberOfStreamDivisions(streamNumber);
+    writer4->SetNumberOfStreamDivisions(streamNumber);
     }
+  writer1->SetInput(filter->GetOutput());
+  writer2->SetInput(filter->GetClusteredOutput());
+  writer3->SetInput(filter->GetLabeledClusteredOutput());
+  writer4->SetInput(filter->GetClusterBoundariesOutput());
+  writer1->Update();
+  writer2->Update();
+  writer3->Update();
+  writer4->Update();
 
-  else
-    {
-
-    WriterType::Pointer        writer1 = WriterType::New();
-    WriterType::Pointer        writer2 = WriterType::New();
-    LabeledWriterType::Pointer writer3 = LabeledWriterType::New();
-    LabeledWriterType::Pointer writer4 = LabeledWriterType::New();
-    writer1->SetFileName(filteredfname);
-    writer2->SetFileName(clusteredfname);
-    writer3->SetFileName(labeledclusteredfname);
-    writer4->SetFileName(clusterboundariesfname);
-    writer1->SetInput(filter->GetOutput());
-    writer2->SetInput(filter->GetClusteredOutput());
-    writer3->SetInput(filter->GetLabeledClusteredOutput());
-    writer4->SetInput(filter->GetClusterBoundariesOutput());
-    writer1->Update();
-    writer2->Update();
-    writer3->Update();
-    writer4->Update();
-
-    }
 
   return EXIT_SUCCESS;
 }
