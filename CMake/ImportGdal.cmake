@@ -174,10 +174,11 @@ IF(OTB_USE_EXTERNAL_GDAL)
             CHECK_GDALOPEN_SYMBOL
             )
   IF(NOT CHECK_GDALOPEN_SYMBOL)
-    MESSAGE(WARNING "CHECK_GDALOPEN_SYMBOL test failed : your platform exhibits a gdal/geotiff conflict. "
-    "Opening a TIF file may generate a crash. This is most probably because the gdal library you configured "
-    "embeds its own libgeotiff and is compiled with --with-hide-internal-symbols=yes.\n"
-    "You might consider building GDAL yourself without using --with-hide-internal-symbols" )
+    MESSAGE(WARNING "CHECK_GDALOPEN_SYMBOL test failed : your platform exhibits a gdal/geotiff conflict.\n"
+    "Opening a TIF file may generate a crash. This is most probably because the gdal library you configured\n"
+    "embeds its own version of libgeotiff and is ABI incompatible with the system libgeotiff\n"
+    "You might consider building GDAL yourself without using --with-hide-internal-symbols\n"
+    "and pointing GEOTIFF_INCLUDE_DIRS to the geotiff headers included in gdal sources" )
   ENDIF(NOT CHECK_GDALOPEN_SYMBOL)
   
   # This test is known to fail with the Ubuntu gdal package
@@ -190,9 +191,10 @@ IF(OTB_USE_EXTERNAL_GDAL)
             )
   IF(NOT CHECK_XTIFFOPEN_SYMBOL)
     MESSAGE(WARNING "CHECK_XTIFFOPEN_SYMBOL test failed : your platform exhibits a gdal/geotiff conflict. "
-    "Opening a TIF file may generate a crash. This is most probably because the gdal library you configured "
-    "embeds its own libgeotiff and is compiled with --with-hide-internal-symbols=yes.\n"
-    "You might consider building GDAL yourself without using --with-hide-internal-symbols" )
+    "Opening a TIF file may generate a crash. This is most probably because the gdal library you configured"
+    "embeds its own version of libgeotiff and is ABI incompatible with the system libgeotiff\n"
+    "You might consider building GDAL yourself without using --with-hide-internal-symbols"
+    "and pointing GEOTIFF_INCLUDE_DIRS to the geotiff headers included in gdal sources" )
   ENDIF(NOT CHECK_XTIFFOPEN_SYMBOL)
   
   # This test is known to fail with gdal build with some versions of hdf library
