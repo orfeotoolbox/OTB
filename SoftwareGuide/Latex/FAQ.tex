@@ -149,7 +149,7 @@ A simple \texttt{make} in your OTB binary directory will be enough to update the
 OTB is a multi-platform library. It has successfully been installed on
 the following platforms:
 \begin{itemize}
-  \item Linux/Unix with GCC (2.95.X, 3.3.X, 4.1.X, 4.2.X, 4.3.X, 4.4.X)
+  \item Linux/Unix with GCC (2.95.X, 3.3.X, 4.1.X, 4.2.X, 4.3.X, 4.4.X, 4.5.X)
   \item Windows with Microsoft Visual Studio C++ 7.1 .NET 2003
   \item Windows with Microsoft Visual Studio C++ 8.0 .NET 2005
   \item Windows with Microsoft Visual Studio C++ 9.0 .NET 2008
@@ -199,9 +199,9 @@ packages, you can skip to step 4.
 \item Install GDAL (or \textbf{use your distribution package})
   \begin{verbatim}
       cd INSTALL_DIR
-      gunzip gdal.1.7.2.tar.gz
-      tar xvf gdal.1.7.2.tar
-      cd gdal.1.7.2
+      gunzip gdal.1.8.0.tar.gz
+      tar xvf gdal.1.8.0.tar
+      cd gdal.1.8.0
       ./configure --prefix=INSTALL_DIR --with-png=internal --with-libtiff=internal --with-geotiff=internal --with-jpeg=internal
       make
       make install
@@ -216,9 +216,9 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
 \item Install CMake (or \textbf{use your distribution package})
   \begin{verbatim}
       cd INSTALL_DIR
-      gunzip cmake-2.8.2.tar.gz
-      tar xvf cmake-2.8.2.tar
-      cd cmake-2.8.2
+      gunzip cmake-2.8.4.tar.gz
+      tar xvf cmake-2.8.4.tar
+      cd cmake-2.8.4
       ./configure --prefix=INSTALL_DIR
       make
       make install
@@ -303,7 +303,7 @@ OSGeo4W installer. OSGeo4W is a binary distribution of a broad set of open sourc
 for Win32 environments (Windows XP, Vista, etc).
 \begin{enumerate}
 
-\item Install OSGEO4W with the following packages : gdal16, curl, libtiff, libgeotiff, libjpeg, zlib, libpng
+\item Install OSGEO4W with the following packages : gdal, curl, libtiff, libgeotiff, libjpeg, zlib, libpng
 
 \item Configure OTB with CMake (Example for release mode, with internal FLTK and ITK)
 
@@ -319,9 +319,8 @@ for Win32 environments (Windows XP, Vista, etc).
 
     Press the "Configure" button and you will be asked to set the following variables :
 
-        \texttt{GDAL\_INCLUDE\_DIR = "C:/OSGeo4W/apps/gdal-16/include"}\\
-        \texttt{GDAL\_LIBRARY\_DIR = "C:/OSGeo4W/apps/gdal-16/lib/gdal\_i.lib"}\\
-        \texttt{OGR\_INCLUDE\_DIR = "C:/OSGeo4W/apps/gdal-16/include"}\\
+        \texttt{GDAL\_INCLUDE\_DIR = "C:/OSGeo4W/include"}\\
+        \texttt{GDAL\_LIBRARY\_DIR = "C:/OSGeo4W/lib/gdal\_i.lib"}\\
         \texttt{CURL\_INCLUDE\_DIR = "C:/OSGeo4W/include/curl"}\\
         \texttt{CURL\_LIBRARY = "C:/OSGeo4W/lib/libcurl\_imp.lib"}\\
         \texttt{TIFF\_INCLUDE\_DIRS = "C:/OSGeo4W/include"}\\
