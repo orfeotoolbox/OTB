@@ -37,7 +37,6 @@
 
 #include "itkImageToImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
-#include "otbExtractROI.h"
 
 namespace otb
 {
@@ -99,8 +98,6 @@ public:
   typedef typename    OutputImageType::RegionType OutputImageRegionType;
 
   typedef typename    OutputImageType::Pointer    OutputImagePointer;
-  typedef otb::ExtractROI<InputImageType, InputImageType> ExtractROIFilterType;
-  typedef typename    ExtractROIFilterType::Pointer      ExtractROIFilterPointer;
   typedef TFunction                                                              FunctorType;
   typedef typename    FunctorType::Pointer        FunctorPointer;
 
