@@ -82,11 +82,11 @@ public:
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self)
-  ;
+ ;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(MaskMuParserFilter, itk::ImageToImageFilter)
-  ;
+ ;
 
   /** Some convenient typedefs. */
   typedef TInputImage InputImageType;
