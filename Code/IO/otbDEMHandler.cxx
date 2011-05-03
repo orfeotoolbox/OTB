@@ -54,6 +54,13 @@ DEMHandler
   OpenDEMDirectory(DEMDirectory.c_str());
 }
 
+bool
+DEMHandler
+::IsValidDEMDirectory(const char* DEMDirectory)
+{
+  return m_ElevManager->loadElevationPath(DEMDirectory);
+}
+
 void
 DEMHandler
 ::OpenGeoidFile(const char* geoidFile)
