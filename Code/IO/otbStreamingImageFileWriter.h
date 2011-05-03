@@ -21,9 +21,6 @@
 #include "otbMacro.h"
 #include "itkImageIOBase.h"
 #include "itkImageToImageFilter.h"
-#include "itkImageRegionSplitter.h"
-#include "otbStreamingTraits.h"
-
 #include "otbStreamingManager.h"
 
 namespace otb
@@ -36,14 +33,15 @@ namespace otb
  * StreamingImageFileWriter interfaces with an ImageIO class to write out the
  * data whith streaming process.
  *
- * StreamingImageFileWriter will divide the output into severalpieces
- * (controlled by SetNumberOfStreamDivisions), and call the upstream
- * pipeline for each piece, tiling the individual outputs into one large
+ * StreamingImageFileWriter will divide the output into several pieces
+ * (controlled by SetNumberOfDivisionsStrippedStreaming, SetNumberOfLinesStrippedStreaming,
+ * SetAutomaticStrippedStreaming, SetTileDimensionTiledStreaming or SetAutomaticTiledStreaming),
+ * and call the upstream pipeline for each piece, tiling the individual outputs into one large
  * output. This reduces the memory footprint for the application since
  * each filter does not have to process the entire dataset at once.
- * StreamingImageFileWriter will write directly the streaming buffer in the image file.
- * The output image is not completely allocated; just streaming size,
- * calculate whith the NumberOfStreamDivisions, is allocate.
+ *
+ * StreamingImageFileWriter will write directly the streaming buffer in the image file, so
+ * that the output image never needs to be completely allocated
  *
  * \sa ImageFileWriter
  * \sa ImageSeriesReader
@@ -76,16 +74,9 @@ public:
   typedef typename OutputImageType::PixelType    OutputImagePixelType;
   typedef typename Superclass::DataObjectPointer DataObjectPointer;
 
-  /** Streaming traits helper typedef */
-//  typedef StreamingTraits<InputImageType> StreamingTraitsType;
-
   /** Dimension of input image. */
   itkStaticConstMacro(InputImageDimension, unsigned int,
                       InputImageType::ImageDimension);
-
-  /** SmartPointer to a region splitting object */
-//  typedef itk::ImageRegionSplitter<itkGetStaticConstMacro(InputImageDimension)> SplitterType;
-//  typedef typename SplitterType::Pointer                                        RegionSplitterPointer;
 
   /** Streaming manager base class pointer */
   typedef StreamingManager<InputImageType>       StreamingManagerType;
@@ -98,7 +89,7 @@ public:
     return m_StreamingManager;
     }
 
-  /**  Set a user-specific implementation of StreamingManager
+  /**  Set a user-specified implementation of StreamingManager
    *   used to divide the largest possible region in several divisions */
   void SetStreamingManager(StreamingManagerType* streamingManager)
     {
@@ -107,6 +98,11 @@ public:
 
   /**  Set the streaming mode to 'stripped' and configure the number of strips
    *   which will be used to stream the image */
+  void SetNumberOfDivisionsStrippedStreaming(unsigned int nbDivisions);
+
+  /**  Set the streaming mode to 'stripped' and configure the number of strips
+   *   which will be used to stream the image with respect to a number of line
+   *   per strip */
   void SetNumberOfLinesStrippedStreaming(unsigned int nbLinesPerStrip);
 
   /**  Set the streaming mode to 'stripped' and configure the number of MB
@@ -156,12 +152,6 @@ public:
    * will be executed this many times. */
   itkLegacyMacro( unsigned long GetNumberOfStreamDivisions(void) );
 
-  /** Set the helper class for dividing the input into chunks. */
-//  itkSetObjectMacro(RegionSplitter, SplitterType);
-
-  /** Get the helper class for dividing the input into chunks. */
-//  itkGetObjectMacro(RegionSplitter, SplitterType);
-
   /** Override UpdateOutputData() from ProcessObject to divide upstream
    * updates into pieces. This filter does not have a GenerateData()
    * or ThreadedGenerateData() method.  Instead, all the work is done
@@ -209,9 +199,6 @@ public:
   itkGetObjectMacro(ImageIO, itk::ImageIOBase);
   itkGetConstObjectMacro(ImageIO, itk::ImageIOBase);
 
-  /** Type use to define number of divisions */
-//  typedef StreamingMode CalculationDivisionEnumType;
-
   /**
    * Enable/disable writing of a .geom file with the ossim keyword list along with the written image
    */
@@ -258,20 +245,6 @@ private:
   unsigned int m_NumberOfDivisions;
   unsigned int m_CurrentDivision;
   float m_DivisionProgress;
-
-
-  /** This method calculate the number of stream divisions, by using the CalculationDivision type */
-//  unsigned long CalculateNumberOfStreamDivisions(void);
-
-  /** Use to define the method used to calculate number of divisions */
-//  unsigned long m_BufferMemorySize;
-//  unsigned long m_BufferNumberOfLinesDivisions;
-//  unsigned long m_NumberOfStreamDivisions;
-
-//  RegionSplitterPointer m_RegionSplitter;
-
-  /** Use to determine method of calculation number of divisions */
-//  CalculationDivisionEnumType m_CalculationDivision;
 
   /** ImageFileWriter Parameters */
   std::string m_FileName;
