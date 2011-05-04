@@ -25,9 +25,9 @@ namespace otb
 
 /** \class NumberOfDivisionsStrippedStreamingManager
  *  \brief This class computes the divisions needed to stream an image by strips,
- *  driven by a user-defined desired number of lines per strips.
+ *  driven by a user-defined number of divisions in which to divide the images.
  *
- * You can use SetNumberOfLinesPerStrip to ask for a specific number of lines per strip.
+ * You can use SetNumberOfDivisions to ask for a specific number of divisions.
  * The number of strips will be computed to fit this requirements as close as possible.
  *
  * \sa StreamingImageFileWriter
@@ -61,8 +61,7 @@ public:
   /** The number of lines per strip desired */
   itkGetMacro(NumberOfDivisions, unsigned int);
 
-  /** Actually computes the stream divisions, according to the specified streaming mode,
-   * eventually using the input parameter to estimate memory consumption */
+  /** Actually computes the stream divisions given a DataObject and its region to write */
   virtual void PrepareStreaming(itk::DataObject * input, const RegionType &region);
 
 protected:
