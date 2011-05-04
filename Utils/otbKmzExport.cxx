@@ -28,7 +28,7 @@ namespace otb
 int KmzExport::Describe(ApplicationDescriptor* descriptor)
 {
   descriptor->SetName("KmzExport");
-  descriptor->SetDescription("Chain that Estimate a sensor model in order to export the input image to Google Earth understandable format Kmz");
+  descriptor->SetDescription("Export the input image as Kmz");
   descriptor->AddInputImage();
   descriptor->AddOption("OutputProductName", "Output Kmz product", "kmz", 1, true, ApplicationDescriptor::InputImage);
   descriptor->AddOption("TileSize", "Set the size of the tiles", "s", 1, false, ApplicationDescriptor::Integer);
