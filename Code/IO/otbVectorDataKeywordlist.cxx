@@ -105,6 +105,68 @@ VectorDataKeywordlist
   return "";
 }
 
+double
+VectorDataKeywordlist
+::GetFieldAsDouble(std::string key) const
+{
+  for (unsigned int i = 0; i < m_FieldList.size(); ++i)
+      {
+      if (key.compare(m_FieldList[i].first->GetNameRef()) == 0)
+        {
+        if (m_FieldList[i].first->GetType() == OFTInteger)
+          {
+          return (double)(m_FieldList[i].second.Integer);
+          }
+        if (m_FieldList[i].first->GetType() == OFTReal)
+          {
+          return (double)(m_FieldList[i].second.Real);
+          }
+        itkExceptionMacro(
+          << "This type (" << m_FieldList[i].first->GetType() <<
+          ") is not handled (yet) by GetFieldAsDouble(), please request for it");
+        }
+      }
+    return 0.;
+}
+
+void
+VectorDataKeywordlist
+::SetFieldAsDouble(std::string key, double value)
+{
+  if (HasField(key))
+      {
+      for (unsigned int i = 0; i < m_FieldList.size(); ++i)
+        {
+        if (key.compare(m_FieldList[i].first->GetNameRef()) == 0)
+          {
+          if (m_FieldList[i].first->GetType() == OFTReal)
+            {
+            OGRField field;
+            field.Real = value;
+            m_FieldList[i].second = field;
+            }
+          else
+            {
+            itkExceptionMacro(<< "This type is not of double type, can't add the element in it");
+            }
+          }
+        }
+      }
+    else
+      {
+      FieldType newField;
+
+      OGRFieldDefn* fieldDefn =  new OGRFieldDefn(key.c_str(), OFTReal);
+
+      OGRField field;
+      field.Real = value;
+      newField.first = fieldDefn;
+      newField.second = field;
+      m_FieldList.push_back(newField);
+      }
+
+}
+
 bool
 VectorDataKeywordlist
 ::HasField(std::string key) const

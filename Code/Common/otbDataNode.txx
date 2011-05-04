@@ -274,6 +274,38 @@ DataNode<TPrecision, VDimension, TValuePrecision>
                                                   kwl);
 }
 
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
+void
+DataNode<TPrecision, VDimension, TValuePrecision>
+::SetFieldAsDouble(std::string key, double value)
+{
+  otb::VectorDataKeywordlist kwl;
+  itk::ExposeMetaData<VectorDataKeywordlist>(this->GetMetaDataDictionary(),
+                                             MetaDataKey::VectorDataKeywordlistKey,
+                                             kwl);
+
+  kwl.SetFieldAsDouble(key, value);
+  itk::EncapsulateMetaData<VectorDataKeywordlist>(this->GetMetaDataDictionary(),
+                                                  MetaDataKey::VectorDataKeywordlistKey,
+                                                  kwl);
+}
+
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
+double
+DataNode<TPrecision, VDimension, TValuePrecision>
+::GetFieldAsDouble(std::string key) const
+{
+  VectorDataKeywordlist keywordlist;
+  if (HasField(key))
+    {
+    itk::ExposeMetaData<VectorDataKeywordlist>(this->GetMetaDataDictionary(),
+                                               MetaDataKey::VectorDataKeywordlistKey, keywordlist);
+
+    return keywordlist.GetFieldAsDouble(key);
+    }
+  return 0;
+}
+
 /*
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 std::string

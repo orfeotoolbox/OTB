@@ -224,6 +224,19 @@ public:
   int GetFieldAsInt(std::string key) const;
 
   /**
+   * Add a field to the node.
+   * \param key The name of the field.
+   * \param value The value of the field.
+   */
+  void SetFieldAsDouble(std::string key, double value);
+  /**
+   * Returns the value associated with a field name.
+   * \param key The name of the field.
+   * \return The value of the field. A default value is returned if the key was not found.
+   */
+  double GetFieldAsDouble(std::string key) const;
+
+  /**
    * Remove the field associated with the given key, if possible.
    * \param key The name of the field.
    */

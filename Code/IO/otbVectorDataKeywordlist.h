@@ -78,6 +78,19 @@ public:
   void SetFieldAsString(std::string key, std::string value);
 
   /**
+    * Returns the value associated with a field name.
+    * \param key The name of the field.
+    * \return The value of the field. A default value is returned if the key was not found.
+    */
+  double GetFieldAsDouble(std::string key) const;
+
+  /**
+    * \param key The name of the field.
+    * \param value The value of the field.
+    */
+  void SetFieldAsDouble(std::string key, double value);
+
+  /**
     * \return the nth field of the node as a std::pair of (key, value).
     * \param index the index of the field to return.
     */
