@@ -56,7 +56,7 @@ StreamingImageFileWriter<TInputImage>
 
   // By default, we use tiled streaming, with automatic tile size
   // We don't set any parameter, so the memory size is retrieved from the OTB configuration options
-  m_StreamingManager = otb::RAMDrivenTiledStreamingManager<TInputImage>::New();
+  this->SetAutomaticTiledStreaming();
 }
 
 /**
@@ -75,6 +75,18 @@ StreamingImageFileWriter<TInputImage>
 {
   typedef NumberOfDivisionsStrippedStreamingManager<TInputImage> NumberOfDivisionsStrippedStreamingManagerType;
   typename NumberOfDivisionsStrippedStreamingManagerType::Pointer streamingManager = NumberOfDivisionsStrippedStreamingManagerType::New();
+  streamingManager->SetNumberOfDivisions(nbDivisions);
+
+  m_StreamingManager = streamingManager;
+}
+
+template <class TInputImage>
+void
+StreamingImageFileWriter<TInputImage>
+::SetNumberOfDivisionsStrippedStreaming(unsigned int nbDivisions)
+{
+  typedef NumberOfDivisionsTiledStreamingManager<TInputImage> NumberOfDivisionsTiledStreamingManagerType;
+  typename NumberOfDivisionsTiledStreamingManagerType::Pointer streamingManager = NumberOfDivisionsTiledStreamingManagerType::New();
   streamingManager->SetNumberOfDivisions(nbDivisions);
 
   m_StreamingManager = streamingManager;
@@ -218,7 +230,7 @@ StreamingImageFileWriter<TInputImage>
                   "SetAutomaticStrippedStreaming, SetTileDimensionTiledStreaming, "
                   "or SetAutomaticTiledStreaming." );
   unsigned int tileDim = static_cast<unsigned int>(nb_divisions);
-  this->SetTileDimensionTiledStreaming(nb_divisions);
+  this->SetNumberOfDivisionsTiledStreaming(nb_divisions);
 }
 
 /**
