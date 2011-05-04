@@ -39,7 +39,6 @@ template <class TImage>
 void
 NumberOfDivisionsStrippedStreamingManager<TImage>::PrepareStreaming( itk::DataObject * input, const RegionType &region )
 {
-  std::cout << "NumberOfDivisionsStrippedStreamingManager<TImage>::PrepareStreaming" << std::endl;
   otbMsgDevMacro(<< "Activating NumberOfDivisionsStrippedStreamingManager streaming mode")
   if (m_NumberOfDivisions < 1)
     {
@@ -50,7 +49,6 @@ NumberOfDivisionsStrippedStreamingManager<TImage>::PrepareStreaming( itk::DataOb
   this->m_Splitter = itk::ImageRegionSplitter<itkGetStaticConstMacro(ImageDimension)>::New();
   this->m_ComputedNumberOfSplits = this->m_Splitter->GetNumberOfSplits(region, m_NumberOfDivisions);
   otbMsgDevMacro(<< "Computed number of split : " << this->m_ComputedNumberOfSplits)
-std::cout << "Computed number of split : " << this->m_ComputedNumberOfSplits << std::endl;
   // Save the region to generate the splits later
   this->m_Region = region;
 }
