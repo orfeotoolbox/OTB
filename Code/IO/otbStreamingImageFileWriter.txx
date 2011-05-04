@@ -71,7 +71,7 @@ StreamingImageFileWriter<TInputImage>
 template <class TInputImage>
 void
 StreamingImageFileWriter<TInputImage>
-::SetNumberOfDivisionsStrippedStreaming(unsigned int nbDivisions)
+::SetNumberOfDivisionsTiledStreaming(unsigned int nbDivisions)
 {
   typedef NumberOfDivisionsStrippedStreamingManager<TInputImage> NumberOfDivisionsStrippedStreamingManagerType;
   typename NumberOfDivisionsStrippedStreamingManagerType::Pointer streamingManager = NumberOfDivisionsStrippedStreamingManagerType::New();
