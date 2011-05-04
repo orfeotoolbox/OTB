@@ -59,13 +59,13 @@ public:
     return !(*this != other);
   }
   // Operator on vector pixel type
-  inline TOutput operator ()(const InputVectorType& inputVector)
+  inline TOutput operator ()(const InputVectorType& inputVector) const
   {
     return this->Evaluate(inputVector[m_RedIndex - 1], static_cast<TInput2>(inputVector[m_NIRIndex - 1]));
   }
 
   // Binary operator
-  inline TOutput operator ()(const TInput1& r, const TInput2& nir)
+  inline TOutput operator ()(const TInput1& r, const TInput2& nir) const
   {
     return this->Evaluate(r, nir);
   }
