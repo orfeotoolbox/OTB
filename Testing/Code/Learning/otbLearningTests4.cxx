@@ -30,6 +30,7 @@ void RegisterTests()
   REGISTER_TEST(otbROIdataConversion);
   REGISTER_TEST(otbSVMCrossValidationCostFunctionNew);
   REGISTER_TEST(otbExhaustiveExponentialOptimizerNew);
+  REGISTER_TEST(otbExhaustiveExponentialOptimizerTest);
   REGISTER_TEST(otbListSampleGeneratorNew);
   REGISTER_TEST(otbListSampleGenerator);
   REGISTER_TEST(otbConfusionMatrixCalculatorNew);

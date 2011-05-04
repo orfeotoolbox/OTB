@@ -476,6 +476,13 @@ ADD_TEST(leTuSVMCrossValidationCostFunctionNew ${LEARNING_TESTS4}
 ADD_TEST(leTuExhaustiveExponentialOptimizerNew ${LEARNING_TESTS4}
         otbExhaustiveExponentialOptimizerNew)
         
+ADD_TEST(leTvExhaustiveExponentialOptimizerTest ${LEARNING_TESTS4}
+        --compare-ascii ${NOTOL}
+          ${BASELINE_FILES}/leTvExhaustiveExponentialOptimizerOutput.txt
+          ${TEMP}/leTvExhaustiveExponentialOptimizerTestOutput.txt
+        otbExhaustiveExponentialOptimizerTest
+          ${TEMP}/leTvExhaustiveExponentialOptimizerTestOutput.txt)
+        
 # -------            otb::ListSampleGenerator   -----------------------------
 ADD_TEST(leTuListSampleGeneratorNew ${LEARNING_TESTS4}
         otbListSampleGeneratorNew)
@@ -706,6 +713,7 @@ otbROIdataConversionNew.cxx
 otbROIdataConversion.cxx
 otbSVMCrossValidationCostFunctionNew.cxx
 otbExhaustiveExponentialOptimizerNew.cxx
+otbExhaustiveExponentialOptimizerTest.cxx
 otbListSampleGeneratorTest.cxx
 otbConfusionMatrixCalculatorTest.cxx
 otbSVMValidation.cxx
