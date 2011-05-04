@@ -153,6 +153,7 @@ public:
   {
     GDALDatasetWrapper::Pointer datasetWrapper;
     GDALDatasetH dataset = GDALOpen(filename.c_str(), GA_ReadOnly);
+
     if (dataset != NULL)
       {
       datasetWrapper = GDALDatasetWrapper::New();
@@ -196,6 +197,13 @@ private :
   GDALDriverManagerWrapper()
   {
     GDALAllRegister();
+
+#if !CHECK_HDF4OPEN_SYMBOL
+    // Get rid of the HDF4 driver when it is buggy
+    GDALDriver* driver = GetGDALDriverManager()->GetDriverByName( "hdf4" );
+    if (driver)
+      GetGDALDriverManager()->DeregisterDriver( driver );
+#endif
   }
 
   ~GDALDriverManagerWrapper()
