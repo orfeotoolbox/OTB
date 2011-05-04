@@ -30,6 +30,8 @@ SET(BASICFILTERS_TESTS11 ${CXX_TEST_PATH}/otbBasicFiltersTests11)
 SET(BASICFILTERS_TESTS12 ${CXX_TEST_PATH}/otbBasicFiltersTests12)
 SET(BASICFILTERS_TESTS13 ${CXX_TEST_PATH}/otbBasicFiltersTests13)
 SET(BASICFILTERS_TESTS14 ${CXX_TEST_PATH}/otbBasicFiltersTests14)
+SET(BASICFILTERS_TESTS15 ${CXX_TEST_PATH}/otbBasicFiltersTests15)
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests1 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1989,6 +1991,32 @@ ADD_TEST(bfTvLabelObjectOpeningMuParserFilterTest ${BASICFILTERS_TESTS14}
     "SHAPE_Elongation>8"
 )
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests15 ~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# -----------------------  otbNDVIDataNodeFeatureFunction  -----------------------
+IF(OTB_DATA_USE_LARGEINPUT)
+ADD_TEST(bfTuNDVIDataNodeFeatureFunctionNew ${BASICFILTERS_TESTS15}
+  otbNDVIDataNodeFeatureFunctionNew
+)
+
+ADD_TEST(bfTvNDVIDataNodeFeatureFunction_Line ${BASICFILTERS_TESTS15}
+  otbNDVIDataNodeFeatureFunction
+  	${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/ROI_QB_RANGUEUIL_ROADS.shp
+	${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/ROI_QB_RANGUEUIL.TIF
+	${INPUTDATA}/DEM/srtm_directory
+	${TEMP}/bfTvNDVIDataNodeFeatureFunctionOutput_Line.shp
+)
+
+ADD_TEST(bfTvNDVIDataNodeFeatureFunction_Polygon ${BASICFILTERS_TESTS15}
+  otbNDVIDataNodeFeatureFunction
+  	${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/ROI_QB_RANGUEUIL_BUILDINGS.shp
+	${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/ROI_QB_RANGUEUIL.TIF
+	${INPUTDATA}/DEM/srtm_directory
+	${TEMP}/bfTvNDVIDataNodeFeatureFunctionOutput_Polygon.shp
+)
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 
 # A enrichir
@@ -2246,7 +2274,12 @@ otbConnectedComponentMuParserFunctorTest.cxx
 otbLabelObjectOpeningMuParserFilterNew.cxx
 otbLabelObjectOpeningMuParserFilterTest.cxx
 )
-
+IF(OTB_DATA_USE_LARGEINPUT)
+SET(BasicFilters_SRCS15
+otbBasicFiltersTests15.cxx
+otbNDVIDataNodeFeatureFunction.cxx
+)
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 OTB_ADD_EXECUTABLE(otbBasicFiltersTests1 "${BasicFilters_SRCS1}" "OTBBasicFilters;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbBasicFiltersTests2 "${BasicFilters_SRCS2}" "OTBBasicFilters;OTBIO;OTBTesting")
@@ -2262,5 +2295,9 @@ OTB_ADD_EXECUTABLE(otbBasicFiltersTests11 "${BasicFilters_SRCS11}" "OTBBasicFilt
 OTB_ADD_EXECUTABLE(otbBasicFiltersTests12 "${BasicFilters_SRCS12}" "OTBBasicFilters;ITKAlgorithms;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbBasicFiltersTests13 "${BasicFilters_SRCS13}" "OTBBasicFilters;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbBasicFiltersTests14 "${BasicFilters_SRCS14}" "OTBBasicFilters;OTBIO;OTBTesting")
+
+IF(OTB_DATA_USE_LARGEINPUT)
+OTB_ADD_EXECUTABLE(otbBasicFiltersTests15 "${BasicFilters_SRCS15}" "OTBBasicFilters;OTBIO;OTBTesting")
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
