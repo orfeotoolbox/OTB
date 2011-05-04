@@ -2777,6 +2777,7 @@ ADD_TEST(ioTvTileMapImageIOHelperTest ${IO_TESTS21}
 
 IF(CHECK_GDAL_BUILDED_WITH_HDF)
 
+IF(CHECK_HDF4OPEN_SYMBOL)
 # Tests to check if we can open hdf files using a otb::VectorImage and IFReader->SetDatasetNumber() function.
 # no access to data only PrintSelf() method.
 ADD_TEST(ioTvMultiDatasetReading1 ${IO_TESTS22}
@@ -2822,8 +2823,7 @@ ADD_TEST(ioTvMultiDatasetReadingInfo ${IO_TESTS22}
       ${TEMP}/ioTvMultiDatasetReadingInfoOut.txt
       )
    
-# Tests which read data in HDF files.  
-IF(CHECK_HDF4OPEN_SYMBOL)          
+# Tests which read data in HDF files.            
 ADD_TEST(ioTvMultiChannelROI_HDF4_2_TIF ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_HDF2TIF_MOD09Q1G_20_25_100_150_channel_1.tif
                      ${TEMP}/ioExtractROI_HDF2TIF_MOD09Q1G_20_25_100_150_channel_1_OUT.tif
