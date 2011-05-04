@@ -144,7 +144,7 @@ StreamingImageVirtualWriter<TInputImage>
   InputImageRegionType outputRegion = inputPtr->GetLargestPossibleRegion();
   /**
    * Determine of number of pieces to divide the input.  This will be the
-   * minimum of what the user specified via SetNumberOfStreamDivisions()
+   * minimum of what the user specified via SetNumberOfDivisionsStrippedStreaming()
    * and what the Splitter thinks is a reasonable value.
    */
   m_StreamingManager->PrepareStreaming(inputPtr, outputRegion);
