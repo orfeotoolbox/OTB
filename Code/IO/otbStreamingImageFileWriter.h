@@ -100,6 +100,10 @@ public:
    *   which will be used to stream the image */
   void SetNumberOfDivisionsStrippedStreaming(unsigned int nbDivisions);
 
+  /**  Set the streaming mode to 'tiled' and configure the number of tiles
+   *   which will be used to stream the image */
+  void SetNumberOfDivisionsTiledStreaming(unsigned int nbDivisions);
+
   /**  Set the streaming mode to 'stripped' and configure the number of strips
    *   which will be used to stream the image with respect to a number of line
    *   per strip */
@@ -110,7 +114,7 @@ public:
    *   by estimating the memory consumption of the pipeline.
    *   Setting the availableRAM parameter to 0 means that the available RAM
    *   is set from the CMake configuration option */
-  void SetAutomaticStrippedStreaming(unsigned int availableRAM);
+  void SetAutomaticStrippedStreaming(unsigned int availableRAM = 0);
 
   /**  Set the streaming mode to 'tiled' and configure the dimension of the tiles
    *   in pixels for each dimension (square tiles will be generated) */
@@ -122,7 +126,7 @@ public:
    *   Tiles will be square.
    *   Setting the availableRAM parameter to 0 means that the available RAM
    *   is set from the CMake configuration option */
-  void SetAutomaticTiledStreaming(unsigned int availableRAM);
+  void SetAutomaticTiledStreaming(unsigned int availableRAM = 0);
 
   /**  Set buffer memory size (in bytes) use to calculate the number of stream divisions */
   itkLegacyMacro( void SetBufferMemorySize(unsigned long) );
