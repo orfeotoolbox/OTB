@@ -102,7 +102,7 @@ public:
 //   typedef std::pair<std::string, std::string>         FieldType;
 
   /** Accessors */
-  itkGetMacro(NodeType, NodeType);
+  itkGetConstMacro(NodeType, NodeType);
   itkGetStringMacro(NodeId);
   itkSetStringMacro(NodeId);
 
