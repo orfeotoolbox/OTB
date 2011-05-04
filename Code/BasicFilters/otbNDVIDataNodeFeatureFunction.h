@@ -28,9 +28,9 @@ namespace otb
 {
 /** \class NDVIDataNodeFeatureFunction
   * \brief .
-  * 
-  * 
-  * 
+  *
+  *
+  *
   * \ingroup Functions
   * \sa DataNodeImageFunction
   */

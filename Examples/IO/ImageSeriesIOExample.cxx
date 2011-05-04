@@ -173,7 +173,7 @@ int main(int argc, char** argv)
 
 //  Software Guide : BeginLatex
 //
-//  We can tune the size of the image tiles, so that the 
+//  We can tune the size of the image tiles, so that the
 //  total memory footprint of the pipeline is constant
 //  for any execution of the program.
 //

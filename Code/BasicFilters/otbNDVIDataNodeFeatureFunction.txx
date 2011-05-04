@@ -31,7 +31,7 @@ NDVIDataNodeFeatureFunction<TImage, TCoordRep, TPrecision>
 ::NDVIDataNodeFeatureFunction()
 {
   m_NDVIThreshold = 0.3;    //Advised for QuickBird images
-  this->SetREDChannelIndex(3);//for QuickBird images
+  this->SetREDChannelIndex(3); //for QuickBird images
   this->SetNIRChannelIndex(4); //for QuickBird images
 }
 

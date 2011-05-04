@@ -63,7 +63,7 @@ public:
   };
   void SetFunctionInternalParameters(ModelParametersType quadraticModel2D)
   {
-    this->SetFunctionInternalParameters(quadraticModel2D[0],quadraticModel2D[1],quadraticModel2D[2],quadraticModel2D[3],quadraticModel2D[4],quadraticModel2D[5]);
+    this->SetFunctionInternalParameters(quadraticModel2D[0], quadraticModel2D[1], quadraticModel2D[2], quadraticModel2D[3], quadraticModel2D[4], quadraticModel2D[5]);
   };
 
   /** \return The accuracy value corresponding the parameters */
@@ -78,7 +78,7 @@ public:
   };
 
   /** \return the number of parameters to optimize */
-  virtual unsigned int GetNumberOfParameters(void) const {return 2;};
+  virtual unsigned int GetNumberOfParameters(void) const {return 2; };
 
   /** \return The accuracy derivative corresponding to the parameters */
   virtual void GetDerivative(const ParametersType& parameters, DerivativeType& derivative) const {};
