@@ -25,9 +25,6 @@
 #include "otbPipelineMemoryPrintCalculator.h"
 #include "itkExtractImageFilter.h"
 
-#include "otbImageRegionSquareTileSplitter.h"
-#include "itkImageRegionSplitter.h"
-
 namespace otb
 {
 

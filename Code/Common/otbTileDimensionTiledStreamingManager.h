@@ -73,9 +73,6 @@ protected:
   TileDimensionTiledStreamingManager();
   virtual ~TileDimensionTiledStreamingManager();
 
-  /** The splitter type used to generate the different strips */
-  typedef otb::ImageRegionSquareTileSplitter<itkGetStaticConstMacro(ImageDimension)> SplitterType;
-
   /** The number of lines per strip desired by the user.
    *  This may be different than the one computed by the Splitter */
   unsigned int m_TileDimension;

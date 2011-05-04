@@ -20,6 +20,7 @@
 
 #include "otbTileDimensionTiledStreamingManager.h"
 #include "otbMacro.h"
+#include "otbImageRegionSquareTileSplitter.h"
 
 namespace otb
 {

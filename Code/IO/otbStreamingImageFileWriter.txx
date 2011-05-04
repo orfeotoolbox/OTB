@@ -33,10 +33,12 @@
 #include "otbConfigure.h"
 
 #include "otbNumberOfDivisionsStrippedStreamingManager.h"
+#include "otbNumberOfDivisionsTiledStreamingManager.h"
 #include "otbNumberOfLinesStrippedStreamingManager.h"
 #include "otbRAMDrivenStrippedStreamingManager.h"
 #include "otbTileDimensionTiledStreamingManager.h"
 #include "otbRAMDrivenTiledStreamingManager.h"
+
 
 namespace otb
 {
@@ -134,11 +136,13 @@ void
 StreamingImageFileWriter<TInputImage>
 ::SetBufferMemorySize(unsigned long memory_size_divisions)
 {
-  itkWarningMacro("SetNumberOfStreamDivisions is DEPRECATED. "
+  itkWarningMacro("SetNumberOfDivisionsStrippedStreaming is DEPRECATED. "
                   "Use one of SetNumberOfLinesStrippedStreaming, "
                   "SetAutomaticStrippedStreaming, SetTileDimensionTiledStreaming, "
                   "or SetAutomaticTiledStreaming." );
-  this->SetAutomaticStrippedStreaming(memory_size_divisions / 1024 / 1024);
+
+  unsigned int ram = static_cast<unsigned int>(memory_size_divisions / 1024 / 1024);
+  this->SetAutomaticStrippedStreaming(ram);
 }
 
 /**
@@ -153,7 +157,9 @@ StreamingImageFileWriter<TInputImage>
                   "Use one of SetNumberOfLinesStrippedStreaming, "
                   "SetAutomaticStrippedStreaming, SetTileDimensionTiledStreaming, "
                   "or SetAutomaticTiledStreaming." );
-  this->SetNumberOfLinesStrippedStreaming(nb_lines_divisions);
+
+  unsigned int nb_lines = static_cast<unsigned int>(nb_lines_divisions);
+  this->SetNumberOfLinesStrippedStreaming(nb_lines);
 }
 
 /**
@@ -168,7 +174,8 @@ StreamingImageFileWriter<TInputImage>
                   "Use one of SetNumberOfLinesStrippedStreaming, "
                   "SetAutomaticStrippedStreaming, SetTileDimensionTiledStreaming, "
                   "or SetAutomaticTiledStreaming." );
-  this->SetNumberOfDivisionsStrippedStreaming(nb_divisions);
+  unsigned int nb_div = static_cast<unsigned int>(nb_divisions);
+  this->SetNumberOfDivisionsStrippedStreaming(nb_div);
 }
 
 /**
@@ -210,6 +217,7 @@ StreamingImageFileWriter<TInputImage>
                   "Use one of SetNumberOfLinesStrippedStreaming, "
                   "SetAutomaticStrippedStreaming, SetTileDimensionTiledStreaming, "
                   "or SetAutomaticTiledStreaming." );
+  unsigned int tileDim = static_cast<unsigned int>(nb_divisions);
   this->SetTileDimensionTiledStreaming(nb_divisions);
 }
 
@@ -434,7 +442,7 @@ StreamingImageFileWriter<TInputImage>
 
   /**
    * Determine of number of pieces to divide the input.  This will be the
-   * minimum of what the user specified via SetNumberOfStreamDivisions()
+   * minimum of what the user specified via SetNumberOfDivisionsStrippedStreaming()
    * and what the Splitter thinks is a reasonable value.
    */
 

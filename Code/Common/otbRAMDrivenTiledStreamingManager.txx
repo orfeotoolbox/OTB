@@ -20,6 +20,7 @@
 
 #include "otbRAMDrivenTiledStreamingManager.h"
 #include "otbMacro.h"
+#include "otbImageRegionSquareTileSplitter.h"
 
 namespace otb
 {
