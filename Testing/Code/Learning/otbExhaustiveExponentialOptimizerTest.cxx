@@ -35,7 +35,7 @@ class Quadratic2DCostFunction
 {
 public:
  /** Standard class typedefs. */
-   typedef Quadratic2DCostFunction Self;
+   typedef Quadratic2DCostFunction        Self;
    typedef itk::SingleValuedCostFunction  Superclass;
    typedef itk::SmartPointer<Self>        Pointer;
    typedef itk::SmartPointer<const Self>  ConstPointer;
@@ -150,9 +150,9 @@ int otbExhaustiveExponentialOptimizerTest(int argc, char* argv[])
   file << "initial value: " << costFunction->GetValue(initialPosition) << ", position: "
        << initialPosition <<"\n";
   file << "minimum: " << fineoptimizer->GetMinimumMetricValue() << ", position: " <<
-      fineoptimizer->GetMinimumMetricValuePosition() << "\n" ;
+      fineoptimizer->GetMinimumMetricValuePosition() << "\n";
   file << "maximum: " << fineoptimizer->GetMaximumMetricValue() << ", position: " <<
-        fineoptimizer->GetMaximumMetricValuePosition() << "\n" ;
+        fineoptimizer->GetMaximumMetricValuePosition() << "\n";
 
   file.close();
 
