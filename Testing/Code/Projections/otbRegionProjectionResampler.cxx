@@ -138,7 +138,7 @@ int otbRegionProjectionResampler(int argc, char* argv[])
   otbGenericMsgDebugMacro(<< "Sensor Model :" << model);
 
   writer->SetInput(resampler->GetOutput());
-  writer->SetTilingStreamDivisions(10);
+  writer->SetNumberOfDivisionsTiledStreaming(10);
   otbGenericMsgDebugMacro(<< "Update writer ...");
   writer->Update();
 

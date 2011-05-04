@@ -109,7 +109,7 @@ int otbOrthoRectificationFilterWithDEM(int argc, char* argv[])
 
   writer->SetInput(orthoRectifFilter->GetOutput());
 
-  writer->SetTilingStreamDivisions();
+  writer->SetAutomaticTiledStreaming();
 
   otbGenericMsgDebugMacro(<< "Update writer ...");
   writer->Update();

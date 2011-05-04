@@ -125,7 +125,7 @@ int otbGenericRSResampleImageFilter(int argc, char* argv[])
     
   // Write the resampled image
   WriterType::Pointer writer= WriterType::New();
-  writer->SetTilingStreamDivisions(4);
+  writer->SetNumberOfDivisionsTiledStreaming(4);
   writer->SetFileName(outfname);
   writer->SetInput(resampler->GetOutput());
   writer->Update();
@@ -201,7 +201,7 @@ int otbGenericRSResampleImageFilterFromMap(int argc, char* argv[])
   // Write the resampled image
   typedef otb::StreamingImageFileWriter<ImageType>    WriterType;
   WriterType::Pointer writer= WriterType::New();
-  writer->SetTilingStreamDivisions();
+  writer->SetAutomaticTiledStreaming();
   writer->SetFileName(outfname);
   writer->SetInput(resampler->GetOutput());
   writer->Update();

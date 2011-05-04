@@ -99,7 +99,7 @@ int otbStreamingResampleImageFilterWithAffineTransform(int argc, char* argv[])
     // Write the resampled image
     typedef otb::StreamingImageFileWriter<ImageType>    WriterType;
     WriterType::Pointer writer= WriterType::New();
-    writer->SetTilingStreamDivisions(4);
+    writer->SetNumberOfDivisionsTiledStreaming(4);
     writer->WriteGeomFileOn();
     writer->SetFileName(outfname);
     writer->SetInput(resampler->GetOutput());

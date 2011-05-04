@@ -54,7 +54,7 @@ int otbPhysicalToRPCSensorModelImageFilter(int argc, char* argv[])
     // Write the resampled image
     typedef otb::StreamingImageFileWriter<ImageType>    WriterType;
     WriterType::Pointer writer= WriterType::New();
-    writer->SetTilingStreamDivisions();
+    writer->SetAutomaticTiledStreaming();
     writer->WriteGeomFileOn();
     writer->SetFileName(outfname);
     writer->SetInput(estimator->GetOutput());

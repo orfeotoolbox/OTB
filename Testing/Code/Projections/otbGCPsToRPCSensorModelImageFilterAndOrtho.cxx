@@ -124,7 +124,7 @@ int otbGCPsToRPCSensorModelImageFilterAndOrtho(int argc, char* argv[])
 
   writer->SetInput(orthoRectifFilter->GetOutput());
   writer->SetFileName(outfname);
-  writer->SetTilingStreamDivisions(4);
+  writer->SetNumberOfDivisionsTiledStreaming(4);
   writer->Update();
 
   return EXIT_SUCCESS;

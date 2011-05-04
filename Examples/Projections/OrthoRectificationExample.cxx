@@ -172,7 +172,7 @@ int main(int argc, char* argv[])
 // Software Guide : BeginCodeSnippet
   writer->SetInput(orthoRectifFilter->GetOutput());
 
-  writer->SetTilingStreamDivisions();
+  writer->SetAutomaticTiledStreaming();
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex

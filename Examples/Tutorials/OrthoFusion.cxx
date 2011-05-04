@@ -213,7 +213,7 @@ int main(int argc, char* argv[])
   //  Software Guide : BeginLatex
   //
   //  And we can plug it to the writer. To be able to process the images by
-  // tiles, we use the \code{SetTilingStreamDivisions()} method of the writer.
+  // tiles, we use the \code{SetAutomaticTiledStreaming()} method of the writer.
   // We trigger the pipeline execution with the \code{Update()} method.
   //
   //  Software Guide : EndLatex
@@ -221,7 +221,7 @@ int main(int argc, char* argv[])
   // Software Guide : BeginCodeSnippet
   writer->SetInput(fusion->GetOutput());
 
-  writer->SetTilingStreamDivisions();
+  writer->SetAutomaticTiledStreaming();
 
   otb::StandardFilterWatcher watcher(writer, "OrthoFusion");
 

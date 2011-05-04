@@ -108,7 +108,7 @@ int otbOrthoRectificationMonoThreadFilter(int argc, char* argv[])
   orthoRectifFilter->SetDeformationFieldSpacing(gridSpacing);
   
   writer->SetInput(orthoRectifFilter->GetOutput());
-  writer->SetTilingStreamDivisions();
+  writer->SetAutomaticTiledStreaming();
   writer->SetNumberOfThreads(1);
   writer->Update();
 

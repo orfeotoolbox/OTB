@@ -97,7 +97,7 @@ int otbOrthoRectificationFilter(int argc, char* argv[])
   orthoRectifFilter->SetDeformationFieldSpacing(gridSpacing);
   
   writer->SetInput(orthoRectifFilter->GetOutput());
-  writer->SetTilingStreamDivisions(4);
+  writer->SetNumberOfDivisionsTiledStreaming(4);
   writer->Update();
 
   return EXIT_SUCCESS;
@@ -178,7 +178,7 @@ int otbOrthoRectificationComplexFilter(int argc, char* argv[])
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(argv[2]);
   writer->SetInput(orthoRectifFilter->GetOutput());
-  writer->SetTilingStreamDivisions(4);
+  writer->SetNumberOfDivisionsTiledStreaming(4);
   writer->Update();
 
   return EXIT_SUCCESS;
