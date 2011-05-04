@@ -198,7 +198,7 @@ private :
   {
     GDALAllRegister();
 
-#if !CHECK_HDF4OPEN_SYMBOL
+#ifndef CHECK_HDF4OPEN_SYMBOL
     // Get rid of the HDF4 driver when it is buggy
     GDALDriver* driver = GetGDALDriverManager()->GetDriverByName( "hdf4" );
     if (driver)
