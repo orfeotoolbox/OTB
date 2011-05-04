@@ -70,3 +70,6 @@
 
 /* Deprecated Managment */
 #cmakedefine OTB_USE_DEPRECATED
+
+#cmakedefine CHECK_HDF4OPEN_SYMBOL
+
