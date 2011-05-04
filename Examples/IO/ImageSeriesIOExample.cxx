@@ -173,18 +173,18 @@ int main(int argc, char** argv)
 
 //  Software Guide : BeginLatex
 //
-//  We can tune the size of the image tiles as a function of the
-//  number of input images, so that the total memory footprint of the
-//  pipeline is constant for any execution of the program.
+//  We can tune the size of the image tiles, so that the 
+//  total memory footprint of the pipeline is constant
+//  for any execution of the program.
 //
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  unsigned long size = (10000 * 10000 * sizeof(PixelType)) / NbImages;
+  unsigned long memoryConsumptionInMB = 10;
 
-  std::cout << "Streaming size: " << size << std::endl;
+  std::cout << "Memory consumption: " << memoryConsumptionInMB << std::endl;
 
-  imageWriter->SetBufferMemorySize(size);
+  imageWriter->SetAutomaticTiledStreaming(memoryConsumptionInMB);
 
   imageWriter->SetInput(iL2VI->GetOutput());
 
