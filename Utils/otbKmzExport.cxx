@@ -30,13 +30,13 @@ int KmzExport::Describe(ApplicationDescriptor* descriptor)
   descriptor->SetName("KmzExport");
   descriptor->SetDescription("Export the input image as Kmz");
   descriptor->AddInputImage();
-  descriptor->AddOption("OutputProductName", "Output Kmz product", "kmz", 1, true, 
+  descriptor->AddOption("OutputProductName", "Output Kmz product", "kmz", 1, true,
                         ApplicationDescriptor::InputImage);
-  descriptor->AddOption("TileSize", "Set the size of the tiles", "s", 1, false, 
+  descriptor->AddOption("TileSize", "Set the size of the tiles", "s", 1, false,
                         ApplicationDescriptor::Integer);
-  descriptor->AddOption("LogoImage", "Add a logo to the final Kmz", "lo", 1, false, 
+  descriptor->AddOption("LogoImage", "Add a logo to the final Kmz", "lo", 1, false,
                         ApplicationDescriptor::FileName);
-  descriptor->AddOption("LegendImage", "Add a legend to the image exported", "le", 1, 
+  descriptor->AddOption("LegendImage", "Add a legend to the image exported", "le", 1,
                         false, ApplicationDescriptor::FileName);
  
   return EXIT_SUCCESS;
