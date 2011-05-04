@@ -98,7 +98,7 @@ int otbProlateInterpolateImageFunction(int argc, char * argv[])
   proresampler->SetOutputSpacing(tutu);
   // Result of resampler is written
   prowriter->SetInput(proresampler->GetOutput());
-  //prowriter->SetNumberOfStreamDivisions(1);
+  //prowriter->SetNumberOfDivisionsStrippedStreaming(1);
   prowriter->SetFileName(profname);
   prowriter->Update();
 

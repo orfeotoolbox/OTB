@@ -70,7 +70,7 @@ int otbStreamingResampleImageFilter(int argc, char * argv[])
 
   // Result of resampler is written
   writer->SetInput(resampler->GetOutput());
-  writer->SetNumberOfStreamDivisions(1);
+  writer->SetNumberOfDivisionsStrippedStreaming(1);
   writer->SetFileName(outputFilename);
 
   writer->Update();

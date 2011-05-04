@@ -46,7 +46,7 @@ int otbFltkWriterWatcher(int argc, char * argv[])
   gradient->SetInput(reader->GetOutput());
 
   StreamingWriterType::Pointer writer1 = StreamingWriterType::New();
-  writer1->SetNumberOfStreamDivisions(nbsd);
+  writer1->SetNumberOfDivisionsStrippedStreaming(nbsd);
   writer1->SetInput(gradient->GetOutput());
   writer1->SetFileName(outfname);
 

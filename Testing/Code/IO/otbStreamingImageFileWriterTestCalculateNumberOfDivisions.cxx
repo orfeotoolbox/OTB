@@ -56,7 +56,7 @@ int otbStreamingImageFileWriterTestCalculateNumberOfDivisions(int argc, char* ar
     }
   else if (MethodCalculateNumberOfStreamDivision == "NUMBER_OF_STREAM_DIVISIONS")
     {
-    writer->SetNumberOfStreamDivisions(::atoi(argv[4]));
+    writer->SetNumberOfDivisionsStrippedStreaming(::atoi(argv[4]));
     }
   else if (MethodCalculateNumberOfStreamDivision == "BUFFER_MEMORY_SIZE")
     {

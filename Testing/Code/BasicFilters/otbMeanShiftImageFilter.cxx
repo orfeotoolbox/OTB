@@ -83,10 +83,10 @@ int otbMeanShiftImageFilter(int argc, char * argv[])
   writer4->SetFileName(clusterboundariesfname);
   if (streamNumber > 0)
     {
-    writer1->SetNumberOfStreamDivisions(streamNumber);
-    writer2->SetNumberOfStreamDivisions(streamNumber);
-    writer3->SetNumberOfStreamDivisions(streamNumber);
-    writer4->SetNumberOfStreamDivisions(streamNumber);
+    writer1->SetNumberOfDivisionsStrippedStreaming(streamNumber);
+    writer2->SetNumberOfDivisionsStrippedStreaming(streamNumber);
+    writer3->SetNumberOfDivisionsStrippedStreaming(streamNumber);
+    writer4->SetNumberOfDivisionsStrippedStreaming(streamNumber);
     }
   writer1->SetInput(filter->GetOutput());
   writer2->SetInput(filter->GetClusteredOutput());

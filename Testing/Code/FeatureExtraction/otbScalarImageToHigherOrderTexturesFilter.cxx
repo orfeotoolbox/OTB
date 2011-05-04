@@ -74,7 +74,7 @@ int otbScalarImageToHigherOrderTexturesFilter(int argc, char * argv[])
   // Write outputs
   itk::OStringStream oss;
 
-  //writer->SetNumberOfStreamDivisions(2);
+  //writer->SetNumberOfDivisionsStrippedStreaming(2);
 
   oss.str("");
   oss << outprefix << "ShortRunEmphasis.tif";

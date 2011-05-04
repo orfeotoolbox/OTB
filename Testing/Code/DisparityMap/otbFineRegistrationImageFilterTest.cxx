@@ -22,7 +22,7 @@
 #include "itkFixedArray.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "otbImageFileWriter.h"
+#include "otbStreamingImageFileWriter.h"
 #include "otbFineRegistrationImageFilter.h"
 #include "otbStandardFilterWatcher.h"
 #include "itkTimeProbe.h"
@@ -66,8 +66,8 @@ int otbFineRegistrationImageFilterTest( int argc, char * argv[] )
   typedef otb::Image< PixelType,  Dimension >                                  ImageType;
   typedef otb::Image<DeformationValueType, Dimension>                           FieldImageType;
   typedef otb::ImageFileReader< ImageType >                                    ReaderType;
-  typedef otb::ImageFileWriter< ImageType >                                    CorrelWriterType;
-  typedef otb::ImageFileWriter< FieldImageType>                                FieldWriterType;
+  typedef otb::StreamingImageFileWriter< ImageType >                           CorrelWriterType;
+  typedef otb::StreamingImageFileWriter< FieldImageType>                       FieldWriterType;
   typedef otb::ExtractROI<PixelType, PixelType>                                ExtractFiltertype;
   typedef otb::FineRegistrationImageFilter<ImageType, ImageType, FieldImageType> RegistrationFilterType;
   
@@ -163,13 +163,13 @@ int otbFineRegistrationImageFilterTest( int argc, char * argv[] )
   CorrelWriterType::Pointer correlWriter = CorrelWriterType::New();
   correlWriter->SetFileName(correlFileName);
   correlWriter->SetInput(registration->GetOutput());
-  correlWriter->SetNumberOfStreamDivisions(2);
+  correlWriter->SetNumberOfDivisionsStrippedStreaming(2);
   correlWriter->Update();
 
   FieldWriterType::Pointer fieldWriter = FieldWriterType::New();
   fieldWriter->SetFileName(fieldFileName);
   fieldWriter->SetInput(registration->GetOutputDeformationField());
-  fieldWriter->SetNumberOfStreamDivisions(2);
+  fieldWriter->SetNumberOfDivisionsStrippedStreaming(2);
   fieldWriter->Update();
 
   return EXIT_SUCCESS;

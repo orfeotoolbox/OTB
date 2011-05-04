@@ -20,7 +20,7 @@
 #include "otbScalarImageToTexturesFilter.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "otbImageFileWriter.h"
+#include "otbStreamingImageFileWriter.h"
 #include "otbStandardFilterWatcher.h"
 
 int otbScalarImageToTexturesFilter(int argc, char * argv[])
@@ -43,7 +43,7 @@ int otbScalarImageToTexturesFilter(int argc, char * argv[])
   typedef otb::ScalarImageToTexturesFilter
   <ImageType, ImageType>                        TexturesFilterType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::ImageFileWriter<ImageType> WriterType;
+  typedef otb::StreamingImageFileWriter<ImageType> WriterType;
 
   ReaderType::Pointer         reader = ReaderType::New();
   TexturesFilterType::Pointer filter = TexturesFilterType::New();
@@ -74,7 +74,7 @@ int otbScalarImageToTexturesFilter(int argc, char * argv[])
   // Write outputs
   itk::OStringStream oss;
 
-  writer->SetNumberOfStreamDivisions(2);
+  writer->SetNumberOfDivisionsStrippedStreaming(2);
 
   oss.str("");
   oss << outprefix << "Energy.tif";

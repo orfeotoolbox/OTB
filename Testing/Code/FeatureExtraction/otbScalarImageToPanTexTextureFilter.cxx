@@ -20,7 +20,7 @@
 #include "otbScalarImageToPanTexTextureFilter.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "otbImageFileWriter.h"
+#include "otbStreamingImageFileWriter.h"
 #include "otbStandardFilterWatcher.h"
 
 int otbScalarImageToPanTexTextureFilter(int argc, char * argv[])
@@ -41,7 +41,7 @@ int otbScalarImageToPanTexTextureFilter(int argc, char * argv[])
   typedef otb::ScalarImageToPanTexTextureFilter
   <ImageType, ImageType>                        PanTexTextureFilterType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::ImageFileWriter<ImageType> WriterType;
+  typedef otb::StreamingImageFileWriter<ImageType> WriterType;
 
   ReaderType::Pointer              reader = ReaderType::New();
   PanTexTextureFilterType::Pointer filter = PanTexTextureFilterType::New();
@@ -70,7 +70,7 @@ int otbScalarImageToPanTexTextureFilter(int argc, char * argv[])
   oss << outprefix << "PanTex.tif";
   writer->SetInput(filter->GetOutput());
   writer->SetFileName(oss.str());
-  writer->SetNumberOfStreamDivisions(2);
+  writer->SetNumberOfDivisionsStrippedStreaming(2);
   writer->Update();
 
   return EXIT_SUCCESS;

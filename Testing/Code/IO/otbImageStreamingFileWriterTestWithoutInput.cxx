@@ -78,7 +78,7 @@ int otbImageScalarStreamingFileWriterTestWithoutInputGeneric(int argc, char* arg
     }
 
   writer->SetFileName(outputFilename);
-  writer->SetNumberOfStreamDivisions(10);
+  writer->SetNumberOfDivisionsStrippedStreaming(10);
   writer->SetInput(image);
   writer->Update();
 
@@ -155,7 +155,7 @@ int otbImageComplexStreamingFileWriterTestWithoutInputGeneric(int argc, char* ar
     }
 
   writer->SetFileName(outputFilename);
-  writer->SetNumberOfStreamDivisions(10);
+  writer->SetNumberOfDivisionsStrippedStreaming(10);
   writer->SetInput(image);
   writer->Update();
 

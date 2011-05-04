@@ -112,7 +112,7 @@ int otbSarParametricMapFunctionToImageFilter(int argc, char * argv[])
   std::cout << index << " -> " << function->EvaluateAtIndex(index) << std::endl;
 
   writer->SetInput(filter->GetOutput());
-  writer->SetNumberOfStreamDivisions(2);
+  writer->SetNumberOfDivisionsStrippedStreaming(2);
   writer->Update();
 
   return EXIT_SUCCESS;

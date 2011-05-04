@@ -49,7 +49,7 @@ int otbFunctionWithNeighborhoodToImageFilter(int argc, char * argv[])
   filter->SetFunction(function);
 
   writer->SetInput(filter->GetOutput());
-  writer->SetNumberOfStreamDivisions(2);
+  writer->SetNumberOfDivisionsStrippedStreaming(2);
   writer->Update();
 
   return EXIT_SUCCESS;

@@ -100,7 +100,7 @@ int otbVectorImageStreamingFileWriterScalarTestWithoutInputGeneric(int argc, cha
     }
 
   writer->SetFileName(argv[1]);
-  writer->SetNumberOfStreamDivisions(10);
+  writer->SetNumberOfDivisionsStrippedStreaming(10);
   writer->SetInput(image);
   writer->Update();
 
@@ -202,7 +202,7 @@ int otbVectorImageStreamingFileWriterComplexTestWithoutInputGeneric(int argc, ch
     }
 
   writer->SetFileName(argv[1]);
-  writer->SetNumberOfStreamDivisions(10);
+  writer->SetNumberOfDivisionsStrippedStreaming(10);
   writer->SetInput(image);
   writer->Update();
 

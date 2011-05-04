@@ -44,7 +44,7 @@ int otbImageFileWriterStreamingONERAComplex(int argc, char* argv[])
 
   complexReader->SetFileName(inputFilename);
 
-  complexWriter->SetNumberOfStreamDivisions(100);
+  complexWriter->SetNumberOfDivisionsStrippedStreaming(100);
   complexWriter->SetFileName(outputFilename);
   complexWriter->SetInput(complexReader->GetOutput());
 

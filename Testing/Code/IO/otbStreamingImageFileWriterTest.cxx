@@ -57,7 +57,7 @@ int otbStreamingImageFileWriterTest(int argc, char* argv[])
     std::cout << "Streaming writing test" << std::endl;
     StreamingWriterType::Pointer writer = StreamingWriterType::New();
     writer->SetFileName(outputFilename);
-    writer->SetNumberOfStreamDivisions(NumberOfStreamDivisions);
+    writer->SetNumberOfDivisionsStrippedStreaming(NumberOfStreamDivisions);
     writer->SetInput(reader->GetOutput());
     writer->Update();
     }
