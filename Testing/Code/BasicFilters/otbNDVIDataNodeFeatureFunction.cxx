@@ -121,8 +121,7 @@ int otbNDVIDataNodeFeatureFunction(int argc, char* argv[])
           const DataNodeType::Pointer currentGeometry = itVector.Get();
           NDVIFeatureOutputType currentResult;
           currentResult = NDVIFeatureFunction->Evaluate(*(currentGeometry.GetPointer()));
-          std::cout << "DataNode score: " << currentResult[0] << std::endl;
-          currentGeometry->SetFieldAsInt("NDVI", (int)(100*currentResult[0]));
+          currentGeometry->SetFieldAsDouble("NDVI", (double)(currentResult[0]));
           outVD->GetDataTree()->Add(currentGeometry, folder);
          }
     ++itVector;
