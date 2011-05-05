@@ -66,8 +66,8 @@ namespace otb {
  *         figure out how to do this ) (tricky)
  *
  * TODO  - Height and weight of the bbox cannot exceed 0.25 degrees. We have
- *         to process the bbox (split it) and concatenate the result. 
- *        
+ *         to process the bbox (split it) and concatenate the result.
+ *
  */
 class  ITK_EXPORT OSMDataToVectorDataGenerator : 
     public VectorDataSource< otb::VectorData<> >

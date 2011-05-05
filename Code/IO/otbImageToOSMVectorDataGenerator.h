@@ -32,7 +32,7 @@ namespace otb {
  *  than used to fill the bbox values. 
  *  The class OSMDataToVectorDataGenerator request the OSM server to get
  *  the OSM XML file within this bbox.
- *	
+ *
  * \sa otb::OSMDataToVectorDataGenerator
  */
 template < class TImage>  
