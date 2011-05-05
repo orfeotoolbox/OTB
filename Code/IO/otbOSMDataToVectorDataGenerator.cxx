@@ -258,7 +258,7 @@ OSMDataToVectorDataGenerator::AddKeyTypeToMap(std::string key, std::string value
     std::pair< std::string, StringVectorType > keytype;
     keytype.first  = key;
     keytype.second.push_back(value);
-    m_KeysMap.insert(keytype);        
+    m_KeysMap.insert(keytype);  
     }
 }
 

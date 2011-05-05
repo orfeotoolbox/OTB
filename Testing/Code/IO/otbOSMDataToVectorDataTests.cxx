@@ -20,7 +20,7 @@
 #include "otbVectorDataFileWriter.h"
 
 
-typedef otb::OSMDataToVectorDataGenerator      FilterType;
+typedef otb::OSMDataToVectorDataGenerator                     FilterType;
 typedef otb::VectorDataFileWriter<FilterType::VectorDataType> VectorDataFileWriterType;
 
 
@@ -30,8 +30,6 @@ int otbOSMToVectorDataGeneratorNew (int argc, char * argv[])
   
   return EXIT_SUCCESS;
 }
-
-
 
 int otbOSMToVectorDataGeneratorTest (int argc, char * argv[])
 {
@@ -46,7 +44,6 @@ int otbOSMToVectorDataGeneratorTest (int argc, char * argv[])
   
   return EXIT_SUCCESS;
 }
-
 
 int otbOSMToVectorDataGeneratorByName (int argc, char * argv[])
 {

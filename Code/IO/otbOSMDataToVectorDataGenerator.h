@@ -53,7 +53,7 @@ namespace otb {
  *       For instance : GetVectorDataByName("highway")
  * 
  *    2: Get only the features  for a key that match a given value via 
- *	 GetVectorDataByName(std::string key, std::string value)
+ *       GetVectorDataByName(std::string key, std::string value)
  *       For instance : GetVectorDataByName("highway", "motorway")
  *
  *
@@ -75,21 +75,21 @@ class  ITK_EXPORT OSMDataToVectorDataGenerator :
 public:
   /** Standard class typedefs */
   typedef OSMDataToVectorDataGenerator             Self;
-  typedef VectorDataSource< otb::VectorData<> > Superclass;
-  typedef itk::SmartPointer< Self >             Pointer;
-  typedef itk::SmartPointer<const Self>         ConstPointer;
+  typedef VectorDataSource< otb::VectorData<> >    Superclass;
+  typedef itk::SmartPointer< Self >                Pointer;
+  typedef itk::SmartPointer<const Self>            ConstPointer;
 
-  typedef Superclass::OutputVectorDataType      VectorDataType;
-  typedef VectorDataType::DataNodeType          DataNodeType;
-  typedef DataNodeType::LineType                LineType;
-  typedef DataNodeType::PolygonType             PolygonType;
-  typedef LineType::VertexType                  VertexType;
+  typedef Superclass::OutputVectorDataType         VectorDataType;
+  typedef VectorDataType::DataNodeType             DataNodeType;
+  typedef DataNodeType::LineType                   LineType;
+  typedef DataNodeType::PolygonType                PolygonType;
+  typedef LineType::VertexType                     VertexType;
 
   // typedefs for objects to store results
-  typedef std::map<int, VertexType>             ContainerType;
+  typedef std::map<int, VertexType>                ContainerType;
 
   // Vector to store <Key, value> 
-  typedef std::pair <std::string, std::string>        ElementPairType;
+  typedef std::pair <std::string, std::string>     ElementPairType;
   
   // Coordinates of the nodes 
   typedef std::vector<VertexType >                    PointTypeList;
@@ -223,4 +223,3 @@ private:
 }; // end of class 
 
 } // end of namespace otb
-

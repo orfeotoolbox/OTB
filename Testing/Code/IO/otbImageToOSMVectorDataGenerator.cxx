@@ -15,6 +15,7 @@
    PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
+
 #include "otbCommandLineArgumentParser.h"
 
 #include "otbImageToOSMVectorDataGenerator.h"
@@ -87,7 +88,7 @@ int otbImageToOSMVectorDataGenerator(int argc, char * argv[])
     std::string str = parseResult->GetParameterString("--Key");
 
     // find the position of the separator , 
-    size_t  pos = str.find(",");    
+    size_t  pos = str.find(",");
 
     // split the string
     currentkeyvalue.first = str.substr (0,pos);

@@ -41,8 +41,8 @@ class  ITK_EXPORT ImageToOSMVectorDataGenerator :
 {
 public:
   /** Standard class typedefs */
-  typedef ImageToOSMVectorDataGenerator             Self;
-  typedef OSMDataToVectorDataGenerator              Superclass;
+  typedef ImageToOSMVectorDataGenerator          Self;
+  typedef OSMDataToVectorDataGenerator           Superclass;
   typedef itk::SmartPointer< Self >              Pointer;
   typedef itk::SmartPointer<const Self>          ConstPointer;
 
@@ -73,7 +73,7 @@ public:
   void SetInput( const ImageType  * input);
   
    /** Returns the input image */
-  const ImageType* GetInput() const ;
+  const ImageType* GetInput() const;
 
 protected:
   virtual void GenerateData();
