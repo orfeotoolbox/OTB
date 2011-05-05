@@ -16,11 +16,6 @@
 
 =========================================================================*/
 
-
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
-
 #include <iostream>
 #include <iomanip>
 
@@ -33,16 +28,12 @@
 #include "itkExceptionObject.h"
 #include "itkMacro.h"
 
-#include "init/ossimInit.h"
-
-
 template<typename TMapProjection>
-int generic_main_carto_geo(TMapProjection* mapProjection, otb::CommandLineArgumentParseResult* parseResult)
+int generic_main_carto_geo(TMapProjection* mapProjection,
+                           otb::CommandLineArgumentParseResult* parseResult)
 {
-
   try
   {
-
     typedef TMapProjection MapProjectionType;
 
     typename MapProjectionType::InputPointType cartoPoint;
@@ -98,8 +89,6 @@ int main(int argc, char* argv[])
 {
   try
   {
-    ossimInit::instance()->initialize(argc, argv);
-
     // Parse command line parameters
     typedef otb::CommandLineArgumentParser ParserType;
     ParserType::Pointer parser = ParserType::New();
