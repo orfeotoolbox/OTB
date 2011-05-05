@@ -128,7 +128,7 @@ VectorDataIntoImageProjectionFilter<TInputVectorData, TInputImage>
   std::cout << "Origin of the input image: "<< m_InputImage->GetOrigin() << std::endl;
   std::cout << "Size of the input image: "<< m_InputImage->GetLargestPossibleRegion() << std::endl;
   std::cout << "ProjRef of the input image: "<< m_InputImage->GetProjectionRef() << std::endl;
-  std::cout << "ProjRef of the input vector data: "<< this->GetInput()->GetProjectionRef() << std::endl;*/
+  std::cout << "ProjRef of the input vector data: "<< this->GetInput()->GetProjectionRef() << std::endl; */
 
   // Get the index of the corner of the image
   IndexType ul, ur, ll, lr;

@@ -26,7 +26,7 @@
 #include "otbVectorDataFileWriter.h"
 
 
-typedef otb::VectorImage<unsigned int,2>               ImageType;
+typedef otb::VectorImage<unsigned int, 2>               ImageType;
 
 typedef otb::ImageToOSMVectorDataGenerator<ImageType>  FilterType;
 typedef FilterType::VectorDataType                     VectorDataType;
@@ -49,17 +49,17 @@ int otbImageToOSMVectorDataGenerator(int argc, char * argv[])
   // Parse command line parameters
   typedef otb::CommandLineArgumentParser ParserType;
   ParserType::Pointer parser = ParserType::New();
-  parser->AddInputImage(); 
-  parser->AddOption("--OutputVectorData","Output VectorData","-out",true);
-  parser->AddOption("--Key","Key to search in the XML OSM file","-key",1, false);
-  parser->AddOption("--OSM","OSM XML file to be parsed","-osm",1, false);
+  parser->AddInputImage();
+  parser->AddOption("--OutputVectorData","Output VectorData","-out", true);
+  parser->AddOption("--Key","Key to search in the XML OSM file","-key", 1, false);
+  parser->AddOption("--OSM","OSM XML file to be parsed","-osm", 1, false);
   
   typedef otb::CommandLineArgumentParseResult ParserResultType;
   ParserResultType::Pointer  parseResult = ParserResultType::New();
   
   try
     {
-    parser->ParseCommandLine(argc,argv,parseResult);
+    parser->ParseCommandLine(argc, argv, parseResult);
     }
   catch ( itk::ExceptionObject & err )
     {
@@ -70,7 +70,7 @@ int otbImageToOSMVectorDataGenerator(int argc, char * argv[])
   typedef std::pair<std::string, std::string>      KeyValueType;
   typedef std::vector<KeyValueType>                KeyValueListType;
 
-  // Instanciate the image reader 
+  // Instanciate the image reader
   ReaderType::Pointer      reader = ReaderType::New();
   reader->SetFileName(parseResult->GetInputImage());
   reader->UpdateOutputInformation();
@@ -93,18 +93,18 @@ int otbImageToOSMVectorDataGenerator(int argc, char * argv[])
     KeyValueType   currentkeyvalue;
     std::string str = parseResult->GetParameterString("--Key");
 
-    // find the position of the separator , 
+    // find the position of the separator ,
     size_t  pos = str.find(",");
 
     // split the string
-    currentkeyvalue.first = str.substr (0,pos);
+    currentkeyvalue.first = str.substr (0, pos);
     if(pos != std::string::npos)
       currentkeyvalue.second = str.substr (pos+1);
     
     keyvalueList.push_back(currentkeyvalue);
     }
 
-  std::cout <<"Searching for class "<<keyvalueList[0].first 
+  std::cout <<"Searching for class "<<keyvalueList[0].first
             << " and subclass "<< keyvalueList[0].second  << std::endl;
 
   
@@ -114,14 +114,14 @@ int otbImageToOSMVectorDataGenerator(int argc, char * argv[])
 
   if(parseResult->IsOptionPresent("--Key"))
     {
-    const VectorDataType *vd  = 
-      vdgenerator->GetVectorDataByName(keyvalueList[0].first, 
+    const VectorDataType *vd  =
+      vdgenerator->GetVectorDataByName(keyvalueList[0].first,
                                        keyvalueList[0].second);
     writer->SetInput(vd);
     }
   else
     {
-    const VectorDataType *vd  = 
+    const VectorDataType *vd  =
       vdgenerator->GetVectorDataByName("highway");
     writer->SetInput(vd);
     }

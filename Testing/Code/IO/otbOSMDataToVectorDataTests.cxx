@@ -63,7 +63,7 @@ int otbOSMToVectorDataGeneratorByName (int argc, char * argv[])
   
   try
     {
-    parser->ParseCommandLine(argc,argv,parseResult);
+    parser->ParseCommandLine(argc, argv, parseResult);
     }
   catch ( itk::ExceptionObject & err )
     {
@@ -88,7 +88,7 @@ int otbOSMToVectorDataGeneratorByName (int argc, char * argv[])
   const FilterType::VectorDataType*  v4 = filter->GetVectorDataByName("highway","motorway_link");
   std::cout <<"Size of the vectordata v4 : "<< v4->Size() << std::endl;
 
-  // Write the VectorData 
+  // Write the VectorData
   VectorDataFileWriterType::Pointer writer = VectorDataFileWriterType::New();
   writer->SetFileName(parseResult->GetParameterString("--OutputVectorData"));
   writer->SetInput(v4);

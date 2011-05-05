@@ -26,16 +26,16 @@ namespace otb {
 /** \class OSMDataToVectorDataGenerator
  *
  *  \brief Helper class to compute the extent of the input image and
- *   use it to fill the bbox for the OSM request. 
+ *   use it to fill the bbox for the OSM request.
  *
  *  This class compute the extent of the input image. The extent is
- *  than used to fill the bbox values. 
+ *  than used to fill the bbox values.
  *  The class OSMDataToVectorDataGenerator request the OSM server to get
  *  the OSM XML file within this bbox.
  *
  * \sa otb::OSMDataToVectorDataGenerator
  */
-template < class TImage>  
+template < class TImage>
 class  ITK_EXPORT ImageToOSMVectorDataGenerator :
     public OSMDataToVectorDataGenerator
 {
@@ -52,13 +52,13 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
   
-  // Image typedef 
+  // Image typedef
   typedef TImage                                ImageType;
   typedef typename ImageType::SizeType          SizeType;
   typedef typename ImageType::IndexType         IndexType;
   typedef typename ImageType::PointType         PointType;
 
-  // VectorData 
+  // VectorData
   typedef Superclass::VectorDataType            VectorDataType;
   
   // Struct to store the extent of the image
@@ -90,7 +90,7 @@ private:
 
   ImageExtentType                            m_ImageExtent;
 
-}; // end of class 
+}; // end of class
 
 } // end of namespace otb
 

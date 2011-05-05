@@ -87,7 +87,7 @@ int otbSpectralAngleDataNodeFeatureFunction(int argc, char* argv[])
 
   imgReader->SetFileName(inputImg);
   imgReader->UpdateOutputInformation();
-  imgReader->Update();//Needed to set m_EndIndex, m_StartIndex in otbDataNodeImageFunction
+  imgReader->Update(); //Needed to set m_EndIndex, m_StartIndex in otbDataNodeImageFunction
 
   vdReProjFilter->SetInputImage(imgReader->GetOutput());
   vdReProjFilter->SetInputVectorData(vdReader->GetOutput());

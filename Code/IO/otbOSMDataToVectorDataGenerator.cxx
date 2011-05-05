@@ -27,7 +27,7 @@
 namespace otb
 {
 
-OSMDataToVectorDataGenerator::OSMDataToVectorDataGenerator():m_North(43.62811), 
+OSMDataToVectorDataGenerator::OSMDataToVectorDataGenerator():m_North(43.62811),
                                                        m_South(43.60185),
                                                        m_East(1.59323),
                                                        m_West(1.54911),
@@ -72,7 +72,7 @@ void OSMDataToVectorDataGenerator::GenerateData()
     urlStream<<"bbox="<<m_West<<","<<m_South<<","<<m_East<<","<<m_North;
     
     // Use Curl to request the OSM Server
-    // TODO use the RetrieveUrlInMemory 
+    // TODO use the RetrieveUrlInMemory
     if(m_Curl->RetrieveFile(urlStream.str(), m_FileName) != 0)
       {
       itkExceptionMacro(<<"Problem while getting "<< m_Url);
@@ -85,7 +85,7 @@ void OSMDataToVectorDataGenerator::GenerateData()
       itkExceptionMacro(<<"The XML output FileName is empty, please set the filename via the method SetFileName");
 
     //Check that the right extension is given : expected .xml */
-    if (itksys::SystemTools::GetFilenameLastExtension(m_FileName) != ".xml" 
+    if (itksys::SystemTools::GetFilenameLastExtension(m_FileName) != ".xml"
         &&  itksys::SystemTools::GetFilenameLastExtension(m_FileName)!= ".osm" )
       {
       itkExceptionMacro(<<itksys::SystemTools::GetFilenameLastExtension(m_FileName)
@@ -93,7 +93,7 @@ void OSMDataToVectorDataGenerator::GenerateData()
       }
     }
   
-  // Parse the XML File 
+  // Parse the XML File
   this->ParseXmlFile();
 
   // Remove the osm temp file only if the url request is used
@@ -115,7 +115,7 @@ void OSMDataToVectorDataGenerator::ParseXmlFile()
     std::cout <<"Cannot open the file "<<m_FileName <<std::endl;
     }
     
-  // Parse the xml 
+  // Parse the xml
   TiXmlHandle hDoc(&doc);
   TiXmlHandle root      = hDoc.FirstChildElement();
 
@@ -127,19 +127,19 @@ void OSMDataToVectorDataGenerator::ParseXmlFile()
   /*   Step 1 : Store the nodes in a std::map                       */
   ////////////  ////////////  ////////////  ////////////  ////////////
 
-  // Iterate through the tree to get all the nodes and store them in 
+  // Iterate through the tree to get all the nodes and store them in
   // a std::map
   for( TiXmlElement* node = root.FirstChild("node").ToElement();
-       node != NULL  && strcmp(node->Value(),"node")==0 ;
+       node != NULL  && strcmp(node->Value(),"node")==0;
        node = node->NextSiblingElement() )
     {
     int id = 0;
     double longitude = 0.;
     double latitude = 0.;
     
-    if ( node->QueryIntAttribute("id",&id) == TIXML_SUCCESS 
-         && node->QueryDoubleAttribute("lat",&latitude) == TIXML_SUCCESS
-         && node->QueryDoubleAttribute("lon",&longitude) == TIXML_SUCCESS )
+    if ( node->QueryIntAttribute("id", &id) == TIXML_SUCCESS
+         && node->QueryDoubleAttribute("lat", &latitude) == TIXML_SUCCESS
+         && node->QueryDoubleAttribute("lon", &longitude) == TIXML_SUCCESS )
       {
       // current point
       VertexType geoPoint;
@@ -189,7 +189,7 @@ void OSMDataToVectorDataGenerator::ParseXmlFile()
           elementPair.first  = result;
           elementPair.second = resultValue;
           
-          // Add the key,value to map
+          // Add the key, value to map
           this->AddKeyTypeToMap(result, resultValue);
           
           break;
@@ -203,18 +203,18 @@ void OSMDataToVectorDataGenerator::ParseXmlFile()
         
         // put the current layer pointer to the begining
         for( TiXmlElement* currentNode = currentLayer->FirstChildElement("nd");
-             currentNode != NULL ;
+             currentNode != NULL;
              currentNode = currentNode->NextSiblingElement() )
           {
           int value=0;
-          if(currentNode->QueryIntAttribute("ref",&value) == TIXML_SUCCESS)
+          if(currentNode->QueryIntAttribute("ref", &value) == TIXML_SUCCESS)
             {
             // Add the current point to the list
             pointList.push_back((*m_GeoPointContainer.find(value)).second);
             }
           }
         
-        // Form the VectorDataElement 
+        // Form the VectorDataElement
         if(pointList.size()>0)
           {
           vdelement.first  = elementPair;
@@ -242,7 +242,7 @@ OSMDataToVectorDataGenerator::AddKeyTypeToMap(std::string key, std::string value
     bool found = false;
 
     // Add the type if not present
-    for(unsigned int i = 0; i < currentTypes.size() ; i++)
+    for(unsigned int i = 0; i < currentTypes.size(); i++)
       {
       if(currentTypes[i].compare(value)  == 0)
         found = true;
@@ -258,7 +258,7 @@ OSMDataToVectorDataGenerator::AddKeyTypeToMap(std::string key, std::string value
     std::pair< std::string, StringVectorType > keytype;
     keytype.first  = key;
     keytype.second.push_back(value);
-    m_KeysMap.insert(keytype);  
+    m_KeysMap.insert(keytype);
     }
 }
 
@@ -283,10 +283,10 @@ OSMDataToVectorDataGenerator::ProcessVectorData(std::string key, std::string val
   m_OutputVectorData->GetDataTree()->Add(document, root);
   m_OutputVectorData->GetDataTree()->Add(folder, document);
 
-  // Form the vector data with the values parsed 
+  // Form the vector data with the values parsed
   for(unsigned int idx = 0; idx < m_VectorDataElementList.size(); idx++)
     {
-    // Instanciate a datanode 
+    // Instanciate a datanode
     DataNodeType::Pointer currentDataNode = DataNodeType::New();
     
     // Get the current PointTypeList
@@ -301,12 +301,12 @@ OSMDataToVectorDataGenerator::ProcessVectorData(std::string key, std::string val
       {
       
       // value is empty
-      // or if it is not empty it has to match the requestd value 
+      // or if it is not empty it has to match the requestd value
       if(value.empty() || elementPair.second.compare(value) == 0)
         {
         
         // If the first and the last vertex are the same = polygon else
-        // line 
+        // line
         if(currentPointList[0].EuclideanDistanceTo(currentPointList[currentPointList.size()-1]) < 1e-10) // polygon
           {
           currentDataNode->SetNodeId("FEATURE_POLYGON");
@@ -357,10 +357,10 @@ OSMDataToVectorDataGenerator::GetVectorDataByName(std::string key)
     this->ParseXmlFile();
     }
   
-  // Build the output 
+  // Build the output
   this->ProcessVectorData(key,"");
 
-  // Get the output 
+  // Get the output
   return m_OutputVectorData;
 }
 
@@ -378,7 +378,7 @@ OSMDataToVectorDataGenerator::GetVectorDataByName(std::string key, std::string v
     this->ParseXmlFile();
     }
   
-  // Build the output 
+  // Build the output
   this->ProcessVectorData(key, value);
 
   // Get the output

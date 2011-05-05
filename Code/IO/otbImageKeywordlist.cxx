@@ -84,7 +84,7 @@ GetMetadataByKey(const std::string& key) const
   return it->second;
 }
 
-void 
+void
 ImageKeywordlist::
 ClearMetadataByKey(const std::string& key)
 {

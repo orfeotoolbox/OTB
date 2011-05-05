@@ -37,29 +37,29 @@ namespace otb {
  *  parameters can be set using the methods Set{North, South, East,
  *  West}. Thus, only the vector elements that are within this bbox
  *  are returned in the Xml file.
- * 
+ *
  *  The class parse the XML file for certain keys by default, the
  *  class allow adding key to be searched in the XML file. Use
  *  AddKey(std::string key) to add it to the search list.
- * 
+ *
  *  Adding a field and its integer value is possible through the
  *  methods SetClassKey(std::string) and SetClassKeyValue()
  *  The field is retrieved by GetFieldAsInt(), thus must be int-compatible
  *
- *  Getting output VectorData is possible via two methods : 
- * 
+ *  Getting output VectorData is possible via two methods :
+ *
  *    1: Get all the features of key in a vector data via
  *       GetVectorDataByName(std::string key)
  *       For instance : GetVectorDataByName("highway")
- * 
- *    2: Get only the features  for a key that match a given value via 
+ *
+ *    2: Get only the features  for a key that match a given value via
  *       GetVectorDataByName(std::string key, std::string value)
  *       For instance : GetVectorDataByName("highway", "motorway")
  *
  *
  *  All the keys and their relative values are stored in a map. To get
  *  this map use the method  GetKeysMap().
- * 
+ *
  *
  * TODO  - Get the number of elements within the bbox requested. OSM
  *         server can return only 5000 elements per request ( Cannot
@@ -69,7 +69,7 @@ namespace otb {
  *         to process the bbox (split it) and concatenate the result.
  *
  */
-class  ITK_EXPORT OSMDataToVectorDataGenerator : 
+class  ITK_EXPORT OSMDataToVectorDataGenerator :
     public VectorDataSource< otb::VectorData<> >
 {
 public:
@@ -88,10 +88,10 @@ public:
   // typedefs for objects to store results
   typedef std::map<int, VertexType>                ContainerType;
 
-  // Vector to store <Key, value> 
+  // Vector to store <Key, value>
   typedef std::pair <std::string, std::string>     ElementPairType;
   
-  // Coordinates of the nodes 
+  // Coordinates of the nodes
   typedef std::vector<VertexType >                    PointTypeList;
   typedef std::pair<ElementPairType, PointTypeList>   VectorDataElementType;
   typedef std::vector<VectorDataElementType>          VectorDataElementListType;
@@ -131,7 +131,7 @@ public:
 
   /* flag to choose between requesting the url using curl or a file
    in the disk */
-  itkSetMacro(UseUrl,bool);
+  itkSetMacro(UseUrl, bool);
 
   /** Add a key to search into the list */
   void AddKey(std::string key)
@@ -140,40 +140,40 @@ public:
       m_KeyList.push_back(key);
   }
 
-  /** Method to get the map where are stored the keys and their value 
+  /** Method to get the map where are stored the keys and their value
     * found when parsing the osm file.
-    */ 
-  const KeyMapType GetKeysMap() const 
+    */
+  const KeyMapType GetKeysMap() const
   {
     return m_KeysMap;
   }
 
-  /** Method to get a VectorData where are stored elements 
-    * corresponding the key 
-    */ 
+  /** Method to get a VectorData where are stored elements
+    * corresponding the key
+    */
   const VectorDataType* GetVectorDataByName(std::string key);
 
-  /** Method to get a VectorData where are stored elements 
+  /** Method to get a VectorData where are stored elements
     * corresponding the key and the value
-    */ 
-  const VectorDataType* GetVectorDataByName(std::string key, std::string value);  
+    */
+  const VectorDataType* GetVectorDataByName(std::string key, std::string value);
 
 protected:
   /** Generate Data method : lauch the process */
   virtual void GenerateData();
   
-  /** 
+  /**
     * Parse the xml file get from OSM to compose the requested vector
-    * data  
+    * data
     */
   void ParseXmlFile();
   
-  /** 
-    * Compose the vector data 
+  /**
+    * Compose the vector data
     */
   void ProcessVectorData(std::string key, std::string value);
 
-  /** 
+  /**
     * internal convenient method to serach if a key was already added
     */
   bool IsKeyPresent(std::string key);
@@ -186,7 +186,7 @@ private:
   OSMDataToVectorDataGenerator(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  // Private method to add the key,type to the map
+  // Private method to add the key, type to the map
   void AddKeyTypeToMap(std::string key, std::string value);
 
   // Extent of the region to get from OSM
@@ -220,6 +220,6 @@ private:
   std::string                 m_ClassKey;
   int                         m_ClassKeyValue;
   
-}; // end of class 
+}; // end of class
 
 } // end of namespace otb
