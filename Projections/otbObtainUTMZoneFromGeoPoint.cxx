@@ -15,11 +15,9 @@
      PURPOSE,  See the above copyright notices for more information.
 
 =========================================================================*/
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
 
 #include <iostream>
+#include <fstream>
 
 #include "otbCommandLineArgumentParser.h"
 #include "otbMapProjections.h"
@@ -28,18 +26,12 @@
 #include "itkExceptionObject.h"
 #include "itkMacro.h"
 
-#include "init/ossimInit.h"
-#include "projection/ossimUtmProjection.h"
-
 #include "otbUtils.h"
-
 
 int main(int argc, char* argv[])
 {
   try
   {
-    ossimInit::instance()->initialize(argc, argv);
-
     // Parse command line parameters
     typedef otb::CommandLineArgumentParser ParserType;
     ParserType::Pointer parser = ParserType::New();
@@ -71,29 +63,24 @@ int main(int argc, char* argv[])
     }
 
     // Code
+    double lon = parseResult->GetParameterDouble("--Longitude");
+    double lat =parseResult->GetParameterDouble("--Latitude");
 
-    typedef otb::UtmForwardProjection UtmProjectionType;
-    UtmProjectionType::Pointer utmProjection = UtmProjectionType::New();
-    UtmProjectionType::InputPointType geoPoint;
-
-    geoPoint[0]=parseResult->GetParameterDouble("--Longitude");
-    geoPoint[1]=parseResult->GetParameterDouble("--Latitude");
-
-    int utmZone = otb::Utils::GetZoneFromGeoPoint(geoPoint[0], geoPoint[1]);
+    int utmZone = otb::Utils::GetZoneFromGeoPoint(lon, lat);
 
     if (!parseResult->IsOptionPresent("--OTBTesting"))
     {
-      std::cout << "Geographic   Point (Lat, Lon) : (" << geoPoint[1] << "," << geoPoint[0] << ")" << std::endl;
+      std::cout << "Geographic   Point (Lat,Lon) : (" << lat << "," << lon << ")" << std::endl;
       std::cout << "UTM Corresponding Zone       : ==> " << utmZone << " <=="  << std::endl;
     }
     else
     {
       std::string outputTestFileName = parseResult->GetParameterString("--OTBTesting", 0);
 
-      ofstream outputTestFile;
+      std::ofstream outputTestFile;
       outputTestFile.open(outputTestFileName.c_str());
 
-      outputTestFile << "Geographic   Point (Lat, Lon) : (" << geoPoint[1] << "," << geoPoint[0] << ")" << std::endl;
+      outputTestFile << "Geographic   Point (Lat,Lon) : (" << lat << "," << lon << ")" << std::endl;
       outputTestFile << "UTM Corresponding Zone       : ==> " << utmZone << " <=="  << std::endl;
 
       outputTestFile.close();
