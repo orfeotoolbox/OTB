@@ -95,7 +95,7 @@ int generic_main(otb::ApplicationOptionsResult* parseResult,
       typedef otb::ImageMetadataInterfaceBase ImageMetadataInterfaceType;
       ImageMetadataInterfaceType::Pointer metadataInterface = ImageMetadataInterfaceFactory::CreateIMI(
           reader->GetOutput()->GetMetaDataDictionary());
-      double isotropicSpacing = std::max(metadataInterface->GetXPixelSpacing(),metadataInterface->GetYPixelSpacing());
+      double isotropicSpacing = std::max(metadataInterface->GetXPixelSpacing(), metadataInterface->GetYPixelSpacing());
 
       spacing[0] =  isotropicSpacing;
       spacing[1] = -isotropicSpacing;
