@@ -161,7 +161,7 @@ protected:
   MassOfBelief() {}
   
   /** Desctructor */
-  ~MassOfBelief() {}
+  virtual ~MassOfBelief() {}
   
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
