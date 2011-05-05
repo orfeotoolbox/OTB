@@ -32,7 +32,6 @@
 #include "otbSimpleRcsPanSharpeningFusionImageFilter.h"
 #include "itkPixelBuilder.h"
 
-#include "init/ossimInit.h"
 #include "itkFixedArray.h"
 
 #include "otbPipelineMemoryPrintCalculator.h"
