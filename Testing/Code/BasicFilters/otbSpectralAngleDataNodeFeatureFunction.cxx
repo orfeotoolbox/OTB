@@ -19,7 +19,7 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#include "otbNDVIDataNodeFeatureFunction.h"
+#include "otbSpectralAngleDataNodeFeatureFunction.h"
 
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
@@ -29,22 +29,22 @@
 #include "otbVectorDataFileWriter.h"
 #include "itkPreOrderTreeIterator.h"
 
-int otbNDVIDataNodeFeatureFunctionNew(int argc, char* argv[])
+int otbSpectralAngleDataNodeFeatureFunctionNew(int argc, char* argv[])
 {
   typedef double CoordRepType;
   typedef double PrecisionType;
   typedef otb::VectorImage<double, 2>  ImageType;
-  typedef otb::NDVIDataNodeFeatureFunction<ImageType, CoordRepType, PrecisionType>
-                                       NDVIDataNodeFeaturefunctionType;
+  typedef otb::SpectralAngleDataNodeFeatureFunction<ImageType, CoordRepType, PrecisionType>
+                                       DataNodeFeaturefunctionType;
 
-  NDVIDataNodeFeaturefunctionType::Pointer NDVIFeature = NDVIDataNodeFeaturefunctionType::New();
+  DataNodeFeaturefunctionType::Pointer featureFunction = DataNodeFeaturefunctionType::New();
 
-  std::cout << NDVIFeature << std::endl;
+  std::cout << featureFunction << std::endl;
 
   return EXIT_SUCCESS;
 }
 
-int otbNDVIDataNodeFeatureFunction(int argc, char* argv[])
+int otbSpectralAngleDataNodeFeatureFunction(int argc, char* argv[])
 {
   const char * inputVD  = argv[1];
   const char * inputImg = argv[2];
@@ -66,16 +66,16 @@ int otbNDVIDataNodeFeatureFunction(int argc, char* argv[])
   typedef itk::PreOrderTreeIterator<VectorDataType::DataTreeType>
                                                       TreeIteratorType;
 
-  typedef otb::NDVIDataNodeFeatureFunction<ImageType, CoordRepType, PrecisionType>
-                                         NDVIDataNodeFeaturefunctionType;
-  typedef NDVIDataNodeFeaturefunctionType::OutputType
-                                                      NDVIFeatureOutputType;
+  typedef otb::SpectralAngleDataNodeFeatureFunction<ImageType, CoordRepType, PrecisionType>
+                                                      FeaturefunctionType;
+  typedef FeaturefunctionType::OutputType
+                                                      FeatureOutputType;
 
   ImageReaderType::Pointer imgReader = ImageReaderType::New();
   VectorDataReaderType::Pointer vdReader = VectorDataReaderType::New();
   VectorDataReProjFilter::Pointer vdReProjFilter = VectorDataReProjFilter::New();
   VectorDataWriterType::Pointer vdWriter = VectorDataWriterType::New();
-  NDVIDataNodeFeaturefunctionType::Pointer NDVIFeatureFunction = NDVIDataNodeFeaturefunctionType::New();
+  FeaturefunctionType::Pointer featureFunction = FeaturefunctionType::New();
 
   if (!DisplayWarnings)
    {
@@ -87,21 +87,18 @@ int otbNDVIDataNodeFeatureFunction(int argc, char* argv[])
 
   imgReader->SetFileName(inputImg);
   imgReader->UpdateOutputInformation();
-  imgReader->Update(); //Needed to set m_EndIndex, m_StartIndex in otbDataNodeImageFunction
+  imgReader->Update();//Needed to set m_EndIndex, m_StartIndex in otbDataNodeImageFunction
 
   vdReProjFilter->SetInputImage(imgReader->GetOutput());
   vdReProjFilter->SetInputVectorData(vdReader->GetOutput());
   vdReProjFilter->SetDEMDirectory(DEMDir);
   vdReProjFilter->SetUseOutputSpacingAndOriginFromImage(true);
   vdReProjFilter->Update();
-/*
+
   std::cout<< "vdReProjFilter->GetOutput()->Size(): "
         << vdReProjFilter->GetOutput()->Size() << std::endl;
-*/
-  NDVIFeatureFunction->SetREDChannelIndex(3);
-  NDVIFeatureFunction->SetNIRChannelIndex(4);
-  NDVIFeatureFunction->SetNDVIThreshold(0.047);
-  NDVIFeatureFunction->SetInputImage(imgReader->GetOutput());
+
+  featureFunction->SetInputImage(imgReader->GetOutput());
 
   // Output
   VectorDataType::Pointer outVD = VectorDataType::New();
@@ -125,9 +122,9 @@ int otbNDVIDataNodeFeatureFunction(int argc, char* argv[])
     if (itVector.Get()->IsLineFeature() || itVector.Get()->IsPolygonFeature())
          {
           const DataNodeType::Pointer currentGeometry = itVector.Get();
-          NDVIFeatureOutputType currentResult;
-          currentResult = NDVIFeatureFunction->Evaluate(*(currentGeometry.GetPointer()));
-          currentGeometry->SetFieldAsDouble("NDVI", (double)(currentResult[0]));
+          FeatureOutputType currentResult;
+          currentResult = featureFunction->Evaluate(*(currentGeometry.GetPointer()));
+          currentGeometry->SetFieldAsDouble("RADIOM", (double)(currentResult[0]));
           outVD->GetDataTree()->Add(currentGeometry, folder);
          }
     ++itVector;
@@ -139,4 +136,3 @@ int otbNDVIDataNodeFeatureFunction(int argc, char* argv[])
 
   return EXIT_SUCCESS;
 }
-

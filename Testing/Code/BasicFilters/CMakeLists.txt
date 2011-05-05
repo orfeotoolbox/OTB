@@ -2010,6 +2010,7 @@ ADD_TEST(bfTvNDVIDataNodeFeatureFunction_Line ${BASICFILTERS_TESTS15}
 	${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/ROI_QB_RANGUEUIL.TIF
 	${INPUTDATA}/DEM/srtm_directory
 	${TEMP}/bfTvNDVIDataNodeFeatureFunctionOutput_Line.shp
+	0
 )
 
 ADD_TEST(bfTvNDVIDataNodeFeatureFunction_Polygon ${BASICFILTERS_TESTS15}
@@ -2021,7 +2022,37 @@ ADD_TEST(bfTvNDVIDataNodeFeatureFunction_Polygon ${BASICFILTERS_TESTS15}
 	${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/ROI_QB_RANGUEUIL.TIF
 	${INPUTDATA}/DEM/srtm_directory
 	${TEMP}/bfTvNDVIDataNodeFeatureFunctionOutput_Polygon.shp
+	0
 )
+
+ADD_TEST(bfTuSpectralAngleDataNodeFeatureFunctionNew ${BASICFILTERS_TESTS15}
+  otbSpectralAngleDataNodeFeatureFunctionNew
+)
+
+ADD_TEST(bfTvSpectralAngleDataNodeFeatureFunction_Line ${BASICFILTERS_TESTS15}
+  --compare-ogr ${NOTOL}
+  ${BASELINE_FILES}/bfTvSpectralAngleDataNodeFeatureFunctionOutput_Line.shp
+  ${TEMP}/bfTvSpectralAngleDataNodeFeatureFunctionOutput_Line.shp
+ 	otbSpectralAngleDataNodeFeatureFunction
+  	${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/ROI_QB_RANGUEUIL_ROADS.shp
+	${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/ROI_QB_RANGUEUIL.TIF
+	${INPUTDATA}/DEM/srtm_directory
+	${TEMP}/bfTvSpectralAngleDataNodeFeatureFunctionOutput_Line.shp
+	0
+)
+
+ADD_TEST(bfTvSpectralAngleDataNodeFeatureFunction_Polygon ${BASICFILTERS_TESTS15}
+  --compare-ogr ${NOTOL}
+  ${BASELINE_FILES}/bfTvSpectralAngleDataNodeFeatureFunctionOutput_Polygon.shp
+  ${TEMP}/bfTvSpectralAngleDataNodeFeatureFunctionOutput_Polygon.shp
+ 	otbSpectralAngleDataNodeFeatureFunction
+  	${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/ROI_QB_RANGUEUIL_BUILDINGS.shp
+	${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/ROI_QB_RANGUEUIL.TIF
+	${INPUTDATA}/DEM/srtm_directory
+	${TEMP}/bfTvSpectralAngleDataNodeFeatureFunctionOutput_Polygon.shp
+	0
+)
+
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 
@@ -2284,6 +2315,7 @@ IF(OTB_DATA_USE_LARGEINPUT)
 SET(BasicFilters_SRCS15
 otbBasicFiltersTests15.cxx
 otbNDVIDataNodeFeatureFunction.cxx
+otbSpectralAngleDataNodeFeatureFunction.cxx
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
