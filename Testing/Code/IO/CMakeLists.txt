@@ -2600,6 +2600,34 @@ ADD_TEST(ioTvTileMapWriter ${IO_TESTS19}
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
+
+
+# OSM Data To VectorData Generator
+
+ADD_TEST(ioTuOSMToVectorDataGenerator ${IO_TESTS19}
+  otbOSMToVectorDataGeneratorNew
+)
+
+ADD_TEST(ioTvOSMToVectorDataGeneratorTest ${IO_TESTS19}
+  --compare-ogr ${EPSILON_9}
+  ${BASELINE_FILES}/ioTvOSMToVectorDataFilterTest_highway.shp
+  ${TEMP}/ioTvOSMToVectorDataFilterTest_highway.shp
+  otbOSMToVectorDataGeneratorTest
+  ${TEMP}/ioTvOSMToVectorDataFilterTest_highway.shp
+)
+
+ADD_TEST(ioTvOSMToVectorDataGeneratorByName ${IO_TESTS19}
+  --compare-ogr ${EPSILON_9}
+  ${BASELINE_FILES}/ioTvOSMToVectorDataFilterByName_highway.shp
+  ${TEMP}/ioTvOSMToVectorDataFilterByName_highway.shp
+  otbOSMToVectorDataGeneratorByName
+  -osm ${INPUTDATA}/qb_road.osm
+  -vd ${TEMP}/ioTvOSMToVectorDataFilterByName_highway.shp
+)
+
+
+
+
 ENDIF(OTB_USE_CURL)
 
 #----------------------------------------------------------------------------------
@@ -2769,6 +2797,8 @@ ADD_TEST(ioTvTileMapImageIOHelperTest ${IO_TESTS21}
          otbTileMapImageIOHelperTest
               ${TEMP}/ioTvTileMapImageIOHelperTest.txt
 )
+
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS22 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -3348,6 +3378,7 @@ otbIOTests19.cxx
 otbImageFileReaderServerName.cxx
 otbTileMapImageIOTest.cxx
 otbTileMapWriter.cxx
+otbOSMDataToVectorDataTests.cxx
 )
 ENDIF(OTB_USE_CURL)
 
