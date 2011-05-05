@@ -80,21 +80,32 @@ ADD_TEST(fzTvMassOfBeliefDSApplied-H1_H2_ ${Fuzzy_TESTS2}
         0.9
         )
 
-#ADD_TEST(fzTuVectorDataToSpecificDescriptionFilterBaseNew ${Fuzzy_TESTS2}
-#        otbVectorDataToSpecificDescriptionFilterBaseNew)
+ADD_TEST(fzTuVectorDataToDSValidatedVectorDataFilterNew ${Fuzzy_TESTS2}
+        otbVectorDataToDSValidatedVectorDataFilterNew)
 
-#ADD_TEST(fzTuVectorDataToRoadDescriptionFilterNew ${Fuzzy_TESTS2}
-#        otbVectorDataToRoadDescriptionFilterNew)
+ADD_TEST(fzTvVectorDataToDSValidatedVectorDataFilter ${Fuzzy_TESTS2}
+        otbVectorDataToDSValidatedVectorDataFilter
+      ${TEMP}/fzTvVectorDataToRoadDescriptionFilterOutput.shp
+      ${TEMP}/fzTvDSValidatedRoadVectorDataOutput.shp
+      )
 
-#ADD_TEST(fzTvVectorDataToRoadDescriptionFilter ${Fuzzy_TESTS2}
-  #--compare-ogr ${NOTOL}
-  #${INPUTDATA}/.shp
-  #${TEMP}/.shp
-  #otbVectorDataToRoadDescriptionFilter
-  #${INPUTDATA}/ROI_QB_RANGUEUIL_ROADS.shp
-  #${INPUTDATA}/ROI_QB_RANGUEUIL_MUL_4.TIF
-  #${TEMP}/fzTvVectorDataToRoadDescriptionFilterOutput.shp
-  #)
+ADD_TEST(fzTuVectorDataToSpecificDescriptionFilterBaseNew ${Fuzzy_TESTS2}
+        otbVectorDataToSpecificDescriptionFilterBaseNew)
+
+ADD_TEST(fzTuVectorDataToRoadDescriptionFilterNew ${Fuzzy_TESTS2}
+        otbVectorDataToRoadDescriptionFilterNew)
+
+ADD_TEST(fzTvVectorDataToRoadDescriptionFilter ${Fuzzy_TESTS2}
+ #--compare-ogr ${NOTOL}
+ #${BASELINE_FILES}/fzTvVectorDataToRoadDescriptionFilterOutput.shp
+ #${TEMP}/fzTvVectorDataToRoadDescriptionFilterOutput.shp
+ otbVectorDataToRoadDescriptionFilter
+ ${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/ROI_QB_RANGUEUIL_ROADS.shp
+ ${OTB_DATA_LARGEINPUT_ROOT}/Dempster-Shafer/ROI_QB_RANGUEUIL.TIF
+ ${TEMP}/fzTvVectorDataToRoadDescriptionFilterOutput.shp
+ ${INPUTDATA}/DEM/srtm_directory
+ 0
+ )
 
 
 SET(BasicFuzzy_SRCS1
@@ -109,8 +120,9 @@ otbJointMassOfBeliefFilter.cxx
 SET(BasicFuzzy_SRCS2
 otbFuzzyVariableDSApplied.cxx
 otbMassOfBeliefDSApplied.cxx
-#otbVectorDataToSpecificDescriptionFilterBase.cxx
-#otbVectorDataToRoadDescriptionFilter.cxx
+#otbVectorDataToDSValidatedVectorDataFilter.cxx
+otbVectorDataToSpecificDescriptionFilterBase.cxx
+otbVectorDataToRoadDescriptionFilter.cxx
 )
 
 ADD_EXECUTABLE(otbFuzzyTests1 otbFuzzyTests1.cxx ${BasicFuzzy_SRCS1})
