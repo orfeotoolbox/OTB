@@ -33,8 +33,6 @@
 #include "itkNearestNeighborInterpolateImageFunction.h"
 #include "otbImageToGenericRSOutputParameters.h"
 
-#include "projection/ossimUtmProjection.h"
-
 #include "otbPipelineMemoryPrintCalculator.h"
 #include "itkExtractImageFilter.h"
 
@@ -97,7 +95,7 @@ int generic_main(otb::ApplicationOptionsResult* parseResult,
       typedef otb::ImageMetadataInterfaceBase ImageMetadataInterfaceType;
       ImageMetadataInterfaceType::Pointer metadataInterface = ImageMetadataInterfaceFactory::CreateIMI(
           reader->GetOutput()->GetMetaDataDictionary());
-      double isotropicSpacing = max(metadataInterface->GetXPixelSpacing(), metadataInterface->GetYPixelSpacing());
+      double isotropicSpacing = std::max(metadataInterface->GetXPixelSpacing(),metadataInterface->GetYPixelSpacing());
 
       spacing[0] =  isotropicSpacing;
       spacing[1] = -isotropicSpacing;
@@ -446,11 +444,7 @@ int OrthoRectification::Execute(otb::ApplicationOptionsResult* parseResult)
 
     // Build the UTM transform : Need the zone & the hemisphere
     // For this we us the geographic coordinate of the input UL corner
-    typedef ossimRefPtr<ossimUtmProjection>       OssimMapProjectionPointerType;
     typedef itk::Point<double, 2>                  GeoPointType;
-
-    // instanciate the projection to get the utm zone
-    OssimMapProjectionPointerType  utmMapProjection =  new ossimUtmProjection();
 
     // get the utm zone and hemisphere using the input UL corner
     // geographic coordinates
@@ -465,8 +459,7 @@ int OrthoRectification::Execute(otb::ApplicationOptionsResult* parseResult)
     geoPoint = invTransform->GetTransform()->GetFirstTransform()->TransformPoint(pSrc);
 
     // Guess the zone and the hemisphere
-    ossimGpt point(geoPoint[1],  geoPoint[0]);
-    int zone = utmMapProjection->computeZone(point);
+    int zone = otb::Utils::GetZoneFromGeoPoint(geoPoint[0], geoPoint[1]);
     bool hem = (geoPoint[1]>1e-10)?true:false;
 
     typedef otb::UtmInverseProjection UtmProjectionType;
