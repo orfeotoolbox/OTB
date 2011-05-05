@@ -29,8 +29,8 @@ void RegisterTests()
 {
   REGISTER_TEST(otbFuzzyVariableDSApplied);
   REGISTER_TEST(otbMassOfBeliefDSApplied);
-  //REGISTER_TEST(otbVectorDataToDSValidatedVectorDataFilterNew);
-  //REGISTER_TEST(otbVectorDataToDSValidatedVectorDataFilter);
+  REGISTER_TEST(otbVectorDataToDSValidatedVectorDataFilterNew);
+  REGISTER_TEST(otbVectorDataToDSValidatedVectorDataFilter);
   REGISTER_TEST(otbVectorDataToSpecificDescriptionFilterBaseNew);
   REGISTER_TEST(otbVectorDataToRoadDescriptionFilterNew);
   REGISTER_TEST(otbVectorDataToRoadDescriptionFilter);

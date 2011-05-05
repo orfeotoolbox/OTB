@@ -120,7 +120,7 @@ otbJointMassOfBeliefFilter.cxx
 SET(BasicFuzzy_SRCS2
 otbFuzzyVariableDSApplied.cxx
 otbMassOfBeliefDSApplied.cxx
-#otbVectorDataToDSValidatedVectorDataFilter.cxx
+otbVectorDataToDSValidatedVectorDataFilter.cxx
 otbVectorDataToSpecificDescriptionFilterBase.cxx
 otbVectorDataToRoadDescriptionFilter.cxx
 )
