@@ -83,6 +83,14 @@ GetMetadataByKey(const std::string& key) const
   // Then if everything is ok, return the ossinString
   return it->second;
 }
+
+void 
+ImageKeywordlist::
+ClearMetadataByKey(const std::string& key)
+{
+  m_Keywordlist[key] = "";
+}
+
 void
 ImageKeywordlist::
 convertToOSSIMKeywordlist(ossimKeywordlist& kwl) const

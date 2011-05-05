@@ -74,6 +74,9 @@ public:
   /** Get the Data object descriptor corresponding to the given key */
   const std::string& GetMetadataByKey(const std::string& key) const;
 
+  /** Clear a given field of the keyword list */
+  virtual void ClearMetadataByKey(const std::string& key);
+
   virtual void convertToOSSIMKeywordlist(ossimKeywordlist& kwl) const;
 
   virtual void Print(std::ostream& os, itk::Indent indent = 0) const;
