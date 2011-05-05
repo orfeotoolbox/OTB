@@ -74,9 +74,6 @@ DataNodeImageFunction<TImage, TOutput, TCoordRep, TPrecision>
     typename InputImageType::SizeType size = ptr->GetBufferedRegion().GetSize();
     m_StartIndex = ptr->GetBufferedRegion().GetIndex();
 
-    std::cout << "ptr->GetBufferedRegion().GetSize() : "
-              << ptr->GetBufferedRegion().GetSize()
-              << std::endl;
     for ( unsigned int j = 0; j < ImageDimension; j++ )
       {
       m_EndIndex[j] = m_StartIndex[j] + static_cast<IndexValueType>( size[j] ) - 1;
