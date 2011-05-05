@@ -52,6 +52,7 @@ int otbImageToOSMVectorDataGenerator(int argc, char * argv[])
   parser->AddInputImage(); 
   parser->AddOption("--OutputVectorData","Output VectorData","-out",true);
   parser->AddOption("--Key","Key to search in the XML OSM file","-key",1, false);
+  parser->AddOption("--OSM","OSM XML file to be parsed","-osm",1, false);
   
   typedef otb::CommandLineArgumentParseResult ParserResultType;
   ParserResultType::Pointer  parseResult = ParserResultType::New();
@@ -77,6 +78,11 @@ int otbImageToOSMVectorDataGenerator(int argc, char * argv[])
   // VectorData generator instanciation
   FilterType::Pointer vdgenerator = FilterType::New();
   vdgenerator->SetInput(reader->GetOutput());
+  if(parseResult->IsOptionPresent("--OSM"))
+    {
+    vdgenerator->SetUseUrl(false);
+    vdgenerator->SetFileName(parseResult->GetParameterString("--OSM"));
+    }
   vdgenerator->Update();
   
   // Split the classes to get classes and values
@@ -98,7 +104,8 @@ int otbImageToOSMVectorDataGenerator(int argc, char * argv[])
     keyvalueList.push_back(currentkeyvalue);
     }
 
-  std::cout <<"Searching for class "<<keyvalueList[0].first << " and subclass "<< keyvalueList[0].second  << std::endl;
+  std::cout <<"Searching for class "<<keyvalueList[0].first 
+            << " and subclass "<< keyvalueList[0].second  << std::endl;
 
   
   // Write the generated vector data

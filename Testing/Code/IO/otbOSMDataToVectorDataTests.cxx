@@ -34,12 +34,14 @@ int otbOSMToVectorDataGeneratorNew (int argc, char * argv[])
 int otbOSMToVectorDataGeneratorTest (int argc, char * argv[])
 {
   FilterType::Pointer filter = FilterType::New();
+  filter->SetFileName(argv[1]);
+  filter->SetUseUrl(false);
   filter->Update();
 
   // Write the IndexTile
   VectorDataFileWriterType::Pointer writer = VectorDataFileWriterType::New();
-  writer->SetInput(filter->GetVectorDataByName("highway"));
-  writer->SetFileName(argv[1]);
+  writer->SetInput(filter->GetVectorDataByName("building"));
+  writer->SetFileName(argv[2]);
   writer->Update();
   
   return EXIT_SUCCESS;

@@ -2613,6 +2613,7 @@ ADD_TEST(ioTvOSMToVectorDataGeneratorTest ${IO_TESTS19}
   ${BASELINE_FILES}/ioTvOSMToVectorDataFilterTest_highway.shp
   ${TEMP}/ioTvOSMToVectorDataFilterTest_highway.shp
   otbOSMToVectorDataGeneratorTest
+  ${INPUTDATA}/qb_road.osm
   ${TEMP}/ioTvOSMToVectorDataFilterTest_highway.shp
 )
 
@@ -2630,13 +2631,13 @@ ADD_TEST(ioTuImageToOSMVectorDataGeneratorNew ${IO_TESTS19}
   otbImageToOSMVectorDataGeneratorNew
 )
 
-
 ADD_TEST(ioTvImageToOSMVectorDataGenerator ${IO_TESTS19}
   --compare-ogr ${EPSILON_9}
     ${BASELINE_FILES}/ioTvImageToOSMVectorDataGenerator_highway_motorway.shp
     ${TEMP}/ioTvImageToOSMVectorDataGenerator_highway_motorway.shp
   otbImageToOSMVectorDataGenerator
   -in  ${EXAMPLEDATA}/qb_RoadExtract.tif
+  -osm ${INPUTDATA}/qb_road.osm
   -out ${TEMP}/ioTvImageToOSMVectorDataGenerator_highway_motorway.shp
   -key highvay,motorway
 )
