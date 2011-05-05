@@ -32,4 +32,6 @@ void RegisterTests()
   REGISTER_TEST(otbOSMToVectorDataGeneratorNew);
   REGISTER_TEST(otbOSMToVectorDataGeneratorTest);
   REGISTER_TEST(otbOSMToVectorDataGeneratorByName);
+  REGISTER_TEST(otbImageToOSMVectorDataGeneratorNew);
+  REGISTER_TEST(otbImageToOSMVectorDataGenerator);
 }

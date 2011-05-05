@@ -2625,8 +2625,21 @@ ADD_TEST(ioTvOSMToVectorDataGeneratorByName ${IO_TESTS19}
   -vd ${TEMP}/ioTvOSMToVectorDataFilterByName_highway.shp
 )
 
+# ImageToOSMVectorData
+ADD_TEST(ioTuImageToOSMVectorDataGeneratorNew ${IO_TESTS19}
+  otbImageToOSMVectorDataGeneratorNew
+)
 
 
+ADD_TEST(ioTvImageToOSMVectorDataGenerator ${IO_TESTS19}
+  --compare-ogr ${EPSILON_9}
+    ${BASELINE_FILES}/ioTvImageToOSMVectorDataGenerator_highway_motorway.shp
+    ${TEMP}/ioTvImageToOSMVectorDataGenerator_highway_motorway.shp
+  otbImageToOSMVectorDataGenerator
+  -in  ${EXAMPLEDATA}/qb_RoadExtract.tif
+  -out ${TEMP}/ioTvImageToOSMVectorDataGenerator_highway_motorway.shp
+  -key highvay,motorway
+)
 
 ENDIF(OTB_USE_CURL)
 
@@ -3379,6 +3392,7 @@ otbImageFileReaderServerName.cxx
 otbTileMapImageIOTest.cxx
 otbTileMapWriter.cxx
 otbOSMDataToVectorDataTests.cxx
+otbImageToOSMVectorDataGenerator.cxx
 )
 ENDIF(OTB_USE_CURL)
 
