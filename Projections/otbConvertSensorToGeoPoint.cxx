@@ -15,9 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
 
 #include <iostream>
 #include <iomanip>
@@ -30,15 +27,10 @@
 
 #include "itkExceptionObject.h"
 
-#include "init/ossimInit.h"
-
-
 int main(int argc, char* argv[])
 {
   try
   {
-    ossimInit::instance()->initialize(argc, argv);
-
     // Parse command line parameters
     typedef otb::CommandLineArgumentParser ParserType;
     ParserType::Pointer parser = ParserType::New();
