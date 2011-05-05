@@ -70,7 +70,7 @@ int main(int argc, char* argv[])
 
     if (!parseResult->IsOptionPresent("--OTBTesting"))
     {
-      std::cout << "Geographic   Point (Lat,Lon) : (" << lat << "," << lon << ")" << std::endl;
+      std::cout << "Geographic   Point (Lat, Lon) : (" << lat << "," << lon << ")" << std::endl;
       std::cout << "UTM Corresponding Zone       : ==> " << utmZone << " <=="  << std::endl;
     }
     else
@@ -80,7 +80,7 @@ int main(int argc, char* argv[])
       std::ofstream outputTestFile;
       outputTestFile.open(outputTestFileName.c_str());
 
-      outputTestFile << "Geographic   Point (Lat,Lon) : (" << lat << "," << lon << ")" << std::endl;
+      outputTestFile << "Geographic   Point (Lat, Lon) : (" << lat << "," << lon << ")" << std::endl;
       outputTestFile << "UTM Corresponding Zone       : ==> " << utmZone << " <=="  << std::endl;
 
       outputTestFile.close();
