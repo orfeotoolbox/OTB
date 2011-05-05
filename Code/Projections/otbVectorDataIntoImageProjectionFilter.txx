@@ -124,11 +124,11 @@ VectorDataIntoImageProjectionFilter<TInputVectorData, TInputImage>
     itkExceptionMacro("Invalid input image.");
     }
 
-  std::cout << "Spacing of the input image: "<< m_InputImage->GetSpacing() << std::endl;
+  /*std::cout << "Spacing of the input image: "<< m_InputImage->GetSpacing() << std::endl;
   std::cout << "Origin of the input image: "<< m_InputImage->GetOrigin() << std::endl;
   std::cout << "Size of the input image: "<< m_InputImage->GetLargestPossibleRegion() << std::endl;
   std::cout << "ProjRef of the input image: "<< m_InputImage->GetProjectionRef() << std::endl;
-  std::cout << "ProjRef of the input vector data: "<< this->GetInput()->GetProjectionRef() << std::endl;
+  std::cout << "ProjRef of the input vector data: "<< this->GetInput()->GetProjectionRef() << std::endl;*/
 
   // Get the index of the corner of the image
   IndexType ul, ur, ll, lr;
@@ -142,14 +142,14 @@ VectorDataIntoImageProjectionFilter<TInputVectorData, TInputImage>
   lr[1] += m_InputImage->GetLargestPossibleRegion().GetSize()[1];
   ll[1] += m_InputImage->GetLargestPossibleRegion().GetSize()[1];
 
-  std::cout << "bounding box of the input image (pixel): "<< ur << ", " << ul << ", " << lr << ", " << ll << std::endl;
+  //std::cout << "bounding box of the input image (pixel): "<< ur << ", " << ul << ", " << lr << ", " << ll << std::endl;
 
   // Transform to physical point
   m_InputImage->TransformIndexToPhysicalPoint(ul, pul);
   m_InputImage->TransformIndexToPhysicalPoint(ur, pur);
   m_InputImage->TransformIndexToPhysicalPoint(ll, pll);
   m_InputImage->TransformIndexToPhysicalPoint(lr, plr);
-  std::cout << "bounding box of the input image (physical): "<< pur << ", " << pul << ", " << plr << ", " << pll << std::endl;
+  //std::cout << "bounding box of the input image (physical): "<< pur << ", " << pul << ", " << plr << ", " << pll << std::endl;
 
   // Build the cartographic region
   RemoteSensingRegionType rsRegion;
@@ -165,8 +165,8 @@ VectorDataIntoImageProjectionFilter<TInputVectorData, TInputImage>
   rsRegion.SetRegionProjection(m_InputImage->GetProjectionRef());
   rsRegion.SetKeywordList(m_InputImage->GetImageKeywordlist());
 
-  std::cout << "remote sensing region origin and size (physical): " << rsOrigin << ", " << rsSize << std::endl;
-  std::cout << "remote sensing region ProjRef: " << rsRegion.GetRegionProjection() << std::endl;
+  //std::cout << "remote sensing region origin and size (physical): " << rsOrigin << ", " << rsSize << std::endl;
+  //std::cout << "remote sensing region ProjRef: " << rsRegion.GetRegionProjection() << std::endl;
 
   // Set the cartographic region to the extract roi filter
   m_VdExtractFilter->SetRegion(rsRegion);
