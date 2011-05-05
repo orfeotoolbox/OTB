@@ -201,6 +201,9 @@ HistogramOfOrientedGradientCovariantImageFunction<TInputImage, TOutputPrecision,
         // lies in [-pi, pi]
         unsigned int binIndex = vcl_floor((otb::CONST_PI + angle)/orientationBinWidth);
 
+        if(binIndex == m_NumberOfOrientationBins)
+          binIndex=m_NumberOfOrientationBins-1;
+
         // Compute the angular position
         double angularPosition = vcl_atan2((double)j, (double)i) - principalOrientation;
 
