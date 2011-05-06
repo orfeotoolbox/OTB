@@ -50,43 +50,7 @@ VectorDataToRoadDescriptionFilter<TVectorData, TOpticalImage, TNDVIImage>
   return static_cast<const OpticalImageType *>
     (this->GetSupport(0));
 }
-/*
-template <class TVectorData, class TOpticalImage, class TNDVIImage>
-void
-VectorDataToRoadDescriptionFilter<TVectorData, TOpticalImage, TNDVIImage>
-::AddNDVIImage(const NDVIImageType * support)
-{
-  this->AddSupport(const_cast<NDVIImageType *>(support), 1);
-}
 
-template <class TVectorData, class TOpticalImage, class TNDVIImage>
-const typename VectorDataToRoadDescriptionFilter<TVectorData, TOpticalImage, TNDVIImage>
-::NDVIImageType *
-VectorDataToRoadDescriptionFilter<TVectorData, TOpticalImage, TNDVIImage>
-::GetNDVIImage()
-{
-  return static_cast<const NDVIImageType *>
-    (this->GetSupport(1));
-}
-
-template <class TVectorData, class TOpticalImage, class TNDVIImage>
-void
-VectorDataToRoadDescriptionFilter<TVectorData, TOpticalImage, TNDVIImage>
-::AddLSDVectorData(const VectorDataType * support)
-{
-  this->AddSupport(const_cast<VectorDataType *>(support), 2);
-}
-
-template <class TVectorData, class TOpticalImage, class TNDVIImage>
-const typename VectorDataToRoadDescriptionFilter<TVectorData, TOpticalImage, TNDVIImage>
-::VectorDataType *
-VectorDataToRoadDescriptionFilter<TVectorData, TOpticalImage, TNDVIImage>
-::GetLSDVectorData()
-{
-  return static_cast<const VectorDataType *>
-    (this->GetSupport(2));
-}
-*/
 template <class TVectorData, class TOpticalImage, class TNDVIImage>
 void
 VectorDataToRoadDescriptionFilter<TVectorData, TOpticalImage, TNDVIImage>

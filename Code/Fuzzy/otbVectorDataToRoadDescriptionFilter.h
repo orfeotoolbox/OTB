@@ -29,17 +29,16 @@
 namespace otb
 {
 /** \class VectorDataToRoadDescriptionFilter
-  * \brief VectorDataToRoadDescriptionFilter associates scores to each
+  * \brief VectorDataToRoadDescriptionFilter associates a score to each
   * adapted input VectorData DataNode.
   * 
   * VectorDataToRoadDescriptionFilter is dedicated to road description.
   * Input and output are both VectorDatas in index coordinate.
-  * Each DataNode of the
-  * output VectorData contains its scores regarding to the associated
-  * descriptors.
+  * Each DataNode of the output VectorData contains its scores
+  * regarding to the associated descriptors.
   * The support is an Optical Image and the descriptor are:
-  * -
-  * 
+  * - (NDVI >= threshold) per cent along the tested lines
+  * - mean Spectral Angle regarding a reference pixel along the tested lines
   * 
   * \ingroup VectorDataFilter
   * \sa VectorDataToSpecificDescriptionFilterBase
@@ -88,13 +87,7 @@ public:
 
   virtual void AddOpticalImage(const OpticalImageType * support);
   const OpticalImageType * GetOpticalImage();
-/*
-  virtual void AddNDVIImage(const NDVIImageType * support);
-  const NDVIImageType * GetNDVIImage();
 
-  virtual void AddLSDVectorData(const VectorDataType * support);
-  const VectorDataType * GetLSDVectorData();
-*/
 protected:
   /** Constructor */
   VectorDataToRoadDescriptionFilter();
