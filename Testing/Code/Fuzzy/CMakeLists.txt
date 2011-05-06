@@ -86,6 +86,7 @@ ADD_TEST(fzTuVectorDataToSpecificDescriptionFilterBaseNew ${Fuzzy_TESTS2}
 ADD_TEST(fzTuVectorDataToRoadDescriptionFilterNew ${Fuzzy_TESTS2}
         otbVectorDataToRoadDescriptionFilterNew)
 
+IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(fzTvVectorDataToRoadDescriptionFilter ${Fuzzy_TESTS2}
  --compare-ogr ${NOTOL}
  ${BASELINE_FILES}/fzTvVectorDataToRoadDescriptionFilterOutput.shp
@@ -97,10 +98,12 @@ ADD_TEST(fzTvVectorDataToRoadDescriptionFilter ${Fuzzy_TESTS2}
  ${INPUTDATA}/DEM/srtm_directory
  0
  )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 ADD_TEST(fzTuVectorDataToDSValidatedVectorDataFilterNew ${Fuzzy_TESTS2}
         otbVectorDataToDSValidatedVectorDataFilterNew)
 
+IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(fzTvVectorDataToDSValidatedVectorDataFilter ${Fuzzy_TESTS2}
  --compare-ogr ${NOTOL}
  ${BASELINE_FILES}/fzTvDSValidatedRoadVectorDataOutput.shp
@@ -110,7 +113,7 @@ ADD_TEST(fzTvVectorDataToDSValidatedVectorDataFilter ${Fuzzy_TESTS2}
     ${TEMP}/fzTvDSValidatedRoadVectorDataOutput.shp
 )
 SET_TESTS_PROPERTIES(fzTvVectorDataToDSValidatedVectorDataFilter PROPERTIES DEPENDS fzTvVectorDataToRoadDescriptionFilter)
-
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 SET(BasicFuzzy_SRCS1
 otbFuzzyVariableNew.cxx
 otbFuzzyVariable2Values.cxx
