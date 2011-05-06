@@ -259,6 +259,7 @@ int Rasterization::Execute(otb::ApplicationOptionsResult* parseResult)
     {
     outputImage->SetMetaDataDictionary(referenceImage->GetMetaDataDictionary());
     }
+
   // Instantiate the writer
   std::string oFilename = parseResult->GetParameterString("OutputImage");
 
@@ -266,29 +267,14 @@ int Rasterization::Execute(otb::ApplicationOptionsResult* parseResult)
   oWriter->SetFileName(oFilename);
   oWriter->SetInput(outputImage);
 
-  //Instantiate the pipeline memory print estimator
-  MemoryCalculatorType::Pointer calculator = MemoryCalculatorType::New();
-  const double byteToMegabyte = 1. / vcl_pow(2.0, 20);
-
+  unsigned int ram = 256;
   if (parseResult->IsOptionPresent("AvailableMemory"))
     {
-    long long int memory = static_cast<long long int> (parseResult->GetParameterUInt("AvailableMemory"));
-    calculator->SetAvailableMemory(memory / byteToMegabyte);
+    ram = parseResult->GetParameterUInt("AvailableMemory");
     }
-  else
-    {
-    calculator->SetAvailableMemory(256 * byteToMegabyte);
-    }
-
-  calculator->SetDataToWrite(vectorDataRendering->GetOutput());
-  calculator->Compute();
-
-  oWriter->SetTilingStreamDivisions(calculator->GetOptimalNumberOfStreamDivisions());
-
-  otbMsgDevMacro(<< "Guess the pipeline memory print " << calculator->GetMemoryPrint()*byteToMegabyte << " Mo"); otbMsgDevMacro(<< "Number of stream divisions : " << calculator->GetOptimalNumberOfStreamDivisions());
+  oWriter->SetAutomaticTiledStreaming(ram);
 
   otb::StandardWriterWatcher watcher(oWriter, "Rasterization");
-
   oWriter->Update();
 
   return EXIT_SUCCESS;
