@@ -101,6 +101,13 @@ int generic_main_convert(otb::ApplicationOptionsResult* parseResult)
 
     writer->SetInput(rescaler->GetOutput());
 
+    unsigned int ram = 256;
+    if (parseResult->IsOptionPresent("AvailableMemory"))
+      {
+      ram = parseResult->GetParameterUInt("AvailableMemory");
+      }
+    writer->SetAutomaticTiledStreaming(ram);
+
     otb::StandardWriterWatcher watcher(writer, rescaler,"Conversion");
 
     writer->Update();
@@ -112,6 +119,14 @@ int generic_main_convert(otb::ApplicationOptionsResult* parseResult)
     reader->SetFileName(parseResult->GetInputImage().c_str());
     otb::StandardFilterWatcher watcher(writer,"Conversion");
     writer->SetInput(reader->GetOutput());
+
+    unsigned int ram = 256;
+    if (parseResult->IsOptionPresent("AvailableMemory"))
+      {
+      ram = parseResult->GetParameterUInt("AvailableMemory");
+      }
+    writer->SetAutomaticTiledStreaming(ram);
+
     writer->Update();
     }
 
@@ -129,7 +144,8 @@ int Convert::Describe(ApplicationDescriptor* descriptor)
                         " double (5), unsigned short int (12), unsigned int (13); default 1","t", 1, false, ApplicationDescriptor::Integer);
   descriptor->AddOption("UseRescale", "Rescale value between output type min and max","r", 0, false, ApplicationDescriptor::Boolean);
   descriptor->AddOption("RescaleType", "Transfer function for the rescaling: linear (1), log (2); default 1","rt", 1, false, ApplicationDescriptor::Integer);
-  
+  descriptor->AddOption("AvailableMemory","Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default)","ram", 1, false, otb::ApplicationDescriptor::Integer);
+
   return EXIT_SUCCESS;
 }
 
