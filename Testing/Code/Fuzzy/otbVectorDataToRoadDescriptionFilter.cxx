@@ -42,7 +42,7 @@ int otbVectorDataToRoadDescriptionFilterNew(int argc, char* argv[])
   typedef otb::VectorData<PrecisionType>  VectorDataType;
   typedef otb::VectorImage<PrecisionType> ImageType;
 
-  typedef otb::VectorDataToRoadDescriptionFilter<VectorDataType, ImageType, ImageType>
+  typedef otb::VectorDataToRoadDescriptionFilter<VectorDataType, ImageType>
                                           VectorDataToRoadDescriptionFilterType;
 
   VectorDataToRoadDescriptionFilterType::Pointer filter = 
@@ -65,7 +65,7 @@ int otbVectorDataToRoadDescriptionFilter(int argc, char* argv[])
   typedef otb::VectorData<PrecisionType, 2>  VectorDataType;
   typedef otb::VectorImage<PrecisionType>    ImageType;
 
-  typedef otb::VectorDataToRoadDescriptionFilter<VectorDataType, ImageType, ImageType>
+  typedef otb::VectorDataToRoadDescriptionFilter<VectorDataType, ImageType>
                                           VectorDataToRoadDescriptionFilterType;
   
   typedef otb::ImageFileReader<ImageType> ImageReaderType;

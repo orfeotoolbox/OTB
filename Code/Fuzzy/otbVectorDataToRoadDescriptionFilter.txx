@@ -24,8 +24,8 @@ namespace otb
 {
 
 // Constructor
-template <class TVectorData, class TOpticalImage, class TNDVIImage>
-VectorDataToRoadDescriptionFilter<TVectorData, TOpticalImage, TNDVIImage>
+template <class TVectorData, class TOpticalImage>
+VectorDataToRoadDescriptionFilter<TVectorData, TOpticalImage>
 ::VectorDataToRoadDescriptionFilter()
 {
   this->SetNumberOfRequiredInputs(2);
@@ -33,27 +33,27 @@ VectorDataToRoadDescriptionFilter<TVectorData, TOpticalImage, TNDVIImage>
   m_SpectralAngleFeatureFunction = SpectralAngleFeatureFunctionType::New();
 }
 
-template <class TVectorData, class TOpticalImage, class TNDVIImage>
+template <class TVectorData, class TOpticalImage>
 void
-VectorDataToRoadDescriptionFilter<TVectorData, TOpticalImage, TNDVIImage>
+VectorDataToRoadDescriptionFilter<TVectorData, TOpticalImage>
 ::AddOpticalImage(const OpticalImageType * support)
 {
   this->AddSupport(const_cast<OpticalImageType *>(support), 0);
 }
 
-template <class TVectorData, class TOpticalImage, class TNDVIImage>
-const typename VectorDataToRoadDescriptionFilter<TVectorData, TOpticalImage, TNDVIImage>
+template <class TVectorData, class TOpticalImage>
+const typename VectorDataToRoadDescriptionFilter<TVectorData, TOpticalImage>
 ::OpticalImageType *
-VectorDataToRoadDescriptionFilter<TVectorData, TOpticalImage, TNDVIImage>
+VectorDataToRoadDescriptionFilter<TVectorData, TOpticalImage>
 ::GetOpticalImage()
 {
   return static_cast<const OpticalImageType *>
     (this->GetSupport(0));
 }
 
-template <class TVectorData, class TOpticalImage, class TNDVIImage>
+template <class TVectorData, class TOpticalImage>
 void
-VectorDataToRoadDescriptionFilter<TVectorData, TOpticalImage, TNDVIImage>
+VectorDataToRoadDescriptionFilter<TVectorData, TOpticalImage>
 ::GenerateData()
 {
   m_NDVIFeatureFunction->SetInputImage(const_cast<OpticalImageType *>(this->GetOpticalImage()));
@@ -92,9 +92,9 @@ VectorDataToRoadDescriptionFilter<TVectorData, TOpticalImage, TNDVIImage>
 }
 
 // PrintSelf Method
-template <class TVectorData, class TOpticalImage, class TNDVIImage>
+template <class TVectorData, class TOpticalImage>
 void
-VectorDataToRoadDescriptionFilter<TVectorData, TOpticalImage, TNDVIImage>
+VectorDataToRoadDescriptionFilter<TVectorData, TOpticalImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);

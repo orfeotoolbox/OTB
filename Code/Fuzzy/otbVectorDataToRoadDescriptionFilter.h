@@ -45,7 +45,7 @@ namespace otb
   * \sa VectorDataToBuildingDescriptionFilter
  */
 
-template <class TVectorData, class TOpticalImage, class TNDVIImage>
+template <class TVectorData, class TOpticalImage>
 class ITK_EXPORT VectorDataToRoadDescriptionFilter : 
 public otb::VectorDataToSpecificDescriptionFilterBase<TVectorData>
 {
