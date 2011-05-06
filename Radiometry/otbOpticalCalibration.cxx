@@ -71,7 +71,6 @@ int OpticalCalibration::Execute(otb::ApplicationOptionsResult* parseResult)
   typedef FilterFunctionValuesType::ValuesVectorType                                ValuesVectorType;
   typedef AtmosphericCorrectionParameters AtmosphericCorrectionParametersType;
   typedef AtmosphericCorrectionParametersType::AerosolModelType AerosolModelType;
-  typedef otb::PipelineMemoryPrintCalculator                                        MemoryCalculatorType;
 
   // Read input image information
   ReaderType::Pointer reader=ReaderType::New();
@@ -179,13 +178,11 @@ int OpticalCalibration::Execute(otb::ApplicationOptionsResult* parseResult)
 
     //rescale the surface reflectance in milli-reflectance
     scaleFilter->SetInput(reflectanceToSurfaceReflectanceFilter->GetOutput());
-    calculator->SetDataToWrite(reflectanceToSurfaceReflectanceFilter->GetOutput());
     }
   else
     {
     //Rescale luminanceToReflectance filter output (TOA level)
     scaleFilter->SetInput(luminanceToReflectanceFilter->GetOutput());
-    calculator->SetDataToWrite(imageToLuminanceFilter->GetOutput());
     }
 
   //Instantiate the writer
@@ -201,11 +198,7 @@ int OpticalCalibration::Execute(otb::ApplicationOptionsResult* parseResult)
     }
   writer->SetAutomaticTiledStreaming(ram);
 
-  std::cout << "Guess the pipeline memory print " << calculator->GetMemoryPrint()*byteToMegabyte << " Mo" << std::endl;
-  std::cout << "Number of stream divisions : " << calculator->GetOptimalNumberOfStreamDivisions() << std::endl;
-
   otb::StandardWriterWatcher watcher(writer,"OpticalCalibration");
-
   writer->Update();
 
   return EXIT_SUCCESS;
