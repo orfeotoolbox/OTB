@@ -39,6 +39,7 @@ int CompareImages::Describe(ApplicationDescriptor* descriptor)
   descriptor->AddOption("StartY", "first point in y-axis ", "y0", 1, false, ApplicationDescriptor::Real);
   descriptor->AddOption("SizeX", "size in x-axis ", "Nx", 1, false, ApplicationDescriptor::Integer);
   descriptor->AddOption("SizeY", "size in y-axis ", "Ny", 1, false, ApplicationDescriptor::Integer);
+  descriptor->AddOption("AvailableMemory","Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default)","ram", 1, false, otb::ApplicationDescriptor::Integer);
   return EXIT_SUCCESS;
 }
 
@@ -107,6 +108,13 @@ int CompareImages::Execute(otb::ApplicationOptionsResult* parseResult)
 
   filter->SetInput1(extractROIMonoFilter1->GetOutput());
   filter->SetInput2(extractROIMonoFilter2->GetOutput());
+
+  unsigned int ram = 256;
+  if (parseResult->IsOptionPresent("AvailableMemory"))
+    {
+    ram = parseResult->GetParameterUInt("AvailableMemory");
+    }
+  filter->GetStreamer()->SetAutomaticTiledStreaming(ram);
 
   filter->Update();
 
