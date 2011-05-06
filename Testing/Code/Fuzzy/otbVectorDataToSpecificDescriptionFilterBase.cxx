@@ -27,7 +27,8 @@ int otbVectorDataToSpecificDescriptionFilterBaseNew(int argc, char* argv[])
 {
   typedef float                           PrecisionType;
   typedef otb::VectorData<PrecisionType>  VectorDataType;
-  typedef otb::VectorDataToSpecificDescriptionFilterBase<VectorDataType>                                                 VectorDataToSpecificDescriptionFilterType;
+  typedef otb::VectorDataToSpecificDescriptionFilterBase<VectorDataType>
+                                          VectorDataToSpecificDescriptionFilterType;
 
   VectorDataToSpecificDescriptionFilterType::Pointer filter = 
     VectorDataToSpecificDescriptionFilterType::New();

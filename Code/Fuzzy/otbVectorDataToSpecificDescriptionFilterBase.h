@@ -19,7 +19,6 @@
 #define __otbVectorDataToSpecificDescriptionFilterBase_h
 
 #include "otbVectorDataToVectorDataFilter.h"
-//#include "otbDataNodeDescriptorBase.h" #include "otbDataNodeFunctionBase.h" 
 
 namespace otb
 {
@@ -27,7 +26,7 @@ namespace otb
   * \brief Base class for VectorDataToSpecificDescriptionFilters.
   * 
   * VectorDataToSpecificDescriptionFilterBase is a base class, it is
-  * suposed to be used through a derivated class.
+  * supposed to be used through a inheriting class.
   * Input and output are both VectorDatas. Each data node of the
   * output VectorData contains its score regarding to the associated
   * descriptors.
@@ -60,9 +59,6 @@ public:
   typedef TVectorData                             VectorDataType;
   typedef typename VectorDataType::Pointer        VectorDataPointer;
   typedef typename VectorDataType::DataNodeType   DataNodeType;
-  //typedef typename DataNodeDescriptorBase<VectorDataType>
-  //                                                DescriptorType;
-  //typedef typename DescriptorType::Pointer        DescriptorPointerType;
 
   typedef itk::DataObject::Pointer DataObjectPointer;
   typedef itk::DataObject          DataObject;
@@ -70,10 +66,6 @@ public:
   /** Support accessors. */
   virtual void AddSupport(const itk::DataObject * support, unsigned int idx);
   const itk::DataObject * GetSupport(unsigned int idx);
-
-  /** Descriptor bench accessors. */
-  //virtual void ClearDescriptors();
-  //virtual void PushBackDescriptor(DescriptorType * descriptor);
 
 protected:
   /** Constructor */
@@ -87,8 +79,6 @@ private:
   VectorDataToSpecificDescriptionFilterBase(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  // Descriptor bench
-  //std::vector<DescriptorPointerType>    m_Descriptors;
 };
 
 } // end namespace otb

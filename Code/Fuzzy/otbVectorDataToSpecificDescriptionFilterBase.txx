@@ -58,24 +58,6 @@ VectorDataToSpecificDescriptionFilterBase<TVectorData>
            (this->itk::ProcessObject::GetInput(idx+1));
 }
 
-/*
-template <class TVectorData>
-void
-VectorDataToSpecificDescriptionFilterBase<TVectorData>
-::ClearDescriptors()
-{
-  m_Descriptors.clear();
-}
-
-template <class TVectorData>
-void
-VectorDataToSpecificDescriptionFilterBase<TVectorData>
-:: PushBackDescriptor(DescriptorType * descriptor)
-{
-  m_Descriptors.push_back(descriptor);
-}
-*/
-
 // PrintSelf Method
 template <class TVectorData>
 void
@@ -84,7 +66,6 @@ VectorDataToSpecificDescriptionFilterBase<TVectorData>
 {
   Superclass::PrintSelf(os, indent);
   os<<indent<<"Number of Support: "<<(int)(this->GetNumberOfInputs())-1<<std::endl;
-  //os<<indent<<"Number of Descriptor: "<<m_Descriptors.size<<std::endl;
 }
 
 } // end namespace otb
