@@ -37,6 +37,7 @@ int BandMath::Describe(ApplicationDescriptor* descriptor)
   descriptor->AddOutputImage();
   descriptor->AddOption("Expression", "The mathematical expression to apply. \nUse im1b1 for the first band, im1b2 for the second one...",
                         "exp", 1, true, ApplicationDescriptor::String);
+  descriptor->AddOption("AvailableMemory","Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default)","ram", 1, false, otb::ApplicationDescriptor::Integer);
   return EXIT_SUCCESS;
 }
 
@@ -94,6 +95,14 @@ int BandMath::Execute(otb::ApplicationOptionsResult* parseResult)
   ImageWriterType::Pointer imageWriter = ImageWriterType::New();
   imageWriter->SetFileName(parseResult->GetOutputImage());
   imageWriter->SetInput(filter->GetOutput());
+
+  unsigned int ram = 256;
+  if (parseResult->IsOptionPresent("AvailableMemory"))
+    {
+    ram = parseResult->GetParameterUInt("AvailableMemory");
+    }
+  imageWriter->SetAutomaticTiledStreaming(ram);
+
   imageWriter->Update();
 
   return EXIT_SUCCESS;
