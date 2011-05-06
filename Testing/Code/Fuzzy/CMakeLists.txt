@@ -80,15 +80,6 @@ ADD_TEST(fzTvMassOfBeliefDSApplied-H1_H2_ ${Fuzzy_TESTS2}
         0.9
         )
 
-ADD_TEST(fzTuVectorDataToDSValidatedVectorDataFilterNew ${Fuzzy_TESTS2}
-        otbVectorDataToDSValidatedVectorDataFilterNew)
-
-ADD_TEST(fzTvVectorDataToDSValidatedVectorDataFilter ${Fuzzy_TESTS2}
-        otbVectorDataToDSValidatedVectorDataFilter
-      ${TEMP}/fzTvVectorDataToRoadDescriptionFilterOutput.shp
-      ${TEMP}/fzTvDSValidatedRoadVectorDataOutput.shp
-      )
-
 ADD_TEST(fzTuVectorDataToSpecificDescriptionFilterBaseNew ${Fuzzy_TESTS2}
         otbVectorDataToSpecificDescriptionFilterBaseNew)
 
@@ -96,9 +87,9 @@ ADD_TEST(fzTuVectorDataToRoadDescriptionFilterNew ${Fuzzy_TESTS2}
         otbVectorDataToRoadDescriptionFilterNew)
 
 ADD_TEST(fzTvVectorDataToRoadDescriptionFilter ${Fuzzy_TESTS2}
- #--compare-ogr ${NOTOL}
- #${BASELINE_FILES}/fzTvVectorDataToRoadDescriptionFilterOutput.shp
- #${TEMP}/fzTvVectorDataToRoadDescriptionFilterOutput.shp
+ --compare-ogr ${NOTOL}
+ ${BASELINE_FILES}/fzTvVectorDataToRoadDescriptionFilterOutput.shp
+ ${TEMP}/fzTvVectorDataToRoadDescriptionFilterOutput.shp
  otbVectorDataToRoadDescriptionFilter
  ${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/ROI_QB_RANGUEUIL_ROADS.shp
  ${OTB_DATA_LARGEINPUT_ROOT}/Dempster-Shafer/ROI_QB_RANGUEUIL.TIF
@@ -107,6 +98,18 @@ ADD_TEST(fzTvVectorDataToRoadDescriptionFilter ${Fuzzy_TESTS2}
  0
  )
 
+ADD_TEST(fzTuVectorDataToDSValidatedVectorDataFilterNew ${Fuzzy_TESTS2}
+        otbVectorDataToDSValidatedVectorDataFilterNew)
+
+ADD_TEST(fzTvVectorDataToDSValidatedVectorDataFilter ${Fuzzy_TESTS2}
+ --compare-ogr ${NOTOL}
+ ${BASELINE_FILES}/fzTvDSValidatedRoadVectorDataOutput.shp
+ ${TEMP}/fzTvDSValidatedRoadVectorDataOutput.shp
+  otbVectorDataToDSValidatedVectorDataFilter
+    ${TEMP}/fzTvVectorDataToRoadDescriptionFilterOutput.shp
+    ${TEMP}/fzTvDSValidatedRoadVectorDataOutput.shp
+)
+SET_TESTS_PROPERTIES(fzTvVectorDataToDSValidatedVectorDataFilter PROPERTIES DEPENDS fzTvVectorDataToRoadDescriptionFilter)
 
 SET(BasicFuzzy_SRCS1
 otbFuzzyVariableNew.cxx

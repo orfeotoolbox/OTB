@@ -71,9 +71,9 @@ int otbVectorDataToDSValidatedVectorDataFilter(int argc, char* argv[])
 
   filter->SetInput(vdReader->GetOutput());
   LabelSetType hypothesis;
-  hypothesis.insert("NDVI_");
+  hypothesis.insert("NDVI");
   hypothesis.insert("RADIOM");
-  hypothesis.insert("LSD_");
+  //hypothesis.insert("LSD_");
   //hypothesis.insert("SHADOW_");
   filter->SetHypothesis(hypothesis);
 
@@ -81,5 +81,15 @@ int otbVectorDataToDSValidatedVectorDataFilter(int argc, char* argv[])
   vdWriter->SetInput(filter->GetOutput());
   vdWriter->Update();
   
+  std::cout << "Input VectorData Size : "
+            << vdReader->GetOutput()->Size() << std::endl
+            << "CriterionFormula : "
+            << filter->GetCriterionFormula() << std::endl
+            //<< "Hypothesis : "
+            //<< filter->GetHypothesis()
+            << "Output VecttorData Size : "
+            << filter->GetOutput()->Size()
+            << std::endl;
+
   return EXIT_SUCCESS;
 }
