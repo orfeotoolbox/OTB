@@ -215,7 +215,7 @@ int main(int argc, char * argv[])
   printableImageFilter->SetChannel(3);
 
   typedef PrintableFilterType::OutputImageType           OutputImageType;
-  typedef otb::StreamingImageFileWriter<OutputImageType> PrettyWriterType;
+  typedef otb::ImageFileWriter<OutputImageType>          PrettyWriterType;
 
   PrettyWriterType::Pointer prettyWriter = PrettyWriterType::New();
 
