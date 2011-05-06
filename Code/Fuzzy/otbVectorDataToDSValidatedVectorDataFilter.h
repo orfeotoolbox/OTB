@@ -34,7 +34,7 @@ namespace otb
 /** \class VectorDataToDSValidatedVectorDataFilter
   * \brief VectorData filter validating data nodes using
   * Dempster-Shafer theory.
-  * 
+  *
   * This filter takes as input a vector data containing
   * features score and validate (or not) each data node
   * according to these features score, a fuzzy model corresponding
@@ -55,7 +55,7 @@ namespace otb
   * string refering to "Belief" and "Plausibility" from the
   * Dempster-Shafer theory. By default the criterion is:
   * "((Belief + Plausibility)/2) >= 0.5"
-  * 
+  *
   * The concidered features will be the intersection between
   * the features embedded in this filter and the features embedded
   * in the input vector data. For now, the filter uses "NDVI" and
@@ -68,7 +68,7 @@ namespace otb
  */
 
 template <class TVectorData, class TPrecision=float>
-class ITK_EXPORT VectorDataToDSValidatedVectorDataFilter : 
+class ITK_EXPORT VectorDataToDSValidatedVectorDataFilter :
 public otb::VectorDataToVectorDataFilter<TVectorData, TVectorData>
 {
 public:
@@ -96,9 +96,9 @@ public:
   typedef FuzzyVariable<std::string, PrecisionType> FuzzyVarType;
   typedef MassOfBelief<std::string, PrecisionType>
                                                     MassOfBeliefFunctionType;
-  typedef typename MassOfBeliefFunctionType::LabelSetType 
+  typedef typename MassOfBeliefFunctionType::LabelSetType
                                                     LabelSetType;
-  typedef JointMassOfBeliefFilter<MassOfBeliefFunctionType> 
+  typedef JointMassOfBeliefFilter<MassOfBeliefFunctionType>
                                                     JointMassOfBeliefFilterType;
   typedef Parser                                    ParserType;
 

@@ -24,21 +24,21 @@ namespace otb
 {
 /** \class VectorDataToSpecificDescriptionFilterBase
   * \brief Base class for VectorDataToSpecificDescriptionFilters.
-  * 
+  *
   * VectorDataToSpecificDescriptionFilterBase is a base class, it is
   * supposed to be used through a inheriting class.
   * Input and output are both VectorDatas. Each data node of the
   * output VectorData contains its score regarding to the associated
   * descriptors.
-  * 
-  * 
+  *
+  *
   * \ingroup VectorDataFilter
   * \sa VectorDataToRoadDescriptionFilter
   * \sa VectorDataToBuildingDescriptionFilter
  */
 
 template <class TVectorData>
-class ITK_EXPORT VectorDataToSpecificDescriptionFilterBase : 
+class ITK_EXPORT VectorDataToSpecificDescriptionFilterBase :
 public otb::VectorDataToVectorDataFilter<TVectorData, TVectorData>
 {
 public:

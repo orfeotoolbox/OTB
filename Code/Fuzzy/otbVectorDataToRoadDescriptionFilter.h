@@ -31,7 +31,7 @@ namespace otb
 /** \class VectorDataToRoadDescriptionFilter
   * \brief VectorDataToRoadDescriptionFilter associates a score to each
   * adapted input VectorData DataNode.
-  * 
+  *
   * VectorDataToRoadDescriptionFilter is dedicated to road description.
   * Input and output are both VectorDatas in index coordinate.
   * Each DataNode of the output VectorData contains its scores
@@ -39,20 +39,20 @@ namespace otb
   * The support is an Optical Image and the descriptor are:
   * - (NDVI >= threshold) per cent along the tested lines
   * - mean Spectral Angle regarding a reference pixel along the tested lines
-  * 
+  *
   * \ingroup VectorDataFilter
   * \sa VectorDataToSpecificDescriptionFilterBase
   * \sa VectorDataToBuildingDescriptionFilter
  */
 
 template <class TVectorData, class TOpticalImage>
-class ITK_EXPORT VectorDataToRoadDescriptionFilter : 
+class ITK_EXPORT VectorDataToRoadDescriptionFilter :
 public otb::VectorDataToSpecificDescriptionFilterBase<TVectorData>
 {
 public:
   /** Standard class typedefs. */
   typedef VectorDataToRoadDescriptionFilter            Self;
-  typedef otb::VectorDataToSpecificDescriptionFilterBase<TVectorData>   
+  typedef otb::VectorDataToSpecificDescriptionFilterBase<TVectorData>
                                                        Superclass;
   typedef itk::SmartPointer<Self>                      Pointer;
   typedef itk::SmartPointer<const Self>                ConstPointer;

@@ -34,7 +34,7 @@ int otbVectorDataToDSValidatedVectorDataFilterNew(int argc, char* argv[])
   typedef otb::VectorDataToDSValidatedVectorDataFilter<VectorDataType, PrecisionType>
                                           VectorDataValidationFilterType;
   /*
-  VectorDataValidationFilterType::Pointer filter = 
+  VectorDataValidationFilterType::Pointer filter =
     VectorDataValidationFilterType::New();
   
   std::cout<<filter<<std::endl;
@@ -63,7 +63,7 @@ int otbVectorDataToDSValidatedVectorDataFilter(int argc, char* argv[])
   VectorDataReaderType::Pointer vdReader = VectorDataReaderType::New();
   VectorDataWriterType::Pointer vdWriter = VectorDataWriterType::New();
 
-  VectorDataValidationFilterType::Pointer filter = 
+  VectorDataValidationFilterType::Pointer filter =
     VectorDataValidationFilterType::New();
   
   vdReader->SetFileName(inputVD);

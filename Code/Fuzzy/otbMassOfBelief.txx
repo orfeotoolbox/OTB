@@ -451,7 +451,6 @@ MassOfBelief<TLabel, TMass>
 }
 
 
-
 } // end namespace otb
 
 /** Define the << operator for label sets */

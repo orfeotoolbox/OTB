@@ -45,7 +45,7 @@ int otbVectorDataToRoadDescriptionFilterNew(int argc, char* argv[])
   typedef otb::VectorDataToRoadDescriptionFilter<VectorDataType, ImageType>
                                           VectorDataToRoadDescriptionFilterType;
 
-  VectorDataToRoadDescriptionFilterType::Pointer filter = 
+  VectorDataToRoadDescriptionFilterType::Pointer filter =
     VectorDataToRoadDescriptionFilterType::New();
   
   std::cout<<filter<<std::endl;
@@ -82,7 +82,7 @@ int otbVectorDataToRoadDescriptionFilter(int argc, char* argv[])
   VectorDataWriterType::Pointer vdWriter = VectorDataWriterType::New();
   VectorDataReProjFilter::Pointer vdReProjFilter = VectorDataReProjFilter::New();
 
-  VectorDataToRoadDescriptionFilterType::Pointer filter = 
+  VectorDataToRoadDescriptionFilterType::Pointer filter =
     VectorDataToRoadDescriptionFilterType::New();
 
   if (!DisplayWarnings)

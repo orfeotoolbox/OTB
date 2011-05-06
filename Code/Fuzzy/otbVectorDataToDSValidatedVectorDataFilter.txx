@@ -28,14 +28,14 @@ namespace otb
 // Constructor
 template <class TVectorData, class TPrecision>
   VectorDataToDSValidatedVectorDataFilter<TVectorData, TPrecision>
-::VectorDataToDSValidatedVectorDataFilter() : 
+::VectorDataToDSValidatedVectorDataFilter() :
   m_CriterionFormula("((Belief + Plausibility)/2) >= 0.5"),
   m_CurrentID(0)
 {
   this->SetNumberOfRequiredInputs(1);
   //Default road descriptors
   std::vector<double> ndvi, radiom, lsd, shadow;
-  ndvi.push_back(0.25); ndvi.push_back(0.5);ndvi.push_back(0.75); ndvi.push_back(0.99);
+  ndvi.push_back(0.25); ndvi.push_back(0.5); ndvi.push_back(0.75); ndvi.push_back(0.99);
   radiom.push_back(0.25); radiom.push_back(0.5); radiom.push_back(0.75); radiom.push_back(0.90);
   //lsd.push_back(0.25); lsd.push_back(0.5); lsd.push_back(0.75); lsd.push_back(0.96);
   //shadow.push_back(0.25); shadow.push_back(0.5); shadow.push_back(0.75); shadow.push_back(0.98);
@@ -55,7 +55,7 @@ void
 VectorDataToDSValidatedVectorDataFilter<TVectorData, TPrecision>
 ::AddDescriptor(std::string key, std::vector<double>  model)
 {
-  m_DescriptorModels.push_back(std::pair<std::string,std::vector<double> >(key, model));
+  m_DescriptorModels.push_back(std::pair<std::string, std::vector<double> >(key, model));
 }
 
 
@@ -83,19 +83,19 @@ VectorDataToDSValidatedVectorDataFilter<TVectorData, TPrecision>
     fuzName  = m_DescriptorModels[i].first;
     fuzName_ = m_DescriptorModels[i].first + "_";
 
-    fuz->SetMembership(fuzName, 
+    fuz->SetMembership(fuzName,
                        0.0,
                        0.0,
                        m_DescriptorModels[i].second[0],
                        m_DescriptorModels[i].second[1],
-                       0.0, 
+                       0.0,
                        m_DescriptorModels[i].second[3]);
-    fuz->SetMembership(fuzName_, 
+    fuz->SetMembership(fuzName_,
                        m_DescriptorModels[i].second[1],
                        m_DescriptorModels[i].second[2],
                        1.0,
                        1.0,
-                       0.0, 
+                       0.0,
                        m_DescriptorModels[i].second[3]);
     
     m_FuzzyVars.push_back(fuz);
@@ -177,11 +177,11 @@ VectorDataToDSValidatedVectorDataFilter<TVectorData, TPrecision>
         currentGeometry->SetNodeId(this->GetNextID());
         this->GetOutput(0)->GetDataTree()->Add(currentGeometry, folder);
         }
-      else 
+      else
         {
         //std::cout << "Feature Rejected : " << m_Parser->Eval() << std::endl;
         }
-      //itVector.GoToEnd();//TEST ONLY###########################################
+      //itVector.GoToEnd(); //TEST ONLY###########################################
       }
     ++itVector;
     }

@@ -78,7 +78,7 @@ int otbOSMToVectorDataGeneratorByName (int argc, char * argv[])
   filter->SetFileName(parseResult->GetParameterString("--OSMFile"));
   filter->SetUseUrl(false);
   
-  // Set the extent of the request 
+  // Set the extent of the request
   filter->SetNorth(43.62811);
   filter->SetSouth(43.60185);
   filter->SetWest(1.54911);
