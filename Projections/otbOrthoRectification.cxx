@@ -33,9 +33,6 @@
 #include "itkNearestNeighborInterpolateImageFunction.h"
 #include "otbImageToGenericRSOutputParameters.h"
 
-#include "otbPipelineMemoryPrintCalculator.h"
-#include "itkExtractImageFilter.h"
-
 namespace otb
 {
 
@@ -220,58 +217,14 @@ int generic_main(otb::ApplicationOptionsResult* parseResult,
     writer->SetFileName(parseResult->GetOutputImage());
     writer->SetInput(orthoFilter->GetOutput());
 
-    // Estimate memory print
-    otb::PipelineMemoryPrintCalculator::Pointer memoryPrintCalculator = otb::PipelineMemoryPrintCalculator::New();
-    const double byteToMegabyte = 1./vcl_pow(2.0, 20);
-
-    // Trick to avoid having the resampler compute the whole
-    // deformation field
-    ExtractFilterType::Pointer extractFilter = ExtractFilterType::New();
-    extractFilter->SetInput(orthoFilter->GetOutput());
-    ImageType::RegionType smallRegion;
-    ImageType::SizeType smallSize;
-    smallSize.Fill(100);
-    ImageType::IndexType index;
-    index[0] = orthoFilter->GetOutput()->GetLargestPossibleRegion().GetIndex()[0]
-                                                                               + orthoFilter->GetOutput()->GetLargestPossibleRegion().GetSize()[0]/2 - 50;
-    index[1] = orthoFilter->GetOutput()->GetLargestPossibleRegion().GetIndex()[1]
-                                                                               + orthoFilter->GetOutput()->GetLargestPossibleRegion().GetSize()[1]/2 - 50;
-    smallRegion.SetSize(smallSize);
-    smallRegion.SetIndex(index);
-
-    extractFilter->SetExtractionRegion(smallRegion);
-
-    bool smallRegionSuccess = smallRegion.Crop(orthoFilter->GetOutput()->GetLargestPossibleRegion());
-
-    if( smallRegionSuccess)
-      {
-      memoryPrintCalculator->SetDataToWrite(extractFilter->GetOutput());
-      double regionTrickFactor = (double)orthoFilter->GetOutput()->GetLargestPossibleRegion().GetNumberOfPixels()
-                        /(double)(smallRegion.GetNumberOfPixels());
-      memoryPrintCalculator->SetBiasCorrectionFactor(regionTrickFactor);
-      }
-    else
-      {
-      memoryPrintCalculator->SetDataToWrite(orthoFilter->GetOutput());
-      }
-
-    memoryPrintCalculator->SetAvailableMemory(256 / byteToMegabyte);
-
+    unsigned int ram = 256;
     if (parseResult->IsOptionPresent("AvailableMemory"))
       {
-      long long int memory = static_cast <long long int> (parseResult->GetParameterUInt("AvailableMemory"));
-      memoryPrintCalculator->SetAvailableMemory(memory / byteToMegabyte);
+      ram = parseResult->GetParameterUInt("AvailableMemory");
       }
-
-    memoryPrintCalculator->Compute();
-
-    std::cout<<"Total memory usage: "<<memoryPrintCalculator->GetMemoryPrint()*byteToMegabyte<<" Mb"<<std::endl;
-    std::cout<<"Optimal stream division: "<<memoryPrintCalculator->GetOptimalNumberOfStreamDivisions()<<std::endl;
-
-    writer->SetTilingStreamDivisions(memoryPrintCalculator->GetOptimalNumberOfStreamDivisions());
+    writer->SetAutomaticTiledStreaming(ram);
 
     otb::StandardWriterWatcher watcher(writer, orthoFilter,"Orthorectification");
-
     writer->Update();
   }
   catch ( itk::ExceptionObject & err )
