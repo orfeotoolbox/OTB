@@ -82,11 +82,13 @@ int generic_main_concatenate(otb::ApplicationOptionsResult* parseResult)
   typename ImageWriterType::Pointer imageWriter = ImageWriterType::New();
   imageWriter->SetFileName(parseResult->GetOutputImage().c_str());
 
-  unsigned long size = (10000 * 10000 * sizeof(PixelType)) / NbImages;
+  unsigned int ram = 256;
+  if (parseResult->IsOptionPresent("AvailableMemory"))
+    {
+    ram = parseResult->GetParameterUInt("AvailableMemory");
+    }
+  imageWriter->SetAutomaticTiledStreaming(ram);
 
-  std::cout << "Streaming size: " << size << std::endl;
-
-  imageWriter->SetBufferMemorySize(size);
   imageWriter->SetInput(iL2VI->GetOutput());
 
   otb::StandardFilterWatcher watcher(imageWriter, "Writing");
@@ -108,6 +110,7 @@ int ConcatenateImages::Describe(ApplicationDescriptor* descriptor)
   descriptor->AddOption("OutputNameList",
                         "Text file containing the name of the images used to generate the output in the same order",
                         "ot", 1, false, ApplicationDescriptor::String);
+  descriptor->AddOption("AvailableMemory","Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default)","ram", 1, false, otb::ApplicationDescriptor::Integer);
 
   return EXIT_SUCCESS;
 }
