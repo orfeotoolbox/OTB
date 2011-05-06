@@ -45,7 +45,6 @@
 #include "otbPipelineMemoryPrintCalculator.h"
 
 
-
 namespace otb
 {
 
