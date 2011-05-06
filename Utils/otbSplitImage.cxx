@@ -22,7 +22,7 @@
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
-#include "otbImageFileWriter.h"
+#include "otbStreamingImageFileWriter.h"
 #include "otbMultiToMonoChannelExtractROI.h"
 #include "otbStandardFilterWatcher.h"
 
@@ -58,8 +58,8 @@ int generic_main_split(otb::ApplicationOptionsResult* parseResult)
   typename FilterType::Pointer filter = FilterType::New();
   filter->SetInput(reader->GetOutput());
 
-  typedef otb::Image<PixelType, Dimension>      OutputImageType;
-  typedef otb::ImageFileWriter<OutputImageType> ImageWriterType;
+  typedef otb::Image<PixelType, Dimension>               OutputImageType;
+  typedef otb::StreamingImageFileWriter<OutputImageType> ImageWriterType;
   typename ImageWriterType::Pointer writer = ImageWriterType::New();
   writer->SetInput(filter->GetOutput());
 
@@ -73,6 +73,14 @@ int generic_main_split(otb::ApplicationOptionsResult* parseResult)
     filter->SetChannel(i+1); //FIXME change the convention
     writer->SetFileName(filename.str());
     otb::StandardFilterWatcher watcher(writer, "Writing "+filename.str());
+
+    unsigned int ram = 256;
+    if (parseResult->IsOptionPresent("AvailableMemory"))
+      {
+      ram = parseResult->GetParameterUInt("AvailableMemory");
+      }
+    writer->SetAutomaticTiledStreaming(ram);
+
     writer->Update();
     }
 
@@ -89,7 +97,8 @@ int SplitImage::Describe(ApplicationDescriptor* descriptor)
                     "OutputPixelType: unsigned char (1), short int (2), int (3), float (4),"
                     " double (5), unsigned short int (12), unsigned int (13); default 1",
                     "t", 1, false, ApplicationDescriptor::Integer);
-  
+  descriptor->AddOption("AvailableMemory","Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default)","ram", 1, false, otb::ApplicationDescriptor::Integer);
+
   return EXIT_SUCCESS;
 }
 
