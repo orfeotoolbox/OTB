@@ -29,7 +29,6 @@
 
 #include "otbStreamingImageFileWriter.h"
 #include "otbStandardWriterWatcher.h"
-#include "otbPipelineMemoryPrintCalculator.h"
 #include "otbMultiplyByScalarImageFilter.h"
 
 namespace otb
@@ -102,20 +101,6 @@ int OpticalCalibration::Execute(otb::ApplicationOptionsResult* parseResult)
     std::cout << "Invalid input image medadata. The parsing returns the following error:\n" << std::endl;
     return EXIT_FAILURE;
   }
-
-  //Instantiate the pipeline memory print estimator
-  MemoryCalculatorType::Pointer calculator = MemoryCalculatorType::New();
-  const double byteToMegabyte = 1./vcl_pow(2.0, 20);
-
-  if (parseResult->IsOptionPresent("AvailableMemory"))
-    {
-    long long int memory = static_cast <long long int> (parseResult->GetParameterUInt("AvailableMemory"));
-    calculator->SetAvailableMemory(memory / byteToMegabyte);
-    }
-  else
-    {
-    calculator->SetAvailableMemory(256 / byteToMegabyte);
-    }
 
   ImageToLuminanceImageFilterType ::Pointer imageToLuminanceFilter                = ImageToLuminanceImageFilterType::New();
   LuminanceToReflectanceImageFilterType::Pointer luminanceToReflectanceFilter          = LuminanceToReflectanceImageFilterType::New();
@@ -209,9 +194,12 @@ int OpticalCalibration::Execute(otb::ApplicationOptionsResult* parseResult)
   writer->SetInput(scaleFilter->GetOutput());
   writer->SetWriteGeomFile(true);
 
-  //Compute the pipeline memory print estimation
-  calculator->Compute();
-  writer->SetTilingStreamDivisions(calculator->GetOptimalNumberOfStreamDivisions());
+  unsigned int ram = 256;
+  if (parseResult->IsOptionPresent("AvailableMemory"))
+    {
+    ram = parseResult->GetParameterUInt("AvailableMemory");
+    }
+  writer->SetAutomaticTiledStreaming(ram);
 
   std::cout << "Guess the pipeline memory print " << calculator->GetMemoryPrint()*byteToMegabyte << " Mo" << std::endl;
   std::cout << "Number of stream divisions : " << calculator->GetOptimalNumberOfStreamDivisions() << std::endl;
