@@ -29,20 +29,20 @@ namespace otb
 template <class TVectorData, class TPrecision>
   VectorDataToDSValidatedVectorDataFilter<TVectorData, TPrecision>
 ::VectorDataToDSValidatedVectorDataFilter() : 
-  m_CriterionFormula("(Belief + Plausibility)/2"),
-  m_CriterionThreshold(0.5)
+  m_CriterionFormula("((Belief + Plausibility)/2) >= 0.5"),
+  m_CurrentID(0)
 {
   this->SetNumberOfRequiredInputs(1);
   //Default road descriptors
   std::vector<double> ndvi, radiom, lsd, shadow;
   ndvi.push_back(0.25); ndvi.push_back(0.5);ndvi.push_back(0.75); ndvi.push_back(0.99);
   radiom.push_back(0.25); radiom.push_back(0.5); radiom.push_back(0.75); radiom.push_back(0.90);
-  lsd.push_back(0.25); lsd.push_back(0.5); lsd.push_back(0.75); lsd.push_back(0.96);
-  shadow.push_back(0.25); shadow.push_back(0.5); shadow.push_back(0.75); shadow.push_back(0.98);
+  //lsd.push_back(0.25); lsd.push_back(0.5); lsd.push_back(0.75); lsd.push_back(0.96);
+  //shadow.push_back(0.25); shadow.push_back(0.5); shadow.push_back(0.75); shadow.push_back(0.98);
  
   AddDescriptor("NDVI", ndvi);
   AddDescriptor("RADIOM", radiom);
-  AddDescriptor("LSD", lsd);
+  //AddDescriptor("LSD", lsd);
   //AddDescriptor("SHADOW", shadow);
   
   m_Parser =  ParserType::New();
@@ -105,7 +105,7 @@ VectorDataToDSValidatedVectorDataFilter<TVectorData, TPrecision>
     }
 
   //Initialize parser
-  std::cout << m_CriterionFormula << std::endl;
+  //std::cout << m_CriterionFormula << std::endl;
   m_Parser->SetExpr(m_CriterionFormula);
   m_Parser->DefineVar("Belief", &m_Bel);
   m_Parser->DefineVar("Plausibility", &m_Plau);
@@ -150,17 +150,15 @@ VectorDataToDSValidatedVectorDataFilter<TVectorData, TPrecision>
           H.insert(fuzName);
           H_.insert(fuzName_);
           
-          mass->SetMass(H, m_FuzzyVars[i]->GetMembership(fuzName, 
-                                                         (double)(currentGeometry->GetFieldAsInt(fuzName))/100.0));
-          mass->SetMass(H_, m_FuzzyVars[i]->GetMembership(fuzName_,
-                                                          (double)(currentGeometry->GetFieldAsInt(fuzName))/100.0));
+          mass->SetMass(H, m_FuzzyVars[i]->GetMembership(fuzName, currentGeometry->GetFieldAsDouble(fuzName)));
+          mass->SetMass(H_, m_FuzzyVars[i]->GetMembership(fuzName_, currentGeometry->GetFieldAsDouble(fuzName)));
 
-
-          std::cout << fuzName  << " : " << (double)(currentGeometry->GetFieldAsInt(fuzName))/100.
-                    << " " << m_FuzzyVars[i]->GetMembership(fuzName, (double)(currentGeometry->GetFieldAsInt(fuzName))/100.0) << std::endl;
-          std::cout << fuzName_ << " : " << (double)(currentGeometry->GetFieldAsInt(fuzName))/100.
-                    << " " << m_FuzzyVars[i]->GetMembership(fuzName_, (double)(currentGeometry->GetFieldAsInt(fuzName))/100.0) << std::endl;
-          
+/*
+          std::cout << fuzName  << " : " << currentGeometry->GetFieldAsDouble(fuzName)
+                    << " " << m_FuzzyVars[i]->GetMembership(fuzName, currentGeometry->GetFieldAsInt(fuzName)) << std::endl;
+          std::cout << fuzName_ << " : " << currentGeometry->GetFieldAsDouble(fuzName)
+                    << " " << m_FuzzyVars[i]->GetMembership(fuzName_, currentGeometry->GetFieldAsDouble(fuzName)) << std::endl;
+*/
           mass->EstimateUncertainty();
           
           jointMassFilter->PushBackInput(mass);
@@ -169,20 +167,21 @@ VectorDataToDSValidatedVectorDataFilter<TVectorData, TPrecision>
       jointMassFilter->Update();
       m_Bel  = jointMassFilter->GetOutput()->GetBelief(m_Hypothesis);
       m_Plau = jointMassFilter->GetOutput()->GetPlausibility(m_Hypothesis);
-      
+      /*
       std::cout << "Bel : " << m_Bel << std::endl;
       std::cout << "Plau: " << m_Plau << std::endl;
-
-      if (m_Parser->Eval() >= m_CriterionThreshold)
+      */
+      if (m_Parser->Eval())
         {
-        std::cout << "Feature Validated : " << m_Parser->Eval() << std::endl;
+        //std::cout << "Feature Validated : " << m_Parser->Eval() << std::endl;
+        currentGeometry->SetNodeId(this->GetNextID());
         this->GetOutput(0)->GetDataTree()->Add(currentGeometry, folder);
         }
       else 
         {
-        std::cout << "Feature Rejected : " << m_Parser->Eval() << std::endl;
+        //std::cout << "Feature Rejected : " << m_Parser->Eval() << std::endl;
         }
-      itVector.GoToEnd();//TEST ONLY###########################################
+      //itVector.GoToEnd();//TEST ONLY###########################################
       }
     ++itVector;
     }
