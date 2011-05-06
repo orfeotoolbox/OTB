@@ -140,14 +140,14 @@ public:
 
 #define otbGetParameterMacro(name, type)                                                 \
   virtual type GetParameter ## name (std::string option, unsigned int number = 0) const     \
-                                       {                                                                                     \
-                                       std::string parameter = this->GetParameterString(option, number);               \
-                                       type        lValeur;                                                                   \
-                                       ::otb::StringStream flux;                                                       \
-                                       flux << parameter;                                                              \
-                                       flux >> lValeur;                                                                \
-                                       return lValeur;                                                                 \
-                                       }
+  {                                                                     \
+    std::string parameter = this->GetParameterString(option, number);   \
+    type        lValeur;                                                \
+    ::otb::StringStream flux;                                           \
+    flux << parameter;                                                  \
+    flux >> lValeur;                                                    \
+    return lValeur;                                                     \
+  }
 
   otbGetParameterMacro(Char, char);
   otbGetParameterMacro(Short, short);
@@ -165,11 +165,10 @@ public:
   std::string GetOutputImage(void) const;
 
 protected:
-  CommandLineArgumentParseResult() {};
-  virtual ~CommandLineArgumentParseResult() {}
+  CommandLineArgumentParseResult();
+  virtual ~CommandLineArgumentParseResult();
 
 private:
-
   template<typename TypeValeur>
   TypeValeur GetParameter(std::string option, unsigned int number = 0) const;
 
@@ -235,12 +234,12 @@ public:
   /** Add a new option with fixed number of parameters */
   void AddOption(std::string name,
                  std::string comment,
-                 std::string synonim = NULL,
+                 std::string synonym = NULL,
                  int nParameters = 1,
                  bool obligatory = true);
 
   /** Add a new option with unknown number of parameters */
-  void AddOptionNParams(std::string name, std::string comment, std::string synonim = NULL, bool obligatory = true);
+  void AddOptionNParams(std::string name, std::string comment, std::string synonym = NULL, bool obligatory = true);
 
   /** Interpret options from the command line */
   void ParseCommandLine(int argc, char *argv[],
@@ -249,7 +248,7 @@ public:
 
 protected:
   CommandLineArgumentParser();
-  virtual ~CommandLineArgumentParser() {}
+  virtual ~CommandLineArgumentParser();
 
 private:
 
@@ -268,7 +267,7 @@ private:
   {
     std::string CommonName;             // option name
     std::string Description;            // option description
-    std::string Synonim;                // shortcut
+    std::string Synonym;                // shortcut
     bool NumberOfParametersFixed;       // required number of values
     int NumberOfParameters;             // number of values
     bool Obligatory;                    // is the option mandatory ?

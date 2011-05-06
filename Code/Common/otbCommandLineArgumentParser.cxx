@@ -25,7 +25,12 @@
 namespace otb
 {
 
-// --------- CommandLineArgumentParseResult  ----------------------------------------
+// --------- CommandLineArgumentParseResult
+// --------- ----------------------------------------
+CommandLineArgumentParseResult::CommandLineArgumentParseResult() {}
+
+CommandLineArgumentParseResult::~CommandLineArgumentParseResult() {}
+
 void CommandLineArgumentParseResult
 ::PrintSelf(std::ostream& /*os*/ /*, itk::Indent indent*/) const
 {
@@ -123,6 +128,10 @@ CommandLineArgumentParser
   m_ProgramDescription.clear();
 }
 
+CommandLineArgumentParser
+::~CommandLineArgumentParser() {}
+
+
 void CommandLineArgumentParser
 ::AddInputImage(bool obligatory)
 {
@@ -136,13 +145,13 @@ void CommandLineArgumentParser
 }
 
 void CommandLineArgumentParser
-::AddOption(std::string name, std::string comment, std::string synonim, int nParameters, bool obligatory)
+::AddOption(std::string name, std::string comment, std::string synonym, int nParameters, bool obligatory)
 {
   // Create a structure for the command
   OptionType option;
   option.CommonName  = name;
   option.Description = comment;
-  option.Synonim     = synonim;
+  option.Synonym     = synonym;
   option.NumberOfParameters = nParameters;
   option.NumberOfParametersFixed = true;
   option.Obligatory = obligatory;
@@ -154,13 +163,13 @@ void CommandLineArgumentParser
 }
 
 void CommandLineArgumentParser
-::AddOptionNParams(std::string name, std::string comment, std::string synonim, bool obligatory)
+::AddOptionNParams(std::string name, std::string comment, std::string synonym, bool obligatory)
 {
   // Create a structure for the command
   OptionType option;
   option.CommonName  = name;
   option.Description = comment;
-  option.Synonim     = synonim;
+  option.Synonym     = synonym;
   option.NumberOfParameters = -1;
   option.NumberOfParametersFixed = false;
   option.Obligatory = obligatory;
@@ -348,7 +357,7 @@ bool CommandLineArgumentParser::FindOption(const std::string& option, int& index
   std::string  strOption(option);
   while (goOnFlag == true)
     {
-    if ((m_OptionList[cpt].CommonName == strOption) || (m_OptionList[cpt].Synonim == strOption))
+    if ((m_OptionList[cpt].CommonName == strOption) || (m_OptionList[cpt].Synonym == strOption))
       {
       index = cpt;
       goOnFlag = false;
@@ -379,7 +388,7 @@ void CommandLineArgumentParser::PrintUsage(std::ostream& os) const
 
   for (i = 0; i < m_OptionList.size(); ++i)
     {
-    int largeur = m_OptionList[i].CommonName.size() + m_OptionList[i].Synonim.size();
+    int largeur = m_OptionList[i].CommonName.size() + m_OptionList[i].Synonym.size();
     if (largeur > largeurmax) largeurmax = largeur;
     }
 
@@ -388,14 +397,14 @@ void CommandLineArgumentParser::PrintUsage(std::ostream& os) const
     {
     if (m_OptionList[i].CommonName != "--OTBTesting")
       {
-      int largeur = m_OptionList[i].CommonName.size() + m_OptionList[i].Synonim.size();
+      int largeur = m_OptionList[i].CommonName.size() + m_OptionList[i].Synonym.size();
       os << "      ";
       if (m_OptionList[i].Obligatory == false) os << "[";
       else os << " ";
       os << m_OptionList[i].CommonName;
-      if (m_OptionList[i].Synonim.empty() == false)
+      if (m_OptionList[i].Synonym.empty() == false)
         {
-        os << "|" << m_OptionList[i].Synonim;
+        os << "|" << m_OptionList[i].Synonym;
         }
       if (m_OptionList[i].Obligatory == false) os << "]";
       else os << " ";
