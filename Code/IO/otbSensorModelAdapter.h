@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSensorModelWrapper_h
-#define __otbSensorModelWrapper_h
+#ifndef __otbSensorModelAdapter_h
+#define __otbSensorModelAdapter_h
 
 
 #include "itkObject.h"
@@ -29,7 +29,7 @@ namespace otb
 {
 
 /**
- * \class SensorModelWrapper
+ * \class SensorModelAdapter
  * \brief Wrapper class to group all dependencies to ossim for sensor models
  *
  * This class is NOT intented to be used outside of OTB. Use the
@@ -42,11 +42,11 @@ namespace otb
  *
  **/
 
-class SensorModelWrapper: public itk::Object
+class SensorModelAdapter: public itk::Object
 {
 public:
   /** Standard class typedefs. */
-  typedef SensorModelWrapper          Self;
+  typedef SensorModelAdapter          Self;
   typedef itk::Object                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -58,7 +58,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(SensorModelWrapper, itk::Object);
+  itkTypeMacro(SensorModelAdapter, itk::Object);
 
   void SetDEMDirectory(const std::string& directory);
 
@@ -78,11 +78,11 @@ public:
   bool IsValidSensorModel();
 
 protected:
-  SensorModelWrapper();
-  virtual ~SensorModelWrapper();
+  SensorModelAdapter();
+  virtual ~SensorModelAdapter();
 
 private:
-  SensorModelWrapper(const Self &); //purposely not implemented
+  SensorModelAdapter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
   InternalMapProjectionPointer m_SensorModel;

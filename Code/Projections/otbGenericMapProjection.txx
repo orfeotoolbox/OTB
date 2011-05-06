@@ -29,7 +29,7 @@ template<TransformDirection::TransformationDirection TDirectionOfMapping, class 
 GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>
 ::GenericMapProjection() : Superclass(SpaceDimension, ParametersDimension)
 {
-  m_MapProjection = MapProjectionWrapper::New();
+  m_MapProjection = MapProjectionAdapter::New();
 }
 
 template<TransformDirection::TransformationDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions,
@@ -41,7 +41,7 @@ GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutput
 
 template<TransformDirection::TransformationDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions,
     unsigned int NOutputDimensions>
-const MapProjectionWrapper*
+const MapProjectionAdapter*
 GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>
 ::GetMapProjection() const
 {

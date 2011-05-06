@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMapProjectionWrapper_h
-#define __otbMapProjectionWrapper_h
+#ifndef __otbMapProjectionAdapter_h
+#define __otbMapProjectionAdapter_h
 
 #include <string>
 #include <map>
@@ -30,7 +30,7 @@ namespace otb
 {
 
 /**
- * \class MapProjectionWrapper
+ * \class MapProjectionAdapter
  * \brief Wrapper class to group all dependencies to ossim for map projection
  *
  * This class is NOT intented to be used outside of OTB. Use the
@@ -42,11 +42,11 @@ namespace otb
  *
  **/
 
-class MapProjectionWrapper: public itk::Object
+class MapProjectionAdapter: public itk::Object
 {
 public:
   /** Standard class typedefs. */
-  typedef MapProjectionWrapper          Self;
+  typedef MapProjectionAdapter          Self;
   typedef itk::Object                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -58,7 +58,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MapProjectionWrapper, itk::Object);
+  itkTypeMacro(MapProjectionAdapter, itk::Object);
 
   InternalMapProjectionPointer GetMapProjection();
   InternalMapProjectionConstPointer GetMapProjection() const;
@@ -79,11 +79,11 @@ public:
   void PrintMap() const;
 
 protected:
-  MapProjectionWrapper();
-  virtual ~MapProjectionWrapper();
+  MapProjectionAdapter();
+  virtual ~MapProjectionAdapter();
 
 private:
-  MapProjectionWrapper(const Self &); //purposely not implemented
+  MapProjectionAdapter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
   void ApplyParametersToProjection();

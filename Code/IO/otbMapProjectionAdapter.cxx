@@ -16,7 +16,7 @@
 
 =========================================================================*/
 
-#include "otbMapProjectionWrapper.h"
+#include "otbMapProjectionAdapter.h"
 
 #include <cassert>
 
@@ -44,12 +44,12 @@
 namespace otb
 {
 
-MapProjectionWrapper::MapProjectionWrapper():
+MapProjectionAdapter::MapProjectionAdapter():
   m_MapProjection(NULL), m_ProjectionRefWkt(""), m_ReinstanciateProjection(true)
 {
 }
 
-MapProjectionWrapper::~MapProjectionWrapper()
+MapProjectionAdapter::~MapProjectionAdapter()
 {
   if (m_MapProjection != NULL)
     {
@@ -57,7 +57,7 @@ MapProjectionWrapper::~MapProjectionWrapper()
     }
 }
 
-MapProjectionWrapper::InternalMapProjectionPointer MapProjectionWrapper::GetMapProjection()
+MapProjectionAdapter::InternalMapProjectionPointer MapProjectionAdapter::GetMapProjection()
 {
   itkDebugMacro("returning MapProjection address " << this->m_MapProjection);
   if ((m_ReinstanciateProjection) || (m_MapProjection == NULL))
@@ -68,7 +68,7 @@ MapProjectionWrapper::InternalMapProjectionPointer MapProjectionWrapper::GetMapP
   return this->m_MapProjection;
 }
 
-MapProjectionWrapper::InternalMapProjectionConstPointer MapProjectionWrapper::GetMapProjection() const
+MapProjectionAdapter::InternalMapProjectionConstPointer MapProjectionAdapter::GetMapProjection() const
 {
   itkDebugMacro("returning MapProjection address " << this->m_MapProjection);
   if ((m_ReinstanciateProjection) || (m_MapProjection == NULL))
@@ -79,7 +79,7 @@ MapProjectionWrapper::InternalMapProjectionConstPointer MapProjectionWrapper::Ge
   return this->m_MapProjection;
 }
 
-std::string MapProjectionWrapper::GetWkt() const
+std::string MapProjectionAdapter::GetWkt() const
 {
   ossimKeywordlist kwl;
   this->GetMapProjection();
@@ -94,7 +94,7 @@ std::string MapProjectionWrapper::GetWkt() const
   return wkt;
 }
 
-void MapProjectionWrapper::SetWkt(std::string projectionRefWkt)
+void MapProjectionAdapter::SetWkt(std::string projectionRefWkt)
 {
   this->m_ProjectionRefWkt = projectionRefWkt;
   m_ReinstanciateProjection = true;
@@ -102,7 +102,7 @@ void MapProjectionWrapper::SetWkt(std::string projectionRefWkt)
   this->Modified();
 }
 
-void MapProjectionWrapper::SetParameter(std::string key, std::string value)
+void MapProjectionAdapter::SetParameter(std::string key, std::string value)
 {
   m_ParameterStore[key] = value;
   m_ReinstanciateProjection = true;
@@ -110,7 +110,7 @@ void MapProjectionWrapper::SetParameter(std::string key, std::string value)
   this->Modified();
 }
 
-std::string MapProjectionWrapper::GetParameter(std::string key) const
+std::string MapProjectionAdapter::GetParameter(std::string key) const
 {
   // Please refer to the note in the header filer
   // we do NOT want to read from m_ParameterStore here!
@@ -187,7 +187,7 @@ std::string MapProjectionWrapper::GetParameter(std::string key) const
   return "";
 }
 
-bool MapProjectionWrapper::InstanciateProjection()
+bool MapProjectionAdapter::InstanciateProjection()
 {
   if ((this->m_ReinstanciateProjection) || (m_MapProjection == NULL))
     {
@@ -242,7 +242,7 @@ bool MapProjectionWrapper::InstanciateProjection()
   return false;
 }
 
-void MapProjectionWrapper::InverseTransform(double x, double y, double z,
+void MapProjectionAdapter::InverseTransform(double x, double y, double z,
                                        double& lon, double& lat, double& h)
 {
   if (m_MapProjection == NULL)
@@ -266,7 +266,7 @@ void MapProjectionWrapper::InverseTransform(double x, double y, double z,
   h = z;
 }
 
-void MapProjectionWrapper::ForwardTransform(double lon, double lat, double h,
+void MapProjectionAdapter::ForwardTransform(double lon, double lat, double h,
                                        double& x, double& y, double& z)
 {
   if (m_MapProjection == NULL)
@@ -289,7 +289,7 @@ void MapProjectionWrapper::ForwardTransform(double lon, double lat, double h,
   z = h;
 }
 
-void MapProjectionWrapper::ApplyParametersToProjection()
+void MapProjectionAdapter::ApplyParametersToProjection()
 {
   // Start by identifying the projection, that will be necessary for
   // the casting.
@@ -444,7 +444,7 @@ void MapProjectionWrapper::ApplyParametersToProjection()
     }
 }
 
-void MapProjectionWrapper::PrintMap() const
+void MapProjectionAdapter::PrintMap() const
 {
   std::cout << m_MapProjection->print(std::cout);
   std::cout << "Parameter store:\n";

@@ -45,7 +45,7 @@ GCPsToRPCSensorModelImageFilter<TImage>
   this->ClearGCPs();
 
   // Create projection
-  m_RpcProjection = RPCProjectionWrapper::New();
+  m_RpcProjection = RPCProjectionAdapter::New();
 
   /** Create the DEM handler */
   m_DEMHandler = DEMHandler::New();

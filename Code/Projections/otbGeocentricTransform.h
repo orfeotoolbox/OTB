@@ -20,7 +20,7 @@
 
 #include "itkTransform.h"
 #include "otbGenericMapProjection.h"
-#include "otbEllipsoidWrapper.h"
+#include "otbEllipsoidAdapter.h"
 
 namespace otb
 {
@@ -67,7 +67,7 @@ public:
 protected:
   GeocentricTransform();
   virtual ~GeocentricTransform();
-  EllipsoidWrapper::Pointer m_Ellipsoid;
+  EllipsoidAdapter::Pointer m_Ellipsoid;
 
 private:
   GeocentricTransform(const Self &);        //purposely not implemented

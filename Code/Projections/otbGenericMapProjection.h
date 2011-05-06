@@ -25,7 +25,7 @@
 #include "itkTransform.h"
 #include "itkExceptionObject.h"
 #include "itkMacro.h"
-#include "otbMapProjectionWrapper.h"
+#include "otbMapProjectionAdapter.h"
 
 namespace otb
 {
@@ -70,7 +70,7 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   typedef typename Superclass::ScalarType           ScalarType;
-  typedef MapProjectionWrapper                      MapProjectionType;
+  typedef MapProjectionAdapter                      MapProjectionType;
   typedef itk::Point<ScalarType, NInputDimensions>  InputPointType;
   typedef itk::Point<ScalarType, NOutputDimensions> OutputPointType;
 
@@ -99,7 +99,7 @@ public:
 
   virtual bool InstanciateProjection();
 
-  const MapProjectionWrapper* GetMapProjection() const;
+  const MapProjectionAdapter* GetMapProjection() const;
 
   virtual bool IsProjectionDefined() const;
 
@@ -112,7 +112,7 @@ protected:
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  MapProjectionWrapper::Pointer m_MapProjection;
+  MapProjectionAdapter::Pointer m_MapProjection;
 
 private:
   GenericMapProjection(const Self &); //purposely not implemented

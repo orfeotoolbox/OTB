@@ -28,7 +28,7 @@ template<TransformDirection::TransformationDirection TDirectionOfMapping, class 
 GeocentricTransform<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>
 ::GeocentricTransform() : Superclass(SpaceDimension, ParametersDimension)
 {
-  m_Ellipsoid = EllipsoidWrapper::New();
+  m_Ellipsoid = EllipsoidAdapter::New();
 }
 
 template<TransformDirection::TransformationDirection TDirectionOfMapping, class TScalarType,

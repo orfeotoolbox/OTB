@@ -22,7 +22,7 @@
 
 #include "otbMacro.h"
 #include "otbImageKeywordlist.h"
-#include "otbSensorModelWrapper.h"
+#include "otbSensorModelAdapter.h"
 
 #include "itkTransform.h"
 #include "itkSmartPointer.h"
@@ -102,7 +102,7 @@ protected:
   /** ImageKeywordlist */
   ImageKeywordlist m_ImageKeywordlist;
   /** Pointer on an ossim projection (created with the keywordlist) */
-  SensorModelWrapper::Pointer m_Model;
+  SensorModelAdapter::Pointer m_Model;
 
   /** Specify an average elevation to use */
   TScalarType m_AverageElevation;

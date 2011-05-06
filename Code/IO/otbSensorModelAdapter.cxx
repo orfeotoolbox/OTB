@@ -16,7 +16,7 @@
 
 =========================================================================*/
 
-#include "otbSensorModelWrapper.h"
+#include "otbSensorModelAdapter.h"
 
 #include "projection/ossimProjection.h"
 #include "projection/ossimSensorModelFactory.h"
@@ -27,13 +27,13 @@
 namespace otb
 {
 
-SensorModelWrapper::SensorModelWrapper():
+SensorModelAdapter::SensorModelAdapter():
   m_SensorModel(NULL), m_UseDEM(false), m_Epsilon(0.0001),  m_NbIter(1) // FIXME keeping the original value but...
 {
   m_DEMHandler = DEMHandler::New();
 }
 
-SensorModelWrapper::~SensorModelWrapper()
+SensorModelAdapter::~SensorModelAdapter()
 {
   if (m_SensorModel != NULL)
     {
@@ -42,7 +42,7 @@ SensorModelWrapper::~SensorModelWrapper()
     }
 }
 
-void SensorModelWrapper::CreateProjection(const ImageKeywordlist& image_kwl)
+void SensorModelAdapter::CreateProjection(const ImageKeywordlist& image_kwl)
 {
   ossimKeywordlist geom;
 
@@ -57,7 +57,7 @@ void SensorModelWrapper::CreateProjection(const ImageKeywordlist& image_kwl)
     }
 }
 
-bool SensorModelWrapper::IsValidSensorModel()
+bool SensorModelAdapter::IsValidSensorModel()
 {
   if (m_SensorModel == NULL)
     {
@@ -70,13 +70,13 @@ bool SensorModelWrapper::IsValidSensorModel()
 }
 
 
-void SensorModelWrapper::SetDEMDirectory(const std::string& directory)
+void SensorModelAdapter::SetDEMDirectory(const std::string& directory)
 {
   m_DEMHandler->OpenDEMDirectory(directory);
   m_UseDEM = true;
 }
 
-void SensorModelWrapper::ForwardTransformPoint(double x, double y, double z,
+void SensorModelAdapter::ForwardTransformPoint(double x, double y, double z,
                                                double& lon, double& lat, double& h) const
 {
   ossimDpt ossimPoint(x, y);
@@ -137,7 +137,7 @@ void SensorModelWrapper::ForwardTransformPoint(double x, double y, double z,
   h = ossimGPoint.hgt;
 }
 
-void SensorModelWrapper::InverseTransformPoint(double lon, double lat, double h,
+void SensorModelAdapter::InverseTransformPoint(double lon, double lat, double h,
                                                double& x, double& y, double& z) const
 {
   ossimGpt ossimGPoint(lat, lon);
@@ -175,7 +175,7 @@ void SensorModelWrapper::InverseTransformPoint(double lon, double lat, double h,
   z = ossimGPoint.height();
 }
 
-ossimProjection* SensorModelWrapper::GetOssimModel() //FIXME temporary only
+ossimProjection* SensorModelAdapter::GetOssimModel() //FIXME temporary only
 {
   return m_SensorModel;
 }

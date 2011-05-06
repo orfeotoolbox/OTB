@@ -1618,13 +1618,13 @@ ADD_TEST(ioTvossimElevManagerTest2 ${IO_TESTS12}
 	500
          )
 
-# otb::MapProjectionWrapper (TODO: remove from IO)
-ADD_TEST(ioTvMapProjectionWrapperTest ${IO_TESTS12}
+# otb::MapProjectionAdapter (TODO: remove from IO)
+ADD_TEST(ioTvMapProjectionAdapterTest ${IO_TESTS12}
         --compare-ascii ${EPSILON_9}
-            ${BASELINE_FILES}/ioTvMapProjectionWrapperTest.txt
-            ${TEMP}/ioTvMapProjectionWrapperTest.txt
-        otbMapProjectionWrapperTest
-            ${TEMP}/ioTvMapProjectionWrapperTest.txt
+            ${BASELINE_FILES}/ioTvMapProjectionAdapterTest.txt
+            ${TEMP}/ioTvMapProjectionAdapterTest.txt
+        otbMapProjectionAdapterTest
+            ${TEMP}/ioTvMapProjectionAdapterTest.txt
 )
 
 
@@ -3305,7 +3305,7 @@ otbDEMToImageGeneratorTest.cxx
 otbOssimElevManagerTest.cxx
 otbOssimElevManagerTest2.cxx
 otbOssimElevManagerTest4.cxx
-otbMapProjectionWrapperTest.cxx
+otbMapProjectionAdapterTest.cxx
 )
 
 

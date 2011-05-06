@@ -16,7 +16,7 @@
 
 =========================================================================*/
 
-#include "otbRPCProjectionWrapper.h"
+#include "otbRPCProjectionAdapter.h"
 #include "otbImageKeywordlist.h"
 
 #include "projection/ossimRpcProjection.h"
@@ -27,13 +27,13 @@
 namespace otb
 {
 
-RPCProjectionWrapper::RPCProjectionWrapper()
+RPCProjectionAdapter::RPCProjectionAdapter()
 {
   // Create projection
   m_RpcProjection = new ossimRpcProjection();
 }
 
-RPCProjectionWrapper::~RPCProjectionWrapper()
+RPCProjectionAdapter::~RPCProjectionAdapter()
 {
   if (m_RpcProjection != NULL)
     {
@@ -42,7 +42,7 @@ RPCProjectionWrapper::~RPCProjectionWrapper()
 }
 
 void
-RPCProjectionWrapper::TransformPoint(double x, double y, double z,
+RPCProjectionAdapter::TransformPoint(double x, double y, double z,
                                      double& lon, double& lat, double& h) const
 {
   if (m_RpcProjection == NULL)
@@ -63,7 +63,7 @@ RPCProjectionWrapper::TransformPoint(double x, double y, double z,
 }
 
 void
-RPCProjectionWrapper::Solve(const GCPsContainerType& gcpContainer,
+RPCProjectionAdapter::Solve(const GCPsContainerType& gcpContainer,
                             double& rmsError, ImageKeywordlist& otb_kwl)
 {
   // TODO: for now, this is a simple transfer of what was done in the

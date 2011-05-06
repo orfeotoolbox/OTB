@@ -16,18 +16,18 @@
 
 =========================================================================*/
 
-#include "otbEllipsoidWrapper.h"
+#include "otbEllipsoidAdapter.h"
 #include "base/ossimEllipsoid.h"
 
 namespace otb
 {
 
-EllipsoidWrapper::EllipsoidWrapper()
+EllipsoidAdapter::EllipsoidAdapter()
 {
   m_Ellipsoid = new ossimEllipsoid();
 }
 
-EllipsoidWrapper::~EllipsoidWrapper()
+EllipsoidAdapter::~EllipsoidAdapter()
 {
   if (m_Ellipsoid != NULL)
     {
@@ -36,7 +36,7 @@ EllipsoidWrapper::~EllipsoidWrapper()
 }
 
 void
-EllipsoidWrapper::XYZToLonLatHeight(double x, double y, double z,
+EllipsoidAdapter::XYZToLonLatHeight(double x, double y, double z,
                                     double& lon, double& lat, double& h) const
 {
    // Note the lat/lon convension for ossim vs lon/lat for OTB
@@ -44,7 +44,7 @@ EllipsoidWrapper::XYZToLonLatHeight(double x, double y, double z,
 }
 
 void
-EllipsoidWrapper::LonLatHeightToXYZ(double lon, double lat, double h,
+EllipsoidAdapter::LonLatHeightToXYZ(double lon, double lat, double h,
                                     double& x, double& y, double& z) const
 {
   // Note the lat/lon convension for ossim vs lon/lat for OTB

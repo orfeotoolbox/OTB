@@ -21,7 +21,7 @@
 #include "itkCastImageFilter.h"
 #include "otbDEMHandler.h"
 
-#include "otbRPCProjectionWrapper.h"
+#include "otbRPCProjectionAdapter.h"
 
 namespace otb {
 
@@ -209,7 +209,7 @@ private:
   GCPsContainerType m_GCPsContainer;
 
   /** RPC Projection */
-  RPCProjectionWrapper::Pointer m_RpcProjection;
+  RPCProjectionAdapter::Pointer m_RpcProjection;
 
   /** Keywordlist */
   ImageKeywordlist m_Keywordlist;

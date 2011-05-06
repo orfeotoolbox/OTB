@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRPCProjectionWrapper_h
-#define __otbRPCProjectionWrapper_h
+#ifndef __otbRPCProjectionAdapter_h
+#define __otbRPCProjectionAdapter_h
 
 #include <vector>
 
@@ -31,7 +31,7 @@ namespace otb {
 
 class ImageKeywordlist;
 
-/** \class RPCProjectionWrapper
+/** \class RPCProjectionAdapter
  *  \brief Wrapper class for the ossim Rpc projection
  *
  * This class is used inside the GCPsToRPCSensorModelImageFilter and should not
@@ -40,11 +40,11 @@ class ImageKeywordlist;
  * \sa GCPsToRPCSensorModelImageFilter
  **/
 
-class RPCProjectionWrapper: public itk::Object
+class RPCProjectionAdapter: public itk::Object
 {
 public:
   /** Standard class typedefs. */
-  typedef RPCProjectionWrapper          Self;
+  typedef RPCProjectionAdapter          Self;
   typedef itk::Object                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -58,18 +58,18 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(RPCProjectionWrapper, itk::Object);
+  itkTypeMacro(RPCProjectionAdapter, itk::Object);
 
   void Solve(const GCPsContainerType& gcpContainer,
              double& rmsError, ImageKeywordlist& otb_kwl);
   void TransformPoint(double x, double y, double z,
                       double& lon, double& lat, double& h) const;
 protected:
-  RPCProjectionWrapper();
-  virtual ~RPCProjectionWrapper();
+  RPCProjectionAdapter();
+  virtual ~RPCProjectionAdapter();
 
 private:
-  RPCProjectionWrapper(const Self &); //purposely not implemented
+  RPCProjectionAdapter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
   /** RPC Projection */
