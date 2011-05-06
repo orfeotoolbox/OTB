@@ -29,10 +29,15 @@ namespace otb
  *  \brief Produces a VectorData Containing Random Lines
  *
  *  This generator produces a unique vector data containing
- *  randomly generated lines.
+ *  randomly generated lines inside polygons contained in the input
+ *  vectorData.
  *
- *  The generated lies are all contained into the extend of the input vectorData
+ *  The user can set the range of point per line through
+ *  SetMinLineSize() and SetMaxLineSize().
+ *  The generated line number per polygon can be set through
+ *  SetNumberOfOutputLine
  *
+ *  \sa VectorDataSource
  */
 template <class TVectorData>
 class ITK_EXPORT VectorDataToRandomLineGenerator :
