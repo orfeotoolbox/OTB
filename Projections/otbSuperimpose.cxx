@@ -27,7 +27,6 @@
 #include "otbBCOInterpolateImageFunction.h"
 #include "itkExceptionObject.h"
 #include "otbStandardWriterWatcher.h"
-#include "otbPipelineMemoryPrintCalculator.h"
 
 namespace otb
 {
@@ -41,6 +40,7 @@ int Superimpose::Describe(ApplicationDescriptor* descriptor)
   descriptor->AddOption("LocMapSpacing","Generate a coarser deformation field with the given spacing.","lmSpacing", 1, false, otb::ApplicationDescriptor::Real);
   descriptor->AddOption("ReferenceInput","The reference input","inR", 1, true, otb::ApplicationDescriptor::InputImage);
   descriptor->AddOption("MovingInput","The image to reproject","inM", 1, true, otb::ApplicationDescriptor::InputImage);
+  descriptor->AddOption("AvailableMemory","Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default)","ram", 1, false, otb::ApplicationDescriptor::Integer);
   descriptor->AddOutputImage();
 
   return EXIT_SUCCESS;
@@ -123,24 +123,14 @@ int Superimpose::Execute(otb::ApplicationOptionsResult* parseResult)
     writer->SetInput(resampler->GetOutput());
     writer->SetWriteGeomFile(true);
 
-    otb::StandardWriterWatcher w4(writer, resampler,"Superimposition");
-
-    otb::PipelineMemoryPrintCalculator::Pointer memoryPrintCalculator = otb::PipelineMemoryPrintCalculator::New();
-    const double byteToMegabyte = 1./vcl_pow(2.0, 20);
-    memoryPrintCalculator->SetDataToWrite(resampler->GetOutput());
-    memoryPrintCalculator->SetAvailableMemory(256 / byteToMegabyte);
-
+    unsigned int ram = 256;
     if (parseResult->IsOptionPresent("AvailableMemory"))
       {
-      long long int memory = static_cast <long long int> (parseResult->GetParameterUInt("AvailableMemory"));
-      memoryPrintCalculator->SetAvailableMemory(memory / byteToMegabyte);
+      ram = parseResult->GetParameterUInt("AvailableMemory");
       }
+    writer->SetAutomaticTiledStreaming(ram);
 
-    memoryPrintCalculator->SetBiasCorrectionFactor(1.27);
-    memoryPrintCalculator->Compute();
-
-    writer->SetTilingStreamDivisions(memoryPrintCalculator->GetOptimalNumberOfStreamDivisions());
-
+    otb::StandardWriterWatcher w4(writer, resampler,"Superimposition");
     writer->Update();
     }
   catch ( itk::ExceptionObject & err )
