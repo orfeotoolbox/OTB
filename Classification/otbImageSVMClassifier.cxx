@@ -26,7 +26,6 @@
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
 #include "otbChangeLabelImageFilter.h"
-#include "otbPipelineMemoryPrintCalculator.h"
 #include "otbStandardWriterWatcher.h"
 
 // itk
@@ -158,35 +157,17 @@ int ImageSVMClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
   //--------------------------
   // Save labeled Image
   WriterType::Pointer    writer  = WriterType::New();
+  writer->SetInput(classificationFilter->GetOutput());
   writer->SetFileName(parseResult->GetParameterString("OutputLabeledImage"));
-
-  //Instantiate the pipeline memory print estimator
-  MemoryCalculatorType::Pointer calculator = MemoryCalculatorType::New();
-  const double byteToMegabyte = 1./vcl_pow(2.0, 20);
-
+  unsigned int ram = 256;
   if (parseResult->IsOptionPresent("AvailableMemory"))
     {
-    long long int memory = static_cast <long long int> (parseResult->GetParameterUInt("AvailableMemory"));
-    calculator->SetAvailableMemory(memory / byteToMegabyte);
+    ram = parseResult->GetParameterUInt("AvailableMemory");
     }
-  else
-    {
-    calculator->SetAvailableMemory(256 * byteToMegabyte);
-    }
-    
-  calculator->SetDataToWrite(classificationFilter->GetOutput());
-  calculator->Compute();
-    
-  writer->SetTilingStreamDivisions(calculator->GetOptimalNumberOfStreamDivisions());
-    
-  writer->SetInput(classificationFilter->GetOutput());
+  writer->SetAutomaticTiledStreaming(ram);
     
   otb::StandardWriterWatcher watcher(writer,"Classification");
-
   writer->Update();
-
-  std::cout<<"Classification done ... "<<std::endl;
-
   return EXIT_SUCCESS;
 }
 
