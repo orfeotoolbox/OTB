@@ -109,6 +109,8 @@ int FineRegistration::Describe(ApplicationDescriptor* descriptor)
                         "spa", 1, false, ApplicationDescriptor::Real);
   descriptor->AddOption("ValidityMask","(optional) Threshold to obtain a validity mask. Params are lowerThan or greaterThan and a threshold",
                         "vm", 2, false, ApplicationDescriptor::Real);
+  descriptor->AddOption("AvailableMemory","Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default)","ram", 1, false, otb::ApplicationDescriptor::Integer);
+
   return EXIT_SUCCESS;
 }
 
@@ -334,6 +336,12 @@ int FineRegistration::Execute(otb::ApplicationOptionsResult* parseResult)
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(parseResult->GetOutputImage());
   writer->SetInput(il2vi->GetOutput());
+  unsigned int ram = 256;
+  if (parseResult->IsOptionPresent("AvailableMemory"))
+    {
+    ram = parseResult->GetParameterUInt("AvailableMemory");
+    }
+  writer->SetAutomaticTiledStreaming(ram);
 
   std::cout<<std::endl;
   otb::StandardWriterWatcher watcher(writer, registration,"Fine Registration");
