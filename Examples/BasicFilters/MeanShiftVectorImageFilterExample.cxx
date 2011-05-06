@@ -44,6 +44,7 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbPrintableImageFilter.h"
 
 //  Software Guide : BeginLatex
