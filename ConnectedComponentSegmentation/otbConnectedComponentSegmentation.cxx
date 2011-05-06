@@ -354,6 +354,3 @@ int ConnectedComponentSegmentation::Execute(otb::ApplicationOptionsResult* parse
 
 
 
-
-
-
