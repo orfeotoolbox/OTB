@@ -36,6 +36,10 @@ int otbOSMToVectorDataGeneratorTest (int argc, char * argv[])
   FilterType::Pointer filter = FilterType::New();
   filter->SetFileName(argv[1]);
   filter->SetUseUrl(false);
+  filter->SetNorth(43.62811);
+  filter->SetSouth(43.60185);
+  filter->SetWest(1.54911);
+  filter->SetEast(1.59323);
   filter->Update();
 
   // Write the IndexTile
@@ -73,6 +77,13 @@ int otbOSMToVectorDataGeneratorByName (int argc, char * argv[])
   FilterType::Pointer filter = FilterType::New();
   filter->SetFileName(parseResult->GetParameterString("--OSMFile"));
   filter->SetUseUrl(false);
+  
+  // Set the extent of the request 
+  filter->SetNorth(43.62811);
+  filter->SetSouth(43.60185);
+  filter->SetWest(1.54911);
+  filter->SetEast(1.59323);
+  
   filter->Update();
 
   const FilterType::VectorDataType*  v1 = filter->GetVectorDataByName("waterway");
