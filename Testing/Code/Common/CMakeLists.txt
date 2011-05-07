@@ -1044,13 +1044,6 @@ ADD_TEST(coTvRAMDrivenTiledStreamingManager ${COMMON_TESTS13}
     ${TEMP}/coTvRAMDrivenTiledStreamingManager.txt
 )
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbCommonTests14 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Gamma function tests #
-ADD_TEST(coTvGamma ${COMMON_TESTS14}
-  otbGammaTest
-)
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS1
@@ -1216,12 +1209,6 @@ otbPipelineMemoryPrintCalculatorTest.cxx
 otbStreamingManager.cxx
 )
 
-SET(BasicCommon_SRCS14
-otbCommonTests14.cxx
-otbGammaTest.cxx
-)
-
-
 OTB_ADD_EXECUTABLE(otbCommonTests1 "${BasicCommon_SRCS1}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbCommonTests2 "${BasicCommon_SRCS2}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbCommonTests3 "${BasicCommon_SRCS3}" "OTBIO;OTBTesting")
@@ -1243,6 +1230,5 @@ TARGET_LINK_LIBRARIES(otbCommonTests11 OTBIO  OTBTesting itkvcl)
 
 OTB_ADD_EXECUTABLE(otbCommonTests12 "${BasicCommon_SRCS12}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbCommonTests13 "${BasicCommon_SRCS13}" "OTBIO;OTBTesting")
-OTB_ADD_EXECUTABLE(otbCommonTests14 "${BasicCommon_SRCS14}" "OTBIO;OTBTesting")
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

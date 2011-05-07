@@ -22,7 +22,6 @@
 
 #include "otbMRFEnergy.h"
 #include "otbMath.h"
-#include "otbGamma.h"
 #include <boost/math/special_functions/gamma.hpp>
 
 namespace otb
@@ -57,7 +56,6 @@ public:
   itkNewMacro(Self);
   itkTypeMacro(MRFEnergyFisherClassification, MRFEnergy);
 
-  Gamma g;
   void SetNumberOfParameters(const unsigned int nParameters)
   {
     Superclass::SetNumberOfParameters(nParameters);
