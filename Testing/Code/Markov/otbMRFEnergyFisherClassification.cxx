@@ -19,11 +19,27 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#include "otbMRFEnergyGaussianClassification.h"
+#include "otbMRFEnergyFisherClassification.h"
 #include "otbImage.h"
 #include <fstream>
 
-int otbMRFEnergyGaussianClassification(int argc, char * argv[])
+int otbMRFEnergyFisherClassificationNew(int argc, char * argv[])
+{
+  typedef double                        PixelTypeInput;
+  typedef int                           PixelTypeLabel;
+  typedef otb::Image<PixelTypeInput, 2> ImageType;
+  typedef otb::Image<PixelTypeLabel, 2> LabelType;
+
+  typedef otb::MRFEnergyFisherClassification<ImageType, LabelType> MRFFisherType;
+
+  MRFFisherType::Pointer classif = MRFFisherType::New();
+
+  std::cout << classif << std::endl;
+
+  return EXIT_SUCCESS;
+}
+  
+int otbMRFEnergyFisherClassification(int argc, char * argv[])
 {
   const char * outputFile = argv[1];
 
@@ -32,12 +48,12 @@ int otbMRFEnergyGaussianClassification(int argc, char * argv[])
   typedef otb::Image<PixelTypeInput, 2> ImageType;
   typedef otb::Image<PixelTypeLabel, 2> LabelType;
 
-  typedef otb::MRFEnergyGaussianClassification<ImageType, LabelType> MRFGaussianType;
+  typedef otb::MRFEnergyFisherClassification<ImageType, LabelType> MRFFisherType;
 
-  MRFGaussianType::Pointer classif = MRFGaussianType::New();
+  MRFFisherType::Pointer classif = MRFFisherType::New();
 
   classif->SetNumberOfParameters(6);
-  MRFGaussianType::ParametersType param(6);
+  MRFFisherType::ParametersType param(6);
   param[0] = 0;
   param[1] = 1;
   param[2] = 2;
@@ -49,10 +65,11 @@ int otbMRFEnergyGaussianClassification(int argc, char * argv[])
   file.open(outputFile);
 
   file << std::endl;
-  file << "Number of parameters: " << classif->GetNumberOfParameters() << std::endl;
-  file << "GetSingleValue(10, 1): " << classif->GetSingleValue(10, 2) << std::endl;
+  file << "Number of paramters: " << classif->GetNumberOfParameters() << std::endl;
+  file << "GetSingleValue(10, 1): " << classif->GetSingleValue(10, 1) << std::endl;
 
   file.close();
 
   return EXIT_SUCCESS;
 }
+
