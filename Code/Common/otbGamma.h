@@ -9,6 +9,8 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
+  This code is from a Jan Wegner contribution.
+
 
      This software is distributed WITHOUT ANY WARRANTY; without even
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
@@ -27,7 +29,7 @@
 namespace otb 
 {
 /** \class Gamma
- *  \brief Gamma function (necessary for Fisher distribution 
+ *  \brief Gamma function
  *
  */
 class Gamma {

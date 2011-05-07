@@ -37,6 +37,7 @@
 //  regularization energy is defined by a Potts model and the fidelity or likelihood energy is modelled by a
 //  Fisher distribution.
 //  The parameter of the fisher distribution was determined for each class in a supervised step. ( See the File OtbParameterEstimatioOfFisherDistribution )
+//  This example is a contribution from Jan Wegner.
 //
 // Software Guide : EndLatex
 
