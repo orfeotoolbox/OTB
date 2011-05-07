@@ -36,7 +36,8 @@
 //  The optimization is done using a Metropolis algorithm with a random sampler. The
 //  regularization energy is defined by a Potts model and the fidelity or likelihood energy is modelled by a
 //  Fisher distribution.
-//  The parameter of the fisher distribution was determined for each class in a supervised step. ( See the File OtbParameterEstimatioOfFisherDistribution )
+//  The parameter of the fisher distribution was determined for each class in a supervised step.
+//  ( See the File OtbParameterEstimatioOfFisherDistribution )
 //  This example is a contribution from Jan Wegner.
 //
 // Software Guide : EndLatex
@@ -65,7 +66,8 @@ int main(int argc, char* argv[] )
     {
     std::cerr << "Missing Parameters "<< argc << std::endl;
     std::cerr << "Usage: " << argv[0];
-    std::cerr << " inputImage output_gray_label output_color_label lambda iterations optimizerTemperature useRandomValue " << std::endl;
+    std::cerr << " inputImage output_gray_label output_color_label lambda iterations "
+                 "optimizerTemperature useRandomValue " << std::endl;
     return 1;
     }
   // Software Guide : BeginLatex
@@ -79,9 +81,10 @@ int main(int argc, char* argv[] )
 
   // Software Guide : BeginCodeSnippet
   const unsigned int Dimension = 2;
-  typedef double InternalPixelType;
+  typedef double        InternalPixelType;
   typedef unsigned char LabelledPixelType;
-  typedef otb::Image<InternalPixelType, Dimension>  InputImageType;
+
+  typedef otb::Image<InternalPixelType, Dimension>    InputImageType;
   typedef otb::Image<LabelledPixelType, Dimension>    LabelledImageType;
   // Software Guide : EndCodeSnippet
 
@@ -94,7 +97,7 @@ int main(int argc, char* argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::ImageFileReader< InputImageType >  ReaderType;
+  typedef otb::ImageFileReader< InputImageType >              ReaderType;
   typedef otb::StreamingImageFileWriter< LabelledImageType >  WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
@@ -165,7 +168,7 @@ int main(int argc, char* argv[] )
   typedef otb::MRFEnergyPotts
       <LabelledImageType, LabelledImageType>  EnergyRegularizationType;
   typedef otb::MRFEnergyFisherClassification
-      <InputImageType, LabelledImageType>  EnergyFidelityType;
+      <InputImageType, LabelledImageType>     EnergyFidelityType;
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -185,7 +188,8 @@ int main(int argc, char* argv[] )
 
   // Software Guide : BeginLatex
   //
-  // Parameter for the MRFEnergyFisherClassification class are created. The shape parameters M,L and the weighting parameter mu are computed in a supervised step
+  // Parameter for the MRFEnergyFisherClassification class are created. The shape parameters M,L
+  // and the weighting parameter mu are computed in a supervised step
   //
   // Software Guide : EndLatex
 
@@ -268,10 +272,10 @@ int main(int argc, char* argv[] )
   writer->Update();
   // Software Guide : EndCodeSnippet
   //convert output image to color
-  typedef itk::RGBPixel<unsigned char>   RGBPixelType;
-  typedef otb::Image<RGBPixelType, 2>    RGBImageType;
-  typedef itk::Functor::ScalarToRGBPixelFunctor<unsigned long>
-  ColorMapFunctorType;
+  typedef itk::RGBPixel<unsigned char>                          RGBPixelType;
+  typedef otb::Image<RGBPixelType, 2>                           RGBImageType;
+  typedef itk::Functor::ScalarToRGBPixelFunctor<unsigned long>  ColorMapFunctorType;
+
   typedef itk::UnaryFunctorImageFilter< LabelledImageType,RGBImageType,ColorMapFunctorType> ColorMapFilterType;
   ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
 

@@ -34,61 +34,55 @@ namespace otb
  \*
  \* This class is meant to be used in the MRF framework with the  otb:: MarkovRandomFieldFilter
 
-*/
+ */
 template< class TInput1, class TInput2>
 class ITK_EXPORT MRFEnergyFisherClassification:public MRFEnergy< TInput1, TInput2>
- {
- public:
-   typedef MRFEnergyFisherClassification   Self;
-   typedef MRFEnergy< TInput1, TInput2>    Superclass;
-   typedef itk::SmartPointer<Self>         Pointer;
-   typedef itk::SmartPointer<const Self>   ConstPointer;
+{
+public:
+typedef MRFEnergyFisherClassification   Self;
+typedef MRFEnergy< TInput1, TInput2>    Superclass;
+typedef itk::SmartPointer<Self>         Pointer;
+typedef itk::SmartPointer<const Self>   ConstPointer;
 
-   typedef TInput1                               InputImageType;
-   typedef TInput2                               LabelledImageType;
-   typedef typename InputImageType::PixelType    InputImagePixelType;
-   typedef typename LabelledImageType::PixelType LabelledImagePixelType;
-   typedef itk::Array < double >                 ParametersType;
+typedef TInput1                               InputImageType;
+typedef TInput2                               LabelledImageType;
+typedef typename InputImageType::PixelType    InputImagePixelType;
+typedef typename LabelledImageType::PixelType LabelledImagePixelType;
+typedef itk::Array < double >                 ParametersType;
 
-   itkNewMacro(Self);
+itkNewMacro(Self);
+itkTypeMacro(MRFEnergyFisherClassification, MRFEnergy);
 
-   itkTypeMacro(MRFEnergyFisherClassification, MRFEnergy);
-
-   Gamma g;
-   void SetNumberOfParameters(const unsigned int nParameters)
-     {
- Superclass::SetNumberOfParameters(nParameters);
- this->m_Parameters.SetSize(nParameters);
- this->Modified();
-     }
-
-       double GetSingleValue(const InputImagePixelType & value1,  const LabelledImagePixelType & value2)
-   {
-               if ((unsigned int)value2 >= this->GetNumberOfParameters()/3)
-               {
-                       itkExceptionMacro(<<"Number of parameters does not correspond to number of classes" );
-               }
-               double val1 = static_cast<double>(value1);
-
-
-               double mu = this->m_Parameters[3*static_cast<double>(value2)] ;
-               double l  = this->m_Parameters[3*static_cast<double>(value2)+1] ;
-               double m  = this->m_Parameters[3*static_cast<double>(value2)+2] ;
-
-       double result = -vcl_log((g.gamma(l+m)/(g.gamma(l)*g.gamma(m))) * (2/(mu)) * (vcl_sqrt(l/m)) *
-               ((pow((vcl_sqrt(l/m)*(val1/mu)),((2*l)-1))) / (pow(1+(vcl_sqrt(l/m)*(val1/mu)*vcl_sqrt(l/m)*(val1/mu)),(l+m)))));
-
-               return static_cast<double>( result );
-       }
-
-
-
- protected:
-   // The constructor and destructor.
-   MRFEnergyFisherClassification() {};
-   virtual ~MRFEnergyFisherClassification() {};
-
-};
+Gamma g;
+void SetNumberOfParameters(const unsigned int nParameters)
+{
+  Superclass::SetNumberOfParameters(nParameters);
+  this->m_Parameters.SetSize(nParameters);
+  this->Modified();
 }
 
+double GetSingleValue(const InputImagePixelType & value1,  const LabelledImagePixelType & value2)
+{
+  if ((unsigned int)value2 >= this->GetNumberOfParameters()/3)
+    {
+    itkExceptionMacro(<<"Number of parameters does not correspond to number of classes" );
+    }
+  double val1 = static_cast<double>(value1);
+  double mu = this->m_Parameters[3*static_cast<double>(value2)];
+  double l  = this->m_Parameters[3*static_cast<double>(value2)+1];
+  double m  = this->m_Parameters[3*static_cast<double>(value2)+2];
+
+  double result = -vcl_log((g.gamma(l+m)/(g.gamma(l)*g.gamma(m))) * (2/(mu)) * (vcl_sqrt(l/m)) *
+                           ((pow((vcl_sqrt(l/m)*(val1/mu)),((2*l)-1))) /
+                               (pow(1+(vcl_sqrt(l/m)*(val1/mu)*vcl_sqrt(l/m)*(val1/mu)),(l+m)))));
+
+  return static_cast<double>( result );
+}
+
+protected:
+// The constructor and destructor.
+MRFEnergyFisherClassification() {};
+virtual ~MRFEnergyFisherClassification() {};
+};
+}
 #endif
