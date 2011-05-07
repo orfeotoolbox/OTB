@@ -78,7 +78,7 @@ public:
                                ga = 1e308;
                 }
                 else {
-                       if (fabs(x) > 1.0) {
+                       if (vcl_abs(x) > 1.0) {
                                z = fabs(x);
                                m = (int)z;
                                r = 1.0;
@@ -94,10 +94,10 @@ public:
                                gr = gr*z+g[k];
                        }
                        ga = 1.0/(gr*z);
-                       if (fabs(x) > 1.0) {
+                       if (vcl_abs(x) > 1.0) {
                                ga *= r;
                                if (x < 0.0) {
-                                       ga = -M_PI/(x*ga*sin(M_PI*x));
+                                       ga = -otb::CONST_PI/(x*ga*sin(otb::CONST_PI*x));
                                }
                        }
                }
