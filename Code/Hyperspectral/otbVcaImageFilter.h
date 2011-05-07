@@ -27,9 +27,12 @@
 #include "otbProjectiveProjectionImageFilter.h"
 #include "otbMatrixMultiplyImageFilter.h"
 #include "otbVectorImageToMatrixImageFilter.h"
-#include "otbStreamingMinMaxImageFilter2.h"
+#include "otbStreamingMinMaxImageFilter.h"
 #include "otbStreamingStatisticsImageFilter.h"
-#include "otbStreamingStatisticsVectorImageFilter2.h"
+#include "otbStreamingStatisticsVectorImageFilter.h"
+#include "otbPCAImageFilter.h"
+#include "otbVectorImageToAmplitudeImageFilter.h"
+#include "otbConcatenateScalarValueImageFilter.h"
 
 #include "itkMersenneTwisterRandomVariateGenerator.h"
 #include "vnl/algo/vnl_svd.h"
@@ -68,17 +71,21 @@ public:
   typedef typename VectorImageType::InternalPixelType  InternalPixelType;
   typedef InternalPixelType                            PrecisionType;
 
-  typedef otb::Image<InternalPixelType>       ImageType;
+  typedef otb::Image<InternalPixelType>                ImageType;
 
   typedef itk::AbsImageFilter<ImageType, ImageType>                                           AbsImageFilterType;
   typedef otb::ProjectiveProjectionImageFilter<VectorImageType,VectorImageType,PrecisionType> ProjectiveProjectionImageFilterType;
   typedef otb::DotProductImageFilter<VectorImageType,ImageType>                               DotProductImageFilterType;
   typedef otb::MatrixMultiplyImageFilter<VectorImageType,VectorImageType,PrecisionType>       MatrixMultiplyImageFilterType;
   typedef otb::VectorImageToMatrixImageFilter<VectorImageType>                                VectorImageToMatrixImageFilterType;
-  typedef otb::StreamingMinMaxImageFilter2<ImageType>                                         StreamingMinMaxImageFilterType;
-  typedef otb::StreamingStatisticsVectorImageFilter2<VectorImageType,PrecisionType>           StreamingStatisticsVectorImageFilterType;
+  typedef otb::StreamingMinMaxImageFilter<ImageType>                                          StreamingMinMaxImageFilterType;
+  typedef otb::StreamingStatisticsVectorImageFilter<VectorImageType,PrecisionType>            StreamingStatisticsVectorImageFilterType;
   typedef otb::StreamingStatisticsImageFilter<ImageType>                                      StreamingStatisticsImageFilterType;
   typedef itk::Statistics::MersenneTwisterRandomVariateGenerator                              RandomVariateGeneratorType;
+  typedef otb::PCAImageFilter< VectorImageType, VectorImageType, otb::Transform::FORWARD >    ForwardPCAImageFilterType;
+  typedef otb::PCAImageFilter< VectorImageType, VectorImageType, otb::Transform::INVERSE >    InversePCAImageFilterType;
+  typedef otb::VectorImageToAmplitudeImageFilter< VectorImageType, ImageType >                VectorImageToAmplitudeImageFilterType;
+  typedef otb::ConcatenateScalarValueImageFilter< VectorImageType, VectorImageType >          ConcatenateScalarValueImageFilterType;
 
   // creation of SmartPointer
   itkNewMacro(Self);
