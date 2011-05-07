@@ -135,13 +135,13 @@ ADD_TEST(bfTvUnConstrainedLeastSquareImageFilter_AVIRIS512
          ${TESTEXE_DIR}/otbHyperTests1
          otbUnConstrainedLeastSquareImageFilterTest
          ${DATA}/AVIRIS/extract512/f970619t01p02_r02_sc01_goodbands.hdr
-         ${TEMP}/aviris_vcaimagefilter_13_2.hdr
+         ${TEMP}/aviris_vcaimagefilter_13.hdr
          ${TEMP}/bfUnConstrainedLeastSquareImageFilter_AVIRIS512.hdr)
 ADD_TEST(NAME bfTvUnConstrainedLeastSquareImageFilter_AVIRIS512_Recompose
          COMMAND ${TESTEXE_DIR}/otbHyperspectralRecompose
          -in ${TEMP}/bfUnConstrainedLeastSquareImageFilter_AVIRIS512.hdr
          -out ${TEMP}/bfUnConstrainedLeastSquareImageFilter_AVIRIS512_Recomposed.hdr
-         -e ${TEMP}/aviris_vcaimagefilter_13_2.hdr)
+         -e ${TEMP}/aviris_vcaimagefilter_13.hdr)
 SET_TESTS_PROPERTIES(bfTvUnConstrainedLeastSquareImageFilter_AVIRIS512_Recompose
                      PROPERTIES DEPENDS bfTvUnConstrainedLeastSquareImageFilter_AVIRIS512)
 ADD_TEST(NAME bfTvUnConstrainedLeastSquareImageFilter_AVIRIS512_Compare
@@ -169,7 +169,7 @@ ADD_TEST(bfTvFullyConstrainedLeastSquareImageFilter_AVIRIS512
          ${TESTEXE_DIR}/otbHyperTests1
          otbFullyConstrainedLeastSquareImageFilterTest
          ${DATA}/AVIRIS/extract512/f970619t01p02_r02_sc01_goodbands.hdr
-         ${TEMP}/aviris_vcaimagefilter_13_2.hdr
+         ${TEMP}/aviris_vcaimagefilter_13.hdr
          ${TEMP}/bfFullyConstrainedLeastSquareImageFilter_AVIRIS512.tif)
 
 
@@ -206,14 +206,14 @@ ADD_TEST(bfTvISRAUnmixingImageFilter_AVIRIS512
          ${TESTEXE_DIR}/otbHyperTests1
          otbISRAUnmixingImageFilterTest
          ${DATA}/AVIRIS/extract512/f970619t01p02_r02_sc01_goodbands.hdr
-         ${TEMP}/aviris_vcaimagefilter_13_2.hdr
+         ${TEMP}/aviris_vcaimagefilter_13.hdr
          ${TEMP}/bfISRAUnmixingImageFilter_AVIRIS512.hdr
          10)
 ADD_TEST(NAME bfTvISRAUnmixingImageFilter_AVIRIS512_Recompose
          COMMAND ${TESTEXE_DIR}/otbHyperspectralRecompose
          -in ${TEMP}/bfISRAUnmixingImageFilter_AVIRIS512.hdr
          -out ${TEMP}/bfISRAUnmixingImageFilter_AVIRIS512_Recomposed.hdr
-         -e ${TEMP}/aviris_vcaimagefilter_13_2.hdr)
+         -e ${TEMP}/aviris_vcaimagefilter_13.hdr)
 SET_TESTS_PROPERTIES(bfTvISRAUnmixingImageFilter_AVIRIS512_Recompose
                      PROPERTIES DEPENDS bfTvISRAUnmixingImageFilter_AVIRIS512)
 ADD_TEST(NAME bfTvISRAUnmixingImageFilter_AVIRIS512_Compare
@@ -229,14 +229,14 @@ ADD_TEST(bfTvISRAUnmixingImageFilter_AVIRIS512_iter100
          ${TESTEXE_DIR}/otbHyperTests1
          otbISRAUnmixingImageFilterTest
          ${DATA}/AVIRIS/extract512/f970619t01p02_r02_sc01_goodbands.hdr
-         ${TEMP}/aviris_vcaimagefilter_13_2.hdr
+         ${TEMP}/aviris_vcaimagefilter_13.hdr
          ${TEMP}/bfISRAUnmixingImageFilter_AVIRIS512_iter100.hdr
          10)
 ADD_TEST(NAME bfTvISRAUnmixingImageFilter_AVIRIS512_iter100_Recompose
          COMMAND ${TESTEXE_DIR}/otbHyperspectralRecompose
          -in ${TEMP}/bfISRAUnmixingImageFilter_AVIRIS512_iter100.hdr
          -out ${TEMP}/bfISRAUnmixingImageFilter_AVIRIS512_iter100_Recomposed.hdr
-         -e ${TEMP}/aviris_vcaimagefilter_13_2.hdr)
+         -e ${TEMP}/aviris_vcaimagefilter_13.hdr)
 SET_TESTS_PROPERTIES(bfTvISRAUnmixingImageFilter_AVIRIS512_iter100_Recompose
                      PROPERTIES DEPENDS bfTvISRAUnmixingImageFilter_AVIRIS512_iter100)
 ADD_TEST(NAME bfTvISRAUnmixingImageFilter_AVIRIS512_iter100_Compare
@@ -278,14 +278,14 @@ ADD_TEST(bfTvNCLSUnmixingImageFilter_AVIRIS512_iter100
          ${TESTEXE_DIR}/otbHyperTests1
          otbNCLSUnmixingImageFilterTest
          ${DATA}/AVIRIS/extract512/f970619t01p02_r02_sc01_goodbands.hdr
-         ${TEMP}/aviris_vcaimagefilter_13_2.hdr
+         ${TEMP}/aviris_vcaimagefilter_13.hdr
          ${TEMP}/bfNCLSUnmixingImageFilter_AVIRIS512_iter100.hdr
          10)
 ADD_TEST(NAME bfTvNCLSUnmixingImageFilter_AVIRIS512_iter100_Recompose
          COMMAND ${TESTEXE_DIR}/otbHyperspectralRecompose
          -in ${TEMP}/bfNCLSUnmixingImageFilter_AVIRIS512_iter100.hdr
          -out ${TEMP}/bfNCLSUnmixingImageFilter_AVIRIS512_iter100_Recomposed.hdr
-         -e ${TEMP}/aviris_vcaimagefilter_13_2.hdr)
+         -e ${TEMP}/aviris_vcaimagefilter_13.hdr)
 SET_TESTS_PROPERTIES(bfTvNCLSUnmixingImageFilter_AVIRIS512_iter100_Recompose
                      PROPERTIES DEPENDS bfTvNCLSUnmixingImageFilter_AVIRIS512_iter100)
 ADD_TEST(NAME bfTvNCLSUnmixingImageFilter_AVIRIS512_iter100_Compare
@@ -302,14 +302,14 @@ ADD_TEST(bfTvFCLSUnmixingImageFilter_AVIRIS512_iter100
          ${TESTEXE_DIR}/otbHyperTests1
          otbFCLSUnmixingImageFilterTest
          ${DATA}/AVIRIS/extract512/f970619t01p02_r02_sc01_goodbands.hdr
-         ${TEMP}/aviris_vcaimagefilter_13_2.hdr
+         ${TEMP}/aviris_vcaimagefilter_13.hdr
          ${TEMP}/bfFCLSUnmixingImageFilter_AVIRIS512_iter100.hdr
          10)
 ADD_TEST(NAME bfTvFCLSUnmixingImageFilter_AVIRIS512_iter100_Recompose
          COMMAND ${TESTEXE_DIR}/otbHyperspectralRecompose
          -in ${TEMP}/bfFCLSUnmixingImageFilter_AVIRIS512_iter100.hdr
          -out ${TEMP}/bfFCLSUnmixingImageFilter_AVIRIS512_iter100_Recomposed.hdr
-         -e ${TEMP}/aviris_vcaimagefilter_13_2.hdr)
+         -e ${TEMP}/aviris_vcaimagefilter_13.hdr)
 SET_TESTS_PROPERTIES(bfTvFCLSUnmixingImageFilter_AVIRIS512_iter100_Recompose
                      PROPERTIES DEPENDS bfTvFCLSUnmixingImageFilter_AVIRIS512_iter100)
 ADD_TEST(NAME bfTvFCLSUnmixingImageFilter_AVIRIS512_iter100_Compare

@@ -67,34 +67,50 @@ public:
   itkTypeMacro(PersistentStreamingStatisticsVectorImageFilter2, PersistentImageFilter);
 
   /** Image related typedefs. */
-  typedef TInputImage                             ImageType;
-  typedef typename TInputImage::Pointer           InputImagePointer;
-  typedef typename TInputImage::RegionType        RegionType;
-  typedef typename TInputImage::SizeType          SizeType;
-  typedef typename TInputImage::IndexType         IndexType;
-  typedef typename TInputImage::PixelType         PixelType;
-  typedef typename TInputImage::InternalPixelType InternalPixelType;
+  typedef TInputImage                           ImageType;
+  typedef typename ImageType::Pointer           InputImagePointer;
+  typedef typename ImageType::RegionType        RegionType;
+  typedef typename ImageType::SizeType          SizeType;
+  typedef typename ImageType::IndexType         IndexType;
+  typedef typename ImageType::PixelType         PixelType;
+  typedef typename ImageType::InternalPixelType InternalPixelType;
 
-  typedef TPrecision                              PrecisionType;
-  typedef PrecisionType                           RealType;
-
-  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
+  typedef TPrecision                            PrecisionType;
+  typedef PrecisionType                         RealType;
 
   /** Image related typedefs. */
   itkStaticConstMacro(ImageDimension, unsigned int, TInputImage::ImageDimension);
 
-  /** Type to use for computations. */
-  typedef itk::VariableLengthVector<PrecisionType>      RealPixelType;
-
   /** Smart Pointer type to a DataObject. */
   typedef typename itk::DataObject::Pointer DataObjectPointer;
 
-  /** Type of DataObjects used for scalar outputs */
+  /** Type to use for computations. */
   typedef itk::VariableSizeMatrix<PrecisionType>        MatrixType;
+  typedef itk::VariableLengthVector<PrecisionType>      RealPixelType;
+
+  /** Type of DataObjects used for outputs */
+  typedef itk::SimpleDataObjectDecorator<IndexType>     IndexObjectType;
+  typedef itk::SimpleDataObjectDecorator<PixelType>     PixelObjectType;
   typedef itk::SimpleDataObjectDecorator<RealPixelType> RealPixelObjectType;
   typedef itk::SimpleDataObjectDecorator<MatrixType>    MatrixObjectType;
 
-  /** Return the computed Mean. */
+  /** Return the computed Min */
+  PixelType GetMinimum() const
+  {
+    return this->GetMinOutput()->Get();
+  }
+  PixelObjectType* GetMinimumOutput();
+  const PixelObjectType* GetMinimumOutput() const;
+
+  /** Return the computed Max index */
+  PixelType GetMaximum() const
+  {
+    return this->GetMaxOutput()->Get();
+  }
+  PixelObjectType* GetMaximumOutput();
+  const PixelObjectType* GetMaximumOutput() const;
+
+ /** Return the computed Mean. */
   RealPixelType GetMean() const
   {
     return this->GetMeanOutput()->Get();
@@ -102,13 +118,13 @@ public:
   RealPixelObjectType* GetMeanOutput();
   const RealPixelObjectType* GetMeanOutput() const;
 
-  /** Return the computed Covariance. */
-  MatrixType GetCovariance() const
+  /** Return the computed Sum. */
+  RealPixelType GetSum() const
   {
-    return this->GetCovarianceOutput()->Get();
+    return this->GetSumOutput()->Get();
   }
-  MatrixObjectType* GetCovarianceOutput();
-  const MatrixObjectType* GetCovarianceOutput() const;
+  RealPixelObjectType* GetSumOutput();
+  const RealPixelObjectType* GetSumOutput() const;
 
   /** Return the computed Covariance. */
   MatrixType GetCorrelation() const
@@ -118,32 +134,47 @@ public:
   MatrixObjectType* GetCorrelationOutput();
   const MatrixObjectType* GetCorrelationOutput() const;
 
+  /** Return the computed Covariance. */
+  MatrixType GetCovariance() const
+  {
+    return this->GetCovarianceOutput()->Get();
+  }
+  MatrixObjectType* GetCovarianceOutput();
+  const MatrixObjectType* GetCovarianceOutput() const;
+
   /** Make a DataObject of the correct type to be used as the specified
    * output.
    */
   virtual DataObjectPointer MakeOutput(unsigned int idx);
 
+  virtual void Reset(void);
+
+  virtual void Synthetize(void);
+
+  itkSetMacro(EnableMinMax, bool);
+  itkGetMacro(EnableMinMax, bool);
+
+  itkSetMacro(EnableFirstOrderStats, bool);
+  itkGetMacro(EnableFirstOrderStats, bool);
+
+  itkSetMacro(EnableSecondOrderStats, bool);
+  itkGetMacro(EnableSecondOrderStats, bool);
+
+protected:
+  PersistentStreamingStatisticsVectorImageFilter2();
+
+  virtual ~PersistentStreamingStatisticsVectorImageFilter2() {}
+
   /** Pass the input through unmodified. Do this by Grafting in the
    *  AllocateOutputs method.
    */
   virtual void AllocateOutputs();
+
   virtual void GenerateOutputInformation();
-  virtual void Synthetize(void);
-  virtual void Reset(void);
 
-  itkSetMacro(EnableMean, bool);
-  itkGetMacro(EnableMean, bool);
 
-  itkSetMacro(EnableCorrelation, bool);
-  itkGetMacro(EnableCorrelation, bool);
-
-  itkSetMacro(EnableCovariance, bool);
-  itkGetMacro(EnableCovariance, bool);
-
-protected:
-  PersistentStreamingStatisticsVectorImageFilter2();
-  virtual ~PersistentStreamingStatisticsVectorImageFilter2() {}
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+
   /** Multi-thread version GenerateData. */
   void  ThreadedGenerateData(const RegionType& outputRegionForThread, int threadId);
 
@@ -151,12 +182,14 @@ private:
   PersistentStreamingStatisticsVectorImageFilter2(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  bool m_EnableMean;
-  bool m_EnableCorrelation;
-  bool m_EnableCovariance;
+  bool m_EnableMinMax;
+  bool m_EnableFirstOrderStats;
+  bool m_EnableSecondOrderStats;
 
-  std::vector<RealPixelType> m_FirstOrderAccumulators;
-  std::vector<MatrixType>    m_SecondOrderAccumulators;
+  std::vector<PixelType>     m_ThreadMin;
+  std::vector<PixelType>     m_ThreadMax;
+  std::vector<RealPixelType> m_ThreadFirstOrderAccumulators;
+  std::vector<MatrixType>    m_ThreadSecondOrderAccumulators;
 
 }; // end of class PersistentStreamingStatisticsVectorImageFilter2
 
@@ -219,6 +252,34 @@ public:
   }
 
   /** Return the computed Mean. */
+  RealPixelType GetMinimum() const
+  {
+    return this->GetFilter()->GetMinimumOutput()->Get();
+  }
+  RealPixelObjectType* GetMinimumOutput()
+  {
+    return this->GetFilter()->GetMinimumOutput();
+  }
+  const RealPixelObjectType* GetMinimumOutput() const
+  {
+    return this->GetFilter()->GetMinimumOutput();
+  }
+
+  /** Return the computed Mean. */
+  RealPixelType GetMaximum() const
+  {
+    return this->GetFilter()->GetMaximumOutput()->Get();
+  }
+  RealPixelObjectType* GetMaximumOutput()
+  {
+    return this->GetFilter()->GetMaximumOutput();
+  }
+  const RealPixelObjectType* GetMaximumOutput() const
+  {
+    return this->GetFilter()->GetMaximumOutput();
+  }
+
+  /** Return the computed Mean. */
   RealPixelType GetMean() const
   {
     return this->GetFilter()->GetMeanOutput()->Get();
@@ -230,6 +291,20 @@ public:
   const RealPixelObjectType* GetMeanOutput() const
   {
     return this->GetFilter()->GetMeanOutput();
+  }
+
+  /** Return the computed Mean. */
+  RealPixelType GetSum() const
+  {
+    return this->GetFilter()->GetSumOutput()->Get();
+  }
+  RealPixelObjectType* GetSumOutput()
+  {
+    return this->GetFilter()->GetSumOutput();
+  }
+  const RealPixelObjectType* GetSumOutput() const
+  {
+    return this->GetFilter()->GetSumOutput();
   }
 
   /** Return the computed Covariance. */
@@ -260,14 +335,14 @@ public:
     return this->GetFilter()->GetCorrelationOutput();
   }
 
-  otbSetObjectMemberMacro(Filter, EnableMean, bool);
-  otbGetObjectMemberMacro(Filter, EnableMean, bool);
+  otbSetObjectMemberMacro(Filter, EnableMinMax, bool);
+  otbGetObjectMemberMacro(Filter, EnableMinMax, bool);
 
-  otbSetObjectMemberMacro(Filter, EnableCorrelation, bool);
-  otbGetObjectMemberMacro(Filter, EnableCorrelation, bool);
+  otbSetObjectMemberMacro(Filter, EnableFirstOrderStats, bool);
+  otbGetObjectMemberMacro(Filter, EnableFirstOrderStats, bool);
 
-  otbSetObjectMemberMacro(Filter, EnableCovariance, bool);
-  otbGetObjectMemberMacro(Filter, EnableCovariance, bool);
+  otbSetObjectMemberMacro(Filter, EnableSecondOrderStats, bool);
+  otbGetObjectMemberMacro(Filter, EnableSecondOrderStats, bool);
 
 protected:
   /** Constructor */
