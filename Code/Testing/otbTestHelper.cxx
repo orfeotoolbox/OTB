@@ -1340,7 +1340,7 @@ bool TestHelper::isMinusSign(int i) const
   return (i == 45);
 }
 
-bool TestHelper::isNumeric(std::string str) const
+bool TestHelper::isNumeric(const std::string& str) const
 {
   int          nbOfPoints = 0;
   int          nbOfNumbers = 0;
@@ -1364,7 +1364,7 @@ bool TestHelper::isNumeric(std::string str) const
   return result;
 }
 
-bool TestHelper::isScientificNumeric(std::string str) const
+bool TestHelper::isScientificNumeric(const std::string& str) const
 {
        if(str.size() == 0)
        {
@@ -1416,7 +1416,7 @@ bool TestHelper::isScientificNumeric(std::string str) const
   return true;
 }
 
-bool TestHelper::isToBeIgnoredForAnyComparison(std::string str) const
+bool TestHelper::isToBeIgnoredForAnyComparison(const std::string& str) const
 {
   if (str.find("RTTI") != std::string::npos) return true;
   if (str.find("Modified Time") != std::string::npos) return true;
@@ -1424,7 +1424,7 @@ bool TestHelper::isToBeIgnoredForAnyComparison(std::string str) const
   return false;
 }
 
-bool TestHelper::isHexaPointerAddress(std::string str) const
+bool TestHelper::isHexaPointerAddress(const std::string& str) const
 {
   unsigned int size(0);
   bool         result(false);
@@ -1465,7 +1465,7 @@ bool TestHelper::isHexaPointerAddress(std::string str) const
   return result;
 }
 
-void TestHelper::AddWhiteSpace(std::string strIn, std::string &strOut) const
+void TestHelper::AddWhiteSpace(const std::string& strIn, std::string &strOut) const
 {
   std::string strLine = strIn;
 
@@ -1503,8 +1503,8 @@ void TestHelper::AddWhiteSpace(std::string strIn, std::string &strOut) const
   strOut = strLine;
 }
 
-bool TestHelper::CompareLines(std::string strfileref,
-                              std::string strfiletest,
+bool TestHelper::CompareLines(const std::string& strfileref,
+                              const std::string& strfiletest,
                               int& nbdiff,
                               std::ofstream& fluxfilediff,
                               int& numLine,
@@ -1722,11 +1722,11 @@ bool TestHelper::CompareLines(std::string strfileref,
   return differenceFoundInCurrentLine;
 }
 
-std::string TestHelper::VectorToString(otb::MetaDataKey::VectorType vector) const
+std::string TestHelper::VectorToString(const otb::MetaDataKey::VectorType& vector) const
 {
   otb::StringStream oss;
   oss.str("");
-  otb::MetaDataKey::VectorType::iterator it = vector.begin();
+  otb::MetaDataKey::VectorType::const_iterator it = vector.begin();
   oss << "[";
   while (it != vector.end())
     {

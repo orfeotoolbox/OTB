@@ -18,16 +18,15 @@
 #ifndef __otbTestMain_h
 #define __otbTestMain_h
 
-#include "itkWin32Header.h"
 #include <map>
 #include <string>
 #include <iostream>
-#include <fstream>
 
+#include "itkWin32Header.h"
 #include "itkMultiThreader.h"
+#include "itkMacro.h"
 
 #include "otbTestHelper.h"
-#include "otbMacro.h"
 
 typedef int (*MainFuncPointer)(int, char*[]);
 std::map<std::string, MainFuncPointer> StringToTestFunctionMap;

@@ -25,6 +25,7 @@
 #include <string>
 #include <vector>
 #include "itkObject.h"
+
 #include "otbMetaDataKey.h"
 
 class OGRFeature;
@@ -54,7 +55,7 @@ public:
 
   ~TestHelper(){}
 
-  int RegressionTestAllImages(const StringList& baselineFilenamesImage, 
+  int RegressionTestAllImages(const StringList& baselineFilenamesImage,
                               const StringList& testFilenamesImage);
 
   int RegressionTestAllMetaData(const StringList& baselineFilenamesMetaData,
@@ -70,22 +71,6 @@ public:
   int RegressionTestAllOgr(const StringList& baselineFilenamesOgr,
                            const StringList& testFilenamesOgr);
 
-  std::map<std::string, int> RegressionTestBaselines(char *baselineFilename) const;
-
-  int RegressionTestImage(int cpt, const char *testImageFilename, const char *baselineImageFilename,
-                          const double toleranceDiffPixelImage) const;
-
-  int RegressionTestOgrFile(const char *testOgrFilename, const char *baselineOgrFilename,
-                            const double toleranceDiffValue) const;
-
-  int RegressionTestBinaryFile(const char * testBinaryFileName, const char * baselineBinaryFileName) const;
-
-  int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselineAsciiFileName,
-                              const double epsilon, std::vector<std::string> ignoredLines) const;
-
-  int RegressionTestMetaData(const char *testImageFilename, const char *baselineImageFilename,
-                             const double toleranceDiffPixelImage) const;
-
   itkSetMacro(ReportErrors, bool);
   itkBooleanMacro(ReportErrors);
   itkSetMacro(IgnoreLineOrder, bool);
@@ -96,18 +81,41 @@ public:
   itkSetMacro(EpsilonBoundaryChecking, double);
 
 private:
+
+  std::map<std::string, int> RegressionTestBaselines(char *baselineFilename) const;
+
+  int RegressionTestImage(int cpt, const char *testImageFilename,
+                          const char *baselineImageFilename,
+                          const double toleranceDiffPixelImage) const;
+
+  int RegressionTestOgrFile(const char *testOgrFilename,
+                            const char *baselineOgrFilename,
+                            const double toleranceDiffValue) const;
+
+  int RegressionTestBinaryFile(const char * testBinaryFileName,
+                               const char * baselineBinaryFileName) const;
+
+  int RegressionTestAsciiFile(const char * testAsciiFileName,
+                              const char * baselineAsciiFileName,
+                              const double epsilon,
+                              std::vector<std::string> ignoredLines) const;
+
+  int RegressionTestMetaData(const char *testImageFilename,
+                             const char *baselineImageFilename,
+                             const double toleranceDiffPixelImage) const;
+
   bool isNumber(int i) const;
   bool isHexaNumber(int i) const;
   bool isPoint(int i) const;
   bool isMinusSign(int i) const;
-  bool isNumeric(std::string str) const;
-  bool isScientificNumeric(std::string str) const;
-  bool isHexaPointerAddress(std::string str) const;
-  bool isToBeIgnoredForAnyComparison(std::string str) const;
-  std::string VectorToString(otb::MetaDataKey::VectorType vector) const;
+  bool isNumeric(const std::string& str) const;
+  bool isScientificNumeric(const std::string& str) const;
+  bool isHexaPointerAddress(const std::string& str) const;
+  bool isToBeIgnoredForAnyComparison(const std::string& str) const;
+  std::string VectorToString(const otb::MetaDataKey::VectorType& vector) const;
   //FIXME parameters have to be cleaned up later (this is the first step of refactoring)
-  bool CompareLines(std::string strfileref,
-                    std::string strfiletest,
+  bool CompareLines(const std::string& strfileref,
+                    const std::string& strfiletest,
                     int& nbdiff,
                     std::ofstream& fluxfilediff,
                     int& numLine,
@@ -129,7 +137,7 @@ private:
   bool   m_ReportErrors;
   bool   m_IgnoreLineOrder;
 
-  void AddWhiteSpace(std::string strIn, std::string &strOut) const;
+  void AddWhiteSpace(const std::string& strIn, std::string &strOut) const;
 };
 }
 
