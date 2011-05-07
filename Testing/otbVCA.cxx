@@ -24,9 +24,9 @@
 #include "otbProjectiveProjectionImageFilter.h"
 #include "otbMatrixMultiplyImageFilter.h"
 #include "otbVectorImageToMatrixImageFilter.h"
-#include "otbStreamingMinMaxImageFilter2.h"
+#include "otbStreamingMinMaxImageFilter.h"
 #include "otbStreamingStatisticsImageFilter.h"
-#include "otbStreamingStatisticsVectorImageFilter2.h"
+#include "otbStreamingStatisticsVectorImageFilter.h"
 #include "itkAbsImageFilter.h"
 #include "itkMersenneTwisterRandomVariateGenerator.h"
 #include "vnl/algo/vnl_svd.h"
@@ -47,8 +47,8 @@ typedef otb::DotProductImageFilter<VectorImageType,ImageType> DotProductImageFil
 typedef otb::MatrixMultiplyImageFilter<VectorImageType,VectorImageType,PrecisionType> MatrixMultiplyImageFilterType;
 typedef otb::VectorImageToMatrixImageFilter<VectorImageType> VectorImageToMatrixImageFilterType;
 typedef otb::ImageFileWriter<VectorImageType> WriterType;
-typedef otb::StreamingMinMaxImageFilter2<ImageType> StreamingMinMaxImageFilterType;
-typedef otb::StreamingStatisticsVectorImageFilter2<VectorImageType> StreamingStatisticsVectorImageFilterType;
+typedef otb::StreamingMinMaxImageFilter<ImageType> StreamingMinMaxImageFilterType;
+typedef otb::StreamingStatisticsVectorImageFilter<VectorImageType> StreamingStatisticsVectorImageFilterType;
 typedef otb::StreamingStatisticsImageFilter<ImageType> StreamingStatisticsImageFilterType;
 
 typedef itk::Statistics::MersenneTwisterRandomVariateGenerator RandomVariateGeneratorType;

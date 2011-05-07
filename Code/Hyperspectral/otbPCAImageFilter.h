@@ -20,7 +20,7 @@
 
 #include "otbMacro.h"
 #include "itkImageToImageFilter.h"
-#include "otbStreamingStatisticsVectorImageFilter2.h"
+#include "otbStreamingStatisticsVectorImageFilter.h"
 #include "otbMatrixMultiplyImageFilter.h"
 #include "otbNormalizeVectorImageFilter.h"
 
@@ -39,7 +39,7 @@ namespace otb
  * The internal structure of this filter is a filter-to-filter like structure. 
  * The estimation of the covariance matrix has persistent capabilities...
  *
- * \sa otbStreamingStatisticsVectorImageFilter2
+ * \sa otbStreamingStatisticsVectorImageFilter
  * \sa MatrixMultiplyImageFilter
  */
 template <class TInputImage, class TOutputImage, Transform::TransformDirection TDirectionOfTransformation >
@@ -71,7 +71,7 @@ public:
   typedef TOutputImage OutputImageType;
 
   /** Filter types and related */
-  typedef StreamingStatisticsVectorImageFilter2< InputImageType > CovarianceEstimatorFilterType;
+  typedef StreamingStatisticsVectorImageFilter< InputImageType > CovarianceEstimatorFilterType;
   typedef typename CovarianceEstimatorFilterType::Pointer CovarianceEstimatorFilterPointerType;
 
   typedef typename CovarianceEstimatorFilterType::RealType RealType;

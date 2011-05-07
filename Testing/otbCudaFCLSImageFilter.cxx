@@ -74,7 +74,7 @@ int otbCudaFullyConstrainedLeastSquareImageFilterTest(int argc, char * argv[])
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outputImage);
   writer->SetInput(unmixer->GetOutput());
-  writer->SetBufferMemorySize(streamSizeMB * 1024 * 1024);
+  writer->SetAutomaticStrippedStreaming(streamSizeMB * 1024 * 1024);
 
   otb::StandardWriterWatcher w4(writer,unmixer,"FullyConstrainedLeastSquare");
 

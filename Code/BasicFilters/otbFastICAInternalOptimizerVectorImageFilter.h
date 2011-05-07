@@ -21,7 +21,7 @@
 #include "otbMacro.h"
 #include "itkImageToImageFilter.h"
 #include "otbMatrixMultiplyImageFilter.h"
-#include "otbStreamingStatisticsVectorImageFilter2.h"
+#include "otbStreamingStatisticsVectorImageFilter.h"
 
 namespace otb 
 {
@@ -65,7 +65,7 @@ public:
   typedef typename OutputImageType::RegionType OutputRegionType;
 
   /** Filter types and related */
-  typedef StreamingStatisticsVectorImageFilter2< InputImageType > CovarianceEstimatorFilterType;
+  typedef StreamingStatisticsVectorImageFilter< InputImageType > CovarianceEstimatorFilterType;
   typedef typename CovarianceEstimatorFilterType::Pointer CovarianceEstimatorFilterPointerType;
 
   typedef typename CovarianceEstimatorFilterType::RealType RealType;

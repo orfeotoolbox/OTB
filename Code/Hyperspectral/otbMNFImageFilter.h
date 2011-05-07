@@ -20,7 +20,7 @@
 
 #include "otbMacro.h"
 #include "itkImageToImageFilter.h"
-#include "otbStreamingStatisticsVectorImageFilter2.h"
+#include "otbStreamingStatisticsVectorImageFilter.h"
 #include "otbMatrixMultiplyImageFilter.h"
 #include "otbNormalizeVectorImageFilter.h"
 #include "otbPCAImageFilter.h"
@@ -39,7 +39,7 @@ namespace otb {
  *
  * TODO? Utiliser une 2e entree pour donner directement une image de bruit ??
  *
- * \sa otbStreamingStatisticsVectorImageFilter2
+ * \sa otbStreamingStatisticsVectorImageFilter
  * \sa PCAImageFiler
  */
 template <class TInputImage, class TOutputImage, 
@@ -73,7 +73,7 @@ public:
   typedef TOutputImage OutputImageType;
 
   /** Filter types and related */
-  typedef StreamingStatisticsVectorImageFilter2< InputImageType > CovarianceEstimatorFilterType;
+  typedef StreamingStatisticsVectorImageFilter< InputImageType > CovarianceEstimatorFilterType;
   typedef typename CovarianceEstimatorFilterType::Pointer CovarianceEstimatorFilterPointerType;
 
   typedef typename CovarianceEstimatorFilterType::RealType RealType;

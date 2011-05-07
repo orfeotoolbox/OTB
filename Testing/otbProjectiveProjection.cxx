@@ -25,7 +25,7 @@
 #include "otbMatrixMultiplyImageFilter.h"
 #include "otbVectorImageToMatrixImageFilter.h"
 #include "otbStreamingStatisticsImageFilter.h"
-#include "otbStreamingStatisticsVectorImageFilter2.h"
+#include "otbStreamingStatisticsVectorImageFilter.h"
 
 const unsigned int Dimension = 2;
 typedef double PixelType;
@@ -39,7 +39,7 @@ typedef otb::DotProductImageFilter<VectorImageType,ImageType> DotProductImageFil
 typedef otb::MatrixMultiplyImageFilter<VectorImageType,VectorImageType,PrecisionType> MatrixMultiplyImageFilterType;
 typedef otb::VectorImageToMatrixImageFilter<VectorImageType> VectorImageToMatrixImageFilterType;
 typedef otb::ImageFileWriter<VectorImageType> WriterType;
-typedef otb::StreamingStatisticsVectorImageFilter2<VectorImageType> StreamingStatisticsVectorImageFilterType;
+typedef otb::StreamingStatisticsVectorImageFilter<VectorImageType> StreamingStatisticsVectorImageFilterType;
 typedef otb::StreamingStatisticsImageFilter<ImageType> StreamingStatisticsImageFilterType;
 
 typedef StreamingStatisticsVectorImageFilterType::MatrixType MatrixType;

@@ -60,7 +60,6 @@ UnaryFunctorVectorImageFilter<TInputImage, TOutputImage, TFunction>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
                        int threadId)
 {
-
   InputImageRegionType inputRegionForThread;
   this->CallCopyOutputRegionToInputRegion( inputRegionForThread, outputRegionForThread );
 

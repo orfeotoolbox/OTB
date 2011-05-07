@@ -22,7 +22,7 @@
 #include "itkImageToImageFilter.h"
 #include "otbPCAImageFilter.h"
 #include "otbMatrixMultiplyImageFilter.h"
-#include "otbStreamingStatisticsVectorImageFilter2.h"
+#include "otbStreamingStatisticsVectorImageFilter.h"
 #include "otbFastICAInternalOptimizerVectorImageFilter.h"
 
 namespace otb 
@@ -80,7 +80,7 @@ public:
       InternalOptimizerType;
   typedef typename InternalOptimizerType::Pointer InternalOptimizerPointerType;
 
-  typedef StreamingStatisticsVectorImageFilter2< InputImageType > MeanEstimatorFilterType;
+  typedef StreamingStatisticsVectorImageFilter< InputImageType > MeanEstimatorFilterType;
   typedef typename MeanEstimatorFilterType::Pointer MeanEstimatorFilterPointerType;
 
   typedef double (*ContrastFunctionType) ( double );

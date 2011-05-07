@@ -7,7 +7,7 @@ SET( otbHyperTests1_SRC
   vahineElmVCA.cxx
   otbEigenvalueLikelihoodMaximization.cxx
   otbStreamingStatisticsVectorImageFilter.cxx
-  otbStreamingStatisticsVectorImageFilter2.cxx
+#  otbStreamingStatisticsVectorImageFilter.cxx
   otbMatrixMultiplyImageFilter.cxx
   otbUnConstrainedLeastSquareImageFilter.cxx
   otbISRAUnmixingImageFilter.cxx
@@ -68,7 +68,7 @@ ADD_TEST(bfTvStreamingStatisticsVectorImageFilter
 
 ADD_TEST(bfTuStreamingStatisticsVectorImageFilterNew2
          ${TESTEXE_DIR}/otbHyperTests1
-         otbStreamingStatisticsVectorImageFilter2NewTest)
+         otbStreamingStatisticsVectorImageFilterNewTest)
 
 #ADD_TEST(bfTvStreamingStatisticsVectorImageFilter_AVIRIS512
 #         ${TESTEXE_DIR}/otbHyperTests1
@@ -76,15 +76,15 @@ ADD_TEST(bfTuStreamingStatisticsVectorImageFilterNew2
 #         ${DATA}/AVIRIS/extract512/f970619t01p02_r02_sc01_goodbands.hdr
 #         ${TEMP}/aviris512_stats_otb.txt)
        
-ADD_TEST(bfTvStreamingStatisticsVectorImageFilter2
+ADD_TEST(bfTvStreamingStatisticsVectorImageFilter
          ${TESTEXE_DIR}/otbHyperTests1
-         otbStreamingStatisticsVectorImageFilter2Test
+         otbStreamingStatisticsVectorImageFilterTest
          ${DATA}/AVIRIS/extract128/extract128_goodbands.hdr
          ${TEMP}/extract128_stats_rt.txt)
 
-ADD_TEST(bfTvStreamingStatisticsVectorImageFilter2_AVIRIS512
+ADD_TEST(bfTvStreamingStatisticsVectorImageFilter_AVIRIS512
          ${TESTEXE_DIR}/otbHyperTests1
-         otbStreamingStatisticsVectorImageFilter2Test
+         otbStreamingStatisticsVectorImageFilterTest
          ${DATA}/AVIRIS/extract512/f970619t01p02_r02_sc01_goodbands.hdr
          ${TEMP}/aviris512_stats_rt.txt)
 

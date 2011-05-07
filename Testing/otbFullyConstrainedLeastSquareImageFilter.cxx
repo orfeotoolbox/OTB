@@ -68,7 +68,7 @@ int otbFullyConstrainedLeastSquareImageFilterTest(int argc, char * argv[])
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outputImage);
   writer->SetInput(unmixer->GetOutput());
-  writer->SetBufferNumberOfLinesDivisions(10);
+  writer->SetNumberOfDivisionsStrippedStreaming(10);
 
   otb::StandardWriterWatcher w4(writer,unmixer,"FullyConstrainedLeastSquare");
 

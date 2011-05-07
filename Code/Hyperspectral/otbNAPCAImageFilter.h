@@ -20,7 +20,7 @@
 
 #include "otbMacro.h"
 #include "itkImageToImageFilter.h"
-#include "otbStreamingStatisticsVectorImageFilter2.h"
+#include "otbStreamingStatisticsVectorImageFilter.h"
 #include "otbMatrixMultiplyImageFilter.h"
 #include "otbNormalizeVectorImageFilter.h"
 #include "otbMNFImageFilter.h"
@@ -42,7 +42,7 @@ namespace otb {
  *
  * TODO? Utiliser une 2e entree pour donner directement une image de bruit ??
  *
- * \sa otbStreamingStatisticsVectorImageFilter2
+ * \sa otbStreamingStatisticsVectorImageFilter
  * \sa MNFImageFilter
  */
 template <class TInputImage, class TOutputImage, 

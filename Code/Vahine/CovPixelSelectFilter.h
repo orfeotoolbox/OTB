@@ -68,7 +68,7 @@ public:
   typedef typename OutputImageType::RegionType               OutputRegionType;
   typedef typename itk::ImageRegionIterator<OutputImageType> OutputRegionIterator;
 
-  typedef StreamingStatisticsVectorImageFilter2<InputImageType> StatsFilterType;
+  typedef StreamingStatisticsVectorImageFilter<InputImageType> StatsFilterType;
   typedef typename StatsFilterType::Pointer                    StatsFilterPointer;
 
   typedef typename itk::VariableSizeMatrix<RealType> MatrixType;

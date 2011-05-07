@@ -16,26 +16,31 @@
 
 =========================================================================*/
 #include "otbStreamingStatisticsVectorImageFilter.h"
-
-#include <fstream>
-
-#include "otbVectorImage.h"
+#include "itkExceptionObject.h"
 #include "otbImageFileReader.h"
+#include "otbVectorImage.h"
+#include <fstream>
 #include "otbStreamingTraits.h"
+
+const unsigned int Dimension = 2;
+typedef float PixelType;
+
+typedef otb::VectorImage<PixelType, Dimension> ImageType;
+typedef otb::ImageFileReader<ImageType> ReaderType;
+typedef otb::StreamingStatisticsVectorImageFilter<ImageType> StreamingStatisticsVectorImageFilterType;
+
+int otbStreamingStatisticsVectorImageFilterNewTest(int argc, char * argv[])
+{
+  StreamingStatisticsVectorImageFilterType::Pointer filter = StreamingStatisticsVectorImageFilterType::New();
+  std::cout << filter << std::endl;
+  return EXIT_SUCCESS;
+}
 
 int otbStreamingStatisticsVectorImageFilterTest(int argc, char * argv[])
 {
   const char * infname = argv[1];
   const char * outfname = argv[2];
 
-  const unsigned int Dimension = 2;
-  typedef double PixelType;
-
-  typedef otb::VectorImage<PixelType, Dimension>               ImageType;
-  typedef otb::ImageFileReader<ImageType>                      ReaderType;
-  typedef otb::StreamingStatisticsVectorImageFilter<ImageType> StreamingStatisticsVectorImageFilterType;
-
-  // Instantiating object
   StreamingStatisticsVectorImageFilterType::Pointer filter = StreamingStatisticsVectorImageFilterType::New();
 
   ReaderType::Pointer reader = ReaderType::New();
@@ -51,6 +56,7 @@ int otbStreamingStatisticsVectorImageFilterTest(int argc, char * argv[])
   file.precision(5);
   file << "Mean: " << filter->GetMean() << std::endl;
   file << "Covariance: " << filter->GetCovariance() << std::endl;
+  file << "Correlation: " << filter->GetCorrelation() << std::endl;
   file.close();
 
   return EXIT_SUCCESS;

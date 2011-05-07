@@ -26,7 +26,7 @@
 #include <vcl_algorithm.h>
 #include <vcl_vector.h>
 
-#include <otbStreamingStatisticsVectorImageFilter2.h>
+#include <otbStreamingStatisticsVectorImageFilter.h>
 #include <otbStreamingStatisticsImageFilter.h>
 #include <otbVectorImageToImageListFilter.h>
 #include <otbImageList.h>
@@ -111,7 +111,7 @@ private:
 
   typedef itk::ImageRegionConstIterator<VectorImageType>             ConstIteratorType;
   typedef itk::ImageRegionIterator<VectorImageType>                  IteratorType;
-  typedef otb::StreamingStatisticsVectorImageFilter2<VectorImageType> StatsFilterType;
+  typedef otb::StreamingStatisticsVectorImageFilter<VectorImageType> StatsFilterType;
   typedef typename StatsFilterType::Pointer                          StatsFilterPointer;
 
   typedef ImageList<BandType>                                          ImageListType;
@@ -123,7 +123,7 @@ private:
   typedef typename BandStatsFilterType::Pointer                        BandStatsFilterPointer;
 
   /** Typedef for statistic computing. */
-  typedef StreamingStatisticsVectorImageFilter2<VectorImageType>         StreamingStatisticsVectorImageFilterType;
+  typedef StreamingStatisticsVectorImageFilter<VectorImageType>         StreamingStatisticsVectorImageFilterType;
   typedef typename StreamingStatisticsVectorImageFilterType::MatrixType MatrixType;
 
   typedef typename itk::Statistics::ListSample< itk::VariableLengthVector< InternalPixelType > > SampleType;

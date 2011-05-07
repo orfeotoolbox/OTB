@@ -55,7 +55,7 @@ public:
 
   typedef typename itk::VariableSizeMatrix<RealType>             MatrixType;
   typedef vnl_matrix<InternalPixelType>                          VnlMatrixType;
-  typedef otb::StreamingStatisticsVectorImageFilter2<TInputImage> StatsFilterType;
+  typedef otb::StreamingStatisticsVectorImageFilter<TInputImage> StatsFilterType;
 
   itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
 

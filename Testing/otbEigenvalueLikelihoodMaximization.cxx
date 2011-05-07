@@ -19,14 +19,14 @@
 
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingStatisticsVectorImageFilter2.h"
+#include "otbStreamingStatisticsVectorImageFilter.h"
 
 const unsigned int Dimension = 2;
 typedef double PixelType;
 
 typedef otb::VectorImage<PixelType, Dimension> ImageType;
 typedef otb::ImageFileReader<ImageType> ReaderType;
-typedef otb::StreamingStatisticsVectorImageFilter2<ImageType> StreamingStatisticsVectorImageFilterType;
+typedef otb::StreamingStatisticsVectorImageFilter<ImageType> StreamingStatisticsVectorImageFilterType;
 
 typedef otb::EigenvalueLikelihoodMaximisation<double> ELMType;
 

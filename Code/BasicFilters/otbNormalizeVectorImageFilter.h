@@ -26,7 +26,7 @@
 #include <otbVectorImage.h>
 #include <otbUnaryFunctorVectorImageFilter.h>
 
-#include <otbStreamingStatisticsVectorImageFilter2.h>
+#include <otbStreamingStatisticsVectorImageFilter.h>
 
 namespace otb 
 {
@@ -121,10 +121,10 @@ protected:
  * NormalizeVectorImageFilter shifts and scales an image so that the pixels in the image 
  * have a zero mean and unit variance. 
  *
- * This filter uses StreamingStatisticsVectorImageFilter2 to compute the mean and variance of
+ * This filter uses StreamingStatisticsVectorImageFilter to compute the mean and variance of
  * the input and then applies the dedicated functor.
  *
- * \sa StreamingStatisticsVectorImageFilter2
+ * \sa StreamingStatisticsVectorImageFilter
  */
 template < class TInputImage, class TOutputImage >
 class ITK_EXPORT NormalizeVectorImageFilter 
@@ -155,7 +155,7 @@ public:
   typedef typename itk::NumericTraits< typename TInputImage::PixelType >::RealType RealVectorType;
   typedef typename  itk::NumericTraits< typename RealVectorType::ValueType >::RealType RealType;
 
-  typedef StreamingStatisticsVectorImageFilter2< InputImageType > CovarianceEstimatorFilterType;
+  typedef StreamingStatisticsVectorImageFilter< InputImageType > CovarianceEstimatorFilterType;
   typedef typename CovarianceEstimatorFilterType::Pointer CovarianceEstimatorFilterPointerType;
 
   itkGetConstMacro(CovarianceEstimator,CovarianceEstimatorFilterType*);

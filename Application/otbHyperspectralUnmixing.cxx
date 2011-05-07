@@ -22,7 +22,7 @@
 #include "otbCommandLineArgumentParser.h"
 #include <boost/algorithm/string.hpp>
 
-#include "otbStreamingStatisticsVectorImageFilter2.h"
+#include "otbStreamingStatisticsVectorImageFilter.h"
 
 #include "otbEigenvalueLikelihoodMaximisation.h"
 #include "otbVcaImageFilter.h"
@@ -45,7 +45,7 @@ typedef otb::VectorImage<PixelType, Dimension> VectorImageType;
 typedef otb::ImageFileReader<VectorImageType> ReaderType;
 typedef otb::StreamingImageFileWriter<VectorImageType> WriterType;
 
-typedef otb::StreamingStatisticsVectorImageFilter2<VectorImageType, PixelType> StreamingStatisticsVectorImageFilterType;
+typedef otb::StreamingStatisticsVectorImageFilter<VectorImageType, PixelType> StreamingStatisticsVectorImageFilterType;
 typedef otb::EigenvalueLikelihoodMaximisation<PixelType> ELMType;
 typedef otb::VCAImageFilter<VectorImageType> VCAFilterType;
 
