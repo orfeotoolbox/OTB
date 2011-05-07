@@ -100,24 +100,23 @@ template<class TData>
 void
 KMLVectorDataIO<TData>::WalkFeature(const kmldom::FeaturePtr& feature, DataNodePointerType father)
 {
-
   DataNodePointerType node = NULL;
 
-  if (feature)
+  if (!feature) return;
+    
+  if (const kmldom::ContainerPtr container = kmldom::AsContainer(feature))
     {
-    if (const kmldom::ContainerPtr container = kmldom::AsContainer(feature))
-      {
-      WalkContainer(container, father);
-      }
-    else if (const kmldom::PlacemarkPtr placemark = kmldom::AsPlacemark(feature))
-      {
-      WalkGeometry(placemark->get_geometry(), father);
-      }
+    WalkContainer(container, father);
+    }
+  else if (const kmldom::PlacemarkPtr placemark = kmldom::AsPlacemark(feature))
+    {
+    WalkGeometry(placemark->get_geometry(), father);
+    }
 
     // The Read() method is not exhaustive it is possible to add the read of the "link",
     // the style (iconStyle, LineStyle...). Then into the containers we also can find the fields :
     // <visibility> <description> <LookAt>... cf. code.google.com/apis/kml/documentation/kmlelementssinmaps.html
-    }
+    
   return;
 }
 
@@ -471,10 +470,7 @@ KMLVectorDataIO<TData>
   std::string        errors;
   kmldom::ElementPtr root = kmldom::Parse(kml, &errors);
 
-  if (!root)
-    {
-    itkExceptionMacro(<< "Failed to open KML data file " << errors);
-    }
+  if (!root) itkExceptionMacro(<< "Failed to open KML data file " << errors);
 
   //Fill up projection information
   //for KML files, this is geographic coordinates
@@ -485,25 +481,19 @@ KMLVectorDataIO<TData>
   itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projectionRef);
 
   const kmldom::FeaturePtr feature = GetRootFeature(root);
-  if (feature)
-    {
 
-    // Retrieving root node
-    m_Tree = data->GetDataTree();
-    DataNodePointerType rootNode = m_Tree->GetRoot()->Get();
+  if (!feature) itkExceptionMacro(<< "No root feature");
 
-    DataNodePointerType document = DataNodeType::New();
-    document->SetNodeType(DOCUMENT);
-    m_Tree->Add(document, rootNode);
+  // Retrieving root node
+  m_Tree = data->GetDataTree();
+  DataNodePointerType rootNode = m_Tree->GetRoot()->Get();
 
-    // Walk Feature (get the Placemarks... and walk into them) //ENGLISH ??
-    WalkFeature(feature, document);
+  DataNodePointerType document = DataNodeType::New();
+  document->SetNodeType(DOCUMENT);
+  m_Tree->Add(document, rootNode);
 
-    }
-  else
-    {
-    itkExceptionMacro(<< "No root feature");
-    }
+  // Walk Feature (get the Placemarks... and walk into them) //ENGLISH ??
+  WalkFeature(feature, document);
 
   // std::cout<< m_Tree <<std::endl;
 }

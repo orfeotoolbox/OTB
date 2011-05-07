@@ -281,7 +281,8 @@ private:
   unsigned int           m_CurIdx;
 
   // KMZ file
-  kmlengine::KmzFilePtr  m_KmzFile;
+  
+kmlengine::KmzFilePtr  m_KmzFile;
   
   // KMZ file name
   std::ostringstream     m_KmzFileName;
