@@ -66,7 +66,7 @@ int otbMRFEnergyFisherClassification(int argc, char * argv[])
   file.open(outputFile);
 
   file << std::endl;
-  file << "Number of paramters: " << classif->GetNumberOfParameters() << std::endl;
+  file << "Number of parameters: " << classif->GetNumberOfParameters() << std::endl;
   file << "GetSingleValue(10, 1): " << classif->GetSingleValue(10, 1) << std::endl;
 
   file.close();
