@@ -23,6 +23,7 @@
 #include "otbMRFEnergy.h"
 #include "otbMath.h"
 #include "otbGamma.h"
+#include <boost/math/special_functions/gamma.hpp>
 
 namespace otb
 {
@@ -75,11 +76,12 @@ public:
     double l  = this->m_Parameters[3*static_cast<double>(value2)+1];
     double m  = this->m_Parameters[3*static_cast<double>(value2)+2];
 
-    double result = -vcl_log((g.gamma(l+m)/(g.gamma(l)*g.gamma(m))) * (2/(mu)) * (vcl_sqrt(l/m)) *
-                             ((pow((vcl_sqrt(l/m)*(val1/mu)), ((2*l)-1))) /
-                              (pow(1+(vcl_sqrt(l/m)*(val1/mu)*vcl_sqrt(l/m)*(val1/mu)), (l+m)))));
+    double result = -vcl_log((boost::math::tgamma(l+m)/(boost::math::tgamma(l)*boost::math::tgamma(m)))
+                             * (2/(mu)) * (vcl_sqrt(l/m)) *
+                             ((vcl_pow((vcl_sqrt(l/m)*(val1/mu)), ((2*l)-1))) /
+                              (vcl_pow(1+(vcl_sqrt(l/m)*(val1/mu)*vcl_sqrt(l/m)*(val1/mu)), (l+m)))));
 
-    return static_cast<double>( result );
+    return result;
   }
 
 protected:
