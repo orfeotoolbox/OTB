@@ -79,7 +79,7 @@ public:
                 }
                 else {
                        if (vcl_abs(x) > 1.0) {
-                               z = fabs(x);
+                               z = vcl_abs(x);
                                m = (int)z;
                                r = 1.0;
                                for (k=1;k<=m;k++) {
@@ -97,7 +97,7 @@ public:
                        if (vcl_abs(x) > 1.0) {
                                ga *= r;
                                if (x < 0.0) {
-                                       ga = -otb::CONST_PI/(x*ga*sin(otb::CONST_PI*x));
+                                       ga = -otb::CONST_PI/(x*ga*vcl_sin(otb::CONST_PI*x));
                                }
                        }
                }
