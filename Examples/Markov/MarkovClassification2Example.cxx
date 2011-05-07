@@ -55,7 +55,6 @@
 #include "otbMRFSamplerRandomMAP.h"
 #include "otbMRFOptimizerICM.h"
 // Software Guide : EndCodeSnippet
-//#include "otbMRFSamplerRandom.h"
 
 int main(int argc, char* argv[])
 {

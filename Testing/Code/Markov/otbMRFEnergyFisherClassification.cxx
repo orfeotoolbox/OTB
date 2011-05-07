@@ -38,7 +38,7 @@ int otbMRFEnergyFisherClassificationNew(int argc, char * argv[])
 
   return EXIT_SUCCESS;
 }
-  
+
 int otbMRFEnergyFisherClassification(int argc, char * argv[])
 {
   const char * outputFile = argv[1];

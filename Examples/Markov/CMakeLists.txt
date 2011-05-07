@@ -9,6 +9,9 @@ TARGET_LINK_LIBRARIES(MarkovClassification1Example OTBMarkov OTBCommon OTBIO ITK
 ADD_EXECUTABLE(MarkovClassification2Example MarkovClassification2Example.cxx )
 TARGET_LINK_LIBRARIES(MarkovClassification2Example OTBMarkov OTBCommon OTBIO ITKNumerics)
 
+ADD_EXECUTABLE(MarkovClassification3Example MarkovClassification3Example.cxx )
+TARGET_LINK_LIBRARIES(MarkovClassification3Example OTBMarkov OTBCommon OTBIO ITKNumerics)
+
 ADD_EXECUTABLE(MarkovRestaurationExample MarkovRestaurationExample.cxx )
 TARGET_LINK_LIBRARIES(MarkovRestaurationExample OTBMarkov OTBCommon OTBIO ITKNumerics)
 
@@ -50,6 +53,17 @@ ADD_TEST(maTeMarkovClassification2ExampleTest ${EXE_TESTS}
         1.0
 	5
 	1 # true to use always the same rand() sample, false otherwise
+)
+
+ADD_TEST(maTeMarkovClassification3ExampleTest ${EXE_TESTS}
+	--compare-image ${EPSILON}
+                    ${BASELINE}/MarkovClassification3.png
+                    ${TEMP}/MarkovClassification3.png
+    MarkovClassification3ExampleTest
+        ${INPUTDATA}/QB_Suburb.png
+        ${TEMP}/MarkovClassification3.png
+        ${TEMP}/MarkovClassification3_1.png
+        1.0 20 1.0 1
 )
 
 ADD_TEST(maTeMarkovRestaurationExampleTest ${EXE_TESTS}

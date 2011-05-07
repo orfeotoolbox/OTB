@@ -27,6 +27,7 @@ void RegisterTests()
 {
   REGISTER_TEST(MarkovClassification1ExampleTest);
   REGISTER_TEST(MarkovClassification2ExampleTest);
+  REGISTER_TEST(MarkovClassification3ExampleTest);
   REGISTER_TEST(MarkovRestaurationExampleTest);
   REGISTER_TEST(MarkovRegularizationExampleTest);
 }
@@ -38,6 +39,10 @@ void RegisterTests()
 #undef main
 #define main MarkovClassification2ExampleTest
 #include "MarkovClassification2Example.cxx"
+
+#undef main
+#define main MarkovClassification3ExampleTest
+#include "MarkovClassification3Example.cxx"
 
 #undef main
 #define main MarkovRestaurationExampleTest
