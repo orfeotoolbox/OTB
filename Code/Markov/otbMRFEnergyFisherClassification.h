@@ -73,8 +73,8 @@ double GetSingleValue(const InputImagePixelType & value1,  const LabelledImagePi
   double m  = this->m_Parameters[3*static_cast<double>(value2)+2];
 
   double result = -vcl_log((g.gamma(l+m)/(g.gamma(l)*g.gamma(m))) * (2/(mu)) * (vcl_sqrt(l/m)) *
-                           ((pow((vcl_sqrt(l/m)*(val1/mu)),((2*l)-1))) /
-                               (pow(1+(vcl_sqrt(l/m)*(val1/mu)*vcl_sqrt(l/m)*(val1/mu)),(l+m)))));
+                           ((pow((vcl_sqrt(l/m)*(val1/mu)), ((2*l)-1))) /
+                               (pow(1+(vcl_sqrt(l/m)*(val1/mu)*vcl_sqrt(l/m)*(val1/mu)), (l+m)))));
 
   return static_cast<double>( result );
 }

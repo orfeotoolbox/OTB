@@ -26,7 +26,7 @@
 
 #include "otbMath.h"
 
-namespace otb 
+namespace otb
 {
 /** \class Gamma
  *  \brief Gamma function
@@ -36,8 +36,8 @@ class Gamma {
 public:
        double gamma(double x)
        {
-               int i,k,m;
-               double ga,gr,r,z;
+               int i, k, m;
+               double ga, gr, r, z;
 
                static double g[] = {
                        1.0,
@@ -70,7 +70,7 @@ public:
                if (x == (int)x) {
                        if (x > 0.0) {
                                ga = 1.0;               // use factorial
-                               for (i=2;i<x;i++) {
+                               for (i=2; i<x; i++) {
                                   ga *= i;
                                }
                         }
@@ -82,7 +82,7 @@ public:
                                z = vcl_abs(x);
                                m = (int)z;
                                r = 1.0;
-                               for (k=1;k<=m;k++) {
+                               for (k=1; k<=m; k++) {
                                        r *= (z-k);
                                }
                                z -= m;
@@ -90,7 +90,7 @@ public:
                        else
                                z = x;
                        gr = g[24];
-                       for (k=23;k>=0;k--) {
+                       for (k=23; k>=0; k--) {
                                gr = gr*z+g[k];
                        }
                        ga = 1.0/(gr*z);

@@ -121,7 +121,7 @@ int main(int argc, char* argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef otb::MarkovRandomFieldFilter
-      <InputImageType,LabelledImageType> MarkovRandomFieldFilterType;
+      <InputImageType, LabelledImageType> MarkovRandomFieldFilterType;
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -188,7 +188,7 @@ int main(int argc, char* argv[] )
 
   // Software Guide : BeginLatex
   //
-  // Parameter for the MRFEnergyFisherClassification class are created. The shape parameters M,L
+  // Parameter for the MRFEnergyFisherClassification class are created. The shape parameters M, L
   // and the weighting parameter mu are computed in a supervised step
   //
   // Software Guide : EndLatex
@@ -276,7 +276,7 @@ int main(int argc, char* argv[] )
   typedef otb::Image<RGBPixelType, 2>                           RGBImageType;
   typedef itk::Functor::ScalarToRGBPixelFunctor<unsigned long>  ColorMapFunctorType;
 
-  typedef itk::UnaryFunctorImageFilter< LabelledImageType,RGBImageType,ColorMapFunctorType> ColorMapFilterType;
+  typedef itk::UnaryFunctorImageFilter< LabelledImageType, RGBImageType, ColorMapFunctorType> ColorMapFilterType;
   ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
 
   colormapper->SetInput( rescaleFilter->GetOutput() );

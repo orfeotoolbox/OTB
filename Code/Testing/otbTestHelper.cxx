@@ -75,7 +75,7 @@
 namespace otb
 {
 
-int TestHelper::RegressionTestAllImages(const StringList& baselineFilenamesImage, 
+int TestHelper::RegressionTestAllImages(const StringList& baselineFilenamesImage,
                                         const StringList& testFilenamesImage)
 {
   int result = 0;
@@ -114,7 +114,7 @@ int TestHelper::RegressionTestAllImages(const StringList& baselineFilenamesImage
         = this->RegressionTestImage(cpt, testFilenameImage.c_str(),
                                          (baseline->first).c_str(),
                                          m_ToleranceDiffValue);
-      }  
+      }
     cpt++;
     result += multiResult;
     }

@@ -29,7 +29,7 @@ int otbGammaTest(int argc, char * argv[])
   GammaFunctionType * gam = new GammaFunctionType();
   const double epsilon = 0.0000000001;
 
-  if ( vcl_abs(gam->gamma(1) - 1) > epsilon ) return EXIT_FAILURE; 
+  if ( vcl_abs(gam->gamma(1) - 1) > epsilon ) return EXIT_FAILURE;
   if ( vcl_abs(gam->gamma(0.5) - 1.77245385091) > epsilon ) return EXIT_FAILURE;
   if ( vcl_abs(gam->gamma(4) - 6) > epsilon ) return EXIT_FAILURE;
 
