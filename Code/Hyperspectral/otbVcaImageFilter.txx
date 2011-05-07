@@ -81,6 +81,7 @@ void VCAImageFilter<TImage>::GenerateData()
 
   statsInput->SetInput(input);
   //otb::StandardWriterWatcher watcher(statsInput->GetStreamer(), statsInput->GetFilter(), "Computing image stats");
+  statsInput->SetEnableMinMax(false);
   statsInput->Update();
 
   otbMsgDevMacroVCA( "Computing SVD of correlation matrix" );
@@ -106,8 +107,8 @@ void VCAImageFilter<TImage>::GenerateData()
   otbMsgDevMacroVCA( "Compute mean(Xd)" );
   typename StreamingStatisticsVectorImageFilterType::Pointer statsXd = \
       StreamingStatisticsVectorImageFilterType::New();
-  statsXd->SetEnableCorrelation(false);
-  statsXd->SetEnableCovariance(false);
+  statsXd->SetEnableMinMax(false);
+  statsXd->SetEnableSecondOrderStats(false);
   statsXd->SetInput(Xd);
 //  statsXd->GetStreamer()->SetBufferNumberOfLinesDivisions(10);
   statsXd->Update();
