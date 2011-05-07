@@ -70,9 +70,9 @@ public:
       itkExceptionMacro(<<"Number of parameters does not correspond to number of classes" );
       }
     double val1 = static_cast<double>(value1);
-    double mu = this->m_Parameters[3*static_cast<double>(value2)];
-    double l  = this->m_Parameters[3*static_cast<double>(value2)+1];
-    double m  = this->m_Parameters[3*static_cast<double>(value2)+2];
+    double mu = this->m_Parameters[3*value2];
+    double l  = this->m_Parameters[3*value2+1];
+    double m  = this->m_Parameters[3*value2+2];
 
     double result = -vcl_log((boost::math::tgamma(l+m)/(boost::math::tgamma(l)*boost::math::tgamma(m)))
                              * (2/(mu)) * (vcl_sqrt(l/m)) *
