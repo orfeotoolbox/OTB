@@ -24,10 +24,12 @@
 #include <map>
 #include <string>
 #include <vector>
+#include "itkObject.h"
 #include "otbMetaDataKey.h"
 
-// OGR Headers files
-#include "ogrsf_frmts.h"
+class OGRFeature;
+class OGRGeometry;
+class OGRLayer;
 
 namespace otb
 {
@@ -35,7 +37,7 @@ namespace otb
  * \class TestHelper
  * \brief Helper class to perform the baseline comparisons during the tests
  */
-class /*ITK_EXPORT*/ TestHelper
+class /*ITK_EXPORT*/ TestHelper : itk::Object
 {
 public:
   TestHelper() :
@@ -46,7 +48,7 @@ public:
 
   ~TestHelper(){}
 
-  std::map<std::string, int> RegressionTestbaselines(char *baselineFilename) const;
+  std::map<std::string, int> RegressionTestBaselines(char *baselineFilename) const;
 
   int RegressionTestImage(int cpt, const char *testImageFilename, const char *baselineImageFilename,
                           const double toleranceDiffPixelImage) const;
@@ -62,23 +64,10 @@ public:
   int RegressionTestMetaData(const char *testImageFilename, const char *baselineImageFilename,
                              const double toleranceDiffPixelImage) const;
 
-  void ReportErrorsOn()
-  {
-    m_ReportErrors = true;
-  }
-  void ReportErrorsOff()
-  {
-    m_ReportErrors = false;
-  }
-
-  void IgnoreLineOrderOn()
-  {
-    m_IgnoreLineOrder = true;
-  }
-  void IgnoreLineOrderOff()
-  {
-    m_IgnoreLineOrder = false;
-  }
+  itkSetMacro(ReportErrors, bool);
+  itkBooleanMacro(ReportErrors);
+  itkSetMacro(IgnoreLineOrder, bool);
+  itkBooleanMacro(IgnoreLineOrder);
 
   void SetEpsilonBoundaryChecking(double epsilonBoundary)
   {

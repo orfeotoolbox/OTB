@@ -40,6 +40,7 @@
 #include "cpl_string.h"
 #include "cpl_multiproc.h"
 #include "ogr_api.h"
+#include "ogrsf_frmts.h"
 
 #define otbPrintDiff(comment, refStr, testStr) \
   std::cout << "   ----    '" << comment << "' checking   ---------------------------" << std::endl; \
@@ -720,7 +721,7 @@ int TestHelper::RegressionTestMetaData(const char *testImageFilename, const char
 // 3) append the original suffix.
 // It the file exists, increment x and continue
 //
-std::map<std::string, int> TestHelper::RegressionTestbaselines(char *baselineFilename) const
+std::map<std::string, int> TestHelper::RegressionTestBaselines(char *baselineFilename) const
 {
   std::map<std::string, int> baselines;
   baselines[std::string(baselineFilename)] = 0;
