@@ -203,7 +203,7 @@ int main(int argc, char* argv[] )
     }
 
   // Software Guide : BeginCodeSnippet
-  unsigned int nClass =4 ;
+  unsigned int nClass =4;
   energyFidelity->SetNumberOfParameters(3*nClass);
   EnergyFidelityType::ParametersType parameters;
   parameters.SetSize(energyFidelity->GetNumberOfParameters());
@@ -213,11 +213,11 @@ int main(int argc, char* argv[] )
   parameters[2] =         4.920403;       //Class 0 M
   //Class 1
   parameters[3] =         72.068291;    //Class 1 mu
-  parameters[4] =         11.000000 ;   //Class 1 L
+  parameters[4] =         11.000000;   //Class 1 L
   parameters[5] =         50.950001;    //Class 1 M
   //Class 2
   parameters[6] =         146.665985;   //Class 2 mu
-  parameters[7] =         11.000000 ;   //Class 2 L
+  parameters[7] =         11.000000;   //Class 2 L
   parameters[8] =         50.900002;    //Class 2 M
   //Class 3
   parameters[9]  =      200.010132;     //Class 3 mu
