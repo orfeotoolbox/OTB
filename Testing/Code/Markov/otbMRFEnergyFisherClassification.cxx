@@ -16,9 +16,7 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
+
 
 #include "otbMRFEnergyFisherClassification.h"
 #include "otbImage.h"
