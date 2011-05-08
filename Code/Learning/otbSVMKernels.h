@@ -18,6 +18,10 @@
 #ifndef __otbSVMKernels_h
 #define __otbSVMKernels_h
 
+#include <vector>
+#include <algorithm> // for std::find
+#include <string.h> // for strpbrk
+
 #include "itkNumericTraits.h"
 #include "otbMath.h"
 
@@ -28,9 +32,6 @@
 #include "otbMixturePolyRBFKernelFunctor.h"
 
 #include "svm.h"
-#include <vector>
-#include <algorithm> // for std::find
-#include <string.h> // for strpbrk
 
 namespace otb
 {
@@ -98,7 +99,7 @@ public:
 
   virtual double operator ()(const svm_node *x, const svm_node *y, const svm_parameter& param) const
   {
-    double              mq = this->GetValue<double>("const_coef") + m_Custom(x, y, param);
+    double mq = this->GetValue<double>("const_coef") + m_Custom(x, y, param);
     if (mq == 0.0)
       {
       return itk::NumericTraits<double>::max();
@@ -329,7 +330,7 @@ public:
 
   virtual double operator ()(const svm_node *x, const svm_node *y, const svm_parameter& param) const
   {
-    double           mq = this->GetValue<double>("const_coef") + m_Sam(x, y, param);
+    double mq = this->GetValue<double>("const_coef") + m_Sam(x, y, param);
 
     if (mq == 0.)
       {
@@ -379,7 +380,7 @@ public:
 
   virtual double operator ()(const svm_node *x, const svm_node *y, const svm_parameter& param) const
   {
-    double           mq = this->GetValue<double>("const_coef") + m_Sam(x, y, param);
+    double mq = this->GetValue<double>("const_coef") + m_Sam(x, y, param);
 
     if (mq == 0.)
       {
@@ -429,7 +430,7 @@ public:
 
   virtual double operator ()(const svm_node *x, const svm_node *y, const svm_parameter& param) const
   {
-    double              res = this->GetValue<double>("gamma_coef") * m_Custom(x, y, param);
+    double res = this->GetValue<double>("gamma_coef") * m_Custom(x, y, param);
     return vcl_exp(-res);
   }
 
@@ -498,10 +499,8 @@ public:
         break;
       default:
         return (-2 * gamma *
-                ((degree -
-                  1) *
-                 this->derivative(x, y, param, degree - 2, index, isAtEnd,
-                                  constValue) +
+                ((degree - 1) *
+                 this->derivative(x, y, param, degree - 2, index, isAtEnd, constValue) +
                  (yval - xval) * derivative(x, y, param, degree - 1, index, isAtEnd, constValue)));
         break;
       }
@@ -577,8 +576,8 @@ private:
 class PolyRBFSAMKernelFunctor : public GenericKernelFunctorBase
 {
 public:
-  typedef PolyRBFSAMKernelFunctor             Self;
-  typedef GenericKernelFunctorBase            Superclass;
+  typedef PolyRBFSAMKernelFunctor  Self;
+  typedef GenericKernelFunctorBase Superclass;
 
   PolyRBFSAMKernelFunctor() : GenericKernelFunctorBase()
   {
@@ -624,8 +623,8 @@ private:
 class RBFDiffKernelFunctor : public GenericKernelFunctorBase
 {
 public:
-  typedef RBFDiffKernelFunctor                Self;
-  typedef GenericKernelFunctorBase            Superclass;
+  typedef RBFDiffKernelFunctor     Self;
+  typedef GenericKernelFunctorBase Superclass;
 
   RBFDiffKernelFunctor() : GenericKernelFunctorBase()
   {
@@ -654,14 +653,8 @@ public:
         }
       else
         {
-        if (x->index < y->index)
-          {
-          ++x;
-          }
-        else
-          {
-          ++y;
-          }
+        if (x->index < y->index) ++x;
+        else ++y;
         }
       }
     return total;
@@ -785,13 +778,13 @@ public:
 
     while (xBuff->index != 1)
       {
-      sizeX++;
+      ++sizeX;
       ++xBuff;
       }
 
     while (yBuff->index != 1)
       {
-      sizeY++;
+      ++sizeY;
       ++yBuff;
       }
 
@@ -967,13 +960,13 @@ public:
 
     while (xBuff->index != 1)
       {
-      sizeX++;
+      ++sizeX;
       ++xBuff;
       }
 
     while (yBuff->index != 1)
       {
-      sizeY++;
+      ++sizeY;
       ++yBuff;
       }
 

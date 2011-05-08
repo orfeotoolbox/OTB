@@ -18,16 +18,10 @@
 #ifndef __otbCommandLineArgumentParser_h
 #define __otbCommandLineArgumentParser_h
 
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#pragma warning ( disable : 4503 )
-#endif
-
 #include <iostream>
 #include <vector>
 #include <string>
 #include <map>
-#include <cstdlib>
 
 #include "itkProcessObject.h"
 #include "otbMacro.h"
