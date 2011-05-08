@@ -18,12 +18,11 @@
 #ifndef __otbDEMHandler_h
 #define __otbDEMHandler_h
 
-#include "itkIndent.h"
-#include "itkImageSource.h"
-#include "otbImage.h"
 #include <iostream>
 #include <stdio.h>
 
+#include "itkIndent.h"
+#include "itkImageSource.h"
 #include "itkImageRegionIteratorWithIndex.h"
 #include "itkIndent.h"
 

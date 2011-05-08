@@ -18,6 +18,8 @@
 
 #include "otbSensorModelAdapter.h"
 
+#include "otbMacro.h"
+
 #include "projection/ossimProjection.h"
 #include "projection/ossimSensorModelFactory.h"
 #include "ossim/ossimPluginProjectionFactory.h"

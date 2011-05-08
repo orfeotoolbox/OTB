@@ -19,13 +19,16 @@
 
 #include <cassert>
 
+#include "otbMacro.h"
+
 #include "base/ossimKeywordlist.h"
 #include "base/ossimString.h"
-#include "ossimTileMapModel.h"
 #include "ossim/ossimPluginProjectionFactory.h"
 #include "imaging/ossimImageHandlerRegistry.h"
+#include "ossimTileMapModel.h"
 
-#include "otbTileMapImageIO.h"
+// FIXME Temporarily deactivated
+// #include "otbTileMapImageIO.h"
 
 namespace otb
 {
@@ -179,7 +182,8 @@ ReadGeometry(const std::string& filename)
 
       if (projection)
         {
-        if (projection->getClassName() == "ossimTileMapModel")
+// FIXME Temporarily deactivated
+/*        if (projection->getClassName() == "ossimTileMapModel")
           {
           //we need to pass the depth information which in on the IO to the projection
           //to be handle throught the kwl
@@ -191,9 +195,8 @@ ReadGeometry(const std::string& filename)
           imageIO->ReadImageInformation();
           int depth = imageIO->GetDepth();
           dynamic_cast<ossimplugins::ossimTileMapModel*>(projection)->setDepth(depth);
-          }
+          }*/
         hasMetaData = projection->saveState(geom_kwl);
-//             delete projection; //FIXME find out where this should occur
         }
       }
     // Free memory

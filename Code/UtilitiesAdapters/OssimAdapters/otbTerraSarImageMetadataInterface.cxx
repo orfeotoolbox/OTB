@@ -24,7 +24,6 @@
 #include "otbTerraSarImageMetadataInterface.h"
 
 #include "itkMetaDataObject.h"
-#include "otbVectorDataKeywordlist.h"
 #include "base/ossimDate.h"
 #include "base/ossimKeywordlist.h"
 #include "itkIndex.h"

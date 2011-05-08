@@ -23,7 +23,6 @@
 #include "itkMacro.h"
 #include "itkVariableSizeMatrix.h"
 #include "itkVariableLengthVector.h"
-#include "otbObjectList.h"
 #include <vector>
 #include <iostream>
 

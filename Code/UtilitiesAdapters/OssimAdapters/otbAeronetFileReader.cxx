@@ -21,6 +21,7 @@
 #include <iostream>
 #include <iomanip>
 #include "otbMath.h"
+#include "otbAeronetData.h"
 
 #include "base/ossimDate.h"
 

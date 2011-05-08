@@ -23,7 +23,6 @@
 #include "otbImageMetadataInterfaceBase.h"
 
 #include "itkMetaDataObject.h"
-#include "otbVectorDataKeywordlist.h"
 #include "base/ossimKeywordlist.h"
 
 namespace otb
@@ -453,7 +452,8 @@ ImageMetadataInterfaceBase::PrintSelf(std::ostream& os, itk::Indent indent, cons
   double                   dvalue = 0.;
   OTB_GCP                  gcpvalue;
   ImageKeywordlist         ossimvalue;
-  VectorDataKeywordlist    vectorDataKeywordlistValue;
+// an extra dependency just for printing is a bad idea.
+//  VectorDataKeywordlist    vectorDataKeywordlistValue;
   unsigned int             i(0);
 
   // Copy of the const metadata dictionary in a metadata dictionary to be used
@@ -505,12 +505,12 @@ ImageMetadataInterfaceBase::PrintSelf(std::ostream& os, itk::Indent indent, cons
         os << indent << "---> " << keys[itkey] << std::endl;
         ossimvalue.Print(os);
         break;
-      case MetaDataKey::TVECTORDATAKEYWORDLIST:
-        itk::ExposeMetaData<VectorDataKeywordlist>(dict2, keys[itkey], vectorDataKeywordlistValue);
-
-        os << indent << "---> " << keys[itkey] << std::endl;
-        vectorDataKeywordlistValue.Print(os);
-        break;
+//      case MetaDataKey::TVECTORDATAKEYWORDLIST:
+//        itk::ExposeMetaData<VectorDataKeywordlist>(dict2, keys[itkey], vectorDataKeywordlistValue);
+//
+//        os << indent << "---> " << keys[itkey] << std::endl;
+//        vectorDataKeywordlistValue.Print(os);
+//        break;
       default:
         break;
       }

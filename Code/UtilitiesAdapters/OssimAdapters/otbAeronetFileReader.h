@@ -24,10 +24,12 @@
 #include "itkExceptionObject.h"
 #include "itkProcessObject.h"
 #include "otbMacro.h"
-#include "otbAeronetData.h"
 
 namespace otb
 {
+
+class AeronetData;
+
 /** \class AeronetFileReaderException
  * \brief Base exception class for Aeronet problems during reading.
  */

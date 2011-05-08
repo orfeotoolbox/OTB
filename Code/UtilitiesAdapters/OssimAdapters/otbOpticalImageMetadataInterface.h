@@ -27,6 +27,7 @@
 #include "otbImageMetadataInterfaceBase.h"
 #include "itkPointSet.h"
 #include "otbFilterFunctionValues.h"
+#include "otbObjectList.h"
 
 #include <string>
 
