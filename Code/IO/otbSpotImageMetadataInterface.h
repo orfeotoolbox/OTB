@@ -18,9 +18,7 @@
 #ifndef __otbSpotImageMetadataInterface_h
 #define __otbSpotImageMetadataInterface_h
 
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
+
 
 #include "otbOpticalImageMetadataInterface.h"
 

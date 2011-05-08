@@ -18,9 +18,7 @@
 #ifndef __otbImageToLineSpatialObjectListFilter_h
 #define __otbImageToLineSpatialObjectListFilter_h
 
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
+
 
 #include "itkProcessObject.h"
 #include "otbLineSpatialObjectList.h"

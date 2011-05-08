@@ -18,9 +18,7 @@
 #ifndef __otbGDALImageIO_h
 #define __otbGDALImageIO_h
 
-#ifdef _MSC_VER
-#pragma warning ( disable : 4786 )
-#endif
+
 
 /* C++ Libraries */
 #include <string>

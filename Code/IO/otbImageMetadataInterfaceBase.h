@@ -18,9 +18,7 @@
 #ifndef __otbImageMetadataInterfaceBase_h
 #define __otbImageMetadataInterfaceBase_h
 
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
+
 
 #include "itkMetaDataDictionary.h"
 

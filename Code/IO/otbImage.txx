@@ -18,9 +18,7 @@
 #ifndef __otbImage_txx
 #define __otbImage_txx
 
-#ifdef _MSC_VER
-#pragma warning ( disable : 4786 )
-#endif
+
 
 #include "otbImage.h"
 #include "otbImageMetadataInterfaceFactory.h"

@@ -18,9 +18,7 @@
 #ifndef __otbVectorDataIOFactory_txx
 #define __otbVectorDataIOFactory_txx
 
-#ifdef _MSC_VER
-#pragma warning ( disable : 4786 )
-#endif
+
 
 #include "otbVectorDataIOFactory.h"
 #include "otbOGRVectorDataIOFactory.h"

@@ -18,9 +18,7 @@
 #ifndef __otbVectorDataToRightAngleVectorDataFilter_h
 #define __otbVectorDataToRightAngleVectorDataFilter_h
 
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
+
 
 #include "otbVectorDataToVectorDataFilter.h"
 #include "itkPreOrderTreeIterator.h"

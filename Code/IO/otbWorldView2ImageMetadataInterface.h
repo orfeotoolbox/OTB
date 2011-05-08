@@ -18,9 +18,7 @@
 #ifndef __otbWorldView2ImageMetadataInterface_h
 #define __otbWorldView2ImageMetadataInterface_h
 
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
+
 
 #include "otbOpticalImageMetadataInterface.h"
 

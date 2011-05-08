@@ -18,9 +18,7 @@
 #ifndef __otbLineSpatialObject_txx
 #define __otbLineSpatialObject_txx
 
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
+
 
 #include "otbLineSpatialObject.h"
 #include "otbMacro.h"

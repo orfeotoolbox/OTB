@@ -18,9 +18,7 @@
 #ifndef __otbTerraSarImageMetadataInterfaceFactory_h
 #define __otbTerraSarImageMetadataInterfaceFactory_h
 
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
+
 
 #include "itkObjectFactoryBase.h"
 

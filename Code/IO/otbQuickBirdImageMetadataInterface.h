@@ -18,9 +18,7 @@
 #ifndef __otbQuickBirdImageMetadataInterface_h
 #define __otbQuickBirdImageMetadataInterface_h
 
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
+
 
 #include "otbOpticalImageMetadataInterface.h"
 
