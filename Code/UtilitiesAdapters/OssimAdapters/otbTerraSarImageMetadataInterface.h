@@ -19,18 +19,21 @@
 #ifndef __otbTerraSarImageMetadataInterface_h
 #define __otbTerraSarImageMetadataInterface_h
 
+#include <string>
 
-
+#include "otbSarImageMetadataInterface.h"
 #include "itkMetaDataDictionary.h"
 #include "otbMetaDataKey.h"
-#include "otbImageKeywordlist.h"
 #include "itkImageBase.h"
-#include <otb/Noise.h>
-#include <otb/SceneCoord.h>
-#include <string>
-#include "itkPointSet.h"
-#include "otbSarImageMetadataInterface.h"
 
+namespace ossimplugins 
+{
+class Noise;
+class SceneCoord;
+class CivilDateTime;
+}
+
+class ossimString;
 
 namespace otb
 {
@@ -60,7 +63,7 @@ public:
   typedef itk::MetaDataDictionary               MetaDataDictionaryType;
   typedef MetaDataKey::VectorType               VectorType;
   typedef MetaDataKey::VariableLengthVectorType VariableLengthVectorType;
-  typedef ImageKeywordlist                      ImageKeywordlistType;
+  typedef Superclass::ImageKeywordlistType      ImageKeywordlistType;
   typedef std::vector<double>                   DoubleVectorType;
   typedef std::vector<DoubleVectorType>         DoubleVectorVectorType;
   typedef std::vector<unsigned int>             UIntVectorType;

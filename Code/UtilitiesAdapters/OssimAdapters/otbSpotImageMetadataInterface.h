@@ -18,8 +18,6 @@
 #ifndef __otbSpotImageMetadataInterface_h
 #define __otbSpotImageMetadataInterface_h
 
-
-
 #include "otbOpticalImageMetadataInterface.h"
 
 namespace otb

@@ -18,17 +18,12 @@
 #ifndef __otbSarImageMetadataInterface_h
 #define __otbSarImageMetadataInterface_h
 
-
-
-#include "itkMetaDataDictionary.h"
-
-#include "otbMetaDataKey.h"
-#include "otbImageKeywordlist.h"
-#include "otbImageMetadataInterfaceBase.h"
-#include "itkPointSet.h"
-
 #include <string>
 
+#include "itkMetaDataDictionary.h"
+#include "otbMetaDataKey.h"
+#include "otbImageMetadataInterfaceBase.h"
+#include "itkPointSet.h"
 
 namespace otb
 {

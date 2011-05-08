@@ -18,19 +18,13 @@
 #ifndef __otbOpticalImageMetadataInterface_h
 #define __otbOpticalImageMetadataInterface_h
 
-
-
-#include "itkMetaDataDictionary.h"
-
-#include "otbMetaDataKey.h"
-#include "otbImageKeywordlist.h"
-#include "otbImageMetadataInterfaceBase.h"
-#include "itkPointSet.h"
-#include "otbFilterFunctionValues.h"
-#include "otbObjectList.h"
-
 #include <string>
 
+#include "itkMetaDataDictionary.h"
+#include "otbMetaDataKey.h"
+#include "otbImageMetadataInterfaceBase.h"
+#include "otbFilterFunctionValues.h"
+#include "otbObjectList.h"
 
 namespace otb
 {
@@ -56,8 +50,6 @@ public:
   typedef Superclass::VectorType                     VectorType;
   typedef Superclass::VariableLengthVectorType       VariableLengthVectorType;
   typedef Superclass::ImageKeywordlistType           ImageKeywordlistType;
-  typedef itk::PointSet<double, 2>                   PointSetType;
-  typedef PointSetType::Pointer                      PointSetPointer;
 
   typedef FilterFunctionValues                              FilterFunctionValuesType;
   typedef otb::ObjectList <FilterFunctionValuesType>        InternalWavelengthSpectralBandVectorType;

@@ -17,6 +17,7 @@
 =========================================================================*/
 
 #include "otbFilterFunctionValues.h"
+
 #include <fstream>
 
 namespace otb

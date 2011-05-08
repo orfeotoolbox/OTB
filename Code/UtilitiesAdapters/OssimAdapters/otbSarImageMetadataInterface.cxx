@@ -16,13 +16,11 @@
 
 =========================================================================*/
 
-
-
-#include "otbMath.h"
-
 #include "otbSarImageMetadataInterface.h"
 
+#include "otbMath.h"
 #include "itkMetaDataObject.h"
+#include "otbImageKeywordlist.h"
 #include "base/ossimKeywordlist.h"
 
 namespace otb

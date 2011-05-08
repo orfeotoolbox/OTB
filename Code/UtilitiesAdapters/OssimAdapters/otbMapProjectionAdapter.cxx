@@ -25,7 +25,6 @@
 
 #include "projection/ossimMapProjection.h"
 #include "projection/ossimMapProjectionFactory.h"
-#include "projection/ossimMapProjection.h"
 #include "base/ossimGpt.h"
 #include "base/ossimDpt.h"
 #include "projection/ossimProjection.h"

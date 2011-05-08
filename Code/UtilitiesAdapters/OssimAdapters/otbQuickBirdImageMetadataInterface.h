@@ -18,8 +18,6 @@
 #ifndef __otbQuickBirdImageMetadataInterface_h
 #define __otbQuickBirdImageMetadataInterface_h
 
-
-
 #include "otbOpticalImageMetadataInterface.h"
 
 namespace otb

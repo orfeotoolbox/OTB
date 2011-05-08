@@ -18,10 +18,10 @@
 #ifndef __otbSpectralSensitivityReader_h
 #define __otbSpectralSensitivityReader_h
 
-#include "otbAtmosphericCorrectionParameters.h"
 #include "itkProcessObject.h"
 #include "itkImageBase.h"
 #include "otbObjectList.h"
+#include "otbFilterFunctionValues.h"
 
 namespace otb
 {

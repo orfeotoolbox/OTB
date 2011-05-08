@@ -16,12 +16,10 @@
 
 =========================================================================*/
 
-
-
-#include "otbMacro.h"
-
 #include "otbImageMetadataInterfaceBase.h"
 
+#include "otbMacro.h"
+#include "otbImageKeywordlist.h"
 #include "itkMetaDataObject.h"
 #include "base/ossimKeywordlist.h"
 

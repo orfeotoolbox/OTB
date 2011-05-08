@@ -18,20 +18,18 @@
 #ifndef __otbImageMetadataInterfaceBase_h
 #define __otbImageMetadataInterfaceBase_h
 
-
+#include <string>
 
 #include "itkMetaDataDictionary.h"
-
 #include "otbMetaDataKey.h"
-#include "otbImageKeywordlist.h"
 #include "itkImageBase.h"
 #include "otbMacro.h"
 
-#include <string>
-
-
 namespace otb
 {
+
+class ImageKeywordlist;
+
 /** \class ImageMetadataInterfaceBase
  *
  * \brief Base class for captor metadata reading.

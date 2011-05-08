@@ -16,14 +16,12 @@
 
 =========================================================================*/
 
-
+#include "otbQuickBirdImageMetadataInterface.h"
 
 #include "otbMacro.h"
-
-#include "otbQuickBirdImageMetadataInterface.h"
 #include "itkMetaDataObject.h"
+#include "otbImageKeywordlist.h"
 #include "base/ossimKeywordlist.h"
-#include <list>
 
 namespace otb
 {

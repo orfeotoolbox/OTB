@@ -18,13 +18,14 @@
 
 #include "otbSensorModelAdapter.h"
 
+#include <cassert>
+
 #include "otbMacro.h"
+#include "otbImageKeywordlist.h"
 
 #include "projection/ossimProjection.h"
 #include "projection/ossimSensorModelFactory.h"
 #include "ossim/ossimPluginProjectionFactory.h"
-
-//TODO remove this->
 
 namespace otb
 {

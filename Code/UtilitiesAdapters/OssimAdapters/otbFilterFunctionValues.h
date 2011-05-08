@@ -18,13 +18,12 @@
 #ifndef __otbFilterFunctionValues_h
 #define __otbFilterFunctionValues_h
 
+#include <vector>
+#include <iostream>
+
 #include "itkDataObject.h"
 #include "itkObjectFactory.h"
 #include "itkMacro.h"
-#include "itkVariableSizeMatrix.h"
-#include "itkVariableLengthVector.h"
-#include <vector>
-#include <iostream>
 
 namespace otb
 {

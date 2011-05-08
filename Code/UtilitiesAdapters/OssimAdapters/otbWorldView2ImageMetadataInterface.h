@@ -18,8 +18,6 @@
 #ifndef __otbWorldView2ImageMetadataInterface_h
 #define __otbWorldView2ImageMetadataInterface_h
 
-
-
 #include "otbOpticalImageMetadataInterface.h"
 
 namespace otb

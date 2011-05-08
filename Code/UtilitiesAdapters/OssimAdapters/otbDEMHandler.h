@@ -22,9 +22,9 @@
 #include <stdio.h>
 
 #include "itkIndent.h"
-#include "itkImageSource.h"
-#include "itkImageRegionIteratorWithIndex.h"
-#include "itkIndent.h"
+#include "itkObject.h"
+#include "itkObjectFactory.h"
+#include "itkPoint.h"
 
 class ossimElevManager;
 

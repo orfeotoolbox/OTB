@@ -16,9 +16,8 @@
 
 =========================================================================*/
 
-
-
 #include "otbMetaDataKey.h"
+#include "gdal.h"
 
 #define NBKEYS  19
 
@@ -110,6 +109,48 @@ MetaDataKey::KeyType MetaDataKey::GetKeyType(std::string name)
       }
     }
   return (ktype);
+}
+
+OTB_GCP::OTB_GCP() {};
+OTB_GCP::OTB_GCP(const GDAL_GCP * psGCP)
+{
+  m_Id = std::string(psGCP->pszId);
+  m_Info = std::string(psGCP->pszInfo);
+  m_GCPRow = psGCP->dfGCPLine;
+  m_GCPCol = psGCP->dfGCPPixel;
+  m_GCPX = psGCP->dfGCPX;
+  m_GCPY = psGCP->dfGCPY;
+  m_GCPZ = psGCP->dfGCPZ;
+}
+OTB_GCP::OTB_GCP(const OTB_GCP &pGcp)
+{
+  m_Id = pGcp.m_Id;
+  m_Info = pGcp.m_Info;
+  m_GCPCol = pGcp.m_GCPCol;
+  m_GCPRow = pGcp.m_GCPRow;
+  m_GCPX = pGcp.m_GCPX;
+  m_GCPY = pGcp.m_GCPY;
+  m_GCPZ = pGcp.m_GCPZ;
+}
+
+OTB_GCP::~OTB_GCP() {};
+
+void OTB_GCP::operator =(const OTB_GCP& pGcp)
+{
+  m_Id = pGcp.m_Id;
+  m_Info = pGcp.m_Info;
+  m_GCPCol = pGcp.m_GCPCol;
+  m_GCPRow = pGcp.m_GCPRow;
+  m_GCPX = pGcp.m_GCPX;
+  m_GCPY = pGcp.m_GCPY;
+  m_GCPZ = pGcp.m_GCPZ;
+}
+void OTB_GCP::Print(std::ostream& os) const
+{
+  os << "   GCP Id = " << this->m_Id << std::endl;
+  os << "   GCP Info =  " << this->m_Info << std::endl;
+  os << "   GCP (Row, Col) = (" << this->m_GCPRow << "," << this->m_GCPCol << ")" << std::endl;
+  os << "   GCP (X, Y, Z) = (" << this->m_GCPX << "," << this->m_GCPY << "," << this->m_GCPZ << ")" << std::endl;
 }
 
 } // end namespace otb

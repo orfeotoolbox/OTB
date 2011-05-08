@@ -18,8 +18,10 @@
 
 #include "otbSpectralSensitivityReader.h"
 
-#include "base/ossimFilename.h"
 #include <fstream>
+
+#include "base/ossimFilename.h"
+
 #include "otbSpotImageMetadataInterface.h"
 #include "itkExceptionObject.h"
 

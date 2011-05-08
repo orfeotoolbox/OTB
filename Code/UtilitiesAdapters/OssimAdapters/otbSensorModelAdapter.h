@@ -21,12 +21,13 @@
 #include "itkObject.h"
 #include "itkObjectFactory.h"
 #include "otbDEMHandler.h"
-#include "otbImageKeywordlist.h"
 
 class ossimProjection;
 
 namespace otb
 {
+
+class ImageKeywordlist;
 
 /**
  * \class SensorModelAdapter

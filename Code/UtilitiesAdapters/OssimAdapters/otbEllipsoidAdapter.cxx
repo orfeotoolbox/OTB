@@ -17,6 +17,7 @@
 =========================================================================*/
 
 #include "otbEllipsoidAdapter.h"
+
 #include "base/ossimEllipsoid.h"
 
 namespace otb
