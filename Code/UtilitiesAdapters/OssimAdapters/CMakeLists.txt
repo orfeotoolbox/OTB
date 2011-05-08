@@ -3,7 +3,7 @@
 FILE(GLOB OTBOssimAdapters_SRCS "*.cxx" )
 
 ADD_LIBRARY(OTBOssimAdapters ${OTBOssimAdapters_SRCS})
-TARGET_LINK_LIBRARIES (OTBOssimAdapters otbossim otbossimplugins)
+TARGET_LINK_LIBRARIES (OTBOssimAdapters otbossim otbossimplugins ITKCommon)
 IF(OTB_LIBRARY_PROPERTIES)
   SET_TARGET_PROPERTIES(OTBOssimAdapters PROPERTIES ${OTB_LIBRARY_PROPERTIES})
 ENDIF(OTB_LIBRARY_PROPERTIES)
