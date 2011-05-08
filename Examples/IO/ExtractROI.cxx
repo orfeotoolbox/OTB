@@ -20,7 +20,6 @@
 =========================================================================*/
 
 
-
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {IMAGERY_SSECH.tif}
 //    OUTPUTS: {ROI_IMAGERY_RGB.png}, {ROI_IMAGERY_MIR.png}

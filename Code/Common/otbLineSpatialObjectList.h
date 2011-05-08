@@ -19,7 +19,6 @@
 #define __otbLineSpatialObjectList_h
 
 
-
 #include "itkDataObject.h"
 #include "itkLineSpatialObject.h"
 

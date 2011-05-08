@@ -19,7 +19,6 @@
 #define __otbVectorDataToRightAngleVectorDataFilter_h
 
 
-
 #include "otbVectorDataToVectorDataFilter.h"
 #include "itkPreOrderTreeIterator.h"
 #include "otbMath.h"

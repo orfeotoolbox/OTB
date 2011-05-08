@@ -19,7 +19,6 @@
 =========================================================================*/
 
 
-
 //  Software Guide : BeginLatex
 // This example illustrates the modifications to be added to the
 // use of \doxygen{otb}{SVMImageModelEstimator} in order to add a

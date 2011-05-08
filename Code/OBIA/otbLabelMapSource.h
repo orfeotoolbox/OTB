@@ -20,7 +20,6 @@
 #define __otbLabelMapSource_h
 
 
-
 #include "itkProcessObject.h"
 #include "itkObjectFactory.h"
 #include "itkMacro.h"

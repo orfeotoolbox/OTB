@@ -17,7 +17,6 @@
 =========================================================================*/
 
 
-
 #include "otbSarImageMetadataInterfaceFactory.h"
 #include "otbSarDefaultImageMetadataInterface.h"
 

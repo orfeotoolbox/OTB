@@ -17,7 +17,6 @@
 =========================================================================*/
 
 
-
 #include "itkExceptionObject.h"
 #include "itkPointSet.h"
 #include <iostream>

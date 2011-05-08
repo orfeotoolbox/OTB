@@ -19,7 +19,6 @@
 #define __otbVectorImage_h
 
 
-
 #include "itkVectorImage.h"
 #include "otbImageMetadataInterfaceBase.h"
 

@@ -21,7 +21,6 @@
 #include "otbMacro.h"
 
 
-
 namespace otb
 {
 // TODO: Check memory allocation in this class

@@ -19,7 +19,6 @@
 #define __otbTileMapImageIO_h
 
 
-
 /* C++ Libraries */
 #include <string>
 #include "stdlib.h"

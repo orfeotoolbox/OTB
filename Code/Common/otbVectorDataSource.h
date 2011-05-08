@@ -20,7 +20,6 @@
 #define __otbVectorDataSource_h
 
 
-
 #include "itkProcessObject.h"
 #include "itkObjectFactory.h"
 #include "itkMacro.h"

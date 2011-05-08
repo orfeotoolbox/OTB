@@ -17,7 +17,6 @@
 =========================================================================*/
 
 
-
 #include "otbOpticalImageMetadataInterfaceFactory.h"
 #include "otbOpticalDefaultImageMetadataInterface.h"
 

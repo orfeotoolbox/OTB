@@ -19,7 +19,6 @@
 #define __otbDefaultImageMetadataInterfaceFactory_h
 
 
-
 #include "itkObjectFactoryBase.h"
 
 namespace otb

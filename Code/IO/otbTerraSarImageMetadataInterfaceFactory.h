@@ -19,7 +19,6 @@
 #define __otbTerraSarImageMetadataInterfaceFactory_h
 
 
-
 #include "itkObjectFactoryBase.h"
 
 namespace otb

@@ -17,7 +17,6 @@
 =========================================================================*/
 
 
-
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {ROI_QB_MUL_1.png}, {ROI_mask.png}
 //    OUTPUTS: {svm_image_model.svn}

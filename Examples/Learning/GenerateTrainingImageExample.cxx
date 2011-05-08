@@ -17,7 +17,6 @@
 =========================================================================*/
 
 
-
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {ROI_QB_MUL_4.tif}, {LearningROIs.txt}
 //    OUTPUTS: {ROI_QB_MUL_4_training.png}

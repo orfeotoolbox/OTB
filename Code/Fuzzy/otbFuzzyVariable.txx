@@ -19,7 +19,6 @@
 #define __otbFuzzyVariable_txx
 
 
-
 #include "otbFuzzyVariable.h"
 #include "otbMacro.h"
 

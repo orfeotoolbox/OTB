@@ -17,7 +17,6 @@
 =========================================================================*/
 
 
-
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {SpotBefore.png}, {SpotAfter.png}
 //    OUTPUTS: {DiffChDet.tif}

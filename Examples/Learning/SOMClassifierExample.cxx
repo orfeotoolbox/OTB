@@ -17,7 +17,6 @@
 =========================================================================*/
 
 
-
 #include <fstream>
 #include "otbImage.h"
 #include "otbVectorImage.h"

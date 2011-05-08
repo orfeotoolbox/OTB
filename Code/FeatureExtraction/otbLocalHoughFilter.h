@@ -19,7 +19,6 @@
 #define __otbLocalHoughFilter_h
 
 
-
 #include "itkProcessObject.h"
 #include "itkHoughTransform2DLinesImageFilter.h"
 

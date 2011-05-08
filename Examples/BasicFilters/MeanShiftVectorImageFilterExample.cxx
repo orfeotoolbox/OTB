@@ -17,7 +17,6 @@
 =========================================================================*/
 
 
-
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {ROI_QB_MUL_1.png}
 //    OUTPUTS: {MSFilteredOutput.tif}, {MSClusteredOutput.tif}, {MSLabeledOutput.tif}, {MSBoundariesOutput.tif}, {MSFilteredOutput-pretty.jpg}, {MSClusteredOutput-pretty.jpg}

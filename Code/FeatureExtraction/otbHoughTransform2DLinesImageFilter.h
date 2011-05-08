@@ -19,7 +19,6 @@
 #define __otbHoughTransform2DLinesImageFilter_h
 
 
-
 #include "itkImageToImageFilter.h"
 #include "itkImage.h"
 #include "itkLineSpatialObject.h"

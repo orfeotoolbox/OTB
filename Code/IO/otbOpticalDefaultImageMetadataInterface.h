@@ -19,7 +19,6 @@
 #define __otbOpticalDefaultImageMetadataInterface_h
 
 
-
 #include "otbMacro.h"
 
 #include "otbOpticalImageMetadataInterface.h"

@@ -19,7 +19,6 @@
 #define __otbLineSpatialObject_txx
 
 
-
 #include "otbLineSpatialObject.h"
 #include "otbMacro.h"
 

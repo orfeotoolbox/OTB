@@ -19,7 +19,6 @@
 #define __otbSarDefaultImageMetadataInterface_h
 
 
-
 #include "otbMacro.h"
 
 #include "otbSarImageMetadataInterface.h"

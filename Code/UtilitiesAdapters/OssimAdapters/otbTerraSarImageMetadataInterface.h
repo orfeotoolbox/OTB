@@ -26,7 +26,7 @@
 #include "otbMetaDataKey.h"
 #include "itkImageBase.h"
 
-namespace ossimplugins 
+namespace ossimplugins
 {
 class Noise;
 class SceneCoord;

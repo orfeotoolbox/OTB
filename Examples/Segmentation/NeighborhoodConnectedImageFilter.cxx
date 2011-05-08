@@ -20,7 +20,6 @@
 =========================================================================*/
 
 
-
 //  Software Guide : BeginCommandLineArgs
 //  INPUTS: {QB_Suburb.png}
 //  OUTPUTS: {NeighborhoodConnectedThresholdOutput1.png}

@@ -17,7 +17,6 @@
 =========================================================================*/
 
 
-
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {amst.png}
 //    OUTPUTS: {amstLineRatios.png}, {amstLineRatioDirections.png}

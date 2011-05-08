@@ -19,7 +19,6 @@
 #define __otbFormosatImageMetadataInterfaceFactory_h
 
 
-
 #include "itkObjectFactoryBase.h"
 
 namespace otb

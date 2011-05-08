@@ -19,7 +19,6 @@
 #define __otbQuickBirdImageMetadataInterfaceFactory_h
 
 
-
 #include "itkObjectFactoryBase.h"
 
 namespace otb

@@ -17,7 +17,6 @@
 =========================================================================*/
 
 
-
 //  SoftwareGuide: BeginLatex
 //
 //  This example illustrates the access to metadata image information

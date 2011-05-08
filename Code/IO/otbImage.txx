@@ -19,7 +19,6 @@
 #define __otbImage_txx
 
 
-
 #include "otbImage.h"
 #include "otbImageMetadataInterfaceFactory.h"
 #include "otbImageKeywordlist.h"

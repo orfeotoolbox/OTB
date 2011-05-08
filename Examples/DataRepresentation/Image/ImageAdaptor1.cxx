@@ -17,7 +17,6 @@
 =========================================================================*/
 
 
-
 // Software Guide : BeginLatex
 //
 //This example illustrates how the \doxygen{itk}{ImageAdaptor} can be used to cast

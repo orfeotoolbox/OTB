@@ -19,7 +19,6 @@
 #define __otbVectorDataIOFactory_txx
 
 
-
 #include "otbVectorDataIOFactory.h"
 #include "otbOGRVectorDataIOFactory.h"
 #include "otbKMLVectorDataIOFactory.h"

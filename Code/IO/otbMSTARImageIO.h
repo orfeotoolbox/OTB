@@ -19,7 +19,6 @@
 #define __otbMSTARImageIO_h
 
 
-
 #include <string>
 #include <cstring>
 #include <fstream>

@@ -201,7 +201,7 @@ KmzProductWriter<TInputImage>
   if (remove(logo_absolut_path.str().c_str()) != 0)
     {
     itkExceptionMacro(<< "Error while deleting the file" << logo_absolut_path.str());
-    }    
+    }
 }
 
 /**
