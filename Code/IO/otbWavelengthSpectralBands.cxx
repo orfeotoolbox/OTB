@@ -17,7 +17,6 @@
 =========================================================================*/
 
 #include "otbWavelengthSpectralBands.h"
-#include "base/ossimFilename.h"
 #include <fstream>
 
 namespace otb
