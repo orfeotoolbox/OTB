@@ -25,6 +25,7 @@
 #include <string>
 #include <vector>
 #include "itkObject.h"
+#include "itkObjectFactory.h"
 
 #include "otbMetaDataKey.h"
 
@@ -38,9 +39,18 @@ namespace otb
  * \class TestHelper
  * \brief Helper class to perform the baseline comparisons during the tests
  */
-class /*ITK_EXPORT*/ TestHelper : itk::Object
+class /*ITK_EXPORT*/ TestHelper : public itk::Object
 {
 public:
+
+  /** Standard class typedefs. */
+  typedef TestHelper                    Self;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef itk::Object                   Superclass;
+
+  itkTypeMacro(TestHelper, itk::Object);
+  itkNewMacro(Self);
 
   typedef std::vector<std::string> StringList;
   typedef StringList::const_iterator StringListIt;

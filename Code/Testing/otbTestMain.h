@@ -74,7 +74,7 @@ int main(int ac, char* av[])
   StringList ignoredLines;
   ignoredLines.clear();
 
-  otb::TestHelper testHelper;
+  otb::TestHelper::Pointer testHelper = otb::TestHelper::New();
 
   RegisterTests();
   std::string testToRun;
@@ -323,43 +323,43 @@ int main(int ac, char* av[])
       std::cout << "-------------  Start control baseline tests    -------------" << std::endl;
       // Make a list of possible baselines
 
-      testHelper.SetIgnoreLineOrder(lIgnoreOrder);
-      testHelper.SetToleranceDiffValue(lToleranceDiffValue); // What's the difference
-      testHelper.SetEpsilon(lEpsilon); // maybe we should consolidate...
+      testHelper->SetIgnoreLineOrder(lIgnoreOrder);
+      testHelper->SetToleranceDiffValue(lToleranceDiffValue); // What's the difference
+      testHelper->SetEpsilon(lEpsilon); // maybe we should consolidate...
       if (epsilonBoundary != 0.0)
         {
-        testHelper.SetEpsilonBoundaryChecking(epsilonBoundary);
+        testHelper->SetEpsilonBoundaryChecking(epsilonBoundary);
         }
       /***********************************************************************************/
       // Non regression test for images
       if ((baselineFilenamesImage.size() > 0) && (testFilenamesImage.size() > 0))
         {
-        result += testHelper.RegressionTestAllImages(baselineFilenamesImage, testFilenamesImage);
+        result += testHelper->RegressionTestAllImages(baselineFilenamesImage, testFilenamesImage);
         }
       /***********************************************************************************/
       // Non-regression test for metadata.
       if ((baselineFilenamesMetaData.size() > 0) && (testFilenamesMetaData.size() > 0))
         {
-        result += testHelper.RegressionTestAllMetaData(baselineFilenamesMetaData, testFilenamesMetaData);
+        result += testHelper->RegressionTestAllMetaData(baselineFilenamesMetaData, testFilenamesMetaData);
         }
 
       /***********************************************************************************/
       // Non regression test for ascii files
       if ((baselineFilenamesAscii.size() > 0) && (testFilenamesAscii.size() > 0))
         {
-        result += testHelper.RegressionTestAllAscii(baselineFilenamesAscii, testFilenamesAscii, ignoredLines);
+        result += testHelper->RegressionTestAllAscii(baselineFilenamesAscii, testFilenamesAscii, ignoredLines);
         }
       /******************************************************************************/
       // Non regression test for binary files
       if ((baselineFilenamesBinary.size() > 0) && (testFilenamesBinary.size() > 0))
         {
-        result += testHelper.RegressionTestAllBinary(baselineFilenamesBinary, testFilenamesBinary);
+        result += testHelper->RegressionTestAllBinary(baselineFilenamesBinary, testFilenamesBinary);
         }
       /******************************************************************************/
       // Non regression test for OGR files
       if ((baselineFilenamesOgr.size() > 0) && (testFilenamesOgr.size() > 0))
         {
-        result += testHelper.RegressionTestAllOgr(baselineFilenamesOgr, testFilenamesOgr);
+        result += testHelper->RegressionTestAllOgr(baselineFilenamesOgr, testFilenamesOgr);
         }
 
       }
