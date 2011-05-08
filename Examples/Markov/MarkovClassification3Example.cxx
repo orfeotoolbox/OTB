@@ -19,7 +19,7 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {QB_Suburb.png}
-//    OUTPUTS: {MarkovRandomField_gray_value.png}, {MarkovRandomField_color_value.png}
+//    OUTPUTS: {MarkovRandomField3_gray_value.png}, {MarkovRandomField3_color_value.png}
 //    1.0 20 1.0 1
 //  Software Guide : EndCommandLineArgs
 
@@ -65,7 +65,7 @@ int main(int argc, char* argv[] )
     std::cerr << "Missing Parameters "<< argc << std::endl;
     std::cerr << "Usage: " << argv[0];
     std::cerr << " inputImage output_gray_label output_color_label lambda iterations "
-                 "optimizerTemperature useRandomValue " << std::endl;
+        "optimizerTemperature useRandomValue " << std::endl;
     return 1;
     }
   // Software Guide : BeginLatex
@@ -269,6 +269,7 @@ int main(int argc, char* argv[] )
   writer->SetInput( rescaleFilter->GetOutput() );
   writer->Update();
   // Software Guide : EndCodeSnippet
+
   //convert output image to color
   typedef itk::RGBPixel<unsigned char>                          RGBPixelType;
   typedef otb::Image<RGBPixelType, 2>                           RGBImageType;
@@ -293,6 +294,27 @@ int main(int argc, char* argv[] )
   writerRescaled->SetInput( colormapper->GetOutput() );
 
   writerRescaled->Update();
+  // Software Guide : EndCodeSnippet
+
+  // Software Guide : BeginLatex
+  //
+  // Figure~\ref{fig:MRF_CLASSIFICATION3} shows the output of the Markov Random
+  // Field classification into four classes using the
+  // Fisher-distribution as likelihood term.
+  //
+  // \begin{figure}
+  // \center
+  // \includegraphics[width=0.44\textwidth]{QB_Suburb.eps}
+  // \includegraphics[width=0.44\textwidth]{MarkovRandomField3_color_value.eps}
+  // \itkcaption[MRF restauration]{Result of applying
+  // the \doxygen{otb}{MarkovRandomFieldFilter} to an extract from a PAN Quickbird
+  // image for classification into fourt classes using the Fisher-distribution as
+  // likehood term. From left to right : original image,
+  // classification.}
+  // \label{fig:MRF_CLASSIFICATION3}
+  // \end{figure}
+  //
+  // Software Guide : EndLatex
 
   return EXIT_SUCCESS;
 
