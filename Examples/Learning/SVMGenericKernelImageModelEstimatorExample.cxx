@@ -18,9 +18,7 @@
 
 =========================================================================*/
 
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
+
 
 //  Software Guide : BeginLatex
 // This example illustrates the modifications to be added to the

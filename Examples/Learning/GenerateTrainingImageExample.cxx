@@ -16,9 +16,7 @@
 
 =========================================================================*/
 
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
+
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {ROI_QB_MUL_4.tif}, {LearningROIs.txt}
