@@ -90,7 +90,7 @@ public:
 
           // Compute the origin and the size of the visible region
           IndexType indexBegin, indexEnd;
-          typedef IndexType::IndexValueType IndexValueType;
+          typedef typename IndexType::IndexValueType IndexValueType;
           indexBegin[0] = static_cast<IndexValueType> (m_Model->GetExtractRegion().GetIndex()[0] + m_MoveX);
           indexBegin[1] = static_cast<IndexValueType> (m_Model->GetExtractRegion().GetIndex()[1] + m_MoveY);
           indexEnd[0] = indexBegin[0] + m_Model->GetExtractRegion().GetSize()[0];
