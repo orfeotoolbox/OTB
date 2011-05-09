@@ -46,7 +46,7 @@ RCC8GraphFileReader<TOutputGraph>
 }
 /**
  * Parse edge informations from a given line.
- * \param The line to parse.
+ * \param line The line to parse.
  */
 template <class TOutputGraph>
 void
@@ -67,7 +67,7 @@ RCC8GraphFileReader<TOutputGraph>
 }
 /**
  * Parse vertex informations from a given line.
- * \param The line to parse.
+ * \param line The line to parse.
  */
 template <class TOutputGraph>
 void

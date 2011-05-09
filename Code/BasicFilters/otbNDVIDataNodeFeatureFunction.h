@@ -27,7 +27,7 @@
 namespace otb
 {
 /** \class NDVIDataNodeFeatureFunction
-  * \brief .
+  * \brief TODO
   *
   *
   *

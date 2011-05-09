@@ -46,7 +46,7 @@ RCC8GraphFileWriter<TInputGraph>
 }
 /**
  * Set the input graph.
- * \param inputGraph The graph to write.
+ * \param graph The graph to write.
  */
 template <class TInputGraph>
 void

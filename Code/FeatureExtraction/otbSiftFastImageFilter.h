@@ -37,7 +37,7 @@ namespace otb
  * tune the number of scales used in pyramidal decomposition.
  *
  * Please note that OTB provides also a home-brewed version of the
- * SIFT (\doxygen{otb}{ImageToSIFTKeyPointSetFilter}).
+ * SIFT (ImageToSIFTKeyPointSetFilter).
  *
  * \sa ImageToSIFTKeyPointSetFilter
  *

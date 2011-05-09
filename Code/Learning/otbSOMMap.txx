@@ -41,7 +41,7 @@ SOMMap<TNeuron, TDistance, VMapDimension>
 {}
 /**
  * Get The index of the winning neuron for a sample.
- * \param the sample.
+ * \param sample The sample
  * \return The index of the winning neuron.
  */
 template <class TNeuron, class TDistance, unsigned int VMapDimension>
