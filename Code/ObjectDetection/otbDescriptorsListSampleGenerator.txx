@@ -214,8 +214,25 @@ PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType
   ListSampleType* listSample = this->GetListSample();
   LabelListSampleType* labelListSample = this->GetLabelListSample();
   SamplesPositionType& samplesPosition = this->GetSamplesPositions();
+  VectorDataPointType ref;
 
-  for (int threadId = 0; threadId < this->GetNumberOfThreads(); ++threadId )
+  // Copy the first thread elements into lists
+  if( this->GetNumberOfThreads() > 1 )
+    {
+      ListSampleType* threadListSample = m_ThreadListSample[0];
+      LabelListSampleType* threadLabelListSample = m_ThreadLabelListSample[0];
+      SamplesPositionType& threadSamplesPosition = m_ThreadSamplesPosition[0];
+      
+      for (unsigned int i = 0; i < threadListSample->Size(); ++i)
+      {
+        listSample->PushBack( threadListSample->GetMeasurementVector(i) );
+        labelListSample->PushBack( threadLabelListSample->GetMeasurementVector(i) );
+        samplesPosition.push_back( threadSamplesPosition[i] );
+      }
+    }
+
+  // Add the other thread element checking if the point dosn't already exist
+  for (int threadId = 1; threadId < this->GetNumberOfThreads(); ++threadId )
     {
     ListSampleType* threadListSample = m_ThreadListSample[threadId];
     LabelListSampleType* threadLabelListSample = m_ThreadLabelListSample[threadId];
@@ -223,9 +240,13 @@ PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType
 
     for (unsigned int i = 0; i < threadListSample->Size(); ++i)
       {
-      listSample->PushBack( threadListSample->GetMeasurementVector(i) );
-      labelListSample->PushBack( threadLabelListSample->GetMeasurementVector(i) );
-      samplesPosition.push_back( threadSamplesPosition[i] );
+        const DescriptorsFunctionPointType & curSamplesPosition = threadSamplesPosition[i];
+        if( std::find(samplesPosition.begin(), samplesPosition.end(), curSamplesPosition) == samplesPosition.end() )
+          {
+            listSample->PushBack( threadListSample->GetMeasurementVector(i) );
+            labelListSample->PushBack( threadLabelListSample->GetMeasurementVector(i) );
+            samplesPosition.push_back( curSamplesPosition );
+          }
       }
     }
 }
@@ -261,7 +282,7 @@ PersistentDescriptorsListSampleGenerator<TInputImage, TVectorData, TFunctionType
   inputRequestedRegion = inputPtr->GetRequestedRegion();
 
   // pad the input requested region by the operator radius
-  inputRequestedRegion.PadByRadius( m_NeighborhoodRadius + 1 );
+  inputRequestedRegion.PadByRadius( m_NeighborhoodRadius + 5 );
 
   // crop the input requested region at the input's largest possible region
   if ( inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()) )
