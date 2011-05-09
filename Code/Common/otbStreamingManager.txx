@@ -22,7 +22,6 @@
 #include "otbMacro.h"
 #include "otbConfigure.h"
 #include "otbConfigurationFile.h"
-#include "otbPipelineMemoryPrintCalculator.h"
 #include "itkExtractImageFilter.h"
 
 namespace otb
@@ -40,12 +39,10 @@ StreamingManager<TImage>::~StreamingManager()
 }
 
 template <class TImage>
-unsigned int
-StreamingManager<TImage>::EstimateOptimalNumberOfDivisions(itk::DataObject * input, const RegionType &region,
-                                                           unsigned int availableRAM)
+typename StreamingManager<TImage>::MemoryPrintType
+StreamingManager<TImage>::GetActualAvailableRAMInBytes(MemoryPrintType availableRAMInMB)
 {
-  otbMsgDevMacro(<< "availableRAM " << availableRAM)
-  unsigned int availableRAMInBytes = availableRAM * 1024 * 1024;
+  unsigned int availableRAMInBytes = availableRAMInMB * 1024 * 1024;
 
   if (availableRAMInBytes == 0)
     {
@@ -63,24 +60,34 @@ StreamingManager<TImage>::EstimateOptimalNumberOfDivisions(itk::DataObject * inp
       {
       // We should never have to go here if the configuration file is
       // correct and found.
-      // In case it is not fallback on the cmake
+      // In case it is not, fallback on the cmake
       // defined constants.
       availableRAMInBytes = OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING;
       }
     }
 
   otbMsgDevMacro("RAM used to estimate memory footprint : " << availableRAMInBytes / 1024 / 1024  << " MB")
+  return availableRAMInBytes;
+}
+
+template <class TImage>
+unsigned int
+StreamingManager<TImage>::EstimateOptimalNumberOfDivisions(itk::DataObject * input, const RegionType &region,
+                                                           MemoryPrintType availableRAM)
+{
+  otbMsgDevMacro(<< "availableRAM " << availableRAM)
+
+  MemoryPrintType availableRAMInBytes = GetActualAvailableRAMInBytes(availableRAM);
 
   otb::PipelineMemoryPrintCalculator::Pointer memoryPrintCalculator;
   memoryPrintCalculator = otb::PipelineMemoryPrintCalculator::New();
-
-  memoryPrintCalculator->SetAvailableMemory( availableRAMInBytes );
 
   // Trick to avoid having the resampler compute the whole
   // deformation field
   double     regionTrickFactor = 1;
   ImageType* inputImage = dynamic_cast<ImageType*>(input);
-  //inputImage = 0;
+
+  MemoryPrintType pipelineMemoryPrint;
   if (inputImage)
     {
 
@@ -127,6 +134,17 @@ StreamingManager<TImage>::EstimateOptimalNumberOfDivisions(itk::DataObject * inp
       }
 
     memoryPrintCalculator->Compute();
+
+    pipelineMemoryPrint = memoryPrintCalculator->GetMemoryPrint();
+
+    if (smallRegionSuccess)
+      {
+      // remove the contribution of the ExtractImageFilter
+      MemoryPrintType extractContrib =
+          memoryPrintCalculator->EvaluateDataObjectPrint(extractFilter->GetOutput());
+
+      pipelineMemoryPrint -= extractContrib;
+      }
     }
   else
     {
@@ -135,14 +153,19 @@ StreamingManager<TImage>::EstimateOptimalNumberOfDivisions(itk::DataObject * inp
     memoryPrintCalculator->SetBiasCorrectionFactor(1.0);
 
     memoryPrintCalculator->Compute();
+
+    pipelineMemoryPrint = memoryPrintCalculator->GetMemoryPrint();
     }
 
-  otbMsgDevMacro( "Estimated Memory print for the full image : "
-                  << static_cast<unsigned int>(memoryPrintCalculator->GetMemoryPrint() / 1024 / 1024 ) << std::endl)
-  otbMsgDevMacro( "Optimal number of stream divisions: "
-                  << memoryPrintCalculator->GetOptimalNumberOfStreamDivisions() << std::endl)
+  unsigned int optimalNumberOfDivisions =
+      otb::PipelineMemoryPrintCalculator::EstimateOptimalNumberOfStreamDivisions(pipelineMemoryPrint, availableRAMInBytes);
 
-  return memoryPrintCalculator->GetOptimalNumberOfStreamDivisions();
+  otbMsgDevMacro( "Estimated Memory print for the full image : "
+                  << static_cast<unsigned int>(pipelineMemoryPrint * otb::PipelineMemoryPrintCalculator::ByteToMegabyte ) << std::endl)
+  otbMsgDevMacro( "Optimal number of stream divisions: "
+                  << optimalNumberOfDivisions << std::endl)
+
+  return optimalNumberOfDivisions;
 }
 
 template <class TImage>

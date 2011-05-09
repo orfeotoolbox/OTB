@@ -15,16 +15,20 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
+
 
 #include "otbMassOfBelief.h"
 
+typedef otb::MassOfBelief<std::string> MassOfBeliefFunctionType;
+
+std::ostream& operator <<(std::ostream& os, const MassOfBeliefFunctionType::LabelSetType& l )
+{
+  MassOfBeliefFunctionType::PrintLabelSet(os, l);
+  return os;
+}
+
 int otbMassOfBelief(int argc, char* argv[])
 {
-  typedef otb::MassOfBelief<std::string> MassOfBeliefFunctionType;
-
   // Instantiate function
   MassOfBeliefFunctionType::Pointer massFunction = MassOfBeliefFunctionType::New();
 

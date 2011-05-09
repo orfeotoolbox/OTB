@@ -18,14 +18,10 @@
 #ifndef __otbImage_h
 #define __otbImage_h
 
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
+#include <string.h>
 
 #include "itkImage.h"
 #include "otbImageMetadataInterfaceBase.h"
-
-#include <string.h>
 
 namespace otb
 {

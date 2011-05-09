@@ -32,24 +32,24 @@ namespace otb
  *  data should be set to the data to write) and
  *  examining each filter to determine its memory footprint. To do so,
  *  it performs a dry run of the requested region pipeline
- *  negociation.
+ *  negotiation.
  *
  *  The SetDataToWrite() method allows to set the data candidate for
  *  writing, and for which memory usage estimation should be
  *  performed.
  *
- *  Additionnaly, this class allows to compute the optimal number of
+ *  Additionally, this class allows to compute the optimal number of
  *  stream division to write the data. To do so, the available memory
- *  can be set via the SetAvailableMemory() method, and an optionnal
- *  bias correction factor can be applied to wheight the estimate
+ *  can be set via the SetAvailableMemory() method, and an optional
+ *  bias correction factor can be applied to weight the estimate
  *  memory usage in case a bias occurs between estimated and real
  *  memory usage. The optimal number of stream divisions can be
- *  retreived using the GetOptimalNumberOfStreamDivisions().
+ *  retrieved using the GetOptimalNumberOfStreamDivisions().
  *
  *  Please note that for now this calculator suffers from the
  *  following limitations:
  *  - DataObject taken into account for memory usage estimation are
- *  only Image and VectorImage instantiation,
+ *  only Image, VectorImage and ImageList instantiation,
  *  - The estimator is non-intrusive regarding the pipeline high-level
  *  class, but it is not able to estimate memory usage of minipipeline
  *  within composite filter (because there is no way to trace back to
@@ -85,11 +85,6 @@ public:
   /** Get the total memory print (in bytes) */
   itkGetMacro(MemoryPrint, MemoryPrintType);
 
-  /** Set/Get the available memory for pipeline execution (in bytes,
-   *  default is 256 Mb) */
-  itkSetMacro(AvailableMemory, MemoryPrintType);
-  itkGetMacro(AvailableMemory, MemoryPrintType);
-
   /** Set/Get the bias correction factor which will weight the
    * estimated memory print (allows to compensate bias between
    * estimated and real memory print, default is 1., i.e. no correction) */
@@ -97,7 +92,8 @@ public:
   itkGetMacro(BiasCorrectionFactor, double);
 
   /** Get the optimal number of stream division */
-  itkGetMacro(OptimalNumberOfStreamDivisions, unsigned long);
+  static unsigned long EstimateOptimalNumberOfStreamDivisions(
+      MemoryPrintType memoryPrint, MemoryPrintType availableMemory);
 
   /** Set last pipeline filter */
   itkSetObjectMacro(DataToWrite, DataObjectType);
@@ -107,6 +103,10 @@ public:
 
   /** Const conversion factor */
   static const double ByteToMegabyte;
+  static const double MegabyteToByte;
+
+  /** Evaluate the print (in bytes) of a single data object */
+  MemoryPrintType EvaluateDataObjectPrint(DataObjectType * data) const;
 
 protected:
   /** Constructor */
@@ -118,11 +118,8 @@ protected:
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  /** Internal recursive method to evaluate memory print in bytes */
-  MemoryPrintType EvaluateMemoryPrint(ProcessObjectType * process);
-
-  /** Internal method to evaluate the print (in Mo) of a single data object */
-  MemoryPrintType EvaluateDataObjectPrint(DataObjectType * data) const;
+  /** Recursive method to evaluate memory print in bytes */
+  MemoryPrintType EvaluateProcessObjectPrintRecursive(ProcessObjectType * process);
 
 private:
   PipelineMemoryPrintCalculator(const Self &); //purposely not implemented
@@ -130,12 +127,6 @@ private:
 
   /** The total memory print of the pipeline */
   MemoryPrintType       m_MemoryPrint;
-
-  /** The available memory for pipeline execution */
-  MemoryPrintType       m_AvailableMemory;
-
-  /** The optimal number of stream division */
-  unsigned long m_OptimalNumberOfStreamDivisions;
 
   /** Pointer to the last pipeline filter */
   DataObjectPointerType m_DataToWrite;

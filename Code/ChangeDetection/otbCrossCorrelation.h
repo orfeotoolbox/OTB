@@ -24,7 +24,8 @@ namespace otb
 namespace Functor
 {
 
-/** \class Functor::CrossCorrelation
+/** \class CrossCorrelation
+ *  \brief Functor to compute the cross correlation
  *
  * - cast the input 1 pixel value to \c double
  * - cast the input 2 pixel value to \c double

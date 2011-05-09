@@ -32,7 +32,7 @@ namespace Functor {
  * \brief This class implements the functor that perform substitution between
  *  input image pixels and the corresponding winning neurons of a Kohonen map.
  *
- *  On the contrary to \doxygen{otb}{SOMClassifier}, it does not yield labels but the
+ *  On the contrary to SOMClassifier, it does not yield labels but the
  *  value of the winning neurons. Also, it is threaded...
  */
 template <class TInput, class TOutput, class TDistanceMetric, class TMap>

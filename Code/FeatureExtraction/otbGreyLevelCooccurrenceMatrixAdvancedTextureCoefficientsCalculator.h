@@ -36,7 +36,7 @@ namespace otb {
  *
  * "Mean" \f$ = \sum_{i, j}i g(i, j) \f$
  *
- * "Sum of squares: Variance" \f$ = f_4 = \sum_{i, j}(i -mu)^2 g(i, j) \f$
+ * "Sum of squares: Variance" \f$ = f_4 = \sum_{i, j}(i - \mu)^2 g(i, j) \f$
  *
  * "Sum average" \f$ = f_6 = -\sum_{i}i g_{x+y}(i)
  *

@@ -18,10 +18,11 @@
 
 #include "otbAtmosphericCorrectionParameters.h"
 
+#include <fstream>
+
 #include "otbAeronetFileReader.h"
 #include "otbSpectralSensitivityReader.h"
-#include "base/ossimFilename.h"
-#include <fstream>
+#include "otbAeronetData.h"
 
 namespace otb
 {

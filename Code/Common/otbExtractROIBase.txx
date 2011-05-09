@@ -234,79 +234,7 @@ ExtractROIBase<TInputImage, TOutputImage>
   phyData
     = dynamic_cast<const itk::ImageBase<InputImageDimension>*>(this->GetInput());
 
-  if (phyData)
-    {
-    // Copy what we can from the image from spacing and origin of the input
-    // This logic needs to be augmented with logic that select which
-    // dimensions to copy
-    unsigned int i;
-    const typename InputImageType::SpacingType&
-    inputSpacing = inputPtr->GetSpacing();
-    const typename InputImageType::DirectionType&
-    inputDirection = inputPtr->GetDirection();
-    const typename InputImageType::PointType&
-    inputOrigin = inputPtr->GetOrigin();
-
-    typename OutputImageType::SpacingType   outputSpacing;
-    typename OutputImageType::DirectionType outputDirection;
-    typename OutputImageType::PointType     outputOrigin;
-
-    if (static_cast<unsigned int>(OutputImageDimension) >
-        static_cast<unsigned int>(InputImageDimension))
-      {
-      // copy the input to the output and fill the rest of the
-      // output with zeros.
-      for (i = 0; i < InputImageDimension; ++i)
-        {
-        outputSpacing[i] = inputSpacing[i];
-        outputOrigin[i] = inputOrigin[i] + static_cast<double>(m_ExtractionRegion.GetIndex()[i]) * outputSpacing[i];
-        for (unsigned int dim = 0; dim < InputImageDimension; ++dim)
-          {
-          outputDirection[i][dim] = inputDirection[i][dim];
-          }
-        }
-      for (; i < OutputImageDimension; ++i)
-        {
-        outputSpacing[i] = 1.0;
-        outputOrigin[i] = 0.0;
-        for (unsigned int dim = 0; dim < InputImageDimension; ++dim)
-          {
-          outputDirection[i][dim] = 0.0;
-          }
-        outputDirection[i][i] = 1.0;
-        }
-      }
-    else
-      {
-      // copy the non-collapsed part of the input spacing and origing to the output
-      int nonZeroCount = 0;
-      for (i = 0; i < InputImageDimension; ++i)
-        {
-        if (m_ExtractionRegion.GetSize()[i])
-          {
-          outputSpacing[nonZeroCount] = inputSpacing[i];
-          outputOrigin[nonZeroCount] = inputOrigin[i] + static_cast<double>(m_ExtractionRegion.GetIndex()[i]) *
-                                       outputSpacing[i];
-          for (unsigned int dim = 0; dim < OutputImageDimension; ++dim)
-            {
-            outputDirection[nonZeroCount][dim] =
-              inputDirection[nonZeroCount][dim];
-            }
-          nonZeroCount++;
-          }
-        }
-      }
-
-    // set the spacing and origin
-    outputPtr->SetSpacing(outputSpacing);
-    outputPtr->SetDirection(outputDirection);
-    outputPtr->SetOrigin(outputOrigin);
-// THOMAS : dans ITK ce code est present, mais pas dans notre cas, car le nombre de composantes/pixel depend des canaux selectionnes par l'utilisateur
-//          ce parametre est renseignes dans les classes sous-jacentes
-//    outputPtr->SetNumberOfComponentsPerPixel(
-//       inputPtr->GetNumberOfComponentsPerPixel() );
-    }
-  else
+  if (!phyData)
     {
     // pointer could not be cast back down
     itkExceptionMacro(<< "otb::ExtractROIBase::GenerateOutputInformation "
@@ -314,6 +242,74 @@ ExtractROIBase<TInputImage, TOutputImage>
                       << typeid(itk::ImageBase<InputImageDimension>*).name());
     }
 
+  // Copy what we can from the image from spacing and origin of the input
+  // This logic needs to be augmented with logic that select which
+  // dimensions to copy
+  const typename InputImageType::SpacingType&
+    inputSpacing = inputPtr->GetSpacing();
+  const typename InputImageType::DirectionType&
+    inputDirection = inputPtr->GetDirection();
+  const typename InputImageType::PointType&
+    inputOrigin = inputPtr->GetOrigin();
+
+  typename OutputImageType::SpacingType   outputSpacing;
+  typename OutputImageType::DirectionType outputDirection;
+  typename OutputImageType::PointType     outputOrigin;
+
+  if (static_cast<unsigned int>(OutputImageDimension) >
+      static_cast<unsigned int>(InputImageDimension))
+    {
+    unsigned int i;
+    // copy the input to the output and fill the rest of the
+    // output with zeros.
+    for (i = 0; i < InputImageDimension; ++i)
+      {
+      outputSpacing[i] = inputSpacing[i];
+      outputOrigin[i] = inputOrigin[i] + static_cast<double>(m_ExtractionRegion.GetIndex()[i]) * outputSpacing[i];
+      for (unsigned int dim = 0; dim < InputImageDimension; ++dim)
+        {
+        outputDirection[i][dim] = inputDirection[i][dim];
+        }
+      }
+    for (; i < OutputImageDimension; ++i)
+      {
+      outputSpacing[i] = 1.0;
+      outputOrigin[i] = 0.0;
+      for (unsigned int dim = 0; dim < InputImageDimension; ++dim)
+        {
+        outputDirection[i][dim] = 0.0;
+        }
+      outputDirection[i][i] = 1.0;
+      }
+    }
+  else
+    {
+    // copy the non-collapsed part of the input spacing and origing to the output
+    int nonZeroCount = 0;
+    for (unsigned int i = 0; i < InputImageDimension; ++i)
+      {
+      if (m_ExtractionRegion.GetSize()[i] == 0) continue;
+
+      outputSpacing[nonZeroCount] = inputSpacing[i];
+      outputOrigin[nonZeroCount] = inputOrigin[i] + static_cast<double>(m_ExtractionRegion.GetIndex()[i]) *
+        outputSpacing[i];
+      for (unsigned int dim = 0; dim < OutputImageDimension; ++dim)
+        {
+        outputDirection[nonZeroCount][dim] =
+          inputDirection[nonZeroCount][dim];
+        }
+      nonZeroCount++;
+      }
+    }
+
+  // set the spacing and origin
+  outputPtr->SetSpacing(outputSpacing);
+  outputPtr->SetDirection(outputDirection);
+  outputPtr->SetOrigin(outputOrigin);
+// THOMAS : dans ITK ce code est present, mais pas dans notre cas, car le nombre de composantes/pixel depend des canaux selectionnes par l'utilisateur
+//          ce parametre est renseignes dans les classes sous-jacentes
+//    outputPtr->SetNumberOfComponentsPerPixel(
+//       inputPtr->GetNumberOfComponentsPerPixel() );
 }
 
 } // end namespace otb

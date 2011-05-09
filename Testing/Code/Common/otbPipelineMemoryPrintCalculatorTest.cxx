@@ -34,7 +34,7 @@ int otbPipelineMemoryPrintCalculatorTest(int argc, char * argv[])
 {
   typedef otb::VectorImage<double, 2>            VectorImageType;
   typedef otb::Image<double, 2>                  ImageType;
-  typedef otb::ImageFileReader<VectorImageType> ReaderType;
+  typedef otb::ImageFileReader<VectorImageType>  ReaderType;
   typedef otb::VectorImageToIntensityImageFilter
     <VectorImageType, ImageType>                 IntensityImageFilterType;
 
@@ -46,15 +46,19 @@ int otbPipelineMemoryPrintCalculatorTest(int argc, char * argv[])
 
   otb::PipelineMemoryPrintCalculator::Pointer calculator = otb::PipelineMemoryPrintCalculator::New();
   calculator->SetDataToWrite(intensity->GetOutput());
-  calculator->SetAvailableMemory(104858);
   calculator->Compute();
+
+  otb::PipelineMemoryPrintCalculator::MemoryPrintType availableMemoryInBytes = 104858;
+  otb::PipelineMemoryPrintCalculator::MemoryPrintType memoryPrint = calculator->GetMemoryPrint();
+
+  unsigned int optimalNbDiv = otb::PipelineMemoryPrintCalculator::EstimateOptimalNumberOfStreamDivisions(memoryPrint, availableMemoryInBytes);
 
   std::ofstream ofs(argv[2]);
   ofs<<"Memory print of whole pipeline:     "<<calculator->GetMemoryPrint()
     * otb::PipelineMemoryPrintCalculator::ByteToMegabyte << " Mb"<<std::endl;
-  ofs<<"Available memory:                   "<<calculator->GetAvailableMemory()
+  ofs<<"Available memory:                   "<<availableMemoryInBytes
     * otb::PipelineMemoryPrintCalculator::ByteToMegabyte << " Mb"<<std::endl;
-  ofs<<"Optimal number of stream divisions: "<<calculator->GetOptimalNumberOfStreamDivisions()<<std::endl;
+  ofs<<"Optimal number of stream divisions: "<<optimalNbDiv<<std::endl;
   ofs<<"Bias correction factor applied:     "<<calculator->GetBiasCorrectionFactor()<<std::endl;
   ofs.close();
 

@@ -18,9 +18,6 @@
 #ifndef __otbLineSpatialObjectList_h
 #define __otbLineSpatialObjectList_h
 
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
 
 #include "itkDataObject.h"
 #include "itkLineSpatialObject.h"

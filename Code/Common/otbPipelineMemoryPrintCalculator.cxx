@@ -27,12 +27,11 @@
 namespace otb
 {
 const double PipelineMemoryPrintCalculator::ByteToMegabyte = 1./vcl_pow(2.0, 20);
+const double PipelineMemoryPrintCalculator::MegabyteToByte = vcl_pow(2.0, 20);
 
 PipelineMemoryPrintCalculator
 ::PipelineMemoryPrintCalculator()
   : m_MemoryPrint(0),
-    m_AvailableMemory(256000000),
-    m_OptimalNumberOfStreamDivisions(1),
     m_DataToWrite(NULL),
     m_BiasCorrectionFactor(1.),
     m_VisitedProcessObjects()
@@ -41,6 +40,17 @@ PipelineMemoryPrintCalculator
 PipelineMemoryPrintCalculator
 ::~PipelineMemoryPrintCalculator()
 {}
+
+// [static]
+unsigned long
+PipelineMemoryPrintCalculator
+::EstimateOptimalNumberOfStreamDivisions(MemoryPrintType memoryPrint, MemoryPrintType availableMemory)
+{
+  unsigned long divisions;
+  divisions = vcl_ceil(static_cast<double>(memoryPrint)
+                       / availableMemory);
+  return divisions;
+}
 
 void
 PipelineMemoryPrintCalculator
@@ -52,8 +62,6 @@ PipelineMemoryPrintCalculator
   // Display parameters
   os<<indent<<"Data to write:                      "<<m_DataToWrite<<std::endl;
   os<<indent<<"Memory print of whole pipeline:     "<<m_MemoryPrint * ByteToMegabyte <<" Mb"<<std::endl;
-  os<<indent<<"Available memory:                   "<<m_AvailableMemory * ByteToMegabyte <<" Mb"<<std::endl;
-  os<<indent<<"Optimal number of stream divisions: "<<m_OptimalNumberOfStreamDivisions<<std::endl;
   os<<indent<<"Bias correction factor applied:     "<<m_BiasCorrectionFactor<<std::endl;
 }
 
@@ -76,7 +84,7 @@ PipelineMemoryPrintCalculator
   if(source)
     {
     // Call the recursive memory print evaluation
-    m_MemoryPrint = EvaluateMemoryPrint(source);
+    m_MemoryPrint = EvaluateProcessObjectPrintRecursive(source);
     }
   else
     {
@@ -87,14 +95,11 @@ PipelineMemoryPrintCalculator
   // Apply bias correction factor
   m_MemoryPrint *= m_BiasCorrectionFactor;
 
-  // Compute the optimal number of stream division
-  m_OptimalNumberOfStreamDivisions = vcl_ceil(static_cast<double>(m_MemoryPrint)
-                                              /m_AvailableMemory);
 }
 
 PipelineMemoryPrintCalculator::MemoryPrintType
 PipelineMemoryPrintCalculator
-::EvaluateMemoryPrint(ProcessObjectType * process)
+::EvaluateProcessObjectPrintRecursive(ProcessObjectType * process)
 {
   otbMsgDevMacro(<< "EvaluateMemoryPrint for " << process->GetNameOfClass() << " (" << process << ")")
   // This variable will store the final print
@@ -127,7 +132,7 @@ PipelineMemoryPrintCalculator
         // If data object has a source
         if(source)
           {
-            print += this->EvaluateMemoryPrint(source);
+            print += this->EvaluateProcessObjectPrintRecursive(source);
           }
         else
           {
@@ -136,6 +141,7 @@ PipelineMemoryPrintCalculator
           }
       }
     }
+
   // Retrieve the output array
   ProcessObjectType::DataObjectPointerArray outputs = process->GetOutputs();
 

@@ -37,16 +37,17 @@ namespace Functor {
  * - channel #4 : \f$ 0.5*(M_{33} - M_{44} - 2*i*M_{34}) \f$
  * - channel #5 : \f$ 0.5*(M_{13} - M_{23} - i*(M_{14}-M_{24})) \f$
  *
- * Where \f$ M_{ij} are the coefficients of the input Mueller matrix.
+ * Where \f$ M_{ij} \f$ are the coefficients of the input Mueller matrix.
  * Input pixel must have 10 channels (one for each Mueller matrix coeffcients).
   * The order of the channels corresponds to :
- * \f$  \begin{pmatrix}
+ * \f$  
+ * \begin{pmatrix}
  * {channel #0 }&{channel #1 }&{channel #2 }&{channel #3 } \\
  * {channel #4 }&{channel #5 }&{channel #6 }&{channel #7 } \\
  * {channel #8 }&{channel #9 }&{channel #10}&{channel #11} \\
  * {channel #12}&{channel #13}&{channel #14}&{channel #15} \\
  * \end{pmatrix}
- *
+ * \f$
  * The output image has 6 channels : the diagonal and the upper element of the reciprocal matrix.
  * Element are stored from left to right, line by line.
  *

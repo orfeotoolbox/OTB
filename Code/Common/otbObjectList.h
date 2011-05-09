@@ -18,10 +18,6 @@
 #ifndef __otbObjectList_h
 #define __otbObjectList_h
 
-#ifdef _MSC_VER
-#pragma warning ( disable : 4290 )
-#endif
-
 #include <vector>
 #include "itkDataObject.h"
 #include "itkObjectFactory.h"

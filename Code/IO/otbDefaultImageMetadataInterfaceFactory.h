@@ -18,9 +18,6 @@
 #ifndef __otbDefaultImageMetadataInterfaceFactory_h
 #define __otbDefaultImageMetadataInterfaceFactory_h
 
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
 
 #include "itkObjectFactoryBase.h"
 

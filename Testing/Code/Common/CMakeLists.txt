@@ -34,6 +34,7 @@ ENDIF(OTB_USE_PQXX)
 SET(COMMON_TESTS11 ${CXX_TEST_PATH}/otbCommonTests11)
 SET(COMMON_TESTS12 ${CXX_TEST_PATH}/otbCommonTests12)
 SET(COMMON_TESTS13 ${CXX_TEST_PATH}/otbCommonTests13)
+SET(COMMON_TESTS14 ${CXX_TEST_PATH}/otbCommonTests14)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbCommonTests1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1044,7 +1045,6 @@ ADD_TEST(coTvRAMDrivenTiledStreamingManager ${COMMON_TESTS13}
 )
 
 
-
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS1
 otbCommonTests1.cxx
@@ -1208,7 +1208,6 @@ otbCommonTests13.cxx
 otbPipelineMemoryPrintCalculatorTest.cxx
 otbStreamingManager.cxx
 )
-
 
 OTB_ADD_EXECUTABLE(otbCommonTests1 "${BasicCommon_SRCS1}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbCommonTests2 "${BasicCommon_SRCS2}" "OTBIO;OTBTesting")

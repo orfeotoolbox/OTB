@@ -21,6 +21,7 @@
 #include "otbGCPsToRPCSensorModelImageFilter.h"
 
 #include "itkMetaDataObject.h"
+#include "otbMetaDataKey.h"
 
 namespace otb {
 

@@ -18,9 +18,6 @@
 #ifndef __otbTileMapImageIO_h
 #define __otbTileMapImageIO_h
 
-#ifdef _MSC_VER
-#pragma warning ( disable : 4786 )
-#endif
 
 /* C++ Libraries */
 #include <string>

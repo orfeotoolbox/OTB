@@ -18,9 +18,6 @@
 #ifndef __otbVectorImage_h
 #define __otbVectorImage_h
 
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
 
 #include "itkVectorImage.h"
 #include "otbImageMetadataInterfaceBase.h"

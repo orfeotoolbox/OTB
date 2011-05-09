@@ -12,6 +12,7 @@ SET(EPSILON 0.000000000001)
 SET(EPSILON_10e6 0.000001)
 SET(MARKOV_TESTS1 ${CXX_TEST_PATH}/otbMarkovTests1)
 SET(MARKOV_TESTS2 ${CXX_TEST_PATH}/otbMarkovTests2)
+SET(MARKOV_TESTS3 ${CXX_TEST_PATH}/otbMarkovTests3)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbMARKOV_TESTS1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -147,6 +148,19 @@ ADD_TEST(maTvMRFSamplerRandomMAP ${MARKOV_TESTS2}
 	${TEMP}/maTvMRFSamplerRandomMAP.txt
 	)
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbMARKOV_TESTS3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# -------            otb::MRFEnergyFisherClassification   ------------------------------
+ADD_TEST(maTuMRFEnergyFisherClassificationNew ${MARKOV_TESTS3}
+        otbMRFEnergyFisherClassificationNew )
+
+ADD_TEST(maTvMRFEnergyFisherClassification ${MARKOV_TESTS3}
+    --compare-ascii ${TOL} ${BASELINE_FILES}/maTvMRFEnergyFisherClassification.txt
+                            ${TEMP}/maTvMRFEnergyFisherClassification.txt
+    otbMRFEnergyFisherClassification
+	${TEMP}/maTvMRFEnergyFisherClassification.txt
+	)
 
 # A enrichir
 SET(Markov_SRCS1
@@ -177,7 +191,13 @@ otbMRFSamplerRandomMAPNew.cxx
 otbMRFSamplerRandomMAP.cxx
 )
 
+SET(Markov_SRCS3
+otbMarkovTests3.cxx
+otbMRFEnergyFisherClassification.cxx
+)
+
 OTB_ADD_EXECUTABLE(otbMarkovTests1 "${Markov_SRCS1}" "OTBMarkov;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbMarkovTests2 "${Markov_SRCS2}" "OTBMarkov;OTBIO;OTBTesting")
+OTB_ADD_EXECUTABLE(otbMarkovTests3 "${Markov_SRCS3}" "OTBMarkov;OTBIO;OTBTesting")
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

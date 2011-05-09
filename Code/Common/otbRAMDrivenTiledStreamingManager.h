@@ -72,9 +72,6 @@ protected:
   RAMDrivenTiledStreamingManager();
   virtual ~RAMDrivenTiledStreamingManager();
 
-  /** The splitter type used to generate the different strips */
-  typedef itk::ImageRegionSplitter<itkGetStaticConstMacro(ImageDimension)> SplitterType;
-
   /** The number of MegaBytes of RAM available */
   unsigned int m_AvailableRAMInMB;
 private:

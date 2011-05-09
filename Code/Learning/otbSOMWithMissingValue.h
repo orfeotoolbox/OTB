@@ -34,7 +34,7 @@ namespace otb
  *  adapt the evaluation of each component of the 'newNeuron' when dealing
  *  with missing values.
  *
- *  TMap has to be templeted with \doxygen{otb}{statistics}{EuclideanDistanceWithMissingValuePow2}
+ *  TMap has to be templeted with EuclideanDistanceWithMissingValuePow2
  *
  *  \sa SOMMap
  *  \sa PeriodicSOM

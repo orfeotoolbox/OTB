@@ -41,8 +41,8 @@ namespace otb {
  * it takes an image list but yield a single list on the Wavelet::INVERSE transformation.
  * Hence, the Forward vs Inverse transformation has been splitted into two classes
  * (templated with otb::Wavelet::FORWARD and otb::Wavelet::INVERSE). The Forward class comes from
- * \doxygen{otb}{ImageToImageListFilter} while the latter comes from a
- * \doxygen{otb}{ImageListToImageFilter}. Thse two classes have specific declaration
+ * ImageToImageListFilter while the latter comes from a
+ * ImageListToImageFilter. Thse two classes have specific declaration
  * and implementation.
  *
  * The user is supposed to initialize Cost properly (through GetCost() macro)
@@ -93,8 +93,8 @@ private:
  * it takes an image list but yield a single list on the Wavelet::INVERSE transformation.
  * Hence, the Forward vs Inverse transformation has been splitted into two classes
  * (templated with otb::Wavelet::FORWARD and otb::Wavelet::INVERSE). The Forward class comes from
- * \doxygen{otb}{ImageToImageListFilter} while the latter comes from a
- * \doxygen{otb}{ImageListToImageFilter}. Thse two classes have specific declaration
+ * ImageToImageListFilter while the latter comes from a
+ * ImageListToImageFilter. Thse two classes have specific declaration
  * and implementation.
  *
  * The user is supposed to initialize Cost properly (through GetCost() macro)
@@ -223,8 +223,8 @@ private:
  * it takes an image list but yield a single list on the Wavelet::INVERSE transformation.
  * Hence, the Forward vs Inverse transformation has been splitted into two classes
  * (templated with otb::Wavelet::FORWARD and otb::Wavelet::INVERSE). The Forward class comes from
- * \doxygen{otb}{ImageToImageListFilter} while the latter comes from a
- * \doxygen{otb}{ImageListToImageFilter}. Thse two classes have specific declaration
+ * ImageToImageListFilter while the latter comes from a
+ * ImageListToImageFilter. Thse two classes have specific declaration
  * and implementation.
  *
  * This is the specific declaration of the Inverse transformation.

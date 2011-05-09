@@ -18,9 +18,6 @@
 #ifndef __otbLocalHoughFilter_h
 #define __otbLocalHoughFilter_h
 
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
 
 #include "itkProcessObject.h"
 #include "itkHoughTransform2DLinesImageFilter.h"

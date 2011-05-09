@@ -18,9 +18,7 @@
 
 // this file defines the otbCommonTest for the test driver
 // and all it expects is that you have a function called RegisterTests
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
+
 
 #include "otbTestMain.h"
 
@@ -29,4 +27,6 @@ void RegisterTests()
   REGISTER_TEST(otbConnectedComponentMuParserFunctorTest);
   REGISTER_TEST(otbLabelObjectOpeningMuParserFilterNew);
   REGISTER_TEST(otbLabelObjectOpeningMuParserFilterTest);
+  REGISTER_TEST(otbVectorDataToRandomLineGeneratorNew);
+  REGISTER_TEST(otbVectorDataToRandomLineGenerator);
 }

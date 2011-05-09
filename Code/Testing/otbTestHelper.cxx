@@ -40,6 +40,7 @@
 #include "cpl_string.h"
 #include "cpl_multiproc.h"
 #include "ogr_api.h"
+#include "ogrsf_frmts.h"
 
 #define otbPrintDiff(comment, refStr, testStr) \
   std::cout << "   ----    '" << comment << "' checking   ---------------------------" << std::endl; \
@@ -73,6 +74,254 @@
 
 namespace otb
 {
+
+int TestHelper::RegressionTestAllImages(const StringList& baselineFilenamesImage,
+                                        const StringList& testFilenamesImage)
+{
+  int result = 0;
+  StringListIt itbaselineFilenames = baselineFilenamesImage.begin();
+  StringListIt itTestFilenames = testFilenamesImage.begin();
+  int                                cpt(1);
+  // For each couple of baseline and test file, do the comparison
+  for (; (itbaselineFilenames != baselineFilenamesImage.end())
+         && (itTestFilenames != testFilenamesImage.end());
+       ++itbaselineFilenames, ++itTestFilenames)
+    {
+    std::string baselineFilenameImage = (*itbaselineFilenames);
+    std::string testFilenameImage = (*itTestFilenames);
+
+    std::map<std::string, int> baselines =
+      this->RegressionTestBaselines(const_cast<char*>(baselineFilenameImage.c_str()));
+    std::map<std::string, int>::reverse_iterator baseline = baselines.rbegin();
+    int multiResult = 1;
+    std::cout << "Number of baseline images: " << baselines.size() << std::endl;
+    while (baseline != baselines.rend() && (multiResult != 0))
+      {
+      std::cout << "Testing non-regression on image: " << (baseline->first).c_str() << std::endl;
+      this->ReportErrorsOff();
+      baseline->second = this->RegressionTestImage(cpt, testFilenameImage.c_str(),
+                                                        (baseline->first).c_str(),
+                                                        m_ToleranceDiffValue);
+
+      multiResult = baseline->second;
+      ++baseline;
+      }
+    if (multiResult != 0)
+      {
+      baseline = baselines.rbegin();
+      this->ReportErrorsOn();
+      baseline->second
+        = this->RegressionTestImage(cpt, testFilenameImage.c_str(),
+                                         (baseline->first).c_str(),
+                                         m_ToleranceDiffValue);
+      }
+    cpt++;
+    result += multiResult;
+    }
+  return result;
+}
+
+int TestHelper::RegressionTestAllMetaData(const StringList& baselineFilenamesMetaData,
+                                          const StringList& testFilenamesMetaData)
+{
+  int result = 0;
+  // Creates iterators on baseline filenames vector and test filenames vector
+  StringListIt itbaselineFilenames = baselineFilenamesMetaData.begin();
+  StringListIt itTestFilenames = testFilenamesMetaData.begin();
+  // For each couple of baseline and test file, do the comparison
+  for (; (itbaselineFilenames != baselineFilenamesMetaData.end())
+         && (itTestFilenames != testFilenamesMetaData.end());
+       ++itbaselineFilenames, ++itTestFilenames)
+    {
+    std::string baselineFilenameImage = (*itbaselineFilenames);
+    std::string testFilenameImage = (*itTestFilenames);
+
+    std::map<std::string, int> baselines =
+      this->RegressionTestBaselines(const_cast<char*>(baselineFilenameImage.c_str()));
+    std::map<std::string, int>::reverse_iterator baseline = baselines.rbegin();
+    int multiResult = 1;
+    std::cout << "Number of baseline images: " << baselines.size() << std::endl;
+    while (baseline != baselines.rend() && (multiResult != 0))
+      {
+      std::cout << "Testing non-regression on image: " << (baseline->first).c_str() << std::endl;
+      this->ReportErrorsOff();
+      baseline->second = this->RegressionTestMetaData(testFilenameImage.c_str(),
+                                                           (baseline->first).c_str(),
+                                                           m_ToleranceDiffValue);
+
+      multiResult = baseline->second;
+      ++baseline;
+      }
+    if (multiResult != 0)
+      {
+      baseline = baselines.rbegin();
+      this->ReportErrorsOn();
+      baseline->second
+        = this->RegressionTestMetaData(testFilenameImage.c_str(),
+                                            (baseline->first).c_str(),
+                                            m_ToleranceDiffValue);
+      }
+    result += multiResult;
+    }
+  return result;
+}
+
+int TestHelper::RegressionTestAllAscii(const StringList& baselineFilenamesAscii,
+                                       const StringList& testFilenamesAscii,
+                                       const StringList& ignoredLines)
+{
+  int result = 0;
+  // Creates iterators on baseline filenames vector and test filenames vector
+  StringListIt itbaselineFilenames = baselineFilenamesAscii.begin();
+  StringListIt itTestFilenames = testFilenamesAscii.begin();
+  StringListIt itIgnoredLines = ignoredLines.begin();
+
+  // Warning message
+  if (ignoredLines.size() > 0)
+    {
+    std::cout << "The lines containing the expressions ";
+    for (; itIgnoredLines != ignoredLines.end(); ++itIgnoredLines)
+      {
+      std::cout << (*itIgnoredLines) << " ";
+      }
+    std::cout << "are not considered" << std::endl;
+    }
+
+  // For each couple of baseline and test file, do the comparison
+  for (; (itbaselineFilenames != baselineFilenamesAscii.end())
+         && (itTestFilenames != testFilenamesAscii.end());
+       ++itbaselineFilenames, ++itTestFilenames)
+    {
+    std::string baselineFilenameAscii = (*itbaselineFilenames);
+    std::string testFilenameAscii = (*itTestFilenames);
+
+    std::map<std::string,
+             int> baselines =
+      this->RegressionTestBaselines(const_cast<char*>(baselineFilenameAscii.c_str()));
+    std::map<std::string, int>::reverse_iterator baseline = baselines.rbegin();
+    int multiResult = 1;
+    std::cout << "Number of baseline files: " << baselines.size() << std::endl;
+    while (baseline != baselines.rend() && (multiResult != 0))
+      {
+      std::cout << "Testing non-regression on file: " << (baseline->first).c_str() << std::endl;
+      this->ReportErrorsOff();
+      baseline->second = this->RegressionTestAsciiFile(testFilenameAscii.c_str(),
+                                                            (baseline->first).c_str(),
+                                                            m_Epsilon,
+                                                            ignoredLines);
+
+      multiResult = baseline->second;
+      ++baseline;
+      }
+    if (multiResult != 0)
+      {
+      baseline = baselines.rbegin();
+      this->ReportErrorsOn();
+      baseline->second
+        = this->RegressionTestAsciiFile(testFilenameAscii.c_str(),
+                                             (baseline->first).c_str(),
+                                             m_Epsilon,
+                                             ignoredLines);
+      }
+    result += multiResult;
+    }
+
+  return result;
+}
+
+int TestHelper::RegressionTestAllBinary(const StringList& baselineFilenamesBinary,
+                                        const StringList& testFilenamesBinary)
+{
+  int result = 0;
+  // Creates iterators on baseline filenames vector and test filenames vector
+  StringListIt itbaselineFilenames = baselineFilenamesBinary.begin();
+  StringListIt itTestFilenames = testFilenamesBinary.begin();
+
+  // For each couple of baseline and test file, do the comparison
+  for (; (itbaselineFilenames != baselineFilenamesBinary.end())
+         && (itTestFilenames != testFilenamesBinary.end());
+       ++itbaselineFilenames, ++itTestFilenames)
+    {
+    std::string baselineFilenameBinary = (*itbaselineFilenames);
+    std::string testFilenameBinary = (*itTestFilenames);
+
+    std::map<std::string,
+             int> baselines =
+      this->RegressionTestBaselines(const_cast<char*>(baselineFilenameBinary.c_str()));
+    std::map<std::string, int>::reverse_iterator baseline = baselines.rbegin();
+    int multiResult = 1;
+    std::cout << "Number of baseline files: " << baselines.size() << std::endl;
+    while (baseline != baselines.rend() && (multiResult != 0))
+      {
+      std::cout << "Testing non-regression on file: " << (baseline->first).c_str() << std::endl;
+      this->ReportErrorsOff();
+      baseline->second = this->RegressionTestBinaryFile(testFilenameBinary.c_str(),
+                                                             (baseline->first).c_str());
+
+      multiResult = baseline->second;
+      ++baseline;
+      }
+    if (multiResult != 0)
+      {
+      baseline = baselines.rbegin();
+      this->ReportErrorsOn();
+      baseline->second
+        = this->RegressionTestBinaryFile(testFilenameBinary.c_str(),
+                                              (baseline->first).c_str());
+      }
+    result += multiResult;
+    }
+
+  return result;
+}
+
+int TestHelper::RegressionTestAllOgr(const StringList& baselineFilenamesOgr,
+                                     const StringList& testFilenamesOgr)
+{
+  int result = 0;
+  // Creates iterators on baseline filenames vector and test filenames vector
+  StringListIt itbaselineFilenames = baselineFilenamesOgr.begin();
+  StringListIt itTestFilenames = testFilenamesOgr.begin();
+  // For each couple of baseline and test file, do the comparison
+  for (; (itbaselineFilenames != baselineFilenamesOgr.end())
+         && (itTestFilenames != testFilenamesOgr.end());
+       ++itbaselineFilenames, ++itTestFilenames)
+    {
+    std::string baselineFilenameOgr = (*itbaselineFilenames);
+    std::string testFilenameOgr = (*itTestFilenames);
+
+    std::map<std::string,
+             int> baselines =
+      this->RegressionTestBaselines(const_cast<char*>(baselineFilenameOgr.c_str()));
+    std::map<std::string, int>::reverse_iterator baseline = baselines.rbegin();
+    int multiResult = 1;
+    std::cout << "Number of baseline OGR files: " << baselines.size() << std::endl;
+    while (baseline != baselines.rend() && (multiResult != 0))
+      {
+      std::cout << "Testing non-regression on OGR file: " << (baseline->first).c_str() << std::endl;
+      this->ReportErrorsOff();
+      baseline->second = this->RegressionTestOgrFile(testFilenameOgr.c_str(),
+                                                          (baseline->first).c_str(),
+                                                          m_ToleranceDiffValue);
+
+      multiResult = baseline->second;
+      ++baseline;
+      }
+    if (multiResult != 0)
+      {
+      baseline = baselines.rbegin();
+      this->ReportErrorsOn();
+      baseline->second
+        = this->RegressionTestOgrFile(testFilenameOgr.c_str(),
+                                           (baseline->first).c_str(),
+                                           m_ToleranceDiffValue);
+      }
+    result += multiResult;
+    }
+
+  return result;
+}
+
 
 int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselineAsciiFileName,
                                         const double epsilon, std::vector<std::string> ignoredLines) const
@@ -720,7 +969,7 @@ int TestHelper::RegressionTestMetaData(const char *testImageFilename, const char
 // 3) append the original suffix.
 // It the file exists, increment x and continue
 //
-std::map<std::string, int> TestHelper::RegressionTestbaselines(char *baselineFilename) const
+std::map<std::string, int> TestHelper::RegressionTestBaselines(char *baselineFilename) const
 {
   std::map<std::string, int> baselines;
   baselines[std::string(baselineFilename)] = 0;
@@ -1091,7 +1340,7 @@ bool TestHelper::isMinusSign(int i) const
   return (i == 45);
 }
 
-bool TestHelper::isNumeric(std::string str) const
+bool TestHelper::isNumeric(const std::string& str) const
 {
   int          nbOfPoints = 0;
   int          nbOfNumbers = 0;
@@ -1115,7 +1364,7 @@ bool TestHelper::isNumeric(std::string str) const
   return result;
 }
 
-bool TestHelper::isScientificNumeric(std::string str) const
+bool TestHelper::isScientificNumeric(const std::string& str) const
 {
        if(str.size() == 0)
        {
@@ -1167,7 +1416,7 @@ bool TestHelper::isScientificNumeric(std::string str) const
   return true;
 }
 
-bool TestHelper::isToBeIgnoredForAnyComparison(std::string str) const
+bool TestHelper::isToBeIgnoredForAnyComparison(const std::string& str) const
 {
   if (str.find("RTTI") != std::string::npos) return true;
   if (str.find("Modified Time") != std::string::npos) return true;
@@ -1175,7 +1424,7 @@ bool TestHelper::isToBeIgnoredForAnyComparison(std::string str) const
   return false;
 }
 
-bool TestHelper::isHexaPointerAddress(std::string str) const
+bool TestHelper::isHexaPointerAddress(const std::string& str) const
 {
   unsigned int size(0);
   bool         result(false);
@@ -1216,7 +1465,7 @@ bool TestHelper::isHexaPointerAddress(std::string str) const
   return result;
 }
 
-void TestHelper::AddWhiteSpace(std::string strIn, std::string &strOut) const
+void TestHelper::AddWhiteSpace(const std::string& strIn, std::string &strOut) const
 {
   std::string strLine = strIn;
 
@@ -1254,8 +1503,8 @@ void TestHelper::AddWhiteSpace(std::string strIn, std::string &strOut) const
   strOut = strLine;
 }
 
-bool TestHelper::CompareLines(std::string strfileref,
-                              std::string strfiletest,
+bool TestHelper::CompareLines(const std::string& strfileref,
+                              const std::string& strfiletest,
                               int& nbdiff,
                               std::ofstream& fluxfilediff,
                               int& numLine,
@@ -1473,11 +1722,11 @@ bool TestHelper::CompareLines(std::string strfileref,
   return differenceFoundInCurrentLine;
 }
 
-std::string TestHelper::VectorToString(otb::MetaDataKey::VectorType vector) const
+std::string TestHelper::VectorToString(const otb::MetaDataKey::VectorType& vector) const
 {
   otb::StringStream oss;
   oss.str("");
-  otb::MetaDataKey::VectorType::iterator it = vector.begin();
+  otb::MetaDataKey::VectorType::const_iterator it = vector.begin();
   oss << "[";
   while (it != vector.end())
     {

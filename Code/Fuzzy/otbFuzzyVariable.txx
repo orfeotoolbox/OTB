@@ -18,9 +18,6 @@
 #ifndef __otbFuzzyVariable_txx
 #define __otbFuzzyVariable_txx
 
-#ifdef _MSC_VER
-#pragma warning ( disable : 4786 )
-#endif
 
 #include "otbFuzzyVariable.h"
 #include "otbMacro.h"

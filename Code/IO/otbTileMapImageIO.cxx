@@ -28,6 +28,8 @@
 //This is to check the file existence
 #include <sys/stat.h>
 
+#include "itksys/SystemTools.hxx"
+
 #include "otbTileMapImageIO.h"
 #include "otbSystem.h"
 
@@ -39,9 +41,6 @@
 #include "otbCurlHelper.h"
 
 #include "otbLogo.inc"
-
-// we should be using itksys instead here!
-#include "base/ossimFilename.h"
 
 namespace otb
 {
@@ -391,8 +390,7 @@ void TileMapImageIO::BuildFileName(const std::ostringstream& quad, std::ostrings
     i++;
     }
 
-  ossimFilename directoryOssim(directory.str().c_str());
-  directoryOssim.createDirectory();
+  itksys::SystemTools::MakeDirectory(directory.str().c_str());
 
   filename << directory.str();
   filename << "/";
@@ -405,15 +403,6 @@ void TileMapImageIO::BuildFileName(const std::ostringstream& quad, std::ostrings
 /* Fill up dhe image information reading the ascii configuration file */
 void TileMapImageIO::ReadImageInformation()
 {
-  if (m_FileName.empty() == true)
-    {
-    itkExceptionMacro(<< "TileMap read : empty image file name file.");
-    }
-
-  if (m_FileName.find("http://") == 0)
-    {
-    m_FileNameIsServerName = true;
-    }
 
   m_Dimensions[0] = (1 << m_Depth) * 256;
   m_Dimensions[1] = (1 << m_Depth) * 256;
@@ -427,6 +416,17 @@ void TileMapImageIO::ReadImageInformation()
   m_Spacing[1] = 1;
   m_Origin[0] = 0;
   m_Origin[1] = 0;
+
+
+  if (m_FileName.empty() == true)
+    {
+    itkExceptionMacro(<< "TileMap read : empty image file name file.");
+    }
+
+  if (m_FileName.find("http://") == 0)
+    {
+    m_FileNameIsServerName = true;
+    }
 
   if (!m_FileNameIsServerName)
     {
@@ -640,12 +640,7 @@ void TileMapImageIO::InternalWrite(double x, double y, const void* buffer)
 
   if (lCanWrite)
     {
-      ossimFilename fileOssim(filename.str().c_str());
-      // If the file already exists, remove it.
-      if( fileOssim.exists() == true )
-        {
-          fileOssim.remove();
-        }
+    itksys::SystemTools::RemoveFile(filename.str().c_str());
 
     imageIO->CanStreamWrite();
     imageIO->SetNumberOfDimensions(2);
@@ -811,11 +806,11 @@ void TileMapImageIO::SetCacheDirectory(const char* _arg)
   if (_arg)
     {
     // Check the directory write permission
-    ossimFilename directoryOssim(_arg);
-    if( directoryOssim.isWriteable() == false )
+    if( !itksys::SystemTools::Touch(_arg, true))
       {
       itkExceptionMacro( "Error, no write permission in given CacheDirectory "<<m_CacheDirectory<<".");
       }
+    itksys::SystemTools::RemoveFile(_arg);
     this->m_CacheDirectory = _arg;
     this->m_UseCache = true;
     }

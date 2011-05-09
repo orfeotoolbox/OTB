@@ -15,14 +15,26 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
+
 
 #include "otbMassOfBelief.h"
 
 #include "otbFuzzyVariable.h"
 #include "otbJointMassOfBeliefFilter.h"
+
+
+typedef float                           PrecisionType;
+typedef otb::FuzzyVariable<std::string, PrecisionType>
+                                        FuzzyVarType;
+typedef otb::MassOfBelief<std::string>  MassOfBeliefFunctionType;
+typedef otb::JointMassOfBeliefFilter<MassOfBeliefFunctionType>
+                                        JointMassOfBeliefFilterType;
+
+std::ostream& operator <<(std::ostream& os, const MassOfBeliefFunctionType::LabelSetType& l )
+{
+  MassOfBeliefFunctionType::PrintLabelSet(os, l);
+  return os;
+}
 
 int otbMassOfBeliefDSApplied(int argc, char* argv[])
 {
@@ -31,12 +43,6 @@ int otbMassOfBeliefDSApplied(int argc, char* argv[])
   double desc1Val = atof(argv[3]);
   double desc2Val = atof(argv[4]);
 
-  typedef float                           PrecisionType;
-  typedef otb::FuzzyVariable<std::string, PrecisionType>
-                                          FuzzyVarType;
-  typedef otb::MassOfBelief<std::string>  MassOfBeliefFunctionType;
-  typedef otb::JointMassOfBeliefFilter<MassOfBeliefFunctionType>
-                                          JointMassOfBeliefFilterType;
 
   // Descriptors and associated fuzzy variables
   FuzzyVarType::Pointer desc1 = FuzzyVarType::New();

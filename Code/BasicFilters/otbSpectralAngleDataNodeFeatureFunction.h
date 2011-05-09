@@ -28,7 +28,7 @@
 namespace otb
 {
 /** \class SpectralAngleDataNodeFeatureFunction
-  * \brief .
+  * \brief TODO
   *
   *
   *

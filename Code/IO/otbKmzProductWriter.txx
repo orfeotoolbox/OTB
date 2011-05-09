@@ -18,22 +18,22 @@
 #ifndef __otbKmzProductWriter_txx
 #define __otbKmzProductWriter_txx
 
+#include <string>
+
 #include "otbKmzProductWriter.h"
 #include "itksys/SystemTools.hxx"
 
 #include "otbMetaDataKey.h"
 #include "otbVectorDataKeywordlist.h"
-#include "string.h"
 
 namespace otb
 {
 template <class TInputImage>
 KmzProductWriter<TInputImage>
-::KmzProductWriter()
+::KmzProductWriter():
+  m_UseExtendMode(true),
+  m_TileSize(512)
 {
-  m_TileSize      = 512;
-  m_UseExtendMode = true;
-
   // Modify superclass default values, can be overridden by subclasses
   this->SetNumberOfRequiredInputs(1);
 }
@@ -169,39 +169,38 @@ KmzProductWriter<TInputImage>
 ::AddLogo()
 {
   // Logo
-  if(!m_Logo.IsNull())
+  if(m_Logo.IsNull()) return;
+
+  std::ostringstream     logoFilename;
+  logoFilename << m_Path;
+  logoFilename << "/logo.jpeg";
+    
+  if (!itksys::SystemTools::MakeDirectory(m_Path.c_str()))
     {
-    std::ostringstream     logoFilename;
-    logoFilename << m_Path;
-    logoFilename << "/logo.jpeg";
+    itkExceptionMacro(<< "Error while creating cache directory" << m_Path);
+    }
     
-    if (!itksys::SystemTools::MakeDirectory(m_Path.c_str()))
-      {
-      itkExceptionMacro(<< "Error while creating cache directory" << m_Path);
-      }
+  typename CastFilterType::Pointer castFiler = CastFilterType::New();
+  castFiler->SetInput(m_Logo);
     
-    typename CastFilterType::Pointer castFiler = CastFilterType::New();
-    castFiler->SetInput(m_Logo);
+  m_VectorWriter = VectorWriterType::New();
+  m_VectorWriter->SetFileName(logoFilename.str());
+  m_VectorWriter->SetInput(castFiler->GetOutput());
+  m_VectorWriter->Update();
     
-    m_VectorWriter = VectorWriterType::New();
-    m_VectorWriter->SetFileName(logoFilename.str());
-    m_VectorWriter->SetInput(castFiler->GetOutput());
-    m_VectorWriter->Update();
+  // Add the logo to the kmz
+  itk::OStringStream logo_root_path_in_kmz;
+  logo_root_path_in_kmz << "logo.jpeg";
     
-    // Add the logo to the kmz
-    itk::OStringStream logo_root_path_in_kmz;
-    logo_root_path_in_kmz << "logo.jpeg";
+  itk::OStringStream logo_absolut_path;
+  logo_absolut_path << logoFilename.str();
     
-    itk::OStringStream logo_absolut_path;
-    logo_absolut_path << logoFilename.str();
+  this->AddFileToKMZ(logo_absolut_path, logo_root_path_in_kmz);
     
-    this->AddFileToKMZ(logo_absolut_path, logo_root_path_in_kmz);
-    
-    // Remove the logo file with stdio method :remove
-    if (remove(logo_absolut_path.str().c_str()) != 0)
-      {
-      itkExceptionMacro(<< "Error while deleting the file" << logo_absolut_path.str());
-      }
+  // Remove the logo file with stdio method :remove
+  if (remove(logo_absolut_path.str().c_str()) != 0)
+    {
+    itkExceptionMacro(<< "Error while deleting the file" << logo_absolut_path.str());
     }
 }
 
@@ -278,7 +277,7 @@ KmzProductWriter<TInputImage>
   // Compute max depth
   int maxDepth =
     static_cast<int>(std::max(vcl_ceil(vcl_log(static_cast<float>(sizeX) / static_cast<float>(m_TileSize)) / vcl_log(2.0)),
-                         vcl_ceil(vcl_log(static_cast<float>(sizeY) / static_cast<float>(m_TileSize)) / vcl_log(2.0))));
+                              vcl_ceil(vcl_log(static_cast<float>(sizeY) / static_cast<float>(m_TileSize)) / vcl_log(2.0))));
   m_MaxDepth = maxDepth;
   m_CurIdx = 0;
 
@@ -301,7 +300,7 @@ KmzProductWriter<TInputImage>
     m_CurrentDepth = depth;
 
     // Resample image to the max Depth
-    int sampleRatioValue = static_cast<int>(vcl_pow(2., (maxDepth - depth)));
+    int sampleRatioValue = (1 << (maxDepth - depth));
 
     if (sampleRatioValue > 1)
       {
@@ -363,13 +362,10 @@ KmzProductWriter<TInputImage>
     sizeX = size[0];
     sizeY = size[1];
 
-    int x = 0;
-    int y = 0;
-
     // Tiling resample image
-    for (int tx = 0; tx < sizeX; tx += m_TileSize)
+    for (int tx = 0, x = 0; tx < sizeX; tx += m_TileSize, ++x)
       {
-      for (int ty = 0; ty < sizeY; ty += m_TileSize)
+      for (int ty = 0, y = 0; ty < sizeY; ty += m_TileSize, ++y)
         {
         if ((tx + m_TileSize) >= sizeX)
           {
@@ -478,7 +474,7 @@ KmzProductWriter<TInputImage>
         double west = outputPoint[0];
 
         // Compute center value (lat / long)
-        indexTile[0] = extractIndex[0] + demiSizeTile[1];
+        indexTile[0] = extractIndex[0] + demiSizeTile[0];
         indexTile[1] = extractIndex[1] + demiSizeTile[1];
         m_ResampleVectorImage->TransformIndexToPhysicalPoint(indexTile, inputPoint);
         outputPoint = m_Transform->TransformPoint(inputPoint);
@@ -516,35 +512,43 @@ KmzProductWriter<TInputImage>
   
         /** END GX LAT LON */
 
-  // Create KML - Filename - PathName - tile number - North - South - East - West
-  if (sampleRatioValue == 1)
-    {
-    if (!m_UseExtendMode) // Extended format
-      this->GenerateKML(path.str(), depth, x, y, north, south, east, west);
-    else
-      this->GenerateKMLExtended(path.str(), depth,
-              x, y, lowerLeftCorner,
-              lowerRightCorner,
-              upperRightCorner, upperLeftCorner);
-    }
-  else
-    {
-    // Search tiles to link
-    int tileXStart = extractIndex[0] / (m_TileSize / 2);
-    int tileYStart = extractIndex[1] / (m_TileSize / 2);
+        // Create KML - Filename - PathName - tile number - North - South - East - West
+        if (sampleRatioValue == 1)
+          {
+          if (!m_UseExtendMode) // Extended format
+            {
+            this->GenerateKML(path.str(), depth, x, y, north, south, east, west);
+            }
+          else
+            {
+            this->GenerateKMLExtended(path.str(), depth,
+                                      x, y, lowerLeftCorner,
+                                      lowerRightCorner,
+                                      upperRightCorner, upperLeftCorner);
+            }
+          }
+        else
+          {
+          // Search tiles to link
+          int tileXStart = extractIndex[0] / (m_TileSize / 2);
+          int tileYStart = extractIndex[1] / (m_TileSize / 2);
 
-    // Create KML with link
-    if (!m_UseExtendMode)
-      this->GenerateKMLWithLink(path.str(), depth, x, y, tileXStart, tileYStart,
-              north, south, east, west, centerLong, centerLat);
-    else
-      this->GenerateKMLExtendedWithLink(
-        path.str(), depth, x, y, tileXStart, tileYStart,
-        lowerLeftCorner, lowerRightCorner, upperRightCorner, upperLeftCorner,
-        centerLong, centerLat);
-    }
+          // Create KML with link
+          if (!m_UseExtendMode)
+            {
+            this->GenerateKMLWithLink(path.str(), depth, x, y, tileXStart, tileYStart,
+                                      north, south, east, west, centerLong, centerLat);
+            }
+          else
+            {
+            this->GenerateKMLExtendedWithLink(
+              path.str(), depth, x, y, tileXStart, tileYStart,
+              lowerLeftCorner, lowerRightCorner, upperRightCorner, upperLeftCorner,
+              centerLong, centerLat);
+            }
+          }
 
-  if (depth == 0)
+        if (depth == 0)
           {
           // Add the headers and the basic stuffs in the kml only once.
           if (curIdx == 0)
@@ -577,11 +581,7 @@ KmzProductWriter<TInputImage>
           itkExceptionMacro(
             << "Error while deleting the file" << kml_absolute_path.str() << "or file " << jpg_absolute_path.str());
           }
-
-        y++;
         }
-      x++;
-      y = 0;
       }
     }
 }

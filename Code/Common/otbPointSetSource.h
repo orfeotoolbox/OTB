@@ -19,9 +19,7 @@
 #ifndef __otbPointSetSource_h
 #define __otbPointSetSource_h
 
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
+
 #include "itkProcessObject.h"
 
 namespace otb

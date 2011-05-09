@@ -15,9 +15,7 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
+
 
 #include "otbMRFEnergyGaussianClassification.h"
 #include "otbImage.h"
@@ -49,7 +47,7 @@ int otbMRFEnergyGaussianClassification(int argc, char * argv[])
   file.open(outputFile);
 
   file << std::endl;
-  file << "Number of paramters: " << classif->GetNumberOfParameters() << std::endl;
+  file << "Number of parameters: " << classif->GetNumberOfParameters() << std::endl;
   file << "GetSingleValue(10, 1): " << classif->GetSingleValue(10, 2) << std::endl;
 
   file.close();

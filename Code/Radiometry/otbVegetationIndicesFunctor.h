@@ -1238,6 +1238,8 @@ private:
 };
 
 /** \class LAIFromNDVILogarithmic
+ *  \brief computes the LAI from NDVI
+ *
  *  This functor computes the LAI from NDVI using a
  *  logarithmic relationship. Asrar et al. (1984), Baret and Guyot
  *  (1991) and Wilson and Meyers (2007). Default values for the
@@ -1319,9 +1321,11 @@ private:
 
 
 /** \class LAIFromReflectancesLinear
+ * \brief computes the LAI from reflectances
+ *
  *  This functor computes the LAI from reflectances using a
  *  linear relationship.
- *  LAI = \beta_0 + \sum_j \beta_j \rho_j where \rho are the
+ *  \f$ LAI = \beta_0 + \sum_j \beta_j \rho_j \f$ where \f$ \rho \f$ are the
  *  reflectances
  *  Default values for the parameters are taken from A. Bsaibes et
  *  al. / Remote Sensing of Environment 113 (2009) 716-729

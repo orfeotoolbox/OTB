@@ -26,8 +26,10 @@
 #include <map>
 #include <ostream>
 
+
 namespace otb
 {
+
 /** \class MassOfBelief
  *  \brief This class represent a mass of belief function
  *
@@ -156,12 +158,24 @@ public:
   /** Return true if the support set is null */
   bool IsEmpty() const;
 
+  /** Define a Print static method for label sets
+   *  Do not overload << for std::set since it causes
+   *  namespace issues. */
+  static std::ostream & PrintLabelSet(std::ostream & out,
+                                      const LabelSetType & labelSet);
+
+  /** Define a Print static method for label sets
+   *  Do not overload << for std::set since it causes
+   *  namespace issues. */
+  static std::ostream & PrintLabelSetOfSet(std::ostream & out,
+                                           const LabelSetOfSetType & labelSet);
+
 protected:
   /** Constructor */
   MassOfBelief() {}
   
   /** Desctructor */
-  ~MassOfBelief() {}
+  virtual ~MassOfBelief() {}
   
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
@@ -176,11 +190,6 @@ private:
 
 } // end namespace otb
 
-/** Define the << operator for label sets */
-template <class TLabel>
-std::ostream &
-operator<<(std::ostream & out,
-           const std::set<TLabel> & labelSet);
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbMassOfBelief.txx"

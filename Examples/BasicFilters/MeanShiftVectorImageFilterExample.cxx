@@ -16,9 +16,6 @@
 
 =========================================================================*/
 
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {ROI_QB_MUL_1.png}
@@ -44,6 +41,7 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbPrintableImageFilter.h"
 
 //  Software Guide : BeginLatex
@@ -215,7 +213,7 @@ int main(int argc, char * argv[])
   printableImageFilter->SetChannel(3);
 
   typedef PrintableFilterType::OutputImageType           OutputImageType;
-  typedef otb::StreamingImageFileWriter<OutputImageType> PrettyWriterType;
+  typedef otb::ImageFileWriter<OutputImageType>          PrettyWriterType;
 
   PrettyWriterType::Pointer prettyWriter = PrettyWriterType::New();
 

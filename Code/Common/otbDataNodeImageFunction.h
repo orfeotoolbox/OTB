@@ -27,7 +27,7 @@
 namespace otb
 {
 /** \class DataNodeImageFunction
-  * \brief .
+  * \brief TODO
   *
   *
   *

@@ -1991,6 +1991,22 @@ ADD_TEST(bfTvLabelObjectOpeningMuParserFilterTest ${BASICFILTERS_TESTS14}
     "SHAPE_Elongation>8"
 )
 
+# -----------------------  otbVectorDataToRandomLineGenerator  -----------------------
+
+ADD_TEST(bfTuVectorDataToRandomLineGeneratorNew ${BASICFILTERS_TESTS14}
+  otbVectorDataToRandomLineGeneratorNew
+)
+
+ADD_TEST(bfTuVectorDataToRandomLineGenerator ${BASICFILTERS_TESTS14}
+  --compare-ogr ${NOTOL}
+  ${BASELINE_FILES}/bfTvVectorDataToRandomLineGeneratorOutput.shp
+  ${TEMP}/bfTvVectorDataToRandomLineGeneratorOutput.shp
+  otbVectorDataToRandomLineGenerator
+  ${INPUTDATA}/ObjectReco/Boats/maur_B010202_01Polygons.shp
+  ${TEMP}/bfTvVectorDataToRandomLineGeneratorOutput.shp
+)
+
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests15 ~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2310,6 +2326,7 @@ otbBasicFiltersTests14.cxx
 otbConnectedComponentMuParserFunctorTest.cxx
 otbLabelObjectOpeningMuParserFilterNew.cxx
 otbLabelObjectOpeningMuParserFilterTest.cxx
+otbVectorDataToRandomLineGenerator.cxx
 )
 IF(OTB_DATA_USE_LARGEINPUT)
 SET(BasicFilters_SRCS15

@@ -30,7 +30,8 @@ namespace otb
 namespace Functor
 {
 
-/** \class Functor::LHMI
+/** \class LHMI
+ * \brief TODO
  *
  * - cast the input 1 pixel value to \c double
  * - cast the input 2 pixel value to \c double

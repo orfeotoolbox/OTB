@@ -18,9 +18,6 @@
 #ifndef __otbHoughTransform2DLinesImageFilter_h
 #define __otbHoughTransform2DLinesImageFilter_h
 
-#ifdef _MSC_VER
-#pragma warning ( disable : 4786 )
-#endif
 
 #include "itkImageToImageFilter.h"
 #include "itkImage.h"

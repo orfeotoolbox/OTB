@@ -18,9 +18,7 @@
 #ifndef __otbVectorDataIOBase_txx
 #define __otbVectorDataIOBase_txx
 
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
+
 #include "otbVectorDataIOBase.h"
 
 namespace otb

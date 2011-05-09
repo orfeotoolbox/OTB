@@ -22,6 +22,7 @@
 #include "otbDEMHandler.h"
 
 #include "otbRPCProjectionAdapter.h"
+#include "otbImageKeywordlist.h"
 
 namespace otb {
 

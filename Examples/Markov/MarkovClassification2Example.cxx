@@ -15,9 +15,7 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
+
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {QB_Suburb.png}
@@ -55,7 +53,6 @@
 #include "otbMRFSamplerRandomMAP.h"
 #include "otbMRFOptimizerICM.h"
 // Software Guide : EndCodeSnippet
-//#include "otbMRFSamplerRandom.h"
 
 int main(int argc, char* argv[])
 {

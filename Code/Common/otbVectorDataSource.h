@@ -19,9 +19,6 @@
 #ifndef __otbVectorDataSource_h
 #define __otbVectorDataSource_h
 
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
 
 #include "itkProcessObject.h"
 #include "itkObjectFactory.h"

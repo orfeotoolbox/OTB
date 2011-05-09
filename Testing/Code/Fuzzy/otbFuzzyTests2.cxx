@@ -18,9 +18,7 @@
 
 // this file defines the otbCommonTest for the test driver
 // and all it expects is that you have a function called RegisterTests
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
+
 
 //
 #include "otbTestMain.h"
@@ -29,7 +27,9 @@ void RegisterTests()
 {
   REGISTER_TEST(otbFuzzyVariableDSApplied);
   REGISTER_TEST(otbMassOfBeliefDSApplied);
-  //REGISTER_TEST(otbVectorDataToSpecificDescriptionFilterBaseNew);
-  //REGISTER_TEST(otbVectorDataToRoadDescriptionFilterNew);
-  //REGISTER_TEST(otbVectorDataToRoadDescriptionFilter);
+  REGISTER_TEST(otbVectorDataToDSValidatedVectorDataFilterNew);
+  REGISTER_TEST(otbVectorDataToDSValidatedVectorDataFilter);
+  REGISTER_TEST(otbVectorDataToSpecificDescriptionFilterBaseNew);
+  REGISTER_TEST(otbVectorDataToRoadDescriptionFilterNew);
+  REGISTER_TEST(otbVectorDataToRoadDescriptionFilter);
 }

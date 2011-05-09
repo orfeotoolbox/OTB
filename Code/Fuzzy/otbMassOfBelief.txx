@@ -373,29 +373,33 @@ MassOfBelief<TLabel, TMass>
   Superclass::PrintSelf(os, indent);
 
   // Display mass of belief universe
-  os<<indent<<"Mass of belief universe: "<<this->GetUniverse()<<std::endl;
+  os << indent << "Mass of belief universe: "
+     << PrintLabelSet(os, this->GetUniverse())
+     << std::endl;
 
   // Display mass of belief support
-  os<<indent<<"Mass of belief support: "<<this->GetSupport()<<std::endl;
+  os<<indent<<"Mass of belief support: "
+    <<PrintLabelSetOfSet(os, this->GetSupport())
+    <<std::endl;
   
   // Display individual masses
   for(typename MassMapType::const_iterator it = m_MassesMap.begin();
       it!=m_MassesMap.end(); ++it)
     {
-    os<<indent<<(it->first)<< " has mass "<<(it->second)<<std::endl;
+    os<< indent
+      << PrintLabelSet(os, it->first)
+      << " has mass "<<(it->second)<<std::endl;
     }
   os<<indent<<"Other masses are null"<<std::endl;
 }
-} // end namespace otb
 
-/** Define the << operator for label sets */
-template <class TLabel>
+template <class TLabel, class TMass>
 std::ostream &
-operator<<(std::ostream & out,
-           const std::set<TLabel> & labelSet)
+MassOfBelief<TLabel, TMass>
+::PrintLabelSet(std::ostream & out,
+                const LabelSetType & labelSet)
 {
   // Define an iterator on the label set
-  typedef std::set<TLabel> LabelSetType;
   typename LabelSetType::const_iterator it = labelSet.begin();
 
   // Open the set
@@ -409,12 +413,52 @@ operator<<(std::ostream & out,
     if(it != labelSet.end())
       out<<", ";
     }
-  
+
   // close the set
   out<<"}";
 
   // Return
   return out;
 }
+
+template <class TLabel, class TMass>
+std::ostream &
+MassOfBelief<TLabel, TMass>
+::PrintLabelSetOfSet(std::ostream & out,
+                     const LabelSetOfSetType & labelSet)
+{
+  // Define an iterator on the label set
+  typedef std::set<TLabel> LabelSetType;
+  typename LabelSetOfSetType::const_iterator it = labelSet.begin();
+
+  // Open the set
+  out<<"{";
+
+  // Append the set elements
+  while(it != labelSet.end())
+    {
+    PrintLabelSet(out, *it);
+    ++it;
+    if(it != labelSet.end())
+      out<<", ";
+    }
+
+  // close the set
+  out<<"}";
+
+  // Return
+  return out;
+}
+
+
+} // end namespace otb
+
+/** Define the << operator for label sets */
+/*
+template <class TLabel>
+std::ostream &
+operator<<(std::ostream & out,
+           const std::set<TLabel> & labelSet)*/
+
 
 #endif
