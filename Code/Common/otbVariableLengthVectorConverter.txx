@@ -33,22 +33,29 @@ typename VariableLengthVectorConverter< std::vector<std::vector<TInternalInputTy
 VariableLengthVectorConverter< std::vector<std::vector<TInternalInputType> >, TPrecisionType>
 ::Convert(InputType input)
 {
-  unsigned int p, q, rsltIdx = 0;
+  unsigned int p, q, count, rsltIdx = 0;
   OutputType result;
   
   p = input.size();
-  q = input.at(0).size();
 
-  result.SetSize(p*q);
+  for (unsigned int l=0; l<p; l++)
+    {
+      count+=input.at(l).size();
+    }
+
+
+  result.SetSize(count);
 
   for (unsigned int i=0; i<p; i++)
     {
-    for (unsigned int j=0; j<q; j++)
-      {
-      result[rsltIdx] = static_cast<OutputPrecisionType>(input.at(i).at(j));
-      rsltIdx ++;
-      }
+      q = input.at(i).size();
+      for (unsigned int j=0; j<q; j++)
+        {
+          result[rsltIdx] = static_cast<OutputPrecisionType>(input.at(i).at(j));
+          rsltIdx ++;
+        }
     }
+
   return result;
 }
 
@@ -61,16 +68,21 @@ VariableLengthVectorConverter< std::vector<std::vector<std::complex<TInternalInp
                                TPrecisionType>
 ::Convert(InputType input)
 {
-  unsigned int p, q, rsltIdx = 0;
+  unsigned int p, q, count, rsltIdx = 0;
   OutputType result;
   
   p = input.size();
-  q = input.at(0).size();
 
-  result.SetSize(p*q*2);
+  for (unsigned int l=0; l<p; l++)
+    {
+      count+=input.at(l).size();
+    }
+
+  result.SetSize(count*2);
 
   for (unsigned int i=0; i<p; i++)
     {
+      q = input.at(i).size();
     for (unsigned int j=0; j<q; j++)
       {
       result[rsltIdx] = static_cast<OutputPrecisionType>(input.at(i).at(j).real());
