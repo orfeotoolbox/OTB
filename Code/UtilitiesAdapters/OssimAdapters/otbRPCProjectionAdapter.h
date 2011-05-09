@@ -24,7 +24,11 @@
 #include "itkObjectFactory.h"
 
 #include "itkPoint.h"
+#include "ossim/base/ossimDpt.h"
+#include "ossim/base/ossimGpt.h"
 
+
+#include "ossim/projection/ossimRpcProjection.h"
 class ossimRpcProjection;
 
 namespace otb {
@@ -64,6 +68,12 @@ public:
              double& rmsError, ImageKeywordlist& otb_kwl);
   void TransformPoint(double x, double y, double z,
                       double& lon, double& lat, double& h) const;
+
+  void LineSampleToWorld(const ossimDpt & imagePoint, ossimGpt& worldPoint) const
+  {
+    m_RpcProjection->lineSampleToWorld(imagePoint, worldPoint);
+  }
+
 protected:
   RPCProjectionAdapter();
   virtual ~RPCProjectionAdapter();

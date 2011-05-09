@@ -105,13 +105,17 @@ RPCProjectionAdapter::Solve(const GCPsContainerType& gcpContainer,
   // Retrieve the output RPC projection
   ossimRefPtr<ossimRpcModel> rpcModel = dynamic_cast<ossimRpcModel*>(rpcSolver->createRpcModel()->getProjection());
 
+  // Compute projection
+  m_RpcProjection = dynamic_cast<ossimRpcProjection*>(
+                                                      rpcSolver->createRpcProjection()->getProjection());
+  
+  // Add spacings
+  rpcModel->setMetersPerPixel( m_RpcProjection->getMetersPerPixel() );
+
   // Export the sensor model in an ossimKeywordlist
   ossimKeywordlist geom_kwl;
   rpcModel->saveState(geom_kwl);
-
-  // Compute projection
-  m_RpcProjection = dynamic_cast<ossimRpcProjection*>(
-    rpcSolver->createRpcProjection()->getProjection());
+  
   ossimKeywordlist kwl;
   m_RpcProjection->saveState(kwl);
 
