@@ -40,7 +40,7 @@ namespace Functor {
  * Where \f$ M_{ij} \f$ are the coefficients of the input Mueller matrix.
  * Input pixel must have 10 channels (one for each Mueller matrix coeffcients).
   * The order of the channels corresponds to :
- * \f$  
+ * \f$
  * \begin{pmatrix}
  * {channel #0 }&{channel #1 }&{channel #2 }&{channel #3 } \\
  * {channel #4 }&{channel #5 }&{channel #6 }&{channel #7 } \\

@@ -26,7 +26,7 @@ namespace otb
 {
 namespace Functor
 {
-/** \class TimeSeriesLeastSquareFittingFunctor 
+/** \class TimeSeriesLeastSquareFittingFunctor
   * \brief Implements a least squares fitting of a time profile
   *
   * This functor
@@ -48,7 +48,7 @@ namespace Functor
   *  \f$ b = (\frac{ f(t_i) }{\sigma_i}) \f$
   *  \f$ A_{ij} = \frac{\Phi_{ij}}{\sigma_i} \f$
   *
-  *  
+  *
   */
 template <class TSeriesType, class TTimeFunction, class TDateType = TSeriesType, class TWeightType = TSeriesType>
 class TimeSeriesLeastSquareFittingFunctor
