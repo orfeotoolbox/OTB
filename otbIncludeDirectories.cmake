@@ -315,6 +315,7 @@ SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
   Fusion
   GeospatialAnalysis
   Testing
+  UtilitiesAdapters/OssimAdapters
   OBIA
   Fuzzy
   ObjectDetection
