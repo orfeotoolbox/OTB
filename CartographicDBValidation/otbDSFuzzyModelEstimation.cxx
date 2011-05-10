@@ -47,9 +47,9 @@ int DSFuzzyModelEstimation::Describe(ApplicationDescriptor* descriptor)
   descriptor->SetName("DSFuzzyModelEstimation");
   descriptor->SetDescription("Estimate feature fuzzy model parameters using an image and an VectorData");
   descriptor->AddOption("InputImage", "Support to estimate the models on",
-                        "in",1, true, ApplicationDescriptor::InputImage);
+                        "in", 1, true, ApplicationDescriptor::InputImage);
   descriptor->AddOption("InputVectorData", "Ground Truth Vector Data",
-                        "vdin",1, true, ApplicationDescriptor::FileName);
+                        "vdin", 1, true, ApplicationDescriptor::FileName);
   descriptor->AddOption("Hypothesis", "Dempster Shafer study hypothesis",
                         "hyp", 1, false, ApplicationDescriptor::StringList);
   descriptor->AddOption("Criterion", "Dempster Shafer Criterion (by default (Belief+Plausibility)/2 >= 0.5))",
@@ -135,7 +135,6 @@ int DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseResult)
   vdReProjFilterRL->SetDEMDirectory(parseResult->GetParameterString("DEMDirectory"));
   vdReProjFilterRL->SetUseOutputSpacingAndOriginFromImage(true);
   vdReProjFilterRL->Update();
-
 
 
 
