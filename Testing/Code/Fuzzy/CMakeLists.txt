@@ -114,7 +114,20 @@ ADD_TEST(fzTvVectorDataToDSValidatedVectorDataFilter ${Fuzzy_TESTS2}
 )
 SET_TESTS_PROPERTIES(fzTvVectorDataToDSValidatedVectorDataFilter PROPERTIES DEPENDS fzTvVectorDataToRoadDescriptionFilter)
 ENDIF(OTB_DATA_USE_LARGEINPUT)
+
+
+ADD_TEST(fzTuFuzzyDescriptorsModelManagerNew ${Fuzzy_TESTS2}
+  otbFuzzyDescriptorsModelManagerNew)
+
+ADD_TEST(fzTvFuzzyDescriptorsModelManagerTest ${Fuzzy_TESTS2}
+  otbFuzzyDescriptorsModelManagerTest
+${TEMP}/fzTvFuzzyDescriptorsModelManager.xml
+)
+
+
+
 SET(BasicFuzzy_SRCS1
+otbFuzzyTests1.cxx
 otbFuzzyVariableNew.cxx
 otbFuzzyVariable2Values.cxx
 otbFuzzyVariableSetValue.cxx
@@ -124,11 +137,13 @@ otbJointMassOfBeliefFilter.cxx
 )
 
 SET(BasicFuzzy_SRCS2
+otbFuzzyTests2.cxx
 otbFuzzyVariableDSApplied.cxx
 otbMassOfBeliefDSApplied.cxx
 otbVectorDataToDSValidatedVectorDataFilter.cxx
 otbVectorDataToSpecificDescriptionFilterBase.cxx
 otbVectorDataToRoadDescriptionFilter.cxx
+otbFuzzyDescriptorsModelManager.cxx
 )
 
 ADD_EXECUTABLE(otbFuzzyTests1 otbFuzzyTests1.cxx ${BasicFuzzy_SRCS1})

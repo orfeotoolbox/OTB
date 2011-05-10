@@ -32,4 +32,6 @@ void RegisterTests()
   REGISTER_TEST(otbVectorDataToSpecificDescriptionFilterBaseNew);
   REGISTER_TEST(otbVectorDataToRoadDescriptionFilterNew);
   REGISTER_TEST(otbVectorDataToRoadDescriptionFilter);
+  REGISTER_TEST(otbFuzzyDescriptorsModelManagerNew);
+  REGISTER_TEST(otbFuzzyDescriptorsModelManagerTest);
 }
