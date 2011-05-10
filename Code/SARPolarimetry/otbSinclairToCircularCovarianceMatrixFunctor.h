@@ -46,6 +46,7 @@ namespace Functor
  * - \f$ S_{lr} = 0.5 * (-S_{hh}+i*S_{hv}-i*S_{vh}+S_{vv}) \f$
  * - \f$ S_{rl} = 0.5 * (-S_{hh}-i*S_{hv}+i*S_{vh}-S_{vv}) \f$
  * - \f$ S_{rr} = 0.5 * (-S_{hh}+i*S_{hv}+i*S_{vh}+S_{vv}) \f$
+ *
  * Extract from Antennas for radar and communications Harold Mott p 317.
  *
  * The output pixel has 10 channels : the diagonal and the upper element of the matrix.

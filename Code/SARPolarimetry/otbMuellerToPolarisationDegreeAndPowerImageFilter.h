@@ -48,11 +48,14 @@ namespace Functor {
  * - \f$ Si_{1} = \cos{\psi * \frac{\pi}{90}} * \cos{\tau *  \frac{\pi}{90}} \f$
  * - \f$ Si_{2} = \sin{\psi * \frac{\pi}{90}} * \cos{\tau *  \frac{\pi}{90}} \f$
  * - \f$ Si_{3} = \sin{\tau * \frac{\pi}{90}} \f$
+ *
  * 2. Evaluate the received Stokes vector :
  * - \f$ Sr = Si * MuellerMatrix \f$
+ *
  * 3. Evaluate power \f$ P \f$  and polarisation degree \f$ DegP \f$:
  * - \f$ P = \max{0, Sr_0} \f$
  * - \f$ DegP =  \sqrt{Sr_{1}^{2} + Sr_{2}^{2} + Sr_{3}^{2}} / Sr_{0} \f$
+ *
  * 4. Keep the smallest and the biggest power (\f$ P_{min}, P_{max} \f$) and polarisation degree (\f$ DegP_{min}, DegP_{max} \f$) ).
  *
  * Output value are:

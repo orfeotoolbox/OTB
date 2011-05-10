@@ -42,10 +42,13 @@ namespace Functor {
  * - channel #2 : \f$ anisotropy = \frac {SortedEigenValues[1] - SortedEigenValues[2]}{SortedEigenValues[1] + SortedEigenValues[2]} \f$
  *
  * Where:
- * \f$ p[i] = \max{SortedEigenValues[i], 0} / \sum_{i=0}^{2, SortedEigenValues[i]>0}{SortedEigenValues[i]} \f$
- * Then, \f$ if p[i] < 0, p[i]=0, if p[i] > 1, p[i]=1. \f$
- * \f$ \alpha_{i} = \left| SortedEigenVector[i] \right|* \frac{180}{\pi}\f$
- * Then, \f$ if \alpha_{i} > 90, \alpha_{i}=90. \f$
+ * - \f$ p[i] = max(SortedEigenValues[i], 0) / \sum_{i=0}^{2, SortedEigenValues[i]>0}{SortedEigenValues[i]} \f$
+ * - \f$ \alpha_{i} = \left| SortedEigenVector[i] \right|* \frac{180}{\pi}\f$
+ *
+ * With, 
+ * - \f$ if p[i] < 0, p[i]=0 \f$
+ * - \f$ if p[i] > 1, p[i]=1 \f$
+ * - \f$ if \alpha_{i} > 90, \alpha_{i}=90 \f$
  *
  * \ingroup SARPolarimetry
  *
