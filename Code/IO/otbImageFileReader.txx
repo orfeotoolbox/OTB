@@ -17,6 +17,7 @@
 =========================================================================*/
 #ifndef __otbImageFileReader_txx
 #define __otbImageFileReader_txx
+
 #include "otbImageFileReader.h"
 
 #include "itkMetaDataObject.h"
@@ -28,6 +29,7 @@
 #include "otbMetaDataKey.h"
 
 #include "otbGDALImageIO.h" //FIXME find a better way
+#include "otbTileMapImageIO.h"
 
 #include <itksys/SystemTools.hxx>
 #include <fstream>
@@ -364,8 +366,18 @@ ImageFileReader<TOutputImage>
   // Update otb Keywordlist
   ImageKeywordlist otb_kwl = ReadGeometry(lFileNameOssimKeywordlist);
 
-  // Update itk MetaData Dictionary
+  // Pass the depth parameter from the tilemap around
+  if (strcmp(this->m_ImageIO->GetNameOfClass(), "TileMapImageIO") == 0)
+    {
+    typename TileMapImageIO::Pointer imageIO = dynamic_cast<TileMapImageIO*>(this->GetImageIO());
+    std::ostringstream depth;
+    depth << imageIO->GetDepth();
+    otb_kwl.AddKey("depth", depth.str());
+    }
 
+  otbMsgDevMacro(<< otb_kwl);
+
+  // Update itk MetaData Dictionary
   itk::MetaDataDictionary& dict = this->m_ImageIO->GetMetaDataDictionary();
 
   // Don't add an empty ossim keyword list

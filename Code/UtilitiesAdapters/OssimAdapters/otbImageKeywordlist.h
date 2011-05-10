@@ -77,6 +77,8 @@ public:
   /** Clear a given field of the keyword list */
   virtual void ClearMetadataByKey(const std::string& key);
 
+  virtual void AddKey(const std::string& key, const std::string& value);
+
   virtual void convertToOSSIMKeywordlist(ossimKeywordlist& kwl) const;
 
   virtual void Print(std::ostream& os, itk::Indent indent = 0) const;

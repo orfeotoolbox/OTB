@@ -96,6 +96,13 @@ ClearMetadataByKey(const std::string& key)
 
 void
 ImageKeywordlist::
+AddKey(const std::string& key, const std::string& value)
+{
+  m_Keywordlist[key] = value;
+}
+
+void
+ImageKeywordlist::
 convertToOSSIMKeywordlist(ossimKeywordlist& kwl) const
 {
   ossimKeywordlist::KeywordMap ossimMap;
@@ -156,6 +163,7 @@ ReadGeometry(const std::string& filename)
   else
     {
     otbMsgDevMacro(<< "OSSIM Instantiate projection SUCCESS ! ");
+
     hasMetaData = projection->saveState(geom_kwl);
 
     // Free memory
@@ -182,20 +190,6 @@ ReadGeometry(const std::string& filename)
 
       if (projection)
         {
-// FIXME Temporarily deactivated
-/*        if (projection->getClassName() == "ossimTileMapModel")
-          {
-          //we need to pass the depth information which in on the IO to the projection
-          //to be handle throught the kwl
-          TileMapImageIO::Pointer imageIO = TileMapImageIO::New();
-          imageIO->SetFileName(filename);
-          // if we are here, we instanciated an ossimTileMapModel, so we should
-          // be able to create a TileMapImageIO
-          assert(!imageIO->CanReadFile(filename.c_str()));
-          imageIO->ReadImageInformation();
-          int depth = imageIO->GetDepth();
-          dynamic_cast<ossimplugins::ossimTileMapModel*>(projection)->setDepth(depth);
-          }*/
         hasMetaData = projection->saveState(geom_kwl);
         }
       }
