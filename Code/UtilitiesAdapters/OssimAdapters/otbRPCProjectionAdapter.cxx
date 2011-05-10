@@ -123,4 +123,36 @@ RPCProjectionAdapter::Solve(const GCPsContainerType& gcpContainer,
   otb_kwl.SetKeywordlist(geom_kwl);
 }
 
+
+void
+RPCProjectionAdapter
+::AddGroundRect( ImageKeywordlist& otb_kwl, 
+                 itk::Point<double, 2> orig, itk::Size<2> size)
+{
+  ossimGpt ul, ll, ur, lr;
+   // Upper left
+  ossimDpt imagePoint(orig[0], orig[1]);
+  m_RpcProjection->lineSampleToWorld(imagePoint, ul);
+  // Upper right
+  imagePoint = ossimDpt(orig[0], orig[1]+size[0]-1);
+  m_RpcProjection->lineSampleToWorld(imagePoint, ur);
+  // Lower left
+  imagePoint = ossimDpt(orig[0]+size[1]-1, orig[1]);
+  m_RpcProjection->lineSampleToWorld(imagePoint, ll);
+  // Lower right
+  imagePoint = ossimDpt(orig[0]+size[1]-1, orig[1]+size[0]-1);
+  m_RpcProjection->lineSampleToWorld(imagePoint, lr);
+ 
+
+  ossimKeywordlist geom_kwl;
+  otb_kwl.convertToOSSIMKeywordlist(geom_kwl);
+ 
+  ossimRefPtr<ossimRpcModel> rpcModel = new ossimRpcModel;
+  rpcModel->loadState( geom_kwl );
+  rpcModel->setGroundRect(ul, ur, lr, ll);
+  rpcModel->saveState(geom_kwl);
+  otb_kwl.SetKeywordlist(geom_kwl);
+}
+
+
 } // namespace otb

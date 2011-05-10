@@ -22,9 +22,6 @@
 
 #include "itkMetaDataObject.h"
 #include "otbMetaDataKey.h"
-#include "ossim/base/ossimDpt.h"
-#include "ossim/base/ossimGpt.h"
-#include "ossim/projection/ossimRpcModel.h"
 
 namespace otb {
 
@@ -308,35 +305,12 @@ GCPsToRPCSensorModelImageFilter<TImage>
   // Compute errors
   this->ComputeErrors();
 
-  // Compute corner coordinates
-  ossimGpt ul, ur, ll, lr;
   typename TImage::PointType startId = this->GetInput()->GetOrigin();
   typename TImage::SizeType size = this->GetInput()->GetLargestPossibleRegion().GetSize();
-  
-  // Upper left
-  ossimDpt imagePoint(startId[0], startId[1]);
-  m_RpcProjection->LineSampleToWorld(imagePoint, ul);
-  // Upper right
-  imagePoint = ossimDpt(startId[0], startId[1]+size[0]-1);
-  m_RpcProjection->LineSampleToWorld(imagePoint, ur);
-  // Lower left
-  imagePoint = ossimDpt(startId[0]+size[1]-1, startId[1]);
-  m_RpcProjection->LineSampleToWorld(imagePoint, ll);
-  // Lower right
-  imagePoint = ossimDpt(startId[0]+size[1]-1, startId[1]+size[0]-1);
-  m_RpcProjection->LineSampleToWorld(imagePoint, lr);
- 
 
-  ossimKeywordlist geom_kwl;
-  otb_kwl.convertToOSSIMKeywordlist(geom_kwl);
- 
-  ossimRefPtr<ossimRpcModel> rpcModel = new ossimRpcModel;
-  rpcModel->loadState( geom_kwl );
-  rpcModel->setGroundRect(ul, ur, lr, ll);
-  rpcModel->saveState(geom_kwl);
-  otb_kwl.SetKeywordlist(geom_kwl);
+  m_RpcProjection->AddGroundRect( otb_kwl, startId, size );
 
-  
+ 
   m_Keywordlist = otb_kwl;
 
   // Encapsulate it
