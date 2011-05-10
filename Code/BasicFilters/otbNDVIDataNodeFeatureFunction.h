@@ -27,9 +27,12 @@
 namespace otb
 {
 /** \class NDVIDataNodeFeatureFunction
-  * \brief TODO
+  * \brief Compute a NDVI based feature alongside a
+  * datanode.
   *
-  *
+  * This function compute a feature alongside a datanode.
+  * The feature is (NDVI >= threshold) per cent along the
+  * tested datanode.
   *
   * \ingroup Functions
   * \sa DataNodeImageFunction

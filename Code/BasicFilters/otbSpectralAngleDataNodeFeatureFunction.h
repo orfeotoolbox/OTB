@@ -28,9 +28,12 @@
 namespace otb
 {
 /** \class SpectralAngleDataNodeFeatureFunction
-  * \brief TODO
+  * \brief Compute a spectral angle based feature alongside a
+  * datanode.
   *
-  *
+  * This function compute a feature alongside a datanode.
+  * The feature is the mean spectral angle regarding a
+  * reference pixel alongside the tested datanode.
   *
   * \ingroup Functions
   * \sa DataNodeImageFunction
