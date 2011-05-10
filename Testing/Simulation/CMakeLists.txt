@@ -4,7 +4,7 @@
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
 SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
 SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
-SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
+SET(TEMP ${CMAKE_CURRENT_BINARY_DIR}/../Temporary)
 
 #Tolerance sur diff pixel image
 SET(TOL 0.0)
@@ -69,23 +69,23 @@ ADD_TEST(otbReduceSpectralResponseClassifierRAndNIR ${Simulation_TESTS2}
         )
 
         
-ADD_TEST(otbAtmosphericEffects ${Simulation_TESTS2}
-        otbAtmosphericEffects
-        ${RSR_DATA}/BD-CNES/JHU/becknic/manmade/txt/0092uuu.txt
-        ${RSR_DATA}/Rsr/SPOT5/HRG2/rep6S.dat
-        4 #nb band
-        4 #day
-        12 #month
-        27.3 #zenithSolarAngle
-        152.7 #azimutSolarAngle
-        2.5 #viewingZenitalAngle
-        -77.0 #viewingAzimutalAngle
-        1013. #atmoPressure
-        2.48134 #waterVaporAmount
-        0.34400 #ozoneAmount
-        1 #aerosolModelValue
-        0.199854 #aerosolOptical
-        )
+# ADD_TEST(otbAtmosphericEffects ${Simulation_TESTS2}
+#         otbAtmosphericEffects
+#         ${RSR_DATA}/BD-CNES/JHU/becknic/manmade/txt/0092uuu.txt
+#         ${RSR_DATA}/Rsr/SPOT5/HRG2/rep6S.dat
+#         4 #nb band
+#         4 #day
+#         12 #month
+#         27.3 #zenithSolarAngle
+#         152.7 #azimutSolarAngle
+#         2.5 #viewingZenitalAngle
+#         -77.0 #viewingAzimutalAngle
+#         1013. #atmoPressure
+#         2.48134 #waterVaporAmount
+#         0.34400 #ozoneAmount
+#         1 #aerosolModelValue
+#         0.199854 #aerosolOptical
+#         )
 
 ADD_TEST(otbSpatialisationTest ${Simulation_TESTS2}
         otbSpatialisationTest
