@@ -36,9 +36,9 @@ int OSMDownloader::Describe(ApplicationDescriptor* descriptor)
   descriptor->SetName("OSMDownloader");
   descriptor->SetDescription("Generate a vector data from OSM on the input image extend");
   descriptor->AddOption("InputImage", "Support to estimate the models on",
-                        "in",1, true, ApplicationDescriptor::InputImage);
+                        "in", 1, true, ApplicationDescriptor::InputImage);
   descriptor->AddOption("OSMKey", "OSM key (highway, buildings...)",
-                          "key",1, true, ApplicationDescriptor::String);
+                          "key", 1, true, ApplicationDescriptor::String);
   descriptor->AddOption("DEMDirectory", "DEM directory",
                         "dem", 1, false, ApplicationDescriptor::DirectoryName);
   descriptor->AddOption("Output", "OutputVectorData",
@@ -61,7 +61,6 @@ int OSMDownloader::Execute(otb::ApplicationOptionsResult* parseResult)
                                                       EnvelopeFilterType;
   typedef otb::VectorDataProperties<VectorDataType>   VectorDataPropertiesType;
   typedef otb::VectorDataFileWriter<VectorDataType>   VectorDataWriterType;
-
 
 
   //Instantiate
