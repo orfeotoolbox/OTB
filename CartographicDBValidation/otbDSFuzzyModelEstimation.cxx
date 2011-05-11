@@ -137,7 +137,6 @@ int DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseResult)
   vdReProjFilterRL->Update();
 
 
-
   vdWriter->SetInput(vdReProjFilterRL->GetOutput());
   vdWriter->SetFileName(parseResult->GetParameterString("Output"));
   vdWriter->Update();
