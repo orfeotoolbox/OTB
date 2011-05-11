@@ -105,9 +105,24 @@ public:
   typedef itk::DataObject::Pointer DataObjectPointer;
   typedef itk::DataObject          DataObject;
 
+  typedef std::pair< std::string, std::vector<double> > PairType;
+  typedef std::vector< PairType >                       DescriptorModelsType;;
+
   /** Descriptor model accessors. */
   virtual void AddDescriptor(std::string key, std::vector<double> model);
   virtual void ClearDescriptors();
+
+  void SetDescriptorModels( DescriptorModelsType model )
+  {
+    m_DescriptorModels = model;
+    this->Modified();
+  }
+
+  DescriptorModelsType GetDescriptorModels()
+  {
+    return m_DescriptorModels;
+  }
+
 
   /** Parameter accessors. */
   itkGetConstMacro(CriterionFormula, std::string);
@@ -146,8 +161,7 @@ private:
   void operator =(const Self&); //purposely not implemented
 
   // Descriptor bench
-  std::vector< std::pair<std::string, std::vector<double> > >
-                                                  m_DescriptorModels;
+  DescriptorModelsType                            m_DescriptorModels;
   std::vector< typename FuzzyVarType::Pointer >   m_FuzzyVars;
   LabelSetType                                    m_Universe, m_Hypothesis;
   double                                          m_Bel, m_Plau;

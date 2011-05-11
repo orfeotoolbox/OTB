@@ -109,7 +109,7 @@ ADD_TEST(fzTvVectorDataToDSValidatedVectorDataFilter ${Fuzzy_TESTS2}
  ${BASELINE_FILES}/fzTvDSValidatedRoadVectorDataOutput.shp
  ${TEMP}/fzTvDSValidatedRoadVectorDataOutput.shp
   otbVectorDataToDSValidatedVectorDataFilter
-    ${TEMP}/fzTvVectorDataToRoadDescriptionFilterOutput.shp
+    ${BASELINE_FILES}/fzTvVectorDataToRoadDescriptionFilterOutput.shp
     ${TEMP}/fzTvDSValidatedRoadVectorDataOutput.shp
 )
 SET_TESTS_PROPERTIES(fzTvVectorDataToDSValidatedVectorDataFilter PROPERTIES DEPENDS fzTvVectorDataToRoadDescriptionFilter)
