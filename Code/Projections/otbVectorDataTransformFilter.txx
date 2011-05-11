@@ -28,8 +28,7 @@
 * C99 functions. Unless the compiler subverts your efforts, you can
 * usually define isnan as (http://www.dinkumware.com):
 **/
-#define LocalIsNaN(x) ((x)!=(x))
-
+#define LocalIsNaN(x) ((x) != (x))
 
 namespace otb
 {
@@ -180,7 +179,7 @@ VectorDataTransformFilter<TInputVectorData,TOutputVectorData>
   InputChildrenListType children = source->GetChildrenList();
 
   // For each child
-  for(typename InputChildrenListType::iterator it = children.begin(); it!=children.end();++it)
+  for(typename InputChildrenListType::iterator it = children.begin(); it != children.end();++it)
     {
     typename OutputInternalTreeNodeType::Pointer newContainer;
 
@@ -231,7 +230,7 @@ VectorDataTransformFilter<TInputVectorData,TOutputVectorData>
       case FEATURE_LINE:
       {
       LinePointerType line = this->ReprojectLine(dataNode->GetLine());
-      if( line->GetVertexList()->Size()!= 0 )
+      if( line->GetVertexList()->Size() != 0 )
         {
         newDataNode->SetLine(this->ReprojectLine(dataNode->GetLine()));
         newContainer = OutputInternalTreeNodeType::New();
@@ -251,7 +250,7 @@ VectorDataTransformFilter<TInputVectorData,TOutputVectorData>
         if( it.Get()->GetVertexList()->Size() == 0 )
           ok = false;
         }
-      if(polyExt->GetVertexList()->Size()!= 0 && ok == true)
+      if(polyExt->GetVertexList()->Size() != 0 && ok == true)
         {
         newDataNode->SetPolygonExteriorRing(this->ReprojectPolygon(dataNode->GetPolygonExteriorRing()));
         newDataNode->SetPolygonInteriorRings(this->ReprojectPolygonList(dataNode->GetPolygonInteriorRings()));

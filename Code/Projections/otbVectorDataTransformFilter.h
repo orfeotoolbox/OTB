@@ -61,7 +61,7 @@ public:
   typedef typename GenericTransformType::Pointer GenericTransformPointerType;
 
   typedef itk::Vector<double, 2> SpacingType;
-  typedef itk::Point<double, 2> OriginType;
+  typedef itk::Point<double, 2>  OriginType;
   
   typedef typename InputVectorDataType::DataNodePointerType  InputDataNodePointerType;
   typedef typename OutputVectorDataType::DataNodeType        OutputDataNodeType;
