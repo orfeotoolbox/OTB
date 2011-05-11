@@ -34,7 +34,7 @@ int otbFuzzyDescriptorsModelManagerTest(int argc, char* argv[])
   otb::FuzzyDescriptorsModelManager::ParameterType        param;
   otb::FuzzyDescriptorsModelManager::PairType             couple;
 
-  couple.first = "model1";
+  couple.first = "desc1";
   param.push_back(0);
   param.push_back(1);
   couple.second = param;
@@ -46,7 +46,7 @@ int otbFuzzyDescriptorsModelManagerTest(int argc, char* argv[])
   param.push_back(7);
   param.push_back(6);
 
-  otb::FuzzyDescriptorsModelManager::AddDescriptor("model2", param, model);
+  otb::FuzzyDescriptorsModelManager::AddDescriptor("desc2", param, model);
 
   otb::FuzzyDescriptorsModelManager::Save(argv[1], model);
 

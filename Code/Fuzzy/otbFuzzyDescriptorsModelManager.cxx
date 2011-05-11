@@ -185,7 +185,7 @@ FuzzyDescriptorsModelManager
   for (unsigned int i = 0; i < model.size(); i++)
     {   
       // The current statistic
-      TiXmlElement * desc = new TiXmlElement("Model");
+      TiXmlElement * desc = new TiXmlElement("Descriptor");
       desc->SetAttribute("name", model[i].first.c_str());
       root->LinkEndChild( desc );
 
