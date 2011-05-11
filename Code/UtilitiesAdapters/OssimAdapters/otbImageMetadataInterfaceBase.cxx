@@ -389,14 +389,14 @@ ImageMetadataInterfaceBase::GetXPixelSpacing() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  if (!imageKeywordlist.HasKey("meters_per_pixel_x"))
+  if (imageKeywordlist.HasKey("meters_per_pixel_x"))
     {
     std::string valueString = imageKeywordlist.GetMetadataByKey("meters_per_pixel_x");
     double value = atof(valueString.c_str());
     return value;
     }
 
-  if (!imageKeywordlist.HasKey("pixel_spacing"))
+  if (imageKeywordlist.HasKey("pixel_spacing"))
     {
     std::string valueString = imageKeywordlist.GetMetadataByKey("pixel_spacing");
     double value = atof(valueString.c_str());
@@ -417,14 +417,14 @@ ImageMetadataInterfaceBase::GetYPixelSpacing() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  if (!imageKeywordlist.HasKey("meters_per_pixel_y"))
+  if (imageKeywordlist.HasKey("meters_per_pixel_y"))
     {
     std::string valueString = imageKeywordlist.GetMetadataByKey("meters_per_pixel_y");
     double value = atof(valueString.c_str());
     return value;
     }
 
-  if (!imageKeywordlist.HasKey("pixel_spacing"))
+  if (imageKeywordlist.HasKey("pixel_spacing"))
     {
     std::string valueString = imageKeywordlist.GetMetadataByKey("pixel_spacing");
     double value = atof(valueString.c_str());
