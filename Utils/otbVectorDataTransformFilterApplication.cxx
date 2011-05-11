@@ -40,9 +40,13 @@ int VectorDataTransformFilterApplication::Describe(ApplicationDescriptor* descri
   descriptor->AddOption("Output","Output vector data","out", 1, true, ApplicationDescriptor::FileName);
   descriptor->AddOption("TanslationX","Translation in the X direction","tx", 1, false, ApplicationDescriptor::Real);
   descriptor->AddOption("TanslationY","Translation in the Y direction","ty", 1, false, ApplicationDescriptor::Real);
-  descriptor->AddOption("Angle","Angle of the rotation to apply in degrees","rot", 1, false, ApplicationDescriptor::Real);
-  descriptor->AddOption("CenterX","The first coordinate of the rotation center","cx", 1, false, ApplicationDescriptor::Real);
-  descriptor->AddOption("CenterY","The second coordinate of the rotation center","cy", 1, false, ApplicationDescriptor::Real);
+  descriptor->AddOption("Angle",
+                        "Angle of the rotation to apply in degrees","rot", 
+                        1, false, ApplicationDescriptor::Real);
+  descriptor->AddOption("CenterX","The first coordinate of the rotation center","cx", 1, 
+                        false, ApplicationDescriptor::Real);
+  descriptor->AddOption("CenterY","The second coordinate of the rotation center","cy", 1, 
+                        false, ApplicationDescriptor::Real);
   descriptor->AddOption("Scale","The scale to apply ","sc", 1, false, ApplicationDescriptor::Real);
   
   return EXIT_SUCCESS;
