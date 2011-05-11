@@ -23,6 +23,7 @@
 #include "otbVectorData.h"
 #include "otbVectorDataFileReader.h"
 #include "otbVectorDataFileWriter.h"
+#include "otbFuzzyDescriptorsModelManager.h"
 
 int otbVectorDataToDSValidatedVectorDataFilterNew(int argc, char* argv[])
 {
@@ -31,12 +32,11 @@ int otbVectorDataToDSValidatedVectorDataFilterNew(int argc, char* argv[])
   
   typedef otb::VectorDataToDSValidatedVectorDataFilter<VectorDataType, PrecisionType>
                                           VectorDataValidationFilterType;
-  /*
+
   VectorDataValidationFilterType::Pointer filter =
     VectorDataValidationFilterType::New();
   
-  std::cout<<filter<<std::endl;
-  */
+  std::cout << filter << std::endl;
 
   return EXIT_SUCCESS;
 }
@@ -57,7 +57,8 @@ int otbVectorDataToDSValidatedVectorDataFilter(int argc, char* argv[])
                                           VectorDataValidationFilterType;
   typedef VectorDataValidationFilterType::LabelSetType
                                           LabelSetType;
-  
+  typedef otb::FuzzyDescriptorsModelManager
+                                          FuzzyManagerType;
   VectorDataReaderType::Pointer vdReader = VectorDataReaderType::New();
   VectorDataWriterType::Pointer vdWriter = VectorDataWriterType::New();
 
@@ -68,12 +69,21 @@ int otbVectorDataToDSValidatedVectorDataFilter(int argc, char* argv[])
   vdReader->Update();
 
   filter->SetInput(vdReader->GetOutput());
+  //filter->GetDescriptorModels();
+  FuzzyManagerType::Print(filter->GetDescriptorModels());
   LabelSetType hypothesis;
-  hypothesis.insert("NDVI");
+  hypothesis.insert("NDVI_");
   hypothesis.insert("RADIOM");
   //hypothesis.insert("LSD_");
   //hypothesis.insert("SHADOW_");
   filter->SetHypothesis(hypothesis);
+  std::vector<double> ndviFuzzyModel;
+  ndviFuzzyModel.push_back(0.15);
+  ndviFuzzyModel.push_back(0.25);
+  ndviFuzzyModel.push_back(0.35);
+  ndviFuzzyModel.push_back(0.8);
+  filter->SetFuzzyModel("NDVI", ndviFuzzyModel);
+  FuzzyManagerType::Print(filter->GetDescriptorModels());
 
   vdWriter->SetFileName(outputVD);
   vdWriter->SetInput(filter->GetOutput());
