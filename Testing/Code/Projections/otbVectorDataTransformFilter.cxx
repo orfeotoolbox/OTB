@@ -25,10 +25,7 @@
 #include "otbVectorDataFileReader.h"
 #include "otbVectorDataFileWriter.h"
 
-
-#include "otbGeoInformationConversion.h"
 #include "otbVectorDataProjectionFilter.h"
-
 
 // common typedefs
 typedef otb::VectorData<>                      VectorDataType;
@@ -66,7 +63,6 @@ int otbVectorDataTransformFilter (int argc, char * argv[])
   VDProjectionFilterType::Pointer  vdproj = VDProjectionFilterType::New();
   vdproj->SetInput(vdreader->GetOutput());
   vdproj->SetInputProjectionRef(vdreader->GetOutput()->GetProjectionRef());
-  std::cout <<"vdreader projection ref "<<  vdreader->GetOutput()->GetProjectionRef() << std::endl;
   vdproj->SetOutputKeywordList(reader->GetOutput()->GetImageKeywordlist());
   vdproj->SetOutputProjectionRef(reader->GetOutput()->GetProjectionRef());
   
@@ -89,7 +85,6 @@ int otbVectorDataTransformFilter (int argc, char * argv[])
   VDProjectionFilterType::Pointer  reverseVdProj = VDProjectionFilterType::New();
   reverseVdProj->SetInput(transformFilter->GetOutput());
   reverseVdProj->SetOutputProjectionRef(vdreader->GetOutput()->GetProjectionRef());
-  std::cout <<"vdreader projection ref 2  "<<  vdreader->GetOutput()->GetProjectionRef() << std::endl;
   reverseVdProj->SetInputKeywordList(reader->GetOutput()->GetImageKeywordlist());
   reverseVdProj->SetInputProjectionRef(reader->GetOutput()->GetProjectionRef());
 
