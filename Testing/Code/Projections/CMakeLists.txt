@@ -1087,6 +1087,22 @@ ADD_TEST(prTvGeographicalDistance ${PROJECTIONS_TESTS4}
   ${EPSILON_4}
 )
 
+
+#----- otb::VectorDataTransformFilter ---------------------
+ADD_TEST(prTuVectorDataTransformFilterNew ${PROJECTIONS_TESTS4}
+  otbVectorDataTransformFilterNew)
+
+ADD_TEST(prTvVectorDataTransformFilter ${PROJECTIONS_TESTS4}
+  --compare-ogr ${EPSILON_4}
+  ${BASELINE_FILES}/prTvVectorDataTransformFilter_Translation.shp
+   ${TEMP}/prTvVectorDataTransformFilter_Translation.shp
+ otbVectorDataTransformFilter
+  ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+  ${INPUTDATA}/ToulouseRoad-examples.shp
+  ${TEMP}/prTvVectorDataTransformFilter_Translation.shp
+)
+
+
 #=======================================================================================
 SET(Projections_SRCS1
 otbProjectionsTests1.cxx
@@ -1148,6 +1164,7 @@ otbImageToEnvelopeVectorDataFilter.cxx
 otbImageToGenericRSOutputParameters.cxx
 otbRationalTransform.cxx
 otbGeographicalDistance.cxx
+otbVectorDataTransformFilter.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbProjectionsTests1 "${Projections_SRCS1}" "OTBProjections;OTBIO;OTBTesting")
