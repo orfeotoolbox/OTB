@@ -87,6 +87,14 @@ GetMetadataByKey(const std::string& key) const
   return it->second;
 }
 
+bool
+ImageKeywordlist::
+HasKey(const std::string& key) const
+{
+  KeywordlistMap::const_iterator it = m_Keywordlist.find(key);
+  return (it != m_Keywordlist.end());
+}
+
 void
 ImageKeywordlist::
 ClearMetadataByKey(const std::string& key)

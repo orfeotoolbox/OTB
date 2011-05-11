@@ -21,7 +21,7 @@
 #include "otbMacro.h"
 #include "otbImageKeywordlist.h"
 #include "itkMetaDataObject.h"
-#include "base/ossimKeywordlist.h"
+#include "itksys/SystemTools.hxx"
 
 namespace otb
 {
@@ -292,91 +292,88 @@ ImageMetadataInterfaceBase::GetLowerRightCorner() const
 ImageMetadataInterfaceBase::ImageKeywordlistType
 ImageMetadataInterfaceBase::GetImageKeywordlist()
 {
-  ImageKeywordlistType ImageKeywordlist;
+  ImageKeywordlistType imageKeywordlist;
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
   if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
     {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, ImageKeywordlist);
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
-  return (ImageKeywordlist);
+  return (imageKeywordlist);
 }
 
 const ImageMetadataInterfaceBase::ImageKeywordlistType
 ImageMetadataInterfaceBase::GetImageKeywordlist() const
 {
-  ImageKeywordlistType ImageKeywordlist;
+  ImageKeywordlistType imageKeywordlist;
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
   if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
     {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, ImageKeywordlist);
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
-  return (ImageKeywordlist);
+  return (imageKeywordlist);
 }
 
 
 std::string
 ImageMetadataInterfaceBase::GetSensorID() const
 {
-  ImageKeywordlistType ImageKeywordlist;
+  ImageKeywordlistType imageKeywordlist;
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
   if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
     {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, ImageKeywordlist);
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
-  ossimKeywordlist kwl;
-  ImageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  if (!imageKeywordlist.HasKey("sensor"))
+    {
+    return "";
+    }
 
-  std::string key = "sensor";
-  ossimString keywordString = kwl.find(key.c_str());
-  std::string output(keywordString.chars());
-
-  return output;
+  return imageKeywordlist.GetMetadataByKey("sensor");
 }
 
 unsigned int
 ImageMetadataInterfaceBase::GetNumberOfBands() const
 {
-  ImageKeywordlistType ImageKeywordlist;
+  ImageKeywordlistType imageKeywordlist;
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
   if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
     {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, ImageKeywordlist);
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
-  ossimKeywordlist kwl;
-  ImageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  std::string key = "support_data.number_bands";
-  ossimString keywordString = kwl.find(key.c_str());
-  return keywordString.toUInt32();
+
+  if (!imageKeywordlist.HasKey("support_data.number_bands"))
+    {
+    return 0;
+    }
+
+  std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.number_bands");
+  unsigned int value = atoi(valueString.c_str());
+  return value;
 }
 
 std::vector<std::string>
 ImageMetadataInterfaceBase::GetBandName() const
 {
-  ImageKeywordlistType ImageKeywordlist;
+  ImageKeywordlistType imageKeywordlist;
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
   if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
     {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, ImageKeywordlist);
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
-  ossimKeywordlist kwl;
-  ImageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  std::string              key = "support_data.band_name";
-  ossimString              keywordString = kwl.find(key.c_str());
-  ossimString              separatorList = " /";
-  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+
   std::vector<std::string> outputValues;
-  for (unsigned int i = 0; i < keywordStrings.size(); ++i)
+  if (!imageKeywordlist.HasKey("support_data.band_name")) 
     {
-    if (!keywordStrings[i].empty())
-      {
-      outputValues.push_back(keywordStrings[i].chars());
-      }
+    return outputValues;
     }
+
+  std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.band_name");
+  itksys::SystemTools::Split(valueString.c_str(), outputValues, '/');
 
   return outputValues;
 }
@@ -392,22 +389,21 @@ ImageMetadataInterfaceBase::GetXPixelSpacing() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-
-  std::string key;
-  ossimString keywordString;
-
-  key = "meters_per_pixel_x";
-  keywordString = kwl.find(key.c_str());
-  if (!keywordString.empty())
+  if (!imageKeywordlist.HasKey("meters_per_pixel_x"))
     {
-    return keywordString.toDouble();
+    std::string valueString = imageKeywordlist.GetMetadataByKey("meters_per_pixel_x");
+    double value = atof(valueString.c_str());
+    return value;
     }
-  key = "pixel_spacing";
-  keywordString = kwl.find(key.c_str());
 
-  return keywordString.toDouble();
+  if (!imageKeywordlist.HasKey("pixel_spacing"))
+    {
+    std::string valueString = imageKeywordlist.GetMetadataByKey("pixel_spacing");
+    double value = atof(valueString.c_str());
+    return value;
+    }
+
+  return 0;
 }
 
 double
@@ -421,21 +417,22 @@ ImageMetadataInterfaceBase::GetYPixelSpacing() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  std::string key;
-  ossimString keywordString;
-
-  key = "meters_per_pixel_y";
-  keywordString = kwl.find(key.c_str());
-  if (!keywordString.empty())
+  if (!imageKeywordlist.HasKey("meters_per_pixel_y"))
     {
-    return keywordString.toDouble();
+    std::string valueString = imageKeywordlist.GetMetadataByKey("meters_per_pixel_y");
+    double value = atof(valueString.c_str());
+    return value;
     }
-  key = "pixel_spacing";
-  keywordString = kwl.find(key.c_str());
 
-  return keywordString.toDouble();
+  if (!imageKeywordlist.HasKey("pixel_spacing"))
+    {
+    std::string valueString = imageKeywordlist.GetMetadataByKey("pixel_spacing");
+    double value = atof(valueString.c_str());
+    return value;
+    }
+
+  return 0;
+ 
 }
 
 
@@ -449,7 +446,7 @@ ImageMetadataInterfaceBase::PrintSelf(std::ostream& os, itk::Indent indent, cons
   VectorType               vvalue;
   double                   dvalue = 0.;
   OTB_GCP                  gcpvalue;
-  ImageKeywordlist         ossimvalue;
+  ImageKeywordlist         kwl;
 // an extra dependency just for printing is a bad idea.
 //  VectorDataKeywordlist    vectorDataKeywordlistValue;
   unsigned int             i(0);
@@ -498,10 +495,10 @@ ImageMetadataInterfaceBase::PrintSelf(std::ostream& os, itk::Indent indent, cons
         gcpvalue.Print(os);
         break;
       case MetaDataKey::TOSSIMKEYWORDLIST:
-        itk::ExposeMetaData<ImageKeywordlist>(dict2, keys[itkey], ossimvalue);
+        itk::ExposeMetaData<ImageKeywordlist>(dict2, keys[itkey], kwl);
 
         os << indent << "---> " << keys[itkey] << std::endl;
-        ossimvalue.Print(os);
+        kwl.Print(os);
         break;
 //      case MetaDataKey::TVECTORDATAKEYWORDLIST:
 //        itk::ExposeMetaData<VectorDataKeywordlist>(dict2, keys[itkey], vectorDataKeywordlistValue);
