@@ -91,10 +91,10 @@ FuzzyDescriptorsModelManager
 
 FuzzyDescriptorsModelManager::DescriptorsModelType
 FuzzyDescriptorsModelManager
-::Read(const char * filename)
+::Read(const std::string & filename)
 {
   // Check if the filename is not empty
-  if( filename == NULL )
+  if( filename.empty() == true )
     {
       itkGenericExceptionMacro(<<"The XML output FileName is empty");
     }
@@ -107,7 +107,7 @@ FuzzyDescriptorsModelManager
     }
 
   // Open the xml file
-  TiXmlDocument doc(filename);
+  TiXmlDocument doc(filename.c_str());
   if (!doc.LoadFile())
     {
     itkGenericExceptionMacro(<<"Can't open file "<<filename);
@@ -157,10 +157,10 @@ FuzzyDescriptorsModelManager
 
 void
 FuzzyDescriptorsModelManager
-::Save(const char * filename, DescriptorsModelType & model )
+::Save(const std::string & filename, DescriptorsModelType & model )
 {
   // Check if the filename is not empty
-  if( filename == NULL )
+  if( filename.empty() == true )
     {
       itkGenericExceptionMacro(<<"The XML output FileName is empty");
     }
@@ -201,7 +201,7 @@ FuzzyDescriptorsModelManager
     }
   
   // Finally, write the file
-  doc.SaveFile( filename );
+  doc.SaveFile( filename.c_str() );
 }
 
 

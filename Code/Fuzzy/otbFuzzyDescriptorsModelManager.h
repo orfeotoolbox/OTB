@@ -53,9 +53,9 @@ public:
   /** Print a model */
   static void Print( const DescriptorsModelType & descModel );
   /** Read a model from a xml file */
-  static DescriptorsModelType Read(const char * filename);
+  static DescriptorsModelType Read(const std::string & filename);
   /** Write a model in a xml file */
-  static void Save(const char * filename, DescriptorsModelType & model );
+  static void Save(const std::string & filename, DescriptorsModelType & model );
 
   FuzzyDescriptorsModelManager();
   virtual ~FuzzyDescriptorsModelManager() {}
