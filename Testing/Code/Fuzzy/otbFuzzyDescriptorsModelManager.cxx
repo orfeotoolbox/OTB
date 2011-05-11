@@ -19,6 +19,7 @@
 
 #include "otbFuzzyDescriptorsModelManager.h"
 #include <iostream>
+#include <stdlib.h>
 
 
 int otbFuzzyDescriptorsModelManagerNew(int argc, char* argv[])
