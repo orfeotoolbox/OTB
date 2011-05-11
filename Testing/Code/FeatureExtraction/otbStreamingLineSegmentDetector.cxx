@@ -21,15 +21,18 @@
 #include "otbImageFileReader.h"
 #include "otbVectorDataFileWriter.h"
 
+#include "otbVectorDataSourceImageToImageFilterAdapter.h"
+#include "otbPersistentImageToVectorDataFilter.h"
+#include "otbPersistentFilterStreamingDecorator.h"
+
 int otbStreamingLineSegmentDetectorNew(int argc, char * argv[])
 {
-
   typedef float InputPixelType;
   const unsigned int Dimension = 2;
 
   /** Typedefs */
   typedef otb::Image<InputPixelType,  Dimension>       ImageType;
-  typedef otb::StreamingLineSegmentDetector<ImageType> StreamingLSDFilterType;
+  typedef otb::StreamingLineSegmentDetector<ImageType>::FilterType StreamingLSDFilterType;
 
   StreamingLSDFilterType::Pointer lsdFilter = StreamingLSDFilterType::New();
 
@@ -48,24 +51,23 @@ int otbStreamingLineSegmentDetector(int argc, char * argv[])
   typedef otb::Image<InputPixelType,  Dimension> ImageType;
   typedef otb::ImageFileReader<ImageType>        ReaderType;
 
-  typedef otb::StreamingLineSegmentDetector<ImageType> StreamingLSDFilterType;
-  typedef StreamingLSDFilterType::VectorDataType       VectorDataType;
-  typedef otb::VectorDataFileWriter<VectorDataType>    WriterType;
+  typedef otb::StreamingLineSegmentDetector<ImageType>::FilterType             StreamingLineSegmentDetectorType;
+  typedef StreamingLineSegmentDetectorType::FilterType::OutputVectorDataType   OutputVectorDataType;
+  typedef otb::VectorDataFileWriter<OutputVectorDataType>                      WriterType;
 
-  StreamingLSDFilterType::Pointer lsdFilter = StreamingLSDFilterType::New();
   ReaderType::Pointer             reader = ReaderType::New();
+  StreamingLineSegmentDetectorType::Pointer lsdFilter = StreamingLineSegmentDetectorType::New();
   WriterType::Pointer             writer = WriterType::New();
 
   reader->SetFileName(argv[1]);
   reader->GenerateOutputInformation();
-  lsdFilter->SetInput(reader->GetOutput());
-  //lsdFilter->SetThreadDistanceThreshold(10.);
+  lsdFilter->GetFilter()->SetInput(reader->GetOutput());
+  lsdFilter->GetStreamer()->SetNumberOfLinesStrippedStreaming(atoi(argv[3]));
   lsdFilter->Update();
 
   writer->SetFileName(argv[2]);
-  writer->SetInput(lsdFilter->GetOutputVectorData());
+  writer->SetInput(lsdFilter->GetFilter()->GetOutputVectorData());
   writer->Update();
 
   return EXIT_SUCCESS;
 }
-

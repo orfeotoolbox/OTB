@@ -1315,13 +1315,24 @@ ADD_TEST(feTvRegionImageToRectangularPathListFilter ${FEATUREEXTRACTION_TESTS14}
 ADD_TEST(feTuStreamingLineSegmentDetectorNew ${FEATUREEXTRACTION_TESTS15}
     otbStreamingLineSegmentDetectorNew)
 
-ADD_TEST(feTvStreamingLineSegmentDetector ${FEATUREEXTRACTION_TESTS15}
+ADD_TEST(feTvStreamingLineSegmentDetector10 ${FEATUREEXTRACTION_TESTS15}
 --compare-ogr  ${EPSILON_8}
-     ${BASELINE_FILES}/feTvStreamingLineSegmentDetectorOutput.shp
-     ${TEMP}/feTvStreamingLineSegmentDetectorOutput.shp
+     ${BASELINE_FILES}/feTvStreamingLineSegmentDetectorOutput10.shp
+     ${TEMP}/feTvStreamingLineSegmentDetectorOutput10.shp
     otbStreamingLineSegmentDetector
       ${INPUTDATA}/scene.png
-      ${TEMP}/feTvStreamingLineSegmentDetectorOutput.shp
+      ${TEMP}/feTvStreamingLineSegmentDetectorOutput10.shp
+      10
+)
+
+ADD_TEST(feTvStreamingLineSegmentDetector1000 ${FEATUREEXTRACTION_TESTS15}
+--compare-ogr  ${EPSILON_8}
+     ${BASELINE_FILES}/feTvStreamingLineSegmentDetectorOutput1000.shp
+     ${TEMP}/feTvStreamingLineSegmentDetectorOutput1000.shp
+    otbStreamingLineSegmentDetector
+      ${INPUTDATA}/scene.png
+      ${TEMP}/feTvStreamingLineSegmentDetectorOutput1000.shp
+      1000
 )
 
 # -------            otb::SqrtSpectralAngleImageFilter (Ossman)------------------------------
