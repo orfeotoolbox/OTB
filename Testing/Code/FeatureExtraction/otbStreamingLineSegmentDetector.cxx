@@ -21,7 +21,6 @@
 #include "otbImageFileReader.h"
 #include "otbVectorDataFileWriter.h"
 
-#include "otbVectorDataSourceImageToImageFilterAdapter.h"
 #include "otbPersistentImageToVectorDataFilter.h"
 #include "otbPersistentFilterStreamingDecorator.h"
 
