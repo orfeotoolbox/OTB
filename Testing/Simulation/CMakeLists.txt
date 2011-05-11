@@ -4,11 +4,19 @@
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
 SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
 SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
+SET(SPECTRUM_DB ${RSR_DATA}/BD-CNES)
 SET(TEMP ${CMAKE_CURRENT_BINARY_DIR}/../Temporary)
+
+SET(SRCLASS0 ${SPECTRUM_DB}/JHU/becknic/manmade/txt)
+SET(SRCLASS1 ${SPECTRUM_DB}/JHU/becknic/water/txt)
+SET(SRCLASS2 ${SPECTRUM_DB}/JHU/becknic/soils/txt)
+SET(SRCLASS3 ${SPECTRUM_DB}/JHU/becknic/vegetation/txt)
+SET(SRCLASS4 ${SPECTRUM_DB}/JHU/becknic/rocks/sedimentary/powder/0_75/txt)
 
 #Tolerance sur diff pixel image
 SET(TOL 0.0)
-SET(EPSILON 0.01)
+SET(EPSILON 0.00001)
+SET(EPSILON_PROSPECT 0.01)
 SET(Simulation_TESTS1 ${CXX_TEST_PATH}/otbSimulationTests1)
 SET(Simulation_TESTS2 ${CXX_TEST_PATH}/otbSimulationTests2)
 SET(Simulation_TESTS3 ${CXX_TEST_PATH}/otbSimulationTests3)
@@ -32,7 +40,7 @@ ADD_TEST(otbSpectralResponseNew ${Simulation_TESTS2}
 
 ADD_TEST(otbSpectralResponse ${Simulation_TESTS2}
         otbSpectralResponse
-        ${RSR_DATA}/BD-CNES/JHU/becknic/manmade/txt/0092uuu.txt
+        ${SPECTRUM_DB}/JHU/becknic/manmade/txt/0092uuu.txt
         2.5 #lambda
         )
 
@@ -42,7 +50,7 @@ ADD_TEST(otbSatelliteRSRNew ${Simulation_TESTS2}
 
 ADD_TEST(otbSatelliteRSR ${Simulation_TESTS2}
         otbSatelliteRSR
-        ${RSR_DATA}/Rsr/SPOT5/HRG2/rep6S.dat
+        ${INPUTDATA}/Radiometry/SPOT5/HRG2/rep6S.dat
         4 #nb band
         2.5 #lambda
         2 #num band
@@ -54,25 +62,25 @@ ADD_TEST(otbReduceSpectralResponseNew ${Simulation_TESTS2}
 
 ADD_TEST(otbReduceSpectralResponse ${Simulation_TESTS2}
         otbReduceSpectralResponse
-        ${RSR_DATA}/BD-CNES/jpl/beckman/minerals/Arsenate/txt/A01Ac.txt
-        ${RSR_DATA}/Rsr/SPOT5/HRG2/rep6S.dat
+        ${SPECTRUM_DB}/jpl/beckman/minerals/Arsenate/txt/A01Ac.txt
+        ${INPUTDATA}/Radiometry/SPOT5/HRG2/rep6S.dat
         4 #nb band
         )
 
 ADD_TEST(otbReduceSpectralResponseClassifierRAndNIR ${Simulation_TESTS2}
         otbReduceSpectralResponseClassifierRAndNIR
-        ${RSR_DATA}/BD-CNES/JHU/becknic/manmade/txt/0092uuu.txt
-        ${RSR_DATA}/Rsr/SPOT5/HRG2/rep6S.dat
+        ${SPECTRUM_DB}/JHU/becknic/manmade/txt/0092uuu.txt
+        ${INPUTDATA}/Radiometry/SPOT5/HRG2/rep6S.dat
         4 #nb band
         1 #red index
         2 #NIR index
         )
 
-        
+#FIXME uncomment this test and make it compatible with filters able to read filter function values (rep6S.dat)        
 # ADD_TEST(otbAtmosphericEffects ${Simulation_TESTS2}
 #         otbAtmosphericEffects
-#         ${RSR_DATA}/BD-CNES/JHU/becknic/manmade/txt/0092uuu.txt
-#         ${RSR_DATA}/Rsr/SPOT5/HRG2/rep6S.dat
+#         ${SPECTRUM_DB}/JHU/becknic/manmade/txt/0092uuu.txt
+#         ${INPUTDATA}/Radiometry/SPOT5/HRG2/rep6S.dat
 #         4 #nb band
 #         4 #day
 #         12 #month
@@ -94,20 +102,20 @@ ADD_TEST(otbSpatialisationTest ${Simulation_TESTS2}
         
 ADD_TEST(otbLabelMapToSimulatedImageFilterTest ${Simulation_TESTS2}
         otbLabelMapToSimulatedImageFilterTest
-        ${RSR_DATA}/Shapefile/culturesWithAndWithoutPath.shp
+        ${INPUTDATA}/Simulation/culturesWithAndWithoutPath.shp
 #         /home2/arnaud/PROJETS/SimuCapteur/data/largeInput.shp
-        ${RSR_DATA}/Rsr/SPOT5/HRG2/rep6S.dat
+        ${INPUTDATA}/Radiometry/SPOT5/HRG2/rep6S.dat
         4 #nb bands
-        ${RSR_DATA}/BD-CNES/jpl/beckman/minerals/ #root path of spectrum
+        ${SPECTRUM_DB}/jpl/beckman/minerals/ #root path of spectrum
         ${TEMP}/LabelMapToSimulatedImageFilterTest.tif
         )
         
 ADD_TEST(otbImageSimulationMethodWithVectorDataTest ${Simulation_TESTS2}
         otbImageSimulationMethodWithVectorDataTest
-        ${RSR_DATA}/Shapefile/stickPolygons.shp
-        ${RSR_DATA}/Rsr/SPOT5/HRG2/rep6S.dat
+        ${INPUTDATA}/Simulation/stickPolygons.shp
+        ${INPUTDATA}/Radiometry/SPOT5/HRG2/rep6S.dat
         4 #nb bands
-        ${RSR_DATA}/BD-CNES/ #root path of spectrum
+        ${SPECTRUM_DB}/ #root path of spectrum
         3 #prolate radius
         ${TEMP}/ImageSimulationMethodTest.tif
         ${TEMP}/LabelImageSimulationMethodTest.tif
@@ -115,9 +123,9 @@ ADD_TEST(otbImageSimulationMethodWithVectorDataTest ${Simulation_TESTS2}
         
 ADD_TEST(otbImageSimulationMethodWithSpatialisationTest ${Simulation_TESTS2}
         otbImageSimulationMethodWithSpatialisationTest
-        ${RSR_DATA}/Rsr/SPOT5/HRG2/rep6S.dat
+        ${INPUTDATA}/Radiometry/SPOT5/HRG2/rep6S.dat
         4 #nb bands
-        ${RSR_DATA}/BD-CNES/ #root path of spectrum
+        ${SPECTRUM_DB}/ #root path of spectrum
         3 #prolate radius
         ${TEMP}/ImageSimulationMethodWithSpatialisationTest.tif
         ${TEMP}/LabelImageSimulationMethodWithSpatialisationTest.tif
@@ -143,8 +151,10 @@ ADD_TEST(otbProspectReflTest ${Simulation_TESTS3}
         ${TEMP}/refl.txt
         )
 
+#FIXME The tolerance is set to 0.01
+#need to investigate differences between matlab baselines and otb implementation
 ADD_TEST(otbProspectTransTest ${Simulation_TESTS3}
-   --compare-ascii ${EPSILON} ${BASELINE_FILES}/prospect_trans.txt
+   --compare-ascii ${EPSILON_2} ${BASELINE_FILES}/prospect_trans.txt
                    ${TEMP}/trans.txt
         otbProspectTransTest
         30.0 #cab
@@ -211,39 +221,39 @@ ADD_TEST(rsrSVMClassifier ${Simulation_TESTS4}
         ${SRCLASS2} 
         ${SRCLASS3} 
         ${SRCLASS4} 
-        ${RSR_DATA}/Rsr/SPOT5/HRG2/rep6S.dat
+        ${INPUTDATA}/Radiometry/SPOT5/HRG2/rep6S.dat
         4 #nbBands
         0.1 #percentage of validation files
         )
         
-ADD_TEST(atmosphericCorrectionsRSRSVMClassifier ${Simulation_TESTS4}
-        otbAtmosphericCorrectionsRSRSVMClassifier
-        ${SRCLASS0} 
-        ${SRCLASS1} 
-        ${SRCLASS2} 
-        ${SRCLASS3} 
-        ${SRCLASS4} 
-        ${RSR_DATA}/Rsr/SPOT5/HRG2/rep6S.dat
-        4 #nbBands
-        4 #day
-        12 #month
-        27.3 #elevation et azimuth solaire
-        152.7 #solar azimutal angle
-        2.5 #viewing zenithal angle
-        -77.0 #viewing azimutal angle
-        1013. #atmo pressure
-        2.48134 #water vapour amount
-        0.34400 #ozone amount
-        1 #aerosol model type 
-        0.199854 #aerosol optical
-        0.2 #percentage of validation files
-        )
+# ADD_TEST(atmosphericCorrectionsRSRSVMClassifier ${Simulation_TESTS4}
+#         otbAtmosphericCorrectionsRSRSVMClassifier
+#         ${SRCLASS0} 
+#         ${SRCLASS1} 
+#         ${SRCLASS2} 
+#         ${SRCLASS3} 
+#         ${SRCLASS4} 
+#         ${INPUTDATA}/Radiometry/SPOT5/HRG2/rep6S.dat
+#         4 #nbBands
+#         4 #day
+#         12 #month
+#         27.3 #elevation et azimuth solaire
+#         152.7 #solar azimutal angle
+#         2.5 #viewing zenithal angle
+#         -77.0 #viewing azimutal angle
+#         1013. #atmo pressure
+#         2.48134 #water vapour amount
+#         0.34400 #ozone amount
+#         1 #aerosol model type 
+#         0.199854 #aerosol optical
+#         0.2 #percentage of validation files
+#         )
 
 ADD_TEST(ImageSimulationMethodKMeansClassif ${Simulation_TESTS4}
         otbImageSimulationMethodKMeansClassif
-        ${RSR_DATA}/Rsr/SPOT5/HRG2/rep6S.dat
+        ${INPUTDATA}/Radiometry/SPOT5/HRG2/rep6S.dat
         4 #nb bands
-        ${RSR_DATA}/BD-CNES/ #root path of spectrum
+        ${SPECTRUM_DB}/ #root path of spectrum
         3 #prolate radius
         ${TEMP}/ImageSimulationMethodKMeansClassif.tif
         ${TEMP}/KMeansClassifLabelImage.tif
@@ -252,9 +262,9 @@ ADD_TEST(ImageSimulationMethodKMeansClassif ${Simulation_TESTS4}
 #warning the svm model estimation does not converge.
 ADD_TEST(ImageSimulationMethodSVMClassif ${Simulation_TESTS4}
         otbImageSimulationMethodSVMClassif
-        ${RSR_DATA}/Rsr/SPOT5/HRG2/rep6S.dat
+        ${INPUTDATA}/Radiometry/SPOT5/HRG2/rep6S.dat
         4 #nb bands
-        ${RSR_DATA}/BD-CNES/ #root path of spectrum
+        ${SPECTRUM_DB}/ #root path of spectrum
         3 #prolate radius
         ${TEMP}/ImageSimulationMethodSVMClassif.tif
         ${TEMP}/SVMClassifLabelImage.tif
