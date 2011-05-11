@@ -25,6 +25,7 @@
 int otbFuzzyDescriptorsModelManagerNew(int argc, char* argv[])
 {
   otb::FuzzyDescriptorsModelManager mng;
+  return EXIT_SUCCESS;
 }
 
 
