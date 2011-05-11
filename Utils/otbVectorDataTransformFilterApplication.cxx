@@ -61,13 +61,13 @@ int VectorDataTransformFilterApplication::Execute(otb::ApplicationOptionsResult*
     typedef otb::VectorDataFileWriter<VectorDataType> VectorDataFileWriterType;
     typedef otb::VectorDataTransformFilter
       <VectorDataType, VectorDataType>              VectorDataTransformType;
-    typedef otb::VectorDataProjectionFilter<VectorDataType, 
+    typedef otb::VectorDataProjectionFilter<VectorDataType,
       VectorDataType>                                 VDProjectionFilterType;
 
-    typedef otb::VectorImage<double,2>                ImageType;
+    typedef otb::VectorImage<double, 2>                ImageType;
     typedef otb::ImageFileReader<ImageType>           ReaderType;
     
-    // Instanciate the image reader 
+    // Instanciate the image reader
     ReaderType::Pointer      reader = ReaderType::New();
     reader->SetFileName(parseResult->GetParameterString("Input"));
     reader->UpdateOutputInformation();
@@ -122,7 +122,7 @@ int VectorDataTransformFilterApplication::Execute(otb::ApplicationOptionsResult*
     transformFilter->SetInput(vdproj->GetOutput());
     transformFilter->SetTransform(transform);
   
-    // retransform int the input vector projection 
+    // retransform int the input vector projection
     VDProjectionFilterType::Pointer  reverseVdProj = VDProjectionFilterType::New();
     reverseVdProj->SetInput(transformFilter->GetOutput());
     reverseVdProj->SetOutputProjectionRef(vdreader->GetOutput()->GetProjectionRef());
