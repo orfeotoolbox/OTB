@@ -35,11 +35,11 @@ int VectorDataDSValidation::Describe(ApplicationDescriptor* descriptor)
                         ApplicationDescriptor::FileName);
   descriptor->AddOption("OutputShapeFileName", "Output Shape file name", "out", 1, true,
                         ApplicationDescriptor::FileName);
-  descriptor->AddOptionNParams("Hypothesis", "Hypothesis",
-                               "hyp", true, ApplicationDescriptor::StringList);
-  descriptor->AddOption("DescriptorsModelFileName", "Fuzzy descriptors model xml file", "descMod", 1, true, 
+  descriptor->AddOptionNParams("Hypothesis", "Hypothesis (default: NDVI, RADIOM)",
+                               "hyp", false, ApplicationDescriptor::StringList);
+  descriptor->AddOption("DescriptorsModelFileName", "Fuzzy descriptors model xml file (default: NDVI(0.25, 0.5, 0.75, 0.99) / RADIOM(0.25, 0.5, 0.75, 0.90))", "descMod", 1, false, 
                         ApplicationDescriptor::FileName);
-  descriptor->AddOption("CriterionFormula", "Criterion formula expression", "exp", 1, true, 
+  descriptor->AddOption("CriterionFormula", "Criterion formula expression (default: ((Belief + Plausibility)/2) >= 0.5)", "exp", 1, false, 
                         ApplicationDescriptor::FileName);
 
   return EXIT_SUCCESS;
