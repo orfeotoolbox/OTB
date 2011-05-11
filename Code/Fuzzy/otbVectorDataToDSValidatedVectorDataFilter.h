@@ -24,6 +24,7 @@
 
 #include "itkPreOrderTreeIterator.h"
 #include "otbVectorData.h"
+#include "otbFuzzyDescriptorsModelManager.h"
 
 #include "otbFuzzyVariable.h"
 #include "otbJointMassOfBeliefFilter.h"
@@ -127,6 +128,38 @@ public:
   /** Parameter accessors. */
   itkGetConstMacro(CriterionFormula, std::string);
   itkSetMacro(CriterionFormula, std::string);
+
+  /** Fuzzy Models */
+  void SetFuzzyModel(std::string key, std::vector<double> model)
+  {
+    unsigned int nbDescriptor = m_DescriptorModels.size();
+
+    if (model.size() != 4)
+      {
+      itkExceptionMacro(<< "Wrong model!")
+      }
+    else
+      {
+       for (unsigned j=0; j<nbDescriptor; j++)
+         {
+         if (m_DescriptorModels[j].first.compare(key) == 0)
+           {
+           for (unsigned int i=0; i<4; i++)
+             {
+             if ((model[i]<=1.) && (model[i]>=0.))
+               {
+               m_DescriptorModels[j].second.at(i) = model[i];
+               }
+             else
+               {
+               itkExceptionMacro(<< "Wrong model!")
+               }
+             }
+           }
+         }
+      }
+  }
+
 
   LabelSetType GetHypothesis()
   {
