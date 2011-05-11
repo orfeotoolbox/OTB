@@ -45,7 +45,7 @@ namespace Functor {
  * - \f$ p[i] = max(SortedEigenValues[i], 0) / \sum_{i=0}^{2, SortedEigenValues[i]>0}{SortedEigenValues[i]} \f$
  * - \f$ \alpha_{i} = \left| SortedEigenVector[i] \right|* \frac{180}{\pi}\f$
  *
- * With, 
+ * With,
  * - \f$ if p[i] < 0, p[i]=0 \f$
  * - \f$ if p[i] > 1, p[i]=1 \f$
  * - \f$ if \alpha_{i} > 90, \alpha_{i}=90 \f$

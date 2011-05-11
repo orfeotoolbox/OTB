@@ -67,8 +67,8 @@ public:
   void TransformPoint(double x, double y, double z,
                       double& lon, double& lat, double& h) const;
 
-  void AddGroundRect( ImageKeywordlist& otb_kwl, 
-                      itk::Point<double, 2> orig, itk::Size<2> size); 
+  void AddGroundRect( ImageKeywordlist& otb_kwl,
+                      itk::Point<double, 2> orig, itk::Size<2> size);
 
 protected:
   RPCProjectionAdapter();

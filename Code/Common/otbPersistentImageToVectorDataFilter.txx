@@ -84,7 +84,7 @@ PersistentImageToVectorDataFilter<TImage, TOutputVectorData>
   DataNodePointerType folder = DataNodeType::New();
   folder->SetNodeType(otb::FOLDER);
 
-  DataNodePointerType document = DataNodeType::New() ;
+  DataNodePointerType document = DataNodeType::New();
   document->SetNodeType(otb::DOCUMENT);
 
   this->GetOutputVectorData()->GetDataTree()->Add(folder, this->GetOutputVectorData()->GetDataTree()->GetRoot()->Get());

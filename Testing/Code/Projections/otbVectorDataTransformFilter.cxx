@@ -40,17 +40,17 @@ int otbVectorDataTransformFilterNew (int argc, char * argv[])
 
 int otbVectorDataTransformFilter (int argc, char * argv[])
 {
-  typedef otb::VectorImage<double,2>             ImageType;
+  typedef otb::VectorImage<double, 2>             ImageType;
   typedef otb::VectorData<>                      VectorDataType;
   
   typedef otb::ImageFileReader<ImageType>             ReaderType;
   typedef otb::VectorDataFileReader<VectorDataType>   VectorDataFileReaderType;
   typedef otb::VectorDataFileWriter<VectorDataType>   VectorDataFileWriterType;
   
-  typedef otb::VectorDataProjectionFilter<VectorDataType, 
+  typedef otb::VectorDataProjectionFilter<VectorDataType,
     VectorDataType>                                   VDProjectionFilterType;
   
-  // Instanciate the image reader 
+  // Instanciate the image reader
   ReaderType::Pointer      reader = ReaderType::New();
   reader->SetFileName(argv[1]);
   reader->UpdateOutputInformation();
@@ -67,7 +67,7 @@ int otbVectorDataTransformFilter (int argc, char * argv[])
   vdproj->SetOutputProjectionRef(reader->GetOutput()->GetProjectionRef());
   
   // Test the translation using the ApplyTransformTo
-  typedef itk::AffineTransform<double,2>           TransformType;
+  typedef itk::AffineTransform<double, 2>           TransformType;
   typedef TransformType::OutputVectorType          TranslationParamType;
   
   // Set up the transform (Apply a translation of 8 pixels in the y direction)
@@ -81,7 +81,7 @@ int otbVectorDataTransformFilter (int argc, char * argv[])
   transformFilter->SetInput(vdproj->GetOutput());
   transformFilter->SetTransform(transform);
   
-  // retransform int the input vector projection 
+  // retransform int the input vector projection
   VDProjectionFilterType::Pointer  reverseVdProj = VDProjectionFilterType::New();
   reverseVdProj->SetInput(transformFilter->GetOutput());
   reverseVdProj->SetOutputProjectionRef(vdreader->GetOutput()->GetProjectionRef());

@@ -126,7 +126,7 @@ RPCProjectionAdapter::Solve(const GCPsContainerType& gcpContainer,
 
 void
 RPCProjectionAdapter
-::AddGroundRect( ImageKeywordlist& otb_kwl, 
+::AddGroundRect( ImageKeywordlist& otb_kwl,
                  itk::Point<double, 2> orig, itk::Size<2> size)
 {
   ossimGpt ul, ll, ur, lr;

@@ -107,7 +107,7 @@ public:
   typedef itk::DataObject          DataObject;
 
   typedef std::pair< std::string, std::vector<double> > PairType;
-  typedef std::vector< PairType >                       DescriptorModelsType;;
+  typedef std::vector< PairType >                       DescriptorModelsType; ;
 
   /** Descriptor model accessors. */
   virtual void AddDescriptor(std::string key, std::vector<double> model);

@@ -40,14 +40,14 @@ namespace otb
 
 template <class TInputVectorData, class TOutputVectorData>
 class ITK_EXPORT VectorDataTransformFilter :
-      public otb::VectorDataToVectorDataFilter<TInputVectorData,TOutputVectorData>
+      public otb::VectorDataToVectorDataFilter<TInputVectorData, TOutputVectorData>
 {
 
 public:
   /** Standard class typedefs. */
   typedef VectorDataTransformFilter         Self;
   typedef otb::VectorDataToVectorDataFilter
-  <TInputVectorData,TOutputVectorData>      Superclass;
+  <TInputVectorData, TOutputVectorData>      Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
 
@@ -94,8 +94,8 @@ public:
   itkTypeMacro(VectorDataTransformFilter, VectorDataToVectorDataFilter);
 
   /** Set The Transform applied to VectorData*/
-  itkSetObjectMacro(Transform,GenericTransformType);
-  itkGetObjectMacro(Transform,GenericTransformType);
+  itkSetObjectMacro(Transform, GenericTransformType);
+  itkGetObjectMacro(Transform, GenericTransformType);
 
 protected:
   VectorDataTransformFilter();

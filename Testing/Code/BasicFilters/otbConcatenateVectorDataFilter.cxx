@@ -30,7 +30,7 @@
 typedef otb::VectorData<>                                 VectorDataType;
 typedef otb::VectorDataFileReader<VectorDataType>         ReaderType;
 typedef otb::VectorDataFileWriter<VectorDataType>         WriterType;
-typedef otb::ConcatenateVectorDataFilter<VectorDataType>  ConcatenateFilterType; 
+typedef otb::ConcatenateVectorDataFilter<VectorDataType>  ConcatenateFilterType;
 
 int otbConcatenateVectorDataFilterNew (int argc, char * argv[])
 {
@@ -44,14 +44,14 @@ int otbConcatenateVectorDataFilter (int argc, char * argv[])
   typedef otb::CommandLineArgumentParser ParserType;
   ParserType::Pointer parser = ParserType::New();
   parser->AddOptionNParams("--InputVectorDatas","Input VectorDatas to concatenate ", "-in", true);
-  parser->AddOption("--OutputVectorData","Output concatenated VectorData","-out",true);
+  parser->AddOption("--OutputVectorData","Output concatenated VectorData","-out", true);
     
   typedef otb::CommandLineArgumentParseResult ParserResultType;
   ParserResultType::Pointer  parseResult = ParserResultType::New();
   
   try
     {
-    parser->ParseCommandLine(argc,argv,parseResult);
+    parser->ParseCommandLine(argc, argv, parseResult);
     }
   catch ( itk::ExceptionObject & err )
     {
@@ -62,7 +62,7 @@ int otbConcatenateVectorDataFilter (int argc, char * argv[])
   // Get number of input vectorDatas
   unsigned int nbInputs = parseResult->GetNumberOfParameters("--InputVectorDatas");
 
-  // Instanciate a concatenate filter 
+  // Instanciate a concatenate filter
     // Concatenate the vector datas
   ConcatenateFilterType::Pointer concatenate = ConcatenateFilterType::New();
   
@@ -71,13 +71,13 @@ int otbConcatenateVectorDataFilter (int argc, char * argv[])
     // Reader object
     ReaderType::Pointer reader = ReaderType::New();
     //std::cout << << std::endl;
-    reader->SetFileName(parseResult->GetParameterString("--InputVectorDatas",idx ));
+    reader->SetFileName(parseResult->GetParameterString("--InputVectorDatas", idx ));
     reader->Update();
     
     concatenate->AddInput(reader->GetOutput());
     }
   
-  // Write the output 
+  // Write the output
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(parseResult->GetParameterString("--OutputVectorData"));
   writer->SetInput(concatenate->GetOutput());

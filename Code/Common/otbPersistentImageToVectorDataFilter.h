@@ -44,12 +44,12 @@ namespace otb
  */
 template<class TImage, class TOutputVectorData>
 class ITK_EXPORT PersistentImageToVectorDataFilter :
-  public PersistentImageFilter<TImage,TImage>
+  public PersistentImageFilter<TImage, TImage>
 {
 public:
   /** Standard Self typedef */
   typedef PersistentImageToVectorDataFilter               Self;
-  typedef PersistentImageFilter<TImage,TImage>            Superclass;
+  typedef PersistentImageFilter<TImage, TImage>            Superclass;
   typedef itk::SmartPointer<Self>                         Pointer;
   typedef itk::SmartPointer<const Self>                   ConstPointer;
 

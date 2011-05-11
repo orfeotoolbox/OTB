@@ -60,7 +60,7 @@ FuzzyDescriptorsModelManager
 ::AddDescriptor( PairType modelPair, DescriptorsModelType & descModel )
 {
   descModel.push_back(modelPair);
-} 
+}
 
 
 void
@@ -70,7 +70,7 @@ FuzzyDescriptorsModelManager
 {
   PairType lPair( key, model );
   descModel.push_back(lPair);
-} 
+}
 
 void
 FuzzyDescriptorsModelManager
@@ -183,7 +183,7 @@ FuzzyDescriptorsModelManager
 
   // Iterate through the input
   for (unsigned int i = 0; i < model.size(); i++)
-    {   
+    {
       // The current statistic
       TiXmlElement * desc = new TiXmlElement("Descriptor");
       desc->SetAttribute("name", model[i].first.c_str());

@@ -367,7 +367,7 @@ ImageMetadataInterfaceBase::GetBandName() const
     }
 
   std::vector<std::string> outputValues;
-  if (!imageKeywordlist.HasKey("support_data.band_name")) 
+  if (!imageKeywordlist.HasKey("support_data.band_name"))
     {
     return outputValues;
     }

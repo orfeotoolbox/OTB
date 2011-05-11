@@ -26,15 +26,15 @@ namespace otb
 {
 template<class TVectorData>
 ConcatenateVectorDataFilter<TVectorData>
-::ConcatenateVectorDataFilter() 
+::ConcatenateVectorDataFilter()
 {
   this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfRequiredOutputs(1);
 
-  m_Folder        = DataNodeType::New() ;
+  m_Folder        = DataNodeType::New();
   m_Folder->SetNodeType(otb::FOLDER);
 
-  m_Document        = DataNodeType::New() ;
+  m_Document        = DataNodeType::New();
   m_Document->SetNodeType(otb::DOCUMENT);
 
 }
@@ -52,7 +52,7 @@ void
 ConcatenateVectorDataFilter<TVectorData>
 ::AddInput(const VectorDataType * vectorData)
 {
-  this->Superclass::SetNthInput(this->GetNumberOfInputs(), 
+  this->Superclass::SetNthInput(this->GetNumberOfInputs(),
                                 const_cast<VectorDataType *>(vectorData));
 }
 
@@ -81,20 +81,20 @@ ConcatenateVectorDataFilter<TVectorData>
   // Copy the input MetaDataDictionary in the output VectorData
   //this->GetOutput()->SetMetaDataDictionary(this->GetInput(0)->GetMetaDataDictionary());
   
-  // Prepare the output 
+  // Prepare the output
   typename DataNodeType::Pointer outputRoot = this->GetOutput()->GetDataTree()->GetRoot()->Get();
   
   // Adding the layer to the data tree
   this->GetOutput()->GetDataTree()->Add(m_Folder, outputRoot);
   this->GetOutput()->GetDataTree()->Add(m_Document , m_Folder);
   
-  // Retrieve all the inputs 
+  // Retrieve all the inputs
   for(unsigned int idx = 0; idx < this->GetNumberOfInputs(); idx++)
     {
     // Add the current vectordata
-    TreeNodeType * 
+    TreeNodeType *
       inputRoot = const_cast<TreeNodeType *>(this->GetInput(idx)->GetDataTree()->GetRoot());
-    // 
+    //
     ProcessNode(inputRoot);
     }
 

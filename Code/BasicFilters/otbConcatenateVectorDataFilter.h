@@ -30,11 +30,11 @@ namespace otb
  *
  *  This generator produces a unique vector by concatening several
  *  inputs set via the method AddInput(VectorData *)
- *  
+ *
  * Note that the input vectordatas must have the same node type,
  * this is due that vectordata creation does not support multiple geomtries
  * in a single vectordata.
- * 
+ *
  */
 template <class TVectorData>
 class ITK_EXPORT ConcatenateVectorDataFilter :
@@ -48,7 +48,7 @@ public:
   typedef itk::SmartPointer<const Self>                ConstPointer;
  
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ConcatenateVectorDataFilter, 
+  itkTypeMacro(ConcatenateVectorDataFilter,
                VectorDataSource);
 
   /** Method for creation through the object factory. */

@@ -37,7 +37,7 @@ namespace otb
    * Constructor
  */
 template <class TInputVectorData, class TOutputVectorData >
-VectorDataTransformFilter<TInputVectorData,TOutputVectorData>
+VectorDataTransformFilter<TInputVectorData, TOutputVectorData>
 ::VectorDataTransformFilter()
 {
   m_Transform = GenericTransformType::New();
@@ -47,12 +47,12 @@ VectorDataTransformFilter<TInputVectorData,TOutputVectorData>
 * Convert point
  */
 template <class TInputVectorData, class TOutputVectorData >
-typename VectorDataTransformFilter<TInputVectorData,TOutputVectorData>::PointType
-VectorDataTransformFilter<TInputVectorData,TOutputVectorData>
+typename VectorDataTransformFilter<TInputVectorData, TOutputVectorData>::PointType
+VectorDataTransformFilter<TInputVectorData, TOutputVectorData>
 ::ReprojectPoint(PointType pointCoord) const
 {
 
-  itk::Point<double,2> point;
+  itk::Point<double, 2> point;
   point = m_Transform->TransformPoint(pointCoord);
   return point;
 }
@@ -62,8 +62,8 @@ VectorDataTransformFilter<TInputVectorData,TOutputVectorData>
  * Convert line
  */
 template <class TInputVectorData, class TOutputVectorData >
-typename VectorDataTransformFilter<TInputVectorData,TOutputVectorData>::LinePointerType
-VectorDataTransformFilter<TInputVectorData,TOutputVectorData>
+typename VectorDataTransformFilter<TInputVectorData, TOutputVectorData>::LinePointerType
+VectorDataTransformFilter<TInputVectorData, TOutputVectorData>
 ::ReprojectLine(LinePointerType line) const
 {
   typedef typename LineType::VertexListType::ConstPointer VertexListConstPointerType;
@@ -73,8 +73,8 @@ VectorDataTransformFilter<TInputVectorData,TOutputVectorData>
   typename LineType::Pointer newLine = LineType::New();
   while ( it != vertexList->End())
     {
-    itk::Point<double,2> point;
-    itk::ContinuousIndex<double,2> index;
+    itk::Point<double, 2> point;
+    itk::ContinuousIndex<double, 2> index;
     typename LineType::VertexType pointCoord = it.Value();
     point = m_Transform->TransformPoint(pointCoord);
     index[0]=point[0];
@@ -91,8 +91,8 @@ VectorDataTransformFilter<TInputVectorData,TOutputVectorData>
  * Convert polygon
  */
 template <class TInputVectorData, class TOutputVectorData >
-typename VectorDataTransformFilter<TInputVectorData,TOutputVectorData>::PolygonPointerType
-VectorDataTransformFilter<TInputVectorData,TOutputVectorData>
+typename VectorDataTransformFilter<TInputVectorData, TOutputVectorData>::PolygonPointerType
+VectorDataTransformFilter<TInputVectorData, TOutputVectorData>
 ::ReprojectPolygon(PolygonPointerType polygon) const
 {
   typedef typename PolygonType::VertexListType::ConstPointer VertexListConstPointerType;
@@ -102,8 +102,8 @@ VectorDataTransformFilter<TInputVectorData,TOutputVectorData>
   typename PolygonType::Pointer newPolygon = PolygonType::New();
   while ( it != vertexList->End())
     {
-    itk::Point<double,2> point;
-    itk::ContinuousIndex<double,2> index;
+    itk::Point<double, 2> point;
+    itk::ContinuousIndex<double, 2> index;
     typename PolygonType::VertexType pointCoord = it.Value();
     point = m_Transform->TransformPoint(pointCoord);
     index[0]=point[0];
@@ -119,8 +119,8 @@ VectorDataTransformFilter<TInputVectorData,TOutputVectorData>
 * Convert polygon list
  */
 template <class TInputVectorData, class TOutputVectorData >
-typename VectorDataTransformFilter<TInputVectorData,TOutputVectorData>::PolygonListPointerType
-VectorDataTransformFilter<TInputVectorData,TOutputVectorData>
+typename VectorDataTransformFilter<TInputVectorData, TOutputVectorData>::PolygonListPointerType
+VectorDataTransformFilter<TInputVectorData, TOutputVectorData>
 ::ReprojectPolygonList(PolygonListPointerType polygonList) const
 {
 
@@ -139,7 +139,7 @@ VectorDataTransformFilter<TInputVectorData,TOutputVectorData>
  */
 template <class TInputVectorData, class TOutputVectorData >
 void
-VectorDataTransformFilter<TInputVectorData,TOutputVectorData>
+VectorDataTransformFilter<TInputVectorData, TOutputVectorData>
 ::GenerateData(void)
 {
   Superclass::GenerateOutputInformation();
@@ -165,21 +165,21 @@ VectorDataTransformFilter<TInputVectorData,TOutputVectorData>
   // Start recursive processing
   itk::TimeProbe chrono;
   chrono.Start();
-  ProcessNode(inputRoot,outputRoot);
+  ProcessNode(inputRoot, outputRoot);
   chrono.Stop();
 }
 
 
 template <class TInputVectorData, class TOutputVectorData >
 void
-VectorDataTransformFilter<TInputVectorData,TOutputVectorData>
+VectorDataTransformFilter<TInputVectorData, TOutputVectorData>
 ::ProcessNode(InputInternalTreeNodeType * source, OutputInternalTreeNodeType * destination)
 {
   // Get the children list from the input node
   InputChildrenListType children = source->GetChildrenList();
 
   // For each child
-  for(typename InputChildrenListType::iterator it = children.begin(); it != children.end();++it)
+  for(typename InputChildrenListType::iterator it = children.begin(); it != children.end(); ++it)
     {
     typename OutputInternalTreeNodeType::Pointer newContainer;
 
@@ -196,7 +196,7 @@ VectorDataTransformFilter<TInputVectorData,TOutputVectorData>
       newContainer = OutputInternalTreeNodeType::New();
       newContainer->Set(newDataNode);
       destination->AddChild(newContainer);
-      ProcessNode((*it),newContainer);
+      ProcessNode((*it), newContainer);
       break;
       }
       case DOCUMENT:
@@ -204,7 +204,7 @@ VectorDataTransformFilter<TInputVectorData,TOutputVectorData>
       newContainer = OutputInternalTreeNodeType::New();
       newContainer->Set(newDataNode);
       destination->AddChild(newContainer);
-      ProcessNode((*it),newContainer);
+      ProcessNode((*it), newContainer);
       break;
       }
       case FOLDER:
@@ -212,7 +212,7 @@ VectorDataTransformFilter<TInputVectorData,TOutputVectorData>
       newContainer = OutputInternalTreeNodeType::New();
       newContainer->Set(newDataNode);
       destination->AddChild(newContainer);
-      ProcessNode((*it),newContainer);
+      ProcessNode((*it), newContainer);
       break;
       }
       case FEATURE_POINT:
@@ -265,7 +265,7 @@ VectorDataTransformFilter<TInputVectorData,TOutputVectorData>
       newContainer = OutputInternalTreeNodeType::New();
       newContainer->Set(newDataNode);
       destination->AddChild(newContainer);
-      ProcessNode((*it),newContainer);
+      ProcessNode((*it), newContainer);
       break;
       }
       case FEATURE_MULTILINE:
@@ -273,7 +273,7 @@ VectorDataTransformFilter<TInputVectorData,TOutputVectorData>
       newContainer = OutputInternalTreeNodeType::New();
       newContainer->Set(newDataNode);
       destination->AddChild(newContainer);
-      ProcessNode((*it),newContainer);
+      ProcessNode((*it), newContainer);
       break;
       }
       case FEATURE_MULTIPOLYGON:
@@ -281,7 +281,7 @@ VectorDataTransformFilter<TInputVectorData,TOutputVectorData>
       newContainer = OutputInternalTreeNodeType::New();
       newContainer->Set(newDataNode);
       destination->AddChild(newContainer);
-      ProcessNode((*it),newContainer);
+      ProcessNode((*it), newContainer);
       break;
       }
       case FEATURE_COLLECTION:
@@ -289,7 +289,7 @@ VectorDataTransformFilter<TInputVectorData,TOutputVectorData>
       newContainer = OutputInternalTreeNodeType::New();
       newContainer->Set(newDataNode);
       destination->AddChild(newContainer);
-      ProcessNode((*it),newContainer);
+      ProcessNode((*it), newContainer);
       break;
       }
       }
