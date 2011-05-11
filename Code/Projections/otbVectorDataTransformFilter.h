@@ -45,15 +45,16 @@ class ITK_EXPORT VectorDataTransformFilter :
 
 public:
   /** Standard class typedefs. */
-  typedef VectorDataTransformFilter  Self;
-  typedef otb::VectorDataToVectorDataFilter<TInputVectorData,TOutputVectorData>  Superclass;
-  typedef itk::SmartPointer<Self>   Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef VectorDataTransformFilter         Self;
+  typedef otb::VectorDataToVectorDataFilter
+  <TInputVectorData,TOutputVectorData>      Superclass;
+  typedef itk::SmartPointer<Self>           Pointer;
+  typedef itk::SmartPointer<const Self>     ConstPointer;
 
-  typedef TInputVectorData InputVectorDataType;
-  typedef TOutputVectorData OutputVectorDataType;
+  typedef TInputVectorData                        InputVectorDataType;
+  typedef TOutputVectorData                       OutputVectorDataType;
   typedef typename TInputVectorData::ConstPointer InputVectorDataPointer;
-  typedef typename TOutputVectorData::Pointer OutputVectorDataPointer;
+  typedef typename TOutputVectorData::Pointer     OutputVectorDataPointer;
 
   /** Some typedefs. */
   typedef itk::Transform<double, 2, 2>           GenericTransformType;
@@ -62,8 +63,8 @@ public:
   typedef itk::Vector<double, 2> SpacingType;
   typedef itk::Point<double, 2> OriginType;
   
-  typedef typename InputVectorDataType::DataNodePointerType InputDataNodePointerType;
-  typedef typename OutputVectorDataType::DataNodeType OutputDataNodeType;
+  typedef typename InputVectorDataType::DataNodePointerType  InputDataNodePointerType;
+  typedef typename OutputVectorDataType::DataNodeType        OutputDataNodeType;
   typedef typename OutputVectorDataType::DataNodePointerType OutputDataNodePointerType;
   typedef typename OutputVectorDataType::DataTreePointerType OutputDataTreePointerType;
 
@@ -72,19 +73,18 @@ public:
   typedef typename InputInternalTreeNodeType::ChildrenListType        InputChildrenListType;
 
 
-  typedef typename OutputDataNodeType::PointType PointType;
-
-  typedef typename OutputDataNodeType::LineType LineType;
+  typedef typename OutputDataNodeType::PointType            PointType;
+  typedef typename OutputDataNodeType::LineType             LineType;
   typedef typename OutputDataNodeType::LineConstPointerType LineConstPointerType;
-  typedef typename OutputDataNodeType::LinePointerType LinePointerType;
+  typedef typename OutputDataNodeType::LinePointerType      LinePointerType;
 
-  typedef typename OutputDataNodeType::PolygonType PolygonType;
+  typedef typename OutputDataNodeType::PolygonType             PolygonType;
   typedef typename OutputDataNodeType::PolygonConstPointerType PolygonConstPointerType;
-  typedef typename OutputDataNodeType::PolygonPointerType PolygonPointerType;
+  typedef typename OutputDataNodeType::PolygonPointerType      PolygonPointerType;
 
-  typedef typename OutputDataNodeType::PolygonListType PolygonListType;
+  typedef typename OutputDataNodeType::PolygonListType             PolygonListType;
   typedef typename OutputDataNodeType::PolygonListConstPointerType PolygonListConstPointerType;
-  typedef typename OutputDataNodeType::PolygonListPointerType PolygonListPointerType;
+  typedef typename OutputDataNodeType::PolygonListPointerType      PolygonListPointerType;
 
 
   /** Method for creation through the object factory. */
@@ -96,7 +96,6 @@ public:
   /** Set The Transform applied to VectorData*/
   itkSetObjectMacro(Transform,GenericTransformType);
   itkGetObjectMacro(Transform,GenericTransformType);
-
 
 protected:
   VectorDataTransformFilter();
@@ -113,7 +112,6 @@ protected:
 private:
   VectorDataTransformFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-
   
   GenericTransformPointerType m_Transform;
 };
