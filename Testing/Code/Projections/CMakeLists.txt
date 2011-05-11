@@ -1092,6 +1092,7 @@ ADD_TEST(prTvGeographicalDistance ${PROJECTIONS_TESTS4}
 ADD_TEST(prTuVectorDataTransformFilterNew ${PROJECTIONS_TESTS4}
   otbVectorDataTransformFilterNew)
 
+IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(prTvVectorDataTransformFilter ${PROJECTIONS_TESTS4}
   --compare-ogr ${EPSILON_4}
   ${BASELINE_FILES}/prTvVectorDataTransformFilter_Translation.shp
@@ -1101,6 +1102,7 @@ ADD_TEST(prTvVectorDataTransformFilter ${PROJECTIONS_TESTS4}
   ${INPUTDATA}/ToulouseRoad-examples.shp
   ${TEMP}/prTvVectorDataTransformFilter_Translation.shp
 )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 
 #=======================================================================================
