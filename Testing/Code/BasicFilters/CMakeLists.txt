@@ -2007,6 +2007,24 @@ ADD_TEST(bfTuVectorDataToRandomLineGenerator ${BASICFILTERS_TESTS14}
 )
 
 
+# -----------------------  otbConcatenateVectorDataFilter  -----------------------
+
+ADD_TEST(bfTuConcatenateVectorDataFilterNew ${BASICFILTERS_TESTS14}
+  otbConcatenateVectorDataFilterNew
+)
+
+ADD_TEST(bfTvConcatenateVectorDataFilter ${BASICFILTERS_TESTS14}
+  --compare-ogr ${NOTOL}
+  ${BASELINE_FILES}/otbConcatenateVectorDataFilter_Output.shp
+  ${TEMP}/otbConcatenateVectorDataFilter_Output.shp
+  otbConcatenateVectorDataFilter
+  -in  ${INPUTDATA}/france_coastline.shp
+       ${INPUTDATA}/waterways.shp
+  -out ${TEMP}/otbConcatenateVectorDataFilter_Output.shp
+)
+
+
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests15 ~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2327,6 +2345,7 @@ otbConnectedComponentMuParserFunctorTest.cxx
 otbLabelObjectOpeningMuParserFilterNew.cxx
 otbLabelObjectOpeningMuParserFilterTest.cxx
 otbVectorDataToRandomLineGenerator.cxx
+otbConcatenateVectorDataFilter.cxx
 )
 IF(OTB_DATA_USE_LARGEINPUT)
 SET(BasicFilters_SRCS15
