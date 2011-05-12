@@ -23,6 +23,8 @@
 #include "otbConfigure.h"
 #include "itkCommand.h"
 
+#include "otbNumberOfDivisionsStrippedStreamingManager.h"
+#include "otbNumberOfDivisionsTiledStreamingManager.h"
 #include "otbNumberOfLinesStrippedStreamingManager.h"
 #include "otbRAMDrivenStrippedStreamingManager.h"
 #include "otbTileDimensionTiledStreamingManager.h"
@@ -52,6 +54,30 @@ StreamingImageVirtualWriter<TInputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
+}
+
+template <class TInputImage>
+void
+StreamingImageVirtualWriter<TInputImage>
+::SetNumberOfDivisionsStrippedStreaming(unsigned int nbDivisions)
+{
+  typedef NumberOfDivisionsStrippedStreamingManager<TInputImage> NumberOfDivisionsStrippedStreamingManagerType;
+  typename NumberOfDivisionsStrippedStreamingManagerType::Pointer streamingManager = NumberOfDivisionsStrippedStreamingManagerType::New();
+  streamingManager->SetNumberOfDivisions(nbDivisions);
+
+  m_StreamingManager = streamingManager;
+}
+
+template <class TInputImage>
+void
+StreamingImageVirtualWriter<TInputImage>
+::SetNumberOfDivisionsTiledStreaming(unsigned int nbDivisions)
+{
+  typedef NumberOfDivisionsTiledStreamingManager<TInputImage> NumberOfDivisionsTiledStreamingManagerType;
+  typename NumberOfDivisionsTiledStreamingManagerType::Pointer streamingManager = NumberOfDivisionsTiledStreamingManagerType::New();
+  streamingManager->SetNumberOfDivisions(nbDivisions);
+
+  m_StreamingManager = streamingManager;
 }
 
 template <class TInputImage>

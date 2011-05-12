@@ -96,6 +96,14 @@ public:
 
   /**  Set the streaming mode to 'stripped' and configure the number of strips
    *   which will be used to stream the image */
+  void SetNumberOfDivisionsStrippedStreaming(unsigned int nbDivisions);
+
+  /**  Set the streaming mode to 'tiled' and configure the number of tiles
+   *   which will be used to stream the image */
+  void SetNumberOfDivisionsTiledStreaming(unsigned int nbDivisions);
+
+  /**  Set the streaming mode to 'stripped' and configure the number of strips
+   *   which will be used to stream the image */
   void SetNumberOfLinesStrippedStreaming(unsigned int nbLinesPerStrip);
 
   /**  Set the streaming mode to 'stripped' and configure the number of MB
