@@ -1286,8 +1286,9 @@ ADD_TEST(ioTvStreamingIFWriterBSQWithStreaming ${IO_TESTS2}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS10 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# ---  STREAMING  IMAGE   FILE    WRITER  ---
-# ---  TESTS DIFFERENT ACTIVATE STREAMING PARAMETER  ---
+
+# Test otb::StreamingImageFileWriter streaming
+
 # 1. DEFAULT
 ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_DEFAULT ${IO_TESTS10}
    --compare-image ${EPSILON_9}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
@@ -1297,6 +1298,70 @@ ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_DEFAULT ${IO_TES
          ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_DEFAULT.tif
          DEFAULT
          )
+# 2. SetNumberOfDivisionsStrippedStreaming
+ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_SetNumberOfDivisionsStrippedStreaming ${IO_TESTS10}
+   --compare-image ${EPSILON_9}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
+                      		${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_SetNumberOfDivisionsStrippedStreaming.tif
+         otbStreamingImageFileWriterTestCalculateNumberOfDivisions
+         ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
+         ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_SetNumberOfDivisionsStrippedStreaming.tif
+         SetNumberOfDivisionsStrippedStreaming
+         10
+         )
+# 3. SetNumberOfDivisionsTiledStreaming
+ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_SetNumberOfDivisionsTiledStreamingS ${IO_TESTS10}
+   --compare-image ${EPSILON_9}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
+                      		${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_SetNumberOfDivisionsTiledStreaming.tif
+         otbStreamingImageFileWriterTestCalculateNumberOfDivisions
+         ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
+         ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_SetNumberOfDivisionsTiledStreaming.tif
+         SetNumberOfDivisionsTiledStreaming
+         10
+         )
+# 4. SetNumberOfLinesStrippedStreaming
+ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_SetNumberOfLinesStrippedStreaming ${IO_TESTS10}
+   --compare-image ${EPSILON_9}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
+                          ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_SetNumberOfLinesStrippedStreaming.tif
+         otbStreamingImageFileWriterTestCalculateNumberOfDivisions
+         ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
+         ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_SetNumberOfLinesStrippedStreaming.tif
+         SetNumberOfLinesStrippedStreaming
+         5
+         )
+# 5. SetAutomaticStrippedStreaming
+ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_SetAutomaticStrippedStreaming ${IO_TESTS10}
+   --compare-image ${EPSILON_9}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
+                          ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_SetAutomaticStrippedStreaming.tif
+         otbStreamingImageFileWriterTestCalculateNumberOfDivisions
+         ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
+         ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_SetAutomaticStrippedStreaming.tif
+         SetAutomaticStrippedStreaming
+         10
+         )
+# 6. SetTileDimensionTiledStreaming
+ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_SetTileDimensionTiledStreaming ${IO_TESTS10}
+   --compare-image ${EPSILON_9}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
+			    ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_SetTileDimensionTiledStreaming.tif
+         otbStreamingImageFileWriterTestCalculateNumberOfDivisions
+         ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
+         ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_SetTileDimensionTiledStreaming.tif
+         SetTileDimensionTiledStreaming
+         32
+         )
+# 7. SetAutomaticTiledStreaming
+ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_SetAutomaticTiledStreaming ${IO_TESTS10}
+   --compare-image ${EPSILON_9}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
+			    ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_SetAutomaticTiledStreaming.tif
+         otbStreamingImageFileWriterTestCalculateNumberOfDivisions
+         ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
+         ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_SetAutomaticTiledStreaming.tif
+         SetAutomaticTiledStreaming
+				 10
+         )
+
+
+
+# Test otb::ImageFileWriter streaming
 # 1.bis WITH IMAGEFILEWRITER : DEFAULT
 ADD_TEST(ioTvStreamingWithImageFileWriterCalculateNumberOfDivisions_DEFAULT ${IO_TESTS10}
    --compare-image ${EPSILON_9}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
@@ -1305,15 +1370,6 @@ ADD_TEST(ioTvStreamingWithImageFileWriterCalculateNumberOfDivisions_DEFAULT ${IO
          ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
          ${TEMP}/ioStreamingWithImageFileWriterCalculateNumberOfDivisions_DEFAULT.tif
          DEFAULT
-         )
-# 2. AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS
-ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS ${IO_TESTS10}
-   --compare-image ${EPSILON_9}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
-                      		${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS.tif
-         otbStreamingImageFileWriterTestCalculateNumberOfDivisions
-         ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
-         ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS.tif
-         AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS
          )
 # 2.bis WITH IMAGEFILEWRITER : AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS
 ADD_TEST(ioTvStreamingWithImageFileWriterCalculateNumberOfDivisions_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS ${IO_TESTS10}
@@ -1324,17 +1380,6 @@ ADD_TEST(ioTvStreamingWithImageFileWriterCalculateNumberOfDivisions_AUTOMATIC_NU
          ${TEMP}/ioStreamingWithImageFileWriterCalculateNumberOfDivisions_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS.tif
          AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS
          )
-# 3. NUMBER_OF_STREAM_DIVISIONS
-ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_NUMBER_OF_STREAM_DIVISIONS ${IO_TESTS10}
-   --compare-image ${EPSILON_9}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
-                      		${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_NUMBER_OF_STREAM_DIVISIONS_10.tif
-         otbStreamingImageFileWriterTestCalculateNumberOfDivisions
-         ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
-         ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_NUMBER_OF_STREAM_DIVISIONS_10.tif
-         NUMBER_OF_STREAM_DIVISIONS
-         10
-         )
-
 # 3.bis WITH IMAGEFILEWRITER : NUMBER_OF_STREAM_DIVISIONS
 ADD_TEST(ioTvStreamingWithImageFileWriterCalculateNumberOfDivisions_NUMBER_OF_STREAM_DIVISIONS ${IO_TESTS10}
    --compare-image ${EPSILON_9}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
@@ -1344,19 +1389,6 @@ ADD_TEST(ioTvStreamingWithImageFileWriterCalculateNumberOfDivisions_NUMBER_OF_ST
          ${TEMP}/ioStreamingWithImageFileWriterCalculateNumberOfDivisions_NUMBER_OF_STREAM_DIVISIONS_10.tif
          NUMBER_OF_STREAM_DIVISIONS
          10
-         )
-
-
-
-# 4. BUFFER_MEMORY_SIZE
-ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_BUFFER_MEMORY_SIZE ${IO_TESTS10}
-   --compare-image ${EPSILON_9}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
-                          ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_BUFFER_MEMORY_SIZE_8x2000x10.tif
-         otbStreamingImageFileWriterTestCalculateNumberOfDivisions
-         ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
-         ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_BUFFER_MEMORY_SIZE_8x2000x10.tif
-         BUFFER_MEMORY_SIZE
-         8*2000*10
          )
 # 4.bis WITH IMAGEFILEWRITER BUFFER_MEMORY_SIZE
 ADD_TEST(ioTvStreamingWithImageFileWriterCalculateNumberOfDivisions_BUFFER_MEMORY_SIZE ${IO_TESTS10}
@@ -1368,16 +1400,6 @@ ADD_TEST(ioTvStreamingWithImageFileWriterCalculateNumberOfDivisions_BUFFER_MEMOR
          BUFFER_MEMORY_SIZE
          8*2000*10
          )
-# 5. BUFFER_NUMBER_OF_LINES
-ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_BUFFER_NUMBER_OF_LINES ${IO_TESTS10}
-   --compare-image ${EPSILON_9}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
-                          ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_BUFFER_NUMBER_OF_LINES_1000.tif
-         otbStreamingImageFileWriterTestCalculateNumberOfDivisions
-         ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
-         ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_BUFFER_NUMBER_OF_LINES_1000.tif
-         BUFFER_NUMBER_OF_LINES
-         1000
-         )
 # 5.bis WITH IMAGEFILEWRITER  BUFFER_NUMBER_OF_LINES
 ADD_TEST(ioTvStreamingWithImageFileWriterCalculateNumberOfDivisions_BUFFER_NUMBER_OF_LINES ${IO_TESTS10}
    --compare-image ${EPSILON_9}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
@@ -1388,26 +1410,7 @@ ADD_TEST(ioTvStreamingWithImageFileWriterCalculateNumberOfDivisions_BUFFER_NUMBE
          BUFFER_NUMBER_OF_LINES
          1000
          )
-# 6. TILING_STREAM_DIVISIONS
-ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_TILING_STREAM_DIVISIONS ${IO_TESTS10}
-   --compare-image ${EPSILON_9}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
-			    ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_TILING_STREAM_DIVISIONS.tif
-         otbStreamingImageFileWriterTestCalculateNumberOfDivisions
-         ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
-         ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_TILING_STREAM_DIVISIONS.tif
-         TILING_STREAM_DIVISIONS
-         )
-# 7. TILING_STREAM_DIVISIONS with number of divisions
-ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_TILING_NUMBER_OF_STREAM_DIVISIONS ${IO_TESTS10}
-   --compare-image ${EPSILON_9}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
-			    ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_TILING_NUMBER_OF_STREAM_DIVISIONS.tif
-         otbStreamingImageFileWriterTestCalculateNumberOfDivisions
-         ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
-         ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_TILING_NUMBER_OF_STREAM_DIVISIONS.tif
-         TILING_NUMBER_OF_STREAM_DIVISIONS
-				 100
-         )
-
+      
 ADD_TEST(ioTvStreamingIFWriterWithFilter ${IO_TESTS10}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioStreamingImageFileWriterWithFilter_1_100.hdr
                             ${TEMP}/ioStreamingImageFileWriterWithFilter_1_100.hdr

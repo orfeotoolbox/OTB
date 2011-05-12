@@ -15,9 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
-
-
 #include "itkExceptionObject.h"
 #include <iostream>
 
@@ -48,30 +45,29 @@ int otbStreamingImageFileWriterTestCalculateNumberOfDivisions(int argc, char* ar
   writer->SetFileName(outputFilename);
   writer->SetInput(reader->GetOutput());
 
-  if (MethodCalculateNumberOfStreamDivision == "AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS")
-    {
-    writer->SetAutomaticNumberOfStreamDivisions();
-    }
-  else if (MethodCalculateNumberOfStreamDivision == "NUMBER_OF_STREAM_DIVISIONS")
+  if (MethodCalculateNumberOfStreamDivision == "SetNumberOfDivisionsStrippedStreaming")
     {
     writer->SetNumberOfDivisionsStrippedStreaming(::atoi(argv[4]));
     }
-  else if (MethodCalculateNumberOfStreamDivision == "BUFFER_MEMORY_SIZE")
+  else if (MethodCalculateNumberOfStreamDivision == "SetNumberOfDivisionsTiledStreaming")
     {
-    writer->SetBufferMemorySize(::atoi(argv[4]));
-    }
-  else if (MethodCalculateNumberOfStreamDivision == "BUFFER_NUMBER_OF_LINES")
-    {
-    writer->SetBufferNumberOfLinesDivisions(::atoi(argv[4]));
-    }
-  else if (MethodCalculateNumberOfStreamDivision == "TILING_STREAM_DIVISIONS")
-    {
-    writer->SetAutomaticTiledStreaming();
-    }
-  else if (MethodCalculateNumberOfStreamDivision == "TILING_NUMBER_OF_STREAM_DIVISIONS")
-    {
-    std::cout << "Number : " << ::atoi(argv[4]) << std::endl;
     writer->SetNumberOfDivisionsTiledStreaming(::atoi(argv[4]));
+    }
+  else if (MethodCalculateNumberOfStreamDivision == "SetNumberOfLinesStrippedStreaming")
+    {
+    writer->SetNumberOfLinesStrippedStreaming(::atoi(argv[4]));
+    }
+  else if (MethodCalculateNumberOfStreamDivision == "SetAutomaticStrippedStreaming")
+    {
+    writer->SetAutomaticStrippedStreaming(::atoi(argv[4]));
+    }
+  else if (MethodCalculateNumberOfStreamDivision == "SetTileDimensionTiledStreaming")
+    {
+    writer->SetTileDimensionTiledStreaming(::atoi(argv[4]));
+    }
+  else if (MethodCalculateNumberOfStreamDivision == "SetAutomaticTiledStreaming")
+    {
+    writer->SetAutomaticTiledStreaming(::atoi(argv[4]));
     }
   else if (MethodCalculateNumberOfStreamDivision == "DEFAULT")
     {
