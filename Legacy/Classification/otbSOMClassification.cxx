@@ -291,7 +291,7 @@ int main(int argc, char * argv[])
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outfname);
   writer->SetInput(classifier->GetOutput());
-  writer->SetNumberOfStreamDivisions(numberOfStreamDivisions);
+  writer->SetNumberOfDivisionsStrippedStreaming(numberOfStreamDivisions);
   writer->Update();
 
   std::cout<<"Classification completed."<<std::endl;
