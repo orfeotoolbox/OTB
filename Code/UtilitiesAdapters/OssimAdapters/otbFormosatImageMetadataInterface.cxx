@@ -107,13 +107,13 @@ FormosatImageMetadataInterface::GetSolarIrradiance() const
     }
 
   std::vector<double>      outputValues;
-  if (imageKeywordlist.HasKey("support_data.solar_irradiance")) 
+  if (imageKeywordlist.HasKey("support_data.solar_irradiance"))
     {
     std::vector<std::string> outputValuesString;
     std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.solar_irradiance");
     boost::trim(valueString);
     boost::split(outputValuesString, valueString, boost::is_any_of(" "));
-    for (unsigned int i = 0; i < outputValuesString.size(); ++i) 
+    for (unsigned int i = 0; i < outputValuesString.size(); ++i)
       {
       outputValues.push_back(atof(outputValuesString[i].c_str()));
       }
@@ -160,7 +160,7 @@ FormosatImageMetadataInterface::GetDay() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  if (!imageKeywordlist.HasKey("support_data.image_date")) 
+  if (!imageKeywordlist.HasKey("support_data.image_date"))
     {
     return -1;
     }
@@ -192,7 +192,7 @@ FormosatImageMetadataInterface::GetMonth() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  if (!imageKeywordlist.HasKey("support_data.image_date")) 
+  if (!imageKeywordlist.HasKey("support_data.image_date"))
     {
     return -1;
     }
@@ -223,7 +223,7 @@ FormosatImageMetadataInterface::GetYear() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  if (!imageKeywordlist.HasKey("support_data.image_date")) 
+  if (!imageKeywordlist.HasKey("support_data.image_date"))
     {
     return -1;
     }
@@ -254,7 +254,7 @@ FormosatImageMetadataInterface::GetHour() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  if (!imageKeywordlist.HasKey("support_data.image_date")) 
+  if (!imageKeywordlist.HasKey("support_data.image_date"))
     {
     return -1;
     }
@@ -285,7 +285,7 @@ FormosatImageMetadataInterface::GetMinute() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  if (!imageKeywordlist.HasKey("support_data.image_date")) 
+  if (!imageKeywordlist.HasKey("support_data.image_date"))
     {
     return -1;
     }
@@ -316,7 +316,7 @@ FormosatImageMetadataInterface::GetProductionDay() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  if (!imageKeywordlist.HasKey("support_data.production_date")) 
+  if (!imageKeywordlist.HasKey("support_data.production_date"))
     {
     return -1;
     }
@@ -347,7 +347,7 @@ FormosatImageMetadataInterface::GetProductionMonth() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  if (!imageKeywordlist.HasKey("support_data.production_date")) 
+  if (!imageKeywordlist.HasKey("support_data.production_date"))
     {
     return -1;
     }
@@ -378,7 +378,7 @@ FormosatImageMetadataInterface::GetProductionYear() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  if (!imageKeywordlist.HasKey("support_data.production_date")) 
+  if (!imageKeywordlist.HasKey("support_data.production_date"))
     {
     return -1;
     }
@@ -411,13 +411,13 @@ FormosatImageMetadataInterface
     }
 
   std::vector<double>      outputValues;
-  if (imageKeywordlist.HasKey("support_data.physical_bias")) 
+  if (imageKeywordlist.HasKey("support_data.physical_bias"))
     {
     std::vector<std::string> outputValuesString;
     std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.physical_bias");
     boost::trim(valueString);
     boost::split(outputValuesString, valueString, boost::is_any_of(" "));
-    for (unsigned int i = 0; i < outputValuesString.size(); ++i) 
+    for (unsigned int i = 0; i < outputValuesString.size(); ++i)
       {
       outputValues.push_back(atof(outputValuesString[i].c_str()));
       }
@@ -467,13 +467,13 @@ FormosatImageMetadataInterface
     }
 
   std::vector<double>      outputValues;
-  if (imageKeywordlist.HasKey("support_data.physical_gain")) 
+  if (imageKeywordlist.HasKey("support_data.physical_gain"))
     {
     std::vector<std::string> outputValuesString;
     std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.physical_gain");
     boost::trim(valueString);
     boost::split(outputValuesString, valueString, boost::is_any_of(" "));
-    for (unsigned int i = 0; i < outputValuesString.size(); ++i) 
+    for (unsigned int i = 0; i < outputValuesString.size(); ++i)
       {
       outputValues.push_back(atof(outputValuesString[i].c_str()));
       }
