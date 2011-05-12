@@ -30,7 +30,7 @@ int ConcatenateVectorData::Describe(ApplicationDescriptor* descriptor)
 {
   descriptor->SetName("ConcatenateVectorData");
   descriptor->SetDescription("Concatenate VectorDatas");
-  descriptor->AddOptionNParams("InputVectorDatas","Input VectorDatas to concatenate","in",true, ApplicationDescriptor::FileName);
+  descriptor->AddOptionNParams("InputVectorDatas","Input VectorDatas to concatenate","in", true, ApplicationDescriptor::FileName);
   descriptor->AddOption("OutputVectorData","Output vector data","out", 1, true, ApplicationDescriptor::FileName);
 
   return EXIT_SUCCESS;
@@ -49,7 +49,7 @@ int ConcatenateVectorData::Execute(otb::ApplicationOptionsResult* parseResult)
     // Get number of input vectorDatas
     unsigned int nbInputs = parseResult->GetNumberOfParameters("InputVectorDatas");
 
-    // Instanciate a concatenate filter Concatenate the vector datas 
+    // Instanciate a concatenate filter Concatenate the vector datas
     ConcatenateFilterType::Pointer concatenate = ConcatenateFilterType::New();
   
     for (unsigned int idx = 0; idx < nbInputs; idx++)
