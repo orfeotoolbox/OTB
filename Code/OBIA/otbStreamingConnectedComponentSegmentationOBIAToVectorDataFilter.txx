@@ -40,17 +40,24 @@ typename PersistentConnectedComponentSegmentationOBIAToVectorDataFilter<TVImage,
 PersistentConnectedComponentSegmentationOBIAToVectorDataFilter<TVImage, TLabelImage, TMaskImage, TOutputVectorData>
 ::ProcessTile(const VectorImageType* inputImage)
 {
-  // Compute the mask
-  typename MaskMuParserFilterType::Pointer maskFilter;
-  maskFilter = MaskMuParserFilterType::New();
-  maskFilter->SetInput(inputImage);
-  maskFilter->SetExpression(m_MaskExpression);
-  maskFilter->Update();
+  typename MaskImageType::Pointer mask;
+  if (!m_MaskExpression.empty())
+    {
+    // Compute the mask
+    typename MaskMuParserFilterType::Pointer maskFilter;
+    maskFilter = MaskMuParserFilterType::New();
+    maskFilter->SetInput(inputImage);
+    maskFilter->SetExpression(m_MaskExpression);
+    maskFilter->Update();
+    mask = maskFilter->GetOutput();
+    }
 
   // Perform connected components segmentation
   typename ConnectedComponentFilterType::Pointer connected = ConnectedComponentFilterType::New();
   connected->SetInput(inputImage);
-  connected->SetMaskImage(maskFilter->GetOutput());
+
+  if (mask.IsNotNull())
+    connected->SetMaskImage(mask);
   connected->GetFunctor().SetExpression(m_ConnectedComponentExpression);
   connected->Update();
 
