@@ -47,8 +47,11 @@ namespace otb {
 *  OBIA filtering and conversion to VectorData.
 *  An optional mask can be applied to segment only the pixels inside the mask.
 *
-*  Mathematical expression can be given for the 3 main parameters :
-*  <li> MaskExpression
+*  Parameters of the chain are :
+*  - MaskExpression : mathematical expression to apply on the input image to make a mask
+*  - ConnectedComponentExpression : mathematical expression which connects two pixels
+*  - MinimumObjectSize : minimum object size kept after segmentation
+*  - OBIAExpression : mathematical expression for OBIA filtering
 *
 * \ingroup Streamed
 */
@@ -163,11 +166,11 @@ private:
 *  The parameters of the processing chain must be applied on the internal filter,
 *  which can be accessed with GetFilter. See PersistentConnectedComponentSegmentationOBIAToVectorDataFilter
 *
-*  Mathematical expression can be given for the 3 main parameters :
-*  - MaskExpression : sets the expression to apply on the input image to make a mask
-*  - ConnectedComponentExpression : sets the expression which connects two pixels
-*  - MinimumObjectSize : sets the minimum object size kept after segmentation
-*  - OBIAExpression : sets the expression to apply on the input image to make a mask
+*  Parameters of the chain are :
+*  - MaskExpression : mathematical expression to apply on the input image to make a mask
+*  - ConnectedComponentExpression : mathematical expression which connects two pixels
+*  - MinimumObjectSize : minimum object size kept after segmentation
+*  - OBIAExpression : mathematical expression for OBIA filtering
 *
 * \sa PersistentConnectedComponentSegmentationOBIAToVectorDataFilter
 * \sa PersistentFilterStreamingDecorator
