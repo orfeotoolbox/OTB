@@ -163,48 +163,37 @@ SubsampleImageFilter<TInputImage, TOutputImage, TDirectionOfTransformation>
   SubsampledImageRegionConstIterator<InputImageType> inputIter
     (this->GetInput(), inputRegionForThread);
 
-  switch (DirectionOfTransformation)
+  if (static_cast<int>(itkGetStaticConstMacro(DirectionOfTransformation))
+        == static_cast<int>(Wavelet::FORWARD))
     {
-    case static_cast<int>(Wavelet::FORWARD):
+    inputIter.SetSubsampleFactor(GetSubsampleFactor());
+    inputIter.GoToBegin();
+
+    while (!inputIter.IsAtEnd())
       {
-      inputIter.SetSubsampleFactor(GetSubsampleFactor());
-      inputIter.GoToBegin();
-
-      while (!inputIter.IsAtEnd())
-        {
-        outputIter.SetOffset(
-          static_cast<typename SubsampledImageRegionIterator<OutputImageType>::OffsetType>
-            (inputIter.GetOffset()));
-        outputIter.Set(static_cast<OutputPixelType>(inputIter.Get()));
-        ++inputIter;
-        }
-
-      break;
+      outputIter.SetOffset(
+        static_cast<typename SubsampledImageRegionIterator<OutputImageType>::OffsetType>
+          (inputIter.GetOffset()));
+      outputIter.Set(static_cast<OutputPixelType>(inputIter.Get()));
+      ++inputIter;
       }
-    case static_cast<int>(Wavelet::INVERSE):
-      {
-      inputIter.SetSubsampleFactor(1);
-      inputIter.GoToBegin();
+    }
+  else
+    {
+    inputIter.SetSubsampleFactor(1);
+    inputIter.GoToBegin();
 
-      while (!inputIter.IsAtEnd())
+    while (!inputIter.IsAtEnd())
+      {
+      InputImageIndexType  inputIndex = inputIter.GetIndex();
+      OutputImageIndexType outputIndex;
+      for (unsigned int i = 0; i < OutputImageDimension; i++)
         {
-        InputImageIndexType  inputIndex = inputIter.GetIndex();
-        OutputImageIndexType outputIndex;
-        for (unsigned int i = 0; i < OutputImageDimension; i++)
-          {
-          outputIndex[i] = inputIndex[i] * m_SubsampleFactor[i];
-          }
-        outputIter.SetIndex(outputIndex);
-        outputIter.Set(static_cast<OutputPixelType>(inputIter.Get()));
-        ++inputIter;
+        outputIndex[i] = inputIndex[i] * m_SubsampleFactor[i];
         }
-
-      break;
-      }
-    default:
-      {
-      itkExceptionMacro(<< "otb::SubsampleImageFilter have to be Wavelet::FORWARD or Wavelet::INVERSE only!!");
-      break;
+      outputIter.SetIndex(outputIndex);
+      outputIter.Set(static_cast<OutputPixelType>(inputIter.Get()));
+      ++inputIter;
       }
     }
 }
