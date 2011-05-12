@@ -60,11 +60,11 @@ int VectorDataTransformFilterApplication::Execute(otb::ApplicationOptionsResult*
     typedef otb::VectorDataFileReader<VectorDataType> VectorDataFileReaderType;
     typedef otb::VectorDataFileWriter<VectorDataType> VectorDataFileWriterType;
     typedef otb::VectorDataTransformFilter
-      <VectorDataType, VectorDataType>              VectorDataTransformType;
+      <VectorDataType, VectorDataType>                VectorDataTransformType;
     typedef otb::VectorDataProjectionFilter<VectorDataType,
       VectorDataType>                                 VDProjectionFilterType;
 
-    typedef otb::VectorImage<double, 2>                ImageType;
+    typedef otb::VectorImage<double, 2>               ImageType;
     typedef otb::ImageFileReader<ImageType>           ReaderType;
     
     // Instanciate the image reader
