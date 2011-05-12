@@ -51,4 +51,6 @@ REGISTER_TEST(otbShapeAttributesLabelMapFilterNew);
 REGISTER_TEST(otbStatisticsAttributesLabelMapFilterNew);
 REGISTER_TEST(otbVectorDataToLabelMapFilterNew);
 REGISTER_TEST(otbVectorDataToLabelMapFilter);
+REGISTER_TEST(otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilterNew);
+REGISTER_TEST(otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter);
 }

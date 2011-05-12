@@ -141,7 +141,22 @@ ADD_TEST(obTvVectorDataToLabelMapFilter ${OBIA_TESTS1}
     ${INPUTDATA}/vectorIOexample_gis_to_vec.shp
     ${TEMP}/vectordataToLabelMap.png)
 
+ADD_TEST(obTuStreamingConnectedComponentSegmentationOBIAToVectorDataFilterNew ${OBIA_TESTS1} 
+    otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilterNew)
 
+ADD_TEST(obTvStreamingConnectedComponentSegmentationOBIAToVectorDataFilter ${OBIA_TESTS1}
+    --compare-ogr ${NOTOL}
+     ${BASELINE_FILES}/obTvStreamingConnectedComponentSegmentationOBIAToVectorDataFilter.shp
+     ${TEMP}/obTvStreamingConnectedComponentSegmentationOBIAToVectorDataFilter.shp
+    otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter
+      ${INPUTDATA}/ROI_QB_MUL_4.tif
+      ${TEMP}/obTvStreamingConnectedComponentSegmentationOBIAToVectorDataFilter.shp
+      "((b1>80) * intensity>95)"
+      "distance<40"
+      15
+      "SHAPE_Elongation>8"
+      5 )
+      
 # OBIATests2 (need PQXX)
 IF(OTB_USE_PQXX)
 ADD_TEST(obTuLabelMapToGISTableFilterNew ${OBIA_TESTS2}
@@ -194,6 +209,7 @@ otbShapeAttributesLabelMapFilterNew.cxx
 otbStatisticsAttributesLabelMapFilterNew.cxx
 otbVectorDataToLabelMapFilter.cxx
 otbVectorDataToLabelMapFilterNew.cxx
+otbStreamingConnectedComponentOBIATest.cxx
 )
 
 IF(OTB_USE_PQXX)
