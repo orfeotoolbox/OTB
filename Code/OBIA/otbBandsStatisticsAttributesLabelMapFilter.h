@@ -164,11 +164,6 @@ public:
   /** Runtime information support. */
   itkTypeMacro(BandsStatisticsAttributesLabelMapFilter, LabelMapFeaturesFunctorImageFilter);
 
-  // Channels
-  typedef MultiToMonoChannelExtractROI
-  <FeatureInternalPixelType, InternalPrecisionType>       ChannelFilterType;
-  typedef typename ChannelFilterType::Pointer ChannelFilterPointerType;
-
   /** Set the feature image */
   void SetFeatureImage(const TFeatureImage *input);
 

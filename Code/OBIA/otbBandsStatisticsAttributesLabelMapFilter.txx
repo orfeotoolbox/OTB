@@ -19,6 +19,7 @@
 #define __otbBandsStatisticsAttributesLabelMapFilter_txx
 
 #include "otbBandsStatisticsAttributesLabelMapFilter.h"
+#include "itkVectorIndexSelectionCastImageFilter.h"
 
 namespace otb
 {
@@ -225,16 +226,20 @@ BandsStatisticsAttributesLabelMapFilter<TImage, TFeatureImage>
   // Add each band of the feature image to the statistics functor
   for (unsigned int i = 0; i < nbComponents; ++i)
     {
-    ChannelFilterPointerType band = ChannelFilterType::New();
-    band->SetChannel(i + 1);
+    typedef itk::VectorIndexSelectionCastImageFilter<FeatureImageType, InternalImageType>
+      VectorIndexSelectionCastImageFilterType;
+
+    typename VectorIndexSelectionCastImageFilterType::Pointer band = VectorIndexSelectionCastImageFilterType::New();
     band->SetInput(this->GetFeatureImage());
+    band->SetIndex(i);
+    band->UpdateOutputInformation();
     band->GetOutput()->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
     band->Update();
     std::ostringstream oss;
     oss << "Band" << i + 1; // [1..N] convention in feature naming
     this->GetFunctor().AddFeature(oss.str(), band->GetOutput());
-    }
 
+    }
 }
 
 template <class TImage, class TFeatureImage>
