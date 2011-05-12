@@ -21,7 +21,6 @@
 #include "otbMacro.h"
 #include "itkMetaDataObject.h"
 #include "otbImageKeywordlist.h"
-#include "base/ossimKeywordlist.h"
 
 namespace otb
 {
@@ -42,12 +41,14 @@ OpticalImageMetadataInterface::GetSunElevation() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  std::string key = "support_data.elevation_angle";
-  ossimString keywordString = kwl.find(key.c_str());
+  if (imageKeywordlist.HasKey("support_data.elevation_angle"))
+    {
+    std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.elevation_angle");
+    double value = atof(valueString.c_str());
+    return value;
+    }
 
-  return keywordString.toDouble();
+  return 0;
 }
 
 double
@@ -61,12 +62,14 @@ OpticalImageMetadataInterface::GetSunAzimuth() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  std::string key = "support_data.azimuth_angle";
-  ossimString keywordString = kwl.find(key.c_str());
+  if (imageKeywordlist.HasKey("support_data.azimuth_angle"))
+    {
+    std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.azimuth_angle");
+    double value = atof(valueString.c_str());
+    return value;
+    }
 
-  return keywordString.toDouble();
+  return 0;
 }
 
 

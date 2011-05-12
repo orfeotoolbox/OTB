@@ -528,10 +528,7 @@ IkonosImageMetadataInterface
   VariableLengthVectorType wavel(1);
   wavel.Fill(0.);
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  std::string key = "support_data.number_bands";
-  int         nbBands = ossimString(kwl.find(key.c_str())).toInt();
+  int nbBands = this->GetNumberOfBands();
 
   // Panchromatic case
   if (nbBands == 1)
@@ -572,10 +569,7 @@ IkonosImageMetadataInterface
   VariableLengthVectorType wavel(1);
   wavel.Fill(0.);
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  std::string key = "support_data.number_bands";
-  int         nbBands = ossimString(kwl.find(key.c_str())).toInt();
+  int nbBands = this->GetNumberOfBands();
 
   // Panchromatic case
   if (nbBands == 1)
