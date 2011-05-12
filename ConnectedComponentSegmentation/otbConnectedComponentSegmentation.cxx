@@ -96,5 +96,4 @@ int ConnectedComponentSegmentation::Execute(otb::ApplicationOptionsResult* parse
 
   return EXIT_SUCCESS;
 }
-
 }
