@@ -50,6 +50,8 @@ SET(CTEST_CUSTOM_WARNING_EXCEPTION
   "ranlib:.*file:.*has no symbols"
   "ranlib: file: .+ has no symbols"
   "libtool:.*file:.*has no symbols"
+  "itkIOCommonTest.cxx:.*warning:.* is deprecated"
+  "Fl_Image.H:.*warning:.*dereferencing type-punned pointer will break strict-aliasing rules.*"
   )
 
 IF(APPLE)
