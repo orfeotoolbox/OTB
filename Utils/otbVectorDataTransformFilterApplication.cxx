@@ -101,7 +101,7 @@ int VectorDataTransformFilterApplication::Execute(otb::ApplicationOptionsResult*
       parameters[0] = parseResult->GetParameterFloat("Scale");
 
     if(parseResult->IsOptionPresent("Angle"))
-      parameters[1] = M_PI*parseResult->GetParameterFloat("Angle")/180.;
+      parameters[1] = CONST_PI*parseResult->GetParameterFloat("Angle")/180.;
 
     if(parseResult->IsOptionPresent("CenterX"))
       parameters[2] = parseResult->GetParameterFloat("CenterX");
