@@ -66,146 +66,167 @@ namespace otb
   {
 
     template<class TInput>
-    class ITK_EXPORT ConnectedComponentMuParserFunctor
-    {
-   
-    public:
-      typedef Parser ParserType;
-      typedef ConnectedComponentMuParserFunctor Self;
+class ITK_EXPORT ConnectedComponentMuParserFunctor
+{
 
-      std::string GetNameOfClass()
+public:
+  typedef Parser ParserType;
+  typedef ConnectedComponentMuParserFunctor Self;
+
+  std::string GetNameOfClass()
+  {
+    return "ConnectedComponentMuParserFunctor";
+  }
+
+  inline bool operator()(const TInput &p1, const TInput &p2)
+  {
+
+    double value;
+
+    if (p1.GetSize() != m_NbOfBands)
       {
-        return "ConnectedComponentMuParserFunctor";
+      this->SetNumberOfBands(p1.GetSize());
       }
 
-      inline bool operator()(const TInput &p1, const TInput &p2)
+    // we fill the buffer
+    for (unsigned int i = 0; i < m_NbOfBands; i++)
       {
-
-
-        double value;
-
-        if(p1.GetSize()!=m_NbOfBands)
-          {
-          this->SetNumberOfBands(p1.GetSize());
-          }
-
-        // we fill the buffer
-        for(unsigned int i=0; i<m_NbOfBands; i++)
-          {
-          m_AImageP1[i]= static_cast<double> (p1[i]);
-          m_AImageP2[i]= static_cast<double> (p2[i]);
-          }
-
-        m_Distance = 0.0;
-        m_IntensityP1=0.0;
-        m_IntensityP2=0.0;
-
-        for(unsigned int i = 0; i<m_NbOfBands; ++i)
-          {
-          m_Distance +=(p1[i]-p2[i])*(p1[i]-p2[i]);
-          m_IntensityP1+=p1[i];
-          m_IntensityP2+=p2[i];
-          }
-
-        m_IntensityP1=m_IntensityP1/(static_cast<double>(m_NbOfBands));
-        m_IntensityP2=m_IntensityP2/(static_cast<double>(m_NbOfBands));
-
-        m_Distance  = vcl_sqrt(m_Distance);
-
-        //TODO JGU compute spectraldistance
-
-          value = m_Parser->Eval();
-
-        return static_cast<bool> (value);
+      m_AImageP1[i] = static_cast<double> (p1[i]);
+      m_AImageP2[i] = static_cast<double> (p2[i]);
       }
 
+    m_Distance = 0.0;
+    m_IntensityP1 = 0.0;
+    m_IntensityP2 = 0.0;
 
-      void SetExpression(const std::string expression)
+    for (unsigned int i = 0; i < m_NbOfBands; ++i)
       {
-        m_Expression=expression;
-        m_Parser->SetExpr(m_Expression);
+      m_Distance += (p1[i] - p2[i]) * (p1[i] - p2[i]);
+      m_IntensityP1 += p1[i];
+      m_IntensityP2 += p2[i];
       }
 
-      /** Return the expression to be parsed */
-      std::string GetExpression() const
+    m_IntensityP1 = m_IntensityP1 / (static_cast<double> (m_NbOfBands));
+    m_IntensityP2 = m_IntensityP2 / (static_cast<double> (m_NbOfBands));
+
+    m_Distance = vcl_sqrt(m_Distance);
+
+    //compute spectralAngle
+
+    double dist = 0.0;
+    double scalarProd = 0.0;
+    double normProd = 0.0;
+    double normProd1 = 0.0;
+    double normProd2 = 0.0;
+
+    for (unsigned int i = 0; i < p1.Size(); ++i)
       {
-        return m_Expression;
+      scalarProd += p1[i] * p2[i];
+      normProd1 += p1[i] * p1[i];
+      normProd2 += p2[i] * p2[i];
+      }
+    normProd = normProd1 * normProd2;
+
+    if (normProd == 0.0)
+      {
+      m_SpectralAngle = 0.0;
+      }
+    else
+      {
+      m_SpectralAngle = vcl_acos(scalarProd / vcl_sqrt(normProd));
       }
 
-      /** Check the expression */
-      bool CheckExpression()
+    //
+
+    value = m_Parser->Eval();
+
+    return static_cast<bool> (value);
+  }
+
+  void SetExpression(const std::string expression)
+  {
+    m_Expression = expression;
+    m_Parser->SetExpr(m_Expression);
+  }
+
+  /** Return the expression to be parsed */
+  std::string GetExpression() const
+  {
+    return m_Expression;
+  }
+
+  /** Check the expression */
+  bool CheckExpression()
+  {
+    return m_Parser->CheckExpr();
+  }
+
+  void SetNumberOfBands(unsigned int NbOfBands)
+  {
+
+    m_NbOfBands = NbOfBands;
+    std::ostringstream varName;
+
+    m_AImageP1.resize(NbOfBands, 0.0);
+    m_AImageP2.resize(NbOfBands, 0.0);
+
+    for (unsigned int i = 0; i < NbOfBands; i++)
       {
-        return m_Parser->CheckExpr();
+      varName << "p1b" << i + 1;
+      m_Parser->DefineVar(varName.str(), &(m_AImageP1[i]));
+      varName.str("");
+      varName << "p2b" << i + 1;
+      m_Parser->DefineVar(varName.str(), &(m_AImageP2[i]));
+      varName.str("");
       }
+    // customized data
+    //m_NbVar++;
+    //this->SetDataSize(m_NbVar);
+    m_Parser->DefineVar("distance", &m_Distance);
+    m_Parser->DefineVar("spectralAngle", &m_SpectralAngle);
+    m_Parser->DefineVar("intensity_p1", &m_IntensityP1);
+    m_Parser->DefineVar("intensity_p2", &m_IntensityP2);
+    //this->SetVarName(m_NbVar-1,"spectralDistance");
 
+  }
 
-      void SetNumberOfBands(unsigned int NbOfBands)
-      {
+  const std::map<std::string, Parser::ValueType*>& GetVar() const
+  {
+    return this->m_Parser->GetVar();
+  }
 
-        m_NbOfBands=NbOfBands;
-        std::ostringstream varName;
+  ConnectedComponentMuParserFunctor()
+  {
+    m_Parser = ParserType::New();
+    m_NbOfBands = 0;
+  }
+  ;
 
+  ~ConnectedComponentMuParserFunctor()
+  {
+  }
+  ;
 
-        m_AImageP1.resize(NbOfBands, 0.0);
-        m_AImageP2.resize(NbOfBands, 0.0);
+protected:
 
-        for(unsigned int i=0; i<NbOfBands; i++)
-          {
-          varName << "p1b" << i+1;
-          m_Parser->DefineVar(varName.str(), &(m_AImageP1[i]));
-          varName.str("");
-          varName << "p2b" << i+1;
-          m_Parser->DefineVar(varName.str(), &(m_AImageP2[i]));
-          varName.str("");
-          }
-        // customized data
-        //m_NbVar++;
-        //this->SetDataSize(m_NbVar);
-        m_Parser->DefineVar("distance", &m_Distance);
-        m_Parser->DefineVar("spectralAngle", &m_SpectralAngle);
-        m_Parser->DefineVar("intensity_p1", &m_IntensityP1);
-        m_Parser->DefineVar("intensity_p2", &m_IntensityP2);
-        //this->SetVarName(m_NbVar-1,"spectralDistance");
+private:
 
-      }
+  ConnectedComponentMuParserFunctor(const Self &); //purposely not implemented
+  void operator =(const Self &); //purposely not implemented
 
+  std::string m_Expression;
+  ParserType::Pointer m_Parser;
+  std::vector<double> m_AImageP1;
+  std::vector<double> m_AImageP2;
+  double m_Distance;
+  double m_IntensityP1;
+  double m_IntensityP2;
+  double m_SpectralAngle;
+  std::vector<std::string> m_VarName;
+  unsigned int m_NbOfBands;
+  double m_ParserResult;
 
-      const std::map<std::string, Parser::ValueType*>& GetVar() const
-       {
-         return this->m_Parser->GetVar();
-       }
-
-
-      ConnectedComponentMuParserFunctor()
-      {
-        m_Parser = ParserType::New();
-        m_NbOfBands =0;
-      };
-
-      ~ConnectedComponentMuParserFunctor()
-      {};
-
-    protected:
-
-
-    private:
-
-      ConnectedComponentMuParserFunctor(const Self &); //purposely not implemented
-      void operator =(const Self &);    //purposely not implemented
-
-      std::string m_Expression;
-      ParserType::Pointer m_Parser;
-      std::vector<double> m_AImageP1;
-      std::vector<double> m_AImageP2;
-      double m_Distance;
-      double m_IntensityP1;
-      double m_IntensityP2;
-      double m_SpectralAngle;
-      std::vector<std::string > m_VarName;
-      unsigned int m_NbOfBands;
-      double m_ParserResult;
-
-    };
+};
   } // end of Functor namespace
 
 
