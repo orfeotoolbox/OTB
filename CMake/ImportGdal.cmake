@@ -47,7 +47,7 @@ IF(OTB_USE_EXTERNAL_GDAL)
     IF ( ${GDAL_FORMATS} MATCHES "hdf" )
        SET(CHECK_GDAL_BUILDED_WITH_HDF 1 CACHE INTERNAL "GDAL_BUILDED_WITH_HDF" FORCE)
     ELSE ( ${GDAL_FORMATS} MATCHES "hdf")
-       MESSAGE(WARNING "CHECK_GDAL_BUILDED_WITH_HDF test failed : GDAL is not built with hdf support. So the HDF tests will be deactivated. Formats supported by your GDAL: " [ ${GDAL_FORMATS} ] )
+       MESSAGE(STATUS "CHECK_GDAL_BUILDED_WITH_HDF test failed : GDAL is not built with hdf support. So the HDF tests will be deactivated. Formats supported by your GDAL: " [ ${GDAL_FORMATS} ] )
        SET(CHECK_GDAL_BUILDED_WITH_HDF 0 CACHE INTERNAL "GDAL_BUILDED_WITH_HDF" FORCE)
     ENDIF(${GDAL_FORMATS} MATCHES "hdf")
 
