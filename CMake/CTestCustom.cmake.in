@@ -51,12 +51,6 @@ SET(CTEST_CUSTOM_WARNING_EXCEPTION
   "ranlib: file: .+ has no symbols"
   "libtool:.*file:.*has no symbols"
   "Fl_Image.H:.*warning:.*dereferencing type-punned pointer will break strict-aliasing rules.*"
-  )
-
-IF(APPLE)
-SET(CTEST_CUSTOM_WARNING_EXCEPTION
-  ${CTEST_CUSTOM_WARNING_EXCEPTION}
   "warning -.: directory name .* does not exist"
   "ld.*warning.*duplicate dylib.*"
   )
-ENDIF(APPLE)
