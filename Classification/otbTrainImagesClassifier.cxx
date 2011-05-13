@@ -73,6 +73,8 @@ int TrainImagesClassifier::Describe(ApplicationDescriptor* descriptor)
                                "in", true, ApplicationDescriptor::InputImage);
   descriptor->AddOptionNParams("VectorDataSamples", "Vector Data of sample used to train the estimator",
                                "vd", true, ApplicationDescriptor::FileName);
+  descriptor->AddOptionNParams("DEMdirectory", "A DEM repository",
+                               "dem", false, ApplicationDescriptor::DirectoryName);
   descriptor->AddOption("ImagesStatistics", "XML file containing mean and variance of input images.",
                         "is", 1, false, ApplicationDescriptor::FileName);
   descriptor->AddOption("Output", "Output SVM model",
@@ -91,6 +93,8 @@ int TrainImagesClassifier::Describe(ApplicationDescriptor* descriptor)
                         "vtr", 1, false, ApplicationDescriptor::Real);
   descriptor->AddOption("SVMParamOptim", "Use SVM parameters optimization",
                         "opt", 1, false, ApplicationDescriptor::Integer);
+  descriptor->AddOption("VectorDataFieldName", "Name of the field using to discriminate class in the vector data files",
+                         "vfn", 1, false, ApplicationDescriptor::String);
 
   return EXIT_SUCCESS;
 }
@@ -225,6 +229,10 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
     // Set the cartographic region to the extract roi filter
     vdextract->SetRegion(rsRegion);
 
+    if (parseResult->IsOptionPresent("DEMdirectory"))
+      {
+      vdextract->SetDEMDirectory(parseResult->GetParameterString("DEMdirectory"));
+      }
 
     // Project the vectorData in the Image Coodinate system
     VectorDataProjectionFilterType::Pointer vproj = VectorDataProjectionFilterType::New();
@@ -236,9 +244,13 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
     // with listSampleGenerator we don't need this parameters.
     //vproj->SetOutputOrigin(reader->GetOutput()->GetOrigin());
     //vproj->SetOutputSpacing(reader->GetOutput()->GetSpacing());
-    // TODO add DEM support
-    vproj->Update();
 
+    if (parseResult->IsOptionPresent("DEMdirectory"))
+      {
+      vproj->SetDEMDirectory(parseResult->GetParameterString("DEMdirectory"));
+      }
+
+    vproj->Update();
 
     //Sample list generator
     ListSampleGeneratorType::Pointer sampleGenerator = ListSampleGeneratorType::New();
@@ -247,6 +259,12 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
     //TODO the ListSampleGenerator perform UpdateOutputData over the input image (need a persistent implementation)
     sampleGenerator->SetInput(reader->GetOutput());
     sampleGenerator->SetInputVectorData(vproj->GetOutput());
+
+    if (parseResult->IsOptionPresent( "VectorDataFieldName"))
+      {
+      sampleGenerator->SetClassKey(parseResult->GetParameterString("VectorDataFieldName"));
+      }
+
     if (parseResult->IsOptionPresent("MaxTrainingSize"))
       {
       sampleGenerator->SetMaxTrainingSize(parseResult->GetParameterInt("MaxTrainingSize"));
@@ -263,7 +281,6 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
       {
       sampleGenerator->SetValidationTrainingProportion(0.5);
       }
-    sampleGenerator->SetClassKey("Class");
 
     sampleGenerator->Update();
 
