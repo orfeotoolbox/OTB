@@ -26,6 +26,8 @@ void RegisterTests()
 {
   REGISTER_TEST(otbMultiToMonoChannelExtractROI);
   REGISTER_TEST(otbMultiToMonoChannelExtractROINew);
+  REGISTER_TEST(otbITKExtractImageFilterROITestRegion);
+  REGISTER_TEST(otbMultiChannelExtractROITestRegion);
   REGISTER_TEST(otbPointSetSourceTest);
   REGISTER_TEST(otbDrawLineSpatialObjectNew);
   REGISTER_TEST(otbDrawLineSpatialObject);
@@ -35,4 +37,9 @@ void RegisterTests()
   REGISTER_TEST(otbPathListToHistogramGeneratorNew);
   REGISTER_TEST(otbPathListToHistogramGenerator);
   REGISTER_TEST(otbLineSpatialObjectListToPointSetFilterNew);
+  REGISTER_TEST(otbITKExtractImageFilterROITestRegion);
+  REGISTER_TEST(otbITKVectorIndexSelectionCastTestRegion);
+  REGISTER_TEST(otbMultiToMonoChannelExtractROITestRegion);
+  REGISTER_TEST(otbMultiChannelExtractROITestRegion);
+  REGISTER_TEST(otbExtractROITestRegion);
 }

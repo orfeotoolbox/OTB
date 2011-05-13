@@ -318,7 +318,7 @@ ADD_TEST(coTvMultiChannelExtractROI_Romania ${COMMON_TESTS2}
 
 ADD_TEST(coTuMultiToMonoROINew ${COMMON_TESTS3}
          otbMultiToMonoChannelExtractROINew)
-
+         
 ADD_TEST(coTvMultiToMonoROI_RGB2NG_PNG ${COMMON_TESTS3}
   --compare-image ${NOTOL}   ${BASELINE}/coMultiToMonoChannelExtractROI_RGB2NG_PNG_300_10_250_50_channel_1.png
                            ${TEMP}/coMultiToMonoChannelExtractROI_RGB2NG_PNG_300_10_250_50_channel_1.png
@@ -371,6 +371,25 @@ ADD_TEST(coTuPathListToHistogramGenerator ${COMMON_TESTS3}
 
 ADD_TEST(coTuLineSpatialObjectListToPointSetFilter ${COMMON_TESTS3}
          otbLineSpatialObjectListToPointSetFilterNew)
+
+
+# -------  Compare region propagation of ExtractROI filters  ------------------------------
+ADD_TEST(coTuITKExtractImageFilterTestRegion ${COMMON_TESTS3}
+         otbITKExtractImageFilterROITestRegion)
+  
+ADD_TEST(coTuITKVectorIndexSelectionCastTestRegion ${COMMON_TESTS3}
+         otbITKVectorIndexSelectionCastTestRegion)
+         
+ADD_TEST(coTuMultiToMonoChannelExtractROITestRegion ${COMMON_TESTS3}
+         otbMultiToMonoChannelExtractROITestRegion)
+       
+ADD_TEST(coTuMultiChannelExtractROITestRegion ${COMMON_TESTS3}
+         otbMultiChannelExtractROITestRegion)
+         
+ADD_TEST(coTuExtractROITestRegion ${COMMON_TESTS3}
+         otbExtractROITestRegion)
+
+         
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbCommonTests4 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1071,6 +1090,7 @@ otbVectorDataExtractROI.cxx
 )
 SET(BasicCommon_SRCS3
 otbCommonTests3.cxx
+otbExtractROICompareRegionsImplementations.cxx
 otbMultiToMonoChannelExtractROI.cxx
 otbMultiToMonoChannelExtractROINew.cxx
 otbPointSetSourceTest.cxx
