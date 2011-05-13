@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   Insight Segmentation & Registration Toolkit
-  Module:    $RCSfile: itkRelabelComponentImageFilter.txx,v $
+  Module:    $RCSfile: itkRelabelComponentImageFilter.txx, v $
   Language:  C++
   Date:      $Date: 2009-04-27 22:58:48 $
   Version:   $Revision: 1.18 $
@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -200,7 +200,7 @@ RelabelComponentImageFilter< TInputImage, TOutputImage >
       {
 
       // lookup the mapped label
-      outputValue = static_cast<OutputPixelType>(relabelMap[inputValue]); 
+      outputValue = static_cast<OutputPixelType>(relabelMap[inputValue]);
       oit.Set( outputValue );
       }
     else

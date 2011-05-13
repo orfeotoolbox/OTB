@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   Insight Segmentation & Registration Toolkit
-  Module:    $RCSfile: itkRelabelComponentImageFilter.h,v $
+  Module:    $RCSfile: itkRelabelComponentImageFilter.h, v $
   Language:  C++
   Date:      $Date: 2009-04-27 22:58:48 $
   Version:   $Revision: 1.17 $
@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -37,7 +37,7 @@ namespace otb
  * largest will have label #2, etc.
  *
  * Label #0 is assumed to be background is left unaltered by the
- * relabeling. 
+ * relabeling.
  *
  * RelabelComponentImageFilter is typically used on the output of the
  * ConnectedComponentImageFilter for those applications that want to
@@ -71,7 +71,7 @@ namespace otb
  */
 
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT RelabelComponentImageFilter : 
+class ITK_EXPORT RelabelComponentImageFilter :
     public itk::InPlaceImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -95,7 +95,7 @@ public:
   typedef typename TInputImage::PixelType          InputPixelType;
   typedef typename TInputImage::InternalPixelType  InputInternalPixelType;
   itkStaticConstMacro(ImageDimension, unsigned int,
-                      TOutputImage::ImageDimension); 
+                      TOutputImage::ImageDimension);
   itkStaticConstMacro(InputImageDimension, unsigned int,
                       TInputImage::ImageDimension);
  
@@ -108,8 +108,8 @@ public:
   typedef   typename TInputImage::SizeType        SizeType;
   typedef   typename TOutputImage::RegionType     RegionType;
 
-  /** 
-   * Smart pointer typedef support 
+  /**
+   * Smart pointer typedef support
    */
   typedef itk::SmartPointer<Self>        Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
@@ -196,7 +196,7 @@ public:
    * size). This information is only valid after the filter has
    * executed. Size of the background (object #0) is not calculated.  */
   float GetSizeOfObjectInPhysicalUnits( LabelType obj ) const
-    { 
+    {
     if (obj > 0 && obj <= m_NumberOfObjects)
       {
       return m_SizeOfObjectsInPhysicalUnits[obj-1];
@@ -232,7 +232,7 @@ protected:
   RelabelComponentImageFilter(const Self&) {}
 
   /**
-   * Standard pipeline method. 
+   * Standard pipeline method.
    */
   void GenerateData();
 
@@ -260,7 +260,7 @@ protected:
   class RelabelComponentSizeInPixelsComparator
     {
     public:
-      bool operator()(const RelabelComponentObjectType&a, 
+      bool operator()(const RelabelComponentObjectType&a,
                       const RelabelComponentObjectType &b)
       {
       if (a.m_SizeInPixels > b.m_SizeInPixels)

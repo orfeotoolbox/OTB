@@ -94,7 +94,7 @@ int otbITKExtractImageFilterROITestRegion(int argc, char * argv[])
   RegionType extractionRegion;
   ExtractImageFilterType::Pointer extract;
 
-  in = makeImage(0,0,100,100);
+  in = makeImage(0, 0, 100, 100);
 
   extractionRegion.SetIndex(0, 50);
   extractionRegion.SetIndex(1, 50);
@@ -115,7 +115,7 @@ int otbITKExtractImageFilterROITestRegion(int argc, char * argv[])
     return EXIT_FAILURE;
     }
 
-  in = makeImage(20,20,100,100);
+  in = makeImage(20, 20, 100, 100);
 
   extractionRegion.SetIndex(0, 50);
   extractionRegion.SetIndex(1, 50);
@@ -146,7 +146,7 @@ int otbITKVectorIndexSelectionCastTestRegion(int argc, char * argv[])
   RegionType extractionRegion;
   VectorIndexSelectionCastImageFilterType::Pointer extract;
 
-  in = makeVectorImage(0,0,100,100,3);
+  in = makeVectorImage(0, 0, 100, 100, 3);
 
   extract = VectorIndexSelectionCastImageFilterType::New();
   extract->SetInput(in);
@@ -161,7 +161,7 @@ int otbITKVectorIndexSelectionCastTestRegion(int argc, char * argv[])
     return EXIT_FAILURE;
     }
 
-  in = makeVectorImage(50,50,100,100,3);
+  in = makeVectorImage(50, 50, 100, 100, 3);
 
   extract = VectorIndexSelectionCastImageFilterType::New();
   extract->SetInput(in);
@@ -186,7 +186,7 @@ int otbMultiToMonoChannelExtractROITestRegion(int argc, char * argv[])
   RegionType extractionRegion;
   MultiToMonoChannelExtractROIType::Pointer extract;
 
-  in = makeVectorImage(0,0,100,100,3);
+  in = makeVectorImage(0, 0, 100, 100, 3);
 
   extractionRegion.SetIndex(0, 50);
   extractionRegion.SetIndex(1, 50);
@@ -207,7 +207,7 @@ int otbMultiToMonoChannelExtractROITestRegion(int argc, char * argv[])
     return EXIT_FAILURE;
     }
 
-  in = makeVectorImage(20,20,100,100,3);
+  in = makeVectorImage(20, 20, 100, 100, 3);
 
   extractionRegion.SetIndex(0, 50);
   extractionRegion.SetIndex(1, 50);
@@ -239,7 +239,7 @@ int otbMultiChannelExtractROITestRegion(int argc, char * argv[])
   RegionType extractionRegion;
   MultiChannelExtractROIType::Pointer extract;
 
-  in = makeVectorImage(0,0,100,100,3);
+  in = makeVectorImage(0, 0, 100, 100, 3);
 
   extractionRegion.SetIndex(0, 50);
   extractionRegion.SetIndex(1, 50);
@@ -260,7 +260,7 @@ int otbMultiChannelExtractROITestRegion(int argc, char * argv[])
     return EXIT_FAILURE;
     }
 
-  in = makeVectorImage(20,20,100,100,3);
+  in = makeVectorImage(20, 20, 100, 100, 3);
 
   extractionRegion.SetIndex(0, 50);
   extractionRegion.SetIndex(1, 50);
@@ -291,7 +291,7 @@ int otbExtractROITestRegion(int argc, char * argv[])
   RegionType extractionRegion;
   ExtractROIType::Pointer extract;
 
-  in = makeImage(0,0,100,100);
+  in = makeImage(0, 0, 100, 100);
 
   extractionRegion.SetIndex(0, 50);
   extractionRegion.SetIndex(1, 50);
@@ -312,7 +312,7 @@ int otbExtractROITestRegion(int argc, char * argv[])
     return EXIT_FAILURE;
     }
 
-  in = makeImage(20,20,100,100);
+  in = makeImage(20, 20, 100, 100);
 
   extractionRegion.SetIndex(0, 50);
   extractionRegion.SetIndex(1, 50);

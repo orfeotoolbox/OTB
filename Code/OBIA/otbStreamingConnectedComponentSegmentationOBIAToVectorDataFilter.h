@@ -61,7 +61,7 @@ class PersistentConnectedComponentSegmentationOBIAToVectorDataFilter : public ot
 public:
   /** Standard Self typedef */
   typedef PersistentConnectedComponentSegmentationOBIAToVectorDataFilter      Self;
-  typedef PersistentImageToVectorDataFilter<TVImage,TOutputVectorData >       Superclass;
+  typedef PersistentImageToVectorDataFilter<TVImage, TOutputVectorData >       Superclass;
   typedef itk::SmartPointer<Self>                                             Pointer;
   typedef itk::SmartPointer<const Self>                                       ConstPointer;
 

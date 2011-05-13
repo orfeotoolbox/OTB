@@ -66,7 +66,7 @@ IkonosImageMetadataInterface::GetSolarIrradiance() const
 
   std::string keywordString = imageKeywordlist.GetMetadataByKey("support_data.band_name");
 
-  // values from geoeye 
+  // values from geoeye
   // TODO are these the correct values ????
   if (keywordString == "Pan")
     {
@@ -107,7 +107,7 @@ IkonosImageMetadataInterface::GetDay() const
     {
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
-  if (!imageKeywordlist.HasKey("support_data.acquisition_date")) 
+  if (!imageKeywordlist.HasKey("support_data.acquisition_date"))
     {
     return -1;
     }
@@ -138,7 +138,7 @@ IkonosImageMetadataInterface::GetMonth() const
     {
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
-  if (!imageKeywordlist.HasKey("support_data.acquisition_date")) 
+  if (!imageKeywordlist.HasKey("support_data.acquisition_date"))
     {
     return -1;
     }
@@ -170,7 +170,7 @@ IkonosImageMetadataInterface::GetYear() const
     {
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
-  if (!imageKeywordlist.HasKey("support_data.acquisition_date")) 
+  if (!imageKeywordlist.HasKey("support_data.acquisition_date"))
     {
     return -1;
     }
@@ -202,7 +202,7 @@ IkonosImageMetadataInterface::GetHour() const
     {
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
-  if (!imageKeywordlist.HasKey("support_data.acquisition_time")) 
+  if (!imageKeywordlist.HasKey("support_data.acquisition_time"))
     {
     return -1;
     }
@@ -233,7 +233,7 @@ IkonosImageMetadataInterface::GetMinute() const
     {
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
-  if (!imageKeywordlist.HasKey("support_data.acquisition_time")) 
+  if (!imageKeywordlist.HasKey("support_data.acquisition_time"))
     {
     return -1;
     }
@@ -264,7 +264,7 @@ IkonosImageMetadataInterface::GetProductionDay() const
     {
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
-  if (!imageKeywordlist.HasKey("support_data.production_date")) 
+  if (!imageKeywordlist.HasKey("support_data.production_date"))
     {
     return -1;
     }
@@ -294,7 +294,7 @@ IkonosImageMetadataInterface::GetProductionMonth() const
     {
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
-  if (!imageKeywordlist.HasKey("support_data.production_date")) 
+  if (!imageKeywordlist.HasKey("support_data.production_date"))
     {
     return -1;
     }
@@ -324,7 +324,7 @@ IkonosImageMetadataInterface::GetProductionYear() const
     {
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
-  if (!imageKeywordlist.HasKey("support_data.production_date")) 
+  if (!imageKeywordlist.HasKey("support_data.production_date"))
     {
     return -1;
     }

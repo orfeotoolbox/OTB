@@ -113,7 +113,6 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
 
 
 
-
 /** Set the compute feret diameter flag */
 template <class TLabelObject, class TLabelImage>
 void

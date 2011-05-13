@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   Insight Segmentation & Registration Toolkit
-  Module:    $RCSfile: itkLabelMapToLabelImageFilter.h,v $
+  Module:    $RCSfile: itkLabelMapToLabelImageFilter.h, v $
   Language:  C++
   Date:      $Date: 2009-07-30 22:54:24 $
   Version:   $Revision: 1.3 $
@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -29,7 +29,7 @@ namespace otb {
  * \author Gaetan Lehmann. Biologie du Developpement et de la Reproduction, INRA de Jouy-en-Josas, France.
  *
  * This implementation was taken from the Insight Journal paper:
- * http://hdl.handle.net/1926/584  or 
+ * http://hdl.handle.net/1926/584  or
  * http://www.insight-journal.org/browse/publication/176
  *
  * \sa LabelMapToBinaryImageFilter, LabelMapMaskImageFilter
@@ -37,7 +37,7 @@ namespace otb {
  * \ingroup LabeledImageFilters
  */
 template<class TInputImage, class TOutputImage>
-class ITK_EXPORT LabelMapToLabelImageFilter : 
+class ITK_EXPORT LabelMapToLabelImageFilter :
     public itk::LabelMapToLabelImageFilter<TInputImage, TOutputImage>
 {
 public:
@@ -67,7 +67,7 @@ public:
   itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
   /** Standard New method. */
-  itkNewMacro(Self);  
+  itkNewMacro(Self);
 
   /** Runtime information support. */
   itkTypeMacro(LabelMapToLabelImageFilter, ImageToImageFilter);

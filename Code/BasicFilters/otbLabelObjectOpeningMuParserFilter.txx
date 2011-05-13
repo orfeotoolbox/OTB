@@ -142,7 +142,6 @@ void LabelObjectOpeningMuParserFilter<TImage, TFunction>::GenerateInputRequested
 }
 
 
-
 template  < class TImage, class TFunction>
 void LabelObjectOpeningMuParserFilter<TImage, TFunction>::GenerateData()
     {
