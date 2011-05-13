@@ -90,7 +90,7 @@ const std::map<std::string, double*>& MaskMuParserFilter<TInputImage, TOutputIma
     }
   catch (itk::ExceptionObject& err)
     {
-    itkWarningMacro(<< err);
+    itkDebugMacro(<< err);
 
     }
 
@@ -118,7 +118,7 @@ bool MaskMuParserFilter<TInputImage, TOutputImage, TFunction>::CheckExpression()
     }
   catch (itk::ExceptionObject& err)
     {
-    itkWarningMacro(<< err);
+    itkDebugMacro(<< err);
     return false;
     }
   return true;
