@@ -100,16 +100,7 @@ void LabelObjectOpeningMuParserFilter<TImage, TFunction>::DisplayVar() const
 template< class TImage, class TFunction>
 bool LabelObjectOpeningMuParserFilter<TImage, TFunction>::CheckExpression()
 {
-  try
-  {
-    this->m_Functor.CheckExpression();
-  }
-  catch(itk::ExceptionObject& err)
-  {
-    itkWarningMacro(<< err);
-    return false;
-  }
-  return true;
+  return this->m_Functor.CheckExpression();
 }
 
 template< class TImage, class TFunction>
@@ -117,6 +108,40 @@ void LabelObjectOpeningMuParserFilter<TImage, TFunction>::SetAttributes(std::vec
 {
   this->m_Functor.SetAttributes(shapeAttributes, statAttributes, nbOfBands);
 }
+
+template  < class TImage, class TFunction>
+void LabelObjectOpeningMuParserFilter<TImage, TFunction>::GenerateInputRequestedRegion()
+{
+  ImagePointer input = const_cast<ImageType *>(this->GetInput());
+
+      if ( !input )
+       { return; }
+
+  for (unsigned int idx = 0; idx < this->GetNumberOfInputs(); ++idx)
+      {
+       ImagePointer input = const_cast<ImageType *>(this->GetInput(idx));
+      if (!input.IsNull())
+        {
+        input->SetRequestedRegionToLargestPossibleRegion();
+        // Check whether the input is an image of the appropriate
+        // dimension (use ProcessObject's version of the GetInput()
+        // method since it returns the input as a pointer to a
+        // DataObject as opposed to the subclass version which
+        // static_casts the input to an TInputImage).
+
+        // Use the function object RegionCopier to copy the output region
+        // to the input.  The default region copier has default implementations
+        // to handle the cases where the input and output are the same
+        // dimension, the input a higher dimension than the output, and the
+        // input a lower dimension than the output.
+        InputImageRegionType inputRegion;
+        this->CallCopyOutputRegionToInputRegion(inputRegion, this->GetOutput()->GetRequestedRegion());
+        input->SetRequestedRegion( inputRegion );
+        }
+      }
+}
+
+
 
 template  < class TImage, class TFunction>
 void LabelObjectOpeningMuParserFilter<TImage, TFunction>::GenerateData()

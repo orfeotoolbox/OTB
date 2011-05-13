@@ -33,7 +33,6 @@
 #include "otbParser.h"
 #include "otbMacro.h"
 #include "itkMacro.h"
-#include "otbMaskMuParserFunctor.h"
 
 #include "itkInPlaceLabelMapFilter.h"
 #include "itkLabelObjectAccessors.h"
@@ -80,6 +79,7 @@ typedef typename ImageType::Pointer         ImagePointer;
 typedef typename ImageType::ConstPointer    ImageConstPointer;
 typedef typename ImageType::PixelType       PixelType;
 typedef typename ImageType::IndexType       IndexType;
+typedef typename ImageType::RegionType     InputImageRegionType;
 typedef typename ImageType::LabelObjectType LabelObjectType;
 typedef typename LabelObjectType::ConstPointer    LabelObjectConstPointer;
 typedef  TFunction                            FunctorType;
@@ -112,6 +112,10 @@ void DisplayVar() const;
 
 /** return list of Mu Parser varialbes and address**/
 const std::map<std::string, double*>& GetVar() const;
+
+void GenerateInputRequestedRegion();
+
+void EnlargeOutputRequestedRegion(itk::DataObject *){};
 
 void GenerateData();
 

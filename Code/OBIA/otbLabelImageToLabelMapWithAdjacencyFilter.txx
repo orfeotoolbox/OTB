@@ -40,14 +40,28 @@ void
 LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
 ::GenerateInputRequestedRegion()
 {
-  // call the superclass' implementation of this method
-  Superclass::GenerateInputRequestedRegion();
-  
-  // We need all the input.
-  InputImagePointer input = const_cast<InputImageType *>(this->GetInput());
-  if ( !input )
-    { return; }
-  input->SetRequestedRegion( input->GetLargestPossibleRegion() );
+  for (unsigned int idx = 0; idx < this->GetNumberOfInputs(); ++idx)
+        {
+         InputImagePointer input = const_cast<InputImageType *>(this->GetInput(idx));
+        if (!input.IsNull())
+          {
+          input->SetRequestedRegionToLargestPossibleRegion();
+          // Check whether the input is an image of the appropriate
+          // dimension (use ProcessObject's version of the GetInput()
+          // method since it returns the input as a pointer to a
+          // DataObject as opposed to the subclass version which
+          // static_casts the input to an TInputImage).
+
+          // Use the function object RegionCopier to copy the output region
+          // to the input.  The default region copier has default implementations
+          // to handle the cases where the input and output are the same
+          // dimension, the input a higher dimension than the output, and the
+          // input a lower dimension than the output.
+          InputImageRegionType inputRegion;
+          this->CallCopyOutputRegionToInputRegion(inputRegion, this->GetOutput()->GetRequestedRegion());
+          input->SetRequestedRegion( inputRegion );
+          }
+        }
 }
 
 
@@ -56,8 +70,6 @@ void
 LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
 ::EnlargeOutputRequestedRegion(itk::DataObject *)
 {
-  this->GetOutput()
-    ->SetRequestedRegion( this->GetOutput()->GetLargestPossibleRegion() );
 }
 
 

@@ -138,6 +138,7 @@ class ITK_EXPORT BandsStatisticsAttributesLabelMapFilter
 public:
   /** Some convenient typedefs. */
   typedef TImage                                       ImageType;
+  typedef typename ImageType::RegionType     InputImageRegionType;
   typedef typename ImageType::LabelObjectType          LabelObjectType;
   typedef TFeatureImage                                FeatureImageType;
   typedef typename FeatureImageType::InternalPixelType FeatureInternalPixelType;
@@ -154,6 +155,7 @@ public:
   <ImageType, FunctorType>                                Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef typename ImageType::Pointer         ImagePointer;
 
   /** ImageDimension constants */
   itkStaticConstMacro(ImageDimension, unsigned int, TImage::ImageDimension);
@@ -183,6 +185,10 @@ protected:
   BandsStatisticsAttributesLabelMapFilter();
   /** Destructor */
   ~BandsStatisticsAttributesLabelMapFilter() {}
+
+  void GenerateInputRequestedRegion();
+
+  void EnlargeOutputRequestedRegion(itk::DataObject *){};
 
   /** Before threaded data generation */
   virtual void BeforeThreadedGenerateData();

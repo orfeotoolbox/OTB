@@ -81,6 +81,13 @@ public:
   /** Get the compute perimeter flag */
   bool GetComputePerimeter() const;
 
+  /** Set the polygonalisation flag */
+  void SetComputePolygon(bool flag);
+
+  /** Get the polygonalisation flag */
+  bool GetComputePolygon() const;
+
+
   /** Set the compute feret diameter flag */
   void SetComputeFeretDiameter(bool flag);
 
@@ -130,8 +137,11 @@ private:
   /** Do we compute the feret diameter ? */
   bool m_ComputeFeretDiameter;
 
-  /** Du we compute the perimeter ? */
+  /** Do we compute the perimeter ? */
   bool m_ComputePerimeter;
+
+  /** Do we polygonise ? */
+  bool m_ComputePolygon;
 
   /** Compute only a reduced attribute set */
   bool m_ReducedAttributeSet;
@@ -181,6 +191,7 @@ public:
   /** Template parameters typedefs */
   typedef TImage                              ImageType;
   typedef typename ImageType::LabelObjectType LabelObjectType;
+  typedef typename ImageType::RegionType     InputImageRegionType;
   typedef TLabelImage                         LabelImageType;
   typedef Functor::ShapeAttributesLabelObjectFunctor
   <LabelObjectType, LabelImageType>                      FunctorType;
@@ -193,6 +204,7 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
+  typedef typename ImageType::Pointer         ImagePointer;
   /** ImageDimension constants */
   itkStaticConstMacro(ImageDimension, unsigned int, TImage::ImageDimension);
 
@@ -218,6 +230,14 @@ public:
   bool GetComputePerimeter() const;
   itkBooleanMacro(ComputePerimeter);
 
+  /**
+   * Set/Get whether the  polygonalisation process should be computed or not. The defaut value
+   * is true, to assure backward compatibility.
+   */
+  void SetComputePolygon(bool flag);
+  bool GetComputePolygon() const;
+  itkBooleanMacro(ComputePolygon);
+
   /** Set/get the ReducedAttributesSet flag */
   void SetReducedAttributeSet(bool flag);
   bool GetReducedAttributeSet() const;
@@ -240,6 +260,10 @@ protected:
 
   /** Things to to before threaded data generation */
   virtual void BeforeThreadedGenerateData();
+
+  void GenerateInputRequestedRegion();
+
+  void EnlargeOutputRequestedRegion(itk::DataObject *){};
 
 private:
   ShapeAttributesLabelMapFilter(const Self &); //purposely not implemented

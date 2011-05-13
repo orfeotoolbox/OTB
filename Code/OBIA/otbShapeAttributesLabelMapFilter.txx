@@ -40,6 +40,7 @@ template <class TLabelObject, class TLabelImage>
 ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
 ::ShapeAttributesLabelObjectFunctor() : m_ComputeFeretDiameter(false),
   m_ComputePerimeter(false),
+  m_ComputePolygon(true),
   m_ReducedAttributeSet(true),
   m_PerimeterCalculator(NULL),
   m_LabelImage(NULL)
@@ -91,6 +92,27 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
 {
   return m_ComputePerimeter;
 }
+
+/** Set the compute perimeter flag */
+template <class TLabelObject, class TLabelImage>
+void
+ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
+::SetComputePolygon(bool flag)
+{
+  m_ComputePolygon = flag;
+}
+
+/** Get the compute perimeter flag */
+template <class TLabelObject, class TLabelImage>
+bool
+ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
+::GetComputePolygon() const
+{
+  return m_ComputePolygon;
+}
+
+
+
 
 /** Set the compute feret diameter flag */
 template <class TLabelObject, class TLabelImage>
@@ -499,13 +521,16 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
     }
 
   // Set the attributes
-  PolygonFunctorType polygonFunctor;
-  SimplifyPolygonFunctorType simplifyFunctor;
-  polygonFunctor.SetStartIndex(m_LabelImage->GetLargestPossibleRegion().GetIndex());
-  polygonFunctor.SetOrigin(m_LabelImage->GetOrigin());
-  polygonFunctor.SetSpacing(m_LabelImage->GetSpacing());
-  typename PolygonType::Pointer polygon = simplifyFunctor(polygonFunctor(lo));
-  lo->SetPolygon(polygon);
+  if (m_ComputePolygon)
+    {
+    PolygonFunctorType polygonFunctor;
+    SimplifyPolygonFunctorType simplifyFunctor;
+    polygonFunctor.SetStartIndex(m_LabelImage->GetLargestPossibleRegion().GetIndex());
+    polygonFunctor.SetOrigin(m_LabelImage->GetOrigin());
+    polygonFunctor.SetSpacing(m_LabelImage->GetSpacing());
+    typename PolygonType::Pointer polygon = simplifyFunctor(polygonFunctor(lo));
+    lo->SetPolygon(polygon);
+    }
 
   // Physical size
   lo->SetAttribute("SHAPE::PhysicalSize", physicalSize);
@@ -750,6 +775,27 @@ ShapeAttributesLabelMapFilter<TImage, TLabelImage>
 template<class TImage, class TLabelImage>
 void
 ShapeAttributesLabelMapFilter<TImage, TLabelImage>
+::SetComputePolygon(bool flag)
+{
+  if (this->GetFunctor().GetComputePolygon() != flag)
+    {
+    this->GetFunctor().SetComputePolygon(flag);
+    this->Modified();
+    }
+}
+
+template<class TImage, class TLabelImage>
+bool
+ShapeAttributesLabelMapFilter<TImage, TLabelImage>
+::GetComputePolygon() const
+{
+  return this->GetFunctor().GetComputePolygon();
+}
+
+
+template<class TImage, class TLabelImage>
+void
+ShapeAttributesLabelMapFilter<TImage, TLabelImage>
 ::SetReducedAttributeSet(bool flag)
 {
   if (this->GetFunctor().GetReducedAttributeSet() != flag)
@@ -787,13 +833,45 @@ ShapeAttributesLabelMapFilter<TImage, TLabelImage>
   return this->GetFunctor().GetLabelImage();
 }
 
+template <class TImage, class TLabelImage>
+void
+ShapeAttributesLabelMapFilter<TImage, TLabelImage>
+::GenerateInputRequestedRegion()
+{
+
+  for (unsigned int idx = 0; idx < this->GetNumberOfInputs(); ++idx)
+      {
+       ImagePointer input = const_cast<ImageType *>(this->GetInput(idx));
+      if (!input.IsNull())
+        {
+        input->SetRequestedRegionToLargestPossibleRegion();
+        // Check whether the input is an image of the appropriate
+        // dimension (use ProcessObject's version of the GetInput()
+        // method since it returns the input as a pointer to a
+        // DataObject as opposed to the subclass version which
+        // static_casts the input to an TInputImage).
+
+        // Use the function object RegionCopier to copy the output region
+        // to the input.  The default region copier has default implementations
+        // to handle the cases where the input and output are the same
+        // dimension, the input a higher dimension than the output, and the
+        // input a lower dimension than the output.
+        InputImageRegionType inputRegion;
+        this->CallCopyOutputRegionToInputRegion(inputRegion, this->GetOutput()->GetRequestedRegion());
+        input->SetRequestedRegion( inputRegion );
+        }
+      }
+
+
+}
+
+
 template<class TImage, class TLabelImage>
 void
 ShapeAttributesLabelMapFilter<TImage, TLabelImage>
 ::BeforeThreadedGenerateData()
 {
   Superclass::BeforeThreadedGenerateData();
-
   if (!this->GetFunctor().GetLabelImage())
     {
     // generate an image of the labelized image

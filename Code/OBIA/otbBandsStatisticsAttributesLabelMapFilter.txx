@@ -213,6 +213,39 @@ BandsStatisticsAttributesLabelMapFilter<TImage, TFeatureImage>
 template <class TImage, class TFeatureImage>
 void
 BandsStatisticsAttributesLabelMapFilter<TImage, TFeatureImage>
+::GenerateInputRequestedRegion()
+{
+
+  for (unsigned int idx = 0; idx < this->GetNumberOfInputs(); ++idx)
+      {
+       ImagePointer input = const_cast<ImageType *>(this->GetInput(idx));
+      if (!input.IsNull())
+        {
+        input->SetRequestedRegionToLargestPossibleRegion();
+        // Check whether the input is an image of the appropriate
+        // dimension (use ProcessObject's version of the GetInput()
+        // method since it returns the input as a pointer to a
+        // DataObject as opposed to the subclass version which
+        // static_casts the input to an TInputImage).
+
+        // Use the function object RegionCopier to copy the output region
+        // to the input.  The default region copier has default implementations
+        // to handle the cases where the input and output are the same
+        // dimension, the input a higher dimension than the output, and the
+        // input a lower dimension than the output.
+        InputImageRegionType inputRegion;
+        this->CallCopyOutputRegionToInputRegion(inputRegion, this->GetOutput()->GetRequestedRegion());
+        input->SetRequestedRegion( inputRegion );
+        }
+      }
+}
+
+
+
+
+template <class TImage, class TFeatureImage>
+void
+BandsStatisticsAttributesLabelMapFilter<TImage, TFeatureImage>
 ::BeforeThreadedGenerateData()
 {
   // First call superclass implementation
