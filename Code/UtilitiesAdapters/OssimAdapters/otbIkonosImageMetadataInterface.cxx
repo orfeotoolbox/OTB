@@ -18,10 +18,10 @@
 
 #include "otbIkonosImageMetadataInterface.h"
 
+#include <boost/algorithm/string.hpp>
 #include "otbMacro.h"
 #include "itkMetaDataObject.h"
 #include "otbImageKeywordlist.h"
-#include "base/ossimKeywordlist.h"
 
 namespace otb
 {
@@ -56,13 +56,18 @@ IkonosImageMetadataInterface::GetSolarIrradiance() const
     }
 
   VariableLengthVectorType outputValuesVariableLengthVector;
-  ossimKeywordlist         kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-
   outputValuesVariableLengthVector.SetSize(1);
-  // values from geoeye
-  std::string key = "support_data.band_name";
-  ossimString keywordString = kwl.find(key.c_str());
+
+  if (!imageKeywordlist.HasKey("support_data.band_name"))
+    {
+    outputValuesVariableLengthVector[0] = -1;
+    return outputValuesVariableLengthVector;
+    }
+
+  std::string keywordString = imageKeywordlist.GetMetadataByKey("support_data.band_name");
+
+  // values from geoeye 
+  // TODO are these the correct values ????
   if (keywordString == "Pan")
     {
     outputValuesVariableLengthVector[0] = 1375.8;
@@ -102,25 +107,20 @@ IkonosImageMetadataInterface::GetDay() const
     {
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
+  if (!imageKeywordlist.HasKey("support_data.acquisition_date")) 
+    {
+    return -1;
+    }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.acquisition_date");
+  std::vector<std::string> outputValues;
 
-  std::string key;
-  ossimString separatorList;
+  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
 
-  key = "support_data.acquisition_date";
-  separatorList = "-";
+  if (outputValues.size() <= 2) itkExceptionMacro(<< "Invalid Day");
 
-  ossimString              keywordString = kwl.find(key.c_str());
-  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
-
-  if (keywordStrings.size() <= 2) itkExceptionMacro(<< "Invalid Day");
-
-  // YYYY/MM/DD
-  ossimString day = keywordStrings[2];
-
-  return day.toInt();
+  int value = atoi(outputValues[2].c_str());
+  return value;
 }
 
 int
@@ -138,25 +138,54 @@ IkonosImageMetadataInterface::GetMonth() const
     {
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
+  if (!imageKeywordlist.HasKey("support_data.acquisition_date")) 
+    {
+    return -1;
+    }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.acquisition_date");
+  std::vector<std::string> outputValues;
 
-  std::string key;
-  ossimString separatorList;
+  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
 
-  key = "support_data.acquisition_date";
-  separatorList = "-";
-  ossimString              keywordString = kwl.find(key.c_str());
-  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+  if (outputValues.size() <= 2) itkExceptionMacro(<< "Invalid Month");
 
-  if (keywordStrings.size() <= 2) itkExceptionMacro(<< "Invalid Month");
-
-  // YYYY/MM/DD
-  ossimString month = keywordStrings[1];
-
-  return month.toInt();
+  int value = atoi(outputValues[1].c_str());
+  return value;
 }
+
+
+int
+IkonosImageMetadataInterface::GetYear() const
+{
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
+    {
+    itkExceptionMacro(<< "Invalid Metadata, no Ikonos Image");
+    }
+
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+    {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+    }
+  if (!imageKeywordlist.HasKey("support_data.acquisition_date")) 
+    {
+    return -1;
+    }
+
+  std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.acquisition_date");
+  std::vector<std::string> outputValues;
+
+  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
+
+  if (outputValues.size() <= 2) itkExceptionMacro(<< "Invalid Year");
+
+  int value = atoi(outputValues[0].c_str());
+  return value;
+}
+
 
 int
 IkonosImageMetadataInterface::GetHour() const
@@ -173,24 +202,20 @@ IkonosImageMetadataInterface::GetHour() const
     {
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
+  if (!imageKeywordlist.HasKey("support_data.acquisition_time")) 
+    {
+    return -1;
+    }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.acquisition_time");
+  std::vector<std::string> outputValues;
 
-  std::string key;
-  ossimString separatorList;
+  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
 
-  key = "support_data.acquisition_time";
-  separatorList = ":";
-  ossimString              keywordString = kwl.find(key.c_str());
-  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+  if (outputValues.size() < 2) itkExceptionMacro(<< "Invalid Hour");
 
-  if (keywordStrings.size() <= 1) itkExceptionMacro(<< "Invalid Hour");
-
-  // HH:MM
-  ossimString hour = keywordStrings[0];
-
-  return hour.toInt();
+  int value = atoi(outputValues[0].c_str());
+  return value;
 }
 
 int
@@ -208,60 +233,20 @@ IkonosImageMetadataInterface::GetMinute() const
     {
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
-
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-
-  std::string key;
-  ossimString separatorList;
-
-  key = "support_data.acquisition_time";
-  separatorList = ":";
-  ossimString              keywordString = kwl.find(key.c_str());
-  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
-
-  if (keywordStrings.size() <= 1) itkExceptionMacro(<< "Invalid Minute");
-
-  // HH:MM
-  ossimString minute = keywordStrings[1];
-
-  return minute.toInt();
-}
-
-int
-IkonosImageMetadataInterface::GetYear() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
+  if (!imageKeywordlist.HasKey("support_data.acquisition_time")) 
     {
-    itkExceptionMacro(<< "Invalid Metadata, no Ikonos Image");
+    return -1;
     }
 
-  ImageKeywordlistType imageKeywordlist;
+  std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.acquisition_time");
+  std::vector<std::string> outputValues;
 
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-    {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-    }
+  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  if (outputValues.size() < 2) itkExceptionMacro(<< "Invalid Minute");
 
-  std::string key;
-  ossimString separatorList;
-
-  key = "support_data.acquisition_date";
-  separatorList = "-";
-
-  ossimString              keywordString = kwl.find(key.c_str());
-  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
-
-  if (keywordStrings.size() <= 2) itkExceptionMacro("Invalid Year");
-
-  // YYYY/MM/DD
-  ossimString year = keywordStrings[0];
-
-  return year.toInt();
+  int value = atoi(outputValues[1].c_str());
+  return value;
 }
 
 int
@@ -279,25 +264,19 @@ IkonosImageMetadataInterface::GetProductionDay() const
     {
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
+  if (!imageKeywordlist.HasKey("support_data.production_date")) 
+    {
+    return -1;
+    }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.production_date");
+  std::vector<std::string> outputValues;
+  boost::split(outputValues, valueString, boost::is_any_of(" T:-/"));
 
-  std::string key;
-  ossimString separatorList;
-
-  key = "support_data.production_date";
-  separatorList = "/";
-
-  ossimString              keywordString = kwl.find(key.c_str());
-  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
-
-  if (keywordStrings.size() <= 2) itkExceptionMacro(<< "Invalid Day");
-
+  if (outputValues.size() <= 2) itkExceptionMacro(<< "Invalid Day");
   // MM/DD/YY
-  ossimString day = keywordStrings[1];
-
-  return day.toInt();
+  int value = atoi(outputValues[1].c_str());
+  return value;
 }
 
 int
@@ -315,24 +294,19 @@ IkonosImageMetadataInterface::GetProductionMonth() const
     {
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
+  if (!imageKeywordlist.HasKey("support_data.production_date")) 
+    {
+    return -1;
+    }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.production_date");
+  std::vector<std::string> outputValues;
+  boost::split(outputValues, valueString, boost::is_any_of(" T:-/"));
 
-  std::string key;
-  ossimString separatorList;
-
-  key = "support_data.production_date";
-  separatorList = "/";
-  ossimString              keywordString = kwl.find(key.c_str());
-  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
-
-  if (keywordStrings.size() <= 2) itkExceptionMacro(<< "Invalid Month");
-
+  if (outputValues.size() <= 2) itkExceptionMacro(<< "Invalid Month");
   // MM/DD/YY
-  ossimString month = keywordStrings[0];
-
-  return month.toInt();
+  int value = atoi(outputValues[0].c_str());
+  return value;
 }
 
 int
@@ -350,27 +324,20 @@ IkonosImageMetadataInterface::GetProductionYear() const
     {
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
+  if (!imageKeywordlist.HasKey("support_data.production_date")) 
+    {
+    return -1;
+    }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.production_date");
+  std::vector<std::string> outputValues;
+  boost::split(outputValues, valueString, boost::is_any_of(" T:-/"));
 
-  std::string key;
-  ossimString separatorList;
-
-  key = "support_data.production_date";
-  separatorList = "/";
-
-  ossimString              keywordString = kwl.find(key.c_str());
-  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
-
-  if (keywordStrings.size() <= 2) itkExceptionMacro("Invalid Year");
-
+  if (outputValues.size() <= 2) itkExceptionMacro(<< "Invalid Year");
   // MM/DD/YY
-  int year = keywordStrings[2].toInt();
-
+  int year = atoi(outputValues[2].c_str());
   if (year == 99) year += 1900;
   else year += 2000;
-
   return year;
 }
 
@@ -475,13 +442,14 @@ IkonosImageMetadataInterface::GetSatElevation() const
     {
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
+  if (!imageKeywordlist.HasKey("support_data.nominal_collection_elevation_angle"))
+    {
+    return 0;
+    }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  std::string key = "support_data.nominal_collection_elevation_angle";
-  ossimString keywordString = kwl.find(key.c_str());
-
-  return keywordString.toDouble();
+  std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.nominal_collection_elevation_angle");
+  double value = atof(valueString.c_str());
+  return value;
 }
 
 double
@@ -499,13 +467,14 @@ IkonosImageMetadataInterface::GetSatAzimuth() const
     {
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
+  if (!imageKeywordlist.HasKey("support_data.nominal_collection_azimuth_angle"))
+    {
+    return 0;
+    }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  std::string key = "support_data.nominal_collection_azimuth_angle";
-  ossimString keywordString = kwl.find(key.c_str());
-
-  return keywordString.toDouble();
+  std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.nominal_collection_azimuth_angle");
+  double value = atof(valueString.c_str());
+  return value;
 }
 
 IkonosImageMetadataInterface::VariableLengthVectorType
