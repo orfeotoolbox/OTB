@@ -18,6 +18,7 @@
 #include "otbMath.h"
 #include "itkMacro.h"
 #include "otbParser.h"
+#include "otbMacro.h"
 
 namespace otb
 {
@@ -114,7 +115,7 @@ bool Parser::CheckExpr()
   }
  catch(ParserType::ExceptionType &e)
   {
-   ExceptionHandler(e);
+   ExceptionHandlerDebug(e);
    return false;
   }
 
@@ -138,6 +139,20 @@ void Parser::ExceptionHandler(ParserType::ExceptionType &e)
                << std::endl);
 //        << "Errc:        "   << e.GetCode()  << std::endl);
 }
+
+
+void Parser::ExceptionHandlerDebug(ParserType::ExceptionType &e)
+{
+  otbGenericMsgDebugMacro(                                     << std::endl
+        << "Message:     "   << e.GetMsg()   << std::endl
+        << "Formula:     "   << e.GetExpr()  << std::endl
+        << "Token:       "   << e.GetToken() << std::endl
+        << "Position:    "   << e.GetPos()   << std::endl
+               << std::endl);
+//        << "Errc:        "   << e.GetCode()  << std::endl);
+}
+
+
 
 
 // Get the map with the variables

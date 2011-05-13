@@ -83,7 +83,8 @@ public:
 
   /** Convert parser specific exception into itk exception */
   virtual void ExceptionHandler(ExceptionType &e);
-
+  /** Convert parser specific exception into itk debug macro */
+   virtual void ExceptionHandlerDebug(ExceptionType &e);
   
 protected:
   Parser();
