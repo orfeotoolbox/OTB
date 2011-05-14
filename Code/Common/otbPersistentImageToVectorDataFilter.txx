@@ -113,15 +113,17 @@ PersistentImageToVectorDataFilter<TImage, TOutputVectorData>
   InputImagePointer image = m_ExtractFilter->GetOutput();
 
   // call the processing function for this tile
-  OutputVectorDataPointerType vd = this->ProcessTile(image);
+  OutputVectorDataPointerType currentTileVD = this->ProcessTile(image);
 
   // merge the result into the output vector data object
   OutputVectorDataPointerType output = GetOutputVectorData();
 
   ConcatenateVectorDataFilterPointerType concatenate = ConcatenateVectorDataFilterType::New();
-  concatenate->AddInput(vd);
+  concatenate->AddInput(currentTileVD);
   concatenate->AddInput(output);
   concatenate->Update();
+
+  concatenate->GetOutput()->SetMetaDataDictionary(currentTileVD->GetMetaDataDictionary());
 
   // copy metadata and reference the same data tree
   output->Graft( concatenate->GetOutput() );
