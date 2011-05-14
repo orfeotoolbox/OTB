@@ -102,7 +102,7 @@ private:
   PersistentImageToVectorDataFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  virtual OutputVectorDataPointerType ProcessTile(const InputImageType* inputImage) = 0;
+  virtual OutputVectorDataPointerType ProcessTile() = 0;
 
 }; // end of class
 } // end namespace otb

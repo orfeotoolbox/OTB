@@ -19,7 +19,6 @@
 #define __otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter_txx
 
 #include "otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter.h"
-#include "otbVectorDataIntoImageProjectionFilter.h"
 #include "otbVectorDataTransformFilter.h"
 #include "itkAffineTransform.h"
 
@@ -41,8 +40,14 @@ PersistentConnectedComponentSegmentationOBIAToVectorDataFilter<TVImage, TLabelIm
 template<class TVImage, class TLabelImage, class TMaskImage, class TOutputVectorData>
 typename PersistentConnectedComponentSegmentationOBIAToVectorDataFilter<TVImage, TLabelImage, TMaskImage, TOutputVectorData>::VectorDataPointerType
 PersistentConnectedComponentSegmentationOBIAToVectorDataFilter<TVImage, TLabelImage, TMaskImage, TOutputVectorData>
-::ProcessTile(const VectorImageType* inputImage)
+::ProcessTile()
 {
+  // Apply an ExtractImageFilter to avoid problems with filters asking for the LargestPossibleRegion
+  typedef itk::ExtractImageFilter<VectorImageType, VectorImageType> ExtractImageFilterType;
+  typename ExtractImageFilterType::Pointer extract = ExtractImageFilterType::New();
+  extract->SetInput( this->GetInput() );
+  extract->SetExtractionRegion( this->GetInput()->GetBufferedRegion() );
+  // WARNING: itk::ExtractImageFilter does not copy the MetadataDictionnary
 
   typename MaskImageType::Pointer mask;
   if (!m_MaskExpression.empty())
@@ -50,7 +55,7 @@ PersistentConnectedComponentSegmentationOBIAToVectorDataFilter<TVImage, TLabelIm
     // Compute the mask
     typename MaskMuParserFilterType::Pointer maskFilter;
     maskFilter = MaskMuParserFilterType::New();
-    maskFilter->SetInput(inputImage);
+    maskFilter->SetInput(extract->GetOutput());
     maskFilter->SetExpression(m_MaskExpression);
     maskFilter->Update();
     mask = maskFilter->GetOutput();
@@ -58,7 +63,7 @@ PersistentConnectedComponentSegmentationOBIAToVectorDataFilter<TVImage, TLabelIm
 
   // Perform connected components segmentation
   typename ConnectedComponentFilterType::Pointer connected = ConnectedComponentFilterType::New();
-  connected->SetInput(inputImage);
+  connected->SetInput(this->GetInput());
 
   if (mask.IsNotNull())
     connected->SetMaskImage(mask);
@@ -93,7 +98,7 @@ PersistentConnectedComponentSegmentationOBIAToVectorDataFilter<TVImage, TLabelIm
     // band stat attributes computation
     typename RadiometricLabelMapFilterType::Pointer radiometricLabelMapFilter = RadiometricLabelMapFilterType::New();
     radiometricLabelMapFilter->SetInput(shapeLabelMapFilter->GetOutput());
-    radiometricLabelMapFilter->SetFeatureImage(inputImage);
+    radiometricLabelMapFilter->SetFeatureImage(extract->GetOutput());
     radiometricLabelMapFilter->SetReducedAttributeSet(true);
 
     // OBIA Filtering using shape and radiometric object characteristics
@@ -110,7 +115,7 @@ PersistentConnectedComponentSegmentationOBIAToVectorDataFilter<TVImage, TLabelIm
   labelMapToVectorDataFilter->Update();
 
   // The VectorData in output of the chain is in image index coordinate,
-  // and the projection information are lost.
+  // and the projection information is lost
   // Apply an affine transform to apply image origin and spacing,
   // and arbitrarily set the ProjectionRef to the input image ProjectionRef
 
@@ -119,12 +124,12 @@ PersistentConnectedComponentSegmentationOBIAToVectorDataFilter<TVImage, TLabelIm
 
   typename TransformType::ParametersType params;
   params.SetSize(6);
-  params[0] = inputImage->GetSpacing()[0];
+  params[0] = this->GetInput()->GetSpacing()[0];
   params[1] = 0;
   params[2] = 0;
-  params[3] = inputImage->GetSpacing()[1];
-  params[4] = inputImage->GetOrigin()[0];
-  params[5] = inputImage->GetOrigin()[1];
+  params[3] = this->GetInput()->GetSpacing()[1];
+  params[4] = this->GetInput()->GetOrigin()[0];
+  params[5] = this->GetInput()->GetOrigin()[1];
 
   typename TransformType::Pointer transform = TransformType::New();
   transform->SetParameters(params);
@@ -133,7 +138,7 @@ PersistentConnectedComponentSegmentationOBIAToVectorDataFilter<TVImage, TLabelIm
   vdTransform->SetTransform(transform);
   vdTransform->SetInput(labelMapToVectorDataFilter->GetOutput());
   vdTransform->Update();
-  vdTransform->GetOutput()->SetProjectionRef(inputImage->GetProjectionRef());
+  vdTransform->GetOutput()->SetProjectionRef(this->GetInput()->GetProjectionRef());
 
   return vdTransform->GetOutput();
 }

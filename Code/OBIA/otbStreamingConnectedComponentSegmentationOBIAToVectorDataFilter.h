@@ -149,7 +149,7 @@ private:
   std::string    m_ConnectedComponentExpression;
   std::string    m_OBIAExpression;
 
-  virtual VectorDataPointerType ProcessTile(const VectorImageType* inputImage);
+  virtual VectorDataPointerType ProcessTile();
 };
 
 /** \class StreamingConnectedComponentSegmentationOBIAToVectorDataFilter

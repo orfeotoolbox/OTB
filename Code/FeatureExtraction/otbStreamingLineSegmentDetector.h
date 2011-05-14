@@ -77,7 +77,7 @@ private:
   PersistentStreamingLineSegmentDetector(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  virtual OutputVectorDataPointerType ProcessTile(const InputImageType* inputImage);
+  virtual OutputVectorDataPointerType ProcessTile();
 };
 
 template <class TImageType>

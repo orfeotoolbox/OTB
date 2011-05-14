@@ -104,16 +104,8 @@ void
 PersistentImageToVectorDataFilter<TImage, TOutputVectorData>
 ::GenerateData()
 {
-  // make an extract to handle filter which request
-  // the largest possible region of their input
-  m_ExtractFilter = ExtractImageFilterType::New();
-  m_ExtractFilter->SetInput( this->GetInput() );
-  m_ExtractFilter->SetExtractionRegion( this->GetInput()->GetBufferedRegion() );
-  m_ExtractFilter->Update();
-  InputImagePointer image = m_ExtractFilter->GetOutput();
-
   // call the processing function for this tile
-  OutputVectorDataPointerType currentTileVD = this->ProcessTile(image);
+  OutputVectorDataPointerType currentTileVD = this->ProcessTile();
 
   // merge the result into the output vector data object
   OutputVectorDataPointerType output = GetOutputVectorData();
