@@ -19,6 +19,9 @@
 #define __otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter_txx
 
 #include "otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter.h"
+#include "otbVectorDataIntoImageProjectionFilter.h"
+#include "otbVectorDataTransformFilter.h"
+#include "itkAffineTransform.h"
 
 namespace otb {
 
@@ -40,6 +43,7 @@ typename PersistentConnectedComponentSegmentationOBIAToVectorDataFilter<TVImage,
 PersistentConnectedComponentSegmentationOBIAToVectorDataFilter<TVImage, TLabelImage, TMaskImage, TOutputVectorData>
 ::ProcessTile(const VectorImageType* inputImage)
 {
+
   typename MaskImageType::Pointer mask;
   if (!m_MaskExpression.empty())
     {
@@ -74,28 +78,64 @@ PersistentConnectedComponentSegmentationOBIAToVectorDataFilter<TVImage, TLabelIm
   labelImageToLabelMap->SetBackgroundValue(0);
   labelImageToLabelMap->Update();
 
-  // shape attributes computation
-  typename ShapeLabelMapFilterType::Pointer shapeLabelMapFilter = ShapeLabelMapFilterType::New();
-  shapeLabelMapFilter->SetInput(labelImageToLabelMap->GetOutput());
-  shapeLabelMapFilter->SetReducedAttributeSet(false);
+  typename AttributesLabelMapType::Pointer labelMap = labelImageToLabelMap->GetOutput();
 
-  // band stat attributes computation
-  typename RadiometricLabelMapFilterType::Pointer radiometricLabelMapFilter = RadiometricLabelMapFilterType::New();
-  radiometricLabelMapFilter->SetInput(shapeLabelMapFilter->GetOutput());
-  radiometricLabelMapFilter->SetFeatureImage(inputImage);
-  radiometricLabelMapFilter->SetReducedAttributeSet(true);
+  if (!m_OBIAExpression.empty())
+    {
+    // shape attributes computation
+    typename ShapeLabelMapFilterType::Pointer shapeLabelMapFilter = ShapeLabelMapFilterType::New();
+    shapeLabelMapFilter->SetInput(labelImageToLabelMap->GetOutput());
+    shapeLabelMapFilter->SetReducedAttributeSet(true);
+    shapeLabelMapFilter->SetComputePolygon(false);
+    shapeLabelMapFilter->SetComputePerimeter(false);
+    shapeLabelMapFilter->SetComputeFeretDiameter(false);
 
-  // OBIA Filtering using shape and radiometric object characteristics
-  typename LabelObjectOpeningFilterType::Pointer opening = LabelObjectOpeningFilterType::New();
-  opening->SetExpression(m_OBIAExpression);
-  opening->SetInput(radiometricLabelMapFilter->GetOutput());
+    // band stat attributes computation
+    typename RadiometricLabelMapFilterType::Pointer radiometricLabelMapFilter = RadiometricLabelMapFilterType::New();
+    radiometricLabelMapFilter->SetInput(shapeLabelMapFilter->GetOutput());
+    radiometricLabelMapFilter->SetFeatureImage(inputImage);
+    radiometricLabelMapFilter->SetReducedAttributeSet(true);
+
+    // OBIA Filtering using shape and radiometric object characteristics
+    typename LabelObjectOpeningFilterType::Pointer opening = LabelObjectOpeningFilterType::New();
+    opening->SetExpression(m_OBIAExpression);
+    opening->SetInput(radiometricLabelMapFilter->GetOutput());
+
+    labelMap = opening->GetOutput();
+    }
 
   // Transformation to VectorData
   typename LabelMapToVectorDataFilterType::Pointer labelMapToVectorDataFilter = LabelMapToVectorDataFilterType::New();
-  labelMapToVectorDataFilter->SetInput(opening->GetOutput());
+  labelMapToVectorDataFilter->SetInput(labelMap);
   labelMapToVectorDataFilter->Update();
 
-  return labelMapToVectorDataFilter->GetOutput();
+  // The VectorData in output of the chain is in image index coordinate,
+  // and the projection information are lost.
+  // Apply an affine transform to apply image origin and spacing,
+  // and arbitrarily set the ProjectionRef to the input image ProjectionRef
+
+  typedef itk::AffineTransform<typename VectorDataType::PrecisionType, 2> TransformType;
+  typedef VectorDataTransformFilter<VectorDataType,VectorDataType> VDTransformType;
+
+  typename TransformType::ParametersType params;
+  params.SetSize(6);
+  params[0] = inputImage->GetSpacing()[0];
+  params[1] = 0;
+  params[2] = 0;
+  params[3] = inputImage->GetSpacing()[1];
+  params[4] = inputImage->GetOrigin()[0];
+  params[5] = inputImage->GetOrigin()[1];
+
+  typename TransformType::Pointer transform = TransformType::New();
+  transform->SetParameters(params);
+
+  typename VDTransformType::Pointer vdTransform = VDTransformType::New();
+  vdTransform->SetTransform(transform);
+  vdTransform->SetInput(labelMapToVectorDataFilter->GetOutput());
+  vdTransform->Update();
+  vdTransform->GetOutput()->SetProjectionRef(inputImage->GetProjectionRef());
+
+  return vdTransform->GetOutput();
 }
 
 } // end namespace otb
