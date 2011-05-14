@@ -23,6 +23,7 @@
 #include "otbImageFileReader.h"
 #include "otbVectorDataFileWriter.h"
 #include "otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter.h"
+#include "otbStandardFilterWatcher.h"
 
 namespace otb
 {
@@ -39,7 +40,7 @@ int ConnectedComponentSegmentation::Describe(ApplicationDescriptor* descriptor)
                         false, ApplicationDescriptor::String);
   descriptor->AddOption("ConnectedComponentExpression", "Formula used for connected component segmentation", "expression", 1, true, ApplicationDescriptor::String);
   descriptor->AddOption("MinimumObjectSize", "Min object size (area in pixel)", "minsize", 1, false, ApplicationDescriptor::Real);
-  descriptor->AddOption("OBIAExpression", "OBIA Mu Parser expression", "OBIAexpression", 1, true,
+  descriptor->AddOption("OBIAExpression", "OBIA Mu Parser expression", "OBIAexpression", 1, false,
                         ApplicationDescriptor::String);
   return EXIT_SUCCESS;
 }
@@ -84,9 +85,10 @@ int ConnectedComponentSegmentation::Execute(otb::ApplicationOptionsResult* parse
   else
     connected->GetFilter()->SetMinimumObjectSize(2);
 
-  connected->GetFilter()->SetOBIAExpression(parseResult->GetParameterString("OBIAExpression"));
+  if (parseResult->IsOptionPresent("OBIAExpression"))
+    connected->GetFilter()->SetOBIAExpression(parseResult->GetParameterString("OBIAExpression"));
 
-  connected->GetStreamer()->SetNumberOfDivisionsStrippedStreaming(2);
+  otb::StandardFilterWatcher watcher(connected->GetStreamer(),"Segmentation");
   connected->Update();
 
   VectorDataFileWriterPointerType vdwriter = VectorDataFileWriterType::New();
