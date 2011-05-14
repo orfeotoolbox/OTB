@@ -21,7 +21,6 @@
 #include "otbMath.h"
 #include "itkMetaDataObject.h"
 #include "otbImageKeywordlist.h"
-#include "base/ossimKeywordlist.h"
 
 namespace otb
 {

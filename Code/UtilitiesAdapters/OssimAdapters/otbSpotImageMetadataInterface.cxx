@@ -18,10 +18,10 @@
 
 #include "otbSpotImageMetadataInterface.h"
 
+#include <boost/algorithm/string.hpp>
 #include "otbMacro.h"
 #include "itkMetaDataObject.h"
 #include "otbImageKeywordlist.h"
-#include "base/ossimKeywordlist.h"
 
 namespace otb
 {
@@ -55,13 +55,13 @@ SpotImageMetadataInterface::GetInstrument() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  if (imageKeywordlist.HasKey("support_data.instrument"))
+    {
+    std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.instrument");
+    return valueString;
+    }
 
-  std::string key = "support_data.instrument";
-  ossimString keywordString = kwl.find(key.c_str());
-
-  return keywordString;
+  return "";
 }
 
 unsigned int
@@ -79,14 +79,14 @@ SpotImageMetadataInterface::GetInstrumentIndex() const
     {
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
+  if (imageKeywordlist.HasKey("support_data.instrument_index"))
+    {
+    std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.instrument_index");
+    unsigned int value = atoi(valueString.c_str());
+    return value;
+    }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-
-  std::string key = "support_data.instrument_index";
-  ossimString keywordString = kwl.find(key.c_str());
-
-  return static_cast<unsigned int>(keywordString.toUInt32());
+  return -1; // Invalid value
 }
 
 SpotImageMetadataInterface::VariableLengthVectorType
@@ -105,23 +105,20 @@ SpotImageMetadataInterface::GetSolarIrradiance() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  VariableLengthVectorType outputValuesVariableLengthVector;
-  ossimKeywordlist         kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-
-  std::string              key = "support_data.solar_irradiance";
-  ossimString              keywordString = kwl.find(key.c_str());
-  ossimString              separatorList = " ";
-  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
   std::vector<double>      outputValues;
-  for (unsigned int i = 0; i < keywordStrings.size(); ++i)
+  if (imageKeywordlist.HasKey("support_data.solar_irradiance"))
     {
-    if (!keywordStrings[i].empty())
+    std::vector<std::string> outputValuesString;
+    std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.solar_irradiance");
+    boost::trim(valueString);
+    boost::split(outputValuesString, valueString, boost::is_any_of(" "));
+    for (unsigned int i = 0; i < outputValuesString.size(); ++i)
       {
-      outputValues.push_back(keywordStrings[i].toDouble());
+      outputValues.push_back(atof(outputValuesString[i].c_str()));
       }
     }
 
+  VariableLengthVectorType outputValuesVariableLengthVector;
   outputValuesVariableLengthVector.SetSize(outputValues.size());
   outputValuesVariableLengthVector.Fill(0);
   //In the case of SPOT, the bands are in a different order:
@@ -140,7 +137,7 @@ SpotImageMetadataInterface::GetSolarIrradiance() const
     }
   else
     {
-    itkExceptionMacro("Invalid Physical Gain");
+    itkExceptionMacro("Invalid Physical Irradiance");
     }
 
   return outputValuesVariableLengthVector;
@@ -162,22 +159,20 @@ SpotImageMetadataInterface::GetDay() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  if (!imageKeywordlist.HasKey("support_data.image_date"))
+    {
+    return -1;
+    }
 
-  std::string key;
-  ossimString separatorList;
-  key = "support_data.image_date";
-  separatorList = "-T";
+  std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.image_date");
+  std::vector<std::string> outputValues;
 
-  ossimString              keywordString = kwl.find(key.c_str());
-  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
 
-  if (keywordStrings.size() <= 2) itkExceptionMacro(<< "Invalid Day");
+  if (outputValues.size() <= 2) itkExceptionMacro(<< "Invalid Day");
 
-  ossimString day = keywordStrings[2];
-
-  return day.toInt();
+  int value = atoi(outputValues[2].c_str());
+  return value;
 }
 
 int
@@ -196,22 +191,19 @@ SpotImageMetadataInterface::GetMonth() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  if (!imageKeywordlist.HasKey("support_data.image_date"))
+    {
+    return -1;
+    }
 
-  std::string key;
-  ossimString separatorList;
-  key = "support_data.image_date";
-  separatorList = "-T";
+  std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.image_date");
+  std::vector<std::string> outputValues;
+  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
 
-  ossimString              keywordString = kwl.find(key.c_str());
-  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+  if (outputValues.size() <= 2) itkExceptionMacro(<< "Invalid Month");
 
-  if (keywordStrings.size() <= 2) itkExceptionMacro(<< "Invalid Month");
-
-  ossimString month = keywordStrings[1];
-
-  return month.toInt();
+  int value = atoi(outputValues[1].c_str());
+  return value;
 }
 
 int
@@ -229,22 +221,20 @@ SpotImageMetadataInterface::GetYear() const
     {
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
 
-  std::string key;
-  ossimString separatorList;
-  key = "support_data.image_date";
-  separatorList = "-T";
+  if (!imageKeywordlist.HasKey("support_data.image_date"))
+    {
+    return -1;
+    }
 
-  ossimString              keywordString = kwl.find(key.c_str());
-  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+  std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.image_date");
+  std::vector<std::string> outputValues;
+  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
 
-  if (keywordStrings.size() <= 2) itkExceptionMacro("Invalid Year");
+  if (outputValues.size() <= 2) itkExceptionMacro(<< "Invalid Year");
 
-  ossimString year = keywordStrings[0];
-
-  return year.toInt();
+  int value = atoi(outputValues[0].c_str());
+  return value;
 }
 
 int
@@ -263,22 +253,19 @@ SpotImageMetadataInterface::GetHour() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  if (!imageKeywordlist.HasKey("support_data.image_date"))
+    {
+    return -1;
+    }
 
-  std::string key;
-  ossimString separatorList;
-  key = "support_data.image_date";
-  separatorList = "-T:";
+  std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.image_date");
+  std::vector<std::string> outputValues;
+  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
 
-  ossimString              keywordString = kwl.find(key.c_str());
-  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+  if (outputValues.size() < 4) itkExceptionMacro(<< "Invalid Hour");
 
-  if (keywordStrings.size() <= 2) itkExceptionMacro("Invalid Hour");
-
-  ossimString hour = keywordStrings[3];
-
-  return hour.toInt();
+  int value = atoi(outputValues[3].c_str());
+  return value;
 }
 
 int
@@ -297,21 +284,19 @@ SpotImageMetadataInterface::GetMinute() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  if (!imageKeywordlist.HasKey("support_data.image_date"))
+    {
+    return -1;
+    }
 
-  std::string key;
-  ossimString separatorList;
-  key = "support_data.image_date";
-  separatorList = "-T:";
+  std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.image_date");
+  std::vector<std::string> outputValues;
+  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
 
-  ossimString              keywordString = kwl.find(key.c_str());
-  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
-  if (keywordStrings.size() <= 2) itkExceptionMacro("Invalid Minute");
+  if (outputValues.size() < 5) itkExceptionMacro(<< "Invalid Minute");
 
-  ossimString minute = keywordStrings[4];
-
-  return minute.toInt();
+  int value = atoi(outputValues[4].c_str());
+  return value;
 }
 
 int
@@ -330,22 +315,19 @@ SpotImageMetadataInterface::GetProductionDay() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  if (!imageKeywordlist.HasKey("support_data.production_date"))
+    {
+    return -1;
+    }
 
-  std::string key;
-  ossimString separatorList;
-  key = "support_data.production_date";
-  separatorList = "-T:";
+  std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.production_date");
+  std::vector<std::string> outputValues;
+  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
 
-  ossimString              keywordString = kwl.find(key.c_str());
-  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+  if (outputValues.size() <= 2) itkExceptionMacro(<< "Invalid Day");
 
-  if (keywordStrings.size() <= 2) itkExceptionMacro(<< "Invalid Day");
-
-  ossimString day = keywordStrings[2];
-
-  return day.toInt();
+  int value = atoi(outputValues[2].c_str());
+  return value;
 }
 
 int
@@ -364,22 +346,19 @@ SpotImageMetadataInterface::GetProductionMonth() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  if (!imageKeywordlist.HasKey("support_data.production_date"))
+    {
+    return -1;
+    }
 
-  std::string key;
-  ossimString separatorList;
-  key = "support_data.production_date";
-  separatorList = "-T";
+  std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.production_date");
+  std::vector<std::string> outputValues;
+  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
 
-  ossimString              keywordString = kwl.find(key.c_str());
-  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+  if (outputValues.size() <= 2) itkExceptionMacro(<< "Invalid Month");
 
-  if (keywordStrings.size() <= 2) itkExceptionMacro(<< "Invalid Month");
-
-  ossimString month = keywordStrings[1];
-
-  return month.toInt();
+  int value = atoi(outputValues[1].c_str());
+  return value;
 }
 
 int
@@ -398,22 +377,19 @@ SpotImageMetadataInterface::GetProductionYear() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  if (!imageKeywordlist.HasKey("support_data.production_date"))
+    {
+    return -1;
+    }
 
-  std::string key;
-  ossimString separatorList;
-  key = "support_data.production_date";
-  separatorList = "-T";
+  std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.production_date");
+  std::vector<std::string> outputValues;
+  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
 
-  ossimString              keywordString = kwl.find(key.c_str());
-  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+  if (outputValues.size() <= 2) itkExceptionMacro(<< "Invalid Year");
 
-  if (keywordStrings.size() <= 2) itkExceptionMacro("Invalid Year");
-
-  ossimString year = keywordStrings[0];
-
-  return year.toInt();
+  int value = atoi(outputValues[0].c_str());
+  return value;
 }
 
 SpotImageMetadataInterface::VariableLengthVectorType
@@ -433,18 +409,16 @@ SpotImageMetadataInterface
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  std::string              key = "support_data.physical_bias";
-  ossimString              keywordString = kwl.find(key.c_str());
-  ossimString              separatorList = " ";
-  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
   std::vector<double>      outputValues;
-  for (unsigned int i = 0; i < keywordStrings.size(); ++i)
+  if (imageKeywordlist.HasKey("support_data.physical_bias"))
     {
-    if (!keywordStrings[i].empty())
+    std::vector<std::string> outputValuesString;
+    std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.physical_bias");
+    boost::trim(valueString);
+    boost::split(outputValuesString, valueString, boost::is_any_of(" "));
+    for (unsigned int i = 0; i < outputValuesString.size(); ++i)
       {
-      outputValues.push_back(keywordStrings[i].toDouble());
+      outputValues.push_back(atof(outputValuesString[i].c_str()));
       }
     }
 
@@ -491,18 +465,16 @@ SpotImageMetadataInterface
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  std::string              key = "support_data.physical_gain";
-  ossimString              keywordString = kwl.find(key.c_str());
-  ossimString              separatorList = " ";
-  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
   std::vector<double>      outputValues;
-  for (unsigned int i = 0; i < keywordStrings.size(); ++i)
+  if (imageKeywordlist.HasKey("support_data.physical_gain"))
     {
-    if (!keywordStrings[i].empty())
+    std::vector<std::string> outputValuesString;
+    std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.physical_gain");
+    boost::trim(valueString);
+    boost::split(outputValuesString, valueString, boost::is_any_of(" "));
+    for (unsigned int i = 0; i < outputValuesString.size(); ++i)
       {
-      outputValues.push_back(keywordStrings[i].toDouble());
+      outputValues.push_back(atof(outputValuesString[i].c_str()));
       }
     }
 
@@ -548,12 +520,14 @@ SpotImageMetadataInterface::GetSatElevation() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  std::string key = "support_data.incident_angle";
-  ossimString keywordString = kwl.find(key.c_str());
+  if (!imageKeywordlist.HasKey("support_data.incident_angle"))
+    {
+    return 0;
+    }
 
-  return (90. - keywordString.toDouble());
+  std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.incident_angle");
+  double value = 90 - atof(valueString.c_str());
+  return value;
 }
 
 double
@@ -572,15 +546,16 @@ SpotImageMetadataInterface::GetSatAzimuth() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  std::string key = "support_data.step_count";
-  ossimString keywordString = kwl.find(key.c_str());
-  int         step = keywordString.toInt();
+  if (!imageKeywordlist.HasKey("support_data.step_count") ||
+      !imageKeywordlist.HasKey("support_data.scene_orientation"))
+    {
+    return 0;
+    }
 
-  key = "support_data.scene_orientation";
-  keywordString = kwl.find(key.c_str());
-  double satAz = keywordString.toDouble();
+  std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.step_count");
+  int step = atoi(valueString.c_str());
+  valueString = imageKeywordlist.GetMetadataByKey("support_data.scene_orientation");
+  double satAz = atof(valueString.c_str());
 
   if ((step - 48) < 0)
     {
@@ -611,10 +586,7 @@ SpotImageMetadataInterface
   VariableLengthVectorType wavel(1);
   wavel.Fill(0.);
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  std::string key = "support_data.number_bands";
-  int         nbBands = ossimString(kwl.find(key.c_str())).toInt();
+  int         nbBands = this->GetNumberOfBands();
   std::string sensorId = this->GetSensorID();
 
   // Panchromatic case
@@ -659,10 +631,7 @@ SpotImageMetadataInterface
   VariableLengthVectorType wavel(1);
   wavel.Fill(0.);
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  std::string key = "support_data.number_bands";
-  int         nbBands = ossimString(kwl.find(key.c_str())).toInt();
+  int nbBands = this->GetNumberOfBands();
   std::string sensorId = this->GetSensorID();
 
   // Panchromatic case
@@ -728,10 +697,7 @@ SpotImageMetadataInterface
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  std::string key = "support_data.number_bands";
-  int         nbBands = ossimString(kwl.find(key.c_str())).toInt();
+  int nbBands = this->GetNumberOfBands();
   std::string sensorId = this->GetSensorID();
 
   // Panchromatic case

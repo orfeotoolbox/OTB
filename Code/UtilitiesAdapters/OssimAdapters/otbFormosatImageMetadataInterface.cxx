@@ -593,6 +593,7 @@ FormosatImageMetadataInterface
   if (nbBands == 1)
     {
     wavel.SetSize(1);
+    // FIXME that's definitely NOT correct in a formosat file!!!
     if (sensorId == "SPOT4") wavel.Fill(0.610);
     else if (sensorId == "SPOT5") wavel.Fill(0.480);
     else itkExceptionMacro(<< "Invalid Formosat2 Sensor ID");

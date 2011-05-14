@@ -18,10 +18,10 @@
 
 #include "otbWorldView2ImageMetadataInterface.h"
 
+#include <boost/algorithm/string.hpp>
 #include "otbMacro.h"
 #include "itkMetaDataObject.h"
 #include "otbImageKeywordlist.h"
-#include "base/ossimKeywordlist.h"
 
 namespace otb
 {
@@ -56,21 +56,22 @@ WorldView2ImageMetadataInterface::GetSolarIrradiance() const
     }
 
   VariableLengthVectorType outputValuesVariableLengthVector;
-  ossimKeywordlist         kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
 
-  std::string keyBId = "support_data.band_id";
-  ossimString keywordStringBId = kwl.find(keyBId.c_str());
+  std::string keywordStringBId = imageKeywordlist.GetMetadataByKey("support_data.band_id");
+  std::string panchro("P");
+  std::string multi("Multi");
 
-  if (keywordStringBId == ossimString("P"))
+  if (keywordStringBId == panchro)
     {
     outputValuesVariableLengthVector.SetSize(1);
     outputValuesVariableLengthVector.Fill(1603.40);
     }
   else
     {
-    ossimString keywordStringBandNameList = kwl.find("support_data.band_name_list");
-    std::vector<ossimString> bandNameList = keywordStringBandNameList.split(" ");
+    std::string keywordStringBandNameList = imageKeywordlist.GetMetadataByKey("support_data.band_name_list");
+    std::vector<std::string> bandNameList;
+    boost::trim(keywordStringBandNameList);
+    boost::split(bandNameList, keywordStringBandNameList, boost::is_any_of(" "));
 
     outputValuesVariableLengthVector.SetSize(bandNameList.size());
     for(unsigned int i = 0; i < bandNameList.size(); ++i)
@@ -131,22 +132,21 @@ WorldView2ImageMetadataInterface::GetDay() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key("support_data.tlc_date");
+  if (!imageKeywordlist.HasKey(key))
+    {
+    return -1;
+    }
 
-  std::string key;
-  ossimString separatorList;
-  key = "support_data.tlc_date";
-  separatorList = "-T";
+  std::string valueString = imageKeywordlist.GetMetadataByKey(key);
+  std::vector<std::string> outputValues;
 
-  ossimString              keywordString = kwl.find(key.c_str());
-  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
 
-  if (keywordStrings.size() <= 2) itkExceptionMacro(<< "Invalid Day");
+  if (outputValues.size() <= 2) itkExceptionMacro(<< "Invalid Day");
 
-  ossimString day = keywordStrings[2];
-
-  return day.toInt();
+  int value = atoi(outputValues[2].c_str());
+  return value;
 }
 
 int
@@ -165,22 +165,21 @@ WorldView2ImageMetadataInterface::GetMonth() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key("support_data.tlc_date");
+  if (!imageKeywordlist.HasKey(key))
+    {
+    return -1;
+    }
 
-  std::string key;
-  ossimString separatorList;
-  key = "support_data.tlc_date";
-  separatorList = "-T";
+  std::string valueString = imageKeywordlist.GetMetadataByKey(key);
+  std::vector<std::string> outputValues;
 
-  ossimString              keywordString = kwl.find(key.c_str());
-  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
 
-  if (keywordStrings.size() <= 2) itkExceptionMacro(<< "Invalid Month");
+  if (outputValues.size() <= 2) itkExceptionMacro(<< "Invalid Month");
 
-  ossimString month = keywordStrings[1];
-
-  return month.toInt();
+  int value = atoi(outputValues[1].c_str());
+  return value;
 }
 
 int
@@ -199,22 +198,21 @@ WorldView2ImageMetadataInterface::GetYear() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key("support_data.tlc_date");
+  if (!imageKeywordlist.HasKey(key))
+    {
+    return -1;
+    }
 
-  std::string key;
-  ossimString separatorList;
-  key = "support_data.tlc_date";
-  separatorList = "-T";
+  std::string valueString = imageKeywordlist.GetMetadataByKey(key);
+  std::vector<std::string> outputValues;
 
-  ossimString              keywordString = kwl.find(key.c_str());
-  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
 
-  if (keywordStrings.size() <= 2) itkExceptionMacro("Invalid Year");
+  if (outputValues.size() <= 2) itkExceptionMacro(<< "Invalid Year");
 
-  ossimString year = keywordStrings[0];
-
-  return year.toInt();
+  int value = atoi(outputValues[0].c_str());
+  return value;
 }
 
 int
@@ -233,22 +231,21 @@ WorldView2ImageMetadataInterface::GetHour() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key("support_data.tlc_date");
+  if (!imageKeywordlist.HasKey(key))
+    {
+    return -1;
+    }
 
-  std::string key;
-  ossimString separatorList;
-  key = "support_data.tlc_date";
-  separatorList = "-T:";
+  std::string valueString = imageKeywordlist.GetMetadataByKey(key);
+  std::vector<std::string> outputValues;
 
-  ossimString              keywordString = kwl.find(key.c_str());
-  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
 
-  if (keywordStrings.size() <= 2) itkExceptionMacro("Invalid Hour");
+  if (outputValues.size() <= 2) itkExceptionMacro(<< "Invalid Hour");
 
-  ossimString hour = keywordStrings[3];
-
-  return hour.toInt();
+  int value = atoi(outputValues[3].c_str());
+  return value;
 }
 
 int
@@ -267,27 +264,21 @@ WorldView2ImageMetadataInterface::GetMinute() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-
-  std::string key;
-  ossimString separatorList;
-  key = "support_data.tlc_date";
-  separatorList = "-T:";
-  ossimString keywordString = kwl.find(key.c_str());
-
-  if (keywordString == ossimString("Unknown"))
+  std::string key("support_data.tlc_date");
+  if (!imageKeywordlist.HasKey(key))
     {
-    itkExceptionMacro("Unknown date")
+    return -1;
     }
 
-  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+  std::string valueString = imageKeywordlist.GetMetadataByKey(key);
+  std::vector<std::string> outputValues;
 
-  if (keywordStrings.size() <= 2) itkExceptionMacro("Invalid Minute");
+  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
 
-  ossimString minute = keywordStrings[4];
+  if (outputValues.size() <= 2) itkExceptionMacro(<< "Invalid Minute");
 
-  return minute.toInt();
+  int value = atoi(outputValues[4].c_str());
+  return value;
 }
 
 int
@@ -306,22 +297,21 @@ WorldView2ImageMetadataInterface::GetProductionDay() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key("support_data.generation_date");
+  if (!imageKeywordlist.HasKey(key))
+    {
+    return -1;
+    }
 
-  std::string key;
-  ossimString separatorList;
-  key = "support_data.generation_date";
-  separatorList = "-T";
+  std::string valueString = imageKeywordlist.GetMetadataByKey(key);
+  std::vector<std::string> outputValues;
 
-  ossimString              keywordString = kwl.find(key.c_str());
-  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
 
-  if (keywordStrings.size() <= 2) itkExceptionMacro(<< "Invalid Day");
+  if (outputValues.size() <= 2) itkExceptionMacro(<< "Invalid Day");
 
-  ossimString day = keywordStrings[2];
-
-  return day.toInt();
+  int value = atoi(outputValues[2].c_str());
+  return value;
 }
 
 int
@@ -340,22 +330,21 @@ WorldView2ImageMetadataInterface::GetProductionMonth() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key("support_data.generation_date");
+  if (!imageKeywordlist.HasKey(key))
+    {
+    return -1;
+    }
 
-  std::string key;
-  ossimString separatorList;
-  key = "support_data.generation_date";
-  separatorList = "-T";
+  std::string valueString = imageKeywordlist.GetMetadataByKey(key);
+  std::vector<std::string> outputValues;
 
-  ossimString              keywordString = kwl.find(key.c_str());
-  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
 
-  if (keywordStrings.size() <= 2) itkExceptionMacro(<< "Invalid Month");
+  if (outputValues.size() <= 2) itkExceptionMacro(<< "Invalid Month");
 
-  ossimString month = keywordStrings[1];
-
-  return month.toInt();
+  int value = atoi(outputValues[1].c_str());
+  return value;
 }
 
 int
@@ -373,23 +362,22 @@ WorldView2ImageMetadataInterface::GetProductionYear() const
     {
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
+ 
+  std::string key("support_data.generation_date");
+  if (!imageKeywordlist.HasKey(key))
+    {
+    return -1;
+    }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string valueString = imageKeywordlist.GetMetadataByKey(key);
+  std::vector<std::string> outputValues;
 
-  std::string key;
-  ossimString separatorList;
-  key = "support_data.generation_date";
-  separatorList = "-T";
+  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
 
-  ossimString              keywordString = kwl.find(key.c_str());
-  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+  if (outputValues.size() <= 2) itkExceptionMacro(<< "Invalid Year");
 
-  if (keywordStrings.size() <= 2) itkExceptionMacro("Invalid Year");
-
-  ossimString year = keywordStrings[0];
-
-  return year.toInt();
+  int value = atoi(outputValues[0].c_str());
+  return value;
 }
 
 WorldView2ImageMetadataInterface::VariableLengthVectorType
@@ -401,27 +389,28 @@ WorldView2ImageMetadataInterface
     {
     itkExceptionMacro(<< "Invalid Metadata, no WorldView2 Image");
     }
-  ImageKeywordlistType ImageKeywordlist;
+  ImageKeywordlistType imageKeywordlist;
 
   if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
     {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, ImageKeywordlist);
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
-  ossimKeywordlist kwl;
-  ImageKeywordlist.convertToOSSIMKeywordlist(kwl);
 
   VariableLengthVectorType outputValuesVariableLengthVector;
-  std::string              keyBId = "support_data.band_id";
-  ossimString              keywordStringBId = kwl.find(keyBId.c_str());
-  if (keywordStringBId == ossimString("P"))
+  std::string keywordStringBId = imageKeywordlist.GetMetadataByKey("support_data.band_id");
+  std::string panchro("P");
+  std::string multi("Multi");
+  if (keywordStringBId == panchro)
     {
     outputValuesVariableLengthVector.SetSize(1);
     outputValuesVariableLengthVector.Fill(0.0);
     }
-  else if (keywordStringBId == ossimString("Multi"))
+  else if (keywordStringBId == multi)
     {
-    ossimString keywordStringBandNameList = kwl.find("support_data.band_name_list");
-    std::vector<ossimString> bandNameList = keywordStringBandNameList.split(" ");
+    std::string keywordStringBandNameList = imageKeywordlist.GetMetadataByKey("support_data.band_name_list");
+    std::vector<std::string> bandNameList;
+    boost::trim(keywordStringBandNameList);
+    boost::split(bandNameList, keywordStringBandNameList, boost::is_any_of(" "));
 
     outputValuesVariableLengthVector.SetSize(bandNameList.size());
     outputValuesVariableLengthVector.Fill(0.0);
@@ -443,59 +432,62 @@ WorldView2ImageMetadataInterface
     {
     itkExceptionMacro(<< "Invalid Metadata, no WorldView2 Image");
     }
-  ImageKeywordlistType ImageKeywordlist;
+  ImageKeywordlistType imageKeywordlist;
 
   if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
     {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, ImageKeywordlist);
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
-  ossimKeywordlist kwl;
-  ImageKeywordlist.convertToOSSIMKeywordlist(kwl);
 
-  ossimString keywordStringBitsPerPixel = kwl.find("support_data.bits_per_pixel");
-  int         bitsPerPixel = keywordStringBitsPerPixel.toInt();
+  std::string keywordStringBitsPerPixel = imageKeywordlist.GetMetadataByKey("support_data.bits_per_pixel");
+  int         bitsPerPixel = atoi(keywordStringBitsPerPixel.c_str());
   if (bitsPerPixel != 16)
     {
     itkExceptionMacro(<< "Invalid bitsPerPixel " << bitsPerPixel);
     }
 
-  std::string keyBId = "support_data.band_id";
-  ossimString keywordStringBId = kwl.find(keyBId.c_str());
-  if (keywordStringBId != ossimString("P") && keywordStringBId != ossimString("Multi"))
+  std::string keywordStringBId = imageKeywordlist.GetMetadataByKey("support_data.band_id");
+  std::string panchro("P");
+  std::string multi("Multi");
+  if (keywordStringBId != panchro && keywordStringBId != multi)
     {
     itkExceptionMacro(<< "Invalid bandID " << keywordStringBId);
     }
 
-  ossimString keywordStringTDILevel = kwl.find("support_data.TDI_level");
-  int         TDILevel = keywordStringTDILevel.toInt();
-  if ( (keywordStringBId == ossimString("P") && TDILevel >64) ||
-      (keywordStringBId == ossimString("P") && TDILevel < 8) )
+  std::string keywordStringTDILevel = imageKeywordlist.GetMetadataByKey("support_data.TDI_level");
+  int         TDILevel = atoi(keywordStringTDILevel.c_str());
+  if ( (keywordStringBId == panchro && TDILevel > 64) ||
+      (keywordStringBId == panchro && TDILevel < 8) )
     {
     itkExceptionMacro(<< "Invalid TDILevel " << TDILevel);
     }
 
-  ossimString keywordStringBandNameList = kwl.find("support_data.band_name_list");
-  std::vector<ossimString> bandNameList = keywordStringBandNameList.split(" ");
+  std::string keywordStringBandNameList = imageKeywordlist.GetMetadataByKey("support_data.band_name_list");
+  std::vector<std::string> bandNameList;
+  boost::trim(keywordStringBandNameList);
+  boost::split(bandNameList, keywordStringBandNameList, boost::is_any_of(" "));
 
   VariableLengthVectorType outputValuesVariableLengthVector;
   outputValuesVariableLengthVector.SetSize(bandNameList.size());
 
-  if (keywordStringBId == ossimString("P"))
+  if (keywordStringBId == panchro)
     {
-    ossimString keywordStringAbsCalFactor = kwl.find("support_data.absCalFactor");
-    outputValuesVariableLengthVector[0] = keywordStringAbsCalFactor.toDouble();
+    std::string keywordStringAbsCalFactor = imageKeywordlist.GetMetadataByKey("support_data.absCalFactor");
+    double absCalFactor = atof(keywordStringAbsCalFactor.c_str());
+    outputValuesVariableLengthVector[0] = absCalFactor;
     }
   else
     {
     for(unsigned int i = 0; i < bandNameList.size(); ++i)
       {
-      ossimString keywordString = "support_data." + bandNameList[i] + "_band_absCalFactor";
-      ossimString keywordStringAbsCalFactor = kwl.find(keywordString);
-      outputValuesVariableLengthVector[i] = keywordStringAbsCalFactor.toDouble();
+      std::string key = "support_data." + bandNameList[i] + "_band_absCalFactor";
+      std::string keywordStringCalFactor = imageKeywordlist.GetMetadataByKey(key);;
+      double calFactor = atof(keywordStringCalFactor.c_str());
+      outputValuesVariableLengthVector[i] = calFactor;
       }
     }
 
-  if (keywordStringBId == ossimString("P"))
+  if (keywordStringBId == panchro)
     {
     outputValuesVariableLengthVector[0] = 1.0 / outputValuesVariableLengthVector[0];
     }
@@ -525,13 +517,15 @@ WorldView2ImageMetadataInterface::GetSatElevation() const
     {
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
+  std::string key("support_data.sat_elevation_angle");
+  if (!imageKeywordlist.HasKey(key))
+    {
+    return -1;
+    }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  std::string key = "support_data.sat_elevation_angle";
-  ossimString keywordString = kwl.find(key.c_str());
-
-  return keywordString.toDouble();
+  std::string valueString = imageKeywordlist.GetMetadataByKey(key);
+  double value = atof(valueString.c_str());
+  return value;
 }
 
 double
@@ -550,12 +544,15 @@ WorldView2ImageMetadataInterface::GetSatAzimuth() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  std::string key = "support_data.sat_azimuth_angle";
-  ossimString keywordString = kwl.find(key.c_str());
+  std::string key("support_data.sat_azimuth_angle");
+  if (!imageKeywordlist.HasKey(key))
+    {
+    return -1;
+    }
 
-  return keywordString.toDouble();
+  std::string valueString = imageKeywordlist.GetMetadataByKey(key);
+  double value = atof(valueString.c_str());
+  return value;
 }
 
 WorldView2ImageMetadataInterface::VariableLengthVectorType
@@ -578,26 +575,26 @@ WorldView2ImageMetadataInterface
   VariableLengthVectorType wavel(1);
   wavel.Fill(0.);
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  std::string key = "support_data.band_id";
-  ossimString keywordStringBId = kwl.find(key.c_str());
-
-  if (keywordStringBId != ossimString("P") && keywordStringBId != ossimString("Multi"))
+  std::string keywordStringBId = imageKeywordlist.GetMetadataByKey("support_data.band_id");
+  std::string panchro("P");
+  std::string multi("Multi");
+  if (keywordStringBId != panchro && keywordStringBId != multi)
     {
     itkExceptionMacro(<< "Invalid bandID " << keywordStringBId);
     }
 
   // Panchromatic case
-  if (keywordStringBId == ossimString("P"))
+  if (keywordStringBId == panchro)
     {
     wavel.SetSize(1);
     wavel.Fill(0.464);
     }
   else
     {
-    ossimString keywordStringBandNameList = kwl.find("support_data.band_name_list");
-    std::vector<ossimString> bandNameList = keywordStringBandNameList.split(" ");
+    std::string keywordStringBandNameList = imageKeywordlist.GetMetadataByKey("support_data.band_name_list");
+    std::vector<std::string> bandNameList;
+    boost::trim(keywordStringBandNameList);
+    boost::split(bandNameList, keywordStringBandNameList, boost::is_any_of(" "));
 
     wavel.SetSize(bandNameList.size());
     for(unsigned int i = 0; i < bandNameList.size(); ++i)
@@ -662,26 +659,27 @@ WorldView2ImageMetadataInterface
   VariableLengthVectorType wavel(1);
   wavel.Fill(0.);
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  std::string key = "support_data.band_id";
-  ossimString keywordStringBId = kwl.find(key.c_str());
+  std::string keywordStringBId = imageKeywordlist.GetMetadataByKey("support_data.band_id");
+  std::string panchro("P");
+  std::string multi("Multi");
 
-  if (keywordStringBId != ossimString("P") && keywordStringBId != ossimString("Multi"))
+  if (keywordStringBId != panchro && keywordStringBId != multi)
     {
     itkExceptionMacro(<< "Invalid bandID " << keywordStringBId);
     }
 
   // Panchromatic case
-  if (keywordStringBId == ossimString("P"))
+  if (keywordStringBId == panchro)
     {
     wavel.SetSize(1);
     wavel.Fill(0.801);
     }
   else
     {
-    ossimString keywordStringBandNameList = kwl.find("support_data.band_name_list");
-    std::vector<ossimString> bandNameList = keywordStringBandNameList.split(" ");
+    std::string keywordStringBandNameList = imageKeywordlist.GetMetadataByKey("support_data.band_name_list");
+    std::vector<std::string> bandNameList;
+    boost::trim(keywordStringBandNameList);
+    boost::split(bandNameList, keywordStringBandNameList, boost::is_any_of(" "));
 
     wavel.SetSize(bandNameList.size());
     for(unsigned int i = 0; i < bandNameList.size(); ++i)
@@ -741,11 +739,12 @@ WorldView2ImageMetadataInterface::GetDefaultDisplay() const
     {
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
 
-  ossimString keywordStringBandNameList = kwl.find("support_data.band_name_list");
-  std::vector<ossimString> bandNameList = keywordStringBandNameList.split(" ");
+  std::string keywordStringBandNameList = imageKeywordlist.GetMetadataByKey("support_data.band_name_list");
+  std::vector<std::string> bandNameList;
+  boost::trim(keywordStringBandNameList);
+  boost::split(bandNameList, keywordStringBandNameList, boost::is_any_of(" "));
+
   std::vector<unsigned int> rgb(3);
   if(bandNameList.size() > 4)
     {
@@ -784,18 +783,17 @@ WorldView2ImageMetadataInterface
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  std::string key = "support_data.band_id";
-  ossimString keywordStringBId = kwl.find(key.c_str());
+  std::string keywordStringBId = imageKeywordlist.GetMetadataByKey("support_data.band_id");
+  std::string panchro("P");
+  std::string multi("Multi");
 
-  if (keywordStringBId != ossimString("P") && keywordStringBId != ossimString("Multi"))
+  if (keywordStringBId != panchro && keywordStringBId != multi)
     {
     itkExceptionMacro(<< "Invalid bandID " << keywordStringBId);
     }
 
   // Panchromatic case
-  if (keywordStringBId == ossimString("P"))
+  if (keywordStringBId == panchro)
     {
     const float b0[301] =
     {
