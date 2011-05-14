@@ -153,7 +153,6 @@ void Parser::ExceptionHandlerDebug(ParserType::ExceptionType &e)
 }
 
 
-
 // Get the map with the variables
 const std::map<std::string, Parser::ValueType*>& Parser::GetVar() const
 {

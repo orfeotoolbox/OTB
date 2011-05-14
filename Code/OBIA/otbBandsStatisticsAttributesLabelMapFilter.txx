@@ -241,7 +241,6 @@ BandsStatisticsAttributesLabelMapFilter<TImage, TFeatureImage>
 }
 
 
-
 template <class TImage, class TFeatureImage>
 void
 BandsStatisticsAttributesLabelMapFilter<TImage, TFeatureImage>

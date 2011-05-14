@@ -200,12 +200,12 @@ public:
     m_Parser = ParserType::New();
     m_NbOfBands = 0;
   }
- ;
+;
 
   ~ConnectedComponentMuParserFunctor()
   {
   }
- ;
+;
 
 protected:
 
