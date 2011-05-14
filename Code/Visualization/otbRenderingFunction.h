@@ -156,7 +156,7 @@ public:
    */
   // REVIEW: I agree, we should not be calling intialize ourselve, it
   // would better be seamless
-  virtual void Initialize(const MetaDataDictionaryType& metadatadictionary){} //FIXME should disappear and be
+  virtual void Initialize(const MetaDataDictionaryType& itkNotUsed(metadatadictionary)){} //FIXME should disappear and be
   //automatic (IsModified())
 
 protected:
