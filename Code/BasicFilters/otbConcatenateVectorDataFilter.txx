@@ -28,7 +28,7 @@ template<class TVectorData>
 ConcatenateVectorDataFilter<TVectorData>
 ::ConcatenateVectorDataFilter()
 {
-  this->SetNumberOfRequiredInputs(1);
+  this->SetNumberOfRequiredInputs(2);
   this->SetNumberOfRequiredOutputs(1);
 
   m_Folder        = DataNodeType::New();
