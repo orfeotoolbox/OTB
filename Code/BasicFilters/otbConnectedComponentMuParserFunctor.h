@@ -62,10 +62,10 @@ namespace otb
 /** \class ConnectedComponentMuParserFunctor
  *  \brief This functor use MuParser as criteria for itk connected component module
  */
-  namespace Functor
-  {
+namespace Functor
+{
 
-    template<class TInput>
+template<class TInput>
 class ITK_EXPORT ConnectedComponentMuParserFunctor
 {
 
@@ -112,8 +112,6 @@ public:
     m_Distance = vcl_sqrt(m_Distance);
 
     //compute spectralAngle
-
-    double dist = 0.0;
     double scalarProd = 0.0;
     double normProd = 0.0;
     double normProd1 = 0.0;
@@ -200,14 +198,10 @@ public:
     m_Parser = ParserType::New();
     m_NbOfBands = 0;
   }
-;
 
   ~ConnectedComponentMuParserFunctor()
   {
   }
-;
-
-protected:
 
 private:
 
@@ -227,7 +221,7 @@ private:
   double m_ParserResult;
 
 };
-  } // end of Functor namespace
+} // end of Functor namespace
 
 
 }//end namespace otb
