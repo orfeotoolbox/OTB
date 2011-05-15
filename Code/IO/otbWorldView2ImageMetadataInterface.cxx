@@ -481,7 +481,7 @@ WorldView2ImageMetadataInterface
     for(unsigned int i = 0; i < bandNameList.size(); ++i)
       {
       std::string key = "support_data." + bandNameList[i] + "_band_absCalFactor";
-      std::string keywordStringCalFactor = imageKeywordlist.GetMetadataByKey(key);;
+      std::string keywordStringCalFactor = imageKeywordlist.GetMetadataByKey(key); ;
       double calFactor = atof(keywordStringCalFactor.c_str());
       outputValuesVariableLengthVector[i] = calFactor;
       }

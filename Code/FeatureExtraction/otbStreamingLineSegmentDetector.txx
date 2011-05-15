@@ -86,7 +86,7 @@ PersistentStreamingLineSegmentDetector<TInputImage>
   // and arbitrarily set the ProjectionRef to the input image ProjectionRef
 
   typedef itk::AffineTransform<typename OutputVectorDataType::PrecisionType, 2> TransformType;
-  typedef VectorDataTransformFilter<OutputVectorDataType,OutputVectorDataType> VDTransformType;
+  typedef VectorDataTransformFilter<OutputVectorDataType, OutputVectorDataType> VDTransformType;
 
   typename TransformType::ParametersType params;
   params.SetSize(6);

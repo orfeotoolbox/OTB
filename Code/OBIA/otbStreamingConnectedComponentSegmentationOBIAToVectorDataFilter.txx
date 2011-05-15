@@ -120,7 +120,7 @@ PersistentConnectedComponentSegmentationOBIAToVectorDataFilter<TVImage, TLabelIm
   // and arbitrarily set the ProjectionRef to the input image ProjectionRef
 
   typedef itk::AffineTransform<typename VectorDataType::PrecisionType, 2> TransformType;
-  typedef VectorDataTransformFilter<VectorDataType,VectorDataType> VDTransformType;
+  typedef VectorDataTransformFilter<VectorDataType, VectorDataType> VDTransformType;
 
   typename TransformType::ParametersType params;
   params.SetSize(6);
