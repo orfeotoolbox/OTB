@@ -347,6 +347,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Classification/ScalarImageMarkovRandomField1.cxx
   ${OTB_SOURCE_DIR}/Examples/Markov/MarkovClassification1Example.cxx
   ${OTB_SOURCE_DIR}/Examples/Markov/MarkovClassification2Example.cxx
+  ${OTB_SOURCE_DIR}/Examples/Markov/MarkovClassification3Example.cxx
   ${OTB_SOURCE_DIR}/Examples/Markov/MarkovRestaurationExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Markov/MarkovRegularizationExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMPointSetModelEstimatorExample.cxx
