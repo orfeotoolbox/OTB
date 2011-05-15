@@ -65,6 +65,8 @@ ELSE(OTB_BINARY_DIR)
   ELSE(OTB_FOUND)
     MESSAGE("OTB not found.  Please set OTB_DIR")
   ENDIF(OTB_FOUND)
+  
+  CONFIGURE_FILE(../CMake/CTestCustom.cmake.in CTestCustom.cmake)
 
   IF(NOT OTB_INSTALL_BIN_DIR)
     SET(OTB_INSTALL_BIN_DIR "/bin")
