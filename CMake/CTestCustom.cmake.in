@@ -49,6 +49,7 @@ SET(CTEST_CUSTOM_WARNING_EXCEPTION
   "warning LNK4221.*no public symbols found"
   "ranlib:.*file:.*has no symbols"
   "ranlib: file: .+ has no symbols"
+  "ranlib:.*warning for library:.*the table of contents is empty.*no object file members in the library define global symbols.*"
   "libtool:.*file:.*has no symbols"
   "Fl_Image.H:.*warning:.*dereferencing type-punned pointer will break strict-aliasing rules.*"
   "warning -.: directory name .* does not exist"
