@@ -33,7 +33,7 @@ typename VariableLengthVectorConverter< std::vector<std::vector<TInternalInputTy
 VariableLengthVectorConverter< std::vector<std::vector<TInternalInputType> >, TPrecisionType>
 ::Convert(InputType input)
 {
-  unsigned int p, q
+  unsigned int p, q;
   unsigned int count = 0;
   unsigned int rsltIdx = 0;
 
