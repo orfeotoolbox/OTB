@@ -26,15 +26,6 @@
 #include "otbMetaDataKey.h"
 #include "itkImageBase.h"
 
-namespace ossimplugins
-{
-class Noise;
-class SceneCoord;
-class CivilDateTime;
-}
-
-class ossimString;
-
 namespace otb
 {
 /** \class TerraSarImageMetadataInterface
@@ -72,11 +63,6 @@ public:
   typedef Superclass::PointSetPointer           PointSetPointer;
   typedef double                                RealType;
 
-  typedef ossimplugins::CivilDateTime           CivilDateTimeType;
-
-  /** Get the sensor ID from the ossim metadata */
-  std::string GetSensorID() const;
-
   /** Get the imaging start acquisition day from the ossim metadata */
   int GetDay() const;
 
@@ -103,9 +89,6 @@ public:
 
   /** Get the calibration.calFactor : generationTime variable */
   double GetCalibrationFactor() const;
-
-  /** Get the noise structure */
-  ossimplugins::Noise * GetNoise() const;
 
   /** Get the number of noise records */
   unsigned int GetNumberOfNoiseRecords() const;
@@ -137,17 +120,11 @@ public:
   /** Get the RSF */
   double GetRSF() const;
   
-  /** Get the incidence angles structure */
-  //ossimplugins::SceneCoord* GetIncidenceAngles() const;
-
   /** Get the number of corner incidence angles */
   unsigned int GetNumberOfCornerIncidenceAngles() const;
 
   /** Get the Mean Incidence angles */
   double GetMeanIncidenceAngles() const;
-
-  /** Get the incidence angles structure */
-  ossimplugins::SceneCoord* GetSceneCoord() const;
 
   /** Get the center incidence angle */
   double GetCenterIncidenceAngle() const;
@@ -193,7 +170,7 @@ protected:
   RealType GetRangeTimeLastPixel() const;
 
   /** convert a TimeUTC string to a julian day */
-  double ConvertStringTimeUTCToJulianDay(ossimString& value) const;
+  double ConvertStringTimeUTCToJulianDay(const std::string& value) const;
 
   /** Get the polynomial degree for a given noise record */
   unsigned int GetNoisePolynomialDegrees(unsigned int noiseRecord) const;
@@ -206,7 +183,6 @@ protected:
 
   /** Get noise reference point for a given noise record */
   double GetNoiseReferencePoint(unsigned int noiseRecord) const;
-
 
 private:
   TerraSarImageMetadataInterface(const Self &); //purposely not implemented

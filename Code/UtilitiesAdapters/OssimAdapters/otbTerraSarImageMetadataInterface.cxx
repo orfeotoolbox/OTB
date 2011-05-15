@@ -18,17 +18,12 @@
 
 #include "otbTerraSarImageMetadataInterface.h"
 
+#include <boost/algorithm/string.hpp>
 #include "otbMacro.h"
 #include "otbMath.h"
 #include "itkIndex.h"
 #include "itkMetaDataObject.h"
 #include "otbImageKeywordlist.h"
-
-#include "base/ossimDate.h"
-#include "base/ossimKeywordlist.h"
-
-#include "otb/Noise.h"
-#include "otb/SceneCoord.h"
 
 namespace otb
 {
@@ -36,26 +31,6 @@ namespace otb
 TerraSarImageMetadataInterface
 ::TerraSarImageMetadataInterface()
 {
-}
-
-std::string
-TerraSarImageMetadataInterface::GetSensorID() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  ImageKeywordlistType ImageKeywordlist;
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-    {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, ImageKeywordlist);
-    }
-
-  ossimKeywordlist kwl;
-  ImageKeywordlist.convertToOSSIMKeywordlist(kwl);
-
-  std::string key = "sensor";
-  ossimString keywordString = kwl.find(key.c_str());
-  std::string output(keywordString.chars());
-
-  return output;
 }
 
 bool
@@ -82,22 +57,21 @@ TerraSarImageMetadataInterface::GetDay() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key("azimuth_start_time");
+  if (!imageKeywordlist.HasKey(key))
+    {
+    return -1;
+    }
 
-  std::string key;
-  ossimString separatorList;
-  key = "azimuth_start_time";
-  separatorList = "-T";
+  std::string valueString = imageKeywordlist.GetMetadataByKey(key);
+  std::vector<std::string> outputValues;
 
-  ossimString              keywordString = kwl.find(key.c_str());
-  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
 
-  if (keywordStrings.size() <= 2) itkExceptionMacro(<< "Invalid Day");
+  if (outputValues.size() <= 2) itkExceptionMacro(<< "Invalid Day");
 
-  ossimString day = keywordStrings[2];
-
-  return day.toInt();
+  int value = atoi(outputValues[2].c_str());
+  return value;
 }
 
 int
@@ -116,22 +90,21 @@ TerraSarImageMetadataInterface::GetMonth() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key("azimuth_start_time");
+  if (!imageKeywordlist.HasKey(key))
+    {
+    return -1;
+    }
 
-  std::string key;
-  ossimString separatorList;
-  key = "azimuth_start_time";
-  separatorList = "-T";
+  std::string valueString = imageKeywordlist.GetMetadataByKey(key);
+  std::vector<std::string> outputValues;
 
-  ossimString              keywordString = kwl.find(key.c_str());
-  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
 
-  if (keywordStrings.size() <= 2) itkExceptionMacro(<< "Invalid Month");
+  if (outputValues.size() <= 2) itkExceptionMacro(<< "Invalid Month");
 
-  ossimString month = keywordStrings[1];
-
-  return month.toInt();
+  int value = atoi(outputValues[1].c_str());
+  return value;
 }
 
 int
@@ -150,23 +123,21 @@ TerraSarImageMetadataInterface::GetYear() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key("azimuth_start_time");
+  if (!imageKeywordlist.HasKey(key))
+    {
+    return -1;
+    }
 
-  std::string key;
-  ossimString separatorList;
-  key = "azimuth_start_time";
-  separatorList = "-T";
+  std::string valueString = imageKeywordlist.GetMetadataByKey(key);
+  std::vector<std::string> outputValues;
 
-  ossimString              keywordString = kwl.find(key.c_str());
-  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
 
-  if (keywordStrings.size() <= 2) itkExceptionMacro("Invalid Year");
+  if (outputValues.size() <= 2) itkExceptionMacro(<< "Invalid Year");
 
-  ossimString year = keywordStrings[0];
-
-  return year.toInt();
-
+  int value = atoi(outputValues[0].c_str());
+  return value;
 }
 
 int
@@ -185,22 +156,21 @@ TerraSarImageMetadataInterface::GetHour() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key("azimuth_start_time");
+  if (!imageKeywordlist.HasKey(key))
+    {
+    return -1;
+    }
 
-  std::string key;
-  ossimString separatorList;
-  key = "azimuth_start_time";
-  separatorList = "-T:";
+  std::string valueString = imageKeywordlist.GetMetadataByKey(key);
+  std::vector<std::string> outputValues;
 
-  ossimString              keywordString = kwl.find(key.c_str());
-  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
 
-  if (keywordStrings.size() <= 4) itkExceptionMacro("Invalid Hour");
+  if (outputValues.size() <= 4) itkExceptionMacro(<< "Invalid Hour");
 
-  ossimString hour = keywordStrings[3];
-
-  return hour.toInt();
+  int value = atoi(outputValues[3].c_str());
+  return value;
 }
 
 int
@@ -219,21 +189,21 @@ TerraSarImageMetadataInterface::GetMinute() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key("azimuth_start_time");
+  if (!imageKeywordlist.HasKey(key))
+    {
+    return -1;
+    }
 
-  std::string key;
-  ossimString separatorList;
-  key = "azimuth_start_time";
-  separatorList = "-T:";
+  std::string valueString = imageKeywordlist.GetMetadataByKey(key);
+  std::vector<std::string> outputValues;
 
-  ossimString              keywordString = kwl.find(key.c_str());
-  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
-  if (keywordStrings.size() <= 5) itkExceptionMacro("Invalid Minute");
+  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
 
-  ossimString minute = keywordStrings[4];
+  if (outputValues.size() <= 4) itkExceptionMacro(<< "Invalid Minute");
 
-  return minute.toInt();
+  int value = atoi(outputValues[4].c_str());
+  return value;
 }
 
 int
@@ -251,23 +221,21 @@ TerraSarImageMetadataInterface::GetProductionDay() const
     {
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
+  std::string key("generation_time");
+  if (!imageKeywordlist.HasKey(key))
+    {
+    return -1;
+    }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string valueString = imageKeywordlist.GetMetadataByKey(key);
+  std::vector<std::string> outputValues;
 
-  std::string key;
-  ossimString separatorList;
-  key = "generation_time";
-  separatorList = "-T:";
+  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
 
-  ossimString              keywordString = kwl.find(key.c_str());
-  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+  if (outputValues.size() <= 2) itkExceptionMacro(<< "Invalid Production Day");
 
-  if (keywordStrings.size() <= 2) itkExceptionMacro(<< "Invalid Production Day");
-
-  ossimString day = keywordStrings[2];
-
-  return day.toInt();
+  int value = atoi(outputValues[2].c_str());
+  return value;
 }
 
 int
@@ -286,22 +254,21 @@ TerraSarImageMetadataInterface::GetProductionMonth() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key("generation_time");
+  if (!imageKeywordlist.HasKey(key))
+    {
+    return -1;
+    }
 
-  std::string key;
-  ossimString separatorList;
-  key = "generation_time";
-  separatorList = "-T";
+  std::string valueString = imageKeywordlist.GetMetadataByKey(key);
+  std::vector<std::string> outputValues;
 
-  ossimString              keywordString = kwl.find(key.c_str());
-  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
 
-  if (keywordStrings.size() <= 2) itkExceptionMacro(<< "Invalid Production Month");
+  if (outputValues.size() <= 2) itkExceptionMacro(<< "Invalid Production Month");
 
-  ossimString month = keywordStrings[1];
-
-  return month.toInt();
+  int value = atoi(outputValues[1].c_str());
+  return value;
 }
 
 int
@@ -320,22 +287,21 @@ TerraSarImageMetadataInterface::GetProductionYear() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key("generation_time");
+  if (!imageKeywordlist.HasKey(key))
+    {
+    return -1;
+    }
 
-  std::string key;
-  ossimString separatorList;
-  key = "generation_time";
-  separatorList = "-T";
+  std::string valueString = imageKeywordlist.GetMetadataByKey(key);
+  std::vector<std::string> outputValues;
 
-  ossimString              keywordString = kwl.find(key.c_str());
-  std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
+  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
 
-  if (keywordStrings.size() <= 2) itkExceptionMacro("Invalid Production Year");
+  if (outputValues.size() <= 2) itkExceptionMacro(<< "Invalid Production Year");
 
-  ossimString year = keywordStrings[0];
-
-  return year.toInt();
+  int value = atoi(outputValues[0].c_str());
+  return value;
 }
 
 double
@@ -354,40 +320,16 @@ TerraSarImageMetadataInterface::GetCalibrationFactor() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-
-  std::string key = "calibration.calibrationConstant.calFactor";
-  ossimString calFac = kwl.find(key.c_str());
-
-  return calFac.toDouble();
-}
-
-ossimplugins::Noise *
-TerraSarImageMetadataInterface::GetNoise() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
+  std::string key("calibration.calibrationConstant.calFactor");
+  if (imageKeywordlist.HasKey(key))
     {
-    itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
+    std::string valueString = imageKeywordlist.GetMetadataByKey(key);
+    double value = atof(valueString.c_str());
+    return value;
     }
 
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-    {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-    }
-
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-
-  ossimplugins::Noise * noise = new ossimplugins::Noise();
-  noise->loadState(kwl, "");
-
-  return noise;
+  return std::numeric_limits<double>::quiet_NaN(); // Invalid value
 }
-
 
 unsigned int
 TerraSarImageMetadataInterface::GetNumberOfNoiseRecords() const
@@ -405,12 +347,15 @@ TerraSarImageMetadataInterface::GetNumberOfNoiseRecords() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  std::string key = "noise.numberOfNoiseRecords";
-  ossimString nbRec = kwl.find(key.c_str());
+  std::string key("noise.numberOfNoiseRecords");
+  if (imageKeywordlist.HasKey(key))
+    {
+    std::string valueString = imageKeywordlist.GetMetadataByKey(key);
+    unsigned int value = atoi(valueString.c_str());
+    return value;
+    }
 
-  return static_cast<unsigned int>(nbRec.toInt());
+  return std::numeric_limits<unsigned int>::quiet_NaN(); // Invalid value
 }
 
 unsigned int
@@ -429,18 +374,18 @@ TerraSarImageMetadataInterface::GetNoisePolynomialDegrees(unsigned int noiseReco
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-
-  unsigned int     polDeg;
   itk::OStringStream oss;
-
   oss.str("");
   oss << "noise[" << noiseRecord << "]imageNoise.noiseEstimate.polynomialDegree";
-  ossimString tempVal = kwl.find(oss.str().c_str());
-  polDeg = static_cast<unsigned int>(tempVal.toInt());
+  std::string key = oss.str();
+  if (imageKeywordlist.HasKey(key))
+    {
+    std::string valueString = imageKeywordlist.GetMetadataByKey(key);
+    unsigned int value = atoi(valueString.c_str());
+    return value;
+    }
 
-  return polDeg;
+  return std::numeric_limits<unsigned int>::quiet_NaN(); // Invalid value
 }
 
 
@@ -460,9 +405,6 @@ TerraSarImageMetadataInterface::GetNoisePolynomialDegrees() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-
   UIntVectorType     polDeg;
   itk::OStringStream oss;
 
@@ -471,8 +413,10 @@ TerraSarImageMetadataInterface::GetNoisePolynomialDegrees() const
     {
     oss.str("");
     oss << "noise[" << i << "]imageNoise.noiseEstimate.polynomialDegree";
-    ossimString tempVal = kwl.find(oss.str().c_str());
-    polDeg.push_back(static_cast<unsigned int>(tempVal.toInt()));
+    std::string key = oss.str();
+    std::string valueString = imageKeywordlist.GetMetadataByKey(key);
+    unsigned int value = atoi(valueString.c_str());
+    polDeg.push_back(value);
     }
 
   return polDeg;
@@ -496,9 +440,6 @@ TerraSarImageMetadataInterface
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-
   unsigned int   polDegs = this->GetNoisePolynomialDegrees(noiseRecord);
 
   DoubleVectorType       polCoef;
@@ -507,11 +448,13 @@ TerraSarImageMetadataInterface
   polCoef.clear();
   // set <= condition because degree N means N+1 coeff
   for (unsigned int j = 0; j <= polDegs; j++)
-  {
-      oss.str("");
-      oss << "noise[" << noiseRecord << "]imageNoise.noiseEstimate.coefficient[" << j << "]";
-      ossimString tempVal = kwl.find(oss.str().c_str());
-      polCoef.push_back(static_cast<double>(tempVal.toDouble()));
+    {
+    oss.str("");
+    oss << "noise[" << noiseRecord << "]imageNoise.noiseEstimate.coefficient[" << j << "]";
+    std::string key = oss.str();
+    std::string valueString = imageKeywordlist.GetMetadataByKey(key);
+    double value = atof(valueString.c_str());
+    polCoef.push_back(value);
   }
 
   return polCoef;
@@ -534,9 +477,6 @@ TerraSarImageMetadataInterface::GetNoisePolynomialCoefficientsList() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-
   unsigned int   nbRec = this->GetNumberOfNoiseRecords();
   UIntVectorType polDegs = this->GetNoisePolynomialDegrees();
 
@@ -552,8 +492,10 @@ TerraSarImageMetadataInterface::GetNoisePolynomialCoefficientsList() const
       {
       oss.str("");
       oss << "noise[" << i << "]imageNoise.noiseEstimate.coefficient[" << j << "]";
-      ossimString tempVal = kwl.find(oss.str().c_str());
-      polCoef.push_back(static_cast<double>(tempVal.toDouble()));
+      std::string key = oss.str();
+      std::string valueString = imageKeywordlist.GetMetadataByKey(key);
+      double value = atof(valueString.c_str());
+      polCoef.push_back(value);
       }
     polCoefList.push_back(polCoef);
     }
@@ -578,53 +520,49 @@ TerraSarImageMetadataInterface
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-
   DoubleVectorType         timeList;
   itk::OStringStream       oss;
 
   oss.str("");
   oss << "noise[" << noiseRecord << "]imageNoise.timeUTC";
-  ossimString tempVal = kwl.find(oss.str().c_str());
+  std::string key = oss.str();
+  if (imageKeywordlist.HasKey(key))
+    {
+    std::string valueString = imageKeywordlist.GetMetadataByKey(key);
+    double julianDay = ConvertStringTimeUTCToJulianDay(valueString);
+    return julianDay;
+    }
 
-  double julianDay;
-  julianDay = ConvertStringTimeUTCToJulianDay(tempVal);
-
-  return julianDay;
+  return std::numeric_limits<double>::quiet_NaN(); // Invalid value
 }
 
 double
 TerraSarImageMetadataInterface
-::ConvertStringTimeUTCToJulianDay(ossimString& value) const
+::ConvertStringTimeUTCToJulianDay(const std::string& value) const
 {
-  ossimString              separatorList = "-T:Z";
-  std::vector<ossimString> splittedDate;
+  std::vector<std::string> splittedDate;
+  boost::split(splittedDate, value, boost::is_any_of("-T:Z"));
 
-  int          year, month, day, hour, minu, sec;
-  double       secDec, julianDay;
-    splittedDate = value.split(separatorList);
+  int year = atoi(splittedDate[0].c_str());
+  int month = atoi(splittedDate[1].c_str());
+  int day = atoi(splittedDate[2].c_str());
+  int hour = atoi(splittedDate[3].c_str());
+  int minu = atoi(splittedDate[4].c_str());
+  double sec = atof(splittedDate[5].c_str());
 
-    year = splittedDate[0].toInt();
-    month = splittedDate[1].toInt();
-    day = splittedDate[2].toInt();
-    hour = splittedDate[3].toInt();
-    minu = splittedDate[4].toInt();
-    double secFull = splittedDate[5].toDouble();
-    sec = static_cast<int>(vcl_floor(secFull));
-    // store the decimal second value
-    secDec = secFull - vcl_floor(secFull);
+  // Conversion to julian day
+  // according to http://en.wikipedia.org/wiki/Julian_day
+  // division are integer divisions:
+  int a = (14 - month) / 12;
+  int y = year + 4800 - a;
+  int m = month + 12*a - 3;
 
-    ossimDate myDate(month, day, year);
-    myDate.setHour(hour);
-    myDate.setMin(minu);
-    myDate.setSec(sec);
-    julianDay = myDate.getJulian();
+  double julianDay = day + (153*m+2)/5 + 365*y + y/4 -y/100 + y/400 - 32045;
 
-    // add the decimal second to the julian day (1s <-> 1/24*60*60 = 1/86400 julienDay)
-    julianDay += secDec / 86400;
+  // now, the division are NOT integer
+  julianDay += hour/24. + minu/1440. + sec/86400.;
 
-    return julianDay;
+  return julianDay;
 }
 
 TerraSarImageMetadataInterface::DoubleVectorType
@@ -643,43 +581,17 @@ TerraSarImageMetadataInterface::GetNoiseTimeUTCList() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-
   DoubleVectorType         timeList;
   itk::OStringStream       oss;
-  ossimString              separatorList = "-T:Z";
-  std::vector<ossimString> splittedDate;
 
-  int          year, month, day, hour, minu, sec;
-  double       secDec, julianDay;
   unsigned int nbRec = this->GetNumberOfNoiseRecords();
   for (unsigned int i = 0; i < nbRec; i++)
     {
     oss.str("");
     oss << "noise[" << i << "]imageNoise.timeUTC";
-    ossimString tempVal = kwl.find(oss.str().c_str());
-    splittedDate = tempVal.split(separatorList);
-
-    year = splittedDate[0].toInt();
-    month = splittedDate[1].toInt();
-    day = splittedDate[2].toInt();
-    hour = splittedDate[3].toInt();
-    minu = splittedDate[4].toInt();
-    double secFull = splittedDate[5].toDouble();
-    sec = static_cast<int>(vcl_floor(secFull));
-    // store the decimal second value
-    secDec = secFull - vcl_floor(secFull);
-    ossimDate myDate(month, day, year);
-    myDate.setHour(hour);
-    myDate.setMin(minu);
-    myDate.setSec(sec);
-
-    julianDay = myDate.getJulian();
-
-    // add the decimal second to the julian day (1s <-> 1/24*60*60 = 1/86400 julienDay)
-    julianDay += secDec / 86400;
-
+    std::string key = oss.str();
+    std::string valueString = imageKeywordlist.GetMetadataByKey(key);
+    double julianDay = ConvertStringTimeUTCToJulianDay(valueString);
     timeList.push_back(julianDay);
     }
 
@@ -702,9 +614,6 @@ TerraSarImageMetadataInterface::GetNoiseValidityRangeMaxList() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-
   DoubleVectorType   maxList;
   itk::OStringStream oss;
 
@@ -713,8 +622,8 @@ TerraSarImageMetadataInterface::GetNoiseValidityRangeMaxList() const
     {
     oss.str("");
     oss << "noise[" << i << "]imageNoise.noiseEstimate.validityRangeMax";
-    ossimString tempVal = kwl.find(oss.str().c_str());
-    maxList.push_back(tempVal.toDouble());
+    std::string valueString = imageKeywordlist.GetMetadataByKey(oss.str());
+    maxList.push_back(atof(valueString.c_str()));
     }
 
   return maxList;
@@ -736,9 +645,6 @@ TerraSarImageMetadataInterface::GetNoiseValidityRangeMinList() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-
   DoubleVectorType   minList;
   itk::OStringStream oss;
 
@@ -747,9 +653,8 @@ TerraSarImageMetadataInterface::GetNoiseValidityRangeMinList() const
     {
     oss.str("");
     oss << "noise[" << i << "]imageNoise.noiseEstimate.validityRangeMin";
-    ossimString tempVal = kwl.find(oss.str().c_str());
-
-    minList.push_back(tempVal.toDouble());
+    std::string valueString = imageKeywordlist.GetMetadataByKey(oss.str());
+    minList.push_back(atof(valueString.c_str()));
     }
 
   return minList;
@@ -773,16 +678,13 @@ TerraSarImageMetadataInterface
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-
   double refPoint;
   itk::OStringStream oss;
 
   oss.str("");
   oss << "noise[" << noiseRecord << "]imageNoise.noiseEstimate.referencePoint";
-  ossimString tempVal = kwl.find(oss.str().c_str());
-  refPoint = tempVal.toDouble();
+  std::string valueString = imageKeywordlist.GetMetadataByKey(oss.str());
+  refPoint = atof(valueString.c_str());
 
   return refPoint;
 }
@@ -804,9 +706,6 @@ TerraSarImageMetadataInterface::GetNoiseReferencePointList() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-
   DoubleVectorType   refPointList;
   itk::OStringStream oss;
 
@@ -815,9 +714,9 @@ TerraSarImageMetadataInterface::GetNoiseReferencePointList() const
     {
     oss.str("");
     oss << "noise[" << i << "]imageNoise.noiseEstimate.referencePoint";
-    ossimString tempVal = kwl.find(oss.str().c_str());
+    std::string valueString = imageKeywordlist.GetMetadataByKey(oss.str());
 
-    refPointList.push_back(tempVal.toDouble());
+    refPointList.push_back(atof(valueString.c_str()));
     }
 
   return refPointList;
@@ -839,11 +738,8 @@ TerraSarImageMetadataInterface::GetRadarFrequency() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-
-  ossimString tempVal = kwl.find("radarFrequency");
-  double      freq = tempVal.toDouble();
+  std::string valueString = imageKeywordlist.GetMetadataByKey("radarFrequency");
+  double      freq = atof(valueString.c_str());
 
   return freq;
 }
@@ -863,12 +759,8 @@ TerraSarImageMetadataInterface::GetPRF() const
     {
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
-
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-
-  ossimString tempVal = kwl.find("sensor_params.prf");
-  double      freq = tempVal.toDouble();
+  std::string valueString = imageKeywordlist.GetMetadataByKey("sensor_params.prf");
+  double      freq = atof(valueString.c_str());
 
   return freq;
 }
@@ -888,39 +780,11 @@ TerraSarImageMetadataInterface::GetRSF() const
   {
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
   }
-  
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  
-  ossimString tempVal = kwl.find("sensor_params.sampling_frequency");
-  double      freq = tempVal.toDouble();
+
+  std::string valueString = imageKeywordlist.GetMetadataByKey("sensor_params.sampling_frequency");
+  double      freq = atof(valueString.c_str());
   
   return freq;
-}
-
-ossimplugins::SceneCoord*
-TerraSarImageMetadataInterface::GetSceneCoord() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-    {
-    itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
-    }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-    {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-    }
-
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-
-  ossimplugins::SceneCoord* sceneCoord = new ossimplugins::SceneCoord();
-  sceneCoord->loadState(kwl, "");
-
-  return sceneCoord;
 }
 
 unsigned int
@@ -935,12 +799,9 @@ TerraSarImageMetadataInterface::GetNumberOfCornerIncidenceAngles() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  std::string key = "sceneCoord.numberOfSceneCornerCoord";
-  ossimString nbCornerAngles = kwl.find(key.c_str());
-
-  return static_cast<unsigned int>(nbCornerAngles.toInt());
+  std::string valueString = imageKeywordlist.GetMetadataByKey("sceneCoord.numberOfSceneCornerCoord");
+  int      value = atoi(valueString.c_str());
+  return value;
 }
 
 double
@@ -957,24 +818,20 @@ TerraSarImageMetadataInterface::GetMeanIncidenceAngles() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string valueString = imageKeywordlist.GetMetadataByKey("sceneCoord.sceneCenterCoord.incidenceAngle");
+  double      value = atof(valueString.c_str());
 
-  itk::OStringStream oss;
-
-  std::string key = "sceneCoord.sceneCenterCoord.incidenceAngle";
-  ossimString centerIncidenceAngle = kwl.find(key.c_str());
-
-  sum += centerIncidenceAngle.toDouble();
+  sum += value;
 
   unsigned int nbAngles = this->GetNumberOfCornerIncidenceAngles();
+  itk::OStringStream oss;
   for (unsigned int i = 0; i < nbAngles; i++)
     {
     oss.str("");
     oss << "sceneCoord.sceneCornerCoord[" << i << "].incidenceAngle";
-    ossimString tempVal = kwl.find(oss.str().c_str());
-
-    sum += tempVal.toDouble();
+    valueString = imageKeywordlist.GetMetadataByKey(oss.str());
+    value = atof(valueString.c_str());
+    sum += value;
     }
 
   return (sum / (nbAngles + 1));
@@ -992,12 +849,10 @@ TerraSarImageMetadataInterface::GetCenterIncidenceAngle() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  std::string key = "sceneCoord.sceneCenterCoord.incidenceAngle";
-  ossimString tempVal = kwl.find(key.c_str());
+  std::string valueString = imageKeywordlist.GetMetadataByKey("sceneCoord.sceneCenterCoord.incidenceAngle");
+  double      value = atof(valueString.c_str());
 
-  return tempVal.toDouble();
+  return value;
 }
 
 TerraSarImageMetadataInterface::IndexType
@@ -1014,17 +869,11 @@ TerraSarImageMetadataInterface::GetCenterIncidenceAngleIndex() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  std::string key = "sceneCoord.sceneCenterCoord.refRow";
-  ossimString tempVal = kwl.find(key.c_str());
+  std::string valueString = imageKeywordlist.GetMetadataByKey("sceneCoord.sceneCenterCoord.refRow");
+  it[1] = atoi(valueString.c_str());
 
-  it[1] = tempVal.toInt();
-
-  key = "sceneCoord.sceneCenterCoord.refColumn";
-  tempVal = kwl.find(key.c_str());
-
-  it[0] = tempVal.toInt();
+  valueString = imageKeywordlist.GetMetadataByKey("sceneCoord.sceneCenterCoord.refColumn");
+  it[0] = atoi(valueString.c_str());
 
   return it;
 }
@@ -1043,9 +892,6 @@ TerraSarImageMetadataInterface::GetCornersIncidenceAngles() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-
   itk::OStringStream oss;
 
   unsigned int nbAngles = this->GetNumberOfCornerIncidenceAngles();
@@ -1053,11 +899,10 @@ TerraSarImageMetadataInterface::GetCornersIncidenceAngles() const
     {
     oss.str("");
     oss << "sceneCoord.sceneCornerCoord[" << i << "].incidenceAngle";
-    ossimString tempVal = kwl.find(oss.str().c_str());
+    std::string valueString = imageKeywordlist.GetMetadataByKey(oss.str());
 
-    dv.push_back(tempVal.toDouble());
+    dv.push_back(atof(valueString.c_str()));
     }
-
 
   return dv;
 }
@@ -1076,8 +921,6 @@ TerraSarImageMetadataInterface::GetCornersIncidenceAnglesIndex() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
 
   itk::OStringStream oss;
   itk::OStringStream oss2;
@@ -1089,15 +932,15 @@ TerraSarImageMetadataInterface::GetCornersIncidenceAnglesIndex() const
 
     oss.str("");
     oss << "sceneCoord.sceneCornerCoord[" << i << "].refRow";
-    ossimString tempVal = kwl.find(oss.str().c_str());
 
-    it[1] = tempVal.toInt();
+    std::string valueString = imageKeywordlist.GetMetadataByKey(oss.str());
+    it[1] = atoi(valueString.c_str());
 
     oss2.str("");
     oss2 << "sceneCoord.sceneCornerCoord[" << i << "].refColumn";
-    tempVal = kwl.find(oss2.str().c_str());
 
-    it[0] = tempVal.toInt();
+    valueString = imageKeywordlist.GetMetadataByKey(oss2.str());
+    it[0] = atoi(valueString.c_str());
 
     iv.push_back(it);
     }
@@ -1204,8 +1047,8 @@ double
 TerraSarImageMetadataInterface
 ::GetStartTimeUTC() const
 {
-    const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-    if (!this->CanRead())
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
   {
      itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
   }
@@ -1217,25 +1060,18 @@ TerraSarImageMetadataInterface
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
   }
 
-    ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  std::string key;
-  key = "azimuth_start_time";
+  std::string referenceUTC = imageKeywordlist.GetMetadataByKey("azimuth_start_time");
+  double julianDay = ConvertStringTimeUTCToJulianDay(referenceUTC);
 
-  ossimString  referenceUTC = kwl.find(key.c_str());
-
-  double julianDay;
-  julianDay = ConvertStringTimeUTCToJulianDay(referenceUTC);
-
-    return julianDay;
+  return julianDay;
 }
 
 double
 TerraSarImageMetadataInterface
 ::GetStopTimeUTC() const
 {
-    const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-    if (!this->CanRead())
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
   {
      itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
   }
@@ -1247,25 +1083,18 @@ TerraSarImageMetadataInterface
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
   }
 
-    ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  std::string key;
-  key = "azimuth_stop_time";
+  std::string referenceUTC = imageKeywordlist.GetMetadataByKey("azimuth_stop_time");
+  double julianDay = ConvertStringTimeUTCToJulianDay(referenceUTC);
 
-  ossimString  referenceUTC = kwl.find(key.c_str());
-
-  double julianDay;
-  julianDay = ConvertStringTimeUTCToJulianDay(referenceUTC);
-
-    return julianDay;
+  return julianDay;
 }
 
 TerraSarImageMetadataInterface::RealType
 TerraSarImageMetadataInterface
 ::GetRangeTimeFirstPixel() const
 {
-    const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-    if (!this->CanRead())
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
   {
      itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
   }
@@ -1277,24 +1106,17 @@ TerraSarImageMetadataInterface
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
   }
 
-    ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  std::string key;
-  key = "range_first_time";
-
-  ossimString  rangeTimeTmp = kwl.find(key.c_str());
-
-  double rangeTime = rangeTimeTmp.toDouble();
-
-  return rangeTime;
+  std::string valueString = imageKeywordlist.GetMetadataByKey("range_first_time");
+  double value = atof(valueString.c_str());
+  return value;
 }
 
 TerraSarImageMetadataInterface::RealType
 TerraSarImageMetadataInterface
 ::GetRangeTimeLastPixel() const
 {
-    const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-    if (!this->CanRead())
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
   {
      itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
   }
@@ -1306,16 +1128,9 @@ TerraSarImageMetadataInterface
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
   }
 
-    ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  std::string key;
-  key = "range_last_time";
-
-  ossimString  rangeTimeTmp = kwl.find(key.c_str());
-
-  double rangeTime = rangeTimeTmp.toDouble();
-
-  return rangeTime;
+  std::string valueString = imageKeywordlist.GetMetadataByKey("range_last_time");
+  double value = atof(valueString.c_str());
+  return value;
 }
 
 TerraSarImageMetadataInterface::RealType
@@ -1335,14 +1150,9 @@ TerraSarImageMetadataInterface
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  ossimKeywordlist kwl;
-  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  std::string key;
-  key = "calibration.calibrationConstant.calFactor";
-
-  ossimString calFactorValue = kwl.find(key.c_str());
-
-  return calFactorValue.toDouble();
+  std::string valueString = imageKeywordlist.GetMetadataByKey("calibration.calibrationConstant.calFactor");
+  double value = atof(valueString.c_str());
+  return value;
 }
 
 TerraSarImageMetadataInterface::PointSetPointer
