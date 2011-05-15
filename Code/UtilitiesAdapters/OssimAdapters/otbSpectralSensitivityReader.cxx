@@ -19,8 +19,10 @@
 #include "otbSpectralSensitivityReader.h"
 
 #include <fstream>
-
-#include "base/ossimFilename.h"
+#include <algorithm>
+#include <cctype>
+#include <boost/algorithm/string.hpp>
+#include "itksys/SystemTools.hxx"
 
 #include "otbSpotImageMetadataInterface.h"
 #include "itkExceptionObject.h"
@@ -73,24 +75,17 @@ SpectralSensitivityReader
     itkExceptionMacro(<< "An input image has to be set or set directly the filename");
     }
 
-  ossimString        sensor("");
+  std::string        sensor("");
   itk::OStringStream oss;
 
   try
     {
     SpotImageMetadataInterface::Pointer lImageMetadata = SpotImageMetadataInterface::New();
     lImageMetadata->SetMetaDataDictionary(m_Image->GetMetaDataDictionary());
-    sensor = ossimString(lImageMetadata->GetSensorID());
-    sensor.upcase();
+    sensor = lImageMetadata->GetSensorID();
+    sensor = itksys::SystemTools::UpperCase(sensor);
     // Suppress spaces
-    for (unsigned int i = 0; i < sensor.size() - 1; i++)
-      {
-      if (sensor.compare(i, 1, " ") == 0)
-        {
-        sensor.erase(i, 1);
-        i--;
-        }
-      }
+    sensor.erase(std::remove_if(sensor.begin(), sensor.end(), isspace), sensor.end());
 
     oss.str("");
     oss << lImageMetadata->GetInstrument();
@@ -122,14 +117,15 @@ SpectralSensitivityReader
 
   WavelengthSpectralBandVectorType * wavelengthSpectralBand = this->GetOutput();
 
-  ossimFilename fname(m_FileName);
-  if (!fname.exists()) itkExceptionMacro(<< m_FileName << " does not exist.");
+  if ( !itksys::SystemTools::FileExists(m_FileName.c_str()) )
+    {
+    itkExceptionMacro(<< m_FileName << " does not exist.");
+    }
 
-  std::ifstream file(fname.c_str());
-  if (!file) itkExceptionMacro(<< "Enable to read " << fname << " file.");
+  std::ifstream file(m_FileName.c_str());
+  if (!file) itkExceptionMacro(<< "Enable to read " <<  m_FileName << " file.");
 
   std::string line;
-  ossimString separator = " ";
   double      mini = 0;
   double      maxi = 0.;
   bool        firstLine = true;
@@ -140,28 +136,21 @@ SpectralSensitivityReader
 
   while (std::getline(file, line))
     {
-    ossimString osLine(line);
 
     // Suppress multiple spaces
-    for (unsigned int i = 0; i < osLine.size() - 1; i++)
-      {
-      if (osLine.compare(i, 1, " ") == 0 && osLine.compare(i + 1, 1, " ") == 0)
-        {
-        osLine.erase(i + 1, 1);
-        i--;
-        }
-      }
-    // if the first character is a space, erase it
-    if (osLine.compare(0, 1, " ") == 0) osLine.erase(0, 1);
+    boost::algorithm::replace_all_copy( line, "  ", " ");
 
-    std::vector<ossimString> keywordStrings = osLine.split(separator);
+    // if the first character is a space, erase it
+    boost::trim(line);
+    std::vector<std::string> keywordStrings;
+    boost::split(keywordStrings, line, boost::is_any_of(" "));
 
     if (keywordStrings.size() < 3) itkExceptionMacro(<< "Invalid file format");
 
     // Store min wavelength
     if (firstLine)
       {
-      mini = keywordStrings[0].toDouble();
+      mini = atof(keywordStrings[0].c_str());
       nbBands = keywordStrings.size() - 2;
       for (unsigned int j = 0; j < nbBands; j++)
         {
@@ -176,10 +165,10 @@ SpectralSensitivityReader
 
     for (unsigned int i = 0; i < nbBands; i++)
       {
-      valuesVector[i].push_back(keywordStrings[i + 2].toDouble());
+      valuesVector[i].push_back(atof(keywordStrings[i + 2].c_str()));
       }
 
-    maxi = keywordStrings[0].toDouble();
+    maxi = atof(keywordStrings[0].c_str());
     } //while ( std::getline( file, line ) )
 
   for (unsigned int j = 0; j < nbBands; j++)
