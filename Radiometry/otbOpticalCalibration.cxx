@@ -97,7 +97,7 @@ int OpticalCalibration::Execute(otb::ApplicationOptionsResult* parseResult)
   }
   catch (itk::ExceptionObject& err)
   {
-    std::cout << "Invalid input image medadata. The parsing returns the following error:\n" << std::endl;
+    std::cout << "Invalid input image medadata. The parsing returns the following error:\n" << err << std::endl;
     return EXIT_FAILURE;
   }
 
