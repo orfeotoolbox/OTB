@@ -48,16 +48,7 @@ int otbConcatenateVectorDataFilter (int argc, char * argv[])
     
   typedef otb::CommandLineArgumentParseResult ParserResultType;
   ParserResultType::Pointer  parseResult = ParserResultType::New();
-  
-  try
-    {
-    parser->ParseCommandLine(argc, argv, parseResult);
-    }
-  catch ( itk::ExceptionObject & err )
-    {
-    return EXIT_FAILURE;
-    }
-  
+  parser->ParseCommandLine(argc, argv, parseResult);
   
   // Get number of input vectorDatas
   unsigned int nbInputs = parseResult->GetNumberOfParameters("--InputVectorDatas");
