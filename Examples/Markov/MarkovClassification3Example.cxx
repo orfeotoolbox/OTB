@@ -290,7 +290,7 @@ int main(int argc, char* argv[] )
 
   WriterRescaledType::Pointer writerRescaled = WriterRescaledType::New();
 
-  writerRescaled->SetFileName( argv[3]  );
+  writerRescaled->SetFileName( outputRescaledImageFileName );
   writerRescaled->SetInput( colormapper->GetOutput() );
 
   writerRescaled->Update();
