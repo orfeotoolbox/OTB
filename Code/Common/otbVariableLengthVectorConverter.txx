@@ -33,7 +33,10 @@ typename VariableLengthVectorConverter< std::vector<std::vector<TInternalInputTy
 VariableLengthVectorConverter< std::vector<std::vector<TInternalInputType> >, TPrecisionType>
 ::Convert(InputType input)
 {
-  unsigned int p, q, count, rsltIdx = 0;
+  unsigned int p, q
+  unsigned int count = 0;
+  unsigned int rsltIdx = 0;
+
   OutputType result;
   
   p = input.size();
@@ -42,7 +45,6 @@ VariableLengthVectorConverter< std::vector<std::vector<TInternalInputType> >, TP
     {
       count+=input.at(l).size();
     }
-
 
   result.SetSize(count);
 
@@ -68,7 +70,9 @@ VariableLengthVectorConverter< std::vector<std::vector<std::complex<TInternalInp
                                TPrecisionType>
 ::Convert(InputType input)
 {
-  unsigned int p, q, count, rsltIdx = 0;
+  unsigned int p, q;
+  unsigned int count = 0;
+  unsigned int rsltIdx = 0;
   OutputType result;
   
   p = input.size();
