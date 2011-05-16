@@ -15,8 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbFuzzyDescriptorsModelManager_txx
-#define __otbFuzzyDescriptorsModelManager_txx
 
 #include "otbFuzzyDescriptorsModelManager.h"
 #include "itkExceptionObject.h"
@@ -207,4 +205,3 @@ FuzzyDescriptorsModelManager
 
 } // End namespace otb
 
-#endif
