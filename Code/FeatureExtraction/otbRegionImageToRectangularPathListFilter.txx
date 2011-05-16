@@ -355,7 +355,7 @@ RegionImageToRectangularPathListFilter<TInputImage, TOutputPath>
           std::cout << "A-eigenvector 1 = [" << ax1 << ", " << ay1 << "]; A-eigenvector 2 = [" << ax2 << ", " << ay2 <<
           "]" << std::endl;
           std::cout << "length = " << length << "; width = " << width << std::endl;
-          std::cout << "main direction = " << alpha << "°" << std::endl;
+          std::cout << "main direction = " << alpha << " degree" << std::endl;
           std::cout << "rectangular fit = " << (float) countWithin / n << std::endl;
           }
 
