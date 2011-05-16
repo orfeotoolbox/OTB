@@ -407,10 +407,7 @@ void TileMapImageIO::ReadImageInformation()
   m_Dimensions[0] = (1 << m_Depth) * 256;
   m_Dimensions[1] = (1 << m_Depth) * 256;
   otbMsgDevMacro(<< "Get Dimensions : x=" << m_Dimensions[0] << " & y=" << m_Dimensions[1]);
-  this->SetNumberOfComponents(4);
-  this->SetNumberOfDimensions(2);
-  this->SetFileTypeToBinary();
-  SetComponentType(UCHAR);
+
   // Default Spacing
   m_Spacing[0] = 1;
   m_Spacing[1] = 1;
@@ -443,16 +440,16 @@ void TileMapImageIO::ReadImageInformation()
       {
       case 0:
         m_AddressMode = TileMapAdressingStyle::GM;
-        return;
+        break;
       case 1:
         m_AddressMode = TileMapAdressingStyle::OSM;
-        return;
+        break;
       case 2:
         m_AddressMode = TileMapAdressingStyle::NEARMAP;
-        return;
+        break;
       case 3:
         m_AddressMode = TileMapAdressingStyle::LOCAL;
-        return;
+        break;
       default:
         itkExceptionMacro(<< "Addressing style unknown");
       }
@@ -494,6 +491,17 @@ void TileMapImageIO::ReadImageInformation()
     // File suffix and addres mode must be set with accessors
     otbMsgDevMacro(<< "File parameters: " << m_ServerName << " " << m_FileSuffix << " " << m_AddressMode);
     }
+
+  // The OSM tiles are 4 bands png, while HillShade & NearMap are 3 bands jpeg
+  if (m_AddressMode == TileMapAdressingStyle::OSM)
+    this->SetNumberOfComponents(4);
+  else
+    this->SetNumberOfComponents(3);
+
+  this->SetNumberOfDimensions(2);
+  this->SetFileTypeToBinary();
+  this->SetComponentType(UCHAR);
+
 }
 
 bool TileMapImageIO::CanWriteFile(const char* name)
