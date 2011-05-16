@@ -106,7 +106,6 @@ VectorDataToDSValidatedVectorDataFilter<TVectorData, TPrecision>
     }
 
   //Initialize parser
-  //std::cout << m_CriterionFormula << std::endl;
   m_Parser->SetExpr(m_CriterionFormula);
   m_Parser->DefineVar("Belief", &m_Bel);
   m_Parser->DefineVar("Plausibility", &m_Plau);
@@ -154,12 +153,6 @@ VectorDataToDSValidatedVectorDataFilter<TVectorData, TPrecision>
           mass->SetMass(H, m_FuzzyVars[i]->GetMembership(fuzName, currentGeometry->GetFieldAsDouble(fuzName)));
           mass->SetMass(H_, m_FuzzyVars[i]->GetMembership(fuzName_, currentGeometry->GetFieldAsDouble(fuzName)));
 
-/*
-          std::cout << fuzName  << " : " << currentGeometry->GetFieldAsDouble(fuzName)
-                    << " " << m_FuzzyVars[i]->GetMembership(fuzName, currentGeometry->GetFieldAsInt(fuzName)) << std::endl;
-          std::cout << fuzName_ << " : " << currentGeometry->GetFieldAsDouble(fuzName)
-                    << " " << m_FuzzyVars[i]->GetMembership(fuzName_, currentGeometry->GetFieldAsDouble(fuzName)) << std::endl;
-*/
           mass->EstimateUncertainty();
           
           jointMassFilter->PushBackInput(mass);
@@ -168,21 +161,14 @@ VectorDataToDSValidatedVectorDataFilter<TVectorData, TPrecision>
       jointMassFilter->Update();
       m_Bel  = jointMassFilter->GetOutput()->GetBelief(m_Hypothesis);
       m_Plau = jointMassFilter->GetOutput()->GetPlausibility(m_Hypothesis);
-      /*
-      std::cout << "Bel : " << m_Bel << std::endl;
-      std::cout << "Plau: " << m_Plau << std::endl;
-      */
-      if (m_Parser->Eval())
+
+     if (m_Parser->Eval())
         {
-        //std::cout << "Feature Validated : " << m_Parser->Eval() << std::endl;
         currentGeometry->SetNodeId(this->GetNextID());
+        currentGeometry->SetFieldAsDouble("Belief", m_Bel);
+        currentGeometry->SetFieldAsDouble("Plausi", m_Plau);
         this->GetOutput(0)->GetDataTree()->Add(currentGeometry, folder);
         }
-      else
-        {
-        //std::cout << "Feature Rejected : " << m_Parser->Eval() << std::endl;
-        }
-      //itVector.GoToEnd(); //TEST ONLY###########################################
       }
     ++itVector;
     }

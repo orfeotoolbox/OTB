@@ -136,8 +136,18 @@ public:
 
     if (model.size() != 4)
       {
-      itkExceptionMacro(<< "Wrong model!")
+      itkExceptionMacro(<< "Wrong model! Size(="
+                        << model.size()
+                        << ") > 4" )
       }
+    else if (model[0]<0 || model[1]<model[0] || model[2]<model[1] || model[2]>1)
+    {
+      itkExceptionMacro(<< "Wrong model! Values have to be 0<=v1<=v2<=v3<=1" )
+    }
+    else if (model[3]<.75 || model[3]>1)
+    {
+      itkExceptionMacro(<< "Wrong model! Values have to be 0.75<=v4<=1" )
+    }
     else
       {
        for (unsigned j=0; j<nbDescriptor; j++)
@@ -152,7 +162,7 @@ public:
                }
              else
                {
-               itkExceptionMacro(<< "Wrong model!")
+               itkExceptionMacro(<< "Wrong model! Value must be between 0 and 1")
                }
              }
            }
@@ -171,6 +181,11 @@ public:
     m_Hypothesis = hypothesis;
   }
   
+  unsigned int GetNumberOfParameters()
+  {
+    return (m_DescriptorModels.size() * 4);
+  }
+
 
 protected:
   /** Triggers the Computation */
