@@ -50,12 +50,12 @@ int LabeledImageColorMapping::Execute(otb::ApplicationOptionsResult* parseResult
   typedef unsigned char  PixelType;
   typedef unsigned short LabelType;
 
-  typedef otb::VectorImage<PixelType,2>                  VectorImageType;
+  typedef otb::VectorImage<PixelType, 2>                  VectorImageType;
   typedef VectorImageType::PixelType                     VectorPixelType;
-  typedef otb::Image<LabelType,2>                        LabelImageType;
+  typedef otb::Image<LabelType, 2>                        LabelImageType;
   typedef otb::ImageFileReader<LabelImageType>           ReaderType;
   typedef otb::StreamingImageFileWriter<VectorImageType> WriterType;
-  typedef otb::ChangeLabelImageFilter<LabelImageType,VectorImageType> ChangeLabelFilterType;
+  typedef otb::ChangeLabelImageFilter<LabelImageType, VectorImageType> ChangeLabelFilterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(parseResult->GetInputImage().c_str());
@@ -86,30 +86,30 @@ int LabeledImageColorMapping::Execute(otb::ApplicationOptionsResult* parseResult
   while(!ifs.eof())
     {
     std::string line;
-    std::getline(ifs,line);
+    std::getline(ifs, line);
 
     // Avoid commented lines or too short ones
     if(line[0]!='#' && line.size()> 0)
       {
       // retrieve the label
-      std::string::size_type pos = line.find_first_of(" ",0);
-      LabelType clabel = atoi(line.substr(0,pos).c_str());
+      std::string::size_type pos = line.find_first_of(" ", 0);
+      LabelType clabel = atoi(line.substr(0, pos).c_str());
       ++pos;
       // Retrieve the color
       VectorPixelType color(3);
       color.Fill(0);
-      for(unsigned int i = 0; i < 3;++i)
-	{
-	std::string::size_type nextpos = line.find_first_of(" ",pos);
-        int value = atoi(line.substr(pos,nextpos).c_str());
+      for(unsigned int i = 0; i < 3; ++i)
+       {
+       std::string::size_type nextpos = line.find_first_of(" ", pos);
+        int value = atoi(line.substr(pos, nextpos).c_str());
         if(value < 0 or value > 255)
           std::cerr<<"WARNING: color value outside 8-bits range (<0 or >255). Value will be clamped."<<std::endl;
-	color[i]=static_cast<PixelType>(value);
-	pos = nextpos+1;
-	nextpos = line.find_first_of(" ",pos);	
-	}
+       color[i]=static_cast<PixelType>(value);
+       pos = nextpos+1;
+       nextpos = line.find_first_of(" ", pos);
+       }
       std::cout<<"Adding color mapping "<<clabel<<" -> ["<<(int)color[0]<<" "<<(int)color[1]<<" "<<(int)color[2]<<" ]"<<std::endl;
-      mapper->SetChange(clabel,color);
+      mapper->SetChange(clabel, color);
       }
     }
   ifs.close();
