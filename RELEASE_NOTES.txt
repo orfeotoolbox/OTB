@@ -1,3 +1,89 @@
+OTB-v.3.10.0 - Changes since version 3.8.0 (2011/05/??)
+-----------------------------------------
+* Monteverdi
+  * New Rasterization module
+  * New ImageStatistics module
+  * New BayesianFusion module
+  * New SAR Polarimetry modules (conversion, analysis)
+  * Removed the Orthorectification since its functionnalities are covered by the Reprojection module
+  * Handle multi band complex images
+  * Viewer module : Add "save screenshots" capability
+  
+* Applications with command-line interfaces and GUI
+  * Optical calibration
+  * Cartographic DB Validation based on Dempster Shafer theory
+    * ExtractRoadDescription
+    * VectorDataDSValidation
+    * DSFuzzyModelEstimation
+  * Multi-images classification chain
+    * EstimateImagesStatistics
+    * TrainImagesClassifier
+    * ValidateImagesClassifier
+    * ImageSVMClassifier
+  * Connected Component Segmentation and OBIA based on user provided mathematical formula
+  * Object Detection application
+    * TrainHOGDetector 
+    * HOGObjectDetector
+    * MeanShiftModesDetection
+    * TrainDeepSVMDetector
+  * Various new utilities :
+    * LineSegmentDetection
+    * Superimpose
+    * RigidTransformResample
+    * ConcatenateVectorData
+    * VectorDataExtractROIApplication
+    * VectorDataTransformFilterApplication
+    * OSMDownloader
+
+* Library
+  * Add HistogramOfOrientedGradientCovariantImageFunction
+  * Add Framework for LANDSAT Spectral rule based classifier (contribution from J. Inglada)
+  * Add Multitemporal time point interpolators : SavitzkyGolayInterpolationFunctor, EnvelopeSavitzkyGolayInterpolationFunctor (contribution from J. Inglada)
+  * Add SAR Polarimetry conversions and analysis code :
+    * SinclairImageFilter
+    * SinclairReciprocalImageFilter
+    * SinclairToCircularCovarianceMatrixFunctor
+    * SinclairToCoherencyMatrixFunctor
+    * SinclairToCovarianceMatrixFunctor
+    * SinclairToMuellerMatrixFunctor
+    * SinclairToCircularCovarianceMatrixFunctor
+    * SinclairToReciprocalCircularCovarianceMatrixFunctor
+    * SinclairToReciprocalCoherencyMatrixFunctor
+    * SinclairToReciprocalCovarianceMatrixFunctor
+    * ReciprocalLinearCovarianceToReciprocalCircularCovarianceFunctor
+    * ReciprocalHAlphaFunctor
+    * ReciprocalCovarianceToReciprocalCoherencyFunctor
+    * ReciprocalCovarianceToCoherencyDegreeFunctor
+    * CoherencyToMuellerFunctor
+    * MuellerToReciprocalCovarianceFunctor
+    * MuellerToPolarisationDegreeAndPowerFunctor
+  * Add RationalTransform
+  * Add PipelineMemoryPrintEstimator: computes the total memory used by a pipeline, and proposes streaming parameters depending on available RAM
+  * Add Dempster Shafer framework for classifier fusion
+    * MassOfBelief
+    * JointMassOfBeliefFilter
+    * VectorDataToDSValidatedVectorDataFilter
+    * VectorDataToRoadDescriptionFilter
+  * AssymmetricFusionOfLineDetectorImageFilter: call SetNumberOfDirections on internal filters (contribution from A. Ferro)
+  * Add RationalTransform
+  * RADARSAT 1: more product types supported
+  * VectorDataToImageFilter: Binary rasterization available, support images of arbitrary size
+  * Add VectorDataRendering example: showing how to rasterize OSM roads onto an image for visualisation
+  * LineSegmentDetector & RightAngleDetection: algorithmic improvements
+  * GDALImageIO: multi dataset support (for MODIS HDF4)
+  * GDALImageIO: improve performance by avoiding unnecessary memory copies
+  * GDALImageIO: TIFF are now saved as TILED
+  * GDALImageIO: various improvements to support reading and writing of multiband complex data with all types supported by GDAL
+  * StreamingImageVirtualFileWriter, StreamingImageFileWriter : new streaming strategies, with integrated pipeline memory print estimation
+  * Curl: add in-memory download support to avoid writing small temporary files
+
+* System
+  * Compilation on Windows and MacOS with mapnik
+  * Update internal tinyXML to 2.6
+
+* Bug fix:
+  * RADARSAT1 infinite loop
+
 OTB-v.3.8.0 - Changes since version 3.6.0 (2010/12/16)
 -----------------------------------------
 
