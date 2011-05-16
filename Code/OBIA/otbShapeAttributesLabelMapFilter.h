@@ -205,6 +205,7 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   typedef typename ImageType::Pointer         ImagePointer;
+
   /** ImageDimension constants */
   itkStaticConstMacro(ImageDimension, unsigned int, TImage::ImageDimension);
 
@@ -257,6 +258,8 @@ protected:
 
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
+
+  virtual void AllocateOutputs();
 
   /** Things to to before threaded data generation */
   virtual void BeforeThreadedGenerateData();

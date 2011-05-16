@@ -113,6 +113,8 @@ void DisplayVar() const;
 /** return list of Mu Parser varialbes and address**/
 const std::map<std::string, double*>& GetVar() const;
 
+virtual void AllocateOutputs();
+
 void GenerateInputRequestedRegion();
 
 void EnlargeOutputRequestedRegion(itk::DataObject *){};

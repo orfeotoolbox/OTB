@@ -834,33 +834,52 @@ ShapeAttributesLabelMapFilter<TImage, TLabelImage>
 template <class TImage, class TLabelImage>
 void
 ShapeAttributesLabelMapFilter<TImage, TLabelImage>
-::GenerateInputRequestedRegion()
-{
+::AllocateOutputs()
+ {
+ // if told to run in place and the types support it,
+  if( this->GetInPlace() && this->CanRunInPlace() )
+    {
+    // Graft this first input to the output.  Later, we'll need to
+    // remove the input's hold on the bulk data.
+    //
+   ImagePointer inputAsOutput = dynamic_cast<TImage *>(const_cast<TImage *>(this->GetInput()));
 
-  for (unsigned int idx = 0; idx < this->GetNumberOfInputs(); ++idx)
+    if( inputAsOutput )
       {
-       ImagePointer input = const_cast<ImageType *>(this->GetInput(idx));
-      if (!input.IsNull())
-        {
-        input->SetRequestedRegionToLargestPossibleRegion();
-        // Check whether the input is an image of the appropriate
-        // dimension (use ProcessObject's version of the GetInput()
-        // method since it returns the input as a pointer to a
-        // DataObject as opposed to the subclass version which
-        // static_casts the input to an TInputImage).
 
-        // Use the function object RegionCopier to copy the output region
-        // to the input.  The default region copier has default implementations
-        // to handle the cases where the input and output are the same
-        // dimension, the input a higher dimension than the output, and the
-        // input a lower dimension than the output.
-        InputImageRegionType inputRegion;
-        this->CallCopyOutputRegionToInputRegion(inputRegion, this->GetOutput()->GetRequestedRegion());
-        input->SetRequestedRegion( inputRegion );
-        }
+      this->GraftOutput( inputAsOutput );
+      this->GetOutput()->SetLargestPossibleRegion(this->GetOutput()->GetLargestPossibleRegion());
+      this->GetOutput()->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
+      this->GetOutput()->SetBufferedRegion(this->GetOutput()->GetBufferedRegion());
+
       }
 
+    // If there are more than one outputs, allocate the remaining outputs
+    for (unsigned int i=1; i < this->GetNumberOfOutputs(); i++)
+      {
+      ImagePointer outputPtr;
 
+      outputPtr = this->GetOutput(i);
+      outputPtr->SetBufferedRegion(outputPtr->GetRequestedRegion());
+      outputPtr->Allocate();
+      }
+    }
+  else
+    {
+    //
+     Superclass::AllocateOutputs();
+    // copy the content of the input image to the output image (will be done by ImageSource AllocateOutputs Method)
+    // would never occur : inputasoutput condition is always true, since output and input type is TImage for
+   // ShapeAttributesLabelMapFilter class
+    }
+}
+
+template <class TImage, class TLabelImage>
+void
+ShapeAttributesLabelMapFilter<TImage, TLabelImage>
+::GenerateInputRequestedRegion()
+{
+  itk::ImageToImageFilter<TImage,TImage>::GenerateInputRequestedRegion();
 }
 
 

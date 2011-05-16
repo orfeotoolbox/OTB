@@ -186,6 +186,8 @@ protected:
   /** Destructor */
   ~BandsStatisticsAttributesLabelMapFilter() {}
 
+  virtual void AllocateOutputs();
+
   void GenerateInputRequestedRegion();
 
   void EnlargeOutputRequestedRegion(itk::DataObject *){};
