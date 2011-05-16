@@ -261,7 +261,7 @@ void
 BandsStatisticsAttributesLabelMapFilter<TImage, TFeatureImage>
 ::GenerateInputRequestedRegion()
 {
-  itk::ImageToImageFilter<TImage,TImage>::GenerateInputRequestedRegion();
+  itk::ImageToImageFilter<TImage, TImage>::GenerateInputRequestedRegion();
 }
 
 

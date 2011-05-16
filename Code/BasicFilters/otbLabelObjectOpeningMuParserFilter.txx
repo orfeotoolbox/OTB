@@ -155,7 +155,7 @@ void LabelObjectOpeningMuParserFilter<TImage, TFunction>
 template  < class TImage, class TFunction>
 void LabelObjectOpeningMuParserFilter<TImage, TFunction>::GenerateInputRequestedRegion()
 {
- itk::ImageToImageFilter<TImage,TImage>::GenerateInputRequestedRegion();
+ itk::ImageToImageFilter<TImage, TImage>::GenerateInputRequestedRegion();
 }
 
 

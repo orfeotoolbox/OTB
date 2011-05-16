@@ -879,7 +879,7 @@ void
 ShapeAttributesLabelMapFilter<TImage, TLabelImage>
 ::GenerateInputRequestedRegion()
 {
-  itk::ImageToImageFilter<TImage,TImage>::GenerateInputRequestedRegion();
+  itk::ImageToImageFilter<TImage, TImage>::GenerateInputRequestedRegion();
 }
 
 

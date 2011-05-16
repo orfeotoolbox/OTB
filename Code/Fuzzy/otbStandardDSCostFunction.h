@@ -72,8 +72,8 @@ public:
   itkTypeMacro(StandardDSCostFunction, itk::SingleValuedCostFunction);
 
   typedef Superclass::MeasureType                      MeasureType;   //double
-  typedef Superclass::DerivativeType                   DerivativeType;//Array<double>
-  typedef Superclass::ParametersType                   ParametersType;//Array<double>
+  typedef Superclass::DerivativeType                   DerivativeType; //Array<double>
+  typedef Superclass::ParametersType                   ParametersType; //Array<double>
 
   typedef TDSValidationFilter                          DSValidationFilterType;
   typedef typename DSValidationFilterType::VectorDataType
@@ -130,8 +130,8 @@ private:
   void operator =(const Self&); //purposely not implemented
 
 
-  typename VectorDataType::Pointer            m_GTVectorData;//Ground Truth
-  typename VectorDataType::Pointer            m_NSVectorData;//Negative Samples
+  typename VectorDataType::Pointer            m_GTVectorData; //Ground Truth
+  typename VectorDataType::Pointer            m_NSVectorData; //Negative Samples
 
   typename ParserType::Pointer       m_Parser;
   std::string                        m_CriterionFormula;

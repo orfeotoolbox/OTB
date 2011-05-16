@@ -35,7 +35,7 @@ void
 LabelMapToLabelImageFilter<TInputImage, TOutputImage>
 ::GenerateInputRequestedRegion()
 {
-  itk::ImageToImageFilter<TInputImage,TOutputImage>::GenerateInputRequestedRegion();
+  itk::ImageToImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion();
 }
 
 }// end namespace otb

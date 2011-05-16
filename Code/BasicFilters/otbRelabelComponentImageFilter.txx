@@ -40,7 +40,7 @@ void
 RelabelComponentImageFilter< TInputImage, TOutputImage >
 ::GenerateInputRequestedRegion()
 {
-  itk::ImageToImageFilter<TInputImage,TOutputImage>::GenerateInputRequestedRegion();
+  itk::ImageToImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion();
 }
 
 
