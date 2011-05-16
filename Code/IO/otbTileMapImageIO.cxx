@@ -221,6 +221,13 @@ void TileMapImageIO::GenerateTileInfo(double x, double y, int numTileX, int numT
  */
 bool TileMapImageIO::CanReadFromCache(std::string filename)
 {
+  // Verify that the file exists and is not a directory
+  bool fileExists = itksys::SystemTools::FileExists(filename.c_str(), true);
+  if (!fileExists)
+    {
+    return false;
+    }
+
   itk::ImageIOBase::Pointer imageIO;
   imageIO = otb::GDALImageIO::New();
   return imageIO->CanReadFile(filename.c_str());
