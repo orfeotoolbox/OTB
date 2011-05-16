@@ -142,6 +142,7 @@ protected:
 
   virtual ~PersistentConnectedComponentSegmentationOBIAToVectorDataFilter();
 
+  void GenerateInputRequestedRegion();
 private:
 
   ObjectSizeType m_MinimumObjectSize;

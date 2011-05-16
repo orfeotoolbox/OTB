@@ -38,6 +38,14 @@ PersistentConnectedComponentSegmentationOBIAToVectorDataFilter<TVImage, TLabelIm
 }
 
 template<class TVImage, class TLabelImage, class TMaskImage, class TOutputVectorData>
+void
+PersistentConnectedComponentSegmentationOBIAToVectorDataFilter<TVImage, TLabelImage, TMaskImage, TOutputVectorData>
+::GenerateInputRequestedRegion()
+{
+  Superclass::GenerateInputRequestedRegion();
+}
+
+template<class TVImage, class TLabelImage, class TMaskImage, class TOutputVectorData>
 typename PersistentConnectedComponentSegmentationOBIAToVectorDataFilter<TVImage, TLabelImage, TMaskImage, TOutputVectorData>::VectorDataPointerType
 PersistentConnectedComponentSegmentationOBIAToVectorDataFilter<TVImage, TLabelImage, TMaskImage, TOutputVectorData>
 ::ProcessTile()
@@ -105,6 +113,7 @@ PersistentConnectedComponentSegmentationOBIAToVectorDataFilter<TVImage, TLabelIm
     typename LabelObjectOpeningFilterType::Pointer opening = LabelObjectOpeningFilterType::New();
     opening->SetExpression(m_OBIAExpression);
     opening->SetInput(radiometricLabelMapFilter->GetOutput());
+    opening->Update();
 
     labelMap = opening->GetOutput();
     }
