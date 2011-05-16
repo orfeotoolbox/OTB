@@ -62,7 +62,7 @@ ImageType::Pointer makeImage(IndexValueType startX, IndexValueType startY, SizeV
   region.SetIndex(0, startX);
   region.SetIndex(1, startY);
   region.SetSize(0, sizeX);
-  region.SetSize(0, sizeY);
+  region.SetSize(1, sizeY);
 
   im->SetRegions(region);
   im->Allocate();
@@ -79,7 +79,7 @@ VectorImageType::Pointer makeVectorImage(IndexValueType startX, IndexValueType s
   region.SetIndex(0, startX);
   region.SetIndex(1, startY);
   region.SetSize(0, sizeX);
-  region.SetSize(0, sizeY);
+  region.SetSize(1, sizeY);
 
   im->SetRegions(region);
   im->SetNumberOfComponentsPerPixel(nbChannel);
