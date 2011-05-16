@@ -932,15 +932,46 @@ ADD_TEST(prTvVectorDataProjectionFilterFromMapToImage ${PROJECTIONS_TESTS3}
         ${TEMP}/prTvVectorDataProjectionFilterFromMapToImage.kml
 )
 
-ADD_TEST(prTvVectorDataIntoImageProjectionFilter ${PROJECTIONS_TESTS3}
-        #--compare-ascii ${NOTOL}
-          #${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToImage.kml
-          #${TEMP}/prTvVectorDataProjectionFilterFromMapToImage.kml
+# extract from image QB and MidiPyrenees vectordata
+ADD_TEST(prTvVectorData_ProjRef_ProjIntoImage_WithProjRef_Extract_Filter0 ${PROJECTIONS_TESTS3}
         otbVectorDataIntoImageProjectionFilterTest
-          ${INPUTDATA}/Classification/QB_1_ortho.tif
-          ${INPUTDATA}/Classification/VectorData_QB1.shp
+          ${INPUTDATA}/QB_extract_512x512.tif
+          ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
+          ${INPUTDATA}/DEM/srtm_directory
+          ${TEMP}/prTvVectorDataProjRefProjIntoImageWithProjRef10.shp
+          ${TEMP}/prTvVectorDataProjRefProjIntoImageWithProjRef10.txt
+          0
 )
 
+ADD_TEST(prTvVectorData_ProjRef_ProjIntoImage_WithProjRef_ExtractLeftUp_Filter0 ${PROJECTIONS_TESTS3}
+        otbVectorDataIntoImageProjectionFilterTest
+          ${INPUTDATA}/QB_extract_leftup_256x2048.tif
+          ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
+          ${INPUTDATA}/DEM/srtm_directory
+          ${TEMP}/prTvVectorDataProjRefProjIntoImageWithProjRef20.shp
+          ${TEMP}/prTvVectorDataProjRefProjIntoImageWithProjRef20.txt
+          0
+)
+
+ADD_TEST(prTvVectorData_ProjRef_ProjIntoImage_WithProjRef_Extract_Filter1 ${PROJECTIONS_TESTS3}
+        otbVectorDataIntoImageProjectionFilterTest
+          ${INPUTDATA}/QB_extract_512x512.tif
+          ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
+          ${INPUTDATA}/DEM/srtm_directory
+          ${TEMP}/prTvVectorDataProjRefProjIntoImageWithProjRef11.shp
+          ${TEMP}/prTvVectorDataProjRefProjIntoImageWithProjRef11.txt
+          1
+)
+
+ADD_TEST(prTvVectorData_ProjRef_ProjIntoImage_WithProjRef_ExtractLeftUp_Filter1 ${PROJECTIONS_TESTS3}
+        otbVectorDataIntoImageProjectionFilterTest
+          ${INPUTDATA}/QB_extract_leftup_256x2048.tif
+          ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
+          ${INPUTDATA}/DEM/srtm_directory
+          ${TEMP}/prTvVectorDataProjRefProjIntoImageWithProjRef21.shp
+          ${TEMP}/prTvVectorDataProjRefProjIntoImageWithProjRef21.txt
+          1
+)
 
 
 ADD_TEST(prTuGeocentricTransformNew ${PROJECTIONS_TESTS3}  otbGeocentricTransformNew )
