@@ -34,4 +34,5 @@ void RegisterTests()
   REGISTER_TEST(otbVectorDataToRoadDescriptionFilter);
   REGISTER_TEST(otbFuzzyDescriptorsModelManagerNew);
   REGISTER_TEST(otbFuzzyDescriptorsModelManagerTest);
+  REGISTER_TEST(otbStandardDSCostFunctionNew);
 }

@@ -124,6 +124,8 @@ ADD_TEST(fzTvFuzzyDescriptorsModelManagerTest ${Fuzzy_TESTS2}
 ${TEMP}/fzTvFuzzyDescriptorsModelManager.xml
 )
 
+ADD_TEST(fzTuStandardDSCostFunctionNew ${Fuzzy_TESTS2}
+  otbStandardDSCostFunctionNew)
 
 
 SET(BasicFuzzy_SRCS1
@@ -144,6 +146,7 @@ otbVectorDataToDSValidatedVectorDataFilter.cxx
 otbVectorDataToSpecificDescriptionFilterBase.cxx
 otbVectorDataToRoadDescriptionFilter.cxx
 otbFuzzyDescriptorsModelManager.cxx
+otbStandardDSCostFunction.cxx
 )
 
 ADD_EXECUTABLE(otbFuzzyTests1 otbFuzzyTests1.cxx ${BasicFuzzy_SRCS1})
