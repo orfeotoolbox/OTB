@@ -59,7 +59,7 @@ int otbFuzzyDescriptorsModelManagerTest(int argc, char* argv[])
       std::cout<<"Written model and read model from the written one differs."<<std::endl;
       std::cout<<"Input is:"<<std::endl;
       otb::FuzzyDescriptorsModelManager::Print(model);
-      std::cout<<"Putput is:"<<std::endl;
+      std::cout<<"Output is:"<<std::endl;
       otb::FuzzyDescriptorsModelManager::Print(modelRead);
       return EXIT_FAILURE;
     }
