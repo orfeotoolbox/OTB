@@ -63,7 +63,7 @@ PersistentConnectedComponentSegmentationOBIAToVectorDataFilter<TVImage, TLabelIm
 
   // Perform connected components segmentation
   typename ConnectedComponentFilterType::Pointer connected = ConnectedComponentFilterType::New();
-  connected->SetInput(this->GetInput());
+  connected->SetInput(extract->GetOutput());
 
   if (mask.IsNotNull())
     connected->SetMaskImage(mask);
