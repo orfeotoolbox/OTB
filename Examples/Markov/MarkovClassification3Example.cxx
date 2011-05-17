@@ -25,16 +25,16 @@
 
 // Software Guide : BeginLatex
 //
-//  This example illustrates the details of the MarkovRandomFieldFilter by using the fisher distribution
+//  This example illustrates the details of the MarkovRandomFieldFilter by using the Fisher distribution
 //  to model the likelihood energy.
 //  This filter is an application of the Markov Random Fields for classification.
 //
 //  This example applies the MarkovRandomFieldFilter to
-//  classify an image into four classes defined by their fisher distribution parameters L, M and mu.
+//  classify an image into four classes defined by their Fisher distribution parameters L, M and mu.
 //  The optimization is done using a Metropolis algorithm with a random sampler. The
 //  regularization energy is defined by a Potts model and the fidelity or likelihood energy is modelled by a
 //  Fisher distribution.
-//  The parameter of the fisher distribution was determined for each class in a supervised step.
+//  The parameter of the Fisher distribution was determined for each class in a supervised step.
 //  ( See the File OtbParameterEstimatioOfFisherDistribution )
 //  This example is a contribution from Jan Wegner.
 //
