@@ -71,7 +71,6 @@ VectorDataToRoadDescriptionFilter<TVectorData, TOpticalImage>
   folder->SetNodeType(otb::FOLDER);
   // Adding the layer to the data tree
   this->GetOutput(0)->GetDataTree()->Add(folder, document);
-  this->GetOutput(0)->SetProjectionRef(this->GetInput()->GetProjectionRef());
 
   TreeIteratorType itVector(this->GetInput()->GetDataTree());
   itVector.GoToBegin();
