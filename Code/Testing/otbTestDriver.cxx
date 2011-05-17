@@ -47,7 +47,7 @@ void usage()
   "otbTestDriver alter the environment, run a test program and does regression testing based on capabilities provided by otbTestMain.h"
             << std::endl;
   std::cerr << std::endl;
-  std::cerr << "Global pptions:" << std::endl;
+  std::cerr << "Global options:" << std::endl;
   std::cerr << "  --add-before-libpath PATH" << std::endl;
   std::cerr << "      Add a path to the library path environment. This option take care of" << std::endl;
   std::cerr << "      choosing the right environment variable for your system." << std::endl;
