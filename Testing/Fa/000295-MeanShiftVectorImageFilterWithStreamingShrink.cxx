@@ -23,14 +23,13 @@
 #include "otbStreamingShrinkImageFilter.h"
 
 
-int otbMeanShiftVectorImageFilter_BUG295(int argc, char * argv[])
+int main(int argc, char * argv[])
 {
   const char *       infname                = argv[1];
-  const char *       filteredfname          = argv[2];
-  const unsigned int spatialRadius          = atoi(argv[3]);
-  const double       rangeRadius            = atof(argv[4]);
-  const unsigned int minRegionSize          = atoi(argv[5]);
-  unsigned int       factor                 = atoi(argv[6]);
+  const unsigned int spatialRadius          = atoi(argv[2]);
+  const double       rangeRadius            = atof(argv[3]);
+  const unsigned int minRegionSize          = atoi(argv[4]);
+  unsigned int       factor                 = atoi(argv[5]);
 
   const unsigned int Dimension = 2;
   typedef float                                           PixelType;

@@ -22,7 +22,7 @@ SET(IO_TESTS     ${CXX_TEST_PATH}/otbIOTests9)
 SET(IO_TESTS2     ${CXX_TEST_PATH}/otbIOTests7)
 SET(VISU_TESTS   ${CXX_TEST_PATH}/otbVisuTests1)
 
-# -------       FAs traitees -----------------------------------
+# -------       FAs fixed -----------------------------------
 
 # ---  FA 00005 ENVI (GDAL) image multi-canal ---
 ADD_TEST(FA-00005-io_EnviMultiBande_RW ${IO_TESTS}
@@ -188,7 +188,13 @@ ADD_TEST(FA-00060-le_Map_Activation ${CXX_TEST_PATH}/MapActivation
         ${TEMP}/FA-00013-le-som.hdr
 	)
 
-# -------       Fin des FAs traitees -----------------------------------
+# ---  FA 000295 : Pb Mean Shift clustering module  ---
+ADD_TEST(000295-MeanShiftVectorImageFilterWithStreamingShrink ${CXX_TEST_PATH}/000295-MeanShiftVectorImageFilterWithStreamingShrink
+	${INPUTDATA}/qb_RoadExtract2sub200x200.tif
+        20 50 500 10
+	)
+
+# -------       End of fixed FAs -----------------------------------
 
 ADD_TEST(FA-00070-vi_Streaming_Stat ${CXX_TEST_PATH}/StreamingStat
 	${EXAMPLES_DATA}/qb_RoadExtract.tif
@@ -274,5 +280,8 @@ TARGET_LINK_LIBRARIES(PolygonsVectorization OTBIO OTBCommon)
 
 ADD_EXECUTABLE(0000169-fftcomplextocomplex  0000169-fftcomplextocomplex.cxx)
 TARGET_LINK_LIBRARIES(0000169-fftcomplextocomplex OTBIO OTBCommon)
+
+ADD_EXECUTABLE(000295-MeanShiftVectorImageFilterWithStreamingShrink 000295-MeanShiftVectorImageFilterWithStreamingShrink.cxx)
+TARGET_LINK_LIBRARIES(000295-MeanShiftVectorImageFilterWithStreamingShrink OTBIO OTBCommon)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

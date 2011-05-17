@@ -1272,13 +1272,6 @@ ADD_TEST(bfTvMeanShiftVectorImageFilterNotStreamedNotThreaded ${BASICFILTERS_TES
 	16 16 10 1.0 0 0
 	)
 
-ADD_TEST(bfTvMeanShiftVectorImageFilter_BUG295 ${BASICFILTERS_TESTS9}
-        otbMeanShiftVectorImageFilter_BUG295
-	${INPUTDATA}/qb_RoadExtract2sub200x200.tif
-	${TEMP}/bfMeanShiftVectorImageFilter_BUG295.tif
-        20 50 500 2
-	)
-
 ADD_TEST(bfTuFunctionToImageFilterNew ${BASICFILTERS_TESTS9}
         otbFunctionToImageFilterNew
 )
@@ -2260,7 +2253,6 @@ otbMeanShiftImageFilterNew.cxx
 otbMeanShiftImageFilter.cxx
 otbMeanShiftVectorImageFilterNew.cxx
 otbMeanShiftVectorImageFilter.cxx
-otbMeanShiftVectorImageFilter_BUG295.cxx
 otbFunctionToImageFilterNew.cxx
 otbFunctionToImageFilter.cxx
 otbBinaryImageDensityFunctionNew.cxx

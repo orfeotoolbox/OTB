@@ -2793,7 +2793,7 @@ void msImageProcessor::Prune(int minRegion)
 
 			//*******************************************************************************
 
-			if(modePointCounts[i] < minRegion)
+			if(modePointCounts[i] < minRegion && raList[i].next != NULL)
 			{
 				//update minRegionCount to indicate that a region
 				//having area less than minRegion was found
@@ -2803,63 +2803,63 @@ void msImageProcessor::Prune(int minRegion)
 				//region adjacency list of the ith region...
 				neighbor	= raList[i].next;
 				
-				//calculate the distance between the mode of the ith
-				//region and that of the neighboring region...
-				candidate		= neighbor->label;
-				minSqDistance	= SqDistance(i, candidate);
-				
-				//traverse region adjacency list of region i and select
-				//a candidate region
-				neighbor	= neighbor->next;
-				while(neighbor)
-				{
-
-					//calculate the square distance between region i
-					//and current neighbor...
-					neighborDistance = SqDistance(i, neighbor->label);
-
-					//if this neighbors square distance to region i is less
-					//than minSqDistance, then select this neighbor as the
-					//candidate region for region i
-					if(neighborDistance < minSqDistance)
-					{
-						minSqDistance	= neighborDistance;
-						candidate		= neighbor->label;
-					}
-
-					//traverse region list of region i
-					neighbor	= neighbor->next;
-
-				}
-
-				//join region i with its candidate region:
-
-				// (1) find the canonical element of region i
-				iCanEl		= i;
-				while(raList[iCanEl].label != iCanEl)
-					iCanEl		= raList[iCanEl].label;
-
-				// (2) find the canonical element of neighboring region
-				neighCanEl	= candidate;
-				while(raList[neighCanEl].label != neighCanEl)
-					neighCanEl	= raList[neighCanEl].label;
-
-				// if the canonical elements of are not the same then assign
-				// the canonical element having the smaller label to be the parent
-				// of the other region...
-				if(iCanEl < neighCanEl)
-					raList[neighCanEl].label	= iCanEl;
-				else
-				{
-					//must replace the canonical element of previous
-					//parent as well
-					raList[raList[iCanEl].label].label	= neighCanEl;
-
-					//re-assign canonical element
-					raList[iCanEl].label				= neighCanEl;
-				}
-			}
-		}
+                                //calculate the distance between the mode of the ith
+                                //region and that of the neighboring region...
+                                candidate		= neighbor->label;
+                                minSqDistance	= SqDistance(i, candidate);
+                                
+                                //traverse region adjacency list of region i and select
+                                //a candidate region
+                                neighbor	= neighbor->next;
+                                while(neighbor)
+                                  {
+                                    
+                                    //calculate the square distance between region i
+                                    //and current neighbor...
+                                    neighborDistance = SqDistance(i, neighbor->label);
+                                    
+                                    //if this neighbors square distance to region i is less
+                                    //than minSqDistance, then select this neighbor as the
+                                    //candidate region for region i
+                                    if(neighborDistance < minSqDistance)
+                                      {
+                                        minSqDistance	= neighborDistance;
+                                        candidate		= neighbor->label;
+                                      }
+                                    
+                                    //traverse region list of region i
+                                    neighbor	= neighbor->next;
+                                    
+                                  }
+                                
+                                //join region i with its candidate region:
+                                
+                                // (1) find the canonical element of region i
+                                iCanEl		= i;
+                                while(raList[iCanEl].label != iCanEl)
+                                  iCanEl		= raList[iCanEl].label;
+                                    
+                                // (2) find the canonical element of neighboring region
+                                neighCanEl	= candidate;
+                                while(raList[neighCanEl].label != neighCanEl)
+                                  neighCanEl	= raList[neighCanEl].label;
+                                
+                                // if the canonical elements of are not the same then assign
+                                // the canonical element having the smaller label to be the parent
+                                // of the other region...
+                                if(iCanEl < neighCanEl)
+                                  raList[neighCanEl].label	= iCanEl;
+                                else
+                                  {
+                                    //must replace the canonical element of previous
+                                    //parent as well
+                                    raList[raList[iCanEl].label].label	= neighCanEl;
+                                    
+                                    //re-assign canonical element
+                                    raList[iCanEl].label				= neighCanEl;
+                                  }
+                        }
+                }
 
 		// Step (3):
 		
