@@ -805,8 +805,10 @@ void GDALImageIO::InternalReadImageInformation()
       CPLFree(pszPrettyWkt);
       }
     else
+      {
       itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey,
                                             static_cast<std::string>(dataset->GetProjectionRef()));
+      }
 
     if (pSR != NULL)
       {
@@ -889,6 +891,23 @@ void GDALImageIO::InternalReadImageInformation()
       itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projRef);
       }
     }
+
+  // Dataset info
+  otbMsgDevMacro(<< "**** ReadImageInformation() DATASET INFO: ****" );
+  otbMsgDevMacro(<< "Projection Ref: "<< dataset->GetProjectionRef() );
+  double GT[6];
+  if (dataset->GetGeoTransform(GT) == CE_None)
+    {
+    otbMsgDevMacro( <<"Geo Transform: "<< GT[0] << ", " << GT[1] << ", "
+                                 << GT[2] << ", " << GT[3] << ", "
+                                 << GT[4] << ", " << GT[5] );
+    }
+  else
+    {
+    otbMsgDevMacro( << "No Geo Transform: ");
+    }
+  otbMsgDevMacro(<< "GCP Projection Ref: "<< dataset->GetGCPProjection() );
+  otbMsgDevMacro(<< "GCP Count: " << dataset->GetGCPCount() );
 
   /* -------------------------------------------------------------------- */
   /*      Report metadata.                                                */
@@ -1388,6 +1407,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
 
     std::string gcpProjectionRef;
     itk::ExposeMetaData<std::string>(dict, MetaDataKey::GCPProjectionKey, gcpProjectionRef);
+
     dataset->SetGCPs(gcpCount, gdalGcps, gcpProjectionRef.c_str());
 
     delete[] gdalGcps;
@@ -1441,6 +1461,24 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
       }
     }
   // END
+
+  // Dataset info
+  otbMsgDevMacro( << "**** WriteImageInformation() DATASET INFO: ****" );
+  otbMsgDevMacro( << "Projection Ref: "<<dataset->GetProjectionRef() );
+  double GT[6];
+  if (dataset->GetGeoTransform(GT) == CE_None)
+    {
+    otbMsgDevMacro( <<"Geo Transform: "<< GT[0] << ", " << GT[1] << ", "
+                                 << GT[2] << ", " << GT[3] << ", "
+                                 << GT[4] << ", " << GT[5] );
+    }
+  else
+    {
+    otbMsgDevMacro( << "No Geo Transform: ");
+    }
+
+  otbMsgDevMacro( << "GCP Projection Ref: "<< dataset->GetGCPProjection() );
+  otbMsgDevMacro( << "GCP Count: " << dataset->GetGCPCount() );
 
 }
 

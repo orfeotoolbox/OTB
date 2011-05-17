@@ -42,4 +42,5 @@ void RegisterTests()
   REGISTER_TEST(otbMultiToMonoChannelExtractROITestRegion);
   REGISTER_TEST(otbMultiChannelExtractROITestRegion);
   REGISTER_TEST(otbExtractROITestRegion);
+  REGISTER_TEST(otbExtractROITestMetaData);
 }

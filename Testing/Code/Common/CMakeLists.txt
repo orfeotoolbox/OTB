@@ -388,8 +388,42 @@ ADD_TEST(coTuMultiChannelExtractROITestRegion ${COMMON_TESTS3}
          
 ADD_TEST(coTuExtractROITestRegion ${COMMON_TESTS3}
          otbExtractROITestRegion)
-
          
+IF(OTB_DATA_USE_LARGEINPUT)       
+ADD_TEST(coTvExtractROITestMetaData_TIFF ${COMMON_TESTS3}
+         --compare-n-ascii ${NOTOL} 2
+         ${TEMP}/coTvExtractROITestMetaData1.txt
+         ${TEMP}/coTvExtractROITestMetaData2.txt
+         ${TEMP}/coTvExtractROITestMetaData1_writeRead.txt
+         ${TEMP}/coTvExtractROITestMetaData2_writeRead.txt
+         --ignore-lines-with 1 Origin:
+         otbExtractROITestMetaData
+         ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+         ${TEMP}/coTvExtractROITestMetaData1.tif
+         ${TEMP}/coTvExtractROITestMetaData2.tif
+         ${TEMP}/coTvExtractROITestMetaData1.txt
+         ${TEMP}/coTvExtractROITestMetaData2.txt
+         ${TEMP}/coTvExtractROITestMetaData1_writeRead.txt
+         ${TEMP}/coTvExtractROITestMetaData2_writeRead.txt
+         )
+         
+ADD_TEST(coTvExtractROITestMetaData_HDR ${COMMON_TESTS3}
+         --compare-n-ascii ${NOTOL} 2
+         ${TEMP}/coTvExtractROITestMetaData1_hdr.txt
+         ${TEMP}/coTvExtractROITestMetaData2_hdr.txt
+         ${TEMP}/coTvExtractROITestMetaData1_writeRead_hdr.txt
+         ${TEMP}/coTvExtractROITestMetaData2_writeRead_hdr.txt
+         --ignore-lines-with 1 Origin:
+         otbExtractROITestMetaData
+         ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+         ${TEMP}/coTvExtractROITestMetaData1.hdr
+         ${TEMP}/coTvExtractROITestMetaData2.hdr
+         ${TEMP}/coTvExtractROITestMetaData1_hdr.txt
+         ${TEMP}/coTvExtractROITestMetaData2_hdr.txt
+         ${TEMP}/coTvExtractROITestMetaData1_writeRead_hdr.txt
+         ${TEMP}/coTvExtractROITestMetaData2_writeRead_hdr.txt
+         )
+ENDIF(OTB_DATA_USE_LARGEINPUT)    
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbCommonTests4 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1093,6 +1127,7 @@ otbCommonTests3.cxx
 otbExtractROICompareRegionsImplementations.cxx
 otbMultiToMonoChannelExtractROI.cxx
 otbMultiToMonoChannelExtractROINew.cxx
+otbExtractROITestMetaData.cxx
 otbPointSetSourceTest.cxx
 otbDrawLineSpatialObjectNew.cxx
 otbDrawLineSpatialObject.cxx
