@@ -83,6 +83,39 @@ OTB-v.3.10.0 - Changes since version 3.8.0 (2011/05/??)
 
 * Bug fix:
   * RADARSAT1 infinite loop
+  * OTB-lib
+    * 0000245: Wrong path for GDAL_CONFIG or GDALCONFIG_EXECUTABLE cmake variable produce incoherent results in the OTB configuration
+    * 0000273: otbHarrisImageFilter applies final smoothing only over the 0-th direction; + wrong final scaling applied
+    * 0000228: Problems related to the --compare-ascii tool in OTB tests protocol
+    * 0000219: HDF dataset not openable with ImageFileReader
+    * 0000229: OTB driver in imageFileReader must support different file extensions related to the HDF format
+    * 0000222: Issues with the TerraSar-X ossim plugin
+    * 0000221: Fail to retrieve the pixel spacing from image metadata.
+
+  * Monteverdi
+    * 0000281: Crash opening a RAD image.
+    * 0000280: SVM classification and Feature extraction issues
+    * 0000247: Style of the new screenshots function in viewer module is ugly
+    * 0000238: Monteverdi spreads xml temporary files everywhere
+    * 0000241: A warning appears each time an image is read
+    * 0000269: Inoperative fields in the reprojection module
+    * 0000271: Default RGB channels are wrong for WV2 images
+    * 0000255: Image is not visible if scroll or Full   window is minimized while working with SVM classification
+    * 0000265: SVM learn module : crash when displaying results
+    * 0000254: Homologous point module
+    * 0000267: Vectorization-Rasterization module
+    * 0000240: Importing shp file in SVM module in Monterverdi 1.6 always results in crash
+    * 0000244: Pansharpening EO-1 image with Monteverdi produces NaN
+    * 0000227: Monteverdi crashing while displaying a .tif file
+
+  * OTB-applications
+    * 0000231: otbRasterizationApplication -pr options await for OGC WKT strings
+    * 0000232: Several minor changes in rasterization application
+    * 0000233: otbRasterizationApplication fail to rasterize SRTM water bodies shapefile with default parameters
+
+  * Orfeo Toolbox (OTB)
+    * 0000237: Boost / Fltk conflict
+    * 0000276: Trouble with the compare ascii when separations are tabulation
 
 OTB-v.3.8.0 - Changes since version 3.6.0 (2010/12/16)
 -----------------------------------------
