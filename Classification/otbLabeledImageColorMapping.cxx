@@ -102,7 +102,7 @@ int LabeledImageColorMapping::Execute(otb::ApplicationOptionsResult* parseResult
        {
        std::string::size_type nextpos = line.find_first_of(" ", pos);
         int value = atoi(line.substr(pos, nextpos).c_str());
-        if(value < 0 or value > 255)
+        if(value < 0 || value > 255)
           std::cerr<<"WARNING: color value outside 8-bits range (<0 or >255). Value will be clamped."<<std::endl;
        color[i]=static_cast<PixelType>(value);
        pos = nextpos+1;
