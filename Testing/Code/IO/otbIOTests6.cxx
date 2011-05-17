@@ -32,4 +32,5 @@ void RegisterTests()
   REGISTER_TEST(otbImageFileWriterStreamingONERAComplex);
   REGISTER_TEST(otbMSTARImageIOTestCanRead);
   REGISTER_TEST(otbImageFileReaderMSTAR);
+  REGISTER_TEST(otbGDALImageIOTestWriteMetadata);
 }

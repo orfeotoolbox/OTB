@@ -663,6 +663,272 @@ ADD_TEST(ioTuGDALImageIOCanWrite_TIFF ${IO_TESTS6} otbGDALImageIOTestCanWrite
 	${INPUTDATA}/testGDALWriter.tif)
 ADD_TEST(ioTuGDALImageIOCanWrite_HFA ${IO_TESTS6} otbGDALImageIOTestCanWrite
 	${INPUTDATA}/HFAGeoreferenced.img)
+	
+# Pb with copy of some infos into the dataset
+# cases with no ProjRef
+ADD_TEST(ioTvGDALImageIOWriteMetadata_TIFF_None ${IO_TESTS6}
+    --compare-ascii ${NOTOL}
+       ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_TIFF_None.txt
+       ${TEMP}/ioTvGDALImageIOWriteMetadataWR_TIFF_None.txt
+    otbGDALImageIOTestWriteMetadata
+       ${TEMP}/ioTvGDALImageIOWriteMetadata_None.tif
+       ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_TIFF_None.txt
+       ${TEMP}/ioTvGDALImageIOWriteMetadataWR_TIFF_None.txt
+    )
+ADD_TEST(ioTvGDALImageIOWriteMetadata_TIFF_NoProjRef_NoGCP_GeoTransfo_ID ${IO_TESTS6}
+    --compare-ascii ${NOTOL}
+       ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_TIFF_NoProjRef_NoGCP_GeoTransfo_ID.txt
+       ${TEMP}/ioTvGDALImageIOWriteMetadataWR_TIFF_NoProjRef_NoGCP_GeoTransfo_ID.txt
+    otbGDALImageIOTestWriteMetadata
+       ${TEMP}/ioTvGDALImageIOWriteMetadata_NoProjRef_NoGCP_GeoTransfo_ID.tif
+       ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_TIFF_NoProjRef_NoGCP_GeoTransfo_ID.txt
+       ${TEMP}/ioTvGDALImageIOWriteMetadataWR_TIFF_NoProjRef_NoGCP_GeoTransfo_ID.txt
+       -setGeoTransform_ID
+    )
+ADD_TEST(ioTvGDALImageIOWriteMetadata_TIFF_NoProjRef_NoGCP_GeoTransfo ${IO_TESTS6}
+    --compare-ascii ${NOTOL}
+       ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_TIFF_NoProjRef_NoGCP_GeoTransfo.txt
+       ${TEMP}/ioTvGDALImageIOWriteMetadataWR_TIFF_NoProjRef_NoGCP_GeoTransfo.txt    
+    otbGDALImageIOTestWriteMetadata
+       ${TEMP}/ioTvGDALImageIOWriteMetadata_NoProjRef_NoGCP_GeoTransfo.tif
+       ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_TIFF_NoProjRef_NoGCP_GeoTransfo.txt
+       ${TEMP}/ioTvGDALImageIOWriteMetadataWR_TIFF_NoProjRef_NoGCP_GeoTransfo.txt
+       -setGeoTransform
+    )
+ADD_TEST(ioTvGDALImageIOWriteMetadata_TIFF_NoProjRef_GCP_NoGeoTransfo ${IO_TESTS6}
+    --compare-ascii ${NOTOL}
+       ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_TIFF_NoProjRef_GCP_NoGeoTransfo.txt
+       ${TEMP}/ioTvGDALImageIOWriteMetadataWR_TIFF_NoProjRef_GCP_NoGeoTransfo.txt    
+    otbGDALImageIOTestWriteMetadata
+       ${TEMP}/ioTvGDALImageIOWriteMetadata_NoProjRef_GCP_NoGeoTransfo.tif
+       ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_TIFF_NoProjRef_GCP_NoGeoTransfo.txt
+       ${TEMP}/ioTvGDALImageIOWriteMetadataWR_TIFF_NoProjRef_GCP_NoGeoTransfo.txt
+       -setGCP
+    )
+ADD_TEST(ioTvGDALImageIOWriteMetadata_TIFF_NoProjRef_GCP_GeoTransfo_ID ${IO_TESTS6}
+    --compare-ascii ${NOTOL}
+       ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_TIFF_NoProjRef_GCP_GeoTransfo_ID.txt
+       ${TEMP}/ioTvGDALImageIOWriteMetadataWR_TIFF_NoProjRef_GCP_GeoTransfo_ID.txt    
+    otbGDALImageIOTestWriteMetadata
+       ${TEMP}/ioTvGDALImageIOWriteMetadata_NoProjRef_GCP_GeoTransfo_ID.tif
+       ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_TIFF_NoProjRef_GCP_GeoTransfo_ID.txt
+       ${TEMP}/ioTvGDALImageIOWriteMetadataWR_TIFF_NoProjRef_GCP_GeoTransfo_ID.txt
+       -setGeoTransform_ID
+       -setGCP
+    )
+ADD_TEST(ioTvGDALImageIOWriteMetadata_TIFF_NoProjRef_GCP_GeoTransfo ${IO_TESTS6}
+    --compare-ascii ${NOTOL}
+       ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_TIFF_NoProjRef_GCP_GeoTransfo.txt
+       ${TEMP}/ioTvGDALImageIOWriteMetadataWR_TIFF_NoProjRef_GCP_GeoTransfo.txt    
+    otbGDALImageIOTestWriteMetadata
+       ${TEMP}/ioTvGDALImageIOWriteMetadata_NoProjRef_GCP_GeoTransfo.tif
+       ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_TIFF_NoProjRef_GCP_GeoTransfo.txt
+       ${TEMP}/ioTvGDALImageIOWriteMetadataWR_TIFF_NoProjRef_GCP_GeoTransfo.txt
+       -setGeoTransform
+       -setGCP
+    )    
+
+# cases with ProjRef         
+ADD_TEST(ioTvGDALImageIOWriteMetadata_TIFF_ProjRef_NoGCP_NoGeoTransfo ${IO_TESTS6}
+    --compare-ascii ${NOTOL}
+        ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_TIFF_ProjRef_NoGCP_NoGeoTransfo.txt
+        ${TEMP}/ioTvGDALImageIOWriteMetadataWR_TIFF_ProjRef_NoGCP_NoGeoTransfo.txt
+    otbGDALImageIOTestWriteMetadata
+        ${TEMP}/ioTvGDALImageIOWriteMetadata_ProjRef_NoGCP_NoGeoTransfo.tif
+        ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_TIFF_ProjRef_NoGCP_NoGeoTransfo.txt
+        ${TEMP}/ioTvGDALImageIOWriteMetadataWR_TIFF_ProjRef_NoGCP_NoGeoTransfo.txt
+        -setProjectionRef
+    )
+ADD_TEST(ioTvGDALImageIOWriteMetadata_TIFF_ProjRef_NoGCP_GeoTransfo_ID ${IO_TESTS6}
+    --compare-ascii ${NOTOL}
+       ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_TIFF_ProjRef_NoGCP_GeoTransfo_ID.txt
+       ${TEMP}/ioTvGDALImageIOWriteMetadataWR_TIFF_ProjRef_NoGCP_GeoTransfo_ID.txt
+    otbGDALImageIOTestWriteMetadata
+       ${TEMP}/ioTvGDALImageIOWriteMetadata_ProjRef_NoGCP_GeoTransfo_ID.tif
+       ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_TIFF_ProjRef_NoGCP_GeoTransfo_ID.txt
+       ${TEMP}/ioTvGDALImageIOWriteMetadataWR_TIFF_ProjRef_NoGCP_GeoTransfo_ID.txt
+       -setProjectionRef
+       -setGeoTransform_ID
+    )
+ADD_TEST(ioTvGDALImageIOWriteMetadata_TIFF_ProjRef_NoGCP_GeoTransfo ${IO_TESTS6}
+    --compare-ascii ${NOTOL}
+       ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_TIFF_ProjRef_NoGCP_GeoTransfo.txt
+       ${TEMP}/ioTvGDALImageIOWriteMetadataWR_TIFF_ProjRef_NoGCP_GeoTransfo.txt
+    otbGDALImageIOTestWriteMetadata
+       ${TEMP}/ioTvGDALImageIOWriteMetadata_ProjRef_NoGCP_GeoTransfo.tif
+       ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_TIFF_ProjRef_NoGCP_GeoTransfo.txt
+       ${TEMP}/ioTvGDALImageIOWriteMetadataWR_TIFF_ProjRef_NoGCP_GeoTransfo.txt
+       -setProjectionRef
+       -setGeoTransform
+    )
+ADD_TEST(ioTvGDALImageIOWriteMetadata_TIFF_ProjRef_GCP_NoGeoTransfo ${IO_TESTS6}
+    --compare-ascii ${NOTOL}
+       ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_TIFF_ProjRef_GCP_NoGeoTransfo.txt
+       ${TEMP}/ioTvGDALImageIOWriteMetadataWR_TIFF_ProjRef_GCP_NoGeoTransfo.txt
+    otbGDALImageIOTestWriteMetadata
+       ${TEMP}/ioTvGDALImageIOWriteMetadata_ProjRef_GCP_NoGeoTransfo.tif
+       ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_TIFF_ProjRef_GCP_NoGeoTransfo.txt
+       ${TEMP}/ioTvGDALImageIOWriteMetadataWR_TIFF_ProjRef_GCP_NoGeoTransfo.txt
+       -setProjectionRef
+       -setGCP
+    )
+ADD_TEST(ioTvGDALImageIOWriteMetadata_TIFF_ProjRef_GCP_GeoTransfo_ID ${IO_TESTS6}
+    --compare-ascii ${NOTOL}
+       ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_TIFF_ProjRef_GCP_GeoTransfo_ID.txt
+       ${TEMP}/ioTvGDALImageIOWriteMetadataWR_TIFF_ProjRef_GCP_GeoTransfo_ID.txt
+    otbGDALImageIOTestWriteMetadata
+       ${TEMP}/ioTvGDALImageIOWriteMetadata_ProjRef_GCP_GeoTransfo_ID.tif
+       ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_TIFF_ProjRef_GCP_GeoTransfo_ID.txt
+       ${TEMP}/ioTvGDALImageIOWriteMetadataWR_TIFF_ProjRef_GCP_GeoTransfo_ID.txt
+       -setProjectionRef
+       -setGeoTransform_ID
+       -setGCP
+    )
+ADD_TEST(ioTvGDALImageIOWriteMetadata_TIFF_ProjRef_GCP_GeoTransfo ${IO_TESTS6}
+    --compare-ascii ${NOTOL}
+       ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_TIFF_ProjRef_GCP_GeoTransfo.txt
+       ${TEMP}/ioTvGDALImageIOWriteMetadataWR_TIFF_ProjRef_GCP_GeoTransfo.txt
+    otbGDALImageIOTestWriteMetadata
+       ${TEMP}/ioTvGDALImageIOWriteMetadata_ProjRef_GCP_GeoTransfo.tif
+       ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_TIFF_ProjRef_GCP_GeoTransfo.txt
+       ${TEMP}/ioTvGDALImageIOWriteMetadataWR_TIFF_ProjRef_GCP_GeoTransfo.txt
+       -setProjectionRef
+       -setGeoTransform
+       -setGCP
+    )    
+
+# Pb with copy of some infos into the dataset (HDR)
+# cases with no ProjRef
+ADD_TEST(ioTvGDALImageIOWriteMetadata_HDR_None ${IO_TESTS6}
+    --compare-ascii ${NOTOL}
+       ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_HDR_None.txt
+       ${TEMP}/ioTvGDALImageIOWriteMetadataWR_HDR_None.txt
+    otbGDALImageIOTestWriteMetadata
+       ${TEMP}/ioTvGDALImageIOWriteMetadata_None.hdr
+       ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_HDR_None.txt
+       ${TEMP}/ioTvGDALImageIOWriteMetadataWR_HDR_None.txt
+    )
+ADD_TEST(ioTvGDALImageIOWriteMetadata_HDR_NoProjRef_NoGCP_GeoTransfo_ID ${IO_TESTS6}
+    --compare-ascii ${NOTOL}
+       ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_HDR_NoProjRef_NoGCP_GeoTransfo_ID.txt
+       ${TEMP}/ioTvGDALImageIOWriteMetadataWR_HDR_NoProjRef_NoGCP_GeoTransfo_ID.txt
+    otbGDALImageIOTestWriteMetadata
+       ${TEMP}/ioTvGDALImageIOWriteMetadata_NoProjRef_NoGCP_GeoTransfo_ID.hdr
+       ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_HDR_NoProjRef_NoGCP_GeoTransfo_ID.txt
+       ${TEMP}/ioTvGDALImageIOWriteMetadataWR_HDR_NoProjRef_NoGCP_GeoTransfo_ID.txt
+       -setGeoTransform_ID
+    )
+ADD_TEST(ioTvGDALImageIOWriteMetadata_HDR_NoProjRef_NoGCP_GeoTransfo ${IO_TESTS6}
+    --compare-ascii ${NOTOL}
+       ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_HDR_NoProjRef_NoGCP_GeoTransfo.txt
+       ${TEMP}/ioTvGDALImageIOWriteMetadataWR_HDR_NoProjRef_NoGCP_GeoTransfo.txt    
+    otbGDALImageIOTestWriteMetadata
+       ${TEMP}/ioTvGDALImageIOWriteMetadata_NoProjRef_NoGCP_GeoTransfo.hdr
+       ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_HDR_NoProjRef_NoGCP_GeoTransfo.txt
+       ${TEMP}/ioTvGDALImageIOWriteMetadataWR_HDR_NoProjRef_NoGCP_GeoTransfo.txt
+       -setGeoTransform
+    )
+ADD_TEST(ioTvGDALImageIOWriteMetadata_HDR_NoProjRef_GCP_NoGeoTransfo ${IO_TESTS6}
+    --compare-ascii ${NOTOL}
+       ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_HDR_NoProjRef_GCP_NoGeoTransfo.txt
+       ${TEMP}/ioTvGDALImageIOWriteMetadataWR_HDR_NoProjRef_GCP_NoGeoTransfo.txt    
+    otbGDALImageIOTestWriteMetadata
+       ${TEMP}/ioTvGDALImageIOWriteMetadata_NoProjRef_GCP_NoGeoTransfo.hdr
+       ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_HDR_NoProjRef_GCP_NoGeoTransfo.txt
+       ${TEMP}/ioTvGDALImageIOWriteMetadataWR_HDR_NoProjRef_GCP_NoGeoTransfo.txt
+       -setGCP
+    )
+ADD_TEST(ioTvGDALImageIOWriteMetadata_HDR_NoProjRef_GCP_GeoTransfo_ID ${IO_TESTS6}
+    --compare-ascii ${NOTOL}
+       ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_HDR_NoProjRef_GCP_GeoTransfo_ID.txt
+       ${TEMP}/ioTvGDALImageIOWriteMetadataWR_HDR_NoProjRef_GCP_GeoTransfo_ID.txt    
+    otbGDALImageIOTestWriteMetadata
+       ${TEMP}/ioTvGDALImageIOWriteMetadata_NoProjRef_GCP_GeoTransfo_ID.hdr
+       ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_HDR_NoProjRef_GCP_GeoTransfo_ID.txt
+       ${TEMP}/ioTvGDALImageIOWriteMetadataWR_HDR_NoProjRef_GCP_GeoTransfo_ID.txt
+       -setGeoTransform_ID
+       -setGCP
+    )
+ADD_TEST(ioTvGDALImageIOWriteMetadata_HDR_NoProjRef_GCP_GeoTransfo ${IO_TESTS6}
+    --compare-ascii ${NOTOL}
+       ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_HDR_NoProjRef_GCP_GeoTransfo.txt
+       ${TEMP}/ioTvGDALImageIOWriteMetadataWR_HDR_NoProjRef_GCP_GeoTransfo.txt    
+    otbGDALImageIOTestWriteMetadata
+       ${TEMP}/ioTvGDALImageIOWriteMetadata_NoProjRef_GCP_GeoTransfo.hdr
+       ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_HDR_NoProjRef_GCP_GeoTransfo.txt
+       ${TEMP}/ioTvGDALImageIOWriteMetadataWR_HDR_NoProjRef_GCP_GeoTransfo.txt
+       -setGeoTransform
+       -setGCP
+    )    
+
+# cases with ProjRef         
+ADD_TEST(ioTvGDALImageIOWriteMetadata_HDR_ProjRef_NoGCP_NoGeoTransfo ${IO_TESTS6}
+    --compare-ascii ${NOTOL}
+        ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_HDR_ProjRef_NoGCP_NoGeoTransfo.txt
+        ${TEMP}/ioTvGDALImageIOWriteMetadataWR_HDR_ProjRef_NoGCP_NoGeoTransfo.txt
+    otbGDALImageIOTestWriteMetadata
+        ${TEMP}/ioTvGDALImageIOWriteMetadata_ProjRef_NoGCP_NoGeoTransfo.hdr
+        ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_HDR_ProjRef_NoGCP_NoGeoTransfo.txt
+        ${TEMP}/ioTvGDALImageIOWriteMetadataWR_HDR_ProjRef_NoGCP_NoGeoTransfo.txt
+        -setProjectionRef
+    )
+ADD_TEST(ioTvGDALImageIOWriteMetadata_HDR_ProjRef_NoGCP_GeoTransfo_ID ${IO_TESTS6}
+    --compare-ascii ${NOTOL}
+       ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_HDR_ProjRef_NoGCP_GeoTransfo_ID.txt
+       ${TEMP}/ioTvGDALImageIOWriteMetadataWR_HDR_ProjRef_NoGCP_GeoTransfo_ID.txt
+    otbGDALImageIOTestWriteMetadata
+       ${TEMP}/ioTvGDALImageIOWriteMetadata_ProjRef_NoGCP_GeoTransfo_ID.hdr
+       ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_HDR_ProjRef_NoGCP_GeoTransfo_ID.txt
+       ${TEMP}/ioTvGDALImageIOWriteMetadataWR_HDR_ProjRef_NoGCP_GeoTransfo_ID.txt
+       -setProjectionRef
+       -setGeoTransform_ID
+    )
+ADD_TEST(ioTvGDALImageIOWriteMetadata_HDR_ProjRef_NoGCP_GeoTransfo ${IO_TESTS6}
+    --compare-ascii ${NOTOL}
+       ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_HDR_ProjRef_NoGCP_GeoTransfo.txt
+       ${TEMP}/ioTvGDALImageIOWriteMetadataWR_HDR_ProjRef_NoGCP_GeoTransfo.txt
+    otbGDALImageIOTestWriteMetadata
+       ${TEMP}/ioTvGDALImageIOWriteMetadata_ProjRef_NoGCP_GeoTransfo.hdr
+       ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_HDR_ProjRef_NoGCP_GeoTransfo.txt
+       ${TEMP}/ioTvGDALImageIOWriteMetadataWR_HDR_ProjRef_NoGCP_GeoTransfo.txt
+       -setProjectionRef
+       -setGeoTransform
+    )
+ADD_TEST(ioTvGDALImageIOWriteMetadata_HDR_ProjRef_GCP_NoGeoTransfo ${IO_TESTS6}
+    --compare-ascii ${NOTOL}
+       ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_HDR_ProjRef_GCP_NoGeoTransfo.txt
+       ${TEMP}/ioTvGDALImageIOWriteMetadataWR_HDR_ProjRef_GCP_NoGeoTransfo.txt
+    otbGDALImageIOTestWriteMetadata
+       ${TEMP}/ioTvGDALImageIOWriteMetadata_ProjRef_GCP_NoGeoTransfo.hdr
+       ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_HDR_ProjRef_GCP_NoGeoTransfo.txt
+       ${TEMP}/ioTvGDALImageIOWriteMetadataWR_HDR_ProjRef_GCP_NoGeoTransfo.txt
+       -setProjectionRef
+       -setGCP
+    )
+ADD_TEST(ioTvGDALImageIOWriteMetadata_HDR_ProjRef_GCP_GeoTransfo_ID ${IO_TESTS6}
+    --compare-ascii ${NOTOL}
+       ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_HDR_ProjRef_GCP_GeoTransfo_ID.txt
+       ${TEMP}/ioTvGDALImageIOWriteMetadataWR_HDR_ProjRef_GCP_GeoTransfo_ID.txt
+    otbGDALImageIOTestWriteMetadata
+       ${TEMP}/ioTvGDALImageIOWriteMetadata_ProjRef_GCP_GeoTransfo_ID.hdr
+       ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_HDR_ProjRef_GCP_GeoTransfo_ID.txt
+       ${TEMP}/ioTvGDALImageIOWriteMetadataWR_HDR_ProjRef_GCP_GeoTransfo_ID.txt
+       -setProjectionRef
+       -setGeoTransform_ID
+       -setGCP
+    )
+ADD_TEST(ioTvGDALImageIOWriteMetadata_HDR_ProjRef_GCP_GeoTransfo ${IO_TESTS6}
+    --compare-ascii ${NOTOL}
+       ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_HDR_ProjRef_GCP_GeoTransfo.txt
+       ${TEMP}/ioTvGDALImageIOWriteMetadataWR_HDR_ProjRef_GCP_GeoTransfo.txt
+    otbGDALImageIOTestWriteMetadata
+       ${TEMP}/ioTvGDALImageIOWriteMetadata_ProjRef_GCP_GeoTransfo.hdr
+       ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_HDR_ProjRef_GCP_GeoTransfo.txt
+       ${TEMP}/ioTvGDALImageIOWriteMetadataWR_HDR_ProjRef_GCP_GeoTransfo.txt
+       -setProjectionRef
+       -setGeoTransform
+       -setGCP
+    ) 
 
 
 # -------            otb::ONERAImageIO   ------------------------------
@@ -3264,6 +3530,7 @@ otbImageFileWriterONERAComplex.cxx
 otbImageFileWriterStreamingONERAComplex.cxx
 otbMSTARImageIOTestCanRead.cxx
 otbImageFileReaderMSTAR.cxx
+otbGDALImageIOTestWriteMetadata.cxx
 )
 SET(BasicIO_SRCS7
 otbIOTests7.cxx
