@@ -90,7 +90,7 @@ int LabeledImageColorMapping::Execute(otb::ApplicationOptionsResult* parseResult
     std::getline(ifs, line);
 
     // Avoid commented lines or too short ones
-    if (line[0] != '#' && line.size() > 0)
+    if (!line.empty() && line[0] != '#')
       {
       // retrieve the label
       std::string::size_type pos = line.find_first_of(" ", 0);
