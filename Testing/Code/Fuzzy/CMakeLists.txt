@@ -86,34 +86,30 @@ ADD_TEST(fzTuVectorDataToSpecificDescriptionFilterBaseNew ${Fuzzy_TESTS2}
 ADD_TEST(fzTuVectorDataToRoadDescriptionFilterNew ${Fuzzy_TESTS2}
         otbVectorDataToRoadDescriptionFilterNew)
 
-IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(fzTvVectorDataToRoadDescriptionFilter ${Fuzzy_TESTS2}
  --compare-ogr ${NOTOL}
  ${BASELINE_FILES}/fzTvVectorDataToRoadDescriptionFilterOutput.shp
  ${TEMP}/fzTvVectorDataToRoadDescriptionFilterOutput.shp
  otbVectorDataToRoadDescriptionFilter
- ${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/ROI_QB_RANGUEUIL_ROADS.shp
- ${OTB_DATA_LARGEINPUT_ROOT}/Dempster-Shafer/ROI_QB_RANGUEUIL.TIF
+ ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE_ROADS.shp
+ ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE.TIF
  ${TEMP}/fzTvVectorDataToRoadDescriptionFilterOutput.shp
  ${INPUTDATA}/DEM/srtm_directory
  0
  )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 ADD_TEST(fzTuVectorDataToDSValidatedVectorDataFilterNew ${Fuzzy_TESTS2}
         otbVectorDataToDSValidatedVectorDataFilterNew)
 
-IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(fzTvVectorDataToDSValidatedVectorDataFilter ${Fuzzy_TESTS2}
  --compare-ogr ${NOTOL}
  ${BASELINE_FILES}/fzTvDSValidatedRoadVectorDataOutput.shp
  ${TEMP}/fzTvDSValidatedRoadVectorDataOutput.shp
   otbVectorDataToDSValidatedVectorDataFilter
-    ${BASELINE_FILES}/fzTvVectorDataToRoadDescriptionFilterOutput.shp
+    ${TEMP}/fzTvVectorDataToRoadDescriptionFilterOutput.shp
     ${TEMP}/fzTvDSValidatedRoadVectorDataOutput.shp
 )
 SET_TESTS_PROPERTIES(fzTvVectorDataToDSValidatedVectorDataFilter PROPERTIES DEPENDS fzTvVectorDataToRoadDescriptionFilter)
-ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 
 ADD_TEST(fzTuFuzzyDescriptorsModelManagerNew ${Fuzzy_TESTS2}
