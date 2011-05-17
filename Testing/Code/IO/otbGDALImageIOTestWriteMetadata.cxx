@@ -33,7 +33,7 @@ int otbGDALImageIOTestWriteMetadata(int argc, char * argv[])
   bool setGeoTransform_ID = false;
   bool setGeoTransform = false;
   std::cout << argc <<std::endl;
-  for (unsigned int itOption = 0 ; itOption < (unsigned int)argc-4 ; itOption++)
+  for (unsigned int itOption = 0; itOption < (unsigned int)argc-4; itOption++)
     {
     std::string arg = argv[itOption+4];
     std::cout << "arg: " << arg << std::endl;
@@ -59,17 +59,17 @@ int otbGDALImageIOTestWriteMetadata(int argc, char * argv[])
       }
     }
 
-  const char *pszFormat;// = "GTiff";
+  const char *pszFormat; // = "GTiff";
   // Detect format with the extension
   std::string filename = pszDstFilename;
   if ( filename.compare(filename.size()-4, 4,".tif") == 0 )
     {
     pszFormat = "GTiff";
     }
-  else if (filename.compare(filename.size()-4,4,".hdr") == 0 )
+  else if (filename.compare(filename.size()-4, 4,".hdr") == 0 )
     {
     pszFormat = "ENVI";
-    filename.erase(filename.size()-4,4);
+    filename.erase(filename.size()-4, 4);
     std::cout << filename <<std::endl;
     }
   else
@@ -169,31 +169,31 @@ int otbGDALImageIOTestWriteMetadata(int argc, char * argv[])
   // Get some informations from dataset
   std::ofstream fileCreate;
   fileCreate.open(argv[2]);
-  fileCreate << "Projection Ref: "<< poDstDS->GetProjectionRef() << "\n" ;
+  fileCreate << "Projection Ref: "<< poDstDS->GetProjectionRef() << "\n";
   double GT_Create[6];
   if (poDstDS->GetGeoTransform(GT_Create) == CE_None)
     {
     fileCreate <<"GeoTransform: "<< GT_Create[0] << ", " << GT_Create[1] << ", "
                                  << GT_Create[2] << ", " << GT_Create[3] << ", "
-                                 << GT_Create[4] << ", " << GT_Create[5] << "\n" ;
+                                 << GT_Create[4] << ", " << GT_Create[5] << "\n";
     }
   else
     {
-    fileCreate << "No GeoTransform \n" ;
+    fileCreate << "No GeoTransform \n";
     }
 
-  fileCreate << "GCP Projection Ref: "<< poDstDS->GetGCPProjection()<< "\n" ;
-  fileCreate << "GCP Count: " << poDstDS->GetGCPCount()<< "\n" ;
+  fileCreate << "GCP Projection Ref: "<< poDstDS->GetGCPProjection()<< "\n";
+  fileCreate << "GCP Count: " << poDstDS->GetGCPCount()<< "\n";
   const GDAL_GCP * gdalGcpCreate  = poDstDS->GetGCPs();
   for (int gcpIndex = 0; gcpIndex < poDstDS->GetGCPCount(); ++gcpIndex)
     {
-    fileCreate << "GCP[" << gcpIndex <<"].pszId: "     << gdalGcpCreate->pszId<< "\n" ;
-    fileCreate << "GCP[" << gcpIndex <<"].pszInfo: "   << gdalGcpCreate->pszInfo<< "\n" ;
-    fileCreate << "GCP[" << gcpIndex <<"].dfGCPPixel: "<< gdalGcpCreate->dfGCPPixel<< "\n" ;
-    fileCreate << "GCP[" << gcpIndex <<"].dfGCPLine: " << gdalGcpCreate->dfGCPLine<< "\n" ;
-    fileCreate << "GCP[" << gcpIndex <<"].m_GPCX: "    << gdalGcpCreate->dfGCPX<< "\n" ;
-    fileCreate << "GCP[" << gcpIndex <<"].m_GPCY: "    << gdalGcpCreate->dfGCPY<< "\n" ;
-    fileCreate << "GCP[" << gcpIndex <<"].m_GPCZ: "    << gdalGcpCreate->dfGCPZ<< "\n" ;
+    fileCreate << "GCP[" << gcpIndex <<"].pszId: "     << gdalGcpCreate->pszId<< "\n";
+    fileCreate << "GCP[" << gcpIndex <<"].pszInfo: "   << gdalGcpCreate->pszInfo<< "\n";
+    fileCreate << "GCP[" << gcpIndex <<"].dfGCPPixel: "<< gdalGcpCreate->dfGCPPixel<< "\n";
+    fileCreate << "GCP[" << gcpIndex <<"].dfGCPLine: " << gdalGcpCreate->dfGCPLine<< "\n";
+    fileCreate << "GCP[" << gcpIndex <<"].m_GPCX: "    << gdalGcpCreate->dfGCPX<< "\n";
+    fileCreate << "GCP[" << gcpIndex <<"].m_GPCY: "    << gdalGcpCreate->dfGCPY<< "\n";
+    fileCreate << "GCP[" << gcpIndex <<"].m_GPCZ: "    << gdalGcpCreate->dfGCPZ<< "\n";
     }
   fileCreate.close();
 
@@ -213,31 +213,31 @@ int otbGDALImageIOTestWriteMetadata(int argc, char * argv[])
   // Get some informations from file
   std::ofstream fileWriteRead;
   fileWriteRead.open(argv[3]);
-  fileWriteRead << "Projection Ref: "<< poDataset->GetProjectionRef()<< "\n"  ;
+  fileWriteRead << "Projection Ref: "<< poDataset->GetProjectionRef()<< "\n" ;
   double GT[6];
   if (poDataset->GetGeoTransform(GT) == CE_None)
     {
     fileWriteRead <<"GeoTransform: "<< GT[0] << ", " << GT[1] << ", "
                                     << GT[2] << ", " << GT[3] << ", "
-                                    << GT[4] << ", " << GT[5] << "\n" ;
+                                    << GT[4] << ", " << GT[5] << "\n";
     }
   else
     {
-    fileWriteRead << "No GeoTransform \n" ;
+    fileWriteRead << "No GeoTransform \n";
     }
 
-  fileWriteRead << "GCP Projection Ref: "<< poDataset->GetGCPProjection()<< "\n" ;
-  fileWriteRead << "GCP Count: " << poDataset->GetGCPCount()<< "\n" ;
+  fileWriteRead << "GCP Projection Ref: "<< poDataset->GetGCPProjection()<< "\n";
+  fileWriteRead << "GCP Count: " << poDataset->GetGCPCount()<< "\n";
   const GDAL_GCP * gdalGcp  = poDataset->GetGCPs();
   for (int gcpIndex = 0; gcpIndex < poDataset->GetGCPCount(); ++gcpIndex)
     {
-    fileWriteRead << "GCP[" << gcpIndex <<"].pszId: "     << gdalGcp->pszId<< "\n" ;
-    fileWriteRead << "GCP[" << gcpIndex <<"].pszInfo: "   << gdalGcp->pszInfo<< "\n" ;
-    fileWriteRead << "GCP[" << gcpIndex <<"].dfGCPPixel: "<< gdalGcp->dfGCPPixel<< "\n" ;
-    fileWriteRead << "GCP[" << gcpIndex <<"].dfGCPLine: " << gdalGcp->dfGCPLine<< "\n" ;
-    fileWriteRead << "GCP[" << gcpIndex <<"].m_GPCX: "    << gdalGcp->dfGCPX<< "\n" ;
-    fileWriteRead << "GCP[" << gcpIndex <<"].m_GPCY: "    << gdalGcp->dfGCPY<< "\n" ;
-    fileWriteRead << "GCP[" << gcpIndex <<"].m_GPCZ: "    << gdalGcp->dfGCPZ<< "\n" ;
+    fileWriteRead << "GCP[" << gcpIndex <<"].pszId: "     << gdalGcp->pszId<< "\n";
+    fileWriteRead << "GCP[" << gcpIndex <<"].pszInfo: "   << gdalGcp->pszInfo<< "\n";
+    fileWriteRead << "GCP[" << gcpIndex <<"].dfGCPPixel: "<< gdalGcp->dfGCPPixel<< "\n";
+    fileWriteRead << "GCP[" << gcpIndex <<"].dfGCPLine: " << gdalGcp->dfGCPLine<< "\n";
+    fileWriteRead << "GCP[" << gcpIndex <<"].m_GPCX: "    << gdalGcp->dfGCPX<< "\n";
+    fileWriteRead << "GCP[" << gcpIndex <<"].m_GPCY: "    << gdalGcp->dfGCPY<< "\n";
+    fileWriteRead << "GCP[" << gcpIndex <<"].m_GPCZ: "    << gdalGcp->dfGCPZ<< "\n";
     }
   fileWriteRead.close();
 
