@@ -15,9 +15,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#include <iostream>
+#include <iomanip>
 
 #include "otbVectorDataKeywordlist.h"
-#include <iomanip>
 
 namespace otb
 {
@@ -127,6 +128,13 @@ VectorDataKeywordlist
           {
           return (double)(m_FieldList[i].second.Real);
           }
+        if (m_FieldList[i].first->GetType() == OFTString)
+          {
+          std::istringstream is(m_FieldList[i].second.String);
+          double value;
+          is >> value;
+          return value;
+          }
         itkExceptionMacro(
           << "This type (" << m_FieldList[i].first->GetType() <<
           ") is not handled (yet) by GetFieldAsDouble(), please request for it");
@@ -150,6 +158,13 @@ VectorDataKeywordlist
         if (m_FieldList[i].first->GetType() == OFTReal)
           {
           return (int)(m_FieldList[i].second.Real);
+          }
+        if (m_FieldList[i].first->GetType() == OFTString)
+          {
+          std::istringstream is(m_FieldList[i].second.String);
+          int value;
+          is >> value;
+          return value;
           }
         itkExceptionMacro(
           << "This type (" << m_FieldList[i].first->GetType() <<
