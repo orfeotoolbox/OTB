@@ -112,7 +112,7 @@ void OSMDataToVectorDataGenerator::ParseXmlFile()
   
   if (!doc.LoadFile())
     {
-    std::cout <<"Cannot open the file "<<m_FileName <<std::endl;
+    itkExceptionMacro( <<"Cannot open the file "<<m_FileName );
     }
     
   // Parse the xml
@@ -120,7 +120,7 @@ void OSMDataToVectorDataGenerator::ParseXmlFile()
   TiXmlHandle root      = hDoc.FirstChildElement();
 
   if(!root.ToElement())
-    std::cout<<"There is a problem with the XML file, The field way is not found"<<std::endl;
+    itkExceptionMacro( "Invalid or corrupted XML file : The field way is not found");
 
   
   ////////////  ////////////  ////////////  ////////////  ////////////
