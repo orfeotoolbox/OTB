@@ -95,7 +95,7 @@ public:
     * \param key The name of the field.
     * \param value The value of the field.
     */
-  void SetFieldAsInt(std::string key, int value); 
+  void SetFieldAsInt(std::string key, int value);
   
   /**
     * Returns the value associated with a field name.

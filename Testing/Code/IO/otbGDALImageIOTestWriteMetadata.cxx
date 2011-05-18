@@ -213,7 +213,7 @@ int otbGDALImageIOTestWriteMetadata(int argc, char * argv[])
   // Get some informations from file
   std::ofstream fileWriteRead;
   fileWriteRead.open(argv[3]);
-  fileWriteRead << "Projection Ref: "<< poDataset->GetProjectionRef()<< "\n" ;
+  fileWriteRead << "Projection Ref: "<< poDataset->GetProjectionRef()<< "\n";
   double GT[6];
   if (poDataset->GetGeoTransform(GT) == CE_None)
     {

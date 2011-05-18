@@ -98,7 +98,7 @@ public:
   typedef Functor::BinarySpectralAngleFunctor<PixelType, ReferencePixelType, PrecisionType>
                                                       SpectralAngleFunctorType;
 
-  typedef std::pair<IndexType, IndexType>             IndexPairType; 
+  typedef std::pair<IndexType, IndexType>             IndexPairType;
   typedef std::vector<PrecisionType>                  OutputType;
 
   virtual OutputType Evaluate( const DataNodeType& node ) const;
