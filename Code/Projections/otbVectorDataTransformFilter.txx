@@ -51,7 +51,6 @@ typename VectorDataTransformFilter<TInputVectorData, TOutputVectorData>::PointTy
 VectorDataTransformFilter<TInputVectorData, TOutputVectorData>
 ::ReprojectPoint(PointType pointCoord) const
 {
-
   itk::Point<double, 2> point;
   point = m_Transform->TransformPoint(pointCoord);
   return point;
@@ -188,6 +187,7 @@ VectorDataTransformFilter<TInputVectorData, TOutputVectorData>
     OutputDataNodePointerType newDataNode   = OutputDataNodeType::New();
     newDataNode->SetNodeType(dataNode->GetNodeType());
     newDataNode->SetNodeId(dataNode->GetNodeId());
+    newDataNode->CopyFieldList(dataNode);
 
     switch(dataNode->GetNodeType())
       {
