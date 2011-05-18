@@ -75,18 +75,12 @@ const std::map<std::string, double*>& MaskMuParserFilter<TInputImage, TOutputIma
   FunctorPointer tempFunctor = FunctorType::New();
   tempFunctor->SetExpression(m_Expression);
 
-  InputImageConstPointer inputPtr = this->GetInput();
-
-  // Define the iterators
-  itk::ImageConstIterator<TInputImage> inputIt(inputPtr, inputPtr->GetRequestedRegion());
-  inputIt.GoToBegin();
-
   FunctorType& functor = *tempFunctor;
 
   try
     {
-    functor(inputIt.Get());
-    //functor(inputPtr->GetPixel(pixelIndex));
+     functor(this->GetInput()->GetPixel(this->GetInput()->GetBufferedRegion().GetIndex()));
+
     }
   catch (itk::ExceptionObject& err)
     {
