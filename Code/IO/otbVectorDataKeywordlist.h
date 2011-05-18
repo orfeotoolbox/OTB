@@ -90,6 +90,20 @@ public:
     */
   void SetFieldAsDouble(std::string key, double value);
 
+   /**
+    * Set the field as an integer
+    * \param key The name of the field.
+    * \param value The value of the field.
+    */
+  void SetFieldAsInt(std::string key, int value); 
+  
+  /**
+    * Returns the value associated with a field name.
+    * \param key The name of the field.
+    * \return The value of the field. A default value is returned if the key was not found.
+    */
+  int GetFieldAsInt(std::string key) const;
+  
   /**
     * \return the nth field of the node as a std::pair of (key, value).
     * \param index the index of the field to return.
@@ -107,6 +121,11 @@ public:
   std::vector<std::string> GetFieldList() const;
 
   /**
+    * Copy all the fields from another kwl
+    */
+  void CopyFieldList(const Self& kwl);
+
+  /**
    * Print the keyword list
    */
   virtual void Print(std::ostream& os, itk::Indent indent = 0) const;
@@ -117,7 +136,7 @@ public:
   virtual ~VectorDataKeywordlist();
 
   /** Constructor by copy (deep copy)*/
-  VectorDataKeywordlist(const Self&);
+  VectorDataKeywordlist(const Self& other);
 
   /** Deep copy operator*/
   void operator =(const Self&);

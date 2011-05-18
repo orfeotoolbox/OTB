@@ -29,6 +29,12 @@ VectorDataKeywordlist
 }
 
 VectorDataKeywordlist
+::VectorDataKeywordlist(const Self& other)
+{
+  *this = other;
+}
+
+VectorDataKeywordlist
 ::~VectorDataKeywordlist()
 {
   for (unsigned int i = 0; i < m_FieldList.size(); ++i)
@@ -129,6 +135,30 @@ VectorDataKeywordlist
     return 0.;
 }
 
+int
+VectorDataKeywordlist
+::GetFieldAsInt(std::string key) const
+{
+  for (unsigned int i = 0; i < m_FieldList.size(); ++i)
+      {
+      if (key.compare(m_FieldList[i].first->GetNameRef()) == 0)
+        {
+        if (m_FieldList[i].first->GetType() == OFTInteger)
+          {
+          return (int)(m_FieldList[i].second.Integer);
+          }
+        if (m_FieldList[i].first->GetType() == OFTReal)
+          {
+          return (int)(m_FieldList[i].second.Real);
+          }
+        itkExceptionMacro(
+          << "This type (" << m_FieldList[i].first->GetType() <<
+          ") is not handled (yet) by GetFieldAsInt(), please request for it");
+        }
+      }
+    return 0.;
+}
+
 void
 VectorDataKeywordlist
 ::SetFieldAsDouble(std::string key, double value)
@@ -164,7 +194,49 @@ VectorDataKeywordlist
       newField.second = field;
       m_FieldList.push_back(newField);
       }
+}
 
+void
+VectorDataKeywordlist
+::SetFieldAsInt(std::string key, int value)
+{
+  if (HasField(key))
+    {
+    for (unsigned int i = 0; i < m_FieldList.size(); ++i)
+      {
+      if (key.compare(m_FieldList[i].first->GetNameRef()) == 0)
+        {
+        if (m_FieldList[i].first->GetType() == OFTInteger)
+          {
+          OGRField field;
+          field.Integer = value;
+          m_FieldList[i].second = field;
+          }
+        else
+          if (m_FieldList[i].first->GetType() == OFTReal)
+            {
+            OGRField field;
+            field.Real = static_cast<double>(value);
+            m_FieldList[i].second = field;
+            }
+          else
+            {
+            itkExceptionMacro(<< "This type is not of integer type, can't add the element in it");
+            }
+        }
+      }
+    }
+  else
+    {
+    FieldType newField;
+
+    OGRFieldDefn* fieldDefn =  new OGRFieldDefn(key.c_str(), OFTInteger);
+    OGRField field;
+    field.Integer = value;
+    newField.first = fieldDefn;
+    newField.second = field;
+    m_FieldList.push_back(newField);
+    }
 }
 
 bool
@@ -268,6 +340,35 @@ VectorDataKeywordlist
   for (unsigned int i = 0; i < m_FieldList.size(); ++i)
     {
     os << indent << "    " << PrintField(m_FieldList[i]);
+    }
+}
+
+void
+VectorDataKeywordlist::CopyFieldList(const Self& kwl)
+{
+  for (unsigned int idx = 0; idx < kwl.GetNumberOfFields(); ++idx)
+    {
+    switch(kwl.GetNthField(idx).first->GetType())
+      {
+      case OFTString :
+      {
+      this->SetFieldAsString(kwl.GetNthField(idx).first->GetNameRef(),
+                             kwl.GetNthField(idx).second.String);
+      break;
+      }
+      case OFTInteger :
+      {
+      this->SetFieldAsInt(kwl.GetNthField(idx).first->GetNameRef(),
+                          kwl.GetNthField(idx).second.Integer);
+      break;
+      }
+      case OFTReal :
+      {
+      this->SetFieldAsDouble(kwl.GetNthField(idx).first->GetNameRef(),
+                             kwl.GetNthField(idx).second.Real);
+      break;
+      }
+      }
     }
 }
 
