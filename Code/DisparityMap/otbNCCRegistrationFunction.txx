@@ -107,9 +107,9 @@ NCCRegistrationFunction<TFixedImage, TMovingImage, TDeformationField>
   // setup moving image interpolator
   m_MovingImageInterpolator->SetInputImage(this->m_MovingImage);
 
-  std::cout << " total metric " << m_MetricTotal << " field size " <<
+  otbMsgDevMacro( " total metric " << m_MetricTotal << " field size " <<
   this->GetDeformationField()->GetLargestPossibleRegion().GetSize() << " image size " <<
-  this->m_FixedImage->GetLargestPossibleRegion().GetSize() << std::endl;
+  this->m_FixedImage->GetLargestPossibleRegion().GetSize() );
   m_MetricTotal = 0.0;
 
 }

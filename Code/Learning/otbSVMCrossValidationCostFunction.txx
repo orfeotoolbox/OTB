@@ -77,10 +77,10 @@ SVMCrossValidationCostFunction<TModel>
     y2 = this->GetValue(x2);
 
     derivative[i] = (y2 - y1) / (2 * m_DerivativeStep);
-    std::cout << "x1= " << x1 << " x2= " << x2 << ", y1= " << y1 << ", y2= " << y2 << std::endl;
+    otbMsgDevMacro( << "x1= " << x1 << " x2= " << x2 << ", y1= " << y1 << ", y2= " << y2 );
     }
-  std::cout << "Position: " << parameters << ", Value: " << this->GetValue(parameters) << ", Derivatives: " <<
-  derivative << std::endl;
+  otbMsgDevMacro( "Position: " << parameters << ", Value: " << this->GetValue(parameters)
+                  << ", Derivatives: " << derivative );
 }
 
 template<class TModel>

@@ -160,7 +160,7 @@ VectorDataToGISTableFilter<TVectorData, TGISTable>
         gisWriter->Write(input, overOptions);
 
         output->SetTableName (inputRoot->Get()->GetNodeId());
-        std::cout << "tablename " << output->GetTableName() << std::endl;
+        otbMsgDevMacro( "tablename " << output->GetTableName() );
         }
       else
         {

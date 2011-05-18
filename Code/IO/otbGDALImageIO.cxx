@@ -39,6 +39,8 @@
 
 namespace otb
 {
+
+/*
 template<class InputType>
 void printOutputData(InputType *pData, int nbBands, int nbPixelToRead)
 {
@@ -87,7 +89,7 @@ void printDataBuffer(unsigned char *pData, GDALDataType pxlType, int nbBands, in
     std::cerr << "Pixel type unknown" << std::endl;
     }
 };
-
+*/
 
 // only two states : the Pointer is Null or GetDataSet() returns a valid dataset
 class GDALDatasetWrapper : public itk::LightObject

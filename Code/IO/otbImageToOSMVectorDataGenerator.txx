@@ -139,8 +139,8 @@ ImageToOSMVectorDataGenerator<TImage>
     {
     PointType physicalPoint;
     input->TransformIndexToPhysicalPoint(vindex[i], physicalPoint);
-    std::cout <<" physical point "<<  physicalPoint << " --> Transform "
-              << transform->TransformPoint(physicalPoint) << std::endl;
+    otbMsgDevMacro( << " physical point "<<  physicalPoint << " --> Transform "
+                    << transform->TransformPoint(physicalPoint));
     voutput.push_back(transform->TransformPoint(physicalPoint));
     }
 

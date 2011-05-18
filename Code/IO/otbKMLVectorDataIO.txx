@@ -461,10 +461,8 @@ KMLVectorDataIO<TData>
     itkExceptionMacro(<< "Failed to open KML data file " << this->m_FileName);
     }
 
-  std::cout << this->m_FileName << std::endl;
-
-  otbMsgDebugMacro(<< "Driver to read: KML");
-  otbMsgDebugMacro(<< "Reading  file: " << this->m_FileName);
+  otbMsgDevMacro(<< "Driver to read: KML");
+  otbMsgDevMacro(<< "Reading  file: " << this->m_FileName);
 
   // Parse the file.
   std::string        errors;
@@ -578,9 +576,7 @@ void KMLVectorDataIO<TData>::Write(const VectorDataConstPointerType data, char *
   //std::cout << xml;
 
   chrono.Stop();
-  std::cout << "KMLVectorDataIO: file saved in " << chrono.GetMeanTime() << " seconds. (" << m_Kept << " elements)" <<
-  std::endl;
-
+  otbMsgDevMacro(<< "KMLVectorDataIO: file saved in " << chrono.GetMeanTime() << " seconds. (" << m_Kept << " elements)" );
   otbMsgDevMacro(<< " KMLVectorDataIO::Write()  ");
 
 }

@@ -92,7 +92,7 @@ DecisionTree<AttributeValueType, LabelType>
 {
   AttributeValueType attrValue = example[m_Attribute];
 
-  std::cout << "Trying to match attribute " << m_Attribute << " with value " << attrValue << std::endl;
+  otbMsgDevMacro( << "Trying to match attribute " << m_Attribute << " with value " << attrValue );
 
   bool found = false;
   KeyType key;

@@ -588,9 +588,9 @@ SVMModel<TValue, TLabel>::SetSupportVectors(svm_node ** sv, int nbOfSupportVecto
   unsigned int elements = 0;
   for (int p = 0; p < nbOfSupportVector; ++p)
     {
-    std::cout << p << "  ";
+    //std::cout << p << "  ";
     const svm_node *tempNode = sv[p];
-    std::cout << p << "  ";
+    //std::cout << p << "  ";
     while (tempNode->index != -1)
       {
       tempNode++;

@@ -299,9 +299,9 @@ VectorDataToLabelMapFilter<TVectorData, TLabelMap>
         RegionType polygonExtRingBoundReg = correctPolygonExtRing->GetBoundingRegion();
 
         VertexType vertex;
-        std::cout << "Polygon bounding region " << polygonExtRingBoundReg << std::endl;
-        std::cout << "output origin " << this->GetOutput()->GetOrigin() << std::endl;
-        std::cout << "spacing " << this->GetOutput()->GetSpacing() << std::endl;
+        otbMsgDevMacro( "Polygon bounding region " << polygonExtRingBoundReg);
+        otbMsgDevMacro( "output origin " << this->GetOutput()->GetOrigin());
+        otbMsgDevMacro( "spacing " << this->GetOutput()->GetSpacing());
         // For each position in the bounding region of the polygon
 
         for (double i = polygonExtRingBoundReg.GetOrigin(0);

@@ -117,7 +117,7 @@ MapFileProductWriter<TInputImage>
   if(m_VectorImage->GetProjectionRef().empty()
      && m_VectorImage->GetImageKeywordlist().GetSize() > 0)
     {
-    std::cout << "Sensor Model detected : Reprojecting in the targer SRID"<< std::endl;
+    otbMsgDevMacro( "Sensor Model detected : Reprojecting in the targer SRID" );
     m_GenericRSResampler->SetInput(this->GetInput());
     m_GenericRSResampler->SetOutputParametersFromMap(otb::GeoInformationConversion::ToWKT(m_SRID));
     m_VectorImage = m_GenericRSResampler->GetOutput();

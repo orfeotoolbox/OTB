@@ -144,14 +144,14 @@ SVMMarginSampler< TSample, TModel >
   sort(idDistVector.begin(), idDistVector.end(), &Compare);
 
   // Display the first 10 values
-  std::cout <<" Margin Sampling: "<<std::endl;
+  otbMsgDevMacro( <<" Margin Sampling: " );
 
   // Clear previous margin samples
   m_MarginSamples.clear();
   
   for(unsigned int i = 0; i<m_NumberOfCandidates && i<idDistVector.size(); ++i)
     {
-    std::cout<<"Sample "<<idDistVector[i].first<<" (distance= "<<idDistVector[i].second<<")"<<std::endl;
+    otbMsgDevMacro( "Sample "<<idDistVector[i].first<<" (distance= "<<idDistVector[i].second<<")" )
     m_MarginSamples.push_back(idDistVector[i].first);
     }
 

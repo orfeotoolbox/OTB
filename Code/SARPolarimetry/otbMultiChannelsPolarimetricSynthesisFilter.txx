@@ -371,20 +371,20 @@ MultiChannelsPolarimetricSynthesisFilter<TInputImage, TOutputImage, TFunction>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   this->Superclass::PrintSelf(os, indent);
-  std::cout << "PsiI: " << m_PsiI << std::endl;
-  std::cout << "KhiI: " << m_KhiI << std::endl;
-  std::cout << "PsiR: " << m_PsiR << std::endl;
-  std::cout << "KhiR: " << m_KhiR << std::endl;
+  os << indent << "PsiI: " << m_PsiI << std::endl;
+  os << indent << "KhiI: " << m_KhiI << std::endl;
+  os << indent << "PsiR: " << m_PsiR << std::endl;
+  os << indent << "KhiR: " << m_KhiR << std::endl;
 
-  std::cout << "Ei0 im: " << m_Ei[0].imag() << std::endl;
-  std::cout << "Ei0 re: " << m_Ei[0].real() << std::endl;
-  std::cout << "Ei1 im: " << m_Ei[1].imag() << std::endl;
-  std::cout << "Ei1 re: " << m_Ei[1].real() << std::endl;
+  os << indent << "Ei0 im: " << m_Ei[0].imag() << std::endl;
+  os << indent << "Ei0 re: " << m_Ei[0].real() << std::endl;
+  os << indent << "Ei1 im: " << m_Ei[1].imag() << std::endl;
+  os << indent << "Ei1 re: " << m_Ei[1].real() << std::endl;
 
-  std::cout << "Er0 im: " << m_Er[0].imag() << std::endl;
-  std::cout << "Er0 re: " << m_Er[0].real() << std::endl;
-  std::cout << "Er1 im: " << m_Er[1].imag() << std::endl;
-  std::cout << "Er1 re: " << m_Er[1].real() << std::endl;
+  os << indent << "Er0 im: " << m_Er[0].imag() << std::endl;
+  os << indent << "Er0 re: " << m_Er[0].real() << std::endl;
+  os << indent << "Er1 im: " << m_Er[1].imag() << std::endl;
+  os << indent << "Er1 re: " << m_Er[1].real() << std::endl;
 }
 
 } // end namespace otb

@@ -56,9 +56,7 @@ void PostGISFromStringTransactor::operator ()(pqxx::nontransaction& T)
 
 void PostGISFromStringTransactor::on_commit()
 {
-  std::cout << "\t Transaction \t"  << std::endl;
-  std::cout << "\t " << m_TransactionString  << std::endl;
-
+  otbMsgDevMacro( "\t Transaction \t\n\t"  << m_TransactionString );
 }
 
 std::string PostGISFromStringTransactor::GetTransactionString() const

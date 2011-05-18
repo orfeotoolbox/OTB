@@ -93,7 +93,7 @@ void PostGISCreateTableTransactor::operator ()(pqxx::nontransaction& T)
 
 void PostGISCreateTableTransactor::on_commit()
 {
-  std::cout << "\t Table is created \t"  << std::endl;
+  otbMsgDevMacro( "\t Table is created \t"  );
   //T.exec
 }
 
