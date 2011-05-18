@@ -68,16 +68,6 @@ public:
   /** Update the pixel description */
   void UpdatePixelDescription(const IndexType& index);
 
-  /** add layer name in pixel information description**/
-  void AddLayerNameToDisplay(const char *layerName);
-
-  /** remove layer name in pixel information description return true if the layer name have been found
-   * false otherwise **/
-  bool RemoveLayerNameToDisplay(const char *layerName);
-
-
-
-
 protected:
   /** Constructor */
   PixelDescriptionModel();
@@ -90,18 +80,12 @@ protected:
   /** Notify a registered listener */
   void        NotifyListener(ListenerType * listener);
 
-  /** check if the layer pixel description has to be displayed  **/
-   bool HasToDisplayLayerPixeldescription(const char *layerName);
-
 private:
   PixelDescriptionModel(const Self&);     // purposely not implemented
   void operator =(const Self&); // purposely not implemented
 
   /** The pixel description */
   std::string m_PixelDescription;
-
-  /** which layer to display **/
-  std::vector<std::string> m_LayerNameToDisplay;
 
 }; // end class
 } // end namespace otb

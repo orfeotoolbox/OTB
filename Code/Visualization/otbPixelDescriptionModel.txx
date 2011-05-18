@@ -45,51 +45,6 @@ PixelDescriptionModel<TOutputImage>
 }
 
 template <class TOutputImage>
-void PixelDescriptionModel<TOutputImage>
-::AddLayerNameToDisplay(const char* layerName)
- {
-   std::string stringName(layerName);
-   m_LayerNameToDisplay.push_back(stringName);
-
- }
-
- /** **/
-template <class TOutputImage>
-bool PixelDescriptionModel<TOutputImage>
-::RemoveLayerNameToDisplay(const char * layerName)
-{
-
-  for (unsigned int i = 0; i < m_LayerNameToDisplay.size(); i++)
-    {
-    if (!(m_LayerNameToDisplay.at(i).compare(layerName)))
-      {
-      std::cout << "layer found remove " << m_LayerNameToDisplay.at(i) << std::endl;
-      m_LayerNameToDisplay.erase(m_LayerNameToDisplay.begin()+i);
-      return true;
-      }
-
-    }
-  return false;
-
-}
-
-template <class TOutputImage>
-bool PixelDescriptionModel<TOutputImage>
-::HasToDisplayLayerPixeldescription(const char * layerName)
- {
-   for (unsigned int i = 0; i < m_LayerNameToDisplay.size(); i++)
-       {
-       if (!(m_LayerNameToDisplay.at(i).compare(layerName)))
-           return true;
-
-       }
-     return false;
-
- }
-
-
-
-template <class TOutputImage>
 void
 PixelDescriptionModel<TOutputImage>
 ::UpdatePixelDescription(const IndexType& index)
@@ -102,7 +57,7 @@ PixelDescriptionModel<TOutputImage>
        it != this->GetLayers()->End(); ++it)
     {
     // If the layer is visible
-    if (it.Get()->GetVisible() || this->HasToDisplayLayerPixeldescription(it.Get()->GetName()))
+    if (it.Get()->GetVisible())
       {
       // Get the pixel description
       oss << it.Get()->GetPixelDescription(index) << std::endl;
