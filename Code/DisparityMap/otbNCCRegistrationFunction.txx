@@ -23,6 +23,7 @@
 
 #include "otbNCCRegistrationFunction.h"
 #include "itkExceptionObject.h"
+#include "otbMacro.h"
 #include "vnl/vnl_math.h"
 
 namespace otb
