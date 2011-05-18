@@ -266,9 +266,7 @@ DataNode<TPrecision, VDimension, TValuePrecision>
   itk::ExposeMetaData<VectorDataKeywordlist>(this->GetMetaDataDictionary(),
                                              MetaDataKey::VectorDataKeywordlistKey,
                                              kwl);
-  std::ostringstream os;
-  os << value;
-  kwl.SetFieldAsString(key, os.str()); //FIXME the int is currently saved as string in the OGR data
+  kwl.SetFieldAsInt(key, value);
   itk::EncapsulateMetaData<VectorDataKeywordlist>(this->GetMetaDataDictionary(),
                                                   MetaDataKey::VectorDataKeywordlistKey,
                                                   kwl);
@@ -347,10 +345,8 @@ DataNode<TPrecision, VDimension, TValuePrecision>
     {
     itk::ExposeMetaData<VectorDataKeywordlist>(this->GetMetaDataDictionary(),
                                                MetaDataKey::VectorDataKeywordlistKey, keywordlist);
-    std::istringstream is(keywordlist.GetFieldAsString(key));
-    int value;
-    is >> value;
-    return value;
+
+    return keywordlist.GetFieldAsInt(key);
     }
   return 0;
 }
@@ -414,6 +410,29 @@ DataNode<TPrecision, VDimension, TValuePrecision>
   return m_FieldMap.size();
 }
 */
+
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
+void
+DataNode<TPrecision, VDimension, TValuePrecision>
+::CopyFieldList(const DataNode * dataNode)
+{
+  // The source keywordlist where to get the feature list to copy
+  otb::VectorDataKeywordlist srcKwl;
+  itk::ExposeMetaData<VectorDataKeywordlist>(dataNode->GetMetaDataDictionary(),
+                                             MetaDataKey::VectorDataKeywordlistKey,
+                                             srcKwl);
+
+  otb::VectorDataKeywordlist kwl;
+  itk::ExposeMetaData<VectorDataKeywordlist>(this->GetMetaDataDictionary(),
+                                             MetaDataKey::VectorDataKeywordlistKey,
+                                             kwl);
+
+  kwl.CopyFieldList(srcKwl);
+  std::cout << " kwl "<< kwl << std::endl;
+  itk::EncapsulateMetaData<VectorDataKeywordlist>(this->GetMetaDataDictionary(),
+                                                  MetaDataKey::VectorDataKeywordlistKey,
+                                                  kwl);
+}
 
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 std::vector<std::string>

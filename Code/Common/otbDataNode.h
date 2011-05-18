@@ -236,11 +236,11 @@ public:
    */
   double GetFieldAsDouble(std::string key) const;
 
-  /**
-   * Remove the field associated with the given key, if possible.
-   * \param key The name of the field.
-   */
-//   void RemoveField(std::string key);
+  // /**
+  //  * Remove the field associated with the given key, if possible.
+  //  * \param key The name of the field.
+  //  */
+  //   void RemoveField(std::string key);
 /**
  * \return True if the node contains the field named after the given key.
  * \param key The name of the field.
@@ -248,17 +248,13 @@ public:
   bool HasField(std::string key) const;
 
   /**
-   * \return the nth field of the node as a std::pair of (key, value).
-   * \param index the index of the field to return.
+   * Copy the field list from a DataNode
+   * \param datanode where to get the keywordlist to copy.
    */
-//   FieldType GetNthField(unsigned int index) const;
-/**
- * \return the number of fields in the node.
- */
-//   unsigned int GetNumberOfFields() const;
+  void CopyFieldList(const DataNode * dataNode);
 
   /**
-    * \return the name of fields in the node.
+    * \return the field list in the node.
     */
   std::vector<std::string> GetFieldList() const;
 
