@@ -25,7 +25,7 @@ namespace otb
 {
 namespace Functor
 {
-/** \class SinclairToCircularCovarianceMatrixFunctor
+/** \class SinclairToReciprocalCircularCovarianceMatrixFunctor
  *  \brief Construct the fully reciprocal polarimetric circular covariance matrix
  *  with Sinclair matrix information.
  *

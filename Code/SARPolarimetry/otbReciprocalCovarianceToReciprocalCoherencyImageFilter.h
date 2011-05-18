@@ -26,7 +26,7 @@ namespace otb
 
 namespace Functor {
 
-/** \class otbReciprocalCovarianceToReciprocalCoherencyFunctor
+/** \class ReciprocalCovarianceToReciprocalCoherencyFunctor
  * \brief Evaluate the Coherency matrix from the Covariance image
  *
  * Output value are:

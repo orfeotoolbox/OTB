@@ -26,7 +26,7 @@ namespace otb
 
 namespace Functor {
 
-/** \class otbReciprocalLinearCovarianceToReciprocalCircularCovarianceFunctor
+/** \class ReciprocalLinearCovarianceToReciprocalCircularCovarianceFunctor
  * \brief Compute the reciprocal Covariance circular matrix from the reciprocal Covariance linear matrix.
  *  Extract from Antennas for radar and communications Harold Mott p 317.
  *

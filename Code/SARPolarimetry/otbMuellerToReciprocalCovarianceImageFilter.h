@@ -26,7 +26,7 @@ namespace otb
 
 namespace Functor {
 
-/** \class otbMuellerToReciprocalCovarianceFunctor
+/** \class MuellerToReciprocalCovarianceFunctor
  * \brief Evaluate the  MLC image from the Mueller image
  *
  * Output value are:

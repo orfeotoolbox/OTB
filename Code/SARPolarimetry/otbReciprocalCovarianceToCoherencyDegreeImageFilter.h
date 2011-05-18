@@ -26,7 +26,7 @@ namespace otb
 
 namespace Functor {
 
-/** \class otbReciprocalCovarianceToCoherencyDegreeFunctor
+/** \class ReciprocalCovarianceToCoherencyDegreeFunctor
  * \brief Evaluate the Coherency Degree coefficient from from the MLC image
  *
  * Output value are:

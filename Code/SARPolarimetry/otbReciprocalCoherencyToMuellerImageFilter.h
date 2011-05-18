@@ -26,7 +26,7 @@ namespace otb
 
 namespace Functor {
 
-/** \class otbCoherencyToMuellerFunctor
+/** \class CoherencyToMuellerFunctor
  * \brief Evaluate the Mueller matrix from the reciprocal coherency matrix image
  *
  * Outpus are:

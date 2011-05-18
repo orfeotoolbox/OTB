@@ -30,7 +30,7 @@ namespace otb
 
 namespace Functor {
 
-/** \class otbMuellerToPolarisationDegreeAndPowerFunctor
+/** \class MuellerToPolarisationDegreeAndPowerFunctor
  * \brief Evaluate the  min and max polarisation degree and min and max power
  *   from the Mueller image
  *
