@@ -23,6 +23,7 @@
 #include "otbBinarySpectralAngleFunctor.h"
 #include "otbDataNode.h"
 #include "otbPolyLineImageConstIterator.h"
+#include "itkLineConstIterator.h"
 #include "itkVariableLengthVector.h"
 
 namespace otb
@@ -31,9 +32,19 @@ namespace otb
   * \brief Compute a spectral angle based feature alongside a
   * datanode.
   *
-  * This function compute a feature alongside a datanode.
+  * This function compute a spectral angle alongside a datanode.
   * The feature is the mean spectral angle regarding a
   * reference pixel alongside the tested datanode.
+  *
+  * Furethemore, it compute the spectral in a neighborhood region located between
+  * +/- m_StartNeighborhoodRadius and StopNeighborhoodRadius.
+  *
+  * The output has five elements:
+  * - #0: \$f \frac{mean spectral angle alongside the datanode}{mean spectral angle of the neighborhood} \$f
+  * - #1: cumulate spectral angle alongside the datanode
+  * - #2: number of pixel alongside the datanode
+  * - #3: cumulate spectral angle of the neighborhood
+  * - #4: number of pixel in the neighborhood
   *
   * \ingroup Functions
   * \sa DataNodeImageFunction
@@ -65,6 +76,8 @@ public:
   /** Some typedefs. */
   typedef typename Superclass::DataNodeType           DataNodeType;
   typedef typename DataNodeType::LineType             LineType;
+  typedef typename LineType::Pointer                  LinePointer;
+  typedef typename LineType::ContinuousIndexType      ContinuousIndexType;
 
   typedef TImage                                      InputImageType;
   typedef typename InputImageType::ConstPointer       InputImageConstPointer;
@@ -79,11 +92,13 @@ public:
 
   typedef itk::VariableLengthVector<PrecisionType>    ReferencePixelType;
 
-  typedef PolyLineImageConstIterator<InputImageType, LineType>
-                                                      ImageLineIteratorType;
+  typedef PolyLineImageConstIterator<InputImageType, LineType> ImageLineIteratorType;
+  typedef itk::LineConstIterator<InputImageType>      LineIteratorType;
+
   typedef Functor::BinarySpectralAngleFunctor<PixelType, ReferencePixelType, PrecisionType>
                                                       SpectralAngleFunctorType;
 
+  typedef std::pair<IndexType, IndexType>             IndexPairType; 
   typedef std::vector<PrecisionType>                  OutputType;
 
   virtual OutputType Evaluate( const DataNodeType& node ) const;
@@ -91,6 +106,12 @@ public:
   /** Set/Get methods */
   itkGetConstMacro(RefPixel, PixelType);
   itkSetMacro(RefPixel, PixelType);
+
+  itkGetConstMacro(StartNeighborhoodRadius, unsigned int);
+  itkSetMacro(StartNeighborhoodRadius, unsigned int);
+  itkGetConstMacro(StopNeighborhoodRadius, unsigned int);
+  itkSetMacro(StopNeighborhoodRadius, unsigned int);
+
 
 protected:
   SpectralAngleDataNodeFeatureFunction();
@@ -104,6 +125,10 @@ private:
   /** SpectralAngle Functor & ReferencePixel*/
   ReferencePixelType          m_RefPixel;
   SpectralAngleFunctorType    m_SpectralAngleFunctor;
+  /** Start neighborhod radius */
+  unsigned int m_StartNeighborhoodRadius;
+ /** Stop neighborhod radius */
+  unsigned int m_StopNeighborhoodRadius;
 };
 
 }

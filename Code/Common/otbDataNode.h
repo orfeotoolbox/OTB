@@ -267,7 +267,7 @@ protected:
   /** Constructor */
   DataNode();
   /** Destructor */
-  ~DataNode() {}
+  virtual ~DataNode() {}
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
