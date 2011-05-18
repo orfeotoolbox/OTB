@@ -65,7 +65,6 @@ ScalarToRGBPixelFunctor<TScalar>
   ans[0] = static_cast<RGBComponentType>( bytes[m_Index[0]] * 3 );
   ans[1] = static_cast<RGBComponentType>( (bytes[m_Index[0]] + bytes[m_Index[1]]) * 5 );
   ans[2] = static_cast<RGBComponentType>( (bytes[m_Index[0]] + bytes[m_Index[2]])  );
-                                         
   return ans;
 }
 

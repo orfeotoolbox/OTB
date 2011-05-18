@@ -103,17 +103,11 @@ bool MaskMuParserFilter<TInputImage, TOutputImage, TFunction>::CheckExpression()
   FunctorPointer checkFunctor = FunctorType::New();
   checkFunctor->SetExpression(m_Expression);
 
-  //initialize
-  InputImageConstPointer inputPtr = this->GetInput();
-
-  itk::ImageConstIterator<TInputImage> inputIt(inputPtr, inputPtr->GetRequestedRegion());
-  inputIt.GoToBegin();
-
   FunctorType& functor = *checkFunctor;
 
   try
     {
-    functor(inputIt.Get());
+    functor(this->GetInput()->GetPixel(this->GetInput()->GetBufferedRegion().GetIndex()));
 
     }
   catch (itk::ExceptionObject& err)

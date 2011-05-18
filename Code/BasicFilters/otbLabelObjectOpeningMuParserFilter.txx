@@ -85,7 +85,6 @@ void LabelObjectOpeningMuParserFilter<TImage, TFunction>::DisplayVar() const
 {
   const std::map<std::string, double*>& variables = this->m_Functor.GetVar();
 
-  std::cout<<"nb var "<<variables.size()<<std::endl;
   // Get the number of variables
   std::map<std::string, double*>::const_iterator item = variables.begin();
 
