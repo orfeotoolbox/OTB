@@ -51,13 +51,14 @@ public:
   //operators !=
   bool operator !=(const RAndNIRIndexBase&) const
   {
-    return false;
+    return true;
   }
   //operator ==
   bool operator ==(const RAndNIRIndexBase& other) const
   {
     return !(*this != other);
   }
+
   // Operator on vector pixel type
   inline TOutput operator ()(const InputVectorType& inputVector) const
   {
@@ -155,7 +156,7 @@ public:
   //operators !=
   bool operator !=(const RAndBAndNIRIndexBase&) const
   {
-    return false;
+    return true;
   }
 
   //operator ==
@@ -279,6 +280,17 @@ public:
   /// input images
   typedef itk::VariableLengthVector<TInput1> InputVectorType;
 
+  //operators !=
+  bool operator !=(const RAndGAndNIRIndexBase&) const
+  {
+    return true;
+  }
+  //operator ==
+  bool operator ==(const RAndGAndNIRIndexBase& other) const
+  {
+    return !(*this != other);
+  }
+
   // Operator on vector pixel type
   inline TOutput operator ()(const InputVectorType& inputVector)
   {
@@ -369,7 +381,7 @@ protected:
   // This method must be reimplemented in subclasses to actually
   // compute the index value
   virtual TOutput Evaluate(const TInput1& r, const TInput2& g, const TInput3& nir) const = 0;
-  const double m_EpsilonToBeConsideredAsZero;
+  double m_EpsilonToBeConsideredAsZero;
 
 private:
   unsigned int m_RedIndex;
@@ -747,7 +759,7 @@ protected:
 private:
   /** Slope of soil line */
   double                m_S;
-  const NDVIFunctorType m_NDVIfunctor;
+  NDVIFunctorType m_NDVIfunctor;
   WDVIFunctorType       m_WDVIfunctor;
 
 };
@@ -1234,7 +1246,7 @@ protected:
       }
   }
 private:
-  const NDVIFunctorType m_NDVIfunctor;
+  NDVIFunctorType m_NDVIfunctor;
 };
 
 /** \class LAIFromNDVILogarithmic
@@ -1313,7 +1325,7 @@ protected:
       }
   }
 private:
-  const NDVIFunctorType m_NDVIfunctor;
+  NDVIFunctorType m_NDVIfunctor;
   double m_NdviSoil;
   double m_NdviInf;
   double m_ExtinctionCoefficient;
@@ -1378,7 +1390,7 @@ protected:
       return (static_cast<TOutput>(m_RedCoef*r+m_NirCoef*nir));
   }
 private:
-  const NDVIFunctorType m_NDVIfunctor;
+  NDVIFunctorType m_NDVIfunctor;
   double m_RedCoef;
   double m_NirCoef;
 };

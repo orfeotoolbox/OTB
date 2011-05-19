@@ -47,6 +47,17 @@ public:
   /// input images
   typedef itk::VariableLengthVector<TInput1> InputVectorType;
 
+  //operators !=
+  bool operator !=(const TM4AndTM5IndexBase&) const
+  {
+    return true;
+  }
+  //operator ==
+  bool operator ==(const TM4AndTM5IndexBase& other) const
+  {
+    return !(*this != other);
+  }
+
   // Operator on vector pixel type
   inline TOutput operator ()(const InputVectorType& inputVector) const
   {

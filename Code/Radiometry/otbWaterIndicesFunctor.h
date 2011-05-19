@@ -47,6 +47,17 @@ public:
   /// input images
   typedef itk::VariableLengthVector<TInput1> InputVectorType;
 
+  //operators !=
+  bool operator !=(const WaterIndexBase&) const
+  {
+    return true;
+  }
+  //operator ==
+  bool operator ==(const WaterIndexBase& other) const
+  {
+    return !(*this != other);
+  }
+
   // Operator on vector pixel type
   inline TOutput operator ()(const InputVectorType& inputVector) const
   {
@@ -247,7 +258,7 @@ protected:
   }
 private:
   // Water Index Classic Functor
-  const WIFunctorType m_WIFunctor;
+  WIFunctorType m_WIFunctor;
 };
 
 /** \class NDWI2
@@ -330,7 +341,7 @@ protected:
   }
 private:
   // Water Index Classic Functor
-  const WIFunctorType m_WIFunctor;
+  WIFunctorType m_WIFunctor;
 };
 
 /** \class MNDWI
@@ -413,7 +424,7 @@ protected:
   }
 private:
   // Water Index Classic Functor
-  const WIFunctorType m_WIFunctor;
+  WIFunctorType m_WIFunctor;
 };
 
 /** \class NDPI
@@ -496,7 +507,7 @@ protected:
   }
 private:
   // Water Index Classic Functor
-  const WIFunctorType m_WIFunctor;
+  WIFunctorType m_WIFunctor;
 };
 
 /** \class NDTI
@@ -581,7 +592,7 @@ protected:
   }
 private:
   // Water Index Classic Functor
-  const WIFunctorType m_WIFunctor;
+  WIFunctorType m_WIFunctor;
 };
 
 /** \class WaterSqrtSpectralAngleFunctor

@@ -50,6 +50,17 @@ public:
   /// input images
   typedef itk::VariableLengthVector<TInput1> InputVectorType;
 
+  //operators !=
+  bool operator !=(const GAndRIndexBase&) const
+  {
+    return true;
+  }
+  //operator ==
+  bool operator ==(const GAndRIndexBase& other) const
+  {
+    return !(*this != other);
+  }
+
   // Operator on vector pixel type
   inline TOutput operator ()(const InputVectorType& inputVector) const
   {
@@ -140,6 +151,17 @@ public:
   /// Vector pixel type used to support both vector images and multiple
   /// input images
   typedef itk::VariableLengthVector<TInput1> InputVectorType;
+
+  //operators !=
+  bool operator !=(const GAndRAndNirIndexBase&) const
+  {
+    return true;
+  }
+  //operator ==
+  bool operator ==(const GAndRAndNirIndexBase& other) const
+  {
+    return !(*this != other);
+  }
 
   // Operator on vector pixel type
   inline TOutput operator ()(const InputVectorType& inputVector) const
