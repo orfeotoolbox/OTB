@@ -118,6 +118,7 @@ PersistentShrinkImageFilter<TInputImage, TOutputImage>
   inputPtr->UpdateOutputInformation();
 
   m_ShrinkedOutput = OutputImageType::New();
+  m_ShrinkedOutput->CopyInformation(inputPtr);
 
   const typename InputImageType::SpacingType&
                                            inputSpacing = inputPtr->GetSpacing();
@@ -133,11 +134,13 @@ PersistentShrinkImageFilter<TInputImage, TOutputImage>
     {
     shrinkedOutputSpacing[i] = inputSpacing[i] * static_cast<double>(m_ShrinkFactor);
     shrinkedOutputSize[i] = inputSize[i] / m_ShrinkFactor;
+
+    // TODO : don't know what to do here.
+    // dividing the input index by the shrink factor does not make a lot of sense...
     shrinkedOutputStartIndex[i] = 0;
     }
 
   m_ShrinkedOutput->SetSpacing(shrinkedOutputSpacing);
-  m_ShrinkedOutput->SetNumberOfComponentsPerPixel(inputPtr->GetNumberOfComponentsPerPixel());
 
   shrinkedOutputLargestPossibleRegion.SetSize(shrinkedOutputSize);
   shrinkedOutputLargestPossibleRegion.SetIndex(shrinkedOutputStartIndex);
