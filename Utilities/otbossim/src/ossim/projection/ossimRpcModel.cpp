@@ -282,7 +282,7 @@ void ossimRpcModel::worldToLineSample(const ossimGpt& ground_point,
 
    if( ground_point.isHgtNan() )
    {
-      nhgt = (theHgtScale - theHgtOffset) / theHgtScale;
+      nhgt = (- theHgtOffset) / theHgtScale;
    }
    else
    {
