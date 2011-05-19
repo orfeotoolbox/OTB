@@ -238,34 +238,21 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
   OptimizerType::ParametersType
       simplexDelta( costFunction->GetNumberOfParameters() );
   simplexDelta.Fill(.25);
-  /*
-  simplexDelta.SetElement(0, 0.25);
-  simplexDelta.SetElement(1, 0.25);
-  simplexDelta.SetElement(2, 0.25);
-  simplexDelta.SetElement(3, 0.20);
-  simplexDelta.SetElement(4, 0.25);
-  simplexDelta.SetElement(5, 0.25);
-  simplexDelta.SetElement(6, 0.25);
-  simplexDelta.SetElement(7, 0.20);
-  */
+
   optimizer->AutomaticInitialSimplexOff();
   optimizer->SetInitialSimplexDelta( simplexDelta );
 
-  //optimizer->SetScales()
-
   OptimizerType::ParametersType
         initialPosition( costFunction->GetNumberOfParameters() );
-  //initialPosition.Fill(0.25);
-  initialPosition.SetElement(0, 0.25);
-  initialPosition.SetElement(1, 0.50);
-  initialPosition.SetElement(2, 0.75);
-  initialPosition.SetElement(3, 0.99);
-  initialPosition.SetElement(4, 0.25);
-  initialPosition.SetElement(5, 0.50);
-  initialPosition.SetElement(6, 0.75);
-  initialPosition.SetElement(7, 0.99);
+  initialPosition.Fill(0.25);
 
-  //initialPosition.SetElement();
+  for (unsigned int i=0; i<(double)(costFunction->GetNumberOfParameters())/4.0; i++)
+    {
+     initialPosition.SetElement(4*i+1, 0.50);
+     initialPosition.SetElement(4*i+2, 0.75);
+     initialPosition.SetElement(4*i+3, 0.99);
+    }
+
   optimizer->SetInitialPosition(initialPosition);
 
   // Create the Command observer and register it with the optimizer.
@@ -308,6 +295,7 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
     {
     radiom.push_back(optimizer->GetCurrentPosition()[i+4]);
     }
+
   otb::FuzzyDescriptorsModelManager::AddDescriptor("NDVI", ndvi, model);
   otb::FuzzyDescriptorsModelManager::AddDescriptor("RADIOM", radiom, model);
   otb::FuzzyDescriptorsModelManager::Save(parseResult->GetParameterString("Output"),
