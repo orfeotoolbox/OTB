@@ -71,15 +71,18 @@ PersistentStreamingLineSegmentDetector<TInputImage>
   typename ExtractImageFilterType::Pointer extract = ExtractImageFilterType::New();
   extract->SetInput( this->GetInput() );
   extract->SetExtractionRegion( this->GetInput()->GetBufferedRegion() );
+  extract->Update();
+
   // WARNING: itk::ExtractImageFilter does not copy the MetadataDictionnary
-  // We are in index coordinates from now on
+  // but LSD filter need the projection ref if available
+  extract->GetOutput()->SetMetaDataDictionary(this->GetInput()->GetMetaDataDictionary());
 
   typename LSDType::Pointer lsd = LSDType::New();
   lsd->SetInput(extract->GetOutput());
   lsd->UpdateOutputInformation();
   lsd->Update();
 
-  // return the LSD VectorData in image index coordinates
+  // return the LSD VectorData in image physical coordinates
   return lsd->GetOutput();
 }
 
