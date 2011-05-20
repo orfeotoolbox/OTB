@@ -24,6 +24,10 @@
 #include "otbVectorDataFileWriter.h"
 #include "otbStandardFilterWatcher.h"
 
+#include "otbVectorDataProjectionFilter.h"
+#include "otbVectorDataTransformFilter.h"
+#include "itkAffineTransform.h"
+
 namespace otb
 {
 
@@ -35,6 +39,8 @@ int LineSegmentDetection::Describe(ApplicationDescriptor* descriptor)
   descriptor->AddInputImage();
   descriptor->AddOption("OutputVectorData", "Output Shape file name", "outshape", 1, true,
                         ApplicationDescriptor::FileName);
+  descriptor->AddOption("DEMDirectory", "DEM directory (used to reproject in WGS84 if input is in sensor model geometry)",
+                        "dem", 1, false, ApplicationDescriptor::DirectoryName);
   return EXIT_SUCCESS;
 }
 
@@ -58,15 +64,56 @@ int LineSegmentDetection::Execute(otb::ApplicationOptionsResult* parseResult)
   reader->SetFileName(parseResult->GetInputImage());
   reader->UpdateOutputInformation();
 
-  LSDFilterType::Pointer connected
-    = LSDFilterType::New();
-  connected->GetFilter()->SetInput(reader->GetOutput());
+  ImageType::Pointer inputImage = reader->GetOutput();
 
-  otb::StandardFilterWatcher watcher(connected->GetStreamer(),"Segmentation");
-  connected->Update();
+  LSDFilterType::Pointer lsd
+    = LSDFilterType::New();
+  lsd->GetFilter()->SetInput(inputImage);
+
+  otb::StandardFilterWatcher watcher(lsd->GetStreamer(),"Line Segment Detection");
+  lsd->Update();
+
+  /*
+   * Reprojection of the output VectorData
+   *
+   * The output of LSDFilterType is in image physical coordinates,
+   * projection WKT applied if the input image has one
+   *
+   * We need to reproject in WGS84 if the input image is in sensor model geometry
+   */
+
+  std::string projRef = inputImage->GetProjectionRef();
+  ImageKeywordlist kwl = inputImage->GetImageKeywordlist();
+
+  VectorDataType::Pointer vd = lsd->GetFilter()->GetOutputVectorData();
+  VectorDataType::Pointer projectedVD = vd;
+
+  if ( projRef.empty() && kwl.GetSize() > 0 )
+    {
+    // image is in sensor model geometry
+
+    // Reproject VectorData in image projection
+    typedef otb::VectorDataProjectionFilter
+      <VectorDataType, VectorDataType>                     VectorDataProjectionFilterType;
+
+    VectorDataProjectionFilterType::Pointer vproj = VectorDataProjectionFilterType::New();
+    vproj->SetInput(vd);
+    vproj->SetInputKeywordList(inputImage->GetImageKeywordlist());
+    vproj->SetInputOrigin(inputImage->GetOrigin());
+    vproj->SetInputSpacing(inputImage->GetSpacing());
+
+    if( parseResult->IsOptionPresent("DEMDirectory") )
+      {
+      vproj->SetDEMDirectory(parseResult->GetParameterString("DEMDirectory"));
+      }
+
+    vproj->Update();
+
+    projectedVD = vproj->GetOutput();
+    }
 
   VectorDataFileWriterPointerType vdwriter = VectorDataFileWriterType::New();
-  vdwriter->SetInput(connected->GetFilter()->GetOutputVectorData());
+  vdwriter->SetInput(projectedVD);
   vdwriter->SetFileName(parseResult->GetParameterString("OutputVectorData"));
   vdwriter->Update();
 
