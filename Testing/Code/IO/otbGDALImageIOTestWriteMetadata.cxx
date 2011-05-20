@@ -50,8 +50,8 @@ public:
     m_FileType.clear();
     m_ProjRef.clear();
     m_GeoTransfo = CE_None;
-    m_GeoTransfoParam[0] = 0;m_GeoTransfoParam[1] = 0;m_GeoTransfoParam[2] = 0;
-    m_GeoTransfoParam[3] = 0;m_GeoTransfoParam[4] = 0;m_GeoTransfoParam[5] = 0;
+    m_GeoTransfoParam[0] = 0; m_GeoTransfoParam[1] = 0; m_GeoTransfoParam[2] = 0;
+    m_GeoTransfoParam[3] = 0; m_GeoTransfoParam[4] = 0; m_GeoTransfoParam[5] = 0;
     m_GCPProjRef.clear();
     m_GCPCount = 0;
     m_GCPs.clear();
@@ -93,7 +93,7 @@ public:
                              << this->m_GeoTransfoParam[2] << ", "
                              << this->m_GeoTransfoParam[3] << ", "
                              << this->m_GeoTransfoParam[4] << ", "
-                             << this->m_GeoTransfoParam[5] << std::endl ;
+                             << this->m_GeoTransfoParam[5] << std::endl;
       }
     else
       {
@@ -318,14 +318,14 @@ void testWriteMetadata(std::string filenameTIFF,
     for(size_t it = 0; it < options.size(); it ++)
       {
       os << options[it] << std::endl;
-      filenameTIFF.insert(filenameTIFF.size()-4,options[it]);
-      filenameHDR.insert(filenameHDR.size()-4,options[it]);
+      filenameTIFF.insert(filenameTIFF.size()-4, options[it]);
+      filenameHDR.insert(filenameHDR.size()-4, options[it]);
       }
     }
 
   os << "\nFormat: TIFF"  <<std::endl;
   writeReadDatasetMetadata(filenameTIFF, options, infoDatasetCreate_TIFF, infoDatasetWR_TIFF);
-  int msg = compareDatasetInfoGDAL(infoDatasetCreate_TIFF,infoDatasetWR_TIFF, os);
+  int msg = compareDatasetInfoGDAL(infoDatasetCreate_TIFF, infoDatasetWR_TIFF, os);
   if ( msg > 0 )
     {
     os << "output code: " << msg << std::endl;
@@ -339,7 +339,7 @@ void testWriteMetadata(std::string filenameTIFF,
 
   os << "\nFormat: HDR"  <<std::endl;
   writeReadDatasetMetadata(filenameHDR, options, infoDatasetCreate_HDR, infoDatasetWR_HDR);
-  msg = compareDatasetInfoGDAL(infoDatasetCreate_HDR,infoDatasetWR_HDR, os);
+  msg = compareDatasetInfoGDAL(infoDatasetCreate_HDR, infoDatasetWR_HDR, os);
   if ( msg > 0 )
     {
     os << "output code: " << msg << std::endl;
@@ -394,7 +394,7 @@ bool writeReadDatasetMetadata(std::string filename, std::vector<std::string> opt
   bool setGeoTransform_ID = false;
   bool setGeoTransform = false;
 
-  for (unsigned int itOption = 0 ; itOption < (unsigned int)options.size() ; itOption++)
+  for (unsigned int itOption = 0; itOption < (unsigned int)options.size(); itOption++)
     {
     std::string opt = options[itOption];
     if ( opt.compare("-setGCP") == 0 )
@@ -459,7 +459,7 @@ bool writeReadDatasetMetadata(std::string filename, std::vector<std::string> opt
     GDAL_GCP * gdalGcps = new GDAL_GCP[gcpCount];
 
     std::ostringstream strIndexGCP;
-    strIndexGCP << 1 ;
+    strIndexGCP << 1;
     gdalGcps[0].pszId = const_cast<char *>(strIndexGCP.str().c_str());
     gdalGcps[0].pszInfo = const_cast<char *>("GCP test");
     gdalGcps[0].dfGCPPixel = 0.5;
@@ -472,8 +472,8 @@ bool writeReadDatasetMetadata(std::string filename, std::vector<std::string> opt
 
     delete[] gdalGcps;
 
-    /*infoDatasetCreate->m_GCPProjRef = static_cast<std::string>( pszSRS_WKT) ;
-    infoDatasetCreate->m_GCPCount = gcpCount;*/
+    /*infoDatasetCreate->m_GCPProjRef = static_cast<std::string>( pszSRS_WKT);
+    infoDatasetCreate->m_GCPCount = gcpCount; */
     }
 
   // Set ProjectionRef
@@ -497,7 +497,7 @@ bool writeReadDatasetMetadata(std::string filename, std::vector<std::string> opt
     infoDatasetCreate->m_GeoTransfoParam[0] = adfGeoTransform[0];
     infoDatasetCreate->m_GeoTransfoParam[1] = adfGeoTransform[1];
     infoDatasetCreate->m_GeoTransfoParam[3] = adfGeoTransform[3];
-    infoDatasetCreate->m_GeoTransfoParam[5] = adfGeoTransform[5];*/
+    infoDatasetCreate->m_GeoTransfoParam[5] = adfGeoTransform[5]; */
     }
 
   // Write data into dataset
@@ -519,7 +519,7 @@ bool writeReadDatasetMetadata(std::string filename, std::vector<std::string> opt
 
   infoDatasetCreate->m_GeoTransfo = poDstDS->GetGeoTransform(infoDatasetCreate->m_GeoTransfoParam);
 
-  infoDatasetCreate->m_GCPProjRef = static_cast<std::string>( poDstDS->GetGCPProjection()) ;
+  infoDatasetCreate->m_GCPProjRef = static_cast<std::string>( poDstDS->GetGCPProjection());
   infoDatasetCreate->m_GCPCount = poDstDS->GetGCPCount();
 
   for (unsigned int gcpIndex = 0; gcpIndex < (unsigned int) poDstDS->GetGCPCount(); gcpIndex++)
@@ -547,7 +547,7 @@ bool writeReadDatasetMetadata(std::string filename, std::vector<std::string> opt
 
   infoDatasetWR->m_GeoTransfo = poDataset->GetGeoTransform(infoDatasetWR->m_GeoTransfoParam);
 
-  infoDatasetWR->m_GCPProjRef = static_cast<std::string>( poDataset->GetGCPProjection()) ;
+  infoDatasetWR->m_GCPProjRef = static_cast<std::string>( poDataset->GetGCPProjection());
   infoDatasetWR->m_GCPCount = poDataset->GetGCPCount();
   for (unsigned int gcpIndex = 0; gcpIndex < (unsigned int)poDataset->GetGCPCount(); gcpIndex++)
     {

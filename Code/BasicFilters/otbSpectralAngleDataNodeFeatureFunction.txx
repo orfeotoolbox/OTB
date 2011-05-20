@@ -104,13 +104,13 @@ typename SpectralAngleDataNodeFeatureFunction<TImage, TCoordRep, TPrecision>::Ou
     id2[1] = static_cast<int> (it2.Value()[1]);
 
     // Compute the direction of the current line
-    itk::Vector<double,2> direction;
+    itk::Vector<double, 2> direction;
     direction[0] = it2.Value()[0] - it1.Value()[0];
     direction[1] = it2.Value()[1] - it1.Value()[1];
     direction.Normalize();
 
     // Compute the orthogonal direction of the current line
-    itk::Vector<double,2> orthogonalDirection;
+    itk::Vector<double, 2> orthogonalDirection;
     orthogonalDirection[0] = direction[1];
     orthogonalDirection[1] = -direction[0];
 
