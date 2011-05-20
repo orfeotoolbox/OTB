@@ -25,6 +25,10 @@
 #include "otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter.h"
 #include "otbStandardFilterWatcher.h"
 
+#include "otbVectorDataProjectionFilter.h"
+#include "otbVectorDataTransformFilter.h"
+#include "itkAffineTransform.h"
+
 namespace otb
 {
 
@@ -42,6 +46,8 @@ int ConnectedComponentSegmentation::Describe(ApplicationDescriptor* descriptor)
   descriptor->AddOption("MinimumObjectSize", "Min object size (area in pixel)", "minsize", 1, false, ApplicationDescriptor::Real);
   descriptor->AddOption("OBIAExpression", "OBIA Mu Parser expression", "OBIAexpression", 1, false,
                         ApplicationDescriptor::String);
+  descriptor->AddOption("DEMDirectory", "DEM directory (used to reproject output in WGS84 if input image is in sensor model geometry)",
+                        "dem", 1, false, ApplicationDescriptor::DirectoryName);
   return EXIT_SUCCESS;
 }
 
@@ -71,9 +77,11 @@ int ConnectedComponentSegmentation::Execute(otb::ApplicationOptionsResult* parse
   reader->SetFileName(parseResult->GetInputImage());
   reader->UpdateOutputInformation();
 
+  InputVectorImageType::Pointer inputImage = reader->GetOutput();
+
   ConnectedComponentSegmentationOBIAToVectorDataFilterType::FilterType::Pointer connected
     = ConnectedComponentSegmentationOBIAToVectorDataFilterType::FilterType::New();
-  connected->GetFilter()->SetInput(reader->GetOutput());
+  connected->GetFilter()->SetInput(inputImage);
 
   if (parseResult->IsOptionPresent("MaskExpression"))
     connected->GetFilter()->SetMaskExpression(parseResult->GetParameterString("MaskExpression"));
@@ -91,8 +99,60 @@ int ConnectedComponentSegmentation::Execute(otb::ApplicationOptionsResult* parse
   otb::StandardFilterWatcher watcher(connected->GetStreamer(),"Segmentation");
   connected->Update();
 
+
+
+  /*
+   * Reprojection of the output VectorData
+   *
+   * The output of LSDFilterType is in image index coordinates
+   *
+   * 3 cases :
+   * - input image has no geo-information : pass through
+   * - input image is in cartographic projection : apply image spacing and origin, and set the ProjectionRef
+   * - input image is in sensor model geometry : reproject in WGS84
+   *
+   */
+  /*
+   * Reprojection of the output VectorData
+   *
+   * The output of LSDFilterType is in image physical coordinates,
+   * projection WKT applied if the input image has one
+   *
+   * We need to reproject in WGS84 if the input image is in sensor model geometry
+   */
+
+  std::string projRef = inputImage->GetProjectionRef();
+  ImageKeywordlist kwl = inputImage->GetImageKeywordlist();
+
+  VectorDataType::Pointer vd = connected->GetFilter()->GetOutputVectorData();
+  VectorDataType::Pointer projectedVD = vd;
+
+  if ( projRef.empty() && kwl.GetSize() > 0 )
+    {
+    // image is in sensor model geometry
+
+    // Reproject VectorData in image projection
+    typedef otb::VectorDataProjectionFilter
+      <VectorDataType, VectorDataType>                     VectorDataProjectionFilterType;
+
+    VectorDataProjectionFilterType::Pointer vproj = VectorDataProjectionFilterType::New();
+    vproj->SetInput(vd);
+    vproj->SetInputKeywordList(inputImage->GetImageKeywordlist());
+    vproj->SetInputOrigin(inputImage->GetOrigin());
+    vproj->SetInputSpacing(inputImage->GetSpacing());
+
+    if( parseResult->IsOptionPresent("DEMDirectory") )
+      {
+      vproj->SetDEMDirectory(parseResult->GetParameterString("DEMDirectory"));
+      }
+
+    vproj->Update();
+
+    projectedVD = vproj->GetOutput();
+    }
+
   VectorDataFileWriterPointerType vdwriter = VectorDataFileWriterType::New();
-  vdwriter->SetInput(connected->GetFilter()->GetOutputVectorData());
+  vdwriter->SetInput(projectedVD);
   vdwriter->SetFileName(parseResult->GetParameterString("OutputVectorData"));
   vdwriter->Update();
 
