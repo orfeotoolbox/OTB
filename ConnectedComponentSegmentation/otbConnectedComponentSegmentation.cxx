@@ -102,7 +102,7 @@ int ConnectedComponentSegmentation::Execute(otb::ApplicationOptionsResult* parse
   /*
    * Reprojection of the output VectorData
    *
-   * The output of LSDFilterType is in image physical coordinates,
+   * The output of the filter is in image physical coordinates,
    * projection WKT applied if the input image has one
    *
    * We need to reproject in WGS84 if the input image is in sensor model geometry
