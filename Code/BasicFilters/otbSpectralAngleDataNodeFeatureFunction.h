@@ -36,7 +36,7 @@ namespace otb
   * The feature is the mean spectral angle regarding a
   * reference pixel alongside the tested datanode.
   *
-  * Furethemore, it compute the spectral in a neighborhood region located between
+  * Furthermore, it compute the spectral in a neighborhood region located between
   * +/- m_StartNeighborhoodRadius and StopNeighborhoodRadius.
   *
   * The output has five elements:
@@ -108,11 +108,14 @@ public:
   itkGetConstMacro(RefPixel, PixelType);
   itkSetMacro(RefPixel, PixelType);
 
-  itkGetConstMacro(StartNeighborhoodRadius, unsigned int);
-  itkSetMacro(StartNeighborhoodRadius, unsigned int);
-  itkGetConstMacro(StopNeighborhoodRadius, unsigned int);
-  itkSetMacro(StopNeighborhoodRadius, unsigned int);
+  itkGetConstMacro(CenterRadius, unsigned int);
+  itkSetMacro(CenterRadius, unsigned int);
 
+  itkGetConstMacro(NeighborhoodBeginRadius, unsigned int);
+  itkSetMacro(NeighborhoodBeginRadius, unsigned int);
+
+  itkGetConstMacro(NeighborhoodEndRadius, unsigned int);
+  itkSetMacro(NeighborhoodEndRadius, unsigned int);
 
 protected:
   SpectralAngleDataNodeFeatureFunction();
@@ -126,10 +129,12 @@ private:
   /** SpectralAngle Functor & ReferencePixel*/
   ReferencePixelType          m_RefPixel;
   SpectralAngleFunctorType    m_SpectralAngleFunctor;
+
   /** Start neighborhod radius */
-  unsigned int m_StartNeighborhoodRadius;
- /** Stop neighborhod radius */
-  unsigned int m_StopNeighborhoodRadius;
+  unsigned int m_CenterRadius;
+  unsigned int m_NeighborhoodBeginRadius;
+  unsigned int m_NeighborhoodEndRadius;
+
 };
 
 }
