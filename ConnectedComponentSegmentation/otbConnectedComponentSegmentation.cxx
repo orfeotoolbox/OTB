@@ -99,19 +99,6 @@ int ConnectedComponentSegmentation::Execute(otb::ApplicationOptionsResult* parse
   otb::StandardFilterWatcher watcher(connected->GetStreamer(),"Segmentation");
   connected->Update();
 
-
-
-  /*
-   * Reprojection of the output VectorData
-   *
-   * The output of LSDFilterType is in image index coordinates
-   *
-   * 3 cases :
-   * - input image has no geo-information : pass through
-   * - input image is in cartographic projection : apply image spacing and origin, and set the ProjectionRef
-   * - input image is in sensor model geometry : reproject in WGS84
-   *
-   */
   /*
    * Reprojection of the output VectorData
    *
