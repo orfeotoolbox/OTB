@@ -61,7 +61,7 @@ public:
    * \param event The event
    * \return The handling return code
    */
-  virtual bool HandleWidgetEvent(std::string widgetId, int event)
+  virtual bool HandleWidgetEvent(const std::string& widgetId, int event)
   {
     if (m_View.IsNotNull() && m_Model.IsNotNull() && this->GetIsActive())
       {

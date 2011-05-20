@@ -149,7 +149,7 @@ public:
   itkGetMacro(ScaleFactor, double);
 
   /** */
-  void AddStyle(std::string style)
+  void AddStyle(const std::string& style)
   {
     m_StyleList.push_back(style);
   }

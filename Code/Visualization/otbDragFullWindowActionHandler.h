@@ -62,7 +62,7 @@ public:
    * \param widgetId The id of the handled Curve widget
    * \param event kind of event or handle : FL_PUSH, FL_RELEASE
    */
-  virtual bool HandleWidgetEvent(std::string widgetId, int event)
+  virtual bool HandleWidgetEvent(const std::string& widgetId, int event)
   {
     // Drag using the middle button (2) of the mouse
     if (widgetId == m_View->GetFullWidget()->GetIdentifier() && Fl::event_button() == 2)

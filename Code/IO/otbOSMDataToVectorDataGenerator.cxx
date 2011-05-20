@@ -228,7 +228,7 @@ void OSMDataToVectorDataGenerator::ParseXmlFile()
 }
 
 void
-OSMDataToVectorDataGenerator::AddKeyTypeToMap(std::string key, std::string value)
+OSMDataToVectorDataGenerator::AddKeyTypeToMap(const std::string& key, const std::string& value)
 {
   // Is this key present in the map
   KeyMapType::iterator   it = m_KeysMap.find(key);
@@ -263,7 +263,7 @@ OSMDataToVectorDataGenerator::AddKeyTypeToMap(std::string key, std::string value
 }
 
 void
-OSMDataToVectorDataGenerator::ProcessVectorData(std::string key, std::string value)
+OSMDataToVectorDataGenerator::ProcessVectorData(const std::string& key, const std::string& value)
 {
   // the output
   m_OutputVectorData = VectorDataType::New();
@@ -343,7 +343,7 @@ OSMDataToVectorDataGenerator::ProcessVectorData(std::string key, std::string val
 }
 
 const OSMDataToVectorDataGenerator::VectorDataType*
-OSMDataToVectorDataGenerator::GetVectorDataByName(std::string key)
+OSMDataToVectorDataGenerator::GetVectorDataByName(const std::string& key)
 {
   if(key.empty())
     itkExceptionMacro(<<"Requested key is empty, please set a valid one");
@@ -365,7 +365,7 @@ OSMDataToVectorDataGenerator::GetVectorDataByName(std::string key)
 }
 
 const OSMDataToVectorDataGenerator::VectorDataType*
-OSMDataToVectorDataGenerator::GetVectorDataByName(std::string key, std::string value)
+OSMDataToVectorDataGenerator::GetVectorDataByName(const std::string& key, const std::string& value)
 {
   if(key.empty())
     itkExceptionMacro(<<"Requested key is empty, please set a valid one");
@@ -387,7 +387,7 @@ OSMDataToVectorDataGenerator::GetVectorDataByName(std::string key, std::string v
 
 
 bool
-OSMDataToVectorDataGenerator::IsKeyPresent(std::string key)
+OSMDataToVectorDataGenerator::IsKeyPresent(const std::string& key)
 {
   for(unsigned int i = 0; i < m_KeyList.size(); i++)
     if(m_KeyList[i].compare(key) == 0)

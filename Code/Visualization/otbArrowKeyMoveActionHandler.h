@@ -59,7 +59,7 @@ public:
 
   /** Handle widget event
     */
-  virtual bool HandleWidgetEvent(std::string widgetId, int event)
+  virtual bool HandleWidgetEvent(const std::string& widgetId, int event)
   {
     if (m_Model.IsNotNull() &&  m_View.IsNotNull() && this->GetIsActive())
       {

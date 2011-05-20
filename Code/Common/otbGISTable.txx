@@ -37,7 +37,7 @@ GISTable<TConnectionImplementation, TPrecision, TSpatialDimension>
 template <class TConnectionImplementation, class TPrecision, unsigned int TSpatialDimension>
 void
 GISTable<TConnectionImplementation, TPrecision, TSpatialDimension>
-::SetProjectionRef(std::string projectionRef)
+::SetProjectionRef(const std::string& projectionRef)
 {
   itk::MetaDataDictionary& dict = this->GetMetaDataDictionary();
 

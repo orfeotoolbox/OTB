@@ -108,7 +108,7 @@ AtmosphericCorrectionParameters
 /** Get data from aeronet file*/
 void
 AtmosphericCorrectionParameters
-::UpdateAeronetData(std::string file, int year, int month, int day, int hour, int minute, double epsi)
+::UpdateAeronetData(const std::string& file, int year, int month, int day, int hour, int minute, double epsi)
 {
   if (file == "") itkExceptionMacro(<< "No Aeronet filename specified.");
 
@@ -130,7 +130,7 @@ AtmosphericCorrectionParameters
 /** Get data from filter function file*/
 void
 AtmosphericCorrectionParameters
-::LoadFilterFunctionValue(std::string filename)
+::LoadFilterFunctionValue(const std::string& filename)
 {
   m_WavelengthSpectralBand->Clear();
   SpectralSensitivityReader::Pointer spectralSensitivityReader = SpectralSensitivityReader::New();

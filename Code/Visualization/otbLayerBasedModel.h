@@ -81,14 +81,14 @@ public:
    *  \param name The name of the layer.
    *  \return a pointer to the layer or NULL if no layer was found.
    */
-  virtual LayerType * GetLayerByName(std::string name);
+  virtual LayerType * GetLayerByName(const std::string& name);
 
   /** Delete the first layer whose name matches the given name.
    *  \param name The name of the layer.
    *  \return true if a layer was actually deleted, false otherwise.
    * this location.
    */
-  virtual bool         DeleteLayerByName(std::string name);
+  virtual bool         DeleteLayerByName(const std::string& name);
 
   /** Clear all layers */
   virtual void         ClearLayers(void);

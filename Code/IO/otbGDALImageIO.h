@@ -159,9 +159,9 @@ private:
   void operator =(const Self&); //purposely not implemented
 
   /** Determine real file name to write the image */
-  std::string GetGdalWriteImageFileName(std::string& gdalDriverShortName, std::string filename);
+  std::string GetGdalWriteImageFileName(const std::string& gdalDriverShortName, const std::string& filename) const;
 
-  std::string FilenameToGdalDriverShortName(std::string name);
+  std::string FilenameToGdalDriverShortName(const std::string& name) const;
 
 
   /** GDAL parameters. */
@@ -173,7 +173,7 @@ private:
   int m_BytePerPixel;
 
   bool GDALInfoReportCorner(const char * corner_name, double x, double y,
-                            double& dfGeoX, double& dfGeoY);
+                            double& dfGeoX, double& dfGeoY) const;
 
   bool m_FlagWriteImageInformation;
   bool m_CanStreamWrite;

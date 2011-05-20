@@ -129,14 +129,14 @@ public:
   itkGetMacro(AverageElevation, double);
 
   itkGetMacro(InputKeywordList, ImageKeywordlist);
-  void SetInputKeywordList(ImageKeywordlist kwl)
+  void SetInputKeywordList(const ImageKeywordlist& kwl)
   {
     this->m_InputKeywordList = kwl;
     this->Modified();
   }
 
   itkGetMacro(OutputKeywordList, ImageKeywordlist);
-  void SetOutputKeywordList(ImageKeywordlist kwl)
+  void SetOutputKeywordList(const ImageKeywordlist& kwl)
   {
     this->m_OutputKeywordList = kwl;
     this->Modified();
@@ -188,7 +188,7 @@ protected:
   void GenerateOutputInformation(void);
   void GenerateData(void);
 
-  void ProcessNode(InputInternalTreeNodeType * source, OutputInternalTreeNodeType * destination);
+  void ProcessNode(InputInternalTreeNodeType * source, OutputInternalTreeNodeType * destination) const;
 
 private:
   VectorDataProjectionFilter(const Self &); //purposely not implemented

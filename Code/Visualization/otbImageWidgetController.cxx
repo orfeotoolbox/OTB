@@ -47,7 +47,7 @@ void ImageWidgetController::ClearAllActionHandlers()
   m_ActionHandlersList->Clear();
 }
 
-int ImageWidgetController::HandleWidgetEvent(std::string widgetId, int event)
+int ImageWidgetController::HandleWidgetEvent(const std::string& widgetId, int event)
 {
   // Define an iterator on the action handlers list
   ActionHandlerListType::Iterator it = m_ActionHandlersList->Begin();
@@ -78,7 +78,7 @@ int ImageWidgetController::HandleWidgetEvent(std::string widgetId, int event)
     }
 }
 
-void ImageWidgetController::HandleWidgetResize(std::string widgetId, int w, int h)
+void ImageWidgetController::HandleWidgetResize(const std::string& widgetId, int w, int h)
 {
   // Define an iterator on the action handlers list
   ActionHandlerListType::Iterator it = m_ActionHandlersList->Begin();
@@ -96,7 +96,7 @@ void ImageWidgetController::HandleWidgetResize(std::string widgetId, int w, int 
     }
 }
 
-void ImageWidgetController::HandleWidgetMove(std::string widgetId, int x, int y)
+void ImageWidgetController::HandleWidgetMove(const std::string& widgetId, int x, int y)
 {
   otbMsgDevMacro(<< "ImageWidgetController::HandleWidgetMove(): (" << widgetId << ", " << x << ", " << y << ")");
   // Define an iterator on the action handlers list

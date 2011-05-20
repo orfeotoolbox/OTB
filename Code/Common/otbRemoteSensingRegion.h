@@ -267,7 +267,7 @@ public:
   }
 
   /**Get/Set InputProjectionRef  std::string*/
-  void SetRegionProjection(std::string projection)
+  void SetRegionProjection(const std::string& projection)
   {m_InputProjectionRef = projection; }
 
   std::string

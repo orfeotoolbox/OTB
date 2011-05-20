@@ -105,7 +105,7 @@ protected:
 
   static const kmldom::FeaturePtr GetRootFeature(const kmldom::ElementPtr& root);
 
-  static void PrintIndented(std::string item, int depth);
+  static void PrintIndented(const std::string& item, int depth);
 
   static void PrintFeature(const kmldom::FeaturePtr& feature, int depth);
 

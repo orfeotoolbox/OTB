@@ -165,10 +165,10 @@ private:
 
   /** CURL Multi */
   void GenerateTileInfo(double x, double y, int numTileX, int numTileY);
-  bool CanReadFromCache(std::string filename);
+  bool CanReadFromCache(const std::string& filename);
   void GenerateURL(double x, double y);
   void GenerateBuffer(unsigned char * p);
-  void ReadTile(std::string filename, void * buffer);
+  void ReadTile(const std::string& filename, void * buffer);
 
   std::vector<std::string>          m_ListFilename;
   std::vector<std::string>          m_ListURLs;

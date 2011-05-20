@@ -86,7 +86,7 @@ public:
   itkGetObjectMacro(DataTree, DataTreeType);
   itkGetConstObjectMacro(DataTree, DataTreeType);
 
-  virtual void SetProjectionRef(std::string projectionRef);
+  virtual void SetProjectionRef(const std::string& projectionRef);
   virtual std::string GetProjectionRef() const;
 
   /** Set the origin of the vector data to put it in the corresponding

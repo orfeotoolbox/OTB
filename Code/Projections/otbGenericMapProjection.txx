@@ -62,7 +62,7 @@ template<TransformDirection::TransformationDirection TDirectionOfMapping, class 
     unsigned int NOutputDimensions>
 void
 GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>
-::SetWkt(std::string projectionRefWkt)
+::SetWkt(const std::string& projectionRefWkt)
 {
   m_MapProjection->SetWkt(projectionRefWkt);
   this->Modified();
@@ -137,7 +137,7 @@ template<TransformDirection::TransformationDirection TDirectionOfMapping, class 
     unsigned int NOutputDimensions>
   void
 GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>
-::SetParameter(std::string key, std::string value)
+::SetParameter(const std::string& key, const std::string& value)
 {
   m_MapProjection->SetParameter(key, value);
 }
@@ -146,7 +146,7 @@ template<TransformDirection::TransformationDirection TDirectionOfMapping, class 
     unsigned int NOutputDimensions>
 std::string
 GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>
-::GetParameter(std::string key) const
+::GetParameter(const std::string& key) const
 {
   return m_MapProjection->GetParameter(key);
 }

@@ -64,7 +64,7 @@ VectorDataKeywordlist
 
 void
 VectorDataKeywordlist
-::AddField(std::string key, std::string value)
+::AddField(const std::string& key, const std::string& value)
 {
   FieldType newField;
 
@@ -82,7 +82,7 @@ VectorDataKeywordlist
 
 std::string
 VectorDataKeywordlist
-::GetFieldAsString(std::string key) const
+::GetFieldAsString(const std::string& key) const
 {
   for (unsigned int i = 0; i < m_FieldList.size(); ++i)
     {
@@ -114,7 +114,7 @@ VectorDataKeywordlist
 
 double
 VectorDataKeywordlist
-::GetFieldAsDouble(std::string key) const
+::GetFieldAsDouble(const std::string& key) const
 {
   for (unsigned int i = 0; i < m_FieldList.size(); ++i)
       {
@@ -145,7 +145,7 @@ VectorDataKeywordlist
 
 int
 VectorDataKeywordlist
-::GetFieldAsInt(std::string key) const
+::GetFieldAsInt(const std::string& key) const
 {
   for (unsigned int i = 0; i < m_FieldList.size(); ++i)
       {
@@ -176,7 +176,7 @@ VectorDataKeywordlist
 
 void
 VectorDataKeywordlist
-::SetFieldAsDouble(std::string key, double value)
+::SetFieldAsDouble(const std::string& key, double value)
 {
   if (HasField(key))
       {
@@ -213,7 +213,7 @@ VectorDataKeywordlist
 
 void
 VectorDataKeywordlist
-::SetFieldAsInt(std::string key, int value)
+::SetFieldAsInt(const std::string& key, int value)
 {
   if (HasField(key))
     {
@@ -256,7 +256,7 @@ VectorDataKeywordlist
 
 bool
 VectorDataKeywordlist
-::HasField(std::string key) const
+::HasField(const std::string& key) const
 {
   for (unsigned int i = 0; i < m_FieldList.size(); ++i)
     {
@@ -270,7 +270,7 @@ VectorDataKeywordlist
 
 void
 VectorDataKeywordlist
-::SetFieldAsString(std::string key, std::string value)
+::SetFieldAsString(const std::string& key, const std::string& value)
 {
   if (HasField(key))
     {

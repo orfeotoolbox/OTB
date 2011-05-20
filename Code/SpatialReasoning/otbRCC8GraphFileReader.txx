@@ -51,7 +51,7 @@ RCC8GraphFileReader<TOutputGraph>
 template <class TOutputGraph>
 void
 RCC8GraphFileReader<TOutputGraph>
-::ParseEdge(std::string line)
+::ParseEdge(const std::string& line)
 {
   typename std::string::size_type pos1 = line.find_first_of(" ", 0);
   typename std::string::size_type pos2 = line.find_first_of(" ", pos1 + 1);
@@ -72,7 +72,7 @@ RCC8GraphFileReader<TOutputGraph>
 template <class TOutputGraph>
 void
 RCC8GraphFileReader<TOutputGraph>
-::ParseVertex(std::string line)
+::ParseVertex(const std::string& line)
 {
   typename VertexType::AttributesMapType attr;
   typename std::string::size_type        pos = line.find_first_of(" ", 0);

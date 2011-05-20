@@ -115,7 +115,7 @@ public:
   itkTypeMacro(CommandLineArgumentParseResult, itk::ProcessObject);
 
   /** Check whether the option was passed in or not */
-  bool IsOptionPresent(std::string option) const;
+  bool IsOptionPresent(const std::string& option) const;
 
   /** Check whether the input image option was passed in or not */
   bool IsOptionInputImagePresent(void) const;
@@ -128,12 +128,12 @@ public:
 
   /** Get one of the parameters to the option */
 //  const char *GetOptionParameter(const char *option, unsigned int number = 0);
-  int GetNumberOfParameters(std::string option);
+  int GetNumberOfParameters(const std::string& option);
 
   void PrintSelf(std::ostream& os /*, itk::Indent indent*/) const;
 
 #define otbGetParameterMacro(name, type)                                                 \
-  virtual type GetParameter ## name (std::string option, unsigned int number = 0) const     \
+  virtual type GetParameter ## name (const std::string& option, unsigned int number = 0) const     \
   {                                                                     \
     std::string parameter = this->GetParameterString(option, number);   \
     type        lValeur;                                                \
@@ -153,7 +153,7 @@ public:
   otbGetParameterMacro(Float, float);
   otbGetParameterMacro(Double, double);
 
-  std::string GetParameterString(std::string option, unsigned int number = 0) const;
+  std::string GetParameterString(const std::string& option, unsigned int number = 0) const;
 
   std::string GetInputImage(void) const;
   std::string GetOutputImage(void) const;
@@ -164,7 +164,7 @@ protected:
 
 private:
   template<typename TypeValeur>
-  TypeValeur GetParameter(std::string option, unsigned int number = 0) const;
+  TypeValeur GetParameter(const std::string& option, unsigned int number = 0) const;
 
   typedef std::vector<std::string>                  ParameterArrayType;
   typedef std::map<std::string, ParameterArrayType> OptionMapType;
@@ -226,14 +226,14 @@ public:
   itkGetStringMacro(ProgramDescription);
 
   /** Add a new option with fixed number of parameters */
-  void AddOption(std::string name,
-                 std::string comment,
-                 std::string synonym = NULL,
+  void AddOption(const std::string& name,
+                 const std::string& comment,
+                 const std::string& synonym = NULL,
                  int nParameters = 1,
                  bool obligatory = true);
 
   /** Add a new option with unknown number of parameters */
-  void AddOptionNParams(std::string name, std::string comment, std::string synonym = NULL, bool obligatory = true);
+  void AddOptionNParams(const std::string& name, const std::string& comment, const std::string& synonym = NULL, bool obligatory = true);
 
   /** Interpret options from the command line */
   void ParseCommandLine(int argc, char *argv[],
@@ -249,7 +249,7 @@ private:
   void PrintUsage(std::ostream& os) const;
   void PrintVersion(std::ostream& os) const;
   bool FindOption(const std::string&, int& index);
-  bool IsNumber(std::string text);
+  bool IsNumber(const std::string& text);
 
   /** Try processing a command line.  Returns false if something breaks */
   bool TryParseCommandLine(int argc, char *argv[],

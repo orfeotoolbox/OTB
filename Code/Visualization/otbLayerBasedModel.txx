@@ -88,7 +88,7 @@ template <class TLayer>
 typename LayerBasedModel<TLayer>
 ::LayerType *
 LayerBasedModel<TLayer>
-::GetLayerByName(std::string name)
+::GetLayerByName(const std::string& name)
 {
   LayerType *       resp = NULL;
   LayerIteratorType it = m_Layers->Begin();
@@ -110,7 +110,7 @@ LayerBasedModel<TLayer>
 template <class TLayer>
 bool
 LayerBasedModel<TLayer>
-::DeleteLayerByName(std::string name)
+::DeleteLayerByName(const std::string& name)
 {
   LayerIteratorType it = m_Layers->Begin();
   bool              found  = false;

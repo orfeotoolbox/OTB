@@ -1484,7 +1484,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
 
 }
 
-std::string GDALImageIO::FilenameToGdalDriverShortName(std::string name)
+std::string GDALImageIO::FilenameToGdalDriverShortName(const std::string& name) const
 {
   std::string extension;
   std::string gdalDriverShortName;
@@ -1512,7 +1512,7 @@ std::string GDALImageIO::FilenameToGdalDriverShortName(std::string name)
   return gdalDriverShortName;
 }
 
-std::string GDALImageIO::GetGdalWriteImageFileName(std::string& gdalDriverShortName, std::string filename)
+std::string GDALImageIO::GetGdalWriteImageFileName(const std::string& gdalDriverShortName, const std::string& filename) const
 {
   std::string gdalFileName;
 
@@ -1525,7 +1525,7 @@ std::string GDALImageIO::GetGdalWriteImageFileName(std::string& gdalDriverShortN
   return gdalFileName;
 }
 
-bool GDALImageIO::GDALInfoReportCorner(const char * /*corner_name*/, double x, double y, double& GeoX, double& GeoY)
+bool GDALImageIO::GDALInfoReportCorner(const char * /*corner_name*/, double x, double y, double& GeoX, double& GeoY) const
 {
   const char *pszProjection;
   double      adfGeoTransform[6];

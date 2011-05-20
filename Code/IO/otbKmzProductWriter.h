@@ -29,7 +29,6 @@
 #include "otbMultiChannelExtractROI.h"
 #include "otbImageFileWriter.h"
 #include "otbVectorRescaleIntensityImageFilter.h"
-#include <ogr_spatialref.h>
 #include "otbGenericRSTransform.h"
 #include "otbStreamingShrinkImageFilter.h"
 #include "itkCastImageFilter.h"
@@ -139,7 +138,7 @@ public:
 
   // Public method to store the legend and their description in the
   // legendVector
-  void AddLegend(std::string description, const InputImagePointer legend)
+  void AddLegend(const std::string& description, const InputImagePointer legend)
   {
     LegendPairType   legendPair;
     legendPair.first  = description;
@@ -193,24 +192,26 @@ private:
   void AddLegendToRootKml(double north, double south, double east, double west);
 
   /** KML root generate */
-  void GenerateKMLRoot(std::string title, double north, double south, double east, double west, bool extended);
+  void GenerateKMLRoot(const std::string& title, double north, double south, double east, double west, bool extended);
 
   /** KML generate  Filename - PathName - tile number - North - South - East - West */
-  void GenerateKML(std::string pathname, int depth, int x, int y, double north, double south, double east, double west);
-  void GenerateKMLExtended(std::string pathname,
-         int depth,
-         int x,
-                            int y,
-         OutputPointType lowerLeft,
-                            OutputPointType lowerRight,
-         OutputPointType upperRight,
-         OutputPointType upperLeft);
+  void GenerateKML(const std::string& pathname, int depth, int x, int y, double north, double south, double east, double west);
+
+  void GenerateKMLExtended(const std::string& pathname,
+                           int depth,
+                           int x,
+                           int y,
+                           OutputPointType lowerLeft,
+                           OutputPointType lowerRight,
+                           OutputPointType upperRight,
+                           OutputPointType upperLeft);
 
   /** KML with link generate */
-  void GenerateKMLWithLink(std::string pathname,
+  void GenerateKMLWithLink(const std::string& pathname,
                            int depth, int x, int y, int tileStartX, int tileStartY,
-         double north, double south, double east, double west, double centerLong, double centerLat);
-  void GenerateKMLExtendedWithLink(std::string pathname,
+                           double north, double south, double east, double west,
+                           double centerLong, double centerLat);
+  void GenerateKMLExtendedWithLink(const std::string& pathname,
                                    int depth, int x, int y, int tileStartX, int tileStartY,
                                    OutputPointType lowerLeft, OutputPointType lowerRight,
                                    OutputPointType upperRight, OutputPointType upperLeft,
@@ -229,7 +230,7 @@ private:
                                double south,
                                double east,
                                double west,
-                               std::string directory,
+                               const std::string& directory,
                                bool addRegion,
                                unsigned int pos);
 
@@ -237,10 +238,10 @@ private:
    * Add file to KMZ : return the number of error when writing the
    * file in the kmz
    */
-  virtual int  AddFileToKMZ(std::ostringstream&  absolutePath, std::ostringstream&   kmz_in_path);
+  virtual int AddFileToKMZ(const std::ostringstream&  absolutePath, const std::ostringstream&   kmz_in_path);
 
   /**Cut the image file name to built the directory name*/
-  std::string GetCuttenFileName(std::string description, unsigned int idx);
+  std::string GetCuttenFileName(const std::string& description, unsigned int idx);
 
   /** Method to add logo if any */
   void AddLogo();
@@ -282,7 +283,7 @@ private:
 
   // KMZ file
   
-kmlengine::KmzFilePtr  m_KmzFile;
+  kmlengine::KmzFilePtr  m_KmzFile;
   
   // KMZ file name
   std::ostringstream     m_KmzFileName;

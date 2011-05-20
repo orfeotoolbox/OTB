@@ -40,20 +40,20 @@ namespace otb {
  *
  *  The class parse the XML file for certain keys by default, the
  *  class allow adding key to be searched in the XML file. Use
- *  AddKey(std::string key) to add it to the search list.
+ *  AddKey(const std::string& key) to add it to the search list.
  *
  *  Adding a field and its integer value is possible through the
- *  methods SetClassKey(std::string) and SetClassKeyValue()
+ *  methods SetClassKey(const std::string&) and SetClassKeyValue()
  *  The field is retrieved by GetFieldAsInt(), thus must be int-compatible
  *
  *  Getting output VectorData is possible via two methods :
  *
  *    1: Get all the features of key in a vector data via
- *       GetVectorDataByName(std::string key)
+ *       GetVectorDataByName(const std::string& key)
  *       For instance : GetVectorDataByName("highway")
  *
  *    2: Get only the features  for a key that match a given value via
- *       GetVectorDataByName(std::string key, std::string value)
+ *       GetVectorDataByName(const std::string& key, const std::string& value)
  *       For instance : GetVectorDataByName("highway", "motorway")
  *
  *
@@ -134,7 +134,7 @@ public:
   itkSetMacro(UseUrl, bool);
 
   /** Add a key to search into the list */
-  void AddKey(std::string key)
+  void AddKey(const std::string& key)
   {
     if(!this->IsKeyPresent(key))
       m_KeyList.push_back(key);
@@ -151,12 +151,12 @@ public:
   /** Method to get a VectorData where are stored elements
     * corresponding the key
     */
-  const VectorDataType* GetVectorDataByName(std::string key);
+  const VectorDataType* GetVectorDataByName(const std::string& key);
 
   /** Method to get a VectorData where are stored elements
     * corresponding the key and the value
     */
-  const VectorDataType* GetVectorDataByName(std::string key, std::string value);
+  const VectorDataType* GetVectorDataByName(const std::string& key, const std::string& value);
 
 protected:
   /** Generate Data method : lauch the process */
@@ -171,12 +171,12 @@ protected:
   /**
     * Compose the vector data
     */
-  void ProcessVectorData(std::string key, std::string value);
+  void ProcessVectorData(const std::string& key, const std::string& value);
 
   /**
     * internal convenient method to serach if a key was already added
     */
-  bool IsKeyPresent(std::string key);
+  bool IsKeyPresent(const std::string& key);
 
   
   OSMDataToVectorDataGenerator();
@@ -187,7 +187,7 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   // Private method to add the key, type to the map
-  void AddKeyTypeToMap(std::string key, std::string value);
+  void AddKeyTypeToMap(const std::string& key, const std::string& value);
 
   // Extent of the region to get from OSM
   double                      m_North;

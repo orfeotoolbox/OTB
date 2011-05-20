@@ -56,7 +56,7 @@ public:
    * \param event The event
    * \return true if the event is handled
    */
-  virtual bool HandleWidgetEvent(std::string itkNotUsed(widgetId), int itkNotUsed(event))
+  virtual bool HandleWidgetEvent(const std::string& itkNotUsed(widgetId), int itkNotUsed(event))
   {
     return false;
   }
@@ -67,7 +67,7 @@ public:
    * \param y new y location
    * \return true if the event is handled
    */
-  virtual bool HandleWidgetMove(std::string itkNotUsed(widgetId), int itkNotUsed(x), int itkNotUsed(y))
+  virtual bool HandleWidgetMove(const std::string& itkNotUsed(widgetId), int itkNotUsed(x), int itkNotUsed(y))
   {
     return false;
   }
@@ -78,7 +78,7 @@ public:
     * \param h new height
     * \return true if the event is handled
     */
-  virtual bool HandleWidgetResize(std::string itkNotUsed(widgetId), int itkNotUsed(w), int itkNotUsed(h))
+  virtual bool HandleWidgetResize(const std::string& itkNotUsed(widgetId), int itkNotUsed(w), int itkNotUsed(h))
   {
     return false;
   }

@@ -95,7 +95,7 @@ public:
 
   virtual void SetEllipsoid();
   void SetEllipsoid(const ossimEllipsoid& ellipsoid);
-  void SetEllipsoid(std::string code);
+  void SetEllipsoid(const std::string& code);
   void SetEllipsoid(const double& major_axis, const double& minor_axis);
 
   OutputPointType TransformPoint(const InputPointType& point) const;
@@ -113,7 +113,7 @@ public:
   virtual OutputPointType GetDecimalDegreesPerPixel() const;
   virtual void SetAB(double a, double b);
   virtual void SetOrigin(const InputPointType& origin);
-  virtual void SetOrigin(const InputPointType& origin, std::string datumCode);
+  virtual void SetOrigin(const InputPointType& origin, const std::string& datumCode);
   virtual void SetMetersPerPixel(const OutputPointType& point);
   virtual void SetDecimalDegreesPerPixel(const OutputPointType& point);
   virtual void ComputeDegreesPerPixel(const InputPointType& ground,
@@ -137,7 +137,7 @@ public:
   virtual std::string GetWkt() const;
 
   /** Instanciate the projection according to the Wkt specification*/
-  virtual void SetWkt(std::string projectionRefWkt);
+  virtual void SetWkt(const std::string& projectionRefWkt);
   
   virtual void PrintMap() const;
 

@@ -87,7 +87,7 @@ KMLVectorDataIO<TData>::GetRootFeature(const kmldom::ElementPtr& root)
 // Print the selected feature
 template<class TData>
 void
-KMLVectorDataIO<TData>::PrintIndented(std::string item, int depth)
+KMLVectorDataIO<TData>::PrintIndented(const std::string& item, int depth)
 {
   while (depth--)
     {

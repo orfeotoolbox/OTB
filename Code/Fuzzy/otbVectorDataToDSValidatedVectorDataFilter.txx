@@ -53,7 +53,7 @@ template <class TVectorData, class TPrecision>
 template <class TVectorData, class TPrecision>
 void
 VectorDataToDSValidatedVectorDataFilter<TVectorData, TPrecision>
-::AddDescriptor(std::string key, std::vector<double>  model)
+::AddDescriptor(const std::string& key, std::vector<double>  model)
 {
   m_DescriptorModels.push_back(std::pair<std::string, std::vector<double> >(key, model));
   this->Modified();

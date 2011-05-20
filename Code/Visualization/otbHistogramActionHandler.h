@@ -75,7 +75,7 @@ public:
    * \param widgetId The id of the handled Curve widget
    * \param event kind of event ot handle : FL_DRAG , FL_PUSH, FL_RELEASE
    */
-  virtual bool HandleWidgetEvent(std::string widgetId, int event)
+  virtual bool HandleWidgetEvent(const std::string& widgetId, int event)
   {
     // Variable declaration
     PointType spacePoint;

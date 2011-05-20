@@ -236,7 +236,7 @@ DataNode<TPrecision, VDimension, TValuePrecision>
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 void
 DataNode<TPrecision, VDimension, TValuePrecision>
-::SetField(std::string key, std::string value)
+::SetField(const std::string& key, const std::string& value)
 {
   m_FieldMap[key] = value;
 }
@@ -245,7 +245,7 @@ DataNode<TPrecision, VDimension, TValuePrecision>
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 void
 DataNode<TPrecision, VDimension, TValuePrecision>
-::SetFieldAsString(std::string key, std::string value)
+::SetFieldAsString(const std::string& key, const std::string& value)
 {
   otb::VectorDataKeywordlist kwl;
   itk::ExposeMetaData<VectorDataKeywordlist>(this->GetMetaDataDictionary(),
@@ -260,7 +260,7 @@ DataNode<TPrecision, VDimension, TValuePrecision>
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 void
 DataNode<TPrecision, VDimension, TValuePrecision>
-::SetFieldAsInt(std::string key, int value)
+::SetFieldAsInt(const std::string& key, int value)
 {
   otb::VectorDataKeywordlist kwl;
   itk::ExposeMetaData<VectorDataKeywordlist>(this->GetMetaDataDictionary(),
@@ -275,7 +275,7 @@ DataNode<TPrecision, VDimension, TValuePrecision>
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 void
 DataNode<TPrecision, VDimension, TValuePrecision>
-::SetFieldAsDouble(std::string key, double value)
+::SetFieldAsDouble(const std::string& key, double value)
 {
   otb::VectorDataKeywordlist kwl;
   itk::ExposeMetaData<VectorDataKeywordlist>(this->GetMetaDataDictionary(),
@@ -291,7 +291,7 @@ DataNode<TPrecision, VDimension, TValuePrecision>
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 double
 DataNode<TPrecision, VDimension, TValuePrecision>
-::GetFieldAsDouble(std::string key) const
+::GetFieldAsDouble(const std::string& key) const
 {
   VectorDataKeywordlist keywordlist;
   if (HasField(key))
@@ -308,7 +308,7 @@ DataNode<TPrecision, VDimension, TValuePrecision>
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 std::string
 DataNode<TPrecision, VDimension, TValuePrecision>
-::GetField(std::string key) const
+::GetField(const std::string& key) const
 {
   if (HasField(key))
   {
@@ -323,7 +323,7 @@ DataNode<TPrecision, VDimension, TValuePrecision>
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 std::string
 DataNode<TPrecision, VDimension, TValuePrecision>
-::GetFieldAsString(std::string key) const
+::GetFieldAsString(const std::string& key) const
 {
   VectorDataKeywordlist keywordlist;
   if (HasField(key))
@@ -338,7 +338,7 @@ DataNode<TPrecision, VDimension, TValuePrecision>
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 int
 DataNode<TPrecision, VDimension, TValuePrecision>
-::GetFieldAsInt(std::string key) const
+::GetFieldAsInt(const std::string& key) const
 {
   VectorDataKeywordlist keywordlist;
   if (HasField(key))
@@ -355,14 +355,14 @@ DataNode<TPrecision, VDimension, TValuePrecision>
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 void
 DataNode<TPrecision, VDimension, TValuePrecision>
-::RemoveField(std::string key)
+::RemoveField(const std::string& key)
 {
   m_FieldMap.erase(key);
 }
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 bool
 DataNode<TPrecision, VDimension, TValuePrecision>
-::HasField(std::string key) const
+::HasField(const std::string& key) const
 {
   return (m_FieldMap.find(key)!=m_FieldMap.end());
 }
@@ -371,7 +371,7 @@ DataNode<TPrecision, VDimension, TValuePrecision>
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 bool
 DataNode<TPrecision, VDimension, TValuePrecision>
-::HasField(std::string key) const
+::HasField(const std::string& key) const
 {
   VectorDataKeywordlist keywordlist;
   if (this->GetMetaDataDictionary().HasKey(MetaDataKey::VectorDataKeywordlistKey))

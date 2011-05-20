@@ -96,7 +96,7 @@ public:
     KeyType type;
 
     KeyTypeDef() {}
-    KeyTypeDef(std::string _keyname, KeyType _type)
+    KeyTypeDef(const std::string& _keyname, const KeyType& _type)
     {
       keyname = _keyname;
       type = _type;
@@ -104,7 +104,7 @@ public:
 
   };
 
-  KeyType GetKeyType(std::string name);
+  KeyType GetKeyType(const std::string& name);
 
   typedef std::vector<double>               VectorType;
   typedef itk::VariableLengthVector<double> VariableLengthVectorType;

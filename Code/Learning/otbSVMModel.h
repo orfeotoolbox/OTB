@@ -120,7 +120,7 @@ public:
 
   /** Saves the model to a file */
   void SaveModel(const char* model_file_name) const;
-  void SaveModel(std::string model_file_name) const
+  void SaveModel(const std::string& model_file_name) const
   {
     //implemented in term of const char * version
     this->SaveModel(model_file_name.c_str());
@@ -128,7 +128,7 @@ public:
 
   /** Loads the model from a file */
   void LoadModel(const char* model_file_name);
-  void LoadModel(std::string model_file_name)
+  void LoadModel(const std::string& model_file_name)
   {
     //implemented in term of const char * version
     this->LoadModel(model_file_name.c_str());

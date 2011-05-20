@@ -593,7 +593,7 @@ KmzProductWriter<TInputImage>
 template <class TInputImage>
 int
 KmzProductWriter<TInputImage>
-::AddFileToKMZ(std::ostringstream& absolutePath, std::ostringstream& kmz_in_path)
+::AddFileToKMZ(const std::ostringstream& absolutePath, const std::ostringstream& kmz_in_path)
 {
   std::string absolute = absolutePath.str();
   std::string relative = kmz_in_path.str();
@@ -621,7 +621,7 @@ KmzProductWriter<TInputImage>
 template <class TInputImage>
 void
 KmzProductWriter<TInputImage>
-::GenerateKMLRoot(std::string title,
+::GenerateKMLRoot(const std::string& title,
       double north,
       double south,
       double east,
@@ -773,7 +773,7 @@ KmzProductWriter<TInputImage>
         double south,
         double east,
         double west,
-        std::string directory,
+        const std::string& directory,
         bool addRegion,
         unsigned int pos)
 {
@@ -913,7 +913,7 @@ KmzProductWriter<TInputImage>
 template <class TInputImage>
 void
 KmzProductWriter<TInputImage>
-::GenerateKMLExtended(std::string pathname, int depth, int x, int y,
+::GenerateKMLExtended(const std::string& pathname, int depth, int x, int y,
           OutputPointType lowerLeft, OutputPointType lowerRight,
           OutputPointType upperRight, OutputPointType upperLeft)
 {
@@ -968,7 +968,7 @@ KmzProductWriter<TInputImage>
 template <class TInputImage>
 void
 KmzProductWriter<TInputImage>
-::GenerateKML(std::string pathname, int depth, int x, int y, double north, double south, double east, double west)
+::GenerateKML(const std::string& pathname, int depth, int x, int y, double north, double south, double east, double west)
 {
   std::ostringstream kmlname;
   kmlname << pathname;
@@ -1017,7 +1017,7 @@ KmzProductWriter<TInputImage>
 template <class TInputImage>
 void
 KmzProductWriter<TInputImage>
-::GenerateKMLExtendedWithLink(std::string pathname,
+::GenerateKMLExtendedWithLink(const std::string& pathname,
             int depth, int x, int y, int tileStartX, int tileStartY,
             OutputPointType lowerLeft, OutputPointType lowerRight,
             OutputPointType upperRight, OutputPointType upperLeft,
@@ -1202,7 +1202,7 @@ KmzProductWriter<TInputImage>
 template <class TInputImage>
 void
 KmzProductWriter<TInputImage>
-::GenerateKMLWithLink(std::string pathname,
+::GenerateKMLWithLink(const std::string& pathname,
           int depth, int x, int y, int tileStartX, int tileStartY,
           double north, double south, double east, double west, double centerLong, double centerLat)
 {
@@ -1430,7 +1430,7 @@ KmzProductWriter<TInputImage>
 template <class TInputImage>
 std::string
 KmzProductWriter<TInputImage>
-::GetCuttenFileName(std::string description, unsigned int idx)
+::GetCuttenFileName(const std::string& description, unsigned int idx)
 {
   std::string currentImageName;
   std::string tempName;

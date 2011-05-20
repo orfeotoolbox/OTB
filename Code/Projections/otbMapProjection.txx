@@ -101,7 +101,7 @@ void MapProjection<TOssimMapProjection, TDirectionOfMapping, TScalarType, NInput
 template<class TOssimMapProjection, TransformDirection::TransformationDirection TDirectionOfMapping, class TScalarType,
     unsigned int NInputDimensions, unsigned int NOutputDimensions>
 void MapProjection<TOssimMapProjection, TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>
-::SetEllipsoid(std::string code)
+::SetEllipsoid(const std::string& code)
 {
   const ossimEllipsoid ellipsoid = *(ossimEllipsoidFactory::instance()->create(ossimString(code)));
   m_MapProjection->setEllipsoid(ellipsoid);
@@ -342,7 +342,7 @@ void MapProjection<TOssimMapProjection, TDirectionOfMapping, TScalarType, NInput
 template<class TOssimMapProjection, TransformDirection::TransformationDirection TDirectionOfMapping, class TScalarType,
     unsigned int NInputDimensions, unsigned int NOutputDimensions>
 void MapProjection<TOssimMapProjection, TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>
-::SetOrigin(const InputPointType& origin, std::string datumCode)
+::SetOrigin(const InputPointType& origin, const std::string& datumCode)
 {
   ossimGpt ossimOrigin(origin[1], origin[0], 0, ossimDatumFactory::instance()->create(datumCode));
   m_MapProjection->setOrigin(ossimOrigin);
@@ -435,7 +435,7 @@ template<class TOssimMapProjection, TransformDirection::TransformationDirection 
     unsigned int NInputDimensions, unsigned int NOutputDimensions>
 void
 MapProjection<TOssimMapProjection, TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>
-::SetWkt(std::string projectionRefWkt)
+::SetWkt(const std::string& projectionRefWkt)
 {
   this->m_ProjectionRefWkt = projectionRefWkt;
   this->Modified();

@@ -92,12 +92,12 @@ protected:
    * Parse edge informations from a given line.
    * \param line The line to parse.
    */
-  void ParseEdge(std::string line);
+  void ParseEdge(const std::string& line);
   /**
    * Parse vertex informations from a given line.
    * \param line The line to parse.
    */
-  void  ParseVertex(std::string line);
+  void  ParseVertex(const std::string& line);
 
   /** PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;

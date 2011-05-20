@@ -219,7 +219,7 @@ void TileMapImageIO::GenerateTileInfo(double x, double y, int numTileX, int numT
 /*
  * This method try to read tile from cache
  */
-bool TileMapImageIO::CanReadFromCache(std::string filename)
+bool TileMapImageIO::CanReadFromCache(const std::string& filename)
 {
   // Verify that the file exists and is not a directory
   bool fileExists = itksys::SystemTools::FileExists(filename.c_str(), true);
@@ -345,7 +345,7 @@ void TileMapImageIO::GenerateBuffer(unsigned char *p)
 /*
  * This method read tile in the cache
  */
-void TileMapImageIO::ReadTile(std::string filename, void * buffer)
+void TileMapImageIO::ReadTile(const std::string& filename, void * buffer)
 {
   otbMsgDevMacro(<< "Retrieving " << filename);
   unsigned char *           bufferCacheFault = NULL;

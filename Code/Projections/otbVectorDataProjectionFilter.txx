@@ -366,13 +366,13 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
 template <class TInputVectorData, class TOutputVectorData>
 void
 VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
-::ProcessNode(InputInternalTreeNodeType * source, OutputInternalTreeNodeType * destination)
+::ProcessNode(InputInternalTreeNodeType * source, OutputInternalTreeNodeType * destination) const
 {
   // Get the children list from the input node
   InputChildrenListType children = source->GetChildrenList();
 
   // For each child
-  typename InputChildrenListType::iterator it = children.begin();
+  typename InputChildrenListType::const_iterator it = children.begin();
   while (it != children.end())
 //for(typename InputChildrenListType::iterator it = children.begin(); it!=children.end(); ++it)
     {

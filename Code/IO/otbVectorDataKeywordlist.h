@@ -56,53 +56,53 @@ public:
     * \param key The name of the field.
     * \param value The value of the field.
     */
-  void AddField(std::string key, std::string value);
+  void AddField(const std::string& key, const std::string& value);
 
   /**
     * Returns the value associated with a field name.
     * \param key The name of the field.
     * \return The value of the field. A default value is returned if the key was not found.
     */
-  std::string GetFieldAsString(std::string key) const;
+  std::string GetFieldAsString(const std::string& key) const;
 
   /**
     * \return True if the node contains the field named after the given key.
     * \param key The name of the field.
     */
-  bool HasField(std::string key) const;
+  bool HasField(const std::string& key) const;
 
   /**
     * \param key The name of the field.
     * \param value The value of the field.
     */
-  void SetFieldAsString(std::string key, std::string value);
+  void SetFieldAsString(const std::string& key, const std::string& value);
 
   /**
     * Returns the value associated with a field name.
     * \param key The name of the field.
     * \return The value of the field. A default value is returned if the key was not found.
     */
-  double GetFieldAsDouble(std::string key) const;
+  double GetFieldAsDouble(const std::string& key) const;
 
   /**
     * \param key The name of the field.
     * \param value The value of the field.
     */
-  void SetFieldAsDouble(std::string key, double value);
+  void SetFieldAsDouble(const std::string& key, double value);
 
    /**
     * Set the field as an integer
     * \param key The name of the field.
     * \param value The value of the field.
     */
-  void SetFieldAsInt(std::string key, int value);
+  void SetFieldAsInt(const std::string& key, int value);
   
   /**
     * Returns the value associated with a field name.
     * \param key The name of the field.
     * \return The value of the field. A default value is returned if the key was not found.
     */
-  int GetFieldAsInt(std::string key) const;
+  int GetFieldAsInt(const std::string& key) const;
   
   /**
     * \return the nth field of the node as a std::pair of (key, value).

@@ -290,7 +290,7 @@ public:
   {
     this->GetModel()->SaveModel(fname);
   }
-  virtual void SaveModel(std::string fname)
+  virtual void SaveModel(const std::string& fname)
   {
     //implemented in term of const char * version
     this->SaveModel(fname.c_str());

@@ -91,7 +91,7 @@ public:
   virtual std::string GetWkt();
 
   /** Instanciate the projection according to the Wkt specification*/
-  virtual void SetWkt(std::string projectionRefWkt);
+  virtual void SetWkt(const std::string& projectionRefWkt);
 
   virtual void PrintMap() const;
 
@@ -103,8 +103,8 @@ public:
 
   virtual bool IsProjectionDefined() const;
 
-  void SetParameter(std::string key, std::string value);
-  std::string GetParameter(std::string key) const;
+  void SetParameter(const std::string& key, const std::string& value);
+  std::string GetParameter(const std::string& key) const;
 
 protected:
   GenericMapProjection();

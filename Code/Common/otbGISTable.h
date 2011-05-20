@@ -101,7 +101,7 @@ public:
 
   virtual void getGeometryType(){}
 
-  virtual void SetProjectionRef(std::string projectionRef);
+  virtual void SetProjectionRef(const std::string& projectionRef);
   virtual std::string GetProjectionRef() const;
 
   /** Get string connection usable by OGR library*/
@@ -111,7 +111,7 @@ public:
   virtual const std::string AddVarCharColumn(unsigned int size) {return 0; }
 
   /** Insert Alpha Numeric Data in the Car char column */
-  virtual void AddStrDataToVarCharColumn(std::string data) {}
+  virtual void AddStrDataToVarCharColumn(const std::string& data) {}
 protected:
   /** Constructor */
   GISTable();

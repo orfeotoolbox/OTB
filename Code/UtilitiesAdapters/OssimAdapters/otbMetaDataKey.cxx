@@ -96,7 +96,7 @@ const MetaDataKey::KeyTypeDef Types[] =
   MetaDataKey::KeyTypeDef(MetaDataKey::VectorDataKeywordlistDelimiterKey, MetaDataKey::TSTRING)
   };
 
-MetaDataKey::KeyType MetaDataKey::GetKeyType(std::string name)
+MetaDataKey::KeyType MetaDataKey::GetKeyType(const std::string& name)
 {
   MetaDataKey::KeyType ktype(MetaDataKey::TSTRING);
 

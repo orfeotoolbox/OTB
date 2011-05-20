@@ -63,7 +63,7 @@ public:
   * \param w new width
   * \param h new height
   */
-  virtual bool HandleWidgetResize(std::string widgetId, int w, int h)
+  virtual bool HandleWidgetResize(const std::string& widgetId, int w, int h)
   {
     if (m_Model.IsNotNull() && m_View.IsNotNull() && this->GetIsActive())
       {

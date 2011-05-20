@@ -64,10 +64,10 @@ public:
   InternalMapProjectionConstPointer GetMapProjection() const;
 
   std::string GetWkt() const;
-  void SetWkt(std::string projectionRefWkt);
+  void SetWkt(const std::string& projectionRefWkt);
 
-  void SetParameter(std::string key, std::string value);
-  std::string GetParameter(std::string key) const;
+  void SetParameter(const std::string& key, const std::string& value);
+  std::string GetParameter(const std::string& key) const;
 
   bool InstanciateProjection();
 

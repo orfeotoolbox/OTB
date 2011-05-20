@@ -152,16 +152,16 @@ public:
   }
 
   /** Read the aeronet data and extract aerosol optical and water vapor amount. */
-  void UpdateAeronetData(std::string file, int year, int month, int day, int hour, int minute, double epsi);
-  void UpdateAeronetData(std::string file, int year, int month, int day, int hour, int minute)
+  void UpdateAeronetData(const std::string& file, int year, int month, int day, int hour, int minute, double epsi);
+  void UpdateAeronetData(const std::string& file, int year, int month, int day, int hour, int minute)
   {
     this->UpdateAeronetData(file, year, month, day, hour, minute, 0.4);
   }
-  void UpdateAeronetData(std::string file, int year, int hour, int minute, double epsi)
+  void UpdateAeronetData(const std::string& file, int year, int hour, int minute, double epsi)
   {
     this->UpdateAeronetData(file, year, m_Month, m_Day, hour, minute, epsi);
   }
-  void UpdateAeronetData(std::string file, int year, int hour, int minute)
+  void UpdateAeronetData(const std::string& file, int year, int hour, int minute)
   {
     this->UpdateAeronetData(file, year, m_Month, m_Day, hour, minute, 0.4);
   }
@@ -169,7 +169,7 @@ public:
   /**
    * Read a file that contains filter function values on the 6S format.
    */
-  void LoadFilterFunctionValue(std::string filename);
+  void LoadFilterFunctionValue(const std::string& filename);
 
   /** Constructor */
   AtmosphericCorrectionParameters();

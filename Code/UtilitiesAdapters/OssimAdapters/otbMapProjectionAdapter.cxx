@@ -93,7 +93,7 @@ std::string MapProjectionAdapter::GetWkt() const
   return wkt;
 }
 
-void MapProjectionAdapter::SetWkt(std::string projectionRefWkt)
+void MapProjectionAdapter::SetWkt(const std::string& projectionRefWkt)
 {
   this->m_ProjectionRefWkt = projectionRefWkt;
   m_ReinstanciateProjection = true;
@@ -101,7 +101,7 @@ void MapProjectionAdapter::SetWkt(std::string projectionRefWkt)
   this->Modified();
 }
 
-void MapProjectionAdapter::SetParameter(std::string key, std::string value)
+void MapProjectionAdapter::SetParameter(const std::string& key, const std::string& value)
 {
   m_ParameterStore[key] = value;
   m_ReinstanciateProjection = true;
@@ -109,7 +109,7 @@ void MapProjectionAdapter::SetParameter(std::string key, std::string value)
   this->Modified();
 }
 
-std::string MapProjectionAdapter::GetParameter(std::string key) const
+std::string MapProjectionAdapter::GetParameter(const std::string& key) const
 {
   // Please refer to the note in the header filer
   // we do NOT want to read from m_ParameterStore here!

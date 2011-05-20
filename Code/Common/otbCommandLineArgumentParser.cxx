@@ -39,7 +39,7 @@ void CommandLineArgumentParseResult
 }
 
 bool CommandLineArgumentParseResult
-::IsOptionPresent(std::string option) const
+::IsOptionPresent(const std::string& option) const
 {
   return (m_OptionMap.find(option) != m_OptionMap.end());
 }
@@ -62,7 +62,7 @@ bool CommandLineArgumentParseResult
 }
 
 std::string CommandLineArgumentParseResult
-::GetParameterString(std::string option, unsigned int number) const
+::GetParameterString(const std::string& option, unsigned int number) const
 {
   if (this->IsOptionPresent(option) == false)
     {
@@ -92,7 +92,7 @@ std::string CommandLineArgumentParseResult
 }
 
 int CommandLineArgumentParseResult
-::GetNumberOfParameters(std::string option)
+::GetNumberOfParameters(const std::string& option)
 {
   assert(IsOptionPresent(option));
   return (m_OptionMap[option].size());
@@ -146,7 +146,7 @@ void CommandLineArgumentParser
 }
 
 void CommandLineArgumentParser
-::AddOption(std::string name, std::string comment, std::string synonym, int nParameters, bool obligatory)
+::AddOption(const std::string& name, const std::string& comment, const std::string& synonym, int nParameters, bool obligatory)
 {
   // Create a structure for the command
   OptionType option;
@@ -164,7 +164,7 @@ void CommandLineArgumentParser
 }
 
 void CommandLineArgumentParser
-::AddOptionNParams(std::string name, std::string comment, std::string synonym, bool obligatory)
+::AddOptionNParams(const std::string& name, const std::string& comment, const std::string& synonym, bool obligatory)
 {
   // Create a structure for the command
   OptionType option;
@@ -328,7 +328,7 @@ bool CommandLineArgumentParser::TryParseCommandLine(int argc, char *argv[],
 }
 
 
-bool CommandLineArgumentParser::IsNumber(std::string text)
+bool CommandLineArgumentParser::IsNumber(const std::string& text)
 {
   if(text.empty())
     return false;

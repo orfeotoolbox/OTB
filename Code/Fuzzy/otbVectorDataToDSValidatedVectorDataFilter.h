@@ -110,7 +110,7 @@ public:
   typedef std::vector< PairType >                       DescriptorModelsType; ;
 
   /** Descriptor model accessors. */
-  virtual void AddDescriptor(std::string key, std::vector<double> model);
+  virtual void AddDescriptor(const std::string& key, std::vector<double> model);
   virtual void ClearDescriptors();
 
   void SetDescriptorModels( DescriptorModelsType model )
@@ -130,7 +130,7 @@ public:
   itkSetMacro(CriterionFormula, std::string);
 
   /** Fuzzy Models */
-  void SetFuzzyModel(std::string key, std::vector<double> model)
+  void SetFuzzyModel(const std::string& key, std::vector<double> model)
   {
     unsigned int nbDescriptor = m_DescriptorModels.size();
 

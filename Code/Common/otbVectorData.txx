@@ -40,7 +40,7 @@ VectorData<TPrecision, VDimension, TValuePrecision>
 template<class TPrecision, unsigned int VDimension, class TValuePrecision>
 void
 VectorData<TPrecision, VDimension, TValuePrecision>
-::SetProjectionRef(std::string projectionRef)
+::SetProjectionRef(const std::string& projectionRef)
 {
   itk::MetaDataDictionary& dict = this->GetMetaDataDictionary();
 
