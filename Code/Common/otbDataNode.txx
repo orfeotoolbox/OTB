@@ -428,7 +428,6 @@ DataNode<TPrecision, VDimension, TValuePrecision>
                                              kwl);
 
   kwl.CopyFieldList(srcKwl);
-  std::cout << " kwl "<< kwl << std::endl;
   itk::EncapsulateMetaData<VectorDataKeywordlist>(this->GetMetaDataDictionary(),
                                                   MetaDataKey::VectorDataKeywordlistKey,
                                                   kwl);
