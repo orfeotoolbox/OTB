@@ -78,6 +78,7 @@ public:
   typedef typename DataNodeType::LineType             LineType;
   typedef typename LineType::Pointer                  LinePointer;
   typedef typename LineType::ContinuousIndexType      ContinuousIndexType;
+  typedef typename LineType::VertexListConstIteratorType VertexListConstIteratorType;
 
   typedef TImage                                      InputImageType;
   typedef typename InputImageType::ConstPointer       InputImageConstPointer;

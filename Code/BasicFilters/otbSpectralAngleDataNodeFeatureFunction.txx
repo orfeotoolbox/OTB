@@ -83,10 +83,11 @@ typename SpectralAngleDataNodeFeatureFunction<TImage, TCoordRep, TPrecision>::Ou
 
   std::vector<std::pair<IndexType, IndexType> > splitedLineIdNeigh;
   std::vector<std::pair<IndexType, IndexType> > splitedLineIdCentral;
+
   // Split line and polygon into segment (ie. line with two vertex
-  typename LineType::VertexListConstIteratorType it1 = path->GetVertexList()->Begin();
-  typename LineType::VertexListConstIteratorType it2 = path->GetVertexList()->Begin();
-  typename LineType::VertexListConstIteratorType itStop = path->GetVertexList()->End();
+  VertexListConstIteratorType it1 = path->GetVertexList()->Begin();
+  VertexListConstIteratorType it2 = path->GetVertexList()->Begin();
+  VertexListConstIteratorType itStop = path->GetVertexList()->End();
 
   ++it2;
   if (it2 == itStop)
@@ -103,18 +104,27 @@ typename SpectralAngleDataNodeFeatureFunction<TImage, TCoordRep, TPrecision>::Ou
     id2[1] = static_cast<int> (it2.Value()[1]);
     splitedLineIdCentral.push_back(IndexPairType(id1, id2));
 
+    itk::Vector<double,2> direction;
+    direction[0] = it2.Value()[0] - it1.Value()[0];
+    direction[1] = it2.Value()[1] - it1.Value()[1];
+    direction.Normalize();
+
+    itk::Vector<double,2> orthogonalDirection;
+    orthogonalDirection[0] = direction[1];
+    orthogonalDirection[1] = -direction[0];
+
     for (unsigned int j = m_StartNeighborhoodRadius; j < m_StopNeighborhoodRadius; j++)
       {
       IndexType shift11, shift12;
-      shift11[0] = id1[0] - j;
-      shift11[1] = id1[1] - j;
-      shift12[0] = id1[0] + j;
-      shift12[1] = id1[1] + j;
+      shift11[0] = id1[0] - j * orthogonalDirection[0];
+      shift11[1] = id1[1] - j * orthogonalDirection[1];
+      shift12[0] = id1[0] + j * orthogonalDirection[0];
+      shift12[1] = id1[1] + j * orthogonalDirection[1];
       IndexType shift21, shift22;
-      shift21[0] = id2[0] - j;
-      shift21[1] = id2[1] - j;
-      shift22[0] = id2[0] + j;
-      shift22[1] = id2[1] + j;
+      shift21[0] = id2[0] - j * orthogonalDirection[0];
+      shift21[1] = id2[1] - j * orthogonalDirection[1];
+      shift22[0] = id2[0] + j * orthogonalDirection[0];
+      shift22[1] = id2[1] + j * orthogonalDirection[1];
 
       splitedLineIdNeigh.push_back(IndexPairType(shift11, shift21));
       splitedLineIdNeigh.push_back(IndexPairType(shift12, shift22));
