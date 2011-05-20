@@ -194,16 +194,16 @@ typename SpectralAngleDataNodeFeatureFunction<TImage, TCoordRep, TPrecision>::Ou
 
   OutputType output;
 
-  double meanCurr = 0.;
+  double meanCentral = 0.;
   if (centralNbVisitedPixel != 0.)
     {
-    meanCurr /= static_cast<double> (centralAccSpectralAngle);
+    meanCentral = static_cast<double> (centralAccSpectralAngle) / centralNbVisitedPixel;
     }
 
   double meanNeigh = 0.;
   if (neighNbVisitedPixel != 0.)
     {
-    meanNeigh /= static_cast<double> (neighAccSpectralAngle);
+    meanNeigh = static_cast<double> (neighAccSpectralAngle) / neighNbVisitedPixel;
     }
 
   if (meanNeigh == 0.)
@@ -212,7 +212,7 @@ typename SpectralAngleDataNodeFeatureFunction<TImage, TCoordRep, TPrecision>::Ou
     }
   else
     {
-    output.push_back(static_cast<PrecisionType> (meanCurr / meanNeigh));
+    output.push_back(static_cast<PrecisionType> (meanCentral / meanNeigh));
     }
 
   output.push_back(static_cast<PrecisionType> (centralAccSpectralAngle));
