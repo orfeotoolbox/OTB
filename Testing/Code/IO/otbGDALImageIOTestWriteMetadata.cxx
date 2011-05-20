@@ -411,7 +411,6 @@ bool writeReadDatasetMetadata(std::string filename, std::vector<std::string> opt
       }
     if (opt.compare("-setProjectionRef") == 0)
       {
-      std::cout << "set Projection Ref" << std::endl;
       setProjectionRef = true;
       }
     }
@@ -482,7 +481,6 @@ bool writeReadDatasetMetadata(std::string filename, std::vector<std::string> opt
   {
     //infoDatasetCreate->m_ProjRef = static_cast<std::string>(pszSRS_WKT);
     poDstDS->SetProjection( pszSRS_WKT );
-    std::cout << "pszSRS_WKT =" << pszSRS_WKT << std::endl;
   }
 
   // Set GeoTransform
@@ -518,7 +516,6 @@ bool writeReadDatasetMetadata(std::string filename, std::vector<std::string> opt
   // Get some informations from dataset
   infoDatasetCreate->m_Name = "Create";
   infoDatasetCreate->m_ProjRef = static_cast<std::string>(poDstDS->GetProjectionRef());
-  std::cout << "infoDatasetCreate->m_ProjRef = " << infoDatasetCreate->m_ProjRef <<std::endl;
 
   infoDatasetCreate->m_GeoTransfo = poDstDS->GetGeoTransform(infoDatasetCreate->m_GeoTransfoParam);
 
@@ -547,7 +544,6 @@ bool writeReadDatasetMetadata(std::string filename, std::vector<std::string> opt
   // Get some informations from file
   infoDatasetWR->m_Name = "WR";
   infoDatasetWR->m_ProjRef = static_cast<std::string>(poDataset->GetProjectionRef());
-  std::cout << "infoDatasetWR->m_ProjRef = " << infoDatasetWR->m_ProjRef <<std::endl;
 
   infoDatasetWR->m_GeoTransfo = poDataset->GetGeoTransform(infoDatasetWR->m_GeoTransfoParam);
 
