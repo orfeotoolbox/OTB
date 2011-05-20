@@ -72,41 +72,14 @@ PersistentStreamingLineSegmentDetector<TInputImage>
   extract->SetInput( this->GetInput() );
   extract->SetExtractionRegion( this->GetInput()->GetBufferedRegion() );
   // WARNING: itk::ExtractImageFilter does not copy the MetadataDictionnary
-
+  // We are in index coordinates from now on
 
   typename LSDType::Pointer lsd = LSDType::New();
-  lsd->SetInput(this->GetInput());
+  lsd->SetInput(extract->GetOutput());
   lsd->UpdateOutputInformation();
   lsd->Update();
 
-
-  // The VectorData in output of the chain is in image index coordinate,
-  // and the projection information is lost
-  // Apply an affine transform to apply image origin and spacing,
-  // and arbitrarily set the ProjectionRef to the input image ProjectionRef
-
-  typedef itk::AffineTransform<typename OutputVectorDataType::PrecisionType, 2> TransformType;
-  typedef VectorDataTransformFilter<OutputVectorDataType, OutputVectorDataType> VDTransformType;
-
-  typename TransformType::ParametersType params;
-  params.SetSize(6);
-  params[0] = this->GetInput()->GetSpacing()[0];
-  params[1] = 0;
-  params[2] = 0;
-  params[3] = this->GetInput()->GetSpacing()[1];
-  params[4] = this->GetInput()->GetOrigin()[0];
-  params[5] = this->GetInput()->GetOrigin()[1];
-
-  typename TransformType::Pointer transform = TransformType::New();
-  transform->SetParameters(params);
-
-  typename VDTransformType::Pointer vdTransform = VDTransformType::New();
-  vdTransform->SetTransform(transform);
-  vdTransform->SetInput(lsd->GetOutput());
-  vdTransform->Update();
-
-  vdTransform->GetOutput()->SetProjectionRef(this->GetInput()->GetProjectionRef());
-
+  // return the LSD VectorData in image index coordinates
   return lsd->GetOutput();
 }
 
