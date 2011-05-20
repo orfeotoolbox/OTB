@@ -666,7 +666,7 @@ ADD_TEST(ioTuGDALImageIOCanWrite_HFA ${IO_TESTS6} otbGDALImageIOTestCanWrite
 	
 # Pb with copy of some infos into the dataset
 # cases with no ProjRef
-ADD_TEST(ioTvGDALImageIOWriteMetadata_TIFF_None ${IO_TESTS6}
+ADD_TEST(ioTvGDALImageIOWriteMetadata ${IO_TESTS6}
 #    --compare-ascii ${NOTOL}
 #       ${TEMP}/ioTvGDALImageIOWriteMetadataCreate_TIFF_None.txt
 #       ${TEMP}/ioTvGDALImageIOWriteMetadataWR_TIFF_None.txt
