@@ -62,7 +62,9 @@ ConfusionMatrixCalculator<TRefListLabel, TProdListLabel>
 
   //check that both lists have the same number of samples
 
-  if (m_ReferenceLabels->Size() != m_ProducedLabels->Size())
+  if  ( (m_ReferenceLabels->Size() != m_ProducedLabels->Size()) ||
+        (m_ReferenceLabels->Size() == 0 ) ||
+        (m_ProducedLabels->Size() == 0 )  )
     {
     otbMsgDebugMacro(<< "refLabels size = " << m_ReferenceLabels->Size() <<
                      " / proLabels size = " << m_ProducedLabels->Size());
@@ -189,24 +191,47 @@ ConfusionMatrixCalculator<TRefListLabel, TProdListLabel>
     {
     for (unsigned int i = 0; i < m_NumberOfClasses; ++i)
       {
-      this->m_Precisions[i] = this->m_TruePositiveValues[i] / (this->m_TruePositiveValues[i]
-          + this->m_FalsePositiveValues[i]);
-      this->m_Recalls[i] = this->m_TruePositiveValues[i] / (this->m_TruePositiveValues[i]
+      if (this->m_TruePositiveValues[i] + this->m_FalsePositiveValues[i] != 0)
+        {
+        this->m_Precisions[i] = this->m_TruePositiveValues[i] / (this->m_TruePositiveValues[i]
+            + this->m_FalsePositiveValues[i]);
+        }
+
+      if (this->m_TruePositiveValues[i] + this->m_FalseNegativeValues[i] !=0)
+        {
+        this->m_Recalls[i] = this->m_TruePositiveValues[i] / (this->m_TruePositiveValues[i]
           + this->m_FalseNegativeValues[i]);
-      this->m_FScores[i] = 2 * this->m_Recalls[i] * this->m_Precisions[i]
-          / (this->m_Recalls[i] + this->m_Precisions[i]);
+        }
+
+      if (this->m_Recalls[i] + this->m_Precisions[i] != 0)
+        {
+        this->m_FScores[i] = 2 * this->m_Recalls[i] * this->m_Precisions[i]
+            / (this->m_Recalls[i] + this->m_Precisions[i]);
+        }
       }
     }
   else
     {
-    this->m_Precision = this->m_TruePositiveValue / (this->m_TruePositiveValue + this->m_FalsePositiveValue);
-    this->m_Recall = this->m_TruePositiveValue / (this->m_TruePositiveValue + this->m_FalseNegativeValue);
-    this->m_FScore = 2 * this->m_Recall * this->m_Precision / (this->m_Recall + this->m_Precision);
+    if (this->m_TruePositiveValue + this->m_FalsePositiveValue != 0 )
+      {
+      this->m_Precision = this->m_TruePositiveValue / (this->m_TruePositiveValue + this->m_FalsePositiveValue);
+      }
+    if (this->m_TruePositiveValue + this->m_FalseNegativeValue != 0)
+      {
+      this->m_Recall = this->m_TruePositiveValue / (this->m_TruePositiveValue + this->m_FalseNegativeValue);
+      }
+    if (this->m_Recall + this->m_Precision != 0)
+      {
+      this->m_FScore = 2 * this->m_Recall * this->m_Precision / (this->m_Recall + this->m_Precision);
+      }
     }
 
   luckyRate /= vcl_pow(m_NumberOfSamples, 2.0);
 
-  m_KappaIndex = (m_OverallAccuracy - luckyRate) / (1 - luckyRate);
+  if (luckyRate != 1 )
+    {
+    m_KappaIndex = (m_OverallAccuracy - luckyRate) / (1 - luckyRate);
+    }
 
 }
 
