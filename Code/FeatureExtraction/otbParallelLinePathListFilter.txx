@@ -133,9 +133,9 @@ ParallelLinePathListFilter<TPath>
     ++outputIt1;
     } // end of for loop
 
-  otbMsgDevMacro( "Number of line pairs that pass the angular condition:          " << parallelLineCounter );
-  otbMsgDevMacro( "Number of line pairs that pass the maximum distance condition: " << maxDistCounter );
-  otbMsgDevMacro( "Number of line pairs that pass the common distance condition:  " << commonDistCounter  );
+  otbMsgDevMacro( << "Number of line pairs that pass the angular condition:          " << parallelLineCounter );
+  otbMsgDevMacro( << "Number of line pairs that pass the maximum distance condition: " << maxDistCounter );
+  otbMsgDevMacro( << "Number of line pairs that pass the common distance condition:  " << commonDistCounter  );
 
   // Write all parallel lines and set the non-erase flagg.
   typename std::vector<unsigned int>::iterator lineIt1 = parallelLineIndex.begin();
@@ -149,7 +149,7 @@ ParallelLinePathListFilter<TPath>
     // add a non-erase flag for the new path
     eraseFlagVector1.push_back(false);
     ++sortLineIndex;
-    otbMsgDevMacro( "Number of lines written in the path list: " << sortLineIndex );
+    otbMsgDevMacro( << "Number of lines written in the path list: " << sortLineIndex );
     ++lineIt1;
     }
 
@@ -338,15 +338,15 @@ ParallelLinePathListFilter<TPath>
       tempv4[0] = temptransv4[0] * cos(alpha1) + temptransv4[1] * sin(alpha1);
       tempv4[1] = temptransv4[1] * cos(alpha1) - temptransv4[0] * sin(alpha1);
 
-      otbMsgDevMacro(  "tempv1[0], tempv1[1], tempv2[0], tempv2[1]: " );
-      otbMsgDevMacro( tempv1[0] << ", " << tempv1[1] << ", " << tempv2[0] << ", " << tempv2[1] );
-      otbMsgDevMacro( "Alpha: " << alpha1 );
-      otbMsgDevMacro( "tempv3[0], tempv3[1], tempv4[0], tempv4[1]: "
+      otbMsgDevMacro(<< "tempv1[0], tempv1[1], tempv2[0], tempv2[1]: " );
+      otbMsgDevMacro(<< tempv1[0] << ", " << tempv1[1] << ", " << tempv2[0] << ", " << tempv2[1] );
+      otbMsgDevMacro(<< "Alpha: " << alpha1 );
+      otbMsgDevMacro(<< "tempv3[0], tempv3[1], tempv4[0], tempv4[1]: "
                        << tempv3[0] << ", " << tempv3[1] << ", "
                        << tempv4[0] << ", " << tempv4[1] );
-      otbMsgDevMacro( "Calculated length of the second line: "
+      otbMsgDevMacro(<< "Calculated length of the second line: "
                         << sqrt(pow((tempv4[0] - tempv3[0]), 2) + pow((tempv4[1] - tempv3[1]), 2)) );
-      otbMsgDevMacro( "Original length of line 1:       " << length12 );
+      otbMsgDevMacro(<< "Original length of line 1:       " << length12 );
       }
     }
 
@@ -392,14 +392,14 @@ ParallelLinePathListFilter<TPath>
       tempv4[0] = temptransv4[0] * cos(alpha1) + temptransv4[1] * sin(alpha1);
       tempv4[1] = temptransv4[1] * cos(alpha1) - temptransv4[0] * sin(alpha1);
 
-      otbMsgDevMacro( "tempv1[0], tempv1[1], tempv2[0], tempv2[1]: " );
-      otbMsgDevMacro( tempv1[0] << ", " << tempv1[1] << ", " << tempv2[0] << ", " << tempv2[1] );
-      otbMsgDevMacro( "Alpha: " << alpha1 );
-      otbMsgDevMacro( "tempv3[0], tempv3[1], tempv4[0], tempv4[1]: "
+      otbMsgDevMacro( << "tempv1[0], tempv1[1], tempv2[0], tempv2[1]: " );
+      otbMsgDevMacro( << tempv1[0] << ", " << tempv1[1] << ", " << tempv2[0] << ", " << tempv2[1] );
+      otbMsgDevMacro( << "Alpha: " << alpha1 );
+      otbMsgDevMacro( << "tempv3[0], tempv3[1], tempv4[0], tempv4[1]: "
                        << tempv3[0] << ", " << tempv3[1] << ", " << tempv4[0] << ", " << tempv4[1] );
-      otbMsgDevMacro( "Calculated length of the second line: "
+      otbMsgDevMacro( << "Calculated length of the second line: "
                        << sqrt(pow((tempv4[0] - tempv3[0]), 2) + pow((tempv4[1] - tempv3[1]), 2)) );
-      otbMsgDevMacro( "Original length of line 1:       " << length12 );
+      otbMsgDevMacro( << "Original length of line 1:       " << length12 );
       }
     }
 
@@ -489,7 +489,7 @@ ParallelLinePathListFilter<TPath>
     }
   // The common parallel parts of the two lines have to be greater than
   // the provided threshold.
-  otbMsgDevMacro( "Calculated common distance of the parallel lines: " << commonDist );
+  otbMsgDevMacro( << "Calculated common distance of the parallel lines: " << commonDist );
   bool common = (commonDist >= static_cast<double>(m_CommonDistanceThreshold));
 
   return common;
