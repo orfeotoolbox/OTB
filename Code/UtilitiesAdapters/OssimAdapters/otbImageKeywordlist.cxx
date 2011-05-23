@@ -194,11 +194,15 @@ ReadGeometry(const std::string& filename)
       {
       otbMsgDevMacro(<< "OSSIM Open Image SUCCESS ! ");
       //     hasMetaData = handler->getImageGeometry(geom_kwl);
-      ossimProjection* projection = handler->getImageGeometry()->getProjection();
+      ossimRefPtr<ossimImageGeometry> geom = handler->getImageGeometry();
 
-      if (projection)
+      if (geom.valid())
         {
-        hasMetaData = projection->saveState(geom_kwl);
+        ossimProjection* projection = geom->getProjection();
+        if (projection)
+          {
+          hasMetaData = projection->saveState(geom_kwl);
+          }
         }
       }
     // Free memory
