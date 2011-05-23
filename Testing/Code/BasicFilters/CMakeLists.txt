@@ -2030,7 +2030,6 @@ ADD_TEST(bfTvConcatenateVectorDataFilter ${BASICFILTERS_TESTS14}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # -----------------------  otbNDVIDataNodeFeatureFunction  -----------------------
-IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(bfTuNDVIDataNodeFeatureFunctionNew ${BASICFILTERS_TESTS15}
   otbNDVIDataNodeFeatureFunctionNew
 )
@@ -2040,8 +2039,8 @@ ADD_TEST(bfTvNDVIDataNodeFeatureFunction_Line ${BASICFILTERS_TESTS15}
   ${BASELINE_FILES}/bfTvNDVIDataNodeFeatureFunctionOutput_Line.shp
   ${TEMP}/bfTvNDVIDataNodeFeatureFunctionOutput_Line.shp
   otbNDVIDataNodeFeatureFunction
-  	${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/ROADS.shp
-	${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/ROI_QB_TOULOUSE.TIF
+  	${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE_ROADS.shp
+	${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE.TIF
 	${INPUTDATA}/DEM/srtm_directory
 	${TEMP}/bfTvNDVIDataNodeFeatureFunctionOutput_Line.shp
 	0
@@ -2052,13 +2051,14 @@ ADD_TEST(bfTvNDVIDataNodeFeatureFunction_Polygon ${BASICFILTERS_TESTS15}
   ${BASELINE_FILES}/bfTvNDVIDataNodeFeatureFunctionOutput_Polygon.shp
   ${TEMP}/bfTvNDVIDataNodeFeatureFunctionOutput_Polygon.shp
   otbNDVIDataNodeFeatureFunction
-  	${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/BUILDINGS.shp
-	${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/ROI_QB_TOULOUSE.TIF
+  	${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE_BUILDINGS.shp
+	${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE.TIF
 	${INPUTDATA}/DEM/srtm_directory
 	${TEMP}/bfTvNDVIDataNodeFeatureFunctionOutput_Polygon.shp
 	0
 )
 
+# ------------------  otbSpectralAngleDataNodeFeatureFunction   ------------------
 ADD_TEST(bfTuSpectralAngleDataNodeFeatureFunctionNew ${BASICFILTERS_TESTS15}
   otbSpectralAngleDataNodeFeatureFunctionNew
 )
@@ -2068,8 +2068,8 @@ ADD_TEST(bfTvSpectralAngleDataNodeFeatureFunction_Line ${BASICFILTERS_TESTS15}
   ${BASELINE_FILES}/bfTvSpectralAngleDataNodeFeatureFunctionOutput_Line.shp
   ${TEMP}/bfTvSpectralAngleDataNodeFeatureFunctionOutput_Line.shp
  	otbSpectralAngleDataNodeFeatureFunction
-  	${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/ROADS.shp
-	${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/ROI_QB_TOULOUSE.TIF
+  	${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE_ROADS.shp
+	${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE.TIF
 	${INPUTDATA}/DEM/srtm_directory
 	${TEMP}/bfTvSpectralAngleDataNodeFeatureFunctionOutput_Line.shp
 	0
@@ -2080,14 +2080,29 @@ ADD_TEST(bfTvSpectralAngleDataNodeFeatureFunction_Polygon ${BASICFILTERS_TESTS15
   ${BASELINE_FILES}/bfTvSpectralAngleDataNodeFeatureFunctionOutput_Polygon.shp
   ${TEMP}/bfTvSpectralAngleDataNodeFeatureFunctionOutput_Polygon.shp
  	otbSpectralAngleDataNodeFeatureFunction
-  	${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/BUILDINGS.shp
-	${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/ROI_QB_TOULOUSE.TIF
+  	${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE_BUILDINGS.shp
+	${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE.TIF
 	${INPUTDATA}/DEM/srtm_directory
 	${TEMP}/bfTvSpectralAngleDataNodeFeatureFunctionOutput_Polygon.shp
 	0
 )
 
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+# ---------------------  otDBOverlapDataNodeFeatureFunction  ---------------------
+ADD_TEST(bfTuDBOverlapDataNodeFeatureFunctionNew ${BASICFILTERS_TESTS15}
+  otbDBOverlapDataNodeFeatureFunctionNew
+)
+
+ADD_TEST(bfTvDBOverlapDataNodeFeatureFunction ${BASICFILTERS_TESTS15}
+  --compare-ogr ${NOTOL}
+  ${BASELINE_FILES}/bfTvDBOverlapDataNodeFeatureFunctionOutput.shp
+  ${TEMP}/bfTvDBOverlapDataNodeFeatureFunctionOutput.shp
+ 	otbDBOverlapDataNodeFeatureFunction
+  	${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE_ROADS.shp
+	${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE_BUILDINGS.shp
+	${TEMP}/bfTvDBOverlapDataNodeFeatureFunctionOutput.shp
+	0
+)
+
 
 
 # A enrichir
@@ -2347,13 +2362,12 @@ otbLabelObjectOpeningMuParserFilterTest.cxx
 otbVectorDataToRandomLineGenerator.cxx
 otbConcatenateVectorDataFilter.cxx
 )
-IF(OTB_DATA_USE_LARGEINPUT)
 SET(BasicFilters_SRCS15
 otbBasicFiltersTests15.cxx
 otbNDVIDataNodeFeatureFunction.cxx
 otbSpectralAngleDataNodeFeatureFunction.cxx
+otbDBOverlapDataNodeFeatureFunction.cxx
 )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 OTB_ADD_EXECUTABLE(otbBasicFiltersTests1 "${BasicFilters_SRCS1}" "OTBBasicFilters;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbBasicFiltersTests2 "${BasicFilters_SRCS2}" "OTBBasicFilters;OTBIO;OTBTesting")
@@ -2369,9 +2383,6 @@ OTB_ADD_EXECUTABLE(otbBasicFiltersTests11 "${BasicFilters_SRCS11}" "OTBBasicFilt
 OTB_ADD_EXECUTABLE(otbBasicFiltersTests12 "${BasicFilters_SRCS12}" "OTBBasicFilters;ITKAlgorithms;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbBasicFiltersTests13 "${BasicFilters_SRCS13}" "OTBBasicFilters;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbBasicFiltersTests14 "${BasicFilters_SRCS14}" "OTBBasicFilters;OTBIO;OTBTesting")
-
-IF(OTB_DATA_USE_LARGEINPUT)
 OTB_ADD_EXECUTABLE(otbBasicFiltersTests15 "${BasicFilters_SRCS15}" "OTBBasicFilters;OTBIO;OTBTesting")
-ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

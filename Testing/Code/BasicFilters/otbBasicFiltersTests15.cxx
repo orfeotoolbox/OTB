@@ -29,4 +29,6 @@ void RegisterTests()
   REGISTER_TEST(otbNDVIDataNodeFeatureFunction);
   REGISTER_TEST(otbSpectralAngleDataNodeFeatureFunctionNew);
   REGISTER_TEST(otbSpectralAngleDataNodeFeatureFunction);
+  REGISTER_TEST(otbDBOverlapDataNodeFeatureFunctionNew);
+  REGISTER_TEST(otbDBOverlapDataNodeFeatureFunction);
 }
