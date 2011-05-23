@@ -28,7 +28,7 @@ StandardDSCostFunction<TDSValidationFilter>
 ::StandardDSCostFunction() :
   m_CriterionFormula("((Belief + Plausibility)/2)"),
   m_Weight(0.5),
-  m_NumberOfParameters(8)
+  m_NumberOfParameters(12)
 {
  m_GTVectorData = VectorDataType::New();
  m_NSVectorData = VectorDataType::New();
@@ -36,6 +36,7 @@ StandardDSCostFunction<TDSValidationFilter>
 
  m_Hypothesis.insert("NDVI");
  m_Hypothesis.insert("RADIOM");
+ m_Hypothesis.insert("DBOVER");
 }
 
 template <class TDSValidationFilter>
@@ -57,7 +58,7 @@ typename StandardDSCostFunction<TDSValidationFilter>
 
   unsigned int nbParam = this->GetNumberOfParameters();
 
-  std::vector<double> ndvi, radiom;
+  std::vector<double> ndvi, radiom, overlap;
   for (unsigned int i=0; i<4; i++)
     {
       ndvi.push_back(parameters[i]);
@@ -66,6 +67,11 @@ typename StandardDSCostFunction<TDSValidationFilter>
     {
       radiom.push_back(parameters[i+4]);
     }
+  for (unsigned int i=0; i<4; i++)
+    {
+      overlap.push_back(parameters[i+4]);
+    }
+
   typename DSValidationFilterType::Pointer internalFunctionGT
     = DSValidationFilterType::New();
   internalFunctionGT->SetCriterionFormula("1");
@@ -75,6 +81,7 @@ typename StandardDSCostFunction<TDSValidationFilter>
   {
     internalFunctionGT->SetFuzzyModel("NDVI", ndvi);
     internalFunctionGT->SetFuzzyModel("RADIOM", radiom);
+    internalFunctionGT->SetFuzzyModel("DBOVER", overlap);
   }
   catch (itk::ExceptionObject & err)
   {
@@ -91,6 +98,7 @@ typename StandardDSCostFunction<TDSValidationFilter>
   {
     internalFunctionNS->SetFuzzyModel("NDVI", ndvi);
     internalFunctionNS->SetFuzzyModel("RADIOM", radiom);
+    internalFunctionNS->SetFuzzyModel("DBOVER", overlap);
   }
   catch (itk::ExceptionObject & err)
   {
