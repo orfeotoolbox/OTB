@@ -71,7 +71,7 @@ int ValidateImagesClassifier::Describe(ApplicationDescriptor* descriptor)
                                "in", true, ApplicationDescriptor::InputImage);
   descriptor->AddOptionNParams("VectorDataSamples", "Vector Data of sample used to validate the estimator",
                                "vd", true, ApplicationDescriptor::FileName);
-  descriptor->AddOption("ImagesStatistics", "XML file containing mean and variance of input images which have been used to train the svm estimator.",
+  descriptor->AddOption("ImagesStatistics", "XML file containing mean and standard deviation of input images which have been used to train the svm estimator.",
                         "is", 1, false, ApplicationDescriptor::FileName);
   descriptor->AddOption("SVMmodel", "SVM model to validate its performances",
                         "svm", 1, true, ApplicationDescriptor::FileName);
@@ -197,32 +197,32 @@ int ValidateImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult
 
   //--------------------------
   // Normalize the samples
-  // Read the mean and variance form the XML file (estimate with the otbEstimateImagesStatistics application)
+  // Read the mean and standard deviation form the XML file (estimate with the otbEstimateImagesStatistics application)
   MeasurementType  meanMeasurentVector;
-  MeasurementType  varianceMeasurentVector;
+  MeasurementType  stddevMeasurentVector;
   if(parseResult->IsOptionPresent("ImagesStatistics"))
     {
     StatisticsReader::Pointer  statisticsReader = StatisticsReader::New();
     statisticsReader->SetFileName(parseResult->GetParameterString("ImagesStatistics").c_str());
     meanMeasurentVector     = statisticsReader->GetStatisticVectorByName("mean");
-    varianceMeasurentVector = statisticsReader->GetStatisticVectorByName("variance");
+    stddevMeasurentVector = statisticsReader->GetStatisticVectorByName("stddev");
     }
   else
     {
     meanMeasurentVector.SetSize(nbBands);
     meanMeasurentVector.Fill(0.);
-    varianceMeasurentVector.SetSize(nbBands);
-    varianceMeasurentVector.Fill(1.);
+    stddevMeasurentVector.SetSize(nbBands);
+    stddevMeasurentVector.Fill(1.);
     }
 
   std::cout << "Mean vector loaded and used: " << meanMeasurentVector  << std::endl;
-  std::cout << "Variance vector loaded and used: " << varianceMeasurentVector  << std::endl;
+  std::cout << "Standard deviation vector loaded and used: " << stddevMeasurentVector  << std::endl;
 
   // Shift scale the samples
   ShiftScaleFilterType::Pointer validationShiftScaleFilter = ShiftScaleFilterType::New();
   validationShiftScaleFilter->SetInput(concatenateValidationSamples->GetOutput());
   validationShiftScaleFilter->SetShifts(meanMeasurentVector);
-  validationShiftScaleFilter->SetScales(varianceMeasurentVector);
+  validationShiftScaleFilter->SetScales(stddevMeasurentVector);
   validationShiftScaleFilter->Update();
 
   //--------------------------
