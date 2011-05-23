@@ -93,6 +93,7 @@ ADD_TEST(fzTvVectorDataToRoadDescriptionFilter ${Fuzzy_TESTS2}
  otbVectorDataToRoadDescriptionFilter
  ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE_ROADS.shp
  ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE.TIF
+ ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE_BUILDINGS.shp
  ${TEMP}/fzTvVectorDataToRoadDescriptionFilterOutput.shp
  ${INPUTDATA}/DEM/srtm_directory
  0

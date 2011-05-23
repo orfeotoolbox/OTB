@@ -55,9 +55,10 @@ int otbVectorDataToRoadDescriptionFilter(int argc, char* argv[])
 {
   const char * inputVD  = argv[1];
   const char * inputImg = argv[2];
-  const char * outputVD = argv[3];
-  const char * DEMDirectory = argv[4];
-  int DisplayWarnings   = atoi(argv[5]);
+  const char * inputDB  = argv[3];
+  const char * outputVD = argv[4];
+  const char * DEMDirectory = argv[5];
+  int DisplayWarnings   = atoi(argv[6]);
 
   typedef double                             PrecisionType;
   typedef otb::VectorData<PrecisionType, 2>  VectorDataType;
@@ -76,6 +77,7 @@ int otbVectorDataToRoadDescriptionFilter(int argc, char* argv[])
 
 
   VectorDataReaderType::Pointer vdReader = VectorDataReaderType::New();
+  VectorDataReaderType::Pointer DBReader = VectorDataReaderType::New();
   ImageReaderType::Pointer      reader   = ImageReaderType::New();
   VectorDataWriterType::Pointer vdWriter = VectorDataWriterType::New();
   VectorDataReProjFilter::Pointer vdReProjFilter = VectorDataReProjFilter::New();
@@ -91,6 +93,9 @@ int otbVectorDataToRoadDescriptionFilter(int argc, char* argv[])
   reader->SetFileName(inputImg);
   reader->UpdateOutputInformation();
 
+  DBReader->SetFileName(inputDB);
+  DBReader->Update();
+
   vdReader->SetFileName(inputVD);
   vdReader->Update();
   
@@ -102,6 +107,7 @@ int otbVectorDataToRoadDescriptionFilter(int argc, char* argv[])
 
   filter->SetInput(vdReProjFilter->GetOutput());
   filter->AddOpticalImage(reader->GetOutput());
+  filter->AddBuildingsDB(DBReader->GetOutput());
 
   vdWriter->SetFileName(outputVD);
   vdWriter->SetInput(filter->GetOutput());

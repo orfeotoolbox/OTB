@@ -24,7 +24,7 @@
 
 #include "otbNDVIDataNodeFeatureFunction.h"
 #include "otbSpectralAngleDataNodeFeatureFunction.h"
-
+#include "otbDBOverlapDataNodeFeatureFunction.h"
 
 namespace otb
 {
@@ -39,6 +39,8 @@ namespace otb
   * The support is an Optical Image and the descriptor are:
   * - (NDVI >= threshold) per cent along the tested lines
   * - mean Spectral Angle regarding a reference pixel along the tested lines
+  * - DB Overlap compute the number of building crossed by the data node in percent
+  *   regarding all the buildings within a data node neighborhood
   *
   * \ingroup VectorDataFilter
   * \sa VectorDataToSpecificDescriptionFilterBase
@@ -81,6 +83,8 @@ public:
                                                   NDVIFeatureFunctionType;
   typedef otb::SpectralAngleDataNodeFeatureFunction<OpticalImageType, CoordRepType, PrecisionType>
                                                   SpectralAngleFeatureFunctionType;
+  typedef otb::DBOverlapDataNodeFeatureFunction<CoordRepType, PrecisionType>
+                                                  DBOverlapFeatureFunctionType;
 
   typedef itk::DataObject::Pointer DataObjectPointer;
   typedef itk::DataObject          DataObject;
@@ -107,6 +111,7 @@ private:
 
   typename NDVIFeatureFunctionType::Pointer           m_NDVIFeatureFunction;
   typename SpectralAngleFeatureFunctionType::Pointer  m_SpectralAngleFeatureFunction;
+  typename DBOverlapFeatureFunctionType::Pointer      m_DBOverlapFeatureFunction;
 
 };
 

@@ -28,9 +28,10 @@ template <class TVectorData, class TOpticalImage>
 VectorDataToRoadDescriptionFilter<TVectorData, TOpticalImage>
 ::VectorDataToRoadDescriptionFilter()
 {
-  this->SetNumberOfRequiredInputs(2);
+  this->SetNumberOfRequiredInputs(3);
   m_NDVIFeatureFunction = NDVIFeatureFunctionType::New();
   m_SpectralAngleFeatureFunction = SpectralAngleFeatureFunctionType::New();
+  m_DBOverlapFeatureFunction = DBOverlapFeatureFunctionType::New();
 }
 
 template <class TVectorData, class TOpticalImage>
@@ -70,7 +71,6 @@ VectorDataToRoadDescriptionFilter<TVectorData, TOpticalImage>
     (this->GetSupport(1));
 }
 
-
 template <class TVectorData, class TOpticalImage>
 void
 VectorDataToRoadDescriptionFilter<TVectorData, TOpticalImage>
@@ -78,6 +78,7 @@ VectorDataToRoadDescriptionFilter<TVectorData, TOpticalImage>
 {
   m_NDVIFeatureFunction->SetInputImage(const_cast<OpticalImageType *>(this->GetOpticalImage()));
   m_SpectralAngleFeatureFunction->SetInputImage(const_cast<OpticalImageType *>(this->GetOpticalImage()));
+  m_DBOverlapFeatureFunction->SetInputVectorData(const_cast<VectorDataType *>(this->GetBuildingsDB()));
 
   // Retrieving root node
   typename DataNodeType::Pointer root = this->GetOutput(0)->GetDataTree()->GetRoot()->Get();
@@ -99,8 +100,9 @@ VectorDataToRoadDescriptionFilter<TVectorData, TOpticalImage>
     if (!itVector.Get()->IsRoot() && !itVector.Get()->IsDocument() && !itVector.Get()->IsFolder())
       {
       typename DataNodeType::Pointer currentGeometry = itVector.Get();
-      currentGeometry->SetFieldAsDouble("NDVI", (double)(m_NDVIFeatureFunction->Evaluate(*(currentGeometry.GetPointer()))[0]));
+      currentGeometry->SetFieldAsDouble("NDVI",   (double)(m_NDVIFeatureFunction->Evaluate(*(currentGeometry.GetPointer()))[0]));
       currentGeometry->SetFieldAsDouble("RADIOM", (double)(m_SpectralAngleFeatureFunction->Evaluate(*(currentGeometry.GetPointer()))[0]));
+      currentGeometry->SetFieldAsDouble("DBOVER", (double)(m_DBOverlapFeatureFunction->Evaluate(*(currentGeometry.GetPointer()))[0]));
       //currentGeometry->SetFieldAsInt("LSD",  80);
       //currentGeometry->SetFieldAsInt("SHADOW", 80);
       
