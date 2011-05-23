@@ -55,7 +55,7 @@ int ImageSVMClassifier::Describe(ApplicationDescriptor* descriptor)
                         "in", 1, true, ApplicationDescriptor::InputImage);
   descriptor->AddOption("InputImageMask", "A mask associated with the new image to classify",
                         "inm", 1, false, ApplicationDescriptor::InputImage);
-  descriptor->AddOption("ImageStatistics", "a XML file containing mean and variance of input images used to train svm model.",
+  descriptor->AddOption("ImageStatistics", "a XML file containing mean and standard deviation of input images used to train svm model.",
                         "is", 1, false, ApplicationDescriptor::FileName);
   descriptor->AddOption("SVMmodel", "Estimated model previously computed",
                         "svm", 1, true, ApplicationDescriptor::FileName);
@@ -108,7 +108,7 @@ int ImageSVMClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
   // Normalize input image (optional)
   StatisticsReader::Pointer  statisticsReader = StatisticsReader::New();
   MeasurementType  meanMeasurementVector;
-  MeasurementType  varianceMeasurementVector;
+  MeasurementType  stddevMeasurementVector;
   RescalerType::Pointer rescaler = RescalerType::New();
 
   //--------------------------
@@ -122,12 +122,12 @@ int ImageSVMClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
     // Load input image statistics
     statisticsReader->SetFileName(parseResult->GetParameterString("ImageStatistics"));
     meanMeasurementVector     = statisticsReader->GetStatisticVectorByName("mean");
-    varianceMeasurementVector = statisticsReader->GetStatisticVectorByName("variance");
+    stddevMeasurementVector = statisticsReader->GetStatisticVectorByName("stddev");
     std::cout << "mean used: " << meanMeasurementVector << std::endl;
-    std::cout << "variance used: " << varianceMeasurementVector << std::endl;
+    std::cout << "standard deviation used: " << stddevMeasurementVector << std::endl;
     std::cout << "Shift and scale of the input image !" << std::endl;
     // Rescale vector image
-    rescaler->SetScale(varianceMeasurementVector);
+    rescaler->SetScale(stddevMeasurementVector);
     rescaler->SetShift(meanMeasurementVector);
     rescaler->SetInput(reader->GetOutput());
 
