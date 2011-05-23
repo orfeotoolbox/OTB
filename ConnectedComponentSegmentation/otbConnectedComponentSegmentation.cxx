@@ -97,7 +97,6 @@ int ConnectedComponentSegmentation::Execute(otb::ApplicationOptionsResult* parse
     connected->GetFilter()->SetOBIAExpression(parseResult->GetParameterString("OBIAExpression"));
 
   otb::StandardFilterWatcher watcher(connected->GetStreamer(),"Segmentation");
-  connected->Update();
 
   /*
    * Reprojection of the output VectorData
@@ -141,6 +140,7 @@ int ConnectedComponentSegmentation::Execute(otb::ApplicationOptionsResult* parse
   VectorDataFileWriterPointerType vdwriter = VectorDataFileWriterType::New();
   vdwriter->SetInput(projectedVD);
   vdwriter->SetFileName(parseResult->GetParameterString("OutputVectorData"));
+
   vdwriter->Update();
 
   return EXIT_SUCCESS;
