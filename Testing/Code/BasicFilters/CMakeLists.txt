@@ -2030,6 +2030,7 @@ ADD_TEST(bfTvConcatenateVectorDataFilter ${BASICFILTERS_TESTS14}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # -----------------------  otbNDVIDataNodeFeatureFunction  -----------------------
+
 ADD_TEST(bfTuNDVIDataNodeFeatureFunctionNew ${BASICFILTERS_TESTS15}
   otbNDVIDataNodeFeatureFunctionNew
 )
@@ -2081,12 +2082,38 @@ ADD_TEST(bfTvSpectralAngleDataNodeFeatureFunction_Polygon ${BASICFILTERS_TESTS15
   ${TEMP}/bfTvSpectralAngleDataNodeFeatureFunctionOutput_Polygon.shp
  	otbSpectralAngleDataNodeFeatureFunction
   	${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE_BUILDINGS.shp
-	${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE.TIF
-	${INPUTDATA}/DEM/srtm_directory
-	${TEMP}/bfTvSpectralAngleDataNodeFeatureFunctionOutput_Polygon.shp
-	0
+	  ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE.TIF
+	  ${INPUTDATA}/DEM/srtm_directory
+	  ${TEMP}/bfTvSpectralAngleDataNodeFeatureFunctionOutput_Polygon.shp
+  	0 )
+
+# ------------------  otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction   ------------------
+ADD_TEST(bfTuRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunctionNew ${BASICFILTERS_TESTS15}
+  otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunctionNew
 )
 
+ADD_TEST(bfTvRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction_Line ${BASICFILTERS_TESTS15}
+  --compare-ogr ${NOTOL}
+  ${BASELINE_FILES}/bfTvRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunctionOutput_Line.shp
+  ${TEMP}/bfTvRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunctionOutput_Line.shp
+  otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction
+    ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE_ROADS.shp
+    ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE.TIF
+    ${INPUTDATA}/DEM/srtm_directory
+    ${TEMP}/bfTvRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunctionOutput_Line.shp
+    0 )
+  
+ADD_TEST(bfTvRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction_Polygon ${BASICFILTERS_TESTS15}
+  --compare-ogr ${NOTOL}
+  ${BASELINE_FILES}/bfTvRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunctionOutput_Polygon.shp
+  ${TEMP}/bfTvRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunctionOutput_Polygon.shp
+  otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction
+    ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE_BUILDINGS.shp
+    ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE.TIF
+    ${INPUTDATA}/DEM/srtm_directory
+    ${TEMP}/bfTvRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunctionOutput_Polygon.shp
+    0 )
+  
 # ---------------------  otDBOverlapDataNodeFeatureFunction  ---------------------
 ADD_TEST(bfTuDBOverlapDataNodeFeatureFunctionNew ${BASICFILTERS_TESTS15}
   otbDBOverlapDataNodeFeatureFunctionNew
@@ -2367,6 +2394,7 @@ otbBasicFiltersTests15.cxx
 otbNDVIDataNodeFeatureFunction.cxx
 otbSpectralAngleDataNodeFeatureFunction.cxx
 otbDBOverlapDataNodeFeatureFunction.cxx
+otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbBasicFiltersTests1 "${BasicFilters_SRCS1}" "OTBBasicFilters;OTBIO;OTBTesting")
