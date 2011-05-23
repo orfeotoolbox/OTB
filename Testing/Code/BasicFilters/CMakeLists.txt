@@ -2040,8 +2040,8 @@ ADD_TEST(bfTvNDVIDataNodeFeatureFunction_Line ${BASICFILTERS_TESTS15}
   ${BASELINE_FILES}/bfTvNDVIDataNodeFeatureFunctionOutput_Line.shp
   ${TEMP}/bfTvNDVIDataNodeFeatureFunctionOutput_Line.shp
   otbNDVIDataNodeFeatureFunction
-  	${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/ROI_QB_RANGUEUIL_ROADS.shp
-	${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/ROI_QB_RANGUEUIL.TIF
+  	${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/ROADS.shp
+	${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/ROI_QB_TOULOUSE.TIF
 	${INPUTDATA}/DEM/srtm_directory
 	${TEMP}/bfTvNDVIDataNodeFeatureFunctionOutput_Line.shp
 	0
@@ -2052,8 +2052,8 @@ ADD_TEST(bfTvNDVIDataNodeFeatureFunction_Polygon ${BASICFILTERS_TESTS15}
   ${BASELINE_FILES}/bfTvNDVIDataNodeFeatureFunctionOutput_Polygon.shp
   ${TEMP}/bfTvNDVIDataNodeFeatureFunctionOutput_Polygon.shp
   otbNDVIDataNodeFeatureFunction
-  	${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/ROI_QB_RANGUEUIL_BUILDINGS.shp
-	${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/ROI_QB_RANGUEUIL.TIF
+  	${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/BUILDINGS.shp
+	${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/ROI_QB_TOULOUSE.TIF
 	${INPUTDATA}/DEM/srtm_directory
 	${TEMP}/bfTvNDVIDataNodeFeatureFunctionOutput_Polygon.shp
 	0
@@ -2068,8 +2068,8 @@ ADD_TEST(bfTvSpectralAngleDataNodeFeatureFunction_Line ${BASICFILTERS_TESTS15}
   ${BASELINE_FILES}/bfTvSpectralAngleDataNodeFeatureFunctionOutput_Line.shp
   ${TEMP}/bfTvSpectralAngleDataNodeFeatureFunctionOutput_Line.shp
  	otbSpectralAngleDataNodeFeatureFunction
-  	${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/ROI_QB_RANGUEUIL_ROADS.shp
-	${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/ROI_QB_RANGUEUIL.TIF
+  	${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/ROADS.shp
+	${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/ROI_QB_TOULOUSE.TIF
 	${INPUTDATA}/DEM/srtm_directory
 	${TEMP}/bfTvSpectralAngleDataNodeFeatureFunctionOutput_Line.shp
 	0
@@ -2080,8 +2080,8 @@ ADD_TEST(bfTvSpectralAngleDataNodeFeatureFunction_Polygon ${BASICFILTERS_TESTS15
   ${BASELINE_FILES}/bfTvSpectralAngleDataNodeFeatureFunctionOutput_Polygon.shp
   ${TEMP}/bfTvSpectralAngleDataNodeFeatureFunctionOutput_Polygon.shp
  	otbSpectralAngleDataNodeFeatureFunction
-  	${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/ROI_QB_RANGUEUIL_BUILDINGS.shp
-	${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/ROI_QB_RANGUEUIL.TIF
+  	${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/BUILDINGS.shp
+	${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/ROI_QB_TOULOUSE.TIF
 	${INPUTDATA}/DEM/srtm_directory
 	${TEMP}/bfTvSpectralAngleDataNodeFeatureFunctionOutput_Polygon.shp
 	0
