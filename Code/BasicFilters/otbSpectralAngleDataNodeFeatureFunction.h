@@ -37,7 +37,7 @@ namespace otb
   * reference pixel alongside the tested datanode.
   *
   * The output has three elements:
-  * - #0: mean spectral angle of a neighborhood around the datanode, weighted to fit in [0,1] interval
+  * - #0: mean spectral angle of a neighborhood around the datanode, weighted to fit in [0, 1] interval
   * - #1: accumulator of the spectral angle alongside the datanode
   * - #2: number of visited pixel
   *
