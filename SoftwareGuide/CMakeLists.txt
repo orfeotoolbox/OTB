@@ -77,7 +77,7 @@ IF(GENERATE_WRAPPING_DOC)
   #ENDIF(OTB-Wrapping_FOUND)
 ENDIF(GENERATE_WRAPPING_DOC)
 
-OPTION(GENERATE_MONTEVERDI_DOC "Generate Monteverdi user guide as well" OFF)
+#OPTION(GENERATE_MONTEVERDI_DOC "Generate Monteverdi user guide as well" OFF)
 
 # Configure the default OTB_DATA_ROOT for the location of OTB Data.
 FIND_PATH(OTB_DATA_ROOT README-OTB-Data PATHS $ENV{OTB_DATA_ROOT} ${OTB_SOURCE_DIR}/../OTB-Data)
