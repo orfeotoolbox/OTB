@@ -32,8 +32,6 @@ namespace otb
   * This class is used to reproject vector data using a itk::Transform
   * the input and output coordinate system are the same
   *
-  * TODO : copy all the fields of the dataNode
-  *
   * \ingroup VectorDataFilter
   * \ingroup Projection
   */
