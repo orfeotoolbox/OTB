@@ -28,7 +28,7 @@ namespace otb
  */
 template<class TImage, class TCoordRep, class TPrecision>
 SpectralAngleDataNodeFeatureFunction<TImage, TCoordRep, TPrecision>::SpectralAngleDataNodeFeatureFunction() :
-  m_CenterRadius(1), m_NeighborhoodBeginRadius(2), m_NeighborhoodEndRadius(3)
+  m_Radius(2)
 {
   //Example for QuickBird images (on a specific image)
   m_RefPixel.SetSize(4);
@@ -115,7 +115,8 @@ typename SpectralAngleDataNodeFeatureFunction<TImage, TCoordRep, TPrecision>::Ou
     orthogonalDirection[1] = -direction[0];
 
     splitedLineIdCentral.push_back(IndexPairType(id1, id2));
-    for (unsigned int j = 1; j <= m_CenterRadius; j++)
+
+    for (unsigned int j = 1; j <= m_Radius; j++)
       {
       IndexType shift11, shift12;
       shift11[0] = id1[0] - j * orthogonalDirection[0];
@@ -132,22 +133,6 @@ typename SpectralAngleDataNodeFeatureFunction<TImage, TCoordRep, TPrecision>::Ou
       splitedLineIdCentral.push_back(IndexPairType(shift12, shift22));
       }
 
-    for (unsigned int j = m_NeighborhoodBeginRadius; j <= m_NeighborhoodEndRadius; j++)
-      {
-      IndexType shift11, shift12;
-      shift11[0] = id1[0] - j * orthogonalDirection[0];
-      shift11[1] = id1[1] - j * orthogonalDirection[1];
-      shift12[0] = id1[0] + j * orthogonalDirection[0];
-      shift12[1] = id1[1] + j * orthogonalDirection[1];
-      IndexType shift21, shift22;
-      shift21[0] = id2[0] - j * orthogonalDirection[0];
-      shift21[1] = id2[1] - j * orthogonalDirection[1];
-      shift22[0] = id2[0] + j * orthogonalDirection[0];
-      shift22[1] = id2[1] + j * orthogonalDirection[1];
-
-      splitedLineIdNeigh.push_back(IndexPairType(shift11, shift21));
-      splitedLineIdNeigh.push_back(IndexPairType(shift12, shift22));
-      }
     ++it1;
     ++it2;
     }
@@ -156,12 +141,10 @@ typename SpectralAngleDataNodeFeatureFunction<TImage, TCoordRep, TPrecision>::Ou
   if (node.GetNodeType() == FEATURE_POLYGON)
     {
     splitedLineIdCentral.pop_back();
-    splitedLineIdNeigh.pop_back();
-    splitedLineIdNeigh.pop_back();
     }
 
   double centralAccSpectralAngle = 0.;
-  double centralAccSpectralAngleSecondOrder = 0.;
+  //double centralAccSpectralAngleSecondOrder = 0.;
   double centralNbVisitedPixel = 0.;
 
   for (unsigned int i = 0; i < splitedLineIdCentral.size(); i++)
@@ -173,45 +156,11 @@ typename SpectralAngleDataNodeFeatureFunction<TImage, TCoordRep, TPrecision>::Ou
       {
       if (this->IsInsideBuffer(lineIt.GetIndex()))
         {
-        PixelType currPixel;
-        currPixel.SetSize(std::min(this->GetRefPixel().Size(), lineIt.Get().Size()));
-        for (unsigned int i = 0; i < std::min(this->GetRefPixel().Size(), lineIt.Get().Size()); i++)
-          {
-          currPixel[i] = (lineIt.Get())[i];
-          }
-
+        PixelType currPixel = this->GetInputImage()->GetPixel( lineIt.GetIndex() );
         double angle = m_SpectralAngleFunctor(currPixel, this->GetRefPixel());
         centralAccSpectralAngle += angle;
-        centralAccSpectralAngleSecondOrder += angle * angle;
+        //centralAccSpectralAngleSecondOrder += angle * angle;
         centralNbVisitedPixel += 1;
-        }
-      ++lineIt;
-      }
-    }
-
-  double neighAccSpectralAngle = 0.;
-  double neighAccSpectralAngleSecondOrder = 0.;
-  double neighNbVisitedPixel = 0.;
-
-  for (unsigned int i = 0; i < splitedLineIdNeigh.size(); i++)
-    {
-    LineIteratorType lineIt(this->GetInputImage(), splitedLineIdNeigh[i].first, splitedLineIdNeigh[i].second);
-    lineIt.GoToBegin();
-
-    while (!lineIt.IsAtEnd())
-      {
-      if (this->IsInsideBuffer(lineIt.GetIndex()))
-        {
-        PixelType currPixel;
-        currPixel.SetSize(std::min(this->GetRefPixel().Size(), lineIt.Get().Size()));
-        for (unsigned int i = 0; i < std::min(this->GetRefPixel().Size(), lineIt.Get().Size()); i++)
-          {
-          currPixel[i] = (lineIt.Get())[i];
-          }
-        double angle = m_SpectralAngleFunctor(currPixel, this->GetRefPixel());
-        neighAccSpectralAngle += angle;
-        neighAccSpectralAngleSecondOrder += angle * angle;
-        neighNbVisitedPixel += 1;
         }
       ++lineIt;
       }
@@ -220,41 +169,29 @@ typename SpectralAngleDataNodeFeatureFunction<TImage, TCoordRep, TPrecision>::Ou
   OutputType output;
 
   double meanCentral = 0.;
-  double stddevCentral = 0.;
+  //double stddevCentral = 0.;
   if (centralNbVisitedPixel != 0.)
     {
     meanCentral = static_cast<double> (centralAccSpectralAngle) / centralNbVisitedPixel;
-    stddevCentral = vcl_sqrt( centralAccSpectralAngleSecondOrder/centralNbVisitedPixel - meanCentral*meanCentral );
+    //stddevCentral = vcl_sqrt( centralAccSpectralAngleSecondOrder/centralNbVisitedPixel - meanCentral*meanCentral );
     }
 
-  double meanNeigh = 0.;
-  double stddevNeigh = 0.;
-  if (neighNbVisitedPixel != 0.)
-    {
-    meanNeigh = static_cast<double> (neighAccSpectralAngle) / neighNbVisitedPixel;
-    stddevCentral = vcl_sqrt( neighAccSpectralAngleSecondOrder/neighNbVisitedPixel - meanNeigh*meanNeigh );
-    }
-
-  if (meanNeigh == 0.)
+  if (meanCentral == 0.)
     {
     output.push_back(static_cast<PrecisionType> (0.));
     }
   else
     {
     // Compute the descriptor here
-    // meanCentral & meanNeigh are in [0, pi]
+    // meanCentral is in [0, pi]
     // We need a descriptor in [0 1]
 
-    double descriptor = ( std::min(meanCentral, meanNeigh) /  std::max(meanCentral, meanNeigh) );
-
+    double descriptor = meanCentral / otb::CONST_PI;
     output.push_back(static_cast<PrecisionType>( descriptor ));
     }
 
   output.push_back(static_cast<PrecisionType> (centralAccSpectralAngle));
   output.push_back(static_cast<PrecisionType> (centralNbVisitedPixel));
-
-  output.push_back(static_cast<PrecisionType> (neighAccSpectralAngle));
-  output.push_back(static_cast<PrecisionType> (neighNbVisitedPixel));
 
   return output;
 }
