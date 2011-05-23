@@ -383,6 +383,51 @@ VectorDataKeywordlist::CopyFieldList(const Self& kwl)
                              kwl.GetNthField(idx).second.Real);
       break;
       }
+      case OFTIntegerList:
+      {
+      std::cerr << "Type not handled for Integer conversion" <<std::endl;
+      break;
+      }
+      case OFTRealList:
+      {
+      std::cerr << "Type not handled for Integer conversion"<<std::endl;
+      break;
+      }
+      case OFTStringList:
+      {
+      std::cerr << "Type not handled for Integer conversion"<<std::endl;
+      break;
+      }
+      case OFTWideString:
+      {
+      std::cerr << "Type not handled for Integer conversion"<<std::endl;
+      break;
+      }
+      case OFTWideStringList:
+      {
+      std::cerr << "Type not handled for Integer conversion"<<std::endl;
+      break;
+      }
+      case OFTBinary:
+      {
+      std::cerr << "Type not handled for Integer conversion"<<std::endl;
+      break;
+      }
+      case OFTDate:
+      {
+      std::cerr << "Type not handled for Integer conversion"<<std::endl;
+      break;
+      }
+      case OFTTime:
+      {
+      std::cerr << "Type not handled for Integer conversion"<<std::endl;
+      break;
+      }
+      case OFTDateTime:
+      {
+      std::cerr << "Type not handled for Integer conversion"<<std::endl;
+      break;
+      }
       }
     }
 }
@@ -414,7 +459,7 @@ VectorDataKeywordlist
       }
     case OFTRealList:
       {
-      output << "Type not handled for printing";
+      std::cerr << "Type not handled for printing" << std::endl;
       break;
       }
     case OFTString:
