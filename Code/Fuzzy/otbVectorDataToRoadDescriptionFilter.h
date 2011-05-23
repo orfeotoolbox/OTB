@@ -88,6 +88,9 @@ public:
   virtual void AddOpticalImage(const OpticalImageType * support);
   const OpticalImageType * GetOpticalImage();
 
+  virtual void AddBuldingsDB(const VectorDataType * support);
+  const VectorDataType * GetBuldingsDB();
+
 protected:
   /** Constructor */
   VectorDataToRoadDescriptionFilter();

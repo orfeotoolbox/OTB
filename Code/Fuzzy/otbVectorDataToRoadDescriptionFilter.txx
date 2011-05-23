@@ -51,6 +51,26 @@ VectorDataToRoadDescriptionFilter<TVectorData, TOpticalImage>
     (this->GetSupport(0));
 }
 
+
+template <class TVectorData, class TOpticalImage>
+void
+VectorDataToRoadDescriptionFilter<TVectorData, TOpticalImage>
+::AddBuildingsDB(const VectorDataType * support)
+{
+  this->AddSupport(const_cast<VectorDataType *>(support), 1);
+}
+
+template <class TVectorData, class TOpticalImage>
+const typename VectorDataToRoadDescriptionFilter<TVectorData, TOpticalImage>
+::VectorDataType *
+VectorDataToRoadDescriptionFilter<TVectorData, TOpticalImage>
+::GetBuildingsDB()
+{
+  return static_cast<const VectorDataType *>
+    (this->GetSupport(1));
+}
+
+
 template <class TVectorData, class TOpticalImage>
 void
 VectorDataToRoadDescriptionFilter<TVectorData, TOpticalImage>
