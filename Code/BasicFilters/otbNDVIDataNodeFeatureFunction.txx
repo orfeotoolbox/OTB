@@ -46,7 +46,7 @@ NDVIDataNodeFeatureFunction<TImage, TCoordRep, TPrecision>
   itk::Indent indent) const
 {
   Superclass::PrintSelf( os, indent );
-  os << indent << "NDVI Threshold: " << m_NDVIThreshold << std::endl;
+  os << indent << "NDVI Threshold: "    << m_NDVIThreshold << std::endl;
   os << indent << "RED Channel Index: " << this->GetREDChannelIndex() << std::endl;
   os << indent << "NIR Channel Index: " << this->GetNIRChannelIndex() << std::endl;
 }
