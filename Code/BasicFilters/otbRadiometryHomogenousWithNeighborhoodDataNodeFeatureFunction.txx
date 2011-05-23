@@ -30,12 +30,6 @@ template<class TImage, class TCoordRep, class TPrecision>
 RadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction<TImage, TCoordRep, TPrecision>::RadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction() :
   m_CenterRadius(1), m_NeighborhoodBeginRadius(2), m_NeighborhoodEndRadius(3)
 {
-  //Example for QuickBird images (on a specific image)
-  m_RefPixel.SetSize(4);
-  m_RefPixel.SetElement(0, 252.284);
-  m_RefPixel.SetElement(1, 357.3);
-  m_RefPixel.SetElement(2, 232.644);
-  m_RefPixel.SetElement(3, 261.558);
 }
 
 /**
@@ -46,7 +40,6 @@ void RadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction<TImage, TCoordR
                                                                                     itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "Reference Pixel: " << m_RefPixel << std::endl;
 }
 
 template<class TImage, class TCoordRep, class TPrecision>

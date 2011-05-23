@@ -104,10 +104,6 @@ public:
 
   virtual OutputType Evaluate( const DataNodeType& node ) const;
 
-  /** Set/Get methods */
-  itkGetConstMacro(RefPixel, PixelType);
-  itkSetMacro(RefPixel, PixelType);
-
   itkGetConstMacro(CenterRadius, unsigned int);
   itkSetMacro(CenterRadius, unsigned int);
 
@@ -125,10 +121,6 @@ protected:
 private:
   RadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-
-  /** SpectralAngle Functor & ReferencePixel*/
-  ReferencePixelType          m_RefPixel;
-  SpectralAngleFunctorType    m_SpectralAngleFunctor;
 
   /** Start neighborhod radius */
   unsigned int m_CenterRadius;
