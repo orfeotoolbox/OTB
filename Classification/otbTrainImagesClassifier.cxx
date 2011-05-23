@@ -75,7 +75,7 @@ int TrainImagesClassifier::Describe(ApplicationDescriptor* descriptor)
                                "vd", true, ApplicationDescriptor::FileName);
   descriptor->AddOptionNParams("DEMdirectory", "A DEM repository",
                                "dem", false, ApplicationDescriptor::DirectoryName);
-  descriptor->AddOption("ImagesStatistics", "XML file containing mean and variance of input images.",
+  descriptor->AddOption("ImagesStatistics", "XML file containing mean and standard deviation of input images.",
                         "is", 1, false, ApplicationDescriptor::FileName);
   descriptor->AddOption("Output", "Output SVM model",
                         "out", 1, true, ApplicationDescriptor::FileName);
@@ -92,7 +92,7 @@ int TrainImagesClassifier::Describe(ApplicationDescriptor* descriptor)
   descriptor->AddOption("ValidationTrainingRatio", "Ratio between training and validation sample (0.0 = all training, 1.0 = all validation) default = 0.5",
                         "vtr", 1, false, ApplicationDescriptor::Real);
   descriptor->AddOption("SVMParamOptim", "Use SVM parameters optimization",
-                        "opt", 1, false, ApplicationDescriptor::Integer);
+                        "opt", 0, false, ApplicationDescriptor::Integer);
   descriptor->AddOption("VectorDataFieldName", "Name of the field using to discriminate class in the vector data files",
                          "vfn", 1, false, ApplicationDescriptor::String);
 
@@ -256,7 +256,6 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
     ListSampleGeneratorType::Pointer sampleGenerator = ListSampleGeneratorType::New();
 
     //Set inputs of the sample generator
-    //TODO the ListSampleGenerator perform UpdateOutputData over the input image (need a persistent implementation)
     sampleGenerator->SetInput(reader->GetOutput());
     sampleGenerator->SetInputVectorData(vproj->GetOutput());
 
@@ -299,38 +298,38 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
 
   //--------------------------
   // Normalize the samples
-  // Read the mean and variance form the XML file (estimate with the otbEstimateImagesStatistics application)
+  // Read the mean and stddev from the XML file (estimate with the otbEstimateImagesStatistics application)
   MeasurementType  meanMeasurentVector;
-  MeasurementType  varianceMeasurentVector;
+  MeasurementType  stddevMeasurentVector;
   if(parseResult->IsOptionPresent("ImagesStatistics"))
     {
     StatisticsReader::Pointer  statisticsReader = StatisticsReader::New();
     statisticsReader->SetFileName(parseResult->GetParameterString("ImagesStatistics").c_str());
     meanMeasurentVector     = statisticsReader->GetStatisticVectorByName("mean");
-    varianceMeasurentVector = statisticsReader->GetStatisticVectorByName("variance");
+    stddevMeasurentVector = statisticsReader->GetStatisticVectorByName("stddev");
     }
   else
     {
     meanMeasurentVector.SetSize(nbBands);
     meanMeasurentVector.Fill(0.);
-    varianceMeasurentVector.SetSize(nbBands);
-    varianceMeasurentVector.Fill(1.);
+    stddevMeasurentVector.SetSize(nbBands);
+    stddevMeasurentVector.Fill(1.);
     }
 
   std::cout << "Mean vector loaded and used: " << meanMeasurentVector  << std::endl;
-  std::cout << "Variance vector loaded and used: " << varianceMeasurentVector  << std::endl;
+  std::cout << "Standard deviation vector loaded and used: " << stddevMeasurentVector  << std::endl;
 
   // Shift scale the samples
   ShiftScaleFilterType::Pointer trainingShiftScaleFilter = ShiftScaleFilterType::New();
   trainingShiftScaleFilter->SetInput(concatenateTrainingSamples->GetOutput());
   trainingShiftScaleFilter->SetShifts(meanMeasurentVector);
-  trainingShiftScaleFilter->SetScales(varianceMeasurentVector);
+  trainingShiftScaleFilter->SetScales(stddevMeasurentVector);
   trainingShiftScaleFilter->Update();
 
   ShiftScaleFilterType::Pointer validationShiftScaleFilter = ShiftScaleFilterType::New();
   validationShiftScaleFilter->SetInput(concatenateValidationSamples->GetOutput());
   validationShiftScaleFilter->SetShifts(meanMeasurentVector);
-  validationShiftScaleFilter->SetScales(varianceMeasurentVector);
+  validationShiftScaleFilter->SetScales(stddevMeasurentVector);
   validationShiftScaleFilter->Update();
 
   ListSampleType::Pointer listSample;
@@ -377,7 +376,7 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
   svmestimator->SetTrainingSampleList(trainingLabeledListSample);
 
   //SVM Option
-  //TODO : Add some other options ?
+  //TODO : Add other options ?
   if(parseResult->IsOptionPresent("SVMParamOptim"))
     {
     svmestimator->SetParametersOptimization(true);
