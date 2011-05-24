@@ -54,7 +54,7 @@ PersistentConnectedComponentSegmentationOBIAToVectorDataFilter<TVImage, TLabelIm
   typedef itk::ExtractImageFilter<VectorImageType, VectorImageType> ExtractImageFilterType;
   typename ExtractImageFilterType::Pointer extract = ExtractImageFilterType::New();
   extract->SetInput( this->GetInput() );
-  extract->SetExtractionRegion( this->GetInput()->GetBufferedRegion() );
+  extract->SetExtractionRegion( this->GetOutput()->GetRequestedRegion() );
   // WARNING: itk::ExtractImageFilter does not copy the MetadataDictionnary
 
   typename MaskImageType::Pointer mask;
