@@ -97,6 +97,7 @@ int ConnectedComponentSegmentation::Execute(otb::ApplicationOptionsResult* parse
     connected->GetFilter()->SetOBIAExpression(parseResult->GetParameterString("OBIAExpression"));
 
   otb::StandardFilterWatcher watcher(connected->GetStreamer(),"Segmentation");
+  connected->Update();
 
   /*
    * Reprojection of the output VectorData
