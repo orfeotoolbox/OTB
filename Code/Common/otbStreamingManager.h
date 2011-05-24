@@ -71,7 +71,7 @@ public:
   /** Dimension of input image. */
   itkStaticConstMacro(ImageDimension, unsigned int, ImageType::ImageDimension);
 
-  /** Actually computes the stream divisions, accorfing to the specified streaming mode,
+  /** Actually computes the stream divisions, according to the specified streaming mode,
    * eventually using the input parameter to estimate memory consumption */
   virtual void PrepareStreaming(itk::DataObject * input, const RegionType &region) = 0;
 
