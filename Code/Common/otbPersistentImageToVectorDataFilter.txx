@@ -30,26 +30,8 @@ template<class TImage, class TOutputVectorData>
 PersistentImageToVectorDataFilter<TImage, TOutputVectorData>
 ::PersistentImageToVectorDataFilter()
 {
-  //this->itk::ProcessObject::SetNumberOfRequiredOutputs(2);
-  //this->itk::ProcessObject::SetNthOutput(1, this->MakeOutput(1).GetPointer());
-
   m_ExtractFilter = ExtractImageFilterType::New();
   m_OutputVectorData = OutputVectorDataType::New();
-}
-
-template<class TImage, class TOutputVectorData>
-typename PersistentImageToVectorDataFilter<TImage, TOutputVectorData>::DataObjectPointer
-PersistentImageToVectorDataFilter<TImage, TOutputVectorData>
-::MakeOutput(unsigned int i)
-{
-/*  if (i == 1)
-    {
-    return static_cast<itk::DataObject*>(OutputVectorDataType::New().GetPointer());
-    }
-  else*/
-    {
-    return Superclass::MakeOutput(i);
-    }
 }
 
 template<class TImage, class TOutputVectorData>
@@ -58,7 +40,6 @@ PersistentImageToVectorDataFilter<TImage, TOutputVectorData>
 ::GetOutputVectorData() const
 {
   return m_OutputVectorData;
-  //return static_cast<OutputVectorDataType*>(const_cast<itk::DataObject*>(this->itk::ProcessObject::GetOutput(1)));
 }
 
 template<class TImage, class TOutputVectorData>
@@ -67,7 +48,6 @@ PersistentImageToVectorDataFilter<TImage, TOutputVectorData>
 ::AllocateOutputs()
 {
   // Nothing that needs to be allocated for the outputs : the output is not meant to be used
-  //this->GetOutputVectorData()->Clear();
 }
 
 template<class TImage, class TOutputVectorData>

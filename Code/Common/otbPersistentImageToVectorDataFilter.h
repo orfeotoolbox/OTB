@@ -78,10 +78,6 @@ public:
 
   OutputVectorDataType* GetOutputVectorData() const;
 
-  /** Make a DataObjectof the correct type to be used as the specified
-   * output. */
-  virtual DataObjectPointer MakeOutput(unsigned int idx);
-
   void AllocateOutputs();
 
   virtual void Reset(void);
