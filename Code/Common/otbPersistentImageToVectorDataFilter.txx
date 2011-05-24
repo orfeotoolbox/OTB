@@ -30,10 +30,11 @@ template<class TImage, class TOutputVectorData>
 PersistentImageToVectorDataFilter<TImage, TOutputVectorData>
 ::PersistentImageToVectorDataFilter()
 {
-  this->itk::ProcessObject::SetNumberOfRequiredOutputs(2);
-  this->itk::ProcessObject::SetNthOutput(1, this->MakeOutput(1).GetPointer());
+  //this->itk::ProcessObject::SetNumberOfRequiredOutputs(2);
+  //this->itk::ProcessObject::SetNthOutput(1, this->MakeOutput(1).GetPointer());
 
   m_ExtractFilter = ExtractImageFilterType::New();
+  m_OutputVectorData = OutputVectorDataType::New();
 }
 
 template<class TImage, class TOutputVectorData>
@@ -41,11 +42,11 @@ typename PersistentImageToVectorDataFilter<TImage, TOutputVectorData>::DataObjec
 PersistentImageToVectorDataFilter<TImage, TOutputVectorData>
 ::MakeOutput(unsigned int i)
 {
-  if (i == 1)
+/*  if (i == 1)
     {
     return static_cast<itk::DataObject*>(OutputVectorDataType::New().GetPointer());
     }
-  else
+  else*/
     {
     return Superclass::MakeOutput(i);
     }
@@ -56,7 +57,8 @@ typename PersistentImageToVectorDataFilter<TImage, TOutputVectorData>::OutputVec
 PersistentImageToVectorDataFilter<TImage, TOutputVectorData>
 ::GetOutputVectorData() const
 {
-  return static_cast<OutputVectorDataType*>(const_cast<itk::DataObject*>(this->itk::ProcessObject::GetOutput(1)));
+  return m_OutputVectorData;
+  //return static_cast<OutputVectorDataType*>(const_cast<itk::DataObject*>(this->itk::ProcessObject::GetOutput(1)));
 }
 
 template<class TImage, class TOutputVectorData>

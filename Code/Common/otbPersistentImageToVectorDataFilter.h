@@ -98,6 +98,8 @@ protected:
 
   ExtractImageFilterPointerType          m_ExtractFilter;
 
+  OutputVectorDataPointerType m_OutputVectorData;
+
 private:
   PersistentImageToVectorDataFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
