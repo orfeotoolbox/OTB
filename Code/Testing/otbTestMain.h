@@ -263,16 +263,26 @@ int main(int ac, char* av[])
       }
     testToRun = av[1];
     }
+
   std::map<std::string, MainFuncPointer>::iterator j = StringToTestFunctionMap.find(testToRun);
+  // If the test doesn't exists
+  if ( j == StringToTestFunctionMap.end() )
+      {
+        PrintAvailableTests();
+        std::cerr << "Failure: " << testToRun << ": no test identified " << testToRun << "\n";
+        return -1;
+      }
+
   if (j != StringToTestFunctionMap.end())
     {
+      std::cout<<"goooo?: "<<std::endl;
     MainFuncPointer f = j->second;
     int             result;
     try
       {
       // Invoke the test's "main" function.
       result = (*f)(ac - 1, av + 1);
-      if (result != EXIT_SUCCESS)
+      if (result != EXIT_SUCCESS )
         {
         std::cout << "-> Test EXIT FAILURE (" << result << ")." << std::endl;
         itkGenericExceptionMacro(<< "Function returns EXIT_FAILURE (no regression test)");
@@ -303,12 +313,13 @@ int main(int ac, char* av[])
       result = EXIT_FAILURE;
       }
 
-    if (result != EXIT_SUCCESS)
+    std::cout<<"result: "<<result<<std::endl;
+
+    if (result != EXIT_SUCCESS )
       {
-      PrintAvailableTests();
-      std::cerr << "Failure: " << testToRun << ": no test identified " << testToRun << "\n";
-      return -1;
+        return -1;
       }
+
 
     result = EXIT_SUCCESS;
     std::cout << " -> Test EXIT SUCCESS." << std::endl;

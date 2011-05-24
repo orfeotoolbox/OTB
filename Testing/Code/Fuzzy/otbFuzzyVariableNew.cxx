@@ -27,5 +27,6 @@ int otbFuzzyVariableNew(int argc, char* argv[])
 
   FuzzyVarType::Pointer fv = FuzzyVarType::New();
   
-  return EXIT_SUCCESS;
+  //return EXIT_SUCCESS;
+  return EXIT_FAILURE;
 }
