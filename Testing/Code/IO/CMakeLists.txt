@@ -342,7 +342,7 @@ ADD_TEST(ioTvStreamingImageFilterLUM2PNG ${IO_TESTS2}
          ${TEMP}/ioImageFileReaderPNG2LUM.lum
          ${TEMP}/ioStreamingImageFilterTestLUM.png
          )
-SET_TESTS_PROPERTIES(ioTvStreamingImageFilterLUM2PNG PROPERTIES DEPENDS ioTvImageFileReaderFloatPNG2LUM)         
+SET_TESTS_PROPERTIES(ioTvStreamingImageFilterLUM2PNG PROPERTIES DEPENDS ioTvImageFileReaderPNG2LUM) 
 
 # ---  LUM STREAMING  IMAGE   FILE    WRITER  ---
 ADD_TEST(ioTvStreamingIFWriterLUMWithoutStreaming ${IO_TESTS2}
@@ -354,7 +354,7 @@ ADD_TEST(ioTvStreamingIFWriterLUMWithoutStreaming ${IO_TESTS2}
          0 # StreamingImageFileWriter
          0 # NumberOfStreamDivisions
          )
-SET_TESTS_PROPERTIES(ioTvStreamingIFWriterLUMWithoutStreaming PROPERTIES DEPENDS ioTvImageFileReaderFloatPNG2LUM) 
+SET_TESTS_PROPERTIES(ioTvStreamingIFWriterLUMWithoutStreaming PROPERTIES DEPENDS ioTvImageFileReaderPNG2LUM) 
          
 # ---  LUM STREAMING  With STREAMING IMAGE   FILE    WRITER  ---
 ADD_TEST(ioTvStreamingIFWriterLUMWithStreaming ${IO_TESTS2}
@@ -366,7 +366,7 @@ ADD_TEST(ioTvStreamingIFWriterLUMWithStreaming ${IO_TESTS2}
          1 # StreamingImageFileWriter
          10 # NumberOfStreamDivisions
          )
-SET_TESTS_PROPERTIES(ioTvStreamingIFWriterLUMWithStreaming PROPERTIES DEPENDS ioTvImageFileReaderFloatPNG2LUM) 
+SET_TESTS_PROPERTIES(ioTvStreamingIFWriterLUMWithStreaming PROPERTIES DEPENDS ioTvImageFileReaderPNG2LUM) 
          
 # ---  LUM STREAMING  With IMAGE   FILE    WRITER  ---
 ADD_TEST(ioTvStreamingWithIFWriterLUMWithStreaming ${IO_TESTS2}
@@ -378,7 +378,7 @@ ADD_TEST(ioTvStreamingWithIFWriterLUMWithStreaming ${IO_TESTS2}
          0 # StreamingImageFileWriter
          10 # NumberOfStreamDivisions
          )
-SET_TESTS_PROPERTIES(ioTvStreamingWithIFWriterLUMWithStreaming PROPERTIES DEPENDS ioTvImageFileReaderFloatPNG2LUM)         
+SET_TESTS_PROPERTIES(ioTvStreamingWithIFWriterLUMWithStreaming PROPERTIES DEPENDS ioTvImageFileReaderPNG2LUM)         
 
 # ---  STREAMING  Pipeline Example ---
 ADD_TEST(ioTvStreamingPipeline_TIF2PNG ${IO_TESTS2}
