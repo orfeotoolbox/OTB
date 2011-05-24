@@ -20,6 +20,7 @@
 
 #include <boost/algorithm/string.hpp>
 #include "otbMacro.h"
+#include "otbMath.h"
 #include "itkMetaDataObject.h"
 #include "otbImageKeywordlist.h"
 
@@ -547,23 +548,67 @@ FormosatImageMetadataInterface::GetSatAzimuth() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  if (!imageKeywordlist.HasKey("support_data.step_count") ||
-      !imageKeywordlist.HasKey("support_data.scene_orientation"))
+ if (!imageKeywordlist.HasKey("support_data.incident_angle"))
     {
     return 0;
     }
 
-  std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.step_count");
-  int step = atoi(valueString.c_str());
-  valueString = imageKeywordlist.GetMetadataByKey("support_data.scene_orientation");
+  std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.sat_azimuth_angle");
   double satAz = atof(valueString.c_str());
-  if ((step - 48) < 0)
-    {
-    satAz += 90.;
-    }
-  else satAz = satAz - 90.;
+ 
+  // In some software version, a bug exists.
+  // We have to check the version t correct the satellite azimuth angle contained in the metadata
+  std::string softVersion = imageKeywordlist.GetMetadataByKey("support_data.software_version");
 
-  return satAz;
+  if( (softVersion == "R2P_02.03.P1") || (softVersion == "R2P_02.02") || (softVersion == "R2P_02.03") )
+    {
+      if (!imageKeywordlist.HasKey("support_data.viewing_angle_across_track"))
+        {
+          return 0;
+        }
+      if (!imageKeywordlist.HasKey("support_data.viewing_angle_along_track"))
+        {
+          return 0;
+        }
+      if (!imageKeywordlist.HasKey("support_data.scene_orientation"))
+        {
+          return 0;
+        } 
+      
+      valueString = imageKeywordlist.GetMetadataByKey("support_data.viewing_angle_across_track");
+      double viewingAngleAcrossTrack( atof(valueString.c_str()) );
+      valueString = imageKeywordlist.GetMetadataByKey("support_data.viewing_angle_along_track");
+      double viewingAngleAlongTrack( atof(valueString.c_str()) );
+      valueString = imageKeywordlist.GetMetadataByKey("support_data.scene_orientation");
+      double sceneOrientation( atof(valueString.c_str()) );
+      
+      double alpha = vcl_atan( vcl_tan( viewingAngleAcrossTrack * CONST_PI_180 ) /  vcl_tan( viewingAngleAlongTrack * CONST_PI_180 ) ) * CONST_180_PI;
+      
+      if( viewingAngleAlongTrack < 0 )
+        {
+          if (alpha >0)
+            {
+              alpha = alpha - 180;
+            }
+          else
+            {
+              alpha = alpha + 180;
+            }
+        }
+      
+      alpha -= sceneOrientation;
+      if (alpha >0)
+        {
+          satAz += 180;
+        }
+      else
+        {
+          satAz = 180 - satAz;
+        }
+      
+    }
+
+  return satAz; 
 }
 
 FormosatImageMetadataInterface::VariableLengthVectorType

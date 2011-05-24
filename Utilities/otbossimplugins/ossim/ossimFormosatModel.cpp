@@ -74,6 +74,7 @@ ossimplugins::ossimFormosatModel::ossimFormosatModel()
    theMetaDataFile       ("NOT ASSIGNED"),
    theIllumAzimuth       (0.0),
    theIllumElevation     (0.0),
+   theSatAzimuth         (0.0),
    thePositionError      (0.0),
    theRefImagingTime     (0.0),
    theRefImagingTimeLine (0.0),
@@ -98,6 +99,7 @@ ossimplugins::ossimFormosatModel::ossimFormosatModel(ossimFormosatDimapSupportDa
    theMetaDataFile       ("NOT ASSIGNED"),
    theIllumAzimuth       (0.0),
    theIllumElevation     (0.0),
+   theSatAzimuth         (0.0),
    thePositionError      (0.0),
    theRefImagingTime     (0.0),
    theRefImagingTimeLine (0.0),
@@ -378,6 +380,8 @@ void ossimplugins::ossimFormosatModel::loadSupportData()
 
    theSupportData->getSunAzimuth(theIllumAzimuth);
    theSupportData->getSunElevation(theIllumElevation);
+   theSupportData->getSatAzimuth(theSatAzimuth);
+
    ossimDpt sz;
    theSupportData->getImageSize(sz);
    theImageSize = sz;
@@ -461,6 +465,7 @@ std::ostream& ossimplugins::ossimFormosatModel::print(std::ostream& out) const
        << "\n  theMetadataFile       = " << theMetaDataFile
        << "\n  theIllumAzimuth       = " << theIllumAzimuth
        << "\n  theIllumElevation     = " << theIllumElevation
+       << "\n  theSatAzimuth         = " << theSatAzimuth
        << "\n  thePositionError      = " << thePositionError
        << "\n  theImageSize          = " << theImageSize
        << "\n  theRefGndPt           = " << theRefGndPt
@@ -759,6 +764,7 @@ ossimplugins::ossimFormosatModel::initFromMetadata(ossimFormosatDimapSupportData
    theMetaDataFile       = "NOT ASSIGNED";
    theIllumAzimuth       = 0.0;
    theIllumElevation     = 0.0;
+   theSatAzimuth         = 0.0;
    thePositionError      = 0.0;
    theRefImagingTime     = 0.0;
    theLineSamplingPeriod = 0.0;

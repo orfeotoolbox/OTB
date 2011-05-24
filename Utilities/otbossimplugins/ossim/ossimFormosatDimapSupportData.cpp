@@ -37,12 +37,16 @@ ossimFormosatDimapSupportData::ossimFormosatDimapSupportData ()
    theImageID(),
    theMetadataFile(),
    theProductionDate(),
+   theSoftwareVersion(),
    theInstrument(),
-   theInstrumentIndex(0),
+   theInstrumentIndex(0), 
    theSunAzimuth(0.0),
    theSunElevation(0.0),
+   theSatAzimuth(0.0),
    theIncidenceAngle(0.0),
    theViewingAngle(0.0),
+   theViewingAngleAlongTrack(0.0),
+   theViewingAngleAcrossTrack(0.0),
    theSceneOrientation(0.0),
    theImageSize(0.0, 0.0),
    theRefGroundPoint(0.0, 0.0, 0.0),
@@ -73,12 +77,16 @@ ossimFormosatDimapSupportData::ossimFormosatDimapSupportData(const ossimFormosat
     theImageID(rhs.theImageID),
     theMetadataFile (rhs.theMetadataFile),
     theProductionDate(rhs.theProductionDate),
+    theSoftwareVersion(rhs.theSoftwareVersion),
     theInstrument(rhs.theInstrument),
     theInstrumentIndex(rhs.theInstrumentIndex),
     theSunAzimuth(rhs.theSunAzimuth),
-    theSunElevation(rhs.theSunElevation),  
+    theSunElevation(rhs.theSunElevation), 
+    theSatAzimuth(rhs.theSatAzimuth),
     theIncidenceAngle(rhs.theIncidenceAngle),
     theViewingAngle(rhs.theViewingAngle),
+    theViewingAngleAlongTrack(rhs.theViewingAngle),
+    theViewingAngleAcrossTrack(rhs.theViewingAngle),
     theSceneOrientation(rhs.theSceneOrientation),
     theImageSize(rhs.theImageSize),
     theRefGroundPoint(rhs.theRefGroundPoint),
@@ -111,12 +119,16 @@ ossimFormosatDimapSupportData::ossimFormosatDimapSupportData (const ossimFilenam
    theImageID(),
    theMetadataFile (dimapFile),
    theProductionDate(),
+   theSoftwareVersion(),
    theInstrument(),
    theInstrumentIndex(0),
    theSunAzimuth(0.0),
    theSunElevation(0.0),
+   theSatAzimuth(0.0),
    theIncidenceAngle(0.0),
    theViewingAngle(0.0),
+   theViewingAngleAlongTrack(0.0),
+   theViewingAngleAcrossTrack(0.0),
    theSceneOrientation(0.0),
    theImageSize(0.0, 0.0),
    theRefGroundPoint(0.0, 0.0, 0.0),
@@ -175,12 +187,16 @@ void ossimFormosatDimapSupportData::clearFields()
    theImageID = "";
    theMetadataFile = "";
    theProductionDate = "";
+   theSoftwareVersion = "";
    theInstrument = "";
    theInstrumentIndex = 0;
    theSunAzimuth = 0.0;
    theSunElevation = 0.0;
+   theSatAzimuth = 0.0;
    theIncidenceAngle = 0.0;
    theViewingAngle = 0.0;
+   theViewingAngleAlongTrack = 0.0;
+   theViewingAngleAcrossTrack = 0.0;
    theSceneOrientation = 0.0;
    theImageSize.makeNan();
    theRefGroundPoint.makeNan();
@@ -780,24 +796,28 @@ void ossimFormosatDimapSupportData::printInfo(ostream& os) const
 
    os << "\n----------------- Info on Formosat Image -------------------"
       << "\n  "
-      << "\n  Job Number (ID):           			" << theImageID
-      << "\n  Acquisition Date:          			" << theAcquisitionDate
-      << "\n  Instrument:                			" << theInstrument
-      << "\n  Instrument Index:          			" << theInstrumentIndex
-      << "\n  Production Date:           			" << theProductionDate
-      << "\n  Number of Bands:           			" << theNumBands
-      << "\n  Geo Center Point:         		 	" << theRefGroundPoint
-      << "\n  Image Size:                			" << theImageSize
-      << "\n  Incidence Angle:           			" << theIncidenceAngle
-      << "\n  Viewing Angle:             			" << theViewingAngle      
-      << "\n  Scene Orientation:                  	" << theSceneOrientation 
-      << "\n  Corrected Attitude:                 	" << corr_att
-      << "\n  Sun Azimuth:                        	" << theSunAzimuth
-      << "\n  Sun Elevation:                      	" << theSunElevation
-      << "\n  Sub image offset:                   	" << theSubImageOffset
-      << "\n  PolynomialLookAngleX size:          	" << thePolynomialLookAngleX.size()
-      << "\n  thePosEcfSamples size:              	" << thePosEcfSamples.size()
-      << "\n  theFrameVertexPosImagePoints size : 	" << theFrameVertexPosImagePoints.size()
+      << "\n  Job Number (ID):           	  " << theImageID
+      << "\n  Acquisition Date:          	  " << theAcquisitionDate
+      << "\n  Instrument:                	  " << theInstrument
+      << "\n  Instrument Index:          	  " << theInstrumentIndex
+      << "\n  Production Date:           	  " << theProductionDate
+      << "\n  Production Softwrae version:     	  " << theSoftwareVersion
+      << "\n  Number of Bands:           	  " << theNumBands
+      << "\n  Geo Center Point:         	  " << theRefGroundPoint
+      << "\n  Image Size:                	  " << theImageSize
+      << "\n  Incidence Angle:           	  " << theIncidenceAngle
+      << "\n  Viewing Angle:             	  " << theViewingAngle
+      << "\n  Viewing Angle Along Track:       	  " << theViewingAngleAlongTrack
+      << "\n  Viewing Angle Across Track:      	  " << theViewingAngleAcrossTrack
+      << "\n  Scene Orientation:                  " << theSceneOrientation 
+      << "\n  Corrected Attitude:                 " << corr_att
+      << "\n  Sun Azimuth:                        " << theSunAzimuth
+      << "\n  Sun Elevation:                      " << theSunElevation
+      << "\n  Sat Azimuth:                        " << theSatAzimuth
+      << "\n  Sub image offset:                   " << theSubImageOffset
+      << "\n  PolynomialLookAngleX size:          " << thePolynomialLookAngleX.size()
+      << "\n  thePosEcfSamples size:              " << thePosEcfSamples.size()
+      << "\n  theFrameVertexPosImagePoints size : " << theFrameVertexPosImagePoints.size()
       << "\n"
       << "\n---------------------------------------------------------"
       << "\n  " << std::endl;
@@ -831,6 +851,11 @@ ossimString ossimFormosatDimapSupportData::getProductionDate() const
    return theProductionDate;
 }
 
+ossimString ossimFormosatDimapSupportData::getSoftwareVersion() const
+{
+   return theSoftwareVersion;
+}
+
 ossimString ossimFormosatDimapSupportData::getImageID() const
 {
    return theImageID;
@@ -859,6 +884,11 @@ void ossimFormosatDimapSupportData::getSunAzimuth(ossim_float64& az) const
 void ossimFormosatDimapSupportData::getSunElevation(ossim_float64& el) const
 {
    el = theSunElevation;
+}
+
+void ossimFormosatDimapSupportData::getSatAzimuth(ossim_float64& az) const
+{
+   az = theSatAzimuth;
 }
 
 void ossimFormosatDimapSupportData::getImageSize(ossimDpt& sz) const
@@ -890,6 +920,16 @@ void ossimFormosatDimapSupportData::getIncidenceAngle(ossim_float64& ia) const
 void ossimFormosatDimapSupportData::getViewingAngle(ossim_float64& va) const
 {
    va = theViewingAngle;
+}
+
+void ossimFormosatDimapSupportData::getViewingAngleAlongTrack(ossim_float64& va) const
+{
+   va = theViewingAngleAlongTrack;
+}
+
+void ossimFormosatDimapSupportData::getViewingAngleAcrossTrack(ossim_float64& va) const
+{
+   va = theViewingAngleAcrossTrack;
 }
 
 void ossimFormosatDimapSupportData::getSceneOrientation(ossim_float64& so) const
@@ -963,6 +1003,11 @@ bool ossimFormosatDimapSupportData::saveState(ossimKeywordlist& kwl,
    kwl.add(prefix,
            ossimKeywordNames::ELEVATION_ANGLE_KW,
            theSunElevation,
+           true);
+
+   kwl.add(prefix,
+           "sat_azimuth_angle",
+           theSatAzimuth,
            true);
 
    //---
@@ -1158,6 +1203,11 @@ bool ossimFormosatDimapSupportData::saveState(ossimKeywordlist& kwl,
            true);
 
    kwl.add(prefix,
+           "software_version",
+           theSoftwareVersion,
+           true);
+
+   kwl.add(prefix,
            "incident_angle",
            theIncidenceAngle,
            true);
@@ -1165,6 +1215,16 @@ bool ossimFormosatDimapSupportData::saveState(ossimKeywordlist& kwl,
    kwl.add(prefix,
            "viewing_angle",
            theViewingAngle,
+           true);
+
+   kwl.add(prefix,
+           "viewing_angle_along_track",
+           theViewingAngleAlongTrack,
+           true);
+   
+   kwl.add(prefix,
+           "viewing_angle_across_track",
+           theViewingAngleAcrossTrack,
            true);
 
    kwl.add(prefix,
@@ -1227,6 +1287,7 @@ bool ossimFormosatDimapSupportData::loadState(const ossimKeywordlist& kwl,
 
    theSunAzimuth   = ossimString(kwl.find(prefix, ossimKeywordNames::AZIMUTH_ANGLE_KW)).toDouble();
    theSunElevation = ossimString(kwl.find(prefix, ossimKeywordNames::ELEVATION_ANGLE_KW)).toDouble();
+   theSatAzimuth   = ossimString(kwl.find(prefix, "sat_azimuth_angle")).toDouble();
 
    theImageSize      = createDpt(kwl.find(prefix, "image_size"));
    theRefGroundPoint = createGround(kwl.find(prefix, "reference_ground_point"));
@@ -1356,13 +1417,16 @@ bool ossimFormosatDimapSupportData::loadState(const ossimKeywordlist& kwl,
    theNumBands        = ossimString(kwl.find(prefix, ossimKeywordNames::NUMBER_BANDS_KW)).toUInt32();
    theAcquisitionDate = kwl.find(prefix, ossimKeywordNames::IMAGE_DATE_KW);
    theProductionDate  = kwl.find(prefix, "production_date");
+   theSoftwareVersion = kwl.find(prefix, "software_version");
    theImageID         = kwl.find(prefix, "image_id");
    theInstrument      = kwl.find(prefix, "instrument");
    theInstrumentIndex = ossimString(kwl.find(prefix, "instrument_index")).toUInt32();
    
-   theIncidenceAngle  = ossimString(kwl.find(prefix, "incident_angle")).toDouble();
-   theViewingAngle    = ossimString(kwl.find(prefix, "viewing_angle")).toDouble();
-   theSceneOrientation= ossimString(kwl.find(prefix, "scene_orientation")).toDouble();
+   theIncidenceAngle          = ossimString(kwl.find(prefix, "incident_angle")).toDouble();
+   theViewingAngle            = ossimString(kwl.find(prefix, "viewing_angle")).toDouble();
+   theViewingAngleAlongTrack  = ossimString(kwl.find(prefix, "viewing_angle_along_track")).toDouble();
+   theViewingAngleAcrossTrack = ossimString(kwl.find(prefix, "viewing_angle_across_track")).toDouble();
+   theSceneOrientation        = ossimString(kwl.find(prefix, "scene_orientation")).toDouble();
    
 	/* TODO add reading FrameVertex point */
 
@@ -1536,7 +1600,6 @@ bool ossimFormosatDimapSupportData::parsePart1(
       theSubImageOffset.line = xml_nodes[0]->getText().toDouble() - 1.0;
    }
 
-
    //---
    // Fetch the RefLineTime:
    //---
@@ -1577,7 +1640,26 @@ bool ossimFormosatDimapSupportData::parsePart1(
       return false;
    }
    theProductionDate = xml_nodes[0]->getText();
-   
+
+   //---
+   // Fetch the SoftwareVersion:
+   //---
+   xml_nodes.clear();
+   xpath = "/Dimap_Document/Production/Production_Facility/SOFTWARE_VERSION";
+   xmlDocument->findNodes(xpath, xml_nodes);
+   if (xml_nodes.size() == 0)
+   {
+      setErrorStatus();
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << MODULE << " DEBUG:"
+            << "\nCould not find: " << xpath
+            << std::endl;
+      }
+      return false;
+   }
+   theSoftwareVersion = xml_nodes[0]->getText();
    //---
    // Fetch the Instrument:
    //---
@@ -1617,7 +1699,6 @@ bool ossimFormosatDimapSupportData::parsePart1(
       return false;
    }
    theInstrumentIndex = xml_nodes[0]->getText().toUInt32();
-
 
    return true;
 }
@@ -2342,7 +2423,7 @@ bool ossimFormosatDimapSupportData::initSceneSource(
      theSensorID = "Formosat 2";
 
    //---
-   // Fetch the Sun Azimuth:
+   // Fetch the Viewing Angle Along Track:
    //---
    xml_nodes.clear();
    xpath = "/Dimap_Document/Dataset_Sources/Source_Information/Scene_Source/SUN_AZIMUTH";
@@ -2360,6 +2441,44 @@ bool ossimFormosatDimapSupportData::initSceneSource(
    }
    theSunAzimuth = xml_nodes[0]->getText().toDouble();
 
+   //---
+   // Fetch the Viewing Angle Across Track:
+   //---
+   xml_nodes.clear();
+   xpath = "/Dimap_Document/Dataset_Sources/Source_Information/Scene_Source/VIEWING_ANGLE_ALONG_TRACK";
+   xmlDocument->findNodes(xpath, xml_nodes);
+   if (xml_nodes.size() == 0)
+   {
+      setErrorStatus();
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "DEBUG:\nCould not find: " << xpath
+            << std::endl;
+      }
+      return false;
+   }
+   theViewingAngleAlongTrack = xml_nodes[0]->getText().toDouble();
+ 
+   //---
+   // Fetch the Sun Azimuth:
+   //---
+   xml_nodes.clear();
+   xpath = "/Dimap_Document/Dataset_Sources/Source_Information/Scene_Source/VIEWING_ANGLE_ACROSS_TRACK";
+   xmlDocument->findNodes(xpath, xml_nodes);
+   if (xml_nodes.size() == 0)
+   {
+      setErrorStatus();
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "DEBUG:\nCould not find: " << xpath
+            << std::endl;
+      }
+      return false;
+   }
+   theViewingAngleAcrossTrack = xml_nodes[0]->getText().toDouble();
+ 
    //---
    // Fetch the Sun Elevation:
    //---
@@ -2399,6 +2518,25 @@ bool ossimFormosatDimapSupportData::initSceneSource(
    theIncidenceAngle = xml_nodes[0]->getText().toDouble();
 
    //---
+   // Fetch incidence angle:
+   //---
+   xml_nodes.clear();
+   xpath = "/Dimap_Document/Dataset_Sources/Source_Information/Scene_Source/SATELLITE_AZIMUTH_ANGLE";
+   xmlDocument->findNodes(xpath, xml_nodes);
+   if (xml_nodes.size() == 0)
+   {
+      setErrorStatus();
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "DEBUG:\nCould not find: " << xpath
+            << std::endl;
+      }
+      return false;
+   }
+   theSatAzimuth = xml_nodes[0]->getText().toDouble();
+
+   //---
    // Fetch viewing angle:
    /*
     * FROM FORMOSAT: You can use use incidence angle to calculate viewing angle
@@ -2430,7 +2568,7 @@ bool ossimFormosatDimapSupportData::initSceneSource(
    double theSatelliteAltitude =  xml_nodes[0]->getText().toDouble();
    double RT = 63710087714.0;
    theViewingAngle = asin((RT/(RT+theSatelliteAltitude))*sin(theIncidenceAngle));
-   
+
    return true;
 }
 

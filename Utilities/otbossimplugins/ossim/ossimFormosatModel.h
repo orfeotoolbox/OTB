@@ -136,6 +136,7 @@ protected:
    ossimFilename  theMetaDataFile;
    ossim_float64  theIllumAzimuth;  
    ossim_float64  theIllumElevation;
+   ossim_float64  theSatAzimuth;
    ossim_float64  thePositionError;
    ossim_float64  theRefImagingTime;
 
@@ -157,6 +158,7 @@ protected:
    ossim_float64  thePitchRate;       // degrees/sec
    ossim_float64  theYawRate;         // degrees/sec
    ossim_float64  theFocalLenOffset;  // percent deviation from nominal
+
 
 TYPE_DATA
 };

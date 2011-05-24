@@ -56,24 +56,28 @@ public:
    void clearFields();
    bool loadXmlFile(const ossimFilename& file);
 
-   ossimString   getSensorID()                            const;
-   ossimString   getMetadataVersionString()               const;
-   ossimString   getAcquisitionDate()                     const;
-   ossimString   getProductionDate()                      const;
-   ossimString   getImageID()                             const;
-   ossimString   getInstrument()                          const;
-   ossim_uint32  getInstrumentIndex()                     const;
-   ossimFilename getMetadataFile()                        const;
-   void          getSunAzimuth(ossim_float64& az)         const;
-   void          getSunElevation(ossim_float64& el)       const;
-   void          getImageSize(ossimDpt& sz)               const;
-   void          getLineSamplingPeriod(ossim_float64& pe) const;
-   void          getIncidenceAngle(ossim_float64& ia)     const;
-   void          getViewingAngle(ossim_float64& va)       const;
-   void          getSceneOrientation(ossim_float64& so)   const;
-   ossim_uint32  getNumberOfBands()                       const;
-   bool          isStarTrackerUsed()                      const;
-   bool          isSwirDataUsed()                         const;
+   ossimString   getSensorID()                                 const;
+   ossimString   getMetadataVersionString()                    const;
+   ossimString   getAcquisitionDate()                          const;
+   ossimString   getProductionDate()                           const;
+   ossimString   getSoftwareVersion()                          const;
+   ossimString   getImageID()                                  const;
+   ossimString   getInstrument()                               const;
+   ossim_uint32  getInstrumentIndex()                          const;
+   ossimFilename getMetadataFile()                             const;
+   void          getSunAzimuth(ossim_float64& az)              const;
+   void          getSunElevation(ossim_float64& el)            const;
+   void          getSatAzimuth(ossim_float64& az)              const;
+   void          getImageSize(ossimDpt& sz)                    const;
+   void          getLineSamplingPeriod(ossim_float64& pe)      const;
+   void          getIncidenceAngle(ossim_float64& ia)          const;
+   void          getViewingAngle(ossim_float64& va)            const;
+   void          getViewingAngleAlongTrack(ossim_float64& va)  const;
+   void          getViewingAngleAcrossTrack(ossim_float64& va) const;
+   void          getSceneOrientation(ossim_float64& so)        const;
+   ossim_uint32  getNumberOfBands()                            const;
+   bool          isStarTrackerUsed()                           const;
+   bool          isSwirDataUsed()                              const;
 
    //---
    // Image center point:
@@ -192,6 +196,7 @@ private:
     * Initializes:
     * theSunAzimuth
     * theSunElevation
+    * theSatAzimuth;
     * theIncidenceAngle
     * @return true on success, false if not found.
     */
@@ -206,6 +211,8 @@ private:
     * Initializes:
     * theRefGroundPoint
     * theViewingAngle
+    * theViewingAngleAlongTrack
+    * theViewingAngleAcrossTrack
     *
     * Note that the theRefImagePoint will be the zero based center of the
     * frame.
@@ -218,6 +225,7 @@ private:
    ossimString                 theImageID;
    ossimFilename               theMetadataFile;
    ossimString                 theProductionDate;
+   ossimString                 theSoftwareVersion;
    ossimString                 theInstrument;
    ossim_uint32                theInstrumentIndex;
 
@@ -228,8 +236,11 @@ private:
     */
    ossim_float64               theSunAzimuth;
    ossim_float64               theSunElevation;
+   ossim_float64               theSatAzimuth;
    ossim_float64               theIncidenceAngle;
    ossim_float64               theViewingAngle;
+   ossim_float64               theViewingAngleAlongTrack;
+   ossim_float64               theViewingAngleAcrossTrack;
    ossim_float64               theSceneOrientation;   
    
    ossimDpt                    theImageSize;
