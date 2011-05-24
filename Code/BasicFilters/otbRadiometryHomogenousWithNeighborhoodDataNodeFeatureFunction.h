@@ -29,22 +29,23 @@
 namespace otb
 {
 /** \class RadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction
-  * \brief Compute a spectral angle based feature alongside a
-  * datanode.
+  * \brief Compute the spectral angle between the radiometry along
+  * a line and its neighborhood
   *
-  * This function compute a spectral angle alongside a datanode.
-  * The feature is the mean spectral angle regarding a
-  * reference pixel alongside the tested datanode.
+  * This function compares the radiometry along a datanode with the
+  * radiometry of the neighborhood.
   *
-  * Furthermore, it compute the spectral in a neighborhood region located between
-  * +/- m_StartNeighborhoodRadius and StopNeighborhoodRadius.
+  * It computes the mean of a rectangular area around each line segment,
+  * and the mean of two rectangular areas on each side of the line segment.
+  * The descriptor is the spectral angle between the two values,
+  * scaled by \$f\pi\$f.
   *
-  * The output has five elements:
-  * - #0: \$f \frac{mean spectral angle alongside the datanode}{mean spectral angle of the neighborhood} \$f
-  * - #1: cumulate spectral angle alongside the datanode
-  * - #2: number of pixel alongside the datanode
-  * - #3: cumulate spectral angle of the neighborhood
-  * - #4: number of pixel in the neighborhood
+  * The width of the area around a line segment can be specified with
+  * SetCenterRadius.
+  *
+  * The neighborhood area can be specified by two radius, using SetNeighborhoodBeginRadius
+  * and SetNeighborhoodEndRadius.
+  *
   *
   * \ingroup Functions
   * \sa DataNodeImageFunction
@@ -102,15 +103,33 @@ public:
   typedef std::pair<IndexType, IndexType>             IndexPairType;
   typedef std::vector<PrecisionType>                  OutputType;
 
-  virtual OutputType Evaluate( const DataNodeType& node ) const;
+  /* Compute the descriptor value along this DataNode */
+ virtual OutputType Evaluate( const DataNodeType& node ) const;
 
+  /* Get the radius used to define the area around a line segment.
+   * A radius of 0 means that the area is reduced to a line joining
+   * the two segments extremities. */
   itkGetConstMacro(CenterRadius, unsigned int);
+
+  /* Set the radius used to define the area around a line segment.
+   * A radius of 0 means that the area is reduced to a line joining
+   * the two segments extremities. */
   itkSetMacro(CenterRadius, unsigned int);
 
+  /* Get the radius used to define the start of the neighboring area.
+   * Typically this value must be greater than CenterRadius */
   itkGetConstMacro(NeighborhoodBeginRadius, unsigned int);
+
+  /* Set the radius used to define the start of the neighboring area.
+   * Typically this value must be greater than CenterRadius */
   itkSetMacro(NeighborhoodBeginRadius, unsigned int);
 
+  /* Get the radius used to define the end of the neighboring area.
+   * Typically this value must be greater than NeighborhoodBeginRadius */
   itkGetConstMacro(NeighborhoodEndRadius, unsigned int);
+
+  /* Set the radius used to define the end of the neighboring area.
+   * Typically this value must be greater than NeighborhoodBeginRadius */
   itkSetMacro(NeighborhoodEndRadius, unsigned int);
 
 protected:
@@ -122,9 +141,13 @@ private:
   RadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  /** Start neighborhod radius */
+  /** Center radius */
   unsigned int m_CenterRadius;
+
+  /** Neighborhood start radius */
   unsigned int m_NeighborhoodBeginRadius;
+
+  /** Neighborhood end radius */
   unsigned int m_NeighborhoodEndRadius;
 
 };
