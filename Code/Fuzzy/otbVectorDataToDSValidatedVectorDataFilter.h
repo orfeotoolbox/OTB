@@ -144,7 +144,7 @@ public:
     {
       itkExceptionMacro(<< "Wrong model! Values have to be 0<=v1<=v2<=v3<=1" )
     }
-    else if (model[3]<.75 || model[3]>1)
+    else if (model[3]<.75 || model[3]>1.0)
     {
       itkExceptionMacro(<< "Wrong model! Values have to be 0.75<=v4<=1" )
     }

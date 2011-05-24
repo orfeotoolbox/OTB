@@ -69,7 +69,7 @@ typename StandardDSCostFunction<TDSValidationFilter>
     }
   for (unsigned int i=0; i<4; i++)
     {
-      overlap.push_back(parameters[i+4]);
+      overlap.push_back(parameters[i+8]);
     }
 
   typename DSValidationFilterType::Pointer internalFunctionGT
