@@ -932,46 +932,102 @@ ADD_TEST(prTvVectorDataProjectionFilterFromMapToImage ${PROJECTIONS_TESTS3}
         ${TEMP}/prTvVectorDataProjectionFilterFromMapToImage.kml
 )
 
-# extract from image QB and MidiPyrenees vectordata
-#ADD_TEST(prTvVectorData_ProjRef_ProjIntoImage_WithProjRef_Extract_Filter0 ${PROJECTIONS_TESTS3}
+# With QGIS the two vectordata are equal
+ADD_TEST(prTvVectorDataProjectionFilterFromGeoToMap ${PROJECTIONS_TESTS3}
+        #--compare-ascii ${NOTOL}
+        #${INPUTDATA}/ToulousePoints-examples.shp
+        #${TEMP}/prTvVectorDataProjectionFilterFromGeoToMap.shp
+        otbVectorDataProjectionFilterFromGeoToMap
+        ${TEMP}/prTvVectorDataProjectionFilterFromMapToGeo.kml
+        ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif 
+        ${TEMP}/prTvVectorDataProjectionFilterFromGeoToMap.shp
+)
+SET_TESTS_PROPERTIES(prTvVectorDataProjectionFilterFromGeoToMap PROPERTIES DEPENDS prTvVectorDataProjectionFilterFromMapToGeo)
+
+
+
+###################
+# TESTS ABOUT REPROJECTION INTO AN IMAGE OF A VECTORDATA
+# QB ortho and extract and extract of MidiPyrenees roads file
+#ADD_TEST(prTvVectorData_ProjRef_ProjIntoImage_WithProjRef ${PROJECTIONS_TESTS3}
 #        otbVectorDataIntoImageProjectionFilterTest
-#          ${INPUTDATA}/QB_extract_512x512.tif
+#          ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE.TIF
 #          ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
 #          ${INPUTDATA}/DEM/srtm_directory
-#          ${TEMP}/prTvVectorDataProjRefProjIntoImageWithProjRef10.shp
-#          ${TEMP}/prTvVectorDataProjRefProjIntoImageWithProjRef10.txt
+#          ${TEMP}/prTvVectorDataProjRefProjIntoImageWithProjRef.shp
+#          ${TEMP}/prTvVectorDataProjRefProjIntoImageWithProjRef.txt
 #          0
 #)
 
-#ADD_TEST(prTvVectorData_ProjRef_ProjIntoImage_WithProjRef_ExtractLeftUp_Filter0 ${PROJECTIONS_TESTS3}
+#ADD_TEST(prTvVectorData_ProjRef_ProjIntoImage_WithProjRef1 ${PROJECTIONS_TESTS3}
 #        otbVectorDataIntoImageProjectionFilterTest
-#          ${INPUTDATA}/QB_extract_leftup_256x2048.tif
+#          ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE.TIF
 #          ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
 #          ${INPUTDATA}/DEM/srtm_directory
-#          ${TEMP}/prTvVectorDataProjRefProjIntoImageWithProjRef20.shp
-#          ${TEMP}/prTvVectorDataProjRefProjIntoImageWithProjRef20.txt
+#          ${TEMP}/prTvVectorDataProjRefProjIntoImageWithProjRef1.shp
+#          ${TEMP}/prTvVectorDataProjRefProjIntoImageWithProjRef1.txt
+#          1
+#)
+
+#ADD_TEST(prTvVectorData_ProjRef_ProjIntoImage_WithSensorModel ${PROJECTIONS_TESTS3}
+#        otbVectorDataIntoImageProjectionFilterTest
+#          ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE_EXTRACT.HDR
+#          ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
+#          ${INPUTDATA}/DEM/srtm_directory
+#          ${TEMP}/prTvVectorDataProjRefProjIntoImageWithWithSensorModel.shp
+#          ${TEMP}/prTvVectorDataProjRefProjIntoImageWithWithSensorModel.txt
 #          0
 #)
 
-#ADD_TEST(prTvVectorData_ProjRef_ProjIntoImage_WithProjRef_Extract_Filter1 ${PROJECTIONS_TESTS3}
+#ADD_TEST(prTvVectorData_ProjRef_ProjIntoImage_WithSensorModel1 ${PROJECTIONS_TESTS3}
 #        otbVectorDataIntoImageProjectionFilterTest
-#          ${INPUTDATA}/QB_extract_512x512.tif
+#          ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE_EXTRACT.HDR
 #          ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
 #          ${INPUTDATA}/DEM/srtm_directory
-#          ${TEMP}/prTvVectorDataProjRefProjIntoImageWithProjRef11.shp
-#          ${TEMP}/prTvVectorDataProjRefProjIntoImageWithProjRef11.txt
+#          ${TEMP}/prTvVectorDataProjRefProjIntoImageWithWithSensorModel1.shp
+#          ${TEMP}/prTvVectorDataProjRefProjIntoImageWithWithSensorModel1.txt
 #          1
 #)
 
-#ADD_TEST(prTvVectorData_ProjRef_ProjIntoImage_WithProjRef_ExtractLeftUp_Filter1 ${PROJECTIONS_TESTS3}
+#ADD_TEST(prTvVectorData_ProjRef_ProjIntoImage_Index ${PROJECTIONS_TESTS3}
 #        otbVectorDataIntoImageProjectionFilterTest
-#          ${INPUTDATA}/QB_extract_leftup_256x2048.tif
+#          ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE_EXTRACT_INDEX.HDR
 #          ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
 #          ${INPUTDATA}/DEM/srtm_directory
-#          ${TEMP}/prTvVectorDataProjRefProjIntoImageWithProjRef21.shp
-#          ${TEMP}/prTvVectorDataProjRefProjIntoImageWithProjRef21.txt
+#          ${TEMP}/prTvVectorDataProjRefProjIntoImageIndex.shp
+#          ${TEMP}/prTvVectorDataProjRefProjIntoImageindex.txt
+#          0
+#)
+
+#ADD_TEST(prTvVectorData_ProjRef_ProjIntoImage_Index1 ${PROJECTIONS_TESTS3}
+#        otbVectorDataIntoImageProjectionFilterTest
+#           ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE_EXTRACT_INDEX.HDR
+#          ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
+#          ${INPUTDATA}/DEM/srtm_directory
+#          ${TEMP}/prTvVectorDataProjRefProjIntoImageIndex1.shp
+#          ${TEMP}/prTvVectorDataProjRefProjIntoImageindex1.txt
 #          1
 #)
+
+#ADD_TEST(prTvVectorData_NoProjRef_ProjIntoImage_Index ${PROJECTIONS_TESTS3}
+#        otbVectorDataIntoImageProjectionFilterTest
+#          ${INPUTDATA}/QB_Toulouse_extract_leftup_400x128_index.hdr
+#          ${INPUTDATA}/QB_Toulouse_extract_leftup_400x128_index.shp
+#          ${INPUTDATA}/DEM/srtm_directory
+#          ${TEMP}/prTvVectorDataNoProjRefProjIntoImageIndex.shp
+#          ${TEMP}/prTvVectorDataNoProjRefProjIntoImageindex.txt
+#          0
+#)
+#ADD_TEST(prTvVectorData_NoProjRef_ProjIntoImage_Index1 ${PROJECTIONS_TESTS3}
+#        otbVectorDataIntoImageProjectionFilterTest
+#          ${INPUTDATA}/QB_Toulouse_extract_leftup_400x128_index.hdr
+#          ${INPUTDATA}/QB_Toulouse_extract_leftup_400x128_index.shp
+#          ${INPUTDATA}/DEM/srtm_directory
+#          ${TEMP}/prTvVectorDataNoProjRefProjIntoImageIndex1.shp
+#          ${TEMP}/prTvVectorDataNoProjRefProjIntoImageindex1.txt
+#          1
+#)
+
 
 
 ADD_TEST(prTuGeocentricTransformNew ${PROJECTIONS_TESTS3}  otbGeocentricTransformNew )
@@ -1181,6 +1237,7 @@ otbVectorDataProjectionFilter.cxx
 otbVectorDataProjectionFilterFromMapToSensor.cxx
 otbVectorDataProjectionFilterFromMapToGeo.cxx
 otbVectorDataProjectionFilterFromMapToImage.cxx
+otbVectorDataProjectionFilterFromGeoToMap.cxx
 otbVectorDataIntoImageProjectionFilterTest.cxx
 otbGeocentricTransformNew.cxx
 otbGeocentricTransform.cxx

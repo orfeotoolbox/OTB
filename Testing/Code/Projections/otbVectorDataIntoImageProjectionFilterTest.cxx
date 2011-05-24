@@ -29,6 +29,9 @@
 
 #include "otbVectorDataIntoImageProjectionFilter.h"
 
+#include "otbVectorDataExtractROI.h"
+#include "otbVectorDataProjectionFilter.h"
+
 int otbVectorDataIntoImageProjectionFilterTest(int argc, char * argv[])
 {
   typedef float                                           PixelType;
@@ -45,19 +48,24 @@ int otbVectorDataIntoImageProjectionFilterTest(int argc, char * argv[])
   typedef otb::VectorDataIntoImageProjectionFilter
                  <VectorDataType, VectorImageType>        VectorDataReProjFilter;
 
+  typedef otb::VectorDataProjectionFilter
+  <VectorDataType, VectorDataType>                        VectorDataProjectionFilterType;
+  typedef otb::VectorDataExtractROI<VectorDataType>       VectorDataExtractROIType;
+  typedef VectorDataExtractROIType::RegionType            RemoteSensingRegionType;
+
   typedef itk::PreOrderTreeIterator<VectorDataType::DataTreeType> TreeIteratorType;
 
   std::string imageInputFilename = argv[1];
   std::string vectorDataInputFilename = argv[2];
   std::string demDirectory = argv[3];
   std::string vectorDataOutputFilename = argv[4];
-  std::string txtOutputFilename = argv[5];
+  std::string vectorDataOutputFilename2 = argv[5];
 
   std::cout << imageInputFilename << "\n"
             << vectorDataInputFilename << "\n"
             << demDirectory << "\n"
             << vectorDataOutputFilename << "\n"
-            << txtOutputFilename << std::endl;
+            << vectorDataOutputFilename2 << std::endl;
 
   // Read the image
   ReaderType::Pointer    reader  = ReaderType::New();
@@ -69,29 +77,8 @@ int otbVectorDataIntoImageProjectionFilterTest(int argc, char * argv[])
   vdReader->SetFileName(vectorDataInputFilename);
   vdReader->Update();
 
-  std::cout<<"Set input data to read data DONE"<<std::endl;
-
-  std::ofstream file;
-  file.open(txtOutputFilename.c_str());
-
-  file << "--- IMAGE INPUT ---" << std::endl;
-  file << "Spacing of the input image: "<< reader->GetOutput()->GetSpacing() << std::endl;
-  file << "Origin of the input image: "<< reader->GetOutput()->GetOrigin() << std::endl;
-  file << "Size of the input image: "<< reader->GetOutput()->GetLargestPossibleRegion() << std::endl;
-  file << "ProjRef of the input image: "<< reader->GetOutput()->GetProjectionRef() << std::endl;
-
-
   VectorDataReProjFilter::Pointer vdReProjFilter = VectorDataReProjFilter::New();
 
-  //----------
-  // Display input
-  file << "\n--- VECTOR DATA INPUT ---" << std::endl;
-  file << "ProjRef of the input vector data: "<< vdReader->GetOutput()->GetProjectionRef() << std::endl;
-  file << "Origin of the input vector data: "<< vdReader->GetOutput()->GetOrigin() << std::endl;
-  file << "Spacing of the input vector data: "<< vdReader->GetOutput()->GetSpacing() << std::endl;
-
-  //----------
-  // Set input of the filter
   vdReProjFilter->SetInputImage(reader->GetOutput());
 
   vdReProjFilter->SetInputVectorData(vdReader->GetOutput());
@@ -110,8 +97,6 @@ int otbVectorDataIntoImageProjectionFilterTest(int argc, char * argv[])
    vdReProjFilter->SetUseOutputSpacingAndOriginFromImage(false);
    }
 
-  std::cout<<"Set input data for the filter DONE (" << stateOutput << ")" <<std::endl;
-
   //----------
   // WRITE
   //vdReProjFilter->Update();
@@ -121,18 +106,77 @@ int otbVectorDataIntoImageProjectionFilterTest(int argc, char * argv[])
   vdwriter->SetInput(vdReProjFilter->GetOutput());
   vdwriter->Update();
 
-  std::cout<<"Update"<<std::endl;
+  //-------
+  // do the same with old code
+
+  VectorDataProjectionFilterType::Pointer vproj;
+  VectorDataExtractROIType::Pointer vdextract;
+
+      // Extract The part of the VectorData that actually overlaps with
+  // the image extent
+  vdextract = VectorDataExtractROIType::New();
+  vdextract->SetInput(vdReader->GetOutput());
+
+  // Find the geographic region of interest
+
+  // Ge the index of the corner of the image
+  ImageType::IndexType ul, ur, ll, lr;
+  ImageType::PointType pul, pur, pll, plr;
+  ul = reader->GetOutput()->GetLargestPossibleRegion().GetIndex();
+  ur = ul;
+  ll = ul;
+  lr = ul;
+  ur[0] += reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0];
+  lr[0] += reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0];
+  lr[1] += reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1];
+  ll[1] += reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1];
+
+  // Transform to physical point
+  reader->GetOutput()->TransformIndexToPhysicalPoint(ul, pul);
+  reader->GetOutput()->TransformIndexToPhysicalPoint(ur, pur);
+  reader->GetOutput()->TransformIndexToPhysicalPoint(ll, pll);
+  reader->GetOutput()->TransformIndexToPhysicalPoint(lr, plr);
+
+  // Build the cartographic region
+  RemoteSensingRegionType rsRegion;
+  RemoteSensingRegionType::IndexType rsOrigin;
+  RemoteSensingRegionType::SizeType rsSize;
+  rsOrigin[0] = std::min(pul[0], plr[0]);
+  rsOrigin[1] = std::min(pul[1], plr[1]);
+  rsSize[0] = vcl_abs(pul[0] - plr[0]);
+  rsSize[1] = vcl_abs(pul[1] - plr[1]);
+
+  rsRegion.SetOrigin(rsOrigin);
+  rsRegion.SetSize(rsSize);
+  rsRegion.SetRegionProjection(reader->GetOutput()->GetProjectionRef());
+  rsRegion.SetKeywordList(reader->GetOutput()->GetImageKeywordlist());
+
+  // Set the cartographic region to the extract roi filter
+  vdextract->SetRegion(rsRegion);
+  if (!demDirectory.empty())
+    {
+    vdextract->SetDEMDirectory(demDirectory);
+    }
+
+  // Reproject VectorData in image projection
+  vproj = VectorDataProjectionFilterType::New();
+  vproj->SetInput(vdextract->GetOutput());
+  vproj->SetInputProjectionRef(vdReader->GetOutput()->GetProjectionRef());
+  vproj->SetOutputKeywordList(reader->GetOutput()->GetImageKeywordlist());
+  vproj->SetOutputProjectionRef(reader->GetOutput()->GetProjectionRef());
+  vproj->SetOutputOrigin(reader->GetOutput()->GetOrigin());
+  vproj->SetOutputSpacing(reader->GetOutput()->GetSpacing());
+  if (!demDirectory.empty())
+    {
+    vproj->SetDEMDirectory(demDirectory);
+    }
 
   //----------
-  // check output
-  file << "\n--- VECTRODATA OUTPUT ---" << std::endl;
-  file << "ProjRef of the output vector data: "<< vdReProjFilter->GetOutput()->GetProjectionRef() << std::endl;
-  file << "Origin of the output vector data: "<< vdReProjFilter->GetOutput()->GetOrigin() << std::endl;
-  file << "Spacing of the output vector data: "<< vdReProjFilter->GetOutput()->GetSpacing() << std::endl;
-
-  file.close();
-
-  std::cout<<"END"<<std::endl;
+  // WRITE
+  VectorDataWriterType::Pointer vdwriter2 = VectorDataWriterType::New();
+  vdwriter2->SetFileName(vectorDataOutputFilename2);
+  vdwriter2->SetInput(vproj->GetOutput());
+  vdwriter2->Update();
 
 
   return EXIT_SUCCESS;

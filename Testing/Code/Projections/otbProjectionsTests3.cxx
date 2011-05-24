@@ -38,6 +38,7 @@ void RegisterTests()
   REGISTER_TEST(otbVectorDataProjectionFilterFromMapToSensor);
   REGISTER_TEST(otbVectorDataProjectionFilterFromMapToGeo);
   REGISTER_TEST(otbVectorDataProjectionFilterFromMapToImage);
+  REGISTER_TEST(otbVectorDataProjectionFilterFromGeoToMap);
   REGISTER_TEST(otbGeocentricTransformNew);
   REGISTER_TEST(otbGeocentricTransform);
   REGISTER_TEST(otbTileMapTransform);
