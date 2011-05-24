@@ -97,6 +97,7 @@ int otbSpectralAngleDataNodeFeatureFunction(int argc, char* argv[])
         << vdReProjFilter->GetOutput()->Size() << std::endl;
 
   featureFunction->SetInputImage(imgReader->GetOutput());
+  featureFunction->SetRadius(0);
 
   // Output
   VectorDataType::Pointer outVD = VectorDataType::New();
