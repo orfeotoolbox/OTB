@@ -573,7 +573,7 @@ FormosatImageMetadataInterface::GetSatAzimuth() const
       if (!imageKeywordlist.HasKey("support_data.scene_orientation"))
         {
           return 0;
-        } 
+        }
       
       valueString = imageKeywordlist.GetMetadataByKey("support_data.viewing_angle_across_track");
       double viewingAngleAcrossTrack( atof(valueString.c_str()) );
@@ -608,7 +608,7 @@ FormosatImageMetadataInterface::GetSatAzimuth() const
       
     }
 
-  return satAz; 
+  return satAz;
 }
 
 FormosatImageMetadataInterface::VariableLengthVectorType
