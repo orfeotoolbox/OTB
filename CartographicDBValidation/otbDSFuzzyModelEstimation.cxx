@@ -85,13 +85,15 @@ public:
 int otb::DSFuzzyModelEstimation::Describe(ApplicationDescriptor* descriptor)
 {
   descriptor->SetName("DSFuzzyModelEstimation");
-  descriptor->SetDescription("Estimate feature fuzzy model parameters using an image and an VectorData");
-  descriptor->AddOption("InputImage", "Support to estimate the models on",
+  descriptor->SetDescription("Estimate feature fuzzy model parameters using an image and an VectorData as support");
+  descriptor->AddOption("InputImage", "Image Support to estimate the models on",
                         "in", 1, true, ApplicationDescriptor::InputImage);
+  descriptor->AddOption("BuildingsDB", "Building DataBase Support to estimate the models on",
+                        "db", 1, true, ApplicationDescriptor::FileName);
   descriptor->AddOption("InputVectorData", "Ground Truth Vector Data",
                         "vdin", 1, true, ApplicationDescriptor::FileName);
   descriptor->AddOption("Hypothesis", "Dempster Shafer study hypothesis",
-                        "hyp", 2, false, ApplicationDescriptor::StringList);
+                        "hyp", 3, false, ApplicationDescriptor::StringList);
   //descriptor->AddOption("Criterion", "Dempster Shafer Criterion (by default (Belief+Plausibility)/2 >= 0.5))",
   //                      "cri", 1, false, ApplicationDescriptor::String);
   descriptor->AddOption("weighting", "Coefficient between 0 and 1 to promote false detections or undetection (default 0.5)",
@@ -102,8 +104,6 @@ int otb::DSFuzzyModelEstimation::Describe(ApplicationDescriptor* descriptor)
                         "dem", 1, false, ApplicationDescriptor::DirectoryName);
   descriptor->AddOption("OptimizerObserver", "Activate or not the optimizer observer",
                         "OptObs", 1, true, ApplicationDescriptor::Integer);
-
-  //TESTING PURPOSE
   descriptor->AddOption("Output", "Output Model File Name",
                         "out", 1, true, ApplicationDescriptor::FileName);
   return EXIT_SUCCESS;
@@ -148,11 +148,13 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
 
   //Instantiate
   ImageReaderType::Pointer                   imgReader = ImageReaderType::New();
+  VectorDataReaderType::Pointer               dbReader = VectorDataReaderType::New();
   VectorDataReaderType::Pointer               vdReader = VectorDataReaderType::New();
   EnvelopeFilterType::Pointer           envelopeFilter = EnvelopeFilterType::New();
   RandomGeneratorType::Pointer       vdRandomGenerator = RandomGeneratorType::New();
   VectorDataReProjFilter::Pointer     vdReProjFilterGT = VectorDataReProjFilter::New();
   VectorDataReProjFilter::Pointer     vdReProjFilterRL = VectorDataReProjFilter::New();
+  VectorDataReProjFilter::Pointer     vdReProjFilterDB = VectorDataReProjFilter::New();
   DescriptionFilterType::Pointer   descriptionFilterGT = DescriptionFilterType::New();
   DescriptionFilterType::Pointer   descriptionFilterNS = DescriptionFilterType::New();
   CostFunctionType::Pointer               costFunction = CostFunctionType::New();
@@ -165,6 +167,10 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
   imgReader->UpdateOutputInformation();
 
   imgReader->SetGlobalWarningDisplay(0);
+
+  //Read the building database
+  dbReader->SetFileName(parseResult->GetParameterString("BuildingsDB"));
+  dbReader->Update();
 
   //Read the vector data
   vdReader->SetFileName(parseResult->GetParameterString("InputVectorData"));
@@ -193,12 +199,20 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
   vdReProjFilterRL->SetUseOutputSpacingAndOriginFromImage(true);
   vdReProjFilterRL->Update();
 
+  vdReProjFilterDB->SetInputImage(imgReader->GetOutput());
+  vdReProjFilterDB->SetInputVectorData(dbReader->GetOutput());
+  vdReProjFilterDB->SetDEMDirectory(parseResult->GetParameterString("DEMDirectory"));
+  vdReProjFilterDB->SetUseOutputSpacingAndOriginFromImage(true);
+  vdReProjFilterDB->Update();
+
   //Add Description to VectorDatas
   descriptionFilterGT->SetInput(vdReProjFilterGT->GetOutput());
   descriptionFilterGT->AddOpticalImage(imgReader->GetOutput());
+  descriptionFilterGT->AddBuildingsDB(vdReProjFilterDB->GetOutput());
   descriptionFilterGT->Update();
   descriptionFilterNS->SetInput(vdReProjFilterRL->GetOutput());
   descriptionFilterNS->AddOpticalImage(imgReader->GetOutput());
+  descriptionFilterNS->AddBuildingsDB(vdReProjFilterDB->GetOutput());
   descriptionFilterNS->Update();
 
   //Cost Function
@@ -206,8 +220,8 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
   LabelSetType hyp;
   if (parseResult->IsOptionPresent("Hypothesis"))
     {
-    int NumberOfChannel = parseResult->GetNumberOfParameters("Hypothesis");
-    for (int i = 0; i < NumberOfChannel; i++)
+    int nbSet = parseResult->GetNumberOfParameters("Hypothesis");
+    for (int i = 0; i < nbSet; i++)
        {
         std::string str = parseResult->GetParameterString("Hypothesis", i);
         hyp.insert(str);
@@ -285,7 +299,7 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
   std::cout << "Results : " << optimizer->GetCurrentPosition() << std::endl;
 
   otb::FuzzyDescriptorsModelManager::DescriptorsModelType model;
-  otb::FuzzyDescriptorsModelManager::ParameterType        ndvi, radiom;
+  otb::FuzzyDescriptorsModelManager::ParameterType        ndvi, radiom, overlap;
 
   for (unsigned int i = 0; i<4; i++)
     {
@@ -295,9 +309,13 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
     {
     radiom.push_back(optimizer->GetCurrentPosition()[i+4]);
     }
-
+  for (unsigned int i = 0; i<4; i++)
+    {
+    overlap.push_back(optimizer->GetCurrentPosition()[i+8]);
+    }
   otb::FuzzyDescriptorsModelManager::AddDescriptor("NDVI", ndvi, model);
   otb::FuzzyDescriptorsModelManager::AddDescriptor("RADIOM", radiom, model);
+  otb::FuzzyDescriptorsModelManager::AddDescriptor("DBOVER", overlap, model);
   otb::FuzzyDescriptorsModelManager::Save(parseResult->GetParameterString("Output"),
                                           model);
 
