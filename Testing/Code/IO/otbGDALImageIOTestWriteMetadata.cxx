@@ -167,6 +167,7 @@ int otbGDALImageIOTestWriteMetadata(int argc, char * argv[])
   options.push_back("-setGCP");
   testWriteMetadata(filenameTIFF, filenameHDR, options, file);
 
+  file << "==================================================" << std::endl;
   //////////
   // ProjRef, NoGCP, No GeoTransfo_ID
   options.clear();
@@ -196,6 +197,38 @@ int otbGDALImageIOTestWriteMetadata(int argc, char * argv[])
   options.push_back("-setProjectionRef");
   options.push_back("-setGCP");
   testWriteMetadata(filenameTIFF, filenameHDR, options, file);
+
+  file << "==================================================" << std::endl;
+  //////////
+  // ProjRefUTM, NoGCP, No GeoTransfo_ID
+  options.clear();
+  options.push_back("-setProjectionRef_UTM");
+  testWriteMetadata(filenameTIFF, filenameHDR, options, file);
+
+  // ProjRefUTM, NoGCP, GeoTransfo_ID
+  options.push_back("-setGeoTransform_ID");
+  testWriteMetadata(filenameTIFF, filenameHDR, options, file);
+
+  // ProjRefUTM, GCP, GeoTransfo_ID
+  options.push_back("-setGCP");
+  testWriteMetadata(filenameTIFF, filenameHDR, options, file);
+
+  // ProjRefUTM, NoGCP, GeoTransfo
+  options.clear();
+  options.push_back("-setProjectionRef_UTM");
+  options.push_back("-setGeoTransform");
+  testWriteMetadata(filenameTIFF, filenameHDR, options, file);
+
+  // ProjRefUTM, GCP, GeoTransfo
+  options.push_back("-setGCP");
+  testWriteMetadata(filenameTIFF, filenameHDR, options, file);
+
+  // ProjRefUTM, GCP, No GeoTransfo
+  options.clear();
+  options.push_back("-setProjectionRef_UTM");
+  options.push_back("-setGCP");
+  testWriteMetadata(filenameTIFF, filenameHDR, options, file);
+
 
   file.close();
   return EXIT_SUCCESS;
@@ -391,6 +424,7 @@ bool writeReadDatasetMetadata(std::string filename, std::vector<std::string> opt
   // Set parameters
   bool setGCP = false;
   bool setProjectionRef = false;
+  bool setProjectionRef_UTM = false;
   bool setGeoTransform_ID = false;
   bool setGeoTransform = false;
 
@@ -413,7 +447,12 @@ bool writeReadDatasetMetadata(std::string filename, std::vector<std::string> opt
       {
       setProjectionRef = true;
       }
+    if (opt.compare("-setProjectionRef_UTM") == 0)
+      {
+      setProjectionRef_UTM = true;
+      }
     }
+
 
   // Check the driver used
   GDALDriver *poDriver;
@@ -447,10 +486,10 @@ bool writeReadDatasetMetadata(std::string filename, std::vector<std::string> opt
   poDstDS = poDriver->Create( filename.c_str(), 128, 128, 1, GDT_Byte,
                               papszOptions );
 
-  OGRSpatialReference oSRS;
-  char *pszSRS_WKT = NULL;
-  oSRS.SetWellKnownGeogCS( "WGS84" );
-  oSRS.exportToWkt( &pszSRS_WKT );
+  OGRSpatialReference oSRS_GCP;
+  char *pszSRS_WKT_GCP = NULL;
+  oSRS_GCP.SetWellKnownGeogCS( "WGS84" );
+  oSRS_GCP.exportToWkt( &pszSRS_WKT_GCP );
 
   // Set GCP
   if (setGCP)
@@ -468,7 +507,7 @@ bool writeReadDatasetMetadata(std::string filename, std::vector<std::string> opt
     gdalGcps[0].dfGCPY = 43.6544262050905;
     gdalGcps[0].dfGCPZ = 0;
 
-    poDstDS->SetGCPs(gcpCount, gdalGcps, pszSRS_WKT);
+    poDstDS->SetGCPs(gcpCount, gdalGcps, pszSRS_WKT_GCP);
 
     delete[] gdalGcps;
 
@@ -477,10 +516,17 @@ bool writeReadDatasetMetadata(std::string filename, std::vector<std::string> opt
     }
 
   // Set ProjectionRef
-  if (setProjectionRef)
+  OGRSpatialReference oSRS_ProjRef;
+  char *pszSRS_WKT_ProjRef = NULL;
+  if (setProjectionRef || setProjectionRef_UTM)
   {
-    //infoDatasetCreate->m_ProjRef = static_cast<std::string>(pszSRS_WKT);
-    poDstDS->SetProjection( pszSRS_WKT );
+    oSRS_ProjRef.SetWellKnownGeogCS( "WGS84" );
+    if (setProjectionRef_UTM)
+      {
+      oSRS_ProjRef.SetUTM( 31, TRUE );
+      }
+    oSRS_ProjRef.exportToWkt( &pszSRS_WKT_ProjRef );
+    poDstDS->SetProjection( pszSRS_WKT_ProjRef );
   }
 
   // Set GeoTransform
@@ -531,7 +577,8 @@ bool writeReadDatasetMetadata(std::string filename, std::vector<std::string> opt
 
   // Once we're done, close properly the dataset
   GDALClose( (GDALDatasetH) poDstDS );
-  CPLFree( pszSRS_WKT );
+  CPLFree( pszSRS_WKT_GCP );
+  CPLFree( pszSRS_WKT_ProjRef );
 
   //**************
   // Open File
