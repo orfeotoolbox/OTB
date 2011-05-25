@@ -25,6 +25,7 @@
 
 #include "otbVectorData.h"
 #include "otbVectorDataFileReader.h"
+#include "otbVectorDataFileWriter.h"
 #include "otbImageToEnvelopeVectorDataFilter.h"
 #include "otbVectorDataToRandomLineGenerator.h"
 
@@ -39,6 +40,9 @@
 
 #include "otbFuzzyDescriptorsModelManager.h"
 
+#include "otbVectorDataProjectionFilter.h"
+#include "otbVectorDataTransformFilter.h"
+#include "itkAffineTransform.h"
 
 //  The following piece of code implements an observer
 //  that will monitor the evolution of the registration process.
@@ -75,10 +79,6 @@ public:
 };
 
 
-//TESTING
-#include "otbVectorDataFileWriter.h"
-
-
 //namespace otb
 //{
 
@@ -87,25 +87,29 @@ int otb::DSFuzzyModelEstimation::Describe(ApplicationDescriptor* descriptor)
   descriptor->SetName("DSFuzzyModelEstimation");
   descriptor->SetDescription("Estimate feature fuzzy model parameters using an image and an VectorData as support");
   descriptor->AddOption("InputImage", "Image Support to estimate the models on",
-                        "img", 1, true, ApplicationDescriptor::InputImage);
+                        "img", 1,  true, ApplicationDescriptor::InputImage);
   descriptor->AddOption("BuildingsDB", "Building DataBase Support to estimate the models on",
-                        "db", 1, true, ApplicationDescriptor::FileName);
+                        "db", 1,   true, ApplicationDescriptor::FileName);
   descriptor->AddOption("InputVectorData", "Ground Truth Vector Data",
                         "vdin", 1, true, ApplicationDescriptor::FileName);
+  descriptor->AddOption("Output", "Output Model File Name",
+                        "out", 1,  true, ApplicationDescriptor::FileName);
+
   descriptor->AddOption("Hypothesis", "Dempster Shafer study hypothesis",
                         "hyp", 3, false, ApplicationDescriptor::StringList);
-  //descriptor->AddOption("Criterion", "Dempster Shafer Criterion (by default (Belief+Plausibility)/2 >= 0.5))",
-  //                      "cri", 1, false, ApplicationDescriptor::String);
-  descriptor->AddOption("weighting", "Coefficient between 0 and 1 to promote false detections or undetection (default 0.5)",
+  descriptor->AddOption("Criterion", "Dempster Shafer Criterion (by default (Belief+Plausibility)/2)",
+                        "cri", 1, false, ApplicationDescriptor::String);
+  descriptor->AddOption("weighting", "Coefficient between 0 and 1 to promote undetection or false detections (default 0.5)",
                         "wgt", 1, false, ApplicationDescriptor::Real);
   descriptor->AddOption("MaximumNumberOfIterations", "Maximum Number os Optimizer Iteration",
                         "MaxNbIt", 1, false, ApplicationDescriptor::Integer);
   descriptor->AddOption("DEMDirectory", "DEM directory",
                         "dem", 1, false, ApplicationDescriptor::DirectoryName);
   descriptor->AddOption("OptimizerObserver", "Activate or not the optimizer observer",
-                        "OptObs", 1, false, ApplicationDescriptor::Integer);
-  descriptor->AddOption("Output", "Output Model File Name",
-                        "out", 1, true, ApplicationDescriptor::FileName);
+                        "OptObs", 0, false, ApplicationDescriptor::Boolean);
+  descriptor->AddOption("GenerateShp", "Activate the output of intermediate vector datas (only work with cartographic image)",
+                        "grtShp", 0, false, ApplicationDescriptor::Boolean);
+
   return EXIT_SUCCESS;
 }
 
@@ -116,6 +120,7 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
   typedef VectorDataType::ValuePrecisionType          PrecisionType;
   typedef VectorDataType::PrecisionType               CoordRepType;
   typedef otb::VectorDataFileReader<VectorDataType>   VectorDataReaderType;
+  typedef otb::VectorDataFileWriter<VectorDataType>   VectorDataWriterType;
   typedef otb::VectorDataToRandomLineGenerator<VectorDataType>
                                                       RandomGeneratorType;
 
@@ -142,8 +147,6 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
   typedef CostFunctionType::LabelSetType              LabelSetType;
 
   typedef itk::AmoebaOptimizer                        OptimizerType;
-
-  typedef otb::VectorDataFileWriter<VectorDataType>   VectorDataWriterType;
 
 
   //Instantiate
@@ -235,11 +238,21 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
         std::string str = parseResult->GetParameterString("Hypothesis", i);
         hyp.insert(str);
        }
-    costFunction->SetHypothesis(hyp);
     }
+  else
+    {
+    hyp.insert("NDVI");
+    hyp.insert("RADIOM");
+    hyp.insert("DBOVERLAP");
+    }
+  costFunction->SetHypothesis(hyp);
   if (parseResult->IsOptionPresent("Weighting"))
     {
     costFunction->SetWeight(parseResult->GetParameterDouble("Weighting"));
+    }
+  if (parseResult->IsOptionPresent("Criterion"))
+    {
+    costFunction->SetCriterionFormula(parseResult->GetParameterString("Criterion"));
     }
   costFunction->SetGTVectorData(descriptionFilterGT->GetOutput());
   costFunction->SetNSVectorData(descriptionFilterNS->GetOutput());
@@ -327,6 +340,59 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
   otb::FuzzyDescriptorsModelManager::AddDescriptor("DBOVER", overlap, model);
   otb::FuzzyDescriptorsModelManager::Save(parseResult->GetParameterString("Output"),
                                           model);
+
+  if (parseResult->IsOptionPresent("GenerateShp"))
+    {
+    VectorDataWriterType::Pointer NSWriter = VectorDataWriterType::New();
+    VectorDataWriterType::Pointer PSWriter = VectorDataWriterType::New();
+    std::string NSFileName, PSFileName;
+    NSFileName = parseResult->GetParameterString("Output") + "_NS.shp";
+    PSFileName = parseResult->GetParameterString("Output") + "_PS.shp";
+
+    VectorDataType::Pointer vdNS = descriptionFilterNS->GetOutput();
+    VectorDataType::Pointer vdPS = descriptionFilterGT->GetOutput();
+    VectorDataType::Pointer projectedVDNS, projectedVDPS;
+
+
+    std::string projRef = imgReader->GetOutput()->GetProjectionRef();
+
+    typedef itk::AffineTransform<VectorDataType::PrecisionType, 2> TransformType;
+    typedef otb::VectorDataTransformFilter<VectorDataType, VectorDataType> VDTransformType;
+
+    TransformType::ParametersType params;
+    params.SetSize(6);
+    params[0] = imgReader->GetOutput()->GetSpacing()[0];
+    params[1] = 0;
+    params[2] = 0;
+    params[3] = imgReader->GetOutput()->GetSpacing()[1];
+    params[4] = imgReader->GetOutput()->GetOrigin()[0];
+    params[5] = imgReader->GetOutput()->GetOrigin()[1];
+
+    TransformType::Pointer transform = TransformType::New();
+    transform->SetParameters(params);
+
+    VDTransformType::Pointer vdTransformNS = VDTransformType::New();
+    vdTransformNS->SetTransform(transform);
+    vdTransformNS->SetInput(vdNS);
+    vdTransformNS->Update();
+
+    VDTransformType::Pointer vdTransformPS = VDTransformType::New();
+    vdTransformPS->SetTransform(transform);
+    vdTransformPS->SetInput(vdPS);
+    vdTransformPS->Update();
+
+    projectedVDNS = vdTransformNS->GetOutput();
+    projectedVDNS->SetProjectionRef(projRef);
+    projectedVDPS = vdTransformPS->GetOutput();
+    projectedVDPS->SetProjectionRef(projRef);
+
+    NSWriter->SetInput(projectedVDNS);
+    NSWriter->SetFileName(NSFileName);
+    NSWriter->Update();
+    PSWriter->SetInput(projectedVDPS);
+    PSWriter->SetFileName(PSFileName);
+    PSWriter->Update();
+    }
 
   return EXIT_SUCCESS;
 }
