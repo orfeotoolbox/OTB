@@ -189,19 +189,28 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
   //Reproject into image index coordinates
   vdReProjFilterGT->SetInputImage(imgReader->GetOutput());
   vdReProjFilterGT->SetInputVectorData(vdReader->GetOutput());
-  vdReProjFilterGT->SetDEMDirectory(parseResult->GetParameterString("DEMDirectory"));
+  if( parseResult->IsOptionPresent("DEMDirectory") )
+    {
+    vdReProjFilterGT->SetDEMDirectory(parseResult->GetParameterString("DEMDirectory"));
+    }
   vdReProjFilterGT->SetUseOutputSpacingAndOriginFromImage(true);
   vdReProjFilterGT->Update();
 
   vdReProjFilterRL->SetInputImage(imgReader->GetOutput());
   vdReProjFilterRL->SetInputVectorData(vdRandomGenerator->GetOutput());
-  vdReProjFilterRL->SetDEMDirectory(parseResult->GetParameterString("DEMDirectory"));
+  if( parseResult->IsOptionPresent("DEMDirectory") )
+    {
+    vdReProjFilterRL->SetDEMDirectory(parseResult->GetParameterString("DEMDirectory"));
+    }
   vdReProjFilterRL->SetUseOutputSpacingAndOriginFromImage(true);
   vdReProjFilterRL->Update();
 
   vdReProjFilterDB->SetInputImage(imgReader->GetOutput());
   vdReProjFilterDB->SetInputVectorData(dbReader->GetOutput());
-  vdReProjFilterDB->SetDEMDirectory(parseResult->GetParameterString("DEMDirectory"));
+  if( parseResult->IsOptionPresent("DEMDirectory") )
+    {
+    vdReProjFilterDB->SetDEMDirectory(parseResult->GetParameterString("DEMDirectory"));
+    }
   vdReProjFilterDB->SetUseOutputSpacingAndOriginFromImage(true);
   vdReProjFilterDB->Update();
 
