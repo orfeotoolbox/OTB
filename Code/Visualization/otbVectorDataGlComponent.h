@@ -172,7 +172,8 @@ private:
   static void CALLBACK TesselationErrorCallback(GLenum errorCode)
   {
     const GLubyte * estring = gluErrorString(errorCode);
-    itkGenericExceptionMacro(<< "Glu Tesselation error: " << estring);
+    otbMsgDevMacro(<< "Glu Tesselation error: " << estring);
+    estring = 0; // avoid unused variable warning
   }
 
   // Static begin callback for tesselation
