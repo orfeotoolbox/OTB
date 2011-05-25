@@ -31,21 +31,22 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
 ::ReflectanceToSurfaceReflectanceImageFilter() :
-  m_IsSetAtmosphericRadiativeTerms(false),
-  m_AeronetFileName(""),
-  m_FilterFunctionValuesFileName(""),
-  m_UseGenerateParameters(true)
-{
+ m_IsSetAtmosphericRadiativeTerms(false),
+ m_AeronetFileName(""),
+ m_FilterFunctionValuesFileName(""),
+ m_UseGenerateParameters(true)
+ {
   m_AtmosphericRadiativeTerms = AtmosphericRadiativeTerms::New();
   m_CorrectionParameters      = AtmosphericCorrectionParameters::New();
-  m_FilterFunctionCoef.clear();
-}
+  m_FilterFunctionCoef = InternalWavelengthSpectralBandVectorType::New();
+  m_FilterFunctionCoef->Clear();
+ }
 
 template <class TInputImage, class TOutputImage>
 void
 ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
 ::UpdateAtmosphericRadiativeTerms()
-{
+ {
   if (this->GetInput() == NULL)
     {
     itkExceptionMacro(<< "Input must be set before updating the atmospheric radiative terms");
@@ -95,68 +96,52 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
     {
     m_CorrectionParameters->LoadFilterFunctionValue(m_FilterFunctionValuesFileName);
     }
-  // the user has set the filter function values
-  else if (m_CorrectionParameters->GetWavelengthSpectralBand()->Size() !=
-           this->GetInput()->GetNumberOfComponentsPerPixel())
+  //case where filter function values are not read from an ascii file
+  else
     {
-    bool ffvfOK = true;
-    if (m_FilterFunctionCoef.size() == 0) ffvfOK = false;
-    else if (m_FilterFunctionCoef.size() != this->GetInput()->GetNumberOfComponentsPerPixel())
-      itkExceptionMacro(
-        << "Function Values and Input image size mismatch");
-
-    for (unsigned int i = 0; i < this->GetInput()->GetNumberOfComponentsPerPixel(); i++)
+    if (m_FilterFunctionCoef->Size() == 0)
       {
-      FilterFunctionValuesType::Pointer functionValues = FilterFunctionValuesType::New();
-
-      if (ffvfOK)
+      std::cout << "use dummy filter" << std::endl;
+      for (unsigned int i = 0; i < this->GetInput()->GetNumberOfComponentsPerPixel(); ++i)
         {
-        functionValues->SetFilterFunctionValues(m_FilterFunctionCoef[i]);
-        }
-      else    // if no ffvf set, compute the step to be sure that the valueswavelength are between min and max and 1 as coef
-        {
-        functionValues->SetMinSpectralValue(imageMetadataInterface->GetFirstWavelengths()[i]);
-        functionValues->SetMaxSpectralValue(imageMetadataInterface->GetLastWavelengths()[i]);
-        //By default the function values size is 3, set the step to feet with min and max spectral value
-        functionValues->SetUserStep((functionValues->GetMaxSpectralValue() - functionValues->GetMinSpectralValue()) / 2.);
+        m_FilterFunctionCoef->PushBack(FilterFunctionValues::New());
         }
 
-      m_CorrectionParameters->SetWavelengthSpectralBandWithIndex(i, functionValues);
       }
+    m_CorrectionParameters->SetWavelengthSpectralBand(m_FilterFunctionCoef);
 
+    Parameters2RadiativeTermsPointerType param2Terms = Parameters2RadiativeTermsType::New();
+    param2Terms->SetInput(m_CorrectionParameters);
+    param2Terms->Update();
+    m_AtmosphericRadiativeTerms = param2Terms->GetOutput();
     }
-
-  Parameters2RadiativeTermsPointerType param2Terms = Parameters2RadiativeTermsType::New();
-  param2Terms->SetInput(m_CorrectionParameters);
-  param2Terms->Update();
-  m_AtmosphericRadiativeTerms = param2Terms->GetOutput();
-}
+ }
 
 template <class TInputImage, class TOutputImage>
 void
 ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
 ::GenerateOutputInformation()
-{
+ {
   Superclass::GenerateOutputInformation();
   if (m_UseGenerateParameters) this->GenerateParameters();
-}
+ }
 
 template <class TInputImage, class TOutputImage>
 void
 ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
 ::GenerateAtmosphericRadiativeTerms()
-{
-    Parameters2RadiativeTermsPointerType param2Terms = Parameters2RadiativeTermsType::New();
-    param2Terms->SetInput(m_CorrectionParameters);
-    param2Terms->Update();
-    m_AtmosphericRadiativeTerms = param2Terms->GetOutput();
-}
+ {
+  Parameters2RadiativeTermsPointerType param2Terms = Parameters2RadiativeTermsType::New();
+  param2Terms->SetInput(m_CorrectionParameters);
+  param2Terms->Update();
+  m_AtmosphericRadiativeTerms = param2Terms->GetOutput();
+ }
 
 template <class TInputImage, class TOutputImage>
 void
 ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
 ::UpdateFunctors()
-{
+ {
   if (this->GetInput() == NULL)
     {
     itkExceptionMacro(<< "Input must be set before updating the functors");
@@ -184,13 +169,13 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
 
     this->GetFunctorVector().push_back(functor);
     }
-}
+ }
 
 template <class TInputImage, class TOutputImage>
 void
 ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
 ::GenerateParameters()
-{
+ {
   if (!m_IsSetAtmosphericRadiativeTerms)
     {
     this->UpdateAtmosphericRadiativeTerms();
@@ -198,7 +183,7 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
     }
 
   this->UpdateFunctors();
-}
+ }
 
 }
 

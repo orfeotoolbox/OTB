@@ -26,10 +26,10 @@ namespace otb
 FilterFunctionValues
 ::FilterFunctionValues()
 {
-  m_MinSpectralValue = 0;
+  m_MinSpectralValue = 0.3;
   m_MaxSpectralValue = 1;
   // Fill with 1. Size 3 for 6S interpolation
-  m_FilterFunctionValues = ValuesVectorType(3, 1.);
+  m_FilterFunctionValues = ValuesVectorType(280, 1.);
   m_UserStep = 0.0025;
 }
 

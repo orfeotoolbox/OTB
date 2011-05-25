@@ -170,6 +170,10 @@ public:
   typedef FilterFunctionValuesType::ValuesVectorType CoefVectorType;
   typedef std::vector<CoefVectorType>                FilterFunctionCoefVectorType;
 
+  typedef ObjectList<FilterFunctionValues>                  InternalWavelengthSpectralBandVectorType;
+  typedef InternalWavelengthSpectralBandVectorType::Pointer WavelengthSpectralBandVectorType;
+
+
   typedef itk::MetaDataDictionary MetaDataDictionaryType;
 
   /** Get/Set Atmospheric Radiative Terms. */
@@ -195,12 +199,12 @@ public:
   itkGetMacro(FilterFunctionValuesFileName, std::string);
 
   /** Get/Set Filter function coef. */
-  void SetFilterFunctionCoef(FilterFunctionCoefVectorType vect)
+  void SetFilterFunctionCoef(WavelengthSpectralBandVectorType vect)
   {
     m_FilterFunctionCoef = vect;
     this->Modified();
   }
-  FilterFunctionCoefVectorType GetFilterFunctionCoef() const
+  WavelengthSpectralBandVectorType GetFilterFunctionCoef() const
   {
     return m_FilterFunctionCoef;
   }
@@ -245,7 +249,7 @@ private:
   /** Path to an filter function values file. */
   std::string m_FilterFunctionValuesFileName;
   /** Contains the filter function values (each element is a vector and represents the values for each channel) */
-  FilterFunctionCoefVectorType m_FilterFunctionCoef;
+  WavelengthSpectralBandVectorType m_FilterFunctionCoef;
   /** Enable/Disable GenerateParameters in GenerateOutputInformation.
    *  Useful for image view that call GenerateOutputInformation each time you move the full area.
    */
