@@ -37,8 +37,10 @@ int OSMDownloader::Describe(ApplicationDescriptor* descriptor)
   descriptor->SetDescription("Generate a vector data from OSM on the input image extend");
   descriptor->AddOption("InputImage", "Support to estimate the models on",
                         "in", 1, true, ApplicationDescriptor::InputImage);
-  descriptor->AddOption("OSMKey", "OSM key (highway, buildings...)",
-                          "key", 1, true, ApplicationDescriptor::String);
+  descriptor->AddOption("OSMKey", "OSM key (highway, building...)",
+                        "key", 1, true, ApplicationDescriptor::String);
+  descriptor->AddOption("OSMValue", "OSM Value (motorway, footway...)",
+                        "val", 1, false, ApplicationDescriptor::String);
   descriptor->AddOption("DEMDirectory", "DEM directory",
                         "dem", 1, false, ApplicationDescriptor::DirectoryName);
   descriptor->AddOption("Output", "OutputVectorData",
@@ -76,6 +78,10 @@ int OSMDownloader::Execute(otb::ApplicationOptionsResult* parseResult)
 
   //Generate the envelope
   envelopeFilter->SetInput(imgReader->GetOutput()); //->Output in WGS84
+  if (parseResult->IsOptionPresent("CriterionFormula"))
+    {
+    envelopeFilter->SetDEMDirectory(parseResult->GetParameterString("DEMDirectory"));
+    }
   envelopeFilter->Update();
 
   vdProperties->SetVectorDataObject(envelopeFilter->GetOutput());
@@ -115,7 +121,16 @@ int OSMDownloader::Execute(otb::ApplicationOptionsResult* parseResult)
   std::cout << vdOSMGenerator->GetVectorDataByName(parseResult->GetParameterString("OSMKey"))->Size()-3
       << std::endl;
 
-  vdWriter->SetInput(vdOSMGenerator->GetVectorDataByName(parseResult->GetParameterString("OSMKey")));
+  if (parseResult->IsOptionPresent("OSMValue"))
+    {
+    vdWriter->SetInput(vdOSMGenerator->GetVectorDataByName(parseResult->GetParameterString("OSMKey"),
+                                                           parseResult->GetParameterString("OSMValue")));
+    }
+  else
+    {
+    vdWriter->SetInput(vdOSMGenerator->GetVectorDataByName(parseResult->GetParameterString("OSMKey")));
+    }
+
   vdWriter->SetFileName(parseResult->GetParameterString("Output"));
   vdWriter->Update();
 
