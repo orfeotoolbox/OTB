@@ -35,13 +35,14 @@ int VectorDataDSValidation::Describe(ApplicationDescriptor* descriptor)
                         "in", 1, true, ApplicationDescriptor::FileName);
   descriptor->AddOption("OutputShapeFileName", "Output Shape file name",
                         "out", 1, true, ApplicationDescriptor::FileName);
-  descriptor->AddOptionNParams("Hypothesis", "Hypothesis (default: NDVI, RADIOM)",
-                               "hyp", false, ApplicationDescriptor::StringList);
   descriptor->AddOption("DescriptorsModelFileName", "Fuzzy descriptors model xml file (default: NDVI(0.25, 0.5, 0.75, 0.99) / RADIOM(0.25, 0.5, 0.75, 0.90))",
                         "descMod", 1, true, ApplicationDescriptor::FileName);
+  descriptor->AddOptionNParams("Hypothesis", "Hypothesis (default: NDVI, RADIOM)",
+                               "hyp", false, ApplicationDescriptor::StringList);
   descriptor->AddOption("CriterionFormula", "Criterion formula expression (default: ((Belief + Plausibility)/2) >= 0.5)",
-                        "exp", 1, false, ApplicationDescriptor::FileName);
-
+                        "Cri", 1, false, ApplicationDescriptor::String);
+  descriptor->AddOption("CriterionThreshold", "Criterion threshold (by default 0.5)",
+                        "thd", 1, false, ApplicationDescriptor::Real);
   return EXIT_SUCCESS;
 }
 
@@ -97,10 +98,11 @@ int VectorDataDSValidation::Execute(otb::ApplicationOptionsResult* parseResult)
     {
     filter->SetCriterionFormula(parseResult->GetParameterString("CriterionFormula"));
     }
-  else
+  if (parseResult->IsOptionPresent("CriterionThreshold"))
     {
-    filter->SetCriterionFormula(parseResult->GetParameterString("((Belief + Plausibility)/2.)"));
+    filter->SetCriterionThreshold(parseResult->GetParameterDouble("CriterionThreshold"));
     }
+
   // Write the output
   VectorDataWriterType::Pointer vdWriter = VectorDataWriterType::New();
   vdWriter->SetFileName(parseResult->GetParameterString("OutputShapeFileName"));
