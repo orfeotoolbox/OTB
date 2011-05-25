@@ -14,7 +14,7 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 #Tolerance sur diff pixel image
 SET(NOTOL 0.0)
 SET(EPSILON_6 0.000001)
-
+SET(EPSILON_4 0.0001)
 
 SET(UTILITIES_TESTS ${CXX_TEST_PATH}/otbUtilitiesTests)
 
@@ -141,7 +141,7 @@ ADD_TEST(utTvSvmComposedKernelFunctorTest ${UTILITIES_TESTS}
 #)
 
 ADD_TEST(utTv6SFunctionMainTest ${UTILITIES_TESTS}
---compare-ascii ${EPSILON_6}  ${BASELINE_FILES}/ut6S_function_main_test.txt
+--compare-ascii ${EPSILON_4}  ${BASELINE_FILES}/ut6S_function_main_test.txt
                 ${TEMP}/ut6S_function_main_test.txt
                 SIXSFunctionMainOtbTest
                 ${INPUTDATA}/in6S_otb
