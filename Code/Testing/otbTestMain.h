@@ -272,10 +272,8 @@ int main(int ac, char* av[])
         std::cerr << "Failure: " << testToRun << ": no test identified " << testToRun << "\n";
         return -1;
       }
-
-  if (j != StringToTestFunctionMap.end())
+  else
     {
-      std::cout<<"goooo?: "<<std::endl;
     MainFuncPointer f = j->second;
     int             result;
     try
@@ -312,8 +310,6 @@ int main(int ac, char* av[])
       std::cerr << "otbTestMain '" << testToRun << "': Unknown exception thrown !" << std::endl;
       result = EXIT_FAILURE;
       }
-
-    std::cout<<"result: "<<result<<std::endl;
 
     if (result != EXIT_SUCCESS )
       {
@@ -399,7 +395,7 @@ int main(int ac, char* av[])
       return -1;
       }
     std::cout << "-------------  End control baseline tests    -------------" << std::endl;
-  
+    
     return result;
     }
 }
