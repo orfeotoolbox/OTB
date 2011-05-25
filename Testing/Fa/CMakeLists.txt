@@ -232,6 +232,8 @@ ADD_TEST(FA-00134-feature_extraction ${CXX_TEST_PATH}/00134-feature_extraction
 	${IMAGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
         ${TEMP}/extracted_filter_134.tif
         5
+        500 # extract start index
+        300 # extract size
 	)
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
