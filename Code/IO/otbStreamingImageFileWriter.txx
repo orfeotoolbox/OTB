@@ -107,11 +107,12 @@ StreamingImageFileWriter<TInputImage>
 template <class TInputImage>
 void
 StreamingImageFileWriter<TInputImage>
-::SetAutomaticStrippedStreaming(unsigned int availableRAM)
+::SetAutomaticStrippedStreaming(unsigned int availableRAM, double bias)
 {
   typedef RAMDrivenStrippedStreamingManager<TInputImage> RAMDrivenStrippedStreamingManagerType;
   typename RAMDrivenStrippedStreamingManagerType::Pointer streamingManager = RAMDrivenStrippedStreamingManagerType::New();
   streamingManager->SetAvailableRAMInMB(availableRAM);
+  streamingManager->SetBias(bias);
 
   m_StreamingManager = streamingManager;
 }
@@ -131,12 +132,12 @@ StreamingImageFileWriter<TInputImage>
 template <class TInputImage>
 void
 StreamingImageFileWriter<TInputImage>
-::SetAutomaticTiledStreaming(unsigned int availableRAM)
+::SetAutomaticTiledStreaming(unsigned int availableRAM, double bias)
 {
   typedef RAMDrivenTiledStreamingManager<TInputImage> RAMDrivenTiledStreamingManagerType;
   typename RAMDrivenTiledStreamingManagerType::Pointer streamingManager = RAMDrivenTiledStreamingManagerType::New();
   streamingManager->SetAvailableRAMInMB(availableRAM);
-
+  streamingManager->SetBias(bias);
   m_StreamingManager = streamingManager;
 }
 

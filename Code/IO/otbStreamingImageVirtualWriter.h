@@ -111,7 +111,7 @@ public:
    *   by estimating the memory consumption of the pipeline.
    *   Setting the availableRAM parameter to 0 means that the available RAM
    *   is set from the CMake configuration option */
-  void SetAutomaticStrippedStreaming(unsigned int availableRAM);
+  void SetAutomaticStrippedStreaming(unsigned int availableRAM, double bias = 1.0);
 
   /**  Set the streaming mode to 'tiled' and configure the dimension of the tiles
    *   in pixels for each dimension (square tiles will be generated) */
@@ -123,7 +123,7 @@ public:
    *   Tiles will be square.
    *   Setting the availableRAM parameter to 0 means that the available RAM
    *   is set from the CMake configuration option */
-  void SetAutomaticTiledStreaming(unsigned int availableRAM);
+  void SetAutomaticTiledStreaming(unsigned int availableRAM, double bias = 1.0);
 
 protected:
   StreamingImageVirtualWriter();

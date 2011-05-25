@@ -62,7 +62,13 @@ public:
 
   /** The number of Megabytes available (if 0, the configuration option is
     used)*/
-  itkGetMacro(AvailableRAMInMB, unsigned int);
+  itkGetConstMacro(AvailableRAMInMB, unsigned int);
+
+  /** The multiplier to apply to the memory print estimation */
+  itkSetMacro(Bias, double);
+
+  /** The multiplier to apply to the memory print estimation */
+  itkGetConstMacro(Bias, double);
 
   /** Actually computes the stream divisions, according to the specified streaming mode,
    * eventually using the input parameter to estimate memory consumption */
@@ -74,6 +80,10 @@ protected:
 
   /** The number of MegaBytes of RAM available */
   unsigned int m_AvailableRAMInMB;
+
+  /** The multiplier to apply to the memory print estimation */
+  double m_Bias;
+
 private:
   RAMDrivenTiledStreamingManager(const RAMDrivenTiledStreamingManager &);
   void operator =(const RAMDrivenTiledStreamingManager&);

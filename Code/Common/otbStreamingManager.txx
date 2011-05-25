@@ -73,7 +73,8 @@ StreamingManager<TImage>::GetActualAvailableRAMInBytes(MemoryPrintType available
 template <class TImage>
 unsigned int
 StreamingManager<TImage>::EstimateOptimalNumberOfDivisions(itk::DataObject * input, const RegionType &region,
-                                                           MemoryPrintType availableRAM)
+                                                           MemoryPrintType availableRAM,
+                                                           double bias)
 {
   otbMsgDevMacro(<< "availableRAM " << availableRAM)
 
@@ -119,10 +120,11 @@ StreamingManager<TImage>::EstimateOptimalNumberOfDivisions(itk::DataObject * inp
       otbMsgDevMacro("Using an extract to estimate memory : " << smallRegion)
       // the region is well behaved, inside the largest possible region
       memoryPrintCalculator->SetDataToWrite(extractFilter->GetOutput() );
+
       regionTrickFactor = static_cast<double>( region.GetNumberOfPixels() )
         / static_cast<double>(smallRegion.GetNumberOfPixels() );
 
-      memoryPrintCalculator->SetBiasCorrectionFactor(regionTrickFactor);
+      memoryPrintCalculator->SetBiasCorrectionFactor(regionTrickFactor * bias);
       }
     else
       {
@@ -130,7 +132,7 @@ StreamingManager<TImage>::EstimateOptimalNumberOfDivisions(itk::DataObject * inp
       // the region is not well behaved
       // use the full region
       memoryPrintCalculator->SetDataToWrite(input);
-      memoryPrintCalculator->SetBiasCorrectionFactor(1.0);
+      memoryPrintCalculator->SetBiasCorrectionFactor(bias);
       }
 
     memoryPrintCalculator->Compute();

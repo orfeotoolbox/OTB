@@ -113,8 +113,12 @@ public:
    *   available. The actual number of divisions is computed automatically
    *   by estimating the memory consumption of the pipeline.
    *   Setting the availableRAM parameter to 0 means that the available RAM
-   *   is set from the CMake configuration option */
-  void SetAutomaticStrippedStreaming(unsigned int availableRAM = 0);
+   *   is set from the CMake configuration option.
+   *   The bias parameter is a multiplier applied on the estimated memory size
+   *   of the pipeline and can be used to fine tune the potential gap between
+   *   estimated memory and actual memory used, which can happen because of
+   *   composite filters for example */
+  void SetAutomaticStrippedStreaming(unsigned int availableRAM = 0, double bias = 1.0);
 
   /**  Set the streaming mode to 'tiled' and configure the dimension of the tiles
    *   in pixels for each dimension (square tiles will be generated) */
@@ -125,8 +129,12 @@ public:
    *   by estimating the memory consumption of the pipeline.
    *   Tiles will be square.
    *   Setting the availableRAM parameter to 0 means that the available RAM
-   *   is set from the CMake configuration option */
-  void SetAutomaticTiledStreaming(unsigned int availableRAM = 0);
+   *   is set from the CMake configuration option
+   *   The bias parameter is a multiplier applied on the estimated memory size
+   *   of the pipeline and can be used to fine tune the potential gap between
+   *   estimated memory and actual memory used, which can happen because of
+   *   composite filters for example */
+  void SetAutomaticTiledStreaming(unsigned int availableRAM = 0, double bias = 1.0);
 
   /**  Set buffer memory size (in bytes) use to calculate the number of stream divisions */
   itkLegacyMacro( void SetBufferMemorySize(unsigned long) );
