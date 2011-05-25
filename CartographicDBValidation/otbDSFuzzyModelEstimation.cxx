@@ -87,7 +87,7 @@ int otb::DSFuzzyModelEstimation::Describe(ApplicationDescriptor* descriptor)
   descriptor->SetName("DSFuzzyModelEstimation");
   descriptor->SetDescription("Estimate feature fuzzy model parameters using an image and an VectorData as support");
   descriptor->AddOption("InputImage", "Image Support to estimate the models on",
-                        "in", 1, true, ApplicationDescriptor::InputImage);
+                        "img", 1, true, ApplicationDescriptor::InputImage);
   descriptor->AddOption("BuildingsDB", "Building DataBase Support to estimate the models on",
                         "db", 1, true, ApplicationDescriptor::FileName);
   descriptor->AddOption("InputVectorData", "Ground Truth Vector Data",
@@ -103,7 +103,7 @@ int otb::DSFuzzyModelEstimation::Describe(ApplicationDescriptor* descriptor)
   descriptor->AddOption("DEMDirectory", "DEM directory",
                         "dem", 1, false, ApplicationDescriptor::DirectoryName);
   descriptor->AddOption("OptimizerObserver", "Activate or not the optimizer observer",
-                        "OptObs", 1, true, ApplicationDescriptor::Integer);
+                        "OptObs", 1, false, ApplicationDescriptor::Integer);
   descriptor->AddOption("Output", "Output Model File Name",
                         "out", 1, true, ApplicationDescriptor::FileName);
   return EXIT_SUCCESS;
@@ -280,7 +280,7 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
 
   // Create the Command observer and register it with the optimizer.
   CommandIterationUpdate::Pointer observer = CommandIterationUpdate::New();
-  if (parseResult->GetParameterInt("OptimizerObserver"))
+  if (parseResult->IsOptionPresent("OptimizerObserver"))
     {
     optimizer->AddObserver( itk::IterationEvent(), observer );
     }
