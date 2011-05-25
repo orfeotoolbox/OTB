@@ -83,7 +83,7 @@ typename StandardDSCostFunction<TDSValidationFilter>
     internalFunctionGT->SetFuzzyModel("RADIOM", radiom);
     internalFunctionGT->SetFuzzyModel("DBOVER", overlap);
   }
-  catch (itk::ExceptionObject & err)
+  catch (itk::ExceptionObject /*& err*/)
   {
     return (m_Weight*m_GTVectorData->Size() + (1-m_Weight)*m_NSVectorData->Size()); ;
   }
