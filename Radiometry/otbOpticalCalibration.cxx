@@ -159,7 +159,7 @@ int OpticalCalibration::Execute(otb::ApplicationOptionsResult* parseResult)
       }
     else
       {
-      atmosphericParam->SetWavelengthSpectralBand(lImageMetadataInterface->GetSpectralSensitivity());
+      reflectanceToSurfaceReflectanceFilter->SetFilterFunctionCoef(lImageMetadataInterface->GetSpectralSensitivity());
       }
 
     if (parseResult->IsOptionPresent("AeronetFile"))
