@@ -145,7 +145,9 @@ int BundleToPerfectSensor::Execute(otb::ApplicationOptionsResult* parseResult)
       {
       ram = parseResult->GetParameterUInt("AvailableMemory");
       }
-    writer->SetAutomaticTiledStreaming(ram);
+
+    const double bias = 1.27;
+    writer->SetAutomaticTiledStreaming(ram, bias);
 
     otb::StandardWriterWatcher w4(writer, resampler,"Perfect sensor fusion");
     writer->Update();
