@@ -28,6 +28,7 @@ void RegisterTests()
   REGISTER_TEST(otbLabelObjectOpeningMuParserFilterNew);
   REGISTER_TEST(otbLabelObjectOpeningMuParserFilterTest);
   REGISTER_TEST(otbVectorDataToRandomLineGeneratorNew);
+  REGISTER_TEST(otbVectorDataToRandomLineGenerator);
   REGISTER_TEST(otbConcatenateVectorDataFilterNew);
   REGISTER_TEST(otbConcatenateVectorDataFilter);
 }
