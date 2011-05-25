@@ -493,11 +493,15 @@ void GDALImageIO::Read(void* buffer)
 
 bool GDALImageIO::GetSubDatasetInfo(std::vector<std::string> &names, std::vector<std::string> &desc)
 {
-       // Note: we assume that the subdatasets are in order : SUBDATASET_ID_NAME, SUBDATASET_ID_DESC, SUBDATASET_ID+1_NAME, SUBDATASET_ID+1_DESC
+  // Note: we assume that the subdatasets are in order : SUBDATASET_ID_NAME, SUBDATASET_ID_DESC, SUBDATASET_ID+1_NAME, SUBDATASET_ID+1_DESC
   char** papszMetadata;
   papszMetadata = m_Dataset->GetDataSet()->GetMetadata("SUBDATASETS");
 
-  if (CSLCount(papszMetadata) > 0) // Have we find some dataSet ?
+  // Have we find some dataSet ?
+  // This feature is supported only for hdf4 and hdf5 file (regards to the bug 270)
+  if ( (CSLCount(papszMetadata) > 0) &&
+       ( (strcmp(m_Dataset->GetDataSet()->GetDriver()->GetDescription(),"HDF4") == 0) ||
+         (strcmp(m_Dataset->GetDataSet()->GetDriver()->GetDescription(),"HDF5") == 0) ) )
     {
     for (int cpt = 0; papszMetadata[cpt] != NULL; cpt++)
       {
