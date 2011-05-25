@@ -129,6 +129,9 @@ public:
   itkGetConstMacro(CriterionFormula, std::string);
   itkSetMacro(CriterionFormula, std::string);
 
+  itkGetMacro(CriterionThreshold, double);
+  itkSetMacro(CriterionThreshold, double);
+
   /** Fuzzy Models */
   void SetFuzzyModel(const std::string& key, std::vector<double> model)
   {
@@ -216,6 +219,7 @@ private:
   typename ParserType::Pointer                    m_Parser;
 
   std::string                                     m_CriterionFormula;
+  double                                          m_CriterionThreshold;
   unsigned int                                    m_CurrentID;
 };
 

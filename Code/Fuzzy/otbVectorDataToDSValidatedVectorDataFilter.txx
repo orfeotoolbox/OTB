@@ -29,7 +29,8 @@ namespace otb
 template <class TVectorData, class TPrecision>
   VectorDataToDSValidatedVectorDataFilter<TVectorData, TPrecision>
 ::VectorDataToDSValidatedVectorDataFilter() :
-  m_CriterionFormula("((Belief + Plausibility)/2) >= 0.5"),
+  m_CriterionFormula("((Belief + Plausibility)/2.)"),
+  m_CriterionThreshold(0.5),
   m_CurrentID(0)
 {
   this->SetNumberOfRequiredInputs(1);
@@ -165,7 +166,7 @@ VectorDataToDSValidatedVectorDataFilter<TVectorData, TPrecision>
       m_Bel  = jointMassFilter->GetOutput()->GetBelief(m_Hypothesis);
       m_Plau = jointMassFilter->GetOutput()->GetPlausibility(m_Hypothesis);
 
-     if (m_Parser->Eval())
+     if (m_Parser->Eval() >= m_CriterionThreshold)
         {
         currentGeometry->SetNodeId(this->GetNextID());
         currentGeometry->SetFieldAsDouble("Belief", m_Bel);
