@@ -378,7 +378,7 @@ ADD_TEST(feTvFineRegistrationImageFilterTestWithMeanSquare ${DISPARITYMAP_TESTS3
 	    1 # Grid step
 	    0 # Initial offset x
 	    0 # Initial offset y
-	    0 0 80 130 # region to proceed
+	    0 0 80 65 # region to proceed
 )
 
 ADD_TEST(feTvFineRegistrationImageFilterTestWithMeanReciprocalDifference ${DISPARITYMAP_TESTS3}
