@@ -814,27 +814,52 @@ void TileMapImageIO::FillCacheFaults(void* buffer) const
 
 void TileMapImageIO::SetCacheDirectory(const char* _arg)
 {
+   std::cout<<"TileMapImageIO::SetCacheDirectory"<<std::endl;
   if (_arg && (_arg == this->m_CacheDirectory))
     {
     return;
     }
-  if (_arg)
+
+   if (_arg)
     {
-    // Check the directory write permission
-    if( !itksys::SystemTools::Touch(_arg, true))
+      // if existing dir, check writable
+      if ( itksys::SystemTools::FileIsDirectory( _arg ) )
       {
-      itkExceptionMacro( "Error, no write permission in given CacheDirectory "<<m_CacheDirectory<<".");
+         itk::OStringStream oss;
+         oss<<_arg<<"/foo";
+         if( itksys::SystemTools::Touch( oss.str().c_str(), true ) == false )
+         {
+            itkExceptionMacro( "Error, no write permission in given CacheDirectory "<<_arg<<".");
+         }
+         else
+         {
+            itksys::SystemTools::RemoveFile( oss.str().c_str() );
+         }
       }
-    itksys::SystemTools::RemoveFile(_arg);
-    this->m_CacheDirectory = _arg;
-    this->m_UseCache = true;
-    }
-  else
-    {
-    this->m_CacheDirectory = "";
-    this->m_UseCache = false;
-    }
-  this->Modified();
+      // if existing file
+      else if( itksys::SystemTools::FileExists(_arg) == true )
+      {
+         itkExceptionMacro( "Error, given CacheDirectory "<<_arg<<" is an existing file.");
+      }
+      // doesn't exist, try to create it
+      else if( itksys::SystemTools::MakeDirectory( _arg ) == false )
+      {
+        itkExceptionMacro( "Error, no permission to create the given CacheDirectory "<<_arg<<".");
+      }
+      else
+      {
+         itksys::SystemTools::RemoveADirectory( _arg );
+      }
+      this->m_CacheDirectory = _arg;
+      this->m_UseCache = true;
+   }
+   else
+   {
+      this->m_CacheDirectory = "";
+      this->m_UseCache = false;
+   }
+  
+   this->Modified();
 }
 
 void TileMapImageIO::SetCacheDirectory(const std::string& _arg)
