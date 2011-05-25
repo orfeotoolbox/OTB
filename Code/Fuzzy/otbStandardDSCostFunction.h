@@ -101,6 +101,9 @@ public:
   itkSetMacro(Weight, double);
   itkGetConstMacro(Weight, double);
 
+  itkSetMacro(CriterionFormula, std::string);
+  itkGetConstMacro(CriterionFormula, std::string);
+
   itkSetObjectMacro(GTVectorData, VectorDataType);
   itkGetConstObjectMacro(GTVectorData, VectorDataType);
 

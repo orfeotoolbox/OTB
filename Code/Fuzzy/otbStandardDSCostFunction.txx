@@ -26,7 +26,7 @@ namespace otb
 template <class TDSValidationFilter>
 StandardDSCostFunction<TDSValidationFilter>
 ::StandardDSCostFunction() :
-  m_CriterionFormula("((Belief + Plausibility)/2)"),
+  m_CriterionFormula("((Belief + Plausibility)/2.)"),
   m_Weight(0.5),
   m_NumberOfParameters(12)
 {
@@ -122,7 +122,7 @@ typename StandardDSCostFunction<TDSValidationFilter>
         m_Parser->DefineVar("Belief", &belief);
         m_Parser->DefineVar("Plausibility", &plausibility);
 
-        accGT += (1 - m_Parser->Eval()) * (1 - m_Parser->Eval());
+        accGT += ((1 - m_Parser->Eval()) * (1 - m_Parser->Eval()));
 
         m_Parser->ClearVar();
         }
@@ -141,7 +141,7 @@ typename StandardDSCostFunction<TDSValidationFilter>
         m_Parser->DefineVar("Belief", &belief);
         m_Parser->DefineVar("Plausibility", &plausibility);
 
-        accNS += m_Parser->Eval() * m_Parser->Eval();
+        accNS += (m_Parser->Eval() * m_Parser->Eval());
 
         m_Parser->ClearVar();
         }
