@@ -141,7 +141,7 @@ public:
     return false;
   }
 
-  /*   /\** Writes the spacing and dimentions of the VectorData. */
+  /*   /\** Writes the spacing and dimensions of the VectorData. */
   /*    * Assumes SetFileName has been called with a valid file name. *\/ */
   /*   virtual void WriteVectorDataInformation() = 0; */
 
