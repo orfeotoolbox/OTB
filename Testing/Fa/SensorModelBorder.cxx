@@ -27,14 +27,16 @@
 // Exercise the Spot5 sensor model on the image border
 int main(int argc, char* argv[])
 {
-  if (argc != 2)
+  if (argc != 3)
     {
-    std::cout << argv[0] << " <input filename>" << std::endl;
+    std::cout << argv[0] << " <input filename> <output filename>" << std::endl;
 
     return EXIT_FAILURE;
     }
 
   char * filename = argv[1];
+  char*  outFilename = argv[2];
+
 
   typedef otb::VectorImage<double, 2> ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
@@ -66,18 +68,18 @@ int main(int argc, char* argv[])
     }
   inverseSensorModel->SetAverageElevation(16.19688987731934);
 
-  const int radius = 3;
+  const int radius = 10;
+  const double gridstep = 0.1;
 
   itk::Point<double, 2> imagePoint;
 
   // Test upper left corner
   std::cout << " --- upper left corner ---" << std::endl;
-  for (int i = region.GetIndex(0) - radius; i < region.GetIndex(0) + radius; i++)
+  for (imagePoint[0] = region.GetIndex(0) - radius; imagePoint[0] < region.GetIndex(0) + radius; imagePoint[0] += gridstep)
     {
-    imagePoint[0] = i;
-    for (int j = region.GetIndex(1) - radius; j < region.GetIndex(1) + radius; j++)
+
+    for (imagePoint[1] = region.GetIndex(1) - radius; imagePoint[1] < region.GetIndex(1) + radius; imagePoint[1] += gridstep)
       {
-      imagePoint[1] = j;
 
       itk::Point<double, 2> geoPoint;
       geoPoint = forwardSensorModel->TransformPoint(imagePoint);
@@ -102,12 +104,10 @@ int main(int argc, char* argv[])
 
   // Test lower left corner
   std::cout << " --- lower left corner ---" << std::endl;
-  for (int i = region.GetIndex(0) - radius; i < region.GetIndex(0) + radius; i++)
+  for (imagePoint[0] = region.GetIndex(0) - radius; imagePoint[0] < region.GetIndex(0) + radius; imagePoint[0] += gridstep)
     {
-    imagePoint[0] = i;
-    for (int j = region.GetIndex(1) + region.GetSize(1) - radius; j < region.GetIndex(1) + region.GetSize(1) + radius; j++)
+    for (imagePoint[1] = region.GetIndex(1) + region.GetSize(1) - radius; imagePoint[1] < region.GetIndex(1) + region.GetSize(1) + radius; imagePoint[1] += gridstep)
       {
-      imagePoint[1] = j;
 
       itk::Point<double, 2> geoPoint;
       geoPoint = forwardSensorModel->TransformPoint(imagePoint);
@@ -132,12 +132,10 @@ int main(int argc, char* argv[])
 
   // Test lower right corner
   std::cout << " --- lower right corner ---" << std::endl;
-  for (int i = region.GetIndex(0) + region.GetSize(0) - radius; i < region.GetIndex(0) + region.GetSize(0) + radius; i++)
+  for (imagePoint[0] = region.GetIndex(0) + region.GetSize(0) - radius; imagePoint[0] < region.GetIndex(0) + region.GetSize(0) + radius; imagePoint[0] += gridstep)
     {
-    imagePoint[0] = i;
-    for (int j = region.GetIndex(1) + region.GetSize(1) - radius; j < region.GetIndex(1) + region.GetSize(1) + radius; j++)
+    for (imagePoint[1] = region.GetIndex(1) + region.GetSize(1) - radius; imagePoint[1] < region.GetIndex(1) + region.GetSize(1) + radius; imagePoint[1] += gridstep)
       {
-      imagePoint[1] = j;
 
       itk::Point<double, 2> geoPoint;
       geoPoint = forwardSensorModel->TransformPoint(imagePoint);
@@ -162,12 +160,10 @@ int main(int argc, char* argv[])
 
   // Test upper right corner
   std::cout << " --- upper right corner ---" << std::endl;
-  for (int i = region.GetIndex(0) + region.GetSize(0) - radius; i < region.GetIndex(0) + region.GetSize(0) + radius; i++)
+  for (imagePoint[0] = region.GetIndex(0) + region.GetSize(0) - radius; imagePoint[0] < region.GetIndex(0) + region.GetSize(0) + radius; imagePoint[0] += gridstep)
     {
-    imagePoint[0] = i;
-    for (int j = region.GetIndex(1) - radius; j < region.GetIndex(1) + radius; j++)
+    for (imagePoint[1] = region.GetIndex(1) - radius; imagePoint[1] < region.GetIndex(1) + radius; imagePoint[1] += gridstep)
       {
-      imagePoint[1] = j;
 
       itk::Point<double, 2> geoPoint;
       geoPoint = forwardSensorModel->TransformPoint(imagePoint);
@@ -189,6 +185,55 @@ int main(int argc, char* argv[])
         }
       }
     }
+
+
+
+  // generat the output value along a segment crossing the lower image border
+  // at the center position
+  itk::Point<double, 2> imagePoint1;
+  imagePoint1[0] = region.GetIndex(0) + region.GetSize(0)/2;
+  imagePoint1[1] = region.GetIndex(1) + region.GetSize(1) - radius;
+
+  itk::Point<double, 2> imagePoint2;
+  imagePoint2[0] = region.GetIndex(0) + region.GetSize(0)/2;
+  imagePoint2[1] = region.GetIndex(1) + region.GetSize(1) + radius;
+
+  itk::Point<double, 2> geoPoint1, geoPoint2;
+  geoPoint1 = forwardSensorModel->TransformPoint(imagePoint1);
+  geoPoint2 = forwardSensorModel->TransformPoint(imagePoint2);
+
+  itk::Vector<double, 2> geoDir;
+  geoDir[0] = geoPoint2[0] - geoPoint1[0];
+  geoDir[1] = geoPoint2[1] - geoPoint1[1];
+
+  const int nbStep = 50;
+  itk::Vector<double, 2> geoStep = geoDir / nbStep;
+
+  std::ofstream file;
+  file.open(outFilename);
+
+  file << "# image_x image_y geo_x geo_y reversed_image_x reversed_image_y" << std::endl;
+  file << std::setprecision(15);
+
+  for (int i = 0; i < nbStep; ++i)
+    {
+    itk::Point<double, 2> geoPoint;
+    geoPoint[0] = geoPoint1[0] + geoStep[0] * i;
+    geoPoint[1] = geoPoint1[1] + geoStep[1] * i;
+
+    itk::Point<double, 2> reversedImagePoint;
+    reversedImagePoint = inverseSensorModel->TransformPoint(geoPoint);
+
+    file << geoPoint[0] << "\t" << geoPoint[1]  << "\t"
+         << reversedImagePoint[0] << "\t" << reversedImagePoint[1] << std::endl;
+
+    if (vnl_math_isnan(geoPoint[0]) || vnl_math_isnan(geoPoint[1]))
+      {
+      return EXIT_FAILURE;
+      }
+    }
+
+  file.close();
 
   return EXIT_SUCCESS;
 }

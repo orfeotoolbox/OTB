@@ -239,6 +239,7 @@ ADD_TEST(FA-00134-feature_extraction ${CXX_TEST_PATH}/00134-feature_extraction
 	
 	ADD_TEST(FA-Spot5SensorModel ${CXX_TEST_PATH}/SensorModelBorder
   ${IMAGEDATA}/SPOT5/TEHERAN/IMAGERY.TIF
+  ${TEMP}/FA-Spot5SensorModel.txt
   )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
