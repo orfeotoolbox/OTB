@@ -235,6 +235,11 @@ ADD_TEST(FA-00134-feature_extraction ${CXX_TEST_PATH}/00134-feature_extraction
         500 # extract start index
         300 # extract size
 	)
+	
+	
+	ADD_TEST(FA-Spot5SensorModel ${CXX_TEST_PATH}/SensorModelBorder
+  ${IMAGEDATA}/SPOT5/TEHERAN/IMAGERY.TIF
+  )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 IF(OTB_USE_VISU_GUI)
@@ -285,5 +290,8 @@ TARGET_LINK_LIBRARIES(0000169-fftcomplextocomplex OTBIO OTBCommon)
 
 ADD_EXECUTABLE(000295-MeanShiftVectorImageFilterWithStreamingShrink 000295-MeanShiftVectorImageFilterWithStreamingShrink.cxx)
 TARGET_LINK_LIBRARIES(000295-MeanShiftVectorImageFilterWithStreamingShrink OTBIO OTBCommon)
+
+ADD_EXECUTABLE(SensorModelBorder SensorModelBorder.cxx)
+TARGET_LINK_LIBRARIES(SensorModelBorder OTBIO OTBCommon OTBBasicFilters OTBProjections)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
