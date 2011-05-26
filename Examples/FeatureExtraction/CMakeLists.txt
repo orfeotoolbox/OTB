@@ -106,8 +106,8 @@ TARGET_LINK_LIBRARIES(EdgeDensityExample OTBIO OTBCommon OTBBasicFilters ITKComm
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/FeatureExtraction)
-
 SET(INPUTDATA ${OTB_DATA_ROOT}/Examples)
+SET(INPUTDATA_OTB ${OTB_DATA_ROOT}/Input)
 SET(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
 
 SET(EXE_TESTS1 ${CXX_TEST_PATH}/otbFeatureExtractionExamplesTests1)
@@ -177,7 +177,7 @@ ADD_TEST(feTeExtractSegmentsByStepsExampleTest ${EXE_TESTS1}
 	${BASELINE}/amstSegmentExtractionBySteps.png
 	${TEMP}/amstSegmentExtractionBySteps.png
 	ExtractSegmentsByStepsExampleTest
-	${INPUTDATA}/amst.png
+	${INPUTDATA_OTB}/amst_ers1.ima.extrait.419_187_70_66.hdr
 	${TEMP}/amstSegmentExtractionBySteps.png
   10 3 10 0.5 10 10 3 10 0.5
 )
@@ -201,7 +201,7 @@ ADD_TEST(feTeExtractSegmentsExampleTest ${EXE_TESTS1}
 	${BASELINE}/amstSegmentExtraction.png
 	${TEMP}/amstSegmentExtraction.png
 	ExtractSegmentsExampleTest
-	${INPUTDATA}/amst.png
+	${INPUTDATA_OTB}/amst_ers1.ima.extrait.419_187_70_66.hdr
 	${TEMP}/amstSegmentExtraction.png
   10 3 10 0.5 10 10 3 10 0.5
 )
