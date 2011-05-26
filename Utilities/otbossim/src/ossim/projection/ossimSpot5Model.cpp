@@ -644,7 +644,7 @@ void ossimSpot5Model::lineSampleHeightToWorld(const ossimDpt& image_point,
                                               const ossim_float64& heightEllipsoid,
                                               ossimGpt& worldPoint) const
 {
-   if (!insideImage(image_point))
+   if ( !theImageClipRect.pointWithin(image_point, 1.0-FLT_EPSILON) )
    {
       if(theSeedFunction.valid())
       {
