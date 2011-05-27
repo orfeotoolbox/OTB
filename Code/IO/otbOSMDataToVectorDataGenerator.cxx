@@ -28,10 +28,10 @@ namespace otb
 {
 
 OSMDataToVectorDataGenerator::OSMDataToVectorDataGenerator():m_North(43.62811),
-                                                       m_South(43.60185),
-                                                       m_East(1.59323),
-                                                       m_West(1.54911),
-                                                       m_UseUrl(true)
+                                                             m_South(43.60185),
+                                                             m_East(1.59323),
+                                                             m_West(1.54911),
+                                                             m_UseUrl(true)
 {
   this->SetNumberOfRequiredOutputs(1);
   
@@ -73,9 +73,10 @@ void OSMDataToVectorDataGenerator::GenerateData()
     
     // Use Curl to request the OSM Server
     // TODO use the RetrieveUrlInMemory
-    if(m_Curl->RetrieveFile(urlStream.str(), m_FileName) != 0)
+    int curlCode = 0;
+    if ( curlCode = m_Curl->RetrieveFile(urlStream.str(), m_FileName) != 0)
       {
-      itkExceptionMacro(<<"Problem while getting "<< m_Url);
+      itkExceptionMacro(<<"Problem while getting "<< urlStream.str()<< " Returned error "<< curlCode);
       }
     }
   else
