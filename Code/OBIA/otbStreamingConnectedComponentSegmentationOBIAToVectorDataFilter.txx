@@ -27,8 +27,8 @@ namespace otb {
 template<class TVImage, class TLabelImage, class TMaskImage, class TOutputVectorData>
 PersistentConnectedComponentSegmentationOBIAToVectorDataFilter<TVImage, TLabelImage, TMaskImage, TOutputVectorData>
 ::PersistentConnectedComponentSegmentationOBIAToVectorDataFilter()
- : m_MinimumObjectSize(2),m_ShapeReducedSetOfAttributes(false),m_StatsReducedSetOfAttributes(false),
-m_ComputeFlusser(false),m_ComputePolygon(false),m_ComputeFeretDiameter(false),m_ComputePerimeter(false)
+ : m_MinimumObjectSize(2), m_ShapeReducedSetOfAttributes(false), m_StatsReducedSetOfAttributes(false),
+m_ComputeFlusser(false), m_ComputePolygon(false), m_ComputeFeretDiameter(false), m_ComputePerimeter(false)
 {
 }
 

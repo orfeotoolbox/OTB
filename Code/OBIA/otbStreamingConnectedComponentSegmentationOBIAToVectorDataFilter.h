@@ -142,37 +142,37 @@ public:
   itkSetMacro(ShapeReducedSetOfAttributes, bool);
 
   /* Get shape reduced set attributes flag for object attributes computing  */
-  itkGetMacro(ShapeReducedSetOfAttributes,bool);
+  itkGetMacro(ShapeReducedSetOfAttributes, bool);
 
   /* Set stat reduced set attributes flag for object attributes computing  */
-  itkSetMacro(StatsReducedSetOfAttributes,bool);
+  itkSetMacro(StatsReducedSetOfAttributes, bool);
 
   /* Get stat reduced set attributes flag for object attributes computing  */
-  itkGetMacro(StatsReducedSetOfAttributes,bool);
+  itkGetMacro(StatsReducedSetOfAttributes, bool);
 
   /* Set compute polygon flag for object attributes computing  */
-  itkSetMacro(ComputePolygon,bool);
+  itkSetMacro(ComputePolygon, bool);
 
   /* Get compute polygon flag for object attributes computing  */
-  itkGetMacro(ComputePolygon,bool);
+  itkGetMacro(ComputePolygon, bool);
 
   /* Set compute Flusser flag for object attributes computing  */
-  itkSetMacro(ComputeFlusser,bool);
+  itkSetMacro(ComputeFlusser, bool);
 
   /* Get compute Flusser flag for object attributes computing  */
-  itkGetMacro(ComputeFlusser,bool);
+  itkGetMacro(ComputeFlusser, bool);
 
   /* Set compute perimeter flag for object attributes computing  */
-  itkSetMacro(ComputePerimeter,bool);
+  itkSetMacro(ComputePerimeter, bool);
 
   /* Get compute perimeter flag for object attributes computing  */
-  itkGetMacro(ComputePerimeter,bool);
+  itkGetMacro(ComputePerimeter, bool);
 
   /* Set compute feret diameter flag for object attributes computing  */
-  itkSetMacro(ComputeFeretDiameter,bool);
+  itkSetMacro(ComputeFeretDiameter, bool);
 
   /* Get compute FeretdDiameter flag for object attributes computing  */
-  itkGetMacro(ComputeFeretDiameter,bool);
+  itkGetMacro(ComputeFeretDiameter, bool);
 
 
 protected:

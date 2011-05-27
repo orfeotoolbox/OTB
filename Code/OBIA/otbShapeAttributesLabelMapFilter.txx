@@ -833,7 +833,6 @@ ShapeAttributesLabelMapFilter<TImage, TLabelImage>
 }
 
 
-
 template<class TImage, class TLabelImage>
 void
 ShapeAttributesLabelMapFilter<TImage, TLabelImage>
