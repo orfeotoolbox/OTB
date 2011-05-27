@@ -35,7 +35,7 @@ namespace otb
  *  membership function is modeled by a trapezoidal function for which
  *  4 values have to be provided.
  *  In addition, 2 more values can be provided to define the min and
- *  the max. By default, they ar 0 and 1 respectively.
+ *  the max. By default, they are 0 and 1 respectively.
  *
  */
 template <class TLabel = unsigned short, class TPrecision=double>
@@ -93,6 +93,11 @@ public:
   /** Clear all memberships */
   void Clear();
 
+  /** Print a MembershipValueType */
+  static std::ostream& PrintMembershipValueType(std::ostream & out,
+                                                const MembershipValueType& membership);
+
+
 protected:
   /** Constructor */
   FuzzyVariable();
@@ -106,13 +111,6 @@ private:
   ParametersMapType m_MembershipFunctions;
 };
 } // end namespace otb
-
-/** Define the << operator for maps */
-template <class TLabel, class TPrecision>
-std::ostream &
-operator<<(std::ostream & out,
-           const std::map<TLabel, TPrecision> & labelMap);
-
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbFuzzyVariable.txx"

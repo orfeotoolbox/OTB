@@ -33,7 +33,7 @@ int otbFuzzyVariableSetValue(int argc, char* argv[])
 
   FuzzyVarType::MembershipValueType memValues = fv->GetMembership(0.5);
 
-  std::cout << memValues << std::endl;
+  FuzzyVarType::PrintMembershipValueType(std::cout, memValues);
 
   if( memValues["Low"] != static_cast<PrecisionType>((0.75-0.5)/(0.75-0.25)) )
     return EXIT_FAILURE;

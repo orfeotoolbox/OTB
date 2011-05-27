@@ -245,12 +245,11 @@ FuzzyVariable<TLabel, TPrecision>
   Superclass::PrintSelf(os, indent);
 }
 
-} // end namespace otb
-
 template <class TLabel, class TPrecision>
 std::ostream &
-operator<<(std::ostream & out,
-           const std::map<TLabel, TPrecision> & labelMap)
+FuzzyVariable<TLabel, TPrecision>
+::PrintMembershipValueType(std::ostream & out,
+                           const MembershipValueType & labelMap)
 {
   // Define an iterator on the label set
   typedef std::map<TLabel, TPrecision> LabelMapType;
@@ -274,5 +273,9 @@ operator<<(std::ostream & out,
   // Return
   return out;
 }
+
+} // end namespace otb
+
+
 
 #endif
