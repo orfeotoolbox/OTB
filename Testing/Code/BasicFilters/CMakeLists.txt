@@ -2059,6 +2059,33 @@ ADD_TEST(bfTvNDVIDataNodeFeatureFunction_Polygon ${BASICFILTERS_TESTS15}
 	0
 )
 
+
+ADD_TEST(bfTvParserConditionDataNodeFeatureFunction_Line_NDVI ${BASICFILTERS_TESTS15}
+ --compare-ogr ${NOTOL}
+  ${BASELINE_FILES}/bfTvNDVIDataNodeFeatureFunctionOutput_Line.shp
+  ${TEMP}/bfTvParserConditionDataNodeFeatureFunction_Line_NDVI.shp
+  otbParserConditionDataNodeFeatureFunction
+    ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE_ROADS.shp
+    ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE.TIF
+    ${INPUTDATA}/DEM/srtm_directory
+    ${TEMP}/bfTvParserConditionDataNodeFeatureFunction_Line_NDVI.shp
+    "ndvi(b3,b4) > 0.047"
+    0
+)
+
+ADD_TEST(bfTvParserConditionDataNodeFeatureFunction_Polygon_NDVI ${BASICFILTERS_TESTS15}
+ --compare-ogr ${NOTOL}
+  ${BASELINE_FILES}/bfTvNDVIDataNodeFeatureFunctionOutput_Polygon.shp
+  ${TEMP}/bfTvParserConditionDataNodeFeatureFunction_Polygon_NDVI.shp
+  otbParserConditionDataNodeFeatureFunction
+    ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE_BUILDINGS.shp
+    ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE.TIF
+    ${INPUTDATA}/DEM/srtm_directory
+    ${TEMP}/bfTvParserConditionDataNodeFeatureFunction_Polygon_NDVI.shp
+    "ndvi(b3,b4) > 0.047"
+    0
+)
+
 # ------------------  otbSpectralAngleDataNodeFeatureFunction   ------------------
 ADD_TEST(bfTuSpectralAngleDataNodeFeatureFunctionNew ${BASICFILTERS_TESTS15}
   otbSpectralAngleDataNodeFeatureFunctionNew
@@ -2395,6 +2422,7 @@ otbNDVIDataNodeFeatureFunction.cxx
 otbSpectralAngleDataNodeFeatureFunction.cxx
 otbDBOverlapDataNodeFeatureFunction.cxx
 otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction.cxx
+otbParserConditionDataNodeFeatureFunction.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbBasicFiltersTests1 "${BasicFilters_SRCS1}" "OTBBasicFilters;OTBIO;OTBTesting")
