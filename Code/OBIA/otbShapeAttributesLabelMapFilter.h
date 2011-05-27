@@ -81,12 +81,17 @@ public:
   /** Get the compute perimeter flag */
   bool GetComputePerimeter() const;
 
+  /** Set the compute perimeter flag */
+  void SetComputeFlusser(bool flag);
+
+  /** Get the compute perimeter flag */
+  bool GetComputeFlusser() const;
+
   /** Set the polygonalisation flag */
   void SetComputePolygon(bool flag);
 
   /** Get the polygonalisation flag */
   bool GetComputePolygon() const;
-
 
   /** Set the compute feret diameter flag */
   void SetComputeFeretDiameter(bool flag);
@@ -139,6 +144,9 @@ private:
 
   /** Do we compute the perimeter ? */
   bool m_ComputePerimeter;
+
+  /** Do we compute flusser moments ? */
+  bool m_ComputeFlusser;
 
   /** Do we polygonise ? */
   bool m_ComputePolygon;
@@ -232,12 +240,21 @@ public:
   itkBooleanMacro(ComputePerimeter);
 
   /**
-   * Set/Get whether the  polygonalisation process should be computed or not. The defaut value
+   * Set/Get whether the  polygonalisation process should be computed or not. The default value
    * is true, to assure backward compatibility.
    */
   void SetComputePolygon(bool flag);
   bool GetComputePolygon() const;
   itkBooleanMacro(ComputePolygon);
+
+  /**
+    * Set/Get whether the Flussrer moments should be computed or not. The default value
+    * is true, to assure backward compatibility.
+    */
+   void SetComputeFlusser(bool flag);
+   bool GetComputeFlusser() const;
+   itkBooleanMacro(ComputeFlusser);
+
 
   /** Set/get the ReducedAttributesSet flag */
   void SetReducedAttributeSet(bool flag);

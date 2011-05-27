@@ -113,6 +113,7 @@ public:
 
   typedef typename RelabelComponentFilterType::ObjectSizeType ObjectSizeType;
 
+
   /* Set the mathematical expression used for the mask */
   itkSetStringMacro(MaskExpression);
 
@@ -137,6 +138,43 @@ public:
   /* Get the mathematical expression for filtering labelobjects */
   itkGetStringMacro(OBIAExpression);
 
+  /* Set shape reduced set attributes flag for object attributes computing  */
+  itkSetMacro(ShapeReducedSetOfAttributes, bool);
+
+  /* Get shape reduced set attributes flag for object attributes computing  */
+  itkGetMacro(ShapeReducedSetOfAttributes,bool);
+
+  /* Set stat reduced set attributes flag for object attributes computing  */
+  itkSetMacro(StatsReducedSetOfAttributes,bool);
+
+  /* Get stat reduced set attributes flag for object attributes computing  */
+  itkGetMacro(StatsReducedSetOfAttributes,bool);
+
+  /* Set compute polygon flag for object attributes computing  */
+  itkSetMacro(ComputePolygon,bool);
+
+  /* Get compute polygon flag for object attributes computing  */
+  itkGetMacro(ComputePolygon,bool);
+
+  /* Set compute Flusser flag for object attributes computing  */
+  itkSetMacro(ComputeFlusser,bool);
+
+  /* Get compute Flusser flag for object attributes computing  */
+  itkGetMacro(ComputeFlusser,bool);
+
+  /* Set compute perimeter flag for object attributes computing  */
+  itkSetMacro(ComputePerimeter,bool);
+
+  /* Get compute perimeter flag for object attributes computing  */
+  itkGetMacro(ComputePerimeter,bool);
+
+  /* Set compute feret diameter flag for object attributes computing  */
+  itkSetMacro(ComputeFeretDiameter,bool);
+
+  /* Get compute FeretdDiameter flag for object attributes computing  */
+  itkGetMacro(ComputeFeretDiameter,bool);
+
+
 protected:
   PersistentConnectedComponentSegmentationOBIAToVectorDataFilter();
 
@@ -149,6 +187,14 @@ private:
   std::string    m_MaskExpression;
   std::string    m_ConnectedComponentExpression;
   std::string    m_OBIAExpression;
+
+  // attributes
+  bool m_ShapeReducedSetOfAttributes;
+  bool m_StatsReducedSetOfAttributes;
+  bool m_ComputeFlusser;
+  bool m_ComputePolygon;
+  bool m_ComputeFeretDiameter;
+  bool m_ComputePerimeter;
 
   virtual VectorDataPointerType ProcessTile();
 };

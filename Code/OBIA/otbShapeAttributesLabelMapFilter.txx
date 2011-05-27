@@ -40,6 +40,7 @@ template <class TLabelObject, class TLabelImage>
 ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
 ::ShapeAttributesLabelObjectFunctor() : m_ComputeFeretDiameter(false),
   m_ComputePerimeter(false),
+  m_ComputeFlusser(true),
   m_ComputePolygon(true),
   m_ReducedAttributeSet(true),
   m_PerimeterCalculator(NULL),
@@ -93,7 +94,7 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
   return m_ComputePerimeter;
 }
 
-/** Set the compute perimeter flag */
+/** Set the compute polygon flag */
 template <class TLabelObject, class TLabelImage>
 void
 ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
@@ -102,7 +103,7 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
   m_ComputePolygon = flag;
 }
 
-/** Get the compute perimeter flag */
+/** Get the compute polygon flag */
 template <class TLabelObject, class TLabelImage>
 bool
 ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
@@ -111,6 +112,23 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
   return m_ComputePolygon;
 }
 
+/** Set the compute Flusser flag */
+template <class TLabelObject, class TLabelImage>
+void
+ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
+::SetComputeFlusser(bool flag)
+{
+  m_ComputeFlusser = flag;
+}
+
+/** Get the compute Flusser flag */
+template <class TLabelObject, class TLabelImage>
+bool
+ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
+::GetComputeFlusser() const
+{
+  return m_ComputeFlusser;
+}
 
 /** Set the compute feret diameter flag */
 template <class TLabelObject, class TLabelImage>
@@ -463,59 +481,63 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
     ellipsoidSize[i] = 2.0 * equivalentRadius * vcl_sqrt(principalMoments[i] / edet);
     }
 
-  // Flusser moments (only make sense when ImageDimension == 2)
-  if (LabelObjectType::ImageDimension == 2)
-    {
-    // complex centered moments
-    std::complex<double> c11, c20, c12, c21, c22, c30, c31, c40;
-    c11 = c20 = c12 = c21 = c22 = c30 = c31 = c40 = std::complex<double>(0, 0);
-    for (lit = lineContainer.begin(); lit != lineContainer.end(); lit++)
+
+  if (m_ComputeFlusser)
+  {
+    // Flusser moments (only make sense when ImageDimension == 2)
+    if (LabelObjectType::ImageDimension == 2)
       {
-      const typename LabelObjectType::IndexType& idx = lit->GetIndex();
-      unsigned long                              length = lit->GetLength();
-
-      //
-      long endIdx0 = idx[0] + length;
-      for (typename LabelObjectType::IndexType iidx = idx; iidx[0] < endIdx0; iidx[0]++)
+      // complex centered moments
+      std::complex<double> c11, c20, c12, c21, c22, c30, c31, c40;
+      c11 = c20 = c12 = c21 = c22 = c30 = c31 = c40 = std::complex<double>(0, 0);
+      for (lit = lineContainer.begin(); lit != lineContainer.end(); lit++)
         {
-        typename TLabelImage::PointType cPP;
-        m_LabelImage->TransformIndexToPhysicalPoint(iidx, cPP);
-        cPP -= physicalCentroid.GetVectorFromOrigin();
-        std::complex<double> xpiy(cPP[0],  cPP[1]); // x + i y
-        std::complex<double> xmiy(cPP[0], -cPP[1]); // x - i y
+        const typename LabelObjectType::IndexType& idx = lit->GetIndex();
+        unsigned long length = lit->GetLength();
 
-        c11 += xpiy * xmiy;
-        c20 += xpiy * xpiy;
-        c12 += xpiy * xmiy * xmiy;
-        c21 += xpiy * xpiy * xmiy;
-        c30 += xpiy * xpiy * xpiy;
-        c22 += xpiy * xpiy * xmiy * xmiy;
-        c31 += xpiy * xpiy * xpiy * xmiy;
-        c40 += xpiy * xpiy * xpiy * xpiy;
+        //
+        long endIdx0 = idx[0] + length;
+        for (typename LabelObjectType::IndexType iidx = idx; iidx[0] < endIdx0; iidx[0]++)
+          {
+          typename TLabelImage::PointType cPP;
+          m_LabelImage->TransformIndexToPhysicalPoint(iidx, cPP);
+          cPP -= physicalCentroid.GetVectorFromOrigin();
+          std::complex<double> xpiy(cPP[0], cPP[1]); // x + i y
+          std::complex<double> xmiy(cPP[0], -cPP[1]); // x - i y
+
+          c11 += xpiy * xmiy;
+          c20 += xpiy * xpiy;
+          c12 += xpiy * xmiy * xmiy;
+          c21 += xpiy * xpiy * xmiy;
+          c30 += xpiy * xpiy * xpiy;
+          c22 += xpiy * xpiy * xmiy * xmiy;
+          c31 += xpiy * xpiy * xpiy * xmiy;
+          c40 += xpiy * xpiy * xpiy * xpiy;
+          }
         }
+
+      // normalize
+      c11 /= physicalSize * physicalSize;
+      c20 /= physicalSize * physicalSize;
+      c12 /= vcl_pow(physicalSize, 5.0 / 2);
+      c21 /= vcl_pow(physicalSize, 5.0 / 2);
+      c30 /= vcl_pow(physicalSize, 5.0 / 2);
+      c22 /= vcl_pow(physicalSize, 3);
+      c31 /= vcl_pow(physicalSize, 3);
+      c40 /= vcl_pow(physicalSize, 3);
+
+      lo->SetAttribute("SHAPE::Flusser01", c11.real());
+      lo->SetAttribute("SHAPE::Flusser02", (c21 * c12).real());
+      lo->SetAttribute("SHAPE::Flusser03", (c20 * vcl_pow(c12, 2)).real());
+      lo->SetAttribute("SHAPE::Flusser04", (c20 * vcl_pow(c12, 2)).imag());
+      lo->SetAttribute("SHAPE::Flusser05", (c30 * vcl_pow(c12, 3)).real());
+      lo->SetAttribute("SHAPE::Flusser06", (c30 * vcl_pow(c12, 3)).imag());
+      lo->SetAttribute("SHAPE::Flusser07", c22.real());
+      lo->SetAttribute("SHAPE::Flusser08", (c31 * vcl_pow(c12, 2)).real());
+      lo->SetAttribute("SHAPE::Flusser09", (c31 * vcl_pow(c12, 2)).imag());
+      lo->SetAttribute("SHAPE::Flusser10", (c40 * vcl_pow(c12, 4)).real());
+      lo->SetAttribute("SHAPE::Flusser11", (c40 * vcl_pow(c12, 4)).imag());
       }
-
-    // normalize
-    c11 /= physicalSize * physicalSize;
-    c20 /= physicalSize * physicalSize;
-    c12 /= vcl_pow(physicalSize, 5.0 / 2);
-    c21 /= vcl_pow(physicalSize, 5.0 / 2);
-    c30 /= vcl_pow(physicalSize, 5.0 / 2);
-    c22 /= vcl_pow(physicalSize, 3);
-    c31 /= vcl_pow(physicalSize, 3);
-    c40 /= vcl_pow(physicalSize, 3);
-
-    lo->SetAttribute("SHAPE::Flusser01", c11.real());
-    lo->SetAttribute("SHAPE::Flusser02", (c21 * c12).real());
-    lo->SetAttribute("SHAPE::Flusser03", (c20 * vcl_pow(c12, 2)).real());
-    lo->SetAttribute("SHAPE::Flusser04", (c20 * vcl_pow(c12, 2)).imag());
-    lo->SetAttribute("SHAPE::Flusser05", (c30 * vcl_pow(c12, 3)).real());
-    lo->SetAttribute("SHAPE::Flusser06", (c30 * vcl_pow(c12, 3)).imag());
-    lo->SetAttribute("SHAPE::Flusser07", c22.real());
-    lo->SetAttribute("SHAPE::Flusser08", (c31 * vcl_pow(c12, 2)).real());
-    lo->SetAttribute("SHAPE::Flusser09", (c31 * vcl_pow(c12, 2)).imag());
-    lo->SetAttribute("SHAPE::Flusser10", (c40 * vcl_pow(c12, 4)).real());
-    lo->SetAttribute("SHAPE::Flusser11", (c40 * vcl_pow(c12, 4)).imag());
     }
 
   // Set the attributes
@@ -789,6 +811,27 @@ ShapeAttributesLabelMapFilter<TImage, TLabelImage>
 {
   return this->GetFunctor().GetComputePolygon();
 }
+
+template<class TImage, class TLabelImage>
+void
+ShapeAttributesLabelMapFilter<TImage, TLabelImage>
+::SetComputeFlusser(bool flag)
+{
+  if (this->GetFunctor().GetComputeFlusser() != flag)
+    {
+    this->GetFunctor().SetComputeFlusser(flag);
+    this->Modified();
+    }
+}
+
+template<class TImage, class TLabelImage>
+bool
+ShapeAttributesLabelMapFilter<TImage, TLabelImage>
+::GetComputeFlusser() const
+{
+  return this->GetFunctor().GetComputeFlusser();
+}
+
 
 
 template<class TImage, class TLabelImage>

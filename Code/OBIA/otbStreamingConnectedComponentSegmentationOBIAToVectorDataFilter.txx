@@ -27,7 +27,8 @@ namespace otb {
 template<class TVImage, class TLabelImage, class TMaskImage, class TOutputVectorData>
 PersistentConnectedComponentSegmentationOBIAToVectorDataFilter<TVImage, TLabelImage, TMaskImage, TOutputVectorData>
 ::PersistentConnectedComponentSegmentationOBIAToVectorDataFilter()
- : m_MinimumObjectSize(2)
+ : m_MinimumObjectSize(2),m_ShapeReducedSetOfAttributes(false),m_StatsReducedSetOfAttributes(false),
+m_ComputeFlusser(false),m_ComputePolygon(false),m_ComputeFeretDiameter(false),m_ComputePerimeter(false)
 {
 }
 
@@ -98,16 +99,17 @@ PersistentConnectedComponentSegmentationOBIAToVectorDataFilter<TVImage, TLabelIm
     // shape attributes computation
     typename ShapeLabelMapFilterType::Pointer shapeLabelMapFilter = ShapeLabelMapFilterType::New();
     shapeLabelMapFilter->SetInput(labelImageToLabelMap->GetOutput());
-    shapeLabelMapFilter->SetReducedAttributeSet(true);
-    shapeLabelMapFilter->SetComputePolygon(false);
-    shapeLabelMapFilter->SetComputePerimeter(false);
-    shapeLabelMapFilter->SetComputeFeretDiameter(false);
+    shapeLabelMapFilter->SetReducedAttributeSet(m_ShapeReducedSetOfAttributes);
+    shapeLabelMapFilter->SetComputePolygon(m_ComputePolygon);
+    shapeLabelMapFilter->SetComputePerimeter(m_ComputePerimeter);
+    shapeLabelMapFilter->SetComputeFeretDiameter(m_ComputeFeretDiameter);
+    shapeLabelMapFilter->SetComputeFlusser(m_ComputeFlusser);
 
     // band stat attributes computation
     typename RadiometricLabelMapFilterType::Pointer radiometricLabelMapFilter = RadiometricLabelMapFilterType::New();
     radiometricLabelMapFilter->SetInput(shapeLabelMapFilter->GetOutput());
     radiometricLabelMapFilter->SetFeatureImage(extract->GetOutput());
-    radiometricLabelMapFilter->SetReducedAttributeSet(true);
+    radiometricLabelMapFilter->SetReducedAttributeSet(m_StatsReducedSetOfAttributes);
 
     // OBIA Filtering using shape and radiometric object characteristics
     typename LabelObjectOpeningFilterType::Pointer opening = LabelObjectOpeningFilterType::New();
