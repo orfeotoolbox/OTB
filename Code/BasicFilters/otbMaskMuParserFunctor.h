@@ -26,10 +26,8 @@
 #include "otbMacro.h"
 #include "itkMacro.h"
 
-
 #include "itkLightObject.h"
 #include "itkObjectFactory.h"
-
 
 namespace otb
 {
@@ -57,134 +55,119 @@ namespace Functor
 {
 
 template<class TInput>
-class ITK_EXPORT MaskMuParserFunctor : public itk::LightObject
+class ITK_EXPORT MaskMuParserFunctor: public itk::LightObject
 {
 public:
-typedef Parser ParserType;
-typedef MaskMuParserFunctor Self;
-typedef itk::LightObject                         Superclass;
-typedef itk::SmartPointer<Self>                  Pointer;
-typedef itk::SmartPointer<const Self>            ConstPointer;
-/** Method for creation through the object factory. */
-itkNewMacro(Self);
+  typedef Parser ParserType;
+  typedef MaskMuParserFunctor Self;
+  typedef itk::LightObject Superclass;
+  typedef itk::SmartPointer<Self> Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
+  /** Method for creation through the object factory. */
+  itkNewMacro(Self)
+  ;
 
-/** Run-time type information (and related methods). */
-itkTypeMacro(MaskMuParserFunctor, itk::LightObject);
+  /** Run-time type information (and related methods). */
+  itkTypeMacro(MaskMuParserFunctor, itk::LightObject)
+  ;
 
-inline bool operator()(const TInput &p)
-{
+  inline bool operator()(const TInput &p)
+  {
 
-  double value;
+    double value;
 
-  if(p.Size() !=m_NbOfBands)
-    {
-    this->SetNumberOfBands(p.GetSize());
-    }
+    if (p.Size() != m_NbOfBands)
+      {
+      this->SetNumberOfBands(p.GetSize());
+      }
 
-  // we fill the buffer
-  for(unsigned int i=0; i<m_NbOfBands; i++)
-    {
-    m_AImage[i]= static_cast<double> (p[i]);
-    }
+    // we fill the buffer
+    for (unsigned int i = 0; i < m_NbOfBands; i++)
+      {
+      m_AImage[i] = static_cast<double> (p[i]);
+      }
 
-  // user defined variables
-  m_Intensity = 0.0;
-  for(unsigned int i = 0; i<m_NbOfBands; ++i)
-    {
-    m_Intensity +=p[i];
-    }
-  m_Intensity  = m_Intensity/(static_cast<double> (m_NbOfBands));
-
+    // user defined variables
+    m_Intensity = 0.0;
+    for (unsigned int i = 0; i < m_NbOfBands; ++i)
+      {
+      m_Intensity += p[i];
+      }
+    m_Intensity = m_Intensity / (static_cast<double> (m_NbOfBands));
 
     value = m_Parser->Eval();
 
-  return static_cast<bool> (value);
+    return static_cast<bool> (value);
 
-}
+  }
 
+  const std::map<std::string, Parser::ValueType*>& GetVar() const
+  {
+    return this->m_Parser->GetVar();
+  }
 
-const std::map<std::string, Parser::ValueType*>& GetVar() const
- {
-   return this->m_Parser->GetVar();
- }
+  void SetExpression(const std::string& expression)
+  {
+    m_Expression = expression;
+    m_Parser->SetExpr(m_Expression);
+  }
 
+  /** Return the expression to be parsed */
+  std::string GetExpression() const
+  {
+    return m_Expression;
+  }
 
-void SetExpression(const std::string expression)
-{
-  m_Expression=expression;
-  m_Parser->SetExpr(m_Expression);
-}
+  void SetNumberOfBands(unsigned int NbOfBands)
+  {
 
-/** Return the expression to be parsed */
-std::string GetExpression() const
-{
-  return m_Expression;
-}
+    m_NbOfBands = NbOfBands;
+    std::ostringstream varName;
 
-//void SetVarName(unsigned int idx, const std::string varName)
-//{//
-// m_VarName[idx] = varName;
-// m_Parser->DefineVar(m_VarName[idx], &(m_AImage[idx]));
-//}
+    m_AImage.resize(NbOfBands, 0.0);
 
-//std::string GetVarName(unsigned int idx)
-//{
-//  return m_VarName[idx];
-//}
+    for (unsigned int i = 0; i < NbOfBands; i++)
+      {
+      varName << "b" << i + 1;
+      m_Parser->DefineVar(varName.str(), &(m_AImage[i]));
+      varName.str("");
+      }
+    // customized data
+    m_Parser->DefineVar("intensity", &m_Intensity);
+  }
 
-void SetNumberOfBands(unsigned int NbOfBands)
-{
-
-  m_NbOfBands=NbOfBands;
-  std::ostringstream varName;
-
-  m_AImage.resize(NbOfBands, 0.0);
-
-  for(unsigned int i=0; i<NbOfBands; i++)
-    {
-    varName << "b" << i+1;
-    m_Parser->DefineVar(varName.str(), &(m_AImage[i]));
-    varName.str("");
-    }
-  // customized data
-  //m_NbVar++;
-  //this->SetDataSize(m_NbVar);
-  m_Parser->DefineVar("intensity", &m_Intensity);
-}
-
-
-/** Check the expression */
-bool CheckExpression()
-{
-  return m_Parser->CheckExpr();
-}
+  /** Check the expression */
+  bool CheckExpression()
+  {
+    return m_Parser->CheckExpr();
+  }
 
 protected:
-MaskMuParserFunctor()
-{
-m_Parser = ParserType::New();
-m_NbOfBands=0;
-};
+  MaskMuParserFunctor()
+  {
+    m_Parser = ParserType::New();
+    m_NbOfBands = 0;
+  }
 
-~MaskMuParserFunctor()
-{};
-
+  virtual ~MaskMuParserFunctor()
+  {
+  }
 
 private:
 
-MaskMuParserFunctor(const Self &); //purposely not implemented
-void operator =(const Self &);    //purposely not implemented
+  MaskMuParserFunctor(const Self &); //purposely not implemented
+  void operator =(const Self &); //purposely not implemented
 
-std::string m_Expression;
-ParserType::Pointer m_Parser;
-std::vector<double> m_AImage;
-//std::vector<std::string > m_VarName;
-unsigned int m_NbOfBands;
-//unsigned int m_NbVar;
-double m_ParserResult;
+  std::string m_Expression;
+  ParserType::Pointer m_Parser;
+  std::vector<double> m_AImage;
+  //std::vector<std::string > m_VarName;
+  unsigned int m_NbOfBands;
+  //unsigned int m_NbVar;
+  double m_ParserResult;
 
-//user defined variables
-double m_Intensity;
+  //user defined variables
+  double m_Intensity;
 
 };
 } // end of Functor namespace
