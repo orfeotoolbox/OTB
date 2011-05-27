@@ -102,13 +102,9 @@ typename NDVIDataNodeFeatureFunction<TImage, TCoordRep, TPrecision>
     {
     if(this->IsInsideBuffer(lineIt.GetIndex()))
       {
-/*
-      std::cout << lineIt.Get()[2] << "  " << lineIt.Get()[3] << "  "
-                << m_NDVIFunctor(lineIt.Get()[2], lineIt.Get()[3]) << "  "
-                << (m_NDVIFunctor(lineIt.Get()[2], lineIt.Get()[3]) >= this->GetNDVIThreshold())
-                << std::endl;
-*/
-      if(m_NDVIFunctor(lineIt.Get()[2], lineIt.Get()[3]) >= this->GetNDVIThreshold())
+      PixelType pixel = this->GetInputImage()->GetPixel(lineIt.GetIndex());
+      if(m_NDVIFunctor(pixel [this->GetREDChannelIndex() - 1],
+                       pixel [this->GetNIRChannelIndex() - 1]) >= this->GetNDVIThreshold())
         {
         nbValidPixel += 1;
         }
