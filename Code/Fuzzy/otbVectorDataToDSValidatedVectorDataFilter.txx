@@ -80,7 +80,10 @@ VectorDataToDSValidatedVectorDataFilter<TVectorData, TPrecision>
 {
   //Initialize Dempster Shafer tools
   if( m_DescriptorModels.size() == 0 )
-     itkExceptionMacro(<< "No defined Descriptor. Please add a descriptor model.");
+    {
+    itkExceptionMacro(<< "No defined Descriptor. Please add a descriptor model.");
+    }
+
   for (unsigned int i=0; i<m_DescriptorModels.size(); i++)
     {
     typename FuzzyVarType::Pointer fuz = FuzzyVarType::New();
