@@ -29,8 +29,22 @@ VectorDataToRoadDescriptionFilter<TVectorData, TOpticalImage>
 ::VectorDataToRoadDescriptionFilter()
 {
   this->SetNumberOfRequiredInputs(3);
-  m_NDVIFeatureFunction = NDVIFeatureFunctionType::New();
-  m_SpectralAngleFeatureFunction = SpectralAngleFeatureFunctionType::New();
+
+  m_NDVIFeatureFunction = ParserConditionFeatureFunctionType::New();
+  m_NDVIFeatureFunction->SetExpression("ndvi(b3,b4) > 0.3");
+
+  m_SpectralAngleFeatureFunction = ParserConditionFeatureFunctionType::New();
+  m_SpectralAngleFeatureFunction->SetExpression("spectralangle > 0.15");
+
+  //Example for QuickBird images (on a specific image)
+  typename ParserConditionFeatureFunctionType::PixelType refPixel;
+  refPixel.SetSize(4);
+  refPixel[0] = 252.284;
+  refPixel[1] = 357.3;
+  refPixel[2] = 232.644;
+  refPixel[3] = 261.558;
+  m_SpectralAngleFeatureFunction->SetSpectralAngleReferencePixel(refPixel);
+
   m_DBOverlapFeatureFunction = DBOverlapFeatureFunctionType::New();
 }
 

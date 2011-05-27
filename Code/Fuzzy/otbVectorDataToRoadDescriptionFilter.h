@@ -22,8 +22,9 @@
 #include "itkPreOrderTreeIterator.h"
 #include "otbVectorData.h"
 
-#include "otbNDVIDataNodeFeatureFunction.h"
-#include "otbSpectralAngleDataNodeFeatureFunction.h"
+//#include "otbNDVIDataNodeFeatureFunction.h"
+//#include "otbSpectralAngleDataNodeFeatureFunction.h"
+#include "otbParserConditionDataNodeFeatureFunction.h"
 #include "otbDBOverlapDataNodeFeatureFunction.h"
 
 namespace otb
@@ -79,10 +80,15 @@ public:
   typedef TOpticalImage                           OpticalImageType;
   typedef typename TOpticalImage::Pointer         OpticalImageTypePointer;
 
+  /*
   typedef otb::NDVIDataNodeFeatureFunction<OpticalImageType, CoordRepType, PrecisionType>
                                                   NDVIFeatureFunctionType;
   typedef otb::SpectralAngleDataNodeFeatureFunction<OpticalImageType, CoordRepType, PrecisionType>
                                                   SpectralAngleFeatureFunctionType;
+  */
+  typedef otb::ParserConditionDataNodeFeatureFunction<OpticalImageType, CoordRepType, PrecisionType>
+                                                  ParserConditionFeatureFunctionType;
+
   typedef otb::DBOverlapDataNodeFeatureFunction<CoordRepType, PrecisionType>
                                                   DBOverlapFeatureFunctionType;
 
@@ -109,9 +115,9 @@ private:
   VectorDataToRoadDescriptionFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  typename NDVIFeatureFunctionType::Pointer           m_NDVIFeatureFunction;
-  typename SpectralAngleFeatureFunctionType::Pointer  m_SpectralAngleFeatureFunction;
-  typename DBOverlapFeatureFunctionType::Pointer      m_DBOverlapFeatureFunction;
+  typename ParserConditionFeatureFunctionType::Pointer  m_NDVIFeatureFunction;
+  typename ParserConditionFeatureFunctionType::Pointer  m_SpectralAngleFeatureFunction;
+  typename DBOverlapFeatureFunctionType::Pointer        m_DBOverlapFeatureFunction;
 
 };
 
