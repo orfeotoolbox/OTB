@@ -39,10 +39,10 @@ VectorDataToRoadDescriptionFilter<TVectorData, TOpticalImage>
   //Example for QuickBird images (on a specific image)
   typename ParserConditionFeatureFunctionType::PixelType refPixel;
   refPixel.SetSize(4);
-  refPixel[0] = 252.284;
-  refPixel[1] = 357.3;
-  refPixel[2] = 232.644;
-  refPixel[3] = 261.558;
+  refPixel[0] = 252;
+  refPixel[1] = 357;
+  refPixel[2] = 232;
+  refPixel[3] = 261;
   m_SpectralAngleFeatureFunction->SetSpectralAngleReferencePixel(refPixel);
 
   m_DBOverlapFeatureFunction = DBOverlapFeatureFunctionType::New();
