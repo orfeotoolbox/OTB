@@ -107,8 +107,6 @@ typename ParserConditionDataNodeFeatureFunction<TImage, TCoordRep, TPrecision>
     }
 
   OutputType output;
-std::cout << "nbValidPixel " << nbValidPixel << std::endl;
-std::cout << "nbVisitedPixel " << nbVisitedPixel << std::endl;
   if(nbVisitedPixel == 0)
     {
     output.push_back(static_cast<PrecisionType>(0.));
@@ -120,7 +118,6 @@ std::cout << "nbVisitedPixel " << nbVisitedPixel << std::endl;
 
   output.push_back(static_cast<PrecisionType>(nbValidPixel));
   output.push_back(static_cast<PrecisionType>(nbVisitedPixel));
-std::cout << "output " << output[0] << std::endl;
   return output;
 }
 
