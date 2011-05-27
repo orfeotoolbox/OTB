@@ -240,7 +240,7 @@ ADD_TEST(ioTeLidarToImageExampleTest ${EXE_TESTS3}
          ${DATA}/srs.las
          ${TEMP}/lidar-image-4.hdr
          ${TEMP}/lidar-image-4.png
-         1.0
+         0.2
          5
          4
          )
@@ -251,7 +251,7 @@ ADD_TEST(ioTeLidarToImageExample2Test ${EXE_TESTS3}
          ${DATA}/srs.las
          ${TEMP}/lidar-image-8.hdr
          ${TEMP}/lidar-image-8.png
-         1.0
+         0.2
          5
          8
          )
