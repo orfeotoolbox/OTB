@@ -55,12 +55,12 @@ namespace otb
  * e - log2e - log10e - ln2 - ln10 - pi - euler
  *
  * an input vector image and a Mu Parser compliant fomula is needed
- * each band of vector image is  name im1bX, where X is the band index
- * for example im1b2 correspond to the second band of the input image.
+ * each band of vector image is  name bX, where X is the band index
+ * for example b2 correspond to the second band of the input image.
  * Next step is to set the expression according to the variable
  * names. For example, in the default case with three input images the
  * following expression is valid :
- * "im1b1<140"
+ * "b1<140"
  *
  *
  * \sa Parser
