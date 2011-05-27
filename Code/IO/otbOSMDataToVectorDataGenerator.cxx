@@ -73,8 +73,8 @@ void OSMDataToVectorDataGenerator::GenerateData()
     
     // Use Curl to request the OSM Server
     // TODO use the RetrieveUrlInMemory
-    int curlCode = 0;
-    if ( curlCode = m_Curl->RetrieveFile(urlStream.str(), m_FileName) != 0)
+    int curlCode = m_Curl->RetrieveFile(urlStream.str(), m_FileName);
+    if ( curlCode != 0 )
       {
       itkExceptionMacro(<<"Problem while getting "<< urlStream.str()<< " Returned error "<< curlCode);
       }
