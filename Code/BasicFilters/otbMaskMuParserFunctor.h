@@ -29,6 +29,8 @@
 #include "itkLightObject.h"
 #include "itkObjectFactory.h"
 
+#include "otbBinarySpectralAngleFunctor.h"
+
 namespace otb
 {
 /** \class MaskMuParserFunctor
@@ -54,104 +56,47 @@ namespace otb
 namespace Functor
 {
 
-template<class TInput>
+template<class TInputPixel>
 class ITK_EXPORT MaskMuParserFunctor: public itk::LightObject
 {
 public:
-  typedef Parser ParserType;
-  typedef MaskMuParserFunctor Self;
-  typedef itk::LightObject Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef MaskMuParserFunctor           Self;
+  typedef itk::LightObject              Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
+
   /** Method for creation through the object factory. */
-  itkNewMacro(Self)
-  ;
+  itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MaskMuParserFunctor, itk::LightObject)
-  ;
+  itkTypeMacro(MaskMuParserFunctor, itk::LightObject);
 
-  inline bool operator()(const TInput &p)
-  {
+  typedef TInputPixel PixelType;
+  typedef Parser ParserType;
 
-    double value;
+  typedef BinarySpectralAngleFunctor<PixelType, PixelType, double> SpectralAngleFunctorType;
 
-    if (p.Size() != m_NbOfBands)
-      {
-      this->SetNumberOfBands(p.GetSize());
-      }
+  bool operator()(const PixelType &p);
 
-    // we fill the buffer
-    for (unsigned int i = 0; i < m_NbOfBands; i++)
-      {
-      m_AImage[i] = static_cast<double> (p[i]);
-      }
+  const std::map<std::string, Parser::ValueType*>& GetVar() const;
 
-    // user defined variables
-    m_Intensity = 0.0;
-    for (unsigned int i = 0; i < m_NbOfBands; ++i)
-      {
-      m_Intensity += p[i];
-      }
-    m_Intensity = m_Intensity / (static_cast<double> (m_NbOfBands));
-
-    value = m_Parser->Eval();
-
-    return static_cast<bool> (value);
-
-  }
-
-  const std::map<std::string, Parser::ValueType*>& GetVar() const
-  {
-    return this->m_Parser->GetVar();
-  }
-
-  void SetExpression(const std::string& expression)
-  {
-    m_Expression = expression;
-    m_Parser->SetExpr(m_Expression);
-  }
+  void SetExpression(const std::string& expression);
 
   /** Return the expression to be parsed */
-  std::string GetExpression() const
-  {
-    return m_Expression;
-  }
+  std::string GetExpression() const;
 
-  void SetNumberOfBands(unsigned int NbOfBands)
-  {
+  void SetNumberOfBands(unsigned int NbOfBands);
 
-    m_NbOfBands = NbOfBands;
-    std::ostringstream varName;
-
-    m_AImage.resize(NbOfBands, 0.0);
-
-    for (unsigned int i = 0; i < NbOfBands; i++)
-      {
-      varName << "b" << i + 1;
-      m_Parser->DefineVar(varName.str(), &(m_AImage[i]));
-      varName.str("");
-      }
-    // customized data
-    m_Parser->DefineVar("intensity", &m_Intensity);
-  }
+  /** Set the reference pixel used to compute the "spectralangle" parser variable */
+  void SetSpectralAngleReferencePixel(const PixelType& refPixel);
 
   /** Check the expression */
-  bool CheckExpression()
-  {
-    return m_Parser->CheckExpr();
-  }
+  bool CheckExpression();
 
 protected:
-  MaskMuParserFunctor()
-  {
-    m_Parser = ParserType::New();
-    m_NbOfBands = 0;
-  }
+  MaskMuParserFunctor();
 
-  virtual ~MaskMuParserFunctor()
-  {
-  }
+  virtual ~MaskMuParserFunctor();
 
 private:
 
@@ -168,12 +113,19 @@ private:
 
   //user defined variables
   double m_Intensity;
+  double m_SpectralAngle;
+
+  PixelType m_SpectralAngleReferencePixel;
+  SpectralAngleFunctorType m_SpectralAngleFunctor;
 
 };
+
 } // end of Functor namespace
-
-
 }//end namespace otb
 
+
+#ifndef OTB_MANUAL_INSTANTIATION
+#include "otbMaskMuParserFunctor.txx"
+#endif
 
 #endif
