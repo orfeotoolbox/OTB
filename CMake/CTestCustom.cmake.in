@@ -46,7 +46,7 @@ SET(CTEST_CUSTOM_WARNING_EXCEPTION
   "vcl_deprecated_header"
   "backward_warning"
   "Utilities"
-  "warning LNK4221.*no public symbols found"
+  "warning LNK4221"
   "ranlib:.*file:.*has no symbols"
   "ranlib: file: .+ has no symbols"
   "ranlib:.*warning for library:.*the table of contents is empty.*no object file members in the library define global symbols.*"
