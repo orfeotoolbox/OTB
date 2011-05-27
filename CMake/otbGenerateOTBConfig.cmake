@@ -37,7 +37,7 @@ SET(OTB_INCLUDE_DIRS_CONFIG
 
 #-----------------------------------------------------------------------------
 # Configure OTBConfig.cmake for the BUILD tree.
-CONFIGURE_FILE(${OTB_SOURCE_DIR}/OTBConfig.cmake.in
+CONFIGURE_FILE(${OTB_SOURCE_DIR}/CMake/OTBConfig.cmake.in
                ${OTB_BINARY_DIR}/OTBConfig.cmake @ONLY IMMEDIATE)
 
 #-----------------------------------------------------------------------------
@@ -88,6 +88,6 @@ FOREACH(p ${OTB_INSTALL_PACKAGE_DIR_COUNT})
     )
 ENDFOREACH(p)
 
-CONFIGURE_FILE(${OTB_SOURCE_DIR}/OTBConfig.cmake.in
+CONFIGURE_FILE(${OTB_SOURCE_DIR}/CMake/OTBConfig.cmake.in
                ${OTB_BINARY_DIR}/Utilities/OTBConfig.cmake @ONLY IMMEDIATE)
                

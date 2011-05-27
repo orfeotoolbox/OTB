@@ -237,7 +237,7 @@ ENDMACRO(OTB_ADD_EXECUTABLE)
 # The entire OTB tree should use the same include path
 
 # Create the list of include directories needed for OTB header files.
-INCLUDE(${OTB_SOURCE_DIR}/otbIncludeDirectories.cmake)
+INCLUDE(${OTB_SOURCE_DIR}/CMake/otbIncludeDirectories.cmake)
 
 # This should be the only INCLUDE_DIRECTORIES command in the entire
 # tree, except for the Utilities and Wrapping directories.  We need to
@@ -288,7 +288,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 #-----------------------------------------------------------------------------
 # Configure files with settings for use by the build
 # This must be done after the definition of all options
-CONFIGURE_FILE(${OTB_SOURCE_DIR}/otbConfigure.h.in
+CONFIGURE_FILE(${OTB_SOURCE_DIR}/CMake/otbConfigure.h.in
                ${OTB_BINARY_DIR}/otbConfigure.h)
 
 #-----------------------------------------------------------------------------
@@ -305,7 +305,7 @@ CONFIGURE_FILE(${OTB_SOURCE_DIR}/otbConfigure.h.in
 # Help other projects use OTB.
 
 # Copy the UseOTB.cmake file to the binary tree for backward compatability.
-CONFIGURE_FILE(${OTB_SOURCE_DIR}/UseOTB.cmake.in
+CONFIGURE_FILE(${OTB_SOURCE_DIR}/CMake/UseOTB.cmake.in
                ${OTB_BINARY_DIR}/UseOTB.cmake COPYONLY IMMEDIATE)
 
 # Save the compiler settings so another project can import them.
@@ -316,7 +316,7 @@ CMAKE_EXPORT_BUILD_SETTINGS(${OTB_BINARY_DIR}/OTBBuildSettings.cmake)
 EXPORT_LIBRARY_DEPENDENCIES(${OTB_BINARY_DIR}/OTBLibraryDepends.cmake)
 
 # Create the OTBConfig.cmake file containing the OTB configuration.
-INCLUDE (${OTB_SOURCE_DIR}/otbGenerateOTBConfig.cmake)
+INCLUDE (${OTB_SOURCE_DIR}/CMake/otbGenerateOTBConfig.cmake)
 
 IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
   INSTALL(FILES
