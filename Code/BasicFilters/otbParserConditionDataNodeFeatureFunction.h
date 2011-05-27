@@ -95,6 +95,11 @@ public:
     m_ParserConditionFunctor->SetExpression(expression);
   }
 
+  void SetSpectralAngleReferencePixel(const PixelType& pixel)
+  {
+    m_ParserConditionFunctor->SetSpectralAngleReferencePixel(pixel);
+  }
+
 protected:
   ParserConditionDataNodeFeatureFunction();
   virtual ~ParserConditionDataNodeFeatureFunction() {}
