@@ -91,7 +91,7 @@ int otbParserConditionDataNodeFeatureFunction(int argc, char* argv[])
   vdReProjFilter->SetUseOutputSpacingAndOriginFromImage(true);
   vdReProjFilter->Update();
 
-  ParserConditionFeatureFunction->SetExpression("ndvi(b3,b4) > 0.047");
+  ParserConditionFeatureFunction->SetExpression(expression);
   ParserConditionFeatureFunction->SetInputImage(imgReader->GetOutput());
 
   // Output
