@@ -277,5 +277,4 @@ FuzzyVariable<TLabel, TPrecision>
 } // end namespace otb
 
 
-
 #endif
