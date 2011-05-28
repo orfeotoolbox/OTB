@@ -18,10 +18,11 @@
 #ifndef __otbBSQImageIO_h
 #define __otbBSQImageIO_h
 
-#include "itkImageIOBase.h"
 #include <fstream>
 #include <string>
 #include <vector>
+
+#include "itkImageIOBase.h"
 
 namespace otb
 {
@@ -152,10 +153,7 @@ private:
   std::fstream                m_HeaderFile;
   std::string                 m_TypeBsq;
   std::vector<std::string>    m_ChannelsFileName;
-//  std::vector< std::fstream >  m_ChannelsFile;
   std::fstream * m_ChannelsFile;
-//std::fstream  file;
-//        char* value;
 
 };
 

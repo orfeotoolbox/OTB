@@ -16,18 +16,18 @@
 
 =========================================================================*/
 #include "otbBSQImageIO.h"
+
+#include <fstream>
+#include <iostream>
+
 #include "itkByteSwapper.h"
-#include <itksys/SystemTools.hxx>
-#include <string.h>  // for strncpy
+#include "itksys/SystemTools.hxx"
 
 #include "itkExceptionObject.h"
 #include "otbMacro.h"
 #include "itkMacro.h"
 
 #include "otbSystem.h"
-
-#include <fstream>
-#include <iostream>
 
 namespace otb
 {
@@ -503,8 +503,8 @@ void BSQImageIO::Write(const void* buffer)
   int           lFirstLine   = this->GetIORegion().GetIndex()[1]; // [1... ]
   int           lFirstColumn = this->GetIORegion().GetIndex()[0]; // [1... ]
 
-  // Cas particuliers : on controle que si la r�gion � �crire est de la m�me dimension que l'image enti�re,
-  // on commence l'offset � 0 (lorsque que l'on est pas en "Streaming")
+  // Special case: check that the region to write is the same size as the entire
+  // image. Start at offset 0 (when no streaming)
   if ((lNbLines == m_Dimensions[1]) && (lNbColumns == m_Dimensions[0]))
     {
     otbMsgDevMacro(<< "Force l'offset de l'IORegion � 0");

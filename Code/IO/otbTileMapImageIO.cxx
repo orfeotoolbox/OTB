@@ -15,26 +15,20 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#include "otbTileMapImageIO.h"
 
-#include "itkExceptionObject.h"
-#include "itkMacro.h"
-
-#include <string.h>
-#include <math.h>
+#include <cstring>
+#include <cmath>
 
 #include <iostream>
 #include <fstream>
 
-//This is to check the file existence
-#include <sys/stat.h>
+#include "itkExceptionObject.h"
+#include "itkMacro.h"
 
 #include "itksys/SystemTools.hxx"
-
-#include "otbTileMapImageIO.h"
 #include "otbSystem.h"
 
-//#include "itkPNGImageIO.h"
-//#include "itkJPEGImageIO.h"
 #include "otbGDALImageIO.h"
 
 #include "itkTimeProbe.h"

@@ -21,7 +21,8 @@
 
 /* C++ Libraries */
 #include <string>
-#include "stdlib.h"
+#include <vector>
+//#include "stdlib.h"
 
 /* ITK Libraries */
 #include "otbMacro.h"
