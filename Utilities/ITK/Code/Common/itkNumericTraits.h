@@ -562,7 +562,7 @@ public:
   static TheType max( TheType ) { return TheType(vcl_numeric_limits<ValueType>::max(),
     vcl_numeric_limits<ValueType>::max()); }
   static TheType NonpositiveMin() {
-    return TheType(NumericTraits<float>::NonpositiveMin(),NumericTraits<float>::NonpositiveMin()); }
+    return TheType(NumericTraits<ValueType>::NonpositiveMin(),NumericTraits<ValueType>::NonpositiveMin()); }
   static bool IsPositive(TheType val) { return val.real() > 0.0; }
   static bool IsNonpositive(TheType val) { return val.real() <= 0.0; }
   static bool IsNegative(TheType val) { return val.real() < 0.0; }
@@ -605,7 +605,7 @@ public:
   static TheType max( TheType ) { return TheType(vcl_numeric_limits<ValueType>::max(),
     vcl_numeric_limits<ValueType>::max()); }
   static TheType NonpositiveMin() {
-    return TheType(NumericTraits<float>::NonpositiveMin(),NumericTraits<float>::NonpositiveMin()); }
+    return TheType(NumericTraits<ValueType>::NonpositiveMin(),NumericTraits<ValueType>::NonpositiveMin()); }
   static bool IsPositive(TheType val) { return val.real() > 0.0; }
   static bool IsNonpositive(TheType val) { return val.real() <= 0.0; }
   static bool IsNegative(TheType val) { return val.real() < 0.0; }
