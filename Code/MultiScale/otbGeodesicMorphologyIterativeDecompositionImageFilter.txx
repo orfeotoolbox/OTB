@@ -18,8 +18,6 @@
 #ifndef __otbGeodesicMorphologyIterativeDecompositionImageFilter_txx
 #define __otbGeodesicMorphologyIterativeDecompositionImageFilter_txx
 
-#include <math.h>
-
 #include "otbGeodesicMorphologyIterativeDecompositionImageFilter.h"
 
 #include "itkProgressAccumulator.h"

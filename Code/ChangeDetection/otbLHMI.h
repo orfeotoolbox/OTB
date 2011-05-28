@@ -20,8 +20,6 @@
 #define __otbLHMI_h
 
 #include <vector>
-#include <stdlib.h>
-#include <math.h>
 #include "itkHistogram.h"
 
 namespace otb

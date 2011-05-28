@@ -21,7 +21,6 @@
 #ifndef __otbListSampleToVariableDimensionHistogramGenerator_txx
 #define __otbListSampleToVariableDimensionHistogramGenerator_txx
 
-#include <exception>
 #include "otbMacro.h"
 
 namespace otb

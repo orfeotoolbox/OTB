@@ -17,9 +17,9 @@
 =========================================================================*/
 #include "otbPostGISCreateTableTransactor.h"
 #include <sstream>
-#include "otbMacro.h"
+#include <cassert>
 
-#include <assert.h>
+#include "otbMacro.h"
 
 namespace otb
 {

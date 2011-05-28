@@ -18,11 +18,8 @@
 #ifndef __otbVectorImage_h
 #define __otbVectorImage_h
 
-
 #include "itkVectorImage.h"
 #include "otbImageMetadataInterfaceBase.h"
-
-#include <string.h>
 
 namespace otb
 {

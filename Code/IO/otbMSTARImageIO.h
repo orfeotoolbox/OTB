@@ -18,12 +18,7 @@
 #ifndef __otbMSTARImageIO_h
 #define __otbMSTARImageIO_h
 
-
-#include <string>
-#include <cstring>
-#include <fstream>
 #include "itkImageIOBase.h"
-#include <stdio.h>
 
 namespace otb
 {

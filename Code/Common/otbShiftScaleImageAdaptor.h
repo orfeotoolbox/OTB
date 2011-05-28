@@ -19,8 +19,8 @@
 #ifndef __otbShiftScaleImageAdaptor_h
 #define __otbShiftScaleImageAdaptor_h
 
-#include <itkImageAdaptor.h>
 #include "vnl/vnl_math.h"
+#include "itkImageAdaptor.h"
 
 namespace otb
 {

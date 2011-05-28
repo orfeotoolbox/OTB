@@ -23,7 +23,7 @@
 #include "otbMorphologicalPyramidResampler.h"
 #include "itkSubtractImageFilter.h"
 #include "itkAddImageFilter.h"
-#include  "itkImageDuplicator.h"
+#include "itkImageDuplicator.h"
 #include "otbMacro.h"
 
 namespace otb

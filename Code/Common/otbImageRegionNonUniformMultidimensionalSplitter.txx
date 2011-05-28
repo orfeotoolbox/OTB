@@ -21,7 +21,6 @@
 #ifndef __otbImageRegionNonUniformMultidimensionalSplitter_txx
 #define __otbImageRegionNonUniformMultidimensionalSplitter_txx
 #include "otbImageRegionNonUniformMultidimensionalSplitter.h"
-#include <math.h>
 
 namespace otb
 {

@@ -18,8 +18,6 @@
 #ifndef __otbImage_h
 #define __otbImage_h
 
-#include <string.h>
-
 #include "itkImage.h"
 #include "otbImageMetadataInterfaceBase.h"
 

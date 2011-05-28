@@ -16,18 +16,18 @@
 
 =========================================================================*/
 #include "otbRADImageIO.h"
+
+#include <fstream>
+#include <iostream>
+
 #include "itkByteSwapper.h"
-#include <itksys/SystemTools.hxx>
-#include <string.h>  // for strncpy
+#include "itksys/SystemTools.hxx"
 
 #include "itkExceptionObject.h"
 #include "otbMacro.h"
 #include "itkMacro.h"
 
 #include "otbSystem.h"
-
-#include <fstream>
-#include <iostream>
 
 namespace otb
 {

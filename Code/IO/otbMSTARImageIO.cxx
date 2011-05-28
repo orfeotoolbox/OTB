@@ -38,7 +38,7 @@
 #include <iostream>
 #include <list>
 #include <string>
-#include <math.h>
+#include <cstring>
 
 #include "otbMacro.h"
 

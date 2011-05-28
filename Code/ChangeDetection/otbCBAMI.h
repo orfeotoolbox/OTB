@@ -19,8 +19,6 @@
 #define __otbCBAMI_h
 
 #include <vector>
-#include <stdlib.h>
-#include <math.h>
 
 namespace otb
 {

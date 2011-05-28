@@ -29,7 +29,6 @@
 #include "itkZeroFluxNeumannBoundaryCondition.h"
 #include "itkOffset.h"
 #include "itkProgressReporter.h"
-#include <math.h>
 
 namespace otb
 {

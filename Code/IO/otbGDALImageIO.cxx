@@ -17,10 +17,7 @@
 =========================================================================*/
 #include <iostream>
 #include <fstream>
-#include <string.h>
-#include <list>
 #include <vector>
-#include <math.h>
 
 #include "otbGDALImageIO.h"
 #include "otbMacro.h"

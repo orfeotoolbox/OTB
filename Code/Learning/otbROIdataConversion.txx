@@ -21,8 +21,8 @@
 #ifndef __otbROIdataConversion_txx
 #define __otbROIdataConversion_txx
 
-#include <otbImage.h>
-#include <itkVector.h>
+#include "otbImage.h"
+#include "itkVector.h"
 
 #include "otbROIdataConversion.h"
 #include "itkImageRegionConstIterator.h"

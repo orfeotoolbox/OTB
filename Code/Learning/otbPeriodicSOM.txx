@@ -21,8 +21,8 @@
 #ifndef __otbPeriodicSOM_txx
 #define __otbPeriodicSOM_txx
 
-#include <itkNumericTraits.h>
-#include <itkNeighborhoodIterator.h>
+#include "itkNumericTraits.h"
+#include "itkNeighborhoodIterator.h"
 
 #include "otbPeriodicSOM.h"
 

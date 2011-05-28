@@ -25,8 +25,6 @@
 #include "itkImageRegionIterator.h"
 #include "itkImageRegionConstIterator.h"
 
-#include <math.h>
-
 namespace otb
 {
 

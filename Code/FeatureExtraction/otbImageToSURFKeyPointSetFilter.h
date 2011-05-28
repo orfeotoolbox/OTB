@@ -24,8 +24,8 @@
 #include "itkConstNeighborhoodIterator.h"
 #include "otbImageToHessianDeterminantImageFilter.h"
 #include "itkPointSet.h"
-#include <itkRescaleIntensityImageFilter.h>
-#include <otbImageList.h>
+#include "itkRescaleIntensityImageFilter.h"
+#include "otbImageList.h"
 #include "itkResampleImageFilter.h"
 #include "otbImageToPointSetFilter.h"
 

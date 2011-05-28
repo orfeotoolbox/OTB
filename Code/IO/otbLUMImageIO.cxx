@@ -16,10 +16,9 @@
 
 =========================================================================*/
 #include "otbLUMImageIO.h"
-#include "itkByteSwapper.h"
-#include <itksys/SystemTools.hxx>
-#include <string.h>  // for strncpy
 
+#include "itkByteSwapper.h"
+#include "itksys/SystemTools.hxx"
 #include "itkExceptionObject.h"
 #include "otbMacro.h"
 #include "itkMacro.h"

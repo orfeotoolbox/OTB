@@ -18,13 +18,11 @@
 #ifndef __otbMorphologicalPyramidAnalysisFilter_txx
 #define __otbMorphologicalPyramidAnalysisFilter_txx
 
-#include <math.h>
-
 #include "otbMorphologicalPyramidAnalysisFilter.h"
 
 #include "itkSubtractImageFilter.h"
 #include "itkMaximumImageFilter.h"
-#include  "itkImageDuplicator.h"
+#include "itkImageDuplicator.h"
 #include "otbMorphologicalPyramidResampler.h"
 #include "itkProgressAccumulator.h"
 #include "otbMacro.h"

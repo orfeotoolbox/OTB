@@ -1,7 +1,7 @@
 #ifndef __otbSEMClassifier_txx
 #define __otbSEMClassifier_txx
 
-#include <stdlib.h>
+#include <cstdlib>
 
 #include <iostream>
 #include "itkNumericTraits.h"

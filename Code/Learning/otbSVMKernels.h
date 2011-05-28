@@ -20,7 +20,7 @@
 
 #include <vector>
 #include <algorithm> // for std::find
-#include <string.h> // for strpbrk
+#include <cstring> // for strpbrk
 
 #include "itkNumericTraits.h"
 #include "otbMath.h"

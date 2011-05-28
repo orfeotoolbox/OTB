@@ -17,13 +17,11 @@
 =========================================================================*/
 #include "otbONERAImageIO.h"
 #include "itkByteSwapper.h"
-#include <itksys/SystemTools.hxx>
-#include <string.h>  // for strncpy
+#include "itksys/SystemTools.hxx"
 
 #include "itkExceptionObject.h"
 #include "otbMacro.h"
 #include "itkMacro.h"
-#include <stdio.h>
 
 #include "otbSystem.h"
 

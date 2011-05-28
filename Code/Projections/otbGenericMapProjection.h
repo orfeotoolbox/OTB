@@ -20,7 +20,6 @@
 
 #include <iostream>
 #include <sstream>
-#include <stdio.h>
 
 #include "itkTransform.h"
 #include "itkExceptionObject.h"

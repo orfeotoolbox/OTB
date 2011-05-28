@@ -20,6 +20,8 @@
 
 #include "otbImageFileReader.h"
 
+#include <fstream>
+
 #include "itkMetaDataObject.h"
 
 #include "otbMacro.h"
@@ -31,8 +33,7 @@
 #include "otbGDALImageIO.h" //FIXME find a better way
 #include "otbTileMapImageIO.h"
 
-#include <itksys/SystemTools.hxx>
-#include <fstream>
+#include "itksys/SystemTools.hxx"
 
 #include "otbCurlHelper.h"
 

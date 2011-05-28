@@ -19,7 +19,7 @@
 #define __otbDEMHandler_h
 
 #include <iostream>
-#include <stdio.h>
+#include <cstdio>
 
 #include "itkIndent.h"
 #include "itkObject.h"

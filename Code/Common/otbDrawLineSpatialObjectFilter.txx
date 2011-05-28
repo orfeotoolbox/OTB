@@ -26,8 +26,6 @@
 #include "itkImageIteratorWithIndex.h"
 #include "itkImageConstIteratorWithIndex.h"
 
-#include <math.h>
-
 namespace otb
 {
 
