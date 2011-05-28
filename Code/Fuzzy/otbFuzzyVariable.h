@@ -101,8 +101,8 @@ public:
 protected:
   /** Constructor */
   FuzzyVariable();
-  /** Desctructor */
-  ~FuzzyVariable() {}
+  /** Destructor */
+  virtual ~FuzzyVariable() {}
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
