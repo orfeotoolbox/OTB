@@ -59,51 +59,49 @@ typename StandardDSCostFunction<TDSValidationFilter>
   unsigned int nbParam = this->GetNumberOfParameters();
 
   std::vector<double> ndvi, radiom, overlap;
-  for (unsigned int i=0; i<4; i++)
+  for (unsigned int i = 0; i < 4; i++)
     {
-      ndvi.push_back(parameters[i]);
+    ndvi.push_back(parameters[i]);
     }
-  for (unsigned int i=0; i<4; i++)
+  for (unsigned int i = 0; i < 4; i++)
     {
-      radiom.push_back(parameters[i+4]);
+    radiom.push_back(parameters[i + 4]);
     }
-  for (unsigned int i=0; i<4; i++)
+  for (unsigned int i = 0; i < 4; i++)
     {
-      overlap.push_back(parameters[i+8]);
+    overlap.push_back(parameters[i + 8]);
     }
 
-  typename DSValidationFilterType::Pointer internalFunctionGT
-    = DSValidationFilterType::New();
+  typename DSValidationFilterType::Pointer internalFunctionGT = DSValidationFilterType::New();
   internalFunctionGT->SetCriterionFormula("1");
   internalFunctionGT->SetInput(m_GTVectorData);
   internalFunctionGT->SetHypothesis(m_Hypothesis);
   try
-  {
+    {
     internalFunctionGT->SetFuzzyModel("NDVI", ndvi);
     internalFunctionGT->SetFuzzyModel("RADIOM", radiom);
     internalFunctionGT->SetFuzzyModel("DBOVER", overlap);
-  }
+    }
   catch (itk::ExceptionObject /*& err*/)
-  {
-    return (m_Weight*m_GTVectorData->Size() + (1-m_Weight)*m_NSVectorData->Size()); ;
-  }
+    {
+    return (m_Weight * m_GTVectorData->Size() + (1 - m_Weight) * m_NSVectorData->Size());;
+    }
   internalFunctionGT->Update();
 
-  typename DSValidationFilterType::Pointer internalFunctionNS
-    = DSValidationFilterType::New();
+  typename DSValidationFilterType::Pointer internalFunctionNS = DSValidationFilterType::New();
   internalFunctionNS->SetCriterionFormula("1");
   internalFunctionNS->SetInput(m_NSVectorData);
   internalFunctionNS->SetHypothesis(m_Hypothesis);
   try
-  {
+    {
     internalFunctionNS->SetFuzzyModel("NDVI", ndvi);
     internalFunctionNS->SetFuzzyModel("RADIOM", radiom);
     internalFunctionNS->SetFuzzyModel("DBOVER", overlap);
-  }
+    }
   catch (itk::ExceptionObject &)
-  {
-    return (m_Weight*m_GTVectorData->Size() + (1-m_Weight)*m_NSVectorData->Size()); ;
-  }
+    {
+    return (m_Weight * m_GTVectorData->Size() + (1 - m_Weight) * m_NSVectorData->Size());;
+    }
   internalFunctionNS->Update();
 
   double accGT, accNS, belief, plausibility;
@@ -113,42 +111,42 @@ typename StandardDSCostFunction<TDSValidationFilter>
   TreeIteratorType itVectorGT(internalFunctionGT->GetOutput()->GetDataTree());
   itVectorGT.GoToBegin();
   while (!itVectorGT.IsAtEnd())
+    {
+    if (!itVectorGT.Get()->IsRoot() && !itVectorGT.Get()->IsDocument() && !itVectorGT.Get()->IsFolder())
       {
-      if (!itVectorGT.Get()->IsRoot() && !itVectorGT.Get()->IsDocument() && !itVectorGT.Get()->IsFolder())
-        {
-        belief       = itVectorGT.Get()->GetFieldAsDouble("Belief");
-        plausibility = itVectorGT.Get()->GetFieldAsDouble("Plausi");
+      belief = itVectorGT.Get()->GetFieldAsDouble("Belief");
+      plausibility = itVectorGT.Get()->GetFieldAsDouble("Plausi");
 
-        m_Parser->DefineVar("Belief", &belief);
-        m_Parser->DefineVar("Plausibility", &plausibility);
+      m_Parser->DefineVar("Belief", &belief);
+      m_Parser->DefineVar("Plausibility", &plausibility);
 
-        accGT += ((1 - m_Parser->Eval()) * (1 - m_Parser->Eval()));
+      accGT += ((1 - m_Parser->Eval()) * (1 - m_Parser->Eval()));
 
-        m_Parser->ClearVar();
-        }
-      itVectorGT++;
+      m_Parser->ClearVar();
       }
+    itVectorGT++;
+    }
 
   TreeIteratorType itVectorNS(internalFunctionNS->GetOutput()->GetDataTree());
   itVectorNS.GoToBegin();
   while (!itVectorNS.IsAtEnd())
+    {
+    if (!itVectorNS.Get()->IsRoot() && !itVectorNS.Get()->IsDocument() && !itVectorNS.Get()->IsFolder())
       {
-      if (!itVectorNS.Get()->IsRoot() && !itVectorNS.Get()->IsDocument() && !itVectorNS.Get()->IsFolder())
-        {
-        belief       = itVectorNS.Get()->GetFieldAsDouble("Belief");
-        plausibility = itVectorNS.Get()->GetFieldAsDouble("Plausi");
+      belief = itVectorNS.Get()->GetFieldAsDouble("Belief");
+      plausibility = itVectorNS.Get()->GetFieldAsDouble("Plausi");
 
-        m_Parser->DefineVar("Belief", &belief);
-        m_Parser->DefineVar("Plausibility", &plausibility);
+      m_Parser->DefineVar("Belief", &belief);
+      m_Parser->DefineVar("Plausibility", &plausibility);
 
-        accNS += (m_Parser->Eval() * m_Parser->Eval());
+      accNS += (m_Parser->Eval() * m_Parser->Eval());
 
-        m_Parser->ClearVar();
-        }
-      itVectorNS++;
+      m_Parser->ClearVar();
       }
-  return (m_Weight*accGT + (1-m_Weight)*accNS);
- }
+    itVectorNS++;
+    }
+  return (m_Weight * accGT + (1 - m_Weight) * accNS);
+}
 
 template <class TDSValidationFilter>
 void
