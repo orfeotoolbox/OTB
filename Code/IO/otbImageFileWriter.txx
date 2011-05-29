@@ -22,7 +22,6 @@
 #include "otbImageIOFactory.h"
 
 #include "itkObjectFactoryBase.h"
-#include "vnl/vnl_vector.h"
 
 #include "itkMetaDataObject.h"
 #include "otbImageKeywordlist.h"

@@ -18,14 +18,13 @@
 #ifndef __otbVectorDataIOBase_h
 #define __otbVectorDataIOBase_h
 
+#include <string>
+
 #include "itkLightProcessObject.h"
 #include "itkObjectFactory.h"
 #include "itkIndent.h"
-#include "vnl/vnl_vector.h"
 #include "itkVector.h"
 #include "itkPoint.h"
-
-#include <string>
 
 namespace otb
 {
