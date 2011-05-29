@@ -58,6 +58,10 @@
 /* Show developper debug messages */
 #cmakedefine OTB_SHOW_ALL_MSG_DEBUG
 
+/* Curl */
+#cmakedefine OTB_USE_CURL
+#cmakedefine OTB_CURL_MULTI_AVAILABLE
+
 /* Use Visu/Gui configurations */
 #cmakedefine OTB_USE_VISU_GUI
 

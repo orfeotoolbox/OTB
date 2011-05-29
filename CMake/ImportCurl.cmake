@@ -23,19 +23,11 @@ IF(OTB_USE_CURL)
                         "Cannot find CURL library. Please set CURL_LIBRARY or SET OTB_USE_CURL OFF.")
         ENDIF (NOT CURL_LIBRARY)
 
-        # Add compiler option
-        ADD_DEFINITIONS(-DOTB_USE_CURL)
-
-        INCLUDE_DIRECTORIES(${CURL_INCLUDE_DIR})
-
         TRY_COMPILE(OTB_CURL_MULTI_AVAILABLE
                     ${CMAKE_CURRENT_BINARY_DIR}/CMake
                     ${CMAKE_CURRENT_SOURCE_DIR}/CMake/TestCurlMulti.cxx
                     CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${CURL_INCLUDE_DIR}" "-DLINK_LIBRARIES:STRING=${CURL_LIBRARY}"
                     OUTPUT_VARIABLE OUTPUT)
-        IF (OTB_CURL_MULTI_AVAILABLE)
-          ADD_DEFINITIONS(-DOTB_CURL_MULTI_AVAILABLE)
-        ENDIF (OTB_CURL_MULTI_AVAILABLE)
          
         MESSAGE(STATUS "  Enabling Curl support")
         MESSAGE(STATUS "  Curl includes : ${CURL_INCLUDE_DIR}")
