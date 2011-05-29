@@ -50,6 +50,7 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Code/SARPolarimetry
   ${OTB_SOURCE_DIR}/Code/SpatialReasoning
   ${OTB_SOURCE_DIR}/Code/Testing
+  ${OTB_SOURCE_DIR}/Code/UtilitiesAdapters/CurlAdapters
   ${OTB_SOURCE_DIR}/Code/UtilitiesAdapters/OssimAdapters
   ${OTB_SOURCE_DIR}/Code/Visu
   ${OTB_SOURCE_DIR}/Code/Visualization
@@ -315,6 +316,7 @@ SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
   Fusion
   GeospatialAnalysis
   Testing
+  UtilitiesAdapters/CurlAdapters
   UtilitiesAdapters/OssimAdapters
   OBIA
   Fuzzy

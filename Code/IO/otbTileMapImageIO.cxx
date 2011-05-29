@@ -810,7 +810,6 @@ void TileMapImageIO::FillCacheFaults(void* buffer) const
 
 void TileMapImageIO::SetCacheDirectory(const char* _arg)
 {
-   std::cout<<"TileMapImageIO::SetCacheDirectory"<<std::endl;
   if (_arg && (_arg == this->m_CacheDirectory))
     {
     return;

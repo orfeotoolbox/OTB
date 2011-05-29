@@ -21,10 +21,10 @@ TARGET_LINK_LIBRARIES(OrthoRectificationExample OTBProjections OTBCommon OTBIO)
 
 IF( OTB_USE_CURL )
 ADD_EXECUTABLE(PlaceNameToLonLatExample PlaceNameToLonLatExample.cxx )
-TARGET_LINK_LIBRARIES(PlaceNameToLonLatExample OTBProjections OTBCommon OTBIO ${CURL_LIBRARY} tinyXML)
+TARGET_LINK_LIBRARIES(PlaceNameToLonLatExample OTBProjections OTBCommon OTBIO )
 
 ADD_EXECUTABLE(CoordinateToNameExample CoordinateToNameExample.cxx )
-TARGET_LINK_LIBRARIES(CoordinateToNameExample OTBProjections OTBCommon OTBIO ${CURL_LIBRARY} tinyXML)
+TARGET_LINK_LIBRARIES(CoordinateToNameExample OTBProjections OTBCommon OTBIO )
 
 ENDIF( OTB_USE_CURL )
 
@@ -164,7 +164,7 @@ TARGET_LINK_LIBRARIES(otbProjectionsExamplesTests OTBCommon OTBIO OTBProjections
 
 IF( OTB_USE_CURL )
   ADD_EXECUTABLE(otbProjectionsExamplesTests2 otbProjectionsExamplesTests2.cxx)
-  TARGET_LINK_LIBRARIES(otbProjectionsExamplesTests2 OTBCommon OTBIO OTBProjections ${CURL_LIBRARY} tinyXML OTBTesting)
+  TARGET_LINK_LIBRARIES(otbProjectionsExamplesTests2 OTBCommon OTBIO OTBProjections OTBTesting)
 ENDIF( OTB_USE_CURL )
 
 
