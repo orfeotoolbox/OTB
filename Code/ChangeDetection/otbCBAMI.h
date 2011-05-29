@@ -23,8 +23,6 @@
 namespace otb
 {
 
-// #define EPSILON_VALUE_CBAMI 0.01
-
 namespace Functor
 {
 

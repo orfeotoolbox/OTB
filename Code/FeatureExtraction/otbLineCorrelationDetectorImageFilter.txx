@@ -152,7 +152,7 @@ LineCorrelationDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirect
   rho13 = vcl_sqrt(rho13);
 
   // Determination of the minimum intensity of detection between R12 et R13
-  return static_cast<double>(MIN(rho12, rho13));
+  return static_cast<double>(std::min(rho12, rho13));
 
 }
 

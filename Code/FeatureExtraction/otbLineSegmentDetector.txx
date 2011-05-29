@@ -1045,4 +1045,8 @@ LineSegmentDetector<TInputImage, TPrecision>
 
 } // end namespace otb
 
+#undef MAXIT
+#undef EPS
+#undef FPMIN
+
 #endif

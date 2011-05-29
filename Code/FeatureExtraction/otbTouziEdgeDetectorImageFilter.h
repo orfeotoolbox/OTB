@@ -22,9 +22,6 @@
 #include "otbImage.h"
 #include "itkNumericTraits.h"
 
-#define MINI(_A, _B) ((_A) < (_B) ? (_A) : (_B))
-#define MAXI(_A, _B) ((_A) > (_B) ? (_A) : (_B))
-
 namespace otb
 {
 
