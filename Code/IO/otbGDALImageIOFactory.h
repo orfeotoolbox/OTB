@@ -20,7 +20,6 @@
 #define __otbGDALImageIOFactory_h
 
 #include "itkObjectFactoryBase.h"
-#include "itkImageIOBase.h"
 
 namespace otb
 {

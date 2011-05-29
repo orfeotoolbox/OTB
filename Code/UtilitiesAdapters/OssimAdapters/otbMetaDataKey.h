@@ -24,9 +24,6 @@
 #include "itkDataObject.h"
 #include "itkVariableLengthVector.h"
 
-//TODO: move the OTB_GCP definition out of here
-#include "gdal.h"
-
 namespace otb
 {
 /** \class MetaDataKey
@@ -41,8 +38,8 @@ public:
 
   typedef MetaDataKey Self;
 
-  MetaDataKey() {};
-  virtual ~MetaDataKey() {}
+  MetaDataKey();
+  virtual ~MetaDataKey();
 
   static const std::string DriverShortNameKey;
   static const std::string DriverLongNameKey;
@@ -147,7 +144,6 @@ public:
   double m_GCPZ;
 
   OTB_GCP();
-  OTB_GCP(const GDAL_GCP * psGCP);
   ~OTB_GCP();
 
   OTB_GCP(const OTB_GCP &pGcp);

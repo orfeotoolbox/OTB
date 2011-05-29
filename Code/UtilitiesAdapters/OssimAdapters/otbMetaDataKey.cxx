@@ -53,6 +53,9 @@ const std::string MetaDataKey::OSSIMKeywordlistDelimiterKey = "OSSIMKeywordlistD
 const std::string MetaDataKey::VectorDataKeywordlistKey = "VectorDataKeywordlist";
 const std::string MetaDataKey::VectorDataKeywordlistDelimiterKey = "VectorDataKeywordlistDelimiter";
 
+MetaDataKey::MetaDataKey() {}
+MetaDataKey::~MetaDataKey() {}
+
 /*const MetaDataKey::KeyTypeDef Types[] =
   {
     {MetaDataKey::DriverShortNameKey,     MetaDataKey::TSTRING},
@@ -112,16 +115,7 @@ MetaDataKey::KeyType MetaDataKey::GetKeyType(const std::string& name)
 }
 
 OTB_GCP::OTB_GCP() {};
-OTB_GCP::OTB_GCP(const GDAL_GCP * psGCP)
-{
-  m_Id = std::string(psGCP->pszId);
-  m_Info = std::string(psGCP->pszInfo);
-  m_GCPRow = psGCP->dfGCPLine;
-  m_GCPCol = psGCP->dfGCPPixel;
-  m_GCPX = psGCP->dfGCPX;
-  m_GCPY = psGCP->dfGCPY;
-  m_GCPZ = psGCP->dfGCPZ;
-}
+
 OTB_GCP::OTB_GCP(const OTB_GCP &pGcp)
 {
   m_Id = pGcp.m_Id;

@@ -46,7 +46,7 @@ GDALImageIOFactory::GetITKSourceVersion(void) const
 const char*
 GDALImageIOFactory::GetDescription() const
 {
-  return "GDAL ImageIO Factory, permettant le chargement d'image GDAL dans l'OTB";
+  return "GDAL ImageIO Factory, enabling loading gdal images in OTB";
 }
 
 } // end namespace otb

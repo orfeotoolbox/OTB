@@ -21,22 +21,14 @@
 
 /* C++ Libraries */
 #include <string>
-#include "stdlib.h"
 
 /* ITK Libraries */
 #include "itkImageIOBase.h"
 
-/* GDAL Libraries */
-#include "gdal.h"
-#include "gdal_priv.h"
-#include "cpl_string.h"
-#include "cpl_conv.h"
-#include "ogr_spatialref.h"
-#include "ogr_srs_api.h"
-
 namespace otb
 {
 class GDALDatasetWrapper;
+class GDALDataTypeWrapper;
 
 /** \class GDALImageIO
  *
@@ -106,10 +98,7 @@ public:
   bool GetSubDatasetInfo(std::vector<std::string>& names, std::vector<std::string>& desc);
 
   /** Get if the pixel type in the file is complex or not (GDAL side)*/
-  bool GDALPixelTypeIsComplex()
-  {
-    return GDALDataTypeIsComplex(m_PxType);
-  }
+  bool GDALPixelTypeIsComplex();
 
   /*-------- This part of the interfaces deals with writing data. ----- */
 
@@ -168,7 +157,7 @@ private:
   typedef itk::SmartPointer<GDALDatasetWrapper> GDALDatasetWrapperPointer;
   GDALDatasetWrapperPointer m_Dataset;
 
-  GDALDataType     m_PxType;
+  GDALDataTypeWrapper*    m_PxType;
   /** Nombre d'octets par pixel */
   int m_BytePerPixel;
 
