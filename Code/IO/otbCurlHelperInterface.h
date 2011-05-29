@@ -18,7 +18,7 @@
 #ifndef __otbCurlHelperInterface_h
 #define __otbCurlHelperInterface_h
 
-#include <sstream>
+#include <iosfwd> 
 #include "itkObject.h"
 #include "itkObjectFactory.h"
 

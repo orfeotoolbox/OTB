@@ -17,6 +17,9 @@
 =========================================================================*/
 
 #include "otbCurlHelper.h"
+
+#include <sstream>
+
 #include "otbMacro.h"
 
 #ifdef OTB_USE_CURL
