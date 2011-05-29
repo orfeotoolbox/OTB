@@ -66,6 +66,7 @@ TileMapImageIO::TileMapImageIO()
   m_Depth = 8;
 
   m_BytePerPixel = 1;
+  m_TileSize = 256;
 
   m_UseCache = false;
   m_ServerName = "";
@@ -146,8 +147,8 @@ void TileMapImageIO::Read(void* buffer)
   int firstLine   = this->GetIORegion().GetIndex()[1];
   int firstSample = this->GetIORegion().GetIndex()[0];
 
-  int nTilesX = (int) ceil(totSamples / 256.) + 1;
-  int nTilesY = (int) ceil(totLines / 256.) + 1;
+  int nTilesX = (int) ceil(totSamples / static_cast<double>(m_TileSize)) + 1;
+  int nTilesY = (int) ceil(totLines / static_cast<double>(m_TileSize)) + 1;
 
   // Clear vectors
   m_ListFilename.clear();
@@ -160,8 +161,8 @@ void TileMapImageIO::Read(void* buffer)
     {
     for (int numTileX = 0; numTileX < nTilesX; numTileX++)
       {
-      double xTile = (firstSample + 256 * numTileX) / ((1 << m_Depth) * 256.);
-      double yTile = (firstLine + 256 * numTileY) / ((1 << m_Depth) * 256.);
+      double xTile = (firstSample + m_TileSize * numTileX) / ((1 << m_Depth) * static_cast<double>(m_TileSize));
+      double yTile = (firstLine + m_TileSize * numTileY) / ((1 << m_Depth) * static_cast<double>(m_TileSize));
 
       std::string lFilename;
 
@@ -295,7 +296,7 @@ void TileMapImageIO::GenerateBuffer(unsigned char *p)
   int firstSample = this->GetIORegion().GetIndex()[0];
   int nComponents = this->GetNumberOfComponents();
 
-  unsigned char * bufferTile = new unsigned char[256 * 256 * nComponents];
+  unsigned char * bufferTile = new unsigned char[m_TileSize * m_TileSize * nComponents];
   for (unsigned int currentTile = 0; currentTile < m_ListTiles.size(); currentTile++)
     {
 
@@ -305,16 +306,16 @@ void TileMapImageIO::GenerateBuffer(unsigned char *p)
     int numTileX = m_ListTiles[currentTile].numTileX;
     int numTileY = m_ListTiles[currentTile].numTileY;
 
-    for (int tileJ = 0; tileJ < 256; tileJ++)
+    for (int tileJ = 0; tileJ < m_TileSize; tileJ++)
       {
-      long int yImageOffset = (long int) (256 * floor(firstLine / 256.) + 256 * numTileY - firstLine + tileJ);
+      long int yImageOffset = (long int) (m_TileSize * floor(firstLine / static_cast<double>(m_TileSize)) + m_TileSize * numTileY - firstLine + tileJ);
       if ((yImageOffset >= 0) && (yImageOffset < totLines))
         {
         long int xImageOffset = (long int)
-                                (256 * floor(firstSample / 256.) + 256 * numTileX - firstSample);
+                                (m_TileSize * floor(firstSample / static_cast<double>(m_TileSize)) + m_TileSize * numTileX - firstSample);
         unsigned char * dst = p + nComponents * (xImageOffset + totSamples * yImageOffset);
-        unsigned char * src = bufferTile + nComponents * 256 * tileJ;
-        int             size = nComponents * 256;
+        unsigned char * src = bufferTile + nComponents * m_TileSize * tileJ;
+        int             size = nComponents * m_TileSize;
 
         if (xImageOffset < 0)
           {
@@ -322,9 +323,9 @@ void TileMapImageIO::GenerateBuffer(unsigned char *p)
           src -= nComponents * xImageOffset;
           size += nComponents * xImageOffset;
           }
-        if (xImageOffset + 256 > totSamples)
+        if (xImageOffset + m_TileSize > totSamples)
           {
-          size += nComponents * (totSamples - xImageOffset - 256);
+          size += nComponents * (totSamples - xImageOffset - m_TileSize);
           }
         if (size > 0)
           {
@@ -356,8 +357,8 @@ void TileMapImageIO::ReadTile(const std::string& filename, void * buffer)
     itk::ImageIORegion ioRegion(2);
     ioRegion.SetIndex(0, 0);
     ioRegion.SetIndex(1, 0);
-    ioRegion.SetSize(0, 256);
-    ioRegion.SetSize(1, 256);
+    ioRegion.SetSize(0, m_TileSize);
+    ioRegion.SetSize(1, m_TileSize);
     imageIO->SetIORegion(ioRegion);
 
     imageIO->Read(buffer);
@@ -366,10 +367,10 @@ void TileMapImageIO::ReadTile(const std::string& filename, void * buffer)
     {
     if (bufferCacheFault == NULL)
       {
-      bufferCacheFault = new unsigned char[256 * 256 * 3];
+      bufferCacheFault = new unsigned char[m_TileSize * m_TileSize * 3];
       FillCacheFaults(bufferCacheFault);
       }
-    memcpy(buffer, bufferCacheFault, 256 * 256 * 3);
+    memcpy(buffer, bufferCacheFault, m_TileSize * m_TileSize * 3);
     }
 }
 
@@ -405,8 +406,8 @@ void TileMapImageIO::BuildFileName(const std::ostringstream& quad, std::ostrings
 void TileMapImageIO::ReadImageInformation()
 {
 
-  m_Dimensions[0] = (1 << m_Depth) * 256;
-  m_Dimensions[1] = (1 << m_Depth) * 256;
+  m_Dimensions[0] = (1 << m_Depth) * m_TileSize;
+  m_Dimensions[1] = (1 << m_Depth) * m_TileSize;
   otbMsgDevMacro(<< "Get Dimensions : x=" << m_Dimensions[0] << " & y=" << m_Dimensions[1]);
 
   // Default Spacing
@@ -569,11 +570,11 @@ void TileMapImageIO::Write(const void* buffer)
   otbMsgDevMacro(<< " sizeof(unsigned long) : " << sizeof(unsigned long));
 
   //Using integer division:
-  int nTilesX = (originSample + totSamples - 1) / 256 - originSample / 256 + 1;
-  int nTilesY = (originLine + totLines - 1) / 256 - originLine / 256 + 1;
+  int nTilesX = (originSample + totSamples - 1) / m_TileSize - originSample / m_TileSize + 1;
+  int nTilesY = (originLine + totLines - 1) / m_TileSize - originLine / m_TileSize + 1;
   otbMsgDevMacro(<< "Number of tile to process " << nTilesX << "x" << nTilesY);
 
-  unsigned char * bufferTile = new unsigned char[256 * 256 * nComponents];
+  unsigned char * bufferTile = new unsigned char[m_TileSize * m_TileSize * nComponents];
 
   //Read all the required tiles
   for (int numTileY = 0; numTileY < nTilesY; numTileY++)
@@ -582,33 +583,33 @@ void TileMapImageIO::Write(const void* buffer)
       {
 
       //Set tile buffer to 0
-      for (int iInit = 0; iInit < 256 * 256 * nComponents; iInit++)
+      for (int iInit = 0; iInit < m_TileSize * m_TileSize * nComponents; iInit++)
         {
-       bufferTile[iInit] = 0;
+        bufferTile[iInit] = 0;
         }
 
-      for (int tileJ = 0; tileJ < 256; tileJ++)
+      for (int tileJ = 0; tileJ < m_TileSize; tileJ++)
         {
-        long int yImageOffset = (long int) (256 * floor((originLine + firstLine) / 256.)
-                                            + 256 * numTileY - (originLine + firstLine) + tileJ);
+        long int yImageOffset = (long int) (m_TileSize * floor((originLine + firstLine) / static_cast<double>(m_TileSize))
+                                            + m_TileSize * numTileY - (originLine + firstLine) + tileJ);
         if ((yImageOffset >= 0) && (yImageOffset < totLines))
           {
           long int xImageOffset = (long int)
-                                  (256 *
+                                  (m_TileSize *
                                    floor((originSample +
-                                          firstSample) / 256.) + 256 * numTileX - (originSample + firstSample));
-          unsigned char *       dst = bufferTile + nComponents * 256 * tileJ;
+                                          firstSample) / static_cast<double>(m_TileSize)) + m_TileSize * numTileX - (originSample + firstSample));
+          unsigned char *       dst = bufferTile + nComponents * m_TileSize * tileJ;
           const unsigned char * src = p + nComponents * (xImageOffset + totSamples * yImageOffset);
-          int                   size = nComponents * 256;
+          int                   size = nComponents * m_TileSize;
           if (xImageOffset < 0)
             {
             src -= nComponents * xImageOffset;
             dst -= nComponents * xImageOffset;
             size += nComponents * xImageOffset;
             }
-          if (xImageOffset + 256 > totSamples)
+          if (xImageOffset + m_TileSize > totSamples)
             {
-            size += nComponents * (totSamples - xImageOffset - 256);
+            size += nComponents * (totSamples - xImageOffset - m_TileSize);
             }
           if (size > 0)
             {
@@ -618,8 +619,8 @@ void TileMapImageIO::Write(const void* buffer)
           }
         } //end of tile copy
 
-      double xTile = (originSample + firstSample + 256 * numTileX) / ((1 << m_Depth) * 256.);
-      double yTile = (originLine + firstLine + 256 * numTileY) / ((1 << m_Depth) * 256.);
+      double xTile = (originSample + firstSample + m_TileSize * numTileX) / ((1 << m_Depth) * static_cast<double>(m_TileSize));
+      double yTile = (originLine + firstLine + m_TileSize * numTileY) / ((1 << m_Depth) * static_cast<double>(m_TileSize));
       //Write the tile
       InternalWrite(xTile, yTile, bufferTile);
 
@@ -653,8 +654,8 @@ void TileMapImageIO::InternalWrite(double x, double y, const void* buffer)
 
     imageIO->CanStreamWrite();
     imageIO->SetNumberOfDimensions(2);
-    imageIO->SetDimensions(0, 256);
-    imageIO->SetDimensions(1, 256);
+    imageIO->SetDimensions(0, m_TileSize);
+    imageIO->SetDimensions(1, m_TileSize);
     imageIO->SetSpacing(0, 1);
     imageIO->SetSpacing(1, 1);
     imageIO->SetOrigin(0, 0);
@@ -678,10 +679,10 @@ void TileMapImageIO::InternalWrite(double x, double y, const void* buffer)
     itk::ImageIORegion ioRegion(2);
     for (unsigned int i = 0; i < 2; i++)
       {
-      ioRegion.SetSize(i, 256);
+      ioRegion.SetSize(i, m_TileSize);
       ioRegion.SetIndex(i, 0);
       }
-    
+
     imageIO->SetIORegion(ioRegion);
 
     imageIO->Write(buffer);
@@ -796,14 +797,15 @@ TileMapImageIO::GetSplitRegionForWritingCanStreamWrite(unsigned int ithPiece,
 void TileMapImageIO::FillCacheFaults(void* buffer) const
 {
   //replicate to make 256x256x3 pixels
-  for (int line = 0; line < 256; line++)
+  for (int line = 0; line < m_TileSize; line++)
     {
-    memcpy(((unsigned char *) buffer) + line * 256 * 3, kLogoOtb + (line % 64) * 64 * 3, 64 * 3);
-    memcpy(((unsigned char *) buffer) + line * 256 * 3 + 64 * 3, kLogoOtb + (line % 64) * 64 * 3, 64 * 3);
-    memcpy(((unsigned char *) buffer) + line * 256 * 3 + 64 * 3 * 2, kLogoOtb + (line % 64) * 64 * 3, 64 * 3);
-    memcpy(((unsigned char *) buffer) + line * 256 * 3 + 64 * 3 * 3, kLogoOtb + (line % 64) * 64 * 3, 64 * 3);
+    for (int col = 0; col < m_TileSize/64; col++)
+      {
+      memcpy(((unsigned char *) buffer) + line * m_TileSize * 3 + 64 * 3 * col,
+             kLogoOtb + (line % 64) * 64 * 3,
+             64 * 3);
+      }
     }
-
 }
 
 void TileMapImageIO::SetCacheDirectory(const char* _arg)
@@ -852,15 +854,13 @@ void TileMapImageIO::SetCacheDirectory(const char* _arg)
       this->m_CacheDirectory = "";
       this->m_UseCache = false;
    }
-  
+
    this->Modified();
 }
 
 void TileMapImageIO::SetCacheDirectory(const std::string& _arg)
 {
   this->SetCacheDirectory(_arg.c_str());
-  //this->m_UseCache = true; FIXME: why this was even here??? we don't want a
-  //different behavior from the method above!
 }
 
 } // end namespace otb

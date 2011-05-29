@@ -181,6 +181,9 @@ private:
   /** Byte per pixel pixel */
   int m_BytePerPixel;
 
+  /** Tile size (heavily tested for the default 256 only) */
+  int m_TileSize;
+
   /** Resolution depth*/
   int                                          m_Depth;
   bool                                         m_UseCache;
