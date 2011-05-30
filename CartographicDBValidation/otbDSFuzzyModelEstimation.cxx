@@ -143,9 +143,8 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
   typedef otb::VectorDataToDSValidatedVectorDataFilter<VectorDataType, PrecisionType>
   ValidationFilterType;
 
-  typedef otb::StandardDSCostFunction<ValidationFilterType>
-  CostFunctionType;
-  typedef CostFunctionType::LabelSetType              LabelSetType;
+  typedef otb::StandardDSCostFunction<ValidationFilterType> CostFunctionType;
+  typedef CostFunctionType::LabelSetType                    LabelSetType;
 
   typedef itk::AmoebaOptimizer                        OptimizerType;
 
@@ -528,6 +527,3 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
 
   return EXIT_SUCCESS;
 }
-
-//}
-
