@@ -28,7 +28,7 @@
 typedef unsigned short                              LabelType;
 typedef otb::Image<LabelType>                       LabelImageType;
 typedef otb::ImageFileReader<LabelImageType>        LabelReaderType;
-typedef itk::LabelObject<LabelType,2>               LabelObjectType;
+typedef itk::LabelObject<LabelType, 2>               LabelObjectType;
 typedef otb::LabelMapWithAdjacency<LabelObjectType> LabelMapType;
 typedef otb::LabelImageToLabelMapWithAdjacencyFilter
 < LabelImageType, LabelMapType>                     FilterType;
@@ -57,13 +57,13 @@ int otbLabelImageToLabelMapWithAdjacencyFilter(int argc, char * argv[])
   // Retrieve the adjacency map
   LabelMapType::AdjacencyMapType adjMap = filter->GetOutput()->GetAdjacencyMap();
 
-  for(LabelMapType::AdjacencyMapType::const_iterator it = adjMap.begin(); it!=adjMap.end();++it)
+  for(LabelMapType::AdjacencyMapType::const_iterator it = adjMap.begin(); it!=adjMap.end(); ++it)
     {
     ofs<<"Label:\t"<<it->first<<" adjacent with labels";
 
     LabelMapType::AdjacentLabelsContainerType::const_iterator lit = it->second.begin();
 
-    for(;lit!=it->second.end();++lit)
+    for(; lit!=it->second.end(); ++lit)
       {
 
       ofs<<"\t"<<(*lit);
