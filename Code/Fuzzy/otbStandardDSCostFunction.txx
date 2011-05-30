@@ -56,7 +56,7 @@ typename StandardDSCostFunction<TDSValidationFilter>
   //Initialize parser
   m_Parser->SetExpr(m_CriterionFormula);
 
-  unsigned int nbParam = this->GetNumberOfParameters();
+  //unsigned int nbParam = this->GetNumberOfParameters();
 
   std::vector<double> ndvi, radiom, overlap;
   for (unsigned int i = 0; i < 4; i++)
