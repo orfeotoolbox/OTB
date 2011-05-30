@@ -75,6 +75,11 @@ ImageIOFactory::RegisterBuiltInFactories()
       itk::ObjectFactoryBase::RegisterFactory(JPEG2000ImageIOFactory::New());
 #endif
 
+#ifdef OTB_USE_CURL
+      // TileMap : New format for OTB
+      itk::ObjectFactoryBase::RegisterFactory(TileMapImageIOFactory::New());
+#endif
+
       // GDAL : New format for OTB
       itk::ObjectFactoryBase::RegisterFactory(GDALImageIOFactory::New());
       // MegaWave format for OTB
@@ -86,10 +91,6 @@ ImageIOFactory::RegisterBuiltInFactories()
       // MSTAR Format for OTB
       itk::ObjectFactoryBase::RegisterFactory(MSTARImageIOFactory::New());
 
-#ifdef OTB_USE_CURL
-      // TileMap : New format for OTB
-      itk::ObjectFactoryBase::RegisterFactory(TileMapImageIOFactory::New());
-#endif
       firstTime = false;
       }
     }
