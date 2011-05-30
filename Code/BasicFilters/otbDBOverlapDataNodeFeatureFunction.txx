@@ -128,6 +128,7 @@ DBOverlapDataNodeFeatureFunction<TCoordRep, TPrecision>
   std::cout << tmpDataTree->GetDataTree()->Count() << std::endl;
   */
   unsigned int crossAcc = 0;
+  unsigned int nbBuildings = 0;
 
   TreeIteratorType it(tmpDataTree->GetDataTree());
   it.GoToBegin();
@@ -136,6 +137,7 @@ DBOverlapDataNodeFeatureFunction<TCoordRep, TPrecision>
     if (it.Get()->IsPolygonFeature())
       {
       typename DataNodeType::Pointer currentGeometry = it.Get();
+      nbBuildings ++;
       for (unsigned int i=0; i<node.GetLine()->GetVertexList()->Size()-1; i++)
         {
 
@@ -143,23 +145,24 @@ DBOverlapDataNodeFeatureFunction<TCoordRep, TPrecision>
                                                                  node.GetLine()->GetVertexList()->GetElement(i+1)))
           {
           crossAcc ++;
+          break;
           }
         }
       }
     ++it;
     }
 
-  if(tmpDataTree->GetDataTree()->Count() == 0)
+  if(nbBuildings == 0)
     {
     output.push_back(static_cast<PrecisionType>(0.));
     }
   else
     {
-    output.push_back(static_cast<PrecisionType>((double)(crossAcc)/(double)(tmpDataTree->GetDataTree()->Count())));
+    output.push_back(static_cast<PrecisionType>((double)(crossAcc)/(double)(nbBuildings)));
     }
 
   output.push_back(static_cast<PrecisionType>(crossAcc));
-  output.push_back(static_cast<PrecisionType>(tmpDataTree->GetDataTree()->Count()));
+  output.push_back(static_cast<PrecisionType>(nbBuildings));
 
   return output;
 }
