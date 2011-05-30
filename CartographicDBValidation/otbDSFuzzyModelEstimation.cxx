@@ -227,6 +227,116 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
   descriptionFilterNS->AddBuildingsDB(vdReProjFilterDB->GetOutput());
   descriptionFilterNS->Update();
 
+
+  // Compute statistics of all the descriptors
+
+  typedef VectorDataType::DataTreeType DataTreeType;
+  typedef VectorDataType::DataNodeType DataNodeType;
+  typedef itk::PreOrderTreeIterator<VectorDataType::DataTreeType>
+                                                    TreeIteratorType;
+
+  typedef DescriptionFilterType::DescriptorsListType DescriptorsListType;
+
+  const DescriptorsListType& descriptors = descriptionFilterGT->GetDescriptorsList();
+
+  std::vector<double> accFirstOrderGT, accSecondOrderGT, minGT, maxGT;
+  accFirstOrderGT.resize(descriptors.size());
+  accSecondOrderGT.resize(descriptors.size());
+  std::fill(accFirstOrderGT.begin(), accFirstOrderGT.end(), 0);
+  std::fill(accSecondOrderGT.begin(), accSecondOrderGT.end(), 0);
+  minGT.resize(descriptors.size());
+  maxGT.resize(descriptors.size());
+  unsigned int accNbElemGT = 0;
+
+  TreeIteratorType itVectorGT(vdReProjFilterGT->GetOutput()->GetDataTree());
+  for( itVectorGT.GoToBegin(); !itVectorGT.IsAtEnd(); ++itVectorGT )
+    {
+    if (!itVectorGT.Get()->IsRoot()
+        && !itVectorGT.Get()->IsDocument()
+        && !itVectorGT.Get()->IsFolder())
+      {
+      DataNodeType::Pointer currentGeometry = itVectorGT.Get();
+
+      for (unsigned int i = 0; i < descriptors.size(); ++i)
+        {
+        double desc = currentGeometry->GetFieldAsDouble(descriptors[i]);
+
+        accFirstOrderGT[i] += desc;
+        accSecondOrderGT[i] += desc * desc;
+
+        if (desc < minGT[i])
+          {
+          minGT[i] = desc;
+          }
+        if (desc > maxGT[i])
+          {
+          maxGT[i] = desc;
+          }
+
+        }
+      accNbElemGT ++;
+      }
+    }
+
+  TreeIteratorType itVectorNS(vdReProjFilterRL->GetOutput()->GetDataTree());
+  std::vector<double> accFirstOrderNS, accSecondOrderNS, minNS, maxNS;
+  minNS.resize(descriptors.size());
+  maxNS.resize(descriptors.size());
+  accFirstOrderNS.resize(descriptors.size());
+  accSecondOrderNS.resize(descriptors.size());
+  std::fill(accFirstOrderNS.begin(), accFirstOrderNS.end(), 0);
+  std::fill(accSecondOrderNS.begin(), accSecondOrderNS.end(), 0);
+  std::fill(minNS.begin(), minNS.end(), 1);
+  std::fill(maxNS.begin(), maxNS.end(), 0);
+  unsigned int accNbElemNS = 0;
+
+  for( itVectorNS.GoToBegin(); !itVectorNS.IsAtEnd(); ++itVectorNS )
+    {
+    if (!itVectorNS.Get()->IsRoot()
+        && !itVectorNS.Get()->IsDocument()
+        && !itVectorNS.Get()->IsFolder())
+      {
+      DataNodeType::Pointer currentGeometry = itVectorNS.Get();
+
+      for (unsigned int i = 0; i < descriptors.size(); ++i)
+        {
+        double desc = currentGeometry->GetFieldAsDouble(descriptors[i]);
+
+        accFirstOrderNS[i] += desc;
+        accSecondOrderNS[i] += desc * desc;
+
+        if (desc < minNS[i])
+          {
+          minNS[i] = desc;
+          }
+        if (desc > maxNS[i])
+          {
+          maxNS[i] = desc;
+          }
+
+        }
+      accNbElemNS ++;
+      }
+    }
+  std::cout << "Descriptors Stats : " << std::endl;
+  std::cout << "Ground truth" << std::endl;
+  for (unsigned int i = 0; i < descriptors.size(); ++i)
+    {
+    double mean = accFirstOrderGT[i] / accNbElemGT;
+    double stddev = vcl_sqrt( accSecondOrderGT[i]/accNbElemGT - mean*mean );
+    std::cout << descriptors[i] << "  :  " << mean << " +/- " << stddev
+        << "  (min: " << minGT[i] << "  max: " << maxGT[i] << ")"<< std::endl;
+    }
+  std::cout << "Negative Samples" << std::endl;
+  for (unsigned int i = 0; i < descriptors.size(); ++i)
+    {
+    double mean = accFirstOrderNS[i] / accNbElemNS;
+    double stddev = vcl_sqrt( accSecondOrderNS[i]/accNbElemNS - mean*mean );
+    std::cout << descriptors[i] << "  :  " << mean << " +/- " << stddev
+        << "  (min: " << minNS[i] << "  max: " << maxNS[i] << ")"<< std::endl;
+    }
+
+
   //Cost Function
   //Format Hypothesis
   LabelSetType hyp;
@@ -273,7 +383,7 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
 */
   OptimizerType::ParametersType
       simplexDelta( costFunction->GetNumberOfParameters() );
-  simplexDelta.Fill(.25);
+  simplexDelta.Fill(0.1);
 
   optimizer->AutomaticInitialSimplexOff();
   optimizer->SetInitialSimplexDelta( simplexDelta );
