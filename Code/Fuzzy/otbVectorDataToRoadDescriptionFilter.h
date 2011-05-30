@@ -80,6 +80,8 @@ public:
   typedef TOpticalImage                           OpticalImageType;
   typedef typename TOpticalImage::Pointer         OpticalImageTypePointer;
 
+  typedef std::vector<std::string>                DescriptorsListType;
+
   /*
   typedef otb::NDVIDataNodeFeatureFunction<OpticalImageType, CoordRepType, PrecisionType>
                                                   NDVIFeatureFunctionType;
@@ -101,6 +103,11 @@ public:
   virtual void AddBuildingsDB(const VectorDataType * support);
   const VectorDataType * GetBuildingsDB();
 
+  const DescriptorsListType& GetDescriptorsList() const
+  {
+    return m_DescriptorsList;
+  }
+
 protected:
   /** Constructor */
   VectorDataToRoadDescriptionFilter();
@@ -118,6 +125,7 @@ private:
   typename ParserConditionFeatureFunctionType::Pointer  m_NDVIFeatureFunction;
   typename ParserConditionFeatureFunctionType::Pointer  m_SpectralAngleFeatureFunction;
   typename DBOverlapFeatureFunctionType::Pointer        m_DBOverlapFeatureFunction;
+  DescriptorsListType m_DescriptorsList;
 
 };
 

@@ -46,6 +46,10 @@ VectorDataToRoadDescriptionFilter<TVectorData, TOpticalImage>
   m_SpectralAngleFeatureFunction->SetSpectralAngleReferencePixel(refPixel);
 
   m_DBOverlapFeatureFunction = DBOverlapFeatureFunctionType::New();
+
+  m_DescriptorsList.push_back("NDVI");
+  m_DescriptorsList.push_back("RADIOM");
+  m_DescriptorsList.push_back("DBOVER");
 }
 
 template <class TVectorData, class TOpticalImage>
