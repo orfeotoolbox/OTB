@@ -104,9 +104,11 @@ typename StandardDSCostFunction<TDSValidationFilter>
     }
   internalFunctionNS->Update();
 
-  double accGT, accNS, belief, plausibility;
+  double accGT, nGT, accNS, nNS, belief, plausibility;
   accGT = 0.0;
   accNS = 0.0;
+  nGT = 0.0;
+  nNS = 0.0;
 
   TreeIteratorType itVectorGT(internalFunctionGT->GetOutput()->GetDataTree());
   itVectorGT.GoToBegin();
@@ -121,6 +123,7 @@ typename StandardDSCostFunction<TDSValidationFilter>
       m_Parser->DefineVar("Plausibility", &plausibility);
 
       accGT += ((1 - m_Parser->Eval()) * (1 - m_Parser->Eval()));
+      nGT += 1.0;
 
       m_Parser->ClearVar();
       }
@@ -140,12 +143,13 @@ typename StandardDSCostFunction<TDSValidationFilter>
       m_Parser->DefineVar("Plausibility", &plausibility);
 
       accNS += (m_Parser->Eval() * m_Parser->Eval());
+      nNS += 1.0;
 
       m_Parser->ClearVar();
       }
     itVectorNS++;
     }
-  return (m_Weight * accGT + (1 - m_Weight) * accNS);
+  return (m_Weight * accGT / nGT + (1 - m_Weight) * accNS / nNS);
 }
 
 template <class TDSValidationFilter>
