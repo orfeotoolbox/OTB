@@ -156,6 +156,19 @@ ADD_TEST(obTvStreamingConnectedComponentSegmentationOBIAToVectorDataFilter ${OBI
       15
       "SHAPE_Elongation>8"
       5 )
+
+ADD_TEST(obTuLabelImageToLabelMapWithAdjacencyFilterNew ${OBIA_TESTS3}
+  otbLabelImageToLabelMapWithAdjacencyFilterNew)
+
+ADD_TEST(obTvLabelImageToLabelMapWithAdjacencyFilter ${OBIA_TESTS3}
+  --compare-ascii ${NOTOL}
+  ${BASELINE_FILES}/obTvLabelImageToLabelMapWithAdjacencyFilterOutput.txt
+  ${TEMP}/obTvLabelImageToLabelMapWithAdjacencyFilterOutput.txt
+  otbLabelImageToLabelMapWithAdjacencyFilter
+  ${INPUTDATA}/simpleLabelImage.tif
+  ${TEMP}/obTvLabelImageToLabelMapWithAdjacencyFilterOutput.txt
+)
+
       
 # OBIATests2 (need PQXX)
 IF(OTB_USE_PQXX)
@@ -222,6 +235,7 @@ ENDIF(OTB_USE_PQXX)
 
 SET(BasicOBIA_SRCS3
 otbLabelMapSVMClassifier.cxx
+otbLabelImageToLabelMapWithAdjacencyFilter.cxx
 )
 
 ADD_EXECUTABLE(otbOBIATests1 otbOBIATests1.cxx ${BasicOBIA_SRCS1})

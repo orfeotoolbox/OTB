@@ -27,4 +27,6 @@ void RegisterTests()
 {
   REGISTER_TEST(otbLabelMapSVMClassifierNew);
   REGISTER_TEST(otbLabelMapSVMClassifier);
+  REGISTER_TEST(otbLabelImageToLabelMapWithAdjacencyFilterNew);
+  REGISTER_TEST(otbLabelImageToLabelMapWithAdjacencyFilter);
 }
