@@ -390,13 +390,13 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
 
   OptimizerType::ParametersType
         initialPosition( costFunction->GetNumberOfParameters() );
-  initialPosition.Fill(0.25);
 
-  for (unsigned int i=0; i<(double)(costFunction->GetNumberOfParameters())/4.0; i++)
+  for (unsigned int i = 0; i < costFunction->GetNumberOfParameters(); i += 4)
     {
-     initialPosition.SetElement(4*i+1, 0.50);
-     initialPosition.SetElement(4*i+2, 0.75);
-     initialPosition.SetElement(4*i+3, 0.99);
+     initialPosition.SetElement(i,   0.25);
+     initialPosition.SetElement(i+1, 0.50);
+     initialPosition.SetElement(i+2, 0.75);
+     initialPosition.SetElement(i+3, 0.99);
     }
 
   optimizer->SetInitialPosition(initialPosition);
