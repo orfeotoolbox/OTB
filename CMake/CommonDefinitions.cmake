@@ -3,7 +3,7 @@
 IF(WIN32)
   # do not build shared lib under windows
   SET(BUILD_SHARED_LIBS OFF)
-  MESSAGE("Disabling build shared lib option on windows like OS.")
+  MESSAGE(STATUS "Disabling build shared lib option on windows like OS.")
 ELSE(WIN32)
   # on other systems, leave the choice to the user
   OPTION(BUILD_SHARED_LIBS "Build OTB with shared libraries." ON)

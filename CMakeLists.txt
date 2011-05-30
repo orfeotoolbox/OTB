@@ -116,6 +116,7 @@ SET(CXX_TEST_PATH ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 #-----------------------------------------------------------------------------
 # External libraries
 
+FIND_PACKAGE(OSGeo4W)
 # Put GDAL first, since on Windows, include dirs for other libs (curl, expat, mapnik)  contain gdal 1.5 includes
 INCLUDE(ImportGdal) 
 INCLUDE(ImportLibLAS) # depends on ImportGdal
