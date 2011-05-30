@@ -185,10 +185,10 @@ LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
       if(label1 != label2)
   {
   //Check adjacency
-  if(  (  (start1-offset >= start2) && (start1-offset<=end2) )
-       || ( (end1  +offset >= start2) && (end1  +offset<=end2) )
-       || ( (start2-offset >= start1) && (start2-offset<=end1) )
-       || ( (end2  +offset >= start1) && (end2  +offset<=end1) ))
+  if(  (  (start1 >= start2 - offset) && (start1 <= end2 + offset) )
+       || ( (end1 >= start2 - offset) && (end1  <= end2 + offset) )
+       || ( (start2 >= start1 - offset) && (start2 <= end1 + offset) )
+       || ( (end2 >= start1 - offset) && (end2 <= end1 + offset) ))
     {
     // Add the adjacency
     this->AddAdjacency(label1, label2, threadId);
@@ -239,7 +239,7 @@ LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
           }
         // create the run length object to go in the vector
         m_TemporaryImages[threadId]->SetLine( idx, length, v );
-  currentLine.push_back(RLE(idx, length, v));
+        currentLine.push_back(RLE(idx, length, v));
         }
       else
         {
