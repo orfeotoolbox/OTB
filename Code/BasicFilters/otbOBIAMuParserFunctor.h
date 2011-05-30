@@ -140,7 +140,6 @@ public:
       {
       std::string attributeName=m_AttributesName.at(i);
       ParseAttributeName(attributeName); //eliminate '::' from string name
-
       m_Parser->DefineVar(attributeName, &(m_AAttributes[i]));
       }
 
@@ -173,7 +172,7 @@ public:
         varName<<"STATS::Band"<<bandIndex<<"::"<<statAttributes.at(i);
         m_AttributesName.at(index)=varName.str();
         varName.str("");
-        varName<<"STATS_b"<< bandIndex <<"_"<<statAttributes.at(i);
+        varName<<"STATS_Band"<< bandIndex <<"_"<<statAttributes.at(i);
         m_Parser->DefineVar(varName.str(), &(m_AAttributes[index]));
         varName.str("");
         index++;
