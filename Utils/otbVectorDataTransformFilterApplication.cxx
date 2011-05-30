@@ -110,10 +110,10 @@ int VectorDataTransformFilterApplication::Execute(otb::ApplicationOptionsResult*
       parameters[3] = parseResult->GetParameterFloat("CenterY");
     
     if(parseResult->IsOptionPresent("TanslationX"))
-      parameters[4] = parseResult->GetParameterFloat("TanslationX");
+      parameters[4] = reader->GetOutput()->GetSpacing()[0] * parseResult->GetParameterFloat("TanslationX");
 
     if(parseResult->IsOptionPresent("TanslationY"))
-      parameters[5] = parseResult->GetParameterFloat("TanslationY");
+      parameters[5] = vcl_abs(reader->GetOutput()->GetSpacing()[1]) * parseResult->GetParameterFloat("TanslationY");
     
     // Set the parameters to the transform
     transform->SetParameters(parameters);
