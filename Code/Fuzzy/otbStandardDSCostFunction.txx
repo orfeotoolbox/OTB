@@ -104,11 +104,10 @@ typename StandardDSCostFunction<TDSValidationFilter>
     }
   internalFunctionNS->Update();
 
-  double accGT, nGT, accNS, nNS, belief, plausibility;
-  accGT = 0.0;
-  accNS = 0.0;
-  nGT = 0.0;
-  nNS = 0.0;
+  double accGT = 0.0;
+  double accNS = 0.0;
+  double nGT = 0.0;
+  double nNS = 0.0;
 
   TreeIteratorType itVectorGT(internalFunctionGT->GetOutput()->GetDataTree());
   itVectorGT.GoToBegin();
@@ -116,8 +115,8 @@ typename StandardDSCostFunction<TDSValidationFilter>
     {
     if (!itVectorGT.Get()->IsRoot() && !itVectorGT.Get()->IsDocument() && !itVectorGT.Get()->IsFolder())
       {
-      belief = itVectorGT.Get()->GetFieldAsDouble("Belief");
-      plausibility = itVectorGT.Get()->GetFieldAsDouble("Plausi");
+      double belief = itVectorGT.Get()->GetFieldAsDouble("Belief");
+      double plausibility = itVectorGT.Get()->GetFieldAsDouble("Plausi");
 
       m_Parser->DefineVar("Belief", &belief);
       m_Parser->DefineVar("Plausibility", &plausibility);
@@ -136,8 +135,8 @@ typename StandardDSCostFunction<TDSValidationFilter>
     {
     if (!itVectorNS.Get()->IsRoot() && !itVectorNS.Get()->IsDocument() && !itVectorNS.Get()->IsFolder())
       {
-      belief = itVectorNS.Get()->GetFieldAsDouble("Belief");
-      plausibility = itVectorNS.Get()->GetFieldAsDouble("Plausi");
+      double belief = itVectorNS.Get()->GetFieldAsDouble("Belief");
+      double plausibility = itVectorNS.Get()->GetFieldAsDouble("Plausi");
 
       m_Parser->DefineVar("Belief", &belief);
       m_Parser->DefineVar("Plausibility", &plausibility);
