@@ -7,14 +7,14 @@ As presented in chapter~\ref{sec:StreamingAndThreading}, OTB has two
 main mechanisms to handle efficiently large data: streaming allows to
 process image piece-wise, and multi-threading allows to process
 concurrently several pieces of one streaming block. Using these
-concepts, one can easily write pixel-wise or neighbourhood-based
+concepts, one can easily write pixel-wise or neighborhood-based
 filters and insert them into a pipeline which will be scalable with
 respect to the input image size.
 
 Yet, sometimes we need to compute global features on the whole image. One
 example is to determine image mean and variance of the input image in
-order to produce a centred and reduced image. The operation of
-centring and reducing each pixel is fully compliant with streaming and
+order to produce a centered and reduced image. The operation of
+centering and reducing each pixel is fully compliant with streaming and
 threading, but one has to first estimate the mean and variance of the
 image. This first step requires to walk the whole image once, and
 traditional streaming and multi-threading based filter architecture is
@@ -25,7 +25,7 @@ operations: one supports streaming, and the other needs to perform
 streaming. In fact we would like to stream the whole image piece by
 piece through some filter that will collect and keep mean and variance
 cumulants, and then synthetize theses cumulants to compute the final
-mean and variance once the full image as been streamed. Each piece of
+mean and variance once the full image as been streamed. Each
 stream would also benefit from parallel processing. This is exactly
 what persistent filters are for.
 
@@ -84,12 +84,12 @@ process. Therefore, it packages the whole mechanism for the use of a
   compute the final results.
 \end{enumerate}
 
-There are some methods that allows to tune the behaviour of the
+There are some methods that allows to tune the behavior of the
 \doxygen{otb}{StreamingImageVirtualWriter}, allowing to change the
 image splitting methods (tiles or strips) or the size of the streams
 with respect to some target available amount of memory. Please see the
 class documentation for details. The instance of the
-\doxygen[otb::StreamingImageVirtualWriter} can be retrieved from the
+\doxygen{otb}{StreamingImageVirtualWriter} can be retrieved from the
 \doxygen{otb}{PersistentImageFilterStreamingDecorator} through the
 \verb?GetStreamer()? method.
 
