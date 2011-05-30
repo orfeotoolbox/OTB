@@ -50,32 +50,32 @@
 class CommandIterationUpdate : public itk::Command
 {
 public:
-  typedef  CommandIterationUpdate   Self;
-  typedef  itk::Command             Superclass;
-  typedef itk::SmartPointer<Self>   Pointer;
-  itkNewMacro( Self );
+typedef  CommandIterationUpdate   Self;
+typedef  itk::Command             Superclass;
+typedef itk::SmartPointer<Self>   Pointer;
+itkNewMacro( Self );
 protected:
-  CommandIterationUpdate() {};
+CommandIterationUpdate() {};
 public:
-  typedef itk::AmoebaOptimizer         OptimizerType;
-  typedef   const OptimizerType   *    OptimizerPointer;
+typedef itk::AmoebaOptimizer         OptimizerType;
+typedef   const OptimizerType   *    OptimizerPointer;
 
-  void Execute(itk::Object *caller, const itk::EventObject & event)
-    {
-    Execute( (const itk::Object *)caller, event);
-    }
+void Execute(itk::Object *caller, const itk::EventObject & event)
+{
+  Execute( (const itk::Object *)caller, event);
+}
 
-  void Execute(const itk::Object * object, const itk::EventObject & event)
+void Execute(const itk::Object * object, const itk::EventObject & event)
+{
+  OptimizerPointer optimizer =
+      dynamic_cast< OptimizerPointer >( object );
+  if( ! itk::IterationEvent().CheckEvent( &event ) )
     {
-    OptimizerPointer optimizer =
-                      dynamic_cast< OptimizerPointer >( object );
-    if( ! itk::IterationEvent().CheckEvent( &event ) )
-      {
-      return;
-      }
-    std::cout << optimizer->GetCachedValue() << "   ";
-    std::cout << optimizer->GetCachedCurrentPosition() << std::endl;
+    return;
     }
+  std::cout << optimizer->GetCachedValue() << "   ";
+  std::cout << optimizer->GetCachedCurrentPosition() << std::endl;
+}
 };
 
 
@@ -92,9 +92,10 @@ int otb::DSFuzzyModelEstimation::Describe(ApplicationDescriptor* descriptor)
                         "db", 1,   true, ApplicationDescriptor::FileName);
   descriptor->AddOption("InputVectorData", "Ground Truth Vector Data",
                         "vdin", 1, true, ApplicationDescriptor::FileName);
+  descriptor->AddOption("InputNegativeVectorData", "Negative samples Vector Data",
+                        "nsin", 1, false, ApplicationDescriptor::FileName);
   descriptor->AddOption("Output", "Output Model File Name",
                         "out", 1,  true, ApplicationDescriptor::FileName);
-
   descriptor->AddOption("Hypothesis", "Dempster Shafer study hypothesis",
                         "hyp", 3, false, ApplicationDescriptor::StringList);
   descriptor->AddOption("Criterion", "Dempster Shafer Criterion (by default (Belief+Plausibility)/2)",
@@ -122,32 +123,31 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
   typedef otb::VectorDataFileReader<VectorDataType>   VectorDataReaderType;
   typedef otb::VectorDataFileWriter<VectorDataType>   VectorDataWriterType;
   typedef otb::VectorDataToRandomLineGenerator<VectorDataType>
-                                                      RandomGeneratorType;
+  RandomGeneratorType;
 
   typedef otb::VectorImage<PrecisionType , 2>         ImageType;
   typedef otb::ImageFileReader<ImageType>             ImageReaderType;
 
   typedef otb::ImageToEnvelopeVectorDataFilter<ImageType, VectorDataType>
-                                                      EnvelopeFilterType;
+  EnvelopeFilterType;
 
   typedef otb::VectorDataProjectionFilter<VectorDataType, ImageType>
-                                                      VectorDataProjFilter;
+  VectorDataProjFilter;
 
   typedef otb::VectorDataIntoImageProjectionFilter<VectorDataType, ImageType>
-                                                      VectorDataReProjFilter;
+  VectorDataReProjFilter;
 
   typedef otb::VectorDataToRoadDescriptionFilter<VectorDataType, ImageType>
-                                                      DescriptionFilterType;
+  DescriptionFilterType;
 
   typedef otb::VectorDataToDSValidatedVectorDataFilter<VectorDataType, PrecisionType>
-                                                      ValidationFilterType;
+  ValidationFilterType;
 
   typedef otb::StandardDSCostFunction<ValidationFilterType>
-                                                      CostFunctionType;
+  CostFunctionType;
   typedef CostFunctionType::LabelSetType              LabelSetType;
 
   typedef itk::AmoebaOptimizer                        OptimizerType;
-
 
   //Instantiate
   ImageReaderType::Pointer                   imgReader = ImageReaderType::New();
@@ -183,11 +183,24 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
   envelopeFilter->SetInput(imgReader->GetOutput()); //->Output in WGS84
   envelopeFilter->Update();
 
-  //Generate Random lines
-  vdRandomGenerator->SetInput(envelopeFilter->GetOutput());
-  vdRandomGenerator->SetNumberOfOutputLine(vdReader->GetOutput()->Size());
-  vdRandomGenerator->SetMinLineSize(4);
-  vdRandomGenerator->SetMaxLineSize(20);
+  if (parseResult->IsOptionPresent("InputNegativeVectorData"))
+    {
+    //Read the negative samples vector data
+    VectorDataReaderType::Pointer               nsReader = VectorDataReaderType::New();
+    nsReader->SetFileName(parseResult->GetParameterString("InputNegativeVectorData"));
+    nsReader->Update();
+    vdReProjFilterRL->SetInputVectorData(nsReader->GetOutput());
+    }
+  else
+    {
+    //Generate Random lines
+    vdRandomGenerator->SetInput(envelopeFilter->GetOutput());
+    vdRandomGenerator->SetNumberOfOutputLine(vdReader->GetOutput()->Size());
+    vdRandomGenerator->SetMinLineSize(4);
+    vdRandomGenerator->SetMaxLineSize(20);
+    vdReProjFilterRL->SetInputVectorData(vdRandomGenerator->GetOutput());
+    }
+
 
   //Reproject into image index coordinates
   vdReProjFilterGT->SetInputImage(imgReader->GetOutput());
@@ -200,7 +213,7 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
   vdReProjFilterGT->Update();
 
   vdReProjFilterRL->SetInputImage(imgReader->GetOutput());
-  vdReProjFilterRL->SetInputVectorData(vdRandomGenerator->GetOutput());
+
   if( parseResult->IsOptionPresent("DEMDirectory") )
     {
     vdReProjFilterRL->SetDEMDirectory(parseResult->GetParameterString("DEMDirectory"));
@@ -233,7 +246,7 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
   typedef VectorDataType::DataTreeType DataTreeType;
   typedef VectorDataType::DataNodeType DataNodeType;
   typedef itk::PreOrderTreeIterator<VectorDataType::DataTreeType>
-                                                    TreeIteratorType;
+  TreeIteratorType;
 
   typedef DescriptionFilterType::DescriptorsListType DescriptorsListType;
 
@@ -327,7 +340,16 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
     std::cout << descriptors[i] << "  :  " << mean << " +/- " << stddev
         << "  (min: " << minGT[i] << "  max: " << maxGT[i] << ")"<< std::endl;
     }
-  std::cout << "Negative Samples" << std::endl;
+
+  std::cout << "Negative Samples ";
+
+  if (!parseResult->IsOptionPresent("InputNegativeVectorData"))
+    {
+    std::cout << "(random generation)";
+    }
+
+  std::cout << std::endl;
+
   for (unsigned int i = 0; i < descriptors.size(); ++i)
     {
     double mean = accFirstOrderNS[i] / accNbElemNS;
@@ -344,10 +366,10 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
     {
     int nbSet = parseResult->GetNumberOfParameters("Hypothesis");
     for (int i = 0; i < nbSet; i++)
-       {
-        std::string str = parseResult->GetParameterString("Hypothesis", i);
-        hyp.insert(str);
-       }
+      {
+      std::string str = parseResult->GetParameterString("Hypothesis", i);
+      hyp.insert(str);
+      }
     }
   else
     {
@@ -377,26 +399,26 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
     {
     optimizer->SetMaximumNumberOfIterations(200);
     }
-/*
+  /*
   optimizer->SetParametersConvergenceTolerance( 0.01 );
   optimizer->SetFunctionConvergenceTolerance(0.001);
-*/
+   */
   OptimizerType::ParametersType
-      simplexDelta( costFunction->GetNumberOfParameters() );
+  simplexDelta( costFunction->GetNumberOfParameters() );
   simplexDelta.Fill(0.1);
 
   optimizer->AutomaticInitialSimplexOff();
   optimizer->SetInitialSimplexDelta( simplexDelta );
 
   OptimizerType::ParametersType
-        initialPosition( costFunction->GetNumberOfParameters() );
+  initialPosition( costFunction->GetNumberOfParameters() );
 
   for (unsigned int i = 0; i < costFunction->GetNumberOfParameters(); i += 4)
     {
-     initialPosition.SetElement(i,   0.25);
-     initialPosition.SetElement(i+1, 0.50);
-     initialPosition.SetElement(i+2, 0.75);
-     initialPosition.SetElement(i+3, 0.99);
+    initialPosition.SetElement(i,   0.25);
+    initialPosition.SetElement(i+1, 0.50);
+    initialPosition.SetElement(i+2, 0.75);
+    initialPosition.SetElement(i+3, 0.99);
     }
 
   optimizer->SetInitialPosition(initialPosition);
@@ -409,24 +431,24 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
     }
 
   try
-      {
-      // do the optimization
-      optimizer->StartOptimization();
-      }
+  {
+    // do the optimization
+    optimizer->StartOptimization();
+  }
   catch( itk::ExceptionObject& err )
-      {
-      // An error has occurred in the optimization.
-      // Update the parameters
-      std::cout << "ERROR: Exception Catched!" << std::endl;
-      std::cout << err.GetDescription() << std::endl;
-      const unsigned int numberOfIterations
-        = optimizer->GetOptimizer()->get_num_evaluations();
-      std::cout << "numberOfIterations : " << numberOfIterations << std::endl;
-      std::cout << "Results : " << optimizer->GetCurrentPosition() << std::endl;
-      }
+  {
+    // An error has occurred in the optimization.
+    // Update the parameters
+    std::cout << "ERROR: Exception Catched!" << std::endl;
+    std::cout << err.GetDescription() << std::endl;
+    const unsigned int numberOfIterations
+    = optimizer->GetOptimizer()->get_num_evaluations();
+    std::cout << "numberOfIterations : " << numberOfIterations << std::endl;
+    std::cout << "Results : " << optimizer->GetCurrentPosition() << std::endl;
+  }
   // get the results
   const unsigned int numberOfIterations
-    = optimizer->GetOptimizer()->get_num_evaluations();
+  = optimizer->GetOptimizer()->get_num_evaluations();
   std::cout << "numberOfIterations : " << numberOfIterations << std::endl;
   std::cout << "Results : " << optimizer->GetCurrentPosition() << std::endl;
 
