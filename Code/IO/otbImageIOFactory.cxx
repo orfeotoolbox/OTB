@@ -16,7 +16,7 @@
 
 =========================================================================*/
 
-
+#include "otbConfigure.h"
 #include "otbImageIOFactory.h"
 #include "itkMutexLock.h"
 #include "itkMutexLockHolder.h"
