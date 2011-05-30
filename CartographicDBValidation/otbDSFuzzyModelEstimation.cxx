@@ -108,7 +108,7 @@ int otb::DSFuzzyModelEstimation::Describe(ApplicationDescriptor* descriptor)
                         "dem", 1, false, ApplicationDescriptor::DirectoryName);
   descriptor->AddOption("OptimizerObserver", "Activate or not the optimizer observer",
                         "OptObs", 0, false, ApplicationDescriptor::Boolean);
-  descriptor->AddOption("GenerateShp", "Activate the output of intermediate vector datas (only work with cartographic image)",
+  descriptor->AddOption("GenerateShp", "Activate the output of intermediate vector data (only work with cartographic image)",
                         "grtShp", 0, false, ApplicationDescriptor::Boolean);
 
   return EXIT_SUCCESS;
