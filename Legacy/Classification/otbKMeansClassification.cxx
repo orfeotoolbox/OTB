@@ -12,6 +12,7 @@
 #include "itkListSample.h"
 #include "itkWeightedCentroidKdTreeGenerator.h"
 #include "itkKdTreeBasedKmeansEstimator.h"
+#include "itkMersenneTwisterRandomVariateGenerator.h"
 
 int main(int argc, char * argv[])
 {
@@ -53,7 +54,9 @@ int main(int argc, char * argv[])
   }
 
   // initiating random number generation
-  srand(time(NULL));
+  itk::Statistics::MersenneTwisterRandomVariateGenerator::Pointer randomGen
+    = itk::Statistics::MersenneTwisterRandomVariateGenerator::New();
+
 
   std::string infname = parseResult->GetInputImage();
   std::string maskfname = parseResult->GetParameterString("--ValidityMask", 0);
@@ -145,7 +148,8 @@ int main(int argc, char * argv[])
 
   while ((totalSamples<nbsamples)&&(init_means_index<108*nb_classes))
   {
-    piece = static_cast<unsigned int>(static_cast<double>(numberOfStreamDivisions)*rand()/(RAND_MAX));
+    double random = randomGen->GetVariateWithClosedRange();
+    piece = static_cast<unsigned int>(random * numberOfStreamDivisions);
 
     streamingRegion = splitter->GetSplit(piece, numberOfStreamDivisions, largestRegion);
 
