@@ -56,12 +56,6 @@ public:
   /** Type for function/number of arguments map */
   typedef std::map<std::string, int>               FunctionMapType;
 
-  /** Initialize user defined constants */
-  virtual void InitConst();
-
-  /** Initialize user defined functions */
-  virtual void InitFun();
-  
   /** Set the expression to be parsed */
   virtual void SetExpr(const std::string & Expression);
   

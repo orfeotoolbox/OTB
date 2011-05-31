@@ -227,16 +227,6 @@ Parser::~Parser()
 {
 }
 
-void Parser::InitConst()
-{
-  m_InternalParser->InitConst();
-}
-
-void Parser::InitFun()
-{
-  m_InternalParser->InitFun();
-}
-
 void Parser::SetExpr(const std::string & Expression)
 {
   m_InternalParser->SetExpr(Expression);
