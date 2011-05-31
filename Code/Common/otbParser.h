@@ -74,7 +74,7 @@ public:
   /** Return the list of variables */
   const std::map<std::string, Parser::ValueType*>& GetVar() const;
 
-  /** Return the list of variables */
+  /** Return a map of function names and associated number of arguments */
   FunctionMapType GetFunList() const;
 
   /**  Check Expression **/
