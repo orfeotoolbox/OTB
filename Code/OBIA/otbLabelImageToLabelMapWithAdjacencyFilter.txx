@@ -232,7 +232,7 @@ LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
   if(previousLineRegion.Crop(this->GetInput()->GetRequestedRegion()))
     {
     // Build an iterator
-    itk::ImageRegionConstIteratorWithIndex<InputImageType> pIt(this->GetInput(),previousLineRegion);
+    itk::ImageRegionConstIteratorWithIndex<InputImageType> pIt(this->GetInput(), previousLineRegion);
     pIt.GoToBegin();
 
     // Iterate on line
