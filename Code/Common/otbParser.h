@@ -21,11 +21,12 @@
 #include "itkLightObject.h"
 #include "itkObjectFactory.h"
 
-#include "muParser.h"
-
-
 namespace otb
 {
+
+class ParserImpl;
+
+
 /** \class Parser
  * \brief  Definition of the standard floating point parser.
  * Standard implementation of the mathematical expressions parser.
@@ -33,7 +34,6 @@ namespace otb
  * \sa BandMathImageFilter
  *
  */
-
 class ITK_EXPORT Parser : public itk::LightObject
 {
 public:
@@ -52,7 +52,9 @@ public:
   /** Convenient type definitions */
   typedef Parser                                   ParserType;
   typedef double                                   ValueType;
-  typedef mu::Parser::exception_type               ExceptionType;
+
+  /** Type for function/number of arguments map */
+  typedef std::map<std::string, int>               FunctionMapType;
 
   /** Initialize user defined constants */
   virtual void InitConst();
@@ -76,19 +78,14 @@ public:
   const std::string& GetExpr() const;
 
   /** Return the list of variables */
-  const std::map<std::string, ValueType*>& GetVar() const;
+  const std::map<std::string, Parser::ValueType*>& GetVar() const;
 
   /** Return the list of variables */
-  const mu::funmap_type& GetFunList() const;
+  FunctionMapType GetFunList() const;
 
   /**  Check Expression **/
   bool CheckExpr();
 
-  /** Convert parser specific exception into itk exception */
-  virtual void ExceptionHandler(ExceptionType &e);
-  /** Convert parser specific exception into itk debug macro */
-   virtual void ExceptionHandlerDebug(ExceptionType &e);
-  
 protected:
   Parser();
   virtual ~Parser();
@@ -99,15 +96,8 @@ private:
   Parser(const Self &);             //purposely not implemented
   void operator =(const Self &);    //purposely not implemented
 
-  mu::Parser                  m_InternalParser;
-  
-  //----------  User Defined Functions  ----------//BEGIN
-
-  static ValueType NDVI(ValueType, ValueType); // NDVI(r, niri)
-
-  //----------  User Defined Functions  ----------//END
-
-
+  typedef itk::SmartPointer<ParserImpl> ParserImplPtr;
+  ParserImplPtr m_InternalParser;
 }; // end class
 
 }//end namespace otb

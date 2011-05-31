@@ -17,11 +17,200 @@
 =========================================================================*/
 #include "otbMath.h"
 #include "itkMacro.h"
-#include "otbParser.h"
 #include "otbMacro.h"
+
+#include "muParser.h"
+#include "otbParser.h"
 
 namespace otb
 {
+
+class ITK_EXPORT ParserImpl : public itk::LightObject
+{
+public:
+  /** Standard class typedefs. */
+  typedef ParserImpl                               Self;
+  typedef itk::LightObject                         Superclass;
+  typedef itk::SmartPointer<Self>                  Pointer;
+  typedef itk::SmartPointer<const Self>            ConstPointer;
+
+  /** New macro for creation of through a Smart Pointer */
+  itkNewMacro(Self);
+
+  /** Run-time type information (and related methods) */
+  itkTypeMacro(ParserImpl, itk::LightObject);
+
+  /** Convenient type definitions */
+  typedef double                                   ValueType;
+  typedef mu::Parser::exception_type               ExceptionType;
+
+  /** Initialize user defined constants */
+  virtual void InitConst()
+  {
+    m_MuParser.DefineConst( "e",      CONST_E );
+    m_MuParser.DefineConst( "log2e",  CONST_LOG2E );
+    m_MuParser.DefineConst( "log10e", CONST_LOG10E );
+    m_MuParser.DefineConst( "ln2",    CONST_LN2 );
+    m_MuParser.DefineConst( "ln10",   CONST_LN10 );
+    m_MuParser.DefineConst( "pi",     CONST_PI );
+    m_MuParser.DefineConst( "euler",  CONST_EULER );
+  }
+
+  /** Initialize user defined functions */
+  virtual void InitFun()
+  {
+    m_MuParser.DefineFun("ndvi", NDVI);
+    m_MuParser.DefineFun("NDVI", NDVI);
+  }
+
+  /** Set the expression to be parsed */
+  virtual void SetExpr(const std::string & Expression)
+  {
+    m_MuParser.SetExpr(Expression);
+  }
+
+  /** Trigger the parsing */
+  ValueType Eval()
+  {
+    Parser::ValueType result = 0.0;
+    try
+      {
+      result = m_MuParser.Eval();
+      }
+    catch(ExceptionType &e)
+      {
+      ExceptionHandler(e);
+      }
+    return result;
+  }
+
+
+  /** Define a variable */
+  void DefineVar(const std::string &sName, ValueType *fVar)
+  {
+    try
+      {
+      m_MuParser.DefineVar(sName, fVar);
+      }
+    catch(ExceptionType &e)
+      {
+      ExceptionHandler(e);
+      }
+  }
+
+  /** Clear all the defined variables */
+  void ClearVar()
+  {
+    m_MuParser.ClearVar();
+  }
+
+  /** Return the expression to be parsed */
+  const std::string& GetExpr() const
+  {
+    return m_MuParser.GetExpr();
+  }
+
+  /** Return the list of variables */
+  const std::map<std::string, ValueType*>& GetVar() const
+  {
+    return m_MuParser.GetVar();
+  }
+
+  /**  Check Expression **/
+  bool CheckExpr()
+  {
+    Parser::ValueType result = 0.0;
+
+    try
+    {
+      result = m_MuParser.Eval();
+    }
+   catch(ExceptionType &e)
+    {
+     ExceptionHandlerDebug(e);
+     return false;
+    }
+
+    return true;
+  }
+
+  // Get the map with the functions
+  Parser::FunctionMapType GetFunList() const
+  {
+    Parser::FunctionMapType output;
+    const mu::funmap_type& funmap = m_MuParser.GetFunDef();
+
+    mu::funmap_type::const_iterator funItem;
+
+    int nbArgs;
+
+    for (funItem = funmap.begin(); funItem != funmap.end(); ++funItem)
+      {
+      output[funItem->first] = funItem->second.GetArgc();
+      }
+    return output;
+  }
+
+  /** Convert parser specific exception into itk exception */
+  virtual void ExceptionHandler(ExceptionType &e)
+  {
+    itkExceptionMacro(                                     << std::endl
+          << "Message:     "   << e.GetMsg()   << std::endl
+          << "Formula:     "   << e.GetExpr()  << std::endl
+          << "Token:       "   << e.GetToken() << std::endl
+          << "Position:    "   << e.GetPos()   << std::endl
+                 << std::endl);
+  //        << "Errc:        "   << e.GetCode()  << std::endl);
+  }
+
+  /** Convert parser specific exception into itk debug macro */
+   virtual void ExceptionHandlerDebug(ExceptionType &e)
+   {
+     otbGenericMsgDebugMacro(                                     << std::endl
+           << "Message:     "   << e.GetMsg()   << std::endl
+           << "Formula:     "   << e.GetExpr()  << std::endl
+           << "Token:       "   << e.GetToken() << std::endl
+           << "Position:    "   << e.GetPos()   << std::endl
+                  << std::endl);
+   //        << "Errc:        "   << e.GetCode()  << std::endl);
+   }
+
+
+protected:
+  ParserImpl()
+  {
+    InitFun();
+    InitConst();
+  }
+
+  virtual ~ParserImpl()
+  {
+  }
+
+  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
+  {
+    Superclass::PrintSelf(os, indent);
+  }
+
+
+private:
+  ParserImpl(const Self &);             //purposely not implemented
+  void operator =(const Self &);    //purposely not implemented
+
+  mu::Parser m_MuParser;
+
+  //----------  User Defined Functions  ----------//BEGIN
+  static ValueType NDVI(ValueType r, ValueType niri)
+  {
+    if ( vcl_abs(r + niri) < 1E-6 )
+      {
+      return 0.;
+      }
+    return (niri-r)/(niri+r);
+  }
+
+  //----------  User Defined Functions  ----------//END
+}; // end class
 
 void Parser::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
@@ -29,141 +218,66 @@ void Parser::PrintSelf(std::ostream& os, itk::Indent indent) const
 }
 
 
-//----------  User Defined Function Definitions  ----------//BEGIN
-Parser::ValueType Parser::NDVI(Parser::ValueType r, Parser::ValueType niri)
-{
-  if ( vcl_abs(r + niri) < 1E-6 )
-    {
-    return 0.;
-    }
-  return (niri-r)/(niri+r);
-}
-//----------  User Defined Function Definitions  ----------//END
-
-
 Parser::Parser()
+: m_InternalParser( ParserImpl::New() )
 {
-  InitFun();
-  InitConst();
 }
 
 Parser::~Parser()
 {
-
 }
 
 void Parser::InitConst()
 {
- m_InternalParser.DefineConst( "e",      CONST_E );
- m_InternalParser.DefineConst( "log2e",  CONST_LOG2E );
- m_InternalParser.DefineConst( "log10e", CONST_LOG10E );
- m_InternalParser.DefineConst( "ln2",    CONST_LN2 );
- m_InternalParser.DefineConst( "ln10",   CONST_LN10 );
- m_InternalParser.DefineConst( "pi",     CONST_PI );
- m_InternalParser.DefineConst( "euler",  CONST_EULER );
+  m_InternalParser->InitConst();
 }
 
 void Parser::InitFun()
 {
-  m_InternalParser.DefineFun("ndvi", NDVI);
-  m_InternalParser.DefineFun("NDVI", NDVI);
+  m_InternalParser->InitFun();
 }
 
 void Parser::SetExpr(const std::string & Expression)
 {
-  m_InternalParser.SetExpr(Expression);
+  m_InternalParser->SetExpr(Expression);
 }
 
 Parser::ValueType Parser::Eval()
 {
-  Parser::ValueType result = 0.0;
-  try
-    {
-    result = m_InternalParser.Eval();
-    }
-  catch(ParserType::ExceptionType &e)
-    {
-    ExceptionHandler(e);
-    }
-  return result;
+  return m_InternalParser->Eval();
 }
 
 void Parser::DefineVar(const std::string &sName, Parser::ValueType *fVar)
 {
-  try
-    {
-    m_InternalParser.DefineVar(sName, fVar);
-    }
-  catch(ParserType::ExceptionType &e)
-    {
-    ExceptionHandler(e);
-    }
+  m_InternalParser->DefineVar(sName, fVar);
 }
 
 void Parser::ClearVar()
 {
-  m_InternalParser.ClearVar();
+  m_InternalParser->ClearVar();
 }
 
 bool Parser::CheckExpr()
 {
-  Parser::ValueType result = 0.0;
-
-  try
-  {
-    result = m_InternalParser.Eval();
-  }
- catch(ParserType::ExceptionType &e)
-  {
-   ExceptionHandlerDebug(e);
-   return false;
-  }
-
-  return true;
+  return m_InternalParser->CheckExpr();
 }
 
 
 const std::string& Parser::GetExpr() const
 {
-  return m_InternalParser.GetExpr();
-
+  return m_InternalParser->GetExpr();
 }
-
-void Parser::ExceptionHandler(ParserType::ExceptionType &e)
-{
-  itkExceptionMacro(                                     << std::endl
-        << "Message:     "   << e.GetMsg()   << std::endl
-        << "Formula:     "   << e.GetExpr()  << std::endl
-        << "Token:       "   << e.GetToken() << std::endl
-        << "Position:    "   << e.GetPos()   << std::endl
-               << std::endl);
-//        << "Errc:        "   << e.GetCode()  << std::endl);
-}
-
-
-void Parser::ExceptionHandlerDebug(ParserType::ExceptionType &e)
-{
-  otbGenericMsgDebugMacro(                                     << std::endl
-        << "Message:     "   << e.GetMsg()   << std::endl
-        << "Formula:     "   << e.GetExpr()  << std::endl
-        << "Token:       "   << e.GetToken() << std::endl
-        << "Position:    "   << e.GetPos()   << std::endl
-               << std::endl);
-//        << "Errc:        "   << e.GetCode()  << std::endl);
-}
-
 
 // Get the map with the variables
 const std::map<std::string, Parser::ValueType*>& Parser::GetVar() const
 {
-  return m_InternalParser.GetVar();
+  return m_InternalParser->GetVar();
 }
 
 // Get the map with the functions
-const mu::funmap_type& Parser::GetFunList() const
+Parser::FunctionMapType Parser::GetFunList() const
 {
-  return m_InternalParser.GetFunDef();
+  return m_InternalParser->GetFunList();
 }
-
 
 }//end namespace otb
