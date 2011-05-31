@@ -114,7 +114,7 @@ MaskMuParserFunctor<TInputPixel>::SetNumberOfBands(unsigned int NbOfBands)
 
   // customized data
   m_Parser->DefineVar("intensity", &m_Intensity);
-  m_Parser->DefineVar("spectralangle", &m_SpectralAngle);
+  m_Parser->DefineVar("spectralAngle", &m_SpectralAngle);
 }
 
 /** Set the reference pixel used to compute the "spectralangle" parser variable */

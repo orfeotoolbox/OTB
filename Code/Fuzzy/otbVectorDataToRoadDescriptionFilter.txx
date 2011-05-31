@@ -34,7 +34,7 @@ VectorDataToRoadDescriptionFilter<TVectorData, TOpticalImage>
   m_NDVIFeatureFunction->SetExpression("ndvi(b3, b4) > 0.3");
 
   m_SpectralAngleFeatureFunction = ParserConditionFeatureFunctionType::New();
-  m_SpectralAngleFeatureFunction->SetExpression("spectralangle > 0.15");
+  m_SpectralAngleFeatureFunction->SetExpression("spectralAngle > 0.15");
 
   //Example for QuickBird images (on a specific image)
   typename ParserConditionFeatureFunctionType::PixelType refPixel;
