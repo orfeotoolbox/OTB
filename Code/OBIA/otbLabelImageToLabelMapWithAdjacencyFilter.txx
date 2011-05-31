@@ -25,6 +25,7 @@
 #include "itkNumericTraits.h"
 #include "itkProgressReporter.h"
 #include "itkImageLinearConstIteratorWithIndex.h"
+#include "itkImageRegionConstIteratorWithIndex.h"
 
 namespace otb {
 
@@ -206,13 +207,60 @@ LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
   itk::ProgressReporter progress( this, threadId, regionForThread.GetNumberOfPixels() );
 
   typedef itk::ImageLinearConstIteratorWithIndex< InputImageType > InputLineIteratorType;
+
   InputLineIteratorType it( this->GetInput(), regionForThread );
   it.SetDirection(0);
 
   RLEVectorType currentLine;
   RLEVectorType previousLine;
+  
+  // Parse previous line if exists
+  typename InputImageType::RegionType previousLineRegion;
+  typename InputImageType::SizeType previousLineRegionSize;
+  typename InputImageType::IndexType previousLineRegionIndex;
 
+  previousLineRegionIndex = regionForThread.GetIndex();
+  previousLineRegionIndex[1]--;
+  
+  previousLineRegionSize = regionForThread.GetSize();
+  previousLineRegionSize[1]=1;
 
+  previousLineRegion.SetIndex(previousLineRegionIndex);
+  previousLineRegion.SetSize(previousLineRegionSize);
+
+  // If previous line is still in image
+  if(previousLineRegion.Crop(this->GetInput()->GetRequestedRegion()))
+    {
+    // Build an iterator
+    itk::ImageRegionConstIteratorWithIndex<InputImageType> pIt(this->GetInput(),previousLineRegion);
+    pIt.GoToBegin();
+
+    // Iterate on line
+    while( !pIt.IsAtEnd() )
+      {
+      const InputImagePixelType & v = pIt.Get();
+  
+      if( v != m_BackgroundValue )
+        {
+        // We've hit the start of a run
+        IndexType idx = pIt.GetIndex();
+        long length=1;
+        ++pIt;
+        while( !pIt.IsAtEnd() && pIt.Get() == v )
+          {
+          ++length;
+          ++pIt;
+          }
+        previousLine.push_back(RLE(idx, length, v));
+        }
+      else
+        {
+        // go the the next pixel
+        ++pIt;
+        }
+      }
+    }
+  
   for( it.GoToBegin(); !it.IsAtEnd(); it.NextLine() )
     {
     // Go to beginning of line
