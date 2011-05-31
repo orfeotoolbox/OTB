@@ -187,12 +187,12 @@ public:
     return m_Parser->CheckExpr();
   }
 
- const std::map<std::string, Parser::ValueType*>& GetVar() const
+  const std::map<std::string, Parser::ValueType*>& GetVar() const
   {
     return this->m_Parser->GetVar();
   }
 
- const mu::funmap_type& GetFunList() const
+  Parser::FunctionMapType GetFunList() const
   {
     return this->m_Parser->GetFunList();
   }

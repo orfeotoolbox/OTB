@@ -82,8 +82,7 @@ public:
 
   const std::map<std::string, Parser::ValueType*>& GetVar() const;
 
-  const mu::funmap_type& GetFunList() const;
-
+  Parser::FunctionMapType GetFunList() const;
 
   void SetExpression(const std::string& expression);
 

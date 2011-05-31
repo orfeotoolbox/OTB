@@ -115,7 +115,7 @@ public:
 
   std::vector<std::string> GetVar();
 
-  const mu::funmap_type &GetFunList();
+  Parser::FunctionMapType GetFunList();
 
 protected:
   MaskMuParserFilter();

@@ -81,7 +81,7 @@ MaskMuParserFunctor<TInputPixel>::GetVar() const
 }
 
 template<class TInputPixel>
-const mu::funmap_type&
+Parser::FunctionMapType
 MaskMuParserFunctor<TInputPixel>::GetFunList() const
 {
   return this->m_Parser->GetFunList();

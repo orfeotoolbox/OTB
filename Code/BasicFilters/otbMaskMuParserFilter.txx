@@ -83,7 +83,6 @@ std::vector<std::string> MaskMuParserFilter<TInputImage, TOutputImage, TFunction
 
     // Run the functor to update the variable list
     functor(this->GetInput()->GetPixel(this->GetInput()->GetBufferedRegion().GetIndex()));
-
     const std::map<std::string, double*>& varMap = functor.GetVar();
     std::map<std::string, double*>::const_iterator it;
     for (it = varMap.begin(); it != varMap.end(); ++it)
@@ -101,7 +100,7 @@ std::vector<std::string> MaskMuParserFilter<TInputImage, TOutputImage, TFunction
 
 
 template<class TInputImage, class TOutputImage, class TFunction>
-const mu::funmap_type& MaskMuParserFilter<TInputImage, TOutputImage, TFunction>::GetFunList()
+Parser::FunctionMapType MaskMuParserFilter<TInputImage, TOutputImage, TFunction>::GetFunList()
 {
   FunctorPointer tempFunctor = FunctorType::New();
   tempFunctor->SetExpression(m_Expression);
@@ -110,13 +109,11 @@ const mu::funmap_type& MaskMuParserFilter<TInputImage, TOutputImage, TFunction>:
 
   try
     {
-     functor(this->GetInput()->GetPixel(this->GetInput()->GetBufferedRegion().GetIndex()));
-
+    functor(this->GetInput()->GetPixel(this->GetInput()->GetBufferedRegion().GetIndex()));
     }
   catch (itk::ExceptionObject& err)
     {
     itkDebugMacro(<< err);
-
     }
 
   return functor.GetFunList();
@@ -133,7 +130,6 @@ bool MaskMuParserFilter<TInputImage, TOutputImage, TFunction>::CheckExpression()
   try
     {
     functor(this->GetInput()->GetPixel(this->GetInput()->GetBufferedRegion().GetIndex()));
-
     }
   catch (itk::ExceptionObject& err)
     {
