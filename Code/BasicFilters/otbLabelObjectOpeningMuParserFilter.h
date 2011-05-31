@@ -110,8 +110,11 @@ void SetAttributes(std::vector<std::string> shapeAttributes, std::vector<std::st
 /** Display varname and address **/
 void DisplayVar() const;
 
-/** return list of Mu Parser varialbes and address**/
+/** return list of Mu Parser variables and address**/
 const std::map<std::string, double*>& GetVar() const;
+
+/** return list of Mu Parser functions**/
+const mu::funmap_type& GetFunList() const;
 
 virtual void AllocateOutputs();
 

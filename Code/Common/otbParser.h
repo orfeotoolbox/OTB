@@ -78,6 +78,9 @@ public:
   /** Return the list of variables */
   const std::map<std::string, ValueType*>& GetVar() const;
 
+  /** Return the list of variables */
+  const mu::funmap_type& GetFunList() const;
+
   /**  Check Expression **/
   bool CheckExpr();
 

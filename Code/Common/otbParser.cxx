@@ -159,5 +159,11 @@ const std::map<std::string, Parser::ValueType*>& Parser::GetVar() const
   return m_InternalParser.GetVar();
 }
 
+// Get the map with the functions
+const mu::funmap_type& Parser::GetFunList() const
+{
+  return m_InternalParser.GetFunDef();
+}
+
 
 }//end namespace otb

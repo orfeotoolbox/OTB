@@ -81,6 +81,14 @@ MaskMuParserFunctor<TInputPixel>::GetVar() const
 }
 
 template<class TInputPixel>
+const mu::funmap_type&
+MaskMuParserFunctor<TInputPixel>::GetFunList() const
+{
+  return this->m_Parser->GetFunList();
+}
+
+
+template<class TInputPixel>
 void
 MaskMuParserFunctor<TInputPixel>::SetExpression(const std::string& expression)
 {

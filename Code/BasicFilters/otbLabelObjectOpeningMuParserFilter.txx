@@ -80,6 +80,13 @@ const std::map<std::string, double*>& LabelObjectOpeningMuParserFilter<TImage, T
   return this->m_Functor.GetVar();
 }
 
+
+template< class TImage, class TFunction>
+const mu::funmap_type& LabelObjectOpeningMuParserFilter<TImage, TFunction>::GetFunList() const
+{
+  return this->m_Functor.GetFunList();
+}
+
 template< class TImage, class TFunction>
 void LabelObjectOpeningMuParserFilter<TImage, TFunction>::DisplayVar() const
 {

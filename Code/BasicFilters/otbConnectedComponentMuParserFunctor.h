@@ -193,6 +193,11 @@ public:
     return this->m_Parser->GetVar();
   }
 
+  const mu::funmap_type &GetFunList() const
+  {
+     return this->m_Parser->GetFunList();
+  }
+
   ConnectedComponentMuParserFunctor()
   {
     m_Parser = ParserType::New();

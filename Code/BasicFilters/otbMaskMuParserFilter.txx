@@ -91,6 +91,29 @@ const std::map<std::string, double*>& MaskMuParserFilter<TInputImage, TOutputIma
   return functor.GetVar();
 }
 
+
+template<class TInputImage, class TOutputImage, class TFunction>
+const mu::funmap_type& MaskMuParserFilter<TInputImage, TOutputImage, TFunction>::GetFunList()
+{
+  FunctorPointer tempFunctor = FunctorType::New();
+  tempFunctor->SetExpression(m_Expression);
+
+  FunctorType& functor = *tempFunctor;
+
+  try
+    {
+     functor(this->GetInput()->GetPixel(this->GetInput()->GetBufferedRegion().GetIndex()));
+
+    }
+  catch (itk::ExceptionObject& err)
+    {
+    itkDebugMacro(<< err);
+
+    }
+
+  return functor.GetFunList();
+}
+
 template<class TInputImage, class TOutputImage, class TFunction>
 bool MaskMuParserFilter<TInputImage, TOutputImage, TFunction>::CheckExpression()
 {

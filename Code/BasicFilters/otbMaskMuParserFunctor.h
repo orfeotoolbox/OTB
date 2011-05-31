@@ -31,6 +31,8 @@
 
 #include "otbBinarySpectralAngleFunctor.h"
 
+#include "muParserCallback.h"
+
 namespace otb
 {
 /** \class MaskMuParserFunctor
@@ -79,6 +81,9 @@ public:
   bool operator()(const PixelType &p);
 
   const std::map<std::string, Parser::ValueType*>& GetVar() const;
+
+  const mu::funmap_type& GetFunList() const;
+
 
   void SetExpression(const std::string& expression);
 

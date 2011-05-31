@@ -115,6 +115,8 @@ public:
 
   const std::map<std::string, double*>&GetVar();
 
+  const mu::funmap_type &GetFunList();
+
 protected:
   MaskMuParserFilter();
   virtual ~MaskMuParserFilter();
