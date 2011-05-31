@@ -729,7 +729,7 @@ ADD_TEST(ioTvONERAImageStreamWriter ${IO_TESTS6}
 SET_TESTS_PROPERTIES(ioTvONERAImageStreamWriter PROPERTIES DEPENDS ioTvONERAImageFileWriterComplex)
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
-# -------            otb::ONERAImageIO   ------------------------------
+# -------            otb::MSTARImageIO   ------------------------------
 # CanRead()
 ADD_TEST(ioTuMSTARImageIOCanRead1 ${IO_TESTS6} otbMSTARImageIOTestCanRead
         ${INPUTDATA}/MSTAR/HB19896.016)
@@ -743,7 +743,6 @@ ADD_TEST(ioTvImageFileReaderMSTAR ${IO_TESTS6}
         otbImageFileReaderMSTAR
         ${INPUTDATA}/MSTAR/HB19896.016
         ${TEMP}/ioImageFileReaderMSTAR_rescal_chanel1.png )
-
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTests7 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
