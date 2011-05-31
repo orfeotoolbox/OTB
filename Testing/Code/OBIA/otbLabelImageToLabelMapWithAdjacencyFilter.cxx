@@ -50,7 +50,6 @@ int otbLabelImageToLabelMapWithAdjacencyFilter(int argc, char * argv[])
   FilterType::Pointer filter = FilterType::New();
   filter->SetInput(reader->GetOutput());
   filter->SetBackgroundValue(itk::NumericTraits<LabelType>::max());
-  filter->SetNumberOfThreads(8);
   filter->Update();
 
   std::ofstream ofs(argv[2]);
