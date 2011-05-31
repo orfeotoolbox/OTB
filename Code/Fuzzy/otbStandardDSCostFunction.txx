@@ -84,7 +84,7 @@ typename StandardDSCostFunction<TDSValidationFilter>
     }
   catch (itk::ExceptionObject /*& err*/)
     {
-    return (m_Weight * m_GTVectorData->Size() + (1 - m_Weight) * m_NSVectorData->Size());
+    return 1;
     }
   internalFunctionGT->Update();
 
@@ -100,7 +100,7 @@ typename StandardDSCostFunction<TDSValidationFilter>
     }
   catch (itk::ExceptionObject &)
     {
-    return (m_Weight * m_GTVectorData->Size() + (1 - m_Weight) * m_NSVectorData->Size());
+    return 1;
     }
   internalFunctionNS->Update();
 
