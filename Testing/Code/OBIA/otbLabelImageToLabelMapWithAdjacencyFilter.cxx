@@ -50,9 +50,38 @@ int otbLabelImageToLabelMapWithAdjacencyFilter(int argc, char * argv[])
   FilterType::Pointer filter = FilterType::New();
   filter->SetInput(reader->GetOutput());
   filter->SetBackgroundValue(itk::NumericTraits<LabelType>::max());
+  filter->SetNumberOfThreads(8);
   filter->Update();
 
   std::ofstream ofs(argv[2]);
+
+  // Retrieve the label map
+  LabelMapType::LabelObjectContainerType loContainer = filter->GetOutput()->GetLabelObjectContainer();
+  
+  ofs<<"Label map: "<<std::endl;
+
+  for(LabelMapType::LabelObjectContainerType::const_iterator lIt = loContainer.begin();
+      lIt!=loContainer.end(); ++lIt)
+    {
+    // Retrieve the label object
+    LabelObjectType::Pointer lo = lIt->second;
+    
+    // Retrieve the line container
+    LabelObjectType::LineContainerType lineContainer = lo->GetLineContainer();
+
+    ofs<<"Label: "<<lo->GetLabel()<<", lines: ";
+
+    for(LabelObjectType::LineContainerType::const_iterator lineIt = lineContainer.begin();
+        lineIt!=lineContainer.end(); ++lineIt)
+      {
+      ofs<<" { "<<lineIt->GetIndex()<<", "<<lineIt->GetLength()<<"}";
+
+      }
+    ofs<<std::endl;
+
+    }
+
+  ofs<<"Adjacency map: "<<std::endl;
 
   // Retrieve the adjacency map
   LabelMapType::AdjacencyMapType adjMap = filter->GetOutput()->GetAdjacencyMap();
