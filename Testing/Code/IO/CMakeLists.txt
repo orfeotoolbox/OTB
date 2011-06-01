@@ -1499,23 +1499,25 @@ ADD_TEST(ioTvImageMetadataStreamingWriterTest_TIF ${IO_TESTS11}
         )
 
 # Commented because gdal does not seems to write the metadata the same way in both formats
+# Compare metadata indicates a small differences between the ProjRef
 #ADD_TEST(ioTvImageMetadataStreamingWriterTest_HFA2TIFF ${IO_TESTS11}
 #   --compare-metadata ${EPSILON_9}
-#		      ${INPUTDATA}/HFAGeoreferenced.img
-#		      ${TEMP}/temp.tif
-#        otbImageMetadataStreamingFileWriterTest
-#        ${INPUTDATA}/HFAGeoreferenced.img
-#	${TEMP}/temp.tif
+#	   ${INPUTDATA}/HFAGeoreferenced.img
+#	   ${TEMP}/ioTvImageMetadataStreamingWriterTest_HFA2TIFF.tif
+#     otbImageMetadataStreamingFileWriterTest
+#       ${INPUTDATA}/HFAGeoreferenced.img
+#	   ${TEMP}/ioTvImageMetadataStreamingWriterTest_HFA2TIFF.tif
 #        )
 
 # Commented because gdal does not seems to write the metadata the same way in both formats
+# Compare metadata indicates that GCP are lost but they are in filename.aux.xml
 #ADD_TEST(ioTvImageMetadataStreamingWriterTest_TIFF2HFA ${IO_TESTS11}
 #   --compare-metadata ${EPSILON_9}
-#		      ${INPUTDATA}/spot5SubWithGcps.tif
-#		      ${TEMP}/temp.img
-#        otbImageMetadataStreamingFileWriterTest
-#        ${INPUTDATA}/spot5SubWithGcps.tif
-#	${TEMP}/temp.img
+#	   ${INPUTDATA}/spot5SubWithGcps.tif
+#	   ${TEMP}/ioTvImageMetadataStreamingWriterTest_TIFF2HFA.img
+#     otbImageMetadataStreamingFileWriterTest
+#       ${INPUTDATA}/spot5SubWithGcps.tif
+#	   ${TEMP}/ioTvImageMetadataStreamingWriterTest_TIFF2HFA.img
 #        )
 
 ADD_TEST(ioTvPipelineMetadataHandlingTest ${IO_TESTS11}
@@ -1528,14 +1530,15 @@ ADD_TEST(ioTvPipelineMetadataHandlingTest ${IO_TESTS11}
         )
 
 # Commented out, since this test fails beceause of an ITK bug (added to our bugtracker for tracking)
-#ADD_TEST(ioTvPipelineMetadataHandlingWithUFFilterTest ${IO_TESTS11}
-#   --compare-metadata ${EPSILON_9}
-#		      ${INPUTDATA}/HFAGeoreferenced.img
-#		      ${TEMP}/temp.img
-#        otbPipelineMetadataHandlingWithUFFilterTest
-#        ${INPUTDATA}/HFAGeoreferenced.img
-#	${TEMP}/temp.img
-#        )
+# MSD: this test doesn't fail today (UFF = Unary Functor Image Filter)
+ADD_TEST(ioTvPipelineMetadataHandlingWithUFFilterTest ${IO_TESTS11}
+   --compare-metadata ${EPSILON_9}
+	   ${INPUTDATA}/HFAGeoreferenced.img
+	   ${TEMP}/ioTvPipelineMetadataHandlingWithUFFilterTest.img
+     otbPipelineMetadataHandlingWithUFFilterTest
+       ${INPUTDATA}/HFAGeoreferenced.img
+	   ${TEMP}/ioTvPipelineMetadataHandlingWithUFFilterTest.img
+        )
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS12 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -3293,7 +3296,6 @@ SET(BasicIO_SRCS9
 otbIOTests9.cxx
 otbImageTest.cxx
 otbVectorImageTest.cxx
-otbMultiDatasetReadingInfo.cxx
 otbStreamingImageFilterTest.cxx
 otbVectorImageFileReaderWriterTest.cxx
 otbStreamingShortImageFileWriterTest.cxx
