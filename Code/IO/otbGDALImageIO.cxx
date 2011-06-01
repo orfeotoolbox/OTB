@@ -823,7 +823,6 @@ void GDALImageIO::InternalReadImageInformation()
   /* -------------------------------------------------------------------- */
   /* Get the projection coordinate system of the image : ProjectionRef  */
   /* -------------------------------------------------------------------- */
-
   if (dataset->GetProjectionRef() != NULL && !std::string(dataset->GetProjectionRef()).empty())
     {
     OGRSpatialReferenceH pSR = OSRNewSpatialReference(NULL);
@@ -915,25 +914,12 @@ void GDALImageIO::InternalReadImageInformation()
 
     itk::EncapsulateMetaData<MetaDataKey::VectorType>(dict, MetaDataKey::GeoTransformKey, VadfGeoTransform);
 
-    /// retrieve orgin and spacing from the geo transform
+    /// retrieve origin and spacing from the geo transform
     m_Origin[0] = VadfGeoTransform[0];
     m_Origin[1] = VadfGeoTransform[3];
     m_Spacing[0] = VadfGeoTransform[1];
     m_Spacing[1] = VadfGeoTransform[5];
 
-    //In this case, we are in a geographic projection if no other cartographic information was already
-    // available
-    // FIXME is there any way to know if we are in WGS 84 ???
-    std::string projRef;
-    itk::ExposeMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projRef);
-    if (projRef.empty())
-      {
-      projRef =
-        "GEOGCS[\"GCS_WGS_1984\", DATUM[\"D_WGS_1984\", SPHEROID[\"WGS_1984\", 6378137, 298.257223563]],"
-        "PRIMEM[\"Greenwich\", 0], UNIT[\"Degree\", 0.017453292519943295]]";
-
-      itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projRef);
-      }
     }
 
   // Dataset info
@@ -1418,46 +1404,6 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   GDALDataset* dataset = m_Dataset->GetDataSet();
 
   /* -------------------------------------------------------------------- */
-  /* Set the GCPs                                                          */
-  /* -------------------------------------------------------------------- */
-
-  unsigned int gcpCount = 0;
-  itk::ExposeMetaData<unsigned int>(dict, MetaDataKey::GCPCountKey, gcpCount);
-
-  if (gcpCount > 0)
-    {
-
-    GDAL_GCP * gdalGcps = new GDAL_GCP[gcpCount];
-
-    for (unsigned int gcpIndex = 0; gcpIndex < gcpCount; ++gcpIndex)
-      {
-      //Build the GCP string in the form of GCP_n
-      std::ostringstream lStream;
-      lStream << MetaDataKey::GCPParametersKey << gcpIndex;
-      std::string key = lStream.str();
-
-      OTB_GCP gcp;
-      itk::ExposeMetaData<OTB_GCP>(dict, key, gcp);
-
-      gdalGcps[gcpIndex].pszId = const_cast<char *>(gcp.m_Id.c_str());
-      gdalGcps[gcpIndex].pszInfo = const_cast<char *>(gcp.m_Info.c_str());
-      gdalGcps[gcpIndex].dfGCPPixel = gcp.m_GCPCol;
-      gdalGcps[gcpIndex].dfGCPLine = gcp.m_GCPRow;
-      gdalGcps[gcpIndex].dfGCPX = gcp.m_GCPX;
-      gdalGcps[gcpIndex].dfGCPY = gcp.m_GCPY;
-      gdalGcps[gcpIndex].dfGCPZ = gcp.m_GCPZ;
-
-      }
-
-    std::string gcpProjectionRef;
-    itk::ExposeMetaData<std::string>(dict, MetaDataKey::GCPProjectionKey, gcpProjectionRef);
-
-    dataset->SetGCPs(gcpCount, gdalGcps, gcpProjectionRef.c_str());
-
-    delete[] gdalGcps;
-    }
-
-  /* -------------------------------------------------------------------- */
   /* Set the projection coordinate system of the image : ProjectionRef  */
   /* -------------------------------------------------------------------- */
 
@@ -1483,6 +1429,63 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   geoTransform[2] = 0.;
   geoTransform[4] = 0.;
   dataset->SetGeoTransform(const_cast<double*>(geoTransform.GetDataPointer()));
+
+  /* -------------------------------------------------------------------- */
+  /* Set the GCPs                                                          */
+  /* -------------------------------------------------------------------- */
+  const double Epsilon = 1E-10;
+  if (projectionRef.empty()
+      &&  (vcl_abs(m_Origin[0]) > Epsilon
+           || vcl_abs(m_Origin[1]) > Epsilon
+           || vcl_abs(m_Spacing[0] - 1) > Epsilon
+           || vcl_abs(m_Spacing[1] - 1) > Epsilon) )
+    {
+    // See issue #303 :
+    // If there is no ProjectionRef, and the GeoTransform is not the identity,
+    // then saving also GCPs is undefined behavior for GDAL, and a WGS84 projection crs
+    // is assigned arbitrarily
+    itkWarningMacro(<< "Skipping GCPs saving to prevent GDAL from assigning a WGS84 projection ref to the file")
+    }
+  else
+    {
+
+    unsigned int gcpCount = 0;
+    itk::ExposeMetaData<unsigned int>(dict, MetaDataKey::GCPCountKey, gcpCount);
+
+    if (gcpCount > 0)
+      {
+
+      GDAL_GCP * gdalGcps = new GDAL_GCP[gcpCount];
+
+      for (unsigned int gcpIndex = 0; gcpIndex < gcpCount; ++gcpIndex)
+        {
+        //Build the GCP string in the form of GCP_n
+      std::ostringstream lStream;
+        lStream << MetaDataKey::GCPParametersKey << gcpIndex;
+        std::string key = lStream.str();
+
+        OTB_GCP gcp;
+        itk::ExposeMetaData<OTB_GCP>(dict, key, gcp);
+
+        gdalGcps[gcpIndex].pszId = const_cast<char *>(gcp.m_Id.c_str());
+        gdalGcps[gcpIndex].pszInfo = const_cast<char *>(gcp.m_Info.c_str());
+        gdalGcps[gcpIndex].dfGCPPixel = gcp.m_GCPCol;
+        gdalGcps[gcpIndex].dfGCPLine = gcp.m_GCPRow;
+        gdalGcps[gcpIndex].dfGCPX = gcp.m_GCPX;
+        gdalGcps[gcpIndex].dfGCPY = gcp.m_GCPY;
+        gdalGcps[gcpIndex].dfGCPZ = gcp.m_GCPZ;
+
+        }
+
+      std::string gcpProjectionRef;
+      itk::ExposeMetaData<std::string>(dict, MetaDataKey::GCPProjectionKey, gcpProjectionRef);
+
+      dataset->SetGCPs(gcpCount, gdalGcps, gcpProjectionRef.c_str());
+
+      delete[] gdalGcps;
+      }
+
+    }
 
   /* -------------------------------------------------------------------- */
   /*      Report metadata.                                                */
