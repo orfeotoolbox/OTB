@@ -119,7 +119,7 @@ int OSMDownloader::Execute(otb::ApplicationOptionsResult* parseResult)
   }
 
   std::cout << vdOSMGenerator->GetVectorDataByName(parseResult->GetParameterString("OSMKey"))->Size()-3
-      << std::endl;
+      << " vector elements retrieved" << std::endl;
 
   if (parseResult->IsOptionPresent("OSMValue"))
     {
