@@ -23,13 +23,6 @@
 #include <itkContinuousIndex.h>
 #include "itkTimeProbe.h"
 
-/**
-* VC++ is nowhere near C99 compliant yet, and you're trying to use
-* C99 functions. Unless the compiler subverts your efforts, you can
-* usually define isnan as (http://www.dinkumware.com):
-**/
-#define LocalIsNaN(x) ((x) != (x))
-
 namespace otb
 {
 
@@ -78,7 +71,7 @@ VectorDataTransformFilter<TInputVectorData, TOutputVectorData>
     point = m_Transform->TransformPoint(pointCoord);
     index[0]=point[0];
     index[1]=point[1];
-    if (!LocalIsNaN(index[0]) &&  !LocalIsNaN(index[1]))
+    if (!vnl_math_isnan(index[0]) &&  !vnl_math_isnan(index[1]))
       newLine->AddVertex(index);
     it++;
     }
@@ -107,7 +100,7 @@ VectorDataTransformFilter<TInputVectorData, TOutputVectorData>
     point = m_Transform->TransformPoint(pointCoord);
     index[0]=point[0];
     index[1]=point[1];
-    if( !LocalIsNaN(index[0]) &&  !LocalIsNaN(index[1]) )
+    if( !vnl_math_isnan(index[0]) &&  !vnl_math_isnan(index[1]) )
       newPolygon->AddVertex(index);
     it++;
     }
@@ -218,7 +211,7 @@ VectorDataTransformFilter<TInputVectorData, TOutputVectorData>
       case FEATURE_POINT:
       {
       PointType point = this->ReprojectPoint(dataNode->GetPoint());
-      if (!LocalIsNaN(point[0]) && !LocalIsNaN(point[1]) )
+      if (!vnl_math_isnan(point[0]) && !vnl_math_isnan(point[1]) )
         {
         newDataNode->SetPoint(this->ReprojectPoint(dataNode->GetPoint()));
         newContainer = OutputInternalTreeNodeType::New();
