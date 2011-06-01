@@ -128,7 +128,7 @@ int CurlHelper::RetrieveFile(const std::string& urlString, std::string filename)
     curl_easy_setopt(curl, CURLOPT_URL, url);
 
     // Set 5s timeout
-    curl_easy_setopt(curl, CURLOPT_TIMEOUT, 5);
+    curl_easy_setopt(curl, CURLOPT_TIMEOUT, 10);
 
     // Use our writing static function to avoid file descriptor
     // pointer crash on windows
