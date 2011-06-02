@@ -948,7 +948,7 @@ static doublereal c_b277 = .1;
     }
 /*     Compute f0 and g0. */
 /*<       task = 'FG_START'  >*/
-    s_copy(task, "FG_START", (ftnlen)60, (ftnlen)8);
+    s_copy(task, "FG_START", (ftnlen)60, (ftnlen)(8+1));
 /*          return to the driver to calculate f and g; reenter at 111. */
 /*<       goto 1000 >*/
     goto L1000;
@@ -985,7 +985,7 @@ L111:
 /*                                terminate the algorithm. */
 /*<          task = 'CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL' >*/
         s_copy(task, "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL", (
-                ftnlen)60, (ftnlen)48);
+                ftnlen)60, (ftnlen)(48 + 1));
 /*<          goto 999 >*/
         goto L999;
 /*<       endif  >*/
@@ -1238,7 +1238,7 @@ L666:
             }
 /*<             task = 'ABNORMAL_TERMINATION_IN_LNSRCH' >*/
             s_copy(task, "ABNORMAL_TERMINATION_IN_LNSRCH", (ftnlen)60, (
-                    ftnlen)30);
+                    ftnlen)(30+1));
 /*<             iter = iter + 1 >*/
             ++iter;
 /*<             goto 999 >*/
@@ -1273,7 +1273,7 @@ L666:
 /*<             updatd = .false. >*/
             updatd = FALSE_;
 /*<             task   = 'RESTART_FROM_LNSRCH' >*/
-            s_copy(task, "RESTART_FROM_LNSRCH", (ftnlen)60, (ftnlen)19);
+            s_copy(task, "RESTART_FROM_LNSRCH", (ftnlen)60, (ftnlen)(19+1));
 /*<             call timer(cpu2) >*/
             timer_(&cpu2);
 /*<             lnscht = lnscht + cpu2 - cpu1 >*/
@@ -1315,7 +1315,7 @@ L777:
 /*                                terminate the algorithm. */
 /*<          task = 'CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL' >*/
         s_copy(task, "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL", (
-                ftnlen)60, (ftnlen)48);
+                ftnlen)60, (ftnlen)(48+1));
 /*<          goto 999 >*/
         goto L999;
 /*<       endif  >*/
@@ -1329,7 +1329,7 @@ L777:
 /*                                        terminate the algorithm. */
 /*<          task = 'CONVERGENCE: REL_REDUCTION_OF_F <= FACTR*EPSMCH' >*/
         s_copy(task, "CONVERGENCE: REL_REDUCTION_OF_F <= FACTR*EPSMCH", (
-                ftnlen)60, (ftnlen)47);
+                ftnlen)60, (ftnlen)(47+1));
 /*<          if (iback .ge. 10) info = -5 >*/
         if (iback >= 10) {
             info = -5;
@@ -2830,15 +2830,15 @@ L999:
 
     /* Function Body */
     if (*n <= 0) {
-        s_copy(task, "ERROR: N .LE. 0", (ftnlen)60, (ftnlen)15);
+        s_copy(task, "ERROR: N .LE. 0", (ftnlen)60, (ftnlen)(15+1));
     }
 /*<       if (m .le. 0) task = 'ERROR: M .LE. 0' >*/
     if (*m <= 0) {
-        s_copy(task, "ERROR: M .LE. 0", (ftnlen)60, (ftnlen)15);
+        s_copy(task, "ERROR: M .LE. 0", (ftnlen)60, (ftnlen)(15+1));
     }
 /*<       if (factr .lt. zero) task = 'ERROR: FACTR .LT. 0' >*/
     if (*factr < 0.) {
-        s_copy(task, "ERROR: FACTR .LT. 0", (ftnlen)60, (ftnlen)19);
+        s_copy(task, "ERROR: FACTR .LT. 0", (ftnlen)60, (ftnlen)(19+1));
     }
 /*     Check the validity of the arrays nbd(i), u(i), and l(i). */
 /*<       do 10 i = 1, n >*/
@@ -2848,7 +2848,7 @@ L999:
         if (nbd[i__] < 0 || nbd[i__] > 3) {
 /*                                                   return */
 /*<             task = 'ERROR: INVALID NBD' >*/
-            s_copy(task, "ERROR: INVALID NBD", (ftnlen)60, (ftnlen)18);
+            s_copy(task, "ERROR: INVALID NBD", (ftnlen)60, (ftnlen)(18+1));
 /*<         info = -6 >*/
             *info = -6;
 /*<         k = i >*/
@@ -2862,7 +2862,7 @@ L999:
 /*                                    return */
 /*<                task = 'ERROR: NO FEASIBLE SOLUTION' >*/
                 s_copy(task, "ERROR: NO FEASIBLE SOLUTION", (ftnlen)60, (
-                        ftnlen)27);
+                        ftnlen)(27+1));
 /*<            info = -7 >*/
                 *info = -7;
 /*<            k = i >*/
@@ -4011,7 +4011,7 @@ L30:
 /*<       iback = 0 >*/
     *iback = 0;
 /*<       csave = 'START' >*/
-    s_copy(csave, "START", (ftnlen)60, (ftnlen)5);
+    s_copy(csave, "START", (ftnlen)60, (ftnlen)(5+1));
 /*<  556  continue >*/
 L556:
 /*<       gd = ddot(n,g,1,d,1) >*/
@@ -4041,7 +4041,7 @@ L556:
     if (s_cmp(csave, "CONV", (ftnlen)4, (ftnlen)4) != 0 && s_cmp(csave, "WARN"
             , (ftnlen)4, (ftnlen)4) != 0) {
 /*<      task = 'FG_LNSRCH' >*/
-        s_copy(task, "FG_LNSRCH", (ftnlen)60, (ftnlen)9);
+        s_copy(task, "FG_LNSRCH", (ftnlen)60, (ftnlen)(9+1));
 /*<      ifun = ifun + 1 >*/
         ++(*ifun);
 /*<          nfgv = nfgv + 1 >*/
@@ -4067,7 +4067,7 @@ L556:
 /*<       else >*/
     } else {
 /*<          task = 'NEW_X' >*/
-        s_copy(task, "NEW_X", (ftnlen)60, (ftnlen)5);
+        s_copy(task, "NEW_X", (ftnlen)60, (ftnlen)(5+1));
 /*<       endif >*/
     }
 /*<       return >*/
@@ -5527,35 +5527,35 @@ L999:
 /*        Check the input arguments for errors. */
 /*<          if (stp .lt. stpmin) task = 'ERROR: STP .LT. STPMIN' >*/
         if (*stp < *stpmin) {
-            s_copy(task, "ERROR: STP .LT. STPMIN", task_len, (ftnlen)22);
+            s_copy(task, "ERROR: STP .LT. STPMIN", task_len, (ftnlen)(22+1));
         }
 /*<          if (stp .gt. stpmax) task = 'ERROR: STP .GT. STPMAX' >*/
         if (*stp > *stpmax) {
-            s_copy(task, "ERROR: STP .GT. STPMAX", task_len, (ftnlen)22);
+            s_copy(task, "ERROR: STP .GT. STPMAX", task_len, (ftnlen)(22+1));
         }
 /*<          if (g .ge. zero) task = 'ERROR: INITIAL G .GE. ZERO' >*/
         if (*g >= 0.) {
-            s_copy(task, "ERROR: INITIAL G .GE. ZERO", task_len, (ftnlen)26);
+            s_copy(task, "ERROR: INITIAL G .GE. ZERO", task_len, (ftnlen)(26+1));
         }
 /*<          if (ftol .lt. zero) task = 'ERROR: FTOL .LT. ZERO' >*/
         if (*ftol < 0.) {
-            s_copy(task, "ERROR: FTOL .LT. ZERO", task_len, (ftnlen)21);
+            s_copy(task, "ERROR: FTOL .LT. ZERO", task_len, (ftnlen)(21+1));
         }
 /*<          if (gtol .lt. zero) task = 'ERROR: GTOL .LT. ZERO' >*/
         if (*gtol < 0.) {
-            s_copy(task, "ERROR: GTOL .LT. ZERO", task_len, (ftnlen)21);
+            s_copy(task, "ERROR: GTOL .LT. ZERO", task_len, (ftnlen)(21+1));
         }
 /*<          if (xtol .lt. zero) task = 'ERROR: XTOL .LT. ZERO' >*/
         if (*xtol < 0.) {
-            s_copy(task, "ERROR: XTOL .LT. ZERO", task_len, (ftnlen)21);
+            s_copy(task, "ERROR: XTOL .LT. ZERO", task_len, (ftnlen)(21+1));
         }
 /*<          if (stpmin .lt. zero) task = 'ERROR: STPMIN .LT. ZERO' >*/
         if (*stpmin < 0.) {
-            s_copy(task, "ERROR: STPMIN .LT. ZERO", task_len, (ftnlen)23);
+            s_copy(task, "ERROR: STPMIN .LT. ZERO", task_len, (ftnlen)(23+1));
         }
 /*<          if (stpmax .lt. stpmin) task = 'ERROR: STPMAX .LT. STPMIN' >*/
         if (*stpmax < *stpmin) {
-            s_copy(task, "ERROR: STPMAX .LT. STPMIN", task_len, (ftnlen)25);
+            s_copy(task, "ERROR: STPMAX .LT. STPMIN", task_len, (ftnlen)(25+1));
         }
 /*        Exit if there are errors on input. */
 /*<          if (task(1:5) .eq. 'ERROR') return >*/
@@ -5600,7 +5600,7 @@ L999:
 /*<          stmax = stp + xtrapu*stp >*/
         stmax = *stp + *stp * 4.;
 /*<          task = 'FG' >*/
-        s_copy(task, "FG", task_len, (ftnlen)2);
+        s_copy(task, "FG", task_len, (ftnlen)(2+1));
 /*<          goto 1000 >*/
         goto L1000;
 /*<       else >*/
@@ -5658,24 +5658,24 @@ L999:
 /*<    >*/
     if (brackt && (*stp <= stmin || *stp >= stmax)) {
         s_copy(task, "WARNING: ROUNDING ERRORS PREVENT PROGRESS", task_len, (
-                ftnlen)41);
+                ftnlen)(41+1));
     }
 /*<    >*/
     if (brackt && stmax - stmin <= *xtol * stmax) {
-        s_copy(task, "WARNING: XTOL TEST SATISFIED", task_len, (ftnlen)28);
+        s_copy(task, "WARNING: XTOL TEST SATISFIED", task_len, (ftnlen)(28+1));
     }
 /*<    >*/
     if (*stp == *stpmax && *f <= ftest && *g <= gtest) {
-        s_copy(task, "WARNING: STP = STPMAX", task_len, (ftnlen)21);
+        s_copy(task, "WARNING: STP = STPMAX", task_len, (ftnlen)(21+1));
     }
 /*<    >*/
     if (*stp == *stpmin && (*f > ftest || *g >= gtest)) {
-        s_copy(task, "WARNING: STP = STPMIN", task_len, (ftnlen)21);
+        s_copy(task, "WARNING: STP = STPMIN", task_len, (ftnlen)(21+1));
     }
 /*     Test for convergence. */
 /*<    >*/
     if (*f <= ftest && abs(*g) <= *gtol * (-ginit)) {
-        s_copy(task, "CONVERGENCE", task_len, (ftnlen)11);
+        s_copy(task, "CONVERGENCE", task_len, (ftnlen)(11+1));
     }
 /*     Test for termination. */
 /*<       if (task(1:4) .eq. 'WARN' .or. task(1:4) .eq. 'CONV') goto 1000 >*/
@@ -5764,7 +5764,7 @@ L999:
     }
 /*     Obtain another function and derivative. */
 /*<       task = 'FG' >*/
-    s_copy(task, "FG", task_len, (ftnlen)2);
+    s_copy(task, "FG", task_len, (ftnlen)(2+1));
 /*<  1000 continue >*/
 L1000:
 /*     Save local variables. */
@@ -5824,7 +5824,7 @@ L1000:
     double sqrt(doublereal);
 
     /* Local variables */
-    doublereal p, q, r__, s, sgnd, stpc, stpf, stpq, gamma, theta;
+    doublereal p, q, r__, s, sgnd, stpc, stpf, stpq, gammavalue, theta;
 
 /*<       logical brackt >*/
 /*<       double precision stx,fx,dx,sty,fy,dy,stp,fp,dp,stpmin,stpmax >*/
@@ -5922,7 +5922,7 @@ L1000:
 /*     ********** */
 /*<       double precision zero,p66,two,three >*/
 /*<       parameter(zero=0.0d0,p66=0.66d0,two=2.0d0,three=3.0d0) >*/
-/*<       double precision gamma,p,q,r,s,sgnd,stpc,stpf,stpq,theta >*/
+/*<       double precision gammavalue,p,q,r,s,sgnd,stpc,stpf,stpq,theta >*/
 /*<       sgnd = dp*(dx/abs(dx)) >*/
     sgnd = *dp * (*dx / abs(*dx));
 /*     First case: A higher function value. The minimum is bracketed. */
@@ -5938,18 +5938,18 @@ L1000:
         d__1 = abs(theta), d__2 = abs(*dx), d__1 = max(d__1,d__2), d__2 = abs(
                 *dp);
         s = max(d__1,d__2);
-/*<          gamma = s*sqrt((theta/s)**2 - (dx/s)*(dp/s)) >*/
+/*<          gammavalue = s*sqrt((theta/s)**2 - (dx/s)*(dp/s)) >*/
 /* Computing 2nd power */
         d__1 = theta / s;
-        gamma = s * sqrt(d__1 * d__1 - *dx / s * (*dp / s));
-/*<          if (stp .lt. stx) gamma = -gamma >*/
+        gammavalue = s * sqrt(d__1 * d__1 - *dx / s * (*dp / s));
+/*<          if (stp .lt. stx) gammavalue = -gammavalue >*/
         if (*stp < *stx) {
-            gamma = -gamma;
+            gammavalue = -gammavalue;
         }
-/*<          p = (gamma - dx) + theta >*/
-        p = gamma - *dx + theta;
-/*<          q = ((gamma - dx) + gamma) + dp >*/
-        q = gamma - *dx + gamma + *dp;
+/*<          p = (gammavalue - dx) + theta >*/
+        p = gammavalue - *dx + theta;
+/*<          q = ((gammavalue - dx) + gammavalue) + dp >*/
+        q = gammavalue - *dx + gammavalue + *dp;
 /*<          r = p/q >*/
         r__ = p / q;
 /*<          stpc = stx + r*(stp - stx) >*/
@@ -5983,18 +5983,18 @@ L1000:
         d__1 = abs(theta), d__2 = abs(*dx), d__1 = max(d__1,d__2), d__2 = abs(
                 *dp);
         s = max(d__1,d__2);
-/*<          gamma = s*sqrt((theta/s)**2 - (dx/s)*(dp/s)) >*/
+/*<          gammavalue = s*sqrt((theta/s)**2 - (dx/s)*(dp/s)) >*/
 /* Computing 2nd power */
         d__1 = theta / s;
-        gamma = s * sqrt(d__1 * d__1 - *dx / s * (*dp / s));
-/*<          if (stp .gt. stx) gamma = -gamma >*/
+        gammavalue = s * sqrt(d__1 * d__1 - *dx / s * (*dp / s));
+/*<          if (stp .gt. stx) gammavalue = -gammavalue >*/
         if (*stp > *stx) {
-            gamma = -gamma;
+            gammavalue = -gammavalue;
         }
-/*<          p = (gamma - dp) + theta >*/
-        p = gamma - *dp + theta;
-/*<          q = ((gamma - dp) + gamma) + dx >*/
-        q = gamma - *dp + gamma + *dx;
+/*<          p = (gammavalue - dp) + theta >*/
+        p = gammavalue - *dp + theta;
+/*<          q = ((gammavalue - dp) + gammavalue) + dx >*/
+        q = gammavalue - *dp + gammavalue + *dx;
 /*<          r = p/q >*/
         r__ = p / q;
 /*<          stpc = stp + r*(stx - stp) >*/
@@ -6029,26 +6029,26 @@ L1000:
         d__1 = abs(theta), d__2 = abs(*dx), d__1 = max(d__1,d__2), d__2 = abs(
                 *dp);
         s = max(d__1,d__2);
-/*        The case gamma = 0 only arises if the cubic does not tend */
+/*        The case gammavalue = 0 only arises if the cubic does not tend */
 /*        to infinity in the direction of the step. */
-/*<          gamma = s*sqrt(max(zero,(theta/s)**2-(dx/s)*(dp/s))) >*/
+/*<          gammavalue = s*sqrt(max(zero,(theta/s)**2-(dx/s)*(dp/s))) >*/
 /* Computing MAX */
 /* Computing 2nd power */
         d__3 = theta / s;
         d__1 = 0., d__2 = d__3 * d__3 - *dx / s * (*dp / s);
-        gamma = s * sqrt((max(d__1,d__2)));
-/*<          if (stp .gt. stx) gamma = -gamma >*/
+        gammavalue = s * sqrt((max(d__1,d__2)));
+/*<          if (stp .gt. stx) gammavalue = -gammavalue >*/
         if (*stp > *stx) {
-            gamma = -gamma;
+            gammavalue = -gammavalue;
         }
-/*<          p = (gamma - dp) + theta >*/
-        p = gamma - *dp + theta;
-/*<          q = (gamma + (dx - dp)) + gamma >*/
-        q = gamma + (*dx - *dp) + gamma;
+/*<          p = (gammavalue - dp) + theta >*/
+        p = gammavalue - *dp + theta;
+/*<          q = (gammavalue + (dx - dp)) + gammavalue >*/
+        q = gammavalue + (*dx - *dp) + gammavalue;
 /*<          r = p/q >*/
         r__ = p / q;
-/*<          if (r .lt. zero .and. gamma .ne. zero) then >*/
-        if (r__ < 0. && gamma != 0.) {
+/*<          if (r .lt. zero .and. gammavalue .ne. zero) then >*/
+        if (r__ < 0. && gammavalue != 0.) {
 /*<             stpc = stp + r*(stx - stp) >*/
             stpc = *stp + r__ * (*stx - *stp);
 /*<          else if (stp .gt. stx) then >*/
@@ -6130,18 +6130,18 @@ L1000:
             d__1 = abs(theta), d__2 = abs(*dy), d__1 = max(d__1,d__2), d__2 = 
                     abs(*dp);
             s = max(d__1,d__2);
-/*<             gamma = s*sqrt((theta/s)**2 - (dy/s)*(dp/s)) >*/
+/*<             gammavalue = s*sqrt((theta/s)**2 - (dy/s)*(dp/s)) >*/
 /* Computing 2nd power */
             d__1 = theta / s;
-            gamma = s * sqrt(d__1 * d__1 - *dy / s * (*dp / s));
-/*<             if (stp .gt. sty) gamma = -gamma >*/
+            gammavalue = s * sqrt(d__1 * d__1 - *dy / s * (*dp / s));
+/*<             if (stp .gt. sty) gammavalue = -gammavalue >*/
             if (*stp > *sty) {
-                gamma = -gamma;
+                gammavalue = -gammavalue;
             }
-/*<             p = (gamma - dp) + theta >*/
-            p = gamma - *dp + theta;
-/*<             q = ((gamma - dp) + gamma) + dy >*/
-            q = gamma - *dp + gamma + *dy;
+/*<             p = (gammavalue - dp) + theta >*/
+            p = gammavalue - *dp + theta;
+/*<             q = ((gammavalue - dp) + gammavalue) + dy >*/
+            q = gammavalue - *dp + gammavalue + *dy;
 /*<             r = p/q >*/
             r__ = p / q;
 /*<             stpc = stp + r*(sty - stp) >*/

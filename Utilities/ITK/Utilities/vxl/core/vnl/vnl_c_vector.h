@@ -5,24 +5,26 @@
 #pragma interface
 #endif
 //:
-//  \file
-//  \brief Math on blocks of memory
+// \file
+// \brief Math on blocks of memory
 //
-//    vnl_c_vector interfaces to lowlevel memory-block operations.
+//    vnl_c_vector interfaces to low-level memory-block operations.
 //
 // \author Andrew W. Fitzgibbon, Oxford RRG
-// \date   12 Feb 98
+// \date   12 Feb 1998
 //
 // \verbatim
-// Modifications
-//     980212 AWF Initial version.
-//     LSB (Manchester) 26/3/01 Tidied documentation
+//  Modifications
+//   1998-02-12 AWF              Initial version.
+//   2001-03-26 LSB (Manchester) Tidied documentation
+//   2009-03-30 Peter Vanroose   added arg_min() and arg_max()
 // \endverbatim
 //
 //-----------------------------------------------------------------------------
 
 #include <vcl_iosfwd.h>
 #include <vnl/vnl_numeric_traits.h>
+#include <vcl_cstddef.h> // for vcl_size_t
 #include <vcl_cmath.h> // for vcl_sqrt
 
 // avoid messing about with aux_* functions for gcc 2.7 -- fsm
@@ -47,64 +49,65 @@ class vnl_c_vector
   static void apply(T const *, unsigned, T (*f)(T), T* v_out);
   static void apply(T const *, unsigned, T (*f)(T const&), T* v_out);
 
-
-//: y[i]  = x[i]
+  //: y[i]  = x[i]
   static void copy    (T const *x, T       *y, unsigned);
 
-//:  y[i]  = a*x[i]
+  //:  y[i]  = a*x[i]
   static void scale   (T const *x, T       *y, unsigned, T const &);
 
-//: z[i]  = x[i] + y[i];
+  //: z[i]  = x[i] + y[i];
   static void add     (T const *x, T const *y, T *z, unsigned);
 
-//: z[i]  = x[i] + y;
+  //: z[i]  = x[i] + y;
   static void add     (T const *x, T const& y, T *z, unsigned);
 
-//: z[i]  = x[i] - y[i]
+  //: z[i]  = x[i] - y[i]
   static void subtract(T const *x, T const *y, T *z, unsigned);
 
-//: z[i]  = x[i] - y[i]
+  //: z[i]  = x[i] - y[i]
   static void subtract(T const *x, T const& y, T *z, unsigned);
 
-//: z[i]  = x[i] * y[i]
+  //: z[i]  = x[i] * y[i]
   static void multiply(T const *x, T const *y, T *z, unsigned);
 
-//: z[i]  = x[i] * y[i]
+  //: z[i]  = x[i] * y[i]
   static void multiply(T const *x, T const& y, T *z, unsigned);
 
-//: z[i]  = x[i] / y[i]
+  //: z[i]  = x[i] / y[i]
   static void divide  (T const *x, T const *y, T *z, unsigned);
 
-//: z[i]  = x[i] / y[i]
+  //: z[i]  = x[i] / y[i]
   static void divide  (T const *x, T const& y, T *z, unsigned);
 
-//: y[i]  = -x[i]
-// Note that this is a no-op when T is an unsigned type.
+  //: y[i]  = -x[i]
+  // Note that this is a no-op when T is an unsigned type.
   static void negate  (T const *x, T       *y, unsigned);
 
-//: y[i]  = 1/x[i]
+  //: y[i]  = 1/x[i]
   static void invert  (T const *x, T       *y, unsigned);
 
-//:  y[i] += a*x[i]
+  //:  y[i] += a*x[i]
   static void saxpy   (T const &a, T const *x, T *y, unsigned);
 
-//: x[i]  = v
+  //: x[i]  = v
   static void fill    (T *x, unsigned, T const &v);
 
 
   static void reverse (T *x, unsigned);
   static T dot_product  (T const *, T const *, unsigned);
 
-//: conjugate second
+  //: conjugate second
   static T inner_product(T const *, T const *, unsigned);
   static void conjugate(T const *, T *, unsigned);
 
   static T max_value(T const *, unsigned);
   static T min_value(T const *, unsigned);
+  static unsigned arg_max(T const *, unsigned);
+  static unsigned arg_min(T const *, unsigned);
 
-  static T mean(T const *p, unsigned n) { return sum(p,n)/abs_t(n); }
- 
-  //: The standard deviation 
+  static T mean(T const *p, unsigned n) { return T(sum(p,n)/abs_t(n)); }
+
+  //: The standard deviation
   // This method uses the 1/(n-1) normalisation, assuming that your
   // data is a sample of a population.
   static inline real_t std(T const *p, unsigned n) {
@@ -138,14 +141,14 @@ class vnl_c_vector
   static T euclid_dist_sq(T const *, T const *, unsigned);
 
   //: Memory allocation
-  static T** allocate_Tptr(int n);
-  static T*  allocate_T(int n);
-  static void deallocate(T**, int n_when_allocated);
-  static void deallocate(T*, int n_when_allocated);
+  static T** allocate_Tptr(vcl_size_t n);
+  static T*  allocate_T(vcl_size_t n);
+  static void deallocate(T**, vcl_size_t n_when_allocated);
+  static void deallocate(T*, vcl_size_t n_when_allocated);
 };
 
 //: Input & output
-// \relates vnl_c_vector
+// \relatesalso vnl_c_vector
 template <class T>
 vcl_ostream& print_vector(vcl_ostream&, T const*, unsigned);
 

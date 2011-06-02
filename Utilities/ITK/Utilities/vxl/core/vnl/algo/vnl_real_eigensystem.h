@@ -6,13 +6,13 @@
 #endif
 //:
 // \file
-// \brief Extract eigensystem of unsymmetric matrix M, using EISPACK
+// \brief Extract eigensystem of non-symmetric matrix M, using EISPACK
 // \author Andrew W. Fitzgibbon, Oxford RRG
 // \date   23 Jan 97
 //
 // \verbatim
-// Modifications
-//  dac (Manchester) 28/03/2001: tidied up documentation
+//  Modifications
+//   dac (Manchester) 28/03/2001: tidied up documentation
 // \endverbatim
 //
 
@@ -20,7 +20,7 @@
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_diag_matrix.h>
 
-//: Extract eigensystem of unsymmetric matrix M, using the EISPACK routine
+//: Extract eigensystem of asymmetric matrix M, using the EISPACK routine
 //  vnl_eigensystem is a full-bore real eigensystem.  If your matrix
 //  is symmetric, it is *much* better to use vnl_symmetric_eigensystem.
 

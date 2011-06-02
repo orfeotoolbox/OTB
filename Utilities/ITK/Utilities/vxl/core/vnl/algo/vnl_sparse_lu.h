@@ -17,8 +17,6 @@
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_sparse_matrix.h>
-#include <sparse/spMatrix.h>
-
 
 //: Linear system solver for Mx = b using LU decomposition of a sparse matrix
 //  Encapsulating Sparse 1.3 by Kenneth S. Kundert.
@@ -42,11 +40,11 @@ class vnl_sparse_lu
 
   //: Make sparse_lu decomposition of M optionally computing the reciprocal condition number.
   vnl_sparse_lu(vnl_sparse_matrix<double> const& M, operation mode = quiet);
- ~vnl_sparse_lu() {}
+ ~vnl_sparse_lu();
 
   //: set the relative pivot threshold should be between 0 and 1
   // If set to one then pivoting is complete and slow
-  // If near zero then roundoff error may be prohibitive but compuation is fast
+  // If near zero then roundoff error may be prohibitive but computation is fast
   // Typical values are between 0.01 and 0.1.
   void set_pivot_thresh(double pivot_thresh){pivot_thresh_=pivot_thresh;}
 
@@ -108,7 +106,10 @@ class vnl_sparse_lu
   //: Assignment operator - privatised to avoid it being used
   vnl_sparse_lu& operator=(vnl_sparse_lu const & that);
   //: The internal matrix representation
-  spMatrix pmatrix_;
+  //
+  // We don't use the typedef spMatrix directly here to avoid exposing
+  // the implementation detail (sparse/spMatrix.h) to the user.
+  void* pmatrix_;
 };
 
 #endif // vnl_sparse_lu_h_

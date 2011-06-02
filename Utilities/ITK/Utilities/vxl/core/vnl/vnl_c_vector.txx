@@ -4,7 +4,7 @@
 //:
 // \file
 // \author Andrew W. Fitzgibbon, Oxford RRG
-// \date   12 Feb 98
+// \date   12 Feb 1998
 //
 //-----------------------------------------------------------------------------
 
@@ -15,7 +15,6 @@
 #include <vnl/vnl_complex_traits.h>
 #include <vnl/vnl_numeric_traits.h>
 
-#include <vnl/vnl_config.h>
 #include <vnl/vnl_sse.h>
 
 template <class T>
@@ -254,6 +253,22 @@ T vnl_c_vector<T>::min_value(T const *src, unsigned n)
   return vnl_sse<T>::min(src,n);
 }
 
+//: Returns location of max value of the vector.
+template<class T>
+unsigned vnl_c_vector<T>::arg_max(T const *src, unsigned n)
+{
+  assert(n!=0); // max value of an empty vector is undefined
+  return vnl_sse<T>::arg_max(src,n);
+}
+
+//: Returns location of min value of the vector.
+template<class T>
+unsigned vnl_c_vector<T>::arg_min(T const *src, unsigned n)
+{
+  assert(n!=0); // min value of an empty vector is undefined
+  return vnl_sse<T>::arg_min(src,n);
+}
+
 //: Sum of Differences squared.
 template<class T>
 T vnl_c_vector<T>::euclid_dist_sq(T const *a, T const *b, unsigned n)
@@ -284,10 +299,10 @@ void vnl_c_vector_two_norm_squared(T const *p, unsigned n, S *out)
   // IMS: MSVC's optimiser does much better with *p++ than with p[i];
   // consistently about 30% better over vectors from 4 to 20000 dimensions.
   // PVr: with gcc 3.0 on alpha this is even a factor 3 faster!
-  S val =0;
+  S val = 0;
   T const* end = p+n;
   while (p != end)
-    val += vnl_math_squared_magnitude(*p++);
+    val += S(vnl_math_squared_magnitude(*p++));
   *out = val;
 #else
   *out = 0;
@@ -338,43 +353,43 @@ void vnl_c_vector_inf_norm(T const *p, unsigned n, S *out)
 //---------------------------------------------------------------------------
 
 
-inline void* vnl_c_vector_alloc(int n, int size)
+inline void* vnl_c_vector_alloc(vcl_size_t n, unsigned size)
 {
   return vnl_sse_alloc(n,size);
 }
 
 
-inline void vnl_c_vector_dealloc(void* v, int n, int size)
+inline void vnl_c_vector_dealloc(void* v, vcl_size_t n, unsigned size)
 {
   vnl_sse_dealloc(v,n,size);
 }
 
 template<class T>
-T** vnl_c_vector<T>::allocate_Tptr(int n)
+T** vnl_c_vector<T>::allocate_Tptr(vcl_size_t n)
 {
   return (T**)vnl_c_vector_alloc(n, sizeof (T*));
 }
 
 template<class T>
-void vnl_c_vector<T>::deallocate(T** v, int n)
+void vnl_c_vector<T>::deallocate(T** v, vcl_size_t n)
 {
   vnl_c_vector_dealloc(v, n, sizeof (T*));
 }
 
 // "T *" is POD, but "T" might not be.
 #include <vcl_new.h>
-template <class T> inline void vnl_c_vector_construct(T *p, int n)
+template <class T> inline void vnl_c_vector_construct(T *p, vcl_size_t n)
 {
-  for (int i=0; i<n; ++i)
+  for (vcl_size_t i=0; i<n; ++i)
     new (p+i) T();
 }
 
-inline void vnl_c_vector_construct(float *, int) { }
-inline void vnl_c_vector_construct(double *, int) { }
-inline void vnl_c_vector_construct(long double *, int) { }
-inline void vnl_c_vector_construct(vcl_complex<float> *, int) { }
-inline void vnl_c_vector_construct(vcl_complex<double> *, int) { }
-inline void vnl_c_vector_construct(vcl_complex<long double> *, int) { }
+inline void vnl_c_vector_construct(float *, vcl_size_t) { }
+inline void vnl_c_vector_construct(double *, vcl_size_t) { }
+inline void vnl_c_vector_construct(long double *, vcl_size_t) { }
+inline void vnl_c_vector_construct(vcl_complex<float> *, vcl_size_t) { }
+inline void vnl_c_vector_construct(vcl_complex<double> *, vcl_size_t) { }
+inline void vnl_c_vector_construct(vcl_complex<long double> *, vcl_size_t) { }
 
 #ifdef __BORLANDC__
 // The compiler is confused
@@ -385,9 +400,9 @@ inline void vnl_c_vector_construct(vcl_complex<long double> *, int) { }
 #endif
 
 
-template <class T> inline void vnl_c_vector_destruct(T *p, int n)
+template <class T> inline void vnl_c_vector_destruct(T *p, vcl_size_t n)
 {
-  for (int i=0; i<n; ++i)
+  for (vcl_size_t i=0; i<n; ++i)
     (p+i)->~T();
 }
 
@@ -396,15 +411,15 @@ template <class T> inline void vnl_c_vector_destruct(T *p, int n)
 #endif
 
 
-inline void vnl_c_vector_destruct(float *, int) { }
-inline void vnl_c_vector_destruct(double *, int) { }
-inline void vnl_c_vector_destruct(long double *, int) { }
-inline void vnl_c_vector_destruct(vcl_complex<float> *, int) { }
-inline void vnl_c_vector_destruct(vcl_complex<double> *, int) { }
-inline void vnl_c_vector_destruct(vcl_complex<long double> *, int) { }
+inline void vnl_c_vector_destruct(float *, vcl_size_t) { }
+inline void vnl_c_vector_destruct(double *, vcl_size_t) { }
+inline void vnl_c_vector_destruct(long double *, vcl_size_t) { }
+inline void vnl_c_vector_destruct(vcl_complex<float> *, vcl_size_t) { }
+inline void vnl_c_vector_destruct(vcl_complex<double> *, vcl_size_t) { }
+inline void vnl_c_vector_destruct(vcl_complex<long double> *, vcl_size_t) { }
 
 template<class T>
-T* vnl_c_vector<T>::allocate_T(int n)
+T* vnl_c_vector<T>::allocate_T(vcl_size_t n)
 {
   T *p = (T*)vnl_c_vector_alloc(n, sizeof (T));
   vnl_c_vector_construct(p, n);
@@ -412,7 +427,7 @@ T* vnl_c_vector<T>::allocate_T(int n)
 }
 
 template<class T>
-void vnl_c_vector<T>::deallocate(T* p, int n)
+void vnl_c_vector<T>::deallocate(T* p, vcl_size_t n)
 {
   vnl_c_vector_destruct(p, n);
   vnl_c_vector_dealloc(p, n, sizeof (T));
@@ -447,10 +462,14 @@ template vcl_ostream& print_vector(vcl_ostream &,T const *,unsigned)
 #define VNL_C_VECTOR_INSTANTIATE_unordered(T) \
 VCL_DO_NOT_INSTANTIATE(T vnl_c_vector<T >::max_value(T const *, unsigned), T(0)); \
 VCL_DO_NOT_INSTANTIATE(T vnl_c_vector<T >::min_value(T const *, unsigned), T(0)); \
+VCL_DO_NOT_INSTANTIATE(unsigned vnl_c_vector<T >::arg_max(T const *, unsigned), 0U); \
+VCL_DO_NOT_INSTANTIATE(unsigned vnl_c_vector<T >::arg_min(T const *, unsigned), 0U); \
 VNL_C_VECTOR_INSTANTIATE_norm(T, vnl_c_vector<T >::abs_t); \
 template class vnl_c_vector<T >; \
 VCL_UNINSTANTIATE_SPECIALIZATION(T vnl_c_vector<T >::max_value(T const *, unsigned)); \
-VCL_UNINSTANTIATE_SPECIALIZATION(T vnl_c_vector<T >::min_value(T const *, unsigned))
+VCL_UNINSTANTIATE_SPECIALIZATION(T vnl_c_vector<T >::min_value(T const *, unsigned)); \
+VCL_UNINSTANTIATE_SPECIALIZATION(unsigned vnl_c_vector<T >::arg_max(T const *, unsigned)); \
+VCL_UNINSTANTIATE_SPECIALIZATION(unsigned vnl_c_vector<T >::arg_min(T const *, unsigned))
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #undef VNL_C_VECTOR_INSTANTIATE

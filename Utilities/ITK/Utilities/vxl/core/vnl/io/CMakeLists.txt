@@ -32,5 +32,5 @@ INSTALL_TARGETS(/lib vnl_io)
 INSTALL_NOBASE_HEADER_FILES(/include/vxl/core/vnl/io ${vnl_io_sources})
 
 IF(BUILD_TESTING)
-  SUBDIRS(tests)
+#  SUBDIRS(tests)
 ENDIF(BUILD_TESTING)

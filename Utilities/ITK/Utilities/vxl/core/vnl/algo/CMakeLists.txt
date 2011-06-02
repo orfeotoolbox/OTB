@@ -1,5 +1,8 @@
 # vxl/vnl/algo/CMakeLists.txt
 
+PROJECT(vnl_algo)
+
+
 INCLUDE( ${MODULE_PATH}/FindNetlib.cmake )
 
 # most of vnl_algo is simply a wrapper around netlib, so we must have netlib.
@@ -10,6 +13,7 @@ IF(NETLIB_FOUND)
 # vnl_cholesky                     dpoco_ dpodi_ dpofa_ dposl_
 # vnl_ldl_cholesky                 dpoco_ dpodi_ dpofa_ dposl_
 # vnl_complex_eigensystem          zgeev_
+# vnl_complex_generalized_schur    zgges_
 # vnl_conjugate_gradient           cg_
 # vnl_fft                          dgpfa_ dsetgpfa_ gpfa_ setgpfa_
 # vnl_generalized_eigensystem      rsg_
@@ -24,6 +28,7 @@ IF(NETLIB_FOUND)
 # vnl_sparse_symmetric_eigensystem dnlaso_
 # vnl_svd                          csvdc_ dsvdc_ ssvdc_ zsvdc_
 # vnl_svd_economy                  csvdc_ dsvdc_ ssvdc_ zsvdc_
+# vnl_svd_fixed                    csvdc_ dsvdc_ ssvdc_ zsvdc_
 # vnl_symmetric_eigensystem        rs_
 
   INCLUDE_DIRECTORIES( 
@@ -32,12 +37,15 @@ IF(NETLIB_FOUND)
     )
 
   SET( vnl_algo_sources
+    dll.h
+
     vnl_algo_fwd.h
     vnl_netlib.h
 
     # matrix decompositions
     vnl_svd.txx vnl_svd.h
     vnl_svd_economy.txx vnl_svd_economy.h
+    vnl_svd_fixed.txx vnl_svd_fixed.h
     vnl_matrix_inverse.txx vnl_matrix_inverse.h
     vnl_qr.txx vnl_qr.h
     vnl_scatter_3x3.txx vnl_scatter_3x3.h
@@ -46,14 +54,16 @@ IF(NETLIB_FOUND)
     vnl_sparse_lu.cxx vnl_sparse_lu.h
     vnl_real_eigensystem.cxx vnl_real_eigensystem.h
     vnl_complex_eigensystem.cxx vnl_complex_eigensystem.h
-    vnl_symmetric_eigensystem.cxx vnl_symmetric_eigensystem.h
+    vnl_symmetric_eigensystem.txx vnl_symmetric_eigensystem.h
     vnl_generalized_eigensystem.cxx vnl_generalized_eigensystem.h
     vnl_sparse_symmetric_eigensystem.cxx vnl_sparse_symmetric_eigensystem.h
     vnl_generalized_schur.cxx vnl_generalized_schur.h
+    vnl_complex_generalized_schur.cxx vnl_complex_generalized_schur.h
 
     # optimisation
     vnl_discrete_diff.cxx vnl_discrete_diff.h
     vnl_levenberg_marquardt.cxx vnl_levenberg_marquardt.h
+    vnl_sparse_lm.cxx           vnl_sparse_lm.h
     vnl_conjugate_gradient.cxx vnl_conjugate_gradient.h
     vnl_lbfgs.cxx vnl_lbfgs.h
     vnl_lbfgsb.cxx vnl_lbfgsb.h
@@ -80,7 +90,7 @@ IF(NETLIB_FOUND)
     # stuff
     vnl_convolve.txx vnl_convolve.h
     vnl_determinant.cxx vnl_determinant.txx vnl_determinant.h
-    vnl_chi_squared.cxx vnl_chi_squared.h
+    vnl_chi_squared.txx vnl_chi_squared.h
     vnl_gaussian_kernel_1d.cxx vnl_gaussian_kernel_1d.h
     vnl_adjugate.txx vnl_adjugate.h
     vnl_orthogonal_complement.txx vnl_orthogonal_complement.h
@@ -101,16 +111,17 @@ IF(NETLIB_FOUND)
 
   IF(NOT VXL_INSTALL_NO_LIBRARIES)
     INSTALL(TARGETS itkvnl_algo
-      RUNTIME DESTINATION ${VXL_INSTALL_BIN_DIR_CM24} COMPONENT RuntimeLibraries
-      LIBRARY DESTINATION ${VXL_INSTALL_LIB_DIR_CM24} COMPONENT RuntimeLibraries
-      ARCHIVE DESTINATION ${VXL_INSTALL_LIB_DIR_CM24} COMPONENT Development)
+      EXPORT ${VXL_INSTALL_EXPORT_NAME}
+      RUNTIME DESTINATION ${VXL_INSTALL_RUNTIME_DIR} COMPONENT RuntimeLibraries
+      LIBRARY DESTINATION ${VXL_INSTALL_LIBRARY_DIR} COMPONENT RuntimeLibraries
+      ARCHIVE DESTINATION ${VXL_INSTALL_ARCHIVE_DIR} COMPONENT Development)
   ENDIF(NOT VXL_INSTALL_NO_LIBRARIES)
   IF(NOT VXL_INSTALL_NO_DEVELOPMENT)
-    INSTALL_NOBASE_HEADER_FILES(${VXL_INSTALL_ROOT}/core/vnl/algo ${vnl_algo_sources})
+    INSTALL_NOBASE_HEADER_FILES(${VXL_INSTALL_INCLUDE_DIR}/vnl/algo ${vnl_algo_sources})
   ENDIF(NOT VXL_INSTALL_NO_DEVELOPMENT)
 
   IF( BUILD_TESTING )
-    SUBDIRS(tests)
+#    SUBDIRS(tests)
   ENDIF( BUILD_TESTING )
 
 ENDIF(NETLIB_FOUND)

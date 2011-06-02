@@ -6,7 +6,7 @@
  *      UC Berkeley
  */
 /*! \file
- * 
+ *
  *  This file contains the output-to-file and output-to-screen routines for
  *  the matrix package.
  *
@@ -60,11 +60,7 @@ Removed File IO routines to get rid of fopen warnings - JLM
 #include "spDefs.h"
 
 
-
-
-
 #if DOCUMENTATION
-
 /*!
  *  Formats and send the matrix to standard output.  Some elementary
  *  statistics are also output.  The matrix is output in a format that is
@@ -143,7 +139,7 @@ spPrint(
 MatrixPtr  Matrix = (MatrixPtr)eMatrix;
 register  int  J = 0;
 int I, Row, Col, Size, Top, StartCol = 1, StopCol, Columns, ElementCount = 0;
-double  Magnitude, SmallestDiag, SmallestElement;
+double  Magnitude, SmallestDiag=LARGEST_REAL, SmallestElement=LARGEST_REAL;
 double  LargestElement = 0.0, LargestDiag = 0.0;
 ElementPtr  pElement, pImagElements[PRINTER_WIDTH/10+1];
 int  *PrintOrdToIntRowMap, *PrintOrdToIntColMap;
@@ -159,9 +155,16 @@ int  *PrintOrdToIntRowMap, *PrintOrdToIntColMap;
     Top = Matrix->AllocatedSize;
 #endif
     CALLOC( PrintOrdToIntRowMap, int, Top + 1 );
+    if ( PrintOrdToIntRowMap == NULL)
+    {
+        Matrix->Error = spNO_MEMORY;
+        return;
+    }
     CALLOC( PrintOrdToIntColMap, int, Top + 1 );
-    if ( PrintOrdToIntRowMap == NULL OR PrintOrdToIntColMap == NULL)
-    {   Matrix->Error = spNO_MEMORY;
+    if ( PrintOrdToIntColMap == NULL)
+    {
+        Matrix->Error = spNO_MEMORY;
+        FREE(PrintOrdToIntRowMap);
         return;
     }
     for (I = 1; I <= Size; I++)
@@ -191,11 +194,13 @@ int  *PrintOrdToIntRowMap, *PrintOrdToIntColMap;
             printf("Matrix after factorization:\n");
         else
             printf("Matrix before factorization:\n");
-
-        SmallestElement = LARGEST_REAL;
-        SmallestDiag = SmallestElement;
     }
-    if (Size == 0) return;
+    if (Size == 0)
+    {
+      FREE(PrintOrdToIntColMap);
+      FREE(PrintOrdToIntRowMap);
+      return;
+    }
 
 /* Determine how many columns to use. */
     Columns = PRINTER_WIDTH;
@@ -261,7 +266,7 @@ int  *PrintOrdToIntRowMap, *PrintOrdToIntColMap;
                     Col = PrintOrdToIntColMap[J];
 
                 pElement = Matrix->FirstInCol[Col];
-                while(pElement != NULL AND pElement->Row != Row)
+                while (pElement != NULL AND pElement->Row != Row)
                     pElement = pElement->NextInCol;
 
                 if (Data)
@@ -353,7 +358,7 @@ int  *PrintOrdToIntRowMap, *PrintOrdToIntColMap;
 
 #endif /* DOCUMENTATION */
 
-/* Added to export the row and column maps to convert the 
+/* Added to export the row and column maps to convert the
    internal matrix to an external form - JLM */
 void
 spRowColOrder(
@@ -363,7 +368,7 @@ spRowColOrder(
 )
 {
   MatrixPtr  Matrix = (MatrixPtr)eMatrix;
-  
+
   int I, Size;
   ASSERT_IS_SPARSE( Matrix );
   Size = Matrix->Size;
