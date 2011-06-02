@@ -38,10 +38,6 @@
 #include "itkMatrix.h"
 #include "itkSymmetricEigenAnalysis.h"
 
-#define MAXIT 100
-#define EPS 3.0e-7
-#define FPMIN 1.0e-30
-
 namespace otb
 {
 
@@ -1044,9 +1040,5 @@ LineSegmentDetector<TInputImage, TPrecision>
 }
 
 } // end namespace otb
-
-#undef MAXIT
-#undef EPS
-#undef FPMIN
 
 #endif
