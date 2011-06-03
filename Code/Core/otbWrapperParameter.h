@@ -60,7 +60,7 @@ class Parameter
 public:
   /** Standard class typedef */
   typedef Parameter                     Self;
-  typedef itk::LightObject              Superclass;
+  typedef itk::Object                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
