@@ -16,5 +16,6 @@ FOREACH(swigfile ${swigfiles})
 
 ENDFOREACH(swigfile ${swigfiles})
 
+# TODO: add build dependency with the macro files
 SWIG_ADD_MODULE(core python core.i)
 SWIG_LINK_LIBRARIES(core ${PYTHON_LIBRARIES} OTBWrapperCore)
