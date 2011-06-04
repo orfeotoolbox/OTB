@@ -46,7 +46,7 @@ namespace Wrapper
 
 /** \class Application
  *  \brief This class represent an application
- *
+ *  TODO
  *
  */
 class ITK_EXPORT Application: public itk::Object
