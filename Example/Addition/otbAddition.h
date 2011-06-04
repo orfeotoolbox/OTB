@@ -55,3 +55,8 @@ private:
 }
 
 }
+
+extern "C"
+{
+  itk::ObjectFactoryBase* itkLoad();
+}

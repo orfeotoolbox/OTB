@@ -48,12 +48,16 @@ ADD_TEST(owTuInputImageParameter ${OTB_WRAPPER_TESTS}
 ADD_TEST(owTuInputVectorDataParameter ${OTB_WRAPPER_TESTS}
     otbWrapperInputVectorDataParameterNew
   )
-    
+
 # Application class test
 ADD_TEST(owTuApplication ${OTB_WRAPPER_TESTS}
 	otbWrapperApplicationNew
   )
-  
+
+# Application class test
+ADD_TEST(owTvApplicationFactory ${OTB_WRAPPER_TESTS}
+    otbWrapperApplicationFactory
+  )
 
 # ----------------Source files CXX -----------------------------------
 
@@ -69,6 +73,7 @@ otbWrapperNumericalParameterTest.cxx
 otbWrapperOutputImageParameterTest.cxx
 otbWrapperParameterListTest.cxx
 otbWrapperParameterTest.cxx
+otbWrapperApplicationFactoryTest.cxx
 )
 
 ADD_EXECUTABLE(otbWrapperTests ${Wrapper_SRCS})

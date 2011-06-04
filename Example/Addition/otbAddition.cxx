@@ -17,6 +17,7 @@
  =========================================================================*/
 #include "otbAddition.h"
 #include "otbWrapperNumericalParameter.h"
+#include "itkVersion.h"
 
 namespace otb
 {
@@ -72,6 +73,83 @@ void Addition::DoExecute()
   std::cout << a + b << std::endl;
 }
 
+class AdditionFactory : public itk::ObjectFactoryBase
+{
+public:
+  /** Standard class typedefs. */
+  typedef AdditionFactory              Self;
+  typedef itk::ObjectFactoryBase        Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
+
+  /** Class methods used to interface with the registered factories. */
+  virtual const char* GetITKSourceVersion(void) const
+    {
+    return ITK_SOURCE_VERSION;
+    }
+
+  virtual const char* GetDescription(void) const
+    {
+    return "Addition";
+    }
+
+  /** Method for class instantiation. */
+  itkFactorylessNewMacro(Self);
+
+  /** Run-time type information (and related methods). */
+  itkTypeMacro(AdditionFactory, itk::ObjectFactoryBase);
+
+protected:
+  AdditionFactory()
+  {
+
+  }
+
+  virtual ~AdditionFactory()
+  {
+
+  }
+
+  /** This method is provided by sub-classes of ObjectFactoryBase.
+   * It should create the named itk object or return 0 if that object
+   * is not supported by the factory implementation. */
+  virtual LightObject::Pointer CreateObject(const char* itkclassname )
+  {
+    const std::string classname("otbWrapperApplication");
+    LightObject::Pointer ret;
+    if ( classname == itkclassname )
+      ret = Addition::New().GetPointer();
+
+    return ret;
+  }
+
+  /** This method creates all the objects with the class overide of
+   * itkclass name, which are provide by this object
+   */
+  virtual std::list<LightObject::Pointer>
+  CreateAllObject(const char* itkclassname)
+  {
+    const std::string classname("otbWrapperApplication");
+    std::list<LightObject::Pointer> list;
+    if ( classname == itkclassname )
+      list.push_back(Addition::New().GetPointer());
+
+    return list;
+  }
+
+private:
+  AdditionFactory(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
+};
+
+
 }
 
+}
+
+static otb::Wrapper::AdditionFactory::Pointer staticFactory;
+itk::ObjectFactoryBase* itkLoad()
+{
+  staticFactory = otb::Wrapper::AdditionFactory::New();
+  return staticFactory;
 }

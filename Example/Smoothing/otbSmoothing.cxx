@@ -24,6 +24,8 @@
 //#include "itkCurvatureAnisotropicDiffusionImageFilter.h"
 #include "otbPerBandVectorImageFilter.h"
 
+#include "itkVersion.h"
+
 namespace otb
 {
 namespace Wrapper
@@ -174,6 +176,85 @@ void Smoothing::DoExecute()
     }
 }
 
+
+class SmoothingFactory : public itk::ObjectFactoryBase
+{
+public:
+  /** Standard class typedefs. */
+  typedef SmoothingFactory              Self;
+  typedef itk::ObjectFactoryBase        Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
+
+  /** Class methods used to interface with the registered factories. */
+  virtual const char* GetITKSourceVersion(void) const
+    {
+    return ITK_SOURCE_VERSION;
+    }
+
+  virtual const char* GetDescription(void) const
+    {
+    return "Smoothing";
+    }
+
+  /** Method for class instantiation. */
+  itkFactorylessNewMacro(Self);
+
+  /** Run-time type information (and related methods). */
+  itkTypeMacro(SmoothingFactory, itk::ObjectFactoryBase);
+
+protected:
+  SmoothingFactory()
+  {
+
+  }
+
+  virtual ~SmoothingFactory()
+  {
+
+  }
+
+  /** This method is provided by sub-classes of ObjectFactoryBase.
+   * It should create the named itk object or return 0 if that object
+   * is not supported by the factory implementation. */
+  virtual LightObject::Pointer CreateObject(const char* itkclassname )
+  {
+    const std::string classname("otbWrapperApplication");
+    LightObject::Pointer ret;
+    if ( classname == itkclassname )
+      ret = Smoothing::New().GetPointer();
+
+    return ret;
+  }
+
+  /** This method creates all the objects with the class overide of
+   * itkclass name, which are provide by this object
+   */
+  virtual std::list<LightObject::Pointer>
+  CreateAllObject(const char* itkclassname)
+  {
+    const std::string classname("otbWrapperApplication");
+    std::list<LightObject::Pointer> list;
+    if ( classname == itkclassname )
+      list.push_back(Smoothing::New().GetPointer());
+
+    return list;
+  }
+
+private:
+  SmoothingFactory(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
+};
+
+
 }
 
 }
+
+static otb::Wrapper::SmoothingFactory::Pointer staticFactory;
+itk::ObjectFactoryBase* itkLoad()
+{
+  staticFactory = otb::Wrapper::SmoothingFactory::New();
+  return staticFactory;
+}
+
