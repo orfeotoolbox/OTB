@@ -27,3 +27,9 @@
 %define itkGetEnumMacro(name, type)
   type Get##name () const;
 %enddef
+
+
+%define itkNewMacro(name)
+  static name##_Pointer New(void);
+%enddef
+

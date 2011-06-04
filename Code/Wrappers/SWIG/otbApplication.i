@@ -17,24 +17,11 @@ namespace Wrapper
 
 enum DefaultValueMode
   {
-    /** 
-     * This parameter has no default behaviour and should be set by
-     * the user. 
-     */
     UNKNOWN,
-    /**
-     * The default value of this parameter can be estimated from
-     * other parameters.
-     */
     RELATIVE,
-
-    /** 
-     * Tge default value of this parameter is not depending of any
-     * other parameter.
-     */
     ABSOLUTE
   };
-  
+
 }
 }
 
@@ -47,29 +34,23 @@ enum DefaultValueMode
 class Parameter : public itkObject
 {
 public:
+  itkNewMacro(Parameter)
 
-  typedef Parameter                     Self;
-  typedef itkObject                     Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  itkSetStringMacro(Name)
+  itkGetStringMacro(Name)
+  
+  itkSetStringMacro(Description)
+  itkGetStringMacro(Description)
+  
+  itkSetStringMacro(Key)
+  itkGetStringMacro(Key)
 
-  static Parameter_Pointer New(void);
+  itkSetMacro(Mandatory,bool)
+  itkGetMacro(Mandatory,bool)
+  itkBooleanMacro(Mandatory)
 
-  itkSetStringMacro(Name);
-  itkGetStringMacro(Name);
-
-  itkSetStringMacro(Description);
-  itkGetStringMacro(Description);
-
-  itkSetStringMacro(Key);
-  itkGetStringMacro(Key);
-
-  itkSetMacro(Mandatory,bool);
-  itkGetMacro(Mandatory,bool);
-  itkBooleanMacro(Mandatory);
-
-  itkSetEnumMacro(DefaultValueMode, otb::Wrapper::DefaultValueMode);
-  itkGetEnumMacro(DefaultValueMode, otb::Wrapper::DefaultValueMode);
+  itkSetEnumMacro(DefaultValueMode, otb::Wrapper::DefaultValueMode)
+  itkGetEnumMacro(DefaultValueMode, otb::Wrapper::DefaultValueMode)
 
   virtual void Reset();
   
@@ -82,31 +63,68 @@ private:
     void operator =(const Parameter&);
 
 };
-
-class Parameter_Pointer
-{
-   public:
-     Parameter_Pointer();
-     Parameter_Pointer(Parameter_Pointer const & p);
-     Parameter_Pointer(Parameter * p);
-     ~Parameter_Pointer();
-     Parameter * operator->() const;
-     bool IsNotNull() const;
-     bool IsNull() const;
-     Parameter * GetPointer() const;
-     bool operator<(Parameter_Pointer const & r) const;
-     bool operator>(Parameter_Pointer const & r) const;
-     bool operator<=(Parameter_Pointer const & r) const;
-     bool operator>=(Parameter_Pointer const & r) const;
-     Parameter_Pointer & operator=(Parameter_Pointer const & r);
-     Parameter_Pointer & operator=(Parameter * r);
-     Parameter * Print(std::ostream & os) const;
-   private:
-     void Register();
-     void UnRegister();
-   protected:
-};
-
-
 DECLARE_REF_COUNT_CLASS( Parameter )
+
+class ParameterGroup : public Parameter
+{
+public:
+  itkNewMacro(ParameterGroup);
+  
+  void AddParameter(Parameter_Pointer p);
+  Parameter_Pointer GetParameter(unsigned int i);
+  unsigned int GetNumberOfParameters();
+
+protected:
+  ParameterGroup();
+  virtual ~ParameterGroup();
+
+private:
+  ParameterGroup(const ParameterGroup &);
+  void operator =(const ParameterGroup&);
+};
+DECLARE_REF_COUNT_CLASS( ParameterGroup )
+
+class Application: public itk::Object
+{
+public:
+  itkSetStringMacro(Name);
+  itkGetStringMacro(Name);
+
+  itkSetStringMacro(Description);
+  itkGetStringMacro(Description);
+
+  void Init();
+  void UpdateParameters();
+  void Execute();
+  ParameterGroup* GetParameterList();
+  
+protected:
+  Application();
+  virtual ~Application();
+
+private:
+  virtual void DoCreateParameters() = 0;
+  virtual void DoUpdateParameters() = 0;
+  virtual void DoExecute() = 0;
+
+  Application(const Application &);
+  void operator =(const Application&);
+};
+DECLARE_REF_COUNT_CLASS( Application )
+
+
+class ApplicationFactory : public itkObject
+{
+public:
+  static std::list<std::string> GetAvailableApplications();
+  static Application_Pointer CreateApplication(const std::string& name);
+
+protected:
+  ApplicationFactory();
+  virtual ~ApplicationFactory();
+
+private:
+  ApplicationFactory(const Self&);
+  void operator=(const Self&);
+};
 

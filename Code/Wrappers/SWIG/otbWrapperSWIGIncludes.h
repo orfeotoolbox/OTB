@@ -19,8 +19,21 @@
 #define __otbWrapperSWIGIncludes_h
 
 #include "otbWrapperParameter.h"
+#include "otbWrapperParameterGroup.h"
+#include "otbWrapperApplication.h"
+#include "otbWrapperApplicationFactory.h"
+
 
 typedef otb::Wrapper::Parameter                        Parameter;
 typedef otb::Wrapper::Parameter::Pointer::SmartPointer Parameter_Pointer;
+
+typedef otb::Wrapper::ParameterGroup                        ParameterGroup;
+typedef otb::Wrapper::ParameterGroup::Pointer::SmartPointer ParameterGroup_Pointer;
+
+typedef otb::Wrapper::Application                        Application;
+typedef otb::Wrapper::Application::Pointer::SmartPointer Application_Pointer;
+
+typedef otb::Wrapper::ApplicationFactory                        ApplicationFactory;
+typedef otb::Wrapper::ApplicationFactory::Pointer::SmartPointer ApplicationFactory_Pointer;
 
 #endif

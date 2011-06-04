@@ -7,6 +7,30 @@
 // Reference: http://www.nabble.com/attachment/16653644/0/SwigRefCount.i
 %define DECLARE_REF_COUNT_CLASS(class_name)
 
+  class class_name##_Pointer
+  {
+     public:
+       class_name##_Pointer();
+       class_name##_Pointer(class_name##_Pointer const & p);
+       class_name##_Pointer(class_name * p);
+       ~class_name##_Pointer();
+       class_name * operator->() const;
+       bool IsNotNull() const;
+       bool IsNull() const;
+       class_name * GetPointer() const;
+       bool operator<(class_name##_Pointer const & r) const;
+       bool operator>(class_name##_Pointer const & r) const;
+       bool operator<=(class_name##_Pointer const & r) const;
+       bool operator>=(class_name##_Pointer const & r) const;
+       class_name##_Pointer & operator=(class_name##_Pointer const & r);
+       class_name##_Pointer & operator=(class_name## * r);
+       class_name * Print(std::ostream & os) const;
+     private:
+       void Register();
+       void UnRegister();
+     protected:
+  };
+
   // pointers and references
   %typemap(out) class_name *, class_name & {
     // always tell SWIG_NewPointerObj we're the owner
