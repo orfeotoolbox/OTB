@@ -41,7 +41,7 @@ enum DefaultValueMode
     RELATIVE,
 
     /** 
-     * Tge default value of this parameter is not depending of any
+     * The default value of this parameter is not depending on any
      * other parameter.
      */
     ABSOLUTE
@@ -114,6 +114,7 @@ public:
   virtual boost::any GetAnyValue()
   {
     itkExceptionMacro(<<"GetAnyValue() method must be re-implemented by sub-classes.");
+    return boost::any(); // avoid warning
   }
   
   /** Set the parameter value as a boost:any. Should be
@@ -138,6 +139,10 @@ protected:
   virtual ~Parameter()
   {}
 
+private:
+  Parameter(const Parameter &); //purposely not implemented
+  void operator =(const Parameter&); //purposely not implemented
+
   /** Name of the parameter */
   std::string m_Name;
 
@@ -152,10 +157,6 @@ protected:
 
   /** Default value behaviour */
   DefaultValueMode m_DefaultValueMode;
-
-private:
-  Parameter(const Parameter &); //purposely not implemented
-  void operator =(const Parameter&); //purposely not implemented
 
 }; // End class Parameter
 
