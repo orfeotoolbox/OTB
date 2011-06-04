@@ -1,11 +1,14 @@
 %include "itkMacro.i"
 %include "RefCountMacro.i"
 
- %module core
+
+ %module otbApplication
  %{
 #include "otbWrapperSWIGIncludes.h"
+#include "itkBase.includes"
  %}
 
+%include "itkBase.i"
 
 namespace otb
 {
@@ -79,7 +82,6 @@ private:
     void operator =(const Parameter&);
 
 };
-
 
 class Parameter_Pointer
 {

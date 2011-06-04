@@ -20,13 +20,7 @@
 
 #include "otbWrapperParameter.h"
 
-typedef itk::LightObject          itkLightObject;
-typedef itk::LightObject::Pointer itkLightObject_Pointer;
-typedef itk::Object               itkObject;
-typedef itk::Object::Pointer      itkObject_Pointer;
-
 typedef otb::Wrapper::Parameter                        Parameter;
 typedef otb::Wrapper::Parameter::Pointer::SmartPointer Parameter_Pointer;
-
 
 #endif
