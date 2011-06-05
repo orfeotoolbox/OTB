@@ -456,7 +456,7 @@ bool RADImageIO::InternalReadHeaderInformation(const std::string& file_name, std
   for (unsigned int i = 0; i < m_NbOfChannels; ++i)
     {
     file >> lString;
-    ::itk::OStringStream lStream;
+    itk::OStringStream lStream;
     lStream << lPathName << "/" << lString;
     m_ChannelsFileName.push_back(lStream.str());
 
@@ -721,7 +721,7 @@ void RADImageIO::WriteImageInformation()
   m_ChannelsFileName.clear();
   for (unsigned int i = 0; i < m_NbOfChannels; ++i)
     {
-    ::itk::OStringStream lStream;
+    itk::OStringStream lStream;
     lStream << lRootName << "_" << i + 1 << lExtension;
     m_ChannelsFileName.push_back(lStream.str());
     }

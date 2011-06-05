@@ -24,7 +24,7 @@
 #include <vector>
 #include <algorithm>
 
-#include "ogrsf_frmts.h"
+//#include "ogrsf_frmts.h"
 #include "otbOGRIOHelper.h"
 
 namespace otb

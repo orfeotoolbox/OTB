@@ -679,7 +679,7 @@ int TestHelper::RegressionTestImage(int cpt, const char *testImageFilename, cons
     std::cout << toleranceDiffPixelImage;
     std::cout << "</DartMeasurement>" << std::endl;
 
-    ::itk::OStringStream diffName;
+    itk::OStringStream diffName;
     diffName << testImageFilename << ".diff.png";
     try
       {
@@ -711,7 +711,7 @@ int TestHelper::RegressionTestImage(int cpt, const char *testImageFilename, cons
     std::cout << diffName.str();
     std::cout << "</DartMeasurementFile>" << std::endl;
 
-    ::itk::OStringStream baseName;
+    itk::OStringStream baseName;
     baseName << testImageFilename << ".base.png";
     try
       {
@@ -737,7 +737,7 @@ int TestHelper::RegressionTestImage(int cpt, const char *testImageFilename, cons
     std::cout << baseName.str();
     std::cout << "</DartMeasurementFile>" << std::endl;
 
-    ::itk::OStringStream testName;
+    itk::OStringStream testName;
     testName << testImageFilename << ".test.png";
     try
       {
@@ -986,7 +986,7 @@ std::map<std::string, int> TestHelper::RegressionTestBaselines(char *baselineFil
     }
   while (++x)
     {
-    ::itk::OStringStream filename;
+    itk::OStringStream filename;
     filename << originalBaseline << "." << x << suffix;
     std::ifstream filestream(filename.str().c_str());
     if (!filestream)

@@ -891,7 +891,7 @@ void GDALImageIO::InternalReadImageInformation()
       pOtbGCP.m_GCPZ = psGCP->dfGCPZ;
 
       // Complete the key with the GCP number : GCP_i
-      ::itk::OStringStream lStream;
+      itk::OStringStream lStream;
       lStream << MetaDataKey::GCPParametersKey << cpt;
       key = lStream.str();
 
@@ -964,7 +964,7 @@ void GDALImageIO::InternalReadImageInformation()
 
     for (int cpt = 0; papszMetadata[cpt] != NULL; cpt++)
       {
-      ::itk::OStringStream lStream;
+      itk::OStringStream lStream;
       lStream << MetaDataKey::MetadataKey << cpt;
       key = lStream.str();
 
@@ -984,7 +984,7 @@ void GDALImageIO::InternalReadImageInformation()
 
     for (int cpt = 0; papszMetadata[cpt] != NULL; cpt++)
       {
-      ::itk::OStringStream lStream;
+      itk::OStringStream lStream;
       lStream << MetaDataKey::SubMetadataKey << cpt;
       key = lStream.str();
 

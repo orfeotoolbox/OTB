@@ -79,7 +79,7 @@ ImageMetadataInterfaceBase::GetGCPs(unsigned int GCPnum)
   std::string key;
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
-  ::itk::OStringStream lStream;
+  itk::OStringStream lStream;
   lStream << MetaDataKey::GCPParametersKey << GCPnum;
   key = lStream.str();
 
@@ -97,7 +97,7 @@ ImageMetadataInterfaceBase::GetGCPId(unsigned int GCPnum) const
   std::string key;
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
-  ::itk::OStringStream lStream;
+  itk::OStringStream lStream;
   lStream << MetaDataKey::GCPParametersKey << GCPnum;
   key = lStream.str();
 
@@ -116,7 +116,7 @@ ImageMetadataInterfaceBase::GetGCPInfo(unsigned int GCPnum) const
   std::string key;
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
-  ::itk::OStringStream lStream;
+  itk::OStringStream lStream;
   lStream << MetaDataKey::GCPParametersKey << GCPnum;
   key = lStream.str();
 
@@ -135,7 +135,7 @@ ImageMetadataInterfaceBase::GetGCPRow(unsigned int GCPnum) const
   std::string key;
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
-  ::itk::OStringStream lStream;
+  itk::OStringStream lStream;
   lStream << MetaDataKey::GCPParametersKey << GCPnum;
   key = lStream.str();
 
@@ -154,7 +154,7 @@ ImageMetadataInterfaceBase::GetGCPCol(unsigned int GCPnum) const
   std::string key;
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
-  ::itk::OStringStream lStream;
+  itk::OStringStream lStream;
   lStream << MetaDataKey::GCPParametersKey << GCPnum;
   key = lStream.str();
 
@@ -173,7 +173,7 @@ ImageMetadataInterfaceBase::GetGCPX(unsigned int GCPnum) const
   std::string key;
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
-  ::itk::OStringStream lStream;
+  itk::OStringStream lStream;
   lStream << MetaDataKey::GCPParametersKey << GCPnum;
   key = lStream.str();
 
@@ -192,7 +192,7 @@ ImageMetadataInterfaceBase::GetGCPY(unsigned int GCPnum) const
   std::string key;
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
-  ::itk::OStringStream lStream;
+  itk::OStringStream lStream;
   lStream << MetaDataKey::GCPParametersKey << GCPnum;
   key = lStream.str();
 
@@ -211,7 +211,7 @@ ImageMetadataInterfaceBase::GetGCPZ(unsigned int GCPnum) const
   std::string key;
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
-  ::itk::OStringStream lStream;
+  itk::OStringStream lStream;
   lStream << MetaDataKey::GCPParametersKey << GCPnum;
   key = lStream.str();
 

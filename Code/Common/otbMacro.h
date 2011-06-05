@@ -43,7 +43,7 @@ namespace otb
  * itkDebugMacro(<< "this is debug info" << this->SomeVariable); */
 #define otbDebugMacro(x) itkDebugMacro(x)
 /*  { if ( this->GetDebug() && *::itk::Object::GetGlobalWarningDisplay())   \
-    { ::itk::OStringStream itkmsg; \
+    { itk::OStringStream itkmsg; \
       itkmsg << "Debug: In " __FILE__ ", line " << __LINE__ << "\n" \
              << this->GetNameOfClass() << " (" << this << "): " x  \
              << "\n\n"; \
@@ -54,7 +54,7 @@ namespace otb
     { \
     if (this->GetDebug() && ::itk::Object::GetGlobalWarningDisplay())   \
       { \
-      ::itk::OStringStream itkmsg; \
+      itk::OStringStream itkmsg; \
       itkmsg << " Msg Debug: " x << "\n"; \
       ::itk::OutputWindowDisplayDebugText(itkmsg.str().c_str()); \
       } \
@@ -66,7 +66,7 @@ namespace otb
     {  \
     if (::itk::Object::GetGlobalWarningDisplay())   \
       { \
-      ::itk::OStringStream itkmsg; \
+      itk::OStringStream itkmsg; \
       itkmsg << " Generic Msg Debug: " x << "\n"; \
       ::itk::OutputWindowDisplayDebugText(itkmsg.str().c_str()); \
       } \
@@ -84,7 +84,7 @@ namespace otb
 #define otbMsgDevMacro(x) \
     { \
       { \
-      ::itk::OStringStream itkmsg; \
+      itk::OStringStream itkmsg; \
       itkmsg << " Msg Dev: (" << __FILE__ << ":" << __LINE__ << ") " x << "\n"; \
       ::itk::OutputWindowDisplayDebugText(itkmsg.str().c_str()); \
       } \
@@ -100,7 +100,7 @@ namespace otb
     { \
     if (itk::Object::GetGlobalWarningDisplay()) \
       { \
-      ::itk::OStringStream itkmsg; \
+      itk::OStringStream itkmsg; \
       itkmsg << "WARNING: In " __FILE__ ", line " << __LINE__ << "\n" \
              << this->GetNameOfClass() << " (" << this << "): " x  \
              << "\n\n"; \
@@ -171,7 +171,7 @@ namespace otb
       throw stde; } \
     catch (...) \
       { \
-      ::itk::OStringStream message; \
+      itk::OStringStream message; \
       message << "otb::ERROR Unknow error while running " << # command << " (catch(...) )"; \
       ::itk::ExceptionObject e_(__FILE__, __LINE__, message.str().c_str(), ITK_LOCATION); \
       throw e_; \
@@ -194,14 +194,14 @@ namespace otb
       throw stde; } \
     catch (...) \
       { \
-      ::itk::OStringStream message; \
+      itk::OStringStream message; \
       message << "otb::ERROR Unknow error while running " << # command << " (catch(...) )"; \
       ::itk::ExceptionObject e_(__FILE__, __LINE__, message.str().c_str(), ITK_LOCATION); \
       throw e_; \
       } \
     if (result == 1) \
       { \
-      ::itk::OStringStream message; \
+      itk::OStringStream message; \
       message << "otb::ERROR: " << # command << " should be throwing an exception."; \
       ::itk::ExceptionObject e_(__FILE__, __LINE__, message.str().c_str(), ITK_LOCATION); \
       throw e_; \
