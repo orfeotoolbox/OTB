@@ -162,7 +162,7 @@ VectorDataFileReader<TOutputVectorData>
       for (std::list<itk::LightObject::Pointer>::iterator i = allobjects.begin();
            i != allobjects.end(); ++i)
         {
-        VectorDataIOBase<TOutputVectorData>* io = dynamic_cast<VectorDataIOBase<TOutputVectorData>*>(i->GetPointer());
+        VectorDataIOBase* io = dynamic_cast<VectorDataIOBase*>(i->GetPointer());
         msg << "    " << io->GetNameOfClass() << std::endl;
         }
       msg << "  You probably failed to set a file suffix, or" << std::endl;

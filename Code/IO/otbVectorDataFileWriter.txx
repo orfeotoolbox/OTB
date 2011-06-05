@@ -141,7 +141,7 @@ VectorDataFileWriter<TInputVectorData>
     for (std::list<LightObject::Pointer>::iterator i = allobjects.begin();
          i != allobjects.end(); ++i)
       {
-      VectorDataIOBase<TInputVectorData>* io = dynamic_cast<VectorDataIOBase<TInputVectorData>*>(i->GetPointer());
+      VectorDataIOBase* io = dynamic_cast<VectorDataIOBase*>(i->GetPointer());
       msg << "    " << io->GetNameOfClass() << std::endl;
       }
     msg << "  You probably failed to set a file suffix, or" << std::endl;

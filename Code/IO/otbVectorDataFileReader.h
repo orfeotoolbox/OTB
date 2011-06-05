@@ -95,7 +95,7 @@ public:
   itkTypeMacro(VectorDataFileReader, VectorDataSource);
 
   typedef TOutputVectorData                  OutputVectorType;
-  typedef VectorDataIOBase<OutputVectorType> VectorDataIOBaseType;
+  typedef VectorDataIOBase                   VectorDataIOBaseType;
 
   itkStaticConstMacro(VDimension, unsigned int, OutputVectorType::DataNodeType::Dimension);
   typedef itk::Vector<double, VDimension> SpacingType;

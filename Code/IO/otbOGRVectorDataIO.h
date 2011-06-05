@@ -40,13 +40,13 @@ namespace otb
  *
  */
 template <class TData> class ITK_EXPORT OGRVectorDataIO
-  : public VectorDataIOBase<TData>
+  : public VectorDataIOBase
 {
 public:
 
   /** Standard class typedefs. */
   typedef OGRVectorDataIO               Self;
-  typedef VectorDataIOBase<TData>       Superclass;
+  typedef VectorDataIOBase              Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -89,7 +89,7 @@ public:
   virtual bool CanReadFile(const char*) const;
 
   /** Reads the data from disk into the memory buffer provided. */
-  virtual void Read(VectorDataPointerType data);
+  virtual void Read(itk::DataObject* data);
 
   /*-------- This part of the interfaces deals with writing data. ----- */
 
@@ -98,7 +98,7 @@ public:
   virtual bool CanWriteFile(const char*) const;
 
   /** Writes the data to disk from the memory buffer provided */
-  virtual void Write(VectorDataConstPointerType data,  char ** papszOptions = NULL);
+  virtual void Write(const itk::DataObject* data,  char ** papszOptions = NULL);
 
 protected:
   /** Constructor.*/

@@ -76,8 +76,9 @@ OGRVectorDataIO<TData>::PrintSelf(std::ostream& os, itk::Indent indent) const
 template<class TData>
 void
 OGRVectorDataIO<TData>
-::Read(VectorDataPointerType data)
+::Read(itk::DataObject* datag)
 {
+  VectorDataPointerType data = dynamic_cast<VectorDataType*>(datag);
   // Destroy previous opened data source
   if (m_DataSource != NULL)
     {
@@ -186,10 +187,12 @@ bool OGRVectorDataIO<TData>::CanWriteFile(const char* filename) const
 }
 
 template<class TData>
-void OGRVectorDataIO<TData>::Write(const VectorDataConstPointerType data, char ** papszOptions)
+void OGRVectorDataIO<TData>::Write(const itk::DataObject* datag, char ** papszOptions)
 {
   itk::TimeProbe chrono;
   chrono.Start();
+
+  VectorDataConstPointerType data = dynamic_cast<const VectorDataType*>(datag);
 
   //Find first the OGR driver
   OGRSFDriver * ogrDriver =

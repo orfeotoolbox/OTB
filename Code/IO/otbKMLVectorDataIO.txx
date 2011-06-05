@@ -451,9 +451,9 @@ KMLVectorDataIO<TData>::PrintSelf(std::ostream& os, itk::Indent indent) const
 template<class TData>
 void
 KMLVectorDataIO<TData>
-::Read(VectorDataPointerType data)
+::Read(itk::DataObject* datag)
 {
-
+  VectorDataPointerType data = dynamic_cast<VectorDataType*>(datag);
   std::string kml;
   bool        status = kmlbase::File::ReadFileToString(this->m_FileName, &kml);
   if (status == false)
@@ -512,11 +512,13 @@ bool KMLVectorDataIO<TData>::CanWriteFile(const char* filename) const
 }
 
 template<class TData>
-void KMLVectorDataIO<TData>::Write(const VectorDataConstPointerType data, char ** itkNotUsed(papszOptions))
+void KMLVectorDataIO<TData>::Write(const itk::DataObject* datag, char ** itkNotUsed(papszOptions))
 {
   itk::TimeProbe chrono;
   chrono.Start();
   // Retrieve data required for georeferencing
+
+  VectorDataConstPointerType data = dynamic_cast<const VectorDataType*>(datag);
 
   std::string           projectionRefWkt = data->GetProjectionRef();
   OGRSpatialReferenceH oSRS = OSRNewSpatialReference(projectionRefWkt.c_str());

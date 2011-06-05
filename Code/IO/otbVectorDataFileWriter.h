@@ -74,8 +74,8 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(VectorDataFileWriter, itk::ProcessObject);
 
-  typedef TInputVectorData                      InputVectorDataType;
-  typedef VectorDataIOBase<InputVectorDataType> VectorDataIOBaseType;
+  typedef TInputVectorData InputVectorDataType;
+  typedef VectorDataIOBase VectorDataIOBaseType;
 
   /** Set/Get the image input of this writer.  */
   void SetInput(const InputVectorDataType *input);

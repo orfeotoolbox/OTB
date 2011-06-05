@@ -37,7 +37,7 @@ public:
 
   typedef TData                                  DataType;
   typedef typename DataType::Pointer             DataPointerType;
-  typedef otb::VectorDataIOBase<DataType>        VectorDataIOBaseType;
+  typedef otb::VectorDataIOBase                  VectorDataIOBaseType;
   typedef typename VectorDataIOBaseType::Pointer VectorDataIOBasePointerType;
 
   /** Class Methods used to interface with the registered factories */
@@ -46,7 +46,7 @@ public:
   itkTypeMacro(VectorDataIOFactory, Object);
 
   /** Convenient typedefs. */
-  typedef typename VectorDataIOBase<DataType>::Pointer VectorDataIOBasePointer;
+  typedef typename VectorDataIOBase::Pointer VectorDataIOBasePointer;
 
   /** Mode in which the files is intended to be used */
   typedef enum { ReadMode, WriteMode } FileModeType;

@@ -15,40 +15,33 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataIOBase_txx
-#define __otbVectorDataIOBase_txx
-
 
 #include "otbVectorDataIOBase.h"
 
 namespace otb
 {
-template <class TData>
-VectorDataIOBase<TData>
+VectorDataIOBase
 ::VectorDataIOBase() :
   m_ByteOrder(OrderNotApplicable)
 {
-  Reset(false);
+  this->Reset(false);
 }
 
-template <class TData>
 void
-VectorDataIOBase<TData>
+VectorDataIOBase
 ::Reset(const bool)
 {
   m_Initialized = false;
   m_FileName = "";
 }
 
-template <class TData>
-VectorDataIOBase<TData>
-::~VectorDataIOBase()
-{
-}
 
-template <class TData>
+VectorDataIOBase
+::~VectorDataIOBase()
+{}
+
 std::string
-VectorDataIOBase<TData>
+VectorDataIOBase
 ::GetByteOrderAsString(ByteOrder t) const
 {
   std::string s;
@@ -65,9 +58,8 @@ VectorDataIOBase<TData>
   return s = "OrderNotApplicable";
 }
 
-template <class TData>
 void
-VectorDataIOBase<TData>
+VectorDataIOBase
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
@@ -77,5 +69,3 @@ VectorDataIOBase<TData>
 }
 
 } //namespace otb
-
-#endif

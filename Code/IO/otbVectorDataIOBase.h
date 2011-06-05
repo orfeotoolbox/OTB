@@ -25,6 +25,7 @@
 #include "itkIndent.h"
 #include "itkVector.h"
 #include "itkPoint.h"
+#include "itkDataObject.h"
 
 namespace otb
 {
@@ -33,7 +34,7 @@ namespace otb
  * \brief Abstract superclass defines VectorData IO interface.
  *
  * VectorDataIOBase is a class that reads and/or writes VectorData data
- * of a particular format (such as PNG or raw binary). The
+ * of a particular format (such as shapefile or kml). The
  * VectorDataIOBase encapsulates both the reading and writing of data. The
  * VectorDataIOBase is used by the VectorDataFileReader class (to read data)
  * and the VectorDataFileWriter (to write data) into a single file.
@@ -51,7 +52,7 @@ namespace otb
  * \ingroup IOFilters
  *
  */
-template <class TData> class ITK_EXPORT VectorDataIOBase : public itk::LightProcessObject
+class ITK_EXPORT VectorDataIOBase : public itk::LightProcessObject
 {
 public:
   /** Standard class typedefs. */
@@ -62,11 +63,7 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(VectorDataIOBase, Superclass);
 
-  typedef TData                                 VectorDataType;
-  typedef typename VectorDataType::Pointer      VectorDataPointerType;
-  typedef typename VectorDataType::ConstPointer VectorDataConstPointerType;
-
-  itkStaticConstMacro(VDimension, unsigned int, VectorDataType::DataNodeType::Dimension);
+  itkStaticConstMacro(VDimension, unsigned int, 2);
   typedef itk::Vector<double, VDimension> SpacingType;
   typedef itk::Point<double, VDimension>  PointType;
 
@@ -125,7 +122,7 @@ public:
   /*   virtual void ReadVectorDataInformation() = 0; */
 
   /** Reads the data from disk into the memory buffer provided. */
-  virtual void Read(VectorDataPointerType data) = 0;
+  virtual void Read(itk::DataObject* data) = 0;
 
   /*-------- This part of the interfaces deals with writing data ----- */
 
@@ -147,7 +144,7 @@ public:
   /** Writes the data to disk from the memory buffer provided. Make sure
    * that the IORegions has been set properly. The buffer is cast to a
    * pointer to the beginning of the image data. */
-  virtual void Write(VectorDataConstPointerType data, char ** papszOptions = NULL) = 0;
+  virtual void Write(const itk::DataObject* data, char ** papszOptions = NULL) = 0;
 
 protected:
   VectorDataIOBase();
@@ -174,9 +171,5 @@ private:
 };
 
 } // end namespace otb
-
-#ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorDataIOBase.txx"
-#endif
 
 #endif // __otbVectorDataIOBase_h
