@@ -437,7 +437,7 @@ bool BSQImageIO::InternalReadHeaderInformation(const std::string& file_name, std
   m_ChannelsFileName.clear();
   for (unsigned int i = 0; i < this->GetNumberOfComponents(); ++i)
     {
-    itk::OStringStream lStream;
+    std::ostringstream lStream;
     lStream << lRootName << ".c" << i + 1;
     m_ChannelsFileName.push_back(lStream.str());
     }
@@ -641,7 +641,7 @@ void BSQImageIO::WriteImageInformation()
   m_ChannelsFileName.clear();
   for (unsigned int i = 0; i < this->GetNumberOfComponents(); ++i)
     {
-    itk::OStringStream lStream;
+    std::ostringstream lStream;
     lStream << lRootName << ".c" << i + 1;
     m_ChannelsFileName.push_back(lStream.str());
     }

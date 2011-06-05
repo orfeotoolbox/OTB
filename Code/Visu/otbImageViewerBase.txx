@@ -205,7 +205,7 @@ ImageViewerBase<TPixel, TLabel>
     itkExceptionMacro(<< "Input image and input image overlay do not have the same size !");
     }
 
-  itk::OStringStream oss;
+  std::ostringstream oss;
   // Get the image dimension
   typename ImageType::SizeType size = m_InputImage->GetLargestPossibleRegion().GetSize();
   m_ImageGeometry = static_cast<double>(size[0]) / static_cast<double>(size[1]);
@@ -634,7 +634,7 @@ ImageViewerBase<TPixel, TLabel>
     //comment: std::cout<<"PixLocOutput == NULL, returning ..."<<std::endl;
     return;
     }
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss << index << " (image position)" << std::endl;
   PointType point;
   m_InputImage->TransformIndexToPhysicalPoint(index, point);

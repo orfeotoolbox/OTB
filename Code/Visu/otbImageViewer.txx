@@ -89,7 +89,7 @@ ImageViewer<TPixel, TLabel>
 ::Build(void)
 {
   Superclass::Build();
-  itk::OStringStream oss;
+  std::ostringstream oss;
 
   int wfull = this->GetFullWidget()->w();
   int hfull = this->GetFullWidget()->h();
@@ -219,7 +219,7 @@ void
 ImageViewer<TPixel, TLabel>
 ::Update(void)
 {
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss << this->GetLabel() << " - Zoom Window (X" << this->GetZoomWidget()->GetOpenGlIsotropicZoom() << ")";
   if (oss.good())
     {

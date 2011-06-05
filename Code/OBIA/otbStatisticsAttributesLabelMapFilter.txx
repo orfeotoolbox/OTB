@@ -80,7 +80,7 @@ StatisticsAttributesLabelObjectFunctor<TLabelObject, TFeatureImage>
   typename LabelObjectType::LineContainerType::const_iterator lit;
   typename LabelObjectType::LineContainerType& lineContainer = lo->GetLineContainer();
 
-  itk::OStringStream oss;
+  std::ostringstream oss;
 
   FeatureType min = itk::NumericTraits<FeatureType>::max();
   FeatureType max = itk::NumericTraits<FeatureType>::NonpositiveMin();

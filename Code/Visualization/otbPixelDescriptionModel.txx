@@ -50,7 +50,7 @@ PixelDescriptionModel<TOutputImage>
 ::UpdatePixelDescription(const IndexType& index)
 {
   // The output stringstream
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss << otbGetTextMacro("Index") << ": " << index << std::endl;
   // Report pixel info for each visible layer
   for (typename Superclass::LayerIteratorType it = this->GetLayers()->Begin();

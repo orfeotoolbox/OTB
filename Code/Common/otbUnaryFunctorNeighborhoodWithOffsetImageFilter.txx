@@ -99,7 +99,7 @@ UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage, TOutputImage, TFuncti
 
     // build an exception
     itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
-    itk::OStringStream msg;
+    std::ostringstream msg;
     msg << this->GetNameOfClass()
         << "::GenerateInputRequestedRegion()";
     e.SetLocation(msg.str().c_str());

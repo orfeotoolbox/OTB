@@ -196,7 +196,7 @@ DisparityMapEstimationMethod<TFixedImage, TMovingImage, TPointSet>
 //      typename FixedWriterType::Pointer fwriter = FixedWriterType::New();
 //      typename MovingWriterType::Pointer mwriter = MovingWriterType::New();
 
-//      itk::OStringStream oss;
+//      std::ostringstream oss;
 //      oss.str("");
 //      oss<<"Fixed"<<dataId<<".tif";
 //      fwriter->SetInput(fixedExtractor->GetOutput());

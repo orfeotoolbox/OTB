@@ -227,7 +227,7 @@ AeronetFileReader
   if (!fin)
     {
     AeronetFileReaderException e(__FILE__, __LINE__);
-    itk::OStringStream         msg;
+    std::ostringstream         msg;
     msg << " Could not open IO object for file ";
     msg << m_FileName << "." << std::endl;
     e.SetDescription(msg.str().c_str());
@@ -262,7 +262,7 @@ AeronetFileReader
       )
     {
     AeronetFileReaderException e(__FILE__, __LINE__);
-    itk::OStringStream         msg;
+    std::ostringstream         msg;
     msg << " The file ";
     msg << m_FileName << " is not conform." << std::endl;
     e.SetDescription(msg.str().c_str());
@@ -372,7 +372,7 @@ AeronetFileReader
   aeronetData->SetAngstromCoefficient(angst_mean);
   aeronetData->SetWater(water_mean);
   aeronetData->SetSolarZenithAngle(solarZenithAngle_mean);
-  itk::OStringStream msg;
+  std::ostringstream msg;
   msg << "(hh/mm/yyyy hh:mm:ss) " << m_Day << "/" << m_Month << "/" << m_Year << " " << m_Hour << ":" << m_Minute <<
   ":00";
   std::string str(msg.str());

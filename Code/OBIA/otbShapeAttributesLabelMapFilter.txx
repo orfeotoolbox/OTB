@@ -648,7 +648,7 @@ ShapeAttributesLabelObjectFunctor<TLabelObject, TLabelImage>
   if (!m_ReducedAttributeSet)
     {
     lo->SetAttribute("SHAPE::Size", size);
-    itk::OStringStream oss;
+    std::ostringstream oss;
     for (unsigned int dim = 0; dim < LabelObjectType::ImageDimension; ++dim)
       {
       oss.str("");

@@ -45,7 +45,7 @@ MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
   this->SetNumberOfRequiredInputs(1);
   if ((int) InputImageDimension != (int) ClassifiedImageDimension)
     {
-    itk::OStringStream msg;
+    std::ostringstream msg;
     msg << "Input image dimension: " << InputImageDimension << " != output image dimension: " <<
     ClassifiedImageDimension;
     throw itk::ExceptionObject(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);

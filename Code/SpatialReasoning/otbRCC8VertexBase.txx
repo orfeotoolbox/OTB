@@ -47,7 +47,7 @@ RCC8VertexBase<TPath>
   m_SegmentationType = static_cast<bool>(atoi(attributes["SegmentationType"].c_str()));
   unsigned int nbPoints = static_cast<unsigned int>(atoi(attributes["NumberOfPointsInPath"].c_str()));
 
-  itk::OStringStream oss;
+  std::ostringstream oss;
 
   m_Path = PathType::New();
   m_Path->Initialize();
@@ -73,7 +73,7 @@ typename RCC8VertexBase<TPath>::AttributesMapType
 RCC8VertexBase<TPath>
 ::GetAttributesMap(void)
 {
-  itk::OStringStream oss;
+  std::ostringstream oss;
   AttributesMapType  results;
   oss << m_SegmentationLevel;
   results["SegmentationLevel"] = oss.str();

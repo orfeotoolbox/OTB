@@ -820,7 +820,7 @@ void TileMapImageIO::SetCacheDirectory(const char* _arg)
       // if existing dir, check writable
       if ( itksys::SystemTools::FileIsDirectory( _arg ) )
       {
-         itk::OStringStream oss;
+         std::ostringstream oss;
          oss<<_arg<<"/foo";
          if( itksys::SystemTools::Touch( oss.str().c_str(), true ) == false )
          {

@@ -168,7 +168,7 @@ std::string
 DataNode<TPrecision, VDimension, TValuePrecision>
 ::GetNodeTypeAsString() const
 {
-  itk::OStringStream oss;
+  std::ostringstream oss;
   switch (m_NodeType)
     {
     case ROOT:

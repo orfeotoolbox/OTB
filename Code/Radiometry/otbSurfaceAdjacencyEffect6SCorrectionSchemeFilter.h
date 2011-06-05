@@ -85,7 +85,7 @@ public:
     double       contribution = 0.;
     TOutput      outPixel;
     outPixel.SetSize(it.GetCenterPixel().Size());
-    itk::OStringStream oss;
+    std::ostringstream oss;
     oss << std::fixed << std::setprecision(3);
 
     // Loop over each component

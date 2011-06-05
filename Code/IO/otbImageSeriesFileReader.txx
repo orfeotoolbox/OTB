@@ -49,7 +49,7 @@ void
 ImageSeriesFileReader<TImage, TInternalImage>
 ::GenerateData(unsigned int idx)
 {
-  itk::OStringStream msg;
+  std::ostringstream msg;
   msg << "Something wrong... Check the template definition of this class in the program...\n";
   msg << "\"ENVI META FILE\" FileName: " << this->m_FileName << "\n";
   ImageSeriesFileReaderException e(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
@@ -95,7 +95,7 @@ ImageSeriesFileReader<Image<TPixel, 2>, Image<TInternalPixel, 2> >
 {
   if (bands.size() != 1)
     {
-    itk::OStringStream msg;
+    std::ostringstream msg;
     msg << "Unable to handle multicomponent file from Image<> class\n";
     msg << "\"ENVI META FILE\" FileName: " << this->m_FileName << "\n";
     ImageSeriesFileReaderException e(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
@@ -104,7 +104,7 @@ ImageSeriesFileReader<Image<TPixel, 2>, Image<TInternalPixel, 2> >
 
   if (bands[0] != 1)
     {
-    itk::OStringStream msg;
+    std::ostringstream msg;
     msg << "Unable to handle given band reading from multicomponent file with Image<> class\n";
     msg << "\"ENVI META FILE\" FileName: " << this->m_FileName << "\n";
     ImageSeriesFileReaderException e(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
@@ -185,7 +185,7 @@ ImageSeriesFileReader<Image<TPixel, 2>, VectorImage<TInternalPixel, 2> >
 {
   if (bands.size() != 1)
     {
-    itk::OStringStream msg;
+    std::ostringstream msg;
     msg << "Unable to handle multicomponent file from Image<> class as output\n";
     msg << "\"ENVI META FILE\" FileName: " << this->m_FileName << "\n";
     ImageSeriesFileReaderException e(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);

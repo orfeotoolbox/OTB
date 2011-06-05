@@ -76,7 +76,7 @@ SpectralSensitivityReader
     }
 
   std::string        sensor("");
-  itk::OStringStream oss;
+  std::ostringstream oss;
 
   try
     {

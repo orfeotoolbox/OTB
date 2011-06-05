@@ -137,7 +137,7 @@ RCC8GraphFileWriter<TInputGraph>
   if (!out)
     {
     RCC8GraphFileWriterException e(__FILE__, __LINE__);
-    itk::OStringStream msg;
+    std::ostringstream msg;
     msg << " Could not create IO object for file ";
     msg << m_FileName << "." << std::endl;
     e.SetDescription(msg.str().c_str());

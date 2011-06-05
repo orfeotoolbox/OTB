@@ -235,7 +235,7 @@ MultiChannelExtractROI<TInputPixelType, TOutputPixelType>
       }
     if (m_BadChannels.empty() == false)
       {
-      itk::OStringStream oss;
+      std::ostringstream oss;
       oss << "otb::ExtractImageFilter::GenerateOutputInformation : ";
       oss <<  "Channel(s) [ ";
       for (unsigned int i = 0; i < m_BadChannels.size(); ++i)

@@ -35,7 +35,7 @@ const char *
 WaveletGenerator<TMotherWaveletOperator>
 ::GetWaveletName() const
 {
-  itk::OStringStream msg;
+  std::ostringstream msg;
   msg << "The mother wavelet ID " << TMotherWaveletOperator;
   msg << " is unkown or has to be implemented...\n";
   throw itk::ExceptionObject(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
@@ -48,7 +48,7 @@ void
 WaveletGenerator<TMotherWaveletOperator>
 ::GetLowPassCoefficientVector(CoefficientVector& coeff) const
 {
-  itk::OStringStream msg;
+  std::ostringstream msg;
   msg << "The mother wavelet ID " << TMotherWaveletOperator;
   msg << " is unkown or has to be implemented...\n";
   throw itk::ExceptionObject(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
@@ -59,7 +59,7 @@ void
 WaveletGenerator<TMotherWaveletOperator>
 ::GetHighPassCoefficientVector(CoefficientVector& coeff) const
 {
-  itk::OStringStream msg;
+  std::ostringstream msg;
   msg << "The mother wavelet ID " << TMotherWaveletOperator;
   msg << " is unkown or has to be implemented (check the txx file)...\n";
   throw itk::ExceptionObject(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);

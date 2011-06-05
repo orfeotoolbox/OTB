@@ -89,7 +89,7 @@ void
 StandardWriterWatcher
 ::ShowProgress()
 {
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss.str("");
   oss << "\r";
 

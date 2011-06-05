@@ -261,7 +261,7 @@ ImageFileReader<TOutputImage>
     {
     this->Print(std::cerr);
     itk::ImageFileReaderException e(__FILE__, __LINE__);
-    itk::OStringStream msg;
+    std::ostringstream msg;
     msg << " Could not create IO object for file "
         << this->m_FileName.c_str() << std::endl;
     msg << "  Tried to create one of the following:" << std::endl;
@@ -429,7 +429,7 @@ ImageFileReader<TOutputImage>
     if (res != 0 && res != 63) // 63 stands for filesize exceed
       {
       itk::ImageFileReaderException e(__FILE__, __LINE__);
-      itk::OStringStream msg;
+      std::ostringstream msg;
       msg << "File name is an http address, but curl fails to connect to it "
           << std::endl << "Filename = " << this->m_FileName
           << std::endl << "Curl error code = " << res
@@ -456,7 +456,7 @@ ImageFileReader<TOutputImage>
   if (!itksys::SystemTools::FileExists(this->m_FileName.c_str()))
     {
     itk::ImageFileReaderException e(__FILE__, __LINE__);
-    itk::OStringStream msg;
+    std::ostringstream msg;
     msg << "The file doesn't exist. "
         << std::endl << "Filename = " << this->m_FileName
         << std::endl;
@@ -474,7 +474,7 @@ ImageFileReader<TOutputImage>
     if (readTester.fail())
       {
       readTester.close();
-      itk::OStringStream msg;
+      std::ostringstream msg;
       msg << "The file couldn't be opened for reading. "
           << std::endl << "Filename: " << this->m_FileName
           << std::endl;

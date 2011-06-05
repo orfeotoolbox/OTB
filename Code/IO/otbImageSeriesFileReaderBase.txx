@@ -114,7 +114,7 @@ ImageSeriesFileReaderBase<TImage, TInternalImage>
   if (aLine != "ENVI")
     {
     inputFile.close();
-    itk::OStringStream msg;
+    std::ostringstream msg;
     msg << "The file " << m_FileName << " is not a \"ENVI META FILE\" format\n";
     ImageSeriesFileReaderException e(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
     throw e;
@@ -125,7 +125,7 @@ ImageSeriesFileReaderBase<TImage, TInternalImage>
   if (aLine != "META")
     {
     inputFile.close();
-    itk::OStringStream msg;
+    std::ostringstream msg;
     msg << "The file " << m_FileName << " is not a \"ENVI META FILE\" format\n";
     ImageSeriesFileReaderException e(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
     throw e;
@@ -136,7 +136,7 @@ ImageSeriesFileReaderBase<TImage, TInternalImage>
   if (aLine != "FILE")
     {
     inputFile.close();
-    itk::OStringStream msg;
+    std::ostringstream msg;
     msg << "The file " << m_FileName << " is not a \"ENVI META FILE\" format\n";
     ImageSeriesFileReaderException e(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
     throw e;
@@ -167,7 +167,7 @@ ImageSeriesFileReaderBase<TImage, TInternalImage>
       if (!inputFile.good())
         {
         inputFile.close();
-        itk::OStringStream msg;
+        std::ostringstream msg;
         msg << "Unable to read image files in the  \"ENVI META FILE\" file \n";
         msg << "FileName: " << m_FileName << "\n";
         ImageSeriesFileReaderException e(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
@@ -201,7 +201,7 @@ ImageSeriesFileReaderBase<TImage, TInternalImage>
     if (!inputFile.good())
       {
       inputFile.close();
-      itk::OStringStream msg;
+      std::ostringstream msg;
       msg << "Unable to read the number of bands in the images in the  \"ENVI META FILE\" file \n";
       msg << "FileName: " << m_FileName << "\n";
       ImageSeriesFileReaderException e(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
@@ -242,7 +242,7 @@ ImageSeriesFileReaderBase<TImage, TInternalImage>
       }
     catch (ImageSeriesFileReaderException & e)
       {
-      itk::OStringStream msg;
+      std::ostringstream msg;
       msg << e.GetDescription();
       msg << "Image FileName             : " << imageFileName << "\n";
       e.SetDescription(msg.str().c_str());
@@ -272,7 +272,7 @@ ImageSeriesFileReaderBase<TImage, TInternalImage>
       if (!inputFile.good())
         {
         inputFile.close();
-        itk::OStringStream msg;
+        std::ostringstream msg;
         msg << "Unable to read image region in the  \"ENVI META FILE\" file \n";
         msg << "FileName : " << m_FileName << "\n";
         msg << "ImageName: " << imageFileName << "\n";
@@ -289,7 +289,7 @@ ImageSeriesFileReaderBase<TImage, TInternalImage>
     if (!inputFile.good())
       {
       inputFile.close();
-      itk::OStringStream msg;
+      std::ostringstream msg;
       msg << "Unable to read image region selection in the  \"ENVI META FILE\" file \n";
       msg << "FileName : " << m_FileName << "\n";
       msg << "ImageName: " << imageFileName << "\n";
@@ -334,7 +334,7 @@ void
 ImageSeriesFileReaderBase<TImage, TInternalImage>
 ::GenerateData(unsigned int idx)
 {
-  itk::OStringStream msg;
+  std::ostringstream msg;
   msg << "Something wrong... Check the template definition of this class in the program...\n";
   msg << "\"ENVI META FILE\" FileName: " << m_FileName << "\n";
   ImageSeriesFileReaderException e(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
@@ -417,7 +417,7 @@ ImageSeriesFileReaderBase<TImage, TInternalImage>
     if (fileType != kImageFileName)
       {
       ImageSeriesFileReaderException e(__FILE__, __LINE__);
-      itk::OStringStream msg;
+      std::ostringstream msg;
       msg << "The file doesn't exist. \n";
       if (fileType == kFileName) msg << "Filename = " << file << "\n";
       else msg << "File = " << file << "\n";
@@ -437,7 +437,7 @@ ImageSeriesFileReaderBase<TImage, TInternalImage>
       if (!itksys::SystemTools::FileExists(fullFileName.c_str()))
         {
         ImageSeriesFileReaderException e(__FILE__, __LINE__);
-        itk::OStringStream msg;
+        std::ostringstream msg;
         msg << "The image file doesn't exist. \n";
         msg << "ImageFileName     = " << file << "\n";
         msg << "tested path       = " << itksys::SystemTools::GetFilenamePath(m_FileName) << "\n";
@@ -460,7 +460,7 @@ ImageSeriesFileReaderBase<TImage, TInternalImage>
   if (readTester.fail())
     {
     readTester.close();
-    itk::OStringStream msg;
+    std::ostringstream msg;
     msg << "The file couldn't be opened for reading. "
         << std::endl << "Filename: " << file << std::endl;
     ImageSeriesFileReaderException e(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);

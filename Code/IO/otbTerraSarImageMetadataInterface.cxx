@@ -374,7 +374,7 @@ TerraSarImageMetadataInterface::GetNoisePolynomialDegrees(unsigned int noiseReco
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss.str("");
   oss << "noise[" << noiseRecord << "]imageNoise.noiseEstimate.polynomialDegree";
   std::string key = oss.str();
@@ -406,7 +406,7 @@ TerraSarImageMetadataInterface::GetNoisePolynomialDegrees() const
     }
 
   UIntVectorType     polDeg;
-  itk::OStringStream oss;
+  std::ostringstream oss;
 
   unsigned int nbRec = this->GetNumberOfNoiseRecords();
   for (unsigned int i = 0; i < nbRec; i++)
@@ -443,7 +443,7 @@ TerraSarImageMetadataInterface
   unsigned int   polDegs = this->GetNoisePolynomialDegrees(noiseRecord);
 
   DoubleVectorType       polCoef;
-  itk::OStringStream     oss;
+  std::ostringstream     oss;
 
   polCoef.clear();
   // set <= condition because degree N means N+1 coeff
@@ -482,7 +482,7 @@ TerraSarImageMetadataInterface::GetNoisePolynomialCoefficientsList() const
 
   DoubleVectorVectorType polCoefList;
   DoubleVectorType       polCoef;
-  itk::OStringStream     oss;
+  std::ostringstream     oss;
 
   for (unsigned int i = 0; i < nbRec; i++)
     {
@@ -521,7 +521,7 @@ TerraSarImageMetadataInterface
     }
 
   DoubleVectorType         timeList;
-  itk::OStringStream       oss;
+  std::ostringstream       oss;
 
   oss.str("");
   oss << "noise[" << noiseRecord << "]imageNoise.timeUTC";
@@ -582,7 +582,7 @@ TerraSarImageMetadataInterface::GetNoiseTimeUTCList() const
     }
 
   DoubleVectorType         timeList;
-  itk::OStringStream       oss;
+  std::ostringstream       oss;
 
   unsigned int nbRec = this->GetNumberOfNoiseRecords();
   for (unsigned int i = 0; i < nbRec; i++)
@@ -615,7 +615,7 @@ TerraSarImageMetadataInterface::GetNoiseValidityRangeMaxList() const
     }
 
   DoubleVectorType   maxList;
-  itk::OStringStream oss;
+  std::ostringstream oss;
 
   unsigned int nbRec = this->GetNumberOfNoiseRecords();
   for (unsigned int i = 0; i < nbRec; i++)
@@ -646,7 +646,7 @@ TerraSarImageMetadataInterface::GetNoiseValidityRangeMinList() const
     }
 
   DoubleVectorType   minList;
-  itk::OStringStream oss;
+  std::ostringstream oss;
 
   unsigned int nbRec = this->GetNumberOfNoiseRecords();
   for (unsigned int i = 0; i < nbRec; i++)
@@ -679,7 +679,7 @@ TerraSarImageMetadataInterface
     }
 
   double refPoint;
-  itk::OStringStream oss;
+  std::ostringstream oss;
 
   oss.str("");
   oss << "noise[" << noiseRecord << "]imageNoise.noiseEstimate.referencePoint";
@@ -707,7 +707,7 @@ TerraSarImageMetadataInterface::GetNoiseReferencePointList() const
     }
 
   DoubleVectorType   refPointList;
-  itk::OStringStream oss;
+  std::ostringstream oss;
 
   unsigned int nbRec = this->GetNumberOfNoiseRecords();
   for (unsigned int i = 0; i < nbRec; i++)
@@ -824,7 +824,7 @@ TerraSarImageMetadataInterface::GetMeanIncidenceAngles() const
   sum += value;
 
   unsigned int nbAngles = this->GetNumberOfCornerIncidenceAngles();
-  itk::OStringStream oss;
+  std::ostringstream oss;
   for (unsigned int i = 0; i < nbAngles; i++)
     {
     oss.str("");
@@ -892,7 +892,7 @@ TerraSarImageMetadataInterface::GetCornersIncidenceAngles() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  itk::OStringStream oss;
+  std::ostringstream oss;
 
   unsigned int nbAngles = this->GetNumberOfCornerIncidenceAngles();
   for (unsigned int i = 0; i < nbAngles; i++)
@@ -922,8 +922,8 @@ TerraSarImageMetadataInterface::GetCornersIncidenceAnglesIndex() const
     }
 
 
-  itk::OStringStream oss;
-  itk::OStringStream oss2;
+  std::ostringstream oss;
+  std::ostringstream oss2;
 
   unsigned int nbAngles = this->GetNumberOfCornerIncidenceAngles();
   for (unsigned int i = 0; i < nbAngles; i++)

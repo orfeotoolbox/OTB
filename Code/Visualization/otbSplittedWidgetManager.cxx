@@ -127,27 +127,27 @@ void
 SplittedWidgetManager
 ::SetLabel(const char * label)
 {
-  itk::OStringStream oss1;
+  std::ostringstream oss1;
   oss1.str("");
   oss1 << "Full Widget - " << label;
   m_SplittedWidget->m_FullGroup->copy_label(oss1.str().c_str());
 
-  itk::OStringStream oss2;
+  std::ostringstream oss2;
   oss2.str("");
   oss2 << "Zoom Widget - " << label;
   m_SplittedWidget->m_ZoomGroup->copy_label(oss2.str().c_str());
 
-  itk::OStringStream oss3;
+  std::ostringstream oss3;
   oss3.str("");
   oss3 << "Pixel Information Widget - " << label;
   m_SplittedWidget->m_PixelDescriptionGroup->copy_label(oss3.str().c_str());
 
-  itk::OStringStream oss4;
+  std::ostringstream oss4;
   oss4.str("");
   oss4 << "Scroll Widget - " << label;
   m_SplittedWidget->m_QuicklookGroup->copy_label(oss4.str().c_str());
 
-  itk::OStringStream oss5;
+  std::ostringstream oss5;
   oss5.str("");
   oss5 << "Histogram Widget - " << label;
   m_SplittedWidget->m_HistogramsGroup->copy_label(oss5.str().c_str());

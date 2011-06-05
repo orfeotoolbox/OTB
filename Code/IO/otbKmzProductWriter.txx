@@ -189,10 +189,10 @@ KmzProductWriter<TInputImage>
   m_VectorWriter->Update();
     
   // Add the logo to the kmz
-  itk::OStringStream logo_root_path_in_kmz;
+  std::ostringstream logo_root_path_in_kmz;
   logo_root_path_in_kmz << "logo.jpeg";
     
-  itk::OStringStream logo_absolut_path;
+  std::ostringstream logo_absolut_path;
   logo_absolut_path << logoFilename.str();
     
   this->AddFileToKMZ(logo_absolut_path, logo_root_path_in_kmz);
@@ -228,10 +228,10 @@ KmzProductWriter<TInputImage>
     m_VectorWriter->Update();
 
     // Add the legend to the kmz
-    itk::OStringStream legend_root_path_in_kmz;
+    std::ostringstream legend_root_path_in_kmz;
     legend_root_path_in_kmz << "legends/legend_" << idx << ".jpeg";
     
-    itk::OStringStream legend_absolut_path;
+    std::ostringstream legend_absolut_path;
     legend_absolut_path << legendName.str();
 
     this->AddFileToKMZ(legend_absolut_path, legend_root_path_in_kmz);
@@ -1435,7 +1435,7 @@ KmzProductWriter<TInputImage>
   std::string currentImageName;
   std::string tempName;
   
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss << "tiles_" << idx;
   tempName = oss.str();
   

@@ -381,7 +381,7 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD>
 
   if ((1 << dir) >= static_cast<int>(this->GetNumberOfOutputs()))
     {
-    itk::OStringStream msg;
+    std::ostringstream msg;
     msg << "Output number 1<<" << dir << " = " << (1 << dir) << " not allocated\n";
     msg << "Number of excpected outputs " << this->GetNumberOfOutputs() << "\n";
     throw itk::ExceptionObject(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);

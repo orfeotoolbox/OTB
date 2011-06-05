@@ -260,7 +260,7 @@ ImageToPointSetFilter<TInputImage, TOutputPointSet>
   // itkExceptionMacro("subclass should override this method!!!");
   // The ExceptionMacro is not used because gcc warns that a
   // 'noreturn' function does return
-  itk::OStringStream message;
+  std::ostringstream message;
   message << "itk::ERROR: " << this->GetNameOfClass()
           << "(" << this << "): " << "Subclass should override this method!!!";
   itk::ExceptionObject e_(__FILE__, __LINE__, message.str().c_str(), ITK_LOCATION);

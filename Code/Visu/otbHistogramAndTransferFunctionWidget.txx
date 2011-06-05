@@ -199,7 +199,7 @@ HistogramAndTransferFunctionWidget<THistogram, TPixel>
 {
   double x, y;
   // rendering axis values
-  itk::OStringStream oss;
+  std::ostringstream oss;
   glColor3d(m_TextColor[0], m_TextColor[1], m_TextColor[2]);
   gl_font(FL_COURIER_BOLD, 10);
   double step = (m_Histogram->Quantile(0, 1.) - m_Histogram->Quantile(0, 0.))

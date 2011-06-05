@@ -891,7 +891,7 @@ void GDALImageIO::InternalReadImageInformation()
       pOtbGCP.m_GCPZ = psGCP->dfGCPZ;
 
       // Complete the key with the GCP number : GCP_i
-      itk::OStringStream lStream;
+      std::ostringstream lStream;
       lStream << MetaDataKey::GCPParametersKey << cpt;
       key = lStream.str();
 
@@ -964,7 +964,7 @@ void GDALImageIO::InternalReadImageInformation()
 
     for (int cpt = 0; papszMetadata[cpt] != NULL; cpt++)
       {
-      itk::OStringStream lStream;
+      std::ostringstream lStream;
       lStream << MetaDataKey::MetadataKey << cpt;
       key = lStream.str();
 
@@ -984,7 +984,7 @@ void GDALImageIO::InternalReadImageInformation()
 
     for (int cpt = 0; papszMetadata[cpt] != NULL; cpt++)
       {
-      itk::OStringStream lStream;
+      std::ostringstream lStream;
       lStream << MetaDataKey::SubMetadataKey << cpt;
       key = lStream.str();
 
@@ -1414,7 +1414,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
 
   // Now initialize the itk dictionary
   itk::MetaDataDictionary& dict = this->GetMetaDataDictionary();
-  itk::OStringStream oss;
+  std::ostringstream oss;
   GDALDataset* dataset = m_Dataset->GetDataSet();
 
   /* -------------------------------------------------------------------- */
@@ -1432,7 +1432,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
     for (unsigned int gcpIndex = 0; gcpIndex < gcpCount; ++gcpIndex)
       {
       //Build the GCP string in the form of GCP_n
-      itk::OStringStream lStream;
+      std::ostringstream lStream;
       lStream << MetaDataKey::GCPParametersKey << gcpIndex;
       std::string key = lStream.str();
 

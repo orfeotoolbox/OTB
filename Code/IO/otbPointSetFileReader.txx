@@ -89,7 +89,7 @@ PointSetFileReader<TOutputPointSet>
   if (!itksys::SystemTools::FileExists(m_FileName.c_str()))
     {
     itk::ImageFileReaderException e(__FILE__, __LINE__);
-    itk::OStringStream msg;
+    std::ostringstream msg;
     msg << "The file doesn't exist. "
         << std::endl << "Filename = " << m_FileName
         << std::endl;
@@ -104,7 +104,7 @@ PointSetFileReader<TOutputPointSet>
   if (readTester.fail())
     {
     readTester.close();
-    itk::OStringStream msg;
+    std::ostringstream msg;
     msg << "The file couldn't be opened for reading. "
         << std::endl << "Filename: " << m_FileName
         << std::endl;

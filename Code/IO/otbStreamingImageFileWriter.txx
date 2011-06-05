@@ -427,7 +427,7 @@ StreamingImageFileWriter<TInputImage>
   if (m_ImageIO.IsNull())
     {
     itk::ImageFileWriterException e(__FILE__, __LINE__);
-    itk::OStringStream msg;
+    std::ostringstream msg;
     msg << " Could not create IO object for file "
         << m_FileName.c_str() << std::endl;
     msg << "  Tried to create one of the following:" << std::endl;

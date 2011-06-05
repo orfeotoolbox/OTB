@@ -274,7 +274,7 @@ public:
 
   const std::string Describe(const PixelType& spixel) const
   {
-    itk::OStringStream oss;
+    std::ostringstream oss;
     oss << m_PixelRepresentationFunction->GetDescription() << ": ";
     typename PixelRepresentationFunctionType::ChannelListType channels;
     channels = m_PixelRepresentationFunction->GetChannelList();

@@ -466,7 +466,7 @@ MapFileProductWriter<TInputImage>
   m_Polygon->SetNodeType(otb::FEATURE_POLYGON);
   m_Polygon->SetPolygonExteriorRing(poly);
   
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss << "tiles/tile_";
   oss <<m_CurrentDepth <<"_"<< x <<"_"<< y <<".tif";
   

@@ -63,7 +63,7 @@ VectorDataFileReader<TOutputVectorData>
   if (!itksys::SystemTools::FileExists(this->m_FileName.c_str()))
     {
     VectorDataFileReaderException e(__FILE__, __LINE__);
-    itk::OStringStream msg;
+    std::ostringstream msg;
     msg << "The file doesn't exist. "
         << std::endl << "Filename = " << this->m_FileName
         << std::endl;
@@ -83,7 +83,7 @@ VectorDataFileReader<TOutputVectorData>
     if (readTester.fail())
       {
       readTester.close();
-      itk::OStringStream msg;
+      std::ostringstream msg;
       msg << "The file couldn't be opened for reading. "
           << std::endl << "Filename: " << this->m_FileName
           << std::endl;
@@ -147,7 +147,7 @@ VectorDataFileReader<TOutputVectorData>
 
   if (m_VectorDataIO.IsNull())
     {
-    itk::OStringStream msg;
+    std::ostringstream msg;
     msg << " Could not create IO object for file "
         << m_FileName.c_str() << std::endl;
     if (m_ExceptionMessage.size())
