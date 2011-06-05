@@ -1,6 +1,6 @@
 // kindly stolen from the build files of OTB-Wrapping (Typedefs/itkBase.includes, Typedefs/wrap_ITKCommonBase.i)
 
-
+%include "RefCountMacro.i"
 
 %include <exception.i>
 %include <typemaps.i>
@@ -96,30 +96,7 @@
      virtual void PrintHeader(std::ostream & os, itkIndent indent) const;
      virtual void PrintTrailer(std::ostream & os, itkIndent indent) const;
  };
-
-
- class itkLightObject_Pointer {
-   public:
-     itkLightObject_Pointer();
-     itkLightObject_Pointer(itkLightObject_Pointer const & p);
-     itkLightObject_Pointer(itkLightObject * p);
-     ~itkLightObject_Pointer();
-     itkLightObject * operator->() const;
-     bool IsNotNull() const;
-     bool IsNull() const;
-     itkLightObject * GetPointer() const;
-     bool operator<(itkLightObject_Pointer const & r) const;
-     bool operator>(itkLightObject_Pointer const & r) const;
-     bool operator<=(itkLightObject_Pointer const & r) const;
-     bool operator>=(itkLightObject_Pointer const & r) const;
-     itkLightObject_Pointer & operator=(itkLightObject_Pointer const & r);
-     itkLightObject_Pointer & operator=(itkLightObject * r);
-     itkLightObject * Print(std::ostream & os) const;
-   private:
-     void Register();
-     void UnRegister();
-   protected:
- };
+ DECLARE_REF_COUNT_CLASS( itkLightObject )
 
  class itkObject : public itkLightObject {
    public:
@@ -159,29 +136,7 @@
      virtual void PrintSelf(std::ostream & os, itkIndent indent) const;
      bool PrintObservers(std::ostream & os, itkIndent indent) const;
  };
-
- class itkObject_Pointer {
-   public:
-     itkObject_Pointer();
-     itkObject_Pointer(itkObject_Pointer const & p);
-     itkObject_Pointer(itkObject * p);
-     ~itkObject_Pointer();
-     itkObject * operator->() const;
-     bool IsNotNull() const;
-     bool IsNull() const;
-     itkObject * GetPointer() const;
-     bool operator<(itkObject_Pointer const & r) const;
-     bool operator>(itkObject_Pointer const & r) const;
-     bool operator<=(itkObject_Pointer const & r) const;
-     bool operator>=(itkObject_Pointer const & r) const;
-     itkObject_Pointer & operator=(itkObject_Pointer const & r);
-     itkObject_Pointer & operator=(itkObject * r);
-     itkObject * Print(std::ostream & os) const;
-   private:
-     void Register();
-     void UnRegister();
-   protected:
- };
+ DECLARE_REF_COUNT_CLASS( itkObject )
 
  
 
@@ -220,30 +175,7 @@
      itkObjectFactoryBase();
      ~itkObjectFactoryBase();
  };
-
-
- class itkObjectFactoryBase_Pointer {
-   public:
-     itkObjectFactoryBase_Pointer();
-     itkObjectFactoryBase_Pointer(itkObjectFactoryBase_Pointer const & p);
-     itkObjectFactoryBase_Pointer(itkObjectFactoryBase * p);
-     ~itkObjectFactoryBase_Pointer();
-     itkObjectFactoryBase * operator->() const;
-     bool IsNotNull() const;
-     bool IsNull() const;
-     itkObjectFactoryBase * GetPointer() const;
-     bool operator<(itkObjectFactoryBase_Pointer const & r) const;
-     bool operator>(itkObjectFactoryBase_Pointer const & r) const;
-     bool operator<=(itkObjectFactoryBase_Pointer const & r) const;
-     bool operator>=(itkObjectFactoryBase_Pointer const & r) const;
-     itkObjectFactoryBase_Pointer & operator=(itkObjectFactoryBase_Pointer const & r);
-     itkObjectFactoryBase_Pointer & operator=(itkObjectFactoryBase * r);
-     itkObjectFactoryBase * Print(std::ostream & os) const;
-   private:
-     void Register();
-     void UnRegister();
-   protected:
- };
+ DECLARE_REF_COUNT_CLASS( itkObjectFactoryBase )
 
 
  class itkMetaDataDictionary {
@@ -275,29 +207,8 @@
      itkCommand();
      ~itkCommand();
  };
+ DECLARE_REF_COUNT_CLASS( itkCommand )
 
- class itkCommand_Pointer {
-   public:
-     itkCommand_Pointer();
-     itkCommand_Pointer(itkCommand_Pointer const & p);
-     itkCommand_Pointer(itkCommand * p);
-     ~itkCommand_Pointer();
-     itkCommand * operator->() const;
-     bool IsNotNull() const;
-     bool IsNull() const;
-     itkCommand * GetPointer() const;
-     bool operator<(itkCommand_Pointer const & r) const;
-     bool operator>(itkCommand_Pointer const & r) const;
-     bool operator<=(itkCommand_Pointer const & r) const;
-     bool operator>=(itkCommand_Pointer const & r) const;
-     itkCommand_Pointer & operator=(itkCommand_Pointer const & r);
-     itkCommand_Pointer & operator=(itkCommand * r);
-     itkCommand * Print(std::ostream & os) const;
-   private:
-     void Register();
-     void UnRegister();
-   protected:
- };
 
 
  class itkEventObject {

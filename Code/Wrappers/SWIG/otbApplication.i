@@ -1,5 +1,5 @@
 %include "itkMacro.i"
-%include "RefCountMacro.i"
+
 
 
  %module otbApplication
@@ -84,7 +84,7 @@ private:
 };
 DECLARE_REF_COUNT_CLASS( ParameterGroup )
 
-class Application: public itk::Object
+class Application: public itkObject
 {
 public:
   itkSetStringMacro(Name);
