@@ -21,7 +21,6 @@
 #include <vector>
 
 //TODO change this include  have to define from what inherate this class
-//#include "otbPolyLineParametricPathWithValue.h" //for vcl_abs
 #include "ogrsf_frmts.h"
 #include "otbVectorData.h"
 
@@ -33,7 +32,7 @@ namespace otb
  *
  */
 template <class TVectorData>
-class OGRIOHelper
+class OGRIOHelper: public itk::Object
 {
 public:
   /** Template parameters typedefs */
@@ -57,27 +56,16 @@ public:
   typedef typename PolygonListType::Pointer               PolygonListPointerType;
   typedef typename VectorDataType::Pointer                VectorDataPointerType;
   typedef typename VectorDataType::ConstPointer           VectorDataConstPointerType;
-  //typedef typename Superclass::SpacingType       SpacingType;
-  //typedef typename Superclass::PointType         OriginType;
+
+  /** Method for creation through the object factory. */
+  itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(OGRIOHelper, 0);
+  itkTypeMacro(OGRIOHelper, itk::Object);
 
-  /**
-   * \param labelObject the label object to vectorize
-   * \return The vectorized label object as a polygon.
-   */
-  //inline PolygonPointerType operator()(const LabelObjectType * labelObject);
   /** Conversion tools */
-
-  inline DataNodePointerType ConvertGeometryToPointNode(const OGRGeometry * ogrGeometry) const;
-
-  inline DataNodePointerType ConvertGeometryToLineNode(const OGRGeometry * ogrGeometry) const;
-
-  inline DataNodePointerType ConvertGeometryToPolygonNode(const OGRGeometry * ogrGeometry) const;
-
   inline void ConvertOGRLayerToDataTreeNode(OGRLayer * layer, InternalTreeNodeType * documentPtr) const;
-  /** end conversion tools */
+
 
   unsigned int ProcessNodeWrite(InternalTreeNodeType * source,
                                 OGRDataSource * m_DataSource,
@@ -90,8 +78,17 @@ public:
   virtual ~OGRIOHelper() {}
 
 private:
+
+  inline void ConvertGeometryToPointNode(const OGRGeometry * ogrGeometry, DataNodePointerType node) const;
+
+  inline void ConvertGeometryToLineNode(const OGRGeometry * ogrGeometry, DataNodePointerType node) const;
+
+  inline void ConvertGeometryToPolygonNode(const OGRGeometry * ogrGeometry, DataNodePointerType node) const;
+
+
   /** Number of layer in the Tree*/
   unsigned int m_Kept;
+
 }; // end class OGRIOHelper
 
 } // end namespace otb
