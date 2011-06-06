@@ -1064,7 +1064,7 @@ IF(OTB_DATA_USE_LARGEINPUT)
 #              3 )
 #    SET_TESTS_PROPERTIES(prTvVectorDataIntoImageProjectionFilter_${VectorDataIntoImage_TESTNB}
 #                         PROPERTIES WILL_FAIL true)
-  ENDFOREACH()
+#  ENDFOREACH()
   
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
