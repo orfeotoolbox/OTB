@@ -35,10 +35,12 @@ int VectorDataDSValidation::Describe(ApplicationDescriptor* descriptor)
                         "in", 1, true, ApplicationDescriptor::FileName);
   descriptor->AddOption("OutputShapeFileName", "Output Shape file name",
                         "out", 1, true, ApplicationDescriptor::FileName);
-  descriptor->AddOption("DescriptorsModelFileName", "Fuzzy descriptors model xml file (default: NDVI(0.25, 0.5, 0.75, 0.99) / RADIOM(0.25, 0.5, 0.75, 0.90))",
+  descriptor->AddOption("DescriptorsModelFileName", "Fuzzy descriptors model xml file (default: NONDVI(0.25, 0.5, 0.75, 0.99) / ROADSA(0.25, 0.5, 0.75, 0.90))",
                         "descMod", 1, true, ApplicationDescriptor::FileName);
-  descriptor->AddOptionNParams("Hypothesis", "Hypothesis (default: NDVI, RADIOM)",
-                               "hyp", false, ApplicationDescriptor::StringList);
+  descriptor->AddOptionNParams("BeliefHypothesis", "Hypothesis (default: ROADSA) used to compute the Belief",
+                               "Bhyp", false, ApplicationDescriptor::StringList);
+  descriptor->AddOptionNParams("PlausibilityHypothesis", "Hypothesis (default: ROADSA, NONDVI, NOBUIL) used to compute the Plausibility",
+                               "Phyp", false, ApplicationDescriptor::StringList);
   descriptor->AddOption("CriterionFormula", "Criterion formula expression (default: ((Belief + Plausibility)/2) >= 0.5)",
                         "Cri", 1, false, ApplicationDescriptor::String);
   descriptor->AddOption("CriterionThreshold", "Criterion threshold (by default 0.5)",
@@ -73,27 +75,40 @@ int VectorDataDSValidation::Execute(otb::ApplicationOptionsResult* parseResult)
   DescriptorsModelType descMod = FuzzyDescriptorsModelManager::Read( descModFile.c_str() );
 
   // Load the hypothesis
-  LabelSetType hypothesis;
-  if (parseResult->IsOptionPresent("Hypothesis"))
+  LabelSetType Bhyp, Phyp;
+  if (parseResult->IsOptionPresent("BeliefHypothesis"))
     {
-    unsigned int nbOfHypo = parseResult->GetNumberOfParameters("Hypothesis");
+    unsigned int nbOfHypo = parseResult->GetNumberOfParameters("BeliefHypothesis");
     for (unsigned int i = 0; i < nbOfHypo; i++)
       {
-      hypothesis.insert(parseResult->GetParameterString("Hypothesis", i));
+      Bhyp.insert(parseResult->GetParameterString("BeliefHypothesis", i));
       }
     }
   else
     {
-    hypothesis.insert("NDVI");
-    hypothesis.insert("RADIOM");
-    hypothesis.insert("DBOVERLAP");
+    Bhyp.insert("ROADSA");
     }
- 
+  if (parseResult->IsOptionPresent("PlausibilityHypothesis"))
+    {
+    int nbSet = parseResult->GetNumberOfParameters("PlausibilityHypothesis");
+    for (int i = 0; i < nbSet; i++)
+      {
+      Phyp.insert(parseResult->GetParameterString("PlausibilityHypothesis", i));
+      }
+    }
+  else
+    {
+    Phyp.insert("ROADSA");
+    Phyp.insert("NONDVI");
+    Phyp.insert("NOBUIL");
+    }
+
   // Process
   VectorDataValidationFilterType::Pointer filter = VectorDataValidationFilterType::New();
   filter->SetInput(vdReader->GetOutput());
   filter->SetDescriptorModels(descMod);
-  filter->SetHypothesis(hypothesis);
+  filter->SetBeliefHypothesis(Bhyp);
+  filter->SetPlausibilityHypothesis(Phyp);
   if (parseResult->IsOptionPresent("CriterionFormula"))
     {
     filter->SetCriterionFormula(parseResult->GetParameterString("CriterionFormula"));
