@@ -41,20 +41,19 @@ int main(int argc, char* argv[])
   if (argc > 2)
     {
     std::copy(argv + 2, argv + argc, std::back_inserter(modulePathList));
+
+    // Load the path in the environment
+    std::string specificEnv("ITK_AUTOLOAD_PATH=");
+    std::list<std::string>::const_iterator it;
+    for (it = modulePathList.begin(); it != modulePathList.end(); ++it)
+      {
+      std::string modulePath = *it;
+
+      specificEnv += *it;
+      specificEnv += ":";
+      }
+    putenv (const_cast<char *>(specificEnv.c_str()));
     }
-
-  // Load the path in the environment
-  std::string specificEnv("ITK_AUTOLOAD_PATH=");
-  std::list<std::string>::const_iterator it;
-  for (it = modulePathList.begin(); it != modulePathList.end(); ++it)
-    {
-    std::string modulePath = *it;
-
-    specificEnv += *it;
-    specificEnv += ":";
-    }
-  putenv (const_cast<char *>(specificEnv.c_str()));
-
 
   // Reload factories to take into account new path
   itk::ObjectFactoryBase::ReHash();
@@ -65,11 +64,16 @@ int main(int argc, char* argv[])
     {
     std::cerr << "Could not find application " << moduleName << std::endl;
 
-    std::list<std::string> list = ApplicationFactory::GetAvailableApplications();
-
-    std::cout << "Module search path : " << specificEnv << std::endl;
-    std::cout << "Available applications :" << std::endl;
+    std::cout << "Module search path :" << std::endl;
     std::list<std::string>::const_iterator it;
+    for (it = modulePathList.begin(); it != modulePathList.end(); ++it)
+      {
+      std::cout << "  " << *it << std::endl;
+      }
+
+    std::cout << "Available applications :" << std::endl;
+    std::list<std::string> list = ApplicationFactory::GetAvailableApplications();
+    //std::list<std::string>::const_iterator it;
     for (it = list.begin(); it != list.end(); ++it)
       {
       std::cout << "  " << *it << std::endl;
