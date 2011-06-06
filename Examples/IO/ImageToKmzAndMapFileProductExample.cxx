@@ -56,7 +56,9 @@ int main(int argc, char* argv[])
 
   if (argc < 6)
     {
-    std::cerr << "Usage: " << argv[0] << " infname outfname kmzFileName a1x a1y b1x b1y b1z ... aNx aNy aNz bNx bNy bNz" << std::endl;
+    std::cerr << "Usage: " << argv[0] 
+              << " infname outfname kmzFileName "
+              <<"a1x a1y b1x b1y b1z ... aNx aNy aNz bNx bNy bNz" << std::endl;
     return EXIT_FAILURE;
     }
   else if ((argc - 7) % 5 != 0)

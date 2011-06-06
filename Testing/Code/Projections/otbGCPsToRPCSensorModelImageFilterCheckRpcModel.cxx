@@ -128,7 +128,7 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char* argv[])
   
   for (unsigned int gcpId = 0; gcpId < nbGCPs; ++gcpId)
     {
-    ImageType::IndexType index;    
+    ImageType::IndexType index;
     index[0] = parseResult->GetParameterFloat("--GroudControlPoints",     gcpId * 5);
     index[1] = parseResult->GetParameterFloat("--GroudControlPoints", 1 + gcpId * 5);
 
@@ -136,7 +136,6 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char* argv[])
     reader->GetOutput()->TransformIndexToPhysicalPoint(index, point);
     transformedPoint = grsTrasnform->TransformPoint(point);
     
-
     // reference point
     ImageType::PointType geoPoint;
     geoPoint[0] = parseResult->GetParameterFloat("--GroudControlPoints", 2 + gcpId * 5);
@@ -158,9 +157,11 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char* argv[])
     if( residual > parseResult->GetParameterFloat("--ErrorAllowed"))
       {
       std::cout << "Reference : "<< geoPoint 
-                <<" --> Result of the reprojection using the estimated RpcModel "<< grsTrasnform->TransformPoint(point)  
+                <<" --> Result of the reprojection using the estimated RpcModel "
+                << grsTrasnform->TransformPoint(point)  
                 << std::endl
-                << " Residual ["<< residual << "] is higher than the tolerance ["<< parseResult->GetParameterFloat("--ErrorAllowed")
+                << " Residual ["<< residual << "] is higher than the tolerance ["
+                << parseResult->GetParameterFloat("--ErrorAllowed")
                 <<"], there is a problem with the estimated RpcModel"
                 <<std::endl<<std::endl;
       isErrorDetected = true;

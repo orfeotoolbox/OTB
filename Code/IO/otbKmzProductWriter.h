@@ -74,47 +74,48 @@ public:
   itkTypeMacro(KmzProductWriter, itk::ProcessObject);
 
   /** Some convenient typedefs. */
-  typedef TInputImage                          InputImageType;
+  typedef TInputImage                                  InputImageType;
   typedef typename InputImageType::InternalPixelType   InternalPixelType;
-  typedef typename InputImageType::SizeType    SizeType;
-  typedef typename InputImageType::IndexType   IndexType;
-  typedef typename InputImageType::RegionType  RegionType;
-  typedef unsigned char                        OutputPixelType;
-  typedef typename InputImageType::Pointer     InputImagePointer;
-  typedef typename InputImageType::PixelType   InputImagePixelType;
+  typedef typename InputImageType::SizeType            SizeType;
+  typedef typename InputImageType::IndexType           IndexType;
+  typedef typename InputImageType::RegionType          RegionType;
+  typedef unsigned char                                OutputPixelType;
+  typedef typename InputImageType::Pointer             InputImagePointer;
+  typedef typename InputImageType::PixelType           InputImagePixelType;
 
-  typedef VectorData<double, 2>                    VectorDataType;
-  typedef typename VectorDataType::DataNodeType   DataNodeType;
-  typedef typename DataNodeType::PolygonType      PolygonType;
-  typedef typename PolygonType::VertexType        VertexType;
+  typedef VectorData<double, 2>                        VectorDataType;
+  typedef typename VectorDataType::DataNodeType        DataNodeType;
+  typedef typename DataNodeType::PolygonType           PolygonType;
+  typedef typename PolygonType::VertexType             VertexType;
   
-  typedef VectorDataFileWriter<VectorDataType>    VectorDataFileWriterType;
+  typedef VectorDataFileWriter<VectorDataType>         VectorDataFileWriterType;
   
 
-  /// Multi channels Extract ROI filter
-  typedef MultiChannelExtractROI<InternalPixelType, OutputPixelType> VectorImageExtractROIFilterType;
+  // Multi channels Extract ROI filter
+  typedef MultiChannelExtractROI<InternalPixelType,  OutputPixelType> VectorImageExtractROIFilterType;
 
   // Writer
-  typedef ImageFileWriter< VectorImage<OutputPixelType> >     VectorWriterType;
+  typedef ImageFileWriter< VectorImage<OutputPixelType> >             VectorWriterType;
 
   // Resampler
   typedef StreamingShrinkImageFilter<InputImageType, InputImageType > StreamingShrinkImageFilterType;
 
   // Intensity Rescale
   typedef VectorRescaleIntensityImageFilter<InputImageType,
-              InputImageType> VectorRescaleIntensityImageFilterType;
+              InputImageType>                                         VectorRescaleIntensityImageFilterType;
 
   // Transformer
-  typedef GenericRSTransform<>           TransformType;
-  typedef TransformType::InputPointType  InputPointType;
-  typedef TransformType::OutputPointType OutputPointType;
+  typedef GenericRSTransform<>                                        TransformType;
+  typedef TransformType::InputPointType                               InputPointType;
+  typedef TransformType::OutputPointType                              OutputPointType;
 
   // Cast Image Filter
-  typedef itk::CastImageFilter<InputImageType, VectorImage<OutputPixelType> > CastFilterType;
+  typedef itk::CastImageFilter<InputImageType, 
+                               VectorImage<OutputPixelType> >         CastFilterType;
 
   // std::pair description <-> legend (image)
-  typedef std::pair<std::string, InputImagePointer>      LegendPairType;
-  typedef std::vector<LegendPairType>                   LegendVectorType;
+  typedef std::pair<std::string, InputImagePointer>                   LegendPairType;
+  typedef std::vector<LegendPairType>                                 LegendVectorType;
   
   /** Dimension of input image. */
   itkStaticConstMacro(InputImageDimension, unsigned int,
