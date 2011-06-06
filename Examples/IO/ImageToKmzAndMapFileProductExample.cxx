@@ -201,6 +201,7 @@ int main(int argc, char* argv[])
   mapWriter->SetShapeIndexPath(argv[4]);
   mapWriter->SetCGIPath(argv[5]);
   mapWriter->SetSRID(4326);
+  mapWriter->SetDEMDirectory(argv[6]);
   
   mapWriter->Update();
 // Software Guide : EndCodeSnippet
