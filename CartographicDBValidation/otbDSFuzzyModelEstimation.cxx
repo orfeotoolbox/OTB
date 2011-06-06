@@ -96,8 +96,10 @@ int otb::DSFuzzyModelEstimation::Describe(ApplicationDescriptor* descriptor)
                         "nsin", 1, false, ApplicationDescriptor::FileName);
   descriptor->AddOption("Output", "Output Model File Name",
                         "out", 1,  true, ApplicationDescriptor::FileName);
-  descriptor->AddOption("Hypothesis", "Dempster Shafer study hypothesis",
-                        "hyp", 3, false, ApplicationDescriptor::StringList);
+  descriptor->AddOption("BeliefHypothesis", "Dempster Shafer study hypothesis to compute Belief",
+                        "Bhyp", 3, false, ApplicationDescriptor::StringList);
+  descriptor->AddOption("PlausibilityHypothesis", "Dempster Shafer study hypothesis to compute Plausibility",
+                        "Phyp", 3, false, ApplicationDescriptor::StringList);
   descriptor->AddOption("Criterion", "Dempster Shafer Criterion (by default (Belief+Plausibility)/2)",
                         "cri", 1, false, ApplicationDescriptor::String);
   descriptor->AddOption("weighting", "Coefficient between 0 and 1 to promote undetection or false detections (default 0.5)",
@@ -360,23 +362,39 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
 
   //Cost Function
   //Format Hypothesis
-  LabelSetType hyp;
-  if (parseResult->IsOptionPresent("Hypothesis"))
+  LabelSetType Bhyp, Phyp;
+  if (parseResult->IsOptionPresent("BeliefHypothesis"))
     {
-    int nbSet = parseResult->GetNumberOfParameters("Hypothesis");
+    int nbSet = parseResult->GetNumberOfParameters("BeliefHypothesis");
     for (int i = 0; i < nbSet; i++)
       {
-      std::string str = parseResult->GetParameterString("Hypothesis", i);
-      hyp.insert(str);
+      std::string str = parseResult->GetParameterString("BeliefHypothesis", i);
+      Bhyp.insert(str);
       }
     }
   else
     {
-    hyp.insert("NDVI");
-    hyp.insert("RADIOM");
-    hyp.insert("DBOVERLAP");
+    Bhyp.insert("ROADSA");
     }
-  costFunction->SetHypothesis(hyp);
+  costFunction->SetBeliefHypothesis(Bhyp);
+
+  if (parseResult->IsOptionPresent("PlausibilityHypothesis"))
+    {
+    int nbSet = parseResult->GetNumberOfParameters("PlausibilityHypothesis");
+    for (int i = 0; i < nbSet; i++)
+      {
+      std::string str = parseResult->GetParameterString("PlausibilityHypothesis", i);
+      Phyp.insert(str);
+      }
+    }
+  else
+    {
+    Phyp.insert("ROADSA");
+    Phyp.insert("NONDVI");
+    Phyp.insert("NOBUIL");
+    }
+  costFunction->SetPlausibilityHypothesis(Phyp);
+
   if (parseResult->IsOptionPresent("Weighting"))
     {
     costFunction->SetWeight(parseResult->GetParameterDouble("Weighting"));
@@ -412,6 +430,7 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
   OptimizerType::ParametersType
   initialPosition( costFunction->GetNumberOfParameters() );
 
+  /*[0.0585698, 0.158364, 0.207495, 0.999979, 0.208119, 0.310084, 0.507505, 1, 0.106548, 0.207591, 0.306967, 0.940949]
   for (unsigned int i = 0; i < costFunction->GetNumberOfParameters(); i += 4)
     {
     initialPosition.SetElement(i,   0.25);
@@ -419,6 +438,21 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
     initialPosition.SetElement(i+2, 0.75);
     initialPosition.SetElement(i+3, 0.99);
     }
+  */
+  initialPosition.SetElement(0,   0.05);
+  initialPosition.SetElement(1,   0.15);
+  initialPosition.SetElement(2,   0.20);
+  initialPosition.SetElement(3,   0.99);
+
+  initialPosition.SetElement(4,   0.15);
+  initialPosition.SetElement(5,   0.3);
+  initialPosition.SetElement(6,   0.5);
+  initialPosition.SetElement(7,   0.99);
+
+  initialPosition.SetElement(8,   0.1);
+  initialPosition.SetElement(9,   0.2);
+  initialPosition.SetElement(10,   0.3);
+  initialPosition.SetElement(11,   0.99);
 
   optimizer->SetInitialPosition(initialPosition);
 
@@ -452,23 +486,23 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
   std::cout << "Results : " << optimizer->GetCurrentPosition() << std::endl;
 
   otb::FuzzyDescriptorsModelManager::DescriptorsModelType model;
-  otb::FuzzyDescriptorsModelManager::ParameterType        ndvi, radiom, overlap;
+  otb::FuzzyDescriptorsModelManager::ParameterType        noNDVI, roadSA, noBuil;
 
   for (unsigned int i = 0; i<4; i++)
     {
-    ndvi.push_back(optimizer->GetCurrentPosition()[i]);
+    noNDVI.push_back(optimizer->GetCurrentPosition()[i]);
     }
   for (unsigned int i = 0; i<4; i++)
     {
-    radiom.push_back(optimizer->GetCurrentPosition()[i+4]);
+    roadSA.push_back(optimizer->GetCurrentPosition()[i+4]);
     }
   for (unsigned int i = 0; i<4; i++)
     {
-    overlap.push_back(optimizer->GetCurrentPosition()[i+8]);
+    noBuil.push_back(optimizer->GetCurrentPosition()[i+8]);
     }
-  otb::FuzzyDescriptorsModelManager::AddDescriptor("NDVI", ndvi, model);
-  otb::FuzzyDescriptorsModelManager::AddDescriptor("RADIOM", radiom, model);
-  otb::FuzzyDescriptorsModelManager::AddDescriptor("DBOVER", overlap, model);
+  otb::FuzzyDescriptorsModelManager::AddDescriptor("NONDVI", noNDVI, model);
+  otb::FuzzyDescriptorsModelManager::AddDescriptor("ROADSA", roadSA, model);
+  otb::FuzzyDescriptorsModelManager::AddDescriptor("NOBUIL", noBuil, model);
   otb::FuzzyDescriptorsModelManager::Save(parseResult->GetParameterString("Output"),
                                           model);
 
