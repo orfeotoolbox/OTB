@@ -30,7 +30,7 @@
 // and MapFile products.
 // Note that the \doxygen{otb}{KmzProductWriter} and the
 // \doxygen{otb}{MapFileProductWriter} can only process inputs with a
-// non empty keyword list.
+// non empty geographical informations.
 //
 // The first step toward the use of these filters is to include the
 // proper header files: the one for the rpc sensor estimation filter and
@@ -47,6 +47,7 @@
 #include "otbKmzProductWriter.h"
 #include "otbMapFileProductWriter.h"
 #include "otbGCPsToRPCSensorModelImageFilter.h"
+
 // Software Guide : EndCodeSnippet
 //
 
@@ -58,7 +59,7 @@ int main(int argc, char* argv[])
     std::cerr << "Usage: " << argv[0] << " infname outfname kmzFileName a1x a1y b1x b1y b1z ... aNx aNy aNz bNx bNy bNz" << std::endl;
     return EXIT_FAILURE;
     }
-  else if ((argc - 6) % 5 != 0)
+  else if ((argc - 7) % 5 != 0)
     {
     std::cerr << "Inconsistent GCPs description!" << std::endl;
     return EXIT_FAILURE;
@@ -76,6 +77,7 @@ int main(int argc, char* argv[])
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(argv[1]);
+
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -116,13 +118,13 @@ int main(int argc, char* argv[])
 
 // Software Guide : BeginCodeSnippet
     Point2DType sensorPoint;
-    sensorPoint[0] = atof(argv[6 + gcpId * 5]);
-    sensorPoint[1] = atof(argv[7 + gcpId * 5]);
+    sensorPoint[0] = atof(argv[7 + gcpId * 5]);
+    sensorPoint[1] = atof(argv[8 + gcpId * 5]);
 
     Point3DType geoPoint;
-    geoPoint[0] = atof(argv[8 + 5 * gcpId]);
-    geoPoint[1] = atof(argv[9 + 5 * gcpId]);
-    geoPoint[2] = atof(argv[10+ 5 * gcpId]);
+    geoPoint[0] = atof(argv[9 + 5 * gcpId]);
+    geoPoint[1] = atof(argv[10 + 5 * gcpId]);
+    geoPoint[2] = atof(argv[11+ 5 * gcpId]);
 
     rpcEstimator->AddGCP(sensorPoint, geoPoint);
 // Software Guide : EndCodeSnippet
@@ -132,7 +134,6 @@ int main(int argc, char* argv[])
 
   rpcEstimator->GetOutput()->UpdateOutputInformation();
   std::cout << "Residual ground error: " << rpcEstimator->GetRMSGroundError() << std::endl;
-
   
 // Software Guide : BeginLatex
 //
@@ -159,7 +160,7 @@ int main(int argc, char* argv[])
 // Software Guide : BeginCodeSnippet
   kmzWriter->SetInput(rpcEstimator->GetOutput());
   kmzWriter->SetPath(argv[2]);
-  
+  kmzWriter->SetDEMDirectory(argv[6]);
   kmzWriter->Update();
 // Software Guide : EndCodeSnippet
 
@@ -169,7 +170,7 @@ int main(int argc, char* argv[])
 // between objects, points MapServer (http://mapserver.org/) to where
 // data are located and defines how things are to be drawn. The class
 // \doxygen{otb}{MapFileProductWriter} allow producing the mapserver
-// configuration file, the tiles to draw, and shapefiles descrining
+// configuration file, the tiles to draw, and shapefiles describing
 // the tiles and where to find them.
 // The Mapfile writer allow setting the complete path to the mapfile
 // via SetFileName(std::string), the path where to store the tiles via
@@ -189,7 +190,7 @@ int main(int argc, char* argv[])
 // The user can also specify a Spatial Reference System Identifier
 // (SRID) to choose his projection. In this example we choose WGS84 to
 // project our datas in. The SRID relative to WGS84 is 4326.
-// Finally, we trigger the MapFile writting by calling the
+// Finally, we trigger the MapFile writing by calling the
 // \code{Update()}  method on the writer.
 //
 // Software Guide : EndLatex

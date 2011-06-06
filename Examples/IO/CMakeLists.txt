@@ -175,6 +175,7 @@ ADD_TEST(ioImageToKmzAndMapFileProductExample ${EXE_TESTS1}
          ${TEMP}/mapserverExample/ioTeHaitiMapFileProduct.map
          ${TEMP}/mapserverExample/shapeindex
          http://localhost/cgi-bin/mapserv
+         ${DATA}/DEM/srtm_directory
          198.000000 199.000000 -72.351257 18.555075 0.000000 
          196.000000 194.000000 -72.352051 18.556946 0.000000
          208.000000 157.000000 -72.346130 18.574358 0.000000
