@@ -19,6 +19,7 @@
 #define __otbVectorDataIntoImageProjectionFilter_txx
 
 #include "otbVectorDataIntoImageProjectionFilter.h"
+#include "boost/algorithm/string.hpp"
 
 namespace otb
 {
@@ -162,8 +163,16 @@ VectorDataIntoImageProjectionFilter<TInputVectorData, TInputImage>
 
   rsRegion.SetOrigin(rsOrigin);
   rsRegion.SetSize(rsSize);
-  rsRegion.SetRegionProjection(m_InputImage->GetProjectionRef());
-  rsRegion.SetKeywordList(m_InputImage->GetImageKeywordlist());
+
+  if (m_InputImage->GetProjectionRef().empty()
+      || boost::algorithm::istarts_with(m_InputImage->GetProjectionRef(), "LOCAL_CS") )
+    {
+    rsRegion.SetKeywordList(m_InputImage->GetImageKeywordlist());
+    }
+  else
+    {
+    rsRegion.SetRegionProjection(m_InputImage->GetProjectionRef());
+    }
 
   //std::cout << "remote sensing region origin and size (physical): " << rsOrigin << ", " << rsSize << std::endl;
   //std::cout << "remote sensing region ProjRef: " << rsRegion.GetRegionProjection() << std::endl;
@@ -178,19 +187,27 @@ VectorDataIntoImageProjectionFilter<TInputVectorData, TInputImage>
 
   // Reproject VectorData in image projection
   m_VdProjFilter->SetInputProjectionRef(this->GetInput()->GetProjectionRef());
-  m_VdProjFilter->SetOutputKeywordList(m_InputImage->GetImageKeywordlist());
-  m_VdProjFilter->SetOutputProjectionRef(m_InputImage->GetProjectionRef());
+
+  if (m_InputImage->GetProjectionRef().empty()
+      || boost::algorithm::istarts_with(m_InputImage->GetProjectionRef(), "LOCAL_CS") )
+    {
+    m_VdProjFilter->SetOutputKeywordList(m_InputImage->GetImageKeywordlist());
+    }
+  else
+    {
+    m_VdProjFilter->SetOutputProjectionRef(m_InputImage->GetProjectionRef());
+    }
 
   if (m_UseOutputSpacingAndOriginFromImage)
-  {
+    {
     m_VdProjFilter->SetOutputOrigin(m_InputImage->GetOrigin());
     m_VdProjFilter->SetOutputSpacing(m_InputImage->GetSpacing());
-  }
+    }
   else
     {
     m_VdProjFilter->SetOutputOrigin(this->GetOutputOrigin());
     m_VdProjFilter->SetOutputSpacing(this->GetOutputSpacing());
-  }
+    }
 
   if (!m_DEMDirectory.empty())
     {
