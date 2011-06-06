@@ -30,10 +30,9 @@ Application::~Application()
 {
 }
 
-void Application::Init()
+ParameterGroup* Application::GetParameterList()
 {
-  m_ParameterList = ParameterGroup::New();
-  this->DoCreateParameters();
+  return m_ParameterList;
 }
 
 void Application::Init()
