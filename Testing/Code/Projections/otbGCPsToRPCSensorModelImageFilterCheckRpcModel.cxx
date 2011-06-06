@@ -107,7 +107,7 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char* argv[])
 
   // Instancicate a GenericRSTransform in order to transform the
   // indexes, using the rpcModel estimated, into geographical
-  // coordiantes. 
+  // coordiantes.
   // The test will check for nan coordinates, and the distance between
   // geographical coordinates.
   
@@ -122,7 +122,7 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char* argv[])
     }
   grsTrasnform->InstanciateTransform();
 
-  // Test 
+  // Test
   GeoDistanceType::Pointer geoDistance = GeoDistanceType::New();
   bool isErrorDetected = false;
   
@@ -144,21 +144,21 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char* argv[])
     // Search for nans
     if ( vnl_math_isnan(transformedPoint[0]) || vnl_math_isnan(transformedPoint[1]) )
       {
-      std::cout << "Reference : "<< geoPoint 
-                <<" --> Result of the reprojection using the estimated RpcModel "<<  transformedPoint 
+      std::cout << "Reference : "<< geoPoint
+                <<" --> Result of the reprojection using the estimated RpcModel "<<  transformedPoint
                 << std::endl;
       std::cout<<"The result of the projection is nan, there is a problem with the estimated RpcModel "
                << std::endl<<std::endl;
-      isErrorDetected = true; 
+      isErrorDetected = true;
       }
     
     // Search for wrong projection results
     double residual = geoDistance->Evaluate(geoPoint, transformedPoint);
     if( residual > parseResult->GetParameterFloat("--ErrorAllowed"))
       {
-      std::cout << "Reference : "<< geoPoint 
+      std::cout << "Reference : "<< geoPoint
                 <<" --> Result of the reprojection using the estimated RpcModel "
-                << grsTrasnform->TransformPoint(point)  
+                << grsTrasnform->TransformPoint(point)
                 << std::endl
                 << " Residual ["<< residual << "] is higher than the tolerance ["
                 << parseResult->GetParameterFloat("--ErrorAllowed")
@@ -168,7 +168,7 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char* argv[])
       }
     }
   
-  // Is there an error 
+  // Is there an error
   if ( isErrorDetected )
     return EXIT_FAILURE;
   

@@ -110,7 +110,7 @@ public:
   typedef TransformType::OutputPointType                              OutputPointType;
 
   // Cast Image Filter
-  typedef itk::CastImageFilter<InputImageType, 
+  typedef itk::CastImageFilter<InputImageType,
                                VectorImage<OutputPixelType> >         CastFilterType;
 
   // std::pair description <-> legend (image)

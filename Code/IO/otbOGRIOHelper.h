@@ -63,10 +63,10 @@ public:
                                 OGRLayer * ogrCurrentLayer,
                                 OGRSpatialReference * oSRS);
 
-//  typedef  enum { UNKNOWN, FLOAT, DOUBLE } VectorDataComponentType;//unused (yet?)
+//  typedef  enum { UNKNOWN, FLOAT, DOUBLE } VectorDataComponentType; //unused (yet?)
 
-//  itkSetEnumMacro(ComponentType, VectorDataComponentType);//unused (yet?)
-//  itkGetEnumMacro(ComponentType, VectorDataComponentType);//unused (yet?)
+//  itkSetEnumMacro(ComponentType, VectorDataComponentType); //unused (yet?)
+//  itkGetEnumMacro(ComponentType, VectorDataComponentType); //unused (yet?)
 
 
 protected:

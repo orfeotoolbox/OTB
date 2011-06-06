@@ -932,8 +932,8 @@ KmzProductWriter<TInputImage>
 template <class TInputImage>
 void
 KmzProductWriter<TInputImage>
-::GenerateKML(const std::string& pathname, int depth, 
-              int x, int y, double north, double south, 
+::GenerateKML(const std::string& pathname, int depth,
+              int x, int y, double north, double south,
               double east, double west)
 {
   std::ostringstream kmlname;

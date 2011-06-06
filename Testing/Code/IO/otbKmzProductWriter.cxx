@@ -43,7 +43,7 @@ int otbKmzProductWriter(int argc, char* argv[])
   if (argc < 3)
     {
     std::cerr << "Usage: " << argv[0] << " infname demPath kmzFileName "
-              <<"a1x a1y b1x b1y b1z ... aNx aNy aNz bNx bNy bNz" 
+              <<"a1x a1y b1x b1y b1z ... aNx aNy aNz bNx bNy bNz"
               << std::endl;
     return EXIT_FAILURE;
     }

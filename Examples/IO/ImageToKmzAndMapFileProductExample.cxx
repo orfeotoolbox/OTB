@@ -47,7 +47,6 @@
 #include "otbKmzProductWriter.h"
 #include "otbMapFileProductWriter.h"
 #include "otbGCPsToRPCSensorModelImageFilter.h"
-
 // Software Guide : EndCodeSnippet
 //
 
@@ -56,7 +55,7 @@ int main(int argc, char* argv[])
 
   if (argc < 6)
     {
-    std::cerr << "Usage: " << argv[0] 
+    std::cerr << "Usage: " << argv[0]
               << " infname outfname kmzFileName "
               <<"a1x a1y b1x b1y b1z ... aNx aNy aNz bNx bNy bNz" << std::endl;
     return EXIT_FAILURE;
@@ -79,7 +78,6 @@ int main(int argc, char* argv[])
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(argv[1]);
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
