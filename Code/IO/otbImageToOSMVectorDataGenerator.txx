@@ -74,23 +74,6 @@ ImageToOSMVectorDataGenerator<TImage>
   this->SetNorth(m_ImageExtent.maxY);
 
   Superclass::GenerateData();
-
-  //
-  // this is commented due to the loss of pipelining capabilities of
-  // the filter, to request a VectorData relative to a key, use the
-  // method GetVectorDataByName(std::string key, std::string value)
-  //
-
-//   // mini-pipeline building the output vector data
-//   m_OSMVectorDataFilter->SetWest(m_ImageExtent.minX);
-//   m_OSMVectorDataFilter->SetSouth(m_ImageExtent.minY);
-//   m_OSMVectorDataFilter->SetEast(m_ImageExtent.maxX);
-//   m_OSMVectorDataFilter->SetNorth(m_ImageExtent.maxY);
-//   m_OSMVectorDataFilter->Update();
-//
-//   m_OSMVectorDataFilter->GraftOutput(this->GetOutput());
-//   m_OSMVectorDataFilter->Update();
-//   this->GraftOutput(m_OSMVectorDataFilter->GetOutput());
 }
 
 template < class TImage>
