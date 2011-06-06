@@ -1018,26 +1018,76 @@ SET_TESTS_PROPERTIES(prTvVectorDataProjectionFilterFromGeoToMap PROPERTIES DEPEN
 
 ###################
 # TESTS ABOUT REPROJECTION INTO AN IMAGE OF A VECTORDATA
-# QB ortho and extract and extract of MidiPyrenees roads file
-#ADD_TEST(prTvVectorData_ProjRef_ProjIntoImage_WithProjRef ${PROJECTIONS_TESTS3}
-#        otbVectorDataIntoImageProjectionFilterTest
-#          ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE.TIF
-#          ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
-#          ${INPUTDATA}/DEM/srtm_directory
-#          ${TEMP}/prTvVectorDataProjRefProjIntoImageWithProjRef.shp
-#          ${TEMP}/prTvVectorDataProjRefProjIntoImageWithProjRef.txt
-#          0
-#)
+IF(OTB_DATA_USE_LARGEINPUT)
+  SET(VectorDataIntoImage_FILES
+    ${LARGEINPUT}/QB_EXTRACT/qb_extract_00_nogeom.tif
+    ${LARGEINPUT}/QB_EXTRACT/qb_extract_00_nogeom_ENVI.hdr
+    ${LARGEINPUT}/QB_EXTRACT/qb_extract_00_withgeom.tif
+    ${LARGEINPUT}/QB_EXTRACT/qb_extract_00_withgeom_ENVI.hdr
+    ${LARGEINPUT}/QB_EXTRACT/qb_extract_11_nogeom.tif
+    ${LARGEINPUT}/QB_EXTRACT/qb_extract_11_nogeom_ENVI.hdr
+    ${LARGEINPUT}/QB_EXTRACT/qb_extract_11_withgeom.tif
+    ${LARGEINPUT}/QB_EXTRACT/qb_extract_11_withgeom_ENVI.hdr
+    ${LARGEINPUT}/QB_EXTRACT/qb_utm.tif
+    ${LARGEINPUT}/QB_EXTRACT/qb_utm_withgeom.tif
+    ${LARGEINPUT}/QB_EXTRACT/qb_wgs84.tif
+    ${LARGEINPUT}/QB_EXTRACT/qb_wgs84_withgeom.tif)
 
-#ADD_TEST(prTvVectorData_ProjRef_ProjIntoImage_WithProjRef1 ${PROJECTIONS_TESTS3}
-#        otbVectorDataIntoImageProjectionFilterTest
-#          ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE.TIF
-#          ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
-#          ${INPUTDATA}/DEM/srtm_directory
-#          ${TEMP}/prTvVectorDataProjRefProjIntoImageWithProjRef1.shp
-#          ${TEMP}/prTvVectorDataProjRefProjIntoImageWithProjRef1.txt
-#          1
-#)
+  SET( VectorDataIntoImage_TESTNB 0)
+
+  FOREACH( file ${VectorDataIntoImage_FILES} )
+    MATH(EXPR VectorDataIntoImage_TESTNB "${VectorDataIntoImage_TESTNB} + 1")
+    ADD_TEST(prTvVectorDataIntoImageProjectionFilter_${VectorDataIntoImage_TESTNB} ${PROJECTIONS_TESTS3}
+             otbVectorDataIntoImageProjectionFilterTest
+              ${file}
+              ${LARGEINPUT}/VECTOR/MidiPyrenees/natural.shp
+              ${INPUTDATA}/DEM/srtm_directory
+              3 )
+  ENDFOREACH()
+
+#  These tests will fail since data does not have geographic/cartographic information
+#  The call SET_TESTS_PROPERTIES(test PROPERTIES WILL_FAIL true) does not do what it is supposed to 
+# 
+#  SET(VectorDataIntoImage_FILES_NOGEOM
+#    ${LARGEINPUT}/QB_EXTRACT/qb_extract_00_nogeom.tif
+#    ${LARGEINPUT}/QB_EXTRACT/qb_extract_00_nogeom_ENVI.hdr
+#    ${LARGEINPUT}/QB_EXTRACT/qb_extract_11_nogeom.tif
+#    ${LARGEINPUT}/QB_EXTRACT/qb_extract_11_nogeom_ENVI.hdr)
+#
+#  FOREACH( file ${VectorDataIntoImage_FILES_NOGEOM} )
+#    MATH(EXPR VectorDataIntoImage_TESTNB "${VectorDataIntoImage_TESTNB} + 1")
+#    ADD_TEST(prTvVectorDataIntoImageProjectionFilter_${VectorDataIntoImage_TESTNB} ${PROJECTIONS_TESTS3}
+#             otbVectorDataIntoImageProjectionFilterTest
+#              ${file}
+#              ${LARGEINPUT}/VECTOR/MidiPyrenees/natural.shp
+#              ${INPUTDATA}/DEM/srtm_directory
+#              3 )
+#    SET_TESTS_PROPERTIES(prTvVectorDataIntoImageProjectionFilter_${VectorDataIntoImage_TESTNB}
+#                         PROPERTIES WILL_FAIL true)
+  ENDFOREACH()
+  
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
+# QB ortho and extract and extract of MidiPyrenees roads file
+# ADD_TEST(prTvVectorData_ProjRef_ProjIntoImage_WithProjRef ${PROJECTIONS_TESTS3}
+#         otbVectorDataIntoImageProjectionFilterTest
+#           ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE.TIF
+#           ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
+#           ${INPUTDATA}/DEM/srtm_directory
+#           ${TEMP}/prTvVectorDataProjRefProjIntoImageWithProjRef.shp
+#           ${TEMP}/prTvVectorDataProjRefProjIntoImageWithProjRef.txt
+#           0
+# )
+
+# ADD_TEST(prTvVectorData_ProjRef_ProjIntoImage_WithProjRef1 ${PROJECTIONS_TESTS3}
+#         otbVectorDataIntoImageProjectionFilterTest
+#           ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE.TIF
+#           ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
+#           ${INPUTDATA}/DEM/srtm_directory
+#           ${TEMP}/prTvVectorDataProjRefProjIntoImageWithProjRef1.shp
+#           ${TEMP}/prTvVectorDataProjRefProjIntoImageWithProjRef1.txt
+#           1
+# )
 
 #ADD_TEST(prTvVectorData_ProjRef_ProjIntoImage_WithSensorModel ${PROJECTIONS_TESTS3}
 #        otbVectorDataIntoImageProjectionFilterTest
