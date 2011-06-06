@@ -36,6 +36,67 @@ int otbVectorDataIntoImageProjectionFilterTest(int argc, char * argv[])
 {
   typedef float                                           PixelType;
   typedef otb::VectorImage<PixelType, 2>                  VectorImageType;
+  typedef otb::ImageFileReader<VectorImageType>           ReaderType;
+
+  // Vector Data
+  typedef otb::VectorData<>                               VectorDataType;
+  typedef otb::VectorDataFileReader<VectorDataType>       VectorDataReaderType;
+
+  typedef otb::VectorDataIntoImageProjectionFilter
+                 <VectorDataType, VectorImageType>        VectorDataIntoImageProjectionFilterType;
+
+  std::string imageInputFilename = argv[1];
+  std::string vectorDataInputFilename = argv[2];
+  std::string demDirectory = argv[3];
+  int expectedFeatures = atoi(argv[4]);
+
+  // Read the image
+  ReaderType::Pointer    reader  = ReaderType::New();
+  reader->SetFileName(imageInputFilename);
+  reader->UpdateOutputInformation();
+
+  // Read the Vector Data
+  VectorDataReaderType::Pointer vdReader = VectorDataReaderType::New();
+  vdReader->SetFileName(vectorDataInputFilename);
+  vdReader->Update();
+
+  VectorDataIntoImageProjectionFilterType::Pointer vdReProjFilter
+    = VectorDataIntoImageProjectionFilterType::New();
+  vdReProjFilter->SetInputImage(reader->GetOutput());
+  vdReProjFilter->SetInputVectorData(vdReader->GetOutput());
+  vdReProjFilter->SetDEMDirectory(demDirectory);
+  vdReProjFilter->Update();
+
+  int nbElem = 0;
+  typedef itk::PreOrderTreeIterator<VectorDataType::DataTreeType> TreeIteratorType;
+  TreeIteratorType itVector(vdReProjFilter->GetOutput()->GetDataTree());
+  itVector.GoToBegin();
+  while (!itVector.IsAtEnd())
+    {
+    if (   !itVector.Get()->IsRoot()
+        && !itVector.Get()->IsFolder()
+        && !itVector.Get()->IsDocument())
+      {
+      nbElem++;
+      }
+    ++itVector;
+    }
+
+  if (nbElem != expectedFeatures)
+    {
+    std::cerr << "Kept " << nbElem << " features, but expected " << expectedFeatures << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  return EXIT_SUCCESS;
+}
+
+
+
+int otbVectorDataIntoImageProjectionFilterCompareImplTest(int argc, char * argv[])
+{
+  typedef float                                           PixelType;
+  typedef otb::VectorImage<PixelType, 2>                  VectorImageType;
   typedef otb::Image<PixelType, 2>                        ImageType;
   typedef otb::ImageFileReader<VectorImageType>           ReaderType;
 
