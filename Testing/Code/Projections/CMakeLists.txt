@@ -1020,12 +1020,8 @@ SET_TESTS_PROPERTIES(prTvVectorDataProjectionFilterFromGeoToMap PROPERTIES DEPEN
 # TESTS ABOUT REPROJECTION INTO AN IMAGE OF A VECTORDATA
 IF(OTB_DATA_USE_LARGEINPUT)
   SET(VectorDataIntoImage_FILES
-    ${LARGEINPUT}/QB_EXTRACT/qb_extract_00_nogeom.tif
-    ${LARGEINPUT}/QB_EXTRACT/qb_extract_00_nogeom_ENVI.hdr
     ${LARGEINPUT}/QB_EXTRACT/qb_extract_00_withgeom.tif
     ${LARGEINPUT}/QB_EXTRACT/qb_extract_00_withgeom_ENVI.hdr
-    ${LARGEINPUT}/QB_EXTRACT/qb_extract_11_nogeom.tif
-    ${LARGEINPUT}/QB_EXTRACT/qb_extract_11_nogeom_ENVI.hdr
     ${LARGEINPUT}/QB_EXTRACT/qb_extract_11_withgeom.tif
     ${LARGEINPUT}/QB_EXTRACT/qb_extract_11_withgeom_ENVI.hdr
     ${LARGEINPUT}/QB_EXTRACT/qb_utm.tif
