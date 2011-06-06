@@ -39,35 +39,24 @@ public:
   typedef itk::SmartPointer<Self>              Pointer;
   typedef itk::SmartPointer<const Self>        ConstPointer;
 
-  typedef Parameter                            ParameterType;
-
   itkNewMacro(Self);
 
   itkTypeMacro(ParameterList,Parameter);
 
-  void AddParameter(ParameterType::Pointer p)
-  {
-    m_ParameterList.push_back(p);
-  }
+  void AddParameter(Parameter::Pointer p);
 
-  ParameterType::Pointer GetParameter(unsigned int i)
-  {
-    return m_ParameterList[i];
-  }
+  Parameter::Pointer GetParameterByIndex(unsigned int i);
 
-  unsigned int GetNumberOfParameters()
-  {
-    m_ParameterList.size();
-  }
+  Parameter::Pointer GetParameterByKey(std::string name);
+
+  unsigned int GetNumberOfParameters();
 
 protected:
-  ParameterGroup()
-  {}
+  ParameterGroup();
+  virtual ~ParameterGroup();
 
-  virtual ~ParameterGroup()
-  {}
-
-  std::vector<Parameter::Pointer> m_ParameterList;
+  typedef std::vector<Parameter::Pointer> ParameterListType;
+  ParameterListType m_ParameterList;
 
 private:
   ParameterGroup(const ParameterGroup &); //purposely not implemented

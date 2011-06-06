@@ -82,10 +82,14 @@ public:
 
   void Execute();
 
-  ParameterGroup* GetParameterList()
-  {
-    return m_ParameterList;
-  }
+  ParameterGroup* GetParameterList();
+
+  /*
+  void SetParameterBool(std::string parameter, bool value);
+  void SetParameterInt(std::string parameter, int value);
+  void SetParameterFloat(std::string parameter, float value);
+  void SetParameterString(std::string parameter, std::string value);
+  */
 
 protected:
   /** Constructor */

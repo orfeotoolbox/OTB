@@ -111,12 +111,12 @@ void Smoothing::DoExecute()
 {
   ParameterGroup* params = GetParameterList();
 
-  otb::Wrapper::InputImageParameter* inImageParam = dynamic_cast<otb::Wrapper::InputImageParameter*>(params->GetParameter(0).GetPointer());
+  otb::Wrapper::InputImageParameter* inImageParam = dynamic_cast<otb::Wrapper::InputImageParameter*>(params->GetParameterByKey("in").GetPointer());
   VectorImageType::Pointer inImage = boost::any_cast<VectorImageType::Pointer>(inImageParam->GetAnyValue());
 
-  otb::Wrapper::OutputImageParameter* outImageParam = dynamic_cast<otb::Wrapper::OutputImageParameter*>(params->GetParameter(1).GetPointer());
+  otb::Wrapper::OutputImageParameter* outImageParam = dynamic_cast<otb::Wrapper::OutputImageParameter*>(params->GetParameterByKey("out").GetPointer());
 
-  otb::Wrapper::ChoiceParameter* smoothingTypeParam = dynamic_cast<otb::Wrapper::ChoiceParameter*>(params->GetParameter(2).GetPointer());
+  otb::Wrapper::ChoiceParameter* smoothingTypeParam = dynamic_cast<otb::Wrapper::ChoiceParameter*>(params->GetParameterByKey("type").GetPointer());
   int smoothingType = smoothingTypeParam->GetValue();
 
   otb::Wrapper::ParameterGroup* subParam = smoothingTypeParam->GetChoiceAssociatedParameter(smoothingType);
@@ -125,7 +125,8 @@ void Smoothing::DoExecute()
     {
     case Smoothing_Mean:
       {
-      otb::Wrapper::RadiusParameter* radiusParam = dynamic_cast<otb::Wrapper::RadiusParameter*>(subParam->GetParameter(0).GetPointer());
+      otb::Wrapper::RadiusParameter* radiusParam
+        = dynamic_cast<otb::Wrapper::RadiusParameter*>(params->GetParameterByKey("type.mean.radius").GetPointer());
 
       PerBandMeanFilterType::Pointer perBand = PerBandMeanFilterType::New();
 
@@ -140,7 +141,8 @@ void Smoothing::DoExecute()
       break;
     case Smoothing_Gaussian:
       {
-      otb::Wrapper::RadiusParameter* radiusParam = dynamic_cast<otb::Wrapper::RadiusParameter*>(subParam->GetParameter(0).GetPointer());
+      otb::Wrapper::RadiusParameter* radiusParam
+        = dynamic_cast<otb::Wrapper::RadiusParameter*>(subParam->GetParameterByKey("type.gaussian.radius").GetPointer());
       int radius = radiusParam->GetValue();
 
       PerBandDiscreteGaussianFilterType::Pointer perBand = PerBandDiscreteGaussianFilterType::New();
@@ -155,8 +157,8 @@ void Smoothing::DoExecute()
       break;
     case Smoothing_Anisotropic:
       {
-      otb::Wrapper::FloatParameter* aniDifTimeStepParam = dynamic_cast<otb::Wrapper::FloatParameter*>(subParam->GetParameter(0).GetPointer());
-      otb::Wrapper::IntParameter* aniDifNbIterParam = dynamic_cast<otb::Wrapper::IntParameter*>(subParam->GetParameter(1).GetPointer());
+      otb::Wrapper::FloatParameter* aniDifTimeStepParam = dynamic_cast<otb::Wrapper::FloatParameter*>(subParam->GetParameterByKey("type.anidif.timestep").GetPointer());
+      otb::Wrapper::IntParameter* aniDifNbIterParam = dynamic_cast<otb::Wrapper::IntParameter*>(subParam->GetParameterByKey("type.anidif.nbiter").GetPointer());
 
       float aniDifTimeStep = aniDifTimeStepParam->GetValue();
       int aniDifNbIter = aniDifNbIterParam->GetValue();

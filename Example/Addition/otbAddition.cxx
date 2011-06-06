@@ -62,11 +62,11 @@ void Addition::DoExecute()
 
   ParameterGroup* params = GetParameterList();
 
-  otb::Wrapper::FloatParameter* pa = dynamic_cast<otb::Wrapper::FloatParameter*>(params->GetParameter(0).GetPointer());
+  otb::Wrapper::FloatParameter* pa = dynamic_cast<otb::Wrapper::FloatParameter*>(params->GetParameterByKey("a").GetPointer());
   boost::any avalue = pa->GetAnyValue();
   float a = boost::any_cast<float>(avalue);
 
-  otb::Wrapper::FloatParameter* pb = dynamic_cast<otb::Wrapper::FloatParameter*>(params->GetParameter(1).GetPointer());
+  otb::Wrapper::FloatParameter* pb = dynamic_cast<otb::Wrapper::FloatParameter*>(params->GetParameterByKey("b").GetPointer());
   boost::any bvalue = pb->GetAnyValue();
   float b = boost::any_cast<float>(bvalue);
 

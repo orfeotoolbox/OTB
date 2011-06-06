@@ -30,6 +30,12 @@ Application::~Application()
 {
 }
 
+otb::Wrapper::ParameterGroup*
+Application::GetParameterList()
+{
+  return m_ParameterList;
+}
+
 void Application::Init()
 {
   m_ParameterList = ParameterGroup::New();

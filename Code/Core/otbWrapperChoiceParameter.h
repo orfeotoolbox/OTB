@@ -49,94 +49,39 @@ public:
   itkTypeMacro(ChoiceParameter, Parameter);
 
   /** Add a value to the choice */
-  void AddChoice( std::string key, std::string name, Parameter* param )
-  {
-    ParameterGroup* paramAsGroup = dynamic_cast<ParameterGroup*>(param);
-    if ( paramAsGroup != 0 )
-      {
-      Choice choice;
-      choice.m_Key = key;
-      choice.m_Name = name;
-      choice.m_AssociatedParameter = paramAsGroup;
-      m_ChoiceList.push_back(choice);
-      }
-    else
-      {
-      // wrap in  group first
-      ParameterGroup::Pointer group = ParameterGroup::New();
-      group->AddParameter(param);
-      AddChoice(key, name, group.GetPointer());
-      }
-  }
+  void AddChoice( std::string key, std::string name, Parameter* param );
 
-  std::string GetChoiceKey( int i )
-  {
-    return m_ChoiceList[i].m_Key;
-  }
+  /** Get the ID of a specific choice value */
+  std::string GetChoiceKey( int i );
 
-  std::string GetChoiceName( int i )
-  {
-    return m_ChoiceList[i].m_Name;
-  }
+  /** Get the long name of a specific choice value */
+  std::string GetChoiceName( int i );
 
-  ParameterGroup::Pointer GetChoiceAssociatedParameter( int i )
-  {
-    return m_ChoiceList[i].m_AssociatedParameter;
-  }
+  /** Get the ParameterGroup associated to a choice value */
+  ParameterGroup::Pointer GetChoiceAssociatedParameter( int i );
 
-  unsigned int GetNbChoices( void )
-  {
-    return m_ChoiceList.size();
-  }
+  /** Get the number of available choice */
+  unsigned int GetNbChoices( void );
 
   /** Set any value */
-  virtual void SetValue(unsigned int v)
-  {
-    // Perform any cast
-    m_CurrentChoice = v;
-    // Call Modified();
-    this->Modified();
-  }
+  virtual void SetValue(unsigned int v);
 
   /** Return any value */
-  virtual unsigned int GetValue()
-  {
-    return m_CurrentChoice;
-  }
+  virtual unsigned int GetValue();
 
   /** Set any value */
-  virtual void SetAnyValue(boost::any v)
-  {
-    // Perform any cast
-    unsigned int val = boost::any_cast<unsigned int>(v);
-
-    if ( val >= GetNbChoices() )
-      {
-      itkExceptionMacro(<< "Invalid choice value : " << val)
-      }
-
-    m_CurrentChoice = val;
-
-    // Call Modified();
-    this->Modified();
-  }
+  virtual void SetAnyValue(boost::any v);
 
   /** Return any value */
-  virtual boost::any GetAnyValue()
-  {
-    return boost::any(m_CurrentChoice);
-  }
+  virtual boost::any GetAnyValue();
 
 
 protected:
   /** Constructor */
-  ChoiceParameter()
-    : m_CurrentChoice(0)
-  {}
+  ChoiceParameter();
 
   /** Destructor */
-  virtual ~ChoiceParameter()
-  {}
+  virtual ~ChoiceParameter();
 
   struct Choice
   {

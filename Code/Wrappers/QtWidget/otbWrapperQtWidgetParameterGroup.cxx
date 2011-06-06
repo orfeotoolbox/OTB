@@ -54,7 +54,7 @@ void QtWidgetParameterGroup::DoCreateWidget()
   unsigned int nbParams = m_ParamList->GetNumberOfParameters();
   for (unsigned int i = 0; i < nbParams; ++i)
     {
-    Parameter* param = m_ParamList->GetParameter(i);
+    Parameter* param = m_ParamList->GetParameterByIndex(i);
 
     if (param != 0)
       {

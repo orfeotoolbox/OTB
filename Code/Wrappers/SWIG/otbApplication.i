@@ -71,7 +71,8 @@ public:
   itkNewMacro(ParameterGroup);
   
   void AddParameter(Parameter_Pointer p);
-  Parameter_Pointer GetParameter(unsigned int i);
+  Parameter_Pointer GetParameterByIndex(unsigned int i);
+  Parameter_Pointer GetParameterByKey(std::string name);
   unsigned int GetNumberOfParameters();
 
 protected:
