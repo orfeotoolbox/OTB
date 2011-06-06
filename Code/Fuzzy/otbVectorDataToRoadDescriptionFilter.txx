@@ -47,9 +47,9 @@ VectorDataToRoadDescriptionFilter<TVectorData, TOpticalImage>
 
   m_DBOverlapFeatureFunction = DBOverlapFeatureFunctionType::New();
 
-  m_DescriptorsList.push_back("NDVI");
-  m_DescriptorsList.push_back("RADIOM");
-  m_DescriptorsList.push_back("DBOVER");
+  m_DescriptorsList.push_back("NONDVI");
+  m_DescriptorsList.push_back("ROADSA");
+  m_DescriptorsList.push_back("NOBUIL");
 }
 
 template <class TVectorData, class TOpticalImage>
@@ -118,11 +118,9 @@ VectorDataToRoadDescriptionFilter<TVectorData, TOpticalImage>
     if (!itVector.Get()->IsRoot() && !itVector.Get()->IsDocument() && !itVector.Get()->IsFolder())
       {
       typename DataNodeType::Pointer currentGeometry = itVector.Get();
-      currentGeometry->SetFieldAsDouble("NDVI",   (double)(m_NDVIFeatureFunction->Evaluate(*(currentGeometry.GetPointer()))[0]));
-      currentGeometry->SetFieldAsDouble("RADIOM", (double)(m_SpectralAngleFeatureFunction->Evaluate(*(currentGeometry.GetPointer()))[0]));
-      currentGeometry->SetFieldAsDouble("DBOVER", (double)(m_DBOverlapFeatureFunction->Evaluate(*(currentGeometry.GetPointer()))[0]));
-      //currentGeometry->SetFieldAsInt("LSD",  80);
-      //currentGeometry->SetFieldAsInt("SHADOW", 80);
+      currentGeometry->SetFieldAsDouble("NONDVI", (double)(m_NDVIFeatureFunction->Evaluate(*(currentGeometry.GetPointer()))[0]));
+      currentGeometry->SetFieldAsDouble("ROADSA", (double)(m_SpectralAngleFeatureFunction->Evaluate(*(currentGeometry.GetPointer()))[0]));
+      currentGeometry->SetFieldAsDouble("NOBUIL", (double)(m_DBOverlapFeatureFunction->Evaluate(*(currentGeometry.GetPointer()))[0]));
       
       this->GetOutput(0)->GetDataTree()->Add(currentGeometry, folder);
       }

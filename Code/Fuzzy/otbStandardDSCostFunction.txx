@@ -34,9 +34,9 @@ StandardDSCostFunction<TDSValidationFilter>
  m_NSVectorData = VectorDataType::New();
  m_Parser =  ParserType::New();
 
- m_Hypothesis.insert("NDVI");
- m_Hypothesis.insert("RADIOM");
- m_Hypothesis.insert("DBOVER");
+ m_Hypothesis.insert("NONDVI");
+ m_Hypothesis.insert("ROADSA");
+ m_Hypothesis.insert("NOBUIL");
 }
 
 template <class TDSValidationFilter>
@@ -58,18 +58,18 @@ typename StandardDSCostFunction<TDSValidationFilter>
 
   //unsigned int nbParam = this->GetNumberOfParameters();
 
-  std::vector<double> ndvi, radiom, overlap;
+  std::vector<double> noNDVI, roadSA, noBuilding;
   for (unsigned int i = 0; i < 4; i++)
     {
-    ndvi.push_back(parameters[i]);
+    noNDVI.push_back(parameters[i]);
     }
   for (unsigned int i = 0; i < 4; i++)
     {
-    radiom.push_back(parameters[i + 4]);
+    roadSA.push_back(parameters[i + 4]);
     }
   for (unsigned int i = 0; i < 4; i++)
     {
-    overlap.push_back(parameters[i + 8]);
+    noBuilding.push_back(parameters[i + 8]);
     }
 
   typename DSValidationFilterType::Pointer internalFunctionGT = DSValidationFilterType::New();
@@ -78,9 +78,9 @@ typename StandardDSCostFunction<TDSValidationFilter>
   internalFunctionGT->SetHypothesis(m_Hypothesis);
   try
     {
-    internalFunctionGT->SetFuzzyModel("NDVI", ndvi);
-    internalFunctionGT->SetFuzzyModel("RADIOM", radiom);
-    internalFunctionGT->SetFuzzyModel("DBOVER", overlap);
+    internalFunctionGT->SetFuzzyModel("NONDVI", noNDVI);
+    internalFunctionGT->SetFuzzyModel("ROADSA", roadSA);
+    internalFunctionGT->SetFuzzyModel("NOBUIL", noBuilding);
     }
   catch (itk::ExceptionObject /*& err*/)
     {
@@ -94,9 +94,9 @@ typename StandardDSCostFunction<TDSValidationFilter>
   internalFunctionNS->SetHypothesis(m_Hypothesis);
   try
     {
-    internalFunctionNS->SetFuzzyModel("NDVI", ndvi);
-    internalFunctionNS->SetFuzzyModel("RADIOM", radiom);
-    internalFunctionNS->SetFuzzyModel("DBOVER", overlap);
+    internalFunctionNS->SetFuzzyModel("NONDVI", noNDVI);
+    internalFunctionNS->SetFuzzyModel("ROADSA", roadSA);
+    internalFunctionNS->SetFuzzyModel("NOBUIL", noBuilding);
     }
   catch (itk::ExceptionObject &)
     {

@@ -35,22 +35,16 @@ template <class TVectorData, class TPrecision>
 {
   this->SetNumberOfRequiredInputs(1);
   //Default road descriptors
-  std::vector<double> ndvi, radiom, lsd, shadow, overlap;
-  ndvi.push_back(0.25); ndvi.push_back(0.5); ndvi.push_back(0.75); ndvi.push_back(0.99);
-  radiom.push_back(0.25); radiom.push_back(0.5); radiom.push_back(0.75); radiom.push_back(0.90);
-  overlap.push_back(0.25); overlap.push_back(0.5); overlap.push_back(0.75); overlap.push_back(0.90);
-  //lsd.push_back(0.25); lsd.push_back(0.5); lsd.push_back(0.75); lsd.push_back(0.96);
-  //shadow.push_back(0.25); shadow.push_back(0.5); shadow.push_back(0.75); shadow.push_back(0.98);
- 
-  AddDescriptor("NDVI", ndvi);
-  AddDescriptor("RADIOM", radiom);
-  AddDescriptor("DBOVER", overlap);
+  std::vector<double> noNDVI, roadSA, noBuilding;
+  noNDVI.push_back(0.25); noNDVI.push_back(0.5); noNDVI.push_back(0.75); noNDVI.push_back(0.99);
+  roadSA.push_back(0.25); roadSA.push_back(0.5); roadSA.push_back(0.75); roadSA.push_back(0.90);
+  noBuilding.push_back(0.25); noBuilding.push_back(0.5); noBuilding.push_back(0.75); noBuilding.push_back(0.90);
 
-  //AddDescriptor("LSD", lsd);
-  //AddDescriptor("SHADOW", shadow);
-  
+  AddDescriptor("NONDVI", noNDVI);
+  AddDescriptor("ROADSA", roadSA);
+  AddDescriptor("NOBUIL", noBuilding);
+
   m_Parser =  ParserType::New();
-  //m_Hypothesis.insert("NDVI");
 }
 
 

@@ -59,8 +59,8 @@ namespace otb
   *
   * The concidered features will be the intersection between
   * the features embedded in this filter and the features embedded
-  * in the input vector data. For now, the filter uses "NDVI" and
-  * "RADIOM" features.
+  * in the input vector data. For now, the filter uses "NONDVI" and
+  * "ROADSA" features.
   *
   *
   * \ingroup VectorDataFilter

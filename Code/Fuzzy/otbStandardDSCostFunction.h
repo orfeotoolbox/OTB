@@ -37,17 +37,14 @@ namespace otb
   * - an enriched ground truth vector data (using VectorDataToRoadDescription)
   * - an enriched negative sample VectorData or at least random samples
   * - an hypothesis (the same as the considered DSValidationFilter)
-  *      (by default (NDVI, RADIOM))
+  *      (by default (NONDVI, ROADSA, NOBUIL))
   * - a weight between 0 and 1 (0.5 by default) corresponding to the situation
   *      policy regarding under detection/false detection (1 no under detection
   *      0 no false detection)
-  * For now the cost function use the NDVI Feature and the RADIOM Feature.
+  * For now the cost function use the NONDVI Feature, ROADSA Feature and and
+  * the NOBUIL Feature.
   * For each evolution of the VectorDataToDSValidatedVectorDataFilter,
   * this cost function must be adapted.
-  *
-  * Limitation: the use of a custom criterion is to be implemented.
-  * For now, it uses (Belief+Plausibility)/2.0 so it can be used only to
-  * parameter the DSValidetionFilter considering the same criterion
   *
   * \ingroup CostFunction
   * \sa VectorDataToDSValidatedVectorDataFilter
