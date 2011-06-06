@@ -62,7 +62,6 @@ public:
 
   /** Get the number of available choice */
   unsigned int GetNbChoices( void );
-
   /** Set any value */
   virtual void SetValue(unsigned int v);
 

@@ -139,10 +139,6 @@ protected:
   virtual ~Parameter()
   {}
 
-private:
-  Parameter(const Parameter &); //purposely not implemented
-  void operator =(const Parameter&); //purposely not implemented
-
   /** Name of the parameter */
   std::string m_Name;
 
@@ -157,6 +153,10 @@ private:
 
   /** Default value behaviour */
   DefaultValueMode m_DefaultValueMode;
+
+private:
+  Parameter(const Parameter &); //purposely not implemented
+  void operator =(const Parameter&); //purposely not implemented
 
 }; // End class Parameter
 
