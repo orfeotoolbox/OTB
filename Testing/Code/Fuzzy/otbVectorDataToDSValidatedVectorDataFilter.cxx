@@ -72,17 +72,16 @@ int otbVectorDataToDSValidatedVectorDataFilter(int argc, char* argv[])
   //filter->GetDescriptorModels();
   FuzzyManagerType::Print(filter->GetDescriptorModels());
   LabelSetType hypothesis;
-  hypothesis.insert("NDVI_");
-  hypothesis.insert("RADIOM");
-  //hypothesis.insert("LSD_");
-  //hypothesis.insert("SHADOW_");
+  hypothesis.insert("NONDVI");
+  hypothesis.insert("ROADSA");
+  hypothesis.insert("NOBUIL");
   filter->SetHypothesis(hypothesis);
-  std::vector<double> ndviFuzzyModel;
-  ndviFuzzyModel.push_back(0.15);
-  ndviFuzzyModel.push_back(0.25);
-  ndviFuzzyModel.push_back(0.35);
-  ndviFuzzyModel.push_back(0.8);
-  filter->SetFuzzyModel("NDVI", ndviFuzzyModel);
+  std::vector<double> fuzzyModel;
+  fuzzyModel.push_back(0.15);
+  fuzzyModel.push_back(0.25);
+  fuzzyModel.push_back(0.35);
+  fuzzyModel.push_back(0.8);
+  filter->SetFuzzyModel("TEST", fuzzyModel);
   FuzzyManagerType::Print(filter->GetDescriptorModels());
 
   vdWriter->SetFileName(outputVD);
@@ -93,8 +92,6 @@ int otbVectorDataToDSValidatedVectorDataFilter(int argc, char* argv[])
             << vdReader->GetOutput()->Size() << std::endl
             << "CriterionFormula : "
             << filter->GetCriterionFormula() << std::endl
-            //<< "Hypothesis : "
-            //<< filter->GetHypothesis()
             << "Output VecttorData Size : "
             << filter->GetOutput()->Size()
             << std::endl;
