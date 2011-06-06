@@ -42,10 +42,12 @@ int otbKmzProductWriter(int argc, char* argv[])
 
   if (argc < 3)
     {
-    std::cerr << "Usage: " << argv[0] << " infname kmzFileName a1x a1y b1x b1y b1z ... aNx aNy aNz bNx bNy bNz" << std::endl;
+    std::cerr << "Usage: " << argv[0] << " infname demPath kmzFileName "
+              <<"a1x a1y b1x b1y b1z ... aNx aNy aNz bNx bNy bNz" 
+              << std::endl;
     return EXIT_FAILURE;
     }
-  else if ((argc - 3) % 5 != 0)
+  else if ((argc - 4) % 5 != 0)
     {
     std::cout <<"argc " << argc << std::endl;
     std::cerr << "Inconsistent GCPs description!" << std::endl;
@@ -54,7 +56,8 @@ int otbKmzProductWriter(int argc, char* argv[])
 
   // Get the cli arguments
   const char * infname       = argv[1];
-  const char * kmzFileName   = argv[2];
+  const char * demPath       = argv[2];
+  const char * kmzFileName   = argv[3];
   
   // Instanciate reader
   ReaderType::Pointer reader = ReaderType::New();
@@ -63,20 +66,20 @@ int otbKmzProductWriter(int argc, char* argv[])
   GCPsToSensorModelFilterType::Pointer rpcEstimator = GCPsToSensorModelFilterType::New();
   rpcEstimator->SetInput(reader->GetOutput());
 
-  unsigned int nbGCPs = (argc - 3) / 5;
+  unsigned int nbGCPs = (argc - 4) / 5;
 
   std::cout << "Receiving " << nbGCPs << " from command line." << std::endl;
 
   for (unsigned int gcpId = 0; gcpId < nbGCPs; ++gcpId)
     {
     Point2DType sensorPoint;
-    sensorPoint[0] = atof(argv[3 + gcpId * 5]);
-    sensorPoint[1] = atof(argv[4 + gcpId * 5]);
+    sensorPoint[0] = atof(argv[4 + gcpId * 5]);
+    sensorPoint[1] = atof(argv[5 + gcpId * 5]);
 
     Point3DType geoPoint;
-    geoPoint[0] = atof(argv[5 + 5 * gcpId]);
-    geoPoint[1] = atof(argv[6 + 5 * gcpId]);
-    geoPoint[2] = atof(argv[7 + 5 * gcpId]);
+    geoPoint[0] = atof(argv[6 + 5 * gcpId]);
+    geoPoint[1] = atof(argv[7 + 5 * gcpId]);
+    geoPoint[2] = atof(argv[8 + 5 * gcpId]);
 
     std::cout << "Adding GCP sensor: " << sensorPoint << " <-> geo: " << geoPoint << std::endl;
 
@@ -92,6 +95,7 @@ int otbKmzProductWriter(int argc, char* argv[])
 
   kmzWriter->SetInput(rpcEstimator->GetOutput());
   kmzWriter->SetPath(kmzFileName);
+  kmzWriter->SetDEMDirectory(demPath);
   
   kmzWriter->Update();
 
@@ -110,6 +114,7 @@ int otbKmzProductWriterWithLogoAndLegend(int argc, char* argv[])
   parser->AddOption("--OutputProductName", "Output Kmz product ", "-kmz", 1, true);
   parser->AddOption("--LogoImage", "Output Kmz product ", "-lo", 1, false);
   parser->AddOption("--LegendImage", "Output Kmz product ", "-le", 1, false);
+  parser->AddOption("--DEMDirectory", "Path to the DEM directory ", "-dem", 1, true);
   parser->AddOptionNParams("--GroudControlPoints",
                            "Ground Control Points to estimate sensor model a1x a1y b1x b1y b1z ... aNx aNy aNz bNx bNy bNz",
                            "-gcp", true);
@@ -199,6 +204,11 @@ int otbKmzProductWriterWithLogoAndLegend(int argc, char* argv[])
     legendReader->Update();
     kmzWriter->AddLegend("Input Legend", legendReader->GetOutput());
     kmzWriter->AddLegend(legendReader->GetOutput());
+    }
+  // Set the DEM Directory if any
+  if(parseResult->IsOptionPresent("--DEMDirectory"))
+    {
+    kmzWriter->SetDEMDirectory(parseResult->GetParameterString("--DEMDirectory"));
     }
   
   // trigger the writing

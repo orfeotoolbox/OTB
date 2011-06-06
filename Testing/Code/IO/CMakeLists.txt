@@ -2758,6 +2758,7 @@ ADD_TEST(ioTuKmzProductWriterNew ${IO_TESTS21}
 ADD_TEST(ioTvKmzProductWriterWithGCP ${IO_TESTS21}
   otbKmzProductWriter
   ${INPUTDATA}/Haiti1.jpeg
+  ${INPUTDATA}/DEM/srtm_directory
   ${TEMP}/ioTuHaitiKmzProduct.kmz
   1980.000000 1986.000000 -72.351257 18.555075 0.000000 
   1963.000000 1944.000000 -72.352051 18.556946 0.000000
@@ -2786,11 +2787,12 @@ ADD_TEST(ioTvKmzProductWriterWithGCP ${IO_TESTS21}
   417.000000 2317.000000 -72.426552 18.540876 0.000000
   )
 
-ADD_TEST(ioTvKmzProductWriterWithGCP ${IO_TESTS21}
+ADD_TEST(ioTvKmzProductWriterWithGCP_Logo_Legend ${IO_TESTS21}
   otbKmzProductWriterWithLogoAndLegend
   -in ${INPUTDATA}/Haiti1.jpeg
   -lo ${INPUTDATA}/cnes.png
   -le ${INPUTDATA}/otb_big.png
+  -dem ${INPUTDATA}/DEM/srtm_directory
   -kmz ${TEMP}/ioTuHaitiKmzProductWithLogoAndLegend.kmz
   -gcp  1980.000000 1986.000000 -72.351257 18.555075 0.000000 
   1963.000000 1944.000000 -72.352051 18.556946 0.000000
