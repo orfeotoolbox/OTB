@@ -1403,32 +1403,8 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   std::ostringstream oss;
   GDALDataset* dataset = m_Dataset->GetDataSet();
 
-  /* -------------------------------------------------------------------- */
-  /* Set the projection coordinate system of the image : ProjectionRef  */
-  /* -------------------------------------------------------------------- */
-
   std::string projectionRef;
   itk::ExposeMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projectionRef);
-  if (!projectionRef.empty())
-    {
-    dataset->SetProjection(projectionRef.c_str());
-    }
-
-  /* -------------------------------------------------------------------- */
-  /*  Set the six coefficients of affine geoTtransform      */
-  /* -------------------------------------------------------------------- */
-
-  itk::VariableLengthVector<double> geoTransform(6);
-  /// Reporting origin and spacing
-  geoTransform[0] = m_Origin[0];
-  geoTransform[3] = m_Origin[1];
-  geoTransform[1] = m_Spacing[0];
-  geoTransform[5] = m_Spacing[1];
-
-  // FIXME: Here component 1 and 4 should be replaced by the orientation parameters
-  geoTransform[2] = 0.;
-  geoTransform[4] = 0.;
-  dataset->SetGeoTransform(const_cast<double*>(geoTransform.GetDataPointer()));
 
   /* -------------------------------------------------------------------- */
   /* Set the GCPs                                                          */
@@ -1448,7 +1424,6 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
     }
   else
     {
-
     unsigned int gcpCount = 0;
     itk::ExposeMetaData<unsigned int>(dict, MetaDataKey::GCPCountKey, gcpCount);
 
@@ -1460,7 +1435,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
       for (unsigned int gcpIndex = 0; gcpIndex < gcpCount; ++gcpIndex)
         {
         //Build the GCP string in the form of GCP_n
-      std::ostringstream lStream;
+        std::ostringstream lStream;
         lStream << MetaDataKey::GCPParametersKey << gcpIndex;
         std::string key = lStream.str();
 
@@ -1474,7 +1449,6 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
         gdalGcps[gcpIndex].dfGCPX = gcp.m_GCPX;
         gdalGcps[gcpIndex].dfGCPY = gcp.m_GCPY;
         gdalGcps[gcpIndex].dfGCPZ = gcp.m_GCPZ;
-
         }
 
       std::string gcpProjectionRef;
@@ -1484,8 +1458,30 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
 
       delete[] gdalGcps;
       }
-
     }
+
+  /* -------------------------------------------------------------------- */
+  /* Set the projection coordinate system of the image : ProjectionRef    */
+  /* -------------------------------------------------------------------- */
+  if (!projectionRef.empty())
+    {
+    dataset->SetProjection(projectionRef.c_str());
+    }
+
+  /* -------------------------------------------------------------------- */
+  /*  Set the six coefficients of affine geoTransform                     */
+  /* -------------------------------------------------------------------- */
+  itk::VariableLengthVector<double> geoTransform(6);
+  /// Reporting origin and spacing
+  geoTransform[0] = m_Origin[0];
+  geoTransform[3] = m_Origin[1];
+  geoTransform[1] = m_Spacing[0];
+  geoTransform[5] = m_Spacing[1];
+
+  // FIXME: Here component 1 and 4 should be replaced by the orientation parameters
+  geoTransform[2] = 0.;
+  geoTransform[4] = 0.;
+  dataset->SetGeoTransform(const_cast<double*>(geoTransform.GetDataPointer()));
 
   /* -------------------------------------------------------------------- */
   /*      Report metadata.                                                */
