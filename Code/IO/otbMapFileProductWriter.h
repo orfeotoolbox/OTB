@@ -155,6 +155,9 @@ public:
 
   /** Macro to set the SRID we want to project Data in*/
   itkSetMacro(SRID, int);
+
+  /** Set the DEM Direcotory */
+  itkSetStringMacro(DEMDirectory);
   
 protected:
   MapFileProductWriter();
@@ -221,14 +224,16 @@ private:
   unsigned int                 m_CurrentDepth;
 
   // File and path name
-  std::string                   m_FileName;
-  std::string                   m_IndexShapeFileName;
-  std::string                   m_CGIPath;
-  std::string                   m_ShapeIndexPath;
+  std::string                  m_FileName;
+  std::string                  m_IndexShapeFileName;
+  std::string                  m_CGIPath;
+  std::string                  m_ShapeIndexPath;
 
-  std::ofstream                 m_File;
+  std::ofstream                m_File;
+  int                          m_SRID;
 
-  int                           m_SRID;
+  // DEM directory
+  std::string                  m_DEMDirectory;
 };
 
 } // end namespace otb
