@@ -311,7 +311,7 @@ KmzProductWriter<TInputImage>
       m_StreamingShrinkImageFilter->Update();
 
       m_VectorRescaleIntensityImageFilter = VectorRescaleIntensityImageFilterType::New();
-      m_VectorRescaleIntensityImageFilter->SetInput(m_StreamingShrinkImageFilter->GetOutput()); //m_ResampleVectorImage);
+      m_VectorRescaleIntensityImageFilter->SetInput(m_StreamingShrinkImageFilter->GetOutput());
       m_VectorRescaleIntensityImageFilter->SetOutputMinimum(outMin);
       m_VectorRescaleIntensityImageFilter->SetOutputMaximum(outMax);
 
@@ -434,6 +434,8 @@ KmzProductWriter<TInputImage>
         m_Transform->SetInputKeywordList(m_ResampleVectorImage->GetImageKeywordlist());
         m_Transform->SetInputProjectionRef(m_VectorImage->GetProjectionRef());
         m_Transform->SetOutputProjectionRef(wgsRef);
+        if (!m_DEMDirectory.empty())
+          m_Transform->SetDEMDirectory(m_DEMDirectory);
         m_Transform->InstanciateTransform();
 
         InputPointType  inputPoint;
@@ -666,44 +668,6 @@ KmzProductWriter<TInputImage>
 
   // Add the flag netwotk link for each input image
   this->AddNetworkLinkToRootKML(north, south, east, west, m_CurrentImageName, true, 0);
-
-  // Root kml must be the first kml created
-  // Mutliple Inputs
-//   for (unsigned int i = 1; i < 1; i++)
-//     {
-//     // Method to write a legend in the kmz
-//     //this->AddCurrentProductLegends(i);
-
-//     // Get the filename
-//     //std::string fname  = this->GetInputDataDescription<FloatingVectorImageType>("InputImage", i);
-//     std::string currentImageName = this->GetCuttenFileName(m_FileName, i);
-    
-//     // Get the pĥysical coordinate of the center
-//     SizeType tempSize = m_VectorImage->GetLargestPossibleRegion().GetSize();
-//     InputPointType tempPoint, tempPointOrigin;
-//     IndexType      tempIndex, tempIndexOrigin;
-//     tempIndex[0] = tempSize[0];
-//     tempIndex[1] = tempSize[1];
-//     tempIndexOrigin.Fill(0);
-
-//     m_VectorImage->TransformIndexToPhysicalPoint(tempIndex, tempPoint);
-//     m_VectorImage->TransformIndexToPhysicalPoint(tempIndexOrigin, tempPointOrigin);
-
-//     // Compute the transform
-//     TransformType::Pointer tempTransform = TransformType::New();
-//     tempTransform->SetInputKeywordList(m_VectorImage->GetImageKeywordlist());
-//     tempTransform->SetInputProjectionRef(m_VectorImage->GetProjectionRef());
-//     tempTransform->InstanciateTransform();
-
-//     OutputPointType tempOutputPoint, tempOutputPointOrigin;
-//     tempOutputPoint = tempTransform->TransformPoint(tempPoint);
-//     tempOutputPointOrigin = tempTransform->TransformPoint(tempPointOrigin);
-
-//     this->AddNetworkLinkToRootKML(tempOutputPointOrigin[1],
-//           tempOutputPoint[1], tempOutputPointOrigin[0],
-//           tempOutputPoint[0], currentImageName, false,
-//           i);
-//     }
 
   // Last thing to do is to close the root kml
   this->CloseRootKML();

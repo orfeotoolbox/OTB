@@ -132,12 +132,13 @@ public:
   {
     this->Write();
   }
-  
-  // Public method to Add Logo
+
+  /* Method to Add Logo */
   itkSetMacro(Logo, InputImagePointer);
 
-  // Public method to store the legend and their description in the
-  // legendVector
+  /** Method to store the legend and their description in the
+    * legendVector
+    */
   void AddLegend(const std::string& description, const InputImagePointer legend)
   {
     LegendPairType   legendPair;
@@ -145,15 +146,19 @@ public:
     legendPair.second = legend;
     m_LegendVector.push_back(legendPair);
   }
-  // Method to add legend with empty description
+
+  /** Method to add legend with empty description */
   void AddLegend(const InputImagePointer legend)
   {
     std::string emptyString ="";
     this->AddLegend(emptyString, legend);
   }
 
-  // Set the size of the tiles to produce
+  /** Set the size of the tiles to produce */
   itkSetMacro(TileSize, int);
+
+  /** Set the DEM Direcotory */
+  itkSetStringMacro(DEMDirectory);
 
 protected:
   KmzProductWriter();
@@ -305,6 +310,9 @@ private:
 
   // Vector used to store legend and description
   LegendVectorType       m_LegendVector;
+
+  // DEM directory
+  std::string            m_DEMDirectory;
 };
 
 } // end namespace otb
