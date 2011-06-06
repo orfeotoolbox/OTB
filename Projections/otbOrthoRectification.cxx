@@ -304,7 +304,7 @@ int epsg_main(otb::ApplicationOptionsResult* parseResult)
       orthoFilter->SetInputRpcGridSize(parseResult->GetParameterUInt("RPC"));
       }
 
-    std::string outputProjectionRef = otb::GeoInformationConversion::ToWKT(parseResult->GetParameterInt("MapProjectionType",1));
+    std::string outputProjectionRef = otb::GeoInformationConversion::ToWKT(parseResult->GetParameterInt("MapProjectionType", 1));
 
     otbMsgDevMacro(<<"Output projection ref: "<<outputProjectionRef);
 
@@ -480,7 +480,6 @@ int epsg_main(otb::ApplicationOptionsResult* parseResult)
   }
   return EXIT_SUCCESS;
 }
-
 
 
 int OrthoRectification::Execute(otb::ApplicationOptionsResult* parseResult)
