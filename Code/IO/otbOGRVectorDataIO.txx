@@ -29,6 +29,7 @@
 #include "otbMetaDataKey.h"
 #include "itkTimeProbe.h"
 #include "otbVectorDataKeywordlist.h"
+#include "otbOGRIOHelper.h"
 
 namespace otb
 {
@@ -164,8 +165,9 @@ OGRVectorDataIO<TData>
     InternalTreeNodeType * documentPtr = const_cast<InternalTreeNodeType *>(tree->GetNode(document));
 
     /** IO class helper to convert ogr layer*/
-    OGRIOHelper<VectorDataType> OGRConversion;
-    OGRConversion.ConvertOGRLayerToDataTreeNode(layer, documentPtr);
+   
+    typename OGRIOHelper<VectorDataType>::Pointer OGRConversion = OGRIOHelper<VectorDataType>::New();
+    OGRConversion->ConvertOGRLayerToDataTreeNode(layer, documentPtr);
 
     } // end For each layer
 
@@ -273,8 +275,8 @@ void OGRVectorDataIO<TData>::Write(const itk::DataObject* datag, char ** papszOp
   InternalTreeNodeType * inputRoot = const_cast<InternalTreeNodeType *>(tree->GetRoot());
 
   //Refactoring SHPIO Manuel
-  OGRIOHelper<VectorDataType> IOConversion;
-  layerKept = IOConversion.ProcessNodeWrite(inputRoot, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
+  typename OGRIOHelper<VectorDataType>::Pointer IOConversion = OGRIOHelper<VectorDataType>::New();
+  layerKept = IOConversion->ProcessNodeWrite(inputRoot, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
 
   OGRDataSource::DestroyDataSource(m_DataSource);
   m_DataSource = NULL;

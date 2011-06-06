@@ -26,7 +26,7 @@ namespace otb
 {
 
 template<class TVectorData>
-inline void
+void
 OGRIOHelper<TVectorData>
 ::ConvertGeometryToPointNode(const OGRGeometry * ogrGeometry, DataNodePointerType node) const
 {
@@ -55,7 +55,7 @@ OGRIOHelper<TVectorData>
 }
 
 template<class TVectorData>
-inline void
+void
 OGRIOHelper<TVectorData>
 ::ConvertGeometryToLineNode(const OGRGeometry * ogrGeometry, DataNodePointerType node) const
 {
@@ -164,8 +164,19 @@ OGRIOHelper<TVectorData>
   node->SetPolygonInteriorRings(intRings);
 }
 
+
 template<class TVectorData>
-inline void OGRIOHelper<TVectorData>
+OGRIOHelper<TVectorData>
+::OGRIOHelper()
+{}
+
+template<class TVectorData>
+OGRIOHelper<TVectorData>
+::~OGRIOHelper()
+{}
+
+template<class TVectorData>
+void OGRIOHelper<TVectorData>
 ::ConvertOGRLayerToDataTreeNode(OGRLayer * layer, InternalTreeNodeType * documentPtr) const
 {
   /** Temporary pointer to store the feature */
@@ -202,8 +213,6 @@ inline void OGRIOHelper<TVectorData>
         kwl.AddField(feature->GetFieldDefnRef(fieldNum), feature->GetRawFieldRef(fieldNum));
         }
       }
-
-//       Functor::OGRIOHelper<VectorDataType> IOFunctuor;
 
     switch (geometry->getGeometryType())
       {
@@ -638,8 +647,9 @@ unsigned int OGRIOHelper<TVectorData>
 ::ProcessNodeWrite(InternalTreeNodeType * source, OGRDataSource * m_DataSource, OGRGeometryCollection * ogrCollection,
                    OGRLayer * ogrCurrentLayer, OGRSpatialReference * oSRS)
 {
-  //unsigned int m_Kept = 0;
+  unsigned int kept = 0;
   // Get the children list from the input node
+  typedef typename InternalTreeNodeType::ChildrenListType ChildrenListType;
   ChildrenListType children = source->GetChildrenList();
 
   // For each child
@@ -647,7 +657,7 @@ unsigned int OGRIOHelper<TVectorData>
     {
     DataNodePointerType dataNode = (*it)->Get();
     //otbMsgDevMacro(<< "Type of node " << dataNode->GetNodeType() << " id " << dataNode->GetNodeId());
-    ++m_Kept;
+    ++kept;
 
     // Get the kwl
     otb::VectorDataKeywordlist kwl;
@@ -985,7 +995,7 @@ unsigned int OGRIOHelper<TVectorData>
       }
     }
 
-  return m_Kept;
+  return kept;
 }
 } // end namespace otb
 

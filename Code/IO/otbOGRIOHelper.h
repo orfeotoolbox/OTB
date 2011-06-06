@@ -35,27 +35,17 @@ template <class TVectorData>
 class OGRIOHelper: public itk::Object
 {
 public:
+  /** Standard class typedefs. */
+  typedef OGRIOHelper                   Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
+
   /** Template parameters typedefs */
   /** Data typedef */
   typedef TVectorData                                     VectorDataType;
   typedef typename VectorDataType::DataTreeType           DataTreeType;
   typedef typename DataTreeType::TreeNodeType             InternalTreeNodeType;
-  typedef typename InternalTreeNodeType::ChildrenListType ChildrenListType;
-  typedef typename DataTreeType::Pointer                  DataTreePointerType;
-  typedef typename DataTreeType::ConstPointer             DataTreeConstPointerType;
-  typedef typename VectorDataType::DataNodeType           DataNodeType;
-  typedef typename DataNodeType::Pointer                  DataNodePointerType;
-  typedef typename DataNodeType::PointType                PointType;
-  typedef typename DataNodeType::LineType                 LineType;
-  typedef typename LineType::VertexListType               VertexListType;
-  typedef typename VertexListType::ConstPointer           VertexListConstPointerType;
-  typedef typename LineType::Pointer                      LinePointerType;
-  typedef typename DataNodeType::PolygonType              PolygonType;
-  typedef typename PolygonType::Pointer                   PolygonPointerType;
-  typedef typename DataNodeType::PolygonListType          PolygonListType;
-  typedef typename PolygonListType::Pointer               PolygonListPointerType;
-  typedef typename VectorDataType::Pointer                VectorDataPointerType;
-  typedef typename VectorDataType::ConstPointer           VectorDataConstPointerType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -73,21 +63,42 @@ public:
                                 OGRLayer * ogrCurrentLayer,
                                 OGRSpatialReference * oSRS);
 
-  OGRIOHelper() : m_Kept(-1)
-  {}
-  virtual ~OGRIOHelper() {}
+//  typedef  enum { UNKNOWN, FLOAT, DOUBLE } VectorDataComponentType;//unused (yet?)
+
+//  itkSetEnumMacro(ComponentType, VectorDataComponentType);//unused (yet?)
+//  itkGetEnumMacro(ComponentType, VectorDataComponentType);//unused (yet?)
+
+
+protected:
+  OGRIOHelper();
+  ~OGRIOHelper();
 
 private:
+  OGRIOHelper(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
-  inline void ConvertGeometryToPointNode(const OGRGeometry * ogrGeometry, DataNodePointerType node) const;
+  typedef typename VectorDataType::DataNodeType           DataNodeType;
+  typedef typename DataNodeType::Pointer                  DataNodePointerType;
 
-  inline void ConvertGeometryToLineNode(const OGRGeometry * ogrGeometry, DataNodePointerType node) const;
+  typedef typename DataNodeType::PointType                PointType;
 
-  inline void ConvertGeometryToPolygonNode(const OGRGeometry * ogrGeometry, DataNodePointerType node) const;
+  typedef typename DataNodeType::LineType                 LineType;
+  typedef typename LineType::Pointer                      LinePointerType;
+  typedef typename LineType::VertexListType               VertexListType;
+  typedef typename VertexListType::ConstPointer           VertexListConstPointerType;
 
+  typedef typename DataNodeType::PolygonType              PolygonType;
+  typedef typename PolygonType::Pointer                   PolygonPointerType;
+  typedef typename DataNodeType::PolygonListType          PolygonListType;
+  typedef typename PolygonListType::Pointer               PolygonListPointerType;
 
-  /** Number of layer in the Tree*/
-  unsigned int m_Kept;
+  void ConvertGeometryToPointNode(const OGRGeometry * ogrGeometry, DataNodePointerType node) const;
+
+  void ConvertGeometryToLineNode(const OGRGeometry * ogrGeometry, DataNodePointerType node) const;
+
+  void ConvertGeometryToPolygonNode(const OGRGeometry * ogrGeometry, DataNodePointerType node) const;
+
+  //VectorDataComponentType m_ComponentType; //unused (yet?)
 
 }; // end class OGRIOHelper
 
