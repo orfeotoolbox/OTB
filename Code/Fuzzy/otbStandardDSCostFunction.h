@@ -107,14 +107,24 @@ public:
   itkSetObjectMacro(NSVectorData, VectorDataType);
   itkGetConstObjectMacro(NSVectorData, VectorDataType);
 
-  LabelSetType GetHypothesis()
+  LabelSetType GetBeliefHypothesis()
   {
-    return m_Hypothesis;
+    return m_BeliefHypothesis;
   }
 
-  void SetHypothesis(LabelSetType hypothesis)
+  void SetBeliefHypothesis(LabelSetType hypothesis)
   {
-    m_Hypothesis = hypothesis;
+    m_BeliefHypothesis = hypothesis;
+  }
+
+  LabelSetType GetPlausibilityHypothesis()
+  {
+    return m_PlausibilityHypothesis;
+  }
+
+  void SetPlausibilityHypothesis(LabelSetType hypothesis)
+  {
+    m_PlausibilityHypothesis = hypothesis;
   }
 
 protected:
@@ -138,7 +148,8 @@ private:
 
   double                             m_Weight; //range ]0; 1[
 
-  LabelSetType                       m_Hypothesis;
+  LabelSetType                       m_BeliefHypothesis;
+  LabelSetType                       m_PlausibilityHypothesis;
   const unsigned int                 m_NumberOfParameters;
 };
 

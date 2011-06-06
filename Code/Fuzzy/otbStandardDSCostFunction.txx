@@ -34,9 +34,11 @@ StandardDSCostFunction<TDSValidationFilter>
  m_NSVectorData = VectorDataType::New();
  m_Parser =  ParserType::New();
 
- m_Hypothesis.insert("NONDVI");
- m_Hypothesis.insert("ROADSA");
- m_Hypothesis.insert("NOBUIL");
+ m_BeliefHypothesis.insert("ROADSA");
+
+ m_PlausibilityHypothesis.insert("ROADSA");
+ m_PlausibilityHypothesis.insert("NOBUIL");
+ m_PlausibilityHypothesis.insert("NONDVI");
 }
 
 template <class TDSValidationFilter>
@@ -75,7 +77,8 @@ typename StandardDSCostFunction<TDSValidationFilter>
   typename DSValidationFilterType::Pointer internalFunctionGT = DSValidationFilterType::New();
   internalFunctionGT->SetCriterionFormula("1");
   internalFunctionGT->SetInput(m_GTVectorData);
-  internalFunctionGT->SetHypothesis(m_Hypothesis);
+  internalFunctionGT->SetBeliefHypothesis(m_BeliefHypothesis);
+  internalFunctionGT->SetPlausibilityHypothesis(m_PlausibilityHypothesis);
   try
     {
     internalFunctionGT->SetFuzzyModel("NONDVI", noNDVI);
@@ -91,7 +94,8 @@ typename StandardDSCostFunction<TDSValidationFilter>
   typename DSValidationFilterType::Pointer internalFunctionNS = DSValidationFilterType::New();
   internalFunctionNS->SetCriterionFormula("1");
   internalFunctionNS->SetInput(m_NSVectorData);
-  internalFunctionNS->SetHypothesis(m_Hypothesis);
+  internalFunctionNS->SetBeliefHypothesis(m_BeliefHypothesis);
+  internalFunctionNS->SetBeliefHypothesis(m_PlausibilityHypothesis);
   try
     {
     internalFunctionNS->SetFuzzyModel("NONDVI", noNDVI);

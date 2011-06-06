@@ -75,7 +75,7 @@ int otbVectorDataToDSValidatedVectorDataFilter(int argc, char* argv[])
   hypothesis.insert("NONDVI");
   hypothesis.insert("ROADSA");
   hypothesis.insert("NOBUIL");
-  filter->SetHypothesis(hypothesis);
+  filter->SetPlausibilityHypothesis(hypothesis);
   std::vector<double> fuzzyModel;
   fuzzyModel.push_back(0.15);
   fuzzyModel.push_back(0.25);

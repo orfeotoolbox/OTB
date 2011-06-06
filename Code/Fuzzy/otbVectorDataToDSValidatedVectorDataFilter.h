@@ -173,17 +173,26 @@ public:
       }
   }
 
+  LabelSetType GetBeliefHypothesis()
+  {
+    return m_BeliefHypothesis;
+  }
 
-  LabelSetType GetHypothesis()
+  void SetBeliefHypothesis(LabelSetType hypothesis)
   {
-    return m_Hypothesis;
+    m_BeliefHypothesis = hypothesis;
   }
-  
-  void SetHypothesis(LabelSetType hypothesis)
+
+  LabelSetType GetPlausibilityHypothesis()
   {
-    m_Hypothesis = hypothesis;
+    return m_PlausibilityHypothesis;
   }
-  
+
+  void SetPlausibilityHypothesis(LabelSetType hypothesis)
+  {
+    m_PlausibilityHypothesis = hypothesis;
+  }
+
   unsigned int GetNumberOfParameters()
   {
     return (m_DescriptorModels.size() * 4);
@@ -214,7 +223,9 @@ private:
   // Descriptor bench
   DescriptorModelsType                            m_DescriptorModels;
   std::vector< typename FuzzyVarType::Pointer >   m_FuzzyVars;
-  LabelSetType                                    m_Universe, m_Hypothesis;
+  LabelSetType                                    m_Universe,
+                                                  m_BeliefHypothesis,
+                                                  m_PlausibilityHypothesis;
   double                                          m_Bel, m_Plau;
   typename ParserType::Pointer                    m_Parser;
 

@@ -45,6 +45,13 @@ template <class TVectorData, class TPrecision>
   AddDescriptor("NOBUIL", noBuilding);
 
   m_Parser =  ParserType::New();
+
+  m_BeliefHypothesis.insert("ROADSA");
+
+  m_PlausibilityHypothesis.insert("ROADSA");
+  m_PlausibilityHypothesis.insert("NOBUIL");
+  m_PlausibilityHypothesis.insert("NONDVI");
+
 }
 
 
@@ -160,8 +167,8 @@ VectorDataToDSValidatedVectorDataFilter<TVectorData, TPrecision>
           }
         }
       jointMassFilter->Update();
-      m_Bel  = jointMassFilter->GetOutput()->GetBelief(m_Hypothesis);
-      m_Plau = jointMassFilter->GetOutput()->GetPlausibility(m_Hypothesis);
+      m_Bel  = jointMassFilter->GetOutput()->GetBelief(m_BeliefHypothesis);
+      m_Plau = jointMassFilter->GetOutput()->GetPlausibility(m_PlausibilityHypothesis);
 
      if (m_Parser->Eval() >= m_CriterionThreshold)
         {
