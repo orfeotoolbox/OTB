@@ -164,9 +164,6 @@ int otbKmzProductWriterWithLogoAndLegend(int argc, char* argv[])
   for (unsigned int gcpId = 0; gcpId < nbGCPs; ++gcpId)
     {
     Point2DType sensorPoint;
-    sensorPoint[0] = atof(argv[3 + gcpId * 5]);
-    sensorPoint[1] = atof(argv[4 + gcpId * 5]);
-
     sensorPoint[0] = parseResult->GetParameterFloat("--GroudControlPoints",     gcpId * 5);
     sensorPoint[1] = parseResult->GetParameterFloat("--GroudControlPoints", 1 + gcpId * 5);
     
