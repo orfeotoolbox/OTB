@@ -1027,7 +1027,9 @@ IF(OTB_DATA_USE_LARGEINPUT)
     ${LARGEINPUT}/QB_EXTRACT/qb_utm.tif
     ${LARGEINPUT}/QB_EXTRACT/qb_utm_withgeom.tif
     ${LARGEINPUT}/QB_EXTRACT/qb_wgs84.tif
-    ${LARGEINPUT}/QB_EXTRACT/qb_wgs84_withgeom.tif)
+    ${LARGEINPUT}/QB_EXTRACT/qb_wgs84_withgeom.tif
+    ${LARGEINPUT}/QB_EXTRACT/qb_wgs84_worldfile.tif
+    )
 
   SET( VectorDataIntoImage_TESTNB 0)
 
