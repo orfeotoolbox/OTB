@@ -56,6 +56,29 @@ public:
   typedef typename TInputVectorData::ConstPointer InputVectorDataPointer;
   typedef typename TOutputVectorData::Pointer     OutputVectorDataPointer;
 
+  typedef typename InputVectorDataType::DataNodeType        InputDataNodeType;
+  typedef typename OutputVectorDataType::DataNodeType       OutputDataNodeType;
+  typedef typename InputVectorDataType::DataTreeType::TreeNodeType  InputInternalTreeNodeType;
+  typedef typename OutputVectorDataType::DataTreeType::TreeNodeType OutputInternalTreeNodeType;
+
+  typedef typename InputDataNodeType::PointType        InputPointType;
+  typedef typename InputDataNodeType::LineType         InputLineType;
+  typedef typename InputDataNodeType::PolygonType      InputPolygonType;
+  typedef typename InputDataNodeType::PolygonListType  InputPolygonListType;
+
+  typedef typename InputLineType::Pointer         InputLinePointerType;
+  typedef typename InputPolygonType::Pointer      InputPolygonPointerType;
+  typedef typename InputPolygonListType::Pointer  InputPolygonListPointerType;
+
+  typedef typename OutputDataNodeType::PointType       OutputPointType;
+  typedef typename OutputDataNodeType::LineType        OutputLineType;
+  typedef typename OutputDataNodeType::PolygonType     OutputPolygonType;
+  typedef typename OutputDataNodeType::PolygonListType OutputPolygonListType;
+
+  typedef typename OutputLineType::Pointer         OutputLinePointerType;
+  typedef typename OutputPolygonType::Pointer      OutputPolygonPointerType;
+  typedef typename OutputPolygonListType::Pointer  OutputPolygonListPointerType;
+
   typedef itk::DataObject::Pointer DataObjectPointer;
 
   virtual void SetInput(const InputVectorDataType *input);
@@ -66,6 +89,27 @@ protected:
   VectorDataToVectorDataFilter();
   /** Destructor */
   virtual ~VectorDataToVectorDataFilter() {}
+
+  virtual OutputPointType ProcessPoint(InputPointType point) const
+  {
+    itkExceptionMacro( << "Subclass should reimplement this method");
+  }
+  virtual OutputLinePointerType ProcessLine(InputLinePointerType line) const
+  {
+    itkExceptionMacro( << "Subclass should reimplement this method");
+  }
+  virtual OutputPolygonPointerType ProcessPolygon(InputPolygonPointerType polygon) const
+  {
+    itkExceptionMacro( << "Subclass should reimplement this method");
+  }
+  virtual OutputPolygonListPointerType ProcessPolygonList(InputPolygonListPointerType polygonList) const
+  {
+    itkExceptionMacro( << "Subclass should reimplement this method");
+  }
+
+  /** Go through the vector data tree and process the nodes */
+  void ProcessNode(InputInternalTreeNodeType * source, OutputInternalTreeNodeType * destination) const;
+
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

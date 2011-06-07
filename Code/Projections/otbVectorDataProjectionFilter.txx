@@ -22,7 +22,6 @@
 #include "itkProgressReporter.h"
 #include "itkMetaDataObject.h"
 #include "otbMetaDataKey.h"
-#include "otbDataNode.h"
 #include "itkTimeProbe.h"
 
 namespace otb
@@ -178,9 +177,9 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
 * Convert point
  */
 template <class TInputVectorData, class TOutputVectorData>
-typename VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>::PointType
+typename VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>::OutputPointType
 VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
-::ProcessPoint(PointType pointCoord) const
+::ProcessPoint(InputPointType pointCoord) const
 {
 
   itk::Point<double, 2> point;
@@ -192,20 +191,20 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
  * Convert line
  */
 template <class TInputVectorData, class TOutputVectorData>
-typename VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>::LinePointerType
+typename VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>::OutputLinePointerType
 VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
-::ProcessLine(LinePointerType line) const
+::ProcessLine(InputLinePointerType line) const
 {
-  typedef typename LineType::VertexListType::ConstPointer VertexListConstPointerType;
-  typedef typename LineType::VertexListConstIteratorType  VertexListConstIteratorType;
+  typedef typename InputLineType::VertexListType::ConstPointer VertexListConstPointerType;
+  typedef typename InputLineType::VertexListConstIteratorType  VertexListConstIteratorType;
   VertexListConstPointerType  vertexList = line->GetVertexList();
   VertexListConstIteratorType it = vertexList->Begin();
-  typename LineType::Pointer  newLine = LineType::New();
+  typename OutputLineType::Pointer  newLine = OutputLineType::New();
   while (it != vertexList->End())
     {
     itk::Point<double, 2>           point;
     itk::ContinuousIndex<double, 2> index;
-    typename LineType::VertexType   pointCoord = it.Value();
+    typename InputLineType::VertexType   pointCoord = it.Value();
     point = m_Transform->TransformPoint(pointCoord);
     index[0] = point[0];
     index[1] = point[1];
@@ -221,20 +220,20 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
  * Convert polygon
  */
 template <class TInputVectorData, class TOutputVectorData>
-typename VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>::PolygonPointerType
+typename VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>::OutputPolygonPointerType
 VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
-::ProcessPolygon(PolygonPointerType polygon) const
+::ProcessPolygon(InputPolygonPointerType polygon) const
 {
-  typedef typename PolygonType::VertexListType::ConstPointer VertexListConstPointerType;
-  typedef typename PolygonType::VertexListConstIteratorType  VertexListConstIteratorType;
+  typedef typename InputPolygonType::VertexListType::ConstPointer VertexListConstPointerType;
+  typedef typename InputPolygonType::VertexListConstIteratorType  VertexListConstIteratorType;
   VertexListConstPointerType    vertexList = polygon->GetVertexList();
   VertexListConstIteratorType   it = vertexList->Begin();
-  typename PolygonType::Pointer newPolygon = PolygonType::New();
+  typename OutputPolygonType::Pointer newPolygon = OutputPolygonType::New();
   while (it != vertexList->End())
     {
     itk::Point<double, 2>            point;
     itk::ContinuousIndex<double, 2>  index;
-    typename PolygonType::VertexType pointCoord = it.Value();
+    typename InputPolygonType::VertexType pointCoord = it.Value();
     point = m_Transform->TransformPoint(pointCoord);
     index[0] = point[0];
     index[1] = point[1];
@@ -248,13 +247,13 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
 * Convert polygon list
  */
 template <class TInputVectorData, class TOutputVectorData>
-typename VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>::PolygonListPointerType
+typename VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>::OutputPolygonListPointerType
 VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
-::ProcessPolygonList(PolygonListPointerType polygonList) const
+::ProcessPolygonList(InputPolygonListPointerType polygonList) const
 {
 
-  PolygonListPointerType newPolygonList = PolygonListType::New();
-  for (typename PolygonListType::ConstIterator it = polygonList->Begin();
+  OutputPolygonListPointerType newPolygonList = OutputPolygonListType::New();
+  for (typename InputPolygonListType::ConstIterator it = polygonList->Begin();
        it != polygonList->End(); ++it)
     {
     newPolygonList->PushBack(this->ProcessPolygon(it.Get()));
@@ -342,12 +341,14 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
   //Instanciate the transform
   this->InstanciateTransform();
 
+  typedef typename OutputVectorDataType::DataTreePointerType OutputDataTreePointerType;
   OutputDataTreePointerType tree = outputPtr->GetDataTree();
 
 // Get the input tree root
   InputInternalTreeNodeType * inputRoot = const_cast<InputInternalTreeNodeType *>(inputPtr->GetDataTree()->GetRoot());
 
   // Create the output tree root
+  typedef typename OutputVectorDataType::DataNodePointerType OutputDataNodePointerType;
   OutputDataNodePointerType newDataNode = OutputDataNodeType::New();
   newDataNode->SetNodeType(inputRoot->Get()->GetNodeType());
   newDataNode->SetNodeId(inputRoot->Get()->GetNodeId());
@@ -358,119 +359,9 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
   // Start recursive processing
   itk::TimeProbe chrono;
   chrono.Start();
-  ProcessNode(inputRoot, outputRoot);
+  this->ProcessNode(inputRoot, outputRoot);
   chrono.Stop();
   otbMsgDevMacro(<< "VectoDataProjectionFilter: features Processed in " << chrono.GetMeanTime() << " seconds.");
-}
-
-template <class TInputVectorData, class TOutputVectorData>
-void
-VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
-::ProcessNode(InputInternalTreeNodeType * source, OutputInternalTreeNodeType * destination) const
-{
-  // Get the children list from the input node
-  InputChildrenListType children = source->GetChildrenList();
-
-  // For each child
-  typename InputChildrenListType::const_iterator it = children.begin();
-  while (it != children.end())
-//for(typename InputChildrenListType::iterator it = children.begin(); it!=children.end(); ++it)
-    {
-    typename OutputInternalTreeNodeType::Pointer newContainer;
-
-    // Copy input DataNode info
-    InputDataNodePointerType  dataNode = (*it)->Get();
-    OutputDataNodePointerType newDataNode   = OutputDataNodeType::New();
-    newDataNode->SetNodeType(dataNode->GetNodeType());
-    newDataNode->SetNodeId(dataNode->GetNodeId());
-    newDataNode->SetMetaDataDictionary(dataNode->GetMetaDataDictionary());
-
-    switch (dataNode->GetNodeType())
-      {
-      case ROOT:
-        {
-        newContainer = OutputInternalTreeNodeType::New();
-        newContainer->Set(newDataNode);
-        destination->AddChild(newContainer);
-        ProcessNode((*it), newContainer);
-        break;
-        }
-      case DOCUMENT:
-        {
-        newContainer = OutputInternalTreeNodeType::New();
-        newContainer->Set(newDataNode);
-        destination->AddChild(newContainer);
-        ProcessNode((*it), newContainer);
-        break;
-        }
-      case FOLDER:
-        {
-        newContainer = OutputInternalTreeNodeType::New();
-        newContainer->Set(newDataNode);
-        destination->AddChild(newContainer);
-        ProcessNode((*it), newContainer);
-        break;
-        }
-      case FEATURE_POINT:
-        {
-        newDataNode->SetPoint(this->ProcessPoint(dataNode->GetPoint()));
-        newContainer = OutputInternalTreeNodeType::New();
-        newContainer->Set(newDataNode);
-        destination->AddChild(newContainer);
-        break;
-        }
-      case FEATURE_LINE:
-        {
-        newDataNode->SetLine(this->ProcessLine(dataNode->GetLine()));
-        newContainer = OutputInternalTreeNodeType::New();
-        newContainer->Set(newDataNode);
-        destination->AddChild(newContainer);
-        break;
-        }
-      case FEATURE_POLYGON:
-        {
-        newDataNode->SetPolygonExteriorRing(this->ProcessPolygon(dataNode->GetPolygonExteriorRing()));
-        newDataNode->SetPolygonInteriorRings(this->ProcessPolygonList(dataNode->GetPolygonInteriorRings()));
-        newContainer = OutputInternalTreeNodeType::New();
-        newContainer->Set(newDataNode);
-        destination->AddChild(newContainer);
-        break;
-        }
-      case FEATURE_MULTIPOINT:
-        {
-        newContainer = OutputInternalTreeNodeType::New();
-        newContainer->Set(newDataNode);
-        destination->AddChild(newContainer);
-        ProcessNode((*it), newContainer);
-        break;
-        }
-      case FEATURE_MULTILINE:
-        {
-        newContainer = OutputInternalTreeNodeType::New();
-        newContainer->Set(newDataNode);
-        destination->AddChild(newContainer);
-        ProcessNode((*it), newContainer);
-        break;
-        }
-      case FEATURE_MULTIPOLYGON:
-        {
-        newContainer = OutputInternalTreeNodeType::New();
-        newContainer->Set(newDataNode);
-        destination->AddChild(newContainer);
-        ProcessNode((*it), newContainer);
-        break;
-        }
-      case FEATURE_COLLECTION:
-        {
-        newContainer = OutputInternalTreeNodeType::New();
-        newContainer->Set(newDataNode);
-        destination->AddChild(newContainer);
-        ProcessNode((*it), newContainer);
-        break;
-        }
-      }
-    ++it;
-    }
 }
 
 } // end namespace otb

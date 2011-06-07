@@ -86,28 +86,29 @@ public:
   typedef itk::Vector<double, 2> SpacingType;
   typedef itk::Point<double, 2>  OriginType;
 
-  typedef typename InputVectorDataType::DataNodePointerType  InputDataNodePointerType;
   typedef typename OutputVectorDataType::DataNodeType        OutputDataNodeType;
-  typedef typename OutputVectorDataType::DataNodePointerType OutputDataNodePointerType;
-  typedef typename OutputVectorDataType::DataTreePointerType OutputDataTreePointerType;
+  typedef typename InputVectorDataType::DataNodeType         InputDataNodeType;
 
   typedef typename InputVectorDataType::DataTreeType::TreeNodeType  InputInternalTreeNodeType;
   typedef typename OutputVectorDataType::DataTreeType::TreeNodeType OutputInternalTreeNodeType;
-  typedef typename InputInternalTreeNodeType::ChildrenListType      InputChildrenListType;
 
-  typedef typename OutputDataNodeType::PointType PointType;
+  typedef typename InputDataNodeType::PointType        InputPointType;
+  typedef typename InputDataNodeType::LineType         InputLineType;
+  typedef typename InputDataNodeType::PolygonType      InputPolygonType;
+  typedef typename InputDataNodeType::PolygonListType  InputPolygonListType;
 
-  typedef typename OutputDataNodeType::LineType             LineType;
-  typedef typename OutputDataNodeType::LineConstPointerType LineConstPointerType;
-  typedef typename OutputDataNodeType::LinePointerType      LinePointerType;
+  typedef typename InputLineType::Pointer         InputLinePointerType;
+  typedef typename InputPolygonType::Pointer      InputPolygonPointerType;
+  typedef typename InputPolygonListType::Pointer  InputPolygonListPointerType;
 
-  typedef typename OutputDataNodeType::PolygonType             PolygonType;
-  typedef typename OutputDataNodeType::PolygonConstPointerType PolygonConstPointerType;
-  typedef typename OutputDataNodeType::PolygonPointerType      PolygonPointerType;
+  typedef typename OutputDataNodeType::PointType       OutputPointType;
+  typedef typename OutputDataNodeType::LineType        OutputLineType;
+  typedef typename OutputDataNodeType::PolygonType     OutputPolygonType;
+  typedef typename OutputDataNodeType::PolygonListType OutputPolygonListType;
 
-  typedef typename OutputDataNodeType::PolygonListType             PolygonListType;
-  typedef typename OutputDataNodeType::PolygonListConstPointerType PolygonListConstPointerType;
-  typedef typename OutputDataNodeType::PolygonListPointerType      PolygonListPointerType;
+  typedef typename OutputLineType::Pointer         OutputLinePointerType;
+  typedef typename OutputPolygonType::Pointer      OutputPolygonPointerType;
+  typedef typename OutputPolygonListType::Pointer  OutputPolygonListPointerType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -178,17 +179,15 @@ protected:
   VectorDataProjectionFilter();
   virtual ~VectorDataProjectionFilter() {}
 
-  PointType ProcessPoint(PointType point) const;
-  LinePointerType ProcessLine(LinePointerType line) const;
-  PolygonPointerType ProcessPolygon(PolygonPointerType polygon) const;
-  PolygonListPointerType ProcessPolygonList(PolygonListPointerType polygonList) const;
+  virtual OutputPointType ProcessPoint(InputPointType point) const;
+  virtual OutputLinePointerType ProcessLine(InputLinePointerType line) const;
+  virtual OutputPolygonPointerType ProcessPolygon(InputPolygonPointerType polygon) const;
+  virtual OutputPolygonListPointerType ProcessPolygonList(InputPolygonListPointerType polygonList) const;
 
   void InstanciateTransform(void);
 
   void GenerateOutputInformation(void);
   void GenerateData(void);
-
-  void ProcessNode(InputInternalTreeNodeType * source, OutputInternalTreeNodeType * destination) const;
 
 private:
   VectorDataProjectionFilter(const Self &); //purposely not implemented
