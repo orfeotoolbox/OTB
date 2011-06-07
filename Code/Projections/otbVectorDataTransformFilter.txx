@@ -171,7 +171,8 @@ VectorDataTransformFilter<TInputVectorData, TOutputVectorData>
   InputChildrenListType children = source->GetChildrenList();
 
   // For each child
-  for(typename InputChildrenListType::iterator it = children.begin(); it != children.end(); ++it)
+  typename InputChildrenListType::const_iterator it = children.begin();
+  while (it != children.end())
     {
     typename OutputInternalTreeNodeType::Pointer newContainer;
 
@@ -211,46 +212,49 @@ VectorDataTransformFilter<TInputVectorData, TOutputVectorData>
       case FEATURE_POINT:
       {
       PointType point = this->ProcessPoint(dataNode->GetPoint());
-      if (!vnl_math_isnan(point[0]) && !vnl_math_isnan(point[1]) )
+      if (vnl_math_isnan(point[0]) || vnl_math_isnan(point[1]) )
         {
-        newDataNode->SetPoint(this->ProcessPoint(dataNode->GetPoint()));
-        newContainer = OutputInternalTreeNodeType::New();
-        newContainer->Set(newDataNode);
-        destination->AddChild(newContainer);
+        break;
         }
+      newDataNode->SetPoint(this->ProcessPoint(dataNode->GetPoint()));
+      newContainer = OutputInternalTreeNodeType::New();
+      newContainer->Set(newDataNode);
+      destination->AddChild(newContainer);
+        
       break;
       }
       case FEATURE_LINE:
       {
       LinePointerType line = this->ProcessLine(dataNode->GetLine());
-      if( line->GetVertexList()->Size() != 0 )
+      if( line->GetVertexList()->Size() == 0 )
         {
-        newDataNode->SetLine(this->ProcessLine(dataNode->GetLine()));
-        newContainer = OutputInternalTreeNodeType::New();
-        newContainer->Set(newDataNode);
-        destination->AddChild(newContainer);
+        break;
         }
+      newDataNode->SetLine(this->ProcessLine(dataNode->GetLine()));
+      newContainer = OutputInternalTreeNodeType::New();
+      newContainer->Set(newDataNode);
+      destination->AddChild(newContainer);
       break;
       }
       case FEATURE_POLYGON:
       {
       PolygonPointerType polyExt = this->ProcessPolygon(dataNode->GetPolygonExteriorRing());
       PolygonListPointerType polyInt = this->ProcessPolygonList(dataNode->GetPolygonInteriorRings());
-      bool ok=true;
       for (typename PolygonListType::ConstIterator it = polyInt->Begin();
            it != polyInt->End(); ++it)
         {
         if( it.Get()->GetVertexList()->Size() == 0 )
-          ok = false;
+          break;
         }
-      if(polyExt->GetVertexList()->Size() != 0 && ok == true)
+      if(polyExt->GetVertexList()->Size() == 0)
         {
-        newDataNode->SetPolygonExteriorRing(this->ProcessPolygon(dataNode->GetPolygonExteriorRing()));
-        newDataNode->SetPolygonInteriorRings(this->ProcessPolygonList(dataNode->GetPolygonInteriorRings()));
-        newContainer = OutputInternalTreeNodeType::New();
-        newContainer->Set(newDataNode);
-        destination->AddChild(newContainer);
+        break;
         }
+      newDataNode->SetPolygonExteriorRing(this->ProcessPolygon(dataNode->GetPolygonExteriorRing()));
+      newDataNode->SetPolygonInteriorRings(this->ProcessPolygonList(dataNode->GetPolygonInteriorRings()));
+      newContainer = OutputInternalTreeNodeType::New();
+      newContainer->Set(newDataNode);
+      destination->AddChild(newContainer);
       break;
       }
       case FEATURE_MULTIPOINT:
@@ -286,6 +290,7 @@ VectorDataTransformFilter<TInputVectorData, TOutputVectorData>
       break;
       }
       }
+    ++it;
     }
 }
 
