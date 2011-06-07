@@ -23,10 +23,10 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbReciprocalCoherencyToMuellerImageFilter.h"
+#include "otbReciprocalCoherencyToReciprocalMuellerImageFilter.h"
 
 
-int otbReciprocalCoherencyToMuellerImageFilter(int argc, char * argv[])
+int otbReciprocalCoherencyToReciprocalMuellerImageFilter(int argc, char * argv[])
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
@@ -39,7 +39,7 @@ int otbReciprocalCoherencyToMuellerImageFilter(int argc, char * argv[])
   typedef otb::VectorImage<InputPixelType, Dimension>  ImageType;
   typedef otb::VectorImage<PixelType, Dimension>       RealImageType;
 
-  typedef otb::ReciprocalCoherencyToMuellerImageFilter<ImageType, RealImageType> FilterType;
+  typedef otb::ReciprocalCoherencyToReciprocalMuellerImageFilter<ImageType, RealImageType> FilterType;
 
   typedef otb::ImageFileReader<ImageType>  ReaderType;
   typedef otb::ImageFileWriter<RealImageType> WriterType;

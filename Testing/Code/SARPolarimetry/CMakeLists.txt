@@ -311,14 +311,14 @@ ADD_TEST(saTvReciprocalHAlphaImageFilter ${SARPOLARIMETRY_TESTS2}
 	)
 
 # Reciprocal Coherency To Mueller Image Filter
-ADD_TEST(saTuReciprocalCoherencyToMuellerImageFilterNew ${SARPOLARIMETRY_TESTS2}
-		otbReciprocalCoherencyToMuellerImageFilterNew
+ADD_TEST(saTuReciprocalCoherencyToReciprocalMuellerImageFilterNew ${SARPOLARIMETRY_TESTS2}
+		otbReciprocalCoherencyToReciprocalMuellerImageFilterNew
 )
 
-ADD_TEST(saTvReciprocalCoherencyToMuellerImageFilter ${SARPOLARIMETRY_TESTS2}
+ADD_TEST(saTvReciprocalCoherencyToReciprocalMuellerImageFilter ${SARPOLARIMETRY_TESTS2}
   --compare-image ${EPSILON_12}   ${BASELINE}/saTvReciprocalCoherencyToMuellerImageFilter.tif
                     ${TEMP}/saTvReciprocalCoherencyToMuellerImageFilter.tif
-        otbReciprocalCoherencyToMuellerImageFilter
+        otbReciprocalCoherencyToReciprocalMuellerImageFilter
         ${BASELINE}/saTvSinclairImageFilter_SinclairToReciprocalCoherency.tif
         ${TEMP}/saTvReciprocalCoherencyToMuellerImageFilter.tif
 	)
@@ -397,8 +397,8 @@ otbReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilterNew.cxx
 otbReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter.cxx
 otbReciprocalHAlphaImageFilterNew.cxx
 otbReciprocalHAlphaImageFilter.cxx
-otbReciprocalCoherencyToMuellerImageFilterNew.cxx
-otbReciprocalCoherencyToMuellerImageFilter.cxx
+otbReciprocalCoherencyToReciprocalMuellerImageFilterNew.cxx
+otbReciprocalCoherencyToReciprocalMuellerImageFilter.cxx
 otbMuellerToPolarisationDegreeAndPowerImageFilterNew.cxx
 otbMuellerToPolarisationDegreeAndPowerImageFilter.cxx
 otbMuellerToReciprocalCovarianceFunctor.cxx
