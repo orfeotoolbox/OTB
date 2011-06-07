@@ -28,6 +28,7 @@ void RegisterTests()
   REGISTER_TEST(otbDEMHandlerTest);
   REGISTER_TEST(otbDEMToImageGeneratorNew);
   REGISTER_TEST(otbDEMToImageGeneratorTest);
+  REGISTER_TEST(otbDEMToImageGeneratorFromImageTest);
   REGISTER_TEST(otbOssimElevManagerTest);
   REGISTER_TEST(otbOssimElevManagerTest2);
   REGISTER_TEST(otbOssimElevManagerTest4);

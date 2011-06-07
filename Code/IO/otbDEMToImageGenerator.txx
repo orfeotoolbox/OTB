@@ -64,6 +64,7 @@ template <class TDEMImage>
 void DEMToImageGenerator<TDEMImage>
 ::GenerateOutputInformation()
 {
+
   DEMImageType *output;
   output = this->GetOutput(0);
 
@@ -81,7 +82,7 @@ void DEMToImageGenerator<TDEMImage>
   output->SetOrigin(m_OutputOrigin);
 }
 
-// GenerateOutputInformation method
+// InstanciateTransform method
 template <class TDEMImage>
 void DEMToImageGenerator<TDEMImage>
 ::InstanciateTransform()
