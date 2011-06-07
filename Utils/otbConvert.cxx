@@ -27,6 +27,10 @@
 #include "otbStandardFilterWatcher.h"
 #include "otbStandardWriterWatcher.h"
 #include "otbUnaryImageFunctorWithVectorImageFilter.h"
+#include "otbStreamingShrinkImageFilter.h"
+#include "itkListSample.h"
+#include "otbListSampleToHistogramListGenerator.h"
+#include "itkImageRegionConstIterator.h"
 
 namespace otb
 {
@@ -49,6 +53,13 @@ public:
 template<typename OutputPixelType>
 int generic_main_convert(otb::ApplicationOptionsResult* parseResult)
 {
+  unsigned int ram = 256;
+
+  if (parseResult->IsOptionPresent("AvailableMemory"))
+    {
+    ram = parseResult->GetParameterUInt("AvailableMemory");
+    }
+
   typedef otb::VectorImage<double, 2> InputImageType;
   typedef otb::VectorImage<OutputPixelType, 2> OutputImageType;
 
@@ -70,6 +81,8 @@ int generic_main_convert(otb::ApplicationOptionsResult* parseResult)
     reader->SetFileName(parseResult->GetInputImage().c_str());
     reader->UpdateOutputInformation();
 
+    unsigned int nbComp(reader->GetOutput()->GetNumberOfComponentsPerPixel());
+
     //define the transfer log
     typedef otb::Functor::LogFunctor<InputImageType::InternalPixelType> TransferLogFunctor;
     typedef otb::UnaryImageFunctorWithVectorImageFilter<InputImageType, InputImageType, TransferLogFunctor> TransferLogType;
@@ -80,8 +93,8 @@ int generic_main_convert(otb::ApplicationOptionsResult* parseResult)
     typedef otb::VectorRescaleIntensityImageFilter<InputImageType, OutputImageType> RescalerType;
     typename OutputImageType::PixelType minimum;
     typename OutputImageType::PixelType maximum;
-    minimum.SetSize(reader->GetOutput()->GetNumberOfComponentsPerPixel());
-    maximum.SetSize(reader->GetOutput()->GetNumberOfComponentsPerPixel());
+    minimum.SetSize(nbComp);
+    maximum.SetSize(nbComp);
     minimum.Fill(itk::NumericTraits<OutputPixelType>::min());
     maximum.Fill(itk::NumericTraits<OutputPixelType>::max());
 
@@ -90,22 +103,74 @@ int generic_main_convert(otb::ApplicationOptionsResult* parseResult)
     rescaler->SetOutputMinimum(minimum);
     rescaler->SetOutputMaximum(maximum);
 
+    // We need to subsample the input image in order to estimate its
+    // histogram
+    typedef otb::StreamingShrinkImageFilter<InputImageType,InputImageType> ShrinkFilterType;
+    typename ShrinkFilterType::Pointer shrinkFilter = ShrinkFilterType::New();
+    
+    // Shrink factor is computed so as to load a quicklook of 1000
+    // pixels square at most
+    typename InputImageType::SizeType imageSize = reader->GetOutput()->GetLargestPossibleRegion().GetSize();
+    unsigned int shrinkFactor = std::max(imageSize[0],imageSize[1])/1000;
+
+    std::cout<<"Shrink factor: "<<shrinkFactor<<std::endl;
+
+    shrinkFilter->SetShrinkFactor(shrinkFactor);
+
     if (transferNum == 2)
       {
+      shrinkFilter->SetInput(transferLog->GetOutput());
       rescaler->SetInput(transferLog->GetOutput());
       }
     else
       {
+      shrinkFilter->SetInput(reader->GetOutput());
       rescaler->SetInput(reader->GetOutput());
       }
 
-    writer->SetInput(rescaler->GetOutput());
+    otb::StandardWriterWatcher shrinkWatcher(shrinkFilter->GetStreamer(), shrinkFilter->GetFilter(),"Estimating image histogram for rescaling");
 
-    unsigned int ram = 256;
-    if (parseResult->IsOptionPresent("AvailableMemory"))
+    shrinkFilter->GetStreamer()->SetAutomaticTiledStreaming(ram);
+
+    shrinkFilter->Update();
+
+    typedef itk::Statistics::ListSample<typename InputImageType::PixelType> ListSampleType;
+    typedef itk::Statistics::DenseFrequencyContainer DFContainerType;
+
+    typedef otb::ListSampleToHistogramListGenerator<ListSampleType,typename InputImageType::InternalPixelType,DFContainerType> HistogramsGeneratorType;
+    itk::ImageRegionConstIterator<InputImageType> it(shrinkFilter->GetOutput(),shrinkFilter->GetOutput()->GetLargestPossibleRegion());
+
+    typename ListSampleType::Pointer listSample = ListSampleType::New();
+
+    // Now we generate the list of samples
+    for(it.GoToBegin();!it.IsAtEnd();++it)
       {
-      ram = parseResult->GetParameterUInt("AvailableMemory");
+      listSample->PushBack(it.Get());
       }
+
+    // And then the histogram
+    typename HistogramsGeneratorType::Pointer histogramsGenerator = HistogramsGeneratorType::New();
+    histogramsGenerator->SetListSample(listSample);
+    histogramsGenerator->SetNumberOfBins(255);
+    histogramsGenerator->NoDataFlagOn();
+    histogramsGenerator->Update();
+
+    // And extract the 2% lower and upper quantile
+    typename InputImageType::PixelType inputMin(nbComp),inputMax(nbComp);
+    
+    for(unsigned int i = 0; i < nbComp; ++i)
+      {
+      inputMin[i] = histogramsGenerator->GetOutput()->GetNthElement(i)->Quantile(0,0.02);
+      inputMax[i] = histogramsGenerator->GetOutput()->GetNthElement(i)->Quantile(0,0.98);
+      }
+    
+    
+    rescaler->AutomaticInputMinMaxComputationOff();
+    rescaler->SetInputMinimum(inputMin);
+    rescaler->SetInputMaximum(inputMax);
+
+    writer->SetInput(rescaler->GetOutput());
+   
     writer->SetAutomaticTiledStreaming(ram);
 
     otb::StandardWriterWatcher watcher(writer, rescaler,"Conversion");
@@ -120,7 +185,6 @@ int generic_main_convert(otb::ApplicationOptionsResult* parseResult)
     otb::StandardFilterWatcher watcher(writer,"Conversion");
     writer->SetInput(reader->GetOutput());
 
-    unsigned int ram = 256;
     if (parseResult->IsOptionPresent("AvailableMemory"))
       {
       ram = parseResult->GetParameterUInt("AvailableMemory");
