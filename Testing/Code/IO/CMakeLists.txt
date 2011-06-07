@@ -1587,11 +1587,11 @@ ADD_TEST(ioTvDEMToImageGeneratorTest2 ${IO_TESTS12}
 )
 
 IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(ioTvDEMToImageGeneratorFromImageTest ${IO_TESTS12}
+ADD_TEST(ioTvDEMToImageGeneratorFromImageTest_SensorModel ${IO_TESTS12}
     --compare-n-images ${EPSILON_5} 2    
-        ${BASELINE}/ioTvDEMToImageGeneratorFromImageTest.tif
+        ${BASELINE}/ioTvDEMToImageGeneratorFromImageTest_SM.tif
         ${TEMP}/ioTvDEMToImageGeneratorFromImage_Extract_DEM.tif
-        ${BASELINE}/ioTvDEMToImageGeneratorFromImageTest.tif
+        ${BASELINE}/ioTvDEMToImageGeneratorFromImageTest_SM.tif
         ${TEMP}/ioTvDEMToImageGeneratorFromImage_DEM_Extract.tif
       otbDEMToImageGeneratorFromImageTest
         ${LARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
@@ -1602,6 +1602,29 @@ ADD_TEST(ioTvDEMToImageGeneratorFromImageTest ${IO_TESTS12}
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
+ADD_TEST(ioTvDEMToImageGeneratorFromImageTest ${IO_TESTS12}
+    --compare-image ${EPSILON_5}    
+        ${BASELINE}/ioTvDEMToImageGeneratorFromImageTest.tif
+        ${TEMP}/ioTvDEMToImageGeneratorFromImage.tif
+      otbDEMToImageGeneratorFromImageTest
+        ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+        ${INPUTDATA}/DEM/srtm_directory
+        ${TEMP}/ioTvDEMToImageGeneratorFromImage.tif
+)
+
+ADD_TEST(ioTvDEMToImageGeneratorFromImageTest2 ${IO_TESTS12}
+    --compare-n-images ${EPSILON_5} 2    
+        ${BASELINE}/ioTvDEMToImageGeneratorFromImageTest_Ortho.tif
+        ${TEMP}/ioTvDEMToImageGeneratorFromImage_Extract_DEM2.tif
+        ${BASELINE}/ioTvDEMToImageGeneratorFromImageTest_Ortho.tif
+        ${TEMP}/ioTvDEMToImageGeneratorFromImage_DEM_Extract2.tif
+      otbDEMToImageGeneratorFromImageTest
+        ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+        ${INPUTDATA}/DEM/srtm_directory
+        ${TEMP}/ioTvDEMToImageGeneratorFromImage_Extract_DEM2.tif
+        ${TEMP}/ioTvDEMToImageGeneratorFromImage_DEM_Extract2.tif
+        10 15 16 64 
+)
 
 ADD_TEST(ioTvossimElevManagerTest ${IO_TESTS12}
 --compare-image ${EPSILON_9}  ${BASELINE}/ioTvossimElevManagerTest.tif
