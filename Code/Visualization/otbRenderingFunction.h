@@ -191,6 +191,7 @@ protected:
     histogramFilter->SetListSample(pixelRepresentationListSample);
 
     histogramFilter->SetNumberOfBins(m_NumberOfHistogramBins);
+    histogramFilter->NoDataFlagOn();
 
     // Generate
     histogramFilter->Update();
