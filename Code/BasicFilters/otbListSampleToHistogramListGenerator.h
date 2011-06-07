@@ -70,6 +70,32 @@ public:
   typedef typename HistogramListType::Pointer         HistogramListPointerType;
 
   typedef typename TListSample::ConstPointer ListSampleConstPointerType;
+
+  /** Set the no data value. These value are ignored in histogram
+   *  computation if NoDataFlag is On 
+   */
+  itkSetMacro(NoDataValue,THistogramMeasurement);
+
+  /** Set the no data value. These value are ignored in histogram
+   *  computation if NoDataFlag is On 
+   */
+  itkGetConstReferenceMacro(NoDataValue,THistogramMeasurement);
+
+  /** Set the NoDataFlag. If set to true, samples with values equal to
+   *  m_NoDataValue are ignored.
+   */
+  itkSetMacro(NoDataFlag,bool);
+ 
+  /** Get the NoDataFlag. If set to true, samples with values equal to
+   *  m_NoDataValue are ignored.
+   */
+  itkGetMacro(NoDataFlag,bool);
+
+  /** Toggle the NoDataFlag. If set to true, samples with values equal to
+   *  m_NoDataValue are ignored.
+   */
+  itkBooleanMacro(NoDataFlag);
+
   /** plug in the ListSample object */
   void SetListSample(const TListSample* list)
   {
@@ -119,6 +145,8 @@ private:
   MeasurementVectorType      m_HistogramMax;
   bool                       m_AutoMinMax;
   HistogramListPointerType   m_HistogramList;
+  bool                       m_NoDataFlag;
+  THistogramMeasurement      m_NoDataValue;
 
 }; // end of class
 
