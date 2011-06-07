@@ -180,7 +180,7 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
 template <class TInputVectorData, class TOutputVectorData>
 typename VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>::PointType
 VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
-::ReprojectPoint(PointType pointCoord) const
+::ProcessPoint(PointType pointCoord) const
 {
 
   itk::Point<double, 2> point;
@@ -194,7 +194,7 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
 template <class TInputVectorData, class TOutputVectorData>
 typename VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>::LinePointerType
 VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
-::ReprojectLine(LinePointerType line) const
+::ProcessLine(LinePointerType line) const
 {
   typedef typename LineType::VertexListType::ConstPointer VertexListConstPointerType;
   typedef typename LineType::VertexListConstIteratorType  VertexListConstIteratorType;
@@ -223,7 +223,7 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
 template <class TInputVectorData, class TOutputVectorData>
 typename VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>::PolygonPointerType
 VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
-::ReprojectPolygon(PolygonPointerType polygon) const
+::ProcessPolygon(PolygonPointerType polygon) const
 {
   typedef typename PolygonType::VertexListType::ConstPointer VertexListConstPointerType;
   typedef typename PolygonType::VertexListConstIteratorType  VertexListConstIteratorType;
@@ -250,14 +250,14 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
 template <class TInputVectorData, class TOutputVectorData>
 typename VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>::PolygonListPointerType
 VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
-::ReprojectPolygonList(PolygonListPointerType polygonList) const
+::ProcessPolygonList(PolygonListPointerType polygonList) const
 {
 
   PolygonListPointerType newPolygonList = PolygonListType::New();
   for (typename PolygonListType::ConstIterator it = polygonList->Begin();
        it != polygonList->End(); ++it)
     {
-    newPolygonList->PushBack(this->ReprojectPolygon(it.Get()));
+    newPolygonList->PushBack(this->ProcessPolygon(it.Get()));
     }
   return newPolygonList;
 }
@@ -413,7 +413,7 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
         }
       case FEATURE_POINT:
         {
-        newDataNode->SetPoint(this->ReprojectPoint(dataNode->GetPoint()));
+        newDataNode->SetPoint(this->ProcessPoint(dataNode->GetPoint()));
         newContainer = OutputInternalTreeNodeType::New();
         newContainer->Set(newDataNode);
         destination->AddChild(newContainer);
@@ -421,7 +421,7 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
         }
       case FEATURE_LINE:
         {
-        newDataNode->SetLine(this->ReprojectLine(dataNode->GetLine()));
+        newDataNode->SetLine(this->ProcessLine(dataNode->GetLine()));
         newContainer = OutputInternalTreeNodeType::New();
         newContainer->Set(newDataNode);
         destination->AddChild(newContainer);
@@ -429,8 +429,8 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
         }
       case FEATURE_POLYGON:
         {
-        newDataNode->SetPolygonExteriorRing(this->ReprojectPolygon(dataNode->GetPolygonExteriorRing()));
-        newDataNode->SetPolygonInteriorRings(this->ReprojectPolygonList(dataNode->GetPolygonInteriorRings()));
+        newDataNode->SetPolygonExteriorRing(this->ProcessPolygon(dataNode->GetPolygonExteriorRing()));
+        newDataNode->SetPolygonInteriorRings(this->ProcessPolygonList(dataNode->GetPolygonInteriorRings()));
         newContainer = OutputInternalTreeNodeType::New();
         newContainer->Set(newDataNode);
         destination->AddChild(newContainer);

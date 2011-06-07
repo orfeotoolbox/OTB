@@ -178,10 +178,10 @@ protected:
   VectorDataProjectionFilter();
   virtual ~VectorDataProjectionFilter() {}
 
-  PointType ReprojectPoint(PointType point) const;
-  LinePointerType ReprojectLine(LinePointerType line) const;
-  PolygonPointerType ReprojectPolygon(PolygonPointerType polygon) const;
-  PolygonListPointerType ReprojectPolygonList(PolygonListPointerType polygonList) const;
+  PointType ProcessPoint(PointType point) const;
+  LinePointerType ProcessLine(LinePointerType line) const;
+  PolygonPointerType ProcessPolygon(PolygonPointerType polygon) const;
+  PolygonListPointerType ProcessPolygonList(PolygonListPointerType polygonList) const;
 
   void InstanciateTransform(void);
 

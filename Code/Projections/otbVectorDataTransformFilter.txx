@@ -42,7 +42,7 @@ VectorDataTransformFilter<TInputVectorData, TOutputVectorData>
 template <class TInputVectorData, class TOutputVectorData >
 typename VectorDataTransformFilter<TInputVectorData, TOutputVectorData>::PointType
 VectorDataTransformFilter<TInputVectorData, TOutputVectorData>
-::ReprojectPoint(PointType pointCoord) const
+::ProcessPoint(PointType pointCoord) const
 {
   itk::Point<double, 2> point;
   point = m_Transform->TransformPoint(pointCoord);
@@ -56,7 +56,7 @@ VectorDataTransformFilter<TInputVectorData, TOutputVectorData>
 template <class TInputVectorData, class TOutputVectorData >
 typename VectorDataTransformFilter<TInputVectorData, TOutputVectorData>::LinePointerType
 VectorDataTransformFilter<TInputVectorData, TOutputVectorData>
-::ReprojectLine(LinePointerType line) const
+::ProcessLine(LinePointerType line) const
 {
   typedef typename LineType::VertexListType::ConstPointer VertexListConstPointerType;
   typedef typename LineType::VertexListConstIteratorType VertexListConstIteratorType;
@@ -85,7 +85,7 @@ VectorDataTransformFilter<TInputVectorData, TOutputVectorData>
 template <class TInputVectorData, class TOutputVectorData >
 typename VectorDataTransformFilter<TInputVectorData, TOutputVectorData>::PolygonPointerType
 VectorDataTransformFilter<TInputVectorData, TOutputVectorData>
-::ReprojectPolygon(PolygonPointerType polygon) const
+::ProcessPolygon(PolygonPointerType polygon) const
 {
   typedef typename PolygonType::VertexListType::ConstPointer VertexListConstPointerType;
   typedef typename PolygonType::VertexListConstIteratorType VertexListConstIteratorType;
@@ -113,14 +113,14 @@ VectorDataTransformFilter<TInputVectorData, TOutputVectorData>
 template <class TInputVectorData, class TOutputVectorData >
 typename VectorDataTransformFilter<TInputVectorData, TOutputVectorData>::PolygonListPointerType
 VectorDataTransformFilter<TInputVectorData, TOutputVectorData>
-::ReprojectPolygonList(PolygonListPointerType polygonList) const
+::ProcessPolygonList(PolygonListPointerType polygonList) const
 {
 
   PolygonListPointerType newPolygonList = PolygonListType::New();
   for (typename PolygonListType::ConstIterator it = polygonList->Begin();
        it != polygonList->End(); ++it)
     {
-    newPolygonList->PushBack(this->ReprojectPolygon(it.Get()));
+    newPolygonList->PushBack(this->ProcessPolygon(it.Get()));
     }
   return newPolygonList;
 }
@@ -210,10 +210,10 @@ VectorDataTransformFilter<TInputVectorData, TOutputVectorData>
       }
       case FEATURE_POINT:
       {
-      PointType point = this->ReprojectPoint(dataNode->GetPoint());
+      PointType point = this->ProcessPoint(dataNode->GetPoint());
       if (!vnl_math_isnan(point[0]) && !vnl_math_isnan(point[1]) )
         {
-        newDataNode->SetPoint(this->ReprojectPoint(dataNode->GetPoint()));
+        newDataNode->SetPoint(this->ProcessPoint(dataNode->GetPoint()));
         newContainer = OutputInternalTreeNodeType::New();
         newContainer->Set(newDataNode);
         destination->AddChild(newContainer);
@@ -222,10 +222,10 @@ VectorDataTransformFilter<TInputVectorData, TOutputVectorData>
       }
       case FEATURE_LINE:
       {
-      LinePointerType line = this->ReprojectLine(dataNode->GetLine());
+      LinePointerType line = this->ProcessLine(dataNode->GetLine());
       if( line->GetVertexList()->Size() != 0 )
         {
-        newDataNode->SetLine(this->ReprojectLine(dataNode->GetLine()));
+        newDataNode->SetLine(this->ProcessLine(dataNode->GetLine()));
         newContainer = OutputInternalTreeNodeType::New();
         newContainer->Set(newDataNode);
         destination->AddChild(newContainer);
@@ -234,8 +234,8 @@ VectorDataTransformFilter<TInputVectorData, TOutputVectorData>
       }
       case FEATURE_POLYGON:
       {
-      PolygonPointerType polyExt = this->ReprojectPolygon(dataNode->GetPolygonExteriorRing());
-      PolygonListPointerType polyInt = this->ReprojectPolygonList(dataNode->GetPolygonInteriorRings());
+      PolygonPointerType polyExt = this->ProcessPolygon(dataNode->GetPolygonExteriorRing());
+      PolygonListPointerType polyInt = this->ProcessPolygonList(dataNode->GetPolygonInteriorRings());
       bool ok=true;
       for (typename PolygonListType::ConstIterator it = polyInt->Begin();
            it != polyInt->End(); ++it)
@@ -245,8 +245,8 @@ VectorDataTransformFilter<TInputVectorData, TOutputVectorData>
         }
       if(polyExt->GetVertexList()->Size() != 0 && ok == true)
         {
-        newDataNode->SetPolygonExteriorRing(this->ReprojectPolygon(dataNode->GetPolygonExteriorRing()));
-        newDataNode->SetPolygonInteriorRings(this->ReprojectPolygonList(dataNode->GetPolygonInteriorRings()));
+        newDataNode->SetPolygonExteriorRing(this->ProcessPolygon(dataNode->GetPolygonExteriorRing()));
+        newDataNode->SetPolygonInteriorRings(this->ProcessPolygonList(dataNode->GetPolygonInteriorRings()));
         newContainer = OutputInternalTreeNodeType::New();
         newContainer->Set(newDataNode);
         destination->AddChild(newContainer);
