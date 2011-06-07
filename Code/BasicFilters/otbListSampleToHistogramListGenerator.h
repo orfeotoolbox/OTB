@@ -72,24 +72,24 @@ public:
   typedef typename TListSample::ConstPointer ListSampleConstPointerType;
 
   /** Set the no data value. These value are ignored in histogram
-   *  computation if NoDataFlag is On 
+   *  computation if NoDataFlag is On
    */
-  itkSetMacro(NoDataValue,THistogramMeasurement);
+  itkSetMacro(NoDataValue, THistogramMeasurement);
 
   /** Set the no data value. These value are ignored in histogram
-   *  computation if NoDataFlag is On 
+   *  computation if NoDataFlag is On
    */
-  itkGetConstReferenceMacro(NoDataValue,THistogramMeasurement);
+  itkGetConstReferenceMacro(NoDataValue, THistogramMeasurement);
 
   /** Set the NoDataFlag. If set to true, samples with values equal to
    *  m_NoDataValue are ignored.
    */
-  itkSetMacro(NoDataFlag,bool);
+  itkSetMacro(NoDataFlag, bool);
  
   /** Get the NoDataFlag. If set to true, samples with values equal to
    *  m_NoDataValue are ignored.
    */
-  itkGetMacro(NoDataFlag,bool);
+  itkGetMacro(NoDataFlag, bool);
 
   /** Toggle the NoDataFlag. If set to true, samples with values equal to
    *  m_NoDataValue are ignored.

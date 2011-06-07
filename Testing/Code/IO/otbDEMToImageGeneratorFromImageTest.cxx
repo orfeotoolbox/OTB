@@ -60,8 +60,8 @@ int otbDEMToImageGeneratorFromImageTest(int argc, char * argv[])
   typedef otb::ImageFileReader<VImageType> ReaderType;
   typedef otb::StreamingImageFileWriter<ImageType> WriterType;
 
-  typedef otb::MultiToMonoChannelExtractROI<PixelType,PixelType> ExtractVFilterType;
-  typedef otb::ExtractROI<PixelType,PixelType> ExtractFilterType;
+  typedef otb::MultiToMonoChannelExtractROI<PixelType, PixelType> ExtractVFilterType;
+  typedef otb::ExtractROI<PixelType, PixelType> ExtractFilterType;
 
   // Instantiating object
   ReaderType::Pointer              reader = ReaderType::New();
