@@ -105,13 +105,13 @@ int generic_main_convert(otb::ApplicationOptionsResult* parseResult)
 
     // We need to subsample the input image in order to estimate its
     // histogram
-    typedef otb::StreamingShrinkImageFilter<InputImageType,InputImageType> ShrinkFilterType;
+    typedef otb::StreamingShrinkImageFilter<InputImageType, InputImageType> ShrinkFilterType;
     typename ShrinkFilterType::Pointer shrinkFilter = ShrinkFilterType::New();
     
     // Shrink factor is computed so as to load a quicklook of 1000
     // pixels square at most
     typename InputImageType::SizeType imageSize = reader->GetOutput()->GetLargestPossibleRegion().GetSize();
-    unsigned int shrinkFactor = std::max(imageSize[0],imageSize[1])/1000;
+    unsigned int shrinkFactor = std::max(imageSize[0], imageSize[1])/1000;
 
     std::cout<<"Shrink factor: "<<shrinkFactor<<std::endl;
 
@@ -137,13 +137,13 @@ int generic_main_convert(otb::ApplicationOptionsResult* parseResult)
     typedef itk::Statistics::ListSample<typename InputImageType::PixelType> ListSampleType;
     typedef itk::Statistics::DenseFrequencyContainer DFContainerType;
 
-    typedef otb::ListSampleToHistogramListGenerator<ListSampleType,typename InputImageType::InternalPixelType,DFContainerType> HistogramsGeneratorType;
-    itk::ImageRegionConstIterator<InputImageType> it(shrinkFilter->GetOutput(),shrinkFilter->GetOutput()->GetLargestPossibleRegion());
+    typedef otb::ListSampleToHistogramListGenerator<ListSampleType, typename InputImageType::InternalPixelType, DFContainerType> HistogramsGeneratorType;
+    itk::ImageRegionConstIterator<InputImageType> it(shrinkFilter->GetOutput(), shrinkFilter->GetOutput()->GetLargestPossibleRegion());
 
     typename ListSampleType::Pointer listSample = ListSampleType::New();
 
     // Now we generate the list of samples
-    for(it.GoToBegin();!it.IsAtEnd();++it)
+    for(it.GoToBegin(); !it.IsAtEnd(); ++it)
       {
       listSample->PushBack(it.Get());
       }
@@ -156,12 +156,12 @@ int generic_main_convert(otb::ApplicationOptionsResult* parseResult)
     histogramsGenerator->Update();
 
     // And extract the 2% lower and upper quantile
-    typename InputImageType::PixelType inputMin(nbComp),inputMax(nbComp);
+    typename InputImageType::PixelType inputMin(nbComp), inputMax(nbComp);
     
     for(unsigned int i = 0; i < nbComp; ++i)
       {
-      inputMin[i] = histogramsGenerator->GetOutput()->GetNthElement(i)->Quantile(0,0.02);
-      inputMax[i] = histogramsGenerator->GetOutput()->GetNthElement(i)->Quantile(0,0.98);
+      inputMin[i] = histogramsGenerator->GetOutput()->GetNthElement(i)->Quantile(0, 0.02);
+      inputMax[i] = histogramsGenerator->GetOutput()->GetNthElement(i)->Quantile(0, 0.98);
       }
     
     
