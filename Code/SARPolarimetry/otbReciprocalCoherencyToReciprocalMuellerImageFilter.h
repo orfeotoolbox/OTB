@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __ReciprocalCoherencyToMuellerImageFilter_h
-#define __ReciprocalCoherencyToMuellerImageFilter_h
+#ifndef __ReciprocalCoherencyToReciprocalMuellerImageFilter_h
+#define __ReciprocalCoherencyToReciprocalMuellerImageFilter_h
 
 #include "otbUnaryFunctorImageFilter.h"
 
@@ -26,8 +26,8 @@ namespace otb
 
 namespace Functor {
 
-/** \class CoherencyToMuellerFunctor
- * \brief Evaluate the Mueller matrix from the reciprocal coherency matrix image
+/** \class CoherencyToReciprocalMuellerFunctor
+ * \brief Evaluate the reciprocal Mueller matrix from the reciprocal coherency matrix image
  *
  * Outpus are:
  * - channel #0 : \f$ 0.5*\mathcal{Re}( Coherency[0]+Coherency[3]+Coherency[5]) \f$
@@ -56,7 +56,7 @@ namespace Functor {
  *
  */
 template< class TInput, class TOutput>
-class ReciprocalCoherencyToMuellerFunctor
+class ReciprocalCoherencyToReciprocalMuellerFunctor
 {
 public:
   typedef typename std::complex <double>         ComplexType;
@@ -91,10 +91,10 @@ public:
    }
 
    /** Constructor */
-   ReciprocalCoherencyToMuellerFunctor() {}
+   ReciprocalCoherencyToReciprocalMuellerFunctor() {}
 
    /** Destructor */
-   virtual ~ReciprocalCoherencyToMuellerFunctor() {}
+   virtual ~ReciprocalCoherencyToReciprocalMuellerFunctor() {}
 
 private:
    itkStaticConstMacro(NumberOfComponentsPerPixel, unsigned int, 10);
@@ -102,25 +102,25 @@ private:
 }
 
 
-/** \class otbReciprocalCoherencyToMuellerImageFilter
- * \brief Compute the Mueller matrix image (10 real channels)
+/** \class otbReciprocalCoherencyToReciprocalMuellerImageFilter
+ * \brief Compute the reciprocal Mueller matrix image (10 real channels)
  * from the Reciprocal coherency image (6 complex channels)
  *
- * For more datails, please refer to ReciprocalCoherencyToMuellerFunctor.
+ * For more datails, please refer to ReciprocalCoherencyToReciprocalMuellerFunctor.
  *
  * \ingroup SARPolarimetry
- * \sa ReciprocalCoherencyToMuellerFunctor
+ * \sa ReciprocalCoherencyToReciprocalMuellerFunctor
  *
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT ReciprocalCoherencyToMuellerImageFilter :
-   public UnaryFunctorImageFilter<TInputImage, TOutputImage, Functor::ReciprocalCoherencyToMuellerFunctor<
+class ITK_EXPORT ReciprocalCoherencyToReciprocalMuellerImageFilter :
+   public UnaryFunctorImageFilter<TInputImage, TOutputImage, Functor::ReciprocalCoherencyToReciprocalMuellerFunctor<
     ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
 {
 public:
    /** Standard class typedefs. */
-   typedef ReciprocalCoherencyToMuellerImageFilter  Self;
-   typedef typename Functor::ReciprocalCoherencyToMuellerFunctor<
+   typedef ReciprocalCoherencyToReciprocalMuellerImageFilter  Self;
+   typedef typename Functor::ReciprocalCoherencyToReciprocalMuellerFunctor<
      typename TInputImage::PixelType, typename TOutputImage::PixelType> FunctionType;
    typedef UnaryFunctorImageFilter<TInputImage, TOutputImage, FunctionType> Superclass;
    typedef itk::SmartPointer<Self>        Pointer;
@@ -130,16 +130,16 @@ public:
    itkNewMacro(Self);
 
    /** Runtime information support. */
-   itkTypeMacro(ReciprocalCoherencyToMuellerImageFilter, UnaryFunctorImageFilter);
+   itkTypeMacro(ReciprocalCoherencyToReciprocalMuellerImageFilter, UnaryFunctorImageFilter);
 
 
 protected:
-   ReciprocalCoherencyToMuellerImageFilter() {}
-  virtual ~ReciprocalCoherencyToMuellerImageFilter() {}
+   ReciprocalCoherencyToReciprocalMuellerImageFilter() {}
+  virtual ~ReciprocalCoherencyToReciprocalMuellerImageFilter() {}
 
 
 private:
-  ReciprocalCoherencyToMuellerImageFilter(const Self&); //purposely not implemented
+  ReciprocalCoherencyToReciprocalMuellerImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&);            //purposely not implemented
 
 };
