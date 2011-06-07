@@ -34,7 +34,7 @@ ListSampleToHistogramListGenerator<TListSample,
     THistogramMeasurement,
     TFrequencyContainer>
 ::ListSampleToHistogramListGenerator() : m_List(), m_Size(), m_MarginalScale(100), m_HistogramMin(), m_HistogramMax(),
-                                         m_AutoMinMax(true), m_HistogramList(), m_NoDataFlag(true),m_NoDataValue(itk::NumericTraits<THistogramMeasurement>::Zero)
+                                         m_AutoMinMax(true), m_HistogramList(), m_NoDataFlag(false),m_NoDataValue(itk::NumericTraits<THistogramMeasurement>::Zero)
 {
   m_HistogramList = HistogramListType::New();
   m_Size.Fill(255);
