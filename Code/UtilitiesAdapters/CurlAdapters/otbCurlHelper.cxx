@@ -312,10 +312,14 @@ int CurlHelper::RetrieveFileMulti(const std::vector<std::string>& listURLs,
   filename = listFilename.begin();
   while (filename != listFilename.end())
     {
-    FileResource lOutputFile((*filename).c_str());
-    
+    FILE* lOutputFile = fopen((*filename).c_str(), "wb");
+    if (lOutputFile == NULL)
+      {
+      itkExceptionMacro(<< "otbCurlHelper: bad file name: " << (*filename).c_str());
+      }
+
     // Add file to vector
-    listFiles.push_back(lOutputFile.GetFileResource());
+    listFiles.push_back(lOutputFile);
     ++filename;
     }
 
@@ -328,19 +332,29 @@ int CurlHelper::RetrieveFileMulti(const std::vector<std::string>& listURLs,
   while ((url != listURLs.end()) && (file != listFiles.end()))
     {
     otbMsgDevMacro(<< "Retrieving: " << (*url).data());
-    CurlResource lEasyHandleResource;
-    
+    CURL * lEasyHandle;
+    lEasyHandle = curl_easy_init();
+
+    if (!lEasyHandle)
+      {
+      itkExceptionMacro(<< "otbCurlHelper: Curl easy handle init error.");
+      }
+
     // Param easy handle
-    otbCurlCall(curl_easy_setopt(lEasyHandleResource.GetCurlResource(), CURLOPT_USERAGENT, m_Browser.data()));
-    otbCurlCall(curl_easy_setopt(lEasyHandleResource.GetCurlResource(), CURLOPT_URL, (*url).data()));
-    otbCurlCall(curl_easy_setopt(lEasyHandleResource.GetCurlResource(), CURLOPT_WRITEFUNCTION, &Self::CallbackWriteDataToFile));
-    otbCurlCall(curl_easy_setopt(lEasyHandleResource.GetCurlResource(), CURLOPT_WRITEDATA, (void*) (*file)));
+    // the otbCurlCall is not used here cause we are not using the
+    // CurlResource class : Using the CurlResource class in the loop
+    // will make the object CurlResource destroyed at the end of each
+    // loop, making the multi handle not working.    
+    curl_easy_setopt(lEasyHandle, CURLOPT_USERAGENT, m_Browser.data());
+    curl_easy_setopt(lEasyHandle, CURLOPT_URL, (*url).data());
+    curl_easy_setopt(lEasyHandle, CURLOPT_WRITEFUNCTION, &Self::CallbackWriteDataToFile);
+    curl_easy_setopt(lEasyHandle, CURLOPT_WRITEDATA, (void*) (*file));
 
     // Add easy handle to multi handle
-    curl_multi_add_handle(multiHandle.GetCurlMultiResource(), lEasyHandleResource.GetCurlResource());
+    curl_multi_add_handle(multiHandle.GetCurlMultiResource(), lEasyHandle);
 
     // Add hanle to vector
-    listCurlHandles.push_back(lEasyHandleResource.GetCurlResource());
+    listCurlHandles.push_back(lEasyHandle);
     ++url;
     ++file;
     }
@@ -411,7 +425,18 @@ int CurlHelper::RetrieveFileMulti(const std::vector<std::string>& listURLs,
     }
 
   // Cleanup
+  // Close files
+  for (unsigned int currentFile = 0; currentFile < listFiles.size(); currentFile++)
+    {
+    fclose(listFiles[currentFile]);
+    }
   listFiles.clear();
+
+  // Cleanup easy handles
+  for (unsigned int currentHandle = 0; currentHandle < listCurlHandles.size(); currentHandle++)
+    {
+    curl_easy_cleanup(listCurlHandles[currentHandle]);
+    }
   listCurlHandles.clear();
   
 #else
