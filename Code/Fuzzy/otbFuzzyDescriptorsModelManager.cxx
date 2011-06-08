@@ -40,6 +40,7 @@ FuzzyDescriptorsModelManager
     {
       if( (*it).first == model )
         {
+          found = true;
           out = (*it);
         }
       ++it;
