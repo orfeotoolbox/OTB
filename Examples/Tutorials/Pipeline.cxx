@@ -35,6 +35,13 @@
 
 int main(int argc, char * argv[])
 {
+  if (argc != 3)
+    {
+    std::cerr << "Usage: "
+        << argv[0]
+        << " <input_filename> <output_filename>"
+        << std::endl;
+    }
 // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex

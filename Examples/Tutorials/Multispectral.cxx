@@ -50,6 +50,14 @@
 
 int main(int argc, char * argv[])
 {
+  if (argc != 4)
+    {
+    std::cerr << "Usage: "
+        << argv[0]
+        << " <input_filename> <output_extract> <output_shifted_scaled>"
+        << std::endl;
+    }
+
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
