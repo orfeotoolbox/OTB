@@ -8,14 +8,12 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 SET(CMAKE_SWIG_FLAGS "")
 
 FILE(GLOB swigfiles "*.i")
-
 FOREACH(swigfile ${swigfiles})
-
     SET_SOURCE_FILES_PROPERTIES(${swigfile} PROPERTIES CPLUSPLUS ON)
     SET_SOURCE_FILES_PROPERTIES(${swigfile} PROPERTIES SWIG_FLAGS "-includeall")
-
 ENDFOREACH(swigfile ${swigfiles})
 
-# TODO: add build dependency with the macro files
-SWIG_ADD_MODULE(otbApplication python otbApplication.i)
+set(SWIG_MODULE_otbApplication_EXTRA_DEPS itkBase.i itkMacro.i RefCountMacro.i)
+
+SWIG_ADD_MODULE(otbApplication python otbApplication.i )
 SWIG_LINK_LIBRARIES(otbApplication ${PYTHON_LIBRARIES} OTBWrapperCore)
