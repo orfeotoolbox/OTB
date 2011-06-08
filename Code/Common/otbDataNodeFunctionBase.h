@@ -23,7 +23,7 @@
 namespace otb
 {
 /** \class DataNodeFunctionBase
-  * \brief Base class for DataNote functions.
+  * \brief Base class for DataNode functions.
   *
   * DataNodeFunctionBase is the base class for DataNode function objects. Specifically,
   * the abstract method Evaluate() maps a DataNode from the input space to a element
