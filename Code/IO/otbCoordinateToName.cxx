@@ -97,6 +97,10 @@ CoordinateToName::ThreadFunction(void *arg)
 
 void CoordinateToName::DoEvaluate()
 {
+    m_PlaceName = "";
+    m_CountryName = "";
+    m_IsValid = false;
+
   if (Utils::IsLonLatValid(m_Lon, m_Lat))
     {
     std::ostringstream urlStream;
@@ -106,20 +110,24 @@ void CoordinateToName::DoEvaluate()
     urlStream << m_Lon;
     otbMsgDevMacro("CoordinateToName: retrieve url " << urlStream.str());
 
-    m_Curl->RetrieveUrlInMemory(urlStream.str(), m_CurlOutput);
-
-    std::string placeName = "";
-    std::string countryName = "";
-    ParseXMLGeonames(placeName, countryName);
-    m_PlaceName = placeName;
-    m_CountryName = countryName;
-    m_IsValid = true;
-    }
-  else
-    {
-    m_PlaceName = "";
-    m_CountryName = "";
-    m_IsValid = false;
+    try
+      {
+      m_Curl->RetrieveUrlInMemory(urlStream.str(), m_CurlOutput);
+      m_IsValid = true;
+      }
+    catch(itk::ExceptionObject& e)
+      {
+      m_IsValid = false;
+      }
+    
+    if(m_IsValid)
+      {
+      std::string placeName = "";
+      std::string countryName = "";
+      ParseXMLGeonames(placeName, countryName);
+      m_PlaceName = placeName;
+      m_CountryName = countryName;
+      }
     }
 }
 
