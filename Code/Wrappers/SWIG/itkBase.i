@@ -27,28 +27,28 @@
 
 // some code from stl
 
-%template(vectorstring)   std::vector< std::string >;
+//%template(vectorstring)   std::vector< std::string >;
 %template(liststring)     std::list< std::string >;
 
-%template(vectorB)        std::vector< bool >;
-%template(vectorUC)       std::vector< unsigned char >;
-%template(vectorUS)       std::vector< unsigned short >;
-%template(vectorUL)       std::vector< unsigned long >;
-%template(vectorSC)       std::vector< signed char >;
-%template(vectorSS)       std::vector< signed short >;
-%template(vectorSL)       std::vector< signed long >;
-%template(vectorF)        std::vector< float >;
-%template(vectorD)        std::vector< double >;
+//%template(vectorB)        std::vector< bool >;
+//%template(vectorUC)       std::vector< unsigned char >;
+//%template(vectorUS)       std::vector< unsigned short >;
+//%template(vectorUL)       std::vector< unsigned long >;
+//%template(vectorSC)       std::vector< signed char >;
+//%template(vectorSS)       std::vector< signed short >;
+//%template(vectorSL)       std::vector< signed long >;
+//%template(vectorF)        std::vector< float >;
+//%template(vectorD)        std::vector< double >;
 
-%template(listB)          std::list< bool >;
-%template(listUC)         std::list< unsigned char >;
-%template(listUS)         std::list< unsigned short >;
-%template(listUL)         std::list< unsigned long >;
-%template(listSC)         std::list< signed char >;
-%template(listSS)         std::list< signed short >;
-%template(listSL)         std::list< signed long >;
-%template(listF)          std::list< float >;
-%template(listD)          std::list< double >;
+//%template(listB)          std::list< bool >;
+//%template(listUC)         std::list< unsigned char >;
+//%template(listUS)         std::list< unsigned short >;
+//%template(listUL)         std::list< unsigned long >;
+//%template(listSC)         std::list< signed char >;
+//%template(listSS)         std::list< signed short >;
+//%template(listSL)         std::list< signed long >;
+//%template(listF)          std::list< float >;
+//%template(listD)          std::list< double >;
 
 
 // We don't need std::list or std::string interface for this in Python
