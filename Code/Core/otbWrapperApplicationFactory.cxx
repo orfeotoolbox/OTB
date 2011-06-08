@@ -48,7 +48,7 @@ ApplicationFactory::CreateApplication(const std::string& name)
       }
     else
       {
-      std::cerr << "Error ImageIO factory did not return an ImageIOBase: " << (*i)->GetNameOfClass() << std::endl;
+      otbMsgDevMacro( << "Error ApplicationFactory factory did not return an Application: " << (*i)->GetNameOfClass() << std::endl );
       }
     }
 
@@ -84,7 +84,7 @@ ApplicationFactory::GetAvailableApplications()
       }
     else
       {
-      std::cerr << "Error ImageIO factory did not return an ImageIOBase: " << (*i)->GetNameOfClass() << std::endl;
+      otbMsgDevMacro( "Error ApplicationFactory factory did not return an Application: " << (*i)->GetNameOfClass() << std::endl );
       }
     }
 

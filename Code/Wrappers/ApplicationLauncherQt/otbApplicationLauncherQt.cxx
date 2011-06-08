@@ -19,6 +19,7 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 #include "otbWrapperQtWidgetView.h"
+#include "itksys/SystemTools.hxx"
 
 using otb::Wrapper::Application;
 using otb::Wrapper::ApplicationFactory;
@@ -44,15 +45,19 @@ int main(int argc, char* argv[])
 
     // Load the path in the environment
     std::string specificEnv("ITK_AUTOLOAD_PATH=");
-    std::list<std::string>::const_iterator it;
-    for (it = modulePathList.begin(); it != modulePathList.end(); ++it)
+    std::list<std::string>::const_iterator it = modulePathList.begin();
+    while( it != modulePathList.end() )
       {
       std::string modulePath = *it;
 
       specificEnv += *it;
-      specificEnv += ":";
+      ++it;
+      if (it != modulePathList.end())
+        specificEnv += ":";
       }
-    putenv (const_cast<char *>(specificEnv.c_str()));
+
+    // do NOT use putenv() directly, since the string memory must be managed carefully
+    itksys::SystemTools::PutEnv(specificEnv.c_str());
     }
 
   // Reload factories to take into account new path
@@ -64,17 +69,13 @@ int main(int argc, char* argv[])
     {
     std::cerr << "Could not find application " << moduleName << std::endl;
 
-    std::cout << "Module search path :" << std::endl;
-    std::list<std::string>::const_iterator it;
-    for (it = modulePathList.begin(); it != modulePathList.end(); ++it)
-      {
-      std::cout << "  " << *it << std::endl;
-      }
+    const char* modulePath = itksys::SystemTools::GetEnv("ITK_AUTOLOAD_PATH");
+    std::cout << "Module search path : " << (modulePath ? modulePath : "") << std::endl;
 
-    std::cout << "Available applications :" << std::endl;
     std::list<std::string> list = ApplicationFactory::GetAvailableApplications();
-    //std::list<std::string>::const_iterator it;
-    for (it = list.begin(); it != list.end(); ++it)
+
+    std::cout << "Available applications : " << (list.empty() ? "None" : "") << std::endl;
+    for (std::list<std::string>::const_iterator it = list.begin(); it != list.end(); ++it)
       {
       std::cout << "  " << *it << std::endl;
       }
