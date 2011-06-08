@@ -230,7 +230,8 @@ int CurlHelper::RetrieveUrlInMemory(const std::string& url, std::string& output)
   
   // Use our writing static function to avoid file descriptor
   // pointer crash on windows
-  otbCurlCall(curl_easy_setopt(curlResource.GetCurlResource(), CURLOPT_WRITEFUNCTION, &Self::CallbackWriteDataToStringStream));
+  otbCurlCall(curl_easy_setopt(curlResource.GetCurlResource(), CURLOPT_WRITEFUNCTION, 
+                               &Self::CallbackWriteDataToStringStream));
   
   // Say the file where to write the received data
   std::ostringstream* outputStream = new std::ostringstream;
@@ -279,10 +280,12 @@ int CurlHelper::RetrieveFile(const std::string& urlString, std::string filename)
 
   // Use our writing static function to avoid file descriptor
   // pointer crash on windows
-  otbCurlCall(curl_easy_setopt(curlResource.GetCurlResource(), CURLOPT_WRITEFUNCTION, &Self::CallbackWriteDataToFile));
+  otbCurlCall(curl_easy_setopt(curlResource.GetCurlResource(), CURLOPT_WRITEFUNCTION, 
+                               &Self::CallbackWriteDataToFile));
 
   // Say the file where to write the received data
-  otbCurlCall(curl_easy_setopt(curlResource.GetCurlResource(), CURLOPT_WRITEDATA, (void*) output_file.GetFileResource()));
+  otbCurlCall(curl_easy_setopt(curlResource.GetCurlResource(), CURLOPT_WRITEDATA, 
+                               (void*) output_file.GetFileResource()));
 
   otbCurlCall(curl_easy_perform(curlResource.GetCurlResource()));
     
@@ -344,7 +347,7 @@ int CurlHelper::RetrieveFileMulti(const std::vector<std::string>& listURLs,
     // the otbCurlCall is not used here cause we are not using the
     // CurlResource class : Using the CurlResource class in the loop
     // will make the object CurlResource destroyed at the end of each
-    // loop, making the multi handle not working.    
+    // loop, making the multi handle not working.
     curl_easy_setopt(lEasyHandle, CURLOPT_USERAGENT, m_Browser.data());
     curl_easy_setopt(lEasyHandle, CURLOPT_URL, (*url).data());
     curl_easy_setopt(lEasyHandle, CURLOPT_WRITEFUNCTION, &Self::CallbackWriteDataToFile);
