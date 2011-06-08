@@ -70,13 +70,15 @@
   {
   $result = PyList_New( $1.size() );
   Py_ssize_t i = 0;
-  for (std::list< std::string >::const_iterator it = $1.begin(); it != $1.end(); ++it )
+  for (std::list< std::string >::const_iterator it = $1.begin();
+       it != $1.end();
+       ++it, ++i )
     {
     PyList_SetItem( $result, i, PyString_FromString( it->c_str() ) );
     }
   }
 
-
+ 
  class itkIndent {
    public:
      ~itkIndent();
