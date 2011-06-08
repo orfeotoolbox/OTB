@@ -226,7 +226,7 @@ int CurlHelper::RetrieveUrlInMemory(const std::string& url, std::string& output)
   otbCurlCall(curl_easy_setopt(curlResource.GetCurlResource(), CURLOPT_URL, url.c_str()));
   
   // Set 5s timeout
-  otbCurlCall(curl_easy_setopt(curlResource.GetCurlResource(), CURLOPT_TIMEOUT, 5));
+  otbCurlCall(curl_easy_setopt(curlResource.GetCurlResource(), CURLOPT_TIMEOUT, 10));
   
   // Use our writing static function to avoid file descriptor
   // pointer crash on windows
@@ -351,7 +351,7 @@ int CurlHelper::RetrieveFileMulti(const std::vector<std::string>& listURLs,
     curl_easy_setopt(lEasyHandle, CURLOPT_WRITEDATA, (void*) (*file));
 
     // Add easy handle to multi handle
-    curl_multi_add_handle(multiHandle.GetCurlMultiResource(), lEasyHandle);
+    otbCurlMultiCall(curl_multi_add_handle(multiHandle.GetCurlMultiResource(), lEasyHandle));
 
     // Add hanle to vector
     listCurlHandles.push_back(lEasyHandle);
