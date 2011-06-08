@@ -425,14 +425,13 @@ ImageFileReader<TOutputImage>
        && this->m_FileName[2] == 't'
        && this->m_FileName[3] == 'p')
     {
-    int res = m_Curl->TestUrlAvailability(this->m_FileName);
-    if (res != 0 && res != 63) // 63 stands for filesize exceed
+    // If the url is not available
+    if (!m_Curl->TestUrlAvailability(this->m_FileName))
       {
       itk::ImageFileReaderException e(__FILE__, __LINE__);
       std::ostringstream msg;
       msg << "File name is an http address, but curl fails to connect to it "
           << std::endl << "Filename = " << this->m_FileName
-          << std::endl << "Curl error code = " << res
           << std::endl;
       e.SetDescription(msg.str().c_str());
       throw e;

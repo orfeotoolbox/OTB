@@ -25,7 +25,7 @@
 namespace otb
 {
 
-int CurlHelperStub::TestUrlAvailability(const std::string& url) const
+bool CurlHelperStub::TestUrlAvailability(const std::string& url) const
 {
   itkExceptionMacro(<< "otbCurlHelperStub: method undefined");
   return -1;

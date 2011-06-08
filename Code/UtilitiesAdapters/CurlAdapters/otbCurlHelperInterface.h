@@ -43,7 +43,7 @@ public:
 
   itkTypeMacro(CurlHelperInterface, itk::Object);
 
-  virtual int TestUrlAvailability(const std::string& url) const = 0;
+  virtual bool TestUrlAvailability(const std::string& url) const = 0;
 
   virtual int RetrieveFile(const std::ostringstream& urlStream, std::string filename) const = 0;
 
