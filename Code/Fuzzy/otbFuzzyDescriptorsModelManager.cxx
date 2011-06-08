@@ -42,6 +42,7 @@ FuzzyDescriptorsModelManager
         {
           out = (*it);
         }
+      ++it;
     }
   
   if( found == false )
