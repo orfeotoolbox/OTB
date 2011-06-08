@@ -21,10 +21,9 @@
 
 %include <std_iostream.i>
 %include <std_sstream.i>
+%include <std_string.i>
 %include <std_vector.i>
-%include <std_map.i>
 %include <std_list.i>
-%include <std_set.i>
 
 // some code from stl
 
@@ -32,23 +31,14 @@
 %template(liststring)     std::list< std::string >;
 
 %template(vectorB)        std::vector< bool >;
-%template(vectorvectorB)  std::vector< std::vector< bool > >;
 %template(vectorUC)       std::vector< unsigned char >;
-%template(vectorvectorUC) std::vector< std::vector< unsigned char > >;
 %template(vectorUS)       std::vector< unsigned short >;
-%template(vectorvectorUS) std::vector< std::vector< unsigned short > >;
 %template(vectorUL)       std::vector< unsigned long >;
-%template(vectorvectorUL) std::vector< std::vector< unsigned long > >;
 %template(vectorSC)       std::vector< signed char >;
-%template(vectorvectorSC) std::vector< std::vector< signed char > >;
 %template(vectorSS)       std::vector< signed short >;
-%template(vectorvectorSS) std::vector< std::vector< signed short > >;
 %template(vectorSL)       std::vector< signed long >;
-%template(vectorvectorSL) std::vector< std::vector< signed long > >;
 %template(vectorF)        std::vector< float >;
-%template(vectorvectorF)  std::vector< std::vector< float > >;
 %template(vectorD)        std::vector< double >;
-%template(vectorvectorD)  std::vector< std::vector< double > >;
 
 %template(listB)          std::list< bool >;
 %template(listUC)         std::list< unsigned char >;
@@ -59,6 +49,20 @@
 %template(listSL)         std::list< signed long >;
 %template(listF)          std::list< float >;
 %template(listD)          std::list< double >;
+
+
+// We don't need std::list or std::string interface for this in Python
+// A Python list of Python string is more natural
+%typemap(out) std::list< std::string >
+  {
+  $result = PyList_New( $1.size() );
+  Py_ssize_t i = 0;
+  for (std::list< std::string >::const_iterator it = $1.begin(); it != $1.end(); ++it )
+    {
+    PyList_SetItem( $result, i, PyString_FromString( it->c_str() ) );
+    }
+  }
+
 
  class itkIndent {
    public:
