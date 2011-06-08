@@ -29,7 +29,7 @@ namespace Wrapper
  *  \brief This class represent a radius parameter for the wrapper framework
  */
 class RadiusParameter
-  : public NumericalParameter<int>
+  : public IntParameter
 {
 public:
   /** Standard class typedef */

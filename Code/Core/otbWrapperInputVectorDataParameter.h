@@ -19,6 +19,8 @@
 #define __otbWrapperInputVectorDataParameter_h
 
 #include "otbVectorData.h"
+#include "otbVectorDataFileReader.h"
+
 #include "otbWrapperParameter.h"
 
 namespace otb
@@ -60,6 +62,29 @@ public:
     return boost::any(m_VectorData);
   }
 
+  /** Set value from filename */
+  void SetFromFileName(const std::string& filename)
+  {
+    VectorDataFileReaderType::Pointer reader = VectorDataFileReaderType::New();
+    reader->SetFileName(filename);
+    reader->UpdateOutputInformation();
+
+    // everything went fine, store the object references
+    m_Reader = reader;
+    m_VectorData = reader->GetOutput();
+  }
+
+  std::string GetFileName() const
+  {
+    if (m_Reader)
+      {
+      return m_Reader->GetFileName();
+      }
+
+    itkExceptionMacro(<< "No value yet");
+  }
+
+
 protected:
   /** Constructor */
   InputVectorDataParameter()
@@ -72,7 +97,9 @@ protected:
   virtual ~InputVectorDataParameter()
   {}
 
+  typedef otb::VectorDataFileReader<VectorDataType> VectorDataFileReaderType;
   VectorDataType::Pointer m_VectorData;
+  VectorDataFileReaderType::Pointer m_Reader;
 
 private:
   InputVectorDataParameter(const Parameter &); //purposely not implemented

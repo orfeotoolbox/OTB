@@ -58,12 +58,23 @@ public:
   /** Set value from filename */
   void SetFromFileName(const std::string& filename)
   {
-    typedef otb::ImageFileReader<VectorImageType> ImageFileReaderType;
     ImageFileReaderType::Pointer reader = ImageFileReaderType::New();
     reader->SetFileName(filename);
     reader->UpdateOutputInformation();
+
+    // everything went fine, store the object references
     m_Reader = reader;
     m_Image = reader->GetOutput();
+  }
+
+  std::string GetFileName() const
+  {
+    if (m_Reader)
+      {
+      return m_Reader->GetFileName();
+      }
+
+    itkExceptionMacro(<< "No value yet");
   }
 
   /** Return any value */
@@ -85,7 +96,9 @@ protected:
   {}
 
   VectorImageType::Pointer m_Image;
-  itk::ProcessObject::Pointer m_Reader;
+
+  typedef otb::ImageFileReader<VectorImageType> ImageFileReaderType;
+  ImageFileReaderType::Pointer m_Reader;
 
 private:
   InputImageParameter(const Parameter &); //purposely not implemented

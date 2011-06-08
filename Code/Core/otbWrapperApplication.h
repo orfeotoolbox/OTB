@@ -84,12 +84,17 @@ public:
 
   ParameterGroup* GetParameterList();
 
-  /*
-  void SetParameterBool(std::string parameter, bool value);
+  Parameter* GetParameterByKey(std::string parameter);
+
+  //void SetParameterBool(std::string parameter, bool value);
   void SetParameterInt(std::string parameter, int value);
   void SetParameterFloat(std::string parameter, float value);
   void SetParameterString(std::string parameter, std::string value);
-  */
+
+  int GetParameterInt(std::string parameter);
+  float GetParameterFloat(std::string parameter);
+  std::string GetParameterString(std::string parameter);
+
 
 protected:
   /** Constructor */

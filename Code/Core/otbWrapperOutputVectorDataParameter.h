@@ -60,6 +60,21 @@ public:
     return boost::any(m_VectorData);
   }
 
+  /** Return any value */
+  void SetValue(VectorDataType* vd)
+  {
+    m_VectorData = vd;
+  }
+
+  /** Return any value */
+  VectorDataType* GetValue( void )
+  {
+    return m_VectorData;
+  }
+
+  itkSetStringMacro(FileName);
+  itkGetStringMacro(FileName);
+
 protected:
   /** Constructor */
   OutputVectorDataParameter()
@@ -73,6 +88,7 @@ protected:
   {}
 
   VectorDataType::Pointer m_VectorData;
+  std::string m_FileName;
 
 private:
   OutputVectorDataParameter(const Parameter &); //purposely not implemented

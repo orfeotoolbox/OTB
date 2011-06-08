@@ -99,6 +99,14 @@ public:
   void Execute();
   ParameterGroup* GetParameterList();
   
+  void SetParameterInt(std::string parameter, int value);
+  void SetParameterFloat(std::string parameter, float value);
+  void SetParameterString(std::string parameter, std::string value);
+  
+  int GetParameterInt(std::string parameter);
+  float GetParameterFloat(std::string parameter);
+  std::string GetParameterString(std::string parameter);
+  
 protected:
   Application();
   virtual ~Application();
