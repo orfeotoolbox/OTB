@@ -4,8 +4,8 @@
 
  %module otbApplication
  %{
-#include "otbWrapperSWIGIncludes.h"
 #include "itkBase.includes"
+#include "otbWrapperSWIGIncludes.h"
  %}
 
 %include "itkBase.i"
