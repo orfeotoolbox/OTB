@@ -57,7 +57,6 @@ int main(int argc, char * argv[])
         << " <input_filename> <output_extract> <output_shifted_scaled>"
         << std::endl;
     }
-
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
