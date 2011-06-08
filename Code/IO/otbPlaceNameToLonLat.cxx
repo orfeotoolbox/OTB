@@ -25,7 +25,8 @@ namespace otb
 
 PlaceNameToLonLat::PlaceNameToLonLat() :
       m_Lon(-1000.0), m_Lat(-1000.0),
-      m_PlaceName("Where everything started")
+      m_PlaceName("Where everything started"),
+      m_RequestSucceed(false)
 {
   m_Curl = CurlHelper::New();
 }
@@ -56,7 +57,8 @@ bool PlaceNameToLonLat::Evaluate()
     urlStream << m_PlaceName;
     urlStream << "&sll=38.9594, -95.2655&sspn=119.526, 360&output=kml&ie=utf-8&v=2.2&cv=4.2.0180.1134&hl=en";
     RetrieveXML(urlStream);
-    ParseXMLGoogle();
+    if ( m_RequestSucceed )
+      ParseXMLGoogle();
     }
 
   if ((m_Lat == -1000.0) && (m_Lon == -1000.0))
@@ -65,7 +67,8 @@ bool PlaceNameToLonLat::Evaluate()
     urlStream << "http://api.local.yahoo.com/MapsService/V1/geocode?appid=com.sun.blueprints.ui.geocoder&location=";
     urlStream << m_PlaceName;
     RetrieveXML(urlStream);
-    ParseXMLYahoo();
+    if ( m_RequestSucceed )
+      ParseXMLYahoo();
     }
 
   if ((m_Lat == -1000.0) && (m_Lon == -1000.0))
@@ -80,7 +83,15 @@ bool PlaceNameToLonLat::Evaluate()
 
 void PlaceNameToLonLat::RetrieveXML(const std::ostringstream& urlStream)
 {
-  m_Curl->RetrieveUrlInMemory(urlStream.str(), m_CurlOutput);
+  try
+    {
+    m_RequestSucceed = true;
+    m_Curl->RetrieveUrlInMemory(urlStream.str(), m_CurlOutput);
+    }
+  catch(itk::ExceptionObject& e)
+    {
+    m_RequestSucceed = false;
+    }
 }
 
 void PlaceNameToLonLat::ParseXMLYahoo()

@@ -75,7 +75,7 @@ private:
 
   CurlHelperInterface::Pointer m_Curl;
   std::string                  m_CurlOutput;
-
+  bool                         m_RequestSucceed;
 
 };
 
