@@ -45,11 +45,14 @@ OSMDataToVectorDataGenerator::OSMDataToVectorDataGenerator():m_North(43.62811),
 
 
   // Add the key to search by default
-  // 
   m_KeyList.push_back("highway");
   m_KeyList.push_back("building");
   m_KeyList.push_back("landuse");
   m_KeyList.push_back("waterway");
+  m_KeyList.push_back("cycleway");
+  m_KeyList.push_back("public_transport");
+  m_KeyList.push_back("railway");
+  m_KeyList.push_back("natural");
 }
 
 OSMDataToVectorDataGenerator::~OSMDataToVectorDataGenerator()
@@ -78,7 +81,7 @@ void OSMDataToVectorDataGenerator::GenerateData()
     if (m_Curl->IsCurlReturnHttpError( urlStream.str()))
       {
       itkExceptionMacro(<<"The OSM Server returned an Error > =400,"
-                        <<" it means that one of the limits of the server limit are crossed  : node/way/relation /");
+                        <<" it means that one of server limits are crossed : node/way/relation or area requested");
       }
     
     // Use Curl to request the OSM Server
