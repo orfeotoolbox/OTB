@@ -740,17 +740,27 @@ WorldView2ImageMetadataInterface::GetDefaultDisplay() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  std::string keywordStringBandNameList = imageKeywordlist.GetMetadataByKey("support_data.band_name_list");
-  std::vector<std::string> bandNameList;
-  boost::trim(keywordStringBandNameList);
-  boost::split(bandNameList, keywordStringBandNameList, boost::is_any_of(" "));
-
+  std::string key = "support_data.band_name_list";
   std::vector<unsigned int> rgb(3);
-  if(bandNameList.size() > 4)
+  if (imageKeywordlist.HasKey(key))
     {
-    rgb[0] = 4;
-    rgb[1] = 2;
-    rgb[2] = 1;
+    std::string keywordStringBandNameList = imageKeywordlist.GetMetadataByKey(key);
+    std::vector<std::string> bandNameList;
+    boost::trim(keywordStringBandNameList);
+    boost::split(bandNameList, keywordStringBandNameList, boost::is_any_of(" "));
+
+    if (bandNameList.size() > 4)
+      {
+      rgb[0] = 4;
+      rgb[1] = 2;
+      rgb[2] = 1;
+      }
+    else
+      {
+      rgb[0] = 2;
+      rgb[1] = 1;
+      rgb[2] = 0;
+      }
     }
   else
     {
