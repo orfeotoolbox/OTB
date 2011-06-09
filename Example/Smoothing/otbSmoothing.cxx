@@ -109,70 +109,52 @@ void Smoothing::DoUpdateParameters()
 
 void Smoothing::DoExecute()
 {
-  ParameterGroup* params = GetParameterList();
+  VectorImageType::Pointer inImage = this->GetParameterImage("in");
 
-  otb::Wrapper::InputImageParameter* inImageParam = dynamic_cast<otb::Wrapper::InputImageParameter*>(params->GetParameterByKey("in").GetPointer());
-  VectorImageType::Pointer inImage = boost::any_cast<VectorImageType::Pointer>(inImageParam->GetAnyValue());
-
-  otb::Wrapper::OutputImageParameter* outImageParam = dynamic_cast<otb::Wrapper::OutputImageParameter*>(params->GetParameterByKey("out").GetPointer());
-
-  otb::Wrapper::ChoiceParameter* smoothingTypeParam = dynamic_cast<otb::Wrapper::ChoiceParameter*>(params->GetParameterByKey("type").GetPointer());
-  int smoothingType = smoothingTypeParam->GetValue();
-
-  otb::Wrapper::ParameterGroup* subParam = smoothingTypeParam->GetChoiceAssociatedParameter(smoothingType);
-
-  switch (smoothingType)
+  switch (this->GetParameterInt("type"))
     {
     case Smoothing_Mean:
       {
-      otb::Wrapper::RadiusParameter* radiusParam
-        = dynamic_cast<otb::Wrapper::RadiusParameter*>(params->GetParameterByKey("type.mean.radius").GetPointer());
-
-      PerBandMeanFilterType::Pointer perBand = PerBandMeanFilterType::New();
+      PerBandMeanFilterType::Pointer perBand
+        = PerBandMeanFilterType::New();
 
       perBand->SetInput(inImage);
 
       MeanFilterType::InputSizeType radius;
-      radius.Fill(radiusParam->GetValue());
+      radius.Fill( this->GetParameterInt("type.mean.radius") );
       perBand->GetFilter()->SetRadius(radius);
       ref = perBand;
-      outImageParam->SetValue( perBand->GetOutput() );
+      this->SetParameterOutputImage("out", perBand->GetOutput());
       }
       break;
     case Smoothing_Gaussian:
       {
-      otb::Wrapper::RadiusParameter* radiusParam
-        = dynamic_cast<otb::Wrapper::RadiusParameter*>(subParam->GetParameterByKey("type.gaussian.radius").GetPointer());
-      int radius = radiusParam->GetValue();
-
-      PerBandDiscreteGaussianFilterType::Pointer perBand = PerBandDiscreteGaussianFilterType::New();
-
+      PerBandDiscreteGaussianFilterType::Pointer perBand
+        = PerBandDiscreteGaussianFilterType::New();
       perBand->SetInput(inImage);
 
-      double variance = radiusParam->GetValue() * radiusParam->GetValue();
+      int radius = this->GetParameterInt("type.gaussian.radius");
+      double variance = static_cast<double>(radius) * radius;
       perBand->GetFilter()->SetVariance(variance);
       ref = perBand;
-      outImageParam->SetValue( perBand->GetOutput() );
+      this->SetParameterOutputImage("out", perBand->GetOutput());
       }
       break;
     case Smoothing_Anisotropic:
       {
-      otb::Wrapper::FloatParameter* aniDifTimeStepParam = dynamic_cast<otb::Wrapper::FloatParameter*>(subParam->GetParameterByKey("type.anidif.timestep").GetPointer());
-      otb::Wrapper::IntParameter* aniDifNbIterParam = dynamic_cast<otb::Wrapper::IntParameter*>(subParam->GetParameterByKey("type.anidif.nbiter").GetPointer());
-
-      float aniDifTimeStep = aniDifTimeStepParam->GetValue();
-      int aniDifNbIter = aniDifNbIterParam->GetValue();
-
-      PerBandGradientAnisotropicDiffusionFilterType::Pointer perBand = PerBandGradientAnisotropicDiffusionFilterType::New();
-
+      PerBandGradientAnisotropicDiffusionFilterType::Pointer perBand
+        = PerBandGradientAnisotropicDiffusionFilterType::New();
       perBand->SetInput(inImage);
 
+      int aniDifNbIter = this->GetParameterInt("type.anidif.nbiter");
       perBand->GetFilter()->SetNumberOfIterations(static_cast<unsigned int>(aniDifNbIter));
+
+      float aniDifTimeStep = this->GetParameterFloat("type.anidif.timestep");
       perBand->GetFilter()->SetTimeStep(static_cast<double>(aniDifTimeStep));
       // perBand->GetFilter()->SetConductanceParameter()
       perBand->UpdateOutputInformation();
       ref = perBand;
-      outImageParam->SetValue( perBand->GetOutput() );
+      this->SetParameterOutputImage("out", perBand->GetOutput());
       }
       break;
     }

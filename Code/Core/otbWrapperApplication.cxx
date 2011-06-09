@@ -62,6 +62,7 @@ Parameter* Application::GetParameterByKey(std::string name)
 {
   return GetParameterList()->GetParameterByKey(name);
 }
+
 void Application::Init()
 {
   m_ParameterList = ParameterGroup::New();
@@ -154,7 +155,29 @@ void Application::SetParameterString(std::string parameter, std::string value)
     OutputVectorDataParameter* paramDown = dynamic_cast<OutputVectorDataParameter*>(param);
     paramDown->SetFileName(value);
     }
+}
 
+
+void Application::SetParameterOutputImage(std::string parameter, OutputImageParameter::VectorImageType* value)
+{
+  Parameter* param = GetParameterByKey(parameter);
+
+  if (dynamic_cast<OutputImageParameter*>(param))
+    {
+    OutputImageParameter* paramDown = dynamic_cast<OutputImageParameter*>(param);
+    paramDown->SetValue(value);
+    }
+}
+
+void Application::SetParameterOutputVectorData(std::string parameter, OutputVectorDataParameter::VectorDataType* value)
+{
+  Parameter* param = GetParameterByKey(parameter);
+
+  if (dynamic_cast<OutputVectorDataParameter*>(param))
+    {
+    OutputVectorDataParameter* paramDown = dynamic_cast<OutputVectorDataParameter*>(param);
+    paramDown->SetValue(value);
+    }
 }
 
 int Application::GetParameterInt(std::string parameter)
@@ -246,6 +269,55 @@ std::string Application::GetParameterString(std::string parameter)
   //TODO: exception if not found ?
   return ret;
 }
+
+InputImageParameter::VectorImageType* Application::GetParameterImage(std::string parameter)
+{
+  InputImageParameter::VectorImageType::Pointer ret;
+  Parameter* param = GetParameterByKey(parameter);
+
+  if (dynamic_cast<InputImageParameter*>(param))
+    {
+    InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param);
+    ret = paramDown->GetImage();
+    }
+
+  //TODO: exception if not found ?
+  return ret;
+}
+
+InputComplexImageParameter::VectorImageType* Application::GetParameterComplexImage(std::string parameter)
+{
+  InputComplexImageParameter::VectorImageType::Pointer ret;
+  Parameter* param = GetParameterByKey(parameter);
+
+  if (dynamic_cast<InputComplexImageParameter*>(param))
+    {
+    InputComplexImageParameter* paramDown = dynamic_cast<InputComplexImageParameter*>(param);
+    ret = paramDown->GetImage();
+    }
+
+  //TODO: exception if not found ?
+  return ret;
+
+}
+
+InputVectorDataParameter::VectorDataType* Application::GetParameterVectorData(std::string parameter)
+{
+  InputVectorDataParameter::VectorDataType::Pointer ret;
+  Parameter* param = GetParameterByKey(parameter);
+
+  if (dynamic_cast<InputVectorDataParameter*>(param))
+    {
+    InputVectorDataParameter* paramDown = dynamic_cast<InputVectorDataParameter*>(param);
+    ret = paramDown->GetVectorData();
+    }
+
+  //TODO: exception if not found ?
+  return ret;
+}
+
+
+
 
 }
 }

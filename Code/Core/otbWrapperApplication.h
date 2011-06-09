@@ -90,11 +90,15 @@ public:
   void SetParameterInt(std::string parameter, int value);
   void SetParameterFloat(std::string parameter, float value);
   void SetParameterString(std::string parameter, std::string value);
+  void SetParameterOutputImage(std::string parameter, OutputImageParameter::VectorImageType* value);
+  void SetParameterOutputVectorData(std::string parameter, OutputVectorDataParameter::VectorDataType* value);
 
   int GetParameterInt(std::string parameter);
   float GetParameterFloat(std::string parameter);
   std::string GetParameterString(std::string parameter);
-
+  InputImageParameter::VectorImageType* GetParameterImage(std::string parameter);
+  InputComplexImageParameter::VectorImageType* GetParameterComplexImage(std::string parameter);
+  InputVectorDataParameter::VectorDataType* GetParameterVectorData(std::string parameter);
 
 protected:
   /** Constructor */
