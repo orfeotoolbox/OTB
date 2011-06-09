@@ -32,7 +32,7 @@ CurlHelperInterface::IsCurlAvailable()
   return curlAvailable;
 }
 
-bool 
+bool
 CurlHelperInterface::IsCurlMultiAvailable()
 {
   bool curlMultiAvailable = false;

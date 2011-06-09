@@ -409,7 +409,7 @@ int CurlHelper::RetrieveFileMulti(const std::vector<std::string>& listURLs,
         otbCurlCall(curl_easy_setopt(lEasyHandle->GetCurlResource(), CURLOPT_URL, (*url).data()));
         otbCurlCall(curl_easy_setopt(lEasyHandle->GetCurlResource(), CURLOPT_WRITEFUNCTION,
                                      &Self::CallbackWriteDataToFile));
-        otbCurlCall(curl_easy_setopt(lEasyHandle->GetCurlResource(), CURLOPT_WRITEDATA, 
+        otbCurlCall(curl_easy_setopt(lEasyHandle->GetCurlResource(), CURLOPT_WRITEDATA,
                                  (void*) (*file)->GetFileResource()));
 
         // Add easy handle to multi handle

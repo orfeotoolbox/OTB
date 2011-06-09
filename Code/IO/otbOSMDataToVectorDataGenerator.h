@@ -41,7 +41,7 @@ namespace otb {
  *  The class parse the XML file for certain keys by default, the
  *  class allow adding key to be searched in the XML file. Use
  *  AddKey(const std::string& key) to add it to the search list.
- *  Here is a link to the OSM wiki where all the keys are listed : 
+ *  Here is a link to the OSM wiki where all the keys are listed :
  *  http://wiki.openstreetmap.org/wiki/Map_Features.
  *
  *  Adding a field and its integer value is possible through the
@@ -60,7 +60,7 @@ namespace otb {
  *
  *
  *  All the keys and their relative values are stored in a map. To get
- *  this map use the method  GetKeysMap(). 
+ *  this map use the method  GetKeysMap().
  *
  *  Note that if one of the server limits are crossed
  *  node/way/relation or area requested, an exception is raised.
