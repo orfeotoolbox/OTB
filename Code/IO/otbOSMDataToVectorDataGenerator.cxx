@@ -37,17 +37,19 @@ OSMDataToVectorDataGenerator::OSMDataToVectorDataGenerator():m_North(43.62811),
   
   // Initialize the url
   m_Url = "http://www.openstreetmap.org/api/0.6/map?";
-
+  
   m_Curl = CurlHelper::New();
+  
+  m_ClassKey = "Class";
+  m_ClassKeyValue = 1;
+
 
   // Add the key to search by default
-   m_KeyList.push_back("highway");
-   m_KeyList.push_back("building");
-   m_KeyList.push_back("landuse");
-   m_KeyList.push_back("waterway");
-
-   m_ClassKey = "Class";
-   m_ClassKeyValue = 1;
+  // 
+  m_KeyList.push_back("highway");
+  m_KeyList.push_back("building");
+  m_KeyList.push_back("landuse");
+  m_KeyList.push_back("waterway");
 }
 
 OSMDataToVectorDataGenerator::~OSMDataToVectorDataGenerator()
@@ -70,14 +72,18 @@ void OSMDataToVectorDataGenerator::GenerateData()
     
     // Add the extent to the url
     urlStream<<"bbox="<<m_West<<","<<m_South<<","<<m_East<<","<<m_North;
+
+    // First check if the request does not cross the server
+    // limitations :
+    if (m_Curl->IsCurlReturnHttpError( urlStream.str()))
+      {
+      itkExceptionMacro(<<"The OSM Server returned an Error > =400,"
+                        <<" it means that one of the limits of the server limit are crossed  : node/way/relation /");
+      }
     
     // Use Curl to request the OSM Server
     // TODO use the RetrieveUrlInMemory
-    int curlCode = m_Curl->RetrieveFile(urlStream.str(), m_FileName);
-    if ( curlCode != 0 )
-      {
-      itkExceptionMacro(<<"Problem while getting "<< urlStream.str()<< " Returned error "<< curlCode);
-      }
+    m_Curl->RetrieveFile(urlStream.str(), m_FileName);
     }
   else
     {
@@ -104,7 +110,6 @@ void OSMDataToVectorDataGenerator::GenerateData()
       itkExceptionMacro(<< "Error while deleting the file" << m_FileName);
       }
 }
-
 
 void OSMDataToVectorDataGenerator::ParseXmlFile()
 {
@@ -154,7 +159,6 @@ void OSMDataToVectorDataGenerator::ParseXmlFile()
       m_GeoPointContainer.insert(newEntry);
       }
     }
-
   ////////////  ////////////  ////////////  ////////////  ////////////
   /*   Step 2 : Find the Key and the node ids of the key */
   ////////////  ////////////  ////////////  ////////////  ////////////
@@ -216,7 +220,7 @@ void OSMDataToVectorDataGenerator::ParseXmlFile()
           }
         
         // Form the VectorDataElement
-        if(pointList.size()>0)
+        if(pointList.size() > 0)
           {
           vdelement.first  = elementPair;
           vdelement.second = pointList;
@@ -233,7 +237,6 @@ OSMDataToVectorDataGenerator::AddKeyTypeToMap(const std::string& key, const std:
 {
   // Is this key present in the map
   KeyMapType::iterator   it = m_KeysMap.find(key);
-  
   
   if( it != m_KeysMap.end())
     {

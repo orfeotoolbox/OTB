@@ -243,6 +243,38 @@ bool CurlHelper::TestUrlAvailability(const std::string& url) const
   return false;
 }
 
+bool CurlHelper::IsCurlReturnHttpError(const std::string& url) const
+{
+  if (CurlHelperInterface::IsCurlAvailable())
+    {
+    // Set up a curl resource
+    CurlResource::Pointer curlResource = CurlResource::New();
+
+    otbCurlCall(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_USERAGENT, m_Browser.data()));
+    otbCurlCall(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_URL, url.data()));
+    // Set the dummy write function
+    otbCurlCall(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_WRITEFUNCTION,
+                                 &Self::CallbackWriteDataDummy));
+    otbCurlCall(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_MAXFILESIZE, 1));
+    otbCurlCall(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_FAILONERROR, 1));
+
+    // Perform requet
+    CURLcode easyPerformResult = curl_easy_perform(curlResource->GetCurlResource());
+    if ( easyPerformResult == CURLE_HTTP_RETURNED_ERROR )
+      {
+      return true;
+      }
+    
+    return false;
+    }
+  else
+    {
+    otbMsgDevMacro(<< "Curl is not available, compile with OTB_USE_CURL to ON");
+    }
+  
+  return false;
+}
+
 int CurlHelper::RetrieveUrlInMemory(const std::string& url, std::string& output) const
 {
   if(CurlHelperInterface::IsCurlAvailable())
