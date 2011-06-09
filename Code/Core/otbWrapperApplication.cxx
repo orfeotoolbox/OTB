@@ -155,6 +155,11 @@ void Application::SetParameterString(std::string parameter, std::string value)
     OutputVectorDataParameter* paramDown = dynamic_cast<OutputVectorDataParameter*>(param);
     paramDown->SetFileName(value);
     }
+  else if (dynamic_cast<StringParameter*>(param))
+    {
+    StringParameter* paramDown = dynamic_cast<StringParameter*>(param);
+    paramDown->SetValue(value);
+    }
 }
 
 
