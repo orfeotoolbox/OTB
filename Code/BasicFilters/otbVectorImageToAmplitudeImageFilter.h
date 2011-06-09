@@ -35,7 +35,7 @@ public:
 
   inline TOutput operator ()(const TInput& A)
   {
-    return static_cast<TOutput>(vcl_sqrt(A.GetSquaredNorm()));
+    return static_cast<TOutput>(A.GetNorm());
   }
 
   itkConceptMacro(OutputShouldNotBeVectorImageCheck,
