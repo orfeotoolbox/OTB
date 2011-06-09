@@ -104,14 +104,17 @@ int otb::DSFuzzyModelEstimation::Describe(ApplicationDescriptor* descriptor)
                         "cri", 1, false, ApplicationDescriptor::String);
   descriptor->AddOption("weighting", "Coefficient between 0 and 1 to promote undetection or false detections (default 0.5)",
                         "wgt", 1, false, ApplicationDescriptor::Real);
-  descriptor->AddOption("MaximumNumberOfIterations", "Maximum Number os Optimizer Iteration",
+  descriptor->AddOption("MaximumNumberOfIterations", "Maximum Number of Optimizer Iteration",
                         "MaxNbIt", 1, false, ApplicationDescriptor::Integer);
   descriptor->AddOption("DEMDirectory", "DEM directory",
                         "dem", 1, false, ApplicationDescriptor::DirectoryName);
+  descriptor->AddOption("InitModel", "Initial state for the model Optimizer",
+                        "InitMod", 1, false, ApplicationDescriptor::FileName);
   descriptor->AddOption("OptimizerObserver", "Activate or not the optimizer observer",
                         "OptObs", 0, false, ApplicationDescriptor::Boolean);
   descriptor->AddOption("GenerateShp", "Activate the output of intermediate vector data (only work with cartographic image)",
                         "grtShp", 0, false, ApplicationDescriptor::Boolean);
+
 
   return EXIT_SUCCESS;
 }
@@ -149,6 +152,9 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
   typedef CostFunctionType::LabelSetType                    LabelSetType;
 
   typedef itk::AmoebaOptimizer                        OptimizerType;
+
+  typedef otb::FuzzyDescriptorsModelManager::DescriptorsModelType
+                                                      DescriptorsModelType;
 
   //Instantiate
   ImageReaderType::Pointer                   imgReader = ImageReaderType::New();
@@ -430,8 +436,9 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
   OptimizerType::ParametersType
   initialPosition( costFunction->GetNumberOfParameters() );
 
-  /*[0.0585698, 0.158364, 0.207495, 0.999979, 0.208119, 0.310084, 0.507505, 1, 0.106548, 0.207591, 0.306967, 0.940949]
-  for (unsigned int i = 0; i < costFunction->GetNumberOfParameters(); i += 4)
+  //[0.0585698, 0.158364, 0.207495, 0.999979, 0.208119, 0.310084, 0.507505, 1, 0.106548, 0.207591, 0.306967, 0.940949]
+  /*
+    for (unsigned int i = 0; i < costFunction->GetNumberOfParameters(); i += 4)
     {
     initialPosition.SetElement(i,   0.25);
     initialPosition.SetElement(i+1, 0.50);
@@ -439,20 +446,37 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
     initialPosition.SetElement(i+3, 0.99);
     }
   */
-  initialPosition.SetElement(0,   0.05);
-  initialPosition.SetElement(1,   0.15);
-  initialPosition.SetElement(2,   0.20);
-  initialPosition.SetElement(3,   0.99);
 
-  initialPosition.SetElement(4,   0.15);
-  initialPosition.SetElement(5,   0.3);
-  initialPosition.SetElement(6,   0.5);
-  initialPosition.SetElement(7,   0.99);
+  if (parseResult->IsOptionPresent("InitModel"))
+    {
+    // Load the initial descriptor model
+    std::string descModFile = parseResult->GetParameterString("InitModel");
+    DescriptorsModelType descMod = FuzzyDescriptorsModelManager::Read( descModFile.c_str() );
 
-  initialPosition.SetElement(8,   0.1);
-  initialPosition.SetElement(9,   0.2);
-  initialPosition.SetElement(10,   0.3);
-  initialPosition.SetElement(11,   0.99);
+    for(unsigned int i=0; i<4; i++)
+      {
+      initialPosition.SetElement(i,   otb::FuzzyDescriptorsModelManager::GetDescriptor("NONDVI",descMod).second[i]);
+      initialPosition.SetElement(i+4, otb::FuzzyDescriptorsModelManager::GetDescriptor("ROADSA",descMod).second[i]);
+      initialPosition.SetElement(i+8, otb::FuzzyDescriptorsModelManager::GetDescriptor("NOBUIL",descMod).second[i]);
+      }
+    }
+  else
+    {
+    initialPosition.SetElement(0,   0.05);
+    initialPosition.SetElement(1,   0.15);
+    initialPosition.SetElement(2,   0.20);
+    initialPosition.SetElement(3,   0.99);
+
+    initialPosition.SetElement(4,   0.15);
+    initialPosition.SetElement(5,   0.3);
+    initialPosition.SetElement(6,   0.5);
+    initialPosition.SetElement(7,   0.99);
+
+    initialPosition.SetElement(8,   0.1);
+    initialPosition.SetElement(9,   0.2);
+    initialPosition.SetElement(10,   0.3);
+    initialPosition.SetElement(11,   0.99);
+    }
 
   optimizer->SetInitialPosition(initialPosition);
 
