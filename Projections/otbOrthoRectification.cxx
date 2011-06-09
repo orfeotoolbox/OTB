@@ -130,8 +130,8 @@ int generic_main(otb::ApplicationOptionsResult* parseResult,
     ImageType::SizeType size;
     if(parseResult->IsOptionPresent("OutputSize"))
       {
-      size[0]= parseResult->GetParameterDouble("OutputSize", 0);
-      size[1]= parseResult->GetParameterDouble("OutputSize", 1);
+      size[0]= parseResult->GetParameterULong("OutputSize", 0);
+      size[1]= parseResult->GetParameterULong("OutputSize", 1);
       genericRSEstimator->ForceSizeTo(size);
       }
     else
