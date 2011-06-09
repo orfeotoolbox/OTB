@@ -19,10 +19,14 @@
 #include "otbStreamingLineSegmentDetector.h"
 
 #include "otbImage.h"
+#include "otbVectorImage.h"
+#include "otbVectorImageToAmplitudeImageFilter.h"
 #include "otbVectorData.h"
 #include "otbImageFileReader.h"
 #include "otbVectorDataFileWriter.h"
 #include "otbStandardFilterWatcher.h"
+#include "otbStreamingStatisticsImageFilter.h"
+#include "itkShiftScaleImageFilter.h"
 
 #include "otbVectorDataProjectionFilter.h"
 #include "otbVectorDataTransformFilter.h"
@@ -50,12 +54,22 @@ int LineSegmentDetection::Execute(otb::ApplicationOptionsResult* parseResult)
   typedef float InputPixelType;
   const unsigned int Dimension = 2;
   typedef otb::Image<InputPixelType, Dimension>       ImageType;
-  typedef otb::ImageFileReader<ImageType>             ReaderType;
+  typedef otb::VectorImage<InputPixelType, Dimension> VectorImageType;
+  typedef otb::ImageFileReader<VectorImageType>       ReaderType;
 
   typedef otb::VectorData<double, Dimension>          VectorDataType;
   typedef VectorDataType::Pointer                     VectorDataPointerType;
   typedef otb::VectorDataFileWriter<VectorDataType>   VectorDataFileWriterType;
   typedef VectorDataFileWriterType::Pointer           VectorDataFileWriterPointerType;
+
+  typedef otb::VectorImageToAmplitudeImageFilter<VectorImageType, ImageType>
+    VectorImageToAmplitudeImageFilterType;
+
+  typedef otb::StreamingStatisticsImageFilter<ImageType>
+    StreamingStatisticsImageFilterType;
+
+  typedef itk::ShiftScaleImageFilter<ImageType, ImageType>
+    ShiftScaleImageFilterType;
 
   typedef otb::StreamingLineSegmentDetector
     < ImageType >::FilterType LSDFilterType;
@@ -64,11 +78,26 @@ int LineSegmentDetection::Execute(otb::ApplicationOptionsResult* parseResult)
   reader->SetFileName(parseResult->GetInputImage());
   reader->UpdateOutputInformation();
 
-  ImageType::Pointer inputImage = reader->GetOutput();
+  VectorImageToAmplitudeImageFilterType::Pointer amplitudeConverter
+    = VectorImageToAmplitudeImageFilterType::New();
+  amplitudeConverter->SetInput(reader->GetOutput());
+
+  StreamingStatisticsImageFilterType::Pointer stats
+    = StreamingStatisticsImageFilterType::New();
+  stats->SetInput(amplitudeConverter->GetOutput());
+  stats->Update();
+  InputPixelType min = stats->GetMinimum();
+  InputPixelType max = stats->GetMaximum();
+
+  ShiftScaleImageFilterType::Pointer shiftScale
+    = ShiftScaleImageFilterType::New();
+  shiftScale->SetInput(amplitudeConverter->GetOutput());
+  shiftScale->SetShift( -min );
+  shiftScale->SetScale( 255.0 / (max - min) );
 
   LSDFilterType::Pointer lsd
     = LSDFilterType::New();
-  lsd->GetFilter()->SetInput(inputImage);
+  lsd->GetFilter()->SetInput(shiftScale->GetOutput());
 
   otb::StandardFilterWatcher watcher(lsd->GetStreamer(),"Line Segment Detection");
   lsd->Update();
@@ -82,8 +111,8 @@ int LineSegmentDetection::Execute(otb::ApplicationOptionsResult* parseResult)
    * We need to reproject in WGS84 if the input image is in sensor model geometry
    */
 
-  std::string projRef = inputImage->GetProjectionRef();
-  ImageKeywordlist kwl = inputImage->GetImageKeywordlist();
+  std::string projRef = reader->GetOutput()->GetProjectionRef();
+  ImageKeywordlist kwl = reader->GetOutput()->GetImageKeywordlist();
 
   VectorDataType::Pointer vd = lsd->GetFilter()->GetOutputVectorData();
   VectorDataType::Pointer projectedVD = vd;
@@ -98,9 +127,9 @@ int LineSegmentDetection::Execute(otb::ApplicationOptionsResult* parseResult)
 
     VectorDataProjectionFilterType::Pointer vproj = VectorDataProjectionFilterType::New();
     vproj->SetInput(vd);
-    vproj->SetInputKeywordList(inputImage->GetImageKeywordlist());
-    vproj->SetInputOrigin(inputImage->GetOrigin());
-    vproj->SetInputSpacing(inputImage->GetSpacing());
+    vproj->SetInputKeywordList(reader->GetOutput()->GetImageKeywordlist());
+    vproj->SetInputOrigin(reader->GetOutput()->GetOrigin());
+    vproj->SetInputSpacing(reader->GetOutput()->GetSpacing());
 
     if( parseResult->IsOptionPresent("DEMDirectory") )
       {
