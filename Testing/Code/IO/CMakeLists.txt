@@ -1815,6 +1815,17 @@ ADD_TEST(ioTvDEMToImageGeneratorTest ${IO_TESTS12}
         -0.002
         )
 
+# Pech David - Garonne, Toulouse area
+ADD_TEST(ioTvDEMToImageGeneratorTest1 ${IO_TESTS12}
+   --compare-image ${EPSILON_5}  
+       ${BASELINE}/ioTvDEMToImageGenerator1.tif
+       ${TEMP}/ioTvDEMToImageGenerator1.tif
+     otbDEMToImageGeneratorTest
+       ${INPUTDATA}/DEM/srtm_directory
+       ${TEMP}/ioTvDEMToImageGenerator1.tif
+       1.437371 43.559045 512 128 0.000032 -0.000024
+        )        
+
 #Big extend
 ADD_TEST(ioTvDEMToImageGeneratorTest2 ${IO_TESTS12}
 --compare-image ${EPSILON_5}  ${BASELINE}/ioTvDEMToImageGenerator2.tif
