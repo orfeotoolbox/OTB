@@ -455,9 +455,9 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
 
     for(unsigned int i=0; i<4; i++)
       {
-      initialPosition.SetElement(i,   otb::FuzzyDescriptorsModelManager::GetDescriptor("NONDVI",descMod).second[i]);
-      initialPosition.SetElement(i+4, otb::FuzzyDescriptorsModelManager::GetDescriptor("ROADSA",descMod).second[i]);
-      initialPosition.SetElement(i+8, otb::FuzzyDescriptorsModelManager::GetDescriptor("NOBUIL",descMod).second[i]);
+      initialPosition.SetElement(i,   otb::FuzzyDescriptorsModelManager::GetDescriptor("NONDVI", descMod).second[i]);
+      initialPosition.SetElement(i+4, otb::FuzzyDescriptorsModelManager::GetDescriptor("ROADSA", descMod).second[i]);
+      initialPosition.SetElement(i+8, otb::FuzzyDescriptorsModelManager::GetDescriptor("NOBUIL", descMod).second[i]);
       }
     }
   else
