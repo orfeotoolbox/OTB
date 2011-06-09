@@ -74,7 +74,7 @@ int OSMDownloader::Execute(otb::ApplicationOptionsResult* parseResult)
     if( !parseResult->IsOptionPresent("Output"))
       {
       itkExceptionMacro(<<"Missing Option : Output (-out)");
-      }    
+      }
     }
 
   typedef otb::OSMDataToVectorDataGenerator           VectorDataProviderType;
