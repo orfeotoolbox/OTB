@@ -289,7 +289,7 @@ int CurlHelper::RetrieveFile(const std::ostringstream& urlStream, std::string fi
 int CurlHelper::RetrieveFile(const std::string& urlString, std::string filename) const
 {
 #ifdef OTB_USE_CURL
-  otbMsgDevMacro(<< "Retrieving: " << url);
+  otbMsgDevMacro(<< "Retrieving: " << urlString);
   CURLcode res = CURLE_OK;
   
   CurlResource::Pointer curlResource = CurlResource::New();
