@@ -76,7 +76,7 @@ public:
   typedef CurlResource                  Self;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
-  typedef itk::LightObject               Superclass;
+  typedef itk::LightObject              Superclass;
 
   itkTypeMacro(CurlResource, itk::LightObject);
   itkNewMacro(Self);
@@ -121,7 +121,7 @@ public:
   typedef CurlMultiResource             Self;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
-  typedef itk::LightObject               Superclass;
+  typedef itk::LightObject              Superclass;
 
   itkTypeMacro(CurlMultiResource, itk::LightObject);
   itkNewMacro(Self);
@@ -369,7 +369,8 @@ int CurlHelper::RetrieveFileMulti(const std::vector<std::string>& listURLs,
     otbCurlCall(curl_easy_setopt(lEasyHandle->GetCurlResource(), CURLOPT_URL, (*url).data()));
     otbCurlCall(curl_easy_setopt(lEasyHandle->GetCurlResource(), CURLOPT_WRITEFUNCTION,
                                  &Self::CallbackWriteDataToFile));
-    otbCurlCall(curl_easy_setopt(lEasyHandle->GetCurlResource(), CURLOPT_WRITEDATA, (void*) (*file)->GetFileResource()));
+    otbCurlCall(curl_easy_setopt(lEasyHandle->GetCurlResource(), CURLOPT_WRITEDATA, 
+                                 (void*) (*file)->GetFileResource()));
 
     // Add easy handle to multi handle
     otbCurlMultiCall(curl_multi_add_handle(multiHandle->GetCurlMultiResource(), lEasyHandle->GetCurlResource()));
