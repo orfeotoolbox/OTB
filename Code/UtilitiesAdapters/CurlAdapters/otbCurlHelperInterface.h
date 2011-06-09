@@ -22,6 +22,7 @@
 #include "itkObject.h"
 #include "itkObjectFactory.h"
 
+
 namespace otb
 {
 /**
@@ -54,6 +55,10 @@ public:
   virtual int RetrieveFileMulti(const std::vector<std::string>& listURLs,
                                 const std::vector<std::string>& listFiles,
                                 int maxConnect) const = 0;
+
+  static bool IsCurlAvailable();
+  static bool IsCurlMultiAvailable();
+
 protected:
   CurlHelperInterface() {}
   virtual ~CurlHelperInterface() {}

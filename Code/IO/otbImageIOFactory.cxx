@@ -17,6 +17,7 @@
 =========================================================================*/
 
 #include "otbConfigure.h"
+#include "otbCurlHelperInterface.h"
 #include "otbImageIOFactory.h"
 #include "itkMutexLock.h"
 #include "itkMutexLockHolder.h"
@@ -33,9 +34,7 @@
 #include "otbJPEG2000ImageIOFactory.h"
 #endif
 
-#ifdef OTB_USE_CURL
 #include "otbTileMapImageIOFactory.h"
-#endif
 
 namespace otb
 {
@@ -75,10 +74,11 @@ ImageIOFactory::RegisterBuiltInFactories()
       itk::ObjectFactoryBase::RegisterFactory(JPEG2000ImageIOFactory::New());
 #endif
 
-#ifdef OTB_USE_CURL
-      // TileMap : New format for OTB
-      itk::ObjectFactoryBase::RegisterFactory(TileMapImageIOFactory::New());
-#endif
+      if (CurlHelperInterface::IsCurlAvailable())
+        {
+        // TileMap : New format for OTB
+        itk::ObjectFactoryBase::RegisterFactory(TileMapImageIOFactory::New());
+        }
 
       // GDAL : New format for OTB
       itk::ObjectFactoryBase::RegisterFactory(GDALImageIOFactory::New());
