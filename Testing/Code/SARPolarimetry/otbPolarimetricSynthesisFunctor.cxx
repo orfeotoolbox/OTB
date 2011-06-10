@@ -17,6 +17,7 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 #include "vcl_complex.h"
+#include "vcl_cmath.h"
 #include "otbPolarimetricSynthesisFunctor.h"
 
 int otbPolarimetricSynthesisFunctor(int argc, char * argv[])
