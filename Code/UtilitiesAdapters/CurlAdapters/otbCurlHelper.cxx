@@ -112,6 +112,8 @@ private:
   CurlResource & operator= (const CurlResource &);
 };  //end of class CurlResource
 
+
+#ifdef OTB_CURL_MULTI_AVAILABLE
 /**
  * Resource class that create and clean the curl multi environment
  * proprely in case of a thrown exception
@@ -155,7 +157,7 @@ private:
   CurlMultiResource (const CurlMultiResource &);
   CurlMultiResource & operator= (const CurlMultiResource &);
 }; //end of class CurlMultiResource
-
+#endif
 
 /**
  * Resource class that create FILE * and  close the FILE *  descriptor
