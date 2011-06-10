@@ -117,6 +117,7 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
     typedef otb::GenericMapProjection<TransformDirection::INVERSE, ScalarType, InputSpaceDimension, InputSpaceDimension>
         InverseMapProjectionType;
     typename InverseMapProjectionType::Pointer mapTransform = InverseMapProjectionType::New();
+
     mapTransform->SetWkt(m_InputProjectionRef);
     if (mapTransform->IsProjectionDefined())
       {
@@ -234,6 +235,7 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
   m_Transform->SetFirstTransform(m_InputTransform);
   m_Transform->SetSecondTransform(m_OutputTransform);
   m_TransformUpToDate = true;
+
   //The accuracy information is a simplistic model for now and should be refined
   if ((inputTransformIsSensor || outputTransformIsSensor) && (m_DEMDirectory.empty()))
     {
@@ -359,6 +361,10 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
     os << indent << "Input transform: NULL" << std::endl;
     os << indent << "Output transform: NULL" << std::endl;
     }
+  os << indent << "Accuracy: "
+      << (m_TransformAccuracy == Projection::PRECISE ?
+                "PRECISE" : (m_TransformAccuracy == Projection::ESTIMATE ?
+                                  "ESTIMATE" : "UNKNOWN")) << std::endl;
 }
 
 } // namespace otb
