@@ -115,7 +115,7 @@ void CoordinateToName::DoEvaluate()
       m_Curl->RetrieveUrlInMemory(urlStream.str(), m_CurlOutput);
       m_IsValid = true;
       }
-    catch(itk::ExceptionObject& e)
+    catch(itk::ExceptionObject)
       {
       m_IsValid = false;
       }

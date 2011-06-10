@@ -88,7 +88,7 @@ void PlaceNameToLonLat::RetrieveXML(const std::ostringstream& urlStream)
     m_RequestSucceed = true;
     m_Curl->RetrieveUrlInMemory(urlStream.str(), m_CurlOutput);
     }
-  catch(itk::ExceptionObject& e)
+  catch(itk::ExceptionObject)
     {
     m_RequestSucceed = false;
     }
