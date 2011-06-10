@@ -91,7 +91,7 @@ Click on the file to launch Monteverdi.
 
 \subsubsection{Ubuntu 9.10, 10.04 and 10.10}
 \label{ssec:ubuntu_binaries}
-For Unbuntu 9.10 (Karmic Koala), 10.04 (Lucid Lynx) and 10.10 (Maverick Meerkat), OTB, 
+For Ubuntu 10.04 (Lucid Lynx), 10.10 (Maverick Meerkat) and 11.04 (Natty Narwhal), OTB, 
 OTB-Applications, Monteverdi and OTB-Wrapping packages are available through APT repositories.
 
 If you are using apt command-line tools, use these command-lines to add the otb repository to apt sources:
@@ -122,6 +122,18 @@ sudo aptitude install otb otbapp monteverdi otb-wrapping-python otb-wrapping-jav
 \end{verbatim}
 
 Be careful not to add the two repositories, since they may cause incompatibilities.
+
+Moreover, nightly builds for all OTB projects are also available through APT repositories.
+If you are using apt command-line tools, use these command-lines to add the otb repository to apt sources:
+\begin{verbatim}
+sudo aptitude install add-apt-repository 
+sudo add-apt-repository ppa:otb/orfeotoolbox-nightly
+\end{verbatim}
+Now run:
+\begin{verbatim}
+sudo aptitude update
+sudo aptitude install otb otbapp monteverdi otb-wrapping
+\end{verbatim}
 
 For further informations about ubuntu packages go to href{https://launchpad.net/~otb/+archive/orfeotoolbox-stable}{orfeotoolbox-stable launchpad page} and click on \textbf{Read about installing}.
 
