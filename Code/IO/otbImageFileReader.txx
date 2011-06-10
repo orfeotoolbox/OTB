@@ -387,6 +387,30 @@ ImageFileReader<TOutputImage>
       itk::EncapsulateMetaData<ImageKeywordlist>(dict,
                                                  MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
     }
+  else
+    {
+    //
+    // For image with world file, we have a non-null GeoTransform, an empty kwl, but no projection ref.
+    // Decision made here : if the keywordlist is empty, and the geotransform is not the identity,
+    // then assume the file is in WGS84
+    //
+    std::string projRef;
+    itk::ExposeMetaData(dict, MetaDataKey::ProjectionRefKey, projRef);
+
+    const double Epsilon = 1.0E-12;
+    if ( projRef.empty()
+         && vcl_abs(origin[0]) > Epsilon
+         && vcl_abs(origin[1]) > Epsilon
+         && vcl_abs(spacing[0] - 1) > Epsilon
+         && vcl_abs(spacing[1] - 1) > Epsilon)
+      {
+      std::string wgs84ProjRef =
+              "GEOGCS[\"GCS_WGS_1984\", DATUM[\"D_WGS_1984\", SPHEROID[\"WGS_1984\", 6378137, 298.257223563]],"
+              "PRIMEM[\"Greenwich\", 0], UNIT[\"Degree\", 0.017453292519943295]]";
+
+      itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, wgs84ProjRef);
+      }
+    }
 
   //Copy MetaDataDictionary from instantiated reader to output image.
   output->SetMetaDataDictionary(this->m_ImageIO->GetMetaDataDictionary());
