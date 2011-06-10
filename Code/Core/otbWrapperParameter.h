@@ -23,6 +23,8 @@
 #include "boost/any.hpp"
 #include "itkObjectFactory.h"
 
+#include "otbWrapperTypes.h"
+
 namespace otb
 {
 namespace Wrapper
@@ -89,10 +91,16 @@ public:
   itkGetStringMacro(Key);
 
   /** Set the parameter mandatory flag */
+  itkSetMacro(Active,bool);
+
+  /** Get the parameter mandatory flag */
+  itkGetConstMacro(Active,bool);
+
+  /** Set the parameter mandatory flag */
   itkSetMacro(Mandatory,bool);
 
   /** Get the parameter mandatory flag */
-  itkGetMacro(Mandatory,bool);
+  itkGetConstMacro(Mandatory,bool);
 
   /** Toogle the parameter mandatory flag */
   itkBooleanMacro(Mandatory);
@@ -151,8 +159,13 @@ protected:
   /** True if the parameter is mandatory */
   bool m_Mandatory;
 
+  /** True if activated (a mandatory parameter is always active) */
+  bool m_Active;
+
   /** Default value behaviour */
   DefaultValueMode m_DefaultValueMode;
+
+  UserLevel m_Level;
 
 private:
   Parameter(const Parameter &); //purposely not implemented

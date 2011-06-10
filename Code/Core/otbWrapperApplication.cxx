@@ -275,9 +275,9 @@ std::string Application::GetParameterString(std::string parameter)
   return ret;
 }
 
-InputImageParameter::VectorImageType* Application::GetParameterImage(std::string parameter)
+VectorImageType* Application::GetParameterImage(std::string parameter)
 {
-  InputImageParameter::VectorImageType::Pointer ret;
+  VectorImageType::Pointer ret;
   Parameter* param = GetParameterByKey(parameter);
 
   if (dynamic_cast<InputImageParameter*>(param))
@@ -290,9 +290,9 @@ InputImageParameter::VectorImageType* Application::GetParameterImage(std::string
   return ret;
 }
 
-InputComplexImageParameter::VectorImageType* Application::GetParameterComplexImage(std::string parameter)
+VectorImageType* Application::GetParameterComplexImage(std::string parameter)
 {
-  InputComplexImageParameter::VectorImageType::Pointer ret;
+  VectorImageType::Pointer ret;
   Parameter* param = GetParameterByKey(parameter);
 
   if (dynamic_cast<InputComplexImageParameter*>(param))
@@ -306,9 +306,9 @@ InputComplexImageParameter::VectorImageType* Application::GetParameterComplexIma
 
 }
 
-InputVectorDataParameter::VectorDataType* Application::GetParameterVectorData(std::string parameter)
+VectorDataType* Application::GetParameterVectorData(std::string parameter)
 {
-  InputVectorDataParameter::VectorDataType::Pointer ret;
+  VectorDataType::Pointer ret;
   Parameter* param = GetParameterByKey(parameter);
 
   if (dynamic_cast<InputVectorDataParameter*>(param))

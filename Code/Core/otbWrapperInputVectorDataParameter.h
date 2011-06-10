@@ -18,9 +18,7 @@
 #ifndef __otbWrapperInputVectorDataParameter_h
 #define __otbWrapperInputVectorDataParameter_h
 
-#include "otbVectorData.h"
 #include "otbVectorDataFileReader.h"
-
 #include "otbWrapperParameter.h"
 
 namespace otb

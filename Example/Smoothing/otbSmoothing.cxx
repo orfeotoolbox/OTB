@@ -38,20 +38,7 @@ enum
   Smoothing_Anisotropic
 };
 
-typedef otb::Wrapper::InputImageParameter::VectorImageType VectorImageType;
 typedef otb::Image<VectorImageType::InternalPixelType, 2>  ImageType;
-
-typedef itk::MeanImageFilter<ImageType, ImageType>         MeanFilterType;
-typedef otb::PerBandVectorImageFilter<VectorImageType, VectorImageType, MeanFilterType>
-  PerBandMeanFilterType;
-
-typedef itk::DiscreteGaussianImageFilter<ImageType, ImageType>  DiscreteGaussianFilterType;
-typedef otb::PerBandVectorImageFilter<VectorImageType, VectorImageType, DiscreteGaussianFilterType>
-  PerBandDiscreteGaussianFilterType;
-
-typedef itk::GradientAnisotropicDiffusionImageFilter<ImageType, ImageType>  GradientAnisotropicDiffusionFilterType;
-typedef otb::PerBandVectorImageFilter<VectorImageType, VectorImageType, GradientAnisotropicDiffusionFilterType>
-  PerBandGradientAnisotropicDiffusionFilterType;
 
 
 Smoothing::Smoothing()
@@ -115,9 +102,12 @@ void Smoothing::DoExecute()
     {
     case Smoothing_Mean:
       {
+      typedef itk::MeanImageFilter<ImageType, ImageType>         MeanFilterType;
+      typedef otb::PerBandVectorImageFilter<VectorImageType, VectorImageType, MeanFilterType>
+        PerBandMeanFilterType;
+
       PerBandMeanFilterType::Pointer perBand
         = PerBandMeanFilterType::New();
-
       perBand->SetInput(inImage);
 
       MeanFilterType::InputSizeType radius;
@@ -129,6 +119,10 @@ void Smoothing::DoExecute()
       break;
     case Smoothing_Gaussian:
       {
+      typedef itk::DiscreteGaussianImageFilter<ImageType, ImageType>  DiscreteGaussianFilterType;
+      typedef otb::PerBandVectorImageFilter<VectorImageType, VectorImageType, DiscreteGaussianFilterType>
+        PerBandDiscreteGaussianFilterType;
+
       PerBandDiscreteGaussianFilterType::Pointer perBand
         = PerBandDiscreteGaussianFilterType::New();
       perBand->SetInput(inImage);
@@ -142,6 +136,10 @@ void Smoothing::DoExecute()
       break;
     case Smoothing_Anisotropic:
       {
+      typedef itk::GradientAnisotropicDiffusionImageFilter<ImageType, ImageType>  GradientAnisotropicDiffusionFilterType;
+      typedef otb::PerBandVectorImageFilter<VectorImageType, VectorImageType, GradientAnisotropicDiffusionFilterType>
+        PerBandGradientAnisotropicDiffusionFilterType;
+
       PerBandGradientAnisotropicDiffusionFilterType::Pointer perBand
         = PerBandGradientAnisotropicDiffusionFilterType::New();
       perBand->SetInput(inImage);

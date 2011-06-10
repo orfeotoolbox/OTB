@@ -18,10 +18,7 @@
 #ifndef __otbWrapperInputComplexImageParameter_h
 #define __otbWrapperInputComplexImageParameter_h
 
-#include <complex>
-#include "otbVectorImage.h"
 #include "otbImageFileReader.h"
-
 #include "otbWrapperParameter.h"
 
 namespace otb
@@ -46,9 +43,6 @@ public:
 
   /** RTTI support */
   itkTypeMacro(InputComplexImageParameter,Parameter);
-
-  typedef std::complex<float>            PixelType;
-  typedef otb::VectorImage<PixelType, 2> VectorImageType;
 
   /** Set the value */
   itkSetObjectMacro(Image, VectorImageType);
