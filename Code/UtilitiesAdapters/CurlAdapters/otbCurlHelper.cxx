@@ -470,6 +470,8 @@ int CurlHelper::RetrieveFileMulti(const std::vector<std::string>& listURLs,
   // Cleanup
   listFiles.clear();
   listCurlHandles.clear();
+
+  return 0; 
 #else
   //fallback on non curl multi
   otbMsgDevMacro(<< "Curl multi is not available, fallback on standard");
