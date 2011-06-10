@@ -17,7 +17,6 @@
 =========================================================================*/
 
 #include "otbCurlHelperInterface.h"
-#include "otbConfigure.h"
 
 namespace otb {
 

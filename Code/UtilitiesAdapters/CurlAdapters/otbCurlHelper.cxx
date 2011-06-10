@@ -65,6 +65,8 @@
 namespace otb
 {
 
+#ifdef OTB_USE_CURL
+
 /**
  * Resource class that create and clean the curl environment proprely
  * in case of a thrown exception
@@ -202,120 +204,110 @@ private:
   CurlFileDescriptorResource & operator= (const CurlFileDescriptorResource &);
 }; //end of class FileResource
 
+#endif  // Necessary only if Curl Availabale
+
 bool CurlHelper::TestUrlAvailability(const std::string& url) const
 {
-  if (CurlHelperInterface::IsCurlAvailable())
+#ifdef OTB_USE_CURL
+  // Set up a curl resource
+  CurlResource::Pointer curlResource = CurlResource::New();
+  
+  otbCurlCall(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_USERAGENT, m_Browser.data()));
+  otbCurlCall(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_URL, url.data()));
+  // Set the dummy write function
+  otbCurlCall(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_WRITEFUNCTION,
+                               &Self::CallbackWriteDataDummy));
+  otbCurlCall(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_MAXFILESIZE, 1));
+  
+  // Perform requet
+  CURLcode easyPerformResult = curl_easy_perform(curlResource->GetCurlResource());
+  
+  otbMsgDevMacro(<< "CurlHelper::TestUrlAvailability : curl_easy_perform returned "
+                 << easyPerformResult << " --> "
+                 << curl_easy_strerror(easyPerformResult));
+  
+  // Check the curl_easy_perform return code : actually we tests only
+  // the availability of the url, so if the file requested size is less
+  // than 1 byte, and the url is valid it returns CURLE_OK, or if the
+  // url is valid and the file size is greater than 1 byte it returns
+  // the error CURLE_FILESIZE_EXCEEDED
+  if ( easyPerformResult == CURLE_OK || easyPerformResult == CURLE_FILESIZE_EXCEEDED )
     {
-    // Set up a curl resource
-    CurlResource::Pointer curlResource = CurlResource::New();
-
-    otbCurlCall(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_USERAGENT, m_Browser.data()));
-    otbCurlCall(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_URL, url.data()));
-    // Set the dummy write function
-    otbCurlCall(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_WRITEFUNCTION,
-                                 &Self::CallbackWriteDataDummy));
-    otbCurlCall(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_MAXFILESIZE, 1));
-  
-    // Perform requet
-    CURLcode easyPerformResult = curl_easy_perform(curlResource->GetCurlResource());
-  
-    otbMsgDevMacro(<< "CurlHelper::TestUrlAvailability : curl_easy_perform returned "
-                   << easyPerformResult << " --> "
-                   << curl_easy_strerror(easyPerformResult));
-
-    // Check the curl_easy_perform return code : actually we tests only
-    // the availability of the url, so if the file requested size is less
-    // than 1 byte, and the url is valid it returns CURLE_OK, or if the
-    // url is valid and the file size is greater than 1 byte it returns
-    // the error CURLE_FILESIZE_EXCEEDED
-    if ( easyPerformResult == CURLE_OK || easyPerformResult == CURLE_FILESIZE_EXCEEDED )
-      {
-      return true;
-      }
-
-    return false;
+    return true;
     }
-  else
-    {
-    otbMsgDevMacro(<< "Curl is not available, compile with OTB_USE_CURL to ON");
-    }
-  
+
   return false;
+#else
+  otbMsgDevMacro(<< "Curl is not available, compile with OTB_USE_CURL to ON");
+  return false;
+#endif
 }
 
 bool CurlHelper::IsCurlReturnHttpError(const std::string& url) const
 {
-  if (CurlHelperInterface::IsCurlAvailable())
+#ifdef OTB_USE_CURL
+  // Set up a curl resource
+  CurlResource::Pointer curlResource = CurlResource::New();
+
+  otbCurlCall(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_USERAGENT, m_Browser.data()));
+  otbCurlCall(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_URL, url.data()));
+  // Set the dummy write function
+  otbCurlCall(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_WRITEFUNCTION,
+                               &Self::CallbackWriteDataDummy));
+  otbCurlCall(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_MAXFILESIZE, 1));
+  otbCurlCall(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_FAILONERROR, 1));
+
+  // Perform requet
+  CURLcode easyPerformResult = curl_easy_perform(curlResource->GetCurlResource());
+  if ( easyPerformResult == CURLE_HTTP_RETURNED_ERROR )
     {
-    // Set up a curl resource
-    CurlResource::Pointer curlResource = CurlResource::New();
-
-    otbCurlCall(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_USERAGENT, m_Browser.data()));
-    otbCurlCall(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_URL, url.data()));
-    // Set the dummy write function
-    otbCurlCall(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_WRITEFUNCTION,
-                                 &Self::CallbackWriteDataDummy));
-    otbCurlCall(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_MAXFILESIZE, 1));
-    otbCurlCall(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_FAILONERROR, 1));
-
-    // Perform requet
-    CURLcode easyPerformResult = curl_easy_perform(curlResource->GetCurlResource());
-    if ( easyPerformResult == CURLE_HTTP_RETURNED_ERROR )
-      {
-      return true;
-      }
+    return true;
+    }
     
-    return false;
-    }
-  else
-    {
-    otbMsgDevMacro(<< "Curl is not available, compile with OTB_USE_CURL to ON");
-    }
-  
   return false;
+#else
+  otbMsgDevMacro(<< "Curl is not available, compile with OTB_USE_CURL to ON");
+  return false;
+#endif
 }
 
 int CurlHelper::RetrieveUrlInMemory(const std::string& url, std::string& output) const
 {
-  if(CurlHelperInterface::IsCurlAvailable())
-    {
-    otbMsgDevMacro(<< "Retrieving: " << url);
-    CURLcode res = CURLE_OK;
-    CurlResource::Pointer curlResource = CurlResource::New();
+#ifdef OTB_USE_CURL
+  otbMsgDevMacro(<< "Retrieving: " << url);
+  CURLcode res = CURLE_OK;
+  CurlResource::Pointer curlResource = CurlResource::New();
   
-    otbCurlCall(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_URL, url.c_str()));
+  otbCurlCall(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_URL, url.c_str()));
   
-    // Set 5s timeout
-    otbCurlCall(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_TIMEOUT, 10));
+  // Set 5s timeout
+  otbCurlCall(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_TIMEOUT, 10));
   
-    // Use our writing static function to avoid file descriptor
-    // pointer crash on windows
-    otbCurlCall(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_WRITEFUNCTION,
-                                 &Self::CallbackWriteDataToStringStream));
+  // Use our writing static function to avoid file descriptor
+  // pointer crash on windows
+  otbCurlCall(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_WRITEFUNCTION,
+                               &Self::CallbackWriteDataToStringStream));
   
-    // Say the file where to write the received data
-    std::ostringstream* outputStream = new std::ostringstream;
-    otbCurlCall(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_WRITEDATA, (void*) outputStream));
+  // Say the file where to write the received data
+  std::ostringstream* outputStream = new std::ostringstream;
+  otbCurlCall(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_WRITEDATA, (void*) outputStream));
 
-    // Perform request
-    otbCurlCall(curl_easy_perform(curlResource->GetCurlResource()));
+  // Perform request
+  otbCurlCall(curl_easy_perform(curlResource->GetCurlResource()));
 
-    // Save output
-    output = outputStream->str();
-    otbMsgDevMacro("curl output : " << output);
+  // Save output
+  output = outputStream->str();
+  otbMsgDevMacro("curl output : " << output);
 
-    // Clean up
-    delete outputStream;
+  // Clean up
+  delete outputStream;
 
-    otbMsgDevMacro(<< " -> " << res);
-    return res;
-    }
-  else
-    {
-    otbMsgDevMacro(<< "Curl is not available, compile with OTB_USE_CURL to ON");
-    }
-
+  otbMsgDevMacro(<< " -> " << res);
+  return res;
+#else
+  otbMsgDevMacro(<< "Curl is not available, compile with OTB_USE_CURL to ON");
   return -1;
+#endif
 }
 
 int CurlHelper::RetrieveFile(const std::ostringstream& urlStream, std::string filename) const
@@ -325,199 +317,188 @@ int CurlHelper::RetrieveFile(const std::ostringstream& urlStream, std::string fi
 
 int CurlHelper::RetrieveFile(const std::string& urlString, std::string filename) const
 {
-  if(CurlHelperInterface::IsCurlAvailable())
-    {
-    otbMsgDevMacro(<< "Retrieving: " << urlString);
+#ifdef OTB_USE_CURL 
+  otbMsgDevMacro(<< "Retrieving: " << urlString);
 
-    CURLcode res = CURLE_OK;
+  CURLcode res = CURLE_OK;
   
-    CurlResource::Pointer curlResource = CurlResource::New();
+  CurlResource::Pointer curlResource = CurlResource::New();
 
-    CurlFileDescriptorResource::Pointer output_file = CurlFileDescriptorResource::New();
-    output_file->OpenFile(filename.c_str());
+  CurlFileDescriptorResource::Pointer output_file = CurlFileDescriptorResource::New();
+  output_file->OpenFile(filename.c_str());
   
-    char url[256];
-    strcpy(url, urlString.c_str());
+  char url[256];
+  strcpy(url, urlString.c_str());
 
-    otbCurlCall(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_URL, url));
+  otbCurlCall(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_URL, url));
 
-    // Set 10s timeout
-    otbCurlCall(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_TIMEOUT, 10));
+  // Set 10s timeout
+  otbCurlCall(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_TIMEOUT, 10));
 
-    // Use our writing static function to avoid file descriptor
-    // pointer crash on windows
-    otbCurlCall(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_WRITEFUNCTION,
-                                 &Self::CallbackWriteDataToFile));
-    // Say the file where to write the received data
-    otbCurlCall(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_WRITEDATA,
-                                 (void*) output_file->GetFileResource()));
+  // Use our writing static function to avoid file descriptor
+  // pointer crash on windows
+  otbCurlCall(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_WRITEFUNCTION,
+                               &Self::CallbackWriteDataToFile));
+  // Say the file where to write the received data
+  otbCurlCall(curl_easy_setopt(curlResource->GetCurlResource(), CURLOPT_WRITEDATA,
+                               (void*) output_file->GetFileResource()));
 
-    otbCurlCall(curl_easy_perform(curlResource->GetCurlResource()));
+  otbCurlCall(curl_easy_perform(curlResource->GetCurlResource()));
     
-    otbMsgDevMacro(<< " -> " << res);
-    return res;
-    }
-  else
-    {
-    otbMsgDevMacro(<< "Curl is not available, compile with OTB_USE_CURL to ON");
-    }
-
+  otbMsgDevMacro(<< " -> " << res);
+  return res;
+#else
+  otbMsgDevMacro(<< "Curl is not available, compile with OTB_USE_CURL to ON");
   return -1;
+#endif
 }
 
 int CurlHelper::RetrieveFileMulti(const std::vector<std::string>& listURLs,
                                   const std::vector<std::string>& listFilename,
                                   int maxConnect) const
 {
-  if(CurlHelperInterface::IsCurlAvailable())
-    {
-    if(CurlHelperInterface::IsCurlMultiAvailable())
-      {
-      otbMsgDevMacro(<< "Using curl multi");
+#ifdef OTB_USE_CURL
+#ifdef OTB_CURL_MULTI_AVAILABLE
+  otbMsgDevMacro(<< "Using curl multi");
 
-      // Initialize curl handle resource
-      CurlMultiResource::Pointer  multiHandle = CurlMultiResource::New();
+  // Initialize curl handle resource
+  CurlMultiResource::Pointer  multiHandle = CurlMultiResource::New();
   
-      std::vector<CurlResource::Pointer> listCurlHandles;
-      std::vector<CurlFileDescriptorResource::Pointer> listFiles;
+  std::vector<CurlResource::Pointer> listCurlHandles;
+  std::vector<CurlFileDescriptorResource::Pointer> listFiles;
 
-      std::vector<std::string>::const_iterator filename;
-      filename = listFilename.begin();
-      while (filename != listFilename.end())
-        {
-        CurlFileDescriptorResource::Pointer lOutputFile = CurlFileDescriptorResource::New();
-        lOutputFile->OpenFile((*filename).c_str());
+  std::vector<std::string>::const_iterator filename;
+  filename = listFilename.begin();
+  while (filename != listFilename.end())
+    {
+    CurlFileDescriptorResource::Pointer lOutputFile = CurlFileDescriptorResource::New();
+    lOutputFile->OpenFile((*filename).c_str());
 
-        // Add file to vector
-        listFiles.push_back(lOutputFile);
-        ++filename;
-        }
+    // Add file to vector
+    listFiles.push_back(lOutputFile);
+    ++filename;
+    }
 
-      listCurlHandles.clear();
+  listCurlHandles.clear();
 
-      std::vector<std::string>::const_iterator url;
-      std::vector<CurlFileDescriptorResource::Pointer>::const_iterator      file;
-      url = listURLs.begin();
-      file = listFiles.begin();
-      while ((url != listURLs.end()) && (file != listFiles.end()))
-        {
-        otbMsgDevMacro(<< "Retrieving: " << (*url).data());
-        CurlResource::Pointer lEasyHandle = CurlResource::New();
+  std::vector<std::string>::const_iterator url;
+  std::vector<CurlFileDescriptorResource::Pointer>::const_iterator      file;
+  url = listURLs.begin();
+  file = listFiles.begin();
+  while ((url != listURLs.end()) && (file != listFiles.end()))
+    {
+    otbMsgDevMacro(<< "Retrieving: " << (*url).data());
+    CurlResource::Pointer lEasyHandle = CurlResource::New();
 
-        // Param easy handle
-        otbCurlCall(curl_easy_setopt(lEasyHandle->GetCurlResource(), CURLOPT_USERAGENT, m_Browser.data()));
-        otbCurlCall(curl_easy_setopt(lEasyHandle->GetCurlResource(), CURLOPT_URL, (*url).data()));
-        otbCurlCall(curl_easy_setopt(lEasyHandle->GetCurlResource(), CURLOPT_WRITEFUNCTION,
-                                     &Self::CallbackWriteDataToFile));
-        otbCurlCall(curl_easy_setopt(lEasyHandle->GetCurlResource(), CURLOPT_WRITEDATA,
+    // Param easy handle
+    otbCurlCall(curl_easy_setopt(lEasyHandle->GetCurlResource(), CURLOPT_USERAGENT, m_Browser.data()));
+    otbCurlCall(curl_easy_setopt(lEasyHandle->GetCurlResource(), CURLOPT_URL, (*url).data()));
+    otbCurlCall(curl_easy_setopt(lEasyHandle->GetCurlResource(), CURLOPT_WRITEFUNCTION,
+                                 &Self::CallbackWriteDataToFile));
+    otbCurlCall(curl_easy_setopt(lEasyHandle->GetCurlResource(), CURLOPT_WRITEDATA,
                                  (void*) (*file)->GetFileResource()));
 
-        // Add easy handle to multi handle
-        otbCurlMultiCall(curl_multi_add_handle(multiHandle->GetCurlMultiResource(), lEasyHandle->GetCurlResource()));
+    // Add easy handle to multi handle
+    otbCurlMultiCall(curl_multi_add_handle(multiHandle->GetCurlMultiResource(), lEasyHandle->GetCurlResource()));
 
-        // Add hanle to vector
-        listCurlHandles.push_back(lEasyHandle);
-        ++url;
-        ++file;
-        }
-
-      //fetch tiles
-      // Configure multi handle - set the maximum connections
-      otbCurlMultiCall(curl_multi_setopt(multiHandle->GetCurlMultiResource(), CURLMOPT_MAXCONNECTS, maxConnect));
-      otbCurlMultiCall(curl_multi_setopt(multiHandle->GetCurlMultiResource(), CURLMOPT_PIPELINING, 0));
-
-      // Perform
-      int lStillRunning;
-
-      while (CURLM_CALL_MULTI_PERFORM == curl_multi_perform(multiHandle->GetCurlMultiResource(), &lStillRunning));
-
-      // Now get that URL
-      while (lStillRunning)
-        {
-        struct timeval timeout;
-        int            rc; // Return code
-
-        fd_set fdread;
-        fd_set fdwrite;
-        fd_set fdexcep;
-        int    maxfd;
-
-        FD_ZERO(&fdread);
-        FD_ZERO(&fdwrite);
-        FD_ZERO(&fdexcep);
-
-        /* set a suitable timeout to play around with */
-        timeout.tv_sec = 0;
-        timeout.tv_usec = 1;
-
-        /* get file descriptors from the transfers */
-        otbCurlMultiCall(curl_multi_fdset(multiHandle->GetCurlMultiResource(), &fdread, &fdwrite, &fdexcep, &maxfd));
-
-        rc = select(maxfd + 1, &fdread, &fdwrite, &fdexcep, &timeout);
-
-        switch (rc)
-          {
-          case -1:
-            /* select error */
-            break;
-          case 0:
-            /* timeout */
-          default:
-            /* timeout or readable/writable sockets */
-            while (CURLM_CALL_MULTI_PERFORM == curl_multi_perform(multiHandle->GetCurlMultiResource(), &lStillRunning));
-            break;
-          }
-        }
-
-      int      remaining_msgs = 1;
-      int      error = 0;
-      CURLMsg *msg;
-      while (remaining_msgs)
-        {
-        msg = curl_multi_info_read(multiHandle->GetCurlMultiResource(), &remaining_msgs);
-        if (msg != NULL)
-          {
-          if (CURLE_OK != msg->data.result) error = 1;
-          }
-        }
-
-      if (error != 0)
-        {
-        itkExceptionMacro(<< "otbCurlHelper: Error occurs while perform Multi handle");
-        }
-
-      // Cleanup
-      listFiles.clear();
-      listCurlHandles.clear();
-      }
-    else
-      {
-      //fallback on non curl multi
-      otbMsgDevMacro(<< "Curl multi is not available, fallback on standard");
-
-      std::vector<std::string>::const_iterator url;
-      std::vector<std::string>::const_iterator file;
-      url = listURLs.begin();
-      file = listFilename.begin();
-      int res = 0;
-      int resTmp = -1;
-      while ((url != listURLs.end()) && (file != listFilename.end()))
-        {
-        resTmp = RetrieveFile(*url, *file);
-        if (res == 0) res = resTmp;
-        ++url;
-        ++file;
-        }
-
-      return res;
-      } // end else CurlMultiAvailable
-    } // else CurlAvailabel
-  else
-    {
-    otbMsgDevMacro(<< "Curl is not available, compile with OTB_USE_CURL to ON");
+    // Add hanle to vector
+    listCurlHandles.push_back(lEasyHandle);
+    ++url;
+    ++file;
     }
-  
+
+  //fetch tiles
+  // Configure multi handle - set the maximum connections
+  otbCurlMultiCall(curl_multi_setopt(multiHandle->GetCurlMultiResource(), CURLMOPT_MAXCONNECTS, maxConnect));
+  otbCurlMultiCall(curl_multi_setopt(multiHandle->GetCurlMultiResource(), CURLMOPT_PIPELINING, 0));
+
+  // Perform
+  int lStillRunning;
+
+  while (CURLM_CALL_MULTI_PERFORM == curl_multi_perform(multiHandle->GetCurlMultiResource(), &lStillRunning));
+
+  // Now get that URL
+  while (lStillRunning)
+    {
+    struct timeval timeout;
+    int            rc; // Return code
+
+    fd_set fdread;
+    fd_set fdwrite;
+    fd_set fdexcep;
+    int    maxfd;
+
+    FD_ZERO(&fdread);
+    FD_ZERO(&fdwrite);
+    FD_ZERO(&fdexcep);
+
+    /* set a suitable timeout to play around with */
+    timeout.tv_sec = 0;
+    timeout.tv_usec = 1;
+
+    /* get file descriptors from the transfers */
+    otbCurlMultiCall(curl_multi_fdset(multiHandle->GetCurlMultiResource(), &fdread, &fdwrite, &fdexcep, &maxfd));
+
+    rc = select(maxfd + 1, &fdread, &fdwrite, &fdexcep, &timeout);
+
+    switch (rc)
+      {
+      case -1:
+        /* select error */
+        break;
+      case 0:
+        /* timeout */
+      default:
+        /* timeout or readable/writable sockets */
+        while (CURLM_CALL_MULTI_PERFORM == curl_multi_perform(multiHandle->GetCurlMultiResource(), &lStillRunning));
+        break;
+      }
+    }
+
+  int      remaining_msgs = 1;
+  int      error = 0;
+  CURLMsg *msg;
+  while (remaining_msgs)
+    {
+    msg = curl_multi_info_read(multiHandle->GetCurlMultiResource(), &remaining_msgs);
+    if (msg != NULL)
+      {
+      if (CURLE_OK != msg->data.result) error = 1;
+      }
+    }
+
+  if (error != 0)
+    {
+    itkExceptionMacro(<< "otbCurlHelper: Error occurs while perform Multi handle");
+    }
+
+  // Cleanup
+  listFiles.clear();
+  listCurlHandles.clear();
+#else
+  //fallback on non curl multi
+  otbMsgDevMacro(<< "Curl multi is not available, fallback on standard");
+
+  std::vector<std::string>::const_iterator url;
+  std::vector<std::string>::const_iterator file;
+  url = listURLs.begin();
+  file = listFilename.begin();
+  int res = 0;
+  int resTmp = -1;
+  while ((url != listURLs.end()) && (file != listFilename.end()))
+    {
+    resTmp = RetrieveFile(*url, *file);
+    if (res == 0) res = resTmp;
+    ++url;
+    ++file;
+    }
+
+  return res;
+#endif
+#else
+  otbMsgDevMacro(<< "Curl is not available, compile with OTB_USE_CURL to ON");
   return -1;
+#endif
 }
 
 size_t CurlHelper::CallbackWriteDataToFile(void* ptr, size_t size, size_t nmemb, void* data)
