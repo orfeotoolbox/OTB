@@ -312,7 +312,7 @@ int CurlHelper::RetrieveFile(const std::ostringstream& urlStream, std::string fi
 
 int CurlHelper::RetrieveFile(const std::string& urlString, std::string filename) const
 {
-#ifdef OTB_USE_CURL 
+#ifdef OTB_USE_CURL
   otbMsgDevMacro(<< "Retrieving: " << urlString);
 
   CURLcode res = CURLE_OK;
@@ -471,7 +471,7 @@ int CurlHelper::RetrieveFileMulti(const std::vector<std::string>& listURLs,
   listFiles.clear();
   listCurlHandles.clear();
 
-  return 0; 
+  return 0;
 #else
   //fallback on non curl multi
   otbMsgDevMacro(<< "Curl multi is not available, fallback on standard");
