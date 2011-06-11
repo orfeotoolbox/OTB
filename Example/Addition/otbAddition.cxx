@@ -15,141 +15,61 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#include "otbAddition.h"
+#include "otbWrapperApplication.h"
+#include "otbWrapperApplicationFactory.h"
 #include "otbWrapperNumericalParameter.h"
-#include "itkVersion.h"
 
 namespace otb
 {
 namespace Wrapper
 {
 
-Addition::Addition()
-{
-  this->SetName("Addition");
-  this->SetDescription("This is a simple application which adds two numbers and print the sum on standard output");
-}
-
-Addition::~Addition()
-{
-}
-
-void Addition::DoCreateParameters()
-{
-  std::cout << "Addition::DoCreateParameters" << std::endl;
-  ParameterGroup* params = GetParameterList();
-
-  otb::Wrapper::FloatParameter::Pointer a = otb::Wrapper::FloatParameter::New();
-  a->SetKey("a");
-  a->SetName("First number");
-
-  otb::Wrapper::FloatParameter::Pointer b = otb::Wrapper::FloatParameter::New();
-  b->SetKey("b");
-  b->SetName("Second number");
-
-  params->AddParameter(a.GetPointer());
-  params->AddParameter(b.GetPointer());
-}
-
-void Addition::DoUpdateParameters()
-{
-  std::cout << "Addition::DoUpdateParameters" << std::endl;
-}
-
-void Addition::DoExecute()
-{
-  std::cout << "Addition::DoExecute" << std::endl;
-
-  ParameterGroup* params = GetParameterList();
-
-  otb::Wrapper::FloatParameter* pa = dynamic_cast<otb::Wrapper::FloatParameter*>(params->GetParameterByKey("a").GetPointer());
-  boost::any avalue = pa->GetAnyValue();
-  float a = boost::any_cast<float>(avalue);
-
-  otb::Wrapper::FloatParameter* pb = dynamic_cast<otb::Wrapper::FloatParameter*>(params->GetParameterByKey("b").GetPointer());
-  boost::any bvalue = pb->GetAnyValue();
-  float b = boost::any_cast<float>(bvalue);
-
-  std::cout << a + b << std::endl;
-}
-
-class AdditionFactory : public itk::ObjectFactoryBase
+class Addition : public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef AdditionFactory              Self;
-  typedef itk::ObjectFactoryBase        Superclass;
+  typedef Addition                      Self;
+  typedef Application                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  /** Class methods used to interface with the registered factories. */
-  virtual const char* GetITKSourceVersion(void) const
-    {
-    return ITK_SOURCE_VERSION;
-    }
+  /** Standard macro */
+  itkNewMacro(Self);
 
-  virtual const char* GetDescription(void) const
-    {
-    return "Addition";
-    }
-
-  /** Method for class instantiation. */
-  itkFactorylessNewMacro(Self);
-
-  /** Run-time type information (and related methods). */
-  itkTypeMacro(AdditionFactory, itk::ObjectFactoryBase);
+  itkTypeMacro(Self, otb::Application);
 
 protected:
-  AdditionFactory()
+  Addition()
   {
-
+    this->SetName("Addition");
+    this->SetDescription("This is a simple application which adds two numbers and print the sum on standard output");
   }
 
-  virtual ~AdditionFactory()
+  virtual ~Addition()
   {
-
-  }
-
-  /** This method is provided by sub-classes of ObjectFactoryBase.
-   * It should create the named itk object or return 0 if that object
-   * is not supported by the factory implementation. */
-  virtual LightObject::Pointer CreateObject(const char* itkclassname )
-  {
-    const std::string classname("otbWrapperApplication");
-    LightObject::Pointer ret;
-    if ( classname == itkclassname )
-      ret = Addition::New().GetPointer();
-
-    return ret;
-  }
-
-  /** This method creates all the objects with the class overide of
-   * itkclass name, which are provide by this object
-   */
-  virtual std::list<LightObject::Pointer>
-  CreateAllObject(const char* itkclassname)
-  {
-    const std::string classname("otbWrapperApplication");
-    std::list<LightObject::Pointer> list;
-    if ( classname == itkclassname )
-      list.push_back(Addition::New().GetPointer());
-
-    return list;
   }
 
 private:
-  AdditionFactory(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  void DoCreateParameters()
+  {
+    std::cout << "Addition::DoCreateParameters" << std::endl;
+    AddParameter(ParameterType_Float, "a", "First number");
+    AddParameter(ParameterType_Float, "b", "Second number");
+  }
+
+  void DoUpdateParameters()
+  {
+    std::cout << "Addition::DoUpdateParameters" << std::endl;
+  }
+
+
+  void DoExecute()
+  {
+    std::cout << "Addition::DoExecute" << std::endl;
+    std::cout << GetParameterFloat("a") + GetParameterFloat("b") << std::endl;
+  }
 };
-
-
+}
 }
 
-}
-
-static otb::Wrapper::AdditionFactory::Pointer staticFactory;
-itk::ObjectFactoryBase* itkLoad()
-{
-  staticFactory = otb::Wrapper::AdditionFactory::New();
-  return staticFactory;
-}
+OTB_APPLICATION_REGISTER(otb::Wrapper::Addition)
