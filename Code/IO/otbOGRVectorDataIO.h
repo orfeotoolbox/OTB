@@ -18,15 +18,12 @@
 #ifndef __otbOGRVectorDataIO_h
 #define __otbOGRVectorDataIO_h
 
-#include <fstream>
 #include <string>
-#include <vector>
-#include <algorithm>
-
-#include "ogrsf_frmts.h"
 
 #include "otbVectorDataIOBase.h"
 #include "otbVectorData.h"
+
+class OGRDataSource;
 
 namespace otb
 {

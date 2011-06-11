@@ -18,11 +18,7 @@
 
 #include "otbKMLVectorDataIO.h"
 
-#include "itkExceptionObject.h"
-#include "otbMacro.h"
-#include "otbSystem.h"
-#include "otbDataNode.h"
-#include "itkPreOrderTreeIterator.h"
+#include <fstream>
 
 #include "kml/dom.h"
 #include "kml/dom/kml22.h"
@@ -30,11 +26,16 @@
 #include "kml/dom/kml_cast.h"
 #include "kml/engine/kml_file.h"
 
-#include "otbMetaDataKey.h"
+#include "ogrsf_frmts.h"
 
+#include "itkExceptionObject.h"
+#include "otbMacro.h"
+#include "otbSystem.h"
+#include "otbDataNode.h"
+#include "itkPreOrderTreeIterator.h"
+#include "otbMetaDataKey.h"
 #include "itkTimeProbe.h"
 
-#include "ogrsf_frmts.h"
 
 namespace otb
 {

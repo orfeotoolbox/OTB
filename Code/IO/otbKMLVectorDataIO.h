@@ -18,15 +18,17 @@
 #ifndef __otbKMLVectorDataIO_h
 #define __otbKMLVectorDataIO_h
 
-#include <fstream>
 #include <string>
-#include <vector>
-
-#include "kml/dom.h"
-#include "kml/base/file.h"
 
 #include "otbVectorDataIOBase.h"
 #include "otbVectorData.h"
+
+#include "kml/dom/kml_ptr.h"
+
+namespace kmldom
+{
+class KmlFactory;
+}
 
 namespace otb
 {
