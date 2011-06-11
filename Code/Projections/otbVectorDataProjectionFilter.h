@@ -184,10 +184,10 @@ protected:
   virtual OutputPolygonPointerType ProcessPolygon(InputPolygonPointerType polygon) const;
   virtual OutputPolygonListPointerType ProcessPolygonList(InputPolygonListPointerType polygonList) const;
 
-  void InstanciateTransform(void);
+  virtual void InstanciateTransform(void);
 
-  void GenerateOutputInformation(void);
-  void GenerateData(void);
+  virtual void GenerateOutputInformation(void);
+  virtual void GenerateData(void);
 
 private:
   VectorDataProjectionFilter(const Self &); //purposely not implemented

@@ -107,8 +107,11 @@ protected:
     itkExceptionMacro( << "Subclass should reimplement this method");
   }
 
+  virtual void GenerateOutputInformation(void);
+  virtual void GenerateData(void);
+
   /** Go through the vector data tree and process the nodes */
-  void ProcessNode(InputInternalTreeNodeType * source, OutputInternalTreeNodeType * destination) const;
+  virtual void ProcessNode(InputInternalTreeNodeType * source, OutputInternalTreeNodeType * destination) const;
 
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;

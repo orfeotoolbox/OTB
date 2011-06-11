@@ -21,6 +21,7 @@
 #include "otbVectorDataToVectorDataFilter.h"
 #include "itkProgressReporter.h"
 #include "otbDataNode.h"
+#include "itkTimeProbe.h"
 
 namespace otb
 {
@@ -59,6 +60,53 @@ VectorDataToVectorDataFilter<TInputVectorData, TOutputVectorData>
            (this->itk::ProcessObject::GetInput(0));
 }
 
+template <class TInputVectorData, class TOutputVectorData>
+void
+VectorDataToVectorDataFilter<TInputVectorData, TOutputVectorData>
+::GenerateOutputInformation(void)
+{
+  Superclass::GenerateOutputInformation();
+
+  OutputVectorDataPointer  output = this->GetOutput();
+  typename InputVectorDataType::ConstPointer input = this->GetInput();
+  output->SetMetaDataDictionary(input->GetMetaDataDictionary());
+
+}
+
+/**
+   * GenerateData Performs the coordinate convertion for each element in the tree
+ */
+template <class TInputVectorData, class TOutputVectorData>
+void
+VectorDataToVectorDataFilter<TInputVectorData, TOutputVectorData>
+::GenerateData(void)
+{
+  this->AllocateOutputs();
+  InputVectorDataPointer  inputPtr = this->GetInput();
+  OutputVectorDataPointer outputPtr = this->GetOutput();
+
+  typedef typename OutputVectorDataType::DataTreePointerType OutputDataTreePointerType;
+  OutputDataTreePointerType tree = outputPtr->GetDataTree();
+
+  // Get the input tree root
+  InputInternalTreeNodeType * inputRoot = const_cast<InputInternalTreeNodeType *>(inputPtr->GetDataTree()->GetRoot());
+
+  // Create the output tree root
+  typedef typename OutputVectorDataType::DataNodePointerType OutputDataNodePointerType;
+  OutputDataNodePointerType newDataNode = OutputDataNodeType::New();
+  newDataNode->SetNodeType(inputRoot->Get()->GetNodeType());
+  newDataNode->SetNodeId(inputRoot->Get()->GetNodeId());
+  typename OutputInternalTreeNodeType::Pointer outputRoot = OutputInternalTreeNodeType::New();
+  outputRoot->Set(newDataNode);
+  tree->SetRoot(outputRoot);
+
+  // Start recursive processing
+  itk::TimeProbe chrono;
+  chrono.Start();
+  this->ProcessNode(inputRoot, outputRoot);
+  chrono.Stop();
+  otbMsgDevMacro(<< "VectoDataProjectionFilter: features Processed in " << chrono.GetMeanTime() << " seconds.");
+}
 
 template <class TInputVectorData, class TOutputVectorData>
 void

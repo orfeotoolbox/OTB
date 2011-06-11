@@ -22,6 +22,7 @@
 #include "otbMacro.h"
 #include "otbVectorDataFileWriter.h"
 #include "otbVectorDataIOFactory.h"
+#include "otbVectorDataAdapter.h"
 
 namespace otb
 {
@@ -191,8 +192,14 @@ VectorDataFileWriter<TInputVectorData>
   //
   m_VectorDataIO->SetFileName(m_FileName.c_str());
 
-  m_VectorDataIO->Write(input);
+  typedef VectorDataAdapter<TInputVectorData,TInputVectorData > AdapterType; //tmp
+  //typedef VectorDataAdapter<TInputVectorData, VectorData<double, 3> > AdapterType;
+  typename AdapterType::Pointer adapter = AdapterType::New();
+  adapter->SetInput(input);
+  adapter->Update();
+  m_VectorDataIO->Write(adapter->GetOutput());
 
+  //m_VectorDataIO->Write(input);
 }
 
 template <class TInputVectorData>

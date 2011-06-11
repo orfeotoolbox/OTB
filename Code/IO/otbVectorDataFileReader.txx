@@ -19,12 +19,14 @@
 #ifndef __otbVectorDataFileReader_txx
 #define __otbVectorDataFileReader_txx
 
+#include <fstream>
+
 #include "otbMacro.h"
 #include "otbSystem.h"
 #include "otbVectorDataIOFactory.h"
 #include "otbVectorDataFileReader.h"
 #include "itksys/SystemTools.hxx"
-#include <fstream>
+#include "otbVectorDataAdapter.h"
 
 namespace otb
 {
@@ -202,12 +204,22 @@ VectorDataFileReader<TOutputVectorData>
     m_ExceptionMessage = err.GetDescription();
     }
 
+  m_VectorDataIO->SetFileName(m_FileName.c_str());
+//  m_VectorDataIO->Read(output);
+
   // Tell the VectorDataIO to read the file
   //
+  typedef VectorDataAdapter<TOutputVectorData, TOutputVectorData> AdapterType; //tmp
+  //typedef VectorDataAdapter<VectorData<double, 3>, TOutputVectorData> AdapterType;
+  typename AdapterType::InputVectorDataType::Pointer input = AdapterType::InputVectorDataType::New();
 
-  m_VectorDataIO->SetFileName(m_FileName.c_str());
+  m_VectorDataIO->Read(input);
 
-  m_VectorDataIO->Read(output);
+  typename AdapterType::Pointer adapter = AdapterType::New();
+  adapter->SetInput(input);
+  adapter->GraftOutput(output);
+  adapter->Update();
+  this->GraftOutput(adapter->GetOutput());
 
   return;
 }
