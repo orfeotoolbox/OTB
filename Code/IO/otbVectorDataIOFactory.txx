@@ -36,7 +36,7 @@ VectorDataIOFactory<TData>
 {
   RegisterBuiltInFactories();
   
-  std::string baseclassID = std::string("otbVectorDataIOBase<") + typeid(TData).name() + ">";
+  std::string baseclassID = std::string("otbVectorDataIOBase");
 
   std::list<VectorDataIOBasePointerType> possibleVectorDataIO;
   std::list<itk::LightObject::Pointer>   allobjects =

@@ -40,7 +40,7 @@ namespace otb
  * and possibly other OGR formats.
  *
  */
-template <class TData> class ITK_EXPORT OGRVectorDataIO
+class ITK_EXPORT OGRVectorDataIO
   : public VectorDataIOBase
 {
 public:
@@ -122,9 +122,5 @@ private:
 };
 
 } // end namespace otb
-
-#ifndef OTB_MANUAL_INSTANTIATION
-#include "otbOGRVectorDataIO.txx"
-#endif
 
 #endif // __otbOGRVectorDataIO_h

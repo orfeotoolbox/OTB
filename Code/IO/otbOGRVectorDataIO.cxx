@@ -20,7 +20,7 @@
 
 #include "otbOGRVectorDataIO.h"
 
-#include <itksys/SystemTools.hxx>
+#include "itksys/SystemTools.hxx"
 #include "itkExceptionObject.h"
 #include "itkByteSwapper.h"
 #include "otbMacro.h"
@@ -33,8 +33,8 @@
 
 namespace otb
 {
-template<class TData>
-OGRVectorDataIO<TData>
+
+OGRVectorDataIO
 ::OGRVectorDataIO() :
   m_DataSource(NULL)
 {
@@ -42,8 +42,8 @@ OGRVectorDataIO<TData>
   OGRRegisterAll();
 }
 
-template<class TData>
-OGRVectorDataIO<TData>::~OGRVectorDataIO()
+
+OGRVectorDataIO::~OGRVectorDataIO()
 {
   if (m_DataSource != NULL)
     {
@@ -51,9 +51,9 @@ OGRVectorDataIO<TData>::~OGRVectorDataIO()
     }
 }
 
-template<class TData>
+
 bool
-OGRVectorDataIO<TData>::CanReadFile(const char* filename) const
+OGRVectorDataIO::CanReadFile(const char* filename) const
 {
   OGRDataSource * poDS = OGRSFDriverRegistrar::Open(filename, FALSE);
   if (poDS == NULL)
@@ -66,17 +66,17 @@ OGRVectorDataIO<TData>::CanReadFile(const char* filename) const
 }
 
 // Used to print information about this object
-template<class TData>
+
 void
-OGRVectorDataIO<TData>::PrintSelf(std::ostream& os, itk::Indent indent) const
+OGRVectorDataIO::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }
 
 // Read vector data
-template<class TData>
+
 void
-OGRVectorDataIO<TData>
+OGRVectorDataIO
 ::Read(itk::DataObject* datag)
 {
   VectorDataPointerType data = dynamic_cast<VectorDataType*>(datag);
@@ -175,8 +175,8 @@ OGRVectorDataIO<TData>
   m_DataSource = NULL;
 }
 
-template<class TData>
-bool OGRVectorDataIO<TData>::CanWriteFile(const char* filename) const
+
+bool OGRVectorDataIO::CanWriteFile(const char* filename) const
 {
 
   std::string lFileName(filename);
@@ -188,8 +188,8 @@ bool OGRVectorDataIO<TData>::CanWriteFile(const char* filename) const
   return (this->GetOGRDriverName(filename) != "NOT-FOUND");
 }
 
-template<class TData>
-void OGRVectorDataIO<TData>::Write(const itk::DataObject* datag, char ** papszOptions)
+
+void OGRVectorDataIO::Write(const itk::DataObject* datag, char ** papszOptions)
 {
   itk::TimeProbe chrono;
   chrono.Start();
@@ -293,9 +293,9 @@ void OGRVectorDataIO<TData>::Write(const itk::DataObject* datag, char ** papszOp
   otbMsgDevMacro(<< " OGRVectorDataIO::Write()  ");
 }
 
-template<class TData>
+
 std::string
-OGRVectorDataIO<TData>::GetOGRDriverName(std::string name) const
+OGRVectorDataIO::GetOGRDriverName(std::string name) const
 {
   std::string extension;
   std::string driverOGR;

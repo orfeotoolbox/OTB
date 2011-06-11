@@ -17,7 +17,6 @@
 =========================================================================*/
 
 #include "otbOGRVectorDataIO.h"
-#include "otbVectorData.h"
 #include <iostream>
 
 int otbOGRVectorDataIOTestCanRead(int argc, char* argv[])
@@ -33,8 +32,7 @@ int otbOGRVectorDataIOTestCanRead(int argc, char* argv[])
       }
     return EXIT_FAILURE;
     }
-  typedef otb::VectorData<>                    VectorDataType;
-  typedef otb::OGRVectorDataIO<VectorDataType> OGRVectorDataIOType;
+  typedef otb::OGRVectorDataIO  OGRVectorDataIOType;
   OGRVectorDataIOType::Pointer object = OGRVectorDataIOType::New();
   bool                         lCanRead = object->CanReadFile(argv[1]);
   if (lCanRead == false)

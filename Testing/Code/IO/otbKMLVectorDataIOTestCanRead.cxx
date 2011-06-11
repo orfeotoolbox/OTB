@@ -17,13 +17,11 @@
 =========================================================================*/
 
 #include "otbKMLVectorDataIO.h"
-#include "otbVectorData.h"
 #include <iostream>
 
 int otbKMLVectorDataIOTestCanRead(int argc, char* argv[])
 {
-  typedef otb::VectorData<>                    VectorDataType;
-  typedef otb::KMLVectorDataIO<VectorDataType> KMLVectorDataIOType;
+  typedef otb::KMLVectorDataIO KMLVectorDataIOType;
   KMLVectorDataIOType::Pointer object = KMLVectorDataIOType::New();
   bool                         lCanRead = object->CanReadFile(argv[1]);
   if (lCanRead == false)

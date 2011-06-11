@@ -17,12 +17,10 @@
 =========================================================================*/
 
 #include "otbKMLVectorDataIO.h"
-#include "otbVectorData.h"
 
 int otbKMLVectorDataIONew(int argc, char * argv[])
 {
-  typedef otb::VectorData<>                    VectorDataType;
-  typedef otb::KMLVectorDataIO<VectorDataType> KMLVectorDataIOType;
+  typedef otb::KMLVectorDataIO KMLVectorDataIOType;
   KMLVectorDataIOType::Pointer object = KMLVectorDataIOType::New();
 
   std::cout << object << std::endl;

@@ -29,14 +29,14 @@ namespace otb
 template<class TData>
 KMLVectorDataIOFactory<TData>::KMLVectorDataIOFactory()
 {
-  static std::string classOverride = std::string("otbVectorDataIOBase<") + typeid(TData).name() + ">";
-  static std::string subclass = std::string("otbKMLVectorDataIO<") + typeid(TData).name() + ">";
+  static std::string classOverride = std::string("otbVectorDataIOBase");
+  static std::string subclass = std::string("otbKMLVectorDataIO");
 
   this->RegisterOverride(classOverride.c_str(),
                          subclass.c_str(),
                          "KML Vectordata IO",
                          1,
-                         itk::CreateObjectFunction<KMLVectorDataIO<TData> >::New());
+                         itk::CreateObjectFunction<KMLVectorDataIO>::New());
 }
 
 template<class TData>

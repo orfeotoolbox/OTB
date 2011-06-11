@@ -15,8 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbKMLVectorDataIO_txx
-#define __otbKMLVectorDataIO_txx
 
 #include "otbKMLVectorDataIO.h"
 
@@ -40,18 +38,18 @@
 
 namespace otb
 {
-template<class TData>
-KMLVectorDataIO<TData>
+
+KMLVectorDataIO
 ::KMLVectorDataIO()
 {}
 
-template<class TData>
-KMLVectorDataIO<TData>::~KMLVectorDataIO()
+
+KMLVectorDataIO::~KMLVectorDataIO()
 {}
 
-template<class TData>
+
 bool
-KMLVectorDataIO<TData>::CanReadFile(const char* filename) const
+KMLVectorDataIO::CanReadFile(const char* filename) const
 {
   std::string lFileName(filename);
   if (System::IsADirName(lFileName) == true)
@@ -72,9 +70,9 @@ KMLVectorDataIO<TData>::CanReadFile(const char* filename) const
 }
 
 // Get the features of the kml file, read into the root
-template<class TData>
+
 const kmldom::FeaturePtr
-KMLVectorDataIO<TData>::GetRootFeature(const kmldom::ElementPtr& root)
+KMLVectorDataIO::GetRootFeature(const kmldom::ElementPtr& root)
 {
   const kmldom::KmlPtr kml = kmldom::AsKml(root);
   if (kml && kml->has_feature())
@@ -85,9 +83,9 @@ KMLVectorDataIO<TData>::GetRootFeature(const kmldom::ElementPtr& root)
 }
 
 // Print the selected feature
-template<class TData>
+
 void
-KMLVectorDataIO<TData>::PrintIndented(const std::string& item, int depth)
+KMLVectorDataIO::PrintIndented(const std::string& item, int depth)
 {
   while (depth--)
     {
@@ -96,9 +94,9 @@ KMLVectorDataIO<TData>::PrintIndented(const std::string& item, int depth)
   std::cout << item << std::endl;
 }
 
-template<class TData>
+
 void
-KMLVectorDataIO<TData>::WalkFeature(const kmldom::FeaturePtr& feature, DataNodePointerType father)
+KMLVectorDataIO::WalkFeature(const kmldom::FeaturePtr& feature, DataNodePointerType father)
 {
   DataNodePointerType node = NULL;
 
@@ -120,9 +118,9 @@ KMLVectorDataIO<TData>::WalkFeature(const kmldom::FeaturePtr& feature, DataNodeP
   return;
 }
 
-template<class TData>
+
 void
-KMLVectorDataIO<TData>::WalkContainer(const kmldom::ContainerPtr& container, DataNodePointerType father)
+KMLVectorDataIO::WalkContainer(const kmldom::ContainerPtr& container, DataNodePointerType father)
 {
 
   DataNodePointerType node = NULL;
@@ -193,9 +191,9 @@ KMLVectorDataIO<TData>::WalkContainer(const kmldom::ContainerPtr& container, Dat
 }
 
 // Walk through a geometry and create a GeometryNode
-template<class TData>
+
 void
-KMLVectorDataIO<TData>::WalkGeometry(const kmldom::GeometryPtr& geometry, DataNodePointerType father)
+KMLVectorDataIO::WalkGeometry(const kmldom::GeometryPtr& geometry, DataNodePointerType father)
 {
 
   // Creation of a node
@@ -259,10 +257,10 @@ KMLVectorDataIO<TData>::WalkGeometry(const kmldom::GeometryPtr& geometry, DataNo
   return;
 }
 
-template<class TData>
-typename KMLVectorDataIO<TData>
+
+typename KMLVectorDataIO
 ::DataNodePointerType
-KMLVectorDataIO<TData>
+KMLVectorDataIO
 ::ConvertGeometryToPointNode(const kmldom::GeometryPtr& geometry)
 {
 
@@ -291,10 +289,10 @@ KMLVectorDataIO<TData>
   return node;
 }
 
-template<class TData>
-typename KMLVectorDataIO<TData>
+
+typename KMLVectorDataIO
 ::DataNodePointerType
-KMLVectorDataIO<TData>
+KMLVectorDataIO
 ::ConvertGeometryToLineStringNode(const kmldom::GeometryPtr& geometry)
 {
 
@@ -327,10 +325,10 @@ KMLVectorDataIO<TData>
   return node;
 }
 
-template<class TData>
-typename KMLVectorDataIO<TData>
+
+typename KMLVectorDataIO
 ::DataNodePointerType
-KMLVectorDataIO<TData>
+KMLVectorDataIO
 ::ConvertGeometryToLinearRingNode(const kmldom::GeometryPtr& geometry)
 {
 
@@ -363,10 +361,10 @@ KMLVectorDataIO<TData>
   return node;
 }
 
-template<class TData>
-typename KMLVectorDataIO<TData>
+
+typename KMLVectorDataIO
 ::DataNodePointerType
-KMLVectorDataIO<TData>
+KMLVectorDataIO
 ::ConvertGeometryToPolygonNode(const kmldom::GeometryPtr& geometry)
 {
 
@@ -440,17 +438,17 @@ KMLVectorDataIO<TData>
 }
 
 // Used to print information about this object
-template<class TData>
+
 void
-KMLVectorDataIO<TData>::PrintSelf(std::ostream& os, itk::Indent indent) const
+KMLVectorDataIO::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }
 
 // Read vector data
-template<class TData>
+
 void
-KMLVectorDataIO<TData>
+KMLVectorDataIO
 ::Read(itk::DataObject* datag)
 {
   VectorDataPointerType data = dynamic_cast<VectorDataType*>(datag);
@@ -496,8 +494,8 @@ KMLVectorDataIO<TData>
   // std::cout<< m_Tree <<std::endl;
 }
 
-template<class TData>
-bool KMLVectorDataIO<TData>::CanWriteFile(const char* filename) const
+
+bool KMLVectorDataIO::CanWriteFile(const char* filename) const
 {
   std::string lFileName(filename);
   if (System::IsADirName(lFileName) == true)
@@ -511,8 +509,8 @@ bool KMLVectorDataIO<TData>::CanWriteFile(const char* filename) const
   return true;
 }
 
-template<class TData>
-void KMLVectorDataIO<TData>::Write(const itk::DataObject* datag, char ** itkNotUsed(papszOptions))
+
+void KMLVectorDataIO::Write(const itk::DataObject* datag, char ** itkNotUsed(papszOptions))
 {
   itk::TimeProbe chrono;
   chrono.Start();
@@ -583,8 +581,8 @@ void KMLVectorDataIO<TData>::Write(const itk::DataObject* datag, char ** itkNotU
 
 }
 
-template<class TData>
-void KMLVectorDataIO<TData>::ProcessNodeWrite(InternalTreeNodeType * source,
+
+void KMLVectorDataIO::ProcessNodeWrite(InternalTreeNodeType * source,
                                               kmldom::KmlFactory* factory,
                                               kmldom::KmlPtr kml,
                                               kmldom::DocumentPtr currentDocument,
@@ -864,5 +862,3 @@ void KMLVectorDataIO<TData>::ProcessNodeWrite(InternalTreeNodeType * source,
 }
 
 } // end namespace otb
-
-#endif

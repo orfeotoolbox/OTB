@@ -22,9 +22,9 @@
 
 int otbKMLVectorDataIOTestFileReader(int argc, char* argv[])
 {
-  typedef otb::VectorData<>                    VectorDataType;
-  typedef otb::KMLVectorDataIO<VectorDataType> KMLVectorDataIOType;
-  typedef VectorDataType::Pointer              VectorDataPointerType;
+  typedef otb::VectorData<>        VectorDataType;
+  typedef otb::KMLVectorDataIO     KMLVectorDataIOType;
+  typedef VectorDataType::Pointer  VectorDataPointerType;
 
   KMLVectorDataIOType::Pointer object = KMLVectorDataIOType::New();
   VectorDataPointerType        data = VectorDataType::New();

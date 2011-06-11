@@ -36,7 +36,6 @@ namespace otb
  * \brief ImageIO object for reading/writing KML format vector data
  *
  */
-template <class TData>
 class ITK_EXPORT KMLVectorDataIO
   : public VectorDataIOBase
 {
@@ -138,9 +137,5 @@ private:
 };
 
 } // end namespace otb
-
-#ifndef OTB_MANUAL_INSTANTIATION
-#include "otbKMLVectorDataIO.txx"
-#endif
 
 #endif // __otbKMLVectorDataIO_h
