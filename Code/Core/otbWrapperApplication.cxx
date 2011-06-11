@@ -63,6 +63,13 @@ Parameter* Application::GetParameterByKey(std::string name)
   return GetParameterList()->GetParameterByKey(name);
 }
 
+const Parameter* Application::GetParameterByKey(std::string name) const
+{
+  // GetParameterList is non const...
+  Application* _this = const_cast<Application*>(this);
+  return _this->GetParameterByKey(name);
+}
+
 void Application::Init()
 {
   m_ParameterList = ParameterGroup::New();
@@ -77,6 +84,121 @@ void Application::UpdateParameters()
 void Application::Execute()
 {
   this->DoExecute();
+}
+
+
+/* Enable the use of an optional parameter. Returns the previous state */
+void Application::EnableParameter(std::string paramKey)
+{
+  Parameter* param = GetParameterByKey(paramKey);
+  param->SetActive(true);
+}
+
+/* Disable the use of an optional parameter. Returns the previous state  */
+void Application::DisableParameter(std::string paramKey)
+{
+  GetParameterByKey(paramKey)->SetActive(false);
+}
+
+/* Return the enable state of an optional parameter  */
+bool Application::IsParameterEnabled(std::string paramKey) const
+{
+  return GetParameterByKey(paramKey)->GetActive();
+}
+
+/* Return true if the specified parameter is mandatory */
+bool Application::IsMandatory(std::string paramKey) const
+{
+  return GetParameterByKey(paramKey)->GetMandatory();
+}
+
+/* Returns true if the parameter has an associated value provided externally
+ *  (not automatically computed by the application) */
+bool Application::HasUserValue(std::string paramKey) const
+{
+  return GetParameterByKey(paramKey)->HasUserValue();
+}
+
+/* If a user value was provided clear it and update the other parameters */
+void Application::ClearValue(std::string paramKey)
+{
+  GetParameterByKey(paramKey)->ClearValue();
+}
+
+/* Returns true if the parameter has an associated value.
+ * This value can be an automatically computed value or default value,
+ * or a value set externally by user */
+bool Application::HasValue(std::string paramKey) const
+{
+  return GetParameterByKey(paramKey)->HasValue();
+}
+
+/* Return the user level of access to a parameter */
+UserLevel Application::GetParameterUserLevel(std::string paramKey) const
+{
+  return GetParameterByKey(paramKey)->GetUserLevel();
+}
+
+/* Get the parameter type from its name */
+ParameterType Application::GetParameterType(std::string paramKey) const
+{
+  const Parameter* param = GetParameterByKey(paramKey);
+  ParameterType type;
+
+  if (dynamic_cast<const IntParameter*>(param))
+    {
+    type = ParameterType_Int;
+    }
+  else if (dynamic_cast<const FloatParameter*>(param))
+    {
+    type = ParameterType_Float;
+    }
+  else if (dynamic_cast<const RadiusParameter*>(param))
+    {
+    type = ParameterType_String;
+    }
+  else if (dynamic_cast<const FilenameParameter*>(param))
+    {
+    type = ParameterType_Filename;
+    }
+  else if (dynamic_cast<const DirectoryParameter*>(param))
+    {
+    type = ParameterType_Directory;
+    }
+  else if (dynamic_cast<const InputImageParameter*>(param))
+    {
+    type = ParameterType_InputImage;
+    }
+  else if (dynamic_cast<const InputComplexImageParameter*>(param))
+    {
+    type = ParameterType_InputComplexImage;
+    }
+  else if (dynamic_cast<const InputVectorDataParameter*>(param))
+    {
+    type = ParameterType_InputVectorData;
+    }
+  else if (dynamic_cast<const OutputImageParameter*>(param))
+    {
+    type = ParameterType_OutputImage;
+    }
+  else if (dynamic_cast<const OutputVectorDataParameter*>(param))
+    {
+    type = ParameterType_OutputVectorData;
+    }
+  else if (dynamic_cast<const RadiusParameter*>(param))
+    {
+    type = ParameterType_Radius;
+    }
+  else if (dynamic_cast<const ParameterGroup*>(param))
+    {
+    type = ParameterType_Group;
+    }
+  else
+    {
+    itkExceptionMacro(<< "Unknown parameter : " << paramKey);
+    }
+
+  return type;
 }
 
 void Application::SetParameterInt(std::string parameter, int value)
@@ -322,6 +444,18 @@ VectorDataType* Application::GetParameterVectorData(std::string parameter)
 }
 
 
+void
+Application::AddChoice(std::string paramKey, std::string paramName)
+{
+  GetParameterList()->AddChoice(paramKey, paramName);
+}
+
+
+void
+Application::AddParameter(ParameterType type, std::string paramKey, std::string paramName)
+{
+  GetParameterList()->AddParameter(type, paramKey, paramName);
+}
 
 
 }

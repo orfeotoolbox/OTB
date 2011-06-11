@@ -19,7 +19,7 @@
 #define __otbWrapperFilenameParameter_h
 
 #include <string>
-#include "otbWrapperParameter.h"
+#include "otbWrapperStringParameter.h"
 
 namespace otb
 {
@@ -30,12 +30,12 @@ namespace Wrapper
  *  \brief This class represent a string parameter for the wrapper framework
  */
 class FilenameParameter
-  : public Parameter
+  : public StringParameter
 {
 public:
   /** Standard class typedef */
-  typedef FilenameParameter               Self;
-  typedef Parameter                     Superclass;
+  typedef FilenameParameter             Self;
+  typedef StringParameter               Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -45,27 +45,6 @@ public:
   /** RTTI support */
   itkTypeMacro(FilenameParameter, Parameter);
 
-  /** Set any value */
-  virtual void SetAnyValue(boost::any v)
-  {
-    // Perform any cast
-    m_Value = boost::any_cast<std::string>(v);
-
-    // Call Modified();
-    this->Modified();
-  }
-
-  /** Return any value */
-  virtual boost::any GetAnyValue()
-  {
-    return boost::any(m_Value);
-  }
-
-  /** Set the value */
-  itkSetMacro(Value,std::string);
-
-  /** Get the value */
-  itkGetMacro(Value,std::string);
 
 protected:
   /** Constructor */
@@ -75,8 +54,6 @@ protected:
   /** Destructor */
   virtual ~FilenameParameter()
   {}
-
-  std::string m_Value;
 
 private:
   FilenameParameter(const FilenameParameter &); //purposely not implemented

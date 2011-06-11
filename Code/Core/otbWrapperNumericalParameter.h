@@ -57,23 +57,39 @@ public:
   virtual void SetAnyValue(boost::any v)
   {
     // Perform any cast
-    m_Value = boost::any_cast<T>(v);
+    m_Value = boost::any_cast<ScalarType>(v);
 
     // Call Modified();
     this->Modified();
   }
-  
+
   /** Return any value */
   virtual boost::any GetAnyValue()
   {
-    return boost::any(m_Value);
+    return m_Value;
   }
 
   /** Set the value */
-  itkSetMacro(Value,ScalarType);
+  void SetValue( ScalarType value)
+  {
+    m_Value = value;
+  }
 
   /** Get the value */
-  itkGetMacro(Value,ScalarType);
+  ScalarType GetValue() const
+  {
+    return boost::any_cast<ScalarType>(m_Value);
+  }
+
+  bool HasValue() const
+  {
+    return !m_Value.empty();
+  }
+
+  void ClearValue()
+  {
+    m_Value = boost::any();
+  }
 
   /** Set the default value */
   itkSetMacro(DefaultValue,ScalarType);
@@ -96,8 +112,7 @@ public:
 protected:
   /** Constructor */
   NumericalParameter() 
-    : m_Value(itk::NumericTraits<T>::Zero),
-      m_DefaultValue(itk::NumericTraits<T>::Zero),
+    : m_DefaultValue(itk::NumericTraits<T>::Zero),
       m_MinimumValue(itk::NumericTraits<T>::min()),
       m_MaximumValue(itk::NumericTraits<T>::max())
   {}
@@ -107,7 +122,7 @@ protected:
   {}
 
   /** Value */
-  ScalarType m_Value;
+  boost::any m_Value;
 
   /** Default value (when appliable) */
   ScalarType m_DefaultValue;

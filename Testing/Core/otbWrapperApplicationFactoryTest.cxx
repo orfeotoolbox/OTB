@@ -32,9 +32,5 @@ int otbWrapperApplicationFactory(int argc, char* argv[])
     {
     std::cout << *it << std::endl;
     }
-
-
-
-
   return EXIT_SUCCESS;
 }

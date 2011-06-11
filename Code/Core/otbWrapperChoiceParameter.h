@@ -49,19 +49,26 @@ public:
   itkTypeMacro(ChoiceParameter, Parameter);
 
   /** Add a value to the choice */
-  void AddChoice( std::string key, std::string name, Parameter* param );
+  void AddChoice( std::string choicekey, std::string choiceName );
 
-  /** Get the ID of a specific choice value */
+  /** Add parameter to choice */
+  void AddParameterToChoice( std::string choicekey, std::string choiceName , Parameter* param );
+
+  /** Get the key of a specific choice value */
   std::string GetChoiceKey( int i );
 
   /** Get the long name of a specific choice value */
   std::string GetChoiceName( int i );
 
   /** Get the ParameterGroup associated to a choice value */
-  ParameterGroup::Pointer GetChoiceAssociatedParameter( int i );
+  ParameterGroup::Pointer GetChoiceParameterGroupByIndex( int i );
+
+  /** Get the ParameterGroup associated to a choice value */
+  ParameterGroup::Pointer GetChoiceParameterGroupByKey( std::string choiceKey );
 
   /** Get the number of available choice */
   unsigned int GetNbChoices( void );
+
   /** Set any value */
   virtual void SetValue(unsigned int v);
 
@@ -74,6 +81,16 @@ public:
   /** Return any value */
   virtual boost::any GetAnyValue();
 
+  bool HasValue() const
+  {
+    // a choice parameter always has a value
+    return true;
+  }
+
+  void ClearValue()
+  {
+    // nothing to do : a choice parameter always has a value
+  }
 
 protected:
   /** Constructor */

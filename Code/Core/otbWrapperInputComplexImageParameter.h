@@ -44,12 +44,6 @@ public:
   /** RTTI support */
   itkTypeMacro(InputComplexImageParameter,Parameter);
 
-  /** Set the value */
-  itkSetObjectMacro(Image, VectorImageType);
-
-  /** Get the value */
-  itkGetObjectMacro(Image, VectorImageType);
-
   /** Set value from filename */
   void SetFromFileName(const std::string& filename)
   {
@@ -67,9 +61,46 @@ public:
       return m_Reader->GetFileName();
       }
 
-    itkExceptionMacro(<< "No value yet");
+    itkExceptionMacro(<< "No filename value");
   }
 
+  ComplexVectorImageType* GetImage() const
+  {
+    return m_Image;
+  }
+
+  void SetImage(ComplexVectorImageType* image)
+  {
+     m_Image = image;
+     m_Reader = ImageFileReaderType::Pointer();
+  }
+
+  /** Return any value */
+  virtual boost::any GetAnyValue()
+  {
+    return boost::any(m_Image);
+  }
+
+  /** Set any value */
+  virtual void SetAnyValue(boost::any v)
+  {
+    // Perform any cast
+    m_Image = boost::any_cast<ComplexVectorImageType::Pointer>(v);
+
+    // Call Modified();
+    this->Modified();
+  }
+
+  bool HasValue() const
+  {
+    return m_Image.IsNotNull();
+  }
+
+  void ClearValue()
+  {
+    m_Image = ComplexVectorImageType::Pointer();
+    m_Reader = ImageFileReaderType::Pointer();
+  }
 protected:
   /** Constructor */
   InputComplexImageParameter()
@@ -82,8 +113,8 @@ protected:
   virtual ~InputComplexImageParameter()
   {}
 
-  typedef otb::ImageFileReader<VectorImageType> ImageFileReaderType;
-  VectorImageType::Pointer m_Image;
+  typedef otb::ImageFileReader<ComplexVectorImageType> ImageFileReaderType;
+  ComplexVectorImageType::Pointer m_Image;
   ImageFileReaderType::Pointer m_Reader;
 
 private:

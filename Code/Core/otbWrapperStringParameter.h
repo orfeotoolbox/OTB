@@ -58,14 +58,30 @@ public:
   /** Return any value */
   virtual boost::any GetAnyValue()
   {
-    return boost::any(m_Value);
+    return m_Value;
   }
 
   /** Set the value */
-  itkSetMacro(Value,std::string);
+  void SetValue( std::string value)
+  {
+    m_Value = value;
+  }
 
   /** Get the value */
-  itkGetMacro(Value,std::string);
+  std::string GetValue() const
+  {
+    return boost::any_cast<std::string>(m_Value);
+  }
+
+  bool HasValue() const
+  {
+    return !m_Value.empty();
+  }
+
+  void ClearValue()
+  {
+    m_Value = boost::any();
+  }
 
 protected:
   /** Constructor */
@@ -76,7 +92,7 @@ protected:
   virtual ~StringParameter()
   {}
 
-  std::string m_Value;
+  boost::any m_Value;
 
 private:
   StringParameter(const StringParameter &); //purposely not implemented

@@ -31,25 +31,21 @@ ChoiceParameter::~ChoiceParameter()
 {
 }
 
+
 void
-ChoiceParameter::AddChoice( std::string key, std::string name, Parameter* param )
+ChoiceParameter::AddChoice( std::string choicekey, std::string choiceName )
 {
-  ParameterGroup* paramAsGroup = dynamic_cast<ParameterGroup*>(param);
-  if ( paramAsGroup != 0 )
-    {
-    Choice choice;
-    choice.m_Key = key;
-    choice.m_Name = name;
-    choice.m_AssociatedParameter = paramAsGroup;
-    m_ChoiceList.push_back(choice);
-    }
-  else
-    {
-    // wrap in  group first
-    ParameterGroup::Pointer group = ParameterGroup::New();
-    group->AddParameter(param);
-    AddChoice(key, name, group.GetPointer());
-    }
+  Choice choice;
+  choice.m_Key = choicekey;
+  choice.m_Name = choiceName;
+  choice.m_AssociatedParameter = ParameterGroup::New();
+  m_ChoiceList.push_back(choice);
+}
+
+void
+ChoiceParameter::AddParameterToChoice( std::string choicekey, std::string choiceName, Parameter* param )
+{
+
 }
 
 std::string
@@ -65,9 +61,25 @@ ChoiceParameter::GetChoiceName( int i )
 }
 
 ParameterGroup::Pointer
-ChoiceParameter::GetChoiceAssociatedParameter( int i )
+ChoiceParameter::GetChoiceParameterGroupByIndex( int i )
 {
   return m_ChoiceList[i].m_AssociatedParameter;
+}
+
+ParameterGroup::Pointer
+ChoiceParameter::GetChoiceParameterGroupByKey( std::string choiceKey )
+{
+  ChoiceList::iterator it = m_ChoiceList.begin();
+
+  for (it = m_ChoiceList.begin(); it != m_ChoiceList.end(); ++it)
+    {
+    if ( it->m_Key == choiceKey )
+      {
+      return it->m_AssociatedParameter;
+      }
+    }
+
+  itkExceptionMacro(<< "Cannot find " << choiceKey);
 }
 
 unsigned int

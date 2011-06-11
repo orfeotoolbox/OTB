@@ -53,40 +53,26 @@ Smoothing::~Smoothing()
 
 void Smoothing::DoCreateParameters()
 {
-  otb::Wrapper::InputImageParameter::Pointer  inImage  = otb::Wrapper::InputImageParameter::New();
-  otb::Wrapper::OutputImageParameter::Pointer outImage = otb::Wrapper::OutputImageParameter::New();
+  AddParameter(ParameterType_InputImage,  "in",   "Input Image");
+  AddParameter(ParameterType_OutputImage, "out",  "Output Image");
 
-  otb::Wrapper::ChoiceParameter::Pointer smoothingType  = otb::Wrapper::ChoiceParameter::New();
-  smoothingType->SetName("Smoothing Type");
-  smoothingType->SetKey("type");
+  AddParameter(ParameterType_Choice,      "type", "Smoothing Type");
 
-  otb::Wrapper::RadiusParameter::Pointer meanSmoothingRadius  = otb::Wrapper::RadiusParameter::New();
-  meanSmoothingRadius->SetValue(1);
-  smoothingType->AddChoice("mean", "Mean", meanSmoothingRadius.GetPointer());
+  AddChoice("type.mean",     "Mean");
+  AddParameter(ParameterType_Radius, "type.mean.radius", "Radius");
+  SetParameterInt("type.mean.radius", 2);
 
-  otb::Wrapper::RadiusParameter::Pointer gaussianSmoothingRadius  = otb::Wrapper::RadiusParameter::New();
-  gaussianSmoothingRadius->SetValue(1);
-  smoothingType->AddChoice("gaussian", "Gaussian", gaussianSmoothingRadius.GetPointer());
+  AddChoice("type.gaussian", "Gaussian");
+  AddParameter(ParameterType_Radius, "type.gaussian.radius", "Radius");
+  SetParameterInt("type.gaussian.radius", 2);
 
-  otb::Wrapper::FloatParameter::Pointer aniDifTimeStep  = otb::Wrapper::FloatParameter::New();
-  aniDifTimeStep->SetName("Time Step");
-  aniDifTimeStep->SetKey("timestep");
-  aniDifTimeStep->SetValue(0.125);
-  otb::Wrapper::IntParameter::Pointer aniDifNbIter = otb::Wrapper::IntParameter::New();
-  aniDifNbIter->SetName("Nb Iterations");
-  aniDifNbIter->SetKey("nbiter");
-  aniDifNbIter->SetValue(10);
-  otb::Wrapper::ParameterGroup::Pointer aniDifGroup = otb::Wrapper::ParameterGroup::New();
-  aniDifGroup->AddParameter(aniDifTimeStep.GetPointer());
-  aniDifGroup->AddParameter(aniDifNbIter.GetPointer());
-  smoothingType->AddChoice("anidif", "Anisotropic Diffusion", aniDifGroup.GetPointer());
+  AddChoice("type.anidif",   "Anisotropic Diffusion");
+  AddParameter(ParameterType_Float,  "type.anidif.timestep", "Time Step");
+  AddParameter(ParameterType_Int,  "type.anidif.nbiter", "Nb Iterations");
+  SetParameterFloat("type.anidif.timestep",   0.125);
+  SetParameterInt("type.anidif.nbiter",     10);
 
-  smoothingType->SetValue(2);
-
-  ParameterGroup* params = GetParameterList();
-  params->AddParameter(inImage.GetPointer());
-  params->AddParameter(outImage.GetPointer());
-  params->AddParameter(smoothingType.GetPointer());
+  SetParameterInt("type", 2);
 }
 
 void Smoothing::DoUpdateParameters()

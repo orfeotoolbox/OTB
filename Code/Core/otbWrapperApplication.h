@@ -103,11 +103,16 @@ public:
    * WARNING: this method may disappear from the API */
   Parameter* GetParameterByKey(std::string parameter);
 
+  /* Get the internal application parameter specified
+   *
+   * WARNING: this method may disappear from the API */
+  const Parameter* GetParameterByKey(std::string parameter) const;
+
   /* Enable the use of an optional parameter. Returns the previous state */
-  bool EnableParameter(std::string paramKey);
+  void EnableParameter(std::string paramKey);
 
   /* Disable the use of an optional parameter. Returns the previous state  */
-  bool DisableParameter(std::string paramKey);
+  void DisableParameter(std::string paramKey);
 
   /* Return the enable state of an optional parameter  */
   bool IsParameterEnabled(std::string paramKey) const;
@@ -118,6 +123,9 @@ public:
   /* Returns true if the parameter has an associated value provided externally
    *  (not automatically computed by the application) */
   bool HasUserValue(std::string paramKey) const;
+
+  /* If a user value was provided clear it and update the other parameters */
+  void ClearValue(std::string paramKey);
 
   /* Returns true if the parameter has an associated value.
    * This value can be an automatically computed value or default value,
@@ -151,11 +159,13 @@ protected:
   /** Destructor */
   virtual ~Application();
 
-  /** Add a new parameter to the parameter group */
-  void AddParameter(ParameterType type, std::string paramKey, std::string paramName);
+  /** Add a new choice value to an existing choice parameter */
+  void AddChoice(std::string paramKey, std::string paramName);
 
-  /** Add a new subgroup to an existing group */
-  void AddParameterGroup(std::string paramKey, std::string paramName);
+  /** Add a new parameter to the parameter group
+   * the parent key of paramKey can be the path to a parameter group
+   * or the path to a choice value */
+  void AddParameter(ParameterType type, std::string paramKey, std::string paramName);
 
   /** Declare a parameter as mandatory */
   void MandatoryOn(std::string paramKey);

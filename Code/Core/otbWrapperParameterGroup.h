@@ -45,6 +45,14 @@ public:
 
   void AddParameter(Parameter::Pointer p);
 
+  /** Add a new choice value to an existing choice parameter */
+  void AddChoice(std::string paramKey, std::string paramName);
+
+  /** Add a new parameter to the parameter group
+   * the parent key of paramKey can be the path to a parameter group
+   * or the path to a choice value */
+  void AddParameter(ParameterType type, std::string paramKey, std::string paramName);
+
   Parameter::Pointer GetParameterByIndex(unsigned int i);
 
   Parameter::Pointer GetParameterByKey(std::string name);

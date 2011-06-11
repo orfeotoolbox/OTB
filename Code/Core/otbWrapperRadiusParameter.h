@@ -50,6 +50,7 @@ protected:
   {
     this->SetName("Radius");
     this->SetKey("r");
+    this->SetDescription("Radius in pixels");
   }
 
   /** Destructor */

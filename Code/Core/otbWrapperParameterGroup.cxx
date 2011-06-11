@@ -17,6 +17,17 @@
 =========================================================================*/
 #include "otbWrapperParameterGroup.h"
 #include "otbWrapperChoiceParameter.h"
+#include "otbWrapperDirectoryParameter.h"
+#include "otbWrapperEmptyParameter.h"
+#include "otbWrapperFilenameParameter.h"
+#include "otbWrapperInputComplexImageParameter.h"
+#include "otbWrapperInputImageParameter.h"
+#include "otbWrapperInputVectorDataParameter.h"
+#include "otbWrapperNumericalParameter.h"
+#include "otbWrapperOutputImageParameter.h"
+#include "otbWrapperOutputVectorDataParameter.h"
+#include "otbWrapperRadiusParameter.h"
+#include "otbWrapperStringParameter.h"
 #include <boost/algorithm/string.hpp>
 
 namespace otb
@@ -30,6 +41,192 @@ ParameterGroup::ParameterGroup()
 
 ParameterGroup::~ParameterGroup()
 {
+}
+
+/** Add a new choice value to the parameter group */
+void
+ParameterGroup::AddChoice(std::string paramKey, std::string paramName)
+{
+  // Split the parameter name
+  std::vector<std::string> splittedKey;
+  boost::algorithm::split(splittedKey, paramKey, boost::is_any_of("."), boost::token_compress_on);
+
+  // Get the last subkey
+  std::string lastkey = *splittedKey.rbegin();
+
+  Parameter::Pointer parentParam;
+  std::string parentkey;
+
+  // Get the immediate parent of paramKey
+  if (splittedKey.size() > 1)
+    {
+    // Remove the last subkey
+    std::ostringstream parentOss;
+    std::vector<std::string>::const_iterator it = splittedKey.begin();
+    while(it != splittedKey.end() - 1)
+      {
+      parentOss << *it;
+      ++it;
+      if (it != splittedKey.end() - 1)
+        {
+        parentOss << ".";
+        }
+      }
+    parentkey = parentOss.str();
+    parentParam = GetParameterByKey(parentkey);
+
+    // parentParam must be a choice or this is an error
+    ChoiceParameter* parentAsChoice = dynamic_cast<ChoiceParameter*>(parentParam.GetPointer());
+
+    if (parentAsChoice)
+      {
+      parentAsChoice->AddChoice(lastkey, paramName);
+      }
+    else
+      {
+      itkExceptionMacro(<<parentkey << " is not a choice");
+      }
+    }
+  else
+    {
+    itkExceptionMacro(<<"No choice parameter key given");
+    }
+}
+
+
+/** Add a new parameter to the parameter group */
+void
+ParameterGroup::AddParameter(ParameterType type, std::string paramKey, std::string paramName)
+{
+  std::cout << "AddParameter " << type << " " << paramKey << " " << paramName << std::endl;
+  // Split the parameter name
+  std::vector<std::string> splittedKey;
+  boost::algorithm::split(splittedKey, paramKey, boost::is_any_of("."), boost::token_compress_on);
+
+  // Get the last subkey
+  std::string lastkey = *splittedKey.rbegin();
+  std::cout << "AddParameter lastkey " << lastkey << std::endl;
+  Parameter::Pointer parentParam;
+  std::string parentkey;
+
+  // Get the immediate parent of paramKey
+  if (splittedKey.size() > 1)
+    {
+    std::cout << "AddParameter splittedKey.size() > 1" << std::endl;
+    // Remove the last subkey
+    std::ostringstream parentOss;
+    std::vector<std::string>::const_iterator it = splittedKey.begin();
+    while(it != splittedKey.end() - 1)
+      {
+      parentOss << *it;
+      ++it;
+      if (it != splittedKey.end() - 1)
+        {
+        parentOss << ".";
+        }
+      }
+    parentkey = parentOss.str();
+    std::cout << "AddParameter splittedKey.size() > 1 parentkey " <<  parentkey << std::endl;
+
+    parentParam = GetParameterByKey(parentkey);
+    }
+  else
+    {
+    std::cout << "AddParameter splittedKey.size() <= 1" << std::endl;
+    parentParam = this;
+    }
+
+  ParameterGroup* parentAsGroup = dynamic_cast<ParameterGroup*>(parentParam.GetPointer());
+  if (parentAsGroup)
+    {
+    Parameter::Pointer newParam;
+    switch (type)
+      {
+      case ParameterType_Empty:
+        {
+        newParam = EmptyParameter::New();
+        }
+        break;
+      case ParameterType_Int:
+        {
+        newParam = IntParameter::New();
+        }
+        break;
+      case ParameterType_Float:
+        {
+        newParam = FloatParameter::New();
+        }
+        break;
+      case ParameterType_String:
+        {
+        newParam = StringParameter::New();
+        }
+        break;
+      case ParameterType_Filename:
+        {
+        newParam = FilenameParameter::New();
+        }
+        break;
+      case ParameterType_Directory:
+        {
+        newParam = DirectoryParameter::New();
+        }
+        break;
+      case ParameterType_InputImage:
+        {
+        newParam = InputImageParameter::New();
+        }
+        break;
+      case ParameterType_InputComplexImage:
+        {
+        newParam = InputComplexImageParameter::New();
+        }
+        break;
+      case ParameterType_InputVectorData:
+        {
+        newParam = InputVectorDataParameter::New();
+        }
+        break;
+      case ParameterType_OutputImage:
+        {
+        newParam = OutputImageParameter::New();
+        }
+        break;
+      case ParameterType_OutputVectorData:
+        {
+        newParam = OutputVectorDataParameter::New();
+        }
+        break;
+      case ParameterType_Radius:
+        {
+        newParam = RadiusParameter::New();
+        }
+        break;
+      case ParameterType_Choice:
+        {
+        newParam = ChoiceParameter::New();
+        }
+        break;
+      case ParameterType_Group:
+        {
+        newParam = ParameterGroup::New();
+        }
+        break;
+      }
+
+    if (newParam.IsNull())
+      {
+      itkExceptionMacro(<< "Parameter type not supported for " << paramKey);
+      }
+    newParam->SetKey(lastkey);
+    newParam->SetName(paramName);
+
+    parentAsGroup->AddParameter(newParam);
+    }
+  else
+    {
+    itkExceptionMacro(<< "Cannot add " << lastkey << " to parameter " << parentkey);
+    }
 }
 
 void
@@ -47,6 +244,7 @@ ParameterGroup::GetParameterByIndex(unsigned int i)
 Parameter::Pointer
 ParameterGroup::GetParameterByKey(std::string name)
 {
+  std::cout << "GetParameterByKey " << name << std::endl;
   // Split the parameter name
   std::vector<std::string> splittedName;
   boost::algorithm::split(splittedName, name, boost::is_any_of("."), boost::token_compress_on);
@@ -88,7 +286,7 @@ ParameterGroup::GetParameterByKey(std::string name)
         ++it;
         if (it != splittedName.end())
           {
-          childNameOss << "." << std::endl;
+          childNameOss << ".";
           }
         }
       std::string childName = childNameOss.str();
@@ -103,20 +301,15 @@ ParameterGroup::GetParameterByKey(std::string name)
       // Check that splittedName[1] is one of the choice
       ParameterGroup::Pointer associatedParam;
       unsigned int nbChoices = parentAsChoice->GetNbChoices();
-      for (int i = 0; i < nbChoices; ++i)
-        {
-        if ( parentAsChoice->GetChoiceKey(i) == splittedName[1] )
-          {
-          associatedParam = parentAsChoice->GetChoiceAssociatedParameter(i);
-          break;
-          }
-        }
+
+      // will throw if splittedName[1] is not a choice key
+      associatedParam = parentAsChoice->GetChoiceParameterGroupByKey(splittedName[1]);
 
       if (splittedName.size() > 2)
         {
         if (associatedParam.IsNull())
           {
-          itkExceptionMacro(<< "Parameter " << splittedName[1] << "has no child named " << splittedName[2])
+          itkExceptionMacro(<< "Choice " << splittedName[1] << "in " << splittedName[0] << "  has no key named " << splittedName[2]);
           }
 
         // Remove the parent and the choice value from the param name

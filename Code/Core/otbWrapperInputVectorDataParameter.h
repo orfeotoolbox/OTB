@@ -48,18 +48,6 @@ public:
   typedef double ValuePrecisionType;
   typedef otb::VectorData<CoordinatePrecisionType, 2, ValuePrecisionType>  VectorDataType;
 
-  /** Set the value */
-  itkSetObjectMacro(VectorData, VectorDataType);
-
-  /** Get the value */
-  itkGetObjectMacro(VectorData, VectorDataType);
-
-  /** Return any value */
-  virtual boost::any GetAnyValue()
-  {
-    return boost::any(m_VectorData);
-  }
-
   /** Set value from filename */
   void SetFromFileName(const std::string& filename)
   {
@@ -79,9 +67,46 @@ public:
       return m_Reader->GetFileName();
       }
 
-    itkExceptionMacro(<< "No value yet");
+    itkExceptionMacro(<< "No value filename value");
   }
 
+  VectorDataType* GetVectorData() const
+  {
+    return m_VectorData;
+  }
+
+  void SetVectorData(VectorDataType* vectorData)
+  {
+    m_VectorData = vectorData;
+    m_Reader = VectorDataFileReaderType::Pointer();
+  }
+
+  /** Return any value */
+  virtual boost::any GetAnyValue()
+  {
+    return boost::any(m_VectorData);
+  }
+
+  /** Set any value */
+  virtual void SetAnyValue(boost::any v)
+  {
+    // Perform any cast
+    m_VectorData = boost::any_cast<VectorDataType::Pointer>(v);
+
+    // Call Modified();
+    this->Modified();
+  }
+
+  bool HasValue() const
+  {
+    return m_VectorData.IsNotNull();
+  }
+
+  void ClearValue()
+  {
+    m_VectorData = VectorDataType::Pointer();
+    m_Reader = VectorDataFileReaderType::Pointer();
+  }
 
 protected:
   /** Constructor */

@@ -111,15 +111,23 @@ public:
   /** Get the default value mode */
   itkGetEnumMacro(DefaultValueMode,DefaultValueMode);
 
+  /** Set the user access level */
+  itkSetEnumMacro(UserLevel,UserLevel);
+
+  /** Get the user access level */
+  itkGetEnumMacro(UserLevel,UserLevel);
+
   /** Reset to the the default value. Default implementation does
    * nothing 
    */
-  virtual void Reset() {}
+  virtual void Reset()
+  {
+  }
 
   /** Return the parameter value as a boost:any. Should be
    * reimplemented in each relevant sub-class (default implementation
    * raise exception) */
-  virtual boost::any GetAnyValue()
+  virtual boost::any GetAnyValue() const
   {
     itkExceptionMacro(<<"GetAnyValue() method must be re-implemented by sub-classes.");
     return boost::any(); // avoid warning
@@ -133,6 +141,25 @@ public:
     itkExceptionMacro(<<"SetAnyValue() method must be re-implemented by sub-classes.");
   }
 
+  virtual bool HasValue() const
+  {
+    itkExceptionMacro(<<"HasValue() method must be re-implemented by sub-classes.");
+  }
+
+  virtual bool HasUserValue() const
+  {
+    return HasValue() && m_UserValue;
+  }
+
+  virtual void SetUserValue(bool isUserValue)
+  {
+    m_UserValue = isUserValue;
+  }
+
+  virtual void ClearValue()
+  {
+    itkExceptionMacro(<<"ClearValue() method must be re-implemented by sub-classes.");
+  }
 
 protected:
   /** Constructor */
@@ -162,10 +189,13 @@ protected:
   /** True if activated (a mandatory parameter is always active) */
   bool m_Active;
 
+  /** True if the value is set in user mode */
+  bool m_UserValue;
+
   /** Default value behaviour */
   DefaultValueMode m_DefaultValueMode;
 
-  UserLevel m_Level;
+  UserLevel m_UserLevel;
 
 private:
   Parameter(const Parameter &); //purposely not implemented
