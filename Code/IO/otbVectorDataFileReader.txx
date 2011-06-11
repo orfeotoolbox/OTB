@@ -143,8 +143,9 @@ VectorDataFileReader<TOutputVectorData>
 
   if (m_UserSpecifiedVectorDataIO == false)   //try creating via factory
     {
-    m_VectorDataIO = VectorDataIOFactory<TOutputVectorData>::CreateVectorDataIO(
-      m_FileName.c_str(), VectorDataIOFactory<TOutputVectorData>::ReadMode);
+    typedef VectorData<double, 2> IOVectorDataType; //temporary for transition
+    m_VectorDataIO = VectorDataIOFactory<IOVectorDataType>::CreateVectorDataIO(
+      m_FileName.c_str(), VectorDataIOFactory<IOVectorDataType>::ReadMode);
     }
 
   if (m_VectorDataIO.IsNull())

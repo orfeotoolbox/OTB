@@ -108,9 +108,10 @@ VectorDataFileWriter<TInputVectorData>
     {
     itkDebugMacro(<< "Attempting factory creation of VectorDataIO for file: "
                   << m_FileName);
-    m_VectorDataIO = VectorDataIOFactory<TInputVectorData>::CreateVectorDataIO(
+    typedef VectorData<double, 2> IOVectorDataType; //temporary for transition
+    m_VectorDataIO = VectorDataIOFactory<IOVectorDataType>::CreateVectorDataIO(
       m_FileName.c_str(),
-      VectorDataIOFactory<TInputVectorData>::
+      VectorDataIOFactory<IOVectorDataType>::
       WriteMode);
     m_FactorySpecifiedVectorDataIO = true;
     }
@@ -122,9 +123,10 @@ VectorDataFileWriter<TInputVectorData>
                     << m_FileName);
       itkDebugMacro(<< "Attempting creation of VectorDataIO with a factory for file:"
                     << m_FileName);
-      m_VectorDataIO = VectorDataIOFactory<TInputVectorData>::CreateVectorDataIO(
+    typedef VectorData<double, 2> IOVectorDataType; //temporary for transition
+      m_VectorDataIO = VectorDataIOFactory<IOVectorDataType>::CreateVectorDataIO(
         m_FileName.c_str(),
-        VectorDataIOFactory<TInputVectorData>
+        VectorDataIOFactory<IOVectorDataType>
         ::WriteMode);
       m_FactorySpecifiedVectorDataIO = true;
       }

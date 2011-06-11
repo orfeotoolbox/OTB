@@ -63,7 +63,7 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(VectorDataIOBase, Superclass);
 
-  itkStaticConstMacro(VDimension, unsigned int, 2);
+  itkStaticConstMacro(VDimension, unsigned int, 3);
   typedef itk::Vector<double, VDimension> SpacingType;
   typedef itk::Point<double, VDimension>  PointType;
 
