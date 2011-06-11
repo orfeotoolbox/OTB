@@ -19,12 +19,12 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#include "otbWrapperApplicationFactory.h"
+#include "otbWrapperApplicationRegistry.h"
 
-int otbWrapperApplicationFactory(int argc, char* argv[])
+int otbWrapperApplicationRegistry(int argc, char* argv[])
 {
-  using otb::Wrapper::ApplicationFactory;
-  std::list<std::string> list = ApplicationFactory::GetAvailableApplications();
+  using otb::Wrapper::ApplicationRegistry;
+  std::list<std::string> list = ApplicationRegistry::GetAvailableApplications();
 
   std::cout << "Available applications :" << std::endl;
   std::list<std::string>::const_iterator it;

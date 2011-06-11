@@ -98,21 +98,18 @@ ParameterGroup::AddChoice(std::string paramKey, std::string paramName)
 void
 ParameterGroup::AddParameter(ParameterType type, std::string paramKey, std::string paramName)
 {
-  std::cout << "AddParameter " << type << " " << paramKey << " " << paramName << std::endl;
   // Split the parameter name
   std::vector<std::string> splittedKey;
   boost::algorithm::split(splittedKey, paramKey, boost::is_any_of("."), boost::token_compress_on);
 
   // Get the last subkey
   std::string lastkey = *splittedKey.rbegin();
-  std::cout << "AddParameter lastkey " << lastkey << std::endl;
   Parameter::Pointer parentParam;
   std::string parentkey;
 
   // Get the immediate parent of paramKey
   if (splittedKey.size() > 1)
     {
-    std::cout << "AddParameter splittedKey.size() > 1" << std::endl;
     // Remove the last subkey
     std::ostringstream parentOss;
     std::vector<std::string>::const_iterator it = splittedKey.begin();
@@ -126,13 +123,10 @@ ParameterGroup::AddParameter(ParameterType type, std::string paramKey, std::stri
         }
       }
     parentkey = parentOss.str();
-    std::cout << "AddParameter splittedKey.size() > 1 parentkey " <<  parentkey << std::endl;
-
     parentParam = GetParameterByKey(parentkey);
     }
   else
     {
-    std::cout << "AddParameter splittedKey.size() <= 1" << std::endl;
     parentParam = this;
     }
 
@@ -244,7 +238,6 @@ ParameterGroup::GetParameterByIndex(unsigned int i)
 Parameter::Pointer
 ParameterGroup::GetParameterByKey(std::string name)
 {
-  std::cout << "GetParameterByKey " << name << std::endl;
   // Split the parameter name
   std::vector<std::string> splittedName;
   boost::algorithm::split(splittedName, name, boost::is_any_of("."), boost::token_compress_on);

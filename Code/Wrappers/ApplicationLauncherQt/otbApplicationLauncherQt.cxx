@@ -17,12 +17,12 @@
  =========================================================================*/
 #include <QApplication>
 #include "otbWrapperApplication.h"
-#include "otbWrapperApplicationFactory.h"
+#include "otbWrapperApplicationRegistry.h"
 #include "otbWrapperQtWidgetView.h"
 #include "itksys/SystemTools.hxx"
 
 using otb::Wrapper::Application;
-using otb::Wrapper::ApplicationFactory;
+using otb::Wrapper::ApplicationRegistry;
 using otb::Wrapper::QtWidgetView;
 
 int main(int argc, char* argv[])
@@ -64,7 +64,7 @@ int main(int argc, char* argv[])
   itk::ObjectFactoryBase::ReHash();
 
   // Create module
-  Application::Pointer app = ApplicationFactory::CreateApplication(moduleName);
+  Application::Pointer app = ApplicationRegistry::CreateApplication(moduleName);
   if (app.IsNull())
     {
     std::cerr << "Could not find application " << moduleName << std::endl;
@@ -72,7 +72,7 @@ int main(int argc, char* argv[])
     const char* modulePath = itksys::SystemTools::GetEnv("ITK_AUTOLOAD_PATH");
     std::cout << "Module search path : " << (modulePath ? modulePath : "") << std::endl;
 
-    std::list<std::string> list = ApplicationFactory::GetAvailableApplications();
+    std::list<std::string> list = ApplicationRegistry::GetAvailableApplications();
 
     std::cout << "Available applications : " << (list.empty() ? "None" : "") << std::endl;
     for (std::list<std::string>::const_iterator it = list.begin(); it != list.end(); ++it)

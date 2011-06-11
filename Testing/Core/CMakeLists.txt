@@ -73,7 +73,7 @@ otbWrapperNumericalParameterTest.cxx
 otbWrapperOutputImageParameterTest.cxx
 otbWrapperParameterListTest.cxx
 otbWrapperParameterTest.cxx
-otbWrapperApplicationFactoryTest.cxx
+otbWrapperApplicationRegistryTest.cxx
 )
 
 ADD_EXECUTABLE(otbWrapperTests ${Wrapper_SRCS})

@@ -21,7 +21,7 @@
 #include "otbWrapperParameter.h"
 #include "otbWrapperParameterGroup.h"
 #include "otbWrapperApplication.h"
-#include "otbWrapperApplicationFactory.h"
+#include "otbWrapperApplicationRegistry.h"
 
 
 typedef otb::Wrapper::Parameter                        Parameter;
@@ -33,7 +33,7 @@ typedef otb::Wrapper::ParameterGroup::Pointer::SmartPointer ParameterGroup_Point
 typedef otb::Wrapper::Application                        Application;
 typedef otb::Wrapper::Application::Pointer::SmartPointer Application_Pointer;
 
-typedef otb::Wrapper::ApplicationFactory                        ApplicationFactory;
-typedef otb::Wrapper::ApplicationFactory::Pointer::SmartPointer ApplicationFactory_Pointer;
+typedef otb::Wrapper::ApplicationRegistry                        ApplicationRegistry;
+typedef otb::Wrapper::ApplicationRegistry::Pointer::SmartPointer ApplicationRegistry_Pointer;
 
 #endif

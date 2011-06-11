@@ -15,23 +15,23 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#include "otbWrapperApplicationFactory.h"
+#include "otbWrapperApplicationRegistry.h"
 
 namespace otb
 {
 namespace Wrapper
 {
 
-ApplicationFactory::ApplicationFactory()
+ApplicationRegistry::ApplicationRegistry()
 {
 }
 
-ApplicationFactory::~ApplicationFactory()
+ApplicationRegistry::~ApplicationRegistry()
 {
 }
 
-ApplicationFactory::ApplicationPointer
-ApplicationFactory::CreateApplication(const std::string& name)
+ApplicationRegistry::ApplicationPointer
+ApplicationRegistry::CreateApplication(const std::string& name)
 {
   ApplicationPointer appli;
 
@@ -48,7 +48,7 @@ ApplicationFactory::CreateApplication(const std::string& name)
       }
     else
       {
-      otbMsgDevMacro( << "Error ApplicationFactory factory did not return an Application: " << (*i)->GetNameOfClass() << std::endl );
+      otbMsgDevMacro( << "Error ApplicationRegistry factory did not return an Application: " << (*i)->GetNameOfClass() << std::endl );
       }
     }
 
@@ -67,7 +67,7 @@ ApplicationFactory::CreateApplication(const std::string& name)
 }
 
 std::list<std::string>
-ApplicationFactory::GetAvailableApplications()
+ApplicationRegistry::GetAvailableApplications()
 {
   ApplicationPointer appli;
 
@@ -84,7 +84,7 @@ ApplicationFactory::GetAvailableApplications()
       }
     else
       {
-      otbMsgDevMacro( "Error ApplicationFactory factory did not return an Application: " << (*i)->GetNameOfClass() << std::endl );
+      otbMsgDevMacro( "Error ApplicationRegistry factory did not return an Application: " << (*i)->GetNameOfClass() << std::endl );
       }
     }
 

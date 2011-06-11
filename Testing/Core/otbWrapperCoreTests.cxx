@@ -47,5 +47,5 @@ void RegisterTests()
 
   REGISTER_TEST(otbWrapperParameterListNew);
 
-  REGISTER_TEST(otbWrapperApplicationFactory);
+  REGISTER_TEST(otbWrapperApplicationRegistry);
 }

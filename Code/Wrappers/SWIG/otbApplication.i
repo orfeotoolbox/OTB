@@ -122,18 +122,18 @@ private:
 DECLARE_REF_COUNT_CLASS( Application )
 
 
-class ApplicationFactory : public itkObject
+class ApplicationRegistry : public itkObject
 {
 public:
   static std::list<std::string> GetAvailableApplications();
   static Application_Pointer CreateApplication(const std::string& name);
 
 protected:
-  ApplicationFactory();
-  virtual ~ApplicationFactory();
+  ApplicationRegistry();
+  virtual ~ApplicationRegistry();
 
 private:
-  ApplicationFactory(const Self&);
+  ApplicationRegistry(const Self&);
   void operator=(const Self&);
 };
 

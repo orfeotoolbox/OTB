@@ -18,57 +18,97 @@
 #ifndef __otbWrapperApplicationFactory_h
 #define __otbWrapperApplicationFactory_h
 
-#include <string>
-#include "otbMacro.h"
-#include "itkObject.h"
 #include "itkObjectFactory.h"
-
-#include "otbWrapperApplication.h"
+#include "itkVersion.h"
 
 namespace otb
 {
 namespace Wrapper
 {
 
-/** \class Application
- *  \brief This class represent an application
- *  TODO
- *
- */
-class ITK_EXPORT ApplicationFactory : public itk::Object
+template < class TApplication >
+class ApplicationFactory : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */
   typedef ApplicationFactory            Self;
-  typedef itk::Object                   Superclass;
+  typedef itk::ObjectFactoryBase        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  /** Class Methods used to interface with the registered factories */
+  /** Class methods used to interface with the registered factories. */
+  virtual const char* GetITKSourceVersion(void) const
+    {
+    return ITK_SOURCE_VERSION;
+    }
+
+  virtual const char* GetDescription(void) const
+    {
+    return "Smoothing";
+    }
+
+  /** Method for class instantiation. */
+  itkFactorylessNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ApplicationFactory, Object);
-
-  /** Convenient typedefs. */
-  typedef otb::Wrapper::Application::Pointer ApplicationPointer;
-
-  /**  */
-  static std::list<std::string> GetAvailableApplications();
-
-  /** Create the appropriate Application */
-  static ApplicationPointer CreateApplication(const std::string& name);
+  itkTypeMacro(ApplicationFactory, itk::ObjectFactoryBase);
 
 protected:
-  ApplicationFactory();
-  virtual ~ApplicationFactory();
+  ApplicationFactory()
+  {
+
+  }
+
+  virtual ~ApplicationFactory()
+  {
+
+  }
+
+  /** This method is provided by sub-classes of ObjectFactoryBase.
+   * It should create the named itk object or return 0 if that object
+   * is not supported by the factory implementation. */
+  virtual LightObject::Pointer CreateObject(const char* itkclassname )
+  {
+    const std::string classname("otbWrapperApplication");
+    LightObject::Pointer ret;
+    if ( classname == itkclassname )
+      ret = TApplication::New().GetPointer();
+
+    return ret;
+  }
+
+  /** This method creates all the objects with the class overide of
+   * itkclass name, which are provide by this object
+   */
+  virtual std::list<LightObject::Pointer>
+  CreateAllObject(const char* itkclassname)
+  {
+    const std::string classname("otbWrapperApplication");
+    std::list<LightObject::Pointer> list;
+    if ( classname == itkclassname )
+      list.push_back(TApplication::New().GetPointer());
+
+    return list;
+  }
 
 private:
-  ApplicationFactory(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
+  ApplicationFactory(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 };
 
 } // end namespace Wrapper
 } //end namespace otb
+
+
+#define OTB_APPLICATION_REGISTER( ApplicationType )                                    \
+  typedef otb::Wrapper::ApplicationFactory<ApplicationType> ApplicationFactoryType;    \
+  static ApplicationFactoryType::Pointer staticFactory;                                \
+  itk::ObjectFactoryBase* itkLoad()                                                    \
+  {                                                                                    \
+    staticFactory = ApplicationFactoryType::New();                                     \
+    return staticFactory;                                                              \
+  }
+
+
 
 #endif // __otbWrapperApplication_h_
