@@ -25,7 +25,7 @@ namespace otb
 /** \class KMLVectorDataIOFactory
  * \brief Creating an instance of a VectorDataImageIO object using object factory.
  */
-template <class TData> class ITK_EXPORT KMLVectorDataIOFactory : public itk::ObjectFactoryBase
+class ITK_EXPORT KMLVectorDataIOFactory : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */
@@ -47,7 +47,7 @@ public:
   /** Register one factory of this type  */
   static void RegisterOneFactory(void)
   {
-    typename KMLVectorDataIOFactory<TData>::Pointer KMLFactory = KMLVectorDataIOFactory<TData>::New();
+    typename KMLVectorDataIOFactory::Pointer KMLFactory = KMLVectorDataIOFactory::New();
     itk::ObjectFactoryBase::RegisterFactory(KMLFactory);
   }
 
@@ -62,9 +62,5 @@ private:
 };
 
 } // end namespace otb
-
-#ifndef OTB_MANUAL_INSTANTIATION
-#include "otbKMLVectorDataIOFactory.txx"
-#endif
 
 #endif

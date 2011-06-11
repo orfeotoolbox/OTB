@@ -26,7 +26,7 @@ namespace otb
 /** \class VectorDataIOFactory
  * \brief Create instances of VectorDataIO objects using an object factory.
  */
-template <class TData> class ITK_EXPORT VectorDataIOFactory : public itk::Object
+class ITK_EXPORT VectorDataIOFactory : public itk::Object
 {
 public:
   /** Standard class typedefs. */
@@ -35,8 +35,6 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef TData                                  DataType;
-  typedef typename DataType::Pointer             DataPointerType;
   typedef otb::VectorDataIOBase                  VectorDataIOBaseType;
   typedef typename VectorDataIOBaseType::Pointer VectorDataIOBasePointerType;
 
@@ -68,9 +66,5 @@ private:
 };
 
 } // end namespace otb
-
-#ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorDataIOFactory.txx"
-#endif
 
 #endif

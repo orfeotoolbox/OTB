@@ -15,9 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataIOFactory_txx
-#define __otbVectorDataIOFactory_txx
-
 
 #include "otbVectorDataIOFactory.h"
 #include "otbOGRVectorDataIOFactory.h"
@@ -28,14 +25,14 @@
 
 namespace otb
 {
-template <class TData>
-typename VectorDataIOFactory<TData>
+
+typename VectorDataIOFactory
 ::VectorDataIOBasePointerType
-VectorDataIOFactory<TData>
+VectorDataIOFactory
 ::CreateVectorDataIO(const char* path, FileModeType mode)
 {
   RegisterBuiltInFactories();
-  
+
   std::string baseclassID = std::string("otbVectorDataIOBase");
 
   std::list<VectorDataIOBasePointerType> possibleVectorDataIO;
@@ -76,9 +73,9 @@ VectorDataIOFactory<TData>
     }
   return 0;
 }
-template <class TData>
+
 void
-VectorDataIOFactory<TData>
+VectorDataIOFactory
 ::RegisterBuiltInFactories()
 {
   static bool firstTime = true;
@@ -90,8 +87,8 @@ VectorDataIOFactory<TData>
     itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder(mutex);
     if (firstTime)
       {
-      itk::ObjectFactoryBase::RegisterFactory(OGRVectorDataIOFactory<TData>::New());
-      itk::ObjectFactoryBase::RegisterFactory(KMLVectorDataIOFactory<TData>::New());
+      itk::ObjectFactoryBase::RegisterFactory(OGRVectorDataIOFactory::New());
+      itk::ObjectFactoryBase::RegisterFactory(KMLVectorDataIOFactory::New());
       firstTime = false;
       }
     }
@@ -99,4 +96,3 @@ VectorDataIOFactory<TData>
 
 } // end namespace otb
 
-#endif

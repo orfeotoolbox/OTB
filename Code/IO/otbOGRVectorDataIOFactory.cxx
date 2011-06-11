@@ -15,8 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOGRVectorDataIOFactory_txx
-#define __otbOGRVectorDataIOFactory_txx
 
 #include "otbOGRVectorDataIOFactory.h"
 
@@ -26,8 +24,8 @@
 
 namespace otb
 {
-template<class TData>
-OGRVectorDataIOFactory<TData>::OGRVectorDataIOFactory()
+
+OGRVectorDataIOFactory::OGRVectorDataIOFactory()
 {
   static std::string classOverride = std::string("otbVectorDataIOBase");
   static std::string subclass = std::string("otbOGRVectorDataIO");
@@ -38,23 +36,20 @@ OGRVectorDataIOFactory<TData>::OGRVectorDataIOFactory()
                          1,
                          itk::CreateObjectFunction<OGRVectorDataIO>::New());
 }
-template<class TData>
-OGRVectorDataIOFactory<TData>::~OGRVectorDataIOFactory()
-{
-}
-template<class TData>
+
+OGRVectorDataIOFactory::~OGRVectorDataIOFactory()
+{}
+
 const char*
-OGRVectorDataIOFactory<TData>::GetITKSourceVersion(void) const
+OGRVectorDataIOFactory::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;
 }
-template<class TData>
+
 const char*
-OGRVectorDataIOFactory<TData>::GetDescription() const
+OGRVectorDataIOFactory::GetDescription() const
 {
   return "OGR VectorDataIO Factory, allows the loading of ogr supported vector data into OTB";
 }
 
 } // end namespace otb
-
-#endif

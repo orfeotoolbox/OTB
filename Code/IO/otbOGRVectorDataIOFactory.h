@@ -25,7 +25,7 @@ namespace otb
 /** \class OGRVectorDataIOFactory
  * \brief Create an instance of an OGRVectorDataIOFactory.
  */
-template <class TData> class ITK_EXPORT OGRVectorDataIOFactory : public itk::ObjectFactoryBase
+class ITK_EXPORT OGRVectorDataIOFactory : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */
@@ -47,7 +47,7 @@ public:
   /** Register one factory of this type  */
   static void RegisterOneFactory(void)
   {
-    typename OGRVectorDataIOFactory<TData>::Pointer OGRFactory = OGRVectorDataIOFactory<TData>::New();
+    typename OGRVectorDataIOFactory::Pointer OGRFactory = OGRVectorDataIOFactory::New();
     itk::ObjectFactoryBase::RegisterFactory(OGRFactory);
   }
 
@@ -62,9 +62,5 @@ private:
 };
 
 } // end namespace otb
-
-#ifndef OTB_MANUAL_INSTANTIATION
-#include "otbOGRVectorDataIOFactory.txx"
-#endif
 
 #endif

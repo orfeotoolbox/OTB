@@ -15,8 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbKMLVectorDataIOFactory_txx
-#define __otbKMLVectorDataIOFactory_txx
 
 #include "otbKMLVectorDataIOFactory.h"
 
@@ -26,8 +24,8 @@
 
 namespace otb
 {
-template<class TData>
-KMLVectorDataIOFactory<TData>::KMLVectorDataIOFactory()
+
+KMLVectorDataIOFactory::KMLVectorDataIOFactory()
 {
   static std::string classOverride = std::string("otbVectorDataIOBase");
   static std::string subclass = std::string("otbKMLVectorDataIO");
@@ -39,25 +37,20 @@ KMLVectorDataIOFactory<TData>::KMLVectorDataIOFactory()
                          itk::CreateObjectFunction<KMLVectorDataIO>::New());
 }
 
-template<class TData>
-KMLVectorDataIOFactory<TData>::~KMLVectorDataIOFactory()
-{
-}
+KMLVectorDataIOFactory::~KMLVectorDataIOFactory()
+{}
 
-template<class TData>
 const char*
-KMLVectorDataIOFactory<TData>::GetITKSourceVersion(void) const
+KMLVectorDataIOFactory::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;
 }
 
-template<class TData>
+
 const char*
-KMLVectorDataIOFactory<TData>::GetDescription() const
+KMLVectorDataIOFactory::GetDescription() const
 {
   return "KML VectorDataIO Factory, allows the loading of KML vector data into OTB";
 }
 
 } // end namespace otb
-
-#endif
