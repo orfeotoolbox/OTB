@@ -18,13 +18,15 @@
 #ifndef __otbOGRVectorDataIO_h
 #define __otbOGRVectorDataIO_h
 
-#include "otbVectorDataIOBase.h"
 #include <fstream>
 #include <string>
 #include <vector>
 #include <algorithm>
 
 #include "ogrsf_frmts.h"
+
+#include "otbVectorDataIOBase.h"
+#include "otbVectorData.h"
 
 namespace otb
 {
@@ -59,7 +61,7 @@ public:
   typedef typename Superclass::ByteOrder ByteOrder;
 
   /** Data typedef */
-  typedef TData                                           VectorDataType;
+  typedef VectorData<double, 2>                           VectorDataType;
   typedef typename VectorDataType::DataTreeType           DataTreeType;
   typedef typename DataTreeType::TreeNodeType             InternalTreeNodeType;
   typedef typename InternalTreeNodeType::ChildrenListType ChildrenListType;
