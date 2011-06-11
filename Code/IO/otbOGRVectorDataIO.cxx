@@ -20,6 +20,8 @@
 
 #include "otbOGRVectorDataIO.h"
 
+#include "ogrsf_frmts.h"
+
 #include "itksys/SystemTools.hxx"
 #include "itkExceptionObject.h"
 #include "itkByteSwapper.h"
@@ -166,7 +168,7 @@ OGRVectorDataIO
 
     /** IO class helper to convert ogr layer*/
    
-    typename OGRIOHelper<VectorDataType>::Pointer OGRConversion = OGRIOHelper<VectorDataType>::New();
+    typename OGRIOHelper::Pointer OGRConversion = OGRIOHelper::New();
     OGRConversion->ConvertOGRLayerToDataTreeNode(layer, documentPtr);
 
     } // end For each layer
@@ -275,7 +277,7 @@ void OGRVectorDataIO::Write(const itk::DataObject* datag, char ** papszOptions)
   InternalTreeNodeType * inputRoot = const_cast<InternalTreeNodeType *>(tree->GetRoot());
 
   //Refactoring SHPIO Manuel
-  typename OGRIOHelper<VectorDataType>::Pointer IOConversion = OGRIOHelper<VectorDataType>::New();
+  typename OGRIOHelper::Pointer IOConversion = OGRIOHelper::New();
   layerKept = IOConversion->ProcessNodeWrite(inputRoot, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
 
   OGRDataSource::DestroyDataSource(m_DataSource);

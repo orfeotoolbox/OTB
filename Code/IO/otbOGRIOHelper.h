@@ -20,9 +20,13 @@
 
 #include <vector>
 
-//TODO change this include  have to define from what inherate this class
-#include "ogrsf_frmts.h"
 #include "otbVectorData.h"
+
+class OGRDataSource;
+class OGRGeometryCollection;
+class OGRLayer;
+class OGRSpatialReference;
+class OGRGeometry;
 
 namespace otb
 {
@@ -31,7 +35,6 @@ namespace otb
  *  \brief This class IO OGR
  *
  */
-template <class TVectorData>
 class OGRIOHelper: public itk::Object
 {
 public:
@@ -43,7 +46,7 @@ public:
 
   /** Template parameters typedefs */
   /** Data typedef */
-  typedef TVectorData                                     VectorDataType;
+  typedef VectorData<>                                    VectorDataType;
   typedef typename VectorDataType::DataTreeType           DataTreeType;
   typedef typename DataTreeType::TreeNodeType             InternalTreeNodeType;
 
@@ -54,7 +57,7 @@ public:
   itkTypeMacro(OGRIOHelper, itk::Object);
 
   /** Conversion tools */
-  inline void ConvertOGRLayerToDataTreeNode(OGRLayer * layer, InternalTreeNodeType * documentPtr) const;
+  void ConvertOGRLayerToDataTreeNode(OGRLayer * layer, InternalTreeNodeType * documentPtr) const;
 
 
   unsigned int ProcessNodeWrite(InternalTreeNodeType * source,
@@ -62,12 +65,6 @@ public:
                                 OGRGeometryCollection * ogrCollection,
                                 OGRLayer * ogrCurrentLayer,
                                 OGRSpatialReference * oSRS);
-
-//  typedef  enum { UNKNOWN, FLOAT, DOUBLE } VectorDataComponentType; //unused (yet?)
-
-//  itkSetEnumMacro(ComponentType, VectorDataComponentType); //unused (yet?)
-//  itkGetEnumMacro(ComponentType, VectorDataComponentType); //unused (yet?)
-
 
 protected:
   OGRIOHelper();
@@ -98,14 +95,8 @@ private:
 
   void ConvertGeometryToPolygonNode(const OGRGeometry * ogrGeometry, DataNodePointerType node) const;
 
-  //VectorDataComponentType m_ComponentType; //unused (yet?)
-
 }; // end class OGRIOHelper
 
 } // end namespace otb
-
-#ifndef OTB_MANUAL_INSTANTIATION
-#include "otbOGRIOHelper.txx"
-#endif
 
 #endif

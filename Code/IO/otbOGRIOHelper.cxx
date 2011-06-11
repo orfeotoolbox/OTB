@@ -15,19 +15,17 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOGRIOHelper_txx
-#define __otbOGRIOHelper_txx
+#include "otbOGRIOHelper.h"
+
+#include "ogrsf_frmts.h"
 
 #include "itkTimeProbe.h"
-
-#include "otbOGRIOHelper.h"
 
 namespace otb
 {
 
-template<class TVectorData>
 void
-OGRIOHelper<TVectorData>
+OGRIOHelper
 ::ConvertGeometryToPointNode(const OGRGeometry * ogrGeometry, DataNodePointerType node) const
 {
   OGRPoint * ogrPoint = (OGRPoint *) ogrGeometry;
@@ -54,9 +52,9 @@ OGRIOHelper<TVectorData>
   node->SetPoint(otbPoint);
 }
 
-template<class TVectorData>
+
 void
-OGRIOHelper<TVectorData>
+OGRIOHelper
 ::ConvertGeometryToLineNode(const OGRGeometry * ogrGeometry, DataNodePointerType node) const
 {
   OGRLineString * ogrLine = (OGRLineString *) ogrGeometry;
@@ -96,9 +94,9 @@ OGRIOHelper<TVectorData>
   node->SetLine(line);
 }
 
-template<class TVectorData>
+
 inline void
-OGRIOHelper<TVectorData>
+OGRIOHelper
 ::ConvertGeometryToPolygonNode(const OGRGeometry * ogrGeometry, DataNodePointerType node) const
 {
   OGRPolygon * ogrPolygon = (OGRPolygon *) ogrGeometry;
@@ -165,18 +163,18 @@ OGRIOHelper<TVectorData>
 }
 
 
-template<class TVectorData>
-OGRIOHelper<TVectorData>
+
+OGRIOHelper
 ::OGRIOHelper()
 {}
 
-template<class TVectorData>
-OGRIOHelper<TVectorData>
+
+OGRIOHelper
 ::~OGRIOHelper()
 {}
 
-template<class TVectorData>
-void OGRIOHelper<TVectorData>
+
+void OGRIOHelper
 ::ConvertOGRLayerToDataTreeNode(OGRLayer * layer, InternalTreeNodeType * documentPtr) const
 {
   /** Temporary pointer to store the feature */
@@ -642,8 +640,8 @@ void OGRIOHelper<TVectorData>
     << layer->GetFeatureCount() << " features read, average insertion time " << chrono.GetMeanTime() << " s");
 }
 
-template<class TVectorData>
-unsigned int OGRIOHelper<TVectorData>
+
+unsigned int OGRIOHelper
 ::ProcessNodeWrite(InternalTreeNodeType * source, OGRDataSource * m_DataSource, OGRGeometryCollection * ogrCollection,
                    OGRLayer * ogrCurrentLayer, OGRSpatialReference * oSRS)
 {
@@ -998,5 +996,3 @@ unsigned int OGRIOHelper<TVectorData>
   return kept;
 }
 } // end namespace otb
-
-#endif
