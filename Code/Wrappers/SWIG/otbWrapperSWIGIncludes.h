@@ -18,22 +18,22 @@
 #ifndef __otbWrapperSWIGIncludes_h
 #define __otbWrapperSWIGIncludes_h
 
-#include "otbWrapperParameter.h"
-#include "otbWrapperParameterGroup.h"
+//#include "otbWrapperParameter.h"
+//#include "otbWrapperParameterGroup.h"
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationRegistry.h"
 
 
-typedef otb::Wrapper::Parameter                        Parameter;
-typedef otb::Wrapper::Parameter::Pointer::SmartPointer Parameter_Pointer;
+//typedef otb::Wrapper::Parameter                        Parameter;
+//typedef otb::Wrapper::Parameter::Pointer::SmartPointer Parameter_Pointer;
 
-typedef otb::Wrapper::ParameterGroup                        ParameterGroup;
-typedef otb::Wrapper::ParameterGroup::Pointer::SmartPointer ParameterGroup_Pointer;
+//typedef otb::Wrapper::ParameterGroup                        ParameterGroup;
+//typedef otb::Wrapper::ParameterGroup::Pointer::SmartPointer ParameterGroup_Pointer;
 
 typedef otb::Wrapper::Application                        Application;
 typedef otb::Wrapper::Application::Pointer::SmartPointer Application_Pointer;
 
-typedef otb::Wrapper::ApplicationRegistry                        ApplicationRegistry;
-typedef otb::Wrapper::ApplicationRegistry::Pointer::SmartPointer ApplicationRegistry_Pointer;
+typedef otb::Wrapper::ApplicationRegistry                        Registry;
+typedef otb::Wrapper::ApplicationRegistry::Pointer::SmartPointer Registry_Pointer;
 
 #endif

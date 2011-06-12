@@ -15,22 +15,42 @@ namespace otb
 namespace Wrapper
 {
 
-enum DefaultValueMode
+  enum DefaultValueMode
   {
     UNKNOWN,
     RELATIVE,
     ABSOLUTE
   };
-
+  
+  typedef enum
+  {
+    ParameterType_Empty,
+    ParameterType_Int,
+    ParameterType_Float,
+    ParameterType_String,
+    ParameterType_Filename,
+    ParameterType_Directory,
+    ParameterType_Choice,
+    ParameterType_InputImage,
+    ParameterType_InputComplexImage,
+    ParameterType_InputVectorData,
+    ParameterType_OutputImage,
+    ParameterType_OutputVectorData,
+    ParameterType_Radius,
+    ParameterType_Group,
+  } ParameterType;
+  
+  typedef enum
+  {
+    UserLevel_Basic,
+    UserLevel_Advanced
+  } UserLevel;
 }
 }
 
-/** \class Parameter
- *  \brief This class represent a parameter for the wrapper framework
- *  This class is a high level class representing a parameter for the
- *  wrapper framework. It should be subclassed to represent different
- *  kinds of parameters 
- */
+
+
+/*
 class Parameter : public itkObject
 {
 public:
@@ -84,6 +104,7 @@ private:
   void operator =(const ParameterGroup&);
 };
 DECLARE_REF_COUNT_CLASS( ParameterGroup )
+*/
 
 class Application: public itkObject
 {
@@ -97,7 +118,22 @@ public:
   void Init();
   void UpdateParameters();
   void Execute();
-  ParameterGroup* GetParameterList();
+  void ExecuteAndWriteOutput();
+  
+//  ParameterGroup* GetParameterList();
+//  Parameter* GetParameterByKey(std::string parameter);
+//  const Parameter* GetParameterByKey(std::string parameter) const;
+  std::list<std::string> GetParametersKeys();
+  
+  void EnableParameter(std::string paramKey);
+  void DisableParameter(std::string paramKey);
+  bool IsParameterEnabled(std::string paramKey) const;
+  bool IsMandatory(std::string paramKey) const;
+  bool HasUserValue(std::string paramKey) const;
+  void ClearValue(std::string paramKey);
+  bool HasValue(std::string paramKey) const;
+  otb::Wrapper::UserLevel GetParameterUserLevel(std::string paramKey) const;
+  otb::Wrapper::ParameterType GetParameterType(std::string paramKey) const;
   
   void SetParameterInt(std::string parameter, int value);
   void SetParameterFloat(std::string parameter, float value);
@@ -110,7 +146,13 @@ public:
 protected:
   Application();
   virtual ~Application();
-
+  
+  void AddChoice(std::string paramKey, std::string paramName);
+  void AddParameter(otb::Wrapper::ParameterType type, std::string paramKey, std::string paramName);
+  void MandatoryOn(std::string paramKey);
+  void MandatoryOff(std::string paramKey);
+  void SetParameterUserLevel(std::string paramKey, otb::Wrapper::UserLevel level);
+  
 private:
   virtual void DoCreateParameters() = 0;
   virtual void DoUpdateParameters() = 0;
@@ -122,18 +164,18 @@ private:
 DECLARE_REF_COUNT_CLASS( Application )
 
 
-class ApplicationRegistry : public itkObject
+class Registry : public itkObject
 {
 public:
   static std::list<std::string> GetAvailableApplications();
   static Application_Pointer CreateApplication(const std::string& name);
 
 protected:
-  ApplicationRegistry();
-  virtual ~ApplicationRegistry();
+  Registry();
+  virtual ~Registry();
 
 private:
-  ApplicationRegistry(const Self&);
+  Registry(const Self&);
   void operator=(const Self&);
 };
 

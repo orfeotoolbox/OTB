@@ -64,7 +64,6 @@ private:
     std::cout << "~Smoothing" << std::endl;
   }
 
-
   void DoCreateParameters()
   {
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");

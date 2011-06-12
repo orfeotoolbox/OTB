@@ -2,14 +2,17 @@
 #  Example on the use of the Smoothing 
 #
 from sys import argv
-import otbApplication
+import otbApplication as otb
 
-print otbApplication.ApplicationRegistry.GetAvailableApplications()
+print otb.Registry.GetAvailableApplications()
 
-app = otbApplication.ApplicationRegistry.CreateApplication("Smoothing")
+app = otb.Registry.CreateApplication("Smoothing")
+print app.GetParametersKeys()
+
 app.SetParameterString("in", argv[1])
 
 for type in ['mean', 'gaussian', 'anidif']:
+  print 'Testing ' + type
   app.SetParameterString("type", type)
   app.SetParameterString("out", argv[2] + type + ".tif")
   app.Execute()
