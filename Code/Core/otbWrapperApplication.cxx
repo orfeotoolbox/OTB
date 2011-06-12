@@ -48,6 +48,13 @@ Application::~Application()
 {
 }
 
+
+std::list<std::string>
+Application::GetParametersKeys()
+{
+  return GetParameterList()->GetParametersKeys();
+}
+
 ParameterGroup* Application::GetParameterList()
 {
   if (!m_ParameterList)

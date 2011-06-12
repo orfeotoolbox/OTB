@@ -59,6 +59,8 @@ public:
 
   unsigned int GetNumberOfParameters();
 
+  std::list<std::string> GetParametersKeys();
+
 protected:
   ParameterGroup();
   virtual ~ParameterGroup();

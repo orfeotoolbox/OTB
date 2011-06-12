@@ -225,12 +225,13 @@ public:
   /* GetParameterInt
    *
    * Can be called for types :
-   * \li ParameterType_Int
-   * \li ParameterType_Float
-   * \li ParameterType_Radius
-   * \li ParameterType_Choice
+   * \li ParameterType_InputVectorData
    */
   VectorDataType* GetParameterVectorData(std::string parameter);
+
+  /* Get the list of all parameters
+   */
+  std::list<std::string> GetParametersKeys();
 
 protected:
   /** Constructor */

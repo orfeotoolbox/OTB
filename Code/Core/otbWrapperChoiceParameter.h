@@ -51,9 +51,6 @@ public:
   /** Add a value to the choice */
   void AddChoice( std::string choicekey, std::string choiceName );
 
-  /** Add parameter to choice */
-  void AddParameterToChoice( std::string choicekey, std::string choiceName , Parameter* param );
-
   /** Get the key of a specific choice value */
   std::string GetChoiceKey( int i );
 
@@ -65,6 +62,8 @@ public:
 
   /** Get the ParameterGroup associated to a choice value */
   ParameterGroup::Pointer GetChoiceParameterGroupByKey( std::string choiceKey );
+
+  std::list<std::string> GetParametersKeys();
 
   /** Get the number of available choice */
   unsigned int GetNbChoices( void );

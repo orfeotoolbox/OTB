@@ -42,12 +42,6 @@ ChoiceParameter::AddChoice( std::string choicekey, std::string choiceName )
   m_ChoiceList.push_back(choice);
 }
 
-void
-ChoiceParameter::AddParameterToChoice( std::string choicekey, std::string choiceName, Parameter* param )
-{
-
-}
-
 std::string
 ChoiceParameter::GetChoiceKey( int i )
 {
@@ -148,6 +142,33 @@ ChoiceParameter::GetAnyValue()
   return boost::any(m_CurrentChoice);
 }
 
+
+/** Return any value */
+std::list<std::string>
+ChoiceParameter::GetParametersKeys()
+{
+  std::cout << "ChoiceParameter::GetParametersKeys()" << std::endl;
+  std::list<std::string> parameters;
+
+  ChoiceList::iterator cit = m_ChoiceList.begin();
+
+  for (cit = m_ChoiceList.begin(); cit != m_ChoiceList.end(); ++cit)
+    {
+    std::cout << "Choice  " << cit->m_Key << std::endl;
+    if (cit->m_AssociatedParameter)
+      {
+      std::list<std::string> subparams = cit->m_AssociatedParameter->GetParametersKeys();
+      for (std::list<std::string>::const_iterator it = subparams.begin();
+           it != subparams.end(); ++it)
+        {
+        std::cout << "ParameterGroup push_back " << cit->m_Key + "." + *it  << std::endl;
+
+        parameters.push_back( cit->m_Key + "."  + *it );
+        }
+      }
+    }
+  return parameters;
+}
 
 }
 }
