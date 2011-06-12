@@ -1,3 +1,5 @@
+INCLUDE_DIRECTORIES(${QT_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(../QtWidget)
 
 SET( SRCS
      otbApplicationLauncherQt.cxx )

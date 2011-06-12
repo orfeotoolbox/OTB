@@ -8,6 +8,10 @@ SET(WrapperQtWidget_SRCS
     otbWrapperQtWidgetTests.cxx
     otbWrapperQtWidgetParameterFactory.cxx)
 
+INCLUDE_DIRECTORIES(${QT_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/Code/Core)
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/Code/Wrappers/QtWidget)
+
 ADD_EXECUTABLE(otbWrapperQtWidgetTests ${WrapperQtWidget_SRCS})
 TARGET_LINK_LIBRARIES(otbWrapperQtWidgetTests
                         OTBIO

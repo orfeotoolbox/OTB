@@ -1,4 +1,4 @@
-
+INCLUDE_DIRECTORIES(${QT_INCLUDE_DIRS})
 FILE(GLOB srcs "*.cxx")
 
 SET( WrappersQtWidget_MOC_HDR

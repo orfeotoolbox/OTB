@@ -6,42 +6,12 @@ IF(COMMAND CMAKE_POLICY)
   CMAKE_POLICY(SET CMP0003 NEW)
 ENDIF(COMMAND CMAKE_POLICY)
 
-# ensure WIN32 definition
-IF(WIN32)
-  ADD_DEFINITIONS(-DWIN32)
-ENDIF(WIN32)
-
 # Path to additional CMake modules
 SET(CMAKE_MODULE_PATH
     ${CMAKE_SOURCE_DIR}/CMake
     ${CMAKE_MODULE_PATH})
 
-# On Visual Studio 8 MS deprecated C. This removes all 1.276E1265 security
-# warnings
-IF(WIN32)
-    IF(NOT CYGWIN)
-      IF(NOT MINGW)
-          ADD_DEFINITIONS(
-            -D_CRT_FAR_MAPPINGS_NO_DEPRECATE
-            -D_CRT_IS_WCTYPE_NO_DEPRECATE
-            -D_CRT_MANAGED_FP_NO_DEPRECATE
-            -D_CRT_NONSTDC_NO_DEPRECATE
-            -D_CRT_SECURE_NO_DEPRECATE
-            -D_CRT_SECURE_NO_DEPRECATE_GLOBALS
-            -D_CRT_SETERRORMODE_BEEP_SLEEP_NO_DEPRECATE
-            -D_CRT_TIME_FUNCTIONS_NO_DEPRECATE
-            -D_CRT_VCCLRIT_NO_DEPRECATE
-            -D_SCL_SECURE_NO_DEPRECATE
-            )
-
-        IF (MSVC)
-          ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS)
-          ADD_DEFINITIONS(-D_CRT_NONSTDC_NO_WARNING)
-        ENDIF(MSVC)
-
-      ENDIF(NOT MINGW)
-    ENDIF(NOT CYGWIN)
-ENDIF(WIN32)
+include(Definitions)
 
 # Link to the Orfeo ToolBox
 FIND_PACKAGE(OTB REQUIRED PATHS /usr/lib/otb )
@@ -53,7 +23,6 @@ IF(OTB_USE_QT)
   FIND_PACKAGE(Qt4 REQUIRED)
   SET(QT_USE_QTXML 1)
   INCLUDE(${QT_USE_FILE})
-  INCLUDE_DIRECTORIES(${QT_INCLUDE_DIRS})
 ENDIF(OTB_USE_QT)
 
 OPTION(OTB_USE_SWIG "Generate Qt wrappers for Applications" ON)
@@ -63,21 +32,7 @@ INCLUDE(${SWIG_USE_FILE})
 FIND_PACKAGE(PythonLibs REQUIRED)
 FIND_PACKAGE(PythonInterp REQUIRED)
 
-#-----------------------------------------------------------------------------
-#Build shared libraries for monteverdi
-#By default, import the option from the OTB configuration
 SET(BUILD_SHARED_LIBS ${OTB_BUILD_SHARED_LIBS})
-
-INCLUDE_DIRECTORIES(
-    ${CMAKE_CURRENT_SOURCE_DIR}/Code
-    ${CMAKE_CURRENT_SOURCE_DIR}/Code/Core
-    ${CMAKE_CURRENT_SOURCE_DIR}/Code/Wrappers
-    ${CMAKE_CURRENT_SOURCE_DIR}/Code/Wrappers/QtWidget
-    ${CMAKE_CURRENT_BINARY_DIR}
-    ${CMAKE_CURRENT_BINARY_DIR}/Code
-    ${CMAKE_CURRENT_BINARY_DIR}/Code/Wrappers
-    ${CMAKE_CURRENT_BINARY_DIR}/Code/Wrappers/QtWidget
-)
 
 ADD_SUBDIRECTORY(Code)
 ADD_SUBDIRECTORY(Example)

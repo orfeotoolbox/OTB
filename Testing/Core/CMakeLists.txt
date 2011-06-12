@@ -76,5 +76,6 @@ otbWrapperParameterTest.cxx
 otbWrapperApplicationRegistryTest.cxx
 )
 
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/Code/Core)
 ADD_EXECUTABLE(otbWrapperTests ${Wrapper_SRCS})
 TARGET_LINK_LIBRARIES(otbWrapperTests OTBIO OTBCommon ITKIO ITKCommon OTBTesting OTBWrapperCore)
