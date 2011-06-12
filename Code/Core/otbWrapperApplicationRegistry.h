@@ -56,7 +56,7 @@ public:
   static std::list<std::string> GetAvailableApplications();
 
   /** Create the appropriate Application */
-  static ApplicationPointer CreateApplication(const std::string& name);
+  static Application::Pointer CreateApplication(const std::string& name);
 
 protected:
   ApplicationRegistry();

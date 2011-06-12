@@ -30,7 +30,7 @@ ApplicationRegistry::~ApplicationRegistry()
 {
 }
 
-ApplicationRegistry::ApplicationPointer
+Application::Pointer
 ApplicationRegistry::CreateApplication(const std::string& name)
 {
   ApplicationPointer appli;
@@ -61,7 +61,6 @@ ApplicationRegistry::CreateApplication(const std::string& name)
       return *k;
       }
     }
-
 
   return appli;
 }
