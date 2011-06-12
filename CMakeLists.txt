@@ -56,7 +56,12 @@ IF(OTB_USE_QT)
   INCLUDE_DIRECTORIES(${QT_INCLUDE_DIRS})
 ENDIF(OTB_USE_QT)
 
+OPTION(OTB_USE_SWIG "Generate Qt wrappers for Applications" ON)
 
+FIND_PACKAGE(SWIG REQUIRED)
+INCLUDE(${SWIG_USE_FILE})
+FIND_PACKAGE(PythonLibs REQUIRED)
+FIND_PACKAGE(PythonInterp REQUIRED)
 
 #-----------------------------------------------------------------------------
 #Build shared libraries for monteverdi
@@ -84,6 +89,10 @@ INCLUDE(${CMAKE_ROOT}/Modules/Dart.cmake)
 MARK_AS_ADVANCED(TCL_TCLSH DART_ROOT)
 IF(BUILD_TESTING)
   ENABLE_TESTING()
+  
+  FIND_PATH(OTB_DATA_ROOT README-OTB-Data PATHS $ENV{OTB_DATA_ROOT} ${OTB_SOURCE_DIR}/../OTB-Data)
+  MARK_AS_ADVANCED(OTB_DATA_ROOT)
+  
   SET(BUILDNAME "${BUILDNAME}" CACHE STRING "Name of build on the dashboard")
   MARK_AS_ADVANCED(BUILDNAME)
   ADD_SUBDIRECTORY(Testing)
