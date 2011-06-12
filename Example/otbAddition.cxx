@@ -40,8 +40,8 @@ public:
 private:
   Addition()
   {
-    this->SetName("Addition");
-    this->SetDescription("This is a simple application which adds two numbers and print the sum on standard output");
+    SetName("Addition");
+    SetDescription("This is a simple application which adds two numbers and print the sum on standard output");
   }
 
   virtual ~Addition()

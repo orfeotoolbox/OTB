@@ -55,8 +55,8 @@ public:
 private:
   Smoothing()
   {
-    this->SetName("Smoothing");
-    this->SetDescription("Apply a smoothing filter to an image");
+    SetName("Smoothing");
+    SetDescription("Apply a smoothing filter to an image");
   }
 
   virtual ~Smoothing()
@@ -86,7 +86,7 @@ private:
     SetParameterFloat("type.anidif.timestep",   0.125);
     SetParameterInt("type.anidif.nbiter",     10);
 
-    SetParameterInt("type", 2);
+    SetParameterString("type", "anidif");
   }
 
   void DoUpdateParameters()
@@ -96,9 +96,9 @@ private:
 
   void DoExecute()
   {
-    VectorImageType::Pointer inImage = this->GetParameterImage("in");
+    VectorImageType::Pointer inImage = GetParameterImage("in");
 
-    switch (this->GetParameterInt("type"))
+    switch ( GetParameterInt("type") )
       {
       case Smoothing_Mean:
         {
@@ -111,10 +111,11 @@ private:
         perBand->SetInput(inImage);
 
         MeanFilterType::InputSizeType radius;
-        radius.Fill( this->GetParameterInt("type.mean.radius") );
+        radius.Fill( GetParameterInt("type.mean.radius") );
         perBand->GetFilter()->SetRadius(radius);
+        perBand->UpdateOutputInformation();
         m_FilterRef = perBand;
-        this->SetParameterOutputImage("out", perBand->GetOutput());
+        SetParameterOutputImage("out", perBand->GetOutput());
         }
         break;
       case Smoothing_Gaussian:
@@ -127,11 +128,12 @@ private:
           = PerBandDiscreteGaussianFilterType::New();
         perBand->SetInput(inImage);
 
-        int radius = this->GetParameterInt("type.gaussian.radius");
+        int radius = GetParameterInt("type.gaussian.radius");
         double variance = static_cast<double>(radius) * radius;
         perBand->GetFilter()->SetVariance(variance);
+        perBand->UpdateOutputInformation();
         m_FilterRef = perBand;
-        this->SetParameterOutputImage("out", perBand->GetOutput());
+        SetParameterOutputImage("out", perBand->GetOutput());
         }
         break;
       case Smoothing_Anisotropic:
@@ -144,15 +146,15 @@ private:
           = PerBandGradientAnisotropicDiffusionFilterType::New();
         perBand->SetInput(inImage);
 
-        int aniDifNbIter = this->GetParameterInt("type.anidif.nbiter");
+        int aniDifNbIter = GetParameterInt("type.anidif.nbiter");
         perBand->GetFilter()->SetNumberOfIterations(static_cast<unsigned int>(aniDifNbIter));
 
-        float aniDifTimeStep = this->GetParameterFloat("type.anidif.timestep");
+        float aniDifTimeStep = GetParameterFloat("type.anidif.timestep");
         perBand->GetFilter()->SetTimeStep(static_cast<double>(aniDifTimeStep));
         // perBand->GetFilter()->SetConductanceParameter()
         perBand->UpdateOutputInformation();
         m_FilterRef = perBand;
-        this->SetParameterOutputImage("out", perBand->GetOutput());
+        SetParameterOutputImage("out", perBand->GetOutput());
         }
         break;
       }
