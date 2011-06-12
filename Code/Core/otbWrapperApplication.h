@@ -26,19 +26,6 @@
 #include "otbWrapperTypes.h"
 #include "otbWrapperParameterGroup.h"
 
-// include all parameters type for easy use when defining the application
-#include "otbWrapperChoiceParameter.h"
-#include "otbWrapperDirectoryParameter.h"
-#include "otbWrapperEmptyParameter.h"
-#include "otbWrapperFilenameParameter.h"
-#include "otbWrapperInputComplexImageParameter.h"
-#include "otbWrapperInputImageParameter.h"
-#include "otbWrapperInputVectorDataParameter.h"
-#include "otbWrapperNumericalParameter.h"
-#include "otbWrapperOutputImageParameter.h"
-#include "otbWrapperOutputVectorDataParameter.h"
-#include "otbWrapperRadiusParameter.h"
-#include "otbWrapperStringParameter.h"
 
 namespace otb
 {
@@ -138,19 +125,106 @@ public:
   /* Get the parameter type from its name */
   ParameterType GetParameterType(std::string paramKey) const;
 
+  /* Set an integer value
+   *
+   * Can be called for types :
+   * \li ParameterType_Int
+   * \li ParameterType_Float
+   * \li ParameterType_Radius
+   * \li ParameterType_Choice
+   */
   void SetParameterInt(std::string parameter, int value);
+
+  /* Set a floating value
+   *
+   * Can be called for types :
+   * \li ParameterType_Float
+   */
   void SetParameterFloat(std::string parameter, float value);
+
+  /* Set a string value
+   *
+   * Can be called for types :
+   * \li ParameterType_String
+   * \li ParameterType_Filename
+   * \li ParameterType_Directory
+   * \li ParameterType_Choice
+   * \li ParameterType_InputImageParameter
+   * \li ParameterType_InputComplexImageParameter
+   * \li ParameterType_InputVectorDataParameter
+   * \li ParameterType_OutputImageParameter
+   * \li ParameterType_OutputVectorDataParameter
+   */
   void SetParameterString(std::string parameter, std::string value);
+
+  /* Set an output image value
+   *
+   * Can be called for types :
+   * \li ParameterType_OutputImage
+   */
   void SetParameterOutputImage(std::string parameter, VectorImageType* value);
+
+  /* Set an output vector data value
+   *
+   * Can be called for types :
+   * \li ParameterType_OutputVectorData
+   */
   void SetParameterOutputVectorData(std::string parameter, VectorDataType* value);
 
+  /* Get an integer parameter value
+   *
+   * Can be called for types :
+   * \li ParameterType_Int
+   * \li ParameterType_Float
+   * \li ParameterType_Radius
+   * \li ParameterType_Choice
+   */
   int GetParameterInt(std::string parameter);
-  float GetParameterFloat(std::string parameter);
-  std::string GetParameterString(std::string parameter);
-  VectorImageType* GetParameterImage(std::string parameter);
-  ComplexVectorImageType* GetParameterComplexImage(std::string parameter);
-  VectorDataType* GetParameterVectorData(std::string parameter);
 
+  /* Get a floating parameter value
+   *
+   * Can be called for types :
+   * \li ParameterType_Float
+   */
+  float GetParameterFloat(std::string parameter);
+
+  /* Get a string parameter value
+   *
+   * Can be called for types :
+   * \li ParameterType_String
+   * \li ParameterType_Filename
+   * \li ParameterType_Directory
+   * \li ParameterType_InputImage
+   * \li ParameterType_InputComplexImage
+   * \li ParameterType_InputVectorData
+   * \li ParameterType_OutputImage
+   * \li ParameterType_OutputVectorData
+   */
+  std::string GetParameterString(std::string parameter);
+
+  /* Get an image value
+   *
+   * Can be called for types :
+   * \li ParameterType_InputImage
+   */
+  VectorImageType* GetParameterImage(std::string parameter);
+
+  /* Get a complex image value
+   *
+   * Can be called for types :
+   * \li ParameterType_InputComplexImage
+   */
+  ComplexVectorImageType* GetParameterComplexImage(std::string parameter);
+
+  /* GetParameterInt
+   *
+   * Can be called for types :
+   * \li ParameterType_Int
+   * \li ParameterType_Float
+   * \li ParameterType_Radius
+   * \li ParameterType_Choice
+   */
+  VectorDataType* GetParameterVectorData(std::string parameter);
 
 protected:
   /** Constructor */
