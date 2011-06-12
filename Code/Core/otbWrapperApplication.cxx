@@ -158,7 +158,11 @@ ParameterType Application::GetParameterType(std::string paramKey) const
   const Parameter* param = GetParameterByKey(paramKey);
   ParameterType type;
 
-  if (dynamic_cast<const IntParameter*>(param))
+  if (dynamic_cast<const ChoiceParameter*>(param))
+    {
+    type = ParameterType_Choice;
+    }
+  else if (dynamic_cast<const IntParameter*>(param))
     {
     type = ParameterType_Int;
     }
@@ -323,6 +327,18 @@ void Application::SetParameterOutputVectorData(std::string parameter, VectorData
     OutputVectorDataParameter* paramDown = dynamic_cast<OutputVectorDataParameter*>(param);
     paramDown->SetValue(value);
     }
+}
+
+std::string Application::GetParameterName(std::string parameter)
+{
+  Parameter* param = GetParameterByKey(parameter);
+  return param->GetName();
+}
+
+std::string Application::GetParameterDescription(std::string parameter)
+{
+  Parameter* param = GetParameterByKey(parameter);
+  return param->GetDescription();
 }
 
 int Application::GetParameterInt(std::string parameter)

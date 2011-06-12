@@ -124,6 +124,8 @@ public:
 //  Parameter* GetParameterByKey(std::string parameter);
 //  const Parameter* GetParameterByKey(std::string parameter) const;
   std::list<std::string> GetParametersKeys();
+  std::string GetParameterName(std::string);
+  std::string GetParameterDescription(std::string);
   
   void EnableParameter(std::string paramKey);
   void DisableParameter(std::string paramKey);

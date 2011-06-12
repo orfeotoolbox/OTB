@@ -101,6 +101,12 @@ public:
    * WARNING: this method may disappear from the API */
   const Parameter* GetParameterByKey(std::string parameter) const;
 
+  /* Returns the description of a parameter */
+  std::string GetParameterName(std::string paramKey);
+
+  /* Returns the description of a parameter */
+  std::string GetParameterDescription(std::string paramKey);
+
   /* Enable the use of an optional parameter. Returns the previous state */
   void EnableParameter(std::string paramKey);
 
