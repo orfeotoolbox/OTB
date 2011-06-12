@@ -96,15 +96,15 @@
  class itkLightObject {
    public:
      static itkLightObject_Pointer New();
-     virtual itkLightObject_Pointer CreateAnother() const;
+//     virtual itkLightObject_Pointer CreateAnother() const;
      virtual void Delete();
      virtual char const * GetNameOfClass() const;
      void Print(std::ostream & os, itkIndent indent = 0) const;
-     static void BreakOnError();
-     virtual void Register() const;
-     virtual void UnRegister() const;
-     virtual int GetReferenceCount() const;
-     virtual void SetReferenceCount(int arg0);
+//     static void BreakOnError();
+//     virtual void Register() const;
+//     virtual void UnRegister() const;
+//     virtual int GetReferenceCount() const;
+//     virtual void SetReferenceCount(int arg0);
    private:
      itkLightObject(itkLightObject const & arg0);
      void operator=(itkLightObject const & arg0);
@@ -122,24 +122,24 @@
      static itkObject_Pointer New();
      virtual itkLightObject_Pointer CreateAnother() const;
      virtual char const * GetNameOfClass() const;
-     virtual void DebugOn() const;
-     virtual void DebugOff() const;
-     bool GetDebug() const;
-     void SetDebug(bool debugFlag) const;
-     virtual unsigned long GetMTime() const;
-     virtual void Modified() const;
-     virtual void Register() const;
-     virtual void UnRegister() const;
-     virtual void SetReferenceCount(int arg0);
-     static void SetGlobalWarningDisplay(bool flag);
-     static bool GetGlobalWarningDisplay();
-     static void GlobalWarningDisplayOn();
-     static void GlobalWarningDisplayOff();
+//     virtual void DebugOn() const;
+//     virtual void DebugOff() const;
+//     bool GetDebug() const;
+//     void SetDebug(bool debugFlag) const;
+//     virtual unsigned long GetMTime() const;
+//     virtual void Modified() const;
+//     virtual void Register() const;
+//     virtual void UnRegister() const;
+//     virtual void SetReferenceCount(int arg0);
+//     static void SetGlobalWarningDisplay(bool flag);
+//     static bool GetGlobalWarningDisplay();
+//     static void GlobalWarningDisplayOn();
+//     static void GlobalWarningDisplayOff();
      unsigned long AddObserver(itkEventObject const & event, itkCommand * arg1);
-     unsigned long AddObserver(itkEventObject const & event, itkCommand * arg1) const;
+//     unsigned long AddObserver(itkEventObject const & event, itkCommand * arg1) const;
      itkCommand * GetCommand(unsigned long tag);
-     void InvokeEvent(itkEventObject const & arg0);
-     void InvokeEvent(itkEventObject const & arg0) const;
+//     void InvokeEvent(itkEventObject const & arg0);
+//     void InvokeEvent(itkEventObject const & arg0) const;
      void RemoveObserver(unsigned long tag);
      void RemoveAllObservers();
      bool HasObserver(itkEventObject const & event) const;
@@ -218,7 +218,7 @@
    public:
      virtual char const * GetNameOfClass() const;
      virtual void Execute(itkObject * caller, itkEventObject const & event) = 0;
-     virtual void Execute(itkObject const * caller, itkEventObject const & event) = 0;
+//     virtual void Execute(itkObject const * caller, itkEventObject const & event) = 0;
    private:
      itkCommand(itkCommand const & arg0);
      void operator=(itkCommand const & arg0);

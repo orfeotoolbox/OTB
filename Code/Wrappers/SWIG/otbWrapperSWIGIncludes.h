@@ -34,6 +34,6 @@ typedef otb::Wrapper::Application                        Application;
 typedef otb::Wrapper::Application::Pointer::SmartPointer Application_Pointer;
 
 typedef otb::Wrapper::ApplicationRegistry                        Registry;
-typedef otb::Wrapper::ApplicationRegistry::Pointer::SmartPointer Registry_Pointer;
+
 
 #endif
