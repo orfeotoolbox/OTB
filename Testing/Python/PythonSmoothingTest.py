@@ -4,7 +4,7 @@
 from sys import argv
 import otbApplication as otb
 
-print otb.Registry.GetAvailableApplications()
+print "Available applications : " + str(otb.Registry.GetAvailableApplications())
 
 app = otb.Registry.CreateApplication("Smoothing")
 print app.GetParametersKeys()
