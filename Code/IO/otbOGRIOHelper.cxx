@@ -163,7 +163,6 @@ OGRIOHelper
 }
 
 
-
 OGRIOHelper
 ::OGRIOHelper()
 {}
