@@ -69,8 +69,11 @@ public:
   /** Get the number of available choice */
   unsigned int GetNbChoices( void );
 
-  /** Set any value */
+  /** Set choice value */
   virtual void SetValue(unsigned int v);
+
+  /** Set choice value by its key */
+  virtual void SetValue(std::string choiceKey);
 
   /** Return any value */
   virtual unsigned int GetValue();

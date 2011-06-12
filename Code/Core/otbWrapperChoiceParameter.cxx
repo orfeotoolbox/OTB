@@ -88,7 +88,6 @@ ChoiceParameter::GetNbChoices( void )
   return m_ChoiceList.size();
 }
 
-/** Set any value */
 void
 ChoiceParameter::SetValue(unsigned int v)
 {
@@ -98,7 +97,26 @@ ChoiceParameter::SetValue(unsigned int v)
   this->Modified();
 }
 
-/** Return any value */
+void
+ChoiceParameter::SetValue(std::string choiceKey)
+{
+  ChoiceList::iterator it = m_ChoiceList.begin();
+
+  unsigned int i = 0;
+  for (it = m_ChoiceList.begin(); it != m_ChoiceList.end(); ++it)
+    {
+    if ( it->m_Key == choiceKey )
+      {
+      m_CurrentChoice = i;
+      this->Modified();
+      return;
+      }
+    ++i;
+    }
+
+  itkExceptionMacro(<< "Cannot find " << choiceKey);
+}
+
 unsigned int
 ChoiceParameter::GetValue()
 {
