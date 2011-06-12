@@ -44,9 +44,6 @@ public:
   /** RTTI support */
   itkTypeMacro(OutputVectorDataParameter,Parameter);
 
-  typedef double CoordinatePrecisionType;
-  typedef double ValuePrecisionType;
-  typedef otb::VectorData<CoordinatePrecisionType, 2, ValuePrecisionType>  VectorDataType;
 
   /** Set the value */
   itkSetObjectMacro(VectorData, VectorDataType);
