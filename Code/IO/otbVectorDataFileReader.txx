@@ -27,6 +27,7 @@
 #include "otbVectorDataFileReader.h"
 #include "itksys/SystemTools.hxx"
 #include "otbVectorDataAdapter.h"
+#include "otbVectorData.h"
 
 namespace otb
 {
@@ -205,12 +206,11 @@ VectorDataFileReader<TOutputVectorData>
     }
 
   m_VectorDataIO->SetFileName(m_FileName.c_str());
-//  m_VectorDataIO->Read(output);
 
   // Tell the VectorDataIO to read the file
   //
-  typedef VectorDataAdapter<TOutputVectorData, TOutputVectorData> AdapterType; //tmp
-  //typedef VectorDataAdapter<VectorData<double, 3>, TOutputVectorData> AdapterType;
+
+  typedef VectorDataAdapter<VectorData<double, 2>, TOutputVectorData> AdapterType;
   typename AdapterType::InputVectorDataType::Pointer input = AdapterType::InputVectorDataType::New();
 
   m_VectorDataIO->Read(input);
