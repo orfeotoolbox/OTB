@@ -62,7 +62,7 @@ public:
   typedef typename InputGISTableType::ConnectionType        ConnectionType;
   typedef typename InputGISTableType::ConnectionPointerType ConnectionPointerType;
 
-  typedef OGRVectorDataIO<OutputVectorDataType> OGRVectorDataIOType;
+  typedef OGRVectorDataIO                       OGRVectorDataIOType;
   typedef typename OGRVectorDataIOType::Pointer OGRVectorDataIOPointerType;
 
   typedef VectorDataFileReader<OutputVectorDataType> VectorDataFileReaderType;

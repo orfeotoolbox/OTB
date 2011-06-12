@@ -73,7 +73,7 @@ public:
   typedef typename OutputGISTableType::ConnectionType InputGISConnectionType;
   typedef typename InputGISConnectionType::Pointer    InputGISConnectionPointerType;
 
-  typedef OGRVectorDataIO<InputVectorDataType>  OGRVectorDataIOType;
+  typedef OGRVectorDataIO                       OGRVectorDataIOType;
   typedef typename OGRVectorDataIOType::Pointer OGRVectorDataIOPointerType;
 
   /** Standard New method. */
