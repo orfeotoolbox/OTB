@@ -259,7 +259,7 @@ KMLVectorDataIO::WalkGeometry(const kmldom::GeometryPtr& geometry, DataNodePoint
 }
 
 
-typename KMLVectorDataIO
+KMLVectorDataIO
 ::DataNodePointerType
 KMLVectorDataIO
 ::ConvertGeometryToPointNode(const kmldom::GeometryPtr& geometry)
@@ -274,14 +274,14 @@ KMLVectorDataIO
 
   PointType otbPoint;
   otbPoint.Fill(0);
-  otbPoint[0] = static_cast<typename DataNodeType::PrecisionType>(pt->get_coordinates()->get_coordinates_array_at(
+  otbPoint[0] = static_cast<DataNodeType::PrecisionType>(pt->get_coordinates()->get_coordinates_array_at(
                                                                     0).get_longitude());
-  otbPoint[1] = static_cast<typename DataNodeType::PrecisionType>(pt->get_coordinates()->get_coordinates_array_at(
+  otbPoint[1] = static_cast<DataNodeType::PrecisionType>(pt->get_coordinates()->get_coordinates_array_at(
                                                                     0).get_latitude());
 
   if (DataNodeType::Dimension > 2)
     {
-    otbPoint[2] = static_cast<typename DataNodeType::PrecisionType>(pt->get_coordinates()->get_coordinates_array_at(
+    otbPoint[2] = static_cast<DataNodeType::PrecisionType>(pt->get_coordinates()->get_coordinates_array_at(
                                                                       0).get_altitude());
     }
 
@@ -291,7 +291,7 @@ KMLVectorDataIO
 }
 
 
-typename KMLVectorDataIO
+KMLVectorDataIO
 ::DataNodePointerType
 KMLVectorDataIO
 ::ConvertGeometryToLineStringNode(const kmldom::GeometryPtr& geometry)
@@ -309,7 +309,7 @@ KMLVectorDataIO
   LinePointerType line = LineType::New();
   for (int i = 0; i < array_size; ++i)
     {
-    typename LineType::VertexType vertex;
+    LineType::VertexType vertex;
     vertex[0] = coords->get_coordinates_array_at(i).get_longitude();
     vertex[1] = coords->get_coordinates_array_at(i).get_latitude();
 
@@ -327,7 +327,7 @@ KMLVectorDataIO
 }
 
 
-typename KMLVectorDataIO
+KMLVectorDataIO
 ::DataNodePointerType
 KMLVectorDataIO
 ::ConvertGeometryToLinearRingNode(const kmldom::GeometryPtr& geometry)
@@ -345,7 +345,7 @@ KMLVectorDataIO
   LinePointerType line = LineType::New();
   for (int i = 0; i < array_size; ++i)
     {
-    typename LineType::VertexType vertex;
+    LineType::VertexType vertex;
     vertex[0] = coords->get_coordinates_array_at(i).get_longitude();
     vertex[1] = coords->get_coordinates_array_at(i).get_latitude();
 
@@ -363,7 +363,7 @@ KMLVectorDataIO
 }
 
 
-typename KMLVectorDataIO
+KMLVectorDataIO
 ::DataNodePointerType
 KMLVectorDataIO
 ::ConvertGeometryToPolygonNode(const kmldom::GeometryPtr& geometry)
@@ -391,7 +391,7 @@ KMLVectorDataIO
 
       for (int i = 0; i < array_size; ++i)
         {
-        typename PolygonType::VertexType vertex;
+        PolygonType::VertexType vertex;
         vertex[0] = coords->get_coordinates_array_at(i).get_longitude();
         vertex[1] = coords->get_coordinates_array_at(i).get_latitude();
 
@@ -417,7 +417,7 @@ KMLVectorDataIO
 
       for (int pIndex = 0; pIndex < array_size; ++pIndex)
         {
-        typename PolygonType::VertexType vertex;
+        PolygonType::VertexType vertex;
         vertex[0] = coords->get_coordinates_array_at(pIndex).get_longitude();
         vertex[1] = coords->get_coordinates_array_at(pIndex).get_latitude();
 
@@ -598,7 +598,7 @@ void KMLVectorDataIO::ProcessNodeWrite(InternalTreeNodeType * source,
 //   std::cout << "Found " <<  children.size() << " children" << std::endl;
 
   // For each child
-  for (typename ChildrenListType::iterator it = children.begin(); it != children.end(); ++it)
+  for (ChildrenListType::iterator it = children.begin(); it != children.end(); ++it)
     {
     DataNodePointerType dataNode = (*it)->Get();
 //     std::cout << "Processing " << dataNode->GetNodeType() << " with Id: " << dataNode->GetNodeId() << std::endl;
@@ -681,7 +681,7 @@ void KMLVectorDataIO::ProcessNodeWrite(InternalTreeNodeType * source,
         kmldom::CoordinatesPtr coordinates = factory->CreateCoordinates();
         kmldom::LineStringPtr  line = factory->CreateLineString();
 
-        typename VertexListType::ConstIterator vIt = vertexList->Begin();
+        VertexListType::ConstIterator vIt = vertexList->Begin();
 
         while (vIt != vertexList->End())
           {
@@ -733,7 +733,7 @@ void KMLVectorDataIO::ProcessNodeWrite(InternalTreeNodeType * source,
 
         VertexListConstPointerType vertexList = dataNode->GetPolygonExteriorRing()->GetVertexList();
 
-        typename VertexListType::ConstIterator vIt = vertexList->Begin();
+        VertexListType::ConstIterator vIt = vertexList->Begin();
 
         if (vIt == vertexList->End())
           {
@@ -773,7 +773,7 @@ void KMLVectorDataIO::ProcessNodeWrite(InternalTreeNodeType * source,
         polygon->set_outerboundaryis(outerboundaryis);
 
         // Retrieving internal rings as well
-        for (typename PolygonListType::Iterator pIt = dataNode->GetPolygonInteriorRings()->Begin();
+        for (PolygonListType::Iterator pIt = dataNode->GetPolygonInteriorRings()->Begin();
              pIt != dataNode->GetPolygonInteriorRings()->End(); ++pIt)
           {
 

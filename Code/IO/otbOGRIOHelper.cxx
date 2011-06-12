@@ -37,8 +37,8 @@ OGRIOHelper
 
   PointType otbPoint;
   otbPoint.Fill(0);
-  otbPoint[0] = static_cast<typename DataNodeType::PrecisionType>(ogrPoint->getX());
-  otbPoint[1] = static_cast<typename DataNodeType::PrecisionType>(ogrPoint->getY());
+  otbPoint[0] = static_cast<DataNodeType::PrecisionType>(ogrPoint->getX());
+  otbPoint[1] = static_cast<DataNodeType::PrecisionType>(ogrPoint->getY());
 
   if (DataNodeType::Dimension > 2)
     {
@@ -46,7 +46,7 @@ OGRIOHelper
       {
       itkGenericExceptionMacro(<< "OTB vector data can't contain the OGR information (2D instead of 2.5D)");
       }
-    otbPoint[2] = static_cast<typename DataNodeType::PrecisionType>(ogrPoint->getZ());
+    otbPoint[2] = static_cast<DataNodeType::PrecisionType>(ogrPoint->getZ());
     }
 
   node->SetPoint(otbPoint);
@@ -73,7 +73,7 @@ OGRIOHelper
 
     ogrLine->getPoint(pIndex, ogrTmpPoint);
 
-    typename LineType::VertexType vertex;
+    LineType::VertexType vertex;
 
     vertex[0] = ogrTmpPoint->getX();
     vertex[1] = ogrTmpPoint->getY();
@@ -114,7 +114,7 @@ OGRIOHelper
   for (int pIndex = 0; pIndex < ogrRing->getNumPoints(); ++pIndex)
     {
     ogrRing->getPoint(pIndex, ogrTmpPoint);
-    typename PolygonType::VertexType vertex;
+    PolygonType::VertexType vertex;
     vertex[0] = ogrTmpPoint->getX();
     vertex[1] = ogrTmpPoint->getY();
 
@@ -139,7 +139,7 @@ OGRIOHelper
     for (int pIndex = 0; pIndex < ogrRing->getNumPoints(); ++pIndex)
       {
       ogrRing->getPoint(pIndex, ogrTmpPoint);
-      typename PolygonType::VertexType vertex;
+      PolygonType::VertexType vertex;
 
       vertex[0] = ogrTmpPoint->getX();
       vertex[1] = ogrTmpPoint->getY();
@@ -190,7 +190,7 @@ void OGRIOHelper
     chrono.Start();
 
     // A pointer to the current multi-geometry
-    typename InternalTreeNodeType::Pointer multiPtr;
+    InternalTreeNodeType::Pointer multiPtr;
 
     /** Temporary geometry container */
     OGRGeometry * geometry = feature->GetGeometryRef();
@@ -216,7 +216,7 @@ void OGRIOHelper
       {
       case wkbPoint:
       {
-      typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+      InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
       DataNodePointerType dataNode = DataNodeType::New();
       ConvertGeometryToPointNode(geometry, dataNode);
       newNode->Set(dataNode);
@@ -230,7 +230,7 @@ void OGRIOHelper
       }
       case wkbPoint25D:
       {
-      typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+      InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
       DataNodePointerType dataNode = DataNodeType::New();
       ConvertGeometryToPointNode(geometry, dataNode);
       newNode->Set(dataNode);
@@ -244,7 +244,7 @@ void OGRIOHelper
       }
       case wkbLineString:
       {
-      typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+      InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
       DataNodePointerType dataNode = DataNodeType::New();
       ConvertGeometryToLineNode(geometry, dataNode);
       newNode->Set(dataNode);
@@ -258,7 +258,7 @@ void OGRIOHelper
       }
       case wkbLineString25D:
       {
-      typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+      InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
       DataNodePointerType dataNode = DataNodeType::New();
       ConvertGeometryToLineNode(geometry, dataNode);
       newNode->Set(dataNode);
@@ -272,7 +272,7 @@ void OGRIOHelper
       }
       case wkbPolygon:
       {
-      typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+      InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
       DataNodePointerType dataNode = DataNodeType::New();
       ConvertGeometryToPolygonNode(geometry, dataNode);
       newNode->Set(dataNode);
@@ -286,7 +286,7 @@ void OGRIOHelper
       }
       case wkbPolygon25D:
       {
-      typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+      InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
       DataNodePointerType dataNode = DataNodeType::New();
       ConvertGeometryToPolygonNode(geometry, dataNode);
       newNode->Set(dataNode);
@@ -311,7 +311,7 @@ void OGRIOHelper
 
       for (int geoIndex = 0; geoIndex < ogrMulti->getNumGeometries(); ++geoIndex)
         {
-        typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+        InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
         DataNodePointerType dataNode = DataNodeType::New();
         ConvertGeometryToPointNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
         newNode->Set(dataNode);
@@ -336,7 +336,7 @@ void OGRIOHelper
 
       for (int geoIndex = 0; geoIndex < ogrMulti->getNumGeometries(); ++geoIndex)
         {
-        typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+        InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
         DataNodePointerType dataNode = DataNodeType::New();
         ConvertGeometryToPointNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
         newNode->Set(dataNode);
@@ -361,7 +361,7 @@ void OGRIOHelper
 
       for (int geoIndex = 0; geoIndex < ogrMulti->getNumGeometries(); ++geoIndex)
         {
-        typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+        InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
         DataNodePointerType dataNode = DataNodeType::New();
         ConvertGeometryToLineNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
         newNode->Set(dataNode);
@@ -386,7 +386,7 @@ void OGRIOHelper
 
       for (int geoIndex = 0; geoIndex < ogrMulti->getNumGeometries(); ++geoIndex)
         {
-        typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+        InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
         DataNodePointerType dataNode = DataNodeType::New();
         ConvertGeometryToLineNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
         newNode->Set(dataNode);
@@ -411,7 +411,7 @@ void OGRIOHelper
 
       for (int geoIndex = 0; geoIndex < ogrMulti->getNumGeometries(); ++geoIndex)
         {
-        typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+        InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
         DataNodePointerType dataNode = DataNodeType::New();
         ConvertGeometryToPolygonNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
         newNode->Set(dataNode);
@@ -436,7 +436,7 @@ void OGRIOHelper
 
       for (int geoIndex = 0; geoIndex < ogrMulti->getNumGeometries(); ++geoIndex)
         {
-        typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+        InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
         DataNodePointerType dataNode = DataNodeType::New();
         ConvertGeometryToPolygonNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
         newNode->Set(dataNode);
@@ -465,7 +465,7 @@ void OGRIOHelper
           {
           case wkbPoint:
           {
-          typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+          InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
           DataNodePointerType dataNode = DataNodeType::New();
           ConvertGeometryToPointNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
           newNode->Set(dataNode);
@@ -478,7 +478,7 @@ void OGRIOHelper
           }
           case wkbPoint25D:
           {
-          typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+          InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
           DataNodePointerType dataNode = DataNodeType::New();
           ConvertGeometryToPointNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
           newNode->Set(dataNode);
@@ -491,7 +491,7 @@ void OGRIOHelper
           }
           case wkbLineString:
           {
-          typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+          InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
           DataNodePointerType dataNode = DataNodeType::New();
           ConvertGeometryToLineNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
           newNode->Set(dataNode);
@@ -504,7 +504,7 @@ void OGRIOHelper
           }
           case wkbLineString25D:
           {
-          typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+          InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
           DataNodePointerType dataNode = DataNodeType::New();
           ConvertGeometryToLineNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
           newNode->Set(dataNode);
@@ -517,7 +517,7 @@ void OGRIOHelper
           }
           case wkbPolygon:
           {
-          typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+          InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
           DataNodePointerType dataNode = DataNodeType::New();
           ConvertGeometryToPolygonNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
           newNode->Set(dataNode);
@@ -530,7 +530,7 @@ void OGRIOHelper
           }
           case wkbPolygon25D:
           {
-          typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+          InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
           DataNodePointerType dataNode = DataNodeType::New();
           ConvertGeometryToPolygonNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
           newNode->Set(dataNode);
@@ -568,7 +568,7 @@ void OGRIOHelper
           {
           case wkbPoint:
           {
-          typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+          InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
           DataNodePointerType dataNode = DataNodeType::New();
           ConvertGeometryToPointNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
           multiPtr->AddChild(newNode);
@@ -576,7 +576,7 @@ void OGRIOHelper
           }
           case wkbPoint25D:
           {
-          typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+          InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
           DataNodePointerType dataNode = DataNodeType::New();
           ConvertGeometryToPointNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
           multiPtr->AddChild(newNode);
@@ -584,7 +584,7 @@ void OGRIOHelper
           }
           case wkbLineString:
           {
-          typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+          InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
           DataNodePointerType dataNode = DataNodeType::New();
           ConvertGeometryToLineNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
           multiPtr->AddChild(newNode);
@@ -592,7 +592,7 @@ void OGRIOHelper
           }
           case wkbLineString25D:
           {
-          typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+          InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
           DataNodePointerType dataNode = DataNodeType::New();
           ConvertGeometryToLineNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
           multiPtr->AddChild(newNode);
@@ -600,7 +600,7 @@ void OGRIOHelper
           }
           case wkbPolygon:
           {
-          typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+          InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
           DataNodePointerType dataNode = DataNodeType::New();
           ConvertGeometryToPolygonNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
           multiPtr->AddChild(newNode);
@@ -608,7 +608,7 @@ void OGRIOHelper
           }
           case wkbPolygon25D:
           {
-          typename InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
+          InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
           DataNodePointerType dataNode = DataNodeType::New();
           ConvertGeometryToPolygonNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
           multiPtr->AddChild(newNode);
@@ -647,11 +647,11 @@ unsigned int OGRIOHelper
 {
   unsigned int kept = 0;
   // Get the children list from the input node
-  typedef typename InternalTreeNodeType::ChildrenListType ChildrenListType;
+  typedef InternalTreeNodeType::ChildrenListType ChildrenListType;
   ChildrenListType children = source->GetChildrenList();
 
   // For each child
-  for (typename ChildrenListType::iterator it = children.begin(); it != children.end(); ++it)
+  for (ChildrenListType::iterator it = children.begin(); it != children.end(); ++it)
     {
     DataNodePointerType dataNode = (*it)->Get();
     //otbMsgDevMacro(<< "Type of node " << dataNode->GetNodeType() << " id " << dataNode->GetNodeId());
@@ -762,7 +762,7 @@ unsigned int OGRIOHelper
       OGRLineString              ogrLine;
       VertexListConstPointerType vertexList = dataNode->GetLine()->GetVertexList();
 
-      typename VertexListType::ConstIterator vIt = vertexList->Begin();
+      VertexListType::ConstIterator vIt = vertexList->Begin();
 
       while (vIt != vertexList->End())
         {
@@ -818,7 +818,7 @@ unsigned int OGRIOHelper
       OGRLinearRing *            ogrExternalRing = (OGRLinearRing *) OGRGeometryFactory::createGeometry(wkbLinearRing);
       VertexListConstPointerType vertexList = dataNode->GetPolygonExteriorRing()->GetVertexList();
 
-      typename VertexListType::ConstIterator vIt = vertexList->Begin();
+      VertexListType::ConstIterator vIt = vertexList->Begin();
 
       while (vIt != vertexList->End())
         {
@@ -839,7 +839,7 @@ unsigned int OGRIOHelper
       OGRGeometryFactory::destroyGeometry(ogrExternalRing);
 
       // Retrieving internal rings as well
-      for (typename PolygonListType::Iterator pIt = dataNode->GetPolygonInteriorRings()->Begin();
+      for (PolygonListType::Iterator pIt = dataNode->GetPolygonInteriorRings()->Begin();
            pIt != dataNode->GetPolygonInteriorRings()->End(); ++pIt)
         {
         OGRLinearRing * ogrInternalRing = (OGRLinearRing *) OGRGeometryFactory::createGeometry(wkbLinearRing);

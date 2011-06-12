@@ -47,8 +47,8 @@ public:
   /** Template parameters typedefs */
   /** Data typedef */
   typedef VectorData<>                                    VectorDataType;
-  typedef typename VectorDataType::DataTreeType           DataTreeType;
-  typedef typename DataTreeType::TreeNodeType             InternalTreeNodeType;
+  typedef VectorDataType::DataTreeType           DataTreeType;
+  typedef DataTreeType::TreeNodeType             InternalTreeNodeType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -74,20 +74,20 @@ private:
   OGRIOHelper(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  typedef typename VectorDataType::DataNodeType           DataNodeType;
-  typedef typename DataNodeType::Pointer                  DataNodePointerType;
+  typedef VectorDataType::DataNodeType           DataNodeType;
+  typedef DataNodeType::Pointer                  DataNodePointerType;
 
-  typedef typename DataNodeType::PointType                PointType;
+  typedef DataNodeType::PointType                PointType;
 
-  typedef typename DataNodeType::LineType                 LineType;
-  typedef typename LineType::Pointer                      LinePointerType;
-  typedef typename LineType::VertexListType               VertexListType;
-  typedef typename VertexListType::ConstPointer           VertexListConstPointerType;
+  typedef DataNodeType::LineType                 LineType;
+  typedef LineType::Pointer                      LinePointerType;
+  typedef LineType::VertexListType               VertexListType;
+  typedef VertexListType::ConstPointer           VertexListConstPointerType;
 
-  typedef typename DataNodeType::PolygonType              PolygonType;
-  typedef typename PolygonType::Pointer                   PolygonPointerType;
-  typedef typename DataNodeType::PolygonListType          PolygonListType;
-  typedef typename PolygonListType::Pointer               PolygonListPointerType;
+  typedef DataNodeType::PolygonType              PolygonType;
+  typedef PolygonType::Pointer                   PolygonPointerType;
+  typedef DataNodeType::PolygonListType          PolygonListType;
+  typedef PolygonListType::Pointer               PolygonListPointerType;
 
   void ConvertGeometryToPointNode(const OGRGeometry * ogrGeometry, DataNodePointerType node) const;
 

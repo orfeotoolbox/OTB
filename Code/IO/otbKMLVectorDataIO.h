@@ -56,29 +56,29 @@ public:
   itkTypeMacro(KMLVectorDataIO, VectorDataIOBase);
 
   /** Byte order typedef */
-  typedef typename Superclass::ByteOrder ByteOrder;
+  typedef Superclass::ByteOrder ByteOrder;
 
   /** Data typedef */
   typedef VectorData<double, 2>                           VectorDataType;
-  typedef typename VectorDataType::DataTreeType           DataTreeType;
-  typedef typename DataTreeType::TreeNodeType             InternalTreeNodeType;
-  typedef typename InternalTreeNodeType::ChildrenListType ChildrenListType;
-  typedef typename DataTreeType::Pointer                  DataTreePointerType;
-  typedef typename DataTreeType::ConstPointer             DataTreeConstPointerType;
-  typedef typename VectorDataType::DataNodeType           DataNodeType;
-  typedef typename DataNodeType::Pointer                  DataNodePointerType;
-  typedef typename DataNodeType::PointType                PointType;
-  typedef typename DataNodeType::LineType                 LineType;
-  typedef typename LineType::VertexListType               VertexListType;
-  typedef typename VertexListType::ConstPointer           VertexListConstPointerType;
-  typedef typename LineType::Pointer                      LinePointerType;
-  typedef typename LineType::VertexType                   VertexType;
-  typedef typename DataNodeType::PolygonType              PolygonType;
-  typedef typename PolygonType::Pointer                   PolygonPointerType;
-  typedef typename DataNodeType::PolygonListType          PolygonListType;
-  typedef typename PolygonListType::Pointer               PolygonListPointerType;
-  typedef typename VectorDataType::Pointer                VectorDataPointerType;
-  typedef typename VectorDataType::ConstPointer           VectorDataConstPointerType;
+  typedef VectorDataType::DataTreeType           DataTreeType;
+  typedef DataTreeType::TreeNodeType             InternalTreeNodeType;
+  typedef InternalTreeNodeType::ChildrenListType ChildrenListType;
+  typedef DataTreeType::Pointer                  DataTreePointerType;
+  typedef DataTreeType::ConstPointer             DataTreeConstPointerType;
+  typedef VectorDataType::DataNodeType           DataNodeType;
+  typedef DataNodeType::Pointer                  DataNodePointerType;
+  typedef DataNodeType::PointType                PointType;
+  typedef DataNodeType::LineType                 LineType;
+  typedef LineType::VertexListType               VertexListType;
+  typedef VertexListType::ConstPointer           VertexListConstPointerType;
+  typedef LineType::Pointer                      LinePointerType;
+  typedef LineType::VertexType                   VertexType;
+  typedef DataNodeType::PolygonType              PolygonType;
+  typedef PolygonType::Pointer                   PolygonPointerType;
+  typedef DataNodeType::PolygonListType          PolygonListType;
+  typedef PolygonListType::Pointer               PolygonListPointerType;
+  typedef VectorDataType::Pointer                VectorDataPointerType;
+  typedef VectorDataType::ConstPointer           VectorDataConstPointerType;
 
   /*-------- This part of the interface deals with reading data. ------ */
 

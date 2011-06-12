@@ -168,7 +168,7 @@ OGRVectorDataIO
 
     /** IO class helper to convert ogr layer*/
    
-    typename OGRIOHelper::Pointer OGRConversion = OGRIOHelper::New();
+    OGRIOHelper::Pointer OGRConversion = OGRIOHelper::New();
     OGRConversion->ConvertOGRLayerToDataTreeNode(layer, documentPtr);
 
     } // end For each layer
@@ -277,7 +277,7 @@ void OGRVectorDataIO::Write(const itk::DataObject* datag, char ** papszOptions)
   InternalTreeNodeType * inputRoot = const_cast<InternalTreeNodeType *>(tree->GetRoot());
 
   //Refactoring SHPIO Manuel
-  typename OGRIOHelper::Pointer IOConversion = OGRIOHelper::New();
+  OGRIOHelper::Pointer IOConversion = OGRIOHelper::New();
   layerKept = IOConversion->ProcessNodeWrite(inputRoot, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
 
   OGRDataSource::DestroyDataSource(m_DataSource);

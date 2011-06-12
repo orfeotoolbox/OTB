@@ -26,7 +26,7 @@
 namespace otb
 {
 
-typename VectorDataIOFactory
+VectorDataIOFactory
 ::VectorDataIOBasePointerType
 VectorDataIOFactory
 ::CreateVectorDataIO(const char* path, FileModeType mode)
@@ -52,7 +52,7 @@ VectorDataIOFactory
                                << (*i)->GetNameOfClass());
       }
     }
-  for (typename std::list<VectorDataIOBasePointerType>::iterator k = possibleVectorDataIO.begin();
+  for (std::list<VectorDataIOBasePointerType>::iterator k = possibleVectorDataIO.begin();
        k != possibleVectorDataIO.end(); ++k)
     {
     if (mode == ReadMode)

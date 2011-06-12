@@ -47,7 +47,7 @@ public:
   /** Register one factory of this type  */
   static void RegisterOneFactory(void)
   {
-    typename OGRVectorDataIOFactory::Pointer OGRFactory = OGRVectorDataIOFactory::New();
+    OGRVectorDataIOFactory::Pointer OGRFactory = OGRVectorDataIOFactory::New();
     itk::ObjectFactoryBase::RegisterFactory(OGRFactory);
   }
 

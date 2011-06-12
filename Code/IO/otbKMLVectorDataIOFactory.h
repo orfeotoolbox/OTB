@@ -47,7 +47,7 @@ public:
   /** Register one factory of this type  */
   static void RegisterOneFactory(void)
   {
-    typename KMLVectorDataIOFactory::Pointer KMLFactory = KMLVectorDataIOFactory::New();
+    KMLVectorDataIOFactory::Pointer KMLFactory = KMLVectorDataIOFactory::New();
     itk::ObjectFactoryBase::RegisterFactory(KMLFactory);
   }
 

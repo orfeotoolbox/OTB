@@ -35,8 +35,8 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef otb::VectorDataIOBase                  VectorDataIOBaseType;
-  typedef typename VectorDataIOBaseType::Pointer VectorDataIOBasePointerType;
+  typedef VectorDataIOBase              VectorDataIOBaseType;
+  typedef VectorDataIOBaseType::Pointer VectorDataIOBasePointerType;
 
   /** Class Methods used to interface with the registered factories */
 
@@ -44,7 +44,7 @@ public:
   itkTypeMacro(VectorDataIOFactory, Object);
 
   /** Convenient typedefs. */
-  typedef typename VectorDataIOBase::Pointer VectorDataIOBasePointer;
+  typedef VectorDataIOBase::Pointer VectorDataIOBasePointer;
 
   /** Mode in which the files is intended to be used */
   typedef enum { ReadMode, WriteMode } FileModeType;
