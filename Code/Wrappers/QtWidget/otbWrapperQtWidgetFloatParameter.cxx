@@ -35,8 +35,23 @@ QtWidgetFloatParameter::~QtWidgetFloatParameter()
 void QtWidgetFloatParameter::DoUpdateGUI()
 {
   bool signalsBlocked = m_QDoubleSpinBox->blockSignals( true );
-  m_QDoubleSpinBox->setValue(m_FloatParam->GetValue());
+
+  if (m_FloatParam->HasValue())
+    {
+    m_QDoubleSpinBox->setValue(m_FloatParam->GetValue());
+    }
   m_QDoubleSpinBox->blockSignals( signalsBlocked );
+
+  QFont font = m_QDoubleSpinBox->font();
+  if (m_FloatParam->HasUserValue())
+    {
+    font.setBold(true);
+    }
+  else
+    {
+    font.setBold(false);
+    }
+  m_QDoubleSpinBox->setFont(font);
 }
 
 void QtWidgetFloatParameter::DoCreateWidget()
@@ -63,6 +78,7 @@ void QtWidgetFloatParameter::DoCreateWidget()
 void QtWidgetFloatParameter::SetValue(double value)
 {
   m_FloatParam->SetValue( static_cast<float>(value) );
+  m_FloatParam->SetUserValue(true);
 }
 
 }
