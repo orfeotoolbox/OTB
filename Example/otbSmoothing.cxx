@@ -17,15 +17,12 @@
  =========================================================================*/
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
-#include "otbWrapperNumericalParameter.h"
 
 #include "itkMeanImageFilter.h"
 #include "itkDiscreteGaussianImageFilter.h"
 #include "itkGradientAnisotropicDiffusionImageFilter.h"
 //#include "itkCurvatureAnisotropicDiffusionImageFilter.h"
 #include "otbPerBandVectorImageFilter.h"
-
-#include "itkVersion.h"
 
 namespace otb
 {
@@ -53,9 +50,9 @@ public:
   /** Standard macro */
   itkNewMacro(Self);
 
-  itkTypeMacro(Self, otb::Application);
+  itkTypeMacro(Smoothing, otb::Application);
 
-protected:
+private:
   Smoothing()
   {
     this->SetName("Smoothing");
@@ -66,6 +63,7 @@ protected:
   {
     std::cout << "~Smoothing" << std::endl;
   }
+
 
   void DoCreateParameters()
   {
@@ -159,7 +157,7 @@ protected:
         break;
       }
   }
-private:
+
   itk::LightObject::Pointer m_FilterRef;
 };
 

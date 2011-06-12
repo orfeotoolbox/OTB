@@ -17,7 +17,6 @@
  =========================================================================*/
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
-#include "otbWrapperNumericalParameter.h"
 
 namespace otb
 {
@@ -36,9 +35,9 @@ public:
   /** Standard macro */
   itkNewMacro(Self);
 
-  itkTypeMacro(Self, otb::Application);
+  itkTypeMacro(Addition, otb::Application);
 
-protected:
+private:
   Addition()
   {
     this->SetName("Addition");
@@ -49,7 +48,6 @@ protected:
   {
   }
 
-private:
   void DoCreateParameters()
   {
     std::cout << "Addition::DoCreateParameters" << std::endl;
@@ -61,7 +59,6 @@ private:
   {
     std::cout << "Addition::DoUpdateParameters" << std::endl;
   }
-
 
   void DoExecute()
   {
