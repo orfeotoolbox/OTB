@@ -100,13 +100,16 @@ private:
 } //end namespace otb
 
 
-#define OTB_APPLICATION_REGISTER( ApplicationType )                                    \
+#define OTB_APPLICATION_EXPORT( ApplicationType )                                    \
   typedef otb::Wrapper::ApplicationFactory<ApplicationType> ApplicationFactoryType;    \
   static ApplicationFactoryType::Pointer staticFactory;                                \
-  itk::ObjectFactoryBase* itkLoad()                                                    \
+  extern "C"                                                                           \
   {                                                                                    \
-    staticFactory = ApplicationFactoryType::New();                                     \
-    return staticFactory;                                                              \
+    itk::ObjectFactoryBase* itkLoad()                                                  \
+    {                                                                                  \
+      staticFactory = ApplicationFactoryType::New();                                   \
+      return staticFactory;                                                            \
+    }                                                                                  \
   }
 
 

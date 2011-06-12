@@ -4,9 +4,10 @@ FIND_PROGRAM(OTB_TEST_DRIVER otbTestDriver PATHS ${OTB_DIR}/bin ${OTB_DIR}/../..
 
 SET(TEST_DRIVER "${OTB_TEST_DRIVER}"
     --add-before-env PYTHONPATH        "${CMAKE_BINARY_DIR}/Code/Wrappers/SWIG" 
-    --add-before-env ITK_AUTOLOAD_PATH "${CMAKE_BINARY_DIR}/Example/Smoothing"
+    --add-before-env ITK_AUTOLOAD_PATH "${CMAKE_BINARY_DIR}/Example"
 )
-SET(TEMP ${OTBWrapper_BINARY_DIR}/Temporary)
+SET(TEMP ${CMAKE_BINARY_DIR}/Testing/Temporary)
+FILE(MAKE_DIRECTORY ${TEMP})
 
 ADD_TEST( NAME PythonTest1
           COMMAND ${TEST_DRIVER} Execute

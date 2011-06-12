@@ -168,5 +168,5 @@ private:
 }
 }
 
-OTB_APPLICATION_REGISTER(otb::Wrapper::Smoothing)
+OTB_APPLICATION_EXPORT(otb::Wrapper::Smoothing)
 

@@ -55,8 +55,8 @@ ADD_TEST(owTuApplication ${OTB_WRAPPER_TESTS}
   )
 
 # Application class test
-ADD_TEST(owTvApplicationFactory ${OTB_WRAPPER_TESTS}
-    otbWrapperApplicationFactory
+ADD_TEST(owTvApplicationRegistry ${OTB_WRAPPER_TESTS}
+    otbWrapperApplicationRegistry
   )
 
 # ----------------Source files CXX -----------------------------------

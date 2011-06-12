@@ -72,4 +72,4 @@ private:
 }
 }
 
-OTB_APPLICATION_REGISTER(otb::Wrapper::Addition)
+OTB_APPLICATION_EXPORT(otb::Wrapper::Addition)
