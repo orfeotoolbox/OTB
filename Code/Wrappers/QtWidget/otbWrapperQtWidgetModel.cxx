@@ -16,6 +16,7 @@
 
 =========================================================================*/
 #include "otbWrapperQtWidgetModel.h"
+#include "otbWrapperOutputImageParameter.h"
 #include "itkImageFileWriter.h"
 
 namespace otb
@@ -48,11 +49,12 @@ void QtWidgetModel::Execute()
   for (unsigned int i = 0; i < params->GetNumberOfParameters(); ++i)
     {
     Parameter* p = params->GetParameterByIndex( i );
+
     OutputImageParameter* pAsOutputImage = dynamic_cast<OutputImageParameter*>(p);
     if ( pAsOutputImage != 0 )
       {
-      OutputImageParameter::VectorImageType* image = pAsOutputImage->GetValue();
-      typedef itk::ImageFileWriter<OutputImageParameter::VectorImageType> WriterType;
+      VectorImageType* image = pAsOutputImage->GetValue();
+      typedef itk::ImageFileWriter<VectorImageType> WriterType;
 
       WriterType::Pointer writer = WriterType::New();
       writer->SetInput(image);
