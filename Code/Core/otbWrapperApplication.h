@@ -80,6 +80,12 @@ public:
    * the I/O (intermediary results for example) */
   void Execute();
 
+  /** Run the application, then writes all the output to disk
+   * if they have an associated filename.
+   * This is a helper function for wrappers without pipeline support.
+   */
+  void ExecuteAndWriteOutput();
+
   /* Get the internal application parameters
    *
    * WARNING: this method may disappear from the API */

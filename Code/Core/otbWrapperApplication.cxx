@@ -296,7 +296,7 @@ void Application::SetParameterString(std::string parameter, std::string value)
 }
 
 
-void Application::SetParameterOutputImage(std::string parameter, OutputImageParameter::VectorImageType* value)
+void Application::SetParameterOutputImage(std::string parameter, VectorImageType* value)
 {
   Parameter* param = GetParameterByKey(parameter);
 
@@ -307,7 +307,7 @@ void Application::SetParameterOutputImage(std::string parameter, OutputImagePara
     }
 }
 
-void Application::SetParameterOutputVectorData(std::string parameter, OutputVectorDataParameter::VectorDataType* value)
+void Application::SetParameterOutputVectorData(std::string parameter, VectorDataType* value)
 {
   Parameter* param = GetParameterByKey(parameter);
 
