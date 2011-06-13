@@ -1,3 +1,21 @@
+/*=========================================================================
+
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
+
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
+
 // kindly stolen from the build files of OTB-Wrapping (Typedefs/itkBase.includes, Typedefs/wrap_ITKCommonBase.i)
 
 %include "RefCountMacro.i"
@@ -5,30 +23,45 @@
 %include <exception.i>
 %include <typemaps.i>
 
-%include <std_iostream.i>
-%include <std_sstream.i>
-%include <std_string.i>
-%include <std_vector.i>
-%include <std_list.i>
 
-
+// Customize exception handling
+%exception {
+  try {
+    $action
+  } catch( itk::ExceptionObject &ex ) {
+    char error_msg[256];
+    sprintf( error_msg, "Exception thrown in SimpleITK $symname: %s", ex.what() );
+    SWIG_exception( SWIG_RuntimeError, error_msg );
+  } catch( ... ) {
+    SWIG_exception( SWIG_UnknownError, "Unknown exception thrown in SimpleITK $symname" );
+  }
+}
+/*
 %exception {
   try {
     $action
   } catch (const std::out_of_range& e) {
-    SWIG_exception_fail(SWIG_IndexError, e.what());
+    SWIG_exception(SWIG_IndexError, e.what());
   } catch( const std::exception &ex ) {
     SWIG_exception( SWIG_RuntimeError, ex.what() );
   } catch (...) {
     SWIG_exception( SWIG_UnknownError, "Unknown exception thrown in otbApplication $symname" );
   }
 }
+*/
 
+// Some code from STL
+// Do not wrap if not necessary as it really slows down compilation
 
-// some code from stl
+//%include <std_iostream.i>
+//%include <std_sstream.i>
+%include <std_string.i>
+//%include <std_vector.i>
+//%include <std_list.i>
+
 
 //%template(vectorstring)   std::vector< std::string >;
-%template(liststring)     std::list< std::string >;
+//%template(liststring)     std::list< std::string >;
 
 //%template(vectorB)        std::vector< bool >;
 //%template(vectorUC)       std::vector< unsigned char >;
@@ -69,15 +102,15 @@
  class itkLightObject {
    public:
      static itkLightObject_Pointer New();
-//     virtual itkLightObject_Pointer CreateAnother() const;
+     virtual itkLightObject_Pointer CreateAnother() const;
      virtual void Delete();
      virtual char const * GetNameOfClass() const;
      void Print(std::ostream & os, itkIndent indent = 0) const;
-//     static void BreakOnError();
-//     virtual void Register() const;
-//     virtual void UnRegister() const;
-//     virtual int GetReferenceCount() const;
-//     virtual void SetReferenceCount(int arg0);
+     static void BreakOnError();
+     virtual void Register() const;
+     virtual void UnRegister() const;
+     virtual int GetReferenceCount() const;
+     virtual void SetReferenceCount(int arg0);
    private:
      itkLightObject(itkLightObject const & arg0);
      void operator=(itkLightObject const & arg0);
@@ -90,34 +123,24 @@
  };
  DECLARE_REF_COUNT_CLASS( itkLightObject )
  
- // add a ToString shortcut to all itkLightObject
- %extend itkLightObject {
-    public:
-    std::string ToString() {
-      std::ostringstream o;
-      self->Print(o);
-      return o.str();
-    }
-  }
- 
  class itkObject : public itkLightObject {
    public:
      static itkObject_Pointer New();
      virtual itkLightObject_Pointer CreateAnother() const;
      virtual char const * GetNameOfClass() const;
-//     virtual void DebugOn() const;
-//     virtual void DebugOff() const;
-//     bool GetDebug() const;
-//     void SetDebug(bool debugFlag) const;
-//     virtual unsigned long GetMTime() const;
-//     virtual void Modified() const;
-//     virtual void Register() const;
-//     virtual void UnRegister() const;
-//     virtual void SetReferenceCount(int arg0);
-//     static void SetGlobalWarningDisplay(bool flag);
-//     static bool GetGlobalWarningDisplay();
-//     static void GlobalWarningDisplayOn();
-//     static void GlobalWarningDisplayOff();
+     virtual void DebugOn() const;
+     virtual void DebugOff() const;
+     bool GetDebug() const;
+     void SetDebug(bool debugFlag) const;
+     virtual unsigned long GetMTime() const;
+     virtual void Modified() const;
+     virtual void Register() const;
+     virtual void UnRegister() const;
+     virtual void SetReferenceCount(int arg0);
+     static void SetGlobalWarningDisplay(bool flag);
+     static bool GetGlobalWarningDisplay();
+     static void GlobalWarningDisplayOn();
+     static void GlobalWarningDisplayOff();
      unsigned long AddObserver(itkEventObject const & event, itkCommand * arg1);
 //     unsigned long AddObserver(itkEventObject const & event, itkCommand * arg1) const;
      itkCommand * GetCommand(unsigned long tag);
@@ -230,199 +253,35 @@
      virtual void PrintTrailer(std::ostream & os, itkIndent indent) const;
  };
 
+%define DECLARE_itkEventObject_CLASS(class_name, superclass_name)
 
- class itkNoEvent : public itkEventObject {
+ class class_name : public superclass_name {
    public:
-     itkNoEvent();
-     ~itkNoEvent();
+     class_name();
+     ~class_name();
      virtual char const * GetEventName() const;
      virtual bool CheckEvent(itkEventObject const * e) const;
      virtual itkEventObject * MakeObject() const;
-     itkNoEvent(itkNoEvent const & s);
+     class_name(class_name const & s);
    private:
-     void operator=(itkNoEvent const & arg0);
+     void operator=(class_name const & arg0);
    protected:
  };
 
+%enddef
 
- class itkAnyEvent : public itkEventObject {
-   public:
-     itkAnyEvent();
-     ~itkAnyEvent();
-     virtual char const * GetEventName() const;
-     virtual bool CheckEvent(itkEventObject const * e) const;
-     virtual itkEventObject * MakeObject() const;
-     itkAnyEvent(itkAnyEvent const & s);
-   private:
-     void operator=(itkAnyEvent const & arg0);
-   protected:
- };
-
-
- class itkDeleteEvent : public itkAnyEvent {
-   public:
-     itkDeleteEvent();
-     ~itkDeleteEvent();
-     virtual char const * GetEventName() const;
-     virtual bool CheckEvent(itkEventObject const * e) const;
-     virtual itkEventObject * MakeObject() const;
-     itkDeleteEvent(itkDeleteEvent const & s);
-   private:
-     void operator=(itkDeleteEvent const & arg0);
-   protected:
- };
-
-
- class itkEndEvent : public itkAnyEvent {
-   public:
-     itkEndEvent();
-     ~itkEndEvent();
-     virtual char const * GetEventName() const;
-     virtual bool CheckEvent(itkEventObject const * e) const;
-     virtual itkEventObject * MakeObject() const;
-     itkEndEvent(itkEndEvent const & s);
-   private:
-     void operator=(itkEndEvent const & arg0);
-   protected:
- };
-
-
- class itkExitEvent : public itkAnyEvent {
-   public:
-     itkExitEvent();
-     ~itkExitEvent();
-     virtual char const * GetEventName() const;
-     virtual bool CheckEvent(itkEventObject const * e) const;
-     virtual itkEventObject * MakeObject() const;
-     itkExitEvent(itkExitEvent const & s);
-   private:
-     void operator=(itkExitEvent const & arg0);
-   protected:
- };
-
-
- class itkIterationEvent : public itkAnyEvent {
-   public:
-     itkIterationEvent();
-     ~itkIterationEvent();
-     virtual char const * GetEventName() const;
-     virtual bool CheckEvent(itkEventObject const * e) const;
-     virtual itkEventObject * MakeObject() const;
-     itkIterationEvent(itkIterationEvent const & s);
-   private:
-     void operator=(itkIterationEvent const & arg0);
-   protected:
- };
-
-
- class itkModifiedEvent : public itkAnyEvent {
-   public:
-     itkModifiedEvent();
-     ~itkModifiedEvent();
-     virtual char const * GetEventName() const;
-     virtual bool CheckEvent(itkEventObject const * e) const;
-     virtual itkEventObject * MakeObject() const;
-     itkModifiedEvent(itkModifiedEvent const & s);
-   private:
-     void operator=(itkModifiedEvent const & arg0);
-   protected:
- };
-
-
- class itkPickEvent : public itkAnyEvent {
-   public:
-     itkPickEvent();
-     ~itkPickEvent();
-     virtual char const * GetEventName() const;
-     virtual bool CheckEvent(itkEventObject const * e) const;
-     virtual itkEventObject * MakeObject() const;
-     itkPickEvent(itkPickEvent const & s);
-   private:
-     void operator=(itkPickEvent const & arg0);
-   protected:
- };
-
-
- class itkProgressEvent : public itkAnyEvent {
-   public:
-     itkProgressEvent();
-     ~itkProgressEvent();
-     virtual char const * GetEventName() const;
-     virtual bool CheckEvent(itkEventObject const * e) const;
-     virtual itkEventObject * MakeObject() const;
-     itkProgressEvent(itkProgressEvent const & s);
-   private:
-     void operator=(itkProgressEvent const & arg0);
-   protected:
- };
-
-
- class itkStartEvent : public itkAnyEvent {
-   public:
-     itkStartEvent();
-     ~itkStartEvent();
-     virtual char const * GetEventName() const;
-     virtual bool CheckEvent(itkEventObject const * e) const;
-     virtual itkEventObject * MakeObject() const;
-     itkStartEvent(itkStartEvent const & s);
-   private:
-     void operator=(itkStartEvent const & arg0);
-   protected:
- };
-
-
- class itkStartPickEvent : public itkPickEvent {
-   public:
-     itkStartPickEvent();
-     ~itkStartPickEvent();
-     virtual char const * GetEventName() const;
-     virtual bool CheckEvent(itkEventObject const * e) const;
-     virtual itkEventObject * MakeObject() const;
-     itkStartPickEvent(itkStartPickEvent const & s);
-   private:
-     void operator=(itkStartPickEvent const & arg0);
-   protected:
- };
-
-
- class itkUserEvent : public itkAnyEvent {
-   public:
-     itkUserEvent();
-     ~itkUserEvent();
-     virtual char const * GetEventName() const;
-     virtual bool CheckEvent(itkEventObject const * e) const;
-     virtual itkEventObject * MakeObject() const;
-     itkUserEvent(itkUserEvent const & s);
-   private:
-     void operator=(itkUserEvent const & arg0);
-   protected:
- };
-
-
- class itkAbortCheckEvent : public itkPickEvent {
-   public:
-     itkAbortCheckEvent();
-     ~itkAbortCheckEvent();
-     virtual char const * GetEventName() const;
-     virtual bool CheckEvent(itkEventObject const * e) const;
-     virtual itkEventObject * MakeObject() const;
-     itkAbortCheckEvent(itkAbortCheckEvent const & s);
-   private:
-     void operator=(itkAbortCheckEvent const & arg0);
-   protected:
- };
-
-
- class itkEndPickEvent : public itkPickEvent {
-   public:
-     itkEndPickEvent();
-     ~itkEndPickEvent();
-     virtual char const * GetEventName() const;
-     virtual bool CheckEvent(itkEventObject const * e) const;
-     virtual itkEventObject * MakeObject() const;
-     itkEndPickEvent(itkEndPickEvent const & s);
-   private:
-     void operator=(itkEndPickEvent const & arg0);
-   protected:
- };
-
+DECLARE_itkEventObject_CLASS(itkNoEvent,         itkEventObject)
+DECLARE_itkEventObject_CLASS(itkAnyEvent,        itkEventObject)
+DECLARE_itkEventObject_CLASS(itkDeleteEvent,     itkAnyEvent)
+DECLARE_itkEventObject_CLASS(itkEndEvent,        itkAnyEvent)
+DECLARE_itkEventObject_CLASS(itkExitEvent,       itkAnyEvent)
+DECLARE_itkEventObject_CLASS(itkIterationEvent,  itkAnyEvent)
+DECLARE_itkEventObject_CLASS(itkModifiedEvent,   itkAnyEvent)
+DECLARE_itkEventObject_CLASS(itkPickEvent,       itkAnyEvent)
+DECLARE_itkEventObject_CLASS(itkProgressEvent,   itkAnyEvent)
+DECLARE_itkEventObject_CLASS(itkStartEvent,      itkAnyEvent)
+DECLARE_itkEventObject_CLASS(itkStartPickEvent,  itkPickEvent)
+DECLARE_itkEventObject_CLASS(itkUserEvent,       itkAnyEvent)
+DECLARE_itkEventObject_CLASS(itkAbortCheckEvent, itkPickEvent)
+DECLARE_itkEventObject_CLASS(itkEndPickEvent,    itkPickEvent)
+DECLARE_itkEventObject_CLASS(itkUserEvent,       itkAnyEvent)

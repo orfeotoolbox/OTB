@@ -1,17 +1,36 @@
+/*=========================================================================
+
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
+
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
+
 %module otbApplication
  
+
  %{
 #include "itkBase.includes"
 #include "otbWrapperSWIGIncludes.h"
  %}
 
+// Langage specific extension
+%include "Python.i"
+%include "Java.i"
+%include "Ruby.i"
 
 %include "itkMacro.i"
 %include "itkBase.i"
-
-// Langage specific extension
-%include "Python.i"
-
 
 namespace otb
 {
@@ -87,7 +106,6 @@ private:
 
 };
 DECLARE_REF_COUNT_CLASS( Parameter )
-DECLARE_REF_COUNT_CLASS_LANGAGEEXTENSION( Parameter )
 
 class ParameterGroup : public Parameter
 {

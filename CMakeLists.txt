@@ -45,6 +45,9 @@ MARK_AS_ADVANCED(TCL_TCLSH DART_ROOT)
 IF(BUILD_TESTING)
   ENABLE_TESTING()
   
+  # configure the test driver
+  FIND_PROGRAM(OTB_TEST_DRIVER otbTestDriver PATHS ${OTB_DIR}/bin ${OTB_DIR}/../../bin DOC "Path to the otbTestDriver executable from OTB")
+  
   FIND_PATH(OTB_DATA_ROOT README-OTB-Data PATHS $ENV{OTB_DATA_ROOT} ${OTB_SOURCE_DIR}/../OTB-Data)
   MARK_AS_ADVANCED(OTB_DATA_ROOT)
   
