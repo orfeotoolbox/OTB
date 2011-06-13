@@ -5,38 +5,25 @@
 %include <exception.i>
 %include <typemaps.i>
 
+%include <std_iostream.i>
+%include <std_sstream.i>
+%include <std_string.i>
+%include <std_vector.i>
+%include <std_list.i>
+
 
 %exception {
   try {
     $action
   } catch (const std::out_of_range& e) {
     SWIG_exception_fail(SWIG_IndexError, e.what());
-//  } catch (Swig::DirectorException &e) {
-//    SWIG_fail;
-  } catch (const std::exception& e) {
-    SWIG_exception_fail(SWIG_RuntimeError, e.what());
+  } catch( const std::exception &ex ) {
+    SWIG_exception( SWIG_RuntimeError, ex.what() );
+  } catch (...) {
+    SWIG_exception( SWIG_UnknownError, "Unknown exception thrown in otbApplication $symname" );
   }
 }
 
-%typemap(out)  unsigned char &, const unsigned char &, signed char &, const signed char &, unsigned short &, const unsigned short &, signed short &, const signed short &, unsigned int &, const unsigned int &, signed int &, const signed int &, signed long &, const signed long &, unsigned long &, const unsigned long &
-  {$result = PyInt_FromLong( *$1 );}
-
-%typemap(out) float &, const float &, double &, const double &
-  {$result = PyFloat_FromDouble( *$1 );}
-
-// ignore reference count management
-%ignore Delete;
-%ignore SetReferenceCount;
-%ignore Register;
-%ignore UnRegister;
-
-
-
-%include <std_iostream.i>
-%include <std_sstream.i>
-%include <std_string.i>
-%include <std_vector.i>
-%include <std_list.i>
 
 // some code from stl
 
@@ -63,20 +50,6 @@
 //%template(listF)          std::list< float >;
 //%template(listD)          std::list< double >;
 
-
-// We don't need std::list or std::string interface for this in Python
-// A Python list of Python string is more natural
-%typemap(out) std::list< std::string >
-  {
-  $result = PyList_New( $1.size() );
-  Py_ssize_t i = 0;
-  for (std::list< std::string >::const_iterator it = $1.begin();
-       it != $1.end();
-       ++it, ++i )
-    {
-    PyList_SetItem( $result, i, PyString_FromString( it->c_str() ) );
-    }
-  }
 
  
  class itkIndent {
@@ -116,7 +89,17 @@
      virtual void PrintTrailer(std::ostream & os, itkIndent indent) const;
  };
  DECLARE_REF_COUNT_CLASS( itkLightObject )
-
+ 
+ // add a ToString shortcut to all itkLightObject
+ %extend itkLightObject {
+    public:
+    std::string ToString() {
+      std::ostringstream o;
+      self->Print(o);
+      return o.str();
+    }
+  }
+ 
  class itkObject : public itkLightObject {
    public:
      static itkObject_Pointer New();

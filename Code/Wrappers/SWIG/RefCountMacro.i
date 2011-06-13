@@ -64,18 +64,16 @@
     }
   }
 
-  // make "deletion" in scripting language just decrement ref. count
   %extend class_name {
     public:
+
+    // make "deletion" in scripting language just decrement ref. count
     ~class_name() {self->UnRegister();};
-  }
+
+    }
 
   %ignore class_name::~class_name;
   
   %ignore class_name##_Pointer;
 
-  %pythoncode {
-    def class_name##_New():
-      return class_name.New()
-  }
 %enddef

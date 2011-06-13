@@ -1,14 +1,17 @@
-%include "itkMacro.i"
-
-
-
- %module otbApplication
+%module otbApplication
+ 
  %{
 #include "itkBase.includes"
 #include "otbWrapperSWIGIncludes.h"
  %}
 
+
+%include "itkMacro.i"
 %include "itkBase.i"
+
+// Langage specific extension
+%include "Python.i"
+
 
 namespace otb
 {
@@ -84,6 +87,7 @@ private:
 
 };
 DECLARE_REF_COUNT_CLASS( Parameter )
+DECLARE_REF_COUNT_CLASS_LANGAGEEXTENSION( Parameter )
 
 class ParameterGroup : public Parameter
 {
