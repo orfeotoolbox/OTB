@@ -107,7 +107,7 @@
     }
 
   %ignore class_name::~class_name;
-  
+
   %ignore class_name##_Pointer;
 
 %enddef
@@ -144,7 +144,7 @@
   }
 
   %extend itkLightObject {
-        %pythoncode %{  
+        %pythoncode %{
           def __str__( self ):
             return self.ToString()
         %}

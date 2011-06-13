@@ -148,14 +148,14 @@ endif()
 if ( WRAP_LUA )
   option ( USE_SYSTEM_LUA "Use a system provided lua" OFF )
 
-  if ( USE_SYSTEM_LUA )
+#  if ( USE_SYSTEM_LUA )
     find_package ( Lua51 REQUIRED )
     include_directories ( ${LUA_INCLUDE_DIR} )
     set ( LUA_LIB ${LUA_LIBRARIES} )
-  else()
-    set ( LUA_LIB lua5 )
-    include_directories ( ${otbApplication_SOURCE_DIR}/Utilities/lua-5.1.4/src )
-  endif()
+#  else()
+#    set ( LUA_LIB lua5 )
+#    include_directories ( ${otbApplication_SOURCE_DIR}/Utilities/lua-5.1.4/src )
+#  endif()
 
 
   # Run swig
@@ -183,7 +183,7 @@ if ( WRAP_RUBY )
   include_directories ( ${RUBY_INCLUDE_DIRS} )
 
   # Run swig
-  set(CMAKE_SWIG_FLAGS -autorename -module otbApplication ${CMAKE_SWIG_GLOBAL_FLAGS})
+  set(CMAKE_SWIG_FLAGS -autorename -module otbapplication ${CMAKE_SWIG_GLOBAL_FLAGS})
   set(CMAKE_SWIG_OUTDIR ${CMAKE_CURRENT_BINARY_DIR})
   set(SWIG_MODULE_otbApplication_EXTRA_DEPS OTBWrapperCore ${SWIG_HEADERS})
   SWIG_MODULE_INITIALIZE ( otbApplication ruby )
