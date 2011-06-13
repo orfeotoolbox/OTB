@@ -17,9 +17,9 @@ namespace Wrapper
 
   enum DefaultValueMode
   {
-    UNKNOWN,
-    RELATIVE,
-    ABSOLUTE
+    DefaultValueMode_UNKNOWN,
+    DefaultValueMode_RELATIVE,
+    DefaultValueMode_ABSOLUTE
   };
   
   typedef enum

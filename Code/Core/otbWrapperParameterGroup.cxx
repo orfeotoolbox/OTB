@@ -371,7 +371,7 @@ ParameterGroup::GetParameterByKey(std::string name)
 unsigned int
 ParameterGroup::GetNumberOfParameters()
 {
-  m_ParameterList.size();
+  return m_ParameterList.size();
 }
 
 }

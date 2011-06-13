@@ -35,18 +35,18 @@ enum DefaultValueMode
      * This parameter has no default behaviour and should be set by
      * the user. 
      */
-    UNKNOWN,
+    DefaultValueMode_UNKNOWN,
     /**
      * The default value of this parameter can be estimated from
      * other parameters.
      */
-    RELATIVE,
+    DefaultValueMode_RELATIVE,
 
     /** 
      * The default value of this parameter is not depending on any
      * other parameter.
      */
-    ABSOLUTE
+    DefaultValueMode_ABSOLUTE
   };
 
 
@@ -167,7 +167,7 @@ protected:
                 m_Description(""),
                 m_Key(""),
                 m_Mandatory(true),
-                m_DefaultValueMode(UNKNOWN)
+                m_DefaultValueMode(DefaultValueMode_UNKNOWN)
   {}
 
   /** Destructor */
