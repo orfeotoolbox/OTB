@@ -147,7 +147,7 @@ int generic_main(otb::ApplicationOptionsResult* parseResult,
     orthoFilter->SetOutputStartIndex(start);
     orthoFilter->SetEdgePaddingValue(defaultValue);
 
-    // Generate deformation field
+    // Configure DEM directory
     if(parseResult->IsOptionPresent("DEMDirectory"))
       {
       orthoFilter->SetDEMDirectory(parseResult->GetParameterString("DEMDirectory", 0));
@@ -389,10 +389,17 @@ int epsg_main(otb::ApplicationOptionsResult* parseResult)
     orthoFilter->SetOutputStartIndex(start);
     orthoFilter->SetEdgePaddingValue(defaultValue);
 
-    // Generate deformation field
+    // Configure DEM directory
     if(parseResult->IsOptionPresent("DEMDirectory"))
       {
       orthoFilter->SetDEMDirectory(parseResult->GetParameterString("DEMDirectory", 0));
+      }
+    else
+      {
+      if ( otb::ConfigurationFile::GetInstance()->IsValid() )
+        {
+        orthoFilter->SetDEMDirectory(otb::ConfigurationFile::GetInstance()->GetDEMDirectory());
+        }
       }
 
     // Set the output map projection
