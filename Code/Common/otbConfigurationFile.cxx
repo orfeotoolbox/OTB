@@ -106,8 +106,8 @@ ConfigurationFile
   }
   catch (itk::ExceptionObject& ex)
   {
-    otbMsgDevMacro(<< "Error caught when accessing OTB_DEM_DIRECTORY in the config file " << path
-                   << ". The error was " << ex);
+    otbMsgDevMacro(<< "Error caught when accessing OTB_DEM_DIRECTORY in the config file."
+                   << "The error was " << ex);
   }
   return ret;
 }
@@ -129,8 +129,8 @@ ConfigurationFile
   }
   catch (itk::ExceptionObject& ex)
   {
-    otbMsgDevMacro(<< "Error caught when accessing OTB_GEOID_FILE in the config file " << path
-                   << ". The error was " << ex);
+    otbMsgDevMacro(<< "Error caught when accessing OTB_GEOID_FILE in the config file."
+                   << "The error was " << ex);
   }
   return ret;
 }
