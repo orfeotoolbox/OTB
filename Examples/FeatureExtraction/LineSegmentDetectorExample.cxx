@@ -35,6 +35,7 @@
 // This example illustrates the use of the
 // \doxygen{otb}{LineSegmentDetector}\cite{LSD}, also known as {\em Lucy in the
 // Sky with Diamonds}.
+// This filter is designed to extract segments in mono channel images.
 //
 // The first step required to use this filter is to include its header file.
 //
