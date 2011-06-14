@@ -52,3 +52,48 @@ int otbConfigurationTest(int argc, char * argv[])
 
   return EXIT_SUCCESS;
 }
+
+
+int otbConfigurationTestDEM(int argc, char * argv[])
+{
+  typedef otb::ConfigurationFile ConfigurationType;
+  std::string demDir = otb::ConfigurationFile::GetInstance()->GetDEMDirectory();
+
+  if (argc > 1)
+    {
+    // expected something
+    std::string expected = argv[1];
+
+    if (demDir.empty())
+      {
+      std::cerr << "GetDEMDirectory returned nothing but " << expected << " was expected" << std::endl;
+      return EXIT_FAILURE;
+      }
+    else
+      {
+      if (demDir == expected)
+        {
+        return EXIT_SUCCESS;
+        }
+      else
+        {
+        std::cerr << "GetDEMDirectory returned " <<  demDir << " but " << expected << " was expected" << std::endl;
+        return EXIT_FAILURE;
+        }
+      }
+    }
+  else
+    {
+    if (!demDir.empty())
+      {
+      std::cerr << "GetDEMDirectory returned " << demDir << " but nothing was expected" << std::endl;
+      return EXIT_FAILURE;
+      }
+    else
+      {
+      return EXIT_SUCCESS;
+      }
+    }
+  return EXIT_SUCCESS;
+}
+

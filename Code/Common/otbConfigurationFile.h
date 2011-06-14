@@ -28,7 +28,10 @@ namespace otb
 {
 
 /** \class ConfigurationFile
-   *    \brief Manage OTB ConfigurationFile file
+ *  \brief Manage OTB ConfigurationFile file
+ *
+ *  The path to the file can be set with environment variable OTB_CONFIG
+ *
 */
 
 class ConfigurationFile
@@ -48,15 +51,13 @@ public:
   /** Get the unique instanc1e of the model */
   static Pointer GetInstance();
 
-  ConfigFile * GetOTBConfig()
-  {
-    return m_OTBConfig;
-  }
+  ConfigFile * GetOTBConfig();
+
+  bool IsValid() const;
 
   /** Get parameter*/
   template<typename T> T GetParameter(const std::string& key) const
   {
-
     if (m_OTBConfig == NULL)
       {
       itkExceptionMacro(<< "Configuration file not found.");
@@ -70,8 +71,13 @@ public:
       {
       itkExceptionMacro(<< "Error - Key '" << e.key << "' not found.");
       }
-
   }
+
+  /** Returns the DEM directory entry in the config file, or an empty string if not found */
+  std::string GetDEMDirectory() const;
+
+  /** Returns the Geoid entry in the config file, or an empty string if not found */
+  std::string GetGeoidFile() const;
 
 protected:
   /** This is protected for the singleton. Use GetInstance() instead. */
@@ -80,10 +86,15 @@ protected:
   ConfigurationFile();
 
   /** Destructor */
-  ~ConfigurationFile();
+  virtual ~ConfigurationFile();
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
+
 private:
+
+  /** Try to instanciate a ConfigFile from a path. Return NULL on error */
+  ConfigFile * LoadSilent(std::string path);
+
   /** The instance singleton */
   static Pointer Instance;
   ConfigFile *   m_OTBConfig;

@@ -58,6 +58,32 @@ ADD_TEST(coTuConfigurationTest ${COMMON_TESTS1}
         otbConfigurationTest
         )
 
+FILE(WRITE ${CMAKE_BINARY_DIR}/Testing/otbconf_OK  
+           "OTB_DEM_DIRECTORY = ${OTB_DATA_ROOT}/Input/DEM/srtm_directory")
+FILE(WRITE ${CMAKE_BINARY_DIR}/Testing/otbconf_NotOK
+           "OTB_DEM_DIRECTORY = ${OTB_DATA_ROOT}/Input/DEM/egm96.grd")
+
+ADD_TEST(coTuConfigurationTestDEM ${COMMON_TESTS1}
+        otbConfigurationTestDEM
+        )
+
+
+ADD_TEST(coTuConfigurationTestDEM_WithConfigFile otbTestDriver
+        --add-before-env OTB_CONFIG_FILE ${CMAKE_BINARY_DIR}/Testing/otbconf_OK
+        Execute ${COMMON_TESTS1}
+        otbConfigurationTestDEM
+        ${OTB_DATA_ROOT}/Input/DEM/srtm_directory
+        )
+ADD_TEST(coTuConfigurationTestDEM_WithWrongConfigFile otbTestDriver
+        --add-before-env OTB_CONFIG_FILE ${CMAKE_BINARY_DIR}/Testing/otbconf_NotOK
+        Execute ${COMMON_TESTS1}
+        otbConfigurationTestDEM
+        )
+ADD_TEST(coTuConfigurationTestDEM_WithNonExistantConfigFile otbTestDriver
+        --add-before-env OTB_CONFIG_FILE ${CMAKE_BINARY_DIR}/Testing/otbconf_NonExistant
+        Execute ${COMMON_TESTS1}
+        otbConfigurationTestDEM
+        )
 # -------            otb::CommandLibneArgumentParser  -------------
 
 ADD_TEST(coTuCmdLineArgParserHelpWithArg ${COMMON_TESTS1}

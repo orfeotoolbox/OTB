@@ -17,6 +17,7 @@
 =========================================================================*/
 #include "otbConfigurationFile.h"
 #include "otbMacro.h"
+#include "itksys/SystemTools.hxx"
 
 namespace otb
 {
@@ -28,16 +29,25 @@ ConfigurationFile
 {
   m_OTBConfig = NULL;
 
-  std::string OTBBinDir(OTB_CONFIG);
-  try
+  const char* envVar = itksys::SystemTools::GetEnv("OTB_CONFIG_FILE");
+  if (envVar)
     {
-    m_OTBConfig = new ConfigFile(OTBBinDir + "/otb.conf");
+    if (!itksys::SystemTools::FileExists(envVar, true))
+      {
+      itkWarningMacro(<< "When loading the OTB configuration file, "
+                         "the OTB_CONFIG env. var was found, but points a non-existant file : "
+                      << envVar);
+      }
+    else
+      {
+      m_OTBConfig = LoadSilent(envVar);
+      }
     }
-//  catch (ConfigFile::file_not_found& e)
-  catch (...)
+
+  if ( !m_OTBConfig )
     {
-//    otbMsgDevMacro(<< "Error - File '" << e.filename << "' not found.");
-    otbMsgDevMacro(<< "Error - File not found.");
+    std::string OTBBinDir(OTB_CONFIG);
+    m_OTBConfig = LoadSilent(OTBBinDir + "/otb.conf");
     }
 }
 
@@ -45,6 +55,84 @@ ConfigurationFile
 ::~ConfigurationFile()
 {
   delete m_OTBConfig;
+}
+
+ConfigFile *
+ConfigurationFile
+::LoadSilent(std::string path)
+{
+  ConfigFile * config = NULL;
+  try
+    {
+    config = new ConfigFile(path);
+    }
+  catch (...)
+    {
+    otbMsgDevMacro(<< "Unable to load config file from " << path );
+    }
+
+  return config;
+}
+
+
+ConfigFile *
+ConfigurationFile
+::GetOTBConfig()
+{
+  return m_OTBConfig;
+}
+
+bool
+ConfigurationFile
+::IsValid() const
+{
+  return m_OTBConfig != NULL;
+}
+
+std::string
+ConfigurationFile
+::GetDEMDirectory() const
+{
+  std::string ret;
+  try
+  {
+    std::string fromConfigFile = GetParameter<std::string>("OTB_DEM_DIRECTORY");
+
+    if ( itksys::SystemTools::FileExists(fromConfigFile.c_str())
+         && itksys::SystemTools::FileIsDirectory(fromConfigFile.c_str()) )
+      {
+      ret = fromConfigFile;
+      }
+  }
+  catch (itk::ExceptionObject& ex)
+  {
+    otbMsgDevMacro(<< "Error caught when accessing OTB_DEM_DIRECTORY in the config file " << path
+                   << ". The error was " << ex);
+  }
+  return ret;
+}
+
+std::string
+ConfigurationFile
+::GetGeoidFile() const
+{
+  std::string ret;
+  try
+  {
+    std::string fromConfigFile = GetParameter<std::string>("OTB_GEOID_FILE");
+
+    if ( itksys::SystemTools::FileExists(fromConfigFile.c_str())
+         && !itksys::SystemTools::FileIsDirectory(fromConfigFile.c_str()) )
+      {
+      ret = fromConfigFile;
+      }
+  }
+  catch (itk::ExceptionObject& ex)
+  {
+    otbMsgDevMacro(<< "Error caught when accessing OTB_GEOID_FILE in the config file " << path
+                   << ". The error was " << ex);
+  }
+  return ret;
 }
 
 ConfigurationFile::Pointer
