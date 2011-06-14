@@ -143,9 +143,17 @@ int LineSegmentDetection::Execute(otb::ApplicationOptionsResult* parseResult)
     vproj->SetInputOrigin(reader->GetOutput()->GetOrigin());
     vproj->SetInputSpacing(reader->GetOutput()->GetSpacing());
 
-    if( parseResult->IsOptionPresent("DEMDirectory") )
+    // Configure DEM directory
+    if(parseResult->IsOptionPresent("DEMDirectory"))
       {
       vproj->SetDEMDirectory(parseResult->GetParameterString("DEMDirectory"));
+      }
+    else
+      {
+      if ( otb::ConfigurationFile::GetInstance()->IsValid() )
+        {
+        vproj->SetDEMDirectory(otb::ConfigurationFile::GetInstance()->GetDEMDirectory());
+        }
       }
 
     vproj->Update();
