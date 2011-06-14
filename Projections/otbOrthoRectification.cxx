@@ -152,6 +152,13 @@ int generic_main(otb::ApplicationOptionsResult* parseResult,
       {
       orthoFilter->SetDEMDirectory(parseResult->GetParameterString("DEMDirectory", 0));
       }
+    else
+      {
+      if ( otb::ConfigurationFile::GetInstance()->IsValid() )
+        {
+        orthoFilter->SetDEMDirectory(otb::ConfigurationFile::GetInstance()->GetDEMDirectory());
+        }
+      }
 
     // Set the output map projection
     orthoFilter->SetMapProjection(mapProjection);
