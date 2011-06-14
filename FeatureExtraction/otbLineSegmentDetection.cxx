@@ -45,6 +45,8 @@ int LineSegmentDetection::Describe(ApplicationDescriptor* descriptor)
                         ApplicationDescriptor::FileName);
   descriptor->AddOption("DEMDirectory", "DEM directory (used to reproject in WGS84 if input is in sensor model geometry)",
                         "dem", 1, false, ApplicationDescriptor::DirectoryName);
+  descriptor->AddOption("NoRescale", "Do not rescale input image in [0 255] before extracting the segments (default : true)",
+                        "nrs", 0, false, ApplicationDescriptor::Boolean);
   return EXIT_SUCCESS;
 }
 
@@ -82,22 +84,32 @@ int LineSegmentDetection::Execute(otb::ApplicationOptionsResult* parseResult)
     = VectorImageToAmplitudeImageFilterType::New();
   amplitudeConverter->SetInput(reader->GetOutput());
 
+  ImageType::Pointer image = amplitudeConverter->GetOutput();
+
   StreamingStatisticsImageFilterType::Pointer stats
-    = StreamingStatisticsImageFilterType::New();
-  stats->SetInput(amplitudeConverter->GetOutput());
-  stats->Update();
-  InputPixelType min = stats->GetMinimum();
-  InputPixelType max = stats->GetMaximum();
+     = StreamingStatisticsImageFilterType::New();
 
   ShiftScaleImageFilterType::Pointer shiftScale
     = ShiftScaleImageFilterType::New();
-  shiftScale->SetInput(amplitudeConverter->GetOutput());
-  shiftScale->SetShift( -min );
-  shiftScale->SetScale( 255.0 / (max - min) );
+
+  // Default behavior is to do the rescaling
+  if ( !parseResult->IsOptionPresent("NoRescale") )
+    {
+    stats->SetInput(amplitudeConverter->GetOutput());
+    stats->Update();
+    InputPixelType min = stats->GetMinimum();
+    InputPixelType max = stats->GetMaximum();
+
+    shiftScale->SetInput(amplitudeConverter->GetOutput());
+    shiftScale->SetShift( -min );
+    shiftScale->SetScale( 255.0 / (max - min) );
+
+    image = shiftScale->GetOutput();
+    }
 
   LSDFilterType::Pointer lsd
     = LSDFilterType::New();
-  lsd->GetFilter()->SetInput(shiftScale->GetOutput());
+  lsd->GetFilter()->SetInput(image);
 
   otb::StandardFilterWatcher watcher(lsd->GetStreamer(),"Line Segment Detection");
   lsd->Update();
