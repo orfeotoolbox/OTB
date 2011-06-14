@@ -8,7 +8,7 @@ set( CMAKE_JAVA_INCLUDE_PATH ${OTB-Wrapper_BINARY_DIR}/Code/Wrappers/SWIG/org.ot
 set( JAVA_COMMAND "${JAVACOMMAND}" -Djava.library.path=${OTB-Wrapper_BINARY_DIR}/Code/Wrappers/SWIG)
 
 add_jar( JavaSmoothingTest JavaSmoothingTest.java )
-add_dependencies( JavaSmoothingTest otbApplicationJava )
+add_dependencies( JavaSmoothingTest org_otb_Application_jar )
 add_test( NAME jaTvSmoothing
           COMMAND ${TEST_DRIVER} Execute
           ${JAVA_COMMAND} -cp ${CMAKE_JAVA_INCLUDE_PATH}:JavaSmoothingTest.jar SmoothingTest

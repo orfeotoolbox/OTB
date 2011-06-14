@@ -3,9 +3,22 @@ FILE(MAKE_DIRECTORY ${TEMP})
 
 add_subdirectory(Core)
 
-add_subdirectory(Python)
-add_subdirectory(Java)
-add_subdirectory(Ruby)
-add_subdirectory(Lua)
+if ( WRAP_PYTHON )
+  add_subdirectory(Python)
+endif ()
 
-add_subdirectory(QtWidget)
+if ( WRAP_JAVA )
+  add_subdirectory(Java)
+endif ()
+
+if ( WRAP_RUBY )
+  add_subdirectory(Ruby)
+endif ()
+
+if ( WRAP_LUA )
+  add_subdirectory(Lua)
+endif ()
+
+if ( WRAP_QT )
+  add_subdirectory(QtWidget)
+endif ()
