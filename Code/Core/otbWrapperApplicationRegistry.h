@@ -53,7 +53,7 @@ public:
   typedef otb::Wrapper::Application::Pointer ApplicationPointer;
 
   /**  */
-  static std::list<std::string> GetAvailableApplications();
+  static std::vector<std::string> GetAvailableApplications();
 
   /** Create the appropriate Application */
   static Application::Pointer CreateApplication(const std::string& name);

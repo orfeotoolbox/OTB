@@ -65,7 +65,7 @@ ApplicationRegistry::CreateApplication(const std::string& name)
   return appli;
 }
 
-std::list<std::string>
+std::vector<std::string>
 ApplicationRegistry::GetAvailableApplications()
 {
   ApplicationPointer appli;
@@ -88,7 +88,7 @@ ApplicationRegistry::GetAvailableApplications()
     }
 
   // Return the app list
-  std::list<std::string> availableApp;
+  std::vector<std::string> availableApp;
   for(std::list<ApplicationPointer>::iterator k = possibleApp.begin();
       k != possibleApp.end(); ++k)
     {

@@ -56,11 +56,13 @@
 //%include <std_iostream.i>
 //%include <std_sstream.i>
 %include <std_string.i>
-//%include <std_vector.i>
-//%include <std_list.i>
+%include <std_vector.i>
+//%include "std_list.i"
 
 
-//%template(vectorstring)   std::vector< std::string >;
+%template(vectorstring)   std::vector< std::string >;
+
+// list cannot be found for Java
 //%template(liststring)     std::list< std::string >;
 
 //%template(vectorB)        std::vector< bool >;

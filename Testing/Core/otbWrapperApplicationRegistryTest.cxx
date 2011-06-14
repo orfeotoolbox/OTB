@@ -24,10 +24,10 @@
 int otbWrapperApplicationRegistry(int argc, char* argv[])
 {
   using otb::Wrapper::ApplicationRegistry;
-  std::list<std::string> list = ApplicationRegistry::GetAvailableApplications();
+  std::vector<std::string> list = ApplicationRegistry::GetAvailableApplications();
 
   std::cout << "Available applications :" << std::endl;
-  std::list<std::string>::const_iterator it;
+  std::vector<std::string>::const_iterator it;
   for (it = list.begin(); it != list.end(); ++it)
     {
     std::cout << *it << std::endl;

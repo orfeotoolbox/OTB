@@ -9,7 +9,13 @@ class SmoothingTest {
 
   public static void main( String argv[] ) {
 
-    System.out.println( "Available applications : " + Registry.GetAvailableApplications() );
+    vectorstring appAvailable = Registry.GetAvailableApplications();
+    System.out.println( "Available applications :" );
+    
+    for (int i = 0; i < appAvailable.size(); i++)
+    {
+      System.out.println( appAvailable.get(i) );
+    }
 
     Application_Pointer app = Registry.CreateApplication("Smoothing");
     

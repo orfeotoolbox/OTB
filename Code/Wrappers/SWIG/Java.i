@@ -93,7 +93,7 @@
     }
     *(itkClass **)&$result = ptrRaw;
   }
-*/  
+*/
   %typemap(out) itkClass##_Pointer {
     itkClass* ptrRaw = $1.GetPointer();
     if (ptrRaw) {

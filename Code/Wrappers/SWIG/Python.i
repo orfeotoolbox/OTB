@@ -119,12 +119,12 @@
 %typemap(out) float &, const float &, double &, const double &
   {$result = PyFloat_FromDouble( *$1 );}
 
-// transform std::list< std::string > to Python list of Python string
-%typemap(out) std::list< std::string >
+// transform std::vector< std::string > to Python list of Python string
+%typemap(out) std::vector< std::string >
   {
   $result = PyList_New( $1.size() );
   Py_ssize_t i = 0;
-  for (std::list< std::string >::const_iterator it = $1.begin();
+  for (std::vector< std::string >::const_iterator it = $1.begin();
        it != $1.end();
        ++it, ++i )
     {

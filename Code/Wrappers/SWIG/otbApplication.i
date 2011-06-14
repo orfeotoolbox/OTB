@@ -192,7 +192,7 @@ DECLARE_REF_COUNT_CLASS( Application )
 class Registry : public itkObject
 {
 public:
-  static std::list<std::string> GetAvailableApplications();
+  static std::vector<std::string> GetAvailableApplications();
   static Application_Pointer CreateApplication(const std::string& name);
 
 protected:

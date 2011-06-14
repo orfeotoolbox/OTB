@@ -72,10 +72,10 @@ int main(int argc, char* argv[])
     const char* modulePath = itksys::SystemTools::GetEnv("ITK_AUTOLOAD_PATH");
     std::cout << "Module search path : " << (modulePath ? modulePath : "") << std::endl;
 
-    std::list<std::string> list = ApplicationRegistry::GetAvailableApplications();
+    std::vector<std::string> list = ApplicationRegistry::GetAvailableApplications();
 
     std::cout << "Available applications : " << (list.empty() ? "None" : "") << std::endl;
-    for (std::list<std::string>::const_iterator it = list.begin(); it != list.end(); ++it)
+    for (std::vector<std::string>::const_iterator it = list.begin(); it != list.end(); ++it)
       {
       std::cout << "  " << *it << std::endl;
       }
