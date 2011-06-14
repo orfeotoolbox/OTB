@@ -74,10 +74,17 @@ int Superimpose::Execute(otb::ApplicationOptionsResult* parseResult)
     InterpolatorType::Pointer interpolator = InterpolatorType::New();
     resampler->SetInterpolator(interpolator);
     
-    // Add DEM if any
+    // Configure DEM directory
     if(parseResult->IsOptionPresent("DEMDirectory"))
       {
       resampler->SetDEMDirectory(parseResult->GetParameterString("DEMDirectory", 0));
+      }
+    else
+      {
+      if ( otb::ConfigurationFile::GetInstance()->IsValid() )
+        {
+        resampler->SetDEMDirectory(otb::ConfigurationFile::GetInstance()->GetDEMDirectory());
+        }
       }
     
     // Set up output image informations
