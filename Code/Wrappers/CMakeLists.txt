@@ -1,12 +1,12 @@
-INCLUDE_DIRECTORIES(../Core)
+include_directories(../Core)
 
 # Generate Qt based GUI
 option ( WRAP_QT "Enable Qt wrappers" OFF )
 
 if ( WRAP_QT )
-  FIND_PACKAGE(Qt4 REQUIRED)
-  SET(QT_USE_QTXML 1)
-  INCLUDE(${QT_USE_FILE})
+  find_package(Qt4 REQUIRED)
+  set(QT_USE_QTXML 1)
+  include(${QT_USE_FILE})
 
   add_subdirectory(ApplicationLauncherQt)
   add_subdirectory(QtWidget)

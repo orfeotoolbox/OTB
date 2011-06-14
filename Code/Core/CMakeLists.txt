@@ -1,4 +1,4 @@
-FILE(GLOB srcs "*.cxx")
+file(GLOB srcs "*.cxx")
 
-ADD_LIBRARY(OTBWrapperCore ${srcs})
-TARGET_LINK_LIBRARIES(OTBWrapperCore OTBCommon OTBIO)
+add_library(OTBWrapperCore ${srcs})
+target_link_libraries(OTBWrapperCore OTBCommon OTBIO)

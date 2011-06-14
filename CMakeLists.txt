@@ -1,45 +1,44 @@
-PROJECT(OTB-Wrapper)
+project(OTB-Wrapper)
 
 cmake_minimum_required(VERSION 2.6)
 
-IF(COMMAND CMAKE_POLICY)
-  CMAKE_POLICY(SET CMP0003 NEW)
-ENDIF(COMMAND CMAKE_POLICY)
+if(COMMAND CMAKE_POLICY)
+  cmake_policy(SET CMP0003 NEW)
+endif(COMMAND CMAKE_POLICY)
 
 # Path to additional CMake modules
-SET(CMAKE_MODULE_PATH
+set(CMAKE_MODULE_PATH
     ${CMAKE_SOURCE_DIR}/CMake
     ${CMAKE_MODULE_PATH})
 
 include(Definitions)
 
 # Link to the Orfeo ToolBox
-FIND_PACKAGE(OTB REQUIRED PATHS /usr/lib/otb )
-INCLUDE(${OTB_USE_FILE})
+find_package(OTB REQUIRED PATHS /usr/lib/otb )
+include(${OTB_USE_FILE})
 
-SET(BUILD_SHARED_LIBS ${OTB_BUILD_SHARED_LIBS})
+set(BUILD_SHARED_LIBS ${OTB_BUILD_SHARED_LIBS})
 
-ADD_SUBDIRECTORY(Code)
-ADD_SUBDIRECTORY(Example)
+add_subdirectory(Code)
+add_subdirectory(Example)
 
 # Enable / Disable testing
-OPTION(BUILD_TESTING  "Build testing." OFF)
+option(BUILD_TESTING  "Build testing." OFF)
 
-INCLUDE(${CMAKE_ROOT}/Modules/Dart.cmake)
-MARK_AS_ADVANCED(TCL_TCLSH DART_ROOT)
-IF(BUILD_TESTING)
-  ENABLE_TESTING()
-  
-  # configure the test driver
-  FIND_PROGRAM(OTB_TEST_DRIVER otbTestDriver PATHS ${OTB_DIR}/bin ${OTB_DIR}/../../bin DOC "Path to the otbTestDriver executable from OTB")
-  
-  FIND_PATH(OTB_DATA_ROOT README-OTB-Data PATHS $ENV{OTB_DATA_ROOT} ${OTB_SOURCE_DIR}/../OTB-Data)
-  MARK_AS_ADVANCED(OTB_DATA_ROOT)
-  
-  SET(BUILDNAME "${BUILDNAME}" CACHE STRING "Name of build on the dashboard")
-  MARK_AS_ADVANCED(BUILDNAME)
-  ADD_SUBDIRECTORY(Testing)
-ENDIF(BUILD_TESTING)
+include(${CMAKE_ROOT}/Modules/Dart.cmake)
+mark_as_advanced(TCL_TCLSH DART_ROOT)
+if(BUILD_TESTING)
+  enable_testing()
+
+  find_program(OTB_TEST_DRIVER otbTestDriver PATHS ${OTB_DIR}/bin ${OTB_DIR}/../../bin DOC "Path to the otbTestDriver executable from OTB")
+
+  find_path(OTB_DATA_ROOT README-OTB-Data PATHS $ENV{OTB_DATA_ROOT} ${OTB_SOURCE_DIR}/../OTB-Data)
+  mark_as_advanced(OTB_DATA_ROOT)
+
+  set(BUILDNAME "${BUILDNAME}" CACHE STRING "Name of build on the dashboard")
+  mark_as_advanced(BUILDNAME)
+  add_subdirectory(Testing)
+endif(BUILD_TESTING)
 
 
 

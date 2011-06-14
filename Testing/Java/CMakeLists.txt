@@ -1,6 +1,6 @@
 include( UseJava )
 
-SET(TEST_DRIVER "${OTB_TEST_DRIVER}"
+set(TEST_DRIVER "${OTB_TEST_DRIVER}"
     --add-before-env ITK_AUTOLOAD_PATH "${CMAKE_BINARY_DIR}/Example"
 )
 

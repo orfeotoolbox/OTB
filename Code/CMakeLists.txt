@@ -1,2 +1,2 @@
-ADD_SUBDIRECTORY(Core)
-ADD_SUBDIRECTORY(Wrappers)
+add_subdirectory(Core)
+add_subdirectory(Wrappers)

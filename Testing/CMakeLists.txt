@@ -1,5 +1,5 @@
-SET(TEMP ${CMAKE_BINARY_DIR}/Testing/Temporary)
-FILE(MAKE_DIRECTORY ${TEMP})
+set(TEMP ${CMAKE_BINARY_DIR}/Testing/Temporary)
+file(MAKE_DIRECTORY ${TEMP})
 
 add_subdirectory(Core)
 

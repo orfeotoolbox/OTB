@@ -1,38 +1,38 @@
-SET(CXX_TEST_PATH ${EXECUTABLE_OUTPUT_PATH})
+set(CXX_TEST_PATH ${EXECUTABLE_OUTPUT_PATH})
 
-IF(WIN32)
-  ADD_DEFINITIONS(-DWIN32)
-ENDIF(WIN32)
+if(WIN32)
+  add_definitions(-DWIN32)
+endif(WIN32)
 
-SET(OTB_WRAPPER_TESTS ${CXX_TEST_PATH}/otbWrapperTests)
+set(OTB_WRAPPER_TESTS ${CXX_TEST_PATH}/otbWrapperTests)
 
 
-ADD_TEST(owTuParameterNew ${OTB_WRAPPER_TESTS}
+add_test(owTuParameterNew ${OTB_WRAPPER_TESTS}
 	otbWrapperParameterNew
   )
 
-ADD_TEST(owTvParameter ${OTB_WRAPPER_TESTS}
+add_test(owTvParameter ${OTB_WRAPPER_TESTS}
 	otbWrapperParameterTest1
 	"param1"
   )
-  
-  
+
+
 # NumericalParameter class test
-ADD_TEST(owTuNumericalParameter ${OTB_WRAPPER_TESTS}
-	otbWrapperNumericalParameterNew
-  ) 
-  
-# EmptyParameter class test
-ADD_TEST(owTuEmptyParameter ${OTB_WRAPPER_TESTS}
-	otbWrapperEmptyParameterNew
-  )
-  
-# NumericalParameter class test
-ADD_TEST(owTuNumericalParameter ${OTB_WRAPPER_TESTS}
+add_test(owTuNumericalParameter ${OTB_WRAPPER_TESTS}
 	otbWrapperNumericalParameterNew
   )
 
-ADD_TEST(owTvNumericalParameter ${OTB_WRAPPER_TESTS}
+# EmptyParameter class test
+add_test(owTuEmptyParameter ${OTB_WRAPPER_TESTS}
+	otbWrapperEmptyParameterNew
+  )
+
+# NumericalParameter class test
+add_test(owTuNumericalParameter ${OTB_WRAPPER_TESTS}
+	otbWrapperNumericalParameterNew
+  )
+
+add_test(owTvNumericalParameter ${OTB_WRAPPER_TESTS}
 	otbWrapperNumericalParameterTest1
 	42.42
 	"mykey"
@@ -40,28 +40,28 @@ ADD_TEST(owTvNumericalParameter ${OTB_WRAPPER_TESTS}
   )
 
 # Input Image parameter class test
-ADD_TEST(owTuInputImageParameter ${OTB_WRAPPER_TESTS}
+add_test(owTuInputImageParameter ${OTB_WRAPPER_TESTS}
 	otbWrapperInputImageParameterNew
   )
-    
+
 # Input VectorData parameter class test
-ADD_TEST(owTuInputVectorDataParameter ${OTB_WRAPPER_TESTS}
+add_test(owTuInputVectorDataParameter ${OTB_WRAPPER_TESTS}
     otbWrapperInputVectorDataParameterNew
   )
 
 # Application class test
-ADD_TEST(owTuApplication ${OTB_WRAPPER_TESTS}
+add_test(owTuApplication ${OTB_WRAPPER_TESTS}
 	otbWrapperApplicationNew
   )
 
 # Application class test
-ADD_TEST(owTvApplicationRegistry ${OTB_WRAPPER_TESTS}
+add_test(owTvApplicationRegistry ${OTB_WRAPPER_TESTS}
     otbWrapperApplicationRegistry
   )
 
 # ----------------Source files CXX -----------------------------------
 
-SET(Wrapper_SRCS
+set(Wrapper_SRCS
 otbWrapperCoreTests.cxx
 
 otbWrapperApplicationTest.cxx
@@ -76,6 +76,6 @@ otbWrapperParameterTest.cxx
 otbWrapperApplicationRegistryTest.cxx
 )
 
-INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/Code/Core)
-ADD_EXECUTABLE(otbWrapperTests ${Wrapper_SRCS})
-TARGET_LINK_LIBRARIES(otbWrapperTests OTBIO OTBCommon ITKIO ITKCommon OTBTesting OTBWrapperCore)
+include_directories(${CMAKE_SOURCE_DIR}/Code/Core)
+add_executable(otbWrapperTests ${Wrapper_SRCS})
+target_link_libraries(otbWrapperTests OTBIO OTBCommon ITKIO ITKCommon OTBTesting OTBWrapperCore)

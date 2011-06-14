@@ -1,16 +1,16 @@
 
 # ensure WIN32 definition
-IF(WIN32)
-  ADD_DEFINITIONS(-DWIN32)
-ENDIF(WIN32)
+if(WIN32)
+  add_definitions(-DWIN32)
+endif(WIN32)
 
 
 # On Visual Studio 8 MS deprecated C. This removes all 1.276E1265 security
 # warnings
-IF(WIN32)
-    IF(NOT CYGWIN)
-      IF(NOT MINGW)
-          ADD_DEFINITIONS(
+if(WIN32)
+    if(NOT CYGWIN)
+      if(NOT MINGW)
+          add_definitions(
             -D_CRT_FAR_MAPPINGS_NO_DEPRECATE
             -D_CRT_IS_WCTYPE_NO_DEPRECATE
             -D_CRT_MANAGED_FP_NO_DEPRECATE
@@ -23,11 +23,11 @@ IF(WIN32)
             -D_SCL_SECURE_NO_DEPRECATE
             )
 
-        IF (MSVC)
-          ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS)
-          ADD_DEFINITIONS(-D_CRT_NONSTDC_NO_WARNING)
-        ENDIF(MSVC)
+        if(MSVC)
+          add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+          add_definitions(-D_CRT_NONSTDC_NO_WARNING)
+        endif(MSVC)
 
-      ENDIF(NOT MINGW)
-    ENDIF(NOT CYGWIN)
-ENDIF(WIN32)
+      endif(NOT MINGW)
+    endif(NOT CYGWIN)
+endif(WIN32)

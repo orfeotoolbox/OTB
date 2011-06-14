@@ -1,12 +1,12 @@
-INCLUDE_DIRECTORIES(${QT_INCLUDE_DIRS})
-INCLUDE_DIRECTORIES(../QtWidget)
+include_directories(${QT_INCLUDE_DIRS})
+include_directories(../QtWidget)
 
-SET( SRCS
+set( SRCS
      otbApplicationLauncherQt.cxx )
 
-ADD_EXECUTABLE(otbApplicationLauncherQt ${SRCS})
+add_executable(otbApplicationLauncherQt ${SRCS})
 
-TARGET_LINK_LIBRARIES(otbApplicationLauncherQt
+target_link_libraries(otbApplicationLauncherQt
                        OTBWrapperQtWidget
                        OTBWrapperCore
                        ${QT_LIBRARIES})

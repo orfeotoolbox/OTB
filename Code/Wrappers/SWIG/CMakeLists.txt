@@ -76,7 +76,7 @@ if ( WRAP_LUA OR WRAP_PYTHON OR WRAP_JAVA OR WRAP_CSHARP OR WRAP_TCL OR WRAP_R O
      )
 
   set ( SWIG_MODULE_otbApplication_EXTRA_DEPS ${SWIG_HEADERS} )
-  
+
   include_directories ( ${CMAKE_CURRENT_SOURCE_DIR} )
 
 endif()
