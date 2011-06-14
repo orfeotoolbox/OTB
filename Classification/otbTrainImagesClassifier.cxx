@@ -19,6 +19,7 @@
 
 #include <iostream>
 #include "otbCommandLineArgumentParser.h"
+#include "otbConfigurationFile.h"
 
 //Image
 #include "otbImage.h"
