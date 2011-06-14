@@ -73,7 +73,7 @@ int TrainImagesClassifier::Describe(ApplicationDescriptor* descriptor)
                                "in", true, ApplicationDescriptor::InputImage);
   descriptor->AddOptionNParams("VectorDataSamples", "Vector Data of sample used to train the estimator",
                                "vd", true, ApplicationDescriptor::FileName);
-  descriptor->AddOptionNParams("DEMdirectory", "A DEM repository",
+  descriptor->AddOptionNParams("DEMDirectory", "A DEM repository",
                                "dem", false, ApplicationDescriptor::DirectoryName);
   descriptor->AddOption("ImagesStatistics", "XML file containing mean and standard deviation of input images.",
                         "is", 1, false, ApplicationDescriptor::FileName);
@@ -229,9 +229,17 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
     // Set the cartographic region to the extract roi filter
     vdextract->SetRegion(rsRegion);
 
-    if (parseResult->IsOptionPresent("DEMdirectory"))
+    // Configure DEM directory
+    if(parseResult->IsOptionPresent("DEMDirectory"))
       {
-      vdextract->SetDEMDirectory(parseResult->GetParameterString("DEMdirectory"));
+      vdextract->SetDEMDirectory(parseResult->GetParameterString("DEMDirectory"));
+      }
+    else
+      {
+      if ( otb::ConfigurationFile::GetInstance()->IsValid() )
+        {
+        vdextract->SetDEMDirectory(otb::ConfigurationFile::GetInstance()->GetDEMDirectory());
+        }
       }
 
     // Project the vectorData in the Image Coodinate system
@@ -245,9 +253,9 @@ int TrainImagesClassifier::Execute(otb::ApplicationOptionsResult* parseResult)
     //vproj->SetOutputOrigin(reader->GetOutput()->GetOrigin());
     //vproj->SetOutputSpacing(reader->GetOutput()->GetSpacing());
 
-    if (parseResult->IsOptionPresent("DEMdirectory"))
+    if (parseResult->IsOptionPresent("DEMDirectory"))
       {
-      vproj->SetDEMDirectory(parseResult->GetParameterString("DEMdirectory"));
+      vproj->SetDEMDirectory(parseResult->GetParameterString("DEMDirectory"));
       }
 
     vproj->Update();
