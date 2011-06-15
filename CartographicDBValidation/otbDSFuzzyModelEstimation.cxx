@@ -253,10 +253,8 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
   //Format Hypothesis
   LabelSetType Bhyp, Phyp;
   int nbSet;
-  std::cout <<  "!!" << std::endl;
 
   nbSet = parseResult->GetNumberOfParameters("BeliefSupport");
-  std::cout << nbSet << "B" << std::endl;
 
   for (int i = 0; i < nbSet; i++)
     {
@@ -264,7 +262,6 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
     Bhyp.insert(str);
     }
   costFunction->SetBeliefHypothesis(Bhyp);
-  std::cout << nbSet << "B" << std::endl;
   nbSet = parseResult->GetNumberOfParameters("PlausibilitySupport");
   for (int i = 0; i < nbSet; i++)
     {
@@ -272,14 +269,11 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
     Phyp.insert(str);
     }
   costFunction->SetPlausibilityHypothesis(Phyp);
-  std::cout << nbSet << "B" << std::endl;
-  std::cout << "O" << std::endl;
 
   if (parseResult->IsOptionPresent("Weighting"))
     {
     costFunction->SetWeight(parseResult->GetParameterDouble("Weighting"));
     }
-  std::cout << "U"<< std::endl;
   if (parseResult->IsOptionPresent("Criterion"))
     {
     costFunction->SetCriterionFormula(parseResult->GetParameterString("Criterion"));
@@ -309,22 +303,7 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
   optimizer->AutomaticInitialSimplexOff();
   optimizer->SetInitialSimplexDelta( simplexDelta );
 
-  std::cout << "A"<< std::endl;
-
-  //[0.0585698, 0.158364, 0.207495, 0.999979, 0.208119, 0.310084, 0.507505, 1, 0.106548, 0.207591, 0.306967, 0.940949]
-  /*
-    for (unsigned int i = 0; i < costFunction->GetNumberOfParameters(); i += 4)
-    {
-    initialPosition.SetElement(i,   0.25);
-    initialPosition.SetElement(i+1, 0.50);
-    initialPosition.SetElement(i+2, 0.75);
-    initialPosition.SetElement(i+3, 0.99);
-    }
-  */
-
-
   optimizer->SetInitialPosition(initialPosition);
-  std::cout << "A"<< std::endl;
 
   // Create the Command observer and register it with the optimizer.
   CommandIterationUpdate::Pointer observer = CommandIterationUpdate::New();
@@ -332,19 +311,15 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
     {
     optimizer->AddObserver( itk::IterationEvent(), observer );
     }
-  std::cout << "A"<< std::endl;
 
   try
   {
     // do the optimization
     optimizer->StartOptimization();
-    std::cout << "??"<< std::endl;
 
   }
   catch( itk::ExceptionObject& err )
   {
-    std::cout << "?!"<< std::endl;
-
     // An error has occurred in the optimization.
     // Update the parameters
     std::cout << "ERROR: Exception Catched!" << std::endl;
