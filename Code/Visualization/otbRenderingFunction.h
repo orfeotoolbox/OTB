@@ -151,6 +151,14 @@ public:
       }
   }
 
+
+  /** NoData Vaue setter */
+  itkSetMacro( NoDataValue, ScalarType );
+
+  /** NoData Vaue gtter */
+  itkGetMacro( NoDataValue, ScalarType );
+  itkGetConstMacro( NoDataValue, ScalarType );
+
   /** This method is available to allow implementation of
    * preprocessing.
    */
@@ -165,6 +173,7 @@ protected:
   {
     m_HistogramList = NULL;
     m_ListSample = NULL;
+    m_NoDataValue = itk::NumericTraits<ScalarType>::Zero;
   }
   /** Destructor */
   virtual ~RenderingFunction() {}
@@ -192,6 +201,7 @@ protected:
 
     histogramFilter->SetNumberOfBins(m_NumberOfHistogramBins);
     histogramFilter->NoDataFlagOn();
+    histogramFilter->SetNoDataValue(m_NoDataValue);
 
     // Generate
     histogramFilter->Update();
@@ -206,11 +216,13 @@ protected:
     return m_ListSample;
   }
 
+ 
 private:
   RenderingFunction(const Self&); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
   HistogramListPointerType m_HistogramList;
   ListSamplePointerType    m_ListSample;
+  ScalarType m_NoDataValue;
 };
 } // end namespace Function
 } // end namepsace otb
