@@ -27,18 +27,11 @@ template <class TDSValidationFilter>
 StandardDSCostFunction<TDSValidationFilter>
 ::StandardDSCostFunction() :
   m_CriterionFormula("((Belief + Plausibility)/2.)"),
-  m_Weight(0.5),
-  m_NumberOfParameters(12)
+  m_Weight(0.5)
 {
  m_GTVectorData = VectorDataType::New();
  m_NSVectorData = VectorDataType::New();
  m_Parser =  ParserType::New();
-
- m_BeliefHypothesis.insert("ROADSA");
-
- m_PlausibilityHypothesis.insert("ROADSA");
- m_PlausibilityHypothesis.insert("NOBUIL");
- m_PlausibilityHypothesis.insert("NONDVI");
 }
 
 template <class TDSValidationFilter>
@@ -46,7 +39,7 @@ unsigned int
 StandardDSCostFunction<TDSValidationFilter>
 ::GetNumberOfParameters() const
  {
-  return m_NumberOfParameters;
+  return m_DescriptorList.size()*4;
  }
 
 template <class TDSValidationFilter>
@@ -55,23 +48,24 @@ typename StandardDSCostFunction<TDSValidationFilter>
  StandardDSCostFunction<TDSValidationFilter>
 ::GetValue(const ParametersType & parameters) const
  {
+  if (parameters.size() != m_DescriptorList.size()*4)
+    {
+    itkExceptionMacro(<< "Wrong model!" )
+    }
+
   //Initialize parser
   m_Parser->SetExpr(m_CriterionFormula);
 
-  //unsigned int nbParam = this->GetNumberOfParameters();
-
-  std::vector<double> noNDVI, roadSA, noBuilding;
-  for (unsigned int i = 0; i < 4; i++)
+  DescriptorsModelType descModel;
+  for (unsigned int i = 0; i < m_DescriptorList.size(); i++)
     {
-    noNDVI.push_back(parameters[i]);
-    }
-  for (unsigned int i = 0; i < 4; i++)
-    {
-    roadSA.push_back(parameters[i + 4]);
-    }
-  for (unsigned int i = 0; i < 4; i++)
-    {
-    noBuilding.push_back(parameters[i + 8]);
+    std::vector<double> tmp;
+    for (unsigned int j = 0; j < 4; j++)
+      {
+      tmp.push_back(parameters[4*i+j]);
+      }
+    PairType pair( m_DescriptorList[i], tmp);
+    descModel.push_back(pair);
     }
 
   typename DSValidationFilterType::Pointer internalFunctionGT = DSValidationFilterType::New();
@@ -81,9 +75,7 @@ typename StandardDSCostFunction<TDSValidationFilter>
   internalFunctionGT->SetPlausibilityHypothesis(m_PlausibilityHypothesis);
   try
     {
-    internalFunctionGT->SetFuzzyModel("NONDVI", noNDVI);
-    internalFunctionGT->SetFuzzyModel("ROADSA", roadSA);
-    internalFunctionGT->SetFuzzyModel("NOBUIL", noBuilding);
+    internalFunctionGT->SetDescriptorModels(descModel);
     }
   catch (itk::ExceptionObject /*& err*/)
     {
@@ -98,9 +90,7 @@ typename StandardDSCostFunction<TDSValidationFilter>
   internalFunctionNS->SetBeliefHypothesis(m_PlausibilityHypothesis);
   try
     {
-    internalFunctionNS->SetFuzzyModel("NONDVI", noNDVI);
-    internalFunctionNS->SetFuzzyModel("ROADSA", roadSA);
-    internalFunctionNS->SetFuzzyModel("NOBUIL", noBuilding);
+    internalFunctionNS->SetDescriptorModels(descModel);
     }
   catch (itk::ExceptionObject &)
     {

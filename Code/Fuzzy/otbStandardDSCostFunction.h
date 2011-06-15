@@ -82,6 +82,12 @@ public:
 
   typedef FuzzyDescriptorsModelManager                 FuzzyDescriptorsModelManagerType;
 
+  typedef FuzzyDescriptorsModelManager::DescriptorListType
+                                                       DescriptorListType;
+  typedef FuzzyDescriptorsModelManager::DescriptorsModelType
+                                                       DescriptorsModelType;
+  typedef FuzzyDescriptorsModelManager::PairType       PairType;
+
   typedef Parser                                       ParserType;
 
   /** This method returns the value of the cost function corresponding
@@ -101,11 +107,22 @@ public:
   itkSetMacro(CriterionFormula, std::string);
   itkGetConstMacro(CriterionFormula, std::string);
 
+  void SetDescriptorList(DescriptorListType list)
+  {
+    m_DescriptorList = list;
+  }
+
+  DescriptorListType GetDescriptorList()
+  {
+    return m_DescriptorList;
+  }
+
   itkSetObjectMacro(GTVectorData, VectorDataType);
   itkGetConstObjectMacro(GTVectorData, VectorDataType);
 
   itkSetObjectMacro(NSVectorData, VectorDataType);
   itkGetConstObjectMacro(NSVectorData, VectorDataType);
+
 
   LabelSetType GetBeliefHypothesis()
   {
@@ -150,7 +167,8 @@ private:
 
   LabelSetType                       m_BeliefHypothesis;
   LabelSetType                       m_PlausibilityHypothesis;
-  const unsigned int                 m_NumberOfParameters;
+
+  DescriptorListType                 m_DescriptorList;
 };
 
 } // end namespace otb
