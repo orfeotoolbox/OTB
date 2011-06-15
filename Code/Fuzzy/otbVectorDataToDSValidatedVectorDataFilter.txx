@@ -101,7 +101,6 @@ VectorDataToDSValidatedVectorDataFilter<TVectorData, TPrecision>
 }
 
 
-
 template <class TVectorData, class TPrecision>
 void
 VectorDataToDSValidatedVectorDataFilter<TVectorData, TPrecision>
