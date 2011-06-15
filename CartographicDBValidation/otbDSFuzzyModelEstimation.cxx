@@ -86,7 +86,9 @@ int otb::DSFuzzyModelEstimation::Describe(ApplicationDescriptor* descriptor)
   descriptor->AddOption("Weighting", "Coefficient between 0 and 1 to promote undetection or false detections (default 0.5)",
                         "wgt", 1, false, ApplicationDescriptor::Real);
   descriptor->AddOption("InitModel", "Initial state for the model Optimizer",
-                        "InitMod", 1, true, ApplicationDescriptor::FileName);
+                        "InitMod", 1, false, ApplicationDescriptor::FileName);
+  descriptor->AddOptionNParams("DescriptorList", "List of the descriptors used in the model (must be specified to perform an automatic initialization)",
+                        "DescList", false, ApplicationDescriptor::StringList);
   descriptor->AddOption("MaximumNumberOfIterations", "Maximum Number of Optimizer Iteration (default 200)",
                         "MaxNbIt", 1, false, ApplicationDescriptor::Integer);
   descriptor->AddOption("OptimizerObserver", "Activate or not the optimizer observer",
@@ -122,6 +124,13 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
   CostFunctionType::Pointer                   costFunction = CostFunctionType::New();
   OptimizerType::Pointer                      optimizer = OptimizerType::New();
 
+  if ((parseResult->IsOptionPresent("DescriptorList") && parseResult->IsOptionPresent("InitModel"))
+      || (!parseResult->IsOptionPresent("DescriptorList") && !parseResult->IsOptionPresent("InitModel")))
+    {
+    std::cout << "ERROR: An Initial Model OR a Descriptor List must be specified (but not both)" << std::endl;
+    return EXIT_FAILURE;
+    }
+
   //Read the vector datas
   psReader->SetFileName(parseResult->GetParameterString("InputPositiveVectorData"));
   psReader->Update();
@@ -130,20 +139,23 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
   nsReader->Update();
 
   // Load the initial descriptor model
-  std::string descModFile = parseResult->GetParameterString("InitModel");
-  DescriptorsModelType descMod  = FuzzyDescriptorsModelManager::Read( descModFile.c_str() );
-  DescriptorListType   descList = FuzzyDescriptorsModelManager::GetDescriptorList(descMod);
-  costFunction->SetDescriptorList(descList);
-
-  OptimizerType::ParametersType
-  initialPosition( 4 * descList.size() );
-  for(unsigned int i=0; i<4; i++)
+  DescriptorListType   descList;
+  DescriptorsModelType descMod;
+  if (parseResult->IsOptionPresent("InitModel"))
     {
-    for(unsigned int j=0; j< descList.size(); j++)
-      {
-      initialPosition.SetElement(i+4*j,   otb::FuzzyDescriptorsModelManager::GetDescriptor(descList[j].c_str(), descMod).second[i]);
-      }
+    std::string descModFile = parseResult->GetParameterString("InitModel");
+    descMod  = FuzzyDescriptorsModelManager::Read( descModFile.c_str() );
+    descList = FuzzyDescriptorsModelManager::GetDescriptorList(descMod);
     }
+  else
+    {
+    int nbsdDesc = parseResult->GetNumberOfParameters("DescriptorList");
+    for (int i = 0; i < nbsdDesc; i++)
+        {
+        descList.push_back(parseResult->GetParameterString("DescriptorList", i));
+        }
+    }
+  costFunction->SetDescriptorList(descList);
 
   // Compute statistics of all the descriptors
   typedef VectorDataType::DataTreeType DataTreeType;
@@ -247,6 +259,31 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
     double stddev = vcl_sqrt( accSecondOrderNS[i]/accNbElemNS - mean*mean );
     std::cout << descList[i] << "  :  " << mean << " +/- " << stddev
         << "  (min: " << minNS[i] << "  max: " << maxNS[i] << ")"<< std::endl;
+    }
+
+
+  OptimizerType::ParametersType
+  initialPosition( 4 * descList.size() );
+
+  if (parseResult->IsOptionPresent("InitModel"))
+    {
+    for(unsigned int i=0; i<4; i++)
+      {
+      for(unsigned int j=0; j< descList.size(); j++)
+        {
+        initialPosition.SetElement(i+4*j,   otb::FuzzyDescriptorsModelManager::GetDescriptor(descList[j].c_str(), descMod).second[i]);
+        }
+      }
+    }
+  else
+    {
+    for(unsigned int j=0; j< descList.size(); j++)
+      {
+      initialPosition.SetElement((j*4),   std::min(minNS[j], maxPS[j]));
+      initialPosition.SetElement((j*4)+2, std::max(minNS[j], maxPS[j]));
+      initialPosition.SetElement((j*4)+1, 0.5*(initialPosition.GetElement((j*4)) + initialPosition.GetElement((j*4)+2)));
+      initialPosition.SetElement((j*4)+3, 0.95);
+      }
     }
 
   //Cost Function
