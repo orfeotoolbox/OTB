@@ -338,7 +338,7 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
   for (unsigned int i=0; i < descList.size(); i++)
     {
     otb::FuzzyDescriptorsModelManager::ParameterType        tmpParams;
-    for (unsigned int j = 0; i<4; i++)
+    for (unsigned int j = 0; j<4; j++)
       {
       tmpParams.push_back(optimizer->GetCurrentPosition()[(i*4)+j]);
       }
