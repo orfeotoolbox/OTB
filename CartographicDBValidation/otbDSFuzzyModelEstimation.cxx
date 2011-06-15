@@ -20,29 +20,16 @@
 #include <iostream>
 #include "otbCommandLineArgumentParser.h"
 
-#include "otbVectorImage.h"
-#include "otbImageFileReader.h"
-
 #include "otbVectorData.h"
 #include "otbVectorDataFileReader.h"
 #include "otbVectorDataFileWriter.h"
 #include "otbImageToEnvelopeVectorDataFilter.h"
 #include "otbVectorDataToRandomLineGenerator.h"
-
-#include "otbVectorDataProjectionFilter.h"  //Envelope TO WGS84 (OSM friendly)
-#include "otbVectorDataIntoImageProjectionFilter.h" //WGS84 to index
-
-#include "otbVectorDataToRoadDescriptionFilter.h"
-#include "otbVectorDataToDSValidatedVectorDataFilter.h"
-
 #include "itkAmoebaOptimizer.h"
+#include "otbVectorDataToDSValidatedVectorDataFilter.h"
 #include "otbStandardDSCostFunction.h"
-
 #include "otbFuzzyDescriptorsModelManager.h"
 
-#include "otbVectorDataProjectionFilter.h"
-#include "otbVectorDataTransformFilter.h"
-#include "itkAffineTransform.h"
 
 //  The following piece of code implements an observer
 //  that will monitor the evolution of the registration process.
@@ -85,36 +72,27 @@ void Execute(const itk::Object * object, const itk::EventObject & event)
 int otb::DSFuzzyModelEstimation::Describe(ApplicationDescriptor* descriptor)
 {
   descriptor->SetName("DSFuzzyModelEstimation");
-  descriptor->SetDescription("Estimate feature fuzzy model parameters using an image and an VectorData as support");
-  descriptor->AddOption("InputImage", "Image Support to estimate the models on",
-                        "img", 1,  true, ApplicationDescriptor::InputImage);
-  descriptor->AddOption("BuildingsDB", "Building DataBase Support to estimate the models on",
-                        "db", 1,   true, ApplicationDescriptor::FileName);
-  descriptor->AddOption("InputVectorData", "Ground Truth Vector Data",
-                        "vdin", 1, true, ApplicationDescriptor::FileName);
+  descriptor->SetDescription("Estimate feature fuzzy model parameters using 2 VectorDatas (ground thruth / wrong samples)");
+  descriptor->AddOption("InputPositiveVectorData", "Ground Truth Vector Data",
+                        "psin", 1, true, ApplicationDescriptor::FileName);
   descriptor->AddOption("InputNegativeVectorData", "Negative samples Vector Data",
-                        "nsin", 1, false, ApplicationDescriptor::FileName);
-  descriptor->AddOption("Output", "Output Model File Name",
-                        "out", 1,  true, ApplicationDescriptor::FileName);
-  descriptor->AddOption("BeliefHypothesis", "Dempster Shafer study hypothesis to compute Belief",
-                        "Bhyp", 3, false, ApplicationDescriptor::StringList);
-  descriptor->AddOption("PlausibilityHypothesis", "Dempster Shafer study hypothesis to compute Plausibility",
-                        "Phyp", 3, false, ApplicationDescriptor::StringList);
+                        "nsin", 1, true, ApplicationDescriptor::FileName);
+  descriptor->AddOptionNParams("BeliefSupport", "Dempster Shafer study hypothesis to compute Belief",
+                               "BelSup", true, ApplicationDescriptor::StringList);
+  descriptor->AddOptionNParams("PlausibilitySupport", "Dempster Shafer study hypothesis to compute Plausibility",
+                               "PlaSup", true, ApplicationDescriptor::StringList);
   descriptor->AddOption("Criterion", "Dempster Shafer Criterion (by default (Belief+Plausibility)/2)",
                         "cri", 1, false, ApplicationDescriptor::String);
-  descriptor->AddOption("weighting", "Coefficient between 0 and 1 to promote undetection or false detections (default 0.5)",
+  descriptor->AddOption("Weighting", "Coefficient between 0 and 1 to promote undetection or false detections (default 0.5)",
                         "wgt", 1, false, ApplicationDescriptor::Real);
-  descriptor->AddOption("MaximumNumberOfIterations", "Maximum Number of Optimizer Iteration",
-                        "MaxNbIt", 1, false, ApplicationDescriptor::Integer);
-  descriptor->AddOption("DEMDirectory", "DEM directory",
-                        "dem", 1, false, ApplicationDescriptor::DirectoryName);
   descriptor->AddOption("InitModel", "Initial state for the model Optimizer",
-                        "InitMod", 1, false, ApplicationDescriptor::FileName);
+                        "InitMod", 1, true, ApplicationDescriptor::FileName);
+  descriptor->AddOption("MaximumNumberOfIterations", "Maximum Number of Optimizer Iteration (default 200)",
+                        "MaxNbIt", 1, false, ApplicationDescriptor::Integer);
   descriptor->AddOption("OptimizerObserver", "Activate or not the optimizer observer",
                         "OptObs", 0, false, ApplicationDescriptor::Boolean);
-  descriptor->AddOption("GenerateShp", "Activate the output of intermediate vector data (only work with cartographic image)",
-                        "grtShp", 0, false, ApplicationDescriptor::Boolean);
-
+  descriptor->AddOption("Output", "Output Model File Name",
+                        "out", 1,  true, ApplicationDescriptor::FileName);
 
   return EXIT_SUCCESS;
 }
@@ -126,184 +104,98 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
   typedef VectorDataType::ValuePrecisionType          PrecisionType;
   typedef VectorDataType::PrecisionType               CoordRepType;
   typedef otb::VectorDataFileReader<VectorDataType>   VectorDataReaderType;
-  typedef otb::VectorDataFileWriter<VectorDataType>   VectorDataWriterType;
-  typedef otb::VectorDataToRandomLineGenerator<VectorDataType>
-  RandomGeneratorType;
-
-  typedef otb::VectorImage<PrecisionType , 2>         ImageType;
-  typedef otb::ImageFileReader<ImageType>             ImageReaderType;
-
-  typedef otb::ImageToEnvelopeVectorDataFilter<ImageType, VectorDataType>
-  EnvelopeFilterType;
-
-  typedef otb::VectorDataProjectionFilter<VectorDataType, ImageType>
-  VectorDataProjFilter;
-
-  typedef otb::VectorDataIntoImageProjectionFilter<VectorDataType, ImageType>
-  VectorDataReProjFilter;
-
-  typedef otb::VectorDataToRoadDescriptionFilter<VectorDataType, ImageType>
-  DescriptionFilterType;
 
   typedef otb::VectorDataToDSValidatedVectorDataFilter<VectorDataType, PrecisionType>
-  ValidationFilterType;
-
+                                                      ValidationFilterType;
   typedef otb::StandardDSCostFunction<ValidationFilterType> CostFunctionType;
-  typedef CostFunctionType::LabelSetType                    LabelSetType;
+  typedef CostFunctionType::LabelSetType              LabelSetType;
 
   typedef itk::AmoebaOptimizer                        OptimizerType;
 
   typedef otb::FuzzyDescriptorsModelManager::DescriptorsModelType
                                                       DescriptorsModelType;
-
+  typedef otb::FuzzyDescriptorsModelManager::DescriptorListType
+                                                      DescriptorListType;
   //Instantiate
-  ImageReaderType::Pointer                   imgReader = ImageReaderType::New();
-  VectorDataReaderType::Pointer               dbReader = VectorDataReaderType::New();
-  VectorDataReaderType::Pointer               vdReader = VectorDataReaderType::New();
-  EnvelopeFilterType::Pointer           envelopeFilter = EnvelopeFilterType::New();
-  RandomGeneratorType::Pointer       vdRandomGenerator = RandomGeneratorType::New();
-  VectorDataReProjFilter::Pointer     vdReProjFilterGT = VectorDataReProjFilter::New();
-  VectorDataReProjFilter::Pointer     vdReProjFilterRL = VectorDataReProjFilter::New();
-  VectorDataReProjFilter::Pointer     vdReProjFilterDB = VectorDataReProjFilter::New();
-  DescriptionFilterType::Pointer   descriptionFilterGT = DescriptionFilterType::New();
-  DescriptionFilterType::Pointer   descriptionFilterNS = DescriptionFilterType::New();
-  CostFunctionType::Pointer               costFunction = CostFunctionType::New();
-  OptimizerType::Pointer                     optimizer = OptimizerType::New();
+  VectorDataReaderType::Pointer               psReader = VectorDataReaderType::New();
+  VectorDataReaderType::Pointer               nsReader = VectorDataReaderType::New();
+  CostFunctionType::Pointer                   costFunction = CostFunctionType::New();
+  OptimizerType::Pointer                      optimizer = OptimizerType::New();
 
-  VectorDataWriterType::Pointer               vdWriter = VectorDataWriterType::New();
+  //Read the vector datas
+  psReader->SetFileName(parseResult->GetParameterString("InputPositiveVectorData"));
+  psReader->Update();
 
-  //Read the image
-  imgReader->SetFileName(parseResult->GetParameterString("InputImage"));
-  imgReader->UpdateOutputInformation();
+  nsReader->SetFileName(parseResult->GetParameterString("InputNegativeVectorData"));
+  nsReader->Update();
 
-  imgReader->SetGlobalWarningDisplay(0);
+  // Load the initial descriptor model
+  std::string descModFile = parseResult->GetParameterString("InitModel");
+  DescriptorsModelType descMod  = FuzzyDescriptorsModelManager::Read( descModFile.c_str() );
+  DescriptorListType   descList = FuzzyDescriptorsModelManager::GetDescriptorList(descMod);
+  costFunction->SetDescriptorList(descList);
 
-  //Read the building database
-  dbReader->SetFileName(parseResult->GetParameterString("BuildingsDB"));
-  dbReader->Update();
-
-  //Read the vector data
-  vdReader->SetFileName(parseResult->GetParameterString("InputVectorData"));
-  vdReader->Update();
-
-  //Generate the envelope
-  envelopeFilter->SetInput(imgReader->GetOutput()); //->Output in WGS84
-  envelopeFilter->Update();
-
-  if (parseResult->IsOptionPresent("InputNegativeVectorData"))
+  OptimizerType::ParametersType
+  initialPosition( 4 * descList.size() );
+  for(unsigned int i=0; i<4; i++)
     {
-    //Read the negative samples vector data
-    VectorDataReaderType::Pointer               nsReader = VectorDataReaderType::New();
-    nsReader->SetFileName(parseResult->GetParameterString("InputNegativeVectorData"));
-    nsReader->Update();
-    vdReProjFilterRL->SetInputVectorData(nsReader->GetOutput());
+    for(unsigned int j=0; j< descList.size(); j++)
+      {
+      initialPosition.SetElement(i+4*j,   otb::FuzzyDescriptorsModelManager::GetDescriptor(descList[j].c_str(), descMod).second[i]);
+      }
     }
-  else
-    {
-    //Generate Random lines
-    vdRandomGenerator->SetInput(envelopeFilter->GetOutput());
-    vdRandomGenerator->SetNumberOfOutputLine(vdReader->GetOutput()->Size());
-    vdRandomGenerator->SetMinLineSize(4);
-    vdRandomGenerator->SetMaxLineSize(20);
-    vdReProjFilterRL->SetInputVectorData(vdRandomGenerator->GetOutput());
-    }
-
-
-  //Reproject into image index coordinates
-  vdReProjFilterGT->SetInputImage(imgReader->GetOutput());
-  vdReProjFilterGT->SetInputVectorData(vdReader->GetOutput());
-  if( parseResult->IsOptionPresent("DEMDirectory") )
-    {
-    vdReProjFilterGT->SetDEMDirectory(parseResult->GetParameterString("DEMDirectory"));
-    }
-  vdReProjFilterGT->SetUseOutputSpacingAndOriginFromImage(true);
-  vdReProjFilterGT->Update();
-
-  vdReProjFilterRL->SetInputImage(imgReader->GetOutput());
-
-  if( parseResult->IsOptionPresent("DEMDirectory") )
-    {
-    vdReProjFilterRL->SetDEMDirectory(parseResult->GetParameterString("DEMDirectory"));
-    }
-  vdReProjFilterRL->SetUseOutputSpacingAndOriginFromImage(true);
-  vdReProjFilterRL->Update();
-
-  vdReProjFilterDB->SetInputImage(imgReader->GetOutput());
-  vdReProjFilterDB->SetInputVectorData(dbReader->GetOutput());
-  if( parseResult->IsOptionPresent("DEMDirectory") )
-    {
-    vdReProjFilterDB->SetDEMDirectory(parseResult->GetParameterString("DEMDirectory"));
-    }
-  vdReProjFilterDB->SetUseOutputSpacingAndOriginFromImage(true);
-  vdReProjFilterDB->Update();
-
-  //Add Description to VectorDatas
-  descriptionFilterGT->SetInput(vdReProjFilterGT->GetOutput());
-  descriptionFilterGT->AddOpticalImage(imgReader->GetOutput());
-  descriptionFilterGT->AddBuildingsDB(vdReProjFilterDB->GetOutput());
-  descriptionFilterGT->Update();
-  descriptionFilterNS->SetInput(vdReProjFilterRL->GetOutput());
-  descriptionFilterNS->AddOpticalImage(imgReader->GetOutput());
-  descriptionFilterNS->AddBuildingsDB(vdReProjFilterDB->GetOutput());
-  descriptionFilterNS->Update();
-
 
   // Compute statistics of all the descriptors
-
   typedef VectorDataType::DataTreeType DataTreeType;
   typedef VectorDataType::DataNodeType DataNodeType;
   typedef itk::PreOrderTreeIterator<VectorDataType::DataTreeType>
   TreeIteratorType;
 
-  typedef DescriptionFilterType::DescriptorsListType DescriptorsListType;
+  std::vector<double> accFirstOrderPS, accSecondOrderPS, minPS, maxPS;
+  accFirstOrderPS.resize(descList.size());
+  accSecondOrderPS.resize(descList.size());
+  std::fill(accFirstOrderPS.begin(), accFirstOrderPS.end(), 0);
+  std::fill(accSecondOrderPS.begin(), accSecondOrderPS.end(), 0);
+  minPS.resize(descList.size());
+  maxPS.resize(descList.size());
+  unsigned int accNbElemPS = 0;
 
-  const DescriptorsListType& descriptors = descriptionFilterGT->GetDescriptorsList();
-
-  std::vector<double> accFirstOrderGT, accSecondOrderGT, minGT, maxGT;
-  accFirstOrderGT.resize(descriptors.size());
-  accSecondOrderGT.resize(descriptors.size());
-  std::fill(accFirstOrderGT.begin(), accFirstOrderGT.end(), 0);
-  std::fill(accSecondOrderGT.begin(), accSecondOrderGT.end(), 0);
-  minGT.resize(descriptors.size());
-  maxGT.resize(descriptors.size());
-  unsigned int accNbElemGT = 0;
-
-  TreeIteratorType itVectorGT(vdReProjFilterGT->GetOutput()->GetDataTree());
-  for( itVectorGT.GoToBegin(); !itVectorGT.IsAtEnd(); ++itVectorGT )
+  TreeIteratorType itVectorPS(psReader->GetOutput()->GetDataTree());
+  for( itVectorPS.GoToBegin(); !itVectorPS.IsAtEnd(); ++itVectorPS )
     {
-    if (!itVectorGT.Get()->IsRoot()
-        && !itVectorGT.Get()->IsDocument()
-        && !itVectorGT.Get()->IsFolder())
+    if (!itVectorPS.Get()->IsRoot()
+        && !itVectorPS.Get()->IsDocument()
+        && !itVectorPS.Get()->IsFolder())
       {
-      DataNodeType::Pointer currentGeometry = itVectorGT.Get();
+      DataNodeType::Pointer currentGeometry = itVectorPS.Get();
 
-      for (unsigned int i = 0; i < descriptors.size(); ++i)
+      for (unsigned int i = 0; i < descList.size(); ++i)
         {
-        double desc = currentGeometry->GetFieldAsDouble(descriptors[i]);
+        double desc = currentGeometry->GetFieldAsDouble(descList[i]);
 
-        accFirstOrderGT[i] += desc;
-        accSecondOrderGT[i] += desc * desc;
+        accFirstOrderPS[i]  += desc;
+        accSecondOrderPS[i] += desc * desc;
 
-        if (desc < minGT[i])
+        if (desc < minPS[i])
           {
-          minGT[i] = desc;
+          minPS[i] = desc;
           }
-        if (desc > maxGT[i])
+        if (desc > maxPS[i])
           {
-          maxGT[i] = desc;
+          maxPS[i] = desc;
           }
 
         }
-      accNbElemGT ++;
+      accNbElemPS ++;
       }
     }
 
-  TreeIteratorType itVectorNS(vdReProjFilterRL->GetOutput()->GetDataTree());
+  TreeIteratorType itVectorNS(nsReader->GetOutput()->GetDataTree());
   std::vector<double> accFirstOrderNS, accSecondOrderNS, minNS, maxNS;
-  minNS.resize(descriptors.size());
-  maxNS.resize(descriptors.size());
-  accFirstOrderNS.resize(descriptors.size());
-  accSecondOrderNS.resize(descriptors.size());
+  minNS.resize(descList.size());
+  maxNS.resize(descList.size());
+  accFirstOrderNS.resize(descList.size());
+  accSecondOrderNS.resize(descList.size());
   std::fill(accFirstOrderNS.begin(), accFirstOrderNS.end(), 0);
   std::fill(accSecondOrderNS.begin(), accSecondOrderNS.end(), 0);
   std::fill(minNS.begin(), minNS.end(), 1);
@@ -318,11 +210,11 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
       {
       DataNodeType::Pointer currentGeometry = itVectorNS.Get();
 
-      for (unsigned int i = 0; i < descriptors.size(); ++i)
+      for (unsigned int i = 0; i < descList.size(); ++i)
         {
-        double desc = currentGeometry->GetFieldAsDouble(descriptors[i]);
+        double desc = currentGeometry->GetFieldAsDouble(descList[i]);
 
-        accFirstOrderNS[i] += desc;
+        accFirstOrderNS[i]  += desc;
         accSecondOrderNS[i] += desc * desc;
 
         if (desc < minNS[i])
@@ -339,79 +231,63 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
       }
     }
   std::cout << "Descriptors Stats : " << std::endl;
-  std::cout << "Ground truth" << std::endl;
-  for (unsigned int i = 0; i < descriptors.size(); ++i)
+  std::cout << "Positive Samples" << std::endl;
+  for (unsigned int i = 0; i < descList.size(); ++i)
     {
-    double mean = accFirstOrderGT[i] / accNbElemGT;
-    double stddev = vcl_sqrt( accSecondOrderGT[i]/accNbElemGT - mean*mean );
-    std::cout << descriptors[i] << "  :  " << mean << " +/- " << stddev
-        << "  (min: " << minGT[i] << "  max: " << maxGT[i] << ")"<< std::endl;
+    double mean = accFirstOrderPS[i] / accNbElemPS;
+    double stddev = vcl_sqrt( accSecondOrderPS[i]/accNbElemPS - mean*mean );
+    std::cout << descList[i] << "  :  " << mean << " +/- " << stddev
+        << "  (min: " << minPS[i] << "  max: " << maxPS[i] << ")"<< std::endl;
     }
 
-  std::cout << "Negative Samples ";
-
-  if (!parseResult->IsOptionPresent("InputNegativeVectorData"))
-    {
-    std::cout << "(random generation)";
-    }
-
-  std::cout << std::endl;
-
-  for (unsigned int i = 0; i < descriptors.size(); ++i)
+  std::cout << "Negative Samples" << std::endl;
+  for (unsigned int i = 0; i < descList.size(); ++i)
     {
     double mean = accFirstOrderNS[i] / accNbElemNS;
     double stddev = vcl_sqrt( accSecondOrderNS[i]/accNbElemNS - mean*mean );
-    std::cout << descriptors[i] << "  :  " << mean << " +/- " << stddev
+    std::cout << descList[i] << "  :  " << mean << " +/- " << stddev
         << "  (min: " << minNS[i] << "  max: " << maxNS[i] << ")"<< std::endl;
     }
-
 
   //Cost Function
   //Format Hypothesis
   LabelSetType Bhyp, Phyp;
-  if (parseResult->IsOptionPresent("BeliefHypothesis"))
+  int nbSet;
+  std::cout <<  "!!" << std::endl;
+
+  nbSet = parseResult->GetNumberOfParameters("BeliefSupport");
+  std::cout << nbSet << "B" << std::endl;
+
+  for (int i = 0; i < nbSet; i++)
     {
-    int nbSet = parseResult->GetNumberOfParameters("BeliefHypothesis");
-    for (int i = 0; i < nbSet; i++)
-      {
-      std::string str = parseResult->GetParameterString("BeliefHypothesis", i);
-      Bhyp.insert(str);
-      }
-    }
-  else
-    {
-    Bhyp.insert("ROADSA");
+    std::string str = parseResult->GetParameterString("BeliefSupport", i);
+    Bhyp.insert(str);
     }
   costFunction->SetBeliefHypothesis(Bhyp);
-
-  if (parseResult->IsOptionPresent("PlausibilityHypothesis"))
+  std::cout << nbSet << "B" << std::endl;
+  nbSet = parseResult->GetNumberOfParameters("PlausibilitySupport");
+  for (int i = 0; i < nbSet; i++)
     {
-    int nbSet = parseResult->GetNumberOfParameters("PlausibilityHypothesis");
-    for (int i = 0; i < nbSet; i++)
-      {
-      std::string str = parseResult->GetParameterString("PlausibilityHypothesis", i);
-      Phyp.insert(str);
-      }
-    }
-  else
-    {
-    Phyp.insert("ROADSA");
-    Phyp.insert("NONDVI");
-    Phyp.insert("NOBUIL");
+    std::string str = parseResult->GetParameterString("PlausibilitySupport", i);
+    Phyp.insert(str);
     }
   costFunction->SetPlausibilityHypothesis(Phyp);
+  std::cout << nbSet << "B" << std::endl;
+  std::cout << "O" << std::endl;
 
   if (parseResult->IsOptionPresent("Weighting"))
     {
     costFunction->SetWeight(parseResult->GetParameterDouble("Weighting"));
     }
+  std::cout << "U"<< std::endl;
   if (parseResult->IsOptionPresent("Criterion"))
     {
     costFunction->SetCriterionFormula(parseResult->GetParameterString("Criterion"));
     }
-  costFunction->SetGTVectorData(descriptionFilterGT->GetOutput());
-  costFunction->SetNSVectorData(descriptionFilterNS->GetOutput());
 
+  costFunction->SetGTVectorData(psReader->GetOutput());
+  costFunction->SetNSVectorData(nsReader->GetOutput());
+  std::cout << "Y"<< std::endl;
   //Optimizer
   optimizer->SetCostFunction(costFunction);
   if (parseResult->IsOptionPresent("MaximumNumberOfIterations"))
@@ -425,7 +301,7 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
   /*
   optimizer->SetParametersConvergenceTolerance( 0.01 );
   optimizer->SetFunctionConvergenceTolerance(0.001);
-   */
+  */
   OptimizerType::ParametersType
   simplexDelta( costFunction->GetNumberOfParameters() );
   simplexDelta.Fill(0.1);
@@ -433,8 +309,7 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
   optimizer->AutomaticInitialSimplexOff();
   optimizer->SetInitialSimplexDelta( simplexDelta );
 
-  OptimizerType::ParametersType
-  initialPosition( costFunction->GetNumberOfParameters() );
+  std::cout << "A"<< std::endl;
 
   //[0.0585698, 0.158364, 0.207495, 0.999979, 0.208119, 0.310084, 0.507505, 1, 0.106548, 0.207591, 0.306967, 0.940949]
   /*
@@ -447,38 +322,9 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
     }
   */
 
-  if (parseResult->IsOptionPresent("InitModel"))
-    {
-    // Load the initial descriptor model
-    std::string descModFile = parseResult->GetParameterString("InitModel");
-    DescriptorsModelType descMod = FuzzyDescriptorsModelManager::Read( descModFile.c_str() );
-
-    for(unsigned int i=0; i<4; i++)
-      {
-      initialPosition.SetElement(i,   otb::FuzzyDescriptorsModelManager::GetDescriptor("NONDVI", descMod).second[i]);
-      initialPosition.SetElement(i+4, otb::FuzzyDescriptorsModelManager::GetDescriptor("ROADSA", descMod).second[i]);
-      initialPosition.SetElement(i+8, otb::FuzzyDescriptorsModelManager::GetDescriptor("NOBUIL", descMod).second[i]);
-      }
-    }
-  else
-    {
-    initialPosition.SetElement(0,   0.05);
-    initialPosition.SetElement(1,   0.15);
-    initialPosition.SetElement(2,   0.20);
-    initialPosition.SetElement(3,   0.99);
-
-    initialPosition.SetElement(4,   0.15);
-    initialPosition.SetElement(5,   0.3);
-    initialPosition.SetElement(6,   0.5);
-    initialPosition.SetElement(7,   0.99);
-
-    initialPosition.SetElement(8,   0.1);
-    initialPosition.SetElement(9,   0.2);
-    initialPosition.SetElement(10,   0.3);
-    initialPosition.SetElement(11,   0.99);
-    }
 
   optimizer->SetInitialPosition(initialPosition);
+  std::cout << "A"<< std::endl;
 
   // Create the Command observer and register it with the optimizer.
   CommandIterationUpdate::Pointer observer = CommandIterationUpdate::New();
@@ -486,14 +332,19 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
     {
     optimizer->AddObserver( itk::IterationEvent(), observer );
     }
+  std::cout << "A"<< std::endl;
 
   try
   {
     // do the optimization
     optimizer->StartOptimization();
+    std::cout << "??"<< std::endl;
+
   }
   catch( itk::ExceptionObject& err )
   {
+    std::cout << "?!"<< std::endl;
+
     // An error has occurred in the optimization.
     // Update the parameters
     std::cout << "ERROR: Exception Catched!" << std::endl;
@@ -510,78 +361,20 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
   std::cout << "Results : " << optimizer->GetCurrentPosition() << std::endl;
 
   otb::FuzzyDescriptorsModelManager::DescriptorsModelType model;
-  otb::FuzzyDescriptorsModelManager::ParameterType        noNDVI, roadSA, noBuil;
 
-  for (unsigned int i = 0; i<4; i++)
+  for (unsigned int i=0; i < descList.size(); i++)
     {
-    noNDVI.push_back(optimizer->GetCurrentPosition()[i]);
+    otb::FuzzyDescriptorsModelManager::ParameterType        tmpParams;
+    for (unsigned int j = 0; i<4; i++)
+      {
+      tmpParams.push_back(optimizer->GetCurrentPosition()[(i*4)+j]);
+      }
+    otb::FuzzyDescriptorsModelManager::AddDescriptor(descList[i],
+                                                     tmpParams,
+                                                     model);
     }
-  for (unsigned int i = 0; i<4; i++)
-    {
-    roadSA.push_back(optimizer->GetCurrentPosition()[i+4]);
-    }
-  for (unsigned int i = 0; i<4; i++)
-    {
-    noBuil.push_back(optimizer->GetCurrentPosition()[i+8]);
-    }
-  otb::FuzzyDescriptorsModelManager::AddDescriptor("NONDVI", noNDVI, model);
-  otb::FuzzyDescriptorsModelManager::AddDescriptor("ROADSA", roadSA, model);
-  otb::FuzzyDescriptorsModelManager::AddDescriptor("NOBUIL", noBuil, model);
   otb::FuzzyDescriptorsModelManager::Save(parseResult->GetParameterString("Output"),
                                           model);
-
-  if (parseResult->IsOptionPresent("GenerateShp"))
-    {
-    VectorDataWriterType::Pointer NSWriter = VectorDataWriterType::New();
-    VectorDataWriterType::Pointer PSWriter = VectorDataWriterType::New();
-    std::string NSFileName, PSFileName;
-    NSFileName = parseResult->GetParameterString("Output") + "_NS.shp";
-    PSFileName = parseResult->GetParameterString("Output") + "_PS.shp";
-
-    VectorDataType::Pointer vdNS = descriptionFilterNS->GetOutput();
-    VectorDataType::Pointer vdPS = descriptionFilterGT->GetOutput();
-    VectorDataType::Pointer projectedVDNS, projectedVDPS;
-
-
-    std::string projRef = imgReader->GetOutput()->GetProjectionRef();
-
-    typedef itk::AffineTransform<VectorDataType::PrecisionType, 2> TransformType;
-    typedef otb::VectorDataTransformFilter<VectorDataType, VectorDataType> VDTransformType;
-
-    TransformType::ParametersType params;
-    params.SetSize(6);
-    params[0] = imgReader->GetOutput()->GetSpacing()[0];
-    params[1] = 0;
-    params[2] = 0;
-    params[3] = imgReader->GetOutput()->GetSpacing()[1];
-    params[4] = imgReader->GetOutput()->GetOrigin()[0];
-    params[5] = imgReader->GetOutput()->GetOrigin()[1];
-
-    TransformType::Pointer transform = TransformType::New();
-    transform->SetParameters(params);
-
-    VDTransformType::Pointer vdTransformNS = VDTransformType::New();
-    vdTransformNS->SetTransform(transform);
-    vdTransformNS->SetInput(vdNS);
-    vdTransformNS->Update();
-
-    VDTransformType::Pointer vdTransformPS = VDTransformType::New();
-    vdTransformPS->SetTransform(transform);
-    vdTransformPS->SetInput(vdPS);
-    vdTransformPS->Update();
-
-    projectedVDNS = vdTransformNS->GetOutput();
-    projectedVDNS->SetProjectionRef(projRef);
-    projectedVDPS = vdTransformPS->GetOutput();
-    projectedVDPS->SetProjectionRef(projRef);
-
-    NSWriter->SetInput(projectedVDNS);
-    NSWriter->SetFileName(NSFileName);
-    NSWriter->Update();
-    PSWriter->SetInput(projectedVDPS);
-    PSWriter->SetFileName(PSFileName);
-    PSWriter->Update();
-    }
 
   return EXIT_SUCCESS;
 }
