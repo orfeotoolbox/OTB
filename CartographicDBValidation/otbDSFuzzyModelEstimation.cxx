@@ -281,7 +281,6 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
 
   costFunction->SetGTVectorData(psReader->GetOutput());
   costFunction->SetNSVectorData(nsReader->GetOutput());
-  std::cout << "Y"<< std::endl;
   //Optimizer
   optimizer->SetCostFunction(costFunction);
   if (parseResult->IsOptionPresent("MaximumNumberOfIterations"))
