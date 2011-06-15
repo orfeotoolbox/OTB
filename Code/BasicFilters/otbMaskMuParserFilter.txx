@@ -70,25 +70,33 @@ std::string MaskMuParserFilter<TInputImage, TOutputImage, TFunction>::GetExpress
 }
 
 template<class TInputImage, class TOutputImage, class TFunction>
-const std::map<std::string, double*>& MaskMuParserFilter<TInputImage, TOutputImage, TFunction>::GetVar()
+std::vector<std::string> MaskMuParserFilter<TInputImage, TOutputImage, TFunction>::GetVar()
 {
-  FunctorPointer tempFunctor = FunctorType::New();
-  tempFunctor->SetExpression(m_Expression);
-
-  FunctorType& functor = *tempFunctor;
-
+  std::vector<std::string> varList;
   try
     {
-     functor(this->GetInput()->GetPixel(this->GetInput()->GetBufferedRegion().GetIndex()));
+    // Create a temporary functor to get the variable list
+    FunctorPointer tempFunctor = FunctorType::New();
+    tempFunctor->SetExpression(m_Expression);
 
+    FunctorType& functor = *tempFunctor;
+
+    // Run the functor to update the variable list
+    functor(this->GetInput()->GetPixel(this->GetInput()->GetBufferedRegion().GetIndex()));
+
+    const std::map<std::string, double*>& varMap = functor.GetVar();
+    std::map<std::string, double*>::const_iterator it;
+    for (it = varMap.begin(); it != varMap.end(); ++it)
+      {
+      varList.push_back( it->first );
+      }
     }
   catch (itk::ExceptionObject& err)
     {
     itkDebugMacro(<< err);
-
     }
 
-  return functor.GetVar();
+  return varList;
 }
 
 

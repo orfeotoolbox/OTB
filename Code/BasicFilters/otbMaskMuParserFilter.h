@@ -113,7 +113,7 @@ public:
   /** Return the expression to be parsed */
   std::string GetExpression() const;
 
-  const std::map<std::string, double*>&GetVar();
+  std::vector<std::string> GetVar();
 
   const mu::funmap_type &GetFunList();
 
