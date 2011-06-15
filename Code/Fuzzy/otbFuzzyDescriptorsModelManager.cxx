@@ -204,6 +204,22 @@ FuzzyDescriptorsModelManager
   doc.SaveFile( filename.c_str() );
 }
 
+FuzzyDescriptorsModelManager::DescriptorListType
+FuzzyDescriptorsModelManager
+::GetDescriptorList(const DescriptorsModelType & descModel)
+{
+  DescriptorListType out;
+
+  DescriptorsModelType::const_iterator it = descModel.begin();
+
+  while( it!=descModel.end())
+    {
+     out.push_back((*it).first);
+     ++it;
+    }
+
+    return out;
+}
 
 } // End namespace otb
 

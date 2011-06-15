@@ -44,9 +44,12 @@ public:
   typedef std::vector<double>                    ParameterType;
   typedef std::pair<std::string, ParameterType > PairType;
   typedef std::vector< PairType >                DescriptorsModelType;
+  typedef std::vector< std::string >             DescriptorListType;
  
   /** Method to get descriptors */
   static PairType GetDescriptor(const char * model, const DescriptorsModelType & descModel);
+  /** Method to get descriptor List */
+  static DescriptorListType GetDescriptorList(const DescriptorsModelType & descModel);
   /** Method to set descriptors */
   static void AddDescriptor( PairType modelPair, DescriptorsModelType & descModel );
   static void AddDescriptor( std::string key, ParameterType model, DescriptorsModelType & descModel );

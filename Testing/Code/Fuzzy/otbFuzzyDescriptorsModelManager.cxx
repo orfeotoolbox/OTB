@@ -54,6 +54,9 @@ int otbFuzzyDescriptorsModelManagerTest(int argc, char* argv[])
   otb::FuzzyDescriptorsModelManager::DescriptorsModelType modelRead;
   modelRead =  otb::FuzzyDescriptorsModelManager::Read(argv[1]);
 
+  otb::FuzzyDescriptorsModelManager::DescriptorListType list;
+  list = otb::FuzzyDescriptorsModelManager::GetDescriptorList(model);
+
   if(modelRead != model)
     {
       std::cout<<"Written model and read model from the written one differs."<<std::endl;
