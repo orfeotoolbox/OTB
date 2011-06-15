@@ -315,7 +315,6 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
   {
     // do the optimization
     optimizer->StartOptimization();
-
   }
   catch( itk::ExceptionObject& err )
   {
