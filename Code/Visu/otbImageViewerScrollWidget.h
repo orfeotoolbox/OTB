@@ -124,7 +124,6 @@ public:
         }
       case FL_HIDE:
         {
-        m_Parent->Hide();
         return 0;
         }
       }
