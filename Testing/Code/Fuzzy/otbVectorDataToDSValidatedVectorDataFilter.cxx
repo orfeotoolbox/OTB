@@ -71,17 +71,25 @@ int otbVectorDataToDSValidatedVectorDataFilter(int argc, char* argv[])
   filter->SetInput(vdReader->GetOutput());
   //filter->GetDescriptorModels();
   FuzzyManagerType::Print(filter->GetDescriptorModels());
-  LabelSetType hypothesis;
-  hypothesis.insert("NONDVI");
-  hypothesis.insert("ROADSA");
-  hypothesis.insert("NOBUIL");
-  filter->SetPlausibilityHypothesis(hypothesis);
-  std::vector<double> fuzzyModel;
-  fuzzyModel.push_back(0.15);
-  fuzzyModel.push_back(0.25);
-  fuzzyModel.push_back(0.35);
-  fuzzyModel.push_back(0.8);
-  filter->SetFuzzyModel("TEST", fuzzyModel);
+  LabelSetType plau, bel;
+  plau.insert("NONDVI");
+  plau.insert("ROADSA");
+  plau.insert("NOBUIL");
+  filter->SetPlausibilityHypothesis(plau);
+  bel.insert("ROADSA");
+  bel.insert("NONDVI");
+  bel.insert("NOBUIL");
+  filter->SetBeliefHypothesis(bel);
+
+  std::vector<double> stdModel;
+  stdModel.push_back(0.25);
+  stdModel.push_back(0.50);
+  stdModel.push_back(0.75);
+  stdModel.push_back(0.90);
+  filter->AddDescriptor("NONDVI", stdModel);
+  filter->AddDescriptor("ROADSA", stdModel);
+  filter->AddDescriptor("NOBUIL", stdModel);
+
   FuzzyManagerType::Print(filter->GetDescriptorModels());
 
   vdWriter->SetFileName(outputVD);

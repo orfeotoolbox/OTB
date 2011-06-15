@@ -94,7 +94,6 @@ public:
                                                     TreeIteratorType;
 
   typedef TPrecision                                PrecisionType;
-  typedef FuzzyVariable<std::string, PrecisionType> FuzzyVarType;
   typedef MassOfBelief<std::string, PrecisionType>
                                                     MassOfBeliefFunctionType;
   typedef typename MassOfBeliefFunctionType::LabelSetType
@@ -106,24 +105,21 @@ public:
   typedef itk::DataObject::Pointer DataObjectPointer;
   typedef itk::DataObject          DataObject;
 
-  typedef std::pair< std::string, std::vector<double> > PairType;
-  typedef std::vector< PairType >                       DescriptorModelsType;
+
+  typedef FuzzyVariable<std::string, PrecisionType>           FuzzyVarType;
+
+  typedef FuzzyDescriptorsModelManager::PairType              PairType;
+  typedef FuzzyDescriptorsModelManager::DescriptorsModelType  DescriptorModelsType;
 
   /** Descriptor model accessors. */
   virtual void AddDescriptor(const std::string& key, std::vector<double> model);
   virtual void ClearDescriptors();
 
-  void SetDescriptorModels( DescriptorModelsType model )
-  {
-    m_DescriptorModels = model;
-    this->Modified();
-  }
-
+  void SetDescriptorModels( DescriptorModelsType model );
   DescriptorModelsType GetDescriptorModels()
   {
     return m_DescriptorModels;
   }
-
 
   /** Parameter accessors. */
   itkGetConstMacro(CriterionFormula, std::string);
@@ -131,47 +127,6 @@ public:
 
   itkGetMacro(CriterionThreshold, double);
   itkSetMacro(CriterionThreshold, double);
-
-  /** Fuzzy Models */
-  void SetFuzzyModel(const std::string& key, std::vector<double> model)
-  {
-    unsigned int nbDescriptor = m_DescriptorModels.size();
-
-    if (model.size() != 4)
-      {
-      itkExceptionMacro(<< "Wrong model! Size(="
-                        << model.size()
-                        << ") > 4" )
-      }
-    else if (model[0]<0 || model[1]<model[0] || model[2]<model[1] || model[2]>1)
-    {
-      itkExceptionMacro(<< "Wrong model! Values have to be 0<=v1<=v2<=v3<=1" )
-    }
-    else if (model[3]<.75 || model[3]>1.0)
-    {
-      itkExceptionMacro(<< "Wrong model! Values have to be 0.75<=v4<=1" )
-    }
-    else
-      {
-       for (unsigned j=0; j<nbDescriptor; j++)
-         {
-         if (m_DescriptorModels[j].first.compare(key) == 0)
-           {
-           for (unsigned int i=0; i<4; i++)
-             {
-             if ((model[i]<=1.) && (model[i]>=0.))
-               {
-               m_DescriptorModels[j].second.at(i) = model[i];
-               }
-             else
-               {
-               itkExceptionMacro(<< "Wrong model! Value must be between 0 and 1")
-               }
-             }
-           }
-         }
-      }
-  }
 
   LabelSetType GetBeliefHypothesis()
   {

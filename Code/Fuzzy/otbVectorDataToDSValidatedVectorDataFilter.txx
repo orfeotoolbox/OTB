@@ -34,24 +34,8 @@ template <class TVectorData, class TPrecision>
   m_CurrentID(0)
 {
   this->SetNumberOfRequiredInputs(1);
-  //Default road descriptors
-  std::vector<double> noNDVI, roadSA, noBuilding;
-  noNDVI.push_back(0.25); noNDVI.push_back(0.5); noNDVI.push_back(0.75); noNDVI.push_back(0.99);
-  roadSA.push_back(0.25); roadSA.push_back(0.5); roadSA.push_back(0.75); roadSA.push_back(0.90);
-  noBuilding.push_back(0.25); noBuilding.push_back(0.5); noBuilding.push_back(0.75); noBuilding.push_back(0.90);
-
-  AddDescriptor("NONDVI", noNDVI);
-  AddDescriptor("ROADSA", roadSA);
-  AddDescriptor("NOBUIL", noBuilding);
 
   m_Parser =  ParserType::New();
-
-  m_BeliefHypothesis.insert("ROADSA");
-
-  m_PlausibilityHypothesis.insert("ROADSA");
-  m_PlausibilityHypothesis.insert("NOBUIL");
-  m_PlausibilityHypothesis.insert("NONDVI");
-
 }
 
 
@@ -60,7 +44,39 @@ void
 VectorDataToDSValidatedVectorDataFilter<TVectorData, TPrecision>
 ::AddDescriptor(const std::string& key, std::vector<double>  model)
 {
-  m_DescriptorModels.push_back(std::pair<std::string, std::vector<double> >(key, model));
+  bool alreadyExist = false;
+
+  if (model.size() != 4)
+    {
+     itkExceptionMacro(<< "Wrong model! Size(=" << model.size() << ") > 4" )
+    }
+  else if (model[0]<0 || model[1]<model[0] || model[2]<model[1] || model[2]>1)
+    {
+     itkExceptionMacro(<< "Wrong model! Values have to be 0<=v1<=v2<=v3<=1" )
+    }
+  else if (model[3]<.75 || model[3]>1.0)
+    {
+      itkExceptionMacro(<< "Wrong model! Values have to be 0.75<=v4<=1" )
+    }
+  else
+    {
+    for (unsigned int i=0; i<m_DescriptorModels.size(); i++)
+      {
+      if (m_DescriptorModels[i].first.compare(key) == 0)
+        {
+        for (unsigned int j=0; j<4; j++)
+          {
+           m_DescriptorModels[i].second.at(j) = model[j];
+          }
+        alreadyExist = true;
+        }
+      }
+    if (!alreadyExist)
+      {
+      m_DescriptorModels.push_back(std::pair<std::string, std::vector<double> >(key, model));
+      }
+    }
+
   this->Modified();
 }
 
@@ -72,6 +88,18 @@ VectorDataToDSValidatedVectorDataFilter<TVectorData, TPrecision>
 {
   m_DescriptorModels.clear();
 }
+
+template <class TVectorData, class TPrecision>
+void
+VectorDataToDSValidatedVectorDataFilter<TVectorData, TPrecision>
+::SetDescriptorModels(DescriptorModelsType model)
+{
+  for (unsigned int i=0; i<model.size(); i++)
+    {
+     this->AddDescriptor(model[i].first, model[i].second);
+    }
+}
+
 
 
 template <class TVectorData, class TPrecision>
