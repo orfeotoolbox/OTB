@@ -30,17 +30,20 @@ namespace otb
 int VectorDataDSValidation::Describe(ApplicationDescriptor* descriptor)
 {
   descriptor->SetName("Vector data validation");
-  descriptor->SetDescription("Vector data validation using Clasifier fusion.");
+  descriptor->SetDescription("Vector data validation using Classifier fusion.");
   descriptor->AddOption("InputShapeFileName", "Input Shape file name",
                         "in", 1, true, ApplicationDescriptor::FileName);
   descriptor->AddOption("OutputShapeFileName", "Output Shape file name",
                         "out", 1, true, ApplicationDescriptor::FileName);
-  descriptor->AddOption("DescriptorsModelFileName", "Fuzzy descriptors model xml file (default: NONDVI(0.25, 0.5, 0.75, 0.99) / ROADSA(0.25, 0.5, 0.75, 0.90))",
+
+  descriptor->AddOption("DescriptorsModelFileName", "Fuzzy descriptors model xml file",
                         "descMod", 1, true, ApplicationDescriptor::FileName);
-  descriptor->AddOptionNParams("BeliefHypothesis", "Hypothesis (default: ROADSA) used to compute the Belief",
-                               "Bhyp", false, ApplicationDescriptor::StringList);
-  descriptor->AddOptionNParams("PlausibilityHypothesis", "Hypothesis (default: ROADSA, NONDVI, NOBUIL) used to compute the Plausibility",
-                               "Phyp", false, ApplicationDescriptor::StringList);
+  descriptor->AddOptionNParams("BeliefSupport", "Dempster Shafer study hypothesis to compute Belief",
+                               "BelSup", true, ApplicationDescriptor::StringList);
+  descriptor->AddOptionNParams("PlausibilitySupport", "Dempster Shafer study hypothesis to compute Plausibility",
+                               "PlaSup", true, ApplicationDescriptor::StringList);
+
+
   descriptor->AddOption("CriterionFormula", "Criterion formula expression (default: ((Belief + Plausibility)/2) >= 0.5)",
                         "Cri", 1, false, ApplicationDescriptor::String);
   descriptor->AddOption("CriterionThreshold", "Criterion threshold (by default 0.5)",
@@ -76,31 +79,15 @@ int VectorDataDSValidation::Execute(otb::ApplicationOptionsResult* parseResult)
 
   // Load the hypothesis
   LabelSetType Bhyp, Phyp;
-  if (parseResult->IsOptionPresent("BeliefHypothesis"))
+  unsigned int nbSet = parseResult->GetNumberOfParameters("BeliefSupport");
+  for (unsigned int i = 0; i < nbSet; i++)
     {
-    unsigned int nbOfHypo = parseResult->GetNumberOfParameters("BeliefHypothesis");
-    for (unsigned int i = 0; i < nbOfHypo; i++)
-      {
-      Bhyp.insert(parseResult->GetParameterString("BeliefHypothesis", i));
-      }
+    Bhyp.insert(parseResult->GetParameterString("BeliefSupport", i));
     }
-  else
+  nbSet = parseResult->GetNumberOfParameters("PlausibilitySupport");
+  for (unsigned int i = 0; i < nbSet; i++)
     {
-    Bhyp.insert("ROADSA");
-    }
-  if (parseResult->IsOptionPresent("PlausibilityHypothesis"))
-    {
-    int nbSet = parseResult->GetNumberOfParameters("PlausibilityHypothesis");
-    for (int i = 0; i < nbSet; i++)
-      {
-      Phyp.insert(parseResult->GetParameterString("PlausibilityHypothesis", i));
-      }
-    }
-  else
-    {
-    Phyp.insert("ROADSA");
-    Phyp.insert("NONDVI");
-    Phyp.insert("NOBUIL");
+    Phyp.insert(parseResult->GetParameterString("PlausibilitySupport", i));
     }
 
   // Process
