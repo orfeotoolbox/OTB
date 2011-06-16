@@ -72,16 +72,16 @@ void Execute(const itk::Object * object, const itk::EventObject & event)
 int otb::DSFuzzyModelEstimation::Describe(ApplicationDescriptor* descriptor)
 {
   descriptor->SetName("DSFuzzyModelEstimation");
-  descriptor->SetDescription("Estimate feature fuzzy model parameters using 2 VectorDatas (ground thruth / wrong samples)");
-  descriptor->AddOption("InputPositiveVectorData", "Ground Truth Vector Data",
+  descriptor->SetDescription("Estimate feature fuzzy model parameters using 2 vector data (ground truth samples and wrong samples)");
+  descriptor->AddOption("InputPositiveVectorData", "Ground truth vector data",
                         "psin", 1, true, ApplicationDescriptor::FileName);
-  descriptor->AddOption("InputNegativeVectorData", "Negative samples Vector Data",
+  descriptor->AddOption("InputNegativeVectorData", "Negative samples vector data",
                         "nsin", 1, true, ApplicationDescriptor::FileName);
-  descriptor->AddOptionNParams("BeliefSupport", "Dempster Shafer study hypothesis to compute Belief",
+  descriptor->AddOptionNParams("BeliefSupport", "Dempster Shafer study hypothesis to compute belief",
                                "BelSup", true, ApplicationDescriptor::StringList);
-  descriptor->AddOptionNParams("PlausibilitySupport", "Dempster Shafer study hypothesis to compute Plausibility",
+  descriptor->AddOptionNParams("PlausibilitySupport", "Dempster Shafer study hypothesis to compute plausibility",
                                "PlaSup", true, ApplicationDescriptor::StringList);
-  descriptor->AddOption("Criterion", "Dempster Shafer Criterion (by default (Belief+Plausibility)/2)",
+  descriptor->AddOption("Criterion", "Dempster Shafer criterion (by default (belief+plausibility)/2)",
                         "cri", 1, false, ApplicationDescriptor::String);
   descriptor->AddOption("Weighting", "Coefficient between 0 and 1 to promote undetection or false detections (default 0.5)",
                         "wgt", 1, false, ApplicationDescriptor::Real);
@@ -89,11 +89,11 @@ int otb::DSFuzzyModelEstimation::Describe(ApplicationDescriptor* descriptor)
                         "InitMod", 1, false, ApplicationDescriptor::FileName);
   descriptor->AddOptionNParams("DescriptorList", "List of the descriptors used in the model (must be specified to perform an automatic initialization)",
                         "DescList", false, ApplicationDescriptor::StringList);
-  descriptor->AddOption("MaximumNumberOfIterations", "Maximum Number of Optimizer Iteration (default 200)",
+  descriptor->AddOption("MaximumNumberOfIterations", "Maximum number of optimizer iteration (default 200)",
                         "MaxNbIt", 1, false, ApplicationDescriptor::Integer);
   descriptor->AddOption("OptimizerObserver", "Activate or not the optimizer observer",
                         "OptObs", 0, false, ApplicationDescriptor::Boolean);
-  descriptor->AddOption("Output", "Output Model File Name",
+  descriptor->AddOption("Output", "Output model file name (xml file)",
                         "out", 1,  true, ApplicationDescriptor::FileName);
 
   return EXIT_SUCCESS;
