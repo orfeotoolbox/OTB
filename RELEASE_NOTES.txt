@@ -5,6 +5,7 @@ OTB-v.3.10.0 - Changes since version 3.8.0 (2011/05/??)
   * New ImageStatistics module
   * New BayesianFusion module
   * New SAR Polarimetry modules (conversion, analysis)
+  * New VectorData Transform module
   * Removed the Orthorectification since its functionnalities are covered by the Reprojection module
   * Handle multi band complex images
   * Viewer module : Add "save screenshots" capability
@@ -75,7 +76,13 @@ OTB-v.3.10.0 - Changes since version 3.8.0 (2011/05/??)
   * GDALImageIO: TIFF are now saved as TILED
   * GDALImageIO: various improvements to support reading and writing of multiband complex data with all types supported by GDAL
   * StreamingImageVirtualFileWriter, StreamingImageFileWriter : new streaming strategies, with integrated pipeline memory print estimation
-  * Curl: add in-memory download support to avoid writing small temporary files
+  * Curl:
+    * Add in-memory download support to avoid writing small temporary files
+    * Better handling of the exceptions than can be thrown when using curl
+  * Add ConcatenateVectorDataFilter
+  * Add OSMDataToVectorDataGenerator  : Class implementing the download of the OSM file relative to an extent and a parser to generate VectorData from OSM Datas
+  * Add ImageToOSMVectorDataGenerator : Helper class to compute the extent of an image, use OSMDataToVectorDataGenerator for VectorData generation
+  * Add VectorDataTransformFilter     : Apply an affine transform to a VectorData
 
 * System
   * Compilation on Windows and MacOS with mapnik
