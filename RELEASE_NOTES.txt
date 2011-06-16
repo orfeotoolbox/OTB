@@ -18,7 +18,9 @@ OTB-v.3.10.0 - Changes since version 3.8.0 (2011/06/16)
 * Applications with command-line interfaces and GUI
   * Optical calibration
   * Vectorial objects validation based on Dempster Shafer theory framework
-  * TODO: list new apps here
+    * otbDSFuzzyModelEstimation
+    * otbComputePolylineFeatureFromImage
+    * otbVectorDataDSValidation
   * Multi-images SVM classification framework
     * EstimateImagesStatistics
     * TrainImagesClassifier
@@ -89,6 +91,7 @@ OTB-v.3.10.0 - Changes since version 3.8.0 (2011/06/16)
 * System
   * Compilation on Windows and MacOS with mapnik
   * Update internal tinyXML to 2.6
+  * Add ThirdPartiesUtilities: Refactoring OSSIM and CURL accesses so as to minimize dependencies using the Adapter pattern
 
 * Bug fixes :
 
