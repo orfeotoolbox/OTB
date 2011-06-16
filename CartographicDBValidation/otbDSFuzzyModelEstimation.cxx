@@ -185,7 +185,7 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
         {
         double desc = currentGeometry->GetFieldAsDouble(descList[i]);
 
-        accFirstOrderPS[i]  += desc;
+        accFirstOrderPS[i] += desc;
         accSecondOrderPS[i] += desc * desc;
 
         if (desc < minPS[i])
@@ -226,7 +226,7 @@ int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseRes
         {
         double desc = currentGeometry->GetFieldAsDouble(descList[i]);
 
-        accFirstOrderNS[i]  += desc;
+        accFirstOrderNS[i] += desc;
         accSecondOrderNS[i] += desc * desc;
 
         if (desc < minNS[i])
