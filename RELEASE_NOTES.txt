@@ -1,28 +1,31 @@
-OTB-v.3.10.0 - Changes since version 3.8.0 (2011/05/??)
+OTB-v.3.10.0 - Changes since version 3.8.0 (2011/06/16)
 -----------------------------------------
 * Monteverdi
   * New Rasterization module
   * New ImageStatistics module
   * New BayesianFusion module
   * New SAR Polarimetry modules (conversion, analysis)
-  * New VectorData Transform module
+  * New Vector data to image manual registration module
+  * New connected component segmentation and OBIA based on user-defined criterions module
   * Removed the Orthorectification since its functionnalities are covered by the Reprojection module
+  * Specify output map projection by EPSG code in reprojection module
   * Handle multi band complex images
-  * Viewer module : Add "save screenshots" capability
+  * Viewer module : Add "save screenshots" feature
+  * Viewer module now handles a NoData field, allowing to correctly rescale ortho-images
+  * DEM fields throughout the modules are now pre-filled with option in otb config file if correctly set
+  * Add a rectify mode in homologous points extraction module (register image without changing resolution)
   
 * Applications with command-line interfaces and GUI
   * Optical calibration
-  * Cartographic DB Validation based on Dempster Shafer theory
-    * ExtractRoadDescription
-    * VectorDataDSValidation
-    * DSFuzzyModelEstimation
-  * Multi-images classification chain
+  * Vectorial objects validation based on Dempster Shafer theory framework
+  * TODO: list new apps here
+  * Multi-images SVM classification framework
     * EstimateImagesStatistics
     * TrainImagesClassifier
     * ValidateImagesClassifier
     * ImageSVMClassifier
-  * Connected Component Segmentation and OBIA based on user provided mathematical formula
-  * Object Detection application
+  * Connected Component Segmentation and OBIA based on user-defined criterions
+  * Object Detection framework (adding the Histogram of Oriented Gradient feature)
     * TrainHOGDetector 
     * HOGObjectDetector
     * MeanShiftModesDetection
@@ -60,13 +63,12 @@ OTB-v.3.10.0 - Changes since version 3.8.0 (2011/05/??)
     * MuellerToPolarisationDegreeAndPowerFunctor
   * Add RationalTransform
   * Add PipelineMemoryPrintEstimator: computes the total memory used by a pipeline, and proposes streaming parameters depending on available RAM
-  * Add Dempster Shafer framework for classifier fusion
+  * Add Dempster Shafer framework
     * MassOfBelief
     * JointMassOfBeliefFilter
-    * VectorDataToDSValidatedVectorDataFilter
-    * VectorDataToRoadDescriptionFilter
+  * Add a Dempster-Shaffer based vectorial objects validation framework
+    * TODO: List classes here
   * AssymmetricFusionOfLineDetectorImageFilter: call SetNumberOfDirections on internal filters (contribution from A. Ferro)
-  * Add RationalTransform
   * RADARSAT 1: more product types supported
   * VectorDataToImageFilter: Binary rasterization available, support images of arbitrary size
   * Add VectorDataRendering example: showing how to rasterize OSM roads onto an image for visualisation
@@ -88,9 +90,19 @@ OTB-v.3.10.0 - Changes since version 3.8.0 (2011/05/??)
   * Compilation on Windows and MacOS with mapnik
   * Update internal tinyXML to 2.6
 
-* Bug fix:
-  * RADARSAT1 infinite loop
+* Bug fixes :
+
+  * OTB-Qgis
+    * 0000272: problem with installation
+
   * OTB-lib
+    * 0000320: Design issue: VectorDataIOFactory should not be a template class
+    * 0000329: At least 2 platforms don't respect the nightly version for their dashboard submission
+    * 0000334: Some tutorials do not check argc/argv
+    * 0000312: Systematic crash when opening images with GDAL (tif, png, jpeg, etc)
+    * 0000298: TestDriver : returns EXIT_SUCCESS when test is not registered
+    * 0000310: PersistentImageToVectorData process the input twice when only one stream is used
+    * 0000311: No platform testing OTB_SHOW_ALL_MSG_DEBUG set to ON for examples compilation
     * 0000245: Wrong path for GDAL_CONFIG or GDALCONFIG_EXECUTABLE cmake variable produce incoherent results in the OTB configuration
     * 0000273: otbHarrisImageFilter applies final smoothing only over the 0-th direction; + wrong final scaling applied
     * 0000228: Problems related to the --compare-ascii tool in OTB tests protocol
@@ -100,6 +112,29 @@ OTB-v.3.10.0 - Changes since version 3.8.0 (2011/05/??)
     * 0000221: Fail to retrieve the pixel spacing from image metadata.
 
   * Monteverdi
+    * 0000249: otbTrainObjectDetector-cli: malloc(): memory corruption
+    * 0000341: weird french warning in ms dos command window  with monteverdi 1.7 exe
+    * 0000251: Wrong output of the DEM to image generator module when working on a ROI of the image in raw geometry
+    * 0000313: Unable to perform orthofusion of WV2 PAN+XS (4 bands)
+    * 0000239: Trouble in pixel descrition in Monteverdi viewer
+    * 0000226: otbSegmentationApplication: crash when overwriting a .shp file
+    * 0000223: Wrong positioning of polygons from otbSegmentationApplication and open with SVMclassification module (monteverdi)
+    * 0000242: Mean Shift: different display of results in the module and in  the Viewer
+    * 0000250: Meanshift clustering module: spectral radius limited
+    * 0000336: Viewer Histogram settings not applied after channel order changes
+    * 0000304: Advanced save dataset module with scaling on results in visible strip in image
+    * 0000262: Wrong metadata interpretation
+    * 0000317: Monteverdi extract ROI module can not perform extraction from geographical coordinates on SPOT5 data
+    * 0000253: Nodata value in SRTM result in wrong ortho-rectified image
+    * 0000315: Monteverdi ROI extraction module broken : can not select by drag&drop anymore
+    * 0000270: Open RADARSAT2 products as an SAR image in Monteverdi
+    * 0000306: Unable to export otb::Image in KMZ in the Monteverdi module "KMZ export"
+    * 0000302: Can't open two image in the viewer
+    * 0000300: One viewer instance block another instance to display another image
+    * 0000263: Vectorization module : weird behavior
+    * 0000294: Monteverdi doesn't delete files in Caching
+    * 0000292: Tilemap import module not working
+    * 0000297: Crash when open change detection output image
     * 0000281: Crash opening a RAD image.
     * 0000280: SVM classification and Feature extraction issues
     * 0000247: Style of the new screenshots function in viewer module is ugly
@@ -115,14 +150,24 @@ OTB-v.3.10.0 - Changes since version 3.8.0 (2011/05/??)
     * 0000244: Pansharpening EO-1 image with Monteverdi produces NaN
     * 0000227: Monteverdi crashing while displaying a .tif file
 
+  * OTB-Packaging
+    * 0000290: Make an Experimental submission on the dashboard with natty
+    * 0000296: gdal 1.8 debian package breaks TIFF support
+
   * OTB-applications
     * 0000231: otbRasterizationApplication -pr options await for OGC WKT strings
+    * 0000318: otbOSMDownloader-cli does not work anymore
+    * 0000338: otbSegmentationApplication : Enable to use real values
     * 0000232: Several minor changes in rasterization application
     * 0000233: otbRasterizationApplication fail to rasterize SRTM water bodies shapefile with default parameters
 
   * Orfeo Toolbox (OTB)
+    * 0000279: Visualisation from vectorisation module does not use default channels for wv2 images
+    * 0000327: CMake configuration abort if no curl is available on system, even with OTB_USE_CURL is set to OFF
+    * 0000282: Unable to open tiff image
     * 0000237: Boost / Fltk conflict
     * 0000276: Trouble with the compare ascii when separations are tabulation
+ 
 
 OTB-v.3.8.0 - Changes since version 3.6.0 (2010/12/16)
 -----------------------------------------
