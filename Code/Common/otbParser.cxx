@@ -142,8 +142,6 @@ public:
 
     mu::funmap_type::const_iterator funItem;
 
-    int nbArgs;
-
     for (funItem = funmap.begin(); funItem != funmap.end(); ++funItem)
       {
       output[funItem->first] = funItem->second.GetArgc();
