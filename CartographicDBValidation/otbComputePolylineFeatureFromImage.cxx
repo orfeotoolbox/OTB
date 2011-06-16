@@ -42,16 +42,16 @@ namespace otb
 int ComputePolylineFeatureFromImage::Describe(ApplicationDescriptor* descriptor)
 {
   descriptor->SetName("ComputePolylineFeatureFromImage");
-  descriptor->SetDescription("Compute a polyline feature from an input image: part of the polyline pixels that verify the FeatureExpression");
+  descriptor->SetDescription("Compute a polyline feature descriptors from an input image which are part of the polyline pixels that verify the FeatureExpression");
   descriptor->AddOption("InputImage", "An image from which to compute description",
                         "img",   1, true, ApplicationDescriptor::InputImage);
-  descriptor->AddOption("InputVectorData", "Vector Data containing the polylines onto which the feature will be computed",
+  descriptor->AddOption("InputVectorData", "Vector data containing the polylines onto which the feature will be computed",
                         "vdin",  1, true, ApplicationDescriptor::FileName);
   descriptor->AddOption("FeatureExpression", "The feature formula (b1 > 0.3)",
                         "expr",  1, true, ApplicationDescriptor::String);
   descriptor->AddOption("FieldName", "The feature name (NONDVI, ROADSA...)",
                         "field", 1, true, ApplicationDescriptor::String);
-  descriptor->AddOption("OutputVectorData", "The output Vector Data containing the feature",
+  descriptor->AddOption("OutputVectorData", "The output vector data containing the feature",
                         "out",   1, true, ApplicationDescriptor::FileName);
 
   descriptor->AddOption("DEMDirectory", "DEM directory",
