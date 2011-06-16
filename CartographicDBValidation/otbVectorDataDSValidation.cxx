@@ -30,23 +30,23 @@ namespace otb
 int VectorDataDSValidation::Describe(ApplicationDescriptor* descriptor)
 {
   descriptor->SetName("Vector data validation");
-  descriptor->SetDescription("Vector data validation using Classifier fusion.");
-  descriptor->AddOption("InputShapeFileName", "Input Shape file name",
+  descriptor->SetDescription("Vector data validation based on the fusion of features in teh framework of Dempster-Shafer evidence theory.");
+  descriptor->AddOption("InputShapeFileName", "Input vector data for validation",
                         "in", 1, true, ApplicationDescriptor::FileName);
-  descriptor->AddOption("OutputShapeFileName", "Output Shape file name",
+  descriptor->AddOption("OutputShapeFileName", "Output validated vector data",
                         "out", 1, true, ApplicationDescriptor::FileName);
 
-  descriptor->AddOption("DescriptorsModelFileName", "Fuzzy descriptors model xml file",
+  descriptor->AddOption("DescriptorsModelFileName", "Fuzzy descriptors model(xml file)",
                         "descMod", 1, true, ApplicationDescriptor::FileName);
-  descriptor->AddOptionNParams("BeliefSupport", "Dempster Shafer study hypothesis to compute Belief",
+  descriptor->AddOptionNParams("BeliefSupport", "Dempster Shafer study hypothesis to compute belief",
                                "BelSup", true, ApplicationDescriptor::StringList);
-  descriptor->AddOptionNParams("PlausibilitySupport", "Dempster Shafer study hypothesis to compute Plausibility",
+  descriptor->AddOptionNParams("PlausibilitySupport", "Dempster Shafer study hypothesis to compute plausibility",
                                "PlaSup", true, ApplicationDescriptor::StringList);
 
 
-  descriptor->AddOption("CriterionFormula", "Criterion formula expression (default: ((Belief + Plausibility)/2) >= 0.5)",
+  descriptor->AddOption("CriterionFormula", "Criterion formula expression (default: ((belief + plausibility)/2) >= 0.5)",
                         "Cri", 1, false, ApplicationDescriptor::String);
-  descriptor->AddOption("CriterionThreshold", "Criterion threshold (by default 0.5)",
+  descriptor->AddOption("CriterionThreshold", "Criterion threshold (default 0.5)",
                         "thd", 1, false, ApplicationDescriptor::Real);
   return EXIT_SUCCESS;
 }
