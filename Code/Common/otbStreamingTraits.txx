@@ -28,6 +28,8 @@
 #include "itkLinearInterpolateImageFunction.h"
 #include "itkNearestNeighborInterpolateImageFunction.h"
 
+#include "stdint.h"
+
 namespace otb
 {
 
@@ -55,10 +57,10 @@ unsigned long StreamingTraitsBase<TImage>
       {
       const unsigned long bufferMemorySizeOctet = bufferMemorySize / 8;
       unsigned long       numberColumnsOfRegion = region.GetSize()[0]; // X dimension
-      const unsigned long sizeLine = numberColumnsOfRegion * \
+      const uint64_t sizeLine = static_cast<uint64_t>(numberColumnsOfRegion * \
                                      image->GetNumberOfComponentsPerPixel() * \
-                                     sizeof(PixelType);
-      unsigned long regionSize = region.GetSize()[1] * sizeLine;
+                                     sizeof(PixelType));
+      uint64_t regionSize = static_cast<uint64_t>(region.GetSize()[1]) * sizeLine;
       otbMsgDevMacro(<< "image->GetNumberOfComponentsPerPixel()   = " << image->GetNumberOfComponentsPerPixel());
       otbMsgDevMacro(<< "sizeof(PixelType)                        = " << sizeof(PixelType));
       otbMsgDevMacro(<< "numberColumnsOfRegion                    = " << numberColumnsOfRegion);
@@ -68,7 +70,7 @@ unsigned long StreamingTraitsBase<TImage>
       otbMsgDevMacro(<< "bufferMemorySizeOctet                    = " << bufferMemorySizeOctet);
 
       //Active streaming
-      if (regionSize > bufferMemorySizeOctet)
+      if (regionSize > static_cast<uint64_t>(bufferMemorySizeOctet))
         {
         //The regionSize must be at list equal to the sizeLine
         if (regionSize < sizeLine)
@@ -115,13 +117,13 @@ unsigned long StreamingTraitsBase<TImage>
       {
       typedef otb::ConfigurationFile ConfigurationType;
       ConfigurationType::Pointer conf = ConfigurationType::GetInstance();
-      std::streamoff             streamMaxSizeBufferForStreamingInBytes;
-      std::streamoff             streamImageSizeToActivateStreamingInBytes;
+      uint64_t streamMaxSizeBufferForStreamingInBytes;
+      uint64_t streamImageSizeToActivateStreamingInBytes;
       try
         {
-        streamMaxSizeBufferForStreamingInBytes = conf->GetParameter<std::streamoff>(
+        streamMaxSizeBufferForStreamingInBytes = conf->GetParameter<uint64_t>(
           "OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING");
-        streamImageSizeToActivateStreamingInBytes = conf->GetParameter<std::streamoff>(
+        streamImageSizeToActivateStreamingInBytes = conf->GetParameter<uint64_t>(
           "OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING");
         }
       catch(...)
@@ -129,15 +131,17 @@ unsigned long StreamingTraitsBase<TImage>
         // We should never have to go here if the configuration file is
         // correct and found. In case it is not fallback on the cmake
         // defined constants.
-        streamMaxSizeBufferForStreamingInBytes = OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING;
-        streamImageSizeToActivateStreamingInBytes = OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING;
+        streamMaxSizeBufferForStreamingInBytes = static_cast<uint64_t>(OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING);
+        streamImageSizeToActivateStreamingInBytes = static_cast<uint64_t>(OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING);
         }
 
-      std::streamoff       numberColumnsOfRegion = region.GetSize()[0]; // X dimension
-      const std::streamoff sizeLineInBytes = static_cast<std::streamoff>(numberColumnsOfRegion) * \
-                                             static_cast<std::streamoff>(image->GetNumberOfComponentsPerPixel()) * \
-                                             static_cast<std::streamoff>(sizeof(PixelType));
-      const std::streamoff regionSizeInBytes = region.GetSize()[1] * sizeLineInBytes;
+      uint64_t numberColumnsOfRegion = region.GetSize()[0]; // X dimension
+      const uint64_t sizeLineInBytes = static_cast<uint64_t>(numberColumnsOfRegion) * \
+                                             static_cast<uint64_t>(image->GetNumberOfComponentsPerPixel()) * \
+                                             static_cast<uint64_t>(sizeof(PixelType));
+      // Store in double, because std::streamoff = long which max value is 12.8e9.
+      // It happens that we loop the buffer
+      const uint64_t regionSizeInBytes = static_cast<uint64_t>(region.GetSize()[1]) * sizeLineInBytes;
       otbMsgDevMacro(<< "streamImageSizeToActivateStreaming in Bytes  = " << streamImageSizeToActivateStreamingInBytes);
       otbMsgDevMacro(<< "streamMaxSizeBufferForStreaming in Bytes     = " << streamMaxSizeBufferForStreamingInBytes);
       otbMsgDevMacro(<< "image->GetNumberOfComponentsPerPixel()       = " << image->GetNumberOfComponentsPerPixel());
@@ -146,7 +150,7 @@ unsigned long StreamingTraitsBase<TImage>
       otbMsgDevMacro(<< "sizeLine in Bytes                            = " << sizeLineInBytes);
       otbMsgDevMacro(<< "regionSizeInBytes                            = " << regionSizeInBytes);
 
-      if (regionSizeInBytes > streamImageSizeToActivateStreamingInBytes)
+      if ( regionSizeInBytes > streamImageSizeToActivateStreamingInBytes )
         {
         // Activate streaming
 
