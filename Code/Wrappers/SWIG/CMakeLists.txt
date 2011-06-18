@@ -11,47 +11,13 @@ endmacro()
 #
 # Setup the option for each laguage
 #
-option ( WRAP_LUA "Wrap Lua" OFF )
-
-
-find_package ( PythonLibs )
-find_package ( PythonInterp )
-if ( PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND )
-  set( WRAP_PYTHON_DEFAULT ON )
-else ( PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND )
-  set( WRAP_PYTHON_DEFAULT OFF )
-endif ( PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND )
-check_PIC_flag ( Python )
-option( WRAP_PYTHON "Wrap Python" ${WRAP_PYTHON_DEFAULT} )
-
-find_package ( Java COMPONENTS Development Runtime)
-find_package ( JNI  )
-if ( JAVA_FOUND AND JNI_FOUND )
-  set( WRAP_JAVA_DEFAULT ON )
-else ( ${JAVA_FOUND} AND JNI_FOUND )
-  set( WRAP_JAVA_DEFAULT OFF )
-endif ( JAVA_FOUND AND JNI_FOUND )
-check_PIC_flag ( Java )
-option ( WRAP_JAVA "Wrap Java" ${WRAP_JAVA_DEFAULT} )
-
-find_package ( TCL )
-if ( TCL_FOUND )
-  set ( WRAP_TCL_DEFAULT ON )
-else ( TCL_FOUND )
-  set ( WRAP_TCL_DEFAULT OFF )
-endif ( TCL_FOUND )
-#option ( WRAP_TCL "Wrap Tcl" ${WRAP_TCL_DEFAULT} )
-option ( WRAP_TCL "Wrap Tcl" OFF )
-
-find_package ( Ruby )
-if ( RUBY_FOUND )
-  set ( WRAP_RUBY_DEFAULT ON )
-else ( RUBY_FOUND )
-  set ( WRAP_RUBY_DEFAULT OFF )
-endif ( RUBY_FOUND )
-check_PIC_flag ( Ruby )
-#option ( WRAP_RUBY "Wrap Ruby" ${WRAP_RUBY_DEFAULT} )
-option ( WRAP_RUBY "Wrap Ruby" OFF )
+option ( WRAP_PYTHON "Wrap Python" OFF )
+option ( WRAP_JAVA   "Wrap Java"   OFF )
+option ( WRAP_LUA    "Wrap Lua"    OFF )
+option ( WRAP_RUBY   "Wrap Ruby"   OFF )
+option ( WRAP_TCL    "Wrap Tcl"    OFF )
+option ( WRAP_CSHARP "Wrap CSharp" OFF )
+option ( WRAP_R      "Wrap R"      OFF )
 
 #
 # General SWIG configuration
@@ -82,9 +48,10 @@ if ( WRAP_LUA OR WRAP_PYTHON OR WRAP_JAVA OR WRAP_CSHARP OR WRAP_TCL OR WRAP_R O
 endif()
 
 #
-# python SWIG configuration
+# Python SWIG configuration
 #
 if ( WRAP_PYTHON )
+  check_PIC_flag ( Python )
   find_package ( PythonLibs REQUIRED )
   find_package ( PythonInterp REQUIRED )
   include_directories ( ${PYTHON_INCLUDE_DIR} )
@@ -103,6 +70,7 @@ endif()
 # JAVA SWIG configuration
 #
 if ( WRAP_JAVA )
+  check_PIC_flag ( Java )
   find_package ( Java REQUIRED )
   find_package ( JNI REQUIRED )
   include_directories ( ${JAVA_INCLUDE_PATH} ${JNI_INCLUDE_DIRS} )
@@ -146,7 +114,7 @@ endif()
 # lua SWIG configuration
 #
 if ( WRAP_LUA )
-  option ( USE_SYSTEM_LUA "Use a system provided lua" OFF )
+#  option ( USE_SYSTEM_LUA "Use a system provided lua" OFF )
 
 #  if ( USE_SYSTEM_LUA )
     find_package ( Lua51 REQUIRED )
@@ -179,6 +147,7 @@ endif()
 # ruby SWIG configuration
 #
 if ( WRAP_RUBY )
+  check_PIC_flag ( Ruby )
   find_package ( Ruby REQUIRED )
   include_directories ( ${RUBY_INCLUDE_DIRS} )
 
