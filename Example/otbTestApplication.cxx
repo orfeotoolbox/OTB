@@ -63,6 +63,11 @@ private:
     AddParameter(ParameterType_OutputImage, "outputimage", "Output Image");
     AddParameter(ParameterType_OutputVectorData, "outputvectordata", "Output Vector Data");
     AddParameter(ParameterType_Radius, "radius", "Radius");
+
+    AddParameter(ParameterType_Choice, "choice", "Choice");
+    AddChoice("choice.choice1", "Choice 1");
+    AddChoice("choice.choice2", "Choice 2");
+    AddChoice("choice.choice3", "Choice 3");
     //AddParameter(ParameterType_Group, "group", "Group");
   }
 
