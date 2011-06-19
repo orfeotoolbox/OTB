@@ -49,10 +49,10 @@ Application::~Application()
 }
 
 
-std::list<std::string>
-Application::GetParametersKeys()
+std::vector<std::string>
+Application::GetParametersKeys(bool recursive)
 {
-  return GetParameterList()->GetParametersKeys();
+  return GetParameterList()->GetParametersKeys(recursive);
 }
 
 ParameterGroup* Application::GetParameterList()
@@ -97,7 +97,18 @@ void Application::ExecuteAndWriteOutput()
 {
   this->Execute();
 
-
+  std::vector<std::string> paramList = GetParametersKeys(true);
+  for (std::vector<std::string>::const_iterator it = paramList.begin();
+      it != paramList.end();
+      ++it)
+    {
+    if (GetParameterType(*it) == ParameterType_OutputImage)
+      {
+      Parameter* param = GetParameterByKey(*it);
+      OutputImageParameter* outputParam = dynamic_cast<OutputImageParameter*>(param);
+      outputParam->Write();
+      }
+    }
 }
 
 /* Enable the use of an optional parameter. Returns the previous state */
@@ -162,17 +173,22 @@ ParameterType Application::GetParameterType(std::string paramKey) const
     {
     type = ParameterType_Choice;
     }
-  else if (dynamic_cast<const IntParameter*>(param))
+  else if (dynamic_cast<const RadiusParameter*>(param))
+    {
+    type = ParameterType_Radius;
+    }
+  else if (dynamic_cast<const EmptyParameter*>(param))
+    {
+    std::cout << "GetParameterType Empty" << std::endl;
+    type = ParameterType_Empty;
+    }
+ else if (dynamic_cast<const IntParameter*>(param))
     {
     type = ParameterType_Int;
     }
   else if (dynamic_cast<const FloatParameter*>(param))
     {
     type = ParameterType_Float;
-    }
-  else if (dynamic_cast<const RadiusParameter*>(param))
-    {
-    type = ParameterType_String;
     }
   else if (dynamic_cast<const FilenameParameter*>(param))
     {
@@ -202,9 +218,9 @@ ParameterType Application::GetParameterType(std::string paramKey) const
     {
     type = ParameterType_OutputVectorData;
     }
-  else if (dynamic_cast<const RadiusParameter*>(param))
+  else if (dynamic_cast<const StringParameter*>(param))
     {
-    type = ParameterType_Radius;
+    type = ParameterType_String;
     }
   else if (dynamic_cast<const ParameterGroup*>(param))
     {

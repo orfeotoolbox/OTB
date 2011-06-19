@@ -237,7 +237,7 @@ public:
 
   /* Get the list of all parameters
    */
-  std::list<std::string> GetParametersKeys();
+  std::vector<std::string> GetParametersKeys(bool recursive = true);
 
 protected:
   /** Constructor */
