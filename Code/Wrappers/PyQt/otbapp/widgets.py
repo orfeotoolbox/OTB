@@ -37,6 +37,31 @@ class QParameterLabel(QParameterBase):
         self.setLayout(self.labelLayout)
         self.setWindowTitle('box layout')
 
+class QParameterEmpty(QParameterBase):
+    def __init__(self, model, paramKey):
+        super(QParameterEmpty, self).__init__(model)
+        self._paramKey = paramKey
+
+    def DoCreateWidget(self):
+        app = self.GetModel().GetApplication()
+        h = QtGui.QHBoxLayout()
+        h.setSpacing(0)
+        h.setContentsMargins(0,0,0,0)
+        spin = QtGui.QCheckBox()
+        spin.setToolTip(app.GetParameterDescription(self._paramKey))
+        self.connect(spin, QtCore.SIGNAL('stateChanged(int)'), self.SetValue)
+        h.addWidget(spin)
+        h.addStretch()
+        self.setLayout(h)
+        
+    def SetValue(self, val):
+        app = self.GetModel().GetApplication()
+        if val:
+            app.EnableParameter(self._paramKey)
+        else:
+            app.DisableParameter(self._paramKey)
+
+
 class QParameterInt(QParameterBase):
     def __init__(self, model, paramKey):
         super(QParameterInt, self).__init__(model)
@@ -303,7 +328,7 @@ class QParameterGroup(QParameterBase):
         defaultWidget = QParameterInt
         paramTypeToWidget = {
             otbApplication.ParameterType_Choice : QParameterInt,
-            otbApplication.ParameterType_Empty : defaultWidget,
+            otbApplication.ParameterType_Empty : QParameterEmpty,
             otbApplication.ParameterType_Int : QParameterInt,
             otbApplication.ParameterType_Float : QParameterFloat,
             otbApplication.ParameterType_String : QParameterString,
