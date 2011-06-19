@@ -48,7 +48,7 @@ protected slots:
   void NotifyUpdate();
 
   // slot called when execution is requested
-  void Execute();
+  void ExecuteAndWriteOutput();
 
 private:
   QtWidgetModel(const QtWidgetModel&); //purposely not implemented
