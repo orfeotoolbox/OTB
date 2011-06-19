@@ -105,7 +105,6 @@ protected:
   PolygonListPointerType ProcessPolygonList(PolygonListPointerType polygonList) const;
   
   void GenerateData(void);
-  void ProcessNode(InputInternalTreeNodeType * source, OutputInternalTreeNodeType * destination);
 
 private:
   VectorDataTransformFilter(const Self&); //purposely not implemented
