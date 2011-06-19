@@ -22,3 +22,7 @@ endif ()
 if ( WRAP_QT )
   add_subdirectory(QtWidget)
 endif ()
+
+if ( WRAP_PYQT )
+  add_subdirectory(PyQt)
+endif ()
