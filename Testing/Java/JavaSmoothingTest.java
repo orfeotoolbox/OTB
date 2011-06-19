@@ -17,6 +17,7 @@ class SmoothingTest {
       System.out.println( appAvailable.get(i) );
     }
 
+    System.out.println( "Creating application " + "Smoothing");
     Application_Pointer app = Registry.CreateApplication("Smoothing");
     
     System.out.println( Registry.CreateApplication("Smoothing").GetDescription() );
