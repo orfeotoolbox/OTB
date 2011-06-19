@@ -77,12 +77,15 @@ public:
 
   void Write()
   {
-    typedef otb::StreamingImageFileWriter<VectorImageType> WriterType;
+    if (m_Image.IsNotNull())
+      {
+      typedef otb::StreamingImageFileWriter<VectorImageType> WriterType;
 
-    WriterType::Pointer writer = WriterType::New();
-    writer->SetInput(m_Image);
-    writer->SetFileName(this->GetFileName());
-    writer->Update();
+      WriterType::Pointer writer = WriterType::New();
+      writer->SetInput(m_Image);
+      writer->SetFileName(this->GetFileName());
+      writer->Update();
+      }
   }
 
 protected:
