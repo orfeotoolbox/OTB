@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 #
 #  Example on the use of the Smoothing 
 #
