@@ -48,11 +48,43 @@ ChoiceParameter::GetChoiceKey( int i )
   return m_ChoiceList[i].m_Key;
 }
 
+
+std::vector<std::string>
+ChoiceParameter::GetChoiceKeys( )
+{
+  std::vector<std::string> ret;
+  ChoiceList::iterator it = m_ChoiceList.begin();
+
+  for (it = m_ChoiceList.begin(); it != m_ChoiceList.end(); ++it)
+    {
+    ret.push_back(it->m_Key);
+    }
+
+  return ret;
+}
+
+
 std::string
 ChoiceParameter::GetChoiceName( int i )
 {
   return m_ChoiceList[i].m_Name;
 }
+
+
+std::vector<std::string>
+ChoiceParameter::GetChoiceNames( )
+{
+  std::vector<std::string> ret;
+  ChoiceList::iterator it = m_ChoiceList.begin();
+
+  for (it = m_ChoiceList.begin(); it != m_ChoiceList.end(); ++it)
+    {
+    ret.push_back(it->m_Name);
+    }
+  return ret;
+}
+
+
 
 ParameterGroup::Pointer
 ChoiceParameter::GetChoiceParameterGroupByIndex( int i )

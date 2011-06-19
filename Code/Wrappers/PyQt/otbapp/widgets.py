@@ -103,24 +103,43 @@ class QParameterChoice(QParameterBase):
         
         stack = QtGui.QStackedWidget()
         
-        allparams = app.GetParametersKeys()
-        subgroups = set()
+        allparams = app.GetParametersKeys(True)
+        print str(allparams)
+        
+        subgroups = []
+        choicelist = []
         for paramKey in allparams:
+            print 'paramKey ' + paramKey
             if paramKey.startswith(self._paramKey):
+                choicelist.append(paramKey)
                 choiceSubParam = paramKey.partition(self._paramKey + '.')[2].partition('.')[0]
                 if choiceSubParam:
-                    subgroups.add(choiceSubParam.partition('.')[0])
+                    print "choiceSubParam "+ choiceSubParam
+                    subgroups.append(choiceSubParam.partition('.')[0])
+                else:
+                    print "choiceSubParam None"
+                    subgroups.append(None)
         
+        print 'choicelist ' + str(choicelist)
+        for choice in zip(app.GetChoiceKeys(self._paramKey), app.GetChoiceNames(self._paramKey)):
+            combo.addItem(choice[1], choice[0])
+            
         for subgroup in subgroups:
-            combo.addItem(subgroup, subgroup)
+            if not subgroup:
+                continue
             widget = QParameterGroup(self.GetModel(), self._paramKey + '.' + subgroup)
             if widget:
                 widget.CreateWidget()
                 stack.addWidget(widget)
-            
+            else:
+                stack.addWidget(QtGui.QWidget())
+
+        self.connect(combo, QtCore.SIGNAL("currentIndexChanged(int)"), self.SetValue)
+        self.connect(combo, QtCore.SIGNAL("currentIndexChanged(int)"), stack.setCurrentIndex)
 
         layout.addWidget(combo)
         layout.addWidget(stack)
+        layout.addStretch()
         self.setLayout(layout)
         
     def SetValue(self, val):

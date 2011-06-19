@@ -137,6 +137,13 @@ public:
   /* Get the parameter type from its name */
   ParameterType GetParameterType(std::string paramKey) const;
 
+  /* Returns the description of a parameter */
+  std::vector<std::string> GetChoiceKeys(std::string paramKey);
+
+  /* Returns the description of a parameter */
+  std::vector<std::string> GetChoiceNames(std::string paramKey);
+
+
   /* Set an integer value
    *
    * Can be called for types :

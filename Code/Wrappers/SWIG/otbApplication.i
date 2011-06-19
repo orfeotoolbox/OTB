@@ -106,6 +106,9 @@ public:
   int GetParameterInt(std::string parameter);
   float GetParameterFloat(std::string parameter);
   std::string GetParameterString(std::string parameter);
+
+  std::vector<std::string> GetChoiceKeys(std::string choiceKey);
+  std::vector<std::string> GetChoiceNames(std::string choiceKey);
   
 protected:
   Application();

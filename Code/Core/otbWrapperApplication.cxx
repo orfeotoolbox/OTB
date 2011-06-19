@@ -233,6 +233,28 @@ ParameterType Application::GetParameterType(std::string paramKey) const
   return type;
 }
 
+std::vector<std::string> Application::GetChoiceKeys(std::string name)
+{
+  Parameter* param = GetParameterByKey(name);
+  if (dynamic_cast<ChoiceParameter*>(param))
+    {
+    ChoiceParameter* paramChoice = dynamic_cast<ChoiceParameter*>(param);
+    return paramChoice->GetChoiceKeys();
+    }
+  itkExceptionMacro(<< name << " is not a choice parameter");
+}
+
+std::vector<std::string> Application::GetChoiceNames(std::string name)
+{
+  Parameter* param = GetParameterByKey(name);
+  if (dynamic_cast<ChoiceParameter*>(param))
+    {
+    ChoiceParameter* paramChoice = dynamic_cast<ChoiceParameter*>(param);
+    return paramChoice->GetChoiceNames();
+    }
+  itkExceptionMacro(<< name << " is not a choice parameter");
+}
+
 void Application::SetParameterInt(std::string parameter, int value)
 {
   Parameter* param = GetParameterByKey(parameter);

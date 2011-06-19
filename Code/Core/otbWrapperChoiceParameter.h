@@ -54,8 +54,14 @@ public:
   /** Get the key of a specific choice value */
   std::string GetChoiceKey( int i );
 
+  /** Get the list of the different choice keys */
+  std::vector<std::string> GetChoiceKeys();
+
   /** Get the long name of a specific choice value */
   std::string GetChoiceName( int i );
+
+  /** Get the list of the different choice keys */
+  std::vector<std::string> GetChoiceNames();
 
   /** Get the ParameterGroup associated to a choice value */
   ParameterGroup::Pointer GetChoiceParameterGroupByIndex( int i );
@@ -63,7 +69,9 @@ public:
   /** Get the ParameterGroup associated to a choice value */
   ParameterGroup::Pointer GetChoiceParameterGroupByKey( std::string choiceKey );
 
+  /** Get all parameters that are child of this choice parameter */
   std::vector<std::string> GetParametersKeys();
+
 
   /** Get the number of available choice */
   unsigned int GetNbChoices( void );
