@@ -43,40 +43,37 @@ ParameterGroup::~ParameterGroup()
 {
 }
 
-std::list<std::string>
-ParameterGroup::GetParametersKeys()
+std::vector<std::string>
+ParameterGroup::GetParametersKeys(bool recursive)
 {
-  std::list<std::string> parameters;
+  std::vector<std::string> parameters;
 
   ParameterListType::iterator pit;
   for (pit = m_ParameterList.begin(); pit != m_ParameterList.end(); ++pit)
     {
     Parameter* param = *pit;
-    if (dynamic_cast<ParameterGroup*>(param))
+    parameters.push_back( param->GetKey() );
+
+    if (recursive && dynamic_cast<ParameterGroup*>(param))
       {
       ParameterGroup* paramAsGroup = dynamic_cast<ParameterGroup*>(param);
-      std::list<std::string> subparams = paramAsGroup->GetParametersKeys();
-      for (std::list<std::string>::const_iterator it = subparams.begin();
+      std::vector<std::string> subparams = paramAsGroup->GetParametersKeys();
+      for (std::vector<std::string>::const_iterator it = subparams.begin();
            it != subparams.end(); ++it)
         {
         parameters.push_back( std::string(paramAsGroup->GetKey()) + "."  + *it );
         }
       }
-    else if (dynamic_cast<ChoiceParameter*>(param))
+    else if (recursive && dynamic_cast<ChoiceParameter*>(param))
       {
       ChoiceParameter* paramAsChoice = dynamic_cast<ChoiceParameter*>(param);
-      parameters.push_back( param->GetKey() );
 
-      std::list<std::string> subparams = paramAsChoice->GetParametersKeys();
-      for (std::list<std::string>::const_iterator it = subparams.begin();
+      std::vector<std::string> subparams = paramAsChoice->GetParametersKeys();
+      for (std::vector<std::string>::const_iterator it = subparams.begin();
            it != subparams.end(); ++it)
         {
         parameters.push_back( std::string(paramAsChoice->GetKey()) + "."  + *it );
         }
-      }
-    else
-      {
-      parameters.push_back( param->GetKey() );
       }
     }
   return parameters;

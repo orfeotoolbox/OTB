@@ -59,7 +59,7 @@ public:
 
   unsigned int GetNumberOfParameters();
 
-  std::list<std::string> GetParametersKeys();
+  std::vector<std::string> GetParametersKeys(bool recursive = true);
 
 protected:
   ParameterGroup();
