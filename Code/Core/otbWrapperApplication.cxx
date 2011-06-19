@@ -179,7 +179,6 @@ ParameterType Application::GetParameterType(std::string paramKey) const
     }
   else if (dynamic_cast<const EmptyParameter*>(param))
     {
-    std::cout << "GetParameterType Empty" << std::endl;
     type = ParameterType_Empty;
     }
  else if (dynamic_cast<const IntParameter*>(param))
