@@ -20,6 +20,7 @@
 
 #include "otbVectorImage.h"
 #include "otbWrapperParameter.h"
+#include "otbStreamingImageFileWriter.h"
 
 namespace otb
 {
@@ -73,6 +74,16 @@ public:
 
   itkSetStringMacro(FileName);
   itkGetStringMacro(FileName);
+
+  void Write()
+  {
+    typedef otb::StreamingImageFileWriter<VectorImageType> WriterType;
+
+    WriterType::Pointer writer = WriterType::New();
+    writer->SetInput(m_Image);
+    writer->SetFileName(this->GetFileName());
+    writer->Update();
+  }
 
 protected:
   /** Constructor */
