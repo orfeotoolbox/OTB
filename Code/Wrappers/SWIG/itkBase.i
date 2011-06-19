@@ -30,10 +30,10 @@
     $action
   } catch( itk::ExceptionObject &ex ) {
     char error_msg[256];
-    sprintf( error_msg, "Exception thrown in SimpleITK $symname: %s", ex.what() );
+    sprintf( error_msg, "Exception thrown in otbApplication $symname: %s", ex.what() );
     SWIG_exception( SWIG_RuntimeError, error_msg );
   } catch( ... ) {
-    SWIG_exception( SWIG_UnknownError, "Unknown exception thrown in SimpleITK $symname" );
+    SWIG_exception( SWIG_UnknownError, "Unknown exception thrown in otbApplication $symname" );
   }
 }
 /*
