@@ -309,7 +309,6 @@ class QParameterGroup(QParameterBase):
 
     def DoCreateWidget(self):
         
-        form = QtGui.QFormLayout()
         
         defaultWidget = QParameterInt
         paramTypeToWidget = {
@@ -332,14 +331,32 @@ class QParameterGroup(QParameterBase):
 
         app = self.GetModel().GetApplication()
         if self._paramKey:
-            keys = [key for key in app.GetParametersKeys(True) if key and key.startswith(self._paramKey)]
+            keys = [key for key in app.GetParametersKeys(True) if key and key.startswith(self._paramKey + '.')]
         else:
             keys = app.GetParametersKeys(False)
-            
+        print 'keys ' + str(keys)
+        
+        form = QtGui.QFormLayout()
         for key in keys:
             widgetClass = paramTypeToWidget[app.GetParameterType(key)]
             w = widgetClass(self._model, key)
             w.CreateWidget()
-            form.addRow( app.GetParameterName(key), w )
-        
-        self.setLayout(form)
+
+            if widgetClass is not QParameterGroup:
+                print " form.addRow(w"
+                form.addRow( app.GetParameterName(key), w )
+            else:
+                print " form.addWidget(w"
+                form.addRow(w)
+
+        if self._paramKey:
+           # not the root group
+           group = QtGui.QGroupBox()
+           group.setTitle( app.GetParameterName(self._paramKey) )
+           group.setLayout(form)
+           
+           layout = QtGui.QHBoxLayout()
+           layout.addWidget(group)
+           self.setLayout(layout)
+        else:
+            self.setLayout(form)
