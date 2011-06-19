@@ -103,36 +103,18 @@ class QParameterChoice(QParameterBase):
         
         stack = QtGui.QStackedWidget()
         
-        allparams = app.GetParametersKeys(True)
-        print str(allparams)
-        
-        subgroups = []
-        choicelist = []
-        for paramKey in allparams:
-            print 'paramKey ' + paramKey
-            if paramKey.startswith(self._paramKey):
-                choicelist.append(paramKey)
-                choiceSubParam = paramKey.partition(self._paramKey + '.')[2].partition('.')[0]
-                if choiceSubParam:
-                    print "choiceSubParam "+ choiceSubParam
-                    subgroups.append(choiceSubParam.partition('.')[0])
-                else:
-                    print "choiceSubParam None"
-                    subgroups.append(None)
-        
-        print 'choicelist ' + str(choicelist)
         for choice in zip(app.GetChoiceKeys(self._paramKey), app.GetChoiceNames(self._paramKey)):
             combo.addItem(choice[1], choice[0])
-            
-        for subgroup in subgroups:
-            if not subgroup:
-                continue
-            widget = QParameterGroup(self.GetModel(), self._paramKey + '.' + subgroup)
-            if widget:
+        
+        allparams = app.GetParametersKeys(True)
+        for choiceKey in app.GetChoiceKeys(self._paramKey):
+            a = [s for s in allparams if s.startswith(self._paramKey + '.' + choiceKey + '.')]
+            if not a:
+                stack.addWidget(QtGui.QWidget())
+            else:
+                widget = QParameterGroup(self.GetModel(), self._paramKey + '.' + choiceKey)
                 widget.CreateWidget()
                 stack.addWidget(widget)
-            else:
-                stack.addWidget(QtGui.QWidget())
 
         self.connect(combo, QtCore.SIGNAL("currentIndexChanged(int)"), self.SetValue)
         self.connect(combo, QtCore.SIGNAL("currentIndexChanged(int)"), stack.setCurrentIndex)
