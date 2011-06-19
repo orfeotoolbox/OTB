@@ -63,7 +63,7 @@ public:
   /** Get the ParameterGroup associated to a choice value */
   ParameterGroup::Pointer GetChoiceParameterGroupByKey( std::string choiceKey );
 
-  std::list<std::string> GetParametersKeys();
+  std::vector<std::string> GetParametersKeys();
 
   /** Get the number of available choice */
   unsigned int GetNbChoices( void );

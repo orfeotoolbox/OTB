@@ -144,10 +144,10 @@ ChoiceParameter::GetAnyValue()
 
 
 /** Return any value */
-std::list<std::string>
+std::vector<std::string>
 ChoiceParameter::GetParametersKeys()
 {
-  std::list<std::string> parameters;
+  std::vector<std::string> parameters;
 
   ChoiceList::iterator cit = m_ChoiceList.begin();
 
@@ -155,8 +155,8 @@ ChoiceParameter::GetParametersKeys()
     {
     if (cit->m_AssociatedParameter)
       {
-      std::list<std::string> subparams = cit->m_AssociatedParameter->GetParametersKeys();
-      for (std::list<std::string>::const_iterator it = subparams.begin();
+      std::vector<std::string> subparams = cit->m_AssociatedParameter->GetParametersKeys();
+      for (std::vector<std::string>::const_iterator it = subparams.begin();
            it != subparams.end(); ++it)
         {
         parameters.push_back( cit->m_Key + "."  + *it );
