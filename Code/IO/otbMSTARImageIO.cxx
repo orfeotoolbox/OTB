@@ -92,9 +92,6 @@ bool MSTARImageIO::CanReadFile(const char* filename)
     itkDebugMacro(<< "Fichier image non specifie.");
     }
 
-  int NbLignes;                /* Nombre de lignes de l'image */
-  int NbColonnes;              /* Nombre de colonnes de l'image */
-
   MSTARname = filename;
 
   MSTARfp = fopen(MSTARname, "rb");
@@ -155,7 +152,7 @@ bool MSTARImageIO::CanReadFile(const char* filename)
   else
     {
     sscanf((tptr + 16), "%d", &numcols);
-    NbColonnes = static_cast<int>(numcols);
+    //NbColonnes = static_cast<int>(numcols); // Unused
     }
 
   /* Extract MSTAR row height */
@@ -168,7 +165,7 @@ bool MSTARImageIO::CanReadFile(const char* filename)
   else
     {
     sscanf((tptr + 13), "%d", &numrows);
-    NbLignes = static_cast<int>(numrows);
+    //NbLignes = static_cast<int>(numrows); // Unused
     }
 
   /* Set MSTAR image type */
@@ -416,6 +413,7 @@ void MSTARImageIO::Read(void* buffer)
           for (i = 0; i < totchunks; ++i)
             {
             returnVal = fread(bigfloatbuf, sizeof(char), 4, MSTARfp);
+            if (!returnVal) itkExceptionMacro("Read failure");
             littlefloatval = byteswap_SR_IR(bigfloatbuf);
             CHIPdata[i] = littlefloatval;
             }
@@ -461,6 +459,7 @@ void MSTARImageIO::Read(void* buffer)
           for (i = 0; i < nchunks; ++i)
             {
             returnVal = fread(bigushortbuf, sizeof(char), 2, MSTARfp);
+            if (!returnVal) itkExceptionMacro("Read failure");
             littleushortval = byteswap_SUS_IUS(bigushortbuf);
             FSCENEdata[i] = littleushortval;
             }
@@ -503,6 +502,7 @@ void MSTARImageIO::Read(void* buffer)
           for (i = 0; i < nchunks; ++i)
             {
             returnVal = fread(bigushortbuf, sizeof(char), 2, MSTARfp);
+            if (!returnVal) itkExceptionMacro("Read failure");
             littleushortval = byteswap_SUS_IUS(bigushortbuf);
             FSCENEdata[i] = littleushortval;
             }
