@@ -18,8 +18,6 @@
 
 // kindly stolen from the build files of OTB-Wrapping (Typedefs/itkBase.includes, Typedefs/wrap_ITKCommonBase.i)
 
-%include "RefCountMacro.i"
-
 %include <exception.i>
 %include <typemaps.i>
 
@@ -118,7 +116,7 @@
      void operator=(itkLightObject const & arg0);
    protected:
      itkLightObject();
-     ~itkLightObject();
+     //~itkLightObject();
      virtual void PrintSelf(std::ostream & os, itkIndent indent) const;
      virtual void PrintHeader(std::ostream & os, itkIndent indent) const;
      virtual void PrintTrailer(std::ostream & os, itkIndent indent) const;
@@ -159,7 +157,7 @@
      void operator=(itkObject const & arg0);
    protected:
      itkObject();
-     ~itkObject();
+     //~itkObject();
      virtual void PrintSelf(std::ostream & os, itkIndent indent) const;
      bool PrintObservers(std::ostream & os, itkIndent indent) const;
  };
@@ -200,7 +198,7 @@
      virtual itkLightObject_Pointer CreateObject(char const * itkclassname);
      virtual std::list< itkLightObject_Pointer > CreateAllObject(char const * itkclassname);
      itkObjectFactoryBase();
-     ~itkObjectFactoryBase();
+     //~itkObjectFactoryBase();
  };
  DECLARE_REF_COUNT_CLASS( itkObjectFactoryBase )
 
@@ -232,7 +230,7 @@
      void operator=(itkCommand const & arg0);
    protected:
      itkCommand();
-     ~itkCommand();
+     //~itkCommand();
  };
  DECLARE_REF_COUNT_CLASS( itkCommand )
 
@@ -286,4 +284,4 @@ DECLARE_itkEventObject_CLASS(itkStartPickEvent,  itkPickEvent)
 DECLARE_itkEventObject_CLASS(itkUserEvent,       itkAnyEvent)
 DECLARE_itkEventObject_CLASS(itkAbortCheckEvent, itkPickEvent)
 DECLARE_itkEventObject_CLASS(itkEndPickEvent,    itkPickEvent)
-DECLARE_itkEventObject_CLASS(itkUserEvent,       itkAnyEvent)
+
