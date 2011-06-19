@@ -308,10 +308,9 @@ class QParameterGroup(QParameterBase):
         pass
 
     def DoCreateWidget(self):
-        grid = QtGui.QGridLayout()
-        grid.setSpacing(1)
-        grid.setContentsMargins(0,0,0,0)
-
+        
+        form = QtGui.QFormLayout()
+        
         defaultWidget = QParameterInt
         paramTypeToWidget = {
             otbApplication.ParameterType_Choice : QParameterInt,
@@ -337,13 +336,10 @@ class QParameterGroup(QParameterBase):
         else:
             keys = app.GetParametersKeys(False)
             
-        i = 0
         for key in keys:
             widgetClass = paramTypeToWidget[app.GetParameterType(key)]
-            grid.addWidget( QParameterLabel(self._model, key), i, 0 )
             w = widgetClass(self._model, key)
             w.CreateWidget()
-            grid.addWidget(w, i, 1 )
-            i = i+1
+            form.addRow( app.GetParameterName(key), w )
         
-        self.setLayout(grid)
+        self.setLayout(form)
