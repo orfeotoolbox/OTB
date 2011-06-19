@@ -102,13 +102,12 @@
     public:
 
     // make "deletion" in scripting language just decrement ref. count
-    ~class_name() {self->UnRegister();};
-
+    ~class_name()
+    {
+      self->UnRegister();
     }
 
-  %ignore class_name::~class_name;
-
-  %ignore class_name##_Pointer;
+    }
 
 %enddef
 

@@ -146,7 +146,7 @@ public:
 //  ParameterGroup* GetParameterList();
 //  Parameter* GetParameterByKey(std::string parameter);
 //  const Parameter* GetParameterByKey(std::string parameter) const;
-  std::list<std::string> GetParametersKeys();
+  std::vector<std::string> GetParametersKeys(bool recursive = true);
   std::string GetParameterName(std::string);
   std::string GetParameterDescription(std::string);
   
@@ -170,7 +170,7 @@ public:
   
 protected:
   Application();
-  virtual ~Application();
+  //virtual ~Application();
   
   void AddChoice(std::string paramKey, std::string paramName);
   void AddParameter(otb::Wrapper::ParameterType type, std::string paramKey, std::string paramName);
