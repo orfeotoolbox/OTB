@@ -23,7 +23,7 @@ option ( WRAP_R      "Wrap R"      OFF )
 # General SWIG configuration
 #
 if ( WRAP_LUA OR WRAP_PYTHON OR WRAP_JAVA OR WRAP_CSHARP OR WRAP_TCL OR WRAP_R OR WRAP_RUBY )
-  find_package ( SWIG 2 REQUIRED )
+  find_package ( SWIG REQUIRED )
   include ( UseSWIGLocal )
   set_source_files_properties ( otbApplication.i PROPERTIES CPLUSPLUS ON )
   file ( GLOB SWIG_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/*/*.h)
@@ -39,7 +39,8 @@ if ( WRAP_LUA OR WRAP_PYTHON OR WRAP_JAVA OR WRAP_CSHARP OR WRAP_TCL OR WRAP_R O
 #    ${CMAKE_CURRENT_SOURCE_DIR}/CSharpTypemapHelper.i
     ${CMAKE_CURRENT_SOURCE_DIR}/Lua.i
 #    ${CMAKE_CURRENT_SOURCE_DIR}/Tcl.i
-     )
+    ${CMAKE_CURRENT_SOURCE_DIR}/Ruby.i
+    )
 
   set ( SWIG_MODULE_otbApplication_EXTRA_DEPS ${SWIG_HEADERS} )
 
