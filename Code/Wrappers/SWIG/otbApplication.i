@@ -71,64 +71,6 @@ namespace Wrapper
 }
 }
 
-
-
-/*
-class Parameter : public itkObject
-{
-public:
-  itkNewMacro(Parameter)
-
-  itkSetStringMacro(Name)
-  itkGetStringMacro(Name)
-  
-  itkSetStringMacro(Description)
-  itkGetStringMacro(Description)
-  
-  itkSetStringMacro(Key)
-  itkGetStringMacro(Key)
-
-  itkSetMacro(Mandatory,bool)
-  itkGetMacro(Mandatory,bool)
-  itkBooleanMacro(Mandatory)
-
-  itkSetEnumMacro(DefaultValueMode, otb::Wrapper::DefaultValueMode)
-  itkGetEnumMacro(DefaultValueMode, otb::Wrapper::DefaultValueMode)
-
-  virtual void Reset();
-  
-protected:
-  Parameter();
-  //~Parameter();
-  
-private:
-    Parameter(const Parameter &);
-    void operator =(const Parameter&);
-
-};
-DECLARE_REF_COUNT_CLASS( Parameter )
-
-class ParameterGroup : public Parameter
-{
-public:
-  itkNewMacro(ParameterGroup);
-  
-  void AddParameter(Parameter_Pointer p);
-  Parameter_Pointer GetParameterByIndex(unsigned int i);
-  Parameter_Pointer GetParameterByKey(std::string name);
-  unsigned int GetNumberOfParameters();
-
-protected:
-  ParameterGroup();
-  virtual ~ParameterGroup();
-
-private:
-  ParameterGroup(const ParameterGroup &);
-  void operator =(const ParameterGroup&);
-};
-DECLARE_REF_COUNT_CLASS( ParameterGroup )
-*/
-
 class Application: public itkObject
 {
 public:
@@ -143,9 +85,6 @@ public:
   void Execute();
   void ExecuteAndWriteOutput();
   
-//  ParameterGroup* GetParameterList();
-//  Parameter* GetParameterByKey(std::string parameter);
-//  const Parameter* GetParameterByKey(std::string parameter) const;
   std::vector<std::string> GetParametersKeys(bool recursive = true);
   std::string GetParameterName(std::string);
   std::string GetParameterDescription(std::string);
