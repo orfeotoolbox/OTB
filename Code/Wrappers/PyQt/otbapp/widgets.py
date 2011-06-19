@@ -28,12 +28,10 @@ class QParameterLabel(QParameterBase):
         app = self.GetModel().GetApplication()
         self.label.setText( app.GetParameterName(paramKey))
         self.label.setToolTip( app.GetParameterDescription(paramKey) )
-        print self.label.toolTip()
         self.labelLayout = QtGui.QVBoxLayout()
         self.labelLayout.setSpacing(0)
         self.labelLayout.setContentsMargins(0,0,0,0)
         self.labelLayout.addWidget(self.label)
-        print self.labelLayout.spacing()
         self.setLayout(self.labelLayout)
         self.setWindowTitle('box layout')
 
@@ -85,7 +83,6 @@ class QParameterInt(QParameterBase):
         self.setLayout(h)
         
     def SetValue(self, val):
-        print val
         app = self.GetModel().GetApplication()
         app.SetParameterInt(self._paramKey, val)
 
@@ -96,7 +93,6 @@ class QParameterChoice(QParameterBase):
         self._paramKey = paramKey
     
     def DoCreateWidget(self):
-        print 'QParameterChoice DoCreateWidget'
         app = self.GetModel().GetApplication()
         
         layout = QtGui.QVBoxLayout()
@@ -108,14 +104,12 @@ class QParameterChoice(QParameterBase):
         stack = QtGui.QStackedWidget()
         
         allparams = app.GetParametersKeys()
-        print 'allparams = ' + str(allparams)
         subgroups = set()
         for paramKey in allparams:
             if paramKey.startswith(self._paramKey):
                 choiceSubParam = paramKey.partition(self._paramKey + '.')[2].partition('.')[0]
                 if choiceSubParam:
                     subgroups.add(choiceSubParam.partition('.')[0])
-        print str(subgroups)
         
         for subgroup in subgroups:
             combo.addItem(subgroup, subgroup)
@@ -157,7 +151,6 @@ class QParameterFloat(QParameterBase):
         self.setLayout(h)
         
     def SetValue(self, val):
-        print val
         app = self.GetModel().GetApplication()
         app.SetParameterFloat(self._paramKey, val)
 
@@ -182,7 +175,6 @@ class QParameterString(QParameterBase):
         self.setLayout(h)
         
     def SetValue(self, val):
-        print val
         app = self.GetModel().GetApplication()
         app.SetParameterString(self._paramKey, str(val))
 
@@ -215,7 +207,6 @@ class QParameterInputFilename(QParameterBase):
         self.setLayout(h)
         
     def SetFilename(self, val):
-        print val
         app = self.GetModel().GetApplication()
         
         app.SetParameterString(self._paramKey, str(val))
@@ -256,7 +247,6 @@ class QParameterDirectory(QParameterBase):
         self.setLayout(h)
         
     def SetDirname(self, val):
-        print val
         app = self.GetModel().GetApplication()
         app.SetParameterString(self._paramKey, str(val))
 
@@ -297,7 +287,6 @@ class QParameterOutputImage(QParameterBase):
         self.setLayout(h)
         
     def SetFilename(self, val):
-        print val
         app = self.GetModel().GetApplication()
         app.SetParameterString(self._paramKey, str(val))
 
@@ -313,14 +302,11 @@ class QParameterGroup(QParameterBase):
     def __init__(self, model, paramKey = None):
         super(QParameterGroup, self).__init__(model)
         self._paramKey = paramKey
-        if paramKey:
-            print 'QParameterGroup ' + paramKey
 
     def DoUpdateGUI(self):
         pass
 
     def DoCreateWidget(self):
-        print "QParameterGroup DoCreateWidget"
         grid = QtGui.QGridLayout()
         grid.setSpacing(1)
         grid.setContentsMargins(0,0,0,0)
@@ -353,7 +339,6 @@ class QParameterGroup(QParameterBase):
         i = 0
         for key in keys:
             widgetClass = paramTypeToWidget[app.GetParameterType(key)]
-            print "widgetClass " + str(widgetClass)
             grid.addWidget( QParameterLabel(self._model, key), i, 0 )
             w = widgetClass(self._model, key)
             w.CreateWidget()

@@ -42,13 +42,10 @@ private:
   {
     SetName("TestApplication");
     SetDescription("This application demonstrate the use of all parameters types");
-
-    std::cout << ">>>>>>>>>>>>>> TestApplication" << std::endl;
   }
 
   virtual ~TestApplication()
   {
-    std::cout << ">>>>>>>>>>>>>> ~TestApplication" << std::endl;
   }
 
   void DoCreateParameters()

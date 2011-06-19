@@ -8,8 +8,6 @@ class QParameterModel(QtCore.QObject):
     def __init__(self, app):
         super(QParameterModel, self).__init__()
         self._app = app
-        print self._app.GetName()
-        print self._app.GetDescription()
         
     def GetApplication(self):
         return self._app
@@ -62,8 +60,7 @@ class QParameterView(QtGui.QMainWindow):
         description.setText(self._app.GetDescription())
         
         h.addWidget(description)
-        g.setLayout(h)
-        
+        g.setLayout(h)  
         return g
         
     def CreateInputWidgets(self):

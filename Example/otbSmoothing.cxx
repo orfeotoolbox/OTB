@@ -61,7 +61,6 @@ private:
 
   virtual ~Smoothing()
   {
-    std::cout << "~Smoothing" << std::endl;
   }
 
   void DoCreateParameters()
