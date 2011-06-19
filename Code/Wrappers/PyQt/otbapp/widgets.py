@@ -221,7 +221,7 @@ class QParameterDirectory(QParameterBase):
         
         self._button = QtGui.QPushButton()
         self._button.setText('...')
-        self._button.setToolTip('Select file...')
+        self._button.setToolTip('Select directory...')
         self._button.setMaximumWidth(self._button.width())
         self.connect(self._button, QtCore.SIGNAL('clicked()'), self.SelectDir)
         
@@ -239,7 +239,7 @@ class QParameterDirectory(QParameterBase):
         dialog = QtGui.QFileDialog()
         dialog.setConfirmOverwrite(True)
         dialog.setFileMode(QtGui.QFileDialog.Directory)
-        setOption(QtGui.QFileDialog.ShowDirsOnly, true)
+        dialog.setOption(QtGui.QFileDialog.ShowDirsOnly, True)
         dialog.setNameFilter('Raster files (*)')
         if dialog.exec_() :
             self._line.setText(dialog.selectedFiles()[0])
