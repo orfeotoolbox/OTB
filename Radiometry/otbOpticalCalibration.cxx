@@ -112,8 +112,9 @@ int OpticalCalibration::Execute(otb::ApplicationOptionsResult* parseResult)
   ScaleFilterType::Pointer scaleFilter = ScaleFilterType::New();
   scaleFilter->SetCoef(1000.);
 
-  if(parseResult->GetParameterString("Level") == "toc")
+  if(parseResult->GetParameterString("Level") == "TOC")
     {
+    std::cout << "Compute TOC level" << std::endl;
     AtmosphericCorrectionParametersType::Pointer atmosphericParam = reflectanceToSurfaceReflectanceFilter->GetCorrectionParameters();
 
     AerosolModelType aeroMod = AtmosphericCorrectionParametersType::NO_AEROSOL;
