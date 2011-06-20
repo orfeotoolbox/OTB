@@ -616,7 +616,7 @@ void OGRIOHelper
           DataNodePointerType dataNode = DataNodeType::New();
           ConvertGeometryToPolygonNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
           newNode->Set(dataNode);
-multiPtr->AddChild(newNode);
+          multiPtr->AddChild(newNode);
           break;
           }
           default:
