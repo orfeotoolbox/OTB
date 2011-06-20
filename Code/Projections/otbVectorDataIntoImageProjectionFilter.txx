@@ -234,6 +234,11 @@ VectorDataIntoImageProjectionFilter<TInputVectorData, TInputImage>
     ++itVector;
     }*/
 
+  if (m_UseOutputSpacingAndOriginFromImage)
+    {
+    m_VdProjFilter->GetOutput()->SetProjectionRef("");
+    }
+
   this->GraftOutput(m_VdProjFilter->GetOutput());
 }
 
