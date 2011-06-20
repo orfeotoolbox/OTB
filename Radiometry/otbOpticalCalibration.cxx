@@ -57,7 +57,7 @@ int OpticalCalibration::Describe(ApplicationDescriptor* descriptor)
 int OpticalCalibration::Execute(otb::ApplicationOptionsResult* parseResult)
 {
   typedef otb::VectorImage<unsigned short int, 2>       ImageType;
-  typedef otb::VectorImage<float, 2>                     FloatImageType;
+  typedef otb::VectorImage<float, 2>                    FloatImageType;
   typedef otb::ImageFileReader<ImageType>               ReaderType;
   typedef otb::StreamingImageFileWriter<ImageType>      WriterType;
 
