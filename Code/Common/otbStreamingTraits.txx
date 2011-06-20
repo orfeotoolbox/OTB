@@ -18,6 +18,8 @@
 #ifndef __otbStreamingTraits_txx
 #define __otbStreamingTraits_txx
 
+#include <boost/cstdint.hpp>
+
 #include "otbStreamingTraits.h"
 #include "otbMacro.h"
 #include "otbConfigure.h"
@@ -27,8 +29,6 @@
 #include "itkBSplineInterpolateImageFunction.h"
 #include "itkLinearInterpolateImageFunction.h"
 #include "itkNearestNeighborInterpolateImageFunction.h"
-
-#include "stdint.h"
 
 namespace otb
 {
@@ -43,6 +43,7 @@ unsigned long StreamingTraitsBase<TImage>
                                    unsigned long bufferMemorySize,
                                    unsigned long bufferNumberOfLinesDivisions)
 {
+  using boost::uint64_t;
   unsigned long numDivisions(0);
 
   switch (mode)
@@ -55,12 +56,15 @@ unsigned long StreamingTraitsBase<TImage>
       break;
     case SET_BUFFER_MEMORY_SIZE:
       {
-      const unsigned long bufferMemorySizeOctet = bufferMemorySize / 8;
-      unsigned long       numberColumnsOfRegion = region.GetSize()[0]; // X dimension
-      const uint64_t sizeLine = static_cast<uint64_t>(numberColumnsOfRegion * \
+      const uint64_t bufferMemorySizeOctet = bufferMemorySize / 8;
+      const uint64_t numberColumnsOfRegion = region.GetSize()[0]; // X dimension
+      const uint64_t sizeLine = static_cast<uint64_t>(
+                                     numberColumnsOfRegion * \
                                      image->GetNumberOfComponentsPerPixel() * \
                                      sizeof(PixelType));
+
       uint64_t regionSize = static_cast<uint64_t>(region.GetSize()[1]) * sizeLine;
+
       otbMsgDevMacro(<< "image->GetNumberOfComponentsPerPixel()   = " << image->GetNumberOfComponentsPerPixel());
       otbMsgDevMacro(<< "sizeof(PixelType)                        = " << sizeof(PixelType));
       otbMsgDevMacro(<< "numberColumnsOfRegion                    = " << numberColumnsOfRegion);
@@ -70,9 +74,9 @@ unsigned long StreamingTraitsBase<TImage>
       otbMsgDevMacro(<< "bufferMemorySizeOctet                    = " << bufferMemorySizeOctet);
 
       //Active streaming
-      if (regionSize > static_cast<uint64_t>(bufferMemorySizeOctet))
+      if (regionSize > bufferMemorySizeOctet)
         {
-        //The regionSize must be at list equal to the sizeLine
+        //The regionSize must be at least equal to the sizeLine
         if (regionSize < sizeLine)
           {
           otbMsgDevMacro(<< "Force buffer size.");
@@ -85,7 +89,7 @@ unsigned long StreamingTraitsBase<TImage>
         }
       else
         {
-        //Non streaming
+        //No streaming
         numDivisions = 1;
         }
 
@@ -135,12 +139,12 @@ unsigned long StreamingTraitsBase<TImage>
         streamImageSizeToActivateStreamingInBytes = static_cast<uint64_t>(OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING);
         }
 
-      uint64_t numberColumnsOfRegion = region.GetSize()[0]; // X dimension
-      const uint64_t sizeLineInBytes = static_cast<uint64_t>(numberColumnsOfRegion) * \
-                                             static_cast<uint64_t>(image->GetNumberOfComponentsPerPixel()) * \
-                                             static_cast<uint64_t>(sizeof(PixelType));
-      // Store in double, because std::streamoff = long which max value is 12.8e9.
-      // It happens that we loop the buffer
+      const uint64_t numberColumnsOfRegion = region.GetSize()[0]; // X dimension
+      const uint64_t sizeLineInBytes
+              = static_cast<uint64_t>( numberColumnsOfRegion
+                                        * image->GetNumberOfComponentsPerPixel()
+                                        * sizeof(PixelType) );
+
       const uint64_t regionSizeInBytes = static_cast<uint64_t>(region.GetSize()[1]) * sizeLineInBytes;
       otbMsgDevMacro(<< "streamImageSizeToActivateStreaming in Bytes  = " << streamImageSizeToActivateStreamingInBytes);
       otbMsgDevMacro(<< "streamMaxSizeBufferForStreaming in Bytes     = " << streamMaxSizeBufferForStreamingInBytes);
