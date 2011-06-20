@@ -38,4 +38,5 @@ void RegisterTests()
   REGISTER_TEST(otbGeographicalDistance);
   REGISTER_TEST(otbVectorDataTransformFilterNew);
   REGISTER_TEST(otbVectorDataTransformFilter);
+  REGISTER_TEST(otbGenericRSTransformGenericTest);
 }

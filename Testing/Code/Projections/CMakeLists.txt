@@ -1309,6 +1309,10 @@ ADD_TEST(prTvVectorDataTransformFilter ${PROJECTIONS_TESTS4}
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
+#---- Generic tests on GenericRSTransform -----
+ADD_TEST(prTvGenericRSTransformGenericTest_WGS84<->EPSG:3857 ${PROJECTIONS_TESTS4}
+  otbGenericRSTransformGenericTest
+  1.48353 43.55968 165145.804154 5397552.58726 EPSG 4326 EPSG 3857 GEO 1e-6 PHYSICAL 1e-6 NOELEV)
 
 #=======================================================================================
 SET(Projections_SRCS1
@@ -1374,6 +1378,7 @@ otbImageToGenericRSOutputParameters.cxx
 otbRationalTransform.cxx
 otbGeographicalDistance.cxx
 otbVectorDataTransformFilter.cxx
+otbGenericRSTransformGenericTest.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbProjectionsTests1 "${Projections_SRCS1}" "OTBProjections;OTBIO;OTBTesting")
