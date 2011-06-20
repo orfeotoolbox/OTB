@@ -570,6 +570,7 @@ void OGRIOHelper
           InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
           DataNodePointerType dataNode = DataNodeType::New();
           ConvertGeometryToPointNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
+          newNode->Set(dataNode);
           multiPtr->AddChild(newNode);
           break;
           }
@@ -578,6 +579,7 @@ void OGRIOHelper
           InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
           DataNodePointerType dataNode = DataNodeType::New();
           ConvertGeometryToPointNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
+          newNode->Set(dataNode);
           multiPtr->AddChild(newNode);
           break;
           }
@@ -586,6 +588,7 @@ void OGRIOHelper
           InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
           DataNodePointerType dataNode = DataNodeType::New();
           ConvertGeometryToLineNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
+          newNode->Set(dataNode);
           multiPtr->AddChild(newNode);
           break;
           }
@@ -594,6 +597,7 @@ void OGRIOHelper
           InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
           DataNodePointerType dataNode = DataNodeType::New();
           ConvertGeometryToLineNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
+          newNode->Set(dataNode);
           multiPtr->AddChild(newNode);
           break;
           }
@@ -602,6 +606,7 @@ void OGRIOHelper
           InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
           DataNodePointerType dataNode = DataNodeType::New();
           ConvertGeometryToPolygonNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
+          newNode->Set(dataNode);
           multiPtr->AddChild(newNode);
           break;
           }
@@ -610,7 +615,8 @@ void OGRIOHelper
           InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
           DataNodePointerType dataNode = DataNodeType::New();
           ConvertGeometryToPolygonNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
-          multiPtr->AddChild(newNode);
+          newNode->Set(dataNode);
+multiPtr->AddChild(newNode);
           break;
           }
           default:
