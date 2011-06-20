@@ -34,11 +34,11 @@ int otbGenericRSTransformGenericTest(int argc, char * argv[])
 {
   if(argc<14)
     {
-    std::cerr<<"Usage: "<<argv[0]<<"input_point_x input_point_y output_point_x output_point_y input_projection_type[IMAGE,WKT,EPSG] input_projection_source output_projection_type[IMAGE,WKT,EPSG] output_projection_source input_distance[PHYSICAL,GEO] input_threshold output_distance[PHYSICAL,GEO] ouptut_threshold elevation_flag[NOELEV,AVERAGE,DEM] elevation_source";
+    std::cerr<<"Usage: "<<argv[0]<<"input_point_x input_point_y output_point_x output_point_y input_projection_type[IMAGE, WKT, EPSG] input_projection_source output_projection_type[IMAGE, WKT, EPSG] output_projection_source input_distance[PHYSICAL, GEO] input_threshold output_distance[PHYSICAL, GEO] ouptut_threshold elevation_flag[NOELEV, AVERAGE, DEM] elevation_source";
     return EXIT_FAILURE;
     }
 
-  PointType refInPoint,refOutPoint,inPoint,outPoint;
+  PointType refInPoint, refOutPoint, inPoint, outPoint;
   refInPoint[0] = atof(argv[1]);
   refInPoint[1] = atof(argv[2]);
   refOutPoint[0] = atof(argv[3]);
@@ -162,7 +162,7 @@ int otbGenericRSTransformGenericTest(int argc, char * argv[])
     }
   else
     {
-    std::cerr<<"Failed to read the elevation flag. Should be one of NOELEV,AVERAGE,DEM"<<std::endl;
+    std::cerr<<"Failed to read the elevation flag. Should be one of NOELEV, AVERAGE, DEM"<<std::endl;
     return EXIT_FAILURE;
     }
 
@@ -199,12 +199,12 @@ int otbGenericRSTransformGenericTest(int argc, char * argv[])
   if(outDistType == "PHYSICAL")
     {
     std::cout<<"Output precision checked using physical distance."<<std::endl;
-    outRes = physDistance->Evaluate(outPoint,refOutPoint);
+    outRes = physDistance->Evaluate(outPoint, refOutPoint);
     }
   else if(outDistType == "GEO")
     {
     std::cout<<"Output precision checked using Haversine distance."<<std::endl;
-    outRes = geoDistance->Evaluate(outPoint,refOutPoint);
+    outRes = geoDistance->Evaluate(outPoint, refOutPoint);
     }
   else
     {
@@ -228,12 +228,12 @@ int otbGenericRSTransformGenericTest(int argc, char * argv[])
   if(inDistType == "PHYSICAL")
     {
     std::cout<<"Input precision checked using physical distance."<<std::endl;
-    inRes = physDistance->Evaluate(inPoint,refInPoint);
+    inRes = physDistance->Evaluate(inPoint, refInPoint);
     }
   else if(inDistType == "GEO")
     {
     std::cout<<"Input precision checked using Haversine distance."<<std::endl;
-    inRes = geoDistance->Evaluate(inPoint,refInPoint);
+    inRes = geoDistance->Evaluate(inPoint, refInPoint);
     }
   else
     {
