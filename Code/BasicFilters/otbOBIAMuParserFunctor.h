@@ -73,35 +73,33 @@ public:
 
     double value;
 
-    if(a.GetNumberOfAttributes()!=m_NbOfAttributes)
+    if (a.GetNumberOfAttributes() != m_AAttributes.size())
       {
       this->SetAttributes(a);
       }
 
-    // we fill the buffer
-
-    for(unsigned int i=0; i<m_NbOfAttributes; i++)
+    for (unsigned int i = 0; i < m_AAttributes.size(); i++)
       {
-       m_AAttributes[i]= a.GetAttribute((m_AttributesName.at(i)).c_str());
+
+      std::string name = (m_AttributesName[i]);
+      m_AAttributes[i] = a.GetAttribute(name.c_str());
       }
 
-
-    // cast
     try
-    {
+      {
       value = m_Parser->Eval();
-    }
-    catch(itk::ExceptionObject& err)
-    {
+      }
+    catch (itk::ExceptionObject& err)
+      {
       itkExceptionMacro(<< err);
-    }
+      }
     return static_cast<bool> (value);
 
   }
 
   void SetExpression(const std::string expression)
   {
-    m_Expression=expression;
+    m_Expression = expression;
     m_Parser->SetExpr(m_Expression);
   }
 
@@ -114,12 +112,12 @@ public:
   void ParseAttributeName(std::string &attributeName)
   {
 
-    for(unsigned int i=0; i<attributeName.size(); i++)
+    for (unsigned int i = 0; i < attributeName.size(); i++)
       {
-      if(attributeName[i]==':')
+      if (attributeName[i] == ':')
         {
         attributeName.erase(i, 1);
-        attributeName[i]='_';
+        attributeName[i] = '_';
         }
       }
     // TODO JGU
@@ -127,59 +125,58 @@ public:
 
   }
 
-
   void SetAttributes(const TLabelObject &a)
   {
 
-    m_NbOfAttributes=a.GetNumberOfAttributes();
+    unsigned int nbOfAttributes = a.GetNumberOfAttributes();
 
-    m_AAttributes.resize(m_NbOfAttributes, 0.0);
-    m_AttributesName.resize(m_NbOfAttributes,"");
+    m_AAttributes.resize(nbOfAttributes, 0.0);
+    m_AttributesName.resize(nbOfAttributes, "");
     m_AttributesName = a.GetAvailableAttributes();
-    for(unsigned int i=0; i<m_NbOfAttributes; i++)
+    for (unsigned int i = 0; i < nbOfAttributes; i++)
       {
-      std::string attributeName=m_AttributesName.at(i);
+      std::string attributeName = m_AttributesName.at(i);
       ParseAttributeName(attributeName); //eliminate '::' from string name
       m_Parser->DefineVar(attributeName, &(m_AAttributes[i]));
       }
 
   }
 
-  void SetAttributes(std::vector<std::string> shapeAttributes, std::vector<std::string> statAttributes, unsigned int nbOfBands)
+  void SetAttributes(std::vector<std::string> shapeAttributes, std::vector<std::string> statAttributes,
+                     unsigned int nbOfBands)
   {
-    int index=0;
-    m_NbOfAttributes=shapeAttributes.size()+statAttributes.size()*nbOfBands;
+    int index = 0;
+    unsigned int nbOfAttributes = shapeAttributes.size() + statAttributes.size() * nbOfBands;
 
-    m_AAttributes.resize(m_NbOfAttributes, 0.0);
-    m_AttributesName.resize(m_NbOfAttributes,"");
+    m_AAttributes.resize(nbOfAttributes, 0.0);
+    m_AttributesName.resize(nbOfAttributes, "");
     std::ostringstream varName;
-    for(unsigned int i=0; i<shapeAttributes.size(); i++)
+    for (unsigned int i = 0; i < shapeAttributes.size(); i++)
       {
 
-      varName<<"SHAPE::"<<shapeAttributes.at(i);
-      m_AttributesName.at(index)=varName.str();
+      varName << "SHAPE::" << shapeAttributes.at(i);
+      m_AttributesName.at(index) = varName.str();
       varName.str("");
-      varName<<"SHAPE_"<<shapeAttributes.at(i);
+      varName << "SHAPE_" << shapeAttributes.at(i);
 
       m_Parser->DefineVar(varName.str(), &(m_AAttributes[index]));
       varName.str("");
       index++;
       }
-    for(unsigned int i=0; i<statAttributes.size(); i++)
+    for (unsigned int i = 0; i < statAttributes.size(); i++)
       {
-      for(unsigned int bandIndex=1; bandIndex<=nbOfBands; bandIndex++)
+      for (unsigned int bandIndex = 1; bandIndex <= nbOfBands; bandIndex++)
         {
-        varName<<"STATS::Band"<<bandIndex<<"::"<<statAttributes.at(i);
-        m_AttributesName.at(index)=varName.str();
+        varName << "STATS::Band" << bandIndex << "::" << statAttributes.at(i);
+        m_AttributesName.at(index) = varName.str();
         varName.str("");
-        varName<<"STATS_Band"<< bandIndex <<"_"<<statAttributes.at(i);
+        varName << "STATS_Band" << bandIndex << "_" << statAttributes.at(i);
         m_Parser->DefineVar(varName.str(), &(m_AAttributes[index]));
         varName.str("");
         index++;
         }
       }
   }
-
 
   /** Check the expression */
   bool CheckExpression()
@@ -201,23 +198,25 @@ public:
   {
     m_Parser = ParserType::New();
     m_AAttributes.resize(0);
-  };
+  }
+  ;
 
   ~OBIAMuParserFunctor()
-  {};
+  {
+  }
+  ;
 
 protected:
 
 private:
 
   OBIAMuParserFunctor(const Self &); //purposely not implemented
-  void operator =(const Self &);    //purposely not implemented
+  void operator =(const Self &); //purposely not implemented
 
   std::string m_Expression;
   ParserType::Pointer m_Parser;
   std::vector<double> m_AAttributes;
   std::vector<std::string> m_AttributesName;
-  unsigned int m_NbOfAttributes;
   double m_ParserResult;
 
 };
