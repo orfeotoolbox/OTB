@@ -60,7 +60,7 @@ int generic_main_convert(otb::ApplicationOptionsResult* parseResult)
     ram = parseResult->GetParameterUInt("AvailableMemory");
     }
 
-  typedef otb::VectorImage<double, 2> InputImageType;
+  typedef otb::VectorImage<double, 2>          InputImageType;
   typedef otb::VectorImage<OutputPixelType, 2> OutputImageType;
 
   typedef otb::StreamingImageFileWriter<OutputImageType> WriterType;
