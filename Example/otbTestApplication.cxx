@@ -74,8 +74,9 @@ private:
 
     AddParameter(ParameterType_Group, "ingroup", "Input Group");
     AddParameter(ParameterType_Int,  "ingroup.integer", "Integer of Group");
-    AddParameter(ParameterType_InputImage, "ingroup.inputimage", "Input Image");
-    AddParameter(ParameterType_InputComplexImage, "ingroup.inputcompleximage", "Input Complex Image");
+    AddParameter(ParameterType_Group, "ingroup.images", "Input Images Group");
+    AddParameter(ParameterType_InputImage, "ingroup.images.inputimage", "Input Image");
+    AddParameter(ParameterType_InputComplexImage, "ingroup.images.inputcompleximage", "Input Complex Image");
     AddParameter(ParameterType_InputVectorData, "ingroup.inputvectordata", "Input Vector Data");
 
     AddParameter(ParameterType_Group, "outgroup", "Output Group");
