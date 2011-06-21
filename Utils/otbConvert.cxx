@@ -111,7 +111,7 @@ int generic_main_convert(otb::ApplicationOptionsResult* parseResult)
     // Shrink factor is computed so as to load a quicklook of 1000
     // pixels square at most
     typename InputImageType::SizeType imageSize = reader->GetOutput()->GetLargestPossibleRegion().GetSize();
-    unsigned int shrinkFactor = std::max(imageSize[0], imageSize[1])/1000;
+    unsigned int shrinkFactor = std::max(imageSize[0], imageSize[1]) < 1000 ? 1 : std::max(imageSize[0], imageSize[1])/1000;
 
     std::cout<<"Shrink factor: "<<shrinkFactor<<std::endl;
 
