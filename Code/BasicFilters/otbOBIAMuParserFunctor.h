@@ -199,12 +199,12 @@ public:
     m_Parser = ParserType::New();
     m_AAttributes.resize(0);
   }
-  ;
+ ;
 
   ~OBIAMuParserFunctor()
   {
   }
-  ;
+ ;
 
 protected:
 
