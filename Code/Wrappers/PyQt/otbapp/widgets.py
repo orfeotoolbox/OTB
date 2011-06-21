@@ -343,10 +343,8 @@ class QParameterGroup(QParameterBase):
             w.CreateWidget()
 
             if widgetClass is not QParameterGroup:
-                print " form.addRow(w"
                 form.addRow( app.GetParameterName(key), w )
             else:
-                print " form.addWidget(w"
                 form.addRow(w)
 
         if self._paramKey:
