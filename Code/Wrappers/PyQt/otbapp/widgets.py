@@ -348,13 +348,13 @@ class QParameterGroup(QParameterBase):
                 form.addRow(w)
 
         if self._paramKey:
-           # not the root group
-           group = QtGui.QGroupBox()
-           group.setTitle( app.GetParameterName(self._paramKey) )
-           group.setLayout(form)
-           
-           layout = QtGui.QHBoxLayout()
-           layout.addWidget(group)
-           self.setLayout(layout)
+            # not the root group
+            group = QtGui.QGroupBox()
+            group.setTitle( app.GetParameterName(self._paramKey) )
+            group.setLayout(form)
+
+            layout = QtGui.QHBoxLayout()
+            layout.addWidget(group)
+            self.setLayout(layout)
         else:
             self.setLayout(form)
