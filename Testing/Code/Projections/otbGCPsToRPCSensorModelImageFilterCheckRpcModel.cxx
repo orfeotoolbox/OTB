@@ -120,6 +120,11 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char* argv[])
     {
     grsTrasnform->SetDEMDirectory(parseResult->GetParameterString("--DEMDirectory"));
     }
+  else
+    {
+      grsTrasnform->SetAverageElevation(0);
+    }
+
   grsTrasnform->InstanciateTransform();
 
   // Test
