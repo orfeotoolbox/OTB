@@ -75,8 +75,17 @@ bool SensorModelAdapter::IsValidSensorModel()
 
 void SensorModelAdapter::SetDEMDirectory(const std::string& directory)
 {
-  m_DEMHandler->OpenDEMDirectory(directory);
-  m_UseDEM = true;
+  try
+  {
+      m_DEMHandler->OpenDEMDirectory(directory);
+      m_UseDEM = true;
+  }
+
+  catch(itk::ExceptionObject& err)
+  {
+    otbWarningMacro(<< err<< std::endl<<"DEM directory is not set !!"<<std::endl);
+    m_UseDEM = false;
+  }
 }
 
 void SensorModelAdapter::ForwardTransformPoint(double x, double y, double z,
