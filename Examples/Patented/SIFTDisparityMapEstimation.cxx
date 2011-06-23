@@ -403,7 +403,7 @@ int main(int argc, char* argv[])
 
   while (!inIt.IsAtEnd() && !outIt.IsAtEnd())
     {
-    std::cout << inIt.Get() << std::endl;
+    //std::cout << inIt.Get() << std::endl;
 
     outIt.Set(inIt.Get()[1]);
 
