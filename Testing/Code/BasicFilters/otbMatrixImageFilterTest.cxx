@@ -41,6 +41,7 @@ int otbMatrixImageFilterTest(int argc, char * argv[])
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
+  unsigned   int nbCol =atoi(argv[3]);
 
   typedef double PixelType;
 
@@ -60,7 +61,7 @@ int otbMatrixImageFilterTest(int argc, char * argv[])
   writer->SetFileName(outputFilename);
 
 
-  FilterType::MatrixType mat(reader->GetOutput()->GetNumberOfComponentsPerPixel(), 2, 0.);
+  FilterType::MatrixType mat(reader->GetOutput()->GetNumberOfComponentsPerPixel(), nbCol, 0.);
 
   double val = 0;
   for(unsigned int i=0; i<mat.rows(); i++)

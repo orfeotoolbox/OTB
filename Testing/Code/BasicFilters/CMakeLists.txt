@@ -1915,17 +1915,36 @@ ADD_TEST(bfTuMatrixImageFilterNew ${BASICFILTERS_TESTS13}
   otbMatrixImageFilterNew
 )
 
-
-
-ADD_TEST(bfTvMatrixImageFilterTest ${BASICFILTERS_TESTS13}
+ADD_TEST(bfTvMatrixImageFilterTest_1 ${BASICFILTERS_TESTS13}
   --compare-image ${NOTOL}
-  ${TEMP}/bfTvMatrixImageFilterTest.tif
-  ${BASELINE}/bfTvMatrixImageFilterTest.tif
+  ${TEMP}/bfTvMatrixImageFilterTest_1.tif
+  ${BASELINE}/bfTvMatrixImageFilterTest_1.tif
   otbMatrixImageFilterTest
     ${INPUTDATA}/poupees.tif
-    ${TEMP}/bfTvMatrixImageFilterTest.tif
+    ${TEMP}/bfTvMatrixImageFilterTest_1.tif
+    1
 )
 
+ADD_TEST(bfTvMatrixImageFilterTest_2 ${BASICFILTERS_TESTS13}
+  --compare-image ${NOTOL}
+  ${TEMP}/bfTvMatrixImageFilterTest_2.tif
+  ${BASELINE}/bfTvMatrixImageFilterTest_2.tif
+  otbMatrixImageFilterTest
+    ${INPUTDATA}/poupees.tif
+    ${TEMP}/bfTvMatrixImageFilterTest_2.tif
+    2
+)
+
+
+ADD_TEST(bfTvMatrixImageFilterTest_3 ${BASICFILTERS_TESTS13}
+  --compare-image ${NOTOL}
+  ${TEMP}/bfTvMatrixImageFilterTest_3.tif
+  ${BASELINE}/bfTvMatrixImageFilterTest_3.tif
+  otbMatrixImageFilterTest
+    ${INPUTDATA}/poupees.tif
+    ${TEMP}/bfTvMatrixImageFilterTest_3.tif
+    3
+)
 
 # ----------------------------     otbMaskMuParserFilter   ----------------------------
 
