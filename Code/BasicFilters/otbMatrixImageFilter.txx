@@ -74,9 +74,10 @@ void MatrixImageFilter<TInputImage, TOutputImage, TMatrix>::ThreadedGenerateData
   inIt.GoToBegin();
   outIt.GoToBegin();
   
-  const unsigned int outSize =  m_Matrix.rows();
+  const unsigned int inSize =  m_Matrix.rows();
+  const unsigned int outSize =  m_Matrix.cols();
 
-  VectorType inVect(outSize, InputRealType(0.));
+  VectorType inVect(inSize, InputRealType(0.));
   VectorType outVect(outSize, InputRealType(0.));
 
   while (!outIt.IsAtEnd())
@@ -85,7 +86,7 @@ void MatrixImageFilter<TInputImage, TOutputImage, TMatrix>::ThreadedGenerateData
       OutputPixelType outPix;
       outPix.SetSize(outSize);
       
-      for(unsigned int i=0; i<outSize; i++)
+      for(unsigned int i=0; i<inSize; i++)
         {
           inVect[i] = static_cast<InputRealType>(inPix[i]);
         }
@@ -103,6 +104,8 @@ void MatrixImageFilter<TInputImage, TOutputImage, TMatrix>::ThreadedGenerateData
       progress.CompletedPixel();
     }
 }
+
+
 
 
 /**

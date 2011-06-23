@@ -25,11 +25,11 @@ namespace otb
 {
 
 /** \class MatrixImageFilter
- * \brief Apply a transition matric over the channel of an image.
+ * \brief Apply a transition matrix over the channel of an image.
  *
- * The templates are the input and putput image type.
- * The transition matrix is giver using the SetTransitionMatrix() method. The waiting type is a vnl_matrix<double> (ie. MatrixType).
- * The number of columns of the matrix must be the input image number of channels, the number of rows is the number of channels of the output image.
+ * The templates are the input and output image type.
+ * The transition matrix is given using the SetTransitionMatrix() method. The waiting type is a vnl_matrix<double> (ie. MatrixType).
+ * The number of rows of the matrix must be the input image number of channels, the number of columns is the number of channels of the output image.
  *
  * For example, if the image has 2 bands, the matrix is \f$ \begin{pmatrix} \alpha & \beta \\ \gama & \delta \end{pmatrix} \f$
  * The pixel \f$ [a, b] \f$ will give the output pixel \f$ [\alpha.a + \beta.b, \gamma.a + \delta.b  ]. \f$
