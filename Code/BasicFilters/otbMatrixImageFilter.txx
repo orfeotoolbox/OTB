@@ -106,7 +106,6 @@ void MatrixImageFilter<TInputImage, TOutputImage, TMatrix>::ThreadedGenerateData
 }
 
 
-
 /**
  * Standard "PrintSelf" method
  */

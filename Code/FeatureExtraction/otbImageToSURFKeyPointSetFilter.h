@@ -53,7 +53,7 @@ namespace otb
  * DataPoints contain the values of the 64 element descriptor for each key point
  * detected through the pyramidal analysis.
  *
- * Orientation is expressed in degree in the range of [0,360]
+ * Orientation is expressed in degree in the range of [0, 360]
  *
  *  \sa otb::ImageToDeterminantHessianImage
  */

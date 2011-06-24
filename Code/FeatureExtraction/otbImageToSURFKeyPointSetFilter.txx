@@ -113,7 +113,7 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
       for (int k = 0; k < 2; ++k)
         spacing[k] = (spacing[k] * std::pow(2.0, i));
       m_ResampleFilter->SetOutputSpacing(spacing);
-          /* necessary to handle images where the origin is not (0,0) */
+          /* necessary to handle images where the origin is not (0, 0) */
           m_ResampleFilter->SetOutputOrigin(this->GetInput()->GetOrigin());
 
       m_ResampleFilter->SetDefaultPixelValue(0);
@@ -186,7 +186,7 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
         {
                 /**
                  * The extremum condition is weak over scales, it allows the cases :
-                 * maxPrev & minCurr & maxNext, minPrev & maxCurr maxNext ,... 
+                 * maxPrev & minCurr & maxNext, minPrev & maxCurr maxNext , ...
                  */
         if (IsLocalExtremum(it.GetNeighborhood())
             && IsLocalExtremumAround(itNeighPrev.GetNeighborhood(), m_ImageCurrent->GetPixel(it.GetIndex()))
@@ -458,7 +458,7 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
                           - previousScale.GetPixel(m_Offsets[4]));
 
   // We look for the "false" extrema : min-?-max and max-?-min
-  // Those are not compatible with the 3D quadric interpolation 
+  // Those are not compatible with the 3D quadric interpolation
   PixelValue curr = currentScale.GetCenterPixel();
   PixelValue prev = previousScale.GetCenterPixel();
   PixelValue next = nextScale.GetCenterPixel();
@@ -495,7 +495,7 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
     {
     //++m_DiscardedKeyPoints; /* not used at the moment */
     }
-  if (det < 1e-10f)             // this test cancels the shift for every "weak" extrema 
+  if (det < 1e-10f)             // this test cancels the shift for every "weak" extrema
     {
     solution.Fill(0);
     }

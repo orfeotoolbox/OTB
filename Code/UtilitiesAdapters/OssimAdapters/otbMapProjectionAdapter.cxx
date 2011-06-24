@@ -44,7 +44,6 @@
 #include <ossim/base/ossimKeywordNames.h>
 
 
-
 namespace otb
 {
 
