@@ -57,6 +57,12 @@ OTB_GCP& VectorImage<TPixel, VImageDimension>::GetGCPs(unsigned int GCPnum)
 }
 
 template <class TPixel, unsigned int VImageDimension>
+const OTB_GCP& VectorImage<TPixel, VImageDimension>::GetGCPs(unsigned int GCPnum) const
+{
+  return (this->GetMetaDataInterface()->GetGCPs(GCPnum));
+}
+
+template <class TPixel, unsigned int VImageDimension>
 std::string VectorImage<TPixel, VImageDimension>::GetGCPId(unsigned int GCPnum) const
 {
   return (this->GetMetaDataInterface()->GetGCPId(GCPnum));
