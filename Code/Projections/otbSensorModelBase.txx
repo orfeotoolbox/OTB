@@ -86,6 +86,39 @@ SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>
   m_Model->SetGeoidFile(geoidFile);
 }
 
+
+template <class TScalarType,
+    unsigned int NInputDimensions,
+    unsigned int NOutputDimensions>
+void 
+SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>
+::AddTiePoint(const InputPointType & inputPoint, const OutputPointType & outputPoint)
+{
+  itkExceptionMacro(<<"Method should be re-implemented in sub-classes (forward and inverse models)");
+}
+
+/** Clear tie points */
+template <class TScalarType,
+    unsigned int NInputDimensions,
+    unsigned int NOutputDimensions>
+void 
+SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>
+::ClearTiePoints()
+{
+  m_Model->ClearTiePoints();
+}
+
+/** Optimize sensor model */
+template <class TScalarType,
+    unsigned int NInputDimensions,
+    unsigned int NOutputDimensions>
+double 
+SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>
+::Optimize()
+{
+  return m_Model->Optimize();
+}
+
 /**
  * PrintSelf method
  */
