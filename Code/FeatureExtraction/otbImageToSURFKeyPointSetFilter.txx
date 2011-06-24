@@ -488,7 +488,7 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
   PixelValue lHessianTrace2 = (dxx + dyy) * (dxx + dyy);
   PixelValue lHessianDet = dxx * dyy - dxy * dxy;
   
-  // DoG threshold : si l'extrema detecté n'est pas assez marqué, il est ignoré
+  // DoG threshold : ignore detected extrema if is not sufficiently noticeable
   accepted = fabs(lDoHInterpolated) > fabs(det * m_DoHThreshold);
 
   if (!accepted)
@@ -578,12 +578,12 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
     i += pas;
     }
 
-  //Find Orientation
+ //Find Orientation
   double indice = 0;
   double max    = 0;
   double length = 0;
 
-  //Detection de l'orientation du point courant
+  // Detecting current point orientation
   for (int i = 0; i < NbBins * 2; i = i + 2)
     {
     length = vcl_sqrt(tab[i] * tab[i] + tab[i + 1] * tab[i + 1]);
