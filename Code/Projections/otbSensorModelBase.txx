@@ -33,7 +33,7 @@ SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>
 ::SensorModelBase() : Superclass(OutputSpaceDimension, 0) //FIXME
 {
   m_Model = SensorModelAdapter::New();
-  m_AverageElevation = -32768; // used as a invalid value
+  m_AverageElevation = 0; // used as a invalid value
 }
 
 template <class TScalarType,
