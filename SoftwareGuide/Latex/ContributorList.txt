@@ -39,3 +39,4 @@ Julien Malik (CS)
 Amit Kulkarni
 Angelos Tzotsos
 Edouard Barthelet (Telecom Bretagne and Thales Communications)
+Guillaume Pasero (CNES Intern)
