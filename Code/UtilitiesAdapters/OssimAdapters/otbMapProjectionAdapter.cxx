@@ -40,6 +40,11 @@
 #include "projection/ossimMollweidProjection.h"
 #include "projection/ossimSinusoidalProjection.h"
 
+#include <ossim/support_data/ossimSpaceImagingGeom.h>
+#include <ossim/base/ossimKeywordNames.h>
+
+
+
 namespace otb
 {
 
@@ -197,20 +202,34 @@ bool MapProjectionAdapter::InstanciateProjection()
 
     if (projectionInformationAvailable)
       {
-      //we don't want to have a ossimEquDistCylProjection here:
-      //see discussion in May 2009 on ossim list;
-      //a better solution might be available...
-      std::string projectionString(kwl.find("type"));
-      if (projectionString.find("ossimEquDistCylProjection") != string::npos)
-        {
-        otbMsgDevMacro(<< "WARNING: Not instanciating a ossimEquDistCylProjection: " << projectionString);
-        otbMsgDevMacro(<< "Wkt was: " << kwl);
-        otbMsgDevMacro(<< "From RefWkt: " << m_ProjectionRefWkt);
-        return false;
-        }
+        // Trouble with ESPG 3857
+        // The ellipsoid used by ossim is the WGS84 one with minor and major axis differs.
+        // We need to build our own projection in this case.
+        ossimString pcsCodeString = kwl.find("pcs_code");
+        ossimString datumString = kwl.find("datum");
+        if( (!pcsCodeString.empty()) && (!datumString.empty()) )
+          {
+            if( (pcsCodeString == "3857") && (datumString=="WGE") )
+              {
+                ossimKeywordlist kwl3857 = kwl;
+                kwl.add("datum", "WE-EPSG-3857");
+                otbMsgDevMacro(<< "WARNING: Change the datum value to be interpreted as a specific EPSG-3857 one...");
+              }
+          }
 
-      m_MapProjection = ossimMapProjectionFactory::instance()->createProjection(kwl);
+        //we don't want to have a ossimEquDistCylProjection here:
+        //see discussion in May 2009 on ossim list;
+        //a better solution might be available...
+        std::string projectionString(kwl.find("type"));
+        if (projectionString.find("ossimEquDistCylProjection") != string::npos)
+          {
+            otbMsgDevMacro(<< "WARNING: Not instanciating a ossimEquDistCylProjection: " << projectionString);
+            otbMsgDevMacro(<< "Wkt was: " << kwl);
+            otbMsgDevMacro(<< "From RefWkt: " << m_ProjectionRefWkt);
+            return false;
+          }
 
+        m_MapProjection = ossimMapProjectionFactory::instance()->createProjection(kwl);
       }
     else
       {
@@ -228,7 +247,7 @@ bool MapProjectionAdapter::InstanciateProjection()
         extendedName += m_ProjectionRefWkt;
         extendedName += "Projection";
         m_MapProjection = ossimMapProjectionFactory::instance()->createProjection(extendedName);
-        }
+       }
 
       if (m_MapProjection == NULL) return false;
 
