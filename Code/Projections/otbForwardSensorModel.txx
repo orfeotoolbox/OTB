@@ -64,6 +64,27 @@ ForwardSensorModel<TScalarType, NInputDimensions, NOutputDimensions>
 template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 void
 ForwardSensorModel<TScalarType, NInputDimensions, NOutputDimensions>
+:: AddTiePoint(const InputPointType & inputPoint, const OutputPointType & outputPoint)
+{
+  double x = inputPoint[0];
+  double y = inputPoint[1];
+  double z = this->m_AverageElevation;
+
+  if (InputPointType::PointDimension == 3)
+    {
+    z = inputPoint[2];
+    }
+
+  double lon = outputPoint[0];
+  double lat = outputPoint[1];
+
+  this->m_Model->AddTiePoint(x,y,z,lon,lat);
+}
+
+
+template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+void
+ForwardSensorModel<TScalarType, NInputDimensions, NOutputDimensions>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);

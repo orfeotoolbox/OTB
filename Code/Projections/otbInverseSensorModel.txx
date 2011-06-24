@@ -67,6 +67,26 @@ InverseSensorModel<TScalarType, NInputDimensions, NOutputDimensions>
 template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 void
 InverseSensorModel<TScalarType, NInputDimensions, NOutputDimensions>
+:: AddTiePoint(const InputPointType & inputPoint, const OutputPointType & outputPoint)
+{
+  double x = outputPoint[0];
+  double y = outputPoint[1];
+  double z = this->m_AverageElevation;
+
+  if (OutputPointType::PointDimension == 3)
+    {
+    z = inputPoint[2];
+    }
+
+  double lon = inputPoint[0];
+  double lat = inputPoint[1];
+
+  this->m_Model->AddTiePoint(x,y,z,lon,lat);
+}
+
+template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+void
+InverseSensorModel<TScalarType, NInputDimensions, NOutputDimensions>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
