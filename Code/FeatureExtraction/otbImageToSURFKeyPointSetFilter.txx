@@ -93,7 +93,7 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
 
     sigma_in = 2.;
     m_ImageList = ImageListType::New();
-	spacing = this->GetInput()->GetSpacing();
+        spacing = this->GetInput()->GetSpacing();
 
     /*--------------------------------------------------------
     Octave per octave
@@ -113,8 +113,8 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
       for (int k = 0; k < 2; ++k)
         spacing[k] = (spacing[k] * std::pow(2.0, i));
       m_ResampleFilter->SetOutputSpacing(spacing);
-	  /* necessary to handle images where the origin is not (0,0) */
-	  m_ResampleFilter->SetOutputOrigin(this->GetInput()->GetOrigin());
+          /* necessary to handle images where the origin is not (0,0) */
+          m_ResampleFilter->SetOutputOrigin(this->GetInput()->GetOrigin());
 
       m_ResampleFilter->SetDefaultPixelValue(0);
       m_ResampleFilter->Update();
@@ -123,7 +123,7 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
       otbGenericMsgDebugMacro(<< "ImageToSURFKeyPointSetFilter:: Size of the image at the octave : " \
                               << i << " is " \
                               << m_determinantImage->GetLargestPossibleRegion().GetSize());
-	
+        
       }
 
     for (int j = 0; j < m_ScalesNumber; j++)
@@ -159,7 +159,7 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
       /** For each octave, we fill the imageList for the extremum search*/
       m_ImageList->PushBack(m_determinantImage);
       }
-	
+        
     /*----------------------------------------------------*/
     /*           extremum  Search over octave's scales    */
     /*----------------------------------------------------*/
@@ -184,10 +184,10 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
  
       while (!it.IsAtEnd())
         {
-		/**
-		 * The extremum condition is weak over scales, it allows the cases :
-		 * maxPrev & minCurr & maxNext, minPrev & maxCurr maxNext ,... 
-		 */
+                /**
+                 * The extremum condition is weak over scales, it allows the cases :
+                 * maxPrev & minCurr & maxNext, minPrev & maxCurr maxNext ,... 
+                 */
         if (IsLocalExtremum(it.GetNeighborhood())
             && IsLocalExtremumAround(itNeighPrev.GetNeighborhood(), m_ImageCurrent->GetPixel(it.GetIndex()))
             && IsLocalExtremumAround(itNeighNext.GetNeighborhood(), m_ImageCurrent->GetPixel(it.GetIndex())))
@@ -195,22 +195,22 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
           OutputPointType keyPoint;
           itNeighPrev.SetLocation(it.GetIndex());
           itNeighNext.SetLocation(it.GetIndex());
-		  VectorPointType lTranslation(PixelValue(0));
+                  VectorPointType lTranslation(PixelValue(0));
 
-		  /* Approximation de la position */
-		  NeighborhoodIteratorType neighborCurrentScale(it);
+                  /* Approximation de la position */
+                  NeighborhoodIteratorType neighborCurrentScale(it);
           NeighborhoodIteratorType neighborPreviousScale(itNeighPrev);
           NeighborhoodIteratorType neighborNextScale(itNeighNext);
-		  bool accepted = false;
+                  bool accepted = false;
 
           accepted = RefineLocationKeyPoint(neighborCurrentScale,
                                               neighborPreviousScale,
                                               neighborNextScale,
-											  lTranslation);
+                                                                                          lTranslation);
 
           OffsetType lTranslateOffset = {{0, 0}};
-			
-			
+                        
+                        
           lTranslateOffset[0] += static_cast<int>(lTranslation[0] > 0.5);
           lTranslateOffset[0] += -static_cast<int>(lTranslation[0] < -0.5);
 
@@ -225,28 +225,28 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
             neighborCurrentScale += lTranslateOffset;
             neighborPreviousScale += lTranslateOffset;
             neighborNextScale += lTranslateOffset;
-			lTranslation[0] -= lTranslateOffset[0];
-			lTranslation[1] -= lTranslateOffset[1];
+                        lTranslation[0] -= lTranslateOffset[0];
+                        lTranslation[1] -= lTranslateOffset[1];
             }
           else
             {
             lTranslation[0] = 0.0;
-			lTranslation[1] = 0.0;
+                        lTranslation[1] = 0.0;
             }
-		  
-		  if (accepted == false)
-		  {
-		  	++it;
-        	++itNeighPrev;
-        	++itNeighNext;
-		  	continue;
-		  }
+                  
+                  if (accepted == false)
+                  {
+                        ++it;
+                ++itNeighPrev;
+                ++itNeighNext;
+                        continue;
+                  }
 
 
-		  typename InputImageType::IndexType indexKeyPoint;
-		  indexKeyPoint[0] = neighborCurrentScale.GetIndex()[0];
-		  indexKeyPoint[1] = neighborCurrentScale.GetIndex()[1];
-		  
+                  typename InputImageType::IndexType indexKeyPoint;
+                  indexKeyPoint[0] = neighborCurrentScale.GetIndex()[0];
+                  indexKeyPoint[1] = neighborCurrentScale.GetIndex()[1];
+                  
           double sigmaDetected = sigma_in / pow(k, (double) jj) * pow(2., (double) i);
 
           radius.Fill(GetMin((int) (this->GetInput()->GetLargestPossibleRegion().GetSize()[0] - indexKeyPoint[0]),
@@ -259,18 +259,18 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
           NeighborhoodIteratorType itNeighOrientation(radius, this->GetInput(),
                                                       this->GetInput()->GetLargestPossibleRegion());
 
-		  itNeighOrientation.SetLocation(neighborCurrentScale.GetIndex());
-		  
+                  itNeighOrientation.SetLocation(neighborCurrentScale.GetIndex());
+                  
           double orientationDetected = AssignOrientation(itNeighOrientation.GetNeighborhood(), sigmaDetected);
 
           /*Filling the Point pointSet Part*/
           typename InputImageType::PointType physicalKeyPoint;
           m_ImageCurrent->TransformIndexToPhysicalPoint(neighborCurrentScale.GetIndex(), keyPoint);
-	  	  
+                  
           physicalKeyPoint[0] = keyPoint[0] + spacing[0] * lTranslation[0];
-		  physicalKeyPoint[1] = keyPoint[1] + spacing[1] * lTranslation[1];
-		  
-	  	  outputPointSet->SetPoint(m_NumberOfPoints, physicalKeyPoint);
+                  physicalKeyPoint[1] = keyPoint[1] + spacing[1] * lTranslation[1];
+                  
+                  outputPointSet->SetPoint(m_NumberOfPoints, physicalKeyPoint);
 
           /*----------------------------------------*/
           /*  Descriptor Computation                */
@@ -283,7 +283,7 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
           NeighborhoodIteratorType itNeighDescriptor(radius, this->GetInput(),
                                                      this->GetInput()->GetLargestPossibleRegion());
           //itNeighDescriptor.SetLocation(it.GetIndex());
-		  itNeighDescriptor.SetLocation(neighborCurrentScale.GetIndex());
+                  itNeighDescriptor.SetLocation(neighborCurrentScale.GetIndex());
           VectorType descriptor;
           descriptor.resize(64);
           //descriptor = ComputeDescriptor(itNeighDescriptor.GetNeighborhood(), keyPoint[3], keyPoint[2]);
@@ -464,11 +464,11 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
   PixelValue next = nextScale.GetCenterPixel();
   if ((prev < curr && curr < next) || (next < curr && curr < prev))
   {
-  	// So we use only 2D interpolation in the current scale
-	dss = 1.0;
-	dxs = 0.0;
-	dys = 0.0;
-	ds = 0.0;
+        // So we use only 2D interpolation in the current scale
+        dss = 1.0;
+        dxs = 0.0;
+        dys = 0.0;
+        ds = 0.0;
   }
 
   // Compute matrice determinant
@@ -495,7 +495,7 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
     {
     //++m_DiscardedKeyPoints; /* not used at the moment */
     }
-  if (det < 1e-10f)		// this test cancels the shift for every "weak" extrema 
+  if (det < 1e-10f)             // this test cancels the shift for every "weak" extrema 
     {
     solution.Fill(0);
     }
@@ -507,10 +507,10 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
   /* check that the translation found is inside a cubic pixel */
   if (fabs(solution[0]) > 1.0 || fabs(solution[1]) > 1.0 || fabs(solution[2]) > 1.0)
   {
-  	accepted = false;
-	//solution.Fill(0);
+        accepted = false;
+        //solution.Fill(0);
   }
-	
+        
   return accepted;
 }
 
