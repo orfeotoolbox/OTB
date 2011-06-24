@@ -85,6 +85,7 @@ int otbVectorDataExtractROIandProjection(int argc, char * argv[])
 
   if (elementsKeptAfterProj != elementsKeptAfterReader)
     {
+    std::cout<<"Test supposed to fail: shows the error induced by extract+project regarding project+extract" << std::endl;
     return EXIT_FAILURE;
     }
 
