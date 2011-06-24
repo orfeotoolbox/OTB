@@ -74,6 +74,11 @@ public:
 
   typedef typename Superclass::InverseTransformBasePointer InverseTransformBasePointer;
 
+  typedef std::pair<InputPointType,InputPointType>  InputTiePointType;
+  typedef std::pair<OutputPointType,InputPointType> OutputTiePointType;
+  typedef std::vector<InputTiePointType>            InputTiePointContainerType;
+  typedef std::vector<OutputTiePointType>           OutputTiePointContainerType;
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
@@ -102,6 +107,29 @@ public:
 
   itkSetMacro(AverageElevation, double);
   itkGetMacro(AverageElevation, double);
+
+  itkSetMacro(OptimizeInputTransform,bool);
+  itkGetMacro(OptimizeInputTransform,bool);
+  itkBooleanMacro(OptimizeInputTransform);
+
+  itkSetMacro(OptimizeOutputTransform,bool);
+  itkGetMacro(OptimizeOutputTransform,bool);
+  itkBooleanMacro(OptimizeOutputTransform);
+
+  itkSetMacro(InputTiePoints,InputTiePointContainerType);
+  itkGetConstReferenceMacro(InputTiePoints,InputTiePointContainerType);
+
+  itkSetMacro(OutputTiePoints,OutputTiePointContainerType);
+  itkGetConstReferenceMacro(OutputTiePoints,OutputTiePointContainerType);
+
+
+  void AddInputTiePoint(const InputPointType & inputPoint, const InputPointType & wgs84Point);
+  
+  void AddOutputTiePoint(const OutputPointType & outputPoint, const InputPointType & wgs84Point);
+  
+  void ClearInputTiePoints();
+
+  void ClearOutputTiePoints();
 
   /** Set/Get Dictionary*/
   const itk::MetaDataDictionary& GetInputDictionary() const
@@ -225,6 +253,11 @@ private:
   GenericTransformPointerType   m_OutputTransform;
   mutable bool                  m_TransformUpToDate;
   Projection::TransformAccuracy m_TransformAccuracy;
+
+  bool                          m_OptimizeInputTransform;
+  bool                          m_OptimizeOutputTransform;
+  InputTiePointContainerType    m_InputTiePoints;
+  OutputTiePointContainerType   m_OutputTiePoints;
 
 };
 

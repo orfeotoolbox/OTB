@@ -34,7 +34,12 @@ template<class TScalarType, unsigned int NInputDimensions, unsigned int NOutputD
 GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
 ::GenericRSTransform() : Superclass(SpaceDimension, ParametersDimension),
                          m_DEMDirectory(""), m_GeoidFile(""),
-                         m_AverageElevation(-32768.0)
+                         m_AverageElevation(-32768.0),
+                         m_OptimizeInputTransform(true),
+                         m_OptimizeOutputTransform(true),
+                         m_InputTiePoints(),
+                         m_OutputTiePoints()
+
 {
   m_InputProjectionRef.clear();
   m_OutputProjectionRef.clear();
@@ -163,7 +168,15 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
         {
         sensorModel->SetAverageElevation(m_AverageElevation);
         }
-
+      if(m_OptimizeInputTransform && !m_InputTiePoints.empty())
+        {
+        for(typename InputTiePointContainerType::const_iterator it = m_InputTiePoints.begin();
+            it!= m_InputTiePoints.end();++it)
+          {
+          sensorModel->AddTiePoint(it->first,it->second);
+          }
+        double res = sensorModel->Optimize();
+        }
       m_InputTransform = sensorModel.GetPointer();
       inputTransformIsSensor = true;
       otbMsgDevMacro(<< "Input projection set to sensor model.");
@@ -238,7 +251,15 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
         {
         sensorModel->SetAverageElevation(m_AverageElevation);
         }
-
+      if(m_OptimizeOutputTransform && !m_OutputTiePoints.empty())
+        {
+        for(typename OutputTiePointContainerType::const_iterator it = m_OutputTiePoints.begin();
+            it!= m_OutputTiePoints.end();++it)
+          {
+          sensorModel->AddTiePoint(it->second,it->first);
+          }
+        double res = sensorModel->Optimize();
+        }
       m_OutputTransform = sensorModel.GetPointer();
       outputTransformIsSensor = true;
       otbMsgDevMacro(<< "Output projection set to sensor model");
@@ -343,6 +364,12 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
   inverseTransform->SetAverageElevation(m_AverageElevation);
   inverseTransform->SetDEMDirectory(m_DEMDirectory);
 
+  // Copy optimization parameters
+  inverseTransform->SetInputTiePoints(m_OutputTiePoints);
+  inverseTransform->SetOutputTiePoints(m_InputTiePoints);
+  inverseTransform->SetOptimizeInputTransform(m_OptimizeOutputTransform);
+  inverseTransform->SetOptimizeOutputTransform(m_OptimizeInputTransform);
+
   // Instantiate transform
   inverseTransform->InstanciateTransform();
 
@@ -365,6 +392,42 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
     }
 
   return inverseTransform;
+}
+
+template<class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+void
+GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
+::AddInputTiePoint(const InputPointType & inputPoint, const InputPointType & wgs84Point)
+{
+  m_InputTiePoints.push_back(std::make_pair(inputPoint,wgs84Point));
+  this->Modified();
+}
+
+template<class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+void
+GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
+::AddOutputTiePoint(const OutputPointType & outputPoint, const InputPointType & wgs84Point)
+{
+  m_OutputTiePoints.push_back(std::make_pair(outputPoint,wgs84Point));
+  this->Modified();
+}
+
+template<class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+void
+GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
+::ClearInputTiePoints()
+{
+  m_InputTiePoints.clear();
+  this->Modified();
+}
+
+template<class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+void
+GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
+::ClearOutputTiePoints()
+{
+  m_OutputTiePoints.clear();
+  this->Modified();
 }
 
 template<class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
