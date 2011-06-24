@@ -24,13 +24,14 @@
 #include "itkConstNeighborhoodIterator.h"
 #include "otbImageToHessianDeterminantImageFilter.h"
 #include "itkPointSet.h"
-#include "itkRescaleIntensityImageFilter.h"
-#include "otbImageList.h"
+#include <itkRescaleIntensityImageFilter.h>
+#include <otbImageList.h>
 #include "itkResampleImageFilter.h"
 #include "otbImageToPointSetFilter.h"
+#include "itkVector.h"
 
 #include "otbMath.h"
-
+#include <iostream>
 namespace otb
 {
 
@@ -52,7 +53,7 @@ namespace otb
  * DataPoints contain the values of the 64 element descriptor for each key point
  * detected through the pyramidal analysis.
  *
- * Orientation is expressed in degree in the range of [0, 360]
+ * Orientation is expressed in degree in the range of [0,360]
  *
  *  \sa otb::ImageToDeterminantHessianImage
  */
@@ -106,6 +107,7 @@ public:
   /** Internal filters typedefs */
   typedef itk::ConstNeighborhoodIterator<InputImageType>      NeighborhoodIteratorType;
   typedef typename NeighborhoodIteratorType::NeighborhoodType NeighborhoodType;
+  typedef typename NeighborhoodType::OffsetType               OffsetType;
 
   typedef otb::ImageToHessianDeterminantImageFilter<InputImageType, InputImageType> ImageToDetHessianImageType;
   typedef typename ImageToDetHessianImageType::Pointer                              DetHessianPointerFilter;
@@ -118,8 +120,9 @@ public:
   typedef otb::ImageList<InputImageType>  ImageListType;
   typedef typename ImageListType::Pointer ImageListTypePointer;
 
-  /** */
+  /** 3D vector to store the keypoints translations */
   typedef std::vector<double> VectorType;
+  typedef itk::Vector<PixelValue, 3> VectorPointType;
 
 protected:
 
@@ -157,6 +160,23 @@ protected:
    */
   virtual bool IsLocalExtremumAround(const NeighborhoodType& neigh,
                                      double CenterValue);
+
+  /** Refine location key point
+   *
+   *  \li Discard keypoints with low contrats DoH < DoHThreshold
+   *  \li Discard keypoints that lie outside the centre cubic pixel
+   *
+   *  \param currentScale iterator
+   *  \param previousScale iterator
+   *  \param nextScale iterator
+   *  \param solution
+   *
+   *  \return true if key point is accepted, false otherwise
+   */
+  bool RefineLocationKeyPoint(const NeighborhoodIteratorType& currentScale,
+                              const NeighborhoodIteratorType& previousScale,
+                              const NeighborhoodIteratorType& nextScale,
+                              VectorPointType& solution);
 
   /** AssignOrientation
    *
@@ -197,6 +217,9 @@ private:
 
   /** Number of key points detected */
   int m_NumberOfPoints;
+  
+  /** Minimum threshold for determinant of Hessian **/
+  double m_DoHThreshold;
 
   /** Those images */
   InputImagePointerType m_determinantImage;
@@ -212,6 +235,12 @@ private:
 
   /** ImageList*/
   ImageListTypePointer m_ImageList;
+  
+  /** Number of shifted keypoints*/
+  unsigned int m_DifferentSamplePoints;
+  
+  /** Offsets vector, conveniance datas */
+  static const OffsetType m_Offsets[8];
 };
 }
 #ifndef OTB_MANUAL_INSTANTIATION

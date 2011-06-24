@@ -25,6 +25,23 @@
 
 namespace otb
 {
+/**--------------------------------------------------------
+ * Constant indexes for neighbors offsets
+ --------------------------------------------------------*/
+template <class TInputImage, class TOutputPointSet>
+const typename ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>::OffsetType
+ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>::m_Offsets[8] =
+  {
+       {{-1, -1}}, //0
+       {{-1, 0}}, //1
+       {{-1, 1}}, //2
+       {{ 0, -1}}, //3
+       {{ 0, 1}}, //4
+       {{ 1, -1}}, //5
+       {{ 1, 0}}, //6
+       {{ 1, 1}}, //7
+  };
+
 /**---------------------------------------------------------
  * Constructor
  ----------------------------------------------------------*/
@@ -35,6 +52,8 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
   m_OctavesNumber = 1;
   m_ScalesNumber = 3;
   m_NumberOfPoints = 0;
+  m_DifferentSamplePoints = 0;
+  m_DoHThreshold = 0.03;
   m_DetHessianFilter = ImageToDetHessianImageType::New();
 }
 
@@ -58,7 +77,7 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
   double   k;
   double   sigma_in = 2.;
   SizeType radius;
-
+  SpacingType spacing;
   /*Output*/
   OutputPointSetPointerType outputPointSet = this->GetOutput();
 
@@ -74,6 +93,7 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
 
     sigma_in = 2.;
     m_ImageList = ImageListType::New();
+	spacing = this->GetInput()->GetSpacing();
 
     /*--------------------------------------------------------
     Octave per octave
@@ -89,10 +109,12 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
         size[k] = (unsigned int) floor(size[k] / std::pow(2.0, i));
       m_ResampleFilter->SetSize(size);
 
-      SpacingType spacing = this->GetInput()->GetSpacing();
+      
       for (int k = 0; k < 2; ++k)
         spacing[k] = (spacing[k] * std::pow(2.0, i));
       m_ResampleFilter->SetOutputSpacing(spacing);
+	  /* necessary to handle images where the origin is not (0,0) */
+	  m_ResampleFilter->SetOutputOrigin(this->GetInput()->GetOrigin());
 
       m_ResampleFilter->SetDefaultPixelValue(0);
       m_ResampleFilter->Update();
@@ -101,7 +123,7 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
       otbGenericMsgDebugMacro(<< "ImageToSURFKeyPointSetFilter:: Size of the image at the octave : " \
                               << i << " is " \
                               << m_determinantImage->GetLargestPossibleRegion().GetSize());
-
+	
       }
 
     for (int j = 0; j < m_ScalesNumber; j++)
@@ -114,7 +136,7 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
       if ((i != 0 && j != 0) || (i == 0  && (i + j != 0)) || (m_ScalesNumber == 1 && i != 0)) sigma_in *= k;
 
       /**
-       * For each octave, we serach for the key points
+       * For each octave, we search for the key points
        */
 
       /** Hessian Determinant Image */
@@ -137,7 +159,7 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
       /** For each octave, we fill the imageList for the extremum search*/
       m_ImageList->PushBack(m_determinantImage);
       }
-
+	
     /*----------------------------------------------------*/
     /*           extremum  Search over octave's scales    */
     /*----------------------------------------------------*/
@@ -159,10 +181,13 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
 
       NeighborhoodIteratorType itNeighNext(radius, m_ImageMovedNext, m_ImageMovedNext->GetLargestPossibleRegion());
       itNeighNext.GoToBegin();
-
+ 
       while (!it.IsAtEnd())
         {
-
+		/**
+		 * The extremum condition is weak over scales, it allows the cases :
+		 * maxPrev & minCurr & maxNext, minPrev & maxCurr maxNext ,... 
+		 */
         if (IsLocalExtremum(it.GetNeighborhood())
             && IsLocalExtremumAround(itNeighPrev.GetNeighborhood(), m_ImageCurrent->GetPixel(it.GetIndex()))
             && IsLocalExtremumAround(itNeighNext.GetNeighborhood(), m_ImageCurrent->GetPixel(it.GetIndex())))
@@ -170,16 +195,63 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
           OutputPointType keyPoint;
           itNeighPrev.SetLocation(it.GetIndex());
           itNeighNext.SetLocation(it.GetIndex());
+		  VectorPointType lTranslation(PixelValue(0));
 
-          keyPoint[0] =  it.GetIndex()[0];
-          keyPoint[1] =  it.GetIndex()[1];
+		  /* Approximation de la position */
+		  NeighborhoodIteratorType neighborCurrentScale(it);
+          NeighborhoodIteratorType neighborPreviousScale(itNeighPrev);
+          NeighborhoodIteratorType neighborNextScale(itNeighNext);
+		  bool accepted = false;
 
-          //keyPoint[2] =  sigma_in/pow(k, (double)jj)*pow(2., (double)i);
+          accepted = RefineLocationKeyPoint(neighborCurrentScale,
+                                              neighborPreviousScale,
+                                              neighborNextScale,
+											  lTranslation);
+
+          OffsetType lTranslateOffset = {{0, 0}};
+			
+			
+          lTranslateOffset[0] += static_cast<int>(lTranslation[0] > 0.5);
+          lTranslateOffset[0] += -static_cast<int>(lTranslation[0] < -0.5);
+
+          lTranslateOffset[1] += static_cast<int>(lTranslation[1] > 0.5);
+          lTranslateOffset[1] += -static_cast<int>(lTranslation[1] < -0.5);
+
+          NeighborhoodIteratorType moveIterator = neighborCurrentScale + lTranslateOffset;
+
+          if (moveIterator.InBounds())
+            {
+            // move iterator
+            neighborCurrentScale += lTranslateOffset;
+            neighborPreviousScale += lTranslateOffset;
+            neighborNextScale += lTranslateOffset;
+			lTranslation[0] -= lTranslateOffset[0];
+			lTranslation[1] -= lTranslateOffset[1];
+            }
+          else
+            {
+            lTranslation[0] = 0.0;
+			lTranslation[1] = 0.0;
+            }
+		  
+		  if (accepted == false)
+		  {
+		  	++it;
+        	++itNeighPrev;
+        	++itNeighNext;
+		  	continue;
+		  }
+
+
+		  typename InputImageType::IndexType indexKeyPoint;
+		  indexKeyPoint[0] = neighborCurrentScale.GetIndex()[0];
+		  indexKeyPoint[1] = neighborCurrentScale.GetIndex()[1];
+		  
           double sigmaDetected = sigma_in / pow(k, (double) jj) * pow(2., (double) i);
 
-          radius.Fill(GetMin((int) (this->GetInput()->GetLargestPossibleRegion().GetSize()[0] - keyPoint[0]),
-                             (int) (this->GetInput()->GetLargestPossibleRegion().GetSize()[1] - keyPoint[1]),
-                             (int) (6 * sigmaDetected))); // changer le sigma detected par keypoint[2]
+          radius.Fill(GetMin((int) (this->GetInput()->GetLargestPossibleRegion().GetSize()[0] - indexKeyPoint[0]),
+                             (int) (this->GetInput()->GetLargestPossibleRegion().GetSize()[1] - indexKeyPoint[1]),
+                             (int) (6 * sigmaDetected)));
 
           /*
             Computing the orientation of the key point detected
@@ -187,32 +259,31 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
           NeighborhoodIteratorType itNeighOrientation(radius, this->GetInput(),
                                                       this->GetInput()->GetLargestPossibleRegion());
 
-          itNeighOrientation.SetLocation(it.GetIndex());
-
-          /** TO DO*/
-          //keyPoint[3] = AssignOrientation( itNeighOrientation.GetNeighborhood() , keyPoint[2] );
+		  itNeighOrientation.SetLocation(neighborCurrentScale.GetIndex());
+		  
           double orientationDetected = AssignOrientation(itNeighOrientation.GetNeighborhood(), sigmaDetected);
 
           /*Filling the Point pointSet Part*/
           typename InputImageType::PointType physicalKeyPoint;
-          typename InputImageType::IndexType indexKeyPoint;
-          indexKeyPoint[0]=keyPoint[0];
-          indexKeyPoint[1]=keyPoint[1];
-          m_ImageCurrent->TransformIndexToPhysicalPoint(indexKeyPoint, physicalKeyPoint);
-
-          outputPointSet->SetPoint(m_NumberOfPoints, physicalKeyPoint);
+          m_ImageCurrent->TransformIndexToPhysicalPoint(neighborCurrentScale.GetIndex(), keyPoint);
+	  	  
+          physicalKeyPoint[0] = keyPoint[0] + spacing[0] * lTranslation[0];
+		  physicalKeyPoint[1] = keyPoint[1] + spacing[1] * lTranslation[1];
+		  
+	  	  outputPointSet->SetPoint(m_NumberOfPoints, physicalKeyPoint);
 
           /*----------------------------------------*/
           /*  Descriptor Computation                */
           /*----------------------------------------*/
 
-          radius.Fill(GetMin((int) (this->GetInput()->GetLargestPossibleRegion().GetSize()[0] - keyPoint[0]),
-                             (int) (this->GetInput()->GetLargestPossibleRegion().GetSize()[1] - keyPoint[1]),
+          radius.Fill(GetMin((int) (this->GetInput()->GetLargestPossibleRegion().GetSize()[0] - indexKeyPoint[0]),
+                             (int) (this->GetInput()->GetLargestPossibleRegion().GetSize()[1] - indexKeyPoint[1]),
                              (int) (10 * sigmaDetected))); // TODO a changer sigmaDetected par Keypoint[2]
 
           NeighborhoodIteratorType itNeighDescriptor(radius, this->GetInput(),
                                                      this->GetInput()->GetLargestPossibleRegion());
-          itNeighDescriptor.SetLocation(it.GetIndex());
+          //itNeighDescriptor.SetLocation(it.GetIndex());
+		  itNeighDescriptor.SetLocation(neighborCurrentScale.GetIndex());
           VectorType descriptor;
           descriptor.resize(64);
           //descriptor = ComputeDescriptor(itNeighDescriptor.GetNeighborhood(), keyPoint[3], keyPoint[2]);
@@ -333,6 +404,114 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
     }
 
   return max || min;
+}
+
+/**----------------------------------------------------
+ * Refine location key point
+ * TODO : adapt the interpolation to the type of extrema
+ -----------------------------------------------------*/
+template <class TInputImage, class TOutputPointSet>
+bool
+ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
+::RefineLocationKeyPoint(const NeighborhoodIteratorType& currentScale,
+                         const NeighborhoodIteratorType& previousScale,
+                         const NeighborhoodIteratorType& nextScale,
+                         VectorPointType& solution)
+{
+  bool accepted = true;
+  solution = VectorPointType(PixelValue(0));
+
+  PixelValue dx = 0.5 * (currentScale.GetPixel(m_Offsets[6])
+                        - currentScale.GetPixel(m_Offsets[1]));
+
+  PixelValue dy = 0.5 * (currentScale.GetPixel(m_Offsets[4])
+                        - currentScale.GetPixel(m_Offsets[3]));
+
+  PixelValue ds = 0.5 * (nextScale.GetCenterPixel() -
+                        previousScale.GetCenterPixel());
+
+  PixelValue dxx = currentScale.GetPixel(m_Offsets[6])
+                  - 2 * currentScale.GetCenterPixel()
+                  + currentScale.GetPixel(m_Offsets[1]);
+
+  PixelValue dyy = currentScale.GetPixel(m_Offsets[3])
+                  - 2 * currentScale.GetCenterPixel()
+                  + currentScale.GetPixel(m_Offsets[4]);
+
+  PixelValue dss = previousScale.GetCenterPixel()
+                  - 2 * currentScale.GetCenterPixel()
+                  + nextScale.GetCenterPixel();
+
+  PixelValue dxy = 0.25 * (currentScale.GetPixel(m_Offsets[7])
+                          + currentScale.GetPixel(m_Offsets[0])
+                          - currentScale.GetPixel(m_Offsets[2])
+                          - currentScale.GetPixel(m_Offsets[5]));
+
+  PixelValue dxs = 0.25 * (nextScale.GetPixel(m_Offsets[6])
+                          + previousScale.GetPixel(m_Offsets[1])
+                          - nextScale.GetPixel(m_Offsets[1])
+                          - previousScale.GetPixel(m_Offsets[6]));
+
+  PixelValue dys = 0.25 * (nextScale.GetPixel(m_Offsets[4])
+                          + previousScale.GetPixel(m_Offsets[3])
+                          - nextScale.GetPixel(m_Offsets[3])
+                          - previousScale.GetPixel(m_Offsets[4]));
+
+  // We look for the "false" extrema : min-?-max and max-?-min
+  // Those are not compatible with the 3D quadric interpolation 
+  PixelValue curr = currentScale.GetCenterPixel();
+  PixelValue prev = previousScale.GetCenterPixel();
+  PixelValue next = nextScale.GetCenterPixel();
+  if ((prev < curr && curr < next) || (next < curr && curr < prev))
+  {
+  	// So we use only 2D interpolation in the current scale
+	dss = 1.0;
+	dxs = 0.0;
+	dys = 0.0;
+	ds = 0.0;
+  }
+
+  // Compute matrice determinant
+  double det = dxx * (dyy * dss - dys * dys) - dxy * (dxy * dss - dxs * dys) + dxs * (dxy * dys - dxs * dyy);
+
+  // Solve system, compute key point offset
+  solution[0] = -dx * (dyy * dss - dys * dys) - dy * (dxs * dys - dxy * dss) - ds * (dxy * dys - dyy * dxs);
+  solution[1] = -dx * (dys * dxs - dss * dxy) - dy * (dxx * dss - dxs * dxs) - ds * (dxs * dxy - dxx * dys);
+  solution[2] = -dx * (dxy * dys - dxs * dyy) - dy * (dxy * dxs - dxx * dys) - ds * (dxx * dyy - dxy * dxy);
+
+  // Compute interpolated value Hessian Determinant for lSolution (determinant factor)
+  PixelValue lDoHInterpolated = det * currentScale.GetCenterPixel() +
+                               0.5 * (dx * solution[0] +
+                                      dy * solution[1] +
+                                      ds * solution[2]);
+
+  PixelValue lHessianTrace2 = (dxx + dyy) * (dxx + dyy);
+  PixelValue lHessianDet = dxx * dyy - dxy * dxy;
+  
+  // DoG threshold : si l'extrema detecté n'est pas assez marqué, il est ignoré
+  accepted = fabs(lDoHInterpolated) > fabs(det * m_DoHThreshold);
+
+  if (!accepted)
+    {
+    //++m_DiscardedKeyPoints; /* not used at the moment */
+    }
+  if (det < 1e-10f)		// this test cancels the shift for every "weak" extrema 
+    {
+    solution.Fill(0);
+    }
+  else
+    {
+    // normalize offset with determinant of derivative matrix
+    solution /= det;
+    }
+  /* check that the translation found is inside a cubic pixel */
+  if (fabs(solution[0]) > 1.0 || fabs(solution[1]) > 1.0 || fabs(solution[2]) > 1.0)
+  {
+  	accepted = false;
+	//solution.Fill(0);
+  }
+	
+  return accepted;
 }
 
 /*-----------------------------------------------------------
