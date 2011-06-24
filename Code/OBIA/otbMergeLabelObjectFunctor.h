@@ -139,7 +139,7 @@ private:
   {
     LineType resp;
     resp.SetIndex(l1.GetIndex());
-    unsigned long length = max(l1.GetLength(), l2.GetIndex()[0]+l2.GetLength()-l1.GetIndex()[0]);
+    unsigned long length = std::max(l1.GetLength(), l2.GetIndex()[0]+l2.GetLength()-l1.GetIndex()[0]);
     resp.SetLength(length);
     return resp;
   }
