@@ -141,7 +141,8 @@ void SensorModelAdapter::ForwardTransformPoint(double x, double y, double z,
   //Otherwise, just don't consider the altitude
   else
     {
-    this->m_SensorModel->lineSampleToWorld(ossimPoint, ossimGPoint);
+      otbMsgDevMacro("The given altitude is corresponds to NoData (value is -32768. We will use 0 as altitude.");
+      this->m_SensorModel->lineSampleHeightToWorld(ossimPoint, 0, ossimGPoint);
     }
 
   lon = ossimGPoint.lon;
@@ -163,6 +164,11 @@ void SensorModelAdapter::InverseTransformPoint(double lon, double lat, double h,
     {
     ossimGPoint.height(h);
     }
+  else
+    {
+      otbMsgDevMacro("The given altitude is corresponds to NoData (value is -32768. We will use 0 as altitude.");
+      ossimGPoint.height(0);
+    }
 
   ossimDpt ossimDPoint;
 
@@ -181,7 +187,7 @@ void SensorModelAdapter::InverseTransformPoint(double lon, double lat, double h,
   assert(ossim::isnan(ossimGPoint.hgt) || (ossimGPoint.hgt > -1000));
 
   this->m_SensorModel->worldToLineSample(ossimGPoint, ossimDPoint); //"worldToLineSample" call "lineSampleHeightToWorld" method for take in care elevation information.
-
+  std::cout<<"Inv: "<<h<<" => "<<ossimGPoint.height()<<std::endl;
   x = ossimDPoint.x;
   y = ossimDPoint.y;
   z = ossimGPoint.height();
