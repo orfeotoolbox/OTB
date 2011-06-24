@@ -25,15 +25,18 @@
 
 #include "ossim/projection/ossimProjection.h"
 #include "ossim/projection/ossimSensorModelFactory.h"
+#include "projection/ossimSensorModel.h"
 #include "ossim/ossimPluginProjectionFactory.h"
+#include "base/ossimTieGptSet.h"
 
 namespace otb
 {
 
 SensorModelAdapter::SensorModelAdapter():
-  m_SensorModel(NULL), m_UseDEM(false), m_Epsilon(0.0001),  m_NbIter(1) // FIXME keeping the original value but...
+  m_SensorModel(NULL), m_TiePoints(NULL), m_UseDEM(false), m_Epsilon(0.0001),  m_NbIter(1) // FIXME keeping the original value but...
 {
   m_DEMHandler = DEMHandler::New();
+  m_TiePoints = new ossimTieGptSet();
 }
 
 SensorModelAdapter::~SensorModelAdapter()
@@ -42,6 +45,11 @@ SensorModelAdapter::~SensorModelAdapter()
     {
     delete m_SensorModel;
     m_SensorModel = NULL;
+    }
+  if(m_TiePoints!=NULL)
+    {
+    delete m_TiePoints;
+    m_TiePoints = NULL;
     }
 }
 
@@ -184,6 +192,57 @@ void SensorModelAdapter::InverseTransformPoint(double lon, double lat, double h,
   x = ossimDPoint.x;
   y = ossimDPoint.y;
   z = ossimGPoint.height();
+}
+
+
+void SensorModelAdapter::AddTiePoint(double x, double y, double z, double lon, double lat)
+{
+  // Create the tie point
+  ossimDpt imagePoint(x,y);
+  ossimGpt ossimGPoint(lat, lon);
+
+  if (this->m_UseDEM)
+    {
+    double height = this->m_DEMHandler->GetHeightAboveMSL(lon, lat);
+    if(!ossim::isnan(height))  
+      {  
+      ossimGPoint.height(height);
+      }
+    }
+  else if (z != -32768)
+    {
+    ossimGPoint.height(z);
+    }
+
+  // Add the tie point to the container
+  m_TiePoints->addTiePoint(new ossimTieGpt(ossimGPoint,imagePoint,0));
+}
+
+void SensorModelAdapter::ClearTiePoints()
+{
+  m_TiePoints->clearTiePoints();
+}
+
+double SensorModelAdapter::Optimize()
+{
+  double precision = 0.;
+
+  // If tie points and model are allocated
+  if(m_SensorModel != NULL)
+    {
+    // try to retrieve a sensor model
+    ossimSensorModel * sensorModel = NULL;
+    sensorModel = dynamic_cast<ossimSensorModel *>(m_SensorModel);
+
+    if(sensorModel != NULL)
+      {
+      // Call optimize fit
+      precision  = sensorModel->optimizeFit(*m_TiePoints);
+      }
+    }
+
+  // Return the precision
+  return precision;
 }
 
 } // namespace otb

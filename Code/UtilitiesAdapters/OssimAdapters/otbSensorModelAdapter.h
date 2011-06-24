@@ -23,6 +23,7 @@
 #include "otbDEMHandler.h"
 
 class ossimProjection;
+class ossimTieGptSet;
 
 namespace otb
 {
@@ -54,6 +55,7 @@ public:
 
   typedef ossimProjection*       InternalMapProjectionPointer;
   typedef const ossimProjection* InternalMapProjectionConstPointer;
+  typedef ossimTieGptSet*        InternalTiePointsContainerPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -75,6 +77,12 @@ public:
   void InverseTransformPoint(double lon, double lat, double h,
                              double& x, double& y, double& z) const;
 
+  void AddTiePoint(double x, double y, double z, double lon, double lat);
+
+  void ClearTiePoints();
+
+  double Optimize();
+
   /** Is sensor model valid method. return false if the m_SensorModel is null*/
   bool IsValidSensorModel();
 
@@ -88,6 +96,7 @@ private:
 
   InternalMapProjectionPointer m_SensorModel;
 
+  InternalTiePointsContainerPointer m_TiePoints;
 
   /** Object that read and use DEM */
   DEMHandler::Pointer m_DEMHandler;
