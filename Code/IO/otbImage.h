@@ -145,6 +145,7 @@ public:
   virtual unsigned int GetGCPCount(void) const;
 
   virtual OTB_GCP& GetGCPs(unsigned int GCPnum);
+  virtual const OTB_GCP& GetGCPs(unsigned int GCPnum) const;
 
   virtual std::string GetGCPId(unsigned int GCPnum) const;
   virtual std::string GetGCPInfo(unsigned int GCPnum) const;
