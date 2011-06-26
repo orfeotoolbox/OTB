@@ -5,7 +5,7 @@
 // See LICENSE.txt file in the top level directory for more details.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimOrthoIgen.cpp 18011 2010-08-31 12:48:56Z dburken $
+// $Id: ossimOrthoIgen.cpp 19763 2011-06-20 20:56:21Z dburken $
 
 // In Windows, standard output is ASCII by default. 
 // Let's include the following in case we have
@@ -125,6 +125,7 @@ bool ossimOrthoIgen::parseFilename(const ossimString& file_spec, bool decodeEntr
    } // end of while loop parsing fileInfos spec
 
    theSrcRecords.push_back(src_record);
+   
    return true;
 }
 
@@ -598,6 +599,7 @@ void ossimOrthoIgen::addFiles(ossimArgumentParser& argumentParser,
 
    // The last filename left on the command line should be the product filename:
    theProductFilename = argumentParser.argv()[last_idx];
+   
 }
 
 //*************************************************************************************************
@@ -1122,7 +1124,7 @@ void ossimOrthoIgen::setupWriter()
 //*************************************************************************************************
 void ossimOrthoIgen::setupProjection()
 {
-   if (traceDebug())
+      if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)<<"Entering ossimOrthoIgen::setupProjection():"<<std::endl;
    }
@@ -1132,20 +1134,34 @@ void ossimOrthoIgen::setupProjection()
    // Throw exception if no valid input image projection was established:
    if(!theReferenceProj.valid())
    {
-      std::string errMsg = "ossimOrthoIgen::setupView() -- Could not establish input image's "
+      std::string errMsg = "ossimOrthoIgen::setupProjection() -- Could not establish input image's "
          "projection. Cannot setup output view.";
       throw(ossimException(errMsg));
    }
 
    // Define some quantities that may be needed for the output projection:
-   ossimDpt metersPerPixel = theReferenceProj->getMetersPerPixel();
-   double meanGSD = (metersPerPixel.x+metersPerPixel.y)*.5;
-   ossimDpt gsd(meanGSD, meanGSD);
-   ossimUnitType gsdUnits = OSSIM_METERS;
+   ossimDpt gsd;
+   ossimUnitType gsdUnits;
+   ossimMapProjection* rmp = PTR_CAST(ossimMapProjection, theReferenceProj.get());
+   if (rmp && rmp->isGeographic())
+   {
+      gsd = rmp->getDecimalDegreesPerPixel();
+      gsdUnits = OSSIM_DEGREES;
+   }
+   else
+   {
+      gsd = theReferenceProj->getMetersPerPixel();
+      gsdUnits = OSSIM_METERS;
+   }
+
    if(!theDeltaPerPixelOverride.hasNans())
    {
       gsd = theDeltaPerPixelOverride;
       gsdUnits = theDeltaPerPixelUnit;
+
+      // May need to scale the x-direction by the specified reference latitude:
+      if ((theGeographicOriginOfLatitude != 0) && (gsd.x == gsd.y))
+         gsd.x *= cosd(theGeographicOriginOfLatitude);
    }
 
    // Now focus on establishing the output product projection.
@@ -1154,9 +1170,9 @@ void ossimOrthoIgen::setupProjection()
    {
       if (!theTemplateView.isReadable())
       {
-         std::string errMsg = "ossimOrthoIgen::setupView() -- Could not read the product "
+         std::string errMsg = "ossimOrthoIgen::setupProjection() -- Could not read the product "
             "projection template file at <";
-         errMsg += theTemplateView;
+         errMsg += theTemplateView.string();
          errMsg += ">. Cannot establish output projection.";
          throw(ossimException(errMsg));
       }
@@ -1200,7 +1216,7 @@ void ossimOrthoIgen::setupProjection()
       {
          theProjectionType = OSSIM_UNKNOWN_PROJECTION;
          ossimNotify(ossimNotifyLevel_WARN)
-            << "ossimOrthoIgen::srs WARNING:" << " Unsupported spatial reference system."
+            << "ossimOrthoIgen::setupProjection() WARNING:" << " Unsupported spatial reference system."
             << " Will default to the projection from the input image."
             << std::endl;
       }
@@ -1246,21 +1262,35 @@ void ossimOrthoIgen::setupProjection()
    // At this point there should be a valid output projection defined:
    if (!theProductProjection.valid())
    {
-      std::string errMsg = "ossimOrthoIgen::setupView() -- Could not establish valid output "
+      std::string errMsg = "ossimOrthoIgen::setupProjection() -- Could not establish valid output "
          "projection";
       throw(ossimException(errMsg));
    }
 
-   // HACK: The projection may not have had the PCS code initialized even though it
+   // HACK (OLK 06/10): The projection may not have had the PCS code initialized even though it
    // is an EPSG projection, so take this opportunity to identify a PCS for output:
-   theProductProjection->getPcsCode();
+   ossim_uint32 pcs_code = theProductProjection->getPcsCode();
+   if (pcs_code == 0)
+   {
+      pcs_code = ossimEpsgProjectionDatabase::instance()->
+         findProjectionCode(*(theProductProjection.get()));
+      theProductProjection->setPcsCode(pcs_code);
+   }
 
-   //Perform some tasks common to all projection types:
+   // Perform some tasks common to all projection types:
    if (gsdUnits == OSSIM_DEGREES)
       theProductProjection->setDecimalDegreesPerPixel(gsd);
    else
       theProductProjection->setMetersPerPixel(gsd);
    theProjectionName = theProductProjection->getProjectionName();
+
+   // At this point, the product projection will not have a tiepoint (UL corner coordinates)
+   // defined unless it is the same projection as the input reference. We just need to get close to
+   // bootstrap the process. The exact tiepoint is computed later in snapTiePointToRefProj().
+   establishMosaicTiePoint();
+
+   // Base class makes sure the product view projection is properly wired into the chain:
+   setView();
 
    // Fix the tiepoint misalignment between input and output image projections:
    consolidateCutRectSpec();
@@ -1269,7 +1299,7 @@ void ossimOrthoIgen::setupProjection()
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
-         << "ossimOrthoIgen::setupView DEBUG:"
+         << "ossimOrthoIgen::setupProjection DEBUG:"
          << "Leaving...." << __LINE__
          << std::endl;
    }
@@ -1316,7 +1346,7 @@ bool ossimOrthoIgen::setupTiling()
       ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimOrthoIgen::setupTiling: Entered......" << std::endl;
    }
    ossimKeywordlist templateKwl;
-   ossimFilename outputFilename = theSrcRecords[theSrcRecords.size()-1].getFilename();
+   ossimFilename outputFilename = theProductFilename; 
    theTilingEnabled = false;
 
    if ((theTilingTemplate == "")||(!templateKwl.addFile(theTilingTemplate)))
@@ -1346,8 +1376,7 @@ bool ossimOrthoIgen::setupTiling()
          if(templateKwl.find(prefix.chars(), "type"))
          {
             templateKwl.add(prefix.chars(), "tile_name_mask", theTilingFilename.c_str(), true);
-            ossimFilename path (outputFilename.path());
-            theSrcRecords[theSrcRecords.size()-1].setFilename(path);
+            theProductFilename = outputFilename.path();
             theTilingEnabled = true;
             break;
          }
@@ -1475,70 +1504,63 @@ void ossimOrthoIgen::snapTiePointToRefProj()
    if (!theCutRectSpecIsConsolidated)
       consolidateCutRectSpec();
 
-   // When no cutting is requested, then it's the trivial case of simply copying the input
-   // projection's tiepoint to the output:
-   if (theCutOrigin.hasNans())
-   {
-      establishMosaicTiePoint();
-      return;
-   }
-
    // The notion of snapping to a tiepoint is only valid for a map projected input:
    ossimMapProjection* in_proj = PTR_CAST(ossimMapProjection, theReferenceProj.get());
    if (!in_proj)
       return;
-
-   ossimDpt uli (0,0); // upper left corner of input image in pixels
-   ossimGpt ulg; // input image UL geographic origin.
-   in_proj->lineSampleToWorld(uli, ulg);
-
-   // We will be modifying the projection's tiepoint (a.k.a. UL corner point):
-   ossimGpt cutUL_gpt(theCutOrigin.lat, theCutOrigin.lon, 0.0, theProductProjection->getDatum());
-   if(in_proj->isGeographic())  // geographic projection, units = decimal degrees.
+   
+   // We will be modifying the product projection's tiepoint (a.k.a. UL corner point):
+   double fractional_pixel_misalignment, intpart;
+   if (theProductProjection->isGeographic())
    {
+      // If the cut origin is not defined, then set the cut origin to the current mosaic tiepoint
+      // set previously by establishMosaicTiepoint():
+      if (theCutOrigin.hasNans())
+         theCutOrigin = theProductProjection->getUlGpt();
+
       // Need to use the degrees-per-pixel quantity for accurate snap:
-      ossimDpt degPerPixel (in_proj->getDecimalDegreesPerPixel());
+      ossimDpt degPerPixel (theProductProjection->getDecimalDegreesPerPixel());
 
-      // Establish offset from cut-rect UL to input image UL in integral pixels, and
-      // correct the cut-rect's origin for the misalignment:
-      double dLat = cutUL_gpt.lat - ulg.lat;
-      dLat = ossim::round<int>(dLat/degPerPixel.y) * degPerPixel.y;
-      cutUL_gpt.lat = ulg.lat + dLat - 0.5*degPerPixel.y;
+      // Establish offset from cut-rect UL to input image UL in pixels, and
+      // correct the cut-rect's origin for the fractional part of misalignment:
+      ossimGpt ulg_ref (in_proj->getUlGpt());
+      double dLat = theCutOrigin.lat - ulg_ref.lat;
+      fractional_pixel_misalignment = modf(dLat/degPerPixel.y, &intpart);
+      dLat = fractional_pixel_misalignment * degPerPixel.y;
+      theCutOrigin.lat -= dLat; //- 0.5*degPerPixel.y;
+      double dLon = theCutOrigin.lon - ulg_ref.lon;
+      dLon = fractional_pixel_misalignment * degPerPixel.x;
+      theCutOrigin.lon -= dLon; // - 0.5*degPerPixel.x;
 
-      double dLon = cutUL_gpt.lon - ulg.lon;
-      dLon = ossim::round<int>(dLon/degPerPixel.x) * degPerPixel.x;
-      cutUL_gpt.lon = ulg.lon + dLon - 0.5*degPerPixel.x;
-
-      theProductProjection->setUlTiePoints(cutUL_gpt);
+      ossimGpt cut_orig_gpt (theCutOrigin.lat, theCutOrigin.lon);
+      theProductProjection->setUlTiePoints(cut_orig_gpt);
    }
 
    else    // projection in meters...
    {
-      // Establish the easting northing (in input projection space) of the UL cut rect:
-      ossimDpt cut_ul_EN_in = in_proj->forward(cutUL_gpt);
+      // If the cut origin is not defined, then set the cut origin to the current mosaic tiepoint
+      // set previously by establishMosaicTiepoint():
+      if (theCutOrigin.hasNans())
+         theCutOrigin = theProductProjection->getUlEastingNorthing();
 
       // Directly use the meters offset from input image UL in computing snap shift:
-      ossimDpt ul_EN_in; // input image UL E/N origin.
+      ossimDpt ul_EN_in (in_proj->getUlEastingNorthing()); // input image UL E/N origin.
       ossimDpt mtrsPerPixel (theProductProjection->getMetersPerPixel());
-      in_proj->lineSampleToEastingNorthing(uli, ul_EN_in);
 
-      // Establish offset from cut-rect UL to input image UL in integral pixels, and
-      // correct the cut-rect's origin for the misalignment:
-      double dE = cut_ul_EN_in.x - ul_EN_in.x;
-      dE = ((int)(dE/mtrsPerPixel.x)) * mtrsPerPixel.x;
-      cut_ul_EN_in.x = ul_EN_in.x + dE; // + 0.5*mtrsPerPixel.x;
+      // Establish offset from cut-rect UL to input image UL in pixels, and
+      // correct the cut-rect's origin for the fractional part of misalignment:
+      double dE = theCutOrigin.x - ul_EN_in.x;
+      fractional_pixel_misalignment = modf(dE/mtrsPerPixel.x, &intpart);
+      dE = fractional_pixel_misalignment * mtrsPerPixel.x;
+      theCutOrigin.x -= dE; // + 0.5*mtrsPerPixel.x;
 
-      double dN = cut_ul_EN_in.y - ul_EN_in.y;
-      dN = ((int)(dN/mtrsPerPixel.y)) * mtrsPerPixel.y;
-      cut_ul_EN_in.y = ul_EN_in.y + dN; // - 0.5*mtrsPerPixel.y;
+      double dN = theCutOrigin.y - ul_EN_in.y;
+      fractional_pixel_misalignment = modf(dN/mtrsPerPixel.y, &intpart);
+      dN = fractional_pixel_misalignment * mtrsPerPixel.y;
+      theCutOrigin.y -= dN; // - 0.5*mtrsPerPixel.y;
 
-      // Convert input projection easting northing to geographic tiepoint:
-      cutUL_gpt = in_proj->inverse(cut_ul_EN_in);
-      theProductProjection->setUlTiePoints(cutUL_gpt);
-
-      // Update the cut rect with new UL coordinates:
-      theCutOrigin.lat = cutUL_gpt.lat;
-      theCutOrigin.lon = cutUL_gpt.lon;
+      // Set the new easting/northing cut origin:
+      theProductProjection->setUlTiePoints(theCutOrigin);
    }
 }
 
@@ -1825,10 +1847,13 @@ void ossimOrthoIgen::establishMosaicTiePoint()
       return;
    }
 
+   ossimGpt tie_gpt_i, tie_gpt;
+   ossimDpt tie_dpt_i, tie_dpt;
+   tie_gpt.makeNan();
+   tie_dpt.makeNan();
+
    // Loop over all input handlers and latch the most NW tiepoint as the mosaic TP:
    ossimConnectableObject::ConnectableObjectList::iterator iter = clientList.begin();
-   ossimGpt tie_pt_i, tie_pt;
-   tie_pt.makeNan();
    while (iter != clientList.end())
    {
       ossimImageHandler* handler = PTR_CAST(ossimImageHandler, (*iter).get());
@@ -1837,21 +1862,55 @@ void ossimOrthoIgen::establishMosaicTiePoint()
       if (!handler) break;
 
       ossimRefPtr<ossimImageGeometry> geom = handler->getImageGeometry();
-      if (!geom) break;
+      if (!geom.valid()) 
+         continue; // Skip over any non geometry inputs (e.g., masks)
 
       ossimIrect boundingRect = handler->getBoundingRect();
-      ossimDpt ulPt = boundingRect.ul();
-      geom->localToWorld(ulPt, tie_pt_i);
+      vector<ossimDpt> img_vertices;
+      img_vertices.push_back(boundingRect.ul());
+      img_vertices.push_back(boundingRect.ur());
+      img_vertices.push_back(boundingRect.lr());
+      img_vertices.push_back(boundingRect.ll());
 
-      if (tie_pt.hasNans())
-         tie_pt = tie_pt_i;
-      else
+      // The tiepoint will be in easting/northing or lat/lon depending on the type of projection 
+      // used for the product. Need to consider all image corners since the orientation of the image
+
+
+      
+      // is not known:
+      for (int j=0; j<4; j++)
       {
-         if (tie_pt_i.lat > tie_pt.lat) tie_pt.lat = tie_pt_i.lat;
-         if (tie_pt_i.lon < tie_pt.lon) tie_pt.lon = tie_pt_i.lon;
+         geom->localToWorld(img_vertices[j], tie_gpt_i);
+         if (theProductProjection->isGeographic())
+         {
+            if (ossim::isnan(tie_gpt.lat) || ossim::isnan(tie_gpt.lon))
+               tie_gpt = tie_gpt_i;
+            else
+            {
+               if (tie_gpt_i.lat > tie_gpt.lat) 
+                  tie_gpt.lat = tie_gpt_i.lat;
+               if (tie_gpt_i.lon < tie_gpt.lon) 
+                  tie_gpt.lon = tie_gpt_i.lon;
+            }
+         }
+         else
+         {
+            tie_dpt_i = theProductProjection->forward(tie_gpt_i);
+            if (tie_dpt.hasNans())
+               tie_dpt = tie_dpt_i;
+            else
+            {
+               if (tie_dpt_i.y > tie_dpt.y) 
+                  tie_dpt.y = tie_dpt_i.y;
+               if (tie_dpt_i.x < tie_dpt.x) 
+                  tie_dpt.x = tie_dpt_i.x;
+            }
+         }
       }
    }
 
-   if (!tie_pt.hasNans())
-      theProductProjection->setUlTiePoints(tie_pt);
+   if (!ossim::isnan(tie_gpt.lat) && !ossim::isnan(tie_gpt.lon) )
+      theProductProjection->setUlTiePoints(tie_gpt);
+   else if (!tie_dpt.hasNans())
+      theProductProjection->setUlTiePoints(tie_dpt);
 }

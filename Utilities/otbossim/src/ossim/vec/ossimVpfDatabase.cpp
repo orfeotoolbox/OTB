@@ -6,7 +6,7 @@
 // Description: This class extends the stl's string class.
 //
 //********************************************************************
-// $Id: ossimVpfDatabase.cpp 9963 2006-11-28 21:11:01Z gpotts $
+// $Id: ossimVpfDatabase.cpp 19636 2011-05-24 16:48:45Z gpotts $
 #include <ossim/vec/ossimVpfDatabase.h>
 #include <ossim/vec/ossimVpfDatabaseHeader.h>
 #include <ossim/vec/ossimVpfDatabaseHeaderTableValidator.h>
@@ -39,8 +39,8 @@ bool ossimVpfDatabase::openDatabase(const ossimFilename& filename)
 
    // we should have two table to look at for the database.
    // 1) database header (dht) 2) and the Library attribute (lat)
-   theDatabaseHeaderTable   = ossimFilename(tempFilename.path()).dirCat("/dht");
-   theLibraryAttributeTable = ossimFilename(tempFilename.path()).dirCat("/lat");
+   theDatabaseHeaderTable   = ossimFilename(tempFilename.path()).dirCat("dht");
+   theLibraryAttributeTable = ossimFilename(tempFilename.path()).dirCat("lat");
 
    if(theDatabaseHeaderTable.exists() &&
       theLibraryAttributeTable.exists())
@@ -48,7 +48,6 @@ bool ossimVpfDatabase::openDatabase(const ossimFilename& filename)
       ossimVpfTable table;
       // now lets see if they are valid tables
       result = table.openTable(theDatabaseHeaderTable);
-      
       if(result&&
          !ossimVpfDatabaseHeaderTableValidator().isValid(table))
       {

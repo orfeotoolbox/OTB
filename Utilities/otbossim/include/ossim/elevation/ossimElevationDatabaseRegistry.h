@@ -1,10 +1,9 @@
 #ifndef ossimElevationDatabaseRegistry_HEADER
 #define ossimElevationDatabaseRegistry_HEADER
-#include "ossimElevationDatabaseFactoryBase.h"
-#include "ossimElevationDatabase.h"
+#include <ossim/elevation/ossimElevationDatabaseFactoryBase.h>
+#include <ossim/elevation/ossimElevationDatabase.h>
 #include <ossim/base/ossimFactoryListInterface.h>
-class OSSIM_DLL ossimElevationDatabaseRegistry : public ossimFactoryListInterface<ossimElevationDatabaseFactoryBase, 
-                                                                                  ossimElevationDatabase>
+class OSSIM_DLL ossimElevationDatabaseRegistry : public ossimFactoryListInterface<ossimElevationDatabaseFactoryBase, ossimElevationDatabase>
 
 {
 public:

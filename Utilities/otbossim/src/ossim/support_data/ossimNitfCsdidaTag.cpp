@@ -35,9 +35,9 @@ ossimNitfCsdidaTag::~ossimNitfCsdidaTag()
 {
 }
 
-ossimString ossimNitfCsdidaTag::getRegisterTagName() const
+std::string ossimNitfCsdidaTag::getRegisterTagName() const
 {
-   return "CSDIDA";
+   return std::string("CSDIDA");
 }
 
 void ossimNitfCsdidaTag::parseStream(std::istream& in)

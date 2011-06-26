@@ -5,7 +5,7 @@
 // Author: Garrett Potts (gpotts@imagelinks)
 //
 //*************************************************************************
-// $Id: ossimGeoPolyCutter.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimGeoPolyCutter.h 18423 2010-11-16 16:05:12Z gpotts $
 #ifndef ossimGeoPolyCutter_HEADER
 #define ossimGeoPolyCutter_HEADER
 #include <ossim/imaging/ossimPolyCutter.h>
@@ -205,7 +205,7 @@ protected:
    /*!
     * The view projection used to project the ground coordinates.
     */
-   ossimRefPtr<ossimProjection> theViewProjection;
+   ossimRefPtr<ossimImageGeometry> theViewProjection;
 
    std::vector<ossimGeoPolygon> theGeoPolygonList;
 

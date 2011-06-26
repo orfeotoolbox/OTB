@@ -10,7 +10,7 @@
 // Description: Common file for utility functions.
 //
 //*************************************************************************
-// $Id: ossimCommon.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimCommon.h 19008 2011-03-04 13:57:55Z gpotts $
 #ifndef ossimCommon_HEADER
 #define ossimCommon_HEADER
 
@@ -23,12 +23,17 @@
 
 #include <cmath>
 #include <istream>
+#include <sstream>
 #include <string>
 #include <vector>
+#include <iostream>
+#include <algorithm>
+#include <iterator>
 #include <ossim/base/ossimConstants.h>
+#include <ossim/base/ossimString.h>
 class ossimIpt;
 class ossimDpt;
-class ossimString;
+class ossimGpt;
 namespace NEWMAT
 {
    class Matrix;
@@ -443,10 +448,16 @@ namespace ossim
     * For example: 
     *      (45,34) (12,34)
     */
+   
    OSSIM_DLL void toStringList(ossimString& resultStringOfPoints,
-                               const std::vector<ossimDpt>& pointList);
+                               const std::vector<ossimDpt>& pointList,
+                               char separator=' ');
    OSSIM_DLL void toStringList(ossimString& resultStringOfPoints,
-                               const std::vector<ossimIpt>& pointList);
+                               const std::vector<ossimIpt>& pointList,
+                               char separator = ' ');
+   OSSIM_DLL void toStringList(ossimString& resultStringOfPoints,
+                               const std::vector<ossimGpt>& pointList,
+                               char seaprator = ' ');
    
    /**
     * Will take a string list separated by spaces and convert to a vector of ossimDpts.  It will not clear
@@ -456,6 +467,95 @@ namespace ossim
                            const ossimString& stringOfPoints);
    OSSIM_DLL void toVector(std::vector<ossimIpt>& result,
                            const ossimString& stringOfPoints);
+   OSSIM_DLL void toVector(std::vector<ossimGpt>& result,
+                           const ossimString& stringOfPoints);
+   
+   /**
+    * This will output a vector of values inst a string
+    *
+    *  (value1,...,valueN)
+    *
+    * Parenthesis are required
+    */ 
+   template <class T>
+   void toSimpleStringList(ossimString& result,
+                           const std::vector<T>& valuesList)
+   {
+      std::ostringstream out;
+      
+      if(!valuesList.empty())
+      {
+         ossim_uint32 idx = 0;
+         ossim_uint32 size = (valuesList.size()-1);
+         for(idx = 0; idx < size; ++idx)
+         {
+            out << valuesList[idx] << ",";
+         }
+         out << valuesList[size];
+      }
+      
+      result = "("+out.str()+")";
+   }
+   /**
+    * This will output a vector of values inst a string
+    *
+    *  (value1,...,valueN)
+    *
+    * Specialize the char for it will output the actual ascii char instead of the numeric value
+    *
+    * Parenthesis are required
+    */ 
+   template <>
+   OSSIM_DLL void toSimpleStringList(ossimString& result,
+                           const std::vector<ossim_uint8>& valuesList);
+   
+   /**
+    * Generic function to extract a list of values into a vector of string where
+    * the string of points is of the form:
+    *
+    * (value1,value2, ... , )
+    *
+    * Parenthesis are required
+    */ 
+   bool extractSimpleValues(std::vector<ossimString>& values, const ossimString& stringOfPoints);
+
+   
+   /**
+    *  Takes input format of the form:
+    *  (value1,value2,...,valueN)
+    */
+   bool toSimpleVector(std::vector<ossim_uint32>& result,
+                       const ossimString& stringOfPoints);
+   /**
+    *  Takes input format of the form:
+    *  (value1,value2,...,valueN)
+    */
+   bool toSimpleVector(std::vector<ossim_int32>& result,
+                       const ossimString& stringOfPoints);
+   /**
+    *  Takes input format of the form:
+    *  (value1,value2,...,valueN)
+    */
+   bool toSimpleVector(std::vector<ossim_uint16>& result,
+                       const ossimString& stringOfPoints);
+   /**
+    *  Takes input format of the form:
+    *  (value1,value2,...,valueN)
+    */
+   bool toSimpleVector(std::vector<ossim_int16>& result,
+                       const ossimString& stringOfPoints);
+   /**
+    *  Takes input format of the form:
+    *  (value1,value2,...,valueN)
+    */
+   bool toSimpleVector(std::vector<ossim_uint8>& result,
+                       const ossimString& stringOfPoints);
+   /**
+    *  Takes input format of the form:
+    *  (value1,value2,...,valueN)
+    */
+   bool toSimpleVector(std::vector<ossim_int8>& result,
+                       const ossimString& stringOfPoints);
    
         // lex str into tokens starting at position start using whitespace  
 	//    chars as delimiters and quotes[0] and quotes[1] as the opening

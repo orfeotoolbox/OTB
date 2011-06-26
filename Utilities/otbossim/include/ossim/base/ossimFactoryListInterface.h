@@ -23,6 +23,9 @@ class ossimFactoryListInterface
    {
    public:
       typedef std::vector<T*> FactoryListType;
+      typedef T FactoryType;
+      typedef NativeType NativeReturnType;
+      
       ossimFactoryListInterface(){}
       
       /**
@@ -49,13 +52,20 @@ class ossimFactoryListInterface
        * Will register a factory to the factory list.  Will append the passed in factory if not
        * already registered to the list.
        */
-      void registerFactory(T* factory)
+      void registerFactory(T* factory, bool pushToFrontFlag=false)
       {
          if(!factory) return;
          OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_factoryListMutex);
          if(!findFactory(factory))
          {
-            m_factoryList.push_back(factory);
+            if (pushToFrontFlag)
+            {
+               m_factoryList.insert(m_factoryList.begin(), factory);
+            }
+            else
+            {
+               m_factoryList.push_back(factory);
+            }
          }
       }
       /**

@@ -88,7 +88,7 @@ extern int STORAGE_BYTE_ORDER;
  */
 static char * get_line (FILE *fp)
 {
-  long int CurrentChar,   /* This is an int because fgetc returns an int */
+  ossim_int32 CurrentChar,   /* This is an int because fgetc returns an int */
       count ,
       NextBlock = 256 ,
       LineAllocation = 0 ;
@@ -124,18 +124,18 @@ static char * get_line (FILE *fp)
         return (char *) NULL ;
       }
     }  
-    if ( ( CurrentChar == (long int) LINE_CONTINUE ) ) {
+    if ( ( CurrentChar == (ossim_int32) LINE_CONTINUE ) ) {
       CurrentChar = fgetc(fp ) ;        /* read character after backslash */
       /* A newline will be ignored and thus skipped over */
-      if ( CurrentChar == (long int) SPACE )  /* Assume line continue error */
-        while ( fgetc (fp) != (long int) SPACE ) ;
-      else if (CurrentChar != (long int) NEW_LINE ) {
+      if ( CurrentChar == (ossim_int32) SPACE )  /* Assume line continue error */
+        while ( fgetc (fp) != (ossim_int32) SPACE ) ;
+      else if (CurrentChar != (ossim_int32) NEW_LINE ) {
         /* copy it if not new line */
         CurrentLine[count++] = (char) LINE_CONTINUE ;
         CurrentLine[count] = (char) CurrentChar ;
       } else
         count -- ;      /* Decrement the counter on a newline character */
-    } else if (CurrentChar == (long int) NEW_LINE )     /* We're done */
+    } else if (CurrentChar == (ossim_int32) NEW_LINE )     /* We're done */
         break;
     else
       CurrentLine[count] = (char)CurrentChar;
@@ -150,9 +150,9 @@ static char * get_line (FILE *fp)
 
 /* #if UNIX */
 
-long int VpfRead ( void *to, VpfDataType type, long int count, FILE *from )
+ossim_int32 VpfRead ( void *to, VpfDataType type, ossim_int32 count, FILE *from )
 {
-  long int retval=0 , i ;
+  ossim_int32 retval=0 , i ;
 
   switch ( type ) {
   case VpfChar:
@@ -175,15 +175,15 @@ long int VpfRead ( void *to, VpfDataType type, long int count, FILE *from )
   case VpfInteger:
     {
       if (STORAGE_BYTE_ORDER != MACHINE_BYTE_ORDER) {
-	long int itemp,
-	  *iptr = (long int *) to ;
+	ossim_int32 itemp,
+	  *iptr = (ossim_int32 *) to ;
 	for ( i=0; i < count; i++ ) {
-	  retval = (long)fread ( &itemp, sizeof (long int), 1, from ) ;
+	  retval = (long)fread ( &itemp, sizeof (ossim_int32), 1, from ) ;
 	  swap_four ( (char*)&itemp, (char*)iptr ) ;
 	  iptr++ ;
 	}
       } else {
-	retval = (long)fread ( to, sizeof (long int), count, from ) ;
+	retval = (long)fread ( to, sizeof (ossim_int32), count, from ) ;
       }
     }  
     break ;
@@ -375,7 +375,7 @@ char *read_text_defstr ( FILE *infile, FILE * outerr )
 int add_null_values ( char *name, vpf_table_type table, FILE * fpout )
 {
   FILE *nullfp;
-  long int  i , ptr ;
+  ossim_int32  i , ptr ;
   char *cval, *line, *field ;
  
   nullfp = fopen( name, "r");
@@ -440,9 +440,9 @@ int add_null_values ( char *name, vpf_table_type table, FILE * fpout )
  *
  *   Parameters:
  *A
- *    row_number <input> == (long int) row number in the table.
+ *    row_number <input> == (ossim_int32) row number in the table.
  *    table      <input> == (vpf_table_type) VPF table structure.
- *    return    <output> == (long int) length of the table row or 0 on error.
+ *    return    <output> == (ossim_int32) length of the table row or 0 on error.
  *E
  *::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
  *
@@ -471,11 +471,11 @@ int add_null_values ( char *name, vpf_table_type table, FILE * fpout )
  *    This module should be ANSI C compatible.
  *E
  *************************************************************************/
-long int index_length( long int row_number,
+ossim_int32 index_length( ossim_int32 row_number,
 		       vpf_table_type table )
 {
-   long int   recsize,len=0;
-   unsigned long int ulen;
+   ossim_int32   recsize,len=0;
+   ossim_uint32 ulen;
    long  int pos;
 
    STORAGE_BYTE_ORDER = table.byte_order;
@@ -489,14 +489,14 @@ long int index_length( long int row_number,
 	 break;
       case DISK:
 	 recsize = sizeof(index_cell);
-	 fseek( table.xfp, (long int)(row_number*recsize), SEEK_SET );
+	 fseek( table.xfp, (ossim_int32)(row_number*recsize), SEEK_SET );
 
 	 if ( ! Read_Vpf_Int(&pos,table.xfp,1) ) {
-	   len = (long int)0 ;
+	   len = (ossim_int32)0 ;
 	 }
 
 	 if ( ! Read_Vpf_Int(&ulen,table.xfp,1) ) {
-	   return (long int)0 ;
+	   return (ossim_int32)0 ;
 	 }
 	 len = ulen;
 	 break;
@@ -508,7 +508,7 @@ long int index_length( long int row_number,
 	   /* Just an error check, should never get here in writing */
 	   fprintf(stderr,"\nindex_length: error trying to access row %d",
 		   (int)row_number ) ;
-	   len = (long int)0 ;
+	   len = (ossim_int32)0 ;
 	}
 	break;
    }
@@ -530,9 +530,9 @@ long int index_length( long int row_number,
  *
  *   Parameters:
  *A
- *    row_number <input> == (long int) row number in the table.
+ *    row_number <input> == (ossim_int32) row number in the table.
  *    table      <input> == (vpf_table_type) VPF table structure.
- *    return    <output> == (long int) position of the table row 
+ *    return    <output> == (ossim_int32) position of the table row 
  *                          or zero on error.
  *E
  *::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -562,11 +562,11 @@ long int index_length( long int row_number,
  *    This module should be ANSI C compatible.
  *E
  *************************************************************************/
-long int index_pos( long int row_number,
+ossim_int32 index_pos( ossim_int32 row_number,
 		    vpf_table_type table )
 {
-   long int   recsize;
-   unsigned long int pos=0;
+   ossim_int32   recsize;
+   ossim_uint32 pos=0;
 
    STORAGE_BYTE_ORDER = table.byte_order;
 
@@ -579,9 +579,9 @@ long int index_pos( long int row_number,
 	 break;
       case DISK:
 	 recsize = sizeof(index_cell);
-	 fseek( table.xfp, (long int)(row_number*recsize), SEEK_SET );
+	 fseek( table.xfp, (ossim_int32)(row_number*recsize), SEEK_SET );
 	 if ( ! Read_Vpf_Int(&pos,table.xfp,1) ) {
-	   pos = (unsigned long int)0 ;
+	   pos = (ossim_uint32)0 ;
 	 }
 	 break;
       case RAM:
@@ -592,7 +592,7 @@ long int index_pos( long int row_number,
 	   /* Just an error check, should never get here in writing */
 	   fprintf(stderr,"\nindex_length: error trying to access row %d",
 		   (int)row_number ) ;
-	   pos = (unsigned long int)0;
+	   pos = (ossim_uint32)0;
 	 }
 	 break;
    }
@@ -601,12 +601,12 @@ long int index_pos( long int row_number,
 
 #if 0
 /* Compute the offset from the start of the row to the given field */
-static long int row_offset( int field, row_type row, vpf_table_type table)
+static ossim_int32 row_offset( int field, row_type row, vpf_table_type table)
 {
-   long int offset,n,size;
+   ossim_int32 offset,n,size;
    int i;
    id_triplet_type key;
-   int keysize[] = {0,sizeof(char),sizeof(short int),sizeof(long int)};
+   int keysize[] = {0,sizeof(char),sizeof(short int),sizeof(ossim_int32)};
 
    if (field < 0 || field >= table.nfields) return -1;
 
@@ -614,7 +614,7 @@ static long int row_offset( int field, row_type row, vpf_table_type table)
    for (i=0;i<field;i++) {
       switch (table.header[i].type) {
 	 case 'I':
-	    offset += sizeof(long int)*row[i].count;
+	    offset += sizeof(ossim_int32)*row[i].count;
 	    break;
 	 case 'S':
 	    offset += sizeof(short int)*row[i].count;
@@ -722,12 +722,12 @@ id_triplet_type read_key( vpf_table_type table )
       case 1:
 
 	 Read_Vpf_Char (&ucval, table.fp, 1 ) ;
-	 key.id = (long int)ucval;
+	 key.id = (ossim_int32)ucval;
 	 break;
       case 2:
 
 	 Read_Vpf_Short (&uival, table.fp, 1 ) ;
-	 key.id = (long int)uival;
+	 key.id = (ossim_int32)uival;
 	 break;
       case 3:
 
@@ -739,11 +739,11 @@ id_triplet_type read_key( vpf_table_type table )
      break;
    case 1:
      Read_Vpf_Char (&ucval, table.fp, 1 ) ;
-     key.tile = (long int)ucval;
+     key.tile = (ossim_int32)ucval;
      break;
    case 2:
      Read_Vpf_Short (&uival, table.fp, 1 ) ;
-     key.tile = (long int)uival;
+     key.tile = (ossim_int32)uival;
      break;
    case 3:
      Read_Vpf_Int (&(key.tile), table.fp, 1 ) ;
@@ -755,11 +755,11 @@ id_triplet_type read_key( vpf_table_type table )
      break;
    case 1:
      Read_Vpf_Char (&ucval, table.fp, 1 ) ;
-     key.exid = (long int)ucval;
+     key.exid = (ossim_int32)ucval;
      break;
    case 2:
      Read_Vpf_Short (&uival, table.fp, 1 ) ;
-     key.exid = (long int)uival;
+     key.exid = (ossim_int32)uival;
      break;
    case 3:
      Read_Vpf_Int (&(key.exid), table.fp, 1 ) ;
@@ -814,10 +814,10 @@ id_triplet_type read_key( vpf_table_type table )
  *************************************************************************/
 row_type read_next_row( vpf_table_type table )
 {
-   register long int i,j;
-   long int      status;
+   register ossim_int32 i,j;
+   ossim_int32      status;
    char     *tptr;
-   long int size,count;
+   ossim_int32 size,count;
    row_type row;
    id_triplet_type * keys;
    coordinate_type dummycoord;
@@ -859,7 +859,7 @@ row_type read_next_row( vpf_table_type table )
 	    }
 	    break;
 	 case 'I':
-	    row[i].ptr = (long int *)vpfmalloc(count*sizeof(long int));
+	    row[i].ptr = (ossim_int32 *)vpfmalloc(count*sizeof(ossim_int32));
 	    Read_Vpf_Int (row[i].ptr, table.fp, count ) ;
 	    break;
 	 case 'S':
@@ -980,9 +980,9 @@ row_type read_next_row( vpf_table_type table )
 row_type rowcpy( row_type origrow,
 		 vpf_table_type table )
 {
-   register long int i;
-   long int      count;
-   long int size;
+   register ossim_int32 i;
+   ossim_int32      count;
+   ossim_int32 size;
    row_type row;
 
    row = (row_type)vpfmalloc(table.nfields * sizeof(column_type));
@@ -1001,8 +1001,8 @@ row_type rowcpy( row_type origrow,
 	    }
 	    break;
 	 case 'I':
-	    size = count*sizeof(long int);
-	    row[i].ptr = (long int *)vpfmalloc(size);
+	    size = count*sizeof(ossim_int32);
+	    row[i].ptr = (ossim_int32 *)vpfmalloc(size);
 	    memcpy(row[i].ptr,origrow[i].ptr,size);
 	    break;
 	 case 'S':
@@ -1080,7 +1080,7 @@ row_type rowcpy( row_type origrow,
  *
  *   Parameters:
  *A
- *    row_number <input> == (long int) row number.
+ *    row_number <input> == (ossim_int32) row number.
  *    table      <input> == (vpf_table_type) vpf table structure.
  *    return    <output> == (row_type) row that was read in.
  *E
@@ -1100,7 +1100,7 @@ row_type rowcpy( row_type origrow,
  *
  *   Functions Called:
  *F
- *    long int index_pos()                             VPFTABLE.C
+ *    ossim_int32 index_pos()                             VPFTABLE.C
  *    row_type read_next_row()                         VPFTABLE.C
  *E
  *::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -1110,10 +1110,10 @@ row_type rowcpy( row_type origrow,
  *    This module should be ANSI C compatible.
  *E
  *************************************************************************/
-row_type read_row( long int row_number,
+row_type read_row( ossim_int32 row_number,
 		   vpf_table_type table )
 {
-   long int fpos;
+   ossim_int32 fpos;
 
    fpos = index_pos(row_number,table);
 
@@ -1168,7 +1168,7 @@ row_type read_row( long int row_number,
 void free_row( row_type row,
 	       vpf_table_type table)
 {
-   register long int i;
+   register ossim_int32 i;
 
    if (!row) return;
    for (i=0;i<table.nfields;i++)
@@ -1192,7 +1192,7 @@ void free_row( row_type row,
  *
  *   Parameters:
  *A
- *    row_number <input> == (long int) row number in range [1 .. table.nrows].
+ *    row_number <input> == (ossim_int32) row number in range [1 .. table.nrows].
  *    table      <input> == (vpf_table_type) vpf table structure.
  *    return    <output> == (row_type) returned row.
  *E
@@ -1222,7 +1222,7 @@ void free_row( row_type row,
  *    This module should be ANSI C compatible.
  *E
  *************************************************************************/
-row_type get_row( long int row_number,
+row_type get_row( ossim_int32 row_number,
 		  vpf_table_type table )
 {
    row_type row;
@@ -1253,7 +1253,7 @@ row_type get_row( long int row_number,
  *A
  *    field_name <input> == (char *) field name.
  *    table      <input> == (vpf_table_type) VPF table structure.
- *    table_pos  <output> == (long int) returned column number.
+ *    table_pos  <output> == (ossim_int32) returned column number.
  *                          UNIX returns -1 if not exists
  *E
  *::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -1281,10 +1281,10 @@ row_type get_row( long int row_number,
  *    This module should be ANSI C compatible.
  *E
  *************************************************************************/
-long int table_pos( const char* field_name, vpf_table_type table )
+ossim_int32 table_pos( const char* field_name, vpf_table_type table )
 {
-   register long int i;
-   long int col;
+   register ossim_int32 i;
+   ossim_int32 col;
    char altfn[256];
 
    col = -1;
@@ -1319,11 +1319,11 @@ long int table_pos( const char* field_name, vpf_table_type table )
  *
  *   Parameters:
  *A
- *    field_number <input> == (long int) field column number.
+ *    field_number <input> == (ossim_int32) field column number.
  *    row          <input> == (row_type) vpf table row.
  *    table        <input> == (vpf_table_type) VPF table structure.
  *    value       <output> == (void *) pointer to a single element value.
- *    count       <output> == (long int *) pointer to the array size for a
+ *    count       <output> == (ossim_int32 *) pointer to the array size for a
  *                                    multiple element value.
  *    return      <output> == (void *) returned multiple element value.
  *E
@@ -1352,13 +1352,13 @@ long int table_pos( const char* field_name, vpf_table_type table )
  *    This module should be ANSI C compatible.
  *E
  *************************************************************************/
-void *get_table_element( long int field_number,
+void *get_table_element( ossim_int32 field_number,
 			 row_type row,
 			 vpf_table_type table,
 			 void *value,
-			 long int  *count )
+			 ossim_int32  *count )
 {
-   long int   col;
+   ossim_int32   col;
    char     * tptr;
    void     * retvalue;
 
@@ -1390,11 +1390,11 @@ void *get_table_element( long int field_number,
 	 break;
       case 'I':
 	 if (table.header[col].count == 1) {
-	    memcpy(value,row[col].ptr,sizeof(long int));
+	    memcpy(value,row[col].ptr,sizeof(ossim_int32));
 	 } else {
-	    retvalue = (long int *)vpfmalloc(row[col].count*
-					     sizeof(long int));
-	    memcpy(retvalue,row[col].ptr,row[col].count*sizeof(long int));
+	    retvalue = (ossim_int32 *)vpfmalloc(row[col].count*
+					     sizeof(ossim_int32));
+	    memcpy(retvalue,row[col].ptr,row[col].count*sizeof(ossim_int32));
 	 }
 	 break;
       case 'S':
@@ -1513,10 +1513,10 @@ void *get_table_element( long int field_number,
  *   Parameters:
  *A
  *    field_name <input> == (char *) field name.
- *    row_number <input> == (long int) row_number.
+ *    row_number <input> == (ossim_int32) row_number.
  *    table      <input> == (vpf_table_type) VPF table structure.
  *    value     <output> == (void *) pointer to a single element value.
- *    count     <output> == (long int *) pointer to the array size for a multiple
+ *    count     <output> == (ossim_int32 *) pointer to the array size for a multiple
  *                                  element value.
  *    return    <output> == (void *) returned multiple element value.
  *                          or NULL if field_name could not be found
@@ -1550,12 +1550,12 @@ void *get_table_element( long int field_number,
  *E
  *************************************************************************/
 void *named_table_element( char           * field_name,
-			   long int         row_number,
+			   ossim_int32         row_number,
 			   vpf_table_type   table,
 			   void           * value,
-			   long int       * count )
+			   ossim_int32       * count )
 {
-   long int     col;
+   ossim_int32     col;
    row_type     row;
    void       * retvalue;
 
@@ -1593,12 +1593,12 @@ void *named_table_element( char           * field_name,
  *
  *   Parameters:
  *A
- *    field_number <input> == (long int) field number (offset from
+ *    field_number <input> == (ossim_int32) field number (offset from
  *                                   first field in table).
- *    row_number <input> == (long int) row_number.
+ *    row_number <input> == (ossim_int32) row_number.
  *    table      <input> == (vpf_table_type) VPF table structure.
  *    value     <output> == (void *) pointer to a single element value.
- *    count     <output> == (long int *) pointer to the array size for a multiple
+ *    count     <output> == (ossim_int32 *) pointer to the array size for a multiple
  *                                  element value.
  *    return    <output> == (void *) returned multiple element value or
  *                          NULL of the field number is invalid
@@ -1629,11 +1629,11 @@ void *named_table_element( char           * field_name,
  *    This module should be ANSI C compatible.
  *E
  *************************************************************************/
-void *table_element( long int         field_number,
-		     long int         row_number,
+void *table_element( ossim_int32         field_number,
+		     ossim_int32         row_number,
 		     vpf_table_type   table,
 		     void           * value,
-		     long int       * count )
+		     ossim_int32       * count )
 {
    row_type    row;
    void      * retvalue;

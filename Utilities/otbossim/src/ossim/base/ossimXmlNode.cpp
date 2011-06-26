@@ -9,7 +9,7 @@
 // Contains definition of class ossimXmlNode.
 // 
 //*****************************************************************************
-// $Id: ossimXmlNode.cpp 16742 2010-02-28 16:05:43Z dburken $
+// $Id: ossimXmlNode.cpp 19682 2011-05-31 14:21:20Z dburken $
 
 #include <iostream>
 #include <stack>
@@ -125,7 +125,7 @@ bool ossimXmlNode::read(std::istream& in)
          << "ossimXmlNode::read: entered ......" << std::endl;
    }
    char c;
-   in >> xmlskipws;
+   xmlskipws(in);
    if(in.fail())
    {
       if(traceDebug())
@@ -196,7 +196,7 @@ bool ossimXmlNode::read(std::istream& in)
    }
    // skip white space characters
    //
-   in >> xmlskipws;
+   xmlskipws(in);
    
    if(!in.fail()&&readEndTag(in, endTag))
    {
@@ -248,7 +248,7 @@ bool ossimXmlNode::read(std::istream& in)
       }
       return false;
    }
-   in >> xmlskipws;
+   xmlskipws(in);
    c = in.peek();
    
    if(c != '<')
@@ -310,7 +310,7 @@ bool ossimXmlNode::read(std::istream& in)
          }
          return false;
       }
-      in >> xmlskipws;
+      xmlskipws(in);
       
       c = in.peek();
       if(c != '<')
@@ -1028,7 +1028,7 @@ bool ossimXmlNode::readTag(std::istream& in,
       ossimNotify(ossimNotifyLevel_DEBUG)
          << "ossimXmlNode::readTag: entered ......\n";
    }
-   in >> xmlskipws;
+   xmlskipws(in);
    
    tag = "";
    int c = in.peek();
@@ -1116,7 +1116,7 @@ bool ossimXmlNode::readCDataContent(std::istream& in)
 #if 0
 bool ossimXmlNode::readTextContent(std::istream& in)
 {
-   in >> xmlskipws;
+   xmlskipws(in);
    
    theText = "";
    theCDataFlag = false;
@@ -1183,7 +1183,7 @@ bool ossimXmlNode::readTextContent(std::istream& in)
 #if 0
 bool ossimXmlNode::readTextContent(std::istream& in)
 {
-   in >> xmlskipws;
+   xmlskipws(in);
    
    theText = "";
    theCDataFlag = false;
@@ -1282,7 +1282,7 @@ bool ossimXmlNode::readTextContent(std::istream& in)
    theText = "";
    theCDataFlag = false;
    
-   in >> xmlskipws;
+   xmlskipws(in);
 
    if ( !in.fail() )
    {
@@ -1408,7 +1408,7 @@ bool ossimXmlNode::readEndTag(std::istream& in,
       in.ignore();
       readTag(in, endTag);
       if(in.fail()) return false;
-      in >> xmlskipws;
+      xmlskipws(in);
       c = in.peek();
       result = true;
    }

@@ -7,109 +7,80 @@
 // Description: The factory registry for overview builders.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimOverviewBuilderFactoryRegistry.cpp 9935 2006-11-22 19:30:28Z dburken $
+// $Id: ossimOverviewBuilderFactoryRegistry.cpp 19184 2011-03-23 11:59:03Z gpotts $
 
 #include <cstddef>   /* for NULL */
 #include <algorithm> /* for std::find */
 
 #include <ossim/imaging/ossimOverviewBuilderFactoryRegistry.h>
 #include <ossim/imaging/ossimOverviewBuilderFactoryBase.h>
+#include <ossim/base/ossimObjectFactoryRegistry.h>
 
 ossimOverviewBuilderFactoryRegistry*
-ossimOverviewBuilderFactoryRegistry::theInstance = NULL;
+ossimOverviewBuilderFactoryRegistry::m_instance = 0;
 
 ossimOverviewBuilderFactoryRegistry*
 ossimOverviewBuilderFactoryRegistry::instance()
 {
-   if ( theInstance == NULL )
+   if ( m_instance == NULL )
    {
-      theInstance = new ossimOverviewBuilderFactoryRegistry();
+      m_instance = new ossimOverviewBuilderFactoryRegistry();
+      ossimObjectFactoryRegistry::instance()->registerFactory(m_instance);
    }
-   return theInstance;
+   return m_instance;
 }
 
-bool ossimOverviewBuilderFactoryRegistry::registerFactory(
-   ossimOverviewBuilderFactoryBase* factory, bool pushToFrontFlag)
+ossimObject* ossimOverviewBuilderFactoryRegistry::createObject(const ossimKeywordlist& kwl,
+                                                               const char* prefix)const
 {
-   if ( !factory )
-   {
-      return false;
-   }
+   ossimRefPtr<NativeReturnType> result = 0;
 
-   if ( std::find(theFactoryList.begin(), theFactoryList.end(), factory) !=
-        theFactoryList.end() )
+   ossimString type = kwl.find(prefix, "type");
+   if(!type.empty())
    {
-      // Already in list...
-      return false;
-   }
-
-   if ( pushToFrontFlag )
-   {
-      theFactoryList.insert(theFactoryList.begin(), factory);
-   }
-   else
-   {
-      theFactoryList.push_back(factory);
+      result = createBuilder(type);
+      if(result.valid())
+      {
+         if(!result->loadState(kwl, prefix))
+         {
+            result = 0;
+         }
+      }
    }
    
-   return true;
-}
-
-void ossimOverviewBuilderFactoryRegistry::unregisterFactory(
-   ossimOverviewBuilderFactoryBase* factory)
-{
-   std::vector<ossimOverviewBuilderFactoryBase*>::iterator iter =
-      std::find(theFactoryList.begin(), theFactoryList.end(), factory);
-   if(iter != theFactoryList.end())
-   {
-      theFactoryList.erase(iter);
-   }
+   return result.release();
 }
 
 ossimOverviewBuilderBase*
 ossimOverviewBuilderFactoryRegistry::createBuilder(
    const ossimString& typeName) const
 {
-   ossimOverviewBuilderBase* result = NULL;
-
-   std::vector<ossimOverviewBuilderFactoryBase*>::const_iterator i =
-      theFactoryList.begin();
-
-   while ( i != theFactoryList.end() )
+   FactoryListType::const_iterator iter = m_factoryList.begin();
+   NativeReturnType* result = 0;
+   
+   while(iter != m_factoryList.end())
    {
-      result = (*i)->createBuilder(typeName);
+      result = (*iter)->createBuilder(typeName);
       if (result)
       {
          break;
       }
-      ++i;
+      ++iter;
    }
    
    return result;
 }
 
-void ossimOverviewBuilderFactoryRegistry::getTypeNameList(
-   std::vector<ossimString>& typeList)const
-{
-   std::vector<ossimOverviewBuilderFactoryBase*>::const_iterator i =
-      theFactoryList.begin();
-   
-   while ( i != theFactoryList.end() )
-   {
-      (*i)->getTypeNameList(typeList);
-      ++i;
-   } 
-}
 
 ossimOverviewBuilderFactoryRegistry::ossimOverviewBuilderFactoryRegistry()
-   : theFactoryList()
 {
+   m_instance = this;
 }
 
 ossimOverviewBuilderFactoryRegistry::ossimOverviewBuilderFactoryRegistry(
    const ossimOverviewBuilderFactoryRegistry& /* obj */ )
-   : theFactoryList()
 {
+   m_instance = this;
 }
 
 void ossimOverviewBuilderFactoryRegistry::operator=(

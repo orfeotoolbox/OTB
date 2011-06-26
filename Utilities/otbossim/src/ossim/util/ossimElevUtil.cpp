@@ -1,5 +1,7 @@
 //----------------------------------------------------------------------------
 //
+// File: ossimElevUtil.cpp
+// 
 // License:  LGPL
 // 
 // See LICENSE.txt file in the top level directory for more details.
@@ -14,7 +16,7 @@
 
 #include <string>
 
-#include <ossim/util/ossimDemUtil.h>
+#include <ossim/util/ossimElevUtil.h>
 
 #include <ossim/base/ossimArgumentParser.h>
 #include <ossim/base/ossimApplicationUsage.h>
@@ -54,10 +56,9 @@
 
 #include <ossim/support_data/ossimSrcRecord.h>
 
-static ossimTrace traceDebug   = ossimTrace("ossimDemUtil:debug");
-static ossimTrace traceLog     = ossimTrace("ossimDemUtil:log");
-static ossimTrace traceOptions = ossimTrace("ossimDemUtil:options");
-
+static ossimTrace traceDebug   = ossimTrace("ossimElevUtil:debug");
+static ossimTrace traceLog     = ossimTrace("ossimElevUtil:log");
+static ossimTrace traceOptions = ossimTrace("ossimElevUtil:options");
 
 static const char COLOR_BLUE_KW[]           = "color_blue";
 static const char COLOR_GREEN_KW[]          = "color_green";
@@ -71,7 +72,7 @@ static const char CUT_MAX_LON_KW[]          = "cut_maximum_longitude";
 static const char CUT_MIN_LAT_KW[]          = "cut_minimum_latitude";
 static const char CUT_MIN_LON_KW[]          = "cut_minimum_longitude";
 static const char DEM_KW[]                  = "dem";
-static const char EXAGGERATION_KW[]         = "exaggeration";
+static const char GAIN_KW[]                 = "gain";
 static const char FILE_KW[]                 = "file";
 static const char HISTO_OP_KW[]             = "hist-op";
 static const char IMG_KW[]                  = "image";
@@ -80,14 +81,13 @@ static const char METERS_KW[]               = "meters";
 static const char OP_KW[]                   = "operation";
 static const char RESAMPLER_FILTER_KW[]     = "resampler_filter";
 static const char SCALE_2_8_BIT_KW[]        = "scale_2_8_bit";
-static const char SMOOTHNESS_FACTOR_KW[]    = "smoothness_factor";
 static const char SRC_FILE_KW[]             = "src_file";
 static const char SRS_KW[]                  = "srs";
 static const char THUMBNAIL_RESOLUTION_KW[] = "thumbnail_resolution"; // pixels
 static const char WRITER_KW[]               = "writer";
 static const char WRITER_PROPERTY_KW[]      = "writer_property";
 
-ossimDemUtil::ossimDemUtil()
+ossimElevUtil::ossimElevUtil()
    : ossimReferenced(),
      m_operation(OSSIM_DEM_OP_UNKNOWN),
      m_kwl(new ossimKeywordlist()),
@@ -96,16 +96,17 @@ ossimDemUtil::ossimDemUtil()
      m_demLayer(0),
      m_imgLayer(0)
 {
+   m_kwl->setExpandEnvVarsFlag(true);
 }
 
-ossimDemUtil::~ossimDemUtil()
+ossimElevUtil::~ossimElevUtil()
 {
 }
 
-void ossimDemUtil::addArguments(ossimArgumentParser& ap)
+void ossimElevUtil::addArguments(ossimArgumentParser& ap)
 {
    ossimString usageString = ap.getApplicationName();
-   usageString += " [option]... [input-option]... <input-file(s)> <output-file>\nNote at least one input is required either from one of the input options, e.g. --input-dem <my-dem.hgt> or adding to command line in front of the output file in which case the code will try to ascertain what type of input it is.\n\nAvailable traces:\n-T \"ossimDemUtil:debug\"   - General debug trace to standard out.\n-T \"ossimDemUtil:log\"     - Writes a log file to output-file.log.\n-T \"ossimDemUtil:options\" - Writes the options to output-file-options.kwl.";
+   usageString += " [option]... [input-option]... <input-file(s)> <output-file>\nNote at least one input is required either from one of the input options, e.g. --input-dem <my-dem.hgt> or adding to command line in front of the output file in which case the code will try to ascertain what type of input it is.\n\nAvailable traces:\n-T \"ossimElevUtil:debug\"   - General debug trace to standard out.\n-T \"ossimElevUtil:log\"     - Writes a log file to output-file.log.\n-T \"ossimElevUtil:options\" - Writes the options to output-file-options.kwl.";
 
    ossimApplicationUsage* appuse = ap.getApplicationUsage();
    
@@ -127,8 +128,8 @@ void ossimDemUtil::addArguments(ossimArgumentParser& ap)
 
    appuse->addCommandLineOption("--elevation", "<elevation>\nhillshade option - Light source elevation angle for bumb shade.\nRange: 0 to 90, Default = 45.0");
    
-   appuse->addCommandLineOption("--exaggeration", "<exageration>\nExaggeration for image to plane noraml filter.\nRange: .0001 to 50000, Default = 1.0");
-
+   appuse->addCommandLineOption("--gain", "<factor>\nMultiplier for elevation values when computing surface normals. Has the effect of lengthening shadows for oblique lighting.\nRange: .0001 to 50000, Default = 1.0");
+   
    appuse->addCommandLineOption("-h or --help", "Display this help and exit.");
 
    appuse->addCommandLineOption("--histogram-op", "<operation>\nHistogram operation to perform. Valid operations are \"auto-minmax\", \"std-stretch-1\", \"std-stretch-2\" and \"std-stretch-3\".");
@@ -143,44 +144,47 @@ void ossimDemUtil::addArguments(ossimArgumentParser& ap)
       
    appuse->addCommandLineOption("--op","<operation>\nOperation to perform. Valid operations are \"color-relief\", \"hillshade\" and \"ortho\".");
 
-   appuse->addCommandLineOption("--options-keyword-list","<options.kwl>  This can be all or part of the application options.  To get a template you can turn on trace to the ossimDemUtil class by adding \"-T ossimDemUtil\" to your command.");
+   appuse->addCommandLineOption("--options-keyword-list","<options.kwl>  This can be all or part of the application options.  To get a template you can turn on trace to the ossimElevUtil class by adding \"-T ossimElevUtil\" to your command.");
 
    appuse->addCommandLineOption("--origin-latitude","<latidude_in_decimal_degrees>\nNote if set this will be used for the origin latitude of the projection.  Setting this to something other than 0.0 with a geographic projection creates a scaled geographic projection.");
 
-   appuse->addCommandLineOption("--projection", "<output_projection> Can be input, geo, geo-scaled, or utm.\nIf input and multiple sources the projection of the first image will be used.\nIf geo-scaled the origin of latitude will be set to scene center.\nIf utm the zone will be set from the scene center.\nIf --srs is used it takes precident over this option.");
+   appuse->addCommandLineOption("--projection", "<output_projection> Can be input, geo, geo-scaled, or utm.\nIf input and multiple sources the projection of the first image will be used.\nIf geo-scaled the origin of latitude will be set to scene center.\nIf utm the zone will be set from the scene center.\nIf --srs is used it takes precedence over this option.");
    
    appuse->addCommandLineOption(
       "--resample-filter","<type>\nSpecify what resampler filter to use, e.g. nearest neighbor, bilinear, cubic.\nSee ossim-info ----resampler-filters"); 
 
    appuse->addCommandLineOption("--scale-to-8-bit","Scales output to eight bits if not already.");
    
-   appuse->addCommandLineOption("--smoothness-factor","<factor>\nhillshade operation - Smoothness factor for image to plane noraml filter.\nRange: .0001 to 40, Default = 1.0");
-
    appuse->addCommandLineOption("--srs","<src_code>\nSpecify an output reference frame/projection. Example: --srs EPSG:4326");
 
    appuse->addCommandLineOption("-t or --thumbnail", "<max_dimension>\nSpecify a thumbnail resolution.\nScale will be adjusted so the maximum dimension = argument given.");
    
    appuse->addCommandLineOption(
-      "-w or --writer","<writer>\nSpecifies the output writer.  Default uses output file extension to "
-      "determine writer.");
+      "-w or --writer","<writer>\nSpecifies the output writer.  Default uses output file extension to determine writer.");
    
    appuse->addCommandLineOption("--writer-prop", "<writer-property>\nPasses a name=value pair to the writer for setting it's property. Any number of these can appear on the line.");
 }
 
-bool ossimDemUtil::initialize(ossimArgumentParser& ap)
+bool ossimElevUtil::initialize(ossimArgumentParser& ap)
 {
-   static const char MODULE[] = "ossimDemUtil::initialize(ossimArgumentParser&)";
+   static const char MODULE[] = "ossimElevUtil::initialize(ossimArgumentParser&)";
 
    if ( traceDebug() )
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
    }
    
-   //---
+
+   if( ap.read("-h") || ap.read("--help") || (ap.argc() == 1) )
+   {
+      usage(ap);
+      
+      return false; // Indicates process should be terminated to caller.
+   }
+
    // Start with clean options keyword list.
-   //---
    m_kwl->clear();
-   
+
    ossimString tempString1;
    ossimArgumentParser::ossimParameter stringParam1(tempString1);
    ossimString tempString2;
@@ -190,32 +194,12 @@ bool ossimDemUtil::initialize(ossimArgumentParser& ap)
    ossimString tempString4;
    ossimArgumentParser::ossimParameter stringParam4(tempString4);
 
-   if( ap.read("-h") || ap.read("--help") || (ap.argc() == 1) )
-   {
-      // Print the usage from the arg parser.
-      ap.getApplicationUsage()->write( ossimNotify(ossimNotifyLevel_NOTICE) );
-
-      // Print the valid writer types.
-      ossimNotify(ossimNotifyLevel_NOTICE)
-         << "\nValid output writer types for \"-w\" or \"--writer\" option:\n\n";
-      ossimImageWriterFactoryRegistry::instance()->
-         printImageTypeList( ossimNotify(ossimNotifyLevel_NOTICE) );
-      
-      std::string errMsg = "usage";
-      return false; // indicates process should be terminated
-   }   
-
-   //---
-   // Extract optional arguments.
-   //---
    ossim_uint32 demIdx  = 0;
    ossim_uint32 imgIdx  = 0;
    ossim_uint32 propIdx = 0;
    ossimString  key     = "";
    
-   //---
    // Extract optional arguments and stuff them in a keyword list.
-   //---
    if( ap.read("--azimuth", stringParam1) )
    {
       m_kwl->add( ossimKeywordNames::AZIMUTH_ANGLE_KW, tempString1.c_str() );
@@ -288,10 +272,10 @@ bool ossimDemUtil::initialize(ossimArgumentParser& ap)
    {
       m_kwl->add( ossimKeywordNames::ELEVATION_ANGLE_KW, tempString1.c_str() );
    }
-   
-   if( ap.read("--exaggeration", stringParam1) )
+
+   if( ap.read("--gain", stringParam1) )
    {
-      m_kwl->add( EXAGGERATION_KW, tempString1.c_str() );
+      m_kwl->add( GAIN_KW, tempString1.c_str() );
    }
 
    if( ap.read("--meters", stringParam1) )
@@ -312,14 +296,14 @@ bool ossimDemUtil::initialize(ossimArgumentParser& ap)
          if ( m_kwl->addFile(optionsKwl) == false )
          {
             std::string errMsg = "ERROR could not open options keyword list file: ";
-            errMsg += optionsKwl;
+            errMsg += optionsKwl.string();
             throw ossimException(errMsg);
          }
       }
       else
       {
          std::string errMsg = "ERROR options keyword list file does not exists: ";
-         errMsg += optionsKwl;
+         errMsg += optionsKwl.string();
          throw ossimException(errMsg); 
       }
    }
@@ -347,11 +331,6 @@ bool ossimDemUtil::initialize(ossimArgumentParser& ap)
    if ( ap.read("--scale-to-8-bit") )
    {
       m_kwl->add( SCALE_2_8_BIT_KW, "true");
-   }
-
-   if( ap.read("--smoothness-factor", stringParam1) )
-   {
-      m_kwl->add( SMOOTHNESS_FACTOR_KW, tempString1.c_str() );
    }
    
    if( ap.read("--srs", stringParam1) )
@@ -450,7 +429,7 @@ bool ossimDemUtil::initialize(ossimArgumentParser& ap)
          ++pos; // Go to next arg...
          
       } // End: while ( pos < (ap.argc()-1) )
-      
+       
    } // End: if ( ap.argc() > 2 )
 
    initialize();
@@ -461,11 +440,11 @@ bool ossimDemUtil::initialize(ossimArgumentParser& ap)
    }  
    return true;
    
-} // End: void ossimDemUtil::initialize(ossimArgumentParser& ap)
+} // End: void ossimElevUtil::initialize(ossimArgumentParser& ap)
 
-void ossimDemUtil::initialize()
+void ossimElevUtil::initialize()
 {
-   static const char MODULE[] = "ossimDemUtil::initialize()";
+   static const char MODULE[] = "ossimElevUtil::initialize()";
 
    if ( traceOptions() )
    {
@@ -499,7 +478,7 @@ void ossimDemUtil::initialize()
       else
       {
          std::string errMsg = "unknown operation: ";
-         errMsg += s;
+         errMsg += s.string();
          throw ossimException(errMsg);
       }
    }
@@ -534,11 +513,11 @@ void ossimDemUtil::initialize()
       ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " exited...\n";
    }
 
-} // End: void ossimDemUtil::initialize()
+} // End: void ossimElevUtil::initialize()
 
-void ossimDemUtil::execute()
+void ossimElevUtil::execute()
 {
-   static const char MODULE[] = "ossimDemUtil::execute";
+   static const char MODULE[] = "ossimElevUtil::execute";
 
    if ( traceDebug() )
    {
@@ -557,27 +536,23 @@ void ossimDemUtil::execute()
       // Set up the normal source.
       ossimRefPtr<ossimImageToPlaneNormalFilter> normSource = new ossimImageToPlaneNormalFilter;
 
-      // Set the exaggeration.
-      ossim_float64 exaggeration = 1.0;
-      lookup = m_kwl->find( EXAGGERATION_KW );
-      if ( lookup )
-      {
-         exaggeration = ossimString::toFloat64(lookup);
-      }
-      normSource->setXScale(exaggeration);
-      normSource->setXScale(exaggeration);
-      
-      // Set the smoothness factor.
-      ossim_float64 smoothnessFactor = 1.0;
-      lookup = m_kwl->find( SMOOTHNESS_FACTOR_KW );
-      if ( lookup )
-      {
-         smoothnessFactor = ossimString::toFloat64(lookup);
-      }
-      normSource->setSmoothnessFactor(smoothnessFactor);
-      
+      //---
+      // Set the track scale flag to true.  This enables scaling the surface
+      // normals by the GSD in order to maintain terrain proportions.
+      //---
+      normSource->setTrackScaleFlag(true);
+
       // Connect to dems.
       normSource->connectMyInputTo( demSource.get() );
+
+      // Set the smoothness factor.
+      ossim_float64 gain = 1.0;
+      lookup = m_kwl->find( GAIN_KW );
+      if ( lookup )
+      {
+         gain = ossimString::toFloat64(lookup);
+      }
+      normSource->setSmoothnessFactor(gain);
       
       ossimRefPtr<ossimImageSource> colorSource = 0;
       if ( hasLutFile() )
@@ -662,10 +637,9 @@ void ossimDemUtil::execute()
          ossim_uint8 b = 0xff;
          bumpShade->getRgbColorSource(r, g, b);
          ossimNotify(ossimNotifyLevel_DEBUG)
-            << "exaggeration:      " << exaggeration
             << "\nazimuthAngle:      " << azimuthAngle
             << "\nelevation angle:   " << elevationAngle
-            << "\nsmoothness factor: " << smoothnessFactor
+            << "\ngain factor:       " << gain
             << "\nr:                 " << int(r)
             << "\ng:                 " << int(g)
             << "\nb:                 " << int(b)
@@ -704,7 +678,7 @@ void ossimDemUtil::execute()
       //---
       // Get the area of interest. This will be the scene bounding rect if not
       // explicitly set by user with one of the --cut options.
-      // a thumbnail is desired.
+      //  Need to get this before the thumbnail code.
       //---
       ossimIrect aoi;
       getAreaOfInterest(source.get(), aoi);
@@ -723,16 +697,15 @@ void ossimDemUtil::execute()
 
       //---
       // Set the area of interest.
-      // 
       // NOTE: This must be called after the writer->connectMyInputTo as
-      // ossimImageFileWriter::initialize incorrectly resets theAreaOfInterest back to the
-      // bounding rect.
+      // ossimImageFileWriter::initialize incorrectly resets theAreaOfInterest
+      // back to the bounding rect.
       //---
       if ( !aoi.hasNans() )
       {
          writer->setAreaOfInterest(aoi);
       }
-
+      
       // Add a listener to get percent complete.
       ossimStdOutProgress prog(0, true);
       writer->addListener(&prog);
@@ -741,20 +714,37 @@ void ossimDemUtil::execute()
       {
          ossimKeywordlist logKwl;
          writer->saveStateOfAllInputs(logKwl);
-         
+
          ossimFilename logFile;
          getOutputFilename(logFile);
          logFile.setExtension("log");
-         ossimKeywordlist kwl;
-         writer->saveStateOfAllInputs(kwl);
-         kwl.write( logFile.c_str() );
+
+         logKwl.write( logFile.c_str() );
       }
       
       if (writer->getErrorStatus() == ossimErrorCodes::OSSIM_OK)
       {
+         //---
+         // Set the view ossimImageGeometry image size so that external geometries
+         // have the correct "image_size" key/value.
+         //---
+         ossimRefPtr<ossimConnectableObject> obj = writer->getInput(0);
+         ossimRefPtr<ossimImageSource> imgSrc = dynamic_cast<ossimImageSource*>(obj.get());
+         if ( imgSrc.valid() )
+         {
+            ossimRefPtr<ossimImageGeometry> geom = imgSrc->getImageGeometry();
+            if ( geom.valid() )
+            {
+               ossimIrect aoi = writer->getAreaOfInterest();
+               geom->setImageSize(aoi.size());
+            }
+         }
+         
          // Write the file:
          writer->execute();
       }
+
+      writer->removeListener(&prog);
    }
    
    if ( traceDebug() )
@@ -763,9 +753,9 @@ void ossimDemUtil::execute()
    }   
 }
 
-void ossimDemUtil::addDemSources()
+void ossimElevUtil::addDemSources()
 {
-   static const char MODULE[] = "ossimDemUtil::addDemSources";
+   static const char MODULE[] = "ossimElevUtil::addDemSources";
    
    if ( traceDebug() )
    {
@@ -774,7 +764,10 @@ void ossimDemUtil::addDemSources()
 
    // Add the images from the options keyword list.
    ossim_uint32 demCount = m_kwl->numberOf(DEM_KW);
-   for (ossim_uint32 i = 0; i < demCount; ++i)
+   ossim_uint32 maxIndex = demCount + 1000; // Allow for skippage in numbering.
+   ossim_uint32 foundRecords = 0;
+   ossim_uint32 i = 0;
+   while ( foundRecords < demCount )
    {
       ossimString key = DEM_KW;
       key += ossimString::toString(i);
@@ -785,14 +778,20 @@ void ossimDemUtil::addDemSources()
       {
          ossimFilename f = lookup;
          addDemSource(f);
+         ++foundRecords;
       }
+      ++i;
+      if ( i >= maxIndex ) break;
    }
 
    if ( m_srcKwl.valid() )
    {
       // Add stuff from src keyword list.
       demCount = m_srcKwl->numberOf(DEM_KW);
-      for (ossim_uint32 i = 0; i < demCount; ++i)
+      maxIndex = demCount + 1000;
+      foundRecords = 0;
+      i = 0;
+      while ( foundRecords < demCount )
       {
          ossimString prefix = DEM_KW;
          prefix += ossimString::toString(i);
@@ -801,7 +800,10 @@ void ossimDemUtil::addDemSources()
          if ( src.loadState( *(m_srcKwl.get()), prefix ) )
          {
             addDemSource(src);
+            ++foundRecords;
          }
+         ++i;
+         if ( i >= maxIndex ) break;
       }
    }
    
@@ -811,9 +813,9 @@ void ossimDemUtil::addDemSources()
    } 
 }
 
-void ossimDemUtil::addDemSource(const ossimFilename& file)
+void ossimElevUtil::addDemSource(const ossimFilename& file)
 {
-   static const char MODULE[] = "ossimDemUtil::addDemSource(const ossimFilename&)";
+   static const char MODULE[] = "ossimElevUtil::addDemSource(const ossimFilename&)";
 
    if ( traceDebug() )
    {
@@ -832,9 +834,9 @@ void ossimDemUtil::addDemSource(const ossimFilename& file)
    }
 }
 
-void ossimDemUtil::addDemSource(const ossimSrcRecord& rec)
+void ossimElevUtil::addDemSource(const ossimSrcRecord& rec)
 {
-   static const char MODULE[] = "ossimDemUtil::addDemSource(const ossimSrcRecord&)";
+   static const char MODULE[] = "ossimElevUtil::addDemSource(const ossimSrcRecord&)";
 
    if ( traceDebug() )
    {
@@ -853,9 +855,9 @@ void ossimDemUtil::addDemSource(const ossimSrcRecord& rec)
    }
 }
 
-void ossimDemUtil::addImgSources()
+void ossimElevUtil::addImgSources()
 {
-   static const char MODULE[] = "ossimDemUtil::addImgSources";
+   static const char MODULE[] = "ossimElevUtil::addImgSources";
    
    if ( traceDebug() )
    {
@@ -863,7 +865,10 @@ void ossimDemUtil::addImgSources()
    }
    
    ossim_uint32 imgCount = m_kwl->numberOf(IMG_KW);
-   for (ossim_uint32 i = 0; i < imgCount; ++i)
+   ossim_uint32 maxIndex = imgCount + 1000; // Allow for skippage in numbering.
+   ossim_uint32 foundRecords = 0;
+   ossim_uint32 i = 0;
+   while ( foundRecords < imgCount )
    {
       ossimString key = IMG_KW;
       key += ossimString::toString(i);
@@ -874,14 +879,20 @@ void ossimDemUtil::addImgSources()
       {
          ossimFilename f = lookup;
          addImgSource(f);
-      }               
+         ++foundRecords;
+      }
+      ++i;
+      if ( i >= maxIndex ) break;
    }
 
    if ( m_srcKwl.valid() )
    {
       // Add stuff from src keyword list.
       imgCount = m_srcKwl->numberOf(IMG_KW);
-      for (ossim_uint32 i = 0; i < imgCount; ++i)
+      maxIndex = imgCount + 1000;
+      foundRecords = 0;
+      i = 0;
+      while ( foundRecords < imgCount )
       {
          ossimString prefix = IMG_KW;
          prefix += ossimString::toString(i);
@@ -890,7 +901,10 @@ void ossimDemUtil::addImgSources()
          if ( src.loadState( *(m_srcKwl.get()), prefix ) )
          {
             addImgSource(src);
+            ++foundRecords;
          }
+         ++i;
+         if ( i >= maxIndex ) break;
       }
    }
    
@@ -900,9 +914,9 @@ void ossimDemUtil::addImgSources()
    }
 }
 
-void ossimDemUtil::addImgSource(const ossimFilename& file)
+void ossimElevUtil::addImgSource(const ossimFilename& file)
 {
-   static const char MODULE[] = "ossimDemUtil::addImgSource";
+   static const char MODULE[] = "ossimElevUtil::addImgSource";
    
    if ( traceDebug() )
    {
@@ -921,9 +935,9 @@ void ossimDemUtil::addImgSource(const ossimFilename& file)
    }
 }
 
-void ossimDemUtil::addImgSource(const ossimSrcRecord& rec)
+void ossimElevUtil::addImgSource(const ossimSrcRecord& rec)
 {
-   static const char MODULE[] = "ossimDemUtil::addImgSource(const ossimSrcRecord&)";
+   static const char MODULE[] = "ossimElevUtil::addImgSource(const ossimSrcRecord&)";
 
    if ( traceDebug() )
    {
@@ -942,9 +956,9 @@ void ossimDemUtil::addImgSource(const ossimSrcRecord& rec)
    }
 }
 
-ossimRefPtr<ossimSingleImageChain> ossimDemUtil::createChain(const ossimFilename& file) const
+ossimRefPtr<ossimSingleImageChain> ossimElevUtil::createChain(const ossimFilename& file) const
 {
-   static const char MODULE[] = "ossimDemUtil::createChain(const ossimFilename&";
+   static const char MODULE[] = "ossimElevUtil::createChain(const ossimFilename&";
    if ( traceDebug() )
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -1002,7 +1016,7 @@ ossimRefPtr<ossimSingleImageChain> ossimDemUtil::createChain(const ossimFilename
    if ( !ic.valid() )
    {
       std::string errMsg = "Could not open: ";
-      errMsg += file;
+      errMsg += file.string();
       throw ossimException(errMsg); 
    }
 
@@ -1019,9 +1033,9 @@ ossimRefPtr<ossimSingleImageChain> ossimDemUtil::createChain(const ossimFilename
    return ic;
 }
 
-ossimRefPtr<ossimSingleImageChain> ossimDemUtil::createChain(const ossimSrcRecord& rec) const
+ossimRefPtr<ossimSingleImageChain> ossimElevUtil::createChain(const ossimSrcRecord& rec) const
 {
-   static const char MODULE[] = "ossimDemUtil::createChain(const ossimSrcRecord&)";
+   static const char MODULE[] = "ossimElevUtil::createChain(const ossimSrcRecord&)";
    if ( traceDebug() )
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
@@ -1081,9 +1095,9 @@ ossimRefPtr<ossimSingleImageChain> ossimDemUtil::createChain(const ossimSrcRecor
    return ic;
 }
    
-void ossimDemUtil::createOutputProjection()
+void ossimElevUtil::createOutputProjection()
 {
-   static const char MODULE[] = "ossimDemUtil::createOutputProjection";
+   static const char MODULE[] = "ossimElevUtil::createOutputProjection";
    
    if ( traceDebug() )
    {
@@ -1116,39 +1130,57 @@ void ossimDemUtil::createOutputProjection()
    }
    else if (op)
    {
-      ossimString projString = op;
-      ossimString os = op;
-      os.downcase();
-      
-      if ( (os == "utm") || (projString == "ossimUtmProjection") )
+      ossimDemOutputProjection projType = getOutputProjectionType();
+      switch ( projType )
       {
-         m_outputProjection = getNewUtmProjection();
+         case ossimElevUtil::OSSIM_DEM_PROJ_GEO:
+         {
+            m_outputProjection = getNewGeoProjection();
+            break;
+         }
+         case ossimElevUtil::OSSIM_DEM_PROJ_GEO_SCALED:
+         {
+            m_outputProjection = getNewGeoScaledProjection();
+            break;
+         }
+         case ossimElevUtil::OSSIM_DEM_PROJ_INPUT:
+         {
+            m_outputProjection = getFirstInputProjection();
+            usingInput = true;
+            break;
+         }
+         case ossimElevUtil::OSSIM_DEM_PROJ_UTM:
+         {
+            m_outputProjection = getNewUtmProjection();
+            break;
+         }
+         default:
+         {
+            break; // Just for un-handled type warning.
+         }
       }
-      else if ( os == "input" )
+   }
+
+   // Check for identity projection:
+   ossimRefPtr<ossimMapProjection> inputProj = getFirstInputProjection();   
+   if ( m_outputProjection.valid() && inputProj.valid() )
+   {
+      if ( *(inputProj.get()) == *(m_outputProjection.get()) )
       {
-         m_outputProjection = getFirstInputProjection();
+         m_outputProjection = inputProj;
          usingInput = true;
-      }
-      else if (os == "geo")
-      {
-         m_outputProjection = getNewGeoProjection();
-      }
-      else if (os == "geo-scaled")
-      {
-         m_outputProjection = getNewGeoScaledProjection();
       }
    }
    
    if ( !m_outputProjection.valid() )
    {
       // Try first input. If map projected use that.
-      m_outputProjection = getFirstInputProjection();
+      m_outputProjection = inputProj;
       if ( m_outputProjection.valid() )
       {
          usingInput = true;
          if ( traceDebug() )
          {
-            
             ossimNotify(ossimNotifyLevel_WARN)
                << "WARNING: No projection set!"
                << "\nDefaulting to first input's projection.\n";
@@ -1175,18 +1207,20 @@ void ossimDemUtil::createOutputProjection()
    {
       // Set the scale.
       initializeProjectionGsd();
-      
-      // Set the tie.
-      intiailizeProjectionTiePoint();
-
-      // Adjust the projection tie and origin.
-      m_outputProjection->snapTiePointToOrigin();
    }
+
+   // Set the tie.
+   intiailizeProjectionTiePoint();
+   
+   // Adjust the projection tie and origin.
+   m_outputProjection->snapTiePointToOrigin(); 
+   
    
    if ( traceDebug() )
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
-         << "output projection:\n";
+         << "using input projection: " << (usingInput?"true":"false")
+         << "\noutput projection:\n";
 
       m_outputProjection->print(ossimNotify(ossimNotifyLevel_DEBUG));
 
@@ -1194,9 +1228,9 @@ void ossimDemUtil::createOutputProjection()
    }
 }
 
-void ossimDemUtil::intiailizeProjectionTiePoint()
+void ossimElevUtil::intiailizeProjectionTiePoint()
 {
-   static const char MODULE[] = "ossimDemUtil::initializeProjectionTiePoint()";
+   static const char MODULE[] = "ossimElevUtil::initializeProjectionTiePoint()";
    if ( traceDebug() )
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
@@ -1234,9 +1268,9 @@ void ossimDemUtil::intiailizeProjectionTiePoint()
    }
 }
 
-void ossimDemUtil::initializeProjectionGsd()
+void ossimElevUtil::initializeProjectionGsd()
 {
-   static const char MODULE[] = "ossimDemUtil::initializeProjectionGsd()";
+   static const char MODULE[] = "ossimElevUtil::initializeProjectionGsd()";
    if ( traceDebug() )
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
@@ -1256,11 +1290,22 @@ void ossimDemUtil::initializeProjectionGsd()
 
       if ( gsd.hasNans() )
       {
+         // Get the best resolution from the inputs.
          getMetersPerPixel(gsd);
+
+         // See if the output projection is geo-scaled; if so, make the pixels square in meters.
+         if ( getOutputProjectionType() == ossimElevUtil::OSSIM_DEM_PROJ_GEO_SCALED )
+         {
+            // Pick the best resolution and make them both the same.
+            gsd.x = ossim::min<ossim_float64>(gsd.x, gsd.y);
+            gsd.y = gsd.x;
+         }
+
       }
-      
+
       if ( !gsd.hasNans() )
       {
+         // Set to input gsd.
          m_outputProjection->setMetersPerPixel(gsd);
       }
       else
@@ -1284,9 +1329,9 @@ void ossimDemUtil::initializeProjectionGsd()
    }
 }
 
-void ossimDemUtil::getTiePoint(ossimGpt& tie)
+void ossimElevUtil::getTiePoint(ossimGpt& tie)
 {
-   static const char MODULE[] = "ossimDemUtil::getTiePoint(ossimGpt&)";
+   static const char MODULE[] = "ossimElevUtil::getTiePoint(ossimGpt&)";
    if ( traceDebug() )
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
@@ -1304,7 +1349,7 @@ void ossimDemUtil::getTiePoint(ossimGpt& tie)
    while ( chainIdx != m_demLayer.end() )
    {
       getTiePoint( (*chainIdx).get(), chainTiePoint );
-      if ( tie.hasNans() )
+      if ( tie.isLatNan() || tie.isLonNan() )
       {
          tie = chainTiePoint;
       }
@@ -1352,9 +1397,9 @@ void ossimDemUtil::getTiePoint(ossimGpt& tie)
    }
 }
 
-void ossimDemUtil::getTiePoint(ossimSingleImageChain* chain, ossimGpt& tie)
+void ossimElevUtil::getTiePoint(ossimSingleImageChain* chain, ossimGpt& tie)
 {
-   static const char MODULE[] = "ossimDemUtil::getTiePoint(ossimSingleImageChain*,ossimGpt&)";
+   static const char MODULE[] = "ossimElevUtil::getTiePoint(ossimSingleImageChain*,ossimGpt&)";
    if ( traceDebug() )
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
@@ -1376,7 +1421,7 @@ void ossimDemUtil::getTiePoint(ossimSingleImageChain* chain, ossimGpt& tie)
             std::string errMsg = MODULE;
             errMsg += "\ngeom->localToWorld returned nan for chain.";
             errMsg += "\nChain: ";
-            errMsg += chain->getFilename();
+            errMsg += chain->getFilename().string();
             throw ossimException(errMsg);
          }
       }
@@ -1384,7 +1429,7 @@ void ossimDemUtil::getTiePoint(ossimSingleImageChain* chain, ossimGpt& tie)
       {
          std::string errMsg = MODULE;
          errMsg += "\nNo geometry for chain: ";
-         errMsg += chain->getFilename();
+         errMsg += chain->getFilename().string();
          throw ossimException(errMsg);
       }
    }
@@ -1404,9 +1449,9 @@ void ossimDemUtil::getTiePoint(ossimSingleImageChain* chain, ossimGpt& tie)
    }
 }
 
-void ossimDemUtil::getMetersPerPixel(ossimDpt& gsd)
+void ossimElevUtil::getMetersPerPixel(ossimDpt& gsd)
 {
-   static const char MODULE[] = "ossimDemUtil::getMetersPerPixel(ossimDpt&)";
+   static const char MODULE[] = "ossimElevUtil::getMetersPerPixel(ossimDpt&)";
    if ( traceDebug() )
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
@@ -1448,9 +1493,9 @@ void ossimDemUtil::getMetersPerPixel(ossimDpt& gsd)
    }
 }
 
-void ossimDemUtil::getMetersPerPixel(ossimSingleImageChain* chain, ossimDpt& gsd)
+void ossimElevUtil::getMetersPerPixel(ossimSingleImageChain* chain, ossimDpt& gsd)
 {
-   static const char MODULE[] = "ossimDemUtil::getMetersPerPixel(ossimSingleImageChain*,ossimDpt&)";
+   static const char MODULE[] = "ossimElevUtil::getMetersPerPixel(ossimSingleImageChain*,ossimDpt&)";
    if ( traceDebug() )
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
@@ -1468,7 +1513,7 @@ void ossimDemUtil::getMetersPerPixel(ossimSingleImageChain* chain, ossimDpt& gsd
             std::string errMsg = MODULE;
             errMsg += "\ngeom->getMetersPerPixel returned nan for chain.";
             errMsg += "\nChain: ";
-            errMsg += chain->getFilename();
+            errMsg += chain->getFilename().string();
             throw ossimException(errMsg);
          }
       }
@@ -1476,7 +1521,7 @@ void ossimDemUtil::getMetersPerPixel(ossimSingleImageChain* chain, ossimDpt& gsd
       {
          std::string errMsg = MODULE;
          errMsg += "\nNo geometry for chain: ";
-         errMsg += chain->getFilename();
+         errMsg += chain->getFilename().string();
          throw ossimException(errMsg);
       }
    }
@@ -1495,9 +1540,9 @@ void ossimDemUtil::getMetersPerPixel(ossimSingleImageChain* chain, ossimDpt& gsd
    }
 }
 
-void ossimDemUtil::getOrigin(ossimGpt& gpt)
+void ossimElevUtil::getOrigin(ossimGpt& gpt)
 {
-   static const char MODULE[] = "ossimDemUtil::getOrigin(ossimGpt&)";
+   static const char MODULE[] = "ossimElevUtil::getOrigin(ossimGpt&)";
    if ( traceDebug() )
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
@@ -1562,9 +1607,9 @@ void ossimDemUtil::getOrigin(ossimGpt& gpt)
    }
 }
 
-void ossimDemUtil::getSceneCenter(ossimGpt& gpt)
+void ossimElevUtil::getSceneCenter(ossimGpt& gpt)
 {
-   static const char MODULE[] = "ossimDemUtil::getSceneCenter(ossimGpt&)";
+   static const char MODULE[] = "ossimElevUtil::getSceneCenter(ossimGpt&)";
    if ( traceDebug() )
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
@@ -1623,9 +1668,9 @@ void ossimDemUtil::getSceneCenter(ossimGpt& gpt)
       std::string errMsg = MODULE;
       errMsg += " range error!";
       errMsg += "\nlatitude = ";
-      errMsg += ossimString::toString(lat);
+      errMsg += ossimString::toString(lat).string();
       errMsg += "\nlongitude = ";
-      errMsg += ossimString::toString(lon);
+      errMsg += ossimString::toString(lon).string();
       throw ossimException(errMsg);
    }
 
@@ -1636,10 +1681,10 @@ void ossimDemUtil::getSceneCenter(ossimGpt& gpt)
    }
 }
 
-void ossimDemUtil::getSceneCenter(ossimSingleImageChain* chain, ossimGpt& gpt)
+void ossimElevUtil::getSceneCenter(ossimSingleImageChain* chain, ossimGpt& gpt)
 {
    static const char MODULE[] =
-      "ossimDemUtil::getSceneCenter(const ossimSingleImageChain*,ossimGpt&)";
+      "ossimElevUtil::getSceneCenter(const ossimSingleImageChain*,ossimGpt&)";
 
    if ( traceDebug() )
    {
@@ -1661,7 +1706,7 @@ void ossimDemUtil::getSceneCenter(ossimSingleImageChain* chain, ossimGpt& gpt)
             std::string errMsg = MODULE;
             errMsg += "\ngeom->localToWorld returned nan for chain.";
             errMsg += "\nChain: ";
-            errMsg += chain->getFilename();
+            errMsg += chain->getFilename().string();
             throw ossimException(errMsg);
          }
       }
@@ -1669,7 +1714,7 @@ void ossimDemUtil::getSceneCenter(ossimSingleImageChain* chain, ossimGpt& gpt)
       {
          std::string errMsg = MODULE;
          errMsg += "\nNo geometry for chain: ";
-         errMsg += chain->getFilename();
+         errMsg += chain->getFilename().string();
          throw ossimException(errMsg);
       }
    }
@@ -1689,9 +1734,9 @@ void ossimDemUtil::getSceneCenter(ossimSingleImageChain* chain, ossimGpt& gpt)
    }
 }
 
-ossimRefPtr<ossimMapProjection> ossimDemUtil::getFirstInputProjection()
+ossimRefPtr<ossimMapProjection> ossimElevUtil::getFirstInputProjection()
 {
-   static const char MODULE[] = "ossimDemUtil::getFirstInputProjection";
+   static const char MODULE[] = "ossimElevUtil::getFirstInputProjection";
    if ( traceDebug() )
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
@@ -1755,12 +1800,12 @@ ossimRefPtr<ossimMapProjection> ossimDemUtil::getFirstInputProjection()
    return result;
 }
 
-ossimRefPtr<ossimMapProjection> ossimDemUtil::getNewGeoProjection()
+ossimRefPtr<ossimMapProjection> ossimElevUtil::getNewGeoProjection()
 {
    return ossimRefPtr<ossimMapProjection>(new ossimEquDistCylProjection());
 }
 
-ossimRefPtr<ossimMapProjection> ossimDemUtil::getNewGeoScaledProjection()
+ossimRefPtr<ossimMapProjection> ossimElevUtil::getNewGeoScaledProjection()
 {
    ossimRefPtr<ossimMapProjection> result = getNewGeoProjection();
    ossimGpt origin;
@@ -1769,19 +1814,27 @@ ossimRefPtr<ossimMapProjection> ossimDemUtil::getNewGeoScaledProjection()
    return result;
 }
 
-ossimRefPtr<ossimMapProjection> ossimDemUtil::getNewProjectionFromSrsCode(const ossimString& code)
+ossimRefPtr<ossimMapProjection> ossimElevUtil::getNewProjectionFromSrsCode(const ossimString& code)
 {
    ossimRefPtr<ossimMapProjection> result = 0;
-   ossimRefPtr<ossimProjection> proj = ossimProjectionFactoryRegistry::instance()->
-      createProjection(code);
-   if ( proj.valid() )
+
+   if (code == "4326")  // Avoid factory call for this.
    {
-      result = PTR_CAST( ossimMapProjection, proj.get() );
+      result = new ossimEquDistCylProjection();
+   }
+   else
+   {
+      ossimRefPtr<ossimProjection> proj = ossimProjectionFactoryRegistry::instance()->
+         createProjection(code);
+      if ( proj.valid() )
+      {
+         result = PTR_CAST( ossimMapProjection, proj.get() );
+      }
    }
    return result;
 }
 
-ossimRefPtr<ossimMapProjection> ossimDemUtil::getNewUtmProjection()
+ossimRefPtr<ossimMapProjection> ossimElevUtil::getNewUtmProjection()
 {
    ossimRefPtr<ossimUtmProjection> utm = new ossimUtmProjection;
    ossimGpt origin;
@@ -1791,9 +1844,9 @@ ossimRefPtr<ossimMapProjection> ossimDemUtil::getNewUtmProjection()
    return ossimRefPtr<ossimMapProjection>(utm.get());
 }
 
-ossimRefPtr<ossimImageFileWriter> ossimDemUtil::createNewWriter() const
+ossimRefPtr<ossimImageFileWriter> ossimElevUtil::createNewWriter() const
 {
-   static const char MODULE[] = "ossimDemUtil::createNewWriter()";
+   static const char MODULE[] = "ossimElevUtil::createNewWriter()";
    if ( traceDebug() )
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
@@ -1833,7 +1886,7 @@ ossimRefPtr<ossimImageFileWriter> ossimDemUtil::createNewWriter() const
       {
          std::string errMsg = MODULE;
          errMsg += " ERROR creating writer from extension: ";
-         errMsg += outputFile.ext();
+         errMsg += outputFile.ext().string();
          throw ossimException(errMsg);
       }
    }
@@ -1879,9 +1932,9 @@ ossimRefPtr<ossimImageFileWriter> ossimDemUtil::createNewWriter() const
    return writer;
 }
 
-void ossimDemUtil::propagateOutputProjectionToChains()
+void ossimElevUtil::propagateOutputProjectionToChains()
 {
-   static const char MODULE[] = "ossimDemUtil::propagateOutputProjectionToChains()";
+   static const char MODULE[] = "ossimElevUtil::propagateOutputProjectionToChains()";
    if ( traceDebug() )
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
@@ -1931,10 +1984,10 @@ void ossimDemUtil::propagateOutputProjectionToChains()
    }
 }
 
-ossimRefPtr<ossimImageSource> ossimDemUtil::combineLayers(
+ossimRefPtr<ossimImageSource> ossimElevUtil::combineLayers(
    std::vector< ossimRefPtr<ossimSingleImageChain> >& layers) const
 {
-   static const char MODULE[] = "ossimDemUtil::combineLayers(layers)";
+   static const char MODULE[] = "ossimElevUtil::combineLayers(layers)";
    if ( traceDebug() )
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
@@ -1966,9 +2019,9 @@ ossimRefPtr<ossimImageSource> ossimDemUtil::combineLayers(
    return result;
 }
 
-ossimRefPtr<ossimImageSource> ossimDemUtil::combineLayers()
+ossimRefPtr<ossimImageSource> ossimElevUtil::combineLayers()
 {
-   static const char MODULE[] = "ossimDemUtil::combineLayers()";
+   static const char MODULE[] = "ossimElevUtil::combineLayers()";
    if ( traceDebug() )
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
@@ -1976,7 +2029,7 @@ ossimRefPtr<ossimImageSource> ossimDemUtil::combineLayers()
 
    ossimRefPtr<ossimImageSource> result = 0;
 
-   ossim_uint32 layerCount = (ossim_uint32) m_demLayer.size() + m_imgLayer.size();
+   ossim_uint32 layerCount = (ossim_uint32)(m_demLayer.size() + m_imgLayer.size());
 
    if ( layerCount )
    {
@@ -2027,10 +2080,10 @@ ossimRefPtr<ossimImageSource> ossimDemUtil::combineLayers()
    return result;
 }
 
-ossimRefPtr<ossimImageSource> ossimDemUtil::addIndexToRgbLutFilter(
+ossimRefPtr<ossimImageSource> ossimElevUtil::addIndexToRgbLutFilter(
    ossimRefPtr<ossimImageSource> &source) const
 {
-   static const char MODULE[] = "ossimDemUtil::addIndexToRgbLutFilter(source)";
+   static const char MODULE[] = "ossimElevUtil::addIndexToRgbLutFilter(source)";
    if ( traceDebug() )
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
@@ -2059,7 +2112,7 @@ ossimRefPtr<ossimImageSource> ossimDemUtil::addIndexToRgbLutFilter(
       {
          std::string errMsg = MODULE;
          errMsg += " color table does not exists: ";
-         errMsg += lutFile;
+         errMsg += lutFile.string();
          throw ossimException(errMsg);
       }
    }
@@ -2078,10 +2131,10 @@ ossimRefPtr<ossimImageSource> ossimDemUtil::addIndexToRgbLutFilter(
    return result;
 }
 
-ossimRefPtr<ossimImageSource> ossimDemUtil::addScalarRemapper(
+ossimRefPtr<ossimImageSource> ossimElevUtil::addScalarRemapper(
    ossimRefPtr<ossimImageSource> &source) const
 {
-   static const char MODULE[] = "ossimDemUtil::addScalarRemapper(source)";
+   static const char MODULE[] = "ossimElevUtil::addScalarRemapper(source)";
    if ( traceDebug() )
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
@@ -2118,9 +2171,9 @@ ossimRefPtr<ossimImageSource> ossimDemUtil::addScalarRemapper(
    return result;
 }
 
-bool ossimDemUtil::setupChainHistogram( ossimRefPtr<ossimSingleImageChain> &chain) const
+bool ossimElevUtil::setupChainHistogram( ossimRefPtr<ossimSingleImageChain> &chain) const
 {
-   static const char MODULE[] = "ossimDemUtil::setupChainHistogram(chain)";
+   static const char MODULE[] = "ossimElevUtil::setupChainHistogram(chain)";
    if ( traceDebug() )
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
@@ -2205,9 +2258,9 @@ bool ossimDemUtil::setupChainHistogram( ossimRefPtr<ossimSingleImageChain> &chai
    return result;
 }
 
-void ossimDemUtil::getOutputFilename(ossimFilename& f) const
+void ossimElevUtil::getOutputFilename(ossimFilename& f) const
 {
-   static const char MODULE[] = "ossimDemUtil::getOutputFilename()";
+   static const char MODULE[] = "ossimElevUtil::getOutputFilename()";
    if ( traceDebug() )
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
@@ -2229,9 +2282,9 @@ void ossimDemUtil::getOutputFilename(ossimFilename& f) const
    }   
 }
 
-void ossimDemUtil::getAreaOfInterest(const ossimImageSource* source, ossimIrect& rect) const
+void ossimElevUtil::getAreaOfInterest(const ossimImageSource* source, ossimIrect& rect) const
 {
-   static const char MODULE[] = "ossimDemUtil::getAreaOfInterest()";
+   static const char MODULE[] = "ossimElevUtil::getAreaOfInterest()";
    if ( traceDebug() )
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
@@ -2331,10 +2384,10 @@ void ossimDemUtil::getAreaOfInterest(const ossimImageSource* source, ossimIrect&
    }
 }
 
-void ossimDemUtil::initializeThumbnailProjection(const ossimIrect& originalRect,
+void ossimElevUtil::initializeThumbnailProjection(const ossimIrect& originalRect,
                                                 ossimIrect& adjustedRect)
 {
-   static const char MODULE[] = "ossimDemUtil::initializeThumbnailProjection";
+   static const char MODULE[] = "ossimElevUtil::initializeThumbnailProjection";
    if ( traceDebug() )
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -2378,6 +2431,9 @@ void ossimDemUtil::initializeThumbnailProjection(const ossimIrect& originalRect,
             // the tie point so it falls relative to the projection origin.
             //---
             m_outputProjection->applyScale(ossimDpt(scale, scale), true);
+
+            // Must call to reset the ossimImageRenderer's bounding rect for each input.
+            propagateOutputProjectionToChains();
             
             // Get the new upper left in view space.
             m_outputProjection->worldToLineSample(ulGpt, dpt);
@@ -2430,7 +2486,7 @@ void ossimDemUtil::initializeThumbnailProjection(const ossimIrect& originalRect,
    }
 }
 
-bool ossimDemUtil::hasLutFile() const
+bool ossimElevUtil::hasLutFile() const
 {
    bool result = false;
    if ( m_kwl.valid() )
@@ -2440,7 +2496,7 @@ bool ossimDemUtil::hasLutFile() const
    return result;
 }
 
-bool ossimDemUtil::hasBumpShadeArg() const
+bool ossimElevUtil::hasBumpShadeArg() const
 {
    bool result = ( m_operation == OSSIM_DEM_OP_HILL_SHADE );
    if ( !result && m_kwl.valid() )
@@ -2450,13 +2506,12 @@ bool ossimDemUtil::hasBumpShadeArg() const
                  m_kwl->find( COLOR_GREEN_KW ) ||
                  m_kwl->find( COLOR_BLUE_KW ) ||
                  m_kwl->find( ossimKeywordNames::ELEVATION_ANGLE_KW ) ||
-                 m_kwl->find( EXAGGERATION_KW ) ||
-                 m_kwl->find( SMOOTHNESS_FACTOR_KW ) );
+                 m_kwl->find( GAIN_KW ) );
    }
    return result;
 }
 
-bool ossimDemUtil::hasThumbnailResolution() const
+bool ossimElevUtil::hasThumbnailResolution() const
 {
    bool result = false;
    if ( m_kwl.valid() )
@@ -2466,7 +2521,7 @@ bool ossimDemUtil::hasThumbnailResolution() const
    return result;
 }
 
-bool ossimDemUtil::hasHistogramOperation() const
+bool ossimElevUtil::hasHistogramOperation() const
 {
    bool result = false;
    
@@ -2478,7 +2533,7 @@ bool ossimDemUtil::hasHistogramOperation() const
    return result;
 }
 
-bool ossimDemUtil::isDemFile(const ossimFilename& file) const
+bool ossimElevUtil::isDemFile(const ossimFilename& file) const
 {
    bool result = false;
    ossimString ext = file.ext();
@@ -2495,7 +2550,7 @@ bool ossimDemUtil::isDemFile(const ossimFilename& file) const
    return result;
 }
 
-bool ossimDemUtil::isSrcFile(const ossimFilename& file) const
+bool ossimElevUtil::isSrcFile(const ossimFilename& file) const
 {
    bool result = false;
    ossimString ext = file.ext();
@@ -2507,7 +2562,7 @@ bool ossimDemUtil::isSrcFile(const ossimFilename& file) const
    return result;
 }
 
-bool ossimDemUtil::scaleToEightBit() const
+bool ossimElevUtil::scaleToEightBit() const
 {
    bool result = false;
    if ( m_operation == OSSIM_DEM_OP_COLOR_RELIEF ) // Always 8 bit...
@@ -2525,9 +2580,9 @@ bool ossimDemUtil::scaleToEightBit() const
    return result;
 }
 
-void  ossimDemUtil::initializeSrcKwl()
+void  ossimElevUtil::initializeSrcKwl()
 {
-   static const char MODULE[] = "ossimDemUtil::initializeSrcKwl";
+   static const char MODULE[] = "ossimElevUtil::initializeSrcKwl";
    if ( traceDebug() )
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -2538,6 +2593,7 @@ void  ossimDemUtil::initializeSrcKwl()
    if ( lookup )
    {
       m_srcKwl = new ossimKeywordlist();
+      m_srcKwl->setExpandEnvVarsFlag(true);
       if ( m_srcKwl->addFile(lookup) == false )
       {
          m_srcKwl = 0;
@@ -2560,7 +2616,7 @@ void  ossimDemUtil::initializeSrcKwl()
    }
 }
 
-ossim_uint32 ossimDemUtil::getNumberOfInputs() const
+ossim_uint32 ossimElevUtil::getNumberOfInputs() const
 {
    ossim_uint32 result = 0;
    if ( m_kwl.valid() )
@@ -2575,4 +2631,54 @@ ossim_uint32 ossimDemUtil::getNumberOfInputs() const
       result += m_srcKwl->numberOf(IMG_KW);
    }
    return result;
+}
+
+ossimElevUtil::ossimDemOutputProjection ossimElevUtil::getOutputProjectionType() const
+{
+   ossimDemOutputProjection result = ossimElevUtil::OSSIM_DEM_PROJ_UNKNOWN;
+   const char* op  = m_kwl->find(ossimKeywordNames::PROJECTION_KW);
+   if ( op )
+   {
+      ossimString os = op;
+      os.downcase();
+      if (os == "geo")
+      {
+         result = ossimElevUtil::OSSIM_DEM_PROJ_GEO;
+      }
+      else if (os == "geo-scaled")
+      {
+         result = ossimElevUtil::OSSIM_DEM_PROJ_GEO_SCALED;
+      }
+      else if ( os == "input" )
+      {
+         result = ossimElevUtil::OSSIM_DEM_PROJ_INPUT;
+      }
+      else if ( (os == "utm") || (os == "ossimutmprojection") )
+      {
+         result = ossimElevUtil::OSSIM_DEM_PROJ_UTM;
+      }
+   }
+   return result;
+}
+
+void ossimElevUtil::usage(ossimArgumentParser& ap)
+{
+   // Add global usage options.
+   ossimInit::instance()->addOptions(ap);
+   
+   // Set app name.
+   ap.getApplicationUsage()->setApplicationName(ap.getApplicationName());
+
+   // Add options.
+   addArguments(ap);
+   
+   // Write usage.
+   ap.getApplicationUsage()->write(ossimNotify(ossimNotifyLevel_INFO));
+
+   // Print the valid writer types.
+   ossimNotify(ossimNotifyLevel_NOTICE)
+      << "\nValid output writer types for \"-w\" or \"--writer\" option:\n\n";
+
+   ossimImageWriterFactoryRegistry::instance()->
+      printImageTypeList( ossimNotify(ossimNotifyLevel_NOTICE) );
 }

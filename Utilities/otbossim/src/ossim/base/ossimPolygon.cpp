@@ -1,7 +1,5 @@
 //*****************************************************************************
-// FILE: ossimPolygon.cc
-//
-// Copyright (C) 2001 ImageLinks, Inc.
+// FILE: ossimPolygon.cpp
 //
 // License:  LGPL
 //
@@ -12,12 +10,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimPolygon.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
-
-#include <algorithm>
-#include <iterator>
-#include <sstream>
-#include <iterator>
+//  $Id: ossimPolygon.cpp 19682 2011-05-31 14:21:20Z dburken $
 
 #include <ossim/base/ossimPolygon.h>
 #include <ossim/base/ossimLine.h>
@@ -26,6 +19,10 @@
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimPolyArea2d.h>
 #include <ossim/base/ossimString.h>
+#include <algorithm>
+#include <iterator>
+#include <sstream>
+#include <iterator>
 
 static const char* NUMBER_VERTICES_KW = "number_vertices";
 static const char* VERTEX_ORDER_KW    = "order";
@@ -36,16 +33,17 @@ static const int RECT_RIGHT_EDGE  = 2;
 static const int RECT_BOTTOM_EDGE = 3;
 
 ossimPolygon::ossimPolygon()
-   :theVertexList(),
-    theCurrentVertex(0),
-    theOrderingType(OSSIM_VERTEX_ORDER_UNKNOWN)
+   : theOrderingType(OSSIM_VERTEX_ORDER_UNKNOWN),
+    theVertexList(),
+    theCurrentVertex(0)
+   
 {}
 
 ossimPolygon::ossimPolygon(const vector<ossimIpt>& polygon)
-   :
+   :theOrderingType(OSSIM_VERTEX_ORDER_UNKNOWN),
    theVertexList(polygon.size()),
-   theCurrentVertex(0),
-   theOrderingType(OSSIM_VERTEX_ORDER_UNKNOWN)
+   theCurrentVertex(0)
+   
 {
    // Assign std::vector<ossimIpt> list to std::vector<ossimDpt> theVertexList.
    for (std::vector<ossimIpt>::size_type i = 0; i < polygon.size(); ++i)
@@ -55,9 +53,9 @@ ossimPolygon::ossimPolygon(const vector<ossimIpt>& polygon)
 }
 
 ossimPolygon::ossimPolygon(const vector<ossimDpt>& polygon)
-   :theVertexList(polygon),
-    theCurrentVertex(0),
-    theOrderingType(OSSIM_VERTEX_ORDER_UNKNOWN)
+   :theOrderingType(OSSIM_VERTEX_ORDER_UNKNOWN),
+   theVertexList(polygon),
+    theCurrentVertex(0)
 {
 }
 
@@ -66,8 +64,9 @@ ossimPolygon::ossimPolygon(const vector<ossimDpt>& polygon)
 //  
 //*****************************************************************************
 ossimPolygon::ossimPolygon(int numVertices, const ossimDpt* v)
-   : theCurrentVertex(0),
-     theOrderingType(OSSIM_VERTEX_ORDER_UNKNOWN)
+   : theOrderingType(OSSIM_VERTEX_ORDER_UNKNOWN),
+     theCurrentVertex(0)
+     
 {
    theVertexList.insert(theVertexList.begin(),
                         v, v+numVertices);
@@ -94,9 +93,10 @@ ossimPolygon::ossimPolygon(ossimDpt v1,
                            ossimDpt v2,
                            ossimDpt v3,
                            ossimDpt v4)
-   : theVertexList(4),
-     theCurrentVertex(0),
-     theOrderingType(OSSIM_VERTEX_ORDER_UNKNOWN)
+   : theOrderingType(OSSIM_VERTEX_ORDER_UNKNOWN),
+     theVertexList(4),
+     theCurrentVertex(0)
+     
 {
    theVertexList[0] = v1;
    theVertexList[1] = v2;
@@ -105,9 +105,9 @@ ossimPolygon::ossimPolygon(ossimDpt v1,
 }
 
 ossimPolygon::ossimPolygon(const ossimIrect& rect)
-   : theVertexList(4),
-     theCurrentVertex(0),
-     theOrderingType(OSSIM_CLOCKWISE_ORDER)
+: theOrderingType(OSSIM_CLOCKWISE_ORDER),
+  theVertexList(4),
+  theCurrentVertex(0)
 {
    theVertexList[0] = rect.ul();
    theVertexList[1] = rect.ur();
@@ -116,9 +116,9 @@ ossimPolygon::ossimPolygon(const ossimIrect& rect)
 }
 
 ossimPolygon::ossimPolygon(const ossimDrect& rect)
-   : theVertexList(4),
-     theCurrentVertex(0),
-     theOrderingType(OSSIM_CLOCKWISE_ORDER)
+: theOrderingType(OSSIM_CLOCKWISE_ORDER),
+theVertexList(4),
+theCurrentVertex(0)
 {
    theVertexList[0] = rect.ul();
    theVertexList[1] = rect.ur();
@@ -136,6 +136,9 @@ ossimPolygon::~ossimPolygon()
 }
 
 
+//*************************************************************************************************
+//! Returns polygon area. Negative indicates CW ordering of vertices (in right-handed coordinates
+//*************************************************************************************************
 double ossimPolygon::area()const
 {
    double area = 0;
@@ -203,7 +206,7 @@ ossimDpt ossimPolygon::midPoint()const
    }
    else
    {
-      for(i = 0; i < upper; ++upper)
+      for(i = 0; i < upper; ++i)
       {
          result.x+=theVertexList[i].x;
          result.y+=theVertexList[i].y;
@@ -232,30 +235,30 @@ bool ossimPolygon::hasNans()const
 }
 
 void ossimPolygon::getIntegerBounds(ossim_int32& minX,
-                                    ossim_int32& minY,
-                                    ossim_int32& maxX,
-                                    ossim_int32& maxY)const
+   ossim_int32& minY,
+   ossim_int32& maxX,
+   ossim_int32& maxY)const
 {
    ossim_int32 npoly = (ossim_int32)theVertexList.size();
    int i = 0;
-   
+
    if(npoly)
    {
       minX = (ossim_int32)floor(theVertexList[0].x);
       maxX = (ossim_int32)ceil(theVertexList[0].x);
       minY = (ossim_int32)floor(theVertexList[0].y);
       maxY = (ossim_int32)ceil(theVertexList[0].y);
-      
+
       for(i =1; i < npoly; ++i)
       {
          minX = std::min((ossim_int32)floor(theVertexList[i].x),
-                         (ossim_int32)minX);
+            (ossim_int32)minX);
          maxX = std::max((ossim_int32)ceil(theVertexList[i].x),
-                         (ossim_int32)maxX);
+            (ossim_int32)maxX);
          minY = std::min((ossim_int32)floor(theVertexList[i].y),
-                         (ossim_int32)minY);
+            (ossim_int32)minY);
          maxY = std::max((ossim_int32)ceil(theVertexList[i].y),
-                         (ossim_int32)maxY);
+            (ossim_int32)maxY);
       }
    }
    else
@@ -264,6 +267,38 @@ void ossimPolygon::getIntegerBounds(ossim_int32& minX,
       minY = OSSIM_INT_NAN;
       maxX = OSSIM_INT_NAN;
       maxY = OSSIM_INT_NAN;
+   }
+}
+
+void ossimPolygon::getFloatBounds(ossim_float64& minX,
+                                  ossim_float64& minY,
+                                  ossim_float64& maxX,
+                                  ossim_float64& maxY) const
+{
+   ossim_int32 npoly = (ossim_int32)theVertexList.size();
+   int i = 0;
+
+   if(npoly)
+   {
+      minX = floor(theVertexList[0].x);
+      maxX = ceil(theVertexList[0].x);
+      minY = floor(theVertexList[0].y);
+      maxY = ceil(theVertexList[0].y);
+
+      for(i =1; i < npoly; ++i)
+      {
+         minX = std::min<double>(floor(theVertexList[i].x), minX);
+         maxX = std::max<double>(ceil(theVertexList[i].x),  maxX);
+         minY = std::min<double>(floor(theVertexList[i].y), minY);
+         maxY = std::max<double>(ceil(theVertexList[i].y),  maxY);
+      }
+   }
+   else
+   {
+      minX = ossim::nan();
+      minY = ossim::nan();
+      maxX = ossim::nan();
+      maxY = ossim::nan();
    }
 }
 
@@ -371,6 +406,39 @@ bool ossimPolygon::clipLineSegment(ossimDpt& P, ossimDpt& Q) const
    return intersected;
 }
 
+/**
+* METHOD: isRectWithin()
+* Returns true if all the corner points of the given rect fit within.
+*/
+bool ossimPolygon::isRectWithin(const ossimIrect &rect) const 
+{
+    if(isPointWithin(rect.ul()) &&
+       isPointWithin(rect.ur()) &&
+       isPointWithin(rect.ll()) &&
+       isPointWithin(rect.lr())) {
+       	return true;
+    }
+    return false;
+}
+/**
+* METHOD: isPolyWithin()
+* Returns true if all the vertices of the given polygon fit within.
+*/
+bool ossimPolygon::isPolyWithin(const ossimPolygon &poly) const 
+{
+   bool ret=false;
+   int numvertex=poly.getNumberOfVertices();
+   if(getNumberOfVertices()>1 && numvertex) {
+      ret=true;
+      for(int v=0;v<numvertex;v++) {
+         if(!isPointWithin(poly[v])) {
+            ret=false;
+            break;
+         }
+      }
+   }
+   return ret;
+}
 
 //*****************************************************************************
 //  METHOD: ossimPolygon::pointWithin(const ossimDpt& point)
@@ -765,8 +833,8 @@ bool ossimPolygon::loadState(const ossimKeywordlist& kwl,
       ossimString v = kwl.find(prefix, (ossimString("v")+ossimString::toString(i)).c_str());
       v = v.trim();
 
-      istringstream vStream(v);
-      vStream >> x >> y;
+      istringstream vStream(v.string());
+      vStream >> x.string() >> y.string();
       theVertexList.push_back(ossimDpt(x.toDouble(),y.toDouble()));
    }
 
@@ -906,8 +974,73 @@ void ossimPolygon::getMinimumBoundingRect(ossimPolygon& minRect) const
    minRect.addPoint(v3);
    minRect.addPoint(v4);
 
+   // Make sure we are always returning a positive clockwise area.
+   minRect.checkOrdering();
+   if(minRect.getOrdering()==OSSIM_COUNTERCLOCKWISE_ORDER)
+      minRect.reverseOrder();
    return;
 }
+
+/**
+* METHOD: remove() 
+* Removes the vertex from the polygon.
+*/
+void ossimPolygon::removeVertex(int vertex)
+{
+   int numvertices=getNumberOfVertices();
+   if(vertex>numvertices) {
+      return;
+   } else {
+      vector<ossimDpt>::iterator it;
+      int v=0;
+      for(it=theVertexList.begin();it!=theVertexList.end();it++) {
+         if(v++==vertex) {
+            theVertexList.erase(it);
+            break;
+         }
+      }
+   }
+}
+
+/**
+* METHOD: removeSmallestContributingVertex() 
+* Removes the vertex that contributes the smallest area to the polygon.
+*/
+void ossimPolygon::removeSmallestContributingVertex()
+{
+   unsigned int numvertices=getNumberOfVertices();
+   if (!numvertices)
+      return;
+
+   int smallest_vertex=-1,n1,n2;
+   double smallest_area=1.0/DBL_EPSILON;
+   ossimPolygon tmp;
+
+   for(unsigned int v=0;v<numvertices;v++) {
+      tmp.clear();
+      if(v==0) {
+         n1=numvertices-1;
+         n2=1;
+      } else if(v==numvertices-1) {
+         n1=numvertices-2;
+         n2=0;
+      } else {
+         n1=v-1;
+         n2=v+1;
+      }
+
+      tmp.addPoint(theVertexList[n1]);
+      tmp.addPoint(theVertexList[v]);
+      tmp.addPoint(theVertexList[n2]);
+
+      if(fabs(tmp.area())<smallest_area) {
+         smallest_area=fabs(tmp.area());
+         smallest_vertex=v;
+      }
+   }
+   removeVertex(smallest_vertex);
+}
+
 
 ossimDpt& ossimPolygon::operator[](int index)
 {
@@ -937,6 +1070,16 @@ void ossimPolygon::getBoundingRect(ossimIrect& rect)const
    ossim_int32 maxY;
    getIntegerBounds(minX, minY, maxX, maxY);
    rect = ossimIrect(minX, minY, maxX, maxY);
+}
+
+void ossimPolygon::getBoundingRect(ossimDrect& rect)const
+{
+   ossim_float64 minX;
+   ossim_float64 minY;
+   ossim_float64 maxX;
+   ossim_float64 maxY;
+   getFloatBounds(minX, minY, maxX, maxY);
+   rect = ossimDrect(minX, minY, maxX, maxY);
 }
 
 void ossimPolygon::clear()
@@ -999,4 +1142,125 @@ ostream& operator<<(ostream& os, const ossimPolygon& polygon)
    polygon.print(os);
    return os;
 }
+
+/**
+* METHOD: getCentroid() 
+* Assigns the ossimDpt centroid the polygon.
+* Warning: centroid is not guaranteed to be inside the polygon!
+*/
+void ossimPolygon::getCentroid(ossimDpt &centroid) const
+{
+   int numpts = (int)theVertexList.size();
+   unsigned int next;
+   double area=0,parea;
+
+   centroid=ossimDpt(0,0);
+   for(int i=0;i<numpts;i++) {
+      if(i<numpts-1) {
+         next=i+1;
+      } else {
+         next=0;
+      }
+      parea=theVertexList[i].x*theVertexList[next].y-theVertexList[next].x*theVertexList[i].y;
+      area+=parea;
+      centroid.x+=(theVertexList[i].x+theVertexList[next].x)*parea;
+      centroid.y+=(theVertexList[i].y+theVertexList[next].y)*parea;
+   }
+   area=area/2.0;
+   centroid=centroid/(area*6.0);
+}
+
+/**
+* METHOD: fitCircleInsideVertex() 
+* Assigns destPt the point that fits a circle of given radius inside the polygon vertex.
+* Warning: destPt is not guaranteed to be inside the polygon!
+* (you may not be able to fit a circle of the given radius inside the polygon)
+*/
+void ossimPolygon::fitCircleInsideVertex(ossimDpt &destPt, unsigned int vertex, double radius) const
+{
+   ossim_uint32 num_vertices=(int)theVertexList.size(),n1,n2;
+   ossimDpt side1,side2,bisection,currpt;
+   double length_out,side1_side2_cross;
+   bool concave=true;
+
+   // don't be doing that dude.
+   if(num_vertices<3 || vertex>=num_vertices) {
+      destPt=ossimDpt(0,0);
+      return;
+   }
+ 
+   if(vertex==0) {
+      n1=num_vertices-1;
+      n2=vertex+1;
+   } else if(vertex==num_vertices-1) {
+      n1=num_vertices-2;
+      n2=0;
+   } else {
+      n1=vertex-1;
+      n2=vertex+1;
+   }
+
+   currpt=theVertexList[vertex];
+   // get the side vectors
+   side1=theVertexList[n1]-currpt;
+   side2=theVertexList[n2]-currpt;
+
+   // normalize the sides
+   side1 = side1/side1.length();
+   side2 = side2/side2.length();
+
+   side1_side2_cross=side1.x*side2.y-side2.x*side1.y;
+
+   checkOrdering();
+   if(getOrdering()==OSSIM_COUNTERCLOCKWISE_ORDER) {
+      if(side1_side2_cross<0)
+         concave=false;
+   } else { //clockwise
+      if(side1_side2_cross>0)
+         concave=false;
+   }
+
+   bisection = side1+side2;
+   bisection = bisection/bisection.length();
+
+   if(concave) {
+      bisection=bisection*-1.0;
+      length_out=radius;
+   } else {
+      double cos_theta=(side1.x*bisection.x+side1.y*bisection.y);
+      length_out=radius/sqrt(1-cos_theta*cos_theta);
+   }
+   destPt=ossimDpt(currpt+bisection*length_out);
+   return;
+}
+
+
+/**
+//! Shrinks this polygon by radius. Effectively, circles of given radius are placed inside 
+//! the vertices just tangent to the polygon edges (via fitCircleInsideVertex()). The new
+//! polygon's vertices will be the center of these circles. Return true if success. 
+*/
+bool ossimPolygon::shrink(ossimPolygon &dest, double inset) const 
+{
+   int numpts = (int) theVertexList.size();
+   ossimDpt pt;
+   
+   //don't let people shrink themselves, that isn't going to work
+   if(&dest==this) return false;
+
+   dest.clear();
+   for(int i=0;i<numpts;i++) {
+      fitCircleInsideVertex(pt,i,inset);
+      dest.addPoint(pt);
+   }
+   if(isPolyWithin(dest)) {
+      return true;
+   } else {
+      //return an empty polygon
+      dest=ossimPolygon();
+      return false;
+   }
+}
+
+
 

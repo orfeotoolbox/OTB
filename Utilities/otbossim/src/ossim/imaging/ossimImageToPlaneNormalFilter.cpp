@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageToPlaneNormalFilter.cpp 17932 2010-08-19 20:34:35Z dburken $
+// $Id: ossimImageToPlaneNormalFilter.cpp 19198 2011-03-23 16:23:06Z dburken $
 #include <ossim/imaging/ossimImageToPlaneNormalFilter.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
@@ -88,8 +88,8 @@ ossimRefPtr<ossimImageData> ossimImageToPlaneNormalFilter::getTile(
 
       if(!scaleFactor.hasNans())
       {
-         theXScale /= scaleFactor.x;
-         theYScale /= scaleFactor.y;
+         theXScale *= scaleFactor.x;
+         theYScale *= scaleFactor.y;
       }
    }
 
@@ -121,8 +121,8 @@ void ossimImageToPlaneNormalFilter::initialize()
             ossimDpt pt = geom->getMetersPerPixel();
             if(!pt.hasNans())
             {
-               theXScale = pt.x;
-               theYScale = pt.y;
+               theXScale = 1.0/pt.x;
+               theYScale = 1.0/pt.y;
             }
          }
       }
@@ -183,115 +183,66 @@ template <class T> void ossimImageToPlaneNormalFilter::computeNormalsTemplate(
    ossimRefPtr<ossimImageData>& inputTile,
    ossimRefPtr<ossimImageData>& outputTile)
 {
-   T np = (T)inputTile->getNullPix(0);
-   double outNp1 = outputTile->getNullPix(0);
-   double outNp2 = outputTile->getNullPix(1);
-   double outNp3 = outputTile->getNullPix(2);
+   T inputNull = (T)inputTile->getNullPix(0);
+   T* inbuf = (T*)inputTile->getBuf();
 
-   double* outX = (double*)outputTile->getBuf(0);
-   double* outY = (double*)outputTile->getBuf(1);
-   double* outZ = (double*)outputTile->getBuf(2);
-   ossim_int32 y = 0;
-   ossim_int32 x = 0;
-   ossim_int32 iw = inputTile->getWidth();
-   ossim_int32 ow = outputTile->getWidth();
-   ossim_int32 oh = outputTile->getHeight();
-   T* row1 = (T*)inputTile->getBuf();
-   T* row2 = row1+iw;
-   T* row3 = row2+iw;
-   ossimColumnVector3d pX;
-   ossimColumnVector3d pY;
-   ossimColumnVector3d leftX;
-   ossimColumnVector3d rightX;
-   ossimColumnVector3d topY;
-   ossimColumnVector3d bottomY;
-
+   double* normX = (double*)outputTile->getBuf(0);
+   double* normY = (double*)outputTile->getBuf(1);
+   double* normZ = (double*)outputTile->getBuf(2);
+   ossim_int32 inbuf_width = inputTile->getWidth();
+   ossim_int32 normbuf_width = outputTile->getWidth();
+   ossim_int32 normbuf_height = outputTile->getHeight();
    ossimColumnVector3d normal;
 
-
-   for(y = 0; y < oh; ++y)
+   for (ossim_int32 y=0; y<normbuf_height; y++)
    {
-      for(x = 0; x < ow; ++x)
+      // Establish offsets into the image and output normals buffers given row:
+      ossim_uint32 n = y*normbuf_width;
+      ossim_uint32 i = (y+1)*inbuf_width + 1;
+      
+      // Loop to compute the gradient (normal) vector [dh/dx, dh/dy, 1]:
+      for (ossim_int32 x=0; x<normbuf_width; x++)
       {
-         if((row1[0] == np)||
-            (row1[1] == np)||
-            (row1[2] == np)||
-            (row2[0] == np)||
-            (row2[1] == np)||
-            (row2[2] == np)||
-            (row3[0] == np)||
-            (row3[1] == np)||
-            (row3[2] == np))
+         // Default in case of null inputs is a flat earth:
+         normal[0] = 0;
+         normal[1] = 0;
+         normal[2] = 1.0;
+
+         // Compute the x-direction differential:
+         if (inbuf[i+1] != inputNull)
          {
-            *outX = outNp1;
-            *outY = outNp2;
-            *outZ = outNp3;
+            if (inbuf[i-1] != inputNull)
+               normal[0] = theXScale*theSmoothnessFactor*(inbuf[i+1] - inbuf[i-1]) / 2.0;
+            else if (inbuf[i] != inputNull)
+               normal[0] = theXScale*theSmoothnessFactor*(inbuf[i+1] - inbuf[i]);
          }
-         else
+         else if ((inbuf[i] != inputNull) && (inbuf[i-1] != inputNull))
          {
-//             dhX = ((double)row1[2] - (double)row1[0])+
-//                   ((double)row2[2] - (double)row2[0])+
-//                   ((double)row3[2]  - (double)row3[0]);
-
-//             dhY = ((double)row1[0] - (double)row3[0])+
-//                   ((double)row1[1] - (double)row3[1])+
-//                   ((double)row1[2] - (double)row3[2]);
-
-//             dhX = (-(double)row1[2] + (double)row1[0])+
-//                   (-(double)row2[2] + (double)row2[0])+
-//                   (-(double)row3[2] + (double)row3[0]);
-
-//             dhY = (-(double)row1[0] + (double)row3[0])+
-//                   (-(double)row1[1] + (double)row3[1])+
-//                   (-(double)row1[2] + (double)row3[2]);
-
-            leftX[0] = -theXScale*theSmoothnessFactor;
-            leftX[1] = 0.0;
-            leftX[2] = ((double)row1[0] + (double)row2[0]+ (double)row3[0])/3.0;
-
-            rightX[0] = theXScale*theSmoothnessFactor;
-            rightX[1] = 0.0;
-            rightX[2] = ((double)row1[2] + (double)row2[2]+ (double)row3[2])/3.0;
-
-            topY[0]   = 0.0;
-            topY[1]   = theYScale*theSmoothnessFactor;
-            topY[2]   = ((double)row1[0] + (double)row1[1] + (double)row1[2])/3.0;
-
-            bottomY[0]   = 0.0;
-            bottomY[1]   = -theYScale*theSmoothnessFactor;
-            bottomY[2]   = ((double)row3[0] + (double)row3[1] + (double)row3[2])/3.0;
-
-            pX = (rightX - leftX).unit();
-            pY = (topY - bottomY).unit();
-//             pX[0] = theXScale*theSmoothnessFactor;
-//             pX[1] = 0.0;
-//             pX[2] = dhX;
-
-//             pY[0] = 0.0;
-//             pY[1] = theYScale*theSmoothnessFactor;
-//             pY[2] = dhY;
-
-//             pX = pX.unit();
-//             pY = pY.unit();
-            normal = pX.cross(pY).unit();
-
-            normal = normal.unit();
-            *outX = normal[0];
-            *outY = normal[1];
-            *outZ = normal[2];
+            normal[0] = theXScale*theSmoothnessFactor*(inbuf[i] - inbuf[i-1]);
          }
 
-         ++outX;
-         ++outZ;
-         ++outY;
+         // Compute the y-direction differential:
+         if (inbuf[i+inbuf_width] != inputNull)
+         {
+            if (inbuf[i-inbuf_width] != inputNull)
+               normal[1] = theYScale*theSmoothnessFactor*(inbuf[i+inbuf_width] - inbuf[i-inbuf_width]) / 2.0;
+            else if (inbuf[i] != inputNull)
+               normal[1] = theYScale*theSmoothnessFactor*(inbuf[i+inbuf_width] - inbuf[i]);
+         }
+         else if ((inbuf[i] != inputNull) && (inbuf[i-inbuf_width] != inputNull))
+         {
+            normal[1] = theYScale*theSmoothnessFactor*(inbuf[i] - inbuf[i-inbuf_width]);
+         }
 
-         ++row1;
-         ++row2;
-         ++row3;
+         // Stuff the normalized gradient vector into the output buffers:
+         normal = normal.unit();
+         normX[n] = normal[0];
+         normY[n] = normal[1];
+         normZ[n] = normal[2];
+         
+         ++n;
+         ++i;
       }
-      row1+=2;
-      row2+=2;
-      row3+=2;
    }
 }
 

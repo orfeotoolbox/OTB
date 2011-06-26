@@ -12,11 +12,12 @@
 // derive from.
 //
 //*******************************************************************
-//  $Id: ossimImageHandler.cpp 18046 2010-09-06 14:23:47Z dburken $
+//  $Id: ossimImageHandler.cpp 19723 2011-06-06 21:03:49Z dburken $
 
 #include <algorithm>
 
 #include <ossim/imaging/ossimImageHandler.h>
+#include <ossim/base/ossimBooleanProperty.h>
 #include <ossim/base/ossimException.h>
 #include <ossim/base/ossimContainerEvent.h>
 #include <ossim/base/ossimEventIds.h>
@@ -50,10 +51,14 @@ RTTI_DEF1(ossimImageHandler, "ossimImageHandler", ossimImageSource)
 static ossimTrace traceDebug("ossimImageHandler:debug");
 
 // Property keywords.
+static const char HAS_LUT_KW[]                 = "has_lut";
+static const char OPEN_OVERVIEW_FLAG_KW[]      = "open_overview_flag";
+static const char START_RES_LEVEL_KW[]         = "start_res_level";
 static const char SUPPLEMENTARY_DIRECTORY_KW[] = "supplementary_directory";
+static const char VALID_VERTICES_FILE_KW[]     = "valid_vertices_file";
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimImageHandler.cpp 18046 2010-09-06 14:23:47Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimImageHandler.cpp 19723 2011-06-06 21:03:49Z dburken $";
 #endif
 
 // GARRETT! All of the decimation factors are scattered throughout. We want to fold that into 
@@ -68,10 +73,14 @@ theImageFile(ossimFilename::NIL),
 theOverviewFile(ossimFilename::NIL),
 theSupplementaryDirectory(ossimFilename::NIL),
 theOverview(0),
-//theSubImageOffset(0, 0),
 theValidImageVertices(0),
 theMetaData(),
-theStartingResLevel(0)
+theGeometry(),
+theLut(0),
+theDecimationFactors(0),
+theImageID(""),
+theStartingResLevel(0),
+theOpenOverviewFlag(true)
 {
    if (traceDebug())
    {
@@ -118,6 +127,14 @@ bool ossimImageHandler::saveState(ossimKeywordlist& kwl,
            theImageFile.c_str(),
            true);
    kwl.add(prefix,
+           HAS_LUT_KW,
+           (theLut.valid()?"true":"false"),
+           true);
+   kwl.add(prefix,
+           ossimKeywordNames::IMAGE_ID_KW,
+           theImageID,
+           true);
+   kwl.add(prefix,
            ossimKeywordNames::OVERVIEW_FILE_KW,
            theOverviewFile.c_str(),
            true);
@@ -126,7 +143,8 @@ bool ossimImageHandler::saveState(ossimKeywordlist& kwl,
            theSupplementaryDirectory.c_str(),
            true);
 
-   kwl.add(prefix, "start_res_level", theStartingResLevel, true);
+   kwl.add(prefix, START_RES_LEVEL_KW, theStartingResLevel, true);
+   kwl.add(prefix, OPEN_OVERVIEW_FLAG_KW, (theOpenOverviewFlag?"1":"0"), true);
    
    return true;
 }
@@ -209,17 +227,24 @@ bool ossimImageHandler::loadState(const ossimKeywordlist& kwl,
    }
    
    // Check for an valid image vetices file.
-   lookup = kwl.find(prefix, "valid_vertices_file");
+   lookup = kwl.find(prefix, VALID_VERTICES_FILE_KW);
    if (lookup)
    {
       initVertices(lookup);
    }
 
    // Starting resolution level.
-   lookup = kwl.find(prefix, "start_res_level");
+   lookup = kwl.find(prefix, START_RES_LEVEL_KW);
    if (lookup)
    {
       theStartingResLevel = ossimString(lookup).toUInt32();
+   }
+
+   // Open overview flag.
+   lookup = kwl.find(prefix, OPEN_OVERVIEW_FLAG_KW);
+   if (lookup)
+   {
+      setOpenOverviewFlag( ossimString(lookup).toBool() );
    }
 
    // The supplementary directory for finding the overview
@@ -235,6 +260,9 @@ bool ossimImageHandler::loadState(const ossimKeywordlist& kwl,
    }
    theInputListIsFixedFlag = true;
    
+   // Read image id if present:
+   theImageID = kwl.find(prefix, ossimKeywordNames::IMAGE_ID_KW);
+
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -781,20 +809,22 @@ bool ossimImageHandler::openOverview(const ossimFilename& overview_file)
 
    if (overview_file != theImageFile) // Make sure we don't open ourselves.
    {
-      result = true;
-      
       //---
       // Get the number of level before the call to opening the overview so
       // the overview can be told what it's starting res level is.
       //---
-      ossim_uint32 overviewStartingResLevel =
-         getNumberOfDecimationLevels();
-      
+      ossim_uint32 overviewStartingResLevel = getNumberOfDecimationLevels();
+
+      //---
       // Try to open:
-      theOverview = ossimImageHandlerRegistry::instance()->open(overview_file);
+      // False argument to open tell the overview reader not to try to open overviews.
+      //---
+      theOverview = ossimImageHandlerRegistry::instance()->open(overview_file, false);
 
       if (theOverview.valid())
       {
+         result = true;
+         
          //---
          // Set the owner in case the overview reader needs to get something
          // from the it like min/max/null.
@@ -1194,7 +1224,10 @@ ossim_uint32 ossimImageHandler::getNumberOfEntries()const
 void ossimImageHandler::completeOpen()
 {
    loadMetaData();
-   openOverview();
+   if ( theOpenOverviewFlag )
+   {
+      openOverview();
+   }
    establishDecimationFactors();
    openValidVertices();
 }
@@ -1230,7 +1263,13 @@ void ossimImageHandler::setSupplementaryDirectory(const ossimFilename& dir)
    // A change in supplementary directory presents an opportunity to find the OVR that could not be
    // opened previously, as well as other support data items:
    if (!theOverview.valid())
+   {
+      if (theDecimationFactors.size() > 0)
+      {
+        theDecimationFactors.clear();
+      }
       completeOpen();
+   }
 }
 
 const ossimFilename& ossimImageHandler::getSupplementaryDirectory()const
@@ -1240,13 +1279,20 @@ const ossimFilename& ossimImageHandler::getSupplementaryDirectory()const
 
 void ossimImageHandler::setProperty(ossimRefPtr<ossimProperty> property)
 {
-   if(property->getName() == ossimKeywordNames::ENTRY_KW)
+   if ( property.valid() )
    {
-      setCurrentEntry(property->valueToString().toUInt32());
-   }
-   else
-   {
-      ossimImageSource::setProperty(property);
+      if(property->getName() == ossimKeywordNames::ENTRY_KW)
+      {
+         setCurrentEntry(property->valueToString().toUInt32());
+      }
+      else if ( property->getName() == OPEN_OVERVIEW_FLAG_KW )
+      {
+         setOpenOverviewFlag( property->valueToString().toBool() );
+      }
+      else
+      {
+         ossimImageSource::setProperty(property);
+      }
    }
 }
 
@@ -1332,6 +1378,12 @@ ossimRefPtr<ossimProperty> ossimImageHandler::getProperty(const ossimString& nam
       
       return filenameProp;
    }
+   if ( name == OPEN_OVERVIEW_FLAG_KW)
+   {
+      ossimRefPtr<ossimProperty> result =
+         new ossimBooleanProperty(ossimString(OPEN_OVERVIEW_FLAG_KW), theOpenOverviewFlag); 
+      return result;
+   }
    
    return ossimImageSource::getProperty(name);
 }
@@ -1340,6 +1392,7 @@ void ossimImageHandler::getPropertyNames(std::vector<ossimString>& propertyNames
 {
    ossimImageSource::getPropertyNames(propertyNames);
    propertyNames.push_back(ossimKeywordNames::ENTRY_KW);
+   propertyNames.push_back(OPEN_OVERVIEW_FLAG_KW);
 }
 
 ossimFilename ossimImageHandler::getFilenameWithThisExtension(
@@ -1351,8 +1404,9 @@ ossimFilename ossimImageHandler::getFilenameWithThisExtension(
 
    // If the supplementary directory is set, find the extension
    // at that location instead of at the default.
-   if ( theSupplementaryDirectory.empty() == false )
+   if ( theSupplementaryDirectory.size() )
    {
+      
       ossimString drivePart;
       ossimString pathPart;
       ossimString filePart;
@@ -1410,6 +1464,11 @@ ossimRefPtr<ossimNBandLutDataObject> ossimImageHandler::getLut()const
    return theLut;
 }
 
+bool ossimImageHandler::hasLut() const
+{
+   return theLut.valid();
+}
+
 ossimFilename ossimImageHandler::createDefaultOverviewFilename() const
 {
    return getFilenameWithThisExtension("ovr");
@@ -1455,6 +1514,18 @@ ossim_uint32 ossimImageHandler::getStartingResLevel() const
 void ossimImageHandler::setStartingResLevel(ossim_uint32 level)
 {
    theStartingResLevel = level;
+}
+
+bool ossimImageHandler::getOpenOverviewFlag() const
+{
+   return theOpenOverviewFlag;
+}
+   
+void ossimImageHandler::setOpenOverviewFlag(bool flag)
+{
+   theOpenOverviewFlag = flag;
+
+   // If false close overview if open??? (drb)
 }
 
 void ossimImageHandler::initImageParameters(ossimImageGeometry* geom) const

@@ -15,7 +15,7 @@
 // $Id
 
 #ifndef ossimNitfAimidbTag_HEADER
-#define ossimNitfAimidbTag_HEADER
+#define ossimNitfAimidbTag_HEADER 1
 
 #include <ossim/support_data/ossimNitfRegisteredTag.h>
 
@@ -54,9 +54,9 @@ public:
 
    /**
     * @brief Method to return tag name.
-    * @return "AIMIDB" as an ossimString.
+    * @return "AIMIDB" as an std::string.
     */
-   virtual ossimString getRegisterTagName()const;
+   virtual std::string getRegisterTagName()const;
 
    /** @brief Method to parse data from stream. */
    virtual void parseStream(std::istream& in);

@@ -6,7 +6,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimApplanixUtmModel.cpp 16104 2009-12-17 18:09:59Z gpotts $
+//  $Id: ossimApplanixUtmModel.cpp 19682 2011-05-31 14:21:20Z dburken $
 #include <sstream>
 #include <ossim/projection/ossimApplanixUtmModel.h>
 #include <ossim/base/ossimEllipsoid.h>
@@ -26,7 +26,7 @@ static ossimTrace traceDebug("ossimApplanixUtmModel:debug");
 RTTI_DEF1(ossimApplanixUtmModel, "ossimApplanixUtmModel", ossimSensorModel);
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimApplanixUtmModel.cpp 16104 2009-12-17 18:09:59Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimApplanixUtmModel.cpp 19682 2011-05-31 14:21:20Z dburken $";
 #endif
 
 ossimApplanixUtmModel::ossimApplanixUtmModel()
@@ -664,7 +664,7 @@ bool ossimApplanixUtmModel::loadState(const ossimKeywordlist& kwl,
          }
          if(splitString.size() > 3)
          {
-            datumString = splitString[3];
+            datumString = splitString[3].string();
          }
          thePlatformPosition.latd(lat);
          thePlatformPosition.lond(lon);

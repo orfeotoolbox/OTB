@@ -14,7 +14,7 @@
 // $Id
 
 #ifndef ossimNitfEngrdaTag_HEADER
-#define ossimNitfEngrdaTag_HEADER
+#define ossimNitfEngrdaTag_HEADER 1
 
 #include <string>
 #include <vector>
@@ -47,9 +47,9 @@ public:
 
    /**
     * @brief Method to return tag name.
-    * @return "ENGRDA" as an ossimString.
+    * @return "ENGRDA" as a std::string.
     */
-   virtual ossimString getRegisterTagName()const;
+   virtual std::string getRegisterTagName()const;
 
    /** @brief Method to parse data from stream. */
    virtual void parseStream(std::istream& in);

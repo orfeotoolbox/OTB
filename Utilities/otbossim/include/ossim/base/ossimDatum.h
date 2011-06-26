@@ -10,7 +10,7 @@
 // for Geotrans datum.  For more thorough description of each function
 // look at the datum.h file.
 //*******************************************************************
-//  $Id: ossimDatum.h 17932 2010-08-19 20:34:35Z dburken $
+//  $Id: ossimDatum.h 19640 2011-05-25 15:58:00Z oscarkramer $
 #ifndef ossimDatum_HEADER
 #define ossimDatum_HEADER
 #include <ossim/base/ossimConstants.h>
@@ -55,7 +55,7 @@ public:
       {return this == aDatum;}
    virtual const ossimString& code()const{return theCode;}
    virtual const ossimString& name()const{return theName;}
-   virtual ossim_uint32 epsgGcsCode()const{return theEpsgGcsCode;}
+   virtual ossim_uint32 epsgCode()const{return theEpsgCode;}
    virtual const ossimEllipsoid* ellipsoid()const{return theEllipsoid;}
    virtual ossim_float64 sigmaX()const{return theSigmaX;}
    virtual ossim_float64 sigmaY()const{return theSigmaY;}
@@ -75,26 +75,20 @@ public:
    virtual ossim_float64 param7()const=0;
 
    virtual bool isInside(ossim_float64 latitude, ossim_float64 longitude)const
-      {
-         return ((theSouthLatitude <= latitude) &&
-                 (latitude <= theNorthLatitude) &&
-                 (theWestLongitude <= longitude) &&
-                 (longitude <= theEastLongitude));
-      }
+   {
+      return ((theSouthLatitude <= latitude) &&
+              (latitude <= theNorthLatitude) &&
+              (theWestLongitude <= longitude) &&
+              (longitude <= theEastLongitude));
+   }
 
-   bool operator ==(const ossimDatum& rhs)const
-      {
-         return ( (theCode == rhs.theCode)&&
-                  (theName == rhs.theName)&&
-                  (*theEllipsoid == *rhs.theEllipsoid)&&
-                  (theSigmaX == rhs.theSigmaX)&&
-                  (theSigmaY == rhs.theSigmaY)&&
-                  (theSigmaZ == rhs.theSigmaZ)&&
-                  (theWestLongitude == rhs.theWestLongitude)&&
-                  (theEastLongitude == rhs.theEastLongitude)&&
-                  (theSouthLatitude == rhs.theSouthLatitude)&&
-                  (theNorthLatitude == rhs.theNorthLatitude));
-      }
+   bool operator==(const ossimDatum& rhs) const;
+
+   bool operator!=(const ossimDatum& rhs)const
+   {
+      return (!(*this == rhs));
+   }
+
 protected:
    //! Only friend ossimDatumFactory is permitted to delete
    virtual ~ossimDatum(){};
@@ -134,7 +128,7 @@ protected:
 
 private:
    ossimString           theCode;
-   ossim_uint32          theEpsgGcsCode;
+   ossim_uint32          theEpsgCode;
    ossimString           theName;
    const ossimEllipsoid *theEllipsoid;
    

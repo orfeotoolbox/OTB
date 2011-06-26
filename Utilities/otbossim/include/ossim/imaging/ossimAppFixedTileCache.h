@@ -9,7 +9,7 @@
 // Description: This file contains the Application cache algorithm
 //
 //***********************************
-// $Id: ossimAppFixedTileCache.h 17646 2010-06-30 12:51:30Z gpotts $
+// $Id: ossimAppFixedTileCache.h 18421 2010-11-15 13:08:30Z gpotts $
 #ifndef ossimAppFixedTileCache_HEADER
 #define ossimAppFixedTileCache_HEADER
 #include <map>
@@ -110,7 +110,7 @@ protected:
 
    std::map<ossimAppFixedCacheId, ossimFixedTileCache*> theAppCacheMap;
 
-   OpenThreads::ReadWriteMutex theMutex;
+   OpenThreads::Mutex theMutex;
 };
 
 #endif

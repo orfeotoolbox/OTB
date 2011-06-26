@@ -10,7 +10,7 @@
 // Description: Class declaration for ortho-image generator.
 //
 //*************************************************************************
-// $Id: ossimOrthoIgen.h 17815 2010-08-03 13:23:14Z dburken $
+// $Id: ossimOrthoIgen.h 19695 2011-05-31 17:52:24Z dburken $
 
 #ifndef ossimOrthoIgen_HEADER
 #define ossimOrthoIgen_HEADER
@@ -51,7 +51,7 @@ public:
       OSSIM_CENTER_ORIGIN     = 0,
       OSSIM_UPPER_LEFT_ORIGIN = 1
    };
-   typedef std::map<ossimString,ossimString> PropertyMap;
+   typedef std::map<ossimString,ossimString, ossimStringLtstr> PropertyMap;
    
    ossimOrthoIgen();
 

@@ -63,7 +63,7 @@ void feature_class_dictionary( int fc, library_type lib )
    FILE               *out;
    row_type           row;
    float              fval;
-   long int           ival,n;
+   ossim_int32           ival,n;
 
    hidemousecursor();
    time_cursor();

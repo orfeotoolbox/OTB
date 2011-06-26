@@ -8,10 +8,11 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimRectangleCutFilter.cpp 17206 2010-04-25 23:20:40Z dburken $
+// $Id: ossimRectangleCutFilter.cpp 18938 2011-02-22 17:57:10Z gpotts $
 #include <ossim/imaging/ossimRectangleCutFilter.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimNotifyContext.h>
+#include <ossim/base/ossimCommon.h>
 
 static ossimTrace traceDebug("ossimRectangleCutFilter:debug");
 
@@ -255,9 +256,19 @@ bool ossimRectangleCutFilter::loadState(const ossimKeywordlist& kwl,
                                         const char* prefix)
 {
    ossimString newPrefix = prefix;
-   newPrefix+="clip_rect.";
+   
+   ossimString rect = kwl.find(prefix, "rect");
+   if(!rect.empty())
+   {
+      theRectangle.toRect(rect);
+   }
+   else 
+   {
+      newPrefix+="clip_rect.";
+      
+      theRectangle.loadState(kwl, newPrefix.c_str());
+   }
 
-   theRectangle.loadState(kwl, newPrefix.c_str());
    const char* cutType = kwl.find(prefix, "cut_type");
    if(cutType)
    {

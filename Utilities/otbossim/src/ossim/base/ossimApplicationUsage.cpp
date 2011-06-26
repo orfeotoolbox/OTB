@@ -4,7 +4,7 @@
 // OSSIM.
 //
 //-------------------------------------------------------------------------
-// $Id: ossimApplicationUsage.cpp 11955 2007-10-31 16:10:22Z gpotts $
+// $Id: ossimApplicationUsage.cpp 19682 2011-05-31 14:21:20Z dburken $
 
 #include <iostream>
 #include <ossim/base/ossimApplicationUsage.h>
@@ -107,8 +107,8 @@ void ossimApplicationUsage::getFormatedString(ossimString& str, const UsageMap& 
         line.replace(optionPos,citr->first.length(),citr->first);
         
         const ossimString& explanation = citr->second;
-        ossimString::size_type pos = 0;
-        ossimString::size_type offset = 0;
+        std::string::size_type pos = 0;
+        std::string::size_type offset = 0;
         bool firstInLine = true;
         while (pos<explanation.length())
         {
@@ -123,13 +123,13 @@ void ossimApplicationUsage::getFormatedString(ossimString& str, const UsageMap& 
             
             firstInLine = false;
         
-            ossimString::size_type width = ossim::min((ossim_int64)(explanation.length()-pos),
+            std::string::size_type width = ossim::min((ossim_int64)(explanation.length()-pos),
                                                       (ossim_int64)(explanationWidth-offset));
-            ossimString::size_type slashn_pos = explanation.find('\n',pos);
+            std::string::size_type slashn_pos = explanation.find('\n',pos);
             
             unsigned int extraSkip = 0;
             bool concatinated = false;
-            if (slashn_pos!=ossimString::npos)
+            if (slashn_pos!=std::string::npos)
             {
                 if (slashn_pos<pos+width)
                 {

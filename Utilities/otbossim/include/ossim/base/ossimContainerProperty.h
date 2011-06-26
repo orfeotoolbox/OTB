@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimContainerProperty.h 12515 2008-02-27 18:16:15Z dburken $
+// $Id: ossimContainerProperty.h 18405 2010-11-10 20:44:58Z gpotts $
 #ifndef ossimContainerProperty_HEADER
 #define ossimContainerProperty_HEADER
 #include <vector>
@@ -15,6 +15,7 @@
 class OSSIMDLLEXPORT ossimContainerProperty : public ossimProperty
 {
 public:
+   friend class ossimProperty;
    ossimContainerProperty(const ossimString& name=ossimString(""));
    ossimContainerProperty(const ossimContainerProperty& rhs);
    virtual ~ossimContainerProperty();
@@ -46,7 +47,7 @@ public:
    virtual void getPropertyList(
       std::vector<ossimRefPtr<ossimProperty> >& children) const;
    
-   ossimRefPtr<ossimXmlNode> toXml()const;
+   virtual ossimRefPtr<ossimXmlNode> toXml()const;
 
 protected:
    std::vector<ossimRefPtr<ossimProperty> > theChildPropertyList;

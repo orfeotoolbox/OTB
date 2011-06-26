@@ -11,7 +11,7 @@
 // Description:
 //
 //*******************************************************************
-//  $Id: ossimImageSourceFilter.cpp 17932 2010-08-19 20:34:35Z dburken $
+//  $Id: ossimImageSourceFilter.cpp 18920 2011-02-18 20:06:11Z gpotts $
 
 #include <ossim/imaging/ossimImageSourceFilter.h>
 #include <ossim/base/ossimTrace.h>
@@ -92,13 +92,13 @@ bool ossimImageSourceFilter::loadState(const ossimKeywordlist& kwl,
    bool result = ossimImageSource::loadState(kwl, prefix);
 
    // make sure we have 1 input.
-   setNumberOfInputs(1);
+   //setNumberOfInputs(1);
 
    // we will fix the input
-   if(!theInputListIsFixedFlag)
-   {
-      theInputListIsFixedFlag = true;
-   }
+   //if(!theInputListIsFixedFlag)
+  // {
+  //    theInputListIsFixedFlag = true;
+  // }
    
    return result;
 }

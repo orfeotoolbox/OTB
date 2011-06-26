@@ -27,7 +27,11 @@ RTTI_DEF1(ossimImageGeometry, "ossimImageGeometry", ossimObject);
 ossimImageGeometry::ossimImageGeometry()
 :   
 m_transform (0),
-m_projection(0)
+m_projection(0),
+m_gsd(),
+m_decimationFactors(0),
+m_imageSize(),
+m_targetRrds(0)
 {
    m_gsd.makeNan();
    m_imageSize.makeNan();
@@ -41,9 +45,15 @@ m_projection(0)
 // would see this alternate geometry. See ossimScaleFilter for an example of this case.
 //**************************************************************************************************
 ossimImageGeometry::ossimImageGeometry(const ossimImageGeometry& copy_this)
-:ossimObject(copy_this)   
+:
+ossimObject(copy_this),
+m_transform(copy_this.m_transform.valid()?(ossim2dTo2dTransform*)copy_this.m_transform->dup():((ossim2dTo2dTransform*)0)),
+m_projection(copy_this.m_projection.valid()?(ossimProjection*)copy_this.m_projection->dup():(ossimProjection*)0),
+m_gsd(copy_this.m_gsd),
+m_decimationFactors(copy_this.m_decimationFactors),
+m_imageSize(copy_this.m_imageSize),
+m_targetRrds(copy_this.m_targetRrds)
 {
-   *this = copy_this;
 }
 
 //**************************************************************************************************
@@ -51,9 +61,14 @@ ossimImageGeometry::ossimImageGeometry(const ossimImageGeometry& copy_this)
 //! can be NULL -- the associated mapping would be identity.
 //**************************************************************************************************
 ossimImageGeometry::ossimImageGeometry(ossim2dTo2dTransform* transform, ossimProjection* proj)
-:  ossimObject(),
-   m_transform(transform),
-   m_projection(proj)
+:
+ossimObject(),
+m_transform(transform),
+m_projection(proj),
+m_gsd(),
+m_decimationFactors(0),
+m_imageSize(),
+m_targetRrds(0)   
 {
    m_imageSize.makeNan();
    m_gsd.makeNan();
@@ -134,7 +149,7 @@ void ossimImageGeometry::rnToWorld(const ossimDpt& rnPt,
                                    ossimGpt& wpt) const
 {
    ossimDpt localPt;
-   rnToRn(rnPt, resolutionLevel, 0, localPt);
+   rnToRn(rnPt, resolutionLevel, m_targetRrds, localPt);
    localToWorld(localPt, wpt);
 }
 
@@ -144,7 +159,7 @@ void ossimImageGeometry::worldToRn(const ossimGpt& wpt,
 {   
    ossimDpt localPt;
    worldToLocal(wpt, localPt);
-   rnToRn(localPt, 0, resolutionLevel, rnPt);
+   rnToRn(localPt, m_targetRrds, resolutionLevel, rnPt);
 }
 
 //**************************************************************************************************
@@ -164,7 +179,7 @@ bool ossimImageGeometry::localToWorld(const ossimDpt& local_pt, ossimGpt& world_
 
     // First transform local pixel to full-image pixel:
     ossimDpt full_image_pt;
-    rnToFull(local_pt, 0, full_image_pt);
+    rnToFull(local_pt, m_targetRrds, full_image_pt);
 
     // Perform projection to world coordinates:
     m_projection->lineSampleToWorld(full_image_pt, world_pt);
@@ -199,7 +214,7 @@ bool ossimImageGeometry::worldToLocal(const ossimGpt& world_pt, ossimDpt& local_
    m_projection->worldToLineSample(copyPt, full_image_pt);
 
    // Then transform to local space:
-   fullToRn(full_image_pt, 0, local_pt);
+   fullToRn(full_image_pt, m_targetRrds, local_pt);
    
    return true;
 }
@@ -266,9 +281,9 @@ void ossimImageGeometry::computeGsd()const
    if (m_projection.valid())
    {
       // Get three points in full image space.
-      ossimDpt pL0(0,0);
-      ossimDpt pLx(1,0);
-      ossimDpt pLy(0,1);
+      ossimDpt pL0 (m_imageSize/2);
+      ossimDpt pLx (pL0.x+1, pL0.y);
+      ossimDpt pLy (pL0.x, pL0.y+1);
       ossimDpt pF0;
       ossimDpt pFx;
       ossimDpt pFy;
@@ -400,58 +415,66 @@ bool ossimImageGeometry::loadState(const ossimKeywordlist& kwl,
    const char* lookup = kwl.find(prefix, ossimKeywordNames::TYPE_KW);
    if (lookup)
    {
-      ossimString decimations   = kwl.find(prefix, "decimations");
-      ossimString gsd           = kwl.find(prefix, "gsd");
-      ossimString imageSize     = kwl.find(prefix, "image_size");
-      
-      if(!imageSize.empty())
-      {
-         m_imageSize.toPoint(imageSize);
-      }
       if ( ossimString(lookup) == STATIC_TYPE_NAME(ossimImageGeometry) )
       {
          ossimObject::loadState(kwl, prefix);
 
-         // First try to create a transform
-         ossim2dTo2dTransform* transform = 0;
+         // m_transform
          ossimString transformPrefix = ossimString(prefix) + "transform.";
-         ossimString projectionPrefix = ossimString(prefix) + "projection.";
-         transform = ossim2dTo2dTransformRegistry::instance()->
+         ossimRefPtr<ossim2dTo2dTransform> transform = ossim2dTo2dTransformRegistry::instance()->
             createNativeObjectFromRegistry(kwl, transformPrefix.c_str());
-         
-         // Now look for projection spec:
-         ossimProjection* projection =
-            ossimProjectionFactoryRegistry::instance()->
-               createProjection(kwl, projectionPrefix.c_str());
-         if(projection)
+         if( transform.valid() )
+         {
+            m_transform = transform;
+         }
+
+         // m_projection:
+         ossimString projectionPrefix = ossimString(prefix) + "projection.";
+         ossimRefPtr<ossimProjection> projection = ossimProjectionFactoryRegistry::instance()->
+            createProjection(kwl, projectionPrefix.c_str());
+         if( projection.valid() )
          {
             m_projection = projection;
          }
-         if(transform)
+
+         // m_gsd:
+         ossimString gsd = kwl.find(prefix, "gsd");
+         if( gsd.size() )
          {
-            m_transform = transform;
+            m_gsd.toPoint(gsd);
+         }
+
+         // m_decimationFactors:
+         ossimString decimations = kwl.find(prefix, "decimations");
+         if( decimations.size() )
+         {
+            m_decimationFactors.clear();
+            ossim::toVector(m_decimationFactors, decimations);
+         }
+
+         // m_imageSize:
+         ossimString imageSize = kwl.find(prefix, "image_size");
+         if( imageSize.size() )
+         {
+            m_imageSize.toPoint(imageSize);
+         }
+
+         // m_targetRrds:
+         ossimString targetRrds = kwl.find(prefix, "target_rrds");
+         if ( targetRrds.size() )
+         {
+            m_targetRrds = ossimString(targetRrds).toUInt32();
          }
       }
       else
       {
          // Now look for projection spec (for backwards compatibility):
-         ossimProjection* projection = 
-            ossimProjectionFactoryRegistry::instance()->
+         ossimProjection* projection = ossimProjectionFactoryRegistry::instance()->
             createProjection(kwl, prefix);
          if (projection)
          {
             setProjection(projection);
          }
-      }
-      
-      if(!decimations.empty())
-      {
-         m_decimationFactors.clear();
-         ossim::toVector(m_decimationFactors, decimations);
-      }
-      if(!gsd.empty())
-      {
-         m_gsd.toPoint(gsd);
       }
    }
    else
@@ -459,8 +482,7 @@ bool ossimImageGeometry::loadState(const ossimKeywordlist& kwl,
       //---
       // Old geometry file with no type keyword:
       //---
-      ossimProjection* projection = 
-         ossimProjectionFactoryRegistry::instance()->
+      ossimProjection* projection = ossimProjectionFactoryRegistry::instance()->
          createProjection(kwl, prefix);
       if (projection)
       {
@@ -477,42 +499,60 @@ bool ossimImageGeometry::loadState(const ossimKeywordlist& kwl,
 bool ossimImageGeometry::saveState(ossimKeywordlist& kwl, const char* prefix) const
 {
    bool good_save = true;
-   ossimString transformPrefix = ossimString(prefix) + "transform.";
-   ossimString projectionPrefix = ossimString(prefix) + "projection.";
-   // Save transform if present:
+
+   // m_transform:
    if (m_transform.valid())
    {
+      ossimString transformPrefix = ossimString(prefix) + "transform.";
       good_save = m_transform->saveState(kwl, transformPrefix.c_str());
    }
 
-   // Save projection if present:
+   // m_projection:
    if (m_projection.valid())
    {
+      ossimString projectionPrefix = ossimString(prefix) + "projection.";
       good_save &= m_projection->saveState(kwl, projectionPrefix.c_str());
    }
-   good_save &= ossimObject::saveState(kwl, prefix);
 
-   ossimString deimations;
+   // m_gsd:
+   if ( m_gsd.hasNans() )
+   {
+      computeGsd(); // Attempt to compute.
+   }
+   kwl.add(prefix, "gsd", m_gsd.toString(), true);
+
+   // m_decimationFactors:
    if(m_decimationFactors.size())
    {
       ossimString resultPoints;
-      ossim::toStringList(resultPoints,
-                          m_decimationFactors);
-      
-      if(!resultPoints.empty())
-      {
-         kwl.add(prefix, "decimations", resultPoints, true);
-      }
+      ossim::toStringList(resultPoints, m_decimationFactors);
+      kwl.add(prefix, "decimations", resultPoints, true);
    }
-   
-   ossimDpt mpp = getMetersPerPixel();
-   if (!mpp.hasNans())
-      kwl.add(prefix, "gsd", mpp.toString(), true);
-   
-   if (!m_imageSize.hasNans())
-      kwl.add(prefix, "image_size", m_imageSize.toString(), true);
+   else
+   {
+      kwl.add(prefix, "decimations", "", true);
+   }
+
+   // m_imageSize:
+   kwl.add(prefix, "image_size", m_imageSize.toString(), true);
+
+   // m_targetRrds;
+   kwl.add(prefix, "target_rrds", m_targetRrds, true);
+
+   // Base class:
+   good_save &= ossimObject::saveState(kwl, prefix);
    
    return good_save;
+}
+
+void ossimImageGeometry::setTargetRrds(ossim_uint32 rrds)
+{
+   m_targetRrds = rrds;
+}
+
+ossim_uint32 ossimImageGeometry::getTargetRrds() const
+{
+   return m_targetRrds;
 }
 
 //**************************************************************************************************
@@ -533,12 +573,38 @@ const ossimImageGeometry& ossimImageGeometry::operator=(const ossimImageGeometry
       {
          m_projection = (ossimProjection*) copy_this.m_projection->dup();
       }
-       // the Gsd should already be solved from the source we are copying from
-      m_gsd = copy_this.m_gsd;
+      
+      // the Gsd should already be solved from the source we are copying from
+      m_gsd               = copy_this.m_gsd;
+      m_imageSize         = copy_this.m_imageSize;
+      m_decimationFactors = copy_this.m_decimationFactors;
+      m_targetRrds        = copy_this.m_targetRrds;
    }
    return *this;
 }
 
+//**************************************************************************************************
+//! Returns the ossimGpts for the four image corner points
+//**************************************************************************************************
+bool ossimImageGeometry::getCornerGpts(ossimGpt& gul, ossimGpt& gur, 
+                                       ossimGpt& glr, ossimGpt& gll) const
+{
+   ossimDpt iul (0,0);
+   ossimDpt iur (m_imageSize.x-1, 0);
+   ossimDpt ilr (m_imageSize.x-1, m_imageSize.y-1);
+   ossimDpt ill (0, m_imageSize.y-1);
+
+   bool status = true;
+
+   status &= localToWorld(iul, gul);
+   status &= localToWorld(iur, gur);
+   status &= localToWorld(ilr, glr);
+   status &= localToWorld(ill, gll);
+
+   return status;
+}
+
+//**************************************************************************************************
 void ossimImageGeometry::undecimatePoint(const ossimDpt& rnPt,
                                          ossim_uint32 resolutionLevel,
                                          ossimDpt& outPt) const
@@ -568,6 +634,7 @@ void ossimImageGeometry::undecimatePoint(const ossimDpt& rnPt,
    }
 }
 
+//**************************************************************************************************
 void ossimImageGeometry::decimatePoint(const ossimDpt& inPt,
                                        ossim_uint32 resolutionLevel,
                                        ossimDpt& rnPt) const

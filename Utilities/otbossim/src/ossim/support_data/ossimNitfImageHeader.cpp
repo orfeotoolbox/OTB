@@ -9,10 +9,11 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageHeader.cpp 17598 2010-06-19 15:37:46Z dburken $
+// $Id: ossimNitfImageHeader.cpp 18443 2010-11-22 23:42:39Z gpotts $
 
 #include <cmath> /* for fmod */
 #include <iomanip>
+#include <sstream>
 
 #include <ossim/support_data/ossimNitfImageHeader.h>
 #include <ossim/base/ossimContainerProperty.h>
@@ -372,4 +373,24 @@ void ossimNitfImageHeader::getDecimationFactor(ossim_float64& result) const
    {
       result = ossim::nan();
    }
+}
+
+
+bool ossimNitfImageHeader::saveState(ossimKeywordlist& kwl, const ossimString& prefix)const
+{
+   if(!ossimObject::saveState(kwl, prefix)) return false;
+   ossimString tagsPrefix = prefix;
+   
+   for(ossim_uint32 i = 0; i < theTagList.size(); ++i)
+   {
+      ossimRefPtr<ossimNitfRegisteredTag> tag = theTagList[i].getTagData();
+      if (tag.valid())
+      {
+         if(!tag->saveState(kwl, tagsPrefix))
+         {
+            return false;
+         }
+      }
+   }
+   return true;
 }

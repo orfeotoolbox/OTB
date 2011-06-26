@@ -52,7 +52,7 @@
 #endif
 #endif
 #include <ossim/vpfutil/set.h>
-
+#include <ossim/base/ossimConstants.h>
 /******* cellmap definitions **/
 #define  START     0
 #define  NUMFEAT   1
@@ -74,10 +74,10 @@
 
 typedef struct {
    int fd;                     /* File descriptor */
-   long int maplen;            /* Number of cells in the tree */
-   long int cellmap[1023][2];  /* The tree of cells */
-   long int buf[1023][2];      /* Buffer for one cell */
-   long int shift;             /* Size of data before real cell records */
+   ossim_int32 maplen;            /* Number of cells in the tree */
+   ossim_int32 cellmap[1023][2];  /* The tree of cells */
+   ossim_int32 buf[1023][2];      /* Buffer for one cell */
+   ossim_int32 shift;             /* Size of data before real cell records */
    unsigned char box[4];       /* Search box */
 } spx_type;
 
@@ -157,7 +157,7 @@ static int is_over( unsigned char box1[4], unsigned char box2[4] )
  *
  *   Parameters:
  *A
- *    num  <input>==(long int) record number.
+ *    num  <input>==(ossim_int32) record number.
  *    spx  <input>==(spx_type *) spatial index record structure.
  *    set <output>==(set_type) search set to be updated.
  *E
@@ -168,7 +168,7 @@ static int is_over( unsigned char box1[4], unsigned char box2[4] )
  *    Mody Buchbinder  Jul 1991
  *E
  *************************************************************************/
-static void get_record(long int num, spx_type *spx, set_type set )
+static void get_record(ossim_int32 num, spx_type *spx, set_type set )
 {
    long offset;
    int j,index;
@@ -177,7 +177,7 @@ static void get_record(long int num, spx_type *spx, set_type set )
    index  = num -1;
    offset = spx->cellmap[index][0] + spx->shift;
    lseek(spx->fd,offset,SEEK_SET);
-   read(spx->fd,spx->buf,2*spx->cellmap[index][NUMFEAT]*sizeof(long int));
+   read(spx->fd,spx->buf,2*spx->cellmap[index][NUMFEAT]*sizeof(ossim_int32));
 
    for(j=0;j<spx->cellmap[index][NUMFEAT];j++) {
       memcpy(&box,&(spx->buf[j][BOUND]),4*sizeof(unsigned char));
@@ -204,7 +204,7 @@ static void get_record(long int num, spx_type *spx, set_type set )
  *
  *   Parameters:
  *A
- *    record <input>==(long int) record number.
+ *    record <input>==(ossim_int32) record number.
  *    level  <input>==(int) level of the index tree.
  *    bnd    <input>==(unsigned char[4]) bounding box.
  *    spx    <input>==(spx_type *) spatial index record structure.
@@ -217,7 +217,7 @@ static void get_record(long int num, spx_type *spx, set_type set )
  *    Mody Buchbinder  Jul 1991
  *E
  *************************************************************************/
-static void search_cell( long int record, int level, unsigned char bnd[4],
+static void search_cell( ossim_int32 record, int level, unsigned char bnd[4],
 			 spx_type *spx, set_type set )
 {
    int i;
@@ -304,8 +304,8 @@ set_type spatial_index_search( char *fname,
 /*                       int  1 - 4 -> boundaries of coverage     */
 /*                       int  5 -> size of tree in records - each */
 /*                                 record = 2 integers (8 byte)   */
-   read(spx.fd,head,6*sizeof(long int));
-   spx.shift = 6*sizeof(long int);
+   read(spx.fd,head,6*sizeof(ossim_int32));
+   spx.shift = 6*sizeof(ossim_int32);
    spx.maplen = head[CELLMAP_SIZE];
 
    set = set_init(head[TOTAL_NUMBER]+1L);
@@ -323,13 +323,14 @@ set_type spatial_index_search( char *fname,
 
 /* read the cell tree */
 
-   if(read(spx.fd,spx.cellmap,2*spx.maplen*sizeof(long int)) !=
-      2*spx.maplen*sizeof(long int)) {
+   if( (size_t)read(spx.fd,spx.cellmap,2*spx.maplen*sizeof(ossim_int32)) !=
+       (2*spx.maplen*sizeof(ossim_int32)) )
+   {
       close(spx.fd);
       return set;
    }
 
-   spx.shift += 2*spx.maplen*sizeof(long int);
+   spx.shift += 2*spx.maplen*sizeof(ossim_int32);
 
 /* translate search box to 1 byte numbers */
    xf = (float)(255.0 / (bnd[XMAX] - bnd[XMIN]));

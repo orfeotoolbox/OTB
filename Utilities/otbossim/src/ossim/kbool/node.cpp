@@ -6,7 +6,7 @@
 
     Licence: wxWidgets Licence
 
-    RCS-ID: $Id: node.cpp 12630 2008-04-07 17:19:58Z dburken $
+    RCS-ID: $Id: node.cpp 19473 2011-05-03 15:04:19Z gpotts $
 */
 #ifdef __GNUG__
 #pragma implementation 
@@ -22,21 +22,21 @@
 //with NOLIST constructor
 //TDLI<KBoolLink> 	Node::_linkiter=TDLI<KBoolLink>(_GC);
 
-Node::Node(Bool_Engine* GC) : LPoint(0,0)
+Node::Node(Bool_Engine* /*GC*/) : LPoint(0,0)
 {
 //     _GC=GC;
 	_linklist=new DL_List<void*>();
 }
 
 
-Node::Node(B_INT const X, B_INT const Y, Bool_Engine* GC) : LPoint(X,Y)
+Node::Node(B_INT const X, B_INT const Y, Bool_Engine* /*GC*/) : LPoint(X,Y)
 {
 //     _GC=GC;
 	_linklist=new DL_List<void*>();
 }
 
 
-Node::Node(LPoint* const a_point, Bool_Engine* GC) : LPoint(a_point)
+Node::Node(LPoint* const a_point, Bool_Engine* /*GC*/) : LPoint(a_point)
 {
 //     _GC=GC;
 	_linklist=new DL_List<void*>();
@@ -44,7 +44,7 @@ Node::Node(LPoint* const a_point, Bool_Engine* GC) : LPoint(a_point)
 
 
 //Node::Node(Node * const other) : LPoint(other)
-Node::Node(Node * const other, Bool_Engine* GC)
+Node::Node(Node * const other, Bool_Engine* /*GC*/)
 {
 //     _GC=GC;
 	_x = other->_x;

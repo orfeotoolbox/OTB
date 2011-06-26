@@ -16,7 +16,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimImageViewProjectionTransform.cpp 17417 2010-05-20 14:33:16Z dburken $
+//  $Id: ossimImageViewProjectionTransform.cpp 18990 2011-03-01 19:41:50Z gpotts $
 //
 #include <ossim/projection/ossimImageViewProjectionTransform.h>
 #include <ossim/base/ossimKeywordlist.h>
@@ -32,8 +32,8 @@ RTTI_DEF1(ossimImageViewProjectionTransform,
 //*****************************************************************************
 ossimImageViewProjectionTransform::ossimImageViewProjectionTransform
 (  ossimImageGeometry* imageGeometry, ossimImageGeometry* viewGeometry)
-:  m_ImageGeometry(imageGeometry),
-   m_ViewGeometry(viewGeometry)
+:  m_imageGeometry(imageGeometry),
+   m_viewGeometry(viewGeometry)
 {
 }
 
@@ -43,8 +43,8 @@ ossimImageViewProjectionTransform::ossimImageViewProjectionTransform
 ossimImageViewProjectionTransform::
 ossimImageViewProjectionTransform(const ossimImageViewProjectionTransform& src)
 : ossimImageViewTransform(src),
-  m_ImageGeometry(src.m_ImageGeometry),
-  m_ViewGeometry(src.m_ViewGeometry)
+  m_imageGeometry(src.m_imageGeometry),
+  m_viewGeometry(src.m_viewGeometry)
 {
 }
 
@@ -61,25 +61,25 @@ ossimImageViewProjectionTransform::~ossimImageViewProjectionTransform()
 void ossimImageViewProjectionTransform::imageToView(const ossimDpt& ip, ossimDpt& vp) const
 {
    // Check for same geometries on input and output (this includes NULL geoms):
-   if (m_ImageGeometry == m_ViewGeometry)
+   if (m_imageGeometry == m_viewGeometry)
    {
       vp = ip;
       return;
    }
    
    // Otherwise we need access to good geoms. Check for a bad geometry object:
-   if (!m_ImageGeometry || !m_ViewGeometry)
+   if (!m_imageGeometry || !m_viewGeometry)
    {
       vp.makeNan();
       return;
    }
    
    // Check for same projection on input and output sides to save projection to ground:
-   if (m_ImageGeometry->getProjection() == m_ViewGeometry->getProjection())
+   if (m_imageGeometry->getProjection() == m_viewGeometry->getProjection())
    {
       // Check for possible same 2D transforms as well:
-      if ( (m_ImageGeometry->getTransform() == m_ViewGeometry->getTransform()) &&
-           (m_ImageGeometry->decimationFactor(0) == m_ViewGeometry->decimationFactor(0)) )
+      if ( (m_imageGeometry->getTransform() == m_viewGeometry->getTransform()) &&
+           (m_imageGeometry->decimationFactor(0) == m_viewGeometry->decimationFactor(0)) )
       {
          vp = ip;
          return;
@@ -87,8 +87,8 @@ void ossimImageViewProjectionTransform::imageToView(const ossimDpt& ip, ossimDpt
       
       // Not the same 2D transform, so just perform local-image -> full-image -> local-view:
       ossimDpt fp;
-      m_ImageGeometry->rnToFull(ip, 0, fp);
-      m_ViewGeometry->fullToRn(fp, 0, vp);
+      m_imageGeometry->rnToFull(ip, 0, fp);
+      m_viewGeometry->fullToRn(fp, 0, vp);
       return;
    }
    
@@ -97,8 +97,8 @@ void ossimImageViewProjectionTransform::imageToView(const ossimDpt& ip, ossimDpt
    // Need to project to ground.
    //---
    ossimGpt gp;
-   m_ImageGeometry->localToWorld(ip, gp);
-   m_ViewGeometry->worldToLocal(gp, vp);
+   m_imageGeometry->localToWorld(ip, gp);
+   m_viewGeometry->worldToLocal(gp, vp);
    
 #if 0
    if (traceDebug())
@@ -119,25 +119,25 @@ void ossimImageViewProjectionTransform::imageToView(const ossimDpt& ip, ossimDpt
 void ossimImageViewProjectionTransform::viewToImage(const ossimDpt& vp, ossimDpt& ip) const
 {
    // Check for same geometries on input and output (this includes NULL geoms):
-   if (m_ImageGeometry == m_ViewGeometry)
+   if (m_imageGeometry == m_viewGeometry)
    {
       ip = vp;
       return;
    }
    
    // Otherwise we need access to good geoms. Check for a bad geometry object:
-   if (!m_ImageGeometry || !m_ViewGeometry)
+   if (!m_imageGeometry || !m_viewGeometry)
    {
       ip.makeNan();
       return;
    }
    
    // Check for same projection on input and output sides to save projection to ground:
-   if (m_ImageGeometry->getProjection() == m_ViewGeometry->getProjection())
+   if (m_imageGeometry->getProjection() == m_viewGeometry->getProjection())
    {
       // Check for possible same 2D transforms as well:
-      if ( (m_ImageGeometry->getTransform() == m_ViewGeometry->getTransform()) &&
-           (m_ImageGeometry->decimationFactor(0) == m_ViewGeometry->decimationFactor(0)) )
+      if ( (m_imageGeometry->getTransform() == m_viewGeometry->getTransform()) &&
+           (m_imageGeometry->decimationFactor(0) == m_viewGeometry->decimationFactor(0)) )
       {
          ip = vp;
          return;
@@ -145,8 +145,8 @@ void ossimImageViewProjectionTransform::viewToImage(const ossimDpt& vp, ossimDpt
       
       // Not the same 2D transform, so just perform local-image -> full-image -> local-view:
       ossimDpt fp;
-      m_ViewGeometry->rnToFull(vp, 0, fp);
-      m_ImageGeometry->fullToRn(fp, 0, ip);
+      m_viewGeometry->rnToFull(vp, 0, fp);
+      m_imageGeometry->fullToRn(fp, 0, ip);
       return;
    }
    
@@ -155,8 +155,8 @@ void ossimImageViewProjectionTransform::viewToImage(const ossimDpt& vp, ossimDpt
    // Need to project to ground.
    //---
    ossimGpt gp;
-   m_ViewGeometry->localToWorld(vp, gp);
-   m_ImageGeometry->worldToLocal(gp, ip);
+   m_viewGeometry->localToWorld(vp, gp);
+   m_imageGeometry->worldToLocal(gp, ip);
    
 #if 0
    if (traceDebug())
@@ -177,27 +177,27 @@ void ossimImageViewProjectionTransform::viewToImage(const ossimDpt& vp, ossimDpt
 bool ossimImageViewProjectionTransform::setView(ossimObject* baseObject)
 {
    ossimImageGeometry* g = dynamic_cast<ossimImageGeometry*>(baseObject);
+   bool new_view_set = false;
    if (g)
    {
-      m_ViewGeometry = g;
-      return true;
+      m_viewGeometry = g;
+      new_view_set = true;
    }
    else
    {
       ossimProjection* proj = dynamic_cast<ossimProjection*>(baseObject);
       if(proj)
       {
-         if(m_ViewGeometry.valid())
-         {
-            m_ViewGeometry->setProjection(proj);
-         }
+         if(m_viewGeometry.valid())
+            m_viewGeometry->setProjection(proj);
          else
-         {
-            m_ViewGeometry = new ossimImageGeometry(0, proj);
-         }
+            m_viewGeometry = new ossimImageGeometry(0, proj);
+         
+         new_view_set = true;
       }
    }
-   return false;
+
+   return new_view_set;
 }
 
 //*****************************************************************************
@@ -207,19 +207,19 @@ std::ostream& ossimImageViewProjectionTransform::print(std::ostream& out)const
 {
     out << "ossimImageViewProjectionTransform::print: ..... entered " <<endl;
 
-    if(m_ImageGeometry.valid())
+    if(m_imageGeometry.valid())
     {
         out << "  Input Image (LEFT) Geometry: " << endl;
-        m_ImageGeometry->print(out);
+        m_imageGeometry->print(out);
     }
     else
     {
         out << "  None defined." << endl;
     }
-    if(m_ViewGeometry.valid())
+    if(m_viewGeometry.valid())
     {
         out << "Output View (RIGHT) Geometry: " << endl;
-        m_ViewGeometry->print(out);
+        m_viewGeometry->print(out);
     }
     else
     {
@@ -237,20 +237,20 @@ ossimDrect ossimImageViewProjectionTransform::getImageToViewBounds(const ossimDr
    ossimDrect result = ossimImageViewTransform::getImageToViewBounds(imageRect);
 
    // If not successful, compute using input and output geometries:
-   if (result.hasNans() && m_ImageGeometry.valid() && m_ViewGeometry.valid() &&
-       m_ImageGeometry->hasProjection() && m_ViewGeometry->hasProjection())
+   if (result.hasNans() && m_imageGeometry.valid() && m_viewGeometry.valid() &&
+       m_imageGeometry->hasProjection() && m_viewGeometry->hasProjection())
    {
       ossimGeoPolygon viewClip;
-      m_ViewGeometry->getProjection()->getGroundClipPoints(viewClip);
+      m_viewGeometry->getProjection()->getGroundClipPoints(viewClip);
       if(viewClip.size())
       {
          std::vector<ossimGpt> imageGpts(4);
-         m_ImageGeometry->localToWorld(imageRect.ul(), imageGpts[0]);
-         m_ImageGeometry->localToWorld(imageRect.ur(), imageGpts[1]);
-         m_ImageGeometry->localToWorld(imageRect.lr(), imageGpts[2]);
-         m_ImageGeometry->localToWorld(imageRect.ll(), imageGpts[3]);
+         m_imageGeometry->localToWorld(imageRect.ul(), imageGpts[0]);
+         m_imageGeometry->localToWorld(imageRect.ur(), imageGpts[1]);
+         m_imageGeometry->localToWorld(imageRect.lr(), imageGpts[2]);
+         m_imageGeometry->localToWorld(imageRect.ll(), imageGpts[3]);
 
-         const ossimDatum* viewDatum = m_ViewGeometry->getProjection()->origin().datum();
+         const ossimDatum* viewDatum = m_viewGeometry->getProjection()->origin().datum();
          imageGpts[0].changeDatum(viewDatum);
          imageGpts[1].changeDatum(viewDatum);
          imageGpts[2].changeDatum(viewDatum);
@@ -269,7 +269,7 @@ ossimDrect ossimImageViewProjectionTransform::getImageToViewBounds(const ossimDr
             {
                ossimDpt tempPt;
                ossimGpt gpt(visiblePolygons[0][idx].lat, visiblePolygons[0][idx].lon, 0.0,  viewDatum);
-               m_ViewGeometry->worldToLocal(gpt, tempPt);
+               m_viewGeometry->worldToLocal(gpt, tempPt);
                vpts.push_back(tempPt);
             }
             result = ossimDrect(vpts);
@@ -285,7 +285,25 @@ ossimDrect ossimImageViewProjectionTransform::getImageToViewBounds(const ossimDr
 bool ossimImageViewProjectionTransform::loadState(const ossimKeywordlist& kwl,
                                                   const char* prefix)
 {
-   return ossimImageViewTransform::loadState(kwl, prefix);
+   bool result = ossimImageViewTransform::loadState(kwl, prefix);
+   if(result)
+   {
+      ossimString imagePrefix = ossimString(prefix)+"image_geometry.";
+      ossimString viewPrefix  = ossimString(prefix)+"view_geometry.";
+      if(kwl.numberOf(imagePrefix.c_str())>0)
+      {
+         m_imageGeometry = new ossimImageGeometry();
+         m_imageGeometry->loadState(kwl, imagePrefix.c_str());
+      }
+      if(kwl.numberOf(viewPrefix.c_str())>0)
+      {
+         m_viewGeometry = new ossimImageGeometry();
+         m_viewGeometry->loadState(kwl, viewPrefix.c_str());
+      }
+      
+   }
+   
+   return result;
 }
 
 //**************************************************************************************************
@@ -294,6 +312,17 @@ bool ossimImageViewProjectionTransform::loadState(const ossimKeywordlist& kwl,
 bool ossimImageViewProjectionTransform::saveState(ossimKeywordlist& kwl,
                                                   const char* prefix)const
 {
+   ossimString imagePrefix = ossimString(prefix)+"image_geometry.";
+   ossimString viewPrefix  = ossimString(prefix)+"view_geometry.";
+   
+   if(m_imageGeometry.valid())
+   {
+      m_imageGeometry->saveState(kwl, imagePrefix.c_str());
+   }
+   if(m_viewGeometry.valid())
+   {
+      m_viewGeometry->saveState(kwl, viewPrefix.c_str());
+   }
    return ossimImageViewTransform::saveState(kwl, prefix);
 }
 
@@ -304,8 +333,8 @@ ossimDpt ossimImageViewProjectionTransform::getInputMetersPerPixel() const
 {
     ossimDpt result;
 
-    if(m_ImageGeometry->hasProjection())
-        result = m_ImageGeometry->getProjection()->getMetersPerPixel();
+    if(m_imageGeometry->hasProjection())
+        result = m_imageGeometry->getProjection()->getMetersPerPixel();
     else
         result.makeNan();
 
@@ -319,8 +348,8 @@ ossimDpt ossimImageViewProjectionTransform::getOutputMetersPerPixel() const
 {
     ossimDpt result;
 
-    if(m_ViewGeometry->hasProjection())
-        result = m_ViewGeometry->getProjection()->getMetersPerPixel();
+    if(m_viewGeometry->hasProjection())
+        result = m_viewGeometry->getProjection()->getMetersPerPixel();
     else
         result.makeNan();
 

@@ -11,7 +11,7 @@
 // Rational Polynomial Coefficient extension.
 //
 //********************************************************************
-// $Id: ossimNitfRpcATag.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimNitfRpcATag.h 19682 2011-05-31 14:21:20Z dburken $
 #ifndef ossimNitfRpcATag_HEADER
 #define ossimNitfRpcATag_HEADER
 
@@ -28,7 +28,7 @@ public:
    ossimNitfRpcATag();
 
    /** @return "RPC00A" as an ossimString. */
-   virtual ossimString getRegisterTagName() const;
+   virtual std::string getRegisterTagName() const;
    
 protected:
    

@@ -10,7 +10,7 @@
 // Description: This class provides some simple utilities for aux file.
 //
 //********************************************************************
-// $Id: ossimAuxFileHandler.cpp 992 2010-06-10 18:05:37Z ming.su $
+// $Id: ossimAuxFileHandler.cpp 2644 2011-05-26 15:20:11Z oscar.kramer $
 
 #include <cstdio>
 #include <cstdlib>
@@ -197,16 +197,31 @@ bool ossimAuxFileHandler::open(const ossimFilename& file)
     if( typeLen == strLen)
     {
       ossimAuxEntry* projEntry = node->getNamedChild("Map_Info");
+      if( projEntry == NULL )
+      {
+         ossimAuxEntry* childEntry;
+         for( childEntry = node->getChild(); childEntry != NULL && projEntry == NULL; childEntry = childEntry->getNext() )
+         {
+            if (ossimString(childEntry->getType()) == "Eprj_MapInfo")
+               projEntry = childEntry;
+         }
+      }
+
       const char* proj = NULL;
+      const char* units = NULL;
       if (projEntry)
       {
         proj = projEntry->getStringField("proName");
+        units = projEntry->getStringField("units");
       }
       
       if (proj != NULL)
       {
-        ossimString tmpProj(proj);
-        projName = tmpProj;
+        m_projName = ossimString(proj);
+      }
+      if (units != NULL)
+      {
+         m_unitsType = ossimString(proj);
       }
 
       ossimAuxEntry* datumEntry = node->getNamedChild( "Projection.Datum" );
@@ -215,31 +230,17 @@ bool ossimAuxFileHandler::open(const ossimFilename& file)
       {
         datumStr = datumEntry->getStringField("datumname");
       }
-      
       if (datumStr != NULL)
       {
-        ossimString tmpDatum(datumStr);
-        datumName = tmpDatum;
+        m_datumName = ossimString(datumStr);;
       }
-
       break;
     }
-
     node = node->getNext();
   }
 
   fclose(fp);
   return true;
-}
-
-ossimString ossimAuxFileHandler::getProjectionName()
-{
-  return projName;
-}
-
-ossimString ossimAuxFileHandler::getDatumName()
-{
-  return datumName;
 }
 
 /************************************************************************/

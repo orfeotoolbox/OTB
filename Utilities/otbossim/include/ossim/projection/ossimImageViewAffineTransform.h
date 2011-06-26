@@ -8,7 +8,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimImageViewAffineTransform.h 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimImageViewAffineTransform.h 18629 2011-01-04 12:44:14Z gpotts $
 #ifndef ossimImageViewAffineTransform_HEADER
 #define ossimImageViewAffineTransform_HEADER
 #include <ossim/projection/ossimImageViewTransform.h>
@@ -22,24 +22,30 @@ public:
                                  double scaleYValue = 1,
                                  double translateXValue = 0,
                                  double translateYValue = 0,
-                                 double translateOriginXValue = 0,
-                                 double translateOriginYValue = 0);
+                                 double pivotXValue = 0,
+                                 double pivotYValue = 0);
    virtual ~ossimImageViewAffineTransform();
    
    ossimImageViewAffineTransform(const ossimImageViewAffineTransform& src)
    :ossimImageViewTransform(src),
-   theTransform(src.theTransform),
-   theInverseTransform(src.theInverseTransform),
-   theRotation(src.theRotation),
-   theScale(src.theScale),
-   theTranslate(src.theTranslate),
-   theTranslateOrigin(src.theTranslateOrigin)
+   m_transform(src.m_transform),
+   m_inverseTransform(src.m_inverseTransform),
+   m_rotation(src.m_rotation),
+   m_scale(src.m_scale),
+   m_translate(src.m_translate),
+   m_pivot(src.m_pivot)
    {
    }
    virtual ossimObject* dup()const
    {
       return new ossimImageViewAffineTransform(*this);
    }
+//   virtual void inverse(const ossimDpt& input,
+//                        ossimDpt&       output) const
+//   {
+//      viewToImage(input, output);
+ //  }
+   
    virtual void imageToView(const ossimDpt& imagePoint,
                             ossimDpt&       viewPoint)const;
    virtual void viewToImage(const ossimDpt& viewPoint,
@@ -49,15 +55,15 @@ public:
    
    virtual bool isIdentity()const
    {
-      return ((theTransform[0][0] == 1.0)&&
-              (theTransform[0][1] == 0.0)&&
-              (theTransform[0][2] == 0.0)&&
-              (theTransform[1][0] == 0.0)&&
-              (theTransform[1][1] == 1.0)&&
-              (theTransform[1][2] == 0.0)&&
-              (theTransform[2][0] == 0.0)&&
-              (theTransform[2][1] == 0.0)&&
-              (theTransform[2][2] == 1.0));
+      return ((m_transform[0][0] == 1.0)&&
+              (m_transform[0][1] == 0.0)&&
+              (m_transform[0][2] == 0.0)&&
+              (m_transform[1][0] == 0.0)&&
+              (m_transform[1][1] == 1.0)&&
+              (m_transform[1][2] == 0.0)&&
+              (m_transform[2][0] == 0.0)&&
+              (m_transform[2][1] == 0.0)&&
+              (m_transform[2][2] == 1.0));
    }
 
    virtual bool isValid()const;
@@ -89,17 +95,17 @@ public:
    /*!
     * Translate the origin for rotation in the x and y direction.
     */
-   virtual void translateOrigin(double originX, double originY);
+   virtual void pivot(double originX, double originY);
    
    /*!
     * Translate the origin for rotation in the x direction.
     */
-   virtual void translateOriginX(double originX);
+   virtual void pivotX(double originX);
    
    /*!
     * Translate the origin for rotation in the y direction.
     */
-   virtual void translateOriginY(double originY);
+   virtual void pivotY(double originY);
    
    /*!
     * will allow you to specify a scale
@@ -139,13 +145,12 @@ protected:
     * changed it will perform an inverse to solve
     * the inverse transform.
     */
-   NEWMAT::Matrix theTransform;
-   NEWMAT::Matrix theInverseTransform;
-   ossim_float64 theRotation;
-   ossimDpt      theScale;
-   ossimDpt      theTranslate;
-   ossimDpt      theTranslateOrigin;
-//   ossimDpt theTranslateRotationOriginPoint;
+   NEWMAT::Matrix m_transform;
+   NEWMAT::Matrix m_inverseTransform;
+   ossim_float64 m_rotation;
+   ossimDpt      m_scale;
+   ossimDpt      m_translate;
+   ossimDpt      m_pivot;
 
 TYPE_DATA
 };

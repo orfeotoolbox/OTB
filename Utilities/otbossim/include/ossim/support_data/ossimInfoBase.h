@@ -70,7 +70,7 @@ public:
     * @param kwl The keyword list to initialize.
     * @return true on success, false on error.
     */
-   virtual bool getKeywordlist(ossimKeywordlist& kwl);
+   virtual bool getKeywordlist(ossimKeywordlist& kwl)const;
 
 protected:
    /** virtual destructor */

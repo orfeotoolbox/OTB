@@ -9,10 +9,11 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFileHeader.cpp 17206 2010-04-25 23:20:40Z dburken $
+// $Id: ossimNitfFileHeader.cpp 19043 2011-03-10 15:24:24Z dburken $
 #include <ossim/support_data/ossimNitfFileHeader.h>
 #include <ossim/base/ossimContainerProperty.h>
 #include <iostream>
+#include <sstream>
 
 static const char* TAGS_KW = "tags";
 
@@ -182,10 +183,31 @@ void ossimNitfFileHeader::getPropertyNames(std::vector<ossimString>& propertyNam
    propertyNames.push_back(TAGS_KW);
 }
 
-std::ostream& ossimNitfFileHeader::print(std::ostream& out,
-                                         const std::string& /* prefix */) const
+bool ossimNitfFileHeader::saveState(ossimKeywordlist& kwl, const ossimString& prefix)const
 {
-   return out;
+   ossimObject::saveState(kwl, prefix);
+   
+   bool result = true;
+   ossimString tagsPrefix = prefix;
+   for(ossim_uint32 i = 0; i < theTagList.size(); ++i)
+   {
+      ossimRefPtr<ossimNitfRegisteredTag> tag = theTagList[i].getTagData();
+      if (tag.valid())
+      {
+         // we eventually need to do our own prefix for this object and not let the calling object do any prefix definitions
+//         ossimString newPrefix = tagsPrefix + tag->getRegisterTagName() + ".";
+
+         tag->saveState(kwl, tagsPrefix);
+      }
+   }
+   
+   return result;
+}
+
+std::ostream& ossimNitfFileHeader::print(std::ostream& out,
+                                         const std::string& prefix ) const
+{
+   return printTags(out, prefix);
 }
 
 std::ostream& ossimNitfFileHeader::printTags(std::ostream& out,

@@ -17,9 +17,9 @@
 //              Initial coding.
 //<
 //*****************************************************************************
-// $Id: ossimInit.h 16636 2010-02-22 19:02:00Z dburken $
+// $Id: ossimInit.h 19440 2011-04-25 16:41:28Z dburken $
 #ifndef ossimInit_HEADER
-#define ossimInit_HEADER
+#define ossimInit_HEADER 1
 
 #include <ossim/base/ossimFilename.h>
 
@@ -38,6 +38,7 @@ public:
    static ossimInit* instance();
 
    void addOptions(ossimArgumentParser& parser);
+
    /*!
     * METHOD: initialize()
     * This method shall be called from the application's main module with
@@ -69,14 +70,29 @@ public:
     */
    void usage();
 
+   /** @return theElevEnabledFlag */
+   bool getElevEnabledFlag() const;
+
+   /**
+    * @brief Sets theElevEnabledFlag.
+    * @param flag If true ossimElevManager will be initialized. Set to false
+    * to NOT initialize the ossimElevManager from preferences.
+    * Default in class is true.
+    */
+   void setElevEnabledFlag(bool flag);
+
    void setPluginLoaderEnabledFlag(bool flag);
 
    /**
     * Can take a file or a directory.  If a directory is givien then it will check all files in
     * the directory and add each file that is detected to be a valid plugin.
     *
+    * @param plugin Is the filename of the plugin to load
+    * @param options Is a keywordlist of plugin specific options
+    
     */ 
-   void loadPlugins(const ossimFilename& plugin);
+   void loadPlugins(const ossimFilename& plugin, const char* options=0);
+   
    void initializePlugins();
    void initializeDefaultFactories();
    void initializeElevation();
@@ -100,10 +116,9 @@ public:
     * e.g. "version 1.7.0 (20071003)"
     */
    ossimString version() const;
-   ossimFilename appName()const
-   {
-	   return theAppName;
-   }
+
+   ossimFilename appName()const;
+
 protected:
    /** protected default constructor. */
    ossimInit();

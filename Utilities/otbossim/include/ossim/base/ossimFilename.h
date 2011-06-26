@@ -9,7 +9,7 @@
 // Description: This class provides manipulation of filenames.
 //
 //*************************************************************************
-// $Id: ossimFilename.h 17597 2010-06-19 15:33:01Z dburken $
+// $Id: ossimFilename.h 19682 2011-05-31 14:21:20Z dburken $
 
 #ifndef ossimFilename_HEADER
 #define ossimFilename_HEADER
@@ -43,10 +43,13 @@ public:
    
    bool operator == (const ossimString& rhs)const;
    bool operator == (const char* rhs)const;
+
+   /** @brief Writes f to the output stream os. */
+//    friend std::ostream& operator<<(std::ostream& os,
+   //                                const ossimFilename& s);
    
    void convertBackToForwardSlashes();
    void convertForwardToBackSlashes();
-
 
    bool setTimes(ossimLocalTm* accessTime,
                  ossimLocalTm* modTime,
@@ -243,5 +246,10 @@ protected:
    static const char thePathSeparator;
 
 };
+
+// inline std::ostream& operator<<(std::ostream& os, const ossimFilename& f)
+// {
+//   return os << f.string().c_str();
+// }
 
 #endif

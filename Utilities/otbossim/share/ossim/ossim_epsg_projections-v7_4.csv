@@ -1747,7 +1747,7 @@ code,name,type,unit,datum code,datum name,ellipsoid,False easting,Latitude of na
 3851,NZGD2000 / NZCS2000,Lambert Conic Conformal (2SP),metre,4167,New Zealand Geodetic Datum 2000,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-44.3,-41,173,-37.3,7000000,3000000
 3852,RSRGD2000 / DGLC2000,Lambert Conic Conformal (2SP),metre,0,Ross Sea Region Geodetic Datum 2000,GRS 1980,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-79.2,-90,157,-76.4,0,500000
 3854,County ST74,Transverse Mercator,metre,4619,SWEREF99,GRS 1980,100182.7406,0,-6500620.121,18.0328332,0.99999506,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-3857,WGS 84 / Pseudo-Mercator,Popular Visualisation Pseudo Mercator,metre,4326,World Geodetic System 1984,WGS 84,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+3857,WGS 84 / Pseudo-Mercator,Popular Visualisation Pseudo Mercator,metre,6055,World Geodetic System 1984,WGS 84,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 3890,IGRS / UTM zone 37N,Transverse Mercator,metre,0,Iraqi Geospatial Reference System,GRS 1980,500000,0,0,39,0.9996,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 3891,IGRS / UTM zone 38N,Transverse Mercator,metre,0,Iraqi Geospatial Reference System,GRS 1980,500000,0,0,45,0.9996,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 3892,IGRS / UTM zone 39N,Transverse Mercator,metre,0,Iraqi Geospatial Reference System,GRS 1980,500000,0,0,51,0.9996,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -1806,7 +1806,6 @@ code,name,type,unit,datum code,datum name,ellipsoid,False easting,Latitude of na
 4071,Chua / UTM zone 23S,Transverse Mercator,metre,0,Chua,International 1924,500000,0,10000000,-45,0.9996,0,0,0,0,0,0,0,0,0,0,0,0,0,,,
 4082,REGCAN95 / UTM zone 27N,Transverse Mercator,metre,0,Red Geodesica de Canarias 1995,GRS 1980,500000,0,0,-21,0.9996,0,0,0,0,0,0,0,0,0,0,0,0,0,,,
 4083,REGCAN95 / UTM zone 28N,Transverse Mercator,metre,0,Red Geodesica de Canarias 1995,GRS 1980,500000,0,0,-15,0.9996,0,0,0,0,0,0,0,0,0,0,0,0,0,,,
-4087,WGS 84 / World Equidistant Cylindrical,Equidistant Cylindrical,metre,4326,World Geodetic System 1984,WGS 84,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,
 4088,World Equidistant Cylindrical (Sphere),Equidistant Cylindrical (Spherical),metre,0,Not specified (based on GRS 1980 Authalic Sphere),GRS 1980 Authalic Sphere,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,,
 4093,ETRS89 / DKTM1,Transverse Mercator,metre,4258,European Terrestrial Reference System 1989,GRS 1980,200000,0,-5000000,9,0.99998,0,0,0,0,0,0,0,0,0,0,0,0,0,,,
 4094,ETRS89 / DKTM2,Transverse Mercator,metre,4258,European Terrestrial Reference System 1989,GRS 1980,400000,0,-5000000,10,0.99998,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

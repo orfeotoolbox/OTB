@@ -9,7 +9,7 @@
 //
 //
 //*******************************************************************
-//  $Id: ossimStreamFactory.cpp 11177 2007-06-07 19:47:04Z dburken $
+//  $Id: ossimStreamFactory.cpp 18652 2011-01-10 13:30:31Z dburken $
 //
 #include <ossim/base/ossimStreamFactory.h>
 #include <fstream>
@@ -45,6 +45,8 @@ ossimRefPtr<ossimIFStream> ossimStreamFactory::createNewIFStream(
    const ossimFilename& file,
    std::ios_base::openmode openMode) const
 {
+   ossimRefPtr<ossimIFStream> result = 0;
+   
 #if OSSIM_HAS_LIBZ
    ossimFilename copyFile = file;
 
@@ -59,14 +61,14 @@ ossimRefPtr<ossimIFStream> ossimStreamFactory::createNewIFStream(
 
          if(!copyFile.exists())
          {
-            return false;
+            return result;
          }
       }
    }
    
    std::ifstream in(copyFile.c_str(), std::ios::in|std::ios::binary);
 
-   if(!in) return 0;
+   if(!in) return result;
 
    unsigned char buf[2];
 
@@ -77,11 +79,10 @@ ossimRefPtr<ossimIFStream> ossimStreamFactory::createNewIFStream(
    if((buf[0] == 0x1F) &&
       (buf[1] == 0x8B))
    {
-      return new ossimIgzStream(copyFile.c_str(),
-                                openMode);
+      result = new ossimIgzStream(copyFile.c_str(), openMode);
    }
 #endif
-   return 0;
+   return result;
 }
 
 ossimStreamFactory::ossimStreamFactory(const ossimStreamFactory&)

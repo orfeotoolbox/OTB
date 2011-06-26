@@ -3,6 +3,18 @@
 RTTI_DEF1(ossimElevationDatabase, "ossimElevationDatabase", ossimObject);
 RTTI_DEF1(ossimElevationCellDatabase, "ossimElevationCellDatabase", ossimElevationDatabase);
 
+const ossimElevationDatabase& ossimElevationDatabase::operator=(const ossimElevationDatabase& rhs)
+{
+   if ( this != &rhs )
+   {
+      ossimElevSource::operator=(rhs);
+      m_connectionString = rhs.m_connectionString;
+      m_geoid            = rhs.m_geoid;
+      m_meanSpacing      = rhs.m_meanSpacing;
+   }
+   return *this;
+}
+
 double ossimElevationDatabase::getOffsetFromEllipsoid(const ossimGpt& gpt)const
 {
    double result = 0.0;
@@ -54,6 +66,20 @@ bool ossimElevationDatabase::saveState(ossimKeywordlist& kwl, const char* prefix
    return ossimObject::saveState(kwl, prefix);
 }
 
+const ossimElevationCellDatabase& ossimElevationCellDatabase::operator=(
+   const ossimElevationCellDatabase& rhs)
+{
+   if ( this != &rhs )
+   {
+      ossimElevationDatabase::operator=(rhs);
+      m_minOpenCells       = rhs.m_minOpenCells;
+      m_maxOpenCells       = rhs.m_maxOpenCells;
+      m_cacheMap           = rhs.m_cacheMap;
+      m_memoryMapCellsFlag = rhs.m_memoryMapCellsFlag;
+   }
+   return *this;
+}
+
 void ossimElevationCellDatabase::getOpenCellList(std::vector<ossimFilename>& list) const
 {
    CellMap::const_iterator iter = m_cacheMap.begin();
@@ -90,15 +116,16 @@ ossimRefPtr<ossimElevCellHandler> ossimElevationCellDatabase::getOrCreateCellHan
     if(result.valid())
     {
       m_cacheMap.insert(std::make_pair(id, new CellInfo(id, result.get())));
-    }
-    if(m_cacheMap.size() > m_maxOpenCells)
-    {
-      flushCacheToMinOpenCells();
+
+      // Check the map size and purge cells if needed.
+      if(m_cacheMap.size() > m_maxOpenCells)
+      {
+         flushCacheToMinOpenCells();
+      }
     }
   }
 
   return result;
-
 }
 
 bool ossimElevationCellDatabase::loadState(const ossimKeywordlist& kwl, const char* prefix)

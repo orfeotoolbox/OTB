@@ -8,7 +8,7 @@
 // Description:  Contains class declaration for ossimBandSelector.
 // 
 //*******************************************************************
-//  $Id: ossimBandSelector.h 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimBandSelector.h 19716 2011-06-03 17:25:43Z gpotts $
 #ifndef ossimBandSelector_HEADER
 #define ossimBandSelector_HEADER
 
@@ -29,6 +29,7 @@ public:
 
    };
    ossimBandSelector();
+   virtual ~ossimBandSelector();
    
    
    virtual ossimString getLongName()  const;
@@ -98,7 +99,6 @@ public:
 						  
    
 protected:
-   virtual ~ossimBandSelector();
 
    /**
     * Called on first getTile, will initialize all data needed.
@@ -119,7 +119,7 @@ protected:
    
    
    ossimRefPtr<ossimImageData> theTile;
-   vector<ossim_uint32>        theOutputBandList;
+   std::vector<ossim_uint32>        theOutputBandList;
    mutable ossimBandSelectorWithinRangeFlagState theWithinRangeFlag;
    bool theOrderedCorrectlyFlag;
 

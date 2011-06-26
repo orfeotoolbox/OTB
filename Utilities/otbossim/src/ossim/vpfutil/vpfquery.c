@@ -108,7 +108,7 @@ typedef struct {
 } expr_type;
 
 
-static void *memalloc( unsigned long int size )
+static void *memalloc( ossim_uint32 size )
 {
    void *ptr;
 
@@ -663,15 +663,15 @@ static int strcompare( char *val1, char *val2, char op )
  *
  *   Purpose:
  *P
- *     This function compares two long integers with the given logical
+ *     This function compares two ossim_int32 integers with the given logical
  *     operator.
  *E
  *::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
  *
  *   Parameters:
  *A
- *    val1    <input>==(long int) first buffer to compare.
- *    val2    <input>==(long int) second buffer to compare.
+ *    val1    <input>==(ossim_int32) first buffer to compare.
+ *    val2    <input>==(ossim_int32) second buffer to compare.
  *    op      <input>==(char) logical operator.
  *    return <output>==(int) TRUE or FALSE.
  *E
@@ -694,7 +694,7 @@ static int strcompare( char *val1, char *val2, char op )
  *    None
  *E
  *************************************************************************/
-static int icompare( long int val1, long int val2, char op )
+static int icompare( ossim_int32 val1, ossim_int32 val2, char op )
 {
    int result;
 
@@ -741,8 +741,8 @@ static int icompare( long int val1, long int val2, char op )
  *
  *   Parameters:
  *A
- *    val1    <input>==(long int) first buffer to compare.
- *    val2    <input>==(long int) second buffer to compare.
+ *    val1    <input>==(ossim_int32) first buffer to compare.
+ *    val2    <input>==(ossim_int32) second buffer to compare.
  *    op      <input>==(char) logical operator.
  *    return <output>==(int) TRUE or FALSE.
  *E
@@ -844,22 +844,22 @@ static int fcompare( float val1, float val2, char op )
  *
  *   Functions Called:
  *F
- *    set_type set_init( long int n ) SET.C
- *    void set_insert( long int element, set_type set ) SET.C
+ *    set_type set_init( ossim_int32 n ) SET.C
+ *    void set_insert( ossim_int32 element, set_type set ) SET.C
  *    linked_list_type parse_expression( char *expression,
  *                     vpf_table_type table ) VPFQUERY.C
  *    row_type read_next_row( vpf_table_type table ) VPFREAD.C
  *    position_type ll_first( linked_list_type list ) LINKLIST.C
  *    int ll_end( position_type position ) LINKLIST.C
  *    void ll_element( position_type position, void *element ) LINKLIST.C
- *    void *get_table_element( long int field_number,
+ *    void *get_table_element( ossim_int32 field_number,
  * 			 row_type row,
  *			 vpf_table_type table,
  *			 void *value,
- *			 long int  *count ) VPFREAD.C
+ *			 ossim_int32  *count ) VPFREAD.C
  *    void display_message( char *info ) USER DEFINED
  *    static int strcompare( char *val1, char *val2, char op ) VPFQUERY.C
- *    static int icompare( long int val1, long int val2, char op ) VPFQUERY.C
+ *    static int icompare( ossim_int32 val1, ossim_int32 val2, char op ) VPFQUERY.C
  *    static int fcompare( float val1, float val2, char op ) VPFQUERY.C
  *    void ll_reset( linked_list_type list ) LINKLIST.C
       void free_row( row_type row, vpf_table_type table) VPFREAD.C
@@ -870,9 +870,9 @@ set_type query_table( char *expression, vpf_table_type table )
    row_type row;
    position_type pos;
    expr_type expr;
-   register long int i;
+   register ossim_int32 i;
    int boolval=FALSE, booltemp=0, join = OR;
-   long int lval, lval2, count;
+   ossim_int32 lval, lval2, count;
    float fval, fval2;
    char tval, tval2, *tptr;
    linked_list_type exprlist;

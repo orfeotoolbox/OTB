@@ -155,6 +155,10 @@ public:
    //! projection defined.
    const ossimDpt& getMetersPerPixel() const;
 
+   //! Assigns the ossimGpts with the ground coordinates of the four corresponding image 
+   //! corner points. Returns true if points are valid.
+   bool getCornerGpts(ossimGpt& ul, ossimGpt& ur, ossimGpt& lr, ossimGpt& ll) const;
+
    //! Prints contents to output stream.
    std::ostream& print(std::ostream& out) const;
 
@@ -219,11 +223,31 @@ public:
    //! Saves the transform (if any) and projection (if any) states to the KWL.
    virtual bool saveState(ossimKeywordlist& kwl, const char* prefix=0) const;
 
-protected:
+   /**
+    * @brief Set m_targetRrds data member.
+    *
+    * This is used by methods worldToRn and localToWorld that do not take a rrds
+    * argument and methods rnToWorld and worldToRn.  If the target rrds is set to 2,
+    * then the resulting point from worldToLocal is relative to reduced
+    * resolution level 2.  Vice versa for localToWorld it is assumed the local
+    * point is relative to the target
+    * reduced resolution data set.
+    *
+    * @param rrds Target (zero based) reduced resolution data set.
+    */
+   void setTargetRrds(ossim_uint32 rrds);
+
+   /**
+    * @return The target zero based reduced resolution data set used for localToWorld and
+    * worldToLocal.
+    * @see setTargetRrds 
+    */
+   ossim_uint32 getTargetRrds() const;
 
    //! When either the projection or the transform changes, this method recomputes the GSD.
    void computeGsd()const;
 
+protected:
    //! @brief Method to back out decimation of a point.
    //! @param rnPt Is a point in resolution n.
    //! @param resolutionLevel Is the resolution of the point rnPt.
@@ -245,6 +269,9 @@ protected:
    mutable ossimDpt                  m_gsd;         //!< meters per pixel
    std::vector<ossimDpt>             m_decimationFactors; //!< List of decimation factors for R-levels
    ossimIpt                          m_imageSize; // Image width and height
+
+   /** @brief Target rrds for localToWorld and worldToLocal methods. */
+   ossim_uint32                      m_targetRrds; 
 
    TYPE_DATA
 };

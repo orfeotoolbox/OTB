@@ -12,7 +12,7 @@
 // Remapper to adjust hue, saturation and intensity.
 //
 //*************************************************************************
-// $Id: ossimHsiRemapper.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimHsiRemapper.h 19689 2011-05-31 15:55:21Z gpotts $
 
 #ifndef ossimHsiRemapper_HEADER
 #define ossimHsiRemapper_HEADER
@@ -39,7 +39,12 @@ public:
    virtual ossimString getShortName() const;
 
    virtual void initialize();
-
+   /*---------------------- PROPERTY INTERFACE ---------------------------*/
+   virtual void setProperty(ossimRefPtr<ossimProperty> property);
+   virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;
+   virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
+   /*---------------------- END PROPERTY INTERFACE ---------------------------*/
+   
    virtual ossimRefPtr<ossimImageData> getTile(const ossimIrect& tile_rect,
                                    ossim_uint32 resLevel=0);
 
@@ -190,6 +195,7 @@ protected:
    void   verifyEnabled();
    double calculateMinNormValue();
 
+   bool theValidFlag;
    ossimRefPtr<ossimImageData> theTile;
    double*                     theBuffer;
    double                      theNormalizedMinPix;

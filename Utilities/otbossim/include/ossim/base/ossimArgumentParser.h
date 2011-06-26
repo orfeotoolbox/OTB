@@ -4,10 +4,11 @@
 // OSSIM.
 //
 //-------------------------------------------------------------------------
-// $Id: ossimArgumentParser.h 17815 2010-08-03 13:23:14Z dburken $
+// $Id: ossimArgumentParser.h 19682 2011-05-31 14:21:20Z dburken $
 #ifndef ossimArgumentParser_HEADER
 #define ossimArgumentParser_HEADER 1
 #include <ossim/base/ossimConstants.h>
+#include <ossim/base/ossimString.h>
 #include <map>
 #include <string>
 #include <iosfwd>
@@ -62,6 +63,11 @@ public:
       ossimParameter(std::string& value)
       {
          theType = OSSIM_STRING_PARAMETER; theValue.theString = &value;
+      }
+      
+      ossimParameter(ossimString& value)
+      {
+         theType = OSSIM_STRING_PARAMETER; theValue.theString = &(value.string());
       }
       
       bool valid(const char* str) const;

@@ -27,7 +27,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimSensorModel.cpp 17767 2010-07-16 12:20:24Z dburken $
+//  $Id: ossimSensorModel.cpp 19438 2011-04-22 17:25:02Z gpotts $
 #include <iostream>
 #include <sstream>
 using namespace std;
@@ -108,6 +108,7 @@ ossimSensorModel::ossimSensorModel()
    theRefImgPt         (0.0, 0.0),
    theBoundGndPolygon  (),
    theImageClipRect    (),
+   theRelPosError      (0),
    theNominalPosError  (0),
    theExtrapolateImageFlag(false),
    theExtrapolateGroundFlag(false)
@@ -134,9 +135,10 @@ ossimSensorModel::ossimSensorModel(const ossimSensorModel& model)
    theRefImgPt        (model.theRefImgPt),
    theBoundGndPolygon (model.theBoundGndPolygon),
    theImageClipRect   (model.theImageClipRect),
-theNominalPosError (model.theNominalPosError),
-theExtrapolateImageFlag(false),
-theExtrapolateGroundFlag(false)
+   theRelPosError      (model.theRelPosError),
+   theNominalPosError (model.theNominalPosError),
+   theExtrapolateImageFlag(false),
+   theExtrapolateGroundFlag(false)
 {
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimSensorModel::ossimSensorModel(model): entering..." << std::endl;
 
@@ -166,9 +168,10 @@ ossimSensorModel::ossimSensorModel(const ossimKeywordlist& geom_kwl)
    theRefImgPt         (0.0, 0.0),
    theBoundGndPolygon  (),
    theImageClipRect    (),
-theNominalPosError  (0),
-theExtrapolateImageFlag(false),
-theExtrapolateGroundFlag(false)
+   theRelPosError      (0),
+   theNominalPosError      (0),
+   theExtrapolateImageFlag(false),
+   theExtrapolateGroundFlag(false)
 {
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimSensorModel::ossimSensorModel(geom_kwl): entering..." << std::endl;
 
@@ -444,6 +447,8 @@ std::ostream& ossimSensorModel::print(std::ostream& out) const
        << "\n theBoundGndPolygon: \n" << theBoundGndPolygon
        << "\n   theImageClipRect: " << theImageClipRect
        << "\n theNominalPosError: " << theNominalPosError
+       << "\n     theNominalPosError: " << theNominalPosError
+       << "\n     theRelPosError: " << theRelPosError
        << endl;
 
    //---
@@ -596,6 +601,15 @@ bool ossimSensorModel::saveState(ossimKeywordlist& kwl,
            corner.lon,
            true);
 
+   kwl.add(prefix,
+           ossimKeywordNames::CE90_ABSOLUTE_KW,
+           theNominalPosError,
+           true, 20);
+
+   kwl.add(prefix,
+           ossimKeywordNames::CE90_RELATIVE_KW,
+           theRelPosError,
+           true, 20);
 
    kwl.add(prefix,
            "rect",
@@ -779,6 +793,26 @@ bool ossimSensorModel::loadState(const ossimKeywordlist& kwl,
    {
       v[3].lon = ossimString(value).toDouble();
    }
+
+   keyword = ossimKeywordNames::CE90_ABSOLUTE_KW;
+   value = kwl.find(prefix, keyword);
+   if (!value)
+   {
+      // Try old keyword for legacy purposes:
+      keyword = ossimKeywordNames::IMAGE_CE90_KW;
+      value = kwl.find(prefix, keyword);
+   }
+   if (value)
+      theNominalPosError = atof(value);
+   else
+      theNominalPosError = 0.0;
+
+   keyword = ossimKeywordNames::CE90_RELATIVE_KW;
+   value = kwl.find(prefix, keyword);
+   if (value)
+      theRelPosError = atof(value);
+   else
+      theRelPosError = theNominalPosError;
 
    //***
    // Initialize other data members given quantities read in KWL:

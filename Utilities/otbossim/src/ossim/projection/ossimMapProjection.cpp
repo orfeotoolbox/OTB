@@ -9,7 +9,7 @@
 // Base class for all map projections.
 // 
 //*******************************************************************
-//  $Id: ossimMapProjection.cpp 18049 2010-09-06 14:27:12Z dburken $
+//  $Id: ossimMapProjection.cpp 19655 2011-05-26 11:40:25Z gpotts $
 
 #include <iostream>
 #include <cstdlib>
@@ -126,7 +126,7 @@ ossim_uint32 ossimMapProjection::getGcsCode() const
    // Take this opportunity to make sure the GCS code were initialized before saving state.
    // See comments in getPcsCode()
    if ((theGcsCode == 0) && theDatum)
-      theGcsCode = theDatum->epsgGcsCode();
+      theGcsCode = theDatum->epsgCode() - 2000;
    return theGcsCode;
 }
 
@@ -155,7 +155,7 @@ ossimDpt ossimMapProjection::getMetersPerPixel() const
    return theMetersPerPixel;
 }
 
-ossimDpt ossimMapProjection::getDecimalDegreesPerPixel() const
+const ossimDpt& ossimMapProjection::getDecimalDegreesPerPixel() const
 {
    return theDegreesPerPixel;
 }
@@ -197,24 +197,42 @@ void ossimMapProjection::setAB(double a, double b)
 
 void ossimMapProjection::setDatum(const ossimDatum* datum)
 {
-   if(datum)
-   {
+
+   if (!datum || (*theDatum == *datum))
+      return;
+
       theDatum = datum; 
       setEllipsoid( *(datum->ellipsoid()));
-      theGcsCode = datum->epsgGcsCode();
-      update();
+
+   // Change the datum of the ossimGpt data members:
+   theOrigin.changeDatum(theDatum);
+   theUlGpt.changeDatum(theDatum);
+
+   update();
+
+   
+//#if 0
+   // A change of datum usually implies a change of EPSG codes. Only do this if codes were
+   // previously assigned, otherwise, the code will be determined later. This avoids unnecessary
+   // projection instantiations associated with findProjectionCode() calls:
+   if ((theGcsCode != 0) && (theGcsCode != datum->epsgCode()))
+      theGcsCode = datum->epsgCode();
+   if (thePcsCode != 0)
+   {
+      thePcsCode = 0; // set to default "unknown" first. 
+      // this will get set on next call to getPcsCode()
+//      thePcsCode = ossimEpsgProjectionDatabase::instance()->findProjectionCode(*this);
    }
+//#endif
 }
 
 void ossimMapProjection::setOrigin(const ossimGpt& origin)
 {
-   //---
    // Set the origin and since the origin has a datum which in turn has
    // an ellipsoid, sync them up.
-   //---
+   // NOTE: Or perhaps we need to change the datum of the input origin to that of theDatum? (OLK 05/11)
    theOrigin    = origin;
-   theDatum     = theOrigin.datum();
-   theEllipsoid = *(theDatum->ellipsoid());
+   theOrigin.changeDatum(theDatum);
       
    update();
 }
@@ -279,13 +297,13 @@ void ossimMapProjection::update()
 
    // Projection Coordinate System(PCS) code check. Since this projection may have changed, it may
    // no longer correspond to it's original PCS code (same for datum GCS code):
-   if ((thePcsCode != 0) && (thePcsCode != 32767))
-   {
-      ossimRefPtr<ossimProjection> proj = ossimEpsgProjectionFactory::instance()->
-         createProjection(ossimString::toString(thePcsCode));
-      if (proj.valid() && (*proj.get() != *this))
-         thePcsCode = 0;
-   }
+   //if ((thePcsCode != 0) && (thePcsCode != 32767))
+   //{
+   //   ossimRefPtr<ossimProjection> proj = ossimEpsgProjectionFactory::instance()->
+   //      createProjection(ossimString::toString(thePcsCode));
+   //   if (proj.valid() && (*proj.get() != *this))
+   //      thePcsCode = 0;
+   //}
 }
 
 void ossimMapProjection::updateFromTransform()
@@ -552,12 +570,9 @@ void ossimMapProjection::lineSampleHeightToWorld(const ossimDpt &lineSample,
                                                  const double&  hgtEllipsoid,
                                                  ossimGpt&      gpt)const
 {
-   //
    // make sure that the passed in lineSample is good and
    // check to make sure our easting northing is good so
    // we can compute the line sample.
-   //
-   //
    if(lineSample.hasNans())
    {
       gpt.makeNan();
@@ -795,6 +810,10 @@ void ossimMapProjection::setUlEastingNorthing(const ossimDpt& ulEastingNorthing)
 void ossimMapProjection::setUlGpt(const ossimGpt& ulGpt)
 {
    theUlGpt = ulGpt;
+
+   // The ossimGpt data members need to use the same datum as this projection:
+   if (*theDatum != *(ulGpt.datum()))
+      theUlGpt.changeDatum(theDatum);
 }
 
 //*****************************************************************************
@@ -960,10 +979,17 @@ bool ossimMapProjection::loadState(const ossimKeywordlist& kwl, const char* pref
    {
       // Let's assign a proper GCS code from the EPSG database if needed and available:
       if (theGcsCode == 0)
-         theGcsCode = theDatum->epsgGcsCode();
+         theGcsCode = theDatum->epsgCode();
    }
    else
+   {
       theDatum = ossimDatumFactory::instance()->wgs84();
+      theGcsCode = theDatum->epsgCode();
+   }
+
+   // Set all ossimGpt-type members to use this datum:
+   theOrigin.datum(theDatum);
+   theUlGpt.datum(theDatum);
 
    // Fetch the ellipsoid from the datum:
    const ossimEllipsoid* ellipse = theDatum->ellipsoid();
@@ -1380,6 +1406,7 @@ std::ostream& ossimMapProjection::print(std::ostream& out) const
        << theOrigin.latd()
        << "\n" << ossimKeywordNames::CENTRAL_MERIDIAN_KW   << ":  "
        << theOrigin.lond()
+       << "\norigin: " << theOrigin
        << "\n" << ossimKeywordNames::DATUM_KW              << ":  "
        << (theDatum?theDatum->code().c_str():"unknown")
        << "\n" << ossimKeywordNames::METERS_PER_PIXEL_X_KW << ":  "
@@ -1399,6 +1426,10 @@ std::ostream& ossimMapProjection::print(std::ostream& out) const
           << ossimDpt(theUlGpt).toString().c_str()
           << "\n" << ossimKeywordNames::TIE_POINT_UNITS_KW << ": " 
           << ossimUnitTypeLut::instance()->getEntryString(OSSIM_DEGREES)
+          << "\n" << ossimKeywordNames::PIXEL_SCALE_XY_KW << ": "
+          << theDegreesPerPixel.toString().c_str()
+          << "\n" << ossimKeywordNames::PIXEL_SCALE_UNITS_KW << ": "
+          << ossimUnitTypeLut::instance()->getEntryString(OSSIM_DEGREES)
           << std::endl;
    }
    else
@@ -1406,6 +1437,10 @@ std::ostream& ossimMapProjection::print(std::ostream& out) const
       out << "\n" << ossimKeywordNames::TIE_POINT_XY_KW << ": " 
           << theUlEastingNorthing.toString().c_str()
           << "\n" << ossimKeywordNames::TIE_POINT_UNITS_KW << ": " 
+          << ossimUnitTypeLut::instance()->getEntryString(OSSIM_METERS)
+          << "\n" << ossimKeywordNames::PIXEL_SCALE_XY_KW << ": "
+          << theMetersPerPixel.toString().c_str()
+          << "\n" << ossimKeywordNames::PIXEL_SCALE_UNITS_KW << ": "
           << ossimUnitTypeLut::instance()->getEntryString(OSSIM_METERS)
           << std::endl;
    }
@@ -1457,6 +1492,12 @@ void ossimMapProjection::computeMetersPerPixel(const ossimGpt& center,
                                                double deltaDegreesPerPixelLon,
                                                ossimDpt &metersPerPixel)
 {
+//#define USE_OSSIMGPT_METERS_PER_DEGREE
+#ifdef USE_OSSIMGPT_METERS_PER_DEGREE
+   ossimDpt metersPerDegree (center.metersPerDegree());
+   metersPerPixel.x = metersPerDegree.x * deltaDegreesPerPixelLon;
+   metersPerPixel.y = metersPerDegree.y * deltaDegreesPerPixelLat;
+#else
    ossimGpt right=center;
    ossimGpt down=center;
 
@@ -1467,10 +1508,9 @@ void ossimMapProjection::computeMetersPerPixel(const ossimGpt& center,
    ossimDpt rightMeters = forward(right);
    ossimDpt downMeters  = forward(down);
 
-
    metersPerPixel.x = (rightMeters - centerMeters).length();
    metersPerPixel.y = (downMeters  - centerMeters).length();
-
+#endif
 }
 
 //*****************************************************************************
@@ -1508,7 +1548,7 @@ bool ossimMapProjection::operator==(const ossimProjection& projection) const
       return true;
    }
 
-   if (theDatum != mapProj->theDatum)
+   if ( *theDatum != *(mapProj->theDatum) )
       return false;
    
    if (theOrigin != mapProj->theOrigin)

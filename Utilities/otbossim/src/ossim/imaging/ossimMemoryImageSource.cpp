@@ -9,6 +9,8 @@
 //*************************************************************************
 //
 #include <ossim/imaging/ossimMemoryImageSource.h>
+#include <ossim/base/ossimKeywordNames.h>
+#include <ossim/base/ossimScalarTypeLut.h>
 RTTI_DEF1(ossimMemoryImageSource, "ossimMemoryImageSource", ossimImageSource);
 
 ossimMemoryImageSource::ossimMemoryImageSource()
@@ -189,4 +191,35 @@ void ossimMemoryImageSource::getDecimationFactor(ossim_uint32 resLevel,
 void ossimMemoryImageSource::getDecimationFactors(std::vector<ossimDpt>& decimations)const
 {
    decimations.push_back(ossimDpt(1.0,1.0));
+}
+
+
+bool ossimMemoryImageSource::saveState(ossimKeywordlist& kwl, const char* prefix)const
+{
+   
+   return ossimImageSource::saveState(kwl, prefix);
+}
+
+bool ossimMemoryImageSource::loadState(const ossimKeywordlist& kwl, const char* prefix)
+{
+   ossimString boundsString     = kwl.find(prefix, "rect");
+   ossimString scalarTypeString = kwl.find(prefix, ossimKeywordNames::SCALAR_TYPE_KW);
+   ossimString nBandsString     = kwl.find(prefix, ossimKeywordNames::NUMBER_BANDS_KW);
+   
+   m_boundingRect.makeNan();
+   if(!boundsString.empty()&&!scalarTypeString.empty()&&!nBandsString.empty())
+   {
+      m_boundingRect.toRect(boundsString);
+      ossimScalarType scalarType = ossimScalarTypeLut::instance()->getScalarTypeFromString(scalarTypeString);
+      ossim_uint32 numberOfBands = nBandsString.toUInt32();
+      
+      if(scalarType!=OSSIM_SCALAR_UNKNOWN)
+      {
+         m_image = new ossimImageData(0, scalarType, numberOfBands, m_boundingRect.width(), m_boundingRect.height());
+         m_image->setImageRectangle(m_boundingRect);
+         m_image->initialize();
+      }
+   }
+
+   return ossimImageSource::loadState(kwl, prefix);
 }

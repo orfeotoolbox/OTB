@@ -9,13 +9,8 @@
 // Contains definition of class ossimSpotDimapSupportData.
 //
 //*****************************************************************************
-// $Id: ossimSpotDimapSupportData.cpp 18140 2010-09-27 11:17:57Z gpotts $
+// $Id: ossimSpotDimapSupportData.cpp 19682 2011-05-31 14:21:20Z dburken $
 
-
-#include <iostream>
-#include <cstdio>
-#include <cstdlib>
-#include <iterator>
 #include <ossim/support_data/ossimSpotDimapSupportData.h>
 #include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimXmlDocument.h>
@@ -26,6 +21,10 @@
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimNotifyContext.h>
+#include <cstdio>
+#include <cstdlib>
+#include <iostream>
+#include <iterator>
 #include <sstream>
 
 // Define Trace flags for use within this file:
@@ -260,12 +259,12 @@ bool ossimSpotDimapSupportData::loadXmlFile(const ossimFilename& file,
    if(in.good()&&(fileSize > 0))
    {
       char buf[100];
-	  fullBuffer.resize(fileSize);
+      fullBuffer.resize(fileSize);
       in.read(buf, ossim::min((ossim_int64)100, fileSize));
       if(!in.fail())
       {
          ossimString testString = ossimString(buf,
-                                  buf + in.gcount());
+                                              buf + in.gcount());
          if(testString.contains("xml"))
          {
             in.seekg(0);
@@ -295,7 +294,7 @@ bool ossimSpotDimapSupportData::loadXmlFile(const ossimFilename& file,
    {
 
       xmlDocument = new ossimXmlDocument;
-      std::istringstream inStringStream(bufferedIo);
+      std::istringstream inStringStream(bufferedIo.string());
       if(!xmlDocument->read(inStringStream))
       {
          return false;
@@ -323,22 +322,22 @@ bool ossimSpotDimapSupportData::loadXmlFile(const ossimFilename& file,
    xmlDocument->findNodes(xpath, xml_nodes);
    if (xml_nodes.size() == 0)
    {
-     setErrorStatus();
-     if(traceDebug())
-       {
+      setErrorStatus();
+      if(traceDebug())
+      {
 	 ossimNotify(ossimNotifyLevel_DEBUG)
-	   << "DEBUG:\n Not a SPOT DIMAP file format."<< std::endl;
-       }
-     return false;
+            << "DEBUG:\n Not a SPOT DIMAP file format."<< std::endl;
+      }
+      return false;
    }
    if ( xml_nodes[0]->getText() != "SPOT" && xml_nodes[0]->getText() != "Spot" && xml_nodes[0]->getText() != "spot" )
-     {
-       if(traceDebug())
-	 {
-	   ossimNotify(ossimNotifyLevel_DEBUG)
-	     << "DEBUG:\n Not a SPOT DIMAP file format."<< std::endl;
-	 }
-       return false;
+   {
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "DEBUG:\n Not a SPOT DIMAP file format."<< std::endl;
+      }
+      return false;
    }
 
 
@@ -427,12 +426,12 @@ bool ossimSpotDimapSupportData::loadXmlFile(const ossimFilename& file,
 
    if (parsePart4(xmlDocument) == false)
    {
-     ossimNotify(ossimNotifyLevel_FATAL)
+      ossimNotify(ossimNotifyLevel_FATAL)
          << MODULE << " DEBUG:"
          << "ossimSpotDimapSupportData::loadXmlFile:"
          << "\nPart 4 initialization failed.  Returning false"
          << std::endl;
-     return false;
+      return false;
    }
 
    if (traceDebug())
@@ -1481,11 +1480,11 @@ bool ossimSpotDimapSupportData::loadState(const ossimKeywordlist& kwl,
    tempString = kwl.find(prefix,"pixel_lookat_angle_x");
    if(tempString != "")
    {
-      std::istringstream in(tempString);
+      std::istringstream in(tempString.string());
       ossimString tempValue;
       for(idx = 0; idx < thePixelLookAngleX.size();++idx)
       {
-         in >> tempValue;
+         in >> tempValue.string();
          thePixelLookAngleX[idx] = tempValue.toDouble();
       }
    }
@@ -1495,26 +1494,26 @@ bool ossimSpotDimapSupportData::loadState(const ossimKeywordlist& kwl,
    tempString = kwl.find(prefix,"pixel_lookat_angle_y");
    if(tempString != "")
    {
-      std::istringstream in(tempString);
+      std::istringstream in(tempString.string());
       ossimString tempValue;
       for(idx = 0; idx < thePixelLookAngleY.size();++idx)
       {
-         in >> tempValue;
+         in >> tempValue.string();
          thePixelLookAngleY[idx] = tempValue.toDouble();
       }
    }
-
+   
 
    total =  ossimString(kwl.find(prefix,"number_of_attitude_samples")).toUInt32();
    theAttitudeSamples.resize(total);
    tempString = kwl.find(prefix,"attitude_samples");
    if(tempString != "")
    {
-      std::istringstream in(tempString);
+      std::istringstream in(tempString.string());
       ossimString x, y, z;
       for(idx = 0; idx < theAttitudeSamples.size();++idx)
       {
-         in >> x >> y >> z;
+         in >> x.string() >> y.string() >> z.string();
          theAttitudeSamples[idx] =ossimDpt3d(x.toDouble(), y.toDouble(), z.toDouble());
       }
    }
@@ -1524,11 +1523,11 @@ bool ossimSpotDimapSupportData::loadState(const ossimKeywordlist& kwl,
    tempString = kwl.find(prefix,"attitude_sample_times");
    if(tempString != "")
    {
-      std::istringstream in(tempString);
+      std::istringstream in(tempString.string());
       ossimString tempValue;
       for(idx = 0; idx < theAttSampTimes.size();++idx)
       {
-         in >> tempValue;
+         in >> tempValue.string();
          theAttSampTimes[idx] = tempValue.toDouble();
       }
    }
@@ -1538,11 +1537,11 @@ bool ossimSpotDimapSupportData::loadState(const ossimKeywordlist& kwl,
    tempString = kwl.find(prefix,"position_ecf_samples");
    if(tempString != "")
    {
-      std::istringstream in(tempString);
+      std::istringstream in(tempString.string());
       ossimString x, y, z;
       for(idx = 0; idx < thePosEcfSamples.size();++idx)
       {
-         in >> x >> y >> z;
+         in >> x.string() >> y.string() >> z.string();
          thePosEcfSamples[idx] = ossimDpt3d(x.toDouble(), y.toDouble(), z.toDouble());
       }
    }
@@ -1552,11 +1551,11 @@ bool ossimSpotDimapSupportData::loadState(const ossimKeywordlist& kwl,
    tempString = kwl.find(prefix,"velocity_ecf_samples");
    if(tempString != "")
    {
-      std::istringstream in(tempString);
+      std::istringstream in(tempString.string());
       ossimString x, y, z;
       for(idx = 0; idx < theVelEcfSamples.size();++idx)
       {
-         in >> x >> y >> z;
+         in >> x.string() >> y.string() >> z.string();
          theVelEcfSamples[idx] = ossimDpt3d(x.toDouble(), y.toDouble(), z.toDouble());
       }
    }
@@ -1566,11 +1565,11 @@ bool ossimSpotDimapSupportData::loadState(const ossimKeywordlist& kwl,
    tempString = kwl.find(prefix,"ephemeris_sample_times");
    if(tempString != "")
    {
-      std::istringstream in(tempString);
+      std::istringstream in(tempString.string());
       ossimString tempValue;
       for(idx = 0; idx < theEphSampTimes.size();++idx)
       {
-         in >> tempValue;
+         in >> tempValue.string();
          theEphSampTimes[idx] = tempValue.toDouble();
       }
    }
@@ -1606,39 +1605,39 @@ bool ossimSpotDimapSupportData::loadState(const ossimKeywordlist& kwl,
    tempString = kwl.find(prefix,"physical_bias");
    if(tempString != "")
    {
-     std::istringstream in(tempString);
-     ossimString tempValue;
-     for(idx = 0; idx < thePhysicalBias.size();++idx)
-     {
-       in >> tempValue;
-       thePhysicalBias[idx] = tempValue.toDouble();
-     }
+      std::istringstream in(tempString.string());
+      ossimString tempValue;
+      for(idx = 0; idx < thePhysicalBias.size();++idx)
+      {
+         in >> tempValue.string();
+         thePhysicalBias[idx] = tempValue.toDouble();
+      }
    }
 
    thePhysicalGain.resize(theNumBands);
    tempString = kwl.find(prefix,"physical_gain");
    if(tempString != "")
    {
-     std::istringstream in(tempString);
-     ossimString tempValue;
-     for(idx = 0; idx < thePhysicalGain.size();++idx)
-     {
-       in >> tempValue;
-       thePhysicalGain[idx] = tempValue.toDouble();
-     }
+      std::istringstream in(tempString.string());
+      ossimString tempValue;
+      for(idx = 0; idx < thePhysicalGain.size();++idx)
+      {
+         in >> tempValue.string();
+         thePhysicalGain[idx] = tempValue.toDouble();
+      }
    }
 
    theSolarIrradiance.resize(theNumBands);
    tempString = kwl.find(prefix,"solar_irradiance");
    if(tempString != "")
    {
-     std::istringstream in(tempString);
-     ossimString tempValue;
-     for(idx = 0; idx < theSolarIrradiance.size();++idx)
-     {
-       in >> tempValue;
-       theSolarIrradiance[idx] = tempValue.toDouble();
-     }
+      std::istringstream in(tempString.string());
+      ossimString tempValue;
+      for(idx = 0; idx < theSolarIrradiance.size();++idx)
+      {
+         in >> tempValue.string();
+         theSolarIrradiance[idx] = tempValue.toDouble();
+      }
    }
 
    return true;
@@ -1646,11 +1645,11 @@ bool ossimSpotDimapSupportData::loadState(const ossimKeywordlist& kwl,
 
 ossimGpt ossimSpotDimapSupportData::createGround(const ossimString& s)const
 {
-   std::istringstream in(s);
+   std::istringstream in(s.string());
    ossimString lat, lon, height;
    ossimString code;
 
-   in >> lat >> lon >> height >> code;
+   in >> lat.string() >> lon.string() >> height.string() >> code.string();
 
    return ossimGpt(lat.toDouble(),
                    lon.toDouble(),
@@ -1661,11 +1660,11 @@ ossimGpt ossimSpotDimapSupportData::createGround(const ossimString& s)const
 
 ossimDpt ossimSpotDimapSupportData::createDpt(const ossimString& s)const
 {
-   std::istringstream in(s);
+   std::istringstream in(s.string());
    ossimString x, y;
    ossimString code;
 
-   in >> x >> y;
+   in >> x.string() >> y.string();
 
    return ossimDpt(x.toDouble(), y.toDouble());
 

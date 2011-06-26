@@ -120,8 +120,8 @@ static int box_intersection( line_segment_type lseg,
 
 /* Replace the given coordinate string into the given edge row */
 /* and write the new row to the specified edge table.	       */
-static void write_edge_record( long int id, coordinate_type *coord,
-			       long int ncoord, row_type row,
+static void write_edge_record( ossim_int32 id, coordinate_type *coord,
+			       ossim_int32 ncoord, row_type row,
 			       vpf_table_type *table )
 {
    int ID_, COORD_;
@@ -174,7 +174,7 @@ void vpf_edge_clip( char *covpath, extent_type extent, char *outpath )
    vpf_table_type in, out;
    row_type row;
    edge_rec_type inedge, outedge;
-   long int i,j,n,id;
+   ossim_int32 i,j,n,id;
    line_segment_type lseg;
    coordinate_type coord;
    char path[255], *def;

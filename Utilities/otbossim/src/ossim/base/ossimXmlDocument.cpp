@@ -1,6 +1,5 @@
 //*******************************************************************
-// Copyright (C) 2001 ImageLinks Inc.  All rights reserved.
-//
+// 
 // License:  LGPL
 // 
 // See LICENSE.txt file in the top level directory for more details.
@@ -12,11 +11,9 @@
 // Contains definition of class ossimXmlDocument. This class provides read-only
 // parsing and accessing of an XML document file.
 //*****************************************************************************
-// $Id: ossimXmlDocument.cpp 12521 2008-02-28 20:09:25Z gpotts $
+// $Id: ossimXmlDocument.cpp 19682 2011-05-31 14:21:20Z dburken $
 
-#include <stack>
-#include <iostream>
-#include <fstream>
+
 #include <ossim/base/ossimXmlDocument.h>
 #include <ossim/base/ossimXmlAttribute.h>
 #include <ossim/base/ossimXmlNode.h>
@@ -24,10 +21,12 @@
 #include <ossim/base/ossimRegExp.h>
 #include <ossim/base/ossimNotifyContext.h>
 #include <ossim/base/ossimKeywordNames.h>
+#include <stack>
+#include <iostream>
+#include <fstream>
 
-//
+
 // Static trace for debugging
-//
 #include <ossim/base/ossimTrace.h>
 static ossimTrace traceDebug("ossimXmlDocument:debug");
 
@@ -77,7 +76,7 @@ ossimXmlDocument::~ossimXmlDocument()
 
 bool ossimXmlDocument::write(const ossimFilename& file)
 {
-   std::ofstream out(file);
+   std::ofstream out(file.c_str());
 
    if(out)
    {

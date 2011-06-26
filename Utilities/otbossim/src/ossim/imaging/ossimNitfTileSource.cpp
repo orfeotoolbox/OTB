@@ -9,7 +9,7 @@
 // Description:  Contains class definition for ossimNitfTileSource.
 // 
 //*******************************************************************
-//  $Id: ossimNitfTileSource.cpp 18148 2010-09-27 15:24:28Z gpotts $
+//  $Id: ossimNitfTileSource.cpp 19682 2011-05-31 14:21:20Z dburken $
 #include <jerror.h>
 #include <fstream>
 
@@ -43,11 +43,6 @@
 #include <ossim/support_data/ossimNitfStdidcTag.h>
 #include <ossim/support_data/ossimNitfVqCompressionHeader.h>
 
-
-#if defined(JPEG_DUAL_MODE_8_12)
-#undef JPEG_DUAL_MODE_8_12 
-#endif
-
 #if defined(JPEG_DUAL_MODE_8_12)
 #include <ossim/imaging/ossimNitfTileSource_12.h>
 #endif
@@ -55,7 +50,7 @@
 RTTI_DEF1_INST(ossimNitfTileSource, "ossimNitfTileSource", ossimImageHandler)
 
 #ifdef OSSIM_ID_ENABLED
-   static const char OSSIM_ID[] = "$Id: ossimNitfTileSource.cpp 18148 2010-09-27 15:24:28Z gpotts $";
+   static const char OSSIM_ID[] = "$Id: ossimNitfTileSource.cpp 19682 2011-05-31 14:21:20Z dburken $";
 #endif
    
 //---
@@ -285,6 +280,17 @@ bool ossimNitfTileSource::parseFile()
             theEntryList.push_back(i);
             theNitfImageHeader.push_back(hdr);
          }
+         else 
+         {
+            ossimString cat = hdr->getCategory().trim().downcase();
+            // this is an NGA Highr Resoluion Digital Terrain Model NITF format
+            if(cat == "dtem")
+            {
+               theEntryList.push_back(i);
+               theNitfImageHeader.push_back(hdr);
+            }
+         }
+
       }
       else if ( canUncompress(hdr.get()) )
       {
@@ -881,7 +887,8 @@ void ossimNitfTileSource::establishDecimationFactors()
       hdr->getDecimationFactor(decimation);
       if ((decimation != 0.0) && !ossim::isnan(decimation))
       {
-         ossimDpt dec_2d (decimation, decimation);
+         // ossimDpt dec_2d (decimation, decimation);
+         ossimDpt dec_2d (1.0, 1.0);
          theDecimationFactors.push_back(dec_2d);
       }
    }

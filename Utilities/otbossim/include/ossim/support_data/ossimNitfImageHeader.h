@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageHeader.h 17598 2010-06-19 15:37:46Z dburken $
+// $Id: ossimNitfImageHeader.h 18413 2010-11-11 19:56:22Z gpotts $
 #ifndef ossimNitfImageHeader_HEADER
 #define ossimNitfImageHeader_HEADER
 
@@ -159,6 +159,7 @@ public:
    virtual std::ostream& print(std::ostream& out,
                                const std::string& prefix) const = 0;
 
+   virtual bool saveState(ossimKeywordlist& kwl, const ossimString& prefix="")const;
 protected:
 
    /**

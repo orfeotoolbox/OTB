@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimGeoAnnotationPolyObject.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
+// $Id: ossimGeoAnnotationPolyObject.cpp 19734 2011-06-06 23:45:36Z dburken $
 
 #include <sstream>
 
@@ -30,7 +30,8 @@ ossimGeoAnnotationPolyObject::ossimGeoAnnotationPolyObject(bool enableFill,
                                                            ossim_uint8 thickness)
    :ossimGeoAnnotationObject(r, g, b, thickness),
     thePolygon(),
-    theProjectedPolyObject(NULL)
+    theProjectedPolyObject(0),
+    m_PolyType(OSSIM_POLY_EXTERIOR_RING)
 {
    theProjectedPolyObject = new ossimAnnotationPolyObject(enableFill,
                                                           r,
@@ -48,7 +49,8 @@ ossimGeoAnnotationPolyObject::ossimGeoAnnotationPolyObject(
    ossim_uint8 thickness)
    :ossimGeoAnnotationObject(r, g, b, thickness),
     thePolygon(),
-    theProjectedPolyObject(NULL)
+    theProjectedPolyObject(0),
+    m_PolyType(OSSIM_POLY_EXTERIOR_RING)
 {
    
    thePolygon = groundPts;
@@ -71,13 +73,14 @@ ossimGeoAnnotationPolyObject::ossimGeoAnnotationPolyObject(
    const ossimGeoAnnotationPolyObject& rhs)
    :ossimGeoAnnotationObject(rhs),
     thePolygon(rhs.thePolygon),
-    theProjectedPolyObject(rhs.theProjectedPolyObject.valid()?(ossimAnnotationPolyObject*)rhs.theProjectedPolyObject->dup():(ossimAnnotationPolyObject*)NULL)
+    theProjectedPolyObject(rhs.theProjectedPolyObject.valid()?(ossimAnnotationPolyObject*)rhs.theProjectedPolyObject->dup():(ossimAnnotationPolyObject*)0),
+    m_PolyType(rhs.m_PolyType)
 {
 }
 
 ossimGeoAnnotationPolyObject::~ossimGeoAnnotationPolyObject()
 {
-   theProjectedPolyObject = NULL;
+   theProjectedPolyObject = 0;
 }
 
 ossimObject* ossimGeoAnnotationPolyObject::dup()const
@@ -152,7 +155,7 @@ ossimAnnotationObject* ossimGeoAnnotationPolyObject::getNewClippedObject(
       return theProjectedPolyObject->getNewClippedObject(rect);
    }
    
-   return (ossimAnnotationObject*)NULL;
+   return (ossimAnnotationObject*)0;
 }
 
 bool ossimGeoAnnotationPolyObject::intersects(const ossimDrect& rect)const

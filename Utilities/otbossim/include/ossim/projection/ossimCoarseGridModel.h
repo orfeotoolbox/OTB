@@ -14,7 +14,7 @@
 //   implementation of an interpolation sensor model.
 //
 //*****************************************************************************
-//  $Id: ossimCoarseGridModel.h 17815 2010-08-03 13:23:14Z dburken $
+//  $Id: ossimCoarseGridModel.h 18693 2011-01-17 18:49:15Z dburken $
 
 #ifndef ossimCoarseGridModel_HEADER
 #define ossimCoarseGridModel_HEADER
@@ -142,7 +142,7 @@ public:
    inline virtual bool useForward()const {return false;} //!image to ground faster
 
    
-private:
+protected:
    /**
     * METHOD: reallocateGrid()
     * Deletes existing allocated memory and reallocates
@@ -150,6 +150,12 @@ private:
     */
    void reallocateGrid(const ossimIpt& size);
    
+   //! Initializes base class data members after grids have been assigned.
+   void initializeModelParams(ossimIrect irect);
+
+   //! Implements its own extrapolation since this can be handled by ossimDblGrid.
+   virtual ossimGpt extrapolate (const ossimDpt& imgPt, const double& height=ossim::nan()) const;
+
    /**
     * Data Members:
     */

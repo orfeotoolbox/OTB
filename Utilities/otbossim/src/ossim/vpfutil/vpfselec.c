@@ -129,7 +129,7 @@ set_type read_selected_features( view_type *view, int themenum )
       selset.buf = NULL;
       return selset;
    }
-   fread( &selset.size, sizeof(long int), 1, fp );
+   fread( &selset.size, sizeof(ossim_int32), 1, fp );
    selset.buf = (char *)malloc( ((selset.size/8L)+1L) * sizeof(char) );
    if (selset.buf) {
       fread( selset.buf, sizeof(char), (selset.size/8L)+1L, fp );
@@ -206,7 +206,7 @@ void save_selected_features( view_type *view, int themenum,
    /* Write the set */
    fp = fopen(path,"wb");
    if (!fp) return;
-   fwrite( &(selset.size), sizeof(long int), 1, fp );
+   fwrite( &(selset.size), sizeof(ossim_int32), 1, fp );
    if (!selset.diskstorage) {
       fwrite( selset.buf, sizeof(char), (selset.size/8L)+1L, fp );
    } else {
@@ -320,7 +320,7 @@ set_type bounding_select( char *path, extent_type mapextent,
 {
    vpf_table_type table;
    set_type set;
-   long int i, count;
+   ossim_int32 i, count;
    extent_type box, pextent;
    double x1,y1,x2,y2;
    row_type row;
@@ -497,8 +497,8 @@ set_type *get_selected_primitives( view_type *view,
    char *brname[] = {"","ebr","fbr","tbr","nbr","cbr"};
    set_type feature_rows, primitive_rows, tile_features;
    set_type *primitives;
-   long int prim_rownum, count, tile;
-   register long int i,j, pclass, start,end;
+   ossim_int32 prim_rownum, count, tile;
+   register ossim_int32 i,j, pclass, start,end;
    char path[255], covpath[255], tiledir[255], *buf, str[255];
    fcrel_type fcrel;
    linked_list_type primlist;
@@ -777,7 +777,7 @@ set_type *get_selected_primitives( view_type *view,
  *     fcrel     <input>==(fcrel_type) feature class relate structure.
  *     feature_rows <input>==(set_type) set of selected features.
  *     mapenv    <input>==(map_environment_type *) map environment.
- *     tile      <input>==(long int) tile number.
+ *     tile      <input>==(ossim_int32) tile number.
  *     tiledir   <input>==(char *) path to the tile directory.
  *     status   <output>==(int *) status of the function:
  *                         1 if completed, 0 if user escape.
@@ -796,7 +796,7 @@ set_type get_selected_tile_primitives( library_type *library,
 				       fcrel_type fcrel,
 				       set_type feature_rows,
 				       map_environment_type *mapenv,
-				       long int tile,
+				       ossim_int32 tile,
 				       char *tiledir,
 				       int *status )
 {
@@ -807,8 +807,8 @@ set_type get_selected_tile_primitives( library_type *library,
    char *brname[] = {"","ebr","fbr","tbr","nbr","cbr"};
    set_type primitive_rows, tile_features;
    set_type primitives;
-   long int prim_rownum;
-   register long int i,pclass, start,end;
+   ossim_int32 prim_rownum;
+   register ossim_int32 i,pclass, start,end;
    char path[255], covpath[255];
    linked_list_type primlist;
    position_type p;
@@ -984,14 +984,14 @@ set_type get_selected_tile_primitives( library_type *library,
 #endif
 
 #if __MSDOS__
-static long int filesize( char *file )
+static ossim_int32 filesize( char *file )
 {
    struct stat s;
    stat(file,&s);
-   return (long int)s.st_size;
+   return (ossim_int32)s.st_size;
 }
 
-static long int available_space( char *drive )
+static ossim_int32 available_space( char *drive )
 {
    struct dfree disktable;
    int disknum;
@@ -1000,9 +1000,9 @@ static long int available_space( char *drive )
 
    disknum=toupper(drive[0])-'A'+1;
    getdfree(disknum,&disktable);
-   return (long int) disktable.df_avail *
-	  (long int) disktable.df_sclus *
-	  (long int) disktable.df_bsec;
+   return (ossim_int32) disktable.df_avail *
+	  (ossim_int32) disktable.df_sclus *
+	  (ossim_int32) disktable.df_bsec;
 }
 #endif
 
@@ -1048,10 +1048,10 @@ int draw_selected_features( view_type *view,
    vpf_table_type rngtable,edgtable,fbrtable, tile_table;
    row_type row;
    char *ptable[] = {"","edg","fac","txt","end","cnd"};
-   register long int i, j, p, pclass, tile;
+   register ossim_int32 i, j, p, pclass, tile;
    int display_order[] = {FACE,EDGE,ENTITY_NODE,CONNECTED_NODE,TEXT};
-   register long int starttile, endtile, startprim, endprim;
-   long int count;
+   register ossim_int32 starttile, endtile, startprim, endprim;
+   ossim_int32 count;
    char path[255], covpath[255], tiledir[255], *buf, str[255];
    char *drive, rngpath[255],edgpath[255],edxpath[255],fbrpath[255];
    boolean rng_rdisk,edg_rdisk,fbr_rdisk;

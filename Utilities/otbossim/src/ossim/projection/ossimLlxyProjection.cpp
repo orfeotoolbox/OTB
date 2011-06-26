@@ -11,7 +11,7 @@
 // longitude to x / y" projection.
 // 
 //*******************************************************************
-//  $Id: ossimLlxyProjection.cpp 16479 2010-02-02 19:22:00Z gpotts $
+//  $Id: ossimLlxyProjection.cpp 19651 2011-05-25 18:49:22Z gpotts $
 
 #include <ossim/projection/ossimLlxyProjection.h>
 #include <ossim/elevation/ossimElevManager.h>
@@ -308,11 +308,6 @@ void ossimLlxyProjection::setLonSpacing(double spacing)
 bool ossimLlxyProjection::isGeographic() const
 {
    return true;
-}
-
-void ossimLlxyProjection::setOrigin(const ossimGpt& origin)
-{
-   theOrigin = origin;
 }
 
 double ossimLlxyProjection::getLatSpacing() const

@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimConnectableObject.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimConnectableObject.cpp 19635 2011-05-24 13:26:31Z gpotts $
 #include <ossim/base/ossimConnectableObject.h>
 #include <ossim/base/ossimIdManager.h>
 #include <ossim/base/ossimKeywordNames.h>
@@ -15,6 +15,7 @@
 #include <ossim/base/ossimTextProperty.h>
 #include <ossim/base/ossimNotify.h>
 #include <algorithm>
+#include <ossim/base/ossimVisitor.h>
 
 RTTI_DEF3(ossimConnectableObject,
           "ossimConnectableObject",
@@ -119,7 +120,6 @@ bool ossimConnectableObject::isConnected(ossimConnectableObjectDirectionType dir
    {
       ConnectableObjectList::const_iterator current = theOutputObjectList.begin();
       current = theOutputObjectList.begin();
-      
       while(current != theOutputObjectList.end())
       {
          if(! (*current))
@@ -329,6 +329,7 @@ ossimConnectableObject* ossimConnectableObject::findObjectOfType(
 }
 
 ossimConnectableObject* ossimConnectableObject::findInputObjectOfType(
+    
                                                                       const ossimString& className)
 {
    // See if we are of class type.
@@ -336,7 +337,7 @@ ossimConnectableObject* ossimConnectableObject::findInputObjectOfType(
    {
       return this;
    }
-   
+   ossimConnectableObject* result = 0;
    // If we are a container, look inside for type.
    ossimConnectableContainerInterface* container =
    PTR_CAST(ossimConnectableContainerInterface, this);
@@ -348,7 +349,7 @@ ossimConnectableObject* ossimConnectableObject::findInputObjectOfType(
       {
          for (ossim_uint32 idx = NUMBER_OF_OBJECTS; idx > 0; --idx) 
          {
-            ossimConnectableObject* result =
+            result =
             container->getConnectableObject(idx-1);
             if (result)
             {
@@ -356,36 +357,34 @@ ossimConnectableObject* ossimConnectableObject::findInputObjectOfType(
                {
                   return result;
                }
+               else 
+               {
+                  result = result->findInputObjectOfType(className);
+                  if(result)
+                  {
+                     return result;
+                  }
+               }
             }
          }
       }
    }
-   
-   if ( getInputListIsFixedFlag() && (theInputObjectList.size() == 1) )
+  
+   ossim_uint32 inputs = getNumberOfInputs();
+   ossim_uint32 inputIdx = 0;
+   for(inputIdx = 0; inputIdx < inputs; ++inputIdx)
    {
-      // Look at the input connection.
-      ossimConnectableObject* input = theInputObjectList[0].get();
-      
+      ossimConnectableObject* input = getInput(inputIdx);
       if(input)
       {
-         // See if the input can cast to type.
-         if(input->canCastTo(className))
-         {
-            return input;
-         }
-         
-         // Look inside the input connection.
-         ossimConnectableObject* result =
-         input->findInputObjectOfType(className);
+         result = input->findInputObjectOfType(className);
          if(result)
          {
             return result;
          }
       }
-      
-   } // End of "Must have fixed input of one."
-   
-   return 0;
+   }
+   return result;
 }
 
 ossim_int32 ossimConnectableObject::findInputIndex(const ossimConnectableObject* object)
@@ -1391,6 +1390,58 @@ const ossimConnectableObject* ossimConnectableObject::getOutput(ossim_uint32 ind
    return 0;
 }
 
+void  ossimConnectableObject::findAllObjectsOfType(ConnectableObjectList& result,
+                                                   const RTTItypeid& typeInfo,
+                                                   bool recurse)
+{
+   int j;
+   // go through children first
+   //
+   ossimConnectableContainerInterface* inter = PTR_CAST(ossimConnectableContainerInterface,
+                                                        this);
+   if(inter)
+   {
+      ConnectableObjectList tempList = inter->findAllObjectsOfType(typeInfo,
+                                                                   recurse);
+      
+      for(j = 0; j < (int)tempList.size(); ++j)
+      {
+         ConnectableObjectList::iterator iter = std::find(result.begin(), result.end(), tempList[j]);
+         if(iter == result.end())
+         {
+            result.push_back(tempList[j].get());
+         }
+      }
+   }
+   
+}
+
+void ossimConnectableObject::findAllObjectsOfType(ConnectableObjectList& result, 
+                                                  const ossimString& className,
+                                                  bool recurse)
+{
+   int j;
+   // go through children first
+   //
+   ossimConnectableContainerInterface* inter = PTR_CAST(ossimConnectableContainerInterface,
+                                                        this);
+   if(inter)
+   {
+      ConnectableObjectList tempList = inter->findAllObjectsOfType(className,
+                                                                   recurse);
+      
+      for(j = 0; j < (int)tempList.size(); ++j)
+      {
+         ConnectableObjectList::iterator iter = std::find(result.begin(), result.end(), tempList[j]);
+         if(iter == result.end())
+         {
+            result.push_back(tempList[j].get());
+         }
+      }
+   }
+}
+
+
 void ossimConnectableObject::findAllInputsOfType(ConnectableObjectList& result,
                                                  const RTTItypeid& typeInfo,
                                                  bool propagateToInputs,
@@ -1671,6 +1722,11 @@ void ossimConnectableObject::setProperty(ossimRefPtr<ossimProperty> property)
    }
 }
 
+void ossimConnectableObject::setProperty(const ossimString& name, const ossimString& value)
+{
+   ossimPropertyInterface::setProperty(name, value);
+}
+
 ossimRefPtr<ossimProperty> ossimConnectableObject::getProperty(const ossimString& name)const
 {
    if(name == "Description")
@@ -1730,23 +1786,34 @@ bool ossimConnectableObject::loadState(const ossimKeywordlist& kwl,
    {
       numberInputs = ossimString(lookup).toLong();
    }
-   else
+   else if(!theInputListIsFixedFlag)
    {
       regExpression = ossimString("^(") + ossimString(prefix) + "input_connection[0-9]+)";
       numberInputs = kwl.getNumberOfSubstringKeys(regExpression);
    }
+   else
+   {
+      // if we are fixed then the list should already be set
+      numberInputs = theInputObjectList.size();
+   }
+
    
    lookup = kwl.find(prefix, ossimKeywordNames::NUMBER_OUTPUTS_KW);
    if(lookup)
    {
       numberOutputs = ossimString(lookup).toLong();
    }
-   else
+   else if(!theOutputListIsFixedFlag)
    {
       regExpression = ossimString("^(") + ossimString(prefix) + "output_connection[0-9]+)";
       numberOutputs = kwl.getNumberOfSubstringKeys(regExpression);
    }
-   
+   else 
+   {
+      // if we are fixed then the list should already be set
+      numberOutputs = theOutputObjectList.size();
+   }
+
    lookup = kwl.find(prefix, ossimKeywordNames::DESCRIPTION_KW);
    if (lookup)
    {
@@ -2071,4 +2138,55 @@ bool ossimConnectableObject::moveInputToBottom(const ossimId& id)
    }
    
    return result;
+}
+
+void ossimConnectableObject::accept(ossimVisitor& visitor)
+{
+   if(!visitor.stopTraversal())
+   {
+      if(!visitor.hasVisited(this))
+      {
+         visitor.visit(this);
+      }
+      
+      if(!visitor.stopTraversal())
+      {
+         
+         if(visitor.getVisitorType() & ossimVisitor::VISIT_INPUTS)
+         {
+            ConnectableObjectList::iterator current = theInputObjectList.begin();
+            while(current != theInputObjectList.end())
+            {
+               if((*current).get()&&!visitor.hasVisited((*current).get())) (*current)->accept(visitor);
+               ++current;
+            }
+         }
+         
+         if(visitor.getVisitorType() & ossimVisitor::VISIT_OUTPUTS)
+         {
+            // go through the outputs
+            ConnectableObjectList::iterator current = theOutputObjectList.begin();
+            while(current != theOutputObjectList.end())
+            {
+               if((*current).get()&&!visitor.hasVisited((*current).get())) (*current)->accept(visitor);
+               ++current;
+            }
+            ossimConnectableObject* obj = dynamic_cast<ossimConnectableObject*>(theOwner);
+            
+            if((!getNumberOfOutputs()||!isConnected(CONNECTABLE_DIRECTION_OUTPUT))&&obj)
+            {
+               ossimVisitor::VisitorType currentType = visitor.getVisitorType();
+               // lets make sure inputs and outputs are turned off for we are traversing all children and we should not have
+               // to have that enabled
+               //
+               visitor.turnOffVisitorType(ossimVisitor::VISIT_INPUTS);
+               
+               obj->accept(visitor);
+               
+               visitor.setVisitorType(currentType);
+               
+            }
+         } 
+      }  
+   }
 }

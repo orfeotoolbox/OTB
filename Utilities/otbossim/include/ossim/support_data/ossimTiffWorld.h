@@ -10,7 +10,7 @@
 // Description: Container class for a tiff world file data.
 //
 //********************************************************************
-// $Id: ossimTiffWorld.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimTiffWorld.h 18693 2011-01-17 18:49:15Z dburken $
 #ifndef ossimTiffWorld_HEADER
 #define ossimTiffWorld_HEADER
 
@@ -32,15 +32,19 @@ public:
 		  ossimUnitType  unit = OSSIM_METERS);
    
    ~ossimTiffWorld();
-
-  bool saveToOssimGeom(ossimKeywordlist& kwl, const char* prefix=NULL)const;
-  bool loadFromOssimGeom(const ossimKeywordlist& kwl, const char* prefix=NULL);
-
-  std::ostream& print(std::ostream& out) const;
-
-  friend OSSIMDLLEXPORT std::ostream& operator<<(std::ostream& out,
-                                                 const ossimTiffWorld& obj);
-
+   
+   bool open(const ossimFilename& file,
+             ossimPixelType ptype,
+             ossimUnitType unit);
+   
+   bool saveToOssimGeom(ossimKeywordlist& kwl, const char* prefix=NULL)const;
+   bool loadFromOssimGeom(const ossimKeywordlist& kwl, const char* prefix=NULL);
+   
+   std::ostream& print(std::ostream& out) const;
+   
+   friend OSSIMDLLEXPORT std::ostream& operator<<(std::ostream& out,
+                                                  const ossimTiffWorld& obj);
+   
    /*!
     * transformed.x =
     * imagePoint.x*theX_scale + imagePoint.y*the3rdValue + theTranslateX
@@ -51,16 +55,26 @@ public:
    void forward(const ossimDpt& imagePoint,
                 ossimDpt& transformedPoint);
    
-   double theXScale;     // xscale
-   double the2ndValue;   // rotation term
-   double the3rdValue;   // rotaion term
-   double theYScale;     // yscale
-   double theTranslateX; // 
-   double theTranslateY; //
+   //! Converts world file parameters into x, y scale (for use in affine transform) 
+   const ossimDpt& getScale() const { return theComputedScale; }
+   
+   //! Converts world file parameters into RH rotation in radians (for use in affine transform) 
+   double getRotation() const { return theComputedRotation; }
+   
+   //! Provides access to the translation (for use in affine transform) 
+   const ossimDpt& getTranslation() const { return theTranslation; }
 
 protected:
+   double theXform1;     
+   double theXform2;   
+   double theXform3;   
+   double theXform4;   
+   ossimDpt theTranslation;
+
    ossimPixelType thePixelType;
    ossimUnitType  theUnit;
+   ossimDpt theComputedScale;
+   double   theComputedRotation;  //!< Radians
 };
 
 #endif

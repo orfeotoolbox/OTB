@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageDataHelper.cpp 17195 2010-04-23 17:32:18Z dburken $
+// $Id: ossimImageDataHelper.cpp 18360 2010-11-01 15:12:12Z dburken $
 #include <ossim/imaging/ossimImageDataHelper.h>
 #include <ossim/base/ossimPolyArea2d.h>
 #include <ossim/base/ossimLine.h>
@@ -64,6 +64,13 @@ void ossimImageDataHelper::copyInputToThis(const void* input,
                          region,
                          clipPoly);
          break;
+      }
+      case OSSIM_SINT32:
+      {
+          copyInputToThis(reinterpret_cast<const ossim_sint32*>(input),
+                          region,
+                          clipPoly);
+          break;
       }
       case OSSIM_FLOAT:
       case OSSIM_NORMALIZED_FLOAT:

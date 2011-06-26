@@ -110,6 +110,7 @@ public:
                             const ossimDpt& lr,
                             const ossimDpt& ll);
   
+   virtual bool saveState(ossimKeywordlist& kwl, const ossimString& prefix="")const;
 
    static const ossimString IID1_KW;
    static const ossimString IDATIM_KW;

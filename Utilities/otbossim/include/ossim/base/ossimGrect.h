@@ -8,20 +8,22 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimGrect.h 14465 2009-05-07 18:48:02Z gpotts $
+// $Id: ossimGrect.h 19447 2011-04-25 19:42:33Z dburken $
 #ifndef ossimGrect_HEADER
-#define ossimGrect_HEADER
-#include <vector>
-#include <iostream>
+#define ossimGrect_HEADER 1
 
+#include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimDatumFactory.h>
 #include <ossim/base/ossimGpt.h>
 #include <ossim/base/ossimCommon.h>
 
-class OSSIMDLLEXPORT ossimGrect
+#include <vector>
+#include <iostream>
+
+class OSSIM_DLL ossimGrect
 {
 public:
-   friend std::ostream& operator<<(std::ostream& os, const ossimGrect& rect);
+   friend OSSIM_DLL std::ostream& operator<<(std::ostream& os, const ossimGrect& rect);
 
    /**
     * Will default to 0,0,0,0.
@@ -199,10 +201,10 @@ inline ossimGrect ossimGrect::clipToRect(const ossimGrect& rect)const
 {
     double     ulx, uly, lrx, lry;
 
-    ulx = ossim::max(rect.ul().lond(),ul().lond());
-    uly = ossim::min(rect.ul().latd(),ul().latd());
-    lrx = ossim::min(rect.lr().lond(),lr().lond());
-    lry = ossim::max(rect.lr().latd(),lr().latd());
+    ulx = ossim::max<ossim_float64>(rect.ul().lond(),ul().lond());
+    uly = ossim::min<ossim_float64>(rect.ul().latd(),ul().latd());
+    lrx = ossim::min<ossim_float64>(rect.lr().lond(),lr().lond());
+    lry = ossim::max<ossim_float64>(rect.lr().latd(),lr().latd());
 
     if( lrx < ulx || lry > uly )
     {

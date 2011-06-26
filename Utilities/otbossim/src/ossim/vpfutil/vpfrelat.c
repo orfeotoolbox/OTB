@@ -123,7 +123,7 @@ linked_list_type fcs_relate_list( char *fcname, char *start_table,
    set_type fcset, set1, set2;
    char tablename[255], *buf, expr[255];
    row_type row;
-   long int rownum,n;
+   ossim_int32 rownum,n;
    int TABLE1_, KEY1_, TABLE2_, KEY2_;
 
    rlist = ll_init();
@@ -220,10 +220,10 @@ linked_list_type fcs_relate_list( char *fcname, char *start_table,
  *
  *   Parameters:
  *A
- *    srchval <input> == (long int) specified search value.
+ *    srchval <input> == (ossim_int32) specified search value.
  *    field   <input> == (int) table sort field.
  *    table   <input> == (vpf_table_type) VPF table.
- *    vpf_binary_search <output> == (long int) first matching row.
+ *    vpf_binary_search <output> == (ossim_int32) first matching row.
  *E
  *:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
  *
@@ -232,11 +232,11 @@ linked_list_type fcs_relate_list( char *fcname, char *start_table,
  *    Barry Michaels  DOS Turbo C
  *E
  *************************************************************************/
-long int vpf_binary_search( long int srchval,
+ossim_int32 vpf_binary_search( ossim_int32 srchval,
 			    int field,
 			    vpf_table_type table )
 {
-   long int left,right, ival, rowid, n;
+   ossim_int32 left,right, ival, rowid, n;
    row_type row;
 
    left = 1;
@@ -280,11 +280,11 @@ long int vpf_binary_search( long int srchval,
  *    Barry Michaels  DOS Turbo C
  *E
  *************************************************************************/
-long int related_row( void *keyval1,
+ossim_int32 related_row( void *keyval1,
 		      vpf_table_type table2, char *key2,
 		      int sort_flag )
 {
-   long int rowid, i, ival, kval, n;
+   ossim_int32 rowid, i, ival, kval, n;
    row_type row;
    int KEY2_;
    char cval, *tval;
@@ -369,7 +369,7 @@ linked_list_type related_rows( void *keyval1,
 {
    linked_list_type rowlist;
    set_type rowset;
-   long int rowid, i, ival, kval, n, start,end;
+   ossim_int32 rowid, i, ival, kval, n, start,end;
    row_type row = 0;
    int KEY2_;
    char cval, *tval;
@@ -524,7 +524,7 @@ fcrel_type select_feature_class_relate( int fcnum,
 {
    int storage, cov;
    vpf_table_type fcs;
-   long int i;
+   ossim_int32 i;
    char path[255], covpath[255];
    position_type p;
    vpf_relate_struct rcell;
@@ -636,11 +636,11 @@ fcrel_type select_feature_class_relate( int fcnum,
  *    Barry Michaels  DOS Turbo C
  *E
  *************************************************************************/
-long int fc_row_number( row_type row, fcrel_type fcrel, long int tile )
+ossim_int32 fc_row_number( row_type row, fcrel_type fcrel, ossim_int32 tile )
 {
    row_type relrow;
-   long int count;
-   long int i, rownum, keyval;
+   ossim_int32 count;
+   ossim_int32 i, rownum, keyval;
    id_triplet_type triplet_keyval;
    int KEY1_, KEY_;
    position_type p;
@@ -743,12 +743,12 @@ long int fc_row_number( row_type row, fcrel_type fcrel, long int tile )
  *************************************************************************/
 linked_list_type fc_row_numbers( row_type row,
 				 fcrel_type fcrel,
-				 long int tile,
+				 ossim_int32 tile,
 				 ThematicIndex *idx )
 {
    row_type relrow;
-   long int count;
-   long int n, rownum, keyval;
+   ossim_int32 count;
+   ossim_int32 n, rownum, keyval;
    id_triplet_type triplet_keyval;
    int KEY1_, KEY_;
    position_type p, prow, pkey;

@@ -7,10 +7,11 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfCompressionHeader.h 16035 2009-12-03 21:32:27Z dburken $
+// $Id: ossimNitfCompressionHeader.h 18415 2010-11-11 20:02:44Z gpotts $
 #ifndef ossimNitfCompressionHeader_HEADER
 #define ossimNitfCompressionHeader_HEADER
 #include <ossim/base/ossimObject.h>
+#include <ossim/base/ossimString.h>
 
 #include <iosfwd>
 #include <string>
@@ -27,6 +28,7 @@ public:
    virtual std::ostream& print(std::ostream& out,
                                const std::string& prefix) const=0;
    
+   virtual bool saveState(ossimKeywordlist& kwl, const ossimString& prefix="")const;
 protected:
 
 TYPE_DATA;   

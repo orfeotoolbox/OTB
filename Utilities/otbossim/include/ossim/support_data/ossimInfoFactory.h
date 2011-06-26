@@ -51,6 +51,9 @@ private:
 
    /** hidden from use operator = */
    const ossimInfoFactory& operator=(const ossimInfoFactory& rhs);
+
+   /** The single instance of this class. */
+   static ossimInfoFactory* theInstance;
 };
 
 #endif /* End of "#ifndef ossimInfoFactory_HEADER" */

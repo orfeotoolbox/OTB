@@ -10,7 +10,7 @@
 // Description: This class provides some simple utilities for aux file.
 //
 //********************************************************************
-// $Id: ossimAuxFileHandler.h 468 2009-12-23 16:58:08Z ming.su $
+// $Id: ossimAuxFileHandler.h 2644 2011-05-26 15:20:11Z oscar.kramer $
 
 #ifndef ossimAuxFileHandler_HEADER
 #define ossimAuxFileHandler_HEADER
@@ -213,15 +213,18 @@ public:
   *  Reads a single record from a aux file.
   *  Returns true if succesful. Returns false if EOF or error.
   */
-  ossimString getProjectionName();
+  const ossimString& getProjectionName() const { return m_projName; }
 
-  ossimString getDatumName();
+  const ossimString& getDatumName() const { return m_datumName; }
+
+  const ossimString& getUnitType() const { return m_unitsType; }
 
 private:
 
   ossimAuxInfo* m_auxInfo;
-  ossimString projName;
-  ossimString datumName;
+  ossimString m_projName;
+  ossimString m_datumName;
+  ossimString m_unitsType;
 };
 
 #endif  // #ifndef ossimAuxFileHandlerl_HEADER

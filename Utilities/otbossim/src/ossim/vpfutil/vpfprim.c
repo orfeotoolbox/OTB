@@ -60,12 +60,12 @@
 #include <ossim/vpfutil/vpfprim.h>
 
 /* Compute the offset from the start of the row to the given field */
-static long int row_offset( int field, row_type row, vpf_table_type table) 
+static ossim_int32 row_offset( int field, row_type row, vpf_table_type table) 
 {
-   long int offset,n,size;
+   ossim_int32 offset,n,size;
    int i;
    id_triplet_type key;
-   int keysize[] = {0,sizeof(char),sizeof(short int),sizeof(long int)};
+   int keysize[] = {0,sizeof(char),sizeof(short int),sizeof(ossim_int32)};
 
    if (field < 0 || field >= table.nfields) return -1;
 
@@ -73,7 +73,7 @@ static long int row_offset( int field, row_type row, vpf_table_type table)
    for (i=0;i<field;i++) {
       switch (table.header[i].type) {
 	 case 'I':
-	    offset += sizeof(long int)*row[i].count;
+	    offset += sizeof(ossim_int32)*row[i].count;
 	    break;
 	 case 'S':
 	    offset += sizeof(short int)*row[i].count;
@@ -147,7 +147,7 @@ static long int row_offset( int field, row_type row, vpf_table_type table)
 edge_rec_type create_edge_rec( row_type row, vpf_table_type edge_table )
 {
    edge_rec_type edge;
-   long int count,i;
+   ossim_int32 count,i;
    int rowid,start,end,right,left,rightfwd,leftfwd,coord;
    id_triplet_type key;
    tri_coordinate_type *Zcoord;
@@ -283,7 +283,7 @@ edge_rec_type create_edge_rec( row_type row, vpf_table_type edge_table )
       edge.fp = edge_table.fp;
       edge.startpos = index_pos(edge.id,edge_table) +
 		      row_offset(coord,row,edge_table) +
-		      (long int)sizeof(long int);
+		      (ossim_int32)sizeof(ossim_int32);
       edge.pos = -1;
    }
 
@@ -314,7 +314,7 @@ edge_rec_type create_edge_rec( row_type row, vpf_table_type edge_table )
  *
  *   Parameters:
  *A
- *    id         <input> == (long int) edge id number.
+ *    id         <input> == (ossim_int32) edge id number.
  *    edge_table <input> == (vpf_table_type) opened VPF table to read.
  *    return    <output> == (edge_rec_type) returned edge record.
  *E
@@ -325,7 +325,7 @@ edge_rec_type create_edge_rec( row_type row, vpf_table_type edge_table )
  *    Barry Michaels    April 1991                      DOS Turbo C
  *E
  *************************************************************************/
-edge_rec_type read_edge( long int  id,
+edge_rec_type read_edge( ossim_int32  id,
 			 vpf_table_type edge_table )
 {
    edge_rec_type edge;
@@ -492,14 +492,14 @@ coordinate_type next_edge_coordinate( edge_rec_type *edge_rec )
    return coord;
 }
 
-coordinate_type get_edge_coordinate( long int n,
+coordinate_type get_edge_coordinate( ossim_int32 n,
 				     edge_rec_type *edge_rec )
 {
    coordinate_type coord;
    tri_coordinate_type Zcoord;
    double_coordinate_type Bcoord;
    double_tri_coordinate_type Ycoord;
-   long int size;
+   ossim_int32 size;
 
    if (n < 0)
       return first_edge_coordinate(edge_rec);
@@ -582,7 +582,7 @@ coordinate_type get_edge_coordinate( long int n,
  *
  *   Parameters:
  *A
- *    id           <input> == (long int) face id number.
+ *    id           <input> == (ossim_int32) face id number.
  *    face_table   <input> == (vpf_table_type) opened VPF table to read.
  *    return      <output> == (face_rec_type) returned face record.
  *E
@@ -593,12 +593,12 @@ coordinate_type get_edge_coordinate( long int n,
  *    Barry Michaels    April 1991                      DOS Turbo C
  *E
  *************************************************************************/
-face_rec_type read_face( long int  id,
+face_rec_type read_face( ossim_int32  id,
 			 vpf_table_type face_table )
 {
    face_rec_type face;
    int rowid,ring;
-   long int count;
+   ossim_int32 count;
    row_type row;
 
    rowid = table_pos( "ID", face_table );
@@ -648,7 +648,7 @@ face_rec_type read_next_face( vpf_table_type face_table )
 {
    face_rec_type face;
    int rowid,ring;
-   long int count;
+   ossim_int32 count;
    row_type row;
 
    rowid = table_pos( "ID", face_table );
@@ -683,7 +683,7 @@ face_rec_type read_next_face( vpf_table_type face_table )
  *
  *   Parameters:
  *A
- *    id           <input> == (long int) ring id number.
+ *    id           <input> == (ossim_int32) ring id number.
  *    ring_table   <input> == (vpf_table_type) opened VPF table to read.
  *    return      <output> == (ring_rec_type) returned ring record.
  *E
@@ -694,12 +694,12 @@ face_rec_type read_next_face( vpf_table_type face_table )
  *    Barry Michaels    April 1991                      DOS Turbo C
  *E
  *************************************************************************/
-ring_rec_type read_ring( long int  id,
+ring_rec_type read_ring( ossim_int32  id,
 			 vpf_table_type ring_table )
 {
    ring_rec_type ring;
    int rowid,face,edge;
-   long int count;
+   ossim_int32 count;
    row_type row;
 
    rowid = table_pos( "ID", ring_table );
@@ -754,7 +754,7 @@ ring_rec_type read_next_ring( vpf_table_type ring_table )
 {
    ring_rec_type ring;
    int rowid,face,edge;
-   long int count;
+   ossim_int32 count;
    row_type row;
 
    rowid = table_pos( "ID", ring_table );
@@ -797,7 +797,7 @@ ring_rec_type read_next_ring( vpf_table_type ring_table )
  *
  *   Parameters:
  *A
- *    id            <input> == (long int) point id number.
+ *    id            <input> == (ossim_int32) point id number.
  *    point_table   <input> == (vpf_table_type) opened VPF table to read.
  *    return       <output> == (point_rec_type) returned point record.
  *E
@@ -808,12 +808,12 @@ ring_rec_type read_next_ring( vpf_table_type ring_table )
  *    Barry Michaels    April 1991                      DOS Turbo C
  *E
  *************************************************************************/
-point_rec_type read_point( long int  id,
+point_rec_type read_point( ossim_int32  id,
 			   vpf_table_type point_table )
 {
    point_rec_type point;
    int rowid,face,coord;
-   long int count;
+   ossim_int32 count;
    coordinate_type c;
    tri_coordinate_type Zcoord;
    double_coordinate_type Bcoord;
@@ -898,7 +898,7 @@ point_rec_type read_next_point( vpf_table_type point_table )
 {
    point_rec_type point;
    int rowid,face,coord;
-   long int count;
+   ossim_int32 count;
    coordinate_type c;
    tri_coordinate_type Zcoord;
    double_coordinate_type Bcoord;
@@ -970,7 +970,7 @@ point_rec_type read_next_point( vpf_table_type point_table )
  *
  *   Parameters:
  *A
- *    id           <input> == (long int) annotation id.
+ *    id           <input> == (ossim_int32) annotation id.
  *    anno_table   <input> == (vpf_table_type) opened VPF table to read.
  *    return      <output> == (anno_rec_type) returned annotation record.
  *E
@@ -981,12 +981,12 @@ point_rec_type read_next_point( vpf_table_type point_table )
  *    Barry Michaels    April 1991                      DOS Turbo C
  *E
  *************************************************************************/
-anno_rec_type read_anno( long int id,
+anno_rec_type read_anno( ossim_int32 id,
 			 vpf_table_type anno_table )
 {
    anno_rec_type anno;
    int rowid,text,coord;
-   long int count;
+   ossim_int32 count;
    coordinate_type *c;
    tri_coordinate_type *Zcoord;
    double_coordinate_type *Bcoord;
@@ -1077,7 +1077,7 @@ anno_rec_type read_next_anno( vpf_table_type anno_table )
 {
    anno_rec_type anno;
    int rowid,text,coord;
-   long int count;
+   ossim_int32 count;
    coordinate_type *c;
    tri_coordinate_type *Zcoord;
    double_coordinate_type *Bcoord;

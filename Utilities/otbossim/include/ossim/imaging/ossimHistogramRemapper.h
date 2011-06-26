@@ -28,7 +28,7 @@
 //   but is provided for convenience.
 //   
 //*************************************************************************
-// $Id: ossimHistogramRemapper.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimHistogramRemapper.h 19786 2011-06-24 15:17:30Z gpotts $
 #ifndef ossimHistogramRemapper_HEADER
 #define ossimHistogramRemapper_HEADER
 
@@ -408,6 +408,10 @@ public:
     */
    void setHistogram(ossimRefPtr<ossimMultiResLevelHistogram> histogram);
    
+   ossimRefPtr<ossimMultiResLevelHistogram> getHistogram();
+   ossimRefPtr<const ossimMultiResLevelHistogram> getHistogram()const;
+   
+   
    /**
     * Returns pointer to histogram for band and reduced res level.
     * - Band is zero based relative to the input connection.  This will be
@@ -464,6 +468,15 @@ public:
     * Returns the max pixel of the band.
     */
    virtual double getMaxPixelValue(ossim_uint32 band=0)const;
+
+   /**
+    * Will test for the input being a ossimHistogramSource and allow pulling the histogram
+    * from a histogram source.
+    */
+   bool canConnectMyInputTo(ossim_int32 inputIndex,
+                            const ossimConnectableObject* object)const;
+
+
 protected:
    /** virtual destructor */
    virtual ~ossimHistogramRemapper();
@@ -532,7 +545,7 @@ private:
 
    StretchMode                   theStretchMode;
    bool                          theDirtyFlag;
-   ossimRefPtr<ossimMultiResLevelHistogram>  theHistogram;
+   mutable ossimRefPtr<ossimMultiResLevelHistogram>  theHistogram;
    vector<ossim_float64>         theNormalizedLowClipPoint;
    vector<ossim_float64>         theNormalizedHighClipPoint;
    vector<ossim_float64>         theMidPoint;

@@ -31,12 +31,12 @@ bool ossimVpfBoundingRecordTable::openTable(const ossimFilename& tableName)
          {
             result = true;
             reset();
-            long n = 1;
+            ossim_int32 n = 1;
             
-            float xmin;
-            float ymin;
-            float xmax;
-            float ymax;
+            ossim_float32 xmin;
+            ossim_float32 ymin;
+            ossim_float32 xmax;
+            ossim_float32 ymax;
             
             row_type row;
             for(int rowIdx = 1; rowIdx < getNumberOfRows(); ++rowIdx)

@@ -13,10 +13,10 @@
 // Height is relative to the ellipsoid in meters.
 //
 //*******************************************************************
-//  $Id: ossimGpt.h 17815 2010-08-03 13:23:14Z dburken $
+//  $Id: ossimGpt.h 19071 2011-03-13 16:02:06Z dburken $
 
-#ifndef gpt_HEADER
-#define gpt_HEADER
+#ifndef ossimGpt_HEADER
+#define ossimGpt_HEADER 1
 
 #include <iosfwd>
 #include <ossim/base/ossimConstants.h>
@@ -220,7 +220,13 @@ public:
     * Converts the lon data member to a value between -180 and +180:
     */
    void  limitLonTo180()
-      { if (lon < -180.0) lon += 360.0; else if (lon > 180.0) lon -= 360.0; }
+   { if (lon < -180.0) lon += 360.0; else if (lon > 180.0) lon -= 360.0; }
+
+   /**
+    * @brief Wrap method to maintain longitude between -180 and +180 and latitude between
+    * -90 and +90.  Inlined below.
+    */
+   void wrap();
 
    void clampLon(double low, double high)
       {
@@ -278,4 +284,78 @@ private:
  
 };
 
-#endif
+inline const ossimGpt& ossimGpt::operator=(const ossimGpt& aPt)
+{
+   if ( this != &aPt )
+   {
+      lat = aPt.lat;
+      lon = aPt.lon;
+      hgt = aPt.hgt;
+      
+      if(aPt.datum())
+      {
+         theDatum = aPt.datum();
+      }
+      if(!theDatum)
+      {
+         theDatum = ossimDatumFactory::instance()->wgs84();
+      }
+   }
+   return *this;
+}
+
+inline void ossimGpt::wrap()
+{
+   if ( lon > 180.0 )
+   {
+      do
+      {
+         lon = lon - 360.0;
+      } while ( lon > 180.0 );
+   }
+   else if ( lon < -180.0  )
+   {
+      do
+      {
+         lon = lon + 360.0;
+      } while ( lon < -180.0 );
+   }
+   if ( lat > 90.0 )
+   {
+      if ( lat > 360.0 ) // Remove total wraps.
+      {
+         do
+         {
+            lat = lat - 360.0;
+         } while ( lat > 360.0);
+      }
+      if ( lat > 270.0 ) // Between 270 and 360.
+      {
+         lat = lat - 360.0;
+      }
+      else if ( lat > 90 ) // Between 90 and 270.
+      {
+         lat = 180.0 - lat;
+      }
+   }
+   else if ( lat < -90.0  )
+   {
+      if ( lat < -360.0 ) // Remove total wraps.
+      {
+         do
+         {
+            lat = lat + 360.0;
+         } while ( lat < -360.0);
+      }
+      if ( lat < -270.0 ) 
+      {
+         lat = 360.0 + lat; // Between -270 and -360;
+      }
+      else if ( lat < -90.0 )
+      {
+         lat = -180.0 - lat;
+      }
+   }
+}
+
+#endif /* #ifndef ossimGpt_HEADER */

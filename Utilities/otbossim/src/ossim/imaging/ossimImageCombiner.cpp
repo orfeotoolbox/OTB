@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageCombiner.cpp 17932 2010-08-19 20:34:35Z dburken $
+// $Id: ossimImageCombiner.cpp 18590 2010-12-22 14:31:04Z dburken $
 #include <ossim/imaging/ossimImageCombiner.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimIrect.h>
@@ -196,11 +196,7 @@ double ossimImageCombiner::getNullPixelValue(ossim_uint32 band)const
 double ossimImageCombiner::getMinPixelValue(ossim_uint32 band)const
 {
    const char* MODULE = "ossimImageCombiner::getMinPixelValue";
-   
-   if(traceDebug())
-   {
-      CLOG <<"entered..." << endl;
-   }
+
    if(!getNumberOfInputs())
    {
       return ossim::nan();
@@ -233,20 +229,14 @@ double ossimImageCombiner::getMinPixelValue(ossim_uint32 band)const
    {
       CLOG << "min pixel returned is = " << result;
    }
-   if(traceDebug())
-   {
-      CLOG <<"leaving..." << endl;
-   }
+
    return result;
 }
 
 double ossimImageCombiner::getMaxPixelValue(ossim_uint32 band)const
 {
    const char* MODULE = "ossimImageCombiner::getMaxPixelValue";
-   if(traceDebug())
-   {
-      CLOG <<"entered..." << endl;
-   }
+
    if(!getNumberOfInputs())
    {
       return ossim::nan();
@@ -278,10 +268,6 @@ double ossimImageCombiner::getMaxPixelValue(ossim_uint32 band)const
    if(traceDebug())
    {
       CLOG << "max pixel returned is = " << result;
-   }
-   if(traceDebug())
-   {
-      CLOG <<"leaving..." << endl;
    }
    
    return result;

@@ -174,7 +174,7 @@ void vpf_display_record( row_type row,
    vpf_table_type vdt;
    row_type vdtrow;
    int found;
-   long int l, lval, count, *lptr;
+   ossim_int32 l, lval, count, *lptr;
    short int s,sval,*sptr;
    float f,*fptr;
    date_type date;
@@ -473,7 +473,7 @@ void vpf_display_record( row_type row,
  *   Parameters:
  *A
  *    fc      <input> == (int) feature class number.
- *    row     <input> == (long int) row of the attribute table.
+ *    row     <input> == (ossim_int32) row of the attribute table.
  *    library <input> == (library_type *) VPF library structure.
  *    fp      <input> == (FILE *) pointer to the output file.
  *E
@@ -485,7 +485,7 @@ void vpf_display_record( row_type row,
  *E
  *************************************************************************/
 void display_attributes( int fc,
-			 long int row,
+			 ossim_int32 row,
 			 library_type *library,
 			 FILE *fp )
 {

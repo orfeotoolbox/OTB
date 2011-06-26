@@ -15,7 +15,7 @@
 // $Id
 
 #ifndef ossimNitfMstgtaTag_HEADER
-#define ossimNitfMstgtaTag_HEADER
+#define ossimNitfMstgtaTag_HEADER 1
 
 #include <ossim/support_data/ossimNitfRegisteredTag.h>
 
@@ -50,7 +50,7 @@ public:
     * @brief Method to return tag name.
     * @return "MSTGTA" as an ossimString.
     */
-   virtual ossimString getRegisterTagName()const;
+   virtual std::string getRegisterTagName()const;
 
    /** @brief Method to parse data from stream. */
    virtual void parseStream(std::istream& in);

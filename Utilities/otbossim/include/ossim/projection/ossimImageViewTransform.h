@@ -11,7 +11,7 @@
 //               mainly be used in the resampling process.
 //
 //*******************************************************************
-//  $Id: ossimImageViewTransform.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimImageViewTransform.h 18397 2010-11-09 19:13:46Z gpotts $
 #ifndef ossimImageViewTransform_HEADER
 #define ossimImageViewTransform_HEADER
 #include <iostream>
@@ -32,6 +32,7 @@ public:
    ossimImageViewTransform();
 
    virtual void forward(const ossimDpt& input, ossimDpt& output) const;
+   virtual void inverse(const ossimDpt& input, ossimDpt& output) const;
   
   /*!
    * derived classes will specify if the imageViewTransform is an

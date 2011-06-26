@@ -20,6 +20,12 @@ void ossimImageViewTransform::forward(const ossimDpt& input,
    imageToView(input, output);
 }
 
+void ossimImageViewTransform::inverse(const ossimDpt& input,
+                                      ossimDpt& output) const
+{
+   viewToImage(input, output);
+}
+
 void ossimImageViewTransform::imageToView(const ossimDpt& imagePoint,
                                           ossimDpt&       viewPoint)const
 {
@@ -29,7 +35,7 @@ void ossimImageViewTransform::imageToView(const ossimDpt& imagePoint,
 void ossimImageViewTransform::viewToImage(const ossimDpt& viewPoint,
                                           ossimDpt&       imagePoint)const
 {
-   imagePoint = viewPoint;
+   ossim2dTo2dTransform::inverse(viewPoint, imagePoint);
 }
 
 ossimDpt ossimImageViewTransform::imageToView(const ossimDpt& imagePoint)const
@@ -76,16 +82,16 @@ ossimDpt ossimImageViewTransform::getRoundTripErrorImage(const ossimDpt& imagePt
    return result;
 }
   
-bool ossimImageViewTransform::loadState(const ossimKeywordlist& /* kwl */,
-                                        const char* /* prefix */)
+bool ossimImageViewTransform::loadState(const ossimKeywordlist& kwl,
+                                        const char* prefix)
 {
-   return true;
+   return ossim2dTo2dTransform::loadState(kwl, prefix);
 }
 
-bool ossimImageViewTransform::saveState(ossimKeywordlist& /* kwl */,
-                                        const char* /* prefix */)const
+bool ossimImageViewTransform::saveState(ossimKeywordlist& kwl,
+                                        const char* prefix)const
 {
-   return true;
+   return ossim2dTo2dTransform::saveState(kwl, prefix);
 }
 
 void ossimImageViewTransform::getScaleChangeImageToView(ossimDpt& result,

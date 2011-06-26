@@ -9,7 +9,7 @@
 // Contains class declaration for ossimUsgsDemTileSource.
 //
 //********************************************************************
-// $Id: ossimUsgsDemTileSource.cpp 17932 2010-08-19 20:34:35Z dburken $
+// $Id: ossimUsgsDemTileSource.cpp 19640 2011-05-25 15:58:00Z oscarkramer $
 
 #include <iostream>
 #include <fstream>
@@ -29,6 +29,7 @@
 #include <ossim/support_data/ossimDemGrid.h>
 #include <ossim/support_data/ossimDemUtil.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
+#include <ossim/imaging/ossimImageGeometryRegistry.h>
 
 RTTI_DEF1(ossimUsgsDemTileSource, "ossimUsgsDemTileSource", ossimImageHandler)
 
@@ -364,6 +365,43 @@ bool ossimUsgsDemTileSource::loadState(const ossimKeywordlist& kwl,
 
    return false;
 }
+
+ossimRefPtr<ossimImageGeometry> ossimUsgsDemTileSource::getImageGeometry()
+{
+   if ( !theGeometry )
+   {
+      // Check for external geom:
+      theGeometry = getExternalImageGeometry();
+
+      if ( !theGeometry )
+      {
+         // Check the internal geometry first to avoid a factory call.
+         theGeometry = getInternalImageGeometry();
+
+         // At this point it is assured theGeometry is set.
+
+         //---
+         // WARNING:
+         // Must create/set theGeometry at this point or the next call to
+         // ossimImageGeometryRegistry::extendGeometry will put us in an infinite loop
+         // as it does a recursive call back to ossimImageHandler::getImageGeometry().
+         //---         
+
+         // Check for set projection.
+         if ( !theGeometry->getProjection() )
+         {
+            // Try factories for projection.
+            ossimImageGeometryRegistry::instance()->extendGeometry(this);
+         }
+      }
+
+      // Set image things the geometry object should know about.
+      initImageParameters( theGeometry.get() );
+   }
+
+   return theGeometry;
+}
+
 
 ossimRefPtr<ossimImageGeometry> ossimUsgsDemTileSource::getInternalImageGeometry() const
 {

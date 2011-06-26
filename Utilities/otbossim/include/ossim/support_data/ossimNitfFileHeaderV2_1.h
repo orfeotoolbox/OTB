@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFileHeaderV2_1.h 14662 2009-06-07 16:15:23Z dburken $
+// $Id: ossimNitfFileHeaderV2_1.h 18674 2011-01-11 16:24:12Z dburken $
 #ifndef ossimNitfFileHeaderV2_1_HEADER
 #define ossimNitfFileHeaderV2_1_HEADER
 
@@ -62,12 +62,20 @@ public:
 };
 
 
-struct ossimNitfTextFileInfoRecordV2_1
+class OSSIMDLLEXPORT ossimNitfTextFileInfoRecordV2_1
 {
 public:
    friend std::ostream& operator<<(std::ostream& out,
                                    const ossimNitfTextFileInfoRecordV2_1 &data);
 
+
+   ossim_uint32 getHeaderLength()const;
+   ossim_uint32 getTextLength()const;
+   ossim_uint32 getTotalLength()const;
+
+   void setSubheaderLength(ossim_uint32 length);
+   void setTextLength(ossim_uint64 length);
+   
    /**
     * Is a 4 byte numeric 0282-9999
     */
@@ -135,6 +143,9 @@ public:
    virtual ossimDrect getImageRect()const;
 
    virtual void addImageInfoRecord(const ossimNitfImageInfoRecordV2_1& recordInfo);
+   virtual void addTextInfoRecord(const ossimNitfTextFileInfoRecordV2_1& recordInfo);
+	virtual void addDataExtSegInfoRecord(const ossimNitfDataExtSegInfoRecordV2_1& recordInfo);
+
    virtual void replaceImageInfoRecord(int i, const ossimNitfImageInfoRecordV2_1& recordInfo);
    
    virtual ossimNitfImageHeader*  getNewImageHeader(ossim_uint32 imageNumber,
@@ -245,6 +256,9 @@ private:
     * @throw std::out_of_range
     */
    void setNumberOfImageInfoRecords(ossim_uint64 num);
+   void setNumberOfTextInfoRecords(ossim_uint64 num);
+   void setNumberOfGraphicInfoRecords(ossim_uint64 num);
+   void setNumberOfDataExtSegInfoRecords(ossim_uint64 num);
 
    void readImageInfoRecords(std::istream &in);
    void readGraphicInfoRecords(std::istream &in);

@@ -12,7 +12,7 @@
 // Remapper to adjust hue, saturation and intensity.
 //
 //*************************************************************************
-// $Id: ossimHsiRemapper.cpp 13764 2008-10-22 19:30:19Z gpotts $
+// $Id: ossimHsiRemapper.cpp 19714 2011-06-03 17:23:45Z gpotts $
 
 #include <cstdlib>
 #include <ossim/imaging/ossimHsiRemapper.h>
@@ -21,6 +21,7 @@
 #include <ossim/base/ossimHsiVector.h>
 #include <ossim/base/ossimNotifyContext.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
+#include <ossim/base/ossimNumericProperty.h>
 
 RTTI_DEF1(ossimHsiRemapper, "ossimHsiRemapper", ossimImageSourceFilter)
 
@@ -144,8 +145,8 @@ ossimHsiRemapper::ossimHsiRemapper()
    // Set the base class "theEnableFlag" to off since no adjustments have been
    // made yet.
    //***
-   disableSource();
-
+   //disableSource();
+   theValidFlag = false;
    // Construction not complete.
 }
 
@@ -173,7 +174,7 @@ ossimRefPtr<ossimImageData> ossimHsiRemapper::getTile(
       tile_rect, resLevel);
 
    // Check for remap bypass or a null tile return from input:
-   if (!theEnableFlag || !inputTile)
+   if (!isSourceEnabled() || !inputTile||!theValidFlag)
    {
       return inputTile;
    }
@@ -460,6 +461,453 @@ void ossimHsiRemapper::initialize()
       }
    }
 }
+
+void ossimHsiRemapper::setProperty(ossimRefPtr<ossimProperty> property)
+{
+   if(!property.valid()) return;
+   ossimString name = property->getName();
+   if(name == MASTER_HUE_OFFSET_KW)
+   {
+      setMasterHueOffset(property->valueToString().toDouble());
+   }
+   else if(name == MASTER_SATURATION_OFFSET_KW)
+   {
+      setMasterSaturationOffset(property->valueToString().toDouble());
+   }
+   else if(name == MASTER_INTENSITY_OFFSET_KW)
+   {
+      setMasterIntensityOffset(property->valueToString().toDouble());
+   }
+   else if(name == MASTER_INTENSITY_LOW_CLIP_KW)
+   {
+      setMasterIntensityLowClip(property->valueToString().toDouble());
+   }
+   else if(name == MASTER_INTENSITY_HIGH_CLIP_KW)
+   {
+      setMasterIntensityHighClip(property->valueToString().toDouble());
+   }
+   else if(name == RED_HUE_OFFSET_KW)
+   {
+      setRedHueOffset(property->valueToString().toDouble());
+   }
+   else if(name == RED_HUE_LOW_RANGE_KW)
+   {
+      setRedHueLowRange(property->valueToString().toDouble());
+   }
+   else if(name == RED_HUE_HIGH_RANGE_KW)
+   {
+      setRedHueHighRange(property->valueToString().toDouble());
+   }
+   else if(name == RED_HUE_BLEND_RANGE_KW)
+   {
+      setRedHueBlendRange(property->valueToString().toDouble());
+   }
+   else if(name == RED_SATURATION_OFFSET_KW)
+   {
+      setRedSaturationOffset(property->valueToString().toDouble());
+   }
+   else if(name == RED_INTENSITY_OFFSET_KW)
+   {
+      setRedIntensityOffset(property->valueToString().toDouble());
+  }
+   else if(name == YELLOW_HUE_OFFSET_KW)
+   {
+      setYellowHueOffset(property->valueToString().toDouble());
+   }
+   else if(name == YELLOW_HUE_LOW_RANGE_KW)
+   {
+      setYellowHueLowRange(property->valueToString().toDouble());
+   }
+   else if(name == YELLOW_HUE_HIGH_RANGE_KW)
+   {
+      setYellowHueHighRange(property->valueToString().toDouble());
+   }
+   else if(name == YELLOW_HUE_BLEND_RANGE_KW)
+   {
+      setYellowHueBlendRange(property->valueToString().toDouble());
+   }
+   else if(name == YELLOW_SATURATION_OFFSET_KW)
+   {
+      setYellowSaturationOffset(property->valueToString().toDouble());
+   }
+   else if(name == YELLOW_INTENSITY_OFFSET_KW)
+   {
+      setYellowIntensityOffset(property->valueToString().toDouble());
+   }
+   else if(name == GREEN_HUE_OFFSET_KW)
+   {
+      setGreenHueOffset(property->valueToString().toDouble());
+   }
+   else if(name == GREEN_HUE_LOW_RANGE_KW)
+   {
+      setGreenHueLowRange(property->valueToString().toDouble());
+   }
+   else if(name == GREEN_HUE_HIGH_RANGE_KW)
+   {
+      setGreenHueHighRange(property->valueToString().toDouble());
+   }
+   else if(name == GREEN_HUE_BLEND_RANGE_KW)
+   {
+      setGreenHueBlendRange(property->valueToString().toDouble());
+   }
+   else if(name == GREEN_SATURATION_OFFSET_KW)
+   {
+      setGreenSaturationOffset(property->valueToString().toDouble());
+   }
+   else if(name == GREEN_INTENSITY_OFFSET_KW)
+   {
+      setGreenIntensityOffset(property->valueToString().toDouble());
+   }
+   else if(name == CYAN_HUE_OFFSET_KW)
+   {
+      setCyanHueOffset(property->valueToString().toDouble());
+   }
+   else if(name == CYAN_HUE_LOW_RANGE_KW)
+   {
+      setCyanHueLowRange(property->valueToString().toDouble());
+   }
+   else if(name == CYAN_HUE_HIGH_RANGE_KW)
+   {
+      setCyanHueHighRange(property->valueToString().toDouble());
+   }
+   else if(name == CYAN_HUE_BLEND_RANGE_KW)
+   {
+      setCyanHueBlendRange(property->valueToString().toDouble());
+   }
+   else if(name == CYAN_SATURATION_OFFSET_KW)
+   {
+      setCyanSaturationOffset(property->valueToString().toDouble());
+   }
+   else if(name == CYAN_INTENSITY_OFFSET_KW)
+   {
+      setCyanIntensityOffset(property->valueToString().toDouble());
+   }
+   else if(name == BLUE_HUE_OFFSET_KW)
+   {
+      setBlueHueOffset(property->valueToString().toDouble());
+   }
+   else if(name == BLUE_HUE_LOW_RANGE_KW)
+   {
+      setBlueHueLowRange(property->valueToString().toDouble());
+   }
+   else if(name == BLUE_HUE_HIGH_RANGE_KW)
+   {
+      setBlueHueHighRange(property->valueToString().toDouble());
+   }
+   else if(name == BLUE_HUE_BLEND_RANGE_KW)
+   {
+      setBlueHueBlendRange(property->valueToString().toDouble());
+   }
+   else if(name == BLUE_SATURATION_OFFSET_KW)
+   {
+      setBlueSaturationOffset(property->valueToString().toDouble());
+   }
+   else if(name == BLUE_INTENSITY_OFFSET_KW)
+   {
+      setBlueIntensityOffset(property->valueToString().toDouble());
+   }
+   else if(name == MAGENTA_HUE_OFFSET_KW)
+   {
+      setMagentaHueOffset(property->valueToString().toDouble());
+   }
+   else if(name == MAGENTA_HUE_LOW_RANGE_KW)
+   {
+      setMagentaHueLowRange(property->valueToString().toDouble());
+   }
+   else if(name == MAGENTA_HUE_HIGH_RANGE_KW)
+   {
+      setMagentaHueHighRange(property->valueToString().toDouble());
+   }
+   else if(name == MAGENTA_HUE_BLEND_RANGE_KW)
+   {
+      setMagentaHueBlendRange(property->valueToString().toDouble());
+   }
+   else if(name == MAGENTA_SATURATION_OFFSET_KW)
+   {
+      setMagentaSaturationOffset(property->valueToString().toDouble());
+   }
+   else if(name == MAGENTA_INTENSITY_OFFSET_KW)
+   {
+      setMagentaIntensityOffset(property->valueToString().toDouble());
+   }
+   else if(name == WHITE_OBJECT_CLIP_KW)
+   {
+      setWhiteObjectClip(property->valueToString().toDouble());
+   }
+   else
+   {
+      ossimImageSourceFilter::setProperty(property);
+   }
+}
+
+ossimRefPtr<ossimProperty> ossimHsiRemapper::getProperty(const ossimString& name)const
+{
+   ossimRefPtr<ossimProperty> result;
+   if(name == MASTER_HUE_OFFSET_KW)
+   {
+      result = new ossimNumericProperty(name, ossimString::toString(theMasterHueOffset), -180, 180);
+      result->setCacheRefreshBit();
+   }
+   else if(name == MASTER_SATURATION_OFFSET_KW)
+   {
+      result = new ossimNumericProperty(name, ossimString::toString(theMasterSaturationOffset), -1, 1);
+      result->setCacheRefreshBit();
+  }
+   else if(name == MASTER_INTENSITY_OFFSET_KW)
+   {
+      result = new ossimNumericProperty(name, ossimString::toString(theMasterIntensityOffset), -1, 1);
+      result->setCacheRefreshBit();
+   }
+   else if(name == MASTER_INTENSITY_LOW_CLIP_KW)
+   {
+      result = new ossimNumericProperty(name, ossimString::toString(theMasterIntensityLowClip), 0, 1);
+      result->setCacheRefreshBit();
+   }
+   else if(name == MASTER_INTENSITY_HIGH_CLIP_KW)
+   {
+      result = new ossimNumericProperty(name, ossimString::toString(theMasterIntensityHighClip), 0, 1);
+      result->setCacheRefreshBit();
+   }
+   else if(name == RED_HUE_OFFSET_KW)
+   {
+      result = new ossimNumericProperty(name, ossimString::toString(theRedHueOffset), -180, 180);
+      result->setCacheRefreshBit();
+   }
+   else if(name == RED_HUE_LOW_RANGE_KW)
+   {
+      result = new ossimNumericProperty(name, ossimString::toString(theRedHueLowRange), -30, 30);
+      result->setCacheRefreshBit();
+   }
+   else if(name == RED_HUE_HIGH_RANGE_KW)
+   {
+      result = new ossimNumericProperty(name, ossimString::toString(theRedHueHighRange), -30, 30);
+      result->setCacheRefreshBit();
+   }
+   else if(name == RED_HUE_BLEND_RANGE_KW)
+   {
+      result = new ossimNumericProperty(name, ossimString::toString(theRedHueBlendRange), 0, 30);
+      result->setCacheRefreshBit();
+   }
+   else if(name == RED_SATURATION_OFFSET_KW)
+   {
+      result = new ossimNumericProperty(name, ossimString::toString(theRedSaturationOffset), -1, 1);
+      result->setCacheRefreshBit();
+   }
+   else if(name == RED_INTENSITY_OFFSET_KW)
+   {
+      result = new ossimNumericProperty(name, ossimString::toString(theRedIntensityOffset), -1, 1);
+      result->setCacheRefreshBit();
+   }
+   else if(name == YELLOW_HUE_OFFSET_KW)
+   {
+      result = new ossimNumericProperty(name, ossimString::toString(theYellowHueOffset), -180, 180);
+      result->setCacheRefreshBit();
+   }
+   else if(name == YELLOW_HUE_LOW_RANGE_KW)
+   {
+      result = new ossimNumericProperty(name, ossimString::toString(theYellowHueLowRange), 30, 90);
+      result->setCacheRefreshBit();
+   }
+   else if(name == YELLOW_HUE_HIGH_RANGE_KW)
+   {
+      result = new ossimNumericProperty(name, ossimString::toString(theYellowHueHighRange), 30, 90);
+      result->setCacheRefreshBit();
+   }
+   else if(name == YELLOW_HUE_BLEND_RANGE_KW)
+   {
+      result = new ossimNumericProperty(name, ossimString::toString(theYellowHueBlendRange), 0, 30);
+      result->setCacheRefreshBit();
+   }
+   else if(name == YELLOW_SATURATION_OFFSET_KW)
+   {
+      result = new ossimNumericProperty(name, ossimString::toString(theYellowSaturationOffset), -1, 1);
+      result->setCacheRefreshBit();
+   }
+   else if(name == YELLOW_INTENSITY_OFFSET_KW)
+   {
+      result = new ossimNumericProperty(name, ossimString::toString(theYellowIntensityOffset), -1, 1);
+      result->setCacheRefreshBit();
+   }
+   else if(name == GREEN_HUE_OFFSET_KW)
+   {
+      result = new ossimNumericProperty(name, ossimString::toString(theGreenHueOffset), -180, 180);
+      result->setCacheRefreshBit();
+   }
+   else if(name == GREEN_HUE_LOW_RANGE_KW)
+   {
+      result = new ossimNumericProperty(name, ossimString::toString(theGreenHueLowRange), 90, 150);
+      result->setCacheRefreshBit();
+   }
+   else if(name == GREEN_HUE_HIGH_RANGE_KW)
+   {
+      result = new ossimNumericProperty(name, ossimString::toString(theGreenHueHighRange), 90, 150);
+      result->setCacheRefreshBit();
+   }
+   else if(name == GREEN_HUE_BLEND_RANGE_KW)
+   {
+      result = new ossimNumericProperty(name, ossimString::toString(theGreenHueBlendRange), 0, 30);
+      result->setCacheRefreshBit();
+   }
+   else if(name == GREEN_SATURATION_OFFSET_KW)
+   {
+      result = new ossimNumericProperty(name, ossimString::toString(theGreenSaturationOffset), -1, 1);
+      result->setCacheRefreshBit();
+   }
+   else if(name == GREEN_INTENSITY_OFFSET_KW)
+   {
+      result = new ossimNumericProperty(name, ossimString::toString(theGreenIntensityOffset), -1, 1);
+      result->setCacheRefreshBit();
+   }
+   else if(name == CYAN_HUE_OFFSET_KW)
+   {
+      result = new ossimNumericProperty(name, ossimString::toString(theCyanHueOffset), -180, 180);
+      result->setCacheRefreshBit();
+   }
+   else if(name == CYAN_HUE_LOW_RANGE_KW)
+   {
+      result = new ossimNumericProperty(name, ossimString::toString(theCyanHueLowRange), 150, 210);
+      result->setCacheRefreshBit();
+   }
+   else if(name == CYAN_HUE_HIGH_RANGE_KW)
+   {
+      result = new ossimNumericProperty(name, ossimString::toString(theCyanHueHighRange), 150, 210);
+      result->setCacheRefreshBit();
+   }
+   else if(name == CYAN_HUE_BLEND_RANGE_KW)
+   {
+      result = new ossimNumericProperty(name, ossimString::toString(theCyanHueBlendRange), 0, 30);
+      result->setCacheRefreshBit();
+   }
+   else if(name == CYAN_SATURATION_OFFSET_KW)
+   {
+      result = new ossimNumericProperty(name, ossimString::toString(theCyanSaturationOffset), -1, 1);
+      result->setCacheRefreshBit();
+   }
+   else if(name == CYAN_INTENSITY_OFFSET_KW)
+   {
+      result = new ossimNumericProperty(name, ossimString::toString(theCyanIntensityOffset), -1, 1);
+      result->setCacheRefreshBit();
+   }
+   else if(name == BLUE_HUE_OFFSET_KW)
+   {
+      result = new ossimNumericProperty(name, ossimString::toString(theBlueHueOffset), -180, 180);
+      result->setCacheRefreshBit();
+   }
+   else if(name == BLUE_HUE_LOW_RANGE_KW)
+   {
+      result = new ossimNumericProperty(name, ossimString::toString(theBlueHueLowRange), 210, 270);
+      result->setCacheRefreshBit();
+   }
+   else if(name == BLUE_HUE_HIGH_RANGE_KW)
+   {
+      result = new ossimNumericProperty(name, ossimString::toString(theBlueHueHighRange), 210, 270);
+      result->setCacheRefreshBit();
+   }
+   else if(name == BLUE_HUE_BLEND_RANGE_KW)
+   {
+      result = new ossimNumericProperty(name, ossimString::toString(theBlueHueBlendRange), 0, 30);
+      result->setCacheRefreshBit();
+   }
+   else if(name == BLUE_SATURATION_OFFSET_KW)
+   {
+      result = new ossimNumericProperty(name, ossimString::toString(theBlueSaturationOffset), -1, 1);
+      result->setCacheRefreshBit();
+   }
+   else if(name == BLUE_INTENSITY_OFFSET_KW)
+   {
+      result = new ossimNumericProperty(name, ossimString::toString(theBlueIntensityOffset), -1, 1);
+      result->setCacheRefreshBit();
+   }
+   else if(name == MAGENTA_HUE_OFFSET_KW)
+   {
+      result = new ossimNumericProperty(name, ossimString::toString(theMagentaHueOffset), -180, 180);
+      result->setCacheRefreshBit();
+   }
+   else if(name == MAGENTA_HUE_LOW_RANGE_KW)
+   {
+      result = new ossimNumericProperty(name, ossimString::toString(theMagentaHueLowRange), 270, 330);
+      result->setCacheRefreshBit();
+   }
+   else if(name == MAGENTA_HUE_HIGH_RANGE_KW)
+   {
+      result = new ossimNumericProperty(name, ossimString::toString(theMagentaHueHighRange), 270, 330);
+      result->setCacheRefreshBit();
+   }
+   else if(name == MAGENTA_HUE_BLEND_RANGE_KW)
+   {
+      result = new ossimNumericProperty(name, ossimString::toString(theMagentaHueBlendRange), 0, 30);
+      result->setCacheRefreshBit();
+   }
+   else if(name == MAGENTA_SATURATION_OFFSET_KW)
+   {
+      result = new ossimNumericProperty(name, ossimString::toString(theMagentaSaturationOffset), -1, 1);
+      result->setCacheRefreshBit();
+   }
+   else if(name == MAGENTA_INTENSITY_OFFSET_KW)
+   {
+      result = new ossimNumericProperty(name, ossimString::toString(theMagentaIntensityOffset), -1, 1);
+      result->setCacheRefreshBit();
+   }
+   else if(name == WHITE_OBJECT_CLIP_KW)
+   {
+      result = new ossimNumericProperty(name, ossimString::toString(theWhiteObjectClip), 0.8, 1.0);
+      result->setCacheRefreshBit();
+   }
+   else
+   {
+     result = ossimImageSourceFilter::getProperty(name);
+   }
+   
+   return result;
+}
+
+void ossimHsiRemapper::getPropertyNames(std::vector<ossimString>& propertyNames)const
+{
+   ossimImageSourceFilter::getPropertyNames(propertyNames);
+   propertyNames.push_back(MASTER_HUE_OFFSET_KW);
+   propertyNames.push_back(MASTER_SATURATION_OFFSET_KW);
+   propertyNames.push_back(MASTER_INTENSITY_OFFSET_KW);
+   propertyNames.push_back(MASTER_INTENSITY_LOW_CLIP_KW);
+   propertyNames.push_back(MASTER_INTENSITY_HIGH_CLIP_KW);
+   propertyNames.push_back(RED_HUE_OFFSET_KW);
+   propertyNames.push_back(RED_HUE_LOW_RANGE_KW);
+   propertyNames.push_back(RED_HUE_HIGH_RANGE_KW);
+   propertyNames.push_back(RED_HUE_BLEND_RANGE_KW);
+   propertyNames.push_back(RED_SATURATION_OFFSET_KW);
+   propertyNames.push_back(RED_INTENSITY_OFFSET_KW);
+   propertyNames.push_back(YELLOW_HUE_OFFSET_KW);
+   propertyNames.push_back(YELLOW_HUE_LOW_RANGE_KW);
+   propertyNames.push_back(YELLOW_HUE_HIGH_RANGE_KW);
+   propertyNames.push_back(YELLOW_HUE_BLEND_RANGE_KW);
+   propertyNames.push_back(YELLOW_SATURATION_OFFSET_KW);
+   propertyNames.push_back(YELLOW_INTENSITY_OFFSET_KW);
+   propertyNames.push_back(GREEN_HUE_OFFSET_KW);
+   propertyNames.push_back(GREEN_HUE_LOW_RANGE_KW);
+   propertyNames.push_back(GREEN_HUE_HIGH_RANGE_KW);
+   propertyNames.push_back(GREEN_HUE_BLEND_RANGE_KW);
+   propertyNames.push_back(GREEN_SATURATION_OFFSET_KW);
+   propertyNames.push_back(GREEN_INTENSITY_OFFSET_KW);
+   propertyNames.push_back(CYAN_HUE_OFFSET_KW);
+   propertyNames.push_back(CYAN_HUE_LOW_RANGE_KW);
+   propertyNames.push_back(CYAN_HUE_HIGH_RANGE_KW);
+   propertyNames.push_back(CYAN_HUE_BLEND_RANGE_KW);
+   propertyNames.push_back(CYAN_SATURATION_OFFSET_KW);
+   propertyNames.push_back(CYAN_INTENSITY_OFFSET_KW);
+   propertyNames.push_back(BLUE_HUE_OFFSET_KW);
+   propertyNames.push_back(BLUE_HUE_LOW_RANGE_KW);
+   propertyNames.push_back(BLUE_HUE_HIGH_RANGE_KW);
+   propertyNames.push_back(BLUE_HUE_BLEND_RANGE_KW);
+   propertyNames.push_back(BLUE_SATURATION_OFFSET_KW);
+   propertyNames.push_back(BLUE_INTENSITY_OFFSET_KW);
+   propertyNames.push_back(MAGENTA_HUE_OFFSET_KW);
+   propertyNames.push_back(MAGENTA_HUE_LOW_RANGE_KW);
+   propertyNames.push_back(MAGENTA_HUE_HIGH_RANGE_KW);
+   propertyNames.push_back(MAGENTA_HUE_BLEND_RANGE_KW);
+   propertyNames.push_back(MAGENTA_SATURATION_OFFSET_KW);
+   propertyNames.push_back(MAGENTA_INTENSITY_OFFSET_KW);
+   propertyNames.push_back(WHITE_OBJECT_CLIP_KW);
+}
+
 
 void ossimHsiRemapper::allocate(const ossimIrect& rect)
 {
@@ -963,8 +1411,8 @@ void ossimHsiRemapper::resetAll()
    theMagentaIntensityOffset   = 0.0;
 
    theWhiteObjectClip          = 1.0;
-   
-   disableSource();
+   theValidFlag = false;
+   //disableSource();
 }
 
 void ossimHsiRemapper::resetMaster()
@@ -1053,8 +1501,8 @@ void ossimHsiRemapper::resetMagenta()
 void ossimHsiRemapper::verifyEnabled()
 {
    // Start off disabled...
-   disableSource();
-
+   //disableSource();
+   theValidFlag = false;
    if (!theInputConnection)
    {
       //***
@@ -1095,7 +1543,8 @@ void ossimHsiRemapper::verifyEnabled()
         theMasterIntensityHighClip != 1.0 ||
         theWhiteObjectClip != 1.0 )
    {
-      enableSource();
+      theValidFlag = true;
+     // enableSource();
    }
 }
 
@@ -2051,7 +2500,7 @@ double ossimHsiRemapper::calculateMinNormValue()
 
 ossim_uint32 ossimHsiRemapper::getNumberOfOutputBands() const
 {
-   if (theEnableFlag) // Always rgb tile out...
+   if (isSourceEnabled()&&theValidFlag) // Always rgb tile out...
    {
       return 3;
    }

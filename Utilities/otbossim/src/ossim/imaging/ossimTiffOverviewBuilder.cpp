@@ -11,7 +11,7 @@
 // Contains class definition for TiffOverviewBuilder
 // 
 //*******************************************************************
-//  $Id: ossimTiffOverviewBuilder.cpp 18073 2010-09-13 15:55:48Z dburken $
+//  $Id: ossimTiffOverviewBuilder.cpp 19724 2011-06-06 21:07:15Z dburken $
 
 #include <algorithm> /* for std::fill */
 // #include <cstring>
@@ -20,8 +20,6 @@ using namespace std;
 #include <xtiffio.h>
 
 #include <ossim/imaging/ossimTiffOverviewBuilder.h>
-#include <ossim/imaging/ossimImageDataFactory.h>
-#include <ossim/imaging/ossimImageGeometry.h>
 #include <ossim/parallel/ossimMpi.h>
 #include <ossim/parallel/ossimMpiMasterOverviewSequencer.h>
 #include <ossim/parallel/ossimMpiSlaveOverviewSequencer.h>
@@ -31,15 +29,16 @@ using namespace std;
 #include <ossim/base/ossimNotify.h>
 #include <ossim/base/ossimStdOutProgress.h>
 #include <ossim/base/ossimIpt.h>
-#include <ossim/base/ossimDpt3d.h>
 #include <ossim/base/ossimIrect.h>
 #include <ossim/base/ossimFilename.h>
-#include <ossim/imaging/ossimImageHandler.h>
-#include <ossim/imaging/ossimImageData.h>
-#include <ossim/imaging/ossimImageMetaData.h>
-#include <ossim/imaging/ossimImageHandlerRegistry.h>
-#include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimScalarTypeLut.h>
+#include <ossim/base/ossimTrace.h>
+#include <ossim/imaging/ossimBitMaskTileSource.h>
+#include <ossim/imaging/ossimImageData.h>
+#include <ossim/imaging/ossimImageDataFactory.h>
+#include <ossim/imaging/ossimImageGeometry.h>
+#include <ossim/imaging/ossimImageHandler.h>
+#include <ossim/imaging/ossimTiffTileSource.h>
 #include <ossim/projection/ossimMapProjection.h>
 #include <ossim/projection/ossimMapProjectionInfo.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
@@ -55,7 +54,7 @@ static ossimTrace traceDebug("ossimTiffOverviewBuilder:degug");
 static const char COPY_ALL_KW[] = "copy_all_flag";
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimTiffOverviewBuilder.cpp 18073 2010-09-13 15:55:48Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimTiffOverviewBuilder.cpp 19724 2011-06-06 21:07:15Z dburken $";
 #endif
 
 
@@ -65,8 +64,6 @@ static const char OSSIM_ID[] = "$Id: ossimTiffOverviewBuilder.cpp 18073 2010-09-
 ossimTiffOverviewBuilder::ossimTiffOverviewBuilder()
    :
       ossimOverviewBuilderBase(),
-      m_imageHandler(0),
-      m_outputFile(ossimFilename::NIL),
       m_nullDataBuffer(0),
       m_bytesPerPixel(1),
       m_bitsPerSample(8),
@@ -100,8 +97,6 @@ ossimTiffOverviewBuilder::ossimTiffOverviewBuilder()
 
 ossimTiffOverviewBuilder::~ossimTiffOverviewBuilder()
 {
-   m_imageHandler = 0;
-   m_alphaMask.clear();
 }
 
 void ossimTiffOverviewBuilder::setResampleType(
@@ -110,8 +105,7 @@ void ossimTiffOverviewBuilder::setResampleType(
    m_resampleType = resampleType;
 }
 
-bool ossimTiffOverviewBuilder::buildOverview(
-   const ossimFilename& overview_file, bool copy_all)
+bool ossimTiffOverviewBuilder::buildOverview(const ossimFilename& overview_file, bool copy_all)
 {
    if (traceDebug())
    {
@@ -197,6 +191,19 @@ bool ossimTiffOverviewBuilder::execute()
       return false;
    }
    
+   // If alpha bit mask generation was requested, then need to instantiate the mask writer object.
+   // This is simply a "transparent" tile source placed after to the right of the image handler that
+   // scans the pixels being pulled and accumulates alpha bit mask for writing at the end:
+   if (m_bitMaskSpec.getSize() > 0)
+   {
+      m_maskWriter = new ossimBitMaskWriter();
+      m_maskWriter->loadState(m_bitMaskSpec);
+      m_maskWriter->setStartingResLevel(1);
+      ossimRefPtr<ossimBitMaskTileSource> bmts = new ossimBitMaskTileSource;
+      bmts->setAssociatedMaskWriter(m_maskWriter.get());
+      m_maskFilter = new ossimMaskFilter(m_imageHandler.get(), bmts.get());
+   }
+
    ossimStdOutProgress* progressListener = 0; // Only used on master.
    TIFF* tif = 0;                             // Only used on master.
 
@@ -320,8 +327,9 @@ bool ossimTiffOverviewBuilder::execute()
       }
       else
       {
-         ih = ossimImageHandlerRegistry::instance()->open(outputFileTemp);
-         if (!ih)
+         // We know we're a tiff so don't use the factory.
+         ih = new ossimTiffTileSource;
+         if ( ih->open(outputFileTemp) == false )
          {
             // Set the error...
             ossimSetError(getClassName(),
@@ -330,11 +338,25 @@ bool ossimTiffOverviewBuilder::execute()
                           MODULE,
                           __FILE__,
                           __LINE__,
-                          outputFileTemp.c_str());   
+                          outputFileTemp.c_str());
+            ih = 0;
             return false;
          }
+
+         // Since the overview file is being opened here, need to set its handler's starting res
+         // level where the original image file left off. This is usually R1 since the original file
+         // only has R0, but the original file may have more than R0:
+         ih->setStartingResLevel( m_imageHandler->getNumberOfDecimationLevels());
       }
       
+      // If mask is to be generated, need to notify both the writer and the reader of new 
+      // input source:
+      if (m_bitMaskSpec.getSize() > 0)
+      {
+         m_maskFilter->connectMyInputTo(0, ih.get());
+         m_maskWriter->connectMyInputTo(ih.get());
+      }
+
       if ( !writeRn( ih.get(), tif, i, (i==startingResLevel) ) )
       {
          // Set the error...
@@ -345,6 +367,7 @@ bool ossimTiffOverviewBuilder::execute()
                        MODULE,
                        __FILE__,
                        __LINE__);
+         ih->disconnect();
          ih = 0;
          if (tif)
          {
@@ -362,6 +385,7 @@ bool ossimTiffOverviewBuilder::execute()
       
       if (needsAborting())
       {
+         ih->disconnect();
          ih = 0;
          if (tif)
          {
@@ -377,6 +401,11 @@ bool ossimTiffOverviewBuilder::execute()
          return false;
       }
       
+      if (m_bitMaskSpec.getSize() > 0)
+      {
+         m_maskFilter->disconnectMyInput(0);
+         m_maskWriter->disconnectAllInputs();
+      }
       ih = 0;
    }
 
@@ -387,6 +416,14 @@ bool ossimTiffOverviewBuilder::execute()
          closeTiff(tif);
          tif = 0;
       }
+
+      // Write out the alpha bit mask if one was enabled:
+      if (m_maskWriter.valid())
+      {
+         ossimNotify(ossimNotifyLevel_INFO) << "Writing alpha bit mask file..." << std::endl;
+         m_maskWriter->close();
+      }
+
       // Remove the listener if we had one.
       if (progressListener)
       {
@@ -401,27 +438,6 @@ bool ossimTiffOverviewBuilder::execute()
          ossimNotify(ossimNotifyLevel_INFO)
             << "Wrote file:  " << m_outputFile.c_str() << std::endl;
       }
-      ossimFilename file=m_outputFile;
-      file = file.setExtension("omd");
-      ossimKeywordlist kwl;
-      if(file.exists())
-      {
-         kwl.addFile(file.c_str());
-         
-      }
-      ossimImageMetaData metaData(m_imageHandler->getOutputScalarType(),
-                                  m_imageHandler->getNumberOfInputBands());
-      
-      uint32 i= 0;
-      
-      for(i = 0; i < metaData.getNumberOfBands(); ++i)
-      {
-         metaData.setMinPix(i,  m_imageHandler->getMinPixelValue(i));
-         metaData.setMaxPix(i,  m_imageHandler->getMaxPixelValue(i));
-         metaData.setNullPix(i, m_imageHandler->getNullPixelValue(i));
-      }
-      metaData.saveState(kwl);
-      kwl.write(file.c_str());
      
       setCurrentMessage(ossimString("Finished..."));
    }
@@ -500,7 +516,11 @@ bool ossimTiffOverviewBuilder::writeR0(TIFF* tif)
                                                 origin.y,
                                                 origin.x +(m_tileWidth-1),
                                                 origin.y +(m_tileHeight-1)));
-	 
+
+         // If masking was enabled, pass the tile onto that object for processing:
+         if (m_maskWriter.valid())
+            m_maskWriter->generateMask(t, 0);
+
          //***
          // Band loop.
          //***
@@ -604,25 +624,43 @@ bool ossimTiffOverviewBuilder::writeRn(ossimImageHandler* imageHandler,
    }
 
    sequencer->setImageHandler(imageHandler);
+   if (m_maskWriter.valid() && m_maskFilter.valid())
+      sequencer->setBitMaskObjects(m_maskWriter.get(), m_maskFilter.get());
 
-   ossim_uint32 sourceResLevel = imageHandler->getNumberOfDecimationLevels() - 1;
+   int rlevel_offset = imageHandler->getStartingResLevel() - 1;
+   ossim_uint32 sourceResLevel = imageHandler->getNumberOfDecimationLevels() + rlevel_offset;
 
    sequencer->setSourceLevel(sourceResLevel);
    sequencer->setResampleType(m_resampleType);
    sequencer->setTileSize( ossimIpt(m_tileWidth, m_tileHeight) );
    
-   if ( firstResLevel && ( getHistogramMode() != OSSIM_HISTO_MODE_UNKNOWN) )
+   if ( firstResLevel )
    {
-      // Accumulate a histogram.  Can't do with mpi/multi-process.
-      if(ossimMpi::instance()->getNumberOfProcessors() == 1)
+      // Set up things that are only performed on first scan through tiles.
+      
+      if ( getHistogramMode() != OSSIM_HISTO_MODE_UNKNOWN )
       {
-         sequencer->setHistogramMode(getHistogramMode());
+         // Accumulate a histogram.  Can't do with mpi/multi-process.
+         if(ossimMpi::instance()->getNumberOfProcessors() == 1)
+         {
+            sequencer->setHistogramMode(getHistogramMode());
+         }
+         //---
+         // else{} Not sure if we want an error thrown here.  For now will handle at the
+         // application level.
+         //---
       }
-      //---
-      // else{} Not sure if we want an error thrown here.  For now will handle at the
-      // application level.
-      //---
+      if ( getScanForMinMaxNull() == true )
+      {
+         sequencer->setScanForMinMaxNull(true);
+      }
+      else if ( getScanForMinMax() == true )
+      {
+         sequencer->setScanForMinMax(true);
+      }
    }
+
+   // Note sequence setup must be performed before intialize. 
    sequencer->initialize();
 
    // If we are a slave process start the resampling of tiles.
@@ -694,12 +732,6 @@ bool ossimTiffOverviewBuilder::writeRn(ossimImageHandler* imageHandler,
    // Tile loop in the line direction.
    ossim_uint32 y = 0;
 
-   if (resLevel == 1 && m_maskBuildFlag)
-   {
-      m_alphaMask.clear();
-      openMaskFile();
-   }
-
    for(ossim_uint32 i = 0; i < outputTilesHigh; ++i)
    {
       // Tile loop in the sample (width) direction.
@@ -735,12 +767,6 @@ bool ossimTiffOverviewBuilder::writeRn(ossimImageHandler* imageHandler,
                   return false;
                }
             }
-            if (resLevel == 1 && m_maskBuildFlag)
-            {
-              t->computeAlphaChannel();
-              ossim_uint8* alphaValues = t->getAlphaBuf();
-              packAlphaValues(alphaValues, t->getImageRectangle(), rect.width());
-            }
          }
          x += m_tileWidth; // Increment x for next TIFFWriteTile.
          ++tileNumber;      // Increment tile number for percent complete.
@@ -763,29 +789,35 @@ bool ossimTiffOverviewBuilder::writeRn(ossimImageHandler* imageHandler,
 
    } // End of tile loop in the line (height) direction.
 
-   if (resLevel == 1 && m_maskBuildFlag)
-   {
-     closeMaskFile();
-   }
-
    //---
    // Write the current dirctory.
    //---
-   if (!TIFFWriteDirectory(tif))
+   if (!TIFFFlush(tif))
    {
       ossimNotify(ossimNotifyLevel_WARN)
-         << MODULE << " Error writing directory!" << std::endl;
+         << MODULE << " Error writing to TIF file!" << std::endl;
       return false;
    }
 
-   if ( firstResLevel && ( getHistogramMode() != OSSIM_HISTO_MODE_UNKNOWN) )
+   if ( firstResLevel )
    {
-      // Write the histogram.
-      if(ossimMpi::instance()->getNumberOfProcessors() == 1)
+      if ( ossimMpi::instance()->getNumberOfProcessors() == 1 )
       {
-         ossimFilename histoFilename = getOutputFile();
-         histoFilename.setExtension("his");
-         sequencer->writeHistogram(histoFilename);
+         if ( getHistogramMode() != OSSIM_HISTO_MODE_UNKNOWN )
+         {
+            // Write the histogram.
+            ossimFilename histoFilename = getOutputFile();
+            histoFilename.setExtension("his");
+            sequencer->writeHistogram(histoFilename);
+         }
+
+         if ( ( getScanForMinMaxNull() == true ) || ( getScanForMinMax() == true ) )
+         {
+            // Write the omd file:
+            ossimFilename file = m_outputFile;
+            file = file.setExtension("omd");
+            sequencer->writeOmdFile(file);
+         }
       }
    }
 
@@ -1039,11 +1071,10 @@ void ossimTiffOverviewBuilder::setOutputTileSize(const ossimIpt& tileSize)
 
 bool ossimTiffOverviewBuilder::setInputSource(ossimImageHandler* imageSource)
 {
-   static const char MODULE[] =
-      "ossimTiffOverviewBuilder::initializeFromHandler";
+   static const char MODULE[] = "ossimTiffOverviewBuilder::initializeFromHandler";
 
-   m_imageHandler         = imageSource;
-
+   m_imageHandler = imageSource;
+   
    if (!m_imageHandler)
    {
       // Set the error...
@@ -1080,21 +1111,24 @@ bool ossimTiffOverviewBuilder::setInputSource(ossimImageHandler* imageSource)
 
    if(!m_outputTileSizeSetFlag)
    {
-   // Note:  Need a default overview tile size in preferences...
       ossimIpt tileSize;
       ossim::defaultTileSize(tileSize);
-//       if(m_imageHandler->isImageTiled())
-//       {
-//          if(m_imageHandler->getBoundingRect().width() != m_imageHandler->getImageTileWidth())
-//          {
-//             tileSize = ossimIpt(m_imageHandler->getImageTileWidth(),
-//                                 m_imageHandler->getImageTileHeight());
-//          }
-//       }
 
+#if 0
+      if(m_imageHandler->getBoundingRect().width() != m_imageHandler->getImageTileWidth())
+      {
+         tileSize = ossimIpt(m_imageHandler->getImageTileWidth(),
+                             m_imageHandler->getImageTileHeight());
+      }
+#endif
+      
       m_tileWidth  = tileSize.x;
       m_tileHeight = tileSize.y;
    }
+
+   // This will set the flag to scan for min, max, nulls if needed.
+   initializeScanOptions();
+      
    if (traceDebug())
    {
       CLOG << "DEBUG:"
@@ -1305,160 +1339,3 @@ bool ossimTiffOverviewBuilder::canConnectMyInputTo(
    return false;
 }
 
-void ossimTiffOverviewBuilder::packAlphaValues(ossim_uint8* alphaValues, 
-                                               ossimIrect rect,
-                                               ossim_uint32 maskWidth)
-{
-   ossim_uint32 tileCount = std::ceil((double)maskWidth/(double)rect.width());
-   maskWidth = rect.width() * tileCount;
-
-   ossim_uint32 rowNum = rect.ul().y;
-   ossim_uint32 index = 0;
-   bool isMaskWidth = false;
-   for (ossim_uint32 line = 0; line < rect.height(); ++line)
-   {
-      std::vector<ossim_uint8> pixelValues;
-      pixelValues.reserve(rect.width());
-      for (ossim_uint32 sample = 0; sample < rect.width(); ++sample)
-      {
-         if (alphaValues[index+sample] == 255)
-         {
-            pixelValues.push_back(1);
-         }
-         else
-         {
-            pixelValues.push_back(0);
-         }
-      }
-      index += rect.width();
-
-      std::map<ossim_uint32, std::vector<ossim_uint8> >::iterator it = m_alphaMask.find(rowNum);
-      if (it != m_alphaMask.end())
-      {
-         std::vector<ossim_uint8> fullVector;
-         fullVector.reserve(it->second.size() + pixelValues.size());
-         fullVector.insert(fullVector.end(), it->second.begin(), it->second.end());
-         fullVector.insert(fullVector.end(), pixelValues.begin(), pixelValues.end());
-         m_alphaMask[rowNum] = fullVector;
-         if (fullVector.size() == maskWidth)
-         {
-            isMaskWidth = true;
-         }
-         fullVector.clear();
-      }
-      else
-      {
-         m_alphaMask[rowNum] = pixelValues;
-      }
-
-      pixelValues.clear();
-      rowNum++;
-   }
-
-   if (isMaskWidth)
-   {
-      writeMaskStrip();
-   }
-}
-
-bool ossimTiffOverviewBuilder::openMaskFile()
-{
-   const char* M = "ossimTiffOverviewBuilder::openMaskFile() -- ";
-
-   // Open new mask file:
-   setErrorStatus();
-   ossimFilename file = m_outputFile;
-   file.setExtension("mask");
-   m_maskFileStream.open(file.chars(), ios::out | ios::binary);
-   if(!m_maskFileStream.is_open())
-   {
-      ossimNotify(ossimNotifyLevel_WARN)<<M<<"Error encountered trying to create mask file <"<<
-         file<<">. Cannot write mask.";
-      return false;
-   }
-   clearErrorStatus();
-   return true;
-}
-
-bool ossimTiffOverviewBuilder::closeMaskFile()
-{
-   if (m_maskFileStream.is_open())
-   {
-      m_maskFileStream.flush();
-      m_maskFileStream.close();
-   }
-   m_maskFileStream.clear();
-   return true;
-}
-
-bool ossimTiffOverviewBuilder::writeMaskStrip()
-{
-   const char* M = "ossimTiffOverviewBuilder::writeMaskStrip() -- ";
-
-   if (!m_maskFileStream.is_open())
-   {
-      return false;
-   }
-
-   std::map<ossim_uint32, std::vector<ossim_uint8> >::iterator it = m_alphaMask.begin();
-   while (it != m_alphaMask.end())
-   {
-      std::vector<ossim_uint8> bitPixels = it->second; 
-      ossim_uint32 rowSize = (ossim_uint32)bitPixels.size();
-      
-      //Calculate the buffer size
-      ossim_uint32 bufferSize = rowSize/8;
-      ossim_uint32 remainPixels = bufferSize%8;
-      if (remainPixels > 0)
-      {
-         bufferSize = bufferSize + 1;
-      }
-      
-      char* mask = new char[rowSize];
-      char* buffer = new char[bufferSize];
-      
-      for (ossim_uint32 i = 0; i < bitPixels.size(); i++)
-      {
-         mask[i] = bitPixels[i];
-      }
-      it++;
-      
-      // Fill buffer byte with 8 pixels worth of mask data, starting from first pixel:
-      ossim_uint32 mask_index = 0;
-      for (ossim_uint32 i = 0; i < bufferSize; i++)
-      {
-         if (mask_index > rowSize)//make index equal to mask size if it is bigger
-         {
-            mask_index = rowSize;
-         }
-         
-         buffer[i] = 0;
-         buffer[i] |= mask[mask_index++] << 7;
-         buffer[i] |= mask[mask_index++] << 6;
-         buffer[i] |= mask[mask_index++] << 5;
-         buffer[i] |= mask[mask_index++] << 4;
-         buffer[i] |= mask[mask_index++] << 3;
-         buffer[i] |= mask[mask_index++] << 2;
-         buffer[i] |= mask[mask_index++] << 1;
-         buffer[i] |= mask[mask_index++];
-      }
-      
-      // Write the alpha mask to general raster:
-      m_maskFileStream.write(buffer, bufferSize);
-      
-      if (m_maskFileStream.fail())
-      {
-         ossimNotify(ossimNotifyLevel_FATAL)<<M<<"ERROR encountered writing mask file!";
-         delete [] mask;
-         delete [] buffer;
-         return false;
-      }
-      
-      delete [] mask;
-      delete [] buffer;
-   }
-   
-   m_alphaMask.clear();
-   
-   return true;
-}

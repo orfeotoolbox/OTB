@@ -47,36 +47,36 @@
  *    set_type search_gazetteer_index (ThematicIndex *idx,
  *				       char * query_str ) ;
  *
- *    long int read_gazetteer_index_directory (
+ *    ossim_int32 read_gazetteer_index_directory (
  *					ThematicIndexDirectory ** gid,
  *					ThematicIndexHeader     * gi,
  *					FILE * idx_fp);
  *
- *    long int write_thematic_index_header ( ThematicIndexHeader h ,
+ *    ossim_int32 write_thematic_index_header ( ThematicIndexHeader h ,
  *					     FILE *fp ) ;
  *
- *    long int read_thematic_index_header ( ThematicIndexHeader *h ,
+ *    ossim_int32 read_thematic_index_header ( ThematicIndexHeader *h ,
  *					    FILE *fp ) ;
  *
- *    long int write_thematic_index_directory (
+ *    ossim_int32 write_thematic_index_directory (
  *				       ThematicIndexHeader h ,
  *				       ThematicIndexDirectory *d,
- *				       long int size,
+ *				       ossim_int32 size,
  *				       FILE *fp ) ;
  *
- *    long int write_gazetteer_index_directory (
+ *    ossim_int32 write_gazetteer_index_directory (
  *				       ThematicIndexHeader h ,
  *				       ThematicIndexDirectory *d,
- *				       long int size,
+ *				       ossim_int32 size,
  *				       FILE *fp ) ;
  *
- *    long int create_thematic_index ( char indextype,
+ *    ossim_int32 create_thematic_index ( char indextype,
  *				       char *tablename,
  *				       char *idxname ,
  *				       char *columnname,
  *				       char *idx_set );
  *
- *    long int create_gazetteer_index (char *tablename,
+ *    ossim_int32 create_gazetteer_index (char *tablename,
  *				       char *idx_fname ,
  *				       char *columnname,
  *				       char *idx_set);
@@ -109,7 +109,7 @@
 void *vpfmalloc(unsigned long size);
 
 #define Whimper(str) {\
-      return ((long int)0) ; }
+      return ((ossim_int32)0) ; }
 
 #define SWhimper(str) {\
       set_type err; err = set_init (1) ;\
@@ -137,7 +137,7 @@ void *vpfmalloc(unsigned long size);
  * That first byte is what must be stored as the value of Header.nbytes
  */
 
-#define DIR_ON_DISK_INCR (2 * sizeof(long int))
+#define DIR_ON_DISK_INCR (2 * sizeof(ossim_int32))
 
 /*************************************************************************
  *
@@ -202,7 +202,7 @@ void *vpfmalloc(unsigned long size);
  *    This module should be ANSI C compatible.  developed on UNIX
  *E
  *************************************************************************/
-long int create_thematic_index ( char indextype,
+ossim_int32 create_thematic_index ( char indextype,
 		 	         char *tablename,
 				 char *idxname ,
 				 char *columnname,
@@ -211,7 +211,7 @@ long int create_thematic_index ( char indextype,
    unsigned int i;
    unsigned int column_length;
    FILE           *ifp ;
-   long int	 j,tablepos,k,
+   ossim_int32	 j,tablepos,k,
       keycolumn = 0 ,	/* 1 if key column */
       itemp , n,
       idsize ,		/* either 2 or 4 bytes */
@@ -278,10 +278,10 @@ long int create_thematic_index ( char indextype,
   /* Determine the id_data_size. This will save 50% of file size  */
 
   if ( table.nrows > MAX_ID ) {
-    h.id_data_type = 'I' ;		/* long ints */
-    idsize = sizeof ( long int ) ;
+    h.id_data_type = 'I' ;		/* ossim_int32s */
+    idsize = sizeof ( ossim_int32 ) ;
   } else {
-    h.id_data_type = 'S' ;		/* long ints */
+    h.id_data_type = 'S' ;		/* ossim_int32s */
     idsize = sizeof ( short int ) ;
   }
 
@@ -306,7 +306,7 @@ long int create_thematic_index ( char indextype,
     datasize = sizeof ( date_type ) ;
     Whimper ("Not implemented yet") ;
   case 'I':
-    datasize = sizeof ( long int ) ;
+    datasize = sizeof ( ossim_int32 ) ;
     break ;
   case 'K':				/* treat keys like integers */
     Whimper ("Cannot make index on key column") ;
@@ -511,12 +511,12 @@ long int create_thematic_index ( char indextype,
 
   h.table_nrows = table.nrows ;
 
-  if ( write_thematic_index_header ( h, ifp ) == (long int)0 )
+  if ( write_thematic_index_header ( h, ifp ) == (ossim_int32)0 )
     Whimper ( "error writing index header" ) ;
 
   /* Now write out the rest of the header directory */
 
-  if ( write_thematic_index_directory ( h, d, idsize, ifp ) == (long int)0 )
+  if ( write_thematic_index_directory ( h, d, idsize, ifp ) == (ossim_int32)0 )
     Whimper ( "error writing index directory" ) ;
 
   /* now write the data */
@@ -602,7 +602,7 @@ long int create_thematic_index ( char indextype,
 set_type read_thematic_index ( char *idxname,
 			       char *value )
 {
-  long int 			i , ival = 0, Match = -1;
+  ossim_int32 			i , ival = 0, Match = -1;
   short int			sval = 0;
   float				fval = 0.0 ;
   double			dval = 0.0 , atof () ;
@@ -619,7 +619,7 @@ set_type read_thematic_index ( char *idxname,
     SWhimper ( hack ) ;
   }
 
-  if ( read_thematic_index_header ( &h, ifp ) == (long int)0 )
+  if ( read_thematic_index_header ( &h, ifp ) == (ossim_int32)0 )
     SWhimper ( "error reading index header" ) ;
 
   if ( h.index_type == 'G' ) {
@@ -631,7 +631,7 @@ set_type read_thematic_index ( char *idxname,
   if ( value ) 		/* search for pattern */
     switch ( h.column_type ) {			/* using address */
     case	'I':
-      memcpy ( &ival, value, sizeof (long int)) ;
+      memcpy ( &ival, value, sizeof (ossim_int32)) ;
       break ;
     case	'S':
       memcpy ( &sval, value, sizeof (short int)) ;
@@ -730,7 +730,7 @@ set_type read_thematic_index ( char *idxname,
   else
     for ( i=0 ; i < d.num_items; i++ ) {
       Read_Vpf_Short ( &sval, ifp, 1 ) ;
-      set_insert ( (long int) sval, s ) ;
+      set_insert ( (ossim_int32) sval, s ) ;
     }
 
   fclose ( ifp ) ;
@@ -803,12 +803,12 @@ ThematicIndex open_thematic_index ( char *idxname )
     OWhimper ( hack ) ;
   }
 
-  if ( read_thematic_index_header ( &idx.h, idx.fp ) == (long int)0 )
+  if ( read_thematic_index_header ( &idx.h, idx.fp ) == (ossim_int32)0 )
     OWhimper ( "error reading index header" ) ;
 
   if ( idx.h.index_type == 'G' ) {
     /* gazetteer_index  */
-     if (read_gazetteer_index_directory(&idx.gid,&idx.h,idx.fp) == (long int)0) {
+     if (read_gazetteer_index_directory(&idx.gid,&idx.h,idx.fp) == (ossim_int32)0) {
 	   fclose(idx.fp);
 	   idx.fp = NULL;
      }
@@ -873,7 +873,7 @@ ThematicIndex open_thematic_index ( char *idxname )
 set_type search_thematic_index ( ThematicIndex *idx,
 				 char *value )
 {
-  long int 			i , ival = 0, Match = -1;
+  ossim_int32 			i , ival = 0, Match = -1;
   short int			sval = 0;
   float				fval = 0.0 ;
   double			dval = 0.0 , atof () ;
@@ -896,7 +896,7 @@ set_type search_thematic_index ( ThematicIndex *idx,
   if ( value ) 		/* search for pattern */
     switch ( idx->h.column_type ) {			/* using address */
     case	'I':
-      memcpy ( &ival, value, sizeof (long int)) ;
+      memcpy ( &ival, value, sizeof (ossim_int32)) ;
       break ;
     case	'S':
       memcpy ( &sval, value, sizeof (short int)) ;
@@ -996,7 +996,7 @@ set_type search_thematic_index ( ThematicIndex *idx,
   else
     for ( i=0 ; i < d.num_items; i++ ) {
       Read_Vpf_Short ( &sval, idx->fp, 1 ) ;
-      set_insert ( (long int) sval, s ) ;
+      set_insert ( (ossim_int32) sval, s ) ;
     }
 
   return s ;					/* also return set */
@@ -1121,23 +1121,23 @@ void close_thematic_index ( ThematicIndex *idx )
  *E
  *************************************************************************/
 
-long int create_gazetteer_index (char *tablename,
+ossim_int32 create_gazetteer_index (char *tablename,
 				 char *idx_fname ,
 				 char *columnname,
 				 char *idx_set)
 {
   vpf_table_type t;
   row_type       r;
-  long int       c;
+  ossim_int32       c;
   FILE         * idx_fp;
   ThematicIndexHeader
                  gi;
   ThematicIndexDirectory
                * gid;
   set_type     * idx_bit_sets;
-  register long int   i,
+  register ossim_int32   i,
                       j;
-  unsigned long int l,
+  ossim_uint32 l,
                     set_byte_size;
 
   t = vpf_open_table(tablename, disk, "rb", NULL);
@@ -1215,7 +1215,7 @@ long int create_gazetteer_index (char *tablename,
 
   vpf_close_table(&t);
 
-  if (write_thematic_index_header(gi, idx_fp) == (long int)0) {
+  if (write_thematic_index_header(gi, idx_fp) == (ossim_int32)0) {
     fclose(idx_fp);
     for (i = 0; i < gi.nbins; i++)
       set_nuke(&idx_bit_sets[i]);
@@ -1347,12 +1347,12 @@ set_type read_gazetteer_index (char *idx_fname, char *query_str )
   if (idx_fp == NULL)
     return query_set;
 
-  if (read_thematic_index_header (&gi, idx_fp) == (long int)0) {
+  if (read_thematic_index_header (&gi, idx_fp) == (ossim_int32)0) {
     fclose(idx_fp);
     return query_set;
   }
 
-  if (read_gazetteer_index_directory (&gid, &gi, idx_fp) == (long int)0) {
+  if (read_gazetteer_index_directory (&gid, &gi, idx_fp) == (ossim_int32)0) {
     fclose(idx_fp);
     return query_set;
   }
@@ -1584,7 +1584,7 @@ set_type search_gazetteer_index (ThematicIndex *idx, char *query_str )
  *    This module should be ANSI C compatible.
  *E
  *************************************************************************/
-long int read_gazetteer_index_directory(
+ossim_int32 read_gazetteer_index_directory(
 				   ThematicIndexDirectory **gid,
 				   ThematicIndexHeader     *gi,
 				   FILE                    *idx_fp)
@@ -1592,7 +1592,7 @@ long int read_gazetteer_index_directory(
   int i;
 
 #if UNIX
-  if ( fseek ( idx_fp,sizeof (ThematicIndexHeader)-sizeof(long int), 0 )!= 0 )
+  if ( fseek ( idx_fp,sizeof (ThematicIndexHeader)-sizeof(ossim_int32), 0 )!= 0 )
 #else
   if (fseek(idx_fp, sizeof (ThematicIndexHeader), 0) != 0)
 #endif
@@ -1607,7 +1607,7 @@ long int read_gazetteer_index_directory(
     if ( ( ! Read_Vpf_Char(  &( (*gid)[i].value.cval ),   idx_fp, 1) ) ||
 	 ( ! Read_Vpf_Int(   &( (*gid)[i].start_offset ), idx_fp, 1) ) ||
 	 ( ! Read_Vpf_Int(   &( (*gid)[i].num_items ),    idx_fp, 1) )) {
-      return (long int)0 ;
+      return (ossim_int32)0 ;
     }
   }
   return 1;
@@ -1658,9 +1658,9 @@ long int read_gazetteer_index_directory(
  *************************************************************************/
 
 #define RWhimper() {\
-   return (long int)0 ; }
+   return (ossim_int32)0 ; }
 
-long int read_thematic_index_header ( ThematicIndexHeader *h, FILE *ifp ) 
+ossim_int32 read_thematic_index_header ( ThematicIndexHeader *h, FILE *ifp ) 
 {
   if ( fseek ( ifp, 0, 0 ) != 0 ) 	/* rewind, just in case */
     return 0 ;				/* error */
@@ -1732,9 +1732,9 @@ long int read_thematic_index_header ( ThematicIndexHeader *h, FILE *ifp )
  *************************************************************************/
 
 #define WWhimper() {\
-   return (long int)0 ; }
+   return (ossim_int32)0 ; }
 
-long int write_thematic_index_header ( ThematicIndexHeader h, FILE *ifp ) 
+ossim_int32 write_thematic_index_header ( ThematicIndexHeader h, FILE *ifp ) 
 {
   if ( fseek ( ifp, 0, 0 ) != 0 ) 	/* rewind, just in case */
     WWhimper() ;				/* error */
@@ -1778,7 +1778,7 @@ long int write_thematic_index_header ( ThematicIndexHeader h, FILE *ifp )
  *A
  *	h < input > == (ThematicIndexHeader) header structure
  *	d < input > == (ThematicIndexDirectory *) directory array structure
- *	idsize < input > == (long int) size of each data element.
+ *	idsize < input > == (ossim_int32) size of each data element.
  *		for T indexes, this is either 2 bytes or 4 bytes
  *		for G indexes, it will be num_in_set (set) 
  *			       or the size of the bit array.
@@ -1811,11 +1811,11 @@ long int write_thematic_index_header ( ThematicIndexHeader h, FILE *ifp )
  *************************************************************************/
 
 #define WTWhimper() {\
-   return (long int)0 ; }
+   return (ossim_int32)0 ; }
 
-long int write_thematic_index_directory ( ThematicIndexHeader h, 
+ossim_int32 write_thematic_index_directory ( ThematicIndexHeader h, 
 					  ThematicIndexDirectory *d,
-					  long int idsize , /* size of data */
+					  ossim_int32 idsize , /* size of data */
 					  FILE *ifp )
 {
   long	int	offset = h.nbytes ,
@@ -1823,7 +1823,7 @@ long int write_thematic_index_directory ( ThematicIndexHeader h,
 
   /* rewind, just in case */
 #if UNIX
-  if ( fseek ( ifp, sizeof (ThematicIndexHeader)-sizeof(long int), 0 ) != 0 )
+  if ( fseek ( ifp, sizeof (ThematicIndexHeader)-sizeof(ossim_int32), 0 ) != 0 )
 #else
   if ( fseek ( ifp, sizeof (ThematicIndexHeader), 0 ) != 0 )
 #endif
@@ -1887,7 +1887,7 @@ long int write_thematic_index_directory ( ThematicIndexHeader h,
  *A
  *	h < input > == (ThematicIndexHeader) header structure 
  *	d < input > == (ThematicIndexDirectory *) directory array structure
- *	idsize < input > == (long int) size of each data element.
+ *	idsize < input > == (ossim_int32) size of each data element.
  *		for T indexes, this is either 2 bytes or 4 bytes
  *		for G indexes, it will be num_in_set (set) 
  *			       or the size of the bit array.
@@ -1920,11 +1920,11 @@ long int write_thematic_index_directory ( ThematicIndexHeader h,
  *************************************************************************/
 
 #define WTGWhimper() {\
-  return (long int)0 ; }
+  return (ossim_int32)0 ; }
 
-long int write_gazetteer_index_directory ( ThematicIndexHeader h, 
+ossim_int32 write_gazetteer_index_directory ( ThematicIndexHeader h, 
 					  ThematicIndexDirectory *d, 
-					  long int idsize , /* size of data */
+					  ossim_int32 idsize , /* size of data */
 					  FILE *ifp )
 {
   long	int	offset = h.nbytes ,

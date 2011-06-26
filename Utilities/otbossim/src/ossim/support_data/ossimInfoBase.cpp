@@ -12,8 +12,8 @@
 // $Id$
 
 #include <ossim/support_data/ossimInfoBase.h>
-#include <ossim/base/ossimIoStream.h> /* for ossimIOMemoryStream */
 #include <ossim/base/ossimKeywordlist.h>
+#include <sstream>
 
 ossimInfoBase::ossimInfoBase()
    : theOverviewFlag(true)
@@ -32,13 +32,13 @@ bool ossimInfoBase::getProcessOverviewFlag() const
    return theOverviewFlag;
 }
 
-
-bool ossimInfoBase::getKeywordlist(ossimKeywordlist& kwl)
+bool ossimInfoBase::getKeywordlist(ossimKeywordlist& kwl)const
 {  
    // Do a print to a memory stream.
-   ossimIOMemoryStream memStr;
-   print(memStr);
+   std::ostringstream out;
+   print(out);
 
+   std::istringstream in(out.str());
    // Give the result to the keyword list.
-   return kwl.parseStream(memStr);
+   return kwl.parseStream(in);
 }

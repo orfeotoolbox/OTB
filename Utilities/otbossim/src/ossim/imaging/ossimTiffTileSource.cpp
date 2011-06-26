@@ -12,9 +12,8 @@
 // Contains class definition for TiffTileSource.
 //
 //*******************************************************************
-//  $Id: ossimTiffTileSource.cpp 18079 2010-09-14 14:46:17Z dburken $
+//  $Id: ossimTiffTileSource.cpp 19682 2011-05-31 14:21:20Z dburken $
 
-#include <cstdlib> /* for abs(int) */
 #include <ossim/imaging/ossimTiffTileSource.h>
 #include <ossim/support_data/ossimGeoTiff.h>
 #include <ossim/support_data/ossimTiffInfo.h>
@@ -33,6 +32,7 @@
 #include <ossim/imaging/ossimImageDataFactory.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
 #include <xtiffio.h>
+#include <cstdlib> /* for abs(int) */
 
 RTTI_DEF1(ossimTiffTileSource, "ossimTiffTileSource", ossimImageHandler)
 
@@ -207,9 +207,9 @@ bool ossimTiffTileSource::getTile(ossimImageData* result,
                reallocateBuffer = true;
             }
             
-            if (getCurrentTiffRLevel() != level)
+            if (getCurrentTiffRLevel() != theImageDirectoryList[level])
             {
-               status = setTiffDirectory(level);
+               status = setTiffDirectory(theImageDirectoryList[level]);
                if (status)
                {
                   reallocateBuffer = true;
@@ -384,6 +384,7 @@ bool ossimTiffTileSource::open()
        && (header[0] != 'I' || header[1] != 'I') )
        return false;
 #endif
+   theImageDirectoryList.clear();
    //---
    // Note:  The 'm' in "rm" is to tell TIFFOpen to not memory map the file.
    //---
@@ -409,6 +410,7 @@ bool ossimTiffTileSource::open()
    // Note:  If the tag is not present, consider the first level full
    // resolution.
    //***
+   theImageDirectoryList.push_back(0);
    ossim_uint32 sub_file_type;
    if ( !TIFFGetField( theTiffPtr,
                        TIFFTAG_SUBFILETYPE ,
@@ -501,6 +503,7 @@ bool ossimTiffTileSource::open()
    // Current dir.
    theCurrentDirectory = TIFFCurrentDirectory(theTiffPtr);
 
+   
    theImageWidth.resize(theNumberOfDirectories);
    theImageLength.resize(theNumberOfDirectories);
    theReadMethod.resize(theNumberOfDirectories);
@@ -509,13 +512,27 @@ bool ossimTiffTileSource::open()
    theRowsPerStrip.resize(theNumberOfDirectories);
    theImageTileWidth.resize(theNumberOfDirectories);
    theImageTileLength.resize(theNumberOfDirectories);
-   
    for (ossim_uint32 dir=0; dir<theNumberOfDirectories; ++dir)
    {
       if (setTiffDirectory(dir) == false)
       {
          return false;
       }
+      
+      if ( !TIFFGetField( theTiffPtr,
+                         TIFFTAG_SUBFILETYPE ,
+                         &sub_file_type ) )
+      {
+         sub_file_type = 0;
+      }
+      if (sub_file_type == FILETYPE_REDUCEDIMAGE)
+      {
+         if(dir!=0)
+         {
+            theImageDirectoryList.push_back(dir);
+         }
+      }
+      
       
       if( !TIFFGetField( theTiffPtr, TIFFTAG_PLANARCONFIG,
                          &(thePlanarConfig[dir]) ) )
@@ -598,8 +615,8 @@ bool ossimTiffTileSource::open()
             << endl;
       }
       
-   }  // End of "for (ossim_uint32 dir=0; dir<theNumberOfDirectories; dir++)"
-
+   }// End of "for (ossim_uint32 dir=0; dir<theNumberOfDirectories; dir++)"
+   
    // Reset the directory back to "0".
    if (setTiffDirectory(0) == false)
    {
@@ -728,7 +745,7 @@ ossim_uint32 ossimTiffTileSource::getNumberOfLines(
    ossim_uint32 resLevel) const
 {
    ossim_uint32 result = 0;
-   
+   if(!theImageDirectoryList.size()) return result;
    if ( theTiffPtr && isValidRLevel(resLevel) )
    {
       //---
@@ -741,9 +758,9 @@ ossim_uint32 ossimTiffTileSource::getNumberOfLines(
          // If we have r0 our reslevels are the same as the callers so
          // no adjustment necessary.
          //---
-         if (resLevel < theNumberOfDirectories)
+         if (resLevel < theImageDirectoryList.size())
          {
-            result = theImageLength[resLevel];
+            result = theImageLength[theImageDirectoryList[resLevel]];
          }
          else if (theOverview.valid())
          {
@@ -759,14 +776,13 @@ ossim_uint32 ossimTiffTileSource::getNumberOfLines(
             // overview.
             //---
             ossim_uint32 level = resLevel - theStartingResLevel;
-            if (level < theNumberOfDirectories)
+            if (level < theImageDirectoryList.size())
             {
-               result = theImageLength[level];
+               result = theImageLength[theImageDirectoryList[level]];
             }
          }
       }
    }
-   
    return result;
 }
 
@@ -774,18 +790,18 @@ ossim_uint32 ossimTiffTileSource::getNumberOfSamples(
    ossim_uint32 resLevel) const
 {
    ossim_uint32 result = 0;
-   
+   if(!theImageDirectoryList.size()) return result;
    if ( theTiffPtr && isValidRLevel(resLevel) )
    {
       //---
       // If we have r0 our reslevels are the same as the callers so
       // no adjustment necessary.
       //---
-      if (!theStartingResLevel || theR0isFullRes) // not an overview or has r0.
+      if (!theStartingResLevel||theR0isFullRes) // not an overview or has r0.
       {
-         if (resLevel < theNumberOfDirectories)
+         if (resLevel < theImageDirectoryList.size())
          {
-            result = theImageWidth[resLevel];
+            result = theImageWidth[theImageDirectoryList[resLevel]];
          }
          else if (theOverview.valid())
          {
@@ -801,9 +817,9 @@ ossim_uint32 ossimTiffTileSource::getNumberOfSamples(
             // overview.
             //---
             ossim_uint32 level = resLevel - theStartingResLevel;
-            if (level < theNumberOfDirectories)
+            if (level < theImageDirectoryList.size())
             {
-               result = theImageWidth[level];
+               result = theImageWidth[theImageDirectoryList[level]];
             }
          }
       }
@@ -814,15 +830,14 @@ ossim_uint32 ossimTiffTileSource::getNumberOfSamples(
 
 ossim_uint32 ossimTiffTileSource::getNumberOfDecimationLevels() const
 {
-   ossim_uint32 result = theNumberOfDirectories;
-
+   ossim_uint32 result = theImageDirectoryList.size();
    // If starting res level is not 0 then this is an overview.
-   if (theStartingResLevel && theR0isFullRes)
+   if (theStartingResLevel&&theR0isFullRes)
    {
       // Don't count r0.
       --result;
    }
-   else if (theOverview.valid())
+   if (theOverview.valid())
    {
       result += theOverview->getNumberOfDecimationLevels();
    }
@@ -1591,7 +1606,8 @@ bool ossimTiffTileSource::isValidRLevel(ossim_uint32 resLevel) const
 
 ossim_uint32 ossimTiffTileSource::getCurrentTiffRLevel() const
 {
-   return theCurrentDirectory;
+   return theCurrentTiffRlevel;
+//   return theCurrentDirectory;
 }
 
 ossimString ossimTiffTileSource::getReadMethod(ossim_uint32 directory) const
@@ -1908,13 +1924,18 @@ ossim_float64 ossimTiffTileSource::getNullPixelValue(ossim_uint32 band)const
 
 bool ossimTiffTileSource::isColorMapped() const
 {
-   uint16* red;
-   uint16* green;
-   uint16* blue;
-   
-   return static_cast<bool>(TIFFGetField(theTiffPtr,
-                                         TIFFTAG_COLORMAP,
-                                         &red, &green, &blue));
+   bool result = false;
+   if ( isOpen() )
+   {
+      uint16* red;
+      uint16* green;
+      uint16* blue;
+      
+      result = static_cast<bool>(TIFFGetField(theTiffPtr,
+                                              TIFFTAG_COLORMAP,
+                                              &red, &green, &blue));
+   }
+   return result;
 }
 
 void ossimTiffTileSource::setReadMethod()
@@ -2040,17 +2061,14 @@ ossimRefPtr<ossimProperty> ossimTiffTileSource::getProperty(const ossimString& n
 void ossimTiffTileSource::getPropertyNames(std::vector<ossimString>& propertyNames)const
 {
    ossimImageHandler::getPropertyNames(propertyNames);
-	propertyNames.push_back("file_type");
-   // Assuming first directory...
-   if(isColorMapped())
-   {
-      propertyNames.push_back("apply_color_palette_flag");
-   }
+   propertyNames.push_back("file_type");
+   propertyNames.push_back("apply_color_palette_flag");
 }
 
 bool ossimTiffTileSource::setTiffDirectory(ossim_uint16 directory)
 {
    bool status = true;
+   theCurrentTiffRlevel = 0;
    if (theCurrentDirectory != directory)
    {
       status = TIFFSetDirectory(theTiffPtr, directory);
@@ -2063,6 +2081,16 @@ bool ossimTiffTileSource::setTiffDirectory(ossim_uint16 directory)
          ossimNotify(ossimNotifyLevel_WARN)
             << "ossimTiffTileSource::setTiffDirectory ERROR setting directory "
             << directory << "!" << endl;
+      }
+   }
+   
+   ossim_uint32 idx = 0;
+   for(idx = 0; idx<theImageDirectoryList.size();++idx)
+   {
+      if(theImageDirectoryList[idx] == directory)
+      {
+         theCurrentTiffRlevel = idx;
+         break;
       }
    }
    return status;
@@ -2127,7 +2155,7 @@ void ossimTiffTileSource::validateMinMaxNull()
 
    if (theScalarType == OSSIM_FLOAT32)
    {
-      std::ifstream inStr(theImageFile, std::ios::in|std::ios::binary);
+      std::ifstream inStr(theImageFile.c_str(), std::ios::in|std::ios::binary);
       if ( inStr.good() )
       {   
          // Do a print to a memory stream in key:value format.

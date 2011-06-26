@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageHeaderV2_1.cpp 17598 2010-06-19 15:37:46Z dburken $
+// $Id: ossimNitfImageHeaderV2_1.cpp 18413 2010-11-11 19:56:22Z gpotts $
 #include <sstream>
 #include <iomanip>
 #include <cstring> // for memset
@@ -581,6 +581,57 @@ std::ostream& ossimNitfImageHeaderV2_1::print(std::ostream& out,
    out << std::endl;
 
    return printTags(out, prefix);
+}
+
+
+bool ossimNitfImageHeaderV2_1::saveState(ossimKeywordlist& kwl, const ossimString& prefix)const
+{
+   ossimNitfImageHeaderV2_X::saveState(kwl, prefix);
+   
+   kwl.add(prefix, "ISCLSY", theSecurityClassificationSys);
+   kwl.add(prefix, "ISCODE", theCodewords);
+   kwl.add(prefix, "ISCTLH", theControlAndHandling);
+   kwl.add(prefix, "ISREL", theReleasingInstructions);
+   kwl.add(prefix, "ISDCTP", theDeclassificationType);
+   kwl.add(prefix, "ISDCDT", theDeclassificationDate);
+   kwl.add(prefix, "ISDCXM", theDeclassificationExempt);
+   kwl.add(prefix, "ISDG", theDowngrade);
+   kwl.add(prefix, "ISDGDT", theDowngradeDate);
+   kwl.add(prefix, "ISCLTX", theClassificationText);
+   kwl.add(prefix, "ISCATP", theClassificationAuthType);
+   kwl.add(prefix, "ISCAUT", theClassificationAuthority);
+   kwl.add(prefix, "ISCRSN", theClassificationReason);
+   kwl.add(prefix, "ISSRDT", theSecuritySourceDate);
+   kwl.add(prefix, "ISCTLN", theSecurityControlNumber);
+   kwl.add(prefix, "XBANDS", theNumberOfMultispectralBands);
+   
+   ossim_uint32 idx = 0;
+   
+   std::ostringstream out;
+   if(theCompressionHeader.valid())
+   {
+      theCompressionHeader->saveState(kwl, prefix);
+   }
+
+   for(idx = 0; idx < theImageBands.size(); ++idx)
+   {
+      if(theImageBands[idx].valid())
+      {
+         theImageBands[idx]->print(out, "", idx); 
+      }
+   }
+   
+   out << std::endl;
+   
+   ossimKeywordlist kwlTemp;
+   
+   std::istringstream in(out.str());
+   if(kwlTemp.parseStream(in))
+   {
+      kwl.add(prefix, kwlTemp);
+   }
+   
+   return true;
 }
 
 bool ossimNitfImageHeaderV2_1::isCompressed()const

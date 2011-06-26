@@ -29,7 +29,7 @@ typedef struct {
 linked_list_type fcs_relate_list( char *fcname, char *start_table,
 				  char *end_table, vpf_table_type fcs );
 
-long int related_row( void *keyval1,
+ossim_int32 related_row( void *keyval1,
 		      vpf_table_type table2, char *key2,
 		      int sort_flag );
 
@@ -42,11 +42,11 @@ linked_list_type related_rows( void *keyval1,
 fcrel_type select_feature_class_relate( int fcnum, library_type *library,
 					char *start_table, char *end_table );
 
-long int fc_row_number( row_type row, fcrel_type fcrel, long int tile );
+ossim_int32 fc_row_number( row_type row, fcrel_type fcrel, ossim_int32 tile );
 
 linked_list_type fc_row_numbers( row_type row,
 				 fcrel_type fcrel,
-				 long int tile,
+				 ossim_int32 tile,
 				 ThematicIndex *idx );
 
 void deselect_feature_class_relate( fcrel_type *fcrel );

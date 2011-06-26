@@ -6,9 +6,10 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimNBandLutDataObject.h 17815 2010-08-03 13:23:14Z dburken $
+// $Id: ossimNBandLutDataObject.h 19732 2011-06-06 22:24:54Z dburken $
 #ifndef ossimNBandLutDataObject_HEADER
-#define ossimNBandLutDataObject_HEADER
+#define ossimNBandLutDataObject_HEADER 1
+
 #include <ossim/base/ossimObject.h>
 #include <ossim/base/ossimFilename.h>
 #include <iostream>
@@ -355,6 +356,14 @@ public:
                   LUT_ENTRY_TYPE& maxValue);
 
    /**
+    * @return First index with alpha of 0 or -1 if not found or there is no alpha.
+    *
+    * Currently only works on 4 band data.  May consider adding an alpha channel
+    * class data member in the future.
+    */
+   ossim_int32 getFirstNullAlphaIndex() const;
+   
+   /**
     * Allows you to specify which entry is to be designated as an invalid
     * entry.  Note: setting this to -1 indicates no null entry is set.
     *
@@ -387,7 +396,20 @@ public:
     *        of bands for the lut.
     * @return Returns the nearest index to the passed in value.  
     */ 
-   ossim_uint32 findIndex(ossim_int32* values)const;
+   ossim_uint32 findIndex(ossim_int32* values) const;
+
+   /**
+    * @brief This method gives you a way to find an entry index closest to the
+    * passed in band values.
+    * 
+    * @param values Is an array of band values.
+    * @param size Size of values array.  Note if size is less than the LUT
+    * number of bands, the trailing bands get dropped.  This allows finding
+    * an index dropping the alpha channel.
+    * 
+    * @return Returns the nearest index to the passed in value.  
+    */ 
+   ossim_uint32 findIndex(ossim_int32* values, ossim_uint32 size) const;
 
    /**
     * Will do a simple memset to '\0' all 

@@ -9,7 +9,7 @@
 // Description: Common file for global functions.
 //
 //*************************************************************************
-// $Id: ossimCommon.cpp 17978 2010-08-24 16:17:00Z dburken $
+// $Id: ossimCommon.cpp 19453 2011-04-27 12:12:32Z gpotts $
 
 #include <sstream>
 
@@ -23,6 +23,7 @@
 #include <ossim/base/ossimDpt3d.h>
 #include <ossim/matrix/newmat.h>
 #include <ossim/base/ossimDpt.h>
+#include <ossim/base/ossimGpt.h>
 static ossimTrace traceDebug("ossimCommon:debug");
 
 // stores a floating point nan value
@@ -31,9 +32,9 @@ const ossim::IntFloatBitCoercion ossim::nanValue(~ossim_int64(0));
 std::istream& ossim::skipws(std::istream& in)
 {
    int c = in.peek();
-   while( !in.fail() && ossim::isWhiteSpace(c))
+   while( !in.bad() && ossim::isWhiteSpace(c))
    {
-      in.ignore(1);
+      in.ignore();
       c = in.peek();
    }
    
@@ -355,15 +356,24 @@ ossim_uint32 ossim::getActualBitsPerPixel(ossimScalarType scalarType)
       case OSSIM_UINT32:
       case OSSIM_SINT32:
       case OSSIM_FLOAT32:
+      case OSSIM_CINT16:
       case OSSIM_NORMALIZED_FLOAT:
       {
          actualBitsPerPixel = 32;
          break;
       }
       case OSSIM_FLOAT64:
+      case OSSIM_CFLOAT32:
+      case OSSIM_CINT32:
       case OSSIM_NORMALIZED_DOUBLE:
       {
          actualBitsPerPixel = 64;
+         break;
+      }
+      case OSSIM_CFLOAT64:
+      {
+         actualBitsPerPixel = 128;
+         
          break;
       }
       default:
@@ -687,7 +697,8 @@ void ossim::lexQuotedTokens(const std::string& str,
 }
 
 void ossim::toStringList(ossimString& resultStringOfPoints,
-                         const std::vector<ossimDpt>& pointList)
+                         const std::vector<ossimDpt>& pointList, 
+                         char separator)
 {
    ossim_uint32 idx = 0;
    for(;idx < pointList.size();++idx)
@@ -699,13 +710,14 @@ void ossim::toStringList(ossimString& resultStringOfPoints,
       }
       else
       {
-         resultStringOfPoints += (" " + pt);
+         resultStringOfPoints += (separator + pt);
       }
    }
 }
 
 void ossim::toStringList(ossimString& resultStringOfPoints,
-                         const std::vector<ossimIpt>& pointList)
+                         const std::vector<ossimIpt>& pointList, 
+                         char separator)
 {
    ossim_uint32 idx = 0;
    for(;idx < pointList.size();++idx)
@@ -717,7 +729,26 @@ void ossim::toStringList(ossimString& resultStringOfPoints,
       }
       else
       {
-         resultStringOfPoints += (" " + pt);
+         resultStringOfPoints += (separator + pt);
+      }
+   }
+}
+
+void ossim::toStringList(ossimString& resultStringOfPoints,
+                         const std::vector<ossimGpt>& pointList, 
+                         char separator)
+{
+   ossim_uint32 idx = 0;
+   for(;idx < pointList.size();++idx)
+   {
+      ossimString pt = pointList[idx].toString();
+      if(resultStringOfPoints.empty())
+      {
+         resultStringOfPoints = pt;
+      }
+      else
+      {
+         resultStringOfPoints += (separator + pt);
       }
    }
 }
@@ -726,20 +757,37 @@ void ossim::toVector(std::vector<ossimDpt>& result,
                      const ossimString& stringOfPoints)
 {
    std::vector<ossimString> splitResult;
-   
-   stringOfPoints.split(splitResult, " ");
-   
-   if(splitResult.size() > 0)
+  
+   // let grab each point string that is surrounded by ()
+   std::istringstream in(stringOfPoints.trim());
+   ossimString currentPoint = "";
+   ossimDpt tempPoint;
+   while(!in.bad()&&!in.eof())
    {
-      ossimDpt tempPoint;
-      ossim_uint32 idx = 0;
-      for(;idx < splitResult.size(); ++idx)
+      skipws(in);
+      if(in.peek() == '(')
       {
-         tempPoint = ossimDpt(0.0,0.0);
-         tempPoint.toPoint(splitResult[idx]);
-         result.push_back(tempPoint);
+         currentPoint += (char)in.get();
+         skipws(in);
+         if(in.peek() == '(') in.ignore();
+         
+         while(!in.bad()&&!in.eof()&&(in.peek() != ')'))
+         {
+            currentPoint += (char)in.get();
+         }
+         if(in.good())
+         {
+            currentPoint += (char)in.get();
+            tempPoint.toPoint(currentPoint);
+            result.push_back(tempPoint);
+         }
+         currentPoint = "";
       }
-   }
+      else 
+      {
+         in.ignore();
+      }
+   }   
 }
 
 void ossim::toVector(std::vector<ossimIpt>& result,
@@ -747,18 +795,271 @@ void ossim::toVector(std::vector<ossimIpt>& result,
 {
    std::vector<ossimString> splitResult;
    
-   stringOfPoints.split(splitResult, " ");
-   
-   if(splitResult.size() > 0)
+   // let grab each point string that is surrounded by ()
+   std::istringstream in(stringOfPoints.trim());
+   ossimString currentPoint = "";
+   ossimIpt tempPoint;
+   while(!in.bad()&&!in.eof())
    {
-      ossimDpt tempPoint;
-      ossim_uint32 idx = 0;
-      for(;idx < splitResult.size(); ++idx)
+      skipws(in);
+      if(in.peek() == '(')
       {
-         tempPoint = ossimDpt(0.0,0.0);
-         tempPoint.toPoint(splitResult[idx]);
-         result.push_back(tempPoint);
+         currentPoint += (char)in.get();
+         skipws(in);
+         if(in.peek() == '(') in.ignore();
+         
+         while(!in.bad()&&!in.eof()&&(in.peek() != ')'))
+         {
+            currentPoint += (char)in.get();
+         }
+         if(in.good())
+         {
+            currentPoint += (char)in.get();
+            tempPoint.toPoint(currentPoint);
+            result.push_back(tempPoint);
+         }
+         currentPoint = "";
+      }
+      else 
+      {
+         in.ignore();
+      }
+   }   
+}
+void ossim::toVector(std::vector<ossimGpt>& result,
+                     const ossimString& stringOfPoints)
+{
+   std::vector<ossimString> splitResult;
+   
+   // let grab each point string that is surrounded by ()
+   std::istringstream in(stringOfPoints.trim());
+   ossimString currentPoint = "";
+   ossimGpt tempPoint;
+   while(!in.bad()&&!in.eof())
+   {
+      skipws(in);
+      if(in.peek() == '(')
+      {
+         currentPoint += (char)in.get();
+         skipws(in);
+         if(in.peek() == '(') in.ignore();
+         
+         while(!in.bad()&&!in.eof()&&(in.peek() != ')'))
+         {
+            currentPoint += (char)in.get();
+         }
+         if(in.good())
+         {
+            currentPoint += (char)in.get();
+            tempPoint.toPoint(currentPoint);
+            result.push_back(tempPoint);
+         }
+         currentPoint = "";
+      }
+      else 
+      {
+         in.ignore();
+      }
+   }   
+}
+
+/**
+ * Generic function to extract a list of values into a vector of string where
+ * the string of points is of the form:
+ *
+ * (value1,value2, ... , )
+ *
+ * Parenthesis are required
+ */ 
+bool ossim::extractSimpleValues(std::vector<ossimString>& values, const ossimString& stringOfPoints)
+{
+   std::istringstream in(stringOfPoints);
+   ossim::skipws(in);
+   bool result = true;
+   if(stringOfPoints.empty()) return result;
+   char c = in.get();
+   ossimString value = "";
+   if(c == '(')
+   {
+      c = (char)in.get();
+      while((c!=')')&&
+            (c!= '\n')&&
+            (in.good()))
+      {
+         if(c!= ',')
+         {
+            value += ossimString(c);
+         }
+         else
+         {
+            values.push_back(value);
+            value = "";
+         }
+         c = in.get();
       }
    }
+   if(c!= ')')
+   {
+      result = false;
+   }
+   else
+   {
+      if(!value.empty())
+      {
+         values.push_back(value);
+      }
+   }
+   
+   return result;
+}
+/**
+ *  Takes input format of the form:
+ *  (value1,value2,...,valueN)
+ */
+bool ossim::toSimpleVector(std::vector<ossim_uint32>& result,
+                           const ossimString& stringOfPoints)
+{
+   std::vector<ossimString> extractedValues;
+   bool resultFlag = extractSimpleValues(extractedValues, stringOfPoints);
+   if(resultFlag)
+   {
+      ossim_uint32 idx = 0;
+      ossim_uint32 size = extractedValues.size();
+      for(idx = 0; idx < size; ++idx)
+      {
+         result.push_back(extractedValues[idx].toUInt32());
+      }
+   }
+   return resultFlag;
+}
+/**
+ * This will output a vector of values inst a string
+ *
+ *  (value1,...,valueN)
+ *
+ * Specialize the char for it will output the actual ascii char instead of the numeric value
+ *
+ * Parenthesis are required
+ */ 
+template <>
+void ossim::toSimpleStringList(ossimString& result,
+                        const std::vector<ossim_uint8>& valuesList)
+
+{
+   std::ostringstream out;
+   
+   if(!valuesList.empty())
+   {
+      ossim_uint32 idx = 0;
+      ossim_uint32 size = (valuesList.size()-1);
+      for(idx = 0; idx < size; ++idx)
+      {
+         out << ((ossim_uint32)valuesList[idx]) << ",";
+      }
+      out << static_cast<ossim_uint32>(valuesList[size]);
+   }
+   
+   result = "("+out.str()+")";
+}
+
+/**
+ *  Takes input format of the form:
+ *  (value1,value2,...,valueN)
+ */
+bool ossim::toSimpleVector(std::vector<ossim_int32>& result,
+                           const ossimString& stringOfPoints)
+{
+   std::vector<ossimString> extractedValues;
+   bool resultFlag = extractSimpleValues(extractedValues, stringOfPoints);
+   if(resultFlag)
+   {
+      ossim_uint32 idx = 0;
+      ossim_uint32 size = extractedValues.size();
+      for(idx = 0; idx < size; ++idx)
+      {
+         result.push_back(extractedValues[idx].toInt32());
+      }
+   }
+   return resultFlag;
+}
+/**
+ *  Takes input format of the form:
+ *  (value1,value2,...,valueN)
+ */
+bool ossim::toSimpleVector(std::vector<ossim_uint16>& result,
+                           const ossimString& stringOfPoints)
+{
+   std::vector<ossimString> extractedValues;
+   bool resultFlag = extractSimpleValues(extractedValues, stringOfPoints);
+   if(resultFlag)
+   {
+      ossim_uint32 idx = 0;
+      ossim_uint32 size = extractedValues.size();
+      for(idx = 0; idx < size; ++idx)
+      {
+         result.push_back(extractedValues[idx].toUInt32());
+      }
+   }
+   return resultFlag;
+}
+/**
+ *  Takes input format of the form:
+ *  (value1,value2,...,valueN)
+ */
+bool ossim::toSimpleVector(std::vector<ossim_int16>& result,
+                           const ossimString& stringOfPoints)
+{
+   std::vector<ossimString> extractedValues;
+   bool resultFlag = extractSimpleValues(extractedValues, stringOfPoints);
+   if(resultFlag)
+   {
+      ossim_uint32 idx = 0;
+      ossim_uint32 size = extractedValues.size();
+      for(idx = 0; idx < size; ++idx)
+      {
+         result.push_back(extractedValues[idx].toInt32());
+      }
+   }
+   return resultFlag;
+}
+/**
+ *  Takes input format of the form:
+ *  (value1,value2,...,valueN)
+ */
+bool ossim::toSimpleVector(std::vector<ossim_uint8>& result,
+                    const ossimString& stringOfPoints)
+{
+   std::vector<ossimString> extractedValues;
+   bool resultFlag = extractSimpleValues(extractedValues, stringOfPoints);
+   if(resultFlag)
+   {
+      ossim_uint32 idx = 0;
+      ossim_uint32 size = extractedValues.size();
+      for(idx = 0; idx < size; ++idx)
+      {
+         result.push_back(extractedValues[idx].toUInt8());
+      }
+   }
+   return resultFlag;
+}
+/**
+ *  Takes input format of the form:
+ *  (value1,value2,...,valueN)
+ */
+bool ossim::toSimpleVector(std::vector<ossim_int8>& result,
+                    const ossimString& stringOfPoints)
+{
+   std::vector<ossimString> extractedValues;
+   bool resultFlag = extractSimpleValues(extractedValues, stringOfPoints);
+   if(resultFlag)
+   {
+      ossim_uint32 idx = 0;
+      ossim_uint32 size = extractedValues.size();
+      for(idx = 0; idx < size; ++idx)
+      {
+         result.push_back(extractedValues[idx].toUInt8());
+      }
+   }
+   return resultFlag;
 }
 

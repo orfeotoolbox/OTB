@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimGeoAnnotationSource.cpp 17932 2010-08-19 20:34:35Z dburken $
+// $Id: ossimGeoAnnotationSource.cpp 18423 2010-11-16 16:05:12Z gpotts $
 
 #include <ossim/imaging/ossimGeoAnnotationSource.h>
 #include <ossim/imaging/ossimGeoAnnotationObject.h>
@@ -94,7 +94,10 @@ bool ossimGeoAnnotationSource::setView(ossimObject* baseObject)
       setGeometry(m_geometry.get());
       return true;
    }
-
+   else
+   {
+      m_geometry = dynamic_cast<ossimImageGeometry*>(baseObject);
+   }
    return false;
 }
 

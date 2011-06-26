@@ -7,7 +7,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimDate.h 14902 2009-07-17 11:26:20Z gpotts $
+// $Id: ossimDate.h 19704 2011-05-31 22:20:40Z dburken $
 #ifndef ossimDate_HEADER
 #define ossimDate_HEADER
 #include <ctime>
@@ -18,7 +18,7 @@
 class OSSIM_DLL ossimLocalTm : public std::tm
 {
 public:
-   friend  std::ostream& operator<< (std::ostream& out, const ossimLocalTm& src);
+   friend OSSIM_DLL std::ostream& operator<<(std::ostream& out, const ossimLocalTm& src);
    friend OSSIM_DLL int operator== (const ossimLocalTm& t1,
                                     const ossimLocalTm& src);
    friend OSSIM_DLL int operator!= (const ossimLocalTm& t1,
@@ -235,7 +235,7 @@ protected:
 class OSSIM_DLL ossimDate : public ossimLocalTm
 {
 public:
-   friend std::ostream& operator<<(std::ostream& out, const ossimDate& src);
+   friend OSSIM_DLL std::ostream& operator<<(std::ostream& out, const ossimDate& src);
    
    ossimDate(int datefmt =ossimLocalTm::datefmt);
    ossimDate (ossimLocalTm const & t,
@@ -255,7 +255,7 @@ private:
 class OSSIM_DLL ossimTime :public ossimLocalTm
 {
 public:
-   friend std::ostream& operator <<(std::ostream& out, const ossimTime& src);
+   friend OSSIM_DLL std::ostream& operator<<(std::ostream& out, const ossimTime& src);
    ossimTime(int tmfmt =ossimLocalTm::timefmt);
    ossimTime (ossimTime const & t,
               int tmfmt =ossimLocalTm::timefmt);

@@ -9,7 +9,7 @@
 // LATITUDE AND LONGITUDE VALUES ARE IN DEGREES.
 //
 //*******************************************************************
-//  $Id: ossimGpt.cpp 17815 2010-08-03 13:23:14Z dburken $
+//  $Id: ossimGpt.cpp 19649 2011-05-25 18:38:24Z gpotts $
 
 #include <iostream>
 #include <sstream>
@@ -308,32 +308,12 @@ ossimGpt::ossimGpt(const ossimEcefPoint& ecef_point,
 }
 
 //*****************************************************************************
-//  METHOD: ossimGpt::operator =
-//*****************************************************************************
-const ossimGpt& ossimGpt::operator = (const ossimGpt &aPt)
-{
-   lat = aPt.lat;
-   lon = aPt.lon;
-   hgt = aPt.hgt;
-   
-   if(aPt.datum())
-   {
-      theDatum = aPt.datum();
-   }
-   if(!theDatum)
-   {
-      theDatum = ossimDatumFactory::instance()->wgs84();
-   }
-   
-   return *this;
-}
-
-//*****************************************************************************
 //  METHOD: ossimGpt::changeDatum
 //*****************************************************************************
 void ossimGpt::changeDatum(const ossimDatum *datum)
 {
-   if(datum == theDatum) return;
+   if (*datum == *theDatum) 
+      return;
 
    // only shift if all values lat and lon is good
    if(!isLatNan() && !isLonNan()) 
@@ -456,6 +436,13 @@ void ossimGpt::heightMSL(double heightMSL)
 //*****************************************************************************
 ossimDpt ossimGpt::metersPerDegree() const
 {
+//#define USE_ELLIPTICAL_RADII
+#ifdef USE_ELLIPTICAL_RADII
+   ossimDpt radii;
+   theDatum->ellipsoid()->geodeticRadii(lat, radii);
+   return ossimDpt (RAD_PER_DEG * radii.x * ossim::cosd(lat), 
+                    RAD_PER_DEG * radii.y);
+#else 
    ossimDpt result;
 
    double radius = theDatum->ellipsoid()->geodeticRadius(lat);
@@ -463,4 +450,5 @@ ossimDpt ossimGpt::metersPerDegree() const
    result.x =  result.y * ossim::cosd(lat);
 
    return result;
+#endif
 }

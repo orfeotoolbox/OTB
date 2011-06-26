@@ -8,7 +8,7 @@
 //
 // Contains class definition for Degrees Minutes Seconds (ossimDms)
 //*******************************************************************
-//  $Id: ossimDms.h 15249 2009-08-25 13:12:11Z gpotts $
+//  $Id: ossimDms.h 19682 2011-05-31 14:21:20Z dburken $
 #ifndef ossimDms_HEADER
 #define ossimDms_HEADER
 // #include <iostream>
@@ -132,8 +132,8 @@ private:
                                 bool lat_flag)const;
    
    void calc_mins_or_secs(double *dd,
-                          ossimString::const_iterator &formatIter,
-                          ossimString &result)const;
+                          std::string::const_iterator& formatIter,
+                          std::string& result)const;
    /**
     * integer function calc_mins_or_secs				*
     *	calculates minutes from degrees, seconds from minutes,	

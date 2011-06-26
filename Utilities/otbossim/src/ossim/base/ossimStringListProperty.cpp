@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimStringListProperty.cpp 12911 2008-05-28 13:36:06Z gpotts $
+// $Id: ossimStringListProperty.cpp 19682 2011-05-31 14:21:20Z dburken $
 //
 #include <sstream>
 #include <algorithm>
@@ -103,7 +103,7 @@ void ossimStringListProperty::valueToString(ossimString& valueResult)const
 
    for(idx = 0; idx < (int)theValueList.size(); ++idx)
    {
-      kwl.add(ossimString::toString(idx),
+      kwl.add(ossimString::toString(idx).c_str(),
               theValueList[idx],
               true);
    }

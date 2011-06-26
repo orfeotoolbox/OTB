@@ -19,7 +19,7 @@
 //              Initial coding.
 //<
 //**************************************************************************
-// $Id: ossimElevManager.cpp 17784 2010-07-22 17:32:04Z gpotts $
+// $Id: ossimElevManager.cpp 19444 2011-04-25 18:20:59Z dburken $
 
 #include <algorithm>
 #include <ossim/elevation/ossimElevManager.h>
@@ -29,8 +29,6 @@
 #include <ossim/base/ossimGeoidManager.h>
 #include <ossim/elevation/ossimElevationDatabaseRegistry.h>
 #include <ossim/base/ossimKeywordNames.h>
-
-
 
 ossimElevManager* ossimElevManager::m_instance = 0;
 static ossimTrace traceDebug("ossimElevManager:debug");
@@ -46,17 +44,18 @@ ossimElevManager* ossimElevManager::instance()
    return m_instance;
 }
 ossimElevManager::ossimElevManager()
-:ossimElevSource()
+   :ossimElevSource(),
+    m_elevationDatabaseList(0),
+    m_defaultHeightAboveEllipsoid(ossim::nan()),
+    m_elevationOffset(ossim::nan()),
+    m_useGeoidIfNullFlag(false),
+    m_mutex()
 {
    m_instance = this;
-   m_defaultHeightAboveEllipsoid = ossim::nan();
-   m_elevationOffset = ossim::nan();
-   m_useGeoidIfNullFlag = false;
 }
 
 ossimElevManager::~ossimElevManager()
 {
-   
 }
 
 double ossimElevManager::getHeightAboveEllipsoid(const ossimGpt& gpt)
@@ -192,8 +191,7 @@ bool ossimElevManager::loadElevationPath(const ossimFilename& path)
 
 void ossimElevManager::getOpenCellList(std::vector<ossimFilename>& list) const
 {
-   ossim_uint32 idx = 0;
-   for(;idx < m_elevationDatabaseList.size(); ++idx)
+   for(ossim_uint32 idx = 0; idx < m_elevationDatabaseList.size(); ++idx)
    {
       m_elevationDatabaseList[idx]->getOpenCellList(list);
    }
@@ -283,7 +281,9 @@ bool ossimElevManager::loadState(const ossimKeywordlist& kwl,
         {
            ossimNotify(ossimNotifyLevel_DEBUG)
            << "DEBUG ossimElevManager::loadState:"
-           << "\nadding elevation database:  " << database->getConnectionString()
+           << "\nadding elevation database:  "
+           << database->getClassName()
+           << ": " << database->getConnectionString()
            << std::endl;
         }  
         addDatabase(database.get());

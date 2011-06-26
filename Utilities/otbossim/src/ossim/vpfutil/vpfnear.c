@@ -211,7 +211,7 @@ float distance( double lat1, double lon1, double lat2, double lon2,
 float distance_to_edge_rec( float x, float y, edge_rec_type edge_rec,
 			    int dec_degrees )
 {
-   register long int i;
+   register ossim_int32 i;
    line_segment_type lseg;
    float xint,yint, d, dseg, d1, d2;
    coordinate_type coord1, coord2;
@@ -271,7 +271,7 @@ float distance_to_edge_rec( float x, float y, edge_rec_type edge_rec,
  *A
  *    x           <input> == (float) given point x coordinate.
  *    y           <input> == (float) given point y coordinate
- *    edge_id     <input> == (long int) specified edge.
+ *    edge_id     <input> == (ossim_int32) specified edge.
  *    edgetable   <input> == (vpf_table_type) given edge table.
  *    dec_degrees <input> == (float) flag to indicate if coordinates are
  *                                   in decimal degrees.
@@ -286,7 +286,7 @@ float distance_to_edge_rec( float x, float y, edge_rec_type edge_rec,
  *E
  *************************************************************************/
 float distance_to_edge( float x, float y,
-			long int edge_id,
+			ossim_int32 edge_id,
 			vpf_table_type edgetable,
 			int dec_degrees )
 {
@@ -323,7 +323,7 @@ float distance_to_edge( float x, float y,
  *A
  *    x           <input> == (float) given point x coordinate.
  *    y           <input> == (float) given point y coordinate
- *    edge_id    <input> == (long int) specified edge id.
+ *    edge_id    <input> == (ossim_int32) specified edge id.
  *    fname      <input> == (char *) path to valid VPF edge table.
  *    dec_degrees <output> == (int) flag to indicate if coordinates are
  *                                  in decimal degrees.
@@ -338,7 +338,7 @@ float distance_to_edge( float x, float y,
  *E
  *************************************************************************/
 float distance_to_edge_table( float x, float y,
-			      long int edge_id,
+			      ossim_int32 edge_id,
 			      char *fname, int dec_degrees )
 {
    vpf_table_type edgetable;

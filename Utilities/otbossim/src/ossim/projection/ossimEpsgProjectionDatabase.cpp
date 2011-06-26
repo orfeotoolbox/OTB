@@ -178,7 +178,6 @@ ossimEpsgProjectionDatabase* ossimEpsgProjectionDatabase::instance()
 //*************************************************************************************************
 ossimEpsgProjectionDatabase::~ossimEpsgProjectionDatabase()
 {
-   m_instance = 0;
 }
 
 //*************************************************************************************************
@@ -197,16 +196,15 @@ void ossimEpsgProjectionDatabase::initialize()
 {
    // Fetch filenames of all projection DB files specified in ossim_preferences:
    ossimString regEx =  ossimString("^epsg_database_file[0-9]+");
-   std::vector<ossimString> keys = 
+   vector<ossimString> keys = 
       ossimPreferences::instance()->preferencesKWL().getSubstringKeyList(regEx);
-   std::vector<ossimString>::const_iterator i = keys.begin();
+   vector<ossimString>::const_iterator i = keys.begin();
 
    // Create only once outside the loop:
    ossimFilename db_name;
    ossimString group_id;
    ossimString format_id;
    ossimString line;
-   DbEntry file_record;
 
    // Loop over each file and read contents into memory:
    while ( i != keys.end() )
@@ -222,7 +220,7 @@ void ossimEpsgProjectionDatabase::initialize()
       if (db_stream.good())
       {
          // Format specification implied in file's magic number:
-         std::getline(db_stream, format_id);
+         getline(db_stream, format_id.string());
          format_id.trim();
          if ((format_id == EPSG_DB_FORMAT_A) || 
              (format_id == STATE_PLANE_FORMAT_B) ||
@@ -239,35 +237,33 @@ void ossimEpsgProjectionDatabase::initialize()
       }
 
       // The file is good. Skip over the column descriptor line:
-      std::getline(db_stream, line);
-      file_record.clear();
+      getline(db_stream, line.string());
 
       // Loop to read all data records:
       while (!db_stream.eof())
       {
-         std::getline(db_stream, line);
-         file_record = line.explode(","); // ONLY CSV FILES CONSIDERED HERE
-         if (file_record.size())
+         ossimRefPtr<ProjDbRecord> db_record = new ProjDbRecord;
+         std::getline(db_stream, line.string());
+         db_record->csvRecord = line.explode(","); // ONLY CSV FILES CONSIDERED HERE
+         if (db_record->csvRecord.size())
          {
             ossimRefPtr<ossimMapProjection> proj;
-            ProjRecord proj_record;
 
             // Check if primary EPSG database format A:
             if (format_id == EPSG_DB_FORMAT_A)
             {
-               proj = createProjFromFormatARecord(file_record, proj_record.datumValid);
-               proj_record.code = file_record[A_CODE].toUInt32();
-               proj_record.name = file_record[A_NAME];
+               db_record->code = db_record->csvRecord[A_CODE].toUInt32();
+               db_record->name = db_record->csvRecord[A_NAME];
+               db_record->csvFormat = FORMAT_A;
             }
 
             // Check if State Plane (subset of EPSG but handled differently until projection 
             // geotrans-EPSG disconnect is resolved. 
             else if (format_id == STATE_PLANE_FORMAT_B)
             {
-               proj = createProjFromFormatBRecord(file_record);
-               proj_record.code = file_record[B_CODE].toUInt32();
-               proj_record.name = file_record[B_NAME];
-               proj_record.datumValid = true;
+               db_record->code = db_record->csvRecord[B_CODE].toUInt32();
+               db_record->name = db_record->csvRecord[B_NAME];
+               db_record->csvFormat = FORMAT_B;
             }
 
             // This format is for Ming-special State Plane Coordinate System coded format.
@@ -276,9 +272,9 @@ void ossimEpsgProjectionDatabase::initialize()
             // code is saved.
             else if (format_id == SPCS_EPSG_MAP_FORMAT_C)
             {
-               proj_record.code = file_record[C_CODE].toUInt32();
-               proj_record.name = file_record[C_NAME];
-               m_projDatabase.push_back(proj_record);
+               db_record->code = db_record->csvRecord[C_CODE].toUInt32();
+               db_record->name = db_record->csvRecord[C_NAME];
+               db_record->csvFormat = FORMAT_C;
             }
 
             // This format is for alternate projection naming scheme database CSV file format.
@@ -287,17 +283,12 @@ void ossimEpsgProjectionDatabase::initialize()
             // code is saved.
             else if (format_id == WKT_PCS_FORMAT_D)
             {
-               proj_record.code = file_record[D_CODE].toUInt32();
-               proj_record.name = file_record[D_NAME];
-               m_projDatabase.push_back(proj_record);
+               db_record->code = db_record->csvRecord[D_CODE].toUInt32();
+               db_record->name = db_record->csvRecord[D_NAME];
+               db_record->csvFormat = FORMAT_D;
             }
 
-            if (proj.valid() && proj_record.datumValid)
-            {
-               // Serialize the projection to a KWL and stick it in the in-memory database:
-               proj->saveState(proj_record.kwl);
-               m_projDatabase.push_back(proj_record);
-            }
+            m_projDatabase.insert(make_pair(db_record->code, db_record));
          }
       }
 
@@ -311,31 +302,60 @@ void ossimEpsgProjectionDatabase::initialize()
 //*************************************************************************************************
 ossimProjection* ossimEpsgProjectionDatabase::findProjection(ossim_uint32 epsg_code) const
 {
+   ossimMapProjection* proj = 0;
+
    // Quick check for bogus EPSG:
    if ((epsg_code == 0) || (epsg_code == 32767))
       return 0;
 
-   ossimMapProjectionFactory* factory = ossimMapProjectionFactory::instance();
-   ossimMapProjection* proj = 0;
-
-   // Search database for entry:
-   std::vector<ProjRecord>::const_iterator db_iter = m_projDatabase.begin();
-   while (db_iter != m_projDatabase.end())
+   // Check for Google projection:
+   else if (epsg_code == 900913)
    {
-      if (db_iter->code == epsg_code)
+      const ossimDatum* datum = ossimDatumFactory::instance()->create(ossimString("6055"));
+      ossimMercatorProjection* merc_proj = new ossimMercatorProjection();
+      ossimGpt origin(0.0,0.0,0.0, datum);
+      merc_proj->setFalseEasting(0.0);
+      merc_proj->setFalseNorthing(0.0);
+      merc_proj->setOrigin(origin); // Also sets the projections datum to the origin's datum
+      merc_proj->update();
+      merc_proj->setPcsCode(900913);
+      proj = merc_proj;
+   }
+
+   else
+   {
+   // Search database for entry:
+      std::multimap<ossim_uint32, ossimRefPtr<ProjDbRecord> >::iterator db_iter = 
+         m_projDatabase.find(epsg_code);
+      if (db_iter != m_projDatabase.end())
       {
-         // We have a match, instantiate the projection from the associated KWL in the DB. Trick
-         // the registry into using appropriate factory by setting PCS code temporarily to 0 to
-         // avoid infinite recursion:
-         checkForUnhandledDatum(*db_iter);
-         ossimKeywordlist proj_kwl (db_iter->kwl); // make copy since this is a const method
-         proj_kwl.remove(ossimKeywordNames::PCS_CODE_KW);
-         proj = PTR_CAST(ossimMapProjection, factory->createProjection(proj_kwl));
+         // See if a projection has already been created for this entry:
+         ProjDbRecord* db_record = db_iter->second.get();
+         if (db_record->proj.valid())
+            proj = (ossimMapProjection*) db_record->proj->dup();
+         else
+   {
+            // Try decoding the EPSG code before accessing DB:
+            proj = createProjFromUtmCode(epsg_code);
+            if (proj)
+      {
+               db_record->proj = proj;
+               db_record->datumValid = true;
+            }
+            else if (db_iter->second->csvFormat == FORMAT_A)
+               proj = createProjFromFormatARecord(db_record);
+            else if (db_iter->second->csvFormat == FORMAT_B)
+               proj = createProjFromFormatBRecord(db_record);
+
          if (proj)
-            proj->setPcsCode(epsg_code);
-         break;
+            {
+               // To save allocated memory, get rid of the original CSV entry since a real 
+               // projection is now represented in the database:
+               db_record->csvRecord.clear();
+               db_record->csvFormat = NOT_ASSIGNED;
+            }
+         }
       }
-      db_iter++;
    }
    return proj;
 }
@@ -362,57 +382,39 @@ ossimProjection* ossimEpsgProjectionDatabase::findProjection(const ossimString& 
    {
       spec_code = spec.toUInt32();
    }
-   if(spec_code == 4326)
-   {
-      return new ossimEquDistCylProjection();
-   }
-   // Presently only EPSG database is handled:
-   if (spec_code != 0)
-   {
-      if (spec_group != "epsg")
-         return 0;
-      proj = findProjection(spec_code);
-      if (proj)
-         return proj;
-   }
 
-   // spec_code = 0 indicates that the spec is probably a projection name. Need to search Db
-   // by the projection name. Search database for entry:
+   // Presently only EPSG database is handled:
+   if ((spec_code != 0) && (spec_group == "epsg"))
+      return findProjection(spec_code);
+
+   // The spec is probably a projection name. Need to search Db
+   // by the projection name. Search database for entry. The spec may use different delimiters than
+   // the DB so need to split the strings and compare the words:
+   ossimString separators ("_ /()");
+   vector<ossimString> split_spec = spec.split(separators, true);
+   vector<ossimString> split_db_name;
    ossimRefPtr<ossimMapProjection> map_proj = 0;
-   ossimMapProjectionFactory* factory = ossimMapProjectionFactory::instance();
-   std::vector<ProjRecord>::const_iterator db_iter = m_projDatabase.begin();
+   std::multimap<ossim_uint32, ossimRefPtr<ProjDbRecord> >::iterator db_iter = m_projDatabase.begin();
    while ((db_iter != m_projDatabase.end()) && !proj)
    {
-      if (db_iter->name == spec)
+      ProjDbRecord* db_record = db_iter->second.get();
+      split_db_name.clear();
+      split_db_name = db_record->name.split(separators, true);
+      if (split_spec == split_db_name)
       {
-         // We have a match, instantiate the projection from the associated KWL in the DB. Trick
-         // the registry into using appropriate factory by setting PCS code temporarily to 0 to
-         // avoid infinite recursion:
-         checkForUnhandledDatum(*db_iter);
-         if (db_iter->kwl.getSize() > 0)
-         {
-            ossimKeywordlist proj_kwl (db_iter->kwl); // make copy since this is a const method
-            proj_kwl.remove(ossimKeywordNames::PCS_CODE_KW);
-            map_proj = PTR_CAST(ossimMapProjection, factory->createProjection(proj_kwl));
-            if (map_proj.valid())
-            {
-               map_proj->setPcsCode(db_iter->code);
-               proj = (ossimProjection*) map_proj->dup();
-            }
-         }
+         // We may already have instantiated this projection, in which case just return its copy.
+         // Otherwise, create the projection from the EPSG code that corresponds to the name:
+         if (db_record->proj.valid())
+            proj = (ossimMapProjection*) db_record->proj->dup();
          else
-         {
-            // An empty KWL indicates the record is simply a map to another EPSG Db entry:
-            proj = findProjection(db_iter->code);
-         }
+            proj = findProjection(db_record->code);
+         return proj;
       }
       db_iter++;
    }
-   if (proj)
-      return proj;
     
    // No hit? Could be that just a datum was identified, in which case we need a simple 
-   // Platte Carrée:
+   // Platte Carree:
    const ossimDatum* datum = ossimDatumFactoryRegistry::instance()->create(spec);
    if (datum)
    {
@@ -432,11 +434,12 @@ ossimProjection* ossimEpsgProjectionDatabase::findProjection(const ossimString& 
 //*************************************************************************************************
 ossim_uint32 ossimEpsgProjectionDatabase::findProjectionCode(const ossimString& proj_name) const
 {
-   std::vector<ProjRecord>::const_iterator db_iter = m_projDatabase.begin();
+   std::multimap<ossim_uint32, ossimRefPtr<ProjDbRecord> >::iterator db_iter = m_projDatabase.begin();
    while (db_iter != m_projDatabase.end())
    {
-      if (db_iter->name == proj_name)
-         return (db_iter->code);
+      ProjDbRecord* db_record = db_iter->second.get();
+      if (db_record->name == proj_name)
+         return (db_record->code);
       db_iter++;
    }
       
@@ -453,30 +456,35 @@ ossim_uint32
 ossimEpsgProjectionDatabase::findProjectionCode(const ossimMapProjection& lost_proj) const
 {
    ossimString lost_type (lost_proj.getClassName());
-   ossimString lookup;
-   ossimRefPtr<ossimMapProjection> found_proj = 0;
-   ossimMapProjectionFactory* factory = ossimMapProjectionFactory::instance();
-   ossim_uint32 found_code = 0;
 
-   std::vector<ProjRecord>::const_iterator db_iter = m_projDatabase.begin();
+   // Shortcut for EPSG:4326 (WGS-85 geographic rectangular -- very common):
+   if ((lost_type == "ossimEquDistCylProjection") && (lost_proj.getDatum()->epsgCode() == 6326))
+      return 4326;
+
+   ossim_uint32 found_code = 0;
+   if (lost_type == "ossimUtmProjection")
+   {
+      found_code = getCodeFromUtmProj(dynamic_cast<const ossimUtmProjection*>(&lost_proj));
+      if (found_code)
+         return found_code;
+   }
+
+   ossimString lookup;
+   std::multimap<ossim_uint32, ossimRefPtr<ProjDbRecord> >::iterator db_iter = m_projDatabase.begin();
    while ((db_iter != m_projDatabase.end()) && (found_code == 0))
    {
-      // To avoid having to instantiate all projections in the database, let's peek in the record's
-      // KWL for the projection type and only instantiate those that match:
-      lookup = db_iter->kwl.find(ossimKeywordNames::TYPE_KW);
-      if (lost_type == lookup)
-      {
-         // We have a match, instantiate the projection from the associated KWL in the DB. Trick
-         // the registry into using appropriate factory by setting PCS code temporarily to 0 to
-         // avoid infinite recursion:
-         ossimKeywordlist kwl (db_iter->kwl); // make copy since this is a const method
-         kwl.remove(ossimKeywordNames::PCS_CODE_KW);
-         found_proj = PTR_CAST(ossimMapProjection, factory->createProjection(kwl));
+      ProjDbRecord* db_record = db_iter->second.get();
 
-         // Test for same-ness between target and found, and return if matching:
-         if (found_proj.valid() && (*found_proj == lost_proj))
+      // Has a projection already been created for this db iter?
+      if (!db_record->proj.valid())
+      {
+         // No projection has been created yet for this DB entry. 
+         // NOTE: THIS IS VERY SLOW BECAUSE WE ARE INSTANTIATING EVERY PROJECTION IN THE DB!!!
+         db_record->proj = dynamic_cast<ossimMapProjection*>(findProjection(db_record->code));
+      }
+      if (db_record->proj.valid() && (*(db_record->proj.get()) == lost_proj))
          {
-            found_code = db_iter->code;
+         found_code = db_record->code;
 
             // Hack to remap projection code 4087 to 4326 (which is not really a projection 
             // code but other packages like to see 4326 for geographic projections.
@@ -484,7 +492,6 @@ ossimEpsgProjectionDatabase::findProjectionCode(const ossimMapProjection& lost_p
             if (found_code == 4087)
                found_code = 4326;
          }
-      }
       db_iter++;
    }
    return found_code;
@@ -497,16 +504,12 @@ ossimEpsgProjectionDatabase::findProjectionCode(const ossimMapProjection& lost_p
 ossimString ossimEpsgProjectionDatabase::findProjectionName(ossim_uint32 epsg_code) const
 {
    ossimString name ("");
-   std::vector<ProjRecord>::const_iterator db_iter = m_projDatabase.begin();
-   while (db_iter != m_projDatabase.end())
-   {
-      if (db_iter->code == epsg_code)
-      {
-         name = db_iter->name;
-         break;
-      }
-      db_iter++;
-   }
+   std::multimap<ossim_uint32, ossimRefPtr<ProjDbRecord> >::iterator db_iter = 
+       m_projDatabase.find(epsg_code);
+   
+   if (db_iter != m_projDatabase.end())
+      name = db_iter->second->name;
+   
    return name;
 }
 
@@ -518,13 +521,14 @@ ossimString ossimEpsgProjectionDatabase::findProjectionName(ossim_uint32 epsg_co
 //*************************************************************************************************
 void ossimEpsgProjectionDatabase::getProjectionsList(std::vector<ossimString>& list) const
 {
-   std::vector<ProjRecord>::const_iterator db_iter = m_projDatabase.begin();
+   std::multimap<ossim_uint32, ossimRefPtr<ProjDbRecord> >::iterator db_iter = m_projDatabase.begin();
    while (db_iter != m_projDatabase.end())
    {
+      ProjDbRecord* db_record = db_iter->second.get();
       ossimString record ("EPSG:");
-      record += ossimString::toString(db_iter->code);
+      record += ossimString::toString(db_record->code);
       record += "  \"";
-      record += db_iter->name;
+      record += db_record->name;
       record += "\"";
       list.push_back(record);
       db_iter++;
@@ -539,130 +543,129 @@ void ossimEpsgProjectionDatabase::getProjectionsList(std::vector<ossimString>& l
 // with current ossimDatumFactory. Setting to default WGS84 with warning message.
 //*************************************************************************************************
 ossimMapProjection* 
-ossimEpsgProjectionDatabase::createProjFromFormatARecord(const DbEntry& record, 
-                                                         bool& datum_valid) const
+ossimEpsgProjectionDatabase::createProjFromFormatARecord(ProjDbRecord* record) const
 {
    // Establish EPSG code and test for UTM (full projection is implied in the code itself -- no 
    // accessing the database). Until the database is solidified, it is probably better to do 
    // it this way:
-   datum_valid = true;
-   ossim_uint32 pcs_code = record[A_CODE].toUInt32();
-   ossimMapProjection* proj = createProjFromUtmCode(pcs_code);
-   if (proj)
-      return proj;
+   record->datumValid = true;
+   record->proj = 0;
 
    // Establish the units in which the easting/northing is provided:
    double mtrs_per_unit = 1.0;
-   if (record[A_UNITS] == "US survey foot")
+   if (record->csvRecord[A_UNITS] == "US survey foot")
       mtrs_per_unit = US_METERS_PER_FT;
-   else if (record[A_UNITS].contains("foot")) // THIS IS INTERNATIONAL FOOT, NOT EXACT FOR MANY INTERNATIONAL VARIETIES
+   else if (record->csvRecord[A_UNITS].contains("foot")) // THIS IS INTERNATIONAL FOOT, NOT EXACT FOR MANY INTERNATIONAL VARIETIES
       mtrs_per_unit = MTRS_PER_FT;
-   else if (!record[A_UNITS].contains("metre") || (record[A_UNITS] == "kilometre"))
+   else if (record->csvRecord[A_UNITS].contains("kilometre"))
+      mtrs_per_unit = 1000.0;
+   else if (!record->csvRecord[A_UNITS].contains("metre"))
    {
       // ### SKIP THIS MESSAGE BUT BE AWARE THAT THIS PROJECTION WON'T BE REPRESENTED IN DB ###
       //ossimNotify(ossimNotifyLevel_WARN)<<MODULE<<"EPSG:"<<pcs_code<<" units of <"
-      //   <<record[A_UNITS]<<"> not presently supported."<<endl;
+      //   <<record->csvRecord[A_UNITS]<<"> not presently supported."<<endl;
       return 0;
    }
 
    // First create a datum given the datum code in the record:
-   ossim_uint32 gcs_code = record[A_DATUM_CODE].toUInt32();
+   ossim_uint32 gcs_code = record->csvRecord[A_DATUM_CODE].toUInt32();
    const ossimDatum* datum = ossimEpsgDatumFactory::instance()->create(gcs_code);
    if (!datum)
    {
       // Default to WGS 84 -- this may throw an exception:
-      datum = ossimEpsgDatumFactory::instance()->create(ossimString("EPSG:4326"));
-      datum_valid = false;
+      datum = ossimDatumFactory::instance()->create(ossimString("WGE"));
+      record->datumValid = false;
    }
    const ossimEllipsoid* ellipsoid = datum->ellipsoid();
 
-   ossimGpt origin(0,0,0);
-   ossimString proj_type = record[A_PROJ_TYPE];
+   ossimGpt origin(0,0,0,datum);
+   ossimString proj_type = record->csvRecord[A_PROJ_TYPE];
    if (proj_type.contains("Transverse Mercator"))
    {
-      origin.lat = decodeSexagesimalDms(record[A_NAT_ORG_LAT]);
-      origin.lon = decodeSexagesimalDms(record[A_NAT_ORG_LON]);
-      double fe = mtrs_per_unit*record[A_FALSE_EASTING].toDouble();
-      double fn = mtrs_per_unit*record[A_FALSE_NORTHING].toDouble();
-      double sf = record[A_NAT_ORG_SCALE].toDouble();
-      proj = new ossimTransMercatorProjection(*ellipsoid, origin, fe, fn, sf);
+      origin.lat = decodeSexagesimalDms(record->csvRecord[A_NAT_ORG_LAT]);
+      origin.lon = decodeSexagesimalDms(record->csvRecord[A_NAT_ORG_LON]);
+      double fe = mtrs_per_unit*record->csvRecord[A_FALSE_EASTING].toDouble();
+      double fn = mtrs_per_unit*record->csvRecord[A_FALSE_NORTHING].toDouble();
+      double sf = record->csvRecord[A_NAT_ORG_SCALE].toDouble();
+      record->proj = new ossimTransMercatorProjection(*ellipsoid, origin, fe, fn, sf);
    }
    else if (proj_type.contains("Lambert Conic Conformal (1SP)"))
    {
-      origin.lat = decodeSexagesimalDms(record[A_NAT_ORG_LAT]);
-      origin.lon = decodeSexagesimalDms(record[A_NAT_ORG_LON]);
-      double fe = mtrs_per_unit*record[A_FALSE_EASTING].toDouble();
-      double fn = mtrs_per_unit*record[A_FALSE_NORTHING].toDouble();
-      proj = new ossimLambertConformalConicProjection(*ellipsoid, origin, origin.lat, 
+      origin.lat = decodeSexagesimalDms(record->csvRecord[A_NAT_ORG_LAT]);
+      origin.lon = decodeSexagesimalDms(record->csvRecord[A_NAT_ORG_LON]);
+      double fe = mtrs_per_unit*record->csvRecord[A_FALSE_EASTING].toDouble();
+      double fn = mtrs_per_unit*record->csvRecord[A_FALSE_NORTHING].toDouble();
+      record->proj = new ossimLambertConformalConicProjection(*ellipsoid, origin, origin.lat, 
          origin.lat, fe, fn);
    }
    else if (proj_type.contains("Lambert Conic Conformal (2SP)"))
    {
-      origin.lat = decodeSexagesimalDms(record[A_FALSE_ORG_LAT]);
-      origin.lon = decodeSexagesimalDms(record[A_FALSE_ORG_LON]);
-      double p1 = decodeSexagesimalDms(record[A_STD_PARL_1_LAT]);
-      double p2 = decodeSexagesimalDms(record[A_STD_PARL_2_LAT]);
-      double fe = mtrs_per_unit*record[A_FALSE_ORG_EASTING].toDouble();
-      double fn = mtrs_per_unit*record[A_FALSE_ORG_NORTHING].toDouble();
-      proj = new ossimLambertConformalConicProjection(*ellipsoid, origin, p1, p2, fe, fn);
+      origin.lat = decodeSexagesimalDms(record->csvRecord[A_FALSE_ORG_LAT]);
+      origin.lon = decodeSexagesimalDms(record->csvRecord[A_FALSE_ORG_LON]);
+      double p1 = decodeSexagesimalDms(record->csvRecord[A_STD_PARL_1_LAT]);
+      double p2 = decodeSexagesimalDms(record->csvRecord[A_STD_PARL_2_LAT]);
+      double fe = mtrs_per_unit*record->csvRecord[A_FALSE_ORG_EASTING].toDouble();
+      double fn = mtrs_per_unit*record->csvRecord[A_FALSE_ORG_NORTHING].toDouble();
+      record->proj = new ossimLambertConformalConicProjection(*ellipsoid, origin, p1, p2, fe, fn);
    }
    else if (proj_type.contains("Cassini"))
    {
-      origin.lat = decodeSexagesimalDms(record[A_NAT_ORG_LAT]);
-      origin.lon = decodeSexagesimalDms(record[A_NAT_ORG_LON]);
-      double fe = mtrs_per_unit*record[A_FALSE_EASTING].toDouble();
-      double fn = mtrs_per_unit*record[A_FALSE_NORTHING].toDouble();
-      proj =  new ossimCassiniProjection(*ellipsoid, origin, fe, fn);
+      origin.lat = decodeSexagesimalDms(record->csvRecord[A_NAT_ORG_LAT]);
+      origin.lon = decodeSexagesimalDms(record->csvRecord[A_NAT_ORG_LON]);
+      double fe = mtrs_per_unit*record->csvRecord[A_FALSE_EASTING].toDouble();
+      double fn = mtrs_per_unit*record->csvRecord[A_FALSE_NORTHING].toDouble();
+      record->proj =  new ossimCassiniProjection(*ellipsoid, origin, fe, fn);
    }
-   else if (proj_type.contains("Mercator (1SP)"))
+   else if (proj_type.contains("Mercator (1SP)") || proj_type.contains("Pseudo-Mercator"))
    {
-      origin.lat = decodeSexagesimalDms(record[A_NAT_ORG_LAT]);
-      origin.lon = decodeSexagesimalDms(record[A_NAT_ORG_LON]);
-      double fe = mtrs_per_unit*record[A_FALSE_EASTING].toDouble();
-      double fn = mtrs_per_unit*record[A_FALSE_NORTHING].toDouble();
-      double sf = record[A_NAT_ORG_SCALE].toDouble();
-      proj = new ossimMercatorProjection(*ellipsoid, origin, fe, fn, sf);
+      origin.lat = decodeSexagesimalDms(record->csvRecord[A_NAT_ORG_LAT]);
+      origin.lon = decodeSexagesimalDms(record->csvRecord[A_NAT_ORG_LON]);
+      double fe = mtrs_per_unit*record->csvRecord[A_FALSE_EASTING].toDouble();
+      double fn = mtrs_per_unit*record->csvRecord[A_FALSE_NORTHING].toDouble();
+      double sf = record->csvRecord[A_NAT_ORG_SCALE].toDouble();
+      record->proj = new ossimMercatorProjection(*ellipsoid, origin, fe, fn, sf);
    }
    else if (proj_type.contains("Albers"))
    {
-      origin.lat = decodeSexagesimalDms(record[A_FALSE_ORG_LAT]);
-      origin.lon = decodeSexagesimalDms(record[A_FALSE_ORG_LON]);
-      double p1 = decodeSexagesimalDms(record[A_STD_PARL_1_LAT]);
-      double p2 = decodeSexagesimalDms(record[A_STD_PARL_2_LAT]);
-      double fe = mtrs_per_unit*record[A_FALSE_ORG_EASTING].toDouble();
-      double fn = mtrs_per_unit*record[A_FALSE_ORG_NORTHING].toDouble();
-      proj = new ossimAlbersProjection(*ellipsoid, origin, p1, p2, fe, fn);
+      origin.lat = decodeSexagesimalDms(record->csvRecord[A_FALSE_ORG_LAT]);
+      origin.lon = decodeSexagesimalDms(record->csvRecord[A_FALSE_ORG_LON]);
+      double p1 = decodeSexagesimalDms(record->csvRecord[A_STD_PARL_1_LAT]);
+      double p2 = decodeSexagesimalDms(record->csvRecord[A_STD_PARL_2_LAT]);
+      double fe = mtrs_per_unit*record->csvRecord[A_FALSE_ORG_EASTING].toDouble();
+      double fn = mtrs_per_unit*record->csvRecord[A_FALSE_ORG_NORTHING].toDouble();
+      record->proj = new ossimAlbersProjection(*ellipsoid, origin, p1, p2, fe, fn);
    }
    else if (proj_type.contains("Equidistant Cylindrical"))
    {
-      origin.lat = decodeSexagesimalDms(record[A_STD_PARL_1_LAT]);
-      origin.lon = decodeSexagesimalDms(record[A_NAT_ORG_LON]);
-      double fe = mtrs_per_unit*record[A_FALSE_EASTING].toDouble();
-      double fn = mtrs_per_unit*record[A_FALSE_NORTHING].toDouble();
-      proj = new ossimEquDistCylProjection(*ellipsoid, origin, fe, fn);
+      origin.lat = decodeSexagesimalDms(record->csvRecord[A_STD_PARL_1_LAT]);
+      origin.lon = decodeSexagesimalDms(record->csvRecord[A_NAT_ORG_LON]);
+      double fe = mtrs_per_unit*record->csvRecord[A_FALSE_EASTING].toDouble();
+      double fn = mtrs_per_unit*record->csvRecord[A_FALSE_NORTHING].toDouble();
+      record->proj = new ossimEquDistCylProjection(*ellipsoid, origin, fe, fn);
    }
    else if (proj_type.contains("New Zealand Map Grid"))
    {
-      origin.lat = decodeSexagesimalDms(record[A_NAT_ORG_LAT]);
-      origin.lon = decodeSexagesimalDms(record[A_NAT_ORG_LON]);
-      double fe = mtrs_per_unit*record[A_FALSE_EASTING].toDouble();
-      double fn = mtrs_per_unit*record[A_FALSE_NORTHING].toDouble();
+      origin.lat = decodeSexagesimalDms(record->csvRecord[A_NAT_ORG_LAT]);
+      origin.lon = decodeSexagesimalDms(record->csvRecord[A_NAT_ORG_LON]);
+      double fe = mtrs_per_unit*record->csvRecord[A_FALSE_EASTING].toDouble();
+      double fn = mtrs_per_unit*record->csvRecord[A_FALSE_NORTHING].toDouble();
       ossimNewZealandMapGridProjection* nz_proj = new ossimNewZealandMapGridProjection;
       nz_proj->setOrigin(origin);
       nz_proj->setFalseEastingNorthing(fe, fn);
-      proj = nz_proj;
+      record->proj = nz_proj;
    }
    else 
    {
       // Can't handle it now. 
-      //ossimNotify(ossimNotifyLevel_FATAL)<<MODULE<<"EPSG:"<<record[A_CODE]<<" \""<<proj_type<<"\" "
+      //ossimNotify(ossimNotifyLevel_FATAL)<<MODULE<<"EPSG:"<<record->csvRecord[A_CODE]<<" \""<<proj_type<<"\" "
       //   "not presently supported. Returning NULL projection..."<<endl;
       return 0;
    }
   
-   proj->setDatum(datum);
-   proj->setPcsCode(pcs_code);
-   return proj;
+   record->proj->setDatum(datum);
+   record->proj->setPcsCode(record->code);
+   
+   return record->proj.get();
 }
 
 //*************************************************************************************************
@@ -672,35 +675,38 @@ ossimEpsgProjectionDatabase::createProjFromFormatARecord(const DbEntry& record,
 //! programmatically arrive at the UTM projection.
 //*************************************************************************************************
 ossimMapProjection* 
-ossimEpsgProjectionDatabase::createProjFromFormatBRecord(const DbEntry& record) const
+ossimEpsgProjectionDatabase::createProjFromFormatBRecord(ProjDbRecord* db_record) const
 {
    // Unfortunately, as of this writing, there is a disconnect between the Geotrans projection
    // parameters and those provided by EPSG database. In the meantime, to maintain functionality,
    // we intercept the EPSG code and programmatically arrive at the projection versus pulling
-   // all the parameters out of the Db record.
-   ossimStatePlaneProjectionInfo  info(record[B_NAME],
-                                       record[B_CODE].toInt(),
-                                       record[B_PROJ_TYPE],
-                                       record[B_PARAM1],
-                                       record[B_PARAM2],
-                                       record[B_PARAM3],
-                                       record[B_PARAM4],
-                                       record[B_FALSE_EASTING].toDouble(),
-                                       record[B_FALSE_NORTHING].toDouble(),
-                                       record[B_UNITS],
-                                       record[B_DATUM_CODE]);
+   // all the parameters out of the Db record->
+   ossimStatePlaneProjectionInfo  info(db_record->name,
+                                       db_record->code,
+                                       db_record->csvRecord[B_PROJ_TYPE],
+                                       db_record->csvRecord[B_PARAM1],
+                                       db_record->csvRecord[B_PARAM2],
+                                       db_record->csvRecord[B_PARAM3],
+                                       db_record->csvRecord[B_PARAM4],
+                                       db_record->csvRecord[B_FALSE_EASTING].toDouble(),
+                                       db_record->csvRecord[B_FALSE_NORTHING].toDouble(),
+                                       db_record->csvRecord[B_UNITS],
+                                       db_record->csvRecord[B_DATUM_CODE]);
    
    // NOTE: In order to avoid infinite recursion with this object, we initialized the PCS code in 
    // info to NULL to insure that the projection is instantiated directly (not via this class):
    ossimKeywordlist kwl;
    info.populateProjectionKeywords(kwl);
    kwl.remove(ossimKeywordNames::PCS_CODE_KW);
-   ossimMapProjection* proj = PTR_CAST(ossimMapProjection,
-      ossimMapProjectionFactory::instance()->createProjection(kwl));
-   if (proj)
-      proj->setPcsCode(record[B_CODE].toUInt32());
+   db_record->proj = 
+      PTR_CAST(ossimMapProjection, ossimMapProjectionFactory::instance()->createProjection(kwl));
+   if (db_record->proj.valid())
+   {
+      db_record->proj->setPcsCode(db_record->csvRecord[B_CODE].toUInt32());
+      db_record->datumValid = true;
+   }
 
-   return proj;
+   return db_record->proj.get();
 }
 
 //*************************************************************************************************
@@ -820,18 +826,48 @@ ossimMapProjection* ossimEpsgProjectionDatabase::createProjFromUtmCode(ossim_uin
 }
 
 //*************************************************************************************************
-//! Throws an exception if datum code is not handled yet.
+//! Given UTM projection, derives the associated EPSG code. This is faster than a Db lookup.
 //*************************************************************************************************
-void ossimEpsgProjectionDatabase::checkForUnhandledDatum(const ProjRecord& record) const
+ossim_uint32 ossimEpsgProjectionDatabase::getCodeFromUtmProj(const ossimUtmProjection* proj) const
 {
-   if (!record.datumValid)
-   {
-      ossimString errMsg ("ossimEpsgProjectionDatabase -- "
-         "EPSG database parsing of datum code has not been implemented for EPSG code=");
-      errMsg += ossimString::toString(record.code);
-      throw(ossimException(errMsg));
-   }
+   if (proj == NULL)
+      return 0;
+
+   char hemisphere = proj->getHemisphere();
+   ossim_uint32 zone = proj->getZone();
+   ossimString datum_code = proj->getDatum()->code();
+   
+   if ((zone < 1 ) || (zone > 60))
+      return 0;
+
+   ossim_uint32 epsg_code = zone;
+   if ((hemisphere == 'N') && (datum_code == "WGD"))
+      epsg_code += 32200;
+   
+   else if ((hemisphere == 'S') && (datum_code == "WGD"))
+      epsg_code += 32300;
+
+   else if ((hemisphere == 'N') && (datum_code == "WGE"))
+      epsg_code += 32600;
+
+   else if ((hemisphere == 'S') && (datum_code == "WGE"))
+      epsg_code += 32700;
+
+   else if ((hemisphere == 'N') && (datum_code == "NAS-C") && (zone > 2) && (zone < 23))
+      epsg_code += 26700;
+
+   else if ((hemisphere == 'N') && (datum_code == "NAR-C") && (zone > 2) && (zone < 24))
+      epsg_code += 26900;
+
+   else if ((hemisphere == 'N') && (datum_code == "PRP-M"))
+      epsg_code += 24800;
+
+   else if ((hemisphere == 'S') && (datum_code == "PRP-M"))
+      epsg_code += 24800 + 60;
+
+   else
+      epsg_code = 0;
+
+   return epsg_code;
 }
-
-
 

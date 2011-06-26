@@ -73,7 +73,7 @@ private:
     *
     * @param right Right hand side of scene.
     */
-   void checkLongitude(ossimGpt& left, const ossimGpt& right) const;
+   void checkLongitude(ossimGpt& left, ossimGpt& right) const;
 
    /** @brief Method to get the file for entry. */
    void getDotRfpFilenameForEntry(const ossimFilename& outputDir,

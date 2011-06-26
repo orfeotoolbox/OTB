@@ -7,7 +7,7 @@
  * Description: Common file for global constants.
  *
  **************************************************************************
- * $Id: ossimConstants.h 17194 2010-04-23 15:05:19Z dburken $
+ * $Id: ossimConstants.h 19471 2011-05-03 15:03:05Z gpotts $
  */
 #ifndef ossimConstants_HEADER
 #define ossimConstants_HEADER
@@ -37,7 +37,14 @@ extern "C" {
 #  pragma warning(disable:4800) /* int forcing value to bool */
 #  pragma warning(disable:4244) /* conversion, possible loss of data */
 #endif
-
+#if defined(__GNUC__)
+#   define OSSIM_DEPRECATE_METHOD(func) func __attribute__ ((deprecated))
+#elif defined(_MSC_VER)
+#   define OSSIM_DEPRECATE_METHOD(func)  __declspec(deprecated) func 
+#else
+#   define OSSIM_DEPRECATE_METHOD(func)
+#endif
+   
 /**
  * DLL IMPORT/EXORT SECTION
  */
@@ -74,7 +81,7 @@ extern "C" {
 #  define OSSIM_DLL_DATA(type) type
 #  define OSSIMDLLEXPORT_CTORFN
 #endif /* #if defined(_MSC_VER) */
-
+   
 /**
  * Previous DLL import export section.  Commented out, but left just in case.
  */
@@ -381,10 +388,10 @@ enum ossimUnitType
 enum ossimDataObjectStatus
 {
    OSSIM_STATUS_UNKNOWN = 0,
-   OSSIM_NULL           = 1,
-   OSSIM_EMPTY          = 2,
-   OSSIM_PARTIAL        = 3,
-   OSSIM_FULL           = 4
+   OSSIM_NULL           = 1, // not initialized
+   OSSIM_EMPTY          = 2, // initialized but blank or empty
+   OSSIM_PARTIAL        = 3, // contains some null/invalid values
+   OSSIM_FULL           = 4  // all valid data
 };
 
 /** Definitions for image type identification. */

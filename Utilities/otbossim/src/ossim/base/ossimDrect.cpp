@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
 // License:  LGPL
 // 
@@ -11,9 +10,10 @@
 //
 // Contains class definition for ossimDrect.
 //*******************************************************************
-//  $Id: ossimDrect.cpp 14352 2009-04-20 19:34:49Z gpotts $
+//  $Id: ossimDrect.cpp 19682 2011-05-31 14:21:20Z dburken $
 
 #include <iostream>
+#include <sstream>
 
 #include <ossim/base/ossimDrect.h>
 #include <ossim/base/ossimIrect.h>
@@ -30,57 +30,57 @@ clip_1d (double *x0,
 	 double *y1, 
 	 double maxdim)
 {
-  double m;			/* gradient of line */
-  if (*x0 < 0)
-    {				/* start of line is left of window */
+   double m;			/* gradient of line */
+   if (*x0 < 0)
+   {				/* start of line is left of window */
       if (*x1 < 0)		/* as is the end, so the line never cuts the window */
-	return 0;
+         return 0;
       m = (*y1 - *y0) / (double) (*x1 - *x0);	/* calculate the slope of the line */
       /* adjust x0 to be on the left boundary (ie to be zero), and y0 to match */
       *y0 -= m * *x0;
       *x0 = 0;
       /* now, perhaps, adjust the far end of the line as well */
       if (*x1 > maxdim)
-	{
-	  *y1 += m * (maxdim - *x1);
-	  *x1 = maxdim;
-	}
+      {
+         *y1 += m * (maxdim - *x1);
+         *x1 = maxdim;
+      }
       return 1;
-    }
-  if (*x0 > maxdim)
-    {				/* start of line is right of window -
+   }
+   if (*x0 > maxdim)
+   {				/* start of line is right of window -
 				   complement of above */
       if (*x1 > maxdim)		/* as is the end, so the line misses the window */
-	return 0;
+         return 0;
       m = (*y1 - *y0) / (double) (*x1 - *x0);	/* calculate the slope of the line */
       *y0 += m * (maxdim - *x0);	/* adjust so point is on the right
 					   boundary */
       *x0 = maxdim;
       /* now, perhaps, adjust the end of the line */
       if (*x1 < 0)
-	{
-	  *y1 -= m * *x1;
-	  *x1 = 0;
-	}
+      {
+         *y1 -= m * *x1;
+         *x1 = 0;
+      }
       return 1;
-    }
-  /* the final case - the start of the line is inside the window */
-  if (*x1 > maxdim)
-    {				/* other end is outside to the right */
+   }
+   /* the final case - the start of the line is inside the window */
+   if (*x1 > maxdim)
+   {				/* other end is outside to the right */
       m = (*y1 - *y0) / (double) (*x1 - *x0);	/* calculate the slope of the line */
       *y1 += m * (maxdim - *x1);
       *x1 = maxdim;
       return 1;
-    }
-  if (*x1 < 0)
-    {				/* other end is outside to the left */
+   }
+   if (*x1 < 0)
+   {				/* other end is outside to the left */
       m = (*y1 - *y0) / (double) (*x1 - *x0);	/* calculate the slope of the line */
       *y1 -= m * *x1;
       *x1 = 0;
       return 1;
-    }
-  /* only get here if both points are inside the window */
-  return 1;
+   }
+   /* only get here if both points are inside the window */
+   return 1;
 }
 
 //*******************************************************************
@@ -172,6 +172,7 @@ ossimDrect::ossimDrect(const ossimDpt& p1,
                        const ossimDpt& p3,
                        const ossimDpt& p4,
                        ossimCoordSysOrientMode mode)
+: theOrientMode(mode)
 {
    if(p1.hasNans()||p2.hasNans()||p3.hasNans()||p4.hasNans())
    {
@@ -196,6 +197,31 @@ ossimDrect::ossimDrect(const ossimDpt& p1,
          *this = ossimDrect(minx,maxy, maxx, miny, mode);
       }
    }
+}
+
+
+//*******************************************************************
+//! Constructs an ossimDrect surrounding the specified point, and of specified size.
+//*******************************************************************
+ossimDrect::ossimDrect(const ossimDpt& center, 
+                       const double&   size_x, 
+                       const double&   size_y,
+                       ossimCoordSysOrientMode mode)
+: theOrientMode(mode)
+{
+   double dx = fabs(size_x);
+   double dy = fabs(size_y);
+
+   double minx = center.x - dx/2.0;
+   double maxx = minx + dx;
+
+   double miny = center.y - dy/2.0;
+   double maxy = miny + dy;
+
+   if(mode == OSSIM_LEFT_HANDED)
+      *this = ossimDrect(minx, miny, maxx, maxy, mode);
+   else
+      *this = ossimDrect(minx,maxy, maxx, miny, mode);
 }
 
 ossimDrect::~ossimDrect()
@@ -480,14 +506,101 @@ const ossimDrect& ossimDrect::expand(const ossimDpt& padding)
    
    return *this;
 }
+ossimString ossimDrect::toString()const
+{
+   ossimString result="(";
+   
+   if(theOrientMode == OSSIM_LEFT_HANDED)
+   {
+      ossimDpt origin = ul();
+      result += (ossimString::toString(origin.x) + ",");
+      result += (ossimString::toString(origin.y) + ",");
+      result += (ossimString::toString(width()) + ",");
+      result += (ossimString::toString(height()) + ",");
+      result += "LH";
+   }
+   else 
+   {
+      ossimDpt origin = ll();
+      result += (ossimString::toString(origin.x) + ",");
+      result += (ossimString::toString(origin.y) + ",");
+      result += (ossimString::toString(width()) + ",");
+      result += (ossimString::toString(height()) + ",");
+      result += "RH";
+   }
+   
+   result += ")";
+   return result;
+}
 
+bool ossimDrect::toRect(const ossimString& rectString)
+{
+   bool result = false;
+   
+   
+   std::istringstream in(rectString);
+   ossim::skipws(in);
+   char charString[2];
+   charString[1] = '\0';
+   ossimString interior;
+   if(in.peek() == '(')
+   {
+      in.ignore();
+      while((in.peek() != ')')&&
+            (in.peek() != '\n') &&
+            in.good())
+      {
+         charString[0] = in.get();
+         interior += charString;
+      }
+      if(in.peek() == ')')
+      {
+         result = true;
+      }
+   }
+   if(result)
+   {
+      std::vector<ossimString> splitArray;
+      interior.split(splitArray, ",");
+      
+      // assume left handed
+      if(splitArray.size() >= 4)
+      {
+         ossim_float64 x = splitArray[0].toDouble();
+         ossim_float64 y = splitArray[1].toDouble();
+         ossim_float64 w = splitArray[2].toDouble();
+         ossim_float64 h = splitArray[3].toDouble();
+         ossimString orientation = "lh";
+         if(splitArray.size() == 5)
+         {
+            orientation = splitArray[4].downcase();
+         }
+         if(orientation == "lh")
+         {
+            // origin upper left
+            *this = ossimDrect(x,y,x + (w-1), y+h-1, OSSIM_LEFT_HANDED);
+         }
+         else 
+         {
+            // origin lower left so construct and make an upper left
+            *this = ossimDrect(x,y+(h-1),x + (w-1), y, OSSIM_RIGHT_HANDED);
+         }
+      }
+      else
+      {
+         result = false;
+      }
+      
+   }
+   return result;
+}
 
 //*******************************************************************
 // Public Method: ossimDrect::print
 //*******************************************************************
 void ossimDrect::print(std::ostream& os) const
 {
-   os << (theOrientMode==OSSIM_LEFT_HANDED?"left handed: ":"right handed: ") << theUlCorner << theLrCorner;
+   os << toString();
 }
 
 //*******************************************************************
@@ -516,89 +629,22 @@ bool ossimDrect::clip(ossimDpt &p1, ossimDpt &p2)const
    ossimDpt tempShiftP2 = p2+shift;
    double maxW = width()-1;
    double maxH = height()-1;
-  if (clip_1d (&tempShiftP1.x, &tempShiftP1.y, 
-	       &tempShiftP2.x, &tempShiftP2.y, 
-	       maxW) == 0)
-    {
+   if (clip_1d (&tempShiftP1.x, &tempShiftP1.y, 
+                &tempShiftP2.x, &tempShiftP2.y, 
+                maxW) == 0)
+   {
       return false;
-    }
-  if(clip_1d (&tempShiftP1.y, 
-	      &tempShiftP1.x, 
-	      &tempShiftP2.y, 
-	      &tempShiftP2.x, maxH) == 0)
-    {
+   }
+   if(clip_1d (&tempShiftP1.y, 
+               &tempShiftP1.x, 
+               &tempShiftP2.y, 
+               &tempShiftP2.x, maxH) == 0)
+   {
       return false;
-    }
-  p1 = tempShiftP1-shift;
-  p2 = tempShiftP2-shift;
-  return true;
-//   bool done    = false;
-   
-//    long p1Code = getCode(p1, (*this));
-//    long p2Code = getCode(p2, (*this));
-//    long codeOut;
-
-//    do{
-
-//       if((!p1Code) && (!p2Code))
-//       {
-//          visible = true;
-//          done    = true;
-//       }
-//       else if(p1Code&p2Code)
-//       {
-//          done    = true;
-//       }
-//       else
-//       {
-//          if(p1Code)
-//          {
-//             codeOut = p1Code;
-//          }
-//          else
-//          {
-//             codeOut = p2Code;
-//          }
-        
-//          if(codeOut&TOP) // divide rect at the top
-//          {
-//             tempPt.x = p1.x + (p2.x - p1.x)*
-//                        ((*this).ul().y - p1.y)/(p2.y - p1.y);
-//             tempPt.y = (*this).ul().y;
-//          }
-//          else if(codeOut&BOTTOM)
-//          {
-//             tempPt.x = p1.x + (p2.x - p1.x)*
-//                        ((*this).lr().y - p1.y)/(p2.y - p1.y);
-//             tempPt.y = (*this).lr().y;
-//          }
-//          else if(codeOut&RIGHT)
-//          {
-//             tempPt.y = p1.y + (p2.y - p1.y)*
-//                        ((*this).lr().x - p1.x)/(p2.x - p1.x);
-//             tempPt.x = (*this).lr().x;
-//          }
-//          else if(codeOut&LEFT)
-//          {
-//             tempPt.y = p1.y + (p2.y - p1.y)*
-//                        ((*this).ul().x - p1.x)/(p2.x - p1.x);
-//             tempPt.x = (*this).ul().x;
-//          }
-//          if(codeOut == p1Code)
-//          {
-//             p1.x = tempPt.x;
-//             p1.y = tempPt.y;
-//             p1Code = getCode(p1, (*this));
-//          }
-//          else
-//          {
-//             p2.x = tempPt.x;
-//             p2.y = tempPt.y;
-//             p2Code = getCode(p2, (*this));
-//          }
-//       }
-//    }while(!done);
-//    return visible;
+   }
+   p1 = tempShiftP1-shift;
+   p2 = tempShiftP2-shift;
+   return true;
 }
 
 //*******************************************************************
@@ -741,5 +787,31 @@ const ossimDrect& ossimDrect::operator=(const ossimIrect& rect)
    }
    
    return *this;
+}
+
+//*************************************************************************************************
+// Finds the point on the rect boundary that is closest to the arg_point. Closest is defined as
+// the minimum perpendicular distance.
+//*************************************************************************************************
+ossimDpt ossimDrect::findClosestEdgePointTo(const ossimDpt& arg_point) const
+{
+   double dXleft  = theUlCorner.x - arg_point.x;
+   double dXright = theLrCorner.x - arg_point.x;
+   double dYupper = theUlCorner.y - arg_point.y;
+   double dYlower = theLrCorner.y - arg_point.y;
+
+   ossimDpt edge_point (theLrCorner);
+
+   if (dXleft*dXright < 0.0)
+      edge_point.x = arg_point.x;
+   else if (fabs(dXleft) < fabs(dXright))
+      edge_point.x = theUlCorner.x;
+
+   if (dYupper*dYlower < 0.0)
+      edge_point.y = arg_point.y;
+   else if (fabs(dYupper) < fabs(dYlower))
+      edge_point.y = theUlCorner.y;
+
+   return edge_point;
 }
 

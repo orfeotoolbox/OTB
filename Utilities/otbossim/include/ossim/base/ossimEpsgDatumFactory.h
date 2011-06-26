@@ -9,12 +9,11 @@
 //  $Id$
 
 #ifndef ossimEpsgDatumFactory_HEADER
-#define ossimEpsgDatumFactory_HEADER
-
-#include <vector>
-#include <map>
+#define ossimEpsgDatumFactory_HEADER 1
 
 #include <ossim/base/ossimDatumFactoryInterface.h>
+#include <map>
+#include <string>
 
 class ossimDatum;
 class ossimString;
@@ -64,7 +63,7 @@ protected:
 
    //! Presently implemented as a mapping from EPSG code to OSSIM/Geotrans alpha-codes found in 
    //! ossimDatumFactory. Eventually should be independent (and deprecate) ossimDatumFactory.
-   std::map<ossim_uint32, ossimString> m_epsgToAlphaMap;
+   std::map<ossim_uint32, std::string> m_epsgToAlphaMap;
    
    static ossimEpsgDatumFactory* m_instance;
 };

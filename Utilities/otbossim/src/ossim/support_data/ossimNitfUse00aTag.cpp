@@ -10,7 +10,7 @@
 // Exploitation Usability extension.
 // 
 //********************************************************************
-// $Id: ossimNitfUse00aTag.cpp 14241 2009-04-07 19:59:23Z dburken $
+// $Id: ossimNitfUse00aTag.cpp 19682 2011-05-31 14:21:20Z dburken $
 
 #include <iostream>
 #include <iomanip>
@@ -42,9 +42,9 @@ ossimNitfUse00aTag::~ossimNitfUse00aTag()
 {
 }
 
-ossimString ossimNitfUse00aTag::getRegisterTagName()const
+std::string ossimNitfUse00aTag::getRegisterTagName()const
 {
-   return "USE00A";
+   return std::string("USE00A");
 }
 
 void ossimNitfUse00aTag::parseStream(std::istream& in)

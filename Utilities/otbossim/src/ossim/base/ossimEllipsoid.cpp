@@ -13,9 +13,10 @@
 //              Initial coding.
 //<
 //*****************************************************************************
-//  $Id: ossimEllipsoid.cpp 17941 2010-08-19 22:39:13Z dburken $
+//  $Id: ossimEllipsoid.cpp 19640 2011-05-25 15:58:00Z oscarkramer $
 
 #include <ossim/base/ossimEllipsoid.h>
+#include <ossim/base/ossimDpt.h>
 #include <ossim/base/ossimEllipsoidFactory.h>
 #include <ossim/base/ossimEcefRay.h>
 #include <ossim/base/ossimEcefPoint.h>
@@ -40,6 +41,7 @@ ossimEllipsoid::ossimEllipsoid(const ossimEllipsoid &ellipsoid)
    :
       theName(ellipsoid.theName),
       theCode(ellipsoid.theCode),
+      theEpsgCode(ellipsoid.theEpsgCode),
       theA(ellipsoid.theA),
       theB(ellipsoid.theB),
       theFlattening(ellipsoid.theFlattening),
@@ -47,7 +49,10 @@ ossimEllipsoid::ossimEllipsoid(const ossimEllipsoid &ellipsoid)
       theB_squared(ellipsoid.theB_squared),
       theEccentricitySquared(ellipsoid.theEccentricitySquared)
 {
-   theEpsgCode = ossimEllipsoidFactory::instance()->findEpsgCode(theCode);
+   if ( theEpsgCode == 0 )
+   {
+      theEpsgCode = ossimEllipsoidFactory::instance()->findEpsgCode(theCode);
+   }
 }
 
 //*****************************************************************************
@@ -57,15 +62,18 @@ ossimEllipsoid::ossimEllipsoid(const ossimEllipsoid &ellipsoid)
 ossimEllipsoid::ossimEllipsoid(const ossimString &name,
                                const ossimString &code,
                                const double &a,
-                               const double &b)
+                               const double &b,
+                               ossim_uint32 epsg_code)
    :
       theName(name),
       theCode(code),
+      theEpsgCode(epsg_code),
       theA(a),
       theB(b),
       theA_squared(a*a),
       theB_squared(b*b)
 {
+   if (theEpsgCode == 0)
    theEpsgCode = ossimEllipsoidFactory::instance()->findEpsgCode(theCode);
 
    computeFlattening();   
@@ -94,10 +102,18 @@ ossimEllipsoid::ossimEllipsoid(const double &a,
       theA_squared(a*a),
       theB_squared(b*b)
 {
-   computeFlattening();
-
-   theEccentricitySquared = 2*theFlattening - theFlattening*theFlattening;
- }
+   // First check if this is just WGS84:
+   const ossimEllipsoid* wgs84 = ossimEllipsoidFactory::instance()->wgs84();
+   if ((theA == wgs84->theA) && (theB == wgs84->theB))
+   {
+      *this = *wgs84;
+   }
+   else
+   {
+      computeFlattening();
+      theEccentricitySquared = 2*theFlattening - theFlattening*theFlattening;
+   }
+}
 
 //*****************************************************************************
 //  METHOD: ossimEllipsoid::nearestIntersection
@@ -484,6 +500,24 @@ double ossimEllipsoid::geodeticRadius(const double& lat) const
    return sqrt( ( (a2_cos*a2_cos) + (b2_sin*b2_sin) )/ (theA_squared*cos2_lat + theB_squared*sin2_lat));
 }
 
+//*************************************************************************************************
+//  Computes the "geodetic" radius of curvature of the ellipsoid in the east-west (x) and
+//  north-south (y) directions for a given latitude in DEGREES.
+//  Taken from http://en.wikipedia.org/wiki/Earth_radius
+//*************************************************************************************************
+void ossimEllipsoid::geodeticRadii(const double& lat, ossimDpt& radii) const
+{
+   double cos_lat = ossim::cosd(lat);
+   double sin_lat = ossim::sind(lat);
+   double cos2_lat = cos_lat*cos_lat;
+   double sin2_lat = sin_lat*sin_lat;
+   double H = theA_squared*cos2_lat + theB_squared*sin2_lat;
+   double H3 = H*H*H;
+
+   radii.x = theA_squared/sqrt(H);
+   radii.y = theA_squared*theB_squared/sqrt(H3);
+}
+
 void ossimEllipsoid::latLonHeightToXYZ(double lat, double lon, double height,
                                        double &x, double &y, double &z)const
 {
@@ -604,4 +638,21 @@ ossim_uint32 ossimEllipsoid::getEpsgCode() const
    if (!theCode.empty() && (theEpsgCode == 0))
       theEpsgCode = ossimEllipsoidFactory::instance()->findEpsgCode(theCode);
    return theEpsgCode;
+}
+
+const ossimEllipsoid& ossimEllipsoid::operator=(const ossimEllipsoid& copy_me)
+{
+   if (this != &copy_me)
+   {
+      theName = copy_me.theName;
+      theCode = copy_me.theCode;
+      theEpsgCode = copy_me.theEpsgCode;
+      theA = copy_me.theA;  
+      theB = copy_me.theB;  
+      theFlattening = copy_me.theFlattening;
+      theA_squared = copy_me.theA_squared;
+      theB_squared = copy_me.theB_squared;
+      theEccentricitySquared = copy_me.theEccentricitySquared;
+   }
+   return *this;
 }

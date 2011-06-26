@@ -11,9 +11,6 @@
 //*************************************************************************************************
 //  $Id$
 
-#include <cstring> /* for strlen */
-#include <utility> /* for std::make_pair */
-
 #include <ossim/base/ossimEpsgDatumFactory.h>
 #include <ossim/base/ossimEllipsoidFactory.h>
 #include <ossim/base/ossimDatum.h>
@@ -21,6 +18,10 @@
 #include <ossim/base/ossimRefPtr.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimKeywordNames.h>
+#include <ossim/base/ossimString.h>
+
+#include <cstring> /* for strlen */
+#include <utility> /* for std::make_pair */
 
 ossimEpsgDatumFactory* ossimEpsgDatumFactory::m_instance = 0;
 
@@ -42,74 +43,74 @@ ossimEpsgDatumFactory* ossimEpsgDatumFactory::instance()
 //*************************************************************************************************
 ossimEpsgDatumFactory::ossimEpsgDatumFactory()
 {
-   m_epsgToAlphaMap.insert(std::make_pair(4135, ossimString("OHI-M"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4139, ossimString("PUR"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4152, ossimString("NAR"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4154, ossimString("EUR-M"))); // QUESTIONABLE  
-   m_epsgToAlphaMap.insert(std::make_pair(4155, ossimString("DAL"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4156, ossimString("CCD"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4158, ossimString("NAP"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4165, ossimString("BID"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4169, ossimString("AMA"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4175, ossimString("SRL")));   // QUESTIONABLE 
-   m_epsgToAlphaMap.insert(std::make_pair(4201, ossimString("ADI-M"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4202, ossimString("AUA"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4203, ossimString("AUG"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4204, ossimString("AIN-A"))); // QUESTIONABLE 
-   m_epsgToAlphaMap.insert(std::make_pair(4205, ossimString("AFG"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4209, ossimString("ARF-M"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4210, ossimString("ARS-M"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4216, ossimString("BER"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4218, ossimString("BOO")));   // QUESTIONABLE 
-   m_epsgToAlphaMap.insert(std::make_pair(4219, ossimString("BUR"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4221, ossimString("CAI"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4222, ossimString("CAP"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4223, ossimString("CGE"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4224, ossimString("CHU"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4236, ossimString("HTN"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4238, ossimString("IDN"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4239, ossimString("INF-A"))); // QUESTIONABLE 
-   m_epsgToAlphaMap.insert(std::make_pair(4240, ossimString("INH-A"))); // QUESTIONABLE 
-   m_epsgToAlphaMap.insert(std::make_pair(4244, ossimString("KAN"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4245, ossimString("KEA"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4248, ossimString("PRP-M"))); // QUESTIONABLE 
-   m_epsgToAlphaMap.insert(std::make_pair(4250, ossimString("LEH"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4251, ossimString("LIB"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4253, ossimString("LUZ-A"))); // QUESTIONABLE 
-   m_epsgToAlphaMap.insert(std::make_pair(4255, ossimString("HEN"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4256, ossimString("MIK"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4261, ossimString("MER"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4262, ossimString("MAS"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4263, ossimString("MIN-A"))); // QUESTIONABLE 
-   m_epsgToAlphaMap.insert(std::make_pair(4266, ossimString("MPO"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4267, ossimString("NAS-C"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4269, ossimString("NAR-C"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4270, ossimString("NAH-C"))); // QUESTIONABLE
-   m_epsgToAlphaMap.insert(std::make_pair(4282, ossimString("PTN"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4284, ossimString("PUK"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4285, ossimString("QAT")));   // QUESTIONABLE
-   m_epsgToAlphaMap.insert(std::make_pair(4287, ossimString("QUO"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4292, ossimString("SAP"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4293, ossimString("SCK"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4297, ossimString("TAN"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4298, ossimString("TIL"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4301, ossimString("TOY-M"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4304, ossimString("VOI")));   // QUESTIONABLE 
-   m_epsgToAlphaMap.insert(std::make_pair(4307, ossimString("NSD"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4309, ossimString("YAC"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4311, ossimString("ZAN"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4322, ossimString("WGD"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4326, ossimString("WGE"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4601, ossimString("AIA"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4604, ossimString("ASM"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4611, ossimString("HKD")));   // QUESTIONABLE
-   m_epsgToAlphaMap.insert(std::make_pair(4613, ossimString("GSE"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4615, ossimString("POS"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4616, ossimString("SGM"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4618, ossimString("SAN-M"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4658, ossimString("HJO"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4668, ossimString("EUS"))); 
-   m_epsgToAlphaMap.insert(std::make_pair(4807, ossimString("NTF"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6135, std::string("OHI-M"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6139, std::string("PUR"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6152, std::string("NAR"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6154, std::string("EUR-M"))); // QUESTIONABLE  
+   m_epsgToAlphaMap.insert(std::make_pair(6155, std::string("DAL"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6156, std::string("CCD"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6158, std::string("NAP"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6165, std::string("BID"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6169, std::string("AMA"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6175, std::string("SRL")));   // QUESTIONABLE 
+   m_epsgToAlphaMap.insert(std::make_pair(6201, std::string("ADI-M"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6202, std::string("AUA"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6203, std::string("AUG"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6204, std::string("AIN-A"))); // QUESTIONABLE 
+   m_epsgToAlphaMap.insert(std::make_pair(6205, std::string("AFG"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6209, std::string("ARF-M"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6210, std::string("ARS-M"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6216, std::string("BER"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6218, std::string("BOO")));   // QUESTIONABLE 
+   m_epsgToAlphaMap.insert(std::make_pair(6219, std::string("BUR"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6221, std::string("CAI"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6222, std::string("CAP"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6223, std::string("CGE"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6224, std::string("CHU"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6236, std::string("HTN"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6238, std::string("IDN"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6239, std::string("INF-A"))); // QUESTIONABLE 
+   m_epsgToAlphaMap.insert(std::make_pair(6240, std::string("INH-A"))); // QUESTIONABLE 
+   m_epsgToAlphaMap.insert(std::make_pair(6244, std::string("KAN"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6245, std::string("KEA"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6248, std::string("PRP-M"))); // QUESTIONABLE 
+   m_epsgToAlphaMap.insert(std::make_pair(6250, std::string("LEH"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6251, std::string("LIB"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6253, std::string("LUZ-A"))); // QUESTIONABLE 
+   m_epsgToAlphaMap.insert(std::make_pair(6255, std::string("HEN"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6256, std::string("MIK"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6261, std::string("MER"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6262, std::string("MAS"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6263, std::string("MIN-A"))); // QUESTIONABLE 
+   m_epsgToAlphaMap.insert(std::make_pair(6266, std::string("MPO"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6267, std::string("NAS-C"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6269, std::string("NAR-C"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6270, std::string("NAH-C"))); // QUESTIONABLE
+   m_epsgToAlphaMap.insert(std::make_pair(6282, std::string("PTN"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6284, std::string("PUK"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6285, std::string("QAT")));   // QUESTIONABLE
+   m_epsgToAlphaMap.insert(std::make_pair(6287, std::string("QUO"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6292, std::string("SAP"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6293, std::string("SCK"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6297, std::string("TAN"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6298, std::string("TIL"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6301, std::string("TOY-M"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6304, std::string("VOI")));   // QUESTIONABLE 
+   m_epsgToAlphaMap.insert(std::make_pair(6307, std::string("NSD"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6309, std::string("YAC"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6311, std::string("ZAN"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6322, std::string("WGD"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6326, std::string("WGE"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6601, std::string("AIA"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6604, std::string("ASM"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6611, std::string("HKD")));   // QUESTIONABLE
+   m_epsgToAlphaMap.insert(std::make_pair(6613, std::string("GSE"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6615, std::string("POS"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6616, std::string("SGM"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6618, std::string("SAN-M"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6658, std::string("HJO"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6668, std::string("EUS"))); 
+   m_epsgToAlphaMap.insert(std::make_pair(6807, std::string("NTF"))); 
 } 
 
 //*************************************************************************************************
@@ -162,11 +163,16 @@ ossimEpsgDatumFactory::create(const ossimKeywordlist& kwl, const char *prefix) c
 //*************************************************************************************************
 //! Creates given an EPSG spec in the form "EPSG:<datum_code>".
 //*************************************************************************************************
-const ossimDatum* ossimEpsgDatumFactory::create(ossim_uint32 gcs_code) const
+const ossimDatum* ossimEpsgDatumFactory::create(ossim_uint32 datum_code) const
 {
+   // Geographic coordinate system codes (4XXX) are sometimes used in place of their corresponding
+   // datum code (6XXX). Check for this possibility and transpose the code if so:
+   if ((datum_code >= 4135) && (datum_code <= 4807))
+      datum_code += 2000;
+
    // Find the datum code in the map in order to determine the corresponding OSSIM/Geotrans alpha
    // code. Then use the datum factory to create the datum.
-   ossimString alphaCode = findAlphaCode(gcs_code);
+   ossimString alphaCode = findAlphaCode(datum_code);
    if (!alphaCode.empty())
       return ossimDatumFactory::instance()->create(alphaCode);
 
@@ -180,7 +186,7 @@ void ossimEpsgDatumFactory::getList(std::vector<ossimString>& list) const
 {
    ossimDatumFactory* df = ossimDatumFactory::instance();
    const ossimDatum* datum;
-   std::map<ossim_uint32, ossimString>::const_iterator iter = m_epsgToAlphaMap.begin();
+   std::map<ossim_uint32, std::string>::const_iterator iter = m_epsgToAlphaMap.begin();
 
    // Loop over all handled datum codes and instantiate the corresponding datum in order to
    // get the corresponding OSSIM/Geotrans name. Eventually the datum info (including its name as
@@ -207,10 +213,10 @@ void ossimEpsgDatumFactory::getList(std::vector<ossimString>& list) const
 //*************************************************************************************************
 ossim_uint32 ossimEpsgDatumFactory::findEpsgCode(const ossimString& alpha_code) const
 {
-   std::map<ossim_uint32, ossimString>::const_iterator iter = m_epsgToAlphaMap.begin();
+   std::map<ossim_uint32, std::string>::const_iterator iter = m_epsgToAlphaMap.begin();
    while (iter != m_epsgToAlphaMap.end())
    {
-      if (iter->second == alpha_code)
+      if (iter->second == alpha_code.string())
          return iter->first;
       ++iter;
    }
@@ -223,13 +229,13 @@ ossim_uint32 ossimEpsgDatumFactory::findEpsgCode(const ossimString& alpha_code) 
 //*************************************************************************************************
 ossimString ossimEpsgDatumFactory::findAlphaCode(ossim_uint32 epsg_code) const
 {
-   std::map<ossim_uint32, ossimString>::const_iterator iter = m_epsgToAlphaMap.begin();
-   while (iter != m_epsgToAlphaMap.end())
+   ossimString result("");
+   std::map<ossim_uint32, std::string>::const_iterator iter = m_epsgToAlphaMap.find(epsg_code);
+   if (iter != m_epsgToAlphaMap.end())
    {
-      if (iter->first == epsg_code)
-         return iter->second;
-      ++iter;
+      result = iter->second;
    }
-   return ossimString("");
+   return result;
 }
+
 

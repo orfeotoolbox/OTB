@@ -17,7 +17,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
+#include <ossim/base/ossimConstants.h>
 /* These are all the metacharacters used to parse out input text files */
 
 #define	 	COMPONENT_SEPERATOR	';'
@@ -47,7 +47,7 @@ extern "C" {
 	     fread(tobuffer,sizeof(short int),count,fromtable)
 
 #define   Read_Vpf_Int(tobuffer,fromtable,count)\
-	     fread(tobuffer,sizeof(long int),count,fromtable)
+	     fread(tobuffer,sizeof(ossim_int32),count,fromtable)
 
 #define   Read_Vpf_Float(tobuffer,fromtable,count)\
 	     fread(tobuffer,sizeof(float),count,fromtable)
@@ -78,7 +78,7 @@ extern "C" {
 	     fwrite(tobuffer,sizeof(short int),count,fromfile)
 
 #define   Write_Vpf_Int(tobuffer,fromfile,count)\
-	     fwrite(tobuffer,sizeof(long int),count,fromfile)
+	     fwrite(tobuffer,sizeof(ossim_int32),count,fromfile)
 
 #define   Write_Vpf_Float(tobuffer,fromfile,count)\
 	     fwrite(tobuffer,sizeof(float),count,fromfile)
@@ -183,9 +183,9 @@ typedef enum {
 
 /*  subroutines */
 
-long int VpfRead ( void *to, VpfDataType type, long int count, FILE *from ) ;
+ossim_int32 VpfRead ( void *to, VpfDataType type, ossim_int32 count, FILE *from ) ;
 
-long int VpfWrite( void *from, VpfDataType type, long int count, FILE *to );
+ossim_int32 VpfWrite( void *from, VpfDataType type, ossim_int32 count, FILE *to );
 
 #ifdef __cplusplus
 }

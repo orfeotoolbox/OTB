@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
 // License:  See top level LICENSE.txt file.
 //
@@ -8,20 +7,19 @@
 // Description: This class provides capabilities for keywordlists.
 //
 //********************************************************************
-// $Id: ossimKeywordlist.h 17195 2010-04-23 17:32:18Z dburken $
+// $Id: ossimKeywordlist.h 19692 2011-05-31 16:55:47Z dburken $
 
 #ifndef ossimKeywordlist_HEADER
-#define ossimKeywordlist_HEADER
-
-#include <map>
-#include <iosfwd>
-#include <vector>
+#define ossimKeywordlist_HEADER 1
 
 #include <ossim/base/ossimErrorStatusInterface.h>
 #include <ossim/base/ossimReferenced.h>
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimErrorCodes.h>
 #include <ossim/base/ossimString.h>
+#include <iosfwd>
+#include <map>
+#include <vector>
 
 static const char DEFAULT_DELIMITER = ':';
 
@@ -33,8 +31,9 @@ class OSSIM_DLL ossimKeywordlist : public ossimErrorStatusInterface,
 {
 public:
 
-   typedef std::map<ossimString, ossimString> KeywordMap;
+   typedef std::map<std::string, std::string> KeywordMap;
 
+   ossimKeywordlist(const ossimKeywordlist& src);
    ossimKeywordlist(char delimiter = DEFAULT_DELIMITER,
                     bool expandEnvVars = false);
 
@@ -60,7 +59,7 @@ public:
     *  Reads file and adds keywords to the KeywordMap.
     *  Returns true if file was parsed, false on error.
     */
-   bool addFile(const ossimFilename& file);
+   bool addFile(const ossimFilename& file); 
 
    /*!
     *  Method to change default delimiter.  Handy when parsing
@@ -96,6 +95,16 @@ public:
             bool stripPrefix=true);
 
    // Methods to add keywords to list.
+   void addPair(const std::string& key,
+                const std::string& value,
+                bool               overwrite = true);
+
+   void addPair(const std::string& prefix,
+                const std::string& key,
+                const std::string& value,
+                bool               overwrite = true);
+
+   
    void add(const char*   key,
             const char*   value,
             bool          overwrite = true);
@@ -157,6 +166,15 @@ public:
    void add(const char*   prefix,
             const char*   key,
             ossim_int64   value,
+            bool          overwrite = true);
+
+   void add(const char*   key,
+            ossim_uint64  value,
+            bool          overwrite = true);
+
+   void add(const char*   prefix,
+            const char*   key,
+            ossim_uint64  value,
             bool          overwrite = true);
 
    /**
@@ -242,6 +260,10 @@ public:
     *  Searches the map for key(/prefix) and returns the resulting value
     *  or a null string if the key was not found.
     */
+   std::string findKey(const std::string& key) const;
+   std::string findKey(const std::string& prefix,
+                       const std::string& key) const;
+   
    const char* find(const char* key) const;
    const char* find(const char* prefix,
                     const char* key) const;
@@ -314,6 +336,7 @@ public:
                             bool ignoreBinaryChars);
    
    virtual bool parseStream(std::istream& is);
+   virtual bool parseString(const std::string& inString);
 
    /*!
     *  Will return a list of keys that contain the string passed in.
@@ -372,10 +395,29 @@ public:
 
    const ossimKeywordlist::KeywordMap& getMap()const;
    ossimKeywordlist::KeywordMap& getMap();
-   void downcaseKeywords();
-   void upcaseKeywords();
-protected:
+   
+   ossimKeywordlist& downcaseKeywords();
+   ossimKeywordlist& upcaseKeywords();
+   
+   ossimKeywordlist& trimAllValues(const ossimString& valueToTrim= ossimString(" \t\n\r"));
+   ossimKeywordlist trimAllValues(const ossimString& valueToTrim= ossimString(" \t\n\r"))const;
 
+
+   //! [OLK, Aug/2008]
+   //! Sets the boolean  <rtn_val> depending on value associated with keyword for values = 
+   //! (yes|no|true|false|1|0). Returns TRUE if keyword found, otherwise false. Also returns false
+   //! if none of the above permitted values are specified (rtn_val left unchanged in this case).
+   bool getBoolKeywordValue(bool& rtn_val, 
+                            const char* keyword, 
+                            const char* prefix=0) const;
+
+protected:
+   enum KeywordlistParseState
+   {
+      KeywordlistParseState_OK         = 0,
+      KeywordlistParseState_FAIL       = 1, // just used to say this set of token has failed the rules
+      KeywordlistParseState_BAD_STREAM = 2, // Means an error occured that is a mal formed stream for Keywordlist
+   };
    /*!
     *  Method to parse files to initialize the list.  Method will error on
     *  binary characters if "ignoreBinaryChars = false".  This is used by
@@ -387,14 +429,21 @@ protected:
    bool parseFile(const ossimFilename& file,
                   bool  ignoreBinaryChars = false);
 
-
+   bool isValidKeywordlistCharacter(ossim_uint8 c)const;
+   void skipWhitespace(std::istream& in)const;
+   KeywordlistParseState readComments(ossimString& sequence, std::istream& in)const;
+   KeywordlistParseState readKey(ossimString& sequence, std::istream& in)const;
+   KeywordlistParseState readValue(ossimString& sequence, std::istream& in)const;
+   KeywordlistParseState readKeyAndValuePair(ossimString& key, ossimString& value, std::istream& in)const;
+   
    // Method to see if keyword exists in list.
+   KeywordMap::iterator getMapEntry(const std::string& key);
    KeywordMap::iterator getMapEntry(const ossimString& key);
    KeywordMap::iterator getMapEntry(const char* key);
 
    KeywordMap               m_map;
    char                     m_delimiter;
-   char                     m_lineContinuationCharacter;
+   bool                     m_preserveKeyValues; // enables preserving empty field values, multi lines, ... etc
    bool                     m_expandEnvVars;
 };
 

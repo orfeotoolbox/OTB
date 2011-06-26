@@ -12,7 +12,7 @@
 // the tag factories.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimNitfUnknownTag.cpp 14241 2009-04-07 19:59:23Z dburken $
+// $Id: ossimNitfUnknownTag.cpp 19682 2011-05-31 14:21:20Z dburken $
 
 #include <ostream>
 #include <iomanip>
@@ -40,7 +40,7 @@ ossimNitfUnknownTag::~ossimNitfUnknownTag()
    }
 }
 
-ossimString ossimNitfUnknownTag::getRegisterTagName() const
+std::string ossimNitfUnknownTag::getRegisterTagName() const
 {
    return theTagName;
 }
@@ -110,7 +110,7 @@ std::ostream& ossimNitfUnknownTag::print(std::ostream& out,
 
 void ossimNitfUnknownTag::setTagName(const ossimString& tagName)
 {
-   theTagName = tagName;
+   theTagName = tagName.string();
 }
 
 

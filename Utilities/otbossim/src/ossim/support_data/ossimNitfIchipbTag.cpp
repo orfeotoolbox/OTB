@@ -11,7 +11,7 @@
 // http://164.214.2.51/ntb/baseline/docs/stdi0002/final.pdf
 //
 //----------------------------------------------------------------------------
-// $Id: ossimNitfIchipbTag.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimNitfIchipbTag.cpp 19682 2011-05-31 14:21:20Z dburken $
 
 #include <cstring> /* for memcpy */
 #include <iomanip>
@@ -54,9 +54,9 @@ ossimNitfIchipbTag::ossimNitfIchipbTag()
    clearFields();
 }
 
-ossimString ossimNitfIchipbTag::getRegisterTagName() const
+std::string ossimNitfIchipbTag::getRegisterTagName() const
 {
-   return ossimString("ICHIPB");
+   return std::string("ICHIPB");
 }
 
 void ossimNitfIchipbTag::parseStream(std::istream& in)

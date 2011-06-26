@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2004 Intelligence Data Systems. 
 //
 // LICENSE: LGPL
 //
@@ -9,7 +8,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfLocalCartographicTag.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimNitfLocalCartographicTag.cpp 19682 2011-05-31 14:21:20Z dburken $
 
 #include <sstream>
 #include <iostream>
@@ -26,9 +25,9 @@ ossimNitfLocalCartographicTag::~ossimNitfLocalCartographicTag()
 {
 }
 
-ossimString ossimNitfLocalCartographicTag::getRegisterTagName()const
+std::string ossimNitfLocalCartographicTag::getRegisterTagName()const
 {
-   return "MAPLOB";
+   return std::string("MAPLOB");
 }
 
 void ossimNitfLocalCartographicTag::parseStream(std::istream& in)

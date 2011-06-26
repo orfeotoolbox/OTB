@@ -13,6 +13,7 @@
 #define ossimDatumFactoryInterface_HEADER
 
 #include <ossim/base/ossimConstants.h> /* for OSSIM_DLL macro */
+#include <vector>
 
 // Forward class declarations:
 class ossimString;

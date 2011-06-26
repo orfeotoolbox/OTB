@@ -10,9 +10,10 @@
 // Contains class definition for ossimIrect.
 // 
 //*******************************************************************
-//  $Id: ossimIrect.cpp 17866 2010-08-11 20:15:05Z dburken $
+//  $Id: ossimIrect.cpp 19682 2011-05-31 14:21:20Z dburken $
 
 #include <ostream>
+#include <sstream>
 #include <ossim/base/ossimIrect.h>
 #include <ossim/base/ossimDrect.h>
 #include <ossim/base/ossimKeywordlist.h>
@@ -107,6 +108,73 @@ ossimIrect::ossimIrect(const ossimIpt& p1,
 
 ossimIrect::~ossimIrect()
 {
+}
+
+//*******************************************************************
+//! Constructs an Irect surrounding the specified point, and of specified size.
+//*******************************************************************
+ossimIrect::ossimIrect(const ossimIpt& center, 
+                       ossim_uint32    size_x, 
+                       ossim_uint32    size_y,
+                       ossimCoordSysOrientMode mode)
+: theOrientMode (mode)
+{
+   ossim_int32 minx = center.x - size_x/2;
+   ossim_int32 maxx = minx + size_x - 1;
+
+   ossim_int32 miny = center.y - size_y/2;
+   ossim_int32 maxy = miny + size_y - 1;
+
+   if(mode == OSSIM_LEFT_HANDED)
+      *this = ossimIrect(minx, miny, maxx, maxy, mode);
+   else
+      *this = ossimIrect(minx,maxy, maxx, miny, mode);
+}
+
+
+//*************************************************************************************************
+//! Guarantees that this rect will be at least w X h big. If smaller than specified, the 
+//! corresponding side will be stretched equally in + and - direction to meet required size.
+//! Returns TRUE if resizing occurred.
+//*************************************************************************************************
+bool ossimIrect::insureMinimumSize(const ossimIpt& width_height)
+{
+   ossimIpt ul (theUlCorner);
+   ossimIpt lr (theLrCorner);
+   bool resized = false;
+
+   int dx = width_height.x - width();
+   int dy = width_height.y - height();
+
+   if (dx > 0)
+   {
+      dx = (int) ceil((double)dx/2.0);
+      ul.x -= dx;
+      lr.x += dx;
+      resized = true;
+   }
+
+   if (dy > 0)
+   {
+      resized = true;
+      if(theOrientMode == OSSIM_LEFT_HANDED)
+      {
+         dy = (int) ceil((double)dy/2.0);
+         ul.y -= dy;
+         lr.y += dy;
+      }
+      else
+      {
+         dy = (int) ceil((double)dy/2.0);
+         ul.y += dy;
+         lr.y -= dy;
+      }
+   }
+
+   if (resized)
+      *this = ossimIrect(ul, lr, theOrientMode);
+
+   return resized;
 }
 
 //*******************************************************************
@@ -261,6 +329,96 @@ const ossimIrect& ossimIrect::expand(const ossimIpt& padding)
    return *this;
 }
 
+ossimString ossimIrect::toString()const
+{
+   ossimString result="(";
+   
+   if(theOrientMode == OSSIM_LEFT_HANDED)
+   {
+      ossimIpt origin = ul();
+      result += (ossimString::toString(origin.x) + ",");
+      result += (ossimString::toString(origin.y) + ",");
+      result += (ossimString::toString(width()) + ",");
+      result += (ossimString::toString(height()) + ",");
+      result += "LH";
+   }
+   else 
+   {
+      ossimIpt origin = ll();
+      result += (ossimString::toString(origin.x) + ",");
+      result += (ossimString::toString(origin.y) + ",");
+      result += (ossimString::toString(width()) + ",");
+      result += (ossimString::toString(height()) + ",");
+      result += "RH";
+   }
+
+   result += ")";
+   return result;
+}
+
+bool ossimIrect::toRect(const ossimString& rectString)
+{
+   bool result = false;
+   makeNan();
+   
+   std::istringstream in(rectString);
+   ossim::skipws(in);
+   char charString[2];
+   charString[1] = '\0';
+   ossimString interior;
+   if(in.peek() == '(')
+   {
+      in.ignore();
+      while((in.peek() != ')')&&
+            (in.peek() != '\n') &&
+            in.good())
+      {
+         charString[0] = in.get();
+         interior += charString;
+      }
+      if(in.peek() == ')')
+      {
+         result = true;
+      }
+   }
+   if(result)
+   {
+      std::vector<ossimString> splitArray;
+      interior.split(splitArray, ",");
+      
+      // assume left handed
+      if(splitArray.size() >= 4)
+      {
+         ossim_int64 x = splitArray[0].toInt64();
+         ossim_int64 y = splitArray[1].toInt64();
+         ossim_int64 w = splitArray[2].toInt64();
+         ossim_int64 h = splitArray[3].toInt64();
+         ossimString orientation = "lh";
+         if(splitArray.size() == 5)
+         {
+            orientation = splitArray[4].downcase();
+         }
+         if(orientation == "lh")
+         {
+            // origin upper left
+            *this = ossimIrect(x,y,x + (w-1), y+h-1, OSSIM_LEFT_HANDED);
+         }
+         else 
+         {
+            // origin lower left
+            *this = ossimIrect(x,y+(h-1),x + (w-1), y, OSSIM_RIGHT_HANDED);
+         }
+         
+      }
+      else
+      {
+         result = false;
+      }
+
+   }
+   return result;
+}
+
 //*******************************************************************
 // Public Method:
 //*******************************************************************
@@ -320,7 +478,7 @@ bool ossimIrect::completely_within(const ossimIrect& rect) const
 //*******************************************************************
 void ossimIrect::print(std::ostream& os) const
 {
-   os << theUlCorner << theLrCorner;
+   os << toString();
 }
 
 //*******************************************************************

@@ -8,7 +8,7 @@
 // Description: Common file for global Keywors.
 //
 //*************************************************************************
-// $Id: ossimKeywordNames.h 17609 2010-06-23 12:51:04Z dburken $
+// $Id: ossimKeywordNames.h 19180 2011-03-22 17:36:33Z oscarkramer $
 
 #ifndef ossimKeywordNames_HEADER
 #define ossimKeywordNames_HEADER
@@ -23,9 +23,12 @@ public:
    //***
    static const char* AZIMUTH_ANGLE_KW;
    static const char* BAND_KW;
+   static const char* BANDS_KW;
    static const char* BORDER_SIZE_KW;
    static const char* BRUSH_COLOR_KW;
    static const char* BYTE_ORDER_KW;
+   static const char* CE90_ABSOLUTE_KW;
+   static const char* CE90_RELATIVE_KW;
    static const char* CENTER_PIXEL_X_KW;
    static const char* CENTER_PIXEL_Y_KW;
    static const char* CENTRAL_MERIDIAN_KW;
@@ -64,6 +67,7 @@ public:
    static const char* ELLIPSE_NAME_KW;
    static const char* ENABLED_KW;
    static const char* ENABLE_CACHE_KW;
+   static const char* EXTRACT_VERTICES_KW;  
    static const char* ENTRY_KW;
    static const char* FALSE_EASTING_NORTHING_KW;
    static const char* FALSE_EASTING_NORTHING_UNITS_KW;
@@ -73,11 +77,13 @@ public:
    static const char* FILENAME_KW;
    static const char* FILEPATH_KW;
    static const char* FILL_FLAG_KW;
+   static const char* FRAME_INDEX_KW;       
    static const char* GCS_CODE_KW;
    static const char* GEOM_FILE_KW;
    static const char* HEMISPHERE_KW;
    static const char* HORIZONTAL_SIZE_KW;
    static const char* ID_KW;
+   static const char* IMAGE_CE90_KW;
    static const char* IMAGE_FILE_KW;
    static const char* IMAGE_ID_KW;
    static const char* IMAGE_MODEL_TRANSFORM_MATRIX_KW;
@@ -140,6 +146,7 @@ public:
    static const char* POINT_WIDTH_HEIGHT_KW;
    static const char* PROJECTION_KW;
    static const char* QUALITY_KW;
+   static const char* QUERY_KW;
    static const char* RADIOMETRY_KW;
    static const char* REDUCED_RES_LEVEL_KW;
    static const char* REF_GPT_LAT_KW;
@@ -186,9 +193,9 @@ public:
    static const char* UL_Y_KW;
    static const char* UR_X_KW;
    static const char* UR_Y_KW;
+   static const char* VALID_VERTICES_KW;
    static const char* VERTICAL_SIZE_KW;
    static const char* ZONE_KW;
-   
 
 protected:
    ossimKeywordNames();

@@ -52,6 +52,7 @@ RTTI_DEF1(ossimNitfImageHeaderV2_X,
           ossimNitfImageHeader);
 
 ossimNitfImageHeaderV2_X::ossimNitfImageHeaderV2_X()
+:theImageComments(0)
 {
 }
 
@@ -796,7 +797,53 @@ void ossimNitfImageHeaderV2_X::setUtmSouth(ossim_uint32 zone,
 }
 
 
-
+bool ossimNitfImageHeaderV2_X::saveState(ossimKeywordlist& kwl, const ossimString& prefix)const
+{
+   bool result = ossimNitfImageHeader::saveState(kwl, prefix);
+   
+   kwl.add(prefix, "IM", theType);
+   kwl.add(prefix, "IID1", theImageId);
+   kwl.add(prefix, "IDATIM", theDateTime);
+   kwl.add(prefix, "TGTID", theTargetId);
+   kwl.add(prefix, "IID2", theTitle);
+   kwl.add(prefix, "ISCLAS", theSecurityClassification);
+   kwl.add(prefix, "ENCRYP", theEncryption);
+   kwl.add(prefix, "ISORCE", theImageSource);
+   kwl.add(prefix, "NROWS", theSignificantRows);
+   kwl.add(prefix, "NCOLS", theSignificantCols);
+   kwl.add(prefix, "PVTYPE", thePixelValueType);
+   kwl.add(prefix, "IREP", theRepresentation);
+   kwl.add(prefix, "ABPP", theActualBitsPerPixelPerBand);
+   kwl.add(prefix, "ICAT", theCategory);
+   kwl.add(prefix, "PJUST", theJustification);
+   kwl.add(prefix, "ICORDS", theCoordinateSystem);
+   kwl.add(prefix, "NICOM", theNumberOfComments);
+   
+   kwl.add(prefix, "ICOM", ossimString(theImageComments));
+   kwl.add(prefix, "IGEOLO", theGeographicLocation);
+   kwl.add(prefix, "IC", theCompression);
+   kwl.add(prefix, "COMRAT", theCompressionRateCode);
+   kwl.add(prefix, "NBANDS", theNumberOfBands);
+   kwl.add(prefix, "ISYNC", theImageSyncCode);
+   kwl.add(prefix, "IMODE", theImageMode);
+   kwl.add(prefix, "NBPR", theNumberOfBlocksPerRow);
+   kwl.add(prefix, "NBPC", theNumberOfBlocksPerCol);
+   kwl.add(prefix, "NPPBH", theNumberOfPixelsPerBlockHoriz);
+   kwl.add(prefix, "NPPBV", theNumberOfPixelsPerBlockVert);
+   kwl.add(prefix, "NBPP", theNumberOfBitsPerPixelPerBand);
+   kwl.add(prefix, "IDLVL", theDisplayLevel);
+   kwl.add(prefix, "IALVL", theAttachmentLevel);
+   kwl.add(prefix, "ILOC", theImageLocation);
+   kwl.add(prefix, "IMAG", theImageMagnification);
+   kwl.add(prefix, "UDIDL", theUserDefinedImageDataLength);
+   kwl.add(prefix, "UDOFL", theUserDefinedOverflow);
+   kwl.add(prefix, "IXSHDL", theExtendedSubheaderDataLen);
+   kwl.add(prefix, "IXSOFL", theExtendedSubheaderOverflow);
+   kwl.add(prefix, "IMDATOFF", theBlockedImageDataOffset);
+   kwl.add(prefix, "BMRLNTH", theBlockMaskRecordLength);
+   
+   return result;
+}
 
 
 

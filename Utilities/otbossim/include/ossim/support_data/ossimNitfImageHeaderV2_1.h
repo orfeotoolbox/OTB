@@ -8,7 +8,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageHeaderV2_1.h 17598 2010-06-19 15:37:46Z dburken $
+// $Id: ossimNitfImageHeaderV2_1.h 18413 2010-11-11 19:56:22Z gpotts $
 
 #ifndef ossimNitfImageHeaderV2_1_HEADER
 #define ossimNitfImageHeaderV2_1_HEADER
@@ -102,6 +102,7 @@ public:
    virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
 
+   virtual bool saveState(ossimKeywordlist& kwl, const ossimString& prefix="")const;
    static const ossimString ISCLSY_KW;
    static const ossimString ISCODE_KW;
    static const ossimString ISCTLH_KW;

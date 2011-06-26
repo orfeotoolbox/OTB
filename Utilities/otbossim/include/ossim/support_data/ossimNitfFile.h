@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFile.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimNitfFile.h 19583 2011-05-13 10:58:10Z gpotts $
 #ifndef ossimNitfFile_HEADER
 #define ossimNitfFile_HEADER
 
@@ -54,6 +54,7 @@ public:
                        bool printOverviews=false) const;
    
    ossimNitfFile();
+   virtual ~ossimNitfFile();
 
    /*!
     *  Opens the nitf file and attempts to parse.
@@ -78,9 +79,10 @@ public:
 
    /** @return The filename parsed by this object. */
    ossimFilename getFilename() const;
+   
+   virtual bool saveState(ossimKeywordlist& kwl, const ossimString& prefix)const;
 
 protected:
-   virtual ~ossimNitfFile();
    ossimNitfImageHeader* allocateImageHeader()const;
    
    ossimFilename                    theFilename;

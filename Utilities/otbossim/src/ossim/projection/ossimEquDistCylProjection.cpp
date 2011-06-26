@@ -9,7 +9,7 @@
 //
 // Calls Geotrans Equidistant Cylinder projection code.  
 //*******************************************************************
-//  $Id: ossimEquDistCylProjection.cpp 17815 2010-08-03 13:23:14Z dburken $
+//  $Id: ossimEquDistCylProjection.cpp 19654 2011-05-26 11:39:34Z gpotts $
 
 #include <ossim/projection/ossimEquDistCylProjection.h>
 #include <ossim/base/ossimKeywordNames.h>
@@ -91,14 +91,11 @@ void ossimEquDistCylProjection::update()
 
    ossimMapProjection::update();
 
-   // EPSG Platte Carree codes are the same as datum + 2000:
-   if (thePcsCode == 0) 
-   {
-      if (theGcsCode == 4326)
-         thePcsCode = 4326;
-      else if (theGcsCode != 0)
-         thePcsCode = theGcsCode + 2000; 
-   }
+   // Check if the origin is at (0,0). This implies EPSG:4326
+   if ((theOrigin.lat == 0.0) && (theOrigin.lon == 0.0) && (theGcsCode == 4326))
+      setPcsCode(4326);
+   else if (getPcsCode() == 0)
+      setPcsCode(theGcsCode);
 }
 
 void ossimEquDistCylProjection::setFalseEasting(double falseEasting)
@@ -171,7 +168,6 @@ void ossimEquDistCylProjection::lineSampleHeightToWorld(const ossimDpt &lineSamp
       //
       eastingNorthing.y += (-lineSample.y*theMetersPerPixel.y);
       
-      
       //
       // now invert the meters into a ground point.
       //
@@ -184,9 +180,6 @@ void ossimEquDistCylProjection::lineSampleHeightToWorld(const ossimDpt &lineSamp
       }
       else
       {
-         gpt.clampLat(-90, 90);
-         gpt.clampLon(-180, 180);
-         
          // Finally assign the specified height:
          gpt.hgt = hgtEllipsoid;
       }
@@ -503,11 +496,11 @@ long ossimEquDistCylProjection::Convert_Geodetic_To_Equidistant_Cyl (double Lati
   if (!Error_Code)
   { /* no errors */
     dlam = Longitude - Eqcy_Origin_Long;
-    if (dlam > M_PI)
+    if (dlam >= TWO_PI)
     {
       dlam -= TWO_PI;
     }
-    if (dlam < -M_PI)
+    if (dlam <= -TWO_PI)
     {
       dlam += TWO_PI;
     }

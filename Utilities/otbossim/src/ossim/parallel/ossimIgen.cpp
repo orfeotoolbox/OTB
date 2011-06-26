@@ -7,7 +7,7 @@
 // Description: implementation for image generator
 //
 //*************************************************************************
-// $Id: ossimIgen.cpp 17815 2010-08-03 13:23:14Z dburken $
+// $Id: ossimIgen.cpp 19682 2011-05-31 14:21:20Z dburken $
 
 #include <iterator>
 #include <sstream>
@@ -102,10 +102,10 @@ void ossimIgen::initializeAttributes()
          if(resStr)
          {
             theThumbnailSize = ossimIpt(0,0);
-            std::istringstream in(resStr);
+            std::string s(resStr);
+            std::istringstream in(s);
             ossimString x,y;
-
-            in >> x >> y;
+            in >> x.string() >> y.string();
 
             ossim_int32 ix = x.toInt32();
             ossim_int32 iy = y.toInt32();

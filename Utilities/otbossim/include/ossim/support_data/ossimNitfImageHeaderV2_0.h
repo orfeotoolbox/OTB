@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageHeaderV2_0.h 17598 2010-06-19 15:37:46Z dburken $
+// $Id: ossimNitfImageHeaderV2_0.h 18413 2010-11-11 19:56:22Z gpotts $
 #ifndef ossimNitfImageHeaderV2_0_HEADER
 #define ossimNitfImageHeaderV2_0_HEADER
 #include <ossim/support_data/ossimNitfImageHeaderV2_X.h>
@@ -79,6 +79,7 @@ public:
                             const ossimNitfImageBandV2_0& info);
    virtual void setNumberOfRows(ossim_uint32 rows);
    virtual void setNumberOfCols(ossim_uint32 cols);
+   virtual bool saveState(ossimKeywordlist& kwl, const ossimString& prefix="")const;
    
    static const ossimString ISCODE_KW;
    static const ossimString ISCTLH_KW;

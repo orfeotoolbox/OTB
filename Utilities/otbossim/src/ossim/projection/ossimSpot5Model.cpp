@@ -9,7 +9,7 @@
 // Contains definition of class ossimSpot5Model.
 //
 //*****************************************************************************
-// $Id: ossimSpot5Model.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimSpot5Model.cpp 19658 2011-05-26 13:16:06Z gpotts $
 
 #include <iostream>
 #include <iomanip>
@@ -644,7 +644,8 @@ void ossimSpot5Model::lineSampleHeightToWorld(const ossimDpt& image_point,
                                               const ossim_float64& heightEllipsoid,
                                               ossimGpt& worldPoint) const
 {
-   if ( !theImageClipRect.pointWithin(image_point, 1.0-FLT_EPSILON) )
+//   if (!insideImage(image_point))
+   if ( !theImageClipRect.pointWithin(image_point, 1.0-FLT_EPSILON) )   
    {
       if(theSeedFunction.valid())
       {
@@ -657,7 +658,6 @@ void ossimSpot5Model::lineSampleHeightToWorld(const ossimDpt& image_point,
       if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimSpot5Model::lineSampleHeightToWorld(): returning..." << std::endl;
       return;
    }
-
    //***
    // First establish imaging ray from image point:
    //***

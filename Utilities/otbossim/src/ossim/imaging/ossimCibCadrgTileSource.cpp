@@ -7,7 +7,7 @@
 // Author: Garrett Potts
 //
 //********************************************************************
-// $Id: ossimCibCadrgTileSource.cpp 18052 2010-09-06 14:33:08Z dburken $
+// $Id: ossimCibCadrgTileSource.cpp 19552 2011-05-07 16:37:22Z dburken $
 #include <algorithm>
 
 #include <ossim/imaging/ossimCibCadrgTileSource.h>
@@ -40,7 +40,7 @@
 static ossimTrace traceDebug = ossimTrace("ossimCibCadrgTileSource:debug");
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimCibCadrgTileSource.cpp 18052 2010-09-06 14:33:08Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimCibCadrgTileSource.cpp 19552 2011-05-07 16:37:22Z dburken $";
 #endif
 
 RTTI_DEF1(ossimCibCadrgTileSource, "ossimCibCadrgTileSource", ossimImageHandler)
@@ -742,7 +742,7 @@ void ossimCibCadrgTileSource::fillSubTileCadrg(
    const ossimIrect& tileRect,
    const ossimFrameEntryData& frameEntryData,
    ossimImageData* tile)
-{;
+{
    // first let's grab the absolute position of the frame rectangle in pixel space
    ossimIrect frameRect(frameEntryData.thePixelCol,
                         frameEntryData.thePixelRow,
@@ -1205,14 +1205,6 @@ void ossimCibCadrgTileSource::getPropertyNames(std::vector<ossimString>& propert
 {
    ossimImageHandler::getPropertyNames(propertyNames);
    propertyNames.push_back("file_type");
-   const ossimRpfHeader* header =
-      theTableOfContents->getRpfHeader();
-   
-   if(header)
-   {
-      std::ifstream in(theImageFile.c_str(), std::ios::in|std::ios::binary);
-      
-   }
 }
 
 void ossimCibCadrgTileSource::populateLut()

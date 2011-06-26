@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfGeoPositioningTag.cpp 14241 2009-04-07 19:59:23Z dburken $
+// $Id: ossimNitfGeoPositioningTag.cpp 19682 2011-05-31 14:21:20Z dburken $
 
 #include <ossim/support_data/ossimNitfGeoPositioningTag.h>
 #include <cstring>
@@ -29,9 +29,9 @@ ossimNitfGeoPositioningTag::~ossimNitfGeoPositioningTag()
 {
 }
 
-ossimString ossimNitfGeoPositioningTag::getRegisterTagName()const
+std::string ossimNitfGeoPositioningTag::getRegisterTagName()const
 {
-   return "GEOPSB";
+   return std::string("GEOPSB");
 }
 
 void ossimNitfGeoPositioningTag::parseStream(std::istream& in)

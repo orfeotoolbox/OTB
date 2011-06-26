@@ -63,7 +63,6 @@ ossimSingleImageChain::ossimSingleImageChain(bool addHistogramFlag,
 
 ossimSingleImageChain::~ossimSingleImageChain()
 {
-   close();
 }
 
 void ossimSingleImageChain::reset()
@@ -110,9 +109,14 @@ ossimFilename ossimSingleImageChain::getFilename() const
    return result;
 }
 
-bool ossimSingleImageChain::open(const ossimFilename& file)
+bool ossimSingleImageChain::open(const ossimFilename& file, bool openOverview)
 {
-   return addImageHandler(file);
+   return addImageHandler(file, openOverview);
+}
+
+bool ossimSingleImageChain::isOpen() const
+{
+   return m_handler.valid();
 }
 
 bool ossimSingleImageChain::open(const ossimSrcRecord& src)
@@ -290,13 +294,13 @@ void ossimSingleImageChain::createRenderedChain(const ossimSrcRecord& src)
 
 }
 
-bool ossimSingleImageChain::addImageHandler(const ossimFilename& file)
+bool ossimSingleImageChain::addImageHandler(const ossimFilename& file, bool openOverview)
 {
    bool result = false;
 
    close();
    
-   m_handler = ossimImageHandlerRegistry::instance()->open(file);
+   m_handler = ossimImageHandlerRegistry::instance()->open(file, true, openOverview);
    
    if ( m_handler.valid() )
    {
@@ -314,9 +318,54 @@ bool ossimSingleImageChain::addImageHandler(const ossimSrcRecord& src)
    bool result = addImageHandler( src.getFilename() );
    if (result)
    {
-      if ( src.getSupportDir().size() )
+      //---
+      // When loading from ossimSrcRecord typically the overview/histograms are
+      // not in the same directory and the "support" keyword is not set.  For
+      // the ossimImageHandler::getFilenameWithThisExtension to work correctly
+      // the ossimImageHandler::theSupplementaryDirectory must be set.
+      // So if the ossimSrcRecord::getSupportDir() is empty and the overview
+      // or histogram is not co-located with the image we will set it here.
+      //---
+      ossimFilename supportDir = src.getSupportDir();
+      if ( supportDir.empty() )
       {
-         m_handler->setSupplementaryDirectory( src.getSupportDir() );
+         if ( src.getOverviewPath().size() )
+         {
+            if ( src.getOverviewPath().isDir() )
+            {
+               supportDir = src.getOverviewPath();
+            }
+            else
+            {
+               supportDir = src.getOverviewPath().path();
+            }
+         }
+         else if ( src.getHistogramPath().size() )
+         {
+            if ( src.getHistogramPath().isDir() )
+            {
+               supportDir = src.getHistogramPath();
+            }
+            else
+            {
+               supportDir = src.getHistogramPath().path();
+            }
+         }
+         else if ( src.getMaskPath().size() )
+         {
+            if ( src.getMaskPath().isDir() )
+            {
+               supportDir = src.getMaskPath();
+            }
+            else
+            {
+               supportDir = src.getMaskPath().path();
+            }
+         }
+      }
+      if ( supportDir.size() && (src.getFilename().path() != supportDir) )
+      {
+         m_handler->setSupplementaryDirectory( supportDir );
       }
       if ( src.getEntryIndex() > 0 ) // defaulted to -1.
       {
@@ -324,8 +373,15 @@ bool ossimSingleImageChain::addImageHandler(const ossimSrcRecord& src)
       }
       if ( m_handler->getOverview() == 0 )
       {
-         ossimFilename ovrFile = m_handler->getFilenameWithThisExtension(ossimString(".ovr"));
-         m_handler->openOverview( ovrFile ); 
+         if ( src.getOverviewPath().size() )
+         {
+            m_handler->openOverview( src.getOverviewPath() );
+         }
+         else
+         {
+            ossimFilename ovrFile = m_handler->getFilenameWithThisExtension(ossimString(".ovr"));
+            m_handler->openOverview( ovrFile ); 
+         }
       }
    }
    return result;

@@ -7,7 +7,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimVpfAnnotationFeatureInfo.h 15836 2009-10-30 12:29:09Z dburken $
+// $Id: ossimVpfAnnotationFeatureInfo.h 19636 2011-05-24 16:48:45Z gpotts $
 #ifndef ossimVpfAnnotationFeatureInfo_HEADER
 #define ossimVpfAnnotationFeatureInfo_HEADER
 #include <ossim/base/ossimRefPtr.h>
@@ -220,7 +220,7 @@ protected:
 		      int startEdgeId,
 		      ossimVpfTable& edgTable);
 
-  ossimDpt* getXy(vpf_table_type table, row_type row, long pos, long* count);
+  ossimDpt* getXy(vpf_table_type table, row_type row, ossim_int32 pos, ossim_int32* count);
   int getEdgeKeyId (vpf_table_type& table, row_type& row, int col);
 
 TYPE_DATA

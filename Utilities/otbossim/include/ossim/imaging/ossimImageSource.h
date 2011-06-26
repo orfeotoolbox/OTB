@@ -7,9 +7,9 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageSource.h 17932 2010-08-19 20:34:35Z dburken $
+// $Id: ossimImageSource.h 19732 2011-06-06 22:24:54Z dburken $
 #ifndef ossimImageSource_HEADER
-#define ossimImageSource_HEADER
+#define ossimImageSource_HEADER 1
 
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimSource.h>
@@ -207,6 +207,12 @@ public:
    virtual void setProperty(ossimRefPtr<ossimProperty> property);
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
 
+   /**
+    * @return Flag indicating the data contains pallete indexes.
+    *
+    * This should be replaced by a getPhotoInterpretation().
+    */
+   virtual bool isIndexedData() const;
    
 protected:
    ossimImageSource (const ossimImageSource& rhs);

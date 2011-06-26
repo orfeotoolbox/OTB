@@ -5,7 +5,7 @@
   // Author: Garrett Potts
   //
   //*************************************************************************
-    // $Id: ossimImageHistogramSource.cpp 17655 2010-07-01 01:31:51Z gpotts $
+    // $Id: ossimImageHistogramSource.cpp 18916 2011-02-18 20:02:55Z gpotts $
 #include <ossim/imaging/ossimImageHistogramSource.h>
 #include <ossim/base/ossimMultiResLevelHistogram.h>
 #include <ossim/base/ossimMultiBandHistogram.h>
@@ -361,7 +361,7 @@ void ossimImageHistogramSource::computeNormalModeHistogram()
                  resLevelTileCount < resLevelTotalTiles;
                  ++resLevelTileCount)
             {
-               if(data.valid())
+               if(data.valid()&&data->getBuf()&&(data->getDataObjectStatus() != OSSIM_EMPTY))
                {
                   data->populateHistogram(theHistogram->getMultiBandHistogram(index));
                }
@@ -449,7 +449,7 @@ void ossimImageHistogramSource::computeFastModeHistogram()
             ossimIrect tileRect(ul.x, ul.y, ul.x + tileSize.x-1, ul.y + tileSize.y-1);
             ossimRefPtr<ossimImageData> data = input->getTile(tileRect);
 				
-            if(data.valid()&&data->getBuf())
+            if(data.valid()&&data->getBuf()&&(data->getDataObjectStatus() != OSSIM_EMPTY))
             {
                data->populateHistogram(theHistogram->getMultiBandHistogram(0));
             }
@@ -465,13 +465,49 @@ bool ossimImageHistogramSource::loadState(const ossimKeywordlist& kwl,
 {
    ossimHistogramSource::loadState(kwl,
                                    prefix);  
-	
-   ossimString newPrefix = ossimString(prefix) + "rect.";
-   theAreaOfInterest.loadState(kwl, newPrefix);
-	
+	setNumberOfInputs(2);
+   ossimString rect = kwl.find(prefix, "rect");
+   if(!rect.empty())
+   {
+      std::vector<ossimString> values;
+      
+      rect.split(values, ",");
+      if(values.size() == 4)
+      {
+         ossim_int32 x = ossim::round<int, double>(values[0].trim().toDouble());
+         ossim_int32 y = ossim::round<int, double>(values[1].trim().toDouble());
+         ossim_int32 w = ossim::round<int, double>(values[2].trim().toDouble());
+         ossim_int32 h = ossim::round<int, double>(values[3].trim().toDouble());
+         theAreaOfInterest = ossimIrect(x, 
+                                        y,
+                                        x+w-1,
+                                        y+h-1);
+      }
+   }
+   else 
+   {
+      ossimString newPrefix = ossimString(prefix) + "rect.";
+      theAreaOfInterest.loadState(kwl, newPrefix);
+   }
+	ossimString mode = kwl.find(prefix, "mode");
+   mode = mode.downcase();
+   if(mode == "normal")
+   {
+      theComputationMode = OSSIM_HISTO_MODE_NORMAL;
+   }
+   else if(mode = "fast")
+   {
+      theComputationMode = OSSIM_HISTO_MODE_FAST;
+   }
    if(getNumberOfInputs()!=1)
    {
       setNumberOfInputs(1);
+   }
+   
+   ossimString numberOfTiles = kwl.find(prefix, "number_of_tiles");
+   if(!numberOfTiles.empty())
+   {
+      theNumberOfTilesToUseInFastMode = numberOfTiles.toUInt32();
    }
    theInputListIsFixedFlag = true;
    theOutputListIsFixedFlag = false;

@@ -7,7 +7,7 @@
 // Author: Garrett Potts
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimDate.cpp 18110 2010-09-22 11:33:04Z gpotts $
+// $Id: ossimDate.cpp 18270 2010-10-17 16:11:54Z dburken $
 
 #include <ossim/base/ossimDate.h>
 #include <cctype> /* for isdigit */

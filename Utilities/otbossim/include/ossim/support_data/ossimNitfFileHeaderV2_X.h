@@ -5,7 +5,7 @@
 // See LICENSE.txt file in the top level directory for more details.
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimNitfFileHeaderV2_X.h 16997 2010-04-12 18:53:48Z dburken $
+// $Id: ossimNitfFileHeaderV2_X.h 18413 2010-11-11 19:56:22Z gpotts $
 
 #ifndef ossimNitfFileHeaderV2_X_HEADER
 #define ossimNitfFileHeaderV2_X_HEADER
@@ -92,6 +92,7 @@ public:
    virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
 
+   bool saveState(ossimKeywordlist& kwl, const ossimString& prefix="")const;
    /**
     * Properties of a NITF 2.x Header file. See MIL-STD-2500A or
     * MIL-STD-2500B for details.
@@ -99,6 +100,7 @@ public:
     * To access these, pass the constant to getProperty().
     */
    static const ossimString FILE_TYPE_KW;
+   static const ossimString FHDR_KW;
    static const ossimString VERSION_KW;
    static const ossimString CLEVEL_KW;
    static const ossimString STYPE_KW;

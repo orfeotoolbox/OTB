@@ -95,9 +95,9 @@
 void vpf_dump_table( char *tablename, char *outname )
 {
    vpf_table_type table;
-   long int   i,j,k,n;
+   ossim_int32   i,j,k,n;
    int        ival,*iptr;
-   long int   lval,*lptr;
+   ossim_int32   lval,*lptr;
    float      fval,*fptr;
    date_type  dval,*dptr;
    id_triplet_type kval, *kptr;
@@ -157,7 +157,7 @@ void vpf_dump_table( char *tablename, char *outname )
 		  else
 		     fprintf(fp,"(null)\n");
 	       } else {
-		  lptr = (long int*)get_table_element(j,row,table,NULL,&n);
+		  lptr = (ossim_int32*)get_table_element(j,row,table,NULL,&n);
 		  for (k=0;k<n;k++) {
 		     if (lptr[k] != MAXFLOAT)
 			fprintf(fp,"%ld ",lptr[k]);
@@ -290,7 +290,7 @@ void vpf_dump_table( char *tablename, char *outname )
 void vpf_dump_doc_table( char *tablename, char *outname )
 {
    vpf_table_type table;
-   long int   i,n;
+   ossim_int32   i,n;
    char       *buf;
    row_type   row;
    FILE       *fp;

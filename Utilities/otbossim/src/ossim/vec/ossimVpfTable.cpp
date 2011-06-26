@@ -9,7 +9,7 @@
 //              vpf file.
 //
 //********************************************************************
-// $Id: ossimVpfTable.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
+// $Id: ossimVpfTable.cpp 19636 2011-05-24 16:48:45Z gpotts $
 #include <ossim/vec/ossimVpfTable.h>
 #include <ossim/vec/vpf.h>
 #include <ossim/base/ossimErrorCodes.h>
@@ -205,7 +205,7 @@ ossimString ossimVpfTable::getColumnValueAsString(row_type& row,
                                                   long columnNumber)const
 {
    ossimString result;
-   long n=1;
+   ossim_int32 n=1;
    switch(theTableInformation->header[columnNumber].type)
    {
    case 'T': // it's of type text so
@@ -445,10 +445,10 @@ void ossimVpfTable::print(std::ostream& out)const
       // was grabbed from the vhcl map server software.
       vpf_table_type& table = *theTableInformation;
 
-      long       i,j,k,n;
-      short int  ival=0,*iptr=NULL;
-      long       lval=0,*lptr=NULL;
-      float      fval=0,*fptr=NULL;
+      ossim_int32       i,j,k,n;
+      ossim_int16  ival=0,*iptr=NULL;
+      ossim_int32       lval=0,*lptr=NULL;
+      ossim_float32      fval=0,*fptr=NULL;
       date_type  dval,*dptr=NULL;
       id_triplet_type kval={0,0,0}, *kptr=NULL;
       coordinate_type cval={0,0}, *cptr=NULL;
@@ -526,7 +526,7 @@ void ossimVpfTable::print(std::ostream& out)const
 	       }
                else
                {
-		  lptr = (long*)get_table_element(j,row,table,NULL,&n);
+		  lptr = (ossim_int32*)get_table_element(j,row,table,NULL,&n);
 		  for (k=0;k<n;k++)
                   {
 		     if (!is_vpf_null_float(lptr[k]))

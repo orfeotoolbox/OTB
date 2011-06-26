@@ -9,18 +9,18 @@
 // Description: Rpf support class
 // 
 //********************************************************************
-// $Id: ossimRpfTocEntry.h 18118 2010-09-22 20:25:39Z dburken $
+// $Id: ossimRpfTocEntry.h 18362 2010-11-01 15:20:47Z dburken $
 #ifndef ossimRpfTocEntry_HEADER
 #define ossimRpfTocEntry_HEADER
-
-#include <vector>
-#include <iosfwd>
 
 #include <ossim/support_data/ossimRpfBoundaryRectRecord.h>
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimErrorContext.h>
 #include <ossim/imaging/ossimImageGeometry.h>
 #include <ossim/support_data/ossimRpfFrameEntry.h>
+
+#include <vector>
+#include <iosfwd>
 
 class ossimIrect;
 
@@ -97,7 +97,10 @@ public:
    ossimRefPtr<ossimImageGeometry> getImageGeometry() const;
 
    /** @brief Get the scale in decimal degrees per pixel. */
-   void getScale(ossimDpt& scale) const;
+   void getDecimalDegreesPerPixel(ossimDpt& scale) const;
+
+   /** @brief Get the scale in meters per pixel. */
+   void getMetersPerPixel(ossimDpt& scale) const;
    
 private:
    void allocateFrameEntryArray();

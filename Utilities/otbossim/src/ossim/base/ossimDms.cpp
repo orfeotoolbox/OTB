@@ -8,7 +8,7 @@
 //
 // Contains class definition for Degrees Minutes Seconds (ossimDms)
 //*******************************************************************
-//  $Id: ossimDms.cpp 17503 2010-06-02 11:18:49Z dburken $
+//  $Id: ossimDms.cpp 19682 2011-05-31 14:21:20Z dburken $
 
 #include <cctype> /* for isspace */
 #include <cmath>
@@ -294,7 +294,7 @@ bool ossimDms::setDegrees(const std::string& cdegrees)
 ossimString ossimDms::toString(const ossimString& formatString)const
 {
    ossimString result="";
-   ossimString::const_iterator stringIter;
+   std::string::const_iterator stringIter;
    ossimString tempFormatString = formatString;
    if(formatString == ossimString(""))
    {
@@ -613,8 +613,8 @@ ossimString ossimDms::degree_to_string(double degrees,
 
 
 void ossimDms::calc_mins_or_secs(double *dd,
-                            ossimString::const_iterator &formatIter,
-                            ossimString &result)const
+                                 std::string::const_iterator& formatIter,
+                                 std::string& result)const
 {
 	double du;
 	int ufactor, ires, numunits;

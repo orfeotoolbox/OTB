@@ -29,13 +29,7 @@ public:
       return new ossimGeneralRasterElevationDatabase(*this);
    }
    virtual bool open(const ossimString& connectionString);
-   virtual bool pointHasCoverage(const ossimGpt& gpt) const
-   {
-      ossimFilename filename;
-      createRelativePath(filename, gpt);
-      
-      return filename.exists();
-   }
+   virtual bool pointHasCoverage(const ossimGpt& gpt) const;
    /**
     * METHODS: accuracyLE90(), accuracyCE90()
     * Returns the vertical and horizontal accuracy (90% confidence) in the
@@ -70,10 +64,10 @@ protected:
       createRelativePath(relativeFile, gpt);
       file = ossimFilename(m_connectionString).dirCat(relativeFile);
    }
-   ossimRefPtr<ossimElevCellHandler> createHandler(const ossimGpt& /* gpt */)
-   {
-      return m_cellHandler.get();
-   }
+   ossimRefPtr<ossimElevCellHandler> createHandler(const ossimGpt& /* gpt */);
+   virtual ossimRefPtr<ossimElevCellHandler> createCell(const ossimGpt& /* gpt */);
+   
+   
    TYPE_DATA
 };
 #endif

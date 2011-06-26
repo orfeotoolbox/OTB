@@ -7,7 +7,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfVqCompressionHeader.h 16035 2009-12-03 21:32:27Z dburken $
+// $Id: ossimNitfVqCompressionHeader.h 18413 2010-11-11 19:56:22Z gpotts $
 #ifndef ossimNitfVqCompressionHeader_HEADER
 #define ossimNitfVqCompressionHeader_HEADER
 
@@ -49,6 +49,7 @@ public:
    virtual std::ostream& print(std::ostream& out,
                                const std::string& prefix) const;  
 
+   virtual bool saveState(ossimKeywordlist& kwl, const ossimString& prefix="")const;
    virtual ossim_uint32 getBlockSizeInBytes()const;
    virtual ossim_uint32 getNumberOfImageRows()const;
    virtual ossim_uint32 getNumberOfImageCodesPerRow()const;

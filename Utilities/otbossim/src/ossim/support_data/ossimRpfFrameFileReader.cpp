@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
 //
 // LICENSE:  See top level LICENSE.txt file.
 //
@@ -8,16 +7,15 @@
 // Description: Rpf support class
 // 
 //********************************************************************
-// $Id: ossimRpfFrameFileReader.cpp 16997 2010-04-12 18:53:48Z dburken $
-
-#include <fstream>
-#include <ostream>
+// $Id: ossimRpfFrameFileReader.cpp 19682 2011-05-31 14:21:20Z dburken $
 
 #include <ossim/support_data/ossimRpfFrameFileReader.h>
 #include <ossim/support_data/ossimRpfHeader.h>
 #include <ossim/support_data/ossimNitfFile.h>
 #include <ossim/support_data/ossimNitfTagInformation.h>
 #include <ossim/support_data/ossimNitfFileHeader.h>
+#include <fstream>
+#include <ostream>
 
 std::ostream& operator<<(std::ostream& out, const ossimRpfFrameFileReader& data)
 {
@@ -37,7 +35,7 @@ ossimRpfFrameFileReader::~ossimRpfFrameFileReader()
 
 ossimErrorCode ossimRpfFrameFileReader::parseFile(const ossimFilename& fileName)
 {
-   std::ifstream in(fileName, ios::in | ios::binary);
+   std::ifstream in(fileName.c_str(), ios::in | ios::binary);
    ossimRefPtr<ossimNitfFile> nitfFile = new ossimNitfFile;
 
    if(!in)

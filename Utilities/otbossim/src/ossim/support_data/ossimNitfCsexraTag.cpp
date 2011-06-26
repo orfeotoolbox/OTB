@@ -35,9 +35,9 @@ ossimNitfCsexraTag::~ossimNitfCsexraTag()
 {
 }
 
-ossimString ossimNitfCsexraTag::getRegisterTagName() const
+std::string ossimNitfCsexraTag::getRegisterTagName() const
 {
-   return "CSEXRA";
+   return std::string("CSEXRA");
 }
 
 void ossimNitfCsexraTag::parseStream(std::istream& in)

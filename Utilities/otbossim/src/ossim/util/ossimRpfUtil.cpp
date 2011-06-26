@@ -13,9 +13,6 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <ctime>
-#include <iomanip>
-
 #include <ossim/util/ossimRpfUtil.h>
 #include <ossim/base/ossimDrect.h>
 #include <ossim/base/ossimFilename.h>
@@ -24,6 +21,8 @@
 #include <ossim/base/ossimTrace.h>
 #include <ossim/support_data/ossimRpfToc.h>
 #include <ossim/support_data/ossimRpfTocEntry.h>
+#include <ctime>
+#include <iomanip>
 
 static ossimTrace traceDebug = ossimTrace("ossimRpfUtil:debug");
 
@@ -38,7 +37,7 @@ ossimRpfUtil::~ossimRpfUtil()
 
 // Note: throws ossimException on error.
 void ossimRpfUtil::writeDotRpfFiles( const ossimFilename& aDotTocFile,
-                                    const ossimFilename& outputDir )
+                                     const ossimFilename& outputDir )
 {
    static const char MODULE[] = "ossimRpfUtil::writeDotRpfFiles";
 
@@ -58,7 +57,7 @@ void ossimRpfUtil::writeDotRpfFiles( const ossimFilename& aDotTocFile,
    {
       std::string e = MODULE;
       e += " ERROR:\nCould not open: ";
-      e+= aDotTocFile;
+      e+= aDotTocFile.string();
       throw ossimException(e);
    }
 
@@ -91,7 +90,7 @@ void ossimRpfUtil::writeDotRpfFiles( const ossimFilename& aDotTocFile,
       {
          std::string e = MODULE;
          e += " ERROR:  Null entry: ";
-         e += ossimString::toString(entry);
+         e += ossimString::toString(entry).string();
          throw ossimException(e);
       }
    }
@@ -147,12 +146,12 @@ void ossimRpfUtil::writeDotRpfFile( const ossimRpfToc* toc,
    
    // Open the file to write.
    std::ofstream os;
-   os.open(outFile, ios::out);
+   os.open(outFile.c_str(), ios::out);
    if ( os.good() == false )
    {
       std::string errMsg = MODULE;
       errMsg += "ERROR could not open: ";
-      errMsg += outFile;
+      errMsg += outFile.string();
       throw ossimException(errMsg);
    }
    
@@ -170,7 +169,7 @@ void ossimRpfUtil::writeDotRpfFile( const ossimRpfToc* toc,
    if( geom.valid() == false)
    {
       std::string errMsg = "ERROR could not get geometry.";
-      errMsg += outFile;
+      errMsg += outFile.string();
       throw ossimException(errMsg);  
    }
 
@@ -183,7 +182,7 @@ void ossimRpfUtil::writeDotRpfFile( const ossimRpfToc* toc,
 
    // scale:
    ossimDpt scale;
-   tocEntry->getScale(scale);
+   tocEntry->getDecimalDegreesPerPixel(scale);
    ossimDpt halfPix = scale / 2.0;
 
    ossimGpt llg;
@@ -278,7 +277,12 @@ void ossimRpfUtil::writeDotRpfFile( const ossimRpfToc* toc,
          if ( traceDebug() )
          {
             ossimNotify(ossimNotifyLevel_DEBUG)
-               << "row[" << row << "]col[" << col << "]path: " << path << std::endl;
+               << "row[" << row << "]col[" << col << "]path: " << path
+               << "\nlld: " << lld
+               << "\nllg: " << llg
+               << "\nurd: " << urd
+               << "\nurg: " << urg
+               << std::endl;
          }
 
          // Go to next col.
@@ -302,7 +306,7 @@ void ossimRpfUtil::writeDotRpfFile( const ossimRpfToc* toc,
    
 } // End: ossimRpfUtil::writeDotRpfFile
 
-void ossimRpfUtil::checkLongitude(ossimGpt& left, const ossimGpt& right) const
+void ossimRpfUtil::checkLongitude(ossimGpt& left, ossimGpt& right) const
 {
    //---
    // Test for scene coordinates being 180 to 180 (360 degree spread) and
@@ -313,12 +317,13 @@ void ossimRpfUtil::checkLongitude(ossimGpt& left, const ossimGpt& right) const
    // Not sure if this is too loose or not. (drb)
    //---
    const ossim_float64 TOLERANCE = 0.000138889; // 1/7200 about 15 meters.
-   
+
    if ( ossim::almostEqual(left.lon, 180.0, TOLERANCE) )
    {
       if ( ossim::almostEqual(right.lon, 180.0, TOLERANCE) )
       {
          left.lon = -180.0;
+         right.lon = 180.0;
       }
    }
 }

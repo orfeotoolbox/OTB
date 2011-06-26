@@ -7,7 +7,7 @@
 // Description:
 //
 //*******************************************************************
-//  $Id: ossimDatum.cpp 17815 2010-08-03 13:23:14Z dburken $
+//  $Id: ossimDatum.cpp 19640 2011-05-25 15:58:00Z oscarkramer $
 #include <ossim/base/ossimDatum.h>
 #include <ossim/base/ossimGpt.h>
 #include <ossim/base/ossimEllipsoid.h>
@@ -30,7 +30,7 @@ theEastLongitude(eastLongitude),
 theSouthLatitude(southLatitude),
 theNorthLatitude(northLatitude)
 {
-   theEpsgGcsCode = ossimEpsgDatumFactory::instance()->findEpsgCode(alpha_code);
+   theEpsgCode = ossimEpsgDatumFactory::instance()->findEpsgCode(alpha_code);
 };
 
 void ossimDatum::molodenskyShift(double a,
@@ -129,3 +129,47 @@ void ossimDatum::molodenskyShift(double a,
      Lon_out += 2*M_PI;
 }
 
+bool ossimDatum::operator==(const ossimDatum& rhs) const
+{
+   // This method is complicated by the fact that some datums are represented by a precomputed
+   // grid version of the parametric datum.cpp Need to consider these cases. (OLK 02/11)
+   if (theCode == "NAR") // This is the code for gridded NADCON datum
+   {
+      if (!rhs.theCode.contains("NAR"))
+         return false;
+   }
+   else if (rhs.theCode == "NAR")
+   {
+      if (!theCode.contains("NAR"))
+         return false;
+   }
+   else if (theCode == "NAS")
+   {
+      if (!rhs.theCode.contains("NAS"))
+         return false;
+   }
+   else if (rhs.theCode == "NAS")
+   {
+      if (!theCode.contains("NAS"))
+         return false;
+   }
+
+   // Not a grid, so codes must match:
+   else if (theCode != rhs.theCode)
+      return false;
+
+   // Additional EPSG code check after HARN v. parametric caused false positives (OLK 05/11):
+   if ((theEpsgCode != 0) && (rhs.theEpsgCode !=0) && (theEpsgCode != rhs.theEpsgCode))
+      return false;
+
+   // Don't need to check the name since 1:1 relationship with code, code check is sufficient.
+   // This saves the tedium of filtering for NADCON datums as done above.
+   return ((*theEllipsoid == *rhs.theEllipsoid)&&
+      (theSigmaX == rhs.theSigmaX)&&
+      (theSigmaY == rhs.theSigmaY)&&
+      (theSigmaZ == rhs.theSigmaZ)&&
+      (theWestLongitude == rhs.theWestLongitude)&&
+      (theEastLongitude == rhs.theEastLongitude)&&
+      (theSouthLatitude == rhs.theSouthLatitude)&&
+      (theNorthLatitude == rhs.theNorthLatitude));
+}

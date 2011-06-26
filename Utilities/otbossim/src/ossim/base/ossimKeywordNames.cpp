@@ -8,15 +8,18 @@
 // Description: Common file for global Keywords.
 //
 //*************************************************************************
-// $Id: ossimKeywordNames.cpp 17609 2010-06-23 12:51:04Z dburken $
+// $Id: ossimKeywordNames.cpp 19180 2011-03-22 17:36:33Z oscarkramer $
 
 #include <ossim/base/ossimKeywordNames.h>
 
 const char* ossimKeywordNames::AZIMUTH_ANGLE_KW = "azimuth_angle";
 const char* ossimKeywordNames::BAND_KW = "band";
+const char* ossimKeywordNames::BANDS_KW = "bands";
 const char* ossimKeywordNames::BORDER_SIZE_KW = "border_size";
 const char* ossimKeywordNames::BRUSH_COLOR_KW = "brush_color";
 const char* ossimKeywordNames::BYTE_ORDER_KW = "byte_order";
+const char* ossimKeywordNames::CE90_ABSOLUTE_KW = "ce90_absolute";
+const char* ossimKeywordNames::CE90_RELATIVE_KW = "ce90_relative";
 const char* ossimKeywordNames::CENTRAL_MERIDIAN_KW = "central_meridian";
 const char* ossimKeywordNames::CENTRAL_POINT1_LAT_KW = "central_point1_lat";
 const char* ossimKeywordNames::CENTRAL_POINT1_LON_KW = "central_point1_lon";
@@ -54,6 +57,7 @@ const char* ossimKeywordNames::ELLIPSE_EPSG_CODE_KW = "ellipse_epsg_code";
 const char* ossimKeywordNames::ELLIPSE_NAME_KW = "ellipse_name";
 const char* ossimKeywordNames::ENABLED_KW = "enabled";
 const char* ossimKeywordNames::ENABLE_CACHE_KW = "enable_cache";
+const char* ossimKeywordNames::EXTRACT_VERTICES_KW = "extract_vertices";  
 const char* ossimKeywordNames::ENTRY_KW = "entry";
 const char* ossimKeywordNames::FALSE_EASTING_NORTHING_KW = "false_easting_northing";
 const char* ossimKeywordNames::FALSE_EASTING_NORTHING_UNITS_KW = "false_easting_northing_units";
@@ -63,11 +67,13 @@ const char* ossimKeywordNames::FEATURE_NAME_KW = "feature_name";
 const char* ossimKeywordNames::FILENAME_KW = "filename";
 const char* ossimKeywordNames::FILEPATH_KW = "filepath";
 const char* ossimKeywordNames::FILL_FLAG_KW = "fill_flag";
+const char* ossimKeywordNames::FRAME_INDEX_KW = "frame_index";
 const char* ossimKeywordNames::GCS_CODE_KW = "gcs_code";
 const char* ossimKeywordNames::GEOM_FILE_KW = "geom_file";
 const char* ossimKeywordNames::HEMISPHERE_KW = "hemisphere";
 const char* ossimKeywordNames::HORIZONTAL_SIZE_KW = "horizontal_size";
 const char* ossimKeywordNames::ID_KW ="id";
+const char* ossimKeywordNames::IMAGE_CE90_KW  = "estimated_image_ce90";
 const char* ossimKeywordNames::IMAGE_FILE_KW = "image_file";
 const char* ossimKeywordNames::IMAGE_ID_KW = "image_id";
 const char* ossimKeywordNames::IMAGE_MODEL_TRANSFORM_MATRIX_KW = "image_model_transform_matrix";
@@ -131,6 +137,7 @@ const char* ossimKeywordNames::PLANAR_CONFIG_KW  = "planar_config";
 const char* ossimKeywordNames::POINT_WIDTH_HEIGHT_KW = "point_width_height";
 const char* ossimKeywordNames::PROJECTION_KW     = "projection";
 const char* ossimKeywordNames::QUALITY_KW        = "quality";
+const char* ossimKeywordNames::QUERY_KW = "query";
 const char* ossimKeywordNames::RADIOMETRY_KW = "radiometry";
 const char* ossimKeywordNames::REDUCED_RES_LEVEL_KW = "reduced_res_level";
 const char* ossimKeywordNames::REF_GPT_LAT_KW  = "ref_point_lat";
@@ -175,6 +182,7 @@ const char* ossimKeywordNames::UL_X_KW = "ul_x";
 const char* ossimKeywordNames::UL_Y_KW = "ul_y";
 const char* ossimKeywordNames::UR_X_KW = "ur_x";
 const char* ossimKeywordNames::UR_Y_KW = "ur_y";
+const char* ossimKeywordNames::VALID_VERTICES_KW = "valid_vertices_file";
 const char* ossimKeywordNames::VERTICAL_SIZE_KW = "vertical_size";
 const char* ossimKeywordNames::ZONE_KW = "zone";
 

@@ -8,7 +8,7 @@
 //
 // Contains class declaration for ossimImageFileWriter.
 //*******************************************************************
-//  $Id: ossimImageFileWriter.cpp 17227 2010-04-27 19:01:03Z dburken $
+//  $Id: ossimImageFileWriter.cpp 19180 2011-03-22 17:36:33Z oscarkramer $
 
 
 #include <tiff.h> /* for tiff compression defines */
@@ -50,7 +50,7 @@
 static ossimTrace traceDebug("ossimImageFileWriter:debug");
 
 #if OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimImageFileWriter.cpp 17227 2010-04-27 19:01:03Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimImageFileWriter.cpp 19180 2011-03-22 17:36:33Z oscarkramer $";
 #endif
 
 RTTI_DEF3(ossimImageFileWriter,
@@ -425,7 +425,8 @@ bool ossimImageFileWriter::loadState(const ossimKeywordlist& kwl,
 }
 
 bool ossimImageFileWriter::writeOverviewFile(ossim_uint16 tiff_compress_type,
-                                             ossim_int32 jpeg_compress_quality) 
+                                             ossim_int32 jpeg_compress_quality, 
+                                             bool includeR0) 
 {
    if(theFilename == "") return false;
 
@@ -455,6 +456,7 @@ bool ossimImageFileWriter::writeOverviewFile(ossim_uint16 tiff_compress_type,
       ob->setCompressionType(tiff_compress_type);
       ob->setJpegCompressionQuality(jpeg_compress_quality);
       ob->setOutputFile(overview_file);
+      ob->setCopyAllFlag(includeR0);
       ob->execute();
 
       // Remove the listener from the overview builder.

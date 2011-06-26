@@ -72,6 +72,17 @@ public:
    {
       m_geometry = geom;
    }
+   
+   /**
+    *  save state is not implemented for this source and only passes to the base.
+    */
+   virtual bool saveState(ossimKeywordlist& kwl, const char* prefix)const;
+   
+   /**
+    * loadState is here so one can construct a memory source as a blank tile.
+    */
+   virtual bool loadState(const ossimKeywordlist& kwl, const char* prefix);
+   
 protected:
    ossimRefPtr<ossimImageData> m_image;
    ossimRefPtr<ossimImageData> m_result;

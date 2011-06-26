@@ -1,5 +1,5 @@
 #ifndef MGRS_H
-  #define MGRS_H
+#define MGRS_H 1
 
 /***************************************************************************/
 /* RSC IDENTIFIER:  MGRS
@@ -107,14 +107,14 @@ extern "C" {
 
    OSSIM_DLL long Set_OSSIM_MGRS_Parameters(double a,
                                             double f,
-                                            char   *Ellipsoid_Code);
+                                            const char* Ellipsoid_Code);
 /*
  * The function Set_MGRS_Parameters receives the ellipsoid parameters and sets
  * the corresponding state variables. If any errors occur, the error code(s)
  * are returned by the function, otherwise MGRS_NO_ERROR is returned.
  *
  *   a                : Semi-major axis of ellipsoid in meters (input)
- *   f                : Flattening of ellipsoid					       (input)
+ *   f                : Flattening of ellipsoid                (input)
  *   Ellipsoid_Code   : 2-letter code for ellipsoid            (input)
  */
 

@@ -5,7 +5,7 @@
 // See LICENSE.txt file in the top level directory for more details.
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimNitfFileHeaderV2_X.cpp 16997 2010-04-12 18:53:48Z dburken $
+// $Id: ossimNitfFileHeaderV2_X.cpp 18413 2010-11-11 19:56:22Z gpotts $
 
 #include <ossim/support_data/ossimNitfFileHeaderV2_X.h>
 #include <ossim/support_data/ossimNitfCommon.h>
@@ -23,6 +23,7 @@ static ossimString monthConversionTable[] = {"   ", "JAN", "FEB", "MAR", "APR", 
 
 const ossimString ossimNitfFileHeaderV2_X::FILE_TYPE_KW  = "file_type";
 const ossimString ossimNitfFileHeaderV2_X::VERSION_KW  = "version";
+const ossimString ossimNitfFileHeaderV2_X::FHDR_KW     = "fhdr";
 const ossimString ossimNitfFileHeaderV2_X::CLEVEL_KW  = "clevel";
 const ossimString ossimNitfFileHeaderV2_X::STYPE_KW   = "stype";
 const ossimString ossimNitfFileHeaderV2_X::OSTAID_KW  = "ostaid";
@@ -220,7 +221,11 @@ void ossimNitfFileHeaderV2_X::setProperty(ossimRefPtr<ossimProperty> property)
    if(!property.valid()) return;
 
    ossimString name = property->getName();
-   if(name == STYPE_KW)
+   if(name == FHDR_KW)
+   {
+      
+   }
+   else if(name == STYPE_KW)
    {
       setSystemType(property->valueToString());
    }
@@ -290,7 +295,11 @@ ossimRefPtr<ossimProperty> ossimNitfFileHeaderV2_X::getProperty(const ossimStrin
 {
    ossimRefPtr<ossimProperty> property = 0;
    
-   if(name == VERSION_KW)
+   if(name == FHDR_KW)
+   {
+      property = new ossimStringProperty(name, ossimString(theFileTypeVersion));
+   }
+   else if(name == VERSION_KW)
    {
       property = new ossimStringProperty(name, ossimString(getVersion()));
    }
@@ -391,10 +400,33 @@ ossimRefPtr<ossimProperty> ossimNitfFileHeaderV2_X::getProperty(const ossimStrin
    return property;
 }
 
+bool ossimNitfFileHeaderV2_X::saveState(ossimKeywordlist& kwl, const ossimString& prefix)const
+{
+   bool result = ossimNitfFileHeader::saveState(kwl, prefix);
+   
+   if(result)
+   {
+      kwl.add(prefix, "FHDR",theFileTypeVersion);
+      kwl.add(prefix, "CLEVEL",theComplexityLevel);
+      kwl.add(prefix, "STYPE",theSystemType);
+      kwl.add(prefix, "OSTAID",theOriginatingStationId);
+      kwl.add(prefix, "FDT",theDateTime);
+      kwl.add(prefix, "FTITLE",theFileTitle);
+      kwl.add(prefix, "FSCLAS",theSecurityClassification);
+      kwl.add(prefix, "FSCOP",theCopyNumber);
+      kwl.add(prefix, "FSCOPYS",theNumberOfCopies);
+      kwl.add(prefix, "ENCRYP",theEncryption);
+   }
+   
+   return result;
+}
+
 void ossimNitfFileHeaderV2_X::getPropertyNames(std::vector<ossimString>& propertyNames)const
 {
+   ossimNitfFileHeader::getPropertyNames(propertyNames);
    propertyNames.push_back(FILE_TYPE_KW);
    propertyNames.push_back(VERSION_KW);
+   propertyNames.push_back(FHDR_KW);
    propertyNames.push_back(CLEVEL_KW);
    propertyNames.push_back(STYPE_KW);
    propertyNames.push_back(OSTAID_KW);

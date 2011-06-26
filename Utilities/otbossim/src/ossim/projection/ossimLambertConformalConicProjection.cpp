@@ -8,7 +8,7 @@
 //
 // Calls Lamberts Conformal Conic projection code.  
 //*******************************************************************
-//  $Id: ossimLambertConformalConicProjection.cpp 17815 2010-08-03 13:23:14Z dburken $
+//  $Id: ossimLambertConformalConicProjection.cpp 19640 2011-05-25 15:58:00Z oscarkramer $
 
 #include <iostream>
 #include <iomanip>
@@ -634,7 +634,8 @@ double ossimLambertConformalConicProjection::getStandardParallel2()const
 //*************************************************************************************************
 bool ossimLambertConformalConicProjection::operator==(const ossimProjection& proj) const
 {
-   if (!ossimMapProjection::operator==(proj)) return false;
+   if (!ossimMapProjection::operator==(proj)) 
+      return false;
 
    ossimLambertConformalConicProjection* p = PTR_CAST(ossimLambertConformalConicProjection, &proj);
    if (!p) return false;

@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFileHeaderV2_0.h 16997 2010-04-12 18:53:48Z dburken $
+// $Id: ossimNitfFileHeaderV2_0.h 18413 2010-11-11 19:56:22Z gpotts $
 #ifndef ossimNitfFileHeaderV2_0_HEADER
 #define ossimNitfFileHeaderV2_0_HEADER
 
@@ -240,6 +240,8 @@ public:
    virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
 
+   
+   virtual bool saveState(ossimKeywordlist& kwl, const ossimString& prefix="")const;
 TYPE_DATA
 private:
 

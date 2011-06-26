@@ -4,7 +4,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimProjectionFactoryRegistry.cpp 17815 2010-08-03 13:23:14Z dburken $
+// $Id: ossimProjectionFactoryRegistry.cpp 19045 2011-03-10 15:50:07Z gpotts $
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
 #include <ossim/projection/ossimProjectionFactoryBase.h>
 #include <ossim/projection/ossimEpsgProjectionFactory.h>
@@ -139,6 +139,7 @@ void ossimProjectionFactoryRegistry::initializeDefaults()
 {
    registerFactory(ossimSensorModelFactory::instance());
    registerFactory(ossimNitfProjectionFactory::instance());
+   
    registerFactory(ossimTiffProjectionFactory::instance());
    registerFactory(ossimMapProjectionFactory::instance());
    registerFactory(ossimMiscProjectionFactory::instance());

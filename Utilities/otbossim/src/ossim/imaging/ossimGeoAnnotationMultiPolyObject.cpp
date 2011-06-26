@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimGeoAnnotationMultiPolyObject.cpp 17815 2010-08-03 13:23:14Z dburken $
+// $Id: ossimGeoAnnotationMultiPolyObject.cpp 18435 2010-11-17 19:41:13Z gpotts $
 
 #include <ossim/imaging/ossimGeoAnnotationMultiPolyObject.h>
 #include <ossim/imaging/ossimAnnotationMultiPolyObject.h>
@@ -160,7 +160,7 @@ void ossimGeoAnnotationMultiPolyObject::getBoundingRect(ossimDrect& rect)const
    // is nan? (drb - 20100728)
    //---
    rect = theBoundingRect;
-   if (rect.isNan())
+   if (rect.isNan()&&theProjectedPolyObject.valid())
    {
      theProjectedPolyObject->getBoundingRect(rect);
    }

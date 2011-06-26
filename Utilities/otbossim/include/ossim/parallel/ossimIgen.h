@@ -10,7 +10,7 @@
 // Description: Class declaration for image generator.
 //
 //*************************************************************************
-// $Id: ossimIgen.h 17815 2010-08-03 13:23:14Z dburken $
+// $Id: ossimIgen.h 19780 2011-06-24 12:33:41Z gpotts $
 #ifndef ossimIgen_HEADER
 #define ossimIgen_HEADER
 
@@ -38,12 +38,12 @@ class OSSIM_DLL ossimIgen : public ossimReferenced
 {
 public:
    ossimIgen();
+   virtual ~ossimIgen();
 
    virtual void initialize(const ossimKeywordlist& kwl);
    virtual void outputProduct();
    
 protected:
-   virtual ~ossimIgen();
    void initializeAttributes();
    void slaveSetup();
    bool loadProductSpec();

@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimBumpShadeTileSource.cpp 17932 2010-08-19 20:34:35Z dburken $
+// $Id: ossimBumpShadeTileSource.cpp 19197 2011-03-23 16:22:08Z dburken $
 
 #include <ossim/imaging/ossimBumpShadeTileSource.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
@@ -256,22 +256,13 @@ void ossimBumpShadeTileSource::computeColor(ossim_uint8& r,
                                             ossim_uint8 dg,
                                             ossim_uint8 db)const
 {
-   double c = normalX*m_lightDirection[0] +
-              normalY*m_lightDirection[1] +
-              normalZ*m_lightDirection[2];
+   double c = /*fabs*/(normalX*m_lightDirection[0] +
+                   normalY*m_lightDirection[1] +
+                   normalZ*m_lightDirection[2]);
    
-   if(fabs(c) > FLT_EPSILON)
-   {
-      r = ossimRgbVector::clamp(ossim::round<int>(c*dr), 1, 255);
-      g = ossimRgbVector::clamp(ossim::round<int>(c*dg), 1, 255);
-      b = ossimRgbVector::clamp(ossim::round<int>(c*db), 1, 255);
-   }
-   else
-   {
-      r = 1;
-      g = 1;
-      b = 1;
-   }
+   r = ossimRgbVector::clamp(ossim::round<int>(c*dr), 1, 255);
+   g = ossimRgbVector::clamp(ossim::round<int>(c*dg), 1, 255);
+   b = ossimRgbVector::clamp(ossim::round<int>(c*db), 1, 255);
 }
 
 void ossimBumpShadeTileSource::initialize()

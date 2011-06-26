@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFile.cpp 16859 2010-03-11 03:12:51Z dburken $
+// $Id: ossimNitfFile.cpp 19682 2011-05-31 14:21:20Z dburken $
 
 #include <fstream>
 #include <iostream>
@@ -91,7 +91,7 @@ std::ostream& ossimNitfFile::print(std::ostream& out,
                // Add our prefix onto prefix.
                std::string s = pfx;
                s += "image";
-               s += ossimString::toString(idx);
+               s += ossimString::toString(idx).string();
                s += ".";
                
                ih->print(out, s);
@@ -125,6 +125,34 @@ std::ostream& ossimNitfFile::print(std::ostream& out,
 
    return out;
    
+}
+
+bool ossimNitfFile::saveState(ossimKeywordlist& kwl, const ossimString& prefix)const
+{
+   bool result = theNitfFileHeader.valid(); 
+   
+   if(theNitfFileHeader.valid())
+   {
+      theNitfFileHeader->saveState(kwl, prefix);
+   }
+   ossim_int32 n = theNitfFileHeader->getNumberOfImages();
+   for(ossim_int32 idx = 0; idx < n; ++idx)
+   {
+      ossimRefPtr<ossimNitfImageHeader> ih = getNewImageHeader(idx);
+      ossimString newPrefix = prefix + "image" + ossimString::toString(idx) + ".";
+#if 1     
+      ih->saveState(kwl, newPrefix);
+#else
+      if ( (ih->getCategory().trim(ossimString(" ")) !=
+            "CLOUD") ||
+          (ih->getRepresentation().trim(ossimString(" ")) !=
+           "NODISPLY") )
+      {
+         ih->saveState(kwl, newPrefix);
+      }
+#endif
+   }
+   return result;
 }
 
 ossimNitfFile::ossimNitfFile()

@@ -11,7 +11,7 @@
 // See:  STDI-000_v2.1 Table 7-3 for detailed description.
 // 
 //********************************************************************
-// $Id: ossimNitfStdidcTag.cpp 14241 2009-04-07 19:59:23Z dburken $
+// $Id: ossimNitfStdidcTag.cpp 19682 2011-05-31 14:21:20Z dburken $
 
 #include <iostream>
 #include <iomanip>
@@ -46,9 +46,9 @@ ossimNitfStdidcTag::~ossimNitfStdidcTag()
 {
 }
 
-ossimString ossimNitfStdidcTag::getRegisterTagName()const
+std::string ossimNitfStdidcTag::getRegisterTagName()const
 {
-   return "STDIDC";
+   return std::string("STDIDC");
 }
 
 void ossimNitfStdidcTag::parseStream(std::istream& in)

@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
 // License:  See top level LICENSE.txt file.
 //
@@ -9,15 +8,17 @@
 //
 // Thie file contains the ossimEllipsoidFactory.
 //*******************************************************************
-//  $Id: ossimEllipsoidFactory.h 17815 2010-08-03 13:23:14Z dburken $
+//  $Id: ossimEllipsoidFactory.h 19682 2011-05-31 14:21:20Z dburken $
 
 #ifndef ossimEllipsoidFactory_HEADER
 #define ossimEllipsoidFactory_HEADER
-#include <map>
+
 #include <ossim/base/ossimConstants.h>
-#include <ossim/base/ossimString.h>
+#include <map>
+#include <string>
 
 class ossimEllipsoid;
+class ossimString;
 class ossimWgs84Ellipsoid;
 class ossimWgs72Ellipsoid;
 
@@ -36,8 +37,8 @@ public:
    static ossimEllipsoidFactory* instance();
    
 private:
-   typedef std::map<ossimString, ossimEllipsoid*> TableType;
-   typedef std::map<ossim_uint32, ossimString> EpsgTableType;
+   typedef std::map<std::string, ossimEllipsoid*> TableType;
+   typedef std::map<ossim_uint32, std::string> EpsgTableType;
 
    static ossimEllipsoidFactory*     theInstance;
    ossimEllipsoid*       theWgs84Ellipsoid;

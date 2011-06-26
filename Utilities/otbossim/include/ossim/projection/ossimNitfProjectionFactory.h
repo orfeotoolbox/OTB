@@ -9,10 +9,10 @@
 //
 // Contains class declaration for ossimNitfProjectionFactory.
 //
-// $Id: ossimNitfProjectionFactory.h 16937 2010-03-28 21:49:31Z dburken $
+// $Id: ossimNitfProjectionFactory.h 18905 2011-02-16 13:30:11Z dburken $
 //----------------------------------------------------------------------------
 #ifndef ossimNitfProjectionFactory_HEADER
-#define ossimNitfProjectionFactory_HEADER
+#define ossimNitfProjectionFactory_HEADER 1
 
 #include <vector>
 #include <ossim/projection/ossimProjectionFactoryBase.h>
@@ -126,7 +126,6 @@ private:
     */
    ossimProjection* makeUtm(const ossimNitfImageHeader* hdr,
                             const ossimString& coordinateSysetm)const;//,
-                            //const ossimFilename& filename) const;
    
    /**
     * @param hdr The nitf image header.
@@ -171,6 +170,21 @@ private:
    void parseUtmString(const ossimString& utmLocation,
                        ossim_uint32& zone,
                        std::vector<ossimDpt>& utmPoints)const;
+
+   /**
+    * @brief Gets UTM points, zone and hemisphere from IGEOLO field when ICORDS files = U which is
+    * UTM expressed in MGRS.
+    * @param mgrsLocationString String from IGEOLO field.
+    * @param zone Initialized in method.
+    * @param hemisphere Initialized in method.
+    * @param utmPoints Initialized in method.
+    * @return True on success, false on error.
+    */
+   bool parseMgrsString(const ossimString& mgrsLocationString,
+                        ossim_uint32& zone,
+                        char& hemisphere,
+                        std::vector<ossimDpt>& utmPoints) const;
+   
    /**
     * Computes the scale in decimal degrees with scale.x being longitude,
     * y being latitude.

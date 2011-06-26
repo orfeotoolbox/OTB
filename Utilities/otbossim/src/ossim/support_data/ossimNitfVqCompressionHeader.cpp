@@ -7,14 +7,16 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfVqCompressionHeader.cpp 17501 2010-06-02 11:14:55Z dburken $
+// $Id: ossimNitfVqCompressionHeader.cpp 19682 2011-05-31 14:21:20Z dburken $
 
 #include <iostream>
+#include <sstream>
 #include <iomanip>
 
 #include <ossim/support_data/ossimNitfVqCompressionHeader.h>
 #include <ossim/base/ossimEndian.h>
 #include <ossim/base/ossimString.h>
+#include <ossim/base/ossimKeywordlist.h>
 
 RTTI_DEF1(ossimNitfVqCompressionHeader, "ossimNitfVqCompressionHeader", ossimNitfCompressionHeader);
 
@@ -234,7 +236,7 @@ std::ostream& ossimNitfVqCompressionHeader::print(
       {
          std::string tblPfx = pfx;
          tblPfx += "table";
-         tblPfx += ossimString::toString(idx);
+         tblPfx += ossimString::toString(idx).string();
          tblPfx += ".";
 
          out << tblPfx << std::setw(24) << "id:"
@@ -252,6 +254,50 @@ std::ostream& ossimNitfVqCompressionHeader::print(
    }
 
    return out;
+}
+
+bool ossimNitfVqCompressionHeader::saveState(ossimKeywordlist& kwl, const ossimString& prefix)const
+{
+   bool result = ossimNitfCompressionHeader::saveState(kwl, prefix);
+   
+   if(result)
+   {
+      std::ostringstream out;
+      
+      out << std::setiosflags(std::ios::left)
+      << "image_rows:" << theNumberOfImageRows << "\n"
+      << "codes_per_row:" << theNumberOfImageCodesPerRow << "\n"
+      << "codebit_length:" << (ossim_uint32)theImageCodeBitLength << "\n"
+      << "algorithm_id:" << theCompressionAlgorithmId << "\n"
+      << "offset_records:" << theNumberOfCompressionLookupOffsetRecords << "\n"
+      << "offset_record_length:" << theCompressionLookupTableOffsetRecordLength << "\n";
+      
+      if(theTable.size() > 0)
+      {
+         for(ossim_uint32 idx = 0; idx < theTable.size()-1; ++idx)
+         {
+            std::string tblPfx = "table";
+            tblPfx += ossimString::toString(idx).string();
+            tblPfx += ".";
+            
+            out << tblPfx<< "id:"
+            << theTable[idx].theTableId << "\n"
+            << tblPfx << "lookup_records:"<< theTable[idx].theNumberOfCompressionLookupRecords << "\n"
+            << tblPfx <<"values_per_lookup:"<< theTable[idx].theNumberOfValuesPerCompressionLookup << "\n"
+            << tblPfx << "lookup_bit_length:"<< theTable[idx].theCompressionLookupValueBitLength << "\n"
+            << tblPfx << "lookup_table_offset:"<< theTable[idx].theCompressionLookupTableOffset << "\n";
+         }
+      }
+      ossimKeywordlist kwlTemp;
+      
+      std::istringstream in(out.str());
+      if(kwlTemp.parseStream(in))
+      {
+         kwl.add(prefix, kwlTemp);
+      }
+   }
+   
+   return result;
 }
 
 ossim_uint32 ossimNitfVqCompressionHeader::getBlockSizeInBytes()const

@@ -25,7 +25,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimSensorModel.h 17767 2010-07-16 12:20:24Z dburken $
+//  $Id: ossimSensorModel.h 19180 2011-03-22 17:36:33Z oscarkramer $
 
 #ifndef ossimSensorModel_HEADER
 #define ossimSensorModel_HEADER
@@ -90,6 +90,18 @@ public:
    virtual ossimDpt getMetersPerPixel() const {return ossimDpt(fabs(theGSD.x),
                                                                fabs(theGSD.y));}
    
+   //! Returns the estimated Absolute horizontal position error (CE90) of the sensor model.
+   virtual const double& getNominalPosError() const { return theNominalPosError; }
+
+   //! Returns the estimated RELATIVE horizontal position error (CE90) of the sensor model.
+   virtual const double& getRelativePosError() const { return theRelPosError; }
+
+   //! Assigns the absolute image position error uncertainty (abs CE90)
+   virtual void setNominalPosError(const double& ce90) { theNominalPosError = ce90; }
+
+   //! Assigns the relative image position error uncertainty (rel CE90)
+   virtual void setRelativePosError(const double& ce90) { theRelPosError = ce90; }
+
    /*!
     * Implementation of base-class pure virtual projection methods. These
     * methods may be overriden by derived classes if those have more efficient
@@ -204,6 +216,10 @@ public:
     */
    virtual bool operator==(const ossimProjection& proj) const; //inline below
 
+    //! Access methods:
+    const ossimString&   getImageID()               const { return theImageID; }
+    const ossimDrect&    getImageClipRect()         const { return theImageClipRect; }
+
    /*!
     * optimizableProjection implementation
     */
@@ -315,6 +331,7 @@ protected:
    ossimDpt       theRefImgPt;        // should be image center
    ossimPolygon   theBoundGndPolygon;
    ossimDrect     theImageClipRect;
+   ossim_float64  theRelPosError; 	// meters, relative to other models in the set
    ossim_float64  theNominalPosError; // meters
 
    /** Partials for current point */

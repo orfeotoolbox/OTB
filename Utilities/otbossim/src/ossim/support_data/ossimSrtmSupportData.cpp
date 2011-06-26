@@ -9,7 +9,7 @@
 // Support data class for a Shuttle Radar Topography Mission (SRTM) file.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimSrtmSupportData.cpp 17815 2010-08-03 13:23:14Z dburken $
+// $Id: ossimSrtmSupportData.cpp 18693 2011-01-17 18:49:15Z dburken $
 
 #include <cmath>
 #include <fstream>
@@ -259,11 +259,7 @@ ossimRefPtr<ossimProjection> ossimSrtmSupportData::getProjection() const
    // since the DTED post spacing is considered to be square.
    //---
    const ossimDatum* datum = ossimDatumFactory::instance()->wgs84();
-   ossimRefPtr<ossimEquDistCylProjection> eq =
-      new ossimEquDistCylProjection(*(datum->ellipsoid()),
-                                    ossimGpt(0.0, 0.0, 0.0, datum),
-                                    0.0,   // false easting
-                                    0.0);  // false northing
+   ossimRefPtr<ossimEquDistCylProjection> eq = new ossimEquDistCylProjection(*(datum->ellipsoid()));
    
    //---
    // Set the tie point.
@@ -273,9 +269,6 @@ ossimRefPtr<ossimProjection> ossimSrtmSupportData::getProjection() const
    
    // Set the scale:
    eq->setDecimalDegreesPerPixel( ossimDpt(theLonSpacing, theLatSpacing) );
-
-   // Set the pcs code.
-   eq->setPcsCode(6326);   
 
    ossimRefPtr<ossimProjection> proj = eq.get();
 

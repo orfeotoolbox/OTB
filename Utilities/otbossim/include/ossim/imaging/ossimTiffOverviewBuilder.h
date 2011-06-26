@@ -11,7 +11,7 @@
 // Contains class declaration for TiffOverviewBuilder.
 //
 //*******************************************************************
-//  $Id: ossimTiffOverviewBuilder.h 18073 2010-09-13 15:55:48Z dburken $
+//  $Id: ossimTiffOverviewBuilder.h 19735 2011-06-07 15:17:20Z dburken $
 
 #ifndef ossimTiffOverviewBuilder_HEADER
 #define ossimTiffOverviewBuilder_HEADER
@@ -29,7 +29,6 @@
 class ossimConnectableObject;
 class ossimFilename;
 class ossimImageGeometry;
-class ossimImageHandler;
 
 class OSSIM_DLL ossimTiffOverviewBuilder
    :
@@ -259,17 +258,10 @@ private:
 
    void closeTiff(TIFF* tif);
 
-   bool openMaskFile();
-   bool writeMaskStrip();
-   bool closeMaskFile();
-   void packAlphaValues(ossim_uint8* alphaValues, ossimIrect rect, ossim_uint32 maskWidth);
-
    // Disallow these...
    ossimTiffOverviewBuilder(const ossimTiffOverviewBuilder& source);
    ossimTiffOverviewBuilder& operator=(const ossimTiffOverviewBuilder& rhs); 
 
-   ossimRefPtr<ossimImageHandler>                     m_imageHandler;
-   ossimFilename                                      m_outputFile;
    std::vector<ossim_uint8>                           m_nullDataBuffer;
    ossim_int32                                        m_bytesPerPixel;
    ossim_int32                                        m_bitsPerSample;
@@ -284,8 +276,6 @@ private:
    std::vector<double>                                m_nullPixelValues;
    bool                                               m_copyAllFlag;
    bool                                               m_outputTileSizeSetFlag;
-   std::map<ossim_uint32, std::vector<ossim_uint8> >  m_alphaMask;
-   std::ofstream                                      m_maskFileStream;
 
 TYPE_DATA   
 };

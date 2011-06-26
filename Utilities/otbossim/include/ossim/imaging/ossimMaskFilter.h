@@ -6,13 +6,13 @@
   // See LICENSE.txt file in the top level directory for more details.
   //
   // Author: Garrett Potts
-  // 
-  // Description: A brief description of the contents of the file.
+  // Modified by: Elan Sharghi (1/20/2009)
+  // Description: Class declaration for ossimMaskFilter.
   //
   //*************************************************************************
-    // $Id: ossimMaskFilter.h 16180 2009-12-24 15:33:56Z dburken $
+    // $Id: ossimMaskFilter.h 19736 2011-06-07 15:54:13Z dburken $
 #ifndef  ossimMaskFilter_HEADER
-#define  ossimMaskFilter_HEADER
+#define  ossimMaskFilter_HEADER 1
 #include <ossim/imaging/ossimImageCombiner.h>
 
     /**
@@ -62,15 +62,22 @@ public:
     *      works as a multiplier of the input data.  The mask is normalized to be between 0 and 1
     *      and multiplies the input by that normalized value.
     */
-   enum ossimFileSelectionMaskType
-   {
-      OSSIM_MASK_TYPE_SELECT   = 1, /**< standard select if mask is true then keep */
-      OSSIM_MASK_TYPE_INVERT   = 2, /**< standard invert if mask is true the don't keep */
-      OSSIM_MASK_TYPE_WEIGHTED = 3  /**< weighted operation.  Normalize the mask and multiply the input */
-   };
+  enum ossimFileSelectionMaskType
+  {
+     /**< standard select if mask is true then keep */
+     OSSIM_MASK_TYPE_SELECT         = 1,
+     /**< standard invert if mask is true the don't keep */
+     OSSIM_MASK_TYPE_INVERT         = 2,
+     /**< weighted operation.  Normalize the mask and multiply the input */
+     OSSIM_MASK_TYPE_WEIGHTED       = 3,
+     /**< binary image> */
+     OSSIM_MASK_TYPE_BINARY         = 4,
+     /**< inverse binary image> */
+     OSSIM_MASK_TYPE_BINARY_INVERSE = 5
+  };
 
    /**
-    * Constructor.
+    * Default Constructor.
     */
    ossimMaskFilter(ossimObject* owner=NULL);
 
@@ -88,7 +95,15 @@ public:
                    ossimImageSource* imageSource,
                    ossimImageSource* maskSource);
 
-  
+   /**
+    * This set method is necessary when this object is being added to an ossimImageChain because
+    * ossimImageChain::addLast() performs a disconnect of all the input sources, thus losing the
+    * assignments made via constructor accepting source pointers. If the intent is to insert this
+    * object in place of the image handler in a chain, First remove the handler from the chain, then
+    * add a default-constructed mask filter object, then call this method to assign the inputs.
+    */
+   void setInputSources(ossimImageSource* imageSource, ossimImageSource* maskSource);
+
    /**
     * Sets the mask type.
     * @param type The mask algorithm type to be used.
@@ -180,6 +195,9 @@ public:
 
    /** @brief Adds "mask_type" to list. */
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
+
+   /** Provides pointer to the image source's image geometry. */
+   virtual ossimRefPtr<ossimImageGeometry> getImageGeometry();
    
 protected:
    /**
@@ -215,6 +233,13 @@ protected:
       ossimRefPtr<ossimImageData> imageSourceData,
       ossimRefPtr<ossimImageData> maskSourceData);
 
+   /**
+    * Will execute the binary algorithm. Copies the values in the mask to each 
+    * tile. Values will be either NULL or MAX pixel value, typically 0 or 255.
+    */
+   ossimRefPtr<ossimImageData> executeMaskFilterBinary(
+      ossimRefPtr<ossimImageData> imageSourceData,
+      ossimRefPtr<ossimImageData> maskSourceData);
    
    template <class inputT, class maskT>
       ossimRefPtr<ossimImageData> executeMaskFilterSelection(
@@ -237,6 +262,13 @@ protected:
          ossimRefPtr<ossimImageData> imageSourceData,
          ossimRefPtr<ossimImageData> maskSourceData);
 
+   template <class inputT, class maskT>
+   ossimRefPtr<ossimImageData> executeMaskFilterBinarySelection(
+      inputT dummyInput,
+      maskT  dummyMask,
+      ossimRefPtr<ossimImageData> imageSourceData,
+      ossimRefPtr<ossimImageData> maskSourceData);
+
    /**
     * Member variable that holds the algorithm type to run on the calls to getTile.
     */
@@ -251,4 +283,4 @@ protected:
    TYPE_DATA
 };
 
-#endif
+#endif /* #ifndef ossimMaskFilter_HEADER */

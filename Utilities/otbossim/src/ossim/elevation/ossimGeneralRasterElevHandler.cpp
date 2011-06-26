@@ -231,8 +231,7 @@ bool ossimGeneralRasterElevHandler::open(const ossimFilename& file, bool memoryM
    close();
    if(!setFilename(file)) return false;
    m_inputStream.clear();
-   m_inputStream.open(theGeneralRasterInfo.theFilename,
-                      ios::in | ios::binary);
+   m_inputStream.open(theGeneralRasterInfo.theFilename.c_str(), ios::in | ios::binary);
 
    if(memoryMapFlag)
    {
@@ -290,16 +289,14 @@ bool ossimGeneralRasterElevHandler::setFilename(const ossimFilename& file)
       return false;
    }
    
-   kwl.add(ossimKeywordNames::FILENAME_KW,
-           file.c_str(),
-           true);
+   kwl.add(ossimKeywordNames::FILENAME_KW, file.c_str(), true);
    ossimGeneralRasterInfo generalInfo;
    
    if(!generalInfo.loadState(kwl))
    {
       return false;
    }
-    if(generalInfo.numberOfBands() != 1)
+   if(generalInfo.numberOfBands() != 1)
    {
       ossimNotify(ossimNotifyLevel_WARN) << "ossimGeneralRasterElevHandler::initializeInfo WARNING:The number of bands are not specified in the header file" << std::endl;
       return false;
@@ -319,9 +316,19 @@ bool ossimGeneralRasterElevHandler::setFilename(const ossimFilename& file)
       theGeneralRasterInfo.theScalarType      = generalInfo.getScalarType();
       theGeneralRasterInfo.theBytesPerRawLine = generalInfo.bytesPerRawLine();
 
-	  //add  by simbla
+      //add  by simbla
+
+      // ---
+      // Try to determine if there is a prefix like "image0." or not.
+      // ---
+      std::string prefix = "";
+      if ( kwl.find("image0.type") )
+      {
+         prefix = "image0.";
+      }
+      
       theGeneralRasterInfo.theGeometry = new ossimImageGeometry;
-      if(!theGeneralRasterInfo.theGeometry->loadState(kwl))
+      if(!theGeneralRasterInfo.theGeometry->loadState( kwl, prefix.c_str() ))
       {
          theGeneralRasterInfo.theGeometry = 0;
       }

@@ -9,13 +9,14 @@
 //
 // Contains class definition for ossimNitfProjectionFactory.
 //
-// $Id: ossimNitfProjectionFactory.cpp 17932 2010-08-19 20:34:35Z dburken $
+// $Id: ossimNitfProjectionFactory.cpp 18905 2011-02-16 13:30:11Z dburken $
 //----------------------------------------------------------------------------
 
 #include <fstream>
 #include <cmath>
 
 #include <ossim/projection/ossimNitfProjectionFactory.h>
+#include <ossim/projection/ossimMgrs.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
 #include <ossim/projection/ossimUtmProjection.h>
 #include <ossim/projection/ossimEquDistCylProjection.h>
@@ -40,7 +41,7 @@
 // Define Trace flags for use within this file:
 //---
 #include <ossim/base/ossimTrace.h>
-static ossimTrace traceDebug = ossimTrace("ossimNitfProjectionFactory:debug");
+static ossimTrace traceDebug(ossimString("ossimNitfProjectionFactory:debug"));
 
 ossimNitfProjectionFactory* ossimNitfProjectionFactory::theInstance = 0;
 
@@ -77,8 +78,7 @@ ossimNitfProjectionFactory::createProjection(const ossimFilename& filename,
    }
 
    // See if there is an external geomtry.
-   ossimProjection* result = createProjectionFromGeometryFile(filename,
-                                                              entryIdx);
+   ossimProjection* result = createProjectionFromGeometryFile(filename, entryIdx);
    if (result)
    {
       return result;
@@ -174,7 +174,6 @@ ossimProjection* ossimNitfProjectionFactory::createProjection(ossimImageHandler*
    {
       result =  createProjection(handler->getFilename(), handler->getCurrentEntry());
    }
-   
    return result;
 }
 
@@ -196,8 +195,8 @@ bool ossimNitfProjectionFactory::isNitf(const ossimFilename& filename)const
    return false;
 }
 
-ossimProjection* ossimNitfProjectionFactory::createProjectionFromHeaders(ossimNitfFileHeader* fileHeader,
-                                                                         ossimNitfImageHeader* imageHeader)const
+ossimProjection* ossimNitfProjectionFactory::createProjectionFromHeaders(
+   ossimNitfFileHeader* fileHeader, ossimNitfImageHeader* imageHeader)const
 {
    ossimProjection* result = 0;
    ossimString version = fileHeader->getVersion();
@@ -206,7 +205,7 @@ ossimProjection* ossimNitfProjectionFactory::createProjectionFromHeaders(ossimNi
    {
       result = makeGeographic(imageHeader, coordinateSystem);
    }
-   else if(coordinateSystem == "N" || coordinateSystem == "S")
+   else if( (coordinateSystem == "N") || (coordinateSystem == "S") || (coordinateSystem == "U") )
    {
       result = makeUtm(imageHeader, coordinateSystem);
    }
@@ -303,121 +302,210 @@ ossimProjection* ossimNitfProjectionFactory::makeUtm(
    const ossimNitfImageHeader* hdr,
    const ossimString& coordinateSystem) const
 {
-   ossimUtmProjection* proj = 0;
-   if (!hdr)
+   ossimProjection* proj = 0;
+   if (hdr)
    {
-      return proj;
-   }
-
-   ossimString geographicLocation = hdr->getGeographicLocation();
-
-   std::vector<ossimDpt> utmPoints;
-   ossim_uint32 zone;
-   ossimDpt scale;
-   parseUtmString(geographicLocation,
-                  zone,
-                  utmPoints);
-
-   if (traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "ossimNitfProjectionFactory::makeUtm DEBUG"
-         << "\ngeo string: " << geographicLocation
-         << std::endl;
-      for (ossim_uint32 i=0; i<utmPoints.size(); ++i)
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << "utmPoints[" << utmPoints[i] << std::endl;
-      }
-   }
-   
-   proj = new ossimUtmProjection;
-   if(coordinateSystem == "S")
-   {
-      proj->setHemisphere('S');
-   }
-   else
-   {
-      proj->setHemisphere('N');
-   }
-   proj->setZone(zone);
-
-   if(isSkewed(utmPoints))
-   {
-      std::vector<ossimGpt> gpts;
-
-      // Try blocka points first as they are more accurate.
-      if ( getBlockaPoints(hdr, gpts) == false )
-      {
-         ossimGpt ul = proj->inverse(utmPoints[0]);
-         ossimGpt ur = proj->inverse(utmPoints[1]);
-         ossimGpt lr = proj->inverse(utmPoints[2]);
-         ossimGpt ll = proj->inverse(utmPoints[3]);
-         gpts.push_back(ul);
-         gpts.push_back(ur);
-         gpts.push_back(lr);
-         gpts.push_back(ll);
-      }
+      ossimString geographicLocation = hdr->getGeographicLocation();
       
-      delete proj;
-      proj = 0;
-      return makeBilinear(hdr, gpts);
-   }
-   else
-   {
-      computeScaleInMeters(hdr, utmPoints, scale);
-   }
+      std::vector<ossimDpt> utmPoints;
+      ossim_uint32 zone;
+      ossimDpt scale;
+      char hemisphere = 'N';
 
-   ossimProjection* result = 0;
-   if(!scale.hasNans())
-   {
-      //---
-      // Get the tie point.
-      // 
-      // Look for the the BLOCKA tag which may or may not be present.
-      // This has six digit precision in decimal degrees which equates to
-      // about 0.11 meters (at equator) as compared to 1.0 accuaracy of the
-      // IGEOLO field.
-      //---
-      ossimDpt tie;
-      std::vector<ossimGpt> gpts;
-      if ( getBlockaPoints(hdr, gpts) )
+      bool status = true;
+      if ( coordinateSystem == "U")
       {
-         if (traceDebug())
-         {
-            ossimNotify(ossimNotifyLevel_DEBUG)
-               << "ossimNitfProjectionFactory::makeUtm DEBUG:"
-               << "\nTie point from blocka: " << gpts[0]
-               << endl;
-         }
-
-         tie = proj->forward(gpts[0]);
-         tie.x += scale.x/2.0;
-         tie.y -= scale.y/2.0;
+         // Sets zone, hemisphere and utmPoints. Returns true on success.
+         status = parseMgrsString(geographicLocation, zone, hemisphere, utmPoints);
       }
       else
       {
-         tie.x = utmPoints[0].x + scale.x/2.0;
-         tie.y = utmPoints[0].y - scale.y/2.0;
+         // Sets zone and utmPoints.  Void return...
+         parseUtmString(geographicLocation, zone, utmPoints);
+         if(coordinateSystem == "S")
+         {
+            hemisphere = 'S';
+         }
       }
       
-      if (traceDebug())
+      if ( status )
       {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << "ossimNitfProjectionFactory::makeUtm DEBUG:"
-            << "\nTie point: " << tie
-            << "\nScale:     " << scale
-            << endl;
-      }
+         if ( traceDebug() )
+         {
+            std::string s;
+            s.push_back(hemisphere);
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << "ossimNitfProjectionFactory::makeUtm DEBUG"
+               << "\ngeo string: " << geographicLocation
+               << "\nutm zone:   " << zone
+               << "\nhemisphere: " << hemisphere
+               << std::endl;
+            for (ossim_uint32 i=0; i<utmPoints.size(); ++i)
+            {
+               ossimNotify(ossimNotifyLevel_DEBUG)
+                  << "utmPoints[" << utmPoints[i] << std::endl;
+            }
+         }
+         
+         ossimRefPtr<ossimUtmProjection> uproj = new ossimUtmProjection;
+         uproj->setHemisphere(hemisphere);
+         uproj->setZone(zone);
+
+         if(isSkewed(utmPoints))
+         {
+            std::vector<ossimGpt> gpts;
+            
+            // Try blocka points first as they are more accurate.
+            if ( getBlockaPoints(hdr, gpts) == false )
+            {
+               ossimGpt ul = uproj->inverse(utmPoints[0]);
+               ossimGpt ur = uproj->inverse(utmPoints[1]);
+               ossimGpt lr = uproj->inverse(utmPoints[2]);
+               ossimGpt ll = uproj->inverse(utmPoints[3]);
+               gpts.push_back(ul);
+               gpts.push_back(ur);
+               gpts.push_back(lr);
+               gpts.push_back(ll);
+            }
+
+            // Make a bilinear either from our skewed utm points or the points from the blocka tag.
+            proj = makeBilinear(hdr, gpts);
+            
+            uproj = 0; // Done with utm projeciton
+
+         }
+         else
+         {
+            computeScaleInMeters(hdr, utmPoints, scale);
+
+            //---
+            // Assign our projection to the return "proj".
+            // Use ossimRefPtr::release the so we don't delete proj when uproj
+            // goes out of scope.
+            //---
+            proj = uproj.release(); 
+         }
+
+         if( scale.hasNans() == false )
+         {
+            //---
+            // Get the tie point.
+            // 
+            // Look for the the BLOCKA tag which may or may not be present.
+            // This has six digit precision in decimal degrees which equates to
+            // about 0.11 meters (at equator) as compared to 1.0 accuaracy of the
+            // IGEOLO field.
+            //---
+            ossimDpt tie;
+            std::vector<ossimGpt> gpts;
+            if ( getBlockaPoints(hdr, gpts) )
+            {
+               if (traceDebug())
+               {
+                  ossimNotify(ossimNotifyLevel_DEBUG)
+                     << "ossimNitfProjectionFactory::makeUtm DEBUG:"
+                     << "\nTie point from blocka: " << gpts[0]
+                     << endl;
+               }
+               
+               tie = proj->forward(gpts[0]);
+               tie.x += scale.x/2.0;
+               tie.y -= scale.y/2.0;
+            }
+            else
+            {
+               tie.x = utmPoints[0].x + scale.x/2.0;
+               tie.y = utmPoints[0].y - scale.y/2.0;
+            }
+            
+            if (traceDebug())
+            {
+               ossimNotify(ossimNotifyLevel_DEBUG)
+                  << "ossimNitfProjectionFactory::makeUtm DEBUG:"
+                  << "\nTie point: " << tie
+                  << "\nScale:     " << scale
+                  << endl;
+            }
+
+            // Set the tie and scale.
+            ossimMapProjection* mproj = dynamic_cast<ossimMapProjection*>(proj);
+            if ( mproj )
+            {
+               mproj->setUlEastingNorthing(tie);
+               mproj->setMetersPerPixel(scale);
+            }
+            else // cannot cast
+            {
+               if ( proj )
+               {
+                  delete proj;
+                  proj = 0;
+               }
+            }
+         }
+         else // Scale has nans
+         {
+            if ( proj )
+            {
+               delete proj;
+               proj = 0;
+            }
+         }
+         
+      } // matches: if (status)
       
-      proj->setUlEastingNorthing(tie);
-      proj->setMetersPerPixel(scale);
-      result = proj;
-   }
-   else
+   } // matches: if (hdr)
+   
+   return proj;
+}
+
+
+bool ossimNitfProjectionFactory::parseMgrsString(const ossimString& mgrsLocationString,
+                                                 ossim_uint32& zone,
+                                                 char& hemisphere,
+                                                 std::vector<ossimDpt>& utmPoints)const
+{
+   bool result = false; // Start false.
+   
+   //---
+   // From spec:
+   // UTM expressed in MGRS use the format zzBJKeeeeennnnn (15 characters).
+   // Assumption Zone and hemisphere same for all corners.
+   //---
+   if ( mgrsLocationString.size() >= 60 )
    {
-      delete proj;
-      proj = 0;
+      // Split the location string into four separate ones.
+      std::vector<std::string> mgrsStr(4); // Corner strings.
+      mgrsStr[0] = mgrsLocationString.substr(0, 15);
+      mgrsStr[1] = mgrsLocationString.substr(15, 15);
+      mgrsStr[2] = mgrsLocationString.substr(30, 15);
+      mgrsStr[3] = mgrsLocationString.substr(45, 15);
+      
+      utmPoints.resize(4);
+      long z = 0;
+      ossim_float64 e=0.0;
+      ossim_float64 n=0.0;
+      
+      result = true; // Set to true.
+
+      //---
+      // Convert each string to Easting Northing.  This also sets zone hemisphere.
+      // Method takes long for zone.
+      //---
+      for (ossim_uint32 i = 0; i < 4; ++i)
+      {
+         if ( Convert_OSSIM_MGRS_To_UTM(mgrsStr[i].c_str(), &z, &hemisphere, &e, &n) == 0 )
+         {
+            utmPoints[i].x = e;
+            utmPoints[i].y = n;
+         }
+         else
+         {
+            result = false; // Geotrans code errored on string.
+            break;
+         }
+      }
+      if (result) zone = static_cast<ossim_uint32>(z); // Set the zone.
    }
    return result;
 }

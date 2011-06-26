@@ -16,7 +16,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimPolygon.h 14789 2009-06-29 16:48:14Z dburken $
+//  $Id: ossimPolygon.h 19180 2011-03-22 17:36:33Z oscarkramer $
 
 #ifndef ossimPolygon_HEADER
 #define ossimPolygon_HEADER
@@ -67,14 +67,20 @@ public:
    
    ossim_uint32 getNumberOfVertices()const;
 
+   //! Returns polygon area. Negative indicates CW ordering of vertices (in right-handed coordinates)
    double area()const;
 
    void getIntegerBounds(ossim_int32& minX,
                          ossim_int32& minY,
                          ossim_int32& maxX,
                          ossim_int32& maxY)const;
+   void getFloatBounds(ossim_float64& minX,
+                       ossim_float64& minY,
+                       ossim_float64& maxX,
+                       ossim_float64& maxY)const;
 
    void getBoundingRect(ossimIrect& rect)const;
+   void getBoundingRect(ossimDrect& rect)const;
 
    /**
     * Initializes minRect with the minimum area rect (not-necessarily
@@ -124,6 +130,18 @@ public:
    bool pointWithin(const ossimDpt& point) const;
 
    bool isPointWithin(const ossimDpt& point) const;
+
+   /**
+   * METHOD: isRectWithin()
+   * Returns true if all the corner points of the given rect fit within.
+   */
+   bool isRectWithin(const ossimIrect &rect) const;
+
+   /**
+   * METHOD: isPolyWithin()
+   * Returns true if all the vertices of the given polygon fit within.
+   */
+   bool isPolyWithin(const ossimPolygon &poly) const;
 
    /**
     * METHOD: vertex(index)
@@ -180,21 +198,29 @@ public:
 
 protected:
    /**
-    * EMBEDDED CLASS: PolygonEdge
-    * A polygon consists of an ordered list of edges. The ordering corresponds
-    * to the ordering of the vertices. Each edge has a precomputed normal.
-    * The normals point towards the exterior.
+   * METHOD: getCentroid()
+   * Assigns the ossimDpt centroid the polygon.
+   * Warning: centroid is not guaranteed to be inside the polygon!
     */
-   vector<ossimDpt> theVertexList;
-
-   
-   mutable ossim_int32 theCurrentVertex;
+   void getCentroid(ossimDpt &centroid) const;
 
    /**
-    * This enumeration is found in ossimConstants.h
+   * METHOD: shrink()
+   * Shrinks the current polygon by inset, return true if success.
     */
-   mutable ossimVertexOrdering theOrderingType;
+   bool shrink(ossimPolygon &dest, double inset) const;
+   
+   /**
+   * METHOD: remove()
+   * Removes the vertex from the polygon.
 
+    */
+   void removeVertex(int vertex);
+   /**
+   * METHOD: removeSmallestContributingVertex()
+   * Removes the vertex that contributes the smallest area to the polygon.
+    */
+   void removeSmallestContributingVertex();
 
    void intersectEdge(ossimDpt& result,
                       const ossimLine& segment,
@@ -204,6 +230,17 @@ protected:
    bool isInsideEdge(const ossimDpt& pt,
                      const ossimDrect& rect,
                      int edge)const;
+
+   /**
+   * Assigns destPt the point that fits a circle of given radius inside the polygon vertex.
+   * Warning: destPt is not guaranteed to be inside the polygon!
+   * (you may not be able to fit a circle of the given radius inside the polygon)
+   */
+   void fitCircleInsideVertex(ossimDpt &destPt, unsigned int vertex, double radius) const;
+
+   mutable ossimVertexOrdering theOrderingType;
+   vector<ossimDpt> theVertexList;
+   mutable ossim_int32 theCurrentVertex;
 };
 
 #endif /* End of "#ifndef ossimPolygon_HEADER" */

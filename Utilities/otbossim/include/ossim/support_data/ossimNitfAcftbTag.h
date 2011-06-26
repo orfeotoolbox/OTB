@@ -66,7 +66,7 @@ public:
     * @brief Method to return tag name.
     * @return "ACFTB" as an ossimString.
     */
-   virtual ossimString getRegisterTagName()const;
+   virtual std::string getRegisterTagName()const;
 
    /** @brief Method to parse data from stream. */
    virtual void parseStream(std::istream& in);

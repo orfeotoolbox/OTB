@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2000 Intelligence Data Systems. 
 //
 // LICENSE: LGPL
 //
@@ -11,7 +10,7 @@
 // Rational Polynomial Coefficient extension.
 //
 //********************************************************************
-// $Id: ossimNitfRpcATag.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimNitfRpcATag.cpp 19682 2011-05-31 14:21:20Z dburken $
 
 #include <ossim/support_data/ossimNitfRpcATag.h>
 
@@ -22,7 +21,7 @@ ossimNitfRpcATag::ossimNitfRpcATag()
 {
 }
 
-ossimString ossimNitfRpcATag::getRegisterTagName() const
+std::string ossimNitfRpcATag::getRegisterTagName() const
 {
-   return ossimString("RPC00A");
+   return std::string("RPC00A");
 }

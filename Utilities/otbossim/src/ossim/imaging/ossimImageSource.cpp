@@ -7,7 +7,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageSource.cpp 17932 2010-08-19 20:34:35Z dburken $
+// $Id: ossimImageSource.cpp 19732 2011-06-06 22:24:54Z dburken $
 
 #include <ossim/imaging/ossimImageSource.h>
 #include <ossim/imaging/ossimImageData.h>
@@ -344,6 +344,17 @@ void ossimImageSource::setProperty(ossimRefPtr<ossimProperty> property)
 void ossimImageSource::getPropertyNames(std::vector<ossimString>& propertyNames)const
 {
    ossimSource::getPropertyNames(propertyNames);
+}
+
+bool ossimImageSource::isIndexedData() const
+{
+   bool result = false;
+   ossimImageSource* inter = PTR_CAST(ossimImageSource, getInput(0));
+   if (inter)
+   {
+      result = inter->isIndexedData();
+   }
+   return result;
 }
 
 // Protected to hide from use...

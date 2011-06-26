@@ -98,7 +98,7 @@ typedef struct {
 int draw_edge_coordinates( edge_rec_type *edge_rec )
 {
    int xscr,yscr, xprev,yprev, x1,y1,x2,y2, mbrx2, wrap;
-   register long int i;
+   register ossim_int32 i;
    extent_type mbr;
    coordinate_type coord;
 
@@ -279,7 +279,7 @@ int draw_edge_row( row_type row, vpf_table_type table )
  *
  *   Parameters:
  *A
- *     rownum   <input>==(long int)row number of the edge primitive table.
+ *     rownum   <input>==(ossim_int32)row number of the edge primitive table.
  *     table    <input>==(vpf_table_type) edge table.
  *     return  <output>==(int) 0 if the user escapes, 1 upon successful
  *                          completion.
@@ -291,7 +291,7 @@ int draw_edge_row( row_type row, vpf_table_type table )
  *    Barry Michaels   August 1991                           DOS Turbo C
  *E
  *************************************************************************/
-int draw_edge( long int rownum, vpf_table_type table )
+int draw_edge( ossim_int32 rownum, vpf_table_type table )
 {
    int stat;
    row_type row;
@@ -335,7 +335,7 @@ int draw_edge( long int rownum, vpf_table_type table )
 int draw_point_row( row_type row, vpf_table_type table )
 {
    int xscr,yscr, coord_pos;
-   long int n;
+   ossim_int32 n;
    coordinate_type pnt;
 
    coord_pos = table_pos("COORDINATE",table);
@@ -370,7 +370,7 @@ int draw_point_row( row_type row, vpf_table_type table )
  *
  *   Parameters:
  *A
- *     rownum      <input>==(long int) row number of the entity node
+ *     rownum      <input>==(ossim_int32) row number of the entity node
  *                          primitive table.
  *     table       <input>==(vpf_table_type) entity noe primitive table.
  *     return     <output>==(int) 0 if the user escapes, 1 upon successful
@@ -383,7 +383,7 @@ int draw_point_row( row_type row, vpf_table_type table )
  *    Barry Michaels   August 1991                        DOS Turbo C
  *E
  *************************************************************************/
-int draw_point( long int rownum, vpf_table_type table )
+int draw_point( ossim_int32 rownum, vpf_table_type table )
 {
    int stat;
    row_type row;
@@ -426,7 +426,7 @@ int draw_point( long int rownum, vpf_table_type table )
 int draw_text_row( row_type row, vpf_table_type table )
 {
    int xscr,yscr, shape_pos, text_pos;
-   long int n, nshape;
+   ossim_int32 n, nshape;
    coordinate_type *shape_line;
    char *text;
    struct viewporttype vp;
@@ -474,7 +474,7 @@ int draw_text_row( row_type row, vpf_table_type table )
  *
  *   Parameters:
  *A
- *     rownum      <input>==(long int) row number of the text table.
+ *     rownum      <input>==(ossim_int32) row number of the text table.
  *     table       <input>==(vpf_table_type) text primitive table.
  *     return     <output>==(int) 0 if the user escapes, 1 upon successful
  *                          completion.
@@ -486,7 +486,7 @@ int draw_text_row( row_type row, vpf_table_type table )
  *    Barry Michaels   August 1991                        DOS Turbo C
  *E
  *************************************************************************/
-int draw_text( long int rownum, vpf_table_type table )
+int draw_text( ossim_int32 rownum, vpf_table_type table )
 {
    int stat;
    row_type row;
@@ -639,7 +639,7 @@ void gen_polygon_edge( edge_rec_type edge_rec,
 		       Shademap *poly,
 		       int wrap )
 {
-   register long int i,start,end,inc;
+   register ossim_int32 i,start,end,inc;
    int xscr,yscr;
    IPoint pnt, make_ipoint();
    coordinate_type coord;
@@ -732,8 +732,8 @@ void draw_polygon_edge( edge_rec_type edge_rec )
  *
  *   Parameters:
  *A
- *     face_id    <input>==(long int) row id of the specified face.
- *     start_edge <input>==(long int) row id of the edge that starts the
+ *     face_id    <input>==(ossim_int32) row id of the specified face.
+ *     start_edge <input>==(ossim_int32) row id of the edge that starts the
  *                         loop.
  *     edgetable  <input>==(vpf_table_type) VPF edge primitive table.
  *E
@@ -744,12 +744,12 @@ void draw_polygon_edge( edge_rec_type edge_rec )
  *    Barry Michaels   May 1991                           DOS Turbo C
  *E
  *************************************************************************/
-void trace_polygon_loop(long int face_id,
-			long int start_edge,
+void trace_polygon_loop(ossim_int32 face_id,
+			ossim_int32 start_edge,
 			vpf_table_type edgetable )
 {
   edge_rec_type edge_rec;
-  long int next, prevnode;
+  ossim_int32 next, prevnode;
   boolean done=FALSE;
   IPoint make_ipoint();
 
@@ -893,10 +893,10 @@ void trace_polygon_loop(long int face_id,
  *   Parameters:
  *A
  *     edge_rec   <input>==(edge_rec_type *) VPF edge record.
- *     prev_node  <inout>==(long int *) the previous node visited.  This
+ *     prev_node  <inout>==(ossim_int32 *) the previous node visited.  This
  *                         value is updated by this function.
- *     face_id    <input>==(long int) row id of the specified face.
- *     next_polygon_edge <output>==(long int) the next edge id.  A value of -1
+ *     face_id    <input>==(ossim_int32) row id of the specified face.
+ *     next_polygon_edge <output>==(ossim_int32) the next edge id.  A value of -1
  *                         indicates a topology error.
  *E
  *::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -906,10 +906,10 @@ void trace_polygon_loop(long int face_id,
  *    Barry Michaels   May 1991                           DOS Turbo C
  *E
  *************************************************************************/
-long int next_polygon_edge( edge_rec_type *edge_rec, long int *prevnode,
-			    long int face_id )
+ossim_int32 next_polygon_edge( edge_rec_type *edge_rec, ossim_int32 *prevnode,
+			    ossim_int32 face_id )
 {
-   long int next;
+   ossim_int32 next;
 
    if ( (edge_rec->right == face_id) && (edge_rec->left == face_id) ) {
       /* Dangle - go the opposite direction to continue along the boundary */
@@ -955,8 +955,8 @@ long int next_polygon_edge( edge_rec_type *edge_rec, long int *prevnode,
  *
  *   Parameters:
  *A
- *     face_id    <input>==(long int) row id of the specified face.
- *     start_edge <input>==(long int) row id of the edge that starts the
+ *     face_id    <input>==(ossim_int32) row id of the specified face.
+ *     start_edge <input>==(ossim_int32) row id of the edge that starts the
  *                         loop.
  *     edgetable  <input>==(vpf_table_type) VPF edge primitive table.
  *     poly       <inout>==(Shademap *) polygon shade structure.
@@ -970,14 +970,14 @@ long int next_polygon_edge( edge_rec_type *edge_rec, long int *prevnode,
  *    Barry Michaels   May 1991                           DOS Turbo C
  *E
  *************************************************************************/
-void draw_polygon_loop(long int face_id,
-		       long int start_edge,
+void draw_polygon_loop(ossim_int32 face_id,
+		       ossim_int32 start_edge,
 		       vpf_table_type edgetable,
 		       Shademap *poly,
 		       int wrap )
 {
   edge_rec_type edge_rec;
-  long int next, prevnode;
+  ossim_int32 next, prevnode;
   boolean done=FALSE;
   IPoint make_ipoint();
   int xscr,yscr, color;
@@ -1258,7 +1258,7 @@ void draw_face_row( row_type row,
 		color_type c3,
 		color_type c4 )
 {
-   long int count;
+   ossim_int32 count;
    int  spx1,spy1,spx2,spy2,  rowid,ring;
    extent_type shade_box;
    Pattern  pattern;
@@ -1349,7 +1349,7 @@ void draw_face_row( row_type row,
  *
  *   Parameters:
  *A
- *     row_num   <input>==(long int) row id of the specified face.
+ *     row_num   <input>==(ossim_int32) row id of the specified face.
  *     facetable <input>==(vpf_table_type) VPF face primitive table.
  *     ringtable <input>==(vpf_table_type) VPF ring primitive table.
  *     edgetable <input>==(vpf_table_type) VPF edge primitive table.
@@ -1367,7 +1367,7 @@ void draw_face_row( row_type row,
  *    Barry Michaels   May 1991                           DOS Turbo C
  *E
  *************************************************************************/
-void draw_face( long int rownum,
+void draw_face( ossim_int32 rownum,
 		vpf_table_type facetable,
 		vpf_table_type ringtable,
 		vpf_table_type edgetable,
@@ -1406,8 +1406,8 @@ void draw_face( long int rownum,
  *
  *   Parameters:
  *A
- *     face_id    <input>==(long int) row id of the specified face.
- *     start_edge <input>==(long int) row id of the edge that starts the
+ *     face_id    <input>==(ossim_int32) row id of the specified face.
+ *     start_edge <input>==(ossim_int32) row id of the edge that starts the
  *                         loop.
  *     edgetable <input>==(vpf_table_type) VPF edge primitive table.
  *E
@@ -1418,12 +1418,12 @@ void draw_face( long int rownum,
  *    Barry Michaels   May 1991                           DOS Turbo C
  *E
  *************************************************************************/
-void outline_polygon_loop(long int face_id,
-			  long int start_edge,
+void outline_polygon_loop(ossim_int32 face_id,
+			  ossim_int32 start_edge,
 			  vpf_table_type edgetable)
 {
   edge_rec_type edge_rec;
-  long int next, prevnode;
+  ossim_int32 next, prevnode;
   boolean done=FALSE;
   IPoint make_ipoint();
 
@@ -1499,7 +1499,7 @@ void outline_polygon_loop(long int face_id,
  *
  *   Parameters:
  *A
- *     face_id   <input>==(long int) row id of the specified face.
+ *     face_id   <input>==(ossim_int32) row id of the specified face.
  *     facetable <input>==(vpf_table_type) VPF facemitive table.
  *     ringtable <input>==(vpf_table_type) VPF ringmitive table.
  *     edgetable <input>==(vpf_table_type) VPF edge primitive table.
@@ -1514,7 +1514,7 @@ void outline_polygon_loop(long int face_id,
  *    Barry Michaels   May 1991                           DOS Turbo C
  *E
  *************************************************************************/
-void outline_face( long int face_id,
+void outline_face( ossim_int32 face_id,
 		   vpf_table_type facetable,
 		   vpf_table_type ringtable,
 		   vpf_table_type edgetable,
@@ -1566,7 +1566,7 @@ void outline_face( long int face_id,
  *
  *   Parameters:
  *A
- *     face_id  <input>==(long int) id of the face to be outlined.
+ *     face_id  <input>==(ossim_int32) id of the face to be outlined.
  *     fname    <input>==(char *) file name of the face primitive table.
  *     color    <input>==(int) color to outline the face.
  *     inner    <input>==(int) if TRUE, draw inner rings;
@@ -1579,7 +1579,7 @@ void outline_face( long int face_id,
  *    Barry Michaels   May 1991                           DOS Turbo C
  *E
  *************************************************************************/
-void outline_face_table( long int face_id, char *fname,
+void outline_face_table( ossim_int32 face_id, char *fname,
 			 int color, int inner )
 {
    vpf_table_type facetable, ringtable, edgetable;

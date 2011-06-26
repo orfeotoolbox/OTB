@@ -8,7 +8,7 @@
 // Author: Frank Warmerdam (warmerda@home.com)
 //
 //*******************************************************************
-//  $Id: ossimImageWriterFactoryRegistry.cpp 18004 2010-08-30 18:11:59Z gpotts $
+//  $Id: ossimImageWriterFactoryRegistry.cpp 18966 2011-02-25 19:39:58Z gpotts $
 #include <algorithm>
 #include <iterator>
 #include <ostream>
@@ -37,43 +37,6 @@ ossimImageWriterFactoryRegistry* ossimImageWriterFactoryRegistry::instance()
    return theInstance;
 }
 
-//*******************************************************************
-// Public Method:
-//*******************************************************************
-bool ossimImageWriterFactoryRegistry::addFactory(ossimImageWriterFactoryBase* factory)
-{
-   return registerFactory(factory);
-}
-
-bool ossimImageWriterFactoryRegistry::registerFactory(ossimImageWriterFactoryBase* factory)
-{
-   bool result = false;
-   if(factory&&!findFactory(factory))
-   {
-      theFactoryList.push_back(factory);
-      result = true;
-   }
-
-   return result;
-}
-
-void ossimImageWriterFactoryRegistry::unregisterFactory(ossimImageWriterFactoryBase* factory)
-{
-   std::vector<ossimImageWriterFactoryBase*>::iterator iter =  std::find(theFactoryList.begin(),
-                                                                          theFactoryList.end(),
-                                                                          factory);
-   if(iter != theFactoryList.end())
-   {
-      theFactoryList.erase(iter);
-   }
-}
-
-bool ossimImageWriterFactoryRegistry::findFactory(ossimImageWriterFactoryBase* factory)const
-{
-   return (std::find(theFactoryList.begin(),
-                     theFactoryList.end(),
-                     factory)!=theFactoryList.end());
-}
 
 ossimImageFileWriter* ossimImageWriterFactoryRegistry::createWriter(const ossimFilename& filename)const
 {
@@ -128,8 +91,8 @@ ossimImageFileWriter *ossimImageWriterFactoryRegistry::createWriter(const ossimK
    vector<ossimImageWriterFactoryBase*>::const_iterator factories;
    ossimImageFileWriter *result = NULL;
 
-   factories = theFactoryList.begin();
-   while(factories != theFactoryList.end())
+   factories = m_factoryList.begin();
+   while(factories != m_factoryList.end())
    {
       result = (*factories)->createWriter(kwl, prefix);
       if(result)
@@ -147,8 +110,8 @@ ossimImageFileWriter *ossimImageWriterFactoryRegistry::createWriter(const ossimS
    vector<ossimImageWriterFactoryBase*>::const_iterator factories;
    ossimImageFileWriter *result = NULL;
 
-   factories = theFactoryList.begin();
-   while(factories != theFactoryList.end())
+   factories = m_factoryList.begin();
+   while(factories != m_factoryList.end())
    {
       result = (*factories)->createWriter(typeName);
       if(result)
@@ -161,41 +124,13 @@ ossimImageFileWriter *ossimImageWriterFactoryRegistry::createWriter(const ossimS
    return result;
 }
 
-ossimObject* ossimImageWriterFactoryRegistry::createObject(const ossimKeywordlist &kwl,
-                                                           const char *prefix)const
-{
-   return createWriter(kwl, prefix);
-}
-
-ossimObject* ossimImageWriterFactoryRegistry::createObject(const ossimString& typeName)const
-{
-   return createWriter(typeName);
-}
-
-void ossimImageWriterFactoryRegistry::getTypeNameList(std::vector<ossimString>& typeList)const
-{
-   vector<ossimString> result;
-   vector<ossimImageWriterFactoryBase*>::const_iterator iter = theFactoryList.begin();
-   
-   while(iter != theFactoryList.end())
-   {
-      result.clear();
-      (*iter)->getTypeNameList(result);
-      
-      // now append to the end of the typeList.
-      typeList.insert(typeList.end(),
-                      result.begin(),
-                      result.end());
-      ++iter;
-   }  
-}
 
 void ossimImageWriterFactoryRegistry::getImageTypeList(std::vector<ossimString>& typeList)const
 {
    vector<ossimString> result;
-   vector<ossimImageWriterFactoryBase*>::const_iterator iter = theFactoryList.begin();
+   vector<ossimImageWriterFactoryBase*>::const_iterator iter = m_factoryList.begin();
    
-   while(iter != theFactoryList.end())
+   while(iter != m_factoryList.end())
    {
       result.clear();
       (*iter)->getImageTypeList(result);
@@ -212,9 +147,9 @@ void ossimImageWriterFactoryRegistry::getImageFileWritersBySuffix(ossimImageWrit
                                                                   const ossimString& ext)const
 {
    ossimImageWriterFactoryBase::ImageFileWriterList tempResult;
-   vector<ossimImageWriterFactoryBase*>::const_iterator iter = theFactoryList.begin();
+   vector<ossimImageWriterFactoryBase*>::const_iterator iter = m_factoryList.begin();
    
-   while(iter != theFactoryList.end())
+   while(iter != m_factoryList.end())
    {
       result.clear();
       (*iter)->getImageFileWritersBySuffix(tempResult, ext);
@@ -232,9 +167,9 @@ void ossimImageWriterFactoryRegistry::getImageFileWritersByMimeType(ossimImageWr
                                                                     const ossimString& mimeType)const
 {
    ossimImageWriterFactoryBase::ImageFileWriterList tempResult;
-   vector<ossimImageWriterFactoryBase*>::const_iterator iter = theFactoryList.begin();
+   vector<ossimImageWriterFactoryBase*>::const_iterator iter = m_factoryList.begin();
    
-   while(iter != theFactoryList.end())
+   while(iter != m_factoryList.end())
    {
       result.clear();
       (*iter)->getImageFileWritersByMimeType(tempResult, mimeType);
@@ -263,8 +198,8 @@ std::ostream& ossimImageWriterFactoryRegistry::printImageTypeList(
 std::ostream& ossimImageWriterFactoryRegistry::printWriterProps(std::ostream& out)const
 {
    // Loop through factories:
-   vector<ossimImageWriterFactoryBase*>::const_iterator factoryIter = theFactoryList.begin();
-   while( factoryIter != theFactoryList.end() )
+   vector<ossimImageWriterFactoryBase*>::const_iterator factoryIter = m_factoryList.begin();
+   while( factoryIter != m_factoryList.end() )
    {
       out << "factory: " << (*factoryIter)->getClassName() << "\n\n";
 

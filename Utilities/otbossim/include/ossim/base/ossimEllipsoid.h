@@ -27,6 +27,7 @@ class ossimEcefPoint;
 class ossimEcefVector;
 class ossimMatrix4x4;
 class ossimKeywordlist;
+class ossimDpt;
 
 /*!****************************************************************************
  *
@@ -44,7 +45,8 @@ public:
    ossimEllipsoid(const ossimString &name,
                   const ossimString &code,
                   const double &major_axis,
-                  const double &minor_axis);
+                  const double &minor_axis,
+                  ossim_uint32 epsg_code=0);
    ossimEllipsoid(const double &major_axis,
                   const double &minor_axis);
    ossimEllipsoid();
@@ -132,6 +134,12 @@ public:
     */
    double geodeticRadius(const double& latitude) const;
    
+   /*!
+    * Computes the "geodetic" radius of curvature of the ellipsoid in the east-west (x) and
+    * north-south (y) directions for a given latitude in DEGREES:
+    */
+   void geodeticRadii(const double& latitude, ossimDpt& radii) const;
+
    void latLonHeightToXYZ(double lat, double lon, double height,
                           double &x, double &y, double &z)const;
    void XYZToLatLonHeight(double x, double y, double z,
@@ -149,14 +157,27 @@ public:
    {
       return ( (theName == rhs.theName)&&
                (theCode == rhs.theCode)&&
+               (theA    == rhs.theA)&&
                (theB    == rhs.theB)&&
                (theFlattening == rhs.theFlattening));
+   }
+
+   bool operator!=(const ossimEllipsoid& rhs) const
+   {
+      return ( (theName != rhs.theName)||
+               (theCode != rhs.theCode)||
+               (theA    != rhs.theA)||               
+               (theB    != rhs.theB)||
+               (theFlattening != rhs.theFlattening));
    }
 
    bool loadState(const ossimKeywordlist& kwl,
                   const char* prefix=0);
    bool saveState(ossimKeywordlist& kwl,
                   const char* prefix=0)const;
+
+   const ossimEllipsoid& operator=(const ossimEllipsoid& copy_me);
+
 protected:
    void computeFlattening()
    {

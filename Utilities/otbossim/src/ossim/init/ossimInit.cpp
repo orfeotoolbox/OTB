@@ -1,7 +1,9 @@
 //*****************************************************************************
 // FILE: ossimInit.cpp
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // DESCRIPTION:
 //   Contains implementation of class ossimInit. This object handles all
@@ -16,7 +18,7 @@
 //   24Apr2001  Oscar Kramer
 //              Initial coding.
 //*****************************************************************************
-// $Id: ossimInit.cpp 17895 2010-08-17 17:27:12Z dburken $
+// $Id: ossimInit.cpp 19765 2011-06-22 14:33:40Z gpotts $
 
 
 #include <ossim/init/ossimInit.h>
@@ -139,18 +141,17 @@ void ossimInit::initialize(ossimArgumentParser& parser)
    theInstance->parseOptions(parser);
 
    theInstance->initializeDefaultFactories();
-   theInstance->initializeElevation();
+   
+   if ( theElevEnabledFlag )
+   {
+      theInstance->initializeElevation();
+   }
+
    theInstance->initializeLogFile();
    
    if(thePluginLoaderEnabledFlag)
    {
       theInstance->initializePlugins();
-   }
-
-   if(!theElevEnabledFlag)
-   {
-//      ossimElevManager::instance()->disableSource();
-//      ossimElevManager::instance()->disableAutoLoad();
    }
    
    if (traceDebug())
@@ -163,7 +164,6 @@ void ossimInit::initialize(ossimArgumentParser& parser)
    }
    
    theInitializedFlag = true;
-   return;
 }
 
 void ossimInit::initialize()
@@ -172,8 +172,8 @@ void ossimInit::initialize()
    {
       if (traceDebug())
       {
-         ossimNotify(ossimNotifyLevel_DEBUG)<< "DEBUG ossimInit::initialize(): Already initialized, returning......"
-                                            << std::endl;
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "DEBUG ossimInit::initialize(): Already initialized, returning......" << std::endl;
       }
       return;
    }
@@ -181,7 +181,12 @@ void ossimInit::initialize()
    theInstance->theAppName  = "";
    theInstance->thePreferences = ossimPreferences::instance();
    theInstance->initializeDefaultFactories();
-   theInstance->initializeElevation();
+   
+   if ( theElevEnabledFlag )
+   {
+      theInstance->initializeElevation();
+   }
+
    theInstance->initializeLogFile();
 
    //---
@@ -238,12 +243,22 @@ void ossimInit::usage()
    return;
 }
 
+bool ossimInit::getElevEnabledFlag() const
+{
+   return theElevEnabledFlag;
+}
+
+void ossimInit::setElevEnabledFlag(bool flag)
+{
+   theElevEnabledFlag = flag; 
+}
+
 void ossimInit::setPluginLoaderEnabledFlag(bool flag)
 {
    thePluginLoaderEnabledFlag = flag;  
 }
 
-void ossimInit::loadPlugins(const ossimFilename& plugin)
+void ossimInit::loadPlugins(const ossimFilename& plugin, const char* options)
 {
    if(!thePluginLoaderEnabledFlag) return;
 
@@ -261,7 +276,7 @@ void ossimInit::loadPlugins(const ossimFilename& plugin)
             {
                do
                { 
-                  ossimSharedPluginRegistry::instance()->registerPlugin(file);
+                  ossimSharedPluginRegistry::instance()->registerPlugin(file, options);
                }
                while(dir.getNext(file));
             }
@@ -269,7 +284,7 @@ void ossimInit::loadPlugins(const ossimFilename& plugin)
       }
       else
       {
-         ossimSharedPluginRegistry::instance()->registerPlugin(plugin);
+         ossimSharedPluginRegistry::instance()->registerPlugin(plugin, options);
       }
    }
 }
@@ -457,22 +472,7 @@ void ossimInit::initializeDefaultFactories()
 }
 
 void ossimInit::initializePlugins()
-{
-   // check for plugins in the current directory
-   // and load them
-   ossimDirectory currentDir(theAppName.path());
-   std::vector<ossimFilename> result;
-   currentDir.findAllFilesThatMatch(result, "ossim.*plugin.*", ossimDirectory::OSSIM_DIR_FILES);
-
-   if(result.size())
-   {
-	   ossim_uint32 idx = 0;
-	   for(idx = 0; idx < result.size(); ++idx)
-	   {
-          ossimSharedPluginRegistry::instance()->registerPlugin(result[idx]);
-	   }
-   }
-
+{      
    ossimString regExpressionDir =  ossimString("^(") + "plugin.dir[0-9]+)";
    ossimString regExpressionFile =  ossimString("^(") + "plugin.file[0-9]+)";
 
@@ -485,60 +485,11 @@ void ossimInit::initializePlugins()
    int idx = 0;
    
    std::vector<int> numberList(numberOfDirs);
-
-
-   
-   ossimFilename installedPluginDir = ossimEnvironmentUtility::instance()->getInstalledOssimPluginDir();
-   loadPlugins(installedPluginDir);
-//    if(installedPluginDir.exists())
-//    {
-//       ossimDirectory dir;
-//       if(dir.open(installedPluginDir))
-//       {
-//          ossimFilename file;
-
-//          if(dir.getFirst(file,
-//                          ossimDirectory::OSSIM_DIR_FILES))
-//          {
-//             do
-//             {
-//                ossimSharedPluginRegistry::instance()->registerPlugin(file);
-//             }
-//             while(dir.getNext(file));
-//          }
-//       }
-//    }
    
    // register user plugins first
    ossimFilename userPluginDir = ossimEnvironmentUtility::instance()->getUserOssimPluginDir();
    loadPlugins(userPluginDir);
 
-   // no check for bundled plugins that are at the executable/plugins location
-//   ossimFilename bundlePlugins = theAppName.path();
-//   bundlePlugins = bundlePlugins.dirCat("plugins");
-//   if(bundlePlugins.exists())
-//   {
-//	  loadPlugins(bundlePlugins);
-//   }
-//    if(userPluginDir.exists())
-//    {
-//       ossimDirectory dir;
-//       if(dir.open(userPluginDir))
-//       {
-//          ossimFilename file;
-
-//          if(dir.getFirst(file,
-//                          ossimDirectory::OSSIM_DIR_FILES))
-//          {
-//             do
-//             {
-//                ossimSharedPluginRegistry::instance()->registerPlugin(file);
-//             }
-//             while(dir.getNext(file));
-//          }
-//       }
-//    }
-   
    if(numberList.size()>0)
    {
       for(idx = 0; idx < (int)numberList.size();++idx)
@@ -558,20 +509,6 @@ void ossimInit::initializePlugins()
          if(directory)
          {
             loadPlugins(ossimFilename(directory));
-//             ossimDirectory d;
-            
-//             if(d.open(ossimFilename(directory)))
-//             {
-//                ossimFilename file;
-               
-//                if(d.getFirst(file, ossimDirectory::OSSIM_DIR_FILES))
-//                {
-//                   do
-//                   {
-//                      ossimSharedPluginRegistry::instance()->registerPlugin(file);
-//                   }while(d.getNext(file));
-//                }
-//             }
          }
       }
    }
@@ -600,6 +537,66 @@ void ossimInit::initializePlugins()
          {
             loadPlugins(file);
 //             ossimSharedPluginRegistry::instance()->registerPlugin(file);
+         }
+      }
+   }
+   
+   // now check new plugin loading that supports passing options to the plugins
+   // 
+   regExpressionFile =  ossimString("^(") + "plugin[0-9]+\\.file)";
+   keys = kwl.getSubstringKeyList( regExpressionFile );
+   
+   numberOfFiles = (ossim_uint32)keys.size();
+   offset = (ossim_uint32)ossimString("plugin").size();
+   numberList.resize(numberOfFiles);
+   
+   if(numberList.size()>0)
+   {
+      for(idx = 0; idx < (int)numberList.size();++idx)
+      {
+         std::vector<ossimString> splitArray;
+         keys[idx].split(splitArray, ".");
+         if(splitArray.size())
+         {
+            keys[idx] = ossimString(splitArray[0].begin(), splitArray[0].begin()+offset);
+         }
+         ossimString numberStr(splitArray[0].begin() + offset,
+                               splitArray[0].end());
+         numberList[idx] = numberStr.toInt();
+      }
+      
+      std::sort(numberList.begin(), numberList.end());   
+      for(idx=0;idx < (int)numberList.size();++idx)
+      {
+         ossimString newPrefix = ossimString("plugin")+ossimString::toString(numberList[idx]) + ".";
+         const char* file    = kwl.find((newPrefix+"file").c_str());
+         const char* options = kwl.find((newPrefix+"options").c_str());
+         if(file&&ossimFilename(file).exists())
+         {
+            loadPlugins(file, options);
+         }
+      }
+   }
+
+   ossimString auto_load_plugins(ossimPreferences::instance()->findPreference("ossim_init.auto_load_plugins"));
+   
+   if(auto_load_plugins.empty()) auto_load_plugins = "true";
+   // now load any plugins not found in the keywordlist
+   //
+   // check for plugins in the current directory
+   // and load them
+   if(auto_load_plugins.toBool())
+   {
+      ossimDirectory currentDir(theAppName.path());
+      std::vector<ossimFilename> result;
+      currentDir.findAllFilesThatMatch(result, "ossim.*plugin.*", ossimDirectory::OSSIM_DIR_FILES);
+      
+      if(result.size())
+      {
+         ossim_uint32 idx = 0;
+         for(idx = 0; idx < result.size(); ++idx)
+         {
+            ossimSharedPluginRegistry::instance()->registerPlugin(result[idx]);
          }
       }
    }
@@ -691,6 +688,11 @@ ossimString ossimInit::version() const
 #endif
 
    return versionString;
+}
+
+ossimFilename ossimInit::appName()const
+{
+   return theAppName;
 }
 
 ossimInit::ossimInit(const ossimInit& /* obj */ )

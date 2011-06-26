@@ -9,12 +9,14 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfRegisteredTag.h 14241 2009-04-07 19:59:23Z dburken $
+// $Id: ossimNitfRegisteredTag.h 19682 2011-05-31 14:21:20Z dburken $
 #ifndef ossimNitfRegisteredTag_HEADER
 #define ossimNitfRegisteredTag_HEADER
 
 #include <ossim/base/ossimObject.h>
 #include <ossim/base/ossimPropertyInterface.h>
+#include <ossim/base/ossimKeywordlist.h>
+#include <string>
 
 class ossimKeywordlist;
 
@@ -31,7 +33,7 @@ public:
     * user defined header.
     * 
     */
-   virtual ossimString getRegisterTagName()const=0;
+   virtual std::string getRegisterTagName()const=0;
    
    /**
     * 
@@ -67,7 +69,8 @@ public:
    virtual std::ostream& print(std::ostream& out,
                                const std::string& prefix=std::string()) const;
    
-
+   virtual bool saveState(ossimKeywordlist& kwl, const ossimString& prefix)const;
+   
 protected:
    ossimString theRegisteredTagName;
    

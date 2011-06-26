@@ -10,7 +10,7 @@
 // Description:
 //
 //*******************************************************************
-//  $Id: ossimImageSourceSequencer.cpp 17206 2010-04-25 23:20:40Z dburken $
+//  $Id: ossimImageSourceSequencer.cpp 19002 2011-03-02 21:02:16Z oscarkramer $
 #include <ossim/imaging/ossimImageSourceSequencer.h>
 #include <ossim/imaging/ossimImageData.h>
 #include <ossim/base/ossimIrect.h>

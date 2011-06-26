@@ -7,9 +7,9 @@
 // Description: Class definition for sequencer for building overview files.
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimOverviewSequencer.h 17864 2010-08-11 20:10:39Z dburken $
+// $Id: ossimOverviewSequencer.h 19724 2011-06-06 21:07:15Z dburken $
 #ifndef ossimOverviewSequencer_HEADER
-#define ossimOverviewSequencer_HEADER
+#define ossimOverviewSequencer_HEADER 1
 
 #include <ossim/base/ossimReferenced.h>
 #include <ossim/base/ossimConstants.h>
@@ -17,9 +17,12 @@
 #include <ossim/base/ossimMultiBandHistogram.h>
 #include <ossim/imaging/ossimImageHandler.h>
 #include <ossim/imaging/ossimFilterResampler.h>
+#include <ossim/imaging/ossimBitMaskWriter.h>
+#include <ossim/imaging/ossimMaskFilter.h>
+#include <string>
+#include <vector>
 
 class ossimFilename;
-class ossimImageHandler;
 
 /**
  * @class Sequencer for building overview files.
@@ -60,6 +63,14 @@ public:
     * @note This object does not own the image handler.
     */
    void setImageHandler(ossimImageHandler* input);
+   
+   /**
+    * @brief Enabled the generation of an alpha (bit) mask such that any full
+    * or partial null pixels will be masked out. A mask file will be written to
+    * the source image directory with the image file name and extension ".mask"
+    */
+   void setBitMaskObjects(ossimBitMaskWriter* mask_writer,
+                          ossimMaskFilter* mask_filter);
 
    /**
     * @brief Sets the input source resolution to decimate from.
@@ -157,6 +168,42 @@ public:
    void setResampleType(
       ossimFilterResampler::ossimFilterResamplerType resampleType);
 
+   /**
+    * @brief Turn on/off scan for min max flag.
+    * This method assumes the null is known.
+    * @param flag true turns scan on, false off. Default=off.
+    */
+   void setScanForMinMax(bool flag);
+   
+   /** @return scan for min max flag. */
+   bool getScanForMinMax() const;
+   
+   /**
+    * @brief Turn on/off scan for min, max, null flag.
+    * Attempts to find null, min and max where null is the minimum value found,
+    * min is the second most min and max is max.
+    * @param flag true turns scan on, false off. Default=off.
+    */
+   void setScanForMinMaxNull(bool flag);
+
+   /** @return scan for min max flag. */
+   bool getScanForMinMaxNull() const;
+
+   /**
+    * @brief Writes an ossim metadata(omd) file with min, max, null values.
+    *
+    * Writes omd file to disk with min, max, null values.  If file existed
+    * previously it will be ingested into keyword list prior to addition
+    * of the min, max, nulls computed in this method.
+    *
+    * Note that prior to writing a sanity check is performed on the values as
+    * a scan for null value might actually pick up the min if the image is
+    * full.
+    * 
+    * @param file to write.
+    */
+   bool writeOmdFile(const std::string& file);   
+
 protected:
 
    /** virtual destructor */
@@ -188,15 +235,21 @@ protected:
     */
    void resampleTile(const ossimImageData* inputTile);
 
-   template <class T> void  resampleTile(const ossimImageData* inputTile, T dummy);
+   template <class T> void resampleTile(const ossimImageData* inputTile,
+                                        T dummy);
 
-   ossimRefPtr<ossimImageHandler> m_imageHandler;
-   ossimRefPtr<ossimImageData>    m_tile;
-   ossimIrect                     m_areaOfInterest;
-   ossimIpt                       m_tileSize;
-   ossim_uint32                   m_numberOfTilesHorizontal;
-   ossim_uint32                   m_numberOfTilesVertical;
-   ossim_uint32                   m_currentTileNumber;
+   /** @brief Clears out the arrays from a scan for min, max, nulls. */
+   void clearMinMaxNullArrays();
+
+   ossimRefPtr<ossimImageHandler>  m_imageHandler;
+   ossimRefPtr<ossimBitMaskWriter> m_maskWriter;
+   ossimRefPtr<ossimMaskFilter>    m_maskFilter;
+   ossimRefPtr<ossimImageData>     m_tile;
+   ossimIrect                      m_areaOfInterest;
+   ossimIpt                        m_tileSize;
+   ossim_uint32                    m_numberOfTilesHorizontal;
+   ossim_uint32                    m_numberOfTilesVertical;
+   ossim_uint32                    m_currentTileNumber;
 
    /** This is the resolution level to build overviews from. */
    ossim_uint32                   m_sourceResLevel;
@@ -215,11 +268,20 @@ protected:
    ossimHistogramMode m_histoMode;
 
    /**
-    * Used to determine which tiles to accumulate a histogram from.  If set to 1 every tile is
-    * accumulated, 2 every other tile, 3 every 3rd tile, and so on.  Set in initialize method
-    * based on mode and image size.
+    * Used to determine which tiles to accumulate a histogram from.  If set to
+    * 1 every tile is accumulated, 2 every other tile, 3 every 3rd tile, and
+    * so on.  Set in initialize method based on mode and image size.
     */
    ossim_uint32 m_histoTileIndex;
+
+   /** Control flags for min, max, null scanning. */
+   bool m_scanForMinMax;
+   bool m_scanForMinMaxNull;
+ 
+   /** Arrays o hold the min value for each band for scan min/max methods. */
+   std::vector<ossim_float64> m_minValues; 
+   std::vector<ossim_float64> m_maxValues; 
+   std::vector<ossim_float64> m_nulValues;
 };
 
 #endif /* #ifndef ossimOverviewSequencer_HEADER */

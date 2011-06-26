@@ -5,12 +5,13 @@
 // Author: Garrett Potts (gpotts@imagelinks)
 //
 //*************************************************************************
-// $Id: ossimSharedObjectBridge.h 12048 2007-11-15 15:45:35Z gpotts $
+// $Id: ossimSharedObjectBridge.h 18967 2011-02-25 19:40:48Z gpotts $
 #ifndef ossimSharedObjectBridge_HEADER
 #define ossimSharedObjectBridge_HEADER
 #include <vector>
 #include <ossim/base/ossimObject.h>
 #include <ossim/base/ossimConstants.h>
+#include <ossim/base/ossimString.h>
 
 extern "C"
 {
@@ -32,7 +33,7 @@ extern "C"
    };
    
    
-   typedef void (*ossimSharedLibraryInitializePtr)(ossimSharedObjectInfo** info);
+   typedef void (*ossimSharedLibraryInitializePtr)(ossimSharedObjectInfo** info, const char* options);
    typedef void (*ossimSharedLibraryFinalizePtr)();
 
    /*

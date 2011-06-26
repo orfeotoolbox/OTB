@@ -1,8 +1,6 @@
 //*****************************************************************************
 // FILE: ossimGridRemapper.cc
 //
-// Copyright (C) 2001 ImageLinks, Inc.
-//
 // License:  See top level LICENSE.txt file.
 //
 // AUTHOR: Oscar Kramer
@@ -14,7 +12,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimGridRemapSource.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
+//  $Id: ossimGridRemapSource.cpp 19682 2011-05-31 14:21:20Z dburken $
 
 #include <ossim/imaging/ossimGridRemapSource.h>
 
@@ -22,14 +20,15 @@ RTTI_DEF1(ossimGridRemapSource,
           "ossimGridRemapSource",
           ossimImageSourceFilter);
 
-#include <stdio.h>
-#include <fstream>
 #include <ossim/imaging/ossimImageData.h>
 #include <ossim/base/ossimDrect.h>
 #include <ossim/base/ossimDpt.h>
 #include <ossim/base/ossimDblGrid.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/imaging/ossimGridRemapEngineFactory.h>
+#include <cstdio>
+#include <fstream>
+
 
 //***
 // Define Trace flags for use within this file:
@@ -272,7 +271,7 @@ bool ossimGridRemapSource::saveState(ossimKeywordlist& kwl,
       //***
       // Loop over each remap component to write out the grid:
       //***
-      ofstream os (theGridFilename);
+      ofstream os (theGridFilename.c_str());
       bool successful = true;
       int num_components = theRemapEngine->getNumberOfParams();
       for (int p=0; (p<num_components)&&successful; p++)

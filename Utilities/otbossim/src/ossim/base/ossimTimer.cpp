@@ -25,7 +25,11 @@ ossimTimer* ossimTimer::instance()
    return m_instance;
 }
 
-#if defined(WIN32) || defined(WIN64)
+// ---
+// From:  http://msdn.microsoft.com/en-us/library/b0084kay.aspx
+// Defined for applications for Win32 and Win64. Always defined.
+// ---
+#if defined(_WIN32)
 
 #include <sys/types.h>
 #include <fcntl.h>

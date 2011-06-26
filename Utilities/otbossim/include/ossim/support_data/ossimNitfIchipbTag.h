@@ -11,7 +11,7 @@
 // http://164.214.2.51/ntb/baseline/docs/stdi0002/final.pdf
 //
 //----------------------------------------------------------------------------
-// $Id: ossimNitfIchipbTag.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimNitfIchipbTag.h 19682 2011-05-31 14:21:20Z dburken $
 #ifndef ossimNitfIchipbTag_HEADER
 #define ossimNitfIchipbTag_HEADER
 
@@ -68,7 +68,7 @@ public:
    ossimNitfIchipbTag();
 
    /** @return "ICHIPB" as an ossimString. */
-   virtual ossimString getRegisterTagName() const;
+   virtual std::string getRegisterTagName() const;
   
    /**
     * Parse method.

@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageHeaderV2_0.cpp 17598 2010-06-19 15:37:46Z dburken $
+// $Id: ossimNitfImageHeaderV2_0.cpp 18434 2010-11-17 19:23:11Z gpotts $
 
 
 #include <iomanip>
@@ -279,7 +279,6 @@ void ossimNitfImageHeaderV2_0::parseStream(std::istream &in)
       ossimRefPtr<ossimNitfVqCompressionHeader> compressionHeader =
          new ossimNitfVqCompressionHeader;
       compressionHeader->parseStream(in);
-      
       // do a check to see if the compression header is good
       //
       
@@ -532,6 +531,39 @@ std::ostream& ossimNitfImageHeaderV2_0::print(std::ostream& out,
    out << std::endl;
 
    return printTags(out, prefix);
+}
+
+bool ossimNitfImageHeaderV2_0::saveState(ossimKeywordlist& kwl, const ossimString& prefix)const
+{
+   ossimNitfImageHeaderV2_X::saveState(kwl, prefix);
+   std::ostringstream out;
+   
+   kwl.add(prefix, "ITITLE", theTitle);
+
+   ossim_uint32 idx = 0;
+   if(theCompressionHeader.valid())
+   {
+      theCompressionHeader->saveState(kwl, prefix + "compression_header.");
+   }
+   
+   for(idx = 0; idx < theImageBands.size(); ++idx)
+   {
+      if(theImageBands[idx].valid())
+      {
+         theImageBands[idx]->print(out, "", idx); 
+      }
+   }
+   
+   out << std::endl;
+   
+   ossimKeywordlist kwlTemp;
+   
+   std::istringstream in(out.str());
+   if(kwlTemp.parseStream(in))
+   {
+      kwl.add(prefix, kwlTemp);
+   }
+   return true;
 }
 
 bool ossimNitfImageHeaderV2_0::isCompressed()const

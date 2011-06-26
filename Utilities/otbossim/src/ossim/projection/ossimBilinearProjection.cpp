@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 // 
 //********************************************************************
-// $Id: ossimBilinearProjection.cpp 17497 2010-06-02 01:43:43Z gpotts $
+// $Id: ossimBilinearProjection.cpp 19682 2011-05-31 14:21:20Z dburken $
 
 #include <sstream>
 using namespace std;
@@ -25,7 +25,7 @@ using namespace std;
 #include <ossim/base/ossimTieGptSet.h>
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimBilinearProjection.cpp 17497 2010-06-02 01:43:43Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimBilinearProjection.cpp 19682 2011-05-31 14:21:20Z dburken $";
 #endif
 
 // static const ossim_uint32 MINIMUM_NMBER_OF_POINTS = 4;
@@ -188,6 +188,19 @@ bool ossimBilinearProjection::saveState(ossimKeywordlist& kwl,
 
    ossimProjection::saveState(kwl, prefix);
 
+   ossimString imagePoints;
+   ossimString groundPoints;
+   ossim::toStringList(imagePoints, theLineSamplePt);
+   ossim::toStringList(groundPoints, theGeographicPt);
+   kwl.add(prefix, 
+           "image_points",
+           imagePoints,
+           true);
+   kwl.add(prefix, 
+           "ground_points",
+           groundPoints,
+           true);
+#if 0
    const ossim_uint32 SIZE = (ossim_uint32)theLineSamplePt.size();
 
    for (ossim_uint32 i = 0; i < SIZE; ++i)
@@ -208,7 +221,7 @@ bool ossimBilinearProjection::saveState(ossimKeywordlist& kwl,
       os2 << theLineSamplePt[i];
       kwl.add(prefix, kw, os2.str().c_str());
    }
-
+#endif
    return true;
 }
 
@@ -222,54 +235,63 @@ bool ossimBilinearProjection::loadState(const ossimKeywordlist& kwl,
    theLineSamplePt.clear();
    theGeographicPt.clear();
 
-   //---
-   // Get the number of points.
-   // If 0 or gpt size not equal to dpt size get out.
-   //---
-   const ossim_uint32 SIZE = kwl.numberOf(prefix, "gpt");
-   if ( (SIZE == 0) || (SIZE != kwl.numberOf(prefix, "dpt")) )
+   ossimString imagePoints  = kwl.find(prefix, "image_points");
+   ossimString groundPoints = kwl.find(prefix, "ground_points");
+   
+   if(!imagePoints.empty()&&!groundPoints.empty())
    {
-      return false;
+      ossim::toVector(theLineSamplePt, imagePoints);
+      ossim::toVector(theGeographicPt, groundPoints);
    }
-
-   for (ossim_uint32 i = 0; i < SIZE; ++i)
+   else 
    {
-      const char* lookup;
-      ossimString index_string = ossimString::toString(i);
-
-      // Get the geographic point.
-      ossimString kw = "gpt";
-      kw += index_string;
-      lookup = kwl.find(prefix, kw);
-      if (lookup)
+      //---
+      // Get the number of points.
+      // If 0 or gpt size not equal to dpt size get out.
+      //---
+      const ossim_uint32 SIZE = kwl.numberOf(prefix, "gpt");
+      if ( (SIZE == 0) || (SIZE != kwl.numberOf(prefix, "dpt")) )
       {
-         ossimGpt gp;
-         istringstream is(lookup);
-         is >> gp;
-
-         //---
-         // Allow for "nan" height values by substituting with 0.0 so the
-         // hasNans() will work.  "nan"s will get placed in the point if the
-         // user doesn't have the elevation manager preferences set up
-         // correctly.
-         //---
-         if (gp.isHgtNan())
-         {
-            gp.height(0.0);
-         }
-         theGeographicPt.push_back(gp);
+         return false;
       }
-
-      // Get the line sample point.
-      kw = "dpt";
-      kw += index_string;
-      lookup = kwl.find(prefix, kw);
-      if (lookup)
+      
+      for (ossim_uint32 i = 0; i < SIZE; ++i)
       {
-         ossimDpt dp;
-         istringstream is(lookup);
-         is >> dp;
-         theLineSamplePt.push_back(dp);
+         const char* lookup;
+         ossimString index_string = ossimString::toString(i);
+         
+         // Get the geographic point.
+         ossimString kw = "gpt";
+         kw += index_string;
+         lookup = kwl.find(prefix, kw);
+         if (lookup)
+         {
+            ossimGpt gp;
+            gp.toPoint(std::string(lookup));
+            
+            //---
+            // Allow for "nan" height values by substituting with 0.0 so the
+            // hasNans() will work.  "nan"s will get placed in the point if the
+            // user doesn't have the elevation manager preferences set up
+            // correctly.
+            //---
+            if (gp.isHgtNan())
+            {
+               gp.height(0.0);
+            }
+            theGeographicPt.push_back(gp);
+         }
+         
+         // Get the line sample point.
+         kw = "dpt";
+         kw += index_string;
+         lookup = kwl.find(prefix, kw);
+         if (lookup)
+         {
+            ossimDpt dp;
+            dp.toPoint(std::string(lookup));
+            theLineSamplePt.push_back(dp);
+         }
       }
    }
 

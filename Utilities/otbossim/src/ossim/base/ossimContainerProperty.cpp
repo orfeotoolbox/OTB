@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimContainerProperty.cpp 17195 2010-04-23 17:32:18Z dburken $
+// $Id: ossimContainerProperty.cpp 18405 2010-11-10 20:44:58Z gpotts $
 #include <ossim/base/ossimContainerProperty.h>
 #include <ossim/base/ossimStringProperty.h>
 
@@ -100,7 +100,7 @@ ossimContainerProperty* ossimContainerProperty::asContainer()
 }
 
 ossimRefPtr<ossimProperty> ossimContainerProperty::getProperty(const ossimString& name,
-                                                   bool recurse)
+                                                               bool recurse)
 {
    ossim_uint32 idx = 0;
    std::vector<ossimRefPtr<ossimContainerProperty> > containers;
@@ -122,7 +122,7 @@ ossimRefPtr<ossimProperty> ossimContainerProperty::getProperty(const ossimString
          }
       }
    }
-
+   
    if(containers.size())
    {
       for(idx = 0; idx < containers.size();++idx)

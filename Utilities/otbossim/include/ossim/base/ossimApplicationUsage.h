@@ -4,7 +4,7 @@
 // OSSIM.
 //
 //-------------------------------------------------------------------------
-// $Id: ossimApplicationUsage.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimApplicationUsage.h 19692 2011-05-31 16:55:47Z dburken $
 #ifndef ossimApplicationUsage_HEADER
 #define ossimApplicationUsage_HEADER 1
 
@@ -22,8 +22,7 @@ class OSSIMDLLEXPORT ossimApplicationUsage
 
         ossimApplicationUsage(const ossimString& commandLineUsage);
 
-        typedef std::map<ossimString,ossimString> UsageMap;
-        
+        typedef std::map<ossimString,ossimString,ossimStringLtstr> UsageMap;
 
         void setApplicationName(const ossimString& name);
         const ossimString& getApplicationName() const;

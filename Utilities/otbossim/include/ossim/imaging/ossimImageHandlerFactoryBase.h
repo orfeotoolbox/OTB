@@ -5,7 +5,7 @@
 // Author:  Garrett Potts (gpotts@imagelinks.com)
 //
 //*******************************************************************
-//  $Id: ossimImageHandlerFactoryBase.h 18011 2010-08-31 12:48:56Z dburken $
+//  $Id: ossimImageHandlerFactoryBase.h 19443 2011-04-25 18:17:25Z dburken $
 
 #ifndef ossimImageHandlerFactoryBase_HEADER
 #define ossimImageHandlerFactoryBase_HEADER
@@ -23,8 +23,7 @@ class ossimKeywordlist;
 class OSSIM_DLL ossimImageHandlerFactoryBase : public ossimObjectFactory
 {
 public:
-   template <class T>
-      class UniqueList
+   template <class T> class UniqueList
    {
    public:
       
@@ -59,7 +58,8 @@ public:
    typedef UniqueList<ossimString> UniqueStringList;
    typedef std::vector<ossimRefPtr<ossimImageHandler> > ImageHandlerList;
    
-   virtual ossimImageHandler* open(const ossimFilename& fileName)const = 0;
+   virtual ossimImageHandler* open(const ossimFilename& fileName,
+                                   bool openOverview=true)const = 0;
    virtual ossimImageHandler* open(const ossimKeywordlist& kwl,
                                    const char* prefix=0)const = 0;
 

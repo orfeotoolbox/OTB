@@ -9,22 +9,22 @@
 // Description:  Base class for overview builders.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimOverviewBuilderBase.h 17932 2010-08-19 20:34:35Z dburken $
+// $Id: ossimOverviewBuilderBase.h 19724 2011-06-06 21:07:15Z dburken $
 #ifndef ossimOverviewBuilderBase_HEADER
-#define ossimOverviewBuilderBase_HEADER
+#define ossimOverviewBuilderBase_HEADER 1
 
 #include <ossim/base/ossimSource.h>
 #include <ossim/base/ossimProcessInterface.h>
 #include <ossim/base/ossimConnectableObjectListener.h>
-
+#include <ossim/imaging/ossimImageHandler.h>
 #include <ossim/base/ossimRtti.h>
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimString.h>
+#include <ossim/imaging/ossimBitMaskWriter.h>
+#include <ossim/imaging/ossimMaskFilter.h>
 
 class ossimImageFileWriter;
-class ossimImageHandler;
 class ossimFilename;
-
 
 class OSSIM_DLL ossimOverviewBuilderBase
    :
@@ -141,11 +141,34 @@ public:
     */
    virtual bool execute()=0;
 
-    /**
-    * @brief Sets the histogram accumulation mode.
-    * @param mode NONE, NORMAL or FAST.
+   /**
+    * @brief Specifies parameters (in KWL) for generation of an alpha (bit)
+    * mask such that any full or partial null pixels will be masked out. A
+    * mask file will be written to the source image directory with the image
+    * file name and extension ".mask". 
     */
-   void setMaskBuildFlag(bool maskBuildFlag) { m_maskBuildFlag = maskBuildFlag; }
+   void setBitMaskSpec(const ossimKeywordlist& bit_mask_spec);
+
+   /**
+    * @brief Turn on/off scan for min max flag.
+    * This method assumes the null is known.
+    * @param flag true turns scan on, false off. Default=off.
+    */
+   void setScanForMinMax(bool flag);
+
+   /** @return scan for min max flag. */
+   bool getScanForMinMax() const;
+
+   /**
+    * @brief Turn on/off scan for min, max, null flag.
+    * Attempts to find null, min and max where null is the minimum value found,
+    * min is the second most min and max is max.
+    * @param flag true turns scan on, false off. Default=off.
+    */
+   void setScanForMinMaxNull(bool flag);
+
+   /** @return scan for min max flag. */
+   bool getScanForMinMaxNull() const;
 
 protected:
    /** virtual destructor */
@@ -165,19 +188,40 @@ protected:
    ossim_uint32 getRequiredResLevels(const ossimImageHandler* ih) const;
   
    /**
-    * @brief Gets the default stop dimension.
+    * @brief Initializes preference settings.
+    *
+    * Currently:
+    *
+    * 1) Gets the default stop dimension.
     *
     * Looks for overview_stop_dimension, then will use minimum default tile
     * size if that is not found.
     * 
-    * @returns Returns the default stop dimension.
+    * 2) Set scan float data flag.
+    *
+    * Looks for overview_builder.scan_for_min_max_null_if_float.
+    *
+    * If true this will turn the m_scanForMinMaxNull on if the scalar type of
+    * image handler is float.
     */
-   ossim_uint32 getDefaultStopDimension() const;
+   void initializePreferenceSettings();
+
+   /**
+    * @brief Checks scalar type and turns on scanning for min, max, nulls if
+    * needed.
+    */
+   void initializeScanOptions();
    
    ossim_uint32 m_overviewStopDimension;
-   ossimHistogramMode m_histoMode;   
-
-   bool m_maskBuildFlag;
+   ossimHistogramMode m_histoMode; 
+   ossimKeywordlist m_bitMaskSpec;
+   ossimRefPtr<ossimImageHandler>  m_imageHandler;
+   ossimRefPtr<ossimBitMaskWriter> m_maskWriter;
+   ossimRefPtr<ossimMaskFilter>    m_maskFilter;
+   ossimFilename                   m_outputFile;
+   bool                            m_scanForMinMax;
+   bool                            m_scanForMinMaxNull;
+   bool                            m_scanFloatData;
 
    /** for rtti stuff */
    TYPE_DATA

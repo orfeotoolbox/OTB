@@ -1,5 +1,7 @@
 //----------------------------------------------------------------------------
 //
+// File: ossimElevUtil.h
+// 
 // License:  LGPL
 // 
 // See LICENSE.txt file in the top level directory for more details.
@@ -14,11 +16,8 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#ifndef ossimDemUtil_HEADER
-#define ossimDemUtil_HEADER 1
-
-#include <map>
-#include <vector>
+#ifndef ossimElevUtil_HEADER
+#define ossimElevUtil_HEADER 1
 
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimReferenced.h>
@@ -27,6 +26,8 @@
 #include <ossim/imaging/ossimSingleImageChain.h>
 #include <ossim/projection/ossimMapProjection.h>
 
+#include <map>
+#include <vector>
 
 // Forward class declarations:
 class ossimArgumentParser;
@@ -38,7 +39,7 @@ class ossimIrect;
 class ossimKeywordlist;
 
 /**
- * @brief ossimDemUtil class.
+ * @brief ossimElevUtil class.
  *
  * This is a utility class to orthorectify imagery with an added slant toward
  * doing digital elevation model(DEM) operations.
@@ -51,7 +52,7 @@ class ossimKeywordlist;
  * @note "bumpshade" and "hillshade" intermixed throughout.  The class to do
  * a hillshade is the ossimBumpShadeTileSource.
  */
-class OSSIM_DLL ossimDemUtil : public ossimReferenced
+class OSSIM_DLL ossimElevUtil : public ossimReferenced
 {
 public:
 
@@ -64,17 +65,21 @@ public:
       OSSIM_DEM_OP_ORTHO        = 3
    };
 
+   /** emumerated output projections */
+   enum ossimDemOutputProjection
+   {
+      OSSIM_DEM_PROJ_UNKNOWN    = 0,
+      OSSIM_DEM_PROJ_GEO        = 1,
+      OSSIM_DEM_PROJ_GEO_SCALED = 2,
+      OSSIM_DEM_PROJ_INPUT      = 3,
+      OSSIM_DEM_PROJ_UTM        = 4
+   };
+
    /** default constructor */
-   ossimDemUtil();
+   ossimElevUtil();
 
    /** virtual destructor */
-   virtual ~ossimDemUtil();
-
-   /**
-    * @brief Adds application arguments to the argument parser.
-    * @param ap Parser to add to.
-    */
-   void addArguments(ossimArgumentParser& ap);
+   virtual ~ossimElevUtil();
 
    /**
     * @brief Initial method to be ran prior to execute.
@@ -378,6 +383,24 @@ private:
     */
    ossim_uint32 getNumberOfInputs() const;
 
+   /**
+    * @brief Gets the emumerated output projection type.
+    *
+    * This looks in m_kwl for ossimKeywordNames::PROJECTION_KW.
+    * @return The enumerated output projection type.
+    * @note This does not cover SRS keyword which could be any type of projection.
+    */
+   ossimDemOutputProjection getOutputProjectionType() const;
+
+   /**
+    * @brief Adds application arguments to the argument parser.
+    * @param ap Parser to add to.
+    */
+   void addArguments(ossimArgumentParser& ap);
+   
+   /** @brief Initializes arg parser and outputs usage. */
+   void usage(ossimArgumentParser& ap);
+
    /** Enumerated operation to perform. */
    ossimDemOperation m_operation;
    
@@ -397,4 +420,4 @@ private:
    std::vector< ossimRefPtr<ossimSingleImageChain> > m_imgLayer;
 };
 
-#endif /* #ifndef ossimDemUtil_HEADER */
+#endif /* #ifndef ossimElevUtil_HEADER */

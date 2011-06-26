@@ -5,7 +5,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimApplanixEOFile.cpp 13021 2008-06-10 16:22:58Z dburken $
+//  $Id: ossimApplanixEOFile.cpp 19682 2011-05-31 14:21:20Z dburken $
 #include <ossim/support_data/ossimApplanixEOFile.h>
 #include <iterator>
 #include <fstream>
@@ -145,7 +145,7 @@ bool ossimApplanixEOFile::parseStream(std::istream& in)
    while(in.good()&&
          !line.contains("RECORD FORMAT"))
    {
-      std::getline(in, line);
+      getline(in, line);
       line = line.upcase();
       line = line.substitute("\r","\n", true);
       if(line.contains("KAPPA CARDINAL"))
@@ -314,7 +314,7 @@ bool ossimApplanixEOFile::parseStream(std::istream& in)
 
    if(in.peek() == '(')
    {
-      std::getline(in, line);
+      getline(in, line);
    }
    in>>applanix_skipws;
    ossimRefPtr<ossimApplanixEORecord> record = new ossimApplanixEORecord((ossim_uint32)theRecordFormat.size());
@@ -340,7 +340,7 @@ bool ossimApplanixEOFile::parseStream(std::istream& in)
    
    while(in.good()&&theRecordFormat.size())
    {
-      std::getline(in, line);
+      getline(in, line);
       line = line.trim();
       if(line != "")
       {
@@ -404,7 +404,7 @@ bool ossimApplanixEOFile::parseHeader(std::istream& in,
    }
    ossimString line;
 
-   std::getline(in, line);
+   getline(in, line);
    line = line .substitute("\r",
                            "\n");
    if(!line.contains("************"))
@@ -416,7 +416,7 @@ bool ossimApplanixEOFile::parseHeader(std::istream& in,
    header += "\n";
 
    in>>applanix_skipws;
-   std::getline(in, line);
+   getline(in, line);
    line = line .substitute("\r",
                            "\n");
    
@@ -425,7 +425,7 @@ bool ossimApplanixEOFile::parseHeader(std::istream& in,
    {
       header += line;
       header += "\n";
-      std::getline(in, line);
+      getline(in, line);
       line = line .substitute("\r",
                               "\n");
    }

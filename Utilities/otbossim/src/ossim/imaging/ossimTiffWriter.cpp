@@ -5,7 +5,7 @@
 // Author:  Frank Warmerdam (warmerda@home.com)
 //
 //*******************************************************************
-//  $Id: ossimTiffWriter.cpp 18047 2010-09-06 14:25:27Z dburken $
+//  $Id: ossimTiffWriter.cpp 18949 2011-02-23 15:28:08Z gpotts $
 
 #include <algorithm>
 #include <sstream>
@@ -58,7 +58,7 @@ static const long  DEFAULT_JPEG_QUALITY = 75;
 RTTI_DEF1(ossimTiffWriter, "ossimTiffWriter", ossimImageFileWriter);
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimTiffWriter.cpp 18047 2010-09-06 14:25:27Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimTiffWriter.cpp 18949 2011-02-23 15:28:08Z gpotts $";
 #endif
 
 ossimTiffWriter::ossimTiffWriter()
@@ -379,6 +379,18 @@ bool ossimTiffWriter::writeGeotiffTags(ossimRefPtr<ossimMapProjectionInfo> proje
 
 void ossimTiffWriter::checkColorLut()
 {
+   
+   // this code appears to be wrong.  We can only do an outo lut if the immediate input to the sequencer is 
+   // a handler with a lut or some kind of lut source.
+   // 
+   // I think that we should add a flag to enable auto setting of the lut instead of just doing it. This code causes core
+   // dumps if one is to replicate bands with a band selector where a lut is a single band output like a CIB
+   //
+   // I currenlty have to disable
+   //
+   
+   
+#if 0
    bool needColorLut = false;
    bool needLoop = true;
    ossimRefPtr<ossimNBandLutDataObject> colorLut = 0;
@@ -436,6 +448,7 @@ void ossimTiffWriter::checkColorLut()
    {
       setLut(*colorLut.get());
    }
+#endif
 }
 
 bool ossimTiffWriter::writeFile()
@@ -445,7 +458,7 @@ bool ossimTiffWriter::writeFile()
 
    if (traceDebug()) CLOG << "Entered..." << std::endl;
 
-   checkColorLut();
+   //checkColorLut();
 
    if(isLutEnabled())
    {

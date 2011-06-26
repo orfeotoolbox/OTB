@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfLocalGeographicTag.cpp 14713 2009-06-13 16:58:31Z dburken $
+// $Id: ossimNitfLocalGeographicTag.cpp 19682 2011-05-31 14:21:20Z dburken $
 #include <ossim/support_data/ossimNitfLocalGeographicTag.h>
 #include <iomanip>
 #include <sstream>
@@ -25,9 +25,9 @@ ossimNitfLocalGeographicTag::~ossimNitfLocalGeographicTag()
 {
 }
 
-ossimString ossimNitfLocalGeographicTag::getRegisterTagName()const
+std::string ossimNitfLocalGeographicTag::getRegisterTagName()const
 {
-   return "GEOLOB";
+   return std::string("GEOLOB");
 }
 
 void ossimNitfLocalGeographicTag::parseStream(std::istream& in)

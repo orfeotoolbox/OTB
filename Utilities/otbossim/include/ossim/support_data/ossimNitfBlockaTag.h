@@ -13,7 +13,7 @@
 // http://164.214.2.51/ntb/baseline/docs/stdi0002/final.pdf
 //
 //----------------------------------------------------------------------------
-// $Id: ossimNitfBlockaTag.h 14241 2009-04-07 19:59:23Z dburken $
+// $Id: ossimNitfBlockaTag.h 19682 2011-05-31 14:21:20Z dburken $
 #ifndef ossimNitfBlockaTag_HEADER
 #define ossimNitfBlockaTag_HEADER
 #include <ossim/support_data/ossimNitfRegisteredTag.h>
@@ -44,7 +44,7 @@ public:
    ossimNitfBlockaTag();
 
    /** @return "BLOCKA" as an ossimString. */
-   virtual ossimString getRegisterTagName() const;
+   virtual std::string getRegisterTagName() const;
   
    /**
     * Parse method.

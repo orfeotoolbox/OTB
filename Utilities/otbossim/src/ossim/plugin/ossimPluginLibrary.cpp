@@ -7,20 +7,22 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimPluginLibrary.cpp 16098 2009-12-15 15:13:16Z dburken $
+// $Id: ossimPluginLibrary.cpp 18967 2011-02-25 19:40:48Z gpotts $
 #include <ossim/plugin/ossimPluginLibrary.h>
+#include <iostream>
 
 RTTI_DEF1(ossimPluginLibrary, "ossimPluginLibrary", ossimDynamicLibrary);
 
 ossimPluginLibrary::ossimPluginLibrary()
    :ossimDynamicLibrary(),
-    theInfo(0)
+    m_info(0)
 {
 }
 
-ossimPluginLibrary::ossimPluginLibrary(const ossimString& name)
+ossimPluginLibrary::ossimPluginLibrary(const ossimString& name, const ossimString& options)
    :ossimDynamicLibrary(name),
-    theInfo(0)
+    m_options(options),
+    m_info(0)
 {
    initialize();
 }
@@ -36,21 +38,20 @@ void ossimPluginLibrary::initialize()
    {
       load();
    }
-
-   ossimSharedLibraryInitializePtr init = (ossimSharedLibraryInitializePtr)getSymbol("ossimSharedLibraryInitialize");
    
+   ossimSharedLibraryInitializePtr init = (ossimSharedLibraryInitializePtr)getSymbol("ossimSharedLibraryInitialize");
    if(init)
-   {         
-      init(&theInfo);
+   {
+      init(&m_info, m_options.c_str());
    }
 }
 
 void ossimPluginLibrary::finalize()
 {
-   ossimSharedLibraryInitializePtr finalizeLib = (ossimSharedLibraryInitializePtr)getSymbol("ossimSharedLibraryFinalize");
+   ossimSharedLibraryFinalizePtr finalizeLib = (ossimSharedLibraryFinalizePtr)getSymbol("ossimSharedLibraryFinalize");
    if(finalizeLib)
    {         
-      finalizeLib(&theInfo);
+      finalizeLib();
    }
    
    unload();
@@ -60,9 +61,9 @@ ossimString ossimPluginLibrary::getDescription()const
 {
    ossimString result;
 
-   if(theInfo&&isLoaded()&&theInfo->getDescription)
+   if(m_info&&isLoaded()&&m_info->getDescription)
    {
-      result = theInfo->getDescription();
+      result = m_info->getDescription();
    }
 
    return result;
@@ -70,15 +71,21 @@ ossimString ossimPluginLibrary::getDescription()const
 
 void ossimPluginLibrary::getClassNames(std::vector<ossimString>& classNames)const
 {
-   if(theInfo&&theInfo->getNumberOfClassNames&&theInfo->getClassName)
+   if(m_info&&m_info->getNumberOfClassNames&&m_info->getClassName)
    {
       ossim_int32 idx        = 0;
       ossim_int32 numObjects = 0;
 
-      numObjects = theInfo->getNumberOfClassNames();
+      numObjects = m_info->getNumberOfClassNames();
       for(idx = 0; idx < numObjects; ++idx)
       {
-         classNames.push_back(theInfo->getClassName(idx));
+         classNames.push_back(m_info->getClassName(idx));
       }
    }
+}
+
+void ossimPluginLibrary::setOptions(const ossimString& options)
+{
+   m_options = options;
+   
 }

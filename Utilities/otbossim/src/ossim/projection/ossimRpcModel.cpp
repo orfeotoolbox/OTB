@@ -13,7 +13,7 @@
 // LIMITATIONS: Does not support parameter adjustment (YET)
 //
 //*****************************************************************************
-//  $Id: ossimRpcModel.cpp 16174 2009-12-23 16:34:06Z dburken $
+//  $Id: ossimRpcModel.cpp 19594 2011-05-17 13:45:46Z gpotts $
 
 #include <ossim/projection/ossimRpcModel.h>
 #include <ossim/elevation/ossimElevManager.h>
@@ -282,7 +282,8 @@ void ossimRpcModel::worldToLineSample(const ossimGpt& ground_point,
 
    if( ground_point.isHgtNan() )
    {
-      nhgt = (- theHgtOffset) / theHgtScale;
+      // nhgt = (theHgtScale - theHgtOffset) / theHgtScale;
+      nhgt = ( - theHgtOffset) / theHgtScale;
    }
    else
    {

@@ -7,7 +7,7 @@
 // Description:
 //
 //*******************************************************************
-//  $Id: ossimQuickbirdTile.h 17815 2010-08-03 13:23:14Z dburken $
+//  $Id: ossimQuickbirdTile.h 19682 2011-05-31 14:21:20Z dburken $
 #ifndef ossimQuickbirdTil_HEADER
 #define ossimQuickbirdTil_HEADER
 #include <map>
@@ -105,9 +105,9 @@ public:
    bool getInfo(ossimQuickbirdTileInfo& result,
                 const ossimFilename& filename)const;
 
-   const std::map<ossimString, ossimQuickbirdTileInfo>& getMap() const { return theTileMap; }
+   const std::map<std::string, ossimQuickbirdTileInfo>& getMap() const { return theTileMap; }
    
-   typedef std::map<ossimString, ossimQuickbirdTileInfo> TileMap;
+   typedef std::map<std::string, ossimQuickbirdTileInfo> TileMap;
 
 protected:
 

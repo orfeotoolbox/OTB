@@ -7,7 +7,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimConvolutionSource.cpp 17206 2010-04-25 23:20:40Z dburken $
+//  $Id: ossimConvolutionSource.cpp 18602 2010-12-28 05:49:36Z gpotts $
 
 #include <ossim/imaging/ossimConvolutionSource.h>
 #include <ossim/imaging/ossimImageData.h>
@@ -290,11 +290,11 @@ void ossimConvolutionSource::convolve(T /* dummyVariable */,
    long convolutionCenterOffset  = 0;
    
    long outputOffset          = 0;
-   T min = 0;
-   T max = 0;
    T np = 0;
-   const double* minPix  = inputTile->getMinPix();
-   const double* maxPix  = inputTile->getMaxPix();
+   
+   const double minPix  = ossim::defaultMin(getOutputScalarType());
+   const double maxPix  = ossim::defaultMax(getOutputScalarType());
+//   const double* maxPix  = inputTile->getMaxPix();
    const double* nullPix = inputTile->getNullPix();
    double convolveResult = 0;
    
@@ -317,8 +317,9 @@ void ossimConvolutionSource::convolve(T /* dummyVariable */,
                                            patchWidth,
                                            convolveResult,
                                            (T)nullPix[b]);
-                  convolveResult = convolveResult < minPix[b]? minPix[b]:convolveResult;
-                  convolveResult = convolveResult > maxPix[b]? maxPix[b]:convolveResult;
+
+                  convolveResult = convolveResult < minPix? minPix:convolveResult;
+                  convolveResult = convolveResult > maxPix? maxPix:convolveResult;
                   
                   outBuf[outputOffset] = (T)convolveResult;
                }
@@ -341,8 +342,6 @@ void ossimConvolutionSource::convolve(T /* dummyVariable */,
          double convolveResult = 0;
          const T* buf = (const T*)inputTile->getBuf(b);
          T* outBuf    = (T*)(theTile->getBuf(b));
-         min=(T)minPix[b];
-         max=(T)maxPix[b];
          np =(T)nullPix[b];
          outputOffset = 0;
          
@@ -356,8 +355,10 @@ void ossimConvolutionSource::convolve(T /* dummyVariable */,
                                         patchWidth,
                                         convolveResult,
                                         np);
-               convolveResult = convolveResult < min? min:convolveResult;
-               convolveResult = convolveResult > max?max:convolveResult;
+// NOT SURE IF I WANT TO CLAMP IN A CONVOLUTION SOURCE  
+// seems better to clamp to a scalar range instead of an input min max
+               convolveResult = convolveResult < minPix? (T)minPix:convolveResult;
+               convolveResult = convolveResult > maxPix?(T)maxPix:convolveResult;
                outBuf[outputOffset] = (T)convolveResult;
                ++outputOffset;
                ++convolutionTopLeftOffset;

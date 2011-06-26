@@ -10,7 +10,7 @@
 // Container class for four integer points representing a rectangle.
 //
 //*******************************************************************
-//  $Id: ossimIrect.h 17815 2010-08-03 13:23:14Z dburken $
+//  $Id: ossimIrect.h 19180 2011-03-22 17:36:33Z oscarkramer $
 
 #ifndef ossimIrect_HEADER
 #define ossimIrect_HEADER 1
@@ -112,6 +112,12 @@ public:
               const ossimIpt& p3,
               const ossimIpt& p4,
               ossimCoordSysOrientMode=OSSIM_LEFT_HANDED);
+
+   //! Constructs an Irect surrounding the specified point, and of specified size.
+   ossimIrect(const ossimIpt& center, 
+              ossim_uint32    size_x, 
+              ossim_uint32    size_y,
+              ossimCoordSysOrientMode mode=OSSIM_LEFT_HANDED);
 
    /** destructor */
    ~ossimIrect();
@@ -265,10 +271,10 @@ public:
       }
 
    
-   ossimIpt ul() const { return theUlCorner; }
-   ossimIpt ur() const { return theUrCorner; }
-   ossimIpt lr() const { return theLrCorner; }
-   ossimIpt ll() const { return theLlCorner; }
+   const ossimIpt& ul() const { return theUlCorner; }
+   const ossimIpt& ur() const { return theUrCorner; }
+   const ossimIpt& lr() const { return theLrCorner; }
+   const ossimIpt& ll() const { return theLlCorner; }
 
    const ossimIrect& changeOrientationMode(ossimCoordSysOrientMode mode)
    {
@@ -347,7 +353,46 @@ public:
 
    void stretchToTileBoundary(const ossimIpt& tileWidthHeight);
 
+   /**
+    * @return ossimString representing ossimIrect.
+    *
+    * Format:  ( 30, -90, 512, 512, [LH|RH] )
+    *            -x- -y-  -w-  -h-   -Right or left handed-
+    *
+    * where:
+    *     x and y are origins either upper left if LEFT HANDED (LH) or
+    *                                lower left if RIGHT HANDED (RH)
+    *     w and h are width and height respectively
+    *     The last value is LH or RH to indicate LeftHanded or RightHanded
+    *    
+    */
+   ossimString toString()const;
+   
+   
+   /**
+    * expected Format:  form 1: ( 30, -90, 512, 512, [LH|RH] )
+    *                            -x- -y-  -w-  -h-   -Right or left handed-
+    * 
+    *                   form 2: ( 30, -90, 512, 512)
+    *                            -x- -y-  -w-  -h-
+    *
+    * NOTE: Form 2 assumes Left handed were x,y is origin upper left and y positive down.
+    *
+    * This method starts by doing a "makeNan" on rect. 
+    *
+    * @param rectString String to initialize from.
+    * @return true or false to indicate successful parsing.
+    */
+   bool toRect(const ossimString& rectString);
+   
+
    const ossimIrect& expand(const ossimIpt& padding);
+
+   //! Guarantees that this rect will be at least w X h big. If smaller than specified, the 
+   //! corresponding side will be stretched equally in + and - direction to meet required size.
+   //! Returns TRUE if resizing occurred.
+   bool insureMinimumSize(const ossimIpt& width_height);
+
    ossim_uint32 area()const
       {
          return width()*height();
@@ -461,6 +506,8 @@ public:
       }
       return static_cast<ossim_uint32>( w + 1 );
    }
+
+   ossimIpt size() const { return ossimIpt(width(), height()); }
  
    ossimIrect clipToRect(const ossimIrect& rect)const;
 

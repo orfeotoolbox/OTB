@@ -7,7 +7,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimImageRenderer.cpp 18022 2010-09-01 12:11:29Z gpotts $
+//  $Id: ossimImageRenderer.cpp 19639 2011-05-24 19:03:15Z gpotts $
 
 #include <iostream>
 using namespace std;
@@ -39,7 +39,7 @@ using namespace std;
 #include <ossim/projection/ossimEquDistCylProjection.h>
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimImageRenderer.cpp 18022 2010-09-01 12:11:29Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimImageRenderer.cpp 19639 2011-05-24 19:03:15Z gpotts $";
 #endif
 
 static ossimTrace traceDebug("ossimImageRenderer:debug");
@@ -895,7 +895,6 @@ void ossimImageRenderer::fillTile(ossimRefPtr<ossimImageData> outputData,
    double resLevelY = log( 1.0 / imageToViewScale.y )/ log( 2.0 );
    double resLevel0 = resLevelX < resLevelY ? resLevelX : resLevelY;
    long closestFitResLevel = (long)floor( resLevel0 );
-   
    //double averageScale = (imageToViewScale.x + imageToViewScale.y) / 2.0;
    //long closestFitResLevel = (long)floor( log( 1.0 / averageScale )/ log( 2.0 ) );
    
@@ -906,13 +905,13 @@ void ossimImageRenderer::fillTile(ossimRefPtr<ossimImageData> outputData,
    // ESH 02/2009: If requested resLevel is too high, let's lower it to one
    // that is ok.
    //---
-   const ossim_uint32 NUM_LEVELS =
-      theInputConnection->getNumberOfDecimationLevels();
+#if 0
+   const ossim_uint32 NUM_LEVELS = theInputConnection->getNumberOfDecimationLevels();
    if ( (NUM_LEVELS > 0) && (resLevel >=  NUM_LEVELS) )
    {
       resLevel = NUM_LEVELS - 1;
    }
-
+#endif
    //---
    // ESH 11/2008: Check the rset at the calculated resLevel to see
    // if it has the expected decimation factor. It it does, we can 
@@ -930,6 +929,7 @@ void ossimImageRenderer::fillTile(ossimRefPtr<ossimImageData> outputData,
       differenceTest = (1.0/closestScale) - (1.0/requestScale);
    }
 
+#if 0
    //---
    // ESH 11/2008: Add in threshold test so search only happens when 
    //              necessary.
@@ -975,7 +975,7 @@ void ossimImageRenderer::fillTile(ossimRefPtr<ossimImageData> outputData,
          }
       }
    }
-   
+#endif
    ossimDpt nul(rectInfo.m_Iul.x*closestScale,
                 rectInfo.m_Iul.y*closestScale);
    ossimDpt nll(rectInfo.m_Ill.x*closestScale,
@@ -988,7 +988,6 @@ void ossimImageRenderer::fillTile(ossimRefPtr<ossimImageData> outputData,
    m_Resampler->getKernelSupport( kernelSupportX, kernelSupportY );
    
    ossimDrect boundingRect = ossimDrect( nul, nll, nlr, nur );
-   
    boundingRect = ossimIrect((ossim_int32)floor(boundingRect.ul().x - (kernelSupportX)-.5),
                              (ossim_int32)floor(boundingRect.ul().y - (kernelSupportY)-.5),
                              (ossim_int32)ceil (boundingRect.lr().x + (kernelSupportX)+.5),
@@ -1300,14 +1299,16 @@ void ossimImageRenderer::setImageViewTransform(ossimImageViewTransform* ivt)
 //**************************************************************************************************
 bool ossimImageRenderer::setView(ossimObject* baseObject)
 {
-   bool result = false;
+   bool new_view_set = false;
    m_BoundingViewRect.makeNan();
    if(m_ImageViewTransform.valid())
    {
-      result = m_ImageViewTransform->setView(baseObject);
+      new_view_set = m_ImageViewTransform->setView(baseObject);
+
+      getBoundingRect();
    }
 
-   return result;
+   return new_view_set;
 }
 
 //**************************************************************************************************
@@ -1429,28 +1430,29 @@ void ossimImageRenderer::propertyEvent(ossimPropertyEvent& /* event */)
 //**************************************************************************************************
 void ossimImageRenderer::setProperty(ossimRefPtr<ossimProperty> property)
 {
-  ossimString tempName = property->getName();
-  
-  if(tempName == "Filter type")
-    {
+   ossimString tempName = property->getName();
+   
+   if((tempName == "Filter type")||
+      (tempName == "filter_type"))
+   {
       if(m_Resampler)
-	{
-	  m_Resampler->setFilterType(property->valueToString());
-	}
-    }
-//   else if(tempName == "Blur factor")
-//     {
-//       if(m_Resampler)
-// 	{
-// 	  m_Resampler->setBlurFactor(property->valueToString().toDouble());
-// 	}
-//     }
-  else
-    {
+      {
+         m_Resampler->setFilterType(property->valueToString());
+      }
+   }
+   //   else if(tempName == "Blur factor")
+   //     {
+   //       if(m_Resampler)
+   // 	{
+   // 	  m_Resampler->setBlurFactor(property->valueToString().toDouble());
+   // 	}
+   //     }
+   else
+   {
       ossimImageSourceFilter::setProperty(property);
-    }
+   }
 }
-
+      
 //**************************************************************************************************
 // 
 //**************************************************************************************************
@@ -1458,7 +1460,8 @@ ossimRefPtr<ossimProperty> ossimImageRenderer::getProperty(const ossimString& na
 {
   ossimString tempName = name;
 
-  if(tempName == "Filter type")
+  if((tempName == "Filter type")||
+     (tempName == "filter_type"))
     {
       std::vector<ossimString> filterNames;
       m_Resampler->getFilterTypes(filterNames);
@@ -1570,8 +1573,8 @@ void ossimImageRenderer::checkIVT()
          meters.y = GSD;
          if(inputProj)
          {
-            myMapProj->setUlTiePoints(inputProj->origin());
             myMapProj->setOrigin(inputProj->origin());
+            myMapProj->setUlTiePoints(inputProj->origin());
          }
          myMapProj->setMetersPerPixel(meters);
          myOutGeom->setProjection(myMapProj);
@@ -1579,6 +1582,8 @@ void ossimImageRenderer::checkIVT()
       
       // Set up our IVT with the new output geometry:
       ivpt->setViewGeometry(myOutGeom.get());
+      getBoundingRect();
+      myOutGeom->setImageSize(ossimIpt(m_BoundingViewRect.width(), m_BoundingViewRect.height()));
    }
 }
 
@@ -1676,7 +1681,6 @@ ossimRefPtr<ossimImageData>  ossimImageRenderer::getTileAtResLevel(const ossimIr
    }
    
    ossim_uint32 levels = theInputConnection->getNumberOfDecimationLevels();
-   
    // ossim_uint32 maxValue = (ossim_uint32)ossim::max((ossim_uint32)m_BoundingRect.width(),
    //                                            (ossim_uint32)m_BoundingRect.height());
    if(resLevel == 0)

@@ -7,18 +7,21 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimNitfWriter.h 15612 2009-10-08 18:54:42Z dburken $
+//  $Id: ossimNitfWriter.h 18674 2011-01-11 16:24:12Z dburken $
 #ifndef ossimNitfWriter_HEADER
 #define ossimNitfWriter_HEADER
 
 #include <iosfwd>
 #include <ossim/imaging/ossimNitfWriterBase.h>
+#include <ossim/base/ossimIpt.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/projection/ossimMapProjectionInfo.h>
 #include <ossim/base/ossimRgbLutDataObject.h>
 #include <ossim/base/ossimRefPtr.h>
 #include <ossim/support_data/ossimNitfFileHeaderV2_1.h>
 #include <ossim/support_data/ossimNitfImageHeaderV2_1.h>
+#include <ossim/support_data/ossimNitfTextHeaderV2_0.h>
+#include <ossim/support_data/ossimNitfTextHeaderV2_1.h>
 
 class ossimProjection;
 
@@ -46,8 +49,7 @@ public:
    virtual void getImageTypeList(std::vector<ossimString>& imageTypeList)const;
    
    virtual void setProperty(ossimRefPtr<ossimProperty> property);
-   virtual ossimRefPtr<ossimProperty> getProperty(
-      const ossimString& name)const;
+   virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;
 
    /**
     * @param propertyNames Array to populate with property names.
@@ -84,6 +86,21 @@ public:
     */
    virtual bool loadState(const ossimKeywordlist& kwl, const char* prefix=0);
 
+   virtual bool addTextToNitf(std::string& inputText);
+
+   /** @brief Gets the block size. */
+   virtual void getTileSize(ossimIpt& size) const;
+
+   /**
+    * Sets the nitf output block size.  Must be divisible by 16.
+    *
+    * Note:  This is not called setBlockSize just because there was already
+    * a virtual setTileSize.
+    *
+    * @param tileSize Block size.
+    */
+   virtual void setTileSize(const ossimIpt& tileSize);
+
 protected:
    
    /**
@@ -107,10 +124,12 @@ protected:
    /** Currently disabled... */
    // virtual void addStandardTags();
 
-   std::ofstream* theOutputStream;
-   
-   ossimRefPtr<ossimNitfFileHeaderV2_1>  theFileHeader;
-   ossimRefPtr<ossimNitfImageHeaderV2_1> theImageHeader;
+   std::ofstream*                        m_outputStream;
+   ossimRefPtr<ossimNitfFileHeaderV2_1>  m_fileHeader;
+   ossimRefPtr<ossimNitfImageHeaderV2_1> m_imageHeader;
+   ossimRefPtr<ossimNitfTextHeaderV2_1>  m_textHeader;
+   std::string                           m_textEntry;
+   ossimIpt                              m_blockSize;
 
 TYPE_DATA   
 };

@@ -34,9 +34,9 @@ ossimNitfMstgtaTag::~ossimNitfMstgtaTag()
 {
 }
 
-ossimString ossimNitfMstgtaTag::getRegisterTagName() const
+std::string ossimNitfMstgtaTag::getRegisterTagName() const
 {
-   return "MSTGTA";
+   return std::string("MSTGTA");
 }
 
 void ossimNitfMstgtaTag::parseStream(std::istream& in)

@@ -35,9 +35,9 @@ ossimNitfCscrnaTag::~ossimNitfCscrnaTag()
 {
 }
 
-ossimString ossimNitfCscrnaTag::getRegisterTagName() const
+std::string ossimNitfCscrnaTag::getRegisterTagName() const
 {
-   return "CSCRNA";
+   return std::string("CSCRNA");
 }
 
 void ossimNitfCscrnaTag::parseStream(std::istream& in)

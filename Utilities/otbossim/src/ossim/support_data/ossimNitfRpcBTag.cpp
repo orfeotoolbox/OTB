@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2000 Intelligence Data Systems. 
 //
 // LICENSE: LGPL
 //
@@ -9,7 +8,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfRpcBTag.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimNitfRpcBTag.cpp 19682 2011-05-31 14:21:20Z dburken $
 
 #include <ossim/support_data/ossimNitfRpcBTag.h>
 
@@ -20,7 +19,7 @@ ossimNitfRpcBTag::ossimNitfRpcBTag()
 {
 }
 
-ossimString ossimNitfRpcBTag::getRegisterTagName() const
+std::string ossimNitfRpcBTag::getRegisterTagName() const
 {
-   return ossimString("RPC00B");
+   return std::string("RPC00B");
 }

@@ -11,7 +11,7 @@
 //   Contains implementation of class ossimSensorModelFactory
 //
 //*****************************************************************************
-//  $Id: ossimSensorModelFactory.cpp 15945 2009-11-18 14:19:24Z gpotts $
+//  $Id: ossimSensorModelFactory.cpp 19682 2011-05-31 14:21:20Z dburken $
 #include <fstream>
 #include <algorithm>
 #include <ossim/projection/ossimSensorModelFactory.h>
@@ -48,6 +48,7 @@ static ossimTrace traceDebug = ossimTrace("ossimSensorModelFactory:debug");
 #include <ossim/projection/ossimFcsiModel.h>
 #include <ossim/projection/ossimApplanixUtmModel.h>
 #include <ossim/projection/ossimApplanixEcefModel.h>
+#include <ossim/projection/ossimSkyBoxLearSensor.h>
 #include <ossim/support_data/ossimFfL7.h>
 #include <ossim/support_data/ossimFfL5.h>
 
@@ -128,6 +129,10 @@ ossimSensorModelFactory::createProjection(const ossimString &name) const
    //***
    // Name should represent the model type:
    //***
+   if(name == STATIC_TYPE_NAME(ossimSkyBoxLearSensor))
+   {
+      return new ossimSkyBoxLearSensor;
+   }
    if(name == STATIC_TYPE_NAME(ossimCoarseGridModel))
    {
       return new ossimCoarseGridModel;
@@ -192,6 +197,7 @@ ossimSensorModelFactory::createProjection(const ossimString &name) const
    {
       return new ossimSarModel;
    }
+
    //***
    // ADD_MODEL: (Please leave this comment for the next programmer)
    //***
@@ -240,6 +246,8 @@ ossimSensorModelFactory::getTypeNameList(std::vector<ossimString>& typeList)
    typeList.push_back(STATIC_TYPE_NAME(ossimSpot5Model));
    typeList.push_back(STATIC_TYPE_NAME(ossimSarModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimBuckeyeSensor));
+   typeList.push_back(STATIC_TYPE_NAME(ossimSkyBoxLearSensor));
+
    //***
    // ADD_MODEL: Please leave this comment for the next programmer. Add above.
    //***
@@ -538,7 +546,7 @@ void ossimSensorModelFactory::findCoarseGrid(ossimFilename& result,
          {
             if(file.ext().downcase() == "dat")
             {
-               ifstream in(file);
+               std::ifstream in(file.c_str());
                if(in)
                {
                   in.read((char*)tempBuf, 14);

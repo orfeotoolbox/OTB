@@ -18,7 +18,7 @@ void vpf_display_record( row_type row,
 
 
 void display_attributes( int fc,
-			 long int row,
+			 ossim_int32 row,
 			 library_type *library,
 			 FILE *fp );
 

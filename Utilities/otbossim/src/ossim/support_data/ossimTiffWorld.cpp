@@ -9,12 +9,7 @@
 // Description: Container class for a tiff world file data.
 //
 //********************************************************************
-// $Id: ossimTiffWorld.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
-
-#include <iostream>
-#include <fstream>
-#include <iomanip>
-using namespace std;
+// $Id: ossimTiffWorld.cpp 19682 2011-05-31 14:21:20Z dburken $
 
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimDirectory.h>
@@ -22,20 +17,27 @@ using namespace std;
 #include <ossim/base/ossimString.h>
 #include <ossim/base/ossimUnitConversionTool.h>
 #include <ossim/support_data/ossimTiffWorld.h>
+#include <ossim/base/ossimNotify.h>
+#include <cmath>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
+using namespace std;
 
 //**************************************************************************
 // ossimTiffWorld::ossimTiffWorld()
 //***************************************************************************
 ossimTiffWorld::ossimTiffWorld()
    :
-      theXScale(1.0),
-      the2ndValue(0.0),
-      the3rdValue(0.0),
-      theYScale(1.0),
-      theTranslateX(0.0),
-      theTranslateY(0.0),
+      theXform1(1.0),
+      theXform2(0.0),
+      theXform3(0.0),
+      theXform4(-1.0),
+      theTranslation(0.0,0.0),
       thePixelType(OSSIM_PIXEL_IS_AREA),
-      theUnit(OSSIM_METERS)
+      theUnit(OSSIM_METERS),
+      theComputedScale(0.0, 0.0),
+      theComputedRotation(0.0)
 {}
 
 //**************************************************************************
@@ -45,17 +47,25 @@ ossimTiffWorld::ossimTiffWorld(const char* file,
 			       ossimPixelType ptype,
 			       ossimUnitType  scaleUnits)
    :
-      theXScale(1.0),
-      the2ndValue(0.0),
-      the3rdValue(0.0),
-      theYScale(-1.0),
-      theTranslateX(0.0),
-      theTranslateY(0.0),
+      theXform1(1.0),
+      theXform2(0.0),
+      theXform3(0.0),
+      theXform4(-1.0),
+      theTranslation(0.0,0.0),
       thePixelType(ptype),
-      theUnit(scaleUnits)
+      theUnit(scaleUnits),
+      theComputedScale(0.0, 0.0),
+      theComputedRotation(0.0)
 {
+   open(ossimFilename(file), ptype, scaleUnits);
+}
+
+bool ossimTiffWorld::open(const ossimFilename& file, ossimPixelType ptype, ossimUnitType  unit)
+{
+   bool result = false;
+
    ifstream is;
-   is.open(file);
+   is.open(file.c_str());
 
    if( !is.is_open() )
    {
@@ -79,42 +89,67 @@ ossimTiffWorld::ossimTiffWorld(const char* file,
             is.open( result[i].c_str() );
          }
       }
-      
-      if ( !is.is_open() )
-      {
-         return;
-      }
    }
-
-   is >> theXScale
-      >> the2ndValue
-      >> the3rdValue
-      >> theYScale
-      >> theTranslateX
-      >> theTranslateY;
-
-   is.close();
+      
+   if ( is.is_open() )
+   {
+      double x,y;
+      is >> theXform1 >> theXform2 >> theXform3 >> theXform4 >> x >> y;
+      theTranslation = ossimDpt(x,y);
+      
+      // Compute the affine parameters from the transform:
+      theComputedRotation = atan2(theXform2,theXform1);
+      
+/*
+ * Commented out warning.
+ * Used all the time for tie and scale, NOT for affine. We could wrap around trace
+ * if we added trace to class. (drb - 20110115)
+ */
+#if 0
+      double angle2 = atan2(theXform4,theXform3);
+      if (fabs(theComputedRotation - angle2) > 0.00001)
+      {
+         ossimNotify(ossimNotifyLevel_WARN)
+            << "ossimTiffWorld -- Non-affine transform encountered."
+            << " Use of an affine transform to represent this world file geometry will result in errors."
+            << endl;
+      }
+#endif
+      
+      double cos_rot = cos(theComputedRotation);
+      if (cos_rot != 0.0)
+      {
+         theComputedScale.x = theXform1/cos_rot;
+         theComputedScale.y = theXform4/cos_rot;
+      }
+      else
+      {
+         theComputedScale.x = theXform4;
+         theComputedScale.y = theXform1;
+      }
+      thePixelType = ptype;
+      theUnit = unit;
+      is.close();
+      result = true;
+   }
+   return result;
 }
 
 ossimTiffWorld::~ossimTiffWorld()
 {
 }
 
-void ossimTiffWorld::forward(const ossimDpt& imagePoint,
+void ossimTiffWorld::forward(const ossimDpt& ip,
                              ossimDpt& transformedPoint)
 {
-   transformedPoint.x =
-      imagePoint.x*theXScale   + imagePoint.y*the3rdValue + theTranslateX;
-   transformedPoint.y =
-      imagePoint.x*the2ndValue + imagePoint.y*theYScale   + theTranslateY;
+   transformedPoint.x = ip.x*theXform1 + ip.y*theXform2 + theTranslation.x;
+   transformedPoint.y = ip.x*theXform3 + ip.y*theXform4 + theTranslation.y;
 }
 
-
-bool ossimTiffWorld::saveToOssimGeom(ossimKeywordlist& kwl, 
-				     const char* prefix)const
+bool ossimTiffWorld::saveToOssimGeom(ossimKeywordlist& kwl, const char* prefix)const
 {
-   ossimDpt scale(fabs(theXScale), fabs(theYScale));
-   ossimDpt tie(theTranslateX, theTranslateY);
+   ossimDpt scale(fabs(theXform1), fabs(theXform4));
+   ossimDpt tie(theTranslation.x, theTranslation.y);
 
    if ( (theUnit == OSSIM_FEET) || (theUnit == OSSIM_US_SURVEY_FEET) )
    {
@@ -168,11 +203,10 @@ bool ossimTiffWorld::saveToOssimGeom(ossimKeywordlist& kwl,
    return true;
 }
 
-bool ossimTiffWorld::loadFromOssimGeom(const ossimKeywordlist& kwl, 
-				       const char* prefix)
+bool ossimTiffWorld::loadFromOssimGeom(const ossimKeywordlist& kwl, const char* prefix)
 {
-   the2ndValue = 0.0;
-   the3rdValue = 0.0;
+   theXform2 = 0.0;
+   theXform3 = 0.0;
 
    const char* lookup;
 
@@ -182,17 +216,15 @@ bool ossimTiffWorld::loadFromOssimGeom(const ossimKeywordlist& kwl,
    {
       ossimDpt scale;
       scale.toPoint(std::string(lookup));
-      theXScale      = scale.x;
-      theYScale      = -(scale.y);
+      theXform1      = scale.x;
+      theXform4      = -(scale.y);
    }
    else // BACKWARDS COMPATIBILITY LOOKUPS...
    {
-      ossimString xscale   =
-         kwl.find(prefix, ossimKeywordNames::METERS_PER_PIXEL_X_KW);
-      ossimString yscale   =
-         kwl.find(prefix, ossimKeywordNames::METERS_PER_PIXEL_Y_KW);
-      theXScale      = xscale.toDouble();
-      theYScale      = -(yscale.toDouble());
+      ossimString xscale = kwl.find(prefix, ossimKeywordNames::METERS_PER_PIXEL_X_KW);
+      ossimString yscale = kwl.find(prefix, ossimKeywordNames::METERS_PER_PIXEL_Y_KW);
+      theXform1 = xscale.toDouble();
+      theXform4 = -(yscale.toDouble());
    }
 
    // Get the tie...
@@ -201,8 +233,8 @@ bool ossimTiffWorld::loadFromOssimGeom(const ossimKeywordlist& kwl,
    {
       ossimDpt tie;
       tie.toPoint(std::string(lookup));
-      theTranslateX  = tie.x;
-      theTranslateY  = tie.y;
+      theTranslation.x  = tie.x;
+      theTranslation.y  = tie.y;
    }
    else // BACKWARDS COMPATIBILITY LOOKUPS...
    {
@@ -210,8 +242,8 @@ bool ossimTiffWorld::loadFromOssimGeom(const ossimKeywordlist& kwl,
          kwl.find(prefix, ossimKeywordNames::TIE_POINT_EASTING_KW);
       ossimString northing =
          kwl.find(prefix, ossimKeywordNames::TIE_POINT_NORTHING_KW);
-      theTranslateX  = easting.toDouble();
-      theTranslateY  = northing.toDouble(); 
+      theTranslation.x  = easting.toDouble();
+      theTranslation.y  = northing.toDouble(); 
    }
    
    return true;
@@ -220,12 +252,11 @@ bool ossimTiffWorld::loadFromOssimGeom(const ossimKeywordlist& kwl,
 std::ostream& ossimTiffWorld::print(std::ostream& out) const
 {
    out << setiosflags(ios::fixed) << setprecision(15)
-       << theXScale     << "\n"
-       << the2ndValue   << "\n"
-       << the3rdValue   << "\n"
-       << theYScale     << "\n"
-       << theTranslateX << "\n"
-       << theTranslateY
+       << theXform1     << "\n"
+       << theXform2     << "\n"
+       << theXform3     << "\n"
+       << theXform4     << "\n"
+       << theTranslation
        << endl;
    return out;
 }

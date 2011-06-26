@@ -24,13 +24,14 @@
 //   spacing are specified to the constructor.
 //
 //*****************************************************************************
-//  $Id: ossimDblGrid.h 14799 2009-06-30 08:54:44Z dburken $
+//  $Id: ossimDblGrid.h 19441 2011-04-25 16:47:28Z dburken $
 
 #ifndef ossimDblGrid_HEADER
 #define ossimDblGrid_HEADER
 
 #include <ossim/base/ossimDpt.h>
 #include <ossim/base/ossimIpt.h>
+#include <ossim/base/ossimDrect.h>
 #include <ossim/base/ossimCommon.h>
 
 class ossimDrect;
@@ -83,7 +84,13 @@ public:
    void         initialize(const ossimDrect&  uv_rect, 
                            const ossimDpt&    spacing,
                            double null_value = OSSIM_DEFAULT_NULL_PIX_DOUBLE);
-  void deallocate();
+   /*!
+   * Enables/disables extrapolation functionality. If extrapolation is enabled, then calls to 
+   * operator() will handle points outside of the grid. 
+   */
+   void enableExtrapolation(bool arg=true) { theExtrapIsEnabled = arg;}
+
+   void deallocate();
    /*!
     * Fills the current grid with the value specified.
     */
@@ -125,7 +132,7 @@ public:
     * The grid must not contain any NULL nodes as these are treated as valid
     * quantities. The kernel sizes should be odd numbers. To avoid shrinking
     * the grid by the kernel radius, the edge nodes outside of the filter's
-    * reach are set equal to the nearest filtered node. X is the contiguous
+    * reach are computed by extrapolation. X is the contiguous
     * axis in the kernel array, i.e., kernel(x,y) = kernel[y*size_x + x].
     */
    void filter(int size_x, int size_y, double* kernel);
@@ -139,11 +146,20 @@ public:
    };
    void  setInterpolationType (InterpType interp);
 
+   enum DomainType
+   {
+      CONTINUOUS = 0, // Default continuous grid with no limits on values
+      SAWTOOTH_90= 1, // For angles between -90 and 90 deg such as latitude
+      WRAP_180   = 2, // For angles between -180 and 180 with discontinuity at limits (typically used for longitude)
+      WRAP_360   = 3  // For angles between 0 and 360 with discontinuity at limits (typically used for rotations)
+   };
+   void setDomainType(DomainType dt) { theDomainType = dt; }
+
    /*!
     * Access an interpolated value in the U/V (output) coordinate system.
     */
-   double operator() (const ossimDpt& p) const {return (*this)(p.u,p.v);}
-   double value      (const ossimDpt& p) const {return (*this)(p.u,p.v);}
+   double operator() (const ossimDpt& uv_point) const {return (*this)(uv_point.u, uv_point.v);}
+   double value      (const ossimDpt& uv_point) const {return (*this)(uv_point.u, uv_point.v);}
 
    double operator() (const double& u, const double& v) const;
    double value (const double& u, const double& v) const {return (*this)(u,v);}
@@ -171,8 +187,7 @@ public:
    const ossimIpt& size()    const { return theSize; }
    const ossimDpt& origin()  const { return theOrigin; }
    const ossimDpt& spacing() const { return theSpacing; }
-   unsigned long   getSizeInBytes() const
-      { return theSize.x*theSize.y*sizeof(double); }
+   unsigned long   getSizeInBytes() const { return theSize.x*theSize.y*sizeof(double); }
    
    /*!
     * Returns true if double point lies within world space coverage:
@@ -185,15 +200,19 @@ public:
     */
    bool  save(std::ostream& os, const char* descr) const;
    bool  load(std::istream& is);
-      
    
-   friend std::ostream& operator << (std::ostream& os,
-                                     const ossimDblGrid& grid);
+   friend std::ostream& operator << (std::ostream& os, const ossimDblGrid& grid);
    
 private:
    
    void  computeMean();
-   int   index(int x, int y) const { return y*theSize.x + x; }
+   double interpolate(double x, double y) const;
+   double extrapolate(double x, double y) const;
+
+   //! Constrains the value to the numerical domain specified in theDomainType.
+   void constrain(double& value) const;
+
+   ossim_uint32   index(int x, int y) const { return y*theSize.x + x; }
    
    double*      theGridData;
    ossimIpt     theSize;
@@ -205,6 +224,8 @@ private:
    double       theMeanValue;
    double       theDeviation;
    bool         theMeanIsComputed;
+   bool         theExtrapIsEnabled;
+   DomainType   theDomainType;
    
 };
 

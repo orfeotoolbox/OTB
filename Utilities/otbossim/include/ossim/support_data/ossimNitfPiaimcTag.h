@@ -15,7 +15,7 @@
 // http://164.214.2.51/ntb/baseline/docs/stdi0002/final.pdf
 //
 //----------------------------------------------------------------------------
-// $Id: ossimNitfPiaimcTag.h 14241 2009-04-07 19:59:23Z dburken $
+// $Id: ossimNitfPiaimcTag.h 19682 2011-05-31 14:21:20Z dburken $
 #ifndef ossimNitfPiaimcTag_HEADER
 #define ossimNitfPiaimcTag_HEADER
 
@@ -56,7 +56,7 @@ public:
    ossimNitfPiaimcTag();
 
    /** @return "PIAIMC" as an ossimString. */
-   virtual ossimString getRegisterTagName() const;
+   virtual std::string getRegisterTagName() const;
   
    /**
     * Parse method.

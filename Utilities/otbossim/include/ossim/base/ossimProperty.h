@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimProperty.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimProperty.h 18405 2010-11-10 20:44:58Z gpotts $
 #ifndef ossimProperty_HEADER
 #define ossimProperty_HEADER
 #include <ossim/base/ossimObject.h>
@@ -67,6 +67,8 @@ public:
    virtual ossimString getDescription()const;
 
    virtual ossimRefPtr<ossimXmlNode> toXml()const;
+   
+   virtual void saveState(ossimKeywordlist& kwl, const ossimString& prefix = "")const;
    
 protected:
    virtual ~ossimProperty();

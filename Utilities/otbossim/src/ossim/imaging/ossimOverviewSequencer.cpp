@@ -7,7 +7,7 @@
 // Description: Sequencer for building overview files.
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimOverviewSequencer.cpp 17928 2010-08-19 18:43:53Z gpotts $
+// $Id: ossimOverviewSequencer.cpp 19724 2011-06-06 21:07:15Z dburken $
 
 #include <ossim/imaging/ossimOverviewSequencer.h>
 #include <ossim/base/ossimIpt.h>
@@ -18,11 +18,12 @@
 #include <ossim/imaging/ossimImageData.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
 #include <ossim/imaging/ossimImageHandler.h>
+#include <ossim/imaging/ossimImageMetaData.h>
 #include <ossim/parallel/ossimMpi.h>
 
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimOverviewSequencer.cpp 17928 2010-08-19 18:43:53Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimOverviewSequencer.cpp 19724 2011-06-06 21:07:15Z dburken $";
 #endif
 
 static ossimTrace traceDebug("ossimOverviewSequencer:debug");
@@ -31,6 +32,8 @@ ossimOverviewSequencer::ossimOverviewSequencer()
    :
    ossimReferenced(),
    m_imageHandler(0),
+   m_maskWriter(0),
+   m_maskFilter(0),
    m_tile(0),
    m_areaOfInterest(),
    m_tileSize(OSSIM_DEFAULT_TILE_WIDTH, OSSIM_DEFAULT_TILE_HEIGHT),
@@ -43,7 +46,12 @@ ossimOverviewSequencer::ossimOverviewSequencer()
    m_resampleType(ossimFilterResampler::ossimFilterResampler_BOX),
    m_histogram(0),
    m_histoMode(OSSIM_HISTO_MODE_UNKNOWN),
-   m_histoTileIndex(1)
+   m_histoTileIndex(1),
+   m_scanForMinMax(false),
+   m_scanForMinMaxNull(false),
+   m_minValues(0),
+   m_maxValues(0),
+   m_nulValues(0)
 {
    m_areaOfInterest.makeNan();
 
@@ -63,6 +71,8 @@ ossimOverviewSequencer::ossimOverviewSequencer()
 ossimOverviewSequencer::~ossimOverviewSequencer()
 {
    m_imageHandler = 0;
+   m_maskFilter   = 0;
+   m_maskWriter   = 0;
    m_tile         = 0;
    m_histogram    = 0;
 
@@ -125,6 +135,9 @@ void ossimOverviewSequencer::setImageHandler(ossimImageHandler* input)
    m_imageHandler = input;
    m_areaOfInterest.makeNan();
    m_dirtyFlag = true;
+
+   if (m_maskWriter.valid())
+      m_maskWriter->connectMyInputTo(m_imageHandler.get());
 }
 
 void ossimOverviewSequencer::setSourceLevel(ossim_uint32 level)
@@ -177,6 +190,10 @@ void ossimOverviewSequencer::initialize()
       return;
    }
 
+   ossimImageSource* imageSource = m_imageHandler.get();
+   if (m_maskFilter.valid())
+      imageSource = m_maskFilter.get();
+
    // Check the area of interest and set from image if needed.
    if ( m_areaOfInterest.hasNans() )
    {
@@ -186,8 +203,8 @@ void ossimOverviewSequencer::initialize()
    // Check the tile size and set from image if needed.
    if ( m_tileSize.hasNans() )
    {
-      m_tileSize.x = m_imageHandler->getTileWidth();
-      m_tileSize.y = m_imageHandler->getTileHeight();
+      m_tileSize.x = imageSource->getTileWidth();
+      m_tileSize.y = imageSource->getTileHeight();
    }
 
    // Update m_numberOfTilesHorizontal and m_numberOfTilesVertical.
@@ -198,7 +215,7 @@ void ossimOverviewSequencer::initialize()
 
    // Use this factory constructor as it copies the min/max/nulls from the image handler.
    m_tile = ossimImageDataFactory::instance()->
-      create( 0, m_imageHandler->getNumberOfOutputBands(), m_imageHandler.get());
+      create( 0, imageSource->getNumberOfOutputBands(), imageSource);
    
    if(m_tile.valid())
    {
@@ -213,7 +230,7 @@ void ossimOverviewSequencer::initialize()
    {
       m_histogram = new ossimMultiBandHistogram;
       
-      m_histogram->create(m_imageHandler.get());
+      m_histogram->create(imageSource);
 
       if (m_histoMode == OSSIM_HISTO_MODE_NORMAL)
       {
@@ -245,20 +262,33 @@ void ossimOverviewSequencer::initialize()
    {
       m_histogram = 0;
    }
+
+
+   if ( m_scanForMinMax || m_scanForMinMaxNull )
+   {
+      //---
+      // The methods ossimImageData::computeMinMaxNullPix and computeMinMaxPix
+      // will resize and set min to max, max to min and null to max if the arrays passed in
+      // are empty.
+      //---
+      clearMinMaxNullArrays();
+   }
    
    m_dirtyFlag = false;
 
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
-         << "aoi:                  " << m_areaOfInterest
-         << "\ntile size:          " << m_tileSize
-         << "\ntiles wide:         " << m_numberOfTilesHorizontal
-         << "\ntiles high:         " << m_numberOfTilesVertical
-         << "\nsource rlevel:      " << m_sourceResLevel
-         << "\ndecimation factor:  " << m_decimationFactor
-         << "\nresamp type:        " << m_resampleType
-         << "\nhisto mode:         " << m_histoMode << "\n";
+         << "aoi:                      " << m_areaOfInterest
+         << "\ntile size:              " << m_tileSize
+         << "\ntiles wide:             " << m_numberOfTilesHorizontal
+         << "\ntiles high:             " << m_numberOfTilesVertical
+         << "\nsource rlevel:          " << m_sourceResLevel
+         << "\ndecimation factor:      " << m_decimationFactor
+         << "\nresamp type:            " << m_resampleType
+         << "\nscan for min max:       " << (m_scanForMinMax?"true\n":"false\n")
+         << "\nscan for min, max null: " << (m_scanForMinMaxNull?"true\n":"false\n")
+         << "\nhisto mode:             " << m_histoMode << "\n";
       if (m_histoMode != OSSIM_HISTO_MODE_UNKNOWN)
       {
          ossimNotify(ossimNotifyLevel_DEBUG)
@@ -294,14 +324,27 @@ ossimRefPtr<ossimImageData> ossimOverviewSequencer::getNextTile()
    m_tile->makeBlank();
 
    // Grab the input tile.
-   ossimRefPtr<ossimImageData> inputTile =
-      m_imageHandler->getTile(inputRect, m_sourceResLevel);
+   ossimRefPtr<ossimImageData> inputTile;
+   if (m_maskFilter.valid())
+      inputTile = m_maskFilter->getTile(inputRect, m_sourceResLevel);
+   else
+      inputTile = m_imageHandler->getTile(inputRect, m_sourceResLevel);
+
    if (inputTile.valid() == false)
    {
       ossimNotify(ossimNotifyLevel_WARN)
          << "ossimOverviewSequencer::getNextTile DEBUG:"
          << "\nRequest failed for input rect: " << inputRect
          << "\nRes level:  " << m_sourceResLevel << std::endl;
+   }
+
+   if ( m_scanForMinMaxNull )
+   {
+      inputTile->computeMinMaxNulPix(m_minValues, m_maxValues, m_nulValues);
+   }
+   else if ( m_scanForMinMax )
+   {
+      inputTile->computeMinMaxPix(m_minValues, m_maxValues);
    }
 
    if ( ( m_histoMode != OSSIM_HISTO_MODE_UNKNOWN ) &&
@@ -322,9 +365,11 @@ ossimRefPtr<ossimImageData> ossimOverviewSequencer::getNextTile()
    {
       // Resample the tile.
       resampleTile(inputTile.get());
-
-      // Set the tile status.
       m_tile->validate();
+
+      // Scan the resampled pixels for bogus values to be masked out (if masking enabled)
+      if (m_maskWriter.valid())
+         m_maskWriter->generateMask(m_tile, m_sourceResLevel+1);
    }
 
    // Increment the tile index.
@@ -358,6 +403,340 @@ void ossimOverviewSequencer::setResampleType(
    ossimFilterResampler::ossimFilterResamplerType resampleType)
 {
    m_resampleType = resampleType;
+}
+
+void ossimOverviewSequencer::setScanForMinMax(bool flag)
+{
+   m_scanForMinMax  = flag;
+}
+
+bool ossimOverviewSequencer::getScanForMinMax() const
+{
+   return m_scanForMinMax;
+}
+
+void ossimOverviewSequencer::setScanForMinMaxNull(bool flag)
+{
+   m_scanForMinMaxNull = flag;
+}
+
+bool ossimOverviewSequencer::getScanForMinMaxNull() const
+{
+   return m_scanForMinMaxNull;
+}
+
+void ossimOverviewSequencer::clearMinMaxNullArrays()
+{
+   m_minValues.clear();
+   m_maxValues.clear();
+   m_nulValues.clear();
+}
+
+bool ossimOverviewSequencer::writeOmdFile(const std::string& file)
+{
+   static const char M[] = "ossimOverviewSequencer::writeOmdFile";
+   if ( traceDebug() )
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG) << M << " entered...\nfile: " << file << endl;
+   }
+
+   //---
+   // This method writes an omd file to disk.  Typically called after sequencing trough tile that
+   // were scanned for min, max, and potentially null values.
+   // Since this can be called without a scan there is extra logic in here to initialize values
+   // if so.  Also there are sanity checks for cases where there is no null value, i.e. a
+   // full tile, in which case assumptions have to be made...
+   //---
+   
+   bool result = false;
+   if ( file.size() && m_imageHandler.valid() )
+   {
+      const ossim_uint32 BANDS = m_imageHandler->getNumberOfInputBands();
+      const ossimScalarType SCALAR = m_imageHandler->getOutputScalarType();
+      const ossim_float64 DEFAULT_NUL = ossim::defaultNull(SCALAR);
+      const ossim_float64 FALLBACK_NULL = -32767; // This is my arbitrary pick. (drb)
+
+      if ( traceDebug() )
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "Original array values:\n";
+         std::vector<ossim_float64>::const_iterator i = m_minValues.begin();
+         ossim_int32 band = 0;
+         while ( i < m_minValues.end() )
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << "min[" << band++ << "]: " << *i << "\n";
+            ++i;
+         }
+         i = m_maxValues.begin();
+         band = 0;
+         while ( i < m_maxValues.end() )
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << "max[" << band++ << "]: " << *i << "\n";
+            ++i;
+         }
+         i = m_nulValues.begin();
+         band = 0;
+         while ( i < m_nulValues.end() )
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << "nul[" << band++ << "]: " << *i << "\n";
+            ++i;
+         }
+      }
+      
+      if ( (m_scanForMinMax == true) || (m_nulValues.size() !=  BANDS) )
+      {
+         // Only scanned for min and max so set the null.
+         if (m_nulValues.size() !=  BANDS)
+         {
+            m_nulValues.resize(BANDS);
+         }
+         for (ossim_uint32 band = 0; band < BANDS; ++band)
+         {
+            m_nulValues[band] = m_imageHandler->getNullPixelValue(band);
+         }
+      }
+      else if ( m_scanForMinMaxNull == true )
+      {
+         //---
+         // The arrays (sizes) should be set if we did the scan.
+         // Note that scanning for null only works if there IS a null in the image; hence, the
+         // extra sanity checks as if there are no null then the null gets set to the real min.
+         //
+         // This is very dangerous code as it makes assumptions (drb)...
+         //---
+         if ( (m_minValues.size() ==  BANDS) &&
+              (m_maxValues.size() ==  BANDS) &&
+              (m_nulValues.size() ==  BANDS) )
+         {
+            switch(SCALAR)
+            {
+               case OSSIM_UINT8:
+               case OSSIM_SINT8:                  
+               case OSSIM_UINT16:
+               case OSSIM_USHORT11:
+               case OSSIM_UINT32:
+               {
+                  // All of these should have a null of 0.
+                  for (ossim_uint32 band = 0; band < BANDS; ++band)
+                  {
+                     if ( m_nulValues[band] > DEFAULT_NUL )
+                     {
+                        if ( m_nulValues[band] < m_minValues[band] )
+                        {
+                           m_minValues[band] = m_nulValues[band];
+                        }
+                        m_nulValues[band] = DEFAULT_NUL;
+                     }
+                  }
+                  break;
+               }
+               case OSSIM_SINT16:
+               {
+                  for (ossim_uint32 band = 0; band < BANDS; ++band)
+                  {
+                     if ( ( m_nulValues[band] != DEFAULT_NUL ) && // -32768
+                          ( m_nulValues[band] != -32767.0 )    &&
+                          ( m_nulValues[band] != -32766.0 )    &&
+                          ( m_nulValues[band] != -9999.0 ) )
+                     {
+                        if ( ( m_nulValues[band] > -9999.0 ) &&
+                             ( m_nulValues[band] < m_minValues[band] ) )
+                        {
+                           m_minValues[band] = m_nulValues[band];
+                        }
+                        m_nulValues[band] = FALLBACK_NULL;
+                     }
+                  }
+                  break;
+               }
+               case OSSIM_SINT32:
+               {
+                  for (ossim_uint32 band = 0; band < BANDS; ++band)
+                  {
+                     if ( ( m_nulValues[band] != DEFAULT_NUL ) &&
+                          ( m_nulValues[band] != -32768.0 ) &&        // Common null
+                          ( m_nulValues[band] != -32767.0 ) &&       // The other common null.
+                          ( m_nulValues[band] != -32766.0 ) &&
+                          ( m_nulValues[band] != -9999.0  ) &&
+                          ( m_nulValues[band] != -99999.0 ) )
+                     {
+                        if ( ( m_nulValues[band] > -9999.0 ) &&
+                             ( m_nulValues[band] < m_minValues[band] ) )
+                        {
+                           m_minValues[band] = m_nulValues[band];
+                        }
+                        m_nulValues[band] = FALLBACK_NULL;
+                     } 
+                  }
+                  break;
+               }
+               case OSSIM_FLOAT32:
+               case OSSIM_FLOAT64: 
+               {
+                  for (ossim_uint32 band = 0; band < BANDS; ++band)
+                  {
+                     if ( ( m_nulValues[band] != DEFAULT_NUL ) &&
+                          ( m_nulValues[band] != -32768.0 ) &&  
+                          ( m_nulValues[band] != -32767.0 ) && 
+                          ( m_nulValues[band] != -32766.0 ) &&
+                          ( m_nulValues[band] != -9999.0  ) &&
+                          ( m_nulValues[band] != -99999.0 ) )
+                     {
+                        if ( ( m_nulValues[band] > -9999 ) &&
+                             ( m_nulValues[band] < m_minValues[band] ) )
+                        {
+                           m_minValues[band] = m_nulValues[band];
+                        }
+                        m_nulValues[band] = FALLBACK_NULL;
+                     } 
+                  }
+                  break;
+               }
+               case OSSIM_NORMALIZED_FLOAT:
+               case OSSIM_NORMALIZED_DOUBLE:
+               {
+                  for (ossim_uint32 band = 0; band < BANDS; ++band)
+                  {
+                     if ( ( m_nulValues[band] != DEFAULT_NUL ) &&
+                          ( m_nulValues[band] > 0.0) )
+                     {
+                        if ( m_nulValues[band] < m_minValues[band] )
+                        {
+                           m_minValues[band] = m_nulValues[band];
+                        }
+                        m_nulValues[band] = 0.0;
+                     }
+                  }
+                  break;
+               }
+               case OSSIM_SCALAR_UNKNOWN:
+               default:
+               {
+                  if(traceDebug())
+                  {
+                     ossimNotify(ossimNotifyLevel_DEBUG)
+                        << __FILE__ << ":" << __LINE__
+                        << " " << M << "\nUnhandled scalar type:  " << SCALAR << std::endl;
+                  }
+                  break;
+               }
+
+            } // End: switch(SCALAR)
+            
+         } // Matches: if ( (m_minValues.size() ==  BANDS) &&...
+         else
+         {
+            // ERROR!
+            ossimNotify(ossimNotifyLevel_WARN)
+               << M << "ERROR:\nMin, max and null array sizes bad! No omd file will be written."
+               << std::endl;
+         }
+         
+      } // Matches: else if ( m_scanForMinMaxNull == true )
+      else
+      {
+         // Get the values from the image handler.
+         if (m_minValues.size() !=  BANDS)
+         {
+            m_minValues.resize(BANDS);
+            for (ossim_uint32 band = 0; band < BANDS; ++band)
+            {
+               m_minValues[band] = m_imageHandler->getMinPixelValue(band);
+            }
+         }
+         if (m_maxValues.size() !=  BANDS)
+         {
+            m_maxValues.resize(BANDS);
+            for (ossim_uint32 band = 0; band < BANDS; ++band)
+            {
+               m_maxValues[band] = m_imageHandler->getMaxPixelValue(band);
+            }
+         }
+         if (m_nulValues.size() !=  BANDS)
+         {
+            m_nulValues.resize(BANDS);
+            for (ossim_uint32 band = 0; band < BANDS; ++band)
+            {
+               m_nulValues[band] = m_imageHandler->getNullPixelValue(band);
+            }
+         }
+      }
+
+      // Last size check as the m_scanForMinMaxNull block could have failed.
+      if ( ( m_minValues.size() ==  BANDS ) &&
+           ( m_maxValues.size() ==  BANDS ) &&
+           ( m_nulValues.size() ==  BANDS ) )
+      {
+         // Write the omd file:
+         ossimKeywordlist kwl;
+         if( ossimFilename(file).exists())
+         {
+            // Pick up existing omd file.
+            kwl.addFile(file.c_str());
+         }
+         ossimImageMetaData metaData(SCALAR, BANDS);
+         for(ossim_uint32 band = 0; band < BANDS; ++band)
+         {
+            metaData.setMinPix(band,  m_minValues[band]);
+            metaData.setMaxPix(band,  m_maxValues[band]);
+            metaData.setNullPix(band, m_nulValues[band]);
+         }
+         // Save to keyword list.
+         metaData.saveState(kwl);
+         
+         // Write to disk.
+         result = kwl.write(file.c_str());
+         if ( result )
+         {
+            ossimNotify(ossimNotifyLevel_NOTICE) << "Wrote file: " << file << "\n";
+         }
+         else
+         {
+            ossimNotify(ossimNotifyLevel_WARN) << "ERROR writing file: " << file << "\n";
+         }
+      }
+
+      if ( traceDebug() )
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "Final array values:\n";
+         std::vector<ossim_float64>::const_iterator i = m_minValues.begin();
+         ossim_int32 band = 0;
+         while ( i < m_minValues.end() )
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << "min[" << band++ << "]: " << *i << "\n";
+            ++i;
+         }
+         i = m_maxValues.begin();
+         band = 0;
+         while ( i < m_maxValues.end() )
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << "max[" << band++ << "]: " << *i << "\n";
+            ++i;
+         }
+         i = m_nulValues.begin();
+         band = 0;
+         while ( i < m_nulValues.end() )
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << "nul[" << band++ << "]: " << *i << "\n";
+            ++i;
+         }
+      }
+
+   } // Matches: if ( file && m_imageHandler.valid() )
+   
+   if ( traceDebug() )
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG) << M << " exit status" << (result?"true\n":"false\n");
+   }
+   
+   return result;
 }
 
 void ossimOverviewSequencer::getInputTileRectangle(ossimIrect& inputRect) const
@@ -632,4 +1011,11 @@ void  ossimOverviewSequencer::resampleTile(const ossimImageData* inputTile, T  /
          
       } // End of band loop.
    }
+}
+
+void ossimOverviewSequencer::setBitMaskObjects(ossimBitMaskWriter* mask_writer,
+                                               ossimMaskFilter* mask_filter)
+{
+   m_maskWriter = mask_writer;
+   m_maskFilter = mask_filter;
 }

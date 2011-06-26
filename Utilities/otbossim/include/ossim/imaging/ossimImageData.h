@@ -9,9 +9,9 @@
 // Description: Container class for a tile of image data.
 //
 //*******************************************************************
-// $Id: ossimImageData.h 18078 2010-09-14 14:43:09Z dburken $
+// $Id: ossimImageData.h 19722 2011-06-06 21:02:52Z dburken $
 #ifndef ossimImageData_HEADER
-#define ossimImageData_HEADER
+#define ossimImageData_HEADER 1
 
 #include <vector>
 #include <iosfwd> /* for ostream */
@@ -193,7 +193,25 @@ public:
     * OSSIM_EMPTY no action is performed.
     */
    virtual void computeMinMaxPix(std::vector<ossim_float64>& minBands,
-                                 std::vector<ossim_float64>& maxBands);
+                                 std::vector<ossim_float64>& maxBands) const;
+
+   /**
+    * @brief Scans tile for min, max, nulls.
+    * 
+    * If the nullBands, minBands and maxBands are empty or not equal to the
+    * imageData's current number of bands it will erase the contents, resize,
+    * and then replace the values in the passed in array with this objects
+    * min max values.  If the arrays are the same size as this objects number
+    * of bands it will just update the values and use the current values in the
+    * arrays as initial min max values.
+    *
+    * If the status of this object(getDataObjectStatus()) is OSSIM_NULL no
+    * action is performed.
+    */
+   virtual void computeMinMaxNulPix(
+      std::vector<ossim_float64>& minBands,
+      std::vector<ossim_float64>& maxBands,
+      std::vector<ossim_float64>& nulBands) const;
    
    virtual const ossim_float64* getNullPix()const;
    virtual const ossim_float64* getMinPix()const;
@@ -783,6 +801,16 @@ public:
                            const ossimIrect& dest_rect,
                            const ossimIrect& clip_rect,
                            ossimInterleaveType il_type) const;
+
+   /**
+    * @param dest The destination buffer.
+    * @param dest_rect The rectangle of the destination buffer.
+    * param clip_rect Only data within the clip_rect will be copied.
+    * @param src_band The band to copy (unload) from the tile.
+    */
+   virtual void unloadTileToBipAlpha(void* dest,
+                                     const ossimIrect& dest_rect,
+                                     const ossimIrect& clip_rect) const;
    
    virtual bool isPointWithin(const ossimIpt& point)const;
    virtual bool isPointWithin(ossim_int32 x,
@@ -836,6 +864,18 @@ public:
                          ossim_int32 lineStartSample,
                          ossim_int32 lineStopSample,
                          ossimInterleaveType lineInterleave);
+
+   /**
+    * @brief Sets the indexed flag.
+    *
+    * This indicates the data contains palette indexes.  Default is false.
+    * 
+    * @param flag If true data is indexed.
+    */
+   void setIndexedFlag(bool flag);
+
+   /** @return The indexed flag. */
+   bool getIndexedFlag() const;
    
 protected:
 
@@ -981,9 +1021,16 @@ protected:
                                    ossim_float32* buf);
 
    
-   template <class T> void computeMinMaxPix(T dummyValue,
-                                            std::vector<ossim_float64>& minBands,
-                                            std::vector<ossim_float64>& maxBands);
+   template <class T>
+   void computeMinMaxPix(T dummyValue,
+                         std::vector<ossim_float64>& minBands,
+                         std::vector<ossim_float64>& maxBands) const;
+
+   template <class T>
+   void computeMinMaxNulPix(T dummyValue,
+                            std::vector<ossim_float64>& minBands,
+                            std::vector<ossim_float64>& maxBands,
+                            std::vector<ossim_float64>& nulBands) const;
    
    template <class T> void loadBandTemplate(T, // dummy template variable
                                             const void* src,
@@ -1033,6 +1080,11 @@ protected:
                                                    void* dest,
                                                    const ossimIrect& dest_rect,
                                                    const ossimIrect& clip_rect) const;
+
+   template <class T> void unloadTileToBipAlphaTemplate(T, // dummy template variable
+                                                        void* dest,
+                                                        const ossimIrect& dest_rect,
+                                                        const ossimIrect& clip_rect) const;
 
    template <class T> void unloadTileToBilTemplate(T, // dummy template variable
                                                    void* dest,
@@ -1099,27 +1151,22 @@ protected:
       return result;
    }
    
-   /**
-    * Have a null pixel value per band.
-    */
+   /**  Null pixel value for each band. */
    std::vector<ossim_float64> m_nullPixelValue;
 
-   /**
-    * Have a min pixel value per band.
-    */
+   /** Min pixel value for each band. */
    std::vector<ossim_float64> m_minPixelValue;
 
-   /**
-    * Have a max pixel value per band.
-    */
+   /** Max pixel value for each band. */
    std::vector<ossim_float64> m_maxPixelValue;
 
-   /**
-    * Alpha channel:
-    */
+   /** Alpha channel */
    std::vector<ossim_uint8> m_alpha;
    
-   ossimIpt       m_origin;
+   ossimIpt m_origin;
+
+   /** Indicates data contains palette indexes. */
+   bool m_indexedFlag;
 
 private:
 

@@ -16,7 +16,7 @@
 // $Id
 
 #ifndef ossimNitfCsdidaTag_HEADER
-#define ossimNitfCsdidaTag_HEADER
+#define ossimNitfCsdidaTag_HEADER 1
 #include <ossim/support_data/ossimNitfRegisteredTag.h>
 
 class OSSIM_DLL ossimNitfCsdidaTag : public ossimNitfRegisteredTag
@@ -30,9 +30,9 @@ public:
 
    /**
     * @brief Method to return tag name.
-    * @return "CSDIDA" as an ossimString.
+    * @return "CSDIDA" as a std::string.
     */
-   virtual ossimString getRegisterTagName()const;
+   virtual std::string getRegisterTagName()const;
 
    /** @brief Method to parse data from stream. */
    virtual void parseStream(std::istream& in);

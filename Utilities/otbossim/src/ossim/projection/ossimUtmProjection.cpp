@@ -8,7 +8,7 @@
 //
 // Calls Geotrans Utm projection code.  
 //*******************************************************************
-//  $Id: ossimUtmProjection.cpp 17815 2010-08-03 13:23:14Z dburken $
+//  $Id: ossimUtmProjection.cpp 19653 2011-05-26 11:38:07Z gpotts $
 
 #include <cstdlib>
 #include <cmath>
@@ -17,6 +17,7 @@ using namespace std;
 #include <ossim/projection/ossimUtmProjection.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimKeywordlist.h>
+#include <ossim/projection/ossimEpsgProjectionDatabase.h>
 
 RTTI_DEF1(ossimUtmProjection, "ossimUtmProjection", ossimMapProjection)
 
@@ -166,6 +167,13 @@ ossimUtmProjection::ossimUtmProjection(const ossimUtmProjection& src)
 
 void ossimUtmProjection::update()
 {
+   // Garrett comments:  This should already be kept in synch by the getPcsCode() in ossimMapProjection
+   //
+   // EPSG code can be derived if not already specified in KWL:
+   //
+   
+   //if (thePcsCode == 0)
+   //   thePcsCode = ossimEpsgProjectionDatabase::instance()->findProjectionCode(*this);
    ossimGpt origin = theOrigin;
    origin.lond(computeZoneMeridian(theZone));
    origin.latd(0.0);
@@ -252,12 +260,7 @@ void ossimUtmProjection::setOrigin(const ossimGpt& origin)
 
 void ossimUtmProjection::setZone(const ossimGpt& ground)
 {
-   theZone = computeZone(ground);
-   theOrigin.lond(computeZoneMeridian(theZone));
-   theOrigin.latd(0.0);
-   theTranMerc_Origin_Long = theOrigin.lonr();
-   //char hemisphere = theOrigin.latd() < 0.0?'S':'N';
-   //setHemisphere(hemisphere);
+   setZone(computeZone(ground));
 }
 
 void ossimUtmProjection::setZone(ossim_int32 zone)
@@ -272,6 +275,7 @@ void ossimUtmProjection::setZone(ossim_int32 zone)
    }
    theOrigin.lond(computeZoneMeridian(theZone));
    theOrigin.latd(0);
+   theOrigin.datum(theDatum);
    theTranMerc_Origin_Long = theOrigin.lonr();
 }
 
@@ -901,14 +905,28 @@ double ossimUtmProjection::getFalseNorthing() const
 //*************************************************************************************************
 bool ossimUtmProjection::operator==(const ossimProjection& proj) const
 {
-   if (!ossimMapProjection::operator==(proj))
-      return false;
-
-   ossimUtmProjection* p = PTR_CAST(ossimUtmProjection, &proj);
-   if (!p) return false;
-
-   if (theZone != p->theZone) return false;
-   if (theHemisphere != p->theHemisphere) return false;
-
-   return true;
+   bool result = false;
+   if ( this == &proj )
+   {
+      result = true; // Pointer addresses the same.
+   }
+   else
+   {
+      //---
+      // Check our stuff first.  No sense going onto ossimMapProjection::operator==
+      // if we are not a utm projection.
+      //---
+      const ossimUtmProjection* p = dynamic_cast<const ossimUtmProjection*>(&proj);
+      if ( p )
+      {
+         if ( theZone == p->theZone )
+         {
+            if ( theHemisphere == p->theHemisphere )
+            {
+               result = ossimMapProjection::operator==(proj);
+            }
+         }
+      }
+   }
+   return result;   
 }

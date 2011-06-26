@@ -34,9 +34,9 @@ ossimNitfAcftbTag::~ossimNitfAcftbTag()
 {
 }
 
-ossimString ossimNitfAcftbTag::getRegisterTagName() const
+std::string ossimNitfAcftbTag::getRegisterTagName() const
 {
-   return "ACFTB";
+   return std::string("ACFTB");
 }
 
 void ossimNitfAcftbTag::parseStream(std::istream& in)

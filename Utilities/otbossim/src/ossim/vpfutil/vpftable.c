@@ -188,9 +188,9 @@ int is_vpf_null_double( double num )
 
 /***********Mody B**********/
 /* get string until delimeter */
-static char *cpy_del(char *src, char delimiter, long int *ind )
+static char *cpy_del(char *src, char delimiter, ossim_int32 *ind )
 {
-  long int i, skipchar ;
+  ossim_int32 i, skipchar ;
   char *temp, *tempstr ;
 
   /* remove all blanks ahead of good data */
@@ -259,7 +259,7 @@ static char *cpy_del(char *src, char delimiter, long int *ind )
   return tempstr;
 }
 /***********Mody B*********/
-char *get_string(long int *ind,char *src,char delimeter )
+char *get_string(ossim_int32 *ind,char *src,char delimeter )
 { char *temp;
   temp  = cpy_del(&src[*ind],delimeter, ind);
   if( ! strcmp ( temp, TEXT_NULL ))
@@ -267,7 +267,7 @@ char *get_string(long int *ind,char *src,char delimeter )
   return temp;
 }
 /**********Mody B*************/
-char vpf_get_char(long int *ind, char *src)
+char vpf_get_char(ossim_int32 *ind, char *src)
 {  char temp;
    while ( src[*ind] == SPACE || src[*ind] == TAB ) (*ind)++ ;
    temp  = src[*ind];
@@ -275,9 +275,9 @@ char vpf_get_char(long int *ind, char *src)
    return temp;
 }
 /***********Mody B***********/
-long int get_number(long int *ind, char *src,char delimeter)
+ossim_int32 get_number(ossim_int32 *ind, char *src,char delimeter)
 {  char *temp;
-   long int  num;
+   ossim_int32  num;
    temp  = cpy_del(&src[*ind],delimeter, ind);
    if (strchr(temp, VARIABLE_COUNT ) == NULL)
       num = atoi(temp);
@@ -304,7 +304,7 @@ long int get_number(long int *ind, char *src,char delimeter)
  *   Parameters:
  *A
  *    table <inout> == (vpf_table_type *) vpf table structure.
- *    ddlen <input> == (long int) length of the table's data definition.
+ *    ddlen <input> == (ossim_int32) length of the table's data definition.
  *
  *    return value is the record length if all items are fixed length, or
  *    -1 if the record contains variable length items
@@ -336,18 +336,18 @@ long int get_number(long int *ind, char *src,char delimeter)
  *    This module should be ANSI C compatible.
  *E
  *************************************************************************/
-long int parse_data_def( vpf_table_type *table )
+ossim_int32 parse_data_def( vpf_table_type *table )
 {
-   register long int n,i;
-   long int p, k;
+   register ossim_int32 n,i;
+   ossim_int32 p, k;
    char *buf,*des,*nar,*vdt, *tdx, *doc, byte ;/*temporary storage */
    char end_of_rec;
    int status;
-   long int ddlen;
-   long int reclen = 0;
+   ossim_int32 ddlen;
+   ossim_int32 reclen = 0;
 #if UNIX
    /* just for backward compat check */
-   long int bkcompat = 1 ;
+   ossim_int32 bkcompat = 1 ;
 #endif
 
    if ( table->mode == Read ) {
@@ -371,13 +371,13 @@ long int parse_data_def( vpf_table_type *table )
 	swap_four((char *)&k,(char *)&ddlen);
      }
      if ( ddlen < 0 ) {
-       return (long int)0 ;
+       return (ossim_int32)0 ;
      }
 
      STORAGE_BYTE_ORDER = table->byte_order;
 
      /* header without first 4 bytes */
-     table->ddlen = ddlen + sizeof (long int) ;
+     table->ddlen = ddlen + sizeof (ossim_int32) ;
      buf = (char *)vpfmalloc((ddlen+3)*sizeof(char));
      buf[0] = byte; /* already have the first byte of the buffer */
      Read_Vpf_Char(&buf[1],table->fp,ddlen-1) ;
@@ -435,7 +435,7 @@ long int parse_data_def( vpf_table_type *table )
 
      if ( i == 0 )
        if ( ossim_strcasecmp ( table->header[0].name, "ID" ) ) {
-	      return (long int)0 ;
+	      return (ossim_int32)0 ;
        }
 
      if(table->header[i].count == -1)
@@ -448,7 +448,7 @@ long int parse_data_def( vpf_table_type *table )
      switch (table->header[i].type) {
      case 'I':
        if ( reclen >= 0 )
-	 reclen += (sizeof(long int)*table->header[i].count);
+	 reclen += (sizeof(ossim_int32)*table->header[i].count);
        table->header[i].nullval.Int = NULLINT ;
        break;
      case 'S':
@@ -521,7 +521,7 @@ long int parse_data_def( vpf_table_type *table )
        break ;
      } /** switch type **/
 
-     if (status) return (long int)0;
+     if (status) return (ossim_int32)0;
 
      table->header[i].keytype     = vpf_get_char  (&p,buf);
      des = get_string(&p,buf, FIELD_SEPERATOR );
@@ -598,7 +598,7 @@ long int parse_data_def( vpf_table_type *table )
 #define DISPLAY_STRING 0x09
 
 #ifdef __MSDOS__
-static int vpfhandler(long int errval, long int ax, long int bp, long int si)
+static int vpfhandler(ossim_int32 errval, ossim_int32 ax, ossim_int32 bp, ossim_int32 si)
 {
    if (ax < 0) {
       bdosptr(DISPLAY_STRING,"device error$", 0);
@@ -659,7 +659,7 @@ FILE *vpfopencheck( const char *filename,
 		   "in data drive",
 		   "                                                      "};
 */
-   long int retry = 0;
+   ossim_int32 retry = 0;
 #ifdef __MSDOS__
    extern char home[255];
    void interrupt (*doshandler)();
@@ -767,12 +767,12 @@ vpf_table_type vpf_open_table( const char * tablename,
    vpf_table_type   table;
    char             tablepath[255],
 		  * idxname;
-   long int         i,
+   ossim_int32         i,
 		    j;
-   long int         tablesize,
+   ossim_int32         tablesize,
 		    idxsize,
 		    memsize;
-   unsigned long int ulval;
+   ossim_uint32 ulval;
    char            * diskname = "VPF data disc";
 
    strcpy(tablepath,tablename);
@@ -933,7 +933,7 @@ vpf_table_type vpf_open_table( const char * tablename,
 
     table.storage = (storage_type)DISK;
 #ifdef __MSDOS__
-   memsize = (long int)min(farcoreleft(),__64K);
+   memsize = (ossim_int32)min(farcoreleft(),__64K);
 #else
    memsize = MAXINT;
 #endif
@@ -996,7 +996,7 @@ vpf_table_type vpf_open_table( const char * tablename,
  *************************************************************************/
 void vpf_close_table( vpf_table_type *table )
 {
-   register long int i;
+   register ossim_int32 i;
 
    if (table->status != OPENED) {
       return;
@@ -1061,10 +1061,10 @@ void vpf_close_table( vpf_table_type *table )
 
 
 
-long int is_vpf_table( const char *fname )
+ossim_int32 is_vpf_table( const char *fname )
 {
    FILE *fp;
-   long int n, ok;
+   ossim_int32 n, ok;
 
    fp = fopen( fname, "rb" );
    if (!fp) {

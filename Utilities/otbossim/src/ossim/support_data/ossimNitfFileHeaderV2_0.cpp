@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFileHeaderV2_0.cpp 17598 2010-06-19 15:37:46Z dburken $
+// $Id: ossimNitfFileHeaderV2_0.cpp 19058 2011-03-11 20:03:24Z dburken $
 
 
 #include <sstream>
@@ -727,6 +727,171 @@ std::ostream& ossimNitfFileHeaderV2_0::print(std::ostream& out,
        << theExtendedHeaderDataLength << "\n";
    
    return ossimNitfFileHeader::print(out, prefix);
+}
+
+
+bool ossimNitfFileHeaderV2_0::saveState(ossimKeywordlist& kwl, const ossimString& prefix)const
+{
+   bool result = ossimNitfFileHeaderV2_X::saveState(kwl, prefix);
+   
+   if(result)
+   {
+      kwl.add(prefix, "FSCODE",theCodewords);
+      kwl.add(prefix, "FSCTLH",theControlAndHandling);
+      kwl.add(prefix, "FSREL",theReleasingInstructions);
+      kwl.add(prefix, "FSCAUT",theClassificationAuthority);
+      kwl.add(prefix, "FSCTLN",theSecurityControlNumber);
+      kwl.add(prefix, "FSDWNG",theSecurityDowngrade);
+      kwl.add(prefix, "FSDEVT",theDowngradingEvent);
+      kwl.add(prefix, "ONAME",theOriginatorsName);
+      kwl.add(prefix, "OPHONE",theOriginatorsPhone);
+      kwl.add(prefix, "FL",theFileLength);
+      kwl.add(prefix, "HL",theHeaderLength);
+      kwl.add(prefix, "NUMI",theNumberOfImageInfoRecords);
+      kwl.add(prefix, "UDHDL",theUserDefinedHeaderDataLength);
+      kwl.add(prefix, "UDHOFL",theUserDefinedHeaderDataLength);
+      kwl.add(prefix, "XHDL",theExtendedHeaderDataLength);
+
+      std::ostringstream out;
+      ossim_uint32 index;
+      for (index = 0; index < theNitfImageInfoRecords.size(); ++index)
+      {
+         std::ostringstream os;
+         os << std::setw(3) << std::setfill('0') << (index+1) << ":";
+         
+         ossimString tmpStr = "LISH";
+         tmpStr += os.str();
+         
+         out << tmpStr
+         << theNitfImageInfoRecords[index].theImageSubheaderLength << "\n";
+         tmpStr = "LI";
+         tmpStr += os.str();
+         
+         out << tmpStr
+         << theNitfImageInfoRecords[index].theImageLength << "\n";
+      }
+      
+      out <<"NUMS:" << theNumberOfSymbolInfoRecords
+      << "\n";
+      
+      for (index = 0; index < theNitfSymbolInfoRecords.size(); ++index)
+      {
+         std::ostringstream os;
+         os << std::setw(3) << std::setfill('0') << (index+1) << ":";
+         
+         ossimString tmpStr = "LSSH";
+         tmpStr += os.str();
+         
+         out << tmpStr
+         << theNitfSymbolInfoRecords[index].theSymbolSubheaderLength << "\n";
+         
+         tmpStr = "LS";
+         tmpStr += os.str();
+         
+         out << tmpStr 
+         << theNitfSymbolInfoRecords[index].theSymbolLength << "\n";
+      }
+      
+      
+      out << "NUML:" << theNumberOfLabelInfoRecords
+      << "\n";
+      
+      for (index = 0; index < theNitfLabelInfoRecords.size(); ++index)
+      {
+         std::ostringstream os;
+         os << std::setw(3) << std::setfill('0') << (index+1) << ":";
+         
+         ossimString tmpStr = "LLSH";
+         tmpStr += os.str();
+         
+         out << tmpStr
+         << theNitfLabelInfoRecords[index].theLabelSubheaderLength  << "\n";
+         
+         tmpStr = "LL";
+         tmpStr += os.str();
+         
+         out << tmpStr 
+         << theNitfLabelInfoRecords[index].theLabelLength << "\n";
+      }
+      
+      out << "NUMT:" << theNumberOfTextFileInfoRecords
+      << "\n";
+      
+      for (index = 0; index < theNitfTextInfoRecords.size(); ++index)
+      {
+         std::ostringstream os;
+         os << std::setw(3) << std::setfill('0') << (index+1) << ":";
+         
+         ossimString tmpStr = "LTSH";
+         tmpStr += os.str();
+         
+         out << tmpStr
+         << theNitfTextInfoRecords[index].theTextSubheaderLength << "\n";
+         
+         tmpStr = "LT";
+         tmpStr += os.str();
+         
+         out << tmpStr 
+         << theNitfTextInfoRecords[index].theTextLength<< "\n";
+      }
+      
+      out << "NUMDES:"
+      << theNumberOfDataExtSegInfoRecords << "\n";
+      
+      for (index = 0; index < theNitfDataExtSegInfoRecords.size(); ++index)
+      {
+         std::ostringstream os;
+         os << std::setw(3) << std::setfill('0') << (index+1) << ":";
+         
+         ossimString tmpStr = "LDSH";
+         tmpStr += os.str();
+         
+         out << tmpStr
+         << theNitfDataExtSegInfoRecords[index].theDataExtSegSubheaderLength
+         << "\n";
+         
+         tmpStr = "LD";
+         tmpStr += os.str();
+         
+         out << tmpStr 
+         << theNitfDataExtSegInfoRecords[index].theDataExtSegLength << "\n";
+      }
+      
+      out << "NUMRES:"
+      << theNumberOfResExtSegInfoRecords << "\n";
+      
+      for (index = 0; index < theNitfResExtSegInfoRecords.size(); ++index)
+      {
+         std::ostringstream os;
+         os << std::setw(3) << std::setfill('0') << (index+1) << ":";
+         
+         ossimString tmpStr = "LRSH";
+         tmpStr += os.str();
+         
+         out << tmpStr
+         << theNitfResExtSegInfoRecords[index].theResExtSegSubheaderLength
+         << "\n";
+         
+         tmpStr = "LR";
+         tmpStr += os.str();
+         
+         out << tmpStr 
+         << theNitfResExtSegInfoRecords[index].theResExtSegLength
+         << "\n";
+      }
+      
+      {
+         std::istringstream in(out.str());
+         ossimKeywordlist tempKwl;
+         if(tempKwl.parseStream(in))
+         {
+            result = true;
+            kwl.add(prefix, tempKwl);
+         }
+      }
+   }
+   
+   return result;
 }
 
 ossimDrect ossimNitfFileHeaderV2_0::getImageRect()const

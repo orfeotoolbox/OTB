@@ -5,19 +5,20 @@
 // Description: This class provides capabilities for keywordlists.
 //
 //********************************************************************
-// $Id: ossimKeywordlist.cpp 17195 2010-04-23 17:32:18Z dburken $
+// $Id: ossimKeywordlist.cpp 19682 2011-05-31 14:21:20Z dburken $
+
+#include <ossim/base/ossimKeywordlist.h>
+#include <ossim/base/ossimDirectory.h>
+#include <ossim/base/ossimFilename.h>
+#include <ossim/base/ossimNotify.h>
+#include <ossim/base/ossimRegExp.h>
+#include <ossim/base/ossimTrace.h>
+
 #include <algorithm>
 #include <fstream>
 #include <list>
 #include <sstream>
-
-#include <ossim/base/ossimRegExp.h>
-#include <ossim/base/ossimString.h>
-#include <ossim/base/ossimFilename.h>
-#include <ossim/base/ossimKeywordlist.h>
-#include <ossim/base/ossimNotifyContext.h>
-#include <ossim/base/ossimTrace.h>
-#include <ossim/base/ossimDirectory.h>
+#include <utility>
 
 static ossimTrace traceDebug("ossimKeywordlist:debug");
 static const ossim_int32 MAX_LINE_LENGTH = 256;
@@ -27,15 +28,23 @@ static const char NULL_KEY_NOTICE[]
 
 #ifdef OSSIM_ID_ENABLED
 static const bool TRACE = false;
-static const char OSSIM_ID[] = "$Id: ossimKeywordlist.cpp 17195 2010-04-23 17:32:18Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimKeywordlist.cpp 19682 2011-05-31 14:21:20Z dburken $";
 #endif
+
+ossimKeywordlist::ossimKeywordlist(const ossimKeywordlist& src)
+:m_map(src.m_map),
+m_delimiter(src.m_delimiter),
+m_preserveKeyValues(src.m_preserveKeyValues),
+m_expandEnvVars(src.m_expandEnvVars)
+{
+}
 
 ossimKeywordlist::ossimKeywordlist(char delimiter, 
                                    bool expandEnvVars)
 :
 m_map(),
 m_delimiter(delimiter),
-m_lineContinuationCharacter('\\'),
+m_preserveKeyValues(true),
 m_expandEnvVars(expandEnvVars)
 {
 #ifdef OSSIM_ID_ENABLED
@@ -50,7 +59,8 @@ ossimKeywordlist::ossimKeywordlist(const char* file,
 :
 m_map(),
 m_delimiter(delimiter),
-m_lineContinuationCharacter('\\'),
+m_preserveKeyValues(true),
+//m_lineContinuationCharacter('\\'),
 m_expandEnvVars(expandEnvVars)
 {
    ossimFilename in_file(file);
@@ -68,7 +78,7 @@ ossimKeywordlist::ossimKeywordlist(const ossimFilename& file,
 :
 m_map(),
 m_delimiter(delimiter),
-m_lineContinuationCharacter('\\'),
+m_preserveKeyValues(true),
 m_expandEnvVars(expandEnvVars)
 
 {
@@ -111,7 +121,7 @@ void ossimKeywordlist::addList(const ossimKeywordlist &src, bool overwrite)
    
    while (i != src.m_map.end())
    {
-      add( (*i).first, (*i).second, overwrite );
+      addPair( (*i).first, (*i).second, overwrite );
       i++;
    }
 }
@@ -120,12 +130,12 @@ void ossimKeywordlist::add(const ossimKeywordlist& kwl,
                            const char* prefix,
                            bool stripPrefix)
 {
-   std::map<ossimString, ossimString>::const_iterator iter = kwl.m_map.begin();
+   std::map<std::string, std::string>::const_iterator iter = kwl.m_map.begin();
    
    ossimRegExp regExp;
    
    // Check for null prefix.
-   ossimString tmpPrefix;
+   std::string tmpPrefix;
    if (prefix) tmpPrefix = prefix;
    
    regExp.compile(("^("+tmpPrefix+")").c_str());
@@ -139,14 +149,11 @@ void ossimKeywordlist::add(const ossimKeywordlist& kwl,
          newKey = (*iter).first;
          if(stripPrefix && prefix)
          {
-            newKey = newKey.substitute(prefix,
-                                       "");
+            newKey = newKey.substitute(prefix, "");
             
          }
          
-         add(newKey,
-             (*iter).second,
-             true);
+         addPair(newKey.string(), (*iter).second, true);
       }
       ++iter;
    }
@@ -156,7 +163,7 @@ void ossimKeywordlist::add(const char* prefix,
                            const ossimKeywordlist& kwl,
                            bool overwrite)
 {
-   std::map<ossimString, ossimString>::const_iterator iter = kwl.m_map.begin();
+   std::map<std::string, std::string>::const_iterator iter = kwl.m_map.begin();
    
    while(iter != kwl.m_map.end())
    {
@@ -171,31 +178,50 @@ void ossimKeywordlist::add(const char* prefix,
    }
 }
 
-void ossimKeywordlist::add(const char* key,
-                           const char* value,
-                           bool        overwrite)
+void ossimKeywordlist::addPair(const std::string& key,
+                               const std::string& value,
+                               bool               overwrite)
 {
-   if (key)
+   if ( key.size() )
    {
-      ossimString k = key;
-      
-      ossimString v;
-      if (value) v = value;
+      ossimString v = value;
       if ( m_expandEnvVars == true )
       {
          v = v.expandEnvironmentVariable();
       }
       
-      KeywordMap::iterator i = getMapEntry(k);
+      KeywordMap::iterator i = getMapEntry(key);
       
       if (i == m_map.end())
       {
-         m_map.insert(std::make_pair(k, v));
+         m_map.insert(std::make_pair(key, v.string()));
       }
       else if (overwrite)
       {
-         (*i).second = v;
+         (*i).second = v.string();
       }
+   }
+}
+
+void ossimKeywordlist::addPair(const std::string& prefix,
+                               const std::string& key,
+                               const std::string& value,
+                               bool               overwrite)
+{
+   std::string k(prefix + key);
+   addPair(k, value, overwrite);
+}
+
+
+void ossimKeywordlist::add(const char* key,
+                           const char* value,
+                           bool        overwrite)
+{
+   if ( key )
+   {
+      std::string k(key);
+      std::string v(value?value:"");
+      addPair(k, v, overwrite);
    }
 }
 
@@ -204,29 +230,11 @@ void ossimKeywordlist::add(const char* prefix,
                            const char* value,
                            bool        overwrite)
 {
-   if (key)
+   if ( key )
    {
-      ossimString k;
-      if (prefix) k = prefix;
-      k += key;
-      
-      ossimString v;
-      if (value) v = value;
-      if ( m_expandEnvVars == true )
-      {
-         v = v.expandEnvironmentVariable();
-      }
-      
-      KeywordMap::iterator i = getMapEntry(k);
-      
-      if(i == m_map.end())
-      {
-         m_map.insert(std::make_pair(k, v));
-      }
-      else if(overwrite)
-      {
-         (*i).second = v;
-      }
+      std::string k(prefix ? (std::string(prefix)+std::string(key)) : key);
+      std::string v(value ? value : "");
+      addPair(k, v, overwrite);
    }
 }
 
@@ -234,25 +242,11 @@ void ossimKeywordlist::add(const char* key,
                            char        value,
                            bool        overwrite)
 {
-   if (key)
+   if ( key )
    {
-      ossimString k = key;
-      
-      char tmp[2];
-      tmp[0] = value;
-      tmp[1] = '\0';
-      ossimString v = tmp;
-      
-      KeywordMap::iterator i = getMapEntry(k);
-      
-      if (i == m_map.end())
-      {
-         m_map.insert(std::make_pair(k, v));
-      }
-      else if (overwrite)
-      {
-         (*i).second = v;
-      }
+      std::string k(key);
+      std::string v(1, value);
+      addPair(k, v, overwrite);
    }
 }
 
@@ -261,27 +255,11 @@ void ossimKeywordlist::add(const char* prefix,
                            char        value,
                            bool        overwrite)
 {
-   if (key)
+   if ( key )
    {
-      ossimString k;
-      if (prefix) k = prefix;
-      k += key;
-      
-      char tmp[2];
-      tmp[0] = value;
-      tmp[1] = '\0';
-      ossimString v = tmp;
-      
-      KeywordMap::iterator i = getMapEntry(k);
-      
-      if(i == m_map.end())
-      {
-         m_map.insert(std::make_pair(k, v));
-      }
-      else if(overwrite)
-      {
-         (*i).second = v;
-      }
+      std::string k(prefix ? (std::string(prefix)+std::string(key)) : key);
+      std::string v(1, value);
+      addPair(k, v, overwrite);
    }
 }
 
@@ -289,22 +267,11 @@ void ossimKeywordlist::add(const char* key,
                            ossim_int16 value,
                            bool overwrite)
 {
-   if (key)
+   if ( key )
    {
-      ossimString k = key;
-      
-      ossimString v = ossimString::toString(value);
-      
-      KeywordMap::iterator i = getMapEntry(k);
-      
-      if(i == m_map.end())
-      {
-         m_map.insert(std::make_pair(k, v));
-      }
-      else if (overwrite)
-      {
-         (*i).second = v;
-      }
+      std::string k(key);
+      std::string v = ossimString::toString(value).string();
+      addPair(k, v, overwrite);
    }
 }
 
@@ -313,24 +280,11 @@ void ossimKeywordlist::add(const char* prefix,
                            ossim_int16 value,
                            bool overwrite)
 {
-   if (key)
+   if ( key )
    {
-      ossimString k;
-      if (prefix) k = prefix;
-      k += key;
-      
-      ossimString v = ossimString::toString(value);
-      
-      KeywordMap::iterator i = getMapEntry(k);
-      
-      if(i == m_map.end())
-      {
-         m_map.insert(std::make_pair(k, v));
-      }
-      else if (overwrite)
-      {
-         (*i).second = v;
-      }
+      std::string k(prefix ? (std::string(prefix)+std::string(key)) : key);
+      std::string v = ossimString::toString(value).string();
+      addPair(k, v, overwrite);
    }
 }
 
@@ -338,22 +292,11 @@ void ossimKeywordlist::add(const char* key,
                            ossim_uint16 value,
                            bool overwrite)
 {
-   if (key)
+   if ( key )
    {
-      ossimString k = key;
-      
-      ossimString v = ossimString::toString(value);
-      
-      KeywordMap::iterator i = getMapEntry(k);
-      
-      if(i == m_map.end())
-      {
-         m_map.insert(std::make_pair(k, v));
-      }
-      else if (overwrite)
-      {
-         (*i).second = v;
-      }
+      std::string k(key);
+      std::string v = ossimString::toString(value).string();
+      addPair(k, v, overwrite);
    }
 }
 
@@ -362,24 +305,11 @@ void ossimKeywordlist::add(const char* prefix,
                            ossim_uint16 value,
                            bool overwrite)
 {
-   if (key)
+   if ( key )
    {
-      ossimString k;
-      if (prefix) k = prefix;
-      k += key;
-      
-      ossimString v = ossimString::toString(value);
-      
-      KeywordMap::iterator i = getMapEntry(k);
-      
-      if(i == m_map.end())
-      {
-         m_map.insert(std::make_pair(k, v));
-      }
-      else if (overwrite)
-      {
-         (*i).second = v;
-      }
+      std::string k(prefix ? (std::string(prefix)+std::string(key)) : key);
+      std::string v = ossimString::toString(value).string();
+      addPair(k, v, overwrite);
    }
 }
 
@@ -387,22 +317,11 @@ void ossimKeywordlist::add(const char* key,
                            ossim_int32 value,
                            bool overwrite)
 {
-   if (key)
+   if ( key )
    {
-      ossimString k = key;
-      
-      ossimString v = ossimString::toString(value);
-      
-      KeywordMap::iterator i = getMapEntry(k);
-      
-      if(i == m_map.end())
-      {
-         m_map.insert(std::make_pair(k, v));
-      }
-      else if (overwrite)
-      {
-         (*i).second = v;
-      }
+      std::string k(key);
+      std::string v = ossimString::toString(value).string();
+      addPair(k, v, overwrite);
    }
 }
 
@@ -411,24 +330,11 @@ void ossimKeywordlist::add(const char*  prefix,
                            ossim_int32 value,
                            bool overwrite)
 {
-   if (key)
+   if ( key )
    {
-      ossimString k;
-      if (prefix) k = prefix;
-      k += key;
-      
-      ossimString v = ossimString::toString(value);
-      
-      KeywordMap::iterator i = getMapEntry(k);
-      
-      if(i == m_map.end())
-      {
-         m_map.insert(std::make_pair(k, v));
-      }
-      else if (overwrite)
-      {
-         (*i).second = v;
-      }
+      std::string k(prefix ? (std::string(prefix)+std::string(key)) : key);
+      std::string v = ossimString::toString(value).string();
+      addPair(k, v, overwrite);
    }
 }
 
@@ -436,22 +342,11 @@ void ossimKeywordlist::add(const char* key,
                            ossim_uint32 value,
                            bool overwrite)
 {
-   if (key)
+   if ( key )
    {
-      ossimString k = key;
-      
-      ossimString v = ossimString::toString(value);
-      
-      KeywordMap::iterator i = getMapEntry(k);
-      
-      if(i == m_map.end())
-      {
-         m_map.insert(std::make_pair(k, v));
-      }
-      else if (overwrite)
-      {
-         (*i).second = v;
-      }
+      std::string k(key);
+      std::string v = ossimString::toString(value).string();
+      addPair(k, v, overwrite);
    }
 }
 
@@ -460,24 +355,11 @@ void ossimKeywordlist::add(const char*  prefix,
                            ossim_uint32 value,
                            bool overwrite)
 {
-   if (key)
+   if ( key )
    {
-      ossimString k;
-      if (prefix) k = prefix;
-      k += key;
-      
-      ossimString v = ossimString::toString(value);
-      
-      KeywordMap::iterator i = getMapEntry(k);
-      
-      if(i == m_map.end())
-      {
-         m_map.insert(std::make_pair(k, v));
-      }
-      else if (overwrite)
-      {
-         (*i).second = v;
-      }
+      std::string k(prefix ? (std::string(prefix)+std::string(key)) : key);
+      std::string v = ossimString::toString(value).string();
+      addPair(k, v, overwrite);
    }
 }
 
@@ -485,22 +367,11 @@ void ossimKeywordlist::add(const char* key,
                            ossim_int64 value,
                            bool overwrite)
 {
-   if (key)
+   if ( key )
    {
-      ossimString k = key;
-      
-      ossimString v = ossimString::toString(value);
-      
-      KeywordMap::iterator i = getMapEntry(k);
-      
-      if(i == m_map.end())
-      {
-         m_map.insert(std::make_pair(k, v));
-      }
-      else if (overwrite)
-      {
-         (*i).second = v;
-      }
+      std::string k(key);
+      std::string v = ossimString::toString(value).string();
+      addPair(k, v, overwrite);
    }
 }
 
@@ -509,24 +380,36 @@ void ossimKeywordlist::add(const char*  prefix,
                            ossim_int64 value,
                            bool overwrite)
 {
-   if (key)
+   if ( key )
    {
-      ossimString k;
-      if (prefix) k = prefix;
-      k += key;
-      
-      ossimString v = ossimString::toString(value);
-      
-      KeywordMap::iterator i = getMapEntry(k);
-      
-      if(i == m_map.end())
-      {
-         m_map.insert(std::make_pair(k, v));
-      }
-      else if (overwrite)
-      {
-         (*i).second = v;
-      }
+      std::string k(prefix ? (std::string(prefix)+std::string(key)) : key);
+      std::string v = ossimString::toString(value).string();
+      addPair(k, v, overwrite);
+   }
+}
+
+void ossimKeywordlist::add(const char* key,
+                           ossim_uint64 value,
+                           bool overwrite)
+{
+   if ( key )
+   {
+      std::string k(key);
+      std::string v = ossimString::toString(value).string();
+      addPair(k, v, overwrite);
+   }
+}
+
+void ossimKeywordlist::add(const char*  prefix,
+                           const char*  key,
+                           ossim_uint64 value,
+                           bool overwrite)
+{
+   if ( key )
+   {
+      std::string k(prefix ? (std::string(prefix)+std::string(key)) : key);
+      std::string v = ossimString::toString(value).string();
+      addPair(k, v, overwrite);
    }
 }
 
@@ -535,23 +418,11 @@ void ossimKeywordlist::add(const char* key,
                            bool overwrite,
                            int precision)
 {
-   if (key)
+   if ( key )
    {
-      ossimString k = key;
-      
-      ossimString v = ossimString::toString(value,
-                                            precision);
-      
-      KeywordMap::iterator i = getMapEntry(k);
-      
-      if(i == m_map.end())
-      {
-         m_map.insert(std::make_pair(k, v));
-      }
-      else if (overwrite)
-      {
-         (*i).second = v;
-      }
+      std::string k(key);
+      std::string v = ossimString::toString(value, precision).string();
+      addPair(k, v, overwrite);
    }
 }
 
@@ -561,25 +432,11 @@ void ossimKeywordlist::add(const char* prefix,
                            bool overwrite,
                            int precision)
 {
-   if (key)
+   if ( key )
    {
-      ossimString k;
-      if (prefix) k = prefix;
-      k += key;
-      
-      ossimString v = ossimString::toString(value,
-                                            precision);
-      
-      KeywordMap::iterator i = getMapEntry(k);
-      
-      if(i == m_map.end())
-      {
-         m_map.insert(std::make_pair(k, v));
-      }
-      else if (overwrite)
-      {
-         (*i).second = v;
-      }
+      std::string k(prefix ? (std::string(prefix)+std::string(key)) : key);
+      std::string v = ossimString::toString(value, precision).string();
+      addPair(k, v, overwrite);
    }
 }
 
@@ -588,23 +445,11 @@ void ossimKeywordlist::add(const char* key,
                            bool overwrite,
                            int precision)
 {
-   if (key)
+   if ( key )
    {
-      ossimString k = key;
-      
-      ossimString v = ossimString::toString(value,
-                                            precision);
-      
-      KeywordMap::iterator i = getMapEntry(k);
-      
-      if(i == m_map.end())
-      {
-         m_map.insert(std::make_pair(k, v));
-      }
-      else if (overwrite)
-      {
-         (*i).second = v;
-      }
+      std::string k(key);
+      std::string v = ossimString::toString(value, precision).string();
+      addPair(k, v, overwrite);
    }
 }
 
@@ -614,25 +459,11 @@ void ossimKeywordlist::add(const char* prefix,
                            bool overwrite,
                            int precision)
 {
-   if (key)
+   if ( key )
    {
-      ossimString k;
-      if (prefix) k = prefix;
-      k += key;
-      
-      ossimString v = ossimString::toString(value,
-                                            precision);
-      
-      KeywordMap::iterator i = getMapEntry(k);
-      
-      if(i == m_map.end())
-      {
-         m_map.insert(std::make_pair(k, v));
-      }
-      else if (overwrite)
-      {
-         (*i).second = v;
-      }
+      std::string k(prefix ? (std::string(prefix)+std::string(key)) : key);
+      std::string v = ossimString::toString(value, precision).string();
+      addPair(k, v, overwrite);
    }
 }
 
@@ -709,15 +540,39 @@ void ossimKeywordlist::writeToStream(std::ostream& out) const
 {
    KeywordMap::const_iterator i;
    ossimString value;
+   ossimRegExp reg("\n|\r| $|^ ");
    for(i = m_map.begin(); i != m_map.end(); ++i)
    {
       value = (*i).second;
-      value = value.substitute('\n', "\\\n", true);
+      if(!value.empty())
+      {
+         if(reg.find(value))
+         {
+            value = "\"\"\"" + value + "\"\"\"";
+         }
+      }
+      //      value = value.substitute('\n', "\\\n", true);
       out << (*i).first  << delimiter_str().c_str() << "  "
       << value << std::endl;
    }
 }
 
+std::string ossimKeywordlist::findKey(const std::string& key) const
+{
+   std::string result;
+   KeywordMap::const_iterator i = m_map.find(key);
+   if (i != m_map.end())
+   {
+      result = (*i).second;
+   }
+   return result;
+}
+
+std::string ossimKeywordlist::findKey(const std::string& prefix, const std::string& key) const
+{
+   std::string k = prefix+key;
+   return findKey(k);
+}
 
 const char* ossimKeywordlist::find(const char* key) const
 {
@@ -798,7 +653,7 @@ ossim_uint32 ossimKeywordlist::numberOf(const char* str) const
       
       while (i != m_map.end())
       {
-         if ( (*i).first.contains(str) )
+         if ( ossimString((*i).first).contains(str) )
          {
             ++count;
          }
@@ -812,28 +667,12 @@ ossim_uint32 ossimKeywordlist::numberOf(const char* str) const
 ossim_uint32 ossimKeywordlist::numberOf(const char* prefix,
                                         const char* key) const
 {
-   if (!prefix && key)  // Must have key, sometimes no prefix.
+   if ( key ) // Must have key, sometimes no prefix.
    {
-      return numberOf(key);
+      std::string k(prefix ? (std::string(prefix)+std::string(key)) : key);
+      return numberOf(k.c_str());
    }
-   
-   ossim_uint32 count = 0;
-   
-   if (prefix && key)
-   {
-      KeywordMap::const_iterator i = m_map.begin();
-      
-      while (i != m_map.end())
-      {
-         if ( (*i).first.contains(prefix) && (*i).first.contains(key))
-         {
-            ++count;
-         }
-         ++i;
-      }
-   }
-   
-   return count;
+   return 0;
 }
 
 void ossimKeywordlist::clear()
@@ -846,7 +685,7 @@ ossimKeywordlist::getMapEntry(const char* key)
 {
    if (key)
    {
-      ossimString k = key;
+      std::string k = key;
       return m_map.find(k);
    }
    else
@@ -856,9 +695,15 @@ ossimKeywordlist::getMapEntry(const char* key)
 }
 
 ossimKeywordlist::KeywordMap::iterator
-ossimKeywordlist::getMapEntry(const ossimString& key)
+ossimKeywordlist::getMapEntry(const std::string& key)
 {
    return m_map.find(key);
+}
+
+ossimKeywordlist::KeywordMap::iterator
+ossimKeywordlist::getMapEntry(const ossimString& key)
+{
+   return m_map.find(key.string());
 }
 
 
@@ -904,7 +749,6 @@ bool ossimKeywordlist::parseFile(const ossimFilename& file,
          return false;
       }
    }
-
    bool result = parseStream(is, ignoreBinaryChars);
 
    is.close();
@@ -917,127 +761,270 @@ bool ossimKeywordlist::parseStream(std::istream& is, bool /* ignoreBinaryChars *
    return parseStream(is);
 }
 
+bool ossimKeywordlist::parseString(const std::string& inString)
+{
+   std::istringstream in(inString);
+   
+   return parseStream(in);
+}
+
+bool ossimKeywordlist::isValidKeywordlistCharacter(ossim_uint8 c)const
+{
+   if((c>=0x20&&c<=0x7e))
+   {
+      return true;
+   }
+   switch(c)
+   {
+      case '\n':
+      case '\r':
+      case '\t':
+         return true;
+   }
+   return false;
+}
+
+void ossimKeywordlist::skipWhitespace(std::istream& in)const
+{
+   int c = in.peek();
+   while( !in.fail() &&
+         ( (c == ' ') || (c == '\t') || (c == '\n') || (c == '\r') ) )
+   {
+      in.ignore(1);
+      c = in.peek();
+   }
+}
+
+ossimKeywordlist::KeywordlistParseState ossimKeywordlist::readComments(ossimString& sequence, std::istream& in)const
+{
+   KeywordlistParseState result = KeywordlistParseState_FAIL;
+   char c = (char)in.peek();
+   if(c == '/')
+   {
+      sequence += (char)in.get();
+      c = in.peek();
+      if(c == '/')
+      {
+        result = KeywordlistParseState_OK;
+         sequence += c;
+         while(!in.bad()&&!in.eof())
+         {
+            c = (char)in.get();
+            if((c == '\n')||
+               (c == '\r'))
+            {
+               break;
+            }
+            sequence += c;
+         }
+      }
+   }
+   return result;
+}
+
+ossimKeywordlist::KeywordlistParseState ossimKeywordlist::readKey(ossimString& sequence, std::istream& in)const
+{
+   KeywordlistParseState result = KeywordlistParseState_FAIL;
+   if(!sequence.empty())
+   {
+      if(*(sequence.begin()+(sequence.size()-1)) == m_delimiter)
+      {
+         sequence = ossimString(sequence.begin(), sequence.begin() + (sequence.size()-1));
+         return KeywordlistParseState_OK;
+      }
+   }
+   // not a comment so read til key delimeter
+   while(!in.eof() && in.good())
+   {
+      ossim_uint8 c = in.get();
+      if( isValidKeywordlistCharacter(c) )
+      {
+         if ( (c == '\n') || (c == '\r') ) 
+         {
+            // Hit end of line with no delimiter.
+            if ( in.peek() == EOF )
+            {
+               //---
+               // Allowing on last line only.
+               // Note the empty key will trigger parseStream to return true.
+               //---
+               sequence.clear();
+               result = KeywordlistParseState_OK;
+               break;
+            }
+            else // Line with no delimiter.
+            {
+               // mal formed input stream for keyword list specification
+               result = KeywordlistParseState_BAD_STREAM;
+               break;
+            }
+         }
+         else if(c != m_delimiter)
+         {
+            sequence += (char)c;
+         }
+         else // at m_delimiter
+         {
+            result = KeywordlistParseState_OK;
+            sequence = sequence.trim();
+            break;
+         }
+      }
+      else 
+      {
+         // mal formed input stream for keyword list specification
+         result = KeywordlistParseState_BAD_STREAM;
+         break;
+      }
+   }
+   // we never found a delimeter so we are mal formed
+   if(!sequence.empty()&&(result!=KeywordlistParseState_OK))
+   {
+      result = KeywordlistParseState_BAD_STREAM;
+   }
+   return result;
+}
+
+ossimKeywordlist::KeywordlistParseState ossimKeywordlist::readValue(ossimString& sequence, std::istream& in)const
+{
+   KeywordlistParseState result = KeywordlistParseState_OK;
+   
+   ossim_int32 quoteCount = 0; // mark as not set
+   
+   // make sure we check for a blank value
+   while(!in.eof()&&!in.bad())
+   {
+      if(in.peek() == ' '||
+         in.peek() == '\t')
+      {
+         in.ignore();
+      }
+      else if(in.peek() == '\n' ||
+              in.peek() == '\r')
+      {
+         in.ignore();
+         return result;
+      }
+      else 
+      {
+         break;
+      }
+   }
+
+   // The ifstream object will end in 'ÿ' (character 255 or -1) if the end-of-file indicator 
+   // will not be set(e.g \n). In this case, end-of-file conditions would never be detected. 
+   // add EOF (which is actually the integer -1 or 255) check here.
+   // Reference link http://www.cplusplus.com/forum/general/33821/
+   while(!in.eof()&&!in.bad()&&in.peek()!=EOF)
+   {
+      ossim_uint8 c = in.get();
+      if(isValidKeywordlistCharacter(c))
+      {
+         if(((c == '\n'||c=='\r') && !quoteCount) || in.eof())
+         {
+            break;
+         }
+         sequence += (char)c;
+         if(sequence.size() >2)
+         {
+            if(quoteCount < 1)
+            {
+               // if quoted
+               if(ossimString(sequence.begin(), sequence.begin()+3) == "\"\"\"")
+               {
+                  ++quoteCount;
+               }
+            }
+            else // check for ending quotes 
+            {
+               if(ossimString(sequence.begin() + sequence.size()-3, sequence.end()) == "\"\"\"")
+               {
+                  ++quoteCount;
+               }
+            }
+         }
+         if(quoteCount > 1)
+         {
+            sequence = ossimString(sequence.begin()+3, sequence.begin()+(sequence.size()-3));
+            break;
+         }
+      }
+      else 
+      {
+         result = KeywordlistParseState_BAD_STREAM;
+         break;
+      }
+   }
+   return result;
+}
+
+ossimKeywordlist::KeywordlistParseState ossimKeywordlist::readKeyAndValuePair(ossimString& key, ossimString& value, std::istream& in)const
+{
+   ossimKeywordlist::KeywordlistParseState keyState   = readKey(key, in);
+   ossimKeywordlist::KeywordlistParseState valueState = readValue(value, in);
+   return static_cast<ossimKeywordlist::KeywordlistParseState>( (static_cast<int>(keyState) |
+                                                                 static_cast<int>(valueState)) );
+}
+
 bool ossimKeywordlist::parseStream(std::istream& is)
 {
    if (!is) // Check stream state.
    {
       return false;
    }
-   
-   ossimString line;
-   
-   while(!is.eof() && is.good())
+   ossimString key;
+   ossimString value;
+   ossimString sequence;
+   KeywordlistParseState state = KeywordlistParseState_OK;
+   while(!is.eof() && !is.bad())
    {
-      line  = "";
-      // get a line and parse it
-      ossim_uint8 c = is.get();
-      while(!is.eof()&&!is.bad())
+      skipWhitespace(is);
+      if(is.eof() || is.bad()) return true; // we skipped to end so valid keyword list
+      state = readComments(sequence, is);
+      // if we failed a comment parse then try key value parse.
+      if(state == KeywordlistParseState_FAIL)
       {
-         if(c == m_lineContinuationCharacter)
+         key = sequence; // just in case there is a 1 token look ahead residual for a single slash test.
+         if(readKeyAndValuePair(key, value, is) == KeywordlistParseState_OK)
          {
-            char peekChar = is.peek();
-            if(peekChar == '\n')
-            {
-               line += (char)is.get();
-            }
-            else
-            {
-               line += (char)c;
-            }
-         }
-         else if(c == '\n')
-         {
-            break;
-         }
-         else if(c >= 0x20)
-         {
-            if( (c > 0x7e) )
-            {
-               return false;
-            }
-            else if (c <= 0x7e)
-            {
-               
-               line += (char)c;
-            }
-            else
-            {
-               line += (char)c;
-            }
-         }
-         c = is.get();
-      }
-      
-      if(line != "")
-      {
-         // Find the delimiter position.
-         std::string::size_type pos = line.find(m_delimiter);
-         
-         if(pos != line.npos)
-         {
-            // Found delimiter, get the key.
-            ossimString key = line.substr(0, pos);
             key = key.trim();
-            
-            if ( key.size() ) // Could have a one letter key like: 'a'
+            if(key.empty())
             {
-               bool addPair = true;
-               
-               // ESH 06/2008 --
-               // Make sure the locations exist before accessing.
-               if ( key.size() > 1 ) // Check for c++ comment "//".
-               {
-                  //---
-                  // Might want to require beginning character to be an alpha?
-                  // For now only blocked if c++ comment.  (drb)
-                  //---
-                  if ( (key.begin()[0] == (char)'/') &&
-                      (key.begin()[1] == (char)'/') )
-                  {
-                     addPair = false;
-                  }
-               }
-
-               if ( addPair )
-               {
-                  // Get value.
-                  ossimString value = line.substr(pos + 1);
-                  value = value.trim();
-
-                  // ESH: EarthWhere ticket #656
-                  // The ossim_prefs file can now use environment variables. 
-                  // The ossimPreferences class enables this feature for its 
-                  // internal keywordlist.
-                  if ( m_expandEnvVars == true )
-                  {
-                     ossimString result = value.expandEnvironmentVariable();
-                     m_map.insert(std::make_pair(key, result));
-                  }
-                  else
-                  {
-                     m_map.insert(std::make_pair(key, value));
-                  }
-               }
+               return true;
             }
-            
-         } // End of:  if(pos != line.npos)
-         
-      } // End of:  if(line != "")
-      
-   } // End of while(!is.eof() && is.good())
+            if ( m_expandEnvVars == true )
+            {
+               ossimString result = value.expandEnvironmentVariable();
+               m_map.insert(std::make_pair(key.string(), result.string()));
+            }
+            else
+            {
+               m_map.insert(std::make_pair(key.string(), value.string()));
+            }
+         }
+         else
+         {
+            return false;
+         }
+      }
+      else if(state == KeywordlistParseState_BAD_STREAM)
+      {
+         return false;
+      }
+      sequence = key = value = "";
+   }   
    
    return true;
 }
 
-std::vector<ossimString> ossimKeywordlist::findAllKeysThatContains(
-                                                                   const ossimString &searchString)const
+std::vector<ossimString> ossimKeywordlist::findAllKeysThatContains(const ossimString &searchString)const
 {
    KeywordMap::const_iterator i;
    std::vector<ossimString> result;
    
    for(i = m_map.begin(); i != m_map.end(); ++i)
    {
-      if((*i).first.contains(searchString))
+      if( ossimString((*i).first).contains(searchString))
       {
          result.push_back((*i).first);
       }
@@ -1046,8 +1033,7 @@ std::vector<ossimString> ossimKeywordlist::findAllKeysThatContains(
    return result;
 }
 
-std::vector<ossimString> ossimKeywordlist::findAllKeysThatMatch(
-                                                                const ossimString &regularExpression)const
+std::vector<ossimString> ossimKeywordlist::findAllKeysThatMatch(const ossimString &regularExpression)const
 {
    KeywordMap::const_iterator i;
    std::vector<ossimString> result;
@@ -1079,7 +1065,7 @@ void ossimKeywordlist::extractKeysThatMatch(ossimKeywordlist& kwl,
    {
       if(regExp.find( (*i).first.c_str()))
       {
-         kwl.add((*i).first, (*i).second);
+         kwl.addPair((*i).first, (*i).second);
       }
    }
 }
@@ -1176,10 +1162,8 @@ void ossimKeywordlist::addPrefixToAll(const ossimString& prefix)
    
    while(values != tempKwl.m_map.end())
    {
-      ossimString newKey = prefix + (*values).first;
-      add(newKey,
-          (*values).second,
-          true);
+      std::string newKey = prefix.string() + (*values).first;
+      addPair(newKey, (*values).second, true);
       ++values;
    }
 }
@@ -1198,19 +1182,15 @@ void ossimKeywordlist::addPrefixToKeysThatMatch(const ossimString& prefix,
    
    while(values != tempKwl.m_map.end())
    {
-      ossimString newKey = prefix+(*values).first;
+      std::string newKey = prefix.string()+(*values).first;
       if(regExp.find( (*values).first.c_str()))
       {
          
-         add(newKey,
-             (*values).second,
-             true);
+         addPair(newKey, (*values).second, true);
       }
       else
       {
-         add((*values).first,
-             (*values).second,
-             true);
+         addPair((*values).first, (*values).second, true);
       }
       ++values;
    }
@@ -1229,26 +1209,21 @@ void ossimKeywordlist::stripPrefixFromAll(const ossimString& regularExpression)
    
    while(values != tempKwl.m_map.end())
    {
-      ossimString newKey = (*values).first;
+      std::string newKey = (*values).first;
       if(regExp.find( (*values).first.c_str()))
       {
          newKey.erase(newKey.begin()+regExp.start(),
                       newKey.begin()+regExp.start()+regExp.end());
          
-         add(newKey.c_str(),
-             (*values).second,
-             true);
+         addPair(newKey, (*values).second, true);
       }
       else
       {
-         add(newKey.c_str(),
-             (*values).second,
-             true);
+         addPair(newKey, (*values).second, true);
       }
       ++values;
    }
 }
-
 
 ossim_uint32 ossimKeywordlist::getSize()const
 {
@@ -1311,11 +1286,11 @@ OSSIMDLLEXPORT std::ostream& operator<<(std::ostream& os,
 bool ossimKeywordlist::operator ==(ossimKeywordlist& kwl)const
 {
    if(this==&kwl) return true;
-   std::map<ossimString, ossimString>::const_iterator iter = m_map.begin();
+   std::map<std::string, std::string>::const_iterator iter = m_map.begin();
    
    while(iter != m_map.end())
    {
-      const char* value = kwl.find((*iter).first);
+      const char* value = kwl.find((*iter).first.c_str());
       
       if(ossimString(value) != (*iter).second)
       {
@@ -1327,33 +1302,86 @@ bool ossimKeywordlist::operator ==(ossimKeywordlist& kwl)const
    return true;
 }
 
-void ossimKeywordlist::downcaseKeywords()
+ossimKeywordlist&  ossimKeywordlist::downcaseKeywords()
 {
    KeywordMap tempMap;
    KeywordMap::iterator iter = m_map.begin();
    
    while(iter != m_map.end())
    {
-      tempMap.insert(make_pair(ossimString::downcase(iter->first),
-                               iter->second));
-      
+      ossimString k(iter->first);
+      tempMap.insert(std::make_pair(k.downcase().string(), iter->second));
       ++iter;
    }
    m_map = tempMap;
+   
+   return *this;
 }
 
-void ossimKeywordlist::upcaseKeywords()
+ossimKeywordlist& ossimKeywordlist::upcaseKeywords()
 {
    KeywordMap tempMap;
    KeywordMap::iterator iter = m_map.begin();
    
    while(iter != m_map.end())
    {
-      tempMap.insert(make_pair(ossimString::upcase(iter->first),
-                               iter->second));
-      
+      ossimString k(iter->first);
+      tempMap.insert(std::make_pair(k.upcase().string(), iter->second));
       ++iter;
    }
    m_map = tempMap;
+   
+   return *this;
+}
+
+ossimKeywordlist& ossimKeywordlist::trimAllValues(const ossimString& valueToTrim)
+{
+   KeywordMap::iterator iter = m_map.begin();
+   
+   while(iter != m_map.end())
+   {
+      iter->second = ossimString(iter->second).trim(valueToTrim).string();
+      ++iter;
+   }
+   
+   return *this;
+}
+
+ossimKeywordlist ossimKeywordlist::trimAllValues(const ossimString& valueToTrim)const
+{
+   ossimKeywordlist result(*this);
+   result.trimAllValues(valueToTrim);
+   return result;
+}
+
+
+//*************************************************************************************************
+//! [OLK, Aug/2008]
+//! Sets the boolean destination arg depending on value associated with keyword for values = 
+//! (yes|no|true|false|1|0). Returns TRUE if keyword found, otherwise false. Also returns false
+//! if none of the above permitted values are specified (rtn_val left unchanged in this case).
+//*************************************************************************************************
+bool ossimKeywordlist::getBoolKeywordValue(bool& rtn_val, 
+                                           const char* keyword, 
+                                           const char* prefix) const
+{
+   bool found = true;
+   const char* val_str = find(prefix, keyword);
+   if (val_str) 
+   {
+      found = true;
+      ossimString yesno (val_str);
+      yesno.upcase();
+      if ((yesno == "YES") || (yesno == "TRUE") || (yesno == "1"))
+         rtn_val = true;
+      else if ((yesno == "NO") || (yesno == "FALSE") || (yesno == "0"))
+         rtn_val = false;
+      else
+         found = false;
+   }
+   else
+      found = false;
+
+   return found;
 }
 

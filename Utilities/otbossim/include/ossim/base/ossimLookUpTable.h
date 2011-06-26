@@ -11,7 +11,7 @@
 //
 // Contains class declaration for LookUpTable. 
 //*******************************************************************
-//  $Id: ossimLookUpTable.h 14789 2009-06-29 16:48:14Z dburken $
+//  $Id: ossimLookUpTable.h 19448 2011-04-26 15:15:07Z dburken $
 
 #ifndef ossimLookUpTable_HEADER
 #define ossimLookUpTable_HEADER
@@ -103,14 +103,14 @@ protected:
    class ossimKeyValueMap
    {
    public:
+      void init (ossim_int32 key, const ossimString& value) { theKey=key; theValue=value; }
       ossim_int32  theKey;
       ossimString theValue;
    };
 
    std::vector<ossimKeyValueMap>  theTable;
    
-private:
-   ossimLookUpTable(){} // disallow...
+   ossimLookUpTable(){}
 };
 
 #endif

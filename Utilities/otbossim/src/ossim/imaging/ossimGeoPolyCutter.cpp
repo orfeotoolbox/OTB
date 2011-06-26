@@ -5,7 +5,7 @@
 // Author: Garrett Potts (gpotts@imagelinks.com)
 //
 //*************************************************************************
-// $Id: ossimGeoPolyCutter.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
+// $Id: ossimGeoPolyCutter.cpp 18423 2010-11-16 16:05:12Z gpotts $
 #include <algorithm>
 #include <ossim/imaging/ossimGeoPolyCutter.h>
 #include <ossim/projection/ossimProjection.h>
@@ -110,9 +110,12 @@ bool ossimGeoPolyCutter::loadState(const ossimKeywordlist& kwl,
 
    ossimString viewPrefix = prefix;
    viewPrefix += "view.";
-   theViewProjection = ossimProjectionFactoryRegistry::instance()->createProjection(kwl,
-                                                                                        viewPrefix);
-   transformVertices();
+   theViewProjection = new ossimImageGeometry();
+   if(theViewProjection->loadState(kwl,
+                                viewPrefix))
+   {
+      transformVertices();
+   }
    return ossimImageSourceFilter::loadState(kwl, prefix);
 }
 
@@ -225,20 +228,25 @@ void ossimGeoPolyCutter::invertPolygon(int polygonNumber)
    int j = 0;
    for(j = 0; j < (int)poly.getVertexCount(); ++j)
    {
-      theViewProjection->lineSampleToWorld(poly[j], gpoly[j]);
+      theViewProjection->localToWorld(poly[j], gpoly[j]);
    }
 }
 
 bool ossimGeoPolyCutter::setView(ossimObject* baseObject)
 {
+   
    ossimProjection* proj = dynamic_cast<ossimProjection*>(baseObject);
    if(proj)
    {
-      theViewProjection = proj;
+      theViewProjection = new ossimImageGeometry(0, proj);
       transformVertices();
-      return true;
    }
-   return false;
+   else 
+   {
+      theViewProjection = dynamic_cast<ossimImageGeometry*>(baseObject);
+   }
+
+   return theViewProjection.valid();
 }
 
 ossimObject* ossimGeoPolyCutter::getView()
@@ -275,7 +283,7 @@ void ossimGeoPolyCutter::transformVertices()
          for(j = 0; j < nvert; ++j)
          {
 //	   ossimDpt error;
-            theViewProjection->worldToLineSample(gpoly[j], poly[j]);
+            theViewProjection->worldToLocal(gpoly[j], poly[j]);
 //	    theViewProjection->getRoundTripError(ossimIpt(poly[j]), error);
 //	    poly[j] = poly[j] + error;
             poly[j] = ossimDpt(ossim::round<int>(poly[j].x),
@@ -301,7 +309,7 @@ void ossimGeoPolyCutter::transformVertices(int i)
    for(j = 0; j < nvert; ++j)
    {
 //     ossimDpt error;
-     theViewProjection->worldToLineSample(gpoly[j], poly[j]);
+     theViewProjection->worldToLocal(gpoly[j], poly[j]);
 //     theViewProjection->getRoundTripError(poly[j], error);
 //     poly[j] = poly[j] + error;
      poly[j] = ossimDpt(ossim::round<int>(poly[j].x),

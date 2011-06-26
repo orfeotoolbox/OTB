@@ -11,7 +11,7 @@
 // is intended to be an image handler for USGS dem files.
 //
 //********************************************************************
-// $Id: ossimUsgsDemTileSource.h 17932 2010-08-19 20:34:35Z dburken $
+// $Id: ossimUsgsDemTileSource.h 19640 2011-05-25 15:58:00Z oscarkramer $
 
 #ifndef ossimUsgsDemTileSource_HEADER
 #define ossimUsgsDemTileSource_HEADER
@@ -141,6 +141,11 @@ public:
 
    virtual bool isOpen()const;
    
+   /**
+    * Override base-class method to make sure the internal geometry is explored before extending.
+    */
+   virtual ossimRefPtr<ossimImageGeometry> getImageGeometry();
+
 protected:
 
    /**

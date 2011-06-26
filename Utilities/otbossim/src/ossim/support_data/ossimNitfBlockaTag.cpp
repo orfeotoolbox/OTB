@@ -9,7 +9,7 @@
 // Description: BLOCKA tag class declaration.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimNitfBlockaTag.cpp 14754 2009-06-23 23:13:05Z dburken $
+// $Id: ossimNitfBlockaTag.cpp 19682 2011-05-31 14:21:20Z dburken $
 
 #include <cstring> /* for memcpy */
 #include <sstream>
@@ -31,9 +31,9 @@ ossimNitfBlockaTag::ossimNitfBlockaTag()
    clearFields();
 }
 
-ossimString ossimNitfBlockaTag::getRegisterTagName() const
+std::string ossimNitfBlockaTag::getRegisterTagName() const
 {
-   return ossimString("BLOCKA");
+   return std::string("BLOCKA");
 }
 
 void ossimNitfBlockaTag::parseStream(std::istream& in)

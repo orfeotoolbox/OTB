@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFileHeaderV2_1.cpp 17206 2010-04-25 23:20:40Z dburken $
+// $Id: ossimNitfFileHeaderV2_1.cpp 19058 2011-03-11 20:03:24Z dburken $
 
 #include <iostream>
 #include <iomanip>
@@ -17,6 +17,7 @@
 #include <cstring> // for memset
 
 #include <ossim/support_data/ossimNitfFileHeaderV2_1.h>
+#include <ossim/support_data/ossimNitfTextHeaderV2_0.h>
 #include <ossim/base/ossimString.h>
 #include <ossim/base/ossimColorProperty.h>
 #include <ossim/base/ossimDateProperty.h>
@@ -25,6 +26,8 @@
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimNotifyContext.h>
 #include <ossim/support_data/ossimNitfImageHeaderV2_1.h>
+#include <ossim/support_data/ossimNitfImageHeaderV2_X.h>
+#include <ossim/support_data/ossimNitfDataExtensionSegmentV2_0.h> // ??? drb
 
 
 RTTI_DEF1(ossimNitfFileHeaderV2_1,
@@ -91,6 +94,48 @@ std::ostream& operator <<(std::ostream& out,
               << std::endl;
 }
 
+void ossimNitfTextFileInfoRecordV2_1::setSubheaderLength(ossim_uint32 length)
+{
+   ostringstream out;
+   
+   out << std::setw(4)
+   << std::setfill('0')
+   << std::setiosflags(ios::right)
+   << length;
+   
+   memcpy(theTextFileSubheaderLength, out.str().c_str(), 4);
+   theTextFileSubheaderLength[4] = '\0';
+}
+
+void ossimNitfTextFileInfoRecordV2_1::setTextLength(ossim_uint64 length)
+{
+   ostringstream out;
+   
+   out << std::setw(5)
+   << std::setfill('0')
+   << std::setiosflags(ios::right)
+   << length;
+   
+   memcpy(theTextFileLength, out.str().c_str(), 5);
+   theTextFileLength[5] = '\0';
+}
+
+ossim_uint32 ossimNitfTextFileInfoRecordV2_1::getHeaderLength()const
+{
+   return ossimString(theTextFileSubheaderLength).toInt32();
+}
+
+ossim_uint32 ossimNitfTextFileInfoRecordV2_1::getTextLength()const
+{
+   return ossimString(theTextFileLength).toInt32();
+}
+
+ossim_uint32 ossimNitfTextFileInfoRecordV2_1::getTotalLength()const
+{
+   return (getHeaderLength() + getTextLength());
+}
+
+
 std::ostream& operator <<(std::ostream& out,
                      const ossimNitfDataExtSegInfoRecordV2_1 &data)
 {
@@ -138,7 +183,7 @@ void ossimNitfImageInfoRecordV2_1::setImageLength(ossim_uint64 length)
    theImageLength[10] = '\0';
 }
 
-
+// 
 
 ossimNitfFileHeaderV2_1::ossimNitfFileHeaderV2_1()
    :ossimNitfFileHeaderV2_X()
@@ -459,7 +504,6 @@ std::ostream& ossimNitfFileHeaderV2_1::print(std::ostream& out,
                                              const std::string& prefix) const
 {
    out << setiosflags(ios::left)
-      // << "\nossimNitfFileHeaderV2_1::print\n"
        << prefix << std::setw(24) << "FHDR:"
        << theFileTypeVersion << "\n"
        << prefix << std::setw(24) << "CLEVEL:"
@@ -661,13 +705,12 @@ ossimNitfImageHeader* ossimNitfFileHeaderV2_1::allocateImageHeader()const
 
 ossimNitfTextHeader *ossimNitfFileHeaderV2_1::allocateTextHeader()const
 {
-   return 0;
+   return new ossimNitfTextHeaderV2_0;
 }
 
-ossimNitfDataExtensionSegment*
-ossimNitfFileHeaderV2_1::allocateDataExtSegment()const
+ossimNitfDataExtensionSegment* ossimNitfFileHeaderV2_1::allocateDataExtSegment()const
 {
-   return 0;
+   return new ossimNitfDataExtensionSegmentV2_0;
 }
 
 bool ossimNitfFileHeaderV2_1::isEncrypted()const
@@ -940,6 +983,21 @@ void ossimNitfFileHeaderV2_1::addImageInfoRecord(const ossimNitfImageInfoRecordV
    setNumberOfImageInfoRecords(theNitfImageInfoRecords.size());
 }
 
+void ossimNitfFileHeaderV2_1::addTextInfoRecord(const ossimNitfTextFileInfoRecordV2_1& recordInfo)
+{
+   theNitfTextFileInfoRecords.push_back(recordInfo);
+
+   setNumberOfTextInfoRecords(theNitfTextFileInfoRecords.size());
+}
+
+void ossimNitfFileHeaderV2_1::addDataExtSegInfoRecord(const ossimNitfDataExtSegInfoRecordV2_1& recordInfo)
+{
+   theNitfDataExtSegInfoRecords.push_back(recordInfo);
+
+   setNumberOfDataExtSegInfoRecords(theNitfDataExtSegInfoRecords.size());
+}
+
+
 void ossimNitfFileHeaderV2_1::replaceImageInfoRecord(int i, const ossimNitfImageInfoRecordV2_1& recordInfo)
 {
    if ( i < static_cast<int>(theNitfImageInfoRecords.size()) )
@@ -1007,6 +1065,8 @@ ossimNitfFileHeaderV2_1::getNewSymbolHeader(ossim_uint32 /* symbolNumber */,
    // Currently not implemented...
    
    ossimNitfSymbolHeader *result = 0;
+
+
    
    return result;
 }
@@ -1146,6 +1206,86 @@ void ossimNitfFileHeaderV2_1::setFileLength(ossim_uint64 fileLength)
 
    memcpy(theFileLength, out.str().c_str(), 12);
 }
+
+
+
+void ossimNitfFileHeaderV2_1::setNumberOfGraphicInfoRecords(ossim_uint64 num)
+	{
+		if (num < 1000)
+   {
+      ostringstream out;
+      
+      out << std::setw(3)
+          << std::setfill('0')
+          << std::setiosflags(ios::right)
+          << num;
+      
+      memcpy(theNumberOfGraphicInfoRecords, out.str().c_str(), 3);
+   }
+   else
+   {
+      std::string s = "ossimNitfFileHeaderV2_1::setNumberOfGraphicInfoRecords:";
+      s += " ERROR\nExceeded max number of 999!";
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_WARN) << s << std::endl;
+      }
+      throw std::out_of_range(s);
+   }
+		
+	}
+
+void ossimNitfFileHeaderV2_1::setNumberOfDataExtSegInfoRecords(ossim_uint64 num)
+{
+   if (num < 1000)
+   {
+      ostringstream out;
+      
+      out << std::setw(3)
+          << std::setfill('0')
+          << std::setiosflags(ios::right)
+          << num;
+      
+      memcpy(theNumberOfDataExtSegInfoRecords, out.str().c_str(), 3);
+   }
+   else
+   {
+      std::string s = "ossimNitfFileHeaderV2_1::setNumberOfDataExtSegInfoRecords:";
+      s += " ERROR\nExceeded max number of 999!";
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_WARN) << s << std::endl;
+      }
+      throw std::out_of_range(s);
+   }
+}
+
+
+void ossimNitfFileHeaderV2_1::setNumberOfTextInfoRecords(ossim_uint64 num)
+{
+   if (num < 1000)
+   {
+      ostringstream out;
+      
+      out << std::setw(3)
+          << std::setfill('0')
+          << std::setiosflags(ios::right)
+          << num;
+      
+      memcpy(theNumberOfTextFileInfoRecords, out.str().c_str(), 3);
+   }
+   else
+   {
+      std::string s = "ossimNitfFileHeaderV2_1::setNumberOfTextRecords:";
+      s += " ERROR\nExceeded max number of 999!";
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_WARN) << s << std::endl;
+      }
+      throw std::out_of_range(s);
+   }
+}
+
 
 void ossimNitfFileHeaderV2_1::setNumberOfImageInfoRecords(ossim_uint64 num)
 {

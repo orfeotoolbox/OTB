@@ -7,7 +7,7 @@
 //
 // Contains class definition for ossimNotify.
 //*******************************************************************
-//  $Id: ossimNotify.cpp 17195 2010-04-23 17:32:18Z dburken $
+//  $Id: ossimNotify.cpp 18953 2011-02-23 20:18:39Z gpotts $
 
 #include <iostream>
 #include <cstdio>
@@ -323,7 +323,6 @@ void ossimGetLogFilename(ossimFilename& logFile)
 
 ossimString ossimErrorV(const char *fmt, va_list args )
 {
-   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
    char temp[2024];
    if(fmt)
    {

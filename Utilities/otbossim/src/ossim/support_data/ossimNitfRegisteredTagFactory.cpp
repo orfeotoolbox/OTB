@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfRegisteredTagFactory.cpp 14691 2009-06-10 15:56:10Z dburken $
+// $Id: ossimNitfRegisteredTagFactory.cpp 18883 2011-02-09 15:20:25Z dburken $
 
 #include <ossim/support_data/ossimNitfRegisteredTagFactory.h>
 
@@ -23,6 +23,7 @@
 #include <ossim/support_data/ossimNitfEngrdaTag.h>
 #include <ossim/support_data/ossimNitfGeoPositioningTag.h>
 #include <ossim/support_data/ossimNitfIchipbTag.h>
+#include <ossim/support_data/ossimNitfJ2klraTag.h>
 #include <ossim/support_data/ossimNitfLocalGeographicTag.h>
 #include <ossim/support_data/ossimNitfLocalCartographicTag.h>
 #include <ossim/support_data/ossimNitfMstgtaTag.h>
@@ -48,6 +49,7 @@ static const char CSEXRA_TAG[]               = "CSEXRA";
 static const char ENGRDA_TAG[]               = "ENGRDA";
 static const char GEO_POSITIONING_TAG[]      = "GEOPSB";
 static const char ICHIPB_TAG[]               = "ICHIPB";
+static const char J2KLRA_TAG[]               = "J2KLRA";
 static const char LOCAL_GEOGRAPHIC_TAG[]     = "GEOLOB";
 static const char LOCAL_CARTOGRAPHIC_TAG[]   = "MAPLOB";
 static const char MSTGTA_TAG[]               = "MSTGTA";
@@ -119,6 +121,10 @@ ossimRefPtr<ossimNitfRegisteredTag> ossimNitfRegisteredTagFactory::create(
    else if(tagName == ICHIPB_TAG)
    {
       return new ossimNitfIchipbTag;
+   }
+   else if(tagName == J2KLRA_TAG)
+   {
+      return new ossimNitfJ2klraTag;
    }
    else if(tagName == LOCAL_GEOGRAPHIC_TAG)
    {

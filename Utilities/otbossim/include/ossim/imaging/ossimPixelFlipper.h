@@ -13,7 +13,7 @@
 // This was written to fix partial null pixels.
 // 
 //*************************************************************************
-// $Id: ossimPixelFlipper.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimPixelFlipper.h 19728 2011-06-06 21:31:17Z dburken $
 #ifndef ossimPixelFlipper_HEADER
 #define ossimPixelFlipper_HEADER
 
@@ -37,36 +37,75 @@
 class OSSIM_DLL ossimPixelFlipper : public ossimImageSourceFilter
 {
 public:
-   
+   static const char PF_TARGET_VALUE_KW[];     
+   static const char PF_TARGET_RANGE_KW[];     
+   static const char PF_REPLACEMENT_VALUE_KW[];
+   static const char PF_REPLACEMENT_MODE_KW[];
+   static const char PF_CLAMP_VALUE_KW[];
+   static const char PF_CLAMP_VALUE_LO_KW[];   
+   static const char PF_CLAMP_VALUE_HI_KW[];   
+   static const char PF_CLIP_MODE_KW[];
+
+   /**
+    * Target Replacement Mode:
+    * 
+    * Examples given for 3-band pixel values as (R, G, B) with target = 0, and replacement = 1
+
+    * If mode is REPLACE_BAND_IF_TARGET (default):
+    * Any pixel band with value of target will be replaced.
+    * (0, 0, 0) becomes (1, 1, 1)
+    * (0, 3, 2) becomes (1, 3, 2)
+    *
+    * If mode is REPLACE_BAND_IF_PARTIAL_TARGET:
+    * A band with target value will be replaced only if at least one other band in the pixel does 
+    * not have the target.
+    * (0, 0, 0) remains (0, 0, 0)
+    * (0, 3, 2) becomes (1, 3, 2)
+    *
+    * If mode is REPLACE_ALL_BANDS_IF_PARTIAL_TARGET:
+    * All bands of the pixel will be replaced if any but not all bands in the pixel have the
+    * target value.
+    * (0, 0, 0) remains (0, 0, 0)
+    * (0, 3, 2) becomes (1, 1, 1)
+    *
+    * If mode is REPLACE_ONLY_FULL_TARGETS:
+    * All bands in the pixel will be replaced only if they all have the target.
+    * (0, 0, 0) becomes (1, 1, 1)
+    * (0, 3, 2) remains (0, 3, 2)
+    *
+    * If mode is REPLACE_ALL_BANDS_IF_ANY_TARGET:
+    * All bands in the pixel will be replaced if even one band has the target.
+    * (0, 0, 0) becomes (1, 1, 1)
+    * (0, 3, 2) remains (1, 1, 1)
+    */
    enum ReplacementMode
    {
-      /**
-       * Any pixel with dn of target will be replaced. (default)
-       */
-      REPLACE_ALL_TARGETS                = 0,
-      
-      /**
-       * Target will be replaced only at least one subpixel(band) does not have
-       * the target.
-       */
-      REPLACE_PARTIAL_TARGETS            = 1,
-
-      /**
-       * All bands will be replaced if any band has target but not all.
-       */
-      REPLACE_PARTIAL_TARGETS_ALL_BANDS  = 2,
-
-      /**
-       * Target will be repaced only if all subpixels(bands) have the target.
-       */
-      REPLACE_FULL_TARGETS               = 3
+      REPLACE_BAND_IF_TARGET               = 0,
+      REPLACE_BAND_IF_PARTIAL_TARGET       = 1,
+      REPLACE_ALL_BANDS_IF_PARTIAL_TARGET  = 2,
+      REPLACE_ONLY_FULL_TARGETS            = 3,
+      REPLACE_ALL_BANDS_IF_ANY_TARGET      = 4,
    };
+
+   /** 
+    * When either a lo and/or hi clamp value is set, the clamping mode will be enabled accordingly
+    * and override any target replacement defined
+    */
+   enum ClampingMode
+   {
+      DISABLED                           = 0,
+      CLAMPING_LO                        = 1,
+      CLAMPING_HI                        = 2,
+      CLAMPING_LO_AND_HI                 = 3,
+   };
+
    enum ClipMode
    {
-      ossimPixelFlipperClipMode_NONE = 0,
-      ossimPixelFlipperClipMode_BOUNDING_RECT  = 1,
-      ossimPixelFlipperClipMode_VALID_VERTICES = 2
+      NONE = 0,
+      BOUNDING_RECT  = 1,
+      VALID_VERTICES = 2
    };
+
    /** default constructor */
    ossimPixelFlipper(ossimObject* owner=NULL);
 
@@ -105,49 +144,74 @@ public:
    
    virtual ossimScalarType getOutputScalarType() const;
    virtual ossim_float64 getMaxPixelValue (ossim_uint32 band = 0 ) const;
+   virtual ossim_float64 getMinPixelValue (ossim_uint32 band = 0 ) const;
       
    virtual std::ostream& print(std::ostream& out) const;
 
-   /** @param target_value This is the value to flip. */
+   /** 
+    * @param target_value This is the value to flip. 
+    * @note If clamping is specified, it will take precedence over any target value (or range) test
+    */
    void setTargetValue(ossim_float64 target_value);
 
-   /** @param replacement_value This is the value to flip target to. */
-   void setReplacementValue(ossim_float64 replacement_value);
+   /** 
+    * Instead of a single value for a target, this method allows for specifying a range of values
+    * to flip to the replacement. The replacement mode is still referenced.
+    * @param  This is the value to flip. 
+    * @note If clamping is specified, it will take precedence over any target range test.
+    */
+   void setTargetRange(ossim_float64 target_min, ossim_float64 target_max);
 
+   /**
+    * @param replacement_value This is the value to flip target to.
+    * @note If clamping is specified, it will take precedence over any target replacement.
+    */
+ void setReplacementValue(ossim_float64 replacement_value);
+
+   /**
+    * @param clamp_value If set all pixel values above this range will (or below if clamp_max_value
+    * = false) be clamped to clamp_value. Must be less than max pixel (or greater than the min 
+    * pixel) value of the input and cannot be null. 
+    * @note If any clamp limit is defined, it will take precedence over any target value (or range)
+    * replacement. The replacement mode is referenced when deciding whether a pixel should be 
+    * clamped or left alone.
+    */
+   void setClampValue(ossim_float64 clamp_value, bool is_high_clamp_value=true);
+   void setClampValues(ossim_float64 clamp_value_lo, ossim_float64 clamp_value_hi);
 
    /** @see enum ReplacementMode */
    void setReplacementMode(ossimPixelFlipper::ReplacementMode mode);
-   void setReplacementMode(const ossimString& modeString);
 
-   void setClipMode(const ossimString& modeString);
-   void setClipMode(ossimPixelFlipper::ClipMode mode);
-   
-   /**
-    * @param clamp_value If set all pixel values above this range will
-    * be clamped to clamp_value.  Must be less than max pixel value of the
-    * input and cannot be null.
+   /** Accepts a string that must match the enumerator's label (can be lower case) and sets the 
+    * replacement mode accordingly. If the string is not understood, the mode remains unchanged and
+    * FALSE is returned. */
+   bool setReplacementMode(const ossimString& modeString);
+
+   /** 
+    * Clipping here refers to bounding rect or valid polygon (spacial) clipping, where all pixels
+    * outside the valid area are mapped to the replacement value.
     */
-   void setClampValue(ossim_float64 clamp_value);
+   void setClipMode(const ossimString& modeString);
+   void setClipMode(ClipMode mode);
 
-   ossim_float64 getTargetValue()      const;
+   //ossim_float64 getTargetValue()      const;
    ossim_float64 getReplacementValue() const;
-   ossim_float64 getClampValue() const;
+   //ossim_float64 getClampValue() const;
    ossimPixelFlipper::ReplacementMode getReplacementMode()  const;
    ossimString getReplacementModeString() const;
    ossimString getClipModeString() const;
-   ossimPixelFlipper::ClipMode getClipMode() const;
+   ClipMode getClipMode() const;
 
    virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;
    virtual void setProperty(ossimRefPtr<ossimProperty> property);
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
    
+   //! This object can be used outside of an image chain for offline processing of existing tile.
+   template <class T> void flipPixels(T dummy, ossimImageData* inpuTile, ossim_uint32 resLevel);
+
 protected:
    /** destructor */
    virtual ~ossimPixelFlipper();
-   template <class T> void flipPixels(T dummy,
-                                      ossimImageData* inpuTile,
-                                      ossim_uint32 resLevel);
-
    template <class T> void clipTile(T dummy,
                                     ossimImageData* inpuTile,
                                     ossim_uint32 resLevel);
@@ -159,65 +223,27 @@ protected:
    bool inRange(ossim_float64 value) const;
 
    void allocateClipTileBuffer(ossimRefPtr<ossimImageData> inputImage);
-   /** The value to replace. */
-   ossim_float64 theTargetValue;
-
-   /** The replacement value. */
-   ossim_float64 theReplacementValue;
-
-   /**
-    * If set and not > max pixel values any values higher than theClampValue
-    * will be clamped to theClampValue.
-    */
-   ossim_float64 theClampValue;
-
    
-   /**
-    * Target Replacement Mode:
-    * 
-    * If mode is REPLACE_ALL_TARGETS (default):
-    * Any pixel with dn of target will be replaced.
-    *
-    * If mode is REPLACE_PARTIAL_TARGETS:
-    * Target will be replaced only at least one subpixel(band) does not have
-    * the target.
-    *
-    * If mode is REPLACE_BANDS_PARTIAL_TARGETS_ALL_BANDS:
-    * All bands will be replaced if any band has target but not all.
-    *
-    * If mode is REPLACE_FULL_TARGETS:
-    * Target will be repaced only if all subpixels(bands) have the target.
-    *
-    * Example:
-    * target      = 0
-    * replacement = 1
-    * Pixel at (0, 0) r=0, g=0,  b=0
-    * Pixel at (0, 1) r=0, g=30, b=21
-    * 
-    * Mode is REPLACE_ALL_TARGETS:
-    * Pixel at (0, 0) becomes  r=1, g=1,  b=1
-    * Pixel at (0, 1) becomes  r=1, g=30, b=21
-    * 
-    * Mode is REPLACE_PARTIAL_TARGETS:
-    * Pixel at (0, 0) remains  r=0, g=0,  b=0
-    * Pixel at (0, 1) becomes  r=1, g=30, b=21
-    *
-    * Mode is REPLACE_PARTIAL_TARGETS_ALL_BANDS:
-    * Pixel at (0, 0) remains  r=0, g=0,  b=0
-    * Pixel at (0, 1) becomes  r=1, g=1,  b=1
-    *
-    * Mode is REPLACE_FULL_TARGETS:
-    * Pixel at (0, 0) becomes  r=1, g=1,  b=1
-    * Pixel at (0, 1) remains  r=0, g=30, b=21
-    *
-    * Default mode is REPLACE_ALL_TARGETS.
-    */
-   ReplacementMode theReplacementMode;
+   /** The value range to replace. For a single value replacement, both Lo and Hi are equal. Any
+    * pixel within this range will be remapped to the replacement value */
+   ossim_float64 theTargetValueLo;
+   ossim_float64 theTargetValueHi;
+
+    /** When target values are defined, this is the value the pixel will assume if the pixel falls 
+     *  within the target range (according to the rules for replacement mode) */
+   ossim_float64 theReplacementValue;
+   ReplacementMode theReplacementMode; //!< See documentation for ReplacementMode enum above
+
+  /** The range of desired pixel values. Any pixels outside this range are set to the corresponding
+    * clamp value. Note that theReplacementValue is not referenced when clamping. */
+   ossim_float64 theClampValueLo;
+   ossim_float64 theClampValueHi;
+   ClampingMode  theClampingMode;
 
    /**
-    * Clip mode
+    * Border Clip mode
     *
-    * This will flip nulls any pixel value outside the specified mode.
+    * This will flip to nulls any pixel value outside the specified mode.
     *
     * Valid modes are:
     *

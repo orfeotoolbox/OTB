@@ -10,7 +10,7 @@
 // Contains definition of class ossimXmlAttribute.
 // 
 //*****************************************************************************
-// $Id: ossimXmlAttribute.cpp 17503 2010-06-02 11:18:49Z dburken $
+// $Id: ossimXmlAttribute.cpp 19682 2011-05-31 14:21:20Z dburken $
 
 #include <iostream>
 #include <sstream>
@@ -51,11 +51,11 @@ ossimXmlAttribute::ossimXmlAttribute(const ossimXmlAttribute& src)
 
 bool ossimXmlAttribute::read(std::istream& in)
 {
-   in >> xmlskipws;
+   xmlskipws(in);
    if(in.fail()) return false;
    if(readName(in))
    {
-      in >> xmlskipws;
+      xmlskipws(in);
       if((in.peek() != '=')||
          (in.fail()))
       {
@@ -160,7 +160,7 @@ std::ostream& operator << (std::ostream& os, const ossimXmlAttribute* xml_attr)
 
 bool ossimXmlAttribute::readName(std::istream& in)
 {
-   in >>xmlskipws;
+   xmlskipws(in);
    theName = "";
    char c = in.peek();
    while((c != ' ')&&
@@ -183,7 +183,7 @@ bool ossimXmlAttribute::readName(std::istream& in)
 
 bool ossimXmlAttribute::readValue(std::istream& in)
 {
-   in >>xmlskipws;
+   xmlskipws(in);
    if(in.fail()) return false;
    theValue = "";
    char c = in.peek();
@@ -217,8 +217,8 @@ bool ossimXmlAttribute::readValue(std::istream& in)
 
    if(theValue != "")
    {
-      ossimString::iterator startIter = theValue.begin();
-      ossimString::iterator endIter   = theValue.end();
+      std::string::iterator startIter = theValue.begin();
+      std::string::iterator endIter   = theValue.end();
       --endIter;
       if(*startIter == startQuote)
       {

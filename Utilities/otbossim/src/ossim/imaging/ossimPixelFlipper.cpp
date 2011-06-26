@@ -9,7 +9,7 @@
 // Filter to toggle pixel values.
 //
 //*************************************************************************
-// $Id: ossimPixelFlipper.cpp 17206 2010-04-25 23:20:40Z dburken $
+// $Id: ossimPixelFlipper.cpp 19728 2011-06-06 21:31:17Z dburken $
 
 #include <cstdlib>
 #include <ossim/imaging/ossimPixelFlipper.h>
@@ -24,24 +24,33 @@ RTTI_DEF1(ossimPixelFlipper, "ossimPixelFlipper", ossimImageSourceFilter)
 
 static ossimTrace traceDebug("ossimPixelFlipper:debug");
 
-static const char TARGET_VALUE_KW[]      = "target_value";
-static const char REPLACEMENT_VALUE_KW[] = "replacement_value";
-static const char CLAMP_VALUE_KW[]       = "clamp_value";
-static const char REPLACEMENT_MODE_KW[]  = "replacement_mode";
-static const char CLIP_MODE_KW[]  = "clip_mode";
+const char ossimPixelFlipper::PF_TARGET_VALUE_KW[]      = "target_value";
+const char ossimPixelFlipper::PF_TARGET_RANGE_KW[]      = "target_range";
+const char ossimPixelFlipper::PF_REPLACEMENT_VALUE_KW[] = "replacement_value";
+const char ossimPixelFlipper::PF_REPLACEMENT_MODE_KW[]  = "replacement_mode";
+const char ossimPixelFlipper::PF_CLAMP_VALUE_KW[]       = "clamp_value"; // deprecated by clamp_value_hi
+const char ossimPixelFlipper::PF_CLAMP_VALUE_LO_KW[]    = "clamp_value_lo";
+const char ossimPixelFlipper::PF_CLAMP_VALUE_HI_KW[]    = "clamp_value_hi";
+const char ossimPixelFlipper::PF_CLIP_MODE_KW[]         = "border_clip_mode";
+
+static const char TARGET_LOWER_LIMIT_PROP_NAME[] = "target_range_lower_limit";
+static const char TARGET_UPPER_LIMIT_PROP_NAME[] = "target_range_upper_limit";
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimPixelFlipper.cpp 17206 2010-04-25 23:20:40Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimPixelFlipper.cpp 19728 2011-06-06 21:31:17Z dburken $";
 #endif
 
 ossimPixelFlipper::ossimPixelFlipper(ossimObject* owner)
    :
       ossimImageSourceFilter(owner),
-      theTargetValue(0.0),
+      theTargetValueLo(0.0),
+      theTargetValueHi(0.0),
       theReplacementValue(1.0),
-      theClampValue(0.0),
-      theReplacementMode(ossimPixelFlipper::REPLACE_ALL_TARGETS),
-      theClipMode(ossimPixelFlipper::ossimPixelFlipperClipMode_NONE)
+      theReplacementMode(ossimPixelFlipper::REPLACE_BAND_IF_TARGET),
+      theClampValueLo(ossim::nan()),
+      theClampValueHi(ossim::nan()),
+      theClampingMode(DISABLED),
+      theClipMode(NONE)
 {
    if (traceDebug())
    {
@@ -135,6 +144,7 @@ ossimRefPtr<ossimImageData> ossimPixelFlipper::getTile(
       }
    }
    
+   inputTile->validate();
    return inputTile;
 }
 
@@ -145,442 +155,260 @@ void ossimPixelFlipper::flipPixels(T /* dummy */,
 {
    if (!inputTile) return;
 
-   T target      = static_cast<T>(theTargetValue);
+   T targetLo    = static_cast<T>(theTargetValueLo);
+   T targetHi    = static_cast<T>(theTargetValueHi);
    T replacement = static_cast<T>(theReplacementValue);
-   T clamp       = static_cast<T>(theClampValue);
-   ossim_uint32 size   = inputTile->getSizePerBand();
-   ossim_uint32 bands  = inputTile->getNumberOfBands();
-   ossim_uint32 band;
-
-   bool do_clamp = (clamp > 0) ? true : false;
+   T clampLo       = static_cast<T>(theClampValueLo);
+   T clampHi       = static_cast<T>(theClampValueHi);
 
    // Get pointers to data for each band.
+   ossim_uint32 bands = inputTile->getNumberOfBands();
+   ossim_uint32 band;
    T** buf = new T*[bands];
-
    for(band=0; band<bands; ++band)
-   {
       buf[band] = static_cast<T*>(inputTile->getBuf(band));
-   }
 
    ossimIrect rect = inputTile->getImageRectangle();
    ossimIpt ul = rect.ul();
-   ossimIpt origin = ul;
-   ossim_uint32 x=0;
-   ossim_uint32 y=0;
-   ossim_uint32 w = rect.width();
-   ossim_uint32 h = rect.height();
-   ossim_uint32 i = 0;   
-   bool replace = false;
-   bool needsTesting = false;
-   switch(theClipMode)
-   {
-      case  ossimPixelFlipperClipMode_BOUNDING_RECT:
-      {
-         if(resLevel < theBoundingRects.size())
-         {
-            if(!rect.intersects(theBoundingRects[resLevel]))
-            {
-               delete [] buf;
-               return;
-            }
-            else
-            {
-               needsTesting = !rect.completely_within(theBoundingRects[resLevel]);
-            }
-         }
-         break;
-      }
-      case  ossimPixelFlipperClipMode_VALID_VERTICES:
-      {
-         if(resLevel < theValidVertices.size())
-         {
-            bool ulFlag = theValidVertices[resLevel].isPointWithin(rect.ul());
-            bool urFlag = theValidVertices[resLevel].isPointWithin(rect.ur());
-            bool lrFlag = theValidVertices[resLevel].isPointWithin(rect.lr());
-            bool llFlag = theValidVertices[resLevel].isPointWithin(rect.ll());
-            if((!ulFlag)&&
-               (!urFlag)&&
-               (!lrFlag)&&
-               (!llFlag))
-            {
-               delete [] buf;
-               return; // none of the tile is inside so return
-            }
-            else
-            {
-               needsTesting = !(ulFlag&&urFlag&&lrFlag&&llFlag);
-            }
-         }
-         break;
-      }
-      default:
-      {
-         break;
-      }
-   }
-   
-   switch (theReplacementMode)
-   {
-      case ossimPixelFlipper::REPLACE_PARTIAL_TARGETS:
-      {
-         i = 0;
-         if((theClipMode == ossimPixelFlipperClipMode_NONE)||(!needsTesting))
-         {
-            for (i=0; i<size; ++i)
-            {
-               // At least one band must NOT have target for replace to = true;
-               replace = false;
-               for (band=0; band<bands; ++band)
-               {
-                  if (buf[band][i] != target)
-                  {
-                     replace = true;
-                     break;
-                  }
-               }
-               if (replace)
-               {
-                  for (band=0; band<bands; ++band)
-                  {
-                     if (buf[band][i] == target) buf[band][i] = replacement;
-                  }
-               }
-            }
-         }
-         else
-         {
-            bool active;
-            origin.y = ul.y;
-            for(y = 0; y < h; ++y)
-            {
-               origin.x = ul.x;
-               for(x =0; x < w; ++x)
-               {
-                  active = true;
-                  switch(theClipMode)
-                  {
-                     case  ossimPixelFlipperClipMode_BOUNDING_RECT:
-                     {
-                        if(resLevel < theBoundingRects.size())
-                        {
-                           active = theBoundingRects[resLevel].pointWithin(origin);
-                        }
-                        break;
-                     }
-                     case  ossimPixelFlipperClipMode_VALID_VERTICES:
-                     {
-                        if(resLevel < theValidVertices.size())
-                        {
-                           active = theValidVertices[resLevel].isPointWithin(origin);
-                        }
-                        break;
-                     }
-                     default:
-                     {
-                        break;
-                     }
-                  }
-                  replace = false;
-                  if(active)
-                  {
-                     for (band=0; band<bands; ++band)
-                     {
-                        if (buf[band][i] != target)
-                        {
-                           replace = true;
-                           break;
-                        }
-                     }
-                  }
-                  if (replace)
-                  {
-                     for (band=0; band<bands; ++band)
-                     {
-                        if (buf[band][i] == target) buf[band][i] = replacement;
-                     }
-                  }
-                  
-                  ++i;
-                  ++origin.x;
-               }
-               ++origin.y;
-            }
-         }
-         break;
-      }
-      case ossimPixelFlipper::REPLACE_PARTIAL_TARGETS_ALL_BANDS:
-      {
-         i = 0;
-         if((theClipMode == ossimPixelFlipperClipMode_NONE)||(!needsTesting))
-         {
-            for (i=0; i<size; ++i)
-            {
-               // Must be at least one target but not all to replace all bands.
-               bool has_a_target = false;
-               replace      = false;
-               for (band=0; band<bands; ++band)
-               {
-                  if (buf[band][i] == target)
-                  {
-                     has_a_target = true;
-                     break;
-                  }
-               }
-               if (has_a_target)
-               {
-                  for (band=0; band<bands; ++band)
-                  {
-                     if (buf[band][i] != target)
-                     {
-                        replace = true;
-                        break;
-                     }
-                  }
-                  if (replace)
-                  {
-                     for (band=0; band<bands; ++band)
-                     {
-                        buf[band][i] = replacement;
-                     }
-                  }
-               }
-            }
-         }
-         else
-         {
-            bool active = true;
-            origin.y = ul.y;
-            for(y = 0; y < h; ++y)
-            {
-               origin.x = ul.x;
-               for(x =0; x < w; ++x)
-               {
-                  switch(theClipMode)
-                  {
-                     case  ossimPixelFlipperClipMode_BOUNDING_RECT:
-                     {
-                        if(resLevel < theBoundingRects.size())
-                        {
-                           active = theBoundingRects[resLevel].pointWithin(origin);
-                        }
-                        break;
-                     }
-                     case  ossimPixelFlipperClipMode_VALID_VERTICES:
-                     {
-                        if(resLevel < theValidVertices.size())
-                        {
-                           active = theValidVertices[resLevel].isPointWithin(origin);
-                        }
-                        break;
-                     }
-                     default:
-                     {
-                        break;
-                     }
-                  }
-                  bool has_a_target = false;
-                  replace      = false;
-                  if(active)
-                  {
-                     for (band=0; band<bands; ++band)
-                     {
-                        if (buf[band][i] == target)
-                        {
-                           has_a_target = true;
-                           break;
-                        }
-                     }
-                  }
-                  if (has_a_target)
-                  {
-                     for (band=0; band<bands; ++band)
-                     {
-                        if (buf[band][i] != target)
-                        {
-                           replace = true;
-                           break;
-                        }
-                     }
-                     if (replace)
-                     {
-                        for (band=0; band<bands; ++band)
-                        {
-                           buf[band][i] = replacement;
-                        }
-                     }
-                  }
-                  
-                  ++i;
-                  ++origin.x;
-               }
-               ++origin.y;
-            }
-         }
-         break;
-      }
-      case ossimPixelFlipper::REPLACE_FULL_TARGETS:
-      {
-         i = 0;
-         if((theClipMode == ossimPixelFlipperClipMode_NONE)||(!needsTesting))
-         {
-            for (i=0; i<size; ++i)
-            {
-               // All bands must have target for replace to = true.
-               replace = true;
-               
-               for (band=0; band<bands; ++band)
-               {
-                  if (buf[band][i] != target)
-                  {
-                     replace = false;
-                     break;
-                  }
-               }
-               if (replace)
-               {
-                  for (band=0; band<bands; ++band)
-                  {
-                     buf[band][i] = replacement;
-                  }
-               }
-            }
-         }
-         else
-         {
-            origin.y = ul.y;
-            for(y = 0; y < h; ++y)
-            {
-               origin.x = ul.x;
-               for(x =0; x < w; ++x)
-               {
-                  replace = true;
-                  switch(theClipMode)
-                  {
-                     case  ossimPixelFlipperClipMode_BOUNDING_RECT:
-                     {
-                        if(resLevel < theBoundingRects.size())
-                        {
-                           replace = theBoundingRects[resLevel].pointWithin(origin);
-                        }
-                        break;
-                     }
-                     case  ossimPixelFlipperClipMode_VALID_VERTICES:
-                     {
-                        if(resLevel < theValidVertices.size())
-                        {
-                           replace = theValidVertices[resLevel].isPointWithin(origin);
-                        }
-                        break;
-                     }
-                     default:
-                     {
-                        break;
-                     }
-                  }
-                  if(replace)
-                  {
-                     for (band=0; band<bands; ++band)
-                     {
-                        if (buf[band][i] != target)
-                        {
-                           replace = false;
-                           break;
-                        }
-                     }
-                  }
-                  
-                  if (replace)
-                  {
-                     for (band=0; band<bands; ++band)
-                     {
-                        buf[band][i] = replacement;
-                     }
-                  }
-                  ++i;
-                  ++origin.x;
-               }
-               ++origin.y;
-            }
-         }
-            
-         break;
-      }
-      default:  // REPLACE_ALL_TARGETS
-      {
-         i = 0;
-         if((theClipMode == ossimPixelFlipperClipMode_NONE)||(!needsTesting))
-         {
-            for(i = 0; i < size;++i)
-            {
-               for (band=0; band<bands; ++band)
-               {
-                  if (buf[band][i] == target) buf[band][i] = replacement;
-               }
-            }
-         }
-         else
-         {
-            origin.y = ul.y;
-            for(y = 0; y < h; ++y)
-            {
-               origin.x = ul.x;
-               for(x =0; x < w; ++x)
-               {
-                  replace = true;
-                  
-                  switch(theClipMode)
-                  {
-                     case  ossimPixelFlipperClipMode_BOUNDING_RECT:
-                     {
-                        if(resLevel < theBoundingRects.size())
-                        {
-                           replace = theBoundingRects[resLevel].pointWithin(origin);
-                        }
-                        break;
-                     }
-                     case  ossimPixelFlipperClipMode_VALID_VERTICES:
-                     {
-                        if(resLevel < theValidVertices.size())
-                        {
-                           replace = theValidVertices[resLevel].isPointWithin(origin);
-                        }
-                        break;
-                     }
-                     default:
-                     {
-                        break;
-                     }
-                  }
-                  if(replace)
-                  {
-                     for (band=0; band<bands; ++band)
-                     {
-                        if (buf[band][i] == target) buf[band][i] = replacement;
-                     }
-                  }
-                  ++i;
-                  ++origin.x;
-               }
-               ++origin.y;
-            }
-         }
-         break;
-      }
+   ossimIpt lr = rect.lr();
 
-      if (do_clamp)
+   // Check the relation between tile rect and the area of interest (either bounding rect or
+   // valid vertices polygons). If completely outside, we can return with empty buffer.get If
+   // partially inside, we'll need to test individual pixels.
+   bool is_outside_aoi = false;
+   bool needsTesting = false;
+   if ((theClipMode == BOUNDING_RECT) && (resLevel < theBoundingRects.size()))
+   {
+      if(!rect.intersects(theBoundingRects[resLevel]))
+         is_outside_aoi = true;
+      else
+         needsTesting = !rect.completely_within(theBoundingRects[resLevel]);
+   }
+   else if ((theClipMode == VALID_VERTICES) && (resLevel < theValidVertices.size()))
+   {
+      bool ulFlag = theValidVertices[resLevel].isPointWithin(rect.ul());
+      bool urFlag = theValidVertices[resLevel].isPointWithin(rect.ur());
+      bool lrFlag = theValidVertices[resLevel].isPointWithin(rect.lr());
+      bool llFlag = theValidVertices[resLevel].isPointWithin(rect.ll());
+      if((!ulFlag) && (!urFlag) && (!lrFlag) && (!llFlag))
+         is_outside_aoi = true;
+      else
+         needsTesting = !(ulFlag && urFlag && lrFlag && llFlag);
+   }
+   if (is_outside_aoi)
+   {
+      // none of the tile is inside so just return with empty tile:
+      delete [] buf;
+      return; 
+   }
+
+   ossim_uint32 i = 0;  // index into band buffers;
+   ossimIpt pixel_loc; 
+   bool can_replace, found_candidate;
+
+   // Begin loop over each pixel in the tile. The individual bands are handled inside this loop:
+   for(pixel_loc.y = ul.y; pixel_loc.y <= lr.y; ++pixel_loc.y)
+   {
+      for(pixel_loc.x = ul.x; pixel_loc.x <= lr.x; ++pixel_loc.x)
       {
-         for (i=0; i<size; ++i)
-         { 
+         // First consider if we need to test the pixel for border clipping:
+         if (needsTesting)
+         {
+            bool is_inside = true; // Assume it will pass the border test
+            if (theClipMode == BOUNDING_RECT)
+               is_inside = theBoundingRects[resLevel].pointWithin(pixel_loc);
+            else if (theClipMode == VALID_VERTICES)
+               is_inside = theValidVertices[resLevel].isPointWithin(pixel_loc);
+
+            if (!is_inside)
+            {
+               // Remap this pixel to the replacement value (all bands)
+               for (band=0; band<bands; ++band)
+                  buf[band][i] = replacement;
+
+               // Proceed to next pixel location:
+               ++i;
+               continue; 
+            }
+         }
+
+         // If clamping specified, the target replacement function is disabled:
+         if (theClampingMode)
+         {
+            switch (theReplacementMode)
+            {
+            case REPLACE_BAND_IF_TARGET:
+            case REPLACE_ALL_BANDS_IF_ANY_TARGET:
+               for (band=0; band<bands; ++band)
+               {
+                  if (!ossim::isnan(theClampValueLo) && (buf[band][i] < clampLo))
+                     buf[band][i] = clampLo;
+                  else if (!ossim::isnan(theClampValueHi) && (buf[band][i] > clampHi))
+                     buf[band][i] = clampHi;
+               }
+               break;
+
+            case REPLACE_BAND_IF_PARTIAL_TARGET: 
+            case REPLACE_ALL_BANDS_IF_PARTIAL_TARGET:
+               // First band loop to establish if pixel qualifies for replacement (at least one 
+               // band must be valid):
+               can_replace = false;
+               found_candidate = false;
+               for (band=0; (band < bands) && !(can_replace && found_candidate); ++band)
+               {
+                  if ((!ossim::isnan(theClampValueLo) && (buf[band][i] < clampLo)) ||
+                     (!ossim::isnan(theClampValueHi) && (buf[band][i] > clampHi)))
+                     found_candidate = true;
+                  else
+                     can_replace = true;
+               }
+               if (can_replace && found_candidate)
+               {
+                  // This pixel has at least one band with normal value, so need to rescan bands
+                  // to find pixels that need replacing (are within the target range):
+                  for (band=0; band<bands; ++band)
+                  {
+                     if (!ossim::isnan(theClampValueLo) && (buf[band][i] < clampLo))
+                        buf[band][i] = clampLo;
+                     else if (!ossim::isnan(theClampValueHi) && buf[band][i] > clampHi)
+                        buf[band][i] = clampHi;
+                  }
+               }
+               break;
+
+            case REPLACE_ONLY_FULL_TARGETS:
+               // First band loop to establish if pixel qualifies for replacement (all 
+               // bands must be in target range):
+               can_replace = true;
+               for (band=0; (band < bands) && can_replace; ++band)
+               {
+                  if ((ossim::isnan(theClampValueLo) || (buf[band][i] >= clampLo)) &&
+                      (ossim::isnan(theClampValueHi) || (buf[band][i] <= clampHi)))
+                     can_replace = false;
+               }
+               if (can_replace)
+               {
+                  // Map all pixels to replacement value: 
+                  for (band=0; band<bands; ++band)
+                  {
+                     if (!ossim::isnan(theClampValueLo) && (buf[band][i] < clampLo))
+                        buf[band][i] = clampLo;
+                     else if (!ossim::isnan(theClampValueHi) && buf[band][i] > clampHi)
+                        buf[band][i] = clampHi;
+                  }
+               }
+               break;
+            } // close switch
+
+            // Proceed to next pixel location:
+            ++i;
+            continue; 
+         }
+
+         // If we got here (the continue statement was not reached) then
+         // the pixel value now needs to be checked for possible target replacement:
+         switch (theReplacementMode)
+         {
+         case REPLACE_BAND_IF_TARGET:
             for (band=0; band<bands; ++band)
             {
-               if (buf[band][i] > clamp)
+               if ((buf[band][i] >= targetLo) && (buf[band][i] <=targetHi)) 
+                  buf[band][i] = theReplacementValue;
+            }
+            break;
+
+         case REPLACE_BAND_IF_PARTIAL_TARGET: 
+
+            // First band loop to establish if pixel qualifies for replacement (at least one 
+            // band must be valid):
+            can_replace = false;
+            found_candidate = false;
+            for (band=0; (band < bands) && !(can_replace && found_candidate); ++band)
+            {
+               //  check for target range replacement qualification:
+               if ((buf[band][i] < targetLo) || (buf[band][i] > targetHi))
+                  can_replace = true; // Has valid band
+               else
+                  found_candidate = true; // found band within target range
+            }
+            if (can_replace && found_candidate)
+            {
+               // This pixel has at least one band with normal value, so need to rescan bands
+               // to find pixels that need replacing (are within the target range):
+               for (band=0; band<bands; ++band)
                {
-                  buf[band][i] = clamp;
+                  if ((buf[band][i] >= targetLo) && (buf[band][i] <= targetHi)) 
+                     buf[band][i] = theReplacementValue;
                }
             }
-         }
-      }
-   }
+            break;
+
+         case REPLACE_ALL_BANDS_IF_PARTIAL_TARGET:
+
+            // First band loop to establish if pixel qualifies for replacement (at least one 
+            // band must be valid):
+            can_replace = false;
+            found_candidate = false;
+            for (band=0; (band < bands) && !(can_replace && found_candidate); ++band)
+            {
+               // check for target range replacement qualification:
+               if ((buf[band][i] < targetLo) || (buf[band][i] > targetHi))
+                  can_replace = true;
+               else
+                  found_candidate = true;
+            }
+            if (can_replace && found_candidate)
+            {
+               // This pixel has at least one band with normal value and one with target, so 
+               // map all bands to target:
+               for (band=0; band<bands; ++band)
+                  buf[band][i] = theReplacementValue;
+            }
+            break;
+
+         case REPLACE_ONLY_FULL_TARGETS:
+
+            // First band loop to establish if pixel qualifies for replacement (all 
+            // bands must be in target range):
+            can_replace = true;
+            for (band=0; (band < bands) && can_replace; ++band)
+            {
+               // check for target range replacement qualification:
+               if ((buf[band][i] < targetLo) || (buf[band][i] > targetHi))
+                  can_replace = false;
+            }
+            if (can_replace)
+            {
+               // Map all pixels to replacement value: 
+               for (band=0; band<bands; ++band)
+                  buf[band][i] = theReplacementValue;
+            }
+            break;
+
+         case REPLACE_ALL_BANDS_IF_ANY_TARGET:
+
+            // First band loop to establish if pixel qualifies for replacement (all 
+            // bands must be in target range):
+            can_replace = false;
+            for (band=0; (band < bands) && !can_replace; ++band)
+            {
+               // check for target range replacement qualification:
+               if ((buf[band][i] >= targetLo) && (buf[band][i] <= targetHi))
+                  can_replace = true;
+            }
+            if (can_replace)
+            {
+               // Map all pixels to replacement value: 
+               for (band=0; band<bands; ++band)
+                  buf[band][i] = theReplacementValue;
+            }
+            break;
+         } // close switch
+
+         // Reached end of processing for one pixel location. Increment the band buffers index:
+         ++i;
+      } // end of loop over pixel_loc.x
+   } // end of loop over pixel_loc.y
    
    delete [] buf;
    inputTile->validate();
@@ -590,7 +418,7 @@ template <class T> void ossimPixelFlipper::clipTile(T /* dummy */,
                                                     ossimImageData* inputTile,
                                                     ossim_uint32 resLevel)
 {
-   if(theClipMode == ossimPixelFlipperClipMode_NONE)
+   if(theClipMode == NONE)
    {
       theClipTileBuffer = 0;
       return;
@@ -613,11 +441,11 @@ template <class T> void ossimPixelFlipper::clipTile(T /* dummy */,
       
       switch(theClipMode)
       {
-         case ossimPixelFlipperClipMode_NONE:
+         case NONE:
          {
             break;
          }
-         case ossimPixelFlipperClipMode_BOUNDING_RECT:
+         case BOUNDING_RECT:
          {
             if(resLevel < theBoundingRects.size())
             {
@@ -647,7 +475,7 @@ template <class T> void ossimPixelFlipper::clipTile(T /* dummy */,
             }
             break;
          }
-         case ossimPixelFlipperClipMode_VALID_VERTICES:
+         case VALID_VERTICES:
          {
             if(resLevel < theValidVertices.size())
             {
@@ -687,7 +515,6 @@ template <class T> void ossimPixelFlipper::clipTile(T /* dummy */,
                      origin.x = ul.x;
                      for(x = 0; x < w; ++x)
                      {
-                        
                         if(!p.isPointWithin(origin))
                         {
                            inputTile->setNull(offset);
@@ -772,7 +599,7 @@ ossimScalarType ossimPixelFlipper::getOutputScalarType() const
    {
       ossimScalarType scalar = theInputConnection->getOutputScalarType();
       {
-         if (scalar == OSSIM_USHORT16 && theClampValue == 2047.0)
+         if (scalar == OSSIM_USHORT16 && theClampValueHi == 2047.0)
          {
             //---
             // Special case:
@@ -792,44 +619,76 @@ ossim_float64 ossimPixelFlipper::getMaxPixelValue (ossim_uint32 band) const
    const ossim_float64 MIN = ossimImageSourceFilter::getMinPixelValue(band);
    const ossim_float64 MAX = ossimImageSourceFilter::getMaxPixelValue(band);
 
-   if (theClampValue > MIN && theClampValue < MAX)
-   {
-      return theClampValue;
-   }
+   if ((theClampValueHi > MIN) && (theClampValueHi < MAX))
+      return theClampValueHi;
 
    return MAX;
 }
 
+ossim_float64 ossimPixelFlipper::getMinPixelValue (ossim_uint32 band) const
+{
+   const ossim_float64 MIN = ossimImageSourceFilter::getMinPixelValue(band);
+   const ossim_float64 MAX = ossimImageSourceFilter::getMaxPixelValue(band);
+
+   if ((theClampValueLo > MIN) && (theClampValueLo < MAX))
+      return theClampValueLo;
+
+   return MIN;
+}
+
 bool ossimPixelFlipper::loadState(const ossimKeywordlist& kwl,
-                                 const char* prefix)
+                                  const char* prefix)
 {
    const char* lookupReturn;
    
-   lookupReturn = kwl.find(prefix, TARGET_VALUE_KW);
+   lookupReturn = kwl.find(prefix, PF_TARGET_VALUE_KW);
    if(lookupReturn)
    {
       setTargetValue(atof(lookupReturn));
    }
 
-   lookupReturn = kwl.find(prefix, REPLACEMENT_VALUE_KW);
+   lookupReturn = kwl.find(prefix, PF_TARGET_RANGE_KW);
+   if(lookupReturn)
+   {
+      ossimString min_max_string (lookupReturn);
+      ossimString separator (" ");
+      ossim_float64 min_target = min_max_string.before(separator).toFloat64();
+      ossim_float64 max_target = min_max_string.after(separator).toFloat64();
+      setTargetRange(min_target, max_target);
+   }
+
+   lookupReturn = kwl.find(prefix, PF_REPLACEMENT_VALUE_KW);
    if(lookupReturn)
    {
       setReplacementValue(atof(lookupReturn));
    }
 
-   lookupReturn = kwl.find(prefix, CLAMP_VALUE_KW);
-   if(lookupReturn)
-   {
-      setClampValue(atof(lookupReturn));
-   }
-
-   lookupReturn = kwl.find(prefix, REPLACEMENT_MODE_KW);
+   lookupReturn = kwl.find(prefix, PF_REPLACEMENT_MODE_KW);
    if(lookupReturn)
    {
       ossimString modeString = lookupReturn;
       setReplacementMode(modeString);
    }
-   lookupReturn = kwl.find(prefix, CLIP_MODE_KW);
+
+   lookupReturn = kwl.find(prefix, PF_CLAMP_VALUE_KW);
+   if(lookupReturn)
+   {
+      setClampValue(atof(lookupReturn), true);
+   }
+
+   lookupReturn = kwl.find(prefix, PF_CLAMP_VALUE_LO_KW);
+   if(lookupReturn)
+   {
+      setClampValue(atof(lookupReturn), false);
+   }
+
+   lookupReturn = kwl.find(prefix, PF_CLAMP_VALUE_HI_KW);
+   if(lookupReturn)
+   {
+      setClampValue(atof(lookupReturn), true);
+   }
+
+   lookupReturn = kwl.find(prefix, PF_CLIP_MODE_KW);
    if(lookupReturn)
    {
       ossimString modeString = lookupReturn;
@@ -852,12 +711,26 @@ bool ossimPixelFlipper::saveState(ossimKeywordlist& kwl,
    // Call the base class saveState.
    ossimImageSourceFilter::saveState(kwl, prefix);
 
-   kwl.add(prefix, TARGET_VALUE_KW,      theTargetValue);
-   kwl.add(prefix, REPLACEMENT_VALUE_KW, theReplacementValue);
-   kwl.add(prefix, CLAMP_VALUE_KW,       theClampValue);
-   kwl.add(prefix, REPLACEMENT_MODE_KW,  getReplacementModeString().c_str());
-   kwl.add(prefix, CLIP_MODE_KW,  getClipModeString().c_str());
-   
+   if (theTargetValueHi != theTargetValueLo)
+   {
+      ossimString s (ossimString::toString(theTargetValueLo) + " " + 
+         ossimString::toString(theTargetValueHi));
+      kwl.add(prefix, PF_TARGET_RANGE_KW, s);
+   }
+   else
+   {
+      kwl.add(prefix, PF_TARGET_VALUE_KW, theTargetValueLo);
+   }
+   kwl.add(prefix, PF_REPLACEMENT_VALUE_KW, theReplacementValue);
+   kwl.add(prefix, PF_REPLACEMENT_MODE_KW,  getReplacementModeString().c_str());
+
+   if (theClampingMode)
+   {
+      kwl.add(prefix, PF_CLAMP_VALUE_LO_KW,    theClampValueLo);
+      kwl.add(prefix, PF_CLAMP_VALUE_HI_KW,    theClampValueHi);
+   }
+   kwl.add(prefix, PF_CLIP_MODE_KW,  getClipModeString().c_str());
+
    return true;
 }
 
@@ -868,9 +741,23 @@ void ossimPixelFlipper::setTargetValue(ossim_float64 target_value)
    // won't affect the output null, min and max ranges.  This will fix a
    // tiled nitf with max of 2047(11bit) with edge tile fill values of 2048.
    //---
-	OpenThreads::ScopedLock<OpenThreads::Mutex> scopeLock(theMutex);
+   OpenThreads::ScopedLock<OpenThreads::Mutex> scopeLock(theMutex);
 
-   theTargetValue = target_value;
+   theTargetValueLo = target_value;
+   theTargetValueHi = target_value; 
+}
+
+void ossimPixelFlipper::setTargetRange(ossim_float64 target_min, ossim_float64 target_max)
+{
+   //---
+   // Since this is the value to replace we will allow for any value as it
+   // won't affect the output null, min and max ranges.  This will fix a
+   // tiled nitf with max of 2047(11bit) with edge tile fill values of 2048.
+   //---
+   OpenThreads::ScopedLock<OpenThreads::Mutex> scopeLock(theMutex);
+
+   theTargetValueLo = target_min;
+   theTargetValueHi = target_max; 
 }
 
 void ossimPixelFlipper::setReplacementValue(ossim_float64 replacement_value)
@@ -884,55 +771,76 @@ void ossimPixelFlipper::setReplacementValue(ossim_float64 replacement_value)
    }
 }
 
-void ossimPixelFlipper::setClampValue(ossim_float64 clamp_value)
+void ossimPixelFlipper::setClampValue(ossim_float64 clamp_value, bool clamp_max_value)
 {
-	OpenThreads::ScopedLock<OpenThreads::Mutex> scopeLock(theMutex);
-   
+   OpenThreads::ScopedLock<OpenThreads::Mutex> scopeLock(theMutex);
+
    if (inRange(clamp_value))
    {
-      theClampValue = clamp_value;
+      // Stupid MS compiler complains if we do an |= on enum type. (OLK 1/11)
+      int temp_int = (int) theClampingMode;
+      if (clamp_max_value)
+      {
+         theClampValueHi = clamp_value;
+         temp_int |= (int) CLAMPING_HI;
+      }
+      else
+      {
+         theClampValueLo = clamp_value;
+         temp_int |= (int) CLAMPING_LO;
+      }
+      theClampingMode = (ClampingMode) temp_int;
    }
-
 }
 
-void ossimPixelFlipper::setReplacementMode(
-   ossimPixelFlipper::ReplacementMode mode)
+void ossimPixelFlipper::setClampValues(ossim_float64 clamp_value_lo, ossim_float64 clamp_value_hi)
+{
+   theClampingMode = DISABLED; // reset and let next calls set accordingly
+   setClampValue(clamp_value_lo, false);
+   setClampValue(clamp_value_hi, true);
+}
+
+void ossimPixelFlipper::setReplacementMode(ossimPixelFlipper::ReplacementMode mode)
 {
 	OpenThreads::ScopedLock<OpenThreads::Mutex> scopeLock(theMutex);
    theReplacementMode = mode;
 }
 
-void ossimPixelFlipper::setReplacementMode(const ossimString& modeString)
+bool ossimPixelFlipper::setReplacementMode(const ossimString& modeString)
 {
 	OpenThreads::ScopedLock<OpenThreads::Mutex> scopeLock(theMutex);
 
    ossimString mode = modeString;
-   mode.downcase();
-   if (mode == "replace_partial_targets")
+   mode.upcase();
+   if (mode == "REPLACE_BAND_IF_TARGET")
    {
-      theReplacementMode = ossimPixelFlipper::REPLACE_PARTIAL_TARGETS;
+      theReplacementMode = REPLACE_BAND_IF_TARGET;
    }
-   else if (mode == "replace_partial_targets_all_bands")
+   else if (mode == "REPLACE_BAND_IF_PARTIAL_TARGET")
    {
-      theReplacementMode =
-         ossimPixelFlipper::REPLACE_PARTIAL_TARGETS_ALL_BANDS;
+      theReplacementMode = REPLACE_BAND_IF_PARTIAL_TARGET;
    }
-   else if (mode == "replace_full_targets")
+   else if (mode == "REPLACE_ALL_BANDS_IF_PARTIAL_TARGET")
    {
-      theReplacementMode = ossimPixelFlipper::REPLACE_FULL_TARGETS;
+      theReplacementMode = REPLACE_ALL_BANDS_IF_PARTIAL_TARGET;
    }
-   else if (mode == "replace_all_targets")
+   else if (mode == "REPLACE_ONLY_FULL_TARGETS")
    {
-      theReplacementMode = ossimPixelFlipper::REPLACE_ALL_TARGETS;
+      theReplacementMode = REPLACE_ONLY_FULL_TARGETS;
+   }
+   else if (mode == "REPLACE_ALL_BANDS_IF_ANY_TARGET")
+   {
+      theReplacementMode = REPLACE_ALL_BANDS_IF_ANY_TARGET;
    }
    else
    {
       ossimNotify(ossimNotifyLevel_WARN)
          << "ossimPixelFlipper::setReplacementMode warning:\n"
-         << "Invalide mode:  " << modeString
+         << "Invalid mode:  " << modeString
          << endl;
+      return false;
    }
-
+   return true;
 }
 
 void ossimPixelFlipper::setClipMode(ossimPixelFlipper::ClipMode mode)
@@ -947,35 +855,29 @@ void ossimPixelFlipper::setClipMode(const ossimString& modeString)
    mode.downcase();
    if (mode == "none")
    {
-      setClipMode(ossimPixelFlipperClipMode_NONE);
+      setClipMode(NONE);
    }
    else if (mode == "bounding_rect")
    {
-      setClipMode(ossimPixelFlipperClipMode_BOUNDING_RECT);
+      setClipMode(BOUNDING_RECT);
    }
    else if (mode == "valid_vertices")
    {
-      setClipMode(ossimPixelFlipperClipMode_VALID_VERTICES);
+      setClipMode(VALID_VERTICES);
    }
    else
    {
       ossimNotify(ossimNotifyLevel_WARN)
          << "ossimPixelFlipper::setClipMode warning:\n"
-         << "Invalide mode:  " << modeString
+         << "Invalid mode:  " << modeString
          << endl;
    }
 }
 
-ossim_float64 ossimPixelFlipper::getClampValue() const
-{
-   return theClampValue;
-}
-
-
-ossim_float64 ossimPixelFlipper::getTargetValue() const
-{
-   return theTargetValue;
-}
+//ossim_float64 ossimPixelFlipper::getTargetValue() const
+//{
+//   return theTargetValueLo;
+//}
 
 ossim_float64 ossimPixelFlipper::getReplacementValue() const
 {
@@ -991,14 +893,16 @@ ossimString ossimPixelFlipper::getReplacementModeString()  const
 {
    switch(theReplacementMode)
    {
-      case REPLACE_ALL_TARGETS:
-         return ossimString("replace_all_targets");
-      case REPLACE_PARTIAL_TARGETS:
-         return ossimString("replace_partial_targets");
-      case REPLACE_PARTIAL_TARGETS_ALL_BANDS:
-         return ossimString("replace_partial_targets_all_bands");
-      case REPLACE_FULL_TARGETS:
-         return ossimString("replace_full_targets");
+      case REPLACE_BAND_IF_TARGET:
+         return ossimString("REPLACE_BAND_IF_TARGET");
+      case REPLACE_BAND_IF_PARTIAL_TARGET:
+         return ossimString("REPLACE_BAND_IF_PARTIAL_TARGET");
+      case REPLACE_ALL_BANDS_IF_PARTIAL_TARGET:
+         return ossimString("REPLACE_ALL_BANDS_IF_PARTIAL_TARGET");
+      case REPLACE_ONLY_FULL_TARGETS:
+         return ossimString("REPLACE_ONLY_FULL_TARGETS");
+      case REPLACE_ALL_BANDS_IF_ANY_TARGET:
+         return ossimString("REPLACE_ALL_BANDS_IF_ANY_TARGET");
       default:
          break;
    }
@@ -1008,25 +912,11 @@ ossimString ossimPixelFlipper::getReplacementModeString()  const
 
 ossimString ossimPixelFlipper::getClipModeString()  const
 {
-   switch(theClipMode)
-   {
-      case ossimPixelFlipperClipMode_NONE:
-      {
-         return ossimString("none");
-      }
-      case ossimPixelFlipperClipMode_BOUNDING_RECT:
-      {
-         return ossimString("bounding_rect");
-      }
-      case REPLACE_PARTIAL_TARGETS_ALL_BANDS:
-      {
-         return ossimString("valid_vertices");
-      }
-      default:
-      {
-         break;
-      }
-   }
+   if (theClipMode == BOUNDING_RECT)
+      return ossimString("bounding_rect");
+
+   if (theClipMode == VALID_VERTICES)
+      return ossimString("valid_vertices");
 
    return ossimString("none");
 }
@@ -1039,9 +929,11 @@ ossimPixelFlipper::ClipMode ossimPixelFlipper::getClipMode() const
 std::ostream& ossimPixelFlipper::print(std::ostream& out) const
 {
    out << "ossimPixelFlipper::print:"
-       << "\ntarget value:       " << theTargetValue
+       << "\ntarget value Lo:    " << theTargetValueLo
+       << "\ntarget value Hi:    " << theTargetValueHi
        << "\nreplacement value:  " << theReplacementValue
-       << "\nclamp value:        " << theClampValue
+       << "\nclamp value Lo:     " << theClampValueLo
+       << "\nclamp value Hi:     " << theClampValueHi
        << "\nreplacement mode:   " << getReplacementModeString().c_str()
        << "\nclip_mode:          " << getClipModeString().c_str()
       << endl;
@@ -1054,15 +946,31 @@ ossimRefPtr<ossimProperty> ossimPixelFlipper::getProperty(
    // Lock for the length of this method.
 	OpenThreads::ScopedLock<OpenThreads::Mutex> scopeLock(theMutex);
 
-   if (name == TARGET_VALUE_KW)
+   if (name == PF_TARGET_VALUE_KW)
    {
       ossimProperty* p =
          new ossimNumericProperty(name,
-                                  ossimString::toString(theTargetValue));
+         ossimString::toString(theTargetValueLo));
       p->setCacheRefreshBit();
       return ossimRefPtr<ossimProperty>(p);
    }
-   else if (name == REPLACEMENT_VALUE_KW)
+   if (name == PF_TARGET_RANGE_KW)
+   {
+      ossimProperty* p =
+         new ossimNumericProperty(name,
+         ossimString::toString(theTargetValueLo));
+      p->setCacheRefreshBit();
+      return ossimRefPtr<ossimProperty>(p);
+   }
+   if (name == TARGET_UPPER_LIMIT_PROP_NAME)
+   {
+      ossimProperty* p =
+         new ossimNumericProperty(name,
+         ossimString::toString(theTargetValueHi));
+      p->setCacheRefreshBit();
+      return ossimRefPtr<ossimProperty>(p);
+   }
+   else if (name == PF_REPLACEMENT_VALUE_KW)
    {
       ossimProperty* p =
          new ossimNumericProperty(name,
@@ -1070,20 +978,28 @@ ossimRefPtr<ossimProperty> ossimPixelFlipper::getProperty(
        p->setCacheRefreshBit();
       return ossimRefPtr<ossimProperty>(p);
    }
-   else if (name == CLAMP_VALUE_KW)
+   else if (name == PF_CLAMP_VALUE_LO_KW)
    {
       ossimProperty* p =
-         new ossimNumericProperty(name, ossimString::toString(theClampValue));
-       p->setCacheRefreshBit();
+         new ossimNumericProperty(name, ossimString::toString(theClampValueLo));
+      p->setCacheRefreshBit();
       return ossimRefPtr<ossimProperty>(p);
    }
-   else if (name == REPLACEMENT_MODE_KW)
+   else if (name == PF_CLAMP_VALUE_HI_KW)
    {
-      vector<ossimString> constraintList(4);
-      constraintList[0] = "replace_all_targets";
-      constraintList[1] = "replace_partial_targets";
-      constraintList[2] = "replace_partial_targets_all_bands";
-      constraintList[3] = "replace_full_targets";
+      ossimProperty* p =
+         new ossimNumericProperty(name, ossimString::toString(theClampValueHi));
+      p->setCacheRefreshBit();
+      return ossimRefPtr<ossimProperty>(p);
+   }
+   else if (name == PF_REPLACEMENT_MODE_KW)
+   {
+      vector<ossimString> constraintList(5);
+      constraintList[0] = "REPLACE_BAND_IF_TARGET";
+      constraintList[1] = "REPLACE_BAND_IF_PARTIAL_TARGET";
+      constraintList[2] = "REPLACE_ALL_BANDS_IF_PARTIAL_TARGET";
+      constraintList[3] = "REPLACE_ONLY_FULL_TARGETS";
+      constraintList[4] = "REPLACE_ALL_BANDS_IF_ANY_TARGET";
       
       ossimStringProperty* p =
          new ossimStringProperty(name,
@@ -1093,7 +1009,7 @@ ossimRefPtr<ossimProperty> ossimPixelFlipper::getProperty(
       p->setCacheRefreshBit();
       return ossimRefPtr<ossimProperty>(p);
    }
-   else if (name == CLIP_MODE_KW)
+   else if (name == PF_CLIP_MODE_KW)
    {
       vector<ossimString> constraintList(3);
       constraintList[0] = "none";
@@ -1132,23 +1048,35 @@ void ossimPixelFlipper::setProperty(ossimRefPtr<ossimProperty> property)
    ossimString os = property->valueToString();
    
    ossimString name = property->getName();
-   if (name == TARGET_VALUE_KW)
+   if (name == PF_TARGET_VALUE_KW)
    {
       setTargetValue(os.toDouble());
    }
-   else if  (name == REPLACEMENT_VALUE_KW)
+   if (name == TARGET_LOWER_LIMIT_PROP_NAME)
+   {
+      setTargetRange(os.toDouble(), theTargetValueHi);
+   }
+   if (name == TARGET_UPPER_LIMIT_PROP_NAME)
+   {
+      setTargetRange(theTargetValueLo, os.toDouble());
+   }
+   else if  (name == PF_REPLACEMENT_VALUE_KW)
    {
       setReplacementValue(os.toDouble());
    }
-   else if  (name == CLAMP_VALUE_KW)
-   {
-      setClampValue(os.toDouble());
-   }
-   else if  (name == REPLACEMENT_MODE_KW)
+   else if  (name == PF_REPLACEMENT_MODE_KW)
    {
       setReplacementMode(os);
    }
-   else if  (name == CLIP_MODE_KW)
+   else if  (name == PF_CLAMP_VALUE_LO_KW)
+   {
+      setClampValue(os.toDouble(), false);
+   }
+   else if  (name == PF_CLAMP_VALUE_HI_KW)
+   {
+      setClampValue(os.toDouble(), true);
+   }
+   else if  (name == PF_CLIP_MODE_KW)
    {
       setClipMode(os);
    }
@@ -1161,11 +1089,14 @@ void ossimPixelFlipper::setProperty(ossimRefPtr<ossimProperty> property)
 void ossimPixelFlipper::getPropertyNames(
    std::vector<ossimString>& propertyNames)const
 {
-   propertyNames.push_back(TARGET_VALUE_KW);
-   propertyNames.push_back(REPLACEMENT_VALUE_KW);
-   propertyNames.push_back(CLAMP_VALUE_KW);
-   propertyNames.push_back(REPLACEMENT_MODE_KW);
-   propertyNames.push_back(CLIP_MODE_KW);
+   propertyNames.push_back(PF_TARGET_VALUE_KW);
+   propertyNames.push_back(TARGET_LOWER_LIMIT_PROP_NAME);
+   propertyNames.push_back(TARGET_UPPER_LIMIT_PROP_NAME);
+   propertyNames.push_back(PF_REPLACEMENT_VALUE_KW);
+   propertyNames.push_back(PF_REPLACEMENT_MODE_KW);
+   propertyNames.push_back(PF_CLAMP_VALUE_LO_KW);
+   propertyNames.push_back(PF_CLAMP_VALUE_HI_KW);
+   propertyNames.push_back(PF_CLIP_MODE_KW);
    
    ossimImageSourceFilter::getPropertyNames(propertyNames);
 }

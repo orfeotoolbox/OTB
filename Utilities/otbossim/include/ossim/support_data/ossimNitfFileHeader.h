@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFileHeader.h 16997 2010-04-12 18:53:48Z dburken $
+// $Id: ossimNitfFileHeader.h 18413 2010-11-11 19:56:22Z gpotts $
 #ifndef ossimNitfFileHeader_HEADER
 #define ossimNitfFileHeader_HEADER
 
@@ -191,6 +191,8 @@ public:
    virtual std::ostream& printTags(
       std::ostream& out,
       const std::string& prefix=std::string()) const;
+   
+   virtual bool saveState(ossimKeywordlist& kwl, const ossimString& prefix="")const;
    
 protected:
    std::vector<ossimNitfTagInformation> theTagList;

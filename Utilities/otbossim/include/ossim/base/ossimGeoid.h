@@ -50,7 +50,7 @@ class OSSIM_DLL ossimIdentityGeoid : public ossimGeoid
 public:
    virtual ossimString getShortName()const
    {
-      return "identity";
+      return ossimString("identity");
    }
    virtual bool open(const ossimFilename& /*dir*/, ossimByteOrder)
    {

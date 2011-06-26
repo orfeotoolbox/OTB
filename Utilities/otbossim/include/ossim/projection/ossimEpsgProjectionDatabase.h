@@ -14,11 +14,12 @@
 #include <ossim/projection/ossimProjectionFactoryBase.h>
 #include <ossim/base/ossimFilename.h>
 #include <fstream>
+#include <ossim/projection/ossimMapProjection.h>
 
 class ossimProjection;
 class ossimString;
-class ossimMapProjection;
 class ossimEpsgProjectionFactory;
+class ossimUtmProjection;
 
 //*************************************************************************************************
 //! Projection Database for coded projections defined in database files and specified via some 
@@ -33,7 +34,7 @@ public:
    static ossimEpsgProjectionDatabase* instance();
 
    //! Destructor
-   ~ossimEpsgProjectionDatabase();
+   virtual ~ossimEpsgProjectionDatabase();
 
    //! Returns a projection corresponding to the projection specified, or NULL if no entry found.
    //! Normally <proj_spec> takes the form of <group>:<code> (e.g., "EPSG:26715"). Other forms 
@@ -67,20 +68,36 @@ public:
 
    //! ENGINEERING CODE. Used for testing
    size_t numRecords() const { return m_projDatabase.size(); }
-   ossim_uint32 getEpsgCode(unsigned int index) const { return m_projDatabase[index].code; }
 
 protected:
-   //! Represents one line (record) from the database file, split by delimiter into string list.
-   typedef std::vector<ossimString> DbEntry;
+   enum RecordFormat
+   {  
+      NOT_ASSIGNED=0,
+      FORMAT_A,
+      FORMAT_B,
+      FORMAT_C,
+      FORMAT_D,
+      CUSTOM
+   };
 
    //! Type for database record consists of EPSG code and serialized form of corresponding OSSIM 
    //! projection (as a keywordlist)
-   struct ProjRecord
+   class ProjDbRecord : public ossimReferenced
    {
+   public:
+      ProjDbRecord() : 
+            code(0), 
+            name(""), 
+            datumValid(false), 
+            csvFormat(NOT_ASSIGNED), 
+            proj(0) {}
+
       ossim_uint32     code;
       ossimString      name;
       bool             datumValid; //!< FALSE if the datum code was not parsed and WGS84 defaulted
-      ossimKeywordlist kwl;
+      RecordFormat     csvFormat;
+      std::vector<ossimString>        csvRecord;
+      ossimRefPtr<ossimMapProjection> proj;
    };
 
    //! Constructor loads all Db files specified in the ossim prefs. Protected as part of
@@ -88,10 +105,10 @@ protected:
    ossimEpsgProjectionDatabase();
 
    //! Parses the "Spadac EPSG" Db record format and produces a projection (or NULL if invalid)   
-   ossimMapProjection* createProjFromFormatARecord(const DbEntry& record, bool& datum_valid) const;
+   ossimMapProjection* createProjFromFormatARecord(ProjDbRecord* record) const;
 
    //! Parses the State Plane Db record format and produce a projection (or NULL if invalid)
-   ossimMapProjection* createProjFromFormatBRecord(const DbEntry& record) const;
+   ossimMapProjection* createProjFromFormatBRecord(ProjDbRecord* record) const;
 
    //!  ### HACK ###
    //! UTM projections as specified in the EPSG are indistinguishable from regular TM. Unfortunately
@@ -99,16 +116,15 @@ protected:
    //! at the UTM projection.
    ossimMapProjection* createProjFromUtmCode(ossim_uint32 code) const;
 
+   //! Given UTM projection, derives the associated EPSG code. This is faster than a Db lookup.
+   ossim_uint32 getCodeFromUtmProj(const ossimUtmProjection* proj) const;
+
    //! Populates the database with contents of DB files as specified in ossim_preferences.
    void initialize();
 
-   //! Throws an exception if datum code is not handled.
-   void checkForUnhandledDatum(const ProjRecord& record) const;
-
-   std::vector<ProjRecord> m_projDatabase;
+   mutable std::multimap<ossim_uint32, ossimRefPtr<ProjDbRecord> > m_projDatabase;
    static ossimEpsgProjectionDatabase*  m_instance; //!< Singleton implementation
 
 };
 
 #endif
-

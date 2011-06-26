@@ -9,7 +9,7 @@
 // Description: This class extends the stl's string class.
 // 
 //********************************************************************
-// $Id: ossimString.cpp 17999 2010-08-30 18:00:08Z gpotts $
+// $Id: ossimString.cpp 19682 2011-05-31 14:21:20Z dburken $
 
 #include <cctype> /* for toupper */
 #include <cstdlib> /* for getenv() */
@@ -28,14 +28,14 @@
 static ossimTrace traceDebug("ossimString:debug");
 
 #ifdef OSSIM_ID_ENABLED
-static char OSSIM_ID[] = "$Id: ossimString.cpp 17999 2010-08-30 18:00:08Z gpotts $";
+static char OSSIM_ID[] = "$Id: ossimString.cpp 19682 2011-05-31 14:21:20Z dburken $";
 #endif
 
 ossimString ossimString::upcase(const ossimString& aString)
 {
-   ossimString s(aString);
-
-   ossimString::iterator eachCharacter = s.begin();
+   std::string s = aString.string();
+   
+   std::string::iterator eachCharacter = s.begin();
    while(eachCharacter != s.end())
    {
       *eachCharacter = toupper(*eachCharacter);
@@ -47,25 +47,25 @@ ossimString ossimString::upcase(const ossimString& aString)
 
 ossimString ossimString::downcase(const ossimString& aString)
 {
-   ossimString s(aString);
+   std::string s = aString.m_str;
 
-   ossimString::iterator eachCharacter = s.begin();
+   std::string::iterator eachCharacter = s.begin();
    while(eachCharacter != s.end())
    {
       *eachCharacter = tolower(*eachCharacter);
-      eachCharacter++;
+      ++eachCharacter;
    }
 
-   return s;
+   return ossimString(s);
 }
 
 ossimString& ossimString::upcase()
 {
-   ossimString::iterator eachCharacter = begin();
-   while(eachCharacter != end())
+   std::string::iterator eachCharacter = m_str.begin();
+   while(eachCharacter != m_str.end())
    {
       *eachCharacter = toupper(*eachCharacter);
-      eachCharacter++;
+      ++eachCharacter;
    }
 
    return *this;
@@ -80,11 +80,11 @@ ossimString ossimString::upcase()const
 
 ossimString& ossimString::downcase()
 {
-   ossimString::iterator eachCharacter=begin();
-   while(eachCharacter != end())
+   std::string::iterator eachCharacter = m_str.begin();
+   while(eachCharacter != m_str.end())
    {
       *eachCharacter = tolower(*eachCharacter);
-      eachCharacter++;
+      ++eachCharacter;
    }
    
    return *this;
@@ -109,14 +109,14 @@ char* ossimString::stringDup()const
    else
    {  
       ossim_uint32 index = 0;
-      ossim_uint32 len = (ossim_uint32)length();
+      ossim_uint32 len = (ossim_uint32)m_str.length();
       result = new char[len+1];
-      const char* sourceString = c_str();
+      const char* sourceString = m_str.c_str();
 
       while(index < len) 
       {
          result[index] = sourceString[index];
-         index++;
+         ++index;
       }
       result[len] = '\0';
    }
@@ -125,68 +125,68 @@ char* ossimString::stringDup()const
 
 ossimString ossimString::stripLeading(const ossimString &value, char characterToStrip)
 {
-   ossimString result;
-   ossimString::const_iterator stringIter = value.begin();
+   std::string s;
+   ossimString::const_iterator stringIter = value.m_str.begin();
    
-   while((*stringIter == characterToStrip)&&(stringIter!=value.end()))
+   while((*stringIter == characterToStrip)&&(stringIter!=value.m_str.end()))
    {
       ++stringIter;
    }
 
-   while(stringIter != value.end())
+   while(stringIter != value.m_str.end())
    {
-      result += *stringIter;
+      s += *stringIter;
       ++stringIter;
    }
    
-   return result;
+   return ossimString(s);
 }
 
 ossimString ossimString::substitute(const ossimString &searchKey,
                                     const ossimString &replacementValue,
                                     bool replaceAll)const
 {
-   ossimString result = *this;
+   std::string result = m_str;
 
-   size_type pos = result.find(searchKey);
+   size_type pos = result.find(searchKey.m_str);
    
-   if (pos == npos) return result;  // Search key not found.
+   if (pos == std::string::npos) return result;  // Search key not found.
    
    if(replaceAll)
    {
-      while(pos != npos)
+      while(pos != std::string::npos)
       {
-         result.replace(pos, searchKey.size(), replacementValue.c_str());
-         pos = result.find(searchKey, pos+replacementValue.size());
+         result.replace(pos, searchKey.m_str.size(), replacementValue.m_str.c_str());
+         pos = result.find(searchKey.m_str, pos+replacementValue.m_str.size());
       }
    }
    else  // Replace only the first instance.
    {
-      result.replace(pos, searchKey.size(), replacementValue.c_str());
+      result.replace(pos, searchKey.m_str.size(), replacementValue.m_str.c_str());
    }
 
-   return result;
+   return ossimString(result);
 }
 
 ossimString& ossimString::gsub(const ossimString &searchKey,
                                const ossimString &replacementValue,
                                bool replaceAll)
 {
-   size_type pos = find(searchKey);
+   size_type pos = m_str.find(searchKey.m_str);
    
-   if (pos == npos) return *this;  // Search key not found.
+   if (pos == std::string::npos) return *this;  // Search key not found.
    
    if(replaceAll)
    {
-      while(pos < size())
+      while(pos < m_str.size())
       {
-         replace(pos, searchKey.size(), replacementValue.c_str());
-         pos = find(searchKey, pos+replacementValue.size());
+         m_str.replace(pos, searchKey.m_str.size(), replacementValue.m_str.c_str());
+         pos = find(searchKey.m_str, pos+replacementValue.m_str.size());
       }
    }
    else  // Replace only the first instance.
    {
-      replace(pos, searchKey.size(), replacementValue.c_str());
+      m_str.replace(pos, searchKey.m_str.size(), replacementValue.m_str.c_str());
    }
 
    return *this;
@@ -201,7 +201,7 @@ ossimString  ossimString::trim(const ossimString& valueToTrim) const
 
 ossimString& ossimString::trim(const ossimString& valueToTrim)
 {
-   if(this->size() == 0) return *this;
+   if(m_str.size() == 0) return *this;
    if(valueToTrim.empty()) return *this;
    iterator startPos = (*this).begin();
    iterator endPos   = (*this).begin() + ((*this).size()-1);
@@ -232,7 +232,7 @@ ossimString ossimString::beforePos(std::string::size_type pos)const
 
    if(pos < length())
    {
-      result.erase(pos, npos);
+      result.erase(pos, std::string::npos);
    }
 
    return result;
@@ -261,12 +261,12 @@ std::vector<ossimString> ossimString::explode(const ossimString& delimeter) cons
    std::vector<ossimString> result;
    char* tokenPtr;
 
-   tokenPtr = strtok((char*)exp_str.chars(), (char*)delimeter.chars());
+   tokenPtr = strtok((char*)exp_str.c_str(), (char*)delimeter.c_str());
 
    while(tokenPtr != NULL)
    {
       result.push_back(tokenPtr);
-      tokenPtr = strtok(NULL, delimeter.chars());
+      tokenPtr = strtok(NULL, delimeter.c_str());
    }
 
    return result;
@@ -302,7 +302,7 @@ ossimString ossimString::expandEnvironmentVariable() const
             {
                ossimString envVarStr(result.begin()+startChars.top()+2,
                                      result.begin()+startChars.top()+regExpEnd.start());
-               char* lookup = getenv( envVarStr.c_str() );
+               const char* lookup = getenv( envVarStr.c_str() );
                if ( lookup )
                {
                   result.replace(result.begin()+startChars.top(),
@@ -529,7 +529,7 @@ ossim_uint8 ossimString::toUInt8()const
    ossim_uint16 i = 0;
    if (!empty())
    {
-      std::istringstream is(*this);
+      std::istringstream is(m_str);
       is >> i;
       if(is.fail())
       {
@@ -549,7 +549,7 @@ int ossimString::toInt()const
    int i = 0;
    if (!empty())
    {
-      std::istringstream is(*this);
+      std::istringstream is(m_str);
       is >> i;
       if(is.fail())
       {
@@ -569,7 +569,7 @@ ossim_int16 ossimString::toInt16()const
    ossim_int16 i = 0;
    if (!empty())
    {
-      std::istringstream is(*this);
+      std::istringstream is(m_str);
       is >> i;
       if(is.fail())
       {
@@ -589,7 +589,7 @@ ossim_uint16 ossimString::toUInt16()const
    ossim_uint16 i = 0;
    if (!empty())
    {
-      std::istringstream is(*this);
+      std::istringstream is(m_str);
       is >> i;
       if(is.fail())
       {
@@ -609,7 +609,7 @@ ossim_int32 ossimString::toInt32()const
    ossim_int32 i = 0;
    if (!empty())
    {
-      std::istringstream is(*this);
+      std::istringstream is(m_str);
       is >> i;
       if(is.fail())
       {
@@ -629,7 +629,7 @@ ossim_uint32 ossimString::toUInt32()const
    ossim_uint32 i = 0;
    if (!empty())
    {
-      std::istringstream is(*this);
+      std::istringstream is(m_str);
       is >> i;
       if(is.fail())
       {
@@ -649,7 +649,7 @@ ossim_int64 ossimString::toInt64()const
    ossim_int64 i = 0;
    if (!empty())
    {
-      std::istringstream is(*this);
+      std::istringstream is(m_str);
       is >> i;
       if(is.fail())
       {
@@ -669,7 +669,7 @@ ossim_uint64 ossimString::toUInt64()const
    ossim_uint64 i = 0;
    if (!empty())
    {
-      std::istringstream is(*this);
+      std::istringstream is(m_str);
       is >> i;
       if(is.fail())
       {
@@ -689,7 +689,7 @@ long ossimString::toLong()const
   long i = 0;
    if (!empty())
    {
-      std::istringstream is(*this);
+      std::istringstream is(m_str);
       is >> i;
       if(is.fail())
       {
@@ -709,7 +709,7 @@ unsigned long  ossimString::toULong()const
    unsigned long i = 0;
    if (!empty())
    {
-      std::istringstream is(*this);
+      std::istringstream is(m_str);
       is >> i;
       if(is.fail())
       {
@@ -741,7 +741,7 @@ ossim_float32 ossimString::toFloat32()const
 #if 0
    if (!empty())
    {
-      std::istringstream is(*this);
+      std::istringstream is(m_str);
       is >> d;
       if(is.fail())
       {
@@ -774,7 +774,7 @@ ossim_float64 ossimString::toFloat64()const
 #if 0
    if (!empty())
    {
-      std::istringstream is(*this);
+      std::istringstream is(m_str);
       is >> d;
       if(is.fail())
       {
@@ -808,7 +808,7 @@ double ossimString::toDouble()const
       d = atof(c_str());
 #endif
 #if 0
-      std::istringstream is(*this);
+      std::istringstream is(m_str);
       is >> d;
       if(is.fail())
       {
@@ -930,22 +930,28 @@ ossimString ossimString::before(const ossimString& str,
    if(*this == "") return ossimString();
 
    size_type last = find(str.c_str(), pos);
-   if(last >= npos) return *this;
+   if(last >= std::string::npos) return *this;
    
-   return substr(0, last);
+   return ossimString( substr(0, last) );
 }
 
 ossimString ossimString::after(const ossimString& str,
                                std::string::size_type pos)const
 {
    size_type last = find(str.c_str(), pos);
-   if (last >= npos) return ossimString();
+   if (last >= std::string::npos) return ossimString();
    
-   return substr(last+str.length());
+   return ossimString( substr(last+str.length()) );
 }
 
+//*************************************************************************************************
+// Splits this string into a vector of strings (fields) using the delimiter list specified.
+// If a delimiter is encountered at the beginning or the end of this, or two delimiters are 
+// contiguous, a blank field is inserted in the vector, unless skipBlankFields is true.
+//*************************************************************************************************
 void ossimString::split(std::vector<ossimString>& result,
-                        const ossimString& separatorList)const
+                        const ossimString& separatorList,
+                        bool skipBlankFields)const
 {
 	if(this->empty()) return;
 //   result = split(separatorList);
@@ -956,32 +962,28 @@ void ossimString::split(std::vector<ossimString>& result,
 
    for(std::string::size_type i = 0; i < separatorList.size(); ++ i)
    {
-      if((*(this->begin())) == separatorList.c_str()[i])
-      {
+      if (((*(this->begin())) == separatorList.c_str()[i]) && !skipBlankFields)
          result.push_back("");
-      }
    }
    while(s)
    {
       result.push_back(ossimString(s));
-      s = strtok(NULL,
-                 separatorList.c_str());
+      if ((*s != 0) || !skipBlankFields)
+         s = strtok(NULL, separatorList.c_str());
    }
    for(std::string::size_type i = 0; i < separatorList.size(); ++ i)
    {
-      
-      if((*(this->end()-1)) == separatorList.c_str()[i])
-      {
+      if (((*(this->end()-1)) == separatorList.c_str()[i]) && !skipBlankFields)
          result.push_back("");
-      }
    }
 }
 
-std::vector<ossimString> ossimString:: split(const ossimString& separatorList)const
+std::vector<ossimString> ossimString:: split(const ossimString& separatorList,
+                                             bool skipBlankFields)const
 {
    std::vector<ossimString> result;
 
-   split(result, separatorList);
+   split(result, separatorList, skipBlankFields);
    
    return result;
 }
@@ -1046,3 +1048,4 @@ ossimString ossimString::getOssimId() const
 #endif
    return ossimString("");
 }
+

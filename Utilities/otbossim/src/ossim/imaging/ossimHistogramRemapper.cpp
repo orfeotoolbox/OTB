@@ -11,7 +11,7 @@
 // Remaps a tile based on mode and histogram clip points.
 //
 //*************************************************************************
-// $Id: ossimHistogramRemapper.cpp 17495 2010-06-01 23:21:42Z gpotts $
+// $Id: ossimHistogramRemapper.cpp 19786 2011-06-24 15:17:30Z gpotts $
 
 #include <cstdlib>
 #include <ossim/imaging/ossimHistogramRemapper.h>
@@ -21,6 +21,7 @@
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimNotifyContext.h>
 #include <ossim/base/ossimKeywordNames.h>
+#include <ossim/base/ossimHistogramSource.h>
 
 RTTI_DEF1(ossimHistogramRemapper, "ossimHistogramRemapper", ossimTableRemapper)
 
@@ -42,7 +43,7 @@ static const char STRETCH_MODE_KW[] = "stretch_mode";
 static const char HISTOGRAM_FILENAME_KW[] = "histogram_filename";
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimHistogramRemapper.cpp 17495 2010-06-01 23:21:42Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimHistogramRemapper.cpp 19786 2011-06-24 15:17:30Z gpotts $";
 #endif
 
 ossimHistogramRemapper::ossimHistogramRemapper()
@@ -59,6 +60,7 @@ ossimHistogramRemapper::ossimHistogramRemapper()
    theBandList(),
    theBypassFlag(true)
 {
+   setNumberOfInputs(2);
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -172,7 +174,6 @@ ossimRefPtr<ossimImageData> ossimHistogramRemapper::getTile(
         << "\ntheDirtyFlag:  " << theDirtyFlag
         << endl;
 #endif
-
    ossimRefPtr<ossimImageData> result = 0;
 
    if (theEnableFlag && theDirtyFlag) // Enabled and dirty.
@@ -284,7 +285,10 @@ void ossimHistogramRemapper::setLowClipPoint(const ossim_float64& clip)
 void ossimHistogramRemapper::setLowClipPoint(const ossim_float64& clip,
                                              ossim_uint32 zero_based_band)
 {
-   if (!theHistogram) return;
+   // allow the call to getHistogram to happen this way we can calculate a histogram if 
+   // a histosource is connected to this object
+   //
+   //   if (!theHistogram) return;
 	
    ossimRefPtr<ossimHistogram> h = getHistogram(zero_based_band);
    if (h.valid())
@@ -309,7 +313,10 @@ void ossimHistogramRemapper::setHighClipPoint(const ossim_float64& clip)
 void ossimHistogramRemapper::setHighClipPoint(const ossim_float64& clip,
                                               ossim_uint32 zero_based_band)
 {
-   if (!theHistogram) return;
+   // allow the call to getHistogram to happen this way we can calculate a histogram if 
+   // a histosource is connected to this object
+   //
+   //   if (!theHistogram) return;
 	
    ossimRefPtr<ossimHistogram> h = getHistogram(zero_based_band);
    if (h.valid())
@@ -1054,20 +1061,20 @@ void ossimHistogramRemapper::buildLinearTable()
 {
    switch (getOutputScalarType())
    {
-      case OSSIM_UCHAR:
+      case OSSIM_UINT8:
       {
          buildLinearTable(ossim_uint8(0));
          break;
       }
 			
       case OSSIM_USHORT11:
-      case OSSIM_USHORT16:
+      case OSSIM_UINT16:
       {
          buildLinearTable(ossim_uint16(0));
          break;
       }
 			
-      case OSSIM_SSHORT16:
+      case OSSIM_SINT16:
       {
          buildLinearTable(ossim_sint16(0));
          break;
@@ -1091,10 +1098,9 @@ void ossimHistogramRemapper::buildLinearTable()
       {
          if(traceDebug())
          {
-         // Shouldn't hit this.
+            // Shouldn't hit this.
             ossimNotify(ossimNotifyLevel_WARN)
-               << "ossimTableRemapper::buildTable OSSIM_SCALAR_UNKNOWN!"
-               << endl;
+               << "ossimHistogramRemapper::buildLinearTable OSSIM_SCALAR_UNKNOWN!" << endl;
          }
          break;
       }
@@ -1106,20 +1112,20 @@ void ossimHistogramRemapper::buildAutoLinearMinMaxTable()
 {
    switch (getOutputScalarType())
    {
-      case OSSIM_UCHAR:
+      case OSSIM_UINT8:
       {
          buildAutoLinearMinMaxTableTemplate(ossim_uint8(0));
          break;
       }
 			
       case OSSIM_USHORT11:
-      case OSSIM_USHORT16:
+      case OSSIM_UINT16:
       {
          buildAutoLinearMinMaxTableTemplate(ossim_uint16(0));
          break;
       }
 			
-      case OSSIM_SSHORT16:
+      case OSSIM_SINT16:
       {
          buildAutoLinearMinMaxTableTemplate(ossim_sint16(0));
          break;
@@ -1163,7 +1169,7 @@ template <class T> void ossimHistogramRemapper::buildLinearTable(T /* dummy */)
    const ossim_uint32 BANDS = getNumberOfInputBands();
 
    // Sanity check.
-   if (theNormalizedLowClipPoint.size() != BANDS || !theHistogram)
+   if (theNormalizedLowClipPoint.size() != BANDS || !getHistogram(0).valid())
    {
       if(traceDebug())
       {
@@ -1253,12 +1259,12 @@ template <class T> void ossimHistogramRemapper::buildAutoLinearMinMaxTableTempla
    const ossim_uint32 BANDS = getNumberOfInputBands();
 
    // Sanity check.
-   if (theNormalizedLowClipPoint.size() != BANDS || !theHistogram)
+   if (theNormalizedLowClipPoint.size() != BANDS || !getHistogram(0).valid())
    {
       if(traceDebug())
       {
          ossimNotify(ossimNotifyLevel_WARN)
-            << "ossimHistogramRemapper::buildTable ERROR!"
+            << "ossimHistogramRemapper::buildAutoLinearMinMaxTableTemplate ERROR!"
             << " Line:  " << __LINE__ << endl;
       }
       return;
@@ -1332,7 +1338,7 @@ void ossimHistogramRemapper::buildLinearTableStdFromMean()
    const ossim_uint32 BANDS = getNumberOfInputBands();
 	
    // Sanity check.
-   if (theNormalizedLowClipPoint.size() != BANDS || !theHistogram)
+   if (theNormalizedLowClipPoint.size() != BANDS || !getHistogram(0).valid())
    {
       if(traceDebug())
       {
@@ -1439,7 +1445,7 @@ void ossimHistogramRemapper::initializeClips(ossim_uint32 bands)
 void ossimHistogramRemapper::setNullCount()
 {
    // This will set the null bucket for all res zero bands to zero!
-   if (theHistogram.valid())
+   if (getHistogram(0).valid())
    {
       const ossim_uint32 BANDS = theHistogram->getNumberOfBands();
       for (ossim_uint32 band = 0; band < BANDS; ++band)
@@ -1533,7 +1539,7 @@ void ossimHistogramRemapper::setupTable()
    
    switch (theOutputScalarType)
    {
-      case OSSIM_UCHAR:
+      case OSSIM_UINT8:
          values_per_band = 256;  // 2 ^ 8
          bytes_per_pixel = 1;
          theTableType = ossimTableRemapper::NATIVE;
@@ -1545,8 +1551,8 @@ void ossimHistogramRemapper::setupTable()
          theTableType = ossimTableRemapper::NATIVE;
          break;
          
-      case OSSIM_USHORT16:
-      case OSSIM_SSHORT16:
+      case OSSIM_UINT16:
+      case OSSIM_SINT16:
          values_per_band = 65536; // 2 ^ 16
          bytes_per_pixel = 2;
          theTableType = ossimTableRemapper::NATIVE;
@@ -1682,11 +1688,30 @@ void ossimHistogramRemapper::verifyEnabled()
    }
 }
 
+ossimRefPtr<ossimMultiResLevelHistogram> ossimHistogramRemapper::getHistogram()
+{
+   return ossimRefPtr<ossimMultiResLevelHistogram>(theHistogram.get());
+}
+
+ossimRefPtr<const ossimMultiResLevelHistogram> ossimHistogramRemapper::getHistogram()const
+{
+   return ossimRefPtr<const ossimMultiResLevelHistogram>(theHistogram.get());
+}
+
 ossimRefPtr<ossimHistogram>
 ossimHistogramRemapper::getHistogram(ossim_uint32 zero_based_band,
                                      ossim_uint32 res_level) const
 {
    ossim_uint32 histogram_band = getHistogramBand(zero_based_band);
+   
+   if(!theHistogram.valid())
+   {
+      const ossimHistogramSource* source = dynamic_cast<const ossimHistogramSource*>(getInput(1));
+      if(source)
+      {
+         theHistogram = const_cast<ossimHistogramSource*>(source)->getHistogram();
+      }      
+   }
    
    if (theHistogram.valid())
    {
@@ -1784,5 +1809,18 @@ double ossimHistogramRemapper::getMaxPixelValue(ossim_uint32 band)const
       return theMaxOutputValue[band];
    }
    return ossimTableRemapper::getMaxPixelValue(band);
+}
+
+bool ossimHistogramRemapper::canConnectMyInputTo(ossim_int32 inputIndex,
+                                                 const ossimConnectableObject* object)const
+{
+   // we will alloe the histogram source only to be connected to input slot 2 and
+   // the first slot will be reserved for the ossimImageSource.
+   //
+   bool result = false;
+   if(inputIndex == 0) result = dynamic_cast<const ossimImageSource*>(object)!=0;
+   if(inputIndex == 1) result = dynamic_cast<const ossimHistogramSource*>(object)!=0;
+   
+   return result;
 }
 

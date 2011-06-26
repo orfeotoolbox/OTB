@@ -8,7 +8,7 @@
 //
 // Contains class declaration for 
 //*******************************************************************
-//  $Id: ossimLookUpTable.cpp 12966 2008-06-03 14:17:40Z gpotts $
+//  $Id: ossimLookUpTable.cpp 19448 2011-04-26 15:15:07Z dburken $
 
 #include <iostream>
 using namespace std;
@@ -78,21 +78,25 @@ ossimString ossimLookUpTable::getEntryString(const ossimKeywordlist& kwl,
 ossim_int32 ossimLookUpTable::getEntryNumber(const char*  entry_string,
                                              bool case_insensitive) const
 {
+   // Filter out trivial solution of NULL string:
    ossimString s1 = entry_string;
-   s1 = s1.trim();
-   for (ossim_uint32 i=0; i<theTable.size(); i++)
+   if (!s1.empty())
    {
-      ossimString s2 = theTable[i].theValue;
+      s1 = s1.trim();
+      for (ossim_uint32 i=0; i<theTable.size(); i++)
+      {
+         ossimString s2 = theTable[i].theValue;
 
-      if (case_insensitive == true)
-      {
-         s1.downcase();
-         s2.downcase();
-      }
-      
-      if (s1 == s2)
-      {
-         return theTable[i].theKey;
+         if (case_insensitive == true)
+         {
+            s1.downcase();
+            s2.downcase();
+         }
+
+         if (s1 == s2)
+         {
+            return theTable[i].theKey;
+         }
       }
    }
 

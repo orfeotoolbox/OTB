@@ -9,7 +9,7 @@
 // Description: Nitf support class for SENSRA - Sensor parameters extension.
 // 
 //********************************************************************
-// $Id: ossimNitfSensraTag.cpp 14659 2009-06-05 17:37:39Z dburken $
+// $Id: ossimNitfSensraTag.cpp 19682 2011-05-31 14:21:20Z dburken $
 
 #include <istream>
 #include <iomanip>
@@ -27,9 +27,9 @@ ossimNitfSensraTag::~ossimNitfSensraTag()
 {
 }
 
-ossimString ossimNitfSensraTag::getRegisterTagName()const
+std::string ossimNitfSensraTag::getRegisterTagName()const
 {
-   return "SENSRA";
+   return std::string("SENSRA");
 }
 
 void ossimNitfSensraTag::parseStream(std::istream& in)

@@ -1009,14 +1009,14 @@ long Break_OSSIM_MGRS_String (const char* OSSIM_MGRS,
 
 long Set_OSSIM_MGRS_Parameters (double a,
                           double f,
-                          char   *Ellipsoid_Code)
+                          const char* Ellipsoid_Code)
 /*
  * The function SET_OSSIM_MGRS_PARAMETERS receives the ellipsoid parameters and sets
  * the corresponding state variables. If any errors occur, the error code(s)
  * are returned by the function, otherwise OSSIM_MGRS_NO_ERROR is returned.
  *
  *   a                : Semi-major axis of ellipsoid in meters  (input)
- *   f                : Flattening of ellipsoid					        (input)
+ *   f                : Flattening of ellipsoid                 (input)
  *   Ellipsoid_Code   : 2-letter code for ellipsoid             (input)
  */
 { /* Set_OSSIM_MGRS_Parameters  */

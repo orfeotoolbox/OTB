@@ -13,7 +13,7 @@
 // ossimTiffTileSource  is derived from ImageHandler which is derived from
 // TileSource.
 //*******************************************************************
-//  $Id: ossimTiffTileSource.h 17844 2010-08-05 14:50:09Z dburken $
+//  $Id: ossimTiffTileSource.h 18373 2010-11-02 18:31:14Z gpotts $
 
 #ifndef ossimTiffTileSource_HEADER
 #define ossimTiffTileSource_HEADER
@@ -295,14 +295,17 @@ private:
    bool                 theApplyColorPaletteFlag;
 
    // Things we need from each directory as they can be different.
-   vector<ossim_uint32> theImageWidth;
-   vector<ossim_uint32> theImageLength;
-   vector<ReadMethod>   theReadMethod;
-   vector<ossim_uint16> thePlanarConfig;
-   vector<ossim_uint16> thePhotometric;
-   vector<ossim_uint32> theRowsPerStrip;
-   vector<ossim_uint32> theImageTileWidth;
-   vector<ossim_uint32> theImageTileLength;
+   std::vector<ossim_uint32> theImageWidth;
+   std::vector<ossim_uint32> theImageLength;
+   std::vector<ReadMethod>   theReadMethod;
+   std::vector<ossim_uint16> thePlanarConfig;
+   std::vector<ossim_uint16> thePhotometric;
+   std::vector<ossim_uint32> theRowsPerStrip;
+   std::vector<ossim_uint32> theImageTileWidth;
+   std::vector<ossim_uint32> theImageTileLength;
+   
+   std::vector<ossim_uint32> theImageDirectoryList;
+   ossim_uint32              theCurrentTiffRlevel;
    
 
 TYPE_DATA

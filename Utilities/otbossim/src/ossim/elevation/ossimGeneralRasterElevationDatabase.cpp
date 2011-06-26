@@ -10,10 +10,11 @@ RTTI_DEF1(ossimGeneralRasterElevationDatabase, "ossimGeneralRasterElevationDatab
 double ossimGeneralRasterElevationDatabase::getHeightAboveMSL(const ossimGpt& gpt)
 {
    if(!isSourceEnabled()) return ossim::nan();
+   ossimRefPtr<ossimElevCellHandler> handler = getOrCreateCellHandler(gpt);
 
-   if(m_cellHandler.valid())
+   if(handler.valid())
    {
-      return m_cellHandler->getHeightAboveMSL(gpt); // still need to shift
+      return handler->getHeightAboveMSL(gpt); // still need to shift
    }
    return ossim::nan();
 }
@@ -81,10 +82,41 @@ bool ossimGeneralRasterElevationDatabase::openGeneralRasterDirectory(const ossim
    return m_cellHandler.valid();
 }
 
+bool ossimGeneralRasterElevationDatabase::pointHasCoverage(const ossimGpt& gpt) const
+{
+   bool result = false;
+   
+   if(m_cellHandler.valid())
+   {
+      result = m_cellHandler->pointHasCoverage(gpt);
+   }
+   
+   return result;
+}
+
 void ossimGeneralRasterElevationDatabase::createRelativePath(
    ossimFilename& /* file */, const ossimGpt& /* gpt */)const
 {
 }
+
+ossimRefPtr<ossimElevCellHandler> ossimGeneralRasterElevationDatabase::createHandler(const ossimGpt&  gpt )
+{
+   if(pointHasCoverage(gpt))
+   {
+      return m_cellHandler.get();
+   }
+   return 0;
+}
+
+ossimRefPtr<ossimElevCellHandler> ossimGeneralRasterElevationDatabase::createCell(const ossimGpt& gpt)
+{
+   if(pointHasCoverage(gpt))
+   {
+      return m_cellHandler.get();
+   }
+   return 0;
+}
+
 
 bool ossimGeneralRasterElevationDatabase::loadState(const ossimKeywordlist& kwl, const char* prefix )
 {
@@ -111,3 +143,5 @@ bool ossimGeneralRasterElevationDatabase::saveState(ossimKeywordlist& kwl, const
    
    return result;
 }
+
+

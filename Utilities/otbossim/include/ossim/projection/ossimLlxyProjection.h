@@ -11,7 +11,7 @@
 // synonymous in this projection.
 // 
 //*******************************************************************
-//  $Id: ossimLlxyProjection.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimLlxyProjection.h 19651 2011-05-25 18:49:22Z gpotts $
 
 #ifndef ossimLlxyProjection_HEADER
 #define ossimLlxyProjection_HEADER
@@ -38,12 +38,6 @@ public:
    virtual ossimDpt forward(const ossimGpt &worldPoint) const;
    virtual ossimGpt inverse(const ossimDpt &projectedPoint) const;
    
-   /*!
-    * METHOD:  setOrigin(const ossimGpt& origin)
-    * Set the origin of the projection.
-    */
-   virtual void setOrigin(const ossimGpt& origin);
-
    /*!
     *  METHOD:  getLatSpacing() 
     *  Returns the latitude spacing as a double representing decimal degrees.

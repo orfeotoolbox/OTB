@@ -7,28 +7,69 @@
 //
 //
 //*************************************************************************
-// $Id: ossimRefreshEvent.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimRefreshEvent.h 19717 2011-06-03 17:26:52Z gpotts $
 #ifndef ossimRefreshEvent_HEADER
 #define ossimRefreshEvent_HEADER
 #include <ossim/base/ossimEvent.h>
+#include <ossim/base/ossimDpt.h>
 
 class OSSIMDLLEXPORT ossimRefreshEvent : public ossimEvent
 {
 public:
-
-   ossimRefreshEvent(ossimObject* object=NULL)  // the object associated with the event if any
-      :ossimEvent(object, OSSIM_EVENT_REFRESH_ID)
+   enum RefreshType
+   {
+      REFRESH_NONE      = 0,
+      REFRESH_POSITION  = 1,
+      REFRESH_PIXELS    = 2,
+      REFRESH_GEOMETRY  = 4,
+      REFRESH_ALL       = (REFRESH_POSITION|REFRESH_PIXELS|REFRESH_GEOMETRY)
+   };
+   enum PositionAnchor
+   {
+      ANCHOR_UPPER_LEFT = 1,
+      ANCHOR_CENTER     = 2
+   };
+   ossimRefreshEvent(ossimObject* object=0)  // the object associated with the event if any
+   :ossimEvent(object, OSSIM_EVENT_REFRESH_ID),
+    m_refreshType(static_cast<RefreshType>(REFRESH_PIXELS|REFRESH_GEOMETRY)),
+    m_anchor(ANCHOR_CENTER)
       {}
-   ossimRefreshEvent(const ossimRefreshEvent& rhs)
-      :ossimEvent(rhs)
-      {
-      }
+   ossimRefreshEvent(RefreshType refreshType, ossimObject* object=0)
+   :ossimEvent(object, OSSIM_EVENT_REFRESH_ID),
+    m_refreshType(refreshType),
+    m_anchor(ANCHOR_CENTER)
+
+   {
+   }
+   ossimRefreshEvent(const ossimRefreshEvent& src)
+   :ossimEvent(src),
+    m_refreshType(src.m_refreshType),
+    m_position(src.m_position),
+    m_anchor(src.m_anchor)
+   {
+   }
    virtual ossimObject* dup()const
-      {
-         return new ossimRefreshEvent(*this);
-      }
+   {
+      return new ossimRefreshEvent(*this);
+   }
  
-TYPE_DATA
+   void setRefreshType(int refreshType, bool on=true);
+   RefreshType getRefreshType()const{return m_refreshType;}
+   
+   void setPosition(const ossimDpt& position)
+   {
+      m_position = position;
+      if(!m_position.hasNans())setRefreshType(REFRESH_POSITION);
+   }
+   
+   const ossimDpt& getPosition()const{return m_position;}
+   
+                     
+protected:
+   RefreshType m_refreshType;
+   ossimDpt    m_position;
+   PositionAnchor m_anchor;
+   TYPE_DATA
 };
 
 #endif

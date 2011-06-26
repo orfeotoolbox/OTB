@@ -15,7 +15,7 @@
 // http://164.214.2.51/ntb/baseline/docs/stdi0002/final.pdf
 //
 //----------------------------------------------------------------------------
-// $Id: ossimNitfPiaimcTag.cpp 14291 2009-04-13 22:40:32Z dburken $
+// $Id: ossimNitfPiaimcTag.cpp 19682 2011-05-31 14:21:20Z dburken $
 
 #include <cstring> /* for memcpy */
 #include <iostream>
@@ -55,9 +55,9 @@ ossimNitfPiaimcTag::ossimNitfPiaimcTag()
    clearFields();
 }
 
-ossimString ossimNitfPiaimcTag::getRegisterTagName() const
+std::string ossimNitfPiaimcTag::getRegisterTagName() const
 {
-   return ossimString("PIAIMC");
+   return std::string("PIAIMC");
 }
 
 void ossimNitfPiaimcTag::parseStream(std::istream& in)

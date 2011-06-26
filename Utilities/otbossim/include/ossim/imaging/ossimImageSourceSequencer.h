@@ -8,7 +8,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimImageSourceSequencer.h 16081 2009-12-10 20:56:36Z eshirschorn $
+//  $Id: ossimImageSourceSequencer.h 19583 2011-05-13 10:58:10Z gpotts $
 #ifndef ossimImageSourceSequencer_HEADER
 #define ossimImageSourceSequencer_HEADER
 #include <ossim/imaging/ossimImageSource.h>
@@ -25,6 +25,7 @@ public:
    ossimImageSourceSequencer(ossimImageSource* inputSource=NULL,
                              ossimObject* owner=NULL);
 
+   virtual ~ossimImageSourceSequencer();
   /*!
     * This will return the number of tiles within the
     * area of interest.
@@ -134,7 +135,6 @@ public:
    virtual double getMaxPixelValue(ossim_uint32 band=0)const;
    
 protected:
-   virtual ~ossimImageSourceSequencer();
    ossimImageSource*  theInputConnection;
    ossimRefPtr<ossimImageData> theBlankTile;
    /*!

@@ -12,9 +12,9 @@
 // derive from.
 //
 //********************************************************************
-// $Id: ossimImageHandler.h 18048 2010-09-06 14:26:28Z dburken $
+// $Id: ossimImageHandler.h 19723 2011-06-06 21:03:49Z dburken $
 #ifndef ossimImageHandler_HEADER
-#define ossimImageHandler_HEADER
+#define ossimImageHandler_HEADER 1
 
 #include <ossim/imaging/ossimImageSource.h>
 #include <ossim/imaging/ossimImageMetaData.h>
@@ -42,18 +42,15 @@ public:
       OSSIM_OVERVIEW_COMPRESSION_PACKBITS
    };
 
-   /**
-    * Constructor (default):
-    */
+   /** Constructor (default): */
    ossimImageHandler();
+   
    /**
     * Destructor:
     * Derived classes should implement.
     */
    virtual ~ossimImageHandler();
    
-
-   //virtual ossimObject* dup()const;
    /**
     * initialize
     * Does nothing in this class.  Implemented to satisfy pure virtual.
@@ -448,6 +445,8 @@ public:
    virtual bool hasMetaData() const;
 
    virtual ossimRefPtr<ossimNBandLutDataObject> getLut()const;
+
+   virtual bool hasLut() const;
    
    /**
     * There is an external file with an omd extension.  this file contains
@@ -579,6 +578,18 @@ public:
    ossim_uint32 getStartingResLevel() const;
    
    void setStartingResLevel(ossim_uint32 level);
+
+   /** @return theOpenOverviewFlag */
+   bool getOpenOverviewFlag() const;
+
+   /**
+    * @brief Sets theOpenOverviewFlag.
+    *
+    * If true opening of overviews will be attempted on normal open.  If
+    * false only the base image will be opened (shallow open).
+    * Defaulted to true in constructor.
+    */
+   void setOpenOverviewFlag(bool flag);
    
    /**
     * Sets the supplementary directory
@@ -590,6 +601,13 @@ public:
     */
    virtual const ossimFilename& getSupplementaryDirectory()const;
    
+  //! Fetches the image ID. This is initialized to -1 in the constructor but is searched for in 
+  //! loadState():
+  const ossimString& getImageID() const { return theImageID; }
+
+  //! Sets the image ID in case it is externally generated
+  void setImageID(const ossimString&  id) { theImageID = id; }
+
 protected:
    
    /**
@@ -654,21 +672,28 @@ protected:
    */
    virtual void establishDecimationFactors();
 
-   ossimFilename        theImageFile;
-   ossimFilename        theOverviewFile;
-   ossimFilename        theSupplementaryDirectory;
-   ossimRefPtr<ossimImageHandler>   theOverview;
-   vector<ossimIpt>     theValidImageVertices;
-   ossimImageMetaData   theMetaData;
+   ossimFilename theImageFile;
+   ossimFilename theOverviewFile;
+   ossimFilename theSupplementaryDirectory;
+   ossimRefPtr<ossimImageHandler> theOverview;
+   vector<ossimIpt> theValidImageVertices;
+   ossimImageMetaData theMetaData;
    mutable ossimRefPtr<ossimImageGeometry> theGeometry;
    ossimRefPtr<ossimNBandLutDataObject> theLut;
-   std::vector<ossimDpt>  theDecimationFactors;
+   std::vector<ossimDpt> theDecimationFactors;
+   ossimString theImageID;
 
    /**
     * theStartingResLevel If set to something other than zero(default) this is
     * indicative that the reader is an overview.
     */
-   ossim_uint32         theStartingResLevel; // 0 being full or highest res.
+   ossim_uint32 theStartingResLevel; // 0 being full or highest res.
+
+   /**
+    * If true opening of overviews will be attempted.  If false only the base
+    * image will be opened (shallow open). Defaulted to true in constructor.
+    */
+   bool theOpenOverviewFlag;
    
 TYPE_DATA
 };

@@ -13,7 +13,7 @@
 //              and image handlers (image readers)
 //
 //*************************************************************************
-// $Id: ossimImageSourceFactory.cpp 17873 2010-08-12 17:41:31Z bwatkins $
+// $Id: ossimImageSourceFactory.cpp 19005 2011-03-03 15:56:58Z gpotts $
 
 #include <ossim/imaging/ossimImageSourceFactory.h>
 #include <ossim/imaging/ossimConvolutionFilter1D.h>
@@ -77,6 +77,7 @@
 #include <ossim/imaging/ossimWatermarkFilter.h>
 #include <ossim/imaging/ossimTrimFilter.h>
 #include <ossim/imaging/ossimTwoColorView.h>
+#include <ossim/imaging/ossimMemoryImageSource.h>
 
 #include <ossim/imaging/ossimGridRemapSource.h>
 
@@ -422,6 +423,20 @@ ossimObject* ossimImageSourceFactory::createObject(const ossimString& name)const
    {
       return new ossimTwoColorView;
    }
+   else if(name == STATIC_TYPE_NAME(ossimImageHistogramSource))
+   {
+      return new ossimImageHistogramSource();
+   }
+   else if(name == STATIC_TYPE_NAME(ossimImageSourceFilter))
+   {
+      // this is just a pass through source
+      return new ossimImageSourceFilter;
+   }
+   else if(name == STATIC_TYPE_NAME(ossimMemoryImageSource))
+   {
+      // this is just a pass through source
+      return new ossimMemoryImageSource;
+   }
    return NULL;
 }
 
@@ -551,6 +566,9 @@ void ossimImageSourceFactory::getTypeNameList(std::vector<ossimString>& typeList
    typeList.push_back(STATIC_TYPE_NAME(ossimImageGaussianFilter));
    typeList.push_back(STATIC_TYPE_NAME(ossimTrimFilter));
    typeList.push_back(STATIC_TYPE_NAME(ossimTwoColorView));
+   typeList.push_back(STATIC_TYPE_NAME(ossimImageHistogramSource));
+   typeList.push_back(STATIC_TYPE_NAME(ossimImageSourceFilter));
+   typeList.push_back(STATIC_TYPE_NAME(ossimMemoryImageSource));
 }
 
 // Hide from use...

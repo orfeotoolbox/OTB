@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimRgbToGreyFilter.cpp 11347 2007-07-23 13:01:59Z gpotts $
+// $Id: ossimRgbToGreyFilter.cpp 19223 2011-03-24 13:38:21Z dburken $
 
 #include <ossim/imaging/ossimRgbToGreyFilter.h>
 #include <ossim/imaging/ossimU8ImageData.h>
@@ -198,21 +198,20 @@ void ossimRgbToGreyFilter::runUcharTransformation(ossimRefPtr<ossimImageData>& t
       bandSrc[1]  = static_cast<unsigned char*>(tile->getBuf(1));
       bandSrc[2]  = static_cast<unsigned char*>(tile->getBuf(1));      
    }
-   else if(tile->getNumberOfBands() == 3)
+   else if(tile->getNumberOfBands() >= 3)
    {
       bandSrc[0]  = static_cast<unsigned char*>(tile->getBuf(0));
       bandSrc[1]  = static_cast<unsigned char*>(tile->getBuf(1));
       bandSrc[2]  = static_cast<unsigned char*>(tile->getBuf(2));      
    }
-   
    bandDest = static_cast<unsigned char*>(theTile->getBuf());
    
-   long offset;
+   ossim_int32 offset;
 
-   long upperBound = tile->getWidth()*tile->getHeight();
+   ossim_int32 upperBound = tile->getWidth()*tile->getHeight();
    for(offset = 0; offset < upperBound; ++offset)
    {
-      long value;
+      ossim_int32 value;
       
       value = ossim::round<int>(theC1*(bandSrc[0][offset]) +
                     theC2*(bandSrc[1][offset]) +
@@ -223,7 +222,6 @@ void ossimRgbToGreyFilter::runUcharTransformation(ossimRefPtr<ossimImageData>& t
 
       bandDest[offset] = value;
    }
-   
 
    delete [] bandSrc;
 }

@@ -14,7 +14,7 @@ public:
    
    static ossimSharedPluginRegistry* instance();
 
-   bool registerPlugin(const ossimFilename& filename, bool insertFrontFlag=false);
+   bool registerPlugin(const ossimFilename& filename, const ossimString& options="");//, bool insertFrontFlag=false);
    bool unregisterPlugin(int idx);
    bool unregisterPlugin(ossimPluginLibrary* plugin);
    const ossimPluginLibrary* getPlugin(const ossimFilename& filename)const;

@@ -8,7 +8,7 @@
 //
 // Contains class declaration for ossimImageWriter
 //*******************************************************************
-//  $Id: ossimImageFileWriter.h 17227 2010-04-27 19:01:03Z dburken $
+//  $Id: ossimImageFileWriter.h 19180 2011-03-22 17:36:33Z oscarkramer $
 
 #ifndef ossimImageFileWriter_HEADER
 #define ossimImageFileWriter_HEADER
@@ -160,7 +160,8 @@ public:
     * @return true on success, false on error.
     */
    virtual bool writeOverviewFile(ossim_uint16 tiff_compress_type = 1,
-                                  ossim_int32 jpeg_compress_quality = 75);
+                                  ossim_int32 jpeg_compress_quality = 75,
+                                  bool includeR0 = false );
 
    /**
     * Will write a readme file.  If "theFilename" is "foo.tif"

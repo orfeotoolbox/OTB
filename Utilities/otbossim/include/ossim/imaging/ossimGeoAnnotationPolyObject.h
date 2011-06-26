@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimGeoAnnotationPolyObject.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimGeoAnnotationPolyObject.h 19734 2011-06-06 23:45:36Z dburken $
 #ifndef ossimGeoAnnotationPolyObject_HEADER
 #define ossimGeoAnnotationPolyObject_HEADER
 
@@ -18,6 +18,12 @@
 class OSSIMDLLEXPORT ossimGeoAnnotationPolyObject : public ossimGeoAnnotationObject
 {
 public:
+   enum ossimPolyType
+   {
+     OSSIM_POLY_EXTERIOR_RING  = 0,
+     OSSIM_POLY_INTERIOR_RING = 1
+   };
+
    ossimGeoAnnotationPolyObject(bool enableFill = false,
                                 ossim_uint8 r=255,
                                 ossim_uint8 g=255,
@@ -76,12 +82,19 @@ public:
     */
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix=0);
+
+   virtual std::vector<ossimGpt> getPoints() { return thePolygon; }
+
+   virtual ossimPolyType getPolyType () { return m_PolyType; }
+
+   virtual void setPolyType(ossimPolyType polyType) { m_PolyType = polyType; }
    
 protected:
    virtual ~ossimGeoAnnotationPolyObject();
 
    std::vector<ossimGpt>      thePolygon;
    ossimRefPtr<ossimAnnotationPolyObject> theProjectedPolyObject;
+   ossimPolyType              m_PolyType;
 
 TYPE_DATA
 };

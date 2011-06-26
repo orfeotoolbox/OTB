@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageChain.h 17932 2010-08-19 20:34:35Z dburken $
+// $Id: ossimImageChain.h 19553 2011-05-08 00:52:40Z gpotts $
 #ifndef ossimImageChain_HEADER
 #define ossimImageChain_HEADER
 #include <vector>
@@ -238,43 +238,71 @@ public:
    // ________________________CONNECTABLE CONTAINER DEFINTIONS_________________
    //
    
-   /**
-    * Will find all objects of the past in type.  Use the RTTI type info.  An optional
-    * recurse flag will say if there is another container then recurse it to
-    * find the type you are looking for else it just looks within its immediate
-    * children
-    * 
-    * Example: passing STATIC_TYPE_INFO(ossimImageRenderer) as an argument will
-    *          look for all ossimImageRenderer's and return the list.
+   /*!
+    * These methods are now deprecated.  You can achieve the same thing by using the new visitor design pattern.  If this does not 
+    * achieve exactly what you want then you can derive new rules by overriding the virtual visit method in ossimVisitor
+    *
+    * <pre>
+    *    ossimTypeIdVisitor visitor(tyeId, false, ossimVisitor::VISIT_CHILDREN);
+    *    connectableObject->accept(visitor);
+    *    ossimCollectionVisitor::List& collection = visitor.getObjects();
+    * </pre>
     */
-   virtual ossimConnectableObject::ConnectableObjectList findAllObjectsOfType(const RTTItypeid& typeInfo,
-                                                                     bool recurse=true);
-   virtual ossimConnectableObject::ConnectableObjectList findAllObjectsOfType(const ossimString& className,
-                                                                     bool recurse=true);
-
-   /**
-    * Will find the firt object of the past in type.  Use the RTTI type info.An optional
-    * recurse flag will say if there is another container then recurse it to
-    * find the type you are looking for else it just looks within its immediate
-    * children
-    * 
-    * Example: passing STATIC_TYPE_INFO(ossimImageRenderer) as an argument will
-    *          look for the first ossimImageRenderer and return that object.
+   OSSIM_DEPRECATE_METHOD( virtual ossimConnectableObject::ConnectableObjectList findAllObjectsOfType(const RTTItypeid& typeInfo,
+                                                                     bool recurse=true));
+   /*!
+    * These methods are now deprecated.  You can achieve the same thing by using the new visitor design pattern.  If this does not 
+    * achieve exactly what you want then you can derive new rules by overriding the virtual visit method in ossimVisitor
+    *
+    * <pre>
+    *    ossimTypeNameVisitor visitor(typeName, false, ossimVisitor::VISIT_CHILDREN);
+    *    connectableObject->accept(visitor);
+    *    ossimCollectionVisitor::List& collection = visitor.getObjects();
+    * </pre>
     */
-   virtual ossimConnectableObject* findFirstObjectOfType(const RTTItypeid& typeInfo,
-                                                         bool recurse=true);
-   virtual ossimConnectableObject* findFirstObjectOfType(const ossimString& className,
-                                                         bool recurse=true);
+   OSSIM_DEPRECATE_METHOD(virtual ossimConnectableObject::ConnectableObjectList findAllObjectsOfType(const ossimString& className,
+                                                                     bool recurse=true));
 
-   /**
-    * will search for the object given an id.  If recurse is true it will
-    * recurse to other containers.
-    */ 
-   virtual ossimConnectableObject* findObject(const ossimId& id,
-                                              bool recurse=true);
+   /*!
+    * These methods are now deprecated.  You can achieve the same thing by using the new visitor design pattern.  If this does not 
+    * achieve exactly what you want then you can derive new rules by overriding the virtual visit method in ossimVisitor
+    *
+    * <pre>
+    *    ossimTypeIdVisitor visitor(tyeId, true, ossimVisitor::VISIT_CHILDREN);
+    *    connectableObject->accept(visitor);
+    *    ossimRefPtr<ossimConnectableObject> obj = visitor.getObject();
+    * </pre>
+    */
+   OSSIM_DEPRECATE_METHOD(virtual ossimConnectableObject* findFirstObjectOfType(const RTTItypeid& typeInfo,
+                                                         bool recurse=true));
+   /*!
+    * These methods are now deprecated.  You can achieve the same thing by using the new visitor design pattern.  If this does not 
+    * achieve exactly what you want then you can derive new rules by overriding the virtual visit method in ossimVisitor
+    *
+    * <pre>
+    *    ossimTypeNameVisitor visitor(className, true, ossimVisitor::VISIT_CHILDREN);
+    *    connectableObject->accept(visitor);
+    *    ossimRefPtr<ossimConnectableObject> obj = visitor.getObject();
+    * </pre>
+    */
+   OSSIM_DEPRECATE_METHOD(virtual ossimConnectableObject* findFirstObjectOfType(const ossimString& className,
+                                                         bool recurse=true));
 
-   virtual ossimConnectableObject* findObject(const ossimConnectableObject* obj,
-                                              bool recurse=true);
+   /*!
+    * These methods are now deprecated.  You can achieve the same thing by using the new visitor design pattern.  If this does not 
+    * achieve exactly what you want then you can derive new rules by overriding the virtual visit method in ossimVisitor
+    *
+    * <pre>
+    *    ossimIdVisitor visitor(tyeId, true, ossimVisitor::VISIT_CHILDREN);
+    *    connectableObject->accept(visitor);
+    *    ossimRefPtr<ossimConnectableObject> obj = visitor.getObject();
+    * </pre>
+    */
+   OSSIM_DEPRECATE_METHOD(virtual ossimConnectableObject* findObject(const ossimId& id,
+                                              bool recurse=true));
+
+   OSSIM_DEPRECATE_METHOD(virtual ossimConnectableObject* findObject(const ossimConnectableObject* obj,
+                                              bool recurse=true));
 
    /**
     * Will cycle through all sources setting their ids. the idLast wlil
@@ -326,7 +354,10 @@ public:
 
    virtual void propagateEventToOutputs(ossimEvent& event);
    virtual void propagateEventToInputs(ossimEvent& event);
+ 
    
+   virtual void accept(ossimVisitor& visitor);
+
 protected:
    friend class ossimImageChainChildListener;
   /**

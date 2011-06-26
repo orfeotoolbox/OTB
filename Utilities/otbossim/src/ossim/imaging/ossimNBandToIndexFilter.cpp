@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimNBandToIndexFilter.cpp 17815 2010-08-03 13:23:14Z dburken $
+// $Id: ossimNBandToIndexFilter.cpp 19732 2011-06-06 22:24:54Z dburken $
 
 #include <ossim/imaging/ossimNBandToIndexFilter.h>
 #include <ossim/imaging/ossimImageData.h>
@@ -260,7 +260,11 @@ ossimRefPtr<ossimImageData> ossimNBandToIndexFilter::convertInputTileToOutputTem
                bandValues[idx2] = *band[idx2];
                ++band[idx2];
             }
-            idx = theLut->findIndex(bandValues);
+            //---
+            // Note call the ossimNBandLutDataObject::findIndex that takes a size as the input
+            // data may have dropped the alpha channel.
+            //---
+            idx = theLut->findIndex(bandValues, numberOfBands);
 
             if(!theKeepQuantizedValueFlag)
             {
@@ -294,7 +298,11 @@ ossimRefPtr<ossimImageData> ossimNBandToIndexFilter::convertInputTileToOutputTem
             idx = -1;
             if(!inputTile->isNull(offset))
             {
-               idx = theLut->findIndex(bandValues);
+               //---
+               // Note call the ossimNBandLutDataObject::findIndex that takes a size as the input
+               // data may have dropped the alpha channel.
+               //---
+               idx = theLut->findIndex(bandValues, numberOfBands);
             }
             if(!theKeepQuantizedValueFlag)
             {
@@ -333,7 +341,7 @@ ossimRefPtr<ossimImageData> ossimNBandToIndexFilter::convertInputTileToOutputTem
 }
 
 bool ossimNBandToIndexFilter::saveState(ossimKeywordlist& kwl,
-                                      const char* prefix)const
+                                        const char* prefix)const
 {
    ossimString newPrefix = prefix;
    newPrefix = newPrefix + "lut.";

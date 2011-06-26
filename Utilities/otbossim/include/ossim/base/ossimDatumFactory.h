@@ -9,15 +9,17 @@
 // This is the DatumFactory class.  You give it a code and it will
 // construct a Datum class.  It returns NULL if no code was found.
 //*******************************************************************
-//  $Id: ossimDatumFactory.h 17815 2010-08-03 13:23:14Z dburken $
+//  $Id: ossimDatumFactory.h 19682 2011-05-31 14:21:20Z dburken $
 
 #ifndef ossimDatumFactory_HEADER
-#define ossimDatumFactory_HEADER
-#include <vector>
-#include <map>
+#define ossimDatumFactory_HEADER 1
 
 #include <ossim/base/ossimDatumFactoryInterface.h>
 #include <ossim/base/ossimEllipsoidFactory.h>
+#include <map>
+#include <string>
+#include <vector>
+
 class ossimFilename;
 class ossimDatum;
 class ossimWgs84Datum;
@@ -53,7 +55,7 @@ protected:
    static ossimDatumFactory*       theInstance;
    const ossimDatum*               theWgs84Datum;
    const ossimDatum*               theWgs72Datum;
-   std::map<ossimString, const ossimDatum*> theDatumTable;
+   std::map<std::string, const ossimDatum*> theDatumTable;
    
 
    ossimDatumFactory()

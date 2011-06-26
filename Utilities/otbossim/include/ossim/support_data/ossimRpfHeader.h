@@ -9,9 +9,9 @@
 // Description: Rpf support class
 // 
 //********************************************************************
-// $Id: ossimRpfHeader.h 16997 2010-04-12 18:53:48Z dburken $
+// $Id: ossimRpfHeader.h 19682 2011-05-31 14:21:20Z dburken $
 #ifndef ossimRpfHeader_HEADER
-#define ossimRpfHeader_HEADER
+#define ossimRpfHeader_HEADER 1
 
 #include <iosfwd>
 #include <ossim/base/ossimConstants.h>
@@ -53,7 +53,7 @@ public:
     * This will return the name of the registered tag for this
     * user defined header.
     */
-   virtual ossimString getRegisterTagName()const;
+   virtual std::string getRegisterTagName()const;
 
    /**
     * @brief Parse method.

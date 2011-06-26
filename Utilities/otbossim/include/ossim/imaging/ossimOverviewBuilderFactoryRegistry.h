@@ -7,7 +7,7 @@
 // Description: The factory registry for overview builders.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimOverviewBuilderFactoryRegistry.h 15833 2009-10-29 01:41:53Z eshirschorn $
+// $Id: ossimOverviewBuilderFactoryRegistry.h 19184 2011-03-23 11:59:03Z gpotts $
 
 #ifndef ossimOverviewBuilderFactoryRegistry_HEADER
 #define ossimOverviewBuilderFactoryRegistry_HEADER
@@ -15,10 +15,10 @@
 #include <vector>
 
 #include <ossim/base/ossimConstants.h>
-
-class ossimOverviewBuilderFactoryBase;
-class ossimOverviewBuilderBase;
-class ossimString;
+#include <ossim/base/ossimString.h>
+#include <ossim/imaging/ossimOverviewBuilderFactoryBase.h>
+#include <ossim/imaging/ossimOverviewBuilderBase.h>
+#include <ossim/base/ossimFactoryListInterface.h>
 
 /**
  * @class ossimOverviewBuilderFactoryRegistry
@@ -31,7 +31,8 @@ class ossimString;
  * ossimOverviewBuilderFactoryRegistry::instance()->createBuilder(
  * someStringFromTypeList);
  */
-class OSSIM_DLL ossimOverviewBuilderFactoryRegistry
+class OSSIM_DLL ossimOverviewBuilderFactoryRegistry : public ossimObjectFactory, 
+                                                      public ossimFactoryListInterface<ossimOverviewBuilderFactoryBase, ossimOverviewBuilderBase>
 {
 public:
 
@@ -41,22 +42,20 @@ public:
     */
    static ossimOverviewBuilderFactoryRegistry* instance();
 
-   /**
-    * @brief Method to register a factory.
-    * @param factory The factory to register.
-    * @param pushToFrontFlag If true, factory will be pushed to the front of
-    * the factory list. default = false.
-    * @return true on success, false on error.
-    */
-   bool registerFactory(ossimOverviewBuilderFactoryBase* factory,
-                        bool pushToFrontFlag = false);
 
-   /**
-    * @brief Method to unregistrer a factory.
-    * @param factory The factory to unregister.
+   /*!
+    * Creates an object given a type name.
     */
-   void unregisterFactory(ossimOverviewBuilderFactoryBase* factory);
-
+   virtual ossimObject* createObject(const ossimString& typeName)const
+   {
+      return createObjectFromRegistry(typeName);
+   }
+   
+   /*!
+    * Creates and object given a keyword list.
+    */
+   virtual ossimObject* createObject(const ossimKeywordlist& kwl,
+                                     const char* prefix=0)const;
    /**
     * @brief Creates a builder from a string.  This should match a string from
     * the getTypeNameList() method.
@@ -76,8 +75,11 @@ public:
     *
     * @param typeList List of ossimStrings to add to.
     */
-   void getTypeNameList(std::vector<ossimString>& typeList)const;
-
+   virtual void getTypeNameList(std::vector<ossimString>& typeList)const
+   {
+      getAllTypeNamesFromRegistry(typeList);
+   }
+   
 private:
    /** default constructor hidden from use */
    ossimOverviewBuilderFactoryRegistry();
@@ -89,10 +91,8 @@ private:
    void operator=(const ossimOverviewBuilderFactoryRegistry& rhs);
 
    /** The static instance of this class. */
-   static ossimOverviewBuilderFactoryRegistry* theInstance;
+   static ossimOverviewBuilderFactoryRegistry* m_instance;
 
-   /** The list of factories. */
-   std::vector<ossimOverviewBuilderFactoryBase*> theFactoryList;
    
 };
 

@@ -14,7 +14,7 @@ bool ossimNadconGridFile::open(const ossimFilename& file)
    {
       theInputFile.close();
       theInputFile.clear();
-      theInputFile.open(file, ios::in|ios::binary);
+      theInputFile.open(file.c_str(), ios::in|ios::binary);
 
       theBoundingRect = theHeader.getBoundingRect();
       theLatLonOrigin.lat = theHeader.getMinY();

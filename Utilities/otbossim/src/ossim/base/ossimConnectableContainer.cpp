@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimConnectableContainer.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
+// $Id: ossimConnectableContainer.cpp 19471 2011-05-03 15:03:05Z gpotts $
 
 #include <algorithm>
 #include <stack>
@@ -20,7 +20,7 @@
 #include <ossim/base/ossimObjectFactoryRegistry.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimNotifyContext.h>
-
+#include <ossim/base/ossimVisitor.h>
 static ossimTrace traceDebug("ossimConnectableContainer:debug");
 
 RTTI_DEF2(ossimConnectableContainer, "ossimConnectableContainer", ossimConnectableObject, ossimConnectableContainerInterface);
@@ -748,3 +748,31 @@ bool ossimConnectableContainer::canConnectMyOutputTo(ossim_int32,
 {
    return false;
 }
+
+void ossimConnectableContainer::accept(ossimVisitor& visitor)
+{
+   if(!visitor.hasVisited(this))
+   {
+      visitor.visit(this);
+      ossimVisitor::VisitorType currentType = visitor.getVisitorType();
+      // lets make sure inputs and outputs are turned off for we are traversing all children and we should not have
+      // to have that enabled
+      //
+      visitor.turnOffVisitorType(ossimVisitor::VISIT_INPUTS|ossimVisitor::VISIT_OUTPUTS);
+      if(visitor.getVisitorType() & ossimVisitor::VISIT_CHILDREN)
+      {
+         connectablObjectMapType::iterator current = theObjectMap.begin();
+         while((current != theObjectMap.end())&&!visitor.stopTraversal())
+         {
+            ossimRefPtr<ossimConnectableObject> currentObject = (current->second);
+            if(currentObject.valid()&&!visitor.hasVisited(currentObject.get())) currentObject->accept(visitor);
+            ++current;
+         }
+      }
+      visitor.setVisitorType(currentType);
+   }
+   
+   ossimConnectableObject::accept(visitor);
+   
+}
+

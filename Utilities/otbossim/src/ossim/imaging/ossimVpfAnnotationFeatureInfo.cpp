@@ -566,7 +566,7 @@ void ossimVpfAnnotationFeatureInfo::buildTxtFeature(const ossimFilename& tableNa
 	    }
 	  row_type row = read_row( columnValues[idx].toInt(), 
 				   *primitiveTable.getVpfTableData());
-	  long count = 0;
+	  ossim_int32 count = 0;
 	  ossimDpt* ptArray = getXy(*primitiveTable.getVpfTableData(),
 				    row,
 				    shapeLinePosition,
@@ -752,7 +752,7 @@ void ossimVpfAnnotationFeatureInfo::buildPointFeature(const ossimString& primiti
 	  row_type row = read_row( columnValues[idx].toInt(), 
 				   *primitiveTable.getVpfTableData());
 
-	  long count = 0;
+	  ossim_int32 count = 0;
 	  ossimDpt* ptArray = getXy(*primitiveTable.getVpfTableData(),
 				    row,
 				    coordinateValuePosition,
@@ -982,10 +982,10 @@ void ossimVpfAnnotationFeatureInfo::readAttributes(ossimGeoPolygon& polygon, oss
 /*****************************************************************************/
 ossimDpt *ossimVpfAnnotationFeatureInfo::getXy(vpf_table_type table, 
 					       row_type row, 
-					       long pos, 
-					       long *count)
+					       ossim_int32 pos, 
+					       ossim_int32 *count)
 {
-   long i;
+   ossim_int32 i;
    ossimDpt *coord = 0;
   
    switch (table.header[pos].type)
@@ -1143,7 +1143,7 @@ int ossimVpfAnnotationFeatureInfo::readStartEdgeId(int rowNumber,
 
 int ossimVpfAnnotationFeatureInfo::getEdgeKeyId (vpf_table_type& table, row_type& row, int col) {
     id_triplet_type key;
-    long keyCount;
+    ossim_int32 keyCount;
     get_table_element( col,
 		       row,
 		       table,
@@ -1372,7 +1372,7 @@ void ossimVpfAnnotationFeatureInfo::readGeoPolygon(ossimGeoPolygon& polygon,
   }
 
   for (vector< int >::iterator i = edges.begin(); i != edges.end(); i++) {
-    long count = 0;
+    ossim_int32 count = 0;
     free_row(row,  *edgTable.getVpfTableData());
     row = read_row( *i, *edgTable.getVpfTableData() );
     ossimDpt* ptArray = getXy(*edgTable.getVpfTableData(),
@@ -1421,7 +1421,7 @@ void ossimVpfAnnotationFeatureInfo::readEdge(ossimPolyLine& polyLine,
   row_type row = read_row( rowNumber, 
 			   *edgeTable.getVpfTableData());
 
-  long count = 0;
+  ossim_int32 count = 0;
   ossimDpt* ptArray = getXy(*edgeTable.getVpfTableData(),
 			    row,
 			    colPosition,

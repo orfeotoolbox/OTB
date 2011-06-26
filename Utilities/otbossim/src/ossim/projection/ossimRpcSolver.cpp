@@ -8,7 +8,7 @@
 // AUTHOR: Garrett Potts
 //
 //*****************************************************************************
-//  $Id: ossimRpcSolver.cpp 17206 2010-04-25 23:20:40Z dburken $
+//  $Id: ossimRpcSolver.cpp 18960 2011-02-25 12:07:18Z gpotts $
 
 #include <cstdlib>
 #include <ctime>
@@ -176,7 +176,7 @@ void ossimRpcSolver::solveCoefficients(const std::vector<ossimDpt>& imagePoints,
    // in data normalization
    //
    ossim_float64 w = rect.width();
-   ossim_float64 h = rect.width();
+   ossim_float64 h = rect.height();
 
    // setup scales for normalization
 //   ossim_float64 xScale = w/2.0;

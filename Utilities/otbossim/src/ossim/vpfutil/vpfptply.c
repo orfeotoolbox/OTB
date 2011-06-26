@@ -38,15 +38,15 @@
  *        float *xint, float *yint );
  *    int intersect_polygon_edge( float x, float y, edge_rec_type edge_rec );
  *    int intersect_polygon_loop( float x, float y,
- *        int face_id, long int start_edge,
+ *        int face_id, ossim_int32 start_edge,
  *        vpf_table_type edgetable );
  *    int point_in_face( float x, float y,
- *	  long int face_id,
+ *	  ossim_int32 face_id,
  *        vpf_table_type facetable,
  *        vpf_table_type ringtable,
  *        vpf_table_type edgetable );
  *    int point_in_face_table( float x, float y,
- *	  long int face_id,
+ *	  ossim_int32 face_id,
  *        char *fname );
  *E
  **************************************************************************/
@@ -280,7 +280,7 @@ int intersect( line_segment_type l1, line_segment_type l2,
  **************************************************************************/
 int intersect_polygon_edge( float x, float y, edge_rec_type edge_rec )
 {
-   register long int i;
+   register ossim_int32 i;
    line_segment_type lseg, pseg;
    int n;
    float xint,yint;
@@ -328,17 +328,17 @@ int intersect_polygon_edge( float x, float y, edge_rec_type edge_rec )
  *    x  <input> == (float) test point x coordinate.
  *    y  <input> == (float) test point y coordinate.
  *    face_id <input> == (int) given polygon loop.
- *    start_edge <input> == (long int) one edge of the polygon loop.
+ *    start_edge <input> == (ossim_int32) one edge of the polygon loop.
  *    edge_table <input> == (vpf_table_type) VPF edge table.
  *    intersect_polygon_loop <output> == (int) number of intersections.
  *E
  **************************************************************************/
 int intersect_polygon_loop( float x, float y,
-			    int face_id, long int start_edge,
+			    int face_id, ossim_int32 start_edge,
 			    vpf_table_type edgetable )
 {
    edge_rec_type edge_rec;
-   long int next, prevnode;
+   ossim_int32 next, prevnode;
    VPF_BOOLEAN done = FALSE;
    int n;
 
@@ -389,7 +389,7 @@ int intersect_polygon_loop( float x, float y,
  *A
  *    x         <input> == (float) x coordinate of given point.
  *    y         <input> == (float) y coordinate of given point.
- *    face_id   <input> == (long int) given face.
+ *    face_id   <input> == (ossim_int32) given face.
  *    facetable <input> == (vpf_table_type) VPF face table.
  *    ringtable <input> == (vpf_table_type) VPF ring table.
  *    edgetable <input> == (vpf_table_type) VPF edge table.
@@ -399,7 +399,7 @@ int intersect_polygon_loop( float x, float y,
  *E
  **************************************************************************/
 int point_in_face( float x, float y,
-		   long int face_id,
+		   ossim_int32 face_id,
 		   vpf_table_type facetable,
 		   vpf_table_type ringtable,
 		   vpf_table_type edgetable )
@@ -461,7 +461,7 @@ static void dirpath( char *path )
  *A
  *    x        <input> == (float) given point x coordinate.
  *    y        <input> == (float) given point y coordinate.
- *    face_id  <input> == (long int) face.
+ *    face_id  <input> == (ossim_int32) face.
  *    fname    <input> == (char *) pathname to VPF face file.
  *    point_in_face_table <output> == VPF_BOOLEAN:
  *                                            1 --> point is inside
@@ -469,7 +469,7 @@ static void dirpath( char *path )
  *E
  **************************************************************************/
 int point_in_face_table( float x, float y,
-			 long int face_id,
+			 ossim_int32 face_id,
 			 char *fname )
 {
    vpf_table_type facetable, ringtable, edgetable;

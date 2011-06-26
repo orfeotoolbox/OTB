@@ -8,45 +8,42 @@
 //               ImageHandlerRegistry.
 //
 //*******************************************************************
-//  $Id: ossimImageHandlerRegistry.h 18002 2010-08-30 18:01:10Z gpotts $
+//  $Id: ossimImageHandlerRegistry.h 19551 2011-05-07 16:36:34Z dburken $
 
 #ifndef ossimImageHandlerRegistry_HEADER
-#define ossimImageHandlerRegistry_HEADER
+#define ossimImageHandlerRegistry_HEADER 1
 
-#include <vector>
 #include <ossim/base/ossimObjectFactory.h>
 #include <ossim/base/ossimRtti.h>
 #include <ossim/imaging/ossimImageHandlerFactoryBase.h>
+#include <ossim/base/ossimFactoryListInterface.h>
+#include <vector>
+
 class ossimImageHandler;
 class ossimFilename;
 class ossimKeywordlist;
 
-class OSSIMDLLEXPORT ossimImageHandlerRegistry : public ossimObjectFactory
+class OSSIMDLLEXPORT ossimImageHandlerRegistry : public ossimObjectFactory,
+                                                public ossimFactoryListInterface<ossimImageHandlerFactoryBase, ossimImageHandler>
 {
 public:
    virtual ~ossimImageHandlerRegistry();
    
    static ossimImageHandlerRegistry* instance();
    
-   void addFactory(ossimImageHandlerFactoryBase* factory);
 
    /**
-    * Method to add a factory to the list of this registry.
-    *
-    * @param factory Factory to add.
-    *
-    * @param pushToFrontFlag If true the factory is added to the front of the
-    * list.  If false (default behavior) the factory is added to the end of
-    * the list.
+    * @brief open that takes a filename.
+    * @param fileName File to open.
+    * @param trySuffixFirst If true calls code to try to open by suffix first,
+    * then goes through the list of available handlers. default=true.
+    * @param openOverview If true image handler will attempt to open overview.
+    * default = true
+    * @return Pointer to image handler or null if cannot open.
     */
-   void registerFactory(ossimImageHandlerFactoryBase* factory,
-                        bool pushToFrontFlag=false);
-   
-   void unregisterFactory(ossimImageHandlerFactoryBase* factory);
-   bool findFactory(ossimImageHandlerFactoryBase* factory)const;
-   
-   ossimImageHandler* open(const ossimFilename& fileName, bool trySuffixFirst=true)const;
-
+   ossimImageHandler* open(const ossimFilename& fileName,
+                           bool trySuffixFirst=true,
+                           bool openOverview=true)const;
    
    /*!
     *  Given a keyword list return a pointer to an ImageHandler.  Returns
@@ -57,8 +54,11 @@ public:
    /*!
     * Creates an object given a type name.
     */
-   virtual ossimObject* createObject(const ossimString& typeName)const;
-
+   virtual ossimObject* createObject(const ossimString& typeName)const
+   {
+      return createObjectFromRegistry(typeName);
+   }
+   
    /*!
     * Creates and object given a keyword list.
     */
@@ -69,10 +69,11 @@ public:
     * openBySuffix will call the mthod getImageHandlersBySuffix and go through each handler to try and open the file.
     * This should be a faster open for we do not have to do a magic number compare on all prior files and keep opening and
     * closing files.
-    *
-    * 
+    * @param openOverview If true image handler will attempt to open overview.
+    * default = true
     */
-   virtual ossimRefPtr<ossimImageHandler> openBySuffix(const ossimFilename& file)const; 
+   virtual ossimRefPtr<ossimImageHandler> openBySuffix(const ossimFilename& file,
+                                                       bool openOverview=true)const; 
    
    /**
     *
@@ -89,15 +90,24 @@ public:
    virtual void getImageHandlersByMimeType(ossimImageHandlerFactoryBase::ImageHandlerList& result,
                                            const ossimString& mimeType)const;
    
-   
    /*!
     * This should return the type name of all objects in all factories.
     * This is the name used to construct the objects dynamially and this
     * name must be unique.
     */
-   virtual void getTypeNameList(std::vector<ossimString>& typeList)const;
+   virtual void getTypeNameList(std::vector<ossimString>& typeList)const
+   {
+      getAllTypeNamesFromRegistry(typeList);
+   }
 
    virtual void getSupportedExtensions(ossimImageHandlerFactoryBase::UniqueStringList& extensionList)const;
+
+   /**
+    * @brief Prints list of readers and properties.
+    * @param  out Stream to print to.
+    * @return std::ostream&
+    */
+   std::ostream& printReaderProps(std::ostream& out) const;
    
 protected:
    ossimImageHandlerRegistry();
@@ -105,9 +115,6 @@ protected:
    const ossimImageHandlerRegistry&
       operator=(const ossimImageHandlerRegistry& rhs);
 
-private:
-   void clear();
-   std::vector<ossimImageHandlerFactoryBase*>   theFactoryList;
    //static ossimImageHandlerRegistry*            theInstance;
 
 TYPE_DATA

@@ -5,8 +5,10 @@
 // Author: Garrett Potts (gpotts@imagelinks.com)
 //
 //*************************************************************************
-// $Id: ossimProperty.cpp 10174 2007-01-03 18:24:31Z gpotts $
+// $Id: ossimProperty.cpp 18406 2010-11-10 20:45:37Z gpotts $
 #include <ossim/base/ossimProperty.h>
+#include <ossim/base/ossimContainerProperty.h>
+#include <ossim/base/ossimKeywordlist.h>
 
 RTTI_DEF1(ossimProperty, "ossimProperty", ossimObject);
 
@@ -171,3 +173,27 @@ ossimRefPtr<ossimXmlNode> ossimProperty::toXml()const
    
    return result;
 }
+
+void ossimProperty::saveState(ossimKeywordlist& kwl, const ossimString& prefix)const
+{
+   const ossimContainerProperty* container = asContainer();
+   if(container)
+   {
+      ossim_uint32 nproperties     = container->getNumberOfProperties();
+      ossim_uint32 propertiesIndex = 0;
+      for(propertiesIndex = 0; propertiesIndex < nproperties; ++propertiesIndex)
+      {
+         ossimString newPrefix = prefix + container->getName() + ".";
+         ossimRefPtr<ossimProperty> prop = container->theChildPropertyList[propertiesIndex];
+         if(prop.valid())
+         {
+            prop->saveState(kwl, newPrefix);
+         }
+      }
+   }
+   else 
+   {
+      kwl.add(prefix + getName(), valueToString(), true);
+   }
+}
+

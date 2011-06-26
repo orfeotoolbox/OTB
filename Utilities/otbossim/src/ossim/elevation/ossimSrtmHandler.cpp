@@ -9,7 +9,7 @@
 // Shuttle Radar Topography Mission (SRTM) elevation source.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimSrtmHandler.cpp 17195 2010-04-23 17:32:18Z dburken $
+// $Id: ossimSrtmHandler.cpp 19444 2011-04-25 18:20:59Z dburken $
 
 #include <ossim/elevation/ossimSrtmHandler.h>
 #include <ossim/base/ossimCommon.h>
@@ -266,7 +266,8 @@ double ossimSrtmHandler::getHeightAboveMSLMemoryTemplate(T /* dummy */,
       //       std::cout << "ossimSrtmHandler::getHeightAboveMSLTemplate: leaving 1" << std::endl;
       return ossim::nan();
    }
-   
+
+   // Grab the four points from the srtm cell needed.
    ossim_uint64 offset = y0 * m_srtmRecordSizeInBytes + x0 * sizeof(T);
    ossim_uint64 offset2 =offset+m_srtmRecordSizeInBytes;
    T v00 = *(reinterpret_cast<T*> (&m_memoryMap[offset]));
@@ -284,10 +285,6 @@ double ossimSrtmHandler::getHeightAboveMSLMemoryTemplate(T /* dummy */,
    double p01 = v01;
    double p10 = v10;
    double p11 = v11;
-   
-   //---
-   // Grab the four points from the srtm cell needed.
-   //---
    
    double xt0 = xi - x0;
    double yt0 = yi - y0;

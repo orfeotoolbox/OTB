@@ -13,7 +13,7 @@
 // Container class for four double points representing a rectangle.
 // 
 //*******************************************************************
-//  $Id: ossimDrect.h 14789 2009-06-29 16:48:14Z dburken $
+//  $Id: ossimDrect.h 19180 2011-03-22 17:36:33Z oscarkramer $
 
 #ifndef ossimDrect_HEADER
 #define ossimDrect_HEADER
@@ -121,6 +121,12 @@ public:
    /** destructor */
    ~ossimDrect();
    
+   //! Constructs an Drect surrounding the specified point, and of specified size.
+   ossimDrect(const ossimDpt& center, 
+              const double&   size_x, 
+              const double&   size_y,
+              ossimCoordSysOrientMode mode=OSSIM_LEFT_HANDED);
+
    const ossimDrect& operator=  (const ossimDrect& rect);
    const ossimDrect& operator=  (const ossimIrect& rect);
    bool         operator!= (const ossimDrect& rect) const;
@@ -328,10 +334,10 @@ public:
          }
       }  
 
-   ossimDpt ul() const { return theUlCorner; }
-   ossimDpt ur() const { return theUrCorner; }
-   ossimDpt lr() const { return theLrCorner; }
-   ossimDpt ll() const { return theLlCorner; }
+   const ossimDpt& ul() const { return theUlCorner; }
+   const ossimDpt& ur() const { return theUrCorner; }
+   const ossimDpt& lr() const { return theLrCorner; }
+   const ossimDpt& ll() const { return theLlCorner; }
 
    const ossimDrect& changeOrientationMode(ossimCoordSysOrientMode mode)
    {
@@ -513,6 +519,8 @@ public:
     */
    ossim_float64 width()  const { return fabs(theLrCorner.x - theLlCorner.x) + 1.0; }
 
+   ossimDpt size() const { return ossimDpt(width(), height()); }
+
    /*!
     * Stretches this rectangle out to integer boundaries.
     */
@@ -524,13 +532,49 @@ public:
    void stretchToTileBoundary(const ossimDpt& widthHeight);
 
    const ossimDrect& expand(const ossimDpt& padding);
+
+   /**
+    * @return ossimString representing ossimIrect.
+    *
+    * Format:  ( 30, -90, 512, 512, [LH|RH] )
+    *            -x- -y-  -w-  -h-   -Right or left handed-
+    *
+    * where:
+    *     x and y are origins either upper left if LEFT HANDED (LH) or
+    *                                lower left if RIGHT HANDED (RH)
+    *     w and h are width and height respectively
+    *     The last value is LH or RH to indicate LeftHanded or RightHanded
+    *    
+    */
+   ossimString toString()const;
+   /**
+    * expected Format:  form 1: ( 30, -90, 512, 512, [LH|RH] )
+    *                            -x- -y-  -w-  -h-   -Right or left handed-
+    * 
+    *                   form 2: ( 30, -90, 512, 512)
+    *                            -x- -y-  -w-  -h-
+    *
+    * NOTE: Form 2 assumes Left handed were x,y is origin upper left and y positive down.
+    *
+    * This method starts by doing a "makeNan" on rect. 
+    *
+    * @param rectString String to initialize from.
+    * @return true or false to indicate successful parsing.
+    */
+   bool toRect(const ossimString& rectString);
    /*!
-    * Will subdivide this rect into four partiions.
+    * Will subdivide this rect into four partitions.
     */
    void splitToQuad(ossimDrect& ulRect,
                     ossimDrect& urRect,
                     ossimDrect& lrRect,
                     ossimDrect& llRect);
+   
+   /*!
+   * Finds the point on the rect boundary that is closest to the arg_point. Closest is defined as
+   * the minimum perpendicular distance.
+   */
+   ossimDpt findClosestEdgePointTo(const ossimDpt& arg_point) const;
    
    ossimDrect clipToRect(const ossimDrect& rect)const;
 

@@ -12,9 +12,9 @@
 // the tag factories.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimNitfUnknownTag.h 14241 2009-04-07 19:59:23Z dburken $
+// $Id: ossimNitfUnknownTag.h 19682 2011-05-31 14:21:20Z dburken $
 #ifndef ossimNitfUnknownTag_HEADER
-#define ossimNitfUnknownTag_HEADER
+#define ossimNitfUnknownTag_HEADER 1
 
 #include <ossim/support_data/ossimNitfRegisteredTag.h>
 
@@ -28,11 +28,11 @@ public:
    virtual ~ossimNitfUnknownTag();
 
    /**
-    * @return "tagname" as an ossimString.
+    * @return "tagname" as an std::string.
     *
     * @note: This has to be set by maker as the tag is not in any factory.
     */
-   virtual ossimString getRegisterTagName() const;
+   virtual std::string getRegisterTagName() const;
   
    /**
     * Parse method.
@@ -93,7 +93,7 @@ protected:
     */
    bool tagDataIsAscii() const;
 
-   ossimString  theTagName;
+   std::string  theTagName;
    ossim_uint32 theTagLength;
 
    /**

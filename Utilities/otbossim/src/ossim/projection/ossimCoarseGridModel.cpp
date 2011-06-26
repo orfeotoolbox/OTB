@@ -14,7 +14,7 @@
 //   elevations relative to the ellipsoid.
 //
 //*****************************************************************************
-//  $Id: ossimCoarseGridModel.cpp 17815 2010-08-03 13:23:14Z dburken $
+//  $Id: ossimCoarseGridModel.cpp 19457 2011-04-27 16:05:42Z gpotts $
 
 #include <ossim/projection/ossimCoarseGridModel.h>
 
@@ -62,6 +62,11 @@ ossimCoarseGridModel::ossimCoarseGridModel()
       << "DEBUG ossimCoarseGridModel::ossimCoarseGridModel: entering..."
       << std::endl;
 
+   theLatGrid.setDomainType(ossimDblGrid::SAWTOOTH_90);
+   theLonGrid.setDomainType(ossimDblGrid::WRAP_180);
+   theLatGrid.enableExtrapolation();
+   theLonGrid.enableExtrapolation();
+
    setErrorStatus();
 
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG)
@@ -81,6 +86,8 @@ ossimCoarseGridModel::ossimCoarseGridModel(const ossimCoarseGridModel& model)
       theLonGrid        (model.theLonGrid),
       theDlatDhGrid     (model.theDlatDhGrid),
       theDlonDhGrid     (model.theDlonDhGrid),
+      theDlatDparamGrid (0),
+      theDlonDparamGrid (0),
       theHeightEnabledFlag(true)
 {
    if (traceExec()) ossimNotify(ossimNotifyLevel_DEBUG)
@@ -123,6 +130,11 @@ ossimCoarseGridModel::ossimCoarseGridModel(const ossimFilename& geom_file)
 {
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimCoarseGridModel::ossimCoarseGridModel(geom_file): entering..." << std::endl;
    
+   theLatGrid.setDomainType(ossimDblGrid::SAWTOOTH_90);
+   theLonGrid.setDomainType(ossimDblGrid::WRAP_180);
+   theLatGrid.enableExtrapolation();
+   theLonGrid.enableExtrapolation();
+
    ossimKeywordlist kwl (geom_file);
    loadState(kwl);
 
@@ -145,7 +157,12 @@ ossimCoarseGridModel::ossimCoarseGridModel(const ossimKeywordlist& geom_kwl)
 {
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimCoarseGridModel::ossimCoarseGridModel(geom_kwl): entering..." << std::endl;
 
-   // Parse keywordlist for geometry:
+   theLatGrid.setDomainType(ossimDblGrid::SAWTOOTH_90);
+   theLonGrid.setDomainType(ossimDblGrid::WRAP_180);
+   theLatGrid.enableExtrapolation();
+   theLonGrid.enableExtrapolation();
+
+  // Parse keywordlist for geometry:
    loadState(geom_kwl);
 }
 
@@ -175,229 +192,198 @@ void ossimCoarseGridModel::buildGrid(const ossimDrect& imageBounds,
 {
    theHeightEnabledFlag =  enableHeightFlag;
    
-   if(geom->getProjection()&&(!imageBounds.hasNans()))
+   if (!geom->getProjection() || imageBounds.hasNans())
+      return;
+
+   // don't let it get any smaller than 100, 100 pixels
+   // on the input projector
+   //
+   // may want this to be adjusted by outside
+   //
+   const ossimDatum* targetDatum = ossimDatumFactory::instance()->wgs84();
+   ossimIpt gridSize(2,2);
+   ossimDpt gridOrigin(0,0);
+   ossimGpt gpt;
+   ossimGpt gpt2;
+   ossimGpt bilinearGpt;
+   resizeAdjustableParameterArray(0);
+   double normSplit = 1.0;
+   ossimIpt imageSize = ossimIpt(imageBounds.width(), imageBounds.height());
+   double error = 0.0;
+
+   ossimIpt imageOrigin = imageBounds.ul();
+   ossimDpt spacing ((double)(imageBounds.width()-1)/(gridSize.x-1),
+      (double)(imageBounds.height()-1)/(gridSize.y-1));
+
+   if(theDlatDparamGrid)
    {
-     // don't let it get any smaller than 100, 100 pixels
-     // on the input projector
-     //
-     // may want this to be adjusted by outside
-     //
-     const ossimDatum* targetDatum = ossimDatumFactory::instance()->wgs84();
-     ossimIpt gridSize(2,2);
-     ossimDpt gridOrigin(0,0);
-     ossimGpt gpt;
-     ossimGpt gpt2;
-     ossimGpt bilinearGpt;
-     resizeAdjustableParameterArray(0);
-     double normSplit = 1.0;
-     ossimDpt imageSize(imageBounds.width(),
-                        imageBounds.height());
-     double error = 0.0;
+      delete [] theDlatDparamGrid;
+      theDlatDparamGrid = NULL;
+   }
+   if(theDlonDparamGrid)
+   {
+      delete [] theDlonDparamGrid;
+      theDlonDparamGrid = NULL;
+   }
 
-     // int y=0;
-     // int x=0;
-     // double ht=0, vt=0;
-     // double w = imageBounds.width();
-     // double h = imageBounds.height();
-     ossimIpt imageOrigin = imageBounds.ul();
-     // ossimDpt metersPerPixel = proj->getMetersPerPixel();
-     ossimDpt spacing ((double)(imageBounds.width()-1)/(gridSize.x-1),
-                       (double)(imageBounds.height()-1)/(gridSize.y-1));
+   geom->localToWorld(imageBounds.midPoint(), gpt);
 
-     if(theDlatDparamGrid)
-     {
-        delete [] theDlatDparamGrid;
-        theDlatDparamGrid = NULL;
-     }
-     if(theDlonDparamGrid)
-     {
-        delete [] theDlonDparamGrid;
-        theDlonDparamGrid = NULL;
-     }
-     
-     geom->localToWorld(imageBounds.midPoint(), gpt);
+   do
+   {
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG) << "Checking grid size " << gridSize << std::endl;
+      }
 
-     do
-     {
-        if(traceDebug())
-        {
-           ossimNotify(ossimNotifyLevel_DEBUG) << "Checking grid size " << gridSize << std::endl;
-        }
-        
-        spacing = ossimDpt((double)(imageBounds.width()-1)/(gridSize.x-1),
-                           (double)(imageBounds.height()-1)/(gridSize.y-1));
+      spacing = ossimDpt((double)(imageBounds.width()-1)/(gridSize.x-1),
+         (double)(imageBounds.height()-1)/(gridSize.y-1));
 
-        theLatGrid.setNullValue(ossim::nan());
-        theLonGrid.setNullValue(ossim::nan());
-        theDlatDhGrid.setNullValue(0.0);
-        theDlonDhGrid.setNullValue(0.0);
-        theLatGrid.initialize(gridSize, gridOrigin, spacing);
-        theLonGrid.initialize(gridSize, gridOrigin, spacing);
-        theDlatDhGrid.initialize(gridSize, gridOrigin, spacing);
-        theDlonDhGrid.initialize(gridSize, gridOrigin, spacing);
-        ossim_int32 x, y;
-        
-        for(y = 0; y < gridSize.y; ++y)
-        {
-           for(x = 0; x < gridSize.x; ++x)
-           {
-              ossimDpt norm((double)x/(double)(gridSize.x-1),
-                            (double)y/(double)(gridSize.y-1));
-              
-              ossimDpt pt(imageOrigin.x + norm.x*(imageSize.x-1),
-                          imageOrigin.y + norm.y*(imageSize.y-1));
-              
-              geom->localToWorld(pt, gpt);
-              double h = gpt.height();
-              if(ossim::isnan(h))
-              {
-                 h += heightDelta;
-              }
-              ossimDpt fullPt;
-              geom->rnToFull(pt, 0, fullPt);
-              geom->getProjection()->lineSampleHeightToWorld(fullPt, h, gpt2);
-              gpt.changeDatum(targetDatum);
-              gpt2.changeDatum(targetDatum);
-              
-              theLatGrid.setNode(x, y, gpt.latd());
-              theLonGrid.setNode(x, y, gpt.lond());
+      theLatGrid.setNullValue(ossim::nan());
+      theLonGrid.setNullValue(ossim::nan());
+      theDlatDhGrid.setNullValue(0.0);
+      theDlonDhGrid.setNullValue(0.0);
+      theLatGrid.setDomainType(ossimDblGrid::SAWTOOTH_90);
+      theLonGrid.setDomainType(ossimDblGrid::WRAP_180);
+      theLatGrid.initialize(gridSize, gridOrigin, spacing);
+      theLonGrid.initialize(gridSize, gridOrigin, spacing);
+      theDlatDhGrid.initialize(gridSize, gridOrigin, spacing);
+      theDlonDhGrid.initialize(gridSize, gridOrigin, spacing);
+      ossim_int32 x, y;
 
-              theDlatDhGrid.setNode(x, y, (gpt2.latd() - gpt.latd())/heightDelta);
-              theDlonDhGrid.setNode(x, y, (gpt2.lond() - gpt.lond())/heightDelta);
-           }
-        }
-        ossim_int32 upperY = 2*gridSize.y;
-        ossim_int32 upperX = 2*gridSize.x;
-        error = 0.0;
+      for(y = 0; y < gridSize.y; ++y)
+      {
+         for(x = 0; x < gridSize.x; ++x)
+         {
+            ossimDpt norm((double)x/(double)(gridSize.x-1),
+               (double)y/(double)(gridSize.y-1));
 
-        ossimDpt v[4];
-        v[0].lat = theLatGrid.getNode(0,0);
-        v[0].lon = theLonGrid.getNode(0,0);
-        v[1].lat = theLatGrid.getNode(gridSize.x-1, 0);
-        v[1].lon = theLonGrid.getNode(gridSize.x-1, 0);
-        v[2].lat = theLatGrid.getNode(gridSize.x-1, gridSize.y-1);
-        v[2].lon = theLonGrid.getNode(gridSize.x-1, gridSize.y-1);
-        v[3].lat = theLatGrid.getNode(0, gridSize.y-1);
-        v[3].lon = theLonGrid.getNode(0, gridSize.y-1);
-        theBoundGndPolygon = ossimPolygon(4, v);
-        
-        
-        theImageSize  = ossimDpt(imageBounds.width(), imageBounds.height());
-        theRefImgPt   = imageBounds.midPoint();
-        theRefGndPt   = ossimGpt(theLatGrid(theRefImgPt),
-                                 theLonGrid(theRefImgPt));
-        ossimDpt ref_ip_dx(theRefImgPt.x+1.0, theRefImgPt.y);
-        ossimDpt ref_ip_dy(theRefImgPt.x, theRefImgPt.y+1.0);
-        ossimGpt ref_gp_dx(theLatGrid(ref_ip_dx), theLonGrid(ref_ip_dx));
-        ossimGpt ref_gp_dy(theLatGrid(ref_ip_dy), theLonGrid(ref_ip_dy));
+            ossimDpt pt(imageOrigin.x + norm.x*(imageSize.x-1),
+               imageOrigin.y + norm.y*(imageSize.y-1));
 
-        theGSD.x   = theRefGndPt.distanceTo(ref_gp_dx);
-        theGSD.y   = theRefGndPt.distanceTo(ref_gp_dy);
+            geom->localToWorld(pt, gpt);
+            double h = gpt.height();
+            if(ossim::isnan(h))
+            {
+               h += heightDelta;
+            }
+            ossimDpt fullPt;
+            geom->rnToFull(pt, 0, fullPt);
+            geom->getProjection()->lineSampleHeightToWorld(fullPt, h, gpt2);
+            gpt.changeDatum(targetDatum);
+            gpt2.changeDatum(targetDatum);
 
-        theMeanGSD = (theGSD.line + theGSD.samp)/2.0;
-        theImageClipRect  = imageBounds;
-        theSubImageOffset = ossimIpt(0,0);
+            theLatGrid.setNode(x, y, gpt.latd());
+            theLonGrid.setNode(x, y, gpt.lond());
 
-        for(y = 0; ((y < upperY)&&(error < theInterpolationError)); ++y)
-        {
-           for(x = 0; ((x < upperX)&&(error<theInterpolationError)); ++x)
-           {
-              ossimDpt norm((double)x/(double)(upperX-1),
-                            (double)y/(double)(upperY-1));
-              
-              ossimDpt imagePoint(imageOrigin.x + norm.x*(imageSize.x-1),
-                                  imageOrigin.y + norm.y*(imageSize.y-1));
-              ossimDpt testIpt;
+            theDlatDhGrid.setNode(x, y, (gpt2.latd() - gpt.latd())/heightDelta);
+            theDlonDhGrid.setNode(x, y, (gpt2.lond() - gpt.lond())/heightDelta);
+         }
+      }
+      ossim_int32 upperY = 2*gridSize.y;
+      ossim_int32 upperX = 2*gridSize.x;
+      error = 0.0;
 
-               geom->localToWorld(imagePoint, gpt);
-               worldToLineSample(gpt, testIpt);
-               error = (testIpt-imagePoint).length();
-           }
-        }
+      // Set all base-class data members needed for subsequent calls to projection code:
+      initializeModelParams(imageBounds);
 
-        gridSize.x *= 2;
-        gridSize.y *= 2;
-        normSplit *= .5;
-     }while((error > theInterpolationError)&&
-            ((imageSize.x*normSplit) > theMinGridSpacing)&&
-            ((imageSize.y*normSplit) > theMinGridSpacing));
+      for(y = 0; ((y < upperY)&&(error < theInterpolationError)); ++y)
+      {
+         for(x = 0; ((x < upperX)&&(error<theInterpolationError)); ++x)
+         {
+            ossimDpt norm((double)x/(double)(upperX-1),
+               (double)y/(double)(upperY-1));
+
+            ossimDpt imagePoint(imageOrigin.x + norm.x*(imageSize.x-1),
+               imageOrigin.y + norm.y*(imageSize.y-1));
+            ossimDpt testIpt;
+
+            geom->localToWorld(imagePoint, gpt);
+            worldToLineSample(gpt, testIpt);
+            error = (testIpt-imagePoint).length();
+         }
+      }
+
+      gridSize.x *= 2;
+      gridSize.y *= 2;
+      normSplit *= .5;
+   } while((error > theInterpolationError) &&
+           ((imageSize.x*normSplit) > theMinGridSpacing) &&
+           ((imageSize.y*normSplit) > theMinGridSpacing));
+
+   gridSize = theLatGrid.size();
+
+   ossimAdjustableParameterInterface* adjustableParameters = 
+      PTR_CAST(ossimAdjustableParameterInterface, geom->getProjection());
+   removeAllAdjustments();
+   if(adjustableParameters&&makeAdjustableFlag)
+   {
+      if(adjustableParameters->getNumberOfAdjustableParameters() > 0)
+      {
+         newAdjustment(adjustableParameters->getNumberOfAdjustableParameters());
+
+         int numberOfParams = getNumberOfAdjustableParameters();
+         if(numberOfParams)
+         {
+            //***
+            // Allocate adjustable parameter partials grids then assign:
+            //***
+            theDlatDparamGrid = new ossimDblGrid [numberOfParams];
+            theDlonDparamGrid = new ossimDblGrid [numberOfParams];
+            for(int paramIdx = 0; paramIdx < numberOfParams; ++ paramIdx)
+            {
+               theDlonDparamGrid[paramIdx].setNullValue(0.0);
+               theDlatDparamGrid[paramIdx].setNullValue(0.0);
+               theDlatDparamGrid[paramIdx].initialize(gridSize, gridOrigin, spacing);
+               theDlonDparamGrid[paramIdx].initialize(gridSize, gridOrigin, spacing);
+               setAdjustableParameter(paramIdx, 0.0);
+               setParameterSigma(paramIdx, adjustableParameters->getParameterSigma(paramIdx));
+               setParameterUnit(paramIdx, adjustableParameters->getParameterUnit(paramIdx));
+               setParameterCenter(paramIdx, 0.0);
+               setParameterDescription(paramIdx,
+                  adjustableParameters->getParameterDescription(paramIdx));
+
+               double oldParameter = adjustableParameters->getAdjustableParameter(paramIdx);
+               adjustableParameters->setAdjustableParameter(paramIdx, 1.0, true);
+               double adjust = adjustableParameters->computeParameterOffset(paramIdx);
+               double deltaLat = 0;
+               double deltaLon = 0;
+               if(adjust != 0.0)
+               {
+                  for(int y = 0; y < gridSize.y; ++y)
+                  {
+                     for(int x = 0; x < gridSize.x; ++x)
+                     {
+                        ossimDpt norm((double)x/(double)(gridSize.x-1),
+                           (double)y/(double)(gridSize.y-1));
+
+                        ossimDpt pt(imageOrigin.x + norm.x*(imageSize.x-1),
+                           imageOrigin.y + norm.y*(imageSize.y-1));
+                        geom->localToWorld(pt, gpt);
+
+                        gpt.changeDatum(targetDatum);
+                        gpt2.latd(theLatGrid(pt));
+                        gpt2.lond(theLonGrid(pt));
+                        deltaLat = gpt.latd()-gpt2.latd();
+                        deltaLon = gpt.lond()-gpt2.lond();
+
+                        theDlatDparamGrid[paramIdx].setNode(x, y, deltaLat/adjust);
+                        theDlonDparamGrid[paramIdx].setNode(x, y, deltaLon/adjust);
+                     }
+                  }
+
+                  // The partials grids for this parameter are initialized, now initialize the
+                  // grid's extrapolator:
+                  theDlatDparamGrid[paramIdx].enableExtrapolation();
+                  theDlonDparamGrid[paramIdx].enableExtrapolation();
+               }
+               adjustableParameters->setAdjustableParameter(paramIdx, oldParameter, true);
+            }
+         }
+      }
+   }
+   getAdjustment(theInitialAdjustment);
 
 
-     gridSize = theLatGrid.size();
-
-     ossimAdjustableParameterInterface* adjustableParameters = PTR_CAST(ossimAdjustableParameterInterface,
-                                                                        geom->getProjection());
-     removeAllAdjustments();
-     if(adjustableParameters&&makeAdjustableFlag)
-     {
-        if(adjustableParameters->getNumberOfAdjustableParameters() > 0)
-        {
-           newAdjustment(adjustableParameters->getNumberOfAdjustableParameters());
-
-           int numberOfParams = getNumberOfAdjustableParameters();
-           if(numberOfParams)
-           {
-              //***
-              // Allocate adjustable parameter partials grids then assign:
-              //***
-              theDlatDparamGrid = new ossimDblGrid [numberOfParams];
-              theDlonDparamGrid = new ossimDblGrid [numberOfParams];
-              ossim_uint32 paramIdx = 0;
-              for(paramIdx = 0; paramIdx < getNumberOfAdjustableParameters(); ++ paramIdx)
-              {
-                 theDlonDparamGrid[paramIdx].setNullValue(0.0);
-                 theDlatDparamGrid[paramIdx].setNullValue(0.0);
-                 theDlatDparamGrid[paramIdx].initialize(gridSize, gridOrigin, spacing);
-                 theDlonDparamGrid[paramIdx].initialize(gridSize, gridOrigin, spacing);
-                 setAdjustableParameter(paramIdx,
-                                        0.0);
-                 setParameterSigma(paramIdx,
-                                   adjustableParameters->getParameterSigma(paramIdx));
-                 setParameterUnit(paramIdx,
-                                  adjustableParameters->getParameterUnit(paramIdx));
-                 setParameterCenter(paramIdx,
-                                    0.0);
-                 setParameterDescription(paramIdx,
-                                         adjustableParameters->getParameterDescription(paramIdx));
-
-                 double oldParameter = adjustableParameters->getAdjustableParameter(paramIdx);
-                 adjustableParameters->setAdjustableParameter(paramIdx, 1.0, true);
-                 double adjust = adjustableParameters->computeParameterOffset(paramIdx);
-                 double deltaLat = 0;
-                 double deltaLon = 0;
-                 if(adjust != 0.0)
-                 {
-                    for(int y = 0; y < gridSize.y; ++y)
-                    {
-                       for(int x = 0; x < gridSize.x; ++x)
-                       {
-                          ossimDpt norm((double)x/(double)(gridSize.x-1),
-                                        (double)y/(double)(gridSize.y-1));
-                          
-                          ossimDpt pt(imageOrigin.x + norm.x*(imageSize.x-1),
-                                      imageOrigin.y + norm.y*(imageSize.y-1));
-                          geom->localToWorld(pt, gpt);
-
-                          gpt.changeDatum(targetDatum);
-                          gpt2.latd(theLatGrid(pt));
-                          gpt2.lond(theLonGrid(pt));
-                          deltaLat = gpt.latd()-gpt2.latd();
-                          deltaLon = gpt.lond()-gpt2.lond();
-
-                          theDlatDparamGrid[paramIdx].setNode(x, y,
-                                                              deltaLat/adjust);
-                          theDlonDparamGrid[paramIdx].setNode(x, y,
-                                                              deltaLon/adjust);
-                       }
-                    }
-                 }
-                 adjustableParameters->setAdjustableParameter(paramIdx, oldParameter, true);
-              }
-           }
-        }
-     }
-     getAdjustment(theInitialAdjustment);
-  }
 }
 
 void ossimCoarseGridModel::setInterpolationError(double error)
@@ -408,6 +394,52 @@ void ossimCoarseGridModel::setInterpolationError(double error)
 void ossimCoarseGridModel::setMinGridSpacing(ossim_int32 minSpacing)
 {
    theMinGridSpacing = minSpacing;
+}
+
+//*************************************************************************************************
+//! Initializes base class data members after grids have been assigned.
+//! It is assumed that theImageSize and the origin image point were already set.
+//*************************************************************************************************
+void ossimCoarseGridModel::initializeModelParams(ossimIrect imageBounds)
+{
+   // NOTE: it is assumed that the grid size and spacing is the same for ALL grids:
+   ossimIpt gridSize (theLatGrid.size());
+   ossimDpt spacing  (theLatGrid.spacing());
+   ossimDpt v[4];
+   v[0].lat = theLatGrid.getNode(0,0);
+   v[0].lon = theLonGrid.getNode(0,0);
+   v[1].lat = theLatGrid.getNode(gridSize.x-1, 0);
+   v[1].lon = theLonGrid.getNode(gridSize.x-1, 0);
+   v[2].lat = theLatGrid.getNode(gridSize.x-1, gridSize.y-1);
+   v[2].lon = theLonGrid.getNode(gridSize.x-1, gridSize.y-1);
+   v[3].lat = theLatGrid.getNode(0, gridSize.y-1);
+   v[3].lon = theLonGrid.getNode(0, gridSize.y-1);
+
+   // Guaranty longitude values are -180 to 180
+   for (int i=0; i<4; i++)
+   {
+      if (v[i].lon > 180.0)
+         v[i].lon -= 360.0;
+   }
+
+   theBoundGndPolygon = ossimPolygon(4, v);
+   
+   theImageSize  = ossimDpt(imageBounds.width(), imageBounds.height());
+   theRefImgPt   = imageBounds.midPoint();
+   theRefGndPt.lat = theLatGrid(theRefImgPt);
+   theRefGndPt.lon = theLonGrid(theRefImgPt);
+   
+   ossimDpt ref_ip_dx (theRefImgPt.x+1.0, theRefImgPt.y    );
+   ossimDpt ref_ip_dy (theRefImgPt.x    , theRefImgPt.y+1.0);
+   ossimGpt ref_gp_dx (theLatGrid(ref_ip_dx), theLonGrid(ref_ip_dx));
+   ossimGpt ref_gp_dy (theLatGrid(ref_ip_dy), theLonGrid(ref_ip_dy));
+
+   theGSD.x   = theRefGndPt.distanceTo(ref_gp_dx);
+   theGSD.y   = theRefGndPt.distanceTo(ref_gp_dy);
+
+   theMeanGSD = (theGSD.line + theGSD.samp)/2.0;
+   theImageClipRect  = imageBounds;
+   theSubImageOffset = imageBounds.ul();
 }
 
 //*****************************************************************************
@@ -483,13 +515,8 @@ ossimCoarseGridModel::lineSampleHeightToWorld(const ossimDpt& lineSampPt,
 
    double height = (ossim::isnan(arg_hgt_above_ellipsoid)) ? 0.0 : arg_hgt_above_ellipsoid;
 
-   // Extrapolate if point is outside image:
-   if (!insideImage(lineSampPt))
-   {
-      worldPt = extrapolate(lineSampPt, height);
-      if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimCoarseGridModel::lineSampleHeightToWorld: returning..." << std::endl;
-      return;
-   }
+   // Note that there is no check for image point outside of valid image rect because this model
+   // uses the extrapolation inherent to the ossimDblGrid.
 
    // The image point may correspond to an offset sub-image. Need to convert
    // to full image space before anything:
@@ -514,6 +541,8 @@ ossimCoarseGridModel::lineSampleHeightToWorld(const ossimDpt& lineSampPt,
        worldPt.lat += (theDlatDparamGrid[p](ip) * computeParameterOffset(p));
        worldPt.lon += (theDlonDparamGrid[p](ip) * computeParameterOffset(p));
    }
+
+   worldPt.limitLonTo180();
 
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimCoarseGridModel::lineSampleHeightToWorld: returning..." << std::endl;
 }
@@ -802,8 +831,11 @@ bool ossimCoarseGridModel::loadCoarseGrid(const ossimFilename& cgFileName)
    if (!instream.is_open())
    {
       theErrorStatus++;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimCoarseGridModel::loadCoarseGrid: Error encountered opening coarse grid file <" << cgFileName
-                                          << ">. Check that the file exists and is readable." << std::endl;
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimCoarseGridModel::loadCoarseGrid: Error encountered opening coarse grid file <" << cgFileName
+         << ">. Check that the file exists and is readable." << std::endl;
+      }
       if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "CEBUG ossimCoarseGridModel::loadCoarseGrid: returning with error..." << std::endl;
       return false;
    }
@@ -866,10 +898,9 @@ bool ossimCoarseGridModel::loadCoarseGrid(const ossimFilename& cgFileName)
    }
 
    //***
-   // Initialize the bounging ground rectangle:
+   // Initialize the bounding ground rectangle:
    //***
    grid_size = theLatGrid.size();
-
 
    v[0].lat = theLatGrid(0,0);
    v[0].lon = theLonGrid(0,0);
@@ -880,29 +911,10 @@ bool ossimCoarseGridModel::loadCoarseGrid(const ossimFilename& cgFileName)
    v[3].lat = theLatGrid(0, theImageSize.y-1);
    v[3].lon = theLonGrid(0, theImageSize.y-1);
 
-
-//     ossimGpt gpt;
-//     lineSampleHeightToWorld(ossimDpt(0,0), 0, gpt);
-//     v[0].lat = gpt.latd();
-//     v[0].lon = gpt.lond();
-//     lineSampleHeightToWorld(ossimDpt(grid_size.x-1,0), 0.0, gpt);
-//     v[1].lat = gpt.latd();
-//     v[1].lon = gpt.lond();
-//     lineSampleHeightToWorld(ossimDpt(grid_size.x-1, grid_size.y-1), 0.0, gpt);
-//     v[2].lat = gpt.latd();
-//     v[2].lon = gpt.lond();
-//     lineSampleHeightToWorld(ossimDpt(0,grid_size.y-1), 0.0,gpt);
-//     v[3].lat = gpt.latd();
-//     v[3].lon = gpt.lond();
-   
    theBoundGndPolygon = ossimPolygon(4, v);
-
    
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimCoarseGridModel::loadCoarseGrid: returning..." << std::endl;
    return true;
-
-   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG rossimCoarseGridModel::loadCoarseGrid: eturning with error..." << std::endl;
-   return false;
 }
 
 
@@ -948,7 +960,6 @@ void ossimCoarseGridModel::reallocateGrid(const ossimIpt& grid_size)
    theLonGrid.initialize(grid_size, grid_origin, spacing);
    theDlatDhGrid.initialize(grid_size, grid_origin, spacing);
    theDlonDhGrid.initialize(grid_size, grid_origin, spacing);
-
    
    int numberOfParams = getNumberOfAdjustableParameters();
    if(numberOfParams)
@@ -996,5 +1007,12 @@ void ossimCoarseGridModel::writeGeomTemplate(ostream& os)
    return;
 }
    
-
-      
+//*************************************************************************************************
+// Overrides base-class extrapolation code. Uses extrapolation inherent to ossimDbleGrid
+//*************************************************************************************************
+ossimGpt ossimCoarseGridModel::extrapolate(const ossimDpt& local_ip, const double& height) const
+{
+   ossimGpt gpt;
+   lineSampleHeightToWorld(local_ip, height, gpt);
+   return gpt;
+}

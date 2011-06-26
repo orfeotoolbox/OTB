@@ -1,16 +1,16 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
 // License:  See top level LICENSE.txt file.
 //
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimQuickbirdTile.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimQuickbirdTile.cpp 19682 2011-05-31 14:21:20Z dburken $
 
 #include <ossim/support_data/ossimQuickbirdTile.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimNotifyContext.h>
+#include <iostream>
 
 static const ossimTrace traceDebug(ossimString("ossimQuickbirdTile:debug"));
 
@@ -28,7 +28,7 @@ bool ossimQuickbirdTile::open(const ossimFilename tileFile)
          << std::endl;
    }
    
-   std::ifstream in(tileFile, std::ios::in|std::ios::binary);
+   std::ifstream in(tileFile.c_str(), std::ios::in|std::ios::binary);
 
    if(!in)
    {
@@ -53,8 +53,7 @@ bool ossimQuickbirdTile::open(const ossimFilename tileFile)
       ossimString line;
       ossimString name;
       ossimString value;
-      std::getline(in,
-                   line);
+      std::getline(in, line.string());
 
       while(!in.eof()&&!in.bad()&&(in.good())&&
             (theErrorStatus==ossimErrorCodes::OSSIM_OK))
@@ -136,7 +135,7 @@ bool ossimQuickbirdTile::open(const ossimFilename tileFile)
             }
             setErrorStatus();
          }
-         std::getline(in, line);
+         std::getline(in, line.string());
       }
    }
 
@@ -171,8 +170,7 @@ void ossimQuickbirdTile::parseTileGroup(std::istream& in,
          (name != "END_GROUP"))
    {
       line = "";
-      std::getline(in,
-                   line);
+      std::getline(in, line.string());
 
       parseNameValue(name, value, line);
       name = name.upcase();
@@ -351,8 +349,7 @@ void ossimQuickbirdTile::parseTileGroup(std::istream& in,
    
    if(theErrorStatus == ossimErrorCodes::OSSIM_OK)
    {
-      theTileMap.insert(make_pair(info.theFilename,
-                                  info));
+      theTileMap.insert(std::make_pair(info.theFilename.string(), info));
    }
 }
 
@@ -369,7 +366,8 @@ void ossimQuickbirdTile::parseNameValue(ossimString& name,
 bool ossimQuickbirdTile::getInfo(ossimQuickbirdTileInfo& result,
                                  const ossimFilename& filename)const
 {
-   std::map<ossimString,ossimQuickbirdTileInfo>::const_iterator iter =  theTileMap.find(filename);
+   std::map<std::string,ossimQuickbirdTileInfo>::const_iterator iter =
+      theTileMap.find(filename.string());
 
    if(iter != theTileMap.end())
    {

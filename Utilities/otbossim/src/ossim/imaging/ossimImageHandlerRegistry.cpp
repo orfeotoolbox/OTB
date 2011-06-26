@@ -9,15 +9,16 @@
 // Contains class definition for ImageHandlerRegistry.
 //
 //*******************************************************************
-//  $Id: ossimImageHandlerRegistry.cpp 18002 2010-08-30 18:01:10Z gpotts $
-#include <algorithm>
+//  $Id: ossimImageHandlerRegistry.cpp 19551 2011-05-07 16:36:34Z dburken $
+
 #include <ossim/imaging/ossimImageHandlerRegistry.h>
+#include <ossim/base/ossimFilename.h>
+#include <ossim/base/ossimObjectFactoryRegistry.h>
+#include <ossim/base/ossimString.h>
+#include <ossim/imaging/ossimImageHandler.h>
 #include <ossim/imaging/ossimImageHandlerFactory.h>
 #include <ossim/imaging/ossimImageHandlerFactoryBase.h>
-#include <ossim/base/ossimFilename.h>
-#include <ossim/imaging/ossimImageHandler.h>
-#include <ossim/base/ossimObjectFactoryRegistry.h>
-
+#include <algorithm>
 using namespace std;
 
 RTTI_DEF1(ossimImageHandlerRegistry, "ossimImageHandlerRegistry", ossimObjectFactory);
@@ -39,78 +40,14 @@ ossimImageHandlerRegistry* ossimImageHandlerRegistry::instance()
 
 ossimImageHandlerRegistry::~ossimImageHandlerRegistry()
 {
-   clear();
+   unregisterAllFactories();
 }
 
-void ossimImageHandlerRegistry::addFactory(
-   ossimImageHandlerFactoryBase* factory)
-{
-   registerFactory(factory);
-}
-
-void ossimImageHandlerRegistry::registerFactory(
-   ossimImageHandlerFactoryBase* factory, bool pushToFrontFlag)
-{
-   if( factory && !findFactory(factory) )
-   {
-      if (pushToFrontFlag)
-      {
-         theFactoryList.insert(theFactoryList.begin(), factory);
-      }
-      else
-      {
-         theFactoryList.push_back(factory);
-      }
-   }
-}
-
-void ossimImageHandlerRegistry::unregisterFactory(ossimImageHandlerFactoryBase* factory)
-{
-   std::vector<ossimImageHandlerFactoryBase*>::iterator iter =  std::find(theFactoryList.begin(),
-                                                                          theFactoryList.end(),
-                                                                          factory);
-   if(iter != theFactoryList.end())
-   {
-      theFactoryList.erase(iter);
-   }
-}
-
-bool ossimImageHandlerRegistry::findFactory(ossimImageHandlerFactoryBase* factory)const
-{
-   return (std::find(theFactoryList.begin(),
-                     theFactoryList.end(),
-                     factory)!=theFactoryList.end());
-}
-
-
-ossimObject* ossimImageHandlerRegistry::createObject(const ossimString& typeName)const
-{
-   ossimObject*                   result = NULL;
-   vector<ossimImageHandlerFactoryBase*>::const_iterator factory;
-
-   factory = theFactoryList.begin();
-   while((factory != theFactoryList.end()) && !result)
-   {
-     result = (*factory)->createObject(typeName);
-     ++factory;
-   }
-   
-   return result;
- 
-}
 
 ossimObject* ossimImageHandlerRegistry::createObject(const ossimKeywordlist& kwl,
                                                      const char* prefix)const
 {
-   ossimObject* result = NULL;
-   vector<ossimImageHandlerFactoryBase*>::const_iterator factory;
-
-   factory = theFactoryList.begin();
-   while((factory != theFactoryList.end()) && !result)
-   {
-     result = (*factory)->createObject(kwl, prefix);
-     ++factory;
-   }
+   ossimObject* result = createObjectFromRegistry(kwl, prefix);
    if(!result)
    {
       result = open(kwl, prefix);
@@ -118,7 +55,8 @@ ossimObject* ossimImageHandlerRegistry::createObject(const ossimKeywordlist& kwl
    return result;
 }
 
-ossimRefPtr<ossimImageHandler> ossimImageHandlerRegistry::openBySuffix(const ossimFilename& file)const
+ossimRefPtr<ossimImageHandler> ossimImageHandlerRegistry::openBySuffix(const ossimFilename& file,
+                                                                       bool openOverview)const
 {
    std::vector<ossimRefPtr<ossimImageHandler> > handlers;
    
@@ -128,6 +66,7 @@ ossimRefPtr<ossimImageHandler> ossimImageHandlerRegistry::openBySuffix(const oss
    
    for(idx = 0; idx < size; ++idx)
    {
+      handlers[idx]->setOpenOverviewFlag(openOverview);
       if(handlers[idx]->open(file))
       {
          return handlers[idx];
@@ -140,9 +79,9 @@ ossimRefPtr<ossimImageHandler> ossimImageHandlerRegistry::openBySuffix(const oss
 void ossimImageHandlerRegistry::getImageHandlersBySuffix(ossimImageHandlerFactoryBase::ImageHandlerList& result,
                                                          const ossimString& ext)const
 {
-   vector<ossimImageHandlerFactoryBase*>::const_iterator iter = theFactoryList.begin();
+   vector<ossimImageHandlerFactoryBase*>::const_iterator iter = m_factoryList.begin();
    ossimImageHandlerFactoryBase::ImageHandlerList temp;
-   while(iter != theFactoryList.end())
+   while(iter != m_factoryList.end())
    {
       temp.clear();
       (*iter)->getImageHandlersBySuffix(temp, ext);
@@ -162,9 +101,9 @@ void ossimImageHandlerRegistry::getImageHandlersBySuffix(ossimImageHandlerFactor
 void ossimImageHandlerRegistry::getImageHandlersByMimeType(ossimImageHandlerFactoryBase::ImageHandlerList& result,
                                                            const ossimString& mimeType)const
 {
-   vector<ossimImageHandlerFactoryBase*>::const_iterator iter = theFactoryList.begin();
+   vector<ossimImageHandlerFactoryBase*>::const_iterator iter = m_factoryList.begin();
    ossimImageHandlerFactoryBase::ImageHandlerList temp;
-   while(iter != theFactoryList.end())
+   while(iter != m_factoryList.end())
    {
       temp.clear();
       (*iter)->getImageHandlersByMimeType(temp, mimeType);
@@ -181,30 +120,12 @@ void ossimImageHandlerRegistry::getImageHandlersByMimeType(ossimImageHandlerFact
    }
 }
 
-void ossimImageHandlerRegistry::getTypeNameList(std::vector<ossimString>& typeList)const
-{
-   vector<ossimString> result;
-   vector<ossimImageHandlerFactoryBase*>::const_iterator iter = theFactoryList.begin();
-
-   while(iter != theFactoryList.end())
-   {
-      result.clear();
-      (*iter)->getTypeNameList(result);
-
-      // now append to the end of the typeList.
-      typeList.insert(typeList.end(),
-                      result.begin(),
-                      result.end());
-      ++iter;
-   }
-}
-
 void ossimImageHandlerRegistry::getSupportedExtensions(ossimImageHandlerFactoryBase::UniqueStringList& extensionList)const
 {
    vector<ossimString> result;
-   vector<ossimImageHandlerFactoryBase*>::const_iterator iter = theFactoryList.begin();
+   vector<ossimImageHandlerFactoryBase*>::const_iterator iter = m_factoryList.begin();
 
-   while(iter != theFactoryList.end())
+   while(iter != m_factoryList.end())
    {
       (*iter)->getSupportedExtensions(extensionList);
 
@@ -213,11 +134,13 @@ void ossimImageHandlerRegistry::getSupportedExtensions(ossimImageHandlerFactoryB
    
 }
 
-ossimImageHandler* ossimImageHandlerRegistry::open(const ossimFilename& fileName, bool trySuffixFirst)const
+ossimImageHandler* ossimImageHandlerRegistry::open(const ossimFilename& fileName,
+                                                   bool trySuffixFirst,
+                                                   bool openOverview)const
 {
    if(trySuffixFirst)
    {
-      ossimRefPtr<ossimImageHandler> h = openBySuffix(fileName);
+      ossimRefPtr<ossimImageHandler> h = openBySuffix(fileName, openOverview);
       if(h.valid())
       {
          return h.release();
@@ -229,10 +152,10 @@ ossimImageHandler* ossimImageHandlerRegistry::open(const ossimFilename& fileName
    ossimImageHandler*                   result = NULL;
    vector<ossimImageHandlerFactoryBase*>::const_iterator factory;
 
-   factory = theFactoryList.begin();
-   while((factory != theFactoryList.end()) && !result)
+   factory = m_factoryList.begin();
+   while((factory != m_factoryList.end()) && !result)
    {
-      result = (*factory)->open(fileName);
+      result = (*factory)->open(fileName, openOverview);
       ++factory;
    }
    
@@ -244,20 +167,58 @@ ossimImageHandler* ossimImageHandlerRegistry::open(const ossimKeywordlist& kwl,
 {
    ossimImageHandler*                   result = NULL;
    vector<ossimImageHandlerFactoryBase*>::const_iterator factory;
-
-   factory = theFactoryList.begin();
-   while((factory != theFactoryList.end()) && !result)
+   
+   factory = m_factoryList.begin();
+   while((factory != m_factoryList.end()) && !result)
    {
-     result = (*factory)->open(kwl, prefix);
-     ++factory;
+      result = (*factory)->open(kwl, prefix);
+      ++factory;
    }
    
    return result;
 }
 
-void ossimImageHandlerRegistry::clear()
+std::ostream& ossimImageHandlerRegistry::printReaderProps(std::ostream& out) const
 {
-   theFactoryList.clear();
+   // Loop through factories:
+   vector<ossimImageHandlerFactoryBase*>::const_iterator factory = m_factoryList.begin();
+   while( factory != m_factoryList.end() )
+   {
+      out << "factory: " << (*factory)->getClassName() << "\n";
+      
+      // Loop through factory image handlers:
+      std::vector<ossimString> readerList;
+      (*factory)->getTypeNameList(readerList);
+
+      std::vector<ossimString>::const_iterator i = readerList.begin();
+      while ( i != readerList.end() )
+      {
+         ossimRefPtr<ossimImageHandler> ih =
+            dynamic_cast<ossimImageHandler*>( (*factory)->createObject( (*i) ) );
+         if ( ih.valid() )
+         {
+            std::vector<ossimString> propertyList;
+            ih->getPropertyNames(propertyList);
+            out << "reader: " << ih->getClassName() << "\n";
+            
+            if ( propertyList.size() )
+            {
+               // Loop through image handler properties:
+               out << "properties:\n";
+               std::vector<ossimString>::const_iterator p = propertyList.begin();
+               while ( p != propertyList.end() )
+               {
+                  out << (*p) << "\n";
+                  ++p;
+               }
+            }
+         }
+         ++i;
+      }
+      ++factory;
+   }
+   out << std::endl;
+   return out;
 }
 
 ossimImageHandlerRegistry::ossimImageHandlerRegistry(const ossimImageHandlerRegistry& /* rhs */)

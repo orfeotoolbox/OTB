@@ -6,16 +6,17 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimNBandLutDataObject.cpp 17815 2010-08-03 13:23:14Z dburken $
+//  $Id: ossimNBandLutDataObject.cpp 19732 2011-06-06 22:24:54Z dburken $
 
-#include <iostream>
-#include <sstream>
 #include <ossim/base/ossimScalarTypeLut.h>
 #include <ossim/base/ossimNBandLutDataObject.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimNotifyContext.h>
+
+#include <iostream>
+#include <sstream>
 
 RTTI_DEF1(ossimNBandLutDataObject, "ossimNBandLutDataObject", ossimObject);
 
@@ -104,21 +105,29 @@ void ossimNBandLutDataObject::create(ossim_uint32 numberOfEntries,
    }
 }
 
-ossim_uint32 ossimNBandLutDataObject::findIndex(ossimNBandLutDataObject::LUT_ENTRY_TYPE* bandValues)const
+ossim_uint32 ossimNBandLutDataObject::findIndex(
+   ossimNBandLutDataObject::LUT_ENTRY_TYPE* bandValues)const
 {
-   ossim_float64 distance = 1.0/DBL_EPSILON; 
-   ossim_uint32  result   = 0;
+   return findIndex(bandValues, theNumberOfBands);
+}
 
-   if(theNumberOfEntries > 0)
+ossim_uint32 ossimNBandLutDataObject::findIndex(
+   ossimNBandLutDataObject::LUT_ENTRY_TYPE* bandValues, ossim_uint32 size)const
+{
+   ossim_uint32  result = 0;
+
+   if ( (theNumberOfEntries > 0) && (size <= theNumberOfBands) )
    {
+      ossim_float64 distance = 1.0/DBL_EPSILON; 
       ossim_uint32 idx = 0;
       ossim_uint32 bandIdx = 0;
       ossimNBandLutDataObject::LUT_ENTRY_TYPE* lutPtr = theLut;
+
       for(idx = 0; idx < theNumberOfEntries; ++idx,lutPtr+=theNumberOfBands)
       {
          ossim_float64 sumSquare = 0.0;
-
-         for(bandIdx = 0; bandIdx < theNumberOfBands; ++bandIdx)
+         
+         for(bandIdx = 0; bandIdx < size; ++bandIdx)
          {
             ossim_int64 delta = lutPtr[bandIdx] - bandValues[bandIdx];
             sumSquare += (delta*delta);
@@ -153,14 +162,14 @@ void ossimNBandLutDataObject::getMinMax(ossim_uint32 band,
    minValue = 0;
    maxValue = 0;
    ossim_uint32 idx = 0;
-   LUT_ENTRY_TYPE *bandPtr = theLut+theNumberOfBands;
+   LUT_ENTRY_TYPE *bandPtr = theLut+band;
    if((band < theNumberOfBands)&&
       (theNumberOfEntries > 0))
    {
       minValue = theLut[band];
       maxValue = theLut[band];
       
-      for(idx = 1; idx < theNumberOfEntries; ++idx,bandPtr+=theNumberOfBands)
+      for(idx = 0; idx < theNumberOfEntries; ++idx,bandPtr+=theNumberOfBands)
       {
          if((ossim_int32)idx != theNullPixelIndex)
          {
@@ -175,6 +184,25 @@ void ossimNBandLutDataObject::getMinMax(ossim_uint32 band,
          }
       }
    }
+}
+
+ossim_int32 ossimNBandLutDataObject::getFirstNullAlphaIndex() const
+{
+   ossim_int32 result = -1;
+   if ( (theNumberOfBands == 4) &&  (theNumberOfEntries > 0) )
+   {
+      ossim_uint32 idx = 0;
+      LUT_ENTRY_TYPE* bandPtr = theLut+3; // Index to the first alpha channel.
+      for ( idx = 0; idx < theNumberOfEntries; ++idx, bandPtr+=theNumberOfBands )
+      {
+         if ( *bandPtr == 0 )
+         {
+            result = *bandPtr;
+            break;
+         }
+      }
+   }
+   return result;
 }
 
 const ossimNBandLutDataObject& ossimNBandLutDataObject::operator =(const ossimNBandLutDataObject& lut)

@@ -109,7 +109,7 @@ extern int STORAGE_BYTE_ORDER;
  *A
  *    key     <input> == (id_triplet_type) id triplet key.
  *    fp      <input> == (FILE *) input file pointer.
- *    return <output> == (long int) size of the key.
+ *    return <output> == (ossim_int32) size of the key.
  *E
  *::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
  *
@@ -136,11 +136,11 @@ extern int STORAGE_BYTE_ORDER;
  *    This module should be ANSI C compatible.
  *E
  *************************************************************************/
-long int write_key( id_triplet_type key, FILE *fp )
+ossim_int32 write_key( id_triplet_type key, FILE *fp )
 {
-  long int size = 0 ;	/* to count size of key write */
+  ossim_int32 size = 0 ;	/* to count size of key write */
   unsigned char tint ;
-  short int tshort ;
+  ossim_int16 tshort ;
 
    /* Assume that any count value has been written before this */
    /* Only write one key in this subroutine, do not write more */
@@ -159,11 +159,11 @@ long int write_key( id_triplet_type key, FILE *fp )
    case 2:
      tshort = (short) key.id ;
      Write_Vpf_Short ( &tshort, fp, 1 ) ;
-     size += sizeof ( short int ) ;
+     size += sizeof ( ossim_int16 ) ;
      break;
    case 3:
      Write_Vpf_Int (&(key.id), fp, 1 ) ;
-     size += sizeof ( long int ) ;
+     size += sizeof ( ossim_int32 ) ;
      break;
    }
 
@@ -178,11 +178,11 @@ long int write_key( id_triplet_type key, FILE *fp )
    case 2:
      tshort = (short) key.tile ;
      Write_Vpf_Short ( &tshort, fp, 1 ) ;
-     size += sizeof ( short int ) ;
+     size += sizeof ( ossim_int16 ) ;
      break;
    case 3:
      Write_Vpf_Int (&(key.tile), fp, 1 ) ;
-     size += sizeof ( long int ) ;
+     size += sizeof ( ossim_int32 ) ;
      break;
    }
 
@@ -197,11 +197,11 @@ long int write_key( id_triplet_type key, FILE *fp )
    case 2:
      tshort = (short) key.exid ;
      Write_Vpf_Short ( &tshort, fp, 1 ) ;
-     size += sizeof ( short int ) ;
+     size += sizeof ( ossim_int16 ) ;
      break;
    case 3:
      Write_Vpf_Int (&(key.exid), fp, 1 ) ;
-     size += sizeof ( long int ) ;
+     size += sizeof ( ossim_int32 ) ;
      break;
    }
   return size ;
@@ -266,16 +266,16 @@ long int write_key( id_triplet_type key, FILE *fp )
  *    This module should be ANSI C compatible.
  *E
  *************************************************************************/
-long int write_next_row(row_type row, vpf_table_type * table )
+ossim_int32 write_next_row(row_type row, vpf_table_type * table )
 {
-   register long int i,
+   register ossim_int32 i,
 		     j;
    char            * tptr,
 		   * output ;
-   long int          recordsize = 0;
-   long int	     count;
+   ossim_int32          recordsize = 0;
+   ossim_int32	     count;
    id_triplet_type * keys;
-   unsigned long int pos_for_ndx,
+   ossim_uint32 pos_for_ndx,
 		     length;
    int               retn_val = 0;
    coordinate_type   dummycoord = {0.0,0.0};
@@ -297,7 +297,7 @@ long int write_next_row(row_type row, vpf_table_type * table )
 
      if ( table->header[i].count < 0 ) {
        Write_Vpf_Int ( &count, table->fp, 1 ) ;
-       recordsize += sizeof ( long int ) ;
+       recordsize += sizeof ( ossim_int32 ) ;
      }
 
      /* Now write out the data type */
@@ -326,12 +326,12 @@ long int write_next_row(row_type row, vpf_table_type * table )
 
      case 'I':
        Write_Vpf_Int (row[i].ptr, table->fp, count ) ;
-       recordsize += sizeof ( long int ) * count ;
+       recordsize += sizeof ( ossim_int32 ) * count ;
        break;
 
      case 'S':
        Write_Vpf_Short (row[i].ptr, table->fp, count ) ;
-       recordsize += sizeof ( short int ) * count ;
+       recordsize += sizeof ( ossim_int16 ) * count ;
        break;
 
      case 'F':
@@ -449,7 +449,7 @@ long int write_next_row(row_type row, vpf_table_type * table )
  *************************************************************************/
 row_type create_row( vpf_table_type table )
 {
-   long int i;
+   ossim_int32 i;
    row_type row;
 
    row = (row_type)vpfmalloc(table.nfields*sizeof(column_type));
@@ -481,7 +481,7 @@ row_type create_row( vpf_table_type table )
  *
  *   Parameters:
  *A
- *     field <input>  == (long int) column offset.
+ *     field <input>  == (ossim_int32) column offset.
  *     row   <inout> == (row_type) row containing element to be removed.
  *     table <inout> == (vpf_table_type) VPF table owning row.
  *E
@@ -493,7 +493,7 @@ row_type create_row( vpf_table_type table )
  *   JTB  10/91 removed call to exit();
  *E
  *************************************************************************/
-void nullify_table_element( long int            field,
+void nullify_table_element( ossim_int32            field,
 			    row_type       row,
 			    vpf_table_type table )
 {
@@ -527,12 +527,12 @@ void nullify_table_element( long int            field,
  *
  *   Parameters:
  *A
- *     field <input>  == (long int) column offset.
+ *     field <input>  == (ossim_int32) column offset.
  *     row   <in-out> == (row_type) row containing target field.
  *     table <in-out> == (vpf_table_type) VPF table owning row.
  *     value <in>     == (void *) source field element.
- *     count <in>     == (long int) number of items in value.
- *     put_table_element <output> == (long int)
+ *     count <in>     == (ossim_int32) number of items in value.
+ *     put_table_element <output> == (ossim_int32)
  *                                    0 --> element write succeeded
  *                                    1 --> unknown element type or
  *                                          invalid column offset
@@ -548,13 +548,13 @@ void nullify_table_element( long int            field,
  *             -1: unknown element type or invalid column (field) offset
  *E
  *************************************************************************/
-long int put_table_element( long int              field,
+ossim_int32 put_table_element( ossim_int32              field,
 		       row_type         row,
 		       vpf_table_type   table,
 		       void           * value,
-		       long int         count )
+		       ossim_int32         count )
 {
-   long int i, len, stat;
+   ossim_int32 i, len, stat;
    char *str;
 
    stat=0;
@@ -578,7 +578,7 @@ long int put_table_element( long int              field,
 
    switch ( table.header[field].type ) {
       case 'T':
-	len = (long int)max(count,table.header[field].count);
+	len = (ossim_int32)max(count,table.header[field].count);
 	str = (char *) vpfmalloc( len + 1 );
 	row[field].ptr = (char *) vpfmalloc ( len + 1 ) ;
 	strcpy( (char*)str, (char*)value );
@@ -595,13 +595,13 @@ long int put_table_element( long int              field,
 	break;
 
       case 'I' :
-	row[field].ptr = (long int *) vpfmalloc (count*sizeof(long int));
-	memcpy ( row[field].ptr, value, sizeof (long int) * count ) ;
+	row[field].ptr = (ossim_int32 *) vpfmalloc (count*sizeof(ossim_int32));
+	memcpy ( row[field].ptr, value, sizeof (ossim_int32) * count ) ;
 	break;
 
       case 'S' :
-	row[field].ptr = (short int *) vpfmalloc (count*sizeof(short int));
-	memcpy ( row[field].ptr, value, sizeof (short int) * count ) ;
+	row[field].ptr = (ossim_int16 *) vpfmalloc (count*sizeof(ossim_int16));
+	memcpy ( row[field].ptr, value, sizeof (ossim_int16) * count ) ;
 	break;
 
       case 'F':
@@ -695,9 +695,9 @@ long int put_table_element( long int              field,
 
 /* #ifdef UNIX */
 
-long int VpfWrite ( void *from, VpfDataType type, long int count, FILE *to )
+ossim_int32 VpfWrite ( void *from, VpfDataType type, ossim_int32 count, FILE *to )
 {
-  long int retval=0 , i ;
+  ossim_int32 retval=0 , i ;
 
   switch ( type ) {
   case VpfChar:
@@ -706,7 +706,7 @@ long int VpfWrite ( void *from, VpfDataType type, long int count, FILE *to )
   case VpfShort:
     {
       if (MACHINE_BYTE_ORDER != STORAGE_BYTE_ORDER) {
-	short int stemp ,
+	ossim_int16 stemp ,
 		*sptr = (short *) from ;
 	for ( i=0; i < count; i++, sptr++ ) {
 	   swap_two ( (char*)sptr, (char*)&stemp ) ;
@@ -720,14 +720,14 @@ long int VpfWrite ( void *from, VpfDataType type, long int count, FILE *to )
   case VpfInteger:
     {
       if (MACHINE_BYTE_ORDER != STORAGE_BYTE_ORDER) {
-	 long int itemp,
-	   *iptr = (long int *) from ;
+	 ossim_int32 itemp,
+	   *iptr = (ossim_int32 *) from ;
 	 for ( i=0; i < count; i++, iptr++ ) {
 	   swap_four ( (char*)iptr, (char*)&itemp ) ;
-	   retval = (long)fwrite ( &itemp, sizeof (long int), 1, to ) ;
+	   retval = (long)fwrite ( &itemp, sizeof (ossim_int32), 1, to ) ;
 	 }
       } else {
-	 retval = (long)fwrite ( from, sizeof (long int), count, to ) ;
+	 retval = (long)fwrite ( from, sizeof (ossim_int32), count, to ) ;
       }
     }
     break ;
@@ -741,7 +741,7 @@ long int VpfWrite ( void *from, VpfDataType type, long int count, FILE *to )
 	   retval = (long)fwrite ( &ftemp, sizeof (float), 1, to ) ;
 	 }
       } else {
-	 retval = (long)fwrite ( from, sizeof (long int), count, to ) ;
+	 retval = (long)fwrite ( from, sizeof (ossim_int32), count, to ) ;
       }
     }
     break ;

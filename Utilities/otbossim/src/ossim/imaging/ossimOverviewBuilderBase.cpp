@@ -7,7 +7,7 @@
 // Description:  Interface class for overview builders.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimOverviewBuilderBase.cpp 17932 2010-08-19 20:34:35Z dburken $
+// $Id: ossimOverviewBuilderBase.cpp 19724 2011-06-06 21:07:15Z dburken $
 
 #include <ossim/imaging/ossimOverviewBuilderBase.h>
 #include <ossim/base/ossimIpt.h>
@@ -20,17 +20,29 @@ RTTI_DEF3(ossimOverviewBuilderBase,
           ossimSource,
           ossimProcessInterface,
           ossimConnectableObjectListener)
+
+static const std::string SCAN_FLOAT_DATA_KW = "overview_builder.scan_for_min_max_null_if_float";
    
 ossimOverviewBuilderBase::ossimOverviewBuilderBase()
    : m_overviewStopDimension(0),
      m_histoMode(OSSIM_HISTO_MODE_UNKNOWN),
-     m_maskBuildFlag(false)
+     m_bitMaskSpec(),
+     m_imageHandler(0),
+     m_maskWriter(0),
+     m_maskFilter(0),
+     m_outputFile(ossimFilename::NIL),
+     m_scanForMinMax(false),
+     m_scanForMinMaxNull(false),
+     m_scanFloatData(false)
 {
-   m_overviewStopDimension = getDefaultStopDimension();
+   initializePreferenceSettings();
 }
 
 ossimOverviewBuilderBase::~ossimOverviewBuilderBase()
 {
+   m_imageHandler = 0;
+   m_maskWriter = 0;
+   m_maskFilter = 0;
 }
 
 bool ossimOverviewBuilderBase::setOutputWriter(ossimImageFileWriter* /* outputWriter */)
@@ -98,24 +110,65 @@ void ossimOverviewBuilderBase::setHistogramMode(ossimHistogramMode mode)
    m_histoMode = mode;
 }
 
-ossim_uint32 ossimOverviewBuilderBase::getDefaultStopDimension() const
+void ossimOverviewBuilderBase::setBitMaskSpec(const ossimKeywordlist& bit_mask_spec)
 {
-   ossim_uint32 result = 0;
-   
-     // Get the stop dimension from ossim preferences.
+   m_bitMaskSpec = bit_mask_spec;
+}
+
+void ossimOverviewBuilderBase::setScanForMinMax(bool flag)
+{
+   m_scanForMinMax  = flag;
+}
+
+bool ossimOverviewBuilderBase::getScanForMinMax() const
+{
+   return m_scanForMinMax;
+}
+
+void ossimOverviewBuilderBase::setScanForMinMaxNull(bool flag)
+{
+   m_scanForMinMaxNull = flag;
+}
+
+bool ossimOverviewBuilderBase::getScanForMinMaxNull() const
+{
+   return m_scanForMinMaxNull;
+}
+
+void ossimOverviewBuilderBase::initializePreferenceSettings()
+{
+   // Get the stop dimension from ossim preferences.
    const char* lookup = ossimPreferences::instance()->
       findPreference(ossimKeywordNames::OVERVIEW_STOP_DIMENSION_KW);
    if (lookup)
    {
-      result = ossimString(lookup).toUInt32();
+     m_overviewStopDimension = ossimString(lookup).toUInt32();
    }
 
-   if (result == 0)
+   if ( m_overviewStopDimension == 0 )
    {
       // Use the smallest default tile size.
       ossimIpt tileSize;
       ossim::defaultTileSize(tileSize);
-      result  = tileSize.x < tileSize.y ? tileSize.x : tileSize.y;
+      m_overviewStopDimension = tileSize.x < tileSize.y ? tileSize.x : tileSize.y;
    }
-   return result;
+
+   // Look for overview_builder.scan_for_min_max_null_if_float:
+   lookup = ossimPreferences::instance()->findPreference(SCAN_FLOAT_DATA_KW.c_str());
+   if ( lookup )
+   {
+      m_scanFloatData = ossimString(lookup).toBool();
+   }
+}
+
+void ossimOverviewBuilderBase::initializeScanOptions()
+{
+   if ( m_scanFloatData && m_imageHandler.valid())
+   {
+      ossimScalarType scalar = m_imageHandler->getOutputScalarType();
+      if ( ( scalar == OSSIM_FLOAT32 ) || ( scalar == OSSIM_FLOAT64 ) )
+      {
+         setScanForMinMaxNull(true);
+      }
+   }
 }

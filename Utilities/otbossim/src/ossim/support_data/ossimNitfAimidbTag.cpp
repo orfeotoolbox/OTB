@@ -34,9 +34,9 @@ ossimNitfAimidbTag::~ossimNitfAimidbTag()
 {
 }
 
-ossimString ossimNitfAimidbTag::getRegisterTagName() const
+std::string ossimNitfAimidbTag::getRegisterTagName() const
 {
-   return "AIMIDB";
+   return std::string("AIMIDB");
 }
 
 void ossimNitfAimidbTag::parseStream(std::istream& in)

@@ -86,13 +86,19 @@ public:
     *
     * Opens file and creates a simple chain with ossimImageHandler.
     *
+    * @param file File to open.
+
+    * @param openOverview If true image handler will attempt to open overview.
+    * Note that if you are planning on doing a rendered chain or want to go
+    * between res levels you should set this to true.  default = true
+    *
     * @return true on success, false on error.
     *
     * @note This will close previous chain if one was opened.
     */
-   bool open(const ossimFilename& file);
+   bool open(const ossimFilename& file, bool openOverview=true);
 
-    /**
+   /**
     * @brief open method that takes an ossimSrcRecord.
     *
     * Opens file and creates a simple chain with ossimImageHandler.
@@ -102,6 +108,9 @@ public:
     * @note This will close previous chain if one was opened.
     */
    bool open(const ossimSrcRecord& src);
+   
+   /** @return true if image handler is opened. */
+   bool isOpen() const;
 
    /** @brief close method to delete the image handler. */
    void close();
@@ -144,10 +153,17 @@ public:
 
    /**
     * @brief Adds an image handler for file.
+    * 
     * @param file File to open.
+    *
+    * @param openOverview If true image handler will attempt to open overview.
+    * Note that if you are planning on doing a rendered chain or want to go
+    * between res levels you should set this to true. default = true
+    *
     * @return true on success, false on error.
     */
-   bool addImageHandler(const ossimFilename& file);
+   bool addImageHandler(const ossimFilename& file,
+                        bool openOverview=true);
 
    /**
     * @brief Adds an image handler from src record.
@@ -186,7 +202,10 @@ public:
     */
    void addHistogramRemapper(const ossimSrcRecord& src);
 
-   /** @return A a new cache. */
+   /**
+    * @brief Adds a new cache to the current end of the chain.
+    * @return Pointer to cache.
+    */
    ossimRefPtr<ossimCacheTileSource> addCache();
 
    /** @brief Adds a resampler to the end of the chain. */ 

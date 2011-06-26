@@ -9,10 +9,10 @@
 // Base class for all map projections.
 // 
 //*******************************************************************
-//  $Id: ossimMapProjection.h 17815 2010-08-03 13:23:14Z dburken $
+//  $Id: ossimMapProjection.h 19386 2011-04-14 18:08:47Z dburken $
 
 #ifndef ossimMapProjection_HEADER
-#define ossimMapProjection_HEADER
+#define ossimMapProjection_HEADER 1
 
 #include <ossim/projection/ossimProjection.h>
 #include <ossim/base/ossimConstants.h>
@@ -125,7 +125,7 @@ public:
     * Returns decimal degrees per pixel as an ossimDpt with
     * "x" representing longitude and "y" representing latitude.
     */
-   virtual ossimDpt getDecimalDegreesPerPixel() const;
+   virtual const ossimDpt& getDecimalDegreesPerPixel() const;
    
    virtual const ossimDpt&   getUlEastingNorthing() const;
    virtual const ossimGpt&   getUlGpt() const;

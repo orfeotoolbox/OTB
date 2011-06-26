@@ -50,6 +50,8 @@ public:
     */
    virtual std::ostream& print(std::ostream& out) const;
 
+   virtual bool getKeywordlist(ossimKeywordlist& kwl)const;
+   
 private:
    ossimRefPtr<ossimNitfFile> m_nitfFile;
 };

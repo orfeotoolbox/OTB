@@ -8,7 +8,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfProjectionParameterTag.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
+// $Id: ossimNitfProjectionParameterTag.cpp 19682 2011-05-31 14:21:20Z dburken $
 #include <ossim/support_data/ossimNitfProjectionParameterTag.h>
 #include <sstream>
 #include <iomanip>
@@ -23,9 +23,9 @@ ossimNitfProjectionParameterTag::~ossimNitfProjectionParameterTag()
 {
 }
 
-ossimString ossimNitfProjectionParameterTag::getRegisterTagName()const
+std::string ossimNitfProjectionParameterTag::getRegisterTagName()const
 {
-   return "PRJPSB";
+   return std::string("PRJPSB");
 }
 
 void ossimNitfProjectionParameterTag::parseStream(std::istream& in)

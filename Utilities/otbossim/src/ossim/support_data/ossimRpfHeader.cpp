@@ -9,7 +9,7 @@
 // Description: This class extends the stl's string class.
 //
 //********************************************************************
-// $Id: ossimRpfHeader.cpp 17004 2010-04-13 00:49:30Z gpotts $
+// $Id: ossimRpfHeader.cpp 19682 2011-05-31 14:21:20Z dburken $
 
 #include <cstring>
 #include <iostream>
@@ -132,9 +132,9 @@ ossimRpfHeader::~ossimRpfHeader()
    }
 }
 
-ossimString ossimRpfHeader::getRegisterTagName()const
+std::string ossimRpfHeader::getRegisterTagName()const
 {
-   return ossimString("RPFHDR");
+   return std::string("RPFHDR");
 }
 
 void ossimRpfHeader::parseStream(std::istream& in)

@@ -13,7 +13,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimImageViewProjectionTransform.h 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimImageViewProjectionTransform.h 18424 2010-11-16 16:06:04Z gpotts $
 
 #ifndef ossimImageViewProjectionTransform_HEADER
 #define ossimImageViewProjectionTransform_HEADER
@@ -34,17 +34,17 @@ public:
    virtual ~ossimImageViewProjectionTransform();
 
    //! Satisfies base class pure virtual. Returns TRUE if both input and output geoms exist.
-   virtual bool isValid() const { return (m_ImageGeometry.valid() && m_ViewGeometry.valid()); }
+   virtual bool isValid() const { return (m_imageGeometry.valid() && m_viewGeometry.valid()); }
 
    //! Returns TRUE if both input and output geometries are identical. Presently implemented as
    //! limited compare of geometry pointers
-   virtual bool isIdentity() const { return (m_ImageGeometry == m_ViewGeometry); }
+   virtual bool isIdentity() const { return (m_imageGeometry == m_viewGeometry); }
 
    //! Assigns the geometry to use for output view. This object does NOT own the geometry.
-   void setViewGeometry(ossimImageGeometry* g) { m_ViewGeometry = g; }   
+   void setViewGeometry(ossimImageGeometry* g) { m_viewGeometry = g; }   
 
    //! Assigns the geometry to use for input image. This object does NOT own the geometry.
-   void setImageGeometry(ossimImageGeometry* g) { m_ImageGeometry = g; }  
+   void setImageGeometry(ossimImageGeometry* g) { m_imageGeometry = g; }  
 
    //! Workhorse of the object. Converts image-space to view-space.
    virtual void imageToView(const ossimDpt& imagePoint, ossimDpt& viewPoint) const;
@@ -55,16 +55,16 @@ public:
    //! Dumps contents to stream
    virtual std::ostream& print(std::ostream& out) const;
    
-   ossimImageGeometry* getImageGeometry()  { return m_ImageGeometry.get(); }
-   ossimImageGeometry* getViewGeometry()   { return m_ViewGeometry.get(); }
-   const ossimImageGeometry* getImageGeometry()const  { return m_ImageGeometry.get(); }
-   const ossimImageGeometry* getViewGeometry()const   { return m_ViewGeometry.get(); }
+   ossimImageGeometry* getImageGeometry()  { return m_imageGeometry.get(); }
+   ossimImageGeometry* getViewGeometry()   { return m_viewGeometry.get(); }
+   const ossimImageGeometry* getImageGeometry()const  { return m_imageGeometry.get(); }
+   const ossimImageGeometry* getViewGeometry()const   { return m_viewGeometry.get(); }
    
    //! OLK: Not sure where this is used, but needed to satisfy ossimViewInterface base class.
    //! The ownership flag is ignored.
    virtual bool setView(ossimObject* baseObject);
-   virtual       ossimObject* getView()       { return m_ViewGeometry.get(); }
-   virtual const ossimObject* getView() const { return m_ViewGeometry.get(); }
+   virtual       ossimObject* getView()       { return m_viewGeometry.get(); }
+   virtual const ossimObject* getView() const { return m_viewGeometry.get(); }
 
    //! Returns the GSD of input image.
    virtual ossimDpt getInputMetersPerPixel()const;
@@ -82,8 +82,8 @@ public:
    virtual bool saveState(ossimKeywordlist& kwl, const char* prefix = 0)const;
 
 protected:
-   ossimRefPtr<ossimImageGeometry> m_ImageGeometry;
-   ossimRefPtr<ossimImageGeometry> m_ViewGeometry;
+   ossimRefPtr<ossimImageGeometry> m_imageGeometry;
+   ossimRefPtr<ossimImageGeometry> m_viewGeometry;
    
 TYPE_DATA
 };

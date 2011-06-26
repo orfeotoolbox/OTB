@@ -7,7 +7,7 @@
 // Description: This class provides manipulation of filenames.
 //
 //*************************************************************************
-// $Id: ossimFilename.cpp 16939 2010-03-29 12:41:35Z dburken $
+// $Id: ossimFilename.cpp 19682 2011-05-31 14:21:20Z dburken $
 
 #include <ossim/ossimConfig.h>  /* to pick up platform defines */
 
@@ -248,7 +248,7 @@ bool ossimFilename::operator == (const char* rhs)const
 
 void ossimFilename::convertBackToForwardSlashes()
 {
-   ossimFilename::iterator currentChar = this->begin();
+   std::string::iterator currentChar = this->begin();
 
    while(currentChar != this->end())
    {
@@ -262,7 +262,7 @@ void ossimFilename::convertBackToForwardSlashes()
 
 void ossimFilename::convertForwardToBackSlashes()
 {
-   ossimFilename::iterator currentChar = this->begin();
+   std::string::iterator currentChar = this->begin();
 
    while(currentChar != this->end())
    {
@@ -669,13 +669,13 @@ bool ossimFilename::isExecutable() const
 ossimString ossimFilename::ext() const
 {
    ossimFilename file = *this;
-   size_type pos = file.rfind('.');
-   if (pos == npos)
+   std::string::size_type pos = file.m_str.rfind('.');
+   if (pos == std::string::npos)
    {
       return ossimFilename::NIL;
    }
 
-   return ossimFilename(file.substr(pos+1));
+   return ossimFilename(file.m_str.substr(pos+1));
 }
 
 ossimFilename ossimFilename::file() const
@@ -684,11 +684,11 @@ ossimFilename ossimFilename::file() const
 
    //file.convertBackToForwardSlashes();
 
-   size_type pos = file.rfind(thePathSeparator);
-   if (pos == npos)
+   std::string::size_type pos = file.m_str.rfind(thePathSeparator);
+   if (pos == std::string::npos)
       return *this;
    else
-      return ossimFilename(file.substr(pos+1));
+      return ossimFilename(file.m_str.substr(pos+1));
 }
 
 ossimFilename ossimFilename::path() const
@@ -697,17 +697,17 @@ ossimFilename ossimFilename::path() const
    //file.convertBackToForwardSlashes();
 
    // finds the last occurrence of the given string; in this case '/';
-   size_type pos = file.rfind(thePathSeparator);
+   std::string::size_type pos = file.m_str.rfind(thePathSeparator);
 
    if (pos == 0)
       return ossimFilename(ossimFilename(thePathSeparator));
-   if (pos == npos)
+   if (pos == std::string::npos)
    {
       // We got to the end of the file and did not find a path separator.
       return ossimFilename::NIL;
    }
 
-   return ossimFilename(file.substr(0, pos));
+   return ossimFilename(file.m_str.substr(0, pos));
 }
 
 ossimFilename ossimFilename::drive()const
@@ -737,12 +737,12 @@ ossimFilename ossimFilename::fileNoExtension()const
    ossimFilename f = *this;
    //f.convertBackToForwardSlashes();
 
-   size_type dot_pos   = f.rfind('.');
-   size_type slash_pos = f.rfind(thePathSeparator);
+   std::string::size_type dot_pos   = f.m_str.rfind('.');
+   std::string::size_type slash_pos = f.m_str.rfind(thePathSeparator);
 
-   if(dot_pos == npos)
+   if(dot_pos == std::string::npos)
    {
-      if(slash_pos == npos)
+      if(slash_pos == std::string::npos)
       {
          return *this;
       }
@@ -752,7 +752,7 @@ ossimFilename ossimFilename::fileNoExtension()const
                               this->end());
       }
    }
-   else if(slash_pos == npos)
+   else if(slash_pos == std::string::npos)
    {
       return ossimFilename(this->begin(), this->begin()+dot_pos);
    }
@@ -1255,9 +1255,9 @@ bool ossimFilename::needsExpansion() const
       if (result == false)
       {
          // Check for '$'
-         size_type pos = find('$', 0);
+         std::string::size_type pos = m_str.find('$', 0);
          {
-            if (pos != npos)
+            if (pos != std::string::npos)
             {
                // found '$'
                result = true;

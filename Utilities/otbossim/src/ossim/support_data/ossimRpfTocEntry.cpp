@@ -7,11 +7,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimRpfTocEntry.cpp 18052 2010-09-06 14:33:08Z dburken $
-
-#include <istream>
-#include <ostream>
-#include <iterator>
+// $Id: ossimRpfTocEntry.cpp 18362 2010-11-01 15:20:47Z dburken $
 
 #include <ossim/support_data/ossimRpfTocEntry.h>
 #include <ossim/base/ossimCommon.h>
@@ -21,6 +17,10 @@
 #include <ossim/projection/ossimAzimEquDistProjection.h>
 #include <ossim/projection/ossimMapProjection.h>
 #include <ossim/support_data/ossimRpfFrameEntry.h>
+
+#include <istream>
+#include <ostream>
+#include <iterator>
 
 std::ostream& operator <<(std::ostream& out,
                           const ossimRpfTocEntry& data)
@@ -190,21 +190,25 @@ ossimRefPtr<ossimImageGeometry> ossimRpfTocEntry::getImageGeometry() const
 
    ossimGpt ul(boundaryInfo.getCoverage().getUlLat(),
                boundaryInfo.getCoverage().getUlLon());
-   
-   ossim_uint32 lines = getNumberOfLines();
-   ossim_uint32 samps = getNumberOfSamples();
-   
-   // Pixel scale:
-   ossimDpt scale;
-   getScale(scale);
+
+   ossim_float64 lines = getNumberOfLines();
+   ossim_float64 samps = getNumberOfSamples();
+
+   // Decimal degrees per pixel:
+   ossimDpt ddpp;
+   getDecimalDegreesPerPixel(ddpp);
    
    // Tie point - Shifted to point:
-   ossimGpt tie( (ul.latd() - (scale.y/2.0)), (ul.lond() + (scale.x/2.0)), 0.0 );
+   ossimGpt tie( (ul.latd() - (ddpp.y/2.0)), (ul.lond() + (ddpp.x/2.0)), 0.0 );
    
    // Origin - Use the center of the image aligning to tie point.
    // ossimGpt origin((ul.latd()+lr.latd())*.5, (ul.lond()+lr.lond())*.5, 0.0);
-   ossimGpt origin( tie.latd() - ((lines/2)*scale.y),
-                    tie.lond() + ((samps/2)*scale.x) );
+   ossimGpt origin( tie.latd() - (std::floor(lines/2.0) * ddpp.y),
+                    tie.lond() + (std::floor(samps/2.0) * ddpp.x) );
+
+#if 0 /* Please leave for debug. (drb) */
+   std::cout << "boundaryInfo:\n" << boundaryInfo << std::endl;
+#endif
 
    int z = boundaryInfo.getZone();
    
@@ -226,7 +230,7 @@ ossimRefPtr<ossimImageGeometry> ossimRpfTocEntry::getImageGeometry() const
    mapProj->setOrigin(origin);
    
    // Set the scale:
-   mapProj->setDecimalDegreesPerPixel(scale);
+   mapProj->setDecimalDegreesPerPixel(ddpp);
 
    // Set the tie:
    mapProj->setUlTiePoints(tie);
@@ -237,10 +241,27 @@ ossimRefPtr<ossimImageGeometry> ossimRpfTocEntry::getImageGeometry() const
    return geom;
 }
 
-void ossimRpfTocEntry::getScale(ossimDpt& scale) const
+void ossimRpfTocEntry::getDecimalDegreesPerPixel(ossimDpt& scale) const
 {
+#if 1
    scale.x = theBoundaryInformation.getCoverage().getHorizontalInterval();
    scale.y = theBoundaryInformation.getCoverage().getVerticalInterval();
+#else
+   ossim_float64 ulLat = theBoundaryInformation.getCoverage().getUlLat();
+   ossim_float64 ulLon = theBoundaryInformation.getCoverage().getUlLon();
+   ossim_float64 urLon = theBoundaryInformation.getCoverage().getUrLon();
+   ossim_float64 llLat = theBoundaryInformation.getCoverage().getLrLat();
+   ossim_float64 lines = getNumberOfLines();
+   ossim_float64 samps = getNumberOfSamples();
+   scale.x = (urLon - ulLon) / samps;
+   scale.y = (ulLat - llLat) / lines;
+#endif
+}
+
+void ossimRpfTocEntry::getMetersPerPixel(ossimDpt& scale) const
+{
+   scale.x = theBoundaryInformation.getCoverage().getVerticalResolution();
+   scale.y = theBoundaryInformation.getCoverage().getHorizontalResolution();
 }
 
 void ossimRpfTocEntry::allocateFrameEntryArray()

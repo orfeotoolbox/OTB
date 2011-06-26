@@ -6,19 +6,19 @@
 // Description: This class provides manipulation of filenames.
 //
 //*************************************************************************
-// $Id: ossimXmlString.cpp 9963 2006-11-28 21:11:01Z gpotts $
+// $Id: ossimXmlString.cpp 19682 2011-05-31 14:21:20Z dburken $
 #include <ossim/base/ossimXmlString.h>
 
 const ossimXmlString& ossimXmlString::assign(const ossimString& s)
 {
    ossimString result = s;
    
-   size_type pos = 0;
+   std::string::size_type pos = 0;
 
    pos = result.find("&");
    // do ampersand first
    //
-   while(pos != npos)
+   while(pos != std::string::npos)
    {
       ossimString s1(result.begin() + pos,
                      result.begin()+pos+5);

@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfLocalGeographicTag.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimNitfLocalGeographicTag.h 19682 2011-05-31 14:21:20Z dburken $
 #ifndef ossimNitfLocalGeographicTag_HEADER
 #define ossimNitfLocalGeographicTag_HEADER
 #include <ossim/support_data/ossimNitfRegisteredTag.h>
@@ -19,7 +19,7 @@ class OSSIM_DLL ossimNitfLocalGeographicTag : public ossimNitfRegisteredTag
 public:
    ossimNitfLocalGeographicTag();
    virtual ~ossimNitfLocalGeographicTag();
-   virtual ossimString getRegisterTagName()const;
+   virtual std::string getRegisterTagName()const;
    virtual void parseStream(std::istream& in);
    virtual void writeStream(std::ostream& out);
    virtual ossim_uint32 getSizeInBytes()const;

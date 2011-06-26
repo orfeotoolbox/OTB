@@ -9,10 +9,7 @@
 // Description: Rpf support class
 // 
 //********************************************************************
-// $Id: ossimRpfToc.cpp 18044 2010-09-06 14:20:52Z dburken $
-
-#include <iostream>
-#include <fstream>
+// $Id: ossimRpfToc.cpp 19682 2011-05-31 14:21:20Z dburken $
 
 #include <ossim/support_data/ossimRpfToc.h>
 #include <ossim/base/ossimErrorCodes.h>
@@ -32,6 +29,8 @@
 #include <ossim/support_data/ossimRpfPathnameRecord.h>
 #include <ossim/support_data/ossimNitfFile.h>
 #include <ossim/base/ossimTrace.h>
+#include <iostream>
+#include <fstream>
 
 static ossimTrace traceDebug("ossimRpfToc:debug");
 
@@ -190,7 +189,7 @@ void ossimRpfToc::createTocAndCopyFrames( const ossimFilename& dotRpfFile,
 
    // Open the dot rpf file.
    std::ifstream* dotRpfStr = new std::ifstream;
-   dotRpfStr->open(dotRpfFile, ios_base::in);
+   dotRpfStr->open(dotRpfFile.c_str(), ios_base::in);
    if ( !dotRpfStr->good() )
    {
       delete dotRpfStr;
@@ -644,7 +643,7 @@ std::ostream& ossimRpfToc::print(std::ostream& out,
             if ( (scale.contains("OVERVIEW")) == false ||
                  printOverviews )
             {
-               std::string entryPrefix = prefix;
+               ossimString entryPrefix = prefix;
                entryPrefix += "image";
                entryPrefix += ossimString::toString(prefixIndex);
                entryPrefix += ".";

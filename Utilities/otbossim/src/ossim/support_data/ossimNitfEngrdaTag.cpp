@@ -35,9 +35,9 @@ ossimNitfEngrdaTag::~ossimNitfEngrdaTag()
 {
 }
 
-ossimString ossimNitfEngrdaTag::getRegisterTagName() const
+std::string ossimNitfEngrdaTag::getRegisterTagName() const
 {
-   return "ENGRDA";
+   return std::string("ENGRDA");
 }
 
 void ossimNitfEngrdaTag::parseStream(std::istream& in)

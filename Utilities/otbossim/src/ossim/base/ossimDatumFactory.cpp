@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
 // License:  See top level LICENSE.txt file.
 //
@@ -9,11 +8,7 @@
 //
 // This holds the class definition of DatumFactory.
 //*******************************************************************
-//  $Id: ossimDatumFactory.cpp 17815 2010-08-03 13:23:14Z dburken $
-
-
-#include <cstring> /* for strlen */
-#include <utility> /* for std::make_pair */
+//  $Id: ossimDatumFactory.cpp 19682 2011-05-31 14:21:20Z dburken $
 
 #include <ossim/base/ossimDatumFactory.h>
 #include <ossim/base/ossimEllipsoidFactory.h>
@@ -29,6 +24,9 @@
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimPreferences.h>
 #include "ossimDatumFactory.inc"
+
+#include <cstring> /* for strlen */
+#include <utility> /* for std::make_pair */
 
 ossimDatumFactory* ossimDatumFactory::theInstance = 0;
 
@@ -61,7 +59,7 @@ const ossimDatum* ossimDatumFactory::create(const ossimString &code)const
 {
    if ( code.size() )
    {
-      std::map<ossimString, const ossimDatum*>::const_iterator datum = theDatumTable.find(code);
+      std::map<std::string, const ossimDatum*>::const_iterator datum = theDatumTable.find(code);
       
       if(datum != theDatumTable.end())
       {
@@ -107,12 +105,12 @@ const ossimDatum* ossimDatumFactory::create(const ossimDatum* aDatum)const
 
 std::vector<ossimString> ossimDatumFactory::getList()const
 {
-   std::map<ossimString, const ossimDatum*>::const_iterator datum = theDatumTable.begin();
+   std::map<std::string, const ossimDatum*>::const_iterator datum = theDatumTable.begin();
    std::vector<ossimString> result;
 
    while(datum != theDatumTable.end())
    {
-      result.push_back((*datum).first);
+      result.push_back(ossimString((*datum).first) );
       ++datum;
    }
    return result;
@@ -120,25 +118,24 @@ std::vector<ossimString> ossimDatumFactory::getList()const
 
 void ossimDatumFactory::getList(std::vector<ossimString>& list) const
 {
-   std::map<ossimString, const ossimDatum*>::const_iterator datum =
+   std::map<std::string, const ossimDatum*>::const_iterator datum =
       theDatumTable.begin();
 
    while(datum != theDatumTable.end())
    {
-      list.push_back((*datum).first);
+      list.push_back( ossimString((*datum).first) );
       ++datum;
    }
 }
 
 void ossimDatumFactory::deleteAll()
 {   
-   std::map<ossimString, const ossimDatum*>::iterator datum;
+   std::map<std::string, const ossimDatum*>::iterator datum;
 
    datum = theDatumTable.begin();
    while(datum != theDatumTable.end())
    {
       delete ((*datum).second);
-
       ++datum;
    }
 
@@ -149,16 +146,16 @@ void ossimDatumFactory::deleteAll()
 void ossimDatumFactory::initializeDefaults()
 {
    //make the standards
-   theDatumTable.insert(make_pair(ossimString(WGE), new ossimWgs84Datum));
-   theDatumTable.insert(make_pair(ossimString(WGD), new ossimWgs72Datum));
+   theDatumTable.insert(std::make_pair(WGE.string(), new ossimWgs84Datum));
+   theDatumTable.insert(std::make_pair(WGD.string(), new ossimWgs72Datum));
 
    ossim_uint32 idx = 0;     
    while( std::strlen(threeParamDatum[idx].theCode) )
    {
-      if( (threeParamDatum[idx].theCode != ossimString(WGE)) &&
-         (threeParamDatum[idx].theCode != ossimString(WGD)) )
+      if( (threeParamDatum[idx].theCode != WGE) &&
+          (threeParamDatum[idx].theCode != WGD) )
       {
-         theDatumTable.insert(std::make_pair(threeParamDatum[idx].theCode, 
+         theDatumTable.insert(std::make_pair(std::string(threeParamDatum[idx].theCode), 
             new ossimThreeParamDatum(threeParamDatum[idx].theCode, 
             threeParamDatum[idx].theName,
             ossimEllipsoidFactory::instance()->create(ossimString(threeParamDatum[idx].theEllipsoidCode)),
@@ -179,7 +176,7 @@ void ossimDatumFactory::initializeDefaults()
    idx = 0;
    while( std::strlen(sevenParamDatum[idx].theCode) )
    {
-      theDatumTable.insert(std::make_pair(sevenParamDatum[idx].theCode, 
+      theDatumTable.insert(std::make_pair(std::string(sevenParamDatum[idx].theCode), 
          new ossimSevenParamDatum(sevenParamDatum[idx].theCode, 
          sevenParamDatum[idx].theName,
          ossimEllipsoidFactory::instance()->create(ossimString(sevenParamDatum[idx].theEllipsoidCode)),
@@ -215,8 +212,8 @@ void ossimDatumFactory::initializeDefaults()
 
       if (fileTest1.exists() && fileTest2.exists())
       {
-         theDatumTable.insert(std::make_pair(ossimString("NAS"), new ossimNadconNasDatum(file)));
-         theDatumTable.insert(std::make_pair(ossimString("NAR"), new ossimNadconNarDatum(file)));
+         theDatumTable.insert(std::make_pair(std::string("NAS"), new ossimNadconNasDatum(file)));
+         theDatumTable.insert(std::make_pair(std::string("NAR"), new ossimNadconNarDatum(file)));
       }
    }
 }
@@ -268,7 +265,7 @@ void ossimDatumFactory::writeCStructure(const ossimFilename& /*file*/)
    out << "#define NUMBER_OF_SEVEN_PARAM_DATUMS " << 2 << std::endl;
    if(out)
    {
-      std::map<ossimString, const ossimDatum*>::iterator datum;
+      std::map<std::string, const ossimDatum*>::iterator datum;
       out << "static ossimThreeParamDatumType threeParamDatum[] = {\n";
       datum = theDatumTable.begin();
       ossim_uint32 datumCount = 0;

@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimSharedPluginRegistry.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
+// $Id: ossimSharedPluginRegistry.cpp 18967 2011-02-25 19:40:48Z gpotts $
 #include <algorithm>
 #include <iterator>
 #include <ossim/plugin/ossimSharedPluginRegistry.h>
@@ -37,7 +37,7 @@ ossimSharedPluginRegistry* ossimSharedPluginRegistry::instance()
    return &sharedInstance;//theInstance;
 }
 
-bool ossimSharedPluginRegistry::registerPlugin(const ossimFilename& filename, bool insertFrontFlag)
+bool ossimSharedPluginRegistry::registerPlugin(const ossimFilename& filename, const ossimString& options)//, bool insertFrontFlag)
 {
    bool result = false;
    if(!getPlugin(filename))
@@ -45,17 +45,18 @@ bool ossimSharedPluginRegistry::registerPlugin(const ossimFilename& filename, bo
       ossimPluginLibrary *lib =new ossimPluginLibrary;
       if(lib->load(filename))
       {
+         lib->setOptions(options);
          if(lib->getSymbol("ossimSharedLibraryInitialize"))
          {
             lib->initialize();
-            if(!insertFrontFlag)
-            {
+//            if(!insertFrontFlag)
+//            {
                theLibraryList.push_back(lib);
-            }
-            else
-            {
-               theLibraryList.insert(theLibraryList.begin(), lib);
-            }
+//            }
+//            else
+//            {
+//               theLibraryList.insert(theLibraryList.begin(), lib);
+ //           }
             result = true;
          }
          else

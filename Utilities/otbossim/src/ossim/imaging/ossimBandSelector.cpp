@@ -10,7 +10,7 @@
 // Contains class declaration for ossimBandSelector.
 // 
 //*******************************************************************
-//  $Id: ossimBandSelector.cpp 16488 2010-02-02 22:33:41Z gpotts $
+//  $Id: ossimBandSelector.cpp 19715 2011-06-03 17:24:30Z gpotts $
 
 #include <iostream>
 #include <algorithm>
@@ -56,7 +56,7 @@ ossimRefPtr<ossimImageData> ossimBandSelector::getTile(
    ossimRefPtr<ossimImageData> t = theInputConnection->getTile(tileRect,
                                                                resLevel);
 
-   if (!theEnableFlag)
+   if (!isSourceEnabled())
    {
       return t;  // This tile source bypassed, return the input tile source.
    }
@@ -272,6 +272,14 @@ bool ossimBandSelector::saveState(ossimKeywordlist& kwl,
            static_cast<int>(theOutputBandList.size()),
            true);
    
+   ossimString bandsString;
+   ossim::toSimpleStringList(bandsString,
+                             theOutputBandList);
+   kwl.add(prefix,
+           ossimKeywordNames::BANDS_KW,
+           bandsString,
+           true);
+/*   
    for(ossim_uint32 counter = 0; counter < theOutputBandList.size();counter++)
    {
       temp  = ossimKeywordNames::BAND_KW;
@@ -281,7 +289,7 @@ bool ossimBandSelector::saveState(ossimKeywordlist& kwl,
               temp.c_str(),
               ossimString::toString(theOutputBandList[counter]+1).c_str());
    }
-   
+*/   
    return ossimImageSourceFilter::saveState(kwl, prefix);
 }
 
@@ -294,28 +302,36 @@ bool ossimBandSelector::loadState(const ossimKeywordlist& kwl,
    theOutputBandList.clear();
    ossimString copyPrefix = prefix;
    
-   
-   ossimString regExpression =  ossimString("^(") + copyPrefix + "band[0-9]+)";
-   
-   vector<ossimString> keys = kwl.getSubstringKeyList( regExpression );
-   long numberOfBands = (long)keys.size();
-   ossim_uint32 offset = (ossim_uint32)(copyPrefix+"band").size();
-   std::vector<int>::size_type idx = 0;
-   std::vector<int> numberList(numberOfBands);
-   for(idx = 0; idx < keys.size();++idx)
+   ossimString bands = kwl.find(prefix, ossimKeywordNames::BANDS_KW);
+   if(!bands.empty())
    {
-      ossimString numberStr(keys[idx].begin() + offset,
-                            keys[idx].end());
-      numberList[idx] = numberStr.toInt();
+      ossim::toSimpleVector(theOutputBandList, bands);
    }
-   std::sort(numberList.begin(), numberList.end());
-   for(idx=0;idx < numberList.size();++idx)
+   else 
    {
-      const char* bandValue =
+      ossimString regExpression =  ossimString("^(") + copyPrefix + "band[0-9]+)";
+      
+      vector<ossimString> keys = kwl.getSubstringKeyList( regExpression );
+      long numberOfBands = (long)keys.size();
+      ossim_uint32 offset = (ossim_uint32)(copyPrefix+"band").size();
+      std::vector<int>::size_type idx = 0;
+      std::vector<int> numberList(numberOfBands);
+      for(idx = 0; idx < keys.size();++idx)
+      {
+         ossimString numberStr(keys[idx].begin() + offset,
+                               keys[idx].end());
+         numberList[idx] = numberStr.toInt();
+      }
+      std::sort(numberList.begin(), numberList.end());
+      for(idx=0;idx < numberList.size();++idx)
+      {
+         const char* bandValue =
          kwl.find(copyPrefix,
                   ("band"+ossimString::toString(numberList[idx])).c_str());
-      theOutputBandList.push_back( ossimString(bandValue).toLong()-1);
+         theOutputBandList.push_back( ossimString(bandValue).toLong()-1);
+      }
    }
+
    initialize();
    
    return true;
@@ -375,7 +391,7 @@ bool ossimBandSelector::outputBandsWithinInputRange() const
          {
             ossimNotify(ossimNotifyLevel_WARN)
                << "ossimBandSelector::outputBandsWithinInputRange() ERROR:"
-               << "Output band great than highest input band. "
+               << "Output band greater than highest input band. "
                << theOutputBandList[i] << " > " << HIGHEST_BAND << "."
                << std::endl;
             return false;
@@ -441,6 +457,14 @@ void ossimBandSelector::setProperty(ossimRefPtr<ossimProperty> property)
      }
      setOutputBandList( int_vec );
    }
+   else if(property->getName() == "bands")
+   {
+      std::vector<ossim_uint32> selection;
+      if(ossim::toSimpleVector(selection, property->valueToString()))
+      {
+         theOutputBandList = selection;
+      }
+   }
    else
    {
       ossimImageSourceFilter::setProperty(property);
@@ -474,13 +498,25 @@ ossimRefPtr<ossimProperty> ossimBandSelector::getProperty(const ossimString& nam
       
       return stringProp;
    }
-
+   else if(name == "bands")
+   {
+      ossimString bandsString;
+      ossim::toSimpleStringList(bandsString,
+                                theOutputBandList);
+      ossimStringProperty* stringProp = new ossimStringProperty(name, bandsString);
+      
+      stringProp->clearChangeType();
+      stringProp->setReadOnlyFlag(false);
+      stringProp->setCacheRefreshBit();
+      
+      return stringProp;
+   }
    return ossimImageSourceFilter::getProperty(name);
 }
 
 void ossimBandSelector::getPropertyNames(std::vector<ossimString>& propertyNames)const
 {
    ossimImageSourceFilter::getPropertyNames(propertyNames);
-   propertyNames.push_back("bandSelection");
+   propertyNames.push_back("bands");
 }
 
