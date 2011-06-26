@@ -104,6 +104,8 @@ IF(NOT OTB_DISABLE_UTILITIES_COMPILATION)
   ${ossim_parallel_SRCS}
   ${ossim_elevation_SRCS})
 
+  SET(OSSIM_LIB otbossim)
+
   #Apparently not supported by opensolaris at least
 #  SET_TARGET_PROPERTIES(otbossim
 #    PROPERTIES

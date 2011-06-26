@@ -130,6 +130,7 @@ INCLUDE(ImportBoost)
 INCLUDE(ImportMapnik) # depends on ImportBoost
 INCLUDE(ImportGetText)
 INCLUDE(ImportOpenThreads)
+INCLUDE(ImportOssim)
 
 #-----------------------------------------------------------------------------
 # Installation vars.

@@ -57,9 +57,6 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_BINARY_DIR}/Code/Visualization
   ${OTB_MSINTTYPES_INCLUDE_DIR_BUILDTREE}
   ${OTB_SOURCE_DIR}/Utilities/otbsvm
-  ${OTB_SOURCE_DIR}/Utilities/otbossim/include
-  ${OTB_SOURCE_DIR}/Utilities/otbossim/include/ossim
-  ${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim
   ${OTB_SOURCE_DIR}/Utilities/otbossimplugins
   ${OTB_SOURCE_DIR}/Utilities/otbossimplugins/ossim
   ${OTB_SOURCE_DIR}/Utilities/InsightJournal
@@ -86,6 +83,16 @@ ELSE(NOT OTB_USE_EXTERNAL_BOOST)
   SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
     ${Boost_INCLUDE_DIR})
 ENDIF(NOT OTB_USE_EXTERNAL_BOOST)
+
+IF(NOT OTB_USE_EXTERNAL_OSSIM)
+  SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
+  ${OTB_SOURCE_DIR}/Utilities/otbossim/include
+  ${OTB_SOURCE_DIR}/Utilities/otbossim/include/ossim
+  ${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim)
+ELSE(NOT OTB_USE_EXTERNAL_OSSIM)
+  SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
+    ${OSSIM_INCLUDE_DIR})
+ENDIF(NOT OTB_USE_EXTERNAL_OSSIM)
 
 IF(OTB_COMPILE_JPEG2000)
   SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
@@ -325,6 +332,7 @@ SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
   Utilities/ITK
   ${OTB_MSINTTYPES_INCLUDE_RELATIVE_DIR}
   Utilities/otbsvm
+  #TODO: probably have to fix that: we don't need to install ossim headers
   Utilities/otbossim
   Utilities/otbossim/include
   Utilities/otbossim/include/ossim
