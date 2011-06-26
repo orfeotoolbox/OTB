@@ -27,9 +27,6 @@
 #include "imaging/ossimImageHandlerRegistry.h"
 #include "ossimTileMapModel.h"
 
-// FIXME Temporarily deactivated
-// #include "otbTileMapImageIO.h"
-
 namespace otb
 {
 
@@ -64,8 +61,8 @@ SetKeywordlist(const ossimKeywordlist& kwl)
        it != kwl.getMap().end();
        ++it)
     {
-    std::string first(it->first.stringDup());
-    std::string second(it->second.stringDup());
+    std::string first(it->first);
+    std::string second(it->second);
     m_Keywordlist[first] = second;
     }
 }
@@ -118,9 +115,7 @@ convertToOSSIMKeywordlist(ossimKeywordlist& kwl) const
       it != m_Keywordlist.end();
       ++it)
     {
-    ossimString first(it->first);
-    ossimString second(it->second);
-    ossimMap[first] = second;
+    ossimMap[it->first] = it->second;
     }
   kwl.getMap() = ossimMap;
 }

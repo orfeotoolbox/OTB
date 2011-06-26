@@ -41,7 +41,8 @@ public:
     * @param file The file to open.
     * @return pointer to image handler on success, 0 on failure.
     */
-   virtual ossimImageHandler* open(const ossimFilename& fileName) const;
+   virtual ossimImageHandler* open(const ossimFilename& fileName,
+                                   bool openOverview=true) const;
 
    /**
     * @brief open that takes a keyword list and prefix.

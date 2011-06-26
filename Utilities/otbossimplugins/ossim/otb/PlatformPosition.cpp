@@ -188,7 +188,7 @@ bool PlatformPosition::saveState(ossimKeywordlist& kwl,
    {
       std::string s2 = s1;
       s2 += "platform_position[";
-      s2 += ossimString::toString(i);
+      s2 += ossimString::toString(i).chars();
       s2+= "]";
       _data[i]->saveState(kwl, s2.c_str());
    }
@@ -224,7 +224,7 @@ bool PlatformPosition::loadState(const ossimKeywordlist& kwl,
          {
             std::string s2 = s1;
             s2 += "platform_position[";
-            s2 += ossimString::toString(i);
+            s2 += ossimString::toString(i).chars();
             s2+= "]";
 
             _data[i] = new Ephemeris();

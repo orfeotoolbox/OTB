@@ -93,7 +93,7 @@ std::string MapProjectionAdapter::GetWkt() const
   m_MapProjection->saveState(kwl);
   ossimOgcWktTranslator wktTranslator;
   std::string           wkt;
-  wkt = wktTranslator.fromOssimKwl(kwl);
+  wkt = wktTranslator.fromOssimKwl(kwl).chars();
   return wkt;
 }
 

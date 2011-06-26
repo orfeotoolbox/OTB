@@ -48,7 +48,7 @@ ossimPluginReaderFactory* ossimPluginReaderFactory::instance()
 }
 
 ossimImageHandler* ossimPluginReaderFactory::open(
-   const ossimFilename& fileName)const
+  const ossimFilename& fileName, bool openOverview)const
 {
    if(traceDebug())
    {

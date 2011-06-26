@@ -142,10 +142,10 @@ std::ostream& Noise::print(std::ostream& out) const
    ossimKeywordlist kwl;
    ossimString pfx;
    pfx += NOISE;
-   std::string s = pfx + "." + NUMBER_OF_NOISE_RECORDS_KW;
+   ossimString s = pfx + "." + NUMBER_OF_NOISE_RECORDS_KW;
    kwl.add(prefix, s.c_str(), _numberOfNoiseRecords);
    s = pfx + "." + NAME_OF_NOISE_POLARISATION_KW;
-   kwl.add(prefix, s.c_str(), _polarisation);
+   kwl.add(prefix, s.chars(), _polarisation);
    for (unsigned int i = 0; i < _tabImageNoise.size(); ++i)
    {
       std::string s2 = pfx + "[" + ossimString::toString(i) + "]";

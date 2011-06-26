@@ -117,7 +117,7 @@ bool RadarSat2NoiseLevel::saveState(ossimKeywordlist& kwl, const char* prefix) c
    
    for (unsigned int i = 0; i < _noiseLevelValues.size(); ++i)
    {
-      	s = pfx + NOISE_LEVEL_VALUES_KW + "[" + ossimString::toString(i) + "]";
+      	s = pfx + NOISE_LEVEL_VALUES_KW + "[" + ossimString::toString(i).chars() + "]";
    		kwl.add(prefix, s.c_str(), _noiseLevelValues[i]);
    }
 
