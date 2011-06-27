@@ -40,6 +40,15 @@
 
 namespace otb
 {
+/** \class PersistentStreamingLineSegmentDetector
+ *  \brief Perform Line segment detector in a persistent way.
+ *
+ *  This filter is a generic PersistentImageFilter, which encapsulate
+ *  the Line Segment detector filter.
+ *
+ * \sa PersistentImageToVectorDataFilter
+ *
+ */
 template <class TImageType>
 class PersistentStreamingLineSegmentDetector
   : public otb::PersistentImageToVectorDataFilter<TImageType,
