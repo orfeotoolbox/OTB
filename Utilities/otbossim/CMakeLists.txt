@@ -44,6 +44,7 @@ IF(NOT OTB_DISABLE_UTILITIES_COMPILATION)
   FILE(GLOB_RECURSE ossim_parallel_SRCS "src/ossim/parallel/*.cpp" "src/ossim/parallel/*.c")
   FILE(GLOB_RECURSE ossim_projection_SRCS "src/ossim/projection/*.cpp" "src/ossim/projection/*.c")
   FILE(GLOB_RECURSE ossim_support_data_SRCS "src/ossim/support_data/*.cpp" "src/ossim/support_data/*.c")
+  FILE(GLOB_RECURSE ossim_util_SRCS "src/ossim/util/*.cpp" "src/ossim/util/*.c")
   FILE(GLOB_RECURSE ossim_vec_SRCS "src/ossim/vec/*.cpp" "src/ossim/vec/*.c")
   FILE(GLOB_RECURSE ossim_vpfutil_SRCS "src/ossim/vpfutil/*.cpp" "src/ossim/vpfutil/*.c")
   FILE(GLOB_RECURSE ossim_plugin_SRCS "src/ossim/plugin/*.cpp" "src/ossim/plugin/*.c")
@@ -94,6 +95,7 @@ IF(NOT OTB_DISABLE_UTILITIES_COMPILATION)
   ${ossim_base_SRCS}
   ${ossim_kbool_SRCS}
   ${ossim_matrix_SRCS}
+  ${ossim_util_SRCS}
   ${ossim_vec_SRCS}
   ${ossim_vpfutil_SRCS}
   ${ossim_plugin_SRCS}
@@ -103,8 +105,6 @@ IF(NOT OTB_DISABLE_UTILITIES_COMPILATION)
   ${ossim_imaging_SRCS}
   ${ossim_parallel_SRCS}
   ${ossim_elevation_SRCS})
-
-  SET(OSSIM_LIB otbossim)
 
   #Apparently not supported by opensolaris at least
 #  SET_TARGET_PROPERTIES(otbossim
@@ -137,6 +137,7 @@ FILE(GLOB ossim_parallel_HDRS "include/ossim/parallel/*.h")
 FILE(GLOB ossim_plugin_HDRS "include/ossim/plugin/*.h")
 FILE(GLOB ossim_projection_HDRS "include/ossim/projection/*.h")
 FILE(GLOB ossim_support_data_HDRS "include/ossim/support_data/*.h")
+FILE(GLOB ossim_util_HDRS "include/ossim/util/*.h")
 FILE(GLOB ossim_vec_HDRS "include/ossim/vec/*.h")
 FILE(GLOB ossim_vpfutil_HDRS "include/ossim/vpfutil/*.h")
 
@@ -174,6 +175,9 @@ INSTALL(FILES ${ossim_projection_HDRS}
     COMPONENT Development)
 INSTALL(FILES ${ossim_support_data_HDRS}
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbossim/include/ossim/support_data
+    COMPONENT Development)
+INSTALL(FILES ${ossim_util_HDRS}
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbossim/include/ossim/util
     COMPONENT Development)
 INSTALL(FILES ${ossim_vec_HDRS}
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbossim/include/ossim/vec
