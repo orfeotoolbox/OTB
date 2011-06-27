@@ -15,7 +15,7 @@
 // accomplish the translation. 
 //
 //*******************************************************************
-//  $Id: ossimOgcWktTranslator.cpp 18120 2010-09-24 11:08:17Z gpotts $
+//  $Id: ossimOgcWktTranslator.cpp 19683 2011-05-31 14:24:10Z dburken $
 
 #include <cstdio>
 #include <gdal.h>
@@ -530,7 +530,7 @@ ossimString ossimOgcWktTranslator::fromOssimKwl(const ossimKeywordlist &kwl,
       wktString = exportString;
       OGRFree(exportString);
    }
-   
+
    return wktString;
    
 }
@@ -953,48 +953,48 @@ void ossimOgcWktTranslator::initializeDatumTable()
 //    theWktToOssimDatumTranslation.insert(make_pair(ossimString("OSGB_1936"),
 //                                                   ossimString("OSGB_1936")));
   
-   theOssimToWktDatumTranslation.insert(make_pair(ossimString("NAS-C"),
-                                                  ossimString("North_American_Datum_1927")));
-   theOssimToWktDatumTranslation.insert(make_pair(ossimString("NAR-C"),
-                                                  ossimString("North_American_Datum_1983")));
-   theOssimToWktDatumTranslation.insert(make_pair(ossimString("NAS"),
-                                                  ossimString("North_American_Datum_1927")));
-   theOssimToWktDatumTranslation.insert(make_pair(ossimString("NAR"),
-                                                  ossimString("North_American_Datum_1983")));
-   theOssimToWktDatumTranslation.insert(make_pair(ossimString("WGE"),
-                                                  ossimString("WGS_1984")));
-   theWktToOssimDatumTranslation.insert(make_pair(ossimString("OSGB_1936"),
-                                                  ossimString("OGB-B"))); 
-   theWktToOssimDatumTranslation.insert(make_pair(ossimString("Nouvelle_Triangulation_Francaise"),
-                                                  ossimString("NTF")));
+   theOssimToWktDatumTranslation.insert(make_pair(std::string("NAS-C"),
+                                                  std::string("North_American_Datum_1927")));
+   theOssimToWktDatumTranslation.insert(make_pair(std::string("NAR-C"),
+                                                  std::string("North_American_Datum_1983")));
+   theOssimToWktDatumTranslation.insert(make_pair(std::string("NAS"),
+                                                  std::string("North_American_Datum_1927")));
+   theOssimToWktDatumTranslation.insert(make_pair(std::string("NAR"),
+                                                  std::string("North_American_Datum_1983")));
+   theOssimToWktDatumTranslation.insert(make_pair(std::string("WGE"),
+                                                  std::string("WGS_1984")));
+   theWktToOssimDatumTranslation.insert(make_pair(std::string("OSGB_1936"),
+                                                  std::string("OGB-B"))); 
+   theWktToOssimDatumTranslation.insert(make_pair(std::string("Nouvelle_Triangulation_Francaise"),
+                                                  std::string("NTF")));
 }
 
 void ossimOgcWktTranslator::initializeProjectionTable()
 {
-   theWktToOssimProjectionTranslation.insert(make_pair(ossimString(SRS_PT_TRANSVERSE_MERCATOR),
-                                                       ossimString("ossimTransMercatorProjection")));
-   theWktToOssimProjectionTranslation.insert(make_pair(ossimString(SRS_PT_EQUIRECTANGULAR),
-                                                       ossimString("ossimEquDistCylProjection")));
-   theWktToOssimProjectionTranslation.insert(make_pair(ossimString(SRS_PT_ALBERS_CONIC_EQUAL_AREA),
-                                                       ossimString("ossimAlbersProjection")));
-   theWktToOssimProjectionTranslation.insert(make_pair(ossimString(SRS_PT_LAMBERT_CONFORMAL_CONIC_2SP),
-                                                       ossimString("ossimLambertConformalConicProjection")));
-   theWktToOssimProjectionTranslation.insert(make_pair(ossimString(SRS_PT_SINUSOIDAL),
-                                                       ossimString("ossimSinusoidalProjection")));
-   theWktToOssimProjectionTranslation.insert(make_pair(ossimString(SRS_PT_MERCATOR_1SP),
-                                                       ossimString("ossimMercatorProjection")));
-   theOssimToWktProjectionTranslation.insert(make_pair(ossimString("ossimTransMercatorProjection"),
-                                                       ossimString(SRS_PT_TRANSVERSE_MERCATOR)));
-   theOssimToWktProjectionTranslation.insert(make_pair(ossimString("ossimEquDistCylProjection"),
-                                                       ossimString(SRS_PT_EQUIRECTANGULAR)));
-   theOssimToWktProjectionTranslation.insert(make_pair(ossimString("ossimAlbersProjection"),
-                                                       ossimString(SRS_PT_ALBERS_CONIC_EQUAL_AREA)));
-   theOssimToWktProjectionTranslation.insert(make_pair(ossimString("ossimLambertConformalConicProjection"),
-                                                       ossimString(SRS_PT_LAMBERT_CONFORMAL_CONIC_2SP)));
-   theOssimToWktProjectionTranslation.insert(make_pair(ossimString("ossimSinusoidalProjection"),
-                                                       ossimString(SRS_PT_SINUSOIDAL)));
-   theOssimToWktProjectionTranslation.insert(make_pair(ossimString("ossimMercatorProjection"),
-                                                       ossimString(SRS_PT_MERCATOR_1SP)));
+   theWktToOssimProjectionTranslation.insert(make_pair(std::string(SRS_PT_TRANSVERSE_MERCATOR),
+                                                       std::string("ossimTransMercatorProjection")));
+   theWktToOssimProjectionTranslation.insert(make_pair(std::string(SRS_PT_EQUIRECTANGULAR),
+                                                       std::string("ossimEquDistCylProjection")));
+   theWktToOssimProjectionTranslation.insert(make_pair(std::string(SRS_PT_ALBERS_CONIC_EQUAL_AREA),
+                                                       std::string("ossimAlbersProjection")));
+   theWktToOssimProjectionTranslation.insert(make_pair(std::string(SRS_PT_LAMBERT_CONFORMAL_CONIC_2SP),
+                                                       std::string("ossimLambertConformalConicProjection")));
+   theWktToOssimProjectionTranslation.insert(make_pair(std::string(SRS_PT_SINUSOIDAL),
+                                                       std::string("ossimSinusoidalProjection")));
+   theWktToOssimProjectionTranslation.insert(make_pair(std::string(SRS_PT_MERCATOR_1SP),
+                                                       std::string("ossimMercatorProjection")));
+   theOssimToWktProjectionTranslation.insert(make_pair(std::string("ossimTransMercatorProjection"),
+                                                       std::string(SRS_PT_TRANSVERSE_MERCATOR)));
+   theOssimToWktProjectionTranslation.insert(make_pair(std::string("ossimEquDistCylProjection"),
+                                                       std::string(SRS_PT_EQUIRECTANGULAR)));
+   theOssimToWktProjectionTranslation.insert(make_pair(std::string("ossimAlbersProjection"),
+                                                       std::string(SRS_PT_ALBERS_CONIC_EQUAL_AREA)));
+   theOssimToWktProjectionTranslation.insert(make_pair(std::string("ossimLambertConformalConicProjection"),
+                                                       std::string(SRS_PT_LAMBERT_CONFORMAL_CONIC_2SP)));
+   theOssimToWktProjectionTranslation.insert(make_pair(std::string("ossimSinusoidalProjection"),
+                                                       std::string(SRS_PT_SINUSOIDAL)));
+   theOssimToWktProjectionTranslation.insert(make_pair(std::string("ossimMercatorProjection"),
+                                                       std::string(SRS_PT_MERCATOR_1SP)));
    
 }
 
@@ -1038,36 +1038,36 @@ ossimString ossimOgcWktTranslator::wktToOssimDatum(const ossimString& datum)cons
 
 ossimString ossimOgcWktTranslator::ossimToWktDatum(const ossimString& datum)const
 {
-   map<ossimString, ossimString>::const_iterator i = theOssimToWktDatumTranslation.find(datum);
-
+   ossimString result;
+   map<std::string, std::string>::const_iterator i = theOssimToWktDatumTranslation.find(datum);
    if(i != theOssimToWktDatumTranslation.end())
    {
-      return (*i).second;
+      result = (*i).second;
    }
-
-   return "";
+   return result;
 }
 
 ossimString ossimOgcWktTranslator::wktToOssimProjection(const ossimString& datum)const
 {
-   map<ossimString, ossimString>::const_iterator i = theWktToOssimProjectionTranslation.find(datum);
-
+   std::string result;
+   map<std::string, std::string>::const_iterator i =
+      theWktToOssimProjectionTranslation.find(datum);
    if(i != theWktToOssimProjectionTranslation.end())
    {
-      return (*i).second;
+      result = (*i).second;
    }
-
-   return "";
+   return result;
 }
 
 ossimString ossimOgcWktTranslator::ossimToWktProjection(const ossimString& datum)const
 {
-   map<ossimString, ossimString>::const_iterator i = theOssimToWktProjectionTranslation.find(datum);
-
+   ossimString result;
+   map<std::string, std::string>::const_iterator i =
+      theOssimToWktProjectionTranslation.find(datum);
    if(i != theOssimToWktProjectionTranslation.end())
    {
-      return (*i).second;
+      result = (*i).second;
    }
-
-   return "";
+   return result;
 }
+

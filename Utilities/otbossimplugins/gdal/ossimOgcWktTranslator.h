@@ -12,7 +12,7 @@
 // Contains function declarations for translating between OGC WKT strings,
 // and OSSIM projection definitions.
 //*******************************************************************
-//  $Id: ossimOgcWktTranslator.h 9858 2006-11-02 22:18:27Z dburken $
+//  $Id: ossimOgcWktTranslator.h 19683 2011-05-31 14:24:10Z dburken $
 
 #ifndef ossimOgcWktTranslator_HEADER
 #define ossimOgcWktTranslator_HEADER
@@ -21,6 +21,7 @@
 #include <ossim/base/ossimString.h>
 
 #include <map>
+#include <string>
 
 class ossimKeywordlist;
 
@@ -47,11 +48,11 @@ public:
    
 protected:
 
-   std::map<ossimString, ossimString> theWktToOssimDatumTranslation;
-   std::map<ossimString, ossimString> theWktToOssimProjectionTranslation;
+   std::map<std::string, std::string> theWktToOssimDatumTranslation;
+   std::map<std::string, std::string> theWktToOssimProjectionTranslation;
 
-   std::map<ossimString, ossimString> theOssimToWktDatumTranslation;
-   std::map<ossimString, ossimString> theOssimToWktProjectionTranslation;
+   std::map<std::string, std::string> theOssimToWktDatumTranslation;
+   std::map<std::string, std::string> theOssimToWktProjectionTranslation;
 
    void initializeDatumTable();
    void initializeProjectionTable();
