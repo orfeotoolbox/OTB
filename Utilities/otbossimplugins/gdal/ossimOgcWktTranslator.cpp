@@ -639,7 +639,7 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
    if (epsg_code)
    {
       ossimString epsg_spec ("EPSG:"); 
-      epsg_spec += ossimString::toString(epsg_code);
+      epsg_spec += ossimString::toString(ossimString(epsg_code));
       ossimProjection* proj = ossimEpsgProjectionFactory::instance()->createProjection(epsg_spec);
       if (proj)
          ossimProj = proj->getClassName();
@@ -916,6 +916,14 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
       {
          oDatum = "WGE";
       }
+
+      // Trouble with ESPG 3857
+      // The ellipsoid used by ossim is the WGS84 one with minor and major axis differs.
+      // We need to build our own projection in this case.
+      if( oDatum == "WGE" && ossimString(epsg_code) == "3857" )
+        {
+          oDatum = "WE-EPSG-3857";
+        }
    }
        
    kwl.add(prefix, ossimKeywordNames::DATUM_KW, oDatum, true);

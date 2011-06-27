@@ -201,21 +201,6 @@ bool MapProjectionAdapter::InstanciateProjection()
 
     if (projectionInformationAvailable)
       {
-        // Trouble with ESPG 3857
-        // The ellipsoid used by ossim is the WGS84 one with minor and major axis differs.
-        // We need to build our own projection in this case.
-        ossimString pcsCodeString = kwl.find("pcs_code");
-        ossimString datumString = kwl.find("datum");
-        if( (!pcsCodeString.empty()) && (!datumString.empty()) )
-          {
-            if( (pcsCodeString == "3857") && (datumString=="WGE") )
-              {
-                ossimKeywordlist kwl3857 = kwl;
-                kwl.add("datum", "WE-EPSG-3857");
-                otbMsgDevMacro(<< "WARNING: Change the datum value to be interpreted as a specific EPSG-3857 one...");
-              }
-          }
-
         //we don't want to have a ossimEquDistCylProjection here:
         //see discussion in May 2009 on ossim list;
         //a better solution might be available...
