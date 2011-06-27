@@ -489,13 +489,13 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
   PixelValue lHessianDet = dxx * dyy - dxy * dxy;
   
   // DoG threshold : ignore detected extrema if is not sufficiently noticeable
-  accepted = fabs(lDoHInterpolated) > fabs(det * m_DoHThreshold);
+  accepted = vcl_abs(lDoHInterpolated) > vcl_abs(det * m_DoHThreshold);
 
   if (!accepted)
     {
     //++m_DiscardedKeyPoints; /* not used at the moment */
     }
-  if (det < 1e-10f)             // this test cancels the shift for every "weak" extrema
+  if (det < 1.0E-10)             // this test cancels the shift for every "weak" extrema
     {
     solution.Fill(0);
     }
@@ -505,7 +505,9 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
     solution /= det;
     }
   /* check that the translation found is inside a cubic pixel */
-  if (fabs(solution[0]) > 1.0 || fabs(solution[1]) > 1.0 || fabs(solution[2]) > 1.0)
+  if (vcl_abs(static_cast<double>(solution[0])) > 1.0
+      || vcl_abs(static_cast<double>(solution[1])) > 1.0
+      || vcl_abs(static_cast<double>(solution[2])) > 1.0)
   {
         accepted = false;
         //solution.Fill(0);
