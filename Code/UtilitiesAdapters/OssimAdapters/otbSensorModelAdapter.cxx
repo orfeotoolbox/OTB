@@ -178,7 +178,6 @@ void SensorModelAdapter::InverseTransformPoint(double lon, double lat, double h,
   assert(ossim::isnan(ossimGPoint.hgt) || (ossimGPoint.hgt > -1000));
 
   this->m_SensorModel->worldToLineSample(ossimGPoint, ossimDPoint); //"worldToLineSample" call "lineSampleHeightToWorld" method for take in care elevation information.
-  std::cout<<"Inv: "<<h<<" => "<<ossimGPoint.height()<<std::endl;
   x = ossimDPoint.x;
   y = ossimDPoint.y;
   z = ossimGPoint.height();
