@@ -126,7 +126,13 @@ public:
     m_StartIndex(),
     m_Origin(),
     m_Spacing(1.)
-  {}
+  {
+    m_StartingPoint.Fill(0);
+    m_CurrentPoint.Fill(0);
+    m_CurrentRun.Fill(0);
+    m_StartIndex.Fill(0);
+    m_Origin.Fill(0);
+}
 
   /** Destructor */
   virtual ~LabelObjectToPolygonFunctor(){}
