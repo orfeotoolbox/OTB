@@ -20,10 +20,12 @@
 #include "itkExceptionObject.h"
 #include "otbAtmosphericCorrectionParameters.h"
 #include "otbSIXSTraits.h"
-#include "base/ossimFilename.h"
 #include <fstream>
 #include <cstdlib>
 #include "otbObjectList.h"
+#include "itksys/SystemTools.hxx"
+
+
 
 int otbFilterFunctionValuesTest(int argc, char * argv[])
 {
@@ -89,14 +91,13 @@ int otbFilterFunctionValuesDigitalGlobeTest(int argc, char * argv[])
   //WavelengthSpectralBandVectorType::Pointer         filterFunctionList  = WavelengthSpectralBandVectorType::New();
   WavelengthSpectralBandVectorType::Pointer wavelengthSpectralBand = WavelengthSpectralBandVectorType::New();
 
-  ossimFilename fname(infname);
+  itksys::String fname(infname);
   //if (!fname.exists()) itkExceptionMacro(<< infname << " does not exist.");
 
   std::ifstream file(fname.c_str());
   if (!file) return EXIT_FAILURE;
 
   std::string line;
-  ossimString separator = '\t';
   double      mini = 0.;
   double      maxi = 0.;
   bool        firstLine = true;
@@ -107,29 +108,29 @@ int otbFilterFunctionValuesDigitalGlobeTest(int argc, char * argv[])
 
   while (std::getline(file, line))
     {
-    ossimString osLine(line);
+    itksys::String itksLine(line);
 
     // Suppress multiple spaces
-    for (unsigned int i = 0; i < osLine.size() - 1; i++)
+    for (unsigned int i = 0; i < itksLine.size() - 1; i++)
       {
-      if (osLine.compare(i, 1, " ") == 0 && osLine.compare(i + 1, 1, " ") == 0)
+      if (itksLine.compare(i, 1, " ") == 0 && itksLine.compare(i + 1, 1, " ") == 0)
         {
-        osLine.erase(i + 1, 1);
+        itksLine.erase(i + 1, 1);
         i--;
         }
       }
 
     // if the first character is a space, erase it
-    if (osLine.compare(0, 1, " ") == 0) osLine.erase(0, 1);
+    if (itksLine.compare(0, 1, " ") == 0) itksLine.erase(0, 1);
 
-    std::vector<ossimString> keywordStrings = osLine.split(separator);
+    std::vector<itksys::String> keywordStrings = itksys::SystemTools::SplitString(itksLine.c_str(), '\t', true);
 
     //if (keywordStrings.size() < 3) itkExceptionMacro(<< "Invalid file format");
 
     // Store min wavelength
     if (firstLine)
       {
-      mini = keywordStrings[0].toDouble() * wavelengthFactor;
+      mini = atof(keywordStrings[0].c_str()) * wavelengthFactor;
       nbBands = keywordStrings.size() - 1;
       std::cout << "firstline " << " mini " << mini <<  " nbBands "<< nbBands << std::endl;
       std::cout << "keywordStrings[nbBands] "  << keywordStrings[nbBands] << std::endl;
@@ -149,12 +150,12 @@ int otbFilterFunctionValuesDigitalGlobeTest(int argc, char * argv[])
     //std::cout<< "get multi" << std::endl;
     for (unsigned int i = 0; i < nbBands; ++i)
       {
-      valuesVector[i].push_back(keywordStrings[i + 1].toDouble());
+      valuesVector[i].push_back(atof(keywordStrings[i + 1].c_str()));
       //std::cout << "vector values " << keywordStrings[i + 1].toDouble() << " ";
       }
 
 
-    maxi = keywordStrings[0].toDouble() * wavelengthFactor;
+    maxi = atof(keywordStrings[0].c_str()) * wavelengthFactor;
     std::cout << " maxi " << maxi << std::endl;
     std::cout << " vector values[0] size " << valuesVector[0].size() << std::endl;
     }
