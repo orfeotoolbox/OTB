@@ -44,12 +44,6 @@ ADD_TEST(obTvImageToLabelMapWithAttributesFilter ${OBIA_TESTS1}
 
 ADD_TEST(obTuLabelMapSourceNew ${OBIA_TESTS1}
     otbLabelMapSourceNew)
-
-ADD_TEST(obTvLabelMapToVectorDataFilter ${OBIA_TESTS1}
-    otbLabelMapToVectorDataFilter
-    ${INPUTDATA}/rcc8_mire1.png
-    ${TEMP}/rcc8_mire2_vectorizer.shp)
-
 ADD_TEST(obTvVectorDataToLabelMapFilter ${OBIA_TESTS1}
     otbVectorDataToLabelMapFilter
     ${INPUTDATA}/vectorIOexample_gis_to_vec.shp
@@ -69,9 +63,22 @@ ADD_TEST(obTuLabelMapToVectorDataFilterNew ${OBIA_TESTS1}
     otbLabelMapToVectorDataFilterNew)
 
 ADD_TEST(obTvLabelMapToVectorDataFilter ${OBIA_TESTS1}
+   --compare-ogr ${NOTOL}
+   ${BASELINE_FILES}/obTvLabelMapToVectorDataFilter.shp
+   ${TEMP}/obTvLabelMapToVectorDataFilter.shp
     otbLabelMapToVectorDataFilter
     ${INPUTDATA}/rcc8_mire1.png
-    ${TEMP}/rcc8_mire2_vectorizer.shp)
+    ${TEMP}/obTvLabelMapToVectorDataFilter.shp)
+
+
+ADD_TEST(obTvLabelMapToVectorDataFilter2 ${OBIA_TESTS1}
+   --compare-ogr ${NOTOL}
+   ${BASELINE_FILES}/obTvLabelMapToVectorDataFilter.shp
+   ${TEMP}/obTvLabelMapToVectorDataFilter2.shp
+    otbLabelMapToVectorDataFilter
+    ${INPUTDATA}/rcc8_mire5.png
+    ${TEMP}/obTvLabelMapToVectorDataFilter2.shp)
+
 
 ADD_TEST(obTuLabelMapWithClassLabelToLabeledSampleListFilterNew ${OBIA_TESTS1}
     otbLabelMapWithClassLabelToLabeledSampleListFilterNew)

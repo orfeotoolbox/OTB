@@ -63,7 +63,7 @@ int otbLabelMapToVectorDataFilter(int argc, char * argv[])
 
   LabelMapFilterType::Pointer labelMapFilter = LabelMapFilterType::New();
   labelMapFilter->SetInput(lreader->GetOutput());
-  labelMapFilter->SetBackgroundValue(itk::NumericTraits<LabelType>::max());
+  labelMapFilter->SetBackgroundValue(itk::NumericTraits<LabelType>::min());
   labelMapFilter->Update();
 
   WriterType::Pointer writer = WriterType::New();
