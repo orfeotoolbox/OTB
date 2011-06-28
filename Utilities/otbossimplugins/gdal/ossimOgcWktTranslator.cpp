@@ -170,7 +170,7 @@ ossimString ossimOgcWktTranslator::fromOssimKwl(const ossimKeywordlist &kwl,
       }
       oSRS.importFromEPSG( pcsCodeVal );
    }
-   else if(projType == "ossimUtmProjection")
+   if(projType == "ossimUtmProjection")
    {
 #if 0
       hemisphere = hemisphere.trim().upcase();
