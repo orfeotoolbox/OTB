@@ -533,6 +533,38 @@ OTB users, we will then discuss on how to retrieve your code,
 make the necessary adaptions, check with you that the results are correct and finally
 include it in the next release.
 
+To make this process of contribution easier, we also provide a 
+``sandbox`` repository for OTB which works as a testing environment that
+isolates untested code changes and outright experimentation from the
+production environment or repository. Here is how it works:
+
+\begin{itemize}
+  \item Clone the main OTB repository: 
+    \begin{verbatim}
+    hg clone http://hg.orfeo-toolbox.org/OTB
+    \end{verbatim}
+  \item Set up your mercurial identity, in Linux, edit the ~/.hgrc and put the following lines:
+    \begin{verbatim}
+     [ui]
+     username = Your Name <email-where-we-can@contact.you>
+    \end{verbatim}
+  \item Work as usual, commit locally as you would do for your own project
+    when you are happy, push to the sandbox:
+    \begin{verbatim}
+     [ui]
+     hg push http://hg.orfeo-toolbox.org/OTB-SandBox
+    \end{verbatim}
+\end{itemize}  
+
+If necessary, use the -f option (we will sort out the mess). When ask
+for the login use ``anonymous`` with the password ``otb``.  We will be
+informed that something new is in the sandbox, but you can also drop a
+mail at otb-users@googlegroups.com to provide more explanations.
+We will then review the corrections, test them and then merge them
+into the main repository.  You can find more informations about the
+procedure at
+\url{http://blog.orfeo-toolbox.org/news/contribute-easily-to-otb}.      
+
 You can also run the nightly tests so we have a wider range of plateforms to detect
 bugs earlier. Look at section \ref{sec:runningTheTests}.
 
