@@ -239,8 +239,9 @@ MapFileProductWriter<TInputImage>
 
       m_StreamingShrinkImageFilter->SetShrinkFactor(sampleRatioValue);
       m_StreamingShrinkImageFilter->SetInput(m_VectorImage);
+      m_StreamingShrinkImageFilter->GetStreamer()->SetAutomaticStrippedStreaming(0);
       m_StreamingShrinkImageFilter->Update();
-
+      
       m_VectorRescaleIntensityImageFilter = VectorRescaleIntensityImageFilterType::New();
       m_VectorRescaleIntensityImageFilter->SetInput(m_StreamingShrinkImageFilter->GetOutput());
       m_VectorRescaleIntensityImageFilter->SetOutputMinimum(outMin);
@@ -358,10 +359,15 @@ MapFileProductWriter<TInputImage>
         // Search Lat/Lon box
 
         // Initialize the transform to be used
-        typename TransformType::Pointer transform = TransformType::New();
-        transform->SetInputProjectionRef(m_GenericRSResampler->GetOutputProjectionRef());
-        transform->SetOutputProjectionRef(otb::GeoInformationConversion::ToWKT(m_SRID));
-        transform->InstanciateTransform();
+        //typename TransformType::Pointer transform =
+        //TransformType::New();
+        
+        m_Transform  = TransformType::New();
+        m_Transform->SetInputProjectionRef(m_GenericRSResampler->GetOutputProjectionRef());
+        m_Transform->SetOutputProjectionRef(otb::GeoInformationConversion::ToWKT(m_SRID));
+        if(!m_DEMDirectory.empty())
+          m_Transform->SetDEMDirectory(m_DEMDirectory);
+        m_Transform->InstanciateTransform();
         
         InputPointType  inputPoint;
         IndexType       indexTile;
@@ -373,28 +379,28 @@ MapFileProductWriter<TInputImage>
         indexTile[0] = extractIndex[0];
         indexTile[1] = extractIndex[1] + sizeTile[1];
         m_ResampleVectorImage->TransformIndexToPhysicalPoint(indexTile, inputPoint);
-        OutputPointType lowerLeftCorner = transform->TransformPoint(inputPoint);
+        OutputPointType lowerLeftCorner = m_Transform->TransformPoint(inputPoint);
         //std::cout <<"indexTile "<< indexTile <<" --> input Point "<< inputPoint << " lowerLeftCorner "<<  lowerLeftCorner << std::endl;
         
         // Compute lower right corner
         indexTile[0] = extractIndex[0] + sizeTile[0];
         indexTile[1] = extractIndex[1] + sizeTile[1];
         m_ResampleVectorImage->TransformIndexToPhysicalPoint(indexTile, inputPoint);
-        OutputPointType lowerRightCorner = transform->TransformPoint(inputPoint);
+        OutputPointType lowerRightCorner = m_Transform->TransformPoint(inputPoint);
         //std::cout <<"indexTile "<< indexTile <<" --> input Point "<< inputPoint << " lowerRightCorner   "<< lowerRightCorner  << std::endl;
         
         // Compute upper right corner
         indexTile[0] = extractIndex[0]+ sizeTile[0];
         indexTile[1] = extractIndex[1];
         m_ResampleVectorImage->TransformIndexToPhysicalPoint(indexTile, inputPoint);
-        OutputPointType upperRightCorner = transform->TransformPoint(inputPoint);
+        OutputPointType upperRightCorner = m_Transform->TransformPoint(inputPoint);
         //std::cout <<"indexTile "<< indexTile <<" --> input Point "<< inputPoint << " upperRightCorner "<< upperRightCorner  << std::endl;
 
         // Compute upper left corner
         indexTile[0] = extractIndex[0];
         indexTile[1] = extractIndex[1];
         m_ResampleVectorImage->TransformIndexToPhysicalPoint(indexTile, inputPoint);
-        OutputPointType upperLeftCorner = transform->TransformPoint(inputPoint);
+        OutputPointType upperLeftCorner = m_Transform->TransformPoint(inputPoint);
         //std::cout <<"indexTile "<< indexTile <<" --> input Point "<< inputPoint << " upperLeftCorner "<< upperLeftCorner  << std::endl;
   
         // Build The indexTile

@@ -156,7 +156,6 @@ KmzProductWriter<TInputImage>
   // Create a kmz file
   m_KmzFileName << m_Path << "/" << m_FileName << m_KmzExtension;
   m_KmzFile = kmlengine::KmzFile::Create(m_KmzFileName.str().c_str());
- 
 }
 
  /**
@@ -308,6 +307,7 @@ KmzProductWriter<TInputImage>
 
       m_StreamingShrinkImageFilter->SetShrinkFactor(sampleRatioValue);
       m_StreamingShrinkImageFilter->SetInput(m_VectorImage);
+      m_StreamingShrinkImageFilter->GetStreamer()->SetAutomaticStrippedStreaming(0);
       m_StreamingShrinkImageFilter->Update();
 
       m_VectorRescaleIntensityImageFilter = VectorRescaleIntensityImageFilterType::New();
