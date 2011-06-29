@@ -311,11 +311,13 @@ for Win32 environments (Windows XP, Vista, etc), and contains all the required d
 \item Type \texttt{cmake-gui}
 
 \item Configure OTB with CMake (Example for release mode, with internal FLTK and ITK)
+
     First give the path where the source code is and where to build the binaries.
 
     Then press the "Configure" button and choose the generator for your project. For example, Visual Studio 9 2008.
 
     Set the following variables after the first configuration pass :
+
         \texttt{OTB\_USE\_CURL = ON}\\
         \texttt{OTB\_USE\_EXTERNAL\_EXPAT = ON}\\
         \texttt{OTB\_USE\_LIBLAS = ON}\\
