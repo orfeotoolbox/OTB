@@ -1,4 +1,4 @@
-OTB-v.3.10.0 - Changes since version 3.8.0 (2011/06/16)
+OTB-v.3.10.0 - Changes since version 3.8.0 (2011/06/30)
 -----------------------------------------
 * Monteverdi
   * New Rasterization module
@@ -95,82 +95,93 @@ OTB-v.3.10.0 - Changes since version 3.8.0 (2011/06/16)
 
 * Bug fixes :
 
-  * OTB-Qgis
-    * 0000272: problem with installation
-
   * OTB-lib
-    * 0000320: Design issue: VectorDataIOFactory should not be a template class
-    * 0000329: At least 2 platforms don't respect the nightly version for their dashboard submission
-    * 0000334: Some tutorials do not check argc/argv
     * 0000312: Systematic crash when opening images with GDAL (tif, png, jpeg, etc)
+    * 0000330: Suspicious log and output problem in ioImageToKmzAndMapFileProductExport
+    * 0000329: At least 2 platforms don't respect the nightly version for their dashboard submission
     * 0000298: TestDriver : returns EXIT_SUCCESS when test is not registered
     * 0000310: PersistentImageToVectorData process the input twice when only one stream is used
-    * 0000311: No platform testing OTB_SHOW_ALL_MSG_DEBUG set to ON for examples compilation
-    * 0000245: Wrong path for GDAL_CONFIG or GDALCONFIG_EXECUTABLE cmake variable produce incoherent results in the OTB configuration
     * 0000273: otbHarrisImageFilter applies final smoothing only over the 0-th direction; + wrong final scaling applied
     * 0000228: Problems related to the --compare-ascii tool in OTB tests protocol
     * 0000219: HDF dataset not openable with ImageFileReader
+    * 0000358: Remove ossim from otbFilterFunctionValuesDigitalGlobeTest
+    * 0000320: Design issue: VectorDataIOFactory should not be a template class
+    * 0000334: Some tutorials do not check argc/argv
+    * 0000311: No platform testing OTB_SHOW_ALL_MSG_DEBUG set to ON for examples compilation
+    * 0000245: Wrong path for GDAL_CONFIG or GDALCONFIG_EXECUTABLE cmake variable produce incoherent results in the OTB configuration
     * 0000229: OTB driver in imageFileReader must support different file extensions related to the HDF format
     * 0000222: Issues with the TerraSar-X ossim plugin
     * 0000221: Fail to retrieve the pixel spacing from image metadata.
+    * 0000282: Unable to open tiff image
+    * 0000237: Boost / Fltk conflict
+    * 0000327: CMake configuration abort if no curl is available on system, even with OTB_USE_CURL is set to OFF
+    * 0000276: Trouble with the compare ascii when separations are tabulation
 
   * Monteverdi
+    * 0000292: Tilemap import module not working
+    * 0000352: Monteverdi crashes on wrong DEM directory
+    * 0000270: Open RADARSAT2 products as an SAR image in Monteverdi
+    * 0000263: Vectorization module : weird behavior
+    * 0000297: Crash when open change detection output image
+    * 0000281: Crash opening a RAD image.
+    * 0000265: SVM learn module : crash when displaying results
+    * 0000254: Homologous point module
+    * 0000240: Importing shp file in SVM module in Monterverdi 1.6 always results in crash
+    * 0000348: Viewer setup : histogram settings disappear
+    * 0000349: Labeled image can't be viewed
     * 0000249: otbTrainObjectDetector-cli: malloc(): memory corruption
-    * 0000341: weird french warning in ms dos command window  with monteverdi 1.7 exe
     * 0000251: Wrong output of the DEM to image generator module when working on a ROI of the image in raw geometry
-    * 0000313: Unable to perform orthofusion of WV2 PAN+XS (4 bands)
-    * 0000239: Trouble in pixel descrition in Monteverdi viewer
     * 0000226: otbSegmentationApplication: crash when overwriting a .shp file
     * 0000223: Wrong positioning of polygons from otbSegmentationApplication and open with SVMclassification module (monteverdi)
     * 0000242: Mean Shift: different display of results in the module and in  the Viewer
-    * 0000250: Meanshift clustering module: spectral radius limited
-    * 0000336: Viewer Histogram settings not applied after channel order changes
-    * 0000304: Advanced save dataset module with scaling on results in visible strip in image
-    * 0000262: Wrong metadata interpretation
     * 0000317: Monteverdi extract ROI module can not perform extraction from geographical coordinates on SPOT5 data
     * 0000253: Nodata value in SRTM result in wrong ortho-rectified image
     * 0000315: Monteverdi ROI extraction module broken : can not select by drag&drop anymore
-    * 0000270: Open RADARSAT2 products as an SAR image in Monteverdi
-    * 0000306: Unable to export otb::Image in KMZ in the Monteverdi module "KMZ export"
-    * 0000302: Can't open two image in the viewer
     * 0000300: One viewer instance block another instance to display another image
-    * 0000263: Vectorization module : weird behavior
+    * 0000269: Inoperative fields in the reprojection module
+    * 0000255: Image is not visible if scroll or Full   window is minimized while working with SVM classification
+    * 0000267: Vectorization-Rasterization module
+    * 0000244: Pansharpening EO-1 image with Monteverdi produces NaN
+    * 0000227: Monteverdi crashing while displaying a .tif file
+    * 0000350: KMeans module : weird behavior of "Max nb of iterations"
+    * 0000248: In feature extraction module, for haralick textures : impossible to set min/max for binning
+    * 0000341: weird french warning in ms dos command window  with monteverdi 1.7 exe
+    * 0000313: Unable to perform orthofusion of WV2 PAN+XS (4 bands)
+    * 0000239: Trouble in pixel descrition in Monteverdi viewer
+    * 0000336: Viewer Histogram settings not applied after channel order changes
+    * 0000304: Advanced save dataset module with scaling on results in visible strip in image
+    * 0000262: Wrong metadata interpretation
+    * 0000302: Can't open two image in the viewer
     * 0000294: Monteverdi doesn't delete files in Caching
-    * 0000292: Tilemap import module not working
-    * 0000297: Crash when open change detection output image
-    * 0000281: Crash opening a RAD image.
     * 0000280: SVM classification and Feature extraction issues
     * 0000247: Style of the new screenshots function in viewer module is ugly
     * 0000238: Monteverdi spreads xml temporary files everywhere
     * 0000241: A warning appears each time an image is read
-    * 0000269: Inoperative fields in the reprojection module
     * 0000271: Default RGB channels are wrong for WV2 images
-    * 0000255: Image is not visible if scroll or Full   window is minimized while working with SVM classification
-    * 0000265: SVM learn module : crash when displaying results
-    * 0000254: Homologous point module
-    * 0000267: Vectorization-Rasterization module
-    * 0000240: Importing shp file in SVM module in Monterverdi 1.6 always results in crash
-    * 0000244: Pansharpening EO-1 image with Monteverdi produces NaN
-    * 0000227: Monteverdi crashing while displaying a .tif file
-
-  * OTB-Packaging
-    * 0000290: Make an Experimental submission on the dashboard with natty
-    * 0000296: gdal 1.8 debian package breaks TIFF support
+    * 0000250: Meanshift clustering module: spectral radius limited
+    * 0000306: Unable to export otb::Image in KMZ in the Monteverdi module "KMZ export"
+    * 0000279: Visualisation from vectorisation module does not use default channels for wv2 images
 
   * OTB-applications
     * 0000231: otbRasterizationApplication -pr options await for OGC WKT strings
     * 0000318: otbOSMDownloader-cli does not work anymore
-    * 0000338: otbSegmentationApplication : Enable to use real values
-    * 0000232: Several minor changes in rasterization application
     * 0000233: otbRasterizationApplication fail to rasterize SRTM water bodies shapefile with default parameters
+    * 0000232: Several minor changes in rasterization application
+    * 0000338: otbSegmentationApplication : Enable to use real values
 
-  * Orfeo Toolbox (OTB)
-    * 0000279: Visualisation from vectorisation module does not use default channels for wv2 images
-    * 0000327: CMake configuration abort if no curl is available on system, even with OTB_USE_CURL is set to OFF
-    * 0000282: Unable to open tiff image
-    * 0000237: Boost / Fltk conflict
-    * 0000276: Trouble with the compare ascii when separations are tabulation
- 
+  * OTB-Packaging
+    * 0000296: gdal 1.8 debian package breaks TIFF support
+    * 0000301: Can't upgrade debian package between different OTB versions
+    * 0000347: Problem with current ubuntu Natty nightly package of Monteverdi
+    * 0000290: Make an Experimental submission on the dashboard with natty
+    * 0000355: Bad timestamp for nightly built Ubuntu packages
+    * 0000288: Nightly packages upload when launchpad is overloaded
+    * 0000345: debian package : enable mapnik
+    * 0000344: debian package : use system boost
+    * 0000326: CentOS packages for Monteverdi and OTB-Applications
+
+  * OTB-Qgis
+    * 0000272: problem with installation
 
 OTB-v.3.8.0 - Changes since version 3.6.0 (2010/12/16)
 -----------------------------------------
