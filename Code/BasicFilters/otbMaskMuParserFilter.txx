@@ -38,7 +38,7 @@ MaskMuParserFilter<TInputImage, TOutputImage, TFunction>::MaskMuParserFilter()
   m_OverflowCount = 0;
   m_ThreadUnderflow.SetSize(1);
   m_ThreadOverflow.SetSize(1);
-
+  m_Expression="";
 }
 
 // Destructor
