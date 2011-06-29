@@ -28,8 +28,8 @@ INCLUDE(SourceStatus)
 #-----------------------------------------------------------------------------
 # OTB version number.  An even minor number corresponds to releases.
 SET(OTB_VERSION_MAJOR "3")
-SET(OTB_VERSION_MINOR "9")
-SET(OTB_VERSION_PATCH "1")
+SET(OTB_VERSION_MINOR "10")
+SET(OTB_VERSION_PATCH "0")
 
 # Version string should not include patch level.  The major.minor is
 # enough to distinguish available features of the toolkit.
