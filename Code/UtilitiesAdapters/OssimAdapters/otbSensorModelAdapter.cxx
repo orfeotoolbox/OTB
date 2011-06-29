@@ -150,7 +150,7 @@ void SensorModelAdapter::InverseTransformPoint(double lon, double lat, double h,
   if (this->m_UseDEM)
     {
     double height = this->m_DEMHandler->GetHeightAboveMSL(lon, lat);
-    // If the DEM handler cannot give the height for the (lon,lat) point,
+    // If the DEM handler cannot give the height for the (lon, lat) point,
     // either because the tile is not available or the value in the tile are all -32768,
     // it will return ossim::nan()
     ossimGPoint.height(height);
