@@ -132,8 +132,7 @@ void SensorModelAdapter::ForwardTransformPoint(double x, double y, double z,
   //Otherwise, just don't consider the altitude
   else
     {
-      otbMsgDevMacro("The given altitude is corresponds to NoData (value is -32768. We will use 0 as altitude.");
-      this->m_SensorModel->lineSampleHeightToWorld(ossimPoint, 0, ossimGPoint);
+    this->m_SensorModel->lineSampleToWorld(ossimPoint, ossimGPoint);
     }
 
   lon = ossimGPoint.lon;
@@ -144,21 +143,24 @@ void SensorModelAdapter::ForwardTransformPoint(double x, double y, double z,
 void SensorModelAdapter::InverseTransformPoint(double lon, double lat, double h,
                                                double& x, double& y, double& z) const
 {
-  ossimGpt ossimGPoint(lat, lon);
+  // Initialize with value from the function parameters
+  ossimGpt ossimGPoint(lat, lon, h);
 
+  // In case a DEM is used, override the elevation parameter by the DEM value
   if (this->m_UseDEM)
     {
     double height = this->m_DEMHandler->GetHeightAboveMSL(lon, lat);
+    // If the DEM handler cannot give the height for the (lon,lat) point,
+    // either because the tile is not available or the value in the tile are all -32768,
+    // it will return ossim::nan()
     ossimGPoint.height(height);
     }
-  else if (h != -32768)
+
+  // If the 'h' parameter is -32768 (case where OTB classes use a default AverageElevation value)
+  if (ossimGPoint.height() == -32768)
     {
-    ossimGPoint.height(h);
-    }
-  else
-    {
-      otbMsgDevMacro("The given altitude is corresponds to NoData (value is -32768. We will use 0 as altitude.");
-      ossimGPoint.height(0);
+    otbMsgDevMacro(<< "The given altitude corresponds to NoData (value is -32768)");
+    ossimGPoint.height( ossim::nan() );
     }
 
   ossimDpt ossimDPoint;
@@ -168,14 +170,10 @@ void SensorModelAdapter::InverseTransformPoint(double lon, double lat, double h,
     itkExceptionMacro(<< "InverseTransformPoint(): Invalid Model pointer m_SensorModel == NULL !");
     }
 
-  if (ossimGPoint.hgt == -32768)
-    {
-    ossimGPoint.hgt = ossim::nan();
-    }
-
   // Note: the -32768 is only here to show unknown altitude and should never be
-  // passed to ossim
-  assert(ossim::isnan(ossimGPoint.hgt) || (ossimGPoint.hgt > -1000));
+  // passed to ossim.
+  // We should either have a NaN, either a valid elevation value
+  assert(ossim::isnan(ossimGPoint.height()) || (ossimGPoint.height() > -1000));
 
   this->m_SensorModel->worldToLineSample(ossimGPoint, ossimDPoint); //"worldToLineSample" call "lineSampleHeightToWorld" method for take in care elevation information.
   x = ossimDPoint.x;
