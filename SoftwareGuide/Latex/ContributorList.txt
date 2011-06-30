@@ -41,4 +41,4 @@ Angelos Tzotsos
 Edouard Barthelet (Telecom Bretagne and Thales Communications)
 Guillaume Pasero (CNES Intern)
 Jonathan Guinet (CS)
-Micka\"el Savinaud (CS)
+Mickael Savinaud (CS)
