@@ -40,6 +40,5 @@ Amit Kulkarni
 Angelos Tzotsos
 Edouard Barthelet (Telecom Bretagne and Thales Communications)
 Guillaume Pasero (CNES Intern)
-Aurélien Bricier (CS)
 Jonathan Guinet (CS)
-Mickaël Savinaud (CS)
+Micka\"el Savinaud (CS)
