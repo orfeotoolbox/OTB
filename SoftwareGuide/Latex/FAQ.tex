@@ -202,7 +202,7 @@ packages, you can skip to step 4.
       gunzip gdal.1.8.0.tar.gz
       tar xvf gdal.1.8.0.tar
       cd gdal.1.8.0
-      ./configure --prefix=INSTALL_DIR --with-png=internal --with-libtiff=internal --with-geotiff=internal --with-jpeg=internal
+      ./configure --prefix=INSTALL_DIR --with-libtiff=internal --with-geotiff=internal
       make
       make install
   \end{verbatim}
@@ -347,8 +347,7 @@ Microsoft Visual Studio 2010 is supported since the version 3.6.
 
 	To compile GDAL, at configure step, use these options :
 \begin{verbatim}
-	./configure --prefix=INSTALL_DIR --with-png=internal --with-libtiff=internal
-	--with-jpeg=internal
+	./configure --prefix=INSTALL_DIR --with-geotiff=internal --with-libtiff=internal
 \end{verbatim}
 	Then the usual make and make install.
 
@@ -432,8 +431,7 @@ Here is an outline of the issue: to be able to handler big Tiff files (e.g. more
 
 Now, here is the workaround: Build your own Gdal library (you probably want to have the most up-to-date Gdal anyway) using the following options during configuration:
 \begin{verbatim}
-	./configure --prefix=INSTALL_DIR --with-png=internal --with-libtiff=internal
-	--with-jpeg=internal --with-geotiff=internal
+	./configure --prefix=INSTALL_DIR --with-libtiff=internal --with-geotiff=internal
 \end{verbatim}
 
 Then make and (sudo) make install. Then, do:
