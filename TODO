@@ -1,0 +1,82 @@
+== Core ==
+- add a ParameterKey class
+  * constructor can accept string of type "toto.titi.tata"
+  * elementary strings are checked : only alphanumerical, lowercase, and numbers
+  * methods :
+   ** last() : return "tata"
+   ** parent() : return "toto.titi"
+   ** root() : return "toto"
+   ** split() : return vector<string> ("toto", "titi", "tata")
+  * use this class as the basis in the Application class
+  
+- progress reporting
+  
+- log management
+  * http://www.itk.org/Doxygen/html/classitk_1_1ThreadLogger.html
+  * http://www.itk.org/Doxygen/html/classitk_1_1LoggerManager.html
+  
+* list of parameters
+  * input image list, string list, ...
+  
+* tags (for QGis plugins at least)
+* menu hint (for monteverdi integration)
+
+== Wrappers ==
+
+=== ApplicationLauncherQt ===
+* rewrite in PyQt
+* if parameters are only the path to modules or nothing, start a gui with menus to select the module
+
+
+=== C interface ===
+* wrap the C++ interface in a pure C interface ?
+* would help integration to Zoo where modules cannot be C++ due to a "map" type in the API
+
+
+=== PyQt ===
+* integrate list : QListView
+* generic widget with possibility to add/remove/move an entry in the list
+* use the unitary widgets (int/float/input file/...) and embed them in the ListView ?
+* log viewer widget when logging is available in core
+* progress reporting :
+  * look here : http://itk.org/gitweb?p=ITKApps.git;a=tree;f=QtITK;h=402c19a67c9707624e45519b9f6ca179ca2de280;hb=HEAD
+  * or use PyCommand from OTB-Wrapping/Langages/Python/PyUtils ?
+  
+=== QGisProcessing ===
+* fit to the framework when possible, adapt the PyQt wrapper widgets for non supported paramter types
+
+=== QtWidget ===
+* useless now with the PyQt wrappers ?
+
+
+=== SWIG Python ===
+* numpy support for input/output images
+* integrate PyCommand from OTB-Wrapping/Langages/Python/PyUtils to catch progress events from Python ?
+* more pythonic API ? like app.input = '/path/to/file' or app.radius = 5 or app.group1.radius = 2
+  * need a Parameter class in the Python API and reimplement __getattr__ on Application and Parameter
+  * once done, make possible one-liner call : Smoothing(input='fsfd', type='mean', type_radius=5, output='test.tif')
+  * create a specific symbol for each application in the Python module ? avoids the Registry part
+  
+=== SWIG Java ===
+* fix segfault... (smart pointer mess)
+* use itkJavaCommand from OTB-Wrapping
+
+=== SWIG Lua ===
+* who knows this langage ?
+
+=== SWIG Ruby ===
+* who knows this langage ?
+
+=== IDL ===
+* make a generic function taking the module name, followed by key/value(s) pairs of parameters
+
+=== ENVI ===
+* make a .pro generator, generating the ENVI code for widget declaration from the parameter description
+* in what langage ? cmake/python/c++ ?
+
+
+
+
+
+
+
