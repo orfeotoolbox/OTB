@@ -10,3 +10,9 @@ target_link_libraries(otbApplicationLauncherQt
                        OTBWrapperQtWidget
                        OTBWrapperCore
                        ${QT_LIBRARIES})
+
+install(TARGETS otbApplicationLauncherQt
+        RUNTIME DESTINATION bin
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib/static)
+                       

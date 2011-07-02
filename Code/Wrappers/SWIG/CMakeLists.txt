@@ -140,6 +140,11 @@ if ( WRAP_LUA )
   if ( UNIX )
     target_link_libraries ( otbApplicationLua curses )
   endif()
+  
+  install(TARGETS otbApplicationLua
+          RUNTIME DESTINATION bin
+          LIBRARY DESTINATION lib
+          ARCHIVE DESTINATION lib/static)
 
 endif()
 
@@ -160,6 +165,11 @@ if ( WRAP_RUBY )
   SWIG_add_module ( otbApplication ruby otbApplication.i otbApplicationRUBY_wrap.cxx )
   SWIG_link_libraries ( otbApplication ${RUBY_LIBRARY} OTBWrapperCore)
   set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/otbApplicationRUBY_wrap.cxx COMPILE_FLAGS "-w")
+
+  install(TARGETS otbapplication
+          RUNTIME DESTINATION bin
+          LIBRARY DESTINATION lib
+          ARCHIVE DESTINATION lib/static)
 
 endif()
 

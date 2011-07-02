@@ -20,3 +20,12 @@ QT4_WRAP_CPP(WrappersQtWidget_MOC_SRC ${WrappersQtWidget_MOC_HDR})
 
 add_library(OTBWrapperQtWidget ${srcs} ${WrappersQtWidget_MOC_SRC})
 target_link_libraries(OTBWrapperQtWidget OTBCommon OTBIO OTBWrapperCore ${QT_LIBRARIES})
+
+install(TARGETS OTBWrapperQtWidget
+        RUNTIME DESTINATION bin
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib/static)
+ 
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include/otbapp
+        FILES_MATCHING PATTERN "*.h")
+ 
