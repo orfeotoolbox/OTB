@@ -24,15 +24,15 @@ class QParameterLabel(QParameterBase):
     def __init__(self, model, paramKey):
         super(QParameterLabel, self).__init__(model)
         
-        self.label = QtGui.QLabel()
+        self._label = QtGui.QLabel()
         app = self.GetModel().GetApplication()
-        self.label.setText( app.GetParameterName(paramKey))
-        self.label.setToolTip( app.GetParameterDescription(paramKey) )
-        self.labelLayout = QtGui.QVBoxLayout()
-        self.labelLayout.setSpacing(0)
-        self.labelLayout.setContentsMargins(0,0,0,0)
-        self.labelLayout.addWidget(self.label)
-        self.setLayout(self.labelLayout)
+        self._label.setText( app.GetParameterName(paramKey))
+        self._label.setToolTip( app.GetParameterDescription(paramKey) )
+        self._labelLayout = QtGui.QVBoxLayout()
+        self._labelLayout.setSpacing(0)
+        self._labelLayout.setContentsMargins(0,0,0,0)
+        self._labelLayout.addWidget(self._label)
+        self.setLayout(self._labelLayout)
         self.setWindowTitle('box layout')
 
 class QParameterEmpty(QParameterBase):
@@ -42,15 +42,15 @@ class QParameterEmpty(QParameterBase):
 
     def DoCreateWidget(self):
         app = self.GetModel().GetApplication()
-        h = QtGui.QHBoxLayout()
-        h.setSpacing(0)
-        h.setContentsMargins(0,0,0,0)
-        spin = QtGui.QCheckBox()
-        spin.setToolTip(app.GetParameterDescription(self._paramKey))
-        self.connect(spin, QtCore.SIGNAL('stateChanged(int)'), self.SetValue)
-        h.addWidget(spin)
-        h.addStretch()
-        self.setLayout(h)
+        self._h = QtGui.QHBoxLayout()
+        self._h.setSpacing(0)
+        self._h.setContentsMargins(0,0,0,0)
+        self._spin = QtGui.QCheckBox()
+        self._spin.setToolTip(app.GetParameterDescription(self._paramKey))
+        self.connect(self._spin, QtCore.SIGNAL('stateChanged(int)'), self.SetValue)
+        self._h.addWidget(self._spin)
+        self._h.addStretch()
+        self.setLayout(self._h)
         
     def SetValue(self, val):
         app = self.GetModel().GetApplication()
@@ -68,20 +68,24 @@ class QParameterInt(QParameterBase):
     def DoCreateWidget(self):
         app = self.GetModel().GetApplication()
         
-        h = QtGui.QHBoxLayout()
-        h.setSpacing(0)
-        h.setContentsMargins(0,0,0,0)
+        self._h = QtGui.QHBoxLayout()
+        self._h.setSpacing(0)
+        self._h.setContentsMargins(0,0,0,0)
         
-        spin = QtGui.QSpinBox()
-        spin.setToolTip(app.GetParameterDescription(self._paramKey))
+        self._spin = QtGui.QSpinBox()
+        self._spin.setToolTip(app.GetParameterDescription(self._paramKey))
         
-        self.connect(spin, QtCore.SIGNAL('valueChanged(int)'), self.SetValue)
+        self.connect(self._spin, QtCore.SIGNAL('valueChanged(int)'), self.SetValue)
         
-        h.addWidget(spin)
-        h.addStretch()
+        self._h.addWidget(self._spin)
+        self._h.addStretch()
         
-        self.setLayout(h)
-        
+        self.setLayout(self._h)
+
+    def UpdateGUI(self):
+        app = self.GetModel().GetApplication()
+        self._spin.setValue( app.GetParameterInt(self._paramKey) );
+   
     def SetValue(self, val):
         app = self.GetModel().GetApplication()
         app.SetParameterInt(self._paramKey, val)
@@ -94,35 +98,34 @@ class QParameterChoice(QParameterBase):
     
     def DoCreateWidget(self):
         app = self.GetModel().GetApplication()
-        
-        layout = QtGui.QVBoxLayout()
-        
-        
-        combo = QtGui.QComboBox()
-        combo.setToolTip(app.GetParameterDescription(self._paramKey))
-        
-        stack = QtGui.QStackedWidget()
+        self._layout = QtGui.QVBoxLayout()
+        self._combo = QtGui.QComboBox()
+        self._combo.setToolTip(app.GetParameterDescription(self._paramKey))
+        self._stack = QtGui.QStackedWidget()
+        self._stack.setContentsMargins(0,0,0,0)
         
         for choice in zip(app.GetChoiceKeys(self._paramKey), app.GetChoiceNames(self._paramKey)):
-            combo.addItem(choice[1], choice[0])
+            self._combo.addItem(choice[1], choice[0])
         
         allparams = app.GetParametersKeys(True)
         for choiceKey in app.GetChoiceKeys(self._paramKey):
             a = [s for s in allparams if s.startswith(self._paramKey + '.' + choiceKey + '.')]
             if not a:
-                stack.addWidget(QtGui.QWidget())
+                self._stack.addWidget(QtGui.QWidget())
             else:
                 widget = QParameterGroup(self.GetModel(), self._paramKey + '.' + choiceKey)
                 widget.CreateWidget()
-                stack.addWidget(widget)
+                self._stack.addWidget(widget)
 
-        self.connect(combo, QtCore.SIGNAL("currentIndexChanged(int)"), self.SetValue)
-        self.connect(combo, QtCore.SIGNAL("currentIndexChanged(int)"), stack.setCurrentIndex)
+        self.connect(self._combo, QtCore.SIGNAL("currentIndexChanged(int)"), self.SetValue)
+        self.connect(self._combo, QtCore.SIGNAL("currentIndexChanged(int)"), self._stack.setCurrentIndex)
 
-        layout.addWidget(combo)
-        layout.addWidget(stack)
-        layout.addStretch()
-        self.setLayout(layout)
+        self._layout.setSpacing(0)
+        self._layout.setContentsMargins(0,0,0,0)
+        self._layout.addWidget(self._combo)
+        self._layout.addWidget(self._stack)
+        #self._layout.addStretch()
+        self.setLayout(self._layout)
         
     def SetValue(self, val):
         app = self.GetModel().GetApplication()
@@ -136,20 +139,20 @@ class QParameterFloat(QParameterBase):
     def DoCreateWidget(self):
         app = self.GetModel().GetApplication()
         
-        h = QtGui.QHBoxLayout()
-        h.setSpacing(0)
-        h.setContentsMargins(0,0,0,0)
+        self._h = QtGui.QHBoxLayout()
+        self._h.setSpacing(0)
+        self._h.setContentsMargins(0,0,0,0)
         
-        spin = QtGui.QDoubleSpinBox()
-        spin.setDecimals(5)
-        spin.setToolTip(app.GetParameterDescription(self._paramKey))
+        self._spin = QtGui.QDoubleSpinBox()
+        self._spin.setDecimals(5)
+        self._spin.setToolTip(app.GetParameterDescription(self._paramKey))
         
-        self.connect(spin, QtCore.SIGNAL('valueChanged(double)'), self.SetValue)
+        self.connect(self._spin, QtCore.SIGNAL('valueChanged(double)'), self.SetValue)
         
-        h.addWidget(spin)
-        h.addStretch()
+        self._h.addWidget(self._spin)
+        self._h.addStretch()
         
-        self.setLayout(h)
+        self.setLayout(self._h)
         
     def SetValue(self, val):
         app = self.GetModel().GetApplication()
@@ -164,16 +167,16 @@ class QParameterString(QParameterBase):
     def DoCreateWidget(self):
         app = self.GetModel().GetApplication()
         
-        h = QtGui.QHBoxLayout()
-        h.setSpacing(0)
-        h.setContentsMargins(0,0,0,0)
+        self._h = QtGui.QHBoxLayout()
+        self._h.setSpacing(0)
+        self._h.setContentsMargins(0,0,0,0)
         
         self._line = QtGui.QLineEdit()
         self._line.setToolTip(app.GetParameterDescription(self._paramKey))
         self.connect(self._line, QtCore.SIGNAL('textChanged(const QString&)'), self.SetValue)
         
-        h.addWidget(self._line)
-        self.setLayout(h)
+        self._h.addWidget(self._line)
+        self.setLayout(self._h)
         
     def SetValue(self, val):
         app = self.GetModel().GetApplication()
@@ -188,9 +191,9 @@ class QParameterInputFilename(QParameterBase):
     def DoCreateWidget(self):
         app = self.GetModel().GetApplication()
         
-        h = QtGui.QHBoxLayout()
-        h.setSpacing(0)
-        h.setContentsMargins(0,0,0,0)
+        self._h = QtGui.QHBoxLayout()
+        self._h.setSpacing(0)
+        self._h.setContentsMargins(0,0,0,0)
         
         self._line = QtGui.QLineEdit()
         self._line.setToolTip(app.GetParameterDescription(self._paramKey))
@@ -202,10 +205,10 @@ class QParameterInputFilename(QParameterBase):
         self._button.setMaximumWidth(self._button.width())
         self.connect(self._button, QtCore.SIGNAL('clicked()'), self.SelectFile)
         
-        h.addWidget(self._line)
-        h.addWidget(self._button)
+        self._h.addWidget(self._line)
+        self._h.addWidget(self._button)
         
-        self.setLayout(h)
+        self.setLayout(self._h)
         
     def SetFilename(self, val):
         app = self.GetModel().GetApplication()
@@ -228,9 +231,9 @@ class QParameterDirectory(QParameterBase):
     def DoCreateWidget(self):
         app = self.GetModel().GetApplication()
         
-        h = QtGui.QHBoxLayout()
-        h.setSpacing(0)
-        h.setContentsMargins(0,0,0,0)
+        self._h = QtGui.QHBoxLayout()
+        self._h.setSpacing(0)
+        self._h.setContentsMargins(0,0,0,0)
         
         self._line = QtGui.QLineEdit()
         self._line.setToolTip(app.GetParameterDescription(self._paramKey))
@@ -242,10 +245,10 @@ class QParameterDirectory(QParameterBase):
         self._button.setMaximumWidth(self._button.width())
         self.connect(self._button, QtCore.SIGNAL('clicked()'), self.SelectDir)
         
-        h.addWidget(self._line)
-        h.addWidget(self._button)
+        self._h.addWidget(self._line)
+        self._h.addWidget(self._button)
         
-        self.setLayout(h)
+        self.setLayout(self._h)
         
     def SetDirname(self, val):
         app = self.GetModel().GetApplication()
@@ -268,9 +271,9 @@ class QParameterOutputImage(QParameterBase):
     def DoCreateWidget(self):
         app = self.GetModel().GetApplication()
         
-        h = QtGui.QHBoxLayout()
-        h.setSpacing(0)
-        h.setContentsMargins(0,0,0,0)
+        self._h = QtGui.QHBoxLayout()
+        self._h.setSpacing(0)
+        self._h.setContentsMargins(0,0,0,0)
         
         self._line = QtGui.QLineEdit()
         self._line.setToolTip(app.GetParameterDescription(self._paramKey))
@@ -282,10 +285,10 @@ class QParameterOutputImage(QParameterBase):
         self._button.setMaximumWidth(self._button.width())
         self.connect(self._button, QtCore.SIGNAL('clicked()'), self.SelectFile)
         
-        h.addWidget(self._line)
-        h.addWidget(self._button)
+        self._h.addWidget(self._line)
+        self._h.addWidget(self._button)
         
-        self.setLayout(h)
+        self.setLayout(self._h)
         
     def SetFilename(self, val):
         app = self.GetModel().GetApplication()
@@ -308,8 +311,6 @@ class QParameterGroup(QParameterBase):
         pass
 
     def DoCreateWidget(self):
-        
-        
         defaultWidget = QParameterInt
         paramTypeToWidget = {
             otbApplication.ParameterType_Choice : QParameterInt,
@@ -331,30 +332,31 @@ class QParameterGroup(QParameterBase):
 
         app = self.GetModel().GetApplication()
         if self._paramKey:
-            keys = [key for key in app.GetParametersKeys(True) if key and key.startswith(self._paramKey + '.')]
+            keys = [key for key in app.GetParametersKeys(True) 
+                        if key  and key.startswith(self._paramKey + '.')]
         else:
             keys = app.GetParametersKeys(False)
         print 'keys ' + str(keys)
         
-        form = QtGui.QFormLayout()
+        self._form = QtGui.QFormLayout()
         for key in keys:
             widgetClass = paramTypeToWidget[app.GetParameterType(key)]
             w = widgetClass(self._model, key)
             w.CreateWidget()
 
             if widgetClass is not QParameterGroup:
-                form.addRow( app.GetParameterName(key), w )
+                self._form.addRow( app.GetParameterName(key), w )
             else:
-                form.addRow(w)
+                self._form.addRow(w)
 
         if self._paramKey:
             # not the root group
             group = QtGui.QGroupBox()
             group.setTitle( app.GetParameterName(self._paramKey) )
-            group.setLayout(form)
+            group.setLayout(self._form)
 
             layout = QtGui.QHBoxLayout()
             layout.addWidget(group)
             self.setLayout(layout)
         else:
-            self.setLayout(form)
+            self.setLayout(self._form)
