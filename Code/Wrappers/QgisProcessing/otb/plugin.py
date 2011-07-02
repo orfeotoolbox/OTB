@@ -28,35 +28,61 @@ import processing
 import processing.parameters
 import otbApplication as otb
 
-class OTBPlugin(processing.Plugin):
+class OTBPlugin():
     def __init__(self, iface):
-        apps = otb.Registry.GetAvailableApplications()
-        for app in apps:
-            processing.framework.registerModule([OTBModule(app)])
-        processing.Plugin.__init__(self, iface)
+        self._modules = None
+        pass
+        
+    def initGui(self):
+        processing.framework.registerModuleProvider(self)
+        
+    def unload(self):
+        pass # TODO : unload the modules
+    
+    def modules(self):
+        if self._modules is None:
+            apps = otb.Registry.GetAvailableApplications()
+            self._modules = set()
+            for app in apps:
+                self._modules.add(OTBModule(app))
+        return self._modules
 
 class OTBModule(processing.Module):
     def __init__(self, modulename):
-        self.app = otb.Registry.CreateApplication(modulename)
+        self._app = otb.Registry.CreateApplication(modulename)
         processing.Module.__init__(self,
-            self.app.GetName(),
-            self.app.GetDescription())
+            self._app.GetName(),
+            self._app.GetDescription())
+        
+        self._parameters = []
 
-        for p in self.app.GetParametersKeys():
+        for p in self._app.GetParametersKeys():
+            print p
             self.addParameter(p)
 
     def addParameter(self, otbParamKey):
         otbToQGisParam = {
-            otb.ParameterType_Int:
-                processing.parameters.NumericParameter,
+            otb.ParameterType_Empty: processing.parameters.BooleanParameter,
+            otb.ParameterType_Int:   processing.parameters.NumericParameter,
+            otb.ParameterType_Float:   processing.parameters.NumericParameter,
+            otb.ParameterType_String:   processing.parameters.StringParameter,
+            otb.ParameterType_Filename:   processing.parameters.StringParameter,
+            otb.ParameterType_Directory:   processing.parameters.StringParameter,
+            otb.ParameterType_Choice:   processing.parameters.ChoiceParameter,
+            otb.ParameterType_InputImage:   processing.parameters.StringParameter,
+            otb.ParameterType_InputComplexImage:   processing.parameters.StringParameter,
+            otb.ParameterType_InputVectorData:   processing.parameters.StringParameter,
+            otb.ParameterType_OutputImage:   processing.parameters.StringParameter,
+            otb.ParameterType_OutputVectorData:   processing.parameters.StringParameter,
+            otb.ParameterType_Radius:   processing.parameters.NumericParameter
         }
         
         name = otbParamKey
-        descr = self.app.GetParameterName(otbParamKey)
-        typ = self.app.GetParameterType(otbParamKey)
+        descr = self._app.GetParameterName(otbParamKey)
+        typ = self._app.GetParameterType(otbParamKey)
         try:
             qgisParam = otbToQGisParam[typ]
-            self._parameters.add(qgisParam(name, descr))
+            self._parameters.append(qgisParam(name, descr))
         except KeyError:
             #print name + " is of unhandled parameter type."
             pass
