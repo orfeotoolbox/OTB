@@ -28,7 +28,7 @@ SET(Simulation_TESTS4 ${CXX_TEST_PATH}/otbSimulationTests4)
 # -------            otb::reflectancetosurfacereflectance  --------------------------
 
 ADD_TEST(maTuReflectanceToSurfaceReflectanceFilterNew ${Simulation_TESTS1}
-        otbReflectanceToSurfaceReflectanceFilterNew )
+        otbSurfaceReflectanceToReflectanceFilterNew )
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbSimulation_TESTS2 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
