@@ -203,7 +203,7 @@ bool ossimAlosPalsarModel::open(const ossimFilename& file)
       /*
        * Leader file data reading
        */
-      std::ifstream leaderFile(leaFilename, ios::in | ios::binary);
+      std::ifstream leaderFile(leaFilename.c_str(), ios::in | ios::binary);
       leaderFile >> *theAlosPalsarLeader;
       leaderFile.close();
 
@@ -227,7 +227,7 @@ bool ossimAlosPalsarModel::open(const ossimFilename& file)
         /*
          * Read header of data file for image size info
          */
-        std::ifstream dataFile(datFilename, ios::in | ios::binary);
+        std::ifstream dataFile(datFilename.c_str(), ios::in | ios::binary);
         dataFile >> *theAlosPalsarData;
         dataFile.close();
 
@@ -668,7 +668,7 @@ bool ossimAlosPalsarModel::InitSRGR(const ossimKeywordlist &kwl, const char *pre
 
 bool ossimAlosPalsarModel::isAlosPalsarLeader(const ossimFilename& file) const
 {
-  std::ifstream candidate(file, ios::in | ios::binary);
+  std::ifstream candidate(file.c_str(), ios::in | ios::binary);
   char alosFileName[16];
 
   candidate.seekg(48);
@@ -731,7 +731,7 @@ ossimFilename ossimAlosPalsarModel::findAlosPalsarLeader(const ossimFilename& fi
 
 bool ossimAlosPalsarModel::isAlosPalsarData(const ossimFilename& file) const
 {
-  std::ifstream candidate(file, ios::in | ios::binary);
+  std::ifstream candidate(file.c_str(), ios::in | ios::binary);
   char alosFileName[16];
 
   candidate.seekg(48);

@@ -210,7 +210,7 @@ bool ossimRadarSatModel::open(const ossimFilename& file)
 
   RadarSatRecordHeader headerVDF;
   VolumeDirFactory factoryVDF;
-  ifstream volumeDirFile (volumeDirectoryFilePath, ios::in|ios::binary);
+  ifstream volumeDirFile (volumeDirectoryFilePath.c_str(), ios::in|ios::binary);
   volumeDirFile>>headerVDF;
   if(volumeDirFile.eof())
     {
@@ -255,7 +255,7 @@ bool ossimRadarSatModel::open(const ossimFilename& file)
         //Reading of the remaining of the volume directory file
 
         volumeDirFile.close();
-        volumeDirFile.open(volumeDirectoryFilePath, ios::in | ios::binary);
+        volumeDirFile.open(volumeDirectoryFilePath.c_str(), ios::in | ios::binary);
         volumeDirFile >> *_volumeDir;
         volumeDirFile.close();
 
@@ -266,7 +266,7 @@ bool ossimRadarSatModel::open(const ossimFilename& file)
 
         RadarSatRecordHeader headerDAT;
         DataFactory factoryDAT;
-        ifstream dataFile (dataFilePath, ios::in|ios::binary);
+        ifstream dataFile (dataFilePath.c_str(), ios::in|ios::binary);
         dataFile>>headerDAT;
         if(dataFile.eof())
           {
@@ -288,7 +288,7 @@ bool ossimRadarSatModel::open(const ossimFilename& file)
             /*
              * Reading the remaining of the data file
              */
-            dataFile.open(dataFilePath, ios::in|ios::binary);
+            dataFile.open(dataFilePath.c_str(), ios::in|ios::binary);
             dataFile>>*_data;
             dataFile.close();
 
@@ -341,7 +341,7 @@ bool ossimRadarSatModel::open(const ossimFilename& file)
           /*
            * Leader file data reading
            */
-          ifstream leaderFile (leaderFilePath, ios::in|ios::binary);
+          ifstream leaderFile (leaderFilePath.c_str(), ios::in|ios::binary);
           leaderFile>>*_leader;
           leaderFile.close();
           if(traceDebug())
@@ -381,7 +381,7 @@ bool ossimRadarSatModel::open(const ossimFilename& file)
           /*
            * Trailer file data reading
            */
-          ifstream trailerFile (trailerFilePath, ios::in|ios::binary);
+          ifstream trailerFile (trailerFilePath.c_str(), ios::in|ios::binary);
           trailerFile>>*_trailer;
           trailerFile.close();
           if(traceDebug())

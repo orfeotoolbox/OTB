@@ -181,7 +181,7 @@ bool ossimErsSarModel::open(const ossimFilename& file)
       /*
        * Leader file data reading
        */
-      std::ifstream leaderFile(leaFilename, ios::in | ios::binary);
+      std::ifstream leaderFile(leaFilename.c_str(), ios::in | ios::binary);
       leaderFile >> *theErsSarleader;
       leaderFile.close();
 
@@ -632,7 +632,7 @@ bool ossimErsSarModel::InitSRGR(const ossimKeywordlist &kwl, const char *prefix)
 
 bool ossimErsSarModel::isErsLeader(const ossimFilename& file) const
 {
-  std::ifstream candidate(file, ios::in | ios::binary);
+  std::ifstream candidate(file.c_str(), ios::in | ios::binary);
   char ersFileName[16];
 
   candidate.seekg(48);

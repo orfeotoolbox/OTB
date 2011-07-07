@@ -67,7 +67,7 @@ bool Noise::saveState(ossimKeywordlist& kwl, const char* prefix) const
    
    for (unsigned int i = 0; i < _tabImageNoise.size(); ++i)
    {
-      std::string s2 = pfx + "[" + ossimString::toString(i) + "]";
+     ossimString s2 = pfx + "[" + ossimString::toString(i).c_str() + "]";
       _tabImageNoise[i].saveState(kwl, s2.c_str());
    }
 
@@ -119,7 +119,7 @@ bool Noise::loadState(const ossimKeywordlist& kwl, const char* prefix)
    _tabImageNoise.clear();
    for (unsigned int i = 0; i < _numberOfNoiseRecords; ++i)
    {
-      std::string s2 = pfx + "[" + ossimString::toString(i) + "]";
+      std::string s2 = pfx + "[" + ossimString::toString(i).c_str() + "]";
       ImageNoise in;
       result = in.loadState(kwl, s2.c_str());
       _tabImageNoise.push_back(in);
@@ -148,7 +148,7 @@ std::ostream& Noise::print(std::ostream& out) const
    kwl.add(prefix, s.chars(), _polarisation);
    for (unsigned int i = 0; i < _tabImageNoise.size(); ++i)
    {
-      std::string s2 = pfx + "[" + ossimString::toString(i) + "]";
+      std::string s2 = pfx + "[" + ossimString::toString(i).c_str() + "]";
       _tabImageNoise[i].saveState(kwl, s2.c_str());
    }
 
