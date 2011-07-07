@@ -70,7 +70,7 @@ bool IncidenceAngles::saveState(ossimKeywordlist& kwl, const char* prefix) const
    std::string s2 =pfx + "." + CORNERS_INCIDENCE_ANGLE;
    for (unsigned int i = 0; i < _tabCornersInfoIncidenceAngle.size(); ++i)
    {
-      std::string s3 = s2 + "[" + ossimString::toString(i) + "]";
+      std::string s3 = s2 + "[" + ossimString::toString(i).c_str() + "]";
       _tabCornersInfoIncidenceAngle[i].saveState(kwl, s3.c_str());
    }
 
@@ -141,16 +141,16 @@ std::ostream& IncidenceAngles::print(std::ostream& out) const
    ossimKeywordlist kwl;
    ossimString pfx;
    pfx += INCIDENCE_ANGLES;
-   std::string s = pfx + "." + NUMBER_OF_CORNER_INCIDENCE_ANGLES;
+   ossimString s = pfx + "." + NUMBER_OF_CORNER_INCIDENCE_ANGLES;
    kwl.add(prefix, s.c_str(), _numberOfCornerIncidenceAngles);
    
-   std::string s1 = pfx + "." + CENTER_INCIDENCE_ANGLE;
+   ossimString s1 = pfx + "." + CENTER_INCIDENCE_ANGLE;
    _centerInfoIncidenceAngle.saveState(kwl, s1.c_str());
 
-   std::string s2 =pfx + "." + CORNERS_INCIDENCE_ANGLE;
+   ossimString s2 =pfx + "." + CORNERS_INCIDENCE_ANGLE;
    for (unsigned int i = 0; i < _tabCornersInfoIncidenceAngle.size(); ++i)
    {
-     std::string s3 = s2 + "[" + ossimString::toString(i) + "]";
+     ossimString s3 = s2 + "[" + ossimString::toString(i) + "]";
      _tabCornersInfoIncidenceAngle[i].saveState(kwl, s3.c_str());
    }
    out << kwl;

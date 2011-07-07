@@ -70,7 +70,7 @@ bool SceneCoord::saveState(ossimKeywordlist& kwl, const char* prefix) const
    std::string s2 =pfx + "." + SCENE_CORNER_COORD;
    for (unsigned int i = 0; i < _tabCornersSceneCoord.size(); ++i)
    {
-      std::string s3 = s2 + "[" + ossimString::toString(i) + "]";
+      std::string s3 = s2 + "[" + ossimString::toString(i).c_str() + "]";
       _tabCornersSceneCoord[i].saveState(kwl, s3.c_str());
    }
    return true;
@@ -116,7 +116,7 @@ bool SceneCoord::loadState(const ossimKeywordlist& kwl, const char* prefix)
    std::string s2 = pfx + SCENE_CORNER_COORD;
    for (unsigned int i = 0; i < _numberOfSceneCoord; ++i)
    {
-      std::string s3 = s2 + "[" + ossimString::toString(i) + "]";
+      std::string s3 = s2 + "[" + ossimString::toString(i).c_str() + "]";
       InfoSceneCoord isc;
       result = isc.loadState(kwl, s3.c_str());
       _tabCornersSceneCoord.push_back(isc);
@@ -140,16 +140,16 @@ std::ostream& SceneCoord::print(std::ostream& out) const
    ossimKeywordlist kwl;
    ossimString pfx;
    pfx += SCENE_COORD;
-   std::string s = pfx + "." + NUMBER_OF_SCENE_CORNER_COORD;
+   ossimString s = pfx + "." + NUMBER_OF_SCENE_CORNER_COORD;
    kwl.add(prefix, s.c_str(), _numberOfSceneCoord);
    
-   std::string s1 = pfx + "." + SCENE_CENTER_COORD;
+   ossimString s1 = pfx + "." + SCENE_CENTER_COORD;
    _centerSceneCoord.saveState(kwl, s1.c_str());
 
-   std::string s2 =pfx + "." + SCENE_CORNER_COORD;
+   ossimString s2 =pfx + "." + SCENE_CORNER_COORD;
    for (unsigned int i = 0; i < _tabCornersSceneCoord.size(); ++i)
    {
-     std::string s3 = s2 + "[" + ossimString::toString(i) + "]";
+     ossimString s3 = s2 + "[" + ossimString::toString(i) + "]";
      _tabCornersSceneCoord[i].saveState(kwl, s3.c_str());
    }
    out << kwl;

@@ -111,7 +111,7 @@ bool ossimEnvisatAsarModel::open(const ossimFilename& file)
    * Opening and test of the file
    */
   ossimFilename Filename = file;
-  ifstream dataFile(Filename, ios::in | ios::binary);
+  ifstream dataFile(Filename.c_str(), ios::in | ios::binary);
   if (dataFile.eof())
   {
     dataFile.close();
