@@ -148,8 +148,8 @@ std::ostream& Noise::print(std::ostream& out) const
    kwl.add(prefix, s.chars(), _polarisation);
    for (unsigned int i = 0; i < _tabImageNoise.size(); ++i)
    {
-      std::string s2 = pfx + "[" + ossimString::toString(i).c_str() + "]";
-      _tabImageNoise[i].saveState(kwl, s2.c_str());
+     ossimString s2 = pfx + "[" + ossimString::toString(i).c_str() + "]";
+     _tabImageNoise[i].saveState(kwl, s2.c_str());
    }
 
    out << kwl;

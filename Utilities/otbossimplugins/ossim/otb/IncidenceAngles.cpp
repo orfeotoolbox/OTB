@@ -117,7 +117,7 @@ bool IncidenceAngles::loadState(const ossimKeywordlist& kwl, const char* prefix)
    std::string s2 = pfx + CORNERS_INCIDENCE_ANGLE;
    for (unsigned int i = 0; i < _numberOfCornerIncidenceAngles; ++i)
    {
-      std::string s3 = s2 + "[" + ossimString::toString(i) + "]";
+      std::string s3 = s2 + "[" + ossimString::toString(i).c_str() + "]";
       InfoIncidenceAngle iia;
       result = iia.loadState(kwl, s3.c_str());
       _tabCornersInfoIncidenceAngle.push_back(iia);
