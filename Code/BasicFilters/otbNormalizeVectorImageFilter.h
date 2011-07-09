@@ -116,7 +116,7 @@ protected:
 
 
 /** \class NormalizeVectorImageFilter
- * \brief Normalize an VectorImage by setting its mean to zero and possibily variance to one (band by band).
+ * \brief Normalize an VectorImage by setting its mean to zero and possibly variance to one (band by band).
  * 
  * NormalizeVectorImageFilter shifts and scales an image so that the pixels in the image 
  * have a zero mean and unit variance. 
