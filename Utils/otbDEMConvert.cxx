@@ -46,7 +46,6 @@ int generic_convert_to_tif(otb::ApplicationOptionsResult* parseResult, std::stri
   return EXIT_SUCCESS;
 }
 
-
 int DEMConvert::Describe(ApplicationDescriptor* descriptor)
 {
   descriptor->SetName("DEMConvertApplication");
@@ -57,11 +56,6 @@ int DEMConvert::Describe(ApplicationDescriptor* descriptor)
   
   return EXIT_SUCCESS;
 }
-
-int temporaryMethod(std::string tempFilename, std::string output)
-{
-}
-
 
 /* The main is simple : read image using OTB and write it as a tif.
 * Read this tif using OSSIM and convert it as a general raster file (.ras, .geom and . omd)
@@ -145,9 +139,7 @@ int DEMConvert::Execute(otb::ApplicationOptionsResult* parseResult)
       std::cout<<"Enable to erase the output temporary file "<<tempFilename<<"."<<std::endl;
       }
     }
-
   return EXIT_SUCCESS;
 }
-
 
 } // namespace otb
