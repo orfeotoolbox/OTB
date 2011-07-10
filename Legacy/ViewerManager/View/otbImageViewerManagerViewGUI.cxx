@@ -19,9 +19,6 @@ See OTBCopyright.txt for details.
 #include "otbImageViewerManagerViewGUI.h"
 #include "otbMacro.h"
 
-#include "base/ossimFilename.h"
-#include "base/ossimDirectory.h"
-
 namespace otb
 {
 /**
