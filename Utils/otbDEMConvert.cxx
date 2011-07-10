@@ -44,7 +44,7 @@ namespace otb
 
 
 template<typename TPixelType>
-int generic_convert_to_tif(otb::ApplicationOptionsResult* parseResult, ossimFilename tempFilename)
+int generic_convert_to_tif(otb::ApplicationOptionsResult* parseResult, std::string tempFilename)
 {
   typedef otb::VectorImage<TPixelType>              ImageType;
   typedef otb::ImageFileReader<ImageType>          ReaderType;
@@ -86,7 +86,7 @@ int DEMConvert::Execute(otb::ApplicationOptionsResult* parseResult)
   // Load input and output filename
   const char * input_file = parseResult->GetInputImage().c_str();
 
-  ossimFilename tempFilename(parseResult->GetParameterString("OutputPath"));
+  std::string tempFilename(parseResult->GetParameterString("OutputPath"));
   tempFilename += "_DEMConvert.tif";
   
   // Search for the input
@@ -154,7 +154,7 @@ int DEMConvert::Execute(otb::ApplicationOptionsResult* parseResult)
    kwl.add(PREFIX, ossimKeywordNames::TYPE_KW, output_type.c_str(), true);
     
    // Get an image handler for the input file.
-   ossimRefPtr<ossimImageHandler> ih = ossimImageHandlerRegistry::instance()->open(tempFilename);
+   ossimRefPtr<ossimImageHandler> ih = ossimImageHandlerRegistry::instance()->open(ossimString(tempFilename));
    
    // Initialize the
    if (ih->getErrorStatus() == ossimErrorCodes::OSSIM_ERROR)
@@ -231,7 +231,7 @@ int DEMConvert::Execute(otb::ApplicationOptionsResult* parseResult)
 
    if ( parseResult->IsOptionPresent("KeepTif") == false)
      {
-       bool resRemove = tempFilename.remove();
+       bool resRemove = itksys::SystemTools::RemoveFile(tempFilename.c_str());
        if( resRemove == false )
          {
            std::cout<<"Enable to erase the output temporary file "<<tempFilename<<"."<<std::endl;
