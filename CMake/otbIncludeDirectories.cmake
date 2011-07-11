@@ -48,6 +48,7 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Code/Projections
   ${OTB_SOURCE_DIR}/Code/Radiometry
   ${OTB_SOURCE_DIR}/Code/SARPolarimetry
+  ${OTB_SOURCE_DIR}/Code/Simulation
   ${OTB_SOURCE_DIR}/Code/SpatialReasoning
   ${OTB_SOURCE_DIR}/Code/Testing
   ${OTB_SOURCE_DIR}/Code/UtilitiesAdapters/CurlAdapters
