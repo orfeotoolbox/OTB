@@ -118,7 +118,7 @@ std::string MapProjectionAdapter::GetParameter(const std::string& key) const
   // Please refer to the note in the header filer
   // we do NOT want to read from m_ParameterStore here!
 
-  std::string projectionName = this->GetMapProjection()->getClassName();
+  std::string projectionName = this->GetMapProjection()->getClassName().string();
 
   // Start by matching generic parameters
   const ossimMapProjection* projection = dynamic_cast<const ossimMapProjection*>(this->GetMapProjection());
@@ -295,7 +295,7 @@ void MapProjectionAdapter::ApplyParametersToProjection()
 {
   // Start by identifying the projection, that will be necessary for
   // the casting.
-  std::string projectionName = this->GetMapProjection()->getClassName();
+  std::string projectionName = this->GetMapProjection()->getClassName().string();
 
   StoreType::const_iterator it;
 
