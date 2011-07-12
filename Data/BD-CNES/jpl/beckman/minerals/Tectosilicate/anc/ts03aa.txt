@@ -1,8 +1,0 @@
-Mineral:  Oligoclase (Feldspar) (NaSi,CaAl)AlSi_2O_8
-
-File Name:  ts03a.txt
-
-XRD Analysis:  Oligoclase(A)
-
-Chemical Analysis:
-from electron microprobe (Na_0.75K_0.03Ca_0.22)Si_2.78(Al_1.21Fe_0.01^3+)O_8

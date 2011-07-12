@@ -1,5 +1,0 @@
-Mineral:  Stilbite NaCa_2Al_5Si_3O_36.14H_2O
-
-File Name:  ts09a.txt
-
-XRD Analysis:  Stilbite(A)

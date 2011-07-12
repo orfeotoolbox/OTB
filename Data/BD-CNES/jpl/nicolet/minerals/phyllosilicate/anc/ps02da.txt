@@ -1,5 +1,0 @@
-Mineral:  Montmorillonite (Na,Ca)_0.33(Al,Mg)_2Si_4O_10(OH)_2.H_2O
-
-File Name:  ps02d.txt
-
-XRD Analysis:  Montmorillonite(A), Quartz(M)

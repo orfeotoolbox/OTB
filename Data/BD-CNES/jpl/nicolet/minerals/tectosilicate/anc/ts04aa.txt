@@ -1,5 +1,0 @@
-Mineral:  Andesine (Feldspar) (NaSi,CaAl)AlSi_2O_8
-
-File Name:  ts04a.txt
-
-XRD Analysis:  Andesine(A)

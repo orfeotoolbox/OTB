@@ -1,6 +1,0 @@
-Mineral:  Colemanite Ca_2B_6O_11.5H_2O  
-
-File Name:  b01a.txt  
-
-XRD Analysis:  Colemanite(A)  
-

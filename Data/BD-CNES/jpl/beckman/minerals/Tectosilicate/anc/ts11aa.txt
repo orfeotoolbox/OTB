@@ -1,5 +1,0 @@
-Mineral:  Buddingtonite (Feldspar) (NH_4)AlSi_3O_8.0.5H_2O
-
-File Name:  ts11a.txt
-
-XRD Analysis:  Buddingtonite(A), Illite/Smectite clay(A)

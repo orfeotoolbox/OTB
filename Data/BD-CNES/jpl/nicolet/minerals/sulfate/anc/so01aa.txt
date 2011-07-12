@@ -1,5 +1,0 @@
-Mineral:  Anhydrite CaSO_4
-
-File Name:  so01a.txt
-
-XRD Analysis:  Anhydrite(A), Gypsum(M)

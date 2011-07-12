@@ -1,6 +1,0 @@
-Mineral:  Zincite (Zn,Mn)O
-
-File Name:  O13a.txt
-
-XRD Analysis:  Zincite(A)
-

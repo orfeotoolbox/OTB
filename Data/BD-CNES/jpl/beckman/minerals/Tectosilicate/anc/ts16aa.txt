@@ -1,5 +1,0 @@
-Mineral:  Nepheline (Na,K)AlSiO_4
-
-File Name:  ts16a.txt
-
-XRD Analysis:  Nepheline(A), Cancrinite(M), Biotite(M), Alkali Feldspar(M)

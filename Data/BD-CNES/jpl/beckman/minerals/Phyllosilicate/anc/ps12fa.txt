@@ -1,8 +1,0 @@
-Mineral:  Chlorite (Mg,Al)_6(Si,Al)_4O_10(OH)_8
-
-File Name:  ps12f.txt
-
-XRD Analysis:  Chlorite(A)
-
-Chemical Analysis:
-from electron microprobe (Mg_1.11Fe_3.22Mn_0.08Ti_0.01Al_1.49)(Si_2.68Al_1.32)O_10(OH)_8

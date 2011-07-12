@@ -1,6 +1,0 @@
-Mineral:  Borax Na_2B_4O_5(OH)_4.8H_2O  
-
-File Name:  b06a.txt
-
-XRD Analysis:  Borax(A), Tincalconite(T)
-

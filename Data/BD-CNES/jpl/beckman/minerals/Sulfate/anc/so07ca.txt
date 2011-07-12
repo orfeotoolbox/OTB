@@ -1,5 +1,0 @@
-Mineral:  Natrojarosite NaFe_3^3+(SO_4)_2(OH)_6
-
-File Name:  so07c.txt
-
-XRD Analysis:  Natrojarosite(A), Jarosite(M), Goethite(M)

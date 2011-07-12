@@ -1,8 +1,0 @@
-Mineral:  Epidote Ca_2(Al,Fe^3+)_3O.SiO_4.Si_2O_7.OH
-
-File Name:  ss01c.txt
-
-XRD Analysis:  Epidote(A), Calcite(M), Amphibole(M)
-
-Chemical Analysis:
-from electron microprobe (Ca_4.00Mn_0.02)(Al_4.31Fe^3+_1.63Ti_0.02)Si_6.01O_24(OH)_2

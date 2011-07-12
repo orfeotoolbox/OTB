@@ -1,5 +1,0 @@
-Mineral:  Molybdenite MoS_2
-
-File Name:  s11a.txt
-
-XRD Analysis:  Molybdenite(A)

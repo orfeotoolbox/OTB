@@ -1,5 +1,0 @@
-Mineral:  Bytownite (Feldspar) (NaSi,CaAl)AlSi_2O_8
-
-File Name:  ts13a.txt
-
-XRD Analysis:  Bytownite(A)

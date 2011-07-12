@@ -1,5 +1,0 @@
-Mineral:  Hemimorphite Zn_4Si_2O_7(OH)_2.H_2O
-
-File Name:  ss02a.txt
-
-XRD Analysis:  Hemimorphite(A), Calcite(T)

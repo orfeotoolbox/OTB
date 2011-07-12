@@ -1,6 +1,0 @@
-Mineral: Hematite alpha Fe_2O_3 
-
-File Name:  O01a.txt    
-
-XRD Analysis:  Hematite(A), Quartz(M), Calcite(M) 
-

@@ -1,5 +1,0 @@
-Mineral: Sillimanite Al_2SiO_5 
-
-File Name:  ns08a.txt
-
-XRD Analysis:  Sillimanite(A), Quartz(M)

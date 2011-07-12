@@ -1,5 +1,0 @@
-Mineral:  Tremolite Ca_2(Mg,Fe^2+)_5Si_8O_22(OH)_2
-
-File Name:  in05a.txt
-
-XRD Analysis:  Tremolite(A)

@@ -1,5 +1,0 @@
-Mineral:  Saponite (Ca/2,Na)_0.33(Mg,Fe^2+)_3(Si,Al)_4O_10(OH)_2.4H_2O
-
-File Name:  ps24a.txt
-
-XRD Analysis:  Saponite(A), Tremolite(M), Halite(T), Diopside(T)

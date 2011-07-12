@@ -1,9 +1,0 @@
-Mineral:  Alunite (potassium alunite) KAl3(SO4)2(OH)6
-
-Sample No.: alunite.3
-
-XRD Analysis:  Pure alunite.
-
-Chemistry:  None.
-
-Conditions of Synthesis:  See alunite.1 Additional Information file.

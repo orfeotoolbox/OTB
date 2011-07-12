@@ -1,5 +1,0 @@
-Mineral:  Muscovite KAl_2(Si_3Al)O_10(OH,F)_2
-
-File Name:  ps16a.txt
-
-XRD Analysis:  Muscovite(A), Feldspar(M)

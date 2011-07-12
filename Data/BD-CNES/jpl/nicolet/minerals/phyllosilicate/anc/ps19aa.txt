@@ -1,5 +1,0 @@
-Mineral: Glauconite (K,Na)(Fe^3+,Al,Mg)_2(Si,Al)_4O_10(OH)_2 
-
-File Name:  ps19a.txt
-
-XRD Analysis:  Glauconite(A)

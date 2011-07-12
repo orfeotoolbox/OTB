@@ -1,5 +1,0 @@
-Mineral:  Sepiolite Mg_4Si_6O_15(OH)_2.6H_2O
-
-File Name:  ps05a.txt
-
-XRD Analysis:  Sepiolite(A)

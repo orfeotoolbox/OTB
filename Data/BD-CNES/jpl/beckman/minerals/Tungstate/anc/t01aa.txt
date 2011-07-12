@@ -1,5 +1,0 @@
-Mineral:  Scheelite CaWO_4
-
-File Name:  t01a.txt
-
-XRD Analysis:  Scheelite(A), Quartz(M)

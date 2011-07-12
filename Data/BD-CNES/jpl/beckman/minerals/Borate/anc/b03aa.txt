@@ -1,6 +1,0 @@
-Mineral:  Ulexite NaCaB_5O_6(OH)_6.5H_2O
-
-File Name:  b03a.txt  
-
-XRD Analysis:  Ulexite(A)  
-

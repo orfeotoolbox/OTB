@@ -1,5 +1,0 @@
-Mineral:  Aphthitalite (K,Na)_3Na(SO_4)_2 
-
-File Name:  so09a.txt
-
-XRD Analysis:  Aphthitalite(A), Quartz(T)

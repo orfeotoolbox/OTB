@@ -1,5 +1,0 @@
-Mineral:  Galena PbS
-
-File Name:  s07a.txt
-
-XRD Analysis:  Galena(A)

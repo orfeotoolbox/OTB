@@ -1,5 +1,0 @@
-Mineral:  Prehnite Ca_2Al_2Si_3O_10(OH)_2
-
-File Name:  ps21a.txt
-
-XRD Analysis:  Prehnite(A)

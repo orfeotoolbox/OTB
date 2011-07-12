@@ -1,5 +1,0 @@
-Mineral:  Quartz SiO_2
-
-File Name:  ts01a.txt
-
-XRD Analysis:  Quartz(A)

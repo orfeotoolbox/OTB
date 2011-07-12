@@ -1,6 +1,0 @@
-Mineral:  Trona Na_3(CO_3)(HCO_3).2H_2O  
-
-File Name:  c04a.txt
-
-XRD Analysis:  Trona(A)
-

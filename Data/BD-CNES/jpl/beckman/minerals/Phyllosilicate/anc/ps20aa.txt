@@ -1,5 +1,0 @@
-Mineral:  Serpentine (Mg,Fe^2+,Ni)Si_2O_5(OH)_4
-
-File Name:  ps20a.txt
-
-XRD Analysis:  Serpentine(A), Talc(T)

@@ -1,5 +1,0 @@
-Mineral:  Dickite Al_2Si_2O_5(OH)_4
-
-File Name:  ps03a.txt
-
-XRD Analysis:  Dickite(A)

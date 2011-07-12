@@ -1,5 +1,0 @@
-Mineral:  Jarosite KFe_3^3+(SO_4)_2(OH)_6
-
-File Name:  so7a.txt
-
-XRD Analysis:  Jarosite(A)

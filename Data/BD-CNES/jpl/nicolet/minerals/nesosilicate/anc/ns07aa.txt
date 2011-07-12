@@ -1,8 +1,0 @@
-Mineral:  Titanite (Sphene) CaTiSiO_5
-
-File Name:  ns07a.txt
-
-XRD Analysis:  Titanite(A), Rutile(T)
-
-Chemical Analysis:
-from electron microprobe Ca_1.02(Ti_0.95Al_0.04Fe_0.01)SiO_5

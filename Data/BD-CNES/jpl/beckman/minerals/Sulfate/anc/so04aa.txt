@@ -1,5 +1,0 @@
-Mineral:  Alunite KAl_3(SO_4)_2(OH)_6
-
-File Name:  so04a.txt
-
-XRD Analysis:  Alunite(A)

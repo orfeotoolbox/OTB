@@ -1,5 +1,0 @@
-Mineral:  Plumbojarosite PbFe_3^3+(SO_4)_4(OH)_12
-
-File Name:  so07b.txt
-
-XRD Analysis:  Plumbojarosite(A), Goethite(M)

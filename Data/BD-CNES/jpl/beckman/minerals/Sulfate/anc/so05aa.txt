@@ -1,5 +1,0 @@
-Mineral:  Celestite SrSO_4
-
-File Name:  so05a.txt
-
-XRD Analysis:  Celestite(A)

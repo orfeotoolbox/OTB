@@ -1,6 +1,0 @@
-Mineral:  Magnesiochromite MgCr_2O_4  
-
-File Name:  O08a.txt
-
-XRD Analysis:  Magnesiochromite(A), Clinochlore(A)
-

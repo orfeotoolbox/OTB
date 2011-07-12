@@ -1,5 +1,0 @@
-Mineral:  Sodalite Na_8Al_6Si_6O_24Cl_2
-
-File Name:  ts10a.txt
-
-XRD Analysis:  Sodalite(A), Calcite(M)

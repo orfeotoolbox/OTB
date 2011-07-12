@@ -1,6 +1,0 @@
-Mineral:  Halite NaCl
-
-File Name:  h03a.txt
-
-XRD Analysis:  Halite(A)
-

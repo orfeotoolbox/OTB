@@ -1,6 +1,0 @@
-Mineral:  Gibbsite Al(OH)_3  
-
-File Name:  OH03a.txt
-
-XRD Analysis:  Gibbsite(A)
-

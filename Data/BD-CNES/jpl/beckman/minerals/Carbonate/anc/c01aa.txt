@@ -1,6 +1,0 @@
-Mineral:  Strontianite SrCO_3  
-
-File Name:  c01a.txt  
-
-XRD Analysis:  Strontianite(A)
-

@@ -1,5 +1,0 @@
-Mineral:  Cummingtonite (Mg,Fe^2+)_7Si_8O_22(OH)_2
-
-File Name:  in06a.txt
-
-XRD Analysis:  Cummingtonite(A), Mica(M), Feldspar(M), Chlorite(M)

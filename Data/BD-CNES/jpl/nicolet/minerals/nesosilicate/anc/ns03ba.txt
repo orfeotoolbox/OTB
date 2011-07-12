@@ -1,8 +1,0 @@
-Mineral:  Grossular Garnet Ca_3Al_2(SiO_4)_3
-
-File Name:  ns03b.txt
-
-XRD Analysis:  Grossular Garnet(A)
-
-Chemical Analysis:
-from electron microprobe (Ca_2.97Mn_0.01Mg_0.08)(Al_1.71Fe_0.21^3+Ti_0.02)Si_3.01O_12

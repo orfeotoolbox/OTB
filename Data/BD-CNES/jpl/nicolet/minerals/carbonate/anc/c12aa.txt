@@ -1,6 +1,0 @@
-Mineral:  Azurite Cu_3(CO_3)_2(OH)_2
-
-File Name:  c12a.txt
-
-XRD Analysis:  Malachite(A), Azurite(M), possible Chrysocholla(M)
-

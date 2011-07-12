@@ -1,5 +1,0 @@
-Mineral:  Albite (Feldspar) (K,Na)AlSi_3O_8
-
-File Name:  ts06a.txt
-
-XRD Analysis:  Albite(A)

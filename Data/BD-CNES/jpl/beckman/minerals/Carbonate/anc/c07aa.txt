@@ -1,6 +1,0 @@
-Mineral:  Malachite Cu_2(CO_3)(OH)_2
-
-File Name:  c07a.txt
-
-XRD Analysis:  Malachite(A), possible chrysocolla(M)
-

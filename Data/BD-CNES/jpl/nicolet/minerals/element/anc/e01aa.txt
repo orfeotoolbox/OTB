@@ -1,5 +1,0 @@
-Mineral:  Graphite C
-
-File Name:  e01a.txt
-
-XRD Analysis:  Graphite(A)

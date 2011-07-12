@@ -1,6 +1,0 @@
-Mineral:  Magnesite MgCO_3
-
-File Name:  c06a.txt
-
-XRD Analysis:  Magnesite(A)
-

@@ -1,6 +1,0 @@
-Mineral:  Gahnite ZnAl_2O_4  
-
-File Name:  O11a.txt
-
-XRD Analysis:  Gahnite(A)
-

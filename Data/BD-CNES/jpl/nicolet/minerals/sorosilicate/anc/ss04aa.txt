@@ -1,5 +1,0 @@
-Mineral:  Clinozoisite Ca_2Al_3(SiO_4)_3(OH)
-
-File Name:  ss04a.txt
-
-XRD Analysis:  Clinozoisite(A), Quartz(M), Mica(T)

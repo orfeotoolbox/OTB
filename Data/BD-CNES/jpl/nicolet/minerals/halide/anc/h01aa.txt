@@ -1,6 +1,0 @@
-Mineral:  Cryolite Na_3AlF_6
-
-File Name:  h01a.txt
-
-XRD Analysis:  Cryolite(A)
-

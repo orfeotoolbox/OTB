@@ -1,6 +1,0 @@
-Mineral:  Howlite Ca_2B_5SiO_9(OH)_5  
-
-File Name:  b06a.txt  
-
-XRD Analysis:  Howlite(A)
-

@@ -1,6 +1,0 @@
-Mineral:  Rhodochrosite MnCO_3
-
-File Name:  c08a.txt
-
-XRD Analysis:  Rhodochrosite(A), Quartz(M)
-

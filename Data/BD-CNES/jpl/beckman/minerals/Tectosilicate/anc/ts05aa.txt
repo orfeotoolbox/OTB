@@ -1,9 +1,0 @@
-Mineral:  Anorthite (Feldspar) (NaSi,CaAl)AlSi_2O_8
-
-File Name:  ts05a.txt
-
-XRD Analysis:  Anorthite(A)
-
-Chemical Analysis:
-from electron microprobe (Na_0.07Ca_0.93)Si_2.07(Al_1.91Fe_0.02^3+)O_8
- 

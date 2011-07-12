@@ -1,5 +1,0 @@
-Mineral:  Rhodonite (Mn,Ca)SiO_3
-
-File Name:  in01a.txt
-
-XRD Analysis:  Rhodonite(A)

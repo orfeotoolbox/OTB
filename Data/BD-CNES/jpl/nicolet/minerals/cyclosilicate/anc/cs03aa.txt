@@ -1,8 +1,0 @@
-Mineral:  Cordierite Mg_2Al_3(Si_5Al)O_18
-
-File Name:  cs03a.txt
-
-XRD Analysis:  Cordierite(A)
-
-Chemical Analysis:
-from electron microprobe (Mg_1.27Fe_0.73Mn_0.01)(Al_2.97Cr_0.01)(Si_4.99Al_1.01)O_18

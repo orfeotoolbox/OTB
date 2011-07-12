@@ -1,5 +1,0 @@
-Mineral:  Nontronite Na_0.33Fe_2^3+(Si,Al)_4O_10(OH)_2.H_2O
-
-File Name:  ps06b.txt
-
-XRD Analysis:  Nontronite(A), Quartz(M)

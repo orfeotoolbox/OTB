@@ -1,5 +1,0 @@
-Mineral:  Arsenopyrite FeAsS
-
-File Name:  s05a.txt
-
-XRD Analysis:  Arsenopyrite(A), Quartz(M)

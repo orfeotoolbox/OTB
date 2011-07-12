@@ -1,5 +1,0 @@
-Mineral:  Actinolite Ca_2(Mg,Fe^2+)_5Si_8O_22(OH)_2
-
-File Name:  in04a.txt
-
-XRD Analysis:  Actinolite(A)

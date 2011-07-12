@@ -1,5 +1,0 @@
-Mineral:  Corrensite (Mg,Fe)_9(Si,Al)_8O_20(OH)_10._xH_2O
-
-File Name:  ps10a.txt
-
-XRD Analysis:  Quartz(A), Feldspar(A), Corrensite(M)

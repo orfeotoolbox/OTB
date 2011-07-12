@@ -1,5 +1,0 @@
-Mineral:  Spodumene LiAlS_2O_6
-
-File Name:  in13a.txt
-
-XRD Analysis:  Spodumene(A)

@@ -1,5 +1,0 @@
-Mineral:  Zircon ZrSiO_4
-
-File Name:  ns09a.txt
-
-XRD Analysis:  Zircon(A)

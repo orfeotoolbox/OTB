@@ -1,7 +1,0 @@
-Mineral:  Clinochlore (Chlorite) (Mg,Al)_6(Si,Al)_4O_10(OH)_8
-
-File Name:  ps12a.txt
-
-XRD Analysis:  Chlorite, ferroan(A)
-
-Chemical Analysis:  formula derived by electron microprobe (Mg_2.77Fe_1.92Mn_0.01Cr_0.01Al_1.28)(Si_2.73Al_1.27)O_10(OH)_8

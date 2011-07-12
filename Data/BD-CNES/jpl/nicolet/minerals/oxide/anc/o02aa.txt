@@ -1,6 +1,0 @@
-Mineral Name: Rutile TiO_2  
-
-File Name:  O02a.txt  
-
-XRD Analysis:  Rutile(A), Calcite(T), Feldspar(T)  
-

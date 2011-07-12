@@ -1,6 +1,0 @@
-Mineral:  Goethite alpha Fe^3+O(OH) 
-
-File Name:  OH02a.txt
-
-XRD Analysis:  Goethite(A)
-

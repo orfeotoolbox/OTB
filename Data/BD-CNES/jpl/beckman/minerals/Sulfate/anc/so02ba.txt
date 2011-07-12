@@ -1,5 +1,0 @@
-Mineral:  Gypsum CaSO_4.2H_2O
-
-File Name:  so02b.txt
-
-XRD Analysis:  Gypsum(A)

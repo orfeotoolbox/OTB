@@ -1,6 +1,0 @@
-Mineral:  Kernite Na_2B_4O_6(OH)_2.3H_2O
-
-File Name:  b02a.txt  
-
-XRD Analysis:  Kernite(A)  
-
