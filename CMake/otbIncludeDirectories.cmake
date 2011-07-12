@@ -146,13 +146,8 @@ ENDIF(OTB_USE_PQXX)
 #-----------------------------------------------------------------------------
 # Include directories from the ITK build tree.
 IF(OTB_USE_EXTERNAL_ITK)
-#        INCLUDE(${ITK_SOURCE_DIR}/Utilities/itkThirdParty.cmake)
-# 	INCLUDE(${ITK_SOURCE_DIR}/itkIncludeDirectories.cmake)
-#	SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
-#	${ITK_SOURCE_DIR}/Utilities/vxl/v3p/netlib
-# 	${ITK_SOURCE_DIR}/Utilities/vxl/v3p/netlib/opt)
-	SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
-   			 ${ITK_INCLUDE_DIRS} )
+  SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
+    ${ITK_INCLUDE_DIRS} )
 ELSE(OTB_USE_EXTERNAL_ITK)
 	IF(NOT ITK_INSTALL_INCLUDE_DIR)
   		SET(ITK_INSTALL_INCLUDE_DIR "/include/otb/Utilities/ITK")
@@ -160,12 +155,6 @@ ELSE(OTB_USE_EXTERNAL_ITK)
 #         INCLUDE(${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/itkThirdParty.cmake)
 #  	INCLUDE(${OTB_SOURCE_DIR}/Utilities/ITK/itkIncludeDirectories.cmake)
 	SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
-# 2008/12/18: Added ITK include dir
-#         ${ITK_INCLUDE_DIRS_BUILD_TREE}
-#         ${ITK_INCLUDE_DIRS_BUILD_TREE_CXX}
-#         ${ITK_INCLUDE_DIRS_SYSTEM}
-# 	${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/vxl/v3p/netlib
-# 	${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/vxl/v3p/netlib/opt
         ${OTB_SOURCE_DIR}/Utilities/ITK/Code/Algorithms
         ${OTB_SOURCE_DIR}/Utilities/ITK/Code/BasicFilters
         ${OTB_SOURCE_DIR}/Utilities/ITK/Code/Common
@@ -181,20 +170,10 @@ ELSE(OTB_USE_EXTERNAL_ITK)
         ${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/vxl/v3p/netlib
         ${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/vxl/vcl
         ${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/vxl/core
-#        ${OTB_BINARY_DIR}/Utilities/ITK/Utilities/vxl/v3p/netlib
         ${OTB_BINARY_DIR}/Utilities/ITK/Utilities/vxl/vcl
         ${OTB_BINARY_DIR}/Utilities/ITK/Utilities/vxl/core
-#        ${OTB_SOURCE_DIR}/Utilities/ITK/Utilities
         ${OTB_BINARY_DIR}/Utilities/ITK/Utilities
         ${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/itkExtHdrs
-#        ${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/DICOMParser
-#        ${OTB_BINARY_DIR}/Utilities/ITK/Utilities/DICOMParser
-#        ${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/MetaIO
-#        ${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/nifti/niftilib
-#        ${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/nifti/znzlib
-#        ${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/gdcm/src
-#        ${OTB_BINARY_DIR}/Utilities/ITK/Utilities/gdcm
-#        ${OTB_BINARY_DIR}/Utilities/ITK/Utilities/NrrdIO
         )
 ENDIF(OTB_USE_EXTERNAL_ITK)
 
@@ -332,12 +311,6 @@ SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
   Utilities/ITK
   ${OTB_MSINTTYPES_INCLUDE_RELATIVE_DIR}
   Utilities/otbsvm
-  #TODO: probably have to fix that: we don't need to install ossim headers
-  Utilities/otbossim
-  Utilities/otbossim/include
-  Utilities/otbossim/include/ossim
-  Utilities/otbossimplugins
-  Utilities/otbossimplugins/ossim
   Utilities/InsightJournal
   Utilities/otb6S
   Utilities/tinyXMLlib
@@ -441,32 +414,6 @@ ELSE(OTB_USE_EXTERNAL_ITK)
               Utilities/ITK/Utilities/vxl/core
               Utilities/ITK/Utilities
               Utilities/ITK/Utilities/itkExtHdrs
-#              Utilities/ITK/Utilities/DICOMParser
-#              Utilities/ITK/Utilities/MetaIO
-#              Utilities/ITK/Utilities/nifti/niftilib
-#              Utilities/ITK/Utilities/nifti/znzlib
-#              Utilities/ITK/gdcm/src
-#              Utilities/ITK/gdcm
-#              Utilities/ITK/Utilities/NrrdIO 
 )
-
-# JULIEN Seems that ITK_INCLUDE_DIRS_CONFIG replaces ITK_INCLUDE_DIRS_INSTALL_TREE
-#             SET(ITK_INCLUDE_DIRS  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/ITK/)
-#             FOREACH(DIR ${ITK_INCLUDE_RELATIVE_DIRS})
-#               LIST(APPEND ITK_INCLUDE_DIRS ${OTB_INSTALL_INCLUDE_DIR}/Utilities/ITK/${DIR})
-#             ENDFOREACH(DIR)
-#             IF(ITK_INCLUDE_DIRS_SYSTEM)
-#               LIST(APPEND ITK_INCLUDE_DIR ${ITK_INCLUDE_DIRS_SYSTEM})
-#             ENDIF(ITK_INCLUDE_DIRS_SYSTEM)
-
-
-#THOMAS
-#                SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
-#           			${ITK_INCLUDE_DIRS_INSTALL_TREE}
-#JULIEN
-#           			${ITK_INCLUDE_DIRS}
-#           )
-#			${ITK_INCLUDE_DIRS_BUILD_TREE}
-#			${ITK_INCLUDE_DIRS_BUILD_TREE_CXX} )
 
 ENDIF(OTB_USE_EXTERNAL_ITK)
