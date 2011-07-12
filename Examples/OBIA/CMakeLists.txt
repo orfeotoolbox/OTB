@@ -39,37 +39,37 @@ ADD_TEST( trTeOBIAImageToLabelToImageTest ${EXE_TESTS}
         OBIAImageToLabelToImageTest
         ${INPUTDATA}/MSLabeledOutput.tif
         ${TEMP}/OBIAI2L2IOutput.tif
-	${TEMP}/OBIAI2L2IInPretty.png
-	${TEMP}/OBIAI2L2IOutPretty.png
-	1 1108 0
+        ${TEMP}/OBIAI2L2IInPretty.png
+        ${TEMP}/OBIAI2L2IOutPretty.png
+        1 1108 0
         )
 
 ADD_TEST(trTeOBIAShapeAttributeComputationTest ${EXE_TESTS}
-	--compare-ascii ${EPS}	${BASELINE}/OBIAShapeAttribute.txt
-	                        ${TEMP}/OBIAShapeAttribute.txt
-	OBIAShapeAttributeComputationTest
-	${INPUTDATA}/MSLabeledOutput.tif
-	${TEMP}/OBIAShapeAttribute.txt
+        --compare-ascii ${EPS}        ${BASELINE}/OBIAShapeAttribute.txt
+                                ${TEMP}/OBIAShapeAttribute.txt
+        OBIAShapeAttributeComputationTest
+        ${INPUTDATA}/MSLabeledOutput.tif
+        ${TEMP}/OBIAShapeAttribute.txt
 )
 
 ADD_TEST(trTeOBIARadiometricAttributesLabelMapFilterTest ${EXE_TESTS}
-	--compare-image ${TOL}	${BASELINE}/OBIARadiometricAttributes.tif
-	                        ${TEMP}/OBIARadiometricAttributes.tif
-	RadiometricAttributesLabelMapFilterExample
-	${INPUTDATA}/qb_RoadExtract.tif 
-	${TEMP}/OBIARadiometricAttributes.tif
-	${TEMP}/qb_RoadExtract_Radiometry_pretty.png
-	STATS::Band1::Mean
-	0
-	0.5
-	16
-	16
-	50
-	1.0
+        --compare-image ${TOL}        ${BASELINE}/OBIARadiometricAttributes.tif
+                                ${TEMP}/OBIARadiometricAttributes.tif
+        RadiometricAttributesLabelMapFilterExample
+        ${INPUTDATA}/qb_RoadExtract.tif
+        ${TEMP}/OBIARadiometricAttributes.tif
+        ${TEMP}/qb_RoadExtract_Radiometry_pretty.png
+        STATS::Band1::Mean
+        0
+        0.5
+        16
+        16
+        50
+        1.0
 )
     
 ADD_TEST(trTeLabelMapToVectorData ${EXE_TESTS}
-	LabelMapToVectorDataTest
+        LabelMapToVectorDataTest
         ${INPUTDATA}/rcc8_mire1.png
         ${TEMP}/rcc8_mire2_vectorizer.shp
 )

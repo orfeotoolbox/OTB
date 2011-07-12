@@ -32,18 +32,18 @@ SET(EPSILON 0.000000000001)
 
 ADD_TEST(raTeARVIMultiChannelRAndBAndNIRVegetationIndexImageFilterTest ${EXE_TESTS}
   --compare-image ${EPSILON}
-  		  ${BASELINE}/ARVIMultiChannelRAndBAndNIRVegetationIndex.tif
+                    ${BASELINE}/ARVIMultiChannelRAndBAndNIRVegetationIndex.tif
                   ${TEMP}/ARVIMultiChannelRAndBAndNIRVegetationIndex.tif
        ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilterTest
-        	  ${INPUTDATA}/poupees_sub.png
-	          ${TEMP}/ARVIMultiChannelRAndBAndNIRVegetationIndex.tif
+                  ${INPUTDATA}/poupees_sub.png
+                  ${TEMP}/ARVIMultiChannelRAndBAndNIRVegetationIndex.tif
               ${TEMP}/ARVIMultiChannelRAndBAndNIRVegetationIndex3.tif
-	          ${TEMP}/ARVIMultiChannelRAndBAndNIRVegetationIndex2.tif
- 	          1
- 	          2
- 	          3
-         	  0.6 # Gamma parameter
- 	)
+                  ${TEMP}/ARVIMultiChannelRAndBAndNIRVegetationIndex2.tif
+                   1
+                   2
+                   3
+                   0.6 # Gamma parameter
+         )
 
 
 
@@ -72,26 +72,26 @@ ADD_TEST(raTeAVIMultiChannelRAndGAndNIRVegetationIndexImageFilterTest ${EXE_TEST
 
 ADD_TEST(raTeNDVIRAndNIRVegetationIndexImageFilterTest ${EXE_TESTS}
   --compare-image ${TOL}
-  	          ${BASELINE}/NDVIRAndNIRVegetationIndex.tif
+                    ${BASELINE}/NDVIRAndNIRVegetationIndex.tif
                   ${TEMP}/NDVIRAndNIRVegetationIndex.tif
        NDVIRAndNIRVegetationIndexImageFilterTest
- 	${INPUTDATA}/poupees_sub_c1.png
-	${INPUTDATA}/poupees_sub_c2.png
- 	${TEMP}/NDVIRAndNIRVegetationIndex.tif
- 	${TEMP}/NDVIRAndNIRVegetationIndex2.tif
- 	${TEMP}/NDVIRAndNIRVegetationIndex3.tif
-	${TEMP}/NDVIRAndNIRVegetationIndex4.tif
- 	)
+         ${INPUTDATA}/poupees_sub_c1.png
+        ${INPUTDATA}/poupees_sub_c2.png
+         ${TEMP}/NDVIRAndNIRVegetationIndex.tif
+         ${TEMP}/NDVIRAndNIRVegetationIndex2.tif
+         ${TEMP}/NDVIRAndNIRVegetationIndex3.tif
+        ${TEMP}/NDVIRAndNIRVegetationIndex4.tif
+         )
 
 
 
 ADD_TEST(raTeAtmosphericCorrectionSequencementTest ${EXE_TESTS}
         --compare-image ${EPSILON}
-		${BASELINE}/Example_RomaniaAtmosphericCorrectionSequencement.tif
+                ${BASELINE}/Example_RomaniaAtmosphericCorrectionSequencement.tif
                 ${TEMP}/Example_RomaniaAtmosphericCorrectionSequencement.tif
         AtmosphericCorrectionSequencementTest
         ${INPUTDATA}/Romania_Extract.tif
-	${TEMP}/Example_RomaniaAtmosphericCorrectionSequencement.tif
+        ${TEMP}/Example_RomaniaAtmosphericCorrectionSequencement.tif
         ${INPUTDATA}/atmosphericCorrectionSequencement_alpha_beta.txt
         ${INPUTDATA}/atmosphericCorrectionSequencement_solar_illumination.txt
         ${INPUTDATA}/atmosphericCorrectionSequencement_wavelength_spectral_bands_spot4_1.txt
@@ -99,11 +99,11 @@ ADD_TEST(raTeAtmosphericCorrectionSequencementTest ${EXE_TESTS}
 # ImageToLuminance parameters
 # LuminanceToReflectance parameters
         27.3    #solar azimuthal elevation
-	4       #day
-	12      #mounth
+        4       #day
+        12      #mounth
 # AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms parameters
         152.7
-	2.5
+        2.5
         -77.0
         1013.
         2.48134
@@ -112,8 +112,8 @@ ADD_TEST(raTeAtmosphericCorrectionSequencementTest ${EXE_TESTS}
         0.199854
 # ReflectanceToSurfaceReflectance parameters
 # SurfaceAdjacencyEffect6SCorrectionSchemeFilter parameters
-	2       # Radius;
-	0.020   # pixel spacing in kilometers
+        2       # Radius;
+        0.020   # pixel spacing in kilometers
         )
 
 

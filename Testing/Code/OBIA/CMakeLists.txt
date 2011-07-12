@@ -25,19 +25,19 @@ SET(OBIA_TESTS2 ${CXX_TEST_PATH}/otbOBIATests2)
 SET(OBIA_TESTS3 ${CXX_TEST_PATH}/otbOBIATests3)
 
 # OBIATests1
-ADD_TEST(obTuAttributesMapLabelObjectNew ${OBIA_TESTS1} 
-	otbAttributesMapLabelObjectNew)
+ADD_TEST(obTuAttributesMapLabelObjectNew ${OBIA_TESTS1}
+        otbAttributesMapLabelObjectNew)
 
-ADD_TEST(obTuAttributesMapLabelObjectWithClassLabelNew ${OBIA_TESTS1} 
-	otbAttributesMapLabelObjectWithClassLabelNew)
+ADD_TEST(obTuAttributesMapLabelObjectWithClassLabelNew ${OBIA_TESTS1}
+        otbAttributesMapLabelObjectWithClassLabelNew)
 
-ADD_TEST(obTuAttributesMapOpeningLabelMapFilterNew ${OBIA_TESTS1} 
+ADD_TEST(obTuAttributesMapOpeningLabelMapFilterNew ${OBIA_TESTS1}
     otbAttributesMapOpeningLabelMapFilterNew)
 
-ADD_TEST(obTuImageToLabelMapWithAttributesFilterNew ${OBIA_TESTS1} 
+ADD_TEST(obTuImageToLabelMapWithAttributesFilterNew ${OBIA_TESTS1}
     otbImageToLabelMapWithAttributesFilterNew)
 
-ADD_TEST(obTvImageToLabelMapWithAttributesFilter ${OBIA_TESTS1} 
+ADD_TEST(obTvImageToLabelMapWithAttributesFilter ${OBIA_TESTS1}
     otbImageToLabelMapWithAttributesFilter
     ${INPUTDATA}/maur.tif
     ${INPUTDATA}/maur_labelled.tif)
@@ -135,10 +135,10 @@ ADD_TEST(obTvBandsStatisticsAttributesLabelMapFilter ${OBIA_TESTS1}
     ${TEMP}/obTvBandsStatisticsAttributesLabelMapFilter.txt)
     
 ADD_TEST(obTuShapeAttributesLabelMapFilterNew ${OBIA_TESTS1}
-	otbShapeAttributesLabelMapFilterNew)
+        otbShapeAttributesLabelMapFilterNew)
 
 ADD_TEST(obTuStatisticsAttributesLabelMapFilterNew ${OBIA_TESTS1}
-	otbStatisticsAttributesLabelMapFilterNew)
+        otbStatisticsAttributesLabelMapFilterNew)
 
 ADD_TEST(obTuVectorDataToLabelMapFilterNew ${OBIA_TESTS1}
     otbVectorDataToLabelMapFilterNew)
@@ -148,7 +148,7 @@ ADD_TEST(obTvVectorDataToLabelMapFilter ${OBIA_TESTS1}
     ${INPUTDATA}/vectorIOexample_gis_to_vec.shp
     ${TEMP}/vectordataToLabelMap.png)
 
-ADD_TEST(obTuStreamingConnectedComponentSegmentationOBIAToVectorDataFilterNew ${OBIA_TESTS1} 
+ADD_TEST(obTuStreamingConnectedComponentSegmentationOBIAToVectorDataFilterNew ${OBIA_TESTS1}
     otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilterNew)
 
 ADD_TEST(obTvStreamingConnectedComponentSegmentationOBIAToVectorDataFilter ${OBIA_TESTS1}

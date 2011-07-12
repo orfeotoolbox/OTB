@@ -21,7 +21,7 @@ SET(EPSILON_3 0.001)
 SET(TESTSYSTEM_TESTS ${CXX_TEST_PATH}/otbTestSystemTests)
 
 #Test if the current working copy corresponds to the nightly revision number
-ADD_TEST(tsTvIsNightlyRevision ${TESTSYSTEM_TESTS}   
+ADD_TEST(tsTvIsNightlyRevision ${TESTSYSTEM_TESTS}
          otbIsNightlyRevision
          ${OTB_WC_REVISION}
          http://www.orfeo-toolbox.org/nightly/libNightlyNumber )
@@ -127,7 +127,7 @@ ADD_TEST(tsTvCompareAsciiepsilon3_WhiteSpaceOK ${TESTSYSTEM_TESTS}
        ${INPUTDATA}/tsTvCompareAsciiEpsilon3_TestOK.txt
        ${TEMP}/tsTvCompareAsciiEpsilon3_TestOK.txt
   )
-# sould be ko  
+# sould be ko
 ADD_TEST(tsTvCompareAsciiepsilon3_WhiteSpaceKO ${TESTSYSTEM_TESTS}
    --compare-ascii ${EPSILON_3}
        ${BASELINE_FILES}/tsTvCompareAsciiEpsilon3_Base.txt

@@ -26,10 +26,10 @@ SET(EPS 0.001)
 ADD_TEST( trTeGeospatialAnalysisPostGISCreateTableTest ${EXE_TESTS}
       
         GeospatialAnalysisPostGISCreateTableTest
-  	localhost
-  	orfeotoolbox_test
-  	orfeotoolbox_test_user
-  	Bidfeud0
+          localhost
+          orfeotoolbox_test
+          orfeotoolbox_test_user
+          Bidfeud0
         )
 
 

@@ -27,7 +27,7 @@ INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Utilities/otbossim/include)
 INCLUDE_DIRECTORIES(${OTB_BINARY_DIR}/Utilities/otbossim/include)
 
 CONFIGURE_FILE(${OTB_SOURCE_DIR}/Utilities/otbossim/include/ossim/ossimConfig.h.in
-	       ${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimConfig.h)
+               ${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimConfig.h)
 
 
 
@@ -113,7 +113,7 @@ IF(NOT OTB_DISABLE_UTILITIES_COMPILATION)
 #  )
   #TARGET_LINK_LIBRARIES(otbossim ${GDAL_LIBRARY})#To make sure that gdal appear before geotiff
   TARGET_LINK_LIBRARIES(otbossim  ${GEOTIFF_LIBRARY} ${TIFF_LIBRARY} ${JPEG_LIBRARY} ${GDAL_LIBRARY} ${OPENTHREADS_LIBRARY})
-  SET_TARGET_PROPERTIES(otbossim 
+  SET_TARGET_PROPERTIES(otbossim
                         PROPERTIES VERSION "${OSSIM_SVN_REVISION}.${OSSIM_OTB_PATCH}.0"
                                    SOVERSION "${OSSIM_SVN_REVISION}.${OSSIM_OTB_PATCH}")
 

@@ -31,7 +31,7 @@ SET(TOL 0.0)
 SET(EPSILON 0.00000001)
 
 ADD_TEST(maTeMarkovClassification1ExampleTest ${EXE_TESTS}
-	--compare-image ${EPSILON}
+        --compare-image ${EPSILON}
                     ${BASELINE}/MarkovClassification1.png
                     ${TEMP}/MarkovClassification1.png
     MarkovClassification1ExampleTest
@@ -40,23 +40,23 @@ ADD_TEST(maTeMarkovClassification1ExampleTest ${EXE_TESTS}
         1.0
         20
         1.0
-	1 #true to use always the same rand() sample, false otherwise
+        1 #true to use always the same rand() sample, false otherwise
 )
 
 ADD_TEST(maTeMarkovClassification2ExampleTest ${EXE_TESTS}
-	--compare-image ${EPSILON}
+        --compare-image ${EPSILON}
                     ${BASELINE}/MarkovClassification2.png
                     ${TEMP}/MarkovClassification2.png
     MarkovClassification2ExampleTest
         ${INPUTDATA}/QB_Suburb.png
         ${TEMP}/MarkovClassification2.png
         1.0
-	5
-	1 # true to use always the same rand() sample, false otherwise
+        5
+        1 # true to use always the same rand() sample, false otherwise
 )
 
 ADD_TEST(maTeMarkovClassification3ExampleTest ${EXE_TESTS}
-	--compare-image ${EPSILON}
+        --compare-image ${EPSILON}
                     ${BASELINE}/MarkovClassification3.png
                     ${TEMP}/MarkovClassification3.png
     MarkovClassification3ExampleTest
@@ -67,9 +67,9 @@ ADD_TEST(maTeMarkovClassification3ExampleTest ${EXE_TESTS}
 )
 
 ADD_TEST(maTeMarkovRestaurationExampleTest ${EXE_TESTS}
-	--compare-image ${EPSILON}
-	                ${BASELINE}/MarkovRestauration.png
-	                ${TEMP}/MarkovRestauration.png
+        --compare-image ${EPSILON}
+                        ${BASELINE}/MarkovRestauration.png
+                        ${TEMP}/MarkovRestauration.png
     MarkovRestaurationExampleTest
         ${INPUTDATA}/QB_Suburb.png
         ${INPUTDATA}/QB_Suburb.png
@@ -77,12 +77,12 @@ ADD_TEST(maTeMarkovRestaurationExampleTest ${EXE_TESTS}
         10.0
         30.0
         1.
-	1 # true to use always the same rand() sample, false otherwise
+        1 # true to use always the same rand() sample, false otherwise
 )
 
 
 ADD_TEST(maTeMarkovRegularizationExampleTest ${EXE_TESTS}
-	--compare-image ${EPSILON}
+        --compare-image ${EPSILON}
                       ${BASELINE}/MarkovRegularization-scaled.png
                       ${TEMP}/MarkovRegularization-scaled.png
    MarkovRegularizationExampleTest

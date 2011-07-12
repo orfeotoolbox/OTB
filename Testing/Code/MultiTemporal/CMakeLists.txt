@@ -21,42 +21,42 @@ SET(MULTITEMPORAL_TESTS1 ${CXX_TEST_PATH}/otbMultiTemporalTests1)
 
 ADD_TEST(mtTvPolynomialTimeSeriesTest1 ${MULTITEMPORAL_TESTS1}
         otbPolynomialTimeSeriesTest
-	 )
+         )
 
 ADD_TEST(mtTuTimeSeriesLeastSquaresFittingFunctor ${MULTITEMPORAL_TESTS1}
         otbTimeSeriesLeastSquareFittingFunctorNew
-	 )
+         )
 
 ADD_TEST(mtTvTimeSeriesLeastSquaresFittingFunctor ${MULTITEMPORAL_TESTS1}
         otbTimeSeriesLeastSquareFittingFunctorTest
         1 2 3
-	 )
+         )
 
 ADD_TEST(mtTvTimeSeriesLeastSquaresFittingFunctor2 ${MULTITEMPORAL_TESTS1}
         otbTimeSeriesLeastSquareFittingFunctorTest
         10 0.3 3.123
-	 )
+         )
 
 ADD_TEST(mtTvTimeSeriesLeastSquaresFittingFunctorWeights ${MULTITEMPORAL_TESTS1}
         otbTimeSeriesLeastSquareFittingFunctorWeightsTest
         1 2 3
-	 )
+         )
 
 
 ADD_TEST(mtTuSavitzkyGolayInterpolationFunctor ${MULTITEMPORAL_TESTS1}
         otbSavitzkyGolayInterpolationFunctorNew
-	 )
+         )
 
 ADD_TEST(mtTvSavitzkyGolayInterpolationFunctorTest ${MULTITEMPORAL_TESTS1}
         otbSavitzkyGolayInterpolationFunctorTest
-	 )
+         )
 
 ADD_TEST(mtTvEnvelopeSavitzkyGolayInterpolationFunctorTest ${MULTITEMPORAL_TESTS1}
         otbEnvelopeSavitzkyGolayInterpolationFunctorTest
-	 )
+         )
 
 # -------  CXX Source Files -----------------------------------
-SET(BasicMultiTemporal_SRCS1 
+SET(BasicMultiTemporal_SRCS1
 otbPolynomialTimeSeriesTest.cxx
 otbTimeSeriesLeastSquareFittingFunctorNew.cxx
 otbTimeSeriesLeastSquareFittingFunctorTest.cxx

@@ -43,35 +43,35 @@ SET(NOTOL 0.0)
 # ------- LeeImageFilterTest----------
 
 ADD_TEST(bfTeLeeImageFilterTest ${EXE_TESTS}
-	--compare-n-images ${NOTOL} 1
-	${BASELINE}/GomaSmallLeeFiltered.png
-	${TEMP}/GomaSmallLeeFiltered.png
-	LeeImageFilterTest
-	${INPUTDATA}/GomaSmall.png
-	${TEMP}/GomaSmallLeeFiltered.png
+        --compare-n-images ${NOTOL} 1
+        ${BASELINE}/GomaSmallLeeFiltered.png
+        ${TEMP}/GomaSmallLeeFiltered.png
+        LeeImageFilterTest
+        ${INPUTDATA}/GomaSmall.png
+        ${TEMP}/GomaSmallLeeFiltered.png
     3 1
 )
 
 # ------- FrostImageFilterTest----------
 
 ADD_TEST(bfTeFrostImageFilterTest ${EXE_TESTS}
-	--compare-n-images ${NOTOL} 1
-	${BASELINE}/GomaSmallFrostFiltered.png
-	${TEMP}/GomaSmallFrostFiltered.png
-	FrostImageFilterTest
-	${INPUTDATA}/GomaSmall.png
-	${TEMP}/GomaSmallFrostFiltered.png
+        --compare-n-images ${NOTOL} 1
+        ${BASELINE}/GomaSmallFrostFiltered.png
+        ${TEMP}/GomaSmallFrostFiltered.png
+        FrostImageFilterTest
+        ${INPUTDATA}/GomaSmall.png
+        ${TEMP}/GomaSmallFrostFiltered.png
     5 0.1
 )
 
 # ------- DEMToRainbowExampleTest ----------
 
 ADD_TEST(bfTeDEMToRainbowExampleTest ${EXE_TESTS}
-	--compare-n-images ${NOTOL} 1
-	${BASELINE}/DEMToRainbowImageGenerator.png
-	${TEMP}/DEMToRainbowImageGenerator.png
-	DEMToRainbowExampleTest
-	${TEMP}/DEMToRainbowImageGenerator.png
+        --compare-n-images ${NOTOL} 1
+        ${BASELINE}/DEMToRainbowImageGenerator.png
+        ${TEMP}/DEMToRainbowImageGenerator.png
+        DEMToRainbowExampleTest
+        ${TEMP}/DEMToRainbowImageGenerator.png
     6.5 45.5 500 500 0.002 -0.002 ${OTB_DATA_ROOT}/Examples/DEM_srtm
 )
 
@@ -79,69 +79,69 @@ ADD_TEST(bfTeDEMToRainbowExampleTest ${EXE_TESTS}
 # ------- ScalingFilterExampleTest ----------
 
 ADD_TEST(bfTeScalingFilterExampleTest ${EXE_TESTS}
-	--compare-n-images ${NOTOL} 2
-	${BASELINE}/QB_Toulouse_Ortho_PAN_rescaled.png
-	${TEMP}/QB_Toulouse_Ortho_PAN_rescaled.png
-	${BASELINE}/QB_Toulouse_Ortho_PAN_casted.png
-	${TEMP}/QB_Toulouse_Ortho_PAN_casted.png
-	ScalingFilterExampleTest
-	${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
-	${TEMP}/QB_Toulouse_Ortho_PAN_rescaled.png
-	${TEMP}/QB_Toulouse_Ortho_PAN_casted.png
+        --compare-n-images ${NOTOL} 2
+        ${BASELINE}/QB_Toulouse_Ortho_PAN_rescaled.png
+        ${TEMP}/QB_Toulouse_Ortho_PAN_rescaled.png
+        ${BASELINE}/QB_Toulouse_Ortho_PAN_casted.png
+        ${TEMP}/QB_Toulouse_Ortho_PAN_casted.png
+        ScalingFilterExampleTest
+        ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+        ${TEMP}/QB_Toulouse_Ortho_PAN_rescaled.png
+        ${TEMP}/QB_Toulouse_Ortho_PAN_casted.png
 )
 
 # ------- PrintableImageFilterTest----------
 
 ADD_TEST(bfTePrintableImageFilterExample1Test ${EXE_TESTS}
-	--compare-n-images ${NOTOL} 1
-	${BASELINE}/PrintableExampleOutput1.png
-	${TEMP}/PrintableExampleOutput1.png
-	PrintableImageFilterExample1Test
-	${INPUTDATA}/IMAGERY_SSECH.tif
-	${TEMP}/PrintableExampleOutput1.png
+        --compare-n-images ${NOTOL} 1
+        ${BASELINE}/PrintableExampleOutput1.png
+        ${TEMP}/PrintableExampleOutput1.png
+        PrintableImageFilterExample1Test
+        ${INPUTDATA}/IMAGERY_SSECH.tif
+        ${TEMP}/PrintableExampleOutput1.png
     1 2 3
 )
 
 ADD_TEST(bfTePrintableImageFilteExample2rTest ${EXE_TESTS}
-	--compare-n-images ${NOTOL} 1
-	${BASELINE}/PrintableExampleOutput2.png
-	${TEMP}/PrintableExampleOutput2.png
-	PrintableImageFilterExample2Test
-	${INPUTDATA}/IMAGERY_SSECH.tif
-	${TEMP}/PrintableExampleOutput2.png
+        --compare-n-images ${NOTOL} 1
+        ${BASELINE}/PrintableExampleOutput2.png
+        ${TEMP}/PrintableExampleOutput2.png
+        PrintableImageFilterExample2Test
+        ${INPUTDATA}/IMAGERY_SSECH.tif
+        ${TEMP}/PrintableExampleOutput2.png
     1 4 2
 )
 
 # ------- IndexedToRGBExampleTest----------
 
 ADD_TEST(bfTeIndexedToRGBExampleTest ${EXE_TESTS}
-	--compare-n-images ${NOTOL} 2
-	${BASELINE}/buildingExtractionRGB.png
-	${TEMP}/buildingExtractionRGB.png
-	${BASELINE}/buildingExtractionIndexed_scaled.png
-	${TEMP}/buildingExtractionIndexed_scaled.png
-	IndexedToRGBExampleTest
-	${INPUTDATA}/buildingExtractionIndexed.tif
-	${TEMP}/buildingExtractionRGB.png
-	${TEMP}/buildingExtractionIndexed_scaled.png
+        --compare-n-images ${NOTOL} 2
+        ${BASELINE}/buildingExtractionRGB.png
+        ${TEMP}/buildingExtractionRGB.png
+        ${BASELINE}/buildingExtractionIndexed_scaled.png
+        ${TEMP}/buildingExtractionIndexed_scaled.png
+        IndexedToRGBExampleTest
+        ${INPUTDATA}/buildingExtractionIndexed.tif
+        ${TEMP}/buildingExtractionRGB.png
+        ${TEMP}/buildingExtractionIndexed_scaled.png
 )
 
 ADD_TEST(bfTeMeanShiftVectorImageFilterExampleTest ${EXE_TESTS}
-	--compare-n-images ${NOTOL} 6
-	${BASELINE}/MSFilteredOutput.tif
-	${TEMP}/MSFilteredOutput.tif
-	${BASELINE}/MSClusteredOutput.tif
-	${TEMP}/MSClusteredOutput.tif
-	${BASELINE}/MSLabelledOutput.tif
-	${TEMP}/MSLabelledOutput.tif
-	${BASELINE}/MSBoundariesOutput.tif
-	${TEMP}/MSBoundariesOutput.tif
-	${BASELINE}/MSFilteredOutput-pretty.png
-	${TEMP}/MSFilteredOutput-pretty.png
-	${BASELINE}/MSClusteredOutput-pretty.png
-	${TEMP}/MSClusteredOutput-pretty.png
+        --compare-n-images ${NOTOL} 6
+        ${BASELINE}/MSFilteredOutput.tif
+        ${TEMP}/MSFilteredOutput.tif
+        ${BASELINE}/MSClusteredOutput.tif
+        ${TEMP}/MSClusteredOutput.tif
+        ${BASELINE}/MSLabelledOutput.tif
+        ${TEMP}/MSLabelledOutput.tif
+        ${BASELINE}/MSBoundariesOutput.tif
+        ${TEMP}/MSBoundariesOutput.tif
+        ${BASELINE}/MSFilteredOutput-pretty.png
+        ${TEMP}/MSFilteredOutput-pretty.png
+        ${BASELINE}/MSClusteredOutput-pretty.png
+        ${TEMP}/MSClusteredOutput-pretty.png
      MeanShiftVectorImageFilterExampleTest
-	${INPUTDATA}/ROI_QB_MUL_1.png
+        ${INPUTDATA}/ROI_QB_MUL_1.png
         ${TEMP}/MSFilteredOutput.tif
         ${TEMP}/MSClusteredOutput.tif
         ${TEMP}/MSLabelledOutput.tif
@@ -157,14 +157,14 @@ ADD_TEST(bfTeMeanShiftVectorImageFilterExampleTest ${EXE_TESTS}
 # ------- HillShadingExampleTest ----------
 
 ADD_TEST(bfTeHillShadingExampleTest ${EXE_TESTS}
-	--compare-n-images ${NOTOL} 2
-	    ${BASELINE}/HillShadingExample.png
-	    ${TEMP}/HillShadingExample.png
-		${BASELINE}/HillShadingColorExample.png
-	    ${TEMP}/HillShadingColorExample.png
-	HillShadingExampleTest
-	    ${TEMP}/HillShadingExample.png
-    	${TEMP}/HillShadingColorExample.png
+        --compare-n-images ${NOTOL} 2
+            ${BASELINE}/HillShadingExample.png
+            ${TEMP}/HillShadingExample.png
+                ${BASELINE}/HillShadingColorExample.png
+            ${TEMP}/HillShadingColorExample.png
+        HillShadingExampleTest
+            ${TEMP}/HillShadingExample.png
+            ${TEMP}/HillShadingColorExample.png
         6.8 45.3 500 500 0.002 -0.002 ${OTB_DATA_ROOT}/Examples/DEM_srtm
 )
 

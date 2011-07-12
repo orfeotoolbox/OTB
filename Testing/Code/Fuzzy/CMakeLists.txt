@@ -23,17 +23,17 @@ SET(Fuzzy_TESTS1 ${CXX_TEST_PATH}/otbFuzzyTests1)
 SET(Fuzzy_TESTS2 ${CXX_TEST_PATH}/otbFuzzyTests2)
 
 # FuzzyTests1
-ADD_TEST(fzTuFuzzyVariableNew ${Fuzzy_TESTS1} 
-	otbFuzzyVariableNew)
+ADD_TEST(fzTuFuzzyVariableNew ${Fuzzy_TESTS1}
+        otbFuzzyVariableNew)
 
-ADD_TEST(fzTvFuzzyVariable2Values ${Fuzzy_TESTS1} 
-	otbFuzzyVariable2Values)
+ADD_TEST(fzTvFuzzyVariable2Values ${Fuzzy_TESTS1}
+        otbFuzzyVariable2Values)
 
-ADD_TEST(fzTvFuzzyVariableSetValue ${Fuzzy_TESTS1} 
-	otbFuzzyVariableSetValue)
+ADD_TEST(fzTvFuzzyVariableSetValue ${Fuzzy_TESTS1}
+        otbFuzzyVariableSetValue)
 
-ADD_TEST(fzTvFuzzyVariableGetMaxVar ${Fuzzy_TESTS1} 
-	otbFuzzyVariableGetMaxVar)
+ADD_TEST(fzTvFuzzyVariableGetMaxVar ${Fuzzy_TESTS1}
+        otbFuzzyVariableGetMaxVar)
 
 ADD_TEST(fzTvMassOfBelief ${Fuzzy_TESTS1}
         otbMassOfBelief)

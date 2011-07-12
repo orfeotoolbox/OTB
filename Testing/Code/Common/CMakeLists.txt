@@ -58,7 +58,7 @@ ADD_TEST(coTuConfigurationTest ${COMMON_TESTS1}
         otbConfigurationTest
         )
 
-FILE(WRITE ${CMAKE_BINARY_DIR}/Testing/otbconf_OK  
+FILE(WRITE ${CMAKE_BINARY_DIR}/Testing/otbconf_OK
            "OTB_DEM_DIRECTORY = ${OTB_DATA_ROOT}/Input/DEM/srtm_directory")
 FILE(WRITE ${CMAKE_BINARY_DIR}/Testing/otbconf_NotOK
            "OTB_DEM_DIRECTORY = ${OTB_DATA_ROOT}/Input/DEM/egm96.grd")
@@ -148,7 +148,7 @@ ADD_TEST(coTuLineSpatialObjectList ${COMMON_TESTS2}
 # -------            otb::ExtractROI   ------------------------------
 
 ADD_TEST(coTuExtractROINew ${COMMON_TESTS2}
-	otbExtractROINew)
+        otbExtractROINew)
 
 ADD_TEST(coTvExtractROI ${COMMON_TESTS2}
   --compare-image ${NOTOL}   ${BASELINE}/coExtractROI_cthead1_26_97_209_100.png
@@ -181,38 +181,38 @@ ADD_TEST(coTvExtractROI_RGB2 ${COMMON_TESTS2}
         303 2 134 330 )
 
 ADD_TEST(coTvExtractROI_QB ${COMMON_TESTS2}
-  --compare-image ${NOTOL}   
+  --compare-image ${NOTOL}
   ${BASELINE}/coTvExtractROI_QB.png
   ${TEMP}/coTvExtractROI_QB.png
     otbExtractROI_RGB
   ${INPUTDATA}/QB_Suburb.png
   ${TEMP}/coTvExtractROI_QB.png
-  0 0 70 70 
+  0 0 70 70
   )
 
 
 ADD_TEST(coTvExtractROIQB ${COMMON_TESTS2}
-  --compare-image ${NOTOL}   
+  --compare-image ${NOTOL}
   ${BASELINE}/coTvExtractROIQB.png
   ${TEMP}/coTvExtractROIQB.png
     otbExtractROI
   ${INPUTDATA}/QB_Suburb.png
   ${TEMP}/coTvExtractROIQB.png
-  0 0 70 70 
+  0 0 70 70
   )
 
 # -------            otb::VectorDataExtractROI   ------------------------------
 ADD_TEST(coTuVectorDataExtractROINew ${COMMON_TESTS2}
-	otbVectorDataExtractROINew)
+        otbVectorDataExtractROINew)
 
 ADD_TEST(coTvVectorDataExtractROI ${COMMON_TESTS2}
   --compare-ogr ${NOTOL}
               ${BASELINE_FILES}/coVectorDataExtractROIOutput.shp
               ${TEMP}/coVectorDataExtractROIOutput.shp
-	 otbVectorDataExtractROI
-	${INPUTDATA}/ToulousePoints-examples.shp
-	${TEMP}/coVectorDataExtractROIOutput.shp
-	 374369.48850211215904 4853951.786124914  # Origin of the RemoteSensingRegion
+         otbVectorDataExtractROI
+        ${INPUTDATA}/ToulousePoints-examples.shp
+        ${TEMP}/coVectorDataExtractROIOutput.shp
+         374369.48850211215904 4853951.786124914  # Origin of the RemoteSensingRegion
          1000.25 -25000.2                               # Size of the Cartoregion
  )
 
@@ -224,10 +224,10 @@ ADD_TEST(coTvVectorDataExtractROI2 ${COMMON_TESTS2}
   --compare-ogr ${NOTOL}
               ${BASELINE_FILES}/coVectorDataExtractROIOutput2.shp
               ${TEMP}/coVectorDataExtractROIOutput2.shp
-	 otbVectorDataExtractROI
-	${INPUTDATA}/ToulousePoints-examples.shp
-	${TEMP}/coVectorDataExtractROIOutput2.shp
-	 374369.48850211215904 4828951.58612491376698  # Origin of the RemoteSensingRegion
+         otbVectorDataExtractROI
+        ${INPUTDATA}/ToulousePoints-examples.shp
+        ${TEMP}/coVectorDataExtractROIOutput2.shp
+         374369.48850211215904 4828951.58612491376698  # Origin of the RemoteSensingRegion
          1000.25 25000.2                               # Size of the Cartoregion
  )
 
@@ -306,7 +306,7 @@ SET_TESTS_PROPERTIES(coTvMultiChannelROI_3c_BSQ PROPERTIES DEPENDS coTvMultiChan
 
 ADD_TEST(coTvTestMultiExtractMultiUpdate ${COMMON_TESTS2}
 --compare-image  ${NOTOL}
-		 ${BASELINE}/coTvMultiExtractMultiUpdate.tif
+                 ${BASELINE}/coTvMultiExtractMultiUpdate.tif
                  ${TEMP}/coTvMultiExtractMultiUpdate.tif
      otbTestMultiExtractMultiUpdate
       ${INPUTDATA}/poupees.tif
@@ -321,8 +321,8 @@ ADD_TEST(coTvTestMultiExtractMultiUpdate ${COMMON_TESTS2}
 
 ADD_TEST(coTvMultiChannelExtractROI_Romania ${COMMON_TESTS2}
 --compare-image  ${NOTOL}
-		 ${BASELINE}/coTvMultiChannelExtractROI_Romania.tif
-                 ${TEMP}/coTvMultiChannelExtractROI_Romania.tif 
+                 ${BASELINE}/coTvMultiChannelExtractROI_Romania.tif
+                 ${TEMP}/coTvMultiChannelExtractROI_Romania.tif
      otbTestMultiExtractMultiUpdate
       ${INPUTDATA}/Romania_Extract.tif
       ${TEMP}/coTvMultiChannelExtractROI_Romania.tif
@@ -415,7 +415,7 @@ ADD_TEST(coTuMultiChannelExtractROITestRegion ${COMMON_TESTS3}
 ADD_TEST(coTuExtractROITestRegion ${COMMON_TESTS3}
          otbExtractROITestRegion)
          
-IF(OTB_DATA_USE_LARGEINPUT)       
+IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(coTvExtractROITestMetaData_TIFF ${COMMON_TESTS3}
          --compare-n-ascii ${NOTOL} 2
          ${TEMP}/coTvExtractROITestMetaData1.txt
@@ -449,7 +449,7 @@ ADD_TEST(coTvExtractROITestMetaData_HDR ${COMMON_TESTS3}
          ${TEMP}/coTvExtractROITestMetaData1_writeRead_hdr.txt
          ${TEMP}/coTvExtractROITestMetaData2_writeRead_hdr.txt
          )
-ENDIF(OTB_DATA_USE_LARGEINPUT)    
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbCommonTests4 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -483,10 +483,10 @@ ADD_TEST(coTuImageListNew ${COMMON_TESTS4}
          otbImageListNew)
 
 ADD_TEST(coTvImageList ${COMMON_TESTS4}
-	--compare-image ${NOTOL}   ${INPUTDATA}/amst.png
-				 ${TEMP}/amst.png
+        --compare-image ${NOTOL}   ${INPUTDATA}/amst.png
+                                 ${TEMP}/amst.png
          otbImageList
-	 ${INPUTDATA}/amst.png
+         ${INPUTDATA}/amst.png
          ${TEMP}/amst.png
 )
 
@@ -530,26 +530,26 @@ ADD_TEST(coTuConcatenateVectorImageFilterNew ${COMMON_TESTS5}
 
 ADD_TEST(coTvConcatenateVectorImageFilter ${COMMON_TESTS5}
          --compare-image ${NOTOL}
-	 ${BASELINE}/coConcatenateVectorImageFilterOutput1.hdr
+         ${BASELINE}/coConcatenateVectorImageFilterOutput1.hdr
          ${TEMP}/coConcatenateVectorImageFilterOutput1.hdr
-	 otbConcatenateVectorImageFilter
-	 ${INPUTDATA}/poupees.png
+         otbConcatenateVectorImageFilter
          ${INPUTDATA}/poupees.png
-	 ${TEMP}/coConcatenateVectorImageFilterOutput1.hdr
+         ${INPUTDATA}/poupees.png
+         ${TEMP}/coConcatenateVectorImageFilterOutput1.hdr
 )
 
 #------------    otbImageToVectorImageCastFilter --------------------------------
 
 ADD_TEST(coTuImageToVectorImageCastFilter ${COMMON_TESTS5}
-	otbImageToVectorImageCastFilterNew)
+        otbImageToVectorImageCastFilterNew)
 
 ADD_TEST(coTvImageToVectorImageCastFilter ${COMMON_TESTS5}
 --compare-image ${NOTOL}
-		${BASELINE}/coImageToVectorImageCastFilterOutput.tif
-		${TEMP}/coImageToVectorImageCastFilterOutput.tif
-		otbImageToVectorImageCastFilter
-		${INPUTDATA}/poupees.hdr
-		${TEMP}/coImageToVectorImageCastFilterOutput.tif
+                ${BASELINE}/coImageToVectorImageCastFilterOutput.tif
+                ${TEMP}/coImageToVectorImageCastFilterOutput.tif
+                otbImageToVectorImageCastFilter
+                ${INPUTDATA}/poupees.hdr
+                ${TEMP}/coImageToVectorImageCastFilterOutput.tif
 )
 
 # -------            otb::ImageToPathFilterNew  -------------------------------------------
@@ -583,32 +583,32 @@ ADD_TEST(coTuPolygonNew ${COMMON_TESTS6}
 
 ADD_TEST(coTvPolygon ${COMMON_TESTS6}
 --compare-ascii ${EPSILON_3}
-		${BASELINE_FILES}/otbPolygonTest.txt
+                ${BASELINE_FILES}/otbPolygonTest.txt
                 ${TEMP}/otbPolygonTest.txt
          otbPolygon
-	        ${TEMP}/otbPolygonTest.txt
-		2 10 7 10 7 9 5 9 5 8 7 8 7 6 9 6 9 5 7 5 7 3 2 3
-		next 6 10 11 10 11 2 4 2 3 4 8 4 8 7 6 7
+                ${TEMP}/otbPolygonTest.txt
+                2 10 7 10 7 9 5 9 5 8 7 8 7 6 9 6 9 5 7 5 7 3 2 3
+                next 6 10 11 10 11 2 4 2 3 4 8 4 8 7 6 7
 )
 
 #-------- otb::PolyLineImageIterator -----------------------------------------
 
  ADD_TEST(coTvPolyLineImageConstIterator ${COMMON_TESTS6}
     --compare-ascii ${NOTOL}
-		${BASELINE_FILES}/coTvPolyLineImageConstIterator.txt
-		 ${TEMP}/coTvPolyLineImageConstIterator.txt
+                ${BASELINE_FILES}/coTvPolyLineImageConstIterator.txt
+                 ${TEMP}/coTvPolyLineImageConstIterator.txt
          otbPolyLineImageConstIterator
-		 512 512 20
-		 ${TEMP}/coTvPolyLineImageConstIterator.txt
+                 512 512 20
+                 ${TEMP}/coTvPolyLineImageConstIterator.txt
 )
 
 ADD_TEST(coTvPolyLineImageIterator ${COMMON_TESTS6}
 --compare-image ${NOTOL}
-		${BASELINE}/coTvPolyLineImageIterator.png
-		${TEMP}/coTvPolyLineImageIterator.png
+                ${BASELINE}/coTvPolyLineImageIterator.png
+                ${TEMP}/coTvPolyLineImageIterator.png
          otbPolyLineImageIterator
-		512 512 20
-		${TEMP}/coTvPolyLineImageIterator.png
+                512 512 20
+                ${TEMP}/coTvPolyLineImageIterator.png
 )
 
 
@@ -619,20 +619,20 @@ ADD_TEST(coTuDrawPathListFilterNew ${COMMON_TESTS6}
 
 ADD_TEST(coTvDrawPathListFilter ${COMMON_TESTS6}
 --compare-image ${NOTOL}
-		${BASELINE}/coTvDrawPathListFilterOutput.png
-		${TEMP}/coTvDrawPathListFilterOutput.png
-		otbDrawPathListFilter
-		512 512 20
-		${TEMP}/coTvDrawPathListFilterOutput.png
+                ${BASELINE}/coTvDrawPathListFilterOutput.png
+                ${TEMP}/coTvDrawPathListFilterOutput.png
+                otbDrawPathListFilter
+                512 512 20
+                ${TEMP}/coTvDrawPathListFilterOutput.png
 )
 
 ADD_TEST(coTvDrawPathListFilterWithValue ${COMMON_TESTS6}
 --compare-image ${NOTOL}
-		${BASELINE}/coTvDrawPathListFilterWithValueOutput.png
-		${TEMP}/coTvDrawPathListFilterWithValueOutput.png
-		otbDrawPathListFilterWithValue
-		512 512 20
-		${TEMP}/coTvDrawPathListFilterWithValueOutput.png
+                ${BASELINE}/coTvDrawPathListFilterWithValueOutput.png
+                ${TEMP}/coTvDrawPathListFilterWithValueOutput.png
+                otbDrawPathListFilterWithValue
+                512 512 20
+                ${TEMP}/coTvDrawPathListFilterWithValueOutput.png
 )
 
 
@@ -644,11 +644,11 @@ otbDrawPathFilterNew
 
 ADD_TEST(coTvDrawPatFilter ${COMMON_TESTS6}
 --compare-image ${NOTOL}
-		${BASELINE}/coTvDrawPathFilterOutput.png
-		${TEMP}/coTvDrawPathFilterOutput.png
-		otbDrawPathFilter
-		512 512 20
-		${TEMP}/coTvDrawPathFilterOutput.png
+                ${BASELINE}/coTvDrawPathFilterOutput.png
+                ${TEMP}/coTvDrawPathFilterOutput.png
+                otbDrawPathFilter
+                512 512 20
+                ${TEMP}/coTvDrawPathFilterOutput.png
 )
 
 # -------  otb::UnaryFunctorNeighborhoodImageFilter ----------------------
@@ -658,12 +658,12 @@ otbUnaryFunctorNeighborhoodImageFilterNew
 
 ADD_TEST(coTvUnaryFunctorNeighborhoodImageFilter ${COMMON_TESTS6}
 --compare-image ${NOTOL}
-		${BASELINE}/coTvUnaryFunctorNeighborhoodImageFilter.png
-		${TEMP}/coTvUnaryFunctorNeighborhoodImageFilter.png
+                ${BASELINE}/coTvUnaryFunctorNeighborhoodImageFilter.png
+                ${TEMP}/coTvUnaryFunctorNeighborhoodImageFilter.png
     otbUnaryFunctorNeighborhoodImageFilter
         ${INPUTDATA}/amst.png
-	${TEMP}/coTvUnaryFunctorNeighborhoodImageFilter.png
-	3
+        ${TEMP}/coTvUnaryFunctorNeighborhoodImageFilter.png
+        3
 )
 
 #--------------------otb::Rectangle
@@ -672,11 +672,11 @@ ADD_TEST(coTuRectangleNew ${COMMON_TESTS6}
 
 ADD_TEST(coTvRectangle ${COMMON_TESTS6}
 --compare-ascii ${EPSILON_3}
-		${BASELINE_FILES}/otbRectangleTest.txt
+                ${BASELINE_FILES}/otbRectangleTest.txt
                 ${TEMP}/otbRectangleTest.txt
          otbRectangle
-	        ${TEMP}/otbRectangleTest.txt
-		2.12 2.35 12.54 2.45   3. 0.15  1. 1.
+                ${TEMP}/otbRectangleTest.txt
+                2.12 2.35 12.54 2.45   3. 0.15  1. 1.
 
 
 )
@@ -733,11 +733,11 @@ ADD_TEST(coTuShiftScaleImageAdaptorNew ${COMMON_TESTS7}
 
 ADD_TEST(coTvShiftScaleImageAdaptor ${COMMON_TESTS7}
   --compare-image ${EPSILON_9}
-	          ${BASELINE}/coTvShiftScaleImageAdaptor.tif    # copie the input image
-		  ${TEMP}/coTvShiftScaleImageAdaptor.tif
+                  ${BASELINE}/coTvShiftScaleImageAdaptor.tif    # copie the input image
+                  ${TEMP}/coTvShiftScaleImageAdaptor.tif
      otbShiftScaleImageAdaptor
         ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
-	${TEMP}/coTvShiftScaleImageAdaptor.tif
+        ${TEMP}/coTvShiftScaleImageAdaptor.tif
 )
 
 # -------------  otb::StandardWriterWatcher ----------------------------
@@ -745,8 +745,8 @@ ADD_TEST(coTvShiftScaleImageAdaptor ${COMMON_TESTS7}
 ADD_TEST(coTvStandardWriterWatcher ${COMMON_TESTS7}
      otbStandardWriterWatcher
         ${INPUTDATA}/couleurs.tif
-	${TEMP}/coTvStandardWriterWatcherOutput.tif
-	20
+        ${TEMP}/coTvStandardWriterWatcherOutput.tif
+        20
 )
 
 # ------ otb::UnaryFunctorNeighborhoodWithOffsetImageFilterNew  ----
@@ -756,14 +756,14 @@ ADD_TEST(coTuUnaryFunctorNeighborhoodWithOffsetImageFilterNew ${COMMON_TESTS7}
 )
 ADD_TEST(coTvUnaryFunctorNeighborhoodWithOffsetImageFilter ${COMMON_TESTS7}
 --compare-image ${NOTOL}
-	        ${INPUTDATA}/poupees.tif
+                ${INPUTDATA}/poupees.tif
                 ${TEMP}/coTvUnaryFunctorNeighborhoodWithOffsetImageFilter.tif
     otbUnaryFunctorNeighborhoodWithOffsetImageFilter
         ${INPUTDATA}/poupees.tif
-	${TEMP}/coTvUnaryFunctorNeighborhoodWithOffsetImageFilter.tif
-	2 # radius
-	2 # offset[0]
-	2  #offset[1]
+        ${TEMP}/coTvUnaryFunctorNeighborhoodWithOffsetImageFilter.tif
+        2 # radius
+        2 # offset[0]
+        2  #offset[1]
 )
 
 
@@ -773,9 +773,9 @@ ADD_TEST(coTuRemoteSensingRegionNew ${COMMON_TESTS7}
                      otbRemoteSensingRegionNew )
 
 ADD_TEST(coTvRemoteSensingRegion ${COMMON_TESTS7}
-	 otbRemoteSensingRegion
-	 1.21 2.33 58.47 59.49  #size et index of the region
-	 0. 0.                  # Point to check
+         otbRemoteSensingRegion
+         1.21 2.33 58.47 59.49  #size et index of the region
+         0. 0.                  # Point to check
  )
 
 
@@ -791,16 +791,16 @@ otbQuickLookImageGeneratorNew
 
 ADD_TEST(coTvQuickLookImageGenerator ${COMMON_TESTS8}
      --compare-image ${EPSILON_9}
-	   	     ${BASELINE}/coQuickLookImageGenerator.tif
+                        ${BASELINE}/coQuickLookImageGenerator.tif
                      ${TEMP}/coQuickLookImageGenerator.tif
    otbQuickLookImageGenerator
         ${INPUTDATA}/qb_RoadExtract.img.hdr
-	${TEMP}/coQuickLookImageGenerator.tif
-	10 # sr
-	2 # variance
-	0.5 # max error
-	4 # max kernel width
-	1 # usespacing
+        ${TEMP}/coQuickLookImageGenerator.tif
+        10 # sr
+        2 # variance
+        0.5 # max error
+        4 # max kernel width
+        1 # usespacing
 )
 
 # -------------  otb::ImageRegionTileMapSplitter ----------------------------
@@ -882,30 +882,30 @@ otbVectorDataToImageFilterNew
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(coTvVectorDataToImageFilter ${COMMON_TESTS9}
      --compare-image ${NOTOL}
-	   	     ${BASELINE}/coTvVectorDataToImageFilter.png
+                        ${BASELINE}/coTvVectorDataToImageFilter.png
                      ${TEMP}/coTvVectorDataToImageFilter.png
    otbVectorDataToImageFilter
         ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
-	${TEMP}/coTvVectorDataToImageFilter.png
+        ${TEMP}/coTvVectorDataToImageFilter.png
         ${INPUTDATA}/DejaVuSans.ttf # font
 )
 
 ADD_TEST(coTvVectorDataToImageFilterBinary ${COMMON_TESTS9}
      --compare-image ${NOTOL}
-	   	     ${BASELINE}/coTvVectorDataToImageFilterBinary.png
+                        ${BASELINE}/coTvVectorDataToImageFilterBinary.png
                      ${TEMP}/coTvVectorDataToImageFilterBinary.png
    otbVectorDataToImageFilterBinary
         ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
-	${TEMP}/coTvVectorDataToImageFilterBinary.png
+        ${TEMP}/coTvVectorDataToImageFilterBinary.png
 )
 
 ADD_TEST(coTvVectorDataToImageFilterNoFonts ${COMMON_TESTS9}
      --compare-image ${NOTOL}
-	   	     ${BASELINE}/coTvVectorDataToImageFilterNoFonts.png
+                        ${BASELINE}/coTvVectorDataToImageFilterNoFonts.png
                      ${TEMP}/coTvVectorDataToImageFilterNoFonts.png
    otbVectorDataToImageFilterNoFonts
         ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
-	${TEMP}/coTvVectorDataToImageFilterNoFonts.png
+        ${TEMP}/coTvVectorDataToImageFilterNoFonts.png
 )
 
 ENDIF(OTB_DATA_USE_LARGEINPUT)
@@ -916,12 +916,12 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(coTvVectorDataToImageFilterSensorModel ${COMMON_TESTS9}
      --compare-image ${NOTOL}
-	   	     ${BASELINE}/coTvVectorDataToImageFilterSensorModel.png
+                        ${BASELINE}/coTvVectorDataToImageFilterSensorModel.png
                      ${TEMP}/coTvVectorDataToImageFilterSensorModel.png
    otbVectorDataToImageFilterSensorModel
         ${LARGEINPUT}/VECTOR/MidiPyrenees/roads.shp
         ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
-	${TEMP}/coTvVectorDataToImageFilterSensorModel.png
+        ${TEMP}/coTvVectorDataToImageFilterSensorModel.png
         ${INPUTDATA}/DejaVuSans.ttf # font
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)

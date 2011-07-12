@@ -37,7 +37,7 @@ ADD_TEST(viTuFixedSizeFullImageWidgetNew ${VISU_TESTS1}
 
 ADD_TEST(viTvFixedSizFullImageWidget ${VISU_TESTS1}
         otbFixedSizeFullImageWidget
-	${INPUTDATA}/poupees.png
+        ${INPUTDATA}/poupees.png
         )
 
 # -------       otb::FullResolutionImageWidget -----------------------------------
@@ -48,7 +48,7 @@ ADD_TEST(viTuFullResolutionImageWidgetNew ${VISU_TESTS1}
 
 ADD_TEST(viTvFullResolutionImageWidget ${VISU_TESTS1}
         otbFullResolutionImageWidget
-	${INPUTDATA}/poupees.png
+        ${INPUTDATA}/poupees.png
         )
 
 # -------   otb::ZoomableImageWidget  -----------------------------------
@@ -59,7 +59,7 @@ ADD_TEST(viTuZoomableImageWidgetNew ${VISU_TESTS1}
 
 ADD_TEST(viTvZoomableImageWidget ${VISU_TESTS1}
         otbZoomableImageWidget
-	${INPUTDATA}/poupees.png
+        ${INPUTDATA}/poupees.png
         )
 
 # -------   otb::ImageViewer  -----------------------------------
@@ -70,7 +70,7 @@ ADD_TEST(viTuImageViewerNew ${VISU_TESTS1}
 
 ADD_TEST(viTvImageViewerWithOtbVectorImage ${VISU_TESTS1}
         otbImageViewer
-	${INPUTDATA}/couleurs.jpg 3
+        ${INPUTDATA}/couleurs.jpg 3
         )
 
 ADD_TEST(viTvImageViewerWithOtbImage ${VISU_TESTS1}
@@ -81,22 +81,22 @@ ADD_TEST(viTvImageViewerWithOtbImage ${VISU_TESTS1}
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(viTvImageViewerWithLargeOtbVectorImage ${VISU_TESTS1}
         otbImageViewer
-	${IMAGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF 0
+        ${IMAGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF 0
         )
 
 ADD_TEST(viTvModulusImageViewerWithComplexImage ${VISU_TESTS1}
         otbImageViewer
-	${IMAGEDATA}/RADARSAT1/GOMA2/SCENE01/DAT_01.001 1
+        ${IMAGEDATA}/RADARSAT1/GOMA2/SCENE01/DAT_01.001 1
         )
 
 ADD_TEST(viTvPhaseImageViewerWithComplexImage ${VISU_TESTS1}
         otbImageViewer
-	${IMAGEDATA}/RADARSAT1/GOMA2/SCENE01/DAT_01.001 2
+        ${IMAGEDATA}/RADARSAT1/GOMA2/SCENE01/DAT_01.001 2
         )
 
 ADD_TEST(viTvImageViewerWithLargeOtbImage ${VISU_TESTS1}
         otbImageViewerWithOtbImage
-	${IMAGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF 0
+        ${IMAGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF 0
         )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
@@ -105,45 +105,45 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ADD_TEST(viTvImageViewerWithMultiBandFilter ${VISU_TESTS2}
         otbImageViewerWithMultiBandFilter
-	${INPUTDATA}/couleurs.jpg
+        ${INPUTDATA}/couleurs.jpg
         )
 
 ADD_TEST(viTvDoubleImageViewerWithLink ${VISU_TESTS2}
         otbDoubleImageViewerWithLink
-	${INPUTDATA}/couleurs.jpg
-	${INPUTDATA}/couleurs.jpg
+        ${INPUTDATA}/couleurs.jpg
+        ${INPUTDATA}/couleurs.jpg
         )
 
 # -------   otb::ImageToGrayscaleAnaglyphImageFilter  -----------------------------------
 
 ADD_TEST(viTuImageToGrayscaleAnaglyphImageFilterNew ${VISU_TESTS2}
-	otbImageToGrayscaleAnaglyphImageFilterNew
+        otbImageToGrayscaleAnaglyphImageFilterNew
 )
 
 ADD_TEST(viTvImageToGrayscaleAnaglyphImageFilter ${VISU_TESTS2}
-	--compare-image  ${EPSILON_6}
-	${BASELINE}/viTvGrayscaleAnaglyphFilterResult.tif
-	${TEMP}/viTvGrayscaleAnaglyphFilterResult.tif
-	otbImageToGrayscaleAnaglyphImageFilter
-	${INPUTDATA}/anaglyphInput1.tif
-	${INPUTDATA}/anaglyphInput2.tif
-	${TEMP}/viTvGrayscaleAnaglyphFilterResult.tif
+        --compare-image  ${EPSILON_6}
+        ${BASELINE}/viTvGrayscaleAnaglyphFilterResult.tif
+        ${TEMP}/viTvGrayscaleAnaglyphFilterResult.tif
+        otbImageToGrayscaleAnaglyphImageFilter
+        ${INPUTDATA}/anaglyphInput1.tif
+        ${INPUTDATA}/anaglyphInput2.tif
+        ${TEMP}/viTvGrayscaleAnaglyphFilterResult.tif
 )
 
 # -------   otb::VectorImageToColorAnaglyphVectorImageFilter  ---------------------------
 
 ADD_TEST(viTuVectorImageToColorAnaglyphVectorImageFilterNew ${VISU_TESTS2}
-	otbVectorImageToColorAnaglyphVectorImageFilterNew
+        otbVectorImageToColorAnaglyphVectorImageFilterNew
 )
 
 ADD_TEST(viTvVectorImageToColorAnaglyphVectorImageFilter ${VISU_TESTS2}
-	--compare-image ${EPSILON_6}
-	${BASELINE}/viTvColorAnaglyphFilterResult.tif
-	${TEMP}/viTvColorAnaglyphFilterResult.tif
-	otbVectorImageToColorAnaglyphVectorImageFilter
-	${INPUTDATA}/anaglyphInput1.tif
-	${INPUTDATA}/anaglyphInput2.tif
-	${TEMP}/viTvColorAnaglyphFilterResult.tif
+        --compare-image ${EPSILON_6}
+        ${BASELINE}/viTvColorAnaglyphFilterResult.tif
+        ${TEMP}/viTvColorAnaglyphFilterResult.tif
+        otbVectorImageToColorAnaglyphVectorImageFilter
+        ${INPUTDATA}/anaglyphInput1.tif
+        ${INPUTDATA}/anaglyphInput2.tif
+        ${TEMP}/viTvColorAnaglyphFilterResult.tif
 )
 
 # -------  otb::ImageWidgetPolygonForm -------------------------------------------
@@ -152,8 +152,8 @@ ADD_TEST(viTuImageWidgetPolygonFormNew ${VISU_TESTS2}
 
 ADD_TEST(viTuImageWidgetPolygonForm ${VISU_TESTS2}
          otbImageWidgetPolygonForm
-	      	${INPUTDATA}/poupees.tif
-		20 100 70 100 70 90 50 90 50 80 70 80 70 60 90 60 90 50 70 50 70 30 20 30
+                      ${INPUTDATA}/poupees.tif
+                20 100 70 100 70 90 50 90 50 80 70 80 70 60 90 60 90 50 70 50 70 30 20 30
 )
 
 # -------       otb::HistogramAndTransferFunctionWidgtet -----------------------------------
@@ -164,7 +164,7 @@ ADD_TEST(viTuHistogramAndTransferFunctionWidgetNew ${VISU_TESTS2}
 
 ADD_TEST(viTvHistogramAndTransferFunctionWidget ${VISU_TESTS2}
         otbHistogramAndTransferFunctionWidget
-	${INPUTDATA}/GomaAvant.png
+        ${INPUTDATA}/GomaAvant.png
         )
 
 # -------       otb::ImageWidgetTransferFunctions -----------------------------------
@@ -175,18 +175,18 @@ ADD_TEST(viTuImageWidgetTransferFunctionsNew ${VISU_TESTS2}
 
 ADD_TEST(viTvImageWidgetTransferFunctions ${VISU_TESTS2}
 --compare-ascii ${EPSILON_6}
-		${BASELINE_FILES}/viTvImageWidgetTransferFunctionsOutput.txt
-		${TEMP}/viTvImageWidgetTransferFunctionsOutput.txt
+                ${BASELINE_FILES}/viTvImageWidgetTransferFunctionsOutput.txt
+                ${TEMP}/viTvImageWidgetTransferFunctionsOutput.txt
         otbImageWidgetTransferFunctions
-	${TEMP}/viTvImageWidgetTransferFunctionsOutput.txt
+        ${TEMP}/viTvImageWidgetTransferFunctionsOutput.txt
         )
 
 #----------   otb::ImageViewer (Testing overlay, related to bug 35 -----------
 ADD_TEST(viTvImageViewerWithOverlay ${VISU_TESTS2}
-	otbImageViewerWithOverlay
-		${INPUTDATA}/couleurs.tif
-		128
-		128
+        otbImageViewerWithOverlay
+                ${INPUTDATA}/couleurs.tif
+                128
+                128
 )
 
 # -------       Fichiers sources CXX -----------------------------------

@@ -122,10 +122,10 @@ ADD_TEST(leTvSVMPointSetModelEstimatorTrain ${LEARNING_TESTS2}
         otbSVMPointSetModelEstimatorTrain
  ${TEMP}/leTvsvm_model_pointset)
 
-# -------            otb::SVMSampleListModelEstimator   --------------------  
+# -------            otb::SVMSampleListModelEstimator   --------------------
 
 ADD_TEST(leTuSVMSampleListModelEstimatorNew ${LEARNING_TESTS2}
-        otbSVMSampleListModelEstimatorNew)   
+        otbSVMSampleListModelEstimatorNew)
 
 ADD_TEST(leTvSVMSampleListModelEstimatorTest ${LEARNING_TESTS2}
  --compare-ascii ${EPSILON_9}
@@ -328,10 +328,10 @@ ADD_TEST(leTvSVMImageClassificationFilter ${LEARNING_TESTS3}
  ${INPUTDATA}/svm_model_image
  ${TEMP}/leSVMImageClassificationFilterOutput.tif)
 
-# ------- otb::SVMImageClassificationWithRuleFilter ---------------------- 
+# ------- otb::SVMImageClassificationWithRuleFilter ----------------------
 
 ADD_TEST(leTuSVMImageClassificationWithRuleFilterNew ${LEARNING_TESTS3}
-          otbSVMImageClassificationWithRuleFilterNew) 
+          otbSVMImageClassificationWithRuleFilterNew)
 
 ADD_TEST(leTvSVMImageClassificationWithRuleFilter ${LEARNING_TESTS3}
  --compare-image ${NOTOL}
@@ -574,14 +574,14 @@ ${TEMP}/leTvShiftScaleSampleListFilterOutput.txt
 -1 -3
  0 -1
 )
-# Gaussian Additive 
+# Gaussian Additive
 ADD_TEST(leTuGaussianAdditiveNoiseSampleListFilterNew ${LEARNING_TESTS4}
 otbGaussianAdditiveNoiseSampleListFilterNew)
 
 ADD_TEST(leTvGaussianAdditiveNoiseSampleListFilter ${LEARNING_TESTS4}
 --compare-ascii ${NOTOL}
-	${BASELINE_FILES}/leTvGaussianAdditiveNoiseSampleListFilterOutput.txt
-	${TEMP}/leTvGaussianAdditiveNoiseSampleListFilterOutput.txt
+        ${BASELINE_FILES}/leTvGaussianAdditiveNoiseSampleListFilterOutput.txt
+        ${TEMP}/leTvGaussianAdditiveNoiseSampleListFilterOutput.txt
 otbGaussianAdditiveNoiseSampleListFilter
 ${TEMP}/leTvGaussianAdditiveNoiseSampleListFilterOutput.txt
  2
@@ -620,18 +620,18 @@ ${BASELINE_FILES}/leTvListSampleToBalancedListSampleFilterOutput.txt
  ${TEMP}/leTvListSampleToBalancedListSampleFilterOutput.txt
 otbListSampleToBalancedListSampleFilter
 ${TEMP}/leTvListSampleToBalancedListSampleFilterOutput.txt
- 2 
+ 2
 -1 -3  0 # The third element is the label of the SampleList
  1  2  1
 -2 -5  0
 -1 -3  1
  0 -1  1
 -3  1  1
--5  2  1 
+-5  2  1
  2  1  1
- 2  8  1 
+ 2  8  1
  1 -4  0
--1  5  4 
+-1  5  4
  2  5  1
  0 -5  0
  1 -1  2

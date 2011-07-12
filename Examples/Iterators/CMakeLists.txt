@@ -65,127 +65,127 @@ SET(TOL 0.0)
 # ------- ImageRegionIteratorWithIndexTest----------
 
 ADD_TEST(itTeImageRegionIteratorWithIndexTest ${EXE_TESTS}
-	--compare-n-images ${TOL} 1
-	${BASELINE}/ImageRegionIteratorWithIndexOutput.png
-	${TEMP}/ImageRegionIteratorWithIndexOutput.png
-	ImageRegionIteratorWithIndexTest
-	${INPUTDATA}/ROI_QB_MUL_2.tif
-	${TEMP}/ImageRegionIteratorWithIndexOutput.png
+        --compare-n-images ${TOL} 1
+        ${BASELINE}/ImageRegionIteratorWithIndexOutput.png
+        ${TEMP}/ImageRegionIteratorWithIndexOutput.png
+        ImageRegionIteratorWithIndexTest
+        ${INPUTDATA}/ROI_QB_MUL_2.tif
+        ${TEMP}/ImageRegionIteratorWithIndexOutput.png
 )
 
 # ------- NeighborhoodIterators1Test----------
 
 ADD_TEST(itTeNeighborhoodIterators1Test ${EXE_TESTS}
-	--compare-n-images ${TOL} 1
-	${BASELINE}/NeighborhoodIterators1a.png
-	${TEMP}/NeighborhoodIterators1a.png
-	NeighborhoodIterators1Test
-	${INPUTDATA}/ROI_QB_PAN_1.tif
-	${TEMP}/NeighborhoodIterators1a.png
+        --compare-n-images ${TOL} 1
+        ${BASELINE}/NeighborhoodIterators1a.png
+        ${TEMP}/NeighborhoodIterators1a.png
+        NeighborhoodIterators1Test
+        ${INPUTDATA}/ROI_QB_PAN_1.tif
+        ${TEMP}/NeighborhoodIterators1a.png
 )
 
 # ------- NeighborhoodIterators4Test----------
 
 ADD_TEST(itTeNeighborhoodIterators4Test ${EXE_TESTS}
-	--compare-n-images ${TOL} 1
-	${BASELINE}/NeighborhoodIterators4a.png
-	${TEMP}/NeighborhoodIterators4a.png
-	NeighborhoodIterators4Test
-	${INPUTDATA}/QB_Suburb.png
-	${TEMP}/NeighborhoodIterators4a.png
+        --compare-n-images ${TOL} 1
+        ${BASELINE}/NeighborhoodIterators4a.png
+        ${TEMP}/NeighborhoodIterators4a.png
+        NeighborhoodIterators4Test
+        ${INPUTDATA}/QB_Suburb.png
+        ${TEMP}/NeighborhoodIterators4a.png
     0
 )
 
 # ------- NeighborhoodIterators4Test----------
 
 ADD_TEST(itTeNeighborhoodIterators4Test ${EXE_TESTS}
-	--compare-n-images ${TOL} 1
-	${BASELINE}/NeighborhoodIterators4b.png
-	${TEMP}/NeighborhoodIterators4b.png
-	NeighborhoodIterators4Test
-	${INPUTDATA}/QB_Suburb.png
-	${TEMP}/NeighborhoodIterators4b.png
+        --compare-n-images ${TOL} 1
+        ${BASELINE}/NeighborhoodIterators4b.png
+        ${TEMP}/NeighborhoodIterators4b.png
+        NeighborhoodIterators4Test
+        ${INPUTDATA}/QB_Suburb.png
+        ${TEMP}/NeighborhoodIterators4b.png
     1
 )
 
 # ------- NeighborhoodIterators4Test----------
 
 ADD_TEST(itTeNeighborhoodIterators4Test ${EXE_TESTS}
-	--compare-n-images ${TOL} 1
-	${BASELINE}/NeighborhoodIterators4c.png
-	${TEMP}/NeighborhoodIterators4c.png
-	NeighborhoodIterators4Test
-	${INPUTDATA}/QB_Suburb.png
-	${TEMP}/NeighborhoodIterators4c.png
+        --compare-n-images ${TOL} 1
+        ${BASELINE}/NeighborhoodIterators4c.png
+        ${TEMP}/NeighborhoodIterators4c.png
+        NeighborhoodIterators4Test
+        ${INPUTDATA}/QB_Suburb.png
+        ${TEMP}/NeighborhoodIterators4c.png
     2
 )
 
 # ------- NeighborhoodIterators4Test----------
 
 ADD_TEST(itTeNeighborhoodIterators4Test ${EXE_TESTS}
-	--compare-n-images ${TOL} 1
-	${BASELINE}/NeighborhoodIterators4d.png
-	${TEMP}/NeighborhoodIterators4d.png
-	NeighborhoodIterators4Test
-	${INPUTDATA}/QB_Suburb.png
-	${TEMP}/NeighborhoodIterators4d.png
+        --compare-n-images ${TOL} 1
+        ${BASELINE}/NeighborhoodIterators4d.png
+        ${TEMP}/NeighborhoodIterators4d.png
+        NeighborhoodIterators4Test
+        ${INPUTDATA}/QB_Suburb.png
+        ${TEMP}/NeighborhoodIterators4d.png
     5
 )
 
 # ------- NeighborhoodIterators6Test----------
 
 ADD_TEST(itTeNeighborhoodIterators6Test ${EXE_TESTS}
-	--compare-n-images ${TOL} 1
-	${BASELINE}/NeighborhoodIterators6a.png
-	${TEMP}/NeighborhoodIterators6a.png
-	NeighborhoodIterators6Test
-	${TEMP}/NeighborhoodIterators6a.png
+        --compare-n-images ${TOL} 1
+        ${BASELINE}/NeighborhoodIterators6a.png
+        ${TEMP}/NeighborhoodIterators6a.png
+        NeighborhoodIterators6Test
+        ${TEMP}/NeighborhoodIterators6a.png
     100 100
 )
 
 # ------- NeighborhoodIterators6Test----------
 
 ADD_TEST(itTeNeighborhoodIterators6Test ${EXE_TESTS}
-	--compare-n-images ${TOL} 1
-	${BASELINE}/NeighborhoodIterators6b.png
-	${TEMP}/NeighborhoodIterators6b.png
-	NeighborhoodIterators6Test
-	${TEMP}/NeighborhoodIterators6b.png
+        --compare-n-images ${TOL} 1
+        ${BASELINE}/NeighborhoodIterators6b.png
+        ${TEMP}/NeighborhoodIterators6b.png
+        NeighborhoodIterators6Test
+        ${TEMP}/NeighborhoodIterators6b.png
     50 150
 )
 
 # ------- NeighborhoodIterators6Test----------
 
 ADD_TEST(itTeNeighborhoodIterators6Test ${EXE_TESTS}
-	--compare-n-images ${TOL} 1
-	${BASELINE}/NeighborhoodIterators6c.png
-	${TEMP}/NeighborhoodIterators6c.png
-	NeighborhoodIterators6Test
-	${TEMP}/NeighborhoodIterators6c.png
+        --compare-n-images ${TOL} 1
+        ${BASELINE}/NeighborhoodIterators6c.png
+        ${TEMP}/NeighborhoodIterators6c.png
+        NeighborhoodIterators6Test
+        ${TEMP}/NeighborhoodIterators6c.png
     150 50
 )
 
 # ------- ImageRegionIteratorTest----------
 
 ADD_TEST(itTeImageRegionIteratorTest ${EXE_TESTS}
-	--compare-n-images ${TOL} 1
-	${BASELINE}/ImageRegionIteratorOutput.png
-	${TEMP}/ImageRegionIteratorOutput.png
-	ImageRegionIteratorTest
-	${INPUTDATA}/QB_Suburb.png
-	${TEMP}/ImageRegionIteratorOutput.png
+        --compare-n-images ${TOL} 1
+        ${BASELINE}/ImageRegionIteratorOutput.png
+        ${TEMP}/ImageRegionIteratorOutput.png
+        ImageRegionIteratorTest
+        ${INPUTDATA}/QB_Suburb.png
+        ${TEMP}/ImageRegionIteratorOutput.png
      10 10 110 140
 )
 
 # ------- ShapedNeighborhoodIterators2Test----------
 
 ADD_TEST(itTeShapedNeighborhoodIterators2Test ${EXE_TESTS}
-	--compare-n-images ${TOL} 1
-	${BASELINE}/ShapedNeighborhoodIterators1b.png
-	${TEMP}/ShapedNeighborhoodIterators1b.png
-	ShapedNeighborhoodIterators2Test
-	${INPUTDATA}/BinaryImage.png
-	${TEMP}/ShapedNeighborhoodIterators1b.png
+        --compare-n-images ${TOL} 1
+        ${BASELINE}/ShapedNeighborhoodIterators1b.png
+        ${TEMP}/ShapedNeighborhoodIterators1b.png
+        ShapedNeighborhoodIterators2Test
+        ${INPUTDATA}/BinaryImage.png
+        ${TEMP}/ShapedNeighborhoodIterators1b.png
   4
 )
 

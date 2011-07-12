@@ -119,118 +119,118 @@ SET(TOL 0.0)
 # ------- CorrelationLineDetectorExampleTest----------
 
 ADD_TEST(feTeCorrelationLineDetectorExampleTest ${EXE_TESTS1}
-	--compare-n-images ${TOL} 2
-	${BASELINE}/amstLineCorrelations.png
-	${TEMP}/amstLineCorrelations.png
-	${BASELINE}/amstLineCorrelationDirections.png
-	${TEMP}/amstLineCorrelationDirections.png
-	CorrelationLineDetectorExampleTest
-	${INPUTDATA}/amst.png
-	${TEMP}/amstLineCorrelations.png
-	${TEMP}/amstLineCorrelationDirections.png
+        --compare-n-images ${TOL} 2
+        ${BASELINE}/amstLineCorrelations.png
+        ${TEMP}/amstLineCorrelations.png
+        ${BASELINE}/amstLineCorrelationDirections.png
+        ${TEMP}/amstLineCorrelationDirections.png
+        CorrelationLineDetectorExampleTest
+        ${INPUTDATA}/amst.png
+        ${TEMP}/amstLineCorrelations.png
+        ${TEMP}/amstLineCorrelationDirections.png
     5 1
 )
 
 # ------- LocalHoughExampleTest----------
 
 ADD_TEST(feTeLocalHoughExampleTest ${EXE_TESTS1}
-	--compare-n-images ${TOL} 1
-	${BASELINE}/detected_local_hough.png
-	${TEMP}/detected_local_hough.png
-	LocalHoughExampleTest
-	${INPUTDATA}/detected_lines.png
-	${TEMP}/detected_local_hough.png
+        --compare-n-images ${TOL} 1
+        ${BASELINE}/detected_local_hough.png
+        ${TEMP}/detected_local_hough.png
+        LocalHoughExampleTest
+        ${INPUTDATA}/detected_lines.png
+        ${TEMP}/detected_local_hough.png
   30 10 1 50
 )
 
 # ------- HarrisExampleTest----------
 
 ADD_TEST(feTeHarrisExampleTest ${EXE_TESTS1}
-	--compare-n-images ${TOL} 1
-	${BASELINE}/ROISpot5Harris.png
-	${TEMP}/ROISpot5Harris.png
-	HarrisExampleTest
-	${INPUTDATA}/ROISpot5.png
-	${TEMP}/ROISpot5Harris.png
+        --compare-n-images ${TOL} 1
+        ${BASELINE}/ROISpot5Harris.png
+        ${TEMP}/ROISpot5Harris.png
+        HarrisExampleTest
+        ${INPUTDATA}/ROISpot5.png
+        ${TEMP}/ROISpot5Harris.png
     1.5 2 0.1
 )
 
 # ------- TouziEdgeDetectorExampleTest----------
 
 ADD_TEST(feTeTouziEdgeDetectorExampleTest ${EXE_TESTS1}
-	--compare-n-images ${TOL} 2
-	${BASELINE}/amstTouziEdges.png
-	${TEMP}/amstTouziEdges.png
-	${BASELINE}/amstTouziDirections.png
-	${TEMP}/amstTouziDirections.png
-	TouziEdgeDetectorExampleTest
-	${INPUTDATA}/amst.png
-	${TEMP}/amstTouziEdges.png
-	${TEMP}/amstTouziDirections.png
+        --compare-n-images ${TOL} 2
+        ${BASELINE}/amstTouziEdges.png
+        ${TEMP}/amstTouziEdges.png
+        ${BASELINE}/amstTouziDirections.png
+        ${TEMP}/amstTouziDirections.png
+        TouziEdgeDetectorExampleTest
+        ${INPUTDATA}/amst.png
+        ${TEMP}/amstTouziEdges.png
+        ${TEMP}/amstTouziDirections.png
     3
 )
 
 # ------- ExtractSegmentsByStepsExampleTest----------
 
 ADD_TEST(feTeExtractSegmentsByStepsExampleTest ${EXE_TESTS1}
-	--compare-n-images ${TOL} 1
-	${BASELINE}/amstSegmentExtractionBySteps.png
-	${TEMP}/amstSegmentExtractionBySteps.png
-	ExtractSegmentsByStepsExampleTest
-	${INPUTDATA_OTB}/amst_ers1.ima.extrait.419_187_70_66.hdr
-	${TEMP}/amstSegmentExtractionBySteps.png
+        --compare-n-images ${TOL} 1
+        ${BASELINE}/amstSegmentExtractionBySteps.png
+        ${TEMP}/amstSegmentExtractionBySteps.png
+        ExtractSegmentsByStepsExampleTest
+        ${INPUTDATA_OTB}/amst_ers1.ima.extrait.419_187_70_66.hdr
+        ${TEMP}/amstSegmentExtractionBySteps.png
   10 3 10 0.5 10 10 3 10 0.5
 )
 
 # ------- AssymmetricFusionOfLineDetectorExampleTest----------
 
 ADD_TEST(feTeAssymmetricFusionOfLineDetectorExampleTest ${EXE_TESTS1}
-	--compare-n-images ${TOL} 1
-	${BASELINE}/amstLineFusion.png
-	${TEMP}/amstLineFusion.png
-	AssymmetricFusionOfLineDetectorExampleTest
-	${INPUTDATA}/amst.png
-	${TEMP}/amstLineFusion.png
+        --compare-n-images ${TOL} 1
+        ${BASELINE}/amstLineFusion.png
+        ${TEMP}/amstLineFusion.png
+        AssymmetricFusionOfLineDetectorExampleTest
+        ${INPUTDATA}/amst.png
+        ${TEMP}/amstLineFusion.png
     5 1
 )
 
 # ------- ExtractSegmentsExampleTest----------
 
 ADD_TEST(feTeExtractSegmentsExampleTest ${EXE_TESTS1}
-	--compare-n-images ${TOL} 1
-	${BASELINE}/amstSegmentExtraction.png
-	${TEMP}/amstSegmentExtraction.png
-	ExtractSegmentsExampleTest
-	${INPUTDATA_OTB}/amst_ers1.ima.extrait.419_187_70_66.hdr
-	${TEMP}/amstSegmentExtraction.png
+        --compare-n-images ${TOL} 1
+        ${BASELINE}/amstSegmentExtraction.png
+        ${TEMP}/amstSegmentExtraction.png
+        ExtractSegmentsExampleTest
+        ${INPUTDATA_OTB}/amst_ers1.ima.extrait.419_187_70_66.hdr
+        ${TEMP}/amstSegmentExtraction.png
   10 3 10 0.5 10 10 3 10 0.5
 )
 
 # ------- RatioLineDetectorExampleTest----------
 
 ADD_TEST(feTeRatioLineDetectorExampleTest ${EXE_TESTS1}
-	--compare-n-images ${TOL} 2
-	${BASELINE}/amstLineRatios.png
-	${TEMP}/amstLineRatios.png
-	${BASELINE}/amstLineRatioDirections.png
-	${TEMP}/amstLineRatioDirections.png
-	RatioLineDetectorExampleTest
-	${INPUTDATA}/amst.png
-	${TEMP}/amstLineRatios.png
-	${TEMP}/amstLineRatioDirections.png
+        --compare-n-images ${TOL} 2
+        ${BASELINE}/amstLineRatios.png
+        ${TEMP}/amstLineRatios.png
+        ${BASELINE}/amstLineRatioDirections.png
+        ${TEMP}/amstLineRatioDirections.png
+        RatioLineDetectorExampleTest
+        ${INPUTDATA}/amst.png
+        ${TEMP}/amstLineRatios.png
+        ${TEMP}/amstLineRatioDirections.png
     5 1
 )
 
 # ------- AlignmentsExampleTest----------
 
 ADD_TEST(feTeAlignmentsExampleTest ${EXE_TESTS1}
-	--compare-n-images ${TOL} 1
-	${BASELINE}/QB_SuburbAlign.png
-	${TEMP}/QB_SuburbAlign.png
-	AlignmentsExampleTest
-	${INPUTDATA}/QB_Suburb.png
-	${TEMP}/QB_SuburbAlign.png
-	5
+        --compare-n-images ${TOL} 1
+        ${BASELINE}/QB_SuburbAlign.png
+        ${TEMP}/QB_SuburbAlign.png
+        AlignmentsExampleTest
+        ${INPUTDATA}/QB_Suburb.png
+        ${TEMP}/QB_SuburbAlign.png
+        5
 )
 
 # ------- RoadExtractionExamplesTest----------
@@ -238,15 +238,15 @@ ADD_TEST(feTeAlignmentsExampleTest ${EXE_TESTS1}
 
 ADD_TEST(feTeExtractRoadByStepsExampleTest ${EXE_TESTS2}
         --compare-n-images ${TOL} 2
-	${BASELINE}/qb_ExtractRoad_pretty.png
-	${TEMP}/qb_ExtractRoad_pretty.png
+        ${BASELINE}/qb_ExtractRoad_pretty.png
+        ${TEMP}/qb_ExtractRoad_pretty.png
         ${BASELINE}/ExtractRoadByStepsExampleOutput.png
         ${TEMP}/ExtractRoadByStepsExampleOutput.png
         ExtractRoadByStepsExampleTest
         ${INPUTDATA}/qb_RoadExtract.tif
-	${TEMP}/ExtractRoadByStepsExampleOutput.png
+        ${TEMP}/ExtractRoadByStepsExampleOutput.png
         ${TEMP}/qb_ExtractRoad_pretty.png
-	337 557 432 859 0.00005 1.0
+        337 557 432 859 0.00005 1.0
 )
 
 
@@ -257,7 +257,7 @@ ADD_TEST(feTeExtractRoadExampleTest ${EXE_TESTS2}
         ExtractRoadExampleTest
         ${INPUTDATA}/qb_RoadExtract.tif
         ${TEMP}/ExtractRoadExampleOutput.png
-	337 557 432 859 1.0 0.00005 1.0 0.39269 1.0 10.0 25.
+        337 557 432 859 1.0 0.00005 1.0 0.39269 1.0 10.0 25.
 )
 
 # ------- SeamCarvingExamplesTest----------
@@ -269,7 +269,7 @@ ADD_TEST(feTeSeamCarvingExampleTest ${EXE_TESTS2}
         SeamCarvingExampleTest
         ${INPUTDATA}/QB_Suburb.png
         ${TEMP}/SeamCarvingExampleOutput.png
-	50
+        50
 )
 
 ADD_TEST(feTeSeamCarvingOtherExampleTest ${EXE_TESTS2}
@@ -279,7 +279,7 @@ ADD_TEST(feTeSeamCarvingOtherExampleTest ${EXE_TESTS2}
         SeamCarvingOtherExampleTest
         ${INPUTDATA}/QB_Suburb.png
         ${TEMP}/SeamCarvingOtherExampleOutput.png
-	50
+        50
 )
 
 #ADD_TEST(feTeImageToSIFTKeyPointSetFilterTest ${EXE_TESTS}
@@ -289,7 +289,7 @@ ADD_TEST(feTeSeamCarvingOtherExampleTest ${EXE_TESTS2}
 #        ImageToSIFTKeyPointSetFilterTest
 #        ${INPUTDATA}/Scene.png
 #        ${TEMP}/ImageToSIFTKeyPointSetFilterOutput.png
-#	6 3 0.08 10
+#        6 3 0.08 10
 #)
 
 
@@ -302,8 +302,8 @@ ADD_TEST(feTeCloudDetectionExampleTest ${EXE_TESTS2}
         CloudDetectionExampleTest
         ${INPUTDATA}/CloudsOnReunion.tif
         ${TEMP}/CloudDetectionOutput.tif
-	${TEMP}/PrettyCloudDetectionInput.png
-	${TEMP}/PrettyCloudDetectionOutput.png
+        ${TEMP}/PrettyCloudDetectionInput.png
+        ${TEMP}/PrettyCloudDetectionOutput.png
         553 467 734 581 0.4 0.6 1.0
 )
 
@@ -316,8 +316,8 @@ ADD_TEST(feTeLineSegmentDetectorExampleTest  ${EXE_TESTS2}
         ${BASELINE}/feTeLineSegmentDetectorExampleOutput.png
         ${TEMP}/feTeLineSegmentDetectorExampleOutput.png
        LineSegmentDetectorExampleTest
-	${INPUTDATA}/Scene.png
-	${TEMP}/feTeLineSegmentDetectorExampleOutput.png
+        ${INPUTDATA}/Scene.png
+        ${TEMP}/feTeLineSegmentDetectorExampleOutput.png
 )
 
 # ------- Right Angle Detection test----------
@@ -327,12 +327,12 @@ ADD_TEST(feTeRightAngleDetectionExample  ${EXE_TESTS2}
         ${BASELINE}/feTeRightAngleDetectionExampleOutput.png
         ${TEMP}/feTeRightAngleDetectionExampleOutput.png
        RightAngleDetectionExample
-	${INPUTDATA}/Scene.png
-	${TEMP}/feTeRightAngleDetectionExampleOutput.png
-	${TEMP}/PrettyRightAngleInput.png
-	${TEMP}/PrettyRightAngleOutput.png
-	0.1
-	10.
+        ${INPUTDATA}/Scene.png
+        ${TEMP}/feTeRightAngleDetectionExampleOutput.png
+        ${TEMP}/PrettyRightAngleInput.png
+        ${TEMP}/PrettyRightAngleOutput.png
+        0.1
+        10.
 )
 
 ENDIF(OTB_USE_MAPNIK)

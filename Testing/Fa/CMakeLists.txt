@@ -167,15 +167,15 @@ ADD_TEST(FA-00013-io_WriteImageTIFF_bis ${COMMON_TESTS}
 IF (OTB_USE_DEPRECATED)
 # ---  FA 00052 : Floating point exception lecture ROI_QB_MUL_1.png  ---
 ADD_TEST(FA-00052-vi_Floating_Point_Exception ${VISU_TESTS}
-	otbImageViewer
-	${EXAMPLES_DATA}/ROI_QB_MUL_1.png
-	3
+        otbImageViewer
+        ${EXAMPLES_DATA}/ROI_QB_MUL_1.png
+        3
          )
 ENDIF (OTB_USE_DEPRECATED)
 
 # ---  FA 00060 : Pb Map activation  ---
 ADD_TEST(FA-00060-le_Map_Activation ${CXX_TEST_PATH}/MapActivation
-	${INPUTDATA}/list.tif
+        ${INPUTDATA}/list.tif
         4
         4
         20
@@ -186,28 +186,28 @@ ADD_TEST(FA-00060-le_Map_Activation ${CXX_TEST_PATH}/MapActivation
         ${TEMP}/FA-00013-le-som.hdr
         ${TEMP}/FA-00013-le-actMap.png
         ${TEMP}/FA-00013-le-som.hdr
-	)
+        )
 
 # ---  FA 000295 : Pb Mean Shift clustering module  ---
 ADD_TEST(000295-MeanShiftVectorImageFilterWithStreamingShrink ${CXX_TEST_PATH}/000295-MeanShiftVectorImageFilterWithStreamingShrink
-	${INPUTDATA}/qb_RoadExtract2sub200x200.tif
+        ${INPUTDATA}/qb_RoadExtract2sub200x200.tif
         20 50 500 10
-	)
+        )
 
 # -------       End of fixed FAs -----------------------------------
 
 ADD_TEST(FA-00070-vi_Streaming_Stat ${CXX_TEST_PATH}/StreamingStat
-	${EXAMPLES_DATA}/qb_RoadExtract.tif
+        ${EXAMPLES_DATA}/qb_RoadExtract.tif
          )
 
 ADD_TEST(FA-00070-vi_Streaming_Stat_bis ${CXX_TEST_PATH}/StreamingStat
-	${EXAMPLES_DATA}/amst.png
+        ${EXAMPLES_DATA}/amst.png
          )
 
 
 # -------       From Mantis tracker   -----------------------------------
 ADD_TEST(FA-0000041-mean_shift1 ${CXX_TEST_PATH}/0000041-mean_shift
-	${INPUTDATA}/QB_Suburb.png
+        ${INPUTDATA}/QB_Suburb.png
         12
         7
         100
@@ -215,10 +215,10 @@ ADD_TEST(FA-0000041-mean_shift1 ${CXX_TEST_PATH}/0000041-mean_shift
         ${TEMP}/segmented_image1.tif
         ${TEMP}/labelled_image1.tif
         ${TEMP}/boundary_of_labelled_image1.tif
-	)
+        )
 
 ADD_TEST(FA-0000041-mean_shift2 ${CXX_TEST_PATH}/0000041-mean_shift
-	${INPUTDATA}/QB_Suburb.png
+        ${INPUTDATA}/QB_Suburb.png
         20
         7
         100
@@ -226,31 +226,31 @@ ADD_TEST(FA-0000041-mean_shift2 ${CXX_TEST_PATH}/0000041-mean_shift
         ${TEMP}/segmented_image2.tif
         ${TEMP}/labelled_image2.tif
         ${TEMP}/boundary_of_labelled_image2.tif
-	)
+        )
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(FA-00134-feature_extraction ${CXX_TEST_PATH}/00134-feature_extraction
-	${IMAGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+        ${IMAGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
         ${TEMP}/extracted_filter_134.tif
         5
         500 # extract start index
         300 # extract size
-	)
-	
-	
-	ADD_TEST(FA-Spot5SensorModel ${CXX_TEST_PATH}/SensorModelBorder
+        )
+        
+        
+        ADD_TEST(FA-Spot5SensorModel ${CXX_TEST_PATH}/SensorModelBorder
   ${IMAGEDATA}/SPOT5/TEHERAN/IMAGERY.TIF
   ${TEMP}/FA-Spot5SensorModel.txt
   )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 IF(OTB_USE_VISU_GUI)
-ADD_TEST(FA-0000132-jpg ${CXX_TEST_PATH}/0000132-jpg 
+ADD_TEST(FA-0000132-jpg ${CXX_TEST_PATH}/0000132-jpg
         ${INPUTDATA}/toulouse_auat.jpg
-	)
+        )
 ENDIF(OTB_USE_VISU_GUI)
 
 IF(USE_FFTWD OR USE_FFTWF)
-ADD_TEST(FA-0000169-fftcomplextocomplex ${CXX_TEST_PATH}/0000169-fftcomplextocomplex 
+ADD_TEST(FA-0000169-fftcomplextocomplex ${CXX_TEST_PATH}/0000169-fftcomplextocomplex
   )
 ENDIF(USE_FFTWD OR USE_FFTWF)
 
@@ -258,10 +258,10 @@ ENDIF(USE_FFTWD OR USE_FFTWF)
 # FIXME Desactivated until http://bugs.orfeo-toolbox.org/view.php?id=94
 # has somebody working on it
 # ADD_TEST(FA-0000094-fe-PolygonsVectorization ${CXX_TEST_PATH}/PolygonsVectorization
-# 	-in ${INPUTDATA}/objtest2.tif
-# 	-ot ${TEMP}/output.txt
-# 	-out ${TEMP}/objtest2-result.tif
-# 	)
+#         -in ${INPUTDATA}/objtest2.tif
+#         -ot ${TEMP}/output.txt
+#         -out ${TEMP}/objtest2-result.tif
+#         )
 
 ADD_EXECUTABLE(AlignementsQB  AlignementsQB.cxx)
 TARGET_LINK_LIBRARIES(AlignementsQB OTBFeatureExtraction OTBIO OTBCommon)

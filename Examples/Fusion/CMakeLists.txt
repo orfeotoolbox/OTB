@@ -24,31 +24,31 @@ SET(TOL 0.0)
 SET(EPSILON 0.00000001)
 
 ADD_TEST(fuTeBayesianFusionImageFilterTest ${EXE_TESTS}
-	--compare-image ${EPSILON}
-	${BASELINE}/ImageBayesianFusion.tif
-	${TEMP}/ImageBayesianFusion.tif
+        --compare-image ${EPSILON}
+        ${BASELINE}/ImageBayesianFusion.tif
+        ${TEMP}/ImageBayesianFusion.tif
     BayesianFusionImageFilterTest
         ${INPUTDATA}/multiSpect.tif
-	${INPUTDATA}/multiSpectInterp.tif
+        ${INPUTDATA}/multiSpectInterp.tif
         ${INPUTDATA}/panchro.tif
-	${TEMP}/ImageBayesianFusion.tif
-	${TEMP}/ImageBayesianFusion1.png
-	${TEMP}/ImageBayesianFusion2.png
-	${TEMP}/ImageBayesianFusion3.png
-	${TEMP}/ImageBayesianFusion4.png
-	0.9999
+        ${TEMP}/ImageBayesianFusion.tif
+        ${TEMP}/ImageBayesianFusion1.png
+        ${TEMP}/ImageBayesianFusion2.png
+        ${TEMP}/ImageBayesianFusion3.png
+        ${TEMP}/ImageBayesianFusion4.png
+        0.9999
 )
 
 ADD_TEST(fuTePanSharpeningExampleTest ${EXE_TESTS}
     --compare-image ${EPSILON}  ${BASELINE}/PanSharpeningExampleTest.tif
                            ${TEMP}/PanSharpeningExampleTest.tif
         PanSharpeningExampleTest
-	${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
-	${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
-	${TEMP}/PanSharpeningExampleTest.tif
-	${TEMP}/PanSharpeningExampleTest1.png
-	${TEMP}/PanSharpeningExampleTest2.png
-	${TEMP}/PanSharpeningExampleTest3.png
+        ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+        ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+        ${TEMP}/PanSharpeningExampleTest.tif
+        ${TEMP}/PanSharpeningExampleTest1.png
+        ${TEMP}/PanSharpeningExampleTest2.png
+        ${TEMP}/PanSharpeningExampleTest3.png
 )
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)

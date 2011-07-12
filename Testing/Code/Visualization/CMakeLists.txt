@@ -434,7 +434,7 @@ ${INPUTDATA}/Capitole-Shadows.shp
 #------------ otb::AmplitudeFuntor ----------------------
 
 ADD_TEST(vrTuAmplitudeFunctorTest ${VISUALIZATION_TESTS3}
-	otbAmplitudeFunctorTest
+        otbAmplitudeFunctorTest
 )
 
 

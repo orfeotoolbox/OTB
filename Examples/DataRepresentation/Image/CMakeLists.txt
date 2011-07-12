@@ -56,45 +56,45 @@ SET(TOL 0.0)
 # ------- ImageAdaptor4Test----------
 
 ADD_TEST(diTeImageAdaptor4Test1 ${EXE_TESTS}
-	--compare-n-images ${TOL} 1
-	${BASELINE}/ImageAdaptorThresholdingA.png
-	${TEMP}/ImageAdaptorThresholdingA.png
-	ImageAdaptor4Test
-	${INPUTDATA}/QB_Suburb.png
-	${TEMP}/ImageAdaptorThresholdingA.png
+        --compare-n-images ${TOL} 1
+        ${BASELINE}/ImageAdaptorThresholdingA.png
+        ${TEMP}/ImageAdaptorThresholdingA.png
+        ImageAdaptor4Test
+        ${INPUTDATA}/QB_Suburb.png
+        ${TEMP}/ImageAdaptorThresholdingA.png
     100
 )
 
 # ------- ImageAdaptor4Test----------
 
 ADD_TEST(diTeImageAdaptor4Test2 ${EXE_TESTS}
-	--compare-n-images ${TOL} 1
-	${BASELINE}/ImageAdaptorThresholdingB.png
-	${TEMP}/ImageAdaptorThresholdingB.png
-	ImageAdaptor4Test
-	${INPUTDATA}/QB_Suburb.png
-	${TEMP}/ImageAdaptorThresholdingB.png
+        --compare-n-images ${TOL} 1
+        ${BASELINE}/ImageAdaptorThresholdingB.png
+        ${TEMP}/ImageAdaptorThresholdingB.png
+        ImageAdaptor4Test
+        ${INPUTDATA}/QB_Suburb.png
+        ${TEMP}/ImageAdaptorThresholdingB.png
     200
 )
 
 # ------- Image5Test----------
 
 ADD_TEST(diTeImage5Test ${EXE_TESTS}
-	--compare-n-images ${TOL} 1
-	${BASELINE}/Image5.png
-	${TEMP}/Image5.png
-	Image5Test
-	${TEMP}/Image5.png
+        --compare-n-images ${TOL} 1
+        ${BASELINE}/Image5.png
+        ${TEMP}/Image5.png
+        Image5Test
+        ${TEMP}/Image5.png
 )
 
 # ------- Image6Test----------
 
 ADD_TEST(diTeImage6Test ${EXE_TESTS}
-	--compare-n-images ${TOL} 1
-	${BASELINE}/Image6.tif
-	${TEMP}/Image6.tif
-	Image6Test
-	${TEMP}/Image6.tif
+        --compare-n-images ${TOL} 1
+        ${BASELINE}/Image6.tif
+        ${TEMP}/Image6.tif
+        Image6Test
+        ${TEMP}/Image6.tif
 )
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)

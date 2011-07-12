@@ -142,108 +142,108 @@ SET(TOL 0.0)
 # ------- IsolatedConnectedImageFilterTest----------
 
 ADD_TEST(seTeIsolatedConnectedImageFilterTest ${EXE_TESTS}
-	--compare-n-images ${TOL} 1
-	${BASELINE}/ConnectedThresholdOutput1.png
-	${TEMP}/ConnectedThresholdOutput1.png
-	IsolatedConnectedImageFilterTest
-	${INPUTDATA}/QB_Suburb.png
-	${TEMP}/ConnectedThresholdOutput1.png
+        --compare-n-images ${TOL} 1
+        ${BASELINE}/ConnectedThresholdOutput1.png
+        ${TEMP}/ConnectedThresholdOutput1.png
+        IsolatedConnectedImageFilterTest
+        ${INPUTDATA}/QB_Suburb.png
+        ${TEMP}/ConnectedThresholdOutput1.png
   110 38 50 100
 )
 
 # ------- IsolatedConnectedImageFilterTest----------
 
 ADD_TEST(seTeIsolatedConnectedImageFilterTest ${EXE_TESTS}
-	--compare-n-images ${TOL} 1
-	${BASELINE}/IsolatedConnectedImageFilterOutput1.png
-	${TEMP}/IsolatedConnectedImageFilterOutput1.png
-	IsolatedConnectedImageFilterTest
-	${INPUTDATA}/QB_Suburb.png
-	${TEMP}/IsolatedConnectedImageFilterOutput1.png
+        --compare-n-images ${TOL} 1
+        ${BASELINE}/IsolatedConnectedImageFilterOutput1.png
+        ${TEMP}/IsolatedConnectedImageFilterOutput1.png
+        IsolatedConnectedImageFilterTest
+        ${INPUTDATA}/QB_Suburb.png
+        ${TEMP}/IsolatedConnectedImageFilterOutput1.png
   61 140 150 63 43
 )
 
 # ------- FastMarchingImageFilterTest----------
 
 ADD_TEST(seTeFastMarchingImageFilterTest ${EXE_TESTS}
-	--compare-n-images ${TOL} 1
-	${BASELINE}/FastMarchingImageFilterOutput5.png
-	${TEMP}/FastMarchingImageFilterOutput5.png
-	FastMarchingImageFilterTest
-	${INPUTDATA}/QB_Suburb.png
-	${TEMP}/FastMarchingImageFilterOutput5.png
+        --compare-n-images ${TOL} 1
+        ${BASELINE}/FastMarchingImageFilterOutput5.png
+        ${TEMP}/FastMarchingImageFilterOutput5.png
+        FastMarchingImageFilterTest
+        ${INPUTDATA}/QB_Suburb.png
+        ${TEMP}/FastMarchingImageFilterOutput5.png
     91 176 0.5 -0.5 3.0 10000 10000
 )
 
 # ------- FastMarchingImageFilterTest----------
 
 ADD_TEST(seTeFastMarchingImageFilterTest ${EXE_TESTS}
-	--compare-n-images ${TOL} 1
-	${BASELINE}/FastMarchingImageFilterOutput6.png
-	${TEMP}/FastMarchingImageFilterOutput6.png
-	FastMarchingImageFilterTest
-	${INPUTDATA}/QB_Suburb.png
-	${TEMP}/FastMarchingImageFilterOutput6.png
+        --compare-n-images ${TOL} 1
+        ${BASELINE}/FastMarchingImageFilterOutput6.png
+        ${TEMP}/FastMarchingImageFilterOutput6.png
+        FastMarchingImageFilterTest
+        ${INPUTDATA}/QB_Suburb.png
+        ${TEMP}/FastMarchingImageFilterOutput6.png
     118 100 1.0 -0.5 3.0 10000 10000
 )
 
 # ------- FastMarchingImageFilterTest----------
 
 ADD_TEST(seTeFastMarchingImageFilterTest ${EXE_TESTS}
-	--compare-n-images ${TOL} 1
-	${BASELINE}/FastMarchingImageFilterOutput7.png
-	${TEMP}/FastMarchingImageFilterOutput7.png
-	FastMarchingImageFilterTest
-	${INPUTDATA}/QB_Suburb.png
-	${TEMP}/FastMarchingImageFilterOutput7.png
+        --compare-n-images ${TOL} 1
+        ${BASELINE}/FastMarchingImageFilterOutput7.png
+        ${TEMP}/FastMarchingImageFilterOutput7.png
+        FastMarchingImageFilterTest
+        ${INPUTDATA}/QB_Suburb.png
+        ${TEMP}/FastMarchingImageFilterOutput7.png
     145 21 0.5 -0.5 3.0 10000 10000
 )
 
 # ------- OtsuThresholdImageFilterTest----------
 
 ADD_TEST(seTeOtsuThresholdImageFilterTest ${EXE_TESTS}
-	--compare-n-images ${TOL} 1
-	${BASELINE}/OtsuThresholdImageFilterOutput.png
-	${TEMP}/OtsuThresholdImageFilterOutput.png
-	OtsuThresholdImageFilterTest
-	${INPUTDATA}/QB_Suburb.png
-	${TEMP}/OtsuThresholdImageFilterOutput.png
+        --compare-n-images ${TOL} 1
+        ${BASELINE}/OtsuThresholdImageFilterOutput.png
+        ${TEMP}/OtsuThresholdImageFilterOutput.png
+        OtsuThresholdImageFilterTest
+        ${INPUTDATA}/QB_Suburb.png
+        ${TEMP}/OtsuThresholdImageFilterOutput.png
     255 0
 )
 
 # ------- ConfidenceConnectedTest----------
 
 ADD_TEST(seTeConfidenceConnectedTest1 ${EXE_TESTS}
-	--compare-n-images ${TOL} 1
-	${BASELINE}/ConfidenceConnectedOutput1.png
-	${TEMP}/ConfidenceConnectedOutput1.png
-	ConfidenceConnectedTest
-	${INPUTDATA}/QB_Suburb.png
-	${TEMP}/ConfidenceConnectedOutput1.png
+        --compare-n-images ${TOL} 1
+        ${BASELINE}/ConfidenceConnectedOutput1.png
+        ${TEMP}/ConfidenceConnectedOutput1.png
+        ConfidenceConnectedTest
+        ${INPUTDATA}/QB_Suburb.png
+        ${TEMP}/ConfidenceConnectedOutput1.png
   110 38
 )
 
 # ------- ConfidenceConnectedTest----------
 
 ADD_TEST(seTeConfidenceConnectedTest2 ${EXE_TESTS}
-	--compare-n-images ${TOL} 1
-	${BASELINE}/ConfidenceConnectedOutput2.png
-	${TEMP}/ConfidenceConnectedOutput2.png
-	ConfidenceConnectedTest
-	${INPUTDATA}/QB_Suburb.png
-	${TEMP}/ConfidenceConnectedOutput2.png
+        --compare-n-images ${TOL} 1
+        ${BASELINE}/ConfidenceConnectedOutput2.png
+        ${TEMP}/ConfidenceConnectedOutput2.png
+        ConfidenceConnectedTest
+        ${INPUTDATA}/QB_Suburb.png
+        ${TEMP}/ConfidenceConnectedOutput2.png
   118 100
 )
 
 # ------- ConfidenceConnectedTest----------
 
 ADD_TEST(seTeConfidenceConnectedTest3 ${EXE_TESTS}
-	--compare-n-images ${TOL} 1
-	${BASELINE}/ConfidenceConnectedOutput3.png
-	${TEMP}/ConfidenceConnectedOutput3.png
-	ConfidenceConnectedTest
-	${INPUTDATA}/QB_Suburb.png
-	${TEMP}/ConfidenceConnectedOutput3.png
+        --compare-n-images ${TOL} 1
+        ${BASELINE}/ConfidenceConnectedOutput3.png
+        ${TEMP}/ConfidenceConnectedOutput3.png
+        ConfidenceConnectedTest
+        ${INPUTDATA}/QB_Suburb.png
+        ${TEMP}/ConfidenceConnectedOutput3.png
   169 146
 )
 
@@ -252,24 +252,24 @@ ADD_TEST(seTeConfidenceConnectedTest3 ${EXE_TESTS}
 # ------- VectorConfidenceConnectedTest----------
 
 ADD_TEST(seTeVectorConfidenceConnectedTest1 ${EXE_TESTS}
-	--compare-n-images ${TOL} 1
-	${BASELINE}/VectorConfidenceConnectedOutput1.png
-	${TEMP}/VectorConfidenceConnectedOutput1.png
-	VectorConfidenceConnectedTest
-	${INPUTDATA}/maur_rgb.png
-	${TEMP}/VectorConfidenceConnectedOutput1.png
+        --compare-n-images ${TOL} 1
+        ${BASELINE}/VectorConfidenceConnectedOutput1.png
+        ${TEMP}/VectorConfidenceConnectedOutput1.png
+        VectorConfidenceConnectedTest
+        ${INPUTDATA}/maur_rgb.png
+        ${TEMP}/VectorConfidenceConnectedOutput1.png
   3.5 # multiplier
   10 # iterations
   113 234 # seed index
 )
 
 ADD_TEST(seTeVectorConfidenceConnectedTest2 ${EXE_TESTS}
-	--compare-n-images ${TOL} 1
-	${BASELINE}/VectorConfidenceConnectedOutput2.png
-	${TEMP}/VectorConfidenceConnectedOutput2.png
-	VectorConfidenceConnectedTest
-	${INPUTDATA}/maur_rgb.png
-	${TEMP}/VectorConfidenceConnectedOutput2.png
+        --compare-n-images ${TOL} 1
+        ${BASELINE}/VectorConfidenceConnectedOutput2.png
+        ${TEMP}/VectorConfidenceConnectedOutput2.png
+        VectorConfidenceConnectedTest
+        ${INPUTDATA}/maur_rgb.png
+        ${TEMP}/VectorConfidenceConnectedOutput2.png
   3.5 # multiplier
   10 # iterations
   216 30 # seed index
@@ -292,127 +292,127 @@ ADD_TEST(seTeVectorConfidenceConnectedTest3 ${EXE_TESTS}
 # ------- NeighborhoodConnectedImageFilterTest----------
 
 ADD_TEST(seTeNeighborhoodConnectedImageFilterTest ${EXE_TESTS}
-	--compare-n-images ${TOL} 1
-	${BASELINE}/NeighborhoodConnectedThresholdOutput1.png
-	${TEMP}/NeighborhoodConnectedThresholdOutput1.png
-	NeighborhoodConnectedImageFilterTest
-	${INPUTDATA}/QB_Suburb.png
-	${TEMP}/NeighborhoodConnectedThresholdOutput1.png
+        --compare-n-images ${TOL} 1
+        ${BASELINE}/NeighborhoodConnectedThresholdOutput1.png
+        ${TEMP}/NeighborhoodConnectedThresholdOutput1.png
+        NeighborhoodConnectedImageFilterTest
+        ${INPUTDATA}/QB_Suburb.png
+        ${TEMP}/NeighborhoodConnectedThresholdOutput1.png
   110 38 50 100
 )
 
 # ------- NeighborhoodConnectedImageFilterTest----------
 
 ADD_TEST(seTeNeighborhoodConnectedImageFilterTest ${EXE_TESTS}
-	--compare-n-images ${TOL} 1
-	${BASELINE}/NeighborhoodConnectedThresholdOutput2.png
-	${TEMP}/NeighborhoodConnectedThresholdOutput2.png
-	NeighborhoodConnectedImageFilterTest
-	${INPUTDATA}/QB_Suburb.png
-	${TEMP}/NeighborhoodConnectedThresholdOutput2.png
+        --compare-n-images ${TOL} 1
+        ${BASELINE}/NeighborhoodConnectedThresholdOutput2.png
+        ${TEMP}/NeighborhoodConnectedThresholdOutput2.png
+        NeighborhoodConnectedImageFilterTest
+        ${INPUTDATA}/QB_Suburb.png
+        ${TEMP}/NeighborhoodConnectedThresholdOutput2.png
   118 100 0 10
 )
 
 # ------- NeighborhoodConnectedImageFilterTest----------
 
 ADD_TEST(seTeNeighborhoodConnectedImageFilterTest ${EXE_TESTS}
-	--compare-n-images ${TOL} 1
-	${BASELINE}/NeighborhoodConnectedThresholdOutput3.png
-	${TEMP}/NeighborhoodConnectedThresholdOutput3.png
-	NeighborhoodConnectedImageFilterTest
-	${INPUTDATA}/QB_Suburb.png
-	${TEMP}/NeighborhoodConnectedThresholdOutput3.png
+        --compare-n-images ${TOL} 1
+        ${BASELINE}/NeighborhoodConnectedThresholdOutput3.png
+        ${TEMP}/NeighborhoodConnectedThresholdOutput3.png
+        NeighborhoodConnectedImageFilterTest
+        ${INPUTDATA}/QB_Suburb.png
+        ${TEMP}/NeighborhoodConnectedThresholdOutput3.png
   169 146 220 255
 )
 
 # ------- WatershedSegmentationTest----------
 
 ADD_TEST(seTeWatershedSegmentationTest ${EXE_TESTS}
-	--compare-n-images ${TOL} 1
-	${BASELINE}/WatershedSegmentation1Output1.png
-	${TEMP}/WatershedSegmentation1Output1.png
-	WatershedSegmentationTest
-	${INPUTDATA}/ROI_QB_MUL_3.tif
-	${TEMP}/WatershedSegmentation1Output1.png
+        --compare-n-images ${TOL} 1
+        ${BASELINE}/WatershedSegmentation1Output1.png
+        ${TEMP}/WatershedSegmentation1Output1.png
+        WatershedSegmentationTest
+        ${INPUTDATA}/ROI_QB_MUL_3.tif
+        ${TEMP}/WatershedSegmentation1Output1.png
   2 10 0 0.05 1
 )
 
 # ------- WatershedSegmentationTest----------
 
 ADD_TEST(seTeWatershedSegmentationTest ${EXE_TESTS}
-	--compare-n-images ${TOL} 1
-	${BASELINE}/WatershedSegmentation1Output2.png
-	${TEMP}/WatershedSegmentation1Output2.png
-	WatershedSegmentationTest
-	${INPUTDATA}/ROI_QB_MUL_3.tif
-	${TEMP}/WatershedSegmentation1Output2.png
+        --compare-n-images ${TOL} 1
+        ${BASELINE}/WatershedSegmentation1Output2.png
+        ${TEMP}/WatershedSegmentation1Output2.png
+        WatershedSegmentationTest
+        ${INPUTDATA}/ROI_QB_MUL_3.tif
+        ${TEMP}/WatershedSegmentation1Output2.png
   2 10 0.001 0.15 0
 )
 
 # ------- ConnectedThresholdImageFilterTest----------
 
 ADD_TEST(seTeConnectedThresholdImageFilterTest ${EXE_TESTS}
-	--compare-n-images ${TOL} 1
-	${BASELINE}/ConnectedThresholdOutput1.png
-	${TEMP}/ConnectedThresholdOutput1.png
-	ConnectedThresholdImageFilterTest
-	${INPUTDATA}/QB_Suburb.png
-	${TEMP}/ConnectedThresholdOutput1.png
+        --compare-n-images ${TOL} 1
+        ${BASELINE}/ConnectedThresholdOutput1.png
+        ${TEMP}/ConnectedThresholdOutput1.png
+        ConnectedThresholdImageFilterTest
+        ${INPUTDATA}/QB_Suburb.png
+        ${TEMP}/ConnectedThresholdOutput1.png
   110 38 50 100
 )
 
 # ------- ConnectedThresholdImageFilterTest----------
 
 ADD_TEST(seTeConnectedThresholdImageFilterTest ${EXE_TESTS}
-	--compare-n-images ${TOL} 1
-	${BASELINE}/ConnectedThresholdOutput2.png
-	${TEMP}/ConnectedThresholdOutput2.png
-	ConnectedThresholdImageFilterTest
-	${INPUTDATA}/QB_Suburb.png
-	${TEMP}/ConnectedThresholdOutput2.png
+        --compare-n-images ${TOL} 1
+        ${BASELINE}/ConnectedThresholdOutput2.png
+        ${TEMP}/ConnectedThresholdOutput2.png
+        ConnectedThresholdImageFilterTest
+        ${INPUTDATA}/QB_Suburb.png
+        ${TEMP}/ConnectedThresholdOutput2.png
   118 100 0 10
 )
 
 # ------- ConnectedThresholdImageFilterTest----------
 
 ADD_TEST(seTeConnectedThresholdImageFilterTest ${EXE_TESTS}
-	--compare-n-images ${TOL} 1
-	${BASELINE}/ConnectedThresholdOutput3.png
-	${TEMP}/ConnectedThresholdOutput3.png
-	ConnectedThresholdImageFilterTest
-	${INPUTDATA}/QB_Suburb.png
-	${TEMP}/ConnectedThresholdOutput3.png
+        --compare-n-images ${TOL} 1
+        ${BASELINE}/ConnectedThresholdOutput3.png
+        ${TEMP}/ConnectedThresholdOutput3.png
+        ConnectedThresholdImageFilterTest
+        ${INPUTDATA}/QB_Suburb.png
+        ${TEMP}/ConnectedThresholdOutput3.png
   169 146 220 255
 )
 
 # ------- OtsuMultipleThresholdImageFilterTest----------
 
 ADD_TEST(seTeOtsuMultipleThresholdImageFilterTest ${EXE_TESTS}
-	--compare-n-images ${TOL} 3
-	${BASELINE}/OtsuMultipleThresholdsOutput000.png
-	${TEMP}/OtsuMultipleThresholdsOutput000.png
-	${BASELINE}/OtsuMultipleThresholdsOutput001.png
-	${TEMP}/OtsuMultipleThresholdsOutput001.png
-	${BASELINE}/OtsuMultipleThresholdsOutput002.png
-	${TEMP}/OtsuMultipleThresholdsOutput002.png
-	OtsuMultipleThresholdImageFilterTest
-	${INPUTDATA}/QB_Suburb.png
-	${TEMP}/OtsuMultipleThresholdsOutput000.png
-	${TEMP}/OtsuMultipleThresholdsOutput001.png
-	${TEMP}/OtsuMultipleThresholdsOutput002.png
+        --compare-n-images ${TOL} 3
+        ${BASELINE}/OtsuMultipleThresholdsOutput000.png
+        ${TEMP}/OtsuMultipleThresholdsOutput000.png
+        ${BASELINE}/OtsuMultipleThresholdsOutput001.png
+        ${TEMP}/OtsuMultipleThresholdsOutput001.png
+        ${BASELINE}/OtsuMultipleThresholdsOutput002.png
+        ${TEMP}/OtsuMultipleThresholdsOutput002.png
+        OtsuMultipleThresholdImageFilterTest
+        ${INPUTDATA}/QB_Suburb.png
+        ${TEMP}/OtsuMultipleThresholdsOutput000.png
+        ${TEMP}/OtsuMultipleThresholdsOutput001.png
+        ${TEMP}/OtsuMultipleThresholdsOutput002.png
 )
 
 # ------- LabelizeNeighborhoodConnectedImageFilterTest----------
 
 ADD_TEST(seTeLabelizeNeighborhoodConnectedImageFilterTest ${EXE_TESTS}
-	--compare-n-images ${TOL} 1
-	${BASELINE}/LabelizeNeighborhoodConnectedImageFilterOutput.png
-	${TEMP}/LabelizeNeighborhoodConnectedImageFilterOutput.png
-	LabelizeNeighborhoodConnectedImageFilterTest
-	${INPUTDATA}/QB_Suburb.png
-	${TEMP}/LabelizeNeighborhoodConnectedImageFilterOutput.png
-	170 170
-	80 80
+        --compare-n-images ${TOL} 1
+        ${BASELINE}/LabelizeNeighborhoodConnectedImageFilterOutput.png
+        ${TEMP}/LabelizeNeighborhoodConnectedImageFilterOutput.png
+        LabelizeNeighborhoodConnectedImageFilterTest
+        ${INPUTDATA}/QB_Suburb.png
+        ${TEMP}/LabelizeNeighborhoodConnectedImageFilterOutput.png
+        170 170
+        80 80
 )
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)

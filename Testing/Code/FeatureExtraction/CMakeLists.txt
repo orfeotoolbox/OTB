@@ -1355,7 +1355,7 @@ ADD_TEST(feTuMaskedScalarImageToGreyLevelRunLengthMatrixGeneratorNew ${FEATUREEX
 )
 
 ADD_TEST(feTvScalarImageToTexturesFilter ${FEATUREEXTRACTION_TESTS15}
-        --compare-n-images ${EPSILON_8} 8   
+        --compare-n-images ${EPSILON_8} 8
             ${BASELINE}/feTvScalarImageToTexturesFilterOutputEnergy.tif
             ${TEMP}/feTvScalarImageToTexturesFilterOutputEnergy.tif
             ${BASELINE}/feTvScalarImageToTexturesFilterOutputEntropy.tif
@@ -1390,7 +1390,7 @@ ADD_TEST(feTuScalarImageToAdvancedTexturesFilterNew ${FEATUREEXTRACTION_TESTS15}
 )
 
 ADD_TEST(feTvScalarImageToAdvancedTexturesFilter ${FEATUREEXTRACTION_TESTS15}
-        --compare-n-images ${EPSILON_8} 9   
+        --compare-n-images ${EPSILON_8} 9
             ${BASELINE}/feTvScalarImageToAdvancedTexturesFilterOutputVariance.tif
             ${TEMP}/feTvScalarImageToAdvancedTexturesFilterOutputVariance.tif
             ${BASELINE}/feTvScalarImageToAdvancedTexturesFilterOutputMean.tif
@@ -1420,7 +1420,7 @@ ADD_TEST(feTuScalarImageToHigherOrderTexturesFilterNew ${FEATUREEXTRACTION_TESTS
 )
 
 ADD_TEST(feTvScalarImageToHigherOrderTexturesFilter ${FEATUREEXTRACTION_TESTS15}
-        --compare-n-images ${EPSILON_8} 11   
+        --compare-n-images ${EPSILON_8} 11
             ${BASELINE}/feTvScalarImageToHigherOrderTexturesFilterOutputShortRunEmphasis.tif
             ${TEMP}/feTvScalarImageToHigherOrderTexturesFilterOutputShortRunEmphasis.tif
             ${BASELINE}/feTvScalarImageToHigherOrderTexturesFilterOutputLongRunEmphasis.tif
@@ -1453,7 +1453,7 @@ ADD_TEST(feTuScalarImageToPanTexTextureFilterNew ${FEATUREEXTRACTION_TESTS15}
 )
 
 ADD_TEST(feTvScalarImageToPanTexTextureFilter ${FEATUREEXTRACTION_TESTS15}
-        --compare-image ${EPSILON_8}   
+        --compare-image ${EPSILON_8}
             ${BASELINE}/feTvScalarImageToPanTexTextureFilterOutputPanTex.tif
             ${TEMP}/feTvScalarImageToPanTexTextureFilterOutputPanTex.tif
         otbScalarImageToPanTexTextureFilter
@@ -1474,7 +1474,7 @@ ADD_TEST(feTuFourierMellinDescriptorsNew ${FEATUREEXTRACTION_TESTS16}
   )
 
 ADD_TEST(feTvFourierMellinDescriptors ${FEATUREEXTRACTION_TESTS16}
-  --compare-ascii ${NOTOL}     
+  --compare-ascii ${NOTOL}
   ${BASELINE_FILES}/feTvFourierMellinDescriptors.txt
   ${TEMP}/feTvFourierMellinDescriptors.txt
   otbFourierMellinDescriptors
@@ -1506,7 +1506,7 @@ ADD_TEST(feTuLocalHistogramImageFunctionNew ${FEATUREEXTRACTION_TESTS16}
 )
 
 ADD_TEST(feTvLocalHistogramImageFunctionTest ${FEATUREEXTRACTION_TESTS16}
---compare-ascii ${EPSILON_8}     
+--compare-ascii ${EPSILON_8}
  ${BASELINE_FILES}/feLocalHistogramImage.txt
     ${TEMP}/feLocalHistogramImage.txt
  otbLocalHistogramImageFunctionTest
@@ -1532,7 +1532,7 @@ ADD_TEST(feTuMetaImageFunctionNew ${FEATUREEXTRACTION_TESTS16}
 )
 
 ADD_TEST(feTvMetaImageFunction ${FEATUREEXTRACTION_TESTS16}
---compare-ascii ${EPSILON_8}     
+--compare-ascii ${EPSILON_8}
     ${BASELINE_FILES}/feTvMetaImageFunction.txt
     ${TEMP}/feTvMetaImageFunction.txt
     otbMetaImageFunction
@@ -1547,7 +1547,7 @@ ADD_TEST(feTuHaralickTexturesImageFunctionNew ${FEATUREEXTRACTION_TESTS16}
 )
 
 ADD_TEST(feTvHaralickTexturesImageFunction ${FEATUREEXTRACTION_TESTS16}
---compare-ascii ${EPSILON_8}     
+--compare-ascii ${EPSILON_8}
     ${BASELINE_FILES}/feTvHaralickTexturesImageFunction.txt
     ${TEMP}/feTvHaralickTexturesImageFunction.txt
     otbHaralickTexturesImageFunction
@@ -1561,7 +1561,7 @@ ADD_TEST(feTuHistogramOfOrientedGradientCovariantImageFunction ${FEATUREEXTRACTI
          otbHistogramOfOrientedGradientCovariantImageFunctionNew)
 
 ADD_TEST(feTvHistogramOfOrientedGradientCovariantImageFunction ${FEATUREEXTRACTION_TESTS16}
---compare-ascii ${EPSILON_8}     
+--compare-ascii ${EPSILON_8}
   ${BASELINE_FILES}/feTvHistogramOfOrientedGradientCovariantImageFunction.txt
   ${TEMP}/feTvHistogramOfOrientedGradientCovariantImageFunction.txt
          otbHistogramOfOrientedGradientCovariantImageFunction

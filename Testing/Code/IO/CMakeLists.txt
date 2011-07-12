@@ -105,7 +105,7 @@ ADD_TEST(ioTvMultiMonoChannelROI_ENVI2PNG ${COMMON_TESTS3}
 IF(OTB_DATA_USE_LARGEINPUT)
 # ---  SAR_ERS2_SLCI (GDAL)  ---
 ADD_TEST(ioTvImageFileReaderWithComplexPixel_PALSAR ${IO_TESTS1}
-        --compare-image ${EPSILON_9}  
+        --compare-image ${EPSILON_9}
             ${BASELINE}/ioImageFileReaderWithComplexPixel_PALSAR_l1.1.tif
             ${TEMP}/ioImageFileReaderWithComplexPixel_PALSAR_l1.1.tif
         otbImageFileReaderWithComplexPixelTest
@@ -114,7 +114,7 @@ ADD_TEST(ioTvImageFileReaderWithComplexPixel_PALSAR ${IO_TESTS1}
             0 0 100 100)
 
 ADD_TEST(ioTvImageFileReaderWithComplexPixel_ERS ${IO_TESTS1}
-        --compare-image ${EPSILON_9}   
+        --compare-image ${EPSILON_9}
             ${BASELINE}/ioImageFileReaderWithComplexPixel_ERS_SLCI.tif
             ${TEMP}/ioImageFileReaderWithComplexPixel_ERS_SLCI.tif
         otbImageFileReaderWithComplexPixelTest
@@ -123,7 +123,7 @@ ADD_TEST(ioTvImageFileReaderWithComplexPixel_ERS ${IO_TESTS1}
             0 0 100 100)
 
 ADD_TEST(ioTvImageFileReaderWithComplexPixel_RADARSAT ${IO_TESTS1}
-        --compare-image ${EPSILON_9} 
+        --compare-image ${EPSILON_9}
             ${BASELINE}/ioImageFileReaderWithComplexPixel_RADARSAT.tif
             ${TEMP}/ioImageFileReaderWithComplexPixel_RADARSAT.tif
         otbImageFileReaderWithComplexPixelTest
@@ -132,7 +132,7 @@ ADD_TEST(ioTvImageFileReaderWithComplexPixel_RADARSAT ${IO_TESTS1}
             0 0 100 100)
             
 ADD_TEST(ioTvVectorImageFileReaderWithComplexPixel_RADARSAT2 ${IO_TESTS1}
-        --compare-image ${EPSILON_9} 
+        --compare-image ${EPSILON_9}
             ${BASELINE}/ioImageFileReaderWithComplexPixel_RADARSAT2.tif
             ${TEMP}/ioImageFileReaderWithComplexPixel_RADARSAT2.tif
         otbVectorImageFileReaderWithComplexPixelTest
@@ -254,7 +254,7 @@ ADD_TEST(ioTvImageFileReaderTIF2MW ${IO_TESTS1}
         ${TEMP}/ioImageFileReaderTIF2MW.mw )
 
 
-# We use the original file as a baseline for the comparison        
+# We use the original file as a baseline for the comparison
  ADD_TEST(ioTvImageFileReaderPCI2TIF ${IO_TESTS1}
   --compare-image ${EPSILON_9}   ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
                     ${TEMP}/ioImageFileReaderPCI2TIF.tif
@@ -342,7 +342,7 @@ ADD_TEST(ioTvStreamingImageFilterLUM2PNG ${IO_TESTS2}
          ${TEMP}/ioImageFileReaderPNG2LUM.lum
          ${TEMP}/ioStreamingImageFilterTestLUM.png
          )
-SET_TESTS_PROPERTIES(ioTvStreamingImageFilterLUM2PNG PROPERTIES DEPENDS ioTvImageFileReaderPNG2LUM) 
+SET_TESTS_PROPERTIES(ioTvStreamingImageFilterLUM2PNG PROPERTIES DEPENDS ioTvImageFileReaderPNG2LUM)
 
 # ---  LUM STREAMING  IMAGE   FILE    WRITER  ---
 ADD_TEST(ioTvStreamingIFWriterLUMWithoutStreaming ${IO_TESTS2}
@@ -354,7 +354,7 @@ ADD_TEST(ioTvStreamingIFWriterLUMWithoutStreaming ${IO_TESTS2}
          0 # StreamingImageFileWriter
          0 # NumberOfStreamDivisions
          )
-SET_TESTS_PROPERTIES(ioTvStreamingIFWriterLUMWithoutStreaming PROPERTIES DEPENDS ioTvImageFileReaderPNG2LUM) 
+SET_TESTS_PROPERTIES(ioTvStreamingIFWriterLUMWithoutStreaming PROPERTIES DEPENDS ioTvImageFileReaderPNG2LUM)
          
 # ---  LUM STREAMING  With STREAMING IMAGE   FILE    WRITER  ---
 ADD_TEST(ioTvStreamingIFWriterLUMWithStreaming ${IO_TESTS2}
@@ -366,7 +366,7 @@ ADD_TEST(ioTvStreamingIFWriterLUMWithStreaming ${IO_TESTS2}
          1 # StreamingImageFileWriter
          10 # NumberOfStreamDivisions
          )
-SET_TESTS_PROPERTIES(ioTvStreamingIFWriterLUMWithStreaming PROPERTIES DEPENDS ioTvImageFileReaderPNG2LUM) 
+SET_TESTS_PROPERTIES(ioTvStreamingIFWriterLUMWithStreaming PROPERTIES DEPENDS ioTvImageFileReaderPNG2LUM)
          
 # ---  LUM STREAMING  With IMAGE   FILE    WRITER  ---
 ADD_TEST(ioTvStreamingWithIFWriterLUMWithStreaming ${IO_TESTS2}
@@ -378,7 +378,7 @@ ADD_TEST(ioTvStreamingWithIFWriterLUMWithStreaming ${IO_TESTS2}
          0 # StreamingImageFileWriter
          10 # NumberOfStreamDivisions
          )
-SET_TESTS_PROPERTIES(ioTvStreamingWithIFWriterLUMWithStreaming PROPERTIES DEPENDS ioTvImageFileReaderPNG2LUM)         
+SET_TESTS_PROPERTIES(ioTvStreamingWithIFWriterLUMWithStreaming PROPERTIES DEPENDS ioTvImageFileReaderPNG2LUM)
 
 # ---  STREAMING  Pipeline Example ---
 ADD_TEST(ioTvStreamingPipeline_TIF2PNG ${IO_TESTS2}
@@ -647,7 +647,7 @@ ADD_TEST(ioTuGDALImageIOCanRead_SPOT5TIF ${IO_TESTS5} otbGDALImageIOTestCanRead
         ${INPUTDATA}/poupeesTIF/IMAGERY.TIF )
 
 ADD_TEST(ioTuGDALImageIOCanRead_HFA ${IO_TESTS5} otbGDALImageIOTestCanRead
-	${INPUTDATA}/HFAGeoreferenced.img)
+        ${INPUTDATA}/HFAGeoreferenced.img)
 
 ADD_TEST(ioTuGDALImageIOCanRead_PCI ${IO_TESTS5} otbGDALImageIOTestCanRead
     ${INPUTDATA}/QB_Toulouse_Ortho_PAN.pix)
@@ -660,10 +660,10 @@ ADD_TEST(ioTvThreadsTest ${IO_TESTS5} otbThreadsTest)
 # WRITER
 
 ADD_TEST(ioTuGDALImageIOCanWrite_TIFF ${IO_TESTS6} otbGDALImageIOTestCanWrite
-	${INPUTDATA}/testGDALWriter.tif)
+        ${INPUTDATA}/testGDALWriter.tif)
 ADD_TEST(ioTuGDALImageIOCanWrite_HFA ${IO_TESTS6} otbGDALImageIOTestCanWrite
-	${INPUTDATA}/HFAGeoreferenced.img)
-	
+        ${INPUTDATA}/HFAGeoreferenced.img)
+        
 # Pb with copy of some infos into the dataset
 # cases with no ProjRef
 ADD_TEST(ioTvGDALImageIOWriteMetadata ${IO_TESTS6}
@@ -688,31 +688,31 @@ ADD_TEST(ioTuONERAImageIOCanRead ${IO_TESTS6} otbONERAImageIOTestCanRead
 # Read one ONERAimage type CFloat32 with IFreaderScalar and write to a 2 bands hdr file OK
 # crop 10 10 100 100
 ADD_TEST(ioTvONERAImageFileReader ${IO_TESTS6}
-         --compare-image ${EPSILON_9}  
+         --compare-image ${EPSILON_9}
             ${BASELINE}/ioImageFileReaderONERA.hdr
             ${TEMP}/ioImageFileReaderONERA.hdr
          otbImageFileReaderONERATest
             ${LARGEDATA}/ONERA/spa3_0215_rad.ent
-            ${TEMP}/ioImageFileReaderONERA.hdr 
+            ${TEMP}/ioImageFileReaderONERA.hdr
             10 10 100 100 )
 
 # Read one ONERAimage type CFloat32 with IFreaderComplex and write to 2 hdr file (Re and Im)  => OK
 # crop 10 10 100 100
 ADD_TEST(ioTvONERAImageFileReaderComplex ${IO_TESTS6}
          --compare-n-images ${EPSILON_9} 2
-			${BASELINE}/ioImageFileReaderONERAComplexReal.hdr
-			${TEMP}/ioImageFileReaderONERAComplexReal.hdr
-			${BASELINE}/ioImageFileReaderONERAComplexImag.hdr
-			${TEMP}/ioImageFileReaderONERAComplexImag.hdr
+                        ${BASELINE}/ioImageFileReaderONERAComplexReal.hdr
+                        ${TEMP}/ioImageFileReaderONERAComplexReal.hdr
+                        ${BASELINE}/ioImageFileReaderONERAComplexImag.hdr
+                        ${TEMP}/ioImageFileReaderONERAComplexImag.hdr
          otbImageFileReaderONERAComplex
             ${LARGEDATA}/ONERA/spa3_0215_rad.ent
             ${TEMP}/ioImageFileReaderONERAComplexReal.hdr
-	        ${TEMP}/ioImageFileReaderONERAComplexImag.hdr )
+                ${TEMP}/ioImageFileReaderONERAComplexImag.hdr )
 
 # Read one ONERAimage type CFloat32 with IFreaderComplex and write to the same type of file  => OK
-# crop 20 20 100 100 
+# crop 20 20 100 100
 ADD_TEST(ioTvONERAImageFileWriterComplex ${IO_TESTS6}
-         --compare-image ${EPSILON_9}   
+         --compare-image ${EPSILON_9}
             ${BASELINE}/ioImageFileReaderONERAComplexWrite.ent
             ${TEMP}/ioImageFileReaderONERAComplexWrite.ent
          otbImageFileWriterONERAComplex
@@ -722,7 +722,7 @@ ADD_TEST(ioTvONERAImageFileWriterComplex ${IO_TESTS6}
 ADD_TEST(ioTvONERAImageStreamWriter ${IO_TESTS6}
          --compare-image ${EPSILON_9}
             ${TEMP}/ioImageFileReaderONERAComplexWrite.ent
-  			${TEMP}/ioImageFileReaderONERAStreamWrite.ent
+                          ${TEMP}/ioImageFileReaderONERAStreamWrite.ent
          otbImageFileWriterStreamingONERAComplex
             ${TEMP}/ioImageFileReaderONERAComplexWrite.ent
             ${TEMP}/ioImageFileReaderONERAStreamWrite.ent )
@@ -863,7 +863,7 @@ SET_TESTS_PROPERTIES(ioTvImageFileReaderRGB_BSQ2PNG_2 PROPERTIES DEPENDS ioTvIma
 
 # WRITER GDAL
 ADD_TEST(ioTvGDALImageFileWriterTIF2TIF ${IO_TESTS7}
-	otbImageFileWriterRGBTest
+        otbImageFileWriterRGBTest
         ${INPUTDATA}/poupeesTIF/IMAGERY.TIF
         ${TEMP}/poupees.tiff )
 
@@ -1150,7 +1150,7 @@ ADD_TEST(ioTvOtbImageTestSAR_ERS ${IO_TESTS9}
 
 # ---  Otb::Image Test  ---
 ADD_TEST(ioTvOtbImageTestRadarsat ${IO_TESTS9}
-   --compare-ascii ${EPSILON_3}  
+   --compare-ascii ${EPSILON_3}
      ${BASELINE_FILES}/ioOtbImageTestRadarsat.txt
      ${TEMP}/ioOtbImageTestRadarsat.txt
    otbImageTest
@@ -1159,7 +1159,7 @@ ADD_TEST(ioTvOtbImageTestRadarsat ${IO_TESTS9}
 
 # ---  Otb::VectorImage Test  ---
 ADD_TEST(ioTvOtbVectorImageTestRadarsat ${IO_TESTS9}
-   --compare-ascii ${EPSILON_3}  
+   --compare-ascii ${EPSILON_3}
      ${TEMP}/ioOtbImageTestRadarsat.txt
      ${TEMP}/ioOtbVectorImageTestRadarsat.txt
    otbVectorImageLegacyTest
@@ -1221,7 +1221,7 @@ ADD_TEST(ioTvVectorImageComplexIntoRealDoubleTest ${IO_TESTS9}
 # ---  otb::VectorImageReadWriteTest  ---
 ADD_TEST(ioTvVectorImageFileReaderWriterTest ${IO_TESTS9}
    --compare-image ${EPSILON_9}
-		   ${INPUTDATA}/qb_RoadExtract.img.hdr
+                   ${INPUTDATA}/qb_RoadExtract.img.hdr
                    ${TEMP}/ioTvVectorImageFileReaderWriterTest.hdr
         otbVectorImageFileReaderWriterTest
         ${INPUTDATA}/qb_RoadExtract.img.hdr
@@ -1231,7 +1231,7 @@ ADD_TEST(ioTvVectorImageFileReaderWriterTest ${IO_TESTS9}
 # ---  otb::StreamingShortImageFileWriterTest  ---
 ADD_TEST(ioTvStreamingShortImageFileWriterTest ${IO_TESTS9}
    --compare-image ${EPSILON_9}
-		   ${INPUTDATA}/poupees_sub.png
+                   ${INPUTDATA}/poupees_sub.png
                    ${TEMP}/ioTvStreamingShortImageFileWriterTest.png
         otbStreamingShortImageFileWriterTest
         ${INPUTDATA}/poupees_sub.png
@@ -1242,13 +1242,13 @@ ADD_TEST(ioTvStreamingShortImageFileWriterTest ${IO_TESTS9}
 # ---  otb::StreamingShortImageFileWriterTest  ---
 ADD_TEST(ioTvStreamingShortImageFileWriterStreamedTest ${IO_TESTS9}
    --compare-image ${EPSILON_9}
-		   ${INPUTDATA}/poupees_sub.png
+                   ${INPUTDATA}/poupees_sub.png
                    ${TEMP}/ioTvStreamingShortImageFileWriterStreamedTest.png
         otbStreamingShortImageFileWriterTest
         ${INPUTDATA}/poupees_sub.png
         ${TEMP}/ioTvStreamingShortImageFileWriterStreamedTest.png
         1
-	4
+        4
 )
 
 
@@ -1304,7 +1304,7 @@ ADD_TEST(ioTvStreamingIFWriterBSQWithStreaming ${IO_TESTS2}
 # 1. DEFAULT
 ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_DEFAULT ${IO_TESTS10}
    --compare-image ${EPSILON_9}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
-                      		${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_DEFAULT.tif
+                                      ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_DEFAULT.tif
          otbStreamingImageFileWriterTestCalculateNumberOfDivisions
          ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
          ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_DEFAULT.tif
@@ -1313,7 +1313,7 @@ ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_DEFAULT ${IO_TES
 # 2. SetNumberOfDivisionsStrippedStreaming
 ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_SetNumberOfDivisionsStrippedStreaming ${IO_TESTS10}
    --compare-image ${EPSILON_9}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
-                      		${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_SetNumberOfDivisionsStrippedStreaming.tif
+                                      ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_SetNumberOfDivisionsStrippedStreaming.tif
          otbStreamingImageFileWriterTestCalculateNumberOfDivisions
          ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
          ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_SetNumberOfDivisionsStrippedStreaming.tif
@@ -1323,7 +1323,7 @@ ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_SetNumberOfDivis
 # 3. SetNumberOfDivisionsTiledStreaming
 ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_SetNumberOfDivisionsTiledStreamingS ${IO_TESTS10}
    --compare-image ${EPSILON_9}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
-                      		${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_SetNumberOfDivisionsTiledStreaming.tif
+                                      ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_SetNumberOfDivisionsTiledStreaming.tif
          otbStreamingImageFileWriterTestCalculateNumberOfDivisions
          ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
          ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_SetNumberOfDivisionsTiledStreaming.tif
@@ -1353,7 +1353,7 @@ ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_SetAutomaticStri
 # 6. SetTileDimensionTiledStreaming
 ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_SetTileDimensionTiledStreaming ${IO_TESTS10}
    --compare-image ${EPSILON_9}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
-			    ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_SetTileDimensionTiledStreaming.tif
+                            ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_SetTileDimensionTiledStreaming.tif
          otbStreamingImageFileWriterTestCalculateNumberOfDivisions
          ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
          ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_SetTileDimensionTiledStreaming.tif
@@ -1363,12 +1363,12 @@ ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_SetTileDimension
 # 7. SetAutomaticTiledStreaming
 ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_SetAutomaticTiledStreaming ${IO_TESTS10}
    --compare-image ${EPSILON_9}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
-			    ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_SetAutomaticTiledStreaming.tif
+                            ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_SetAutomaticTiledStreaming.tif
          otbStreamingImageFileWriterTestCalculateNumberOfDivisions
          ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
          ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_SetAutomaticTiledStreaming.tif
          SetAutomaticTiledStreaming
-				 10
+                                 10
          )
 
 
@@ -1430,7 +1430,7 @@ ADD_TEST(ioTvStreamingIFWriterWithFilter ${IO_TESTS10}
          ${INPUTDATA}/poupees_1canal.c1.hdr
          ${TEMP}/ioStreamingImageFileWriterWithFilter_1_100.hdr
          1
-	 1 # Streaming
+         1 # Streaming
          100
          )
 
@@ -1442,102 +1442,102 @@ ADD_TEST(ioTvStreamingIFWriterWithFilter ${IO_TESTS10}
 
 ADD_TEST(ioTvImageMetadataWriterTest_HFA ${IO_TESTS11}
    --compare-metadata ${EPSILON_9}
-		      ${INPUTDATA}/HFAGeoreferenced.img
-		      ${TEMP}/ioTvImageMetadataWriterHFA.img
+                      ${INPUTDATA}/HFAGeoreferenced.img
+                      ${TEMP}/ioTvImageMetadataWriterHFA.img
         otbImageMetadataFileWriterTest
         ${INPUTDATA}/HFAGeoreferenced.img
-	${TEMP}/ioTvImageMetadataWriterHFA.img
+        ${TEMP}/ioTvImageMetadataWriterHFA.img
         )
 
 ADD_TEST(ioTvImageMetadataWriterTest_TIF ${IO_TESTS11}
    --compare-metadata ${EPSILON_9}
-		      ${INPUTDATA}/spot5SubWithGcps.tif
-		      ${TEMP}/ioTvImageMetadataWriterTIF.tif
+                      ${INPUTDATA}/spot5SubWithGcps.tif
+                      ${TEMP}/ioTvImageMetadataWriterTIF.tif
         otbImageMetadataFileWriterTest
         ${INPUTDATA}/spot5SubWithGcps.tif
-	${TEMP}/ioTvImageMetadataWriterTIF.tif
+        ${TEMP}/ioTvImageMetadataWriterTIF.tif
         )
 
 
 # Commented because gdal does not seems to write the metadata the same way in both formats
 #ADD_TEST(ioTvImageMetadataWriterTest_HFA2TIFF ${IO_TESTS11}
 #   --compare-metadata ${EPSILON_9}
-#		      ${INPUTDATA}/HFAGeoreferenced.img
-#		      ${TEMP}/temp.tif
+#                      ${INPUTDATA}/HFAGeoreferenced.img
+#                      ${TEMP}/temp.tif
 #        otbImageMetadataFileWriterTest
 #        ${INPUTDATA}/HFAGeoreferenced.img
-#	${TEMP}/temp.tif
+#        ${TEMP}/temp.tif
 #        )
 
 # Commented because gdal does not seems to write the metadata the same way in both formats
 #ADD_TEST(ioTvImageMetadataWriterTest_TIFF2HFA ${IO_TESTS11}
 #   --compare-metadata ${EPSILON_9}
-#		      ${INPUTDATA}/spot5SubWithGcps.tif
-#		      ${TEMP}/temp.img
+#                      ${INPUTDATA}/spot5SubWithGcps.tif
+#                      ${TEMP}/temp.img
 #        otbImageMetadataFileWriterTest
 #        ${INPUTDATA}/spot5SubWithGcps.tif
-#	${TEMP}/temp.img
+#        ${TEMP}/temp.img
 #        )
 
 
 ADD_TEST(ioTvImageMetadataStreamingWriterTest_HFA ${IO_TESTS11}
    --compare-metadata ${EPSILON_9}
-		      ${INPUTDATA}/HFAGeoreferenced.img
-		      ${TEMP}/ioTvImageMetadataStreamingWriterHFA.img
+                      ${INPUTDATA}/HFAGeoreferenced.img
+                      ${TEMP}/ioTvImageMetadataStreamingWriterHFA.img
         otbImageMetadataStreamingFileWriterTest
         ${INPUTDATA}/HFAGeoreferenced.img
-	${TEMP}/ioTvImageMetadataStreamingWriterHFA.img
+        ${TEMP}/ioTvImageMetadataStreamingWriterHFA.img
         )
 
 ADD_TEST(ioTvImageMetadataStreamingWriterTest_TIF ${IO_TESTS11}
    --compare-metadata ${EPSILON_9}
-		      ${INPUTDATA}/spot5SubWithGcps.tif
-		      ${TEMP}/ioTvImageMetadataStreamingWriterTIF.tif
+                      ${INPUTDATA}/spot5SubWithGcps.tif
+                      ${TEMP}/ioTvImageMetadataStreamingWriterTIF.tif
         otbImageMetadataStreamingFileWriterTest
         ${INPUTDATA}/spot5SubWithGcps.tif
-	${TEMP}/ioTvImageMetadataStreamingWriterTIF.tif
+        ${TEMP}/ioTvImageMetadataStreamingWriterTIF.tif
         )
 
 # Commented because gdal does not seems to write the metadata the same way in both formats
 # Compare metadata indicates a small differences between the ProjRef
 #ADD_TEST(ioTvImageMetadataStreamingWriterTest_HFA2TIFF ${IO_TESTS11}
 #   --compare-metadata ${EPSILON_9}
-#	   ${INPUTDATA}/HFAGeoreferenced.img
-#	   ${TEMP}/ioTvImageMetadataStreamingWriterTest_HFA2TIFF.tif
+#           ${INPUTDATA}/HFAGeoreferenced.img
+#           ${TEMP}/ioTvImageMetadataStreamingWriterTest_HFA2TIFF.tif
 #     otbImageMetadataStreamingFileWriterTest
 #       ${INPUTDATA}/HFAGeoreferenced.img
-#	   ${TEMP}/ioTvImageMetadataStreamingWriterTest_HFA2TIFF.tif
+#           ${TEMP}/ioTvImageMetadataStreamingWriterTest_HFA2TIFF.tif
 #        )
 
 # Commented because gdal does not seems to write the metadata the same way in both formats
 # Compare metadata indicates that GCP are lost but they are in filename.aux.xml
 #ADD_TEST(ioTvImageMetadataStreamingWriterTest_TIFF2HFA ${IO_TESTS11}
 #   --compare-metadata ${EPSILON_9}
-#	   ${INPUTDATA}/spot5SubWithGcps.tif
-#	   ${TEMP}/ioTvImageMetadataStreamingWriterTest_TIFF2HFA.img
+#           ${INPUTDATA}/spot5SubWithGcps.tif
+#           ${TEMP}/ioTvImageMetadataStreamingWriterTest_TIFF2HFA.img
 #     otbImageMetadataStreamingFileWriterTest
 #       ${INPUTDATA}/spot5SubWithGcps.tif
-#	   ${TEMP}/ioTvImageMetadataStreamingWriterTest_TIFF2HFA.img
+#           ${TEMP}/ioTvImageMetadataStreamingWriterTest_TIFF2HFA.img
 #        )
 
 ADD_TEST(ioTvPipelineMetadataHandlingTest ${IO_TESTS11}
    --compare-metadata ${EPSILON_9}
-		      ${INPUTDATA}/HFAGeoreferenced.img
-		      ${TEMP}/ioTvPipelineMetadataHandling.img
+                      ${INPUTDATA}/HFAGeoreferenced.img
+                      ${TEMP}/ioTvPipelineMetadataHandling.img
         otbPipelineMetadataHandlingTest
         ${INPUTDATA}/HFAGeoreferenced.img
-	${TEMP}/ioTvPipelineMetadataHandling.img
+        ${TEMP}/ioTvPipelineMetadataHandling.img
         )
 
 # Commented out, since this test fails beceause of an ITK bug (added to our bugtracker for tracking)
 # MSD: this test doesn't fail today (UFF = Unary Functor Image Filter)
 ADD_TEST(ioTvPipelineMetadataHandlingWithUFFilterTest ${IO_TESTS11}
    --compare-metadata ${EPSILON_9}
-	   ${INPUTDATA}/HFAGeoreferenced.img
-	   ${TEMP}/ioTvPipelineMetadataHandlingWithUFFilterTest.img
+           ${INPUTDATA}/HFAGeoreferenced.img
+           ${TEMP}/ioTvPipelineMetadataHandlingWithUFFilterTest.img
      otbPipelineMetadataHandlingWithUFFilterTest
        ${INPUTDATA}/HFAGeoreferenced.img
-	   ${TEMP}/ioTvPipelineMetadataHandlingWithUFFilterTest.img
+           ${TEMP}/ioTvPipelineMetadataHandlingWithUFFilterTest.img
         )
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1548,7 +1548,7 @@ ADD_TEST(ioTvPipelineMetadataHandlingWithUFFilterTest ${IO_TESTS11}
 ADD_TEST(ioTuDEMHandlerNew ${IO_TESTS12} otbDEMHandlerNew )
 
 ADD_TEST(ioTvDEMHandler ${IO_TESTS12}
---compare-ascii ${EPSILON_9} 	${BASELINE_FILES}/ioDEMGetHeightAboveMSL.txt
+--compare-ascii ${EPSILON_9}         ${BASELINE_FILES}/ioDEMGetHeightAboveMSL.txt
                         ${TEMP}/ioDEMGetHeightAboveMSL.txt
         otbDEMHandlerTest
         ${INPUTDATA}/DEM/srtm_directory
@@ -1588,7 +1588,7 @@ ADD_TEST(ioTvDEMToImageGeneratorTest2 ${IO_TESTS12}
 
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(ioTvDEMToImageGeneratorFromImageTest_SensorModel ${IO_TESTS12}
-    --compare-n-images ${EPSILON_5} 2    
+    --compare-n-images ${EPSILON_5} 2
         ${BASELINE}/ioTvDEMToImageGeneratorFromImageTest_SM.tif
         ${TEMP}/ioTvDEMToImageGeneratorFromImage_Extract_DEM.tif
         ${BASELINE}/ioTvDEMToImageGeneratorFromImageTest_SM.tif
@@ -1598,12 +1598,12 @@ ADD_TEST(ioTvDEMToImageGeneratorFromImageTest_SensorModel ${IO_TESTS12}
         ${INPUTDATA}/DEM/srtm_directory
         ${TEMP}/ioTvDEMToImageGeneratorFromImage_Extract_DEM.tif
         ${TEMP}/ioTvDEMToImageGeneratorFromImage_DEM_Extract.tif
-        2600 4300 512 128 
+        2600 4300 512 128
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 ADD_TEST(ioTvDEMToImageGeneratorFromImageTest ${IO_TESTS12}
-    --compare-image ${EPSILON_5}    
+    --compare-image ${EPSILON_5}
         ${BASELINE}/ioTvDEMToImageGeneratorFromImageTest.tif
         ${TEMP}/ioTvDEMToImageGeneratorFromImage.tif
       otbDEMToImageGeneratorFromImageTest
@@ -1613,7 +1613,7 @@ ADD_TEST(ioTvDEMToImageGeneratorFromImageTest ${IO_TESTS12}
 )
 
 ADD_TEST(ioTvDEMToImageGeneratorFromImageTest2 ${IO_TESTS12}
-    --compare-n-images ${EPSILON_5} 2    
+    --compare-n-images ${EPSILON_5} 2
         ${BASELINE}/ioTvDEMToImageGeneratorFromImageTest_Ortho.tif
         ${TEMP}/ioTvDEMToImageGeneratorFromImage_Extract_DEM2.tif
         ${BASELINE}/ioTvDEMToImageGeneratorFromImageTest_Ortho.tif
@@ -1623,7 +1623,7 @@ ADD_TEST(ioTvDEMToImageGeneratorFromImageTest2 ${IO_TESTS12}
         ${INPUTDATA}/DEM/srtm_directory
         ${TEMP}/ioTvDEMToImageGeneratorFromImage_Extract_DEM2.tif
         ${TEMP}/ioTvDEMToImageGeneratorFromImage_DEM_Extract2.tif
-        10 15 16 64 
+        10 15 16 64
 )
 
 ADD_TEST(ioTvossimElevManagerTest ${IO_TESTS12}
@@ -1669,10 +1669,10 @@ ADD_TEST(ioTvossimElevManagerTest2 ${IO_TESTS12}
         otbOssimElevManagerTest2
          ${INPUTDATA}/DEM/srtm_directory
          ${TEMP}/ioTvossimElevManagerTest2.txt
-	6.5
-	44.5
-	0.002
-	500
+        6.5
+        44.5
+        0.002
+        500
          )
 
 # otb::MapProjectionAdapter (TODO: remove from IO)
@@ -1732,7 +1732,7 @@ ADD_TEST(ioTvVectorImageFileReaderWriterJ2K2TIF ${IO_TESTS9}
                         ${TEMP}/ioTvVectorImageFileReaderWriterJ2K2TIFOutput.tif
          otbVectorImageFileReaderWriterTest
          ${INPUTDATA}/bretagne.j2k
-	 ${TEMP}/ioTvVectorImageFileReaderWriterJ2K2TIFOutput.tif
+         ${TEMP}/ioTvVectorImageFileReaderWriterJ2K2TIFOutput.tif
          )
 
 ADD_TEST(ioTvImageFileReaderWriterJ2K2TIF ${IO_TESTS2}
@@ -1740,7 +1740,7 @@ ADD_TEST(ioTvImageFileReaderWriterJ2K2TIF ${IO_TESTS2}
                         ${TEMP}/ioTvImageFileReaderWriterJ2K2TIFOutput.tif
          otbDoubleImageIOTest
          ${INPUTDATA}/bretagne.j2k
-	 ${TEMP}/ioTvImageFileReaderWriterJ2K2TIFOutput.tif
+         ${TEMP}/ioTvImageFileReaderWriterJ2K2TIFOutput.tif
         )
 
 #NOTE: we are comparing with the kakadu output in raw format.
@@ -1750,7 +1750,7 @@ ADD_TEST(ioTvVectorImageFileReaderWriterJP22TIF ${IO_TESTS9}
                         ${TEMP}/ioTvVectorImageFileReaderWriterJP22TIFOutput.tif
          otbVectorImageFileReaderWriterTest
          ${LARGEDATA}/JPEG2000/QB_multicomp_small.jpx
-	 ${TEMP}/ioTvVectorImageFileReaderWriterJP22TIFOutput.tif
+         ${TEMP}/ioTvVectorImageFileReaderWriterJP22TIFOutput.tif
          )
 
 
@@ -1759,7 +1759,7 @@ ADD_TEST(ioTvImageFileReaderWriterJP22TIF ${IO_TESTS2}
                         ${TEMP}/ioTvImageFileReaderWriterJP22TIFOutput.tif
          otbDoubleImageIOTest
          ${LARGEDATA}/JPEG2000/QB_multicomp_small.jpx
-	 ${TEMP}/ioTvImageFileReaderWriterJP22TIFOutput.tif
+         ${TEMP}/ioTvImageFileReaderWriterJP22TIFOutput.tif
          )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
@@ -1780,40 +1780,40 @@ ENDIF(OTB_COMPILE_JPEG2000)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ADD_TEST(ioTvGDALDriverDoubleWritingTest ${IO_TESTS14}
-		--compare-n-images ${EPSILON_9} 4
-			${INPUTDATA}/poupees.tif
-			${TEMP}/ioGdalDriverDoubleWritingTestImage1.tif
-			${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
-			${TEMP}/ioGdalDriverDoubleWritingTestImage2.tif
-			${INPUTDATA}/poupees.tif
-			${TEMP}/ioGdalDriverDoubleWritingTestImage3.tif
-			${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
-			${TEMP}/ioGdalDriverDoubleWritingTestImage4.tif
-		otbGDALDriverDoubleWritingTest
-			${INPUTDATA}/poupees.tif
-			${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
-			${TEMP}/ioGdalDriverDoubleWritingTestImage1.tif
-			${TEMP}/ioGdalDriverDoubleWritingTestImage2.tif
-			${TEMP}/ioGdalDriverDoubleWritingTestImage3.tif
-			${TEMP}/ioGdalDriverDoubleWritingTestImage4.tif
+                --compare-n-images ${EPSILON_9} 4
+                        ${INPUTDATA}/poupees.tif
+                        ${TEMP}/ioGdalDriverDoubleWritingTestImage1.tif
+                        ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+                        ${TEMP}/ioGdalDriverDoubleWritingTestImage2.tif
+                        ${INPUTDATA}/poupees.tif
+                        ${TEMP}/ioGdalDriverDoubleWritingTestImage3.tif
+                        ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+                        ${TEMP}/ioGdalDriverDoubleWritingTestImage4.tif
+                otbGDALDriverDoubleWritingTest
+                        ${INPUTDATA}/poupees.tif
+                        ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+                        ${TEMP}/ioGdalDriverDoubleWritingTestImage1.tif
+                        ${TEMP}/ioGdalDriverDoubleWritingTestImage2.tif
+                        ${TEMP}/ioGdalDriverDoubleWritingTestImage3.tif
+                        ${TEMP}/ioGdalDriverDoubleWritingTestImage4.tif
 )
 
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(ioTvReadingComplexDataIntoComplexImage ${IO_TESTS14}
-		otbReadingComplexDataIntoComplexImageTest
-		${LARGEDATA}/RADARSAT1/GOMA2/SCENE01/DAT_01.001
-		1000 1000
+                otbReadingComplexDataIntoComplexImageTest
+                ${LARGEDATA}/RADARSAT1/GOMA2/SCENE01/DAT_01.001
+                1000 1000
 )
 
 ADD_TEST(ioTvWritingComplexDataWithComplexImage ${IO_TESTS14}
 --compare-image ${EPSILON_9}
-		${BASELINE}/ioWritingComplexDataWithComplexImageOutput.tif
-		${TEMP}/ioWritingComplexDataWithComplexImageOutput.tif
-		otbWritingComplexDataWithComplexImageTest
-		${LARGEDATA}/RADARSAT1/GOMA2/SCENE01/DAT_01.001
-		${TEMP}/ioWritingComplexDataWithComplexImageOutput.tif
-		1000 1000
-		500  500
+                ${BASELINE}/ioWritingComplexDataWithComplexImageOutput.tif
+                ${TEMP}/ioWritingComplexDataWithComplexImageOutput.tif
+                otbWritingComplexDataWithComplexImageTest
+                ${LARGEDATA}/RADARSAT1/GOMA2/SCENE01/DAT_01.001
+                ${TEMP}/ioWritingComplexDataWithComplexImageOutput.tif
+                1000 1000
+                500  500
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
@@ -1838,8 +1838,8 @@ ADD_TEST(ioTvSHPVectorDataFileReader ${IO_TESTS15}
         --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioSHPVectorDataFileReader.txt
                         ${TEMP}/ioSHPVectorDataFileReader.txt
         otbVectorDataFileReader
-	${LARGEDATA}/QUICKBIRD/TOULOUSE/GIS_FILES/000000128955_01_ORDER_SHAPE.shp
-	${TEMP}/ioSHPVectorDataFileReader.txt
+        ${LARGEDATA}/QUICKBIRD/TOULOUSE/GIS_FILES/000000128955_01_ORDER_SHAPE.shp
+        ${TEMP}/ioSHPVectorDataFileReader.txt
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
@@ -1847,8 +1847,8 @@ ADD_TEST(ioTvSHPVectorDataFileReader2 ${IO_TESTS15}
         --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioSHPVectorDataFileReader2.txt
                         ${TEMP}/ioSHPVectorDataFileReader2.txt
         otbVectorDataFileReader
-	${INPUTDATA}/ToulouseRoad-examples.shp
-	${TEMP}/ioSHPVectorDataFileReader2.txt
+        ${INPUTDATA}/ToulouseRoad-examples.shp
+        ${TEMP}/ioSHPVectorDataFileReader2.txt
 )
 
 IF(OTB_DATA_USE_LARGEINPUT)
@@ -1856,8 +1856,8 @@ ADD_TEST(ioTlSHPVectorDataFileReader3 ${IO_TESTS15}
         --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioSHPVectorDataFileReader3.txt
                         ${TEMP}/ioSHPVectorDataFileReader3.txt
         otbVectorDataFileReader
-	${LARGEDATA}/VECTOR/MidiPyrenees/roads.shp
-	${TEMP}/ioSHPVectorDataFileReader3.txt
+        ${LARGEDATA}/VECTOR/MidiPyrenees/roads.shp
+        ${TEMP}/ioSHPVectorDataFileReader3.txt
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
@@ -1865,16 +1865,16 @@ ADD_TEST(ioTvKMLVectorDataFileReader ${IO_TESTS15}
         --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioTvKMLVectorDataFileReader.txt
                         ${TEMP}/ioTvKMLVectorDataFileReader.txt
         otbVectorDataFileReader
-	${INPUTDATA}/lines.kml
-	${TEMP}/ioTvKMLVectorDataFileReader.txt
+        ${INPUTDATA}/lines.kml
+        ${TEMP}/ioTvKMLVectorDataFileReader.txt
 )
 
 ADD_TEST(ioTvKMLVectorDataFileReader2 ${IO_TESTS15}
         --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioTvKMLVectorDataFileReader2.txt
                         ${TEMP}/ioTvKMLVectorDataFileReader2.txt
         otbVectorDataFileReader
-	${INPUTDATA}/multigeometry.kml
-	${TEMP}/ioTvKMLVectorDataFileReader2.txt
+        ${INPUTDATA}/multigeometry.kml
+        ${TEMP}/ioTvKMLVectorDataFileReader2.txt
 )
 
 ADD_TEST(ioTuVectorDataFileWriterNew ${IO_TESTS15}
@@ -1891,8 +1891,8 @@ ADD_TEST(ioTvVectorDataFileWriter ${IO_TESTS15}
 
 ADD_TEST(ioTvVectorDataFileWriterTwice ${IO_TESTS15}
         otbVectorDataFileWriter
-	${TEMP}/ioTvVectorDataFileWriterOutput.shp
-	)
+        ${TEMP}/ioTvVectorDataFileWriterOutput.shp
+        )
 SET_TESTS_PROPERTIES(ioTvVectorDataFileWriterTwice PROPERTIES DEPENDS ioTvVectorDataFileWriter)
 
 ADD_TEST(ioTvVectorDataFileWriterPolygons ${IO_TESTS15}
@@ -1920,7 +1920,7 @@ ADD_TEST(ioTvVectorDataFileReaderWriter ${IO_TESTS15}
         otbVectorDataFileReaderWriter
             ${LARGEDATA}/QUICKBIRD/TOULOUSE/GIS_FILES/000000128955_01_ORDER_SHAPE.shp
             ${TEMP}/ioTvVectorDataFileReaderWriterOutput.shp
-	)
+        )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 ADD_TEST(ioTvVectorDataFileGeoReaderWriter ${IO_TESTS15}
@@ -1930,7 +1930,7 @@ ADD_TEST(ioTvVectorDataFileGeoReaderWriter ${IO_TESTS15}
         otbVectorDataFileGeoReaderWriter
             ${INPUTDATA}/ToulouseRoad-examples.shp
             ${TEMP}/ioTvVectorDataFileGeoReaderWriterOutput.shp
-	)
+        )
 
 ADD_TEST(ioTvVectorDataFileGeoReaderWriter2 ${IO_TESTS15}
         --compare-ogr  ${EPSILON_9}
@@ -1939,7 +1939,7 @@ ADD_TEST(ioTvVectorDataFileGeoReaderWriter2 ${IO_TESTS15}
         otbVectorDataFileGeoReaderWriter
             ${INPUTDATA}/Capitole-Shadows.kml
             ${TEMP}/ioTvVectorDataFileGeoReaderWriterOutput2.shp
-	)
+        )
 
 ADD_TEST(ioTvKMLVectorDataFileGeoReaderWriter ${IO_TESTS15}
         --compare-ascii  ${EPSILON_9}
@@ -1948,7 +1948,7 @@ ADD_TEST(ioTvKMLVectorDataFileGeoReaderWriter ${IO_TESTS15}
         otbVectorDataFileGeoReaderWriter
             ${INPUTDATA}/ToulouseRoad-examples.shp
             ${TEMP}/ioTvKMLVectorDataFileGeoReaderWriterOutput.kml
-	)
+        )
 
 ADD_TEST(ioTvKMLVectorDataFileGeoReaderWriter2 ${IO_TESTS15}
         --compare-ascii  ${EPSILON_9}
@@ -1957,7 +1957,7 @@ ADD_TEST(ioTvKMLVectorDataFileGeoReaderWriter2 ${IO_TESTS15}
         otbVectorDataFileGeoReaderWriter
             ${INPUTDATA}/Capitole-Shadows.kml
             ${TEMP}/ioTvKMLVectorDataFileGeoReaderWriterOutput2.kml
-	)
+        )
 
 # CanRead OGR GML()
 ADD_TEST(ioTuOGRVectorDataIOTestCanReadGML ${IO_TESTS15}
@@ -2057,8 +2057,8 @@ ADD_TEST(ioTuRADImageIOCanRead_RADCI2 ${IO_TESTS16}
 # Convert a ci2.RAD file into ENVI format
 ADD_TEST(ioTvImageFileReaderRADCI22ENVI ${IO_TESTS16}
 --compare-image ${EPSILON_9}
-	${BASELINE}/ioImageFileReaderRADCI22ENVI.hdr
-	${TEMP}/ioImageFileReaderRADCI22ENVI.hdr
+        ${BASELINE}/ioImageFileReaderRADCI22ENVI.hdr
+        ${TEMP}/ioImageFileReaderRADCI22ENVI.hdr
         otbImageFileReaderRADComplexFloatExtract
         ${LARGEDATA}/RAD_CI2/3017_HH.rad
         ${TEMP}/ioImageFileReaderRADCI22ENVI.hdr )
@@ -2187,7 +2187,7 @@ ADD_TEST(ioTvImageMetadataInterfaceBaseTest_QB ${IO_TESTS18}
         otbImageMetadataInterfaceBaseTest
         ${LARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/ioTvImageMetadataInterfaceBase_QB.txt
-)        
+)
 ADD_TEST(ioTvImageMetadataInterfaceBaseTest_QBCevennes ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_QBCevennes.txt
                          ${TEMP}/ioTvImageMetadataInterfaceBase_QBCevennes.txt
@@ -2527,7 +2527,7 @@ ADD_TEST(ioTvImageKeywordlistRadarSat2 ${IO_TESTS18}
          ${TEMP}/ioTvImageKeywordlistRadarSat2.txt
          ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat2.txt
          ${TEMP}/ioTvImageKeywordlistRadarSat2_saveState_loadState.txt
-	  --ignore-lines-with 1 product_xml_filename
+          --ignore-lines-with 1 product_xml_filename
     otbImageKeywordlist
          ${LARGEDATA}/RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/product.xml
          ${TEMP}/ioTvImageKeywordlistRadarSat2.txt
@@ -2540,7 +2540,7 @@ ADD_TEST(ioTvImageKeywordlistTerraSarX ${IO_TESTS18}
          ${TEMP}/ioTvImageKeywordlistTerraSarX.txt
          ${BASELINE_FILES}/ioTvImageKeywordlistTerraSarX.txt
          ${TEMP}/ioTvImageKeywordlistTerraSarX_saveState_loadState.txt
-	  --ignore-lines-with 1 product_xml_filename
+          --ignore-lines-with 1 product_xml_filename
     otbImageKeywordlist
          ${LARGEDATA}/TERRASARX/dims/TSX-1.SAR.L1B/TSX1_SAR__SSC/TSX1_SAR__SSC.xml
          ${TEMP}/ioTvImageKeywordlistTerraSarX.txt
@@ -2553,7 +2553,7 @@ ADD_TEST(ioTvImageKeywordlistTerraSarX_Upsala ${IO_TESTS18}
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Upsala.txt
          ${BASELINE_FILES}/ioTvImageKeywordlistTerraSarX_Upsala.txt
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Upsala_saveState_loadState.txt
-	  --ignore-lines-with 1 product_xml_filename
+          --ignore-lines-with 1 product_xml_filename
     otbImageKeywordlist
          ${LARGEDATA}/TERRASARX/UPSALA_GLACIER/TSX1_SAR__MGD/TSX1_SAR__MGD.xml
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Upsala.txt
@@ -2565,7 +2565,7 @@ ADD_TEST(ioTvImageKeywordlistTerraSarX_Toronto ${IO_TESTS18}
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Toronto.txt
          ${BASELINE_FILES}/ioTvImageKeywordlistTerraSarX_Toronto.txt
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Toronto_saveState_loadState.txt
-	  --ignore-lines-with 1 product_xml_filename
+          --ignore-lines-with 1 product_xml_filename
     otbImageKeywordlist
          ${LARGEDATA}/TERRASARX/TORONTO/TSX1_SAR__SSC/TSX1_SAR__SSC.xml
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Toronto.txt
@@ -2608,9 +2608,9 @@ ADD_TEST(ioTvImageKeywordlistErs ${IO_TESTS18}
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 ADD_TEST(ioTvOssimJpegFileRessourceLeak ${IO_TESTS18}
-	otbOssimJpegFileRessourceLeakTest
-	${INPUTDATA}/poupees.jpg
-	1200
+        otbOssimJpegFileRessourceLeakTest
+        ${INPUTDATA}/poupees.jpg
+        1200
 )
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2619,12 +2619,12 @@ ADD_TEST(ioTvOssimJpegFileRessourceLeak ${IO_TESTS18}
 IF(OTB_USE_CURL)
 
 ADD_TEST(ioTvImageFileReaderServerNameHTTPTest ${IO_TESTS19}
-	otbImageFileReaderServerName
-	http://tile.openstreetmap.org/)
+        otbImageFileReaderServerName
+        http://tile.openstreetmap.org/)
 
 ADD_TEST(ioTvImageFileReaderServerNameOTBTest ${IO_TESTS19}
-	otbImageFileReaderServerName
-	${OTB_DATA_ROOT}/Examples/osmfile.otb)
+        otbImageFileReaderServerName
+        ${OTB_DATA_ROOT}/Examples/osmfile.otb)
 
 # We do not perform regression testing here because images on server might change
 ADD_TEST(ioTvTileMapImageIOFile ${IO_TESTS19}
@@ -2759,18 +2759,18 @@ ADD_TEST(ioTuSarDefaultImageMetadataInterface ${IO_TESTS20}
         otbSarDefaultImageMetadataInterface )
 
 ADD_TEST(ioTuScalarBufferToImageFileWriter ${IO_TESTS20}
-        otbScalarBufferToImageFileWriterNew )		
+        otbScalarBufferToImageFileWriterNew )
 
 ADD_TEST(ioTvScalarBufferToImageFileWriterTest ${IO_TESTS20}
   --compare-image ${NOTOL}
          ${BASELINE}/ioTvScalarBufferToImageFileWriterTest.tif
          ${TEMP}/ioTvScalarBufferToImageFileWriterTest.tif
-  otbScalarBufferToImageFileWriterTest 
-		4
-		50
-		75
+  otbScalarBufferToImageFileWriterTest
+                4
+                50
+                75
          ${TEMP}/ioTvScalarBufferToImageFileWriterTest.tif
-)	
+)
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2799,7 +2799,7 @@ ADD_TEST(ioTvKmzProductWriterWithGCP ${IO_TESTS21}
   ${INPUTDATA}/Haiti1.jpeg
   ${INPUTDATA}/DEM/srtm_directory
   ${TEMP}/ioTuHaitiKmzProduct.kmz
-  1980.000000 1986.000000 -72.351257 18.555075 0.000000 
+  1980.000000 1986.000000 -72.351257 18.555075 0.000000
   1963.000000 1944.000000 -72.352051 18.556946 0.000000
   2078.000000 1566.000000 -72.346130 18.574358 0.000000
   2154.000000 1430.000000 -72.342377 18.580441 0.000000
@@ -2808,7 +2808,7 @@ ADD_TEST(ioTvKmzProductWriterWithGCP ${IO_TESTS21}
   3492.000000 1397.000000 -72.278343 18.580887 0.000000
   2890.000000 1439.000000 -72.306908 18.579464 0.000000
   2098.000000 2469.000000 -72.345741 18.532839 0.000000
-  1941.000000 2473.000000 -72.353317 18.532595 0.00000 
+  1941.000000 2473.000000 -72.353317 18.532595 0.00000
   1644.000000 2409.000000 -72.367691 18.535810 0.000000
   1440.000000 2448.000000 -72.377457 18.534243 0.000000
   687.000000 2005.000000 -72.413315 18.554974 0.000000
@@ -2833,7 +2833,7 @@ ADD_TEST(ioTvKmzProductWriterWithGCP_Logo_Legend ${IO_TESTS21}
   -le ${INPUTDATA}/otb_big.png
   -dem ${INPUTDATA}/DEM/srtm_directory
   -kmz ${TEMP}/ioTuHaitiKmzProductWithLogoAndLegend.kmz
-  -gcp  1980.000000 1986.000000 -72.351257 18.555075 0.000000 
+  -gcp  1980.000000 1986.000000 -72.351257 18.555075 0.000000
   1963.000000 1944.000000 -72.352051 18.556946 0.000000
   2078.000000 1566.000000 -72.346130 18.574358 0.000000
   2154.000000 1430.000000 -72.342377 18.580441 0.000000
@@ -2842,7 +2842,7 @@ ADD_TEST(ioTvKmzProductWriterWithGCP_Logo_Legend ${IO_TESTS21}
   3492.000000 1397.000000 -72.278343 18.580887 0.000000
   2890.000000 1439.000000 -72.306908 18.579464 0.000000
   2098.000000 2469.000000 -72.345741 18.532839 0.000000
-  1941.000000 2473.000000 -72.353317 18.532595 0.00000 
+  1941.000000 2473.000000 -72.353317 18.532595 0.00000
   1644.000000 2409.000000 -72.367691 18.535810 0.000000
   1440.000000 2448.000000 -72.377457 18.534243 0.000000
   687.000000 2005.000000 -72.413315 18.554974 0.000000
@@ -2859,7 +2859,7 @@ ADD_TEST(ioTvKmzProductWriterWithGCP_Logo_Legend ${IO_TESTS21}
   3989.000000 2639.000000 -72.255020 18.523664 0.000000
   417.000000 2317.000000 -72.426552 18.540876 0.000000
   )
-SET_TESTS_PROPERTIES(ioTvKmzProductWriterWithGCP_Logo_Legend 
+SET_TESTS_PROPERTIES(ioTvKmzProductWriterWithGCP_Logo_Legend
   PROPERTIES DEPENDS ioTvKmzProductWriterWithGCP)
 
 
@@ -2920,7 +2920,7 @@ ADD_TEST(ioTvMultiDatasetReadingInName2 ${IO_TESTS22}
       ${TEMP}/ioTvMultiDatasetReadingInName2.txt
       )
 
-# Test to check behavior of function readerGDAL->GetSubDatasetInfo() which return info about subdataset. 
+# Test to check behavior of function readerGDAL->GetSubDatasetInfo() which return info about subdataset.
 ADD_TEST(ioTvMultiDatasetReadingInfo ${IO_TESTS22}
   --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiDatasetReadingInfo.txt
                              ${TEMP}/ioTvMultiDatasetReadingInfoOut.txt
@@ -2929,7 +2929,7 @@ ADD_TEST(ioTvMultiDatasetReadingInfo ${IO_TESTS22}
       ${TEMP}/ioTvMultiDatasetReadingInfoOut.txt
       )
    
-# Tests which read data in HDF files.            
+# Tests which read data in HDF files.
 ADD_TEST(ioTvMultiChannelROI_HDF4_2_TIF ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_HDF2TIF_MOD09Q1G_20_25_100_150_channel_1.tif
                      ${TEMP}/ioExtractROI_HDF2TIF_MOD09Q1G_20_25_100_150_channel_1_OUT.tif
@@ -3016,7 +3016,7 @@ FOREACH(INPUTFILE_PIXELTYPE ${INPUTFILE_PIXELTYPES_LIST})
       #          otbMultibandComplexToImageScalar${READING_PIXELTYPE}
       #          ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_${NBBANDS}bands.tif) #hdr)
 
-      # Size: 100x100 is to large to store pixel values coded as short. 
+      # Size: 100x100 is to large to store pixel values coded as short.
       IF ( NOT ${INPUTFILE_PIXELTYPE} MATCHES "Short" )
 
         ADD_TEST(ioTvMultibandComplex${INPUTFILE_PIXELTYPE}${NBBANDS}BandsToVectorImageScalar${READING_PIXELTYPE}
@@ -3037,8 +3037,8 @@ FOREACH(INPUTFILE_PIXELTYPE ${INPUTFILE_PIXELTYPES_LIST})
       # [missing impl]
       # ADD_TEST(ioTvMultibandComplex${INPUTFILE_PIXELTYPE}${NBBANDS}BandsToImageComplex${READING_PIXELTYPE})
 
-      # Size: 100x100 is to large to store pixel values coded as short. 
-      IF ( NOT ${INPUTFILE_PIXELTYPE} MATCHES "Short" )  
+      # Size: 100x100 is to large to store pixel values coded as short.
+      IF ( NOT ${INPUTFILE_PIXELTYPE} MATCHES "Short" )
 
         ADD_TEST(ioTvMultibandComplex${INPUTFILE_PIXELTYPE}${NBBANDS}BandsToVectorImageComplex${READING_PIXELTYPE}
                  ${IO_TESTS23}
@@ -3056,7 +3056,7 @@ FOREACH(INPUTFILE_PIXELTYPE ${INPUTFILE_PIXELTYPES_LIST})
 
     ENDFOREACH(NBBANDS ${NBBANDS_LIST})
 
-  ENDFOREACH(READING_PIXELTYPE ${READING_PIXELTYPES_LIST})  
+  ENDFOREACH(READING_PIXELTYPE ${READING_PIXELTYPES_LIST})
 ENDFOREACH(INPUTFILE_PIXELTYPE ${INPUTFILE_PIXELTYPES_LIST})
 
 
@@ -3101,8 +3101,8 @@ FOREACH(DATA_PIXELTYPE ${DATA_PIXELTYPES_LIST})
               100
            )
         
-  FOREACH(NBBANDS ${NBBANDS_LIST})       
-    IF ( NOT ${DATA_PIXELTYPE} MATCHES "Short" )   
+  FOREACH(NBBANDS ${NBBANDS_LIST})
+    IF ( NOT ${DATA_PIXELTYPE} MATCHES "Short" )
       
       ADD_TEST(ioTvWriteVectorImageScalar${DATA_PIXELTYPE}${NBBANDS}Bands
                ${IO_TESTS23}
@@ -3113,7 +3113,7 @@ FOREACH(DATA_PIXELTYPE ${DATA_PIXELTYPES_LIST})
                   ${TEMP}/multibandOut${DATA_PIXELTYPE}_${NBBANDS}bands.tif
                   100
                   ${NBBANDS}
-               ) 
+               )
       
       ADD_TEST(ioTvWriteVectorImageComplex${DATA_PIXELTYPE}${NBBANDS}Bands
                ${IO_TESTS23}
@@ -3150,7 +3150,7 @@ FOREACH(DATA_PIXELTYPE ${DATA_PIXELTYPES_LIST})
                   ${NBBANDS}
                )
     
-    ENDIF (  NOT ${DATA_PIXELTYPE} MATCHES "Short" )         
+    ENDIF (  NOT ${DATA_PIXELTYPE} MATCHES "Short" )
   ENDFOREACH(NBBANDS ${NBBANDS_LIST})
 
 ############
@@ -3175,8 +3175,8 @@ FOREACH(DATA_PIXELTYPE ${DATA_PIXELTYPES_LIST})
               100
            )
         
-  FOREACH(NBBANDS ${NBBANDS_LIST})       
-    IF ( NOT ${DATA_PIXELTYPE} MATCHES "Short" )   
+  FOREACH(NBBANDS ${NBBANDS_LIST})
+    IF ( NOT ${DATA_PIXELTYPE} MATCHES "Short" )
       
       ADD_TEST(ioTvStreamingWriteVectorImageScalar${DATA_PIXELTYPE}${NBBANDS}Bands
                ${IO_TESTS23}
@@ -3187,12 +3187,12 @@ FOREACH(DATA_PIXELTYPE ${DATA_PIXELTYPES_LIST})
                   ${TEMP}/multibandStrOut${DATA_PIXELTYPE}_${NBBANDS}bands.tif
                   100
                   ${NBBANDS}
-               ) 
+               )
       
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS23 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Tests about relative sepctral responses from file or OpticalMetadataInterface 
+# Tests about relative sepctral responses from file or OpticalMetadataInterface
 
 ADD_TEST(raTuSpectralSensitivityReaderNew ${IO_TESTS23}
      otbSpectralSensitivityReaderNew
@@ -3204,9 +3204,9 @@ ADD_TEST(raTvSpectralSensitivityReaderTest ${IO_TESTS23}
         ${TEMP}/rcTuSpectralSensitivityReaderTest.txt
      --ignore-lines-with 2 DataPath FileName
      otbSpectralSensitivityReaderTest
-	${INPUTDATA}/Radiometry
-	${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/Arcachon_extrait_3852_3319_546_542.tif
-        ${TEMP}/rcTuSpectralSensitivityReaderTest.txt	  
+        ${INPUTDATA}/Radiometry
+        ${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/Arcachon_extrait_3852_3319_546_542.tif
+        ${TEMP}/rcTuSpectralSensitivityReaderTest.txt
 )
 
 
@@ -3218,7 +3218,7 @@ ADD_TEST(raTvSpectralSensitivityReaderGenericTest ${IO_TESTS23}
      otbSpectralSensitivityReaderGenericTest
     ${INPUTDATA}/Radiometry/SPOT5/HRG1/rep6S.dat
     ${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/Arcachon_extrait_3852_3319_546_542.tif
-        ${TEMP}/raTvSpectralSensitivityReaderGenericTest.txt     
+        ${TEMP}/raTvSpectralSensitivityReaderGenericTest.txt
 )
 
       ADD_TEST(ioTvStreamingWriteVectorImageComplex${DATA_PIXELTYPE}${NBBANDS}Bands

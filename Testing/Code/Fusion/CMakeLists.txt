@@ -32,10 +32,10 @@ ADD_TEST(fuTvBayesianFusionFilter ${FUSION_TESTS1}
     --compare-image ${NOTOL}  ${BASELINE}/fuTvBayesianFusion.tif
                            ${TEMP}/fuTvBayesianFusion.tif
         otbBayesianFusionFilter
-	${INPUTDATA}/multiSpect.tif
-	${INPUTDATA}/multiSpectInterp.tif
-	${INPUTDATA}/panchro.tif
-	${TEMP}/fuTvBayesianFusion.tif
+        ${INPUTDATA}/multiSpect.tif
+        ${INPUTDATA}/multiSpectInterp.tif
+        ${INPUTDATA}/panchro.tif
+        ${TEMP}/fuTvBayesianFusion.tif
 )
 
 
@@ -48,9 +48,9 @@ ADD_TEST(fuTvSimpleRcsPanSharpeningFusionImageFilter ${FUSION_TESTS1}
     --compare-image ${EPSILON_8}  ${BASELINE}/fuTvRcsPanSharpeningFusion.tif
                            ${TEMP}/fuTvRcsPanSharpeningFusion.tif
         otbSimpleRcsPanSharpeningFusionImageFilter
-	${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
-	${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
-	${TEMP}/fuTvRcsPanSharpeningFusion.tif
+        ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+        ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+        ${TEMP}/fuTvRcsPanSharpeningFusion.tif
 )
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

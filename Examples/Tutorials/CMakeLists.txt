@@ -24,7 +24,7 @@ IF(OTB_USE_VISU_GUI)
   TARGET_LINK_LIBRARIES(SimpleViewer OTBCommon OTBIO OTBGui OTBVisualization ${OTB_VISU_GUI_LIBRARIES})
 
 # The basic application tutorial makes use of the otbApplicationsCommon library which is built in OTB-Applications package.
-# Therefore this tutorial will not compile until we move the OTBApplcationsCommon lib to the OTB. Until then, 
+# Therefore this tutorial will not compile until we move the OTBApplcationsCommon lib to the OTB. Until then,
 # the following line will be commented out.
 # SUBDIRS(BasicApplication)
 
@@ -112,11 +112,11 @@ ADD_TEST( trTeTutorialsOrthoFusionTest ${EXE_TESTS}
         31
         N
         375000
-	4828100
-	500
-	500
-	0.6
-	-0.6
+        4828100
+        500
+        500
+        0.6
+        -0.6
         )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 

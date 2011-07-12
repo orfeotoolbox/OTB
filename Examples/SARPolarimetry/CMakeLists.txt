@@ -24,7 +24,7 @@ SET(EPSILON 0.000000000001)
 # Tutorial example . pi / 4
 ADD_TEST(rdTePiOver4ExamplePolarimetricSynthesisFilterTest ${SARPOLARIMETRY_TESTS1}
   --compare-image ${EPSILON}
-		  ${BASELINE}/refPiOver4PolarimetricSynthesis.tif
+                  ${BASELINE}/refPiOver4PolarimetricSynthesis.tif
                   ${TEMP}/resPiOver4PolarimetricSynthesis.tif
        PiOver4ExamplePolarimetricSynthesisFilter
         ${INPUTDATA}/RSAT_imagery_HH.tif
@@ -32,7 +32,7 @@ ADD_TEST(rdTePiOver4ExamplePolarimetricSynthesisFilterTest ${SARPOLARIMETRY_TEST
         ${INPUTDATA}/RSAT_imagery_VH.tif
         ${INPUTDATA}/RSAT_imagery_VV.tif
         ${TEMP}/resPiOver4PolarimetricSynthesis.tif
-	)
+        )
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbSARPolarimetryExamplesTests otbSARPolarimetryExamplesTests.cxx )

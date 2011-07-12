@@ -131,25 +131,25 @@ SET(TOL 0.0)
 # ------- ScalarImageMarkovRandomField1Test----------
 
 ADD_TEST(clTeScalarImageMarkovRandomField1Test ${EXE_TESTS}
-	--compare-n-images ${TOL} 1
-	${BASELINE}/ScalarImageMarkovRandomField1Output.png
-	${TEMP}/ScalarImageMarkovRandomField1Output.png
-	ScalarImageMarkovRandomField1Test
-	${INPUTDATA}/QB_Suburb.png
-	${INPUTDATA}/QB_Suburb_labelled.png
-	${TEMP}/ScalarImageMarkovRandomField1Output.png
+        --compare-n-images ${TOL} 1
+        ${BASELINE}/ScalarImageMarkovRandomField1Output.png
+        ${TEMP}/ScalarImageMarkovRandomField1Output.png
+        ScalarImageMarkovRandomField1Test
+        ${INPUTDATA}/QB_Suburb.png
+        ${INPUTDATA}/QB_Suburb_labelled.png
+        ${TEMP}/ScalarImageMarkovRandomField1Output.png
     50 3 4 79.5097 138.136 213.846 25.9395
 )
 
 # ------- ScalarImageKmeansClassifierTest----------
 
 ADD_TEST(clTeScalarImageKmeansClassifierTest ${EXE_TESTS}
-	--compare-n-images ${TOL} 1
-	${BASELINE}/QB_Suburb_labelled.png
-	${TEMP}/QB_Suburb_labelled.png
-	ScalarImageKmeansClassifierTest
-	${INPUTDATA}/QB_Suburb.png
-	${TEMP}/QB_Suburb_labelled.png
+        --compare-n-images ${TOL} 1
+        ${BASELINE}/QB_Suburb_labelled.png
+        ${TEMP}/QB_Suburb_labelled.png
+        ScalarImageKmeansClassifierTest
+        ${INPUTDATA}/QB_Suburb.png
+        ${TEMP}/QB_Suburb_labelled.png
     0 4 79.5097 138.136 213.846 25.9395
 )
 

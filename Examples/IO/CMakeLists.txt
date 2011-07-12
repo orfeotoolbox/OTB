@@ -138,16 +138,16 @@ SET(HIGHTOL 10.0)
 # ------- ExtractROITest----------
 
 ADD_TEST(ioTeExtractROITest ${EXE_TESTS1}
-	--compare-n-images ${NOTOL} 2
-	${BASELINE}/ROI_IMAGERY_RGB.png
-	${TEMP}/ROI_IMAGERY_RGB.png
+        --compare-n-images ${NOTOL} 2
+        ${BASELINE}/ROI_IMAGERY_RGB.png
+        ${TEMP}/ROI_IMAGERY_RGB.png
 
-	${BASELINE}/ROI_IMAGERY_MIR.png
-	${TEMP}/ROI_IMAGERY_MIR.png
-	ExtractROITest
-	${INPUTDATA}/IMAGERY_SSECH.tif
-	${TEMP}/ROI_IMAGERY_RGB.png
-	${TEMP}/ROI_IMAGERY_MIR.png
+        ${BASELINE}/ROI_IMAGERY_MIR.png
+        ${TEMP}/ROI_IMAGERY_MIR.png
+        ExtractROITest
+        ${INPUTDATA}/IMAGERY_SSECH.tif
+        ${TEMP}/ROI_IMAGERY_RGB.png
+        ${TEMP}/ROI_IMAGERY_MIR.png
     0 0 100 100
 )
 
@@ -166,7 +166,7 @@ ADD_TEST(ioTeDEMToImageGeneratorTest ${EXE_TESTS1}
           ${INPUTDATA}/DEM_srtm
          )
 
-# Testing the chain of creating a kmz and MapFilefrom 
+# Testing the chain of creating a kmz and MapFilefrom
 # a non georeferenced image
 ADD_TEST(ioImageToKmzAndMapFileProductExample ${EXE_TESTS1}
          ImageToKmzAndMapFileProductExample
@@ -176,7 +176,7 @@ ADD_TEST(ioImageToKmzAndMapFileProductExample ${EXE_TESTS1}
          ${TEMP}/mapserverExample/shapeindex
          http://localhost/cgi-bin/mapserv
          ${DATA}/DEM/srtm_directory
-         198.000000 199.000000 -72.351257 18.555075 0.000000 
+         198.000000 199.000000 -72.351257 18.555075 0.000000
          196.000000 194.000000 -72.352051 18.556946 0.000000
          208.000000 157.000000 -72.346130 18.574358 0.000000
          215.000000 143.000000 -72.342377 18.580441 0.000000
@@ -185,7 +185,7 @@ ADD_TEST(ioImageToKmzAndMapFileProductExample ${EXE_TESTS1}
          349.000000 140.000000 -72.278343 18.580887 0.000000
          289.000000 144.000000 -72.306908 18.579464 0.000000
          210.000000 247.000000 -72.345741 18.532839 0.000000
-         194.000000 247.000000 -72.353317 18.532595 0.00000 
+         194.000000 247.000000 -72.353317 18.532595 0.00000
          164.000000 241.000000 -72.367691 18.535810 0.000000
          144.000000 245.000000 -72.377457 18.534243 0.000000
          69.000000  201.000000 -72.413315 18.554974 0.000000

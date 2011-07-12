@@ -30,11 +30,11 @@ ADD_TEST(reTeImageRegistration1ExampleTest ${EXE_TESTS}
         --compare-image ${TOL}
         ${BASELINE}/ImageRegistration1Output.png
         ${TEMP}/ImageRegistration1Output.png
-	ImageRegistration1ExampleTest
-	${INPUTDATA}/QB_Suburb.png
+        ImageRegistration1ExampleTest
+        ${INPUTDATA}/QB_Suburb.png
         ${INPUTDATA}/QB_Suburb13x17y.png
-	${TEMP}/ImageRegistration1Output.png
-	${TEMP}/ImageRegistration1DifferenceAfter.png
+        ${TEMP}/ImageRegistration1Output.png
+        ${TEMP}/ImageRegistration1DifferenceAfter.png
         ${TEMP}/ImageRegistration1DifferenceBefore.png
 )
 
@@ -42,11 +42,11 @@ ADD_TEST(reTeImageRegistration2ExampleTest ${EXE_TESTS}
         --compare-image ${TOL}
         ${BASELINE}/ImageRegistration2Output.png
         ${TEMP}/ImageRegistration2Output.png
-	ImageRegistration2ExampleTest
-	${INPUTDATA}/RamsesROISmall.png
+        ImageRegistration2ExampleTest
+        ${INPUTDATA}/RamsesROISmall.png
         ${INPUTDATA}/ADS40RoiSmall.png
-	${TEMP}/ImageRegistration2Output.png
-	${TEMP}/ImageRegistration2CheckerboardBefore.png
+        ${TEMP}/ImageRegistration2Output.png
+        ${TEMP}/ImageRegistration2CheckerboardBefore.png
         ${TEMP}/ImageRegistration2CheckerboardAfter.png
 )
 
@@ -54,22 +54,22 @@ ADD_TEST(reTeImageRegistration5Cas1ExampleTest ${EXE_TESTS}
         --compare-image ${TOL}
         ${BASELINE}/ImageRegistration5Output1.png
         ${TEMP}/ImageRegistration5Output1.png
-	ImageRegistration5ExampleTest
-	${INPUTDATA}/QB_Suburb.png
+        ImageRegistration5ExampleTest
+        ${INPUTDATA}/QB_Suburb.png
         ${INPUTDATA}/QB_SuburbRotated10.png
-	${TEMP}/ImageRegistration5Output1.png
-	${TEMP}/ImageRegistration5DifferenceBefore1.png
+        ${TEMP}/ImageRegistration5Output1.png
+        ${TEMP}/ImageRegistration5DifferenceBefore1.png
         ${TEMP}/ImageRegistration5DifferenceAfter1.png
 )
 ADD_TEST(reTeImageRegistration5Cas2ExampleTest ${EXE_TESTS}
         --compare-image ${TOL}
         ${BASELINE}/ImageRegistration5Output2.png
         ${TEMP}/ImageRegistration5Output2.png
-	ImageRegistration5ExampleTest
-	${INPUTDATA}/QB_Suburb.png
+        ImageRegistration5ExampleTest
+        ${INPUTDATA}/QB_Suburb.png
         ${INPUTDATA}/QB_SuburbR10X13Y17.png
-	${TEMP}/ImageRegistration5Output2.png
-	${TEMP}/ImageRegistration5DifferenceBefore2.png
+        ${TEMP}/ImageRegistration5Output2.png
+        ${TEMP}/ImageRegistration5DifferenceBefore2.png
         ${TEMP}/ImageRegistration5DifferenceAfter2.png
 )
 

@@ -27,17 +27,17 @@ ADD_TEST(msTuMorphoPyrResamplerNew ${MULTISCALE_TESTS1}
 
 ADD_TEST(msTvMorphoPyrResampler ${MULTISCALE_TESTS1}
   --compare-n-images ${EPSILON8} 2
-		   ${BASELINE}/msPyrResampler_IKO_LesHalles_256_2.hdr
-		   ${TEMP}/msPyrResampler_IKO_LesHalles_256_2.hdr
-		   ${BASELINE}/msPyrResampler_IKO_LesHalles_full.hdr
-		   ${TEMP}/msPyrResampler_IKO_LesHalles_full.hdr
+                   ${BASELINE}/msPyrResampler_IKO_LesHalles_256_2.hdr
+                   ${TEMP}/msPyrResampler_IKO_LesHalles_256_2.hdr
+                   ${BASELINE}/msPyrResampler_IKO_LesHalles_full.hdr
+                   ${TEMP}/msPyrResampler_IKO_LesHalles_full.hdr
          otbMorphologicalPyramidResampler
-	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
-	 ${TEMP}/msPyrResampler_IKO_LesHalles_256_2.hdr
-	 ${TEMP}/msPyrResampler_IKO_LesHalles_full.hdr
-	 256
-	 256
-	 )
+         ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+         ${TEMP}/msPyrResampler_IKO_LesHalles_256_2.hdr
+         ${TEMP}/msPyrResampler_IKO_LesHalles_full.hdr
+         256
+         256
+         )
 
 # -------            otb::MorphologicalPyramidAnalysisFilter   ----------
 
@@ -46,22 +46,22 @@ ADD_TEST(msTuMorphoPyrAnalysisFilterNew ${MULTISCALE_TESTS1}
 
 ADD_TEST(msTvMorphoPyrAnalysisFilter ${MULTISCALE_TESTS1}
   --compare-n-images ${NOTOL} 5
-		   ${BASELINE}/msPyrAn_mire_log_an_2.png
-		   ${TEMP}/msPyrAn_mire_log_an_2.png
-		   ${BASELINE}/msPyrAn_mire_log_sf_2.png
-		   ${TEMP}/msPyrAn_mire_log_sf_2.png
-		   ${BASELINE}/msPyrAn_mire_log_if_2.png
-		   ${TEMP}/msPyrAn_mire_log_if_2.png
-		   ${BASELINE}/msPyrAn_mire_log_sd_2.png
-		   ${TEMP}/msPyrAn_mire_log_sd_2.png
-		   ${BASELINE}/msPyrAn_mire_log_id_2.png
-		   ${TEMP}/msPyrAn_mire_log_id_2.png
+                   ${BASELINE}/msPyrAn_mire_log_an_2.png
+                   ${TEMP}/msPyrAn_mire_log_an_2.png
+                   ${BASELINE}/msPyrAn_mire_log_sf_2.png
+                   ${TEMP}/msPyrAn_mire_log_sf_2.png
+                   ${BASELINE}/msPyrAn_mire_log_if_2.png
+                   ${TEMP}/msPyrAn_mire_log_if_2.png
+                   ${BASELINE}/msPyrAn_mire_log_sd_2.png
+                   ${TEMP}/msPyrAn_mire_log_sd_2.png
+                   ${BASELINE}/msPyrAn_mire_log_id_2.png
+                   ${TEMP}/msPyrAn_mire_log_id_2.png
          otbMorphologicalPyramidAnalysisFilter
-	 ${INPUTDATA}/mire_log.png
-	 ${TEMP}/msPyrAn_mire_log
-	 png
-	 2
-	 2.0)
+         ${INPUTDATA}/mire_log.png
+         ${TEMP}/msPyrAn_mire_log
+         png
+         2
+         2.0)
 
 # -------            otb::MorphologicalPyramidSynthesisFilter   ----------
 
@@ -70,13 +70,13 @@ ADD_TEST(msTuMorphoPyrSynthesisFilterNew ${MULTISCALE_TESTS1}
 
 ADD_TEST(msTvMorphoPyrSynthesisFilter ${MULTISCALE_TESTS1}
    --compare-image ${NOTOL}
- 		   ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
- 		   ${TEMP}/msPyrSynth_IKO_Halles_4_2.tif
+                    ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+                    ${TEMP}/msPyrSynth_IKO_Halles_4_2.tif
          otbMorphologicalPyramidSynthesisFilter
-	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
-	 ${TEMP}/msPyrSynth_IKO_Halles_4_2.tif
-	 4
-	 2.0)
+         ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+         ${TEMP}/msPyrSynth_IKO_Halles_4_2.tif
+         4
+         2.0)
 
 # -------            otb::MorphologicalPyramidMRToMSConverter   ----------
 
@@ -85,20 +85,20 @@ ADD_TEST(msTuMorphoPyrMRToMSConverterNew ${MULTISCALE_TESTS1}
 
 ADD_TEST(msTvMorphoPyrMRToMSConverter ${MULTISCALE_TESTS1}
    --compare-n-images ${EPSILON8} 3
- 		   ${BASELINE}/msPyrMRToMS_IKO_Halles_4_2_sf_full.hdr
- 		   ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_sf_full.hdr
-		   ${BASELINE}/msPyrMRToMS_IKO_Halles_4_2_if_full.hdr
- 		   ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_if_full.hdr
-		   ${BASELINE}/msPyrMRToMS_IKO_Halles_4_2_an_full.hdr
- 		   ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_an_full.hdr
+                    ${BASELINE}/msPyrMRToMS_IKO_Halles_4_2_sf_full.hdr
+                    ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_sf_full.hdr
+                   ${BASELINE}/msPyrMRToMS_IKO_Halles_4_2_if_full.hdr
+                    ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_if_full.hdr
+                   ${BASELINE}/msPyrMRToMS_IKO_Halles_4_2_an_full.hdr
+                    ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_an_full.hdr
 
          otbMorphologicalPyramidMRToMSConverter
-	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
-	 ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_sf_full.hdr
-	 ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_if_full.hdr
-	 ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_an_full.hdr
-	 4
-	 2.0)
+         ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+         ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_sf_full.hdr
+         ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_if_full.hdr
+         ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_an_full.hdr
+         4
+         2.0)
 
 # -------            otb::MorphologicalPyramidSegmenter   ----------
 
@@ -107,31 +107,31 @@ ADD_TEST(msTuMorphoPyrSegmenterNew ${MULTISCALE_TESTS1}
 
 ADD_TEST(msTvMorphoPyrSegmentBright ${MULTISCALE_TESTS1}
    --compare-image ${NOTOL}
- 		   ${BASELINE}/msPyrSegmenter_IKO_Halles_4_2_sf.tif
- 		   ${TEMP}/msPyrSegmenter_IKO_Halles_4_2_sf.tif
+                    ${BASELINE}/msPyrSegmenter_IKO_Halles_4_2_sf.tif
+                    ${TEMP}/msPyrSegmenter_IKO_Halles_4_2_sf.tif
          otbMorphologicalPyramidSegmenter
-	 ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_sf_full.hdr
-	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
-	 ${TEMP}/msPyrSegmenter_IKO_Halles_4_2_sf.tif
-	 0
-	 0.9
-	 0.9
-	 10
+         ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_sf_full.hdr
+         ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+         ${TEMP}/msPyrSegmenter_IKO_Halles_4_2_sf.tif
+         0
+         0.9
+         0.9
+         10
 )
 SET_TESTS_PROPERTIES(msTvMorphoPyrSegmentBright PROPERTIES DEPENDS msTvMorphoPyrMRToMSConverter)
 
 ADD_TEST(msTvMorphoPyrSegmentDark ${MULTISCALE_TESTS1}
    --compare-image ${NOTOL}
- 		   ${BASELINE}/msPyrSegmenter_IKO_Halles_4_2_if.tif
- 		   ${TEMP}/msPyrSegmenter_IKO_Halles_4_2_if.tif
+                    ${BASELINE}/msPyrSegmenter_IKO_Halles_4_2_if.tif
+                    ${TEMP}/msPyrSegmenter_IKO_Halles_4_2_if.tif
          otbMorphologicalPyramidSegmenter
-	 ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_if_full.hdr
-	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
-	 ${TEMP}/msPyrSegmenter_IKO_Halles_4_2_if.tif
-	 1
-	 0.9
-	 0.9
-	 10
+         ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_if_full.hdr
+         ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+         ${TEMP}/msPyrSegmenter_IKO_Halles_4_2_if.tif
+         1
+         0.9
+         0.9
+         10
 )
 SET_TESTS_PROPERTIES(msTvMorphoPyrSegmentDark PROPERTIES DEPENDS msTvMorphoPyrMRToMSConverter)
 
@@ -146,23 +146,23 @@ ADD_TEST(msTuMorphoPyrSegmentationFilterNew ${MULTISCALE_TESTS2}
 
 ADD_TEST(msTvMorphoPyrSegmentationFilter ${MULTISCALE_TESTS2}
    --compare-n-images ${NOTOL} 4
-		   ${BASELINE}/msPyrSegmentation_IKO_Halles_2.tif
- 		   ${TEMP}/msPyrSegmentation_IKO_Halles_2.tif
-		   ${BASELINE}/msPyrSegmentation_IKO_Halles_4.tif
- 		   ${TEMP}/msPyrSegmentation_IKO_Halles_4.tif
-		   ${BASELINE}/msPyrSegmentation_IKO_Halles_5.tif
- 		   ${TEMP}/msPyrSegmentation_IKO_Halles_5.tif
- 		   ${BASELINE}/msPyrSegmentation_IKO_Halles_7.tif
- 		   ${TEMP}/msPyrSegmentation_IKO_Halles_7.tif
+                   ${BASELINE}/msPyrSegmentation_IKO_Halles_2.tif
+                    ${TEMP}/msPyrSegmentation_IKO_Halles_2.tif
+                   ${BASELINE}/msPyrSegmentation_IKO_Halles_4.tif
+                    ${TEMP}/msPyrSegmentation_IKO_Halles_4.tif
+                   ${BASELINE}/msPyrSegmentation_IKO_Halles_5.tif
+                    ${TEMP}/msPyrSegmentation_IKO_Halles_5.tif
+                    ${BASELINE}/msPyrSegmentation_IKO_Halles_7.tif
+                    ${TEMP}/msPyrSegmentation_IKO_Halles_7.tif
          otbMorphologicalPyramidSegmentationFilter
-	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
-	 ${TEMP}/msPyrSegmentation_IKO_Halles_
-	 tif
-	 4
-	 2.0
-	 0.9
-	 0.9
-	 10
+         ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+         ${TEMP}/msPyrSegmentation_IKO_Halles_
+         tif
+         4
+         2.0
+         0.9
+         0.9
+         10
 )
 
 # -------            otb::GeodesicMorphologyDecompositionImageFilter   ----------
@@ -172,18 +172,18 @@ ADD_TEST(msTuGeodesicMorphologyDecompositionImageFilterNew ${MULTISCALE_TESTS2}
 
 ADD_TEST(msTvGeodesicMorphologyDecompositionImageFilter ${MULTISCALE_TESTS2}
    --compare-n-images ${NOTOL} 3
-		   ${BASELINE}/msGeodesicMorphologyDecompositionImageFilterConvexOutput.tif
- 		   ${TEMP}/msGeodesicMorphologyDecompositionImageFilterConvexOutput.tif
-		   ${BASELINE}/msGeodesicMorphologyDecompositionImageFilterConcaveOutput.tif
- 		   ${TEMP}/msGeodesicMorphologyDecompositionImageFilterConcaveOutput.tif
-		   ${BASELINE}/msGeodesicMorphologyDecompositionImageFilterLevelingOutput.tif
- 		   ${TEMP}/msGeodesicMorphologyDecompositionImageFilterLevelingOutput.tif
+                   ${BASELINE}/msGeodesicMorphologyDecompositionImageFilterConvexOutput.tif
+                    ${TEMP}/msGeodesicMorphologyDecompositionImageFilterConvexOutput.tif
+                   ${BASELINE}/msGeodesicMorphologyDecompositionImageFilterConcaveOutput.tif
+                    ${TEMP}/msGeodesicMorphologyDecompositionImageFilterConcaveOutput.tif
+                   ${BASELINE}/msGeodesicMorphologyDecompositionImageFilterLevelingOutput.tif
+                    ${TEMP}/msGeodesicMorphologyDecompositionImageFilterLevelingOutput.tif
          otbGeodesicMorphologyDecompositionImageFilter
-	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
-	 ${TEMP}/msGeodesicMorphologyDecompositionImageFilterConvexOutput.tif
-	 ${TEMP}/msGeodesicMorphologyDecompositionImageFilterConcaveOutput.tif
-	 ${TEMP}/msGeodesicMorphologyDecompositionImageFilterLevelingOutput.tif
-	 4
+         ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+         ${TEMP}/msGeodesicMorphologyDecompositionImageFilterConvexOutput.tif
+         ${TEMP}/msGeodesicMorphologyDecompositionImageFilterConcaveOutput.tif
+         ${TEMP}/msGeodesicMorphologyDecompositionImageFilterLevelingOutput.tif
+         4
 )
 
 # -------            otb::GeodesicMorphologyLevelingFilter   ----------
@@ -193,13 +193,13 @@ ADD_TEST(msTuGeodesicMorphologyLevelingFilterNew ${MULTISCALE_TESTS2}
 
 ADD_TEST(msTvGeodesicMorphologyLevelingFilter ${MULTISCALE_TESTS2}
    --compare-image ${NOTOL}
-		   ${BASELINE}/msGeodesicMorphologyLevelingFilterOutput.tif
- 		   ${TEMP}/msGeodesicMorphologyLevelingFilterOutput.tif
+                   ${BASELINE}/msGeodesicMorphologyLevelingFilterOutput.tif
+                    ${TEMP}/msGeodesicMorphologyLevelingFilterOutput.tif
          otbGeodesicMorphologyLevelingFilter
-	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
-	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles_convex.tif
-	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles_concave.tif
-	 ${TEMP}/msGeodesicMorphologyLevelingFilterOutput.tif
+         ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+         ${INPUTDATA}/ROI_IKO_PAN_LesHalles_convex.tif
+         ${INPUTDATA}/ROI_IKO_PAN_LesHalles_concave.tif
+         ${TEMP}/msGeodesicMorphologyLevelingFilterOutput.tif
 )
 
 # -------            otb::GeodesicMorphologyLevelingFilter   ----------
@@ -209,13 +209,13 @@ ADD_TEST(msTuConvexOrConcaveClassificationFilterNew ${MULTISCALE_TESTS2}
 
 ADD_TEST(msTvConvexOrConcaveClassificationFilter ${MULTISCALE_TESTS2}
    --compare-image ${NOTOL}
-		   ${BASELINE}/msConvexOrConcaveClassificationFilterOutput.png
- 		   ${TEMP}/msConvexOrConcaveClassificationFilterOutput.png
+                   ${BASELINE}/msConvexOrConcaveClassificationFilterOutput.png
+                    ${TEMP}/msConvexOrConcaveClassificationFilterOutput.png
          otbConvexOrConcaveClassificationFilter
-	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
-	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles_leveling.tif
-	 ${TEMP}/msConvexOrConcaveClassificationFilterOutput.png
-	 0.5
+         ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+         ${INPUTDATA}/ROI_IKO_PAN_LesHalles_leveling.tif
+         ${TEMP}/msConvexOrConcaveClassificationFilterOutput.png
+         0.5
 )
 
 # -------            otb::MorphologicalOpeningProfileFilter   ----------
@@ -225,21 +225,21 @@ ADD_TEST(msTuMorphologicalOpeningProfileFilterNew ${MULTISCALE_TESTS2}
 
 ADD_TEST(msTvMorphologicalOpeningProfileFilter ${MULTISCALE_TESTS2}
    --compare-n-images ${NOTOL} 4
-		   ${BASELINE}/msMorphologicalOpeningProfileFilterOutput1.tif
- 		   ${TEMP}/msMorphologicalOpeningProfileFilterOutput1.tif
-		   ${BASELINE}/msMorphologicalOpeningProfileFilterOutput2.tif
- 		   ${TEMP}/msMorphologicalOpeningProfileFilterOutput2.tif
-		   ${BASELINE}/msMorphologicalOpeningProfileFilterOutput3.tif
- 		   ${TEMP}/msMorphologicalOpeningProfileFilterOutput3.tif
-		   ${BASELINE}/msMorphologicalOpeningProfileFilterOutput4.tif
- 		   ${TEMP}/msMorphologicalOpeningProfileFilterOutput4.tif
+                   ${BASELINE}/msMorphologicalOpeningProfileFilterOutput1.tif
+                    ${TEMP}/msMorphologicalOpeningProfileFilterOutput1.tif
+                   ${BASELINE}/msMorphologicalOpeningProfileFilterOutput2.tif
+                    ${TEMP}/msMorphologicalOpeningProfileFilterOutput2.tif
+                   ${BASELINE}/msMorphologicalOpeningProfileFilterOutput3.tif
+                    ${TEMP}/msMorphologicalOpeningProfileFilterOutput3.tif
+                   ${BASELINE}/msMorphologicalOpeningProfileFilterOutput4.tif
+                    ${TEMP}/msMorphologicalOpeningProfileFilterOutput4.tif
          otbMorphologicalOpeningProfileFilter
-	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
-	 ${TEMP}/msMorphologicalOpeningProfileFilterOutput
-	 tif
-	 4
-	 1
-	 1
+         ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+         ${TEMP}/msMorphologicalOpeningProfileFilterOutput
+         tif
+         4
+         1
+         1
 )
 
 # -------            otb::MorphologicalClosingProfileFilter   ----------
@@ -249,21 +249,21 @@ ADD_TEST(msTuMorphologicalClosingProfileFilterNew ${MULTISCALE_TESTS2}
 
 ADD_TEST(msTvMorphologicalClosingProfileFilter ${MULTISCALE_TESTS2}
    --compare-n-images ${NOTOL} 4
-		   ${BASELINE}/msMorphologicalClosingProfileFilterOutput1.tif
- 		   ${TEMP}/msMorphologicalClosingProfileFilterOutput1.tif
-		   ${BASELINE}/msMorphologicalClosingProfileFilterOutput2.tif
- 		   ${TEMP}/msMorphologicalClosingProfileFilterOutput2.tif
-		   ${BASELINE}/msMorphologicalClosingProfileFilterOutput3.tif
- 		   ${TEMP}/msMorphologicalClosingProfileFilterOutput3.tif
-		   ${BASELINE}/msMorphologicalClosingProfileFilterOutput4.tif
- 		   ${TEMP}/msMorphologicalClosingProfileFilterOutput4.tif
+                   ${BASELINE}/msMorphologicalClosingProfileFilterOutput1.tif
+                    ${TEMP}/msMorphologicalClosingProfileFilterOutput1.tif
+                   ${BASELINE}/msMorphologicalClosingProfileFilterOutput2.tif
+                    ${TEMP}/msMorphologicalClosingProfileFilterOutput2.tif
+                   ${BASELINE}/msMorphologicalClosingProfileFilterOutput3.tif
+                    ${TEMP}/msMorphologicalClosingProfileFilterOutput3.tif
+                   ${BASELINE}/msMorphologicalClosingProfileFilterOutput4.tif
+                    ${TEMP}/msMorphologicalClosingProfileFilterOutput4.tif
          otbMorphologicalClosingProfileFilter
-	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
-	 ${TEMP}/msMorphologicalClosingProfileFilterOutput
-	 tif
-	 4
-	 1
-	 1
+         ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+         ${TEMP}/msMorphologicalClosingProfileFilterOutput
+         tif
+         4
+         1
+         1
 )
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -277,21 +277,21 @@ ADD_TEST(msTuProfileToProfileDerivativeFilterNew ${MULTISCALE_TESTS3}
 
 ADD_TEST(msTvProfileToProfileDerivativeFilter ${MULTISCALE_TESTS3}
    --compare-n-images ${NOTOL} 4
-		   ${BASELINE}/msProfileToProfileDerivativeFilterOutput1.tif
- 		   ${TEMP}/msProfileToProfileDerivativeFilterOutput1.tif
-		   ${BASELINE}/msProfileToProfileDerivativeFilterOutput2.tif
- 		   ${TEMP}/msProfileToProfileDerivativeFilterOutput2.tif
-		   ${BASELINE}/msProfileToProfileDerivativeFilterOutput3.tif
- 		   ${TEMP}/msProfileToProfileDerivativeFilterOutput3.tif
-		   ${BASELINE}/msProfileToProfileDerivativeFilterOutput4.tif
- 		   ${TEMP}/msProfileToProfileDerivativeFilterOutput4.tif
+                   ${BASELINE}/msProfileToProfileDerivativeFilterOutput1.tif
+                    ${TEMP}/msProfileToProfileDerivativeFilterOutput1.tif
+                   ${BASELINE}/msProfileToProfileDerivativeFilterOutput2.tif
+                    ${TEMP}/msProfileToProfileDerivativeFilterOutput2.tif
+                   ${BASELINE}/msProfileToProfileDerivativeFilterOutput3.tif
+                    ${TEMP}/msProfileToProfileDerivativeFilterOutput3.tif
+                   ${BASELINE}/msProfileToProfileDerivativeFilterOutput4.tif
+                    ${TEMP}/msProfileToProfileDerivativeFilterOutput4.tif
          otbProfileToProfileDerivativeFilter
-	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
-	 ${TEMP}/msProfileToProfileDerivativeFilterOutput
-	 tif
-	 5
-	 1
-	 1
+         ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+         ${TEMP}/msProfileToProfileDerivativeFilterOutput
+         tif
+         5
+         1
+         1
 )
 
 # -------            otb::ProfileDerivativeToMultiScaleCharacteristicsFilter   ----------
@@ -301,17 +301,17 @@ ADD_TEST(msTuProfileDerivativeToMultiScaleCharacteristicsFilterNew ${MULTISCALE_
 
 ADD_TEST(msTvProfileDerivativeToMultiScaleCharacteristicsFilter ${MULTISCALE_TESTS3}
    --compare-n-images ${NOTOL} 2
-		   ${BASELINE}/msProfileDerivativeToMultiScaleCharacteristicsFilterOutput.tif
- 		   ${TEMP}/msProfileDerivativeToMultiScaleCharacteristicsFilterOutput.tif
-		   ${BASELINE}/msProfileDerivativeToMultiScaleCharacteristicsFilterOutputCharacteristics.tif
- 		   ${TEMP}/msProfileDerivativeToMultiScaleCharacteristicsFilterOutputCharacteristics.tif
+                   ${BASELINE}/msProfileDerivativeToMultiScaleCharacteristicsFilterOutput.tif
+                    ${TEMP}/msProfileDerivativeToMultiScaleCharacteristicsFilterOutput.tif
+                   ${BASELINE}/msProfileDerivativeToMultiScaleCharacteristicsFilterOutputCharacteristics.tif
+                    ${TEMP}/msProfileDerivativeToMultiScaleCharacteristicsFilterOutputCharacteristics.tif
          otbProfileDerivativeToMultiScaleCharacteristicsFilter
-	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
-	 ${TEMP}/msProfileDerivativeToMultiScaleCharacteristicsFilterOutput.tif
-	  ${TEMP}/msProfileDerivativeToMultiScaleCharacteristicsFilterOutputCharacteristics.tif
-	 5
-	 1
-	 1
+         ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+         ${TEMP}/msProfileDerivativeToMultiScaleCharacteristicsFilterOutput.tif
+          ${TEMP}/msProfileDerivativeToMultiScaleCharacteristicsFilterOutputCharacteristics.tif
+         5
+         1
+         1
 )
 # -------            otb::MultiScaleConvexOrConcaveClassificationFilter   ----------
 
@@ -320,15 +320,15 @@ ADD_TEST(msTuMultiScaleConvexOrConcaveClassificationFilterNew ${MULTISCALE_TESTS
 
 ADD_TEST(msTvMultiScaleConvexOrConcaveClassificationFilter ${MULTISCALE_TESTS3}
    --compare-image ${NOTOL}
-		   ${BASELINE}/msMultiScaleConvexOrConcaveClassificationFilterOutput.tif
- 		   ${TEMP}/msMultiScaleConvexOrConcaveClassificationFilterOutput.tif
+                   ${BASELINE}/msMultiScaleConvexOrConcaveClassificationFilterOutput.tif
+                    ${TEMP}/msMultiScaleConvexOrConcaveClassificationFilterOutput.tif
          otbMultiScaleConvexOrConcaveClassificationFilter
-	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
-	 ${TEMP}/msMultiScaleConvexOrConcaveClassificationFilterOutput.tif
-	 5
-	 1
-	 1
-	 1.
+         ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+         ${TEMP}/msMultiScaleConvexOrConcaveClassificationFilterOutput.tif
+         5
+         1
+         1
+         1.
 )
 
 # -------            otb::GeodesicMorphologyIterativeDecompositionImageFilter   ----------
@@ -338,24 +338,24 @@ ADD_TEST(msTuGeodesicMorphologyIterativeDecompositionImageFilterNew ${MULTISCALE
 
 ADD_TEST(msTvGeodesicMorphologyIterativeDecompositionImageFilter ${MULTISCALE_TESTS3}
    --compare-n-images ${NOTOL} 6
-		   ${BASELINE}/msGeodesicMorphologyIterativeDecompositionImageFilter_concMap_1.tif
- 		   ${TEMP}/msGeodesicMorphologyIterativeDecompositionImageFilter_concMap_1.tif
-		   ${BASELINE}/msGeodesicMorphologyIterativeDecompositionImageFilter_concMap_2.tif
- 		   ${TEMP}/msGeodesicMorphologyIterativeDecompositionImageFilter_concMap_2.tif
-		   ${BASELINE}/msGeodesicMorphologyIterativeDecompositionImageFilter_convMap_1.tif
- 		   ${TEMP}/msGeodesicMorphologyIterativeDecompositionImageFilter_convMap_1.tif
-		   ${BASELINE}/msGeodesicMorphologyIterativeDecompositionImageFilter_convMap_2.tif
- 		   ${TEMP}/msGeodesicMorphologyIterativeDecompositionImageFilter_convMap_2.tif
-		   ${BASELINE}/msGeodesicMorphologyIterativeDecompositionImageFilter_leveling_1.tif
- 		   ${TEMP}/msGeodesicMorphologyIterativeDecompositionImageFilter_leveling_1.tif
-		   ${BASELINE}/msGeodesicMorphologyIterativeDecompositionImageFilter_leveling_2.tif
- 		   ${TEMP}/msGeodesicMorphologyIterativeDecompositionImageFilter_leveling_2.tif
+                   ${BASELINE}/msGeodesicMorphologyIterativeDecompositionImageFilter_concMap_1.tif
+                    ${TEMP}/msGeodesicMorphologyIterativeDecompositionImageFilter_concMap_1.tif
+                   ${BASELINE}/msGeodesicMorphologyIterativeDecompositionImageFilter_concMap_2.tif
+                    ${TEMP}/msGeodesicMorphologyIterativeDecompositionImageFilter_concMap_2.tif
+                   ${BASELINE}/msGeodesicMorphologyIterativeDecompositionImageFilter_convMap_1.tif
+                    ${TEMP}/msGeodesicMorphologyIterativeDecompositionImageFilter_convMap_1.tif
+                   ${BASELINE}/msGeodesicMorphologyIterativeDecompositionImageFilter_convMap_2.tif
+                    ${TEMP}/msGeodesicMorphologyIterativeDecompositionImageFilter_convMap_2.tif
+                   ${BASELINE}/msGeodesicMorphologyIterativeDecompositionImageFilter_leveling_1.tif
+                    ${TEMP}/msGeodesicMorphologyIterativeDecompositionImageFilter_leveling_1.tif
+                   ${BASELINE}/msGeodesicMorphologyIterativeDecompositionImageFilter_leveling_2.tif
+                    ${TEMP}/msGeodesicMorphologyIterativeDecompositionImageFilter_leveling_2.tif
          otbGeodesicMorphologyIterativeDecompositionImageFilter
-	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
-	 ${TEMP}/msGeodesicMorphologyIterativeDecompositionImageFilter
-	 tif
-	 2
-	 3
+         ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+         ${TEMP}/msGeodesicMorphologyIterativeDecompositionImageFilter
+         tif
+         2
+         3
          2
 )
 
@@ -381,7 +381,7 @@ ADD_TEST(msTvWaveletFilterBank ${MULTISCALE_TESTS4}
               ${TEMP}/ROI_IKO_PAN_LesHalles_FilterBank.tif
          otbWaveletFilterBank
           ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
-		  2
+                  2
           ${TEMP}/ROI_IKO_PAN_LesHalles_FilterBank.tif
 )
 
@@ -391,7 +391,7 @@ ADD_TEST(msTvWaveletMultiScaleFilterBank ${MULTISCALE_TESTS4}
               ${TEMP}/ROI_IKO_PAN_LesHalles_FilterBankMultiScale.tif
          otbWaveletFilterBank
           ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
-		  1
+                  1
           ${TEMP}/ROI_IKO_PAN_LesHalles_FilterBankMultiScale.tif
 )
 
@@ -404,7 +404,7 @@ ADD_TEST(msTuWaveletInverseTransformNew ${MULTISCALE_TESTS4}
 
 ADD_TEST(msTvWaveletTransformHaar ${MULTISCALE_TESTS4}
         --compare-image ${EPSILON6}
-			  ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+                          ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltHaar.tif
          otbWaveletTransform
           ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
@@ -417,7 +417,7 @@ ADD_TEST(msTvWaveletTransformHaar ${MULTISCALE_TESTS4}
 
 ADD_TEST(msTvWaveletMultiScaleTransformHaar ${MULTISCALE_TESTS4}
         --compare-image ${EPSILON6}
-			  ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+                          ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltMultiScaleHaar.tif
          otbWaveletTransform
           ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
@@ -431,7 +431,7 @@ ADD_TEST(msTvWaveletMultiScaleTransformHaar ${MULTISCALE_TESTS4}
 
 ADD_TEST(msTvWaveletMultiScaleTransformHaar_1 ${MULTISCALE_TESTS4}
         --compare-image ${EPSILON6}
-			  ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+                          ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltMultiScaleHaar_1.tif
          otbWaveletTransform
           ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
@@ -445,7 +445,7 @@ ADD_TEST(msTvWaveletMultiScaleTransformHaar_1 ${MULTISCALE_TESTS4}
 
 ADD_TEST(msTvWaveletMultiScaleTransformHaar_4 ${MULTISCALE_TESTS4}
         --compare-image ${EPSILON6}
-			  ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+                          ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltMultiScaleHaar_4.tif
          otbWaveletTransform
           ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
@@ -459,7 +459,7 @@ ADD_TEST(msTvWaveletMultiScaleTransformHaar_4 ${MULTISCALE_TESTS4}
 
 ADD_TEST(msTvWaveletMultiScaleTransformHaar_8 ${MULTISCALE_TESTS4}
         --compare-image ${EPSILON6}
-			  ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+                          ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltMultiScaleHaar_8.tif
          otbWaveletTransform
           ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
@@ -919,16 +919,16 @@ ADD_TEST(msTvWaveletPacketMultiScaleTransformSYMLET8 ${MULTISCALE_TESTS4}
 
 # ----- otbSubsampleImageFilter --------------------------------------
 ADD_TEST(msTuSubsampleImageFilterNew ${MULTISCALE_TESTS4}
-	otbSubsampleImageFilterNew)
+        otbSubsampleImageFilterNew)
 
 ADD_TEST(msTvSubsampleImageFilter ${MULTISCALE_TESTS4}
-	--compare-image ${NOTOL}
-		${TEMP}/msSubsampleImageFilterOversampled.tif
-		${TEMP}/msSubsampleImageFilterOnePixelOutOf2.tif
-	otbSubsampleImageFilter
-		${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
-		${TEMP}/msSubsampleImageFilterOversampled.tif
-		${TEMP}/msSubsampleImageFilterOnePixelOutOf2.tif
+        --compare-image ${NOTOL}
+                ${TEMP}/msSubsampleImageFilterOversampled.tif
+                ${TEMP}/msSubsampleImageFilterOnePixelOutOf2.tif
+        otbSubsampleImageFilter
+                ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+                ${TEMP}/msSubsampleImageFilterOversampled.tif
+                ${TEMP}/msSubsampleImageFilterOnePixelOutOf2.tif
 )
 
 # -------       Fichiers sources CXX -----------------------------------

@@ -45,19 +45,19 @@ SET(TOL 0.0)
 # ------- HybridSegmentationFuzzyVoronoiTest----------
 
 ADD_TEST(paTeHybridSegmentationFuzzyVoronoiTest ${EXE_TESTS}
-	--compare-n-images ${TOL} 1
-	${BASELINE}/HybridSegmentationFuzzyVoronoiOutput.png
-	${TEMP}/HybridSegmentationFuzzyVoronoiOutput.png
-	HybridSegmentationFuzzyVoronoiTest
-	${INPUTDATA}/QB_Suburb.png
-	${TEMP}/HybridSegmentationFuzzyVoronoiOutput.png
+        --compare-n-images ${TOL} 1
+        ${BASELINE}/HybridSegmentationFuzzyVoronoiOutput.png
+        ${TEMP}/HybridSegmentationFuzzyVoronoiOutput.png
+        HybridSegmentationFuzzyVoronoiTest
+        ${INPUTDATA}/QB_Suburb.png
+        ${TEMP}/HybridSegmentationFuzzyVoronoiOutput.png
     111 38 75 20 0.5 3.0
 )
 
 # -----EstimateAffineTransformationExampleTest---------
 
 ADD_TEST(dmTeEstimateAffineTransformationExampleTest ${EXE_TESTS}
-   --compare-image ${TOL} 
+   --compare-image ${TOL}
          ${BASELINE}/EstimateAffineTransformationOutput.png
          ${TEMP}/AffineTransformationOutput.png
          EstimateAffineTransformationExampleTest
@@ -65,7 +65,7 @@ ADD_TEST(dmTeEstimateAffineTransformationExampleTest ${EXE_TESTS}
          ${INPUTDATA}/QB_SuburbR10X13Y17.png
          ${TEMP}/AffineTransformationOutput.png
          ${TEMP}/AffineTransformationTxtOutput.txt
-   2 3 0 0 0.5 1   
+   2 3 0 0 0.5 1
 )
 
 # -----SIFTDisparityMapEstimationTest---------

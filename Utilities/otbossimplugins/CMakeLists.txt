@@ -9,8 +9,8 @@ SET(OSSIMPLUGINS_SVN_REVISION "18162")
 # patch number for OTB modifications applied on top of OSSIM_SVN_REVISION (used for .so versioning)
 SET(OSSIMPLUGINS_OTB_PATCH "1")
 
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} 
-  ${CMAKE_CURRENT_SOURCE_DIR}/ossim 
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}
+  ${CMAKE_CURRENT_SOURCE_DIR}/ossim
 #  ${OTB_SOURCE_DIR}/Utilities/otbossim/include
 #  ${OTB_BINARY_DIR}/Utilities/otbossim/include
 )

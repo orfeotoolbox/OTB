@@ -23,15 +23,15 @@ ADD_TEST(srTuRCC8CalculatorNew ${SPATIALREASONING_TESTS1}
 
 ADD_TEST(srTvRCC8Calculator ${SPATIALREASONING_TESTS1}
    --compare-ascii ${NOTOL}
- 		   ${BASELINE_FILES}/srRCC8CalculatorOutput.txt
- 		   ${TEMP}/srRCC8CalculatorOutput.txt
-	 otbImageToImageRCC8Calculator
-	 4
-	 ${TEMP}/srRCC8CalculatorOutput.txt
-	 ${INPUTDATA}/rcc8_mire1.png
-	 ${INPUTDATA}/rcc8_mire2.png
-	 ${INPUTDATA}/rcc8_mire3.png
-	 ${INPUTDATA}/rcc8_mire4.png
+                    ${BASELINE_FILES}/srRCC8CalculatorOutput.txt
+                    ${TEMP}/srRCC8CalculatorOutput.txt
+         otbImageToImageRCC8Calculator
+         4
+         ${TEMP}/srRCC8CalculatorOutput.txt
+         ${INPUTDATA}/rcc8_mire1.png
+         ${INPUTDATA}/rcc8_mire2.png
+         ${INPUTDATA}/rcc8_mire3.png
+         ${INPUTDATA}/rcc8_mire4.png
 )
 
 
@@ -42,15 +42,15 @@ ADD_TEST(srTuPolygonRCC8CalculatorNew ${SPATIALREASONING_TESTS1}
 
 ADD_TEST(srTvPolygonRCC8Calculator ${SPATIALREASONING_TESTS1}
    --compare-ascii ${NOTOL}
- 		   ${BASELINE_FILES}/srRCC8PolygonToPolygonCalculatorOutput.txt
- 		   ${TEMP}/srRCC8PolygonToPolygonCalculatorOutput.txt
-	 otbPolygonToPolygonRCC8Calculator
-	 4
-	 ${TEMP}/srRCC8PolygonToPolygonCalculatorOutput.txt
-	 ${INPUTDATA}/rcc8_mire1.png
-	 ${INPUTDATA}/rcc8_mire2.png
-	 ${INPUTDATA}/rcc8_mire3.png
-	 ${INPUTDATA}/rcc8_mire4.png
+                    ${BASELINE_FILES}/srRCC8PolygonToPolygonCalculatorOutput.txt
+                    ${TEMP}/srRCC8PolygonToPolygonCalculatorOutput.txt
+         otbPolygonToPolygonRCC8Calculator
+         4
+         ${TEMP}/srRCC8PolygonToPolygonCalculatorOutput.txt
+         ${INPUTDATA}/rcc8_mire1.png
+         ${INPUTDATA}/rcc8_mire2.png
+         ${INPUTDATA}/rcc8_mire3.png
+         ${INPUTDATA}/rcc8_mire4.png
 )
 
 # -------            otb::RCC8VertexBase   --------------------------
@@ -60,9 +60,9 @@ ADD_TEST(srTuRCC8VertexBaseNew ${SPATIALREASONING_TESTS1}
 
 ADD_TEST(srTvRCC8VertexBase ${SPATIALREASONING_TESTS1}
          otbRCC8VertexBase
-	 5
-	 5
-	 )
+         5
+         5
+         )
 
 # -------            otb::RCC8VertexWithCompacity----------------------
 
@@ -71,10 +71,10 @@ ADD_TEST(srTuRCC8VertexWithCompacityNew ${SPATIALREASONING_TESTS1}
 
 ADD_TEST(srTvRCC8VertexWithCompacity ${SPATIALREASONING_TESTS1}
          otbRCC8VertexWithCompacity
-	 5
-	 5
-	 0.125354
-	 )
+         5
+         5
+         0.125354
+         )
 
 # -------            otb::RCC8VertexWithCompacity----------------------
 
@@ -83,7 +83,7 @@ ADD_TEST(srTuRCC8EdgeNew ${SPATIALREASONING_TESTS1}
 
 ADD_TEST(srTvRCC8Edge ${SPATIALREASONING_TESTS1}
          otbRCC8Edge
-	 )
+         )
 
 
 # -------            otb::RCC8Graph   --------------------------
@@ -94,7 +94,7 @@ ADD_TEST(srTuRCC8GraphNew ${SPATIALREASONING_TESTS1}
 
 ADD_TEST(srTvRCC8Graph ${SPATIALREASONING_TESTS1}
          otbRCC8Graph
-	 )
+         )
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbSPATIALREASONINGTests2 ~~~~~~~~~~~~~~~~~~~~~~
@@ -110,11 +110,11 @@ ADD_TEST(srTuRCC8GraphFileWriterNew ${SPATIALREASONING_TESTS2}
          otbRCC8GraphFileWriterNew)
 
 ADD_TEST(srTvRCC8GraphFileWriter ${SPATIALREASONING_TESTS2}
-	--compare-ascii	${NOTOL}
-			${BASELINE_FILES}/srRCC8GraphWriterOutput1.dot
-			${TEMP}/srRCC8GraphWriterOutput1.dot
-	 otbRCC8GraphFileWriter
-			${TEMP}/srRCC8GraphWriterOutput1.dot
+        --compare-ascii        ${NOTOL}
+                        ${BASELINE_FILES}/srRCC8GraphWriterOutput1.dot
+                        ${TEMP}/srRCC8GraphWriterOutput1.dot
+         otbRCC8GraphFileWriter
+                        ${TEMP}/srRCC8GraphWriterOutput1.dot
 )
 
 # -------        otb::RCC8GraphFileReader   --------------------------
@@ -123,18 +123,18 @@ ADD_TEST(srTuRCC8GraphFileReaderNew ${SPATIALREASONING_TESTS2}
          otbRCC8GraphFileReaderNew)
 
 ADD_TEST(srTvRCC8GraphFileReader ${SPATIALREASONING_TESTS2}
-	 otbRCC8GraphFileReader
-			${TEMP}/srRCC8GraphWriterOutput1.dot
+         otbRCC8GraphFileReader
+                        ${TEMP}/srRCC8GraphWriterOutput1.dot
 )
 SET_TESTS_PROPERTIES(srTvRCC8GraphFileReader PROPERTIES DEPENDS srTvRCC8GraphFileWriter)
 
 ADD_TEST(srTvRCC8GraphIOEndToEnd ${SPATIALREASONING_TESTS2}
-	--compare-ascii	${NOTOL}
-			${BASELINE_FILES}/srRCC8GraphWriterOutput1.dot
-			${TEMP}/srRCC8GraphIOEndToEndOut.dot
-	 otbRCC8GraphIOEndToEnd
-	                ${BASELINE_FILES}/srRCC8GraphWriterOutput1.dot
-			${TEMP}/srRCC8GraphIOEndToEndOut.dot
+        --compare-ascii        ${NOTOL}
+                        ${BASELINE_FILES}/srRCC8GraphWriterOutput1.dot
+                        ${TEMP}/srRCC8GraphIOEndToEndOut.dot
+         otbRCC8GraphIOEndToEnd
+                        ${BASELINE_FILES}/srRCC8GraphWriterOutput1.dot
+                        ${TEMP}/srRCC8GraphIOEndToEndOut.dot
 )
 
 # -------        otb::ImageListToRCC8GraphFilter   --------------------------
@@ -152,53 +152,53 @@ ADD_TEST(srTuMultiSegToRCC8GraphFilterNew ${SPATIALREASONING_TESTS2}
 
 
 ADD_TEST(srTvMultiSegToRCC8GraphFilter1 ${SPATIALREASONING_TESTS2}
-	--compare-ascii	${NOTOL}
-			${BASELINE_FILES}/srRCC8GraphFilterOutput.dot
-			${TEMP}/srRCC8GraphFilterOutput.dot
-	 otbImageMultiSegmentationToRCC8GraphFilter
-			${TEMP}/srRCC8GraphFilterOutput.dot
-			0
-			2
-			${INPUTDATA}/Seg1InputForRCC8Graph.tif
-			${INPUTDATA}/Seg2InputForRCC8Graph.tif
+        --compare-ascii        ${NOTOL}
+                        ${BASELINE_FILES}/srRCC8GraphFilterOutput.dot
+                        ${TEMP}/srRCC8GraphFilterOutput.dot
+         otbImageMultiSegmentationToRCC8GraphFilter
+                        ${TEMP}/srRCC8GraphFilterOutput.dot
+                        0
+                        2
+                        ${INPUTDATA}/Seg1InputForRCC8Graph.tif
+                        ${INPUTDATA}/Seg2InputForRCC8Graph.tif
 )
 
 ADD_TEST(srTvMultiSegToRCC8GraphFilter1WithOpti ${SPATIALREASONING_TESTS2}
-	--compare-ascii	${NOTOL}
-			${BASELINE_FILES}/srRCC8GraphFilterOutput.dot
-			${TEMP}/srRCC8GraphFilterOutputWithOpti.dot
-	 otbImageMultiSegmentationToRCC8GraphFilter
-			${TEMP}/srRCC8GraphFilterOutputWithOpti.dot
-			1
-			2
-			${INPUTDATA}/Seg1InputForRCC8Graph.tif
-			${INPUTDATA}/Seg2InputForRCC8Graph.tif
+        --compare-ascii        ${NOTOL}
+                        ${BASELINE_FILES}/srRCC8GraphFilterOutput.dot
+                        ${TEMP}/srRCC8GraphFilterOutputWithOpti.dot
+         otbImageMultiSegmentationToRCC8GraphFilter
+                        ${TEMP}/srRCC8GraphFilterOutputWithOpti.dot
+                        1
+                        2
+                        ${INPUTDATA}/Seg1InputForRCC8Graph.tif
+                        ${INPUTDATA}/Seg2InputForRCC8Graph.tif
 )
 
 ADD_TEST(srTvMultiSegToRCC8GraphFilter2 ${SPATIALREASONING_TESTS2}
-	--compare-ascii ${NOTOL}
-			${BASELINE_FILES}/srRCC8GraphFilterOutput2.dot
-			${TEMP}/srRCC8GraphFilterOutput2.dot
-	 otbImageMultiSegmentationToRCC8GraphFilter
-			${TEMP}/srRCC8GraphFilterOutput2.dot
-			0
-			3
-			${INPUTDATA}/Seg3InputForRCC8Graph.tif
-			${INPUTDATA}/Seg4InputForRCC8Graph.tif
-			${INPUTDATA}/Seg5InputForRCC8Graph.tif
+        --compare-ascii ${NOTOL}
+                        ${BASELINE_FILES}/srRCC8GraphFilterOutput2.dot
+                        ${TEMP}/srRCC8GraphFilterOutput2.dot
+         otbImageMultiSegmentationToRCC8GraphFilter
+                        ${TEMP}/srRCC8GraphFilterOutput2.dot
+                        0
+                        3
+                        ${INPUTDATA}/Seg3InputForRCC8Graph.tif
+                        ${INPUTDATA}/Seg4InputForRCC8Graph.tif
+                        ${INPUTDATA}/Seg5InputForRCC8Graph.tif
 )
 
 ADD_TEST(srTvMultiSegToRCC8GraphFilter2WithOpti ${SPATIALREASONING_TESTS2}
-	--compare-ascii ${NOTOL}
-			${BASELINE_FILES}/srRCC8GraphFilterOutput2.dot
-			${TEMP}/srRCC8GraphFilterOutput2WithOpti.dot
-	 otbImageMultiSegmentationToRCC8GraphFilter
-			${TEMP}/srRCC8GraphFilterOutput2WithOpti.dot
-			1
-			3
-			${INPUTDATA}/Seg3InputForRCC8Graph.tif
-			${INPUTDATA}/Seg4InputForRCC8Graph.tif
-			${INPUTDATA}/Seg5InputForRCC8Graph.tif
+        --compare-ascii ${NOTOL}
+                        ${BASELINE_FILES}/srRCC8GraphFilterOutput2.dot
+                        ${TEMP}/srRCC8GraphFilterOutput2WithOpti.dot
+         otbImageMultiSegmentationToRCC8GraphFilter
+                        ${TEMP}/srRCC8GraphFilterOutput2WithOpti.dot
+                        1
+                        3
+                        ${INPUTDATA}/Seg3InputForRCC8Graph.tif
+                        ${INPUTDATA}/Seg4InputForRCC8Graph.tif
+                        ${INPUTDATA}/Seg5InputForRCC8Graph.tif
 )
 
 # -------        otb::PolygonListToRCC8GraphFilter   --------------------------
@@ -209,27 +209,27 @@ ADD_TEST(srTuPolygonListToRCC8GraphFilterNew ${SPATIALREASONING_TESTS2}
 
 
 ADD_TEST(srTvPolygonListToRCC8GraphFilter ${SPATIALREASONING_TESTS2}
-	--compare-ascii ${NOTOL}
-		${BASELINE_FILES}/srTvPolygonListToRCC8GraphFilterOuptut.dot
-		${TEMP}/srTvPolygonListToRCC8GraphFilterOuptut.dot
+        --compare-ascii ${NOTOL}
+                ${BASELINE_FILES}/srTvPolygonListToRCC8GraphFilterOuptut.dot
+                ${TEMP}/srTvPolygonListToRCC8GraphFilterOuptut.dot
          otbPolygonListToRCC8GraphFilter
-	 4
-	 ${TEMP}/srTvPolygonListToRCC8GraphFilterOuptut.dot
-	 ${INPUTDATA}/rcc8_mire1.png
-	 ${INPUTDATA}/rcc8_mire2.png
-	 ${INPUTDATA}/rcc8_mire3.png
-	 ${INPUTDATA}/rcc8_mire4.png)
+         4
+         ${TEMP}/srTvPolygonListToRCC8GraphFilterOuptut.dot
+         ${INPUTDATA}/rcc8_mire1.png
+         ${INPUTDATA}/rcc8_mire2.png
+         ${INPUTDATA}/rcc8_mire3.png
+         ${INPUTDATA}/rcc8_mire4.png)
 
 ADD_TEST(srTvPolygonListToRCC8GraphFilter2 ${SPATIALREASONING_TESTS2}
-	--compare-ascii ${NOTOL}
-		${BASELINE_FILES}/srTvPolygonListToRCC8GraphFilter2Ouptut.dot
-		${TEMP}/srTvPolygonListToRCC8GraphFilter2Ouptut.dot
+        --compare-ascii ${NOTOL}
+                ${BASELINE_FILES}/srTvPolygonListToRCC8GraphFilter2Ouptut.dot
+                ${TEMP}/srTvPolygonListToRCC8GraphFilter2Ouptut.dot
          otbPolygonListToRCC8GraphFilter
-	 3
-	 ${TEMP}/srTvPolygonListToRCC8GraphFilter2Ouptut.dot
-	 ${INPUTDATA}/Seg3InputForRCC8Graph.tif
-	 ${INPUTDATA}/Seg4InputForRCC8Graph.tif
-	 ${INPUTDATA}/Seg5InputForRCC8Graph.tif
+         3
+         ${TEMP}/srTvPolygonListToRCC8GraphFilter2Ouptut.dot
+         ${INPUTDATA}/Seg3InputForRCC8Graph.tif
+         ${INPUTDATA}/Seg4InputForRCC8Graph.tif
+         ${INPUTDATA}/Seg5InputForRCC8Graph.tif
 )
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

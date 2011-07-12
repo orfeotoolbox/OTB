@@ -24,14 +24,14 @@ ADD_TEST(maTuMarkovRandomFieldFilterNew ${MARKOV_TESTS1}
 
 ADD_TEST(maTvMarkovRandomFieldFilter ${MARKOV_TESTS1}
   --compare-image ${TOL}  ${BASELINE}/maTvMarkovRandomField.png
-                  	  ${TEMP}/maTvMarkovRandomField.png
+                            ${TEMP}/maTvMarkovRandomField.png
         otbMarkovRandomFieldFilter
             ${INPUTDATA}/QB_Suburb.png
-	    ${TEMP}/maTvMarkovRandomField.png
-	    1.0
-	    30
-	    1.0
-	    )
+            ${TEMP}/maTvMarkovRandomField.png
+            1.0
+            30
+            1.0
+            )
 
 
 # -------            otb::MRFEnergyEdgeFidelity       ------------------------------
@@ -42,8 +42,8 @@ ADD_TEST(maTvMRFEnergyEdgeFidelity ${MARKOV_TESTS1}
 --compare-ascii ${TOL} ${BASELINE_FILES}/maTvMRFEnergyEdgeFidelity.txt
                          ${TEMP}/maTvMRFEnergyEdgeFidelity.txt
      otbMRFEnergyEdgeFidelity
-	${TEMP}/maTvMRFEnergyEdgeFidelity.txt
-	)
+        ${TEMP}/maTvMRFEnergyEdgeFidelity.txt
+        )
 
 
 # -------            otb::MRFEnergyGaussianClassification   ------------------------------
@@ -54,8 +54,8 @@ ADD_TEST(maTvMRFEnergyGaussianClassification ${MARKOV_TESTS1}
 --compare-ascii ${TOL} ${BASELINE_FILES}/maTvMRFEnergyGaussianClassification.txt
                        ${TEMP}/maTvMRFEnergyGaussianClassification.txt
      otbMRFEnergyGaussianClassification
-	${TEMP}/maTvMRFEnergyGaussianClassification.txt
-	)
+        ${TEMP}/maTvMRFEnergyGaussianClassification.txt
+        )
 
 
 # -------            otb::MRFEnergyPotts   ------------------------------
@@ -67,8 +67,8 @@ ADD_TEST(maTvMRFEnergyPotts ${MARKOV_TESTS1}
                   ${BASELINE_FILES}/maTvMRFEnergyPotts.txt
                   ${TEMP}/maTvMRFEnergyPotts.txt
      otbMRFEnergyPotts
-	${TEMP}/maTvMRFEnergyPotts.txt
-	)
+        ${TEMP}/maTvMRFEnergyPotts.txt
+        )
 
 # -------            otb::MRFEnergyGaussian   ------------------------------
 ADD_TEST(maTuMRFEnergyGaussianNew ${MARKOV_TESTS1}
@@ -76,7 +76,7 @@ ADD_TEST(maTuMRFEnergyGaussianNew ${MARKOV_TESTS1}
 
 ADD_TEST(maTvMRFEnergyGaussian ${MARKOV_TESTS1}
      otbMRFEnergyGaussian
-	)
+        )
 
 
 
@@ -86,8 +86,8 @@ ADD_TEST(maTuMRFOptimizerICMNew ${MARKOV_TESTS1}
 
 ADD_TEST(maTuMRFOptimizerICM ${MARKOV_TESTS1}
      otbMRFOptimizerICM
-	${TEMP}/maTuMRFOptimizerICM.txt
-	)
+        ${TEMP}/maTuMRFOptimizerICM.txt
+        )
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbMARKOV_TESTS2 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -102,8 +102,8 @@ ADD_TEST(maTvMRFOptimizerMetropolis ${MARKOV_TESTS2}
                   ${BASELINE_FILES}/maTvMRFOptimizerMetropolis.txt
                   ${TEMP}/maTvMRFOptimizerMetropolis.txt
      otbMRFOptimizerMetropolis
-	${TEMP}/maTvMRFOptimizerMetropolis.txt
-	)
+        ${TEMP}/maTvMRFOptimizerMetropolis.txt
+        )
 
 
 # -------            otbMRFSamplerMAP     ------------------------------
@@ -114,10 +114,10 @@ ADD_TEST(maTvMRFSamplerMAP ${MARKOV_TESTS2}
                   ${BASELINE_FILES}/maTvMRFSamplerMAP.txt
                   ${TEMP}/maTvMRFSamplerMAP.txt
      otbMRFSamplerMAP
-	${INPUTDATA}/poupees_sub_c1.png
-	${INPUTDATA}/poupees_sub_c2.png
-	${TEMP}/maTvMRFSamplerMAP.txt
-	)
+        ${INPUTDATA}/poupees_sub_c1.png
+        ${INPUTDATA}/poupees_sub_c2.png
+        ${TEMP}/maTvMRFSamplerMAP.txt
+        )
 
 
 # -------            otbMRFSamplerRandom    ------------------------------
@@ -129,10 +129,10 @@ ADD_TEST(maTvMRFSamplerRandom ${MARKOV_TESTS2}
                   ${BASELINE_FILES}/maTvMRFSamplerRandom.txt
                   ${TEMP}/maTvMRFSamplerRandom.txt
      otbMRFSamplerRandom
-	${INPUTDATA}/poupees_sub_c1.png
-	${INPUTDATA}/poupees_sub_c2.png
-	${TEMP}/maTvMRFSamplerRandom.txt
-	)
+        ${INPUTDATA}/poupees_sub_c1.png
+        ${INPUTDATA}/poupees_sub_c2.png
+        ${TEMP}/maTvMRFSamplerRandom.txt
+        )
 
 # -------            otbMRFSamplerRandomMAP    ------------------------------
  ADD_TEST(maTuMRFSamplerRandomMAPNew ${MARKOV_TESTS2}
@@ -143,10 +143,10 @@ ADD_TEST(maTvMRFSamplerRandomMAP ${MARKOV_TESTS2}
                   ${BASELINE_FILES}/maTvMRFSamplerRandomMAP.txt
                   ${TEMP}/maTvMRFSamplerRandomMAP.txt
      otbMRFSamplerRandomMAP
-	${INPUTDATA}/poupees_sub_c1.png
-	${INPUTDATA}/poupees_sub_c2.png
-	${TEMP}/maTvMRFSamplerRandomMAP.txt
-	)
+        ${INPUTDATA}/poupees_sub_c1.png
+        ${INPUTDATA}/poupees_sub_c2.png
+        ${TEMP}/maTvMRFSamplerRandomMAP.txt
+        )
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbMARKOV_TESTS3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -159,8 +159,8 @@ ADD_TEST(maTvMRFEnergyFisherClassification ${MARKOV_TESTS3}
     --compare-ascii ${TOL} ${BASELINE_FILES}/maTvMRFEnergyFisherClassification.txt
                             ${TEMP}/maTvMRFEnergyFisherClassification.txt
     otbMRFEnergyFisherClassification
-	${TEMP}/maTvMRFEnergyFisherClassification.txt
-	)
+        ${TEMP}/maTvMRFEnergyFisherClassification.txt
+        )
 
 # A enrichir
 SET(Markov_SRCS1

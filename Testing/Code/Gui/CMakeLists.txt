@@ -17,7 +17,7 @@ SET(GUI_TESTS ${CXX_TEST_PATH}/otbGuiTests)
 # -------            otb::System  -------------
 ADD_TEST(guTuFltkFilterWatcher ${GUI_TESTS}
         otbFltkFilterWatcher
-	${INPUTDATA}/couleurs.tif
+        ${INPUTDATA}/couleurs.tif
         )
 
 
@@ -26,8 +26,8 @@ ADD_TEST(guTuFltkFilterWatcher ${GUI_TESTS}
 ADD_TEST(coTvFltkWriterWatcher ${GUI_TESTS}
      otbFltkWriterWatcher
         ${INPUTDATA}/couleurs.tif
-	${TEMP}/coTvFltkWriterWatcherOutput.tif
-	20)
+        ${TEMP}/coTvFltkWriterWatcherOutput.tif
+        20)
 
 
 

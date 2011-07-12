@@ -22,11 +22,11 @@ SET(GEOSPATIALANALYSIS_TESTS ${CXX_TEST_PATH}/otbGeospatialAnalysisTests)
 
 ADD_TEST(gfTuPostGISCreateTableTransactorNew ${GEOSPATIALANALYSIS_TESTS}
      otbPostGISCreateTableTransactorNew
-	)
+        )
 
 ADD_TEST(gfTuPostGISCreateTableTransactorAccessors ${GEOSPATIALANALYSIS_TESTS}
      otbPostGISCreateTableTransactorAccessors
-	)
+        )
 
 ADD_TEST(gfTuPostGISCreateTableTransactorCreate ${GEOSPATIALANALYSIS_TESTS}
   otbPostGISCreateTableTransactorCreate
@@ -34,11 +34,11 @@ ADD_TEST(gfTuPostGISCreateTableTransactorCreate ${GEOSPATIALANALYSIS_TESTS}
   orfeotoolbox_test
   orfeotoolbox_test_user
   Bidfeud0
-	)
+        )
 
 ADD_TEST(gfTuPostGISFromStringTransactorNew ${GEOSPATIALANALYSIS_TESTS}
      otbPostGISFromStringTransactorNew
-	)
+        )
 
 
 # -------       CXX source files -----------------------------------

@@ -30,18 +30,18 @@ SET(UTILITIES_TESTS ${CXX_TEST_PATH}/otbUtilitiesTests)
 IF(OTB_DATA_USE_LARGEINPUT)
 
 ADD_TEST(utTvOssimKeywordlistToulouseQuickBirdTest ${UTILITIES_TESTS}
---ignore-order --compare-ascii ${EPSILON_6}  
-	       ${BASELINE_FILES}/utOssimKeywordlistToulouseQuickBird.txt
-	       ${TEMP}/utOssimKeywordlistToulouseQuickBird.txt
+--ignore-order --compare-ascii ${EPSILON_6}
+               ${BASELINE_FILES}/utOssimKeywordlistToulouseQuickBird.txt
+               ${TEMP}/utOssimKeywordlistToulouseQuickBird.txt
         ossimKeywordlistTest
         ${IMAGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/utOssimKeywordlistToulouseQuickBird.txt
         )
 
 ADD_TEST(utTvOssimKeywordlistBlossevilleIkonosTest ${UTILITIES_TESTS}
---ignore-order --compare-ascii ${NOTOL} 
-	        ${BASELINE_FILES}/utOssimKeywordlistBlossevilleIkonos.txt
-		${TEMP}/utOssimKeywordlistBlossevilleIkonos.txt
+--ignore-order --compare-ascii ${NOTOL}
+                ${BASELINE_FILES}/utOssimKeywordlistBlossevilleIkonos.txt
+                ${TEMP}/utOssimKeywordlistBlossevilleIkonos.txt
         ossimKeywordlistTest
         ${IMAGEDATA}/IKONOS/BLOSSEVILLE/po_2619900_grn_0000000.tif
         ${TEMP}/utOssimKeywordlistBlossevilleIkonos.txt
@@ -55,27 +55,27 @@ ADD_TEST(utTuOssimElevManagerTest ${UTILITIES_TESTS}
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(utTvOssimXmlDocumentTest ${UTILITIES_TESTS}
         ossimXmlDocumentTest
-	${IMAGEDATA}/TERRASARX/TORONTO/TSX1_SAR__SSC/TSX1_SAR__SSC.xml
+        ${IMAGEDATA}/TERRASARX/TORONTO/TSX1_SAR__SSC/TSX1_SAR__SSC.xml
         )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 ADD_TEST(utTvOssimTileMapModelTestToulouse ${UTILITIES_TESTS}
-	--compare-ascii ${NOTOL}
-		${BASELINE_FILES}/utOssimTileMapModelToulouse.txt
-		${TEMP}/utOssimTileMapModelToulouse.txt
-	ossimTileMapModelTest
-	43.6044
-	1.44295
-	${TEMP}/utOssimTileMapModelToulouse.txt
-	)
-	
+        --compare-ascii ${NOTOL}
+                ${BASELINE_FILES}/utOssimTileMapModelToulouse.txt
+                ${TEMP}/utOssimTileMapModelToulouse.txt
+        ossimTileMapModelTest
+        43.6044
+        1.44295
+        ${TEMP}/utOssimTileMapModelToulouse.txt
+        )
+        
 ADD_TEST(utTvOssimpluginsHermiteInterpolationTest ${UTILITIES_TESTS}
      ossimpluginsHermiteInterpolationTest)
 
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(utTvOssimpluginsHermiteInterpolationPlateformPositionRadarSat2Test ${UTILITIES_TESTS}
-	ossimpluginsHermiteInterpolationPlateformPositionTest
-	${IMAGEDATA}/RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/product.xml
+        ossimpluginsHermiteInterpolationPlateformPositionTest
+        ${IMAGEDATA}/RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/product.xml
     )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
@@ -112,24 +112,24 @@ ADD_TEST(utTvSvmTestGenericModelTest ${UTILITIES_TESTS}
 
 ADD_TEST(utTvSvmGenericKernelBasicOperationsTest ${UTILITIES_TESTS}
 --compare-ascii ${NOTOL}  ${BASELINE_FILES}/utTvsvmGenericKernelBasicOperationsTest.txt
-                	 ${TEMP}/svmGenericKernelBasicOperationsTest.txt
+                         ${TEMP}/svmGenericKernelBasicOperationsTest.txt
               svmGenericKernelBasicOperationsTest
-		 ${TEMP}/svmGenericKernelBasicOperationsTest.txt
+                 ${TEMP}/svmGenericKernelBasicOperationsTest.txt
 )
 
 ADD_TEST(utTvSvmComposedKernelFunctorTest ${UTILITIES_TESTS}
 --compare-n-ascii ${NOTOL} 3
-		  ${BASELINE_FILES}/utTvSVMComposedKernelFunctorResTest.txt
-		  ${TEMP}/SVMComposedKernelFunctorTestRes.txt
-		  ${BASELINE_FILES}/utTvSVMComposedKernelFunctorTest.txt
-		  ${TEMP}/SVMComposedKernelFunctorTestOutput.txt
-		  ${BASELINE_FILES}/utTvSVMComposedKernelFunctorTest.txt
-		  ${TEMP}/SVMComposedKernelFunctorTestOutputBis.txt
+                  ${BASELINE_FILES}/utTvSVMComposedKernelFunctorResTest.txt
+                  ${TEMP}/SVMComposedKernelFunctorTestRes.txt
+                  ${BASELINE_FILES}/utTvSVMComposedKernelFunctorTest.txt
+                  ${TEMP}/SVMComposedKernelFunctorTestOutput.txt
+                  ${BASELINE_FILES}/utTvSVMComposedKernelFunctorTest.txt
+                  ${TEMP}/SVMComposedKernelFunctorTestOutputBis.txt
 
                otbSVMComposedKernelFunctorTest
-	           ${TEMP}/SVMComposedKernelFunctorTestRes.txt
-	           ${TEMP}/SVMComposedKernelFunctorTestOutput.txt
-		   ${TEMP}/SVMComposedKernelFunctorTestOutputBis.txt
+                   ${TEMP}/SVMComposedKernelFunctorTestRes.txt
+                   ${TEMP}/SVMComposedKernelFunctorTestOutput.txt
+                   ${TEMP}/SVMComposedKernelFunctorTestOutputBis.txt
 )
 
 # -------            lib otb6S   ------------------------------
@@ -352,13 +352,13 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 # Case for release 2.2.1
 IF(OTB_COMPILE_JPEG2000)
 ADD_TEST(utTvOpenJpegEncoder ${UTILITIES_TESTS}
-	openJpegEncoder
-	${TEMP}/testjpeg.j2k
+        openJpegEncoder
+        ${TEMP}/testjpeg.j2k
 )
 
 ADD_TEST(utTvOpenJpegDecoder ${UTILITIES_TESTS}
-	openJpegDecoder
-	${TEMP}/testjpeg.j2k
+        openJpegDecoder
+        ${TEMP}/testjpeg.j2k
 )
 SET_TESTS_PROPERTIES(utTvOpenJpegDecoder PROPERTIES DEPENDS utTvOpenJpegEncoder)
 ENDIF(OTB_COMPILE_JPEG2000)
@@ -373,43 +373,43 @@ ENDIF(NOT OTB_USE_EXTERNAL_EXPAT)
 # -------            lib OpenThreads  ------------------------------
 IF(NOT OTB_USE_EXTERNAL_OPENTHREADS)
   ADD_TEST(utTvOpenthreadsSimpleThreader ${UTILITIES_TESTS}
-	openthreadsSimpleThreader
-	2 # [NUM_ELTS]
-	1 # [NUM_THREADS]
-	)
+        openthreadsSimpleThreader
+        2 # [NUM_ELTS]
+        1 # [NUM_THREADS]
+        )
   ADD_TEST(utTvOpenthreadsWorkCrew ${UTILITIES_TESTS}
-	openthreadsWorkCrew
-	1 # [NUM_THREADS]
-	)
+        openthreadsWorkCrew
+        1 # [NUM_THREADS]
+        )
 ENDIF(NOT OTB_USE_EXTERNAL_OPENTHREADS)
 
 # -------            SIFT   -------------------------------------
 ADD_TEST(utTv2DSiftImageSquareSyntheticRotate10 ${UTILITIES_TESTS}
-	 itk2DScaleInvariantFeatureImageFilterTest
-	 ${INPUTDATA}/carre.png
+         itk2DScaleInvariantFeatureImageFilterTest
+         ${INPUTDATA}/carre.png
          ${TEMP}/itk2DScaleInvariantFeatureImageFilter_carre1.png
-	 ${TEMP}/itk2DScaleInvariantFeatureImageFilter_carre2.png
-	 ${TEMP}/itk2DScaleInvariantFeatureImageFilter_carre_keys1.png
-	 ${TEMP}/itk2DScaleInvariantFeatureImageFilter_carre_keys2.png
-	 1 10 0.5 0  )
+         ${TEMP}/itk2DScaleInvariantFeatureImageFilter_carre2.png
+         ${TEMP}/itk2DScaleInvariantFeatureImageFilter_carre_keys1.png
+         ${TEMP}/itk2DScaleInvariantFeatureImageFilter_carre_keys2.png
+         1 10 0.5 0  )
 
 ADD_TEST(utTv2DSiftImageGridSyntheticRotate10 ${UTILITIES_TESTS}
-	 itk2DScaleInvariantFeatureImageFilterTest
-	 ${INPUTDATA}/damier.png
-	 ${TEMP}/itk2DScaleInvariantFeatureImageFilter_damier1.png
-	 ${TEMP}/itk2DScaleInvariantFeatureImageFilter_damier2.png
-	 ${TEMP}/itk2DScaleInvariantFeatureImageFilter_damier_keys1.png
-	 ${TEMP}/itk2DScaleInvariantFeatureImageFilter_damier_keys2.png
-	 1 10 0.5 0 )
+         itk2DScaleInvariantFeatureImageFilterTest
+         ${INPUTDATA}/damier.png
+         ${TEMP}/itk2DScaleInvariantFeatureImageFilter_damier1.png
+         ${TEMP}/itk2DScaleInvariantFeatureImageFilter_damier2.png
+         ${TEMP}/itk2DScaleInvariantFeatureImageFilter_damier_keys1.png
+         ${TEMP}/itk2DScaleInvariantFeatureImageFilter_damier_keys2.png
+         1 10 0.5 0 )
 
 ADD_TEST(utTv2DSiftImageSceneSyntheticRotate10 ${UTILITIES_TESTS}
-	 itk2DScaleInvariantFeatureImageFilterTest
-	 ${INPUTDATA}/scene.png
-	 ${TEMP}/itk2DScaleInvariantFeatureImageFilter_scene1.png
-	 ${TEMP}/itk2DScaleInvariantFeatureImageFilter_scene2.png
-	 ${TEMP}/itk2DScaleInvariantFeatureImageFilter_scene_keys1.png
-	 ${TEMP}/itk2DScaleInvariantFeatureImageFilter_scene_keys2.png
-	 1 10 0.5 0 )
+         itk2DScaleInvariantFeatureImageFilterTest
+         ${INPUTDATA}/scene.png
+         ${TEMP}/itk2DScaleInvariantFeatureImageFilter_scene1.png
+         ${TEMP}/itk2DScaleInvariantFeatureImageFilter_scene2.png
+         ${TEMP}/itk2DScaleInvariantFeatureImageFilter_scene_keys1.png
+         ${TEMP}/itk2DScaleInvariantFeatureImageFilter_scene_keys2.png
+         1 10 0.5 0 )
 
 # -------            lib Kml   ------------------------------
 FOREACH(id_test createkml helloattrs helloenum hellofolder hellogeometry helloregion helloworld parsekml )

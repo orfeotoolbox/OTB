@@ -43,12 +43,12 @@ ADD_TEST(raTvARVI_RAndBAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS2}
                     ${TEMP}/raRAndBAndNIRVegetationIndex_ARVI_verySmallFSATSWcRcBcNir.tif
         otbRAndBAndNIRVegetationIndexImageFilter
         ARVI
-	${INPUTDATA}/verySmallFSATSW_r.tif
-	${INPUTDATA}/verySmallFSATSW_b.tif
-	${INPUTDATA}/verySmallFSATSW_nir.tif
-	${TEMP}/raRAndBAndNIRVegetationIndex_ARVI_verySmallFSATSWcRcBcNir.tif
+        ${INPUTDATA}/verySmallFSATSW_r.tif
+        ${INPUTDATA}/verySmallFSATSW_b.tif
+        ${INPUTDATA}/verySmallFSATSW_nir.tif
+        ${TEMP}/raRAndBAndNIRVegetationIndex_ARVI_verySmallFSATSWcRcBcNir.tif
         0.6 # Gamma parameter
-	)
+        )
 
 # -------            otb::MultiChannelRAndBAndNIRVegetationIndexImageFilter   ------------------------------
 
@@ -60,11 +60,11 @@ ADD_TEST(raTvARVI_MultiChannelRAndBAndNIRVegetationIndexImageFilter ${RADIOMETRY
                     ${TEMP}/raMultiChannelRAndBAndNIRVegetationIndex_ARVI_verySmallFSATSWcRcBcNir.tif
         otbMultiChannelRAndBAndNIRVegetationIndexImageFilter
         ARVI
-	${INPUTDATA}/verySmallFSATSW.tif
-	${TEMP}/raMultiChannelRAndBAndNIRVegetationIndex_ARVI_verySmallFSATSWcRcBcNir.tif
-	3 1 4
+        ${INPUTDATA}/verySmallFSATSW.tif
+        ${TEMP}/raMultiChannelRAndBAndNIRVegetationIndex_ARVI_verySmallFSATSWcRcBcNir.tif
+        3 1 4
     0.6 # Gamma parameter
-	)
+        )
 
 # -------            otb::ImageToLuminanceImageFilter   ------------------------------
 ADD_TEST(raTuImageToLuminanceImageFilterNew ${RADIOMETRY_TESTS2}
@@ -75,16 +75,16 @@ ADD_TEST(raTvImageToLuminanceImageFilter ${RADIOMETRY_TESTS2}
   --compare-image ${EPSILON_12}  ${BASELINE}/raTvImageToLuminanceImageFilter.tif
                           ${TEMP}/raTvImageToLuminanceImageFilter.tif
         otbImageToLuminanceImageFilter
-	${INPUTDATA}/verySmallFSATSW.tif
-	${TEMP}/raTvImageToLuminanceImageFilter.tif
-	10   #channel 1 alpha
-	20   #channel 2 alpha
-	30   #channel 3 alpha
-	40   #channel 4 alpha
-	1    #channel 1 beta
-	2    #channel 2 beta
-	3    #channel 3 beta
-	4    #channel 4 beta
+        ${INPUTDATA}/verySmallFSATSW.tif
+        ${TEMP}/raTvImageToLuminanceImageFilter.tif
+        10   #channel 1 alpha
+        20   #channel 2 alpha
+        30   #channel 3 alpha
+        40   #channel 4 alpha
+        1    #channel 1 beta
+        2    #channel 2 beta
+        3    #channel 3 beta
+        4    #channel 4 beta
          )
 
 IF(OTB_DATA_USE_LARGEINPUT)
@@ -92,16 +92,16 @@ ADD_TEST(raTvImageToLuminanceImageFilterAutoSpot5 ${RADIOMETRY_TESTS2}
   --compare-image ${EPSILON_12}  ${BASELINE}/raTvImageToLuminanceImageFilterAutoSpot5.tif
                           ${TEMP}/raTvImageToLuminanceImageFilterAutoSpot5.tif
         otbImageToLuminanceImageFilterAuto
-	${LARGEINPUT}/SPOT5/TEHERAN/IMAGERY.TIF
-	${TEMP}/raTvImageToLuminanceImageFilterAutoSpot5.tif
+        ${LARGEINPUT}/SPOT5/TEHERAN/IMAGERY.TIF
+        ${TEMP}/raTvImageToLuminanceImageFilterAutoSpot5.tif
          )
 
 ADD_TEST(raTvImageToLuminanceImageFilterAutoIkonos ${RADIOMETRY_TESTS2}
   --compare-image ${EPSILON_12}  ${BASELINE}/raTvImageToLuminanceImageFilterAutoIkonos.tif
                           ${TEMP}/raTvImageToLuminanceImageFilterAutoIkonos.tif
         otbImageToLuminanceImageFilterAuto
-	${LARGEINPUT}/IKONOS/BLOSSEVILLE/po_2619900_pan_0000000.tif
-	${TEMP}/raTvImageToLuminanceImageFilterAutoIkonos.tif
+        ${LARGEINPUT}/IKONOS/BLOSSEVILLE/po_2619900_pan_0000000.tif
+        ${TEMP}/raTvImageToLuminanceImageFilterAutoIkonos.tif
          )
 
 ADD_TEST(raTvImageToLuminanceImageFilterAutoWV2PAN ${RADIOMETRY_TESTS2}
@@ -166,29 +166,29 @@ ADD_TEST(raTvLuminanceToReflectanceImageFilter ${RADIOMETRY_TESTS2}
   --compare-image ${EPSILON_12}  ${BASELINE}/raTvLuminanceToReflectanceImageFilterDsol.tif
                           ${TEMP}/raTvLuminanceToReflectanceImageFilterDsol.tif
         otbLuminanceToReflectanceImageFilter
-	${INPUTDATA}/verySmallFSATSW.tif
-	${TEMP}/raTvLuminanceToReflectanceImageFilterDsol.tif
-	0.2 #radius
-	10  #channel 1 illumination
-	20  #channel 2 illumination
-	30  #channel 3 illumination
-	40  #channel 4 illumination
-	0.9923885328 #d/d0 corresponding to the date 03/05
+        ${INPUTDATA}/verySmallFSATSW.tif
+        ${TEMP}/raTvLuminanceToReflectanceImageFilterDsol.tif
+        0.2 #radius
+        10  #channel 1 illumination
+        20  #channel 2 illumination
+        30  #channel 3 illumination
+        40  #channel 4 illumination
+        0.9923885328 #d/d0 corresponding to the date 03/05
          )
 
 ADD_TEST(raTvLuminanceToReflectanceImageFilterDayMonth ${RADIOMETRY_TESTS2}
   --compare-image ${EPSILON_12}  ${BASELINE}/raTvLuminanceToReflectanceImageFilter.tif
                           ${TEMP}/raTvLuminanceToReflectanceImageFilterDayMounth.tif
         otbLuminanceToReflectanceImageFilter
-	${INPUTDATA}/verySmallFSATSW.tif
-	${TEMP}/raTvLuminanceToReflectanceImageFilterDayMounth.tif
-	0.2 #radius
-	10  #channel 1 illumination
-	20  #channel 2 illumination
-	30  #channel 3 illumination
-	40  #channel 4 illumination
-	3   #day
-	5   #mounth
+        ${INPUTDATA}/verySmallFSATSW.tif
+        ${TEMP}/raTvLuminanceToReflectanceImageFilterDayMounth.tif
+        0.2 #radius
+        10  #channel 1 illumination
+        20  #channel 2 illumination
+        30  #channel 3 illumination
+        40  #channel 4 illumination
+        3   #day
+        5   #mounth
         )
 
 IF(OTB_DATA_USE_LARGEINPUT)
@@ -197,16 +197,16 @@ ADD_TEST(raTvLuminanceToReflectanceImageFilterAutoSpot5 ${RADIOMETRY_TESTS2}
   --compare-image ${EPSILON_12}  ${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoSpot5.tif
                           ${TEMP}/raTvLuminanceToReflectanceImageFilterAutoSpot5.tif
         otbLuminanceToReflectanceImageFilterAuto
-	${LARGEINPUT}/SPOT5/TEHERAN/IMAGERY.TIF
-	${TEMP}/raTvLuminanceToReflectanceImageFilterAutoSpot5.tif
+        ${LARGEINPUT}/SPOT5/TEHERAN/IMAGERY.TIF
+        ${TEMP}/raTvLuminanceToReflectanceImageFilterAutoSpot5.tif
          )
 
 ADD_TEST(raTvLuminanceToReflectanceImageFilterAutoIkonos ${RADIOMETRY_TESTS2}
   --compare-image ${EPSILON_12}  ${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoIkonos.tif
                           ${TEMP}/raTvLuminanceToReflectanceImageFilterAutoIkonos.tif
         otbLuminanceToReflectanceImageFilterAuto
-	${LARGEINPUT}/IKONOS/BLOSSEVILLE/po_2619900_pan_0000000.tif
-	${TEMP}/raTvLuminanceToReflectanceImageFilterAutoIkonos.tif
+        ${LARGEINPUT}/IKONOS/BLOSSEVILLE/po_2619900_pan_0000000.tif
+        ${TEMP}/raTvLuminanceToReflectanceImageFilterAutoIkonos.tif
          )
 
 ADD_TEST(raTvLuminanceToReflectanceImageFilterAutoWV2PAN ${RADIOMETRY_TESTS2}
@@ -270,68 +270,68 @@ ADD_TEST(raTvImageToReflectanceImageFilter ${RADIOMETRY_TESTS2}
   --compare-image ${EPSILON_12}  ${BASELINE}/raTvImageToReflectanceImageFilterDsol.tif
                           ${TEMP}/raTvImageToReflectanceImageFilterDsol.tif
         otbImageToReflectanceImageFilter
-	${INPUTDATA}/verySmallFSATSW.tif
-	${TEMP}/raTvImageToReflectanceImageFilterDsol.tif
-	0.2 #radius
-	1   #channel 1 alpha
-	2   #channel 2 alpha
-	3   #channel 3 alpha
-	4   #channel 4 alpha
-	10  #channel 1 beta
-	11  #channel 2 beta
-	12  #channel 3 beta
-	13  #channel 4 beta
-	10  #channel 1 illumination
-	20  #channel 2 illumination
-	30  #channel 3 illumination
-	40  #channel 4 illumination
-	0.9923885328 #d/d0 corresponding to the date 03/05
+        ${INPUTDATA}/verySmallFSATSW.tif
+        ${TEMP}/raTvImageToReflectanceImageFilterDsol.tif
+        0.2 #radius
+        1   #channel 1 alpha
+        2   #channel 2 alpha
+        3   #channel 3 alpha
+        4   #channel 4 alpha
+        10  #channel 1 beta
+        11  #channel 2 beta
+        12  #channel 3 beta
+        13  #channel 4 beta
+        10  #channel 1 illumination
+        20  #channel 2 illumination
+        30  #channel 3 illumination
+        40  #channel 4 illumination
+        0.9923885328 #d/d0 corresponding to the date 03/05
          )
 
 ADD_TEST(raTvRomaniaImageToReflectance ${RADIOMETRY_TESTS2}
   --compare-image ${EPSILON_12}
-		  ${BASELINE}/raTvRomania_Reflectance.tif
+                  ${BASELINE}/raTvRomania_Reflectance.tif
                   ${TEMP}/raTvRomaniaReflectanceImage.tif
         otbImageToReflectanceImageFilter
-	${INPUTDATA}/Romania_Extract.tif
-	${TEMP}/raTvRomaniaReflectanceImage.tif
-	27.3                 # = 90-62.70 : elevation et azimuth solaire
+        ${INPUTDATA}/Romania_Extract.tif
+        ${TEMP}/raTvRomaniaReflectanceImage.tif
+        27.3                 # = 90-62.70 : elevation et azimuth solaire
         1.981247824          #channel 1 alpha = 0.881338*2.24800
-	4.332207085          #channel 2 alpha = 0.858713*5.04500
-	2.32064768           #channel 3 alpha = 0.685568*3.38500
-	9.3177861            #channel 4 alpha = 6.19122*1.50500
-	0                    #channel 1 beta
-	0                    #channel 2 beta
-	0                    #channel 3 beta
-	0                    #channel 4 beta
-	1057.56              #channel 1 illumination
-	1570.23              #channel 2 illumination
-	1842.94              #channel 3 illumination
-	232.820              #channel 4 illumination
-	0.9889145564708814   #= sqrt(0.977952) d/d0 corresponding to the date 03/05
+        4.332207085          #channel 2 alpha = 0.858713*5.04500
+        2.32064768           #channel 3 alpha = 0.685568*3.38500
+        9.3177861            #channel 4 alpha = 6.19122*1.50500
+        0                    #channel 1 beta
+        0                    #channel 2 beta
+        0                    #channel 3 beta
+        0                    #channel 4 beta
+        1057.56              #channel 1 illumination
+        1570.23              #channel 2 illumination
+        1842.94              #channel 3 illumination
+        232.820              #channel 4 illumination
+        0.9889145564708814   #= sqrt(0.977952) d/d0 corresponding to the date 03/05
         )
 
 ADD_TEST(raTvImageToReflectanceImageFilterDayMounth ${RADIOMETRY_TESTS2}
   --compare-image ${EPSILON_12}  ${BASELINE}/raTvImageToReflectanceImageFilter.tif
                           ${TEMP}/raTvImageToReflectanceImageFilterDayMounth.tif
         otbImageToReflectanceImageFilter
-	${INPUTDATA}/verySmallFSATSW.tif
-	${TEMP}/raTvImageToReflectanceImageFilterDayMounth.tif
-	0.2 #radius
-	1   #channel 1 alpha
-	2   #channel 2 alpha
-	3   #channel 3 alpha
-	4   #channel 4 alpha
-	10  #channel 1 beta
-	11  #channel 2 beta
-	12  #channel 3 beta
-	13  #channel 4 beta
-	10  #channel 1 illumination
-	20  #channel 2 illumination
-	30  #channel 3 illumination
-	40  #channel 4 illumination
-	3   #day
-	5   #mounth
+        ${INPUTDATA}/verySmallFSATSW.tif
+        ${TEMP}/raTvImageToReflectanceImageFilterDayMounth.tif
+        0.2 #radius
+        1   #channel 1 alpha
+        2   #channel 2 alpha
+        3   #channel 3 alpha
+        4   #channel 4 alpha
+        10  #channel 1 beta
+        11  #channel 2 beta
+        12  #channel 3 beta
+        13  #channel 4 beta
+        10  #channel 1 illumination
+        20  #channel 2 illumination
+        30  #channel 3 illumination
+        40  #channel 4 illumination
+        3   #day
+        5   #mounth
        )
 
 IF(OTB_DATA_USE_LARGEINPUT)
@@ -339,14 +339,14 @@ ADD_TEST(raTvImageToReflectanceImageFilterAuto ${RADIOMETRY_TESTS2}
   --compare-image ${EPSILON_12}  ${BASELINE}/raTvImageToReflectanceImageFilterAuto.tif
                           ${TEMP}/raTvImageToReflectanceImageFilterAuto.tif
         otbImageToReflectanceImageFilterAuto
-	${LARGEINPUT}/SPOT5/TEHERAN/IMAGERY.TIF
-	${TEMP}/raTvImageToReflectanceImageFilterAuto.tif
+        ${LARGEINPUT}/SPOT5/TEHERAN/IMAGERY.TIF
+        ${TEMP}/raTvImageToReflectanceImageFilterAuto.tif
          )
 
 ADD_TEST(raTuImageToReflectanceImageFilterAutoFORMOSAT2 ${RADIOMETRY_TESTS2}
         otbImageToReflectanceImageFilterAuto
-		${LARGEINPUT}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF
-		${TEMP}/raTvImageToReflectanceImageFilterAutoFORMOSAT2.tif
+                ${LARGEINPUT}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF
+                ${TEMP}/raTvImageToReflectanceImageFilterAutoFORMOSAT2.tif
          )
          
 ENDIF(OTB_DATA_USE_LARGEINPUT)
@@ -367,21 +367,21 @@ ADD_TEST(raTvDEMCaracteristicsExtractor ${RADIOMETRY_TESTS3}
                      ${TEMP}/raTvDEMCaracteristicsExtractorSlop.tif
                      ${BASELINE}/raTvDEMCaracteristicsExtractorAspect.tif
                      ${TEMP}/raTvDEMCaracteristicsExtractorAspect.tif
-		     ${BASELINE}/raTvDEMCaracteristicsExtractorIncidence.tif
+                     ${BASELINE}/raTvDEMCaracteristicsExtractorIncidence.tif
                      ${TEMP}/raTvDEMCaracteristicsExtractorIncidence.tif
                      ${BASELINE}/raTvDEMCaracteristicsExtractorExitance.tif
                      ${TEMP}/raTvDEMCaracteristicsExtractorExitance.tif
         otbDEMCaracteristicsExtractor
-	${INPUTDATA}/pyramide.tif
-	20 # view azimut
-	40 # view angle
-	10 # solar azimut
-	30 # solar angle
-	${TEMP}/raTvDEMCaracteristicsExtractorSlop.tif
-	${TEMP}/raTvDEMCaracteristicsExtractorAspect.tif
-	${TEMP}/raTvDEMCaracteristicsExtractorIncidence.tif
-	${TEMP}/raTvDEMCaracteristicsExtractorExitance.tif
-	)
+        ${INPUTDATA}/pyramide.tif
+        20 # view azimut
+        40 # view angle
+        10 # solar azimut
+        30 # solar angle
+        ${TEMP}/raTvDEMCaracteristicsExtractorSlop.tif
+        ${TEMP}/raTvDEMCaracteristicsExtractorAspect.tif
+        ${TEMP}/raTvDEMCaracteristicsExtractorIncidence.tif
+        ${TEMP}/raTvDEMCaracteristicsExtractorExitance.tif
+        )
 
 
 # -------            otb::AtmosphericCorrectionParameters   ------------------------------
@@ -394,11 +394,11 @@ ADD_TEST(raTuAtmosphericCorrectionParametersNew ${RADIOMETRY_TESTS3}
 # in otbAtmosphericCorrectionParameters.h/.cxx
 ADD_TEST(raTvFilterFunctionValuesTest ${RADIOMETRY_TESTS3}
         otbFilterFunctionValuesTest
-	${TEMP}/raTvFilterFunctionValuesTest.txt
-	0.5             # lambda min
-	0.7             # lambda max
-	0.05            # user step
-	0.2 0.5 0.3 0.9 0.8 # vector
+        ${TEMP}/raTvFilterFunctionValuesTest.txt
+        0.5             # lambda min
+        0.7             # lambda max
+        0.05            # user step
+        0.2 0.5 0.3 0.9 0.8 # vector
 )
 
 ##########           otb::FilterFunctionValues DigitalGlobe sensitivity files -------------------
@@ -440,8 +440,8 @@ ADD_TEST(raTvSIXSTraitsComputeAtmosphericParametersTest ${RADIOMETRY_TESTS3}
     --compare-ascii ${EPSILON_4} ${BASELINE_FILES}/raTvSIXSTraitsComputeAtmosphericParametersTest.txt
                            ${TEMP}/raTvSIXSTraitsComputeAtmosphericParametersTest.txt
         otbSIXSTraitsComputeAtmosphericParametersTest
-	${INPUTDATA}/in6S_otb
-	${TEMP}/raTvSIXSTraitsComputeAtmosphericParametersTest.txt
+        ${INPUTDATA}/in6S_otb
+        ${TEMP}/raTvSIXSTraitsComputeAtmosphericParametersTest.txt
 )
 
 
@@ -470,40 +470,40 @@ ADD_TEST(raTvReflectanceToSurfaceReflectanceImageFilter ${RADIOMETRY_TESTS3}
   --compare-image ${EPSILON_12}  ${BASELINE}/raTvReflectanceToSurfaceReflectanceImageFilter.tif
                               ${TEMP}/raTvReflectanceToSurfaceReflectanceImageFilter.tif
         otbReflectanceToSurfaceReflectanceImageFilterTest
-	${INPUTDATA}/verySmallFSATSW.tif
-	${TEMP}/raTvReflectanceToSurfaceReflectanceImageFilter.tif
-	# SAME VALUE FOR EACH CHANNEL
-	1 1 1 1 # intrinsic atmospheric reflectance
-	2 2 2 2 # spherical albedo of the atmosphere
-	3 3 3 3 # total transmission
-	2 2 2 2 # downward transmittance
-	3 3 3 3 # upward transmittance
+        ${INPUTDATA}/verySmallFSATSW.tif
+        ${TEMP}/raTvReflectanceToSurfaceReflectanceImageFilter.tif
+        # SAME VALUE FOR EACH CHANNEL
+        1 1 1 1 # intrinsic atmospheric reflectance
+        2 2 2 2 # spherical albedo of the atmosphere
+        3 3 3 3 # total transmission
+        2 2 2 2 # downward transmittance
+        3 3 3 3 # upward transmittance
        )
 
-IF(OTB_DATA_USE_LARGEINPUT)       
+IF(OTB_DATA_USE_LARGEINPUT)
 #this test was comment after the refactoring of astmospheric correction classes
-#//TODO Need to rewrite tests with baselines generated directly with 6S. 
+#//TODO Need to rewrite tests with baselines generated directly with 6S.
 #ADD_TEST(raTvReflectanceToSurfaceReflectanceImageFilter2 ${RADIOMETRY_TESTS3}
 #  --compare-ascii ${EPSILON_12}  ${BASELINE_FILES}/raTvReflectanceToSurfaceReflectanceImageFilter2.txt
 #                              ${TEMP}/raTvReflectanceToSurfaceReflectanceImageFilter2.txt
 #        otbReflectanceToSurfaceReflectanceImageFilterTest2
 #    ${LARGEINPUT}/SPOT5/TEHERAN/IMAGERY.TIF
 #    ${TEMP}/raTvReflectanceToSurfaceReflectanceImageFilter2.txt
-#       )      
-ENDIF(OTB_DATA_USE_LARGEINPUT)    
+#       )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 ADD_TEST(raTvRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter ${RADIOMETRY_TESTS3}
   --compare-image ${EPSILON_12}
-		  ${BASELINE}/raTvRomania_Correction.tif
-		  ${TEMP}/raTvRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter.tif
+                  ${BASELINE}/raTvRomania_Correction.tif
+                  ${TEMP}/raTvRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter.tif
         otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter
-		${BASELINE}/raTvRomania_Reflectance.tif
-		${TEMP}/raTvRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter.tif
-		${INPUTDATA}/romania_parameter.txt                           # atmo param;
-		${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_B3.txt   # wavelengths, channel 3
-		${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_B2.txt   # wavelengths, channel 2
-		${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_B1.txt   # wavelengths, channel 1
-		${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_MIR.txt  # wavelengths, channel 4
+                ${BASELINE}/raTvRomania_Reflectance.tif
+                ${TEMP}/raTvRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter.tif
+                ${INPUTDATA}/romania_parameter.txt                           # atmo param;
+                ${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_B3.txt   # wavelengths, channel 3
+                ${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_B2.txt   # wavelengths, channel 2
+                ${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_B1.txt   # wavelengths, channel 1
+                ${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_MIR.txt  # wavelengths, channel 4
       )
 
 # -------            otb::SurfaceAdjacencyEffect6SCorrectionSchemeFilter   ------------------------------
@@ -517,17 +517,17 @@ ADD_TEST(raTvSurfaceAdjacencyEffect6SCorrectionSchemeFilter ${RADIOMETRY_TESTS3}
 # --compare-ascii ${EPSILON_6} ${BASELINE_FILES}/raTvSurfaceAdjacencyEffect6SCorrectionSchemeFilterOutput6SVallues.txt
 #                           ${TEMP}/raTvSurfaceAdjacencyEffect6SCorrectionSchemeFilterOutput6SVallues.txt
         otbSurfaceAdjacencyEffect6SCorrectionSchemeFilter
-	${BASELINE}/raTvRomania_Correction.tif
-	${TEMP}/raTvSurfaceAdjacencyEffect6SCorrectionSchemeFilter.tif
-	2                                                            # Radius;
-	0.020                                                        # pixel spacing in kilometers
-	${INPUTDATA}/romania_parameter.txt                           # atmo param;
-	${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_B3.txt   # wavelengths, channel 3
-	${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_B2.txt   # wavelengths, channel 2
-	${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_B1.txt   # wavelengths, channel 1
-	${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_MIR.txt  # wavelengths, channel 4
-	# FOR plateform verification only : to remove when OK
-	${TEMP}/raTvSurfaceAdjacencyEffect6SCorrectionSchemeFilterOutput6SVallues.txt
+        ${BASELINE}/raTvRomania_Correction.tif
+        ${TEMP}/raTvSurfaceAdjacencyEffect6SCorrectionSchemeFilter.tif
+        2                                                            # Radius;
+        0.020                                                        # pixel spacing in kilometers
+        ${INPUTDATA}/romania_parameter.txt                           # atmo param;
+        ${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_B3.txt   # wavelengths, channel 3
+        ${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_B2.txt   # wavelengths, channel 2
+        ${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_B1.txt   # wavelengths, channel 1
+        ${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_MIR.txt  # wavelengths, channel 4
+        # FOR plateform verification only : to remove when OK
+        ${TEMP}/raTvSurfaceAdjacencyEffect6SCorrectionSchemeFilterOutput6SVallues.txt
 )
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -539,7 +539,7 @@ ADD_TEST(raTuAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsNew ${R
 
 ADD_TEST(raTvAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms ${RADIOMETRY_TESTS4}
 --compare-ascii ${EPSILON_4}
-		${BASELINE_FILES}/raTvSIXSTraitsComputeAtmosphericParametersTest.txt
+                ${BASELINE_FILES}/raTvSIXSTraitsComputeAtmosphericParametersTest.txt
                 ${TEMP}/raTvCorrectionTo6SRadiative.txt
         otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
                 ${INPUTDATA}/in6S_otb
@@ -548,7 +548,7 @@ ADD_TEST(raTvAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms ${RADI
 
 ADD_TEST(raTvAtmosphericCorrectionSequencementTest ${RADIOMETRY_TESTS4}
         --compare-image ${EPSILON_10}
-		${BASELINE}/raTvRomaniaAtmosphericCorrectionSequencement.tif
+                ${BASELINE}/raTvRomaniaAtmosphericCorrectionSequencement.tif
                 ${TEMP}/raTvRomaniaAtmosphericCorrectionSequencement.tif
         otbAtmosphericCorrectionSequencementTest
         ${INPUTDATA}/Romania_Extract.tif
@@ -557,8 +557,8 @@ ADD_TEST(raTvAtmosphericCorrectionSequencementTest ${RADIOMETRY_TESTS4}
         ${INPUTDATA}/atmosphericCorrectionSequencement_alpha_beta.txt
 # LuminanceToReflectance parameters
         27.3    #elevation et azimuth solaire
-	4       #day
-	12      #month
+        4       #day
+        12      #month
         ${INPUTDATA}/atmosphericCorrectionSequencement_solar_illumination.txt
 # AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms parameters
         152.7
@@ -572,8 +572,8 @@ ADD_TEST(raTvAtmosphericCorrectionSequencementTest ${RADIOMETRY_TESTS4}
         ${INPUTDATA}/atmosphericCorrectionSequencement_wavelength_spectral_bands_spot4_1.txt
 # ReflectanceToSurfaceReflectance parameters
 # SurfaceAdjacencyEffect6SCorrectionSchemeFilter parameters
-	2       # Radius;
-	0.020   # pixel spacing in kilometers
+        2       # Radius;
+        0.020   # pixel spacing in kilometers
         )
 
 
@@ -1116,15 +1116,15 @@ ADD_TEST(raTvAeronet_ArcachonLevel10_ExtractData ${RADIOMETRY_TESTS8}
 
 # -------            TerraSarBrightnessFunctor   ------------------------------
 ADD_TEST(raTvTerraSarBrightnessFunctor ${RADIOMETRY_TESTS9}
- --compare-ascii ${EPSILON_12}  
+ --compare-ascii ${EPSILON_12}
                                ${BASELINE_FILES}/raTvTerraSarBrightnessImageFunctor.txt
                                ${TEMP}/raTvTerraSarBrightnessImageFunctor.txt
         otbTerraSarBrightnessFunctor
-		12 # real pixel
-		12 # complex real part pixel
-		0  # complex imaginary part pixel
-		1  # calFactor
-		${TEMP}/raTvTerraSarBrightnessImageFunctor.txt
+                12 # real pixel
+                12 # complex real part pixel
+                0  # complex imaginary part pixel
+                1  # calFactor
+                ${TEMP}/raTvTerraSarBrightnessImageFunctor.txt
 )
 
 # -------            TerraSarBrightnessImageFilter   ------------------------------
@@ -1133,69 +1133,69 @@ ADD_TEST(raTuTerraSarBrightnessImageFilterNew ${RADIOMETRY_TESTS9}
 )
 
 ADD_TEST(raTvTerraSarBrightnessImageFilterTest ${RADIOMETRY_TESTS9}
-    --compare-image ${EPSILON_12}  
+    --compare-image ${EPSILON_12}
                 ${BASELINE}/raTvTerraSarBrightnessImageFilterTest.tif
                 ${TEMP}/raTvTerraSarBrightnessImageFilterTest.tif
         otbTerraSarBrightnessImageFilterTest
         ${INPUTDATA}/ExtractIMAGE_HH_SRA_strip_012.tif
         ${TEMP}/raTvTerraSarBrightnessImageFilterTest.tif
-	0 # don't use metadata
-	0 # results in linear scale
+        0 # don't use metadata
+        0 # results in linear scale
 )
 
 ADD_TEST(raTvTerraSarBrightnessImageComplexFilterTest ${RADIOMETRY_TESTS9}
-    --compare-image ${EPSILON_12}  
+    --compare-image ${EPSILON_12}
                 ${BASELINE}/raTvTerraSarBrightnessImageComplexFilterTest.tif
                 ${TEMP}/raTvTerraSarBrightnessImageComplexFilterTest.tif
         otbTerraSarBrightnessImageComplexFilterTest
         ${INPUTDATA}/ExtractIMAGE_HH_SRA_spot_074.tif
         ${TEMP}/raTvTerraSarBrightnessImageComplexFilterTest.tif
-	0 # don't use metadata
-	0 # results in linear scale
+        0 # don't use metadata
+        0 # results in linear scale
 )
 
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(raTvTerraSarBrightnessImageFilterUPSALA ${RADIOMETRY_TESTS9}
-    --compare-image ${EPSILON_12}  
+    --compare-image ${EPSILON_12}
                 ${BASELINE}/raTvTerraSarBrightnessImageFilter_UPSALA.tif
                 ${TEMP}/raTvTerraSarBrightnessImageFilter_UPSALA.tif
         otbTerraSarBrightnessImageFilterTest
         ${LARGEINPUT}/TERRASARX/UPSALA_GLACIER/TSX1_SAR__MGD/IMAGEDATA/IMAGE_HH_SRA_strip_012.tif
         ${TEMP}/raTvTerraSarBrightnessImageFilter_UPSALA.tif
-	1 # use metadata
-	0 # results in linear scale
-	2000 2000 250 250 # Extract
+        1 # use metadata
+        0 # results in linear scale
+        2000 2000 250 250 # Extract
 )
 
 ADD_TEST(raTvTerraSarBrightnessImageComplexFilterTORONTO ${RADIOMETRY_TESTS9}
-    --compare-image ${EPSILON_12}  
+    --compare-image ${EPSILON_12}
                 ${BASELINE}/raTvTerraSarBrightnessComplexImageFilter_TORONTO.tif
                 ${TEMP}/raTvTerraSarBrightnessImageComplexFilter_TORONTO.tif
         otbTerraSarBrightnessImageComplexFilterTest
         ${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
         ${TEMP}/raTvTerraSarBrightnessImageComplexFilter_TORONTO.tif
-	1 # use metadata
-	0 # results in linear scale
-	2000 2000 250 250 # Extract
+        1 # use metadata
+        0 # results in linear scale
+        2000 2000 250 250 # Extract
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 # -------            SarParametricMapFunction   ------------------------------
 ADD_TEST(raTuSarParametricMapFunction ${RADIOMETRY_TESTS9}
-	--compare-ascii ${NOTOL}
-		    ${BASELINE_FILES}/raTvSarParametricMapFunctionOutputAscii.txt
-	    	${TEMP}/raTvSarParametricMapFunctionOutputAscii.txt
+        --compare-ascii ${NOTOL}
+                    ${BASELINE_FILES}/raTvSarParametricMapFunctionOutputAscii.txt
+                    ${TEMP}/raTvSarParametricMapFunctionOutputAscii.txt
         otbSarParametricMapFunctionTest
-	 	${INPUTDATA}/scene.png
-	 	${TEMP}/raTvSarParametricMapFunctionOutputAscii.txt
+                 ${INPUTDATA}/scene.png
+                 ${TEMP}/raTvSarParametricMapFunctionOutputAscii.txt
 )
 ADD_TEST(raTvSarParametricMapFunctionToImageFilter  ${RADIOMETRY_TESTS9}
-	--compare-image ${EPSILON_12}
-	    	${BASELINE}/raTvSarParametricMapFunctionToImageFilter.tif
-	    	${TEMP}/raTvSarParametricMapFunctionToImageFilter.tif
+        --compare-image ${EPSILON_12}
+                    ${BASELINE}/raTvSarParametricMapFunctionToImageFilter.tif
+                    ${TEMP}/raTvSarParametricMapFunctionToImageFilter.tif
         otbSarParametricMapFunctionToImageFilter
-	    ${TEMP}/raTvSarParametricMapFunctionToImageFilter.tif
-	    100 200 # image size
+            ${TEMP}/raTvSarParametricMapFunctionToImageFilter.tif
+            100 200 # image size
 )
 
 
@@ -1208,103 +1208,103 @@ ADD_TEST(raTuSarRadiometricCalibrationFunctorWithoutNoise ${RADIOMETRY_TESTS9}
 )
 # -------            SarRadiometricCalibrationFunction   ------------------------------
 ADD_TEST(raTvSarRadiometricCalibrationFunction ${RADIOMETRY_TESTS9}
-	--compare-ascii ${NOTOL}
-		  ${BASELINE_FILES}/raTvSarRadiometricCalibrationFunctionOutputAscii.txt
-	      ${TEMP}/raTvSarRadiometricCalibrationFunctionOutputAsciiWithNoise.txt
+        --compare-ascii ${NOTOL}
+                  ${BASELINE_FILES}/raTvSarRadiometricCalibrationFunctionOutputAscii.txt
+              ${TEMP}/raTvSarRadiometricCalibrationFunctionOutputAsciiWithNoise.txt
         otbSarRadiometricCalibrationFunction
-	 	  ${INPUTDATA}/scene.png
-	 	  ${TEMP}/raTvSarRadiometricCalibrationFunctionOutputAsciiWithNoise.txt
+                   ${INPUTDATA}/scene.png
+                   ${TEMP}/raTvSarRadiometricCalibrationFunctionOutputAsciiWithNoise.txt
 )
 ADD_TEST(raTvSarRadiometricCalibrationFunctionWithoutNoise ${RADIOMETRY_TESTS9}
-	--compare-ascii ${NOTOL}
-		  ${BASELINE_FILES}/raTvSarRadiometricCalibrationFunctionOutputAscii.txt
-	      ${TEMP}/raTvSarRadiometricCalibrationFunctionOutputAsciiWithoutNoise.txt
+        --compare-ascii ${NOTOL}
+                  ${BASELINE_FILES}/raTvSarRadiometricCalibrationFunctionOutputAscii.txt
+              ${TEMP}/raTvSarRadiometricCalibrationFunctionOutputAsciiWithoutNoise.txt
         otbSarRadiometricCalibrationFunctionWithoutNoise
-	 	  ${INPUTDATA}/scene.png
-	 	  ${TEMP}/raTvSarRadiometricCalibrationFunctionOutputAsciiWithoutNoise.txt
+                   ${INPUTDATA}/scene.png
+                   ${TEMP}/raTvSarRadiometricCalibrationFunctionOutputAsciiWithoutNoise.txt
 )
 
 # -------  SarRadiometricCalibrationToImageFilter   ------------------------------
 
 IF(OTB_DATA_USE_LARGEINPUT)
 
-# Read data with a complex IFreader (Input data type = CInt16) and done ExtractROIFilter 
+# Read data with a complex IFreader (Input data type = CInt16) and done ExtractROIFilter
 # after RadiometricCalibFilter.
   ADD_TEST(raTvSarRadiometricCalibrationToImageWithComplexPixelFilter_TSX_PANGKALANBUUN  ${RADIOMETRY_TESTS9}
-	    --compare-image ${EPSILON_12}
-	    	${BASELINE}/raTvSarRadiometricCalibrationToImageFilter_TSX_PANGKALANBUUN_HH.tif
-	    	${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_PANGKALANBUUN_HH.tif
+            --compare-image ${EPSILON_12}
+                    ${BASELINE}/raTvSarRadiometricCalibrationToImageFilter_TSX_PANGKALANBUUN_HH.tif
+                    ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_PANGKALANBUUN_HH.tif
         otbSarRadiometricCalibrationToImageFilterWithComplexPixelTest
-	        ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
-	        ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_PANGKALANBUUN_HH.tif
-	        1000 1000 250 250 # Extract
+                ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
+                ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_PANGKALANBUUN_HH.tif
+                1000 1000 250 250 # Extract
           )
 
-# Read data with a complex IFreader (Input data type = CInt16) and done ExtractROIFilter 
-# after RadiometricCalibFilter without take into account Noise. 
+# Read data with a complex IFreader (Input data type = CInt16) and done ExtractROIFilter
+# after RadiometricCalibFilter without take into account Noise.
   ADD_TEST(raTvSarRadiometricCalibrationToImageWithComplexPixelFilterWithoutNoise_TSX_PANGKALANBUUN  ${RADIOMETRY_TESTS9}
-	    --compare-image ${EPSILON_12}
-	    	${BASELINE}/raTvSarRadiometricCalibrationToImageFilter_TSX_PANGKALANBUUN_HH_WN.tif
-	    	${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_PANGKALANBUUN_HH_WN.tif
+            --compare-image ${EPSILON_12}
+                    ${BASELINE}/raTvSarRadiometricCalibrationToImageFilter_TSX_PANGKALANBUUN_HH_WN.tif
+                    ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_PANGKALANBUUN_HH_WN.tif
         otbSarRadiometricCalibrationToImageFilterWithComplexPixelTestWithoutNoise
-	        ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
-	        ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_PANGKALANBUUN_HH_WN.tif
-	        1000 1000 250 250 # Extract
-          )    
+                ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
+                ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_PANGKALANBUUN_HH_WN.tif
+                1000 1000 250 250 # Extract
+          )
 
-# Read data with a scalar IFreader (Input data type = CInt16) and done ExtractROIFilter 
-# after RadiometricCalibFilter. 
+# Read data with a scalar IFreader (Input data type = CInt16) and done ExtractROIFilter
+# after RadiometricCalibFilter.
   ADD_TEST(raTvSarRadiometricCalibrationToImageWithRealPixelFilter_TSX_PANGKALANBUUN  ${RADIOMETRY_TESTS9}
-	    --compare-image ${EPSILON_12}
-	    	${BASELINE}/raTvSarRadiometricCalibrationToImageFilter_TSX_PANGKALANBUUN_HH.tif
-	    	${TEMP}/raTvSarRadiometricCalibrationToImageFilterRealPixel_TSX_PANGKALANBUUN_HH.tif
+            --compare-image ${EPSILON_12}
+                    ${BASELINE}/raTvSarRadiometricCalibrationToImageFilter_TSX_PANGKALANBUUN_HH.tif
+                    ${TEMP}/raTvSarRadiometricCalibrationToImageFilterRealPixel_TSX_PANGKALANBUUN_HH.tif
         otbSarRadiometricCalibrationToImageFilterWithRealPixelTest
-	        ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
-	        ${TEMP}/raTvSarRadiometricCalibrationToImageFilterRealPixel_TSX_PANGKALANBUUN_HH.tif
-	         1000 1000 250 250 # Extract
+                ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
+                ${TEMP}/raTvSarRadiometricCalibrationToImageFilterRealPixel_TSX_PANGKALANBUUN_HH.tif
+                 1000 1000 250 250 # Extract
           )
           
-# Read data with a complex IFreader (Input data type = CInt16) and done ExtractROIFilter 
-# before RadiometricCalibFilter. 
+# Read data with a complex IFreader (Input data type = CInt16) and done ExtractROIFilter
+# before RadiometricCalibFilter.
   ADD_TEST(raTvSarRadiometricCalibrationToImagePixelFilterWithExtractROIBefore_TSX_PANGKALANBUUN  ${RADIOMETRY_TESTS9}
-	    --compare-image ${EPSILON_12}
-	    	${BASELINE}/raTvSarRadiometricCalibrationToImageFilterWithExtractROIBefore_TSX_PANGKALANBUUN_HH.tif
-	    	${TEMP}/raTvSarRadiometricCalibrationToImageFilterWithExtractROIBefore_TSX_PANGKALANBUUN_HH.tif
+            --compare-image ${EPSILON_12}
+                    ${BASELINE}/raTvSarRadiometricCalibrationToImageFilterWithExtractROIBefore_TSX_PANGKALANBUUN_HH.tif
+                    ${TEMP}/raTvSarRadiometricCalibrationToImageFilterWithExtractROIBefore_TSX_PANGKALANBUUN_HH.tif
         otbSarRadiometricCalibrationToImageFilterWithExtractROIBeforeTest
-	    ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
-	        ${TEMP}/raTvSarRadiometricCalibrationToImageFilterWithExtractROIBefore_TSX_PANGKALANBUUN_HH.tif
-	        1000 1000 250 250 # Extract
+            ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
+                ${TEMP}/raTvSarRadiometricCalibrationToImageFilterWithExtractROIBefore_TSX_PANGKALANBUUN_HH.tif
+                1000 1000 250 250 # Extract
           )
 
-# Read data with a complex IFreader (Input data type = CInt16) and compare the result of 
-# CReader->SarRadiometricCalibFilter with CReader->ModulusFilter->SarRadiometricCalibFilter 
+# Read data with a complex IFreader (Input data type = CInt16) and compare the result of
+# CReader->SarRadiometricCalibFilter with CReader->ModulusFilter->SarRadiometricCalibFilter
   ADD_TEST(raTvSarRadiometricCalibrationToImageCompareFilter_TSX_PANGKALANBUUN  ${RADIOMETRY_TESTS9}
         otbSarRadiometricCalibrationToImageFilterCompareTest
-	       ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
-	       1000 1000 250 250 # Extract
+               ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
+               1000 1000 250 250 # Extract
           )
 
 
 # Read data with a complex IFreader (Input data type = CInt16)
   ADD_TEST(raTvSarRadiometricCalibrationToImageWithComplexPixelFilter_TSX_TORONTO ${RADIOMETRY_TESTS9}
-        --compare-image ${EPSILON_12}  
+        --compare-image ${EPSILON_12}
            ${BASELINE}/raTvSarRadiometricCalibrationToImageFilter_TSX_TORONTO.tif
            ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_TORONTO.tif
         otbSarRadiometricCalibrationToImageFilterWithComplexPixelTest
            ${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
            ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_TORONTO.tif
-		   2000 2000 250 250 # Extract
+                   2000 2000 250 250 # Extract
           )
 
 # Read data with a scalar IFreader (Input data type = UInt16)
   ADD_TEST(raTvSarRadiometricCalibrationToImageWithRealPixelFilter_TSX_UPSALA ${RADIOMETRY_TESTS9}
-        --compare-image ${EPSILON_12}  
+        --compare-image ${EPSILON_12}
            ${BASELINE}/raTvSarRadiometricCalibrationToImageFilter_TSX_UPSALA.tif
            ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_UPSALA.tif
         otbSarRadiometricCalibrationToImageFilterWithRealPixelTest
            ${LARGEINPUT}/TERRASARX/UPSALA_GLACIER/TSX1_SAR__MGD/IMAGEDATA/IMAGE_HH_SRA_strip_012.tif
            ${TEMP}/raTvSarRadiometricCalibrationToImageFilter_TSX_UPSALA.tif
-	       2000 2000 250 250 # Extract
+               2000 2000 250 250 # Extract
           )
 
 ENDIF(OTB_DATA_USE_LARGEINPUT)
@@ -1319,21 +1319,21 @@ ADD_TEST(raTuSarBrightnessFunctorWithoutNoise ${RADIOMETRY_TESTS9}
 
 # -------            SarBrightnessFunction   ------------------------------
 ADD_TEST(raTvSarBrightnessFunction ${RADIOMETRY_TESTS9}
-	--compare-ascii ${NOTOL}
-	    	${BASELINE_FILES}/raTvSarBrightnessFunctionOutputAscii.txt
-	    	${TEMP}/raTvSarBrightnessFunctionOutputAsciiWithNoise.txt
+        --compare-ascii ${NOTOL}
+                    ${BASELINE_FILES}/raTvSarBrightnessFunctionOutputAscii.txt
+                    ${TEMP}/raTvSarBrightnessFunctionOutputAsciiWithNoise.txt
         otbSarBrightnessFunction
-	 	${INPUTDATA}/scene.png
-	 	${TEMP}/raTvSarBrightnessFunctionOutputAsciiWithNoise.txt
+                 ${INPUTDATA}/scene.png
+                 ${TEMP}/raTvSarBrightnessFunctionOutputAsciiWithNoise.txt
 )
 
 ADD_TEST(raTvSarBrightnessFunctionWithoutNoise ${RADIOMETRY_TESTS9}
-	--compare-ascii ${NOTOL}
-	    	${BASELINE_FILES}/raTvSarBrightnessFunctionOutputAscii.txt
-	    	${TEMP}/raTvSarBrightnessFunctionOutputAsciiWithoutNoise.txt
+        --compare-ascii ${NOTOL}
+                    ${BASELINE_FILES}/raTvSarBrightnessFunctionOutputAscii.txt
+                    ${TEMP}/raTvSarBrightnessFunctionOutputAsciiWithoutNoise.txt
         otbSarBrightnessFunctionWithoutNoise
-	 	${INPUTDATA}/scene.png
-	 	${TEMP}/raTvSarBrightnessFunctionOutputAsciiWithoutNoise.txt
+                 ${INPUTDATA}/scene.png
+                 ${TEMP}/raTvSarBrightnessFunctionOutputAsciiWithoutNoise.txt
 )
 
 # ------- SarBrightnessToImageFilter   ------------------------------
@@ -1341,36 +1341,36 @@ IF(OTB_DATA_USE_LARGEINPUT)
 
 # Read data with a scalar IFreader (Input data type = CInt16)
   ADD_TEST(raTvSarBrightnessToImageFilter  ${RADIOMETRY_TESTS9}
-	    --compare-image ${EPSILON_12}
-	    	${BASELINE}/raTvSarBrightnessToImageFilter_TSX_PANGKALANBUUN_HH.tif
-	    	${TEMP}/raTvSarBrightnessToImageFilter_TSX_PANGKALANBUUN_HH.tif
+            --compare-image ${EPSILON_12}
+                    ${BASELINE}/raTvSarBrightnessToImageFilter_TSX_PANGKALANBUUN_HH.tif
+                    ${TEMP}/raTvSarBrightnessToImageFilter_TSX_PANGKALANBUUN_HH.tif
         otbSarBrightnessToImageFilterTest
-	        ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
-	        ${TEMP}/raTvSarBrightnessToImageFilter_TSX_PANGKALANBUUN_HH.tif
-	        1000 1000 250 250 # Extract
+                ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
+                ${TEMP}/raTvSarBrightnessToImageFilter_TSX_PANGKALANBUUN_HH.tif
+                1000 1000 250 250 # Extract
           )
 
-# Read data with a real IFreader (Input data type = CInt16) and done ExtractROIFilter 
-# after BrightnessCalibFilter without take into account Noise. 
+# Read data with a real IFreader (Input data type = CInt16) and done ExtractROIFilter
+# after BrightnessCalibFilter without take into account Noise.
   ADD_TEST(raTvSarBrightnessToImageFilterWithoutNoise  ${RADIOMETRY_TESTS9}
-	    --compare-image ${EPSILON_12}
-	    	${BASELINE}/raTvSarBrightnessToImageFilter_TSX_PANGKALANBUUN_HH_WN.tif
-	    	${TEMP}/raTvSarBrightnessToImageFilter_TSX_PANGKALANBUUN_HH_WN.tif
+            --compare-image ${EPSILON_12}
+                    ${BASELINE}/raTvSarBrightnessToImageFilter_TSX_PANGKALANBUUN_HH_WN.tif
+                    ${TEMP}/raTvSarBrightnessToImageFilter_TSX_PANGKALANBUUN_HH_WN.tif
         otbSarBrightnessToImageFilterTestWithoutNoise
-	        ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
-	        ${TEMP}/raTvSarBrightnessToImageFilter_TSX_PANGKALANBUUN_HH_WN.tif
-	        1000 1000 250 250 # Extract
+                ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
+                ${TEMP}/raTvSarBrightnessToImageFilter_TSX_PANGKALANBUUN_HH_WN.tif
+                1000 1000 250 250 # Extract
           )
 
 # Read data with a scalar IFreader (Input data type = CInt16)
 ADD_TEST(raTvSarBrightnessToImageWithComplexPixelFilter  ${RADIOMETRY_TESTS9}
-	    --compare-image ${EPSILON_12}
-	    	${BASELINE}/raTvSarBrightnessToImageFilter_TSX_PANGKALANBUUN_HH.tif
-	    	${TEMP}/raTvSarBrightnessToImageFilterComplexPixel_TSX_PANGKALANBUUN_HH.tif
+            --compare-image ${EPSILON_12}
+                    ${BASELINE}/raTvSarBrightnessToImageFilter_TSX_PANGKALANBUUN_HH.tif
+                    ${TEMP}/raTvSarBrightnessToImageFilterComplexPixel_TSX_PANGKALANBUUN_HH.tif
         otbSarBrightnessToImageWithComplexPixelFilterTest
-	        ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
-	        ${TEMP}/raTvSarBrightnessToImageFilterComplexPixel_TSX_PANGKALANBUUN_HH.tif
-	        1000 1000 250 250 # Extract
+                ${LARGEINPUT}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
+                ${TEMP}/raTvSarBrightnessToImageFilterComplexPixel_TSX_PANGKALANBUUN_HH.tif
+                1000 1000 250 250 # Extract
         )
 
 ENDIF(OTB_DATA_USE_LARGEINPUT)

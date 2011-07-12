@@ -2,26 +2,26 @@ SET(LIB_NAME ossim)
 
 ########################################### BEGIN: GRAB SOURCE FILES ##########################################
 FILE(GLOB ossim_dll_main_SRCS RELATIVE_PATH ${CMAKE_CURRENT_SOURCE_DIR} "${CMAKE_CURRENT_SOURCE_DIR}/dll_main/*.cpp")
-FILE(GLOB ossim_SRCS  RELATIVE_PATH ${CMAKE_CURRENT_SOURCE_DIR} 
-        "${CMAKE_CURRENT_SOURCE_DIR}/ossimConfig*.cpp" 
-        "${CMAKE_CURRENT_SOURCE_DIR}/ossimVer*.cpp" 
-        "${CMAKE_CURRENT_SOURCE_DIR}/init/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/init/*.c" 
-        "${CMAKE_CURRENT_SOURCE_DIR}/base/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/base/*.c" 
-        "${CMAKE_CURRENT_SOURCE_DIR}/elevation/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/elevation/*.c" 
-        "${CMAKE_CURRENT_SOURCE_DIR}/font/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/font/*.c" 
-        "${CMAKE_CURRENT_SOURCE_DIR}/imaging/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/imaging/*.c" 
-        "${CMAKE_CURRENT_SOURCE_DIR}/matrix/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/matrix/*.c" 
+FILE(GLOB ossim_SRCS  RELATIVE_PATH ${CMAKE_CURRENT_SOURCE_DIR}
+        "${CMAKE_CURRENT_SOURCE_DIR}/ossimConfig*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/ossimVer*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/init/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/init/*.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/base/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/base/*.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/elevation/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/elevation/*.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/font/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/font/*.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/imaging/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/imaging/*.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/matrix/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/matrix/*.c"
         "${CMAKE_CURRENT_SOURCE_DIR}/parallel/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/parallel/*.c"
-        "${CMAKE_CURRENT_SOURCE_DIR}/projection/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/projection/*.c" 
-        "${CMAKE_CURRENT_SOURCE_DIR}/support_data/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/support_data/*.c" 
-        "${CMAKE_CURRENT_SOURCE_DIR}/util/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/util/*.c" 
-        "${CMAKE_CURRENT_SOURCE_DIR}/vec/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/vec/*.c" 
-        "${CMAKE_CURRENT_SOURCE_DIR}/vpfutil/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/vpfutil/*.c" 
+        "${CMAKE_CURRENT_SOURCE_DIR}/projection/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/projection/*.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/support_data/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/support_data/*.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/util/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/util/*.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/vec/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/vec/*.c"
+        "${CMAKE_CURRENT_SOURCE_DIR}/vpfutil/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/vpfutil/*.c"
         "${CMAKE_CURRENT_SOURCE_DIR}/plugin/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/plugin/*.c"
         "${CMAKE_CURRENT_SOURCE_DIR}/kbool/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/kbool/*.c")
 
 IF(WIN32)
-	LIST(APPEND ossim_SRCS "${ossim_dll_main_SRCS}")
+        LIST(APPEND ossim_SRCS "${ossim_dll_main_SRCS}")
 ENDIF(WIN32)
 
 ADD_DEFINITIONS("-DOSSIMMAKINGDLL")
@@ -43,10 +43,10 @@ FILE(GLOB ossim_vec_HDRS RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_CURRENT
 FILE(GLOB ossim_vpfutil_HDRS RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}/../../include/ossim/vpfutil/*.h")
 
 MESSAGE( "${ossim_HDRS}" )
-SET(OSSIM_HEADER_FILES 
-	${ossim_HDRS}
- 	${ossim_base_HDRS} ${ossim_elevation_HDRS} ${ossim_font_HDRS}  ${ossim_imaging_HDRS} ${ossim_init_HDRS} ${ossim_kbool_HDRS} 
-	${ossim_matrix_HDRS} ${ossim_parallel_HDRS} ${ossim_plugin_HDRS} ${ossim_projection_HDRS} ${ossim_support_data_HDRS} ${ossim_util_HDRS} ${ossim_vec_HDRS}  ${ossim_vpfutil_HDRS} )
+SET(OSSIM_HEADER_FILES
+        ${ossim_HDRS}
+         ${ossim_base_HDRS} ${ossim_elevation_HDRS} ${ossim_font_HDRS}  ${ossim_imaging_HDRS} ${ossim_init_HDRS} ${ossim_kbool_HDRS}
+        ${ossim_matrix_HDRS} ${ossim_parallel_HDRS} ${ossim_plugin_HDRS} ${ossim_projection_HDRS} ${ossim_support_data_HDRS} ${ossim_util_HDRS} ${ossim_vec_HDRS}  ${ossim_vpfutil_HDRS} )
 
 
 ################################## APPLE Framework support deep header mapping ###################################
@@ -100,30 +100,30 @@ IF(APPLE)
 ENDIF(APPLE)
 
 #################################### SETUP the required link parameters using the Ossim macro ####################################
-OSSIM_LINK_LIBRARY(${LIB_NAME} 
-                   COMPONENT_NAME ossim 
+OSSIM_LINK_LIBRARY(${LIB_NAME}
+                   COMPONENT_NAME ossim
                    TYPE ${OSSIM_USER_DEFINED_DYNAMIC_OR_STATIC}
                    LIBRARIES ${JPEG_LIBRARIES} ${TIFF_LIBRARIES} ${GEOTIFF_LIBRARIES} ${OPENTHREADS_LIBRARIES} ${FREETYPE_LIBRARIES} ${MPI_LIBRARIES} ${ZLIB_LIBRARIES} ${DL_LIBRARY}
-                   HEADERS "${OSSIM_HEADER_FILES}" 
+                   HEADERS "${OSSIM_HEADER_FILES}"
                    PUBLIC_HEADERS "${ossim_HDRS}"
                    SOURCE_FILES "${ossim_SRCS}"
                    INSTALL_LIB VERSION_SYMLINKS INSTALL_HEADERS)
 
-########################################################## If DO special case for ossim core needs to have the files mapped properly ################################ 
+########################################################## If DO special case for ossim core needs to have the files mapped properly ################################
 IF(NOT OSSIM_BUILD_FRAMEWORKS OR NOT APPLE)
-   install(FILES ${ossim_HDRS} DESTINATION include/ossim COMPONENT ossim) 
-   install(FILES ${ossim_base_HDRS} DESTINATION include/ossim/base COMPONENT ossim) 
+   install(FILES ${ossim_HDRS} DESTINATION include/ossim COMPONENT ossim)
+   install(FILES ${ossim_base_HDRS} DESTINATION include/ossim/base COMPONENT ossim)
    install(FILES ${ossim_elevation_HDRS} DESTINATION include/ossim/elevation COMPONENT ossim)
    install(FILES ${ossim_font_HDRS} DESTINATION include/ossim/font COMPONENT ossim)
-   install(FILES ${ossim_imaging_HDRS} DESTINATION include/ossim/imaging COMPONENT ossim) 
-   install(FILES ${ossim_init_HDRS} DESTINATION include/ossim/init COMPONENT ossim) 
-   install(FILES ${ossim_kbool_HDRS} DESTINATION include/ossim/kbool COMPONENT ossim) 
-   install(FILES ${ossim_matrix_HDRS} DESTINATION include/ossim/matrix COMPONENT ossim) 
-   install(FILES ${ossim_parallel_HDRS} DESTINATION include/ossim/parallel COMPONENT ossim) 
-   install(FILES ${ossim_plugin_HDRS} DESTINATION include/ossim/plugin COMPONENT ossim) 
-   install(FILES ${ossim_projection_HDRS} DESTINATION include/ossim/projection COMPONENT ossim) 
-   install(FILES ${ossim_support_data_HDRS} DESTINATION include/ossim/support_data COMPONENT ossim) 
-   install(FILES ${ossim_util_HDRS} DESTINATION include/ossim/util COMPONENT ossim) 
-   install(FILES ${ossim_vec_HDRS} DESTINATION include/ossim/vec COMPONENT ossim) 
-   install(FILES ${ossim_vpfutil_HDRS} DESTINATION include/ossim/vpfutil COMPONENT ossim) 
+   install(FILES ${ossim_imaging_HDRS} DESTINATION include/ossim/imaging COMPONENT ossim)
+   install(FILES ${ossim_init_HDRS} DESTINATION include/ossim/init COMPONENT ossim)
+   install(FILES ${ossim_kbool_HDRS} DESTINATION include/ossim/kbool COMPONENT ossim)
+   install(FILES ${ossim_matrix_HDRS} DESTINATION include/ossim/matrix COMPONENT ossim)
+   install(FILES ${ossim_parallel_HDRS} DESTINATION include/ossim/parallel COMPONENT ossim)
+   install(FILES ${ossim_plugin_HDRS} DESTINATION include/ossim/plugin COMPONENT ossim)
+   install(FILES ${ossim_projection_HDRS} DESTINATION include/ossim/projection COMPONENT ossim)
+   install(FILES ${ossim_support_data_HDRS} DESTINATION include/ossim/support_data COMPONENT ossim)
+   install(FILES ${ossim_util_HDRS} DESTINATION include/ossim/util COMPONENT ossim)
+   install(FILES ${ossim_vec_HDRS} DESTINATION include/ossim/vec COMPONENT ossim)
+   install(FILES ${ossim_vpfutil_HDRS} DESTINATION include/ossim/vpfutil COMPONENT ossim)
 ENDIF(NOT OSSIM_BUILD_FRAMEWORKS OR NOT APPLE)
