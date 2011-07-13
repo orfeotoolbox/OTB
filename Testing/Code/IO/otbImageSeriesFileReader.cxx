@@ -23,10 +23,7 @@
 #include "otbImageList.h"
 #include "otbImageSeriesFileReader.h"
 #include "otbStreamingImageFileWriter.h"
-#include "base/ossimFilename.h"
-
-#include "otbCommandProgressUpdate.h"
-#include "otbCommandLineArgumentParser.h"
+#include "itksys/SystemTools.hxx"
 
 int otbImageSeriesFileReader(int argc, char* argv[])
 {
@@ -45,35 +42,29 @@ int otbImageSeriesFileReader(int argc, char* argv[])
 
   std::cout << reader << std::endl;
 
-  ossimFilename outputFilenameBase(outputFile);
-
   ImageListType * imageList = reader->GetOutput();
 
   typedef otb::StreamingImageFileWriter<ImageType> WriterType;
 
   for (unsigned int i = 0; i < imageList->Size(); i++)
     {
-    itk::OStringStream title;
-    title << "Image no " << i;
-    std::cerr << title.str().c_str() << "\n";
+    std::cout << "Image no " << i << "\n";
 
-    std::stringstream number;
-    number << "-" << i;
-    ossimString   fileNum(number.str());
-    ossimFilename outputFilename;
-    outputFilename.merge("", outputFilenameBase.path(),
-                         outputFilenameBase.fileNoExtension() + fileNum,
-                         outputFilenameBase.ext()
-                         );
+    std::string path = itksys::SystemTools::GetFilenamePath(outputFile);
+    std::string name = itksys::SystemTools::GetFilenameWithoutExtension(outputFile);
+    std::string ext = itksys::SystemTools::GetFilenameExtension(outputFile);
+    std::stringstream outputFilenameStream;
+    outputFilenameStream << path << "/" << name << "-" << i << ext;
 
+    std::string outputFilename = itksys::SystemTools::ConvertToOutputPath(
+      outputFilenameStream.str().c_str());
+    std::cout << "saved in " << outputFilename << "\n";
     WriterType::Pointer writer = WriterType::New();
     writer->SetFileName(outputFilename);
     writer->SetInput(reader->GetOutput(i));
     writer->Update();
 
     }
-
-  std::cerr << "Normal Exit\n";
 
   return EXIT_SUCCESS;
 }
