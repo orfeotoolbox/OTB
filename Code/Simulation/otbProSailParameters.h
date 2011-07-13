@@ -47,11 +47,11 @@ class ITK_EXPORT ProSailParameters : public itk::DataObject
       
       
 
-      /** Set/Get Chlorophyll content (µg/cm²)*/
+      /** Set/Get Chlorophyll content (µg/cm2)*/
       itkSetMacro(Cab, double);
       itkGetMacro(Cab, double);
       
-      /** Set/Get Carotenoid content (µg/cm²)*/
+      /** Set/Get Carotenoid content (µg/cm2)*/
       itkSetMacro(Car, double);
       itkGetMacro(Car, double);
       
@@ -63,7 +63,7 @@ class ITK_EXPORT ProSailParameters : public itk::DataObject
       itkSetMacro(Cw, double);
       itkGetMacro(Cw, double);
       
-      /** Set/Get LMA (g/cm²)*/
+      /** Set/Get LMA (g/cm2)*/
       itkSetMacro(Cm, double);
       itkGetMacro(Cm, double);
       

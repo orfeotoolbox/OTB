@@ -66,7 +66,7 @@ class ITK_EXPORT SailModel : public SimulationStep2Base
       itkSetMacro(LAI, double);
       itkGetMacro(LAI, double);
       
-      /** Set/Get average leaf angle (°)*/
+      /** Set/Get average leaf angle (deg)*/
       itkSetMacro(Angl, double);
       itkGetMacro(Angl, double);
       
@@ -82,15 +82,15 @@ class ITK_EXPORT SailModel : public SimulationStep2Base
       itkSetMacro(HSpot, double);
       itkGetMacro(HSpot, double);
       
-      /** Set/Get solar zenith angle (°) */
+      /** Set/Get solar zenith angle (deg) */
       itkSetMacro(TTS, double);
       itkGetMacro(TTS, double);
       
-      /** Set/Get observer zenith angle (°) */
+      /** Set/Get observer zenith angle (deg) */
       itkSetMacro(TTO, double);
       itkGetMacro(TTO, double);
       
-      /** Set/Get azimuth(°) */
+      /** Set/Get azimuth(deg) */
       itkSetMacro(PSI, double);
       itkGetMacro(PSI, double);
       

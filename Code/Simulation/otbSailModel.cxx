@@ -369,7 +369,7 @@ SailModel
       
       // Treatment of the hotspot-effect
       alf=1e6;
-      // Apply correction 2/(K+k) suggested by F.-M. Br�on
+      // Apply correction 2/(K+k) suggested by F.-M. Bron
       if (m_HSpot>0) alf=(dso/m_HSpot)*2./(ks+ko);
       if (alf>200) alf=200;
       if (alf==0)

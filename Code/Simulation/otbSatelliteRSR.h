@@ -111,7 +111,7 @@ class SatelliteRSR : public itk::DataObject
       /**
       * \param PrecisionType
       * \param Band  
-      * \return The interpolate value of the SR for the numBand (band n°0 to band n°(m_NbBands-1)).
+      * \return The interpolate value of the SR for the numBand (band num 0 to band num (m_NbBands-1)).
       */
       inline ValuePrecisionType operator()(const PrecisionType & lambda, const unsigned int numBand);
 
