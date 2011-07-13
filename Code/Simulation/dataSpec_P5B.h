@@ -16,7 +16,7 @@
 // [9] = diffuse light
 // [10] = dry soil
 // [11] = wet soil
-// F�ret et al. (2008), PROSPECT-4 and 5: Advances in the Leaf Optical
+// Feret et al. (2008), PROSPECT-4 and 5: Advances in the Leaf Optical
 // Properties Model Separating Photosynthetic Pigments, Remote Sensing of
 // Environment
 // The specific absorption coefficient corresponding to brown pigment is

@@ -47,11 +47,11 @@ class ITK_EXPORT ProSailParameters : public itk::DataObject
       
       
 
-      /** Set/Get Chlorophyll content (µg/cm2)*/
+      /** Set/Get Chlorophyll content (ug/cm2)*/
       itkSetMacro(Cab, double);
       itkGetMacro(Cab, double);
       
-      /** Set/Get Carotenoid content (µg/cm2)*/
+      /** Set/Get Carotenoid content (ug/cm2)*/
       itkSetMacro(Car, double);
       itkGetMacro(Car, double);
       
@@ -75,7 +75,7 @@ class ITK_EXPORT ProSailParameters : public itk::DataObject
       itkSetMacro(LAI, double);
       itkGetMacro(LAI, double);
       
-      /** Set/Get average leaf angle (°)*/
+      /** Set/Get average leaf angle (deg)*/
       itkSetMacro(Angl, double);
       itkGetMacro(Angl, double);
       
@@ -91,15 +91,15 @@ class ITK_EXPORT ProSailParameters : public itk::DataObject
       itkSetMacro(HSpot, double);
       itkGetMacro(HSpot, double);
       
-      /** Set/Get solar zenith angle (°) */
+      /** Set/Get solar zenith angle (deg) */
       itkSetMacro(TTS, double);
       itkGetMacro(TTS, double);
       
-      /** Set/Get observer zenith angle (°) */
+      /** Set/Get observer zenith angle (deg) */
       itkSetMacro(TTO, double);
       itkGetMacro(TTO, double);
       
-      /** Set/Get azimuth(°) */
+      /** Set/Get azimuth(deg) */
       itkSetMacro(PSI, double);
       itkGetMacro(PSI, double);
 
