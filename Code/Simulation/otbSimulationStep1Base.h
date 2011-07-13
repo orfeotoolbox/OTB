@@ -48,7 +48,7 @@ public:
    /** Some convenient typedefs. */
    typedef double                                ParametersValueType;
    typedef itk::Array<ParametersValueType>       ParametersType;
-   typedef otb::SpectralResponse<double,double>  SpectralResponseType;
+   typedef otb::SpectralResponse<double, double>  SpectralResponseType;
    
    
    /** Standard Macro*/

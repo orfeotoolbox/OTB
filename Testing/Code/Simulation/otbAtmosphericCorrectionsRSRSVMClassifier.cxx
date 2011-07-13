@@ -40,15 +40,15 @@ int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
 
    
       
-   typedef otb::SpectralResponse< double,double>  SpectralResponseType;
+   typedef otb::SpectralResponse< double, double>  SpectralResponseType;
    typedef SpectralResponseType::Pointer  SpectralResponsePointerType;
 
-   typedef otb::SatelliteRSR< double,double>  SatRSRType;
+   typedef otb::SatelliteRSR< double, double>  SatRSRType;
    typedef SatRSRType::Pointer  SatRSRPointerType;
   
-   typedef otb::ReduceSpectralResponse< SpectralResponseType,SatRSRType>  ReduceSpectralResponseType;
+   typedef otb::ReduceSpectralResponse< SpectralResponseType, SatRSRType>  ReduceSpectralResponseType;
    
-   typedef otb::AtmosphericEffects< SpectralResponseType,SatRSRType>  AtmosphericEffectsType;
+   typedef otb::AtmosphericEffects< SpectralResponseType, SatRSRType>  AtmosphericEffectsType;
    
    typedef AtmosphericEffectsType::AtmosphericCorrectionParametersType  AtmosphericCorrectionParametersType;
    typedef AtmosphericCorrectionParametersType::AerosolModelType AerosolModelType;
@@ -59,15 +59,15 @@ int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
    typedef itk::FixedArray<unsigned long, 1>               TrainingSampleType;
    typedef itk::Statistics::ListSample<TrainingSampleType> TrainingSampleListType;
   
-   typedef otb::SVMSampleListModelEstimator<SampleListType,TrainingSampleListType> SVMModelEstimatorType;
-   typedef otb::SVMClassifier<SampleListType,unsigned long> SVMClassifierType;
+   typedef otb::SVMSampleListModelEstimator<SampleListType, TrainingSampleListType> SVMModelEstimatorType;
+   typedef otb::SVMClassifier<SampleListType, unsigned long> SVMClassifierType;
    typedef SVMClassifierType::OutputType ClassifierOutputType;
   
-   typedef otb::ConfusionMatrixCalculator<TrainingSampleListType,TrainingSampleListType> ConfusionMatrixCalculatorType;
+   typedef otb::ConfusionMatrixCalculator<TrainingSampleListType, TrainingSampleListType> ConfusionMatrixCalculatorType;
       
    if ( argc!= 20 )
    {
-      std::cout << argv[0] << std::endl << "\t" << "<dir_spectres_class1>" << "\t" << "<dir_spectres_class2>" << "\t" << "<dir_spectres_class3>" << "\t" << "<dir_spectres_class4>" << "\t" << "<dir_spectres_class5>"  << "\t" << "<Gabarit_SAT_fileSRname>" << "\t" << "<nbBands>" << "\t" << "<day>"  << "\t" << "<month>"  << "\t" << "<zenithSolarAngle>"  << "\t" << "<azimutSolarAngle>"  << "\t" << "<viewingZenitalAngle>"  << "\t" << "<viewingAzimutalAngle>"  << "\t" << "<atmoPressure>"  << "\t" << "<waterVaporAmount>"  << "\t" << "<ozoneAmount>"  << "\t" << "<aerosolModelValue>"  << "\t" << "<aerosolOptical>" << "\t" << "<percentage_validation_files>" << std::endl ;
+      std::cout << argv[0] << std::endl << "\t" << "<dir_spectres_class1>" << "\t" << "<dir_spectres_class2>" << "\t" << "<dir_spectres_class3>" << "\t" << "<dir_spectres_class4>" << "\t" << "<dir_spectres_class5>"  << "\t" << "<Gabarit_SAT_fileSRname>" << "\t" << "<nbBands>" << "\t" << "<day>"  << "\t" << "<month>"  << "\t" << "<zenithSolarAngle>"  << "\t" << "<azimutSolarAngle>"  << "\t" << "<viewingZenitalAngle>"  << "\t" << "<viewingAzimutalAngle>"  << "\t" << "<atmoPressure>"  << "\t" << "<waterVaporAmount>"  << "\t" << "<ozoneAmount>"  << "\t" << "<aerosolModelValue>"  << "\t" << "<aerosolOptical>" << "\t" << "<percentage_validation_files>" << std::endl;
       return EXIT_FAILURE;
    }
    /*
@@ -81,7 +81,7 @@ int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
    1013. #atmo pressure
    2.48134 #water vapour amount
    0.34400 #ozone amount
-   1 #aerosol model type 
+   1 #aerosol model type
    0.199854 #aerosol optical
    */
   
@@ -144,7 +144,7 @@ int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
    const ossimString regularExpressionPattern=".*\\.txt$";
    int flags = ossimDirectory::OSSIM_DIR_DEFAULT;
   
-   for(unsigned int i=0;i<dirSR.size();i++) //for each class (directory)
+   for(unsigned int i=0; i<dirSR.size(); i++) //for each class (directory)
    {
       std::vector<ossimFilename> result;
       ossimDirectory * directory = new ossimDirectory();
@@ -159,7 +159,7 @@ int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
       std::vector<ossimFilename> testing; //contains testing files for this class (directory)
       training=result;
       srand((unsigned int)getpid()); //init random
-      for(unsigned int j=0;j<static_cast <unsigned int> (percentage*result.size());j++)
+      for(unsigned int j=0; j<static_cast <unsigned int> (percentage*result.size()); j++)
       {
          ind = rand()%(result.size());
          testing.push_back(result[ind]);
@@ -167,14 +167,14 @@ int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
       }
       
       //add to global training files and testing files
-      for(unsigned int k=0;k<testing.size();k++)
+      for(unsigned int k=0; k<testing.size(); k++)
       {
          std::cout<<"testing["<<k<<"] : "<< testing[k] <<std::endl;
          testingFiles.push_back(testing[k]);
          testingGTClasses.push_back(i);
       }
       
-      for(unsigned int l=0;l<training.size();l++)
+      for(unsigned int l=0; l<training.size(); l++)
       {
          std::cout<<"training["<<l<<"] : "<< training[l] <<std::endl;
          trainingFiles.push_back(training[l]);
@@ -186,7 +186,7 @@ int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
    SampleListType::Pointer sampleList = SampleListType::New();
    TrainingSampleListType::Pointer trainingList = TrainingSampleListType::New();
    
-   for(unsigned int i=0;i<trainingFiles.size();i++)
+   for(unsigned int i=0; i<trainingFiles.size(); i++)
    {
       SpectralResponsePointerType  spectralResponse=SpectralResponseType::New();
       ReduceSpectralResponseType::Pointer reduceSpectralResponse = ReduceSpectralResponseType::New();
@@ -211,7 +211,7 @@ int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
       TrainingSampleType trainingSample;
       sample.SetSize(atmosphericEffectsFilter->GetCorrectedSpectralResponse()->Size());
       std::cout<<"corrected response : [";
-      for(unsigned int j=0;j<atmosphericEffectsFilter->GetCorrectedSpectralResponse()->Size();j++)
+      for(unsigned int j=0; j<atmosphericEffectsFilter->GetCorrectedSpectralResponse()->Size(); j++)
       {
          sample[j]=atmosphericEffectsFilter->GetCorrectedSpectralResponse()->GetResponse()[j].second;
          std::cout<<atmosphericEffectsFilter->GetCorrectedSpectralResponse()->GetResponse()[j].second<<" ";
@@ -233,9 +233,9 @@ int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
   
   
    //compute spectral response for testing files
-   sampleList->Clear();//clear the sample list to re use it for testing samples
+   sampleList->Clear(); //clear the sample list to re use it for testing samples
    TrainingSampleListType::Pointer groundTruthClassList = TrainingSampleListType::New();
-   for(unsigned int i=0;i<testingFiles.size();i++)
+   for(unsigned int i=0; i<testingFiles.size(); i++)
    {
       SpectralResponsePointerType  spectralResponse=SpectralResponseType::New();
       ReduceSpectralResponseType::Pointer reduceSpectralResponse = ReduceSpectralResponseType::New();
@@ -259,7 +259,7 @@ int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
       SampleType sample;
       TrainingSampleType gtClass;
       sample.SetSize(atmosphericEffectsFilter->GetCorrectedSpectralResponse()->Size());
-      for(unsigned int j=0;j<atmosphericEffectsFilter->GetCorrectedSpectralResponse()->Size();j++)
+      for(unsigned int j=0; j<atmosphericEffectsFilter->GetCorrectedSpectralResponse()->Size(); j++)
       {
          sample[j]=atmosphericEffectsFilter->GetCorrectedSpectralResponse()->GetResponse()[j].second;
       }
@@ -284,7 +284,7 @@ int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
          classifierListLabel->PushBack(it.GetClassLabel());
          ++it;
    }
-   for(unsigned int i=0;i<testingFiles.size();i++)
+   for(unsigned int i=0; i<testingFiles.size(); i++)
    {
       std::cout<<"ground truth class : "<<testingGTClasses[i]<<std::endl;
    }

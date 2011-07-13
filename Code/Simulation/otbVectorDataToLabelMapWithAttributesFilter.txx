@@ -362,7 +362,7 @@ VectorDataToLabelMapWithAttributesFilter<TVectorData, TLabelMap>
                 }
                 //add attributes
                 AttributesValueType fieldValue;
-                for(unsigned int ii=0; ii<dataNode->GetFieldList().size() ; ii++)
+                for(unsigned int ii=0; ii<dataNode->GetFieldList().size(); ii++)
                 {
                   fieldValue = static_cast<AttributesValueType>( dataNode->GetFieldAsString(dataNode->GetFieldList()[ii]) );
                   this->GetOutput()->GetLabelObject(m_lab)->SetAttribute( dataNode->GetFieldList()[ii].c_str(), fieldValue );

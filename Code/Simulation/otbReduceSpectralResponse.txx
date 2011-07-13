@@ -25,25 +25,25 @@
 namespace otb
 {
 
-template <class TSpectralResponse ,class TRSR>
-ReduceSpectralResponse <TSpectralResponse ,TRSR>
+template <class TSpectralResponse , class TRSR>
+ReduceSpectralResponse <TSpectralResponse , TRSR>
 ::ReduceSpectralResponse()
 {
     m_ReduceResponse = InputSpectralResponseType::New();
 }
 
-template <class TSpectralResponse ,class TRSR>
+template <class TSpectralResponse , class TRSR>
 bool
-ReduceSpectralResponse<TSpectralResponse ,TRSR>
+ReduceSpectralResponse<TSpectralResponse , TRSR>
 ::Clear()
 {
    return ( m_InputSatRSR->Clear() & m_InputSpectralResponse->Clear() );
 }
 
 
-template <class TSpectralResponse ,class TRSR>
-inline typename ReduceSpectralResponse<TSpectralResponse ,TRSR>::ValuePrecisionType
-ReduceSpectralResponse<TSpectralResponse ,TRSR>
+template <class TSpectralResponse , class TRSR>
+inline typename ReduceSpectralResponse<TSpectralResponse , TRSR>::ValuePrecisionType
+ReduceSpectralResponse<TSpectralResponse , TRSR>
 ::operator()(const unsigned int numBand)
 {
    if ( numBand >= m_InputSatRSR->GetNbBands() )
@@ -101,14 +101,14 @@ ReduceSpectralResponse<TSpectralResponse ,TRSR>
 
 }
 
-template <class TSpectralResponse ,class TRSR>
+template <class TSpectralResponse , class TRSR>
 void
-ReduceSpectralResponse<TSpectralResponse ,TRSR>
+ReduceSpectralResponse<TSpectralResponse , TRSR>
 ::CalculateResponse()
 {
    m_ReduceResponse->Clear();
    //Compute the reduce response for each band of the sensor
-   for (unsigned int i=0;i<m_InputSatRSR->GetNbBands();++i)
+   for (unsigned int i=0; i<m_InputSatRSR->GetNbBands(); ++i)
    {
       PairType pair;
       //pair.first = center wavelength of the band
@@ -121,9 +121,9 @@ ReduceSpectralResponse<TSpectralResponse ,TRSR>
 }
 
 
-template <class TSpectralResponse ,class TRSR>
+template <class TSpectralResponse , class TRSR>
 void
-ReduceSpectralResponse<TSpectralResponse ,TRSR>
+ReduceSpectralResponse<TSpectralResponse , TRSR>
 ::LoadInputsFromFiles (const std::string & spectralResponseFile, const std::string & RSRFile, const unsigned int nbRSRBands, ValuePrecisionType coefNormSpectre, ValuePrecisionType coefNormRSR)
 {
    //Instantiation
@@ -139,18 +139,18 @@ ReduceSpectralResponse<TSpectralResponse ,TRSR>
 }
 
 
-template <class TSpectralResponse ,class TRSR>
+template <class TSpectralResponse , class TRSR>
 void
-ReduceSpectralResponse<TSpectralResponse ,TRSR>
+ReduceSpectralResponse<TSpectralResponse , TRSR>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-   Superclass::PrintSelf(os,indent);
+   Superclass::PrintSelf(os, indent);
    os<<std::endl;
    os << "spectre " << m_InputSpectralResponse <<std::endl;
    os << "Sat RSR " << m_InputSatRSR <<std::endl;
 
    os<<std::endl;
-   os <<indent << "[Center Wavelength (micrometers),Reflectance (percent)]" << std::endl;
+   os <<indent << "[Center Wavelength (micrometers), Reflectance (percent)]" << std::endl;
    for(typename VectorPairType::const_iterator it = m_ReduceResponse->GetResponse().begin(); it != m_ReduceResponse->GetResponse().end(); ++it)
    {
      os <<indent << "Band Nb : "<< it - m_ReduceResponse->GetResponse().begin() << ": [" << (*it).first << ","<< (*it).second << "]" << std::endl;

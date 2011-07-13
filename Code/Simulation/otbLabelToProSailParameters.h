@@ -20,7 +20,6 @@
 #define __otbLabelToProSailParameters_h
 
 
-
 #include "otbLabelToSimulationParametersBase.h"
 
 namespace otb

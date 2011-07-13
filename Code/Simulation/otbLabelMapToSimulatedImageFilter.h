@@ -28,7 +28,6 @@
 #include "otbSatelliteRSR.h"
 
 
-
 namespace otb
 {
 
@@ -38,7 +37,7 @@ namespace otb
  *
  * LabelMapToSimulatedImageFilter convert a label map into a reflectance image.
  * Reflectance of the image are computed by applying the RSR (relative spectral response) of the satellite to the spectrum obtained
- * by the spectrum simulator (or read in the database). A gaussian noise is added to the reflectance value of  
+ * by the spectrum simulator (or read in the database). A gaussian noise is added to the reflectance value of
  * each pixel of the object. However the method used to add this noise (itk::Statistics::MersenneTwisterRandomVariateGenerator)
  * is not thread safe, and then (even if all the remaining is multithread) the number of thread must be set to 1.
  *
@@ -81,11 +80,11 @@ public:
    typedef LabelToProSailParameters<AttributesValueType>    LabelToParametersType;
    typedef typename LabelToParametersType::Pointer          LabelToParametersPointer;
    
-   typedef SpectralResponse<double,double>                  SpectralResponseType;
+   typedef SpectralResponse<double, double>                  SpectralResponseType;
    typedef typename SpectralResponseType::Pointer           SpectralResponsePointer;
-   typedef SatelliteRSR<double,double>                      SatelliteRSRType;
+   typedef SatelliteRSR<double, double>                      SatelliteRSRType;
    typedef typename SatelliteRSRType::Pointer               SatelliteRSRPointer;
-   typedef ReduceSpectralResponse<SpectralResponseType,SatelliteRSRType> ReduceSpectralResponseType;
+   typedef ReduceSpectralResponse<SpectralResponseType, SatelliteRSRType> ReduceSpectralResponseType;
    typedef typename ReduceSpectralResponseType::Pointer                  ReduceSpectralResponsePointer;
    
    typedef itk::Statistics::MersenneTwisterRandomVariateGenerator RandomGeneratorType;

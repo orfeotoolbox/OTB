@@ -35,13 +35,13 @@ int otbSailReflVTest(int argc, char * argv[])
    
    double Cab=static_cast<double>(atof(argv[1]));
    double Car=static_cast<double>(atof(argv[2]));
-   double CBrown=static_cast<double>(atof(argv[3])); 
+   double CBrown=static_cast<double>(atof(argv[3]));
    double Cw=static_cast<double>(atof(argv[4]));
    double Cm=static_cast<double>(atof(argv[5]));
    double N=static_cast<double>(atof(argv[6]));
    double LAI=static_cast<double>(atof(argv[7]));
    double Angl=static_cast<double>(atof(argv[8]));
-   double PSoil=static_cast<double>(atof(argv[9])); 
+   double PSoil=static_cast<double>(atof(argv[9]));
    double Skyl=static_cast<double>(atof(argv[10]));
    double HSpot=static_cast<double>(atof(argv[11]));
    double TTS=static_cast<double>(atof(argv[12]));
@@ -82,8 +82,8 @@ int otbSailReflVTest(int argc, char * argv[])
    sail->SetTransmittance(prospect->GetTransmittance());
    sail->Update();
    
-   std::ofstream outputFile(OutputName,std::ios::out);
-   for(unsigned int i=0;i<sail->GetViewingReflectance()->Size();i++)
+   std::ofstream outputFile(OutputName, std::ios::out);
+   for(unsigned int i=0; i<sail->GetViewingReflectance()->Size(); i++)
    {
       outputFile<<sail->GetViewingReflectance()->GetResponse()[i].second<<std::endl;
    }

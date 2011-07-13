@@ -23,14 +23,13 @@
 #include "itkProcessObject.h"
 
 
-
 namespace otb
 {
 
 /**
  * \class SimulationStep2Base
  * \brief Base class for all methods that generate spectrum of an object using its reflectance and transmittance
- * \brief  (ex: Sail http://teledetection.ipgp.jussieu.fr/prosail/). 
+ * \brief  (ex: Sail http://teledetection.ipgp.jussieu.fr/prosail/).
  *
  * \sa ProcessObject
  */
@@ -47,7 +46,7 @@ public:
    typedef itk::SmartPointer<const Self>       ConstPointer;
 
    /** Some convenient typedefs. */
-   typedef SpectralResponse<double,double>     SpectralResponseType;
+   typedef SpectralResponse<double, double>     SpectralResponseType;
    typedef double                              ParametersValueType;
    typedef itk::Array<ParametersValueType>     ParametersType;
    

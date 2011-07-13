@@ -25,8 +25,8 @@
 namespace otb
 {
 
-template <class TSpectralResponse ,class TRSR>
-AtmosphericEffects<TSpectralResponse ,TRSR>
+template <class TSpectralResponse , class TRSR>
+AtmosphericEffects<TSpectralResponse , TRSR>
 ::AtmosphericEffects()
   {
     m_InputSpectralResponse = InputSpectralResponseType::New();
@@ -34,9 +34,9 @@ AtmosphericEffects<TSpectralResponse ,TRSR>
     m_InputSatRSR = InputRSRType::New();
   }
 /*
-template <class TSpectralResponse ,class TRSR>
-void  
-AtmosphericEffects<TSpectralResponse ,TRSR>
+template <class TSpectralResponse , class TRSR>
+void
+AtmosphericEffects<TSpectralResponse , TRSR>
 ::LoadFilterFunctionAtmosphericCorrectionParameters(double step)
 {
   //LMoad the filter function from the RSR
@@ -46,9 +46,9 @@ AtmosphericEffects<TSpectralResponse ,TRSR>
   }
 }
 */
-template <class TSpectralResponse ,class TRSR>
-void  
-AtmosphericEffects<TSpectralResponse ,TRSR>
+template <class TSpectralResponse , class TRSR>
+void
+AtmosphericEffects<TSpectralResponse , TRSR>
 ::Process6S(/*const unsigned int numBand*/)
 {
   typedef otb::AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
@@ -61,7 +61,7 @@ AtmosphericEffects<TSpectralResponse ,TRSR>
   typedef FilterFunctionValuesType::ValuesVectorType ValuesVectorType;
   ValuesVectorType valuesVector;
   const double step = 0.0025;
-  for (unsigned int i=0;i < this->m_InputSatRSR->GetNbBands();++i)
+  for (unsigned int i=0; i < this->m_InputSatRSR->GetNbBands(); ++i)
   {
     //Foreach band
     valuesVector.clear();
@@ -74,7 +74,7 @@ AtmosphericEffects<TSpectralResponse ,TRSR>
     pair.second=0.;
     m_CorrectedSpectralResponse->GetResponse().push_back(pair);
 
-    for ( double j=inter.first ; j <= inter.second; j+=step)
+    for ( double j=inter.first; j <= inter.second; j+=step)
     {
       valuesVector.push_back( (*this->m_InputSatRSR->GetRSR()[i])(j) );
     }

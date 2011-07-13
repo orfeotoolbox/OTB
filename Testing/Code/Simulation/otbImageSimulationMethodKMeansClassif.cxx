@@ -64,7 +64,7 @@ int otbImageSimulationMethodKMeansClassif(int argc, char * argv[])
    typedef otb::SailModel                                                             SimulationStep2Type;
    typedef otb::ProlateInterpolateImageFunction<LabelImageType>                       FTMType;
    typedef otb::ImageSimulationMethod<VectorDataType, SpatialisationFilterType,
-    SimulationStep1Type, SimulationStep2Type, FTMType ,OutputImageType>               ImageSimulationMethodType;
+    SimulationStep1Type, SimulationStep2Type, FTMType , OutputImageType>               ImageSimulationMethodType;
    
    typedef OutputImageType::PixelType                               SampleType;
    typedef itk::Statistics::ListSample<SampleType>                          ListSampleType;
@@ -72,7 +72,7 @@ int otbImageSimulationMethodKMeansClassif(int argc, char * argv[])
    typedef TreeGeneratorType::KdTreeType                                    TreeType;
    typedef itk::Statistics::KdTreeBasedKmeansEstimator<TreeType>            EstimatorType;
    
-   typedef otb::KMeansImageClassificationFilter<OutputImageType, LabelImageType,nbClasses> ClassificationFilterType;
+   typedef otb::KMeansImageClassificationFilter<OutputImageType, LabelImageType, nbClasses> ClassificationFilterType;
    typedef ClassificationFilterType::KMeansParametersType                    KMeansParametersType;
    
    typedef itk::ImageRegionIterator<OutputImageType> ImageRegionIteratorType;
@@ -137,16 +137,16 @@ int otbImageSimulationMethodKMeansClassif(int argc, char * argv[])
    centroidIndex[1]=objectSize[1]/2;
    
    EstimatorType::ParametersType initialCentroids(nbBands * nbClasses);
-   ImageRegionIteratorType it(imageSimulation->GetOutputReflectanceImage(),imageSimulation->GetOutputReflectanceImage()->GetLargestPossibleRegion());
+   ImageRegionIteratorType it(imageSimulation->GetOutputReflectanceImage(), imageSimulation->GetOutputReflectanceImage()->GetLargestPossibleRegion());
    it.GoToBegin();
    ListSampleType::Pointer listSample = ListSampleType::New();
    unsigned int x=0;
    unsigned int classIndex=0;
    while(!it.IsAtEnd())
-   {  
+   {
       if(it.GetIndex()==centroidIndex)
       {
-         for(unsigned int j=0;j<nbBands;j++)
+         for(unsigned int j=0; j<nbBands; j++)
          {
             initialCentroids[j+classIndex*nbBands]=it.Get()[j];
          }

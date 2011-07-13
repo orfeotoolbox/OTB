@@ -23,7 +23,7 @@
 #include "otbMath.h"
 
 //TODO check EPSILON matlab
-#define EPSILON 0.0000000000000000000000001 
+#define EPSILON 0.0000000000000000000000001
 
 namespace otb
 {
@@ -36,16 +36,16 @@ SailModel
    this->ProcessObject::SetNumberOfRequiredOutputs(2);
    
    SpectralResponseType::Pointer vRefl = static_cast<SpectralResponseType *>(this->MakeOutput(0).GetPointer());
-   this->itk::ProcessObject::SetNthOutput(0,vRefl.GetPointer());
+   this->itk::ProcessObject::SetNthOutput(0, vRefl.GetPointer());
    
    SpectralResponseType::Pointer hRefl = static_cast<SpectralResponseType *>(this->MakeOutput(1).GetPointer());
-   this->itk::ProcessObject::SetNthOutput(1,hRefl.GetPointer());
+   this->itk::ProcessObject::SetNthOutput(1, hRefl.GetPointer());
    
    //default values
    m_LAI=2;
-   m_Angl=50; 
+   m_Angl=50;
    m_PSoil=1;
-   m_Skyl=70; 
+   m_Skyl=70;
    m_HSpot=0.2;
    m_TTS=30;
    m_TTO=0;
@@ -58,7 +58,7 @@ void
 SailModel
 ::SetReflectance(const SpectralResponseType * object)
 {
-   this->itk::ProcessObject::SetNthInput(0,const_cast<SpectralResponseType *>(object));
+   this->itk::ProcessObject::SetNthInput(0, const_cast<SpectralResponseType *>(object));
 }
 
 SailModel::SpectralResponseType *
@@ -78,7 +78,7 @@ void
 SailModel
 ::SetTransmittance(const SpectralResponseType * object)
 {
-   this->itk::ProcessObject::SetNthInput(1,const_cast<SpectralResponseType *>(object));
+   this->itk::ProcessObject::SetNthInput(1, const_cast<SpectralResponseType *>(object));
 }
 
 SailModel::SpectralResponseType *
@@ -134,10 +134,10 @@ SailModel
 ::SetParameters(const ParametersType & params)
 {
    
-   if(params.Size()!=8) itkExceptionMacro( << "Must have 8 parameters in that order : LAI,Angl,PSoil,Skyl,HSpot,TTS,TTO,PSI" );
+   if(params.Size()!=8) itkExceptionMacro( << "Must have 8 parameters in that order : LAI, Angl, PSoil, Skyl, HSpot, TTS, TTO, PSI" );
    m_Parameters = params;
    m_LAI=params[0];
-   m_Angl=params[1]; 
+   m_Angl=params[1];
    m_PSoil=params[2];
    m_Skyl=params[3];
    m_HSpot=params[4];
@@ -192,44 +192,44 @@ SailModel
    dso = vcl_sqrt(tants*tants+tanto*tanto-2.*tants*tanto*cospsi);
 
    // angular distance, compensation of shadow length
-   // Calculate geometric factors associated with extinction and scattering 
+   // Calculate geometric factors associated with extinction and scattering
    // Initialise sums
    double ks = 0;
    double ko = 0;
    double bf = 0;
    double sob = 0;
    double sof = 0;
-   double ttl,ctl,ksli,koli,sobli,sofli,bfli;
+   double ttl, ctl, ksli, koli, sobli, sofli, bfli;
    double chi_s, chi_o, frho, ftau;
    VectorType result(4);
    
    // Weighted sums over LIDF
-   for(unsigned int i=0;i<lidf.size();i++)
+   for(unsigned int i=0; i<lidf.size(); i++)
    {
-      ttl = 2.5+5*i;	// leaf inclination discrete values
+      ttl = 2.5+5*i;       // leaf inclination discrete values
       ctl = vcl_cos(rd*ttl);
-      // SAIL volume scattering phase function gives interception and portions to be 
+      // SAIL volume scattering phase function gives interception and portions to be
       // multiplied by rho and tau
       
-      this->Volscatt(m_TTS,m_TTO,m_PSI,ttl,result);
+      this->Volscatt(m_TTS, m_TTO, m_PSI, ttl, result);
       chi_s = result[0];
       chi_o = result[1];
       frho = result[2];
       ftau = result[3];
 
       //********************************************************************************
-      //*                   SUITS SYSTEM COEFFICIENTS 
+      //*                   SUITS SYSTEM COEFFICIENTS
       //*
-      //*	ks  : Extinction coefficient for direct solar flux
-      //*	ko  : Extinction coefficient for direct observed flux
-      //*	att : Attenuation coefficient for diffuse flux
-      //*	sigb : Backscattering coefficient of the diffuse downward flux
-      //*	sigf : Forwardscattering coefficient of the diffuse upward flux
-      //*	sf  : Scattering coefficient of the direct solar flux for downward diffuse flux
-      //*	sb  : Scattering coefficient of the direct solar flux for upward diffuse flux
-      //*	vf   : Scattering coefficient of upward diffuse flux in the observed direction
-      //*	vb   : Scattering coefficient of downward diffuse flux in the observed direction
-      //*	w   : Bidirectional scattering coefficient
+      //*       ks  : Extinction coefficient for direct solar flux
+      //*       ko  : Extinction coefficient for direct observed flux
+      //*       att : Attenuation coefficient for diffuse flux
+      //*       sigb : Backscattering coefficient of the diffuse downward flux
+      //*       sigf : Forwardscattering coefficient of the diffuse upward flux
+      //*       sf  : Scattering coefficient of the direct solar flux for downward diffuse flux
+      //*       sb  : Scattering coefficient of the direct solar flux for upward diffuse flux
+      //*       vf   : Scattering coefficient of upward diffuse flux in the observed direction
+      //*       vb   : Scattering coefficient of downward diffuse flux in the observed direction
+      //*       w   : Bidirectional scattering coefficient
       //********************************************************************************
    
       // Extinction coefficients
@@ -237,36 +237,36 @@ SailModel
       koli = chi_o/cto;
    
       // Area scattering coefficient fractions
-      sobli	= frho*CONST_PI/ctscto;
-      sofli	= ftau*CONST_PI/ctscto;
-      bfli	= ctl*ctl;
-      ks	= ks+ksli*lidf[i];
-      ko	= ko+koli*lidf[i];
-      bf	= bf+bfli*lidf[i];
-      sob	= sob+sobli*lidf[i];
-      sof	= sof+sofli*lidf[i];
+      sobli       = frho*CONST_PI/ctscto;
+      sofli       = ftau*CONST_PI/ctscto;
+      bfli       = ctl*ctl;
+      ks       = ks+ksli*lidf[i];
+      ko       = ko+koli*lidf[i];
+      bf       = bf+bfli*lidf[i];
+      sob       = sob+sobli*lidf[i];
+      sof       = sof+sofli*lidf[i];
    }
    
    // Geometric factors to be used later with rho and tau
-   double sdb,sdf,dob,dof,ddb,ddf;
-   sdb	= 0.5*(ks+bf);
-   sdf	= 0.5*(ks-bf);
-   dob	= 0.5*(ko+bf);
-   dof	= 0.5*(ko-bf);
-   ddb	= 0.5*(1.+bf);
-   ddf	= 0.5*(1.-bf);
+   double sdb, sdf, dob, dof, ddb, ddf;
+   sdb       = 0.5*(ks+bf);
+   sdf       = 0.5*(ks-bf);
+   dob       = 0.5*(ko+bf);
+   dof       = 0.5*(ko-bf);
+   ddb       = 0.5*(1.+bf);
+   ddf       = 0.5*(1.-bf);
 
-   double lambda,Es,Ed,Rsoil1,Rsoil2,rsoil0,rho,tau,PARdiro,PARdifo;
-   double sigb,sigf,att,m2,m,sb,sf,vb,vf,w;
-   double tss,too,tsstoo,rdd,tdd,rsd,tsd,rdo,tdo,rso,rsos,rsod;
-   double rddt, rsdt,rdot,rsodt,rsost,rsot,dn;
-   double e1,e2,rinf,rinf2,re,denom,J1ks,J2ks,J1ko,J2ko;
-   double Ps,Qs,Pv,Qv,z,g1,g2,Tv1,Tv2,T1,T2,T3;
-   double alf,sumint,fhot,x1,y1,f1,fint,x2,y2,f2;
-   double resh,resv;
+   double lambda, Es, Ed, Rsoil1, Rsoil2, rsoil0, rho, tau, PARdiro, PARdifo;
+   double sigb, sigf, att, m2, m, sb, sf, vb, vf, w;
+   double tss, too, tsstoo, rdd, tdd, rsd, tsd, rdo, tdo, rso, rsos, rsod;
+   double rddt, rsdt, rdot, rsodt, rsost, rsot, dn;
+   double e1, e2, rinf, rinf2, re, denom, J1ks, J2ks, J1ko, J2ko;
+   double Ps, Qs, Pv, Qv, z, g1, g2, Tv1, Tv2, T1, T2, T3;
+   double alf, sumint, fhot, x1, y1, f1, fint, x2, y2, f2;
+   double resh, resv;
    
    int nbdata = sizeof(dataSpecP5B) / sizeof(dataSpec);
-   for (int i = 0 ; i < nbdata ; i++)
+   for (int i = 0; i < nbdata; i++)
    {
       lambda = dataSpecP5B[i].lambda;
       Es = dataSpecP5B[i].directLight; //8
@@ -335,10 +335,10 @@ SailModel
       re = rinf*e1;
       denom = 1.-rinf2*e2;
 
-      J1ks=Jfunc1(ks,m,m_LAI);
-      J2ks=Jfunc2(ks,m,m_LAI);
-      J1ko=Jfunc1(ko,m,m_LAI);
-      J2ko=Jfunc2(ko,m,m_LAI);
+      J1ks=Jfunc1(ks, m, m_LAI);
+      J2ks=Jfunc2(ks, m, m_LAI);
+      J1ko=Jfunc1(ko, m, m_LAI);
+      J2ko=Jfunc2(ko, m, m_LAI);
       
       Ps = (sf+sb*rinf)*J1ks;
       Qs = (sf*rinf+sb)*J2ks;
@@ -354,7 +354,7 @@ SailModel
       
       tss = exp(-ks*m_LAI);
       too = exp(-ko*m_LAI);
-      z = Jfunc3(ks,ko,m_LAI);
+      z = Jfunc3(ks, ko, m_LAI);
       g1 = (z-J1ks*too)/(ko+m);
       g2 = (z-J1ko*tss)/(ks+m);
       
@@ -391,7 +391,7 @@ SailModel
          fint=(1.-exp(-alf))*0.05;
          sumint=0;
          
-         for(unsigned int j=1;j<=20;j++)
+         for(unsigned int j=1; j<=20; j++)
          {
             if (j<20) x2 = -vcl_log(1.-j*fint)/alf;
             else x2 = 1;
@@ -424,7 +424,7 @@ SailModel
       resh = (rddt*PARdifo+rsdt*PARdiro)/(PARdiro+PARdifo);
       resv = (rdot*PARdifo+rsot*PARdiro)/(PARdiro+PARdifo);
       
-      SpectralResponseType::PairType tmp1,tmp2;
+      SpectralResponseType::PairType tmp1, tmp2;
       tmp1.first=lambda/1000.0;
       tmp1.second=resh;
       tmp2.first=lambda/1000.0;
@@ -438,18 +438,16 @@ SailModel
 
 
 
-
 void
 SailModel
 ::Calc_LIDF(const double a, VectorType &lidf)
 {
    int ala=a;
    VectorType freq;
-   Campbell(ala,freq);
+   Campbell(ala, freq);
    lidf=freq;
 
 }
-
 
 
 void
@@ -457,13 +455,13 @@ SailModel
 ::Campbell(const double ala, VectorType &freq)
 {
    unsigned int n=18;
-   double excent = exp(-1.6184e-5*vcl_pow(ala,3)+2.1145e-3*ala*ala-1.2390e-1*ala+3.2491);
+   double excent = exp(-1.6184e-5*vcl_pow(ala, 3)+2.1145e-3*ala*ala-1.2390e-1*ala+3.2491);
    double sum=0;
    unsigned int tx2, tx1;
    double tl1, tl2, x1, x2, v, alpha, alpha2, x12, x22, alpx1, alpx2, dum, almx1, almx2;
    VectorType temp;
 
-   for(unsigned int i=0;i<n;i++)
+   for(unsigned int i=0; i<n; i++)
    {
       tx2 = 5*i;
       tx1 = 5*(i+1);
@@ -506,13 +504,12 @@ SailModel
       }
    }
 
-   for(unsigned int i=0;i<n;i++)
+   for(unsigned int i=0; i<n; i++)
    {
       freq.push_back(temp[i]/sum);
    }
 
 }
-
 
 
 void
@@ -537,12 +534,12 @@ SailModel
    // ..............................................................................
    //     betas -bts- and betao -bto- computation
    //     Transition angles (beta) for solar (betas) and view (betao) directions
-   //     if thetav+thetal>pi/2, bottom side of the leaves is observed for leaf azimut 
+   //     if thetav+thetal>pi/2, bottom side of the leaves is observed for leaf azimut
    //     interval betao+phi<leaf azimut<2pi-betao+phi.
    //     if thetav+thetal<pi/2, top side of the leaves is always observed, betao=pi
    //     same consideration for solar direction to compute betas
    // ..............................................................................
-   double cosbts, cosbto, bts,ds,chi_s, bto, doo, chi_o;
+   double cosbts, cosbto, bts, ds, chi_s, bto, doo, chi_o;
    double btran1, btran2, bt1, bt2, bt3, t1, t2 , denom, frho, ftau;
    
    cosbts = 5;
@@ -630,11 +627,10 @@ SailModel
 
 
 
-
 double
 SailModel
 ::Jfunc1(const double k, const double l, const double t)
-{   
+{
    //J1 function with avoidance of singularity problem
    double v;
    double del=(k-l)*t;
@@ -671,12 +667,11 @@ SailModel
 }
 
 
-
 void
 SailModel
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-   Superclass::PrintSelf(os,indent);
+   Superclass::PrintSelf(os, indent);
 
 }
 } // end namespace otb

@@ -26,17 +26,17 @@ int otbReduceSpectralResponse(int argc, char * argv[])
 {
   if ( argc!=4 )
   {
-    std::cout << argv[0] << std::endl << "\t" << "<Spectral_response_filename>"<< "\t" << "<RSR_filename>"<< "\t" << "<Nb total satelite band>"<< std::endl ;
+    std::cout << argv[0] << std::endl << "\t" << "<Spectral_response_filename>"<< "\t" << "<RSR_filename>"<< "\t" << "<Nb total satelite band>"<< std::endl;
     return EXIT_FAILURE;
   }
   
-  typedef otb::SpectralResponse< double,double>  ResponseType;
+  typedef otb::SpectralResponse< double, double>  ResponseType;
   typedef ResponseType::Pointer  ResponsePointerType;
   
-  typedef otb::SatelliteRSR< double,double>  SatRSRType;
+  typedef otb::SatelliteRSR< double, double>  SatRSRType;
   typedef SatRSRType::Pointer  SatRSRPointerType;
   
-  typedef otb::ReduceSpectralResponse < ResponseType,SatRSRType>  ReduceResponseType;
+  typedef otb::ReduceSpectralResponse < ResponseType, SatRSRType>  ReduceResponseType;
   typedef ReduceResponseType::Pointer  ReduceResponseTypePointerType;
   
   const std::string spectreFile(argv[1]);

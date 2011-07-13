@@ -123,7 +123,7 @@ public:
 //     outPixel = vcl_fabs (static_cast<TOutput>(temp2));
     outPixel = static_cast<TOutput>(temp2);
     
-//     std::cout << "in out "<< static_cast<double>(inPixel) << " ; " << static_cast<double>(outPixel)<< std::endl;
+//     std::cout << "in out "<< static_cast<double>(inPixel) << "; " << static_cast<double>(outPixel)<< std::endl;
 //     std::cout <<"plot " << m_Residu << "+" << m_Coefficient << "*(x/(1-x*" << m_SphericalAlbedo << "))" << std::endl;
 //     std::cout << "------------------------------" << std::endl;
     return outPixel;
@@ -230,12 +230,12 @@ public:
   /** Get/Set Filter function coef. */
   void SetFilterFunctionCoef( FilterFunctionCoefVectorType vect )
   {
-  	m_FilterFunctionCoef = vect;
-  	this->Modified();
+         m_FilterFunctionCoef = vect;
+         this->Modified();
   }
   FilterFunctionCoefVectorType GetFilterFunctionCoef()
   {
-  	return m_FilterFunctionCoef;
+         return m_FilterFunctionCoef;
   }
 
   /** Compute radiative terms if necessary and then updtae functors attibuts. */

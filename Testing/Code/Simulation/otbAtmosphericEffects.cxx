@@ -28,13 +28,13 @@
 int otbAtmosphericEffects(int argc, char * argv[])
 {
 
-   typedef otb::SpectralResponse< double,double>  SpectralResponseType;
+   typedef otb::SpectralResponse< double, double>  SpectralResponseType;
    
-   typedef otb::SatelliteRSR< double,double>  SatRSRType;
+   typedef otb::SatelliteRSR< double, double>  SatRSRType;
    
-   typedef otb::ReduceSpectralResponse< SpectralResponseType,SatRSRType>  ReduceSpectralResponseType;
+   typedef otb::ReduceSpectralResponse< SpectralResponseType, SatRSRType>  ReduceSpectralResponseType;
    
-   typedef otb::AtmosphericEffects< SpectralResponseType,SatRSRType>  AtmosphericEffectsType;
+   typedef otb::AtmosphericEffects< SpectralResponseType, SatRSRType>  AtmosphericEffectsType;
    
    typedef AtmosphericEffectsType::AtmosphericCorrectionParametersType  AtmosphericCorrectionParametersType;
    typedef AtmosphericCorrectionParametersType::AerosolModelType AerosolModelType;
@@ -45,7 +45,7 @@ int otbAtmosphericEffects(int argc, char * argv[])
 
    if ( argc!= 15 )
    {
-      std::cout <<argv[0]<< " <spectrum_filename>"  << "\t" << "<Gabarit_SAT_fileSRname>" << "\t" << "<nbBands>" << "\t" << "<day>"  << "\t" << "<month>"  << "\t" << "<zenithSolarAngle>"  << "\t" << "<azimutSolarAngle>"  << "\t" << "<viewingZenitalAngle>"  << "\t" << "<viewingAzimutalAngle>"  << "\t" << "<atmoPressure>"  << "\t" << "<waterVaporAmount>"  << "\t" << "<ozoneAmount>"  << "\t" << "<aerosolModelValue>"  << "\t" << "<aerosolOptical>" << "\t" << std::endl ;
+      std::cout <<argv[0]<< " <spectrum_filename>"  << "\t" << "<Gabarit_SAT_fileSRname>" << "\t" << "<nbBands>" << "\t" << "<day>"  << "\t" << "<month>"  << "\t" << "<zenithSolarAngle>"  << "\t" << "<azimutSolarAngle>"  << "\t" << "<viewingZenitalAngle>"  << "\t" << "<viewingAzimutalAngle>"  << "\t" << "<atmoPressure>"  << "\t" << "<waterVaporAmount>"  << "\t" << "<ozoneAmount>"  << "\t" << "<aerosolModelValue>"  << "\t" << "<aerosolOptical>" << "\t" << std::endl;
       return EXIT_FAILURE;
    }
    
@@ -74,7 +74,7 @@ int otbAtmosphericEffects(int argc, char * argv[])
    AtmosphericEffectsType::Pointer  atmosphericEffectsFilter = AtmosphericEffectsType::New();
 
    
-   spectrum->Load(file,100.0);
+   spectrum->Load(file, 100.0);
    
    satRSR->SetNbBands(nbBand);
    satRSR->Load(fileSatG);

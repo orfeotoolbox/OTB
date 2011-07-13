@@ -23,13 +23,13 @@
 
 int otbSpectralResponse(int argc, char * argv[])
 {
-  typedef otb::SpectralResponse< double,double>  ResponseType;
+  typedef otb::SpectralResponse< double, double>  ResponseType;
   typedef ResponseType::Pointer  ResponsePointerType;
-  typedef otb::VectorImage<double,2> ImageType;
+  typedef otb::VectorImage<double, 2> ImageType;
   
   if ( argc!=3 )
   {
-    std::cout << argv[0] << std::endl << "\t" << "<Spectrum_filename>"  << "\t" << "<Lambda>"<< std::endl ;
+    std::cout << argv[0] << std::endl << "\t" << "<Spectrum_filename>"  << "\t" << "<Lambda>"<< std::endl;
     return EXIT_FAILURE;
   }
   //Instantiation

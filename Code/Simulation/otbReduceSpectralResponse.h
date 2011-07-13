@@ -29,14 +29,14 @@
 namespace otb
 {
 /** \class ReduceSpectralResponse
-   * \brief This class computes the reduced spectral response of each band of a sensor 
+   * \brief This class computes the reduced spectral response of each band of a sensor
    *
    * It takes the spectral response of an object and the relative spectral
    * response of a satellite (one response per band) to compute the satellite spectral bands.
    *
    * The two templates indicate:
    * - the SpectralResponse input (from the JPL ASTER spectral library for example)
-   * - the relative s spectral response of a sensor 
+   * - the relative s spectral response of a sensor
    *
    * The method CalculateResponse must be called.
    *
@@ -46,7 +46,7 @@ namespace otb
    * \sa SatelliteRSR
    *
  */
-template <class TSpectralResponse ,class TRSR>
+template <class TSpectralResponse , class TRSR>
 class ReduceSpectralResponse : public itk::DataObject
 {
 
@@ -76,7 +76,7 @@ class ReduceSpectralResponse : public itk::DataObject
       typedef typename std::vector<ValuePrecisionType>  ReduceSpectralResponseVectorType;
       /** Standard macros */
       itkNewMacro(Self);
-      itkTypeMacro(ReduceSpectralResponse,DataObject);
+      itkTypeMacro(ReduceSpectralResponse, DataObject);
       
       itkGetConstObjectMacro(InputSatRSR, InputRSRType);
       itkSetObjectMacro(InputSatRSR, InputRSRType);
@@ -95,7 +95,7 @@ class ReduceSpectralResponse : public itk::DataObject
       void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
       /**
-      * \param PrecisionType 
+      * \param PrecisionType
       * \return The integrate value of the RSR for the input spectral response.
       */
       inline ValuePrecisionType operator()(const unsigned int numBand);
@@ -104,7 +104,7 @@ class ReduceSpectralResponse : public itk::DataObject
       void CalculateResponse();
       
       /** Create and load Spectral response and satellite RSR from files*/
-      void LoadInputsFromFiles (const std::string & spectralResponseFile, const std::string & RSRFile, const unsigned int nbRSRBands, ValuePrecisionType coefNormSpectre = 1.0, ValuePrecisionType coefNormRSR = 1.0); 
+      void LoadInputsFromFiles (const std::string & spectralResponseFile, const std::string & RSRFile, const unsigned int nbRSRBands, ValuePrecisionType coefNormSpectre = 1.0, ValuePrecisionType coefNormRSR = 1.0);
           
    protected:
       /** Constructor */

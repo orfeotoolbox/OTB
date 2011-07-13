@@ -41,7 +41,7 @@ namespace otb
 
 /**
  * \class VectorDataToLabelMapWithAttributesFilter
- * \brief Converts a vector data into a LabelMap. 
+ * \brief Converts a vector data into a LabelMap.
  *
  * VectorDataToLabelMapWithAttributesFilter convert a vector data in a LabelMap.
  * To each distinct object is assigned a unique label.
@@ -159,8 +159,8 @@ public:
   const InputVectorDataType * GetInput(unsigned int idx);
 
   /** Set/Get Automatic size computation mode*/
-  itkSetMacro(AutomaticSizeComputation,bool);
-  itkGetMacro(AutomaticSizeComputation,bool);
+  itkSetMacro(AutomaticSizeComputation, bool);
+  itkGetMacro(AutomaticSizeComputation, bool);
    
   /** Set/Get Initial label value */
   itkSetMacro(InitialLabel, LabelType);

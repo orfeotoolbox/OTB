@@ -47,7 +47,7 @@ namespace otb
  *
  * ImageSimulationMethod converts a vectorData describing spatial distibution of materials into an image of reflectance.
  * Reflectance image is computed by applying the RSR (relatives spectral response) of the satellite to the spectra obtained
- * by the spectrum simulator. Then the satellite FTM is applied to compute spatial distribution of spectra. 
+ * by the spectrum simulator. Then the satellite FTM is applied to compute spatial distribution of spectra.
  * FTM is computed  using otbThreamingResampleImageFilter and a ProlateInterpolateImageFunction.
  * This method is not a true composite filter and the method UpdateData() must be called in a main program using this class.
  *
@@ -91,14 +91,14 @@ public:
    typedef typename OutputImageType::Pointer               OutputImagePointer;
    typedef typename OutputImageType::IndexType             IndexType;
    typedef typename OutputImageType::InternalPixelType     InternalPixelType;
-   typedef otb::Image<LabelType,2>                           OutputLabelImageType;
+   typedef otb::Image<LabelType, 2>                           OutputLabelImageType;
 
    typedef otb::LabelMapToSimulatedImageFilter<LabelMapType,
-      SimulationStep1Type,SimulationStep2Type,OutputImageType>      LabelMapToSimulatedImageFilterType;
+      SimulationStep1Type, SimulationStep2Type, OutputImageType>      LabelMapToSimulatedImageFilterType;
    typedef typename LabelMapToSimulatedImageFilterType::Pointer     LabelMapToSimulatedImageFilterPointer;
 
 
-   typedef otb::MultiToMonoChannelExtractROI<double,double>                MultiToMonoChannelFilterType;
+   typedef otb::MultiToMonoChannelExtractROI<double, double>                MultiToMonoChannelFilterType;
    typedef typename MultiToMonoChannelFilterType::Pointer                  MultiToMonoChannelFilterPointer;
    typedef MultiToMonoChannelFilterType::OutputImageType                   SingleImageType;
    typedef otb::ImageList<SingleImageType>                                 ImageListType;
@@ -109,11 +109,11 @@ public:
    
    typedef otb::ProlateInterpolateImageFunction<SingleImageType>                         InterpolatorType;
    typedef typename InterpolatorType::Pointer                                            InterpolatorPointer;
-   typedef itk::ResampleImageFilter<SingleImageType,SingleImageType,double>              FTMFilterType;
+   typedef itk::ResampleImageFilter<SingleImageType, SingleImageType, double>              FTMFilterType;
 //    typedef otb::StreamingResampleImageFilter<SingleImageType, SingleImageType, double>   FTMFilterType;
    typedef typename FTMFilterType::Pointer                                               FTMFilterPointer;
    
-   typedef itk::LabelMapToLabelImageFilter<LabelMapType,OutputLabelImageType> LabelMapToLabelImageFilterType;
+   typedef itk::LabelMapToLabelImageFilter<LabelMapType, OutputLabelImageType> LabelMapToLabelImageFilterType;
    typedef typename LabelMapToLabelImageFilterType::Pointer LabelMapToLabelImageFilterPointer;
    
    /** Standard Macro*/

@@ -57,7 +57,7 @@ class ITK_EXPORT LeafParameters : public itk::DataObject
       itkSetMacro(CBrown, double);
       itkGetMacro(CBrown, double);
       
-      /** Set/Get equivalent leaf water thickness,EWT (cm)*/
+      /** Set/Get equivalent leaf water thickness, EWT (cm)*/
       itkSetMacro(Cw, double);
       itkGetMacro(Cw, double);
       

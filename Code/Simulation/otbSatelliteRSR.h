@@ -34,7 +34,7 @@ namespace otb
    * \brief This class represents a hierarchy of vector data.
    *
    * This class contains an std::vector of spectral response, class otb::SpectralResponse (one for each band of the satellite).
-   * 
+   *
    *
    * The two templates indicate:
    * - the precision of the wavelenght (X) (by default: double)
@@ -54,9 +54,9 @@ class SatelliteRSR : public itk::DataObject
       
       /** Standard macros */
       itkNewMacro(Self);
-      itkTypeMacro(SatelliteRSR,DataObject);
+      itkTypeMacro(SatelliteRSR, DataObject);
       
-      /** Set the number of band of the satellite from an ASCII file 
+      /** Set the number of band of the satellite from an ASCII file
       * Need to parse first all the file to determine the number of columns */
       itkGetConstMacro(NbBands, unsigned int);
       itkSetMacro(NbBands, unsigned int);
@@ -67,7 +67,7 @@ class SatelliteRSR : public itk::DataObject
       typedef TPrecision PrecisionType;
       typedef TValuePrecision ValuePrecisionType;
       
-      typedef SpectralResponse <TPrecision,TValuePrecision>     SpectralResponseType;
+      typedef SpectralResponse <TPrecision, TValuePrecision>     SpectralResponseType;
       typedef typename SpectralResponseType::Pointer            SpectralResponsePointerType;
       typedef std::vector <SpectralResponsePointerType>         RSRVectorType;
       typedef typename SpectralResponseType::VectorPairType     VectorPairType;
@@ -90,17 +90,17 @@ class SatelliteRSR : public itk::DataObject
             
             typename VectorPairType::const_iterator it = a->GetResponse().begin();
                
-            while ((*it).second == 0) 
+            while ((*it).second == 0)
             {
-               ++it;  
+               ++it;
             }
             aFirstNotNull = (*it).first;
             
             typename VectorPairType::const_iterator it2 = b->GetResponse().begin();
                
-            while ((*it2).second == 0) 
+            while ((*it2).second == 0)
             {
-               ++it2;  
+               ++it2;
             }
             bFirstNotNull = (*it2).first;
             
@@ -110,7 +110,7 @@ class SatelliteRSR : public itk::DataObject
           
       /**
       * \param PrecisionType
-      * \param Band  
+      * \param Band
       * \return The interpolate value of the SR for the numBand (band num 0 to band num (m_NbBands-1)).
       */
       inline ValuePrecisionType operator()(const PrecisionType & lambda, const unsigned int numBand);

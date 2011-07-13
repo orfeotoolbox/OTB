@@ -24,7 +24,7 @@
 #include "otbMath.h"
 
 //TODO check EPSILON matlab
-#define EPSILON 0.0000000000000000000000001 
+#define EPSILON 0.0000000000000000000000001
 
 namespace otb
 {
@@ -37,10 +37,10 @@ ProspectModel
    this->ProcessObject::SetNumberOfRequiredOutputs(2);
    
    SpectralResponseType::Pointer outputRefl = static_cast<SpectralResponseType *>(this->MakeOutput(0).GetPointer());
-   this->itk::ProcessObject::SetNthOutput(0,outputRefl.GetPointer());
+   this->itk::ProcessObject::SetNthOutput(0, outputRefl.GetPointer());
    
    SpectralResponseType::Pointer outputTrans = static_cast<SpectralResponseType *>(this->MakeOutput(1).GetPointer());
-   this->itk::ProcessObject::SetNthOutput(1,outputTrans.GetPointer());
+   this->itk::ProcessObject::SetNthOutput(1, outputTrans.GetPointer());
 }
 
 /** Set Input */
@@ -48,7 +48,7 @@ void
 ProspectModel
 ::SetInput(const LeafParametersType * object)
 {
-   this->itk::ProcessObject::SetNthInput(0,const_cast<LeafParametersType *>(object));
+   this->itk::ProcessObject::SetNthInput(0, const_cast<LeafParametersType *>(object));
 }
 
 /** Get Input */
@@ -105,7 +105,7 @@ ProspectModel
 ::SetInput(const ParametersType & params)
 {
 //    m_Parameters = params;
-   if(params.Size()!=6) itkExceptionMacro( << "Must have 6 parameters in that order : Cab,Car,CBrown,Cw,Cm,N" );
+   if(params.Size()!=6) itkExceptionMacro( << "Must have 6 parameters in that order : Cab, Car, CBrown, Cw, Cm, N" );
    LeafParametersType::Pointer leafParams = LeafParametersType::New();
    leafParams->SetCab(params[0]);
    leafParams->SetCar(params[1]);
@@ -114,7 +114,7 @@ ProspectModel
    leafParams->SetCm(params[4]);
    leafParams->SetN(params[5]);
    
-   this->itk::ProcessObject::SetNthInput(0,leafParams);
+   this->itk::ProcessObject::SetNthInput(0, leafParams);
 }
 
 
@@ -141,7 +141,7 @@ ProspectModel
    Cm = leafParameters->GetCm();
    
    int nbdata = sizeof(dataSpecP5B) / sizeof(dataSpec);
-   for (int i = 0 ; i < nbdata ; i++)
+   for (int i = 0; i < nbdata; i++)
    {
       lambda = dataSpecP5B[i].lambda;
       n = dataSpecP5B[i].refLeafMatInd;
@@ -151,10 +151,10 @@ ProspectModel
       k = k / N;
       if(k == itk::NumericTraits<double>::ZeroValue() ) k=EPSILON;
 
-      trans=(1.-k)*exp(-k)+k*k*boost::math::expint(1,k);
+      trans=(1.-k)*exp(-k)+k*k*boost::math::expint(1, k);
       
-      t12 = this->Tav(alpha,n);
-      temp = this->Tav(90,n);
+      t12 = this->Tav(alpha, n);
+      temp = this->Tav(90, n);
       
       
       t21 = temp/(n*n);
@@ -179,7 +179,7 @@ ProspectModel
       else
          vb=vcl_sqrt(beta*(va-r90)/(va*(beta-r90)));
    
-      vbNN = vcl_pow(vb,N-1.);
+      vbNN = vcl_pow(vb, N-1.);
       vbNNinv = 1./vbNN;
       vainv = 1./va;
       s1=ta*t90*(vbNN-vbNNinv);
@@ -209,7 +209,7 @@ ProspectModel
 
    double theta_rad = theta*CONST_PI/180;
    double r2, rp, rm, a, k, ds, k2, rm2, res, b1, b2, b;
-   double ts, tp1, tp2, tp3, tp4, tp5, tp; 
+   double ts, tp1, tp2, tp3, tp4, tp5, tp;
 
    r2=ref*ref;
    rp=r2+1;
@@ -229,12 +229,12 @@ ProspectModel
 
       b2=ds*ds-rp/2;
       b=b1-b2;
-      ts=(k2/(6*vcl_pow(b,3))+k/b-b/2)-(k2/(6*vcl_pow(a,3))+k/a-a/2);
+      ts=(k2/(6*vcl_pow(b, 3))+k/b-b/2)-(k2/(6*vcl_pow(a, 3))+k/a-a/2);
       tp1=-2*r2*(b-a)/(rp*rp);
       tp2=-2*r2*rp*log(b/a)/rm2;
       tp3=r2*(1./b-1./a)/2;
-      tp4=16*r2*r2*(r2*r2+1)*log((2*rp*b-rm2)/(2*rp*a-rm2))/(vcl_pow(rp,3)*rm2);
-      tp5=16*vcl_pow(r2,3)*(1./(2*rp*b-rm2)-1./(2*rp*a-rm2))/vcl_pow(rp,3);
+      tp4=16*r2*r2*(r2*r2+1)*log((2*rp*b-rm2)/(2*rp*a-rm2))/(vcl_pow(rp, 3)*rm2);
+      tp5=16*vcl_pow(r2, 3)*(1./(2*rp*b-rm2)-1./(2*rp*a-rm2))/vcl_pow(rp, 3);
       tp=tp1+tp2+tp3+tp4+tp5;
       res=(ts+tp)/(2*ds*ds);
    }
@@ -247,7 +247,7 @@ void
 ProspectModel
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-   Superclass::PrintSelf(os,indent);
+   Superclass::PrintSelf(os, indent);
 
 }
 } // end namespace otb

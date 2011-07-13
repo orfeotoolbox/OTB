@@ -29,12 +29,12 @@ int otbSpatialisationTest(int argc, char * argv[])
 
   typedef unsigned short LabelType;
   const unsigned int Dimension = 2;
-  typedef otb::Image<LabelType,Dimension> ImageType;
+  typedef otb::Image<LabelType, Dimension> ImageType;
   typedef otb::AttributesMapLabelObject<LabelType, Dimension, std::string>    LabelObjectType;
   typedef itk::LabelMap<LabelObjectType>                                      LabelMapType;
   typedef otb::ImageFileWriter<ImageType>                                     ImageWriterType;
   typedef otb::SpatialisationFilter<LabelMapType>                             FilterType;
-  typedef itk::LabelMapToLabelImageFilter<LabelMapType,ImageType>             LabelMapToLabelImageFilterType;
+  typedef itk::LabelMapToLabelImageFilter<LabelMapType, ImageType>             LabelMapToLabelImageFilterType;
 
   
   /** Instantiation of pointer objects*/
@@ -89,13 +89,13 @@ int otbSpatialisationTest(int argc, char * argv[])
   filter->SetAreaVector(areaVector);
   filter->SetLabels(labels);
   filter->Update();
-// 
-// 
+//
+//
 //   std::cout<<"nb labels : "<<filter->GetOutput()->GetNumberOfLabelObjects()<<std::endl;
 //   filter->GetOutput()->PrintLabelObjects();
 //   labelMapToLabelImageFilter->SetInput(filter->GetOutput());
 // //   labelMapToLabelImageFilter->Update();
-//   
+//
 //   writer->SetFileName(outfilename);
 //   writer->SetInput(labelMapToLabelImageFilter->GetOutput());
 //   writer->Update();

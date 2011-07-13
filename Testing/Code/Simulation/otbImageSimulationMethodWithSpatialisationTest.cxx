@@ -54,7 +54,7 @@ int otbImageSimulationMethodWithSpatialisationTest(int argc, char * argv[])
    typedef otb::SailModel                                                             SimulationStep2Type;
    typedef otb::ProlateInterpolateImageFunction<LabelImageType>                       FTMType;
    typedef otb::ImageSimulationMethod<VectorDataType, SpatialisationFilterType,
-    SimulationStep1Type, SimulationStep2Type, FTMType ,OutputImageType>               ImageSimulationMethodType;
+    SimulationStep1Type, SimulationStep2Type, FTMType , OutputImageType>               ImageSimulationMethodType;
    
 
    

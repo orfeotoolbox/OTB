@@ -34,11 +34,11 @@ namespace otb
    * This class contains the spectral response from an object and the relative spectral
    * response of a satellite (one response per band)
    *
-   * This class compute the reduce spectral response of each band of a sensor 
+   * This class compute the reduce spectral response of each band of a sensor
    *
    * The two templates indicate
    * - the SpectralResponse input (from the JPL ASTER spectral library for example)
-   * - the relative s spectral response of a sensor 
+   * - the relative s spectral response of a sensor
    *
    * The elements in the ReduceSpectralResponseClassifierRAndNIR have their coordinates in the projection
    * specified by the Wkt string. This class also offer the possibility to store
@@ -50,12 +50,12 @@ namespace otb
    * \sa SatelliteRSR
    *
  */
-  template <class TReduceSpectralResponse ,class TFunction = Functor::NDVI< typename TReduceSpectralResponse::ValuePrecisionType,typename TReduceSpectralResponse::ValuePrecisionType,
+  template <class TReduceSpectralResponse , class TFunction = Functor::NDVI< typename TReduceSpectralResponse::ValuePrecisionType, typename TReduceSpectralResponse::ValuePrecisionType,
   typename TReduceSpectralResponse::ValuePrecisionType > >
       class ReduceSpectralResponseClassifierRAndNIR
   : public itk::DataObject
       {
-        //friend class 
+        //friend class
         public:
           /** Standard class typedefs */
           typedef ReduceSpectralResponseClassifierRAndNIR Self;
@@ -72,7 +72,7 @@ namespace otb
           
           /** Standard macros */
           itkNewMacro(Self);
-          itkTypeMacro(ReduceSpectralResponseClassifierRAndNIR,DataObject);
+          itkTypeMacro(ReduceSpectralResponseClassifierRAndNIR, DataObject);
           
           itkGetConstObjectMacro(InputReduceSpectralResponse, InputReduceSpectralResponseType);
           itkSetObjectMacro(InputReduceSpectralResponse, InputReduceSpectralResponseType);
@@ -112,7 +112,7 @@ namespace otb
           
           
           /**
-           * \param ValuePrecisionType 
+           * \param ValuePrecisionType
            * \return the indice value.
            */
           inline ValuePrecisionType operator()();

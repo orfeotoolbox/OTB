@@ -50,12 +50,12 @@ int otbImageSimulationMethodWithVectorDataTest(int argc, char * argv[])
    typedef itk::LabelMap<LabelObjectType>                                             LabelMapType;
    typedef otb::VectorDataFileReader<VectorDataType>                                  VectorDataFileReaderType;
 
-   typedef otb::VectorDataToLabelMapWithAttributesFilter<VectorDataType,LabelMapType> SpatialisationFilterType;
+   typedef otb::VectorDataToLabelMapWithAttributesFilter<VectorDataType, LabelMapType> SpatialisationFilterType;
    typedef otb::ProspectModel                                                         SimulationStep1Type;
    typedef otb::SailModel                                                             SimulationStep2Type;
    typedef otb::ProlateInterpolateImageFunction<LabelImageType>                       FTMType;
    typedef otb::ImageSimulationMethod<VectorDataType, SpatialisationFilterType,
-    SimulationStep1Type, SimulationStep2Type, FTMType ,OutputImageType>               ImageSimulationMethodType;
+    SimulationStep1Type, SimulationStep2Type, FTMType , OutputImageType>               ImageSimulationMethodType;
 
    
    /** Instantiation of pointer objects*/

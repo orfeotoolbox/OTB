@@ -40,13 +40,13 @@ namespace otb
    *
    * This class contains a SORTED std::vector of std::pair values.
    * The first argument of the pair is a wavelenght lambda (in micro meters).
-   * The second argument of the pair is the reflectance response associated to lambda 
+   * The second argument of the pair is the reflectance response associated to lambda
    *
    * The two templates indicate:
    * - the precision of the wavelenght (X) (by default: double),
    * - the precision of the reflectance associated to the wavelenght (Y) (by default: double).
    *
-   * This Spectral response can be loaded from ASCII file (JPL spectral library Version 1.2) 
+   * This Spectral response can be loaded from ASCII file (JPL spectral library Version 1.2)
    * http://speclib.jpl.nasa.gov.
    * \sa itk::DataObject
  */
@@ -64,23 +64,23 @@ class SpectralResponse : public itk::DataObject
       typedef TPrecision PrecisionType;
       typedef TValuePrecision ValuePrecisionType;
       
-      typedef std::pair<TPrecision,TValuePrecision> PairType;
+      typedef std::pair<TPrecision, TValuePrecision> PairType;
       //typedef boost::shared_ptr<PairType> PairPointerType;
       typedef typename std::vector<PairType> VectorPairType;
       
       /** Standard image typedef */
-      typedef otb::VectorImage<TValuePrecision,2> ImageType;
+      typedef otb::VectorImage<TValuePrecision, 2> ImageType;
       typedef typename ImageType::Pointer         ImagePointerType;
       typedef itk::ImageRegionIterator< ImageType > IteratorType;
       
       /** Standard filter functions values typedef */
       typedef otb::FilterFunctionValues             FilterFunctionValuesType;
-      typedef itk::SmartPointer< FilterFunctionValuesType > 	FilterFunctionValuesPointerType;
+      typedef itk::SmartPointer< FilterFunctionValuesType >        FilterFunctionValuesPointerType;
 
   typedef std::pair<TPrecision, TPrecision> IntervalType;
       /** Standard macros */
       itkNewMacro(Self);
-      itkTypeMacro(SpectralResponse,DataObject);
+      itkTypeMacro(SpectralResponse, DataObject);
 
   itkSetMacro(SensitivityThreshold, TPrecision);
   itkGetConstMacro(SensitivityThreshold, TPrecision);
@@ -109,7 +109,7 @@ class SpectralResponse : public itk::DataObject
   }
       
       /**
-      * \param PrecisionType 
+      * \param PrecisionType
       * \return The interpolate value of the SR (for now a simple linear interpolation is used).
       */
       inline ValuePrecisionType operator()(const PrecisionType & lambda);
@@ -136,7 +136,7 @@ class SpectralResponse : public itk::DataObject
        FilterFunctionValuesPointerType GetFilterFunctionValues(double step = 0.0025) const;
        
        /** Get the wavelenght of the first and last not null reflectance  */
-  IntervalType GetInterval() 
+  IntervalType GetInterval()
   {
     if( ! m_IntervalComputed )
       this->ComputeInterval();

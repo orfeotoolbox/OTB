@@ -25,7 +25,7 @@ namespace otb
 {
 
 template <class TPrecision, class TValuePrecision>
-SatelliteRSR<TPrecision,TValuePrecision>
+SatelliteRSR<TPrecision, TValuePrecision>
 ::SatelliteRSR()
 {
    //m_RSR = VectorType::New();
@@ -35,7 +35,7 @@ SatelliteRSR<TPrecision,TValuePrecision>
 
 template <class TPrecision, class TValuePrecision>
 void
-SatelliteRSR<TPrecision,TValuePrecision>
+SatelliteRSR<TPrecision, TValuePrecision>
 ::Load(const std::string & filename, ValuePrecisionType coefNormalization)
 {
    //Parse 6S file Reduce spectral response
@@ -51,7 +51,7 @@ SatelliteRSR<TPrecision,TValuePrecision>
    unsigned int nbColumns = m_NbBands +2;
     
    // For each band
-   for (unsigned int i=0; i < m_NbBands;++i)
+   for (unsigned int i=0; i < m_NbBands; ++i)
    {
       //Create a SpectralResponse for the band i
       SpectralResponsePointerType RSRBand = SpectralResponseType::New();
@@ -66,9 +66,9 @@ SatelliteRSR<TPrecision,TValuePrecision>
       fin >> zenithalAngle;
       
       //for each band add a pair of values (wavelenght and % response)
-      for (unsigned int i=0; i < m_NbBands;++i)
+      for (unsigned int i=0; i < m_NbBands; ++i)
       {
-         std::pair <TPrecision,TValuePrecision > currentPair;
+         std::pair <TPrecision, TValuePrecision > currentPair;
          currentPair.first = currentLambda;
          fin >> currentPair.second;
          currentPair.second = currentPair.second / coefNormalization;
@@ -80,14 +80,14 @@ SatelliteRSR<TPrecision,TValuePrecision>
 
    if(m_SortBands)
      {
-     //Sort the vector of SpectralResponse (band order by minimum wacvelenght firsst not null response 
+     //Sort the vector of SpectralResponse (band order by minimum wacvelenght firsst not null response
      std::sort(m_RSR.begin(), m_RSR.end(), sort_band());
      }
 }
 
 template <class TPrecision, class TValuePrecision>
 bool
-SatelliteRSR<TPrecision,TValuePrecision>
+SatelliteRSR<TPrecision, TValuePrecision>
 ::Clear()
 {
    m_RSR.clear();
@@ -96,7 +96,7 @@ SatelliteRSR<TPrecision,TValuePrecision>
 
 template <class TPrecision, class TValuePrecision>
 int
-SatelliteRSR<TPrecision,TValuePrecision>
+SatelliteRSR<TPrecision, TValuePrecision>
 ::Size() const
 {
    return m_RSR.size();
@@ -104,8 +104,8 @@ SatelliteRSR<TPrecision,TValuePrecision>
 
 
 template <class TPrecision, class TValuePrecision>
-inline typename SatelliteRSR<TPrecision,TValuePrecision>::ValuePrecisionType
-SatelliteRSR<TPrecision,TValuePrecision>
+inline typename SatelliteRSR<TPrecision, TValuePrecision>::ValuePrecisionType
+SatelliteRSR<TPrecision, TValuePrecision>
 ::operator()(const PrecisionType & lambda, const unsigned int numBand)
 {
    //Get the response of the band number numBand at the wavelenght lambda
@@ -123,10 +123,10 @@ SatelliteRSR<TPrecision,TValuePrecision>
 
 template <class TPrecision, class TValuePrecision>
 void
-SatelliteRSR<TPrecision,TValuePrecision>
+SatelliteRSR<TPrecision, TValuePrecision>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-   Superclass::PrintSelf(os,indent);
+   Superclass::PrintSelf(os, indent);
    os<<std::endl;
    
    //typename VectorPairType::iterator it = m_RSR.begin();
@@ -134,7 +134,7 @@ SatelliteRSR<TPrecision,TValuePrecision>
    for(typename RSRVectorType::const_iterator it = m_RSR.begin(); it != m_RSR.end(); it++)
    {
       os << indent << "Band Number " << it - m_RSR.begin() << std::endl;
-      (*it)->PrintSelf (os,indent);
+      (*it)->PrintSelf (os, indent);
       os << std::endl;
    }
 }

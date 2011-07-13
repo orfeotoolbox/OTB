@@ -28,8 +28,8 @@ int otbSurfaceReflectanceToReflectanceFilterNew(int argc, char * argv[])
 {
   const unsigned int                            Dimension = 2;
   typedef double                                PixelType;
-  typedef otb::VectorImage<PixelType,Dimension> ImageType;
-  typedef otb::SurfaceReflectanceToReflectanceFilter< ImageType,ImageType>  SurfaceReflectanceToReflectanceFilterType;
+  typedef otb::VectorImage<PixelType, Dimension> ImageType;
+  typedef otb::SurfaceReflectanceToReflectanceFilter< ImageType, ImageType>  SurfaceReflectanceToReflectanceFilterType;
   typedef SurfaceReflectanceToReflectanceFilterType::Pointer  SurfaceReflectanceToReflectanceFilterPointerType;
 
   //Instantiation
@@ -43,23 +43,23 @@ int otbSurfaceReflectanceToReflectanceFilterTest(int argc, char * argv[])
 {
   if ( argc != 7 )
     {
-    std::cout << argv[0] << std::endl << "\t" << "<RSR_filename>" << "\t" << "<intrinsic>"  << "\t" << "<albedeo>"  << "\t" << "<gaseous>"  << "\t" << "<downTrans>"  << "\t" << "<upTrans>"   << std::endl ;
+    std::cout << argv[0] << std::endl << "\t" << "<RSR_filename>" << "\t" << "<intrinsic>"  << "\t" << "<albedeo>"  << "\t" << "<gaseous>"  << "\t" << "<downTrans>"  << "\t" << "<upTrans>"   << std::endl;
     return EXIT_FAILURE;
     }
 
   const unsigned int                            Dimension = 2;
   typedef double                                PixelType;
-  typedef otb::VectorImage<PixelType,Dimension> ImageType;
+  typedef otb::VectorImage<PixelType, Dimension> ImageType;
 
   typedef itk::ImageRegionIterator< ImageType > IteratorType;
   //typedef ResponseType::PairType    PairType;
   //typedef otb::ObjectList< PairType > PairListType;
   //   PairListType::Pointer pairList = PairListType::New();
 
-  typedef otb::SurfaceReflectanceToReflectanceFilter< ImageType,ImageType>  SurfaceReflectanceToReflectanceFilterType;
+  typedef otb::SurfaceReflectanceToReflectanceFilter< ImageType, ImageType>  SurfaceReflectanceToReflectanceFilterType;
   typedef SurfaceReflectanceToReflectanceFilterType::Pointer  SurfaceReflectanceToReflectanceFilterPointerType;
 
-  typedef otb::SpectralResponse< PixelType,PixelType>  ResponseType;
+  typedef otb::SpectralResponse< PixelType, PixelType>  ResponseType;
   typedef ResponseType::Pointer  ResponsePointerType;
   //
   ResponsePointerType  myResponse=ResponseType::New();
@@ -105,7 +105,7 @@ int otbSurfaceReflectanceToReflectanceFilterTest(int argc, char * argv[])
     {
     pixel[i] = myResponse->GetResponse()[i].second;
     }
-  image->SetPixel(start,pixel);
+  image->SetPixel(start, pixel);
 
   //Instantiation
   SurfaceReflectanceToReflectanceFilterPointerType  myFilter=SurfaceReflectanceToReflectanceFilterType::New();

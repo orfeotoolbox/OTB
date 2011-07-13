@@ -55,15 +55,15 @@ int otbImageSimulationMethodSVMClassif(int argc, char * argv[])
    
    
    typedef otb::SpatialisationFilter<LabelMapType>                                    SpatialisationFilterType;
-//    typedef otb::VectorDataToLabelMapWithAttributesFilter<VectorDataType,LabelMapType> SpatialisationFilterType;
+//    typedef otb::VectorDataToLabelMapWithAttributesFilter<VectorDataType, LabelMapType> SpatialisationFilterType;
    typedef otb::ProspectModel                                                         SimulationStep1Type;
    typedef otb::SailModel                                                             SimulationStep2Type;
    typedef otb::ProlateInterpolateImageFunction<LabelImageType>                       FTMType;
    typedef otb::ImageSimulationMethod<VectorDataType, SpatialisationFilterType,
-    SimulationStep1Type, SimulationStep2Type, FTMType ,OutputImageType>               ImageSimulationMethodType;
+    SimulationStep1Type, SimulationStep2Type, FTMType , OutputImageType>               ImageSimulationMethodType;
    
    
-   typedef otb::SVMImageModelEstimator<OutputImageType,LabelImageType>                    SVMEstimatorType;
+   typedef otb::SVMImageModelEstimator<OutputImageType, LabelImageType>                    SVMEstimatorType;
    typedef otb::SVMImageClassificationFilter<OutputImageType, LabelImageType>             SVMClassificationFilterType;
    
    /** Instantiation of pointer objects*/

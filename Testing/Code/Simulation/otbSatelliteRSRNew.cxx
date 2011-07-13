@@ -22,7 +22,7 @@
 
 int otbSatelliteRSRNew(int argc, char * argv[])
 {
-  typedef otb::SatelliteRSR< double,double>  ResponseType;
+  typedef otb::SatelliteRSR< double, double>  ResponseType;
   typedef ResponseType::Pointer  ResponsePointerType;
   
   

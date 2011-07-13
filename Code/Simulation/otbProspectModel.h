@@ -52,7 +52,7 @@ class ITK_EXPORT ProspectModel : public SimulationStep1Base
       
       /** Standard macros */
       itkNewMacro(Self);
-      itkTypeMacro(ProspectModel,SpectrumGeneratorBase);
+      itkTypeMacro(ProspectModel, SpectrumGeneratorBase);
       
       /** Set/Get Input */
       virtual  void SetInput(const ParametersType &);

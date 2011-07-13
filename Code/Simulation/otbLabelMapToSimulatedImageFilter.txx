@@ -75,14 +75,14 @@ LabelMapToSimulatedImageFilter<TInputLabelMap, TSimuStep1, TSimuStep2, TOutputIm
    SpectralResponsePointer readSpectrum = SpectralResponseType::New();
    bool hasPath=false;
    //Check if the spectrum associated to this object is given by a database.
-   for(unsigned int i=0; i<labelObject->GetNumberOfAttributes();i++)
+   for(unsigned int i=0; i<labelObject->GetNumberOfAttributes(); i++)
    {
       if(labelObject->GetAvailableAttributes()[i].compare("path")==0) hasPath=true;
    }
    if(hasPath==true)
    {
 //       std::cout<<"had path : "<< m_PathRoot + labelObject->GetAttribute("path") << std::endl;
-      readSpectrum->Load( m_PathRoot + labelObject->GetAttribute("path"),100 );
+      readSpectrum->Load( m_PathRoot + labelObject->GetAttribute("path"), 100 );
       reduceSpectralResponse->SetInputSpectralResponse(readSpectrum);
    }
    else //compute the spectrum using ProSail
@@ -126,9 +126,9 @@ LabelMapToSimulatedImageFilter<TInputLabelMap, TSimuStep1, TSimuStep2, TOutputIm
       for( unsigned int i=0; i<length; i++)
       {
          //add gaussian white noise
-         for(unsigned int i=0;i<m_NumberOfComponentsPerPixel;i++)
+         for(unsigned int i=0; i<m_NumberOfComponentsPerPixel; i++)
          {
-            double ran = randomGen->GetNormalVariate(m_Mean,m_Variance);
+            double ran = randomGen->GetNormalVariate(m_Mean, m_Variance);
             pixel[i]=static_cast<InternalPixelType>(reduceSpectralResponse->GetReduceResponse()->GetResponse()[i].second + ran);
          }
 //          pixel[i]=static_cast<InternalPixelType>(reduceSpectralResponse->GetReduceResponse()->GetResponse()[i].second);
@@ -137,7 +137,6 @@ LabelMapToSimulatedImageFilter<TInputLabelMap, TSimuStep1, TSimuStep2, TOutputIm
       }
    }
 }
-
 
 
 template <class TInputLabelMap, class TSimuStep1, class TSimuStep2, class TOutputImage>

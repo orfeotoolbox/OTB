@@ -33,11 +33,11 @@ namespace otb
  * \brief Create a label map from objects description.
  *
  * Objects are described by:
- * - Vector of area: indicating the spectral type of the object (rock, grass, forest,..).
+ * - Vector of area: indicating the spectral type of the object (rock, grass, forest, ..).
  * - Vector of paths: indicating the path of files containing associated spectra or "" if spectrum will be simulated.
- * 
+ *
  * SpatialisationFilter creates a labelMap containing NumberOfObjects[0]*NumberOfObject[1] objects (number of objects by line, number of objects by column).
- * Each object is rectangular of size ObjectSize. 
+ * Each object is rectangular of size ObjectSize.
  * Two attributes "path" and "area" are added to each object using SetPathVector and SetAreaVector.
  * The Label of each object is set using SetLabels.
  *
@@ -87,7 +87,7 @@ public:
    
 //    itkSetMacro(PathVector, VectorType);
 //    itkGetMacro(PathVector, VectorType);
-//    
+//
 //    itkSetMacro(AreaVector, VectorType);
 //    itkGetMacro(AreaVector, VectorType);
    void SetPathVector(VectorType & v)
@@ -131,7 +131,7 @@ private:
    VectorType m_PathVector; //vector containing the spectrum path (if any) for each object
    /** Vector containing the spectral type of each object.*/
    VectorType m_AreaVector; //vector containing the the type of each object
-   /** Vector containing the label of each object (ex.: 1,2,25, etc.).*/
+   /** Vector containing the label of each object (ex.: 1, 2, 25, etc.).*/
    LabelVectorType m_Labels; //vector containing the label of each object.
 
 };

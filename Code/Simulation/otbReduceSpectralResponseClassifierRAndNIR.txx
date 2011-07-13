@@ -25,26 +25,26 @@
 namespace otb
 {
 
-  template <class TReduceSpectralResponse ,class TFunction>
-      ReduceSpectralResponseClassifierRAndNIR <TReduceSpectralResponse ,TFunction>
+  template <class TReduceSpectralResponse , class TFunction>
+      ReduceSpectralResponseClassifierRAndNIR <TReduceSpectralResponse , TFunction>
   ::ReduceSpectralResponseClassifierRAndNIR()
   {
     //m_Response = VectorType::New();
   }
 
-  template <class TReduceSpectralResponse ,class TFunction>
+  template <class TReduceSpectralResponse , class TFunction>
       bool
-          ReduceSpectralResponseClassifierRAndNIR<TReduceSpectralResponse ,TFunction>
+          ReduceSpectralResponseClassifierRAndNIR<TReduceSpectralResponse , TFunction>
   ::Clear()
   {
     return ( m_InputReduceSpectralResponse->Clear() );
   }
 
   
-  template <class TReduceSpectralResponse ,class TFunction>
-      inline typename ReduceSpectralResponseClassifierRAndNIR<TReduceSpectralResponse ,TFunction>
+  template <class TReduceSpectralResponse , class TFunction>
+      inline typename ReduceSpectralResponseClassifierRAndNIR<TReduceSpectralResponse , TFunction>
   ::ValuePrecisionType
-      ReduceSpectralResponseClassifierRAndNIR<TReduceSpectralResponse ,TFunction>
+      ReduceSpectralResponseClassifierRAndNIR<TReduceSpectralResponse , TFunction>
   ::operator()()
   {
       return m_Functor((*m_InputReduceSpectralResponse)(m_RBandNumber), (*m_InputReduceSpectralResponse)(m_NIRBandNumber));
@@ -52,12 +52,12 @@ namespace otb
   
 
   
-  template <class TReduceSpectralResponse ,class TFunction>
+  template <class TReduceSpectralResponse , class TFunction>
       void
-          ReduceSpectralResponseClassifierRAndNIR<TReduceSpectralResponse ,TFunction>
+          ReduceSpectralResponseClassifierRAndNIR<TReduceSpectralResponse , TFunction>
   ::PrintSelf(std::ostream& os, itk::Indent indent) const
   {
-    Superclass::PrintSelf(os,indent);
+    Superclass::PrintSelf(os, indent);
   }
 } // end namespace otb
 

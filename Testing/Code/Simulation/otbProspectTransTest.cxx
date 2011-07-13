@@ -35,7 +35,7 @@ int otbProspectTransTest(int argc, char * argv[])
    
    double Cab=static_cast<double>(atof(argv[1]));
    double Car=static_cast<double>(atof(argv[2]));
-   double CBrown=static_cast<double>(atof(argv[3])); 
+   double CBrown=static_cast<double>(atof(argv[3]));
    double Cw=static_cast<double>(atof(argv[4]));
    double Cm=static_cast<double>(atof(argv[5]));
    double N=static_cast<double>(atof(argv[6]));
@@ -57,8 +57,8 @@ int otbProspectTransTest(int argc, char * argv[])
    prospect->SetInput(leafParams);
    prospect->Update();
    
-   std::ofstream outputFile(OutputName,std::ios::out);
-   for(unsigned int i=0;i<prospect->GetTransmittance()->Size();i++)
+   std::ofstream outputFile(OutputName, std::ios::out);
+   for(unsigned int i=0; i<prospect->GetTransmittance()->Size(); i++)
    {
       outputFile<<prospect->GetTransmittance()->GetResponse()[i].second<<std::endl;
    }

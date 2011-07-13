@@ -31,7 +31,7 @@ namespace otb
  * Constructor
  */
 template <class TInputImage, class TOutputImage>
-SurfaceReflectanceToReflectanceFilter<TInputImage,TOutputImage>
+SurfaceReflectanceToReflectanceFilter<TInputImage, TOutputImage>
 ::SurfaceReflectanceToReflectanceFilter()
 {
   m_AtmosphericRadiativeTerms = AtmosphericRadiativeTerms::New();
@@ -46,7 +46,7 @@ SurfaceReflectanceToReflectanceFilter<TInputImage,TOutputImage>
 
 template <class TInputImage, class TOutputImage>
 void
-SurfaceReflectanceToReflectanceFilter<TInputImage,TOutputImage>
+SurfaceReflectanceToReflectanceFilter<TInputImage, TOutputImage>
 ::UpdateAtmosphericRadiativeTerms()
 {
   MetaDataDictionaryType dict = this->GetInput()->GetMetaDataDictionary();
@@ -84,32 +84,32 @@ SurfaceReflectanceToReflectanceFilter<TInputImage,TOutputImage>
     }
   
   if(m_AeronetFileName != "")
-    m_CorrectionParameters->UpdateAeronetData( m_AeronetFileName, 
-					       imageMetadataInterface->GetYear(),
-					       imageMetadataInterface->GetHour(),
-					       imageMetadataInterface->GetMinute() );    
+    m_CorrectionParameters->UpdateAeronetData( m_AeronetFileName,
+                                          imageMetadataInterface->GetYear(),
+                                          imageMetadataInterface->GetHour(),
+                                          imageMetadataInterface->GetMinute() );
   
   // load fiter function values
   if(m_FilterFunctionValuesFileName != "")
     {
       m_CorrectionParameters->LoadFilterFunctionValue( m_FilterFunctionValuesFileName );
-   } 
-  // the user has set the filter function values 
+   }
+  // the user has set the filter function values
   else
     {
       if( m_FilterFunctionCoef.size() != this->GetInput()->GetNumberOfComponentsPerPixel() )
-	{
-	  itkExceptionMacro(<<"Filter Function and image channels mismatch.");
-	}
+       {
+         itkExceptionMacro(<<"Filter Function and image channels mismatch.");
+       }
       for(unsigned int i=0; i<this->GetInput()->GetNumberOfComponentsPerPixel(); i++)
-	{
-	  FilterFunctionValuesType::Pointer functionValues = FilterFunctionValuesType::New();
-	  functionValues->SetFilterFunctionValues(m_FilterFunctionCoef[i]);
-	  functionValues->SetMinSpectralValue(imageMetadataInterface->GetFirstWavelengths()[i]);
-	  functionValues->SetMaxSpectralValue(imageMetadataInterface->GetLastWavelengths()[i]);
-	  
-	  m_CorrectionParameters->SetWavelengthSpectralBandWithIndex(i, functionValues);
-	}
+       {
+         FilterFunctionValuesType::Pointer functionValues = FilterFunctionValuesType::New();
+         functionValues->SetFilterFunctionValues(m_FilterFunctionCoef[i]);
+         functionValues->SetMinSpectralValue(imageMetadataInterface->GetFirstWavelengths()[i]);
+         functionValues->SetMaxSpectralValue(imageMetadataInterface->GetLastWavelengths()[i]);
+         
+         m_CorrectionParameters->SetWavelengthSpectralBandWithIndex(i, functionValues);
+       }
     }
   
   Parameters2RadiativeTermsPointerType param2Terms = Parameters2RadiativeTermsType::New();
@@ -122,7 +122,7 @@ SurfaceReflectanceToReflectanceFilter<TInputImage,TOutputImage>
 
 template <class TInputImage, class TOutputImage>
 void
-SurfaceReflectanceToReflectanceFilter<TInputImage,TOutputImage>
+SurfaceReflectanceToReflectanceFilter<TInputImage, TOutputImage>
 ::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
@@ -132,13 +132,13 @@ SurfaceReflectanceToReflectanceFilter<TInputImage,TOutputImage>
 
 template <class TInputImage, class TOutputImage>
 void
-SurfaceReflectanceToReflectanceFilter<TInputImage,TOutputImage>
+SurfaceReflectanceToReflectanceFilter<TInputImage, TOutputImage>
 ::UpdateFunctors()
-{  
+{
   //this->GetFunctor().clear();
 
-//    for (unsigned int i = 0;i<this->GetInput()->GetNumberOfComponentsPerPixel();++i)
-   for (unsigned int i = 0;i<m_AtmosphericRadiativeTerms->GetWavelengthSpectralBand().size();++i)
+//    for (unsigned int i = 0; i<this->GetInput()->GetNumberOfComponentsPerPixel(); ++i)
+   for (unsigned int i = 0; i<m_AtmosphericRadiativeTerms->GetWavelengthSpectralBand().size(); ++i)
    {
       double coef;
       double res;
@@ -161,7 +161,7 @@ SurfaceReflectanceToReflectanceFilter<TInputImage,TOutputImage>
 
 template <class TInputImage, class TOutputImage>
 void
-SurfaceReflectanceToReflectanceFilter<TInputImage,TOutputImage>
+SurfaceReflectanceToReflectanceFilter<TInputImage, TOutputImage>
 ::GenerateParameters()
 {
   if(m_IsSetAtmosphericRadiativeTerms==false)

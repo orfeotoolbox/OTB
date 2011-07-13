@@ -34,10 +34,10 @@ ImageSimulationMethod< TInputVectorData, TSpatialisation, TSimulationStep1, TSim
    
    
 //    this->SetNumberOfRequiredOutputs(2);
-//    this->SetNthOutput(0,OutputImageType::New());
-//    this->SetNthOutput(1,OutputLabelImageType::New());
+//    this->SetNthOutput(0, OutputImageType::New());
+//    this->SetNthOutput(1, OutputLabelImageType::New());
    
-   //TODO a changer mais pour le moment obligatoire car ProlateInterpolateImageFunction 
+   //TODO a changer mais pour le moment obligatoire car ProlateInterpolateImageFunction
    // ne fonctionne qu'avec des image mono canal.
 //    m_FTMFilter = FTMFilterType::New();
 //    m_Interpolator = InterpolatorType::New();
@@ -61,9 +61,9 @@ ImageSimulationMethod< TInputVectorData, TSpatialisation, TSimulationStep1, TSim
 // ImageSimulationMethod< TInputVectorData, TSpatialisation, TSimulationStep1, TSimulationStep2, TFTM, TOutputImage>
 // ::SetInput(const InputVectorDataType* object)
 // {
-//    this->itk::ProcessObject::SetNthInput(0,const_cast<InputVectorDataType *>(object));
+//    this->itk::ProcessObject::SetNthInput(0, const_cast<InputVectorDataType *>(object));
 // }
-// 
+//
 // template <class TInputVectorData, class TSpatialisation, class TSimulationStep1, class TSimulationStep2, class TFTM, class TOutputImage>
 // typename ImageSimulationMethod<TInputVectorData, TSpatialisation, TSimulationStep1, TSimulationStep2, TFTM, TOutputImage>::InputVectorDataType *
 // ImageSimulationMethod< TInputVectorData, TSpatialisation, TSimulationStep1, TSimulationStep2, TFTM, TOutputImage>
@@ -85,7 +85,7 @@ ImageSimulationMethod< TInputVectorData, TSpatialisation, TSimulationStep1, TSim
 //    }
 //    return static_cast<OutputImageType *>(this->itk::ProcessObject::GetOutput(0));
 // }
-// 
+//
 // /** Get output label image */
 // template <class TInputVectorData, class TSpatialisation, class TSimulationStep1, class TSimulationStep2, class TFTM, class TOutputImage>
 // typename ImageSimulationMethod< TInputVectorData, TSpatialisation, TSimulationStep1, TSimulationStep2, TFTM, TOutputImage>::OutputLabelImageType *
@@ -200,11 +200,11 @@ ImageSimulationMethod< TInputVectorData, TSpatialisation, TSimulationStep1, TSim
 // ImageSimulationMethod< TInputVectorData, TSpatialisation, TSimulationStep1, TSimulationStep2, TFTM, TOutputImage>
 // ::GenerateData()
 // {
-//    
+//
 // //    m_Spatialisation->SetInput(m_InputVectorData);
 // //    m_Spatialisation->SetInitialLabel(1);
 // //    m_Spatialisation->SetBackgroundValue(0);
-//    
+//
 //    m_LabelMapToSimulatedImageFilter->SetInput(m_Spatialisation->GetOutput());
 //    m_LabelMapToSimulatedImageFilter->SetNumberOfComponentsPerPixel(m_NumberOfComponentsPerPixel);
 //    m_LabelMapToSimulatedImageFilter->SetSatRSRFilename(m_SatRSRFilename);
@@ -212,35 +212,35 @@ ImageSimulationMethod< TInputVectorData, TSpatialisation, TSimulationStep1, TSim
 //    m_LabelMapToSimulatedImageFilter->SetPathRoot(m_PathRoot);
 //    m_LabelMapToSimulatedImageFilter->SetMean(m_Mean);
 //    m_LabelMapToSimulatedImageFilter->SetVariance(m_Variance);
-// 
+//
 //    m_LabelMapToLabelImageFilter->SetInput(m_Spatialisation->GetOutput());
-//    m_LabelMapToLabelImageFilter->GraftNthOutput(0,this->GetOutputLabelImage());
+//    m_LabelMapToLabelImageFilter->GraftNthOutput(0, this->GetOutputLabelImage());
 //    m_LabelMapToLabelImageFilter->Update();
-//    this->GraftNthOutput(1,m_LabelMapToLabelImageFilter->GetOutput());
-// 
-// //    m_LabelMapToSimulatedImageFilter->GraftNthOutput(0,this->GetOutputReflectanceImage());
+//    this->GraftNthOutput(1, m_LabelMapToLabelImageFilter->GetOutput());
+//
+// //    m_LabelMapToSimulatedImageFilter->GraftNthOutput(0, this->GetOutputReflectanceImage());
 // //    m_LabelMapToSimulatedImageFilter->Update();
-// //    this->GraftNthOutput(0,m_LabelMapToSimulatedImageFilter->GetOutput());
-//    
+// //    this->GraftNthOutput(0, m_LabelMapToSimulatedImageFilter->GetOutput());
+//
 //    for(unsigned int i = 0; i<m_NumberOfComponentsPerPixel; i++)
 //    {
-//       
+//
 //       MultiToMonoChannelFilterPointer multiToMonoChannelFilter = MultiToMonoChannelFilterType::New();
 //       InterpolatorPointer interpolator = InterpolatorType::New();
 //       FTMFilterPointer FTMFilter = FTMFilterType::New();
-//       
+//
 //       multiToMonoChannelFilter->SetInput(m_LabelMapToSimulatedImageFilter->GetOutput());
 //       multiToMonoChannelFilter->SetChannel(i+1);
 //       multiToMonoChannelFilter->SetExtractionRegion(m_LabelMapToSimulatedImageFilter->GetOutput()->GetLargestPossibleRegion());
-//       
-// 
+//
+//
 //       //TODO comment changer interpolateur !
 //       interpolator->SetInputImage(multiToMonoChannelFilter->GetOutput());
 //       interpolator->SetRadius(m_Radius);
 //       interpolator->Initialize();
-//       
+//
 //       multiToMonoChannelFilter->UpdateOutputInformation();
-//       
+//
 //       FTMFilter->SetInterpolator(interpolator);
 // //       FTMFilter->SetOutputSize(multiToMonoChannelFilter->GetOutput()->GetLargestPossibleRegion().GetSize());
 //       FTMFilter->SetSize(multiToMonoChannelFilter->GetOutput()->GetLargestPossibleRegion().GetSize());
@@ -248,17 +248,16 @@ ImageSimulationMethod< TInputVectorData, TSpatialisation, TSimulationStep1, TSim
 //       FTMFilter->SetOutputOrigin(multiToMonoChannelFilter->GetOutput()->GetOrigin());
 //       FTMFilter->SetInput(multiToMonoChannelFilter->GetOutput());
 //       FTMFilter->Update();
-//       
+//
 //       m_ImageList->PushBack(FTMFilter->GetOutput());
 //    }
 //    m_ImageListToVectorImageFilter->SetInput(m_ImageList);
-// 
-//    m_ImageListToVectorImageFilter->GraftNthOutput(0,this->GetOutputReflectanceImage());
+//
+//    m_ImageListToVectorImageFilter->GraftNthOutput(0, this->GetOutputReflectanceImage());
 //    m_ImageListToVectorImageFilter->Update();
-//    this->GraftNthOutput(0,m_ImageListToVectorImageFilter->GetOutput());
-//    
+//    this->GraftNthOutput(0, m_ImageListToVectorImageFilter->GetOutput());
+//
 // }
-
 
 
 template <class TInputVectorData, class TSpatialisation, class TSimulationStep1, class TSimulationStep2, class TFTM, class TOutputImage>

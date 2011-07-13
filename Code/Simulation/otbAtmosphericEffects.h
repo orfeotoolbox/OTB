@@ -25,15 +25,15 @@
 namespace otb
 {
 /** \class AtmosphericEffects
-   * \brief This class applies atmospheric effects, computed from otbAtmosphericCorrectionParametersTo6SRadiativeTerms  to an input spectrum (otbSpectralResponse) using the otbSurfaceReflectanceToReflectanceFilter. 
+   * \brief This class applies atmospheric effects, computed from otbAtmosphericCorrectionParametersTo6SRadiativeTerms  to an input spectrum (otbSpectralResponse) using the otbSurfaceReflectanceToReflectanceFilter.
    *
    * The two templates indicate:
    * - the SpectralResponse input (from the JPL ASTER spectral library for example)
-   * - the SatelliteRSR relatives spectral response of a sensor (RSR). 
+   * - the SatelliteRSR relatives spectral response of a sensor (RSR).
    *
    * \sa itk::DataObject
  */
-template <class TSpectralResponse ,class TRSR>
+template <class TSpectralResponse , class TRSR>
 class AtmosphericEffects
   : public itk::DataObject
       {
@@ -64,7 +64,7 @@ class AtmosphericEffects
           
             /** Standard macros */
            itkNewMacro(Self);
-           itkTypeMacro(AtmosphericEffects,DataObject);
+           itkTypeMacro(AtmosphericEffects, DataObject);
           
            itkGetConstObjectMacro(InputSatRSR, InputRSRType);
            itkSetObjectMacro(InputSatRSR, InputRSRType);

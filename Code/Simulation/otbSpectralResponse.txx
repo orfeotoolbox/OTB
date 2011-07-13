@@ -29,7 +29,7 @@ namespace otb
 {
 
 template <class TPrecision, class TValuePrecision>
-SpectralResponse<TPrecision,TValuePrecision>
+SpectralResponse<TPrecision, TValuePrecision>
 ::SpectralResponse()
 {
   m_SensitivityThreshold = 0.1;
@@ -38,7 +38,7 @@ SpectralResponse<TPrecision,TValuePrecision>
 
 template <class TPrecision, class TValuePrecision>
 void
-SpectralResponse<TPrecision,TValuePrecision>
+SpectralResponse<TPrecision, TValuePrecision>
 ::Load(const std::string & filename, ValuePrecisionType coefNormalization)
 {
     //Parse JPL file spectral response (ASCII file)
@@ -55,13 +55,13 @@ SpectralResponse<TPrecision,TValuePrecision>
     
     while(! fin.eof() )
     {
-      //For each 
-      std::pair<TPrecision,TValuePrecision > currentPair;
+      //For each
+      std::pair<TPrecision, TValuePrecision > currentPair;
       
       fin >> currentPair.first;
       fin >> currentPair.second;
       currentPair.second = currentPair.second / coefNormalization;
-      if ( currentPair.first != itk::NumericTraits<TPrecision>::ZeroValue() && currentPair.second != itk::NumericTraits<TValuePrecision>::ZeroValue() )  
+      if ( currentPair.first != itk::NumericTraits<TPrecision>::ZeroValue() && currentPair.second != itk::NumericTraits<TValuePrecision>::ZeroValue() )
        //Add not null pair of values to the vector
        m_Response.push_back(currentPair);
     }
@@ -74,7 +74,7 @@ SpectralResponse<TPrecision,TValuePrecision>
 
 template <class TPrecision, class TValuePrecision>
 bool
-SpectralResponse<TPrecision,TValuePrecision>
+SpectralResponse<TPrecision, TValuePrecision>
 ::Clear()
 {
    m_Response.clear();
@@ -84,15 +84,15 @@ SpectralResponse<TPrecision,TValuePrecision>
 
 template <class TPrecision, class TValuePrecision>
 unsigned int
-SpectralResponse<TPrecision,TValuePrecision>
+SpectralResponse<TPrecision, TValuePrecision>
 ::Size() const
 {
    return m_Response.size();
 }
 
 template <class TPrecision, class TValuePrecision>
-inline typename SpectralResponse<TPrecision,TValuePrecision>::ValuePrecisionType
-SpectralResponse<TPrecision,TValuePrecision>
+inline typename SpectralResponse<TPrecision, TValuePrecision>::ValuePrecisionType
+SpectralResponse<TPrecision, TValuePrecision>
 ::operator()(const PrecisionType & lambda)
 {
   
@@ -112,24 +112,24 @@ SpectralResponse<TPrecision,TValuePrecision>
 
     for(typename VectorPairType::const_iterator it = beg+lambdaPosGuess; it <= last; it++)
     {
-    // if the guess was too high 
+    // if the guess was too high
       if ( (*it).first >= lambda )
-	{
-        return (*it).second; 
-	}
+       {
+        return (*it).second;
+       }
       // if the guess is just right
       else if ( (*it).first < lambda && (*(it+1)).first >= lambda)
-	{
-	return ((*it).second+(*(it+1)).second)/2.0;
-	}
+       {
+       return ((*it).second+(*(it+1)).second)/2.0;
+       }
     }
     //Value not available
     return 0;
 }
   
 template <class TPrecision, class TValuePrecision>
-typename SpectralResponse<TPrecision,TValuePrecision>::ImagePointerType 
-SpectralResponse<TPrecision,TValuePrecision>
+typename SpectralResponse<TPrecision, TValuePrecision>::ImagePointerType
+SpectralResponse<TPrecision, TValuePrecision>
 ::GetImage(ImagePointerType image) const
 {
   typename ImageType::IndexType start;
@@ -139,7 +139,7 @@ SpectralResponse<TPrecision,TValuePrecision>
   typename ImageType::SizeType  size;
 //   size[0] = this->Size();
   size[0] = 1;
-  size[1] = 1; 
+  size[1] = 1;
 
   typename ImageType::PointType origin;
   origin[0] = 0;
@@ -162,27 +162,27 @@ SpectralResponse<TPrecision,TValuePrecision>
   typename ImageType::PixelType pixel;
   pixel.SetSize(this->Size());
 
-  for ( unsigned int j=0 ;j<this->Size(); ++j )
+  for ( unsigned int j=0; j<this->Size(); ++j )
   {
     pixel[j]=m_Response[j].second;
   }
   idx[0]=0;
   idx[1]=0;
-  image->SetPixel(idx,pixel);
+  image->SetPixel(idx, pixel);
   return image;
 }
 
 template <class TPrecision, class TValuePrecision>
 void
-SpectralResponse<TPrecision,TValuePrecision>
-::SetFromImage(ImagePointerType image) 
+SpectralResponse<TPrecision, TValuePrecision>
+::SetFromImage(ImagePointerType image)
 {
 
   typename ImageType::IndexType idx;
   idx[0]=0;
   idx[1]=0;
 
-  for ( unsigned int j=0 ;j<this->Size(); ++j )
+  for ( unsigned int j=0; j<this->Size(); ++j )
   {
     m_Response[j].second = image->GetPixel(idx)[j];
   }
@@ -190,14 +190,14 @@ SpectralResponse<TPrecision,TValuePrecision>
 }
   
 template <class TPrecision, class TValuePrecision>
-typename SpectralResponse<TPrecision,TValuePrecision>::FilterFunctionValuesPointerType 
-SpectralResponse<TPrecision,TValuePrecision>
+typename SpectralResponse<TPrecision, TValuePrecision>::FilterFunctionValuesPointerType
+SpectralResponse<TPrecision, TValuePrecision>
 ::GetFilterFunctionValues(double step) const
 {
   
   //Assume that the SR is sorted
   typename FilterFunctionValuesType::ValuesVectorType valuesVector;
-  for (double i =m_Response.front()->first; i <= m_Response.back()->first ;i+=step)
+  for (double i =m_Response.front()->first; i <= m_Response.back()->first; i+=step)
   {
     valuesVector.push_back=(*this)(i);
   }
@@ -214,13 +214,13 @@ SpectralResponse<TPrecision,TValuePrecision>
 
 template <class TPrecision, class TValuePrecision>
 void
-SpectralResponse<TPrecision,TValuePrecision>
+SpectralResponse<TPrecision, TValuePrecision>
 ::ComputeInterval()
 {
   typename VectorPairType::const_iterator it = m_Response.begin();
   
   while ( (*it).second <= m_SensitivityThreshold )
-  { 
+  {
     ++it;
   }
   
@@ -234,8 +234,8 @@ SpectralResponse<TPrecision,TValuePrecision>
   }
   
   it = m_Response.end() - 1;
-  while ((*it).second <= m_SensitivityThreshold ) 
-  { 
+  while ((*it).second <= m_SensitivityThreshold )
+  {
     --it;
   }
       
@@ -245,7 +245,7 @@ SpectralResponse<TPrecision,TValuePrecision>
   }
   else
   {
-    m_Interval.second = (*(it+1)).first;    
+    m_Interval.second = (*(it+1)).first;
   }
 
   m_IntervalComputed = true;
@@ -255,12 +255,12 @@ SpectralResponse<TPrecision,TValuePrecision>
 
 template <class TPrecision, class TValuePrecision>
 void
-SpectralResponse<TPrecision,TValuePrecision>
+SpectralResponse<TPrecision, TValuePrecision>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-    Superclass::PrintSelf(os,indent);
+    Superclass::PrintSelf(os, indent);
     os<<std::endl;
-    os <<indent << "[Wavelength (micrometers),Reflectance (percent)]" << std::endl;
+    os <<indent << "[Wavelength (micrometers), Reflectance (percent)]" << std::endl;
    for(typename VectorPairType::const_iterator it = m_Response.begin(); it != m_Response.end(); ++it)
    {
      os <<indent << "Num "<< it - m_Response.begin() << ": [" << (*it).first << ","<< (*it).second << "]" << std::endl;
