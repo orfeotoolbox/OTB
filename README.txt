@@ -1,2 +1,0 @@
-Sensor Performances Simulator
-Test
