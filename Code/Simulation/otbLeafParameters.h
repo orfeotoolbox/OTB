@@ -45,11 +45,11 @@ class ITK_EXPORT LeafParameters : public itk::DataObject
       itkTypeMacro(LeafParameters, DataObject);
       itkNewMacro(Self);
 
-      /** Set/Get Chlorophyll content (µg/cm2)*/
+      /** Set/Get Chlorophyll content (ug/cm2)*/
       itkSetMacro(Cab, double);
       itkGetMacro(Cab, double);
       
-      /** Set/Get Carotenoid content (µg/cm2)*/
+      /** Set/Get Carotenoid content (ug/cm2)*/
       itkSetMacro(Car, double);
       itkGetMacro(Car, double);
       
