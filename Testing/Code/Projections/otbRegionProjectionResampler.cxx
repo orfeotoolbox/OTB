@@ -28,8 +28,6 @@
 
 // iostream is used for general output
 #include <iostream>
-#include <iterator>
-#include <stdlib.h>
 
 #include "otbMacro.h"
 #include "otbImage.h"
@@ -49,12 +47,8 @@
 #include "otbInverseSensorModel.h"
 #include "otbCompositeTransform.h"
 
-#include "init/ossimInit.h"
-
 int otbRegionProjectionResampler(int argc, char* argv[])
 {
-  ossimInit::instance()->initialize(argc, argv);
-
   if (argc != 10)
     {
     std::cout << argv[0] <<
