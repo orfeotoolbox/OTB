@@ -45,24 +45,16 @@
 
 #include "otbInverseSensorModel.h"
 
-#include "init/ossimInit.h"
 #include "base/ossimKeywordlist.h"
 #include "base/ossimGpt.h"
 #include "projection/ossimProjectionFactoryRegistry.h"
 #include "imaging/ossimImageHandlerRegistry.h"
 
-// this is the most important class and is called as the first line of all applications.
-// without this all the important factories are not created.
-//#include "init/ossimInit.h"
-
 int otbCreateProjectionWithOTB(int argc, char* argv[])
 {
-  ossimInit::instance()->initialize(argc, argv);
-
   if (argc != 2)
     {
     std::cout << argv[0] << " <input filename> " << std::endl;
-
     return EXIT_FAILURE;
     }
 
