@@ -441,7 +441,6 @@ SailModel
 }
 
 
-
 void
 SailModel
 ::Calc_LIDF(const double a, VectorType &lidf)
@@ -628,7 +627,6 @@ SailModel
    result[3] = ftau;
 
 }
-
 
 
 double
