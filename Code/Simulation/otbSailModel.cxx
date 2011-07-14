@@ -52,6 +52,10 @@ SailModel
    m_PSI=0;
 }
 
+/** Destructor */
+SailModel
+::~SailModel()
+{}
 
 /** Set/Get input reflectance */
 void

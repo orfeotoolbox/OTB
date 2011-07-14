@@ -43,6 +43,11 @@ ProspectModel
    this->itk::ProcessObject::SetNthOutput(1, outputTrans.GetPointer());
 }
 
+/** Destructor */
+ProspectModel
+::~ProspectModel()
+{}
+
 /** Set Input */
 void
 ProspectModel

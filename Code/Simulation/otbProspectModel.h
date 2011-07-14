@@ -49,7 +49,6 @@ class ITK_EXPORT ProspectModel : public SimulationStep1Base
       typedef Superclass::SpectralResponseType      SpectralResponseType;
       typedef Superclass::ParametersType            ParametersType;
       
-      
       /** Standard macros */
       itkNewMacro(Self);
       itkTypeMacro(ProspectModel, SpectrumGeneratorBase);
@@ -59,7 +58,6 @@ class ITK_EXPORT ProspectModel : public SimulationStep1Base
       void SetInput(const LeafParametersType *object);
       LeafParametersType * GetInput();
       
-      
       /** GenerateData */
       virtual void GenerateData();
       
@@ -67,13 +65,11 @@ class ITK_EXPORT ProspectModel : public SimulationStep1Base
       virtual SpectralResponseType * GetReflectance();
       virtual SpectralResponseType * GetTransmittance();
 
-      
-
    protected:
       /** Constructor */
       ProspectModel();
       /** Destructor */
-      virtual ~ProspectModel() {};
+      ~ProspectModel();
       /** PrintSelf method */
       void PrintSelf(std::ostream& os, itk::Indent indent) const;
       
@@ -89,10 +85,5 @@ class ITK_EXPORT ProspectModel : public SimulationStep1Base
 };
 
 }// end namespace otb
-
-
-#ifndef OTB_MANUAL_INSTANTIATION
-// #include "otbProspectModel.cxx"
-#endif
 
 #endif

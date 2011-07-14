@@ -109,7 +109,7 @@ class ITK_EXPORT SailModel : public SimulationStep2Base
       /** Constructor */
       SailModel();
       /** Destructor */
-      virtual ~SailModel() {};
+      virtual ~SailModel();
       /** PrintSelf method */
       void PrintSelf(std::ostream& os, itk::Indent indent) const;
       

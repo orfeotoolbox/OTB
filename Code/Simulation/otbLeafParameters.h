@@ -68,18 +68,15 @@ class ITK_EXPORT LeafParameters : public itk::DataObject
       /** Set/Get leaf structure coef*/
       itkSetMacro(N, double);
       itkGetMacro(N, double);
-      
-
 
    protected:
       /** Constructor */
       LeafParameters();
       /** Destructor */
-      virtual ~LeafParameters() {};
+      ~LeafParameters();
       /** PrintSelf method */
       void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-      
    private:
       LeafParameters(const Self&); //purposely not implemented
       void operator=(const Self&); //purposely not implemented

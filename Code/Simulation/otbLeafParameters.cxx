@@ -38,6 +38,12 @@ LeafParameters
    m_N=1.2;
 }
 
+/**
+ * Destructor
+ */
+LeafParameters
+::~LeafParameters()
+{}
 
 /**PrintSelf method */
 void
