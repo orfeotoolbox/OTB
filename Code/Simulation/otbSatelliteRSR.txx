@@ -46,9 +46,6 @@ SatelliteRSR<TPrecision, TValuePrecision>
    {
       itkExceptionMacro(<<"Error opening file" << filename);
    }
-   
-   unsigned int columnsCounter = 1;
-   unsigned int nbColumns = m_NbBands +2;
     
    // For each band
    for (unsigned int i=0; i < m_NbBands; ++i)
