@@ -38,6 +38,8 @@ enum TransformAccuracy {UNKNOWN, ESTIMATE, PRECISE};
  * The transformation will transform the coordinate from any map projection or sensor
  * model to any map projection or sensor model.
  *
+ * If one of the projection (output or input) is a map projection, it can be
+ * specified using the WKT or the EPSG code.
  *
  * \ingroup Projection
  *
