@@ -55,13 +55,14 @@
 int main(int argc, char * argv[])
 {
 
-  if (argc != 10)
+  if (argc < 10)
     {
-    std::cout << argv[0] << " <output_filename> <output_color_filename> ";
-    std::cout <<
-    " <Longitude Output Origin point> <Latitude Output Origin point>";
-    std::cout << " <X Output Size> <Y Output size>";
-    std::cout << " <X Spacing> <Y Spacing> <DEM folder path>"  << std::endl;
+    std::cout << argv[0] << " <output_filename> <output_color_filename> "
+              << " <Longitude Output Origin point> <Latitude Output Origin point>"
+              << " <X Output Size> <Y Output size>"
+              << " <X Spacing> <Y Spacing> <DEM folder path>"
+              << " [Projection Ref]"
+              << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -107,17 +108,25 @@ int main(int argc, char * argv[])
   spacing[1] = ::atof(argv[8]);
 
   demToImage->SetOutputSpacing(spacing);
+  double res = 0;
 
-  //Compute the resolution (Vincenty formula)
-  double lon1 = origin[0];
-  double lon2 = origin[0] + size[0] * spacing[0];
-  double lat1 = origin[1];
-  double lat2 = origin[1] + size[1] * spacing[1];
-  double R = 6371; // km
-  double d = vcl_acos(vcl_sin(lat1) * vcl_sin(lat2) +
-                      vcl_cos(lat1) * vcl_cos(lat2) * vcl_cos(lon2 - lon1)) * R;
-  double res = d / vcl_sqrt(2.0);
-
+  if ( argc > 10)
+    {
+    demToImage->SetOutputProjectionRef(argv[10]);
+    res = spacing[0];
+    }
+  else
+    {
+    //Compute the resolution (Vincenty formula)
+    double lon1 = origin[0];
+    double lon2 = origin[0] + size[0] * spacing[0];
+    double lat1 = origin[1];
+    double lat2 = origin[1] + size[1] * spacing[1];
+    double R = 6371; // km
+    double d = vcl_acos(vcl_sin(lat1) * vcl_sin(lat2) +
+                        vcl_cos(lat1) * vcl_cos(lat2) * vcl_cos(lon2 - lon1)) * R;
+    res = d / vcl_sqrt(2.0);
+    }
   // Software Guide : BeginLatex
   //
   // After generating the dem image as in the DEMToImageGenerator example, you can declare
