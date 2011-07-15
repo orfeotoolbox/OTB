@@ -23,10 +23,9 @@
 #include "otbMetaDataKey.h"
 #include "itkMetaDataObject.h"
 #include "itkExceptionObject.h"
+#include "otbGeoInformationConversion.h"
 
 #include "ogr_spatialref.h"
-
-//TODO OTB wrapper around the WKT/ossimProjection/isGeographic, etc.
 
 namespace otb
 {
@@ -106,6 +105,18 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
   bool inputTransformIsMap = false;
   bool outputTransformIsSensor = false;
   bool outputTransformIsMap = false;
+
+  // Prepare the projection ref (eventually convert the EPSG code into full WKT)
+  //
+  // Note that we do that at the GenericRSTransform level and not in the member
+  // class for several reasons:
+  // - at the GenericMapProjection and MapProjectionAdapter the method are
+  // called SetWkt and thus should not take a SRID.
+  // - we do not want to mix the GeoInformationConversion (which uses gdal) in
+  // the MapProjectionAdapter to keep ossim and gdal dependencies as separated
+  // as possible.
+  m_InputProjectionRef = GeoInformationConversion::ToWKT(m_InputProjectionRef);
+  m_OutputProjectionRef = GeoInformationConversion::ToWKT(m_OutputProjectionRef);
 
   //*****************************
   //Set the input transformation

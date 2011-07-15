@@ -21,7 +21,6 @@
 #include "otbImageFileReader.h"
 #include "otbGCPsToRPCSensorModelImageFilter.h"
 #include "otbGenericRSTransform.h"
-#include "otbGeoInformationConversion.h"
 #include "otbGeographicalDistance.h"
 
 int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char* argv[])
@@ -113,7 +112,7 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char* argv[])
   
   GenericRSTransformType::Pointer grsTrasnform = GenericRSTransformType::New();
   grsTrasnform->SetInputKeywordList(rpcEstimator->GetKeywordlist());
-  grsTrasnform->SetOutputProjectionRef(otb::GeoInformationConversion::ToWKT(4326));
+  grsTrasnform->SetOutputProjectionRef("4326");
 
   // Set the DEM Directory if any
   if(parseResult->IsOptionPresent("--DEMDirectory"))

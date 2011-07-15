@@ -38,6 +38,7 @@ class GeoInformationConversion
 public:
   /** method used to create a wkt from an epsg number  */
   static std::string ToWKT(int srid);
+  static std::string ToWKT(const std::string& candidateSrid);
 
 protected:
   GeoInformationConversion(); // not implemented

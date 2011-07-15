@@ -20,7 +20,6 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 
-#include "otbGeoInformationConversion.h"
 #include "otbMapProjections.h"
 
 #include <iostream>
@@ -62,7 +61,7 @@ int otbImageToGenericRSOutputParameters (int argc, char * argv[])
   // Filter  : Target SRS : WGS84
   FilterType::Pointer filter = FilterType::New();
   filter->SetInput(reader->GetOutput());
-  filter->SetOutputProjectionRef(otb::GeoInformationConversion::ToWKT(4326));  //WGS84
+  filter->SetOutputProjectionRef("4326");  //WGS84
   filter->Compute();
     
   // Output file
@@ -75,7 +74,7 @@ int otbImageToGenericRSOutputParameters (int argc, char * argv[])
   outfile<< std::endl;
 
   // Target SRS : 32631 UTM 31 N
-  filter->SetOutputProjectionRef(otb::GeoInformationConversion::ToWKT(32631));  //WGS84
+  filter->SetOutputProjectionRef("32631");  // UTM 31 N
   filter->Compute();
   
   outfile<<"Output Parameters for SRID : 32631 (UTM 31 N)"<<std::endl;

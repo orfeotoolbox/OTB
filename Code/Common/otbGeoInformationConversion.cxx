@@ -19,6 +19,7 @@
 
 #include "ogr_spatialref.h"
 #include "cpl_conv.h"
+#include "boost/lexical_cast.hpp"
 
 namespace otb
 {
@@ -43,6 +44,20 @@ std::string GeoInformationConversion::ToWKT(int srid)
     }
   OSRRelease(hSRS);
   return  ret;
+}
+
+std::string GeoInformationConversion::ToWKT(const std::string& candidateSrid)
+{
+  std::string wkt(candidateSrid);
+  try
+    {
+    int srid = boost::lexical_cast<int>(candidateSrid);
+    return GeoInformationConversion::ToWKT(srid);
+    }
+  catch(boost::bad_lexical_cast &)
+    {
+    return wkt;
+    }
 }
 
 } // End namespace otb
