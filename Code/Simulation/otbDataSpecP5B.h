@@ -1,6 +1,26 @@
-#ifndef __dataSpecP5B_h
-#define __dataSpecP5B_h
+/*=========================================================================
 
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
+
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
+
+#ifndef __otbDataSpecP5B_h
+#define __otbDataSpecP5B_h
+
+namespace otb
+{
 
 // ***********************************************************************
 // dataSpec_P5.m - (february, 25th 2008)
@@ -38,10 +58,8 @@ struct dataSpec {
   double wetSoil;
 };
 
-#define DATASPECSIZE 2101
+extern const dataSpec dataSpecP5B[2101];
 
-#ifndef INDATASPEC_P5B_CXX_FILE
-extern dataSpec dataSpecP5B[DATASPECSIZE];
-#endif /* INDATASPEC_P5B_CXX_FILE */
+}
 
-#endif /* __dataSpecP5B_h */
+#endif /* __otbDataSpecP5B_h */

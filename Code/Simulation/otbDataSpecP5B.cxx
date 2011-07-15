@@ -1,7 +1,27 @@
-#define INDATASPEC_P5B_CXX_FILE
-#include "dataSpec_P5B.h"
+/*=========================================================================
 
-dataSpec dataSpecP5B[] = {
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
+
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
+
+#include "otbDataSpecP5B.h"
+
+namespace otb
+{
+
+const dataSpec dataSpecP5B[] = {
 
 { 400, 1.4955, 2.676E-02, 2.895E-01, 5.272E-01, 5.800E-05, 1.097E+02, 5.910E-01, 2.413E+00, 2.377E-01, 3.208E-02 },
 { 401, 1.4958, 3.113E-02, 2.796E-01, 5.262E-01, 5.852E-05, 1.037E+02, 5.980E-01, 2.413E+00, 2.373E-01, 3.195E-02 },
@@ -2107,3 +2127,4 @@ dataSpec dataSpecP5B[] = {
 
 };
 
+}

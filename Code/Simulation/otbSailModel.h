@@ -22,7 +22,7 @@
 #include "itkProcessObject.h"
 #include "itkObjectFactory.h"
 #include "otbSpectralResponse.h"
-#include "dataSpec_P5B.h"
+#include "otbDataSpecP5B.h"
 #include "otbSimulationStep2Base.h"
 
 namespace otb

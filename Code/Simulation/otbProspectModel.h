@@ -23,7 +23,7 @@
 #include "itkObjectFactory.h"
 #include "otbLeafParameters.h"
 
-#include "dataSpec_P5B.h"
+#include "otbDataSpecP5B.h"
 #include "otbSimulationStep1Base.h"
 
 namespace otb
