@@ -30,6 +30,7 @@
 #include "base/ossimDirectory.h"
 #include "otbConfusionMatrixCalculator.h"
 
+#include "time.h"
 
 /*
 ./bin/otbAtmosphericCorrectionsRSRSVMClassifier ../data/BD-CNES/jpl/nicolet/minerals/borate/txt/ ../data/BD-CNES/jpl/nicolet/minerals/carbonate/txt/ ../data/BD-CNES/jpl/nicolet/minerals/cyclosilicate/txt/ ../data/BD-CNES/jpl/nicolet/manmade/txt/ ../data/BD-CNES/jpl/nicolet/soils/txt/ ../hg/SimuPerformances/Data/Rsr/SPOT5/HRG1/rep6S.dat 4 4 12 27.3 152.7 2.5 -77.0 1013. 2.48134 0.34400 1 0.199854
@@ -158,7 +159,7 @@ int otbAtmosphericCorrectionsRSRSVMClassifier(int argc, char * argv[])
       std::vector<ossimFilename> training; //contains training files for this class (directory)
       std::vector<ossimFilename> testing; //contains testing files for this class (directory)
       training=result;
-      srand((unsigned int)getpid()); //init random
+      srand((unsigned int)time(NULL)); //init random
       for(unsigned int j=0; j<static_cast <unsigned int> (percentage*result.size()); j++)
       {
          ind = rand()%(result.size());
