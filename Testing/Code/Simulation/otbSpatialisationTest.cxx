@@ -100,5 +100,9 @@ int otbSpatialisationTest(int argc, char * argv[])
 //   writer->SetInput(labelMapToLabelImageFilter->GetOutput());
 //   writer->Update();
 
+  // This test does not check the output and does not even produce it
+  // as such, it is incomplete and can be returning SUCCESS.
+  return EXIT_FAILURE;
+
   return EXIT_SUCCESS;
 }
