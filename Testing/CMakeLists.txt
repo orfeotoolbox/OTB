@@ -16,6 +16,9 @@ IF(OTB_BINARY_DIR)
 ELSE(OTB_BINARY_DIR)
   # We are building as a stand-alone project.
   CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
+
+  SET(OTB_TESTING_STANDALONE ON)
+
   SET(LIBRARY_OUTPUT_PATH ${OTBTesting_BINARY_DIR}/bin CACHE PATH "Single output directory for building all libraries.")
   SET(EXECUTABLE_OUTPUT_PATH ${OTBTesting_BINARY_DIR}/bin CACHE PATH "Single output directory for building all executables.")
   MARK_AS_ADVANCED(LIBRARY_OUTPUT_PATH EXECUTABLE_OUTPUT_PATH)

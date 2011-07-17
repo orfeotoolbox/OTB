@@ -24,15 +24,9 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(otbProjectionBaseNew);
-  REGISTER_TEST(otbMapProjectionsNew);
-  REGISTER_TEST(otbMapProjectionsTest);
-  REGISTER_TEST(otbMapProjection);
-  REGISTER_TEST(otbUtmMapProjection);
-  REGISTER_TEST(otbSensorModelsNew);
-  REGISTER_TEST(otbCreateInverseForwardSensorModel);
-  REGISTER_TEST(otbRegionProjectionResampler);
-  REGISTER_TEST(otbSensorModel);
-  REGISTER_TEST(otbSensorModelGrid);
-  REGISTER_TEST(otbForwardSensorModelGrid);
+  REGISTER_TEST(otbOssimElevManagerTest);
+  REGISTER_TEST(otbOssimElevManagerTest2);
+  REGISTER_TEST(otbOssimElevManagerTest4);
+  REGISTER_TEST(otbCreateProjectionWithOSSIM);
+  REGISTER_TEST(otbCreateProjectionWithOTB);
 }

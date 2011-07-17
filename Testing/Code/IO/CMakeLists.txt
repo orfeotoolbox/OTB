@@ -1626,55 +1626,6 @@ ADD_TEST(ioTvDEMToImageGeneratorFromImageTest2 ${IO_TESTS12}
         10 15 16 64
 )
 
-ADD_TEST(ioTvossimElevManagerTest ${IO_TESTS12}
---compare-image ${EPSILON_9}  ${BASELINE}/ioTvossimElevManagerTest.tif
-                        ${TEMP}/ioTvossimElevManagerTest.tif
-        otbOssimElevManagerTest
-         ${INPUTDATA}/DEM/srtm_directory
-         ${TEMP}/ioTvossimElevManagerTest.tif
-        6.5
-        45.5
-        0.002
-        -0.002
-        500
-        500
-        )
-
-ADD_TEST(ioTvossimElevManagerTest3 ${IO_TESTS12}
---compare-image ${EPSILON_9}  ${BASELINE}/ioTvossimElevManagerTest3.tif
-                        ${TEMP}/ioTvossimElevManagerTest3.tif
-        otbOssimElevManagerTest
-         ${INPUTDATA}/DEM/srtm_directory
-         ${TEMP}/ioTvossimElevManagerTest3.tif
-         -1.8 52   0.02 -0.018 232 422
-#         -1.8870830 52.0135758  0.024363378967 -0.018457085039 232 422
-        )
-
-#This test investigate the problem with the ossimElevManager
-# - differences between plaforms
-# - file descriptor leak
-ADD_TEST(ioTvossimElevManagerTest4 ${IO_TESTS12}
---compare-image ${EPSILON_9}  ${BASELINE}/ioTvossimElevManagerTest3.tif
-                        ${TEMP}/ioTvossimElevManagerTest4.hdr
-        otbOssimElevManagerTest4
-         ${INPUTDATA}/DEM/srtm_directory
-         ${TEMP}/ioTvossimElevManagerTest4
-         -1.8 52   0.02 -0.018 232 422
-        )
-
-
-ADD_TEST(ioTvossimElevManagerTest2 ${IO_TESTS12}
---compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioTvossimElevManagerTest2.txt
-                        ${TEMP}/ioTvossimElevManagerTest2.txt
-        otbOssimElevManagerTest2
-         ${INPUTDATA}/DEM/srtm_directory
-         ${TEMP}/ioTvossimElevManagerTest2.txt
-        6.5
-        44.5
-        0.002
-        500
-         )
-
 # otb::MapProjectionAdapter (TODO: remove from IO)
 ADD_TEST(ioTvMapProjectionAdapterTest ${IO_TESTS12}
         --compare-ascii ${EPSILON_9}
@@ -1683,29 +1634,6 @@ ADD_TEST(ioTvMapProjectionAdapterTest ${IO_TESTS12}
         otbMapProjectionAdapterTest
             ${TEMP}/ioTvMapProjectionAdapterTest.txt
 )
-
-
-
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-#----------------------------------------------------------------------------------
-# Exemples de tests sur les grosses images
-# Tests non lanc�s pour raison taille des fichiers produits
-#        ADD_TEST(ioTvStreamingIFWriterPARIS_SPOT5THR_WithoutStreaming ${IO_TESTS12}
-#                 otbStreamingImageFileWriterTest
-#                 ${LARGEDATA}/PARIS/SPOT5/THR
-#                 ${TEMP}/ioStreamingImageFileWriterTestCAI_ParisSpot5THR_WithoutStreaming.hd
-#                 0 # Test sans streaming
-#                 )
-#        ADD_TEST(ioTvStreamingIFWriterPARIS_SPOT5THR_WithStreaming_1000 ${IO_TESTS12}
-#                 otbStreamingImageFileWriterTest
-#                 ${LARGEDATA}/PARIS/SPOT5/THR
-#                 ${TEMP}/ioStreamingImageFileWriterTestCAI_ParisSpot5THR_WithStreaming_1000.hd
-#                 1 # Test sans streaming
-#                 1000 # NbDivisionsStreaming
-#                 )
-#----------------------------------------------------------------------------------
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -3305,14 +3233,12 @@ otbShortRGBImageIOTest.cxx
 otbPNGIndexedNbBandsTest.cxx
 )
 
-#SET(BasicIO_SRCS4
-#)
-#CONTAINS THE BasicIO_SRCS2 include
 SET(BasicIO_SRCS5
 otbIOTests5.cxx
 otbGDALImageIOTestCanRead.cxx
 otbThreadsTest.cxx
 )
+
 SET(BasicIO_SRCS6
 otbIOTests6.cxx
 otbGDALImageIOTestCanWrite.cxx
@@ -3325,6 +3251,7 @@ otbMSTARImageIOTestCanRead.cxx
 otbImageFileReaderMSTAR.cxx
 otbGDALImageIOTestWriteMetadata.cxx
 )
+
 SET(BasicIO_SRCS7
 otbIOTests7.cxx
 otbImageFileReaderTest.cxx
@@ -3332,10 +3259,12 @@ otbImageFileReaderRGBTest.cxx
 otbImageFileWriterTest.cxx
 otbImageFileWriterRGBTest.cxx
 )
+
 SET(BasicIO_SRCS8
 otbIOTests8.cxx
 otbCoordinateToNameTest.cxx
 )
+
 SET(BasicIO_SRCS9
 otbIOTests9.cxx
 otbImageTest.cxx
@@ -3345,12 +3274,14 @@ otbVectorImageFileReaderWriterTest.cxx
 otbStreamingShortImageFileWriterTest.cxx
 otbComplexImageTests.cxx
 )
+
 SET(BasicIO_SRCS10
 otbIOTests10.cxx
 otbStreamingImageFileWriterTestCalculateNumberOfDivisions.cxx
 otbStreamingImageFileWriterWithFilterTest.cxx
 otbStreamingWithImageFileWriterTestCalculateNumberOfDivisions.cxx
 )
+
 SET(BasicIO_SRCS11
 otbIOTests11.cxx
 otbImageMetadataFileWriterTest.cxx
@@ -3358,6 +3289,7 @@ otbImageMetadataStreamingFileWriterTest.cxx
 otbPipelineMetadataHandlingTest.cxx
 otbPipelineMetadataHandlingWithUFFilterTest.cxx
 )
+
 SET(BasicIO_SRCS12
 otbIOTests12.cxx
 otbDEMHandlerNew.cxx
@@ -3365,14 +3297,12 @@ otbDEMHandlerTest.cxx
 otbDEMToImageGeneratorNew.cxx
 otbDEMToImageGeneratorTest.cxx
 otbDEMToImageGeneratorFromImageTest.cxx
-otbOssimElevManagerTest.cxx
-otbOssimElevManagerTest2.cxx
-otbOssimElevManagerTest4.cxx
 otbMapProjectionAdapterTest.cxx
 )
 
 
 IF(OTB_COMPILE_JPEG2000)
+#Reserved for jpeg 2000
 SET(BasicIO_SRCS13
 otbIOTests13.cxx
 otbJPEG2000ImageIOTestCanRead.cxx
@@ -3450,6 +3380,7 @@ otbOssimJpegFileRessourceLeakTest.cxx
 )
 
 IF(OTB_USE_CURL)
+#Reserved for CURL
 SET(BasicIO_SRCS19
 otbIOTests19.cxx
 otbImageFileReaderServerName.cxx

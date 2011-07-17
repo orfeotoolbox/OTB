@@ -14,11 +14,13 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 SET(NOTOL 0.0)
 SET(EPSILON_4 0.0001)
 SET(EPSILON_6 0.000001)
+SET(EPSILON_9 0.000000001)
 
 SET(PROJECTIONS_TESTS1 ${CXX_TEST_PATH}/otbProjectionsTests1)
 SET(PROJECTIONS_TESTS2 ${CXX_TEST_PATH}/otbProjectionsTests2)
 SET(PROJECTIONS_TESTS3 ${CXX_TEST_PATH}/otbProjectionsTests3)
 SET(PROJECTIONS_TESTS4 ${CXX_TEST_PATH}/otbProjectionsTests4)
+SET(PROJECTIONS_TESTS5 ${CXX_TEST_PATH}/otbProjectionsTests5)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbPROJECTIONS_TESTS1 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -53,25 +55,6 @@ ADD_TEST(prTvMapProjectionsTest ${PROJECTIONS_TESTS1}
 ADD_TEST(prTuSensorModelsNew ${PROJECTIONS_TESTS1}  otbSensorModelsNew )
 
 IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(prTvTestCreateProjectionWithOSSIM_Toulouse ${PROJECTIONS_TESTS1}
-        otbCreateProjectionWithOSSIM
-        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
-        )
-
-ADD_TEST(prTvTestCreateProjectionWithOSSIM_Cevennes ${PROJECTIONS_TESTS1}
-        otbCreateProjectionWithOSSIM
-        ${LARGEINPUT}/QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
-        )
-
-ADD_TEST(prTvTestCreateProjectionWithOTB_Toulouse ${PROJECTIONS_TESTS1}
-        otbCreateProjectionWithOTB
-        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
-        )
-
-ADD_TEST(prTvTestCreateProjectionWithOTB_Cevennes ${PROJECTIONS_TESTS1}
-        otbCreateProjectionWithOTB
-        ${LARGEINPUT}/QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
-        )
 
 ADD_TEST(prTvTestCreateInverseForwardSensorModel_Toulouse ${PROJECTIONS_TESTS1}
         otbCreateInverseForwardSensorModel
@@ -1419,6 +1402,88 @@ ADD_TEST(prTvGenericRSTransformGenericTestEPSG4326toEPSG4326 ${PROJECTIONS_TESTS
 ADD_TEST(prTvGenericRSTransformGenericTestEPSG4326toEPSG32631 ${PROJECTIONS_TESTS4}
   otbGenericRSTransformGenericTest
   1.3561728980 43.4876035537 367077.72312001337 4816277.086791252 EPSG 4326 EPSG 32631 GEO 1e-3 PHYSICAL 1e-3 NOELEV)
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbPROJECTIONS_TESTS5 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+IF(NOT OTB_TESTING_STANDALONE)
+
+ADD_TEST(prTvossimElevManagerTest ${PROJECTIONS_TESTS5}
+--compare-image ${EPSILON_9}  ${BASELINE}/prTvossimElevManagerTest.tif
+                        ${TEMP}/prTvossimElevManagerTest.tif
+        otbOssimElevManagerTest
+         ${INPUTDATA}/DEM/srtm_directory
+         ${TEMP}/prTvossimElevManagerTest.tif
+        6.5
+        45.5
+        0.002
+        -0.002
+        500
+        500
+        )
+
+ADD_TEST(prTvossimElevManagerTest3 ${PROJECTIONS_TESTS5}
+--compare-image ${EPSILON_9}  ${BASELINE}/prTvossimElevManagerTest3.tif
+                        ${TEMP}/prTvossimElevManagerTest3.tif
+        otbOssimElevManagerTest
+         ${INPUTDATA}/DEM/srtm_directory
+         ${TEMP}/prTvossimElevManagerTest3.tif
+         -1.8 52   0.02 -0.018 232 422
+#         -1.8870830 52.0135758  0.024363378967 -0.018457085039 232 422
+        )
+
+#This test investigate the problem with the ossimElevManager
+# - differences between plaforms
+# - file descriptor leak
+ADD_TEST(prTvossimElevManagerTest4 ${PROJECTIONS_TESTS5}
+--compare-image ${EPSILON_9}  ${BASELINE}/prTvossimElevManagerTest3.tif
+                        ${TEMP}/prTvossimElevManagerTest4.hdr
+        otbOssimElevManagerTest4
+         ${INPUTDATA}/DEM/srtm_directory
+         ${TEMP}/prTvossimElevManagerTest4
+         -1.8 52   0.02 -0.018 232 422
+        )
+
+
+ADD_TEST(prTvossimElevManagerTest2 ${PROJECTIONS_TESTS5}
+--compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/prTvossimElevManagerTest2.txt
+                        ${TEMP}/prTvossimElevManagerTest2.txt
+        otbOssimElevManagerTest2
+         ${INPUTDATA}/DEM/srtm_directory
+         ${TEMP}/prTvossimElevManagerTest2.txt
+        6.5
+        44.5
+        0.002
+        500
+         )
+
+IF(OTB_DATA_USE_LARGEINPUT)
+
+ADD_TEST(prTvTestCreateProjectionWithOSSIM_Toulouse ${PROJECTIONS_TESTS1}
+        otbCreateProjectionWithOSSIM
+        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        )
+
+ADD_TEST(prTvTestCreateProjectionWithOSSIM_Cevennes ${PROJECTIONS_TESTS1}
+        otbCreateProjectionWithOSSIM
+        ${LARGEINPUT}/QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
+        )
+
+ADD_TEST(prTvTestCreateProjectionWithOTB_Toulouse ${PROJECTIONS_TESTS1}
+        otbCreateProjectionWithOTB
+        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        )
+
+ADD_TEST(prTvTestCreateProjectionWithOTB_Cevennes ${PROJECTIONS_TESTS1}
+        otbCreateProjectionWithOTB
+        ${LARGEINPUT}/QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
+        )
+
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
+ENDIF(NOT OTB_TESTING_STANDALONE)
+
+
 #=======================================================================================
 SET(Projections_SRCS1
 otbProjectionsTests1.cxx
@@ -1427,8 +1492,6 @@ otbMapProjectionsNew.cxx
 otbMapProjection.cxx
 otbUtmMapProjection.cxx
 otbSensorModelsNew.cxx
-otbCreateProjectionWithOSSIM.cxx
-otbCreateProjectionWithOTB.cxx
 otbCreateInverseForwardSensorModel.cxx
 otbRegionProjectionResampler.cxx
 otbSensorModel.cxx
@@ -1487,9 +1550,25 @@ otbVectorDataTransformFilter.cxx
 otbGenericRSTransformGenericTest.cxx
 )
 
+#Tests requiring access to ossim header
+#should not be launched when using an installed version of OTB
+IF(NOT OTB_TESTING_STANDALONE)
+SET(Projections_SRCS5
+otbProjectionsTests5.cxx
+otbOssimElevManagerTest.cxx
+otbOssimElevManagerTest2.cxx
+otbOssimElevManagerTest4.cxx
+otbCreateProjectionWithOSSIM.cxx
+otbCreateProjectionWithOTB.cxx
+)
+ENDIF(NOT OTB_TESTING_STANDALONE)
+
 OTB_ADD_EXECUTABLE(otbProjectionsTests1 "${Projections_SRCS1}" "OTBProjections;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbProjectionsTests2 "${Projections_SRCS2}" "OTBProjections;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbProjectionsTests3 "${Projections_SRCS3}" "OTBProjections;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbProjectionsTests4 "${Projections_SRCS4}" "OTBProjections;OTBIO;OTBTesting")
+IF(NOT OTB_TESTING_STANDALONE)
+OTB_ADD_EXECUTABLE(otbProjectionsTests5 "${Projections_SRCS5}" "OTBProjections;OTBIO;OTBTesting")
+ENDIF(NOT OTB_TESTING_STANDALONE)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
