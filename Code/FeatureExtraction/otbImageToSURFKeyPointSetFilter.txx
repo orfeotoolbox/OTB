@@ -485,9 +485,6 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
                                       dy * solution[1] +
                                       ds * solution[2]);
 
-  PixelValue lHessianTrace2 = (dxx + dyy) * (dxx + dyy);
-  PixelValue lHessianDet = dxx * dyy - dxy * dxy;
-  
   // DoG threshold : ignore detected extrema if is not sufficiently noticeable
   accepted = vcl_abs(lDoHInterpolated) > vcl_abs(det * m_DoHThreshold);
 
