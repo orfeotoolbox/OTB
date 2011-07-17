@@ -403,12 +403,17 @@ WaveletGenerator<Wavelet::SPLINE_BIORTHOGONAL_2_4>
 {
   static const double sqrt2 = ::vcl_sqrt(2.0);
   coeff.clear();
+  coeff.push_back(0.);
+  coeff.push_back(0.);
+  coeff.push_back(0.);
+  coeff.push_back(0.);
   coeff.push_back(-1.0 / 4.0 * sqrt2);
   coeff.push_back(1.0 / 2.0 * sqrt2);
   coeff.push_back(-1.0 / 4.0 * sqrt2);
   coeff.push_back(0.);
   coeff.push_back(0.);
-  coeff.resize(5);
+  coeff.resize(9);
+
 }
 
 /**
@@ -457,6 +462,8 @@ WaveletGenerator<Wavelet::SPLINE_BIORTHOGONAL_4_4>
 {
   static const double sqrt2 = ::vcl_sqrt(2.0);
   coeff.clear();
+  coeff.push_back(0.);
+  coeff.push_back(0.);
   coeff.push_back(0.045635881557 * sqrt2);
   coeff.push_back(-0.028771763114 * sqrt2);
   coeff.push_back(-0.295635881557 * sqrt2);
@@ -464,8 +471,6 @@ WaveletGenerator<Wavelet::SPLINE_BIORTHOGONAL_4_4>
   coeff.push_back(-0.295635881557 * sqrt2);
   coeff.push_back(-0.028771763114 * sqrt2);
   coeff.push_back(0.045635881557 * sqrt2);
-  coeff.push_back(0.);
-  coeff.push_back(0.);
   coeff.resize(9);
 }
 
