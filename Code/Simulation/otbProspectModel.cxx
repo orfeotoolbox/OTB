@@ -145,14 +145,14 @@ ProspectModel
    Cw = leafParameters->GetCw();
    Cm = leafParameters->GetCm();
    
-   int nbdata = sizeof(dataSpecP5B) / sizeof(dataSpec);
+   int nbdata = sizeof(DataSpecP5B) / sizeof(DataSpec);
    for (int i = 0; i < nbdata; i++)
    {
-      lambda = dataSpecP5B[i].lambda;
-      n = dataSpecP5B[i].refLeafMatInd;
+      lambda = DataSpecP5B[i].lambda;
+      n = DataSpecP5B[i].refLeafMatInd;
       
-      k = Cab*dataSpecP5B[i].chlAbsCoef+Car*dataSpecP5B[i].carAbsCoef+CBrown*dataSpecP5B[i].brownAbsCoef+Cw*dataSpecP5B[i].waterAbsCoef;
-      k = k + Cm*dataSpecP5B[i].dryAbsCoef;
+      k = Cab*DataSpecP5B[i].chlAbsCoef+Car*DataSpecP5B[i].carAbsCoef+CBrown*DataSpecP5B[i].brownAbsCoef+Cw*DataSpecP5B[i].waterAbsCoef;
+      k = k + Cm*DataSpecP5B[i].dryAbsCoef;
       k = k / N;
       if(k == itk::NumericTraits<double>::ZeroValue() ) k=EPSILON;
 

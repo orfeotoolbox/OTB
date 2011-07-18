@@ -44,7 +44,7 @@ namespace otb
 // and used with his autorization.
 // ***********************************************************************
 
-struct dataSpec {
+struct DataSpec {
   double lambda;
   double refLeafMatInd;
   double chlAbsCoef;
@@ -58,7 +58,7 @@ struct dataSpec {
   double wetSoil;
 };
 
-extern const dataSpec dataSpecP5B[2101];
+extern const DataSpec DataSpecP5B[2101];
 
 }
 

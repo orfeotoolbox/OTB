@@ -269,14 +269,14 @@ SailModel
    double alf, sumint, fhot, x1, y1, f1, fint, x2, y2, f2;
    double resh, resv;
    
-   int nbdata = sizeof(dataSpecP5B) / sizeof(dataSpec);
+   int nbdata = sizeof(DataSpecP5B) / sizeof(DataSpec);
    for (int i = 0; i < nbdata; i++)
    {
-      lambda = dataSpecP5B[i].lambda;
-      Es = dataSpecP5B[i].directLight; //8
-      Ed = dataSpecP5B[i].diffuseLight; //9
-      Rsoil1 = dataSpecP5B[i].drySoil; //10
-      Rsoil2 = dataSpecP5B[i].wetSoil; //11
+      lambda = DataSpecP5B[i].lambda;
+      Es = DataSpecP5B[i].directLight; //8
+      Ed = DataSpecP5B[i].diffuseLight; //9
+      Rsoil1 = DataSpecP5B[i].drySoil; //10
+      Rsoil2 = DataSpecP5B[i].wetSoil; //11
       rho = inRefl->GetResponse()[i].second; //rho = LRT[1][i];
       tau = inTrans->GetResponse()[i].second; //tau = LRT[2][i];
 
