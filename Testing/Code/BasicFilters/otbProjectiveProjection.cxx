@@ -22,7 +22,7 @@
 
 #include "otbDotProductImageFilter.h"
 #include "otbProjectiveProjectionImageFilter.h"
-#include "otbMatrixMultiplyImageFilter.h"
+#include "otbMatrixImageFilter.h"
 #include "otbVectorImageToMatrixImageFilter.h"
 #include "otbStreamingStatisticsImageFilter.h"
 #include "otbStreamingStatisticsVectorImageFilter.h"
@@ -36,7 +36,7 @@ typedef otb::VectorImage<PixelType, Dimension> VectorImageType;
 typedef otb::ImageFileReader<VectorImageType> ReaderType;
 typedef otb::ProjectiveProjectionImageFilter<VectorImageType,VectorImageType,PrecisionType> ProjectiveProjectionImageFilterType;
 typedef otb::DotProductImageFilter<VectorImageType,ImageType> DotProductImageFilterType;
-typedef otb::MatrixMultiplyImageFilter<VectorImageType,VectorImageType,PrecisionType> MatrixMultiplyImageFilterType;
+typedef otb::MatrixImageFilter<VectorImageType,VectorImageType> MatrixImageFilterType;
 typedef otb::VectorImageToMatrixImageFilter<VectorImageType> VectorImageToMatrixImageFilterType;
 typedef otb::ImageFileWriter<VectorImageType> WriterType;
 typedef otb::StreamingStatisticsVectorImageFilter<VectorImageType> StreamingStatisticsVectorImageFilterType;
@@ -72,7 +72,7 @@ int otbProjectiveProjectionTestHighSNR(int argc, char * argv[])
 
   std::cout << "Apply dimensionnality reduction" << std::endl;
   // Xd = Ud.'*M;
-  MatrixMultiplyImageFilterType::Pointer mulUd = MatrixMultiplyImageFilterType::New();
+  MatrixImageFilterType::Pointer mulUd = MatrixImageFilterType::New();
   mulUd->SetInput(readerImage->GetOutput());
   mulUd->SetMatrix(Ud);
   mulUd->UpdateOutputInformation();

@@ -20,7 +20,7 @@
 
 #include "otbMacro.h"
 #include "itkImageToImageFilter.h"
-#include "otbMatrixMultiplyImageFilter.h"
+#include "otbMatrixImageFilter.h"
 #include "otbStreamingStatisticsVectorImageFilter.h"
 
 namespace otb 
@@ -54,8 +54,8 @@ public:
   itkTypeMacro(FastICAInternalOptimizerVectorImageFilter, ImageToImageFilter);
 
   /** Dimension */
-	itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
-	itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
   /** Template parameters typedefs */
   typedef TInputImage  InputImageType;
@@ -75,7 +75,7 @@ public:
   typedef typename MatrixType::InternalMatrixType InternalMatrixType;
   typedef typename InternalMatrixType::element_type MatrixElementType;
 
-  typedef MatrixMultiplyImageFilter< TInputImage, TOutputImage, RealType > TransformFilterType;
+  typedef MatrixImageFilter< TInputImage, TOutputImage > TransformFilterType;
   typedef typename TransformFilterType::Pointer TransformFilterPointerType;
 
   typedef double (*ContrastFunctionType) ( double );

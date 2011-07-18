@@ -18,11 +18,6 @@
 #ifndef __otbNAPCAImageFilter_h
 #define __otbNAPCAImageFilter_h
 
-#include "otbMacro.h"
-#include "itkImageToImageFilter.h"
-#include "otbStreamingStatisticsVectorImageFilter.h"
-#include "otbMatrixMultiplyImageFilter.h"
-#include "otbNormalizeVectorImageFilter.h"
 #include "otbMNFImageFilter.h"
 
 namespace otb {

@@ -129,7 +129,7 @@ void VCAImageFilter<TImage>::GenerateData()
 
     otbMsgDevMacroVCA( "Apply dimensionality reduction" )
     // Xd = Ud.'*M;
-    typename MatrixMultiplyImageFilterType::Pointer mulUd = MatrixMultiplyImageFilterType::New();
+    typename MatrixImageFilterType::Pointer mulUd = MatrixImageFilterType::New();
     mulUd->SetInput(this->GetInput());
     mulUd->SetMatrix(UdT);
     mulUd->UpdateOutputInformation();
@@ -178,7 +178,7 @@ void VCAImageFilter<TImage>::GenerateData()
     Ud = U.get_n_columns(0, m_NumberOfEndmembers - 1);
     vnl_matrix<PrecisionType> UdT = Ud.transpose();
 
-    typename MatrixMultiplyImageFilterType::Pointer mulUd = MatrixMultiplyImageFilterType::New();
+    typename MatrixImageFilterType::Pointer mulUd = MatrixImageFilterType::New();
     mulUd->SetInput(normalize->GetOutput());
     mulUd->SetMatrix(UdT);
     mulUd->UpdateOutputInformation();

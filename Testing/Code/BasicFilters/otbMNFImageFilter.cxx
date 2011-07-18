@@ -33,12 +33,12 @@ int otbMNFImageFilterNewTest ( int argc, char* argv[] )
   typedef otb::VectorImage< PixelType, Dimension > ImageType;
 
   typedef otb::LocalActivityVectorImageFilter< ImageType, ImageType > NoiseFilterType;
-   
-  typedef otb::MNFImageFilter< ImageType, ImageType, 
+
+  typedef otb::MNFImageFilter< ImageType, ImageType,
     NoiseFilterType, otb::Transform::FORWARD > FilterType;
   FilterType::Pointer filter = FilterType::New();
 
-  typedef otb::MNFImageFilter< ImageType, ImageType, 
+  typedef otb::MNFImageFilter< ImageType, ImageType,
       NoiseFilterType, otb::Transform::INVERSE > InvFilterType;
     InvFilterType::Pointer invFilter = InvFilterType::New();
 
@@ -57,11 +57,11 @@ int otbMNFImageFilterTest ( int argc, char* argv[] )
   parser->AddOption( "--Normalize", "center and reduce data before MNF", "-norm", 0, false );
   parser->AddOutputImage();
 
-  typedef otb::CommandLineArgumentParseResult ParserResultType;  
+  typedef otb::CommandLineArgumentParseResult ParserResultType;
   ParserResultType::Pointer  parseResult = ParserResultType::New();
-    
+
   try
-  {  
+  {
     parser->ParseCommandLine( argc, argv, parseResult );
   }
   catch( itk::ExceptionObject & err )
@@ -105,7 +105,7 @@ int otbMNFImageFilterTest ( int argc, char* argv[] )
   NoiseFilterType::RadiusType radius = {{ radiusX, radiusY }};
 
   // Image filtering
-  typedef otb::MNFImageFilter< ImageType, ImageType, 
+  typedef otb::MNFImageFilter< ImageType, ImageType,
     NoiseFilterType, otb::Transform::FORWARD > FilterType;
   FilterType::Pointer filter = FilterType::New();
   filter->SetInput( reader->GetOutput() );
@@ -127,7 +127,7 @@ int otbMNFImageFilterTest ( int argc, char* argv[] )
 
   if ( parseResult->IsOptionPresent("--Inverse") )
   {
-    typedef otb::MNFImageFilter< ImageType, ImageType, 
+    typedef otb::MNFImageFilter< ImageType, ImageType,
       NoiseFilterType, otb::Transform::INVERSE > InvFilterType;
     InvFilterType::Pointer invFilter = InvFilterType::New();
     invFilter->SetInput( filter->GetOutput() );
@@ -139,7 +139,7 @@ int otbMNFImageFilterTest ( int argc, char* argv[] )
     typedef otb::CommandProgressUpdate< InvFilterType > CommandType2;
     CommandType2::Pointer invObserver = CommandType2::New();
     invFilter->AddObserver( itk::ProgressEvent(), invObserver );
-    
+
     ImageWriterType::Pointer invWriter = ImageWriterType::New();
     invWriter->SetFileName( parseResult->GetParameterString("--Inverse") );
     invWriter->SetInput( invFilter->GetOutput() );
@@ -148,8 +148,4 @@ int otbMNFImageFilterTest ( int argc, char* argv[] )
 
   return EXIT_SUCCESS;
 }
-
-
-
-
 

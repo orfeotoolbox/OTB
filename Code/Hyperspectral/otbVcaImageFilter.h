@@ -25,7 +25,7 @@
 #include "itkAbsImageFilter.h"
 #include "otbDotProductImageFilter.h"
 #include "otbProjectiveProjectionImageFilter.h"
-#include "otbMatrixMultiplyImageFilter.h"
+#include "otbMatrixImageFilter.h"
 #include "otbVectorImageToMatrixImageFilter.h"
 #include "otbStreamingMinMaxImageFilter.h"
 #include "otbStreamingStatisticsImageFilter.h"
@@ -76,7 +76,7 @@ public:
   typedef itk::AbsImageFilter<ImageType, ImageType>                                           AbsImageFilterType;
   typedef otb::ProjectiveProjectionImageFilter<VectorImageType,VectorImageType,PrecisionType> ProjectiveProjectionImageFilterType;
   typedef otb::DotProductImageFilter<VectorImageType,ImageType>                               DotProductImageFilterType;
-  typedef otb::MatrixMultiplyImageFilter<VectorImageType,VectorImageType,PrecisionType>       MatrixMultiplyImageFilterType;
+  typedef otb::MatrixImageFilter<VectorImageType,VectorImageType>                             MatrixImageFilterType;
   typedef otb::VectorImageToMatrixImageFilter<VectorImageType>                                VectorImageToMatrixImageFilterType;
   typedef otb::StreamingMinMaxImageFilter<ImageType>                                          StreamingMinMaxImageFilterType;
   typedef otb::StreamingStatisticsVectorImageFilter<VectorImageType,PrecisionType>            StreamingStatisticsVectorImageFilterType;

@@ -21,7 +21,7 @@
 #include "otbMacro.h"
 #include "itkImageToImageFilter.h"
 #include "otbStreamingStatisticsVectorImageFilter.h"
-#include "otbMatrixMultiplyImageFilter.h"
+#include "otbMatrixImageFilter.h"
 #include "otbNormalizeVectorImageFilter.h"
 
 
@@ -60,8 +60,8 @@ public:
   itkTypeMacro(PCAImageFilter, ImageToImageFilter);
 
   /** Dimension */
-	itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
-	itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
   typedef Transform::TransformDirection TransformDirectionEnumType;
   itkStaticConstMacro(DirectionOfTransformation,TransformDirectionEnumType,TDirectionOfTransformation);
@@ -81,11 +81,11 @@ public:
   typedef typename MatrixType::InternalMatrixType InternalMatrixType;
   typedef typename InternalMatrixType::element_type MatrixElementType;
   
-  typedef MatrixMultiplyImageFilter< TInputImage, TOutputImage, RealType > TransformFilterType;
-  typedef typename TransformFilterType::Pointer TransformFilterPointerType;
+  typedef MatrixImageFilter< TInputImage, TOutputImage > TransformFilterType;
+  typedef typename TransformFilterType::Pointer          TransformFilterPointerType;
 
   typedef NormalizeVectorImageFilter< TInputImage, TOutputImage > NormalizeFilterType;
-  typedef typename NormalizeFilterType::Pointer NormalizeFilterPointerType;
+  typedef typename NormalizeFilterType::Pointer                   NormalizeFilterPointerType;
 
   /** 
    * Set/Get the number of required largest principal components. 
