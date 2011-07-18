@@ -137,10 +137,8 @@ ADD_TEST(siTuImageSimulationMethodWithSpatialisationTest ${Simulation_TESTS2}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbSimulation_TESTS3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-#FIXME The tolerance is set to 0.01
-#need to investigate differences between matlab baselines and otb implementation
 ADD_TEST(siTvProspectReflTest ${Simulation_TESTS3}
-   --compare-ascii ${EPSILON_PROSPECT} ${BASELINE_FILES}/siTvProspectReflTest.txt
+   --compare-ascii ${EPSILON_PROSPECT} ${BASELINE_FILES}/Simulation/siTvProspectReflTest.txt
                    ${TEMP}/siTvProspectReflTest.txt
         otbProspectReflTest
         30.0 #cab
@@ -152,10 +150,8 @@ ADD_TEST(siTvProspectReflTest ${Simulation_TESTS3}
         ${TEMP}/siTvProspectReflTest.txt
         )
 
-#FIXME The tolerance is set to 0.01
-#need to investigate differences between matlab baselines and otb implementation
 ADD_TEST(siTvProspectTransTest ${Simulation_TESTS3}
-   --compare-ascii ${EPSILON_PROSPECT} ${BASELINE_FILES}/siTvProspectTransTest.txt
+   --compare-ascii ${EPSILON_PROSPECT} ${BASELINE_FILES}/Simulation/siTvProspectTransTest.txt
                    ${TEMP}/siTvProspectTransTest.txt
         otbProspectTransTest
         30.0 #cab
@@ -168,7 +164,7 @@ ADD_TEST(siTvProspectTransTest ${Simulation_TESTS3}
         )
 
 ADD_TEST(siTvSailReflHTest ${Simulation_TESTS3}
-   --compare-ascii ${EPSILON_PROSPECT} ${BASELINE_FILES}/siTvSailReflHTest.txt
+   --compare-ascii ${EPSILON_PROSPECT} ${BASELINE_FILES}/Simulation/siTvSailReflHTest.txt
                    ${TEMP}/siTvSailReflHTest.txt
         otbSailReflHTest
         30.0 #cab
@@ -189,7 +185,7 @@ ADD_TEST(siTvSailReflHTest ${Simulation_TESTS3}
         )
         
 ADD_TEST(siTvSailReflVTest ${Simulation_TESTS3}
-   --compare-ascii ${EPSILON_PROSPECT} ${BASELINE_FILES}/siTvSailReflVTest.txt
+   --compare-ascii ${EPSILON_PROSPECT} ${BASELINE_FILES}/Simulation/siTvSailReflVTest.txt
                    ${TEMP}/siTvSailReflVTest.txt
         otbSailReflVTest
         30.0 #cab
