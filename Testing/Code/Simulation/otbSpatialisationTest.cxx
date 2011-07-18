@@ -93,16 +93,12 @@ int otbSpatialisationTest(int argc, char * argv[])
 //
 //   std::cout<<"nb labels : "<<filter->GetOutput()->GetNumberOfLabelObjects()<<std::endl;
 //   filter->GetOutput()->PrintLabelObjects();
-//   labelMapToLabelImageFilter->SetInput(filter->GetOutput());
-// //   labelMapToLabelImageFilter->Update();
+   labelMapToLabelImageFilter->SetInput(filter->GetOutput());
+   labelMapToLabelImageFilter->Update();
 //
-//   writer->SetFileName(outfilename);
-//   writer->SetInput(labelMapToLabelImageFilter->GetOutput());
-//   writer->Update();
-
-  // This test does not check the output and does not even produce it
-  // as such, it is incomplete and can be returning SUCCESS.
-  return EXIT_FAILURE;
+   writer->SetFileName(outfilename);
+   writer->SetInput(labelMapToLabelImageFilter->GetOutput());
+   writer->Update();
 
   return EXIT_SUCCESS;
 }

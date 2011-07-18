@@ -95,10 +95,17 @@ ADD_TEST(siTuReduceSpectralResponseClassifierRAndNIR ${Simulation_TESTS2}
 #         0.199854 #aerosolOptical
 #         )
 
-ADD_TEST(siTuSpatialisationTest ${Simulation_TESTS2}
-        otbSpatialisationTest
-        ${TEMP}/SpatialisationTest.tif
+ADD_TEST(siTuSpatialisationTestNew ${Simulation_TESTS2}
+        otbSpatialisationTestNew
         )
+        
+ADD_TEST(siTvSpatialisationTest ${Simulation_TESTS2}
+   --compare-image ${TOL} ${BASELINE}/Simulation/siTvSpatialisationTest.tif
+                   ${TEMP}/siTvSpatialisationTest.tif
+        otbSpatialisationTest
+        ${TEMP}/siTvSpatialisationTest.tif
+        )
+        
         
 ADD_TEST(siTuLabelMapToSimulatedImageFilterTest ${Simulation_TESTS2}
         otbLabelMapToSimulatedImageFilterTest
@@ -285,6 +292,7 @@ otbReduceSpectralResponse.cxx
 otbReduceSpectralResponseClassifierRAndNIR.cxx
 otbAtmosphericEffects.cxx
 otbSpatialisationTest.cxx
+otbSpatialisationTestNew.cxx
 otbLabelMapToSimulatedImageFilterTest.cxx
 otbImageSimulationMethodWithVectorDataTest.cxx
 otbImageSimulationMethodWithSpatialisationTest.cxx

@@ -32,6 +32,7 @@ void RegisterTests()
   REGISTER_TEST(otbReduceSpectralResponse);
   REGISTER_TEST(otbReduceSpectralResponseClassifierRAndNIR);
   REGISTER_TEST(otbAtmosphericEffects);
+  REGISTER_TEST(otbSpatialisationTestNew);
   REGISTER_TEST(otbSpatialisationTest);
   REGISTER_TEST(otbLabelMapToSimulatedImageFilterTest);
   REGISTER_TEST(otbImageSimulationMethodWithVectorDataTest);
