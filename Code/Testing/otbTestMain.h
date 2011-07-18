@@ -283,7 +283,7 @@ int main(int ac, char* av[])
       if (result != EXIT_SUCCESS )
         {
         std::cout << "-> Test EXIT FAILURE (" << result << ")." << std::endl;
-        itkGenericExceptionMacro(<< "Function returns EXIT_FAILURE (no regression test)");
+        itkGenericExceptionMacro(<< "Function returns EXIT_FAILURE (not from regression, failure inside the test)");
         }
       }
     catch (itk::ExceptionObject& e)
