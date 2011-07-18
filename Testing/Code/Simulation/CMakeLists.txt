@@ -16,7 +16,7 @@ SET(SRCLASS4 ${SPECTRUM_DB}/JHU/becknic/rocks/sedimentary/powder/0_75/txt)
 #Tolerance sur diff pixel image
 SET(TOL 0.0)
 SET(EPSILON 0.00001)
-SET(EPSILON_PROSPECT 0.01)
+SET(EPSILON_PROSPECT 0.001)
 SET(Simulation_TESTS1 ${CXX_TEST_PATH}/otbSimulationTests1)
 SET(Simulation_TESTS2 ${CXX_TEST_PATH}/otbSimulationTests2)
 SET(Simulation_TESTS3 ${CXX_TEST_PATH}/otbSimulationTests3)
@@ -154,18 +154,18 @@ ADD_TEST(siTvProspectReflTest ${Simulation_TESTS3}
 
 #FIXME The tolerance is set to 0.01
 #need to investigate differences between matlab baselines and otb implementation
-#ADD_TEST(siTvProspectTransTest ${Simulation_TESTS3}
-#   --compare-ascii ${EPSILON_PROSPECT} ${BASELINE_FILES}/siTvProspectTransTest.txt
-#                   ${TEMP}/siTvProspectTransTest.txt
-#        otbProspectTransTest
-#        30.0 #cab
-#        10.0 #car
-#        0.0 #CBrown 
-#        0.015 #Cw
-#        0.009 #Cm
-#        1.2 #N
-#        ${TEMP}/siTvProspectTransTest.txt
-#        )
+ADD_TEST(siTvProspectTransTest ${Simulation_TESTS3}
+   --compare-ascii ${EPSILON_PROSPECT} ${BASELINE_FILES}/siTvProspectTransTest.txt
+                   ${TEMP}/siTvProspectTransTest.txt
+        otbProspectTransTest
+        30.0 #cab
+        10.0 #car
+        0.0 #CBrown 
+        0.015 #Cw
+        0.009 #Cm
+        1.2 #N
+        ${TEMP}/siTvProspectTransTest.txt
+        )
 
 ADD_TEST(siTvSailReflHTest ${Simulation_TESTS3}
    --compare-ascii ${EPSILON_PROSPECT} ${BASELINE_FILES}/siTvSailReflHTest.txt
