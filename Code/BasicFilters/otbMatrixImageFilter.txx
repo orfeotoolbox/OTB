@@ -30,7 +30,7 @@ namespace otb
  *
  */
 template <class TInputImage, class TOutputImage, class TMatrix>
-MatrixImageFilter<TInputImage, TOutputImage, TMatrix>::MatrixImageFilter() : m_Matrix()
+MatrixImageFilter<TInputImage, TOutputImage, TMatrix>::MatrixImageFilter() : m_MatrixByVector(false)
 {
 }
 
@@ -40,18 +40,33 @@ void MatrixImageFilter<TInputImage, TOutputImage, TMatrix>::GenerateOutputInform
   // call the superclass' implementation of this method
   Superclass::GenerateOutputInformation();
 
-  if( this->GetInput()->GetNumberOfComponentsPerPixel() != m_Matrix.rows() )
+  if ( m_MatrixByVector )
     {
-      itkExceptionMacro("Invalid Matrix size. Number of columns must be the same as the image number of channels.");
+    if( this->GetInput()->GetNumberOfComponentsPerPixel() != m_Matrix.cols() )
+      {
+        itkExceptionMacro("Invalid Matrix size. Number of columns must be the same as the image number of channels.");
+      }
+
+    if( m_Matrix.rows() == 0 )
+      {
+        itkExceptionMacro("Invalid Matrix size. Number of rows can't be null.");
+      }
+    this->GetOutput()->SetNumberOfComponentsPerPixel( m_Matrix.rows() );
     }
 
-  if( m_Matrix.cols() == 0 )
+  if ( !m_MatrixByVector )
     {
-      itkExceptionMacro("Invalid Matrix size. Number of rows can't be null.");
-    }
+    if( this->GetInput()->GetNumberOfComponentsPerPixel() != m_Matrix.rows() )
+      {
+        itkExceptionMacro("Invalid Matrix size. Number of rows must be the same as the image number of channels.");
+      }
 
-  this->GetOutput()->SetNumberOfComponentsPerPixel( m_Matrix.cols() );
-  
+    if( m_Matrix.cols() == 0 )
+      {
+        itkExceptionMacro("Invalid Matrix size. Number of columns can't be null.");
+      }
+    this->GetOutput()->SetNumberOfComponentsPerPixel( m_Matrix.cols() );
+    }
 }
 
 template<class TInputImage, class TOutputImage, class TMatrix>
@@ -74,8 +89,8 @@ void MatrixImageFilter<TInputImage, TOutputImage, TMatrix>::ThreadedGenerateData
   inIt.GoToBegin();
   outIt.GoToBegin();
   
-  const unsigned int inSize =  m_Matrix.rows();
-  const unsigned int outSize =  m_Matrix.cols();
+  const unsigned int inSize =  m_MatrixByVector ? m_Matrix.cols() : m_Matrix.rows();
+  const unsigned int outSize = m_MatrixByVector ? m_Matrix.rows() : m_Matrix.cols();
 
   VectorType inVect(inSize, InputRealType(0.));
   VectorType outVect(outSize, InputRealType(0.));
@@ -91,7 +106,7 @@ void MatrixImageFilter<TInputImage, TOutputImage, TMatrix>::ThreadedGenerateData
           inVect[i] = static_cast<InputRealType>(inPix[i]);
         }
 
-      outVect = inVect*m_Matrix;
+      outVect = m_MatrixByVector ? m_Matrix*inVect : inVect*m_Matrix;
 
       for(unsigned int i=0; i<outSize; i++)
         {
@@ -115,6 +130,7 @@ MatrixImageFilter<TInputImage, TOutputImage, TMatrix>::PrintSelf(std::ostream& o
 {
   Superclass::PrintSelf(os, indent);
   os << indent << "Matrix: " << m_Matrix << std::endl;
+  os << indent << "MatrixByVector: " << m_MatrixByVector << std::endl;
 }
 
 } // end namespace otb
