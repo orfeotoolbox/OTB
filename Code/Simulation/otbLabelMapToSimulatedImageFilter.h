@@ -33,10 +33,10 @@ namespace otb
 
 /**
  * \class LabelMapToSimulatedImageFilter
- * \brief Transform a labelMap into an image
+ * \brief Transform a labelMap into an image.
  *
  * LabelMapToSimulatedImageFilter convert a label map into a reflectance image.
- * Reflectance of the image are computed by applying the RSR (relative spectral response) of the satellite to the spectrum obtained
+ * Reflectance of the image is computed by applying the RSR (relative spectral response) of the satellite to the spectrum obtained
  * by the spectrum simulator (or read in the database). A gaussian noise is added to the reflectance value of
  * each pixel of the object. However the method used to add this noise (itk::Statistics::MersenneTwisterRandomVariateGenerator)
  * is not thread safe, and then (even if all the remaining is multithread) the number of thread must be set to 1.

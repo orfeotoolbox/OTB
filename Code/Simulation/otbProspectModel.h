@@ -34,6 +34,7 @@ namespace otb
    * It computes leaf reflectance and transmittance from a set of parameters (contained in a LeafParameters class)
    *
    * \sa itk::DataObject
+   * \sa SimulationStep1Base
  */
 
 class ITK_EXPORT ProspectModel : public SimulationStep1Base

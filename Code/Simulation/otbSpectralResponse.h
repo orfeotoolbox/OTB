@@ -39,12 +39,12 @@ namespace otb
    * \brief This class represents the spectral response of an object (or a satellite band).
    *
    * This class contains a SORTED std::vector of std::pair values.
-   * The first argument of the pair is a wavelenght lambda (in micro meters).
-   * The second argument of the pair is the reflectance response associated to lambda
+   * The first argument of the pair is a wavelength lambda (in micro meters).
+   * The second argument of the pair is the reflectance response associated to lambda.
    *
    * The two templates indicate:
-   * - the precision of the wavelenght (X) (by default: double),
-   * - the precision of the reflectance associated to the wavelenght (Y) (by default: double).
+   * - the precision of the wavelength (X) (by default: double),
+   * - the precision of the reflectance associated to the wavelength (Y) (by default: double).
    *
    * This Spectral response can be loaded from ASCII file (JPL spectral library Version 1.2)
    * http://speclib.jpl.nasa.gov.
@@ -115,7 +115,7 @@ class SpectralResponse : public itk::DataObject
       inline ValuePrecisionType operator()(const PrecisionType & lambda);
       
       /** Operator for comparing Pair Lambda/Response
-      * Pairs are ordered by wavelenght
+      * Pairs are ordered by wavelength
       */
       struct sort_pair {
       bool operator() ( PairType a , PairType b )
@@ -135,7 +135,7 @@ class SpectralResponse : public itk::DataObject
        /** Transform the SR in a Filter Function (6S parameters)*/
        FilterFunctionValuesPointerType GetFilterFunctionValues(double step = 0.0025) const;
        
-       /** Get the wavelenght of the first and last not null reflectance  */
+       /** Get the wavelength of the first and last not null reflectance  */
   IntervalType GetInterval()
   {
     if( ! m_IntervalComputed )
@@ -156,7 +156,7 @@ class SpectralResponse : public itk::DataObject
       /** Spectral response vector of pairs (first=lambda; second=response)*/
       VectorPairType    m_Response;
 
-  /** Minimum value to consider that the spectral response is not nul  */
+  /** Minimum value to consider that the spectral response is not null  */
   TPrecision m_SensitivityThreshold;
   IntervalType m_Interval;
   bool m_IntervalComputed;

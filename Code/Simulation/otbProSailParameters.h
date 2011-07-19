@@ -29,6 +29,7 @@ namespace otb
 /** \class ProSailParameters
    * \brief this class implements the ProSailParameters lib.
    *
+   * see http://teledetection.ipgp.jussieu.fr/prosail/
    * \sa itk::DataObject
  */
  

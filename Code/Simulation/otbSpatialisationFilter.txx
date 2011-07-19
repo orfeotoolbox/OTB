@@ -31,8 +31,6 @@ SpatialisationFilter<TLabelMap>
 ::SpatialisationFilter()
 {
   //default value
-  
-
 }
 
 
@@ -41,26 +39,26 @@ void
 SpatialisationFilter<TLabelMap>
 ::GenerateData()
 {
-   
-   if(m_AreaVector.size() != (m_NumberOfObjects[0]*m_NumberOfObjects[1]))
-   {
-      itkExceptionMacro( << "Size problem : AreaVector size must be equal to "<< m_NumberOfObjects[0]*m_NumberOfObjects[1] );
-   }
-   if( m_PathVector.size() != (m_NumberOfObjects[0]*m_NumberOfObjects[1]))
-   {
-      itkExceptionMacro( << "Size problem : PathVector size must be equal to "<< m_NumberOfObjects[0]*m_NumberOfObjects[1] );
-   }
-   if(m_Labels.size() != (m_NumberOfObjects[0]*m_NumberOfObjects[1]))
-   {
-      itkExceptionMacro( << "Size problem : Labels size must be equal to "<< m_NumberOfObjects[0]*m_NumberOfObjects[1] );
-   }
 
-   unsigned int numberOfObjects = m_NumberOfObjects[0]*m_NumberOfObjects[1];
-   //first object must have label 1. 0 is for background value in a label map.
-   for(unsigned int i=0; i<numberOfObjects; i++)
-   {
-      this->ProcessObject(i);
-   }
+  if (m_AreaVector.size() != (m_NumberOfObjects[0] * m_NumberOfObjects[1]))
+    {
+    itkExceptionMacro( << "Size problem : AreaVector size must be equal to "<< m_NumberOfObjects[0]*m_NumberOfObjects[1] );
+    }
+  if (m_PathVector.size() != (m_NumberOfObjects[0] * m_NumberOfObjects[1]))
+    {
+    itkExceptionMacro( << "Size problem : PathVector size must be equal to "<< m_NumberOfObjects[0]*m_NumberOfObjects[1] );
+    }
+  if (m_Labels.size() != (m_NumberOfObjects[0] * m_NumberOfObjects[1]))
+    {
+    itkExceptionMacro( << "Size problem : Labels size must be equal to "<< m_NumberOfObjects[0]*m_NumberOfObjects[1] );
+    }
+
+  unsigned int numberOfObjects = m_NumberOfObjects[0] * m_NumberOfObjects[1];
+  //first object must have label 1. 0 is for background value in a label map.
+  for (unsigned int i = 0; i < numberOfObjects; i++)
+    {
+    this->ProcessObject(i);
+    }
 }
 
 template <class TLabelMap>
@@ -91,26 +89,26 @@ void
 SpatialisationFilter<TLabelMap>
 ::GenerateOutputInformation()
 {
-   
-   Superclass::GenerateOutputInformation();
-   
-   RegionType region;
-   SizeType size;
-   IndexType index;
-   index.Fill(0);
-   size[0]=m_ObjectSize[0]*m_NumberOfObjects[0];
-   size[1]=m_ObjectSize[1]*m_NumberOfObjects[1];
-   region.SetSize(size);
-   region.SetIndex(index);
-  
-//    RegionType requestedRegion;
-//    size[0]=m_ObjectSize[0];
-//    size[1]=m_ObjectSize[1];
-//    requestedRegion.SetSize(size);
-//    requestedRegion.SetIndex(index);
-   
-   this->GetOutput()->SetLargestPossibleRegion(region);
-//    this->GetOutput()->SetRequestedRegion(requestedRegion);
+
+  Superclass::GenerateOutputInformation();
+
+  RegionType region;
+  SizeType size;
+  IndexType index;
+  index.Fill(0);
+  size[0] = m_ObjectSize[0] * m_NumberOfObjects[0];
+  size[1] = m_ObjectSize[1] * m_NumberOfObjects[1];
+  region.SetSize(size);
+  region.SetIndex(index);
+
+  //    RegionType requestedRegion;
+  //    size[0]=m_ObjectSize[0];
+  //    size[1]=m_ObjectSize[1];
+  //    requestedRegion.SetSize(size);
+  //    requestedRegion.SetIndex(index);
+
+  this->GetOutput()->SetLargestPossibleRegion(region);
+  //    this->GetOutput()->SetRequestedRegion(requestedRegion);
 }
 
 template <class TLabelMap>

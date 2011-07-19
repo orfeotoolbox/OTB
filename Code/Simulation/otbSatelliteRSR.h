@@ -37,10 +37,11 @@ namespace otb
    *
    *
    * The two templates indicate:
-   * - the precision of the wavelenght (X) (by default: double)
-   * - the precision of the gain associated to the wavelenght (Y) (by default: double)
+   * - the precision of the wavelength (X) (by default: double)
+   * - the precision of the gain associated to the wavelength (Y) (by default: double)
   
    * \sa SpectralResponse
+   * \sa itk::DataObject
  */
 template <class TPrecision = double, class TValuePrecision = double>
 class SatelliteRSR : public itk::DataObject

@@ -30,6 +30,27 @@ namespace otb
  * \class LabelToSimulationParametersBase
  * \brief Base class for all classes that take a label and outputs two set of parameters for two steps (step1, step2)
  *
+ * step1 and 2 refers to PROSPECT and SAIL parameters.
+ *
+ * Prospect Parameters
+ * Cab    = 30;   % chlorophyll content (ug.cm-2)
+ *  Car   = 10;   % carotenoid content (ug.cm-2)
+ * Cbrown  = 0.0;  % brown pigment content (arbitrary units)
+ * Cw    = 0.015;  % EWT (cm)
+ * Cm    = 0.009;  % LMA (g.cm-2)
+ * N   = 1.2;  % structure coefficient
+ *
+ * Sail Parameters
+ * lai   = 2;    % leaf area index
+ * angl  = 50;   % average leaf angle (deg)
+ * psoil = 1;    % soil coefficient
+ * skyl  = 70;   % % diffuse/direct radiation
+ * hspot = 0.2;  % hot spot
+ * ihot  = 1.0;  %
+ * tts   = 30;   % solar zenith angle (deg)
+ * tto   = 0;    % observer zenith angle (deg)
+ * psi   = 0;    % azimuth (deg)
+ *
  * \sa ProcessObject
  */
 

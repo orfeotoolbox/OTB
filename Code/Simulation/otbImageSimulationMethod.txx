@@ -27,31 +27,30 @@ template <class TInputVectorData, class TSpatialisation, class TSimulationStep1,
 ImageSimulationMethod< TInputVectorData, TSpatialisation, TSimulationStep1, TSimulationStep2, TFTM, TOutputImage>
 ::ImageSimulationMethod()
 {
-   //instanciation
-   m_Spatialisation = SpatialisationType::New();
-   m_LabelMapToSimulatedImageFilter = LabelMapToSimulatedImageFilterType::New();
-   m_LabelMapToLabelImageFilter = LabelMapToLabelImageFilterType::New();
-   
-   
-//    this->SetNumberOfRequiredOutputs(2);
-//    this->SetNthOutput(0, OutputImageType::New());
-//    this->SetNthOutput(1, OutputLabelImageType::New());
-   
-   //TODO a changer mais pour le moment obligatoire car ProlateInterpolateImageFunction
-   // ne fonctionne qu'avec des image mono canal.
-//    m_FTMFilter = FTMFilterType::New();
-//    m_Interpolator = InterpolatorType::New();
-//    m_MultiToMonoChannelFilter = MultiToMonoChannelFilterType::New();
-   m_ImageList = ImageListType::New();
-   m_ImageListToVectorImageFilter = ImageListToVectorImageFilterType::New();
-   
-   //default value
-   m_NumberOfComponentsPerPixel = 3;
-   m_Radius = 3;
-   m_SatRSRFilename="";
-   m_PathRoot="";
-   m_Mean=0.0;
-   m_Variance=1e-8;
+  //instanciation
+  m_Spatialisation = SpatialisationType::New();
+  m_LabelMapToSimulatedImageFilter = LabelMapToSimulatedImageFilterType::New();
+  m_LabelMapToLabelImageFilter = LabelMapToLabelImageFilterType::New();
+
+  //    this->SetNumberOfRequiredOutputs(2);
+  //    this->SetNthOutput(0, OutputImageType::New());
+  //    this->SetNthOutput(1, OutputLabelImageType::New());
+
+  //TODO a changer mais pour le moment obligatoire car ProlateInterpolateImageFunction
+  // ne fonctionne qu'avec des images mono canal.
+  //    m_FTMFilter = FTMFilterType::New();
+  //    m_Interpolator = InterpolatorType::New();
+  //    m_MultiToMonoChannelFilter = MultiToMonoChannelFilterType::New();
+  m_ImageList = ImageListType::New();
+  m_ImageListToVectorImageFilter = ImageListToVectorImageFilterType::New();
+
+  //default value
+  m_NumberOfComponentsPerPixel = 3;
+  m_Radius = 3;
+  m_SatRSRFilename = "";
+  m_PathRoot = "";
+  m_Mean = 0.0;
+  m_Variance = 1e-8;
 }
 
 //The 3 commented methods are needed for a true composite filters.
@@ -144,54 +143,52 @@ void
 ImageSimulationMethod< TInputVectorData, TSpatialisation, TSimulationStep1, TSimulationStep2, TFTM, TOutputImage>
 ::UpdateData()
 {
-   
-//    m_Spatialisation->SetInput(m_InputVectorData);
-//    m_Spatialisation->SetInitialLabel(1);
-//    m_Spatialisation->SetBackgroundValue(0);
-   
-   m_LabelMapToSimulatedImageFilter->SetInput(m_Spatialisation->GetOutput());
-   m_LabelMapToSimulatedImageFilter->SetNumberOfComponentsPerPixel(m_NumberOfComponentsPerPixel);
-   m_LabelMapToSimulatedImageFilter->SetSatRSRFilename(m_SatRSRFilename);
-   m_LabelMapToSimulatedImageFilter->SetNumberOfThreads(1);
-   m_LabelMapToSimulatedImageFilter->SetPathRoot(m_PathRoot);
-   m_LabelMapToSimulatedImageFilter->SetMean(m_Mean);
-   m_LabelMapToSimulatedImageFilter->SetVariance(m_Variance);
 
-   m_LabelMapToLabelImageFilter->SetInput(m_Spatialisation->GetOutput());
-   
+  //    m_Spatialisation->SetInput(m_InputVectorData);
+  //    m_Spatialisation->SetInitialLabel(1);
+  //    m_Spatialisation->SetBackgroundValue(0);
 
-   
-   for(unsigned int i = 0; i<m_NumberOfComponentsPerPixel; i++)
-   {
-      
-      MultiToMonoChannelFilterPointer multiToMonoChannelFilter = MultiToMonoChannelFilterType::New();
-      InterpolatorPointer interpolator = InterpolatorType::New();
-      FTMFilterPointer FTMFilter = FTMFilterType::New();
-      
-      multiToMonoChannelFilter->SetInput(m_LabelMapToSimulatedImageFilter->GetOutput());
-      multiToMonoChannelFilter->SetChannel(i+1);
-      multiToMonoChannelFilter->SetExtractionRegion(m_LabelMapToSimulatedImageFilter->GetOutput()->GetLargestPossibleRegion());
-      
+  m_LabelMapToSimulatedImageFilter->SetInput(m_Spatialisation->GetOutput());
+  m_LabelMapToSimulatedImageFilter->SetNumberOfComponentsPerPixel(m_NumberOfComponentsPerPixel);
+  m_LabelMapToSimulatedImageFilter->SetSatRSRFilename(m_SatRSRFilename);
+  m_LabelMapToSimulatedImageFilter->SetNumberOfThreads(1);
+  m_LabelMapToSimulatedImageFilter->SetPathRoot(m_PathRoot);
+  m_LabelMapToSimulatedImageFilter->SetMean(m_Mean);
+  m_LabelMapToSimulatedImageFilter->SetVariance(m_Variance);
 
-      //TODO comment changer interpolateur !
-      interpolator->SetInputImage(multiToMonoChannelFilter->GetOutput());
-      interpolator->SetRadius(m_Radius);
-      interpolator->Initialize();
-      
-      multiToMonoChannelFilter->UpdateOutputInformation();
-      
-      FTMFilter->SetInterpolator(interpolator);
-//       FTMFilter->SetOutputSize(multiToMonoChannelFilter->GetOutput()->GetLargestPossibleRegion().GetSize());
-      FTMFilter->SetSize(multiToMonoChannelFilter->GetOutput()->GetLargestPossibleRegion().GetSize());
-      FTMFilter->SetOutputSpacing(multiToMonoChannelFilter->GetOutput()->GetSpacing());
-      FTMFilter->SetOutputOrigin(multiToMonoChannelFilter->GetOutput()->GetOrigin());
-      FTMFilter->SetInput(multiToMonoChannelFilter->GetOutput());
-      FTMFilter->Update();
-      
-      m_ImageList->PushBack(FTMFilter->GetOutput());
-   }
-   m_ImageListToVectorImageFilter->SetInput(m_ImageList);
-   
+  m_LabelMapToLabelImageFilter->SetInput(m_Spatialisation->GetOutput());
+
+  for (unsigned int i = 0; i < m_NumberOfComponentsPerPixel; i++)
+    {
+
+    MultiToMonoChannelFilterPointer multiToMonoChannelFilter = MultiToMonoChannelFilterType::New();
+    InterpolatorPointer interpolator = InterpolatorType::New();
+    FTMFilterPointer FTMFilter = FTMFilterType::New();
+
+    multiToMonoChannelFilter->SetInput(m_LabelMapToSimulatedImageFilter->GetOutput());
+    multiToMonoChannelFilter->SetChannel(i + 1);
+    multiToMonoChannelFilter->SetExtractionRegion(
+                                                  m_LabelMapToSimulatedImageFilter->GetOutput()->GetLargestPossibleRegion());
+
+    //TODO comment changer interpolateur !
+    interpolator->SetInputImage(multiToMonoChannelFilter->GetOutput());
+    interpolator->SetRadius(m_Radius);
+    interpolator->Initialize();
+
+    multiToMonoChannelFilter->UpdateOutputInformation();
+
+    FTMFilter->SetInterpolator(interpolator);
+    //       FTMFilter->SetOutputSize(multiToMonoChannelFilter->GetOutput()->GetLargestPossibleRegion().GetSize());
+    FTMFilter->SetSize(multiToMonoChannelFilter->GetOutput()->GetLargestPossibleRegion().GetSize());
+    FTMFilter->SetOutputSpacing(multiToMonoChannelFilter->GetOutput()->GetSpacing());
+    FTMFilter->SetOutputOrigin(multiToMonoChannelFilter->GetOutput()->GetOrigin());
+    FTMFilter->SetInput(multiToMonoChannelFilter->GetOutput());
+    FTMFilter->Update();
+
+    m_ImageList->PushBack(FTMFilter->GetOutput());
+    }
+  m_ImageListToVectorImageFilter->SetInput(m_ImageList);
+
 }
 
 //In case of a true composite filter

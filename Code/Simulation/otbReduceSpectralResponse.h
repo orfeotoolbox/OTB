@@ -36,10 +36,9 @@ namespace otb
    *
    * The two templates indicate:
    * - the SpectralResponse input (from the JPL ASTER spectral library for example)
-   * - the relative s spectral response of a sensor
+   * - the relative spectral response (RSR) of a sensor
    *
    * The method CalculateResponse must be called.
-   *
    *
    * \sa itk::DataObject
    * \sa SpectralResponse

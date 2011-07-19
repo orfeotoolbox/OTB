@@ -19,8 +19,6 @@
 #define __otbSurfaceReflectanceToReflectanceFilter_txx
 
 #include "otbSurfaceReflectanceToReflectanceFilter.h"
-// #include "otbImageMetadataInterfaceFactory.h"
-// #include "otbImageMetadataInterfaceBase.h"
 #include "otbOpticalImageMetadataInterfaceFactory.h"
 #include "otbOpticalImageMetadataInterface.h"
 
