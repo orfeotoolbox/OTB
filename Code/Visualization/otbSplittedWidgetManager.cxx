@@ -164,4 +164,25 @@ SplittedWidgetManager
   m_SplittedWidget->m_HistogramsGroup->remove(m_InternalCurveWidget);
 }
 
+void
+SplittedWidgetManager
+::SetLabelScrollWidget(const char * label)
+{
+  m_SplittedWidget->m_QuicklookGroup->label(label);
+}
+
+void
+SplittedWidgetManager
+::SetLabelFullWidget(const char * label)
+{
+  m_SplittedWidget->m_FullGroup->label(label);
+}
+
+void
+SplittedWidgetManager
+::SetLabelZoomWidget(const char * label)
+{
+  m_SplittedWidget->m_ZoomGroup->label(label);
+}
+
 }

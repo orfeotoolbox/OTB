@@ -136,4 +136,25 @@ PackedWidgetManager
   m_PackedWidget->m_Window->copy_label(label);
 }
 
+void
+PackedWidgetManager
+::SetLabelScrollWidget(const char * label)
+{
+  m_PackedWidget->m_QuicklookGroup->label(label);
+}
+
+void
+PackedWidgetManager
+::SetLabelFullWidget(const char * label)
+{
+  m_PackedWidget->m_FullGroup->label(label);
+}
+
+void
+PackedWidgetManager
+::SetLabelZoomWidget(const char * label)
+{
+  m_PackedWidget->m_ZoomGroup->label(label);
+}
+
 }

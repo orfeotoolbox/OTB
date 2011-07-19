@@ -106,6 +106,10 @@ public:
   itkGetMacro(AutoScale, bool);
   itkBooleanMacro(AutoScale);
 
+  itkSetMacro(ScaleAxeYDefault, bool);
+  itkGetMacro(ScaleAxeYDefault, bool);
+  itkBooleanMacro(ScaleAxeYDefault);
+
   /** Add a new curve to the widget
    *  \return curve position in the list
    */
@@ -190,6 +194,8 @@ private:
   // Colors
   ColorType m_AxisColor;
   ColorType m_GridColor;
+
+  bool m_ScaleAxeYDefault;
 
   // Space to screen transform
   AffineTransformPointerType m_SpaceToScreenTransform;

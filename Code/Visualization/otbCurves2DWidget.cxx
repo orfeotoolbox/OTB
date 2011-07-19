@@ -22,7 +22,7 @@ namespace otb
 Curves2DWidget::Curves2DWidget() : m_Curves(), m_XAxisLabel("X axis"), m_YAxisLabel("Y axis"), m_Margins(),
   m_Extent(), m_AxisOrigin(), m_AxisLength(),
   m_GridOrigin(), m_GridSpacing(), m_ZeroCrossingAxis(true),
-  m_AutoScale(true), m_AxisColor(), m_GridColor(), m_SpaceToScreenTransform()
+  m_AutoScale(true), m_AxisColor(), m_GridColor(), m_SpaceToScreenTransform(), m_ScaleAxeYDefault(true)
 {
   // Build the curves list
   m_Curves = CurveListType::New();
@@ -279,7 +279,15 @@ void Curves2DWidget::RenderGrid()
 
   // Display the vertical grid index (Y axis)
   pos = screenGridOrigin[1];
-  int scale = 0;
+
+  int scale;
+  if(m_ScaleAxeYDefault)
+  {
+    scale = 0;
+  }
+  else
+    scale = m_GridOrigin[1];
+
   std::ostringstream oss;
   gl_font(FL_COURIER_BOLD, 8);
   glColor4d(0, 0, 0, 0.5);

@@ -59,6 +59,9 @@ public:
   virtual void Refresh() = 0;
   virtual void SetLabel(const char * label) = 0;
   virtual void UnRegisterAll() = 0;
+  virtual void SetLabelScrollWidget(const char * label) = 0;
+  virtual void SetLabelFullWidget(const char * label) = 0;
+  virtual void SetLabelZoomWidget(const char * label) = 0;
 
 protected:
   /** Constructor */
