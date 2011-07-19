@@ -56,6 +56,7 @@ const double CONST_SQRTPI =   std::sqrt(CONST_PI);     /* sqrt(pi)*/
 const double CONST_2_SQRTPI = 1.12837916709551257390;  /* 2/sqrt(pi) */
 const double CONST_SQRT2 =    1.41421356237309504880;  /* sqrt(2) */
 const double CONST_SQRT1_2 =  0.70710678118654752440;  /* 1/sqrt(2) */
+const double CONST_SQRT3 =    1.73205080756887729353;  /* sqrt(3) */
 const double CONST_EULER =    0.57721566490153286060;  /* euler constant*/
 
 /* The above constants are not adequate for computation using `long double's.
@@ -81,6 +82,7 @@ const long double CONST_LNPIl =     std::log(CONST_PIl);                    /* l
 const long double CONST_SQRTPIl =   std::sqrt(CONST_PIl);                   /* sqrt(pi)*/
 const long double CONST_SQRT2l =    1.4142135623730950488016887242096981L;  /* sqrt(2) */
 const long double CONST_SQRT1_2l =  0.7071067811865475244008443621048490L;  /* 1/sqrt(2) */
+const long double CONST_SQRT3l =    1.7320508075688772935274463415058724L;  /* sqrt(3) */
 const long double CONST_EULERl =    0.5772156649015328606065120900824024L;  /* euler constant*/
 
 #endif

@@ -97,7 +97,7 @@ public:
 
 protected:
   WaveletGenerator() {}
-  virtual ~WaveletGenerator() {}
+  ~WaveletGenerator() {}
 
 private:
   WaveletGenerator(const Self &);  // not implemented
@@ -105,11 +105,5 @@ private:
 }; // end of class
 
 } // end of namespace otb
-
-/*
-#ifndef OTB_MANUAL_INSTANTIATION
-#include "otbWaveletGenerator.txx"
-#endif
-*/
 
 #endif
