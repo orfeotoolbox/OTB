@@ -17,8 +17,60 @@ SET(Hyperspectral_TESTS1 ${CXX_TEST_PATH}/otbHyperspectralTests1)
 SET(Hyperspectral_TESTS2 ${CXX_TEST_PATH}/otbHyperspectralTests2)
 
 # HyperspectralTests1
-ADD_TEST(hyTuHyperspectralVariableNew ${Hyperspectral_TESTS1}
-        otbHyperspectralVariableNew)
+ADD_TEST(hyTuEigenvalueLikelihoodMaximizationNew
+         ${Hyperspectral_TESTS1}
+         otbEigenvalueLikelihoodMaximizationNewTest)         
+
+ADD_TEST(hyTvEigenvalueLikelihoodMaximizationTest
+         ${Hyperspectral_TESTS1}
+           --compare-ascii ${NOTOL}
+           ${BASELINE_FILES}/hyTvEigenvalueLikelihoodMaximizationTest.txt
+           ${TEMP}/hyTvEigenvalueLikelihoodMaximizationTest.txt
+         otbEigenvalueLikelihoodMaximizationTest
+         ${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif
+         ${TEMP}/hyTvEigenvalueLikelihoodMaximizationTest.txt)
+
+ADD_TEST(hyTuVCAImageFilterNew
+         ${Hyperspectral_TESTS1}
+         otbVCAImageFilterNew
+         ${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif
+         ${TEMP}/synthetic_vca_5.hdr
+         5 )
+
+ADD_TEST(hyTvVCAImageFilterTest1
+         ${Hyperspectral_TESTS1}
+           --compare-image ${NOTOL}
+           ${BASELINE_FILES}/hyTvVCAImageFilterTest.tif
+           ${TEMP}/hyTvVCAImageFilterTest.tif
+         otbVCAImageFilterTestHighSNR
+         ${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif
+         ${TEMP}/hyTvVCAImageFilterTest.tif
+         5 )
+
+ADD_TEST(hyTuSparseUnmixingImageFilterNew
+		${Hyperspectral_TESTS1}
+		otbSparseUnmixingImageFilterNewTest)
+
+# TODO
+#ADD_TEST(hyTvSparseUnmixingImageFilterTest
+#		${Hyperspectral_TESTS1}
+#		otbSparseUnmixingImageFilterTest
+#       )
+
+
+ADD_TEST(hyTuUnConstrainedLeastSquareImageFilterNew
+         ${Hyperspectral_TESTS1}
+         otbUnConstrainedLeastSquareImageFilterNewTest)
+
+ADD_TEST(hyTvUnConstrainedLeastSquareImageFilterTest
+         ${Hyperspectral_TESTS1}
+           --compare-image ${NOTOL}
+           ${BASELINE_FILES}/hyTvUnConstrainedLeastSquareImageFilterTest.tif
+           ${TEMP}/hyTvUnConstrainedLeastSquareImageFilterTest.tif
+         otbUnConstrainedLeastSquareImageFilterTest
+         ${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif
+         ${INPUTDATA}/Hyperspectral/synthetic/endmembers.tif
+         ${TEMP}/hyTvUnConstrainedLeastSquareImageFilterTest.tif)
 
 
 SET(Hyperspectral_SRCS1
@@ -29,7 +81,7 @@ otbFCLSUnmixingImageFilter.cxx
 otbFullyConstrainedLeastSquareImageFilter.cxx
 otbISRAUnmixingImageFilter.cxx
 otbNCLSUnmixingImageFilter.cxx
-#otbSparseUnmixingImageFilter.cxx
+otbSparseUnmixingImageFilter.cxx
 otbUnConstrainedLeastSquareImageFilter.cxx
 otbVCAImageFilter.cxx
 )
@@ -41,7 +93,7 @@ otbLocalRxDetectorRoiTest.cxx
 )
 
 ADD_EXECUTABLE(otbHyperspectralTests1 otbHyperspectralTests1.cxx ${Hyperspectral_SRCS1})
-TARGET_LINK_LIBRARIES(otbHyperspectralTests1 OTBIO OTBHyperspectral  OTBTesting)
+TARGET_LINK_LIBRARIES(otbHyperspectralTests1 OTBIO OTBHyperspectral OTBMultiScale OTBTesting)
 
 ADD_EXECUTABLE(otbHyperspectralTests2 otbHyperspectralTests2.cxx ${Hyperspectral_SRCS2})
 TARGET_LINK_LIBRARIES(otbHyperspectralTests2 OTBIO OTBHyperspectral OTBTesting)

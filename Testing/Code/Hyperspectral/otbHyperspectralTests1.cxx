@@ -37,10 +37,11 @@ void RegisterTests()
   REGISTER_TEST(otbCLSPSTOUnmixingImageFilterTest);
   REGISTER_TEST(otbFullyConstrainedLeastSquareImageFilterNewTest);
   REGISTER_TEST(otbFullyConstrainedLeastSquareImageFilterTest);
+  REGISTER_TEST(otbVCAImageFilterNew);
   REGISTER_TEST(otbVCAImageFilterTestHighSNR);
   //  REGISTER_TEST(otbSparseWvltToAngleMapperListFilterNewTest);
   //  REGISTER_TEST(otbAngularProjectionBinaryImageFilterNewTest);
   //  REGISTER_TEST(otbAngularProjectionBinaryImageFilterTest);
-  //  REGISTER_TEST(otbSparseUnmixingImageFilterNewTest);
-  //  REGISTER_TEST(otbSparseUnmixingImageFilterTest);
+  REGISTER_TEST(otbSparseUnmixingImageFilterNewTest);
+  REGISTER_TEST(otbSparseUnmixingImageFilterTest);
 }
