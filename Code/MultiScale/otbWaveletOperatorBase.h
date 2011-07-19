@@ -163,18 +163,6 @@ protected:
    * "Ten Lecture on Wavelets", of Ingrid Daubechies,
    * Society for Industrial and Applied Mathematics, 1992.
    *
-   * It defines filter coefficients as \f$ G(z) = - z H(-z^{-1}) \f$.
-   * According to Daubechies'notation, it concerns the synthesis (Inverse)
-   * part of the filter banc.
-   */
-  void GenerateForwardHighPassFilterFromLowPassFilter(CoefficientVector& coeff);
-
-  /**
-   * Performs the definition of high pass filter in an orthogonal framework
-   * It follows conjugate quadrature filter (CQF) of the chapter 5 of
-   * "Ten Lecture on Wavelets", of Ingrid Daubechies,
-   * Society for Industrial and Applied Mathematics, 1992.
-   *
    * It defines filter coefficients as \f$ G(z) = z H(-z^{-1}) \f$.
    * According to Daubechies'notation, it concerns the synthesis (Inverse)
    * part of the filter banc.

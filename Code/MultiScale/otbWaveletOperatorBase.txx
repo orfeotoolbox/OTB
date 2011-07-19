@@ -93,37 +93,6 @@ template <Wavelet::Wavelet TMotherWaveletOperator,
     class TPixel, unsigned int VDimension, class TAllocator>
 void
 WaveletOperatorBase<TMotherWaveletOperator, TPixel, VDimension, TAllocator>
-::GenerateForwardHighPassFilterFromLowPassFilter(CoefficientVector& coeff)
-{
-  const unsigned int length = coeff.size();
-  //const unsigned int medianPosition = length / 2;
-
-  CoefficientVector highPassCoeff(length + 2);
-
-  highPassCoeff[0] = 0.;
-  highPassCoeff[1] = 0.;
-
-  double sign = -1; //(medianPosition&1)==1 ? -1. : 1.;
-  for (unsigned int i = 0; i < length; i++)
-    {
-    highPassCoeff[i + 2] = sign * coeff[length - 1 - i];
-    sign *= -1.;
-    }
-  //highPassCoeff[length] = 0.;
-  //highPassCoeff[length+1] = 0.;
-
-  coeff = highPassCoeff;
-
-  while (coeff[0] == coeff[coeff.size() - 1])
-    {
-    ReduceFilterLength(coeff);
-    }
-}
-
-template <Wavelet::Wavelet TMotherWaveletOperator,
-    class TPixel, unsigned int VDimension, class TAllocator>
-void
-WaveletOperatorBase<TMotherWaveletOperator, TPixel, VDimension, TAllocator>
 ::GenerateInverseHighPassFilterFromLowPassFilter(CoefficientVector& coeff)
 {
   const unsigned int length = coeff.size();
@@ -141,6 +110,8 @@ WaveletOperatorBase<TMotherWaveletOperator, TPixel, VDimension, TAllocator>
 
   coeff = highPassCoeff;
 
+  // Note that the 0.0 value is obtained by affectation and not by
+  // computation. It is fine to do an == comparison
   while ((coeff[0] == coeff[coeff.size() - 1]) && (coeff[0] == 0.0))
     {
     ReduceFilterLength(coeff);
@@ -168,6 +139,8 @@ WaveletOperatorBase<TMotherWaveletOperator, TPixel, VDimension, TAllocator>
 
   coeff = highPassCoeff;
 
+  // Note that the 0.0 value is obtained by affectation and not by
+  // computation. It is fine to do an == comparison
   while ((coeff[0] == coeff[coeff.size() - 1]) && (coeff[0] == 0.0))
     {
     assert(coeff.size() > 1);
