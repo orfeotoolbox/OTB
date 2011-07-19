@@ -32,6 +32,13 @@ typedef otb::VCAImageFilter<VectorImageType> VCAFilterType;
 typedef otb::ImageFileReader<VectorImageType> ReaderType;
 typedef otb::ImageFileWriter<VectorImageType> WriterType;
 
+int otbVCAImageFilterNew(int argc, char * argv[])
+{
+  VCAFilterType::Pointer vca = VCAFilterType::New();
+  std::cout << vca << std::endl;
+  return EXIT_SUCCESS;
+}
+
 int otbVCAImageFilterTestHighSNR(int argc, char * argv[])
 {
   const char * inputImage = argv[1];
