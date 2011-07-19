@@ -1497,6 +1497,8 @@ otbRegionProjectionResampler.cxx
 otbSensorModel.cxx
 otbSensorModelGrid.cxx
 otbForwardSensorModelGrid.cxx
+otbCreateProjectionWithOSSIM.cxx
+otbCreateProjectionWithOTB.cxx
 )
 
 SET(Projections_SRCS2

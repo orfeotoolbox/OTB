@@ -35,4 +35,6 @@ void RegisterTests()
   REGISTER_TEST(otbSensorModel);
   REGISTER_TEST(otbSensorModelGrid);
   REGISTER_TEST(otbForwardSensorModelGrid);
+  REGISTER_TEST(otbCreateProjectionWithOSSIM);
+  REGISTER_TEST(otbCreateProjectionWithOTB);
 }
