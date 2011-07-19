@@ -38,6 +38,7 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Code/Fuzzy
   ${OTB_SOURCE_DIR}/Code/GeospatialAnalysis
   ${OTB_SOURCE_DIR}/Code/Gui
+  ${OTB_SOURCE_DIR}/Code/Hyperspectral
   ${OTB_SOURCE_DIR}/Code/IO
   ${OTB_SOURCE_DIR}/Code/Learning
   ${OTB_SOURCE_DIR}/Code/Markov
@@ -302,6 +303,7 @@ SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
   Markov
   Fusion
   GeospatialAnalysis
+  Hyperspectral
   Testing
   UtilitiesAdapters/CurlAdapters
   UtilitiesAdapters/OssimAdapters

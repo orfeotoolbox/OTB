@@ -25,10 +25,15 @@ namespace otb
 {
 
 /** \class MatrixImageFilter
- * \brief Apply a transition matrix over the channel of an image.
+ * \brief Apply a matrix multiplication over the channels of an image.
  *
  * The templates are the input and output image type.
- * The transition matrix is given using the SetTransitionMatrix() method. The waiting type is a vnl_matrix<double> (ie. MatrixType).
+ * The transition matrix is given using the SetTransitionMatrix() method.
+ * The awaited type must be compatible with vnl_matrix<double>
+ *
+ * The multiplication can be done as  \f$ p . M \f$ or  \f$ M . p \f$ where  \f$ p \f$ is the pixel and  \f$ M \f$ is the vector.
+ * The behavior can be chosen with 
+ *
  * The number of rows of the matrix must be the input image number of channels, the number of columns is the number of channels of the output image.
  *
  * For example, if the image has 2 bands, the matrix is \f$ \begin{pmatrix} \alpha & \beta \\ \gama & \delta \end{pmatrix} \f$
@@ -95,6 +100,10 @@ public:
      return  m_Matrix;
     }
  
+  itkGetConstMacro( MatrixByVector, bool );
+  itkSetMacro( MatrixByVector, bool );
+  itkBooleanMacro( MatrixByVector );
+
 protected:
   MatrixImageFilter();
   virtual ~MatrixImageFilter() {}
@@ -120,10 +129,13 @@ private:
   MatrixImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  /** Radius declaration */
-  //SizeType m_Radius;
   /** Matrix declaration */
   MatrixType m_Matrix;
+
+  /** If set to true, the applied operation is \f$ M . p \f$ where p is the pixel represented as a column vector. 
+      Otherwise the applied operation is  \f$ p . M \f$ where p is the pixel represented as a row vector.
+  */
+  bool m_MatrixByVector;
 };
 } // end namespace otb
 
