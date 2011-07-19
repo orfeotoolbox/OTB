@@ -141,8 +141,7 @@ WaveletOperatorBase<TMotherWaveletOperator, TPixel, VDimension, TAllocator>
 
   coeff = highPassCoeff;
 
-  const double epsilon = 0.0000000001; 
-  while ((coeff[0] == coeff[coeff.size() - 1]) && (vcl_abs(coeff[0]) < epsilon))
+  while ((coeff[0] == coeff[coeff.size() - 1]) && (coeff[0] == 0.0))
     {
     ReduceFilterLength(coeff);
     }
@@ -169,8 +168,7 @@ WaveletOperatorBase<TMotherWaveletOperator, TPixel, VDimension, TAllocator>
 
   coeff = highPassCoeff;
 
-  const double epsilon = 0.0000000001; 
-  while ((coeff[0] == coeff[coeff.size() - 1]) && (vcl_abs(coeff[0]) < epsilon))
+  while ((coeff[0] == coeff[coeff.size() - 1]) && (coeff[0] == 0.0))
     {
     assert(coeff.size() > 1);
     ReduceFilterLength(coeff);
