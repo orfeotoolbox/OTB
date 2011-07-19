@@ -113,44 +113,44 @@ public:
    * Run-time type information (and related methods)
    */
   itkTypeMacro(VectorDataToLabelMapWithAttributesFilter, ImageToImageFilter)
-  ;
+ ;
 
   /**
    * Method for creation through the object factory.
    */
   itkNewMacro(Self)
-  ;
+ ;
 
   /**
    * Set/Get the value used as "background" in the output image.
    * Defaults to NumericTraits<PixelType>::NonpositiveMin().
    */
   itkSetMacro(BackgroundValue, OutputLabelMapPixelType)
-  ;itkGetConstMacro(BackgroundValue, OutputLabelMapPixelType)
-  ;
+ ; itkGetConstMacro(BackgroundValue, OutputLabelMapPixelType)
+ ;
 
   /** Set the size of the output image. */
   itkSetMacro(Size, SizeType)
-  ;
+ ;
 
   /** Get the size of the output image. */
   itkGetConstReferenceMacro(Size, SizeType)
-  ;
+ ;
 
   /** Set the origin of the vector data.
    * \sa GetOrigin() */
   itkSetMacro(Origin, OriginType)
-  ;
+ ;
   virtual void SetOrigin(const double origin[2]);
   virtual void SetOrigin(const float origin[2]);
 
   itkGetConstReferenceMacro(Origin, OriginType)
-  ;
+ ;
 
   /** Get/Set start index*/
   itkGetConstReferenceMacro(StartIndex, IndexType)
-  ;itkSetMacro(StartIndex, IndexType)
-  ;
+ ; itkSetMacro(StartIndex, IndexType)
+ ;
   /** Set the spacing (size of a pixel) of the vector data.
    * \sa GetSpacing() */
   virtual void SetSpacing(const SpacingType& spacing);
@@ -158,7 +158,7 @@ public:
   virtual void SetSpacing(const float spacing[2]);
 
   itkGetConstReferenceMacro(Spacing, SpacingType)
-  ;
+ ;
 
   /** Set/Get the Vector data input of this process object.  */
   virtual void SetInput(const InputVectorDataType *input);
@@ -168,13 +168,13 @@ public:
 
   /** Set/Get Automatic size computation mode*/
   itkSetMacro(AutomaticSizeComputation, bool)
-  ;itkGetMacro(AutomaticSizeComputation, bool)
-  ;
+ ; itkGetMacro(AutomaticSizeComputation, bool)
+ ;
 
   /** Set/Get Initial label value */
   itkSetMacro(InitialLabel, LabelType)
-  ;itkGetMacro(InitialLabel, LabelType)
-  ;
+ ; itkGetMacro(InitialLabel, LabelType)
+ ;
 
   virtual void GenerateOutputInformation();
 
