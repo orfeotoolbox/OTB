@@ -48,6 +48,7 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 
   m_CovarianceEstimator = CovarianceEstimatorFilterType::New();
   m_Transformer = TransformFilterType::New();
+  m_Transformer->MatrixByVectorOn();
   m_Normalizer = NormalizeFilterType::New();
 }
 

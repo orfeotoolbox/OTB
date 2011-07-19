@@ -52,6 +52,7 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
   m_CovarianceEstimator = CovarianceEstimatorFilterType::New();
   m_NoiseCovarianceEstimator = CovarianceEstimatorFilterType::New();
   m_Transformer = TransformFilterType::New();
+  m_Transformer->MatrixByVectorOn();
 }
 
 template <class TInputImage, class TOutputImage, 
