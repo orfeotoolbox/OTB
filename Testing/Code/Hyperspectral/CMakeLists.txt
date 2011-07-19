@@ -73,6 +73,52 @@ ADD_TEST(hyTvUnConstrainedLeastSquareImageFilterTest
          ${TEMP}/hyTvUnConstrainedLeastSquareImageFilterTest.tif)
 
 
+
+ADD_TEST(hyTuNCLSImageFilterNew
+         ${Hyperspectral_TESTS1}
+         otbNCLSImageFilterNewTest)
+
+ADD_TEST(hyTvNCLSSquareImageFilterTest
+         ${Hyperspectral_TESTS1}
+           --compare-image ${NOTOL}
+           ${BASELINE_FILES}/hyTvNCLSImageFilterTest.tif
+           ${TEMP}/hyTvNCLSImageFilterTest.tif
+         otbNCLSImageFilterTest
+         ${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif
+         ${INPUTDATA}/Hyperspectral/synthetic/endmembers.tif
+         ${TEMP}/hyTvNCLSImageFilterTest.tif)
+
+
+ADD_TEST(hyTuISRAUnmixingImageFilterNew
+         ${Hyperspectral_TESTS1}
+         otbISRAUnmixingImageFilterNewTest)
+
+ADD_TEST(hyTvISRAUnmixingImageFilterTest
+         ${Hyperspectral_TESTS1}
+           --compare-image ${NOTOL}
+           ${BASELINE_FILES}/hyTvISRAUnmixingImageFilterTest.tif
+           ${TEMP}/hyTvISRAUnmixingImageFilterTest.tif
+         otbISRAUnmixingImageFilterTest
+         ${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif
+         ${INPUTDATA}/Hyperspectral/synthetic/endmembers.tif
+         ${TEMP}/hyTvISRAUnmixingImageFilterTest.tif)
+
+
+ADD_TEST(hyTuFCLSUnmixingImageFilterNew
+         ${Hyperspectral_TESTS1}
+         otbFCLSUnmixingImageFilterNewTest)
+
+ADD_TEST(hyTvFCLSUnmixingImageFilterTest
+         ${Hyperspectral_TESTS1}
+           --compare-image ${NOTOL}
+           ${BASELINE_FILES}/hyTvFCLSUnmixingImageFilterTest.tif
+           ${TEMP}/hyTvFCLSUnmixingImageFilterTest.tif
+         otbFCLSUnmixingImageFilterTest
+         ${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif
+         ${INPUTDATA}/Hyperspectral/synthetic/endmembers.tif
+         ${TEMP}/hyTvFCLSUnmixingImageFilterTest.tif)
+
+
 SET(Hyperspectral_SRCS1
 otbHyperspectralTests1.cxx
 otbEigenvalueLikelihoodMaximization.cxx
