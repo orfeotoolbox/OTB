@@ -1459,22 +1459,22 @@ ADD_TEST(prTvossimElevManagerTest2 ${PROJECTIONS_TESTS5}
 
 IF(OTB_DATA_USE_LARGEINPUT)
 
-ADD_TEST(prTvTestCreateProjectionWithOSSIM_Toulouse ${PROJECTIONS_TESTS1}
+ADD_TEST(prTvTestCreateProjectionWithOSSIM_Toulouse ${PROJECTIONS_TESTS5}
         otbCreateProjectionWithOSSIM
         ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         )
 
-ADD_TEST(prTvTestCreateProjectionWithOSSIM_Cevennes ${PROJECTIONS_TESTS1}
+ADD_TEST(prTvTestCreateProjectionWithOSSIM_Cevennes ${PROJECTIONS_TESTS5}
         otbCreateProjectionWithOSSIM
         ${LARGEINPUT}/QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
         )
 
-ADD_TEST(prTvTestCreateProjectionWithOTB_Toulouse ${PROJECTIONS_TESTS1}
+ADD_TEST(prTvTestCreateProjectionWithOTB_Toulouse ${PROJECTIONS_TESTS5}
         otbCreateProjectionWithOTB
         ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         )
 
-ADD_TEST(prTvTestCreateProjectionWithOTB_Cevennes ${PROJECTIONS_TESTS1}
+ADD_TEST(prTvTestCreateProjectionWithOTB_Cevennes ${PROJECTIONS_TESTS5}
         otbCreateProjectionWithOTB
         ${LARGEINPUT}/QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
         )
@@ -1497,8 +1497,6 @@ otbRegionProjectionResampler.cxx
 otbSensorModel.cxx
 otbSensorModelGrid.cxx
 otbForwardSensorModelGrid.cxx
-otbCreateProjectionWithOSSIM.cxx
-otbCreateProjectionWithOTB.cxx
 )
 
 SET(Projections_SRCS2
