@@ -33,6 +33,7 @@ namespace otb
    * Hemispherical and viewing reflectance are computed from 400 to 2500 nm (step 1nm).
    * Input Reflectance and transmittance must be spectrum (otbSpectralResponse) from 400 nm to 2500 nm with step 1nm.
    * \sa itk::ProcessObject
+   * \sa SimulationStep2Base
  */
 
 

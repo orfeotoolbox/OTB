@@ -61,43 +61,42 @@ public:
    * Standard "Self" & Superclass typedef.
    */
   typedef VectorDataToLabelMapWithAttributesFilter Self;
-  typedef LabelMapSource <TLabelMap> Superclass;
+  typedef LabelMapSource<TLabelMap> Superclass;
 
   /** Some convenient typedefs. */
-  typedef TVectorData                                InputVectorDataType;
-  typedef TLabelMap                                  OutputLabelMapType;
-  typedef typename InputVectorDataType::Pointer      InputVectorDataPointer;
+  typedef TVectorData InputVectorDataType;
+  typedef TLabelMap OutputLabelMapType;
+  typedef typename InputVectorDataType::Pointer InputVectorDataPointer;
   typedef typename InputVectorDataType::ConstPointer InputVectorDataConstPointer;
 
-  typedef typename OutputLabelMapType::Pointer      OutputLabelMapPointer;
+  typedef typename OutputLabelMapType::Pointer OutputLabelMapPointer;
   typedef typename OutputLabelMapType::ConstPointer OutputLabelMapConstPointer;
 
   typedef typename InputVectorDataType::DataTreeType::TreeNodeType InternalTreeNodeType;
-  typedef typename InternalTreeNodeType::ChildrenListType          ChildrenListType;
-  typedef typename InputVectorDataType::DataNodeType               DataNodeType;
-  typedef typename DataNodeType::Pointer                           DataNodePointerType;
-  typedef typename DataNodeType::PolygonType                       PolygonType;
-  typedef typename PolygonType::Pointer                            PolygonPointerType;
-  typedef typename OutputLabelMapType::LabelType                   LabelType;
+  typedef typename InternalTreeNodeType::ChildrenListType ChildrenListType;
+  typedef typename InputVectorDataType::DataNodeType DataNodeType;
+  typedef typename DataNodeType::Pointer DataNodePointerType;
+  typedef typename DataNodeType::PolygonType PolygonType;
+  typedef typename PolygonType::Pointer PolygonPointerType;
+  typedef typename OutputLabelMapType::LabelType LabelType;
 
-  typedef typename OutputLabelMapType::IndexType     IndexType;
-  typedef typename OutputLabelMapType::PixelType     OutputLabelMapPixelType;
-  typedef typename OutputLabelMapType::PointType     OriginType;
-  typedef typename OutputLabelMapType::SpacingType   SpacingType;
+  typedef typename OutputLabelMapType::IndexType IndexType;
+  typedef typename OutputLabelMapType::PixelType OutputLabelMapPixelType;
+  typedef typename OutputLabelMapType::PointType OriginType;
+  typedef typename OutputLabelMapType::SpacingType SpacingType;
   typedef typename OutputLabelMapType::DirectionType DirectionType;
-  typedef typename OutputLabelMapType::RegionType    RegionType;
+  typedef typename OutputLabelMapType::RegionType RegionType;
   typedef typename OutputLabelMapType::LabelObjectType LabelObjectType;
   typedef typename LabelObjectType::AttributesValueType AttributesValueType;
 
-   typedef VectorDataProperties<InputVectorDataType>     VectorDataPropertiesType;
+  typedef VectorDataProperties<InputVectorDataType> VectorDataPropertiesType;
 
-   
   /** typedefs for correct polygon */
   typedef otb::CorrectPolygonFunctor<PolygonType> CorrectFunctorType;
 
   /** Number of dimensions. */
   itkStaticConstMacro(VectorDataDimension, unsigned int,
-                      TVectorData::Dimension);
+      TVectorData::Dimension);
 
   /** Image size typedef. */
   typedef itk::Size<itkGetStaticConstMacro(VectorDataDimension)> SizeType;
@@ -107,50 +106,59 @@ public:
   /**
    * Smart pointer typedef support
    */
-  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-/**
- * Run-time type information (and related methods)
- */
-  itkTypeMacro(VectorDataToLabelMapWithAttributesFilter, ImageToImageFilter);
+  /**
+   * Run-time type information (and related methods)
+   */
+  itkTypeMacro(VectorDataToLabelMapWithAttributesFilter, ImageToImageFilter)
+  ;
 
   /**
    * Method for creation through the object factory.
    */
-  itkNewMacro(Self);
+  itkNewMacro(Self)
+  ;
 
   /**
    * Set/Get the value used as "background" in the output image.
    * Defaults to NumericTraits<PixelType>::NonpositiveMin().
    */
-  itkSetMacro(BackgroundValue, OutputLabelMapPixelType);
-  itkGetConstMacro(BackgroundValue, OutputLabelMapPixelType);
+  itkSetMacro(BackgroundValue, OutputLabelMapPixelType)
+  ;itkGetConstMacro(BackgroundValue, OutputLabelMapPixelType)
+  ;
 
   /** Set the size of the output image. */
-  itkSetMacro(Size, SizeType);
+  itkSetMacro(Size, SizeType)
+  ;
 
   /** Get the size of the output image. */
-  itkGetConstReferenceMacro(Size, SizeType);
+  itkGetConstReferenceMacro(Size, SizeType)
+  ;
 
   /** Set the origin of the vector data.
    * \sa GetOrigin() */
-  itkSetMacro(Origin, OriginType);
+  itkSetMacro(Origin, OriginType)
+  ;
   virtual void SetOrigin(const double origin[2]);
   virtual void SetOrigin(const float origin[2]);
 
-  itkGetConstReferenceMacro(Origin, OriginType);
+  itkGetConstReferenceMacro(Origin, OriginType)
+  ;
 
   /** Get/Set start index*/
-  itkGetConstReferenceMacro(StartIndex, IndexType);
-  itkSetMacro(StartIndex, IndexType);
+  itkGetConstReferenceMacro(StartIndex, IndexType)
+  ;itkSetMacro(StartIndex, IndexType)
+  ;
   /** Set the spacing (size of a pixel) of the vector data.
    * \sa GetSpacing() */
   virtual void SetSpacing(const SpacingType& spacing);
   virtual void SetSpacing(const double spacing[2]);
   virtual void SetSpacing(const float spacing[2]);
 
-  itkGetConstReferenceMacro(Spacing, SpacingType);
+  itkGetConstReferenceMacro(Spacing, SpacingType)
+  ;
 
   /** Set/Get the Vector data input of this process object.  */
   virtual void SetInput(const InputVectorDataType *input);
@@ -159,18 +167,22 @@ public:
   const InputVectorDataType * GetInput(unsigned int idx);
 
   /** Set/Get Automatic size computation mode*/
-  itkSetMacro(AutomaticSizeComputation, bool);
-  itkGetMacro(AutomaticSizeComputation, bool);
-   
+  itkSetMacro(AutomaticSizeComputation, bool)
+  ;itkGetMacro(AutomaticSizeComputation, bool)
+  ;
+
   /** Set/Get Initial label value */
-  itkSetMacro(InitialLabel, LabelType);
-  itkGetMacro(InitialLabel, LabelType);
-   
+  itkSetMacro(InitialLabel, LabelType)
+  ;itkGetMacro(InitialLabel, LabelType)
+  ;
+
   virtual void GenerateOutputInformation();
 
 protected:
   VectorDataToLabelMapWithAttributesFilter();
-  virtual ~VectorDataToLabelMapWithAttributesFilter() {}
+  virtual ~VectorDataToLabelMapWithAttributesFilter()
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /**
@@ -182,13 +194,13 @@ protected:
   /** VectorDataToLabelMapWithAttributesFilter needs the entire input. Therefore
    * it must provide an implementation GenerateInputRequestedRegion().
    * \sa ProcessObject::GenerateInputRequestedRegion(). */
-//   void GenerateInputRequestedRegion();
+  //   void GenerateInputRequestedRegion();
 
   /** VectorDataToLabelMapWithAttributesFilter will produce all of the output.
    * Therefore it must provide an implementation of
    * EnlargeOutputRequestedRegion().
    * \sa ProcessObject::EnlargeOutputRequestedRegion() */
-//   void EnlargeOutputRequestedRegion(itk::DataObject *itkNotUsed(output));
+  //   void EnlargeOutputRequestedRegion(itk::DataObject *itkNotUsed(output));
 
 private:
   VectorDataToLabelMapWithAttributesFilter(const Self &); //purposely not implemented
@@ -201,8 +213,8 @@ private:
   /** Set to 0 by default.*/
   LabelType m_InitialLabel;
 
-  //TODO donc need this attribute now compute with VectorDataProperties
-  
+  //TODO dont need this attributes now compute with VectorDataProperties
+
   SpacingType   m_Spacing;
   OriginType    m_Origin;
   SizeType      m_Size;
@@ -211,7 +223,7 @@ private:
 
   /** Background value, not use actually, background value=itk::NumericTraits<LabelType>::max()*/
   OutputLabelMapPixelType m_BackgroundValue;
-  
+
   bool m_AutomaticSizeComputation;
   typename VectorDataPropertiesType::Pointer m_VectorDataProperties;
 };

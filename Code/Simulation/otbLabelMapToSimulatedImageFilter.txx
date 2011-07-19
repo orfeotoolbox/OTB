@@ -69,73 +69,72 @@ void
 LabelMapToSimulatedImageFilter<TInputLabelMap, TSimuStep1, TSimuStep2, TOutputImage>
 ::ThreadedProcessLabelObject( LabelObjectType * labelObject )
 {
-   ReduceSpectralResponsePointer reduceSpectralResponse = ReduceSpectralResponseType::New();
-   SatelliteRSRPointer satRSR = SatelliteRSRType::New();
-   //Compute the spectral response associated to this object.
-   SpectralResponsePointer readSpectrum = SpectralResponseType::New();
-   bool hasPath=false;
-   //Check if the spectrum associated to this object is given by a database.
-   for(unsigned int i=0; i<labelObject->GetNumberOfAttributes(); i++)
-   {
-      if(labelObject->GetAvailableAttributes()[i].compare("path")==0) hasPath=true;
-   }
-   if(hasPath==true)
-   {
-//       std::cout<<"had path : "<< m_PathRoot + labelObject->GetAttribute("path") << std::endl;
-      readSpectrum->Load( m_PathRoot + labelObject->GetAttribute("path"), 100 );
-      reduceSpectralResponse->SetInputSpectralResponse(readSpectrum);
-   }
-   else //compute the spectrum using ProSail
-   {
-      LabelToParametersPointer labelToParams = LabelToParametersType::New();
-      SimulationStep1Pointer simuStep1 = SimulationStep1Type::New();
-      SimulationStep2Pointer simuStep2 = SimulationStep2Type::New();
-      
-      //Compute params needed to the spectrum simulator
-      labelToParams->SetLabel(labelObject->GetAttribute("area"));
-      labelToParams->GenerateData();
-      
-      simuStep1->SetInput(labelToParams->GetStep1Parameters());
+  ReduceSpectralResponsePointer reduceSpectralResponse = ReduceSpectralResponseType::New();
+  SatelliteRSRPointer satRSR = SatelliteRSRType::New();
+  //Compute the spectral response associated to this object.
+  SpectralResponsePointer readSpectrum = SpectralResponseType::New();
+  bool hasPath = false;
+  //Check if the spectrum associated to this object is given by a database.
+  for (unsigned int i = 0; i < labelObject->GetNumberOfAttributes(); i++)
+    {
+    if (labelObject->GetAvailableAttributes()[i].compare("path") == 0) hasPath = true;
+    }
+  if (hasPath == true)
+    {
+    readSpectrum->Load(m_PathRoot + labelObject->GetAttribute("path"), 100);
+    reduceSpectralResponse->SetInputSpectralResponse(readSpectrum);
+    }
+  else //compute the spectrum using ProSail
+    {
+    LabelToParametersPointer labelToParams = LabelToParametersType::New();
+    SimulationStep1Pointer simuStep1 = SimulationStep1Type::New();
+    SimulationStep2Pointer simuStep2 = SimulationStep2Type::New();
 
-      simuStep2->SetParameters(labelToParams->GetStep2Parameters());
-      simuStep2->SetReflectance(simuStep1->GetReflectance());
-      simuStep2->SetTransmittance(simuStep1->GetTransmittance());
-      simuStep2->Update();
-      reduceSpectralResponse->SetInputSpectralResponse(simuStep2->GetViewingReflectance());
-   
-   }
-   //compute the satellite response of this spectrum
-   satRSR->Clear();
-   satRSR->SetNbBands(m_NumberOfComponentsPerPixel);
-   satRSR->Load(m_SatRSRFilename);
-   reduceSpectralResponse->SetInputSatRSR(satRSR);
-   reduceSpectralResponse->CalculateResponse();
+    //Compute params needed to the spectrum simulator
+    labelToParams->SetLabel(labelObject->GetAttribute("area"));
+    labelToParams->GenerateData();
 
-   typename InputLabelMapType::LabelObjectType::LineContainerType::const_iterator lit;
-   typename InputLabelMapType::LabelObjectType::LineContainerType & lineContainer = labelObject->GetLineContainer();
-   typename OutputImageType::PixelType pixel;
-   pixel.SetSize(m_NumberOfComponentsPerPixel);
-   
-   //TODO Change with a multithreaded method
-   RandomGeneratorPointer randomGen = RandomGeneratorType::New();
+    simuStep1->SetInput(labelToParams->GetStep1Parameters());
 
-   for( lit = lineContainer.begin(); lit != lineContainer.end(); lit++ )
-   {
-      IndexType idx = lit->GetIndex();
-      unsigned long length = lit->GetLength();
-      for( unsigned int i=0; i<length; i++)
+    simuStep2->SetParameters(labelToParams->GetStep2Parameters());
+    simuStep2->SetReflectance(simuStep1->GetReflectance());
+    simuStep2->SetTransmittance(simuStep1->GetTransmittance());
+    simuStep2->Update();
+    reduceSpectralResponse->SetInputSpectralResponse(simuStep2->GetViewingReflectance());
+
+    }
+  //compute the satellite response of this spectrum
+  satRSR->Clear();
+  satRSR->SetNbBands(m_NumberOfComponentsPerPixel);
+  satRSR->Load(m_SatRSRFilename);
+  reduceSpectralResponse->SetInputSatRSR(satRSR);
+  reduceSpectralResponse->CalculateResponse();
+
+  typename InputLabelMapType::LabelObjectType::LineContainerType::const_iterator lit;
+  typename InputLabelMapType::LabelObjectType::LineContainerType & lineContainer = labelObject->GetLineContainer();
+  typename OutputImageType::PixelType pixel;
+  pixel.SetSize(m_NumberOfComponentsPerPixel);
+
+  //TODO Change with a multithreaded method
+  RandomGeneratorPointer randomGen = RandomGeneratorType::New();
+
+  for (lit = lineContainer.begin(); lit != lineContainer.end(); lit++)
+    {
+    IndexType idx = lit->GetIndex();
+    unsigned long length = lit->GetLength();
+    for (unsigned int i = 0; i < length; i++)
       {
-         //add gaussian white noise
-         for(unsigned int i=0; i<m_NumberOfComponentsPerPixel; i++)
-         {
-            double ran = randomGen->GetNormalVariate(m_Mean, m_Variance);
-            pixel[i]=static_cast<InternalPixelType>(reduceSpectralResponse->GetReduceResponse()->GetResponse()[i].second + ran);
-         }
-//          pixel[i]=static_cast<InternalPixelType>(reduceSpectralResponse->GetReduceResponse()->GetResponse()[i].second);
-         this->GetOutput()->SetPixel( idx, pixel );
-         idx[0]++;
+      //add gaussian white noise
+      for (unsigned int i = 0; i < m_NumberOfComponentsPerPixel; i++)
+        {
+        double ran = randomGen->GetNormalVariate(m_Mean, m_Variance);
+        pixel[i] = static_cast<InternalPixelType> (reduceSpectralResponse->GetReduceResponse()->GetResponse()[i].second
+            + ran);
+        }
+      this->GetOutput()->SetPixel(idx, pixel);
+      idx[0]++;
       }
-   }
+    }
 }
 
 

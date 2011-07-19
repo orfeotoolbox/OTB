@@ -38,7 +38,7 @@ namespace otb
    *
    * The two templates indicate
    * - the SpectralResponse input (from the JPL ASTER spectral library for example)
-   * - the relative s spectral response of a sensor
+   * - the relative spectral response of a sensor
    *
    * The elements in the ReduceSpectralResponseClassifierRAndNIR have their coordinates in the projection
    * specified by the Wkt string. This class also offer the possibility to store
@@ -97,7 +97,7 @@ namespace otb
            * functor that has ivars set differently than the default functor.
            * This method requires an operator!=() be defined on the functor
            * (or the compiler's default implementation of operator!=() being
-   * appropriate). */
+           * appropriate). */
           void SetFunctor(const FunctorType& functor)
           {
             m_Functor = functor;

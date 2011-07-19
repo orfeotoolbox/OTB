@@ -20,15 +20,13 @@
 
 #include "otbAtmosphericCorrectionParameters.h"
 
-//#include "otbSurfaceReflectanceToReflectanceFilter.h"
-
 namespace otb
 {
 /** \class AtmosphericEffects
    * \brief This class applies atmospheric effects, computed from otbAtmosphericCorrectionParametersTo6SRadiativeTerms  to an input spectrum (otbSpectralResponse) using the otbSurfaceReflectanceToReflectanceFilter.
    *
    * The two templates indicate:
-   * - the SpectralResponse input (from the JPL ASTER spectral library for example)
+   * - the SpectralResponse input (from the JPL ASTER spectral library for example see : http://speclib.jpl.nasa.gov/)
    * - the SatelliteRSR relatives spectral response of a sensor (RSR).
    *
    * \sa itk::DataObject

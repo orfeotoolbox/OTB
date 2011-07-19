@@ -95,36 +95,38 @@ inline typename SpectralResponse<TPrecision, TValuePrecision>::ValuePrecisionTyp
 SpectralResponse<TPrecision, TValuePrecision>
 ::operator()(const PrecisionType & lambda)
 {
-  
-    //Suppose that the vector is sorted
 
-   //Guess a starting lambda
+  //Suppose that the vector is sorted
+
+  //Guess a starting lambda
 
   typename VectorPairType::const_iterator beg = m_Response.begin();
   typename VectorPairType::const_iterator last = m_Response.end()--;
   PrecisionType lambdaMin = (*beg).first;
   PrecisionType lambdaMax = (*last).first;
 
-  if(lambda <= lambdaMin) return lambdaMin;
-  if(lambda >= lambdaMax) return lambdaMax;
-  
-  unsigned int lambdaPosGuess = static_cast<unsigned int>((lambda - lambdaMin)/(lambdaMax - lambdaMin)*m_Response.size())-1;
+  if (lambda <= lambdaMin) return lambdaMin;
+  if (lambda >= lambdaMax) return lambdaMax;
 
-    for(typename VectorPairType::const_iterator it = beg+lambdaPosGuess; it <= last; it++)
+  unsigned int lambdaPosGuess = static_cast<unsigned int> ((lambda - lambdaMin) / (lambdaMax - lambdaMin)
+      * m_Response.size()) - 1;
+
+  for (typename VectorPairType::const_iterator it = beg + lambdaPosGuess; it <= last; it++)
     {
     // if the guess was too high
-      if ( (*it).first >= lambda )
-       {
-        return (*it).second;
-       }
-      // if the guess is just right
-      else if ( (*it).first < lambda && (*(it+1)).first >= lambda)
-       {
-       return ((*it).second+(*(it+1)).second)/2.0;
-       }
+    if ((*it).first >= lambda)
+      {
+      return (*it).second;
+      }
+    // if the guess is just right
+    else
+      if ((*it).first < lambda && (*(it + 1)).first >= lambda)
+        {
+        return ((*it).second + (*(it + 1)).second) / 2.0;
+        }
     }
-    //Value not available
-    return 0;
+  //Value not available
+  return 0;
 }
   
 template <class TPrecision, class TValuePrecision>

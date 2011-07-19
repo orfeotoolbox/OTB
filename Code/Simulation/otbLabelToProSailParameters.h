@@ -19,7 +19,6 @@
 #ifndef __otbLabelToProSailParameters_h
 #define __otbLabelToProSailParameters_h
 
-
 #include "otbLabelToSimulationParametersBase.h"
 
 namespace otb
@@ -30,14 +29,34 @@ namespace otb
  * \brief Take a label corresponding to a spectrum type for vegetation and outputs the ProSail parameters needed to get a spectrum of that type.
  *
  * Output parameters concerns:
- *  - Step1: parameters for PROSPECT simulation
+ *  - Step1: parameters for PROSPECT simulation.
  *  - Step2: parameters for SAIL simulation (see http://teledetection.ipgp.jussieu.fr/prosail/).
  *
  * WARNING: an only set of parameters is defined for all vegetation types.
  *
+ * Prospect Parameters
+ * Cab    = 30;   % chlorophyll content (ug.cm-2)
+ *  Car   = 10;   % carotenoid content (ug.cm-2)
+ * Cbrown  = 0.0;  % brown pigment content (arbitrary units)
+ * Cw    = 0.015;  % EWT (cm)
+ * Cm    = 0.009;  % LMA (g.cm-2)
+ * N   = 1.2;  % structure coefficient
+ *
+ * Sail Parameters
+ * lai   = 2;    % leaf area index
+ * angl  = 50;   % average leaf angle (deg)
+ * psoil = 1;    % soil coefficient
+ * skyl  = 70;   % % diffuse/direct radiation
+ * hspot = 0.2;  % hot spot
+ * ihot  = 1.0;  %
+ * tts   = 30;   % solar zenith angle (deg)
+ * tto   = 0;    % observer zenith angle (deg)
+ * psi   = 0;    % azimuth (deg)
+ *
+ *
  * TODO : define different vegetation types and ProSail parameters associated.
  *
- * \sa ProcessObject
+ * \sa LabelToSimulationParametersBase
  */
 
 template <class TLabel>
