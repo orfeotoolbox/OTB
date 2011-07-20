@@ -53,33 +53,28 @@ void
 LabelToProSailParameters<TLabel>
 ::GenerateData()
 {
-   int value =0;
-//    this->m_Label;
-   this->m_Step1Parameters.SetSize(6);
-   this->m_Step2Parameters.SetSize(8);
-   
-   switch(value)
-   {
-      default :
-      
-         this->m_Step1Parameters[0]=30.0;
-         this->m_Step1Parameters[1]=10.0;
-         this->m_Step1Parameters[2]=0.0;
-         this->m_Step1Parameters[3]=0.015;
-         this->m_Step1Parameters[4]=0.009;
-         this->m_Step1Parameters[5]=1.2;
-         
-         this->m_Step2Parameters[0]=2;
-         this->m_Step2Parameters[1]=50;
-         this->m_Step2Parameters[2]=1;
-         this->m_Step2Parameters[3]=70;
-         this->m_Step2Parameters[4]=0.2;
-         this->m_Step2Parameters[5]=30;
-         this->m_Step2Parameters[6]=0;
-         this->m_Step2Parameters[7]=0;
+  //int value = 0;
+  //    this->m_Label;
+  this->m_Step1Parameters.SetSize(6);
+  this->m_Step2Parameters.SetSize(8);
 
-         break;
-   }
+  //TODO accessor must be implemented in otbLabelToSimulationParametersBase
+  // and default values need to migrate to class constructor.
+  this->m_Step1Parameters[0] = 30.0;
+  this->m_Step1Parameters[1] = 10.0;
+  this->m_Step1Parameters[2] = 0.0;
+  this->m_Step1Parameters[3] = 0.015;
+  this->m_Step1Parameters[4] = 0.009;
+  this->m_Step1Parameters[5] = 1.2;
+
+  this->m_Step2Parameters[0] = 2;
+  this->m_Step2Parameters[1] = 50;
+  this->m_Step2Parameters[2] = 1;
+  this->m_Step2Parameters[3] = 70;
+  this->m_Step2Parameters[4] = 0.2;
+  this->m_Step2Parameters[5] = 30;
+  this->m_Step2Parameters[6] = 0;
+  this->m_Step2Parameters[7] = 0;
 
 }
 
