@@ -33,7 +33,7 @@ namespace otb
  * \brief Calculate the approximate ground spacing in X and Y directions
  *
  * This uses the 'Haversine' formula to calculate great-circle distances between
- * the two points – that is, the shortest distance over the Earth's surface –
+ * the two points (that is, the shortest distance over the Earth's surface)
  * giving an 'as-the-crow-flies' distance between the points (ignoring any hills!).
  *
  * \ingroup ImageFunctions

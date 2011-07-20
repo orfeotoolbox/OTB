@@ -35,9 +35,8 @@ int otbLineCorrelationDetectorLinear(int argc, char* argv[])
   const char * outputFilename1 = argv[2];
   const char * outputFilename2 = argv[3];
 
-  // Largeur de la ligne � detecter = 2*WidthLine+1
+  // Parameters of the line to detect
   unsigned int WidthLine((unsigned int) ::atoi(argv[4]));
-  // Longueur de la ligne � detecter = 2*LengthLine+1
   unsigned int LengthLine((unsigned int) ::atoi(argv[5]));
 
   typedef unsigned char InputPixelType;

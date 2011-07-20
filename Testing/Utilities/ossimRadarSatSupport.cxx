@@ -62,7 +62,7 @@ int ossimRadarSatSupport(int argc, char* argv[])
 
       return EXIT_FAILURE;
     }
-    
+
     char * filename = argv[1];
 
     /** Don't use FactoryRegistry because of its default factory that can conflict
@@ -70,7 +70,7 @@ int ossimRadarSatSupport(int argc, char* argv[])
     // test ossim plugin factory
     ossimProjection * projection = ossimplugins::ossimPluginProjectionFactory::instance()->createProjection(
                                       ossimFilename(filename), 0);
-    
+
     // if ossim plugins factory failed, then test ossim factory
     if (!projection)
     {
@@ -81,7 +81,7 @@ int ossimRadarSatSupport(int argc, char* argv[])
         return EXIT_FAILURE;
       }
     }
-    
+
     ossimKeywordlist geom;
     std::cout << "Read ossim Keywordlist...";
 
@@ -881,7 +881,7 @@ int ossimRadarSatSupport(int argc, char* argv[])
       ossimplugins::ossimRadarSatModel * RDSmodel = (ossimplugins::ossimRadarSatModel *) model;
       std::list<ossimGpt> listePtsSol;
       std::list<ossimDpt> listePtsImage;
-      // le point d'appui : le centre scène
+      // le point d'appui : le centre
       ossimDpt * imageGCP;
       ossimGpt * groundGCP;
       const char* i_str0 = geom.find("cornersCol0");

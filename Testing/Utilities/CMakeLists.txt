@@ -176,13 +176,13 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 # -------            lib Galib   ------------------------------
 
 #                   FOREACH(num 1 12 14 16 17 25 27)
-#                   ADD_TEST( utTuGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
+#                   ADD_TEST(utTuGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
 #                           galibTests${num}
 #                           seed 555 )
 #                   ENDFOREACH(num)
 
 #                   FOREACH(num 6 8 19 20)
-#                           ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
+#                           ADD_TEST(utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
 #                           --compare-ascii ${NOTOL}
 #                                           ${BASELINE_FILES}/utGalibTest${num}_bog.dat
 #                                           ${TEMP}/utGalibTest${num}_bog.dat
@@ -191,7 +191,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 #                           seed 555 )
 #                   ENDFOREACH(num)
 #                   FOREACH(num 2 4 9 11 15)
-#                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
+#                   ADD_TEST(utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
 #                           --compare-ascii ${NOTOL}
 #                                           ${BASELINE_FILES}/utGalibTest${num}_bog.dat
 #                                           ${TEMP}/utGalibTest${num}_bog.dat
@@ -203,7 +203,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 
 #                   SET(num 13)
-#                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
+#                   ADD_TEST(utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
 #                           --compare-ascii ${NOTOL}
 #                                           ${BASELINE_FILES}/utGalibTest${num}_bog.dat
 #                                           ${TEMP}/utGalibTest${num}_bog.dat
@@ -213,7 +213,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 #                           seed 555 )
 
 #                   FOREACH(num 3 18)
-#                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
+#                   ADD_TEST(utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
 #                           --compare-ascii ${NOTOL}
 #                                           ${BASELINE_FILES}/utGalibTest${num}_bog.dat
 #                                           ${TEMP}/utGalibTest${num}_bog.dat
@@ -225,7 +225,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 #                   ENDFOREACH(num)
 
 #                   SET(num 5)
-#                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
+#                   ADD_TEST(utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
 #                           --compare-ascii ${NOTOL}
 #                                           ${BASELINE_FILES}/utGalibTest${num}_bog.dat
 #                                           ${TEMP}/utGalibTest${num}_bog.dat
@@ -237,7 +237,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 # Test 7 commented becasue impossible to specific he bog.dat file name in the process ;-(
 #SET(num 7)
-#        ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
+#        ADD_TEST(utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
 #        --compare-ascii ${NOTOL}
 #                        ${BASELINE_FILES}/utGalibTest${num}_bog.dat
 #                        ${TEMP}/utGalibTest${num}_bog.dat
@@ -249,7 +249,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 
 #                   SET(num 10)
-#                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
+#                   ADD_TEST(utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
 #                           --compare-n-ascii ${NOTOL} 4
 #                                           ${BASELINE_FILES}/utGalibTest${num}_sinusoid.dat
 #                                           ${TEMP}/utGalibTest${num}_sinusoid.dat
@@ -267,7 +267,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 #                           seed 555 )
 
 #                   SET(num 21)
-#                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
+#                   ADD_TEST(utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
 #                           --compare-n-ascii ${NOTOL} 5
 #                                           ${BASELINE_FILES}/utGalibTest${num}_bog1.dat
 #                                           ${TEMP}/utGalibTest${num}_bog1.dat
@@ -289,7 +289,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 
 #                   SET(num 22)
-#                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
+#                   ADD_TEST(utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
 #                           --compare-n-ascii ${NOTOL} 4
 #                                           ${BASELINE_FILES}/utGalibTest${num}_sinusoid.dat
 #                                           ${TEMP}/utGalibTest${num}_sinusoid.dat
@@ -307,7 +307,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 #                           seed 555 )
 
 #                   SET(num 23)
-#                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
+#                   ADD_TEST(utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
 #                           --compare-n-ascii ${NOTOL} 4
 #                                           ${BASELINE_FILES}/utGalibTest${num}_popi.dat
 #                                           ${TEMP}/utGalibTest${num}_popi.dat
@@ -325,7 +325,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 #                           seed 555 )
 
 #                   SET(num 24)
-#                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
+#                   ADD_TEST(utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
 #                           --compare-n-ascii ${NOTOL} 3
 #                                           ${BASELINE_FILES}/utGalibTest${num}_population.dat
 #                                           ${TEMP}/utGalibTest${num}_population.dat
@@ -341,7 +341,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 #                           seed 555 )
 
 #                   SET(num 26)
-#                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
+#                   ADD_TEST(utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
 #                           galibTests${num}
 #                           ${INPUTDATA}/galib-tsp_rect_20.txt
 #                           seed 555 )
@@ -420,24 +420,24 @@ FOREACH(id_test createkml helloattrs helloenum hellofolder hellogeometry hellore
 ENDFOREACH(id_test)
 
 
-ADD_TEST( utTvKmlhellofeatures   ${UTILITIES_TESTS}
+ADD_TEST(utTvKmlhellofeatures   ${UTILITIES_TESTS}
         kmlhellofeatures
         ${INPUTDATA}/MODIS20040214212340.kml #abstractview.kml
 #        ${TEMP}/utkmlhellofeatures.txt
         )
 
-ADD_TEST( utTvKmlhellohref   ${UTILITIES_TESTS}
+ADD_TEST(utTvKmlhellohref   ${UTILITIES_TESTS}
         kmlhellohref
         ${INPUTDATA}/abstractview.kml
 #        ${TEMP}/utkmlhellohref.txt
         )
-ADD_TEST( utTvKmlhellokmz   ${UTILITIES_TESTS}
+ADD_TEST(utTvKmlhellokmz   ${UTILITIES_TESTS}
         kmlhellokmz
         ${INPUTDATA}/multikml-doc.kmz
 #        ${TEMP}/utkmlhellokmz.txt
         )
 
-ADD_TEST( utTvKmlprettykml   ${UTILITIES_TESTS}
+ADD_TEST(utTvKmlprettykml   ${UTILITIES_TESTS}
         --compare-ascii ${NOTOL}
                         ${BASELINE_FILES}/utkmlprettykml.txt
                         ${TEMP}/utkmlprettykml.txt
@@ -446,7 +446,7 @@ ADD_TEST( utTvKmlprettykml   ${UTILITIES_TESTS}
         ${TEMP}/utkmlprettykml.txt
         )
 
-ADD_TEST( utTvKmlprintgeometry   ${UTILITIES_TESTS}
+ADD_TEST(utTvKmlprintgeometry   ${UTILITIES_TESTS}
         kmlprintgeometry
         ${INPUTDATA}/polygons2d.kml
 #        ${TEMP}/utkmlprintgeometry.txt
@@ -460,7 +460,7 @@ ADD_TEST( utTvKmlprintgeometry   ${UTILITIES_TESTS}
 # -------  KNN classification from Insight Journal  --------------------
 # The data are those submitted with the pape for the case 2D classification
 # with 2 features.
-ADD_TEST( utTvClassifyKNN2   ${UTILITIES_TESTS}
+ADD_TEST(utTvClassifyKNN2   ${UTILITIES_TESTS}
         --compare-image ${NOTOL}
            ${BASELINE}/output2D_2ch.tif
            ${TEMP}/output2D_2ch.tif
@@ -473,7 +473,7 @@ ADD_TEST( utTvClassifyKNN2   ${UTILITIES_TESTS}
         )
 
 # ------- GreyLevelRunLengthMatrixTextureCoefficientsCalculator from Insight Journal  --------------------
-ADD_TEST( ijTuGreyLevelRunLengthMatrixTextureCoefficientsCalculator ${UTILITIES_TESTS}
+ADD_TEST(ijTuGreyLevelRunLengthMatrixTextureCoefficientsCalculator ${UTILITIES_TESTS}
           ijGreyLevelRunLengthMatrixTextureCoefficientsCalculatorTest
           ${INPUTDATA}/Textures/1.1.02.png )
           
