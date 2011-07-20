@@ -59,7 +59,7 @@ ImageOfVectorsToMonoChannelExtractROI<TInputImage, TOutputImage>
 ::GenerateOutputInformation()
 {
   typename Superclass::InputImageConstPointer inputPtr = this->GetInput();
-  // Analyse du canal traité
+  // Analysis of processed channel
   if ((m_Channel <= 0) || (m_Channel > InputImagePixelType::Dimension))
     {
     itkExceptionMacro(<< "otb::ExtractImImageOfVectorsToMonoChannelExtractROIageFilter::GenerateOutputInformation "
@@ -67,7 +67,7 @@ ImageOfVectorsToMonoChannelExtractROI<TInputImage, TOutputImage>
                       << typeid(itk::ImageBase<InputImageDimension>*).name());
     }
 
-  // Appel à la methode de la classe de base
+  // Call base class implementation
   Superclass::GenerateOutputInformation();
 }
 
@@ -97,7 +97,7 @@ ImageOfVectorsToMonoChannelExtractROI<TInputImage, TOutputImage>
   OutputIterator outIt(outputPtr, outputRegionForThread);
   InputIterator inIt(inputPtr, inputRegionForThread);
 
-  // Parcours des canaux a traiter
+  // Loop through the processed channels
   unsigned int channelIn(m_Channel - 1);
 
   InputImagePixelType pixelInput;

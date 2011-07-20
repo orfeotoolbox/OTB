@@ -297,7 +297,7 @@ ADD_TEST(bfTuVectorRescaleIntensityImageFilterNew ${BASICFILTERS_TESTS3}
          otbVectorRescaleIntensityImageFilterNew)
 
 
-ADD_TEST(bfTVectorRescaleIntensityImageFilter ${BASICFILTERS_TESTS3}
+ADD_TEST(bfTvVectorRescaleIntensityImageFilter ${BASICFILTERS_TESTS3}
                 --compare-image ${EPSILON_7}
                     ${BASELINE}/bfTvVectorRescaleIntensityOutput.png
                     ${TEMP}/bfTvVectorRescaleIntensityOutput.png

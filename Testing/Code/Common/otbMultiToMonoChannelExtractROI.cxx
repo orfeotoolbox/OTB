@@ -106,7 +106,6 @@ int otbMultiToMonoChannelExtractROI(int argc, char * argv[])
   const char * inputFilename;
   const char * outputFilename;
   int          cpt(1);
-  //Si le format n'est pas spécifé, alors celui par defaut
   if (argv[cpt][0] == '-')
     {
     linputPixelType = std::string(argv[cpt]);

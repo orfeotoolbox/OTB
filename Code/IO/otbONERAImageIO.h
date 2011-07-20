@@ -126,10 +126,9 @@ private:
   ONERAImageIO(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  /** M�thode analyse le nom du fichier a ouvrir. S'il s'agit d'un r�pertoire,
-    * on regarde s'il contient un produit le fichier ent�te (fichier "ENT...")
-    * Dans ce cas, ONERAFileName contient le nom du fichier a ouvrir.
-    * Sinon ONERAFileName contient filename
+  /** Analyze the input file name : if it's a directory, check
+    * that a header file exists (ENT...) and set OneraFileName to it
+    * else OneraFileName is set to filename
     */
   void GetOneraImageFileName(const char * filename, std::string& OneraFileName);
 

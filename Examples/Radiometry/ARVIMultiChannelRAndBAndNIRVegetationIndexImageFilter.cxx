@@ -62,7 +62,7 @@
 // \mathbf{ARVI} = \frac{ L_{NIR}-L_{rb} }{ L_{NIR}+L_{rb} }
 // \end{equation}
 //
-// For more details, refer to Kaufman and Tanré work \cite{ARVI}.
+// For more details, refer to Kaufman and Tanre' work \cite{ARVI}.
 //
 //  \relatedClasses
 //  \begin{itemize}
