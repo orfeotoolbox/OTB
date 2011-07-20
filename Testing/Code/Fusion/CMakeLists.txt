@@ -10,7 +10,6 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 SET(NOTOL 0.0)
 
 #Tolerance sur diff pixel image
-#EPSILON est different de 0.0 pour les tests multiplateformes avec différentes options de compilation.
 SET(EPSILON_8 0.00000001)
 
 SET(FUSION_TESTS1 ${CXX_TEST_PATH}/otbFusionTests1)

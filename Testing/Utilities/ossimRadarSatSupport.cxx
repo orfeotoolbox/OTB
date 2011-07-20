@@ -99,9 +99,6 @@ int ossimRadarSatSupport(int argc, char* argv[])
     ossimDpt ossimDPoint;
     std::cout << "Creating projection..." << std::endl;
     ossimProjection * model = NULL;
-    /*
-     * Creation d'un modèle de projection à partir des métadonnées
-     */
     model = ossimplugins::ossimPluginProjectionFactory::instance()->createProjection(geom);
     // if ossim plugins factory failed, then test ossim factory
     if (model == NULL)

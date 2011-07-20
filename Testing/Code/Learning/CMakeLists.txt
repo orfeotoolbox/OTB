@@ -11,7 +11,6 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 #Tolerance sur diff pixel image
 SET(NOTOL 0.0)
 
-#EPSILON est different de 0.0 pour les tests multiplateformes avec différentes options de compilation.
 SET(EPSILON_10 0.0000000001)
 SET(EPSILON_3 0.001)
 SET(EPSILON_4 0.0001)
@@ -435,13 +434,13 @@ ADD_TEST(leTvSVMModelCopyComposedKernel ${LEARNING_TESTS3}
  ${INPUTDATA}/svm_model_composed
  ${TEMP}/svmcopycomposed_test)
 
-ADD_TEST(leTlSVMInverseCosSpectralAngleKernelFunctorImageModelEstimatorTest ${LEARNING_TESTS3}
+ADD_TEST(leTvSVMInverseCosSpectralAngleKernelFunctorImageModelEstimatorTest ${LEARNING_TESTS3}
         otbSVMInverseCosSpectralAngleKernelFunctorImageModelEstimatorTest
  ${INPUTDATA}/ROI_QB_MUL_4.tif
  ${INPUTDATA}/ROI_QB_MUL_4_train_one_class.tif
  ${TEMP}/leTvsvm_model_image_one_class)
 
-ADD_TEST(leTlSVMInverseCosSpectralAngleKernelFunctorImageClassificationTest ${LEARNING_TESTS3}
+ADD_TEST(leTvSVMInverseCosSpectralAngleKernelFunctorImageClassificationTest ${LEARNING_TESTS3}
         otbSVMInverseCosSpectralAngleKernelFunctorImageClassificationTest
  ${INPUTDATA}/ROI_QB_MUL_4.tif
  ${INPUTDATA}/ROI_QB_MUL_4_train_one_class.tif
@@ -540,7 +539,7 @@ ADD_TEST(leTvListSampleGenerator3 ${LEARNING_TESTS4}
 ADD_TEST(leTuConfusionMatrixCalculatorNew ${LEARNING_TESTS4}
 otbConfusionMatrixCalculatorNew)
 
-ADD_TEST(leTVConfusionMatrixCalculatorSetListSamples ${LEARNING_TESTS4}
+ADD_TEST(leTvConfusionMatrixCalculatorSetListSamples ${LEARNING_TESTS4}
 otbConfusionMatrixCalculatorSetListSamples 1000 4)
 
 ADD_TEST(leTvConfusionMatrixCalculatorWrongSize ${LEARNING_TESTS4}

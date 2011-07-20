@@ -332,9 +332,9 @@ int otbMultiToMonoChannelExtractROI(int argc, char * argv[])
 
   else
     {
-    std::cout << " Erreur : le format des images en entrée est mal précisé dans la ligne de commande !!!" << std::endl;
-    std::cout << "          valeurs autorisées : -uchar, -ushort, -uint, -float, -double" << std::endl;
-    std::cout << "          valeurs par defaut : -uchar" << std::endl;
+    std::cout << " Error : wrong format" << std::endl;
+    std::cout << "          allowed values : -uchar, -ushort, -uint, -float, -double" << std::endl;
+    std::cout << "          default value : -uchar" << std::endl;
     return EXIT_FAILURE;
     }
 

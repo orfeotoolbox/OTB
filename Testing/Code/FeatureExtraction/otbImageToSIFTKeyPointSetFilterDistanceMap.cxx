@@ -40,7 +40,7 @@ typedef itk::PointSet<RealVectorType, 2> PointSetType;
 typedef otb::Image<float, 2>             ImageType;
 typedef otb::Image<unsigned char, 2>     OutputImageType;
 
-// PointSet iterator types
+// PointSet iterator types
 typedef PointSetType::PointsContainer    PointsContainerType;
 typedef PointsContainerType::Iterator    PointsIteratorType;
 typedef PointSetType::PointDataContainer PointDataContainerType;

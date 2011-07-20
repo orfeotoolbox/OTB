@@ -46,8 +46,6 @@ int otbImageToSIFTKeyPointSetFilterOutputImage(int argc, char * argv[])
   typedef otb::ImageFileReader<ImageType>                            ReaderType;
   typedef itk::PointSet<RealVectorType, Dimension>                   PointSetType;
   typedef otb::ImageToSIFTKeyPointSetFilter<ImageType, PointSetType> ImageToSIFTKeyPointSetFilterType;
-
-  // PointSet iterator types
   typedef PointSetType::PointsContainer PointsContainerType;
   typedef PointsContainerType::Iterator PointsIteratorType;
 

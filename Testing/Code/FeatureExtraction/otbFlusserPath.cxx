@@ -34,7 +34,7 @@ int otbFlusserPath(int argc, char * argv[])
   typedef otb::FlusserPathFunction<PathType>     FunctionType;
   typedef FunctionType::RealType                 RealType;
 
-  // Dessiner un carr�:
+  // Draw a square
   PathType::ContinuousIndexType cindex;
   PathType::Pointer             pathElt = PathType::New();
 

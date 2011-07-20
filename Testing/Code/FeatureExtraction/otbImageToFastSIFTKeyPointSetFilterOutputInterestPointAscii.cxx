@@ -51,7 +51,7 @@ int otbImageToFastSIFTKeyPointSetFilterOutputInterestPointAscii(int argc, char *
 
   typedef otb::SiftFastImageFilter<ImageType, PointSetType> ImageToFastSIFTKeyPointSetFilterType;
 
-  // PointSet iterator types
+  // PointSet iterator types
   typedef PointSetType::PointsContainer    PointsContainerType;
   typedef PointsContainerType::Iterator    PointsIteratorType;
   typedef PointSetType::PointDataContainer PointDataContainerType;

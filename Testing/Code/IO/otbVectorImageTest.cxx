@@ -54,18 +54,14 @@ int otbVectorImageLegacyTest(int argc, char* argv[])
 
   image = reader->GetOutput();
 
-  file << "------ IMAGE --------" << std::endl;
   std::cout << "------ IMAGE --------" << std::endl;
-  // Image n'est pas ecrit dans le fichier car des pointeurs sont affich�s, donc la valeur d�pend de l'instanciation
-  // -> pour pouvoir faire de tests de non regression sur la sortie ecrite dans le fichier ASCII
   std::cout << image << std::endl;
   std::cout << "---------------------" << std::endl;
 
+  file << "------ IMAGE --------" << std::endl;
   file << "Spacing " << image->GetSpacing() << std::endl;
   file << "Origin " << image->GetOrigin() << std::endl;
-
   file << "Projection REF " << image->GetProjectionRef() << std::endl;
-
   file << "GCP Projection " << image->GetGCPProjection() << std::endl;
 
   unsigned int GCPCount = image->GetGCPCount();

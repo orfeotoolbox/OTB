@@ -620,7 +620,7 @@ ADD_TEST(raTvTSARVI_RAndBAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS4}
         ${INPUTDATA}/verySmallFSATSW_nir.tif
         ${TEMP}/raRAndBAndNIRVegetationIndex_TSARVI_verySmallFSATSWcRcBcNir.tif
         0.7   # a ( pente de la droite des sols nus dans l'espace RB/PIR )
-        0.9   # b ( ordonnée à l'origine de la droite des sols nus dans l'espace RB/PIR )
+        0.9   # b ( ordonnee a l'origine de la droite des sols nus dans l'espace RB/PIR )
         0.08  # x coeff a priori constant
         0.5   # gamma
 )
@@ -636,7 +636,7 @@ ADD_TEST(raTvTSARVI_MultiChannelRAndBAndNIRVegetationIndexImageFilter ${RADIOMET
         1   # blue
         4   # nir
         0.7   # a ( pente de la droite des sols nus dans l'espace RB/PIR )
-        0.9   # b ( ordonnée à l'origine de la droite des sols nus dans l'espace RB/PIR )
+        0.9   # b ( ordonnee a l'origine de la droite des sols nus dans l'espace RB/PIR )
         0.08  # x coeff a priori constant
         0.5   # gamma
 )

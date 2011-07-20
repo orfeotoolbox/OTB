@@ -20,7 +20,6 @@ SET(EPSILON_5 0.00001)
 SET(EPSILON_6 0.000001)
 SET(EPSILON_9 0.000000001)
 
-# !!!!!  Pointe sur un exe généré dans le repertoire Common
 SET(COMMON_TESTS2 ${CXX_TEST_PATH}/otbCommonTests2)
 SET(COMMON_TESTS3 ${CXX_TEST_PATH}/otbCommonTests3)
 SET(IO_TESTS1     ${CXX_TEST_PATH}/otbIOTests1)
@@ -75,7 +74,7 @@ ADD_TEST(ioTvMultiMonoChannelROI_RADARSAT2ENVI ${COMMON_TESTS3}
          -ushort ${TEMP}/ioMultiMonoChannelROI_RADARSAT2ENVI_2559_3591_337_280.hdr
          -startX 2559 -startY 3591 -sizeX 337 -sizeY 280 )
 
-# ---  RADARSAT (GDAL)  Nom r�pertoire ---
+# ---  RADARSAT (GDAL)  dir name ---
 ADD_TEST(ioTvMultiMonoChannelROI_RADARSAT_ENVI2ENVI ${COMMON_TESTS3}
 # THOMAS (provisoire) : Images OK mais erreur au DIFF ITK !!!
 #   --compare-image ${EPSILON_9} ${BASELINE}/ioMultiMonoChannelROI_RADARSAT2ENVI_2559_3591_337_280.hdr
@@ -1780,7 +1779,7 @@ ADD_TEST(ioTvSHPVectorDataFileReader2 ${IO_TESTS15}
 )
 
 IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(ioTlSHPVectorDataFileReader3 ${IO_TESTS15}
+ADD_TEST(ioTvSHPVectorDataFileReader3 ${IO_TESTS15}
         --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioSHPVectorDataFileReader3.txt
                         ${TEMP}/ioSHPVectorDataFileReader3.txt
         otbVectorDataFileReader

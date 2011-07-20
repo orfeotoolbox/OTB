@@ -30,8 +30,8 @@ int otbTestCommandLineArgumentParserList(int argc, char * argv[])
   parser->AddOption("-image", "Nom d'une image", "-i", 1, true);
   parser->AddOption("-entier", "Une Valeur entiere (obligatoire)", "-e");
   parser->AddOption("-deuxentiers", "Deux Valeurs entieres non obligatoire", "-dede", 2, false);
-  parser->AddOption("-double", "Valeur réelle double", "-d");
-  parser->AddOptionNParams("-doubles", "Liste de Valeurs réelles", "-ld", false);
+  parser->AddOption("-double", "Valeur reelle double", "-d");
+  parser->AddOptionNParams("-doubles", "Liste de Valeurs reelles", "-ld", false);
 
   typedef otb::CommandLineArgumentParseResult ParserResultType;
   ParserResultType::Pointer parseResult = ParserResultType::New();

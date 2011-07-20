@@ -37,7 +37,7 @@ ADD_TEST(dmTvDisparityMapEstimationMethod ${DISPARITYMAP_TESTS1}
              ${TEMP}/dmDisparityMapEstimationOutput.txt
        2 3
 )
-ADD_TEST(dmTlDisparityMapEstimationMethod ${DISPARITYMAP_TESTS1}
+ADD_TEST(dmTvDisparityMapEstimationMethod ${DISPARITYMAP_TESTS1}
    --compare-ascii ${NOTOL}
        ${BASELINE_FILES}/dmDisparityMapEstimationOutput1.txt
        ${TEMP}/dmDisparityMapEstimationOutput1.txt
@@ -162,7 +162,7 @@ ADD_TEST(dmTvBSplinesInterpolateTransformDeformationFieldGenerator ${DISPARITYMA
 
 # -------  Additional tests for deformation fields estimation   ----------
 
-ADD_TEST(dmTlTranslationDeformationFieldEstimation ${DISPARITYMAP_TESTS2}
+ADD_TEST(dmTvTranslationDeformationFieldEstimation ${DISPARITYMAP_TESTS2}
               --compare-n-images ${EPSILON_4} 12
               ${BASELINE}/dmTvTranslationDeformationFieldEstimationOutput_bs_df.hdr
               ${TEMP}/dmTvTranslationDeformationFieldEstimationOutput_bs_df.hdr
@@ -195,7 +195,7 @@ ADD_TEST(dmTlTranslationDeformationFieldEstimation ${DISPARITYMAP_TESTS2}
           15 10 10 250 0.95 4 50
 )
 
-ADD_TEST(dmTlEuler2DDeformationFieldEstimation ${DISPARITYMAP_TESTS2}
+ADD_TEST(dmTvEuler2DDeformationFieldEstimation ${DISPARITYMAP_TESTS2}
               --compare-n-images ${EPSILON_4} 12
               ${BASELINE}/dmTvEuler2DDeformationFieldEstimationOutput_bs_df.hdr
               ${TEMP}/dmTvEuler2DDeformationFieldEstimationOutput_bs_df.hdr
@@ -228,7 +228,7 @@ ADD_TEST(dmTlEuler2DDeformationFieldEstimation ${DISPARITYMAP_TESTS2}
          15 10 0.01 250 0.95 4 50 128 128
 )
 
-ADD_TEST(dmTlCenteredRigidDeformationFieldEstimation ${DISPARITYMAP_TESTS2}
+ADD_TEST(dmTvCenteredRigidDeformationFieldEstimation ${DISPARITYMAP_TESTS2}
               --compare-n-images ${EPSILON_4} 12
               ${BASELINE}/dmTvCenteredRigidDeformationFieldEstimationOutput_bs_df.hdr
               ${TEMP}/dmTvCenteredRigidDeformationFieldEstimationOutput_bs_df.hdr
@@ -262,7 +262,7 @@ ADD_TEST(dmTlCenteredRigidDeformationFieldEstimation ${DISPARITYMAP_TESTS2}
 )
 
 
-ADD_TEST(dmTlSinusoidDeformationFieldEstimation ${DISPARITYMAP_TESTS2}
+ADD_TEST(dmTvSinusoidDeformationFieldEstimation ${DISPARITYMAP_TESTS2}
               --compare-n-images ${EPSILON_4} 12
               ${BASELINE}/dmTvSinusoidDeformationFieldEstimationOutput_bs_df.hdr
               ${TEMP}/dmTvSinusoidDeformationFieldEstimationOutput_bs_df.hdr

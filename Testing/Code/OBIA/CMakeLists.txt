@@ -90,7 +90,7 @@ ADD_TEST(obTvLabelMapWithClassLabelToLabeledSampleListFilter ${OBIA_TESTS1}
     SHAPE::Flusser05  SHAPE::Flusser06  SHAPE::Flusser07 SHAPE::Flusser08
     SHAPE::Flusser09 SHAPE::Flusser10  SHAPE::Flusser11)
 
-ADD_TEST(otbLabelObjectMapVectorizer ${OBIA_TESTS1}
+ADD_TEST(obTvLabelObjectMapVectorizer ${OBIA_TESTS1}
     otbLabelObjectMapVectorizer
     ${INPUTDATA}/rcc8_mire1.png
     rcc8_mire1_label_vectorizer.gml)

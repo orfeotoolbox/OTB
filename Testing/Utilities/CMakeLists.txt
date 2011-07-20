@@ -20,7 +20,7 @@ SET(UTILITIES_TESTS ${CXX_TEST_PATH}/otbUtilitiesTests)
 
 
 # Commentaire parce que trop long. Supprimer commentaire si besoin de tester integration lib Ossim
-#ADD_TEST(utOssimIntegrationTest ${UTILITIES_TESTS}
+#ADD_TEST(utTvOssimIntegrationTest ${UTILITIES_TESTS}
 #        ossimIntegrationTest
 #        ossimTiffWriter
 #        ${IMAGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
