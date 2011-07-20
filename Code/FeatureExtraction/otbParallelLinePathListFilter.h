@@ -33,7 +33,7 @@ namespace otb
  * each other or not, i.e. the orthogonal distance between them is calculated. Finally, it
  * has to be verified if the two lines have a common part since lines may fulfill the two
  * first criteria but be located in different parts of the image. In order to adapt the
- * detection algorithm to the user’s needs, the thresholds AngularThreshold, DistanceThreshold
+ * detection algorithm to the user's needs, the thresholds AngularThreshold, DistanceThreshold
  * and CommonDistanceThreshold can be set.
  *
  * A possible processing chain would be to extract lines with a line detector, to convert the

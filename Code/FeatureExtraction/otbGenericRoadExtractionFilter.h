@@ -51,7 +51,7 @@ namespace otb
  *
  * The full method is detailled in E. Christophe and J. Inglada, "Robust Road
  * Extraction for High Resolution Satellite Images," in IEEE International
- * Conference on Image Processing, ICIP’07, 2007.
+ * Conference on Image Processing, ICIP'07, 2007.
  *
  * This filter is fast, as the detection typically takes 3 seconds for a
  * 1000 \f$ \times \f$ 1000 images with four spectral bands. Results can be

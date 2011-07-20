@@ -41,7 +41,7 @@ TOutput
 TerraSarBrightnessFunctor<TInput, TOutput>
 ::operator() (const TInput &inPix)
   {
-  // Formula: Beta^0 = Ks * |DN|²
+  // Formula: Beta^0 = Ks * |DN|^2
 
   // First, square the input pixel
   double squareInPix = vcl_pow(static_cast<double>(inPix), 2.);

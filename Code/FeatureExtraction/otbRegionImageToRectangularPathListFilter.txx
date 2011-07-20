@@ -272,7 +272,7 @@ RegionImageToRectangularPathListFilter<TInputImage, TOutputPath>
 
         if (y1 != 0) alpha = vcl_atan(1 / y1) * 180 / vnl_math::pi;
         else alpha = 90;
-        if (alpha < 0) alpha += 180;  // Conventionnaly given as a value between 0 and 180°
+        if (alpha < 0) alpha += 180;  // Conventionnaly given as a value between 0 and 180 degrees
 
         // Compute equivalent length and width (based on equal area criterion)
         double length, width;

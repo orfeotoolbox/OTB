@@ -121,7 +121,7 @@ CumulantsForEdgeworthProfile<TInput>
   return resu < 0.0 ? 0.0 : resu;
 }
 
-/* ====== Estimation des moments � partir de voisinnages emboit�s ==== */
+/* ====== Moments estimation from nested neighborhoods ==== */
 
 template <class TInput>
 int
@@ -140,8 +140,8 @@ CumulantsForEdgeworthProfile<TInput>
   return 0;
 }
 
-/* ===================== Estimation des moments ====================== */
-/* =============== � partir de la petite taille de fenetre =========== */
+/* ===================== Moments estimation ====================== */
+/* =============== from the small window size =========== */
 
 template <class TInput>
 int
@@ -241,7 +241,7 @@ CumulantsForEdgeworthProfile<TInput>
   return 0;
 }
 
-/* ================ Accroissement de la taille de fenetre ============ */
+/* ================ Window size growth ============ */
 
 template <class TInput>
 int

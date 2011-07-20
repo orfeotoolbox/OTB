@@ -104,9 +104,8 @@ Resampler<TInputImage, TOutputImage>
     {
     outputStartIndex[i] =  inputStartIndex[i];
     }
-  // Affectation du spacing � l'image de sortie
+  
   outputPtr->SetSpacing(inputSpacing);
-  // G�n�ration de la r�gion de l'image de sortie
   typename OutputImageType::RegionType outputLargestPossibleRegion;
   outputLargestPossibleRegion.SetSize(this->GetSize());
   outputLargestPossibleRegion.SetIndex(outputStartIndex);
