@@ -79,7 +79,7 @@ FastICAInternalOptimizerVectorImageFilter< TInputImage, TOutputImage >
   InputRegionType inputRegion;
   this->CallCopyOutputRegionToInputRegion( inputRegion, outputRegionForThread );
 
-  itk::ImageRegionConstIterator< InputImageType > input0It 
+  itk::ImageRegionConstIterator< InputImageType > input0It
     ( this->GetInput(0), inputRegion );
   itk::ImageRegionConstIterator< InputImageType > input1It
     ( this->GetInput(1), inputRegion );
@@ -146,6 +146,5 @@ FastICAInternalOptimizerVectorImageFilter< TInputImage, TOutputImage >
 } // end of namespace otb
 
 #endif
-
 
 

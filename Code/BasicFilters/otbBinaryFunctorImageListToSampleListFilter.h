@@ -31,11 +31,11 @@ namespace otb {
  * \brief Generate join sample from 2 set of ImageList
  *
  * This class transform the initial data contained in 2 imageList to
- * yield a set of join sample \f$(x_i,y_i)\f$ or a set of parameters
+ * yield a set of join sample \f$(x_i, y_i)\f$ or a set of parameters
  * extracted from the 2 image lists.
  *
- * The Function gives the possibility to select some of the samples only 
- * and to transform the output data. Hence, the functor should have also a IsToGenerate 
+ * The Function gives the possibility to select some of the samples only
+ * and to transform the output data. Hence, the functor should have also a IsToGenerate
  * boolean function...
  *
  * This filter provides pipeline support for itk::Statistics::ListSample via
@@ -140,7 +140,7 @@ private:
   void operator=(const Self &); // not implemeted
 
   FunctorType m_Functor;
-}; // end of class 
+}; // end of class
 
 } // end of namespace otb
 
@@ -148,5 +148,5 @@ private:
 #include "otbBinaryFunctorImageListToSampleListFilter.txx"
 #endif
 
-#endif 
+#endif
 

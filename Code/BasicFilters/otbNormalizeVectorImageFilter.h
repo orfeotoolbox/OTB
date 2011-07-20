@@ -28,7 +28,7 @@
 
 #include <otbStreamingStatisticsVectorImageFilter.h>
 
-namespace otb 
+namespace otb
 {
 namespace Functor
 {
@@ -52,13 +52,13 @@ public:
     for ( unsigned int i = 0; i < length; i++ )
     {
       output[i] = static_cast<typename TOutput::ValueType>(
-                    ( static_cast< RealType >( input[i] ) - m_Mean[i] ) 
+                    ( static_cast< RealType >( input[i] ) - m_Mean[i] )
                       / m_StdDev[i] );
     }
     return output;
   }
 
-  template < class T > 
+  template < class T >
   void SetMean ( const itk::VariableLengthVector<T> & m )
   {
     m_Mean.SetSize( m.Size() );
@@ -80,7 +80,7 @@ public:
       m_StdDev[i] = static_cast< RealType >( sigma[i] );
       if ( m_StdDev[i] == itk::NumericTraits< RealType >::Zero )
       {
-        throw itk::ExceptionObject(__FILE__, __LINE__, 
+        throw itk::ExceptionObject(__FILE__, __LINE__,
                 "Cannot divide by zero !", ITK_LOCATION);
       }
     }
@@ -95,7 +95,7 @@ public:
       m_StdDev[i] = vcl_sqrt( static_cast< RealType >( var[i] ) );
       if ( m_StdDev[i] == itk::NumericTraits< RealType >::Zero )
       {
-        throw itk::ExceptionObject(__FILE__, __LINE__, 
+        throw itk::ExceptionObject(__FILE__, __LINE__,
                 "Cannot divide by zero !", ITK_LOCATION);
       }
     }
@@ -117,9 +117,9 @@ protected:
 
 /** \class NormalizeVectorImageFilter
  * \brief Normalize an VectorImage by setting its mean to zero and possibly variance to one (band by band).
- * 
- * NormalizeVectorImageFilter shifts and scales an image so that the pixels in the image 
- * have a zero mean and unit variance. 
+ *
+ * NormalizeVectorImageFilter shifts and scales an image so that the pixels in the image
+ * have a zero mean and unit variance.
  *
  * This filter uses StreamingStatisticsVectorImageFilter to compute the mean and variance of
  * the input and then applies the dedicated functor.
@@ -127,9 +127,9 @@ protected:
  * \sa StreamingStatisticsVectorImageFilter
  */
 template < class TInputImage, class TOutputImage >
-class ITK_EXPORT NormalizeVectorImageFilter 
+class ITK_EXPORT NormalizeVectorImageFilter
   : public UnaryFunctorVectorImageFilter< TInputImage, TOutputImage,
-            Functor::NormalizeVectorImageFunctor< 
+            Functor::NormalizeVectorImageFunctor<
               typename TInputImage::PixelType,
               typename TOutputImage::PixelType > >
 {
@@ -137,7 +137,7 @@ public:
   /** Standart class typedefs */
   typedef NormalizeVectorImageFilter Self;
   typedef UnaryFunctorVectorImageFilter< TInputImage, TOutputImage,
-            Functor::NormalizeVectorImageFunctor< 
+            Functor::NormalizeVectorImageFunctor<
               typename TInputImage::PixelType,
               typename TOutputImage::PixelType > > Superclass;
   typedef itk::SmartPointer<Self> Pointer;
@@ -158,7 +158,7 @@ public:
   typedef StreamingStatisticsVectorImageFilter< InputImageType > CovarianceEstimatorFilterType;
   typedef typename CovarianceEstimatorFilterType::Pointer CovarianceEstimatorFilterPointerType;
 
-  itkGetConstMacro(CovarianceEstimator,CovarianceEstimatorFilterType*);
+  itkGetConstMacro(CovarianceEstimator, CovarianceEstimatorFilterType*);
 
   template < class T >
   void SetMean ( const itk::VariableLengthVector<T> & m )
@@ -188,8 +188,8 @@ public:
   }
 
 
-  itkSetMacro(UseMean,bool);
-  itkSetMacro(UseStdDev,bool);
+  itkSetMacro(UseMean, bool);
+  itkSetMacro(UseStdDev, bool);
 
 protected:
   NormalizeVectorImageFilter ();

@@ -25,11 +25,11 @@
 #include <vnl/algo/vnl_matrix_inverse.h>
 #include <vnl/algo/vnl_generalized_eigensystem.h>
 
-namespace otb 
+namespace otb
 {
 
-template <class TInputImage, class TOutputImage, 
-            class TNoiseImageFilter, 
+template <class TInputImage, class TOutputImage,
+            class TNoiseImageFilter,
             Transform::TransformDirection TDirectionOfTransformation >
 void
 NAPCAImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransformation >
@@ -52,7 +52,7 @@ NAPCAImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTran
   transf.fliplr();
   transf.inplace_transpose();
 
-  if ( this->GetNumberOfPrincipalComponentsRequired() 
+  if ( this->GetNumberOfPrincipalComponentsRequired()
       != this->GetInput()->GetNumberOfComponentsPerPixel() )
     this->m_TransformationMatrix = transf.get_n_rows( 0, this->GetNumberOfPrincipalComponentsRequired() );
   else
@@ -60,7 +60,7 @@ NAPCAImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTran
 
   this->m_EigenValues.SetSize( this->GetNumberOfPrincipalComponentsRequired() );
   for ( unsigned int i = 0; i < this->GetNumberOfPrincipalComponentsRequired(); i++ )
-    this->m_EigenValues[this->GetNumberOfPrincipalComponentsRequired()-1-i] 
+    this->m_EigenValues[this->GetNumberOfPrincipalComponentsRequired()-1-i]
       = static_cast< RealType >( vectValPadj[i] );
 }
 

@@ -74,12 +74,12 @@ public:
   typedef otb::Image<InternalPixelType>                ImageType;
 
   typedef itk::AbsImageFilter<ImageType, ImageType>                                           AbsImageFilterType;
-  typedef otb::ProjectiveProjectionImageFilter<VectorImageType,VectorImageType,PrecisionType> ProjectiveProjectionImageFilterType;
-  typedef otb::DotProductImageFilter<VectorImageType,ImageType>                               DotProductImageFilterType;
-  typedef otb::MatrixImageFilter<VectorImageType,VectorImageType>                             MatrixImageFilterType;
+  typedef otb::ProjectiveProjectionImageFilter<VectorImageType, VectorImageType, PrecisionType> ProjectiveProjectionImageFilterType;
+  typedef otb::DotProductImageFilter<VectorImageType, ImageType>                               DotProductImageFilterType;
+  typedef otb::MatrixImageFilter<VectorImageType, VectorImageType>                             MatrixImageFilterType;
   typedef otb::VectorImageToMatrixImageFilter<VectorImageType>                                VectorImageToMatrixImageFilterType;
   typedef otb::StreamingMinMaxImageFilter<ImageType>                                          StreamingMinMaxImageFilterType;
-  typedef otb::StreamingStatisticsVectorImageFilter<VectorImageType,PrecisionType>            StreamingStatisticsVectorImageFilterType;
+  typedef otb::StreamingStatisticsVectorImageFilter<VectorImageType, PrecisionType>            StreamingStatisticsVectorImageFilterType;
   typedef otb::StreamingStatisticsImageFilter<ImageType>                                      StreamingStatisticsImageFilterType;
   typedef itk::Statistics::MersenneTwisterRandomVariateGenerator                              RandomVariateGeneratorType;
   typedef otb::PCAImageFilter< VectorImageType, VectorImageType, otb::Transform::FORWARD >    ForwardPCAImageFilterType;

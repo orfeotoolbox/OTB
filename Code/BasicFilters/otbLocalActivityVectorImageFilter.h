@@ -47,14 +47,14 @@ public:
     unsigned int neighborSize = input.Size();
     unsigned int vectorSize = centerPixel.Size();
 
-    if ( neighborSize == 1 )  
+    if ( neighborSize == 1 )
       return centerPixel;
 
     TOutput output ( vectorSize );
 
     for ( unsigned int i = 0; i < vectorSize; i++ )
     {
-      typename TOutput::ValueType out 
+      typename TOutput::ValueType out
           = itk::NumericTraits< typename TOutput::ValueType >::Zero;
       for ( unsigned int j = 0; j < neighborSize/2; j++ )
       {
@@ -80,15 +80,15 @@ public:
 template < class TInputImage, class TOutputImage >
 class ITK_EXPORT LocalActivityVectorImageFilter
   : public UnaryFunctorNeighborhoodVectorImageFilter< TInputImage, TOutputImage,
-            Functor::LocalActivityOperator< 
+            Functor::LocalActivityOperator<
               typename itk::ConstNeighborhoodIterator<TInputImage>,
-              typename TOutputImage::PixelType > > 
+              typename TOutputImage::PixelType > >
 {
 public:
   /** Standart class typedefs */
   typedef LocalActivityVectorImageFilter Self;
   typedef UnaryFunctorNeighborhoodVectorImageFilter< TInputImage, TOutputImage,
-            Functor::LocalActivityOperator< 
+            Functor::LocalActivityOperator<
               typename itk::ConstNeighborhoodIterator<TInputImage>,
               typename TOutputImage::PixelType > >  Superclass;
   typedef itk::SmartPointer<Self> Pointer;

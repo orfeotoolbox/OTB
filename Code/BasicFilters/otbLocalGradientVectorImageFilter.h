@@ -47,7 +47,7 @@ public:
     for ( unsigned int i = 0; i < length; i++ )
     {
       output[i] = static_cast<typename TOutput::ValueType>(
-                  input.GetCenterPixel()[i] 
+                  input.GetCenterPixel()[i]
                   - input.GetPixel(5)[i] / 2.
                   - input.GetPixel(7)[i] / 2. );
     }
@@ -63,15 +63,15 @@ public:
 template < class TInputImage, class TOutputImage >
 class ITK_EXPORT LocalGradientVectorImageFilter
   : public UnaryFunctorNeighborhoodVectorImageFilter< TInputImage, TOutputImage,
-            Functor::LocalGradientOperator< 
+            Functor::LocalGradientOperator<
               typename itk::ConstNeighborhoodIterator<TInputImage>,
-              typename TOutputImage::PixelType > > 
+              typename TOutputImage::PixelType > >
 {
 public:
   /** Standart class typedefs */
   typedef LocalGradientVectorImageFilter Self;
   typedef UnaryFunctorNeighborhoodVectorImageFilter< TInputImage, TOutputImage,
-            Functor::LocalGradientOperator< 
+            Functor::LocalGradientOperator<
               typename itk::ConstNeighborhoodIterator<TInputImage>,
               typename TOutputImage::PixelType > >  Superclass;
   typedef itk::SmartPointer<Self> Pointer;
@@ -84,10 +84,10 @@ public:
   itkTypeMacro(LocalGradientVectorImageFilter, ImageToImageFilter);
 
 protected:
-  LocalGradientVectorImageFilter() 
+  LocalGradientVectorImageFilter()
   {
-    typename Superclass::RadiusType radius = {{1,1}};
-    SetRadius( radius );  
+    typename Superclass::RadiusType radius = {{1, 1}};
+    SetRadius( radius );
   }
   virtual ~LocalGradientVectorImageFilter() { }
 

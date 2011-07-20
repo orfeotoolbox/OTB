@@ -50,11 +50,11 @@ int otbPCAImageFilterTest ( int argc, char* argv[] )
   parser->AddOption( "--Normalize", "center AND reduce data before PCA", "-norm", 0, false );
   parser->AddOutputImage();
 
-  typedef otb::CommandLineArgumentParseResult ParserResultType;  
+  typedef otb::CommandLineArgumentParseResult ParserResultType;
   ParserResultType::Pointer  parseResult = ParserResultType::New();
     
   try
-  {  
+  {
     parser->ParseCommandLine( argc, argv, parseResult );
   }
   catch( itk::ExceptionObject & err )

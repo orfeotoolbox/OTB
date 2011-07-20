@@ -32,7 +32,7 @@ namespace otb
  * The awaited type must be compatible with vnl_matrix<double>
  *
  * The multiplication can be done as  \f$ p . M \f$ or  \f$ M . p \f$ where  \f$ p \f$ is the pixel and  \f$ M \f$ is the vector.
- * The behavior can be chosen with 
+ * The behavior can be chosen with
  *
  * The number of rows of the matrix must be the input image number of channels, the number of columns is the number of channels of the output image.
  *
@@ -132,7 +132,7 @@ private:
   /** Matrix declaration */
   MatrixType m_Matrix;
 
-  /** If set to true, the applied operation is \f$ M . p \f$ where p is the pixel represented as a column vector. 
+  /** If set to true, the applied operation is \f$ M . p \f$ where p is the pixel represented as a column vector.
       Otherwise the applied operation is  \f$ p . M \f$ where p is the pixel represented as a row vector.
   */
   bool m_MatrixByVector;

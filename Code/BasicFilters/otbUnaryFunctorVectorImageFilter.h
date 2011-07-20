@@ -114,7 +114,7 @@ private:
   void operator =(const Self&); //purposely not implemented
 
   FunctorType m_Functor;
-}; // end of class 
+}; // end of class
 
 } // namespace otb
 
@@ -123,8 +123,6 @@ private:
 #endif
 
 #endif
-
-
 
 
 

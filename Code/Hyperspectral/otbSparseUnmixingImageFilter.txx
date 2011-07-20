@@ -24,7 +24,7 @@
 
 namespace otb {
 
-template < class TInputImage, class TOutputImage, 
+template < class TInputImage, class TOutputImage,
             class TPrecision, Wavelet::Wavelet TMotherWaveletOperator >
 SparseUnmixingImageFilter< TInputImage, TOutputImage, TPrecision, TMotherWaveletOperator >
 ::SparseUnmixingImageFilter ()
@@ -44,8 +44,8 @@ SparseUnmixingImageFilter< TInputImage, TOutputImage, TPrecision, TMotherWavelet
   m_ListFilter = ListFilterType::New();
   m_ListFilter->GetFunctor().SetLowerThreshold(10.);
 
-  /** 
-   * The histogram is dedicated to angular value in [-PI,PI]
+  /**
+   * The histogram is dedicated to angular value in [-PI, PI]
    * The histogram is smoothed with 100 bins
    */
   m_Histogram = HistogramType::New();
@@ -56,7 +56,7 @@ SparseUnmixingImageFilter< TInputImage, TOutputImage, TPrecision, TMotherWavelet
   m_Transformer = TransformFilterType::New();
 }
 
-template < class TInputImage, class TOutputImage, 
+template < class TInputImage, class TOutputImage,
             class TPrecision, Wavelet::Wavelet TMotherWaveletOperator >
 void
 SparseUnmixingImageFilter< TInputImage, TOutputImage, TPrecision, TMotherWaveletOperator >
@@ -66,7 +66,7 @@ SparseUnmixingImageFilter< TInputImage, TOutputImage, TPrecision, TMotherWavelet
     const_cast< InputImageType * >( inputPtr ) );
 }
 
-template < class TInputImage, class TOutputImage, 
+template < class TInputImage, class TOutputImage,
             class TPrecision, Wavelet::Wavelet TMotherWaveletOperator >
 void
 SparseUnmixingImageFilter< TInputImage, TOutputImage, TPrecision, TMotherWaveletOperator >
@@ -76,7 +76,7 @@ SparseUnmixingImageFilter< TInputImage, TOutputImage, TPrecision, TMotherWavelet
     const_cast< InputImageType * >( inputPtr ) );
 }
 
-template < class TInputImage, class TOutputImage, 
+template < class TInputImage, class TOutputImage,
             class TPrecision, Wavelet::Wavelet TMotherWaveletOperator >
 const TInputImage *
 SparseUnmixingImageFilter< TInputImage, TOutputImage, TPrecision, TMotherWaveletOperator >
@@ -91,7 +91,7 @@ SparseUnmixingImageFilter< TInputImage, TOutputImage, TPrecision, TMotherWavelet
     (this->itk::ProcessObject::GetInput(0) );
 }
 
-template < class TInputImage, class TOutputImage, 
+template < class TInputImage, class TOutputImage,
             class TPrecision, Wavelet::Wavelet TMotherWaveletOperator >
 const TInputImage *
 SparseUnmixingImageFilter< TInputImage, TOutputImage, TPrecision, TMotherWaveletOperator >
@@ -107,8 +107,7 @@ SparseUnmixingImageFilter< TInputImage, TOutputImage, TPrecision, TMotherWavelet
 }
 
 
-
-template < class TInputImage, class TOutputImage, 
+template < class TInputImage, class TOutputImage,
             class TPrecision, Wavelet::Wavelet TMotherWaveletOperator >
 void
 SparseUnmixingImageFilter< TInputImage, TOutputImage, TPrecision, TMotherWaveletOperator >
@@ -119,16 +118,16 @@ SparseUnmixingImageFilter< TInputImage, TOutputImage, TPrecision, TMotherWavelet
 
 
   m_WvltFilter1->SetInput( this->GetInput1() );
-  progress->RegisterInternalFilter(m_WvltFilter1,0.25f);
+  progress->RegisterInternalFilter(m_WvltFilter1, 0.25f);
   m_WvltFilter1->Update();
 
   m_WvltFilter2->SetInput( this->GetInput2() );
-  progress->RegisterInternalFilter(m_WvltFilter2,0.25f);
+  progress->RegisterInternalFilter(m_WvltFilter2, 0.25f);
   m_WvltFilter2->Update();
 
   m_ListFilter->SetInput1( m_WvltFilter1->GetOutput() );
   m_ListFilter->SetInput2( m_WvltFilter2->GetOutput() );
-  progress->RegisterInternalFilter(m_ListFilter,0.25f);
+  progress->RegisterInternalFilter(m_ListFilter, 0.25f);
   m_ListFilter->Update();
 
   typename InternalSampleListType::Iterator angleIter = m_ListFilter->GetOutputSampleList()->Begin();
@@ -144,11 +143,11 @@ SparseUnmixingImageFilter< TInputImage, TOutputImage, TPrecision, TMotherWavelet
   m_Transformer->SetInput1( this->GetInput1() );
   m_Transformer->SetInput2( this->GetInput2() );
   m_Transformer->SetAngleSet( m_AngleValue );
-  progress->RegisterInternalFilter(m_Transformer,0.25f);
+  progress->RegisterInternalFilter(m_Transformer, 0.25f);
   
   this->SetNumberOfOutputs( m_Transformer->GetNumberOfOutputs() );
   for ( unsigned int i = 0; i < this->GetNumberOfOutputs(); i++ )
-  { 
+  {
     this->SetNthOutput(i, OutputImageType::New());
     m_Transformer->GraftNthOutput( i, this->GetOutput(i) );
   }
@@ -161,17 +160,17 @@ SparseUnmixingImageFilter< TInputImage, TOutputImage, TPrecision, TMotherWavelet
   }
 }
 
-template < class TInputImage, class TOutputImage, 
+template < class TInputImage, class TOutputImage,
             class TPrecision, Wavelet::Wavelet TMotherWaveletOperator >
 void
 SparseUnmixingImageFilter< TInputImage, TOutputImage, TPrecision, TMotherWaveletOperator >
-::GenerateNumberOfComponentsRequired () 
+::GenerateNumberOfComponentsRequired ()
 {
   std::vector<PrecisionType> angles;
 
   typename HistogramType::Iterator prevHist = m_Histogram->Begin();
   typename HistogramType::Iterator curHist = m_Histogram->Begin();
-  /** Since operator-- does not exists in itk::Histgram, we have 
+  /** Since operator-- does not exists in itk::Histgram, we have
    * to reach the end step by step
    */
   ++curHist;
@@ -217,6 +216,5 @@ SparseUnmixingImageFilter< TInputImage, TOutputImage, TPrecision, TMotherWavelet
 } // end of namespace otb
 
 #endif
-
 
 

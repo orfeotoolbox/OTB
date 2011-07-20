@@ -25,18 +25,18 @@
 #include "otbStreamingStatisticsVectorImageFilter.h"
 #include "otbFastICAInternalOptimizerVectorImageFilter.h"
 
-namespace otb 
+namespace otb
 {
 /** \class FastICAImageFilter
  * \brief Performs a Independent Component Analysis
  *
- * The internal structure of this filter is a filter-to-filter like structure. 
+ * The internal structure of this filter is a filter-to-filter like structure.
  * The estimation of the covariance matrix has persistent capabilities...
  *
  * \sa PCAImageFilter
  */
 template <class TInputImage, class TOutputImage, Transform::TransformDirection TDirectionOfTransformation >
-class ITK_EXPORT FastICAImageFilter 
+class ITK_EXPORT FastICAImageFilter
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
@@ -57,7 +57,7 @@ public:
   itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
   typedef Transform::TransformDirection TransformDirectionEnumType;
-  itkStaticConstMacro(DirectionOfTransformation,TransformDirectionEnumType,TDirectionOfTransformation);
+  itkStaticConstMacro(DirectionOfTransformation, TransformDirectionEnumType, TDirectionOfTransformation);
 
   /** typedefs */
   typedef TInputImage InputImageType;
@@ -85,17 +85,17 @@ public:
 
   typedef double (*ContrastFunctionType) ( double );
 
-  /** 
-   * Set/Get the number of required largest principal components. 
+  /**
+   * Set/Get the number of required largest principal components.
    */
-  itkGetMacro(NumberOfPrincipalComponentsRequired,unsigned int);
-  itkSetMacro(NumberOfPrincipalComponentsRequired,unsigned int);
+  itkGetMacro(NumberOfPrincipalComponentsRequired, unsigned int);
+  itkSetMacro(NumberOfPrincipalComponentsRequired, unsigned int);
 
-  itkGetConstMacro(PCAFilter,PCAFilterType *);
-  itkGetMacro(PCAFilter,PCAFilterType *);
+  itkGetConstMacro(PCAFilter, PCAFilterType *);
+  itkGetMacro(PCAFilter, PCAFilterType *);
 
-  itkGetConstMacro(TransformFilter,TransformFilterType *);
-  itkGetMacro(TransformFilter,TransformFilterType *);
+  itkGetConstMacro(TransformFilter, TransformFilterType *);
+  itkGetMacro(TransformFilter, TransformFilterType *);
 
   VectorType GetMeanValues () const
   {
@@ -121,12 +121,12 @@ public:
   }
   void SetPCATransformationMatrix ( const MatrixType & mat, bool isForward = true )
   {
-    m_PCAFilter->SetTransformationMatrix(mat,isForward);
+    m_PCAFilter->SetTransformationMatrix(mat, isForward);
   }
 
-  itkGetConstMacro(TransformationMatrix,MatrixType);
-  itkGetMacro(TransformationMatrix,MatrixType);
-  void SetTransformationMatrix ( const MatrixType & mat, bool isForward = true ) 
+  itkGetConstMacro(TransformationMatrix, MatrixType);
+  itkGetMacro(TransformationMatrix, MatrixType);
+  void SetTransformationMatrix ( const MatrixType & mat, bool isForward = true )
   {
     m_IsTransformationForward = isForward;
     m_GivenTransformationMatrix = true;
@@ -134,26 +134,26 @@ public:
     this->Modified();
   }
 
-  itkGetMacro(NumberOfIterations,unsigned int);
-  itkSetMacro(NumberOfIterations,unsigned int);
+  itkGetMacro(NumberOfIterations, unsigned int);
+  itkSetMacro(NumberOfIterations, unsigned int);
 
-  itkGetMacro(ConvergenceThreshold,double);
-  itkSetMacro(ConvergenceThreshold,double);
+  itkGetMacro(ConvergenceThreshold, double);
+  itkSetMacro(ConvergenceThreshold, double);
 
-  itkGetMacro(ContrastFunction,ContrastFunctionType);
+  itkGetMacro(ContrastFunction, ContrastFunctionType);
 
-  itkGetMacro(Mu,double);
-  itkSetMacro(Mu,double);
+  itkGetMacro(Mu, double);
+  itkSetMacro(Mu, double);
 
 protected:
   FastICAImageFilter ();
   virtual ~FastICAImageFilter() { }
 
   /** GenerateOutputInformation
-   * Propagate vector length info and modify if needed 
+   * Propagate vector length info and modify if needed
    * NumberOfPrincipalComponentsRequired
    *
-   * In REVERSE mode, the covariance matrix or the transformation matrix 
+   * In REVERSE mode, the covariance matrix or the transformation matrix
    * (which may not be square) has to be given,
    * otherwize, GenerateOutputInformation throws an itk::ExceptionObject
    */
@@ -182,7 +182,7 @@ protected:
   unsigned int m_NumberOfIterations; // def is 50
   double m_ConvergenceThreshold; // def is 1e-4
   ContrastFunctionType m_ContrastFunction; // see g() function in the biblio. Def is tanh
-  double m_Mu; // def is 1. in [0,1]
+  double m_Mu; // def is 1. in [0, 1]
 
   PCAFilterPointerType m_PCAFilter;
   TransformFilterPointerType m_TransformFilter;

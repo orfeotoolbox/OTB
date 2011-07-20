@@ -28,7 +28,7 @@ typedef double PixelType;
 
 typedef otb::VectorImage<PixelType, Dimension> ImageType;
 typedef otb::ImageFileReader<ImageType> ReaderType;
-typedef otb::ISRAUnmixingImageFilter<ImageType,ImageType,PixelType> UnmixingImageFilterType;
+typedef otb::ISRAUnmixingImageFilter<ImageType, ImageType, PixelType> UnmixingImageFilterType;
 typedef otb::VectorImageToMatrixImageFilter<ImageType> VectorImageToMatrixImageFilterType;
 typedef otb::StreamingImageFileWriter<ImageType> WriterType;
 
@@ -72,7 +72,7 @@ int otbISRAUnmixingImageFilterTest(int argc, char * argv[])
   writer->SetInput(unmixer->GetOutput());
   writer->SetNumberOfDivisionsStrippedStreaming(10);
 
-  otb::StandardWriterWatcher w4(writer,unmixer,"ISRAUnmixingImageFilter");
+  otb::StandardWriterWatcher w4(writer, unmixer,"ISRAUnmixingImageFilter");
 
   writer->Update();
 

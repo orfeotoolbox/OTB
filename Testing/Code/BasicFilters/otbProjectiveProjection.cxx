@@ -34,9 +34,9 @@ typedef double PrecisionType;
 typedef otb::Image<PixelType, Dimension> ImageType;
 typedef otb::VectorImage<PixelType, Dimension> VectorImageType;
 typedef otb::ImageFileReader<VectorImageType> ReaderType;
-typedef otb::ProjectiveProjectionImageFilter<VectorImageType,VectorImageType,PrecisionType> ProjectiveProjectionImageFilterType;
-typedef otb::DotProductImageFilter<VectorImageType,ImageType> DotProductImageFilterType;
-typedef otb::MatrixImageFilter<VectorImageType,VectorImageType> MatrixImageFilterType;
+typedef otb::ProjectiveProjectionImageFilter<VectorImageType, VectorImageType, PrecisionType> ProjectiveProjectionImageFilterType;
+typedef otb::DotProductImageFilter<VectorImageType, ImageType> DotProductImageFilterType;
+typedef otb::MatrixImageFilter<VectorImageType, VectorImageType> MatrixImageFilterType;
 typedef otb::VectorImageToMatrixImageFilter<VectorImageType> VectorImageToMatrixImageFilterType;
 typedef otb::ImageFileWriter<VectorImageType> WriterType;
 typedef otb::StreamingStatisticsVectorImageFilter<VectorImageType> StreamingStatisticsVectorImageFilterType;
@@ -87,8 +87,8 @@ int otbProjectiveProjectionTestHighSNR(int argc, char * argv[])
   statsXd->Update();
   VectorImageType::PixelType Xdmean = statsXd->GetMean();
 
-  // Compute Xd ./ repmat( sum( Xd .* repmat(u,[1 N]) ) ,[d 1]);
-  // -> divides each pixel component by the dot product <Xd(i,j), mean(Xd)>
+  // Compute Xd ./ repmat( sum( Xd .* repmat(u, [1 N]) ) , [d 1]);
+  // -> divides each pixel component by the dot product <Xd(i, j), mean(Xd)>
   std::cout << "Compute projective projection" << std::endl;
   ProjectiveProjectionImageFilterType::Pointer proj = ProjectiveProjectionImageFilterType::New();
   proj->SetInput(Xd);

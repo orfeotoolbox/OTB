@@ -27,7 +27,7 @@ typedef double PixelType;
 
 typedef otb::VectorImage<PixelType, Dimension> ImageType;
 typedef otb::ImageFileReader<ImageType> ReaderType;
-typedef otb::UnConstrainedLeastSquareImageFilter<ImageType,ImageType,PixelType> UnConstrainedLeastSquareSolverType;
+typedef otb::UnConstrainedLeastSquareImageFilter<ImageType, ImageType, PixelType> UnConstrainedLeastSquareSolverType;
 typedef otb::VectorImageToMatrixImageFilter<ImageType> VectorImageToMatrixImageFilterType;
 typedef otb::StreamingImageFileWriter<ImageType> WriterType;
 
@@ -67,7 +67,7 @@ int otbUnConstrainedLeastSquareImageFilterTest(int argc, char * argv[])
   writer->SetFileName(outputImage);
   writer->SetInput(unmixer->GetOutput());
 
-  otb::StandardWriterWatcher w4(writer,unmixer,"UnConstrainedLeastSquareImageFilter");
+  otb::StandardWriterWatcher w4(writer, unmixer,"UnConstrainedLeastSquareImageFilter");
   writer->Update();
 
   return EXIT_SUCCESS;

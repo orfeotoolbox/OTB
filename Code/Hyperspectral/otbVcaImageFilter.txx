@@ -27,7 +27,7 @@
 
 
 #define otbMsgDevMacroVCA(p) std::cout << p << std::endl;
-//#define otbMsgDevMacroVCA(p) ;
+//#define otbMsgDevMacroVCA(p);
 
 namespace otb {
 
@@ -150,7 +150,7 @@ void VCAImageFilter<TImage>::GenerateData()
     otbMsgDevMacroVCA( "mean(Xd) = " << Xdmean)
 
     // Projective projection
-    // Xd ./ repmat( sum( Xd .* repmat(u,[1 N]) ) ,[d 1]);
+    // Xd ./ repmat( sum( Xd .* repmat(u, [1 N]) ) , [d 1]);
     otbMsgDevMacroVCA( "Compute projective projection" )
     typename ProjectiveProjectionImageFilterType::Pointer proj = ProjectiveProjectionImageFilterType::New();
     proj->SetInput(Xd);
@@ -237,7 +237,7 @@ void VCAImageFilter<TImage>::GenerateData()
   typename VectorImageType::PixelType Xdmean = statsXd->GetMean();
 
   // Projective projection
-  // Xd ./ repmat( sum( Xd .* repmat(u,[1 N]) ) ,[d 1]);
+  // Xd ./ repmat( sum( Xd .* repmat(u, [1 N]) ) , [d 1]);
   otbMsgDevMacroVCA( "Compute projective projection" );
   typename ProjectiveProjectionImageFilterType::Pointer proj = ProjectiveProjectionImageFilterType::New();
   proj->SetInput(Xd);
@@ -247,8 +247,8 @@ void VCAImageFilter<TImage>::GenerateData()
   // E : result, will contain the endmembers
   vnl_matrix<PrecisionType> E(nbBands, m_NumberOfEndmembers);
 
-  // A = zeros(q,q)
-  // A(q,1) = 1
+  // A = zeros(q, q)
+  // A(q, 1) = 1
   vnl_matrix<PrecisionType> A(m_NumberOfEndmembers, m_NumberOfEndmembers);
   A.fill(0);
   A(m_NumberOfEndmembers - 1, 0) = 1;
@@ -259,7 +259,7 @@ void VCAImageFilter<TImage>::GenerateData()
     otbMsgDevMacroVCA( "----------------------------------------" )
     otbMsgDevMacroVCA( "Iteration " << i )
 
-    // w = rand(q,1)
+    // w = rand(q, 1)
     otbMsgDevMacroVCA( "Random vector generation " )
     vnl_vector<PrecisionType> w(m_NumberOfEndmembers);
     for (unsigned int j = 0; j < w.size(); ++j)
@@ -306,8 +306,8 @@ void VCAImageFilter<TImage>::GenerateData()
     otbMsgDevMacroVCA( "max : " << maxAbs->GetMaximum() )
     otbMsgDevMacroVCA( "maxIdx : " << maxIdx )
 
-    // extract Y(:,k)
-    otbMsgDevMacroVCA( "Y(:,k)" )
+    // extract Y(:, k)
+    otbMsgDevMacroVCA( "Y(:, k)" )
     RegionType region;
     region.SetIndex( maxIdx );
     SizeType size;
@@ -317,8 +317,8 @@ void VCAImageFilter<TImage>::GenerateData()
     Y->Update();
 
     // store new endmember in A
-    // A(:,i) = Y(:,k)
-    otbMsgDevMacroVCA( "A(:,i) = Y(:,k)" )
+    // A(:, i) = Y(:, k)
+    otbMsgDevMacroVCA( "A(:, i) = Y(:, k)" )
     typename VectorImageType::PixelType e = Y->GetPixel(maxIdx);
     otbMsgDevMacroVCA( "e = " << e )
     A.set_column(i, e.GetDataPointer());
@@ -329,8 +329,8 @@ void VCAImageFilter<TImage>::GenerateData()
     vnl_vector<PrecisionType> u;
     if (SNR > SNRth)
       {
-      // u = Ud * Xd(:,k)
-      otbMsgDevMacroVCA( "u = Ud * Xd(:,k)" )
+      // u = Ud * Xd(:, k)
+      otbMsgDevMacroVCA( "u = Ud * Xd(:, k)" )
       Xd->SetRequestedRegion(region);
       Xd->Update();
       typename VectorImageType::PixelType xd = Xd->GetPixel(maxIdx);
@@ -339,8 +339,8 @@ void VCAImageFilter<TImage>::GenerateData()
       }
     else
       {
-      // u = invPCA( Xd(:,k) )
-      otbMsgDevMacroVCA( "u = Ud * Xd(:,k)" )
+      // u = invPCA( Xd(:, k) )
+      otbMsgDevMacroVCA( "u = Ud * Xd(:, k)" )
       Xd->SetRequestedRegion(region);
       Xd->Update();
       typename VectorImageType::PixelType xd = Xd->GetPixel(maxIdx);

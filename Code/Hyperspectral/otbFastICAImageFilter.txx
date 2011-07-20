@@ -32,7 +32,7 @@
 namespace otb
 {
 
-template < class TInputImage, class TOutputImage, 
+template < class TInputImage, class TOutputImage,
             Transform::TransformDirection TDirectionOfTransformation >
 FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 ::FastICAImageFilter ()
@@ -55,9 +55,9 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   m_TransformFilter = TransformFilterType::New();
 }
 
-template < class TInputImage, class TOutputImage, 
+template < class TInputImage, class TOutputImage,
             Transform::TransformDirection TDirectionOfTransformation >
-void 
+void
 FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 ::GenerateOutputInformation()
 // throw itk::ExceptionObject
@@ -68,11 +68,11 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   {
     case Transform::FORWARD:
     {
-      if ( m_NumberOfPrincipalComponentsRequired == 0 
-          || m_NumberOfPrincipalComponentsRequired 
+      if ( m_NumberOfPrincipalComponentsRequired == 0
+          || m_NumberOfPrincipalComponentsRequired
             > this->GetInput()->GetNumberOfComponentsPerPixel() )
       {
-        m_NumberOfPrincipalComponentsRequired = 
+        m_NumberOfPrincipalComponentsRequired =
           this->GetInput()->GetNumberOfComponentsPerPixel();
       }
 
@@ -106,7 +106,7 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   }
 }
 
-template < class TInputImage, class TOutputImage, 
+template < class TInputImage, class TOutputImage,
             Transform::TransformDirection TDirectionOfTransformation >
 void
 FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
@@ -125,13 +125,13 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   }
 }
 
-template < class TInputImage, class TOutputImage, 
+template < class TInputImage, class TOutputImage,
             Transform::TransformDirection TDirectionOfTransformation >
 void
 FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 ::ForwardGenerateData ()
 {
-  typename InputImageType::Pointer inputImgPtr 
+  typename InputImageType::Pointer inputImgPtr
     = const_cast<InputImageType*>( this->GetInput() );
 
   m_PCAFilter->SetInput( inputImgPtr );
@@ -164,7 +164,7 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   this->GraftOutput( m_TransformFilter->GetOutput() );
 }
 
-template < class TInputImage, class TOutputImage, 
+template < class TInputImage, class TOutputImage,
             Transform::TransformDirection TDirectionOfTransformation >
 void
 FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
@@ -196,7 +196,7 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   m_TransformFilter->SetMatrix( m_TransformationMatrix.GetVnlMatrix() );
 
   /*
-   * PCA filter may throw exception if 
+   * PCA filter may throw exception if
    * the mean, stdDev and transformation matrix
    * have not been given at this point
    */
@@ -207,7 +207,7 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   this->GraftOutput( m_PCAFilter->GetOutput() );
 }
 
-template < class TInputImage, class TOutputImage, 
+template < class TInputImage, class TOutputImage,
             Transform::TransformDirection TDirectionOfTransformation >
 void
 FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
@@ -223,7 +223,7 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   // transformation matrix
   InternalMatrixType W ( size, size, vnl_matrix_identity );
 
-  while ( iteration++ < GetNumberOfIterations() 
+  while ( iteration++ < GetNumberOfIterations()
           && convergence > GetConvergenceThreshold() )
   {
     InternalMatrixType W_old ( W );
@@ -240,7 +240,7 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 
     for ( unsigned int band = 0; band < size; band++ )
     {
-      otbMsgDebugMacro( << "Iteration " << iteration << ", bande " << band 
+      otbMsgDebugMacro( << "Iteration " << iteration << ", bande " << band
                         << ", convergence " << convergence );
 
       InternalOptimizerPointerType optimizer = InternalOptimizerType::New();
@@ -257,12 +257,12 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
       double norm = 0.;
       for ( unsigned int bd = 0; bd < size; bd++ )
       {
-        W(band,bd) -= m_Mu * ( estimator->GetMean()[bd] 
-                              - optimizer->GetBeta() * W(band,bd) / optimizer->GetDen() );
-        norm += vcl_pow( W(band,bd), 2. );
+        W(band, bd) -= m_Mu * ( estimator->GetMean()[bd]
+                              - optimizer->GetBeta() * W(band, bd) / optimizer->GetDen() );
+        norm += vcl_pow( W(band, bd), 2. );
       }
       for ( unsigned int bd = 0; bd < size; bd++ )
-        W(band,bd) /= vcl_sqrt( norm );
+        W(band, bd) /= vcl_sqrt( norm );
     }
 
     // Decorrelation of the W vectors
@@ -270,7 +270,7 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
     vnl_svd< MatrixElementType > solver ( W_tmp );
     InternalMatrixType valP = solver.W();
     for ( unsigned int i = 0; i < valP.rows(); i++ )
-      valP(i,i) = 1. / vcl_sqrt( static_cast<double>( valP(i,i) ) ); // Watch for 0 or neg
+      valP(i, i) = 1. / vcl_sqrt( static_cast<double>( valP(i, i) ) ); // Watch for 0 or neg
     InternalMatrixType transf = solver.U();
     W_tmp = transf * valP * transf.transpose();
     W = W_tmp * W;
@@ -279,7 +279,7 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
     convergence = 0.;
     for ( unsigned int i = 0; i < W.rows(); i++ )
       for ( unsigned int j = 0; j < W.cols(); j++ )
-        convergence += vcl_abs( W(i,j) - W_old(i,j) );
+        convergence += vcl_abs( W(i, j) - W_old(i, j) );
 
     reporter.CompletedPixel();
   } // end of while loop
@@ -289,7 +289,7 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   else
     this->m_TransformationMatrix = W;
 
-  otbMsgDebugMacro( << "Final convergence " << convergence 
+  otbMsgDebugMacro( << "Final convergence " << convergence
     << " after " << iteration << " iterations" );
 }
 

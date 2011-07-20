@@ -151,7 +151,7 @@ NCLSUnmixingImageFilter<TInputImage, TOutputImage, TPrecision>
 }
 
 template <class TInputImage, class TOutputImage, class TPrecision>
-const typename NCLSUnmixingImageFilter<TInputImage,TOutputImage,TPrecision>::MatrixType&
+const typename NCLSUnmixingImageFilter<TInputImage, TOutputImage, TPrecision>::MatrixType&
 NCLSUnmixingImageFilter<TInputImage, TOutputImage, TPrecision>
 ::GetEndmembersMatrix() const
 {

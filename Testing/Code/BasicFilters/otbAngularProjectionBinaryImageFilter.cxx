@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom ; Telecom Bretagne. All rights reserved. 
+  Copyright (c) Institut Telecom; Telecom Bretagne. All rights reserved.
   See ITCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -48,11 +48,11 @@ int otbAngularProjectionBinaryImageFilterTest ( int argc, char * argv[] )
   parser->AddOption( "--InputImages", "Input Images", "-in", 2, true );
   parser->AddOption( "--OutputImages", "Generic name for output Images (_#.hdr will be added)", "-out", 1, true );
 
-  typedef otb::CommandLineArgumentParseResult ParserResultType;  
+  typedef otb::CommandLineArgumentParseResult ParserResultType;
   ParserResultType::Pointer  parseResult = ParserResultType::New();
     
   try
-  {  
+  {
     parser->ParseCommandLine( argc, argv, parseResult );
   }
   catch( itk::ExceptionObject & err )
@@ -68,8 +68,8 @@ int otbAngularProjectionBinaryImageFilterTest ( int argc, char * argv[] )
     return EXIT_FAILURE;
   }
 
-  const char * inputImageName1 = parseResult->GetParameterString("--InputImages",0).c_str();
-  const char * inputImageName2 = parseResult->GetParameterString("--InputImages",1).c_str();
+  const char * inputImageName1 = parseResult->GetParameterString("--InputImages", 0).c_str();
+  const char * inputImageName2 = parseResult->GetParameterString("--InputImages", 1).c_str();
   const char * outputImageName = parseResult->GetParameterString("--OutputImages").c_str();
 
   // Main type definition

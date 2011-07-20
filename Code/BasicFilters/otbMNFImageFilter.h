@@ -31,7 +31,7 @@ namespace otb {
 /** \class MNFImageFilter
  * \brief Performs a Minimum Noise Fraction analysis of a vector image.
  *
- * The internal structure of this filter is a filter-to-filter like structure. 
+ * The internal structure of this filter is a filter-to-filter like structure.
  * The estimation of the covariance matrix has persistent capabilities...
  *
  * The high pass filter which has to be used for the noise estimation is templated
@@ -42,10 +42,10 @@ namespace otb {
  * \sa otbStreamingStatisticsVectorImageFilter
  * \sa PCAImageFiler
  */
-template <class TInputImage, class TOutputImage, 
-            class TNoiseImageFilter, 
+template <class TInputImage, class TOutputImage,
+            class TNoiseImageFilter,
             Transform::TransformDirection TDirectionOfTransformation >
-class ITK_EXPORT MNFImageFilter 
+class ITK_EXPORT MNFImageFilter
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
@@ -66,7 +66,7 @@ public:
   itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
   typedef Transform::TransformDirection TransformDirectionEnumType;
-  itkStaticConstMacro(DirectionOfTransformation,TransformDirectionEnumType,TDirectionOfTransformation);
+  itkStaticConstMacro(DirectionOfTransformation, TransformDirectionEnumType, TDirectionOfTransformation);
 
   /** Template parameters typedefs */
   typedef TInputImage  InputImageType;
@@ -92,30 +92,30 @@ public:
   typedef NormalizeVectorImageFilter< InputImageType, OutputImageType > NormalizeFilterType;
   typedef typename NormalizeFilterType::Pointer NormalizeFilterPointerType;
 
-  /** 
-   * Set/Get the number of required largest principal components. 
+  /**
+   * Set/Get the number of required largest principal components.
    */
-  itkGetMacro(NumberOfPrincipalComponentsRequired,unsigned int);
-  itkSetMacro(NumberOfPrincipalComponentsRequired,unsigned int);
+  itkGetMacro(NumberOfPrincipalComponentsRequired, unsigned int);
+  itkSetMacro(NumberOfPrincipalComponentsRequired, unsigned int);
 
-  itkGetConstMacro(Normalizer,NormalizeFilterType*);
-  itkGetMacro(Normalizer,NormalizeFilterType*);
+  itkGetConstMacro(Normalizer, NormalizeFilterType*);
+  itkGetMacro(Normalizer, NormalizeFilterType*);
   itkGetMacro(NoiseCovarianceEstimator, CovarianceEstimatorFilterType *);
   itkGetMacro(Transformer, TransformFilterType *);
   itkGetMacro(NoiseImageFilter, NoiseImageFilterType *);
 
   /** Normalization only impact the use of variance. The data is always centered */
-  itkGetMacro(UseNormalization,bool);
-  itkSetMacro(UseNormalization,bool);
+  itkGetMacro(UseNormalization, bool);
+  itkSetMacro(UseNormalization, bool);
 
-  itkGetConstMacro(MeanValues,VectorType);
+  itkGetConstMacro(MeanValues, VectorType);
   void SetMeanValues ( const VectorType & vec )
   {
     m_MeanValues = vec;
     m_GivenMeanValues = true;
   }
 
-  itkGetConstMacro(StdDevValues,VectorType);
+  itkGetConstMacro(StdDevValues, VectorType);
   void SetStdDevValues ( const VectorType & vec )
   {
     m_StdDevValues = vec;
@@ -123,7 +123,7 @@ public:
     m_GivenStdDevValues = true;
   }
 
-  itkGetConstMacro(CovarianceMatrix,MatrixType);
+  itkGetConstMacro(CovarianceMatrix, MatrixType);
   void SetCovarianceMatrix ( const MatrixType & cov )
   {
     m_CovarianceMatrix = cov;
@@ -137,7 +137,7 @@ public:
     m_GivenNoiseCovarianceMatrix = true;
   }
 
-  itkGetConstMacro(TransformationMatrix,MatrixType);
+  itkGetConstMacro(TransformationMatrix, MatrixType);
   void SetTransformationMatrix( const MatrixType & transf, bool isForward = true )
   {
     m_TransformationMatrix = transf;
@@ -145,17 +145,17 @@ public:
     m_IsTransformationMatrixForward = isForward;
   }
 
-  itkGetConstMacro(EigenValues,VectorType);
+  itkGetConstMacro(EigenValues, VectorType);
 
 protected:
   MNFImageFilter();
   virtual ~MNFImageFilter() { }
 
   /** GenerateOutputInformation
-   * Propagate vector length info and modify if needed 
+   * Propagate vector length info and modify if needed
    * NumberOfPrincipalComponentsRequired
    *
-   * In REVERSE mode, the covariance matrix or the transformation matrix 
+   * In REVERSE mode, the covariance matrix or the transformation matrix
    * (which may not be square) has to be given,
    * otherwize, GenerateOutputInformation throws an itk::ExceptionObject
    */
@@ -213,6 +213,5 @@ private:
 
 
 #endif
-
 
 

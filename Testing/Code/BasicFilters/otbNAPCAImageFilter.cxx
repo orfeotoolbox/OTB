@@ -34,11 +34,11 @@ int otbNAPCAImageFilterNewTest ( int argc, char* argv[] )
 
   typedef otb::LocalActivityVectorImageFilter< ImageType, ImageType > NoiseFilterType;
    
-  typedef otb::NAPCAImageFilter< ImageType, ImageType, 
+  typedef otb::NAPCAImageFilter< ImageType, ImageType,
     NoiseFilterType, otb::Transform::FORWARD > FilterType;
   FilterType::Pointer filter = FilterType::New();
 
-  typedef otb::NAPCAImageFilter< ImageType, ImageType, 
+  typedef otb::NAPCAImageFilter< ImageType, ImageType,
       NoiseFilterType, otb::Transform::INVERSE > InvFilterType;
     InvFilterType::Pointer invFilter = InvFilterType::New();
 
@@ -57,11 +57,11 @@ int otbNAPCAImageFilterTest ( int argc, char* argv[] )
   parser->AddOption( "--Normalize", "center and reduce data before NAPCA", "-norm", 0, false );
   parser->AddOutputImage();
 
-  typedef otb::CommandLineArgumentParseResult ParserResultType;  
+  typedef otb::CommandLineArgumentParseResult ParserResultType;
   ParserResultType::Pointer  parseResult = ParserResultType::New();
     
   try
-  {  
+  {
     parser->ParseCommandLine( argc, argv, parseResult );
   }
   catch( itk::ExceptionObject & err )
@@ -85,8 +85,8 @@ int otbNAPCAImageFilterTest ( int argc, char* argv[] )
   unsigned int radiusY = 1;
   if ( parseResult->IsOptionPresent("--Radius") )
   {
-    radiusX = parseResult->GetParameterUInt("--Radius",0);
-    radiusY = parseResult->GetParameterUInt("--Radius",1);
+    radiusX = parseResult->GetParameterUInt("--Radius", 0);
+    radiusY = parseResult->GetParameterUInt("--Radius", 1);
   }
   const bool normalization = parseResult->IsOptionPresent("--Normalize");
 
@@ -105,7 +105,7 @@ int otbNAPCAImageFilterTest ( int argc, char* argv[] )
   NoiseFilterType::RadiusType radius = {{ radiusX, radiusY }};
 
   // Image filtering
-  typedef otb::NAPCAImageFilter< ImageType, ImageType, 
+  typedef otb::NAPCAImageFilter< ImageType, ImageType,
     NoiseFilterType, otb::Transform::FORWARD > FilterType;
   FilterType::Pointer filter = FilterType::New();
   filter->SetInput( reader->GetOutput() );
@@ -127,7 +127,7 @@ int otbNAPCAImageFilterTest ( int argc, char* argv[] )
 
   if ( parseResult->IsOptionPresent("--Inverse") )
   {
-    typedef otb::NAPCAImageFilter< ImageType, ImageType, 
+    typedef otb::NAPCAImageFilter< ImageType, ImageType,
       NoiseFilterType, otb::Transform::INVERSE > InvFilterType;
     InvFilterType::Pointer invFilter = InvFilterType::New();
     invFilter->SetInput( filter->GetOutput() );

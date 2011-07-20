@@ -54,14 +54,14 @@ int otbFastICAImageFilterTest ( int argc, char* argv[] )
   parser->AddOption( "--NumComponents", "Number of components to keep for output", "-n", 1, false );
   parser->AddOption( "--Inverse", "Performs also the inverse transformation (give the output name)", "-inv", 1, false );
   parser->AddOption( "--NumIterations", "number of iterations (def.20)", "-iter", 1, false );
-  parser->AddOption( "--Mu", "Give the increment weight of W in [0,1] (def. 1)", "-mu", 1, false );
+  parser->AddOption( "--Mu", "Give the increment weight of W in [0, 1] (def. 1)", "-mu", 1, false );
   parser->AddOutputImage();
 
-  typedef otb::CommandLineArgumentParseResult ParserResultType;  
+  typedef otb::CommandLineArgumentParseResult ParserResultType;
   ParserResultType::Pointer  parseResult = ParserResultType::New();
     
   try
-  {  
+  {
     parser->ParseCommandLine( argc, argv, parseResult );
   }
   catch( itk::ExceptionObject & err )
@@ -84,7 +84,7 @@ int otbFastICAImageFilterTest ( int argc, char* argv[] )
   const unsigned int nbIterations = parseResult->IsOptionPresent("--NumIterations") ?
     parseResult->GetParameterUInt("--NumIterations") : 20;
   const double mu = parseResult->IsOptionPresent("--Mu" ) ?
-    parseResult->GetParameterDouble("--Mu") : 1. ;
+    parseResult->GetParameterDouble("--Mu") : 1.;
 
   // Main type definition
   const unsigned int Dimension = 2;

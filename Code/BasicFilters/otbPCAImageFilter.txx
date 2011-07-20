@@ -28,7 +28,7 @@
 namespace otb
 {
 
-template < class TInputImage, class TOutputImage, 
+template < class TInputImage, class TOutputImage,
             Transform::TransformDirection TDirectionOfTransformation >
 PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 ::PCAImageFilter ()
@@ -52,7 +52,7 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   m_Normalizer = NormalizeFilterType::New();
 }
 
-template < class TInputImage, class TOutputImage, 
+template < class TInputImage, class TOutputImage,
             Transform::TransformDirection TDirectionOfTransformation >
 void
 PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
@@ -65,11 +65,11 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   {
     case Transform::FORWARD:
     {
-      if ( m_NumberOfPrincipalComponentsRequired == 0 
-          || m_NumberOfPrincipalComponentsRequired 
+      if ( m_NumberOfPrincipalComponentsRequired == 0
+          || m_NumberOfPrincipalComponentsRequired
             > this->GetInput()->GetNumberOfComponentsPerPixel() )
       {
-        m_NumberOfPrincipalComponentsRequired = 
+        m_NumberOfPrincipalComponentsRequired =
           this->GetInput()->GetNumberOfComponentsPerPixel();
       }
 
@@ -108,7 +108,7 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   }
 }
 
-template < class TInputImage, class TOutputImage, 
+template < class TInputImage, class TOutputImage,
             Transform::TransformDirection TDirectionOfTransformation >
 void
 PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
@@ -127,14 +127,14 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   }
 }
 
-template < class TInputImage, class TOutputImage, 
+template < class TInputImage, class TOutputImage,
             Transform::TransformDirection TDirectionOfTransformation >
 void
 PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 ::ForwardGenerateData ()
 {
   std::cout << "ForwardGenerateData ()" << std::endl;
-  typename InputImageType::Pointer inputImgPtr 
+  typename InputImageType::Pointer inputImgPtr
     = const_cast<InputImageType*>( this->GetInput() );
 
   if ( !m_GivenTransformationMatrix )
@@ -223,7 +223,7 @@ std::cout << " !m_GivenMeanValues " << std::endl;
   this->GraftOutput( m_Transformer->GetOutput() );
 }
 
-template < class TInputImage, class TOutputImage, 
+template < class TInputImage, class TOutputImage,
             Transform::TransformDirection TDirectionOfTransformation >
 void
 PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
@@ -302,13 +302,13 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   }
 }
 
-template < class TInputImage, class TOutputImage, 
+template < class TInputImage, class TOutputImage,
             Transform::TransformDirection TDirectionOfTransformation >
 void
 PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 ::GenerateTransformationMatrix ()
 {
-#if 0 
+#if 0
   /*
    * Old stuff but did work !
    */
@@ -341,7 +341,7 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   }
   valP.post_multiply( transf );
 
-  if ( m_NumberOfPrincipalComponentsRequired 
+  if ( m_NumberOfPrincipalComponentsRequired
       != this->GetInput()->GetNumberOfComponentsPerPixel() )
     m_TransformationMatrix = transf.get_n_rows( 0, m_NumberOfPrincipalComponentsRequired );
   else
@@ -358,19 +358,19 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 
   InternalMatrixType valP ( vectValP.size(), vectValP.size(), vnl_matrix_null );
   for ( unsigned int i = 0; i < vectValP.size(); i++ )
-    valP(i,i) = vectValP[i];
+    valP(i, i) = vectValP[i];
 
   /* We used normalized PCA */
   for ( unsigned int i = 0; i < valP.rows(); i++ )
   {
-    if (  valP(i,i) > 0. )
+    if (  valP(i, i) > 0. )
     {
-      valP(i,i) = 1. / vcl_sqrt( valP(i,i) );
+      valP(i, i) = 1. / vcl_sqrt( valP(i, i) );
     }
-    else if ( valP(i,i) < 0. )
+    else if ( valP(i, i) < 0. )
     {
-      otbMsgDebugMacro( << "ValP(" << i << ") neg : " << valP(i,i) << " taking abs value" );
-      valP(i,i) = 1. / vcl_sqrt( vcl_abs( valP(i,i) ) );
+      otbMsgDebugMacro( << "ValP(" << i << ") neg : " << valP(i, i) << " taking abs value" );
+      valP(i, i) = 1. / vcl_sqrt( vcl_abs( valP(i, i) ) );
     }
     else
     {
@@ -381,7 +381,7 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   transf = valP * transf.transpose();
   transf.flipud();
 
-  if ( m_NumberOfPrincipalComponentsRequired 
+  if ( m_NumberOfPrincipalComponentsRequired
       != this->GetInput()->GetNumberOfComponentsPerPixel() )
     m_TransformationMatrix = transf.get_n_rows( 0, m_NumberOfPrincipalComponentsRequired );
   else
@@ -389,13 +389,13 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   
   m_EigenValues.SetSize( m_NumberOfPrincipalComponentsRequired );
   for ( unsigned int i = 0; i < m_NumberOfPrincipalComponentsRequired; i++ )
-    m_EigenValues[i] = static_cast< RealType >( valP(i,i) );
+    m_EigenValues[i] = static_cast< RealType >( valP(i, i) );
 
 #endif
 }
 
 
-template < class TInputImage, class TOutputImage, 
+template < class TInputImage, class TOutputImage,
             Transform::TransformDirection TDirectionOfTransformation >
 void
 PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
@@ -453,6 +453,5 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 } // end of namespace otb
 
 #endif // __otbPCAImageFilter_txx
-
 
 

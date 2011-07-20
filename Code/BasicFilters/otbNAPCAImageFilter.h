@@ -25,13 +25,13 @@ namespace otb {
 /** \class NAPCAImageFilter
  * \brief Performs a Noise Adjusted PCA analysis of a vector image.
  *
- * The internal structure of this filter is a filter-to-filter like structure. 
+ * The internal structure of this filter is a filter-to-filter like structure.
  * The estimation of the covariance matrix has persistent capabilities...
  *
  * The high pass filter which has to be used for the noise estimation is templated
  * for a better scalability...
  *
- * This class is very similar to the MNFImageFilter one since only the projection 
+ * This class is very similar to the MNFImageFilter one since only the projection
  * matrix definition (through GenerateTransformationMatrix function)
  * differs.
  *
@@ -40,15 +40,15 @@ namespace otb {
  * \sa otbStreamingStatisticsVectorImageFilter
  * \sa MNFImageFilter
  */
-template <class TInputImage, class TOutputImage, 
-            class TNoiseImageFilter, 
+template <class TInputImage, class TOutputImage,
+            class TNoiseImageFilter,
             Transform::TransformDirection TDirectionOfTransformation >
-class ITK_EXPORT NAPCAImageFilter 
+class ITK_EXPORT NAPCAImageFilter
   : public MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransformation >
 {
 public:
   typedef NAPCAImageFilter Self;
-  typedef MNFImageFilter< TInputImage, TOutputImage, 
+  typedef MNFImageFilter< TInputImage, TOutputImage,
             TNoiseImageFilter, TDirectionOfTransformation > Superclass;
   typedef itk::SmartPointer<Self>                            Pointer;
   typedef itk::SmartPointer<const Self>                      ConstPointer;
@@ -57,7 +57,7 @@ public:
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(NAPCAImageFilter,MNFImageFilter);
+  itkTypeMacro(NAPCAImageFilter, MNFImageFilter);
 
   /** Template parameters typedefs */
   typedef typename Superclass::InputImageType InputImageType;

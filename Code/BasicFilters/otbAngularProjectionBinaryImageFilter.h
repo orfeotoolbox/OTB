@@ -27,12 +27,12 @@ namespace otb {
 /** \class AngularProjectionBinaryImageFilter
  * \brief Performs \f$ y_i = \cos \theta_i x_1 + \sin \theta_i x_2\f$
  *
- * This class performs the projections of the 2 input images to a set of N 
+ * This class performs the projections of the 2 input images to a set of N
  * output images according to N angular values
  *
  */
 template < class TInputImage, class TOutputImage, class TPrecision >
-class ITK_EXPORT AngularProjectionBinaryImageFilter 
+class ITK_EXPORT AngularProjectionBinaryImageFilter
   : public itk::ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:

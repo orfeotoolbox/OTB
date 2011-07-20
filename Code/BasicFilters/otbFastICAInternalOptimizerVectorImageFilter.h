@@ -23,7 +23,7 @@
 #include "otbMatrixImageFilter.h"
 #include "otbStreamingStatisticsVectorImageFilter.h"
 
-namespace otb 
+namespace otb
 {
 /** \class FastICAInternalOptimizerVectorImageFilter
  * \brief Internal optimisation of the FastICA unmixing filter
@@ -31,7 +31,7 @@ namespace otb
  * This class implements the internal search for the unmixing matrix W
  * in the FastICA technique.
  *
- * The class takes 2 inputs (initial image and its projection with the W matrix). 
+ * The class takes 2 inputs (initial image and its projection with the W matrix).
  *
  * \ingroup Multithreaded
  * \sa FastICAImageFilter
@@ -80,15 +80,15 @@ public:
 
   typedef double (*ContrastFunctionType) ( double );
 
-  itkSetMacro(CurrentBandForLoop,unsigned int);
-  itkGetMacro(CurrentBandForLoop,unsigned int);
+  itkSetMacro(CurrentBandForLoop, unsigned int);
+  itkGetMacro(CurrentBandForLoop, unsigned int);
 
-  itkGetMacro(W,InternalMatrixType);
-  itkSetMacro(W,InternalMatrixType);
+  itkGetMacro(W, InternalMatrixType);
+  itkSetMacro(W, InternalMatrixType);
 
-  itkSetMacro(ContrastFunction,ContrastFunctionType);
-  itkGetMacro(Beta,double);
-  itkGetMacro(Den,double);
+  itkSetMacro(ContrastFunction, ContrastFunctionType);
+  itkGetMacro(Beta, double);
+  itkGetMacro(Den, double);
 
 protected:
   FastICAInternalOptimizerVectorImageFilter();

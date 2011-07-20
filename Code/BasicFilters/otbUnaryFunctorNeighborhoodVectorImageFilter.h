@@ -90,7 +90,7 @@ public:
 
   typedef itk::ConstNeighborhoodIterator<TInputImage>
     NeighborhoodIteratorType;
-  typedef typename NeighborhoodIteratorType::RadiusType 
+  typedef typename NeighborhoodIteratorType::RadiusType
     RadiusType;
 
   /** Set/Get Radius
@@ -131,7 +131,7 @@ private:
   void operator =(const Self&); //purposely not implemented
 
   FunctorType m_Functor;
-}; // end of class 
+}; // end of class
 
 } // namespace otb
 
@@ -140,8 +140,6 @@ private:
 #endif
 
 #endif
-
-
 
 
 

@@ -28,8 +28,8 @@
 
 namespace otb
 {
-template <class TInputImage, class TOutputImage, 
-            class TNoiseImageFilter, 
+template <class TInputImage, class TOutputImage,
+            class TNoiseImageFilter,
             Transform::TransformDirection TDirectionOfTransformation >
 MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransformation >
 ::MNFImageFilter ()
@@ -55,8 +55,8 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
   m_Transformer->MatrixByVectorOn();
 }
 
-template <class TInputImage, class TOutputImage, 
-            class TNoiseImageFilter, 
+template <class TInputImage, class TOutputImage,
+            class TNoiseImageFilter,
             Transform::TransformDirection TDirectionOfTransformation >
 void
 MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransformation >
@@ -69,11 +69,11 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
   {
     case Transform::FORWARD:
     {
-      if ( m_NumberOfPrincipalComponentsRequired == 0 
-          || m_NumberOfPrincipalComponentsRequired 
+      if ( m_NumberOfPrincipalComponentsRequired == 0
+          || m_NumberOfPrincipalComponentsRequired
             > this->GetInput()->GetNumberOfComponentsPerPixel() )
       {
-        m_NumberOfPrincipalComponentsRequired = 
+        m_NumberOfPrincipalComponentsRequired =
           this->GetInput()->GetNumberOfComponentsPerPixel();
       }
 
@@ -113,8 +113,8 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
   }
 }
 
-template <class TInputImage, class TOutputImage, 
-            class TNoiseImageFilter, 
+template <class TInputImage, class TOutputImage,
+            class TNoiseImageFilter,
             Transform::TransformDirection TDirectionOfTransformation >
 void
 MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransformation >
@@ -133,14 +133,14 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
   }
 }
 
-template <class TInputImage, class TOutputImage, 
-            class TNoiseImageFilter, 
+template <class TInputImage, class TOutputImage,
+            class TNoiseImageFilter,
             Transform::TransformDirection TDirectionOfTransformation >
 void
 MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransformation >
 ::ForwardGenerateData ()
 {
-  typename InputImageType::Pointer inputImgPtr 
+  typename InputImageType::Pointer inputImgPtr
     = const_cast<InputImageType*>( this->GetInput() );
 
   if ( m_GivenMeanValues )
@@ -218,8 +218,8 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
 
 }
 
-template <class TInputImage, class TOutputImage, 
-            class TNoiseImageFilter, 
+template <class TInputImage, class TOutputImage,
+            class TNoiseImageFilter,
             Transform::TransformDirection TDirectionOfTransformation >
 void
 MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransformation >
@@ -308,7 +308,7 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
   {
     VectorType revMean ( m_MeanValues.Size() );
     for ( unsigned int i = 0; i < m_MeanValues.Size(); i++ )
-      revMean[i] = - m_MeanValues[i] ;
+      revMean[i] = - m_MeanValues[i];
     m_Normalizer->SetMean( revMean );
     m_Normalizer->SetUseStdDev( false );
   }
@@ -320,8 +320,8 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
   this->GraftOutput( m_Normalizer->GetOutput() );
 }
 
-template <class TInputImage, class TOutputImage, 
-            class TNoiseImageFilter, 
+template <class TInputImage, class TOutputImage,
+            class TNoiseImageFilter,
             Transform::TransformDirection TDirectionOfTransformation >
 void
 MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransformation >
@@ -340,14 +340,14 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
 
   for ( unsigned int i = 0; i < transf.rows(); i++ )
   {
-    double norm = 1. / vcl_sqrt( normMat.get(i,i) );
+    double norm = 1. / vcl_sqrt( normMat.get(i, i) );
     for ( unsigned int j = 0; j < transf.cols(); j++ )
-      transf.put( j, i, transf.get(j,i) * norm );
+      transf.put( j, i, transf.get(j, i) * norm );
   }
 
   transf.inplace_transpose();
 
-  if ( m_NumberOfPrincipalComponentsRequired 
+  if ( m_NumberOfPrincipalComponentsRequired
       != this->GetInput()->GetNumberOfComponentsPerPixel() )
     m_TransformationMatrix = transf.get_n_rows( 0, m_NumberOfPrincipalComponentsRequired );
   else
@@ -355,11 +355,11 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
 
   m_EigenValues.SetSize( m_NumberOfPrincipalComponentsRequired );
   for ( unsigned int i = 0; i < m_NumberOfPrincipalComponentsRequired; i++ )
-    m_EigenValues[i] = static_cast< RealType >( valP(i,i) );
+    m_EigenValues[i] = static_cast< RealType >( valP(i, i) );
 }
 
-template <class TInputImage, class TOutputImage, 
-            class TNoiseImageFilter, 
+template <class TInputImage, class TOutputImage,
+            class TNoiseImageFilter,
             Transform::TransformDirection TDirectionOfTransformation >
 void
 MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransformation >

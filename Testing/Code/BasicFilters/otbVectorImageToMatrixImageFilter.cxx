@@ -81,7 +81,7 @@ int otbVectorImageToMatrixTest(int argc, char * argv[])
 
     for (unsigned int i = 0; i < m.rows(); i++)
       {
-      if ( m(i,j) !=  x + y * Size + i )
+      if ( m(i, j) !=  x + y * Size + i )
         {
         return EXIT_FAILURE;
         }

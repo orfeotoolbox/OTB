@@ -85,8 +85,8 @@ int otbMNFImageFilterTest ( int argc, char* argv[] )
   unsigned int radiusY = 1;
   if ( parseResult->IsOptionPresent("--Radius") )
   {
-    radiusX = parseResult->GetParameterUInt("--Radius",0);
-    radiusY = parseResult->GetParameterUInt("--Radius",1);
+    radiusX = parseResult->GetParameterUInt("--Radius", 0);
+    radiusY = parseResult->GetParameterUInt("--Radius", 1);
   }
   const bool normalization = parseResult->IsOptionPresent("--Normalize");
 

@@ -39,13 +39,13 @@ namespace otb {
  * signals (Through multiscale wavelet transforms) by means of line detection
  * in the scatterplot.
  *
- * It is implemeted as a mutli-filter that performs wavelet decomposition of the 2 
+ * It is implemeted as a mutli-filter that performs wavelet decomposition of the 2
  * images, Sample list construction of the scatter plot sample, histogram estimation
  * of the phase and source detection...
  *
  */
-template < class TInputImage, class TOutputImage, 
-            class TPrecision = double, 
+template < class TInputImage, class TOutputImage,
+            class TPrecision = double,
             Wavelet::Wavelet TMotherWaveletOperator = Wavelet::SYMLET8 >
 class ITK_EXPORT SparseUnmixingImageFilter
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
@@ -64,8 +64,8 @@ public:
   itkTypeMacro(SparseUnmixingImageFilter, ImageToImageFilter);
 
   /** Dimension */
-	itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
-	itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
+       itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
+       itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
   /** Template parameters typedefs */
   typedef TInputImage  InputImageType;
@@ -130,13 +130,13 @@ public:
       GenerateNumberOfComponentsRequired();
     return m_NumberOfComponentsRequired;
   }
-  itkSetMacro(NumberOfComponentsRequired,unsigned int);
+  itkSetMacro(NumberOfComponentsRequired, unsigned int);
 
-  itkGetConstMacro(WvltFilter1,WvltFilterType*);
-  itkGetConstMacro(WvltFilter2,WvltFilterType*);
-  itkGetConstMacro(ListFilter,ListFilterType*);
-  itkGetConstMacro(Histogram,HistogramType*);
-  itkGetConstMacro(Transformer,TransformFilterType*);
+  itkGetConstMacro(WvltFilter1, WvltFilterType*);
+  itkGetConstMacro(WvltFilter2, WvltFilterType*);
+  itkGetConstMacro(ListFilter, ListFilterType*);
+  itkGetConstMacro(Histogram, HistogramType*);
+  itkGetConstMacro(Transformer, TransformFilterType*);
 
 protected:
   SparseUnmixingImageFilter();
@@ -156,7 +156,7 @@ private:
   ListFilterPointerType m_ListFilter;
   HistogramPointerType  m_Histogram;
   TransformFilterPointerType m_Transformer;
-}; // end of class 
+}; // end of class
 
 } // end of namespace otb
 

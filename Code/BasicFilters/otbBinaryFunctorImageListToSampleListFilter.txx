@@ -54,7 +54,7 @@ typename BinaryFunctorImageListToSampleListFilter< TInputImageList, TOutputSampl
 BinaryFunctorImageListToSampleListFilter< TInputImageList, TOutputSampleList, TFunction >
 ::GetOutputSampleList()
 {
-  typename OutputSampleListObjectType::Pointer dataObjectPointer 
+  typename OutputSampleListObjectType::Pointer dataObjectPointer
     = static_cast<OutputSampleListObjectType * > (this->ProcessObject::GetOutput(0) );
   return const_cast<OutputSampleListType *>(dataObjectPointer->Get());
 }
@@ -142,7 +142,7 @@ BinaryFunctorImageListToSampleListFilter< TInputImageList, TOutputSampleList, TF
   // Set-up progress reporting
   itk::ProgressReporter progress(this, 0, list1->Size());
 
-  while ( listIterator1 != list1->End() 
+  while ( listIterator1 != list1->End()
           && listIterator2 != list2->End() )
   {
     InputImageType * img1 = listIterator1.Get();
@@ -174,7 +174,6 @@ BinaryFunctorImageListToSampleListFilter< TInputImageList, TOutputSampleList, TF
 } // end of namespace otb
 
 #endif
-
 
 
 

@@ -58,15 +58,15 @@ public:
 template < class TInputImage, class TOutputImage >
 class ITK_EXPORT HorizontalSobelVectorImageFilter
   : public UnaryFunctorNeighborhoodVectorImageFilter< TInputImage, TOutputImage,
-            Functor::HorizontalSobelOperator< 
+            Functor::HorizontalSobelOperator<
               typename itk::ConstNeighborhoodIterator<TInputImage>,
-              typename TOutputImage::PixelType > > 
+              typename TOutputImage::PixelType > >
 {
 public:
   /** Standart class typedefs */
   typedef HorizontalSobelVectorImageFilter Self;
   typedef UnaryFunctorNeighborhoodVectorImageFilter< TInputImage, TOutputImage,
-            Functor::HorizontalSobelOperator< 
+            Functor::HorizontalSobelOperator<
               typename itk::ConstNeighborhoodIterator<TInputImage>,
               typename TOutputImage::PixelType > >  Superclass;
   typedef itk::SmartPointer<Self> Pointer;
@@ -81,7 +81,7 @@ public:
 protected:
   HorizontalSobelVectorImageFilter()
   {
-    typename Superclass::RadiusType radius = {{1,1}};
+    typename Superclass::RadiusType radius = {{1, 1}};
     SetRadius( radius );
   }
   virtual ~HorizontalSobelVectorImageFilter() { }

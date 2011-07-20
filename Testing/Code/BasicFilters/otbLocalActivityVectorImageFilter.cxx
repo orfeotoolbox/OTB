@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom ; Telecom Bretagne. All rights reserved. 
+  Copyright (c) Institut Telecom; Telecom Bretagne. All rights reserved.
   See ITCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -45,11 +45,11 @@ int otbLocalActivityVectorImageFilterTest ( int argc, char* argv[] )
   parser->AddOption( "--Radius", "Set the radius of the sliding window (def.1)", "-r", 2, false );
   parser->AddOutputImage();
 
-  typedef otb::CommandLineArgumentParseResult ParserResultType;  
+  typedef otb::CommandLineArgumentParseResult ParserResultType;
   ParserResultType::Pointer  parseResult = ParserResultType::New();
     
   try
-  {  
+  {
     parser->ParseCommandLine( argc, argv, parseResult );
   }
   catch( itk::ExceptionObject & err )
@@ -72,8 +72,8 @@ int otbLocalActivityVectorImageFilterTest ( int argc, char* argv[] )
   unsigned int radiusY = 1;
   if ( parseResult->IsOptionPresent("--Radius") )
   {
-    radiusX = parseResult->GetParameterUInt("--Radius",0);
-    radiusY = parseResult->GetParameterUInt("--Radius",1);
+    radiusX = parseResult->GetParameterUInt("--Radius", 0);
+    radiusY = parseResult->GetParameterUInt("--Radius", 1);
   }
 
   // Main type definition

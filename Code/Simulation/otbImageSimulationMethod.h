@@ -116,44 +116,44 @@ public:
 
   /** Standard Macro*/
   itkTypeMacro(ImageSimulationMethod, ImageSource)
- ; itkNewMacro(Self)
- ;
+; itkNewMacro(Self)
+;
 
   itkSetMacro(NumberOfComponentsPerPixel, unsigned int)
- ; itkGetMacro(NumberOfComponentsPerPixel, unsigned int)
- ;
+; itkGetMacro(NumberOfComponentsPerPixel, unsigned int)
+;
 
   //prolate radius
   itkSetMacro(Radius, unsigned int)
- ; itkGetMacro(Radius, unsigned int)
- ;
+; itkGetMacro(Radius, unsigned int)
+;
 
   itkSetMacro(SatRSRFilename, std::string)
- ; itkGetMacro(SatRSRFilename, std::string)
- ;
+; itkGetMacro(SatRSRFilename, std::string)
+;
 
   itkSetMacro(PathRoot, std::string)
- ; itkGetMacro(PathRoot, std::string)
- ;
+; itkGetMacro(PathRoot, std::string)
+;
 
   itkSetMacro(Mean, double)
- ; itkGetMacro(Mean, double)
- ;
+; itkGetMacro(Mean, double)
+;
 
   itkSetMacro(Variance, double)
- ; itkGetMacro(Variance, double)
- ;
+; itkGetMacro(Variance, double)
+;
 
   itkSetObjectMacro(Spatialisation, SpatialisationType)
- ;
+;
   //    itkSetObjectMacro(LabelMapToSimulatedImage, LabelMapToSimulatedImageType);
   //    itkSetObjectMacro(FTM, FTMType);
 
 
   /** Set/Get Input */
   itkSetObjectMacro(InputVectorData, InputVectorDataType)
- ; itkGetConstObjectMacro(InputVectorData, InputVectorDataType)
- ;
+; itkGetConstObjectMacro(InputVectorData, InputVectorDataType)
+;
   //    void SetInput(const InputVectorDataType *object);
   //    InputVectorDataType * GetInput();
 

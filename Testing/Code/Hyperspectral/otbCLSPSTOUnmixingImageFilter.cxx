@@ -28,7 +28,7 @@ typedef float PixelType;
 
 typedef otb::VectorImage<PixelType, Dimension> ImageType;
 typedef otb::ImageFileReader<ImageType> ReaderType;
-typedef otb::CLSPSTOUnmixingImageFilter<ImageType,ImageType,float> UnmixingImageFilterType;
+typedef otb::CLSPSTOUnmixingImageFilter<ImageType, ImageType, float> UnmixingImageFilterType;
 typedef otb::VectorImageToMatrixImageFilter<ImageType> VectorImageToMatrixImageFilterType;
 typedef otb::StreamingImageFileWriter<ImageType> WriterType;
 
@@ -72,7 +72,7 @@ int otbCLSPSTOUnmixingImageFilterTest(int argc, char * argv[])
   writer->SetInput(unmixer->GetOutput());
   writer->SetNumberOfDivisionsStrippedStreaming(10);
 
-  otb::StandardWriterWatcher w4(writer,unmixer,"CLSPSTOUnmixingImageFilter");
+  otb::StandardWriterWatcher w4(writer, unmixer,"CLSPSTOUnmixingImageFilter");
 
   writer->Update();
 

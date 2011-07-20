@@ -79,19 +79,19 @@ namespace Functor {
  * This class implements the BinaryFunctorImageListToSampleListFilter with specific functor...
  */
 template < class TInputImageList, class TOutputSampleList >
-class SparseWvltToAngleMapperListFilter 
-  : public ITK_EXPORT BinaryFunctorImageListToSampleListFilter < 
+class SparseWvltToAngleMapperListFilter
+  : public ITK_EXPORT BinaryFunctorImageListToSampleListFilter <
                         TInputImageList, TOutputSampleList,
-                        Functor::SparseWvltToAngleMapperFunctor< 
+                        Functor::SparseWvltToAngleMapperFunctor<
                           typename TInputImageList::ImageType::PixelType,
                           typename TOutputSampleList::MeasurementVectorType::ValueType > >
 {
 public:
   /** Standard typedefs. */
   typedef SparseWvltToAngleMapperListFilter Self;
-  typedef BinaryFunctorImageListToSampleListFilter < 
+  typedef BinaryFunctorImageListToSampleListFilter <
             TInputImageList, TOutputSampleList,
-            Functor::SparseWvltToAngleMapperFunctor< 
+            Functor::SparseWvltToAngleMapperFunctor<
                 typename TInputImageList::ImageType::PixelType,
               typename TOutputSampleList::MeasurementVectorType::ValueType > >
           Superclass;

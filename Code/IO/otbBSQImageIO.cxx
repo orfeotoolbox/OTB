@@ -507,7 +507,7 @@ void BSQImageIO::Write(const void* buffer)
   // image. Start at offset 0 (when no streaming)
   if ((lNbLines == m_Dimensions[1]) && (lNbColumns == m_Dimensions[0]))
     {
-    otbMsgDevMacro(<< "Forcing offset to [0,0]");
+    otbMsgDevMacro(<< "Forcing offset to [0, 0]");
     lFirstLine = 0;
     lFirstColumn = 0;
     }

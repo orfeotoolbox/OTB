@@ -38,7 +38,7 @@ void
 AngularProjectionBinaryImageFilter< TInputImage, TOutputImage, TPrecision >
 ::SetInput1 ( const InputImageType * inputPtr )
 {
-  this->SetNthInput(0,const_cast<InputImageType*>( inputPtr ));
+  this->SetNthInput(0, const_cast<InputImageType*>( inputPtr ));
 }
 
 template < class TInputImage, class TOutputImage, class TPrecision >
@@ -46,7 +46,7 @@ void
 AngularProjectionBinaryImageFilter< TInputImage, TOutputImage, TPrecision >
 ::SetInput2 ( const InputImageType * inputPtr )
 {
-  this->SetNthInput(1,const_cast<InputImageType*>( inputPtr ));
+  this->SetNthInput(1, const_cast<InputImageType*>( inputPtr ));
 }
 
 template < class TInputImage, class TOutputImage, class TPrecision >
@@ -105,7 +105,7 @@ AngularProjectionBinaryImageFilter< TInputImage, TOutputImage, TPrecision >
 template < class TInputImage, class TOutputImage, class TPrecision >
 void
 AngularProjectionBinaryImageFilter< TInputImage, TOutputImage, TPrecision >
-::ThreadedGenerateData 
+::ThreadedGenerateData
   ( const OutputImageRegionType & outputRegionForThread, int threadId )
 {
   itk::ProgressReporter reporter(this, threadId,
@@ -122,11 +122,11 @@ AngularProjectionBinaryImageFilter< TInputImage, TOutputImage, TPrecision >
     ( this->GetInput2(), inputRegionForThread );
   iter2.GoToBegin();
 
-  std::vector< itk::ImageRegionIterator<OutputImageType> > outIter 
-    ( this->GetNumberOfOutputs() ); 
+  std::vector< itk::ImageRegionIterator<OutputImageType> > outIter
+    ( this->GetNumberOfOutputs() );
   for ( unsigned int i = 0; i < outIter.size(); i++ )
   {
-    outIter[i] = itk::ImageRegionIterator<OutputImageType> 
+    outIter[i] = itk::ImageRegionIterator<OutputImageType>
                   ( this->GetOutput(i), outputRegionForThread );
     outIter[i].GoToBegin();
   }
@@ -147,7 +147,7 @@ AngularProjectionBinaryImageFilter< TInputImage, TOutputImage, TPrecision >
   }
 }
 
-} // end of namespace otb 
+} // end of namespace otb
 
 #endif
 

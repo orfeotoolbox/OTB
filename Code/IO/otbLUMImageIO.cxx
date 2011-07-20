@@ -347,7 +347,7 @@ void LUMImageIO::Write(const void* buffer)
 
   if ((lNbLines == m_Dimensions[1]) && (lNbColumns == m_Dimensions[0]))
     {
-    otbMsgDevMacro(<< "Forcing offset to [0,0]");
+    otbMsgDevMacro(<< "Forcing offset to [0, 0]");
     lFirstLine = 0;
     lFirstColumn = 0;
     }

@@ -28,7 +28,7 @@ typedef double PixelType;
 
 typedef otb::VectorImage<PixelType, Dimension> ImageType;
 typedef otb::ImageFileReader<ImageType> ReaderType;
-typedef otb::FullyConstrainedLeastSquareImageFilter<ImageType,ImageType,double> FullyConstrainedLeastSquareSolverType;
+typedef otb::FullyConstrainedLeastSquareImageFilter<ImageType, ImageType, double> FullyConstrainedLeastSquareSolverType;
 typedef otb::VectorImageToMatrixImageFilter<ImageType> VectorImageToMatrixImageFilterType;
 typedef otb::StreamingImageFileWriter<ImageType> WriterType;
 
@@ -70,7 +70,7 @@ int otbFullyConstrainedLeastSquareImageFilterTest(int argc, char * argv[])
   writer->SetInput(unmixer->GetOutput());
   writer->SetNumberOfDivisionsStrippedStreaming(10);
 
-  otb::StandardWriterWatcher w4(writer,unmixer,"FullyConstrainedLeastSquare");
+  otb::StandardWriterWatcher w4(writer, unmixer,"FullyConstrainedLeastSquare");
 
   writer->Update();
 

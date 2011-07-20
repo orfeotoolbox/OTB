@@ -25,7 +25,7 @@
 #include "otbNormalizeVectorImageFilter.h"
 
 
-namespace otb 
+namespace otb
 {
 
   namespace Transform
@@ -36,14 +36,14 @@ namespace otb
 /** \class PCAImageFilter
  * \brief Performs a Principal Component Analysis
  *
- * The internal structure of this filter is a filter-to-filter like structure. 
+ * The internal structure of this filter is a filter-to-filter like structure.
  * The estimation of the covariance matrix has persistent capabilities...
  *
  * \sa otbStreamingStatisticsVectorImageFilter
  * \sa MatrixMultiplyImageFilter
  */
 template <class TInputImage, class TOutputImage, Transform::TransformDirection TDirectionOfTransformation >
-class ITK_EXPORT PCAImageFilter 
+class ITK_EXPORT PCAImageFilter
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
@@ -64,7 +64,7 @@ public:
   itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
   typedef Transform::TransformDirection TransformDirectionEnumType;
-  itkStaticConstMacro(DirectionOfTransformation,TransformDirectionEnumType,TDirectionOfTransformation);
+  itkStaticConstMacro(DirectionOfTransformation, TransformDirectionEnumType, TDirectionOfTransformation);
 
   /** Template parameters typedefs */
   typedef TInputImage  InputImageType;
@@ -87,9 +87,9 @@ public:
   typedef NormalizeVectorImageFilter< TInputImage, TOutputImage > NormalizeFilterType;
   typedef typename NormalizeFilterType::Pointer                   NormalizeFilterPointerType;
 
-  /** 
-   * Set/Get the number of required largest principal components. 
-   * The filter produces the required number of principal components plus one outputs. 
+  /**
+   * Set/Get the number of required largest principal components.
+   * The filter produces the required number of principal components plus one outputs.
    * Output index 0 represents the mean image and the remaining outputs the requested principal components.
    */
   itkSetMacro(NumberOfPrincipalComponentsRequired, unsigned int);
@@ -98,7 +98,7 @@ public:
   itkGetMacro(CovarianceEstimator, CovarianceEstimatorFilterType *);
   itkGetMacro(Transformer, TransformFilterType *);
 
-  itkGetMacro(GivenCovarianceMatrix,bool);
+  itkGetMacro(GivenCovarianceMatrix, bool);
   MatrixType GetCovarianceMatrix () const
   {
     if ( m_GivenCovarianceMatrix )
@@ -114,8 +114,8 @@ public:
     this->Modified();
   }
 
-  itkGetMacro(TransformationMatrix,MatrixType);
-  itkGetMacro(GivenTransformationMatrix,bool);
+  itkGetMacro(TransformationMatrix, MatrixType);
+  itkGetMacro(GivenTransformationMatrix, bool);
   void SetTransformationMatrix( const MatrixType & transf, bool isForward = true )
   {
     m_TransformationMatrix = transf;
@@ -124,9 +124,9 @@ public:
     this->Modified();
   }
 
-  itkGetConstMacro(EigenValues,VectorType);
+  itkGetConstMacro(EigenValues, VectorType);
   
-  itkGetMacro(UseNormalization,bool);
+  itkGetMacro(UseNormalization, bool);
   void SetUseNormalization ( bool norm )
   {
     m_UseNormalization = norm;
@@ -134,7 +134,7 @@ public:
     this->Modified();
   }
 
-  itkGetConstMacro(MeanValues,VectorType);
+  itkGetConstMacro(MeanValues, VectorType);
   void SetMeanValues ( const VectorType & data )
   {
     m_UseNormalization = true;
@@ -143,10 +143,10 @@ public:
     this->Modified();
   }
 
-  itkGetConstMacro(UseVarianceForNormalization,bool);
-  itkSetMacro(UseVarianceForNormalization,bool);
+  itkGetConstMacro(UseVarianceForNormalization, bool);
+  itkSetMacro(UseVarianceForNormalization, bool);
 
-  itkGetConstMacro(StdDevValues,VectorType);
+  itkGetConstMacro(StdDevValues, VectorType);
   void SetStdDevValues ( const VectorType & vec )
   {
     m_UseNormalization = true;
@@ -162,10 +162,10 @@ protected:
   virtual ~PCAImageFilter() { }
 
   /** GenerateOutputInformation
-   * Propagate vector length info and modify if needed 
+   * Propagate vector length info and modify if needed
    * NumberOfPrincipalComponentsRequired
    *
-   * In REVERSE mode, the covariance matrix or the transformation matrix 
+   * In REVERSE mode, the covariance matrix or the transformation matrix
    * (which may not be square) has to be given,
    * otherwize, GenerateOutputInformation throws an itk::ExceptionObject
    */

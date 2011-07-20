@@ -166,7 +166,7 @@ ISRAUnmixingImageFilter<TInputImage, TOutputImage, TPrecision>
 }
 
 template <class TInputImage, class TOutputImage, class TPrecision>
-const typename ISRAUnmixingImageFilter<TInputImage,TOutputImage,TPrecision>::MatrixType&
+const typename ISRAUnmixingImageFilter<TInputImage, TOutputImage, TPrecision>::MatrixType&
 ISRAUnmixingImageFilter<TInputImage, TOutputImage, TPrecision>
 ::GetEndmembersMatrix() const
 {

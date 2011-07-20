@@ -261,7 +261,7 @@ void MWImageIO::Write(const void* buffer)
 
   if ((lNbLignes == m_Dimensions[1]) && (lNbColonnes == m_Dimensions[0]))
     {
-    otbMsgDevMacro(<< "Forcing offset to [0,0]");
+    otbMsgDevMacro(<< "Forcing offset to [0, 0]");
     lPremiereLigne = 0;
     lPremiereColonne = 0;
     }
