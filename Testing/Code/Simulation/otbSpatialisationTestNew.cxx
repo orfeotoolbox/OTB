@@ -25,7 +25,7 @@
 
 int otbSpatialisationTestNew(int argc, char * argv[])
 {
-  const char * outfilename  = argv[1];
+  //const char * outfilename  = argv[1];
 
   typedef unsigned short LabelType;
   const unsigned int Dimension = 2;
