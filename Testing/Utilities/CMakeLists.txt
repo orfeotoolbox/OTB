@@ -413,7 +413,7 @@ ADD_TEST(utTv2DSiftImageSceneSyntheticRotate10 ${UTILITIES_TESTS}
 
 # -------            lib Kml   ------------------------------
 FOREACH(id_test createkml helloattrs helloenum hellofolder hellogeometry helloregion helloworld parsekml )
-        ADD_TEST( utTuKml${id_test} ${UTILITIES_TESTS}
+        ADD_TEST(utTuKml${id_test} ${UTILITIES_TESTS}
         kml${id_test}
         ${TEMP}/utkml${id_test}.txt
         )
