@@ -99,9 +99,15 @@ SpectralResponse<TPrecision, TValuePrecision>
   //Suppose that the vector is sorted
 
   //Guess a starting lambda
+  if (m_Response.size() <= 1)
+    {
+    itkExceptionMacro(<<"ERROR spectral response need at least 2 value to perfomr interpolation.");
+    }
 
   typename VectorPairType::const_iterator beg = m_Response.begin();
-  typename VectorPairType::const_iterator last = m_Response.end()--;
+  typename VectorPairType::const_iterator last = m_Response.end();
+  --last;
+
   PrecisionType lambdaMin = (*beg).first;
   PrecisionType lambdaMax = (*last).first;
 
