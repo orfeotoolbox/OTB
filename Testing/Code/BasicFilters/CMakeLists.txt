@@ -297,7 +297,7 @@ ADD_TEST(bfTuVectorRescaleIntensityImageFilterNew ${BASICFILTERS_TESTS3}
          otbVectorRescaleIntensityImageFilterNew)
 
 
-ADD_TEST(bfTVectorRescaleIntensityImageFilter ${BASICFILTERS_TESTS3}
+ADD_TEST(bfTvVectorRescaleIntensityImageFilter ${BASICFILTERS_TESTS3}
                 --compare-image ${EPSILON_7}
                     ${BASELINE}/bfTvVectorRescaleIntensityOutput.png
                     ${TEMP}/bfTvVectorRescaleIntensityOutput.png
@@ -1962,6 +1962,92 @@ ADD_TEST(bfTvMaskMuParserFilterTest ${BASICFILTERS_TESTS13}
     "(b1>100)*(b2>120)"
 )
 
+ADD_TEST(bfTuHorizontalSobelVectorImageFilterNew
+         ${BASICFILTERS_TESTS13}
+         otbHorizontalSobelVectorImageFilterNewTest)
+
+ADD_TEST(bfTvHorizontalSobelVectorImageFilter
+         ${BASICFILTERS_TESTS13}
+           --compare-image ${NOTOL}
+             ${BASELINE}/bfTvHorizontalSobelVectorImageFilter.tif
+             ${TEMP}/bfTvHorizontalSobelVectorImageFilter.tif
+         otbHorizontalSobelVectorImageFilterTest
+		 -in ${INPUTDATA}/cupriteSubHsi.tif 
+		 -out ${TEMP}/bfTvHorizontalSobelVectorImageFilter.tif)
+
+ADD_TEST(bfTuVerticalSobelVectorImageFilterNew
+         ${BASICFILTERS_TESTS13}
+         otbVerticalSobelVectorImageFilterNewTest)
+
+ADD_TEST(bfTvVerticalSobelVectorImageFilter
+         ${BASICFILTERS_TESTS13}
+           --compare-image ${NOTOL}
+             ${BASELINE}/bfTvVerticalSobelVectorImageFilter.tif
+             ${TEMP}/bfTvVerticalSobelVectorImageFilter.tif
+         otbVerticalSobelVectorImageFilterTest
+		 -in ${INPUTDATA}/cupriteSubHsi.tif 
+		 -out ${TEMP}/bfTvVerticalSobelVectorImageFilter.tif)
+
+ADD_TEST(bfTuSobelVectorImageFilterNew
+         ${BASICFILTERS_TESTS13}
+         otbSobelVectorImageFilterNewTest)
+
+ADD_TEST(bfTvSobelVectorImageFilter
+         ${BASICFILTERS_TESTS13}
+           --compare-image ${NOTOL}
+             ${BASELINE}/bfTvSobelVectorImageFilter.tif
+             ${TEMP}/bfTvSobelVectorImageFilter.tif
+         otbSobelVectorImageFilterTest
+		 -in ${INPUTDATA}/cupriteSubHsi.tif 
+		 -out ${TEMP}/bfTvSobelVectorImageFilter.tif)
+
+ADD_TEST(bfTuLocalGradientVectorImageFilterNew
+         ${BASICFILTERS_TESTS13}
+         otbLocalGradientVectorImageFilterNewTest)
+
+ADD_TEST(bfTvLocalGradientVectorImageFilter
+         ${BASICFILTERS_TESTS13}
+           --compare-image ${NOTOL}
+             ${BASELINE}/bfTvLocalGradientVectorImageFilter.tif
+             ${TEMP}/bfTvLocalGradientVectorImageFilter.tif
+         otbLocalGradientVectorImageFilterTest
+		 -in ${INPUTDATA}/cupriteSubHsi.tif 
+		 -out ${TEMP}/bfTvLocalGradientVectorImageFilter.tif)
+
+ADD_TEST(bfTuLocalActivityVectorImageFilterNew
+         ${BASICFILTERS_TESTS13}
+         otbLocalActivityVectorImageFilterNewTest)
+
+ADD_TEST(bfTvLocalActivityVectorImageFilter
+         ${BASICFILTERS_TESTS13}
+           --compare-image ${NOTOL}
+             ${BASELINE}/bfTvLocalActivityVectorImageFilter.tif
+             ${TEMP}/bfTvLocalActivityVectorImageFilter.tif
+         otbLocalActivityVectorImageFilterTest
+		 -in ${INPUTDATA}/cupriteSubHsi.tif 
+		 -out ${TEMP}/bfTvLocalActivityVectorImageFilter.tif)
+
+ADD_TEST(bfTuNormalizeVectorImageFilter
+         ${BASICFILTERS_TESTS13}
+		 otbNormalizeVectorImageFilterNewTest)
+
+ADD_TEST(bfTvNormalizeVectorImageFilter
+         ${BASICFILTERS_TESTS13}
+           --compare-image ${NOTOL}
+             ${BASELINE}/bfTvNormalizeVectorImageFilter.tif
+             ${TEMP}/bfTvNormalizeVectorImageFilter.tif
+		 otbNormalizeVectorImageFilterTest
+		 -in ${INPUTDATA}/cupriteSubHsi.tif 
+		 -out ${TEMP}/bfTvNormalizeVectorImageFilter.tif)
+
+ADD_TEST(bfTuVectorImageToMatrixNew
+         ${BASICFILTERS_TESTS13}
+         otbVectorImageToMatrixNewTest)
+
+ADD_TEST(bfTvVectorImageToMatrix
+         ${BASICFILTERS_TESTS13}
+         otbVectorImageToMatrixTest)
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests14 ~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2425,6 +2511,18 @@ otbLog10ThresholdedImageFilterTest.cxx
 otbMatrixImageFilterTest.cxx
 otbMaskMuParserFilterTest.cxx
 otbMaskMuParserFilterNew.cxx
+otbProjectiveProjection.cxx
+otbNormalizeVectorImageFilter.cxx
+otbHorizontalSobelVectorImageFilter.cxx
+otbVerticalSobelVectorImageFilter.cxx
+otbSobelVectorImageFilter.cxx
+otbLocalActivityVectorImageFilter.cxx
+otbLocalGradientVectorImageFilter.cxx
+otbPCAImageFilter.cxx
+otbMNFImageFilter.cxx
+otbNAPCAImageFilter.cxx
+otbFastICAImageFilter.cxx
+otbVectorImageToMatrixImageFilter.cxx
 )
 
 SET(BasicFilters_SRCS14

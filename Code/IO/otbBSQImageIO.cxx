@@ -507,7 +507,7 @@ void BSQImageIO::Write(const void* buffer)
   // image. Start at offset 0 (when no streaming)
   if ((lNbLines == m_Dimensions[1]) && (lNbColumns == m_Dimensions[0]))
     {
-    otbMsgDevMacro(<< "Force l'offset de l'IORegion � 0");
+    otbMsgDevMacro(<< "Forcing offset to [0,0]");
     lFirstLine = 0;
     lFirstColumn = 0;
     }
@@ -531,7 +531,7 @@ void BSQImageIO::Write(const void* buffer)
   char* value = new char[numberOfBytesToBeWrite];
   if (value == NULL)
     {
-    itkExceptionMacro(<< "Erreur allocation meoire");
+    itkExceptionMacro(<< "Memory allocation error");
     return;
     }
 
@@ -656,7 +656,7 @@ void BSQImageIO::WriteImageInformation()
       m_ChannelsFileName[channels].c_str(),  std::ios::out | std::ios::trunc | std::ios::binary);
     if (m_ChannelsFile[channels].fail())
       {
-      itkExceptionMacro(<< "BSQ : impossible to find the file <" << m_ChannelsFileName[channels] << ">.");
+      itkExceptionMacro(<< "BSQ : unable to find the file <" << m_ChannelsFileName[channels] << ">");
       }
     }
   this->SetFileTypeToBinary();

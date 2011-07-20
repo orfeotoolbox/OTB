@@ -102,7 +102,7 @@ ADD_TEST(cdTvKullbackLeiblerDistanceImageFilter ${CHANGEDETECTION_TESTS2}
 ADD_TEST(cdTuKullbackLeiblerProfileImageFilterNew ${CHANGEDETECTION_TESTS2}
          otbKullbackLeiblerProfileImageFilterNew)
 
-ADD_TEST(cdTlKullbackLeiblerProfileImageFilter ${CHANGEDETECTION_TESTS2}
+ADD_TEST(cdTvKullbackLeiblerProfileImageFilter ${CHANGEDETECTION_TESTS2}
          --compare-image ${EPSILON_10}
                          ${BASELINE}/cdTVKullbackLeiblerProfileImageFilterOutput.hdr
                          ${TEMP}/cdTVKullbackLeiblerProfileImageFilterOutput.hdr
@@ -116,7 +116,7 @@ ADD_TEST(cdTlKullbackLeiblerProfileImageFilter ${CHANGEDETECTION_TESTS2}
 ADD_TEST(cdTuKullbackLeiblerSupervizedDistanceImageFilterNew ${CHANGEDETECTION_TESTS2}
          otbKullbackLeiblerSupervizedDistanceImageFilterNew)
 
-ADD_TEST(cdTlKullbackLeiblerSupervizedDistanceImageFilter ${CHANGEDETECTION_TESTS2}
+ADD_TEST(cdTvKullbackLeiblerSupervizedDistanceImageFilter ${CHANGEDETECTION_TESTS2}
          --compare-image ${TOL}
              ${BASELINE}/cdTVKullbackLeiblerSupervizedDistanceImageFilterOutput.png
                          ${TEMP}/cdTVKullbackLeiblerSupervizedDistanceImageFilterOutput.png

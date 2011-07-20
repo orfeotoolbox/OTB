@@ -76,7 +76,7 @@ public:
   itkSetMacro(AxisOrigin, PointType);
   itkGetConstReferenceMacro(AxisOrigin, PointType);
 
-  /// Set§get the axis length
+  /// Set/Get the axis length
   itkSetMacro(AxisLength, VectorType);
   itkGetConstReferenceMacro(AxisLength, VectorType);
 

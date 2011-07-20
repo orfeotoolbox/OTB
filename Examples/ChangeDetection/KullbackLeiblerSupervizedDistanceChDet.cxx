@@ -63,7 +63,7 @@ int main(int argc, char * argv[])
       }
 
     /*
-     *  declaration des types
+     *  Types declaration
      */
 
     const unsigned int Dimension = 2;
@@ -78,7 +78,7 @@ int main(int argc, char * argv[])
     typedef otb::ImageFileReader<TrainingImageType>  TrainingReaderType;
 
     /*
-     * Accès aux paramètres
+     * Extract command line parameters
      */
 
     const char * inputImageFileName1 = parseResult->GetParameterString(

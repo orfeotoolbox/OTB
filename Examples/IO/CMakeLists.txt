@@ -168,7 +168,7 @@ ADD_TEST(ioTeDEMToImageGeneratorTest ${EXE_TESTS1}
 
 # Testing the chain of creating a kmz and MapFilefrom
 # a non georeferenced image
-ADD_TEST(ioImageToKmzAndMapFileProductExample ${EXE_TESTS1}
+ADD_TEST(ioTeImageToKmzAndMapFileProductExample ${EXE_TESTS1}
          ImageToKmzAndMapFileProductExample
          ${DATA}/Haiti1_sr10.jpeg
          ${TEMP}/ioTeHaitiKmzProduct.kmz

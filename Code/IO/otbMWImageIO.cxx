@@ -259,11 +259,9 @@ void MWImageIO::Write(const void* buffer)
   unsigned long lPremiereLigne   = this->GetIORegion().GetIndex()[1]; // [1... ]
   int           lPremiereColonne = this->GetIORegion().GetIndex()[0]; // [1... ]
 
-  // Cas particuliers : on controle que si la r�gion � �crire est de la m�me dimension que l'image enti�re,
-  // on commence l'offset � 0 (lorsque que l'on est pas en "Streaming")
   if ((lNbLignes == m_Dimensions[1]) && (lNbColonnes == m_Dimensions[0]))
     {
-    otbMsgDevMacro(<< "Force l'offset de l'IORegion � 0");
+    otbMsgDevMacro(<< "Forcing offset to [0,0]");
     lPremiereLigne = 0;
     lPremiereColonne = 0;
     }
