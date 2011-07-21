@@ -17,6 +17,7 @@
 =========================================================================*/
 #ifndef __otbFastICAImageFilter_txx
 #define __otbFastICAImageFilter_txx
+
 #include "otbFastICAImageFilter.h"
 
 #include "otbMacro.h"
@@ -285,9 +286,13 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   } // end of while loop
 
   if ( size != this->GetNumberOfPrincipalComponentsRequired() )
+    {
     this->m_TransformationMatrix = W.get_n_rows( 0, this->GetNumberOfPrincipalComponentsRequired() );
+    }
   else
+    {
     this->m_TransformationMatrix = W;
+    }
 
   otbMsgDebugMacro( << "Final convergence " << convergence
     << " after " << iteration << " iterations" );

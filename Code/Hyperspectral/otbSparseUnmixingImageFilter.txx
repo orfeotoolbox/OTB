@@ -17,6 +17,7 @@
 =========================================================================*/
 #ifndef __otbSparseUnmixingImageFilter_txx
 #define __otbSparseUnmixingImageFilter_txx
+
 #include "otbSparseUnmixingImageFilter.h"
 
 #include "otbMath.h"

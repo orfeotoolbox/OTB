@@ -20,10 +20,6 @@
 #ifndef __otbGamma_h
 #define __otbGamma_h
 
-#ifdef _MSC_VER
-#pragma warning ( disable : 4290 )
-#endif
-
 #include "otbMath.h"
 
 namespace otb

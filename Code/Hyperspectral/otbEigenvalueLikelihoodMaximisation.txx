@@ -20,6 +20,7 @@ for details.
 =========================================================================*/
 #ifndef __otbEigenvalueLikelihoodMaximisation_txx
 #define __otbEigenvalueLikelihoodMaximisation_txx
+
 #include "otbEigenvalueLikelihoodMaximisation.h"
 
 #include <vcl_algorithm.h>
@@ -63,7 +64,7 @@ EigenvalueLikelihoodMaximisation<TInputImage>
     const unsigned int nl = nbBands - i;
     VectorType sigma(nl), t(nl);
 
-    for (unsigned int j = 0; j < nl; j++ )
+    for (unsigned int j = 0; j < nl; ++j )
       {
       PrecisionType r = eigenCorrelation[j + i];
       PrecisionType k = eigenCovariance[j + i];
@@ -82,7 +83,8 @@ EigenvalueLikelihoodMaximisation<TInputImage>
   unsigned int iMax = 0;
   for (unsigned int i = 1; i < m_Likelihood.size() - 1; i++)
     {
-    if ( m_Likelihood[i] > m_Likelihood[i - 1] && m_Likelihood[i] > m_Likelihood[i + 1] )
+    if ( (m_Likelihood[i] > m_Likelihood[i - 1]) 
+         && (m_Likelihood[i] > m_Likelihood[i + 1]) )
       {
       max = m_Likelihood[i];
       iMax = i;

@@ -42,7 +42,7 @@ namespace otb
  *
  * References :
  * "Unsupervised Endmember Extraction of Martian Hyperspectral Images",
- * B.Luo, J. Chanussot, S. Doute' and X. Ceamanos,
+ * B.Luo, J. Chanussot, S. Dout\'e and X. Ceamanos,
  * IEEE Whispers 2009, Grenoble France, 2009
  *
  * "Unsupervised classification of hyperspectral images by using linear unmixing algorithm",

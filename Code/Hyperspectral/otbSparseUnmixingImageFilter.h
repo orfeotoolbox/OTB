@@ -145,8 +145,8 @@ protected:
   virtual void GenerateData();
   virtual void GenerateNumberOfComponentsRequired ();
 private:
-  SparseUnmixingImageFilter(const Self &); // not implemented
-  void operator=(const Self &);
+  SparseUnmixingImageFilter(const Self &); //purposely not implemented
+  void operator=(const Self &); //purposely not implemented
 
   unsigned int m_NumberOfComponentsRequired;
   std::vector<PrecisionType> m_AngleValue;

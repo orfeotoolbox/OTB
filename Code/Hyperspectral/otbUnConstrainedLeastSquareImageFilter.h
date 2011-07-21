@@ -70,7 +70,7 @@ public:
     m_OutputSize = m.cols();
   }
 
-  OutputType operator ()(const InputType& in)
+  OutputType operator ()(const InputType& in) const
   {
     // TODO : support different types between input and output ?
     VectorType inVector(in.Size());

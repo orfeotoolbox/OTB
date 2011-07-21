@@ -2,9 +2,8 @@
 
   Program:   ORFEO Toolbox
   Language:  C++
-  Date:      2011/01/24
-  Version:   V1.0
-
+  Date:      $Date$
+  Version:   $Revision$
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
@@ -44,69 +43,69 @@ public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
 
-       /** Standard class typedefs. */
-       typedef LocalRxDetectorFilter                                                     Self;
-       typedef itk::ImageToImageFilter< TInputImage, TOutputImage >                               Superclass;
-       typedef itk::SmartPointer<Self>                                                         Pointer;
-       typedef itk::SmartPointer<const Self>                                             ConstPointer;
+  /** Standard class typedefs. */
+  typedef LocalRxDetectorFilter                                                     Self;
+  typedef itk::ImageToImageFilter< TInputImage, TOutputImage >                               Superclass;
+  typedef itk::SmartPointer<Self>                                                         Pointer;
+  typedef itk::SmartPointer<const Self>                                             ConstPointer;
 
-    /** Type macro */
-    itkNewMacro(Self);
+  /** Type macro */
+  itkNewMacro(Self);
 
-    /** Creation through object factory macro */
-    itkTypeMacro(LocalRxDetectorFilter, ImageToImageFilter);
+  /** Creation through object factory macro */
+  itkTypeMacro(LocalRxDetectorFilter, ImageToImageFilter);
 
-    /** typedef related to input and output images */
-    typedef TInputImage                                   InputImageType;
-    typedef typename InputImageType::Pointer              InputPointerType;
-    typedef typename InputImageType::ConstPointer       InputConstPointerType;
-    typedef typename InputImageType::IndexType              InputIndexType;
-    typedef typename InputImageType::SizeType              InputSizeType;
+  /** typedef related to input and output images */
+  typedef TInputImage                            InputImageType;
+  typedef typename InputImageType::Pointer       InputPointerType;
+  typedef typename InputImageType::ConstPointer  InputConstPointerType;
+  typedef typename InputImageType::IndexType     InputIndexType;
+  typedef typename InputImageType::SizeType      InputSizeType;
 
-    typedef TOutputImage                             OutputImageType;
-    typedef typename OutputImageType::Pointer              OutputPointerType;
-    typedef typename OutputImageType::IndexType              OutputIndexType;
-    typedef typename OutputImageType::OffsetType       OutputOffsetType;
-    typedef typename OutputImageType::SizeType              OutputSizeType;
-    typedef typename OutputImageType::RegionType       OutputImageRegionType;
+  typedef TOutputImage                           OutputImageType;
+  typedef typename OutputImageType::Pointer      OutputPointerType;
+  typedef typename OutputImageType::IndexType    OutputIndexType;
+  typedef typename OutputImageType::OffsetType   OutputOffsetType;
+  typedef typename OutputImageType::SizeType     OutputSizeType;
+  typedef typename OutputImageType::RegionType   OutputImageRegionType;
 
-       /** typedef related to iterators */
-       typedef itk::ConstShapedNeighborhoodIterator<InputImageType>                             ConstShapedNeighborhoodIteratorType;
-       typedef itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>        VectorFaceCalculatorType;
-       typedef itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<OutputImageType>        FaceCalculatorType;
-       typedef itk::ImageRegionIterator<OutputImageType>                                                                ImageRegionIteratorType;
+  /** typedef related to iterators */
+  typedef itk::ConstShapedNeighborhoodIterator<InputImageType>                             ConstShapedNeighborhoodIteratorType;
+  typedef itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>        VectorFaceCalculatorType;
+  typedef itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<OutputImageType>        FaceCalculatorType;
+  typedef itk::ImageRegionIterator<OutputImageType>                                                                ImageRegionIteratorType;
 
-       /** typedef related to statistics */
-       typedef typename InputImageType::PixelType                             VectorMeasurementType;
-       typedef itk::Statistics::ListSample<VectorMeasurementType>               ListSampleType;
-       typedef itk::Statistics::MeanCalculator<ListSampleType>               MeanCalculatorType;
-       typedef itk::Statistics::CovarianceCalculator<ListSampleType>                CovarianceCalculatorType;
-       typedef typename CovarianceCalculatorType::OutputType                     MatrixType;
+  /** typedef related to statistics */
+  typedef typename InputImageType::PixelType                    VectorMeasurementType;
+  typedef itk::Statistics::ListSample<VectorMeasurementType>    ListSampleType;
+  typedef itk::Statistics::MeanCalculator<ListSampleType>       MeanCalculatorType;
+  typedef itk::Statistics::CovarianceCalculator<ListSampleType> CovarianceCalculatorType;
+  typedef typename CovarianceCalculatorType::OutputType         MatrixType;
 
-       /** Getter and Setter */
-       itkSetMacro(InternalRadius, int);
-       itkGetMacro(InternalRadius, int);
-       itkSetMacro(ExternalRadius, int);
-       itkGetMacro(ExternalRadius, int);
+  /** Getter and Setter */
+  itkSetMacro(InternalRadius, int);
+  itkGetMacro(InternalRadius, int);
+  itkSetMacro(ExternalRadius, int);
+  itkGetMacro(ExternalRadius, int);
 
-       /** Main computation method */
-       virtual void GenerateInputRequestedRegion();
+  /** Main computation method */
+  virtual void GenerateInputRequestedRegion();
 //       virtual void GenerateData();
-       virtual void BeforeThreadedGenerateData();
-       virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId);
+  virtual void BeforeThreadedGenerateData();
+  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId);
 
 
 protected:
-       LocalRxDetectorFilter();
-       virtual ~LocalRxDetectorFilter() {}
-       void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  LocalRxDetectorFilter();
+  virtual ~LocalRxDetectorFilter() {}
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-       LocalRxDetectorFilter(const Self&); //purposely not implemented
-       void operator=(const Self&); //purposely not implemented
+  LocalRxDetectorFilter(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
 
-       int m_InternalRadius;
-       int m_ExternalRadius;
+  int m_InternalRadius;
+  int m_ExternalRadius;
 
 };
 

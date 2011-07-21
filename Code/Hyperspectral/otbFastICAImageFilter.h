@@ -168,7 +168,7 @@ protected:
   virtual void ForwardGenerateData();
   virtual void ReverseGenerateData();
 
-  /** this is the specifical part of FastICA */
+  /** this is the specific part of FastICA */
   virtual void GenerateTransformationMatrix();
 
   unsigned int m_NumberOfPrincipalComponentsRequired;
@@ -188,8 +188,8 @@ protected:
   TransformFilterPointerType m_TransformFilter;
 
 private:
-  FastICAImageFilter ( const Self & );
-  void operator= ( const Self & );
+  FastICAImageFilter( const Self & ); //purposely not implemented
+  void operator =( const Self & ); //purposely not implemented
 }; // end of class
 
 } // end of namespace otb

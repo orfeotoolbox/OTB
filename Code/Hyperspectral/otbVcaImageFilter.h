@@ -49,7 +49,7 @@ namespace otb {
  *
  * References :
  * "Vertex Component Analysis: A Fast Algorithm to Unmix Hyperspectral Data",
- * Jose' M. P. Nascimento, and Jose' M. Bioucas Dias,
+ * Jos\'e M. P. Nascimento, and Jos\'e M. Bioucas Dias,
  * IEEE Transactions on Geoscience and Remote Sensing, Vol. 43, No. 4, April 2005
  *
  * \ingroup Hyperspectral
