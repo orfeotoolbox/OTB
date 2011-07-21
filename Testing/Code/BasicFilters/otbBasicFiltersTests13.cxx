@@ -64,4 +64,6 @@ void RegisterTests()
   REGISTER_TEST(otbVectorImageToMatrixTest);
   REGISTER_TEST(otbProjectiveProjectionNew);
   REGISTER_TEST(otbProjectiveProjectionTestHighSNR);
+  REGISTER_TEST(otbConcatenateScalarValueImageFilterNew);
+  REGISTER_TEST(otbConcatenateScalarValueImageFilterTest);
 }

@@ -1946,6 +1946,14 @@ ADD_TEST(bfTvMatrixImageFilterTest_3 ${BASICFILTERS_TESTS13}
     3
 )
 
+
+
+ADD_TEST(bfTuConcatenateScalarValueImageFilterNew ${BASICFILTERS_TESTS13}
+  otbConcatenateScalarValueImageFilterNew )
+
+ADD_TEST(bfTvConcatenateScalarValueImageFilterTest ${BASICFILTERS_TESTS13}
+  otbConcatenateScalarValueImageFilterTest )
+
 # ----------------------------     otbMaskMuParserFilter   ----------------------------
 
 ADD_TEST(bfTuMaskMuParserFilterNew ${BASICFILTERS_TESTS13}
@@ -2765,6 +2773,7 @@ otbMNFImageFilter.cxx
 otbNAPCAImageFilter.cxx
 otbFastICAImageFilter.cxx
 otbVectorImageToMatrixImageFilter.cxx
+otbConcatenateScalarValueImageFilterTest.cxx
 )
 
 SET(BasicFilters_SRCS14
