@@ -2011,7 +2011,7 @@ ADD_TEST(bfTvLocalGradientVectorImageFilter
              ${BASELINE}/bfTvLocalGradientVectorImageFilter.tif
              ${TEMP}/bfTvLocalGradientVectorImageFilter.tif
          otbLocalGradientVectorImageFilterTest
-		 -in ${INPUTDATA}/cupriteSubHsi.tif 
+		 -in ${INPUTDATA}/cupriteSubHsi.tif
 		 -out ${TEMP}/bfTvLocalGradientVectorImageFilter.tif)
 
 ADD_TEST(bfTuLocalActivityVectorImageFilterNew
@@ -2024,7 +2024,7 @@ ADD_TEST(bfTvLocalActivityVectorImageFilter
              ${BASELINE}/bfTvLocalActivityVectorImageFilter.tif
              ${TEMP}/bfTvLocalActivityVectorImageFilter.tif
          otbLocalActivityVectorImageFilterTest
-		 -in ${INPUTDATA}/cupriteSubHsi.tif 
+		 -in ${INPUTDATA}/cupriteSubHsi.tif
 		 -out ${TEMP}/bfTvLocalActivityVectorImageFilter.tif)
 
 ADD_TEST(bfTuNormalizeVectorImageFilter
@@ -2037,7 +2037,7 @@ ADD_TEST(bfTvNormalizeVectorImageFilter
              ${BASELINE}/bfTvNormalizeVectorImageFilter.tif
              ${TEMP}/bfTvNormalizeVectorImageFilter.tif
 		 otbNormalizeVectorImageFilterTest
-		 -in ${INPUTDATA}/cupriteSubHsi.tif 
+		 -in ${INPUTDATA}/cupriteSubHsi.tif
 		 -out ${TEMP}/bfTvNormalizeVectorImageFilter.tif)
 
 ADD_TEST(bfTuVectorImageToMatrixNew
@@ -2047,6 +2047,217 @@ ADD_TEST(bfTuVectorImageToMatrixNew
 ADD_TEST(bfTvVectorImageToMatrix
          ${BASICFILTERS_TESTS13}
          otbVectorImageToMatrixTest)
+
+### PCA ###
+
+ADD_TEST(bfTuPCAImageFilterNew
+         ${BASICFILTERS_TESTS13}
+         otbPCAImageFilterNewTest)
+
+# Test input->PCA->inverse PCA
+ADD_TEST(bfTvPCAImageFilter1
+         ${BASICFILTERS_TESTS13}
+         --compare-image ${EPSILON_7}
+             ${INPUTDATA}/cupriteSubHsi.tif 
+             ${TEMP}/bfTvPCAImageFilter1Inv.tif
+         otbPCAImageFilterTest
+         -in ${INPUTDATA}/cupriteSubHsi.tif
+         -out ${TEMP}/bfTvPCAImageFilter1.tif
+         -inv ${TEMP}/bfTvPCAImageFilter1Inv.tif)
+
+ADD_TEST(bfTvPCAImageFilter2
+         ${BASICFILTERS_TESTS13}
+         --compare-image ${EPSILON_7}
+             ${INPUTDATA}/cupriteSubHsi.tif 
+             ${TEMP}/bfTvPCAImageFilter2Inv.tif
+         otbPCAImageFilterTest
+         -in ${INPUTDATA}/cupriteSubHsi.tif
+         -out ${TEMP}/bfTvPCAImageFilter2.tif
+         -inv ${TEMP}/bfTvPCAImageFilter2Inv.tif
+         -norm)
+
+# Test the direct transform
+ADD_TEST(bfTvPCAImageFilter3
+         ${BASICFILTERS_TESTS13}
+         --compare-n-images ${EPSILON_7} 2
+             ${BASELINE}/bfTvPCAImageFilter3.tif
+             ${TEMP}/bfTvPCAImageFilter3.tif
+             ${BASELINE}/bfTvPCAImageFilter3Inv.tif
+             ${TEMP}/bfTvPCAImageFilter3Inv.tif
+         otbPCAImageFilterTest
+         -in ${INPUTDATA}/cupriteSubHsi.tif
+         -out ${TEMP}/bfTvPCAImageFilter3.tif
+         -inv ${TEMP}/bfTvPCAImageFilter3Inv.tif
+         -norm)
+
+
+# Test the direct transform, reducing dimensionnality
+ADD_TEST(bfTvPCAImageFilter4
+         ${BASICFILTERS_TESTS13}
+         --compare-n-images ${EPSILON_7} 2
+             ${BASELINE}/bfTvPCAImageFilter4.tif
+             ${TEMP}/bfTvPCAImageFilter4.tif
+             ${BASELINE}/bfTvPCAImageFilter4Inv.tif
+             ${TEMP}/bfTvPCAImageFilter4Inv.tif
+         otbPCAImageFilterTest
+         -in ${INPUTDATA}/cupriteSubHsi.tif
+         -out ${TEMP}/bfTvPCAImageFilter4.tif
+         -inv ${TEMP}/bfTvPCAImageFilter4Inv.tif
+         -norm
+         -n 4)
+         
+         
+         
+### NAPCA ###
+
+ADD_TEST(bfTuNAPCAImageFilterNew
+         ${BASICFILTERS_TESTS13}
+         otbNAPCAImageFilterNewTest)
+
+# Test input->NAPCA->inverse NAPCA
+ADD_TEST(bfTvNAPCAImageFilter1
+         ${BASICFILTERS_TESTS13}
+         --compare-image ${EPSILON_7}
+             ${INPUTDATA}/cupriteSubHsi.tif 
+             ${TEMP}/bfTvNAPCAImageFilter1Inv.tif
+         otbNAPCAImageFilterTest
+         -in ${INPUTDATA}/cupriteSubHsi.tif
+         -out ${TEMP}/bfTvNAPCAImageFilter1.tif
+         -inv ${TEMP}/bfTvNAPCAImageFilter1Inv.tif)
+
+ADD_TEST(bfTvNAPCAImageFilter2
+         ${BASICFILTERS_TESTS13}
+         --compare-image ${EPSILON_7}
+             ${INPUTDATA}/cupriteSubHsi.tif 
+             ${TEMP}/bfTvNAPCAImageFilter2Inv.tif
+         otbNAPCAImageFilterTest
+         -in ${INPUTDATA}/cupriteSubHsi.tif
+         -out ${TEMP}/bfTvNAPCAImageFilter2.tif
+         -inv ${TEMP}/bfTvNAPCAImageFilter2Inv.tif
+         -norm)
+
+# Test the direct transform
+ADD_TEST(bfTvNAPCAImageFilter3
+         ${BASICFILTERS_TESTS13}
+         --compare-n-images ${EPSILON_7} 2
+             ${BASELINE}/bfTvNAPCAImageFilter3.tif
+             ${TEMP}/bfTvNAPCAImageFilter3.tif
+             ${BASELINE}/bfTvNAPCAImageFilter3Inv.tif
+             ${TEMP}/bfTvNAPCAImageFilter3Inv.tif
+         otbNAPCAImageFilterTest
+         -in ${INPUTDATA}/cupriteSubHsi.tif
+         -out ${TEMP}/bfTvNAPCAImageFilter3.tif
+         -inv ${TEMP}/bfTvNAPCAImageFilter3Inv.tif
+         -norm)
+
+
+# Test the direct transform, reducing dimensionnality
+ADD_TEST(bfTvNAPCAImageFilter4
+         ${BASICFILTERS_TESTS13}
+         --compare-n-images ${EPSILON_7} 2
+             ${BASELINE}/bfTvNAPCAImageFilter4.tif
+             ${TEMP}/bfTvNAPCAImageFilter4.tif
+             ${BASELINE}/bfTvNAPCAImageFilter4Inv.tif
+             ${TEMP}/bfTvNAPCAImageFilter4Inv.tif
+         otbNAPCAImageFilterTest
+         -in ${INPUTDATA}/cupriteSubHsi.tif
+         -out ${TEMP}/bfTvNAPCAImageFilter4.tif
+         -inv ${TEMP}/bfTvNAPCAImageFilter4Inv.tif
+         -norm
+         -n 4)
+         
+
+### MNF ###
+
+# Test the direct transform, reducing dimensionnality
+ADD_TEST(bfTvMNFImageFilter4
+         ${BASICFILTERS_TESTS13}
+         --compare-n-images ${EPSILON_7} 2
+             ${BASELINE}/bfTvMNFImageFilter4.tif
+             ${TEMP}/bfTvMNFImageFilter4.tif
+             ${BASELINE}/bfTvMNFImageFilter4Inv.tif
+             ${TEMP}/bfTvMNFImageFilter4Inv.tif
+         otbMNFImageFilterTest
+         -in ${INPUTDATA}/cupriteSubHsi.tif
+         -out ${TEMP}/bfTvMNFImageFilter4.tif
+         -inv ${TEMP}/bfTvMNFImageFilter4Inv.tif
+         -norm
+         -n 4)
+
+
+# Test input->MNF->inverse MNF
+ADD_TEST(bfTvMNFImageFilter1
+         ${BASICFILTERS_TESTS13}
+         --compare-image ${EPSILON_7}
+             ${INPUTDATA}/cupriteSubHsi.tif 
+             ${TEMP}/bfTvMNFImageFilter1Inv.tif
+         otbMNFImageFilterTest
+         -in ${INPUTDATA}/cupriteSubHsi.tif
+         -out ${TEMP}/bfTvMNFImageFilter1.tif
+         -inv ${TEMP}/bfTvMNFImageFilter1Inv.tif)
+
+ADD_TEST(bfTvMNFImageFilter2
+         ${BASICFILTERS_TESTS13}
+         --compare-image ${EPSILON_7}
+             ${INPUTDATA}/cupriteSubHsi.tif 
+             ${TEMP}/bfTvMNFImageFilter2Inv.tif
+         otbMNFImageFilterTest
+         -in ${INPUTDATA}/cupriteSubHsi.tif
+         -out ${TEMP}/bfTvMNFImageFilter2.tif
+         -inv ${TEMP}/bfTvMNFImageFilter2Inv.tif
+         -norm)
+
+# Test the direct transform
+ADD_TEST(bfTvMNFImageFilter3
+         ${BASICFILTERS_TESTS13}
+         --compare-n-images ${EPSILON_7} 2
+             ${BASELINE}/bfTvMNFImageFilter3.tif
+             ${TEMP}/bfTvMNFImageFilter3.tif
+             ${BASELINE}/bfTvMNFImageFilter3Inv.tif
+             ${TEMP}/bfTvMNFImageFilter3Inv.tif
+         otbMNFImageFilterTest
+         -in ${INPUTDATA}/cupriteSubHsi.tif
+         -out ${TEMP}/bfTvMNFImageFilter3.tif
+         -inv ${TEMP}/bfTvMNFImageFilter3Inv.tif
+         -norm)
+
+
+# Test the direct transform, reducing dimensionnality
+ADD_TEST(bfTvMNFImageFilter4
+         ${BASICFILTERS_TESTS13}
+         --compare-n-images ${EPSILON_7} 2
+             ${BASELINE}/bfTvMNFImageFilter4.tif
+             ${TEMP}/bfTvMNFImageFilter4.tif
+             ${BASELINE}/bfTvMNFImageFilter4Inv.tif
+             ${TEMP}/bfTvMNFImageFilter4Inv.tif
+         otbMNFImageFilterTest
+         -in ${INPUTDATA}/cupriteSubHsi.tif
+         -out ${TEMP}/bfTvMNFImageFilter4.tif
+         -inv ${TEMP}/bfTvMNFImageFilter4Inv.tif
+         -norm
+         -n 4)
+
+### FastICA ###
+ADD_TEST(bfTuFastICAInternalOptimizerVectorImageFilterNew 
+     ${BASICFILTERS_TESTS13}
+     otbFastICAInternalOptimizerVectorImageFilterNewTest)
+
+ADD_TEST(bfTuFastICAImageFilterNew
+    ${BASICFILTERS_TESTS13}
+    otbFastICAImageFilterNewTest)
+
+ADD_TEST(bfTvFastICAImageFilter
+         ${BASICFILTERS_TESTS13}
+           --compare-n-images ${EPSILON_7} 2
+             ${BASELINE}/hyTvFastICAImageFilter.tif
+             ${TEMP}/hyTvFastICAImageFilter.tif
+             ${BASELINE}/hyTvFastICAImageFilterInv.tif
+             ${TEMP}/hyTvFastICAImageFilterInv.tif
+          otbFastICAImageFilterTest
+          -in ${INPUTDATA}/cupriteSubHsi.tif
+          -inv ${TEMP}/hyTvFastICAImageFilterInv.tif
+          -out ${TEMP}/hyTvFastICAImageFilter.tif)
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests14 ~~~~~~~~~~~~~~~~~~~~~~~~~
