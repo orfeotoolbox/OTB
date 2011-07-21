@@ -54,7 +54,9 @@ public:
    /** Standard Macro*/
    itkTypeMacro(SimulationStep1Base, ProcessObject);
 
-   virtual  void SetInput(const ParametersType &) = 0;
+   itkSetMacro(Parameters, ParametersType)
+   itkGetMacro(Parameters, ParametersType)
+   //virtual  void SetInput(const ParametersType &) = 0;
    
    virtual SpectralResponseType * GetReflectance() = 0;
    virtual SpectralResponseType * GetTransmittance() = 0;
@@ -64,13 +66,13 @@ protected:
    SimulationStep1Base(){};
    virtual ~SimulationStep1Base() {}
    
-   ParametersType m_Parameters;
+
 
 private:
    SimulationStep1Base(const Self &); //purposely not implemented
    void operator =(const Self&); //purposely not implemented
    
-   
+   ParametersType m_Parameters;
 
 };
 

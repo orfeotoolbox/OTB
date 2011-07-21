@@ -135,11 +135,11 @@ SailModel
 /** Set Parameters */
 void
 SailModel
-::SetParameters(const ParametersType & params)
+::SetInput(const ParametersType & params)
 {
    
    if(params.Size()!=8) itkExceptionMacro( << "Must have 8 parameters in that order : LAI, Angl, PSoil, Skyl, HSpot, TTS, TTO, PSI" );
-   m_Parameters = params;
+   this->SetParameters(params);
    m_LAI=params[0];
    m_Angl=params[1];
    m_PSoil=params[2];
@@ -151,22 +151,24 @@ SailModel
 }
 
 /** Get Parameters */
-const SailModel::ParametersType &
+const SailModel::ParametersType
 SailModel
-::GetParameters()
+::GetInput()
 {
-   if(m_Parameters.Size()!=8)
+  ParametersType parameters=this->GetParameters();
+   if(parameters.Size()!=8)
    {
-      m_Parameters[0]=m_LAI;
-      m_Parameters[1]=m_Angl;
-      m_Parameters[2]=m_PSoil;
-      m_Parameters[3]=m_Skyl;
-      m_Parameters[4]=m_HSpot;
-      m_Parameters[5]=m_TTS;
-      m_Parameters[6]=m_TTO;
-      m_Parameters[7]=m_PSI;
+      parameters[0]=m_LAI;
+      parameters[1]=m_Angl;
+      parameters[2]=m_PSoil;
+      parameters[3]=m_Skyl;
+      parameters[4]=m_HSpot;
+      parameters[5]=m_TTS;
+      parameters[6]=m_TTO;
+      parameters[7]=m_PSI;
+      this->SetParameters(parameters);
    }
-   return m_Parameters;
+   return this->GetParameters();
 }
 
 

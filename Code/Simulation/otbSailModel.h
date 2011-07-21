@@ -102,8 +102,8 @@ class ITK_EXPORT SailModel : public SimulationStep2Base
       virtual SpectralResponseType * GetViewingReflectance();
       virtual SpectralResponseType * GetHemisphericalReflectance();
       
-      virtual const ParametersType & GetParameters();
-      virtual  void SetParameters(const ParametersType &);
+     const ParametersType  GetInput();
+     void SetInput(const ParametersType &);
 
 
    protected:

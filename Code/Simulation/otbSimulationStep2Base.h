@@ -39,38 +39,42 @@ class ITK_EXPORT SimulationStep2Base : public itk::ProcessObject
 {
 public:
 
-   /**Standard "Self" & Superclass typedef*/
-   typedef SimulationStep2Base                 Self;
-   typedef itk::ProcessObject                  Superclass;
-   typedef itk::SmartPointer<Self>             Pointer;
-   typedef itk::SmartPointer<const Self>       ConstPointer;
+  /**Standard "Self" & Superclass typedef*/
+  typedef SimulationStep2Base Self;
+  typedef itk::ProcessObject Superclass;
+  typedef itk::SmartPointer<Self> Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-   /** Some convenient typedefs. */
-   typedef SpectralResponse<double, double>     SpectralResponseType;
-   typedef double                              ParametersValueType;
-   typedef itk::Array<ParametersValueType>     ParametersType;
-   
-   
-   /** Standard Macro*/
-   itkTypeMacro(SimulationStep2Base, ProcessObject);
-   
-   virtual const ParametersType & GetParameters() = 0;
-   virtual  void SetParameters(const ParametersType &) = 0;
-   
-   virtual void SetReflectance(const SpectralResponseType *) = 0;
-   virtual void SetTransmittance(const SpectralResponseType *) = 0;
-   
+  /** Some convenient typedefs. */
+  typedef SpectralResponse<double, double> SpectralResponseType;
+  typedef double ParametersValueType;
+  typedef itk::Array<ParametersValueType> ParametersType;
+
+  /** Standard Macro*/
+  itkTypeMacro(SimulationStep2Base, ProcessObject)
+  ;
+
+  itkSetMacro(Parameters, ParametersType)
+  itkGetMacro(Parameters, ParametersType)
+ // ;
+
+  virtual void SetReflectance(const SpectralResponseType *) = 0;
+  virtual void SetTransmittance(const SpectralResponseType *) = 0;
+
 protected:
-   SimulationStep2Base(){};
-   virtual ~SimulationStep2Base() {}
-   
-   ParametersType m_Parameters;
+  SimulationStep2Base()
+  {
+  }
+  ;
+  virtual ~SimulationStep2Base()
+  {
+  }
 
 private:
-   SimulationStep2Base(const Self &); //purposely not implemented
-   void operator =(const Self&); //purposely not implemented
-   
-   
+  SimulationStep2Base(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
+
+  ParametersType m_Parameters;
 
 };
 

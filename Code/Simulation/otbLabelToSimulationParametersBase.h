@@ -75,22 +75,30 @@ public:
    itkTypeMacro(LabelToSimulationParametersBase, ProcessObject);
 
    itkSetMacro(Label, LabelType);
-   virtual const ParametersType & GetStep1Parameters() = 0;
-   virtual const ParametersType & GetStep2Parameters() = 0;
+   itkGetMacro(Label, LabelType);
+
+   itkSetMacro(Step1Parameters, ParametersType);
+   itkGetMacro(Step1Parameters, ParametersType);
+
+   itkSetMacro(Step2Parameters, ParametersType);
+   itkGetMacro(Step2Parameters, ParametersType);
+
+   //virtual const ParametersType & GetStep1Parameters() = 0;
+   //virtual const ParametersType & GetStep2Parameters() = 0;
    
 protected:
    LabelToSimulationParametersBase(){};
    virtual ~LabelToSimulationParametersBase() {}
    
-   ParametersType m_Step1Parameters;
-   ParametersType m_Step2Parameters;
-   LabelType m_Label;
+
 
 private:
    LabelToSimulationParametersBase(const Self &); //purposely not implemented
    void operator =(const Self&); //purposely not implemented
    
-   
+   ParametersType m_Step1Parameters;
+   ParametersType m_Step2Parameters;
+   LabelType m_Label;
 
 };
 

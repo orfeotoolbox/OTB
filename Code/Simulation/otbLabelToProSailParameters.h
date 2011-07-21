@@ -78,8 +78,8 @@ public:
    itkTypeMacro(LabelToProSailParameters, LabelToSimulationParametersBase);
    itkNewMacro(Self);
 
-   virtual const ParametersType & GetStep1Parameters();
-   virtual const ParametersType & GetStep2Parameters();
+  // virtual const ParametersType & GetStep1Parameters();
+  //virtual const ParametersType & GetStep2Parameters();
    
    virtual void GenerateData();
    
