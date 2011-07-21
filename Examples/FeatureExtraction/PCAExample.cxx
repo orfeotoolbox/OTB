@@ -24,14 +24,14 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {ROI_QB_MUL_1.png}
-//    OUTPUTS: {InnerProductPCAOutput.tif}, {PrettyInnerProductPCAOutput1.png}, {PrettyInnerProductPCAOutput2.png}, {PrettyInnerProductPCAOutput3.png}
+//    OUTPUTS: {PCAOutput.tif}, {PCAOutput1.png}, {PCAOutput2.png}, {PCAOutput3.png}
 //    3
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
 //
 // This example illustrates the use of the
-// \doxygen{otb}{InnerProductPCAImageFilter}.
+// \doxygen{otb}{PCAImageFilter}.
 // This filter computes a Principal Component Analysis using an
 // efficient method based on the inner product in order to compute the
 // covariance matrix.
@@ -41,7 +41,7 @@
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-#include "otbInnerProductPCAImageFilter.h"
+#include "otbPCAImageFilter.h"
 // Software Guide : EndCodeSnippet
 
 int main(int argc, char* argv[])
@@ -79,12 +79,14 @@ int main(int argc, char* argv[])
   // Software Guide : BeginLatex
   //
   // We define the type for the filter. It is templated over the input
-  // and the output image types. We the instantiate the filter.
+  // and the output image types and also the transformat  // ion direction. The
+  // internal structure of this filter is a filter-to-fi  // lter like structure.
+  // The estimation of the covariance matrix has persist  // ent capabilities.We the instantiate the filter.
   //
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::InnerProductPCAImageFilter<ImageType, ImageType> PCAFilterType;
+  typedef otb::PCAImageFilter<ImageType, ImageType, otb::Transform::FORWARD> PCAFilterType;
   PCAFilterType::Pointer pcafilter     = PCAFilterType::New();
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
@@ -125,19 +127,19 @@ int main(int argc, char* argv[])
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
-  // Figure~\ref{fig:INNERPRODUCTPCA_FILTER} shows the result of applying
+  // Figure~\ref{fig:PCA_FILTER} shows the result of applying
   // the PCA to a 3 band RGB image.
   // \begin{figure}
   // \center
   // \includegraphics[width=0.25\textwidth]{ROI_QB_MUL_1.eps}
-  // \includegraphics[width=0.25\textwidth]{PrettyInnerProductPCAOutput1.eps}
-  // \includegraphics[width=0.25\textwidth]{PrettyInnerProductPCAOutput2.eps}
-  // \includegraphics[width=0.25\textwidth]{PrettyInnerProductPCAOutput3.eps}
-  // \itkcaption[Inner Product PCA Filter]{Result of applying the
-  // \doxygen{otb}{InnerProductPCAImageFilter} to an image. From left
+  // \includegraphics[width=0.25\textwidth]{PCAOutput1.eps}
+  // \includegraphics[width=0.25\textwidth]{PCAOutput2.eps}
+  // \includegraphics[width=0.25\textwidth]{PCAOutput3.eps}
+  // \itkcaption[PCA Filter (forward trasnformation)]{Result of applying the
+  // \doxygen{otb}{PCAImageFilter} to an image. From left
   // to right and top to bottom:
   // original image, first PC, second PC, third PC.}
-  // \label{fig:INNERPRODUCTPCA_FILTER}
+  // \label{fig:PCA_FILTER}
   // \end{figure}
   //
   //  Software Guide : EndLatex
