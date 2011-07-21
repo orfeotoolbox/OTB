@@ -52,12 +52,12 @@ public:
     return m_OutputSize;
   }
 
-  bool operator !=(const UnConstrainedLeastSquareFunctor& other) const
+  bool operator != (const UnConstrainedLeastSquareFunctor& other) const
   {
     return true;
   }
 
-  bool operator ==(const UnConstrainedLeastSquareFunctor& other) const
+  bool operator == (const UnConstrainedLeastSquareFunctor& other) const
   {
     return !(*this != other);
   }

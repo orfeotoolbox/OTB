@@ -116,7 +116,6 @@ NCLSUnmixingFunctor<TInput, TOutput, TPrecision>
     lambda = m_Ut * (m_U * nclsVector - inVector);
     correction = m_UtUinv * lambda;
     nclsVector -= correction;
-    //std::cout << i << "  " << correction.two_norm() / nclsVector.two_norm() << " " << correction.one_norm() / nclsVector.one_norm() << " " << correction.inf_norm() / nclsVector.inf_norm() << std::endl;
     }
 
   OutputType out(nclsVector.size());
