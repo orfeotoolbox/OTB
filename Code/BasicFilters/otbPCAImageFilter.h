@@ -30,7 +30,7 @@ namespace otb
 
   namespace Transform
   {
-    enum TransformDirection { FORWARD, INVERSE };
+    enum TransformDirection {FORWARD = 0, INVERSE = 1};
   }
 
 /** \class PCAImageFilter
