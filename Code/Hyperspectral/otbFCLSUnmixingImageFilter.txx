@@ -73,7 +73,7 @@ FCLSUnmixingFunctor<TInput, TOutput, TPrecision>
   const double Delta = 1.0E-6;
   m_U = U;
   m_N.set_size(U.rows() + 1, U.cols());
-  for (int r = 0; r < U.rows(); ++r)
+  for (unsigned int r = 0; r < U.rows(); ++r)
     {
     m_N.set_row(r, U.get_row(r));
     }
@@ -104,7 +104,7 @@ FCLSUnmixingFunctor<TInput, TOutput, TPrecision>
 {
   // TODO : support different types between input and output ?
   VectorType inVector(in.Size());
-  for (int i = 0; i < in.GetSize(); i++ )
+  for (unsigned int i = 0; i < in.GetSize(); i++ )
     {
     inVector[i] = in[i];
     }
@@ -118,7 +118,7 @@ FCLSUnmixingFunctor<TInput, TOutput, TPrecision>
   // Apply FCLS iterations
   const double Delta = 1.0E-6;
   VectorType s(nbBands + 1);
-  for (int r = 0; r < nbBands; ++r)
+  for (unsigned int r = 0; r < nbBands; ++r)
     {
     s[r] = inVector[r];
     }
@@ -127,7 +127,7 @@ FCLSUnmixingFunctor<TInput, TOutput, TPrecision>
   VectorType lambda(nbEndmembers);
   VectorType fclsVector = uclsVector;
   VectorType correction(uclsVector.size());
-  for (int i = 0; i < m_MaxIteration; ++i)
+  for (unsigned int i = 0; i < m_MaxIteration; ++i)
     {
     // Error in original paper : divergence
     // lambda = m_Nt * (s - m_N * fclsVector);
@@ -138,7 +138,7 @@ FCLSUnmixingFunctor<TInput, TOutput, TPrecision>
     }
 
   OutputType out(fclsVector.size());
-  for (int i = 0; i < out.GetSize(); i++ )
+  for (unsigned int i = 0; i < out.GetSize(); i++ )
     {
     out[i] = fclsVector[i];
     }

@@ -93,7 +93,7 @@ NCLSUnmixingFunctor<TInput, TOutput, TPrecision>
 {
   // TODO : support different types between input and output ?
   VectorType inVector(in.Size());
-  for (int i = 0; i < in.GetSize(); i++ )
+  for (unsigned int i = 0; i < in.GetSize(); i++ )
     {
     inVector[i] = in[i];
     }
@@ -109,7 +109,7 @@ NCLSUnmixingFunctor<TInput, TOutput, TPrecision>
   VectorType nclsVector = uclsVector;
   VectorType correction(uclsVector.size());
 
-  for (int i = 0; i < m_MaxIteration; ++i)
+  for (unsigned int i = 0; i < m_MaxIteration; ++i)
     {
     // Error in original paper : divergence
     // lambda = m_Ut * (inVector - m_U * nclsVector);
@@ -120,7 +120,7 @@ NCLSUnmixingFunctor<TInput, TOutput, TPrecision>
     }
 
   OutputType out(nclsVector.size());
-  for (int i = 0; i < out.GetSize(); i++ )
+  for (unsigned int i = 0; i < out.GetSize(); i++ )
     {
     out[i] = nclsVector[i];
     }

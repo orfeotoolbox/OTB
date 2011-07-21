@@ -74,7 +74,7 @@ public:
   {
     // TODO : support different types between input and output ?
     VectorType inVector(in.Size());
-    for (int i = 0; i < in.GetSize(); i++ )
+    for (unsigned int i = 0; i < in.GetSize(); i++ )
       {
       inVector[i] = in[i];
       }
@@ -82,7 +82,7 @@ public:
     VectorType outVector = m_Inv * inVector;
 
     OutputType out(outVector.size());
-    for (int i = 0; i < out.GetSize(); i++ )
+    for (unsigned int i = 0; i < out.GetSize(); i++ )
       {
       out[i] = outVector[i];
       }

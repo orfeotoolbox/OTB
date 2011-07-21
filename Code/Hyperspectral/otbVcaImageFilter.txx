@@ -368,7 +368,7 @@ void VCAImageFilter<TImage>::GenerateData()
     {
     vnl_vector<PrecisionType> e = E.get_column(i);
     typename VectorImageType::PixelType pixel(input->GetNumberOfComponentsPerPixel());
-    for (int j = 0; j < e.size(); j++)
+    for (unsigned int j = 0; j < e.size(); j++)
       {
       pixel[j] = E(j, i);
       }

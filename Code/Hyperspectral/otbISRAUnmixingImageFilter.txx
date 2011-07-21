@@ -91,7 +91,7 @@ ISRAUnmixingFunctor<TInput, TOutput, TPrecision>
 {
   // TODO : support different types between input and output ?
   VectorType inVector(in.Size());
-  for (int i = 0; i < in.GetSize(); i++ )
+  for (unsigned int i = 0; i < in.GetSize(); i++ )
     {
     inVector[i] = in[i];
     }
@@ -103,23 +103,23 @@ ISRAUnmixingFunctor<TInput, TOutput, TPrecision>
   unsigned int nbBands = in.Size();
 
   // Apply ISRA iterations
-  for (int i = 0; i < m_MaxIteration; ++i)
+  for (unsigned int i = 0; i < m_MaxIteration; ++i)
     {
 
     // Use a temporary storage since it is used
     // inside the iterations
     VectorType outVectorNew = outVector;
-    for (int e = 0; e < nbEndmembers; ++e)
+    for (unsigned int e = 0; e < nbEndmembers; ++e)
       {
       PrecisionType numerator = 0;
       PrecisionType denominator = 0;
 
-      for (int b = 0; b < nbBands; ++b)
+      for (unsigned int b = 0; b < nbBands; ++b)
         {
         numerator += in[b] * m_U(b, e);
 
         PrecisionType dot = 0;
-        for (int s = 0; s < nbEndmembers; ++s)
+        for (unsigned int s = 0; s < nbEndmembers; ++s)
           {
           // Use outVector from previous iteration here
           dot += m_U(b, s) * outVector[s];
@@ -135,7 +135,7 @@ ISRAUnmixingFunctor<TInput, TOutput, TPrecision>
     }
 
   OutputType out(outVector.size());
-  for (int i = 0; i < out.GetSize(); i++ )
+  for (unsigned int i = 0; i < out.GetSize(); i++ )
     {
     out[i] = outVector[i];
     }
