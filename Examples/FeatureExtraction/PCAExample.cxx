@@ -79,14 +79,15 @@ int main(int argc, char* argv[])
   // Software Guide : BeginLatex
   //
   // We define the type for the filter. It is templated over the input
-  // and the output image types and also the transformat  // ion direction. The
-  // internal structure of this filter is a filter-to-fi  // lter like structure.
-  // The estimation of the covariance matrix has persist  // ent capabilities.We the instantiate the filter.
+  // and the output image types and also the transformation direction. The
+  // internal structure of this filter is a filter-to-filter like structure.
+  // We can now the instantiate the filter.
   //
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::PCAImageFilter<ImageType, ImageType, otb::Transform::FORWARD> PCAFilterType;
+  typedef otb::PCAImageFilter<ImageType, ImageType, 
+                              otb::Transform::FORWARD> PCAFilterType;
   PCAFilterType::Pointer pcafilter     = PCAFilterType::New();
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
