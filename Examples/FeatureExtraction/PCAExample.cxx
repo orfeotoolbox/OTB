@@ -150,12 +150,11 @@ int main(int argc, char* argv[])
   typedef otb::MultiToMonoChannelExtractROI<PixelType, PixelType>
   ExtractROIFilterType;
 
-  typedef otb::Image<unsigned char,
-      2>                                     OutputImageType;
-  typedef otb::ImageFileWriter<OutputImageType>
-  WriterType2;
+  typedef otb::Image<unsigned char, 2>          OutputImageType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType2;
+  
   typedef itk::RescaleIntensityImageFilter<MonoImageType,
-      OutputImageType> RescalerType;
+                                           OutputImageType> RescalerType;
 
   for (unsigned int cpt = 0; cpt < numberOfPrincipalComponentsRequired; cpt++)
     {
