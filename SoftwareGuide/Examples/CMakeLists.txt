@@ -290,7 +290,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/DisparityMap/SimpleDisparityMapEstimationExample.cxx
   #${OTB_SOURCE_DIR}/Examples/DisparityMap/NCCRegistrationFilterExample.cxx
   ${OTB_SOURCE_DIR}/Examples/DisparityMap/FineRegistrationImageFilterExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/InnerProductPCAExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/PCAExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/TextureExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/PanTexExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/SFSExample.cxx
