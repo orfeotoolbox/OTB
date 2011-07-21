@@ -161,7 +161,7 @@ int main(int argc, char* argv[])
     {
     ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
     RescalerType::Pointer         rescaler = RescalerType::New();
-    WriterType2::Pointer          writer2     = WriterType2::New();
+    WriterType2::Pointer          writer2 = WriterType2::New();
 
     extractROIFilter->SetInput(pcafilter->GetOutput());
     extractROIFilter->SetChannel(cpt + 1);
