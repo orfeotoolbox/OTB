@@ -72,14 +72,14 @@ public:
 
   /** Filter types and related */
   typedef StreamingStatisticsVectorImageFilter< InputImageType > CovarianceEstimatorFilterType;
-  typedef typename CovarianceEstimatorFilterType::Pointer CovarianceEstimatorFilterPointerType;
+  typedef typename CovarianceEstimatorFilterType::Pointer        CovarianceEstimatorFilterPointerType;
 
-  typedef typename CovarianceEstimatorFilterType::RealType RealType;
-  typedef typename CovarianceEstimatorFilterType::RealPixelType VectorType;
+  typedef typename CovarianceEstimatorFilterType::RealType         RealType;
+  typedef typename CovarianceEstimatorFilterType::RealPixelType    VectorType;
   typedef typename CovarianceEstimatorFilterType::MatrixObjectType MatrixObjectType;
-  typedef typename MatrixObjectType::ComponentType MatrixType;
-  typedef typename MatrixType::InternalMatrixType InternalMatrixType;
-  typedef typename InternalMatrixType::element_type MatrixElementType;
+  typedef typename MatrixObjectType::ComponentType                 MatrixType;
+  typedef typename MatrixType::InternalMatrixType                  InternalMatrixType;
+  typedef typename InternalMatrixType::element_type                MatrixElementType;
   
   typedef MatrixImageFilter< TInputImage, TOutputImage > TransformFilterType;
   typedef typename TransformFilterType::Pointer          TransformFilterPointerType;
@@ -186,13 +186,13 @@ protected:
 
   /** Internal attributes */
   unsigned int m_NumberOfPrincipalComponentsRequired;
-  bool m_UseNormalization;
-  bool m_UseVarianceForNormalization;
-  bool m_GivenMeanValues;
-  bool m_GivenStdDevValues;
-  bool m_GivenCovarianceMatrix;
-  bool m_GivenTransformationMatrix;
-  bool m_IsTransformationMatrixForward;
+  bool         m_UseNormalization;
+  bool         m_UseVarianceForNormalization;
+  bool         m_GivenMeanValues;
+  bool         m_GivenStdDevValues;
+  bool         m_GivenCovarianceMatrix;
+  bool         m_GivenTransformationMatrix;
+  bool         m_IsTransformationMatrixForward;
 
   VectorType m_MeanValues;
   VectorType m_StdDevValues;
@@ -201,8 +201,8 @@ protected:
   MatrixType m_TransformationMatrix;
 
   CovarianceEstimatorFilterPointerType m_CovarianceEstimator;
-  TransformFilterPointerType m_Transformer;
-  NormalizeFilterPointerType m_Normalizer;
+  TransformFilterPointerType           m_Transformer;
+  NormalizeFilterPointerType           m_Normalizer;
 
 private:
   PCAImageFilter( const Self & ); // not implemented
