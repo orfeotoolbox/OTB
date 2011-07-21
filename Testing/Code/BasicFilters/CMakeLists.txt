@@ -1968,7 +1968,7 @@ ADD_TEST(bfTuHorizontalSobelVectorImageFilterNew
 
 ADD_TEST(bfTvHorizontalSobelVectorImageFilter
          ${BASICFILTERS_TESTS13}
-           --compare-image ${NOTOL}
+           --compare-image ${EPSILON_7}
              ${BASELINE}/bfTvHorizontalSobelVectorImageFilter.tif
              ${TEMP}/bfTvHorizontalSobelVectorImageFilter.tif
          otbHorizontalSobelVectorImageFilterTest
@@ -1981,7 +1981,7 @@ ADD_TEST(bfTuVerticalSobelVectorImageFilterNew
 
 ADD_TEST(bfTvVerticalSobelVectorImageFilter
          ${BASICFILTERS_TESTS13}
-           --compare-image ${NOTOL}
+           --compare-image ${EPSILON_7}
              ${BASELINE}/bfTvVerticalSobelVectorImageFilter.tif
              ${TEMP}/bfTvVerticalSobelVectorImageFilter.tif
          otbVerticalSobelVectorImageFilterTest
@@ -1994,7 +1994,7 @@ ADD_TEST(bfTuSobelVectorImageFilterNew
 
 ADD_TEST(bfTvSobelVectorImageFilter
          ${BASICFILTERS_TESTS13}
-           --compare-image ${NOTOL}
+           --compare-image ${EPSILON_7}
              ${BASELINE}/bfTvSobelVectorImageFilter.tif
              ${TEMP}/bfTvSobelVectorImageFilter.tif
          otbSobelVectorImageFilterTest
@@ -2007,7 +2007,7 @@ ADD_TEST(bfTuLocalGradientVectorImageFilterNew
 
 ADD_TEST(bfTvLocalGradientVectorImageFilter
          ${BASICFILTERS_TESTS13}
-           --compare-image ${NOTOL}
+           --compare-image ${EPSILON_7}
              ${BASELINE}/bfTvLocalGradientVectorImageFilter.tif
              ${TEMP}/bfTvLocalGradientVectorImageFilter.tif
          otbLocalGradientVectorImageFilterTest
@@ -2020,7 +2020,7 @@ ADD_TEST(bfTuLocalActivityVectorImageFilterNew
 
 ADD_TEST(bfTvLocalActivityVectorImageFilter
          ${BASICFILTERS_TESTS13}
-           --compare-image ${NOTOL}
+           --compare-image ${EPSILON_7}
              ${BASELINE}/bfTvLocalActivityVectorImageFilter.tif
              ${TEMP}/bfTvLocalActivityVectorImageFilter.tif
          otbLocalActivityVectorImageFilterTest
@@ -2033,7 +2033,7 @@ ADD_TEST(bfTuNormalizeVectorImageFilter
 
 ADD_TEST(bfTvNormalizeVectorImageFilter
          ${BASICFILTERS_TESTS13}
-           --compare-image ${NOTOL}
+           --compare-image ${EPSILON_7}
              ${BASELINE}/bfTvNormalizeVectorImageFilter.tif
              ${TEMP}/bfTvNormalizeVectorImageFilter.tif
 		 otbNormalizeVectorImageFilterTest

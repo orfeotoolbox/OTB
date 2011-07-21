@@ -23,7 +23,7 @@ ADD_TEST(hyTuEigenvalueLikelihoodMaximizationNew
 
 ADD_TEST(hyTvEigenvalueLikelihoodMaximizationTest
          ${Hyperspectral_TESTS1}
-           --compare-ascii ${NOTOL}
+           --compare-ascii ${EPSILON_9}
            ${BASELINE_FILES}/hyTvEigenvalueLikelihoodMaximizationTest.txt
            ${TEMP}/hyTvEigenvalueLikelihoodMaximizationTest.txt
          otbEigenvalueLikelihoodMaximizationTest
@@ -39,7 +39,7 @@ ADD_TEST(hyTuVCAImageFilterNew
 
 ADD_TEST(hyTvVCAImageFilterTest1
          ${Hyperspectral_TESTS1}
-           --compare-image ${NOTOL}
+           --compare-image ${EPSILON_9}
            ${BASELINE_FILES}/hyTvVCAImageFilterTest.tif
            ${TEMP}/hyTvVCAImageFilterTest.tif
          otbVCAImageFilterTestHighSNR
@@ -64,7 +64,7 @@ ADD_TEST(hyTuUnConstrainedLeastSquareImageFilterNew
 
 ADD_TEST(hyTvUnConstrainedLeastSquareImageFilterTest
          ${Hyperspectral_TESTS1}
-           --compare-image ${NOTOL}
+           --compare-image ${EPSILON_9}
            ${BASELINE_FILES}/hyTvUnConstrainedLeastSquareImageFilterTest.tif
            ${TEMP}/hyTvUnConstrainedLeastSquareImageFilterTest.tif
          otbUnConstrainedLeastSquareImageFilterTest
@@ -80,7 +80,7 @@ ADD_TEST(hyTuNCLSUnmixingImageFilterNew
 
 ADD_TEST(hyTvNCLSUnmixingImageFilterTest
          ${Hyperspectral_TESTS1}
-           --compare-image ${NOTOL}
+           --compare-image ${EPSILON_9}
            ${BASELINE_FILES}/hyTvNCLSImageFilterTest.tif
            ${TEMP}/hyTvNCLSImageFilterTest.tif
          otbNCLSUnmixingImageFilterTest
@@ -96,7 +96,7 @@ ADD_TEST(hyTuISRAUnmixingImageFilterNew
 
 ADD_TEST(hyTvISRAUnmixingImageFilterTest
          ${Hyperspectral_TESTS1}
-           --compare-image ${NOTOL}
+           --compare-image ${EPSILON_9}
            ${BASELINE_FILES}/hyTvISRAUnmixingImageFilterTest.tif
            ${TEMP}/hyTvISRAUnmixingImageFilterTest.tif
          otbISRAUnmixingImageFilterTest
@@ -112,7 +112,7 @@ ADD_TEST(hyTuFCLSUnmixingImageFilterNew
 
 ADD_TEST(hyTvFCLSUnmixingImageFilterTest
          ${Hyperspectral_TESTS1}
-           --compare-image ${NOTOL}
+           --compare-image ${EPSILON_9}
            ${BASELINE_FILES}/hyTvFCLSUnmixingImageFilterTest.tif
            ${TEMP}/hyTvFCLSUnmixingImageFilterTest.tif
          otbFCLSUnmixingImageFilterTest
