@@ -52,7 +52,7 @@ FCLSUnmixingFunctor<TInput, TOutput, TPrecision>
 template <class TInput, class TOutput, class TPrecision>
 bool
 FCLSUnmixingFunctor<TInput, TOutput, TPrecision>
-::operator !=(const Self& other) const
+::operator != (const Self& other) const
 {
   return true;
 }
@@ -60,7 +60,7 @@ FCLSUnmixingFunctor<TInput, TOutput, TPrecision>
 template <class TInput, class TOutput, class TPrecision>
 bool
 FCLSUnmixingFunctor<TInput, TOutput, TPrecision>
-::operator ==(const Self& other) const
+::operator == (const Self& other) const
 {
   return false;
 }
@@ -133,7 +133,6 @@ FCLSUnmixingFunctor<TInput, TOutput, TPrecision>
     // lambda = m_Nt * (s - m_N * fclsVector);
     lambda = m_Nt * (m_N * fclsVector - s);
     correction = m_NtNinv * lambda;
-    //std::cout << i << "  " << correction.two_norm() << " " << correction.one_norm() << " " << correction.inf_norm() << std::endl;
     fclsVector -= correction;
     }
 
