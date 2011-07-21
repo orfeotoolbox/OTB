@@ -83,7 +83,7 @@ EigenvalueLikelihoodMaximisation<TInputImage>
   unsigned int iMax = 0;
   for (unsigned int i = 1; i < m_Likelihood.size() - 1; i++)
     {
-    if ( (m_Likelihood[i] > m_Likelihood[i - 1]) 
+    if ( (m_Likelihood[i] > m_Likelihood[i - 1])
          && (m_Likelihood[i] > m_Likelihood[i + 1]) )
       {
       max = m_Likelihood[i];

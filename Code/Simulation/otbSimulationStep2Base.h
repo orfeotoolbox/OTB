@@ -52,11 +52,11 @@ public:
 
   /** Standard Macro*/
   itkTypeMacro(SimulationStep2Base, ProcessObject)
-  ;
+ ;
 
   itkSetMacro(Parameters, ParametersType)
   itkGetMacro(Parameters, ParametersType)
- // ;
+ //;
 
   virtual void SetReflectance(const SpectralResponseType *) = 0;
   virtual void SetTransmittance(const SpectralResponseType *) = 0;
@@ -65,7 +65,7 @@ protected:
   SimulationStep2Base()
   {
   }
-  ;
+ ;
   virtual ~SimulationStep2Base()
   {
   }

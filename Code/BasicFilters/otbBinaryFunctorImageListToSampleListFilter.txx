@@ -176,4 +176,3 @@ BinaryFunctorImageListToSampleListFilter< TInputImageList, TOutputSampleList, TF
 #endif
 
 
-

@@ -86,7 +86,7 @@ int main(int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::PCAImageFilter<ImageType, ImageType, 
+  typedef otb::PCAImageFilter<ImageType, ImageType,
                               otb::Transform::FORWARD> PCAFilterType;
   PCAFilterType::Pointer pcafilter     = PCAFilterType::New();
   // Software Guide : EndCodeSnippet
