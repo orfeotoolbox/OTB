@@ -62,5 +62,6 @@ void RegisterTests()
   REGISTER_TEST(otbFastICAImageFilterTest);
   REGISTER_TEST(otbVectorImageToMatrixNewTest);
   REGISTER_TEST(otbVectorImageToMatrixTest);
+  REGISTER_TEST(otbProjectiveProjectionNew);
   REGISTER_TEST(otbProjectiveProjectionTestHighSNR);
 }

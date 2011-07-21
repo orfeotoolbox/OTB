@@ -2040,6 +2040,37 @@ ADD_TEST(bfTvNormalizeVectorImageFilter
 		 -in ${INPUTDATA}/cupriteSubHsi.tif
 		 -out ${TEMP}/bfTvNormalizeVectorImageFilter.tif)
 
+
+ADD_TEST(bfTuNormalizeVectorImageFilter
+         ${BASICFILTERS_TESTS13}
+     otbNormalizeVectorImageFilterNewTest)
+
+ADD_TEST(bfTvNormalizeVectorImageFilter
+         ${BASICFILTERS_TESTS13}
+           --compare-image ${EPSILON_7}
+             ${BASELINE}/bfTvNormalizeVectorImageFilter.tif
+             ${TEMP}/bfTvNormalizeVectorImageFilter.tif
+     otbNormalizeVectorImageFilterTest
+     -in ${INPUTDATA}/cupriteSubHsi.tif
+     -out ${TEMP}/bfTvNormalizeVectorImageFilter.tif)
+     
+
+
+ADD_TEST(bfTuProjectiveProjectionNew
+         ${BASICFILTERS_TESTS13}
+         otbProjectiveProjectionNew)
+
+ADD_TEST(bfTvProjectiveProjectionTestHighSNR
+         ${BASICFILTERS_TESTS13}
+           --compare-image ${EPSILON_7}
+             ${BASELINE}/bfTvProjectiveProjectionTestHighSNR.tif
+             ${TEMP}/bfTvProjectiveProjectionTestHighSNR.tif
+     otbProjectiveProjectionTestHighSNR
+     ${INPUTDATA}/cupriteSubHsi.tif
+     3
+     ${TEMP}/bfTvProjectiveProjectionTestHighSNR.tif)
+     
+
 ADD_TEST(bfTuVectorImageToMatrixNew
          ${BASICFILTERS_TESTS13}
          otbVectorImageToMatrixNewTest)
