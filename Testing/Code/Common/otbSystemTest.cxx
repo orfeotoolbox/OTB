@@ -29,7 +29,7 @@ int otbSystemTest(int argc, char* argv[])
 {
   const char *       inputFileName  = argv[1];
   const char *       inputDirName   = argv[2];
-  itk::OStringStream msg;
+  std::stringstream msg;
 
   // Check instanciation test
   otb::System * var(NULL);

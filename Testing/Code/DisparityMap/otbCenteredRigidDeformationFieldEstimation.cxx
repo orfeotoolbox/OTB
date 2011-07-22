@@ -218,7 +218,7 @@ int otbCenteredRigidDeformationFieldEstimation(int argc, char* argv[])
   DeformationFieldWriterType::Pointer dfwriter = DeformationFieldWriterType::New();
   ImageWarperType::Pointer            warper = ImageWarperType::New();
   RescalerType::Pointer               rescaler = RescalerType::New();
-  itk::OStringStream                  oss;
+  std::stringstream                  oss;
 
   //3.a Nearest point deformation field generator
   NearestPointGeneratorType::Pointer generator1 = NearestPointGeneratorType::New();

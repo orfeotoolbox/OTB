@@ -106,7 +106,7 @@ ConfigurationFile
   }
   catch (itk::ExceptionObject& ex)
   {
-    itk::OStringStream oss;
+    std::stringstream oss;
     oss << "Error caught when accessing OTB_DEM_DIRECTORY in the config file.";
     oss << "The error was " << ex;
     otbMsgDevMacro( << oss.str() );
@@ -131,7 +131,7 @@ ConfigurationFile
   }
   catch (itk::ExceptionObject& ex)
   {
-      itk::OStringStream oss;
+      std::stringstream oss;
       oss << "Error caught when accessing OTB_GEOID_FILE in the config file.";
       oss << "The error was " << ex;
       otbMsgDevMacro( << oss.str() );

@@ -47,7 +47,7 @@ int otbMirrorBoundaryConditionTest(int argc, char * argv[])
 
   OffsetType off1, off2;
 
-  itk::OStringStream oss;
+  std::stringstream oss;
   PixelType          in, out;
   for (unsigned int i = 1; i <= rad[0]; ++i)
     {

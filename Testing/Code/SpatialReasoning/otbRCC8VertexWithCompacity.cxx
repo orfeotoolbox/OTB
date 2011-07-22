@@ -74,7 +74,7 @@ int otbRCC8VertexWithCompacity(int argc, char* argv[])
   // attributes vector set test
   AttributesMapType attr1 = vertex1->GetAttributesMap();
 
-  itk::OStringStream oss;
+  std::stringstream oss;
   oss << p1[0];
   otbControlConditionTestMacro(attr1["P0x"].compare(oss.str()) != 0,
                                "Test failed:attr1[\"P0x\"].compare(std::string(p1[0]))!=0");

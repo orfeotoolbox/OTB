@@ -68,7 +68,7 @@ int otbGeodesicMorphologyIterativeDecompositionImageFilter(int argc, char * argv
   WriterType::Pointer writer;
 
   int                i = 1;
-  itk::OStringStream oss;
+  std::stringstream oss;
   // Writing the results images
   while ((itAnalyse != decomposition->GetOutput()->End())
          && (itConvexMap != decomposition->GetConvexOutput()->End())

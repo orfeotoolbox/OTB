@@ -61,7 +61,7 @@ int otbMorphologicalOpeningProfileFilter(int argc, char * argv[])
   WriterType::Pointer writer;
 
   // std::stringstream oss;
-  itk::OStringStream oss;
+  std::stringstream oss;
   // Writing the results images
   for (unsigned int i = 1; i <= profileSize; ++i)
     {

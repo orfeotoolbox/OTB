@@ -73,7 +73,7 @@ int otbMorphologicalPyramidAnalysisFilter(int argc, char * argv[])
 
   int i = 1;
   //      std::stringstream oss;
-  itk::OStringStream oss;
+  std::stringstream oss;
   // Writing the results images
   while ((itAnalyse != pyramid->GetOutput()->End())
          && (itSupFilter != pyramid->GetSupFilter()->End())

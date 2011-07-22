@@ -106,7 +106,7 @@ int otbSparseUnmixingImageFilterTest ( int argc, char * argv[] )
 
   for ( unsigned int i = 0; i < filter->GetNumberOfOutputs(); i++ )
   {
-    itk::OStringStream title;
+    std::stringstream title;
     title << outputImageName << "_" << i << ".hdr";
 
     writers[i] = WriterType::New();
