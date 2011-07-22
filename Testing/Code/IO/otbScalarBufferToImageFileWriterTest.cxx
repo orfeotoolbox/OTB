@@ -38,7 +38,7 @@ int otbScalarBufferToImageFileWriterTest(int argc, char* argv[])
        {
               for(unsigned int sy=0; sy<sizeY; sy++)
               {
-                     for(unsigned int i=0; i<nbCh; i++)
+                     for(unsigned int i=0; i<nbCh; ++i)
                      {
                             tab[cpt++] = val;
                             val++;

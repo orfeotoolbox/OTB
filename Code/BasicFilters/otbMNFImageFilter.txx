@@ -295,19 +295,19 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
     }
 
     VectorType revStdDev ( m_StdDevValues.Size() );
-    for ( unsigned int i = 0; i < m_StdDevValues.Size(); i++ )
+    for ( unsigned int i = 0; i < m_StdDevValues.Size(); ++i )
       revStdDev[i] = 1. / m_StdDevValues[i];
     m_Normalizer->SetStdDev( revStdDev );
 
     VectorType revMean ( m_MeanValues.Size() );
-    for ( unsigned int i = 0; i < m_MeanValues.Size(); i++ )
+    for ( unsigned int i = 0; i < m_MeanValues.Size(); ++i )
       revMean[i] = - m_MeanValues[i] / m_StdDevValues[i];
     m_Normalizer->SetMean( revMean );
   }
   else
   {
     VectorType revMean ( m_MeanValues.Size() );
-    for ( unsigned int i = 0; i < m_MeanValues.Size(); i++ )
+    for ( unsigned int i = 0; i < m_MeanValues.Size(); ++i )
       revMean[i] = - m_MeanValues[i];
     m_Normalizer->SetMean( revMean );
     m_Normalizer->SetUseStdDev( false );
@@ -338,10 +338,10 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
   InternalMatrixType normMat //= transf.transpose() * An * transf;
     = transf.transpose() * Ax_inv * transf;
 
-  for ( unsigned int i = 0; i < transf.rows(); i++ )
+  for ( unsigned int i = 0; i < transf.rows(); ++i )
   {
     double norm = 1. / vcl_sqrt( normMat.get(i, i) );
-    for ( unsigned int j = 0; j < transf.cols(); j++ )
+    for ( unsigned int j = 0; j < transf.cols(); ++j )
       transf.put( j, i, transf.get(j, i) * norm );
   }
 
@@ -354,7 +354,7 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
     m_TransformationMatrix = transf;
 
   m_EigenValues.SetSize( m_NumberOfPrincipalComponentsRequired );
-  for ( unsigned int i = 0; i < m_NumberOfPrincipalComponentsRequired; i++ )
+  for ( unsigned int i = 0; i < m_NumberOfPrincipalComponentsRequired; ++i )
     m_EigenValues[i] = static_cast< RealType >( valP(i, i) );
 }
 
@@ -370,10 +370,10 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
   if ( m_UseNormalization )
   {
     os << indent << "Normalisation with :\n" << indent << "Mean:  ";
-    for ( unsigned int i = 0; i < m_MeanValues.Size(); i++ )
+    for ( unsigned int i = 0; i < m_MeanValues.Size(); ++i )
       os << m_MeanValues[i] << "  ";
     os << "\n" << indent << "StdDev:  ";
-    for ( unsigned int i = 0; i < m_StdDevValues.Size(); i++ )
+    for ( unsigned int i = 0; i < m_StdDevValues.Size(); ++i )
       os << m_StdDevValues[i] << "  ";
     os << "\n";
   }
@@ -413,7 +413,7 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
   if ( m_EigenValues.Size() > 0 )
   {
     os << indent << "RMS value :";
-    for ( unsigned int i = 0; i < m_EigenValues.Size(); i++ )
+    for ( unsigned int i = 0; i < m_EigenValues.Size(); ++i )
       os << " " << m_EigenValues[i];
     os << "\n";
   }

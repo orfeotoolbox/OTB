@@ -69,7 +69,7 @@ ExhaustiveExponentialOptimizer
 
   const unsigned int spaceDimension = this->GetInitialPosition().GetSize();
 
-  for (unsigned int i = 0; i < spaceDimension; i++)
+  for (unsigned int i = 0; i < spaceDimension; ++i)
     {
     m_MaximumNumberOfIterations *= (2 * m_NumberOfSteps[i] + 1);
     }
@@ -91,7 +91,7 @@ ExhaustiveExponentialOptimizer
 
   // Setup first grid position.
   ParametersType position(spaceDimension);
-  for (unsigned int i = 0; i < spaceDimension; i++)
+  for (unsigned int i = 0; i < spaceDimension; ++i)
     {
     position[i] = this->GetInitialPosition()[i] *
                   vcl_pow(m_GeometricProgression, -static_cast<double>(m_NumberOfSteps[i]) * m_StepLength) * scales[i];
@@ -188,7 +188,7 @@ ExhaustiveExponentialOptimizer
     if (m_CurrentIndex[idx] > (2 * m_NumberOfSteps[idx]))
       {
       m_CurrentIndex[idx] = 0;
-      idx++;
+      ++idx;
       }
     else
       {
@@ -201,7 +201,7 @@ ExhaustiveExponentialOptimizer
     m_Stop = true;
     }
 
-  for (unsigned int i = 0; i < spaceDimension; i++)
+  for (unsigned int i = 0; i < spaceDimension; ++i)
     {
     newPosition[i] = this->GetInitialPosition()[i]
                      * this->GetScales()[i]

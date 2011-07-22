@@ -112,7 +112,7 @@ int main(int argc, char** argv)
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  for (unsigned int i = 0; i < NbImages; i++)
+  for (unsigned int i = 0; i < NbImages; ++i)
     {
 
     ImageReaderType::Pointer imageReader = ImageReaderType::New();

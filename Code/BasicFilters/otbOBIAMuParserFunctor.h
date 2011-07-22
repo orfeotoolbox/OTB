@@ -78,7 +78,7 @@ public:
       this->SetAttributes(a);
       }
 
-    for (unsigned int i = 0; i < m_AAttributes.size(); i++)
+    for (unsigned int i = 0; i < m_AAttributes.size(); ++i)
       {
 
       std::string name = (m_AttributesName[i]);
@@ -112,7 +112,7 @@ public:
   void ParseAttributeName(std::string &attributeName)
   {
 
-    for (unsigned int i = 0; i < attributeName.size(); i++)
+    for (unsigned int i = 0; i < attributeName.size(); ++i)
       {
       if (attributeName[i] == ':')
         {
@@ -133,7 +133,7 @@ public:
     m_AAttributes.resize(nbOfAttributes, 0.0);
     m_AttributesName.resize(nbOfAttributes, "");
     m_AttributesName = a.GetAvailableAttributes();
-    for (unsigned int i = 0; i < nbOfAttributes; i++)
+    for (unsigned int i = 0; i < nbOfAttributes; ++i)
       {
       std::string attributeName = m_AttributesName.at(i);
       ParseAttributeName(attributeName); //eliminate '::' from string name
@@ -151,7 +151,7 @@ public:
     m_AAttributes.resize(nbOfAttributes, 0.0);
     m_AttributesName.resize(nbOfAttributes, "");
     std::ostringstream varName;
-    for (unsigned int i = 0; i < shapeAttributes.size(); i++)
+    for (unsigned int i = 0; i < shapeAttributes.size(); ++i)
       {
 
       varName << "SHAPE::" << shapeAttributes.at(i);
@@ -163,7 +163,7 @@ public:
       varName.str("");
       index++;
       }
-    for (unsigned int i = 0; i < statAttributes.size(); i++)
+    for (unsigned int i = 0; i < statAttributes.size(); ++i)
       {
       for (unsigned int bandIndex = 1; bandIndex <= nbOfBands; bandIndex++)
         {

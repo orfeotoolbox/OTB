@@ -210,7 +210,7 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
     index[1] = point[1];
 //       otbMsgDevMacro(<< "Converting: " << it.Value() << " -> " << pointCoord << " -> " << point << " -> " << index);
     newLine->AddVertex(index);
-    it++;
+    ++it;
     }
 
   return newLine;
@@ -238,7 +238,7 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
     index[0] = point[0];
     index[1] = point[1];
     newPolygon->AddVertex(index);
-    it++;
+    ++it;
     }
   return newPolygon;
 }

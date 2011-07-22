@@ -116,7 +116,7 @@ typename SpectralAngleDataNodeFeatureFunction<TImage, TCoordRep, TPrecision>::Ou
 
     splitedLineIdCentral.push_back(IndexPairType(id1, id2));
 
-    for (unsigned int j = 1; j <= m_Radius; j++)
+    for (unsigned int j = 1; j <= m_Radius; ++j)
       {
       IndexType shift11, shift12;
       shift11[0] = id1[0] - j * orthogonalDirection[0];
@@ -147,7 +147,7 @@ typename SpectralAngleDataNodeFeatureFunction<TImage, TCoordRep, TPrecision>::Ou
   //double centralAccSpectralAngleSecondOrder = 0.;
   double centralNbVisitedPixel = 0.;
 
-  for (unsigned int i = 0; i < splitedLineIdCentral.size(); i++)
+  for (unsigned int i = 0; i < splitedLineIdCentral.size(); ++i)
     {
     LineIteratorType lineIt(this->GetInputImage(), splitedLineIdCentral[i].first, splitedLineIdCentral[i].second);
     lineIt.GoToBegin();

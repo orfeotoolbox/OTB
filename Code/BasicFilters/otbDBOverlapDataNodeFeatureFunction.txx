@@ -115,9 +115,9 @@ DBOverlapDataNodeFeatureFunction<TCoordRep, TPrecision>
               j = node.GetLine()->GetVertexList()->Size();
               i = currentGeometry->GetPolygonExteriorRing()->GetVertexList()->Size();
               }
-            j++;
+            ++j;
             }
-          i++;
+          ++i;
           }
         }
       ++itVector;
@@ -138,7 +138,7 @@ DBOverlapDataNodeFeatureFunction<TCoordRep, TPrecision>
       {
       typename DataNodeType::Pointer currentGeometry = it.Get();
       nbBuildings ++;
-      for (unsigned int i=0; i<node.GetLine()->GetVertexList()->Size()-1; i++)
+      for (unsigned int i=0; i<node.GetLine()->GetVertexList()->Size()-1; ++i)
         {
 
         if(currentGeometry->GetPolygonExteriorRing()->NbCrossing(node.GetLine()->GetVertexList()->GetElement(i),

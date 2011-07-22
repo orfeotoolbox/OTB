@@ -109,28 +109,28 @@ int otbMultiToMonoChannelExtractROI(int argc, char * argv[])
   if (argv[cpt][0] == '-')
     {
     linputPixelType = std::string(argv[cpt]);
-    cpt++;
+    ++cpt;
     inputFilename  = argv[cpt];
-    cpt++;
+    ++cpt;
     }
   else
     {
     linputPixelType = std::string("-uchar");
     inputFilename  = argv[cpt];
-    cpt++;
+    ++cpt;
     }
   if (argv[cpt][0] == '-')
     {
     loutputPixelType = std::string(argv[cpt]);
-    cpt++;
+    ++cpt;
     outputFilename  = argv[cpt];
-    cpt++;
+    ++cpt;
     }
   else
     {
     loutputPixelType = std::string("-uchar");
     outputFilename  = argv[cpt];
-    cpt++;
+    ++cpt;
     }
 
   argc -= cpt;

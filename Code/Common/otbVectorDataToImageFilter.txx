@@ -274,9 +274,9 @@ VectorDataToImageFilter<TVectorData, TImage>
   stdXOffset = vcl_floor((double)requestedRegion.GetSize()[0]/ (m_NbTile/2))+1;
   stdYOffset = vcl_floor((double)requestedRegion.GetSize()[1]/ (m_NbTile/2))+1;
   
-  for(unsigned int i=0; i < vcl_floor((double)(m_NbTile)/2 + 0.5); i++)
+  for(unsigned int i=0; i < vcl_floor((double)(m_NbTile)/2 + 0.5); ++i)
     {
-    for(unsigned int j=0; j < vcl_floor((double)(m_NbTile)/2 + 0.5); j++)
+    for(unsigned int j=0; j < vcl_floor((double)(m_NbTile)/2 + 0.5); ++j)
       {
       //Set Regions
       SizeType size;

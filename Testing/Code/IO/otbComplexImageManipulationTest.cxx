@@ -55,7 +55,7 @@ template<class TInternalPixel>
 bool IsEqual(itk::VariableLengthVector<TInternalPixel> output, itk::VariableLengthVector<TInternalPixel> expected)
 {
   bool result = true;
-  for(unsigned int i = 0; i < output.Size(); i++)
+  for(unsigned int i = 0; i < output.Size(); ++i)
     {
     result = result && IsEqual(output[i], expected[i]);
     }

@@ -50,7 +50,7 @@ int otbRemoveTortuousPathListFilter(int argc, char * argv[])
       {
       ListPoints.push_back(static_cast<double>(::atof(argv[cpt])));
       }
-    cpt++;
+    ++cpt;
     }
   MatricePoints.push_back(ListPoints);
 

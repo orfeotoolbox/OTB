@@ -249,7 +249,7 @@ OSMDataToVectorDataGenerator::AddKeyTypeToMap(const std::string& key, const std:
     bool found = false;
 
     // Add the type if not present
-    for(unsigned int i = 0; i < currentTypes.size(); i++)
+    for(unsigned int i = 0; i < currentTypes.size(); ++i)
       {
       if(currentTypes[i].compare(value)  == 0)
         found = true;
@@ -291,7 +291,7 @@ OSMDataToVectorDataGenerator::ProcessVectorData(const std::string& key, const st
   m_OutputVectorData->GetDataTree()->Add(folder, document);
 
   // Form the vector data with the values parsed
-  for(unsigned int idx = 0; idx < m_VectorDataElementList.size(); idx++)
+  for(unsigned int idx = 0; idx < m_VectorDataElementList.size(); ++idx)
     {
     // Instanciate a datanode
     DataNodeType::Pointer currentDataNode = DataNodeType::New();
@@ -396,7 +396,7 @@ OSMDataToVectorDataGenerator::GetVectorDataByName(const std::string& key, const 
 bool
 OSMDataToVectorDataGenerator::IsKeyPresent(const std::string& key)
 {
-  for(unsigned int i = 0; i < m_KeyList.size(); i++)
+  for(unsigned int i = 0; i < m_KeyList.size(); ++i)
     if(m_KeyList[i].compare(key) == 0)
       return true;
 

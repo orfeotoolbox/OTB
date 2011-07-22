@@ -68,7 +68,7 @@ PolyLineParametricPathWithValue<TValue, VDimension>
     VertexType pt1 = it.Value(); //just init, won't be used like that
     VertexType pt2 = it.Value();
 
-    it++;
+    ++it;
     while (it != this->GetVertexList()->End())
       {
       pt1 = pt2;
@@ -79,7 +79,7 @@ PolyLineParametricPathWithValue<TValue, VDimension>
         accum += (pt1[i] - pt2[i]) * (pt1[i] - pt2[i]);
         }
       length += vcl_sqrt(accum);
-      it++;
+      ++it;
       }
 
     }
@@ -105,7 +105,7 @@ PolyLineParametricPathWithValue<TValue, VDimension>
   while (it != this->GetVertexList()->End())
     {
     os << it.Value() << " - ";
-    it++;
+    ++it;
     }
   os << std::endl;
 }

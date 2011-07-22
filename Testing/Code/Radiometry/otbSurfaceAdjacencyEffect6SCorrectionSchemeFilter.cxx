@@ -72,7 +72,7 @@ int otbSurfaceAdjacencyEffect6SCorrectionSchemeFilter(int argc, char * argv[])
   reader->UpdateOutputInformation();
   std::vector<const char *> wavelenghFiles;
   unsigned int              nbChannel = reader->GetOutput()->GetNumberOfComponentsPerPixel();
-  for (unsigned int i = 0; i < nbChannel; i++)
+  for (unsigned int i = 0; i < nbChannel; ++i)
     {
     wavelenghFiles.push_back(argv[i + 6]);
     }
@@ -122,7 +122,7 @@ int otbSurfaceAdjacencyEffect6SCorrectionSchemeFilter(int argc, char * argv[])
   param->SetAerosolOptical(static_cast<double>(aerosolOptical));
 
   ValuesVectorType vect;
-  for (unsigned int j = 0; j < nbChannel; j++)
+  for (unsigned int j = 0; j < nbChannel; ++j)
     {
     functionValues = FilterFunctionValuesType::New();
     vect.clear();

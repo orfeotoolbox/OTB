@@ -76,7 +76,7 @@ int otbImageToEdgePathFilter(int argc, char * argv[])
   // Create one iterator for the Input Image (this is a light object)
   IteratorType it(outputImage, outputImage->GetBufferedRegion());
 
-  for (unsigned int cpt = 0; cpt <  ptrVertexList->Size(); cpt++)
+  for (unsigned int cpt = 0; cpt <  ptrVertexList->Size(); ++cpt)
     {
     std::cout << " Point " << cpt << " : " << ptrVertexList->GetElement(cpt) << std::endl;
     IndexType pos;

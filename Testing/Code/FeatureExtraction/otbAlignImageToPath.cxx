@@ -134,7 +134,7 @@ int otbAlignImageToPath(int argc, char * argv[])
   int nbPath = sortiePath->Size();
   otbGenericMsgDebugMacro(<< "NbSegment: " << nbPath);
   fprintf(file, "Nb Segment: %d\n", nbPath);
-  for (int i = 0; i < nbPath; i++)
+  for (int i = 0; i < nbPath; ++i)
     {
     vertexList = sortiePath->GetNthElement(i)->GetVertexList();
     cindex = vertexList->GetElement(0);

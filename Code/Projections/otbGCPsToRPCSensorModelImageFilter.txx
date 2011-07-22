@@ -176,7 +176,7 @@ GCPsToRPCSensorModelImageFilter<TImage>
   typename TImage::Pointer imagePtr = this->GetOutput();
 
   // Iterate on the image GCPs
-  for (unsigned int i = 0; i < imagePtr->GetGCPCount(); i++)
+  for (unsigned int i = 0; i < imagePtr->GetGCPCount(); ++i)
     {
     // Store row/col in an index
     typename TImage::IndexType index;
@@ -250,7 +250,7 @@ GCPsToRPCSensorModelImageFilter<TImage>
   // Clear Error container
   m_ErrorsContainer.clear();
 
-  for (unsigned int i = 0; i < m_GCPsContainer.size(); i++)
+  for (unsigned int i = 0; i < m_GCPsContainer.size(); ++i)
     {
     // GCP value
     sensorPoint = m_GCPsContainer[i].first;

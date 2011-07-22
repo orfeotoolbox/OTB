@@ -75,7 +75,7 @@ LabelMapToSimulatedImageFilter<TInputLabelMap, TSimuStep1, TSimuStep2, TOutputIm
   SpectralResponsePointer readSpectrum = SpectralResponseType::New();
   bool hasPath = false;
   //Check if the spectrum associated to this object is given by a database.
-  for (unsigned int i = 0; i < labelObject->GetNumberOfAttributes(); i++)
+  for (unsigned int i = 0; i < labelObject->GetNumberOfAttributes(); ++i)
     {
     if (labelObject->GetAvailableAttributes()[i].compare("path") == 0) hasPath = true;
     }
@@ -122,10 +122,10 @@ LabelMapToSimulatedImageFilter<TInputLabelMap, TSimuStep1, TSimuStep2, TOutputIm
     {
     IndexType idx = lit->GetIndex();
     unsigned long length = lit->GetLength();
-    for (unsigned int i = 0; i < length; i++)
+    for (unsigned int i = 0; i < length; ++i)
       {
       //add gaussian white noise
-      for (unsigned int i = 0; i < m_NumberOfComponentsPerPixel; i++)
+      for (unsigned int i = 0; i < m_NumberOfComponentsPerPixel; ++i)
         {
         double ran = randomGen->GetNormalVariate(m_Mean, m_Variance);
         pixel[i] = static_cast<InternalPixelType> (reduceSpectralResponse->GetReduceResponse()->GetResponse()[i].second

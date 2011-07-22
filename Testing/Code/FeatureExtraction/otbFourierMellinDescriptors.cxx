@@ -80,9 +80,9 @@ int otbFourierMellinDescriptors(int argc, char * argv[])
   std::ofstream outputStream(outputFilename);
   outputStream << std::setprecision(10);
   
-  for (unsigned int k=0; k<=p; k++)
+  for (unsigned int k=0; k<=p; ++k)
     {
-    for (unsigned int l=0; l<=q; l++)
+    for (unsigned int l=0; l<=q; ++l)
       {
       outputStream << "FMDescriptor |M(" << k << l << ")| : " << Result.at(k).at(l) << std::endl;
       }
@@ -152,9 +152,9 @@ int otbFourierMellinDescriptorsScaleInvariant(int argc, char * argv[])
 
   double error = 0.0;
   
-  for (unsigned int k=0; k<=p; k++)
+  for (unsigned int k=0; k<=p; ++k)
     {
-    for (unsigned int l=0; l<=q; l++)
+    for (unsigned int l=0; l<=q; ++l)
       {
       error += vcl_pow(vcl_abs( Result1.at(k).at(l) - Result2.at(k).at(l) ), 2);
 
@@ -266,9 +266,9 @@ int otbFourierMellinDescriptorsRotationInvariant(int argc, char * argv[])
 
   double error = 0.0;
   
-  for (unsigned int k=0; k<=p; k++)
+  for (unsigned int k=0; k<=p; ++k)
     {
-    for (unsigned int l=0; l<=q; l++)
+    for (unsigned int l=0; l<=q; ++l)
       {
       error += vcl_pow(vcl_abs( Result1.at(k).at(l) - Result2.at(k).at(l) ), 2);
       

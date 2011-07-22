@@ -76,12 +76,12 @@ void
 FuzzyDescriptorsModelManager
 ::Print( const DescriptorsModelType & descModel )
 {
-  for(unsigned int i=0; i<descModel.size(); i++)
+  for(unsigned int i=0; i<descModel.size(); ++i)
     {
       std::cout<<"Descriptor "<<descModel[i].first<<" parameters:" <<std::endl;
       const ParameterType & param = descModel[i].second;
 
-      for(unsigned int j=0; j<param.size(); j++)
+      for(unsigned int j=0; j<param.size(); ++j)
         {
           std::cout<<param[j]<<"  ";
         }
@@ -182,7 +182,7 @@ FuzzyDescriptorsModelManager
   doc.LinkEndChild( root );
 
   // Iterate through the input
-  for (unsigned int i = 0; i < model.size(); i++)
+  for (unsigned int i = 0; i < model.size(); ++i)
     {
       // The current statistic
       TiXmlElement * desc = new TiXmlElement("Descriptor");

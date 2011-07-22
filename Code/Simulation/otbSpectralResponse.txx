@@ -117,7 +117,7 @@ SpectralResponse<TPrecision, TValuePrecision>
   unsigned int lambdaPosGuess = static_cast<unsigned int> ((lambda - lambdaMin) / (lambdaMax - lambdaMin)
       * m_Response.size()) - 1;
 
-  for (typename VectorPairType::const_iterator it = beg + lambdaPosGuess; it <= last; it++)
+  for (typename VectorPairType::const_iterator it = beg + lambdaPosGuess; it <= last; ++it)
     {
     // if the guess was too high
     if ((*it).first >= lambda)

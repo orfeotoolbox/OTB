@@ -52,15 +52,15 @@ public:
 
     TOutput output ( vectorSize );
 
-    for ( unsigned int i = 0; i < vectorSize; i++ )
+    for ( unsigned int i = 0; i < vectorSize; ++i )
     {
       typename TOutput::ValueType out
           = itk::NumericTraits< typename TOutput::ValueType >::Zero;
-      for ( unsigned int j = 0; j < neighborSize/2; j++ )
+      for ( unsigned int j = 0; j < neighborSize/2; ++j )
       {
         out += input.GetPixel(j)[i];
       }
-      for ( unsigned int j = neighborSize/2+1; j < neighborSize; j++ )
+      for ( unsigned int j = neighborSize/2+1; j < neighborSize; ++j )
       {
         out += input.GetPixel(j)[i];
       }

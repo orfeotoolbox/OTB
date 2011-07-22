@@ -140,7 +140,7 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  for (unsigned k = 0; k < numberOfInitialClasses; k++)
+  for (unsigned k = 0; k < numberOfInitialClasses; ++k)
     {
     const double userProvidedInitialMean = atof(argv[k + argoffset]);
     kmeansFilter->AddClassWithInitialMean(userProvidedInitialMean);

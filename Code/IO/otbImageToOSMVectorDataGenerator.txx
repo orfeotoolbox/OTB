@@ -118,7 +118,7 @@ ImageToOSMVectorDataGenerator<TImage>
   vindex.push_back(index3);
   vindex.push_back(index4);
 
-  for (unsigned int i = 0; i < vindex.size(); i++)
+  for (unsigned int i = 0; i < vindex.size(); ++i)
     {
     PointType physicalPoint;
     input->TransformIndexToPhysicalPoint(vindex[i], physicalPoint);
@@ -133,7 +133,7 @@ ImageToOSMVectorDataGenerator<TImage>
   double minY = voutput[0][1];
   double maxY = voutput[0][1];
 
-  for (unsigned int i = 0; i < voutput.size(); i++)
+  for (unsigned int i = 0; i < voutput.size(); ++i)
     {
     // Origins
     if (minX > voutput[i][0])

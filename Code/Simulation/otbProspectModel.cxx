@@ -146,7 +146,7 @@ ProspectModel
    Cm = leafParameters->GetCm();
    
    int nbdata = sizeof(DataSpecP5B) / sizeof(DataSpec);
-   for (int i = 0; i < nbdata; i++)
+   for (int i = 0; i < nbdata; ++i)
    {
       lambda = DataSpecP5B[i].lambda;
       n = DataSpecP5B[i].refLeafMatInd;

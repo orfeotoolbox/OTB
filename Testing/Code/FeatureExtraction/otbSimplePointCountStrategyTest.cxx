@@ -44,7 +44,7 @@ int otbSimplePointCountStrategyTest(int argc, char * argv[])
   Point[0] = 12.14;
   Point[1] = 14.14;
 
-  for (int i = 0; i < 10; i++)
+  for (int i = 0; i < 10; ++i)
     {
     pointset->SetPoint(count, Point);
     count++;

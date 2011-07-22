@@ -93,7 +93,7 @@ NCLSUnmixingFunctor<TInput, TOutput, TPrecision>
 {
   // TODO : support different types between input and output ?
   VectorType inVector(in.Size());
-  for (unsigned int i = 0; i < in.GetSize(); i++ )
+  for (unsigned int i = 0; i < in.GetSize(); ++i )
     {
     inVector[i] = in[i];
     }
@@ -119,7 +119,7 @@ NCLSUnmixingFunctor<TInput, TOutput, TPrecision>
     }
 
   OutputType out(nclsVector.size());
-  for (unsigned int i = 0; i < out.GetSize(); i++ )
+  for (unsigned int i = 0; i < out.GetSize(); ++i )
     {
     out[i] = nclsVector[i];
     }

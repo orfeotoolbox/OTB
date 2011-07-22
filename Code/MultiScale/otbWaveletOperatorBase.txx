@@ -80,7 +80,7 @@ WaveletOperatorBase<TMotherWaveletOperator, TPixel, VDimension, TAllocator>
 
   CoefficientVector newCoeff(length);
   newCoeff[medianPosition] = coeff[medianPosition];
-  for (unsigned int i = 1; i <= medianPosition; i++)
+  for (unsigned int i = 1; i <= medianPosition; ++i)
     {
     newCoeff[medianPosition + i] = coeff[medianPosition - i];
     newCoeff[medianPosition - i] = coeff[medianPosition + i];
@@ -100,7 +100,7 @@ WaveletOperatorBase<TMotherWaveletOperator, TPixel, VDimension, TAllocator>
   CoefficientVector highPassCoeff(length + 2);
 
   double sign = -1;
-  for (unsigned int i = 0; i < length; i++)
+  for (unsigned int i = 0; i < length; ++i)
     {
     highPassCoeff[i] = sign * coeff[i];
     sign *= -1.;
@@ -129,7 +129,7 @@ WaveletOperatorBase<TMotherWaveletOperator, TPixel, VDimension, TAllocator>
   CoefficientVector highPassCoeff(length + 2);
 
   double sign = 1;
-  for (unsigned int i = 0; i < length; i++)
+  for (unsigned int i = 0; i < length; ++i)
     {
     highPassCoeff[i] = sign * coeff[i];
     sign *= -1.;
@@ -157,7 +157,7 @@ WaveletOperatorBase<TMotherWaveletOperator, TPixel, VDimension, TAllocator>
   const unsigned int length = coeff.size();
   assert(length >= 2);
   CoefficientVector newFilter(length - 2);
-  for (unsigned int i = 0; i < newFilter.size(); i++)
+  for (unsigned int i = 0; i < newFilter.size(); ++i)
     {
     newFilter[i] = coeff[i + 1];
     }

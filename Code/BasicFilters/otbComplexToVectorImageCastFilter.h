@@ -74,7 +74,7 @@ public:
       TOutput output;
       output.SetSize( 2*A.Size() );
       
-      for(unsigned int i=0; i<A.Size(); i++)
+      for(unsigned int i=0; i<A.Size(); ++i)
         {
           output[2*i] = static_cast<OutputValueType>(A[i].real());
           output[2*i+1] = static_cast<OutputValueType>(A[i].imag());

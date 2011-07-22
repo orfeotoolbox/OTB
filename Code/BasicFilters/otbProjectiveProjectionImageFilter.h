@@ -71,13 +71,13 @@ public:
   OutputType operator ()(const InputType& in)
   {
     PrecisionType dotProduct = 0;
-    for (unsigned int i = 0; i < in.Size(); i++)
+    for (unsigned int i = 0; i < in.Size(); ++i)
       {
       dotProduct += in[i] * m_ProjectionDirection[i];
       }
 
     OutputType projected(in.Size());
-    for (unsigned int j = 0; j < in.Size(); j++)
+    for (unsigned int j = 0; j < in.Size(); ++j)
       {
       projected[j] = in[j] / dotProduct;
       }

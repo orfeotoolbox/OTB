@@ -70,7 +70,7 @@ LineSpatialObject<VDimension>
   while (it != end)
     {
     m_Points.push_back(*it);
-    it++;
+    ++it;
     }
 
   this->ComputeBoundingBox();
@@ -117,13 +117,13 @@ LineSpatialObject<VDimension>
       ptmax[1] = pt[1] + 1;
       const_cast<BoundingBoxType *>(this->GetBounds())->SetMinimum(ptmin);
       const_cast<BoundingBoxType *>(this->GetBounds())->SetMaximum(ptmax);
-      it++;
+      ++it;
       while (it != end)
         {
 
         PointType pt = this->GetIndexToWorldTransform()->TransformPoint((*it).GetPosition());
         const_cast<BoundingBoxType *>(this->GetBounds())->ConsiderPoint(pt);
-        it++;
+        ++it;
         }
 
       }
@@ -207,7 +207,7 @@ LineSpatialObject<VDimension>
           }
         }
       it1++;
-      it2++;
+      ++it2;
       }
 
     }

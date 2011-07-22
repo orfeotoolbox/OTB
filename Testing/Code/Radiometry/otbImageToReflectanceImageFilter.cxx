@@ -66,7 +66,7 @@ int otbImageToReflectanceImageFilter(int argc, char * argv[])
   beta.Fill(0);
   solarIllumination.Fill(0);
 
-  for (unsigned int i = 0; i < nbOfComponent; i++)
+  for (unsigned int i = 0; i < nbOfComponent; ++i)
     {
     alpha[i] = static_cast<double>(atof(argv[i + 4]));
     beta[i] = static_cast<double>(atof(argv[i + 8]));

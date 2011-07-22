@@ -203,7 +203,7 @@ int main()
   ComponentType;
 
   std::vector<ComponentType::Pointer> components;
-  for (unsigned int i = 0; i < numberOfClasses; i++)
+  for (unsigned int i = 0; i < numberOfClasses; ++i)
     {
     components.push_back(ComponentType::New());
     (components[i])->SetSample(sample);
@@ -231,7 +231,7 @@ int main()
 
   estimator->SetInitialProportions(initialProportions);
 
-  for (unsigned int i = 0; i < numberOfClasses; i++)
+  for (unsigned int i = 0; i < numberOfClasses; ++i)
     {
     estimator->AddComponent((ComponentType::Superclass*)
                             (components[i]).GetPointer());
@@ -247,7 +247,7 @@ int main()
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  for (unsigned int i = 0; i < numberOfClasses; i++)
+  for (unsigned int i = 0; i < numberOfClasses; ++i)
     {
     std::cout << "Cluster[" << i << "]" << std::endl;
     std::cout << "    Parameters:" << std::endl;

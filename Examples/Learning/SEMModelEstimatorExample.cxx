@@ -174,7 +174,7 @@ int main(int argc, char * argv[])
     typedef otb::Statistics::GaussianModelComponent<ClassSampleType>
     GaussianType;
 
-    for (int i = 0; i < numberOfClasses; i++)
+    for (int i = 0; i < numberOfClasses; ++i)
       classifier->AddComponent(i, GaussianType::New());
 //  Software Guide : EndCodeSnippet
 

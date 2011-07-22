@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
   Spacing4DType spacing4D = image4D->GetSpacing();
   Origin4DType  origin4D  = image4D->GetOrigin();
 
-  for (unsigned int i = 0; i < 3; i++)
+  for (unsigned int i = 0; i < 3; ++i)
     {
     size3D[i]    = size4D[i];
     index3D[i]   = index4D[i];

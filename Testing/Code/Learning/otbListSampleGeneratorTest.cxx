@@ -105,7 +105,7 @@ int otbListSampleGenerator(int argc, char* argv[])
     while (sampleIt != samples->End())
       {
       trainingFile << labelIt.GetMeasurementVector()[0];
-      for (unsigned int i = 0; i < sampleIt.GetMeasurementVector().Size(); i++)
+      for (unsigned int i = 0; i < sampleIt.GetMeasurementVector().Size(); ++i)
         {
         // Careful, the numbering is 1..N in libsvm
         trainingFile << " " << i + 1 << ":" << sampleIt.GetMeasurementVector()[i];
@@ -134,7 +134,7 @@ int otbListSampleGenerator(int argc, char* argv[])
     while (sampleIt != samples->End())
       {
       validationFile << labelIt.GetMeasurementVector()[0];
-      for (unsigned int i = 0; i < sampleIt.GetMeasurementVector().Size(); i++)
+      for (unsigned int i = 0; i < sampleIt.GetMeasurementVector().Size(); ++i)
         {
         // Careful, the numbering is 1..N in libsvm
         validationFile << " " << i + 1 << ":" << sampleIt.GetMeasurementVector()[i];

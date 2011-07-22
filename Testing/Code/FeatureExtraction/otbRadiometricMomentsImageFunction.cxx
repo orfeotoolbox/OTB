@@ -75,7 +75,7 @@ int otbRadiometricMomentsImageFunction(int argc, char * argv[])
   std::ofstream outputStream(outputFilename);
   outputStream << std::setprecision(10) << "Radiometric moments: [10]" << std::endl;
 
-  for (unsigned int j = 1; j < 5; j++)
+  for (unsigned int j = 1; j < 5; ++j)
     {
     outputStream << "Radiometric Moment(" << j << ") = " << Result[j-1] << std::endl;
     }

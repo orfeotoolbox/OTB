@@ -660,7 +660,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   /**
    * Loop for searching regions
    */
-  for (unsigned int cpt = 0; cpt < region.size(); cpt++)
+  for (unsigned int cpt = 0; cpt < region.size(); ++cpt)
     {
     itNeigh.SetLocation(region[cpt]);
     itNeighDir.SetLocation(region[cpt]);

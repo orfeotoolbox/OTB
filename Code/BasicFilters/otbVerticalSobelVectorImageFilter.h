@@ -39,7 +39,7 @@ public:
   {
     unsigned int length = input.GetPixel(0).Size();
     TOutput output ( length );
-    for ( unsigned int i = 0; i < length; i++ )
+    for ( unsigned int i = 0; i < length; ++i )
     {
       output[i] = static_cast<typename TOutput::ValueType>(
                  ( input.GetPixel(0)[i] - input.GetPixel(6)[i] )

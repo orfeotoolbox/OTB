@@ -79,11 +79,11 @@ int main(int argc, char* argv[])
   typedef itk::Statistics::ListSample<MeasurementVectorType> SampleType;
   SampleType::Pointer liste = SampleType::New();
 
-  for (int j = 0; j < nblines; j++)
+  for (int j = 0; j < nblines; ++j)
     {
     MeasurementVectorType tab;
     tab.SetSize(nbcolonnes);
-    for (int i = 0; i < nbcolonnes; i++)
+    for (int i = 0; i < nbcolonnes; ++i)
       {
       tab[i] = vectTab[j][i];
       }
@@ -156,7 +156,7 @@ int main(int argc, char* argv[])
   ClassifierType::OutputType::ConstIterator m_last =  membershipSample->End();
 
   /*int count[16];
-  for(int i=0; i<16; i++)
+  for(int i=0; i<16; ++i)
   {
   count[i]=0;
   }
@@ -174,7 +174,7 @@ int main(int argc, char* argv[])
     ++m_iter;
     }
 
-  /*for(int i=0; i<16; i++)
+  /*for(int i=0; i<16; ++i)
     {
     std::cout<<" classe: "<< i <<" nb elements= "<<count[i]<<std::endl;
     }*/
@@ -182,7 +182,7 @@ int main(int argc, char* argv[])
   int nbclass = membershipSample->GetNumberOfClasses();
   std::cout << " nb of classes= " << nbclass << std::endl;
 
-  for (int i = 0; i < nbclass; i++)
+  for (int i = 0; i < nbclass; ++i)
     {
     if (membershipSample->GetInternalClassLabel(i) != -1)
       {

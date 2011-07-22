@@ -92,7 +92,7 @@ ConfusionMatrixCalculator<TRefListLabel, TProdListLabel>
 
   std::vector<long int> samplesPerClass;
 
-  for (unsigned int i = 0; i < m_NumberOfClasses; i++)
+  for (unsigned int i = 0; i < m_NumberOfClasses; ++i)
     samplesPerClass.push_back(0);
 
   m_ConfusionMatrix = ConfusionMatrixType(m_NumberOfClasses, m_NumberOfClasses);

@@ -204,7 +204,7 @@ protected:
     highPassCoeff[medianPosition] = -coeff[medianPosition];
 
     double sign = 1.;
-    for (int i = 1; i <= medianPosition; i++)
+    for (int i = 1; i <= medianPosition; ++i)
       {
       highPassCoeff[medianPosition + i] = sign * coeff[medianPosition - i];
       highPassCoeff[medianPosition - i] = sign * coeff[medianPosition + i];

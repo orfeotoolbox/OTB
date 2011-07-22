@@ -87,13 +87,13 @@ int otbSVMImageModelEstimatorModelAccessor(int argc, char* argv[])
     {
     itkGenericExceptionMacro(<< "SVs NULL");
     }
-  for (unsigned int i = 0; i < nbSupportVector; i++)
+  for (unsigned int i = 0; i < nbSupportVector; ++i)
     {
     if (SVs[i] == NULL) itkGenericExceptionMacro(<< "SVs " << i << " NULL");
     f << std::endl;
     f << "  SV[" << i << "]:";
     const svm_node *p = SVs[i];
-    /*        for(unsigned int j=0; j<nbSupportVector; j++)
+    /*        for(unsigned int j=0; j<nbSupportVector; ++j)
     {
               f << "       SV["<<i<<"]["<<j<<"]:"; */
     if (svmEstimator->GetKernelType() == PRECOMPUTED)
@@ -121,7 +121,7 @@ int otbSVMImageModelEstimatorModelAccessor(int argc, char* argv[])
     itkGenericExceptionMacro(<< "rhos NULL");
     }
   f << std::setprecision(10) << "      ";
-  for (unsigned int i = 0; i < taille; i++)
+  for (unsigned int i = 0; i < taille; ++i)
     {
     f << " " << rhos[i];
     }
@@ -133,11 +133,11 @@ int otbSVMImageModelEstimatorModelAccessor(int argc, char* argv[])
     {
     itkGenericExceptionMacro(<< "alphas NULL");
     }
-  for (unsigned int i = 0; i < nbClass - 1; i++)
+  for (unsigned int i = 0; i < nbClass - 1; ++i)
     {
     if (alphas[i] == NULL) itkGenericExceptionMacro(<< "alphas " << i << " NULL");
     f << "     ";
-    for (unsigned int j = 0; j < nbSupportVector; j++)
+    for (unsigned int j = 0; j < nbSupportVector; ++j)
       {
       f << "  " << alphas[i][j];
       }
@@ -150,7 +150,7 @@ int otbSVMImageModelEstimatorModelAccessor(int argc, char* argv[])
 //   _evaluateHyperplaneDistance = ptrModel->EvaluateHyperplaneDistance();
 
 //   f << " - EvaluateHyperplaneDistance() VariableLengthVector() nb value(s): "<<_evaluateHyperplaneDistance.Size()<<std::endl;
-//   for (unsigned int i=0; i<_evaluateHyperplaneDistance.Size(); i++)
+//   for (unsigned int i=0; i<_evaluateHyperplaneDistance.Size(); ++i)
 //   {
 //     f << "     "<<_evaluateHyperplaneDistance[i]<<std::endl;
 //   }

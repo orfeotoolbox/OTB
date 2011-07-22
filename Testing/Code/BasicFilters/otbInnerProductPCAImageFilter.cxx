@@ -60,7 +60,7 @@ int otbInnerProductPCAImageFilter(int argc, char* argv[])
   unsigned int nbComponents = numberOfPrincipalComponentsRequired;
   if (generateMeanComponent == true) nbComponents += 1;
 
-  for (unsigned int cpt = 0; cpt < nbComponents; cpt++)
+  for (unsigned int cpt = 0; cpt < nbComponents; ++cpt)
     {
     ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
     WriterType2::Pointer          writer2     = WriterType2::New();

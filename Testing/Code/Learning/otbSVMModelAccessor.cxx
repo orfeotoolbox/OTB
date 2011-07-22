@@ -55,7 +55,7 @@ int otbSVMModelAccessor(int argc, char* argv[])
     {
     itkGenericExceptionMacro(<< "SVs NULL");
     }
-  for (unsigned int i = 0; i < nbSupportVector; i++)
+  for (unsigned int i = 0; i < nbSupportVector; ++i)
     {
     if (SVs[i] == NULL) itkGenericExceptionMacro(<< "SVs " << i << " NULL");
     f << std::endl;
@@ -77,7 +77,7 @@ int otbSVMModelAccessor(int argc, char* argv[])
     itkGenericExceptionMacro(<< "rhos NULL");
     }
   f << "      ";
-  for (unsigned int i = 0; i < taille; i++)
+  for (unsigned int i = 0; i < taille; ++i)
     {
     f << " " << rhos[i];
     }
@@ -89,11 +89,11 @@ int otbSVMModelAccessor(int argc, char* argv[])
     {
     itkGenericExceptionMacro(<< "alphas NULL");
     }
-  for (unsigned int i = 0; i < nbClass - 1; i++)
+  for (unsigned int i = 0; i < nbClass - 1; ++i)
     {
     if (alphas[i] == NULL) itkGenericExceptionMacro(<< "alphas " << i << " NULL");
     f << "     ";
-    for (unsigned int j = 0; j < nbSupportVector; j++)
+    for (unsigned int j = 0; j < nbSupportVector; ++j)
       {
       f << "  " << alphas[i][j];
       }
@@ -106,7 +106,7 @@ int otbSVMModelAccessor(int argc, char* argv[])
 //   _evaluateHyperplaneDistance = ptrModel->EvaluateHyperplaneDistance();
 
 //   f << " - EvaluateHyperplaneDistance() VariableLengthVector() nb value(s): "<<_evaluateHyperplaneDistance.Size()<<std::endl;
-//   for (unsigned int i=0; i<_evaluateHyperplaneDistance.Size(); i++)
+//   for (unsigned int i=0; i<_evaluateHyperplaneDistance.Size(); ++i)
 //   {
 //     f << "     "<<_evaluateHyperplaneDistance[i]<<std::endl;
 //   }

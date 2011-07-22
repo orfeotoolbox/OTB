@@ -52,7 +52,7 @@ bool MaskMuParserFunctor<TInputPixel>::operator()(const PixelType &p)
     }
 
   // we fill the buffer
-  for (unsigned int i = 0; i < m_NbOfBands; i++)
+  for (unsigned int i = 0; i < m_NbOfBands; ++i)
     {
     m_AImage[i] = static_cast<double> (p[i]);
     }
@@ -113,7 +113,7 @@ MaskMuParserFunctor<TInputPixel>::SetNumberOfBands(unsigned int NbOfBands)
 
   m_AImage.resize(NbOfBands, 0.0);
 
-  for (unsigned int i = 0; i < NbOfBands; i++)
+  for (unsigned int i = 0; i < NbOfBands; ++i)
     {
     varName << "b" << i + 1;
     m_Parser->DefineVar(varName.str(), &(m_AImage[i]));

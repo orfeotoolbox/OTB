@@ -460,7 +460,7 @@ ImageToPathListAlignFilter<TInputImage, TOutputPath>
                 }
               }
             /* compute next point */
-            l++;
+            ++l;
             xx = ox + pos * mx + (int) (dx * (double) (l * 2 + lphase));
             yy = oy + pos * my + (int) (dy * (double) (l * 2 + lphase));
             }

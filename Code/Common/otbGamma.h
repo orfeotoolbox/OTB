@@ -68,7 +68,7 @@ public:
       if (x > 0.0)
         {
         ga = 1.0;               // use factorial
-        for (int i = 2; i < x; i++)
+        for (int i = 2; i < x; ++i)
           {
           ga *= i;
           }
@@ -82,7 +82,7 @@ public:
         z = vcl_abs(x);
         m = (int)z;
         r = 1.0;
-        for (int k = 1; k <= m; k++)
+        for (int k = 1; k <= m; ++k)
           {
           r *= (z-k);
           }

@@ -182,7 +182,7 @@ int main(int argc, char *argv[])
     if (i != projectionDirection)
       {
       direction[j] = i;
-      j++;
+      ++j;
       }
     }
 // Software Guide : EndCodeSnippet

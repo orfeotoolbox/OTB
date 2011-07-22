@@ -84,7 +84,7 @@ LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
   // Clear previous adjacency map
   m_TemporaryAdjacencyMaps.resize( this->GetNumberOfThreads() );
 
-  for( int i=0; i<this->GetNumberOfThreads(); i++ )
+  for( int i=0; i<this->GetNumberOfThreads(); ++i )
     {
     if( i == 0 )
       {
@@ -320,14 +320,14 @@ LabelImageToLabelMapWithAdjacencyFilter<TInputImage, TOutputImage>
 
   // merge the lines from the temporary images in the output image
   // don't use the first image - that's the output image
-  for( int i=1; i<this->GetNumberOfThreads(); i++ )
+  for( int i=1; i<this->GetNumberOfThreads(); ++i )
     {
     typedef typename OutputImageType::LabelObjectContainerType LabelObjectContainerType;
     const LabelObjectContainerType & labelObjectContainer = m_TemporaryImages[i]->GetLabelObjectContainer();
 
     for( typename LabelObjectContainerType::const_iterator it = labelObjectContainer.begin();
       it != labelObjectContainer.end();
-      it++ )
+      ++it )
       {
       LabelObjectType * labelObject = it->second;
       if( output->HasLabel( labelObject->GetLabel() ) )

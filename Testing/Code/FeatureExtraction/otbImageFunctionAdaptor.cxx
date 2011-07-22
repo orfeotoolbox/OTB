@@ -152,9 +152,9 @@ int otbImageFunctionAdaptor(int argc, char * argv[])
     FMDImageFunctionAdaptorType::OutputType resultAdaptedFMD = FMDadaptedFunction->EvaluateAtIndex(index);
 
     rsltIdx = 0;
-    for (unsigned int i = 0; i <= 5; i++)
+    for (unsigned int i = 0; i <= 5; ++i)
       {
-      for (unsigned int j = 0; j <= 5; j++)
+      for (unsigned int j = 0; j <= 5; ++j)
         {
         error += vcl_pow(vcl_abs(resultAdaptedFMD[rsltIdx] - resultFMD.at(i).at(j)), 2);
 
@@ -188,9 +188,9 @@ int otbImageFunctionAdaptor(int argc, char * argv[])
     RMImageFunctionAdaptorType::OutputType resultAdaptedRM = RMadaptedFunction->EvaluateAtIndex(index);
 
     rsltIdx = 0;
-    for (unsigned int i = 0; i <= 5; i++)
+    for (unsigned int i = 0; i <= 5; ++i)
       {
-      for (unsigned int j = 0; j <= 5; j++)
+      for (unsigned int j = 0; j <= 5; ++j)
         {
         error += vcl_pow(vcl_abs(resultAdaptedRM[rsltIdx] - resultRM.at(i).at(j)), 2);
 
@@ -223,9 +223,9 @@ int otbImageFunctionAdaptor(int argc, char * argv[])
     CMImageFunctionAdaptorType::OutputType resultAdaptedCM = CMadaptedFunction->EvaluateAtIndex(index);
 
     rsltIdx = 0;
-    for (unsigned int i = 0; i <= 5; i++)
+    for (unsigned int i = 0; i <= 5; ++i)
       {
-      for (unsigned int j = 0; j <= 5; j++)
+      for (unsigned int j = 0; j <= 5; ++j)
         {
         error += vcl_pow(vcl_abs(resultAdaptedCM[rsltIdx] - resultCM.at(i).at(j).real()), 2);
         std::cout << "resultAdaptedCM : (" << resultAdaptedCM[rsltIdx] << "," << resultAdaptedCM[rsltIdx + 1] << ")"
@@ -255,7 +255,7 @@ int otbImageFunctionAdaptor(int argc, char * argv[])
     FMImageFunctionAdaptorType::OutputType resultAdaptedFM = FMadaptedFunction->EvaluateAtIndex(index);
 
     rsltIdx = 0;
-    for (unsigned int i = 0; i < 11; i++)
+    for (unsigned int i = 0; i < 11; ++i)
       {
       error += vcl_pow(vcl_abs(resultAdaptedFM[rsltIdx] - resultFM[i]), 2);
 
@@ -282,7 +282,7 @@ int otbImageFunctionAdaptor(int argc, char * argv[])
     HMImageFunctionAdaptorType::OutputType resultAdaptedHM = HMadaptedFunction->EvaluateAtIndex(index);
 
     rsltIdx = 0;
-    for (unsigned int i = 0; i < 7; i++)
+    for (unsigned int i = 0; i < 7; ++i)
       {
       error += vcl_pow(vcl_abs(resultAdaptedHM[rsltIdx] - resultHM[i]), 2);
 
@@ -309,7 +309,7 @@ int otbImageFunctionAdaptor(int argc, char * argv[])
     RaMImageFunctionAdaptorType::OutputType resultAdaptedRaM = RaMadaptedFunction->EvaluateAtIndex(index);
 
     rsltIdx = 0;
-    for (unsigned int i = 0; i < 4; i++)
+    for (unsigned int i = 0; i < 4; ++i)
       {
       error += vcl_pow(vcl_abs(resultAdaptedRaM[rsltIdx] - resultRaM[i]), 2);
 
@@ -343,7 +343,7 @@ int otbImageFunctionAdaptor(int argc, char * argv[])
     LHImageFunctionAdaptorType::OutputType resultAdaptedLH = LHadaptedFunction->EvaluateAtIndex(index);
 
     rsltIdx = 0;
-    for (unsigned int i = 0; i < 64; i++)
+    for (unsigned int i = 0; i < 64; ++i)
       {
       error += vcl_pow(vcl_abs(resultAdaptedLH[rsltIdx] - resultLH->GetFrequency(i)), 2);
 
@@ -386,9 +386,9 @@ int otbImageFunctionAdaptor(int argc, char * argv[])
     FMDImageFunctionAdaptorType::OutputType myResult = myAdaptedFunction->EvaluateAtIndex(index);
 
     rsltIdx = 0;
-    for (unsigned int i = 0; i <= 2; i++)
+    for (unsigned int i = 0; i <= 2; ++i)
       {
-      for (unsigned int j = 0; j <= 2; j++)
+      for (unsigned int j = 0; j <= 2; ++j)
         {
         std::cout << "myResult: " << myResult[rsltIdx] << std::endl;
         rsltIdx++;

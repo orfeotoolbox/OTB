@@ -62,7 +62,7 @@ int otbChangeLabelImageFilter(int argc, char * argv[])
   background[2] = 0;
 
   filter->SetChange(0, 0);
-  for (InputPixelType i = lower; i <= upper; i++)
+  for (InputPixelType i = lower; i <= upper; ++i)
     {
     filter->SetChange(i, background);
     }

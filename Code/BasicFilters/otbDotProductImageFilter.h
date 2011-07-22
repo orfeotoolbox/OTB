@@ -64,7 +64,7 @@ public:
   OutputType operator ()(const InputType& in)
   {
     OutputType result = 0;
-    for(unsigned int i = 0; i < in.Size(); i++)
+    for(unsigned int i = 0; i < in.Size(); ++i)
       {
       result += in[i] * m_Vector[i];
       }

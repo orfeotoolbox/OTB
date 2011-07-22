@@ -43,7 +43,7 @@ int otbSatelliteRSR(int argc, char * argv[])
 
   std::cout << myResponse <<std::endl;
   std::cout << "RSR("<<lambda<<","<< NumBand <<")= " << (*myResponse)(lambda, NumBand) << std::endl;
-//   for(unsigned int i=0; i<myResponse->GetRSR()[NumBand]->GetResponse().size(); i++)
+//   for(unsigned int i=0; i<myResponse->GetRSR()[NumBand]->GetResponse().size(); ++i)
 //   {
 //      std::cout << "RSR("<<myResponse->GetRSR()[NumBand]->GetResponse()[i]->first<<","<< NumBand <<")= " << myResponse->GetRSR()[NumBand]->GetResponse()[i]->second << std::endl;
 //   }

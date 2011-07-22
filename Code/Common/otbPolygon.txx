@@ -432,7 +432,7 @@ Polygon<TValue>
     {
     double     area = 0.0;
     VertexType origin = it.Value();
-    it++;
+    ++it;
     VertexType pt1 = it.Value();
     VertexType pt2 = it.Value();
 
@@ -447,7 +447,7 @@ Polygon<TValue>
       double vector2y = pt2[1] - origin[1];
       double crossProdduct = vector1x * vector2y - vector2x * vector1y;
       area += crossProdduct;
-      it++;
+      ++it;
       }
 
     m_Area = fabs(area / 2.0);
@@ -493,7 +493,7 @@ double Polygon<TValue>
     VertexType pt1 = it.Value(); //just init, won't be used like that
     VertexType pt2 = it.Value();
 
-    it++;
+    ++it;
     while (it != this->GetVertexList()->End())
       {
       pt1 = pt2;
@@ -504,7 +504,7 @@ double Polygon<TValue>
         accum += (pt1[i] - pt2[i]) * (pt1[i] - pt2[i]);
         }
       length += vcl_sqrt(accum);
-      it++;
+      ++it;
       }
 
     //Adding the last segment (between first and last point)

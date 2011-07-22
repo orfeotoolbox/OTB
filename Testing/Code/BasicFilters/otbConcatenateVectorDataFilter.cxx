@@ -57,7 +57,7 @@ int otbConcatenateVectorDataFilter (int argc, char * argv[])
     // Concatenate the vector datas
   ConcatenateFilterType::Pointer concatenate = ConcatenateFilterType::New();
   
-  for (unsigned int idx = 0; idx < nbInputs; idx++)
+  for (unsigned int idx = 0; idx < nbInputs; ++idx)
     {
     // Reader object
     ReaderType::Pointer reader = ReaderType::New();

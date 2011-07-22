@@ -55,7 +55,7 @@ SpatialisationFilter<TLabelMap>
 
   unsigned int numberOfObjects = m_NumberOfObjects[0] * m_NumberOfObjects[1];
   //first object must have label 1. 0 is for background value in a label map.
-  for (unsigned int i = 0; i < numberOfObjects; i++)
+  for (unsigned int i = 0; i < numberOfObjects; ++i)
     {
     this->ProcessObject(i);
     }

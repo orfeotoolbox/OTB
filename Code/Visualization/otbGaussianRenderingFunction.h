@@ -151,7 +151,7 @@ namespace otb
 
           ParametersType psup;
           psup.SetSize(p.GetSize() - 2);
-          for (unsigned int i = 0; i < psup.GetSize(); i++)
+          for (unsigned int i = 0; i < psup.GetSize(); ++i)
           {
             psup[i] = p[i + 2];
           }
@@ -182,7 +182,7 @@ namespace otb
           p[0] = m_Mean;
           p[1] = m_StandardDeviation;
 
-          for (unsigned int i = 0; i < psup.GetSize(); i++)
+          for (unsigned int i = 0; i < psup.GetSize(); ++i)
           {
             p[i + 2] = psup[i];
           }

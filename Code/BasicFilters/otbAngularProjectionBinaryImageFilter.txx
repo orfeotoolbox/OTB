@@ -82,7 +82,7 @@ AngularProjectionBinaryImageFilter< TInputImage, TOutputImage, TPrecision >
 {
   m_AngleSet = angle;
   this->SetNumberOfOutputs( angle.size() );
-  for ( unsigned int i = 0; i < this->GetNumberOfOutputs(); i++ )
+  for ( unsigned int i = 0; i < this->GetNumberOfOutputs(); ++i )
   {
     this->SetNthOutput(i, OutputImageType::New());
   }
@@ -95,7 +95,7 @@ AngularProjectionBinaryImageFilter< TInputImage, TOutputImage, TPrecision >
 ::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
-  for (unsigned int i = 0; i < this->GetNumberOfOutputs(); i++)
+  for (unsigned int i = 0; i < this->GetNumberOfOutputs(); ++i)
   {
     this->GetOutput(i)->SetRegions(
       this->GetInput()->GetRequestedRegion());
@@ -124,7 +124,7 @@ AngularProjectionBinaryImageFilter< TInputImage, TOutputImage, TPrecision >
 
   std::vector< itk::ImageRegionIterator<OutputImageType> > outIter
     ( this->GetNumberOfOutputs() );
-  for ( unsigned int i = 0; i < outIter.size(); i++ )
+  for ( unsigned int i = 0; i < outIter.size(); ++i )
   {
     outIter[i] = itk::ImageRegionIterator<OutputImageType>
                   ( this->GetOutput(i), outputRegionForThread );
@@ -133,7 +133,7 @@ AngularProjectionBinaryImageFilter< TInputImage, TOutputImage, TPrecision >
 
   while ( !iter1.IsAtEnd() && !iter2.IsAtEnd() )
   {
-    for ( unsigned int i = 0; i < outIter.size(); i++ )
+    for ( unsigned int i = 0; i < outIter.size(); ++i )
     {
       outIter[i].Set( vcl_cos( m_AngleSet[i] ) * iter1.Get()
                       + vcl_sin( m_AngleSet[i] ) * iter2.Get() );

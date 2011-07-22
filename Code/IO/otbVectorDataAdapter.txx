@@ -65,7 +65,7 @@ VectorDataAdapter<TInputVectorData, TOutputVectorData>
     // fixme handle 2.5D ?
 
     newLine->AddVertex(index);
-    it++;
+    ++it;
     }
 
   return newLine;
@@ -94,7 +94,7 @@ VectorDataAdapter<TInputVectorData, TOutputVectorData>
     // fixme handle 2.5D ?
 
     newPolygon->AddVertex(index);
-    it++;
+    ++it;
     }
   return newPolygon;
 }

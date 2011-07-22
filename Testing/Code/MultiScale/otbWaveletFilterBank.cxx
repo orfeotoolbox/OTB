@@ -58,7 +58,7 @@ int otbWaveletFilterBank(int argc, char * argv[])
   typedef otb::WaveletFilterBank<ImageType, ImageType, InvWaveletOperator, otb::Wavelet::INVERSE>
   InvFilterType;
   InvFilterType::Pointer invFilter = InvFilterType::New();
-  for (unsigned int i = 0; i < filter->GetNumberOfOutputs(); i++)
+  for (unsigned int i = 0; i < filter->GetNumberOfOutputs(); ++i)
     invFilter->SetInput(i, filter->GetOutput(i));
   invFilter->SetSubsampleImageFactor(filter->GetSubsampleImageFactor());
 

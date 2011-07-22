@@ -71,7 +71,7 @@ void Curves2DWidget::RemoveCurveByItsID(unsigned int id)
 {
   unsigned int size = m_Curves->Size();
 
-  for (unsigned int j = 0; j < size; j++)
+  for (unsigned int j = 0; j < size; ++j)
     {
     if (m_Curves->GetNthElement(j)->GetId() == id)
       {
@@ -84,7 +84,7 @@ void Curves2DWidget::RemoveCurveByItsID(unsigned int id)
 Curves2DWidget::CurvePointerType
 Curves2DWidget::GetCurveByItsId(unsigned int id)
 {
-  for (unsigned int j = 0; j < m_Curves->Size(); j++)
+  for (unsigned int j = 0; j < m_Curves->Size(); ++j)
     {
     if (m_Curves->GetNthElement(j)->GetId() == id)
       {

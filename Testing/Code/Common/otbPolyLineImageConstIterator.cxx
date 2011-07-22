@@ -58,7 +58,7 @@ int otbPolyLineImageConstIterator(int argc, char * argv[])
 
   PathType::Pointer path = PathType::New();
 
-  for (unsigned int i = 1; i < nbpoints; i++)
+  for (unsigned int i = 1; i < nbpoints; ++i)
     {
     VertexType vertex1, vertex2;
     vertex1[0] = 0;
@@ -68,7 +68,7 @@ int otbPolyLineImageConstIterator(int argc, char * argv[])
     path->AddVertex(vertex1);
     path->AddVertex(vertex2);
     }
-  for (unsigned int i = 1; i < nbpoints; i++)
+  for (unsigned int i = 1; i < nbpoints; ++i)
     {
     VertexType vertex1, vertex2;
     vertex1[0] = i * sizex / nbpoints;

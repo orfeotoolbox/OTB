@@ -147,7 +147,7 @@ SparseUnmixingImageFilter< TInputImage, TOutputImage, TPrecision, TMotherWavelet
   progress->RegisterInternalFilter(m_Transformer, 0.25f);
   
   this->SetNumberOfOutputs( m_Transformer->GetNumberOfOutputs() );
-  for ( unsigned int i = 0; i < this->GetNumberOfOutputs(); i++ )
+  for ( unsigned int i = 0; i < this->GetNumberOfOutputs(); ++i )
   {
     this->SetNthOutput(i, OutputImageType::New());
     m_Transformer->GraftNthOutput( i, this->GetOutput(i) );
@@ -155,7 +155,7 @@ SparseUnmixingImageFilter< TInputImage, TOutputImage, TPrecision, TMotherWavelet
 
   m_Transformer->Update();
 
-  for ( unsigned int i = 0; i < this->GetNumberOfOutputs(); i++ )
+  for ( unsigned int i = 0; i < this->GetNumberOfOutputs(); ++i )
   {
     this->GraftNthOutput( i, m_Transformer->GetOutput(i) );
   }

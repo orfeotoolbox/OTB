@@ -40,9 +40,9 @@ int otbBreakAngularPathListFilter(int argc, char * argv[])
   while (argv[cpt][0] != '|')
     {
     ListMaxAngle.push_back(static_cast<double>(::atof(argv[cpt])));
-    cpt++;
+    ++cpt;
     }
-  cpt++;
+  ++cpt;
   ListPoints.clear();
 
   while (argv[cpt] != NULL)
@@ -60,7 +60,7 @@ int otbBreakAngularPathListFilter(int argc, char * argv[])
       {
       ListPoints.push_back(static_cast<double>(::atof(argv[cpt])));
       }
-    cpt++;
+    ++cpt;
     }
   MatricePoints.push_back(ListPoints);
 

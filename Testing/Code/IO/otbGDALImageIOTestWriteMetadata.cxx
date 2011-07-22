@@ -102,7 +102,7 @@ public:
 
     os << "GCP Projection Ref: " << this->m_GCPProjRef <<std::endl;
     os << "GCP count: " << this->m_GCPCount << std::endl;
-   /* for (int it = 0; it<this->m_GCPCount; it++)
+   /* for (int it = 0; it<this->m_GCPCount; ++it)
       {
       os << "   GCP Id = " << this->m_GCPs[it].pszId << std::endl;
       os << "   GCP Info =  " << this->m_GCPs[it].pszInfo << std::endl;
@@ -549,7 +549,7 @@ bool writeReadDatasetMetadata(std::string filename, std::vector<std::string> opt
   // Write data into dataset
   GDALRasterBand *poBand;
   GByte abyRaster[128*128];
-  for (unsigned int it=0; it < 128*128; it++)
+  for (unsigned int it=0; it < 128*128; ++it)
     {
     abyRaster[it] = 0;
     }

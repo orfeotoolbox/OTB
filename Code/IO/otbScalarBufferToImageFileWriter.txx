@@ -74,10 +74,10 @@ ScalarBufferToImageFileWriter<TBufferType, TOutputPixelType>::GenerateData()
       unsigned int cpt(0);
       while( it.IsAtEnd()==false )
         {
-          for(unsigned int i=0; i<m_NumberOfChannels; i++)
+          for(unsigned int i=0; i<m_NumberOfChannels; ++i)
             {
               lPix[i] = static_cast<OutputPixelType>(m_Buffer[cpt]);
-              cpt++;
+              ++cpt;
             }
           
           it.Set( lPix );
@@ -95,7 +95,7 @@ ScalarBufferToImageFileWriter<TBufferType, TOutputPixelType>::GenerateData()
           IndexType index = it.GetIndex();
           cpt = (m_ImageSize[1] - 1 - index[1]) * m_NumberOfChannels * m_ImageSize[0] + m_NumberOfChannels * index[0];
           
-          for(unsigned int i=0; i<m_NumberOfChannels; i++)
+          for(unsigned int i=0; i<m_NumberOfChannels; ++i)
             {
               lPix[i] = static_cast<OutputPixelType>(m_Buffer[cpt+i]);
             }

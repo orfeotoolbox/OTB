@@ -165,7 +165,7 @@ int main(int ac, char* av[])
     }
   // a NULL is required at the end of the table
   char** argv = new char*[remainingArgs.size() + 2];
-  for (int i = 0; i < static_cast<int>(remainingArgs.size()); i++)
+  for (int i = 0; i < static_cast<int>(remainingArgs.size()); ++i)
     {
     argv[i + 1] = remainingArgs[i];
     }

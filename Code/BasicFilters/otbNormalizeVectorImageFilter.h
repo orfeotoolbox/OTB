@@ -49,7 +49,7 @@ public:
   {
     unsigned int length = input.Size();
     TOutput output ( length );
-    for ( unsigned int i = 0; i < length; i++ )
+    for ( unsigned int i = 0; i < length; ++i )
     {
       output[i] = static_cast<typename TOutput::ValueType>(
                     ( static_cast< RealType >( input[i] ) - m_Mean[i] )
@@ -62,7 +62,7 @@ public:
   void SetMean ( const itk::VariableLengthVector<T> & m )
   {
     m_Mean.SetSize( m.Size() );
-    for ( unsigned int i = 0; i < m_Mean.Size(); i++ )
+    for ( unsigned int i = 0; i < m_Mean.Size(); ++i )
       m_Mean[i] = static_cast< RealType >( m[i] );
   }
 
@@ -75,7 +75,7 @@ public:
   void SetStdDev ( const itk::VariableLengthVector<T> & sigma )
   {
     m_StdDev.SetSize( sigma.Size() );
-    for ( unsigned int i = 0; i < m_StdDev.Size(); i++ )
+    for ( unsigned int i = 0; i < m_StdDev.Size(); ++i )
     {
       m_StdDev[i] = static_cast< RealType >( sigma[i] );
       if ( m_StdDev[i] == itk::NumericTraits< RealType >::Zero )
@@ -90,7 +90,7 @@ public:
   void SetVariance ( const itk::VariableLengthVector<T> & var )
   {
     m_StdDev.SetSize( var.Size() );
-    for ( unsigned int i = 0; i < m_StdDev.Size(); i++ )
+    for ( unsigned int i = 0; i < m_StdDev.Size(); ++i )
     {
       m_StdDev[i] = vcl_sqrt( static_cast< RealType >( var[i] ) );
       if ( m_StdDev[i] == itk::NumericTraits< RealType >::Zero )

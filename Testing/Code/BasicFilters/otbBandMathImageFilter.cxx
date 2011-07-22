@@ -164,7 +164,7 @@ int otbBandMathImageFilter( int argc, char* argv[])
 
   std::cout << "- nan section\n";
   it1.GoToBegin(); it2.GoToBegin(); it.GoToBegin();
-  for(i=1; i<=50; i++ , ++it1, ++it2, ++it){}
+  for(i=1; i<=50; ++i , ++it1, ++it2, ++it){}
   if(vnl_math_isnan(it.Get()))
     std::cout << "Pixel_1 =  " << it1.Get() << "     Pixel_2 =  " << it2.Get() << "     Result =  " << it.Get() << "     Expected =  nan\n";
   else

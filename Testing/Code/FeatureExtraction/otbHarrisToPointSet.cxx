@@ -74,7 +74,7 @@ int otbHarrisToPointSet(int argc, char * argv[])
   unsigned long NbPoints  = pointList->GetNumberOfPoints();
   file << "NbPoints : " << NbPoints << std::endl;
 
-  for (unsigned long i = 0; i < NbPoints; i++)
+  for (unsigned long i = 0; i < NbPoints; ++i)
     {
     pointList->GetPoint(i, &CoordPoint);
     file << i + 1 << " / " << NbPoints << " : ";

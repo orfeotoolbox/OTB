@@ -73,7 +73,7 @@ VectorDataTransformFilter<TInputVectorData, TOutputVectorData>
     index[1]=point[1];
     if (!vnl_math_isnan(index[0]) &&  !vnl_math_isnan(index[1]))
       newLine->AddVertex(index);
-    it++;
+    ++it;
     }
 
   return newLine;
@@ -102,7 +102,7 @@ VectorDataTransformFilter<TInputVectorData, TOutputVectorData>
     index[1]=point[1];
     if( !vnl_math_isnan(index[0]) &&  !vnl_math_isnan(index[1]) )
       newPolygon->AddVertex(index);
-    it++;
+    ++it;
     }
   return newPolygon;
 }

@@ -62,7 +62,7 @@ int generic_otbMultiChannelExtractROI(int argc, char * argv[], const char * inpu
       }
     else if (strArgv == "-channels")
       {
-      cpt++;
+      ++cpt;
       bool searchChannels(true);
       while (searchChannels == true)
         {
@@ -81,7 +81,7 @@ int generic_otbMultiChannelExtractROI(int argc, char * argv[], const char * inpu
             {
             extractROIFilter->SetChannel((unsigned int) ::atoi(argv[cpt]));
             std::cout << " ->SetChannel(" << ::atoi(argv[cpt]) << ")" << std::endl;
-            cpt++;
+            ++cpt;
             nbcanaux++;
             }
           }
@@ -97,7 +97,7 @@ int generic_otbMultiChannelExtractROI(int argc, char * argv[], const char * inpu
   std::cout << " Canaux selectionnes (" << extractROIFilter->GetNbChannels() << ") : ";
   typename ExtractROIFilterType::ChannelsType lChannels;
   lChannels = extractROIFilter->GetChannels();
-  for (unsigned int i = 0; i < lChannels.size(); i++)
+  for (unsigned int i = 0; i < lChannels.size(); ++i)
     {
     std::cout << lChannels[i] << " ";
     }
@@ -137,28 +137,28 @@ int otbMultiChannelExtractROI(int argc, char * argv[])
   if (argv[cpt][0] == '-')
     {
     linputPixelType = std::string(argv[cpt]);
-    cpt++;
+    ++cpt;
     inputFilename  = argv[cpt];
-    cpt++;
+    ++cpt;
     }
   else
     {
     linputPixelType = std::string("-uchar");
     inputFilename  = argv[cpt];
-    cpt++;
+    ++cpt;
     }
   if (argv[cpt][0] == '-')
     {
     loutputPixelType = std::string(argv[cpt]);
-    cpt++;
+    ++cpt;
     outputFilename  = argv[cpt];
-    cpt++;
+    ++cpt;
     }
   else
     {
     loutputPixelType = std::string("-uchar");
     outputFilename  = argv[cpt];
-    cpt++;
+    ++cpt;
     }
 
   argc -= cpt;

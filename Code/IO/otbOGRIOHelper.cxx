@@ -731,7 +731,7 @@ unsigned int OGRIOHelper
         ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
     
         // Add the fields to the features
-        for (unsigned int i  = 0; i < kwl.GetNumberOfFields(); i++)
+        for (unsigned int i  = 0; i < kwl.GetNumberOfFields(); ++i)
           {
           // Get the key of the Nth OGRFieldRefn
           const char * key = kwl.GetNthField(i).first->GetNameRef();
@@ -789,7 +789,7 @@ unsigned int OGRIOHelper
         ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
 
         // Add the fields to the features
-        for (unsigned int i  = 0; i < kwl.GetNumberOfFields(); i++)
+        for (unsigned int i  = 0; i < kwl.GetNumberOfFields(); ++i)
           {
           // Get the key of the Nth OGRFieldRefn
           const char * key = kwl.GetNthField(i).first->GetNameRef();
@@ -874,7 +874,7 @@ unsigned int OGRIOHelper
         ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
     
         // Add the fields to the features
-        for (unsigned int i  = 0; i < kwl.GetNumberOfFields(); i++)
+        for (unsigned int i  = 0; i < kwl.GetNumberOfFields(); ++i)
           {
           // Get the key of the Nth OGRFieldRefn
           const char * key = kwl.GetNthField(i).first->GetNameRef();

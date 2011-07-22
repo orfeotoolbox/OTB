@@ -97,7 +97,7 @@ LabelMapToVectorDataFilter<TLabelMap, TVectorData, TFieldsFunctor>
   typename InputLabelMapType::LabelObjectContainerType::const_iterator it;
   // And get the object container to reuse it later
   const typename InputLabelMapType::LabelObjectContainerType& labelObjectContainer = input->GetLabelObjectContainer();
-  for (it = labelObjectContainer.begin(); it != labelObjectContainer.end(); it++)
+  for (it = labelObjectContainer.begin(); it != labelObjectContainer.end(); ++it)
     {
     /**the label object*/
     LabelObjectType * labelObject = it->second;

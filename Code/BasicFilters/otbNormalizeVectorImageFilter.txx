@@ -65,7 +65,7 @@ NormalizeVectorImageFilter< TInputImage, TOutputImage >
     {
       typename StreamingStatisticsVectorImageFilter< InputImageType >::RealPixelType sigma
         ( this->GetInput()->GetNumberOfComponentsPerPixel() );
-      for ( unsigned int i = 0; i < sigma.Size(); i++ )
+      for ( unsigned int i = 0; i < sigma.Size(); ++i )
         sigma[i] = vcl_sqrt( m_CovarianceEstimator->GetCovariance()(i, i) );
 
       this->GetFunctor().SetStdDev( sigma );

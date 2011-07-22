@@ -58,7 +58,7 @@ int otbProspectTransTest(int argc, char * argv[])
    prospect->Update();
    
    std::ofstream outputFile(OutputName, std::ios::out);
-   for(unsigned int i=0; i<prospect->GetTransmittance()->Size(); i++)
+   for(unsigned int i=0; i<prospect->GetTransmittance()->Size(); ++i)
    {
       outputFile<<prospect->GetTransmittance()->GetResponse()[i].second<<std::endl;
    }

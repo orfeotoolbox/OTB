@@ -80,7 +80,7 @@ int otbFlusserMomentsImageFunction(int argc, char * argv[])
   std::ofstream outputStream(outputFilename);
   outputStream << std::setprecision(10) << "Flusser Image moments: [10]" << std::endl;
 
-  for (unsigned int j = 1; j < 12; j++)
+  for (unsigned int j = 1; j < 12; ++j)
     {
     outputStream << "Flusser(" << j << ") = " << Result[j-1] << std::endl;
     }
@@ -144,7 +144,7 @@ int otbFlusserMomentsImageFunctionScaleInvariant(int argc, char * argv[])
 
   double error = 0.0;
   
-  for (unsigned int j = 1; j < 12; j++)
+  for (unsigned int j = 1; j < 12; ++j)
     {
     error += vcl_pow(vcl_abs( Result1[j-1] - Result2[j-1]), 2);
 
@@ -250,7 +250,7 @@ int otbFlusserMomentsImageFunctionRotationInvariant(int argc, char * argv[])
 
   double error = 0.0;
 
-  for (unsigned int j = 1; j < 12; j++)
+  for (unsigned int j = 1; j < 12; ++j)
     {
     error += vcl_pow(vcl_abs( Result1[j-1] - Result2[j-1]), 2);
     

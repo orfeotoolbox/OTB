@@ -92,7 +92,7 @@ int otbReduceSpectralResponseSVMClassifier(int argc, char * argv[])
   const ossimString regularExpressionPattern = ".*\\.txt$";
   int flags = ossimDirectory::OSSIM_DIR_DEFAULT;
 
-  for (unsigned int i = 0; i < dirSR.size(); i++) //for each class (directory)
+  for (unsigned int i = 0; i < dirSR.size(); ++i) //for each class (directory)
     {
     std::vector<ossimFilename> result;
     ossimDirectory * directory = new ossimDirectory();
@@ -112,7 +112,7 @@ int otbReduceSpectralResponseSVMClassifier(int argc, char * argv[])
         randomGen = itk::Statistics::MersenneTwisterRandomVariateGenerator::New();
     //randomGen->Initialize();
 
-    for (unsigned int j = 0; j < static_cast<unsigned int> (percentage * result.size()); j++)
+    for (unsigned int j = 0; j < static_cast<unsigned int> (percentage * result.size()); ++j)
       {
       ind = randomGen->GetIntegerVariate() % (result.size());
       testing.push_back(result[ind]);
@@ -120,14 +120,14 @@ int otbReduceSpectralResponseSVMClassifier(int argc, char * argv[])
       }
 
     //add to global training files and testing files
-    for (unsigned int k = 0; k < testing.size(); k++)
+    for (unsigned int k = 0; k < testing.size(); ++k)
       {
       std::cout << "testing[" << k << "] : " << testing[k] << std::endl;
       testingFiles.push_back(testing[k]);
       testingGTClasses.push_back(i);
       }
 
-    for (unsigned int l = 0; l < training.size(); l++)
+    for (unsigned int l = 0; l < training.size(); ++l)
       {
       std::cout << "training[" << l << "] : " << training[l] << std::endl;
       trainingFiles.push_back(training[l]);
@@ -138,7 +138,7 @@ int otbReduceSpectralResponseSVMClassifier(int argc, char * argv[])
   //compute spectral response for all training files
   SampleListType::Pointer sampleList = SampleListType::New();
   TrainingSampleListType::Pointer trainingList = TrainingSampleListType::New();
-  for (unsigned int i = 0; i < trainingFiles.size(); i++)
+  for (unsigned int i = 0; i < trainingFiles.size(); ++i)
     {
     ResponsePointerType spectralResponse = ResponseType::New();
     std::cout << "training file : " << trainingFiles[i] << std::endl;
@@ -157,7 +157,7 @@ int otbReduceSpectralResponseSVMClassifier(int argc, char * argv[])
     TrainingSampleType trainingSample;
     sample.SetSize(reduceResponse->GetReduceResponse()->Size());
     std::cout << "reduce response : [";
-    for (unsigned int j = 0; j < reduceResponse->GetReduceResponse()->Size(); j++)
+    for (unsigned int j = 0; j < reduceResponse->GetReduceResponse()->Size(); ++j)
       {
       sample[j] = reduceResponse->GetReduceResponse()->GetResponse()[j].second;
       std::cout << reduceResponse->GetReduceResponse()->GetResponse()[j].second << " ";
@@ -187,7 +187,7 @@ int otbReduceSpectralResponseSVMClassifier(int argc, char * argv[])
   //compute spectral response for testing files
   sampleList->Clear(); //clear the sample list to re use it for testing samples
   TrainingSampleListType::Pointer groundTruthClassList = TrainingSampleListType::New();
-  for (unsigned int i = 0; i < testingFiles.size(); i++)
+  for (unsigned int i = 0; i < testingFiles.size(); ++i)
     {
     ResponsePointerType spectralResponse = ResponseType::New();
     std::cout << "testing file : " << testingFiles[i] << std::endl;
@@ -205,7 +205,7 @@ int otbReduceSpectralResponseSVMClassifier(int argc, char * argv[])
     SampleType sample;
     TrainingSampleType gtClass;
     sample.SetSize(reduceResponse->GetReduceResponse()->Size());
-    for (unsigned int j = 0; j < reduceResponse->GetReduceResponse()->Size(); j++)
+    for (unsigned int j = 0; j < reduceResponse->GetReduceResponse()->Size(); ++j)
       {
       sample[j] = reduceResponse->GetReduceResponse()->GetResponse()[j].second;
       }
@@ -230,7 +230,7 @@ int otbReduceSpectralResponseSVMClassifier(int argc, char * argv[])
     classifierListLabel->PushBack(it.GetClassLabel());
     ++it;
     }
-  for (unsigned int i = 0; i < testingFiles.size(); i++)
+  for (unsigned int i = 0; i < testingFiles.size(); ++i)
     {
     std::cout << "ground truth class : " << testingGTClasses[i] << std::endl;
     }

@@ -60,7 +60,7 @@ int otbConfusionMatrixCalculatorSetListSamples(int argc, char* argv[])
   int nbSamples = atoi(argv[1]);
   int nbClasses = atoi(argv[2]);
 
-  for (int i = 0; i < nbSamples; i++)
+  for (int i = 0; i < nbSamples; ++i)
     {
     int        label = (i % nbClasses) + 1;
     PLabelType plab;
@@ -100,7 +100,7 @@ int otbConfusionMatrixCalculatorWrongSize(int argc, char* argv[])
   int nbSamples = atoi(argv[1]);
   int nbClasses = atoi(argv[2]);
 
-  for (int i = 0; i < nbSamples; i++)
+  for (int i = 0; i < nbSamples; ++i)
     {
     int        label = (i % nbClasses) + 1;
     PLabelType plab;
@@ -154,7 +154,7 @@ int otbConfusionMatrixCalculatorUpdate(int argc, char* argv[])
   int nbSamples = atoi(argv[1]);
   int nbClasses = atoi(argv[2]);
 
-  for (int i = 0; i < nbSamples; i++)
+  for (int i = 0; i < nbSamples; ++i)
     {
     int        label = (i % nbClasses) + 1;
     PLabelType plab;
@@ -184,8 +184,8 @@ int otbConfusionMatrixCalculatorUpdate(int argc, char* argv[])
 
   double totalError = 0.0;
 
-  for (int i = 0; i < nbClasses; i++)
-    for (int j = 0; j < nbClasses; j++)
+  for (int i = 0; i < nbClasses; ++i)
+    for (int j = 0; j < nbClasses; ++j)
       {
       double goodValue = 0.0;
       if (i == j) goodValue = nbSamples / nbClasses;

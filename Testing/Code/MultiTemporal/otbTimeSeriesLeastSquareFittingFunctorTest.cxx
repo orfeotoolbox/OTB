@@ -37,7 +37,7 @@ int otbTimeSeriesLeastSquareFittingFunctorTest(int argc, char* argv[])
 
   DatesType doySeries;
   // one acquisition every 2 days
-  for(unsigned int i = 0; i<nbDates; i++)
+  for(unsigned int i = 0; i<nbDates; ++i)
     doySeries[i] = 2*i;
   
 
@@ -48,7 +48,7 @@ int otbTimeSeriesLeastSquareFittingFunctorTest(int argc, char* argv[])
   inCoefs[2] = ::atof(argv[3]);
 
   // x = a + b * t + c * t^2
-  for(unsigned int i = 0; i<nbDates; i++)
+  for(unsigned int i = 0; i<nbDates; ++i)
     inSeries[i] = inCoefs[0]+inCoefs[1]*doySeries[i]+inCoefs[2]*vcl_pow(doySeries[i], 2.0);
 
 
@@ -57,7 +57,7 @@ int otbTimeSeriesLeastSquareFittingFunctorTest(int argc, char* argv[])
 
   FunctorType::CoefficientsType outCoefs = f.GetCoefficients(inSeries);
 
-  for(unsigned int i=0; i<= Degree; i++)
+  for(unsigned int i=0; i<= Degree; ++i)
     if(fabs((outCoefs[i]-inCoefs[i])/inCoefs[i])>0.01)
       {
       std::cout << outCoefs[i] << " != " << inCoefs[i] << std::endl;

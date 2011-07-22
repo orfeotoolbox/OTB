@@ -87,7 +87,7 @@ BCOInterpolateImageFunctionBase<TInputImage, TCoordRep>
   step = 4./static_cast<double>(2*radius);
   position = - double(radius) * step;
 
-  for ( int i = -radius; i <= radius; i++)
+  for ( int i = -radius; i <= radius; ++i)
     {
     // Compute the BCO coefficients according to alpha.
     dist = vcl_abs(position - offset*step);
@@ -149,9 +149,9 @@ BCOInterpolateImageFunction<TInputImage, TCoordRep>
     baseIndex[dim] = itk::Math::Floor< IndexValueType >( index[dim]+0.5 );
     }
 
-  for( int i = -radius; i <= radius; i++ )
+  for( int i = -radius; i <= radius; ++i )
     {
-    for( int j = -radius; j <= radius; j++ )
+    for( int j = -radius; j <= radius; ++j )
       {
       // get neighbor index
       neighIndex[0] = baseIndex[0] + i;
@@ -214,10 +214,10 @@ BCOInterpolateImageFunction< otb::VectorImage<TPixel, VImageDimension> , TCoordR
   std::vector< std::vector< ScalarRealType > > lineRes;
 
   lineRes.resize(winSize);
-  for( unsigned int i = 0; i<winSize; i++)
+  for( unsigned int i = 0; i<winSize; ++i)
     {
     lineRes.at(i).resize(componentNumber);
-    for( unsigned int j = 0; j<componentNumber; j++)
+    for( unsigned int j = 0; j<componentNumber; ++j)
       {
       lineRes.at(i).at(j) = itk::NumericTraits<ScalarRealType>::Zero;
       }
@@ -226,7 +226,7 @@ BCOInterpolateImageFunction< otb::VectorImage<TPixel, VImageDimension> , TCoordR
   std::vector< ScalarRealType > value;
 
   value.resize(componentNumber);
-  for( unsigned int j = 0; j<componentNumber; j++)
+  for( unsigned int j = 0; j<componentNumber; ++j)
     {
     value.at(j) = itk::NumericTraits<ScalarRealType>::Zero;
     }
@@ -244,9 +244,9 @@ BCOInterpolateImageFunction< otb::VectorImage<TPixel, VImageDimension> , TCoordR
     baseIndex[dim] = itk::Math::Floor< IndexValueType >( index[dim]+0.5 );
     }
 
-  for( int i = -radius; i <= radius; i++ )
+  for( int i = -radius; i <= radius; ++i )
     {
-    for( int j = -radius; j <= radius; j++ )
+    for( int j = -radius; j <= radius; ++j )
       {
       // get neighbor index
       neighIndex[0] = baseIndex[0] + i;
@@ -270,13 +270,13 @@ BCOInterpolateImageFunction< otb::VectorImage<TPixel, VImageDimension> , TCoordR
         }
 #endif
 
-      for( unsigned int k = 0; k<componentNumber; k++)
+      for( unsigned int k = 0; k<componentNumber; ++k)
         {
         lineRes[i+radius].at(k) = lineRes[i+radius].at(k)
           + this->GetInputImage()->GetPixel( neighIndex ).GetElement(k) * BCOCoefY[j+radius];
         }
       }
-    for( unsigned int k = 0; k<componentNumber; k++)
+    for( unsigned int k = 0; k<componentNumber; ++k)
       {
       value.at(k) += lineRes[i+radius].at(k)*BCOCoefX[i+radius];
       }
@@ -285,7 +285,7 @@ BCOInterpolateImageFunction< otb::VectorImage<TPixel, VImageDimension> , TCoordR
   norma = (vcl_log(static_cast<double>(radius))/vcl_log(2.0));
   norma = norma * norma;
 
-  for( unsigned int k = 0; k<componentNumber; k++)
+  for( unsigned int k = 0; k<componentNumber; ++k)
     {
     output.SetElement(k, value.at(k)/norma);
     }

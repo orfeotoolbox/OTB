@@ -60,7 +60,7 @@ int otbProspectReflTest(int argc, char * argv[])
    prospect->Update();
    
    std::ofstream outputFile(OutputName, std::ios::out);
-   for(unsigned int i=0; i<prospect->GetReflectance()->Size(); i++)
+   for(unsigned int i=0; i<prospect->GetReflectance()->Size(); ++i)
    {
       outputFile<<prospect->GetReflectance()->GetResponse()[i].second<<std::endl;
    }

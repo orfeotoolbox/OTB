@@ -53,7 +53,7 @@ int otbTestCommandLineArgumentParserList(int argc, char * argv[])
   std::cout << "Double : " << lDouble << std::endl;
 
   std::cout << "List de Double : " << parseResult->GetNumberOfParameters("-doubles") << std::endl;
-  for (int i = 0; i < parseResult->GetNumberOfParameters("-doubles"); i++)
+  for (int i = 0; i < parseResult->GetNumberOfParameters("-doubles"); ++i)
     {
     //double value = otb::GetParameter<double>(parseResult,"-doubles", i);
     double value = parseResult->GetParameterDouble("-doubles", i);

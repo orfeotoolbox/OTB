@@ -188,7 +188,7 @@ AeronetFileReader
   mean = 0.;
   stddev = 0.;
   if (vec.size() <= 0) return;
-  for (unsigned int i = 0; i < vec.size(); i++)
+  for (unsigned int i = 0; i < vec.size(); ++i)
     {
     sum += vec[i];
     sumOfSquares += vec[i] * vec[i];

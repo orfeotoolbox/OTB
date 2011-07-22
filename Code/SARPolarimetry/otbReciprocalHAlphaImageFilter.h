@@ -106,7 +106,7 @@ public:
     
     // Extract the first component of each the eigen vector sorted by eigen value decrease order
     VNLVectorType sortedGreaterEigenVector(3, eigenVectors[0][0]);
-    for(unsigned int i=0; i<3; i++)
+    for(unsigned int i=0; i<3; ++i)
       {
         if( vcl_abs( eigenValues[1].real()-sortedRealEigenValues[i] ) < m_Epsilon )
           {
@@ -124,7 +124,7 @@ public:
         totalEigenValues = m_Epsilon;
       }
 
-    for (unsigned int k = 0; k < 3; k++)
+    for (unsigned int k = 0; k < 3; ++k)
       {
         p[k] = std::max(sortedRealEigenValues[k], 0.) / totalEigenValues;
       }
@@ -143,7 +143,7 @@ public:
     double val0, val1, val2;
     double a0, a1, a2;
 
-    for(unsigned int k = 0; k < 3; k++)
+    for(unsigned int k = 0; k < 3; ++k)
       {
          p[k] = sortedRealEigenValues[k] / totalEigenValues;
 

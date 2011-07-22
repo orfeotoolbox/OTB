@@ -145,10 +145,10 @@ int otbPolygonToPolygonRCC8Calculator(int argc, char* argv[])
           return EXIT_FAILURE;
           }
         }
-      j++;
+      ++j;
       }
     j = 1;
-    i++;
+    ++i;
     out << std::endl;
     }
   out.close();

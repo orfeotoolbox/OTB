@@ -151,13 +151,13 @@ LocalRxDetectorNonThreadFilter<TInputImage, TOutputImage>
     testPixVec = inputPtr->GetPixel(inputIt.GetIndex());
 
     VectorMeasurementType meanVec(meanVector->GetNumberOfElements());
-    for(unsigned int i = 0; i < meanVector->GetNumberOfElements(); i++)
+    for(unsigned int i = 0; i < meanVector->GetNumberOfElements(); ++i)
       {
       meanVec.SetElement(i, meanVector->GetElement(i));
       }
 
     typename MatrixType::InternalMatrixType centeredTestPixMat(meanVector->GetNumberOfElements(), 1);
-    for (unsigned int i = 0; i < centeredTestPixMat.rows(); i++)
+    for (unsigned int i = 0; i < centeredTestPixMat.rows(); ++i)
       {
       centeredTestPixMat.put(i, 0, (testPixVec.GetElement(i) - meanVector->GetElement(i)));
       }

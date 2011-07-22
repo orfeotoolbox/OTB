@@ -72,7 +72,7 @@ int otbHermitianEigenAnalysisTest(int argc, char * argv[])
   mat.Fill(0.);
 
   float val = 0;
-  for(unsigned int i=0; i<mat.Size(); i++)
+  for(unsigned int i=0; i<mat.Size(); ++i)
     {
       mat[i] = val;
       val += 0.5;
@@ -96,9 +96,9 @@ int otbHermitianEigenAnalysisTest(int argc, char * argv[])
   }
 
   bool isOK = true;
-  for(unsigned int i=0; i<6; i++)
+  for(unsigned int i=0; i<6; ++i)
     {
-      for(unsigned int j=0; j<3; j++)
+      for(unsigned int j=0; j<3; ++j)
         {
           if(vcl_abs(eigVal[j][i] - resEigVal[j][i]) > 1e-5)
             {
@@ -148,7 +148,7 @@ int otbHermitianEigenAnalysisTest(int argc, char * argv[])
   std::cout<<"W:: "<<std::endl;
   vnl_vector< ComplexType > lol = syst.W;
 
-  for(unsigned i=0; i<lol.size(); i++)
+  for(unsigned i=0; i<lol.size(); ++i)
   {
     std::cout<<"  "<<lol[i];
   }

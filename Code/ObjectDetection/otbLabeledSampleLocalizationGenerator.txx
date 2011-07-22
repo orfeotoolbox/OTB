@@ -202,7 +202,7 @@ LabeledSampleLocalizationGenerator<TVectorData>
   std::string positiveClassIdentifier;
   bool firstFeature = true;
   // Copy all point feature in output VectorData
-  for (unsigned int i=0; i<nbInputs; i++)
+  for (unsigned int i=0; i<nbInputs; ++i)
     {
     typename VectorDataType::ConstPointer vectorData = static_cast<const VectorDataType *>(this->GetInput(i));
     
@@ -240,7 +240,7 @@ LabeledSampleLocalizationGenerator<TVectorData>
 
   // Iterates through the polygon features and generates random point inside the polygon with
   // the "NoClass" identifier
-  for (unsigned int i=0; i<nbInputs; i++)
+  for (unsigned int i=0; i<nbInputs; ++i)
     {
     typename VectorDataType::ConstPointer vectorData = static_cast<const VectorDataType *>(this->GetInput(i));
     
@@ -266,7 +266,7 @@ LabeledSampleLocalizationGenerator<TVectorData>
       }
     }
   // Densify positive points
-  for (unsigned int i=0; i<nbInputs; i++)
+  for (unsigned int i=0; i<nbInputs; ++i)
     {
     typename VectorDataType::ConstPointer vectorData = static_cast<const VectorDataType *>(this->GetInput(i));
     

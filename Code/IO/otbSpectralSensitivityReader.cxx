@@ -152,7 +152,7 @@ SpectralSensitivityReader
       {
       mini = atof(keywordStrings[0].c_str());
       nbBands = keywordStrings.size() - 2;
-      for (unsigned int j = 0; j < nbBands; j++)
+      for (unsigned int j = 0; j < nbBands; ++j)
         {
         wavelengthSpectralBand->PushBack(FilterFunctionValues::New());
         ValuesVectorType temp;
@@ -163,7 +163,7 @@ SpectralSensitivityReader
 
     if (nbBands != keywordStrings.size() - 2) itkExceptionMacro(<< "Invalid file format");
 
-    for (unsigned int i = 0; i < nbBands; i++)
+    for (unsigned int i = 0; i < nbBands; ++i)
       {
       valuesVector[i].push_back(atof(keywordStrings[i + 2].c_str()));
       }
@@ -171,7 +171,7 @@ SpectralSensitivityReader
     maxi = atof(keywordStrings[0].c_str());
     } //while ( std::getline( file, line ) )
 
-  for (unsigned int j = 0; j < nbBands; j++)
+  for (unsigned int j = 0; j < nbBands; ++j)
     {
     wavelengthSpectralBand->GetNthElement(j)->SetFilterFunctionValues(valuesVector[j]);
     wavelengthSpectralBand->GetNthElement(j)->SetMinSpectralValue(mini);

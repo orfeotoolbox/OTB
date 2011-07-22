@@ -57,10 +57,10 @@ typename StandardDSCostFunction<TDSValidationFilter>
   m_Parser->SetExpr(m_CriterionFormula);
 
   DescriptorsModelType descModel;
-  for (unsigned int i = 0; i < m_DescriptorList.size(); i++)
+  for (unsigned int i = 0; i < m_DescriptorList.size(); ++i)
     {
     std::vector<double> tmp;
-    for (unsigned int j = 0; j < 4; j++)
+    for (unsigned int j = 0; j < 4; ++j)
       {
       tmp.push_back(parameters[4*i+j]);
       }

@@ -234,29 +234,29 @@ SubsampledImageRegionConstIterator<TImage>
 #if 0
 // #ifndef NDEBUG
   std::cerr << "InitialImageSize (";
-  for (unsigned int i = 0; i < ImageIteratorDimension - 1; i++)
+  for (unsigned int i = 0; i < ImageIteratorDimension - 1; ++i)
     std::cerr << this->m_Region.GetSize()[i] << ", ";
   std::cerr << this->m_Region.GetSize()[ImageIteratorDimension - 1] << ") with index (";
-  for (unsigned int i = 0; i < ImageIteratorDimension - 1; i++)
+  for (unsigned int i = 0; i < ImageIteratorDimension - 1; ++i)
     std::cerr << this->m_Region.GetIndex()[i] << ", ";
   std::cerr << this->m_Region.GetIndex()[ImageIteratorDimension - 1] << ")\n";
 
   std::cerr << "NewRegionSize (";
-  for (unsigned int i = 0; i < ImageIteratorDimension - 1; i++)
+  for (unsigned int i = 0; i < ImageIteratorDimension - 1; ++i)
     std::cerr << size[i] << ", ";
   std::cerr << size[ImageIteratorDimension - 1] << ") with index (";
-  for (unsigned int i = 0; i < ImageIteratorDimension - 1; i++)
+  for (unsigned int i = 0; i < ImageIteratorDimension - 1; ++i)
     std::cerr << startIndex[i] <<  ", ";
   std::cerr << startIndex[ImageIteratorDimension - 1] << ")\n";
 
   std::cerr << "FirstIndex (";
-  for (unsigned int i = 0; i < ImageIteratorDimension - 1; i++)
+  for (unsigned int i = 0; i < ImageIteratorDimension - 1; ++i)
     std::cerr << m_FirstUsableIndex[i] << ", ";
   std::cerr << m_FirstUsableIndex[ImageIteratorDimension - 1] << ") offset=";
   std::cerr << m_SubSampledBeginOffset << "\n";
 
   std::cerr << "LastIndex (";
-  for (unsigned int i = 0; i < ImageIteratorDimension - 1; i++)
+  for (unsigned int i = 0; i < ImageIteratorDimension - 1; ++i)
     std::cerr << m_LastUsableIndex[i] << ", ";
   std::cerr << m_LastUsableIndex[ImageIteratorDimension - 1] << ") offset=";
   std::cerr << m_SubSampledEndOffset << "\n";

@@ -73,7 +73,7 @@ int otbReflectanceToSurfaceReflectanceImageFilterTest(int argc, char * argv[])
   DataVectorType downTrans;
   DataVectorType upTrans;
 
-  for (unsigned int j = 0; j < nbChannel; j++)
+  for (unsigned int j = 0; j < nbChannel; ++j)
     {
     intrinsic.push_back(static_cast<double>(atof(argv[3 + j])));
     albedo.push_back(static_cast<double>(atof(argv[3 + j + nbChannel])));

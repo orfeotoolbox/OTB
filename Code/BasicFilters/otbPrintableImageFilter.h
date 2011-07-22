@@ -79,7 +79,7 @@ public:
     if (maskPix == m_BackgroundValue)
       {
       outPix.SetSize(inPix.Size());
-      for (unsigned int i = 0; i < outPix.Size(); i++)
+      for (unsigned int i = 0; i < outPix.Size(); ++i)
         {
         outPix[i] = static_cast<OutputInternalPixelType>(inPix[i]);
         }

@@ -41,17 +41,17 @@ VariableLengthVectorConverter< std::vector<std::vector<TInternalInputType> >, TP
   
   p = input.size();
 
-  for (unsigned int l=0; l<p; l++)
+  for (unsigned int l=0; l<p; ++l)
     {
       count+=input.at(l).size();
     }
 
   result.SetSize(count);
 
-  for (unsigned int i=0; i<p; i++)
+  for (unsigned int i=0; i<p; ++i)
     {
       q = input.at(i).size();
-      for (unsigned int j=0; j<q; j++)
+      for (unsigned int j=0; j<q; ++j)
         {
           result[rsltIdx] = static_cast<OutputPrecisionType>(input.at(i).at(j));
           rsltIdx ++;
@@ -77,17 +77,17 @@ VariableLengthVectorConverter< std::vector<std::vector<std::complex<TInternalInp
   
   p = input.size();
 
-  for (unsigned int l=0; l<p; l++)
+  for (unsigned int l=0; l<p; ++l)
     {
       count+=input.at(l).size();
     }
 
   result.SetSize(count*2);
 
-  for (unsigned int i=0; i<p; i++)
+  for (unsigned int i=0; i<p; ++i)
     {
       q = input.at(i).size();
-    for (unsigned int j=0; j<q; j++)
+    for (unsigned int j=0; j<q; ++j)
       {
       result[rsltIdx] = static_cast<OutputPrecisionType>(input.at(i).at(j).real());
       rsltIdx ++;
@@ -110,7 +110,7 @@ VariableLengthVectorConverter< itk::FixedArray<TInternalInputType, VArrayDimensi
 
   result.SetSize(VArrayDimension);
 
-  for (unsigned int i=0; i<VArrayDimension; i++)
+  for (unsigned int i=0; i<VArrayDimension; ++i)
     {
     result[rsltIdx] = static_cast<OutputPrecisionType>(input[i]);
     rsltIdx ++;
@@ -135,7 +135,7 @@ VariableLengthVectorConverter< itk::SmartPointer< itk::Statistics::Histogram<TPi
   
   result.SetSize(nbBins[0]);
 
-  for (unsigned int i=0; i<nbBins[0]; i++)
+  for (unsigned int i=0; i<nbBins[0]; ++i)
     {
     result[rsltIdx] = static_cast<OutputPrecisionType>(input->GetFrequency(i));
     rsltIdx ++;

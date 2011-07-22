@@ -97,7 +97,7 @@ int otbSVMModelGenericKernelsTest(int argc, char* argv[])
   model->l = 5;
   model->sv_coef = new double*[model->nr_class - 1];
 
-  for (int i = 0; i < model->nr_class - 1; i++)
+  for (int i = 0; i < model->nr_class - 1; ++i)
     model->sv_coef[i] = new double[model->l];
   model->SV = new svm_node *[model->l];
   for (int n = 0; n < model->l; ++n)

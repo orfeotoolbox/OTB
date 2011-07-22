@@ -88,7 +88,7 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
   else k = 3;
 
   /* Computation loop over octaves*/
-  for (int i = 0; i < m_OctavesNumber; i++)
+  for (int i = 0; i < m_OctavesNumber; ++i)
     {
 
     sigma_in = 2.;
@@ -126,7 +126,7 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
         
       }
 
-    for (int j = 0; j < m_ScalesNumber; j++)
+    for (int j = 0; j < m_ScalesNumber; ++j)
       {
       /** Incrementation of the gaussian width
        *  the width of the gaussian have to be doubled for
@@ -682,14 +682,14 @@ ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>
           }
         }
       }
-    i++;
+    ++i;
     }
 
   double accu = 0;
-  for (int i = 0; i < 64; i++)
+  for (int i = 0; i < 64; ++i)
     accu += descriptorVector[i] * descriptorVector[i];
 
-  for (int j = 0; j < 64; j++)
+  for (int j = 0; j < 64; ++j)
     descriptorVector[j] /= vcl_sqrt(accu);
 
   return descriptorVector;

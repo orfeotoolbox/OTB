@@ -99,7 +99,7 @@ SurfaceReflectanceToReflectanceFilter<TInputImage, TOutputImage>
        {
          itkExceptionMacro(<<"Filter Function and image channels mismatch.");
        }
-      for(unsigned int i=0; i<this->GetInput()->GetNumberOfComponentsPerPixel(); i++)
+      for(unsigned int i=0; i<this->GetInput()->GetNumberOfComponentsPerPixel(); ++i)
        {
          FilterFunctionValuesType::Pointer functionValues = FilterFunctionValuesType::New();
          functionValues->SetFilterFunctionValues(m_FilterFunctionCoef[i]);

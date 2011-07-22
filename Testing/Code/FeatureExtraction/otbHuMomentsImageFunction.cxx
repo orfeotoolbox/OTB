@@ -77,7 +77,7 @@ int otbHuMomentsImageFunction(int argc, char * argv[])
   std::ofstream outputStream(outputFilename);
   outputStream << std::setprecision(10) << "Hu Image moments: [10]" << std::endl;
 
-  for (unsigned int j = 1; j < 8; j++)
+  for (unsigned int j = 1; j < 8; ++j)
     {
     outputStream << "Hu(" << j << ") = " << Result[j-1] << std::endl;
     }
@@ -141,7 +141,7 @@ int otbHuMomentsImageFunctionScaleInvariant(int argc, char * argv[])
 
   double error = 0.0;
 
-  for (unsigned int j = 1; j < 8; j++)
+  for (unsigned int j = 1; j < 8; ++j)
     {
     error += vcl_pow(vcl_abs( Result1[j-1] - Result2[j-1]), 2);
     
@@ -247,7 +247,7 @@ int otbHuMomentsImageFunctionRotationInvariant(int argc, char * argv[])
 
   double error = 0.0;
   
-  for (unsigned int j = 1; j < 8; j++)
+  for (unsigned int j = 1; j < 8; ++j)
     {
     error += vcl_pow(vcl_abs( Result1[j-1] - Result2[j-1]), 2);
 

@@ -187,7 +187,7 @@ private:
     typedef typename IndexType::IndexValueType IndexValueType;
     typedef typename ContinuousIndexType::ValueType ContinuousIndexValueType;
 
-    for(unsigned int i=0; i<ImageDimension; i++)
+    for(unsigned int i=0; i<ImageDimension; ++i)
       {
 #ifdef ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY
       if( itk::Math::RoundHalfIntegerUp<IndexValueType>(index[i]) < static_cast<IndexValueType>( region.GetIndex(i) ) + static_cast<IndexValueType>(m_NeighborhoodRadius) )

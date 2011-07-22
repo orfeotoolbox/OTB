@@ -81,9 +81,9 @@ int otbRealMomentsImageFunction(int argc, char * argv[])
   
   function->SetNeighborhoodRadius(3);
   Result = function->EvaluateAtIndex(index);
-  for (unsigned int k=0; k<=p; k++)
+  for (unsigned int k=0; k<=p; ++k)
     {
-    for (unsigned int l=0; l<=q; l++)
+    for (unsigned int l=0; l<=q; ++l)
       {
       outputStream << "RealMoment c(" << k << l << ") : " << Result.at(k).at(l) << std::endl;
       }

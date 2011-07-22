@@ -136,7 +136,7 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  for (int i = 0; i < iteration; i++)
+  for (int i = 0; i < iteration; ++i)
     {
 
     gradient->SetInput(duplicator->GetOutput());

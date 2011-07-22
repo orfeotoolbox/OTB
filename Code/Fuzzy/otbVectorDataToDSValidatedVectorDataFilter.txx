@@ -60,11 +60,11 @@ VectorDataToDSValidatedVectorDataFilter<TVectorData, TPrecision>
     }
   else
     {
-    for (unsigned int i=0; i<m_DescriptorModels.size(); i++)
+    for (unsigned int i=0; i<m_DescriptorModels.size(); ++i)
       {
       if (m_DescriptorModels[i].first.compare(key) == 0)
         {
-        for (unsigned int j=0; j<4; j++)
+        for (unsigned int j=0; j<4; ++j)
           {
            m_DescriptorModels[i].second.at(j) = model[j];
           }
@@ -94,7 +94,7 @@ void
 VectorDataToDSValidatedVectorDataFilter<TVectorData, TPrecision>
 ::SetDescriptorModels(DescriptorModelsType model)
 {
-  for (unsigned int i=0; i<model.size(); i++)
+  for (unsigned int i=0; i<model.size(); ++i)
     {
      this->AddDescriptor(model[i].first, model[i].second);
     }
@@ -112,7 +112,7 @@ VectorDataToDSValidatedVectorDataFilter<TVectorData, TPrecision>
     itkExceptionMacro(<< "No defined Descriptor. Please add a descriptor model.");
     }
 
-  for (unsigned int i=0; i<m_DescriptorModels.size(); i++)
+  for (unsigned int i=0; i<m_DescriptorModels.size(); ++i)
     {
     typename FuzzyVarType::Pointer fuz = FuzzyVarType::New();
     std::string fuzName, fuzName_;
@@ -170,7 +170,7 @@ VectorDataToDSValidatedVectorDataFilter<TVectorData, TPrecision>
       typename DataNodeType::Pointer currentGeometry = itVector.Get();
       typename JointMassOfBeliefFilterType::Pointer jointMassFilter = JointMassOfBeliefFilterType::New();
 
-      for (unsigned int i=0; i<m_DescriptorModels.size(); i++)
+      for (unsigned int i=0; i<m_DescriptorModels.size(); ++i)
         {
         if (currentGeometry->HasField(m_DescriptorModels[i].first))
           {

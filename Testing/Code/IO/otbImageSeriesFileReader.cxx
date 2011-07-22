@@ -46,7 +46,7 @@ int otbImageSeriesFileReader(int argc, char* argv[])
 
   typedef otb::StreamingImageFileWriter<ImageType> WriterType;
 
-  for (unsigned int i = 0; i < imageList->Size(); i++)
+  for (unsigned int i = 0; i < imageList->Size(); ++i)
     {
     std::cout << "Image no " << i << "\n";
 

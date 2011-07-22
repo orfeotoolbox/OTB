@@ -139,11 +139,11 @@ StatisticsAttributesLabelObjectFunctor<TLabelObject, TFeatureImage>
         // moments
         typename TFeatureImage::PointType physicalPosition;
         m_FeatureImage->TransformIndexToPhysicalPoint(idx, physicalPosition);
-        for (unsigned int i = 0; i < TFeatureImage::ImageDimension; i++)
+        for (unsigned int i = 0; i < TFeatureImage::ImageDimension; ++i)
           {
           centerOfGravity[i] += physicalPosition[i] * v;
           centralMoments[i][i] += v * physicalPosition[i] * physicalPosition[i];
-          for (unsigned int j = i + 1; j < TFeatureImage::ImageDimension; j++)
+          for (unsigned int j = i + 1; j < TFeatureImage::ImageDimension; ++j)
             {
             const double weight = v * physicalPosition[i] * physicalPosition[j];
             centralMoments[i][j] += weight;
@@ -192,19 +192,19 @@ StatisticsAttributesLabelObjectFunctor<TLabelObject, TFeatureImage>
     if (sum != 0)
       {
       // Normalize using the total mass
-      for (unsigned int i = 0; i < TFeatureImage::ImageDimension; i++)
+      for (unsigned int i = 0; i < TFeatureImage::ImageDimension; ++i)
         {
         centerOfGravity[i] /= sum;
-        for (unsigned int j = 0; j < TFeatureImage::ImageDimension; j++)
+        for (unsigned int j = 0; j < TFeatureImage::ImageDimension; ++j)
           {
           centralMoments[i][j] /= sum;
           }
         }
 
       // Center the second order moments
-      for (unsigned int i = 0; i < TFeatureImage::ImageDimension; i++)
+      for (unsigned int i = 0; i < TFeatureImage::ImageDimension; ++i)
         {
-        for (unsigned int j = 0; j < TFeatureImage::ImageDimension; j++)
+        for (unsigned int j = 0; j < TFeatureImage::ImageDimension; ++j)
           {
           centralMoments[i][j] -= centerOfGravity[i] * centerOfGravity[j];
           }
@@ -213,7 +213,7 @@ StatisticsAttributesLabelObjectFunctor<TLabelObject, TFeatureImage>
       // Compute principal moments and axes
       vnl_symmetric_eigensystem<double> eigen(centralMoments.GetVnlMatrix());
       vnl_diag_matrix<double> pm = eigen.D;
-      for (unsigned int i = 0; i < TFeatureImage::ImageDimension; i++)
+      for (unsigned int i = 0; i < TFeatureImage::ImageDimension; ++i)
         {
         //    principalMoments[i] = 4 * vcl_sqrt( pm(i, i) );
         principalMoments[i] = pm(i, i);
@@ -226,12 +226,12 @@ StatisticsAttributesLabelObjectFunctor<TLabelObject, TFeatureImage>
       vnl_diag_matrix<vcl_complex<double> > eigenval = eigenrot.D;
       vcl_complex<double> det(1.0, 0.0);
 
-      for (unsigned int i = 0; i < TFeatureImage::ImageDimension; i++)
+      for (unsigned int i = 0; i < TFeatureImage::ImageDimension; ++i)
         {
         det *= eigenval(i, i);
         }
 
-      for (unsigned int i = 0; i < TFeatureImage::ImageDimension; i++)
+      for (unsigned int i = 0; i < TFeatureImage::ImageDimension; ++i)
         {
         principalAxes[TFeatureImage::ImageDimension - 1][i] *= std::real(det);
         }
@@ -246,11 +246,11 @@ StatisticsAttributesLabelObjectFunctor<TLabelObject, TFeatureImage>
         {
         // can't compute anything in that case - just set everything to a default value
         // Normalize using the total mass
-        for (unsigned int i = 0; i < TFeatureImage::ImageDimension; i++)
+        for (unsigned int i = 0; i < TFeatureImage::ImageDimension; ++i)
           {
           centerOfGravity[i] = 0;
           principalMoments[i] = 0;
-          for (unsigned int j = 0; j < TFeatureImage::ImageDimension; j++)
+          for (unsigned int j = 0; j < TFeatureImage::ImageDimension; ++j)
             {
             principalAxes[i][j] = 0;
             }

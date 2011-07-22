@@ -83,7 +83,7 @@ int otbSailReflVTest(int argc, char * argv[])
    sail->Update();
    
    std::ofstream outputFile(OutputName, std::ios::out);
-   for(unsigned int i=0; i<sail->GetViewingReflectance()->Size(); i++)
+   for(unsigned int i=0; i<sail->GetViewingReflectance()->Size(); ++i)
    {
       outputFile<<sail->GetViewingReflectance()->GetResponse()[i].second<<std::endl;
    }

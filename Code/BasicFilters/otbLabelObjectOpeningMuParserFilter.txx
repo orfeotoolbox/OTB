@@ -131,7 +131,7 @@ void LabelObjectOpeningMuParserFilter<TImage, TFunction>::AllocateOutputs()
       }
 
     // If there are more than one outputs, allocate the remaining outputs
-    for (unsigned int i = 1; i < this->GetNumberOfOutputs(); i++)
+    for (unsigned int i = 1; i < this->GetNumberOfOutputs(); ++i)
       {
       ImagePointer outputPtr;
 
@@ -185,13 +185,13 @@ void LabelObjectOpeningMuParserFilter<TImage, TFunction>::GenerateData()
     if (!m_Functor(*labelObject))
       {
       // must increment the iterator before removing the object to avoid invalidating the iterator
-      it++;
+      ++it;
       output2->AddLabelObject(labelObject);
       output->RemoveLabel(label);
       }
     else
       {
-      it++;
+      ++it;
       }
 
     progress.CompletedPixel();

@@ -108,7 +108,7 @@ public:
     filter->UpdateOutputInformation();
     nbBand = filter->GetOutput()->Size();
 
-    for (unsigned int i=0; i<nbBand; i++)
+    for (unsigned int i=0; i<nbBand; ++i)
       {
       filter->GetOutput()->GetNthElement(i)->UpdateOutputInformation();
       m_Factory->Create(filter->GetOutput()->GetNthElement(i), param, metaIF, container);

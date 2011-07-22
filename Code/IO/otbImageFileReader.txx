@@ -545,7 +545,7 @@ ImageFileReader<TOutputImage>
           fic_trouve = true;
           }
         }
-      cpt++;
+      ++cpt;
       }
     }
   else

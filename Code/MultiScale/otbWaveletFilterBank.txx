@@ -51,7 +51,7 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD>
   unsigned int numOfOutputs = 1 << InputImageDimension;
 
   this->SetNumberOfOutputs(numOfOutputs);
-  for (unsigned int i = 0; i < numOfOutputs; i++)
+  for (unsigned int i = 0; i < numOfOutputs; ++i)
     {
     this->SetNthOutput(i, OutputImageType::New());
     }
@@ -80,7 +80,7 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD>
   OutputImageRegionType newRegion;
   this->CallCopyInputRegionToOutputRegion(newRegion, this->GetInput()->GetLargestPossibleRegion());
 
-  for (unsigned int i = 0; i < this->GetNumberOfOutputs(); i++)
+  for (unsigned int i = 0; i < this->GetNumberOfOutputs(); ++i)
     {
     this->GetOutput(i)->SetRegions(newRegion);
     }
@@ -141,7 +141,7 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD>
   if (m_SubsampleImageFactor > 1)
     {
     // Check the dimension
-    for (unsigned int i = 0; i < InputImageDimension; i++)
+    for (unsigned int i = 0; i < InputImageDimension; ++i)
       {
       if ((m_SubsampleImageFactor
            * (this->GetInput()->GetRequestedRegion().GetSize()[i] / m_SubsampleImageFactor))
@@ -159,7 +159,7 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD>
       {
       // Internal images will be used only if m_SubsampledInputImages != 1
       m_InternalImages.resize(InputImageDimension - 1);
-      for (unsigned int i = 0; i < m_InternalImages.size(); i++)
+      for (unsigned int i = 0; i < m_InternalImages.size(); ++i)
         {
         // the size is linked to the SubsampleImageFactor that is assume to be 2!!!
         m_InternalImages[InputImageDimension - 2 - i].resize(1 << (i + 1));
@@ -188,7 +188,7 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD>
     this->CallCopyInputRegionToOutputRegion(InputImageDimension - 1 - direction,
                                             smallerRegion, largerRegion);
 
-    for (unsigned int i = 0; i < m_InternalImages[direction].size(); i++)
+    for (unsigned int i = 0; i < m_InternalImages[direction].size(); ++i)
       {
       m_InternalImages[InputImageDimension - 2 - direction][i] = OutputImageType::New();
       m_InternalImages[InputImageDimension - 2 - direction][i]->SetRegions(smallerRegion);
@@ -227,7 +227,7 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD>
     InputIndexType destIndex;
     InputSizeType  destSize;
 
-    for (unsigned int i = 0; i < InputImageDimension; i++)
+    for (unsigned int i = 0; i < InputImageDimension; ++i)
       {
       destIndex[i] = srcIndex[i] * GetSubsampleImageFactor();
       destSize[i] = srcSize[i] * GetSubsampleImageFactor();
@@ -255,7 +255,7 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD>
 
     if (radius[0] < highPassOperator.GetRadius()[0]) radius[0] = highPassOperator.GetRadius()[0];
 
-    for (unsigned int i = 1; i < InputImageDimension; i++)
+    for (unsigned int i = 1; i < InputImageDimension; ++i)
       radius[i] = 0;
 
     InputImageRegionType paddedRegion = destRegion;
@@ -287,7 +287,7 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD>
     InputIndexType destIndex;
     InputSizeType  destSize;
 
-    for (unsigned int i = 0; i < InputImageDimension; i++)
+    for (unsigned int i = 0; i < InputImageDimension; ++i)
       {
       if (i == direction)
         {
@@ -322,7 +322,7 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD>
     typename OutputImageRegionType::IndexType destIndex;
     typename OutputImageRegionType::SizeType  destSize;
 
-    for (unsigned int i = 0; i < InputImageDimension; i++)
+    for (unsigned int i = 0; i < InputImageDimension; ++i)
       {
       // TODO: This seems not right in odd index cases
       destIndex[i] = srcIndex[i] / GetSubsampleImageFactor();
@@ -351,7 +351,7 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD>
     typename OutputImageRegionType::IndexType destIndex;
     typename OutputImageRegionType::SizeType  destSize;
 
-    for (unsigned int i = 0; i < InputImageDimension; i++)
+    for (unsigned int i = 0; i < InputImageDimension; ++i)
       {
       if (i == direction)
         {
@@ -636,7 +636,7 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE>
 {
   Superclass::GenerateOutputInformation();
 
-  for (unsigned int i = 1; i < this->GetNumberOfInputs(); i++)
+  for (unsigned int i = 1; i < this->GetNumberOfInputs(); ++i)
     {
     for (unsigned int dim = 0; dim < InputImageDimension; dim++)
       {
@@ -690,7 +690,7 @@ throw (itk::InvalidRequestedRegionError)
   if (radius < highPassOperator.GetRadius()[0]) radius = highPassOperator.GetRadius()[0];
 
   // Get the requested regionand pad it
-  for (unsigned int idx = 0; idx < this->GetNumberOfInputs(); idx++)
+  for (unsigned int idx = 0; idx < this->GetNumberOfInputs(); ++idx)
     {
     InputImagePointerType input = const_cast<InputImageType*>(this->GetInput(idx));
     InputImageRegionType  inputRegion = input->GetRequestedRegion();
@@ -721,7 +721,7 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE>
     {
     // Internal images will be used only if m_SubsampleImageFactor != 1
     m_InternalImages.resize(InputImageDimension - 1);
-    for (unsigned int i = 0; i < m_InternalImages.size(); i++)
+    for (unsigned int i = 0; i < m_InternalImages.size(); ++i)
       {
       // the size is linked to the SubsampleImageFactor that is assume to be 2!!!
       m_InternalImages[i].resize(1 << (i + 1));
@@ -749,7 +749,7 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE>
     this->CallCopyInputRegionToOutputRegion(direction,
                                             largerRegion, smallerRegion);
 
-    for (unsigned int i = 0; i < m_InternalImages[direction].size(); i++)
+    for (unsigned int i = 0; i < m_InternalImages[direction].size(); ++i)
       {
       m_InternalImages[direction][i] = OutputImageType::New();
       m_InternalImages[direction][i]->SetRegions(largerRegion);
@@ -788,7 +788,7 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE>
     InputIndexType destIndex;
     InputSizeType  destSize;
 
-    for (unsigned int i = 0; i < InputImageDimension; i++)
+    for (unsigned int i = 0; i < InputImageDimension; ++i)
       {
       // TODO: This seems not right in odd index cases
       destIndex[i] = srcIndex[i] / GetSubsampleImageFactor();
@@ -815,10 +815,10 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE>
 
     if (radius[0] < highPassOperator.GetRadius()[0]) radius[0] = highPassOperator.GetRadius()[0];
 
-    for (unsigned int i = 1; i < InputImageDimension; i++)
+    for (unsigned int i = 1; i < InputImageDimension; ++i)
       radius[i] = 0;
 
-//     for ( unsigned int i = 0; i < InputImageDimension; i++ )
+//     for ( unsigned int i = 0; i < InputImageDimension; ++i )
 //     {
 //       radius[i] = lowPassOperator.GetRadius()[i];
 //       if ( radius[i] < highPassOperator.GetRadius()[i] )
@@ -852,7 +852,7 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE>
     InputIndexType destIndex;
     InputSizeType  destSize;
 
-    for (unsigned int i = 0; i < InputImageDimension; i++)
+    for (unsigned int i = 0; i < InputImageDimension; ++i)
       {
       destIndex[i] = srcIndex[i] * GetSubsampleImageFactor();
       destSize[i] = srcSize[i] * GetSubsampleImageFactor();
@@ -880,7 +880,7 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE>
     InputIndexType destIndex;
     InputSizeType  destSize;
 
-    for (unsigned int i = 0; i < InputImageDimension; i++)
+    for (unsigned int i = 0; i < InputImageDimension; ++i)
       {
       if (i == direction)
         {
@@ -917,7 +917,7 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE>
     typename OutputImageRegionType::IndexType destIndex;
     typename OutputImageRegionType::SizeType  destSize;
 
-    for (unsigned int i = 0; i < InputImageDimension; i++)
+    for (unsigned int i = 0; i < InputImageDimension; ++i)
       {
       if (i == direction)
         {
@@ -969,7 +969,7 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE>
 
   // Faces iterations
   typename NeighborhoodIteratorType::RadiusType radiusMax;
-  for (unsigned int idx = 0; idx < OutputImageDimension; idx++)
+  for (unsigned int idx = 0; idx < OutputImageDimension; ++idx)
     {
     radiusMax[idx] = lowPassOperator.GetRadius(idx);
     if (radiusMax[idx] < highPassOperator.GetRadius(idx)) radiusMax[idx] = highPassOperator.GetRadius(idx);
@@ -1148,7 +1148,7 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE>
 
   // Faces iterations
   typename NeighborhoodIteratorType::RadiusType radiusMax;
-  for (unsigned int i = 0; i < InputImageDimension; i++)
+  for (unsigned int i = 0; i < InputImageDimension; ++i)
     {
     radiusMax[i] = lowPassOperator.GetRadius(i);
     if (radiusMax[i] < highPassOperator.GetRadius(i)) radiusMax[i] = highPassOperator.GetRadius(i);

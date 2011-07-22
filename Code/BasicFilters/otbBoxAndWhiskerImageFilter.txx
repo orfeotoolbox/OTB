@@ -114,7 +114,7 @@ BoxAndWhiskerImageFilter <TInputImage>
   const unsigned int thirdQuartilePosition = (3 * vectorSize) / 4;
 
   VectorType data(vectorSize);
-  for (i = 0; i < vectorSize; i++)
+  for (i = 0; i < vectorSize; ++i)
     data[i] = pixel[i];
 
   std::sort(data.begin(), data.end());
@@ -123,7 +123,7 @@ BoxAndWhiskerImageFilter <TInputImage>
   double median = ::fabs(static_cast<double>(data[medianPosition]));
 
   PixelType outputPixel(pixel);
-  for (i = 0; i < vectorSize; i++)
+  for (i = 0; i < vectorSize; ++i)
     {
     if (::fabs(static_cast<double>(outputPixel[i]) - box) > median)
       {

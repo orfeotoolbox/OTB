@@ -46,7 +46,7 @@ int main(int argc, char * argv[])
 
   if (argc != 12)
     {
-    for (int i = 0; i < argc; i++)
+    for (int i = 0; i < argc; ++i)
       std::cerr << argv[i] << std::endl;
     std::cerr << "Usage: " << argv[0] << " inputImageFile ";
     std::cerr << " outputSegmentsImageFile length width ";

@@ -274,7 +274,7 @@ SVMModel<TValue, TLabel>::CrossValidation(unsigned int nbFolders)
   int    i;
   double total_correct = 0.;
 
-  for (i = 0; i < length; i++)
+  for (i = 0; i < length; ++i)
     {
     if (target[i] == m_Problem.y[i])
       {
@@ -496,7 +496,7 @@ SVMModel<TValue, TLabel>::EvaluateProbabilities(const MeasurementType& measure) 
   std::sort(orderedLabels.begin(), orderedLabels.end());
 
   ProbabilitiesVectorType probabilities(nr_class);
-  for (int i = 0; i < nr_class; i++)
+  for (int i = 0; i < nr_class; ++i)
     {
     // svm_predict_probability is such that "dec_values[i]" corresponds to label "labels[i]"
     std::vector<int>::iterator it = std::find(orderedLabels.begin(), orderedLabels.end(), labels[i]);

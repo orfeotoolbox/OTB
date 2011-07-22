@@ -59,7 +59,7 @@ NAPCAImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTran
     this->m_TransformationMatrix = transf;
 
   this->m_EigenValues.SetSize( this->GetNumberOfPrincipalComponentsRequired() );
-  for ( unsigned int i = 0; i < this->GetNumberOfPrincipalComponentsRequired(); i++ )
+  for ( unsigned int i = 0; i < this->GetNumberOfPrincipalComponentsRequired(); ++i )
     this->m_EigenValues[this->GetNumberOfPrincipalComponentsRequired()-1-i]
       = static_cast< RealType >( vectValPadj[i] );
 }

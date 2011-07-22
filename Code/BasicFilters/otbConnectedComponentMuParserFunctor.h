@@ -89,7 +89,7 @@ public:
       }
 
     // we fill the buffer
-    for (unsigned int i = 0; i < m_NbOfBands; i++)
+    for (unsigned int i = 0; i < m_NbOfBands; ++i)
       {
       m_AImageP1[i] = static_cast<double> (p1[i]);
       m_AImageP2[i] = static_cast<double> (p2[i]);
@@ -168,7 +168,7 @@ public:
     m_AImageP1.resize(NbOfBands, 0.0);
     m_AImageP2.resize(NbOfBands, 0.0);
 
-    for (unsigned int i = 0; i < NbOfBands; i++)
+    for (unsigned int i = 0; i < NbOfBands; ++i)
       {
       varName << "p1b" << i + 1;
       m_Parser->DefineVar(varName.str(), &(m_AImageP1[i]));

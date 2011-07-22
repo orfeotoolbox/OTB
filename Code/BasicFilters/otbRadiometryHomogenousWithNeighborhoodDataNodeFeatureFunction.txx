@@ -108,7 +108,7 @@ typename RadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction<TImage, TCo
     orthogonalDirection[1] = -direction[0];
 
     splitedLineIdCentral.push_back(IndexPairType(id1, id2));
-    for (unsigned int j = 1; j <= m_CenterRadius; j++)
+    for (unsigned int j = 1; j <= m_CenterRadius; ++j)
       {
       IndexType shift11, shift12;
       shift11[0] = id1[0] - j * orthogonalDirection[0];
@@ -125,7 +125,7 @@ typename RadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction<TImage, TCo
       splitedLineIdCentral.push_back(IndexPairType(shift12, shift22));
       }
 
-    for (unsigned int j = m_NeighborhoodBeginRadius; j <= m_NeighborhoodEndRadius; j++)
+    for (unsigned int j = m_NeighborhoodBeginRadius; j <= m_NeighborhoodEndRadius; ++j)
       {
       IndexType shift11, shift12;
       shift11[0] = id1[0] - j * orthogonalDirection[0];
@@ -158,7 +158,7 @@ typename RadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction<TImage, TCo
   PixelType centralRadiomAcc(this->GetInputImage()->GetNumberOfComponentsPerPixel());
   centralRadiomAcc.Fill(0);
 
-  for (unsigned int i = 0; i < splitedLineIdCentral.size(); i++)
+  for (unsigned int i = 0; i < splitedLineIdCentral.size(); ++i)
     {
     LineIteratorType lineIt(this->GetInputImage(), splitedLineIdCentral[i].first, splitedLineIdCentral[i].second);
     lineIt.GoToBegin();
@@ -179,7 +179,7 @@ typename RadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction<TImage, TCo
   PixelType neighborRadiomAcc(this->GetInputImage()->GetNumberOfComponentsPerPixel());
   neighborRadiomAcc.Fill(0);
 
-  for (unsigned int i = 0; i < splitedLineIdNeigh.size(); i++)
+  for (unsigned int i = 0; i < splitedLineIdNeigh.size(); ++i)
     {
     LineIteratorType lineIt(this->GetInputImage(), splitedLineIdNeigh[i].first, splitedLineIdNeigh[i].second);
     lineIt.GoToBegin();

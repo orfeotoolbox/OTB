@@ -84,9 +84,9 @@ int otbComplexMomentsImageFunction(int argc, char * argv[])
   
   function->SetNeighborhoodRadius(3);
   Result = function->EvaluateAtIndex(index);
-  for (unsigned int k=0; k<=p; k++)
+  for (unsigned int k=0; k<=p; ++k)
     {
-    for (unsigned int l=0; l<=q; l++)
+    for (unsigned int l=0; l<=q; ++l)
       {
       outputStream << "ComplexMoment c(" << k << l << ") : " << Result.at(k).at(l) << std::endl;
       }
@@ -159,9 +159,9 @@ int otbComplexMomentsImageFunctionScaleInvariant(int argc, char * argv[])
 
   error = 0.0;
 
-  for (unsigned int k=0; k<=p; k++)
+  for (unsigned int k=0; k<=p; ++k)
     {
-    for (unsigned int l=0; l<=q; l++)
+    for (unsigned int l=0; l<=q; ++l)
       {
       error += vcl_pow(vcl_abs( Result1.at(k).at(l) - Result2.at(k).at(l) ), 2);
       

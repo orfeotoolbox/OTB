@@ -40,7 +40,7 @@ ReliefColormapFunctor<TScalar, TRGBPixel>
 
   int i = 1;
   while (value > m_Borders[i])
-    i++;
+    ++i;
 
   float factor = (value - m_Borders[i - 1]) / (m_Borders[i] - m_Borders[i - 1]);
 

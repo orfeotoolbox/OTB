@@ -310,7 +310,7 @@ bool CommandLineArgumentParser::TryParseCommandLine(int argc, char *argv[],
     }
 
 // Check that all required arguments are specified
-  for (unsigned int cpt = 0; cpt < m_OptionList.size(); cpt++)
+  for (unsigned int cpt = 0; cpt < m_OptionList.size(); ++cpt)
     {
     if ((m_OptionList[cpt].Obligatory == true) && (m_OptionList[cpt].Finded == false))
       {
@@ -344,7 +344,7 @@ bool CommandLineArgumentParser::IsNumber(const std::string& text)
         return false;
         }
       }
-    i++;
+    ++i;
     }
   return true;
 }
@@ -364,7 +364,7 @@ bool CommandLineArgumentParser::FindOption(const std::string& option, int& index
       goOnFlag = false;
       optionFoundFlag = true;
       }
-    cpt++;
+    ++cpt;
     if (cpt >= m_OptionList.size())
       {
       goOnFlag = false;

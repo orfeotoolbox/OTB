@@ -101,14 +101,14 @@ void MatrixImageFilter<TInputImage, TOutputImage, TMatrix>::ThreadedGenerateData
       OutputPixelType outPix;
       outPix.SetSize(outSize);
       
-      for(unsigned int i=0; i<inSize; i++)
+      for(unsigned int i=0; i<inSize; ++i)
         {
           inVect[i] = static_cast<InputRealType>(inPix[i]);
         }
 
       outVect = m_MatrixByVector ? m_Matrix*inVect : inVect*m_Matrix;
 
-      for(unsigned int i=0; i<outSize; i++)
+      for(unsigned int i=0; i<outSize; ++i)
         {
           outPix[i] = static_cast<OutputInternalPixelType>(outVect[i]);
         }

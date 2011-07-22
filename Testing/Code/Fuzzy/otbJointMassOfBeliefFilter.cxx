@@ -95,7 +95,7 @@ int otbJointMassOfBeliefFilter(int argc, char* argv[])
   results.push_back(jointMass->GetBelief(hyp));
   results.push_back(jointMass->GetPlausibility(hyp));
 
-  for (unsigned int i=0; i<baseline.size(); i++)
+  for (unsigned int i=0; i<baseline.size(); ++i)
     {
     if (vcl_abs(baseline[i] - results[i]) >= .000001)
       {

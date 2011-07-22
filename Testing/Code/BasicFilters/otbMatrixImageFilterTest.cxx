@@ -64,9 +64,9 @@ int otbMatrixImageFilterTest(int argc, char * argv[])
   FilterType::MatrixType mat(reader->GetOutput()->GetNumberOfComponentsPerPixel(), nbCol, 0.);
 
   double val = 0;
-  for(unsigned int i=0; i<mat.rows(); i++)
+  for(unsigned int i=0; i<mat.rows(); ++i)
     {
-      for(unsigned int j=0; j<mat.cols(); j++)
+      for(unsigned int j=0; j<mat.cols(); ++j)
         {
           mat[i][j] = val;
           val += 0.5;

@@ -89,7 +89,7 @@ ConcatenateVectorDataFilter<TVectorData>
   this->GetOutput()->GetDataTree()->Add(m_Document , m_Folder);
   
   // Retrieve all the inputs
-  for(unsigned int idx = 0; idx < this->GetNumberOfInputs(); idx++)
+  for(unsigned int idx = 0; idx < this->GetNumberOfInputs(); ++idx)
     {
     // Add the current vectordata
     TreeNodeType *

@@ -81,7 +81,7 @@ EigenvalueLikelihoodMaximisation<TInputImage>
   // Extract first local maximum
   double max = m_Likelihood[0];
   unsigned int iMax = 0;
-  for (unsigned int i = 1; i < m_Likelihood.size() - 1; i++)
+  for (unsigned int i = 1; i < m_Likelihood.size() - 1; ++i)
     {
     if ( (m_Likelihood[i] > m_Likelihood[i - 1])
          && (m_Likelihood[i] > m_Likelihood[i + 1]) )

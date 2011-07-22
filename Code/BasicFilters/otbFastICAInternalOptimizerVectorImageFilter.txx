@@ -132,7 +132,7 @@ FastICAInternalOptimizerVectorImageFilter< TInputImage, TOutputImage >
   double den = 0.;
   double nbSample = 0;
 
-  for ( int i = 0; i < this->GetNumberOfThreads(); i++ )
+  for ( int i = 0; i < this->GetNumberOfThreads(); ++i )
   {
     beta += m_BetaVector[i];
     den += m_DenVector[i];

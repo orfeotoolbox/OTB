@@ -114,7 +114,7 @@ public:
    * the input image is done. */
   virtual bool IsInsideBuffer( const IndexType & index ) const
     {
-    for( unsigned int j = 0; j < ImageDimension; j++ )
+    for( unsigned int j = 0; j < ImageDimension; ++j )
       {
       if( index[j] < m_StartIndex[j] )
         {
@@ -133,7 +133,7 @@ public:
    * the input image is done. */
   virtual bool IsInsideBuffer( const ContinuousIndexType & index ) const
     {
-    for( unsigned int j = 0; j < ImageDimension; j++ )
+    for( unsigned int j = 0; j < ImageDimension; ++j )
       {
       if( index[j] < m_StartContinuousIndex[j] )
         {

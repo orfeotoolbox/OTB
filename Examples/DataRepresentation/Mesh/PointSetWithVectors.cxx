@@ -99,7 +99,7 @@ int main(int, char *[])
   unsigned int pointId =  0;
   const double radius = 300.0;
 
-  for (unsigned int i = 0; i < 360; i++)
+  for (unsigned int i = 0; i < 360; ++i)
     {
     const double angle = i * atan(1.0) / 45.0;
     point[0] = radius * sin(angle);

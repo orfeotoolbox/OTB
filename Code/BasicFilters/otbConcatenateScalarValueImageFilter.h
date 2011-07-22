@@ -66,7 +66,7 @@ public:
   OutputType operator ()(const InputType& in)
   {
     OutputType out(in.Size() + 1);
-    for (unsigned int j = 0; j < in.Size(); j++)
+    for (unsigned int j = 0; j < in.Size(); ++j)
       {
       out[j] = in[j];
       }

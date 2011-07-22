@@ -135,7 +135,7 @@ VectorDataToRandomLineGenerator<TVectorData>
     if (itVector.Get()->IsPolygonFeature())
       {
 
-      for(unsigned int i=0; i<this->GetNumberOfOutputLine(); i++)
+      for(unsigned int i=0; i<this->GetNumberOfOutputLine(); ++i)
         {
         typename DataNodeType::Pointer currentGeometry = DataNodeType::New();
         currentGeometry->SetNodeId(this->GetNextID());

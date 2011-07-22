@@ -129,7 +129,7 @@ int main(int argc, char * argv[])
   // Software Guide : BeginCodeSnippet
   MomentType Result = hmFunction->EvaluateAtIndex(center);
  
-  for (unsigned int j=0; j<7; j++)
+  for (unsigned int j=0; j<7; ++j)
     {
     std::cout << "The moment of order " << j+1 <<
       " is equal to " << Result[j] << std::endl;

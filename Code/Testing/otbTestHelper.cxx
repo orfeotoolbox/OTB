@@ -115,7 +115,7 @@ int TestHelper::RegressionTestAllImages(const StringList& baselineFilenamesImage
                                          (baseline->first).c_str(),
                                          m_ToleranceDiffValue);
       }
-    cpt++;
+    ++cpt;
     result += multiResult;
     }
   return result;
@@ -1381,7 +1381,7 @@ bool TestHelper::isScientificNumeric(const std::string& str) const
   if ((str[0] != '+') && (str[0] != '-') && (!isNumber(number))) return false;
   if ((str[0] == '+') || (str[0] == '-'))
     {
-    cpt++;
+    ++cpt;
     signDetected = true;
     }
 
@@ -1410,7 +1410,7 @@ bool TestHelper::isScientificNumeric(const std::string& str) const
       number = str[cpt];
       if (!isNumber(number)) return false;
       }
-    cpt++;
+    ++cpt;
     }
 
   return true;
@@ -1489,7 +1489,7 @@ void TestHelper::AddWhiteSpace(const std::string& strIn, std::string &strOut) co
   keysOut.push_back(" : ");
   keysOut.push_back(" , ");
 
-  for (unsigned int it = 0; it < keys.size(); it++)
+  for (unsigned int it = 0; it < keys.size(); ++it)
     {
     size_t found;
     found=strLine.find(keys[it]);

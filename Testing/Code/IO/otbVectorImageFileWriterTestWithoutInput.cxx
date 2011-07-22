@@ -73,7 +73,7 @@ int otbVectorImageFileWriterScalarTestWithoutInputGeneric(int argc, char* argv[]
 
   ImagePixelType pix0;
   pix0.SetSize(atoi(argv[3]));
-  for (unsigned int i = 0; i < static_cast<unsigned int> (atoi(argv[3])); i++)
+  for (unsigned int i = 0; i < static_cast<unsigned int> (atoi(argv[3])); ++i)
     {
     pix0[i] = static_cast<PixelType> (0);
     }
@@ -87,7 +87,7 @@ int otbVectorImageFileWriterScalarTestWithoutInputGeneric(int argc, char* argv[]
 
   while (!it.IsAtEnd())
     {
-    for (unsigned int i = 0; i < static_cast<unsigned int> (atoi(argv[3])); i++)
+    for (unsigned int i = 0; i < static_cast<unsigned int> (atoi(argv[3])); ++i)
       {
       pixVal[i] = static_cast<PixelType> (i * size[0] * size[1] + size[0] * it.GetIndex()[1] + it.GetIndex()[0]);
       }
@@ -167,7 +167,7 @@ int otbVectorImageFileWriterComplexTestWithoutInputGeneric(int argc, char* argv[
 
   ImagePixelType pix0;
   pix0.SetSize(atoi(argv[3]));
-  for (unsigned int i = 0; i < static_cast<unsigned int> (atoi(argv[3])); i++)
+  for (unsigned int i = 0; i < static_cast<unsigned int> (atoi(argv[3])); ++i)
     {
     pix0[i] = static_cast<PixelType> (0);
     }
@@ -182,7 +182,7 @@ int otbVectorImageFileWriterComplexTestWithoutInputGeneric(int argc, char* argv[
   typedef typename itk::NumericTraits<PixelType>::ScalarRealType ScalarRealType;
   while (!it.IsAtEnd())
     {
-    for (unsigned int i = 0; i < static_cast<unsigned int> (atoi(argv[3])); i++)
+    for (unsigned int i = 0; i < static_cast<unsigned int> (atoi(argv[3])); ++i)
       {
       ScalarRealType realPart = 2 * (i *size[0]*size[1] + size[0] * it.GetIndex()[1] + it.GetIndex()[0]);
       ScalarRealType imagPart = 2 * (i *size[0]*size[1] + size[0] * it.GetIndex()[1] + it.GetIndex()[0]) + 1;

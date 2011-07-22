@@ -41,7 +41,7 @@ StatisticsXMLFileWriter<TMeasurementVector>
   inputData.first  = name;
   
   // Check if the statistic name is already added
-  for(unsigned int idx= 0; idx< m_MeasurementVectorContainer.size(); idx++)
+  for(unsigned int idx= 0; idx< m_MeasurementVectorContainer.size(); ++idx)
     {
     if(strcmp(m_MeasurementVectorContainer[idx].first.c_str(), name) == 0 )
       {
@@ -84,7 +84,7 @@ StatisticsXMLFileWriter<TMeasurementVector>
   doc.LinkEndChild( root );
 
   // Iterate through the input
-  for (unsigned int i = 0; i < m_MeasurementVectorContainer.size(); i++)
+  for (unsigned int i = 0; i < m_MeasurementVectorContainer.size(); ++i)
     {
     std::string            featureName              = m_MeasurementVectorContainer[i].first;
     MeasurementVectorType  currentMeasurementVector = m_MeasurementVectorContainer[i].second;

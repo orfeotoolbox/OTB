@@ -59,12 +59,12 @@ int otbImagePCAShapeModelEstimatorTest(int argc, char* argv[])
       std::vector<std::string> imagesfilenames;
       std::vector<std::string> outputimagesfilenames;
       int cpt(3);
-      for(; cpt<(numberOfTrainingImages+3); cpt++)
+      for(; cpt<(numberOfTrainingImages+3); ++cpt)
       {
           imagesfilenames.push_back(argv[cpt]);
       }
       int cpt2(cpt);
-      for(; cpt<(numberOfPrincipalComponentsRequired+cpt2); cpt++)
+      for(; cpt<(numberOfPrincipalComponentsRequired+cpt2); ++cpt)
       {
           outputimagesfilenames.push_back(argv[cpt]);
       }
@@ -164,7 +164,7 @@ int otbImagePCAShapeModelEstimatorTest(int argc, char* argv[])
   applyPCAShapeEstimator->GetNumberOfPrincipalComponentsRequired() <<
   " largest eigen values are:" << std::endl;
 
-  for (unsigned int i = 0; i < vnl_math_min(numEigVal, (unsigned int) NUMLARGESTPC); i++)
+  for (unsigned int i = 0; i < vnl_math_min(numEigVal, (unsigned int) NUMLARGESTPC); ++i)
     {
     std::cout << eigenValues[i] << std::endl;
     }
@@ -183,7 +183,7 @@ int otbImagePCAShapeModelEstimatorTest(int argc, char* argv[])
   }
   std::cout << "  " << std::endl;
   //Print the largest two eigen vectors
-  for (unsigned int j=1; j< NUMLARGESTPC + 1; j++ )
+  for (unsigned int j=1; j< NUMLARGESTPC + 1; ++j )
   {
     OutputImageType::Pointer outImage2 = applyPCAShapeEstimator->GetOutput( j );
     OutputImageIterator outImage2It( outImage2, outImage2->GetBufferedRegion() );

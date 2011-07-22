@@ -75,7 +75,7 @@ CircleGlComponent
   // Enabling line antialiasing
   glEnable(GL_POINT_SMOOTH);
 
-  for (unsigned int i = 0; i < m_IndexList.size(); i++)
+  for (unsigned int i = 0; i < m_IndexList.size(); ++i)
     {
     this->Render(i, extent, space2ScreenTransform);
     }

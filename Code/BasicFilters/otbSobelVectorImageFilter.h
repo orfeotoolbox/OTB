@@ -41,7 +41,7 @@ public:
   {
     unsigned int length = input.GetPixel(0).Size();
     TOutput output ( length );
-    for ( unsigned int i = 0; i < length; i++ )
+    for ( unsigned int i = 0; i < length; ++i )
     {
       double hori = static_cast<double>(
             ( input.GetPixel(0)[i] - input.GetPixel(2)[i] )

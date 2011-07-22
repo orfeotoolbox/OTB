@@ -48,7 +48,7 @@ StatisticsXMLFileReader<TMeasurementVector>
   // Check if the name of the Statistic is present
   bool found = false;
   unsigned int index = 0;
-  for(unsigned int  idx = 0; idx < m_NumberOfOutputs; idx++)
+  for(unsigned int  idx = 0; idx < m_NumberOfOutputs; ++idx)
     {
     if(strcmp(m_MeasurementVectorContainer[idx].first.c_str(), statisticName) == 0 )
       {
@@ -118,7 +118,7 @@ StatisticsXMLFileReader<TMeasurementVector>
     
     // resize the Measurement Vector
     currentStatisticVector.second.SetSize(tempMeasurementVector.size());
-    for(unsigned int i = 0; i < tempMeasurementVector.size(); i++)
+    for(unsigned int i = 0; i < tempMeasurementVector.size(); ++i)
       currentStatisticVector.second.SetElement(i,
                                                (static_cast<InputValueType>(tempMeasurementVector[i])));
     

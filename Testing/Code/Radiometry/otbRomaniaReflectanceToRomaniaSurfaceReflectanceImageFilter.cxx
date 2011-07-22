@@ -66,7 +66,7 @@ int otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter(int argc, char *
 
   reader->UpdateOutputInformation();
   unsigned int nbChannel = reader->GetOutput()->GetNumberOfComponentsPerPixel();
-  for (unsigned int i = 0; i < nbChannel; i++)
+  for (unsigned int i = 0; i < nbChannel; ++i)
     {
     wavelenghFiles.push_back(argv[i + 4]);
     }
@@ -116,7 +116,7 @@ int otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter(int argc, char *
   param->SetAerosolOptical(static_cast<double>(aerosolOptical));
 
   ValuesVectorType vect;
-  for (unsigned int j = 0; j < nbChannel; j++)
+  for (unsigned int j = 0; j < nbChannel; ++j)
     {
     functionValues = FilterFunctionValuesType::New();
     vect.clear();

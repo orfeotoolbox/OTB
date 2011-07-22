@@ -303,7 +303,7 @@ int main(int,  char *[])
 
   // Software Guide : BeginCodeSnippet
   std::vector<MembershipFunctionType::Pointer> membershipFunctions;
-  for (unsigned int i = 0; i < 2; i++)
+  for (unsigned int i = 0; i < 2; ++i)
     {
     membershipFunctions.push_back(MembershipFunctionType::New());
     membershipFunctions[i]->SetMean(meanEstimators[i]->GetOutput());

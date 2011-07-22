@@ -389,7 +389,7 @@ void TileMapImageIO::BuildFileName(const std::ostringstream& quad, std::ostrings
     {
     directory << "/";
     directory << (quad.str().c_str())[i];
-    i++;
+    ++i;
     }
 
   itksys::SystemTools::MakeDirectory(directory.str().c_str());
@@ -677,7 +677,7 @@ void TileMapImageIO::InternalWrite(double x, double y, const void* buffer)
     imageIO->WriteImageInformation();
 
     itk::ImageIORegion ioRegion(2);
-    for (unsigned int i = 0; i < 2; i++)
+    for (unsigned int i = 0; i < 2; ++i)
       {
       ioRegion.SetSize(i, m_TileSize);
       ioRegion.SetIndex(i, 0);

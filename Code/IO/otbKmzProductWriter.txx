@@ -211,7 +211,7 @@ void
 KmzProductWriter<TInputImage>
 ::ProcessLegends()
 {
-  for (unsigned int idx = 0; idx < m_LegendVector.size(); idx++)
+  for (unsigned int idx = 0; idx < m_LegendVector.size(); ++idx)
     {
     std::ostringstream legendName;
     legendName << m_Path;
@@ -283,7 +283,7 @@ KmzProductWriter<TInputImage>
   // Compute nbTile
   int nbTile = 0;
 
-  for (int i = 0; i <= maxDepth; i++)
+  for (int i = 0; i <= maxDepth; ++i)
     {
     int ratio = static_cast<int>(vcl_pow(2., (maxDepth - i)));
     nbTile += (((sizeX / ratio) / m_TileSize) + 1)  * (((sizeY / ratio) / m_TileSize) + 1);
@@ -861,7 +861,7 @@ KmzProductWriter<TInputImage>
     m_RootKmlFile << "\t\t\t\t\t<description>" << std::endl;
     m_RootKmlFile << "\t\t\t\t\t\t<![CDATA[ Legend of the product " << m_FileName << std::endl;
 
-    for(unsigned int idx = 0; idx < m_LegendVector.size(); idx++)
+    for(unsigned int idx = 0; idx < m_LegendVector.size(); ++idx)
       m_RootKmlFile << "\t\t\t\t\t\t<img src=\"legends/legend_"<< idx <<".jpeg\" width=\"215\" height=\"175\"  >";
     
     m_RootKmlFile << "\t\t\t\t\t\t ]]>" << std::endl;
@@ -1410,7 +1410,7 @@ KmzProductWriter<TInputImage>
   while (i < tempName.length())
     {
     if (tempName[i] != ' ') currentImageName += tempName[i];
-    i++;
+    ++i;
     }
 
   return currentImageName;

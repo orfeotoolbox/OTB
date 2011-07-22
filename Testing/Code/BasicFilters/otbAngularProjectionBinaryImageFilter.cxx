@@ -108,7 +108,7 @@ int otbAngularProjectionBinaryImageFilterTest ( int argc, char * argv[] )
   std::vector< WriterType::Pointer > writers;
   writers.resize( filter->GetNumberOfOutputs() );
 
-  for ( unsigned int i = 0; i < filter->GetNumberOfOutputs(); i++ )
+  for ( unsigned int i = 0; i < filter->GetNumberOfOutputs(); ++i )
   {
     std::stringstream title;
     title << outputImageName << "_" << i << ".hdr";

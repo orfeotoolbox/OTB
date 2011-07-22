@@ -44,7 +44,7 @@ int otbPathListToHistogramGenerator(int argc, char* argv[])
   PathListType* PathList = new PathListType;
   PathList->clear();
 
-  for (int i = 0; i < NbAngle; i++)
+  for (int i = 0; i < NbAngle; ++i)
     {
     PathPointer pathElt = PathType::New();
     pathElt->Initialize();

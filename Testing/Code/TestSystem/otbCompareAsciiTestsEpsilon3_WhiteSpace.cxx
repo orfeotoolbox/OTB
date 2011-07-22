@@ -43,7 +43,7 @@ int otbCompareAsciiTestsEpsilon3_WhiteSpace(int argc, char * argv[])
   // Write temporary object without modification
   std::ofstream fileTestOutput;
   fileTestOutput.open(argv[2]);
-  for (unsigned int i=0; i < listLineFileTest.size(); i++)
+  for (unsigned int i=0; i < listLineFileTest.size(); ++i)
     {
     fileTestOutput << listLineFileTest[i];
     }

@@ -58,7 +58,7 @@ int otbDrawPathListFilterWithValue(int argc, char * argv[])
 
   PathType::Pointer path1 = PathType::New();
 
-  for (unsigned int i = 1; i < nbpoints; i++)
+  for (unsigned int i = 1; i < nbpoints; ++i)
     {
     VertexType vertex1, vertex2;
     vertex1[0] = 0;
@@ -70,7 +70,7 @@ int otbDrawPathListFilterWithValue(int argc, char * argv[])
     }
 
   PathType::Pointer path2 = PathType::New();
-  for (unsigned int i = 1; i < nbpoints; i++)
+  for (unsigned int i = 1; i < nbpoints; ++i)
     {
     VertexType vertex1, vertex2;
     vertex1[0] = i * sizex / nbpoints;

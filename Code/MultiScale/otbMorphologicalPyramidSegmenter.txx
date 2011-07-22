@@ -257,7 +257,7 @@ Segmenter<TInputImage, TOutputImage>
     index[0] = static_cast<long int>(it.Value()[0]);
     index[1] = static_cast<long int>(it.Value()[1]);
     connectedThreshold->AddSeed(index);
-    it++;
+    ++it;
     }
 
   // segmentation

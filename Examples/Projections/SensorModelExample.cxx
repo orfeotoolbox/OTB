@@ -390,7 +390,7 @@ int main(int argc, char* argv[])
     max_y = pixelIndexArray[1];
     min_y = pixelIndexArray[1];
 
-    for (j = 0; j < It; j++)
+    for (j = 0; j < It; ++j)
       {
       if (j % 2 == 0 && pixelIndexArray[j] > max_x)
         {
@@ -454,7 +454,7 @@ int main(int argc, char* argv[])
 // Software Guide : BeginCodeSnippet
     interpolator->SetInputImage(extract->GetOutput());
 
-    for (k = 0; k < It / 2; k++)
+    for (k = 0; k < It / 2; ++k)
       {
       pixelIndexBis[0] = pixelIndexArray[2 * k];
       pixelIndexBis[1] = pixelIndexArray[2 * k + 1];

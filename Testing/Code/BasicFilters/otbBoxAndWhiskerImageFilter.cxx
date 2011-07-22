@@ -88,7 +88,7 @@ int otbBoxAndWhiskerImageFilter(int argc, char * argv[])
     ImageType::PixelType outputPixel = outputIt.Get();
 
     const unsigned int vectorSize = pixel.Size();
-    for (unsigned i = 0; i < vectorSize; i++)
+    for (unsigned i = 0; i < vectorSize; ++i)
       {
       if ( OutlierType::IsMissingValue(pixel[i]) )
         {

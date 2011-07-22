@@ -221,7 +221,7 @@ int main(int argc, char * argv[])
       if ((OutputPolyList->GetNthElement(i)->GetArea() > surfaceLimit)   //delete big polygon
           || (OutputPolyList->GetNthElement(i)->GetArea() == 0))         //delete invalid polygon
         OutputPolyList->Erase(i);
-      else i++;
+      else ++i;
       }
 
     //Display results after erasure
@@ -246,7 +246,7 @@ int main(int argc, char * argv[])
       oit.Set(iit.Get());
 
     // erase small polygon
-    for (unsigned int i = 0; i < OutputPolyList->Size(); i++)
+    for (unsigned int i = 0; i < OutputPolyList->Size(); ++i)
       {
       std::cout << "polygon " << i << std::endl;
       ImageRegionType polygonRegion = OutputPolyList->GetNthElement(i)->GetBoundingRegion().GetImageRegion();

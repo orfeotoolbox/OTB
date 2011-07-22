@@ -338,10 +338,10 @@ int main()
   MembershipFunctionType::OriginType origin(
     sample->GetMeasurementVectorSize());
   int index = 0;
-  for (unsigned int i = 0; i < 2; i++)
+  for (unsigned int i = 0; i < 2; ++i)
     {
     membershipFunctions.push_back(MembershipFunctionType::New());
-    for (unsigned int j = 0; j < sample->GetMeasurementVectorSize(); j++)
+    for (unsigned int j = 0; j < sample->GetMeasurementVectorSize(); ++j)
       {
       origin[j] = estimatedMeans[index++];
       }

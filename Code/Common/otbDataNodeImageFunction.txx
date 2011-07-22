@@ -74,7 +74,7 @@ DataNodeImageFunction<TImage, TOutput, TCoordRep, TPrecision>
     typename InputImageType::SizeType size = ptr->GetBufferedRegion().GetSize();
     m_StartIndex = ptr->GetBufferedRegion().GetIndex();
 
-    for ( unsigned int j = 0; j < ImageDimension; j++ )
+    for ( unsigned int j = 0; j < ImageDimension; ++j )
       {
       m_EndIndex[j] = m_StartIndex[j] + static_cast<IndexValueType>( size[j] ) - 1;
 #ifdef ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY

@@ -267,7 +267,7 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
     if ( m_GivenStdDevValues )
     {
       VectorType revStdDev ( m_StdDevValues.Size() );
-      for ( unsigned int i = 0; i < m_StdDevValues.Size(); i++ )
+      for ( unsigned int i = 0; i < m_StdDevValues.Size(); ++i )
         revStdDev[i] = 1. / m_StdDevValues[i];
       m_Normalizer->SetStdDev( revStdDev );
     }
@@ -277,13 +277,13 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
       VectorType revMean ( m_MeanValues.Size() );
       if ( m_GivenStdDevValues )
       {
-        for ( unsigned int i = 0; i < m_MeanValues.Size(); i++ )
+        for ( unsigned int i = 0; i < m_MeanValues.Size(); ++i )
           revMean[i] = - m_MeanValues[i] / m_StdDevValues[i];
         m_Normalizer->SetUseStdDev( true );
       }
       else
       {
-        for ( unsigned int i = 0; i < m_MeanValues.Size(); i++ )
+        for ( unsigned int i = 0; i < m_MeanValues.Size(); ++i )
           revMean[i] = -m_MeanValues[i];
         m_Normalizer->SetUseStdDev( false );
       }
@@ -331,7 +331,7 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   /*
    * We used normalized PCA
    */
-  for ( unsigned int i = 0; i < valP.size(); i++ )
+  for ( unsigned int i = 0; i < valP.size(); ++i )
   {
     if (  valP[i] != 0. )
       valP[i] = 1. / vcl_sqrt( vcl_abs( valP[i] ) );
@@ -349,7 +349,7 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   
  
   m_EigenValues.SetSize( m_NumberOfPrincipalComponentsRequired );
-  for ( unsigned int i = 0; i < m_NumberOfPrincipalComponentsRequired; i++ )
+  for ( unsigned int i = 0; i < m_NumberOfPrincipalComponentsRequired; ++i )
     m_EigenValues[i] = static_cast< RealType >( valP[i] );
 #else
   InternalMatrixType transf;
@@ -357,11 +357,11 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   vnl_symmetric_eigensystem_compute( m_CovarianceMatrix.GetVnlMatrix(), transf, vectValP );
 
   InternalMatrixType valP ( vectValP.size(), vectValP.size(), vnl_matrix_null );
-  for ( unsigned int i = 0; i < vectValP.size(); i++ )
+  for ( unsigned int i = 0; i < vectValP.size(); ++i )
     valP(i, i) = vectValP[i];
 
   /* We used normalized PCA */
-  for ( unsigned int i = 0; i < valP.rows(); i++ )
+  for ( unsigned int i = 0; i < valP.rows(); ++i )
   {
     if (  valP(i, i) > 0. )
     {
@@ -388,7 +388,7 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
     m_TransformationMatrix = transf;
   
   m_EigenValues.SetSize( m_NumberOfPrincipalComponentsRequired );
-  for ( unsigned int i = 0; i < m_NumberOfPrincipalComponentsRequired; i++ )
+  for ( unsigned int i = 0; i < m_NumberOfPrincipalComponentsRequired; ++i )
     m_EigenValues[i] = static_cast< RealType >( valP(i, i) );
 
 #endif
@@ -444,7 +444,7 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   if ( m_EigenValues.Size() > 0 )
   {
     os << indent << "Eigen value :";
-    for ( unsigned int i = 0; i < m_NumberOfPrincipalComponentsRequired; i++ )
+    for ( unsigned int i = 0; i < m_NumberOfPrincipalComponentsRequired; ++i )
       os << " " << m_EigenValues[i];
     os << "\n";
   }

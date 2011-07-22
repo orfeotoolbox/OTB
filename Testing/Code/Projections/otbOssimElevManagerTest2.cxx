@@ -55,7 +55,7 @@ int otbOssimElevManagerTest2(int argc, char* argv[])
   std::ofstream file;
   file.open(outfname);
 
-  for (int i = 0; i < size; i++)
+  for (int i = 0; i < size; ++i)
     {
     PointType point;
     point[0] = origin[0] + i * spacing;

@@ -89,7 +89,7 @@ public:
         }
       }
 
-    for (unsigned int i = 0; i < vInTmp.Size(); i++)
+    for (unsigned int i = 0; i < vInTmp.Size(); ++i)
       {
       out[i] = static_cast<InternalInputPixelType>(vInTmp[i]);
       }

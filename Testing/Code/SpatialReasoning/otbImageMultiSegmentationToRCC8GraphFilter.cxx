@@ -47,7 +47,7 @@ int otbImageMultiSegmentationToRCC8GraphFilter(int argc, char* argv[])
   ImageListType::Pointer inputList = ImageListType::New();
 
   // Reading input images
-  for (unsigned int i = 0; i < nbImages; i++)
+  for (unsigned int i = 0; i < nbImages; ++i)
     {
     ReaderType::Pointer reader = ReaderType::New();
     reader->SetFileName(argv[4 + i]);

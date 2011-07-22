@@ -74,12 +74,12 @@ int otbVectorImageToMatrixTest(int argc, char * argv[])
 
   std::cout << m << std::endl;
 
-  for (unsigned int j = 0; j < m.cols(); j++)
+  for (unsigned int j = 0; j < m.cols(); ++j)
     {
     unsigned int x = j % Size;
     unsigned int y = j / Size;
 
-    for (unsigned int i = 0; i < m.rows(); i++)
+    for (unsigned int i = 0; i < m.rows(); ++i)
       {
       if ( m(i, j) !=  x + y * Size + i )
         {

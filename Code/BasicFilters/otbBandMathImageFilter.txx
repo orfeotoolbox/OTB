@@ -197,17 +197,17 @@ void BandMathImageFilter<TImage>
     *itParser = ParserType::New();
     }
 
-  for(i = 0; i < nbThreads; i++)
+  for(i = 0; i < nbThreads; ++i)
     {
     m_AImage.at(i).resize(m_NbVar);
     m_VParser.at(i)->SetExpr(m_Expression);
   
-    for(j=0; j < nbInputImages; j++)
+    for(j=0; j < nbInputImages; ++j)
       {
       m_VParser.at(i)->DefineVar(m_VVarName.at(j), &(m_AImage.at(i).at(j)));
       }
 
-    for(j=nbInputImages; j < nbInputImages+nbAccessIndex; j++)
+    for(j=nbInputImages; j < nbInputImages+nbAccessIndex; ++j)
       {
       m_VVarName.at(j) = tmpIdxVarNames.at(j-nbInputImages);
       m_VParser.at(i)->DefineVar(m_VVarName.at(j), &(m_AImage.at(i).at(j)));
@@ -226,7 +226,7 @@ void BandMathImageFilter<TImage>
   m_OverflowCount = 0;
 
   // Accumulate counts for each thread
-  for(i = 0; i < nbThreads; i++)
+  for(i = 0; i < nbThreads; ++i)
     {
     m_UnderflowCount += m_ThreadUnderflow[i];
     m_OverflowCount += m_ThreadOverflow[i];
@@ -255,7 +255,7 @@ void BandMathImageFilter<TImage>
   
   std::vector< ImageRegionConstIteratorType > Vit;
   Vit.resize(nbInputImages);
-  for(j=0; j < nbInputImages; j++)
+  for(j=0; j < nbInputImages; ++j)
     {
     Vit[j] = ImageRegionConstIteratorType (this->GetNthInput(j), outputRegionForThread);
     }
@@ -267,17 +267,17 @@ void BandMathImageFilter<TImage>
 
   while(!Vit.at(0).IsAtEnd())
     {
-    for(j=0; j < nbInputImages; j++)
+    for(j=0; j < nbInputImages; ++j)
       {
       m_AImage.at(threadId).at(j) = static_cast<double>(Vit.at(j).Get());
       }
     
     // Image Indexes
-    for(j=0; j < 2; j++)
+    for(j=0; j < 2; ++j)
       {
       m_AImage.at(threadId).at(nbInputImages+j)   = static_cast<double>(Vit.at(0).GetIndex()[j]);
       }
-    for(j=0; j < 2; j++)
+    for(j=0; j < 2; ++j)
       {
       m_AImage.at(threadId).at(nbInputImages+2+j) = static_cast<double>(m_Origin[j])
         +static_cast<double>(Vit.at(0).GetIndex()[j]) * static_cast<double>(m_Spacing[j]);
@@ -311,7 +311,7 @@ void BandMathImageFilter<TImage>
       ot.Set(static_cast<PixelType>(value));
       }
 
-    for(j=0; j < nbInputImages; j++)
+    for(j=0; j < nbInputImages; ++j)
       {
       ++(Vit.at(j));
       }

@@ -270,7 +270,7 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
     InternalMatrixType W_tmp = W * W.transpose();
     vnl_svd< MatrixElementType > solver ( W_tmp );
     InternalMatrixType valP = solver.W();
-    for ( unsigned int i = 0; i < valP.rows(); i++ )
+    for ( unsigned int i = 0; i < valP.rows(); ++i )
       valP(i, i) = 1. / vcl_sqrt( static_cast<double>( valP(i, i) ) ); // Watch for 0 or neg
     InternalMatrixType transf = solver.U();
     W_tmp = transf * valP * transf.transpose();
@@ -278,8 +278,8 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 
     // Convergence evaluation
     convergence = 0.;
-    for ( unsigned int i = 0; i < W.rows(); i++ )
-      for ( unsigned int j = 0; j < W.cols(); j++ )
+    for ( unsigned int i = 0; i < W.rows(); ++i )
+      for ( unsigned int j = 0; j < W.cols(); ++j )
         convergence += vcl_abs( W(i, j) - W_old(i, j) );
 
     reporter.CompletedPixel();

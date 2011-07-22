@@ -66,7 +66,7 @@ int otbThresholdImageToPointSetTest(int argc, char * argv[])
   //Initialization
   CoordPoint.Fill(0);
 
-  for (unsigned long i = 0; i < NbPoints; i++)
+  for (unsigned long i = 0; i < NbPoints; ++i)
     {
     pointList->GetPoint(i, &CoordPoint);
     file << i + 1 << "/" << NbPoints << " : " << CoordPoint[0] << " , " << CoordPoint[1] << std::endl;

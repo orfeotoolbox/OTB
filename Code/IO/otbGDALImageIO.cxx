@@ -529,7 +529,7 @@ bool GDALImageIO::GetSubDatasetInfo(std::vector<std::string> &names, std::vector
        ( (strcmp(m_Dataset->GetDataSet()->GetDriver()->GetDescription(),"HDF4") == 0) ||
          (strcmp(m_Dataset->GetDataSet()->GetDriver()->GetDescription(),"HDF5") == 0) ) )
     {
-    for (int cpt = 0; papszMetadata[cpt] != NULL; cpt++)
+    for (int cpt = 0; papszMetadata[cpt] != NULL; ++cpt)
       {
       std::string key, name;
       if (System::ParseHdfSubsetName(papszMetadata[cpt], key, name))
@@ -587,7 +587,7 @@ void GDALImageIO::InternalReadImageInformation()
     std::vector<std::string> names;
     if( CSLCount(papszMetadata) > 0 )
       {
-      for( int cpt = 0; papszMetadata[cpt] != NULL; cpt++ )
+      for( int cpt = 0; papszMetadata[cpt] != NULL; ++cpt )
         {
         std::string key, name;
         if (System::ParseHdfSubsetName(papszMetadata[cpt], key, name))
@@ -874,7 +874,7 @@ void GDALImageIO::InternalReadImageInformation()
 
     itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::GCPCountKey, gcpCount);
 
-    for (unsigned int cpt = 0; cpt < gcpCount; cpt++)
+    for (unsigned int cpt = 0; cpt < gcpCount; ++cpt)
       {
 
       const GDAL_GCP *psGCP;
@@ -909,7 +909,7 @@ void GDALImageIO::InternalReadImageInformation()
 
   if (dataset->GetGeoTransform(adfGeoTransform) == CE_None)
     {
-    for (int cpt = 0; cpt < 6; cpt++)
+    for (int cpt = 0; cpt < 6; ++cpt)
       VadfGeoTransform.push_back(adfGeoTransform[cpt]);
 
     itk::EncapsulateMetaData<MetaDataKey::VectorType>(dict, MetaDataKey::GeoTransformKey, VadfGeoTransform);
@@ -948,7 +948,7 @@ void GDALImageIO::InternalReadImageInformation()
     {
     std::string key;
 
-    for (int cpt = 0; papszMetadata[cpt] != NULL; cpt++)
+    for (int cpt = 0; papszMetadata[cpt] != NULL; ++cpt)
       {
       std::ostringstream lStream;
       lStream << MetaDataKey::MetadataKey << cpt;
@@ -968,7 +968,7 @@ void GDALImageIO::InternalReadImageInformation()
     {
     std::string key;
 
-    for (int cpt = 0; papszMetadata[cpt] != NULL; cpt++)
+    for (int cpt = 0; papszMetadata[cpt] != NULL; ++cpt)
       {
       std::ostringstream lStream;
       lStream << MetaDataKey::SubMetadataKey << cpt;

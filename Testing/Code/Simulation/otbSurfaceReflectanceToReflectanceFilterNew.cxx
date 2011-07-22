@@ -101,7 +101,7 @@ int otbSurfaceReflectanceToReflectanceFilterTest(int argc, char * argv[])
   ImageType::PixelType pixel;
   pixel.SetSize((myResponse)->Size());
 
-  for ( unsigned int i = 0; i<(myResponse)->Size(); i++ )
+  for ( unsigned int i = 0; i<(myResponse)->Size(); ++i )
     {
     pixel[i] = myResponse->GetResponse()[i].second;
     }

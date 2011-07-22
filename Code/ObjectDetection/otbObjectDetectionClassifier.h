@@ -187,7 +187,7 @@ private:
     typedef typename RegionType::IndexType     IndexType;
     typedef typename IndexType::IndexValueType IndexValueType;
 
-    for(unsigned int i=0; i<ImageDimension; i++)
+    for(unsigned int i=0; i<ImageDimension; ++i)
       {
 #ifdef ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY
       if( itk::Math::RoundHalfIntegerUp<IndexValueType>(index[i]) < static_cast<IndexValueType>( region.GetIndex(i) ) + m_NeighborhoodRadius  + 1 )

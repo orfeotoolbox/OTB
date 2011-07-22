@@ -186,7 +186,7 @@ int main(int argc, char *argv[])
     flag = false;
 
     PixelType min = it.GetCenterPixel();
-    for (unsigned i = 0; i < it.Size(); i++)
+    for (unsigned i = 0; i < it.Size(); ++i)
       {
       if (it.GetPixel(i) < min)
         {

@@ -76,7 +76,7 @@ int otbImageFileReaderMSTAR(int argc, char* argv[])
   const InternalImageType::PointType&   inputOrigin = reader->GetOutput()->GetOrigin();
   double                                outputOrigin[InputDimension];
 
-  for (unsigned int i = 0; i < InputDimension; i++)
+  for (unsigned int i = 0; i < InputDimension; ++i)
     {
     outputOrigin[i] = inputOrigin[i] + spacing[i] * inputStart[i];
     }

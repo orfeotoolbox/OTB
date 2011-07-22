@@ -42,7 +42,7 @@ FlexibleDistanceWithMissingValue<TVector>
 
   double temp, distance = itk::NumericTraits<double>::Zero;
 
-  for (unsigned int i = 0; i < x1.Size(); i++)
+  for (unsigned int i = 0; i < x1.Size(); ++i)
     {
     if (!this->IsMissingValue(x1[i]) && !this->IsMissingValue(x2[i]))
       {
@@ -74,7 +74,7 @@ FlexibleDistanceWithMissingValue<TVector>
 
   double temp, distance = itk::NumericTraits<double>::Zero;
 
-  for (unsigned int i = 0; i < measurementVectorSize; i++)
+  for (unsigned int i = 0; i < measurementVectorSize; ++i)
     {
     if (!this->IsMissingValue(this->GetOrigin()[i]) && !this->IsMissingValue(x[i]))
       {

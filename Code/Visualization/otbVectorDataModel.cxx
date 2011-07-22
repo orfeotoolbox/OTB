@@ -347,7 +347,7 @@ VectorDataModel::CopyFields( TreeNodeType * node )
 {
   std::vector< std::string > fieldList = node->Get()->GetFieldList();
   unsigned int i;
-  for (i=0; i < fieldList.size(); i++)
+  for (i=0; i < fieldList.size(); ++i)
     {
     m_CurrentGeometry->SetFieldAsString(fieldList.at(i), node->Get()->GetFieldAsString(fieldList.at(i)));
     }

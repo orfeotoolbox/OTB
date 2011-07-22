@@ -38,7 +38,7 @@ int otbFuzzyVariableDSApplied(int argc, char* argv[])
   PrecisionType memTheta;
 
   
-  for(unsigned int i=0; i<=100; i++)
+  for(unsigned int i=0; i<=100; ++i)
     {
     pos       = (PrecisionType)i/100;
     maxVar    = fv->GetMaxVar(pos);

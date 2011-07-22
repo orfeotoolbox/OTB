@@ -95,7 +95,7 @@ WaveletPacketTransform<TInputImage, TOutputImage, TFilter, Wavelet::FORWARD, TCo
 
     filter->Update();
 
-    for (unsigned int idx = 0; idx < filter->GetNumberOfOutputs(); idx++)
+    for (unsigned int idx = 0; idx < filter->GetNumberOfOutputs(); ++idx)
       {
       GenerateData(depth + 1, filter->GetOutput(idx), progress);
       }
@@ -142,7 +142,7 @@ WaveletPacketTransform<TInputImage, TOutputImage, TFilter, Wavelet::INVERSE,
   OutputImageSizeType  outputSize;
   OutputImageIndexType outputIndex;
 
-  for (unsigned int i = 0; i < InputImageDimension; i++)
+  for (unsigned int i = 0; i < InputImageDimension; ++i)
     {
     outputIndex[i] = inputIndex[i] * GetSubsampleImageFactor() * GetDepthOfDecomposition();
     outputSize[i] = inputSize[i] * GetSubsampleImageFactor() * GetDepthOfDecomposition();
@@ -220,7 +220,7 @@ WaveletPacketTransform<TInputImage, TOutputImage, TFilter, Wavelet::INVERSE,
 
   if (ruleID == m_WaveletPacketRule.size()) return m_FilterList->Size();
 
-  for (unsigned int i = 0; i < m_FilterList->GetNthElement(filterID)->GetNumberOfInputs(); i++)
+  for (unsigned int i = 0; i < m_FilterList->GetNthElement(filterID)->GetNumberOfInputs(); ++i)
     {
     if (m_WaveletPacketRule[ruleID++] == true)
       {
@@ -275,7 +275,7 @@ WaveletPacketTransform<TInputImage, TOutputImage, TFilter, Wavelet::INVERSE,
 
     m_NumberOfFilters++;
 
-    for (unsigned int i = 0; i < filter->GetNumberOfInputs(); i++)
+    for (unsigned int i = 0; i < filter->GetNumberOfInputs(); ++i)
       {
       ruleID++;
       InterpretRule(ruleID, curDepth + 1);

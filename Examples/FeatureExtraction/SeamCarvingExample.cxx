@@ -145,7 +145,7 @@ int main(int argc, char * argv[])
 
   double energyVert, energyHor;
 
-  for (int i = 0; i < iteration; i++)
+  for (int i = 0; i < iteration; ++i)
     {
 
     gradient->SetInput(duplicator->GetOutput());

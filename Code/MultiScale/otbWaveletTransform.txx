@@ -65,7 +65,7 @@ WaveletTransform<TInputImage, TOutputImage, TFilter, Wavelet::FORWARD>
     1 + GetNumberOfDecompositions() * (filter->GetNumberOfOutputs() - 1));
 
   std::cerr << "Using " << this->GetOutput()->Size() << " outputs...\n";
-  for (unsigned int idx = 0; idx < this->GetOutput()->Size(); idx++)
+  for (unsigned int idx = 0; idx < this->GetOutput()->Size(); ++idx)
     {
     this->GetOutput()->SetNthElement(idx, OutputImageType::New());
     }
@@ -74,7 +74,7 @@ WaveletTransform<TInputImage, TOutputImage, TFilter, Wavelet::FORWARD>
                                    1.f / static_cast<float>(GetNumberOfDecompositions()));
   filter->Update();
 
-  for (unsigned int idx = 1; idx < filter->GetNumberOfOutputs(); idx++)
+  for (unsigned int idx = 1; idx < filter->GetNumberOfOutputs(); ++idx)
     {
     this->GetOutput()->SetNthElement(
       this->GetOutput()->Size() - filter->GetNumberOfOutputs() + idx,
@@ -93,7 +93,7 @@ WaveletTransform<TInputImage, TOutputImage, TFilter, Wavelet::FORWARD>
                                      1.f / static_cast<float>(GetNumberOfDecompositions()));
     filter->Update();
 
-    for (unsigned int idx = 1; idx < filter->GetNumberOfOutputs(); idx++)
+    for (unsigned int idx = 1; idx < filter->GetNumberOfOutputs(); ++idx)
       {
       this->GetOutput()->SetNthElement(
         this->GetOutput()->Size() - 1 - (nbDecomp + 1) * (filter->GetNumberOfOutputs() - 1) + idx,
@@ -137,7 +137,7 @@ WaveletTransform<TInputImage, TOutputImage, TFilter, Wavelet::INVERSE>
     OutputImageSizeType  outputSize;
     OutputImageIndexType outputIndex;
 
-    for (unsigned int i = 0; i < InputImageDimension; i++)
+    for (unsigned int i = 0; i < InputImageDimension; ++i)
       {
       outputIndex[i] = inputIndex[i] * GetSubsampleImageFactor() * GetNumberOfDecompositions();
       outputSize[i] = inputSize[i] * GetSubsampleImageFactor() * GetNumberOfDecompositions();
@@ -171,7 +171,7 @@ WaveletTransform<TInputImage, TOutputImage, TFilter, Wavelet::INVERSE>
 
   this->GetFilterList()->SetNthElement(0, FilterType::New());
   filter = this->GetNthFilter(0);
-  for (unsigned int i = 0; i < filter->GetNumberOfInputs(); i++)
+  for (unsigned int i = 0; i < filter->GetNumberOfInputs(); ++i)
     {
     filter->SetInput(i, inputIterator.Get());
     ++inputIterator;
@@ -187,13 +187,13 @@ WaveletTransform<TInputImage, TOutputImage, TFilter, Wavelet::INVERSE>
                                    1.f / static_cast<float>(GetNumberOfDecompositions()));
   filter->Update();
 
-  for (unsigned int idx = 1; idx < GetNumberOfDecompositions(); idx++)
+  for (unsigned int idx = 1; idx < GetNumberOfDecompositions(); ++idx)
     {
     this->GetFilterList()->SetNthElement(idx, FilterType::New());
     filter = this->GetNthFilter(idx);
     filter->SetInput(0, this->GetNthFilter(idx - 1)->GetOutput());
 
-    for (unsigned int i = 1; i < filter->GetNumberOfInputs(); i++)
+    for (unsigned int i = 1; i < filter->GetNumberOfInputs(); ++i)
       {
       filter->SetInput(i, inputIterator.Get());
       ++inputIterator;

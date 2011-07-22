@@ -39,7 +39,7 @@ SubsampleImageFilter<TInputImage, TOutputImage, TDirectionOfTransformation>
 {
   Superclass::PrintSelf(os, indent);
   os << indent << "SubsampleFactor = [" << m_SubsampleFactor[0];
-  for (unsigned int i = 1; i < InputImageDimension; i++)
+  for (unsigned int i = 1; i < InputImageDimension; ++i)
     {
     os << ", " << m_SubsampleFactor[i];
     }
@@ -52,7 +52,7 @@ bool
 SubsampleImageFilter<TInputImage, TOutputImage, TDirectionOfTransformation>
 ::IsSubsampleFactorOne() const
 {
-  for (unsigned int i = 0; i < InputImageDimension; i++)
+  for (unsigned int i = 0; i < InputImageDimension; ++i)
     {
     if (m_SubsampleFactor[i] != 1) return false;
     }
@@ -93,7 +93,7 @@ SubsampleImageFilter<TInputImage, TOutputImage, TDirectionOfTransformation>
     typename InputImageRegionType::IndexType destIndex;
     typename InputImageRegionType::SizeType  destSize;
 
-    for (unsigned int i = 0; i < InputImageDimension; i++)
+    for (unsigned int i = 0; i < InputImageDimension; ++i)
       {
       // TODO: This seems not right in odd index cases
       destIndex[i] = srcIndex[i] / m_SubsampleFactor[i];
@@ -122,7 +122,7 @@ SubsampleImageFilter<TInputImage, TOutputImage, TDirectionOfTransformation>
     typename OutputImageRegionType::IndexType destIndex;
     typename OutputImageRegionType::SizeType  destSize;
 
-    for (unsigned int i = 0; i < InputImageDimension; i++)
+    for (unsigned int i = 0; i < InputImageDimension; ++i)
       {
       destIndex[i] = srcIndex[i] * m_SubsampleFactor[i];
       destSize[i] =  srcSize[i] * m_SubsampleFactor[i];
@@ -187,7 +187,7 @@ SubsampleImageFilter<TInputImage, TOutputImage, TDirectionOfTransformation>
       {
       InputImageIndexType  inputIndex = inputIter.GetIndex();
       OutputImageIndexType outputIndex;
-      for (unsigned int i = 0; i < OutputImageDimension; i++)
+      for (unsigned int i = 0; i < OutputImageDimension; ++i)
         {
         outputIndex[i] = inputIndex[i] * m_SubsampleFactor[i];
         }

@@ -210,7 +210,7 @@ SailModel
    VectorType result(4);
    
    // Weighted sums over LIDF
-   for(unsigned int i=0; i<lidf.size(); i++)
+   for(unsigned int i=0; i<lidf.size(); ++i)
    {
       ttl = 2.5+5*i;       // leaf inclination discrete values
       ctl = vcl_cos(rd*ttl);
@@ -272,7 +272,7 @@ SailModel
    double resh, resv;
    
    int nbdata = sizeof(DataSpecP5B) / sizeof(DataSpec);
-   for (int i = 0; i < nbdata; i++)
+   for (int i = 0; i < nbdata; ++i)
    {
       lambda = DataSpecP5B[i].lambda;
       Es = DataSpecP5B[i].directLight; //8
@@ -397,7 +397,7 @@ SailModel
          fint=(1.-exp(-alf))*0.05;
          sumint=0;
          
-         for(unsigned int j=1; j<=20; j++)
+         for(unsigned int j=1; j<=20; ++j)
          {
             if (j<20) x2 = -vcl_log(1.-j*fint)/alf;
             else x2 = 1;
@@ -466,7 +466,7 @@ SailModel
    double tl1, tl2, x1, x2, v, alpha, alpha2, x12, x22, alpx1, alpx2, dum, almx1, almx2;
    VectorType temp;
 
-   for(unsigned int i=0; i<n; i++)
+   for(unsigned int i=0; i<n; ++i)
    {
       tx2 = 5*i;
       tx1 = 5*(i+1);
@@ -509,7 +509,7 @@ SailModel
       }
    }
 
-   for(unsigned int i=0; i<n; i++)
+   for(unsigned int i=0; i<n; ++i)
    {
       freq.push_back(temp[i]/sum);
    }

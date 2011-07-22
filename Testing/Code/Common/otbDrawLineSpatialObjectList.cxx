@@ -124,7 +124,7 @@ int otbDrawLineSpatialObjectList(int argc, char* argv[])
 
   /*        LinesListType::const_iterator it;
       std::cout<<list.size()<<std::endl;
-      for (it=list.begin(); it!=list.end(); it++)
+      for (it=list.begin(); it!=list.end(); ++it)
       std::cout<< (*it) <<std::endl; */
 
   filter->SetInputLineSpatialObjectList(list);

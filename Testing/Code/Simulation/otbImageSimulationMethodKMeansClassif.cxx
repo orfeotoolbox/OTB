@@ -146,7 +146,7 @@ int otbImageSimulationMethodKMeansClassif(int argc, char * argv[])
    {
       if(it.GetIndex()==centroidIndex)
       {
-         for(unsigned int j=0; j<nbBands; j++)
+         for(unsigned int j=0; j<nbBands; ++j)
          {
             initialCentroids[j+classIndex*nbBands]=it.Get()[j];
          }

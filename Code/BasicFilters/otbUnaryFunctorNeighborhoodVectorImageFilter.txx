@@ -36,7 +36,7 @@ UnaryFunctorNeighborhoodVectorImageFilter<TInputImage, TOutputImage, TFunction>
 {
   this->SetNumberOfRequiredInputs(1);
   this->InPlaceOff();
-  for ( unsigned int i = 0; i < InputImageDimension; i++ )
+  for ( unsigned int i = 0; i < InputImageDimension; ++i )
     m_Radius[i] = 3;
 }
 

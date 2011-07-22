@@ -37,7 +37,7 @@ int otbMuellerToReciprocalCovarianceFunctor(int argc, char * argv[])
   result.SetSize(6);
   
   double val = 0;
-  for(unsigned int i=0; i<input.Size(); i++)
+  for(unsigned int i=0; i<input.Size(); ++i)
     {
       input[i] =  val;
       val += 0.5;
