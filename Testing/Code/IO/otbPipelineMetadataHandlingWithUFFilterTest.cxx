@@ -19,7 +19,7 @@
 
 
 #include "otbImage.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include <iostream>
 #include "itkRescaleIntensityImageFilter.h"
 #include "otbImageFileReader.h"

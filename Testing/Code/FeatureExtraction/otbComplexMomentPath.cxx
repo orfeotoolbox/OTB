@@ -23,7 +23,7 @@
 #include <fstream>
 #include "otbImageFileReader.h"
 #include "otbComplexMomentPathFunction.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "itkPolyLineParametricPath.h"
 
 int otbComplexMomentPath(int argc, char * argv[])

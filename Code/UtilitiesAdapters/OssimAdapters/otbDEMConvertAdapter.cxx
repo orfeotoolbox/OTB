@@ -18,7 +18,7 @@
 
 #include "otbDEMConvertAdapter.h"
 
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 
 // OSSIM include
 #include "base/ossimKeywordNames.h"

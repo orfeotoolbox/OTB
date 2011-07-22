@@ -23,7 +23,7 @@
 #include "itkByteSwapper.h"
 #include "itksys/SystemTools.hxx"
 
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "otbMacro.h"
 #include "itkMacro.h"
 

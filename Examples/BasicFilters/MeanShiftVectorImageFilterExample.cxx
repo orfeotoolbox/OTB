@@ -37,7 +37,7 @@
 //
 //  Software Guide : EndLatex
 
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"

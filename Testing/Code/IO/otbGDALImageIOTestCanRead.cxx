@@ -19,7 +19,7 @@
 
 
 #include "otbGDALImageIO.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include <iostream>
 
 int otbGDALImageIOTestCanRead(int argc, char* argv[])

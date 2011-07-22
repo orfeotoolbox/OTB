@@ -22,7 +22,7 @@
 #include <sstream>
 
 #include "itkTransform.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "itkMacro.h"
 #include "otbMapProjectionAdapter.h"
 

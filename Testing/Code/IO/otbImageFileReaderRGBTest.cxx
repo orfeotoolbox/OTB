@@ -22,7 +22,7 @@
 #include "otbImageFileReader.h"
 #include "otbImage.h"
 #include "itkRGBPixel.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include <iostream>
 
 int otbImageFileReaderRGBTest(int argc, char* argv[])

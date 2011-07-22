@@ -19,7 +19,7 @@
 #define __otbPointSetExtractROI_txx
 
 #include "otbPointSetExtractROI.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 
 namespace otb
 {

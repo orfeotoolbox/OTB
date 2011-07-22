@@ -22,7 +22,7 @@
 
 #include <iostream>
 
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "otbMacro.h"
 #include "otbModelComponentBase.h"
 

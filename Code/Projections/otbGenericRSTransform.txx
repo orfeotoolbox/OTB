@@ -22,7 +22,7 @@
 #include "otbMacro.h"
 #include "otbMetaDataKey.h"
 #include "itkMetaDataObject.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "otbGeoInformationConversion.h"
 
 #include "ogr_spatialref.h"

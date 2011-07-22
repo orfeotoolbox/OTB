@@ -17,7 +17,7 @@
 =========================================================================*/
 
 
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "otbVectorImage.h"
 
 #include "otbPrintableImageFilter.h"

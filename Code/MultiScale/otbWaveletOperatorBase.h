@@ -20,7 +20,7 @@
 #ifndef __otbWaveletOperatorBase_h
 #define __otbWaveletOperatorBase_h
 
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "itkNeighborhoodOperator.h"
 
 // This include is needed here to define MotherWaveletOperatorEnum...

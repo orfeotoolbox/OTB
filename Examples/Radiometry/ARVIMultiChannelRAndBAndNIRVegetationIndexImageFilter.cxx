@@ -83,7 +83,7 @@
 #include "otbMultiChannelRAndBAndNIRIndexImageFilter.h"
 // Software Guide : EndCodeSnippet
 
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"

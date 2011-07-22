@@ -20,7 +20,7 @@
 
 #include "itkPointSet.h"
 #include "otbPointSetSource.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 
 int otbPointSetSourceTest(int argc, char* argv[])
 {

@@ -17,7 +17,7 @@
 =========================================================================*/
 #include <fstream>
 
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "otbMacro.h"
 
 #include "otbImage.h"

@@ -42,7 +42,7 @@
 //
 // Software Guide : EndLatex
 
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "otbImage.h"
 #include "otbMultiChannelExtractROI.h"
 #include "otbVectorRescaleIntensityImageFilter.h"

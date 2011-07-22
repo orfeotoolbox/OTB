@@ -19,7 +19,7 @@
 #define __otbVectorDataFileWriter_h
 
 #include "itkProcessObject.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "otbVectorDataIOBase.h"
 
 namespace otb

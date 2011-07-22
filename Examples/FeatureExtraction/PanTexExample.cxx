@@ -22,7 +22,7 @@
 //    OUTPUTS: {PanTexOutput.tif}, {pretty_PanTexInput.png}, {pretty_PanTexOutput.png}
 //  Software Guide : EndCommandLineArgs
 
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"

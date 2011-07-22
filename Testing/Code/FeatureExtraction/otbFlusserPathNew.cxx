@@ -20,7 +20,7 @@
 
 #include "otbFlusserPathFunction.h"
 #include "itkPolyLineParametricPath.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 
 int otbFlusserPathNew(int argc, char * argv[])
 {

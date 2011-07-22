@@ -22,7 +22,7 @@
 #include "otbMath.h"
 #include "otbOrientationPathFunction.h"
 #include "itkPolyLineParametricPath.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 
 int otbOrientationPath(int argc, char * argv[])
 {

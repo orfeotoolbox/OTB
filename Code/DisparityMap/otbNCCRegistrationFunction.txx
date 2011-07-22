@@ -22,7 +22,7 @@
 #define __otbNCCRegistrationFunction_txx
 
 #include "otbNCCRegistrationFunction.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "otbMacro.h"
 #include "vnl/vnl_math.h"
 

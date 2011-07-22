@@ -20,7 +20,7 @@
 #ifndef __otbWaveletOperator_h
 #define __otbWaveletOperator_h
 
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "itkNeighborhoodOperator.h"
 
 // This include is needed here to define Wavelet::Wavelet...

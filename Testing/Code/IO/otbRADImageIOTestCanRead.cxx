@@ -19,7 +19,7 @@
 
 
 #include "otbRADImageIO.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include <iostream>
 
 int otbRADImageIOTestCanRead(int argc, char* argv[])

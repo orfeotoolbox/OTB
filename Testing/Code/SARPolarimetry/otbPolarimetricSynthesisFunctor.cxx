@@ -15,7 +15,7 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "vcl_complex.h"
 #include "vcl_cmath.h"
 #include "otbPolarimetricSynthesisFunctor.h"

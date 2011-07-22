@@ -23,7 +23,7 @@
 //    2 1 1
 //  Software Guide : EndCommandLineArgs
 
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"

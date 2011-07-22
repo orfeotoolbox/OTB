@@ -20,7 +20,7 @@
 #include <iostream>
 #include <fstream>
 
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "itkImage.h"
 #include "otbMapProjections.h"
 

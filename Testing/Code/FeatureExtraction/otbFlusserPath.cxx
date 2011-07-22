@@ -23,7 +23,7 @@
 #include <fstream>
 #include "otbFlusserPathFunction.h"
 #include "itkPolyLineParametricPath.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 
 int otbFlusserPath(int argc, char * argv[])
 {

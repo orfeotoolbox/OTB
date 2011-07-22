@@ -20,7 +20,7 @@
 #include "otbImageFileReader.h"
 #include "otbFrostImageFilter.h"
 
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "itkImageFileWriter.h"
 #include "otbImage.h"
 #include "itkRandomImageSource.h"

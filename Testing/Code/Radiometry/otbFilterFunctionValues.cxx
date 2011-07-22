@@ -17,7 +17,7 @@
 =========================================================================*/
 
 
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "otbAtmosphericCorrectionParameters.h"
 #include "otbSIXSTraits.h"
 #include <fstream>

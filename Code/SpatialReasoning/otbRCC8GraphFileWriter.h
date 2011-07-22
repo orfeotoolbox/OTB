@@ -19,7 +19,7 @@
 #define __otbRCC8GraphFileWriter_h
 
 #include "itkProcessObject.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "otbRCC8Graph.h"
 
 namespace otb

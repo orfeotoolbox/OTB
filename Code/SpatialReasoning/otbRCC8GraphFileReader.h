@@ -19,7 +19,7 @@
 #define __otbRCC8GraphFileReader_h
 
 #include "otbRCC8GraphSource.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 
 namespace otb
 {

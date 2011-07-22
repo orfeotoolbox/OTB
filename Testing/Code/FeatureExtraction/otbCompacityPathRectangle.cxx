@@ -20,7 +20,7 @@
 #include <cstdlib>
 #include "otbCompacityPathFunction.h"
 #include "itkPolyLineParametricPath.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "otbMath.h"
 
 int otbCompacityPathRectangle(int argc, char * argv[])

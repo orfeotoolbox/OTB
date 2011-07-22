@@ -25,7 +25,7 @@
 #include "itksys/SystemTools.hxx"
 
 #include "otbSpotImageMetadataInterface.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 
 namespace otb
 {

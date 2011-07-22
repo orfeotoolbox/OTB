@@ -18,7 +18,7 @@
 
 #include <iostream>
 
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "otbCommandLineArgumentParser.h"
 
 int otbTestCommandLineArgumentParser(int argc, char * argv[])

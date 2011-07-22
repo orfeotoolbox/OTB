@@ -19,7 +19,7 @@
 
 
 #include "otbImageIOFactory.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include <iostream>
 
 int otbImageIOFactoryNew(int argc, char* argv[])

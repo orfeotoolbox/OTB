@@ -19,7 +19,7 @@
 #define __otbFastICAInternalOptimizerVectorImageFilter_txx
 #include "otbFastICAInternalOptimizerVectorImageFilter.h"
 
-#include <itkExceptionObject.h>
+#include <itkMacro.h>
 #include <itkImageRegionConstIterator.h>
 #include <itkImageRegionIterator.h>
 

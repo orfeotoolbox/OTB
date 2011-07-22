@@ -17,7 +17,7 @@
 =========================================================================*/
 
 
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include <iostream>
 #include <complex>  //only for the isnan() test line 148
 

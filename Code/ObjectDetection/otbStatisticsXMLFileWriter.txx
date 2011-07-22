@@ -19,7 +19,7 @@
 #define __otbStatisticsXMLFileWriter_txx
 
 #include "otbStatisticsXMLFileWriter.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "itksys/SystemTools.hxx"
 #include "tinyxml.h"
 

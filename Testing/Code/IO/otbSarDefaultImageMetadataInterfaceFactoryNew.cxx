@@ -18,7 +18,7 @@
 
 
 
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 
 #include "otbSarDefaultImageMetadataInterfaceFactory.h"
 

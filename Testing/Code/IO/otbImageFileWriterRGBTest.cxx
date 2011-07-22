@@ -20,7 +20,7 @@
 
 #include "itkImage.h"
 #include "itkRGBPixel.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include <iostream>
 
 #include "otbImageFileReader.h"

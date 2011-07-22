@@ -21,7 +21,7 @@
 #include "otbPixelSuppressionByDirectionImageFilter.h"
 
 #include "itkDataObject.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "itkConstNeighborhoodIterator.h"
 #include "itkNeighborhoodInnerProduct.h"
 #include "itkImageRegionIterator.h"

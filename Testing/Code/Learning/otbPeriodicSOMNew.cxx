@@ -15,7 +15,7 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "otbSOMMap.h"
 #include "otbPeriodicSOM.h"
 #include "itkRGBPixel.h"

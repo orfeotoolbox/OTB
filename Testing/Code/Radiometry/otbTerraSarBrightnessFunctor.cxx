@@ -17,7 +17,7 @@
 =========================================================================*/
 #include <fstream>
 #include <iomanip>
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 
 #include "otbTerraSarBrightnessFunctor.h"
 

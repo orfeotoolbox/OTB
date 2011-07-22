@@ -19,7 +19,7 @@
 
 
 #include "otbLUMImageIO.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include <iostream>
 
 int otbLUMImageIOTestCanWrite(int argc, char* argv[])

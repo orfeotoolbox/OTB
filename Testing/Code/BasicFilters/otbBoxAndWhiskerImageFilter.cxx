@@ -18,7 +18,7 @@
 
 
 #include "otbBoxAndWhiskerImageFilter.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbVectorImage.h"

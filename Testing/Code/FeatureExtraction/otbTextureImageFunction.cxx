@@ -15,7 +15,7 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 
 #include "otbFunctionWithNeighborhoodToImageFilter.h"
 #include "otbTextureImageFunction.h"

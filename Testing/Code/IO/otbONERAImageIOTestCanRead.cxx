@@ -19,7 +19,7 @@
 
 
 #include "otbONERAImageIO.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include <iostream>
 
 int otbONERAImageIOTestCanRead(int argc, char* argv[])

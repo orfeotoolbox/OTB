@@ -17,7 +17,7 @@
 =========================================================================*/
 
 
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 
 #include "otbRAndBAndNIRIndexImageFilter.h"
 #include "otbImage.h"

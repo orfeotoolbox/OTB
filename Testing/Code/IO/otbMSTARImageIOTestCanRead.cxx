@@ -19,7 +19,7 @@
 
 
 #include "otbMSTARImageIO.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include <iostream>
 
 int otbMSTARImageIOTestCanRead(int argc, char* argv[])

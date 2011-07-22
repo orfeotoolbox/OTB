@@ -19,7 +19,7 @@
 #define __otbInverseSensorModel_txx
 
 #include "otbInverseSensorModel.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "otbMacro.h"
 
 namespace otb

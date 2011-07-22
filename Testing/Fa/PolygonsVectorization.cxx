@@ -16,7 +16,7 @@
 
 =========================================================================*/
 
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "otbCommandLineArgumentParser.h"
 
 #include "otbImage.h"

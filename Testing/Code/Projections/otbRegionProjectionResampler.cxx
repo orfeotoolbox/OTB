@@ -36,7 +36,7 @@
 #include "otbStreamingImageFileWriter.h"
 #include "otbStreamingResampleImageFilter.h"
 
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "itkExtractImageFilter.h"
 #include "itkResampleImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"

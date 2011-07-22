@@ -21,7 +21,7 @@
 #include "otbImageFileReader.h"
 #include "otbVectorImage.h"
 #include "itkRGBPixel.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include <iostream>
 
 int otbPNGIndexedNbBandsTest(int argc, char* argv[])

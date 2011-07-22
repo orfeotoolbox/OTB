@@ -25,7 +25,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "itkImageRegionIterator.h"
 
 

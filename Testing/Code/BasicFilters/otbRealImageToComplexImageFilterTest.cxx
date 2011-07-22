@@ -18,7 +18,7 @@
 
 
 #include "otbRealImageToComplexImageFilter.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "otbImageFileReader.h"
 #include "otbImage.h"
 

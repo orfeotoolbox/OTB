@@ -19,7 +19,7 @@
 #include <fstream>
 #include <string>
 
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "otbMacro.h"
 
 int otbCompareAsciiTestsEpsilon3_WhiteSpace(int argc, char * argv[])

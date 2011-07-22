@@ -19,7 +19,7 @@
 
 
 #include "otbMWImageIO.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include <iostream>
 
 int otbMWImageIOTestCanWrite(int argc, char* argv[])

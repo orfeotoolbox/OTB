@@ -16,7 +16,7 @@
 
 =========================================================================*/
 
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "otbMultiToMonoChannelExtractROI.h"
 
 int otbMultiToMonoChannelExtractROINew(int argc, char * argv[])

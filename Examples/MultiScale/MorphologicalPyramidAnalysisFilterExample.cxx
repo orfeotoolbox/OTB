@@ -52,7 +52,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbImage.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 
 int main(int argc, char * argv[])
 {

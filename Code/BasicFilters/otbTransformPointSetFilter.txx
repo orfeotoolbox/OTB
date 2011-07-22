@@ -19,7 +19,7 @@
 #define __otbTransformPointSetFilter_txx
 
 #include "otbTransformPointSetFilter.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 
 namespace otb
 {

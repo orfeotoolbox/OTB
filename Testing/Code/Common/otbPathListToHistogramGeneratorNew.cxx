@@ -18,7 +18,7 @@
 
 
 
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "itkPolyLineParametricPath.h"
 #include "otbOrientationPathFunction.h"
 #include "otbPathListToHistogramGenerator.h"

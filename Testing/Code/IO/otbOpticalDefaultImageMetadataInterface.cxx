@@ -18,7 +18,7 @@
 
 
 
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "otbOpticalDefaultImageMetadataInterface.h"
 
 int otbOpticalDefaultImageMetadataInterface(int argc, char* argv[])

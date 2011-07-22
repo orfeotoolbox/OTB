@@ -19,7 +19,7 @@
 
 #include "otbImageFileReader.h"
 
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "otbStreamingImageFileWriter.h"
 #include "otbVectorImage.h"
 

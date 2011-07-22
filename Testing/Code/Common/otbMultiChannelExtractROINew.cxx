@@ -16,7 +16,7 @@
 
 =========================================================================*/
 
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "otbMultiChannelExtractROI.h"
 
 int otbMultiChannelExtractROINew(int argc, char * argv[])

@@ -24,7 +24,7 @@
 
 #include "otbHuPathFunction.h"
 #include "itkPolyLineParametricPath.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 
 int otbHuPath(int argc, char * argv[])
 {

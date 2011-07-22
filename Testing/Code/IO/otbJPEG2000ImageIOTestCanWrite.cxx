@@ -19,7 +19,7 @@
 
 
 #include "otbJPEG2000ImageIO.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include <iostream>
 
 int otbJPEG2000ImageIOTestCanWrite(int argc, char* argv[])

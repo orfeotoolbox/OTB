@@ -64,7 +64,7 @@
 #include "otbRAndNIRIndexImageFilter.h"
 // Software Guide : EndCodeSnippet
 
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"

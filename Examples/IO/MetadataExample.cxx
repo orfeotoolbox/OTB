@@ -35,7 +35,7 @@
 //
 //  SoftwareGuide: EndLatex
 
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include <iostream>
 #include <fstream>
 #include <string>

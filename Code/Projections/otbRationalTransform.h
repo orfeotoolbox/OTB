@@ -19,7 +19,7 @@
 #define __otbRationalTransform_h
 
 #include "itkTransform.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "itkMacro.h"
 
 namespace otb

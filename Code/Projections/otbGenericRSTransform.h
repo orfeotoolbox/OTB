@@ -22,7 +22,7 @@
 #include <sstream>
 #include <stdio.h>
 #include "itkTransform.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "itkMacro.h"
 #include "otbCompositeTransform.h"
 

@@ -15,7 +15,7 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "otbRCC8Graph.h"
 #include "otbRCC8VertexBase.h"
 #include "otbRCC8GraphFileReader.h"

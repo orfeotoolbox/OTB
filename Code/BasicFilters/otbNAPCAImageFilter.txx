@@ -19,7 +19,7 @@
 #define __otbNAPCAImageFilter_txx
 #include "otbNAPCAImageFilter.h"
 
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_matrix_inverse.h>

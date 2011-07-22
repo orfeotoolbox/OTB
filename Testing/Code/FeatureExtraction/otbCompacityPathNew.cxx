@@ -22,7 +22,7 @@
 
 #include "otbCompacityPathFunction.h"
 #include "itkPolyLineParametricPath.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 
 int otbCompacityPathNew(int argc, char * argv[])
 {

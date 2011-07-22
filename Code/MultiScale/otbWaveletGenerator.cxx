@@ -21,7 +21,7 @@
 #include "otbWaveletGenerator.h"
 
 #include <vcl_cmath.h>
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "otbMath.h"
 
 namespace otb {

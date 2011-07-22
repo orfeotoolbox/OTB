@@ -17,7 +17,7 @@
 =========================================================================*/
 
 
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "itkPointSet.h"
 #include <iostream>
 #include <cstdlib>

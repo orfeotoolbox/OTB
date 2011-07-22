@@ -16,7 +16,7 @@
 
 =========================================================================*/
 
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "itkFFTComplexToComplexImageFilter.h"
 
 int main(int argc, char * argv[])

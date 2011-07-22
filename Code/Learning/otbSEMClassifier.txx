@@ -5,7 +5,7 @@
 
 #include <iostream>
 #include "itkNumericTraits.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "itkImageIterator.h"
 #include "itkImageRegionIterator.h"
 

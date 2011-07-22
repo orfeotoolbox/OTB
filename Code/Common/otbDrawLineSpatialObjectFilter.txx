@@ -21,7 +21,7 @@
 #include "otbDrawLineSpatialObjectFilter.h"
 
 #include "itkDataObject.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "itkImageRegionIterator.h"
 #include "itkImageIteratorWithIndex.h"
 #include "itkImageConstIteratorWithIndex.h"

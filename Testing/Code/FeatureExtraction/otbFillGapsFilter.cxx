@@ -18,7 +18,7 @@
 
 
 
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "otbFillGapsFilter.h"
 #include "otbLineSpatialObjectList.h"
 #include "otbImageFileReader.h"

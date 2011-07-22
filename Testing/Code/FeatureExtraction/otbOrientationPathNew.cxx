@@ -21,7 +21,7 @@
 #include <cstdlib>
 #include "otbOrientationPathFunction.h"
 #include "itkPolyLineParametricPath.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 
 int otbOrientationPathNew(int argc, char * argv[])
 {

@@ -19,7 +19,7 @@
 
 #include <fstream>
 
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "otbAtmosphericRadiativeTerms.h"
 #include <cstdlib>
 

@@ -20,7 +20,7 @@
 
 #include "otbImageFileReader.h"
 #include "otbVectorImage.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include <iostream>
 #include "otbConfigurationFile.h"
 #include <cctype> // for toupper

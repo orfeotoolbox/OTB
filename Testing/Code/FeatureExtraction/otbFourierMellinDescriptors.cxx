@@ -17,7 +17,7 @@
 =========================================================================*/
 #include <iomanip>
 
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 
 #include "otbFourierMellinDescriptorsImageFunction.h"
 #include "otbImage.h"

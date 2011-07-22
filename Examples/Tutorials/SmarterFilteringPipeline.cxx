@@ -55,7 +55,7 @@
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "otbCommandLineArgumentParser.h"
 // Software Guide : EndCodeSnippet
 

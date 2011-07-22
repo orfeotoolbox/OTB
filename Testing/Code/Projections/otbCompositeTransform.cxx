@@ -20,7 +20,7 @@
 #include <iostream>
 #include <iomanip>
 
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "itkImage.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"

@@ -19,7 +19,7 @@
 
 
 #include "otbBSQImageIO.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include <iostream>
 
 int otbBSQImageIOTestCanWrite(int argc, char* argv[])

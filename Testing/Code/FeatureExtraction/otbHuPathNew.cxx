@@ -18,7 +18,7 @@
 
 
 
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "otbHuPathFunction.h"
 #include "itkPolyLineParametricPath.h"
 

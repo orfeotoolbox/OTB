@@ -26,7 +26,7 @@
 #include <string>
 
 #include "itkMacro.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 
 #include "otbImage.h"
 #include "otbVectorImage.h"
