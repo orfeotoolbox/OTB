@@ -93,7 +93,7 @@ public:
 
   /**  Method to transform a point. */
   virtual OutputPointType TransformPoint(const InputPointType  & ) const
-    { return OutputPointType(); } 
+    { return OutputPointType(); }
 
   /**  Method to transform a vector. */
   virtual OutputVectorType    TransformVector(const InputVectorType &) const
@@ -106,7 +106,7 @@ public:
   /**  Method to transform a CovariantVector. */
   virtual OutputCovariantVectorType TransformCovariantVector(
     const InputCovariantVectorType &) const
-  { return OutputCovariantVectorType(); } 
+  { return OutputCovariantVectorType(); }
 
   /** Set the transformation parameters and update internal transformation.
    * SetParameters gives the transform the option to set it's
@@ -115,9 +115,9 @@ public:
    * SetParametersByValue.
    * \sa SetParametersByValue
    */
-    virtual void SetParameters( const ParametersType & ) 
+    virtual void SetParameters( const ParametersType & )
     { itkExceptionMacro( << "Subclasses should override this method (SetParameters)" ) }
-  
+
   /** Set the transformation parameters and update internal transformation.
    * This method forces the transform to copy the parameters.  The
    * default implementation is to call SetParameters.  This call must
@@ -135,14 +135,14 @@ public:
   }
 
   /** Set the fixed parameters and update internal transformation. */
-  virtual void SetFixedParameters( const ParametersType & ) 
+  virtual void SetFixedParameters( const ParametersType & )
     { itkExceptionMacro( << "Subclasses should override this method (SetFixedParameters)" ) }
 
   /** Get the Fixed Parameters. */
   virtual const ParametersType& GetFixedParameters(void) const
     {
     itkExceptionMacro( << "Subclasses should override this method (GetFixedParameters)" );
-    // Next line is needed to avoid errors due to: 
+    // Next line is needed to avoid errors due to:
     // "function must return a value".
     return this->m_FixedParameters;
     }
@@ -177,10 +177,10 @@ public:
   virtual const JacobianType & GetJacobian(const InputPointType  &) const
     {
     itkExceptionMacro( << "Subclass should override this method (GetJacobian)" );
-    // Next line is needed to avoid errors due to: 
+    // Next line is needed to avoid errors due to:
     // "function must return a value" .
     return this->m_Jacobian;
-    } 
+    }
 
   /** Return the number of parameters that completely define the Transfom  */
   virtual unsigned int GetNumberOfParameters(void) const
@@ -191,13 +191,13 @@ protected:
                m_FixedParameters(1),
                m_Jacobian(NOutputDimensions,1)
   {}
-  
+
   Transform(unsigned int Dimension, unsigned int NumberOfParameters):
     m_Parameters(NumberOfParameters),
     m_FixedParameters(NumberOfParameters),
     m_Jacobian(Dimension,NumberOfParameters)
   {}
-  
+
   virtual ~Transform() {}
 
   mutable ParametersType m_Parameters;
