@@ -19,7 +19,6 @@
 #define __otbTransformPointSetFilter_h
 
 #include "otbPointSetToPointSetFilter.h"
-#include "itkTransform.h"
 
 namespace otb
 {
