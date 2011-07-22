@@ -31,6 +31,7 @@ IF(OTB_USE_VISU_GUI)
         # FLTK Library
         #-------------------------------
         OPTION(OTB_USE_EXTERNAL_FLTK "Use an outside build of FLTK." OFF)
+        MARK_AS_ADVANCED(OTB_USE_EXTERNAL_FLTK)
 
         IF(OTB_USE_EXTERNAL_FLTK)
           FIND_PACKAGE(FLTK)
