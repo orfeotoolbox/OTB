@@ -87,10 +87,9 @@ public:
 
   /** Base inverse transform type. This type should not be changed to the
    * concrete inverse transform type or inheritance would be lost. */
-  typedef itk::Transform<
-    TScalarType, NOutputDimensions, NInputDimensions > InverseTransformBaseType;
+  typedef typename Superclass::InverseTransformBaseType InverseTransformBaseType;
 
-  typedef typename InverseTransformBaseType::Pointer InverseTransformBasePointer;
+  typedef typename Superclass::InverseTransformBasePointer InverseTransformBasePointer;
 
   /**  Method to transform a point. */
   virtual OutputPointType TransformPoint(const InputPointType  & ) const
