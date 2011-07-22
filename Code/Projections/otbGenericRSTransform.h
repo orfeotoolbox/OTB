@@ -23,7 +23,6 @@
 #include <stdio.h>
 #include "otbTransform.h"
 #include "itkMacro.h"
-#include "itkMacro.h"
 #include "otbCompositeTransform.h"
 
 namespace otb

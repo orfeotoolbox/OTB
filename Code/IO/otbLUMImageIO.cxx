@@ -19,9 +19,7 @@
 
 #include "itkByteSwapper.h"
 #include "itksys/SystemTools.hxx"
-#include "itkMacro.h"
 #include "otbMacro.h"
-#include "itkMacro.h"
 
 #include "otbSystem.h"
 

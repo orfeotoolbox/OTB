@@ -28,8 +28,6 @@
 #include "itkMetaDataObject.h"
 #include "otbMetaDataKey.h"
 
-#include "itkMacro.h"
-#include "itkMacro.h"
 #include "itkRGBPixel.h"
 #include "itkRGBAPixel.h"
 #include "itkTimeProbe.h"

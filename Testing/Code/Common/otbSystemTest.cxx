@@ -16,9 +16,6 @@
 
 =========================================================================*/
 
-
-
-#include "itkMacro.h"
 #include <iostream>
 #include <cstdlib>
 

@@ -24,7 +24,6 @@
 #include <fstream>
 
 #include "itkMacro.h"
-#include "itkMacro.h"
 
 #include "itksys/SystemTools.hxx"
 #include "otbSystem.h"

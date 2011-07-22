@@ -20,7 +20,6 @@
 
 #include "itkTransform.h"
 #include "itkMacro.h"
-#include "itkMacro.h"
 
 namespace otb
 {
