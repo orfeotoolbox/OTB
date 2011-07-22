@@ -52,7 +52,7 @@ public:
 
   /** Standard Macro*/
   itkTypeMacro(SimulationStep2Base, ProcessObject)
- ;
+;
 
   itkSetMacro(Parameters, ParametersType)
   itkGetMacro(Parameters, ParametersType)
@@ -65,7 +65,7 @@ protected:
   SimulationStep2Base()
   {
   }
- ;
+;
   virtual ~SimulationStep2Base()
   {
   }
