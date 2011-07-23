@@ -33,7 +33,12 @@ template <class TInputVectorData, class TOutputVectorData >
 VectorDataTransformFilter<TInputVectorData, TOutputVectorData>
 ::VectorDataTransformFilter()
 {
-  m_Transform = GenericTransformType::New();
+//  m_Transform = GenericTransformType::New();
+  // with ITK v4 you can't instanciate a transform (virtual). We do NOT want to
+  // use the otb::Transform or we loose the capability of using all the existing
+  // itk transform, so we just keep it as NULL and you have to be careful not
+  // to burn yourself when using it.
+  m_Transform = NULL;
 }
 
 /**
@@ -157,7 +162,7 @@ VectorDataTransformFilter<TInputVectorData, TOutputVectorData>
   // Start recursive processing
   itk::TimeProbe chrono;
   chrono.Start();
-  ProcessNode(inputRoot, outputRoot);
+  this->ProcessNode(inputRoot, outputRoot);
   chrono.Stop();
 }
 

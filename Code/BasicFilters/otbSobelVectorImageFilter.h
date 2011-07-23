@@ -91,7 +91,7 @@ protected:
   SobelVectorImageFilter()
   {
     typename Superclass::RadiusType radius = {{1, 1}};
-    SetRadius( radius );
+    this->SetRadius( radius );
   }
   virtual ~SobelVectorImageFilter() { }
 
