@@ -20,7 +20,7 @@
 
 #include "otbFullResolutionImageWidget.h"
 #include "otbMacro.h"
-#include "itkMacro.h"
+
 
 namespace otb
 {

@@ -20,7 +20,7 @@
 
 #include "otbConfigure.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
-#include "itkMacro.h"
+
 #include "otbMacro.h"
 
 namespace otb

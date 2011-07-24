@@ -21,7 +21,7 @@
 #include "otbHuPathFunction.h"
 #include "otbComplexMomentPathFunction.h"
 #include "itkNumericTraits.h"
-#include "itkMacro.h"
+
 #include "otbMacro.h"
 
 namespace otb

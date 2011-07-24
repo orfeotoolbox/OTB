@@ -23,7 +23,7 @@
 #include "ogrsf_frmts.h"
 
 #include "itksys/SystemTools.hxx"
-#include "itkMacro.h"
+
 #include "itkByteSwapper.h"
 #include "otbMacro.h"
 #include "otbSystem.h"

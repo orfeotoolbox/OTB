@@ -31,7 +31,7 @@
 
 #include "otbParser.h"
 #include "otbMacro.h"
-#include "itkMacro.h"
+
 
 #include "itkInPlaceLabelMapFilter.h"
 #include "itkLabelObjectAccessors.h"

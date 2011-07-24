@@ -17,7 +17,7 @@
 =========================================================================*/
 #include <fstream>
 
-#include "itkMacro.h"
+
 #include "otbMacro.h"
 
 #include "otbImage.h"

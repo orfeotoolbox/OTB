@@ -24,7 +24,7 @@
 
 #include "otbParser.h"
 #include "otbMacro.h"
-#include "itkMacro.h"
+
 
 #include "itkLightObject.h"
 #include "itkObjectFactory.h"

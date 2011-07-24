@@ -32,7 +32,7 @@
 
 #include "otbParser.h"
 #include "otbMacro.h"
-#include "itkMacro.h"
+
 #include "otbMaskMuParserFunctor.h"
 
 #include "itkImageToImageFilter.h"

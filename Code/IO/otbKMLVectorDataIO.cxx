@@ -28,7 +28,7 @@
 
 #include "ogrsf_frmts.h"
 
-#include "itkMacro.h"
+
 #include "otbMacro.h"
 #include "otbSystem.h"
 #include "otbDataNode.h"

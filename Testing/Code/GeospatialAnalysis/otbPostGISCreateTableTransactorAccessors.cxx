@@ -16,7 +16,7 @@
 
 =========================================================================*/
 
-#include "itkMacro.h"
+
 #include "otbMacro.h"
 
 #include "otbPostGISCreateTableTransactor.h"

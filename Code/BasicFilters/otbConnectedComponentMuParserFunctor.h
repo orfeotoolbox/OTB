@@ -24,7 +24,7 @@
 
 #include "otbParser.h"
 #include "otbMacro.h"
-#include "itkMacro.h"
+
 
 
 #include <vnl/algo/vnl_lsqr.h>

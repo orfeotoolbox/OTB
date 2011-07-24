@@ -26,7 +26,7 @@
 // must be included.
 // Software Guide : EndLatex
 
-#include "itkMacro.h"
+
 #include "otbMacro.h"
 
 // Software Guide : BeginCodeSnippet

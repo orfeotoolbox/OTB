@@ -21,7 +21,7 @@
 #include "otbSensorModelBase.h"
 
 #include "otbMacro.h"
-#include "itkMacro.h"
+
 
 namespace otb
 {

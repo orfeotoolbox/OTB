@@ -21,7 +21,7 @@
 #include "otbImageViewer.h"
 #include "otbFltkFilterWatcher.h"
 #include "otbMacro.h"
-#include "itkMacro.h"
+
 #include <sstream>
 #include <iomanip>
 

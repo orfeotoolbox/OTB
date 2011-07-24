@@ -18,7 +18,7 @@
 #include <iostream>
 #include <fstream>
 
-#include "itkMacro.h"
+
 #include "otbMacro.h"
 
 int otbCompareAsciiTests(int argc, char * argv[])

@@ -15,7 +15,7 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "itkMacro.h"
+
 #include "otbMacro.h"
 #include "otbI18n.h"
 #include <fstream>

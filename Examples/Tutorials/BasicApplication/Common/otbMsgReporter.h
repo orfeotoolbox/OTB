@@ -21,7 +21,7 @@
 #include "itkObjectFactory.h"
 #include <string>
 #include "itkObject.h"
-#include "itkMacro.h"
+
 #include "otbMacro.h"
 #include "otbMsgReporterGUI.h"
 

@@ -16,7 +16,7 @@
 
 =========================================================================*/
 #include "otbMath.h"
-#include "itkMacro.h"
+
 #include "otbMacro.h"
 
 #include "muParser.h"

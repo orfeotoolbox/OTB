@@ -33,7 +33,7 @@
 #define LSB_FIRST    0             /* Implies little-endian CPU... */
 #define MSB_FIRST    1             /* Implies big-endian CPU...    */
 
-#include "itkMacro.h"
+
 
 #include <iostream>
 #include <list>

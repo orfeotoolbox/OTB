@@ -30,7 +30,7 @@
 #include "otbInverseSensorModel.h"
 #include "otbStreamingResampleImageFilter.h"
 
-#include "itkMacro.h"
+
 #include "itkExtractImageFilter.h"
 #include "itkResampleImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"

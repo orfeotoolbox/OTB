@@ -22,7 +22,7 @@
 #include "otbMacro.h"
 
 #include "itkDataObject.h"
-#include "itkMacro.h"
+
 #include "itkConstNeighborhoodIterator.h"
 #include "itkNeighborhoodInnerProduct.h"
 #include "itkImageRegionIterator.h"

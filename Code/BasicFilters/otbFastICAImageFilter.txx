@@ -22,7 +22,7 @@
 
 #include "otbMacro.h"
 
-#include "itkMacro.h"
+
 #include "itkNumericTraits.h"
 #include "itkProgressReporter.h"
 
