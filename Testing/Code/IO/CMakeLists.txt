@@ -562,9 +562,9 @@ SET_TESTS_PROPERTIES(ioTvImageFileReaderIntHDR2BSQ PROPERTIES DEPENDS ioTvImageF
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTests4 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-IF(OTB_DATA_USE_LARGEINPUT)
-
 IF(NOT OTB_TESTING_STANDALONE)
+
+IF(OTB_DATA_USE_LARGEINPUT)
 
 ADD_TEST(ioTvImageKeywordlistSPOT5 ${IO_TESTS4}
   --ignore-order --compare-n-ascii ${NOTOL} 2
@@ -786,7 +786,6 @@ ADD_TEST(ioTvImageKeywordlistErs ${IO_TESTS4}
          ${TEMP}/ioTvImageKeywordlistErs.txt
          ${TEMP}/ioTvImageKeywordlistErs_saveState_loadState.txt
 )
-
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 ADD_TEST(ioTvOssimJpegFileRessourceLeak ${IO_TESTS4}
