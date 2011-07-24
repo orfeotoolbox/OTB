@@ -24,7 +24,7 @@
 #include "otbMacro.h"
 
 // #include "otbStreamingImageFileWriter.h"
-// 
+//
 
 namespace otb
 {

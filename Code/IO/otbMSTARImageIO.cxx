@@ -34,7 +34,6 @@
 #define MSB_FIRST    1             /* Implies big-endian CPU...    */
 
 
-
 #include <iostream>
 #include <list>
 #include <string>
