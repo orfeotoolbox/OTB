@@ -25,7 +25,7 @@ SET(COMMON_TESTS3 ${CXX_TEST_PATH}/otbCommonTests3)
 SET(IO_TESTS1     ${CXX_TEST_PATH}/otbIOTests1)
 SET(IO_TESTS2     ${CXX_TEST_PATH}/otbIOTests2)
 SET(IO_TESTS3     ${CXX_TEST_PATH}/otbIOTests3)
-#SET(IO_TESTS4     ${CXX_TEST_PATH}/otbIOTests4)
+SET(IO_TESTS4     ${CXX_TEST_PATH}/otbIOTests4)
 SET(IO_TESTS5     ${CXX_TEST_PATH}/otbIOTests5)
 SET(IO_TESTS6     ${CXX_TEST_PATH}/otbIOTests6)
 SET(IO_TESTS7     ${CXX_TEST_PATH}/otbIOTests7)
@@ -562,6 +562,239 @@ SET_TESTS_PROPERTIES(ioTvImageFileReaderIntHDR2BSQ PROPERTIES DEPENDS ioTvImageF
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTests4 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+IF(OTB_DATA_USE_LARGEINPUT)
+
+IF(NOT OTB_TESTING_STANDALONE)
+
+ADD_TEST(ioTvImageKeywordlistSPOT5 ${IO_TESTS4}
+  --ignore-order --compare-n-ascii ${NOTOL} 2
+         ${BASELINE_FILES}/ioTvImageKeywordlistSpot5.txt
+         ${TEMP}/ioTvImageKeywordlistSpot5.txt
+         ${BASELINE_FILES}/ioTvImageKeywordlistSpot5.txt
+         ${TEMP}/ioTvImageKeywordlistSpot5_saveState_loadState.txt
+         --ignore-lines-with 3 support_data.metadata_file meters_per_pixel_x meters_per_pixel_y
+    otbImageKeywordlist
+         ${LARGEDATA}/SPOT5/TEHERAN/IMAGERY.TIF
+         ${TEMP}/ioTvImageKeywordlistSpot5.txt
+         ${TEMP}/ioTvImageKeywordlistSpot5_saveState_loadState.txt
+)
+
+ADD_TEST(ioTvImageKeywordlistFORMOSAT2 ${IO_TESTS4}
+  --ignore-order --compare-n-ascii ${NOTOL} 2
+         ${BASELINE_FILES}/ioTvImageKeywordlistFORMOSAT2.txt
+         ${TEMP}/ioTvImageKeywordlistFORMOSAT2.txt
+         ${BASELINE_FILES}/ioTvImageKeywordlistFORMOSAT2.txt
+         ${TEMP}/ioTvImageKeywordlistFORMOSAT2_saveState_loadState.txt
+         --ignore-lines-with 3 support_data.metadata_file meters_per_pixel_x meters_per_pixel_y
+    otbImageKeywordlist
+         ${LARGEDATA}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF
+         ${TEMP}/ioTvImageKeywordlistFORMOSAT2.txt
+         ${TEMP}/ioTvImageKeywordlistFORMOSAT2_saveState_loadState.txt
+)
+
+
+ADD_TEST(ioTvImageKeywordlistQuickbird ${IO_TESTS4}
+  --ignore-order --compare-n-ascii ${NOTOL} 2
+         ${BASELINE_FILES}/ioTvImageKeywordlistQuickbird.txt
+         ${TEMP}/ioTvImageKeywordlistQuickbird.txt
+         ${BASELINE_FILES}/ioTvImageKeywordlistQuickbird.txt
+         ${TEMP}/ioTvImageKeywordlistQuickbird_saveState_loadState.txt
+         --ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
+    otbImageKeywordlist
+         ${LARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+         ${TEMP}/ioTvImageKeywordlistQuickbird.txt
+         ${TEMP}/ioTvImageKeywordlistQuickbird_saveState_loadState.txt
+)
+
+ADD_TEST(ioTvImageKeywordlistIkonos ${IO_TESTS4}
+  --ignore-order --compare-n-ascii ${NOTOL} 2
+         ${BASELINE_FILES}/ioTvImageKeywordlistIkonos.txt
+         ${TEMP}/ioTvImageKeywordlistIkonos.txt
+         ${BASELINE_FILES}/ioTvImageKeywordlistIkonos.txt
+         ${TEMP}/ioTvImageKeywordlistIkonos_saveState_loadState.txt
+         --ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
+    otbImageKeywordlist
+         ${LARGEDATA}/IKONOS/BLOSSEVILLE/po_2619900_pan_0000000.tif
+         ${TEMP}/ioTvImageKeywordlistIkonos.txt
+         ${TEMP}/ioTvImageKeywordlistIkonos_saveState_loadState.txt
+)
+
+ADD_TEST(ioTvImageKeywordlistRapidEye ${IO_TESTS4}
+  --ignore-order --compare-n-ascii ${NOTOL} 2
+         ${BASELINE_FILES}/ioTvImageKeywordlistRapidEye.txt
+         ${TEMP}/ioTvImageKeywordlistRapidEye.txt
+         ${BASELINE_FILES}/ioTvImageKeywordlistRapidEye.txt
+         ${TEMP}/ioTvImageKeywordlistRapidEye_saveState_loadState.txt
+    otbImageKeywordlist
+         ${LARGEDATA}/RAPIDEYE/level1B/2008-12-25T005918_RE3_1B-NAC_397971_12345_band3.ntf
+         ${TEMP}/ioTvImageKeywordlistRapidEye.txt
+         ${TEMP}/ioTvImageKeywordlistRapidEye_saveState_loadState.txt
+)
+
+ADD_TEST(ioTvImageKeywordlistEnvisatAsar ${IO_TESTS4}
+  --ignore-order --compare-n-ascii ${NOTOL} 2
+         ${BASELINE_FILES}/ioTvImageKeywordlistEnvisatAsar.txt
+         ${TEMP}/ioTvImageKeywordlistEnvisatAsar.txt
+         ${BASELINE_FILES}/ioTvImageKeywordlistEnvisatAsar.txt
+         ${TEMP}/ioTvImageKeywordlistEnvisatAsar_saveState_loadState.txt
+    otbImageKeywordlist
+         ${LARGEDATA}/ENVISAT_ASAR_SCENE01/ASA_APS_1PNDPA20030821_7713.N1
+         ${TEMP}/ioTvImageKeywordlistEnvisatAsar.txt
+         ${TEMP}/ioTvImageKeywordlistEnvisatAsar_saveState_loadState.txt
+)
+
+ADD_TEST(ioTvImageKeywordlistAlosPalsar ${IO_TESTS4}
+  --ignore-order --compare-n-ascii ${NOTOL} 2
+         ${BASELINE_FILES}/ioTvImageKeywordlistAlosPalsar.txt
+         ${TEMP}/ioTvImageKeywordlistAlosPalsar.txt
+         ${BASELINE_FILES}/ioTvImageKeywordlistAlosPalsar.txt
+         ${TEMP}/ioTvImageKeywordlistAlosPalsar_saveState_loadState.txt
+    otbImageKeywordlist
+         ${LARGEDATA}/PALSAR/200801280007/l1data/VOL-ALPSRP037120700-H1.1__A
+         ${TEMP}/ioTvImageKeywordlistAlosPalsar.txt
+         ${TEMP}/ioTvImageKeywordlistAlosPalsar_saveState_loadState.txt
+)
+
+ADD_TEST(ioTvImageKeywordlistRadarSat1_GOMA ${IO_TESTS4}
+    --compare-n-ascii ${EPSILON_6} 2
+         ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1_GOMA.txt
+         ${TEMP}/ioTvImageKeywordlistRadarSat1_GOMA.txt
+         ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1_GOMA.txt
+         ${TEMP}/ioTvImageKeywordlistRadarSat1_GOMA_saveState_loadState.txt
+    otbImageKeywordlist
+         ${LARGEDATA}/RADARSAT1/GOMA/SCENE01/DAT_01.001
+         ${TEMP}/ioTvImageKeywordlistRadarSat1_GOMA.txt
+         ${TEMP}/ioTvImageKeywordlistRadarSat1_GOMA_saveState_loadState.txt
+)
+
+ADD_TEST(ioTvImageKeywordlistRadarSat1_GOMA_vdf ${IO_TESTS4}
+    --compare-n-ascii ${EPSILON_6} 2
+         ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1_GOMA.txt
+         ${TEMP}/ioTvImageKeywordlistRadarSat1_GOMA_vdf.txt
+         ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1_GOMA.txt
+         ${TEMP}/ioTvImageKeywordlistRadarSat1_GOMA_vdf_saveState_loadState.txt
+    otbImageKeywordlist
+         ${LARGEDATA}/RADARSAT1/GOMA/SCENE01/VDF_DAT.001
+         ${TEMP}/ioTvImageKeywordlistRadarSat1_GOMA_vdf.txt
+         ${TEMP}/ioTvImageKeywordlistRadarSat1_GOMA_vdf_saveState_loadState.txt
+)
+
+ADD_TEST(ioTvImageKeywordlistRadarSat1_SARDEGNA ${IO_TESTS4}
+    --compare-n-ascii ${EPSILON_6} 2
+         ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1_SARDEGNA.txt
+         ${TEMP}/ioTvImageKeywordlistRadarSat1_SARDEGNA.txt
+         ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1_SARDEGNA.txt
+         ${TEMP}/ioTvImageKeywordlistRadarSat1_SARDEGNA_saveState_loadState.txt
+    otbImageKeywordlist
+         ${LARGEDATA}/RADARSAT1/SARDEGNA/scene01/dat_01.001
+         ${TEMP}/ioTvImageKeywordlistRadarSat1_SARDEGNA.txt
+         ${TEMP}/ioTvImageKeywordlistRadarSat1_SARDEGNA_saveState_loadState.txt
+         )
+
+ADD_TEST(ioTvImageKeywordlistRadarSat1_SARDEGNA_vdf ${IO_TESTS4}
+    --compare-n-ascii ${EPSILON_6} 2
+         ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1_SARDEGNA.txt
+         ${TEMP}/ioTvImageKeywordlistRadarSat1_SARDEGNA_vdf.txt
+         ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1_SARDEGNA.txt
+         ${TEMP}/ioTvImageKeywordlistRadarSat1_SARDEGNA_vdf_saveState_loadState.txt
+    otbImageKeywordlist
+         ${LARGEDATA}/RADARSAT1/SARDEGNA/scene01/dat_01.001
+         ${TEMP}/ioTvImageKeywordlistRadarSat1_SARDEGNA_vdf.txt
+         ${TEMP}/ioTvImageKeywordlistRadarSat1_SARDEGNA_vdf_saveState_loadState.txt
+         )
+
+ADD_TEST(ioTvImageKeywordlistRadarSat2 ${IO_TESTS4}
+  --ignore-order --compare-n-ascii ${NOTOL} 2
+         ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat2.txt
+         ${TEMP}/ioTvImageKeywordlistRadarSat2.txt
+         ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat2.txt
+         ${TEMP}/ioTvImageKeywordlistRadarSat2_saveState_loadState.txt
+          --ignore-lines-with 1 product_xml_filename
+    otbImageKeywordlist
+         ${LARGEDATA}/RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/product.xml
+         ${TEMP}/ioTvImageKeywordlistRadarSat2.txt
+         ${TEMP}/ioTvImageKeywordlistRadarSat2_saveState_loadState.txt
+)
+
+ADD_TEST(ioTvImageKeywordlistTerraSarX ${IO_TESTS4}
+  --ignore-order --compare-n-ascii ${NOTOL} 2
+         ${BASELINE_FILES}/ioTvImageKeywordlistTerraSarX.txt
+         ${TEMP}/ioTvImageKeywordlistTerraSarX.txt
+         ${BASELINE_FILES}/ioTvImageKeywordlistTerraSarX.txt
+         ${TEMP}/ioTvImageKeywordlistTerraSarX_saveState_loadState.txt
+          --ignore-lines-with 1 product_xml_filename
+    otbImageKeywordlist
+         ${LARGEDATA}/TERRASARX/dims/TSX-1.SAR.L1B/TSX1_SAR__SSC/TSX1_SAR__SSC.xml
+         ${TEMP}/ioTvImageKeywordlistTerraSarX.txt
+         ${TEMP}/ioTvImageKeywordlistTerraSarX_saveState_loadState.txt
+)
+
+ADD_TEST(ioTvImageKeywordlistTerraSarX_Upsala ${IO_TESTS4}
+  --ignore-order --compare-n-ascii ${NOTOL} 2
+         ${BASELINE_FILES}/ioTvImageKeywordlistTerraSarX_Upsala.txt
+         ${TEMP}/ioTvImageKeywordlistTerraSarX_Upsala.txt
+         ${BASELINE_FILES}/ioTvImageKeywordlistTerraSarX_Upsala.txt
+         ${TEMP}/ioTvImageKeywordlistTerraSarX_Upsala_saveState_loadState.txt
+          --ignore-lines-with 1 product_xml_filename
+    otbImageKeywordlist
+         ${LARGEDATA}/TERRASARX/UPSALA_GLACIER/TSX1_SAR__MGD/TSX1_SAR__MGD.xml
+         ${TEMP}/ioTvImageKeywordlistTerraSarX_Upsala.txt
+         ${TEMP}/ioTvImageKeywordlistTerraSarX_Upsala_saveState_loadState.txt
+)
+ADD_TEST(ioTvImageKeywordlistTerraSarX_Toronto ${IO_TESTS4}
+  --ignore-order --compare-n-ascii ${NOTOL} 2
+         ${BASELINE_FILES}/ioTvImageKeywordlistTerraSarX_Toronto.txt
+         ${TEMP}/ioTvImageKeywordlistTerraSarX_Toronto.txt
+         ${BASELINE_FILES}/ioTvImageKeywordlistTerraSarX_Toronto.txt
+         ${TEMP}/ioTvImageKeywordlistTerraSarX_Toronto_saveState_loadState.txt
+          --ignore-lines-with 1 product_xml_filename
+    otbImageKeywordlist
+         ${LARGEDATA}/TERRASARX/TORONTO/TSX1_SAR__SSC/TSX1_SAR__SSC.xml
+         ${TEMP}/ioTvImageKeywordlistTerraSarX_Toronto.txt
+         ${TEMP}/ioTvImageKeywordlistTerraSarX_Toronto_saveState_loadState.txt
+)
+
+ADD_TEST(ioTuImageKeywordlistTerraSarX_PANGKALANBUUNUsingXmlFile ${IO_TESTS4}
+    otbImageKeywordlist
+         ${LARGEDATA}/TERRASARX/PANGKALANBUUN/TSX1_SAR__SSC______SM_D_SRA_20080313T221955_20080313T222003.xml
+         ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun.txt
+         ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun_saveState_loadState.txt
+)
+ADD_TEST(ioTuImageKeywordlistTerraSarX_PANGKALANBUUNUsingHHFile ${IO_TESTS4}
+    otbImageKeywordlist
+         ${LARGEDATA}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
+         ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun.txt
+         ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun_saveState_loadState.txt
+)
+ADD_TEST(ioTuImageKeywordlistTerraSarX_PANGKALANBUUNUsingVVFile ${IO_TESTS4}
+    otbImageKeywordlist
+         ${LARGEDATA}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_VV_SRA_stripFar_008.cos
+         ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun.txt
+         ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun_saveState_loadState.txt
+)
+
+
+
+ADD_TEST(ioTvImageKeywordlistErs ${IO_TESTS4}
+  --ignore-order --compare-n-ascii ${NOTOL} 2
+         ${BASELINE_FILES}/ioTvImageKeywordlistErs.txt
+         ${TEMP}/ioTvImageKeywordlistErs.txt
+         ${BASELINE_FILES}/ioTvImageKeywordlistErs.txt
+         ${TEMP}/ioTvImageKeywordlistErs_saveState_loadState.txt
+    otbImageKeywordlist
+         ${LARGEDATA}/SAR_ERS2_SLCI_SCENE1/DAT_01.001
+         ${TEMP}/ioTvImageKeywordlistErs.txt
+         ${TEMP}/ioTvImageKeywordlistErs_saveState_loadState.txt
+)
+
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
+ADD_TEST(ioTvOssimJpegFileRessourceLeak ${IO_TESTS4}
+        otbOssimJpegFileRessourceLeakTest
+        ${INPUTDATA}/poupees.jpg
+        1200
+)
+ENDIF(NOT OTB_TESTING_STANDALONE)
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2308,238 +2541,6 @@ ADD_TEST(ioTvImageMetadataInterfaceTest ${IO_TESTS18}
         ${TEMP}/ioTvImageMetadataInterface.txt
 )
 
-
-IF(OTB_DATA_USE_LARGEINPUT)
-
-ADD_TEST(ioTvImageKeywordlistSPOT5 ${IO_TESTS18}
-  --ignore-order --compare-n-ascii ${NOTOL} 2
-         ${BASELINE_FILES}/ioTvImageKeywordlistSpot5.txt
-         ${TEMP}/ioTvImageKeywordlistSpot5.txt
-         ${BASELINE_FILES}/ioTvImageKeywordlistSpot5.txt
-         ${TEMP}/ioTvImageKeywordlistSpot5_saveState_loadState.txt
-         --ignore-lines-with 3 support_data.metadata_file meters_per_pixel_x meters_per_pixel_y
-    otbImageKeywordlist
-         ${LARGEDATA}/SPOT5/TEHERAN/IMAGERY.TIF
-         ${TEMP}/ioTvImageKeywordlistSpot5.txt
-         ${TEMP}/ioTvImageKeywordlistSpot5_saveState_loadState.txt
-)
-
-ADD_TEST(ioTvImageKeywordlistFORMOSAT2 ${IO_TESTS18}
-  --ignore-order --compare-n-ascii ${NOTOL} 2
-         ${BASELINE_FILES}/ioTvImageKeywordlistFORMOSAT2.txt
-         ${TEMP}/ioTvImageKeywordlistFORMOSAT2.txt
-         ${BASELINE_FILES}/ioTvImageKeywordlistFORMOSAT2.txt
-         ${TEMP}/ioTvImageKeywordlistFORMOSAT2_saveState_loadState.txt
-         --ignore-lines-with 3 support_data.metadata_file meters_per_pixel_x meters_per_pixel_y
-    otbImageKeywordlist
-         ${LARGEDATA}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF
-         ${TEMP}/ioTvImageKeywordlistFORMOSAT2.txt
-         ${TEMP}/ioTvImageKeywordlistFORMOSAT2_saveState_loadState.txt
-)
-
-
-ADD_TEST(ioTvImageKeywordlistQuickbird ${IO_TESTS18}
-  --ignore-order --compare-n-ascii ${NOTOL} 2
-         ${BASELINE_FILES}/ioTvImageKeywordlistQuickbird.txt
-         ${TEMP}/ioTvImageKeywordlistQuickbird.txt
-         ${BASELINE_FILES}/ioTvImageKeywordlistQuickbird.txt
-         ${TEMP}/ioTvImageKeywordlistQuickbird_saveState_loadState.txt
-         --ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
-    otbImageKeywordlist
-         ${LARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
-         ${TEMP}/ioTvImageKeywordlistQuickbird.txt
-         ${TEMP}/ioTvImageKeywordlistQuickbird_saveState_loadState.txt
-)
-
-ADD_TEST(ioTvImageKeywordlistIkonos ${IO_TESTS18}
-  --ignore-order --compare-n-ascii ${NOTOL} 2
-         ${BASELINE_FILES}/ioTvImageKeywordlistIkonos.txt
-         ${TEMP}/ioTvImageKeywordlistIkonos.txt
-         ${BASELINE_FILES}/ioTvImageKeywordlistIkonos.txt
-         ${TEMP}/ioTvImageKeywordlistIkonos_saveState_loadState.txt
-         --ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
-    otbImageKeywordlist
-         ${LARGEDATA}/IKONOS/BLOSSEVILLE/po_2619900_pan_0000000.tif
-         ${TEMP}/ioTvImageKeywordlistIkonos.txt
-         ${TEMP}/ioTvImageKeywordlistIkonos_saveState_loadState.txt
-)
-
-ADD_TEST(ioTvImageKeywordlistRapidEye ${IO_TESTS18}
-  --ignore-order --compare-n-ascii ${NOTOL} 2
-         ${BASELINE_FILES}/ioTvImageKeywordlistRapidEye.txt
-         ${TEMP}/ioTvImageKeywordlistRapidEye.txt
-         ${BASELINE_FILES}/ioTvImageKeywordlistRapidEye.txt
-         ${TEMP}/ioTvImageKeywordlistRapidEye_saveState_loadState.txt
-    otbImageKeywordlist
-         ${LARGEDATA}/RAPIDEYE/level1B/2008-12-25T005918_RE3_1B-NAC_397971_12345_band3.ntf
-         ${TEMP}/ioTvImageKeywordlistRapidEye.txt
-         ${TEMP}/ioTvImageKeywordlistRapidEye_saveState_loadState.txt
-)
-
-ADD_TEST(ioTvImageKeywordlistEnvisatAsar ${IO_TESTS18}
-  --ignore-order --compare-n-ascii ${NOTOL} 2
-         ${BASELINE_FILES}/ioTvImageKeywordlistEnvisatAsar.txt
-         ${TEMP}/ioTvImageKeywordlistEnvisatAsar.txt
-         ${BASELINE_FILES}/ioTvImageKeywordlistEnvisatAsar.txt
-         ${TEMP}/ioTvImageKeywordlistEnvisatAsar_saveState_loadState.txt
-    otbImageKeywordlist
-         ${LARGEDATA}/ENVISAT_ASAR_SCENE01/ASA_APS_1PNDPA20030821_7713.N1
-         ${TEMP}/ioTvImageKeywordlistEnvisatAsar.txt
-         ${TEMP}/ioTvImageKeywordlistEnvisatAsar_saveState_loadState.txt
-)
-
-ADD_TEST(ioTvImageKeywordlistAlosPalsar ${IO_TESTS18}
-  --ignore-order --compare-n-ascii ${NOTOL} 2
-         ${BASELINE_FILES}/ioTvImageKeywordlistAlosPalsar.txt
-         ${TEMP}/ioTvImageKeywordlistAlosPalsar.txt
-         ${BASELINE_FILES}/ioTvImageKeywordlistAlosPalsar.txt
-         ${TEMP}/ioTvImageKeywordlistAlosPalsar_saveState_loadState.txt
-    otbImageKeywordlist
-         ${LARGEDATA}/PALSAR/200801280007/l1data/VOL-ALPSRP037120700-H1.1__A
-         ${TEMP}/ioTvImageKeywordlistAlosPalsar.txt
-         ${TEMP}/ioTvImageKeywordlistAlosPalsar_saveState_loadState.txt
-)
-
-ADD_TEST(ioTvImageKeywordlistRadarSat1_GOMA ${IO_TESTS18}
-    --compare-n-ascii ${EPSILON_6} 2
-         ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1_GOMA.txt
-         ${TEMP}/ioTvImageKeywordlistRadarSat1_GOMA.txt
-         ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1_GOMA.txt
-         ${TEMP}/ioTvImageKeywordlistRadarSat1_GOMA_saveState_loadState.txt
-    otbImageKeywordlist
-         ${LARGEDATA}/RADARSAT1/GOMA/SCENE01/DAT_01.001
-         ${TEMP}/ioTvImageKeywordlistRadarSat1_GOMA.txt
-         ${TEMP}/ioTvImageKeywordlistRadarSat1_GOMA_saveState_loadState.txt
-)
-
-ADD_TEST(ioTvImageKeywordlistRadarSat1_GOMA_vdf ${IO_TESTS18}
-    --compare-n-ascii ${EPSILON_6} 2
-         ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1_GOMA.txt
-         ${TEMP}/ioTvImageKeywordlistRadarSat1_GOMA_vdf.txt
-         ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1_GOMA.txt
-         ${TEMP}/ioTvImageKeywordlistRadarSat1_GOMA_vdf_saveState_loadState.txt
-    otbImageKeywordlist
-         ${LARGEDATA}/RADARSAT1/GOMA/SCENE01/VDF_DAT.001
-         ${TEMP}/ioTvImageKeywordlistRadarSat1_GOMA_vdf.txt
-         ${TEMP}/ioTvImageKeywordlistRadarSat1_GOMA_vdf_saveState_loadState.txt
-)
-
-ADD_TEST(ioTvImageKeywordlistRadarSat1_SARDEGNA ${IO_TESTS18}
-    --compare-n-ascii ${EPSILON_6} 2
-         ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1_SARDEGNA.txt
-         ${TEMP}/ioTvImageKeywordlistRadarSat1_SARDEGNA.txt
-         ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1_SARDEGNA.txt
-         ${TEMP}/ioTvImageKeywordlistRadarSat1_SARDEGNA_saveState_loadState.txt
-    otbImageKeywordlist
-         ${LARGEDATA}/RADARSAT1/SARDEGNA/scene01/dat_01.001
-         ${TEMP}/ioTvImageKeywordlistRadarSat1_SARDEGNA.txt
-         ${TEMP}/ioTvImageKeywordlistRadarSat1_SARDEGNA_saveState_loadState.txt
-         )
-
-ADD_TEST(ioTvImageKeywordlistRadarSat1_SARDEGNA_vdf ${IO_TESTS18}
-    --compare-n-ascii ${EPSILON_6} 2
-         ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1_SARDEGNA.txt
-         ${TEMP}/ioTvImageKeywordlistRadarSat1_SARDEGNA_vdf.txt
-         ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1_SARDEGNA.txt
-         ${TEMP}/ioTvImageKeywordlistRadarSat1_SARDEGNA_vdf_saveState_loadState.txt
-    otbImageKeywordlist
-         ${LARGEDATA}/RADARSAT1/SARDEGNA/scene01/dat_01.001
-         ${TEMP}/ioTvImageKeywordlistRadarSat1_SARDEGNA_vdf.txt
-         ${TEMP}/ioTvImageKeywordlistRadarSat1_SARDEGNA_vdf_saveState_loadState.txt
-         )
-
-ADD_TEST(ioTvImageKeywordlistRadarSat2 ${IO_TESTS18}
-  --ignore-order --compare-n-ascii ${NOTOL} 2
-         ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat2.txt
-         ${TEMP}/ioTvImageKeywordlistRadarSat2.txt
-         ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat2.txt
-         ${TEMP}/ioTvImageKeywordlistRadarSat2_saveState_loadState.txt
-          --ignore-lines-with 1 product_xml_filename
-    otbImageKeywordlist
-         ${LARGEDATA}/RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/product.xml
-         ${TEMP}/ioTvImageKeywordlistRadarSat2.txt
-         ${TEMP}/ioTvImageKeywordlistRadarSat2_saveState_loadState.txt
-)
-
-ADD_TEST(ioTvImageKeywordlistTerraSarX ${IO_TESTS18}
-  --ignore-order --compare-n-ascii ${NOTOL} 2
-         ${BASELINE_FILES}/ioTvImageKeywordlistTerraSarX.txt
-         ${TEMP}/ioTvImageKeywordlistTerraSarX.txt
-         ${BASELINE_FILES}/ioTvImageKeywordlistTerraSarX.txt
-         ${TEMP}/ioTvImageKeywordlistTerraSarX_saveState_loadState.txt
-          --ignore-lines-with 1 product_xml_filename
-    otbImageKeywordlist
-         ${LARGEDATA}/TERRASARX/dims/TSX-1.SAR.L1B/TSX1_SAR__SSC/TSX1_SAR__SSC.xml
-         ${TEMP}/ioTvImageKeywordlistTerraSarX.txt
-         ${TEMP}/ioTvImageKeywordlistTerraSarX_saveState_loadState.txt
-)
-
-ADD_TEST(ioTvImageKeywordlistTerraSarX_Upsala ${IO_TESTS18}
-  --ignore-order --compare-n-ascii ${NOTOL} 2
-         ${BASELINE_FILES}/ioTvImageKeywordlistTerraSarX_Upsala.txt
-         ${TEMP}/ioTvImageKeywordlistTerraSarX_Upsala.txt
-         ${BASELINE_FILES}/ioTvImageKeywordlistTerraSarX_Upsala.txt
-         ${TEMP}/ioTvImageKeywordlistTerraSarX_Upsala_saveState_loadState.txt
-          --ignore-lines-with 1 product_xml_filename
-    otbImageKeywordlist
-         ${LARGEDATA}/TERRASARX/UPSALA_GLACIER/TSX1_SAR__MGD/TSX1_SAR__MGD.xml
-         ${TEMP}/ioTvImageKeywordlistTerraSarX_Upsala.txt
-         ${TEMP}/ioTvImageKeywordlistTerraSarX_Upsala_saveState_loadState.txt
-)
-ADD_TEST(ioTvImageKeywordlistTerraSarX_Toronto ${IO_TESTS18}
-  --ignore-order --compare-n-ascii ${NOTOL} 2
-         ${BASELINE_FILES}/ioTvImageKeywordlistTerraSarX_Toronto.txt
-         ${TEMP}/ioTvImageKeywordlistTerraSarX_Toronto.txt
-         ${BASELINE_FILES}/ioTvImageKeywordlistTerraSarX_Toronto.txt
-         ${TEMP}/ioTvImageKeywordlistTerraSarX_Toronto_saveState_loadState.txt
-          --ignore-lines-with 1 product_xml_filename
-    otbImageKeywordlist
-         ${LARGEDATA}/TERRASARX/TORONTO/TSX1_SAR__SSC/TSX1_SAR__SSC.xml
-         ${TEMP}/ioTvImageKeywordlistTerraSarX_Toronto.txt
-         ${TEMP}/ioTvImageKeywordlistTerraSarX_Toronto_saveState_loadState.txt
-)
-
-ADD_TEST(ioTuImageKeywordlistTerraSarX_PANGKALANBUUNUsingXmlFile ${IO_TESTS18}
-    otbImageKeywordlist
-         ${LARGEDATA}/TERRASARX/PANGKALANBUUN/TSX1_SAR__SSC______SM_D_SRA_20080313T221955_20080313T222003.xml
-         ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun.txt
-         ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun_saveState_loadState.txt
-)
-ADD_TEST(ioTuImageKeywordlistTerraSarX_PANGKALANBUUNUsingHHFile ${IO_TESTS18}
-    otbImageKeywordlist
-         ${LARGEDATA}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos
-         ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun.txt
-         ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun_saveState_loadState.txt
-)
-ADD_TEST(ioTuImageKeywordlistTerraSarX_PANGKALANBUUNUsingVVFile ${IO_TESTS18}
-    otbImageKeywordlist
-         ${LARGEDATA}/TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_VV_SRA_stripFar_008.cos
-         ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun.txt
-         ${TEMP}/ioTvImageKeywordlistTerraSarX_Pangkalanbuun_saveState_loadState.txt
-)
-
-
-
-ADD_TEST(ioTvImageKeywordlistErs ${IO_TESTS18}
-  --ignore-order --compare-n-ascii ${NOTOL} 2
-         ${BASELINE_FILES}/ioTvImageKeywordlistErs.txt
-         ${TEMP}/ioTvImageKeywordlistErs.txt
-         ${BASELINE_FILES}/ioTvImageKeywordlistErs.txt
-         ${TEMP}/ioTvImageKeywordlistErs_saveState_loadState.txt
-    otbImageKeywordlist
-         ${LARGEDATA}/SAR_ERS2_SLCI_SCENE1/DAT_01.001
-         ${TEMP}/ioTvImageKeywordlistErs.txt
-         ${TEMP}/ioTvImageKeywordlistErs_saveState_loadState.txt
-)
-
-ENDIF(OTB_DATA_USE_LARGEINPUT)
-
-ADD_TEST(ioTvOssimJpegFileRessourceLeak ${IO_TESTS18}
-        otbOssimJpegFileRessourceLeakTest
-        ${INPUTDATA}/poupees.jpg
-        1200
-)
-
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS19 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -3232,6 +3233,16 @@ otbShortRGBImageIOTest.cxx
 otbPNGIndexedNbBandsTest.cxx
 )
 
+#Tests requiring access to ossim header
+#should not be launched when using an installed version of OTB
+IF(NOT OTB_TESTING_STANDALONE)
+SET(BasicIO_SRCS4
+otbIOTests4.cxx
+otbImageKeywordlist.cxx
+otbOssimJpegFileRessourceLeakTest.cxx
+)
+ENDIF(NOT OTB_TESTING_STANDALONE)
+
 SET(BasicIO_SRCS5
 otbIOTests5.cxx
 otbGDALImageIOTestCanRead.cxx
@@ -3364,7 +3375,6 @@ otbPointSetFileReader2.cxx
 
 SET(BasicIO_SRCS18
 otbIOTests18.cxx
-otbImageKeywordlist.cxx
 otbSpotImageMetadataInterfaceNew.cxx
 otbFormosatImageMetadataInterfaceNew.cxx
 otbQuickBirdImageMetadataInterfaceNew.cxx
@@ -3375,7 +3385,6 @@ otbImageMetadataInterfaceBaseTest.cxx
 otbOpticalImageMetadataInterfaceTest.cxx
 otbSarImageMetadataInterfaceTest.cxx
 otbImageMetadataInterfaceTest2.cxx
-otbOssimJpegFileRessourceLeakTest.cxx
 )
 
 IF(OTB_USE_CURL)
@@ -3438,7 +3447,11 @@ otbGDALReadPxlComplex.cxx
 OTB_ADD_EXECUTABLE(otbIOTests1 "${BasicIO_SRCS1}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbIOTests2 "${BasicIO_SRCS2}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbIOTests3 "${BasicIO_SRCS3}" "OTBIO;OTBTesting")
-#OTB_ADD_EXECUTABLE(otbIOTests4 "${BasicIO_SRCS4}" "OTBIO;OTBTesting")
+
+IF(NOT OTB_TESTING_STANDALONE)
+OTB_ADD_EXECUTABLE(otbIOTests4 "${BasicIO_SRCS4}" "OTBIO;OTBTesting")
+ENDIF(NOT OTB_TESTING_STANDALONE)
+
 OTB_ADD_EXECUTABLE(otbIOTests5 "${BasicIO_SRCS5}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbIOTests6 "${BasicIO_SRCS6}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbIOTests7 "${BasicIO_SRCS7}" "OTBIO;OTBTesting")
