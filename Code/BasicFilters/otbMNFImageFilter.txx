@@ -400,7 +400,7 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
     m_CovarianceMatrix.GetVnlMatrix().print(os);
   }
 
-  if ( !m_TransformationMatrix.GetVnlMatrix().empty() );
+  if ( !m_TransformationMatrix.GetVnlMatrix().empty() )
   {
     os << indent << "Transformation matrix";
     if ( m_GivenTransformationMatrix )
