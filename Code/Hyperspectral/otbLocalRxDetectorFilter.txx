@@ -29,7 +29,7 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 LocalRxDetectorFilter<TInputImage, TOutputImage>
 ::LocalRxDetectorFilter()
-  : m_ExternalRadius(2), m_InternalRadius(1)
+  : m_InternalRadius(1), m_ExternalRadius(2)
 {
 }
 
