@@ -955,7 +955,7 @@ void ossimString::split(std::vector<ossimString>& result,
 {
 	if(this->empty()) return;
 //   result = split(separatorList);
-   ossimString copyString = *this;
+   ossimString copyString = this->c_str();
 
    char* s = strtok(const_cast<char*>(copyString.c_str()),
                     separatorList.c_str());
