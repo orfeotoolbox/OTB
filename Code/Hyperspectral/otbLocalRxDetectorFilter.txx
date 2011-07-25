@@ -126,15 +126,11 @@ LocalRxDetectorFilter<TInputImage, TOutputImage>
   ImageRegionIteratorType outputIt(outputPtr, *fit);
 
   // Run Input Image
-  int j = 0;
-
   for (inputIt.GoToBegin(), outputIt.GoToBegin(); !inputIt.IsAtEnd(); ++inputIt, ++outputIt)
     {
-
     // Create ListSample
     typename ListSampleType::Pointer listSample = ListSampleType::New();
     listSample->SetMeasurementVectorSize(inputPtr->GetNumberOfComponentsPerPixel());
-
 
     // Run neighborhood
     typename ConstShapedNeighborhoodIteratorType::ConstIterator ci;
@@ -144,7 +140,6 @@ LocalRxDetectorFilter<TInputImage, TOutputImage>
       listSample->PushBack(ci.Get());
       }
 
-
     // Compute Mean vector
     typename MeanCalculatorType::Pointer meanCalculator = MeanCalculatorType::New();
     meanCalculator->SetInputSample(listSample);
@@ -153,7 +148,6 @@ LocalRxDetectorFilter<TInputImage, TOutputImage>
     typename MeanCalculatorType::OutputType *meanVector;
     meanVector = meanCalculator->GetOutput();
 
-
     // Compute covariance matrix
     typename CovarianceCalculatorType::Pointer covarianceCalculator = CovarianceCalculatorType::New();
     covarianceCalculator->SetInputSample(listSample);
@@ -161,7 +155,6 @@ LocalRxDetectorFilter<TInputImage, TOutputImage>
     covarianceCalculator->Update();
 
     const typename CovarianceCalculatorType::OutputType *covarianceMatrix = covarianceCalculator->GetOutput();
-
 
     // Compute RX value
     MatrixType invCovMat;

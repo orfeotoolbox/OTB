@@ -102,7 +102,6 @@ NCLSUnmixingFunctor<TInput, TOutput, TPrecision>
   VectorType uclsVector = m_Svd->solve(inVector);
 
   unsigned int nbEndmembers = m_OutputSize;
-  unsigned int nbBands = in.Size();
 
   // Apply NCLS iterations
   VectorType lambda(nbEndmembers);
