@@ -428,7 +428,7 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
       m_CovarianceEstimator->Print( os, indent.GetNextIndent() );
   }
 
-  if ( !m_TransformationMatrix.GetVnlMatrix().empty() );
+  if ( !m_TransformationMatrix.GetVnlMatrix().empty() )
   {
     os << indent;
     if ( !m_IsTransformationMatrixForward )
