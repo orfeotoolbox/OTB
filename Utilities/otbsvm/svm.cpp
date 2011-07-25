@@ -264,7 +264,8 @@ private:
   {
     if( param.kernel_generic == NULL )
       {
-      itkGenericExceptionMacro( << "Generic Kernel is not initialized !");
+      fprintf(stderr, "Generic Kernel is not initialized");
+      return 0;
       }
     return (*param.kernel_generic)(x[i],x[j],param);
   }
@@ -273,7 +274,8 @@ private:
   {
     if( param.kernel_composed == NULL )
       {
-      itkGenericExceptionMacro( << "Generic Kernel is not initialized !");
+      fprintf(stderr, "Composed Kernel is not initialized");
+      return 0;
       }
     return (*param.kernel_composed)(x[i],x[j],param);
   }
@@ -3380,8 +3382,8 @@ GenericKernelFunctorBase* GenericKernelFunctorBase::Clone() const
 
 double GenericKernelFunctorBase::operator()(const svm_node * /*x*/, const svm_node * /*y*/, const svm_parameter& /*param*/) const
 {
-  itkGenericExceptionMacro(<<"Kernel functor not definied (Null)");
-  return static_cast<double> (0.);
+  fprintf(stderr, "Kernel functor not definied (Null)");
+  return 0;
 }
 
 /** Used for Taylor classification*/
@@ -3392,8 +3394,8 @@ double GenericKernelFunctorBase::operator()(const svm_node * /*x*/, const svm_no
 double GenericKernelFunctorBase::derivative(const svm_node * /*x*/, const svm_node * /*y*/, const svm_parameter& /*param*/,
                           int /*degree*/, int /*index*/, bool /*isAtEnd*/, double /*constValue*/) const
 {
-  itkGenericExceptionMacro(<<"derivative method not definied (Null)");
-  return 0.;
+  fprintf(stderr, "derivative method not definied (Null)");
+  return 0;
 }
 
 int
@@ -3771,7 +3773,7 @@ double ComposedKernelFunctor::operator()(const svm_node *x, const svm_node *y, c
     }
   else
     {
-    itkGenericExceptionMacro(<<"ComposedKernelFunctor::operator() : lists dimensions mismatch");
+    fprintf(stderr, "ComposedKernelFunctor::print_param() : lists dimensions mismatch");
     }
   return out;
 }
@@ -3791,13 +3793,13 @@ double ComposedKernelFunctor::derivative(const svm_node *x, const svm_node *y, c
         }
       else
         {
-        itkGenericExceptionMacro(<<"derivative method not definied (Null)");
+        fprintf(stderr, "ComposedKernelFunctor : derivative method not definied (Null)");
         }
       }
     }
   else
     {
-    itkGenericExceptionMacro(<<"ComposedKernelFunctor::operator() : lists dimensions mismatch");
+    fprintf(stderr, "ComposedKernelFunctor::print_param() : lists dimensions mismatch");
     }
   return out;
 }
@@ -3806,9 +3808,9 @@ void
 ComposedKernelFunctor
 ::print_parameters(void)const
 {
- MapConstIterator iter = this->GetMapParameters().begin();
-  std::cout << "Print composed kernel parameters: " << this->GetName() << ", " << this->GetMapParameters().size()
-      << std::endl;
+  MapConstIterator iter = this->GetMapParameters().begin();
+  std::cout << "Print composed kernel parameters: " << this->GetName()
+            << ", " << this->GetMapParameters().size() << std::endl;
   while (iter != this->GetMapParameters().end())
     {
     std::cout << "  " << iter->first << "  " << iter->second << std::endl;
@@ -3816,8 +3818,9 @@ ComposedKernelFunctor
     }
   std::cout << std::endl;
   std::cout << "Composition kernels:" << std::endl;
-  if (m_KernelFunctorList.size() != 0 && m_PonderationList.size() != 0 && m_KernelFunctorList.size()
-      == m_PonderationList.size())
+  if (m_KernelFunctorList.size() != 0
+      && m_PonderationList.size() != 0
+      && m_KernelFunctorList.size() == m_PonderationList.size())
     {
     for (unsigned int i = 0; i < m_KernelFunctorList.size(); i++)
       {
@@ -3829,7 +3832,7 @@ ComposedKernelFunctor
     }
   else
     {
-    itkGenericExceptionMacro(<<"ComposedKernelFunctor::print_param() : lists dimensions mismatch");
+    fprintf(stderr, "ComposedKernelFunctor::print_param() : lists dimensions mismatch");
     }
 }
 
@@ -3896,7 +3899,7 @@ save_parameters(FILE ** pfile, const char * composed_kernel_parameters_keyword)c
   MapConstIterator iter = this->GetMapParameters().begin();
   std::string line(composed_kernel_parameters_keyword);
   std::string strNbParams;
-  ::otb::StringStream flux;
+  std::stringstream flux;
   flux << this->GetMapParameters().size();
   flux >> strNbParams;
   line = line + " " + this->GetName() + " " + strNbParams;
@@ -3910,14 +3913,14 @@ save_parameters(FILE ** pfile, const char * composed_kernel_parameters_keyword)c
   for (unsigned int i = 0; i < m_PonderationList.size(); i++)
     {
     std::string ponde;
-    ::otb::StringStream flux;
+    std::stringstream flux;
     flux << m_PonderationList[i];
     flux >> ponde;
     line = line + "   " + ponde;
     }
   line = line + "\n" + "Kernels list:\nNumber of Kernels: ";
   std::string nbOfKernels;
-  ::otb::StringStream flux2;
+  std::stringstream flux2;
   flux2 << m_KernelFunctorList.size();
   flux2 >> nbOfKernels;
 

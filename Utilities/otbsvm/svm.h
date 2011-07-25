@@ -60,7 +60,7 @@ public:
   {
     std::string Value = m_MapParameters.find(std::string(option))->second;
     T lValeur;
-    ::otb::StringStream flux;
+    std::stringstream flux;
     flux << Value;
     flux >> lValeur;
     return lValeur;
@@ -70,7 +70,7 @@ public:
   void SetValue(const char *option, const T & value)
   {
     std::string lValeur;
-    ::otb::StringStream flux;
+    std::stringstream flux;
     flux << value;
     flux >> lValeur;
     m_MapParameters[std::string(option)] = lValeur;
