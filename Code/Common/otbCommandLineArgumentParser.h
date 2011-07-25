@@ -137,7 +137,7 @@ public:
   {                                                                     \
     std::string parameter = this->GetParameterString(option, number);   \
     type        lValeur;                                                \
-    ::otb::StringStream flux;                                           \
+    std::stringstream flux;                                             \
     flux << parameter;                                                  \
     flux >> lValeur;                                                    \
     return lValeur;                                                     \

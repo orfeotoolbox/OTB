@@ -3428,7 +3428,7 @@ save_parameters(FILE ** pfile, const char * generic_kernel_parameters_keyword)co
 
   std::string line(generic_kernel_parameters_keyword);
   std::string strNbParams;
-  ::otb::StringStream flux;
+  std::stringstream flux;
   flux << m_MapParameters.size();
   flux >> strNbParams;
   line = line + " " + m_Name + " " + strNbParams;

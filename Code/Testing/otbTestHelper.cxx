@@ -478,7 +478,7 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
   while (itRef != listLineFileRef.end())
     {
     strfileref = *itRef;
-    otb::StringStream buffstreamRef;
+    std::stringstream buffstreamRef;
     std::string       strRef = "";
     buffstreamRef << strfileref;
     buffstreamRef >> strRef;
@@ -494,7 +494,7 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
   while (itTest != listLineFileTest.end())
     {
     strfiletest = *itTest;
-    otb::StringStream buffstreamTest;
+    std::stringstream buffstreamTest;
     std::string       strTest = "";
     buffstreamTest << strfiletest;
     buffstreamTest >> strTest;
@@ -1124,14 +1124,14 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
       OGRFeature *      test_poFeature = NULL;
       std::string       basefilename(test_pszDataSource);
       int               nbFeature(0);
-      otb::StringStream oss2;
+      std::stringstream oss2;
       oss2.str("");
       oss2 << iLayer;
 
       while ((ref_poFeature = ref_poLayer->GetNextFeature()) != NULL)
         {
         test_poFeature = test_poLayer->GetNextFeature();
-        otb::StringStream oss;
+        std::stringstream oss;
         oss.str("");
         oss << nbFeature;
 
@@ -1519,7 +1519,7 @@ bool TestHelper::CompareLines(const std::string& strfileref,
   AddWhiteSpace(strfiletest, strLineTest);
   //otbMsgDevMacro(<<"Comparing (after replace) : " << strLineRef << " vs " << strLineTest);
 
-  otb::StringStream buffstreamRef, buffstreamTest;
+  std::stringstream buffstreamRef, buffstreamTest;
   buffstreamRef << strLineRef;
   buffstreamTest << strLineTest;
   //Number of differences in the current line
@@ -1724,7 +1724,7 @@ bool TestHelper::CompareLines(const std::string& strfileref,
 
 std::string TestHelper::VectorToString(const otb::MetaDataKey::VectorType& vector) const
 {
-  otb::StringStream oss;
+  std::stringstream oss;
   oss.str("");
   otb::MetaDataKey::VectorType::const_iterator it = vector.begin();
   oss << "[";
