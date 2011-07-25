@@ -127,6 +127,8 @@ int DEMConvertAdapter::Convert(std::string tempFilename, std::string output)
     itkExceptionMacro("Error detected in the image writer...");
     return EXIT_FAILURE;
     }
+
+  return EXIT_SUCCESS;
 }
 
 } // namespace otb
