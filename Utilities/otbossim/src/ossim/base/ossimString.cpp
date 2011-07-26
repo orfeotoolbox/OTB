@@ -9,7 +9,7 @@
 // Description: This class extends the stl's string class.
 // 
 //********************************************************************
-// $Id: ossimString.cpp 19682 2011-05-31 14:21:20Z dburken $
+// $Id: ossimString.cpp 19870 2011-07-26 11:14:43Z gpotts $
 
 #include <cctype> /* for toupper */
 #include <cstdlib> /* for getenv() */
@@ -28,7 +28,7 @@
 static ossimTrace traceDebug("ossimString:debug");
 
 #ifdef OSSIM_ID_ENABLED
-static char OSSIM_ID[] = "$Id: ossimString.cpp 19682 2011-05-31 14:21:20Z dburken $";
+static char OSSIM_ID[] = "$Id: ossimString.cpp 19870 2011-07-26 11:14:43Z gpotts $";
 #endif
 
 ossimString ossimString::upcase(const ossimString& aString)
@@ -954,6 +954,40 @@ void ossimString::split(std::vector<ossimString>& result,
                         bool skipBlankFields)const
 {
 	if(this->empty()) return;
+   
+   std::string::const_iterator iterStart = m_str.begin();
+   std::string::const_iterator iterCurrent = m_str.begin();
+   
+   while(iterCurrent != m_str.end())
+   {
+      if(std::find(separatorList.m_str.begin(), separatorList.m_str.end(), *iterCurrent) != separatorList.m_str.end())
+      {
+         if(iterStart == iterCurrent)
+         {
+            if(!skipBlankFields)
+            {
+               result.push_back(ossimString());
+            }
+         }
+         else 
+         {
+            result.push_back(ossimString(iterStart, iterCurrent));
+         }
+
+         ++iterCurrent;
+         iterStart = iterCurrent;
+      }
+      else 
+      {
+         ++iterCurrent;
+      }
+   }
+   if(iterStart!=iterCurrent)
+   {
+      result.push_back(ossimString(iterStart, iterCurrent));
+   }
+   
+#if 0   
 //   result = split(separatorList);
    ossimString copyString = *this;
 
@@ -976,6 +1010,7 @@ void ossimString::split(std::vector<ossimString>& result,
       if (((*(this->end()-1)) == separatorList.c_str()[i]) && !skipBlankFields)
          result.push_back("");
    }
+#endif
 }
 
 std::vector<ossimString> ossimString:: split(const ossimString& separatorList,
