@@ -40,7 +40,6 @@
 #include "otbLeafParameters.h"
 #include "otbSailModel.h"
 #include "otbProspectModel.h"
-
 // Software Guide : EndCodeSnippet
 
 
@@ -201,7 +200,6 @@ int main(int argc, char *argv[])
 
   // Software Guide : BeginCodeSnippet
 
-
   for (unsigned int i = 0; i < sail->GetViewingReflectance()->Size(); ++i)
     {
     std::cout << "wavelength  : " << sail->GetViewingReflectance()->GetResponse()[i].first;
@@ -209,7 +207,6 @@ int main(int argc, char *argv[])
     std::cout << ". Hemispherical reflectance " << sail->GetHemisphericalReflectance()->GetResponse()[i].second
         << std::endl;
     }
-
   // Software Guide : EndCodeSnippet
 
   std::ofstream outputFile(OutputName, std::ios::out);
