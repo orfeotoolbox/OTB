@@ -36,11 +36,11 @@ int MultiResolutionPyramid::Describe(ApplicationDescriptor* descriptor)
   descriptor->SetName("Multi-resolution pyramid tool");
   descriptor->SetDescription("Build a multi-resolution pyramid of the image.");
   descriptor->AddInputImage();
-  descriptor->AddOption("NumberOfLevels","Number of levels in the pyramid (default is 1)","level",1,false, ApplicationDescriptor::Integer);
-  descriptor->AddOption("ShrinkFactor","Subsampling factor (default is 2)","sfactor",1,false, ApplicationDescriptor::Integer);
-  descriptor->AddOption("VarianceFactor","Before subsampling, image is smoothed with a gaussian kernel of variance VarianceFactor*ShrinkFactor. Higher values will result in more blur, lower in more aliasing (default is 0.6)","vfactor",1,false,ApplicationDescriptor::Real);
-  descriptor->AddOption("FastScheme","If used, this option allows to speed-up computation by iteratively subsampling previous level of pyramid instead of processing the full input image each time. Please note that this may result in extra blur or extra aliasing.","fast",0,false,ApplicationDescriptor::Integer);
-  descriptor->AddOption("OutputPrefixAndExtextension","prefix for the output files, and extension","out",2,true,ApplicationDescriptor::String);
+  descriptor->AddOption("NumberOfLevels","Number of levels in the pyramid (default is 1)","level", 1, false, ApplicationDescriptor::Integer);
+  descriptor->AddOption("ShrinkFactor","Subsampling factor (default is 2)","sfactor", 1, false, ApplicationDescriptor::Integer);
+  descriptor->AddOption("VarianceFactor","Before subsampling, image is smoothed with a gaussian kernel of variance VarianceFactor*ShrinkFactor. Higher values will result in more blur, lower in more aliasing (default is 0.6)","vfactor", 1, false, ApplicationDescriptor::Real);
+  descriptor->AddOption("FastScheme","If used, this option allows to speed-up computation by iteratively subsampling previous level of pyramid instead of processing the full input image each time. Please note that this may result in extra blur or extra aliasing.","fast", 0, false, ApplicationDescriptor::Integer);
+  descriptor->AddOption("OutputPrefixAndExtextension","prefix for the output files, and extension","out", 2, true, ApplicationDescriptor::String);
   descriptor->AddOption("AvailableMemory","Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default)","ram", 1, false, otb::ApplicationDescriptor::Integer);
   return EXIT_SUCCESS;
 }
@@ -53,10 +53,10 @@ int MultiResolutionPyramid::Execute(otb::ApplicationOptionsResult* parseResult)
   typedef otb::Image<short, Dimension> SImageType;
   typedef otb::VectorImage<short, Dimension> SVectorImageType;
   typedef otb::ImageFileReader<USVectorImageType> ReaderType;
-  typedef itk::DiscreteGaussianImageFilter<USImageType,SImageType> SmoothingImageFilterType;
-  typedef otb::PerBandVectorImageFilter<USVectorImageType,SVectorImageType,
+  typedef itk::DiscreteGaussianImageFilter<USImageType, SImageType> SmoothingImageFilterType;
+  typedef otb::PerBandVectorImageFilter<USVectorImageType, SVectorImageType,
     SmoothingImageFilterType>                                               SmoothingVectorImageFilterType;
-  typedef itk::ShrinkImageFilter<SVectorImageType,USVectorImageType> ShrinkFilterType;
+  typedef itk::ShrinkImageFilter<SVectorImageType, USVectorImageType> ShrinkFilterType;
   typedef otb::StreamingImageFileWriter<USVectorImageType> WriterType;
 
   unsigned int nbLevels = 1;
@@ -82,8 +82,8 @@ int MultiResolutionPyramid::Execute(otb::ApplicationOptionsResult* parseResult)
 
   bool fastScheme = parseResult->IsOptionPresent("FastScheme");
 
-  std::string prefix = parseResult->GetParameterString("OutputPrefixAndExtextension",0);
-  std::string ext = parseResult->GetParameterString("OutputPrefixAndExtextension",1);
+  std::string prefix = parseResult->GetParameterString("OutputPrefixAndExtextension", 0);
+  std::string ext = parseResult->GetParameterString("OutputPrefixAndExtextension", 1);
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(parseResult->GetInputImage());
@@ -134,7 +134,7 @@ int MultiResolutionPyramid::Execute(otb::ApplicationOptionsResult* parseResult)
     oss.str("");
     oss<<"Writing "<<prefix<<"_"<<currentLevel<<"."<<ext;
 
-    otb::StandardWriterWatcher watcher(writer,shrinkFilter,oss.str().c_str());
+    otb::StandardWriterWatcher watcher(writer, shrinkFilter, oss.str().c_str());
 
     writer->Update();
 
