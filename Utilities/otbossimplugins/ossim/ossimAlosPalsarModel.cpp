@@ -710,6 +710,7 @@ ossimFilename ossimAlosPalsarModel::findAlosPalsarLeader(const ossimFilename& fi
 
   ossimString filename = file.fileNoExtension();
   ossimString prefix = filename.substr(0, 3);
+
   if ((prefix == imgPrefix) ||
       (prefix == trlPrefix) ||
       (prefix == volPrefix))
@@ -717,8 +718,7 @@ ossimFilename ossimAlosPalsarModel::findAlosPalsarLeader(const ossimFilename& fi
     // Find the 2nd dash from the end of the string
     // since ALOS files are of the form
     // <prefix>-ALPSRP<identifier>-H<n.n>__A
-    int dash2_pos = filename.rfind('-', filename.rfind('-') - 1);
-    filename.replace(0, dash2_pos, leaPrefix);
+    filename.replace(0, prefix.size(), leaPrefix);
 
     leaFile.setFile(filename);
     if (leaFile.exists())
