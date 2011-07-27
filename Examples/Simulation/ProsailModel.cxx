@@ -124,7 +124,7 @@ int main(int argc, char *argv[])
 
   //  Software Guide : BeginLatex
   //
-  //  Now we use SAIL model to generate transmitance value. SAIL model is created by invoking
+  //  Now we use SAIL model to generate transmitance and reflectance spectrum. SAIL model is created by invoking
   //  the \code{New()} method and
   //  assigning the result to a \doxygen{itk}{SmartPointer}.
   //
@@ -193,19 +193,23 @@ int main(int argc, char *argv[])
 
   //  Software Guide : BeginLatex
   //
-  //  GetViewingReflectance provides viewing reflectance vector (Nx2 N is spectral values, first column wavelength second column viewing reflectance) by calling GetResponse.
-  //  GetHemisphericalReflectance provides hemispherical reflectance vector (Nx2 N is spectral values, first column wavelength second column hemispherical reflectance) by calling GetResponse.
+  //  \emph{GetViewingReflectance} method provides viewing reflectance vector (size $Nx2$, where $N$ is the number of sampled wavelength values, columns corresponds respectively to wavelength and viewing reflectance) by calling \emph{GetResponse}.
+  //  \emph{GetHemisphericalReflectance} method provides hemispherical reflectance vector (size $Nx2$, where $N$ is the number ofsampled wavelength values, columns corresponds to wavelength and hemispherical reflectance) by calling \emph{GetResponse}.
   //
+  // Note that PROSAIL simulation are done for 2100 samples starting from 400nm up to 2500nm
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
 
   for (unsigned int i = 0; i < sail->GetViewingReflectance()->Size(); ++i)
     {
-    std::cout << "wavelength  : " << sail->GetViewingReflectance()->GetResponse()[i].first;
-    std::cout << ". Viewing reflectance " << sail->GetViewingReflectance()->GetResponse()[i].second;
-    std::cout << ". Hemispherical reflectance " << sail->GetHemisphericalReflectance()->GetResponse()[i].second
-        << std::endl;
+    std::cout << "wavelength  : ";
+    std::cout << sail->GetViewingReflectance()->GetResponse()[i].first;
+    std::cout << ". Viewing reflectance ";
+    std::cout << sail->GetViewingReflectance()->GetResponse()[i].second;
+    std::cout << ". Hemispherical reflectance ";
+    std::cout << sail->GetHemisphericalReflectance()->GetResponse()[i].second;
+    std::cout << std::endl;
     }
   // Software Guide : EndCodeSnippet
 
@@ -213,7 +217,7 @@ int main(int argc, char *argv[])
   for (unsigned int i = 0; i < sail->GetHemisphericalReflectance()->Size(); ++i)
     {
     outputFile << sail->GetViewingReflectance()->GetResponse()[i].second << " ";
-    outputFile << sail->GetHemisphericalReflectance()->GetResponse()[i].second << std::endl;
+    outputFile << sail->GetHemisphericalReflectance()->GetResponse()[i].second<< std::endl;
     }
 
   //  Software Guide : BeginLatex
@@ -236,6 +240,7 @@ int main(int argc, char *argv[])
   //  \item PSI 0
   //  \end{itemize}
   //
+  //  More informations and data about leaf properties can be found at \emph{St\'{e}phane Jacquemoud} \href{http://teledetection.ipgp.jussieu.fr/opticleaf/}{OPTICLEAF} website.
   //  Software Guide : EndLatex
 
   return EXIT_SUCCESS;
