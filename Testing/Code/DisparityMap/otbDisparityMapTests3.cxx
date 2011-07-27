@@ -28,4 +28,6 @@ void RegisterTests()
   REGISTER_TEST(otbStreamingWarpImageFilter);
   REGISTER_TEST(otbFineRegistrationImageFilterNew);
   REGISTER_TEST(otbFineRegistrationImageFilterTest);
+  REGISTER_TEST(otbStereoSensorModelToElevationMapFilterNew);
+  REGISTER_TEST(otbStereoSensorModelToElevationMapFilter);
 }
