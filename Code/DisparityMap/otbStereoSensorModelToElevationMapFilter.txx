@@ -28,13 +28,13 @@
 namespace otb
 {
 template <class TInputImage, class TOutputHeight>
-StereoSensorModelToElevationFilter<TInputImage,TOutputHeight>
+StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
 ::StereoSensorModelToElevationFilter()
 {
   // Filter has two inputs
   this->SetNumberOfInputs(2);
   this->SetNumberOfOutputs(2);
-  this->SetNthOutput(1,OutputImageType::New());
+  this->SetNthOutput(1, OutputImageType::New());
 
   // Default interpolator
   m_Interpolator = otb::BCOInterpolateImageFunction<TInputImage>::New();
@@ -58,29 +58,29 @@ StereoSensorModelToElevationFilter<TInputImage,TOutputHeight>
 }
 
 template <class TInputImage, class TOutputHeight>
-StereoSensorModelToElevationFilter<TInputImage,TOutputHeight>
+StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
 ::~StereoSensorModelToElevationFilter()
 {}
 
 template <class TInputImage, class TOutputHeight>
-void 
-StereoSensorModelToElevationFilter<TInputImage,TOutputHeight>
+void
+StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
 ::SetMasterInput(const TInputImage * image)
 {
   SetNthInput(0, const_cast<TInputImage *>( image ));
 }
 
 template <class TInputImage, class TOutputHeight>
-void 
-StereoSensorModelToElevationFilter<TInputImage,TOutputHeight>
+void
+StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
 ::SetSlaveInput(const TInputImage * image)
 {
   SetNthInput(1, const_cast<TInputImage *>( image ));
 }
 
 template <class TInputImage, class TOutputHeight>
-const TInputImage * 
-StereoSensorModelToElevationFilter<TInputImage,TOutputHeight>
+const TInputImage *
+StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
 ::GetMasterInput() const
 {
   if(this->GetNumberOfInputs()<1)
@@ -91,8 +91,8 @@ StereoSensorModelToElevationFilter<TInputImage,TOutputHeight>
 }
 
 template <class TInputImage, class TOutputHeight>
-const TInputImage * 
-StereoSensorModelToElevationFilter<TInputImage,TOutputHeight>
+const TInputImage *
+StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
 ::GetSlaveInput() const
 {
   if(this->GetNumberOfInputs()<2)
@@ -103,8 +103,8 @@ StereoSensorModelToElevationFilter<TInputImage,TOutputHeight>
 }
 
 template <class TInputImage, class TOutputHeight>
-TOutputHeight * 
-StereoSensorModelToElevationFilter<TInputImage,TOutputHeight>
+TOutputHeight *
+StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
 ::GetCorrelationOutput()
 {
   if(this->GetNumberOfOutputs()<2)
@@ -115,7 +115,7 @@ StereoSensorModelToElevationFilter<TInputImage,TOutputHeight>
 }
 
 template <class TInputImage, class TOutputHeight>
-void StereoSensorModelToElevationFilter<TInputImage,TOutputHeight>
+void StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
 ::GenerateInputRequestedRegion()
 {
   // Call the superclass implementation
@@ -140,7 +140,7 @@ void StereoSensorModelToElevationFilter<TInputImage,TOutputHeight>
   masterRequestedRegion.PadByRadius( m_Radius );
   
   // Find corners of the master requested region
-  typename InputImageType::IndexType mul,mur,mll,mlr;
+  typename InputImageType::IndexType mul, mur, mll, mlr;
   mul = masterRequestedRegion.GetIndex();
   mur = masterRequestedRegion.GetIndex();
   mur[0]+=masterRequestedRegion.GetSize()[0]-1;
@@ -151,11 +151,11 @@ void StereoSensorModelToElevationFilter<TInputImage,TOutputHeight>
   mlr[1]+=masterRequestedRegion.GetSize()[1]-1;
 
   // Transform to physical space
-  typename InputImageType::PointType mpul,mpur,mpll,mplr;
-  masterPtr->TransformIndexToPhysicalPoint(mul,mpul);
-  masterPtr->TransformIndexToPhysicalPoint(mur,mpur);
-  masterPtr->TransformIndexToPhysicalPoint(mll,mpll);
-  masterPtr->TransformIndexToPhysicalPoint(mlr,mplr);
+  typename InputImageType::PointType mpul, mpur, mpll, mplr;
+  masterPtr->TransformIndexToPhysicalPoint(mul, mpul);
+  masterPtr->TransformIndexToPhysicalPoint(mur, mpur);
+  masterPtr->TransformIndexToPhysicalPoint(mll, mpll);
+  masterPtr->TransformIndexToPhysicalPoint(mlr, mplr);
 
   // Build the transform to switch from the master to the slave image
   typename GenericRSTransformType::Pointer transform = GenericRSTransformType::New();
@@ -200,22 +200,22 @@ void StereoSensorModelToElevationFilter<TInputImage,TOutputHeight>
   // Transform to index
   typename InputImageType::IndexType sMinul, sMinur, sMinll, sMinlr, sMaxul, sMaxur, sMaxll, sMaxlr;
 
-  slavePtr->TransformPhysicalPointToIndex(sMinPul,sMinul);
-  slavePtr->TransformPhysicalPointToIndex(sMaxPul,sMaxul);
-  slavePtr->TransformPhysicalPointToIndex(sMinPur,sMinur);
-  slavePtr->TransformPhysicalPointToIndex(sMaxPur,sMaxur);
-  slavePtr->TransformPhysicalPointToIndex(sMinPll,sMinll);
-  slavePtr->TransformPhysicalPointToIndex(sMaxPll,sMaxll);
-  slavePtr->TransformPhysicalPointToIndex(sMinPlr,sMinlr);
-  slavePtr->TransformPhysicalPointToIndex(sMaxPlr,sMaxlr);
+  slavePtr->TransformPhysicalPointToIndex(sMinPul, sMinul);
+  slavePtr->TransformPhysicalPointToIndex(sMaxPul, sMaxul);
+  slavePtr->TransformPhysicalPointToIndex(sMinPur, sMinur);
+  slavePtr->TransformPhysicalPointToIndex(sMaxPur, sMaxur);
+  slavePtr->TransformPhysicalPointToIndex(sMinPll, sMinll);
+  slavePtr->TransformPhysicalPointToIndex(sMaxPll, sMaxll);
+  slavePtr->TransformPhysicalPointToIndex(sMinPlr, sMinlr);
+  slavePtr->TransformPhysicalPointToIndex(sMaxPlr, sMaxlr);
 
   // Find the corresponding bounding box
-  typename InputImageType::IndexType sul,slr;
+  typename InputImageType::IndexType sul, slr;
 
-  sul[0] = std::min(std::min(std::min(sMinul[0],sMaxul[0]),std::min(sMinur[0],sMaxur[0])),std::min(std::min(sMinll[0],sMaxll[0]),std::min(sMinlr[0],sMaxlr[0])));
-  sul[1] = std::min(std::min(std::min(sMinul[1],sMaxul[1]),std::min(sMinur[1],sMaxur[1])),std::min(std::min(sMinll[1],sMaxll[1]),std::min(sMinlr[1],sMaxlr[1])));
-  slr[0] = std::max(std::max(std::max(sMinul[0],sMaxul[0]),std::max(sMinur[0],sMaxur[0])),std::max(std::max(sMinll[0],sMaxll[0]),std::max(sMinlr[0],sMaxlr[0])));
-  slr[1] = std::max(std::max(std::max(sMinul[1],sMaxul[1]),std::max(sMinur[1],sMaxur[1])),std::max(std::max(sMinll[1],sMaxll[1]),std::max(sMinlr[1],sMaxlr[1])));
+  sul[0] = std::min(std::min(std::min(sMinul[0], sMaxul[0]), std::min(sMinur[0], sMaxur[0])), std::min(std::min(sMinll[0], sMaxll[0]), std::min(sMinlr[0], sMaxlr[0])));
+  sul[1] = std::min(std::min(std::min(sMinul[1], sMaxul[1]), std::min(sMinur[1], sMaxur[1])), std::min(std::min(sMinll[1], sMaxll[1]), std::min(sMinlr[1], sMaxlr[1])));
+  slr[0] = std::max(std::max(std::max(sMinul[0], sMaxul[0]), std::max(sMinur[0], sMaxur[0])), std::max(std::max(sMinll[0], sMaxll[0]), std::max(sMinlr[0], sMaxlr[0])));
+  slr[1] = std::max(std::max(std::max(sMinul[1], sMaxul[1]), std::max(sMinur[1], sMaxur[1])), std::max(std::max(sMinll[1], sMaxll[1]), std::max(sMinlr[1], sMaxlr[1])));
 
   // Build the slave requested region
   slaveRequestedRegion.SetIndex(sul);
@@ -272,7 +272,7 @@ void StereoSensorModelToElevationFilter<TInputImage,TOutputHeight>
 
 template <class TInputImage, class TOutputHeight>
 void
-StereoSensorModelToElevationFilter<TInputImage,TOutputHeight>
+StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
 ::BeforeThreadedGenerateData()
 {
   // Wire the interpolator
@@ -299,13 +299,13 @@ StereoSensorModelToElevationFilter<TInputImage,TOutputHeight>
     rsTransform->InstanciateTransform();
 
     // Fill ouptut
-    itk::ImageRegionIteratorWithIndex<OutputImageType> outputIt(outputPtr,outputPtr->GetBufferedRegion());
+    itk::ImageRegionIteratorWithIndex<OutputImageType> outputIt(outputPtr, outputPtr->GetBufferedRegion());
 
-    for(outputIt.GoToBegin();!outputIt.IsAtEnd();++outputIt)
+    for(outputIt.GoToBegin(); !outputIt.IsAtEnd(); ++outputIt)
       {
       // Retrieve physical point
       OutputPointType outputPoint, geoPoint;
-      outputPtr->TransformIndexToPhysicalPoint(outputIt.GetIndex(),outputPoint);
+      outputPtr->TransformIndexToPhysicalPoint(outputIt.GetIndex(), outputPoint);
 
       // Transform to geo point
       geoPoint = rsTransform->TransformPoint(outputPoint);
@@ -316,7 +316,7 @@ StereoSensorModelToElevationFilter<TInputImage,TOutputHeight>
 
 template <class TInputImage, class TOutputHeight>
 void
-StereoSensorModelToElevationFilter<TInputImage,TOutputHeight>
+StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
 ::ThreadedGenerateData(const OutputRegionType & outputRegionForThread, int threadId)
 {
   // Retrieve pointers
@@ -342,7 +342,7 @@ StereoSensorModelToElevationFilter<TInputImage,TOutputHeight>
   
   // for(unsigned int i = 0; i < gcpCount1; ++i)
   //   {
-  //   typename GenericRSTransformType::InputPointType imagePoint,groundPoint,groundPointWGS84;
+  //   typename GenericRSTransformType::InputPointType imagePoint, groundPoint, groundPointWGS84;
   //   // Transform GCP ground part to WGS84
   //   groundPoint[0] = this->GetMasterInput()->GetGCPs(i).m_GCPX;
   //   groundPoint[1] = this->GetMasterInput()->GetGCPs(i).m_GCPY;
@@ -356,13 +356,13 @@ StereoSensorModelToElevationFilter<TInputImage,TOutputHeight>
   //   imagePoint[0] = this->GetMasterInput()->GetGCPs(i).m_GCPCol;
   //   imagePoint[1] = this->GetMasterInput()->GetGCPs(i).m_GCPRow;
     
-  //   transform->AddInputTiePoint(imagePoint,groundPointWGS84);
+  //   transform->AddInputTiePoint(imagePoint, groundPointWGS84);
   //   transform->OptimizeInputTransformOn();
   //   }
 
   // for(unsigned int i = 0; i < gcpCount2; ++i)
   //   {
-  //   typename GenericRSTransformType::InputPointType imagePoint,groundPoint,groundPointWGS84;
+  //   typename GenericRSTransformType::InputPointType imagePoint, groundPoint, groundPointWGS84;
   //   // Transform GCP ground part to WGS84
   //   groundPoint[0] = this->GetSlaveInput()->GetGCPs(i).m_GCPX;
   //   groundPoint[1] = this->GetSlaveInput()->GetGCPs(i).m_GCPY;
@@ -376,7 +376,7 @@ StereoSensorModelToElevationFilter<TInputImage,TOutputHeight>
   //   imagePoint[0] = this->GetSlaveInput()->GetGCPs(i).m_GCPCol;
   //   imagePoint[1] = this->GetSlaveInput()->GetGCPs(i).m_GCPRow;
     
-  //   transform->AddOutputTiePoint(imagePoint,groundPointWGS84);
+  //   transform->AddOutputTiePoint(imagePoint, groundPointWGS84);
   //   transform->OptimizeOutputTransformOn();
   //   }
 
@@ -385,9 +385,9 @@ StereoSensorModelToElevationFilter<TInputImage,TOutputHeight>
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   // Define an iterator on the output elevation map
-  itk::ConstNeighborhoodIterator<InputImageType> inputIt(m_Radius, masterPtr,outputRegionForThread);
-  itk::ImageRegionIterator<OutputImageType> outputIt(outputPtr,outputRegionForThread);
-  itk::ImageRegionIteratorWithIndex<OutputImageType> correlIt(correlPtr,outputRegionForThread);
+  itk::ConstNeighborhoodIterator<InputImageType> inputIt(m_Radius, masterPtr, outputRegionForThread);
+  itk::ImageRegionIterator<OutputImageType> outputIt(outputPtr, outputRegionForThread);
+  itk::ImageRegionIteratorWithIndex<OutputImageType> correlIt(correlPtr, outputRegionForThread);
   
   // Transform elevation set-up
   transform->SetAverageElevation(0.);
@@ -403,8 +403,8 @@ StereoSensorModelToElevationFilter<TInputImage,TOutputHeight>
   while(!outputIt.IsAtEnd() && ! inputIt.IsAtEnd())
     {
     // Define some loop variables
-    typename InputImageType::PointType inPoint,outPoint, currentPoint, optimalPoint;
-    typename GenericRSTransform3DType::InputPointType in3DPoint,out3DPoint;
+    typename InputImageType::PointType inPoint, outPoint, currentPoint, optimalPoint;
+    typename GenericRSTransform3DType::InputPointType in3DPoint, out3DPoint;
     typename InputImageType::IndexType index;
 
     // Retrieve intial height
@@ -423,7 +423,7 @@ StereoSensorModelToElevationFilter<TInputImage,TOutputHeight>
       double masterVariance = 0;
 
       // Fill master patch
-      for(unsigned int i = 0; i < inputIt.Size();++i)
+      for(unsigned int i = 0; i < inputIt.Size(); ++i)
         {
         // Add to the master vector
         master.push_back(inputIt.GetPixel(i));
@@ -436,7 +436,7 @@ StereoSensorModelToElevationFilter<TInputImage,TOutputHeight>
       masterSum/=inputIt.Size();
 
       // Complete pooled variance computation
-      for(unsigned int i = 0; i < inputIt.Size();++i)
+      for(unsigned int i = 0; i < inputIt.Size(); ++i)
         {
         masterVariance += (master[i] -masterSum)*(master[i] - masterSum);
         }
@@ -444,21 +444,21 @@ StereoSensorModelToElevationFilter<TInputImage,TOutputHeight>
 
       // Check for high enough variance so that correlation will be reliable
       if(masterVariance > m_VarianceThreshold)
-        {        
+        {
         // Explore candidate heights
         for(double height = initHeight+m_LowerElevation; height < initHeight+m_HigherElevation; height+=m_ElevationStep)
-          {          
+          {
           // This will hold slave patch
           std::vector<double> slave;
           
           // Interpolate slave patch
-          for(unsigned int i = 0; i < inputIt.Size();++i)
+          for(unsigned int i = 0; i < inputIt.Size(); ++i)
             {
             // Retrieve the current index
             index = inputIt.GetIndex(i);
             
             // Retrieve master physical point
-            masterPtr->TransformIndexToPhysicalPoint(index,inPoint);
+            masterPtr->TransformIndexToPhysicalPoint(index, inPoint);
             in3DPoint[0] = inPoint[0];
             in3DPoint[1] = inPoint[1];
             in3DPoint[2] = height;
@@ -483,7 +483,7 @@ StereoSensorModelToElevationFilter<TInputImage,TOutputHeight>
 
           // Now that we have the master and slave patches, call the
           // correlation function
-          double correlationValue = this->Correlation(master,slave);
+          double correlationValue = this->Correlation(master, slave);
           
           // Check if a better correlation was found
           if(correlationValue > optimalCorrelation)
@@ -491,8 +491,8 @@ StereoSensorModelToElevationFilter<TInputImage,TOutputHeight>
             // If found, update values
             optimalCorrelation = correlationValue;
             optimalHeight = height;
-            }          
-          } 
+            }
+          }
         }
         // TODO: refinenement step ?
       }
@@ -529,7 +529,7 @@ StereoSensorModelToElevationFilter<TInputImage,TOutputHeight>
 
 template <class TInputImage, class TOutputHeight>
 double
-StereoSensorModelToElevationFilter<TInputImage,TOutputHeight>
+StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
 ::Correlation(const std::vector<double> & master, const std::vector<double>& slave) const
 {
   double meanSlave = 0;
@@ -537,7 +537,7 @@ StereoSensorModelToElevationFilter<TInputImage,TOutputHeight>
   double correlationValue = 0;
 
   // Compute means
-  for(unsigned int i = 0; i < master.size();++i)
+  for(unsigned int i = 0; i < master.size(); ++i)
     {
     meanSlave+=slave[i];
     meanMaster+=master[i];
@@ -550,7 +550,7 @@ StereoSensorModelToElevationFilter<TInputImage,TOutputHeight>
   double squareSumSlave = 0.;
 
   // Compute correlation
-  for(unsigned int i = 0; i < master.size();++i)
+  for(unsigned int i = 0; i < master.size(); ++i)
     {
     crossProd+=(slave[i]-meanSlave)*(master[i]-meanMaster);
     squareSumSlave+=(slave[i]-meanSlave)*(slave[i]-meanSlave);

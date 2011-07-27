@@ -30,16 +30,16 @@
 #include "itkDiscreteGaussianImageFilter.h"
 #include "itkMedianImageFilter.h"
 
-typedef otb::Image<short,2> ImageType;
-typedef otb::Image<float,2> HeightImageType;
+typedef otb::Image<short, 2> ImageType;
+typedef otb::Image<float, 2> HeightImageType;
 typedef otb::ImageFileReader<ImageType> ReaderType;
-typedef itk::DiscreteGaussianImageFilter<ImageType,ImageType> GaussianFilterType;
+typedef itk::DiscreteGaussianImageFilter<ImageType, ImageType> GaussianFilterType;
 typedef otb::ImageFileWriter<ImageType> SingleWriterType;
-typedef otb::StereoSensorModelToElevationFilter<ImageType,HeightImageType> StereoFilterType;
-typedef otb::VectorImage<float,2> VectorImageType;
+typedef otb::StereoSensorModelToElevationFilter<ImageType, HeightImageType> StereoFilterType;
+typedef otb::VectorImage<float, 2> VectorImageType;
 typedef otb::ImageList<HeightImageType> ImageListType;
-typedef otb::ImageListToVectorImageFilter<ImageListType,VectorImageType> IL2VIFilterType;
-typedef itk::MedianImageFilter<HeightImageType,HeightImageType> MedianFilterType;
+typedef otb::ImageListToVectorImageFilter<ImageListType, VectorImageType> IL2VIFilterType;
+typedef itk::MedianImageFilter<HeightImageType, HeightImageType> MedianFilterType;
 typedef otb::ImageFileWriter<HeightImageType> WriterType;
 
 
@@ -66,7 +66,7 @@ int otbStereoSensorModelToElevationMapFilter( int argc, char * argv[] )
 
   GaussianFilterType::Pointer gaussian1 = GaussianFilterType::New();
   gaussian1->SetInput(masterReader->GetOutput());
-  gaussian1->SetVariance(sigma);          
+  gaussian1->SetVariance(sigma);
 
   GaussianFilterType::Pointer gaussian2 = GaussianFilterType::New();
   gaussian2->SetInput(slaveReader->GetOutput());

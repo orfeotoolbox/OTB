@@ -29,10 +29,10 @@ namespace otb
 /**
  * \class StereoSensorModelToElevationFilter
  * \brief Using sensor models to perform correlation along epipolars
- * 
+ *
  * This filter uses a pair of stereo images along-track to build an elevation
  * map.
- * 
+ *
  * Images are not resampled to epipolar geometry. Instead, for each
  * patch of the master image, corresponding patches are interpolated
  * in the slave image according to a range of candidate
@@ -42,7 +42,7 @@ namespace otb
  * not necesseraly aligned with slave image boundary). The elevation
  * achieving the higher correlation is kept in the final elevation
  * map.
- * 
+ *
  * Setting-up the elevation exploration range is simple : the
  * LowerElevation and HigherElevation parameters allows to set the
  * exploration range offsets with respect to the local elevation, and
@@ -64,25 +64,25 @@ namespace otb
  *   variance is too small to yeld reliable correlation. If the
  *   variance of the current master patch lies bellow this threshold, no
  *   elevation exploration is performed at this location (default is 4).
- *   
+ *
  *   This filter supports multi-threading and streaming. It can
  *   process images of any size and does not requires input images
  *   size to match. If images extents do not match, elevation will
  *   only be estimated over their overlapping extent. The elevation
  *   map is produced in the geometry and grid of the master input
  *   image.
- * 
+ *
  *   \ingroup Streamed
  *   \ingroup Threaded
  */
 template <class TInputImage, class TOutputHeight>
 class ITK_EXPORT StereoSensorModelToElevationFilter
-  : public itk::ImageToImageFilter<TInputImage,TOutputHeight>
+  : public itk::ImageToImageFilter<TInputImage, TOutputHeight>
 {
 public:
   /** Standard class typedefs */
   typedef StereoSensorModelToElevationFilter                 Self;
-  typedef itk::ImageToImageFilter<TInputImage,TOutputHeight> Superclass;
+  typedef itk::ImageToImageFilter<TInputImage, TOutputHeight> Superclass;
   typedef itk::SmartPointer<Self>                            Pointer;
   typedef itk::SmartPointer<const Self>                      ConstPointer;
 
@@ -103,9 +103,9 @@ public:
   typedef itk::InterpolateImageFunction<TInputImage, double> InterpolatorType;
   typedef typename InterpolatorType::Pointer                 InterpolatorPointerType;
   typedef otb::GenericRSTransform<>                          GenericRSTransformType;
-  typedef otb::GenericRSTransform<double,3,3>                GenericRSTransform3DType;
+  typedef otb::GenericRSTransform<double, 3, 3>                GenericRSTransform3DType;
   typedef itk::NormalizedCorrelationImageToImageMetric
-    <TInputImage,TInputImage>                                CorrelationMetricType;
+    <TInputImage, TInputImage>                                CorrelationMetricType;
   typedef typename InputImageType::SizeType                  RadiusType;
   typedef otb::DEMHandler                                    DEMHandlerType;
   
@@ -139,12 +139,12 @@ public:
   /** Set the use DEM flag. If set to true, the local elevation is
    *  extracted from a DEM + geoid. If set to false, average elevation
    *  is used. Default is false. */
-  itkSetMacro(UseDEM,bool);
+  itkSetMacro(UseDEM, bool);
 
   /** Get the use DEM flag. If set to true, the local elevation is
    *  extracted from a DEM + geoid. If set to false, average elevation
    *  is used. Default is false. */
-  itkGetMacro(UseDEM,bool);
+  itkGetMacro(UseDEM, bool);
 
   /** Toggle the use DEM flag. If set to true, the local elevation is
    *  extracted from a DEM + geoid. If set to false, average elevation
@@ -153,58 +153,58 @@ public:
 
   /** Set the average elevation to consider if no DEM is used. Default
    *  is 0.
-   */ 
-  itkSetMacro(AverageElevation,double);
+   */
+  itkSetMacro(AverageElevation, double);
 
   /** Get the average elevation to consider if no DEM is used. Default
    *  is 0.
-   */ 
-  itkGetMacro(AverageElevation,double);
+   */
+  itkGetMacro(AverageElevation, double);
 
   /** Set the lower offset for the local elevation
    * exploration. Default is -20 meters.
    */
-  itkSetMacro(LowerElevation,double);
+  itkSetMacro(LowerElevation, double);
 
   /** Set the lower offset for the local elevation
    * exploration. Default is 20 meters.
    */
-  itkSetMacro(HigherElevation,double);
+  itkSetMacro(HigherElevation, double);
  
   /** Set the step of the elevation exploration. Default is 1 meters. */
-  itkSetMacro(ElevationStep,double);
+  itkSetMacro(ElevationStep, double);
 
   /** Set the threshold of the correlation to keep estimated
-   *  height. Default is 0.7. 
+   *  height. Default is 0.7.
    */
-  itkSetMacro(CorrelationThreshold,double);
+  itkSetMacro(CorrelationThreshold, double);
 
   /** Get the threshold of the correlation to keep estimated
-   *  height. Default is 0.7. 
+   *  height. Default is 0.7.
    */
-  itkGetMacro(CorrelationThreshold,double);
+  itkGetMacro(CorrelationThreshold, double);
 
   /** Set the threshold on the variance of the master patch to start
    *  elevation estimation.  Default is 4.
-   */ 
-  itkSetMacro(VarianceThreshold,double);
+   */
+  itkSetMacro(VarianceThreshold, double);
 
   /** Set the threshold on the variance of the master patch to start
    *  elevation estimation.  Default is 4.
-   */ 
-  itkGetMacro(VarianceThreshold,double);
+   */
+  itkGetMacro(VarianceThreshold, double);
 
   /** Set the SubtractInitialElevation flag. If set to true, the
    *  elevation map will only contains the difference between the
    *  estimated elevation and the initial one. If set to false,
    *  elevation is absolute. Default is false. */
-  itkSetMacro(SubtractInitialElevation,bool);
+  itkSetMacro(SubtractInitialElevation, bool);
 
   /** Get the SubtractInitialElevation flag. If set to true, the
    *  elevation map will only contains the difference between the
    *  estimated elevation and the initial one. If set to false,
    *  elevation is absolute. Default is false. */
-  itkGetMacro(SubtractInitialElevation,bool);
+  itkGetMacro(SubtractInitialElevation, bool);
 
   /** Toggle the SubtractInitialElevation flag. If set to true, the
    *  elevation map will only contains the difference between the
@@ -227,7 +227,7 @@ protected:
   ~StereoSensorModelToElevationFilter();
 
   /** Threaded generate data */
-  virtual void ThreadedGenerateData(const OutputRegionType& outputRegionForThread, 
+  virtual void ThreadedGenerateData(const OutputRegionType& outputRegionForThread,
                                     int threadId);
 
   /** Generate the input requested regions  */
@@ -240,7 +240,7 @@ private:
   StereoSensorModelToElevationFilter(const Self&); // purposely not implemented
   void operator=(const Self&); // purposely not implemented
 
-  inline double Correlation(const std::vector<double> & master, 
+  inline double Correlation(const std::vector<double> & master,
                             const std::vector<double>& slave) const;
 
   /** Interpolator for slave image */

@@ -200,7 +200,6 @@ int main(int argc, char *argv[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   for (unsigned int i = 0; i < sail->GetViewingReflectance()->Size(); ++i)
     {
     std::cout << "wavelength  : ";
