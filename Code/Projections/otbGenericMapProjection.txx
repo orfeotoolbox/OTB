@@ -104,7 +104,7 @@ GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutput
 
     double x, y, z;
     double h = 0.0;
-    if (InputPointType::PointDimension == 3) h = point[3];
+    if (InputPointType::PointDimension == 3) h = point[2];
     m_MapProjection->ForwardTransform(point[0], point[1], h, x, y, z);
     outputPoint[0] = x;
     outputPoint[1] = y;
