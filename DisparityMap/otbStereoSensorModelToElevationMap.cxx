@@ -90,7 +90,7 @@ int StereoSensorModelToElevationMap::Describe(ApplicationDescriptor* descriptor)
   descriptor->AddOption("SecondaryGaussianSmoothing","(optional) Perform a gaussian smoothing of the secondary image. Parameter is gaussian sigma (in pixels). Default is no smoothing.",
                         "sgs", 1, false, ApplicationDescriptor::Real);
 
-  descriptor->AddOption("SubstractInitialHeight","If activated, the elevation map will contain only the estimated height offset from the initial height (either average elevation or DEM)","s",0,false,ApplicationDescriptor::Boolean);
+  descriptor->AddOption("SubtractInitialHeight","If activated, the elevation map will contain only the estimated height offset from the initial height (either average elevation or DEM)","s",0,false,ApplicationDescriptor::Boolean);
 
   descriptor->AddOption("AvailableMemory","Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default)","ram", 1, false, otb::ApplicationDescriptor::Integer);
 
