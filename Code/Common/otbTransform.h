@@ -191,7 +191,7 @@ protected:
   {}
 
   Transform(unsigned int Dimension, unsigned int NumberOfParameters)
-    : Superclass::Transform(Dimension,NumberOfParameters)
+    : Superclass::Transform(Dimension, NumberOfParameters)
   {}
 
   virtual ~Transform() {}
