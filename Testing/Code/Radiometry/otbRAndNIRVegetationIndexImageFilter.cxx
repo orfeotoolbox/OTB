@@ -57,7 +57,7 @@ int generic_RAndNIRVegetationIndexImageFilter(int argc, char * argv[])
 int otbRAndNIRVegetationIndexImageFilter(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef unsigned char                    PixelType;
+  typedef double                   PixelType;
   typedef otb::Image<PixelType, Dimension> InputRImageType;
   typedef otb::Image<PixelType, Dimension> InputNIRImageType;
   typedef otb::Image<double, Dimension>    OutputImageType;

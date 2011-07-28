@@ -56,7 +56,7 @@ int generic_MultiChannelRAndNIRVegetationIndexImageFilter(int argc, char * argv[
 int otbMultiChannelRAndNIRVegetationIndexImageFilter(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef otb::VectorImage<unsigned char, Dimension> InputImageType;
+  typedef otb::VectorImage<double, Dimension> InputImageType;
   typedef otb::Image<double, Dimension>              OutputImageType;
 
   std::string strArgv(argv[1]);
