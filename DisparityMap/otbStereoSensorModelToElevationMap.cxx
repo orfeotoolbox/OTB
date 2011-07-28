@@ -135,7 +135,7 @@ int StereoSensorModelToElevationMap::Execute(otb::ApplicationOptionsResult* pars
     minHeightOffset = parseResult->GetParameterDouble("MinHeightOffset");
     }
 
-  std::cout<<"Minimum height offset:\t"<<minHeightOffset<<std::endl;
+  std::cout<<"Minimum height offset:\t"<<minHeightOffset<<" meters"<<std::endl;
 
   double maxHeightOffset = 20;
 
@@ -144,17 +144,17 @@ int StereoSensorModelToElevationMap::Execute(otb::ApplicationOptionsResult* pars
     maxHeightOffset = parseResult->GetParameterDouble("MaxHeightOffset");
     }
 
-  std::cout<<"Maximum height offset:\t"<<maxHeightOffset<<std::endl;
+  std::cout<<"Maximum height offset:\t"<<maxHeightOffset<<" meters"<<std::endl;
 
 
-  double heightStep = 20;
+  double heightStep = 1.;
 
   if(parseResult->IsOptionPresent("HeightStep"))
     {
     heightStep = parseResult->GetParameterDouble("HeightStep");
     }
 
-  std::cout<<"Height step:\t"<<heightStep<<std::endl;
+  std::cout<<"Height step:\t"<<heightStep<<" meters"<<std::endl;
 
   bool referenceSmoothing = false;
   double referenceSigma = 1.;
@@ -227,7 +227,7 @@ int StereoSensorModelToElevationMap::Execute(otb::ApplicationOptionsResult* pars
     }
   else
     {
-    std::cout<<"Initial elevation is constant and equal to "<<averageElevation<<std::endl;
+    std::cout<<"Initial elevation is constant and equal to "<<averageElevation<<" meters"<<std::endl;
     }
 
   bool subtractInitialHeight = parseResult->IsOptionPresent("SubtractInitialHeight");
@@ -263,7 +263,7 @@ int StereoSensorModelToElevationMap::Execute(otb::ApplicationOptionsResult* pars
   gaussian2->SetVariance(sigma2);
 
   StereoFilterType::Pointer stereoFilter = StereoFilterType::New();
-
+  
   if(referenceSmoothing)
     {
     stereoFilter->SetMasterInput(gaussian1->GetOutput());
