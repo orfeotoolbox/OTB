@@ -119,11 +119,10 @@ public:
   /**  Check Expression **/
   bool CheckExpr()
   {
-    Parser::ValueType result = 0.0;
 
     try
     {
-      result = m_MuParser.Eval();
+      m_MuParser.Eval();
     }
    catch(ExceptionType &e)
     {
