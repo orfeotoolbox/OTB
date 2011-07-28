@@ -123,6 +123,7 @@ int MultiResolutionPyramid::Execute(otb::ApplicationOptionsResult* parseResult)
     WriterType::Pointer writer = WriterType::New();
     writer->SetInput(shrinkFilter->GetOutput());
     writer->SetFileName(oss.str().c_str());
+    writer->WriteGeomFileOn();
 
     unsigned int ram = 256;
     if (parseResult->IsOptionPresent("AvailableMemory"))
