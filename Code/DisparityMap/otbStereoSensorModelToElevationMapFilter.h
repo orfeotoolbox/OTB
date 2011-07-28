@@ -102,13 +102,12 @@ public:
 
   typedef itk::InterpolateImageFunction<TInputImage, double> InterpolatorType;
   typedef typename InterpolatorType::Pointer                 InterpolatorPointerType;
-  typedef otb::GenericRSTransform<>                          GenericRSTransformType;
-  typedef otb::GenericRSTransform<double, 3, 3>                GenericRSTransform3DType;
+  typedef GenericRSTransform<>                               GenericRSTransformType;
+  typedef GenericRSTransform<double, 3, 3>                   GenericRSTransform3DType;
   typedef itk::NormalizedCorrelationImageToImageMetric
-    <TInputImage, TInputImage>                                CorrelationMetricType;
+    <TInputImage, TInputImage>                               CorrelationMetricType;
   typedef typename InputImageType::SizeType                  RadiusType;
-  typedef otb::DEMHandler                                    DEMHandlerType;
-  
+
   /** Set the master input image */
   void SetMasterInput(const TInputImage * image);
 
@@ -126,7 +125,7 @@ public:
 
   /** Set the directory containing the DEM tiles */
   itkSetStringMacro(DEMDirectory);
-  
+
   /** Get the directory containing the DEM tiles */
   itkGetStringMacro(DEMDirectory);
 
@@ -170,7 +169,7 @@ public:
    * exploration. Default is 20 meters.
    */
   itkSetMacro(HigherElevation, double);
- 
+
   /** Set the step of the elevation exploration. Default is 1 meters. */
   itkSetMacro(ElevationStep, double);
 
@@ -224,7 +223,7 @@ protected:
   StereoSensorModelToElevationFilter();
 
   /** Destructor */
-  ~StereoSensorModelToElevationFilter();
+  virtual ~StereoSensorModelToElevationFilter();
 
   /** Threaded generate data */
   virtual void ThreadedGenerateData(const OutputRegionType& outputRegionForThread,
@@ -240,7 +239,7 @@ private:
   StereoSensorModelToElevationFilter(const Self&); // purposely not implemented
   void operator=(const Self&); // purposely not implemented
 
-  inline double Correlation(const std::vector<double> & master,
+  inline double Correlation(const std::vector<double>& master,
                             const std::vector<double>& slave) const;
 
   /** Interpolator for slave image */
@@ -254,7 +253,7 @@ private:
 
   /** Higher offset for the local elevation exploration. */
   double  m_HigherElevation;
-  
+
   /** Step of the elevation exploration. */
   double  m_ElevationStep;
 
