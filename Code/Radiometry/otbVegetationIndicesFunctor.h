@@ -1402,6 +1402,12 @@ private:
  *   a*(exp(nir-red)/((red+nir)*b)-exp(c*b));
  *   with a = 0.1519 b = 3.9443 c = 0.13
  *  this formula is only valid for Formosat 2 reflectance TOC
+ *
+ *  This relationship have been presented by :
+ *  M. Claverie, V. Demarez, B. Duchemin,
+ *  Spatialization of crop leaf area index and biomass by combining a simple crop model
+ *  safy and high spatial and temporal resolutions remote sensing data.
+ *
  *  \ingroup Functor
  * \ingroup Radiometry
   */
