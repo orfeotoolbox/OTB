@@ -524,7 +524,7 @@ StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
       }
     else
       {
-      outputIt.Set(finalOffset);
+      outputIt.Set(initHeight - finalOffset);
       correlIt.Set(0);
       }
 
