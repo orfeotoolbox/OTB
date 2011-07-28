@@ -296,8 +296,12 @@ int StereoSensorModelToElevationMap::Execute(otb::ApplicationOptionsResult* pars
     stereoFilter->SetAverageElevation(averageElevation);
     }
   
+  stereoFilter->SetSubtractInitialElevation(subtractInitialHeight);
+
   stereoFilter->SetLowerElevation(minHeightOffset);
   stereoFilter->SetHigherElevation(maxHeightOffset);
+  stereoFilter->SetCorrelationThreshold(correlationThreshold);
+  stereoFilter->SetVarianceThreshold(varianceThreshold);
   stereoFilter->SetElevationStep(heightStep);
   stereoFilter->SetRadius(radius);
 
