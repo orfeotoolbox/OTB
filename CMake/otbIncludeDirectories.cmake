@@ -304,6 +304,7 @@ SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
   Fusion
   GeospatialAnalysis
   Hyperspectral
+  Simulation
   Testing
   UtilitiesAdapters/CurlAdapters
   UtilitiesAdapters/OssimAdapters
