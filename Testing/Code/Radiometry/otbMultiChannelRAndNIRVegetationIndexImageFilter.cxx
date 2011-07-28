@@ -118,6 +118,12 @@ int otbMultiChannelRAndNIRVegetationIndexImageFilter(int argc, char * argv[])
                     InputImageType::InternalPixelType,
                     OutputImageType::PixelType> >
               (argc, argv));
+  else if (strArgv == "LAIFormosat2")
+      return (generic_MultiChannelRAndNIRVegetationIndexImageFilter<InputImageType, OutputImageType,
+                  otb::Functor::LAIFromNDVIFormosat2Functor<InputImageType::InternalPixelType,
+                      InputImageType::InternalPixelType,
+                      OutputImageType::PixelType> >
+                (argc, argv));
   else return EXIT_FAILURE;
   return EXIT_SUCCESS;
 }

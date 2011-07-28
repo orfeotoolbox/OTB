@@ -119,6 +119,12 @@ int otbRAndNIRVegetationIndexImageFilter(int argc, char * argv[])
                     InputNIRImageType::PixelType,
                     OutputImageType::PixelType> >
               (argc, argv));
+  else if (strArgv == "LAIFormosat2")
+      return (generic_RAndNIRVegetationIndexImageFilter<InputRImageType, InputNIRImageType, OutputImageType,
+                  otb::Functor::LAIFromNDVIFormosat2Functor<InputRImageType::PixelType,
+                      InputNIRImageType::PixelType,
+                      OutputImageType::PixelType> >
+                (argc, argv));
   else return EXIT_FAILURE;
   return EXIT_SUCCESS;
 }

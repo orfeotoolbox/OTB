@@ -17,6 +17,7 @@ SET(EPSILON_6  0.000001)
 SET(EPSILON_8  0.00000001)
 SET(EPSILON_10 0.0000000001)
 SET(EPSILON_12 0.000000000001)
+SET(RADIOMETRY_TESTS1 ${CXX_TEST_PATH}/otbRadiometryTests1)
 SET(RADIOMETRY_TESTS2 ${CXX_TEST_PATH}/otbRadiometryTests2)
 SET(RADIOMETRY_TESTS3 ${CXX_TEST_PATH}/otbRadiometryTests3)
 SET(RADIOMETRY_TESTS4 ${CXX_TEST_PATH}/otbRadiometryTests4)
@@ -26,6 +27,18 @@ SET(RADIOMETRY_TESTS7 ${CXX_TEST_PATH}/otbRadiometryTests7)
 SET(RADIOMETRY_TESTS8 ${CXX_TEST_PATH}/otbRadiometryTests8)
 SET(RADIOMETRY_TESTS9 ${CXX_TEST_PATH}/otbRadiometryTests9)
 SET(RADIOMETRY_TESTS10 ${CXX_TEST_PATH}/otbRadiometryTests10)
+
+
+ADD_TEST(raTvLAIFromNDVIFormosat2_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}
+  --compare-image ${EPSILON_12}   ${BASELINE}/raRAndNIRVegetationIndex_LAIFromNDVIFormosat2_verySmallFSATSWcRcNir.tif
+                    ${TEMP}/raMultiChannelRAndNIRVegetationIndex_LAIFromNDVIFormosat2_verySmallFSATSWcRcNir.tif
+        otbMultiChannelRAndNIRVegetationIndexImageFilter
+        LAIFormosat2    
+        ${INPUTDATA}/verySmallFSATSW.tif
+        ${TEMP}/raMultiChannelRAndNIRVegetationIndex_LAIFromNDVIFormosat2_verySmallFSATSWcRcNir.tif
+        1
+        4
+)
 
 
 
@@ -744,6 +757,18 @@ ADD_TEST(raTvTSAVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS5}
         ${TEMP}/raRAndNIRVegetationIndex_TSAVI_verySmallFSATSWcRcNir.tif
 )
 
+# -------            LAIFromNDVIFormosat2 RAndNIRVegetationIndexImageFilter   ------------------------------
+
+ADD_TEST(raTvLAIFromNDVIFormosat2_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS5}
+  --compare-image ${NOTOL}   ${BASELINE}/raRAndNIRVegetationIndex_LAIFromNDVIFormosat2_verySmallFSATSWcRcNir.tif
+                    ${TEMP}/raRAndNIRVegetationIndex_LAIFromNDVIFormosat2_verySmallFSATSWcRcNir.tif
+        otbRAndNIRVegetationIndexImageFilter
+        LAIFormosat2
+    ${INPUTDATA}/verySmallFSATSW_r.tif
+    ${INPUTDATA}/verySmallFSATSW_nir.tif
+    ${TEMP}/raRAndNIRVegetationIndex_LAIFromNDVIFormosat2_verySmallFSATSWcRcNir.tif
+    )
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbRADIOMETRY_TESTS6 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -852,6 +877,7 @@ ADD_TEST(raTvLAIFromReflectancesLinearFunctorTest ${RADIOMETRY_TESTS6}
         -18   # red coef
         13   # nir coef
 )
+
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
