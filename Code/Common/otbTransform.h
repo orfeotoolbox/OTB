@@ -187,15 +187,11 @@ public:
   { return this->m_Parameters.Size(); }
 
 protected:
-  Transform(): m_Parameters(1),
-               m_FixedParameters(1),
-               m_Jacobian(NOutputDimensions, 1)
+  Transform(): Superclass::Transform()
   {}
 
-  Transform(unsigned int Dimension, unsigned int NumberOfParameters):
-    m_Parameters(NumberOfParameters),
-    m_FixedParameters(NumberOfParameters),
-    m_Jacobian(Dimension, NumberOfParameters)
+  Transform(unsigned int Dimension, unsigned int NumberOfParameters)
+    : Superclass::Transform(Dimension,NumberOfParameters)
   {}
 
   virtual ~Transform() {}
