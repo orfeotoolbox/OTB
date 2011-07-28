@@ -1396,6 +1396,58 @@ private:
 };
 
 
+/** \class LAIFromNDVIFormosat2Functor
+ *
+ * \brief use red and nir image band to compute LAI image using formula
+ *   a*(exp(nir-red)/((red+nir)*b)-exp(c*b));
+ *   with a = 0.1519 b = 3.9443 c = 0.13
+ *  this formula is only valid for Formosat 2 reflectance TOC
+ *  \ingroup Functor
+ * \ingroup Radiometry
+  */
+
+
+  template <class TInput1, class TInput2, class TOutput>
+  class LAIFromNDVIFormosat2Functor : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
+  {
+  public:
+
+    /** Return the index name */
+    virtual std::string GetName() const
+    {
+      return "LAIFromNDVIFormosat2Functor";
+    }
+
+    /// Constructor
+    LAIFromNDVIFormosat2Functor() {}
+    /// Desctructor
+    virtual ~LAIFromNDVIFormosat2Functor() {}
+    // Operator on r and nir single pixel values
+  protected:
+    inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const
+    {
+    double a = 0.1519;
+    double b = 3.9443;
+    double c = 0.13;
+
+      double dr = static_cast<double>(r);
+      double dnir = static_cast<double>(nir);
+      if (vcl_abs(dnir + dr) < this->m_EpsilonToBeConsideredAsZero)
+        {
+        return static_cast<TOutput>(0.);
+        }
+
+      return  a*(vcl_exp(static_cast<TOutput>(dnir-dr)/static_cast<double>(dr+dnir)*b)-vcl_exp(c*b));
+    };
+
+
+
+};
+
+
+
+
+
 } // namespace Functor
 } // namespace otb
 
