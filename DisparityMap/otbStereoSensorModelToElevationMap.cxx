@@ -34,14 +34,14 @@
 namespace otb
 {
 
-typedef otb::Image<short,2> ImageType;
-typedef otb::Image<float,2> HeightImageType;
+typedef otb::Image<short, 2> ImageType;
+typedef otb::Image<float, 2> HeightImageType;
 typedef otb::ImageFileReader<ImageType> ReaderType;
-typedef itk::DiscreteGaussianImageFilter<ImageType,ImageType> GaussianFilterType;
-typedef otb::StereoSensorModelToElevationFilter<ImageType,HeightImageType> StereoFilterType;
-typedef otb::VectorImage<float,2> VectorImageType;
+typedef itk::DiscreteGaussianImageFilter<ImageType, ImageType> GaussianFilterType;
+typedef otb::StereoSensorModelToElevationFilter<ImageType, HeightImageType> StereoFilterType;
+typedef otb::VectorImage<float, 2> VectorImageType;
 typedef otb::ImageList<HeightImageType> ImageListType;
-typedef otb::ImageListToVectorImageFilter<ImageListType,VectorImageType> IL2VIFilterType;
+typedef otb::ImageListToVectorImageFilter<ImageListType, VectorImageType> IL2VIFilterType;
 typedef otb::StreamingImageFileWriter<VectorImageType> WriterType;
 
 int StereoSensorModelToElevationMap::Describe(ApplicationDescriptor* descriptor)
@@ -82,7 +82,7 @@ int StereoSensorModelToElevationMap::Describe(ApplicationDescriptor* descriptor)
 
   descriptor->AddOption("DEMDirectory","Use DEM tiles to derive initial height values (AverageElevation option is ignored in this case)","dem", 1, false, ApplicationDescriptor::String);
 
-  descriptor->AddOption("GeoidFile","Use a geoid file along with the DEM tiles","geoid",1,false, ApplicationDescriptor::String);
+  descriptor->AddOption("GeoidFile","Use a geoid file along with the DEM tiles","geoid", 1, false, ApplicationDescriptor::String);
 
   descriptor->AddOption("ReferenceGaussianSmoothing","(optional) Perform a gaussian smoothing of the reference image. Parameter is gaussian sigma (in pixels). Default is no smoothing.",
                         "rgs", 1, false, ApplicationDescriptor::Real);
@@ -90,7 +90,7 @@ int StereoSensorModelToElevationMap::Describe(ApplicationDescriptor* descriptor)
   descriptor->AddOption("SecondaryGaussianSmoothing","(optional) Perform a gaussian smoothing of the secondary image. Parameter is gaussian sigma (in pixels). Default is no smoothing.",
                         "sgs", 1, false, ApplicationDescriptor::Real);
 
-  descriptor->AddOption("SubtractInitialHeight","If activated, the elevation map will contain only the estimated height offset from the initial height (either average elevation or DEM)","s",0,false,ApplicationDescriptor::Boolean);
+  descriptor->AddOption("SubtractInitialHeight","If activated, the elevation map will contain only the estimated height offset from the initial height (either average elevation or DEM)","s", 0, false, ApplicationDescriptor::Boolean);
 
   descriptor->AddOption("AvailableMemory","Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default)","ram", 1, false, otb::ApplicationDescriptor::Integer);
 
@@ -256,7 +256,7 @@ int StereoSensorModelToElevationMap::Execute(otb::ApplicationOptionsResult* pars
 
   GaussianFilterType::Pointer gaussian1 = GaussianFilterType::New();
   gaussian1->SetInput(masterReader->GetOutput());
-  gaussian1->SetVariance(sigma1);          
+  gaussian1->SetVariance(sigma1);
 
   GaussianFilterType::Pointer gaussian2 = GaussianFilterType::New();
   gaussian2->SetInput(slaveReader->GetOutput());
@@ -315,7 +315,7 @@ int StereoSensorModelToElevationMap::Execute(otb::ApplicationOptionsResult* pars
 
   WriterType::Pointer writer = WriterType::New();
   
-  otb::StandardWriterWatcher watcher(writer,stereoFilter,"Performing stereo-matching");
+  otb::StandardWriterWatcher watcher(writer, stereoFilter,"Performing stereo-matching");
 
   writer->SetInput(il2vi->GetOutput());
   writer->SetFileName(outFileName);
