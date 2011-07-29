@@ -112,7 +112,7 @@ private:
  *
  * It can be used as a simple way to unmix an hyperspectral dataset,
  * where \f$A\f$ is the matrix in which each row corresponds to an endmember signature,
- * although better algorithm can be found for this particular task.
+ * although better algorithms can be found for this particular task.
  *
  * The number of rows in \f$A\f$ must match the input image number of bands.
  * The number of bands in the output image will be the number of columns of \f$A\f$

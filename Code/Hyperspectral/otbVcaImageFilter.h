@@ -58,6 +58,8 @@ namespace otb {
  * IEEE Transactions on Geoscience and Remote Sensing, Vol. 43, No. 4, April 2005
  *
  * \ingroup Hyperspectral
+ * \ingroup Streamed
+ * \ingroup Threaded
  */
 template <class TVectorImage>
 class ITK_EXPORT VCAImageFilter : public itk::ImageToImageFilter<TVectorImage, TVectorImage>
