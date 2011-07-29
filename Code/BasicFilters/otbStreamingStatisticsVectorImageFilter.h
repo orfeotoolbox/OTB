@@ -89,6 +89,7 @@ public:
   typedef itk::VariableLengthVector<PrecisionType>      RealPixelType;
 
   /** Type of DataObjects used for outputs */
+  typedef itk::SimpleDataObjectDecorator<RealType>      RealObjectType;
   typedef itk::SimpleDataObjectDecorator<IndexType>     IndexObjectType;
   typedef itk::SimpleDataObjectDecorator<PixelType>     PixelObjectType;
   typedef itk::SimpleDataObjectDecorator<RealPixelType> RealPixelObjectType;
@@ -110,7 +111,34 @@ public:
   PixelObjectType* GetMaximumOutput();
   const PixelObjectType* GetMaximumOutput() const;
 
- /** Return the computed Mean. */
+  /** Return the global mean of all the internal pixel values
+   * (flattening the multispectral image as a 1D-vector) */
+  RealType GetComponentMean() const
+  {
+    return this->GetComponentMeanOutput()->Get();
+  }
+  RealObjectType* GetComponentMeanOutput();
+  const RealObjectType* GetComponentMeanOutput() const;
+
+  /** Return the global correlation of all the internal pixel values
+   * (flattening the multispectral image as a 1D-vector) */
+  RealType GetComponentCorrelation() const
+  {
+    return this->GetComponentCorrelationOutput()->Get();
+  }
+  RealObjectType* GetComponentCorrelationOutput();
+  const RealObjectType* GetComponentCorrelationOutput() const;
+
+  /** Return the global covariance of all the internal pixel values
+   * (flattening the multispectral image as a 1D-vector) */
+  RealType GetComponentCovariance() const
+  {
+    return this->GetComponentCovarianceOutput()->Get();
+  }
+  RealObjectType* GetComponentCovarianceOutput();
+  const RealObjectType* GetComponentCovarianceOutput() const;
+
+  /** Return the computed Mean. */
   RealPixelType GetMean() const
   {
     return this->GetMeanOutput()->Get();
@@ -194,6 +222,8 @@ private:
 
   std::vector<PixelType>     m_ThreadMin;
   std::vector<PixelType>     m_ThreadMax;
+  std::vector<RealType>      m_ThreadFirstOrderComponentAccumulators;
+  std::vector<RealType>      m_ThreadSecondOrderComponentAccumulators;
   std::vector<RealPixelType> m_ThreadFirstOrderAccumulators;
   std::vector<MatrixType>    m_ThreadSecondOrderAccumulators;
 
@@ -243,6 +273,7 @@ public:
   /** Type of DataObjects used for outputs */
   typedef typename StatFilterType::PixelType           PixelType;
   typedef typename StatFilterType::RealType            RealType;
+  typedef typename StatFilterType::RealObjectType      RealObjectType;
   typedef typename StatFilterType::RealPixelType       RealPixelType;
   typedef typename StatFilterType::RealPixelObjectType RealPixelObjectType;
   typedef typename StatFilterType::MatrixType          MatrixType;
@@ -339,6 +370,48 @@ public:
   const MatrixObjectType* GetCorrelationOutput() const
   {
     return this->GetFilter()->GetCorrelationOutput();
+  }
+
+  /** Return the computed Mean. */
+  RealType GetComponentMean() const
+  {
+    return this->GetFilter()->GetComponentMeanOutput()->Get();
+  }
+  RealObjectType* GetComponentMeanOutput()
+  {
+    return this->GetFilter()->GetComponentMeanOutput();
+  }
+  const RealObjectType* GetComponentMeanOutput() const
+  {
+    return this->GetFilter()->GetComponentMeanOutput();
+  }
+
+  /** Return the computed Covariance. */
+  RealType GetComponentCovariance() const
+  {
+    return this->GetFilter()->GetComponentCovarianceOutput()->Get();
+  }
+  RealObjectType* GetComponentCovarianceOutput()
+  {
+    return this->GetFilter()->GetComponentCovarianceOutput();
+  }
+  const RealObjectType* GetComponentCovarianceOutput() const
+  {
+    return this->GetFilter()->GetComponentCovarianceOutput();
+  }
+
+  /** Return the computed Covariance. */
+  RealType GetComponentCorrelation() const
+  {
+    return this->GetFilter()->GetComponentCorrelationOutput()->Get();
+  }
+  RealObjectType* GetComponentCorrelationOutput()
+  {
+    return this->GetFilter()->GetComponentCorrelationOutput();
+  }
+  const RealObjectType* GetComponentCorrelationOutput() const
+  {
+    return this->GetFilter()->GetComponentCorrelationOutput();
   }
 
   otbSetObjectMemberMacro(Filter, EnableMinMax, bool);

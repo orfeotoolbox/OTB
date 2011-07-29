@@ -45,7 +45,12 @@ namespace otb {
  * This filter applies the VCA (Vertex Component Analysis) algorithm to a
  * hyperspectral image and outputs the estimated endmembers.
  * The output image of this filter is a one-line VectorImage containing,
- * at each pixel location, one of the estimated endmember
+ * at each pixel location, one of the estimated endmember.
+ *
+ * This code is a C++ port of the Matlab implementation
+ * available in the Matlab Hyperspectral Toolbox.
+ * Most notably it supports streaming and is fully multi-threaded,
+ * so it can be run seamlessly on full hyperspectral scenes.
  *
  * References :
  * "Vertex Component Analysis: A Fast Algorithm to Unmix Hyperspectral Data",
@@ -73,19 +78,19 @@ public:
 
   typedef otb::Image<InternalPixelType>                ImageType;
 
-  typedef itk::AbsImageFilter<ImageType, ImageType>                                           AbsImageFilterType;
+  typedef itk::AbsImageFilter<ImageType, ImageType>                                             AbsImageFilterType;
   typedef otb::ProjectiveProjectionImageFilter<VectorImageType, VectorImageType, PrecisionType> ProjectiveProjectionImageFilterType;
-  typedef otb::DotProductImageFilter<VectorImageType, ImageType>                               DotProductImageFilterType;
-  typedef otb::MatrixImageFilter<VectorImageType, VectorImageType>                             MatrixImageFilterType;
-  typedef otb::VectorImageToMatrixImageFilter<VectorImageType>                                VectorImageToMatrixImageFilterType;
-  typedef otb::StreamingMinMaxImageFilter<ImageType>                                          StreamingMinMaxImageFilterType;
-  typedef otb::StreamingStatisticsVectorImageFilter<VectorImageType, PrecisionType>            StreamingStatisticsVectorImageFilterType;
-  typedef otb::StreamingStatisticsImageFilter<ImageType>                                      StreamingStatisticsImageFilterType;
-  typedef itk::Statistics::MersenneTwisterRandomVariateGenerator                              RandomVariateGeneratorType;
-  typedef otb::PCAImageFilter< VectorImageType, VectorImageType, otb::Transform::FORWARD >    ForwardPCAImageFilterType;
-  typedef otb::PCAImageFilter< VectorImageType, VectorImageType, otb::Transform::INVERSE >    InversePCAImageFilterType;
-  typedef otb::VectorImageToAmplitudeImageFilter< VectorImageType, ImageType >                VectorImageToAmplitudeImageFilterType;
-  typedef otb::ConcatenateScalarValueImageFilter< VectorImageType, VectorImageType >          ConcatenateScalarValueImageFilterType;
+  typedef otb::DotProductImageFilter<VectorImageType, ImageType>                                DotProductImageFilterType;
+  typedef otb::MatrixImageFilter<VectorImageType, VectorImageType>                              MatrixImageFilterType;
+  typedef otb::VectorImageToMatrixImageFilter<VectorImageType>                                  VectorImageToMatrixImageFilterType;
+  typedef otb::StreamingMinMaxImageFilter<ImageType>                                            StreamingMinMaxImageFilterType;
+  typedef otb::StreamingStatisticsVectorImageFilter<VectorImageType, PrecisionType>             StreamingStatisticsVectorImageFilterType;
+  typedef otb::StreamingStatisticsImageFilter<ImageType>                                        StreamingStatisticsImageFilterType;
+  typedef itk::Statistics::MersenneTwisterRandomVariateGenerator                                RandomVariateGeneratorType;
+  typedef otb::PCAImageFilter< VectorImageType, VectorImageType, otb::Transform::FORWARD >      ForwardPCAImageFilterType;
+  typedef otb::PCAImageFilter< VectorImageType, VectorImageType, otb::Transform::INVERSE >      InversePCAImageFilterType;
+  typedef otb::VectorImageToAmplitudeImageFilter< VectorImageType, ImageType >                  VectorImageToAmplitudeImageFilterType;
+  typedef otb::ConcatenateScalarValueImageFilter< VectorImageType, VectorImageType >            ConcatenateScalarValueImageFilterType;
 
   // creation of SmartPointer
   itkNewMacro(Self);

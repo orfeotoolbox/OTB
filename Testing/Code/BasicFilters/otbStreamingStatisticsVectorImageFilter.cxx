@@ -53,7 +53,11 @@ int otbStreamingStatisticsVectorImageFilter(int argc, char * argv[])
   file.precision(5);
   file << "Sum: " << filter->GetSum() << std::endl;
   file << "Mean: " << filter->GetMean() << std::endl;
+  file << "Correlation: " << filter->GetCorrelation() << std::endl;
   file << "Covariance: " << filter->GetCovariance() << std::endl;
+  file << "Component Mean: " << filter->GetComponentMean() << std::endl;
+  file << "Component Correlation: " << filter->GetComponentCorrelation() << std::endl;
+  file << "Component Covariance: " << filter->GetComponentCovariance() << std::endl;
   file.close();
 
   return EXIT_SUCCESS;

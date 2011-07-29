@@ -75,6 +75,8 @@ void VCAImageFilter<TImage>::GenerateOutputInformation()
 template<class TImage>
 void VCAImageFilter<TImage>::GenerateData()
 {
+  typedef typename ForwardPCAImageFilterType::NormalizeFilterType NormalizeFilterType;
+
   VectorImageType* input = const_cast<VectorImageType*>(this->GetInput());
   const unsigned int nbBands = this->GetInput()->GetNumberOfComponentsPerPixel();
 
@@ -84,33 +86,91 @@ void VCAImageFilter<TImage>::GenerateData()
       StreamingStatisticsVectorImageFilterType::New();
 
   statsInput->SetInput(input);
-  //otb::StandardWriterWatcher watcher(statsInput->GetStreamer(), statsInput->GetFilter(), "Computing image stats");
   statsInput->SetEnableMinMax(false);
   statsInput->Update();
 
-/*
-//  otbMsgDevMacroVCA( "Computing SVD of correlation matrix" );
-  // Take the correlation matrix
-  vnl_matrix<PrecisionType> R = statsInput->GetCorrelation().GetVnlMatrix();
-
-  // Apply SVD
-  vnl_svd<PrecisionType>    svd(R);
-  vnl_matrix<PrecisionType> U = svd.U();
-  vnl_matrix<PrecisionType> Ud = U.get_n_columns(0, m_NumberOfEndmembers);
-  vnl_matrix<PrecisionType> UdT = Ud.transpose();
-*/
+  double SNR, SNRth;
   vnl_matrix<PrecisionType> Ud;
 
-  // TODO : temporary hack. implement SNR estimation formula here
-  double SNR = 40;
-  double SNRth = 30;
+  // SNR computation
+    {
+    std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
+    std::cout << "statsInput->GetCorrelation().GetVnlMatrix()" << std::endl;
+    vnl_matrix<PrecisionType> R = statsInput->GetCorrelation().GetVnlMatrix();
+    std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
+    std::cout << "svd(R)" << std::endl;
+    vnl_svd<PrecisionType> svd(R);
+    std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
+    std::cout << "U" << std::endl;
+    vnl_matrix<PrecisionType> U = svd.U();
+    std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
+    std::cout << "Ud" << std::endl;
+    vnl_matrix<PrecisionType> Ud = U.get_n_columns(0, m_NumberOfEndmembers);
+    std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
+    std::cout << "Udt" << std::endl;
+    vnl_matrix<PrecisionType> Udt = Ud.transpose();
+
+    // To remove the mean
+    typename NormalizeFilterType::Pointer normalize = NormalizeFilterType::New();
+    normalize->SetInput(input);
+    normalize->SetMean(statsInput->GetMean());
+    normalize->SetUseMean(true);
+    normalize->SetUseStdDev(false);
+
+
+    typename MatrixImageFilterType::Pointer mulUd = MatrixImageFilterType::New();
+    mulUd->MatrixByVectorOn();
+    mulUd->SetInput(normalize->GetOutput());
+    mulUd->SetMatrix(Udt);
+    mulUd->UpdateOutputInformation();
+
+    typename StreamingStatisticsVectorImageFilterType::Pointer transformedStats =
+        StreamingStatisticsVectorImageFilterType::New();
+
+    /*
+    typename ForwardPCAImageFilterType::Pointer pca = ForwardPCAImageFilterType::New();
+    pca->SetInput(input);
+    pca->SetUseNormalization(true);
+    pca->SetUseVarianceForNormalization(false);
+    pca->SetNumberOfPrincipalComponentsRequired(m_NumberOfEndmembers);
+    pca->UpdateOutputInformation();
+
+    std::cout << "PCA output" << std::endl;
+    pca->GetOutput()->Print(std::cout);
+    //transformedStats->SetInput(pca->GetOutput());
+    */
+
+
+    transformedStats->SetInput(mulUd->GetOutput());
+    transformedStats->SetEnableMinMax(false);
+    std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
+    std::cout << "transformedStats Update" << std::endl;
+    transformedStats->Update();
+
+    std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
+    std::cout << "statsInput->GetComponentCorrelation()" << std::endl;
+    double P_R = nbBands * statsInput->GetComponentCorrelation();
+    std::cout << "P_R " << P_R << std::endl;
+    std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
+    std::cout << "transformedStats->GetComponentCorrelation()" << std::endl;
+
+    double P_Rp = m_NumberOfEndmembers * transformedStats->GetComponentCorrelation()
+                  + statsInput->GetMean().GetSquaredNorm();
+    std::cout << "P_Rp " << P_Rp << std::endl;
+    const double qL = static_cast<double>(m_NumberOfEndmembers) / nbBands;
+    SNR = vcl_abs(10*vcl_log10( (P_Rp - (m_NumberOfEndmembers/nbBands)*P_R) / (P_R - P_Rp) ));
+  }
+
+
+  SNRth = 15 + 10 * vcl_log(m_NumberOfEndmembers) + 8;
+  std::cout << "SNR : "  << SNR << std::endl;
+  std::cout << "SNRth : "  << SNRth << std::endl;
 
   typename VectorImageType::Pointer Xd;
   typename VectorImageType::Pointer Y;
 
   std::vector<itk::ProcessObject::Pointer> refHolder;
   typename ForwardPCAImageFilterType::Pointer pca = ForwardPCAImageFilterType::New();
-  typedef typename ForwardPCAImageFilterType::NormalizeFilterType NormalizeFilterType;
   typename NormalizeFilterType::Pointer normalize = NormalizeFilterType::New();
 
   if (SNR > SNRth)
@@ -195,6 +255,7 @@ void VCAImageFilter<TImage>::GenerateData()
     maxNormComputer->SetInput(normComputer->GetOutput());
     maxNormComputer->Update();
     typename ImageType::PixelType maxNorm = maxNormComputer->GetMaximum();
+    otbMsgDevMacroVCA( "maxNorm : "  << maxNorm)
 
     typename ConcatenateScalarValueImageFilterType::Pointer concat = ConcatenateScalarValueImageFilterType::New();
     concat->SetInput(Xd);
@@ -203,47 +264,8 @@ void VCAImageFilter<TImage>::GenerateData()
 
     Y = concat->GetOutput();
     Y->UpdateOutputInformation();
-
-    /*
-     pca->SetInput(normalize->GetOutput());
-     pca->SetNumberOfPrincipalComponentsRequired( m_NumberOfEndmembers - 1 );
-     pca->SetCovarianceMatrix(statsInput->GetCovariance());
-     //    refHolder.push_back(pca.GetPointer());
-     //    pca->GetTransformationMatrix() is not up to date at this point...
-     //    Ud = pca->GetTransformationMatrix().GetVnlMatrix().transpose();
-     Xd = pca->GetOutput();
-     */
-
     }
-/*
-  otbMsgDevMacroVCA( "Apply dimensionality reduction" );
-  // Xd = Ud.'*M;
-  typename MatrixMultiplyImageFilterType::Pointer mulUd = MatrixMultiplyImageFilterType::New();
-  mulUd->SetInput(this->GetInput());
-  mulUd->SetMatrix(UdT);
-  mulUd->UpdateOutputInformation();
-  typename VectorImageType::Pointer Xd = mulUd->GetOutput();
 
-
-  // Compute mean(Xd)
-  otbMsgDevMacroVCA( "Compute mean(Xd)" );
-  typename StreamingStatisticsVectorImageFilterType::Pointer statsXd = \
-      StreamingStatisticsVectorImageFilterType::New();
-  statsXd->SetEnableMinMax(false);
-  statsXd->SetEnableSecondOrderStats(false);
-  statsXd->SetInput(Xd);
-//  statsXd->GetStreamer()->SetNumberOfDivisionsStrippedStreaming(10);
-  statsXd->Update();
-  typename VectorImageType::PixelType Xdmean = statsXd->GetMean();
-
-  // Projective projection
-  // Xd ./ repmat( sum( Xd .* repmat(u, [1 N]) ) , [d 1]);
-  otbMsgDevMacroVCA( "Compute projective projection" );
-  typename ProjectiveProjectionImageFilterType::Pointer proj = ProjectiveProjectionImageFilterType::New();
-  proj->SetInput(Xd);
-  proj->SetProjectionDirection(Xdmean);
-  typename  VectorImageType::Pointer Y = proj->GetOutput();
-*/
   // E : result, will contain the endmembers
   vnl_matrix<PrecisionType> E(nbBands, m_NumberOfEndmembers);
 
@@ -297,7 +319,6 @@ void VCAImageFilter<TImage>::GenerateData()
     otbMsgDevMacroVCA( "max(abs(v))" );
     typename StreamingMinMaxImageFilterType::Pointer maxAbs = StreamingMinMaxImageFilterType::New();
     maxAbs->SetInput(absVFilter->GetOutput());
-//    maxAbs->GetStreamer()->SetNumberOfDivisionsStrippedStreaming(10);
     maxAbs->Update();
 
     // k = arg_max( max(abs(v)) )
