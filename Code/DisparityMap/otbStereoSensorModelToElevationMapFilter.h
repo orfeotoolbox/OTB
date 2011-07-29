@@ -22,7 +22,6 @@
 #include "itkInterpolateImageFunction.h"
 #include "otbGenericRSTransform.h"
 #include "itkNormalizedCorrelationImageToImageMetric.h"
-#include "otbDEMHandler.h"
 
 namespace otb
 {

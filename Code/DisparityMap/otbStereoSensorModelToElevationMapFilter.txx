@@ -407,6 +407,11 @@ StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
   correlIt.GoToBegin();
   inputIt.GoToBegin();
 
+
+  // This will hold the master patch
+  std::vector<double> master;
+  master.reserve(inputIt.Size());
+
   // Walk the output map
   while(!outputIt.IsAtEnd() && !inputIt.IsAtEnd())
     {
@@ -423,9 +428,6 @@ StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
     // Check if there is an height info
     if(initHeight != -32768)
       {
-      // This will hold the master patch
-      std::vector<double> master;
-
       // These are used to estimate master patch variance
       double masterSum = 0;
       double masterVariance = 0;
@@ -435,7 +437,7 @@ StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
         {
         // Add to the master vector
         double value = inputIt.GetPixel(i);
-        master.push_back(value);
+        master[i] = value;
 
         // Cumulate for mean
         masterSum += value;
