@@ -133,19 +133,15 @@ void
 PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 ::ForwardGenerateData ()
 {
-  std::cout << "ForwardGenerateData ()" << std::endl;
   typename InputImageType::Pointer inputImgPtr
     = const_cast<InputImageType*>( this->GetInput() );
 
   if ( !m_GivenTransformationMatrix )
   {
-std::cout << "m_GivenTransformationMatrix" << std::endl;
     if ( !m_GivenCovarianceMatrix )
     {
-std::cout << "m_GivenCovarianceMatrix" << std::endl;
       if ( m_UseNormalization )
       {
-std::cout << "m_UseNormalization" << std::endl;
         m_Normalizer->SetInput( inputImgPtr );
         m_Normalizer->SetUseStdDev( m_UseVarianceForNormalization );
 
@@ -159,7 +155,6 @@ std::cout << "m_UseNormalization" << std::endl;
 
         if ( !m_GivenMeanValues )
         {
-std::cout << " !m_GivenMeanValues " << std::endl;
           m_MeanValues = m_Normalizer->GetCovarianceEstimator()->GetMean();
 
           if ( !m_GivenStdDevValues )
@@ -172,7 +167,6 @@ std::cout << " !m_GivenMeanValues " << std::endl;
         }
         else
         {
-          std::cout << "else !m_GivenMeanValues " << std::endl;
           m_CovarianceEstimator->SetInput( m_Normalizer->GetOutput() );
           m_CovarianceEstimator->Update();
 
@@ -183,7 +177,6 @@ std::cout << " !m_GivenMeanValues " << std::endl;
       }
       else
       {
-        std::cout << "else if ( m_UseNormalization ) " << std::endl;
         m_CovarianceEstimator->SetInput( inputImgPtr );
         m_CovarianceEstimator->Update();
 
@@ -194,7 +187,6 @@ std::cout << " !m_GivenMeanValues " << std::endl;
     }
     else
     {
-      std::cout << "else if ( !m_GivenCovarianceMatrix ) " << std::endl;
       m_Transformer->SetInput( inputImgPtr );
     }
 
@@ -214,8 +206,6 @@ std::cout << " !m_GivenMeanValues " << std::endl;
           "Empty transformation matrix",
           ITK_LOCATION);
   }
-
-  std::cout << "m_TransformationMatrix " << m_TransformationMatrix.Rows() << " " << m_TransformationMatrix.Cols() << std::endl;
 
   m_Transformer->SetMatrix( m_TransformationMatrix.GetVnlMatrix() );
   m_Transformer->GraftOutput( this->GetOutput() );
