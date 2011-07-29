@@ -82,6 +82,7 @@ int otbProjectiveProjectionTestHighSNR(int argc, char * argv[])
   MatrixImageFilterType::Pointer mulUd = MatrixImageFilterType::New();
   mulUd->SetInput(readerImage->GetOutput());
   mulUd->SetMatrix(Ud);
+  mulUd->MatrixByVectorOn();
   mulUd->UpdateOutputInformation();
 
   VectorImageType::Pointer Xd = mulUd->GetOutput();
