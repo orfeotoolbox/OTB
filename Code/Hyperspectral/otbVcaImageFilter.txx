@@ -120,7 +120,7 @@ void VCAImageFilter<TImage>::GenerateData()
                   + statsInput->GetMean().GetSquaredNorm();
     const double qL = static_cast<double>(m_NumberOfEndmembers) / nbBands;
     SNR = vcl_abs(10*vcl_log10( (P_Rp - (m_NumberOfEndmembers/nbBands)*P_R) / (P_R - P_Rp) ));
-  }
+    }
 
   SNRth = 15 + 10 * vcl_log(m_NumberOfEndmembers) + 8;
 
