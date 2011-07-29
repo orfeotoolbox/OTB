@@ -1451,7 +1451,6 @@ private:
 
 
 
-
 } // namespace Functor
 } // namespace otb
 
