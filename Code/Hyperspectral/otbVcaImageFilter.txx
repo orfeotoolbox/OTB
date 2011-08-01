@@ -122,7 +122,7 @@ void VCAImageFilter<TImage>::GenerateData()
     SNR = vcl_abs(10*vcl_log10( (P_Rp - (m_NumberOfEndmembers/nbBands)*P_R) / (P_R - P_Rp) ));
     }
 
-  SNRth = 15 + 10 * vcl_log(m_NumberOfEndmembers) + 8;
+  SNRth = 15.0 + 10.0 * vcl_log( static_cast<double>(m_NumberOfEndmembers) ) + 8.0;
 
   typename VectorImageType::Pointer Xd;
   typename VectorImageType::Pointer Y;
