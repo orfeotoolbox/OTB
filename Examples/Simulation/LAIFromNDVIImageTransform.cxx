@@ -19,7 +19,7 @@
 //  Software Guide : BeginCommandLineArgs
 //
 // INPUTS:  {verySmallFSATSW.tif}
-// OUTPUTS: {siTvLAIFromNDVIImageTransfromExampleTest_verySmallFSATSW.tif},{verySmallFSATSW_visu.png},{siTvLAIFromNDVIImageTransfromExampleTest_verySmallFSATSW_visu.png}
+// OUTPUTS: {siTvLAIFromNDVIImageTransfromExampleTest_verySmallFSATSW.tif}, {verySmallFSATSW_visu.png}, {siTvLAIFromNDVIImageTransfromExampleTest_verySmallFSATSW_visu.png}
 // 1 4
 //  Software Guide : EndCommandLineArgs
 //
@@ -141,7 +141,6 @@ int main(int argc, char *argv[])
   // Software Guide : EndCodeSnippet
 
 
-
   writer->SetFileName(OutputName1);
   writer->SetInput(filter->GetOutput());
   writer->Update();
@@ -189,10 +188,8 @@ int main(int argc, char *argv[])
 
 
 
-
   return EXIT_SUCCESS;
 }
-
 
 
 
