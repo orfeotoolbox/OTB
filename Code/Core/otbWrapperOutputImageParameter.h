@@ -45,9 +45,6 @@ public:
   /** RTTI support */
   itkTypeMacro(OutputImageParameter,Parameter);
 
-  typedef float                          PixelType;
-  typedef otb::VectorImage<PixelType, 2> VectorImageType;
-
   /** Set the value */
   itkSetObjectMacro(Image, VectorImageType);
 

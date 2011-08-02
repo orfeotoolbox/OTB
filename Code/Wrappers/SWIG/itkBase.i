@@ -83,9 +83,7 @@
 //%template(listF)          std::list< float >;
 //%template(listD)          std::list< double >;
 
-
- 
- class itkIndent {
+class itkIndent {
    public:
      ~itkIndent();
      itkIndent & operator=(itkIndent const & arg0);
