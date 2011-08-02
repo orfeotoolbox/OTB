@@ -9,9 +9,15 @@ ADD_EXECUTABLE(ProsailModel ProsailModel.cxx )
 TARGET_LINK_LIBRARIES(ProsailModel OTBSimulation)
 
 
+ADD_EXECUTABLE(LAIFromNDVIImageTransform LAIFromNDVIImageTransform.cxx )
+TARGET_LINK_LIBRARIES(LAIFromNDVIImageTransform OTBSimulation)
+
+
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Simulation)
+SET(BASELINE_IMAGES_OTB ${OTB_DATA_ROOT}/Baseline/OTB/Images)
+
 
 SET(INPUTDATA ${OTB_DATA_ROOT}/Examples)
 SET(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
@@ -23,7 +29,7 @@ SET(TOL_2 0.001)
 
 
 # tests#
-# ------- DEMToRainbowExampleTest ----------
+# ------- ProsailModelExampleTest ----------
 
 ADD_TEST(siTvProsailModelExampleTest ${EXE_TESTS}
      --compare-ascii ${TOL_2} ${BASELINE}/siTvProsailModelExampleTest.txt
@@ -44,6 +50,19 @@ ADD_TEST(siTvProsailModelExampleTest ${EXE_TESTS}
      0 #TTO
      0 #PSI
      ${TEMP}/siTvProsailModelExampleTest.txt
+)
+
+
+ADD_TEST(siTvLAIFromNDVIImageTransfromExampleTest  ${EXE_TESTS}
+ --compare-image ${TOL}   ${BASELINE_IMAGES_OTB}/raRAndNIRVegetationIndex_LAIFromNDVIFormosat2_verySmallFSATSWcRcNir.tif
+                  ${TEMP}/siTvLAIFromNDVIImageTransfromExampleTest_verySmallFSATSW.tif
+        LAIFromNDVIImageTransform
+        ${INPUTDATA}/verySmallFSATSW.tif
+        ${TEMP}/siTvLAIFromNDVIImageTransfromExampleTest_verySmallFSATSW.tif
+        ${TEMP}/verySmallFSATSW_visu.png
+        ${TEMP}/siTvLAIFromNDVIImageTransfromExampleTest_verySmallFSATSW_visu.png
+        1  # red
+        4  # nir
 )
 
 
