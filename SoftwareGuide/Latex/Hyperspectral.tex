@@ -83,12 +83,31 @@ sur une approche geometrique ou chaque pixel spectral est vu comme un
 vecteur de dimension L (nombre de bandes spectrales). Les
 bandes spectrales peuvent alors être ecrites sous forme vectorisee.
 
+\begin{figure}[h]
+\begin{tikzpicture}
+\pgfmathsetmacro{\cubex}{2}
+\pgfmathsetmacro{\cubey}{2}
+\pgfmathsetmacro{\cubez}{2}
+\draw[black,fill=white] (0,0,0) -- ++(-\cubex,0,0) -- ++(0,-\cubey,0) -- ++(\cubex,0,0) -- cycle;
+\draw[black,fill=white] (0,0,0) -- ++(0,0,-\cubez) -- ++(0,-\cubey,0) -- ++(0,0,\cubez) -- cycle;
+\draw[black,fill=white] (0,0,0) -- ++(-\cubex,0,0) -- ++(0,0,-\cubez) -- ++(\cubex,0,0) -- cycle;
+\node[draw] (R) at (2,0.5) {R};
+\draw[->] (2,0.5) -- (R.west);
+\end{tikzpicture}
+\itkcaption[Vectorization du cube]{``Vectorisation'' du cube hyperspectral. Les pixels spectraux
+sont ranges dans les colonnes de la matrice R et, de maniere
+equivalente, les bandes spectrales sont rangees dans les lignes de R.}
+\label{fig:mml}
+\end{figure}
 %% Figure 5: "Vectorisation" du cube hyperspectral. Les pixels spectraux
 %% sont ranges dans les colonnes de la matrice R et, de maniere
 %% equivalente, les bandes spectrales sont rangees dans les lignes de R.
 
-Par deduction de \ref{fig:decomp_mml} et de la Figure5, le MML consiste a decomposer R
-de la maniere suivante : $R= A.S + N = X + N$
+Par deduction de \ref{fig:decomp_mml} et de \ref{fig:mml}, le MML consiste a decomposer R
+de la maniere suivante : 
+\begin{center}
+$R= A.S + N = X + N$
+\end{center}
 
 Soit J le nombre de endmembers et I le nombre de pixels spectaux: 
 \begin{enumerate}
