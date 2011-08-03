@@ -30,7 +30,7 @@ SET(RADIOMETRY_TESTS10 ${CXX_TEST_PATH}/otbRadiometryTests10)
 
 
 ADD_TEST(raTvLAIFromNDVIFormosat2_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}
-  --compare-image ${EPSILON_12}   ${BASELINE}/raRAndNIRVegetationIndex_LAIFromNDVIFormosat2_verySmallFSATSWcRcNir.tif
+  --compare-image ${EPSILON_8}   ${BASELINE}/raRAndNIRVegetationIndex_LAIFromNDVIFormosat2_verySmallFSATSWcRcNir.tif
                     ${TEMP}/raMultiChannelRAndNIRVegetationIndex_LAIFromNDVIFormosat2_verySmallFSATSWcRcNir.tif
         otbMultiChannelRAndNIRVegetationIndexImageFilter
         LAIFormosat2    

@@ -25,6 +25,7 @@ void RegisterTests()
 {
   REGISTER_TEST(ProsailModel);
   REGISTER_TEST(LAIFromNDVIImageTransform);
+  REGISTER_TEST(LAIAndPROSAILToSensorResponse);
 }
 
 #undef main
@@ -36,5 +37,9 @@ void RegisterTests()
 #define main LAIFromNDVIImageTransform
 #include "LAIFromNDVIImageTransform.cxx"
 
+
+#undef main
+#define main LAIAndPROSAILToSensorResponse
+#include "LAIAndPROSAILToSensorResponse.cxx"
 
 

@@ -17,22 +17,23 @@ IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Simulation)
 SET(BASELINE_IMAGES_OTB ${OTB_DATA_ROOT}/Baseline/OTB/Images)
+SET(BASELINE_IMAGES_APPLI ${OTB_DATA_ROOT}/Baseline/OTB-Applications/Images)
 
-
-SET(INPUTDATA ${OTB_DATA_ROOT}/Examples)
+SET(INPUTDATA_EXAMPLES ${OTB_DATA_ROOT}/Examples)
+SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
 SET(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
 
 SET(EXE_TESTS ${CXX_TEST_PATH}/otbSimulationExamplesTests)
 
 SET(TOL 0.0)
-SET(TOL_2 0.001)
-
+SET(TOL_3 0.001)
+SET(TOL_8 0.00000001)
 
 # tests#
 # ------- ProsailModelExampleTest ----------
 
 ADD_TEST(siTvProsailModelExampleTest ${EXE_TESTS}
-     --compare-ascii ${TOL_2} ${BASELINE}/siTvProsailModelExampleTest.txt
+     --compare-ascii ${TOL_3} ${BASELINE}/siTvProsailModelExampleTest.txt
                    ${TEMP}/siTvProsailModelExampleTest.txt
      ProsailModel
      30.0 #cab
@@ -54,16 +55,32 @@ ADD_TEST(siTvProsailModelExampleTest ${EXE_TESTS}
 
 
 ADD_TEST(siTvLAIFromNDVIImageTransfromExampleTest  ${EXE_TESTS}
- --compare-image ${TOL}   ${BASELINE_IMAGES_OTB}/raRAndNIRVegetationIndex_LAIFromNDVIFormosat2_verySmallFSATSWcRcNir.tif
+ --compare-image ${TOL_8}   ${BASELINE_IMAGES_OTB}/raRAndNIRVegetationIndex_LAIFromNDVIFormosat2_verySmallFSATSWcRcNir.tif
                   ${TEMP}/siTvLAIFromNDVIImageTransfromExampleTest_verySmallFSATSW.tif
         LAIFromNDVIImageTransform
-        ${INPUTDATA}/verySmallFSATSW.tif
+        ${INPUTDATA_EXAMPLES}/verySmallFSATSW.tif
         ${TEMP}/siTvLAIFromNDVIImageTransfromExampleTest_verySmallFSATSW.tif
         ${TEMP}/verySmallFSATSW_visu.png
         ${TEMP}/siTvLAIFromNDVIImageTransfromExampleTest_verySmallFSATSW_visu.png
         1  # red
         4  # nir
 )
+
+ADD_TEST(siTvLAIAndPROSAILToSensorResponseExampleTest  ${EXE_TESTS}
+ --compare-image ${TOL_8}   ${BASELINE_IMAGES_APPLI}/siTvLAIAndPROSAILToSensorResponse.tif
+                  ${TEMP}/siTvLAIAndPROSAILToSensorResponse.tif
+        LAIAndPROSAILToSensorResponse
+        ${INPUTDATA}/LAIverySmallFSATSW.tif
+        ${TEMP}/siTvLAIAndPROSAILToSensorResponse.tif
+        ${INPUTDATA}/Simu_label_LAI.png
+        ${INPUTDATA}/Simu_mask_LAI_1.png
+        ${INPUTDATA}/label-params-SO-2006-Level-2.txt
+        ${INPUTDATA}/acqui-params.txt
+        ${INPUTDATA}/Radiometry/FORMOSAT2/RSI/rep6S.dat
+        5
+        ${INPUTDATA}/
+)
+
 
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
