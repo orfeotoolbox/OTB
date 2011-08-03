@@ -32,6 +32,8 @@ scene.
 
 \section{Unmixing}
 
+\subsection{Linear mixing model}
+
 L'information de reflectance ne depend que des spectres de
 reflectance des materiaux de la scene. Lorsque le melange entre les
 materiaux est macroscopique, le modele de melange lineaire de spectres
@@ -125,35 +127,46 @@ Le probleme du demixage consiste a estimer les matrices A et S a
 partir de R ou eventuellement de Xchapeau, une estimation de la matrice signal
 debruite.
 
-Remarque: Plusieurs contraintes physiques peuvent être prises en
+Plusieurs contraintes physiques peuvent être prises en
 compte pour permettre la resolution de ce probleme: 
-C1: positivite
-des spectres de reflectance (matrice A non-negative); 
-C2: positivite
-des abondances (matrice S non-negative); 
-C3: additivite des
+\begin{enumerate}
+\item{C1: positivite
+des spectres de reflectance (matrice A non-negative).}
+\item{C2: positivite
+des abondances (matrice S non-negative).}
+\item{C3: additivite des
 abondances (la somme des coefficients de chaque colonne de la matrice
-S vaut 1); 
-L'independance algebrique entre les ``vecteurs spectraux''
+S vaut 1).}
+\item{L'independance algebrique entre les ``vecteurs spectraux''
 associes au endmembers et la linearite des melanges de spectres, d'ou
-decoule la propriete du simplexe decrite au paragraphe suivant.
-Simplexe circonscrit aux donnees Les algorithmes recents de demixage
-s'appuient sur la ``propriete du simplexe''. Dans un espace vectoriel
-de dimension $J-1$, on peut associer a J vecteurs algebriquement
-independants J points definissant les sommets d'un J-simplexe, comme
-l'illustre la Figure 6.
+decoule la propriete du simplexe decrite au paragraphe suivant.}
+\end{enumerate}
 
-Figure 6: Illustration d'un 2-simplexe, d'un 3-simplexe et d'un
-4-simplexe.  Un cube hyperspectral de L bandes, base sur J endmembers,
-peut être confine dans un sous-espace-affine de dimension $J-1$.  Un
-sous espace pertinent, au sens du rapport signal-a-bruit, est
+\subsection{Simplex}  
+Les algorithmes recents de demixage s'appuient sur la ``propriete du
+simplexe''. Dans un espace vectoriel de dimension $J-1$, on peut
+associer a J vecteurs algebriquement independants J points definissant
+les sommets d'un J-simplexe \ref{fig:simplex}.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.7\textwidth]{Simplex_HPX.eps}
+  \itkcaption[Simplex]{Illustration d'un 2-simplexe, d'un 3-simplexe et d'un
+4-simplexe.}
+  \label{fig:simplex}
+\end{figure}
+
+Un cube hyperspectral de L bandes, base sur J endmembers,
+peut etre confine dans un sous-espace-affine de dimension $J-1$.  
+Un sous espace pertinent, au sens du rapport signal-a-bruit, est
 generalement obtenu par Analyse en Composantes Principales (ACP). En
 pratique, les $J-1$ vecteurs propres associes au plus fortes valeurs
 propres forment les colonnes d'une matrice de projection V de
-dimension $(Lx(J-1))$. Les donnees reduites Z, de dimensions $((J-1)xI)$,
-sont obtenues par l'operation:
+dimension $(Lx(J-1))$. Les donnees reduites Z, de dimensions
+$((J-1)xI)$, sont obtenues par l'operation:
+$Z=V^{T}(\tilde{R})$
 
-ou chaque colonne de'est vue soustraire le spectre moyen,
+ou chaque colonne de $\tilde{R}$ est vue soustraire le spectre moyen,
 generalement estime au sens du maximum de vraisemblance. Dans le
 sous-espace porteur des vecteurs-colonnes de Z, les spectres de
 endmembers sont donc associes au sommet d'un simplexe. Si le bruit est
@@ -162,9 +175,9 @@ negligeable, ce simplexe circonscrit les donnees reduites.
 Remarque: Cette propriete met en evidence le fait que les endmembers
 recherches sont les sommets d'un simplexe qui circonscrit les
 donnees. Cependant, une infinite de simplexes differents peuvent
-circonscrire un même jeu de donnees. En fait, le probleme du demixage
+circonscrire un meme jeu de donnees. En fait, le probleme du demixage
 n'a generalement pas de solution unique. Cette degenerescence peut
-aussi être mise en evidence par le formalisme de la factorisation en
+aussi etre mise en evidence par le formalisme de la factorisation en
 matrices non-negatives (voir Huck2010a), qui sera aborde un peu plus
 loin. Il convient donc de choisir la solution physiquement la plus
 pertinente. Toutes les techniques de demixage basees sur cette
@@ -200,7 +213,7 @@ composee d'algorithmes recherchant le simplexe de volume minimal
 circonscrivant les donnees. La phase d'initialisation consiste a
 determiner un simplexe initial quelconque circonscrivant les
 donnees. Puis, un schema d'optimisation numerique permet de minimiser
-une fonctionnelle, fonction croissante du volume generalise, lui-même
+une fonctionnelle, fonction croissante du volume generalise, lui-meme
 dependant des endmembers estimes a l'iteration
 courante. L'optimisation est contrainte par le fait que les donnees
 doivent restees inscrites dans le simplexe et eventuellement par les
@@ -260,7 +273,7 @@ Frobenius avec une regularisation spectrale et une regularisation
 ``spatiale'' (sur la matrice d'abondances).  
 Minimum spectral
 Dispersion: la regularisation spectrale encourage la variance des
-coefficients d'un spectre de endmembers a être faible.  Maximum
+coefficients d'un spectre de endmembers a etre faible.  Maximum
 spatial Dispersion: la regularisation spatiale encourage les vecteurs
 d'abondances a occuper toute la partie admissible (plus d'information
 dans [Huck2009]). Cette action presente une certaine analogie a la
@@ -290,14 +303,14 @@ Une anomalie dans une scene est, par definition, un element qu'on ne
 s'attend pas a y trouver. L'element anormal est donc de nature
 differente de son environnement et sa presence est minoritaire dans la
 scene. Typiquement, un vehicule dans en milieu naturel, un rocher dans
-champ, une cabane en bois dans une forêt suffisamment clairsemee sont
+champ, une cabane en bois dans une foret suffisamment clairsemee sont
 autant d'anomalies que l'on peut souhaiter detecter a l'aide
 d'imagerie hyperspectrale. Cela suppose que la reponse spectrale de
-l'anomalie puisse être discriminee de la reponse spectrale du
+l'anomalie puisse etre discriminee de la reponse spectrale du
 ``fouilli-du-fond'' (background clutter). Cela suppose egalement que
 les pixels associes aux anomalies, les pixels anormaux, sont
-suffisamment rares et/ou ponctuels pour pouvoir être consideres comme
-tels. Ces proprietes peuvent être vues comme des hypotheses spectrales
+suffisamment rares et/ou ponctuels pour pouvoir etre consideres comme
+tels. Ces proprietes peuvent etre vues comme des hypotheses spectrales
 et spatiales sur lesquelles s'appuient les techniques de detection
 d'anomalies dans les images hyperspectrales.
 
@@ -317,7 +330,7 @@ n'est pas requis par l'algorithme de detection. Pour cette raison, on
 associe souvent le terme de ``detection non supervisee''. Neanmoins,
 les algorithmes dependent generalement de ``parametres de
   structure''. Par exemple, dans le cas de la detection dans une
-fenêtre glissante, le juste choix des dimensions repose sur une
+fenetre glissante, le juste choix des dimensions repose sur une
 connaissance a priori de la taille des anomalies recherchees. Cette
 partie de l'etude se concentre sur la comparaison d'algorithmes de
 detection d'anomalies.
@@ -354,12 +367,12 @@ algorithmes ne sont generalement pas ``a taux de fausse alarme
 Ces difficultes nous ont conduit a considerer, dans le cadre de cette
 etude, exclusivement des algorithmes de la deuxieme categorie evoquee,
 bases sur les notions de modeles probabilistes, test d'hypotheses
-statistiques et fenêtre glissante. Les algorithmes retenus sont
+statistiques et fenetre glissante. Les algorithmes retenus sont
 presentes dans la partie suivante.  Algorithmes selectionnes Les
 algorithmes selectionnes sont RX (presente en premiere version dans
 [Reed1990] et GMRF [Schweizer2001] et leurs specificites respectives
 seront presentees plus loin. Ils sont bases sur les notions de modeles
-probabilistes, test d'hypotheses statistiques et fenêtre glissante.
+probabilistes, test d'hypotheses statistiques et fenetre glissante.
 Ce type d'approche consiste a repondre a la question: ``Le pixel (ou
   ensemble de pixels voisins) teste ressemble-t-il au pixels du
   fond?'' par une demarche de test statistique. De maniere plus
@@ -372,7 +385,7 @@ nombre de parametres a estimer; L'homogeneite, notamment du fond; La
 complexite algorithmique (quoique les algorithmes consideres sont
 hautement parallelisables);
 
-Le principe de fonctionnement de RX et GLRT peut être resume par les
+Le principe de fonctionnement de RX et GLRT peut etre resume par les
 Figure 27 et Figure 28.
 
 Figure 27: Schema bloc des algorithmes consideres.  Une premiere etape
@@ -380,8 +393,8 @@ facultative (spontanement consideree dans le cadre de cette etude)
 consiste a reduire la dimension spectrale des donnees tout en
 conservant l'information liee aux anomalies. Puis, les pixels
 spectraux sont testes a tour de rôle (tache parallelisable). Le pixel
-teste se voit attribuer une fenêtre glissante (voir Figure 28). Cette
-fenêtre comprend deux sous fenêtres, centrees sur le pixel teste, de
+teste se voit attribuer une fenetre glissante (voir Figure 28). Cette
+fenetre comprend deux sous fenetres, centrees sur le pixel teste, de
 dimensions respectives L et LL, avec $L < LL$.  Les pixels appartenant a
 la couronne ainsi formee appartiennent a la classe ``fond local''. Les
 parametres statistiques du fond, requis par les tests statistiques,
@@ -391,18 +404,18 @@ donc le nombre d'echantillons statistiques) sachant que: Si la
 couronne est trop epaisse, le fond local n'est plus suffisamment
 homogene; Si le nombre d'echantillons est trop faible, la precision
 de l'estimation statistique des parametres du modele du fond est trop
-faible.  Les pixels de la partie centrale de la fenêtre glissante
+faible.  Les pixels de la partie centrale de la fenetre glissante
 appartiennent a la classe ``inconnue''. Si le pixel teste (pixel
 central) est un pixel anormal, il est possible que ses voisins soient
-aussi des pixels anormaux, d'ou l'interêt de ne pas choisir une valeur
+aussi des pixels anormaux, d'ou l'interet de ne pas choisir une valeur
 de L trop faible si l'on sait que les anomalies recherchees peuvent
-être reparties sur plusieurs pixels.  Une fois l'ensemble des
+etre reparties sur plusieurs pixels.  Une fois l'ensemble des
 parametres estimes, un test statistique est effectue et affecte une
 valeur $\Lambda(i)$ au pixel teste i. Une carte de detection est ainsi
 constituee.
 
-Figure 28: Principe de la fenêtre glissante et definitions des
-parametres L et LL de la fenêtre glissante.  Les algorithmes RX et
+Figure 28: Principe de la fenetre glissante et definitions des
+parametres L et LL de la fenetre glissante.  Les algorithmes RX et
 GMRF, consideres dans presentes dans les sections suivantes.
 
 \subsection{Local RX}
