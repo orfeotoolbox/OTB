@@ -19,7 +19,7 @@
 
 //  Software Guide : BeginCommandLineArgs
 //
-// INPUTS:  {LAIverySmallFSATSW.tif,Simu_label_LAI.png,Simu_mask_LAI_1.png,label-params-SO-2006-Level-2.txt,acqui-params.txt,rep6S.dat}
+// INPUTS:  {LAIverySmallFSATSW.tif, Simu_label_LAI.png, Simu_mask_LAI_1.png, label-params-SO-2006-Level-2.txt, acqui-params.txt, rep6S.dat}
 // OUTPUTS: {siTvLAIAndPROSAILToSensorResponse.tif}
 // 5
 //  Software Guide : EndCommandLineArgs
@@ -145,7 +145,7 @@ protected:
   }
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
-    Superclass::PrintSelf(os,indent);
+    Superclass::PrintSelf(os, indent);
     os << indent << "Image: " << m_Image.GetPointer() << std::endl;
   }
 
@@ -157,7 +157,6 @@ private:
 
 };  // class ImageUniqueValuesCalculator
 // EndCodeSnippet
-
 
 
 namespace Functor
@@ -232,7 +231,7 @@ public:
   ~ProsailSimulatorFunctor()
   {
   }
-  ;
+ ;
 
   void SetInvertedMask(bool ivm)
   {
@@ -527,7 +526,6 @@ int main(int argc, char *argv[])
   typedef otb::ImageFileReader<MaskImageType> MaskReaderType;
 
   // Software Guide : BeginCodeSnippet
-
   // Software Guide : BeginLatex
   //
   // Leaf parameters typedef is defined.
@@ -548,7 +546,6 @@ int main(int argc, char *argv[])
   typedef double PrecisionType;
   typedef std::vector<PrecisionType> SpectraType;
   typedef std::map<LabelType, SpectraType> SpectraParameterType;
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -885,7 +882,6 @@ int main(int argc, char *argv[])
   //
   //  Software Guide : EndLatex
   // Software Guide : BeginCodeSnippet
-
   SimulatorType::Pointer simulator = SimulatorType::New();
   simulator->SetInput1(laiImage);
   simulator->SetInput2(labelImage);
@@ -920,12 +916,6 @@ int main(int argc, char *argv[])
   return EXIT_SUCCESS;
 
 }
-
-
-
-
-
-
 
 
 
