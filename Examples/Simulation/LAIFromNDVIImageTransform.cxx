@@ -25,7 +25,7 @@
 //
 // Software Guide : BeginLatex
 //
-// This example presents a way to generate LAI image using formula dedicated to Formosat2.
+// This example presents a way to generate LAI (Leaf Area Index) image using formula dedicated to Formosat2.
 // LAI Image is used as an input in Image Simulation process.
 //
 // Let's look at the minimal code required to use this algorithm. First, the
