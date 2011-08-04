@@ -61,7 +61,7 @@ add_test(owTvApplicationRegistry ${OTB_WRAPPER_TESTS}
 
 # ParameterKey class test
 add_test(owTvParameterKey ${OTB_WRAPPER_TESTS}
-    otbParameterKey
+    otbWrapperParameterKey
   )
 
 # ----------------Source files CXX -----------------------------------
@@ -79,7 +79,7 @@ otbWrapperOutputImageParameterTest.cxx
 otbWrapperParameterListTest.cxx
 otbWrapperParameterTest.cxx
 otbWrapperApplicationRegistryTest.cxx
-otbParameterKeyTest.cxx
+otbWrapperParameterKeyTest.cxx
 )
 
 include_directories(${CMAKE_SOURCE_DIR}/Code/Core)

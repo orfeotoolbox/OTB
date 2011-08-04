@@ -15,8 +15,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#ifndef __otbParameterKey_h
-#define __otbParameterKey_h
+#ifndef __otbWrapperParameterKey_h
+#define __otbWrapperParameterKey_h
 
 #include <string>
 #include "otbMacro.h"
@@ -81,19 +81,21 @@ last() : return "tata"
   /** Set Key value */
   void SetKey( const std::string & val )
     {
+      /*
       if( val.substr(1) == "." || 
           val.substr(val.size()-2, val.size()-1) == ".")
         {
           itkGenericExceptionMacro( "invalid key. Can't start or begin with a \".\".");
         }
-      
+      */
       m_Key = val;
-      
+      /*
       if( this->Split().size() != 3 )
         {
           m_Key = "";
           itkGenericExceptionMacro( "Invalid key. Must follow the format \"string1.string2.string3\".");
         }
+      */
     }
 
 private:
@@ -107,4 +109,4 @@ private:
 } // end namespace Wrapper
 } //end namespace otb
 
-#endif // __otbParameterKey_h_
+#endif // __otbWrapperParameterKey_h_

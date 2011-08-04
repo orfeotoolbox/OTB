@@ -15,7 +15,7 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#include "otbParameterKey.h"
+#include "otbWrapperParameterKey.h"
 
 #include <boost/algorithm/string.hpp>
 
@@ -65,7 +65,7 @@ std::vector<std::string>
 ParameterKey::Split()
 {
   std::vector<std::string> res;
-  boost::split(res,m_Key,boost::is_any_of("."));
+  boost::split(res,m_Key,boost::is_any_of("."), boost::token_compress_on);
 
   return res;
 }

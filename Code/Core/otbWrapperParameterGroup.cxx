@@ -28,6 +28,8 @@
 #include "otbWrapperOutputVectorDataParameter.h"
 #include "otbWrapperRadiusParameter.h"
 #include "otbWrapperStringParameter.h"
+#include "otbWrapperParameterKey.h"
+
 #include <boost/algorithm/string.hpp>
 
 namespace otb
@@ -84,88 +86,61 @@ ParameterGroup::GetParametersKeys(bool recursive)
 void
 ParameterGroup::AddChoice(std::string paramKey, std::string paramName)
 {
+  ParameterKey pKey( paramKey );
   // Split the parameter name
-  std::vector<std::string> splittedKey;
-  boost::algorithm::split(splittedKey, paramKey, boost::is_any_of("."), boost::token_compress_on);
+  std::vector<std::string> splittedKey = pKey.Split();
 
-  // Get the last subkey
-  std::string lastkey = *splittedKey.rbegin();
-
-  Parameter::Pointer parentParam;
-  std::string parentkey;
-
-  // Get the immediate parent of paramKey
-  if (splittedKey.size() > 1)
+  if( splittedKey.size() >1 )
     {
-    // Remove the last subkey
-    std::ostringstream parentOss;
-    std::vector<std::string>::const_iterator it = splittedKey.begin();
-    while(it != splittedKey.end() - 1)
-      {
-      parentOss << *it;
-      ++it;
-      if (it != splittedKey.end() - 1)
+      // Get the last subkey
+      std::string lastkey = pKey.GetLastElement();
+      
+      std::string parentkey = pKey.GetRoot();
+      Parameter::Pointer parentParam = GetParameterByKey(parentkey);
+
+      // parentParam must be a choice or this is an error
+      ChoiceParameter* parentAsChoice = dynamic_cast<ChoiceParameter*>(parentParam.GetPointer());
+      
+      if (parentAsChoice)
         {
-        parentOss << ".";
+          parentAsChoice->AddChoice(lastkey, paramName);
         }
-      }
-    parentkey = parentOss.str();
-    parentParam = GetParameterByKey(parentkey);
-
-    // parentParam must be a choice or this is an error
-    ChoiceParameter* parentAsChoice = dynamic_cast<ChoiceParameter*>(parentParam.GetPointer());
-
-    if (parentAsChoice)
-      {
-      parentAsChoice->AddChoice(lastkey, paramName);
-      }
-    else
-      {
-      itkExceptionMacro(<<parentkey << " is not a choice");
-      }
+      else
+        {
+          itkExceptionMacro(<<parentkey << " is not a choice");
+        }
     }
   else
     {
-    itkExceptionMacro(<<"No choice parameter key given");
+      itkExceptionMacro(<<"No choice parameter key given");
     }
 }
-
-
+  
+  
 /** Add a new parameter to the parameter group */
 void
 ParameterGroup::AddParameter(ParameterType type, std::string paramKey, std::string paramName)
 {
+  ParameterKey pKey( paramKey );
   // Split the parameter name
-  std::vector<std::string> splittedKey;
-  boost::algorithm::split(splittedKey, paramKey, boost::is_any_of("."), boost::token_compress_on);
-
+  std::vector<std::string> splittedKey = pKey.Split();
+ 
   // Get the last subkey
-  std::string lastkey = *splittedKey.rbegin();
-  Parameter::Pointer parentParam;
+  std::string lastkey = pKey.GetLastElement();
+  
   std::string parentkey;
-
-  // Get the immediate parent of paramKey
+  Parameter::Pointer parentParam;
+ 
   if (splittedKey.size() > 1)
     {
-    // Remove the last subkey
-    std::ostringstream parentOss;
-    std::vector<std::string>::const_iterator it = splittedKey.begin();
-    while(it != splittedKey.end() - 1)
-      {
-      parentOss << *it;
-      ++it;
-      if (it != splittedKey.end() - 1)
-        {
-        parentOss << ".";
-        }
-      }
-    parentkey = parentOss.str();
-    parentParam = GetParameterByKey(parentkey);
+       parentkey = pKey.GetRoot();
+       parentParam = GetParameterByKey(parentkey);
     }
   else
     {
-    parentParam = this;
+      parentParam = this;
     }
+  
 
   ParameterGroup* parentAsGroup = dynamic_cast<ParameterGroup*>(parentParam.GetPointer());
   if (parentAsGroup)
@@ -275,12 +250,12 @@ ParameterGroup::GetParameterByIndex(unsigned int i)
 Parameter::Pointer
 ParameterGroup::GetParameterByKey(std::string name)
 {
-  // Split the parameter name
-  std::vector<std::string> splittedName;
-  boost::algorithm::split(splittedName, name, boost::is_any_of("."), boost::token_compress_on);
+  ParameterKey pName(name);
+ // Split the parameter name
+  std::vector<std::string> splittedName = pName.Split();
 
   // Get the first parameter key
-  std::string parentName = splittedName[0];
+  std::string parentName = pName.GetFirstElement();
 
   // Look for parentName in the current group
   Parameter::Pointer parentParam;
@@ -362,6 +337,7 @@ ParameterGroup::GetParameterByKey(std::string name)
     // Neither ParameterGroup, neither ChoiceParameter
     itkExceptionMacro(<< "No parameter with key " << name);
     }
+
   return parentParam.GetPointer();
 }
 

@@ -19,9 +19,9 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#include "otbParameterKey.h"
+#include "otbWrapperParameterKey.h"
 
-int otbParameterKey(int argc, char* argv[])
+int otbWrapperParameterKey(int argc, char* argv[])
 {
 
   std::string theKey = "parent.current.child";
