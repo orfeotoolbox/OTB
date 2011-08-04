@@ -231,7 +231,7 @@ public:
   ~ProsailSimulatorFunctor()
   {
   }
- ;
+;
 
   void SetInvertedMask(bool ivm)
   {
@@ -916,11 +916,6 @@ int main(int argc, char *argv[])
   return EXIT_SUCCESS;
 
 }
-
-
-
-
-
 
 
 
