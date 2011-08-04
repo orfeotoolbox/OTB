@@ -124,7 +124,7 @@ additif.}
    
 
 Le probleme du demixage consiste a estimer les matrices A et S a
-partir de R ou eventuellement de Xchapeau, une estimation de la matrice signal
+partir de R ou eventuellement de \"X, une estimation de la matrice signal
 debruite.
 
 Plusieurs contraintes physiques peuvent être prises en
@@ -172,7 +172,7 @@ sous-espace porteur des vecteurs-colonnes de Z, les spectres de
 endmembers sont donc associes au sommet d'un simplexe. Si le bruit est
 negligeable, ce simplexe circonscrit les donnees reduites.
 
-Remarque: Cette propriete met en evidence le fait que les endmembers
+Cette propriete met en evidence le fait que les endmembers
 recherches sont les sommets d'un simplexe qui circonscrit les
 donnees. Cependant, une infinite de simplexes differents peuvent
 circonscrire un meme jeu de donnees. En fait, le probleme du demixage
@@ -184,11 +184,14 @@ pertinente. Toutes les techniques de demixage basees sur cette
 propriete du simplexe admettent que la solution la plus pertinente est
 definie par le simplexe admissible de volume minimal, ou la notion de
 volume est generalisee a toutes les dimensions finies (eventuellement
-differentes de 3).  Selection d'algorithmes et etat de l'art Les
-algorithmes de demixage lineaire les plus recents exploitent
+differentes de 3).  
+
+\subsection{Selection d'algorithmes et etat de l'art} 
+Les algorithmes de demixage lineaire les plus recents exploitent
 generalement la propriete du simplexe. Il est possible de les classer
-en plusieurs familles: 
-Famille 1 Une premiere famille d'algorithmes
+en plusieurs familles:
+\subsubsection{Famille 1} 
+Une premiere famille d'algorithmes
 de demixage est basee sur la recherche des endmembers ``parmi'' les
 donnees. Cela signifie qu'un pixel pur au minimum doit etre associe a
 chaque endmembers. Si cette hypothese n'est pas verifiee, cela
@@ -199,103 +202,157 @@ Index), NFINDER et VCA (Vertex Component Analysis)
 [Nascimento2005]. Outre son succes reconnu par la communaute et sa
 complexite algorithmique tres competitive, l'estimation des spectres
 de endmembers est non biaisee en l'absence de bruit (et lorsque il y a
-des pixels purs). Nous avons donc retenu cet algorithme pour l'etude.
-VCA [Nascimento2005] 
+des pixels purs).
+
+\paragraph{VCA} 
 Note: L'algorithme VCA est systematiquement
 utilise pour initialiser les differents algorithmes etudies (sauf
 MVES, base sur une autre initialisation).
 
-Elements importants sur le fonctionnement de VCA: L'algorithme VCA
+Elements importants sur le fonctionnement de VCA: 
+\begin{enumerate}
+\item {L'algorithme VCA
 est base sur des projections iteratives des donnees orthogonales au
-sous-espace porte par les endmembers deja estimes; Biaise lorsque le
-degre de purete est inferieur a 1; Famille 2 Une deuxieme famille est
-composee d'algorithmes recherchant le simplexe de volume minimal
-circonscrivant les donnees. La phase d'initialisation consiste a
-determiner un simplexe initial quelconque circonscrivant les
-donnees. Puis, un schema d'optimisation numerique permet de minimiser
-une fonctionnelle, fonction croissante du volume generalise, lui-meme
-dependant des endmembers estimes a l'iteration
+sous-espace porte par les endmembers deja estimes.}
+\item {Biaise lorsque le
+degre de purete est inferieur a 1.}
+
+\end{enumerate}  
+
+\subsubsection{Famille 2} 
+Une deuxieme famille est composee d'algorithmes recherchant le
+simplexe de volume minimal circonscrivant les donnees. La phase
+d'initialisation consiste a determiner un simplexe initial quelconque
+circonscrivant les donnees. Puis, un schema d'optimisation numerique
+permet de minimiser une fonctionnelle, fonction croissante du volume
+generalise, lui-meme dependant des endmembers estimes a l'iteration
 courante. L'optimisation est contrainte par le fait que les donnees
 doivent restees inscrites dans le simplexe et eventuellement par les
 contraintes C1, C2 et C3.
 
-Les algorithmes consideres sont: MVSA (Minimum Volume Simplexe
-Analysis) [Li2008]; MVES (Minimum Volume Encosing Simplex)
-[Chan2009]; SISAL (Simplex Identification via Split Augmented
-Lagrangian) [Dias2009]. 
-
+Les algorithmes existant sont : 
+\begin{enumerate}
+\item {MVSA (Minimum Volume Simplexe
+Analysis) [Li2008].}
+\item { MVES (Minimum Volume Encosing Simplex)
+[Chan2009].}
+\item {SISAL (Simplex Identification via Split Augmented
+Lagrangian) [Dias2009].}
+\end{enumerate}  
+  
 Les differences principales entre les algorithmes consideres
 concernent: 
-Le schema d'optimisation numerique; 
-La maniere dont les
-contraintes sont prise en compte; 
-Ces points impactent la complexite
-algorithmique et la precision d'estimation.  MVSA aLi2008] Elements
-  importants sur le fonctionnement de MVSA: Initialisation par VCA;
-  Tous les pixels spectraux inclus dans le simplexe estime
+\begin{enumerate}
+\item {Le schema d'optimisation numerique.}
+\item {La maniere dont les
+contraintes sont prise en compte.}
+
+\end{enumerate}  
+
+ 
+Ces points impactent la complexite algorithmique et la precision
+d'estimation. 
+ 
+\paragraph{MVSA aLi2008]} 
+Elements importants sur le fonctionnement de MVSA: 
+\begin{enumerate}
+\item {Initialisation par VCA.}
+\item {Tous les pixels spectraux inclus dans le simplexe estime
   (approximativement) par VCA n'impactant pas la contrainte
   d'inscription des donnees dans le simplexe recherche, ils sont
   simplement supprimes des donnees utilisees dans la phase de
   minimisation du simplexe afin de reduire la complexite
-  algorithmique.  La technique d'optimisation tres evoluee est de type
+  algorithmique.}
+\item {La technique d'optimisation tres evoluee est de type
   programmation quadratique sequentielle (Sequencial Quadratic
   Programming - SQP) et plus precisement a la categorie
-  ``quasi-Newton'' sous contrainte.  MVES [Chan2009] Elements
-  importants sur le fonctionnement de MVES: Initialisation par une
-  methode iterative (Programmation Lineaire LP pour Linear
-  Programming) non-triviale et differente de VCA; Resolution du
-  probleme par LP.
+  ``quasi-Newton'' sous contrainte.}
+\end{enumerate} 
 
-  SISAL [Dias2009]
-Elements importants sur le fonctionnement de SISAL: Initialisation
-par VCA; 
-Selection des pixels spectraux analogue a MVSA pour reduire
-la complexite algorithmique; 
-Technique d'optimisation tres evoluee
-cumulant plusieurs particularites: 
-Decomposition du probleme
-non-convexe en serie de problemes convexes; 
-Developpement d'une
+\paragraph{MVES [Chan2009]}
+ Elements importants sur le fonctionnement de MVES: 
+\begin{enumerate}
+\item {Initialisation par une
+  methode iterative (Programmation Lineaire LP pour Linear
+  Programming) non-triviale et differente de VCA.}
+\item {Resolution du
+  probleme par LP.}
+\end{enumerate} 
+ 
+
+\paragraph{SISAL [Dias2009]}
+Elements importants sur le fonctionnement de SISAL: 
+\begin{enumerate}
+\item {Initialisation
+par VCA.}
+\item {Selection des pixels spectraux analogue a MVSA pour reduire
+la complexite algorithmique.}
+\item {Technique d'optimisation tres evoluee
+cumulant plusieurs particularites.}
+\begin{enumerate}
+\item {Decomposition du probleme
+non-convexe en serie de problemes convexes.}
+\item {Developpement d'une
 methode specifique de separation de variables permettant de considerer
-un lagrangien augmente avec de bonnes proprietes de calcul.  
-Famille 3
+un lagrangien augmente avec de bonnes proprietes de calcul.}
+\end{enumerate}
+\end{enumerate} 
+
+\subsubsection{Famille 3}
 Il s'agit d'algorithmes de Factorisation en matrices non-negatives
 (NMF pour Non-negative Matrix Factorization). L'objectif de cette
 branche des mathematiques appliquees est de factoriser une matrice
 non-negative, X dans notre cas, en produit de matrices
 non-negatives:AS par minimisation d'une distance entre X et AS et
 avec une regularisation adaptee, afin de lever la degenerescence de
-maniere adaptee au probleme physique associe au demixage.  MDMD-NMF
-[Huck2010b] Elements importants sur le fonctionnement de MDMD-NMF:
-Initialisation par VCA; 
-Minimisation de la norme de la norme de
+maniere adaptee au probleme physique associe au demixage.
+\paragraph{MDMD-NMF [Huck2010b]} 
+Elements importants sur le fonctionnement de MDMD-NMF:
+\begin{enumerate}
+\item {Initialisation par VCA.}
+\item {Minimisation de la norme de la norme de
 Frobenius avec une regularisation spectrale et une regularisation
-``spatiale'' (sur la matrice d'abondances).  
-Minimum spectral
+``spatiale'' (sur la matrice d'abondances).}
+\begin{enumerate}
+\item {Minimum spectral
 Dispersion: la regularisation spectrale encourage la variance des
-coefficients d'un spectre de endmembers a etre faible.  Maximum
-spatial Dispersion: la regularisation spatiale encourage les vecteurs
-d'abondances a occuper toute la partie admissible (plus d'information
-dans [Huck2009]). Cette action presente une certaine analogie a la
-contrainte de volume minimum.
+coefficients d'un spectre de endmembers a etre faible.}
+\item {Maximum spatial Dispersion: la regularisation spatiale
+  encourage les vecteurs d'abondances a occuper toute la partie
+  admissible (plus d'information dans [Huck2009]). Cette action
+  presente une certaine analogie a la contrainte de volume minimum.}
+\end{enumerate}
+\end{enumerate}
+ 
+ 
+  
 
-Remarques complementaires importantes Les algorithmes des familles 1
-et 2 estiment les spectres de endmembers ``seulement''. L'estimation
-des cartes d'abondances a lieu a posteriori et requiert l'application
-d'un algorithme de type Fully Constrained Least Square (FCLS)
-[Heinz2001]. MVES inclut un algorithme specifique d'estimation des
-abondances, que nous avons utilise dans nos simulations (pour MVES
-seulement).  Le demixage est un probleme generalement non convexe, ce
+\subsubsection{Remarques complementaires}
+Les algorithmes des familles 1 et 2 estiment les spectres de
+endmembers ``seulement''. L'estimation des cartes d'abondances a lieu
+a posteriori et requiert l'application d'un algorithme de type Fully
+Constrained Least Square (FCLS) [Heinz2001]. MVES inclut un algorithme
+specifique d'estimation des abondances, que nous avons utilise dans
+nos simulations (pour MVES seulement).  
+Le demixage est un probleme generalement non convexe, ce
 qui explique l'importance de l'initialisation des algorithmes.
 Recapitulatif de la prise en compte des differentes contraintes
 physiques:
 
-VCA MVSA MVES SISAL MDMD C1 $(A>0)$ muette Muette Muette Muette Dure C2
-$(S>0)$ muette Dure Dure Souple Dure C3 (additivite) Muette (via FCLS)
-Dure Dure Dure Souple simplexe Endmembers parmi les donnees
-Circonscrit aux donnees Circonscrit aux donnees Circonscrit aux
-donnees Indirecte par la regularisation ``spatiale'' Tableau 1:
-Comment les differents algorithmes exploitent les c
+
+\begin{center}
+   \begin{tabular}{ l | l | l | l | l | l }
+     \hline
+     & VCA & MVSA & MVES & SISAL & MDMD \\ \hline
+     C1 $(A>0)$ & muette & Muette & Muette & Muette & Dure \\ \hline
+     C2 $(S>0)$ & muette & Dure & Dure & Souple & Dure \\ \hline
+     C3 (additivite) & Muette (via FCLS) & Dure & Dure & Dure & Souple \\ \hline
+     simplexe & Endmembers \\ parmi les donnees & Circonscrit \\ aux donnees & 
+     Circonscrit \\ aux donnees & Circonscrit \\ aux donnees &
+     Indirecte par la \\ regularisation ``spatiale'' \\ \hline
+   \end{tabular}
+ \end{center}
+
 \section{Dimensionality reduction}
 
 \section{Anomaly detection}
@@ -316,7 +373,10 @@ d'anomalies dans les images hyperspectrales.
 
 Nous rappelons que la litterature relative a l'imagerie hyperspectrale
 distingue generalement la detection de cibles et la detection
-d'anomalies.  On parle de detection de cibles lorsque la reponse
+d'anomalies:
+
+\begin{enumerate}
+\item {On parle de detection de cibles lorsque la reponse
 spectrale de l'element recherche est utilisee en entree de
 l'algorithme de detection. Il s'agit d'information a priori qui
 permet, en theorie, de construire des algorithmes a tres fort pouvoir
@@ -324,17 +384,24 @@ de detection, tels que l'Adaptive Matched Filter (AMF) ou l'Adaptive
 Cosine/Coherence Estimator (ACE),pour n'en citer que deux. Neanmoins,
 la connaissance suffisamment fine du spectre recherche est une
 information difficile a detenir en pratique, ce qui conduit bien
-souvent a l'utilisation d'algorithmes de detection d'anomalies.  On
-parle de detection d'anomalies lorsque le spectre de l'element anormal
-n'est pas requis par l'algorithme de detection. Pour cette raison, on
-associe souvent le terme de ``detection non supervisee''. Neanmoins,
-les algorithmes dependent generalement de ``parametres de
-  structure''. Par exemple, dans le cas de la detection dans une
-fenetre glissante, le juste choix des dimensions repose sur une
-connaissance a priori de la taille des anomalies recherchees. Cette
-partie de l'etude se concentre sur la comparaison d'algorithmes de
-detection d'anomalies.
-
+souvent a l'utilisation d'algorithmes de detection d'anomalies.}
+\item {On parle de detection d'anomalies lorsque le spectre de
+  l'element anormal n'est pas requis par l'algorithme de
+  detection. Pour cette raison, on associe souvent le terme de
+  ``detection non supervisee''. Neanmoins, les algorithmes dependent
+  generalement de ``parametres de structure''. Par exemple, dans le
+  cas de la detection dans une fenetre glissante, le juste choix des
+  dimensions repose sur une connaissance a priori de la taille des
+  anomalies recherchees. Cette partie de l'etude se concentre sur la
+  comparaison d'algorithmes de detection d'anomalies.}
+\end{enumerate}
+    
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.7\textwidth]{Anomaly_HYP.eps}
+  \itkcaption[Notion sur la détection]{Notions sur la detection: masque de verite terrain, carte de detection, masque de detection.}
+  \label{fig:decomp_mml}
+\end{figure}
 Dans la Figure 26, nous introduisons d'ores et deja quelques notions
 qui seront utiles par la suite. Les algorithmes de detection
 d'anomalies ont comme entree une image et estiment une carte de
