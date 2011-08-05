@@ -98,7 +98,6 @@ public:
             ImageFileWriterType::Pointer writer = ImageFileWriterType::New();
             writer->SetInput(m_ImageList->GetNthElement( i ));
             writer->SetFileName( m_FileNameList[i]);
-            std::cout<<"###################### "<<m_FileNameList[i]<<std::endl;
             writer->Update();
           }
       }

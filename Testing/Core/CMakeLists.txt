@@ -1,7 +1,7 @@
 set(CXX_TEST_PATH ${EXECUTABLE_OUTPUT_PATH})
 
 set(INPUTDATA ${OTB_DATA_ROOT}/Input)
-set(TEMP ${OTB-Wrapper_BINARY_DIR}/Temporary)
+set(TEMP ${OTB-Wrapper_BINARY_DIR}/Testing/Temporary)
 
 if(WIN32)
   add_definitions(-DWIN32)
