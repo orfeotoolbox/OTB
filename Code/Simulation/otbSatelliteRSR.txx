@@ -62,7 +62,7 @@ SatelliteRSR<TPrecision, TValuePrecision>
       fin >> currentLambda;
       fin >> zenithalAngle;
       
-      //for each band add a pair of values (wavelenght and % response)
+      //for each band add a pair of values (wavelength and % response)
       for (unsigned int i=0; i < m_NbBands; ++i)
       {
          std::pair <TPrecision, TValuePrecision > currentPair;
@@ -77,7 +77,7 @@ SatelliteRSR<TPrecision, TValuePrecision>
 
    if(m_SortBands)
      {
-     //Sort the vector of SpectralResponse (band order by minimum wacvelenght firsst not null response
+     //Sort the vector of SpectralResponse (band order by minimum wavelength first not null response
      std::sort(m_RSR.begin(), m_RSR.end(), sort_band());
      }
 }
