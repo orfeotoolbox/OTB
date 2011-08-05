@@ -119,7 +119,7 @@ ADD_TEST(siTuLabelMapToSimulatedImageFilterTest ${Simulation_TESTS2}
         
 ADD_TEST(siTuImageSimulationMethodWithVectorDataTest ${Simulation_TESTS2}
         otbImageSimulationMethodWithVectorDataTest
-        ${INPUTDATA}/Simulation/Shapefile/stickPolygons.shp
+        ${INPUTDATA}/Simulation/Shapefile/stickPolygons_small.shp
         ${INPUTDATA}/Radiometry/SPOT5/HRG2/rep6S.dat
         4 #nb bands
         ${SPECTRUM_DB}/ #root path of spectrum
