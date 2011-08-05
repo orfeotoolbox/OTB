@@ -53,22 +53,6 @@ public:
     m_Value = m_DefaultValue;
   }
 
-  /** Set any value */
-  virtual void SetAnyValue(boost::any v)
-  {
-    // Perform any cast
-    m_Value = boost::any_cast<ScalarType>(v);
-
-    // Call Modified();
-    this->Modified();
-  }
-
-  /** Return any value */
-  virtual boost::any GetAnyValue()
-  {
-    return m_Value;
-  }
-
   /** Set the value */
   void SetValue( ScalarType value)
   {

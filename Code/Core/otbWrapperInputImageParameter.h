@@ -78,22 +78,6 @@ public:
      m_Reader = ImageFileReaderType::Pointer();
   }
 
-  /** Return any value */
-  virtual boost::any GetAnyValue()
-  {
-    return boost::any(m_Image);
-  }
-
-  /** Set any value */
-  virtual void SetAnyValue(boost::any v)
-  {
-    // Perform any cast
-    m_Image = boost::any_cast<VectorImageType::Pointer>(v);
-
-    // Call Modified();
-    this->Modified();
-  }
-
   bool HasValue() const
   {
     return m_Image.IsNotNull();

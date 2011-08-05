@@ -85,12 +85,6 @@ public:
   /** Return any value */
   virtual unsigned int GetValue();
 
-  /** Set any value */
-  virtual void SetAnyValue(boost::any v);
-
-  /** Return any value */
-  virtual boost::any GetAnyValue();
-
   bool HasValue() const
   {
     // a choice parameter always has a value

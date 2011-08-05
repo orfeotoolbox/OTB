@@ -124,23 +124,6 @@ public:
   {
   }
 
-  /** Return the parameter value as a boost:any. Should be
-   * reimplemented in each relevant sub-class (default implementation
-   * raise exception) */
-  virtual boost::any GetAnyValue() const
-  {
-    itkExceptionMacro(<<"GetAnyValue() method must be re-implemented by sub-classes.");
-    return boost::any(); // avoid warning
-  }
-  
-  /** Set the parameter value as a boost:any. Should be
-   * reimplemented in each relevant sub-class (default implementation
-   * raise exception) */
-  virtual void SetAnyValue(boost::any)
-  {
-    itkExceptionMacro(<<"SetAnyValue() method must be re-implemented by sub-classes.");
-  }
-
   virtual bool HasValue() const
   {
     itkExceptionMacro(<<"HasValue() method must be re-implemented by sub-classes.");

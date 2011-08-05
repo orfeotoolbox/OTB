@@ -149,32 +149,6 @@ ChoiceParameter::GetValue()
   return m_CurrentChoice;
 }
 
-/** Set any value */
-void
-ChoiceParameter::SetAnyValue(boost::any v)
-{
-  // Perform any cast
-  unsigned int val = boost::any_cast<unsigned int>(v);
-
-  if ( val >= GetNbChoices() )
-    {
-    itkExceptionMacro(<< "Invalid choice value : " << val)
-    }
-
-  m_CurrentChoice = val;
-
-  // Call Modified();
-  this->Modified();
-}
-
-/** Return any value */
-boost::any
-ChoiceParameter::GetAnyValue()
-{
-  return boost::any(m_CurrentChoice);
-}
-
-
 /** Return any value */
 std::vector<std::string>
 ChoiceParameter::GetParametersKeys()

@@ -43,8 +43,5 @@ int otbWrapperStringParameterTest1(int argc, char* argv[])
   numParam->SetKey(key);
   numParam->SetDescription(desc);
 
-  boost::any myAny = numParam->GetAnyValue();
-  std::cout << "value: " << boost::any_cast<std::string>(myAny) << std::endl;
-
   return EXIT_SUCCESS;
 }

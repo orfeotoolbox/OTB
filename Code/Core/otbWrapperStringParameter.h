@@ -45,22 +45,6 @@ public:
   /** RTTI support */
   itkTypeMacro(StringParameter, Parameter);
 
-  /** Set any value */
-  virtual void SetAnyValue(boost::any v)
-  {
-    // Perform any cast
-    m_Value = boost::any_cast<std::string>(v);
-
-    // Call Modified();
-    this->Modified();
-  }
-
-  /** Return any value */
-  virtual boost::any GetAnyValue()
-  {
-    return m_Value;
-  }
-
   /** Set the value */
   void SetValue( std::string value)
   {

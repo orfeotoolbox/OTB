@@ -52,12 +52,6 @@ public:
   itkGetObjectMacro(VectorData, VectorDataType);
 
   /** Return any value */
-  virtual boost::any GetAnyValue()
-  {
-    return boost::any(m_VectorData);
-  }
-
-  /** Return any value */
   void SetValue(VectorDataType* vd)
   {
     m_VectorData = vd;

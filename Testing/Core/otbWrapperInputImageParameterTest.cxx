@@ -28,3 +28,15 @@ int otbWrapperInputImageParameterNew(int argc, char* argv[])
 
   return EXIT_SUCCESS;
 }
+
+int otbWrapperInputImageParameterTest1(int argc, char* argv[])
+{
+  typedef otb::Wrapper::InputImageParameter InputImageParameterType;
+  InputImageParameterType::Pointer param = InputImageParameterType::New();
+
+  param->SetFromFileName(argv[1]);
+  param->SetKey(argv[2]);
+  param->SetDescription(argv[3]);
+
+  return EXIT_SUCCESS;
+}

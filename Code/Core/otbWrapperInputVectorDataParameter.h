@@ -81,22 +81,6 @@ public:
     m_Reader = VectorDataFileReaderType::Pointer();
   }
 
-  /** Return any value */
-  virtual boost::any GetAnyValue()
-  {
-    return boost::any(m_VectorData);
-  }
-
-  /** Set any value */
-  virtual void SetAnyValue(boost::any v)
-  {
-    // Perform any cast
-    m_VectorData = boost::any_cast<VectorDataType::Pointer>(v);
-
-    // Call Modified();
-    this->Modified();
-  }
-
   bool HasValue() const
   {
     return m_VectorData.IsNotNull();

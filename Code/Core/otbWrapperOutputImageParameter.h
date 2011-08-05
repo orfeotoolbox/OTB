@@ -52,12 +52,6 @@ public:
   itkGetObjectMacro(Image, VectorImageType);
 
   /** Return any value */
-  virtual boost::any GetAnyValue()
-  {
-    return boost::any(m_Image);
-  }
-
-  /** Return any value */
   void SetValue(VectorImageType* image)
   {
     m_Image = image;
