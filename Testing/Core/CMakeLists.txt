@@ -1,6 +1,7 @@
 set(CXX_TEST_PATH ${EXECUTABLE_OUTPUT_PATH})
 
 set(INPUTDATA ${OTB_DATA_ROOT}/Input)
+set(TEMP ${OTB-Wrapper_BINARY_DIR}/Temporary)
 
 if(WIN32)
   add_definitions(-DWIN32)
@@ -85,6 +86,21 @@ add_test(owTvInputImageListParameter ${OTB_WRAPPER_TESTS}
     "my description"
   )
 
+# Output image list parameter class test
+add_test(owTuOutputImageListParameter ${OTB_WRAPPER_TESTS}
+    otbWrapperOutputImageListParameterNew
+  )
+
+add_test(owTvOutputImageListParameter ${OTB_WRAPPER_TESTS}
+    otbWrapperOutputImageListParameterTest1
+    ${INPUTDATA}/poupees_c1.hdr
+    ${INPUTDATA}/poupees.tif
+    ${TEMP}/owTvInputImageListParameter1.tif
+    ${TEMP}/owTvInputImageListParameter2.tif
+    "mykey"
+    "my description"
+  )
+
 
 # ----------------Source files CXX -----------------------------------
 
@@ -103,6 +119,7 @@ otbWrapperParameterTest.cxx
 otbWrapperApplicationRegistryTest.cxx
 otbWrapperParameterKeyTest.cxx
 otbWrapperInputImageListParameterTest.cxx
+otbWrapperOutputImageListParameterTest.cxx
 )
 
 include_directories(${CMAKE_SOURCE_DIR}/Code/Core)

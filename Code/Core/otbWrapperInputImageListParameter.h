@@ -28,7 +28,7 @@ namespace otb
 namespace Wrapper
 {
 /** \class InputImageListParameter
- *  \brief This class represents a InputImage parameter
+ *  \brief This class represents a list of InputImage parameter
  */
 
 class ITK_EXPORT InputImageListParameter : public Parameter
@@ -40,8 +40,8 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-typedef otb::ObjectList<VectorImageType>  VectorImageListType;
- typedef otb::ImageFileReader<VectorImageType> ImageFileReaderType;
+  typedef otb::ObjectList<VectorImageType>      VectorImageListType;
+  typedef otb::ImageFileReader<VectorImageType> ImageFileReaderType;
   typedef otb::ObjectList<ImageFileReaderType>  ImageFileReaderListType;
 
   /** Defining ::New() static method */
@@ -63,6 +63,8 @@ typedef otb::ObjectList<VectorImageType>  VectorImageListType;
         m_ReaderList->PushBack(reader);
         m_ImageList->PushBack(reader->GetOutput());
       }
+
+    this->Modified();
   }
 
   /** Add an image from a filename */
@@ -75,6 +77,8 @@ typedef otb::ObjectList<VectorImageType>  VectorImageListType;
     // everything went fine, store the object references
     m_ReaderList->PushBack(reader);
     m_ImageList->PushBack(reader->GetOutput());
+
+    this->Modified();
   }
 
   /** Get the stored image filename list */
@@ -135,6 +139,8 @@ typedef otb::ObjectList<VectorImageType>  VectorImageListType;
       {
         m_ReaderList->PushBack( ImageFileReaderType::Pointer() );
       }
+
+    this->Modified();
   }
 
   /** Add an image to the list. */
