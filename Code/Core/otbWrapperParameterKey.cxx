@@ -35,7 +35,7 @@ ParameterKey::ParameterKey( const char * val )
 
 ParameterKey::ParameterKey( const std::string & val )
 {
-  this->SetKey(val);//m_Key = val;
+  this->SetKey(val);
 }
 
 ParameterKey::~ParameterKey()
@@ -73,16 +73,16 @@ ParameterKey::Split()
 void
 ParameterKey::Append( const std::string & val )
 {
+  m_Key.append(".");
   m_Key.append(val);
 }
 
-  /*
+  
 void
 ParameterKey::Append( const ParameterKey & pKey )
 {
-  
-  return appli;
+  this->Append( pKey.GetKey() );
 }
-  */
+  
 } // end namespace Wrapper
 } //end namespace otb

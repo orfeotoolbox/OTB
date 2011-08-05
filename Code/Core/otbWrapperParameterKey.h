@@ -20,6 +20,8 @@
 
 #include <string>
 #include "otbMacro.h"
+#include <itksys/RegularExpression.hxx>
+
 
 namespace otb
 {
@@ -70,7 +72,7 @@ last() : return "tata"
   void Append( const std::string & val ); 
 
   /** Append a string at the end of the key. A point separator will be added before the string. */
-  //void Append( const std::string & val ); 
+  void Append( const ParameterKey & pKey ); 
 
   /** Get Key value */
   std::string GetKey()
@@ -78,24 +80,27 @@ last() : return "tata"
       return m_Key;
     }
 
+  /** Get Key value */
+  std::string GetKey() const
+    {
+      return m_Key;
+    }
+
   /** Set Key value */
   void SetKey( const std::string & val )
     {
-      /*
-      if( val.substr(1) == "." || 
-          val.substr(val.size()-2, val.size()-1) == ".")
+      // Check chain : minuscule, alphanumerical or "."
+      itksys::RegularExpression reg;
+      reg.compile("([^0-9a-z\\.])");
+
+      if(!reg.find(val))
         {
-          itkGenericExceptionMacro( "invalid key. Can't start or begin with a \".\".");
+          m_Key = val;
         }
-      */
-      m_Key = val;
-      /*
-      if( this->Split().size() != 3 )
+      else
         {
-          m_Key = "";
-          itkGenericExceptionMacro( "Invalid key. Must follow the format \"string1.string2.string3\".");
+          itkGenericExceptionMacro( "Invalid key "<<val<<". Must be in minuscule, containing alphanumerical caracters or \".\"");
         }
-      */
     }
 
 private:
