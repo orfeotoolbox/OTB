@@ -115,7 +115,18 @@ SpectralResponse<TPrecision, TValuePrecision>
   if (lambda >= lambdaMax) return lambdaMax;
 
   unsigned int lambdaPosGuess = static_cast<unsigned int> ((lambda - lambdaMin) / (lambdaMax - lambdaMin)
-      * m_Response.size()) - 1;
+      * m_Response.size());
+
+  //this test should be always true since
+  // lambda<=lambdaMin and lambda>=lambdaMax have been just tested
+  if ((lambdaPosGuess < 0) || (lambdaPosGuess > m_Response.size()))
+    {
+    return 0;
+    }
+  // TODO JGU : test algorithm
+  //lambdaPosGuess calculus have been modified (initially lambdaPosGuess = static_cast<unsigned int> ((lambda - lambdaMin) / (lambdaMax - lambdaMin)
+  //* m_Response.size() -1). lambdaPosGuess = 0 for lambda contained in  m_Response first bin
+  // thus lambdaPosGuess -1 = -1 for those values !!!!
 
   for (typename VectorPairType::const_iterator it = beg + lambdaPosGuess; it <= last; ++it)
     {
