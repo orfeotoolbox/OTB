@@ -397,6 +397,9 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Tutorials/SimpleViewer.cxx
   ${OTB_SOURCE_DIR}/Examples/Tutorials/OrthoFusion.cxx
   ${OTB_SOURCE_DIR}/Examples/Tutorials/Multispectral.cxx
+  ${OTB_SOURCE_DIR}/Examples/Simulation/ProsailModel.cxx
+  ${OTB_SOURCE_DIR}/Examples/Simulation/LAIFromNDVIImageTransform.cxx
+  ${OTB_SOURCE_DIR}/Examples/Simulation/LAIAndPROSAILToSensorResponse.cxx
 )
 
 IF(OTB_USE_PATENTED)

@@ -1,0 +1,50 @@
+\chapter{Image Simulation}
+
+This chapter deals with image simulation algorithm. Using objects transmittance and reflectance and sensor characteristics, it can be possible to generate realistic hyperspectral synthetic set of data. This chapter includes PROSPECT (leaf optical properties) and SAIL (canopy bidirectional reflectance) model. Vegetation optical properties are modeled using PROSPECT model \cite{Jacquemoud2009}. 
+
+\section{PROSAIL model}
+
+PROSAIL \cite{Jacquemoud2009} model is the combinaison of PROSPECT leaf optical properties model and SAIL canopy bidirectional reflectance model. PROSAIL has also been used to develop new methods for retrieval of vegetation biophysical properties. It links the spectral variation of canopy reflectance, which is mainly related to leaf biochemical contents, with its directional variation, which is primarily related to canopy architecture and soil/vegetation contrast. This link is key to simultaneous estimation of canopy biophysical/structural variables for applications in agriculture, plant physiology, or ecology, at different scales. PROSAIL has become one of the most popular radiative transfer tools due to its ease of use, general robustness, and consistent validation by lab/field/space experiments over the years. Here we present a first example, which returns Hemispheric and Viewing reflectance for wavelength sampled  from $400$ to $2500 nm$. Inputs are leaf and Sensor (intrinsic and extrinsic) characteristics. 
+
+\label{sec:Prosail}
+\input{ProsailModel.tex}
+
+
+\section{Image Simulation}
+
+Here we present a complete pipeline to simulate image using sensor characteristics and objects reflectance and transmittance properties. This example use :
+
+\begin{itemize}
+\item input image
+\item label image : describes image object properties.
+\item label properties : describes each label characteristics.
+\item mask : vegetation image mask.
+\item cloud mask (optionnal).
+\item acquisition rarameter file : file containing the parameters for the acquisition.
+\item RSR File : File name for the relative spectral response to be used.
+\item sensor FTM file : File name for sensor spatial interpolation.
+\end{itemize}
+
+Algorithm is divided in following step :
+
+\begin{enumerate}
+\item LAI (Leaf Area Index) image estimation using NDVI formula.
+\item Sensor Reduce Spectral Response (RSR) using PROSAIL reflectance output interpolated at sensor spectral bands.
+\item Simulated image using Sensor RSR and Sensor FTM.
+\end{enumerate}
+
+\subsection{LAI image estimation}
+
+\label{sec:LAIFromNDVI}
+\input{LAIFromNDVIImageTransform.tex}
+
+\subsection{Sensor RSR Image Simulation}
+
+\label{sec:LAIAndPROSAILToSensorResponse}
+\input{LAIAndPROSAILToSensorResponse.tex}
+
+% the clearpage command helps to avoid orphans in the title of the next
+% section.
+\clearpage
+
+
