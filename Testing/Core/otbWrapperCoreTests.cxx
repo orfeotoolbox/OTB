@@ -5,7 +5,7 @@
   Date:      $Date$
   Version:   $Revision$
 
-
+numP
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
@@ -27,27 +27,21 @@
 void RegisterTests()
 {
   REGISTER_TEST(otbWrapperApplicationNew);
-
   REGISTER_TEST(otbWrapperParameterNew);
   REGISTER_TEST(otbWrapperParameterTest1);
-
   REGISTER_TEST(otbWrapperChoiceParameterNew);
   REGISTER_TEST(otbWrapperChoiceParameterTest1);
-
   REGISTER_TEST(otbWrapperNumericalParameterNew);
   REGISTER_TEST(otbWrapperNumericalParameterTest1);
-
   REGISTER_TEST(otbWrapperEmptyParameterNew);
-
   REGISTER_TEST(otbWrapperInputImageParameterNew);
+  REGISTER_TEST(otbWrapperInputImageParameterTest1);
   REGISTER_TEST(otbWrapperInputVectorDataParameterNew);
-
   REGISTER_TEST(otbWrapperStringParameterNew);
   REGISTER_TEST(otbWrapperStringParameterTest1);
-
   REGISTER_TEST(otbWrapperParameterListNew);
-
   REGISTER_TEST(otbWrapperApplicationRegistry);
-
   REGISTER_TEST(otbWrapperParameterKey);
+  REGISTER_TEST(otbWrapperInputImageListParameterNew);
+  REGISTER_TEST(otbWrapperInputImageListParameterTest1);
 }

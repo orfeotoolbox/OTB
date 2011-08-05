@@ -1,5 +1,7 @@
 set(CXX_TEST_PATH ${EXECUTABLE_OUTPUT_PATH})
 
+set(INPUTDATA ${OTB_DATA_ROOT}/Input)
+
 if(WIN32)
   add_definitions(-DWIN32)
 endif(WIN32)
@@ -43,6 +45,12 @@ add_test(owTvNumericalParameter ${OTB_WRAPPER_TESTS}
 add_test(owTuInputImageParameter ${OTB_WRAPPER_TESTS}
 	otbWrapperInputImageParameterNew
   )
+add_test(owTvInputImageParameter ${OTB_WRAPPER_TESTS}
+	otbWrapperInputImageParameterTest1
+        ${INPUTDATA}/poupees.tif
+	"mykey"
+	"my description"
+  )
 
 # Input VectorData parameter class test
 add_test(owTuInputVectorDataParameter ${OTB_WRAPPER_TESTS}
@@ -64,6 +72,20 @@ add_test(owTvParameterKey ${OTB_WRAPPER_TESTS}
     otbWrapperParameterKey
   )
 
+# Input image list parameter class test
+add_test(owTuInputImageListParameter ${OTB_WRAPPER_TESTS}
+    otbWrapperInputImageListParameterNew
+  )
+
+add_test(owTvInputImageListParameter ${OTB_WRAPPER_TESTS}
+    otbWrapperInputImageListParameterTest1
+    ${INPUTDATA}/poupees_c1.hdr
+    ${INPUTDATA}/poupees.tif
+    "mykey"
+    "my description"
+  )
+
+
 # ----------------Source files CXX -----------------------------------
 
 set(Wrapper_SRCS
@@ -80,6 +102,7 @@ otbWrapperParameterListTest.cxx
 otbWrapperParameterTest.cxx
 otbWrapperApplicationRegistryTest.cxx
 otbWrapperParameterKeyTest.cxx
+otbWrapperInputImageListParameterTest.cxx
 )
 
 include_directories(${CMAKE_SOURCE_DIR}/Code/Core)
