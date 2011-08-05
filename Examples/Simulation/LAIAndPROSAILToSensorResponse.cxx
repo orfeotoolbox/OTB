@@ -26,8 +26,8 @@
 //
 // Software Guide : BeginLatex
 //
-// The following code is an example of Sensor spectral response image generated using image of labeled objects image, objects properties (vegetal are handled by PROSAIL, non-vegetal classes
-// are characterized using text file), acquisition parameters, sensor characteristics, and LAI (Leaf Area Index) image. LAI image may be generated using \doxygen{LAIFromNDVIImageTransform}.
+// The following code is an example of Sensor spectral response image generated using image of labeled objects image, objects properties (vegetation classes are handled using PROSAIL model, non-vegetation classes
+// are characterized using \href{http://speclib.jpl.nasa.gov/}{Aster database} characteristics provided by a text file), acquisition parameters, sensor characteristics, and LAI (Leaf Area Index) image. LAI image may be generated using \code{LAIFromNDVIImageTransform} OTB-Application.
 //
 // Let's look at the minimal code required to use this algorithm. First, the
 // following headers must be included.
@@ -65,8 +65,8 @@ namespace otb
 
 // Software Guide : BeginLatex
 //
-// \code{ImageUniqueValuesCalculator} class is defined here. Method \code{GetUniqueValues()} returns an array containing all values presents in an image.
-// This class is implemented and using in code to test if all labels in labeled image are present in label parameter file.
+// \code{ImageUniqueValuesCalculator} class is defined here. Method \code{GetUniqueValues()} returns an array with all values contained in an image.
+// This class is implemented and used to test if all labels in labeled image are present in label parameter file.
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
