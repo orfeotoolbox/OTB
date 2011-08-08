@@ -36,14 +36,19 @@ void RegisterTests()
   REGISTER_TEST(otbWrapperEmptyParameterNew);
   REGISTER_TEST(otbWrapperInputImageParameterNew);
   REGISTER_TEST(otbWrapperInputImageParameterTest1);
+  REGISTER_TEST(otbWrapperInputImageListParameterNew);
+  REGISTER_TEST(otbWrapperInputImageListParameterTest1);
   REGISTER_TEST(otbWrapperInputVectorDataParameterNew);
+  REGISTER_TEST(otbWrapperOutputImageParameterNew);
+  REGISTER_TEST(otbWrapperOutputImageParameterTest1);
+  REGISTER_TEST(otbWrapperOutputImageListParameterNew);
+  REGISTER_TEST(otbWrapperOutputImageListParameterTest1);
   REGISTER_TEST(otbWrapperStringParameterNew);
   REGISTER_TEST(otbWrapperStringParameterTest1);
+  REGISTER_TEST(otbWrapperStringListParameterNew);
+  REGISTER_TEST(otbWrapperStringListParameterTest1);
   REGISTER_TEST(otbWrapperParameterListNew);
   REGISTER_TEST(otbWrapperApplicationRegistry);
   REGISTER_TEST(otbWrapperParameterKey);
-  REGISTER_TEST(otbWrapperInputImageListParameterNew);
-  REGISTER_TEST(otbWrapperInputImageListParameterTest1);
-  REGISTER_TEST(otbWrapperOutputImageListParameterNew);
-  REGISTER_TEST(otbWrapperOutputImageListParameterTest1);
 }
+

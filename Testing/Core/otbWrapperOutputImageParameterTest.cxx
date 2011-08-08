@@ -19,29 +19,38 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#include "otbWrapperStringParameter.h"
+#include "otbWrapperOutputImageParameter.h"
+#include "otbImageFileReader.h"
+#include "otbWrapperTypes.h"
 
-int otbWrapperStringParameterNew(int argc, char* argv[])
+int otbWrapperOutputImageParameterNew(int argc, char* argv[])
 {
-  typedef otb::Wrapper::StringParameter StringParameterType;
-  StringParameterType::Pointer parameter = StringParameterType::New();
+  typedef otb::Wrapper::OutputImageParameter OutputImageParameterType;
+  OutputImageParameterType::Pointer parameter = OutputImageParameterType::New();
 
   return EXIT_SUCCESS;
 }
 
 
-int otbWrapperStringParameterTest1(int argc, char* argv[])
+int otbWrapperOutputImageParameterTest1(int argc, char* argv[])
 {
-  typedef otb::Wrapper::StringParameter StringParameterType;
-  StringParameterType::Pointer numParam = StringParameterType::New();
+  typedef otb::Wrapper::OutputImageParameter OutputImageParameterType;
+  OutputImageParameterType::Pointer param = OutputImageParameterType::New();
+  
+ typedef otb::ImageFileReader< otb::Wrapper::VectorImageType > ReaderType;
 
-  const std::string value = argv[1];
-  const std::string key   = argv[2];
-  const std::string desc  = argv[3];
+  ReaderType::Pointer reader = ReaderType::New();
 
-  numParam->SetValue(value);
-  numParam->SetKey(key);
-  numParam->SetDescription(desc);
+  reader->SetFileName( argv[1] );
+  reader->UpdateOutputInformation();
+
+  param->SetValue(reader->GetOutput());
+  param->SetFileName( argv[2] );
+
+  param->SetKey(argv[3]);
+  param->SetDescription(argv[4]);
+
+  param->Write();
 
   return EXIT_SUCCESS;
 }

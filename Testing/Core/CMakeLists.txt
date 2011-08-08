@@ -25,11 +25,6 @@ add_test(owTuNumericalParameter ${OTB_WRAPPER_TESTS}
 	otbWrapperNumericalParameterNew
   )
 
-# EmptyParameter class test
-add_test(owTuEmptyParameter ${OTB_WRAPPER_TESTS}
-	otbWrapperEmptyParameterNew
-  )
-
 # NumericalParameter class test
 add_test(owTuNumericalParameter ${OTB_WRAPPER_TESTS}
 	otbWrapperNumericalParameterNew
@@ -40,6 +35,37 @@ add_test(owTvNumericalParameter ${OTB_WRAPPER_TESTS}
 	42.42
 	"mykey"
 	"my description"
+  )
+
+# String parameter class test
+add_test(owTuStringParameter ${OTB_WRAPPER_TESTS}
+    otbWrapperStringParameterNew
+  )
+
+add_test(owTvStringParameter ${OTB_WRAPPER_TESTS}
+    otbWrapperStringParameterTest1
+    "value1"
+    "mykey"
+    "my description"
+  )
+
+# String list parameter class test
+add_test(owTuStringListParameter ${OTB_WRAPPER_TESTS}
+    otbWrapperStringListParameterNew
+  )
+
+add_test(owTvStringListParameter ${OTB_WRAPPER_TESTS}
+    otbWrapperStringListParameterTest1
+    "value1"
+    "value2"
+    "value3"
+    "mykey"
+    "my description"
+  )
+
+# EmptyParameter class test
+add_test(owTuEmptyParameter ${OTB_WRAPPER_TESTS}
+	otbWrapperEmptyParameterNew
   )
 
 # Input Image parameter class test
@@ -58,6 +84,46 @@ add_test(owTuInputVectorDataParameter ${OTB_WRAPPER_TESTS}
     otbWrapperInputVectorDataParameterNew
   )
 
+# Input image list parameter class test
+add_test(owTuInputImageListParameter ${OTB_WRAPPER_TESTS}
+    otbWrapperInputImageListParameterNew
+  )
+
+add_test(owTvInputImageListParameter ${OTB_WRAPPER_TESTS}
+    otbWrapperInputImageListParameterTest1
+    ${INPUTDATA}/poupees_c1.hdr
+    ${INPUTDATA}/poupees.tif
+    "mykey"
+    "my description"
+  )
+# Output image parameter class test
+add_test(owTuOutputImageParameter ${OTB_WRAPPER_TESTS}
+    otbWrapperOutputImageParameterNew
+  )
+
+add_test(owTvOutputImageParameter ${OTB_WRAPPER_TESTS}
+    otbWrapperOutputImageParameterTest1
+    ${INPUTDATA}/poupees.tif
+    ${TEMP}/owTvOutputImageParameter2.tif
+    "mykey"
+    "my description"
+  )
+
+# Output image list parameter class test
+add_test(owTuOutputImageListParameter ${OTB_WRAPPER_TESTS}
+    otbWrapperOutputImageListParameterNew
+  )
+
+add_test(owTvOutputImageListParameter ${OTB_WRAPPER_TESTS}
+    otbWrapperOutputImageListParameterTest1
+    ${INPUTDATA}/poupees_c1.hdr
+    ${INPUTDATA}/poupees.tif
+    ${TEMP}/owTvOutputImageListParameter1.tif
+    ${TEMP}/owTvOutputImageListParameter2.tif
+    "mykey"
+    "my description"
+  )
+
 # Application class test
 add_test(owTuApplication ${OTB_WRAPPER_TESTS}
 	otbWrapperApplicationNew
@@ -73,34 +139,6 @@ add_test(owTvParameterKey ${OTB_WRAPPER_TESTS}
     otbWrapperParameterKey
   )
 
-# Input image list parameter class test
-add_test(owTuInputImageListParameter ${OTB_WRAPPER_TESTS}
-    otbWrapperInputImageListParameterNew
-  )
-
-add_test(owTvInputImageListParameter ${OTB_WRAPPER_TESTS}
-    otbWrapperInputImageListParameterTest1
-    ${INPUTDATA}/poupees_c1.hdr
-    ${INPUTDATA}/poupees.tif
-    "mykey"
-    "my description"
-  )
-
-# Output image list parameter class test
-add_test(owTuOutputImageListParameter ${OTB_WRAPPER_TESTS}
-    otbWrapperOutputImageListParameterNew
-  )
-
-add_test(owTvOutputImageListParameter ${OTB_WRAPPER_TESTS}
-    otbWrapperOutputImageListParameterTest1
-    ${INPUTDATA}/poupees_c1.hdr
-    ${INPUTDATA}/poupees.tif
-    ${TEMP}/owTvInputImageListParameter1.tif
-    ${TEMP}/owTvInputImageListParameter2.tif
-    "mykey"
-    "my description"
-  )
-
 
 # ----------------Source files CXX -----------------------------------
 
@@ -112,14 +150,17 @@ otbWrapperChoiceParameterTest.cxx
 otbWrapperEmptyParameterTest.cxx
 otbWrapperInputImageParameterTest.cxx
 otbWrapperInputVectorDataParameterTest.cxx
-otbWrapperNumericalParameterTest.cxx
+otbWrapperInputImageListParameterTest.cxx
 otbWrapperOutputImageParameterTest.cxx
+otbWrapperOutputImageListParameterTest.cxx
+otbWrapperNumericalParameterTest.cxx
 otbWrapperParameterListTest.cxx
 otbWrapperParameterTest.cxx
 otbWrapperApplicationRegistryTest.cxx
 otbWrapperParameterKeyTest.cxx
-otbWrapperInputImageListParameterTest.cxx
-otbWrapperOutputImageListParameterTest.cxx
+
+otbWrapperStringParameterTest.cxx
+otbWrapperStringListParameterTest.cxx
 )
 
 include_directories(${CMAKE_SOURCE_DIR}/Code/Core)
