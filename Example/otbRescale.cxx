@@ -53,6 +53,8 @@ private:
     SetDescription("Rescale the image between two given values.");
     m_RescaleFilter = RescaleImageFilterType::New();
     m_MinMaxFilter = MinMaxFilterType::New();
+
+    this->AddProgressSource(m_MinMaxFilter);
   }
 
   virtual ~Rescale()
@@ -76,7 +78,8 @@ private:
   }
 
   void DoExecute()
-  { 
+  {  
+    std::cout<<"rescale::DoExecute starts"<<std::endl;
     VectorImageType::Pointer inImage = GetParameterImage("in");
    
     std::cout<<"first step"<<std::endl;
@@ -104,6 +107,8 @@ private:
     
     SetParameterOutputImage("out", m_RescaleFilter->GetOutput());
     std::cout<<"output updated"<<std::endl;
+
+    std::cout<<"rescale::DoExecute starts"<<std::endl;
   }
   
   RescaleImageFilterType::Pointer m_RescaleFilter;

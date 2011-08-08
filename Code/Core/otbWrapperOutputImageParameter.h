@@ -39,6 +39,8 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
+  typedef otb::StreamingImageFileWriter<VectorImageType> WriterType;
+
   /** Defining ::New() static method */
   itkNewMacro(Self);
 
@@ -65,17 +67,17 @@ public:
 
   itkSetStringMacro(FileName);
   itkGetStringMacro(FileName);
+ 
+  itkGetObjectMacro( Writer, WriterType );
 
   void Write()
   {
     if (m_Image.IsNotNull())
       {
-      typedef otb::StreamingImageFileWriter<VectorImageType> WriterType;
-
-      WriterType::Pointer writer = WriterType::New();
-      writer->SetInput(m_Image);
-      writer->SetFileName(this->GetFileName());
-      writer->Update();
+      m_Writer = WriterType::New();
+      m_Writer->SetInput(m_Image);
+      m_Writer->SetFileName(this->GetFileName());
+      m_Writer->Update();
       }
   }
 
@@ -85,6 +87,7 @@ protected:
   {
     this->SetName("Output Image");
     this->SetKey("out");
+    m_Writer = WriterType::New();
   }
 
   /** Destructor */
@@ -93,6 +96,7 @@ protected:
 
   VectorImageType::Pointer m_Image;
   std::string m_FileName;
+  WriterType::Pointer m_Writer;
 
 private:
   OutputImageParameter(const Parameter &); //purposely not implemented
