@@ -49,7 +49,7 @@ int otbWrapperStringListParameterTest1(int argc, char* argv[])
   numParam->SetKey(key);
   numParam->SetDescription(desc);
 
-  if( boost::any_cast<std::string>(numParam->GetValue()[0]) != value2 )
+  if( numParam->GetValue()[0] != value2 )
     {
       return EXIT_FAILURE;
     }

@@ -39,7 +39,7 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef std::vector< boost::any >    StringListType;
+  typedef std::vector< std::string >    StringListType;
 
   /** Defining ::New() static method */
   itkNewMacro(Self);
@@ -72,19 +72,12 @@ public:
         itkExceptionMacro( "Invalid index "<<i<<" the string list has only "<<m_Value.size()<<" elements...")
       }
 
-    return boost::any_cast<std::string>(m_Value[i]);
+    return m_Value[i];
   }
 
   bool HasValue() const
   {
-    if (m_Value.empty() == true )
-      {
-        return false;
-      }
-    else
-      {
-        return !m_Value[0].empty();
-      }
+    return !m_Value.empty();
   }
 
   void ClearValue()
