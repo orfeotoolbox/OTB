@@ -9,3 +9,10 @@ add_test( NAME rbTvSmoothing
                   ${RUBY_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/RubySmoothingTest.rb
                   ${OTB_DATA_ROOT}/Input/ToulouseExtract_WithGeom.tif
                   ${TEMP}/rbTvSmoothing_ )
+
+add_test( NAME rbTvRescale
+          COMMAND ${TEST_DRIVER} Execute
+                  ${RUBY_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/RubyRescaleTest.rb
+                  ${OTB_DATA_ROOT}/Input/ToulouseExtract_WithGeom.tif
+                  ${TEMP}/rbTvRescale )
+

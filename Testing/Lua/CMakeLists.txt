@@ -10,3 +10,10 @@ add_test( NAME luTvSmoothing
                   ${CMAKE_CURRENT_SOURCE_DIR}/LuaSmoothingTest.lua
                   ${OTB_DATA_ROOT}/Input/ToulouseExtract_WithGeom.tif
                   ${TEMP}/rbTvSmoothing_ )
+
+add_test( NAME luTvRescale
+          COMMAND ${TEST_DRIVER} Execute
+                  ${CMAKE_BINARY_DIR}/Code/Wrappers/SWIG/otbApplicationLua
+                  ${CMAKE_CURRENT_SOURCE_DIR}/LuaRescaleTest.lua
+                  ${OTB_DATA_ROOT}/Input/ToulouseExtract_WithGeom.tif
+                  ${TEMP}/rbTvRescale )

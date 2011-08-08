@@ -14,3 +14,11 @@ add_test( NAME jaTvSmoothing
           ${JAVA_COMMAND} -cp ${CMAKE_JAVA_INCLUDE_PATH}:JavaSmoothingTest.jar SmoothingTest
             ${OTB_DATA_ROOT}/Input/ToulouseExtract_WithGeom.tif
             ${TEMP}/jaTvSmoothing_ )
+
+add_jar( JavaRescaleTest JavaRescaleTest.java )
+add_dependencies( JavaRescaleTest org_otb_Application_jar )
+add_test( NAME jaTvRescale
+          COMMAND ${TEST_DRIVER} Execute
+          ${JAVA_COMMAND} -cp ${CMAKE_JAVA_INCLUDE_PATH}:JavaRescaleTest.jar RescaleTest
+            ${OTB_DATA_ROOT}/Input/ToulouseExtract_WithGeom.tif
+            ${TEMP}/jaTvRescale )

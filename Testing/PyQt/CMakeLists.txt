@@ -10,3 +10,9 @@ add_test( NAME pqTvSmoothing
                   ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PyQtTest.py
                   ${OTB_DATA_ROOT}/Input/ToulouseExtract_WithGeom.tif
                   ${TEMP}/pyTvSmoothing_ )
+
+add_test( NAME pqTvRescale
+          COMMAND ${TEST_DRIVER} Execute
+                  ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PyQtTest.py
+                  ${OTB_DATA_ROOT}/Input/ToulouseExtract_WithGeom.tif
+                  ${TEMP}/pyTvRescale )
