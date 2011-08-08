@@ -2,8 +2,8 @@
 ## Then modify the CMakeLists.txt file in the root directory of your
 ## project to incorporate the testing dashboard.
 ## # The following are required to uses Dart and the Cdash dashboard
-##   enable_testing()
-##   include(Dart)
+##   ENABLE_TESTING()
+##   INCLUDE(CTest)
 set(CTEST_PROJECT_NAME "OTB-Wrapper")
 set(CTEST_NIGHTLY_START_TIME "20:00:00 CEST")
 
