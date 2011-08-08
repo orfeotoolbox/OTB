@@ -88,6 +88,8 @@ int otbGenericRSTransformGenericConversionCheckingFromGCP(int argc, char* argv[]
     return EXIT_FAILURE;
     }
 
+  std::cerr<<"## ---------- ##"<<std::endl;
+
   for (unsigned int GCPid = 0; GCPid < nbGCP; GCPid++)
     {
     ImageType::PointType ImgGCP, GeoGCP, estimatedImgGCP, estimatedGeoGCP;
@@ -107,33 +109,22 @@ int otbGenericRSTransformGenericConversionCheckingFromGCP(int argc, char* argv[]
     double geoRes = geoDistance->Evaluate(GeoGCP, estimatedGeoGCP);
     double imgRes = distance->Evaluate(ImgGCP, estimatedImgGCP);
 
+
+    std::cerr<<"GCP #"<<GCPid<<": ["<<ImgGCP[0]<<","<<ImgGCP[1]<<"] -> "<<"["<<GeoGCP[0]<<","<<GeoGCP[1]<<"]"<<std::endl;
+    std::cerr<<"Estimated Positions: "<<std::endl;
+    std::cerr<<"Geographic (WGS84): "<<" ["<<estimatedGeoGCP[0]<<","<<estimatedGeoGCP[1]<<"]"<<std::endl;
     if((geoRes > geoTol) || vnl_math_isnan(geoRes))
       {
-      std::cerr<<"Geographic (WGS84) residual is too high: "<<std::endl;
-      std::cerr<<"GCP #"<<GCPid<<" ["<<GeoGCP[0]<<","<<GeoGCP[1]<<"]"<<std::endl;
-      std::cerr<<"Estimated Position:"<<" ["<<estimatedGeoGCP[0]<<","<<estimatedGeoGCP[1]<<"]"<<std::endl;
-      std::cerr<<"Residual: "<<geoRes<<" meters"<<std::endl;
+      std::cerr<<"!!! Geographic (WGS84) residual is too high: "<<geoRes<<" meters !!!"<<std::endl;
       pass = false;
       }
+    std::cerr<<"Image index: "<<" ["<<estimatedImgGCP[0]<<","<<estimatedImgGCP[1]<<"]"<<std::endl;
     if((imgRes > imgTol) || vnl_math_isnan(imgRes))
       {
-      std::cerr<<"Image residual is too high: "<<std::endl;
-      std::cerr<<"GCP #"<<GCPid<<" ["<<ImgGCP[0]<<","<<ImgGCP[1]<<"]"<<std::endl;
-      std::cerr<<"Estimated Position:"<<" ["<<estimatedImgGCP[0]<<","<<estimatedImgGCP[1]<<"]"<<std::endl;
-      std::cerr<<"Residual: "<<imgRes<<" pixels"<<std::endl;
+      std::cerr<<"!!! Image residual is too high: "<<imgRes<<" pixels !!!"<<std::endl;
       pass = false;
       }
-/*
-    if( vnl_math_isnan(estimatedGeoGCP[0])
-      ||vnl_math_isnan(estimatedGeoGCP[1])
-      ||vnl_math_isnan(estimatedImgGCP[0])
-      ||vnl_math_isnan(estimatedImgGCP[1]) )
-      {
-      std::cerr<<"There is at least a nan among the estimated positions of GCP #" <<GCPid<<std::endl;
-      pass = false;
-      }
-*/
-
+    std::cerr<<"## ---------- ##"<<std::endl;
     }
 
 
