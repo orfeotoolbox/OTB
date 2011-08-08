@@ -73,7 +73,7 @@ ADD_TEST(siTvLAIAndPROSAILToSensorResponseExampleTest  ${EXE_TESTS}
         ${INPUTDATA}/LAIverySmallFSATSW.tif
         ${TEMP}/siTvLAIAndPROSAILToSensorResponse.tif
         ${INPUTDATA}/Simu_label_LAI.png
-        ${INPUTDATA}/Simu_mask_LAI_1.png
+        ${INPUTDATA}/Simu_mask_LAI_0.png
         ${INPUTDATA}/label-params-SO-2006-Level-2.txt
         ${INPUTDATA}/acqui-params.txt
         ${INPUTDATA}/Radiometry/FORMOSAT2/RSI/rep6S.dat
