@@ -411,12 +411,12 @@ StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
   // This will hold the master patch
   std::vector<double> master;
   master.reserve(inputIt.Size());
-  master = std::vector<double>(inputIt.Size(),0);
+  master = std::vector<double>(inputIt.Size(), 0);
 
   // And this will hold the slave patch
   std::vector<double> slave;
   slave.reserve(inputIt.Size());
-  slave = std::vector<double>(inputIt.Size(),0);
+  slave = std::vector<double>(inputIt.Size(), 0);
 
 
   // Walk the output map
