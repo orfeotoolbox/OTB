@@ -1,9 +1,8 @@
-
 set(TEST_DRIVER "${OTB_TEST_DRIVER}"
     --add-before-env PYTHONPATH        "${CMAKE_BINARY_DIR}/Code/Wrappers/SWIG"
+    --add-before-env PYTHONPATH        $<TARGET_FILE_DIR:_otbApplication>
     --add-before-env PYTHONPATH        "${CMAKE_SOURCE_DIR}/Code/Wrappers/PyQt"
-    --add-before-env ITK_AUTOLOAD_PATH "${CMAKE_BINARY_DIR}/Example"
-)
+    --add-before-env ITK_AUTOLOAD_PATH $<TARGET_FILE_DIR:otbapp_TestApplication> )
 
 add_test( NAME pqTvSmoothing
           COMMAND ${TEST_DRIVER} Execute
