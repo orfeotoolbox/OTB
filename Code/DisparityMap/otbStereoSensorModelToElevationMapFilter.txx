@@ -39,7 +39,7 @@ StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
   this->SetNthOutput(1, OutputImageType::New());
 
   // Default interpolator
-  m_Interpolator = BCOInterpolateImageFunction<TInputImage>::New();
+  m_Interpolator = itk::LinearInterpolateImageFunction<TInputImage>::New();
 
   // Default correlation radius
   m_Radius.Fill(3);
@@ -411,6 +411,13 @@ StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
   // This will hold the master patch
   std::vector<double> master;
   master.reserve(inputIt.Size());
+  master = std::vector<double>(inputIt.Size(),0);
+
+  // And this will hold the slave patch
+  std::vector<double> slave;
+  slave.reserve(inputIt.Size());
+  slave = std::vector<double>(inputIt.Size(),0);
+
 
   // Walk the output map
   while(!outputIt.IsAtEnd() && !inputIt.IsAtEnd())
@@ -461,8 +468,6 @@ StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
             height < initHeight + m_HigherElevation;
             height += m_ElevationStep)
           {
-          // This will hold slave patch
-          std::vector<double> slave;
 
           // Interpolate slave patch
           for(unsigned int i = 0; i < inputIt.Size(); ++i)
@@ -485,19 +490,19 @@ StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
             if(m_Interpolator->IsInsideBuffer(outPoint))
               {
               // And fill slave vector
-              slave.push_back(m_Interpolator->Evaluate(outPoint));
+              slave[i] = m_Interpolator->Evaluate(outPoint);
               }
             else
               {
               // If out of buffer, fill with 0.
-              slave.push_back(0.);
+              slave[i] = 0.;
               }
             }
 
           // Now that we have the master and slave patches, call the
           // correlation function
           double correlationValue = this->Correlation(master, slave);
-
+          
           // Check if a better correlation was found
           if(correlationValue > optimalCorrelation)
             {
@@ -561,6 +566,7 @@ StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
   double crossProd = 0.;
   double squareSumMaster = 0.;
   double squareSumSlave = 0.;
+
 
   // Compute correlation
   for(unsigned int i = 0; i < master.size(); ++i)
