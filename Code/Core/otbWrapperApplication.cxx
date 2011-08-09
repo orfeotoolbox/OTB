@@ -39,80 +39,15 @@ namespace Wrapper
 
 Application::Application()
  : m_Name(""),
-   m_Description(""),
-   m_ThreadId1(0),
-   m_ThreadId2(0),
-   m_ThreadId3(0),
-   m_ThreadId4(0),
-   m_Thread1HasFinished(true),
-   m_Thread2HasFinished(true),
-   m_Thread3HasFinished(true),
-   m_Thread4HasFinished(true)
+   m_Description("")
 {
   // Don't call Init from the constructor, since it calls a virtual method !
-  m_Threader = ThreaderType::New();
-  m_ProgressSourceList = ObjectListType::New();
 }
 
 Application::~Application()
 {
 }
 
-void
-Application
-::StartProcess1()
-{
-  m_ThreadId1 = m_Threader->SpawnThread(RunProcess1_static, this);
-}
-
-void
-Application
-::StopProcess1()
-{
-  m_Threader->TerminateThread(m_ThreadId1);
-}
-
-void
-Application
-::StartProcess2()
-{
-  m_ThreadId2 = m_Threader->SpawnThread(RunProcess2_static, this);
-}
-
-void
-Application
-::StopProcess2()
-{
-  m_Threader->TerminateThread(m_ThreadId2);
-}
-
-void
-Application
-::StartProcess3()
-{
-  m_ThreadId3 = m_Threader->SpawnThread(RunProcess3_static, this);
-}
-
-void
-Application
-::StopProcess3()
-{
-  m_Threader->TerminateThread(m_ThreadId3);
-}
-
-void
-Application
-::StartProcess4()
-{
-  m_ThreadId4 = m_Threader->SpawnThread(RunProcess4_static, this);
-}
-
-void
-Application
-::StopProcess4()
-{
-  m_Threader->TerminateThread(m_ThreadId4);
-}
 
 std::vector<std::string>
 Application::GetParametersKeys(bool recursive)
@@ -155,33 +90,13 @@ void Application::UpdateParameters()
 
 void Application::Execute()
 {
-  //this->DoExecute();
-  std::cout<<"Application::Execute starts"<<std::endl;
-  this->StartProcess1();
-
-  if( m_ProgressSourceList->Size() == 0 )
-    {
-      this->StartProcess2();
-    }
-  std::cout<<"Application::Execute done"<<std::endl;
+  this->DoExecute();
 }
 
 void Application::ExecuteAndWriteOutput()
 {
   this->Execute();
 
-  while( m_Thread2HasFinished == false || m_Thread2HasFinished == false)
-    {
-      this->Sleep(500);
-    }
- 
-  this->StartProcess3();
-  this->StartProcess4();
-}
-
-
-void Application::DoWriteOutput()
-{
   std::vector<std::string> paramList = GetParametersKeys(true);
   for (std::vector<std::string>::const_iterator it = paramList.begin();
       it != paramList.end();
@@ -191,73 +106,10 @@ void Application::DoWriteOutput()
       {
       Parameter* param = GetParameterByKey(*it);
       OutputImageParameter* outputParam = dynamic_cast<OutputImageParameter*>(param);
-      m_CurWriter = outputParam->GetWriter();
       outputParam->Write();
       }
     }
 }
-
-void Application::DoWatchExecute()
-{
-  std::cout<<"Application::DoWatchExecute starts"<<std::endl;
-  /*
-  double last = 0;
-  double updateThres = 0.01;
-  double current = -1;
-  */
-  unsigned int nbProcessDone = 0;  
-  unsigned int nbProcess( m_ProgressSourceList->Size() );
-  unsigned int nbCurProcess( nbProcess );
-
-  while ( nbProcessDone < nbProcess &&  m_Thread1HasFinished == false)
-    {
-      itk::OStringStream oss;
-      for( unsigned int i=0; i<nbProcess; i++ )
-        {
-          unsigned int progressPercent = static_cast<unsigned int>(m_ProgressSourceList->GetNthElement( i )->GetProgress()*100);
-          std::string stars(progressPercent, '*');
-          std::string blanks(100-progressPercent, ' ');
-          oss<< "\rProcessing progress " << i <<": " <<  progressPercent << "% [" << stars << blanks << "]\n" ;
-          //std::cout << m_ProgressSourceList->GetNthElement( i )->GetProgress() << std:endl;
-          //std::cout << "\rProcessing progress: " << progressPercent << "% [" << stars << blanks << "]" << std::flush;
-          if( m_ProgressSourceList->GetNthElement( i )->GetProgress()==1 )
-            {
-              nbProcessDone++;
-            }
-        }
-      std::cout << oss.str() << std::endl;//flush;
-      Sleep(500);
-      
-      /*
-        current = m_ProcessObject->GetProgress();
-        if (current - last > updateThres)
-        {
-        // Make the main fltk loop update progress fields
-        m_View->AwakeProgressFields(m_ProcessObject->GetProgress());
-        last = current;
-        }
-        }
-        // Sleep for a while
-        Sleep(500);
-        m_ProcessObject = m_Model->GetProcessObjectModel();
-      */
-    }  
-  std::cout<<"Application::DoWatchExecute done"<<std::endl;
-}
-
-void Application::DoWatchWrite()
-{
-  while( m_CurWriter.IsNotNull() && m_Thread3HasFinished==false )
-    {
-      unsigned int progressPercent = static_cast<unsigned int>(m_CurWriter->GetProgress()*100);
-      std::string stars(progressPercent, '*');
-      std::string blanks(100-progressPercent, ' ');
-      std::cout << "\rProcessing progress: " << progressPercent << "% [" << stars << blanks << "]" << std::endl;//flush;
-
-      Sleep(500);
-    }  
-}
-
 
 /* Enable the use of an optional parameter. Returns the previous state */
 void Application::EnableParameter(std::string paramKey)

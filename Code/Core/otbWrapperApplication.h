@@ -22,8 +22,6 @@
 #include "otbMacro.h"
 #include "itkObject.h"
 #include "itkObjectFactory.h"
-#include "otbObjectList.h"
-#include "otbThreads.h"
 
 #include "otbWrapperTypes.h"
 #include "otbWrapperParameterGroup.h"
@@ -48,8 +46,8 @@ public:
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef ObjectList< itk::ProcessObject > ObjectListType;
-  typedef itk::MultiThreader ThreaderType;
+  /** Defining ::New() static method */
+  //itkNewMacro(Self);
 
   /** RTTI support */
   itkTypeMacro(Application,itk::Object);
@@ -248,57 +246,6 @@ public:
    */
   std::vector<std::string> GetParametersKeys(bool recursive = true);
 
-  /**
-   * Get the progress report sources.
-   */
-  itkSetObjectMacro( ProgressSourceList, ObjectListType );
-  itkGetObjectMacro( ProgressSourceList, ObjectListType );
-
-  void AddProgressSource( itk::ProcessObject *  obj )
-  {
-    m_ProgressSourceList->PushBack( obj );
-    this->Modified();
-  }
-
-  itk::ProcessObject * GetNthProgressSource( unsigned int i )
-  {
-    if( m_ProgressSourceList->Size() < i )
-      {
-        itkExceptionMacro( "invalid index "<<i<<". Only "<<m_ProgressSourceList->Size()<<" progress sources availbale." );
-      }
-    return m_ProgressSourceList->GetNthElement( i );
-  }
-  
-  /** 
-   * Multi thread methods 
-   */
-  void StartProcess1();
-  void StopProcess1();
-  void StartProcess2();
-  void StopProcess2();
-  void StartProcess3();
-  void StopProcess3();
-  void StartProcess4();
-  void StopProcess4();
-
-  void SetThreader(ThreaderType::Pointer threader)
-  {
-    m_Threader = threader;
-  }
-  ThreaderType::Pointer GetThreader()
-    {
-    return m_Threader;
-  }
-
-  itkGetConstMacro(Thread1HasFinished, bool);
-  itkSetMacro(Thread1HasFinished, bool);
-  itkGetConstMacro(Thread2HasFinished, bool);
-  itkSetMacro(Thread2HasFinished, bool);
-  itkGetConstMacro(Thread3HasFinished, bool);
-  itkSetMacro(Thread3HasFinished, bool);
-  itkGetConstMacro(Thread4HasFinished, bool);
-  itkSetMacro(Thread4HasFinished, bool);
-
 protected:
   /** Constructor */
   Application();
@@ -339,101 +286,7 @@ private:
   std::string m_Name;
   std::string m_Description;
   ParameterGroup::Pointer m_ParameterList;
-  ObjectListType::Pointer m_ProgressSourceList;
 
-
- /** 
-   * Multi thread methods 
-   */
-  static ITK_THREAD_RETURN_TYPE RunProcess1_static(void * t)
-  {
-    struct itk::MultiThreader::      ThreadInfoStruct * pInfo = (itk::MultiThreader::ThreadInfoStruct *) (t);
-    Application::Pointer lThis = (Application*) (pInfo->UserData);
-    lThis->RunProcess1(t);
-    return 0;
-  }
-
-  
-  virtual void RunProcess1(void * itkNotUsed(t))
-  {
-    //itkExceptionMacro(<< "The RunProcess1 method has to be overloaded.");
-    m_Thread1HasFinished = false;
-    this->DoExecute();
-    m_Thread1HasFinished = true;
-  }
-  
-
-  static ITK_THREAD_RETURN_TYPE RunProcess2_static(void * t)
-  {
-    struct itk::MultiThreader::      ThreadInfoStruct * pInfo = (itk::MultiThreader::ThreadInfoStruct *) (t);
-    Application::Pointer lThis = (Application*) (pInfo->UserData);
-    lThis->RunProcess2(t);
-    return 0;
-  }
-
-  virtual void RunProcess2(void * itkNotUsed(t))
-  {
-    //itkExceptionMacro(<< "The RunProcess2 method has to be overloaded.");
-    m_Thread2HasFinished = false;
-    this->DoWatchExecute();
-    m_Thread2HasFinished = true;
-  }
-
-
-  static ITK_THREAD_RETURN_TYPE RunProcess3_static(void * t)
-  {
-    struct itk::MultiThreader::      ThreadInfoStruct * pInfo = (itk::MultiThreader::ThreadInfoStruct *) (t);
-    Application::Pointer lThis = (Application*) (pInfo->UserData);
-    lThis->RunProcess3(t);
-    return 0;
-  }
-
-  virtual void RunProcess3(void * itkNotUsed(t))
-  {
-    //itkExceptionMacro(<< "The RunProcess2 method has to be overloaded.");
-    m_Thread3HasFinished = false;
-    this->DoWriteOutput();
-    m_Thread3HasFinished = true;
-  }
-
-  static ITK_THREAD_RETURN_TYPE RunProcess4_static(void * t)
-  {
-    struct itk::MultiThreader::      ThreadInfoStruct * pInfo = (itk::MultiThreader::ThreadInfoStruct *) (t);
-    Application::Pointer lThis = (Application*) (pInfo->UserData);
-    lThis->RunProcess4(t);
-    return 0;
-  }
-
-  virtual void RunProcess4(void * itkNotUsed(t))
-  {
-    //itkExceptionMacro(<< "The RunProcess2 method has to be overloaded.");
-    m_Thread4HasFinished = false;
-    this->DoWatchWrite();
-    m_Thread4HasFinished = true;
-  }
-
-
-  void DoWatchExecute();
-  void DoWatchWrite();
-  void DoWriteOutput();
-
-  // Internal call to openthread::Thread::microSleep
-  // by the intermediate of the otb class Threads
-  static int Sleep(unsigned int microsec)
-  {
-    return Threads::Sleep(microsec);
-  }
-
-  ThreaderType::Pointer m_Threader;
-  int                   m_ThreadId1;
-  int                   m_ThreadId2;
-  int                   m_ThreadId3;
-  int                   m_ThreadId4;
-  bool                  m_Thread1HasFinished;
-  bool                  m_Thread2HasFinished;
-  bool                  m_Thread3HasFinished;
-  bool                  m_Thread4HasFinished;
-  itk::ProcessObject::Pointer m_CurWriter;
 }; //end class
 
 } // end namespace Wrapper
