@@ -15,3 +15,4 @@ add_test( NAME pyTvRescale
                   ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonRescaleTest.py
                   ${OTB_DATA_ROOT}/Input/ToulouseExtract_WithGeom.tif
                   ${TEMP}/pyTvRescale)
+                  

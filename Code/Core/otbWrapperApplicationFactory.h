@@ -99,13 +99,18 @@ private:
 } // end namespace Wrapper
 } //end namespace otb
 
+#if (defined(WIN32) || defined(_WIN32))
+#  define OTB_APP_EXPORT __declspec(dllexport)
+#else
+#  define OTB_APP_EXPORT
+#endif
 
-#define OTB_APPLICATION_EXPORT( ApplicationType )                                    \
+#define OTB_APPLICATION_EXPORT( ApplicationType )                                      \
   typedef otb::Wrapper::ApplicationFactory<ApplicationType> ApplicationFactoryType;    \
   static ApplicationFactoryType::Pointer staticFactory;                                \
   extern "C"                                                                           \
   {                                                                                    \
-    itk::ObjectFactoryBase* itkLoad()                                                  \
+    OTB_APP_EXPORT itk::ObjectFactoryBase* itkLoad()                                   \
     {                                                                                  \
       staticFactory = ApplicationFactoryType::New();                                   \
       return staticFactory;                                                            \
