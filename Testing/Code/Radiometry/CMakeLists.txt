@@ -760,7 +760,7 @@ ADD_TEST(raTvTSAVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS5}
 # -------            LAIFromNDVIFormosat2 RAndNIRVegetationIndexImageFilter   ------------------------------
 
 ADD_TEST(raTvLAIFromNDVIFormosat2_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS5}
-  --compare-image ${NOTOL}   ${BASELINE}/raRAndNIRVegetationIndex_LAIFromNDVIFormosat2_verySmallFSATSWcRcNir.tif
+  --compare-image ${EPSILON_12}   ${BASELINE}/raRAndNIRVegetationIndex_LAIFromNDVIFormosat2_verySmallFSATSWcRcNir.tif
                     ${TEMP}/raRAndNIRVegetationIndex_LAIFromNDVIFormosat2_verySmallFSATSWcRcNir.tif
         otbRAndNIRVegetationIndexImageFilter
         LAIFormosat2

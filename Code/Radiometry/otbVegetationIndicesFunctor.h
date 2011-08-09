@@ -1443,7 +1443,7 @@ private:
         return static_cast<TOutput>(0.);
         }
 
-      return  static_cast<TOutput>(a*(vcl_exp(static_cast<TOutput>(dnir-dr)/static_cast<TOutput>(dr+dnir)*b)-vcl_exp(c*b)));
+      return  static_cast<TOutput>(a*(vcl_exp(static_cast<double>(dnir-dr)/static_cast<double>(dr+dnir)*b)-vcl_exp(c*b)));
     };
 
 
