@@ -20,7 +20,7 @@
 
 #include "otbStreamingMinMaxVectorImageFilter.h"
 #include "otbVectorRescaleIntensityImageFilter.h"
-
+#include "otbStandardFilterWatcher.h"
 namespace otb
 {
 namespace Wrapper
@@ -80,17 +80,30 @@ private:
     VectorImageType::Pointer inImage = GetParameterImage("in");
    
     m_MinMaxFilter = MinMaxFilterType::New();
+    m_MinMaxFilter->GetStreamer()->SetNumberOfLinesStrippedStreaming( 50 );
     m_RescaleFilter = RescaleImageFilterType::New();
    
     m_MinMaxFilter->SetInput( inImage );
+    std::cout<<inImage->GetLargestPossibleRegion()<<std::endl;
+    otb::StandardFilterWatcher watcher(m_MinMaxFilter, "Min Max Computation");
+    std::cout<<"Updating min-max"<<std::endl;
     m_MinMaxFilter->Update();
+    std::cout<<"min-max computed"<<std::endl;
+    std::cout<<"min computed: "<<m_MinMaxFilter->GetMinimum()<<std::endl;
+    std::cout<<"max computed: "<<m_MinMaxFilter->GetMaximum()<<std::endl;
 
     m_RescaleFilter->SetInput( inImage );
     m_RescaleFilter->SetInputMinimum( m_MinMaxFilter->GetMinimum() );
     m_RescaleFilter->SetInputMaximum( m_MinMaxFilter->GetMaximum() );
 
-    m_RescaleFilter->SetOutputMinimum( GetParameterFloat("outmin") );
-    m_RescaleFilter->SetOutputMaximum( GetParameterFloat("outmax") );
+    VectorImageType::PixelType outMin, outMax;
+    outMin.SetSize( inImage->GetNumberOfComponentsPerPixel() );
+    outMax.SetSize( inImage->GetNumberOfComponentsPerPixel() );
+    outMin.Fill( GetParameterFloat("outmin") );
+    outMax.Fill( GetParameterFloat("outmax") );
+
+    m_RescaleFilter->SetOutputMinimum( outMin );
+    m_RescaleFilter->SetOutputMaximum( outMax );
 
     m_RescaleFilter->UpdateOutputInformation();
     
