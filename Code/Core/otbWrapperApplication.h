@@ -259,9 +259,19 @@ public:
     m_InternalProcessList = lList;
     this->Modified();
   }
-  
-  void AddInternalProcess( itk::ProcessObject * lProcess ){
+
+  std::vector<std::string> GetInternalProcessListName(){
+    return m_InternalProcessListName;
+  }
+ 
+  void SetInternalProcessListName(  std::vector<std::string> lList ){
+    m_InternalProcessListName = lList;
+    this->Modified();
+  }
+
+  void AddInternalProcess( itk::ProcessObject * lProcess, const std::string & name ){
     m_InternalProcessList.push_back( lProcess );
+    m_InternalProcessListName.push_back( name );
     this->Modified();
   }
 
@@ -310,6 +320,7 @@ private:
   ParameterGroup::Pointer m_ParameterList;
   itk::ProcessObject::Pointer m_CurrentProcess;
   std::vector<itk::ProcessObject *> m_InternalProcessList;
+  std::vector<std::string> m_InternalProcessListName;
   unsigned int m_WroteOutput;
   bool m_ExecuteAndWriteOutputDone;
 

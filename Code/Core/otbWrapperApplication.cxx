@@ -42,6 +42,7 @@ Application::Application()
    m_Description(""),
    m_CurrentProcess(),
    m_InternalProcessList(),
+   m_InternalProcessListName(),
    m_WroteOutput(0),
    m_ExecuteAndWriteOutputDone(false)
 {

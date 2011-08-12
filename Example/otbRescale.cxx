@@ -53,7 +53,7 @@ private:
     SetDescription("Rescale the image between two given values.");
     m_RescaleFilter = RescaleImageFilterType::New();
     m_MinMaxFilter = MinMaxFilterType::New();
-    this->AddInternalProcess( m_MinMaxFilter );
+    this->AddInternalProcess( m_MinMaxFilter, "Min/Max computing" );
   }
 
   virtual ~Rescale()
