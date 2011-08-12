@@ -2,6 +2,7 @@ set(TEMP ${CMAKE_BINARY_DIR}/Testing/Temporary)
 file(MAKE_DIRECTORY ${TEMP})
 
 add_subdirectory(Core)
+add_subdirectory(Common)
 add_subdirectory(Example)
 
 if ( WRAP_PYTHON )

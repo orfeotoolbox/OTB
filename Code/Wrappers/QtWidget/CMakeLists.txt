@@ -19,7 +19,7 @@ set( WrappersQtWidget_MOC_HDR
 QT4_WRAP_CPP(WrappersQtWidget_MOC_SRC ${WrappersQtWidget_MOC_HDR})
 
 add_library(OTBWrapperQtWidget ${srcs} ${WrappersQtWidget_MOC_SRC})
-target_link_libraries(OTBWrapperQtWidget OTBCommon OTBIO OTBWrapperCore ${QT_LIBRARIES})
+target_link_libraries(OTBWrapperQtWidget OTBCommon OTBIO OTBWrapperCore OTBWrapperCommon ${QT_LIBRARIES})
 
 install(TARGETS OTBWrapperQtWidget
         RUNTIME DESTINATION bin

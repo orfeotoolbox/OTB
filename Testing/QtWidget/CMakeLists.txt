@@ -12,6 +12,7 @@ set(WrapperQtWidget_SRCS
 
 include_directories(${QT_INCLUDE_DIRS})
 include_directories(${CMAKE_SOURCE_DIR}/Code/Core)
+include_directories(${CMAKE_SOURCE_DIR}/Code/Common)
 include_directories(${CMAKE_SOURCE_DIR}/Code/Wrappers/QtWidget)
 
 add_executable(otbWrapperQtWidgetTests ${WrapperQtWidget_SRCS})

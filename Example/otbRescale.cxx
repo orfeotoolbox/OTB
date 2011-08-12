@@ -53,6 +53,7 @@ private:
     SetDescription("Rescale the image between two given values.");
     m_RescaleFilter = RescaleImageFilterType::New();
     m_MinMaxFilter = MinMaxFilterType::New();
+    this->AddInternalProcess( m_MinMaxFilter );
   }
 
   virtual ~Rescale()
@@ -79,9 +80,7 @@ private:
   { 
     VectorImageType::Pointer inImage = GetParameterImage("in");
    
-    m_MinMaxFilter = MinMaxFilterType::New();
     m_MinMaxFilter->GetStreamer()->SetNumberOfLinesStrippedStreaming( 50 );
-    m_RescaleFilter = RescaleImageFilterType::New();
    
     m_MinMaxFilter->SetInput( inImage );
     std::cout<<inImage->GetLargestPossibleRegion()<<std::endl;
@@ -91,6 +90,8 @@ private:
     std::cout<<"min-max computed"<<std::endl;
     std::cout<<"min computed: "<<m_MinMaxFilter->GetMinimum()<<std::endl;
     std::cout<<"max computed: "<<m_MinMaxFilter->GetMaximum()<<std::endl;
+
+    VectorImageType::PixelType inMin, inMax;
 
     m_RescaleFilter->SetInput( inImage );
     m_RescaleFilter->SetInputMinimum( m_MinMaxFilter->GetMinimum() );

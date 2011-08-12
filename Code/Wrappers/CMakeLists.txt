@@ -1,4 +1,5 @@
 include_directories(../Core)
+include_directories(../Common)
 
 # Generate Qt based GUI
 option ( WRAP_QT "Enable Qt wrappers" OFF )

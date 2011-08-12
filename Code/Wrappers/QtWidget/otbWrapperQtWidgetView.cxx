@@ -29,6 +29,7 @@ QtWidgetView::QtWidgetView(Application* app)
 {
 
   m_Model = new QtWidgetModel(app);
+  //m_Application->RegisterListener( this );
 
 }
 
@@ -127,7 +128,7 @@ QWidget* QtWidgetView::CreateFooter()
   //m_ExecButton->setStyleSheet("border-style: none");
   m_ExecButton->setDefault(true);
   m_ExecButton->setText(QObject::tr("Execute"));
-  connect( m_ExecButton, SIGNAL(clicked()), m_Model, SLOT(ExecuteAndWriteOutput()) );
+  connect( m_ExecButton, SIGNAL(clicked()), m_Model, SLOT(ExecuteAndWriteOutput() ) );
 
   m_QuitButton = new QPushButton(footerGroup);
   m_QuitButton->setText(QObject::tr("Quit"));

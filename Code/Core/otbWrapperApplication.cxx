@@ -39,7 +39,11 @@ namespace Wrapper
 
 Application::Application()
  : m_Name(""),
-   m_Description("")
+   m_Description(""),
+   m_CurrentProcess(),
+   m_InternalProcessList(),
+   m_WroteOutput(0),
+   m_ExecuteAndWriteOutputDone(false)
 {
   // Don't call Init from the constructor, since it calls a virtual method !
 }
@@ -95,8 +99,9 @@ void Application::Execute()
 
 void Application::ExecuteAndWriteOutput()
 {
+  m_ExecuteAndWriteOutputDone = false;
   this->Execute();
-
+  m_WroteOutput = 0;
   std::vector<std::string> paramList = GetParametersKeys(true);
   for (std::vector<std::string>::const_iterator it = paramList.begin();
       it != paramList.end();
@@ -106,9 +111,12 @@ void Application::ExecuteAndWriteOutput()
       {
       Parameter* param = GetParameterByKey(*it);
       OutputImageParameter* outputParam = dynamic_cast<OutputImageParameter*>(param);
+      m_CurrentProcess = outputParam->GetWriter();
       outputParam->Write();
+      m_WroteOutput++;
       }
     }
+  m_ExecuteAndWriteOutputDone = true;
 }
 
 /* Enable the use of an optional parameter. Returns the previous state */
@@ -528,6 +536,50 @@ Application::AddParameter(ParameterType type, std::string paramKey, std::string 
   GetParameterList()->AddParameter(type, paramKey, paramName);
 }
 
+
+double
+Application::GetExecuteProgress()
+{
+  /*
+  unsigned int processStatus = m_CurrentProcess->GetProgresss() * 100;
+
+  itkOStringStream oss;
+  oss << "Writing output "<< m_WroteOutput << " over "<<this->GetParametersKeys(true).size()<<".\n";
+  oss << "\rProcessing progress: "processStatus << "% [" << stars << blanks << "]";
+
+  return oss.str();
+  */
+  double res = -1;
+  if ( m_CurrentProcess.IsNotNull() )
+    {
+      res = m_CurrentProcess->GetProgress();
+    }
+
+  
+  return res;
+}
+
+std::vector<double>
+Application::GetDoExecuteProgress()
+{
+  /*
+  unsigned int processStatus = m_CurrentProcess->GetProgresss() * 100;
+
+  itkOStringStream oss;
+  oss << "Writing output "<< m_WroteOutput << " over "<<this->GetParametersKeys(true).size()<<".\n";
+  oss << "\rProcessing progress: "processStatus << "% [" << stars << blanks << "]";
+
+  return oss.str();
+  */
+
+  std::vector<double> res;
+  for(unsigned int i=0; i<m_InternalProcessList.size(); i++)
+    {
+      res.push_back(m_InternalProcessList[i]->GetProgress());
+    }
+
+  return res;
+}
 
 }
 }

@@ -1,6 +1,6 @@
 include(WrapperMacros)
 
 OTB_CREATE_APPLICATION(NAME Addition  SOURCES otbAddition.cxx)
-OTB_CREATE_APPLICATION(NAME Smoothing SOURCES otbSmoothing.cxx)
-OTB_CREATE_APPLICATION(NAME Rescale   SOURCES otbRescale.cxx)
-OTB_CREATE_APPLICATION(NAME TestApplication SOURCES otbTestApplication.cxx)
+OTB_CREATE_APPLICATION(NAME Smoothing SOURCES otbSmoothing.cxx LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters)
+OTB_CREATE_APPLICATION(NAME Rescale   SOURCES otbRescale.cxx LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters)
+OTB_CREATE_APPLICATION(NAME TestApplication SOURCES otbTestApplication.cxx LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters)

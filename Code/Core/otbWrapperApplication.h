@@ -1,20 +1,20 @@
 /*=========================================================================
-
- Program:   ORFEO Toolbox
- Language:  C++
- Date:      $Date$
- Version:   $Revision$
-
-
- Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
- See OTBCopyright.txt for details.
-
-
- This software is distributed WITHOUT ANY WARRANTY; without even
- the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- PURPOSE.  See the above copyright notices for more information.
-
- =========================================================================*/
+  
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
+  
+  
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+  
+  
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+  PURPOSE.  See the above copyright notices for more information.
+  
+  =========================================================================*/
 #ifndef __otbWrapperApplication_h
 #define __otbWrapperApplication_h
 
@@ -26,18 +26,20 @@
 #include "otbWrapperTypes.h"
 #include "otbWrapperParameterGroup.h"
 
+//#include "otbWrapperEventsSender.h"
+//#include "otbWrapperEvent.h"
 
 namespace otb
 {
 namespace Wrapper
 {
-
+  
 /** \class Application
  *  \brief This class represent an application
  *  TODO
  *
  */
-class ITK_EXPORT Application: public itk::Object
+  class ITK_EXPORT Application: /*public EventsSender<Event>, */public itk::Object
 {
 public:
   /** Standard class typedefs. */
@@ -246,6 +248,26 @@ public:
    */
   std::vector<std::string> GetParametersKeys(bool recursive = true);
 
+  virtual double GetExecuteProgress();
+  virtual std::vector<double> GetDoExecuteProgress();
+  
+  std::vector<itk::ProcessObject *> GetInternalProcessList(){
+    return m_InternalProcessList;
+  }
+ 
+  void SetInternalProcessList(  std::vector<itk::ProcessObject *> lList ){
+    m_InternalProcessList = lList;
+    this->Modified();
+  }
+  
+  void AddInternalProcess( itk::ProcessObject * lProcess ){
+    m_InternalProcessList.push_back( lProcess );
+    this->Modified();
+  }
+
+  itkGetMacro( ExecuteAndWriteOutputDone, bool )
+  itkSetMacro( ExecuteAndWriteOutputDone, bool )
+  
 protected:
   /** Constructor */
   Application();
@@ -286,6 +308,10 @@ private:
   std::string m_Name;
   std::string m_Description;
   ParameterGroup::Pointer m_ParameterList;
+  itk::ProcessObject::Pointer m_CurrentProcess;
+  std::vector<itk::ProcessObject *> m_InternalProcessList;
+  unsigned int m_WroteOutput;
+  bool m_ExecuteAndWriteOutputDone;
 
 }; //end class
 

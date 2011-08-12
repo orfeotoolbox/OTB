@@ -21,6 +21,8 @@
 #include <QtGui>
 #include "otbWrapperApplication.h"
 #include "otbWrapperQtWidgetModel.h"
+//#include "otbWrapperEventsListener.h"
+
 
 namespace otb
 {
@@ -30,7 +32,7 @@ namespace Wrapper
 /** \class
  * \brief
  */
-class QtWidgetView : public QWidget
+  class QtWidgetView : public QWidget/*, public EventsListener<std::string>*/
 {
   Q_OBJECT
 public:

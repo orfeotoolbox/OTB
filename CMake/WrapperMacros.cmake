@@ -9,7 +9,7 @@ macro(OTB_CREATE_APPLICATION)
 
    set( APPLICATION_TARGET_NAME otbapp_${APPLICATION_NAME} )
 
-   include_directories(${CMAKE_SOURCE_DIR}/Code/Core)
+   include_directories(${CMAKE_SOURCE_DIR}/Code/Core ${CMAKE_SOURCE_DIR}/Code/Common )
    include_directories(${APPLICATION_INCLUDE_DIRS})
    add_library(${APPLICATION_TARGET_NAME} MODULE ${APPLICATION_SOURCES})
    target_link_libraries(${APPLICATION_TARGET_NAME} OTBWrapperCore ${APPLICATION_LINK_LIBRARIES})
