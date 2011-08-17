@@ -25,11 +25,10 @@
 #include "otbSVMSampleListModelEstimator.h"
 #include "otbSVMClassifier.h"
 #include "itkListSample.h"
-#include "base/ossimDirectoryTree.h"
-#include "base/ossimDirectory.h"
 #include "otbConfusionMatrixCalculator.h"
 
 #include "itkMersenneTwisterRandomVariateGenerator.h"
+#include <itksys/Glob.hxx>
 
 int otbReduceSpectralResponseSVMClassifier(int argc, char * argv[])
 {
@@ -65,7 +64,7 @@ int otbReduceSpectralResponseSVMClassifier(int argc, char * argv[])
   //Instantiation
 
   //Load fileSR into vector
-  std::vector<ossimFilename> dirSR;
+  std::vector<std::string> dirSR;
   dirSR.push_back(argv[1]);
   dirSR.push_back(argv[2]);
   dirSR.push_back(argv[3]);
@@ -84,54 +83,58 @@ int otbReduceSpectralResponseSVMClassifier(int argc, char * argv[])
 
   //divide into training and testing files
   //90% of files are used for training and 10% for testing
-  std::vector<ossimFilename> trainingFiles; //contains training files for all classes
+  std::vector<std::string> trainingFiles; //contains training files for all classes
   std::vector<unsigned int> trainingClasses; //contains training classes for each files
-  std::vector<ossimFilename> testingFiles; //contains testing files for this classes
+  std::vector<std::string> testingFiles; //contains testing files for this classes
   std::vector<unsigned int> testingGTClasses; //contains testing ground truth classes for each files
   unsigned int ind;
-  const ossimString regularExpressionPattern = ".*\\.txt$";
-  int flags = ossimDirectory::OSSIM_DIR_DEFAULT;
+  const std::string regularExpressionPattern = ".*\\.txt$";
 
   for (unsigned int i = 0; i < dirSR.size(); ++i) //for each class (directory)
     {
-    std::vector<ossimFilename> result;
-    ossimDirectory * directory = new ossimDirectory();
-    std::cout << "dirSR[" << i << "] : " << dirSR[i] << std::endl;
-    directory->open(dirSR[i]);
-    directory->findAllFilesThatMatch(result, regularExpressionPattern, flags);
+      std::cout << "dirSR[" << i << "] : " << dirSR[i] << std::endl;
 
-    delete (directory);
-    directory = NULL;
+      std::string fileExp = dirSR[i];
+      // Find all .txt file in the directory
+      fileExp.append("/*.txt");
+      itksys::Glob glob;
+      if ( glob.FindFiles( fileExp ) == false )
+        {
+          std::cout<<"No .txt file found in "<<dirSR[i]<<"."<<std::endl;
+          return EXIT_FAILURE;
+        }
 
-    std::vector<ossimFilename> training; //contains training files for this class (directory)
-    std::vector<ossimFilename> testing; //contains testing files for this class (directory)
-    training = result;
+      std::vector<std::string> result = glob.GetFiles();
 
-    // initiating random number generation
-    itk::Statistics::MersenneTwisterRandomVariateGenerator::Pointer
+      std::vector<std::string> training; //contains training files for this class (directory)
+      std::vector<std::string> testing; //contains testing files for this class (directory)
+      training = result;
+      
+      // initiating random number generation
+      itk::Statistics::MersenneTwisterRandomVariateGenerator::Pointer
         randomGen = itk::Statistics::MersenneTwisterRandomVariateGenerator::New();
-    //randomGen->Initialize();
-
+      //randomGen->Initialize();
+      
     for (unsigned int j = 0; j < static_cast<unsigned int> (percentage * result.size()); ++j)
       {
-      ind = randomGen->GetIntegerVariate() % (result.size());
-      testing.push_back(result[ind]);
-      training.erase(training.begin() + (ind - j));
+        ind = randomGen->GetIntegerVariate() % (result.size());
+        testing.push_back(result[ind]);
+        training.erase(training.begin() + (ind - j));
       }
 
     //add to global training files and testing files
     for (unsigned int k = 0; k < testing.size(); ++k)
       {
-      std::cout << "testing[" << k << "] : " << testing[k] << std::endl;
-      testingFiles.push_back(testing[k]);
-      testingGTClasses.push_back(i);
+        std::cout << "testing[" << k << "] : " << testing[k] << std::endl;
+        testingFiles.push_back(testing[k]);
+        testingGTClasses.push_back(i);
       }
 
     for (unsigned int l = 0; l < training.size(); ++l)
       {
-      std::cout << "training[" << l << "] : " << training[l] << std::endl;
-      trainingFiles.push_back(training[l]);
-      trainingClasses.push_back(i); //class is the directory number
+        std::cout << "training[" << l << "] : " << training[l] << std::endl;
+        trainingFiles.push_back(training[l]);
+        trainingClasses.push_back(i); //class is the directory number
       }
     }
 
@@ -226,13 +229,13 @@ int otbReduceSpectralResponseSVMClassifier(int argc, char * argv[])
   TrainingSampleListType::Pointer classifierListLabel = TrainingSampleListType::New();
   while (it != classifier->GetOutput()->End())
     {
-    std::cout << "class : " << it.GetClassLabel() << std::endl;
+      std::cout << "class : " << it.GetClassLabel() << std::endl;
     classifierListLabel->PushBack(it.GetClassLabel());
     ++it;
     }
   for (unsigned int i = 0; i < testingFiles.size(); ++i)
     {
-    std::cout << "ground truth class : " << testingGTClasses[i] << std::endl;
+      std::cout << "ground truth class : " << testingGTClasses[i] << std::endl;
     }
 
   //Compute confusion matrix
