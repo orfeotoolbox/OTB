@@ -40,6 +40,29 @@ ${INPUTDATA}/poupees.png 1
 )
 ENDIF(OTB_GL_USE_ACCEL)
 
+
+ADD_TEST(vrTvImageWidgetImageDumpWithoutGlAcceleration ${VISUALIZATION_TESTS1}
+--compare-image ${NOTOL}
+${BASELINE}/vrTvImageWidgetImageDumpWithoutGlAcceleration.png
+${TEMP}/vrTvImageWidgetImageDumpWithoutGlAcceleration.png
+otbImageWidgetImageDump
+${INPUTDATA}/qb_RoadExtract2sub200x200.tif # input image
+0 # use glAcceleration
+2 # resize factor
+${TEMP}/vrTvImageWidgetImageDumpWithoutGlAcceleration.png
+)
+
+IF(OTB_GL_USE_ACCEL)
+ADD_TEST(vrTvImageWidgetImageDumpWithGlAcceleration ${VISUALIZATION_TESTS1}
+${BASELINE}/vrTvImageWidgetImageDumpWithGlAcceleration.png
+${TEMP}/vrTvImageWidgetImageDumpWithGlAcceleration.png
+otbImageWidgetImageDump
+${INPUTDATA}/qb_RoadExtract2sub200x200.tif 
+1
+${TEMP}/vrTvImageWidgetImageDumpWithGlAcceleration.png
+)
+ENDIF(OTB_GL_USE_ACCEL)
+
 #------------ otb::ImageWidgetActionHandler -------------
 
 ADD_TEST(vrTuImageWidgetActionHandlerNew ${VISUALIZATION_TESTS1}
@@ -445,6 +468,7 @@ SET(Visualization_SRCS1
 otbVisualizationTests1.cxx
 otbImageWidgetNew.cxx
 otbImageWidget.cxx
+otbImageWidgetImageDump.cxx
 otbImageWidgetActionHandlerNew.cxx
 otbImageWidgetControllerNew.cxx
 otbImageWidgetController.cxx
