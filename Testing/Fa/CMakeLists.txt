@@ -254,6 +254,10 @@ ADD_TEST(FA-0000169-fftcomplextocomplex ${CXX_TEST_PATH}/0000169-fftcomplextocom
   )
 ENDIF(USE_FFTWD OR USE_FFTWF)
 
+ADD_TEST(WriteUnsignedLong ${CXX_TEST_PATH}/WriteUnsignedLong
+${TEMP}/WriteUnsignedLong.tif
+)
+
 # -------       Vectorization issue   -----------------------------------
 # FIXME Desactivated until http://bugs.orfeo-toolbox.org/view.php?id=94
 # has somebody working on it
@@ -294,5 +298,8 @@ TARGET_LINK_LIBRARIES(000295-MeanShiftVectorImageFilterWithStreamingShrink OTBIO
 
 ADD_EXECUTABLE(SensorModelBorder SensorModelBorder.cxx)
 TARGET_LINK_LIBRARIES(SensorModelBorder OTBIO OTBCommon OTBBasicFilters OTBProjections)
+
+ADD_EXECUTABLE(WriteUnsignedLong WriteUnsignedLong.cxx)
+TARGET_LINK_LIBRARIES(WriteUnsignedLong OTBIO OTBCommon)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
