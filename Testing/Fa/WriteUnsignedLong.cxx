@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
   pixelIndex[0] = 1;   // x position
   pixelIndex[1] = 1;
   
-  image->SetPixel(pixelIndex,initialValue + 1);
+  image->SetPixel(pixelIndex, initialValue + 1);
 
   writer->SetInput(image);
   writer->SetFileName(filename);
@@ -81,9 +81,9 @@ int main(int argc, char *argv[])
   if (reader->GetOutput()->GetPixel(pixelIndex) != initialValue + 1 )
     {
     return EXIT_FAILURE;
-    } 
+    }
   else
     {
     return EXIT_SUCCESS;
-    } 
+    }
 }
