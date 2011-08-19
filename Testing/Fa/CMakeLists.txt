@@ -254,7 +254,7 @@ ADD_TEST(FA-0000169-fftcomplextocomplex ${CXX_TEST_PATH}/0000169-fftcomplextocom
   )
 ENDIF(USE_FFTWD OR USE_FFTWF)
 
-ADD_TEST(WriteUnsignedLong ${CXX_TEST_PATH}/WriteUnsignedLong
+ADD_TEST(faTvWriteUnsignedLong ${CXX_TEST_PATH}/WriteUnsignedLong
 ${TEMP}/WriteUnsignedLong.tif
 )
 
