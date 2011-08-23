@@ -125,16 +125,6 @@ MultivariateAlterationDetectorImageFilter<TInputImage,TOutputImage>
   VnlMatrixType s12 = m_CovarianceMatrix.GetVnlMatrix().extract(nbComp1,nbComp2,0,nbComp1);
   VnlMatrixType s21 = s12.transpose();
 
-  std::cout<<"s11:"<<std::endl;
-  std::cout<<s11<<std::endl;
-  std::cout<<"s12:"<<std::endl;
-  std::cout<<s12<<std::endl;
-  std::cout<<"s21:"<<std::endl;
-  std::cout<<s21<<std::endl;
-  std::cout<<"s22:"<<std::endl;
-  std::cout<<s22<<std::endl;
-
-
   // Extract means
   m_Mean1 = VnlVectorType(nbComp1,0);
   m_Mean2 = VnlVectorType(nbComp2,0);
@@ -152,13 +142,9 @@ MultivariateAlterationDetectorImageFilter<TInputImage,TOutputImage>
     if(nbComp1 == nbComp2)
     {
     // Case where nbbands1 == nbbands2
-    std::cout<<"Solving nb bands equality case"<<std::endl;
 
     VnlMatrixType invs22 = vnl_matrix_inverse<RealType>(s22);
     
-    std::cout<<"s22^-1:" <<std::endl;
-    std::cout<<invs22<<std::endl;
-
     // Build the generalized eigensystem
     VnlMatrixType s12s22is21 = s12 * invs22 *s21;
     
@@ -169,15 +155,11 @@ MultivariateAlterationDetectorImageFilter<TInputImage,TOutputImage>
     // Compute cannonical correlation matrix
     VnlMatrixType rho = ges.D;
     rho = rho.apply(&vcl_sqrt);
-    std::cout<<"Rho: "<<std::endl;
-    std::cout<<rho<<std::endl;
-    
+
     m_V2 = invs22*s21*m_V1;
     }
   else
     {
-    std::cout<<"Solving big problem when nb bands are different."<<std::endl;
-
     VnlMatrixType sl(nbComp1+nbComp2,nbComp1+nbComp2,0);
     VnlMatrixType sr(nbComp1+nbComp2,nbComp1+nbComp2,0);
 
@@ -186,16 +168,7 @@ MultivariateAlterationDetectorImageFilter<TInputImage,TOutputImage>
     sr.update(s11,0,0);
     sr.update(s22,nbComp1,nbComp1);
 
-    std::cout<<"SLeft:"<<std::endl;
-    std::cout<<sl<<std::endl;
-
-    std::cout<<"SRight:"<<std::endl;
-    std::cout<<sr<<std::endl;
-
     vnl_generalized_eigensystem ges(sl,sr);
-
-    std::cout<<ges.V<<std::endl;
-    std::cout<<ges.D<<std::endl;
 
     VnlMatrixType V = ges.V;
     
@@ -223,13 +196,6 @@ MultivariateAlterationDetectorImageFilter<TInputImage,TOutputImage>
     aux3.fill(0);
     aux3.set_diagonal(aux2);
     m_V2 =  aux3 * m_V2;
-
-    std::cout<<"v1: "<<std::endl;
-    std::cout<<m_V1<<std::endl;
-    
-    std::cout<<"v2: "<<std::endl;
-    std::cout<<m_V2<<std::endl;
-
 }
 
 template <class TInputImage, class TOutputImage>
