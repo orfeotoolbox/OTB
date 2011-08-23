@@ -30,7 +30,9 @@ namespace otb
 {
 
 /** \class MultivariateAlterationDetectorImageFilter
- * \brief 
+ * \brief This filter implements the Multivariate Alteration Detector 
+ * 
+ * TODO: document me
  *
  * \ingroup Multithreaded
  */
