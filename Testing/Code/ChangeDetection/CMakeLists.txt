@@ -127,6 +127,18 @@ ADD_TEST(cdTvKullbackLeiblerSupervizedDistanceImageFilter ${CHANGEDETECTION_TEST
              35
              ${TEMP}/cdTVKullbackLeiblerSupervizedDistanceImageFilterOutput.png)
 
+ADD_TEST(cdTuMultivariateAlterationDetectorImageFilterNew ${CHANGEDETECTION_TESTS2}
+         otbMultivariateAlterationDetectorImageFilterNew)
+
+ADD_TEST(cdTvMultivariateAlterationDetectorImageFilter ${CHANGEDETECTION_TESTS2}
+         --compare-image ${TOL}
+             ${BASELINE}/cdTvMultivariateAlterationDetectorImageFilterOutput.tif
+             ${TEMP}/cdTvMultivariateAlterationDetectorImageFilterOutput.tif
+         otbMultivariateAlterationDetectorImageFilter
+             ${INPUTDATA}/Spot5-Gloucester-before.tif
+             ${INPUTDATA}/Spot5-Gloucester-after.tif
+             ${TEMP}/cdTvMultivariateAlterationDetectorImageFilterOutput.tif)
+
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicChangeDetection_SRCS1
@@ -148,6 +160,7 @@ otbKullbackLeiblerProfileImageFilterNew.cxx
 otbKullbackLeiblerProfileImageFilter.cxx
 otbKullbackLeiblerSupervizedDistanceImageFilterNew.cxx
 otbKullbackLeiblerSupervizedDistanceImageFilter.cxx
+otbMultivariateAlterationDetectorImageFilter.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbChangeDetectionTests1 "${BasicChangeDetection_SRCS1}" "OTBChangeDetection;OTBIO;OTBTesting")
