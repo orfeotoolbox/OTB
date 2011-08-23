@@ -2,8 +2,8 @@
 
 %TODO translate 
 Une image hyperspectrale de la Terre acquises depuis
-un porteur aérien ou spatial contient une collection de pixels
-spectraux ou, de maniere équivalente, une collection de bandes
+un porteur aerien ou spatial contient une collection de pixels
+spectraux ou, de maniere equivalente, une collection de bandes
 spectrales.
 
 \begin{figure}[h]
@@ -16,17 +16,17 @@ d'une bande spectrale.}
 
 Le cube hyperspectral \ref{fig:cube} acquis est une image de
 radiance, chaque pixel spectral contient une information spectrale
-fine qui dépend : 
+fine qui depend : 
 
-\begin{enumerate}
+\begin{itemize}
 \item{Du spectre de la source lumineuse (en pratique, le
-soleil) et des perturbations atmosphériques.}
-\item{Des réponses spectrales
-des différents matériaux présents dans la zone de recouvrement et de la nature de leur mélange.}
-\end{enumerate}
+soleil) et des perturbations atmospheriques.}
+\item{Des reponses spectrales
+des differents materiaux presents dans la zone de recouvrement et de la nature de leur melange.}
+\end{itemize}
 
-Des traitements préliminaires de
-correction atmosphérique permettent d'estimer un cube de réflectance
+Des traitements preliminaires de
+correction atmospherique permettent d'estimer un cube de reflectance
 spectrale par soustraction de l'information extrinseque a la
 scene. 
 
@@ -72,13 +72,13 @@ l'abondance du endmember j dans le pixel i. Sous certaines conditions
 surfacique du materiau dans la zone de recouvrement (\ref{fig:linear_unmixing}).  En
 pratique, on peut raisonnablement s'attendre: 
 
-\begin{enumerate}
+\begin{itemize}
 \item{a ce qu'un nombre
 limite de materiaux purs composent la scene.}
 \item{a ce que la scene
 contienne des pixels purs si la resolution spatiale est suffisante, et
 n'en contienne pas forcement sinon.}
-\end{enumerate}
+\end{itemize}
  
 De nombreuses techniques d'analyse d'images hyperspectrales reposent
 sur une approche geometrique ou chaque pixel spectral est vu comme un
@@ -112,14 +112,14 @@ $R= A.S + N = X + N$
 \end{center}
 
 Soit J le nombre de endmembers et I le nombre de pixels spectaux: 
-\begin{enumerate}
+\begin{itemize}
 \item{Les J colonnes de la matrice A contiennent les spectres de endmembers.}
 \item{Les J lignes de la matrice S contiennent les cartes d'abondances
 vectorisees;nous appelons vecteurs d'abondances les colonnes de la
 matrice S.}
 \item{La matrice N, de dimensions $LxI$, est une matrice de bruit
 additif.}
-\end{enumerate}
+\end{itemize}
 
    
 
@@ -129,7 +129,7 @@ debruite.
 
 Plusieurs contraintes physiques peuvent être prises en
 compte pour permettre la resolution de ce probleme: 
-\begin{enumerate}
+\begin{itemize}
 \item{C1: positivite
 des spectres de reflectance (matrice A non-negative).}
 \item{C2: positivite
@@ -140,7 +140,7 @@ S vaut 1).}
 \item{L'independance algebrique entre les ``vecteurs spectraux''
 associes au endmembers et la linearite des melanges de spectres, d'ou
 decoule la propriete du simplexe decrite au paragraphe suivant.}
-\end{enumerate}
+\end{itemize}
 
 \subsection{Simplex}  
 Les algorithmes recents de demixage s'appuient sur la ``propriete du
@@ -210,14 +210,14 @@ utilise pour initialiser les differents algorithmes etudies (sauf
 MVES, base sur une autre initialisation).
 
 Elements importants sur le fonctionnement de VCA: 
-\begin{enumerate}
+\begin{itemize}
 \item {L'algorithme VCA
 est base sur des projections iteratives des donnees orthogonales au
 sous-espace porte par les endmembers deja estimes.}
 \item {Biaise lorsque le
 degre de purete est inferieur a 1.}
 
-\end{enumerate}  
+\end{itemize}  
 
 \subsubsection{Famille 2} 
 Une deuxieme famille est composee d'algorithmes recherchant le
@@ -231,23 +231,23 @@ doivent restees inscrites dans le simplexe et eventuellement par les
 contraintes C1, C2 et C3.
 
 Les algorithmes existant sont : 
-\begin{enumerate}
+\begin{itemize}
 \item {MVSA (Minimum Volume Simplexe
 Analysis) [Li2008].}
 \item { MVES (Minimum Volume Encosing Simplex)
 [Chan2009].}
 \item {SISAL (Simplex Identification via Split Augmented
 Lagrangian) [Dias2009].}
-\end{enumerate}  
+\end{itemize}  
   
 Les differences principales entre les algorithmes consideres
 concernent: 
-\begin{enumerate}
+\begin{itemize}
 \item {Le schema d'optimisation numerique.}
 \item {La maniere dont les
 contraintes sont prise en compte.}
 
-\end{enumerate}  
+\end{itemize}  
 
  
 Ces points impactent la complexite algorithmique et la precision
@@ -255,7 +255,7 @@ d'estimation.
  
 \paragraph{MVSA aLi2008]} 
 Elements importants sur le fonctionnement de MVSA: 
-\begin{enumerate}
+\begin{itemize}
 \item {Initialisation par VCA.}
 \item {Tous les pixels spectraux inclus dans le simplexe estime
   (approximativement) par VCA n'impactant pas la contrainte
@@ -267,36 +267,36 @@ Elements importants sur le fonctionnement de MVSA:
   programmation quadratique sequentielle (Sequencial Quadratic
   Programming - SQP) et plus precisement a la categorie
   ``quasi-Newton'' sous contrainte.}
-\end{enumerate} 
+\end{itemize} 
 
 \paragraph{MVES [Chan2009]}
  Elements importants sur le fonctionnement de MVES: 
-\begin{enumerate}
+\begin{itemize}
 \item {Initialisation par une
   methode iterative (Programmation Lineaire LP pour Linear
   Programming) non-triviale et differente de VCA.}
 \item {Resolution du
   probleme par LP.}
-\end{enumerate} 
+\end{itemize} 
  
 
 \paragraph{SISAL [Dias2009]}
 Elements importants sur le fonctionnement de SISAL: 
-\begin{enumerate}
+\begin{itemize}
 \item {Initialisation
 par VCA.}
 \item {Selection des pixels spectraux analogue a MVSA pour reduire
 la complexite algorithmique.}
 \item {Technique d'optimisation tres evoluee
 cumulant plusieurs particularites.}
-\begin{enumerate}
+\begin{itemize}
 \item {Decomposition du probleme
 non-convexe en serie de problemes convexes.}
 \item {Developpement d'une
 methode specifique de separation de variables permettant de considerer
 un lagrangien augmente avec de bonnes proprietes de calcul.}
-\end{enumerate}
-\end{enumerate} 
+\end{itemize}
+\end{itemize} 
 
 \subsubsection{Famille 3}
 Il s'agit d'algorithmes de Factorisation en matrices non-negatives
@@ -308,12 +308,12 @@ avec une regularisation adaptee, afin de lever la degenerescence de
 maniere adaptee au probleme physique associe au demixage.
 \paragraph{MDMD-NMF [Huck2010b]} 
 Elements importants sur le fonctionnement de MDMD-NMF:
-\begin{enumerate}
+\begin{itemize}
 \item {Initialisation par VCA.}
 \item {Minimisation de la norme de la norme de
 Frobenius avec une regularisation spectrale et une regularisation
 ``spatiale'' (sur la matrice d'abondances).}
-\begin{enumerate}
+\begin{itemize}
 \item {Minimum spectral
 Dispersion: la regularisation spectrale encourage la variance des
 coefficients d'un spectre de endmembers a etre faible.}
@@ -321,8 +321,8 @@ coefficients d'un spectre de endmembers a etre faible.}
   encourage les vecteurs d'abondances a occuper toute la partie
   admissible (plus d'information dans [Huck2009]). Cette action
   presente une certaine analogie a la contrainte de volume minimum.}
-\end{enumerate}
-\end{enumerate}
+\end{itemize}
+\end{itemize}
  
  
   
@@ -375,7 +375,7 @@ Nous rappelons que la litterature relative a l'imagerie hyperspectrale
 distingue generalement la detection de cibles et la detection
 d'anomalies:
 
-\begin{enumerate}
+\begin{itemize}
 \item {On parle de detection de cibles lorsque la reponse
 spectrale de l'element recherche est utilisee en entree de
 l'algorithme de detection. Il s'agit d'information a priori qui
@@ -394,15 +394,15 @@ souvent a l'utilisation d'algorithmes de detection d'anomalies.}
   dimensions repose sur une connaissance a priori de la taille des
   anomalies recherchees. Cette partie de l'etude se concentre sur la
   comparaison d'algorithmes de detection d'anomalies.}
-\end{enumerate}
+\end{itemize}
     
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.7\textwidth]{Anomaly_HYP.eps}
-  \itkcaption[Notion sur la détection]{Notions sur la detection: masque de verite terrain, carte de detection, masque de detection.}
-  \label{fig:decomp_mml}
+  \itkcaption[Notion sur la detection]{Notions sur la detection: masque de verite terrain, carte de detection, masque de detection.}
+  \label{fig:anomaly_hyp}
 \end{figure}
-Dans la Figure 26, nous introduisons d'ores et deja quelques notions
+In \ref{fig:anomaly_hyp}, nous introduisons d'ores et deja quelques notions
 qui seront utiles par la suite. Les algorithmes de detection
 d'anomalies ont comme entree une image et estiment une carte de
 detection faisant office d'outil d'aide a la prise de decision. Un
@@ -411,72 +411,81 @@ l'on espere le plus ressemblant possible au masque de verite terrain,
 inconnu en pratique. Ce masque estime a la vocation d'un outil de
 prises automatiques de decisions.
 
-Figure 26: Notions sur la detection: masque de verite terrain, carte
-de detection, masque de detection.
-
 Deux approches dominent l'etat de l'art sur la detection d'anomalies
 dans les images hyperspectrales. Il s'agit des methodes par Poursuite
 de Projection (PP) et les methodes basees sur une modelisation
 probabiliste de la classe fond et eventuellement de la classe cible
-avec test d'hypotheses statistiques.  La PP consiste a projeter
-lineairement les pixels spectraux sur des vecteurs wi qui optimise un
-critere sensible a la presence d'anomalies (ex: kurtosis). On obtient
-une serie de cartes de projections ou les anomalies contrastent tres
-fortement avec le fond. Mais l'estimation automatique d'une carte de
-detection presente des difficultes majeures, notamment: Combien de
-projecteurs doit-on estimer?  Quel(s) projecteur(s) choisir?  Comment
-gerer un fond inhomogene?  Les performances de detection varient avec
-les dimensions spatiales de l'image (nombre d'echantillons); Ces
-algorithmes ont generalement une structure peu parallelisable; Ces
-algorithmes ne sont generalement pas ``a taux de fausse alarme
-  constant''.
+avec test d'hypotheses statistiques.
+La PP consiste a projeter lineairement les pixels spectraux sur des
+vecteurs wi qui optimise un critere sensible a la presence d'anomalies
+(ex: kurtosis). On obtient une serie de cartes de projections ou les
+anomalies contrastent tres fortement avec le fond. Mais l'estimation
+automatique d'une carte de detection presente des difficultes
+majeures, notamment:
+\begin{itemize} 
+\item Combien de projecteurs doit-on estimer?  
+\item Quel(s) projecteur(s) choisir?  
+\item Comment gerer un fond inhomogene?  
+\item Les performances de detection varient avec les dimensions spatiales de l'image (nombre d'echantillons) 
+\item Ces algorithmes ont generalement une structure peu parallelisable
+\item Ces algorithmes ne sont generalement pas ``a taux de fausse alarme constant''.
+\end{itemize}
 
-Ces difficultes nous ont conduit a considerer, dans le cadre de cette
-etude, exclusivement des algorithmes de la deuxieme categorie evoquee,
-bases sur les notions de modeles probabilistes, test d'hypotheses
-statistiques et fenetre glissante. Les algorithmes retenus sont
-presentes dans la partie suivante.  Algorithmes selectionnes Les
-algorithmes selectionnes sont RX (presente en premiere version dans
-[Reed1990] et GMRF [Schweizer2001] et leurs specificites respectives
-seront presentees plus loin. Ils sont bases sur les notions de modeles
-probabilistes, test d'hypotheses statistiques et fenetre glissante.
-Ce type d'approche consiste a repondre a la question: ``Le pixel (ou
-  ensemble de pixels voisins) teste ressemble-t-il au pixels du
-  fond?'' par une demarche de test statistique. De maniere plus
-exhaustive, cette demarche necessite: Un modele pour la classe
-``fond''; Le choix d'un test statistique; Eventuellement, un modele
-pour la classe ``anomalie''; Des estimateurs pour les differents
-parametres inconnus a priori; Des hypotheses d'homogeneite permettant
-un compromis satisfaisant entre: Le nombre d'echantillons en regard du
-nombre de parametres a estimer; L'homogeneite, notamment du fond; La
-complexite algorithmique (quoique les algorithmes consideres sont
-hautement parallelisables);
-
+Les algorithmes selectionnes sont RX (presente en premiere version
+dans [Reed1990] et GMRF [Schweizer2001] et leurs specificites
+respectives seront presentees plus loin. Ils sont bases sur les
+notions de modeles probabilistes, test d'hypotheses statistiques et
+fenetre glissante.  Ce type d'approche consiste a repondre a la
+question: ``Le pixel (ou ensemble de pixels voisins) teste
+ressemble-t-il au pixels du fond?'' par une demarche de test
+statistique. De maniere plus exhaustive, cette demarche necessite:
+\begin{itemize} 
+\item Un modele pour la classe ``fond'' 
+\item Le choix d'un test statistique 
+\item Eventuellement, un modele pour la classe ``anomalie''
+\item Des estimateurs pour les differents parametres inconnus a priori
+\item Des hypotheses d'homogeneite permettant un compromis satisfaisant entre: 
+\begin{itemize} 
+\item Le nombre d'echantillons en regard du nombre de parametres a
+  estimer 
+\item L'homogeneite, notamment du fond 
+\item La complexite algorithmique (quoique les algorithmes consideres sont
+hautement parallelisables)
+\end{itemize} 
+\end{itemize} 
 Le principe de fonctionnement de RX et GLRT peut etre resume par les
-Figure 27 et Figure 28.
+Figure 27  et Figure 28.
+(TODO do block diagramme using tikz)
 
-Figure 27: Schema bloc des algorithmes consideres.  Une premiere etape
-facultative (spontanement consideree dans le cadre de cette etude)
-consiste a reduire la dimension spectrale des donnees tout en
-conservant l'information liee aux anomalies. Puis, les pixels
+Une premiere etape facultative (spontanement consideree dans le cadre
+de cette etude) consiste a reduire la dimension spectrale des donnees
+tout en conservant l'information liee aux anomalies. Puis, les pixels
 spectraux sont testes a tour de rôle (tache parallelisable). Le pixel
 teste se voit attribuer une fenetre glissante (voir Figure 28). Cette
 fenetre comprend deux sous fenetres, centrees sur le pixel teste, de
-dimensions respectives L et LL, avec $L < LL$.  Les pixels appartenant a
-la couronne ainsi formee appartiennent a la classe ``fond local''. Les
-parametres statistiques du fond, requis par les tests statistiques,
-sont estimes a partir de ces pixels spectraux. L'une des difficultes
-consiste a trouver un compromis sur l'epaisseur de la couronne (et
-donc le nombre d'echantillons statistiques) sachant que: Si la
-couronne est trop epaisse, le fond local n'est plus suffisamment
-homogene; Si le nombre d'echantillons est trop faible, la precision
-de l'estimation statistique des parametres du modele du fond est trop
-faible.  Les pixels de la partie centrale de la fenetre glissante
-appartiennent a la classe ``inconnue''. Si le pixel teste (pixel
-central) est un pixel anormal, il est possible que ses voisins soient
-aussi des pixels anormaux, d'ou l'interet de ne pas choisir une valeur
-de L trop faible si l'on sait que les anomalies recherchees peuvent
-etre reparties sur plusieurs pixels.  Une fois l'ensemble des
+dimensions respectives L et LL, avec $L < LL$. 
+\begin{itemize}
+\item Les pixels appartenant a la couronne ainsi formee appartiennent
+  a la classe ``fond local''. Les parametres statistiques du fond,
+  requis par les tests statistiques, sont estimes a partir de ces
+  pixels spectraux. L'une des difficultes consiste a trouver un
+  compromis sur l'epaisseur de la couronne (et donc le nombre
+  d'echantillons statistiques) sachant que: 
+\begin{itemize}
+\item Si la couronne est trop epaisse, le fond local n'est plus
+  suffisamment homogene 
+\item Si le nombre d'echantillons est trop faible, la precision de
+  l'estimation statistique des parametres du modele du fond est trop
+  faible
+\end{itemize}  
+\item Les pixels de la partie centrale de la fenetre glissante
+  appartiennent a la classe ``inconnue''. Si le pixel teste (pixel
+  central) est un pixel anormal, il est possible que ses voisins
+  soient aussi des pixels anormaux, d'ou l'interet de ne pas choisir
+  une valeur de L trop faible si l'on sait que les anomalies
+  recherchees peuvent etre reparties sur plusieurs pixels.
+\end{itemize}  
+Une fois l'ensemble des
 parametres estimes, un test statistique est effectue et affecte une
 valeur $\Lambda(i)$ au pixel teste i. Une carte de detection est ainsi
 constituee.
@@ -484,5 +493,6 @@ constituee.
 Figure 28: Principe de la fenetre glissante et definitions des
 parametres L et LL de la fenetre glissante.  Les algorithmes RX et
 GMRF, consideres dans presentes dans les sections suivantes.
+(TODO  block diagram for windowing using tikz)
 
 \subsection{Local RX}
