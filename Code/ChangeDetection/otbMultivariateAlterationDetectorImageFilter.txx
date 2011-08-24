@@ -33,6 +33,7 @@ template <class TInputImage, class TOutputImage>
 MultivariateAlterationDetectorImageFilter<TInputImage,TOutputImage>
 ::MultivariateAlterationDetectorImageFilter()
 {
+  this->SetNumberOfThreads(1);
   this->SetNumberOfRequiredInputs(2);
   m_CovarianceEstimator = CovarianceEstimatorType::New();
 }
@@ -219,6 +220,56 @@ MultivariateAlterationDetectorImageFilter<TInputImage,TOutputImage>
 
     m_V1 = V.extract(nbComp1,nbComp1);
     m_V2 = V.extract(nbComp2,nbComp2,nbComp1,0);
+
+        //Scale v1 to get a unit variance
+    VnlMatrixType aux1 = m_V1.transpose() * (s11 * m_V1);
+
+    VnlVectorType aux2 = aux1.get_diagonal();
+    aux2 = aux2.apply(&vcl_sqrt);
+    aux2 = aux2.apply(&InverseValue);    
+
+    VnlMatrixType aux3 = VnlMatrixType(aux2.size(),aux2.size(),0);
+    aux3.set_diagonal(aux2);
+    m_V1 = m_V1 * aux3;
+
+    VnlMatrixType invstderr1 = s11.apply(&vcl_sqrt);
+    invstderr1 = invstderr1.apply(&InverseValue);
+    VnlVectorType diag1 = invstderr1.get_diagonal();
+    invstderr1.fill(0);
+    invstderr1.set_diagonal(diag1);
+
+    VnlMatrixType sign1 = VnlMatrixType(nbComp1,nbComp1,0);
+
+    VnlMatrixType aux4 = invstderr1 * s11 * m_V1;
+
+    VnlVectorType aux5 = VnlVectorType(nbComp1,0);
+
+    for(unsigned int i = 0; i < nbComp1;++i)
+      {
+      aux5=aux5 + aux4.get_row(i);
+      }
+    
+    sign1.set_diagonal(aux5);
+    sign1 = sign1.apply(&SignOfValue);
+
+    m_V1 = m_V1 * sign1;
+
+    // Scale v2 for unit variance
+    aux1 = m_V2.transpose() * (s22 * m_V2);
+    aux2 = aux1.get_diagonal();
+    aux2 = aux2.apply(&vcl_sqrt);
+    aux2 = aux2.apply(&InverseValue);
+    aux3 = VnlMatrixType(aux2.size(),aux2.size(),0);
+    aux3.fill(0);
+    aux3.set_diagonal(aux2);
+    m_V2 =  m_V2 * aux3;
+
+    VnlMatrixType sign2 = VnlMatrixType(nbComp2,nbComp2,0);
+    
+    aux5 = (m_V1.transpose() * s12 * m_V2).transpose().get_diagonal();
+    sign2.set_diagonal(aux5);
+    sign2 = sign2.apply(&SignOfValue);
+    m_V2 = m_V2 * sign2;
     }
 }
 
@@ -255,7 +306,9 @@ MultivariateAlterationDetectorImageFilter<TInputImage,TOutputImage>
   while(!inIt1.IsAtEnd() && !inIt2.IsAtEnd() && !outIt.IsAtEnd())
     {
     VnlVectorType x1(nbComp1,0);
+    VnlVectorType x1bis(outNbComp,0);
     VnlVectorType x2(nbComp2,0);
+    VnlVectorType x2bis(outNbComp,0);
     VnlVectorType mad(outNbComp,0);
     
     for(unsigned int i = 0; i < nbComp1;++i)
@@ -267,16 +320,44 @@ MultivariateAlterationDetectorImageFilter<TInputImage,TOutputImage>
       {
       x2[i] = inIt2.Get()[i];
       }
+
+    VnlVectorType first = (x1-m_Mean1)*m_V1;
+    VnlVectorType second = (x2-m_Mean2)*m_V2;
+
+    for(unsigned int i = 0; i < nbComp1;++i)
+      {
+      x1bis[i] = first[i];
+      }
     
-    mad = (x1-m_Mean1)*m_V1 - (x2-m_Mean2)*m_V2;
+    for(unsigned int i = 0; i < nbComp2;++i)
+      {
+      x2bis[i] = second[i];
+      }
+
+    mad = x1bis - x2bis;
 
     typename OutputImageType::PixelType outPixel(outNbComp);
     
-    for(unsigned int i = 0; i<nbComp1; ++i)
+    if(nbComp1 == nbComp2)
       {
-      outPixel[i]=mad[i];
+      for(unsigned int i = 0; i<outNbComp; ++i)
+        {
+        outPixel[i]=mad[i];
+        }
       }
-    
+    else
+      {
+      for(unsigned int i = 0; i<outNbComp; ++i)
+        {
+        outPixel[i]=mad[outNbComp - i - 1];
+
+        if(i < outNbComp - std::min(nbComp1,nbComp2))
+          {
+          outPixel[i]*=vcl_sqrt(2.);
+          }
+        }
+      }
+
     outIt.Set(outPixel);
     
     ++inIt1;
@@ -285,8 +366,6 @@ MultivariateAlterationDetectorImageFilter<TInputImage,TOutputImage>
     progress.CompletedPixel();
     }
 }
-
-
 }
 
 #endif

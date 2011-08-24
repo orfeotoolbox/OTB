@@ -130,14 +130,23 @@ ADD_TEST(cdTvKullbackLeiblerSupervizedDistanceImageFilter ${CHANGEDETECTION_TEST
 ADD_TEST(cdTuMultivariateAlterationDetectorImageFilterNew ${CHANGEDETECTION_TESTS2}
          otbMultivariateAlterationDetectorImageFilterNew)
 
-ADD_TEST(cdTvMultivariateAlterationDetectorImageFilter ${CHANGEDETECTION_TESTS2}
+ADD_TEST(cdTvMultivariateAlterationDetectorImageFilterSameNbBands ${CHANGEDETECTION_TESTS2}
          --compare-image 0.025
-             ${BASELINE}/cdTvMultivariateAlterationDetectorImageFilterOutput.tif
-             ${TEMP}/cdTvMultivariateAlterationDetectorImageFilterOutput.tif
+             ${BASELINE}/cdTvMultivariateAlterationDetectorImageFilterOutputSameNbBands.tif
+             ${TEMP}/cdTvMultivariateAlterationDetectorImageFilterOutputSameNbBands.tif
          otbMultivariateAlterationDetectorImageFilter
              ${INPUTDATA}/Spot5-Gloucester-before.tif
              ${INPUTDATA}/Spot5-Gloucester-after.tif
-             ${TEMP}/cdTvMultivariateAlterationDetectorImageFilterOutput.tif)
+             ${TEMP}/cdTvMultivariateAlterationDetectorImageFilterOutputSameNbBands.tif)
+
+ADD_TEST(cdTvMultivariateAlterationDetectorImageFilterDiffNbBands ${CHANGEDETECTION_TESTS2}
+         --compare-image 0.025
+             ${BASELINE}/cdTvMultivariateAlterationDetectorImageFilterOutputDiffNbBands.tif
+             ${TEMP}/cdTvMultivariateAlterationDetectorImageFilterOutputDiffNbBands.tif
+         otbMultivariateAlterationDetectorImageFilter
+             ${INPUTDATA}/Spot5-ERS-Gloucester-before.tif
+             ${INPUTDATA}/Spot5-Gloucester-after.tif
+             ${TEMP}/cdTvMultivariateAlterationDetectorImageFilterOutputDiffNbBands.tif)
 
 
 # -------       Fichiers sources CXX -----------------------------------
