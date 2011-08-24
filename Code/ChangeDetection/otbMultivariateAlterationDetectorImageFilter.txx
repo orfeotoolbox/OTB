@@ -156,7 +156,50 @@ MultivariateAlterationDetectorImageFilter<TInputImage,TOutputImage>
     VnlMatrixType rho = ges.D;
     rho = rho.apply(&vcl_sqrt);
 
+    //Scale v1 to get a unit variance
+    VnlMatrixType aux1 = m_V1.transpose() * (s11 * m_V1);
+
+    VnlVectorType aux2 = aux1.get_diagonal();
+    aux2 = aux2.apply(&vcl_sqrt);
+    aux2 = aux2.apply(&InverseValue);    
+
+    VnlMatrixType aux3 = VnlMatrixType(aux2.size(),aux2.size(),0);
+    aux3.set_diagonal(aux2);
+    m_V1 = aux3 * m_V1;
+
+    VnlMatrixType invstderr1 = s11.apply(&vcl_sqrt);
+    invstderr1 = invstderr1.apply(&InverseValue);
+    VnlVectorType diag1 = invstderr1.get_diagonal();
+    invstderr1.fill(0);
+    invstderr1.set_diagonal(diag1);
+
+    VnlMatrixType sign1 = VnlMatrixType(nbComp1,nbComp1,0);
+
+    VnlMatrixType aux4 = invstderr1 * s11 * m_V1;
+
+    VnlVectorType aux5 = VnlVectorType(nbComp1,0);
+
+    for(unsigned int i = 0; i < nbComp1;++i)
+      {
+      aux5=aux5 + aux4.get_row(i);
+      }
+
+    sign1.set_diagonal(aux5);
+    sign1 = sign1.apply(&SignOfValue);
+
+    m_V1 = m_V1 * sign1;
+
     m_V2 = invs22*s21*m_V1;
+
+    // Scale v2 for unit variance
+    aux1 = m_V2.transpose() * (s22 * m_V2);
+    aux2 = aux1.get_diagonal();
+    aux2 = aux2.apply(&vcl_sqrt);
+    aux2 = aux2.apply(&InverseValue);
+    aux3 = VnlMatrixType(aux2.size(),aux2.size(),0);
+    aux3.fill(0);
+    aux3.set_diagonal(aux2);
+    m_V2 =  m_V2 * aux3;
     }
   else
     {
@@ -177,25 +220,6 @@ MultivariateAlterationDetectorImageFilter<TInputImage,TOutputImage>
     m_V1 = V.extract(nbComp1,nbComp1);
     m_V2 = V.extract(nbComp2,nbComp2,nbComp1,0);
     }
-
-    //Scale v1 to get a unit variance
-    VnlMatrixType aux1 = m_V1.transpose() * (s11 * m_V1);
-    VnlVectorType aux2 = aux1.get_diagonal();
-    aux2 = aux2.apply(&vcl_sqrt);
-    aux2 = aux2.apply(&InverseValue);    
-    VnlMatrixType aux3 = VnlMatrixType(aux2.size(),aux2.size(),0);
-    aux3.set_diagonal(aux2);
-    m_V1 = aux3 * m_V1;
-
-    // Scale v2 for unit variance
-    aux1 = m_V2.transpose() * (s22 * m_V2);
-    aux2 = aux1.get_diagonal();
-    aux2 = aux2.apply(&vcl_sqrt);
-    aux2 = aux2.apply(&InverseValue);
-    aux3 = VnlMatrixType(aux2.size(),aux2.size(),0);
-    aux3.fill(0);
-    aux3.set_diagonal(aux2);
-    m_V2 =  aux3 * m_V2;
 }
 
 template <class TInputImage, class TOutputImage>

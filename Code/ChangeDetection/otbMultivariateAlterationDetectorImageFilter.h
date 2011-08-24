@@ -109,7 +109,14 @@ private:
       return 1/value;
     else
       return 0.; // ugly
-
+  }
+  
+  static RealType SignOfValue(const RealType & value)
+  {
+    if(value==0)
+      return value;
+    else
+      return (value > 0 ? 1. : -1.);
   }
 
   CovarianceEstimatorPointer m_CovarianceEstimator;
