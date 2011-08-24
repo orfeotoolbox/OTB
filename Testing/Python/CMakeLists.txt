@@ -22,3 +22,23 @@ add_test( NAME pyTvAddition
                   89
                   57
                   )
+
+add_test( NAME pyTvCopyInput
+          COMMAND ${TEST_DRIVER} Execute
+                  ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonCopyInputTest.py
+                  ${OTB_DATA_ROOT}/Input/ToulouseExtract_WithGeom.tif
+                  ${TEMP}/pyTvCopyInputTest.tif
+                  )
+
+add_test( NAME pyTvAllocateOutput
+          COMMAND ${TEST_DRIVER} Execute
+                  ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonAllocateOutputTest.py
+                  ${TEMP}/pyTvAllocateOutputTest.tif
+                  )
+
+add_test( NAME pyTvInternalReader
+          COMMAND ${TEST_DRIVER} Execute
+                  ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonInternalReaderTest.py
+                  ${OTB_DATA_ROOT}/Input/ToulouseExtract_WithGeom.tif
+                  ${TEMP}/pyTvInternalReader.tif
+                  )
