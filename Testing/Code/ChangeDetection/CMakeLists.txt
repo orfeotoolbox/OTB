@@ -131,7 +131,7 @@ ADD_TEST(cdTuMultivariateAlterationDetectorImageFilterNew ${CHANGEDETECTION_TEST
          otbMultivariateAlterationDetectorImageFilterNew)
 
 ADD_TEST(cdTvMultivariateAlterationDetectorImageFilter ${CHANGEDETECTION_TESTS2}
-         --compare-image ${TOL}
+         --compare-image 0.025
              ${BASELINE}/cdTvMultivariateAlterationDetectorImageFilterOutput.tif
              ${TEMP}/cdTvMultivariateAlterationDetectorImageFilterOutput.tif
          otbMultivariateAlterationDetectorImageFilter
