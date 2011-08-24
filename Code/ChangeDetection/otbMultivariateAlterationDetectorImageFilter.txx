@@ -33,7 +33,6 @@ template <class TInputImage, class TOutputImage>
 MultivariateAlterationDetectorImageFilter<TInputImage,TOutputImage>
 ::MultivariateAlterationDetectorImageFilter()
 {
-  this->SetNumberOfThreads(1);
   this->SetNumberOfRequiredInputs(2);
   m_CovarianceEstimator = CovarianceEstimatorType::New();
 }
