@@ -1,89 +1,78 @@
 \chapter{Hyperspectral}
 
-%TODO translate 
-Une image hyperspectrale de la Terre acquises depuis
-un porteur aerien ou spatial contient une collection de pixels
-spectraux ou, de maniere equivalente, une collection de bandes
-spectrales.
+%TODO translate using  Hyperspectral_tr.txt
+A hyperspectral image contains a collection of spectral pixels or
+equivalently, a collection of spectral bands.
 
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.7\textwidth]{Cube_HPX.eps}
-  \itkcaption[Hyperspectral cube]{Illustration d'un cube hyperspectral, d'un pixel spectral et
-d'une bande spectrale.}
+  \itkcaption[Hyperspectral cube]{Illustration of an hyperspectral cube, spectral pixel and a spectral layer.}
   \label{fig:cube}
 \end{figure}
 
-Le cube hyperspectral \ref{fig:cube} acquis est une image de
-radiance, chaque pixel spectral contient une information spectrale
-fine qui depend : 
+An hyperspectral system \ref{fig:cube} acquired
+radiance, each pixel contains fine spectral information
+fine that depends of:
 
 \begin{itemize}
-\item{Du spectre de la source lumineuse (en pratique, le
-soleil) et des perturbations atmospheriques.}
-\item{Des reponses spectrales
-des differents materiaux presents dans la zone de recouvrement et de la nature de leur melange.}
+\item{Spectrum of the light source (in practice, the
+sun) and atmospheric disturbances.}
+\item{Spectral responses
+of different materials in the overlap zone and of the nature of the mixture.}
 \end{itemize}
 
-Des traitements preliminaires de
-correction atmospherique permettent d'estimer un cube de reflectance
-spectrale par soustraction de l'information extrinseque a la
-scene. 
-
+Preliminary treatments allow to perform 
+atmospheric correction for estimating a reflectance cube
+spectral by subtraction of information extrinsic of the
+scene (see also \ref{secAtmosphericCorrections}).
+ 
 \section{Unmixing}
 
 \subsection{Linear mixing model}
 
-L'information de reflectance ne depend que des spectres de
-reflectance des materiaux de la scene. Lorsque le melange entre les
-materiaux est macroscopique, le modele de melange lineaire de spectres
-est generalement admis. La scene imagee a typiquement l'allure
-illustree ci-apres :
+Reflectance information depends only of the materials spectral responses in the scene. When the mixture between
+materials is macroscopic, the linear mixing model of spectra
+is generally admitted. In this case, the image typically looks like this:
 
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.7\textwidth]{Linear_Unmixing_HPX.eps}
-  \itkcaption[Modele de melange linear]{ Schema d'une zone verifiant le modele MML.}
+  \itkcaption[Linear mixing model]{Zone which verify the LM model.}
   \label{fig:linear_unmixing}
 \end{figure}
 
-Nous notons \ref{fig:linear_unmixing}  la
-presence de pixels-purs et de pixels-melanges. Le MML admet que le
-spectre de reflectance associe a chaque pixel est une combinaison
-lineaire des spectres de materiaux purs composant la zone de
-recouvrement, communement appeles ``endmembers''. Cela peut être
-illustre \ref{fig:decomp_mml} :
+We notice \ ref {fig:} linear_unmixing the
+presence of pure pixels, and pixel-blending. The LMM acknowledges that
+reflectance spectrum associated with each pixel is a linear combination of pure materials in the recovery area, commonly known as ``''endmembers. This is illustrated in \ref{fig: decomp_mml}
 
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.7\textwidth]{Decomposition_MML_HPX.eps}
-  \itkcaption[Decomposition Modele de melange linear]{Decomposition d'un cube hyperspectral selon le MML.}
+  \itkcaption[Decomposition of the LMM]{Decomposition of a hyperspectral cube according to the LMM.}
   \label{fig:decomp_mml}
 \end{figure}
-
-Le ``terme'' de gauche represente les differentes bandes spectrales du
-cube de donnees. Le ``terme'' de droite represente un ``produit''
-entre les spectres de reflectance des endmembers et leurs cartes
-d'abondances respectives. La carte d'abondance d'un endmembers est une
-image en niveaux de gris compris entre $0$ et $1$. Le pixel i de la carte
-d'abondance du endmember j a pour valeur $s_{ji}$. Cette valeur est
-l'abondance du endmember j dans le pixel i. Sous certaines conditions
-[Huck2009], cette valeur peut être interpretee comme le ratio
-surfacique du materiau dans la zone de recouvrement (\ref{fig:linear_unmixing}).  En
-pratique, on peut raisonnablement s'attendre: 
+The `` left'' term represents the different spectral bands of
+data cube. The `` right'' term represents a `` product''
+between the reflectance spectra of endmembers and their repective abundances. Abundance band of endmembers is
+image grayscale between $0$ and $1$. The pixel i of the
+abundance band of endmember j is $s_ {ji}$. This value is the
+abundance of endmember j in the pixel i. Under certain conditions
+[Huck2009], this value can be interpreted as the ratio
+surface of the material in the overlap zone (\ ref {fig: linear_unmixing}). In
+practice, one can reasonably expect that: 
 
 \begin{itemize}
-\item{a ce qu'un nombre
-limite de materiaux purs composent la scene.}
-\item{a ce que la scene
-contienne des pixels purs si la resolution spatiale est suffisante, et
-n'en contienne pas forcement sinon.}
+\item{a limit number
+of pure materials compose the scene.}
+\item{the scene contains pure pixels if the spatial resolution is sufficient and
+do not necessarily contains them otherwise.}
 \end{itemize}
- 
-De nombreuses techniques d'analyse d'images hyperspectrales reposent
-sur une approche geometrique ou chaque pixel spectral est vu comme un
-vecteur de dimension L (nombre de bandes spectrales). Les
-bandes spectrales peuvent alors être ecrites sous forme vectorisee.
+
+Many techniques of unmixing in hyperspectral image analysis
+are based on geometric approach where each pixel is seen as a spectral
+vector of L (number of spectral bands). The
+spectral bands can then be written as vectors.
 
 \begin{figure}[h]
 \begin{tikzpicture}
@@ -96,22 +85,22 @@ bandes spectrales peuvent alors être ecrites sous forme vectorisee.
 \node[draw] (R) at (2,0.5) {R};
 \draw[->] (2,0.5) -- (R.west);
 \end{tikzpicture}
-\itkcaption[Vectorization du cube]{``Vectorisation'' du cube hyperspectral. Les pixels spectraux
-sont ranges dans les colonnes de la matrice R et, de maniere
-equivalente, les bandes spectrales sont rangees dans les lignes de R.}
+\itkcaption[Hyperspectral cube vectorization]{``Vectorization'' of hyperspectral cube. The spectral pixels
+are stored in the columns of the matrix R and, in
+equivalently, the spectral bands are assigned to the lines of R.}
 \label{fig:mml}
 \end{figure}
 %% Figure 5: "Vectorisation" du cube hyperspectral. Les pixels spectraux
 %% sont ranges dans les colonnes de la matrice R et, de maniere
 %% equivalente, les bandes spectrales sont rangees dans les lignes de R.
 
-Par deduction de \ref{fig:decomp_mml} et de \ref{fig:mml}, le MML consiste a decomposer R
-de la maniere suivante : 
+By deduction of \ref{fig:decomp_mml} et de \ref{fig:mml}, the LMM needs to decompose R as: 
 \begin{center}
 $R= A.S + N = X + N$
 \end{center}
 
-Soit J le nombre de endmembers et I le nombre de pixels spectaux: 
+J is the number of endmembers and the number of spectral pixels I:
+ 
 \begin{itemize}
 \item{Les J colonnes de la matrice A contiennent les spectres de endmembers.}
 \item{Les J lignes de la matrice S contiennent les cartes d'abondances
