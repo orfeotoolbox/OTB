@@ -2512,6 +2512,19 @@ ADD_TEST(bfTvDBOverlapDataNodeFeatureFunction ${BASICFILTERS_TESTS15}
         0
 )
 
+# ---------------------  otbMaximumAutocorrelationFactorImageFilter  ---------------------
+ADD_TEST(bfTuMaximumAutocorrelationFactorImageFilterNew ${BASICFILTERS_TESTS15}
+  otbMaximumAutocorrelationFactorImageFilterNew
+)
+
+ADD_TEST(bfTvMaximumAutocorrelationFactorImageFilter ${BASICFILTERS_TESTS15}
+   --compare-image ${NOTOL}
+   ${BASELINE}/bfTvMaximumAutocorrelationFactorImageFilterOutput.tif
+   ${TEMP}/bfTvMaximumAutocorrelationFactorImageFilterOutput.tif
+   otbMaximumAutocorrelationFactorImageFilter
+   ${INPUTDATA}/cupriteSubHsi.tif
+   ${TEMP}/bfTvMaximumAutocorrelationFactorImageFilterOutput.tif
+)
 
 
 # A enrichir
@@ -2791,6 +2804,7 @@ otbSpectralAngleDataNodeFeatureFunction.cxx
 otbDBOverlapDataNodeFeatureFunction.cxx
 otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction.cxx
 otbParserConditionDataNodeFeatureFunction.cxx
+otbMaximumAutocorrelationFactorImageFilter.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbBasicFiltersTests1 "${BasicFilters_SRCS1}" "OTBBasicFilters;OTBIO;OTBTesting")

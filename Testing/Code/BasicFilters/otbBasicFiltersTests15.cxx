@@ -35,4 +35,6 @@ void RegisterTests()
   REGISTER_TEST(otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction);
   REGISTER_TEST(otbDBOverlapDataNodeFeatureFunctionNew);
   REGISTER_TEST(otbDBOverlapDataNodeFeatureFunction);
+  REGISTER_TEST(otbMaximumAutocorrelationFactorImageFilterNew);
+  REGISTER_TEST(otbMaximumAutocorrelationFactorImageFilter);
 }
