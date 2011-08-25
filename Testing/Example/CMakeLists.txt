@@ -18,12 +18,22 @@ add_test(exTvSmoothingTest ${OTB_WRAPPER_Smoothing_TESTS}
     otbSmoothingTest1
     ${INPUTDATA}/poupees.tif
     ${TEMP}/owTvSmoothingTest.tif
-    5
-  )
+    5 )
+
+add_test(NAME exTvSmoothingTest2
+         COMMAND ${CXX_TEST_PATH}/otbWrapperExampleTests_Smoothing2
+                otbSmoothingTest2
+                ${INPUTDATA}/poupees.tif
+                ${TEMP}/owTvSmoothingTest2.tif
+                $<TARGET_FILE_DIR:otbapp_Smoothing> )
+
 include_directories(${CMAKE_SOURCE_DIR}/Code/Core ${CMAKE_SOURCE_DIR}/Example)
+
 add_executable(otbWrapperExampleTests_Smoothing otbWrapperExampleTests_Smoothing.cxx otbSmoothingTest.cxx)
 target_link_libraries(otbWrapperExampleTests_Smoothing OTBIO OTBCommon OTBTesting OTBWrapperCore)
 
+add_executable(otbWrapperExampleTests_Smoothing2 otbWrapperExampleTests_Smoothing2.cxx otbSmoothingTest2.cxx)
+target_link_libraries(otbWrapperExampleTests_Smoothing2 OTBIO OTBCommon OTBTesting OTBWrapperCore)
 
 # ---------------- Rescale example test
 set(OTB_WRAPPER_Rescale_TESTS ${CXX_TEST_PATH}/otbWrapperExampleTests_Rescale)
