@@ -46,60 +46,24 @@ public:
   itkTypeMacro(InputImageParameter,Parameter);
 
   /** Set value from filename */
-  void SetFromFileName(const std::string& filename)
-  {
-    ImageFileReaderType::Pointer reader = ImageFileReaderType::New();
-    reader->SetFileName(filename);
-    reader->UpdateOutputInformation();
+  void SetFromFileName(const std::string& filename);
 
-    // everything went fine, store the object references
-    m_Reader = reader;
-    m_Image = reader->GetOutput();
-  }
+  std::string GetFileName() const;
 
-  std::string GetFileName() const
-  {
-    if (m_Reader)
-      {
-      return m_Reader->GetFileName();
-      }
+  VectorImageType* GetImage() const;
 
-    itkExceptionMacro(<< "No filename value");
-  }
+  void SetImage(VectorImageType* image);
 
-  VectorImageType* GetImage() const
-  {
-    return m_Image;
-  }
+  bool HasValue() const;
 
-  void SetImage(VectorImageType* image)
-  {
-     m_Image = image;
-     m_Reader = ImageFileReaderType::Pointer();
-  }
-
-  bool HasValue() const
-  {
-    return m_Image.IsNotNull();
-  }
-
-  void ClearValue()
-  {
-    m_Image = VectorImageType::Pointer();
-    m_Reader = ImageFileReaderType::Pointer();
-  }
+  void ClearValue();
 
 protected:
   /** Constructor */
-  InputImageParameter()
-  {
-    this->SetName("Input Image");
-    this->SetKey("in");
-  }
+  InputImageParameter();
 
   /** Destructor */
-  virtual ~InputImageParameter()
-  {}
+  virtual ~InputImageParameter();
 
   VectorImageType::Pointer m_Image;
 

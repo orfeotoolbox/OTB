@@ -54,48 +54,26 @@ public:
   itkGetObjectMacro(Image, VectorImageType);
 
   /** Return any value */
-  void SetValue(VectorImageType* image)
-  {
-    m_Image = image;
-  }
+  void SetValue(VectorImageType* image);
 
   /** Return any value */
-  VectorImageType* GetValue( void )
-  {
-    return m_Image;
-  }
+  VectorImageType* GetValue( void );
 
   itkSetStringMacro(FileName);
   itkGetStringMacro(FileName);
-
   itkGetObjectMacro(Writer, WriterType);
 
-  void Write()
-  {
-    if (m_Image.IsNotNull())
-      {
-        m_Writer->SetInput(m_Image);
-        m_Writer->SetFileName(this->GetFileName());
-        m_Writer->Update();
-      }
-  }
+  void Write();
 
 protected:
   /** Constructor */
-  OutputImageParameter()
-  {
-    this->SetName("Output Image");
-    this->SetKey("out");
-    m_Writer = WriterType::New();
-  }
-
+  OutputImageParameter();
   /** Destructor */
-  virtual ~OutputImageParameter()
-  {}
+  virtual ~OutputImageParameter();
 
   VectorImageType::Pointer m_Image;
-  std::string m_FileName;
-  WriterType::Pointer m_Writer;
+  std::string              m_FileName;
+  WriterType::Pointer      m_Writer;
 
 private:
   OutputImageParameter(const Parameter &); //purposely not implemented
