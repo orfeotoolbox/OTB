@@ -52,11 +52,18 @@ public:
   /** Convenient typedefs. */
   typedef otb::Wrapper::Application::Pointer ApplicationPointer;
 
-  /**  */
+  /** Set the specified path to the list of application search path. Reinit all previously set paths */
+  static void SetApplicationPath(std::string path);
+
+  /** Add the specified path to the list of application search path */
+  static void AddApplicationPath(std::string path);
+
+  /** Return the list of available applications */
   static std::vector<std::string> GetAvailableApplications();
 
-  /** Create the appropriate Application */
-  static Application::Pointer CreateApplication(const std::string& name);
+  /** Create the specified Application */
+  static Application::Pointer CreateApplication(const std::string& applicationName);
+
 
 protected:
   ApplicationRegistry();

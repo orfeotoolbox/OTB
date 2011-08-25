@@ -16,6 +16,7 @@
 
  =========================================================================*/
 #include "otbWrapperApplicationRegistry.h"
+#include "itksys/SystemTools.hxx"
 
 namespace otb
 {
@@ -28,6 +29,40 @@ ApplicationRegistry::ApplicationRegistry()
 
 ApplicationRegistry::~ApplicationRegistry()
 {
+}
+
+void
+ApplicationRegistry::SetApplicationPath(std::string newpath)
+{
+  std::ostringstream putEnvPath;
+  putEnvPath << "ITK_AUTOLOAD_PATH=" << newpath;
+
+  // do NOT use putenv() directly, since the string memory must be managed carefully
+  itksys::SystemTools::PutEnv(putEnvPath.str().c_str());
+
+  // Reload factories to take into account new path
+  itk::ObjectFactoryBase::ReHash();
+}
+
+void
+ApplicationRegistry::AddApplicationPath(std::string newpath)
+{
+  std::ostringstream putEnvPath;
+  putEnvPath << "ITK_AUTOLOAD_PATH=";
+
+  const char* currentEnv = itksys::SystemTools::GetEnv("ITK_AUTOLOAD_PATH");
+  if (currentEnv)
+    {
+    putEnvPath << currentEnv << ":";
+    }
+  putEnvPath << newpath;
+
+  // do NOT use putenv() directly, since the string memory must be managed carefully
+  itksys::SystemTools::PutEnv(putEnvPath.str().c_str());
+
+  // Reload factories to take into account new path
+  itk::ObjectFactoryBase::ReHash();
+
 }
 
 Application::Pointer
