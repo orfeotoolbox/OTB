@@ -38,13 +38,11 @@ int otbRescaleTest1(int argc, char* argv[])
 {
   typedef otb::Wrapper::Rescale RescaleType;
   RescaleType::Pointer appli = RescaleType::New();
-
-  dynamic_cast<otb::Wrapper::InputImageParameter *>(appli->GetParameterByKey("in"))->SetFromFileName(argv[1]);
-  dynamic_cast<otb::Wrapper::OutputImageParameter *>(appli->GetParameterByKey("out"))->SetFileName(argv[2]);
   
+  appli->SetParameterString("in", argv[1]);
+  appli->SetParameterString("out", argv[2]);
   appli->SetParameterFloat("outmin", atof(argv[3]));
   appli->SetParameterFloat("outmax", atof(argv[4]));
-
   appli->ExecuteAndWriteOutput();
 
   return EXIT_SUCCESS;

@@ -39,13 +39,10 @@ int otbSmoothingTest1(int argc, char* argv[])
   typedef otb::Wrapper::Smoothing SmoothingType;
   SmoothingType::Pointer appli = SmoothingType::New();
 
-  dynamic_cast<otb::Wrapper::InputImageParameter *>(appli->GetParameterByKey("in"))->SetFromFileName(argv[1]);
-  dynamic_cast<otb::Wrapper::OutputImageParameter *>(appli->GetParameterByKey("out"))->SetFileName(argv[2]);
-  
+  appli->SetParameterString("in", argv[1]);
+  appli->SetParameterString("out", argv[2]);
   appli->SetParameterString("type", "gaussian");
   appli->SetParameterInt("type.gaussian.radius", atoi(argv[3]));
-
-
   appli->ExecuteAndWriteOutput();
 
   return EXIT_SUCCESS;
