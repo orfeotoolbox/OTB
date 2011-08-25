@@ -12,6 +12,6 @@ app = otb.Registry.CreateApplication("AllocateOutput")
 print app.GetParametersKeys()
 
 app.SetParameterString("out", argv[1])
-app.Execute()
+app.ExecuteAndWriteOutput()
   
 print dir(app)

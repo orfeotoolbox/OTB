@@ -17,6 +17,6 @@ for type in ['mean', 'gaussian', 'anidif']:
   print 'Testing ' + type
   app.SetParameterString("type", type)
   app.SetParameterString("out", argv[2] + type + ".tif")
-  app.Execute()
+  app.ExecuteAndWriteOutput()
   
 print dir(app)

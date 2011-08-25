@@ -13,6 +13,6 @@ print app.GetParametersKeys()
 
 app.SetParameterString("inname", argv[1])
 app.SetParameterString("out", argv[2])
-app.Execute()
+app.ExecuteAndWriteOutput()
   
 print dir(app)

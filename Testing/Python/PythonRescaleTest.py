@@ -16,6 +16,6 @@ app.SetParameterString("in", argv[1])
 app.SetParameterFloat("outmin", 1)
 app.SetParameterFloat("outmax", 100)
 app.SetParameterString("out", argv[2] + ".tif")
-app.Execute()
+app.ExecuteAndWriteOutput()
   
 print dir(app)
