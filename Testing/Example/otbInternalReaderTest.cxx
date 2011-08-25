@@ -32,15 +32,13 @@ int otbInternalReaderNew(int argc, char* argv[])
   return EXIT_SUCCESS;
 }
 
-
 int otbInternalReaderTest1(int argc, char* argv[])
 {
   typedef otb::Wrapper::InternalReader InternalReaderType;
   InternalReaderType::Pointer appli = InternalReaderType::New();
 
-  dynamic_cast<otb::Wrapper::StringParameter *>(appli->GetParameterByKey("inname"))->SetValue(argv[1]);
-  dynamic_cast<otb::Wrapper::OutputImageParameter *>(appli->GetParameterByKey("out"))->SetFileName(argv[2]);
-  
+  appli->SetParameterString("inname", argv[1]);
+  appli->SetParameterString("out", argv[2]);
   appli->ExecuteAndWriteOutput();
 
   return EXIT_SUCCESS;
