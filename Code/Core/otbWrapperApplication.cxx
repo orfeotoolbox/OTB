@@ -437,7 +437,12 @@ std::string Application::GetParameterString(std::string parameter)
   std::string ret;
   Parameter* param = GetParameterByKey(parameter);
 
-  if (dynamic_cast<FilenameParameter*>(param))
+  if (dynamic_cast<StringParameter*>(param))
+    {
+    StringParameter* paramDown = dynamic_cast<StringParameter*>(param);
+    ret = paramDown->GetValue();
+    }
+  else if (dynamic_cast<FilenameParameter*>(param))
     {
     FilenameParameter* paramDown = dynamic_cast<FilenameParameter*>(param);
     ret = paramDown->GetValue();
