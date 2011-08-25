@@ -57,9 +57,8 @@ private:
 
   void DoCreateParameters()
   {
-    AddParameter(ParameterType_OutputImage, "out",  "Output Image");
-
     AddParameter(ParameterType_String, "inname", "Input file name");
+    AddParameter(ParameterType_OutputImage, "out",  "Output Image");
   }
 
   void DoUpdateParameters()
@@ -70,7 +69,7 @@ private:
   void DoExecute()
   { 
     m_Reader->SetFileName( GetParameterString("inname") );
-    
+    m_Reader->UpdateOutputInformation();
     SetParameterOutputImage("out", m_Reader->GetOutput());
   }
   
