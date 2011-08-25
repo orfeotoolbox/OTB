@@ -8,7 +8,7 @@ from PyQt4 import QtGui
 if __name__ == "__main__":
     qapp = QtGui.QApplication(sys.argv)
 
-    app = otb_core.Registry.CreateApplication("TestApplication")
+    app = otb_core.Registry.CreateApplication(sys.argv[1])
 
     widget = otb_gui.QParameterView(app)
     widget.CreateGui()
