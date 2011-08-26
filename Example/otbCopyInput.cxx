@@ -17,7 +17,7 @@
  =========================================================================*/
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
-
+#include "itkCastImageFilter.h"
 
 namespace otb
 {
@@ -40,7 +40,7 @@ public:
   itkTypeMacro(CopyInput, otb::Application);
 
 private:
-   CopyInput()
+  CopyInput()
   {
     SetName("CopyInput");
     SetDescription("Copy the input image into output.");
@@ -63,11 +63,22 @@ private:
 
   void DoExecute()
   { 
+    std::cout << "CopyInput 1" << std::endl;
     VectorImageType::Pointer inImage = GetParameterImage("in");
-      
-    SetParameterOutputImage("out", inImage);
+
+    typedef itk::CastImageFilter<VectorImageType, VectorImageType> CastImageFilterType;
+    CastImageFilterType::Pointer caster = CastImageFilterType::New();
+    std::cout << "CopyInput 2" << std::endl;
+    caster->SetInPlace(true);
+    caster->SetInput(inImage);
+    std::cout << "CopyInput 3" << std::endl;
+    caster->UpdateOutputInformation();
+    std::cout << "CopyInput 4" << std::endl;
+    SetParameterOutputImage("out", caster->GetOutput());
+    std::cout << "CopyInput 5" << std::endl;
   }
   
+  itk::LightObject::Pointer m_FilterRef;
 };
 
 
