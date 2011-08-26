@@ -102,126 +102,109 @@ $R= A.S + N = X + N$
 J is the number of endmembers and the number of spectral pixels I:
  
 \begin{itemize}
-\item{Les J colonnes de la matrice A contiennent les spectres de endmembers.}
-\item{Les J lignes de la matrice S contiennent les cartes d'abondances
-vectorisees;nous appelons vecteurs d'abondances les colonnes de la
-matrice S.}
-\item{La matrice N, de dimensions $LxI$, est une matrice de bruit
-additif.}
+\item{J columns of the matrix A contain the spectra of endmembers.}
+\item{J rows of the matrix S contain the abundance maps
+vectorized, we call the columns vectors of abundances of
+matrix S.}
+\item{The matrix N, of dimensions $LXI$ is a matrix of additive noise.}
 \end{itemize}
 
-   
+The unmixing problem is to estimate matrices A and S
+from R or possibly of \"X, an estimate of the denoised matrix signal.
 
-Le probleme du demixage consiste a estimer les matrices A et S a
-partir de R ou eventuellement de \"X, une estimation de la matrice signal
-debruite.
-
-Plusieurs contraintes physiques peuvent être prises en
-compte pour permettre la resolution de ce probleme: 
+Several physical constraints can be taken into
+account to solve the unmixing problem:
+ 
 \begin{itemize}
-\item{C1: positivite
-des spectres de reflectance (matrice A non-negative).}
-\item{C2: positivite
-des abondances (matrice S non-negative).}
-\item{C3: additivite des
-abondances (la somme des coefficients de chaque colonne de la matrice
-S vaut 1).}
-\item{L'independance algebrique entre les ``vecteurs spectraux''
-associes au endmembers et la linearite des melanges de spectres, d'ou
-decoule la propriete du simplexe decrite au paragraphe suivant.}
+\item{C1: reflectance spectra are positives (non negative matrix A).}
+\item{C2: positivity abundances are positive (non-negative matrix S).}
+\item{C3: additivity
+abundance (the sum of the coefficients of each column of the matrix S is 1).}
+\item{Independence between the ``algebraic spectral vectors'' of endmembers associated with linearity and mixtures of spectra, so that the simplex property described in paragraph below.}
 \end{itemize}
 
 \subsection{Simplex}  
-Les algorithmes recents de demixage s'appuient sur la ``propriete du
-simplexe''. Dans un espace vectoriel de dimension $J-1$, on peut
-associer a J vecteurs algebriquement independants J points definissant
-les sommets d'un J-simplexe \ref{fig:simplex}.
+Recent unmixing algorithms based on the ``property of
+simplex.'' In a vector space of dimension $J-1$, we can
+associate to J vectors algebrically independent, J points which define the vertices of a J-simplex \ref{fig: simplex}.
 
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.7\textwidth]{Simplex_HPX.eps}
-  \itkcaption[Simplex]{Illustration d'un 2-simplexe, d'un 3-simplexe et d'un
-4-simplexe.}
+  \itkcaption[Simplex]{Illustration of a 2-simplex, a 3-simplex and a 4-simplex.}
   \label{fig:simplex}
 \end{figure}
 
-Un cube hyperspectral de L bandes, base sur J endmembers,
-peut etre confine dans un sous-espace-affine de dimension $J-1$.  
-Un sous espace pertinent, au sens du rapport signal-a-bruit, est
-generalement obtenu par Analyse en Composantes Principales (ACP). En
-pratique, les $J-1$ vecteurs propres associes au plus fortes valeurs
-propres forment les colonnes d'une matrice de projection V de
-dimension $(Lx(J-1))$. Les donnees reduites Z, de dimensions
-$((J-1)xI)$, sont obtenues par l'operation:
+Hyperspectral cube of L bands, based on J endmembers,
+may be contained in a affine subspace of dimension $J-1$.
+A relevant subspace in the sense of signal-to-noise ratio is
+generally obtained by Principal Component Analysis (PCA) \ref{sec:RoadExtraction}. 
+In practice, the $J-1$ eigenvectors associated with highest values are
+the columns of a projection matrix V of dimension $(Lx(J-1))$. Reduced
+data Z, of dimensions $((J-1)xI)$ are obtained by the operation:
 $Z=V^{T}(\tilde{R})$
 
-ou chaque colonne de $\tilde{R}$ est vue soustraire le spectre moyen,
-generalement estime au sens du maximum de vraisemblance. Dans le
-sous-espace porteur des vecteurs-colonnes de Z, les spectres de
-endmembers sont donc associes au sommet d'un simplexe. Si le bruit est
-negligeable, ce simplexe circonscrit les donnees reduites.
+where each column of $\tilde{R}$ where the average spectrum is substracted,
+generally estimated under maximum likelihood. In the
+subspace carrying the column-vectors Z, endmembers spectra oare associated to the top of the simplex. If the noise is
+negligible, the simplex circumscribed reduced data.
 
-Cette propriete met en evidence le fait que les endmembers
-recherches sont les sommets d'un simplexe qui circonscrit les
-donnees. Cependant, une infinite de simplexes differents peuvent
-circonscrire un meme jeu de donnees. En fait, le probleme du demixage
-n'a generalement pas de solution unique. Cette degenerescence peut
-aussi etre mise en evidence par le formalisme de la factorisation en
-matrices non-negatives (voir Huck2010a), qui sera aborde un peu plus
-loin. Il convient donc de choisir la solution physiquement la plus
-pertinente. Toutes les techniques de demixage basees sur cette
-propriete du simplexe admettent que la solution la plus pertinente est
-definie par le simplexe admissible de volume minimal, ou la notion de
-volume est generalisee a toutes les dimensions finies (eventuellement
-differentes de 3).  
+This property shows that the endmembers research are the vertices of a
+simplex that circumscribes the data. However, an infinity of different
+simplices can identify the same data set. In fact, the problem of
+unmixing generally does not have a unique solution. This degeneration can also be
+demonstrated by the formalism of the non-negative
+matrices factorization (see Huck2010a).
 
-\subsection{Selection d'algorithmes et etat de l'art} 
-Les algorithmes de demixage lineaire les plus recents exploitent
-generalement la propriete du simplexe. Il est possible de les classer
-en plusieurs familles:
-\subsubsection{Famille 1} 
-Une premiere famille d'algorithmes
-de demixage est basee sur la recherche des endmembers ``parmi'' les
-donnees. Cela signifie qu'un pixel pur au minimum doit etre associe a
-chaque endmembers. Si cette hypothese n'est pas verifiee, cela
-produira une erreur d'estimation sur les spectres de
-endmembers. L'avantage historique de ces algorithmes est leur faible
-complexite algorithmique. Les trois plus connus sont PPI (Pixel Purity
-Index), NFINDER et VCA (Vertex Component Analysis)
-[Nascimento2005]. Outre son succes reconnu par la communaute et sa
-complexite algorithmique tres competitive, l'estimation des spectres
-de endmembers est non biaisee en l'absence de bruit (et lorsque il y a
-des pixels purs).
+It is therefore necessary to choose the most physically
+relevant solution. All unmixing techniques based on this simplex property admit that the best solution is defined by the allowable
+minimum volume simplex, or the notion of volume is extended to all
+finite dimensions (possibly different from 3).
+  
+
+\subsection{State of the art unmixing algorithms selection} 
+The more recent linear unmixing algorithms exploit the
+simplex property. It is possible to classify these methods into several families:
+
+\subsubsection{Family 1} 
+A first family of unmixing algorithms are based on research of the
+endmembers ``among'' data. This means that a minimum of one pure pixel must
+be associated with each endmembers. If this hypothesis is not
+verified, it will produce an estimation error of the endmembers spectra. The historical advantage of these algorithms are their low
+algorithmic complexity. The three best known are :
+\begin{itemize}
+\item PPI (Pixel Purity Index)
+\item VCA NFINDER (Vertex Component Analysis) [Nascimento2005]
+\end{itemize}
+
+In addition to its success recognized by the
+community and very competitive algorithmic complexity, the endmembers estimation is unbiased in absence of noise (and when there are pure pixels).
 
 \paragraph{VCA} 
-Note: L'algorithme VCA est systematiquement
-utilise pour initialiser les differents algorithmes etudies (sauf
-MVES, base sur une autre initialisation).
+The VCA algorithm is systematically
+used to initialize various studied algorithms (except
+MVES, based on a different initialization).
 
-Elements importants sur le fonctionnement de VCA: 
+Important elements on the operation of VCA:
 \begin{itemize}
-\item {L'algorithme VCA
-est base sur des projections iteratives des donnees orthogonales au
-sous-espace porte par les endmembers deja estimes.}
-\item {Biaise lorsque le
-degre de purete est inferieur a 1.}
-
+\item {The VCA algorithm
+is based on iterative projections of the data orthogonal to
+the subspace already held by the endmembers.}
+\item {Biaised when degree of purity is lower than 1.}
 \end{itemize}  
 
-\subsubsection{Famille 2} 
-Une deuxieme famille est composee d'algorithmes recherchant le
-simplexe de volume minimal circonscrivant les donnees. La phase
-d'initialisation consiste a determiner un simplexe initial quelconque
-circonscrivant les donnees. Puis, un schema d'optimisation numerique
-permet de minimiser une fonctionnelle, fonction croissante du volume
-generalise, lui-meme dependant des endmembers estimes a l'iteration
-courante. L'optimisation est contrainte par le fait que les donnees
-doivent restees inscrites dans le simplexe et eventuellement par les
-contraintes C1, C2 et C3.
+\subsubsection{Family 2} 
+A second family is composed of algorithms which are looking for the simplex of minimum
+volume circumscribing the data. Phase initialization consists in determining
+an initial simplex any circumscribing the data. Then, a numerical
+optimization scheme minimizes a functional, increasing function of the
+volume generalized, itself dependent of estimated endmembersin the
+current iteration. The optimization scheme is constrained by the fact that the
+data have remained on the simplex and possibly by constraints C1, C2 and C3.
 
-Les algorithmes existant sont : 
+Existing algorithms are: 
 \begin{itemize}
-\item {MVSA (Minimum Volume Simplexe
+\item {MVSA (Minimum Volume Simplex
 Analysis) [Li2008].}
 \item { MVES (Minimum Volume Encosing Simplex)
 [Chan2009].}
@@ -229,87 +212,73 @@ Analysis) [Li2008].}
 Lagrangian) [Dias2009].}
 \end{itemize}  
   
-Les differences principales entre les algorithmes consideres
-concernent: 
+Main differences between algorithms are: 
 \begin{itemize}
-\item {Le schema d'optimisation numerique.}
-\item {La maniere dont les
-contraintes sont prise en compte.}
+\item {The numerical optimization scheme.}
+\item {The way
+constraints are taken into account.}
 
 \end{itemize}  
-
- 
-Ces points impactent la complexite algorithmique et la precision
-d'estimation. 
+These issues impact the computational complexity and the precision of the estimation.
  
 \paragraph{MVSA aLi2008]} 
-Elements importants sur le fonctionnement de MVSA: 
+MVSA key points: 
 \begin{itemize}
-\item {Initialisation par VCA.}
-\item {Tous les pixels spectraux inclus dans le simplexe estime
-  (approximativement) par VCA n'impactant pas la contrainte
-  d'inscription des donnees dans le simplexe recherche, ils sont
-  simplement supprimes des donnees utilisees dans la phase de
-  minimisation du simplexe afin de reduire la complexite
-  algorithmique.}
-\item {La technique d'optimisation tres evoluee est de type
-  programmation quadratique sequentielle (Sequencial Quadratic
-  Programming - SQP) et plus precisement a la categorie
-  ``quasi-Newton'' sous contrainte.}
+\item {Initialization by VCA.}
+\item {All spectral pixels included in the simplex estimate
+  (approximatively) by VCA does not impact the constraint of  data to belong to the researched simplex, they are
+  simply delete the data used in the minimization of the
+  simplex to reduce the algorithmic complexity.}
+\item {The highly developed optimization technique uses
+  sequential quadratic programming (Sequential Quadratic
+  Programming - SQP) and more specifically of the category
+  ``Quasi-Newton''under constraint.}
 \end{itemize} 
 
 \paragraph{MVES [Chan2009]}
- Elements importants sur le fonctionnement de MVES: 
+ MVES key points: 
 \begin{itemize}
-\item {Initialisation par une
-  methode iterative (Programmation Lineaire LP pour Linear
-  Programming) non-triviale et differente de VCA.}
-\item {Resolution du
-  probleme par LP.}
+\item {Initialization by non-trivial
+  iterative method (LP Linear Programming for Linear
+  Programming), different from VCA.}
+\item {Resolution of problem by LP.}
 \end{itemize} 
  
 
 \paragraph{SISAL [Dias2009]}
-Elements importants sur le fonctionnement de SISAL: 
+SISAL key points:
 \begin{itemize}
-\item {Initialisation
-par VCA.}
-\item {Selection des pixels spectraux analogue a MVSA pour reduire
-la complexite algorithmique.}
-\item {Technique d'optimisation tres evoluee
-cumulant plusieurs particularites.}
+\item {Initialisation by VCA.}
+\item {Selection of similar spectral pixels as MVSA to reduce computational complexity.}
+\item {Advanced optimization technique
+combining multiple features.}
 \begin{itemize}
-\item {Decomposition du probleme
-non-convexe en serie de problemes convexes.}
-\item {Developpement d'une
-methode specifique de separation de variables permettant de considerer
-un lagrangien augmente avec de bonnes proprietes de calcul.}
+\item {Decomposition of the non convex problem
+in convex set of problems.}
+\item {Development of a
+specific method of separation of variables for considering
+Lagrangian increases with a good design properties.}
 \end{itemize}
 \end{itemize} 
 
-\subsubsection{Famille 3}
-Il s'agit d'algorithmes de Factorisation en matrices non-negatives
-(NMF pour Non-negative Matrix Factorization). L'objectif de cette
-branche des mathematiques appliquees est de factoriser une matrice
-non-negative, X dans notre cas, en produit de matrices
-non-negatives:AS par minimisation d'une distance entre X et AS et
-avec une regularisation adaptee, afin de lever la degenerescence de
-maniere adaptee au probleme physique associe au demixage.
+\subsubsection{Family 3}
+Non negative matrix factorization algorithms (NMF for Non-negative Matrix Factorization). The purpose of this
+branch of applied mathematics is to factor a non-negative matrix, X in our case, into a product of non negative matrices: AS by minimizing a distance between X and AS and
+with an adapted regularization to lift the degeneration in an appropriate manner adapted to the physical problems associated with unmixing.
+
 \paragraph{MDMD-NMF [Huck2010b]} 
-Elements importants sur le fonctionnement de MDMD-NMF:
+Key points of MDMD-NMF:
 \begin{itemize}
-\item {Initialisation par VCA.}
-\item {Minimisation de la norme de la norme de
-Frobenius avec une regularisation spectrale et une regularisation
-``spatiale'' (sur la matrice d'abondances).}
+\item {VCA initialization.}
+\item {Minimizing the norm of standard
+Frobenius with a spectral regularization and a regularization ``Space''(the matrix of abundances).}
 \begin{itemize}
 \item {Minimum spectral
-Dispersion: la regularisation spectrale encourage la variance des
-coefficients d'un spectre de endmembers a etre faible.}
-\item {Maximum spatial Dispersion: la regularisation spatiale
-  encourage les vecteurs d'abondances a occuper toute la partie
-  admissible (plus d'information dans [Huck2009]). Cette action
-  presente une certaine analogie a la contrainte de volume minimum.}
+Dispersion: the spectral regularization encourages the  variance of 
+coefficients of a spectrum of endmembers to be low.}
+\item {Maximum spatial dispersion: the spatial regularization
+  encourages the vector of abundances to occupy all the admissible parts (more information in [Huck2009]). it
+  presents a certain analogy with the minimum volume constraint.}
 \end{itemize}
 \end{itemize}
  
