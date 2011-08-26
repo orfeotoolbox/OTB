@@ -14,6 +14,11 @@ macro(OTB_CREATE_APPLICATION)
    add_library(${APPLICATION_TARGET_NAME} MODULE ${APPLICATION_SOURCES})
    target_link_libraries(${APPLICATION_TARGET_NAME} OTBWrapperCore ${APPLICATION_LINK_LIBRARIES})
    set_target_properties(${APPLICATION_TARGET_NAME} PROPERTIES PREFIX "")
+
+   if (APPLE)
+     set_target_properties(${APPLICATION_TARGET_NAME} PROPERTIES SUFFIX ".dylib")
+   endif()
+
    install(TARGETS ${APPLICATION_TARGET_NAME}
             RUNTIME DESTINATION lib/otbapp
             LIBRARY DESTINATION lib/otbapp)
