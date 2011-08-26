@@ -49,22 +49,23 @@ private:
   void operator=(const AppliThread&); //purposely not implemented
 
   Application::Pointer m_Application;
-
+  QWidget * m_ProgressWindow;
 };
 
 class WatchThread : public QThread
 {
  Q_OBJECT
  public:
-  WatchThread(Application* app)
+  WatchThread(Application* app, QWidget * pWin)
     {
       m_Application = app;
+      m_ProgressWindow = pWin;
     }
 virtual ~WatchThread(){};
   void run()
   {
     // Prepare the progressbar window 
-    QWidget * progWin = new QWidget();
+    //QWidget * progWin = new QWidget();
     QVBoxLayout *layout = new QVBoxLayout;  
 
     std::vector< QProgressBar * > barListIntern, barListWriter;
@@ -104,8 +105,8 @@ virtual ~WatchThread(){};
           }
       }
 
-    progWin->setLayout(layout);
-    progWin->show();
+    m_ProgressWindow->setLayout(layout);
+    //m_ProgressWindow->show();
 
     double curWriterProgress = 0;
     unsigned int curWriter = 0;
@@ -120,7 +121,7 @@ virtual ~WatchThread(){};
           {
             //oss<< "doexe "<<i<<": "<<m_Application->GetDoExecuteProgress()[i] <<std::flush;
             barListIntern[i]->setValue( static_cast<int>(progCount[i]*100 ));
-            progWin->update();
+            //m_ProgressWindow->update();
           }
       
         // Writer watcher
@@ -136,14 +137,14 @@ virtual ~WatchThread(){};
                 //std::cout<<"progress writer: "<<curProg<<"."<<std::flush;
                 barListWriter[curWriter]->setValue( static_cast<int>(curProg*100) );
                 curWriterProgress = curProg;
-                progWin->update();
+                //m_ProgressWindow->update();
               }
           }
 
         this->msleep(500);
       }
-    progWin->close();
-   std::cout<<"waaaaaaatch done"<<std::endl;
+    //m_ProgressWindow->close();
+
   }
 
 private:
@@ -151,14 +152,14 @@ private:
   void operator=(const WatchThread&); //purposely not implemented
 
   Application::Pointer m_Application;
-
+  QWidget * m_ProgressWindow;
 };
 
 
 /** \class
  * \brief
  */
-  class QtWidgetModel : public QObject/*, public EventsListener<std::string>*/
+  class QtWidgetModel : public QObject /*, public EventsListener<std::string>*/
 {
   Q_OBJECT
 public:
@@ -171,12 +172,12 @@ public:
     return m_Application;
   }
 
+  // slot called when execution is requested
+  void ExecuteAndWriteOutput();
+
 protected slots:
   // slot called everytime one of the widget is updated
   void NotifyUpdate();
-
-  // slot called when execution is requested
-  void ExecuteAndWriteOutput();
 
   //void Notify();
 
@@ -185,7 +186,9 @@ private:
   void operator=(const QtWidgetModel&); //purposely not implemented
 
   Application::Pointer m_Application;
+  QWidget * m_ProgressWindow;
 };
+
 
 
 }

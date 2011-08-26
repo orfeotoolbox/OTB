@@ -85,7 +85,7 @@ int main(int argc, char* argv[])
   // Create GUI based on module
   QtWidgetView* gui = new QtWidgetView(app);
   gui->CreateGui();
-  gui->show();
+  gui->GetMainWindow()->show();
 
   // Start event processing loop
   return qtApp.exec();

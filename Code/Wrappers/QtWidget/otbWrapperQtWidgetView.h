@@ -32,7 +32,7 @@ namespace Wrapper
 /** \class
  * \brief
  */
-  class QtWidgetView : public QWidget/*, public EventsListener<std::string>*/
+  class QtWidgetView : public QObject /* QWidget*/ /*, public EventsListener<std::string>*/
 {
   Q_OBJECT
 public:
@@ -40,6 +40,14 @@ public:
   virtual ~QtWidgetView();
 
   void CreateGui();
+
+  QWidget * GetMainWindow()
+  {
+    return m_MainWindow;
+  }
+
+public slots:
+  void ExecuteAndWriteOutputSlot();
 
 private:
   QtWidgetView(const QtWidgetView&); //purposely not implemented
@@ -55,8 +63,11 @@ private:
 
   QtWidgetModel* m_Model;
 
+  QWidget * m_MainWindow;
+
   QPushButton* m_ExecButton;
   QPushButton* m_QuitButton;
+  QWidget * m_ProgressWindow;
 };
 
 

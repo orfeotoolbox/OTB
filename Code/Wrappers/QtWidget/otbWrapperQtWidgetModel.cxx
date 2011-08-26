@@ -18,6 +18,9 @@
 #include "otbWrapperQtWidgetModel.h"
 #include "otbWrapperOutputImageParameter.h"
 
+//#include <stdio.h>
+#include <time.h>
+
 namespace otb
 {
 namespace Wrapper
@@ -28,6 +31,7 @@ QtWidgetModel::QtWidgetModel(Application* app)
 {
 
   m_Application->Init();
+  m_ProgressWindow = new QWidget();
   //m_Application->RegisterListener( this );
 }
 
@@ -45,8 +49,15 @@ void QtWidgetModel::ExecuteAndWriteOutput()
   std::cout<<"********************************* ExecuteAndWriteOutput launched *********************************"<<std::endl;
   AppliThread * taskAppli = new AppliThread( m_Application );
   taskAppli->start();
-  WatchThread * taskWatch = new WatchThread( m_Application );
-  taskWatch->start();
+  //WatchThread * taskWatch = new WatchThread( m_Application, m_ProgressWindow );
+  //taskWatch->start();
+
+ std::cout<<"********************************* ExecuteAndWriteOutput reporting *********************************"<<std::endl;
+
+   // Prepare the progressbar window 
+
+
+  std::cout<<"********************************** end ExecuteAndWriteOutput thread"<<std::endl;
   //m_Application->ExecuteAndWriteOutput();
 }
 
