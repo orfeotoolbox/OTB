@@ -68,6 +68,7 @@ private:
 
     typedef itk::CastImageFilter<VectorImageType, VectorImageType> CastImageFilterType;
     CastImageFilterType::Pointer caster = CastImageFilterType::New();
+    m_FilterRef = caster;
     std::cout << "CopyInput 2" << std::endl;
     caster->SetInPlace(true);
     caster->SetInput(inImage);
