@@ -244,7 +244,7 @@ void QtWidgetView::ExecuteAndWriteOutputSlot()
             }
         }
       
-      itksys::SystemTools::sleep(1);
+      itksys::SystemTools::Delay(1000);
       
     }
   progWin->close();
