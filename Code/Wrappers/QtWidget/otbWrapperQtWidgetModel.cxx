@@ -46,33 +46,9 @@ void QtWidgetModel::NotifyUpdate()
 
 void QtWidgetModel::ExecuteAndWriteOutput()
 {
-  std::cout<<"********************************* ExecuteAndWriteOutput launched *********************************"<<std::endl;
   AppliThread * taskAppli = new AppliThread( m_Application );
   taskAppli->start();
-  //WatchThread * taskWatch = new WatchThread( m_Application, m_ProgressWindow );
-  //taskWatch->start();
-
- std::cout<<"********************************* ExecuteAndWriteOutput reporting *********************************"<<std::endl;
-
-   // Prepare the progressbar window 
-
-
-  std::cout<<"********************************** end ExecuteAndWriteOutput thread"<<std::endl;
-  //m_Application->ExecuteAndWriteOutput();
 }
 
-/** The Notify */
-/*
-void QtWidgetModel::Notify(const std::string & event)
-{
-  std::cout<<"Notifycation done"<<std::endl;
-  if (event == "OutputsUpdated")
-     {
-     }
-   else if(event == "Quit")
-     {
-     }
-}
-*/
 }
 }

@@ -67,7 +67,6 @@ private:
 
   QPushButton* m_ExecButton;
   QPushButton* m_QuitButton;
-  QWidget * m_ProgressWindow;
 };
 
 

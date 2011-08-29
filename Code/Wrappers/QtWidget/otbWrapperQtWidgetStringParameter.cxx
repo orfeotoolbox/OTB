@@ -56,7 +56,6 @@ void QtWidgetStringParameter::DoCreateWidget()
 
 void QtWidgetStringParameter::SetValue(const QString& value)
 {
-  std::cout << "QtWidgetStringParameter::SetValue " << m_StringParam->GetKey() << " " << value.toStdString() << std::endl;
   m_StringParam->SetValue(value.toStdString());
 
   QString key( QString::fromStdString(m_StringParam->GetKey()) );

@@ -85,6 +85,7 @@ const Parameter* Application::GetParameterByKey(std::string name) const
 void Application::Init()
 {
   m_ParameterList = ParameterGroup::New();
+  m_CurrentProcess = NULL;
   this->DoCreateParameters();
 }
 
@@ -423,7 +424,7 @@ float Application::GetParameterFloat(std::string parameter)
   Parameter* param = GetParameterByKey(parameter);
 
   if (dynamic_cast<FloatParameter*>(param))
-    {
+   {
     FloatParameter* paramFloat = dynamic_cast<FloatParameter*>(param);
     ret = paramFloat->GetValue();
     }
@@ -546,15 +547,6 @@ Application::AddParameter(ParameterType type, std::string paramKey, std::string 
 double
 Application::GetExecuteProgress()
 {
-  /*
-  unsigned int processStatus = m_CurrentProcess->GetProgresss() * 100;
-
-  itkOStringStream oss;
-  oss << "Writing output "<< m_WroteOutput << " over "<<this->GetParametersKeys(true).size()<<".\n";
-  oss << "\rProcessing progress: "processStatus << "% [" << stars << blanks << "]";
-
-  return oss.str();
-  */
   double res = -1;
   if ( m_CurrentProcess.IsNotNull() )
     {
@@ -565,19 +557,10 @@ Application::GetExecuteProgress()
   return res;
 }
 
+
 std::vector<double>
 Application::GetDoExecuteProgress()
 {
-  /*
-  unsigned int processStatus = m_CurrentProcess->GetProgresss() * 100;
-
-  itkOStringStream oss;
-  oss << "Writing output "<< m_WroteOutput << " over "<<this->GetParametersKeys(true).size()<<".\n";
-  oss << "\rProcessing progress: "processStatus << "% [" << stars << blanks << "]";
-
-  return oss.str();
-  */
-
   std::vector<double> res;
   for(unsigned int i=0; i<m_InternalProcessList.size(); i++)
     {

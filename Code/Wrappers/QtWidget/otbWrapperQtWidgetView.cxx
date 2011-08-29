@@ -20,6 +20,8 @@
 #include "otbWrapperQtWidgetParameterGroup.h"
 #include "otbWrapperQtWidgetParameterFactory.h"
 
+#include "otbWrapperOutputImageParameter.h"
+
 namespace otb
 {
 namespace Wrapper
@@ -31,7 +33,6 @@ QtWidgetView::QtWidgetView(Application* app)
   m_Model = new QtWidgetModel(app);
   m_Application = app;
   m_MainWindow = new QWidget();
-  m_ProgressWindow = new QWidget(); 
   //m_Application->RegisterListener( this );
 
 }
@@ -122,17 +123,10 @@ QWidget* QtWidgetView::CreateFooter()
   footerGroup->setFixedHeight(40);
   footerGroup->setContentsMargins(0,0,0,0);
   footerLayout->setContentsMargins(5,5,5,5);
-/*
-  m_ProgressLabel = new otb::ProgressLabel(footerGroup);
-  connect(m_ExecutionThread, SIGNAL(started()),     this, SLOT(StartExecute()) );
-  connect(m_ExecutionThread, SIGNAL(finished()),    this, SLOT(AbortExecute()) );
-  connect(m_ExecutionThread, SIGNAL(terminated()),  this, SLOT(EndExecute()) );
-*/
+
   m_ExecButton = new QPushButton(footerGroup);
-  //m_ExecButton->setStyleSheet("border-style: none");
   m_ExecButton->setDefault(true);
   m_ExecButton->setText(QObject::tr("Execute"));
-  //connect( m_ExecButton, SIGNAL(clicked()), m_Model, SLOT(ExecuteAndWriteOutput() ) );
   connect( m_ExecButton, SIGNAL(clicked()), this, SLOT(ExecuteAndWriteOutputSlot() ) );
 
   m_QuitButton = new QPushButton(footerGroup);
@@ -153,12 +147,8 @@ void QtWidgetView::ExecuteAndWriteOutputSlot()
 {
   m_Model->ExecuteAndWriteOutput();
 
-  //QWidget * progWin = new QWidget();
-  //QTextEdit * progWin = new QTextEdit();
-  //progWin->setWindowTitle( "Progress reporting..." );
-  //progWin->resize(700, 700);
-  m_ProgressWindow->setWindowTitle( "Progress reporting..." );
-  //m_ProgressWindow->resize(700, 700);
+  QWidget * progWin = new QWidget();
+  progWin->setWindowTitle( "Progress reporting..." );
 
   QVBoxLayout *layout = new QVBoxLayout;  
   
@@ -169,6 +159,8 @@ void QtWidgetView::ExecuteAndWriteOutputSlot()
       itkGenericExceptionMacro ("Internal process list and list name size mismatch...");
     }
   
+
+  // Build the window : First internal process
   for(unsigned int ii=0; ii<m_Application->GetInternalProcessList().size(); ii++)
     {
       QLabel *label = new QLabel(QString(m_Application->GetInternalProcessListName()[ii].c_str()));
@@ -177,9 +169,10 @@ void QtWidgetView::ExecuteAndWriteOutputSlot()
       layout->addWidget(bar);
       barListIntern.push_back(bar);
       labelListIntern.push_back(label);
-      std::cout<<"********************************* progress added "<<std::endl;
     }
+
   
+  // Build the window : then writers
   unsigned int nbOutput = 0;
   std::vector<std::string> paramList = m_Application->GetParametersKeys(true);
   for (std::vector<std::string>::const_iterator it = paramList.begin();
@@ -189,35 +182,36 @@ void QtWidgetView::ExecuteAndWriteOutputSlot()
       if ( m_Application->GetParameterType(*it) == ParameterType_OutputImage)
         {
           itk::OStringStream oss;
-          oss << "Writer "<<nbOutput;
+          // create the label including the output description
+          Parameter* param =  m_Application->GetParameterByKey(*it);
+          OutputImageParameter* outputParam = dynamic_cast<OutputImageParameter*>(param);
+          oss << "Writer "<< nbOutput << ": ";
+          oss << outputParam->GetName() <<".";
           QLabel *label = new QLabel(QString(oss.str().c_str()));
           QProgressBar * bar = new QProgressBar();
+          bar->setToolTip( QString( outputParam->GetDescription()) );
           layout->addWidget(label);
           layout->addWidget(bar);
           barListWriter.push_back(bar);
           labelListWriter.push_back(label);
           nbOutput++;
-          std::cout<<"********************************* wrietr added "<<std::endl;
         }
     }
   
-  //progWin->setLayout(layout);
-  //progWin->update();
-  //progWin->show();
-  m_ProgressWindow->setLayout(layout);
-  m_ProgressWindow->update();
- std::cout<<"********************************* ExecuteAndWriteOutput window will be displayed *********************************"<<std::endl;
-  m_ProgressWindow->show();
+  // Display the window
+  progWin->setLayout(layout);
+  progWin->update();
+  progWin->show();
+  // PAY ATTENTION : launching a GUI modification in a slot is simple : you have to call the following method 
+  // to update the general GUI
   QCoreApplication::processEvents();
-  std::cout<<"********************************* ExecuteAndWriteOutput window displayed *********************************"<<std::endl;
+
+  // Watch process
   double curWriterProgress = 0;
   unsigned int curWriter = 0;
   unsigned int countt = 0;
   while( m_Application->GetExecuteAndWriteOutputDone() == false )
     {
-      //progWin->setText( QString(countt) );
-      //progWin->repaint();
-      
       itk::OStringStream oss;
       oss.str("");
       
@@ -225,11 +219,9 @@ void QtWidgetView::ExecuteAndWriteOutputSlot()
       std::vector<double> progCount = m_Application->GetDoExecuteProgress();
       for(unsigned int i=0; i<progCount.size(); i++)
         {
-          //oss<< "doexe "<<i<<": "<<m_Application->GetDoExecuteProgress()[i] <<std::flush;
           barListIntern[i]->setValue( static_cast<int>(progCount[i]*100 ));
-          //progWin->update();
-          m_ProgressWindow->update();
- QCoreApplication::processEvents();
+          progWin->update();
+          QCoreApplication::processEvents();
         }
       
       // Writer watcher
@@ -243,21 +235,18 @@ void QtWidgetView::ExecuteAndWriteOutputSlot()
                 {
                   curWriter++;
                 }
-            
-              std::cout<<curProg<<"."<<std::flush;
+
               barListWriter[curWriter]->setValue( static_cast<int>(curProg*100) );
               curWriterProgress = curProg;
-              //progWin->update();
-              m_ProgressWindow->update();
- QCoreApplication::processEvents();
+              progWin->update();
+              QCoreApplication::processEvents();
             }
         }
       
       sleep(1);
       
     }
-  //progWin->close();
-  m_ProgressWindow->close();
+  progWin->close();
 }
 
 
