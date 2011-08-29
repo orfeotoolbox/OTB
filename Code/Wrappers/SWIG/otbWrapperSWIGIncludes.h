@@ -31,9 +31,9 @@
 //typedef otb::Wrapper::ParameterGroup::Pointer::SmartPointer ParameterGroup_Pointer;
 
 typedef otb::Wrapper::Application                        Application;
-typedef otb::Wrapper::Application::Pointer::SmartPointer Application_Pointer;
+typedef otb::Wrapper::Application::Pointer               Application_Pointer;
 
-typedef otb::Wrapper::ApplicationRegistry                        Registry;
+typedef otb::Wrapper::ApplicationRegistry                Registry;
 
 
 #endif
