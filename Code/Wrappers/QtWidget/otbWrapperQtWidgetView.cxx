@@ -22,6 +22,8 @@
 
 #include "otbWrapperOutputImageParameter.h"
 
+#include "itksys/SystemTools.hxx"
+
 namespace otb
 {
 namespace Wrapper
@@ -242,7 +244,7 @@ void QtWidgetView::ExecuteAndWriteOutputSlot()
             }
         }
       
-      sleep(1);
+      itksys::SystemTools::sleep(1);
       
     }
   progWin->close();
