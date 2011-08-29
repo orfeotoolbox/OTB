@@ -2,7 +2,7 @@
 macro(check_PIC_flag Language)
   if ( UNIX AND NOT APPLE )
     if ( NOT ${CMAKE_CXX_FLAGS} MATCHES "-fPIC")
-      message ( FATAL_ERROR "${Language} wrapping requires CMAKE_CXX_FLAGS (or equivalent) to include -fPIC and ITK built with this flag" )
+#      message ( FATAL_ERROR "${Language} wrapping requires CMAKE_CXX_FLAGS (or equivalent) to include -fPIC and ITK built with this flag" )
     endif()
   endif()
 endmacro()
