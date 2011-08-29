@@ -32,7 +32,7 @@ QtWidgetView::QtWidgetView(Application* app)
 
   m_Model = new QtWidgetModel(app);
   m_Application = app;
-  m_MainWindow = new QWidget();
+  //m_MainWindow = new QWidget();
   //m_Application->RegisterListener( this );
 
 }
@@ -45,13 +45,14 @@ QtWidgetView::~QtWidgetView()
 void QtWidgetView::CreateGui()
 {
   // Create a VBoxLayout with the header, the input widgets, and the footer
-  QVBoxLayout *mainLayout = new QVBoxLayout(m_MainWindow);//this);
+  QVBoxLayout *mainLayout = new QVBoxLayout();
 
   mainLayout->addWidget(CreateHeader());
   mainLayout->addWidget(CreateInputWidgets());
   mainLayout->addWidget(CreateFooter());
 
-  QGroupBox *mainGroup = new QGroupBox(m_MainWindow);//this);
+
+  QGroupBox *mainGroup = new QGroupBox();
   mainGroup->setLayout(mainLayout);
 
   // Put the main group inside a scroll area
@@ -60,17 +61,15 @@ void QtWidgetView::CreateGui()
   scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
   scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
-  QVBoxLayout *scrollLayout = new QVBoxLayout(m_MainWindow);//this);
+  QVBoxLayout *scrollLayout = new QVBoxLayout();
   scrollLayout->addWidget(scrollArea);
 
   // Make the scroll layout the main layout
-  m_MainWindow->setLayout(scrollLayout);
-  m_MainWindow->setWindowIcon(QIcon( ":/otb_small.png" ));
-  m_MainWindow->setWindowTitle(QString(m_Model->GetApplication()->GetName()).append(" - version ").append(OTB_VERSION_STRING));
+  this->setLayout(scrollLayout);
+  this->setWindowIcon(QIcon( ":/otb_small.png" ));
+  this->setWindowTitle(QString(m_Model->GetApplication()->GetName()).append(" - version ").append(OTB_VERSION_STRING));
 
-  // Tweak the window size so that it looks ok (TODO : find the way to make it perfectly symmetric)
-  m_MainWindow->resize(mainGroup->sizeHint() + scrollArea->verticalScrollBar()->size());
-  //m_ProgressWindow->show();
+  this->show();
 }
 
 QWidget* QtWidgetView::CreateHeader()
@@ -131,7 +130,7 @@ QWidget* QtWidgetView::CreateFooter()
 
   m_QuitButton = new QPushButton(footerGroup);
   m_QuitButton->setText(QObject::tr("Quit"));
-  connect( m_QuitButton, SIGNAL(clicked()), this, SLOT(m_MainWindow->close()) );
+  connect( m_QuitButton, SIGNAL(clicked()), this, SLOT(CloseSlot()) );
 
   // Put the buttons on the right
   //footerLayout->addWidget(m_ProgressLabel);
@@ -249,6 +248,10 @@ void QtWidgetView::ExecuteAndWriteOutputSlot()
   progWin->close();
 }
 
+void QtWidgetView::CloseSlot()
+{
+  this->close();
+}
 
 }
 }
