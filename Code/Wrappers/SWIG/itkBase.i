@@ -27,9 +27,9 @@
   try {
     $action
   } catch( itk::ExceptionObject &ex ) {
-    char error_msg[256];
-    sprintf( error_msg, "Exception thrown in otbApplication $symname: %s", ex.what() );
-    SWIG_exception( SWIG_RuntimeError, error_msg );
+    std::ostringstream oss;
+    oss << "Exception thrown in otbApplication $symname: " << ex.what();
+    SWIG_exception( SWIG_RuntimeError, oss.str().c_str() );
   } catch( ... ) {
     SWIG_exception( SWIG_UnknownError, "Unknown exception thrown in otbApplication $symname" );
   }
