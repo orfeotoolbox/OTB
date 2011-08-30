@@ -399,13 +399,19 @@ statistics. More fully, this approach requires:
 highly parallelizable)
 \end{itemize} 
 \end{itemize} 
-Principle of RX and GMRF can be resume with the following figures.
-(TODO do block diagramm of algorithms)
+Principle of RX and GMRF can be resume with \ref{fig:workflow_anomaly}.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.7\textwidth]{Anomaly_Detection_Workflow.eps}
+  \itkcaption[Anomaly detection block diagram]{Basic workflow of anomaly detection in hyperspectral images.}
+  \label{fig:workflow_anomaly}
+\end{figure}
 
 An optional first step is to reduce the size of spectral data
 while maintaining information related to anomalies. Then, the spectral pixels
 are tested one by oneturn (parallelizable task). The pixel
-test works on a sliding window (see Figure). This
+test works on a sliding window (see \ref{fig:sliding_anomaly}). This
 window consists of two sub windows, centered on the pixel test of  dimensions L and LL, with $L<LL$.
 
 \begin{itemize}
@@ -431,9 +437,13 @@ Once all the parameters are estimated, a statistical test is performed and assig
 value $\Lambda(i)$ to the tested pixel i. A map of detection is thus
 formed.
 
-Figure 28: Principle of the sliding window and definitions of
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.7\textwidth]{Sliding_Window_Anomaly_Algo.eps}
+  \itkcaption[Sliding window and parameters definitions]{Principle of the sliding window and definitions of
 parameters L and LL of the sliding window. RX algorithms and
-GMRF, taken herein in the following sections.
-(TODO block diagram for windowing)
+GMRF, taken herein in the following sections.}
+  \label{fig:sliding_anomaly}
+\end{figure}
 
 \subsection{Local RX}
