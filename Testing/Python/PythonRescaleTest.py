@@ -4,12 +4,14 @@
 #  Example on the use of the Rescale 
 #
 from sys import argv
-import otbApplication as otb
+import PythonApplication
+#import otbApplication as otb
 
-print "Available applications : " + str(otb.Registry.GetAvailableApplications())
+app = PythonApplication.PythonApplicationClass("Rescale")
 
-app = otb.Registry.CreateApplication("Rescale")
-print app.GetParametersKeys()
+print app.m_App.GetParametersKeys()
+app.SetParameterString("in", argv[1])
+
 
 app.SetParameterString("in", argv[1])
 
