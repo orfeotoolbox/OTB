@@ -136,7 +136,9 @@ FOREACH( exampletexname ${JAVA_EXAMPLES_TEX_FILES})
   SET( ITK_EXAMPLES_TEX_SRCS ${ITK_EXAMPLES_TEX_SRCS} ${exampletexname})
 ENDFOREACH( exampletexname )
 
-
+#Generate random contributor list
+EXECUTE_PROCESS(WORKING_DIRECTORY ${SoftwareGuide_SOURCE_DIR}/Latex/ COMMAND python  generateRandomContributorList.py)
+MESSAGE(STATUS "Generating contributor list done")
 
 IF(LATEX_COMPILER)
 
