@@ -118,7 +118,7 @@ void VCAImageFilter<TImage>::GenerateData()
     double P_R = nbBands * statsInput->GetComponentCorrelation();
     double P_Rp = m_NumberOfEndmembers * transformedStats->GetComponentCorrelation()
                   + statsInput->GetMean().GetSquaredNorm();
-    const double qL = static_cast<double>(m_NumberOfEndmembers) / nbBands;
+    //const double qL = static_cast<double>(m_NumberOfEndmembers) / nbBands;
     SNR = vcl_abs(10*vcl_log10( (P_Rp - (m_NumberOfEndmembers/nbBands)*P_R) / (P_R - P_Rp) ));
     }
 

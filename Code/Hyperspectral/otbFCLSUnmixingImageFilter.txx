@@ -70,7 +70,7 @@ void
 FCLSUnmixingFunctor<TInput, TOutput, TPrecision>
 ::SetEndmembersMatrix(const MatrixType& U)
 {
-  const double Delta = 1.0E-6;
+  //const double Delta = 1.0E-6;
   m_U = U;
   m_N.set_size(U.rows() + 1, U.cols());
   for (unsigned int r = 0; r < U.rows(); ++r)

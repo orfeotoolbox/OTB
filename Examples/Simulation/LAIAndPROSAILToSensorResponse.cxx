@@ -623,7 +623,7 @@ int main(int argc, char *argv[])
     return EXIT_FAILURE;
     }
 
-  unsigned int acPar = 0;
+  //unsigned int acPar = 0;
   while (acquistionParsFile.good())
     {
     std::string line;
