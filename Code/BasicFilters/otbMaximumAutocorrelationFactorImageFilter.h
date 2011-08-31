@@ -112,6 +112,8 @@ private:
   CovarianceEstimatorPointer m_CovarianceEstimator;
 
   VnlMatrixType m_V;
+
+  VnlVectorType m_Mean;
 };
 
 } // end namespace otb

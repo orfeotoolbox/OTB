@@ -49,10 +49,11 @@ MaximumAutocorrelationFactorImageFilter<TInputImage,TOutputImage>
   Superclass::GenerateOutputInformation();
 
   // Retrieve input images pointers
-  const TInputImage * inputPtr = this->GetInput();
+  TInputImage * inputPtr = const_cast<TInputImage *>(this->GetInput());
   TOutputImage * outputPtr = this->GetOutput();
 
   // TODO: set the number of output components
+  unsigned int nbComp = inputPtr->GetNumberOfComponentsPerPixel();
 
   // Compute Dh and Dv
 
@@ -108,6 +109,12 @@ MaximumAutocorrelationFactorImageFilter<TInputImage,TOutputImage>
   diffh->SetInput1(referenceExtract->GetOutput());
   diffh->SetInput2(dhExtract->GetOutput());
 
+  typedef otb::ImageFileWriter<InputImageType> WriterType;
+  typename WriterType::Pointer writer = WriterType::New();
+  writer->SetInput(diffh->GetOutput());
+  writer->SetFileName("diffh.tif");
+  writer->Update();
+
   std::cout<<"Diffh ok"<<std::endl;
 
   typename DifferenceFilterType::Pointer diffv = DifferenceFilterType::New();
@@ -124,6 +131,7 @@ MaximumAutocorrelationFactorImageFilter<TInputImage,TOutputImage>
   std::cout<<"Sigmadh: "<<std::endl;
   std::cout<<sigmadh<<std::endl;
 
+  m_CovarianceEstimator = CovarianceEstimatorType::New();
   m_CovarianceEstimator->SetInput(diffv->GetOutput());
   m_CovarianceEstimator->Update();
   VnlMatrixType sigmadv = m_CovarianceEstimator->GetCovariance().GetVnlMatrix(
@@ -139,9 +147,17 @@ MaximumAutocorrelationFactorImageFilter<TInputImage,TOutputImage>
   std::cout<<sigmad<<std::endl;
 
   // Compute the original image covariance
-  m_CovarianceEstimator->SetInput(referenceExtract->GetOutput());
+  m_CovarianceEstimator = CovarianceEstimatorType::New();
+  m_CovarianceEstimator->SetInput(inputPtr);
   m_CovarianceEstimator->Update();
   VnlMatrixType sigma = m_CovarianceEstimator->GetCovariance().GetVnlMatrix();
+
+  m_Mean = VnlVectorType(nbComp,0);
+
+  for(unsigned int i = 0; i<nbComp;++i)
+    {
+    m_Mean[i] = m_CovarianceEstimator->GetMean()[i];
+    }
 
   std::cout<<"Sigma: "<<std::endl;
   std::cout<<sigma<<std::endl;
@@ -153,26 +169,35 @@ MaximumAutocorrelationFactorImageFilter<TInputImage,TOutputImage>
   std::cout<<"V: "<<std::endl;
   std::cout<<m_V<<std::endl;
   
-  VnlMatrixType invstderr = sigma.apply(&vcl_sqrt);
+  std::cout<<"D: "<<std::endl;
+  std::cout<<d<<std::endl;
+
+  VnlMatrixType invstderr = VnlMatrixType(nbComp,nbComp,0);
+  invstderr.set_diagonal(sigma.get_diagonal());
+  invstderr = invstderr.apply(&vcl_sqrt);
   invstderr = invstderr.apply(&InverseValue);
-  VnlVectorType diag = invstderr.get_diagonal();
-  invstderr.fill(0);
-  invstderr.set_diagonal(diag);
 
-  VnlMatrixType invstderrmaf = (m_V.transpose() * sigma * m_V).apply(&vcl_sqrt);
+  std::cout<<"invstderr: "<<std::endl;
+  std::cout<<invstderr<<std::endl;
+
+  VnlMatrixType invstderrmaf = VnlMatrixType(nbComp,nbComp,0);
+  invstderrmaf.set_diagonal((m_V.transpose() * sigma * m_V).get_diagonal());
+  invstderrmaf = invstderrmaf.apply(&vcl_sqrt);
   invstderrmaf = invstderrmaf.apply(&InverseValue);
-  VnlVectorType diagmaf = invstderrmaf.get_diagonal();
-  invstderrmaf.fill(0);
-  invstderrmaf.set_diagonal(diagmaf);
 
-
-  VnlMatrixType sign = VnlMatrixType(diag.size(),diag.size(),0);
-
+  std::cout<<"invstderrmaf: "<<std::endl;
+  std::cout<<invstderrmaf<<std::endl;
+  
   VnlMatrixType aux1 = invstderr * sigma * m_V * invstderrmaf;
 
-  VnlVectorType aux2 = VnlVectorType(diag.size(),0);
+  std::cout<<"Aux1: "<<std::endl;
+  std::cout<<aux1<<std::endl;
   
-  for(unsigned int i = 0; i < diag.size();++i)
+  VnlMatrixType sign = VnlMatrixType(nbComp,nbComp,0);
+
+  VnlVectorType aux2 = VnlVectorType(nbComp,0);
+  
+  for(unsigned int i = 0; i < nbComp;++i)
     {
     aux2=aux2 + aux1.get_row(i);
     }
@@ -180,8 +205,11 @@ MaximumAutocorrelationFactorImageFilter<TInputImage,TOutputImage>
   sign.set_diagonal(aux2);
   sign = sign.apply(&SignOfValue);
 
-  m_V = m_V * sign;
+  std::cout<<"sign: "<<std::endl;
+  std::cout<<sign<<std::endl;
 
+  m_V = m_V * sign;
+  
   std::cout<<"V (unit variance): "<<std::endl;
   std::cout<<m_V<<std::endl;
 }
@@ -221,7 +249,7 @@ MaximumAutocorrelationFactorImageFilter<TInputImage,TOutputImage>
       x[i] = inIt.Get()[i];
       }
     
-    maf = x*m_V;
+    maf = (x-m_Mean)*m_V;
 
     typename OutputImageType::PixelType outPixel(outNbComp);
     
