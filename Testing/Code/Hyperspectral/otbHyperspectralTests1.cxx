@@ -25,6 +25,8 @@ void RegisterTests()
 {
   REGISTER_TEST(otbEigenvalueLikelihoodMaximizationNewTest);
   REGISTER_TEST(otbEigenvalueLikelihoodMaximizationTest);
+  REGISTER_TEST(otbVirtualDimensionalityNewTest);
+  REGISTER_TEST(otbVirtualDimensionalityTest);
   REGISTER_TEST(otbUnConstrainedLeastSquareImageFilterNewTest);
   REGISTER_TEST(otbUnConstrainedLeastSquareImageFilterTest);
   REGISTER_TEST(otbISRAUnmixingImageFilterNewTest);

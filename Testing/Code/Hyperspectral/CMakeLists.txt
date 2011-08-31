@@ -30,6 +30,21 @@ ADD_TEST(hyTvEigenvalueLikelihoodMaximizationTest
          ${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif
          ${TEMP}/hyTvEigenvalueLikelihoodMaximizationTest.txt)
 
+# HyperspectralTests1
+ADD_TEST(hyTuVirtualDimensionalityNew
+         ${Hyperspectral_TESTS1}
+         otbVirtualDimensionalityNewTest)
+
+ADD_TEST(hyTvVirtualDimensionalityTest
+         ${Hyperspectral_TESTS1}
+           --compare-ascii ${EPSILON_9}
+           ${BASELINE_FILES}/hyTvVirtualDimensionalityTest.txt
+           ${TEMP}/hyTvVirtualDimensionalityTest.txt
+         otbVirtualDimensionalityTest
+         ${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif
+         ${TEMP}/hyTvVirtualDimensionalityTest.txt
+         1E-3)
+
 ADD_TEST(hyTuVCAImageFilterNew
          ${Hyperspectral_TESTS1}
          otbVCAImageFilterNew
@@ -131,6 +146,7 @@ otbISRAUnmixingImageFilter.cxx
 otbNCLSUnmixingImageFilter.cxx
 otbSparseUnmixingImageFilter.cxx
 otbVCAImageFilter.cxx
+otbVirtualDimensionality.cxx
 )
 
 SET(Hyperspectral_SRCS2
