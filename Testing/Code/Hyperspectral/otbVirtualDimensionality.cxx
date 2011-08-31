@@ -63,7 +63,7 @@ int otbVirtualDimensionalityTest(int argc, char * argv[])
 
   for (int i = 2; i < 10; ++i)
     {
-    double far = vcl_pow(static_cast<double>(10),static_cast<double>(-i));
+    double far = vcl_pow(static_cast<double>(10), static_cast<double>(-i));
     vd->SetFAR(far);
     vd->Compute();
 
