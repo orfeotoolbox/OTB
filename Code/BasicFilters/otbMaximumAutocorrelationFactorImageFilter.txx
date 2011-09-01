@@ -56,8 +56,8 @@ MaximumAutocorrelationFactorImageFilter<TInputImage,TOutputImage>
   unsigned int nbComp = inputPtr->GetNumberOfComponentsPerPixel();
 
   // Compute Dh and Dv
-  typedef otb::MultiChannelExtractROI<typename InputImageType::InternalPixelType,typename InputImageType::InternalPixelType> ExtractFilterType;
-  typedef itk::SubtractImageFilter<InputImageType,InputImageType,InputImageType> DifferenceFilterType;
+  typedef otb::MultiChannelExtractROI<typename InputImageType::InternalPixelType,RealType> ExtractFilterType;
+  typedef itk::SubtractImageFilter<InternalImageType,InternalImageType,InternalImageType>  DifferenceFilterType;
 
   InputImageRegionType largestInputRegion = inputPtr->GetLargestPossibleRegion();
   InputImageRegionType referenceRegion;
@@ -115,7 +115,8 @@ MaximumAutocorrelationFactorImageFilter<TInputImage,TOutputImage>
   VnlMatrixType sigmad = 0.5*(sigmadh+sigmadv);
 
   // Compute the original image covariance
-  m_CovarianceEstimator->SetInput(inputPtr);
+  referenceExtract->SetExtractionRegion(inputPtr->GetLargestPossibleRegion());
+  m_CovarianceEstimator->SetInput(referenceExtract->GetOutput());
   m_CovarianceEstimator->Update();
   VnlMatrixType sigma = m_CovarianceEstimator->GetCovariance().GetVnlMatrix();
 
