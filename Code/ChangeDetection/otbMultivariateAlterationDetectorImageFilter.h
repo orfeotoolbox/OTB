@@ -58,7 +58,7 @@ namespace otb
  * different, the change maps are sorted by decreasing correlation.
  * 
  * The GetV1() and GetV2() methods allow to retrieve the linear
- * combinations used to for the Mad change maps as a vnl_matrix of
+ * combinations used to generate the Mad change maps as a vnl_matrix of
  * double, and the GetRho() method allows to retrieve the correlation
  * associated to each Mad change maps as a vnl_vector.
  * 
