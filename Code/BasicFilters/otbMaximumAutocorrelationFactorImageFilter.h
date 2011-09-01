@@ -37,9 +37,9 @@ namespace otb
  * This filter implements the Maximum Autocorrelation Factor, based
  * on the following work:
  * 
- * A. A. Nielsen, “Kernel maximum autocorrelation factor and minimum
- * noise fraction transformations,” IEEE Transactions on Image
- * Processing, vol. 20, no. 3, pp. 612–624, (2011)
+ * A. A. Nielsen, "Kernel maximum autocorrelation factor and minimum
+ * noise fraction transformations," IEEE Transactions on Image
+ * Processing, vol. 20, no. 3, pp. 612-624, (2011)
  * 
  * Maximum Autocorrelation Factor can be considered as a spatial
  * extension of the PCA, in which new variates try to maximize

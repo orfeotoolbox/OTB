@@ -35,10 +35,10 @@ namespace otb
  * This filter implements the Multivariate Alteration Detector, based
  * on the following work:
  * 
- * A. A. Nielsen and K. Conradsen, “Multivariate alteration detection
+ * A. A. Nielsen and K. Conradsen, "Multivariate alteration detection
  * (mad) in multispectral, bi-temporal image data: a new approach to
- * change detection studies,” Remote Sens. Environ., vol. 64,
- * pp. 1–19, (1998)
+ * change detection studies," Remote Sens. Environ., vol. 64,
+ * pp. 1-19, (1998)
  * 
  * Multivariate Alteration Detector takes two images as inputs and
  * produce a set of N change maps as a VectorImage (where N is the
