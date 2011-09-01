@@ -15,20 +15,17 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#include <QApplication>
+
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationRegistry.h"
-#include "otbWrapperQtWidgetView.h"
 #include "itksys/SystemTools.hxx"
 
 using otb::Wrapper::Application;
 using otb::Wrapper::ApplicationRegistry;
-using otb::Wrapper::QtWidgetView;
 
 int main(int argc, char* argv[])
 {
-  QApplication qtApp(argc, argv);
-
+  /*
   if (argc < 2)
     {
     std::cerr << "Usage : " << argv[0] << " module_name [module_path]" << std::endl;
@@ -66,7 +63,6 @@ int main(int argc, char* argv[])
   // Create module
   Application::Pointer app = ApplicationRegistry::CreateApplication(moduleName);
   if (app.IsNull())
-
     {
     std::cerr << "Could not find application " << moduleName << std::endl;
 
@@ -86,8 +82,9 @@ int main(int argc, char* argv[])
   // Create GUI based on module
   QtWidgetView* gui = new QtWidgetView(app);
   gui->CreateGui();
-  //gui->GetMainWindow()->show();
 
   // Start event processing loop
   return qtApp.exec();
+  */
+  return 1;
 }

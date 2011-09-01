@@ -4,6 +4,7 @@ file(MAKE_DIRECTORY ${TEMP})
 add_subdirectory(Core)
 add_subdirectory(Common)
 add_subdirectory(Example)
+add_subdirectory(CommandLine)
 
 if ( WRAP_PYTHON )
   add_subdirectory(Python)

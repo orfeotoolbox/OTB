@@ -34,9 +34,6 @@ QtWidgetView::QtWidgetView(Application* app)
 
   m_Model = new QtWidgetModel(app);
   m_Application = app;
-  //m_MainWindow = new QWidget();
-  //m_Application->RegisterListener( this );
-
 }
 
 QtWidgetView::~QtWidgetView()
