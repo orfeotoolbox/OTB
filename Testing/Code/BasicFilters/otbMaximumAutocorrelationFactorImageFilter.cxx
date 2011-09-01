@@ -20,7 +20,7 @@
 #include "otbStreamingImageFileWriter.h"
 #include "otbMaximumAutocorrelationFactorImageFilter.h"
 
-typedef otb::VectorImage<short,2>          ImageType;
+typedef otb::VectorImage<unsigned short,2> ImageType;
 typedef otb::VectorImage<double,2>         OutputImageType;
 typedef otb::ImageFileReader<ImageType>    ReaderType;
 typedef otb::StreamingImageFileWriter<OutputImageType> WriterType;
