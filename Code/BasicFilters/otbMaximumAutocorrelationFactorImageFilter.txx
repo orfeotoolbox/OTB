@@ -29,8 +29,6 @@
 #include "itkImageRegionIterator.h"
 #include "itkProgressReporter.h"
 
-#include "otbImageFileWriter.h"
-
 namespace otb
 {
 template <class TInputImage, class TOutputImage>
@@ -38,6 +36,8 @@ MaximumAutocorrelationFactorImageFilter<TInputImage,TOutputImage>
 ::MaximumAutocorrelationFactorImageFilter()
 {
   m_CovarianceEstimator = CovarianceEstimatorType::New();
+  m_CovarianceEstimatorH = CovarianceEstimatorType::New();
+  m_CovarianceEstimatorV = CovarianceEstimatorType::New();
 }
 
 template <class TInputImage, class TOutputImage>
@@ -56,7 +56,6 @@ MaximumAutocorrelationFactorImageFilter<TInputImage,TOutputImage>
   unsigned int nbComp = inputPtr->GetNumberOfComponentsPerPixel();
 
   // Compute Dh and Dv
-
   typedef otb::MultiChannelExtractROI<typename InputImageType::InternalPixelType,typename InputImageType::InternalPixelType> ExtractFilterType;
   typedef itk::SubtractImageFilter<InputImageType,InputImageType,InputImageType> DifferenceFilterType;
 
@@ -69,9 +68,6 @@ MaximumAutocorrelationFactorImageFilter<TInputImage,TOutputImage>
   InputImageIndexType index = largestInputRegion.GetIndex();
   referenceRegion.SetIndex(index);
   
-  std::cout<<"Reference region: "<<std::endl;
-  std::cout<<referenceRegion<<std::endl;
-
   InputImageRegionType dhRegion;
   InputImageRegionType dvRegion;
   
@@ -80,19 +76,12 @@ MaximumAutocorrelationFactorImageFilter<TInputImage,TOutputImage>
   dhRegion.SetSize(size);
   dhRegion.SetIndex(index);
 
-  std::cout<<"Dh region:"<<std::endl;
-  std::cout<<dhRegion<<std::endl;
-
   index[0]-=1;
   index[1]+=1;
 
   dvRegion.SetSize(size);
   dvRegion.SetIndex(index);
 
-  std::cout<<"Dv region:"<<std::endl;
-  std::cout<<dvRegion<<std::endl;
-
-  
   typename ExtractFilterType::Pointer referenceExtract = ExtractFilterType::New();
   referenceExtract->SetInput(inputPtr);
   referenceExtract->SetExtractionRegion(referenceRegion);
@@ -109,45 +98,23 @@ MaximumAutocorrelationFactorImageFilter<TInputImage,TOutputImage>
   diffh->SetInput1(referenceExtract->GetOutput());
   diffh->SetInput2(dhExtract->GetOutput());
 
-  typedef otb::ImageFileWriter<InputImageType> WriterType;
-  typename WriterType::Pointer writer = WriterType::New();
-  writer->SetInput(diffh->GetOutput());
-  writer->SetFileName("diffh.tif");
-  writer->Update();
-
-  std::cout<<"Diffh ok"<<std::endl;
-
   typename DifferenceFilterType::Pointer diffv = DifferenceFilterType::New();
   diffv->SetInput1(referenceExtract->GetOutput());
   diffv->SetInput2(dvExtract->GetOutput());
 
-  std::cout<<"Diffv ok"<<std::endl;
-
   //Compute pooled sigma (using sigmadh and sigmadv)
-  m_CovarianceEstimator->SetInput(diffh->GetOutput());
-  m_CovarianceEstimator->Update();
-  VnlMatrixType sigmadh = m_CovarianceEstimator->GetCovariance().GetVnlMatrix();
+  m_CovarianceEstimatorH->SetInput(diffh->GetOutput());
+  m_CovarianceEstimatorH->Update();
+  VnlMatrixType sigmadh = m_CovarianceEstimatorH->GetCovariance().GetVnlMatrix();
 
-  std::cout<<"Sigmadh: "<<std::endl;
-  std::cout<<sigmadh<<std::endl;
-
-  m_CovarianceEstimator = CovarianceEstimatorType::New();
-  m_CovarianceEstimator->SetInput(diffv->GetOutput());
-  m_CovarianceEstimator->Update();
-  VnlMatrixType sigmadv = m_CovarianceEstimator->GetCovariance().GetVnlMatrix(
-);
-
-  std::cout<<"Sigmadv: "<<std::endl;
-  std::cout<<sigmadv<<std::endl;
+  m_CovarianceEstimatorV->SetInput(diffv->GetOutput());
+  m_CovarianceEstimatorV->Update();
+  VnlMatrixType sigmadv = m_CovarianceEstimatorV->GetCovariance().GetVnlMatrix();
 
   // Simple pool
   VnlMatrixType sigmad = 0.5*(sigmadh+sigmadv);
 
-  std::cout<<"Sigmad: "<<std::endl;
-  std::cout<<sigmad<<std::endl;
-
   // Compute the original image covariance
-  m_CovarianceEstimator = CovarianceEstimatorType::New();
   m_CovarianceEstimator->SetInput(inputPtr);
   m_CovarianceEstimator->Update();
   VnlMatrixType sigma = m_CovarianceEstimator->GetCovariance().GetVnlMatrix();
@@ -159,40 +126,25 @@ MaximumAutocorrelationFactorImageFilter<TInputImage,TOutputImage>
     m_Mean[i] = m_CovarianceEstimator->GetMean()[i];
     }
 
-  std::cout<<"Sigma: "<<std::endl;
-  std::cout<<sigma<<std::endl;
-
   vnl_generalized_eigensystem ges(sigmad,sigma);
   VnlMatrixType d = ges.D;
   m_V = ges.V;
 
-  std::cout<<"V: "<<std::endl;
-  std::cout<<m_V<<std::endl;
-  
-  std::cout<<"D: "<<std::endl;
-  std::cout<<d<<std::endl;
+  m_AutoCorrelation = VnlVectorType(nbComp,1.);
+  m_AutoCorrelation -= 0.5 *d.get_diagonal();
 
   VnlMatrixType invstderr = VnlMatrixType(nbComp,nbComp,0);
   invstderr.set_diagonal(sigma.get_diagonal());
   invstderr = invstderr.apply(&vcl_sqrt);
   invstderr = invstderr.apply(&InverseValue);
 
-  std::cout<<"invstderr: "<<std::endl;
-  std::cout<<invstderr<<std::endl;
-
   VnlMatrixType invstderrmaf = VnlMatrixType(nbComp,nbComp,0);
   invstderrmaf.set_diagonal((m_V.transpose() * sigma * m_V).get_diagonal());
   invstderrmaf = invstderrmaf.apply(&vcl_sqrt);
   invstderrmaf = invstderrmaf.apply(&InverseValue);
 
-  std::cout<<"invstderrmaf: "<<std::endl;
-  std::cout<<invstderrmaf<<std::endl;
-  
   VnlMatrixType aux1 = invstderr * sigma * m_V * invstderrmaf;
 
-  std::cout<<"Aux1: "<<std::endl;
-  std::cout<<aux1<<std::endl;
-  
   VnlMatrixType sign = VnlMatrixType(nbComp,nbComp,0);
 
   VnlVectorType aux2 = VnlVectorType(nbComp,0);
@@ -205,13 +157,9 @@ MaximumAutocorrelationFactorImageFilter<TInputImage,TOutputImage>
   sign.set_diagonal(aux2);
   sign = sign.apply(&SignOfValue);
 
-  std::cout<<"sign: "<<std::endl;
-  std::cout<<sign<<std::endl;
-
+  // There is no need for scaling since vnl_generalized_eigensystem
+  // already gives unit variance
   m_V = m_V * sign;
-  
-  std::cout<<"V (unit variance): "<<std::endl;
-  std::cout<<m_V<<std::endl;
 }
 
 template <class TInputImage, class TOutputImage>
