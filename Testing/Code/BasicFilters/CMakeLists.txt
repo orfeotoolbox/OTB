@@ -2518,7 +2518,7 @@ ADD_TEST(bfTuMaximumAutocorrelationFactorImageFilterNew ${BASICFILTERS_TESTS15}
 )
 
 ADD_TEST(bfTvMaximumAutocorrelationFactorImageFilter ${BASICFILTERS_TESTS15}
-   --compare-image ${NOTOL}
+   --compare-image 0.0001
    ${BASELINE}/bfTvMaximumAutocorrelationFactorImageFilterOutput.tif
    ${TEMP}/bfTvMaximumAutocorrelationFactorImageFilterOutput.tif
    otbMaximumAutocorrelationFactorImageFilter
