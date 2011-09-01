@@ -80,6 +80,19 @@ public:
   typedef vnl_vector<RealType>                                 VnlVectorType;
   typedef vnl_matrix<RealType>                                 VnlMatrixType;
 
+  /** Get the linear combinations of bands of image 1 associated to
+   *  multivariate alteration detector. This is a square matrix of
+   *  size nbBand of image 1. */
+  itkGetMacro(V1,VnlMatrixType);
+
+  /** Get the linear combinations of bands of image 2 associated to
+   *  multivariate alteration detector. This is a square matrix of
+   *  size nbBand of image 2. */
+  itkGetMacro(V2,VnlMatrixType);
+
+  /** Get the correlation coefficient associated with each mad.*/
+  itkGetMacro(Rho,VnlVectorType);
+
   
   /** Connect one of the operands for pixel-wise addition */
   void SetInput1(const TInputImage * image1);
@@ -127,6 +140,7 @@ private:
   VnlMatrixType              m_V2;
   VnlVectorType              m_Mean1;
   VnlVectorType              m_Mean2;
+  VnlVectorType              m_Rho;
 };
 
 } // end namespace otb
