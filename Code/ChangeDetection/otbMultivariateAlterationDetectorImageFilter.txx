@@ -153,19 +153,11 @@ MultivariateAlterationDetectorImageFilter<TInputImage,TOutputImage>
     m_V1 = ges.V;
 
     // Compute cannonical correlation matrix
-    VnlMatrixType rho = ges.D;
-    rho = rho.apply(&vcl_sqrt);
+    m_Rho = ges.D.get_diagonal();
+    m_Rho = m_Rho.apply(&vcl_sqrt);
 
-    //Scale v1 to get a unit variance
-    VnlMatrixType aux1 = m_V1.transpose() * (s11 * m_V1);
-
-    VnlVectorType aux2 = aux1.get_diagonal();
-    aux2 = aux2.apply(&vcl_sqrt);
-    aux2 = aux2.apply(&InverseValue);    
-
-    VnlMatrixType aux3 = VnlMatrixType(aux2.size(),aux2.size(),0);
-    aux3.set_diagonal(aux2);
-    m_V1 = aux3 * m_V1;
+    // We do not need to scale v1 since the
+    // vnl_generalized_eigensystem already gives unit variance
 
     VnlMatrixType invstderr1 = s11.apply(&vcl_sqrt);
     invstderr1 = invstderr1.apply(&InverseValue);
@@ -192,11 +184,11 @@ MultivariateAlterationDetectorImageFilter<TInputImage,TOutputImage>
     m_V2 = invs22*s21*m_V1;
 
     // Scale v2 for unit variance
-    aux1 = m_V2.transpose() * (s22 * m_V2);
-    aux2 = aux1.get_diagonal();
+    VnlMatrixType aux1 = m_V2.transpose() * (s22 * m_V2);
+    VnlVectorType aux2 = aux1.get_diagonal();
     aux2 = aux2.apply(&vcl_sqrt);
     aux2 = aux2.apply(&InverseValue);
-    aux3 = VnlMatrixType(aux2.size(),aux2.size(),0);
+    VnlMatrixType aux3 = VnlMatrixType(aux2.size(),aux2.size(),0);
     aux3.fill(0);
     aux3.set_diagonal(aux2);
     m_V2 =  m_V2 * aux3;
@@ -220,7 +212,9 @@ MultivariateAlterationDetectorImageFilter<TInputImage,TOutputImage>
     m_V1 = V.extract(nbComp1,nbComp1);
     m_V2 = V.extract(nbComp2,nbComp2,nbComp1,0);
 
-        //Scale v1 to get a unit variance
+    m_Rho = ges.D.get_diagonal().flip().extract(std::max(nbComp1,nbComp2),0);
+
+    //Scale v1 to get a unit variance
     VnlMatrixType aux1 = m_V1.transpose() * (s11 * m_V1);
 
     VnlVectorType aux2 = aux1.get_diagonal();
