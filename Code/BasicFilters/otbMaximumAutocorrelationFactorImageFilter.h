@@ -32,11 +32,35 @@ namespace otb
 {
 
 /** \class MaximumAutocorrelationFactorImageFilter
- * \brief This filter implements the Multivariate Alteration Detector 
+ * \brief This filter implements the Maximum Autocorrelation Factor
  * 
- * TODO: document me
- *
- * \ingroup Multithreaded
+ * This filter implements the Maximum Autocorrelation Factor, based
+ * on the following work:
+ * 
+ * A. A. Nielsen, “Kernel maximum autocorrelation factor and minimum
+ * noise fraction transformations,” IEEE Transactions on Image
+ * Processing, vol. 20, no. 3, pp. 612–624, (2011)
+ * 
+ * Maximum Autocorrelation Factor can be considered as a spatial
+ * extension of the PCA, in which new variates try to maximize
+ * auto-correlation between neighboring pixels instead of
+ * variance. Though the inverse transform can be computed, this filter
+ * only provides the forward transform for now.
+ * 
+ * The GetV() method allows to retrieve the linear combinations used
+ * to generate new variates, and the GetAutoCorrelation() method
+ * allows to retrieve the auto-correlation associated to each variate.
+ * 
+ * This filter has been implemented from the Matlab code kindly made
+ * available by the authors here:
+ * http://www2.imm.dtu.dk/~aa/software.html
+ * 
+ * this filter have been validated by comparing the output image to
+ * the output produced by the Matlab code, and the reference image
+ * for testing has been generated from the Matlab code using Octave.
+
+ * \ingroup Multithreaded, Streamed
+ * \sa otbPCAImageFilter
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT MaximumAutocorrelationFactorImageFilter 
