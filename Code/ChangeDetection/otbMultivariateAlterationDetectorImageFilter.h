@@ -93,6 +93,8 @@ public:
   /** Get the correlation coefficient associated with each mad.*/
   itkGetMacro(Rho,VnlVectorType);
 
+  /** Get the covariance estimator (for progress reporting purposes) */
+  itkGetObjectMacro(CovarianceEstimator,CovarianceEstimatorType);
   
   /** Connect one of the operands for pixel-wise addition */
   void SetInput1(const TInputImage * image1);
