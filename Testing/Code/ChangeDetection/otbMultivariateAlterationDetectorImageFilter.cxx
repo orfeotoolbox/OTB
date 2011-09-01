@@ -56,5 +56,14 @@ int otbMultivariateAlterationDetectorImageFilter(int argc, char* argv[])
   writer->SetFileName(outfname);
   writer->Update();
 
+  std::cout<<"V1: "<<std::endl;
+  std::cout<<madFilter->GetV1()<<std::endl;
+
+  std::cout<<"V2: "<<std::endl;
+  std::cout<<madFilter->GetV2()<<std::endl;
+
+  std::cout<<"Rho: "<<std::endl;
+  std::cout<<madFilter->GetRho()<<std::endl;
+
   return EXIT_SUCCESS;
 }
