@@ -20,8 +20,8 @@
 #include "otbStreamingImageFileWriter.h"
 #include "otbMaximumAutocorrelationFactorImageFilter.h"
 
-typedef otb::VectorImage<float,2> ImageType;
-typedef otb::VectorImage<float,2>         OutputImageType;
+typedef otb::VectorImage<short,2>          ImageType;
+typedef otb::VectorImage<double,2>         OutputImageType;
 typedef otb::ImageFileReader<ImageType>    ReaderType;
 typedef otb::StreamingImageFileWriter<OutputImageType> WriterType;
 typedef otb::MaximumAutocorrelationFactorImageFilter<ImageType,OutputImageType> MADFilterType;
@@ -49,6 +49,12 @@ int otbMaximumAutocorrelationFactorImageFilter(int argc, char* argv[])
   writer->SetInput(madFilter->GetOutput());
   writer->SetFileName(outfname);
   writer->Update();
+
+  std::cout<<"V: "<<std::endl;
+  std::cout<<madFilter->GetV()<<std::endl;
+
+  std::cout<<"Auto-correlation: "<<std::endl;
+  std::cout<<madFilter->GetAutoCorrelation()<<std::endl;
 
   return EXIT_SUCCESS;
 }
