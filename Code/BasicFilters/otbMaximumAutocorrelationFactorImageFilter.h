@@ -80,7 +80,24 @@ public:
   typedef vnl_vector<RealType>                                 VnlVectorType;
   typedef vnl_matrix<RealType>                                 VnlMatrixType;
 
-  
+  /** Get the linear correlation used to compute Maf */
+  itkGetMacro(V,VnlMatrixType);
+
+  /** Get the auto-correlation associated with each Maf */
+  itkGetMacro(AutoCorrelation,VnlVectorType);
+
+  /** Get the covariance estimator for image (use for progress
+   * reporting purposes) */
+  itkGetObjectMacro(CovarianceEstimator,CovarianceEstimatorType);
+
+  /** Get the covariance estimator for horizontal autocorrelation (use
+   * for progress reporting purposes) */
+  itkGetObjectMacro(CovarianceEstimatorH,CovarianceEstimatorType);
+
+  /** Get the covariance estimator for vertical autocorrelation (use
+   * for progress reporting purposes) */
+  itkGetObjectMacro(CovarianceEstimatorV,CovarianceEstimatorType);
+
 protected:
   MaximumAutocorrelationFactorImageFilter();
   virtual ~MaximumAutocorrelationFactorImageFilter() {}
@@ -109,11 +126,25 @@ private:
       return (value > 0 ? 1. : -1.);
   }
 
+  /** The covariance estimator for the image */
   CovarianceEstimatorPointer m_CovarianceEstimator;
 
+  /** The covariance estimator for auto-correlation in horizontal
+   *  direction */
+  CovarianceEstimatorPointer m_CovarianceEstimatorH;
+
+  /** The covariance estimator for auto-correlation in vertical
+   *  direction */
+  CovarianceEstimatorPointer m_CovarianceEstimatorV;
+
+  /** The linear combination for Maf */
   VnlMatrixType m_V;
 
+  /** The mean used to center data before computing Maf */
   VnlVectorType m_Mean;
+
+  /** The auto-correlation associated with each Maf */
+  VnlVectorType m_AutoCorrelation;
 };
 
 } // end namespace otb
