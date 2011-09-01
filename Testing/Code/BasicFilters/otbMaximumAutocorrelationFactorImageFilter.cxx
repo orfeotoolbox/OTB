@@ -20,11 +20,11 @@
 #include "otbStreamingImageFileWriter.h"
 #include "otbMaximumAutocorrelationFactorImageFilter.h"
 
-typedef otb::VectorImage<unsigned short,2> ImageType;
-typedef otb::VectorImage<double,2>         OutputImageType;
+typedef otb::VectorImage<unsigned short, 2> ImageType;
+typedef otb::VectorImage<double, 2>         OutputImageType;
 typedef otb::ImageFileReader<ImageType>    ReaderType;
 typedef otb::StreamingImageFileWriter<OutputImageType> WriterType;
-typedef otb::MaximumAutocorrelationFactorImageFilter<ImageType,OutputImageType> MADFilterType;
+typedef otb::MaximumAutocorrelationFactorImageFilter<ImageType, OutputImageType> MADFilterType;
 
 int otbMaximumAutocorrelationFactorImageFilterNew(int argc, char* argv[])
 {

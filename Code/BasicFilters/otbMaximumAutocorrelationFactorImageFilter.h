@@ -33,28 +33,28 @@ namespace otb
 
 /** \class MaximumAutocorrelationFactorImageFilter
  * \brief This filter implements the Maximum Autocorrelation Factor
- * 
+ *
  * This filter implements the Maximum Autocorrelation Factor, based
  * on the following work:
- * 
+ *
  * A. A. Nielsen, "Kernel maximum autocorrelation factor and minimum
  * noise fraction transformations," IEEE Transactions on Image
  * Processing, vol. 20, no. 3, pp. 612-624, (2011)
- * 
+ *
  * Maximum Autocorrelation Factor can be considered as a spatial
  * extension of the PCA, in which new variates try to maximize
  * auto-correlation between neighboring pixels instead of
  * variance. Though the inverse transform can be computed, this filter
  * only provides the forward transform for now.
- * 
+ *
  * The GetV() method allows to retrieve the linear combinations used
  * to generate new variates, and the GetAutoCorrelation() method
  * allows to retrieve the auto-correlation associated to each variate.
- * 
+ *
  * This filter has been implemented from the Matlab code kindly made
  * available by the authors here:
  * http://www2.imm.dtu.dk/~aa/software.html
- * 
+ *
  * this filter have been validated by comparing the output image to
  * the output produced by the Matlab code, and the reference image
  * for testing has been generated from the Matlab code using Octave.
@@ -63,8 +63,8 @@ namespace otb
  * \sa otbPCAImageFilter
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT MaximumAutocorrelationFactorImageFilter 
-  : public itk::ImageToImageFilter<TInputImage,TOutputImage>
+class ITK_EXPORT MaximumAutocorrelationFactorImageFilter
+  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
@@ -93,10 +93,10 @@ public:
   typedef typename OutputImageType::RegionType                    OutputImageRegionType;
   typedef typename OutputImageType::PixelType                     OutputImagePixelType;
   typedef typename InputImageType::InternalPixelType              InputInternalPixelType;
-  typedef typename 
+  typedef typename
     itk::NumericTraits<InputInternalPixelType>::RealType          InternalPixelType;
 
-  typedef VectorImage<InternalPixelType,2>                        InternalImageType;
+  typedef VectorImage<InternalPixelType, 2>                        InternalImageType;
 
 
   /** Internal filters types */
@@ -112,28 +112,28 @@ public:
   typedef vnl_matrix<RealType>                                    VnlMatrixType;
 
   /** Get the linear correlation used to compute Maf */
-  itkGetMacro(V,VnlMatrixType);
+  itkGetMacro(V, VnlMatrixType);
 
   /** Get the auto-correlation associated with each Maf */
-  itkGetMacro(AutoCorrelation,VnlVectorType);
+  itkGetMacro(AutoCorrelation, VnlVectorType);
 
   /** Get the covariance estimator for image (use for progress
    * reporting purposes) */
-  itkGetObjectMacro(CovarianceEstimator,CovarianceEstimatorType);
+  itkGetObjectMacro(CovarianceEstimator, CovarianceEstimatorType);
 
   /** Get the covariance estimator for horizontal autocorrelation (use
    * for progress reporting purposes) */
-  itkGetObjectMacro(CovarianceEstimatorH,CovarianceEstimatorType);
+  itkGetObjectMacro(CovarianceEstimatorH, CovarianceEstimatorType);
 
   /** Get the covariance estimator for vertical autocorrelation (use
    * for progress reporting purposes) */
-  itkGetObjectMacro(CovarianceEstimatorV,CovarianceEstimatorType);
+  itkGetObjectMacro(CovarianceEstimatorV, CovarianceEstimatorType);
 
 protected:
   MaximumAutocorrelationFactorImageFilter();
   virtual ~MaximumAutocorrelationFactorImageFilter() {}
 
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,int threadId);
+  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId);
 
   virtual void GenerateOutputInformation();
 

@@ -20,11 +20,11 @@
 #include "otbImageFileWriter.h"
 #include "otbMultivariateAlterationDetectorImageFilter.h"
 
-typedef otb::VectorImage<unsigned short,2> ImageType;
-typedef otb::VectorImage<double,2>         OutputImageType;
+typedef otb::VectorImage<unsigned short, 2> ImageType;
+typedef otb::VectorImage<double, 2>         OutputImageType;
 typedef otb::ImageFileReader<ImageType>    ReaderType;
 typedef otb::ImageFileWriter<OutputImageType> WriterType;
-typedef otb::MultivariateAlterationDetectorImageFilter<ImageType,OutputImageType> MADFilterType;
+typedef otb::MultivariateAlterationDetectorImageFilter<ImageType, OutputImageType> MADFilterType;
 
 
 int otbMultivariateAlterationDetectorImageFilterNew(int argc, char* argv[])

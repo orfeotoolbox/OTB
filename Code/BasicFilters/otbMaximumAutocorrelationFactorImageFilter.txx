@@ -32,7 +32,7 @@
 namespace otb
 {
 template <class TInputImage, class TOutputImage>
-MaximumAutocorrelationFactorImageFilter<TInputImage,TOutputImage>
+MaximumAutocorrelationFactorImageFilter<TInputImage, TOutputImage>
 ::MaximumAutocorrelationFactorImageFilter()
 {
   m_CovarianceEstimator = CovarianceEstimatorType::New();
@@ -42,7 +42,7 @@ MaximumAutocorrelationFactorImageFilter<TInputImage,TOutputImage>
 
 template <class TInputImage, class TOutputImage>
 void
-MaximumAutocorrelationFactorImageFilter<TInputImage,TOutputImage>
+MaximumAutocorrelationFactorImageFilter<TInputImage, TOutputImage>
 ::GenerateOutputInformation()
 {
   // Call superclass implementation
@@ -56,8 +56,8 @@ MaximumAutocorrelationFactorImageFilter<TInputImage,TOutputImage>
   unsigned int nbComp = inputPtr->GetNumberOfComponentsPerPixel();
 
   // Compute Dh and Dv
-  typedef otb::MultiChannelExtractROI<typename InputImageType::InternalPixelType,RealType> ExtractFilterType;
-  typedef itk::SubtractImageFilter<InternalImageType,InternalImageType,InternalImageType>  DifferenceFilterType;
+  typedef otb::MultiChannelExtractROI<typename InputImageType::InternalPixelType, RealType> ExtractFilterType;
+  typedef itk::SubtractImageFilter<InternalImageType, InternalImageType, InternalImageType>  DifferenceFilterType;
 
   InputImageRegionType largestInputRegion = inputPtr->GetLargestPossibleRegion();
   InputImageRegionType referenceRegion;
@@ -120,37 +120,37 @@ MaximumAutocorrelationFactorImageFilter<TInputImage,TOutputImage>
   m_CovarianceEstimator->Update();
   VnlMatrixType sigma = m_CovarianceEstimator->GetCovariance().GetVnlMatrix();
 
-  m_Mean = VnlVectorType(nbComp,0);
+  m_Mean = VnlVectorType(nbComp, 0);
 
-  for(unsigned int i = 0; i<nbComp;++i)
+  for(unsigned int i = 0; i<nbComp; ++i)
     {
     m_Mean[i] = m_CovarianceEstimator->GetMean()[i];
     }
 
-  vnl_generalized_eigensystem ges(sigmad,sigma);
+  vnl_generalized_eigensystem ges(sigmad, sigma);
   VnlMatrixType d = ges.D;
   m_V = ges.V;
 
-  m_AutoCorrelation = VnlVectorType(nbComp,1.);
+  m_AutoCorrelation = VnlVectorType(nbComp, 1.);
   m_AutoCorrelation -= 0.5 *d.get_diagonal();
 
-  VnlMatrixType invstderr = VnlMatrixType(nbComp,nbComp,0);
+  VnlMatrixType invstderr = VnlMatrixType(nbComp, nbComp, 0);
   invstderr.set_diagonal(sigma.get_diagonal());
   invstderr = invstderr.apply(&vcl_sqrt);
   invstderr = invstderr.apply(&InverseValue);
 
-  VnlMatrixType invstderrmaf = VnlMatrixType(nbComp,nbComp,0);
+  VnlMatrixType invstderrmaf = VnlMatrixType(nbComp, nbComp, 0);
   invstderrmaf.set_diagonal((m_V.transpose() * sigma * m_V).get_diagonal());
   invstderrmaf = invstderrmaf.apply(&vcl_sqrt);
   invstderrmaf = invstderrmaf.apply(&InverseValue);
 
   VnlMatrixType aux1 = invstderr * sigma * m_V * invstderrmaf;
 
-  VnlMatrixType sign = VnlMatrixType(nbComp,nbComp,0);
+  VnlMatrixType sign = VnlMatrixType(nbComp, nbComp, 0);
 
-  VnlVectorType aux2 = VnlVectorType(nbComp,0);
+  VnlVectorType aux2 = VnlVectorType(nbComp, 0);
   
-  for(unsigned int i = 0; i < nbComp;++i)
+  for(unsigned int i = 0; i < nbComp; ++i)
     {
     aux2=aux2 + aux1.get_row(i);
     }
@@ -165,7 +165,7 @@ MaximumAutocorrelationFactorImageFilter<TInputImage,TOutputImage>
 
 template <class TInputImage, class TOutputImage>
 void
-MaximumAutocorrelationFactorImageFilter<TInputImage,TOutputImage>
+MaximumAutocorrelationFactorImageFilter<TInputImage, TOutputImage>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId)
 {
   // Retrieve input images pointers
@@ -176,7 +176,7 @@ MaximumAutocorrelationFactorImageFilter<TInputImage,TOutputImage>
   typedef itk::ImageRegionConstIterator<InputImageType>  ConstIteratorType;
   typedef itk::ImageRegionIterator<OutputImageType> IteratorType;
 
-  IteratorType outIt(outputPtr,outputRegionForThread);
+  IteratorType outIt(outputPtr, outputRegionForThread);
   ConstIteratorType inIt(inputPtr, outputRegionForThread);
 
   inIt.GoToBegin();
@@ -190,10 +190,10 @@ MaximumAutocorrelationFactorImageFilter<TInputImage,TOutputImage>
 
   while(!inIt.IsAtEnd() && !outIt.IsAtEnd())
     {
-    VnlVectorType x(outNbComp,0);
-    VnlVectorType maf(outNbComp,0);
+    VnlVectorType x(outNbComp, 0);
+    VnlVectorType maf(outNbComp, 0);
     
-    for(unsigned int i = 0; i < outNbComp;++i)
+    for(unsigned int i = 0; i < outNbComp; ++i)
       {
       x[i] = inIt.Get()[i];
       }
