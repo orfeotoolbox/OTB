@@ -85,6 +85,8 @@ const long double CONST_SQRT1_2l =  0.7071067811865475244008443621048490L;  /* 1
 const long double CONST_SQRT3l =    1.7320508075688772935274463415058724L;  /* sqrt(3) */
 const long double CONST_EULERl =    0.5772156649015328606065120900824024L;  /* euler constant*/
 
+#endif
+
 template <typename T> T InverseValue(const T & value)
 {
   return ((value > 0 || value > 0) ? 1/value : 0);
@@ -94,8 +96,6 @@ template <typename T> T SignOfValue(const T & value)
 {
   return (value > 0) ? 1 : ((value < 0) ? -1 : 0);
 }
-
-#endif
 
 }
 
