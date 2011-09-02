@@ -26,6 +26,7 @@
 //#include "otbWrapperTypes.h"
 //#include "otbWrapperParameterGroup.h"
 #include "otbWrapperApplication.h"
+#include "otbWrapperParameter.h"
 #include "itksys/SystemTools.hxx"
 
 namespace otb
@@ -61,14 +62,14 @@ public:
   /** Parse result enum */
   typedef enum { OK, EMPTYEXPRESSION, NOMODULENAME, MULTIPLEMODULENAME, INVALIDMODULENAME, WRONGMODULENAME,
                  NOMODULEPATH, INVALIDMODULEPATH,
-                 MISSINGMANDATORYATTRIBUT } ParseResultType;
+                 MISSINGMANDATORYPARAMETER, MISSINGPARAMETERVALUE, WRONGPARAMETERVALUE,  INVALIDNUMBEROFVALUE} ParseResultType;
   
   /** Check expression validity */
   ParseResultType CheckExpression( const std::string & exp );
   ParseResultType CheckExpression( const char * exp );
 
-  bool CheckApplicationArgument( const std::string & exp );
-  bool CheckApplicationArgument( const char * exp );
+  CommandLineParser::ParseResultType ParseApplicationArgument( const std::string & exp );
+  CommandLineParser::ParseResultType ParseApplicationArgument( const char * exp );
 
   std::vector<itksys::String> GetAttribut( const std::string & key, const std::string & exp );
 
@@ -91,6 +92,27 @@ protected:
   void LoadPath();
 
   std::string ExtractApplicationArgument( const char * exp );
+
+  template <class TParameterType>
+    bool CanCreateParameter(Parameter * param);
+  
+  template <class TParameterType>
+    void SetValueToParameter(Parameter * param, const std::string & val );
+  
+  template <class TParameterType>
+    void SetValueToParameter(Parameter * param, const std::vector<std::string> & val);
+                             
+  template <class TParameterType>
+    void SetFileNameToParameter(Parameter * param, const std::string & val );
+  
+  template <class TParameterType>
+    void SetFileNameToParameter(Parameter * param, const std::vector<std::string> & val);
+                                
+  template <class TParameterType>
+    void SetFromFileNameToParameter(Parameter * param, const std::string & val );
+
+template <class TParameterType>
+  void SetFromFileNameToParameter(Parameter * param, const std::vector<std::string> & val );
 
 private:
 

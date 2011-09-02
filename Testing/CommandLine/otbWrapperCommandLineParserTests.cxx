@@ -36,16 +36,12 @@ int otbWrapperCommandLineParserTest(int argc, char* argv[])
   ParserType::Pointer parser = ParserType::New();
 
 
-  parser->GetAttribut("--lol", "sdfjnsf --plop johqsd qiudh --lol 65464 6315");
-  parser->GetAttribut("--lol", "sdfjnsf --lol =====    **** -µµµµµ --plop johqsd qiudh ");
-
-  
   ParserType::ParseResultType res = parser->CheckExpression( argv[1] );
-  if( res == ParserType::OK)
+  /*if( res == ParserType::OK)
     {
       return EXIT_SUCCESS;
     }
- else if( res == ParserType::EMPTYEXPRESSION )
+    else */if( res == ParserType::EMPTYEXPRESSION )
     {
       std::cout<<"Empty expression."<<std::endl;
       return EXIT_FAILURE;
@@ -80,16 +76,27 @@ else if( res == ParserType::MULTIPLEMODULENAME )
       std::cout<<"No module path specified."<<std::endl;
       return EXIT_FAILURE;
     }
-else if( res == ParserType::MISSINGMANDATORYATTRIBUT )
+
+
+  ParserType::ParseResultType res2 = parser->ParseApplicationArgument( argv[1] );
+  
+  if( res2 == ParserType::MISSINGMANDATORYPARAMETER )
     {
-      std::cout<<"Missing mandatory attribut."<<std::endl;
+      std::cout<<"Missing mandatory parameter."<<std::endl;
       return EXIT_FAILURE;
     }
-  else
+  else if( res2 == ParserType::MISSINGPARAMETERVALUE )
     {
-      std::cout<<"Unknown internal error."<<std::endl;
+      std::cout<<"Missing parameter value."<<std::endl;
       return EXIT_FAILURE;
     }
+  else if( res2 == ParserType::INVALIDNUMBEROFVALUE )
+    {
+      std::cout<<"Invalid number of parameter values."<<std::endl;
+      return EXIT_FAILURE;
+    }
+    
+  return EXIT_SUCCESS;
   
 }
 

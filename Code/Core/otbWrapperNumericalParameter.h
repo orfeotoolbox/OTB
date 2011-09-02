@@ -59,6 +59,11 @@ public:
     m_Value = value;
   }
 
+  void SetValue( const std::string & value )
+  {
+    m_Value = static_cast<ScalarType>(atof(value.c_str()));
+  }
+
   /** Get the value */
   ScalarType GetValue() const
   {
