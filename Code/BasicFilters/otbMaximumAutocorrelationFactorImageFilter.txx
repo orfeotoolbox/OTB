@@ -20,6 +20,7 @@
 
 #include "otbMaximumAutocorrelationFactorImageFilter.h"
 #include "otbMultiChannelExtractROI.h"
+#include "otbMath.h"
 #include "itkSubtractImageFilter.h"
 
 #include "vnl/algo/vnl_matrix_inverse.h"

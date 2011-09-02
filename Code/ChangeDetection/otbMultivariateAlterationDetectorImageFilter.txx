@@ -19,6 +19,7 @@
 #define __otbMultivariateAlterationDetectorImageFilter_txx
 
 #include "otbMultivariateAlterationDetectorImageFilter.h"
+#include "otbMath.h"
 
 #include "vnl/algo/vnl_matrix_inverse.h"
 #include "vnl/algo/vnl_generalized_eigensystem.h"

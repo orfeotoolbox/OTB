@@ -155,22 +155,6 @@ private:
   MultivariateAlterationDetectorImageFilter(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
-  static RealType InverseValue(const RealType & value)
-  {
-    if(value != 0)
-      return 1/value;
-    else
-      return 0.; // ugly
-  }
-  
-  static RealType SignOfValue(const RealType & value)
-  {
-    if(value==0)
-      return value;
-    else
-      return (value > 0 ? 1. : -1.);
-  }
-
   CovarianceEstimatorPointer m_CovarianceEstimator;
   MatrixType                 m_CovarianceMatrix;
   VectorType                 m_MeanValues;
