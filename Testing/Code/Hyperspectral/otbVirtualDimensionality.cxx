@@ -42,7 +42,6 @@ int otbVirtualDimensionalityTest(int argc, char * argv[])
 {
   const char * infname = argv[1];
   const char * outfname = argv[2];
-  double far = atof(argv[3]); // False Alarm Rate
 
   StreamingStatisticsVectorImageFilterType::Pointer stats = StreamingStatisticsVectorImageFilterType::New();
 
@@ -63,8 +62,8 @@ int otbVirtualDimensionalityTest(int argc, char * argv[])
 
   for (int i = 2; i < 10; ++i)
     {
-    double far = vcl_pow(static_cast<double>(10), static_cast<double>(-i));
-    vd->SetFAR(far);
+    double falseAlarmRate = vcl_pow(static_cast<double>(10), static_cast<double>(-i));
+    vd->SetFAR(falseAlarmRate);
     vd->Compute();
 
     std::cout << "FAR : 1E-" << i << " -> Nb Endmembers: " << vd->GetNumberOfEndmembers() << std::endl;

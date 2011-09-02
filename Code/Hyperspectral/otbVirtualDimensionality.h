@@ -91,15 +91,15 @@ public:
     m_NumberOfPixels = n;
   }
 
-  void SetFAR(double far)
+  void SetFAR(double falseAlarmRate)
   {
-    if (far < 0)
-      far = 0;
+    if (falseAlarmRate < 0)
+      falseAlarmRate = 0;
 
-    if (far > 1)
-      far = 1;
+    if (falseAlarmRate > 1)
+      falseAlarmRate = 1;
 
-    m_FAR = far;
+    m_FAR = falseAlarmRate;
   }
 
   double GetFAR()
