@@ -25,7 +25,8 @@
 void RegisterTests()
 {
   REGISTER_TEST(otbWrapperCommandLineParserNew);
-  REGISTER_TEST(otbWrapperCommandLineParserTest);
+  REGISTER_TEST(otbWrapperCommandLineParserTest1);
+  REGISTER_TEST(otbWrapperCommandLineParserTest2);
   REGISTER_TEST(otbWrapperCommandLineLauncherNew);
   REGISTER_TEST(otbWrapperCommandLineLauncherTest);
 }

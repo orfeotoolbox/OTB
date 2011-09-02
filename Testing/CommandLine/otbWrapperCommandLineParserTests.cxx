@@ -21,47 +21,33 @@
 
 #include "otbWrapperCommandLineParser.h"
 
+typedef otb::Wrapper::CommandLineParser ParserType;
 
 int otbWrapperCommandLineParserNew(int argc, char* argv[])
 {
-  typedef otb::Wrapper::CommandLineParser ParserType;
   ParserType::Pointer parser = ParserType::New();
 
   return EXIT_SUCCESS;
 }
 
-int otbWrapperCommandLineParserTest(int argc, char* argv[])
+
+int CheckReturn(ParserType::ParseResultType res)
 {
-  typedef otb::Wrapper::CommandLineParser ParserType;
-  ParserType::Pointer parser = ParserType::New();
-
-
-  ParserType::ParseResultType res = parser->CheckExpression( argv[1] );
-  /*if( res == ParserType::OK)
+ if( res == ParserType::OK )
     {
       return EXIT_SUCCESS;
     }
-    else */if( res == ParserType::EMPTYEXPRESSION )
-    {
-      std::cout<<"Empty expression."<<std::endl;
-      return EXIT_FAILURE;
-    }
-  else if( res == ParserType::NOMODULENAME )
+   if( res == ParserType::NOMODULENAME )
     {
       std::cout<<"No module name detected."<<std::endl;
       return EXIT_FAILURE;
     }
-else if( res == ParserType::MULTIPLEMODULENAME )
+  else if( res == ParserType::MULTIPLEMODULENAME )
     {
       std::cout<<"Multiple module name detected. Only one possible."<<std::endl;
       return EXIT_FAILURE;
     }
-  else if( res == ParserType::WRONGMODULENAME )
-    {
-      std::cout<<"Invalid module name."<<std::endl;
-      return EXIT_FAILURE;
-    }
- else if( res == ParserType::INVALIDMODULENAME )
+  else if( res == ParserType::INVALIDMODULENAME )
     {
       std::cout<<"Invalid module name. Must only contain alphanumerical characters."<<std::endl;
       return EXIT_FAILURE;
@@ -76,28 +62,57 @@ else if( res == ParserType::MULTIPLEMODULENAME )
       std::cout<<"No module path specified."<<std::endl;
       return EXIT_FAILURE;
     }
-
-
-  ParserType::ParseResultType res2 = parser->ParseApplicationArgument( argv[1] );
-  
-  if( res2 == ParserType::MISSINGMANDATORYPARAMETER )
+ else
     {
-      std::cout<<"Missing mandatory parameter."<<std::endl;
+      std::cout<<"Invalid return code "<<res<<"."<<std::endl;
       return EXIT_FAILURE;
     }
-  else if( res2 == ParserType::MISSINGPARAMETERVALUE )
-    {
-      std::cout<<"Missing parameter value."<<std::endl;
-      return EXIT_FAILURE;
-    }
-  else if( res2 == ParserType::INVALIDNUMBEROFVALUE )
-    {
-      std::cout<<"Invalid number of parameter values."<<std::endl;
-      return EXIT_FAILURE;
-    }
-    
-  return EXIT_SUCCESS;
-  
 }
+
+
+int otbWrapperCommandLineParserTest1(int argc, char* argv[])
+{
+  ParserType::Pointer parser = ParserType::New();
+
+  std::vector<std::string> res = parser->GetAttribut( argv[1], argv[2] );
+
+  if( res.size() == 0 )
+    {
+      return EXIT_FAILURE;
+    }
+  return EXIT_SUCCESS;
+ }
+
+
+int otbWrapperCommandLineParserTest2(int argc, char* argv[])
+{
+  ParserType::Pointer parser = ParserType::New();
+  
+  std::cout<<"Search for paths..."<<std::endl;
+
+  std::vector<std::string> paths;
+  ParserType::ParseResultType res = parser->GetPaths( paths, argv[1] );
+  if( CheckReturn(res) != ParserType::OK )
+    {
+      std::cout<<"Can't find paths."<<std::endl;
+      return EXIT_FAILURE;
+    }
+
+  std::cout<<"Paths found."<<std::endl;
+  std::cout<<"Search for module name..."<<std::endl;
+
+  std::string name;
+  res = parser->GetModuleName( name, argv[1] );
+  
+  if( CheckReturn(res) != ParserType::OK )
+    {
+      std::cout<<"Can't find module name."<<std::endl;
+      return EXIT_FAILURE;
+    }
+
+  std::cout<<"Module name found."<<std::endl;
+  return CheckReturn(res); 
+}
+
 
 

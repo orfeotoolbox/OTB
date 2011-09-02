@@ -18,16 +18,10 @@
 #ifndef __otbWrapperCommandLineParser_h
 #define __otbWrapperCommandLineParser_h
 
-//#include <string>
 #include "otbMacro.h"
 #include "itkObject.h"
 #include "itkObjectFactory.h"
 
-//#include "otbWrapperTypes.h"
-//#include "otbWrapperParameterGroup.h"
-#include "otbWrapperApplication.h"
-#include "otbWrapperParameter.h"
-#include "itksys/SystemTools.hxx"
 
 namespace otb
 {
@@ -60,18 +54,19 @@ public:
   itkTypeMacro(CommandLineParser,itk::Object);
   
   /** Parse result enum */
-  typedef enum { OK, EMPTYEXPRESSION, NOMODULENAME, MULTIPLEMODULENAME, INVALIDMODULENAME, WRONGMODULENAME,
-                 NOMODULEPATH, INVALIDMODULEPATH,
-                 MISSINGMANDATORYPARAMETER, MISSINGPARAMETERVALUE, WRONGPARAMETERVALUE,  INVALIDNUMBEROFVALUE} ParseResultType;
-  
-  /** Check expression validity */
-  ParseResultType CheckExpression( const std::string & exp );
-  ParseResultType CheckExpression( const char * exp );
+  typedef enum { OK, NOMODULENAME, MULTIPLEMODULENAME, INVALIDMODULENAME,
+                 NOMODULEPATH, INVALIDMODULEPATH} ParseResultType;
+                  
 
-  CommandLineParser::ParseResultType ParseApplicationArgument( const std::string & exp );
-  CommandLineParser::ParseResultType ParseApplicationArgument( const char * exp );
+  std::vector<std::string> GetAttribut( const std::string & key, const std::string & exp );
 
-  std::vector<itksys::String> GetAttribut( const std::string & key, const std::string & exp );
+  CommandLineParser::ParseResultType GetPaths( std::vector<std::string> paths, const std::string & exp );
+  CommandLineParser::ParseResultType GetModuleName( std::string modName, const std::string & exp );
+
+  itkGetStringMacro(ModuleNameKey);
+  itkGetStringMacro(PathKey);
+  itkSetStringMacro(ModuleNameKey);
+  itkSetStringMacro(PathKey);
 
 protected:
   /** Constructor */
@@ -79,52 +74,15 @@ protected:
 
   /** Destructor */
   virtual ~CommandLineParser();
-
-
-
-  bool LoadApplication( const std::string & moduleName );
-
-
-  ParseResultType CheckModuleName( const char * exp );
-
-  ParseResultType CheckPath( const char * exp );
-
-  void LoadPath();
-
-  std::string ExtractApplicationArgument( const char * exp );
-
-  template <class TParameterType>
-    bool CanCreateParameter(Parameter * param);
-  
-  template <class TParameterType>
-    void SetValueToParameter(Parameter * param, const std::string & val );
-  
-  template <class TParameterType>
-    void SetValueToParameter(Parameter * param, const std::vector<std::string> & val);
-                             
-  template <class TParameterType>
-    void SetFileNameToParameter(Parameter * param, const std::string & val );
-  
-  template <class TParameterType>
-    void SetFileNameToParameter(Parameter * param, const std::vector<std::string> & val);
-                                
-  template <class TParameterType>
-    void SetFromFileNameToParameter(Parameter * param, const std::string & val );
-
-template <class TParameterType>
-  void SetFromFileNameToParameter(Parameter * param, const std::vector<std::string> & val );
-
+ 
 private:
 
   CommandLineParser(const CommandLineParser &); //purposely not implemented
   void operator =(const CommandLineParser&); //purposely not implemented
   
-  std::string m_Path;
-  std::string m_ModuleName;
-  const std::string m_ModuleNameKey;
-  const std::string m_PathKey;
+  std::string m_ModuleNameKey;
+  std::string m_PathKey;
 
-  Application::Pointer m_Application;
 }; //end class
 
 } // end namespace Wrapper
