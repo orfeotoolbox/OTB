@@ -221,7 +221,7 @@ BinaryFunctorNeighborhoodImageFilter<TInputImage1, TInputImage2, TOutputImage, T
   // Process each of the boundary faces.  These are N-d regions which border
   // the edge of the buffer.
   for (fit1 = faceList1.begin(), fit2 = faceList2.begin();
-       fit1 != faceList1.end(), fit2 != faceList2.end();
+       fit1 != faceList1.end() && fit2 != faceList2.end();
        ++fit1, ++fit2)
     {
     neighInputIt1 = itk::ConstNeighborhoodIterator<TInputImage1>(r1, inputPtr1, *fit1);
