@@ -101,7 +101,7 @@ SpectralResponse<TPrecision, TValuePrecision>
   //Guess a starting lambda
   if (m_Response.size() <= 1)
     {
-    itkExceptionMacro(<<"ERROR spectral response need at least 2 value to perfomr interpolation.");
+    itkExceptionMacro(<<"ERROR spectral response need at least 2 value to perform interpolation.");
     }
 
   typename VectorPairType::const_iterator beg = m_Response.begin();
