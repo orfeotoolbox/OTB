@@ -1,3 +1,4 @@
+
 /*=========================================================================
 
   Program:   ORFEO Toolbox
@@ -337,7 +338,7 @@ LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
   IndexType    resp;
   resp[0] = -1;
 
-  if (line < 0 || line >= m_InternalDataSet.size())
+  if (line >= m_InternalDataSet.size())
     {
     resp[1] = -1;
     return resp;
@@ -403,7 +404,7 @@ LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
   IndexType    resp;
   resp[0] = -1;
 
-  if (line < 0 || line >= m_InternalDataSet.size())
+  if (line >= m_InternalDataSet.size())
     {
     resp[1] = -1;
     return resp;
@@ -439,7 +440,7 @@ LabelObjectToPolygonFunctor<TLabelObject, TPolygon>
   IndexType resp;
   resp[0] = -1;
 
-  if (line < 0 || line >= m_InternalDataSet.size())
+  if (line >= m_InternalDataSet.size())
     {
     resp[1] = -1;
     return resp;

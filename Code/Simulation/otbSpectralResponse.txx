@@ -119,10 +119,8 @@ SpectralResponse<TPrecision, TValuePrecision>
 
   //this test should be always true since
   // lambda<=lambdaMin and lambda>=lambdaMax have been just tested
-  if ((lambdaPosGuess < 0) || (lambdaPosGuess > m_Response.size()))
-    {
-    return 0;
-    }
+  assert(!(lambdaPosGuess < 0) || (lambdaPosGuess > m_Response.size()));
+
   // TODO JGU : test algorithm
   //lambdaPosGuess calculus have been modified (initially lambdaPosGuess = static_cast<unsigned int> ((lambda - lambdaMin) / (lambdaMax - lambdaMin)
   //* m_Response.size() -1). lambdaPosGuess = 0 for lambda contained in  m_Response first bin
