@@ -69,7 +69,7 @@ void
 StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
 ::SetMasterInput(const TInputImage * image)
 {
-  SetNthInput(0, const_cast<TInputImage *>( image ));
+  this->SetNthInput(0, const_cast<TInputImage *>( image ));
 }
 
 template <class TInputImage, class TOutputHeight>
@@ -77,7 +77,7 @@ void
 StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>
 ::SetSlaveInput(const TInputImage * image)
 {
-  SetNthInput(1, const_cast<TInputImage *>( image ));
+  this->SetNthInput(1, const_cast<TInputImage *>( image ));
 }
 
 template <class TInputImage, class TOutputHeight>
