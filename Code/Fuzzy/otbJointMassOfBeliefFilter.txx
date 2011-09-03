@@ -81,7 +81,7 @@ typename JointMassOfBeliefFilter<TMassFunction>
 JointMassOfBeliefFilter<TMassFunction>
 ::GetOutput()
 {
-  if(this->GetNumberOfOutputs()<0)
+  if(this->GetNumberOfOutputs() < 1)
     {
     return 0;
     }
