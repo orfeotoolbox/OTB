@@ -46,6 +46,8 @@ void QtWidgetInputImageParameter::DoCreateWidget()
   m_Input = new QLineEdit;
   m_Input->setToolTip( m_InputImageParam->GetDescription() );
   connect( m_Input, SIGNAL(textChanged(const QString&)), this, SLOT(SetFileName(const QString&)) );
+  connect( m_Input, SIGNAL(textChanged(const QString&)), GetModel(), SLOT(NotifyUpdate()) );
+
   m_HLayout->addWidget(m_Input);
 
   // Set up input text edit
