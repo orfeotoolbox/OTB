@@ -94,12 +94,17 @@ private:
 
   void DoExecute()
   {
+    GetLogger()->Debug("Entering DoExecute");
+
+
     VectorImageType::Pointer inImage = GetParameterImage("in");
 
     switch ( GetParameterInt("type") )
       {
       case Smoothing_Mean:
         {
+        GetLogger()->Debug("Using mean");
+
         typedef itk::MeanImageFilter<ImageType, ImageType>         MeanFilterType;
         typedef otb::PerBandVectorImageFilter<VectorImageType, VectorImageType, MeanFilterType>
           PerBandMeanFilterType;
@@ -118,6 +123,8 @@ private:
         break;
       case Smoothing_Gaussian:
         {
+        GetLogger()->Debug("Using gaussian");
+
         typedef itk::DiscreteGaussianImageFilter<ImageType, ImageType>  DiscreteGaussianFilterType;
         typedef otb::PerBandVectorImageFilter<VectorImageType, VectorImageType, DiscreteGaussianFilterType>
           PerBandDiscreteGaussianFilterType;
@@ -136,6 +143,8 @@ private:
         break;
       case Smoothing_Anisotropic:
         {
+        GetLogger()->Debug("Using anisotropic diffusion");
+
         typedef itk::GradientAnisotropicDiffusionImageFilter<ImageType, ImageType>  GradientAnisotropicDiffusionFilterType;
         typedef otb::PerBandVectorImageFilter<VectorImageType, VectorImageType, GradientAnisotropicDiffusionFilterType>
           PerBandGradientAnisotropicDiffusionFilterType;

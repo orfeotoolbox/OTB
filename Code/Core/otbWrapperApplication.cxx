@@ -44,15 +44,25 @@ Application::Application()
    m_InternalProcessList(),
    m_InternalProcessListName(),
    m_WroteOutput(0),
-   m_ExecuteAndWriteOutputDone(false)
+   m_ExecuteAndWriteOutputDone(false),
+   m_Logger(itk::Logger::New())
 {
   // Don't call Init from the constructor, since it calls a virtual method !
+
+  m_Logger->SetName("Application.logger");
+  m_Logger->SetPriorityLevel(itk::LoggerBase::INFO);
+  m_Logger->SetLevelForFlushing(itk::LoggerBase::CRITICAL);
+
 }
 
 Application::~Application()
 {
 }
 
+itk::Logger* Application::GetLogger()
+{
+  return m_Logger;
+}
 
 std::vector<std::string>
 Application::GetParametersKeys(bool recursive)

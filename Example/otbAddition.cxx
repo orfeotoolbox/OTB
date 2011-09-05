@@ -63,6 +63,8 @@ private:
   void DoExecute()
   {
     std::cout << "Addition::DoExecute" << std::endl;
+    GetLogger()->Debug("debug message");
+    GetLogger()->Error("error message");
     std::cout << GetParameterFloat("a") + GetParameterFloat("b") << std::endl;
   }
 };
