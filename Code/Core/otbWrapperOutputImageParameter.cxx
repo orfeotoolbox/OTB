@@ -56,6 +56,13 @@ OutputImageParameter::SetValue(VectorImageType* image)
   m_Image = image;
 }
 
+bool
+OutputImageParameter::HasValue() const
+{
+  std::string filename(this->GetFileName());
+  return !filename.empty();
+}
+
 }
 }
 

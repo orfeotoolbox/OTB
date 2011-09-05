@@ -59,6 +59,9 @@ public:
   /** Return any value */
   VectorImageType* GetValue( void );
 
+  /** Return true if a filename is set */
+  bool HasValue() const;
+
   itkSetStringMacro(FileName);
   itkGetStringMacro(FileName);
   itkGetObjectMacro(Writer, WriterType);
