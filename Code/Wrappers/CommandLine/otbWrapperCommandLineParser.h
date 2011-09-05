@@ -55,13 +55,15 @@ public:
   
   /** Parse result enum */
   typedef enum { OK, NOMODULENAME, MULTIPLEMODULENAME, INVALIDMODULENAME,
-                 NOMODULEPATH, INVALIDMODULEPATH} ParseResultType;
+                 NOMODULEPATH, INVALIDMODULEPATH, DEFAULT} ParseResultType;
                   
 
   std::vector<std::string> GetAttribut( const std::string & key, const std::string & exp );
+  
+  bool IsAttributExists(const std::string key, const std::string & exp );
 
-  CommandLineParser::ParseResultType GetPaths( std::vector<std::string> paths, const std::string & exp );
-  CommandLineParser::ParseResultType GetModuleName( std::string modName, const std::string & exp );
+  CommandLineParser::ParseResultType GetPaths( std::vector<std::string> & paths, const std::string & exp );
+  CommandLineParser::ParseResultType GetModuleName( std::string & modName, const std::string & exp );
 
   itkGetStringMacro(ModuleNameKey);
   itkGetStringMacro(PathKey);

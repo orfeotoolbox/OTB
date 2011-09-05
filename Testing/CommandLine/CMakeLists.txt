@@ -93,8 +93,13 @@ add_test(clTuWrapperCommandLineLauncherNew ${OTB_WRAPPER_COMMAND_LINE_TESTS}
 
 add_test(clTvWrapperCommandLineLauncherTest ${OTB_WRAPPER_COMMAND_LINE_TESTS}
 	otbWrapperCommandLineLauncherTest
+        "Rescale --modulePath ${PATH}"
   )
 
+add_test(clTvWrapperCommandLineLauncherTest_Help ${OTB_WRAPPER_COMMAND_LINE_TESTS}
+	otbWrapperCommandLineLauncherTest
+        "Rescale --modulePath ${PATH} --help"
+  )
 
 # --------------------------------------------------------------------
 # ----------------Source files CXX -----------------------------------

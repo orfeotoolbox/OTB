@@ -39,6 +39,7 @@
 
 #include "otbWrapperApplicationRegistry.h"
 #include "otbWrapperApplication.h"
+#include "otbWrapperTypes.h"
 #include <itksys/RegularExpression.hxx>
 #include <string>
 #include <iostream>
@@ -63,8 +64,18 @@ CommandLineLauncher::CommandLineLauncher(const char * exp) : m_Expression(exp)
 CommandLineLauncher::~CommandLineLauncher()
 {
 }
+
 void
-CommandLineLauncher::Launch()
+CommandLineLauncher::Load( const std::string & exp )
+{
+  m_Expression = exp;
+
+  this->Load();
+}
+
+
+void
+CommandLineLauncher::Load()
 {
   if (m_Expression == "")
     {
@@ -73,7 +84,6 @@ CommandLineLauncher::Launch()
 
   this->LoadPath();
   this->LoadApplication();
-  this->LoadParameters();
 }
 
 void
@@ -83,7 +93,17 @@ CommandLineLauncher::Execute()
     {
       itkExceptionMacro("No application loaded");  
     }
-  m_Application->Execute();
+  
+  // if help is asked...
+  if ( m_Parser->IsAttributExists( "--help", m_Expression ) == true )
+    {
+      this->DisplayHelp();
+    }
+  else
+    {
+      this->LoadParameters();
+      m_Application->Execute();
+    }
 } 
 
  void
@@ -93,8 +113,18 @@ CommandLineLauncher::ExecuteAndWriteOutput()
     {
       itkExceptionMacro("No application loaded");  
     }
-  m_Application->ExecuteAndWriteOutput();
-} 
+
+  // if help is asked...
+  if ( m_Parser->IsAttributExists( "--help", m_Expression ) == true )
+    {
+      this->DisplayHelp();
+    }
+  else
+    {
+      this->LoadParameters();
+      m_Application->ExecuteAndWriteOutput();
+    }
+}
 
 void
 CommandLineLauncher::LoadPath()
@@ -106,15 +136,15 @@ CommandLineLauncher::LoadPath()
       return;
     }
   // Contain paths into a string, separating each path with ":"
-  std::string pathAttribut;
+  m_Path = std::string("");
   for( unsigned i=0; i<pathList.size(); i++)
     {  
-      pathAttribut.append(pathList[i]);
-      pathAttribut.append(":");
+      m_Path.append(pathList[i]);
+      m_Path.append(":");
     }
 
   std::string specificEnv("ITK_AUTOLOAD_PATH=");
-  specificEnv.append(pathAttribut);
+  specificEnv.append(m_Path);
   // do NOT use putenv() directly, since the string memory must be managed carefully
   itksys::SystemTools::PutEnv(specificEnv.c_str());
   // Reload factories to take into account new path
@@ -127,11 +157,12 @@ CommandLineLauncher::LoadApplication()
 {
   // Look for the module name
   std::string moduleName;
-  if( m_Parser->GetModuleName( moduleName, m_Expression) != CommandLineParser::OK )
+  if( m_Parser->GetModuleName( moduleName, m_Expression ) != CommandLineParser::OK )
     {
+      std::cout << "LoadApplication, no module found..." <<std::endl;     
       return;
     }
-  
+
   m_Application = ApplicationRegistry::CreateApplication(moduleName);
   
   if (m_Application.IsNull())
@@ -149,7 +180,6 @@ CommandLineLauncher::LoadParameters()
       itkExceptionMacro("No application loaded");
     }
   
-  
   // Mandatory case
   ParameterGroup::Pointer paramGr = m_Application->GetParameterList();
   const unsigned int nbOfParam = paramGr->GetNumberOfParameters();
@@ -162,8 +192,7 @@ CommandLineLauncher::LoadParameters()
       // Check if mandatory parameter are present and have value
       if( param->GetMandatory() == true )
         {
-          std::size_t found = m_Expression.find(param->GetKey());
-           if( found == std::string::npos )
+          if( !m_Parser->IsAttributExists( std::string("--").append(param->GetKey()), m_Expression ) )
              {
                std::cout<<param->GetKey()<<std::endl;
                return MISSINGMANDATORYPARAMETER;
@@ -178,8 +207,7 @@ CommandLineLauncher::LoadParameters()
       // Check if non mandatory parameter have values
       else
         {
-          std::size_t found = m_Expression.find(param->GetKey());
-          if( found != std::string::npos )
+          if( m_Parser->IsAttributExists( std::string("--").append(param->GetKey()), m_Expression ) )
             {
               values = m_Parser->GetAttribut( std::string("--").append(param->GetKey()), m_Expression);
               if(  values.size() == 0 )
@@ -197,18 +225,19 @@ CommandLineLauncher::LoadParameters()
           svValues.push_back(values[j]);
         }
       
+      ParameterType type = m_Application->GetParameterType( param->GetKey());
       // List values parameter case
-      if( this->CanCreateParameter<InputImageListParameter>(param) == true )
+      if( type == ParameterType_InputImageList )
         {
-          this->SetFromFileNameToParameter<InputImageListParameter>( param, svValues );
+          dynamic_cast<InputImageListParameter *>(param.GetPointer())->SetListFromFileName( svValues );
         }
-      else if( this->CanCreateParameter<OutputImageListParameter>(param) == true )
+      else if( type == ParameterType_OutputImageList )
         {
-          this->SetFileNameToParameter<OutputImageListParameter>( param, svValues);
+          dynamic_cast<OutputImageListParameter *>(param.GetPointer())->SetFileNameList( svValues );
         }
-      else if( this->CanCreateParameter<StringListParameter>(param) == true )
+      else if( type == ParameterType_StringList )
         {
-          this->SetValueToParameter<StringListParameter>( param, svValues );
+          dynamic_cast<StringListParameter *>(param.GetPointer())->SetValue( svValues );
         }
       else  if( svValues.size() != 1)
         {
@@ -216,55 +245,14 @@ CommandLineLauncher::LoadParameters()
         }
 
       // Single value parameter
-      if( this->CanCreateParameter<ChoiceParameter>(param) == true )
+   
+      if( type == ParameterType_Choice || type == ParameterType_Float || type == ParameterType_Int || type == ParameterType_Radius 
+          || type == ParameterType_Directory || type == ParameterType_String || type == ParameterType_Filename || type == ParameterType_InputComplexImage 
+          || type == ParameterType_InputImage || type == ParameterType_InputVectorData || type == ParameterType_OutputImage || type == ParameterType_OutputVectorData )
         {
-          this->SetValueToParameter<ChoiceParameter>( param, svValues[0] );
+          m_Application->SetParameterString( param->GetKey(), svValues[0] );
         }
-      else if( this->CanCreateParameter<FloatParameter>(param) == true )
-        {
-          this->SetValueToParameter<FloatParameter>( param, svValues[0] );
-        }
-      else if( this->CanCreateParameter<IntParameter>(param) == true )
-        {
-          this->SetValueToParameter<IntParameter>( param, svValues[0] );
-        }
-      else if( this->CanCreateParameter<RadiusParameter>(param) == true )
-        {
-          this->SetValueToParameter<RadiusParameter>( param, svValues[0] );
-        }
-      else if( this->CanCreateParameter<DirectoryParameter>(param) == true )
-        {
-          this->SetValueToParameter<DirectoryParameter>(param, svValues[0]);
-        }
-      else if( this->CanCreateParameter<StringParameter>(param) == true )
-        {
-          this->SetValueToParameter<StringParameter>( param, svValues[0] );
-        }
-      else if( this->CanCreateParameter<FilenameParameter>(param) == true )
-        {
-          this->SetValueToParameter<FilenameParameter>(param, svValues[0]);
-        }
-      else if( this->CanCreateParameter<InputComplexImageParameter>(param) == true )
-        {
-          this->SetFromFileNameToParameter<InputComplexImageParameter>(param, svValues[0]);
-        }
-      else if( this->CanCreateParameter<InputImageParameter>(param) == true )
-        {
-          this->SetFromFileNameToParameter<InputImageParameter>(param, svValues[0]);
-        }
-      else if( this->CanCreateParameter<InputVectorDataParameter>(param) == true )
-        {
-          this->SetFromFileNameToParameter<InputVectorDataParameter>(param, svValues[0]);
-        }
-      else if( this->CanCreateParameter<OutputImageParameter>(param) == true )
-        {
-          this->SetFileNameToParameter<OutputImageParameter>(param, svValues[0]);
-        }
-      else if( this->CanCreateParameter<OutputVectorDataParameter>(param) == true )
-        {
-          this->SetFileNameToParameter<OutputVectorDataParameter>(param, svValues[0]);
-        }
-      else if( this->CanCreateParameter<EmptyParameter>(param) == true )
+      else if( type == ParameterType_Empty )
         {
           if( svValues[0] == "1" || svValues[0] == "true")
             {
@@ -283,6 +271,121 @@ CommandLineLauncher::LoadParameters()
 }
 
 
+void
+CommandLineLauncher::DisplayHelp()
+{
+  std::cerr<<"====================== HELP CONTEXT ======================"<<std::endl;
+  std::cerr<<"Name: "<<m_Application->GetName()<<std::endl;
+  std::cerr<<"Description: "<<m_Application->GetDescription()<<std::endl;
+  std::cerr<<"Parameters: "<<std::endl;
+  ParameterGroup::Pointer paramGr = m_Application->GetParameterList();
+  const unsigned int nbOfParam = paramGr->GetNumberOfParameters();
+  
+  bool addMandaTag = true;
+  // Mandatory parameters
+  for( unsigned int i=0; i<nbOfParam; i++ )
+    {
+      Parameter::Pointer param =  paramGr->GetParameterByIndex(i);
+      // Check if mandatory parameter are present and have value
+      if( param->GetMandatory() == true )
+        {
+          itk::OStringStream oss;
+          oss<<"--"<<param->GetKey()<<" ("<<param->GetName()<<")"<< std::endl;
+          if( std::string(param->GetDescription()).size() != 0 )
+            {
+              oss<<"\t Description: "<<param->GetDescription()<<")."<<std::endl;
+            }
+          //oss << "\t Default value: "<<param->GetDefaultValue()<< std::endl;
+          if( !m_Parser->IsAttributExists( std::string("--").append(param->GetKey()), m_Expression) )
+            {
+              oss << "\t Status: MISSING."<< std::endl;
+            }
+          else if( m_Parser->GetAttribut( std::string("--").append(param->GetKey()), m_Expression).size() == 0 )
+            {
+              oss << "\t Status: NO VALUE ASSOCIATED."<< std::endl;
+            }
+          else
+            {
+              oss << "\t Status: USER VALUE: ";
+              std::vector<std::string> values = m_Parser->GetAttribut( std::string("--").append(param->GetKey()), m_Expression);
+              for( unsigned int i=0; i<values.size(); i++)
+                {
+                  if( i<values.size() )
+                    {
+                      oss<<values[i]<<" ";
+                    }
+                  else
+                    {
+                      oss<<values[i];
+                    }
+                }
+              oss << std::endl;
+            }
+
+          if( addMandaTag == true )
+            {
+              std::cerr<<"=== Mandatory parameters: "<<std::endl;
+              addMandaTag = false;
+            }
+          std::cerr<< oss.str();
+        }
+    }
+ 
+  bool addOptionTag = true;
+  // Optional parameters
+  for( unsigned int i=0; i<nbOfParam; i++ )
+    {
+      Parameter::Pointer param =  paramGr->GetParameterByIndex(i);
+      // Check if mandatory parameter are present and have value
+      if( param->GetMandatory() != true )
+        {
+          itk::OStringStream oss;
+          oss<<"--"<<param->GetKey()<<" ("<<param->GetName()<<")"<< std::endl;
+          if( std::string(param->GetDescription()).size() != 0 )
+            {
+              oss<<"\t Description: "<<param->GetDescription()<<")."<<std::endl;
+            }
+          //oss << "\t Default value: "<<param->GetDefaultValue()<< std::endl;
+          if( !m_Parser->IsAttributExists( std::string("--").append(param->GetKey()), m_Expression) )
+            {
+              oss << "\t Status: NOT USED."<< std::endl;
+            }
+          else if( m_Parser->GetAttribut( std::string("--").append(param->GetKey()), m_Expression).size() == 0 )
+            {
+              oss << "\t Status: NO VALUE ASSOCIATED."<< std::endl;
+            }
+          else
+            {
+              oss << "\t Status: USER VALUE: ";
+              std::vector<std::string> values = m_Parser->GetAttribut( std::string("--").append(param->GetKey()), m_Expression);
+              for( unsigned int i=0; i<values.size(); i++)
+                {
+                  if( i<values.size() )
+                    {
+                      oss<<values[i]<<" ";
+                    }
+                  else
+                    {
+                      oss<<values[i];
+                    }
+                }
+              oss << std::endl;
+            }
+
+          if( addOptionTag == true )
+            {
+              std::cerr<<"=== Optional parameters: "<<std::endl;
+              addOptionTag = false;
+            }
+          std::cerr<< oss.str() << std::endl;
+        }
+    }
+
+  std::cerr<<"Detected user paths: "<<m_Path<<std::endl;
+
+}
+
+/*
 template <class TParameterType>
 void
 CommandLineLauncher::SetValueToParameter(Parameter * param, const std::string & val )
@@ -361,7 +464,7 @@ CommandLineLauncher::CanCreateParameter( Parameter * param )
 {
   return dynamic_cast<TParameterType *>(param) != 0;
 }
-
+*/
 }
 }
 

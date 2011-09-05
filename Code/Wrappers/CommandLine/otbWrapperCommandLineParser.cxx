@@ -57,7 +57,7 @@ CommandLineParser::~CommandLineParser()
 }
 
 CommandLineParser::ParseResultType
-CommandLineParser::GetPaths( std::vector<std::string> paths, const std::string & exp )
+CommandLineParser::GetPaths( std::vector<std::string> & paths, const std::string & exp )
 {
   std::size_t found = std::string(exp).find(m_PathKey);
   if( found == std::string::npos )
@@ -87,7 +87,7 @@ CommandLineParser::GetPaths( std::vector<std::string> paths, const std::string &
 }
 
 CommandLineParser::ParseResultType
-CommandLineParser::GetModuleName( std::string modName, const std::string & exp )
+CommandLineParser::GetModuleName( std::string & modName, const std::string & exp )
 {
   std::vector<itksys::String> spaceSplittedExp = itksys::SystemTools::SplitString(exp.c_str(), ' ', false);
   // if the chain is "  module", SplitString will return: [ ], [module]
@@ -177,7 +177,7 @@ CommandLineParser::GetAttribut( const std::string & key, const std::string & exp
     {
       itkExceptionMacro("No key \""<<key<<"\" found in \""<<exp<<"\".");
     }
-  
+
   std::string expFromKey = std::string(exp).substr(found+key.size(), std::string(exp).size());
   std::string tempModKey = expFromKey;
   // remove other key in the string if there's any
@@ -185,7 +185,6 @@ CommandLineParser::GetAttribut( const std::string & key, const std::string & exp
     {
       tempModKey = expFromKey.substr( 0, expFromKey.find("--")-1);
     }
-
   std::vector<itksys::String> spaceSplitted = itksys::SystemTools::SplitString(tempModKey.substr(1, tempModKey.size()).c_str(), ' ', false);
   // Remove " " string element
   for(unsigned int i=0; i<spaceSplitted.size(); i++)
@@ -209,6 +208,19 @@ CommandLineParser::GetAttribut( const std::string & key, const std::string & exp
     }
 
    return res; 
+}
+
+
+bool
+CommandLineParser::IsAttributExists( const std::string key, const std::string & exp  )
+{
+  std::size_t found = std::string(exp).find(key);
+  if( found == std::string::npos )
+    {
+      return false;
+    }
+
+  return true;
 }
 
 }

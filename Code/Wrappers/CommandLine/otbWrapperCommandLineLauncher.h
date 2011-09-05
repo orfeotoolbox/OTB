@@ -62,19 +62,30 @@ public:
   
   /** Parse result enum */
   typedef CommandLineParser::ParseResultType ParseResultType;
-  typedef enum { OKPARAM, MISSINGMANDATORYPARAMETER, MISSINGPARAMETERVALUE, WRONGPARAMETERVALUE,  INVALIDNUMBEROFVALUE} ParamResultType;
+  typedef enum { OKPARAM, MISSINGMANDATORYPARAMETER, MISSINGPARAMETERVALUE, WRONGPARAMETERVALUE,  INVALIDNUMBEROFVALUE, DEFAULT} ParamResultType;
   
-  /** Check expression validity */
 
-  void LoadPath();
-  bool IsValidModuleName();
-  void LoadApplication();
-  CommandLineLauncher::ParamResultType LoadParameters();
-  void Launch();
+  /** Load the application in several steps :
+   * - Load the paths
+   * - Load the application using the ApplicationRegistry
+   */
+  void Load();
 
- 
+  /** same as Load method but set the expression before. */
+  void Load( const std::string & exp );
+
+  /** Launch the process, using the Execute application method 
+   * The method will check if the user asked for help (looking at --help key) before loading parameter and launching process.
+   **/
   void Execute();
+
+  /** Launch the process, using the ExecuteAndWriteOutput application method 
+   * The method will check if the user asked for help (looking at --help key) before loading parameter and launching process.
+   */
   void ExecuteAndWriteOutput();
+
+  /** Create and display the help of the application */   
+  void DisplayHelp();
 
 protected:
   /** Constructor */
@@ -85,27 +96,43 @@ protected:
   /** Destructor */
   virtual ~CommandLineLauncher();
 
+  /** Load the executable path. It looks for the key --modulePath, extract and interpret as path the following strings. */
+  void LoadPath();
 
-  template <class TParameterType>
-    bool CanCreateParameter(Parameter * param);
-  
-  template <class TParameterType>
-    void SetValueToParameter(Parameter * param, const std::string & val );
-  
-  template <class TParameterType>
-    void SetValueToParameter(Parameter * param, const std::vector<std::string> & val);
-                             
-  template <class TParameterType>
-    void SetFileNameToParameter(Parameter * param, const std::string & val );
-  
-  template <class TParameterType>
-    void SetFileNameToParameter(Parameter * param, const std::vector<std::string> & val);
-                                
-  template <class TParameterType>
-    void SetFromFileNameToParameter(Parameter * param, const std::string & val );
+ /** Load the application calling the CreateApplication method of the ApplicationRegistry classes. 
+  * Pay attention, the executable paths have to be loaded or set in the environment before calling the function. */
+  void LoadApplication();
 
-template <class TParameterType>
-  void SetFromFileNameToParameter(Parameter * param, const std::vector<std::string> & val );
+  /** Parse the user expression, extract the key and the associated string and set it as value of each corresonding application parameter. */
+  CommandLineLauncher::ParamResultType LoadParameters();
+
+  /** Method used to determine the type of a a parameter (trying a dynamic_cast). */
+  //template <class TParameterType>
+  //bool CanCreateParameter(Parameter * param);
+  
+  /** Set value to prameter using SetValue(string) method. */
+  //template <class TParameterType>
+  //void SetValueToParameter(Parameter * param, const std::string & val );
+  
+  /** Set value to prameter using SetValue(vector<string>) method. */
+  //template <class TParameterType>
+  //void SetValueToParameter(Parameter * param, const std::vector<std::string> & val);
+        
+  /** Set value to prameter using SetValue(string) method. */              
+  //template <class TParameterType>
+  //void SetFileNameToParameter(Parameter * param, const std::string & val );
+  
+  /** Set value to prameter using SetValue(vector<string>) method. */
+  //template <class TParameterType>
+  //void SetFileNameToParameter(Parameter * param, const std::vector<std::string> & val);
+  
+  /** Set value to prameter using SetValue(string) method. */               
+  //template <class TParameterType>
+  //void SetFromFileNameToParameter(Parameter * param, const std::string & val );
+  
+  /** Set value to prameter using SetValue(vector<string>) method. */
+  //template <class TParameterType>
+  //void SetFromFileNameToParameter(Parameter * param, const std::vector<std::string> & val );
 
 private:
 
@@ -113,7 +140,6 @@ private:
   void operator =(const CommandLineLauncher&); //purposely not implemented
   
   std::string m_Path;
-  std::string m_ModuleName;
 
   Application::Pointer m_Application;
   std::string m_Expression;
