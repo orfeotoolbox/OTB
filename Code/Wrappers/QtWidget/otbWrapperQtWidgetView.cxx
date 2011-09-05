@@ -34,7 +34,6 @@ QtWidgetView::QtWidgetView(Application* app)
 
   m_Model = new QtWidgetModel(app);
   m_Application = app;
-  m_Model->RegisterListener( this );
 }
 
 QtWidgetView::~QtWidgetView()
@@ -128,6 +127,7 @@ QWidget* QtWidgetView::CreateFooter()
   m_ExecButton->setEnabled(false);
   m_ExecButton->setText(QObject::tr("Execute"));
   connect( m_ExecButton, SIGNAL(clicked()), this, SLOT(ExecuteAndWriteOutputSlot() ) );
+  connect( m_Model, SIGNAL(SetApplicationReady(bool)), m_ExecButton, SLOT(setEnabled(bool)) );
 
   m_QuitButton = new QPushButton(footerGroup);
   m_QuitButton->setText(QObject::tr("Quit"));
@@ -252,21 +252,6 @@ void QtWidgetView::ExecuteAndWriteOutputSlot()
 void QtWidgetView::CloseSlot()
 {
   this->close();
-}
-void QtWidgetView::Notify(const std::string& event)
-{
-  if(event == "ParametersUpdated")
-    {
-    // "Execute" button activation depends on the application status
-    if(m_Model->GetApplication()->IsApplicationReady())
-      {
-      m_ExecButton->setEnabled(true);
-      }
-    else
-      {
-      m_ExecButton->setEnabled(false);
-      }
-    }
 }
 
 }

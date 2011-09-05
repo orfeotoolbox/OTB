@@ -42,7 +42,7 @@ class AppliThread : public QThread
   void run()
   {
     m_Application->ExecuteAndWriteOutput();
- }
+  }
 
 private:
   AppliThread(const AppliThread&); //purposely not implemented
@@ -56,7 +56,7 @@ private:
 /** \class
  * \brief
  */
-class QtWidgetModel : public QObject, public EventsSender<std::string>
+class QtWidgetModel : public QObject
 {
   Q_OBJECT
 public:
@@ -71,6 +71,9 @@ public:
 
   // slot called when execution is requested
   void ExecuteAndWriteOutput();
+
+signals:
+  void SetApplicationReady(bool);
 
 protected slots:
   // slot called everytime one of the widget is updated

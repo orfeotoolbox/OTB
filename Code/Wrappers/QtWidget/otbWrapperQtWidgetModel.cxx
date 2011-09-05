@@ -43,7 +43,8 @@ void QtWidgetModel::NotifyUpdate()
   m_Application->UpdateParameters();
 
   // Notify all
-  this->NotifyAll("ParametersUpdated");
+  bool applicationStatus = m_Application->IsApplicationReady();
+  emit SetApplicationReady(applicationStatus);
 }
 
 void QtWidgetModel::ExecuteAndWriteOutput()
