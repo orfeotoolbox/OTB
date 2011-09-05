@@ -16,6 +16,7 @@
 
 =========================================================================*/
 #include "otbWrapperInputImageParameter.h"
+#include "itksys/SystemTools.hxx"
 
 namespace otb
 {
@@ -35,13 +36,29 @@ InputImageParameter::~InputImageParameter()
 void
 InputImageParameter::SetFromFileName(const std::string& filename)
 {
-  ImageFileReaderType::Pointer reader = ImageFileReaderType::New();
-  reader->SetFileName(filename);
-  reader->UpdateOutputInformation();
+  // First clear previous file choosen
+  this->ClearValue();
 
-  // everything went fine, store the object references
-  m_Reader = reader;
-  m_Image = reader->GetOutput();
+  // TODO : when the logger will be available, redirect the exception
+  // in the logger (like what is done in MsgReporter)
+  if (!filename.empty()
+      && itksys::SystemTools::FileExists(filename.c_str()))
+    {
+    ImageFileReaderType::Pointer reader = ImageFileReaderType::New();
+    reader->SetFileName(filename);
+    try
+      {
+      reader->UpdateOutputInformation();
+      }
+    catch(itk::ExceptionObject & err)
+      {
+      this->ClearValue();
+      }
+
+    // everything went fine, store the object references
+    m_Reader = reader;
+    m_Image = reader->GetOutput();
+    }
 }
 
 std::string
