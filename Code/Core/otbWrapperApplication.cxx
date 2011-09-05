@@ -580,6 +580,27 @@ Application::GetDoExecuteProgress()
   return res;
 }
 
+bool
+Application::IsApplicationReady()
+{
+  // Check if all the mandatory parameters are set
+  bool ready = true;
+
+  std::vector<std::string> paramList = GetParametersKeys(true);
+  for (std::vector<std::string>::const_iterator it = paramList.begin();
+      it != paramList.end();
+      ++it)
+    {
+    // Check all Input Parameters
+    if (!this->HasValue(*it) && IsMandatory(*it))
+      {
+      ready = false;
+      }
+    }
+
+  return ready;
+}
+
 }
 }
 

@@ -146,6 +146,11 @@ public:
   /* Returns the description of a parameter */
   std::vector<std::string> GetChoiceNames(std::string paramKey);
 
+  /* Is the application ready to be executed : All the mandatory
+   * parameters have to be set
+   */
+  bool IsApplicationReady();
+
 
   /* Set an integer value
    *
