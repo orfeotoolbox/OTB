@@ -21,7 +21,8 @@
 #include <QtGui>
 #include "otbWrapperApplication.h"
 #include "otbWrapperChoiceParameter.h"
-//#include "otbWrapperEventsListener.h"
+#include "otbWrapperEventsSender.h"
+#include "otbWrapperEvent.h"
 
 namespace otb
 {
@@ -55,7 +56,7 @@ private:
 /** \class
  * \brief
  */
-  class QtWidgetModel : public QObject /*, public EventsListener<std::string>*/
+class QtWidgetModel : public QObject, public EventsSender<std::string>
 {
   Q_OBJECT
 public:
@@ -74,8 +75,6 @@ public:
 protected slots:
   // slot called everytime one of the widget is updated
   void NotifyUpdate();
-
-  //void Notify();
 
 private:
   QtWidgetModel(const QtWidgetModel&); //purposely not implemented

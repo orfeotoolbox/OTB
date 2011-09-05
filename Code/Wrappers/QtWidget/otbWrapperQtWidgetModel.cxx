@@ -29,10 +29,8 @@ namespace Wrapper
 QtWidgetModel::QtWidgetModel(Application* app)
  : m_Application(app)
 {
-
   m_Application->Init();
   m_ProgressWindow = new QWidget();
-  //m_Application->RegisterListener( this );
 }
 
 QtWidgetModel::~QtWidgetModel()
@@ -41,7 +39,11 @@ QtWidgetModel::~QtWidgetModel()
 
 void QtWidgetModel::NotifyUpdate()
 {
+  // Update the parameters
   m_Application->UpdateParameters();
+
+  // Notify all
+  this->NotifyAll("ParametersUpdated");
 }
 
 void QtWidgetModel::ExecuteAndWriteOutput()
