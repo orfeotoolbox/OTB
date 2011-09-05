@@ -7,27 +7,28 @@
 // Description: The factory registry for overview builders.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimOverviewBuilderFactoryRegistry.cpp 19184 2011-03-23 11:59:03Z gpotts $
-
-#include <cstddef>   /* for NULL */
-#include <algorithm> /* for std::find */
+// $Id: ossimOverviewBuilderFactoryRegistry.cpp 19907 2011-08-05 19:55:46Z dburken $
 
 #include <ossim/imaging/ossimOverviewBuilderFactoryRegistry.h>
 #include <ossim/imaging/ossimOverviewBuilderFactoryBase.h>
 #include <ossim/base/ossimObjectFactoryRegistry.h>
+#include <algorithm> /* for std::find */
 
-ossimOverviewBuilderFactoryRegistry*
-ossimOverviewBuilderFactoryRegistry::m_instance = 0;
+ossimOverviewBuilderFactoryRegistry* ossimOverviewBuilderFactoryRegistry::m_instance = 0;
 
-ossimOverviewBuilderFactoryRegistry*
-ossimOverviewBuilderFactoryRegistry::instance()
+ossimOverviewBuilderFactoryRegistry* ossimOverviewBuilderFactoryRegistry::instance()
 {
-   if ( m_instance == NULL )
+   if ( m_instance == 0 )
    {
       m_instance = new ossimOverviewBuilderFactoryRegistry();
       ossimObjectFactoryRegistry::instance()->registerFactory(m_instance);
    }
    return m_instance;
+}
+
+ossimObject* ossimOverviewBuilderFactoryRegistry::createObject(const ossimString& typeName)const
+{
+   return createObjectFromRegistry(typeName);
 }
 
 ossimObject* ossimOverviewBuilderFactoryRegistry::createObject(const ossimKeywordlist& kwl,
@@ -71,6 +72,10 @@ ossimOverviewBuilderFactoryRegistry::createBuilder(
    return result;
 }
 
+void ossimOverviewBuilderFactoryRegistry::getTypeNameList(std::vector<ossimString>& typeList)const
+{
+   getAllTypeNamesFromRegistry(typeList);
+}
 
 ossimOverviewBuilderFactoryRegistry::ossimOverviewBuilderFactoryRegistry()
 {

@@ -9,11 +9,7 @@
 // Description:  Contains class definition for ossimNitfTileSource.
 // 
 //*******************************************************************
-//  $Id: ossimNitfTileSource.cpp 19682 2011-05-31 14:21:20Z dburken $
-#include <jerror.h>
-#include <fstream>
-
-#include <algorithm> /* for std::fill */
+//  $Id: ossimNitfTileSource.cpp 19900 2011-08-04 14:19:57Z dburken $
 
 #include <ossim/imaging/ossimNitfTileSource.h>
 #include <ossim/base/ossimConstants.h>
@@ -43,19 +39,18 @@
 #include <ossim/support_data/ossimNitfStdidcTag.h>
 #include <ossim/support_data/ossimNitfVqCompressionHeader.h>
 
-
-#if defined(JPEG_DUAL_MODE_8_12)
-#undef JPEG_DUAL_MODE_8_12 
-#endif
-
 #if defined(JPEG_DUAL_MODE_8_12)
 #include <ossim/imaging/ossimNitfTileSource_12.h>
 #endif
 
+#include <jerror.h>
+#include <fstream>
+#include <algorithm> /* for std::fill */
+
 RTTI_DEF1_INST(ossimNitfTileSource, "ossimNitfTileSource", ossimImageHandler)
 
 #ifdef OSSIM_ID_ENABLED
-   static const char OSSIM_ID[] = "$Id: ossimNitfTileSource.cpp 19682 2011-05-31 14:21:20Z dburken $";
+   static const char OSSIM_ID[] = "$Id: ossimNitfTileSource.cpp 19900 2011-08-04 14:19:57Z dburken $";
 #endif
    
 //---
@@ -892,7 +887,11 @@ void ossimNitfTileSource::establishDecimationFactors()
       hdr->getDecimationFactor(decimation);
       if ((decimation != 0.0) && !ossim::isnan(decimation))
       {
+         //---
+         // Note: Commented out as other code is picking up the resolution and then we're applying
+         // a decimation on top of that. (drb Aug. 2011)
          // ossimDpt dec_2d (decimation, decimation);
+         //---
          ossimDpt dec_2d (1.0, 1.0);
          theDecimationFactors.push_back(dec_2d);
       }
@@ -2403,6 +2402,7 @@ ossimRefPtr<ossimProperty> ossimNitfTileSource::getProperty(const ossimString& n
             ossimRefPtr<ossimProperty> p = theNitfFile->getHeader()->getProperty(name);
             if(p.valid())
             {
+               p->setReadOnlyFlag(true);
                return p;
             }
          }
@@ -2413,6 +2413,7 @@ ossimRefPtr<ossimProperty> ossimNitfTileSource::getProperty(const ossimString& n
          ossimRefPtr<ossimProperty> p = imageHeader->getProperty(name);
          if(p.valid())
          {
+            p->setReadOnlyFlag(true);
             return p;
          }
       }

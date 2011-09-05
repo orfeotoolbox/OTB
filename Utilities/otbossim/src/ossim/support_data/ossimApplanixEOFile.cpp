@@ -5,7 +5,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimApplanixEOFile.cpp 19682 2011-05-31 14:21:20Z dburken $
+//  $Id: ossimApplanixEOFile.cpp 19900 2011-08-04 14:19:57Z dburken $
 #include <ossim/support_data/ossimApplanixEOFile.h>
 #include <iterator>
 #include <fstream>
@@ -128,7 +128,6 @@ bool ossimApplanixEOFile::isEOFile(std::istream& in)const
    return parseHeader(in, header);
 }
 
-
 bool ossimApplanixEOFile::parseStream(std::istream& in)
 {
    theRecordIdMap.clear();
@@ -145,7 +144,7 @@ bool ossimApplanixEOFile::parseStream(std::istream& in)
    while(in.good()&&
          !line.contains("RECORD FORMAT"))
    {
-      getline(in, line);
+      std::getline(in, line.string());
       line = line.upcase();
       line = line.substitute("\r","\n", true);
       if(line.contains("KAPPA CARDINAL"))
@@ -314,7 +313,7 @@ bool ossimApplanixEOFile::parseStream(std::istream& in)
 
    if(in.peek() == '(')
    {
-      getline(in, line);
+      std::getline(in, line.string());
    }
    in>>applanix_skipws;
    ossimRefPtr<ossimApplanixEORecord> record = new ossimApplanixEORecord((ossim_uint32)theRecordFormat.size());
@@ -340,7 +339,7 @@ bool ossimApplanixEOFile::parseStream(std::istream& in)
    
    while(in.good()&&theRecordFormat.size())
    {
-      getline(in, line);
+      std::getline(in, line.string());
       line = line.trim();
       if(line != "")
       {
@@ -404,7 +403,7 @@ bool ossimApplanixEOFile::parseHeader(std::istream& in,
    }
    ossimString line;
 
-   getline(in, line);
+   std::getline(in, line.string());
    line = line .substitute("\r",
                            "\n");
    if(!line.contains("************"))
@@ -416,7 +415,7 @@ bool ossimApplanixEOFile::parseHeader(std::istream& in,
    header += "\n";
 
    in>>applanix_skipws;
-   getline(in, line);
+   std::getline(in, line.string());
    line = line .substitute("\r",
                            "\n");
    
@@ -425,7 +424,7 @@ bool ossimApplanixEOFile::parseHeader(std::istream& in,
    {
       header += line;
       header += "\n";
-      getline(in, line);
+      std::getline(in, line.string());
       line = line .substitute("\r",
                               "\n");
    }

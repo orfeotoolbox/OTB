@@ -6,7 +6,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimSFIMFusion.cpp 17603 2010-06-21 11:39:37Z gpotts $
+//  $Id: ossimSFIMFusion.cpp 19860 2011-07-22 12:23:23Z gpotts $
 #include <ossim/imaging/ossimSFIMFusion.h>
 #include <ossim/matrix/newmat.h>
 #include <ossim/matrix/newmatio.h>
@@ -14,7 +14,10 @@
 #include <ossim/base/ossim2dLinearRegression.h>
 #include <ossim/base/ossimNormRgbVector.h>
 #include <ossim/base/ossimHsiVector.h>
+#include <ossim/base/ossimVisitor.h>
+#include <ossim/imaging/ossimImageGeometry.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
+#include <ossim/base/ossimBooleanProperty.h>
 
 RTTI_DEF2(ossimSFIMFusion, "ossimSFIMFusion", ossimFusionCombiner, ossimAdjustableParameterInterface);
 
@@ -27,6 +30,7 @@ ossimSFIMFusion::ossimSFIMFusion()
    :theLowPassKernelWidth(1.5),
     theHighPassKernelWidth(3)
 {
+   theAutoAdjustScales = true;
    theLowPassFilter  = new ossimImageGaussianFilter;
    theHighPassFilter = new ossimConvolutionSource;
 
@@ -205,6 +209,45 @@ void ossimSFIMFusion::initialize()
       setFilters();
       theLowPassFilter->initialize();
       theHighPassFilter->initialize();
+      
+      if(theAutoAdjustScales)
+      {
+         if(theInputConnection && theIntensityConnection)
+         {
+            ossimTypeNameVisitor visitor("ossimImageRenderer", true);
+            
+            theInputConnection->accept(visitor);
+            ossimRefPtr<ossimConnectableObject> inputColor = visitor.getObjectAs<ossimConnectableObject>();
+            visitor.reset();
+            theIntensityConnection->accept(visitor);
+            ossimRefPtr<ossimConnectableObject> inputPan = visitor.getObjectAs<ossimConnectableObject>();
+            
+            
+            if(inputColor.valid()&&inputPan.valid())
+            {
+               ossimImageSource* inputColorSource = dynamic_cast<ossimImageSource*> (inputColor->getInput());
+               ossimImageSource* inputPanSource = dynamic_cast<ossimImageSource*> (inputPan->getInput());
+               
+               if(inputColorSource&&inputPanSource)
+               {
+                  ossimRefPtr<ossimImageGeometry> colorGeom     = inputColorSource->getImageGeometry();
+                  ossimRefPtr<ossimImageGeometry> intensityGeom = inputPanSource->getImageGeometry();
+                  if(colorGeom.valid()&&intensityGeom.valid())
+                  {
+                     ossimDpt gsdIntensity = intensityGeom->getMetersPerPixel();
+                     ossimDpt gsdColor     = colorGeom->getMetersPerPixel();
+                     if(!gsdColor.hasNans()&&!gsdIntensity.hasNans())
+                     {
+                        double scaleChange = gsdColor.length()/gsdIntensity.length();
+                        if(scaleChange < 1.0) scaleChange = 1.0;
+                        setParameterOffset(LOW_PASS_WIDTH_OFFSET,
+                                           scaleChange);
+                     }
+                  }
+               }
+            }
+         }
+      }
    }
 }
 
@@ -276,17 +319,21 @@ void ossimSFIMFusion::adjustableParametersChanged()
 void ossimSFIMFusion::setProperty(ossimRefPtr<ossimProperty> property)
 {
    ossimString name = property->getName();
-   if(name=="lowPassKernelWidth")
+   if(name=="low_pass_kernel_width")
    {
       setParameterOffset(LOW_PASS_WIDTH_OFFSET,
                          property->valueToString().toDouble(),
                          true);
    }
-   else if(name=="highPassGain")
+   else if(name=="high_pass_gain")
    {
       setParameterOffset(HIGH_PASS_GAIN_OFFSET,
                          property->valueToString().toDouble(),
                          true);
+   }
+   else if(name=="auto_adjust_scales")
+   {
+      theAutoAdjustScales =  property->valueToString().toBool();
    }
    else
    {
@@ -296,19 +343,23 @@ void ossimSFIMFusion::setProperty(ossimRefPtr<ossimProperty> property)
 
 ossimRefPtr<ossimProperty> ossimSFIMFusion::getProperty(const ossimString& name)const
 {
-   if(name == "lowPassKernelWidth")
+   if(name == "low_pass_kernel_width")
    {
       return new ossimNumericProperty(name, 
                                       ossimString::toString(computeParameterOffset(LOW_PASS_WIDTH_OFFSET)),
                                       getParameterCenter(LOW_PASS_WIDTH_OFFSET)-getParameterSigma(LOW_PASS_WIDTH_OFFSET),
                                       getParameterCenter(LOW_PASS_WIDTH_OFFSET)+getParameterSigma(LOW_PASS_WIDTH_OFFSET));
    }
-   else if(name == "highPassGain")
+   else if(name == "high_pass_gain")
    {
       return new ossimNumericProperty(name, 
                                       ossimString::toString(computeParameterOffset(HIGH_PASS_GAIN_OFFSET)),
                                       getParameterCenter(HIGH_PASS_GAIN_OFFSET)-getParameterSigma(HIGH_PASS_GAIN_OFFSET),
                                       getParameterCenter(HIGH_PASS_GAIN_OFFSET)+getParameterSigma(HIGH_PASS_GAIN_OFFSET));
+   }
+   else if(name=="auto_adjust_scales")
+   {
+      return new ossimBooleanProperty(name,theAutoAdjustScales);
    }
    
    return ossimFusionCombiner::getProperty(name);
@@ -317,8 +368,9 @@ ossimRefPtr<ossimProperty> ossimSFIMFusion::getProperty(const ossimString& name)
 void ossimSFIMFusion::getPropertyNames(std::vector<ossimString>& propertyNames)const
 {
    ossimFusionCombiner::getPropertyNames(propertyNames);
-   propertyNames.push_back("lowPassKernelWidth");
-   propertyNames.push_back("highPassGain");
+   propertyNames.push_back("low_pass_kernel_width");
+   propertyNames.push_back("high_pass_gain");
+   propertyNames.push_back("auto_adjust_scales");
 }
 
 bool ossimSFIMFusion::saveState(ossimKeywordlist& kwl,
@@ -326,7 +378,11 @@ bool ossimSFIMFusion::saveState(ossimKeywordlist& kwl,
 {
    ossimFusionCombiner::saveState(kwl, prefix);
    saveAdjustments(kwl, prefix);
-
+   kwl.add(prefix,
+           "auto_adjust_scales",
+           theAutoAdjustScales,
+           true);
+   
    return true;
 }
 
@@ -336,6 +392,11 @@ bool ossimSFIMFusion::loadState(const ossimKeywordlist& kwl,
    ossimFusionCombiner::loadState(kwl, prefix);
    loadAdjustments(kwl, prefix);
    adjustableParametersChanged();
-   
+   ossimString autoAdjustScales = kwl.find(prefix, "auto_adjust_scales");
+                                    
+   if(!autoAdjustScales.empty())
+   {
+      theAutoAdjustScales = autoAdjustScales.toBool();
+   }
    return true;
 }

@@ -12,7 +12,7 @@
 // See class doxygen descriptions below for more.
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimInfo.h 19752 2011-06-13 15:14:37Z dburken $
+// $Id: ossimInfo.h 19801 2011-07-04 15:13:23Z dburken $
 
 #ifndef ossimInfo_HEADER
 #define ossimInfo_HEADER 1
@@ -357,6 +357,12 @@ public:
 
    /** @brief Prints resampler filters to stream. */
    std::ostream& printResamplerFilters(std::ostream& out) const;
+
+   /** @brief Prints list of available writers to stdout. */
+   void printWriters() const;
+
+   /** @brief Prints list of available writers to stream. */
+   std::ostream& printWriters(std::ostream& out) const;
 
    /** @brief Prints writer properties to stdout. */
    void printWriterProps() const;

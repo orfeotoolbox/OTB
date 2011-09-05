@@ -6,7 +6,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimSFIMFusion.h 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimSFIMFusion.h 19827 2011-07-15 19:47:30Z gpotts $
 #ifndef ossimSFIMFusion_HEADER
 #define ossimSFIMFusion_HEADER
 #include <ossim/imaging/ossimFusionCombiner.h>
@@ -78,6 +78,7 @@ protected:
    ossimRefPtr<ossimImageData>           theNormColorData;
 
    NEWMAT::Matrix                        theHighPassMatrix;
+   bool                                  theAutoAdjustScales;
 
 TYPE_DATA   
 };

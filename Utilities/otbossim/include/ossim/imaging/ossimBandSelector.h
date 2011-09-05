@@ -8,7 +8,7 @@
 // Description:  Contains class declaration for ossimBandSelector.
 // 
 //*******************************************************************
-//  $Id: ossimBandSelector.h 19716 2011-06-03 17:25:43Z gpotts $
+//  $Id: ossimBandSelector.h 19807 2011-07-13 11:55:12Z gpotts $
 #ifndef ossimBandSelector_HEADER
 #define ossimBandSelector_HEADER
 
@@ -97,7 +97,7 @@ public:
    virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;						  
 						  
-   
+   virtual bool isSourceEnabled()const;
 protected:
 
    /**
@@ -106,10 +106,9 @@ protected:
    void allocate();
 
    /**
-    * @return true if theInputConnection->getOutputBandList is equal to
-    * this->theOutputBandList, false if not.
+    * Will check all combinations of the band list to see if its 
     */
-   bool isOrderedCorrectly() const;
+   void checkPassThrough() const;
 
    /**
     * @return true if all bands in theOutputBandList are less than the
@@ -121,7 +120,8 @@ protected:
    ossimRefPtr<ossimImageData> theTile;
    std::vector<ossim_uint32>        theOutputBandList;
    mutable ossimBandSelectorWithinRangeFlagState theWithinRangeFlag;
-   bool theOrderedCorrectlyFlag;
+  // bool theOrderedCorrectlyFlag;
+   mutable bool thePassThroughFlag;
 
 TYPE_DATA
 };

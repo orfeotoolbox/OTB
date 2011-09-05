@@ -8,12 +8,14 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimObject.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimObject.cpp 19857 2011-07-21 18:42:15Z gpotts $
 #include <ossim/base/ossimObject.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimObjectFactoryRegistry.h>
 #include <ossim/base/ossimNotifyContext.h>
+#include <ossim/base/ossimConnectableObject.h>
+#include <ossim/base/ossimVisitor.h>
 
 RTTI_DEF(ossimObject, "ossimObject")
 
@@ -99,6 +101,19 @@ bool ossimObject::saveState(ossimKeywordlist& kwl,
            true);
 
    return true;
+}
+
+bool ossimObject::isEqualTo(const ossimObject& obj, ossimCompareType compareType)const
+{
+   return (getClassName() == obj.getClassName());
+}
+
+void ossimObject::accept(ossimVisitor& visitor)
+{
+   if(!visitor.stopTraversal()&&!visitor.hasVisited(this))
+   {
+      visitor.visit(this);
+   }
 }
 
 bool ossimObject::loadState(const ossimKeywordlist&, const char*)

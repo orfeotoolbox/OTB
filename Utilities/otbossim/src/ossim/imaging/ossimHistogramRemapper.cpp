@@ -11,7 +11,7 @@
 // Remaps a tile based on mode and histogram clip points.
 //
 //*************************************************************************
-// $Id: ossimHistogramRemapper.cpp 19786 2011-06-24 15:17:30Z gpotts $
+// $Id: ossimHistogramRemapper.cpp 19804 2011-07-11 11:09:23Z gpotts $
 
 #include <cstdlib>
 #include <ossim/imaging/ossimHistogramRemapper.h>
@@ -43,7 +43,7 @@ static const char STRETCH_MODE_KW[] = "stretch_mode";
 static const char HISTOGRAM_FILENAME_KW[] = "histogram_filename";
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimHistogramRemapper.cpp 19786 2011-06-24 15:17:30Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimHistogramRemapper.cpp 19804 2011-07-11 11:09:23Z gpotts $";
 #endif
 
 ossimHistogramRemapper::ossimHistogramRemapper()
@@ -1278,7 +1278,8 @@ template <class T> void ossimHistogramRemapper::buildAutoLinearMinMaxTableTempla
          ossim_uint32 n     = h->GetRes();
          ossim_float64 low  = h->GetMinVal();
          ossim_float64 high = h->GetMaxVal();
-         
+  
+         double percentChange = .006;
          if(n > 0)
          {
             double newCount       = 0.0;
@@ -1297,8 +1298,10 @@ template <class T> void ossimHistogramRemapper::buildAutoLinearMinMaxTableTempla
                percentage = newCount / count;
                nextPercentage =
                   (newCount + counts[idx+1]) / count;
-               if (std::fabs(percentage - 0.006) <
-                   std::fabs(nextPercentage - 0.006))
+//               if (std::fabs(percentage - 0.006) <
+//                   std::fabs(nextPercentage - 0.006))
+                  if (std::fabs(percentage - percentChange) <
+                      std::fabs(nextPercentage - percentChange))
                {
                   low = idx+1;
                   break;
@@ -1312,8 +1315,8 @@ template <class T> void ossimHistogramRemapper::buildAutoLinearMinMaxTableTempla
                percentage = newCount / count;
                nextPercentage =
                   (newCount + counts[idx-1]) / count;
-               if (std::fabs(percentage - 0.006) <
-                   std::fabs(nextPercentage - 0.006))
+               if (std::fabs(percentage - percentChange) <
+                   std::fabs(nextPercentage - percentChange))
                {
                   high=idx-1;
                   break;

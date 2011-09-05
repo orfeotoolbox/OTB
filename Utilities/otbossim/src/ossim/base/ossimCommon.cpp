@@ -9,7 +9,7 @@
 // Description: Common file for global functions.
 //
 //*************************************************************************
-// $Id: ossimCommon.cpp 19453 2011-04-27 12:12:32Z gpotts $
+// $Id: ossimCommon.cpp 19927 2011-08-10 11:25:11Z gpotts $
 
 #include <sstream>
 
@@ -913,26 +913,6 @@ bool ossim::extractSimpleValues(std::vector<ossimString>& values, const ossimStr
    return result;
 }
 /**
- *  Takes input format of the form:
- *  (value1,value2,...,valueN)
- */
-bool ossim::toSimpleVector(std::vector<ossim_uint32>& result,
-                           const ossimString& stringOfPoints)
-{
-   std::vector<ossimString> extractedValues;
-   bool resultFlag = extractSimpleValues(extractedValues, stringOfPoints);
-   if(resultFlag)
-   {
-      ossim_uint32 idx = 0;
-      ossim_uint32 size = extractedValues.size();
-      for(idx = 0; idx < size; ++idx)
-      {
-         result.push_back(extractedValues[idx].toUInt32());
-      }
-   }
-   return resultFlag;
-}
-/**
  * This will output a vector of values inst a string
  *
  *  (value1,...,valueN)
@@ -960,106 +940,5 @@ void ossim::toSimpleStringList(ossimString& result,
    }
    
    result = "("+out.str()+")";
-}
-
-/**
- *  Takes input format of the form:
- *  (value1,value2,...,valueN)
- */
-bool ossim::toSimpleVector(std::vector<ossim_int32>& result,
-                           const ossimString& stringOfPoints)
-{
-   std::vector<ossimString> extractedValues;
-   bool resultFlag = extractSimpleValues(extractedValues, stringOfPoints);
-   if(resultFlag)
-   {
-      ossim_uint32 idx = 0;
-      ossim_uint32 size = extractedValues.size();
-      for(idx = 0; idx < size; ++idx)
-      {
-         result.push_back(extractedValues[idx].toInt32());
-      }
-   }
-   return resultFlag;
-}
-/**
- *  Takes input format of the form:
- *  (value1,value2,...,valueN)
- */
-bool ossim::toSimpleVector(std::vector<ossim_uint16>& result,
-                           const ossimString& stringOfPoints)
-{
-   std::vector<ossimString> extractedValues;
-   bool resultFlag = extractSimpleValues(extractedValues, stringOfPoints);
-   if(resultFlag)
-   {
-      ossim_uint32 idx = 0;
-      ossim_uint32 size = extractedValues.size();
-      for(idx = 0; idx < size; ++idx)
-      {
-         result.push_back(extractedValues[idx].toUInt32());
-      }
-   }
-   return resultFlag;
-}
-/**
- *  Takes input format of the form:
- *  (value1,value2,...,valueN)
- */
-bool ossim::toSimpleVector(std::vector<ossim_int16>& result,
-                           const ossimString& stringOfPoints)
-{
-   std::vector<ossimString> extractedValues;
-   bool resultFlag = extractSimpleValues(extractedValues, stringOfPoints);
-   if(resultFlag)
-   {
-      ossim_uint32 idx = 0;
-      ossim_uint32 size = extractedValues.size();
-      for(idx = 0; idx < size; ++idx)
-      {
-         result.push_back(extractedValues[idx].toInt32());
-      }
-   }
-   return resultFlag;
-}
-/**
- *  Takes input format of the form:
- *  (value1,value2,...,valueN)
- */
-bool ossim::toSimpleVector(std::vector<ossim_uint8>& result,
-                    const ossimString& stringOfPoints)
-{
-   std::vector<ossimString> extractedValues;
-   bool resultFlag = extractSimpleValues(extractedValues, stringOfPoints);
-   if(resultFlag)
-   {
-      ossim_uint32 idx = 0;
-      ossim_uint32 size = extractedValues.size();
-      for(idx = 0; idx < size; ++idx)
-      {
-         result.push_back(extractedValues[idx].toUInt8());
-      }
-   }
-   return resultFlag;
-}
-/**
- *  Takes input format of the form:
- *  (value1,value2,...,valueN)
- */
-bool ossim::toSimpleVector(std::vector<ossim_int8>& result,
-                    const ossimString& stringOfPoints)
-{
-   std::vector<ossimString> extractedValues;
-   bool resultFlag = extractSimpleValues(extractedValues, stringOfPoints);
-   if(resultFlag)
-   {
-      ossim_uint32 idx = 0;
-      ossim_uint32 size = extractedValues.size();
-      for(idx = 0; idx < size; ++idx)
-      {
-         result.push_back(extractedValues[idx].toUInt8());
-      }
-   }
-   return resultFlag;
 }
 

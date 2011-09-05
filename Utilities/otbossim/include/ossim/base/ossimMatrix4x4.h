@@ -7,7 +7,7 @@
 // Description:
 //
 //*******************************************************************
-//  $Id: ossimMatrix4x4.h 11856 2007-10-12 15:21:17Z gpotts $
+//  $Id: ossimMatrix4x4.h 19824 2011-07-15 16:01:34Z dburken $
 
 #ifndef ossimMatrix4x4_HEADER
 #define ossimMatrix4x4_HEADER
@@ -246,6 +246,9 @@ class OSSIM_DLL ossimMatrix4x4
     */ 
    ossimColumnVector3d getEigenValues()const;
 
+   bool isEqualTo(const ossimMatrix4x4& rhs,
+                  ossimCompareType compareType=OSSIM_COMPARE_FULL)const;
+
    void setZero();
    void setIdentity();
    static NEWMAT::Matrix createIdentity();
@@ -272,7 +275,29 @@ class OSSIM_DLL ossimMatrix4x4
   NEWMAT::Matrix& getData(){return theData;}
 
 private:
-  NEWMAT::Matrix theData; 
-};
+  NEWMAT::Matrix theData;
+  
+}; // class OSSIM_DLL ossimMatrix4x4
 
-#endif
+inline bool ossimMatrix4x4::isEqualTo(const ossimMatrix4x4& rhs,
+                                      ossimCompareType /* compareType */)const
+{
+   return (ossim::almostEqual(theData[0][0], rhs.theData[0][0])&&
+           ossim::almostEqual(theData[0][1], rhs.theData[0][1])&&
+           ossim::almostEqual(theData[0][2], rhs.theData[0][2])&&
+           ossim::almostEqual(theData[0][3], rhs.theData[0][3])&&
+           ossim::almostEqual(theData[1][0], rhs.theData[1][0])&&
+           ossim::almostEqual(theData[1][1], rhs.theData[1][1])&&
+           ossim::almostEqual(theData[1][2], rhs.theData[1][2])&&
+           ossim::almostEqual(theData[1][3], rhs.theData[1][3])&&
+           ossim::almostEqual(theData[2][0], rhs.theData[2][0])&&
+           ossim::almostEqual(theData[2][1], rhs.theData[2][1])&&
+           ossim::almostEqual(theData[2][2], rhs.theData[2][2])&&
+           ossim::almostEqual(theData[2][3], rhs.theData[2][3])&&
+           ossim::almostEqual(theData[3][0], rhs.theData[3][0])&&
+           ossim::almostEqual(theData[3][1], rhs.theData[3][1])&&
+           ossim::almostEqual(theData[3][2], rhs.theData[3][2])&&
+           ossim::almostEqual(theData[3][3], rhs.theData[3][3]));
+}
+
+#endif /* #ifndef ossimMatrix4x4_HEADER */

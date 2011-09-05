@@ -14,11 +14,12 @@
 //  $ID$
 
 #ifndef ossimEllipsoid_HEADER
-#define ossimEllipsoid_HEADER
+#define ossimEllipsoid_HEADER 1
 
 #include <cmath> /* std::sqrt */
 
 #include <ossim/base/ossimConstants.h>
+#include <ossim/base/ossimCommon.h>
 #include <ossim/base/ossimString.h>
 #include <ossim/matrix/newmat.h>
 
@@ -178,6 +179,9 @@ public:
 
    const ossimEllipsoid& operator=(const ossimEllipsoid& copy_me);
 
+   virtual bool isEqualTo(const ossimEllipsoid& rhs,
+                          ossimCompareType compareType=OSSIM_COMPARE_FULL)const;
+
 protected:
    void computeFlattening()
    {
@@ -194,6 +198,18 @@ protected:
    double    theB_squared;
    double    theEccentricitySquared;
 
-};
+}; // class OSSIMDLLEXPORT ossimEllipsoid
 
-#endif
+inline bool ossimEllipsoid::isEqualTo(const ossimEllipsoid& rhs,
+                                      ossimCompareType /* compareType */)const
+{
+   return ((theName == rhs.theName)&&
+           (theCode == rhs.theCode)&&
+           (theEpsgCode ==rhs.theEpsgCode)&&
+           ossim::almostEqual(theA, rhs.theA)&&
+           ossim::almostEqual(theB, rhs.theB)&&
+           ossim::almostEqual(theFlattening, rhs.theFlattening)&&
+           ossim::almostEqual(theEccentricitySquared, rhs.theEccentricitySquared));
+}
+
+#endif /* #ifndef ossimEllipsoid_HEADER */

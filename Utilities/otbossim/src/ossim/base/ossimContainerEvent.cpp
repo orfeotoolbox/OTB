@@ -7,32 +7,25 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimContainerEvent.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimContainerEvent.cpp 19965 2011-08-16 18:12:15Z gpotts $
 
 #include <ossim/base/ossimContainerEvent.h>
 
 RTTI_DEF1(ossimContainerEvent, "ossimContainerEvent", ossimEvent);
 
-ossimContainerEvent::ossimContainerEvent(ossimObject* obj1,
-                                         ossimObject* obj2,
+ossimContainerEvent::ossimContainerEvent(ossimObject* obj,
                                          long id)
-   :
-   ossimEvent(obj1, id),
-   theAssociatedObject(obj2)
+   :ossimEvent(obj, id)
 {
 }
 
-ossimObject* ossimContainerEvent::getAssociatedObject()
+void ossimContainerEvent::setObjectList(ossimObject* obj)
 {
-   return theAssociatedObject;
+   m_objectList.clear();
+   m_objectList.push_back(obj);
 }
 
-const ossimObject* ossimContainerEvent::getAssociatedObject()const
+void ossimContainerEvent::setObjectList(ObjectList& objects)
 {
-   return theAssociatedObject;
-}
-
-void ossimContainerEvent::setAssociatedObject(ossimObject* obj)
-{
-   theAssociatedObject = obj;
+   m_objectList = objects;
 }

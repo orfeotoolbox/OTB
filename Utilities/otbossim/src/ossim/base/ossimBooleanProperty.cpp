@@ -5,7 +5,7 @@
 // Author: Garrett Potts (gpotts@imagelinks.com)
 //
 //*************************************************************************
-// $Id: ossimBooleanProperty.cpp 17195 2010-04-23 17:32:18Z dburken $
+// $Id: ossimBooleanProperty.cpp 19888 2011-08-03 11:30:22Z gpotts $
 #include <ossim/base/ossimBooleanProperty.h>
 
 RTTI_DEF1(ossimBooleanProperty, "ossimBooleanProperty", ossimProperty);
@@ -59,7 +59,7 @@ bool ossimBooleanProperty::setBooleanValue(bool value,
 
 void ossimBooleanProperty::valueToString(ossimString& valueResult)const
 {
-   valueResult = theValue?"1":"0";
+   valueResult = theValue?"true":"false";
 }
 
 bool ossimBooleanProperty::getBoolean()const

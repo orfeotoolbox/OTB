@@ -10,10 +10,10 @@
 // $Id$
 
 #ifndef ossimInfoFactoryRegistry_HEADER
-#define ossimInfoFactoryRegistry_HEADER
+#define ossimInfoFactoryRegistry_HEADER 1
 
-#include <vector>
 #include <ossim/base/ossimConstants.h> /* for OSSIM_DLL macro */
+#include <vector>
 
 // Forward class declarations.
 class ossimInfoFactoryInterface;
@@ -73,6 +73,8 @@ protected:
       const ossimInfoFactoryRegistry& rhs);
    
    std::vector<ossimInfoFactoryInterface*> theFactoryList;
+
+   static ossimInfoFactoryRegistry* theInstance;
 };
 
 #endif /* #ifndef ossimInfoFactoryRegistry_HEADER */

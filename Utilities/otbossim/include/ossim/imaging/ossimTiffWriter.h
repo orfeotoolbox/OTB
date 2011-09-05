@@ -9,7 +9,7 @@
 // Contains class declaration for TiffWriter.
 //
 //*******************************************************************
-//  $Id: ossimTiffWriter.h 18047 2010-09-06 14:25:27Z dburken $
+//  $Id: ossimTiffWriter.h 20026 2011-09-01 16:33:18Z dburken $
 #ifndef ossimTiffWriter_HEADER
 #define ossimTiffWriter_HEADER
 
@@ -219,7 +219,6 @@ protected:
    ossimString             thePhotoMetric;
    ossim_int32             theJpegQuality;
    bool                    theOutputGeotiffTagsFlag;
-   bool                    theImagineNad27Flag;
    bool                    theColorLutFlag;
    ossimRefPtr<ossimMapProjectionInfo> theProjectionInfo;
    ossimIpt                theOutputTileSize;

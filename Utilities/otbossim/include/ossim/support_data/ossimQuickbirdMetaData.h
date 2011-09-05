@@ -12,17 +12,17 @@
 // $Id: ossimQuickbirdMetaData.h 14412 2009-04-27 16:58:46Z dburken $
 
 #ifndef ossimQuickbirdMetaData_HEADER
-#define ossimQuickbirdMetaData_HEADER
-
-#include <iosfwd>
+#define ossimQuickbirdMetaData_HEADER 1
 
 #include <ossim/base/ossimConstants.h>
+#include <ossim/base/ossimIpt.h>
 #include <ossim/base/ossimObject.h>
 #include <ossim/base/ossimString.h>
 
+#include <iosfwd>
+
 class ossimFilename;
 class ossimKeywordlist;
-
 
 class OSSIMDLLEXPORT ossimQuickbirdMetaData : public ossimObject
 {
@@ -100,31 +100,28 @@ public:
                       const char * format,
                       ossimString & name );
 
- 
+   const ossimIpt& getImageSize() const;
 
- /*****************************************
+/*****************************************
 *parseATTData EPH GEO IMD RPB TIL
 *
 ****************************************/
    
 private:
 
-   ossimString   theGenerationDate;
-   ossimString   theBandId;
-   int           theBitsPerPixel;	
-   ossimString   theSatID;
-   ossimString   theTLCDate;
-   ossim_float64 theSunAzimuth;
-   ossim_float64 theSunElevation;
-   ossim_float64 theSatAzimuth;
-   ossim_float64 theSatElevation;
-   int           theTDILevel;
+   ossimString         theGenerationDate;
+   ossimString         theBandId;
+   int                 theBitsPerPixel;	
+   ossimString         theSatID;
+   ossimString         theTLCDate;
+   ossim_float64       theSunAzimuth;
+   ossim_float64       theSunElevation;
+   ossim_float64       theSatAzimuth;
+   ossim_float64       theSatElevation;
+   int                 theTDILevel;
    std::vector<double> theAbsCalFactors;
-   ossimString    theBandNameList;
-   
-   /*ossim_uint32  theNumBands;*/
-   /*ossimString   theBandName;*/
-  /*ossim_uint32  theNumBands;*/
+   ossimString         theBandNameList;
+   ossimIpt            theImageSize;
 
 TYPE_DATA
 };

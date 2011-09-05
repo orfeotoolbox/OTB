@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimGeoAnnotationSource.cpp 18423 2010-11-16 16:05:12Z gpotts $
+// $Id: ossimGeoAnnotationSource.cpp 19900 2011-08-04 14:19:57Z dburken $
 
 #include <ossim/imaging/ossimGeoAnnotationSource.h>
 #include <ossim/imaging/ossimGeoAnnotationObject.h>
@@ -80,6 +80,7 @@ void ossimGeoAnnotationSource::setGeometry(ossimImageGeometry* geom)
 
 bool ossimGeoAnnotationSource::setView(ossimObject* baseObject)
 {
+   bool result = false;
    ossimProjection* proj = PTR_CAST(ossimProjection, baseObject);
    if(proj)
    {
@@ -92,13 +93,17 @@ bool ossimGeoAnnotationSource::setView(ossimObject* baseObject)
          m_geometry = new ossimImageGeometry(0, proj);
       }
       setGeometry(m_geometry.get());
-      return true;
+      result = true;
    }
    else
    {
       m_geometry = dynamic_cast<ossimImageGeometry*>(baseObject);
+      if ( m_geometry.valid() )
+      {
+         result = true;
+      }
    }
-   return false;
+   return result;
 }
 
 ossimObject* ossimGeoAnnotationSource::getView()

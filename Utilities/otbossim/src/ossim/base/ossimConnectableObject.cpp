@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimConnectableObject.cpp 19635 2011-05-24 13:26:31Z gpotts $
+// $Id: ossimConnectableObject.cpp 19969 2011-08-16 19:26:44Z gpotts $
 #include <ossim/base/ossimConnectableObject.h>
 #include <ossim/base/ossimIdManager.h>
 #include <ossim/base/ossimKeywordNames.h>
@@ -118,6 +118,11 @@ bool ossimConnectableObject::isConnected(ossimConnectableObjectDirectionType dir
    
    if(direction & CONNECTABLE_DIRECTION_OUTPUT)
    {
+      if(theOutputObjectList.empty())
+      {
+         return theOutputListIsFixedFlag;
+         
+      }
       ConnectableObjectList::const_iterator current = theOutputObjectList.begin();
       current = theOutputObjectList.begin();
       while(current != theOutputObjectList.end())
@@ -1208,28 +1213,20 @@ bool ossimConnectableObject::connectInputList(ConnectableObjectList& inputList)
       return (connectMyInputTo(inputList[0].get())>=0);
    }
    i = 0;
-   while(currentInput != inputList.end())
-   {
-      if(!canConnectMyInputTo(i, (*currentInput).get()))
-      {
-         result = false;
-      }
-      ++i;
-      ++currentInput;
-   }
-   
-   if(!result)
-   {
-      return false;
-   }
    // now connect the new outputs
    //
    currentInput = inputList.begin();
+   result = false;
+   
    while(currentInput != inputList.end())
    {
       if((*currentInput).valid())
       {
-         (*currentInput)->connectMyOutputTo(this, false);
+         if(connectMyInputTo((*currentInput).get(), false) >= 0)
+         {
+            newInputs.push_back((*currentInput).get());
+            result = true;
+         }
       }
       ++currentInput;
    }
@@ -1241,12 +1238,7 @@ bool ossimConnectableObject::connectInputList(ConnectableObjectList& inputList)
    
    if(theInputObjectList.size())
    {
-      theInputObjectList = inputList;
       fireEvent(event);
-   }
-   else
-   {
-      theInputObjectList = inputList;
    }
    
    newInputs          = theInputObjectList;

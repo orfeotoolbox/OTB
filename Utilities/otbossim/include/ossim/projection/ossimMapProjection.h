@@ -9,7 +9,7 @@
 // Base class for all map projections.
 // 
 //*******************************************************************
-//  $Id: ossimMapProjection.h 19386 2011-04-14 18:08:47Z dburken $
+//  $Id: ossimMapProjection.h 19880 2011-07-30 16:27:15Z dburken $
 
 #ifndef ossimMapProjection_HEADER
 #define ossimMapProjection_HEADER 1
@@ -100,13 +100,10 @@ public:
    virtual void update();
 
    virtual void setPcsCode(ossim_uint32 pcsCode);
-   virtual void setGcsCode(ossim_uint32 pcsCode);
 
    //! Returns the EPSG PCS code or 32767 if the projection is a custom (non-EPSG) projection
    virtual ossim_uint32 getPcsCode()const;
 
-   virtual ossim_uint32 getGcsCode()const;
-   
    /**
     *  Returns the projection name.
     */
@@ -296,6 +293,9 @@ public:
    
    void setProjectionUnits(ossimUnitType units) { theProjectionUnits = units; }
    ossimUnitType getProjectionUnits() const { return theProjectionUnits; }
+   
+   virtual bool isEqualTo(const ossimObject& obj, ossimCompareType compareType = OSSIM_COMPARE_FULL)const;
+
 
 protected:
    
@@ -362,9 +362,6 @@ protected:
    //! corresponding EPSG code can be determined. If the projection is NOT represented by any
    //! EPSG code, then the PCS is set to 32767.
    mutable ossim_uint32      thePcsCode;
-
-   /** Datum code (EPSG). */
-   mutable ossim_uint32      theGcsCode;
 
    bool              theElevationLookupFlag;
 

@@ -9,10 +9,7 @@
 // LATITUDE AND LONGITUDE VALUES ARE IN DEGREES.
 //
 //*******************************************************************
-//  $Id: ossimGpt.cpp 19649 2011-05-25 18:38:24Z gpotts $
-
-#include <iostream>
-#include <sstream>
+//  $Id: ossimGpt.cpp 19900 2011-08-04 14:19:57Z dburken $
 
 #include <ossim/base/ossimGpt.h>
 #include <ossim/base/ossimEcefPoint.h>
@@ -24,6 +21,8 @@
 #include <ossim/base/ossimGeoidManager.h>
 #include <ossim/base/ossimEllipsoid.h>
 #include <ossim/base/ossimGeocent.h>
+#include <iostream>
+#include <sstream>
 
 std::ostream& ossimGpt::print(std::ostream& os, ossim_uint32 precision) const
 {
@@ -320,17 +319,16 @@ void ossimGpt::changeDatum(const ossimDatum *datum)
    {
       if(datum)
       {
-	double h = hgt;
-        *this = datum->shift(*this);
-        if(ossim::isnan(h))
-        {
-           hgt = h;
-        }
-        theDatum = datum;
+         double h = hgt;
+         *this = datum->shift(*this);
+         if(ossim::isnan(h))
+         {
+            hgt = h;
+         }
+         theDatum = datum;
       }
    }
 }
-
 
 //*****************************************************************************
 //  METHOD: ossimGpt::toDmsString()
@@ -360,6 +358,65 @@ ossimString ossimGpt::toDmsString()const
    
    return result;
 }
+
+bool ossimGpt::isEqualTo(const ossimGpt& rhs, ossimCompareType compareType)const
+{
+   bool result = false;
+   if(!ossim::isnan(lat)&&!ossim::isnan(rhs.lat))
+   {
+      result = ossim::almostEqual(lat, rhs.lat);
+   }
+   else 
+   {
+      result = ossim::isnan(lat)&&ossim::isnan(rhs.lat);
+   }
+
+   if(result)
+   {
+      if(!ossim::isnan(lon)&&!ossim::isnan(rhs.lon))
+      {
+         result = ossim::almostEqual(lon, rhs.lon);
+      }
+      else 
+      {
+         result = ossim::isnan(lon)&&ossim::isnan(rhs.lon);
+      }
+   }
+   if(result)
+   {
+      if(!ossim::isnan(hgt)&&!ossim::isnan(rhs.hgt))
+      {
+         result = ossim::almostEqual(hgt, rhs.hgt);
+      }
+      else 
+      {
+         result = ossim::isnan(hgt)&&ossim::isnan(rhs.hgt);
+      }
+   }
+   
+   if(result)
+   {
+      if(theDatum&&rhs.theDatum)
+      {
+         if(compareType == OSSIM_COMPARE_FULL)
+         {
+            result = theDatum->isEqualTo(*rhs.theDatum);
+         }
+         else 
+         {
+            result = theDatum == rhs.theDatum;
+         }
+
+      }
+      else if(reinterpret_cast<ossim_uint64>(theDatum)|reinterpret_cast<ossim_uint64>(rhs.theDatum))
+      {
+         result = false;
+      }
+   }
+   
+   return result;
+}
+
 
 //*****************************************************************************
 //  METHOD: ossimGpt::distanceTo(ossimGpt)
@@ -452,3 +509,12 @@ ossimDpt ossimGpt::metersPerDegree() const
    return result;
 #endif
 }
+
+bool ossimGpt::operator==(const ossimGpt& gpt) const
+{
+   return ( ossim::almostEqual(lat, gpt.lat) &&
+            ossim::almostEqual(lon, gpt.lon) &&
+            ossim::almostEqual(hgt, gpt.hgt) &&
+            (*theDatum == *(gpt.theDatum)));
+}
+

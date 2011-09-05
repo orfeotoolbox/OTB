@@ -1,4 +1,4 @@
-// $Id: ossimVisitor.cpp 19758 2011-06-18 23:57:52Z dburken $
+// $Id: ossimVisitor.cpp 19918 2011-08-09 11:30:03Z gpotts $
 
 #include <ossim/base/ossimVisitor.h>
 #include <ossim/base/ossimConnectableObject.h>
@@ -25,19 +25,27 @@ ossimVisitor::VisitorType ossimVisitor::getVisitorType()const
    return m_visitorType;
 }
 
-void  ossimVisitor::setVisitorType(int vType)
+void  ossimVisitor::setVisitorType(int vType, bool on)
 {
-   m_visitorType = (VisitorType)(vType&VISIT_ALL);
+   if(on)
+   {
+      m_visitorType = (VisitorType)((vType|m_visitorType)&VISIT_ALL);
+   }
+   else 
+   {
+      m_visitorType = (VisitorType)(((~vType) & m_visitorType)&VISIT_ALL);
+   }
 }
 
 void ossimVisitor::turnOffVisitorType(int vType)
 {
-   m_visitorType = (VisitorType)(((~vType) & m_visitorType)&VISIT_ALL);
+   setVisitorType(vType, false);
 }
 
 void ossimVisitor::reset()
 {
    m_markNode.clear();
+   m_stopTraversalFlag = false;
 }
 
 void ossimVisitor::visit(ossimObject* obj)
@@ -47,7 +55,7 @@ void ossimVisitor::visit(ossimObject* obj)
 
 void ossimVisitor::visit(ossimConnectableObject* obj)
 {
-   ossimVisitor::visit(static_cast<ossimObject*>(obj));
+   visit(static_cast<ossimObject*>(obj));
 }
 
 bool ossimVisitor::hasVisited(ossimObject* obj)const
@@ -68,7 +76,7 @@ m_id(id)
 
 ossimIdVisitor::ossimIdVisitor(const ossimIdVisitor& src)
 :ossimVisitor(src),
-m_connectableObject(src.m_connectableObject),
+m_object(src.m_object),
 m_id(src.m_id)
 {
 }
@@ -84,7 +92,7 @@ void ossimIdVisitor::visit(ossimConnectableObject* obj)
    {
       if(obj->getId() == m_id)
       {
-         m_connectableObject = obj;
+         m_object = obj;
          m_stopTraversalFlag = true;
       }
       ossimVisitor::visit(obj);
@@ -93,17 +101,18 @@ void ossimIdVisitor::visit(ossimConnectableObject* obj)
 
 void ossimIdVisitor::reset()
 {
-   m_connectableObject = 0;
+   ossimVisitor::reset();
+   m_object = 0;
 }
 
 ossimConnectableObject* ossimIdVisitor::getObject()
 {
-   return m_connectableObject;
+   return m_object;
 }
 
 const ossimConnectableObject* ossimIdVisitor::getObject()const
 {
-   return m_connectableObject;
+   return m_object;
 }
 
 void ossimIdVisitor::setId(const ossimId& id)
@@ -142,27 +151,6 @@ void ossimCollectionVisitor::reset()
    m_collection.clear();
 }
 
-ossimConnectableObject* ossimCollectionVisitor::getObject(ossim_uint32 idx)
-{
-   if(idx < m_collection.size())
-   {
-      return m_collection[idx].get();
-   }
-   
-   return 0;
-}
-
-const ossimConnectableObject* ossimCollectionVisitor::getObject(ossim_uint32 idx)const
-{
-   if(idx < m_collection.size())
-   {
-      return m_collection[idx].get();
-   }
-   
-   return 0;
-}
-
-
 ossimTypeNameVisitor::ossimTypeNameVisitor(int visitorType)
 :ossimCollectionVisitor(visitorType)
 {
@@ -186,7 +174,7 @@ ossimRefPtr<ossimVisitor> ossimTypeNameVisitor::dup()const
    return new ossimTypeNameVisitor(*this);
 }
 
-void ossimTypeNameVisitor::visit(ossimConnectableObject* obj)
+void ossimTypeNameVisitor::visit(ossimObject* obj)
 {
    if(!hasVisited(obj))
    {
@@ -242,7 +230,7 @@ const RTTItypeid& ossimTypeIdVisitor::getTypeId()const
    return m_typeId;
 }
 
-void ossimTypeIdVisitor::visit(ossimConnectableObject* obj)
+void ossimTypeIdVisitor::visit(ossimObject* obj)
 {
    if(!hasVisited(obj))
    {
@@ -271,12 +259,16 @@ ossimRefPtr<ossimVisitor> ossimEventVisitor::dup()const
    return new ossimEventVisitor(*this);
 }
 
-void ossimEventVisitor::visit(ossimConnectableObject* obj)
+void ossimEventVisitor::visit(ossimObject* obj)
 {
    if(!hasVisited(obj))
    {
-      obj->fireEvent(*m_event);
-      ossimVisitor::visit(obj);
+      ossimListenerManager* manager = dynamic_cast<ossimListenerManager*> (obj);
+      if(manager)
+      {
+         manager->fireEvent(*m_event);
+         ossimVisitor::visit(obj);
+      }
    }
 }
 
@@ -299,7 +291,7 @@ ossimRefPtr<ossimVisitor> ossimViewInterfaceVisitor::dup()const
    return new ossimViewInterfaceVisitor(*this);
 }
 
-void ossimViewInterfaceVisitor::visit(ossimConnectableObject* obj)
+void ossimViewInterfaceVisitor::visit(ossimObject* obj)
 {
    if( !hasVisited(obj) )
    {

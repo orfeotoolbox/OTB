@@ -9,7 +9,7 @@
 // Description: This class provides manipulation of filenames.
 //
 //*************************************************************************
-// $Id: ossimFilename.h 19682 2011-05-31 14:21:20Z dburken $
+// $Id: ossimFilename.h 19798 2011-06-30 15:34:43Z dburken $
 
 #ifndef ossimFilename_HEADER
 #define ossimFilename_HEADER
@@ -33,6 +33,7 @@ public:
    ossimFilename();
    ossimFilename(const ossimFilename& src);
    ossimFilename(const ossimString& src);
+   ossimFilename(const std::string& src);
    ossimFilename(const char* src);
 
    template <class Iter> ossimFilename(Iter s, Iter e);

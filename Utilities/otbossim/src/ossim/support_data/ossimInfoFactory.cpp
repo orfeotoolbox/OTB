@@ -15,6 +15,7 @@
 #include <ossim/support_data/ossimInfoBase.h>
 #include <ossim/support_data/ossimCcfInfo.h>
 #include <ossim/support_data/ossimDemInfo.h>
+#include <ossim/support_data/ossimDoqq.h>
 #include <ossim/support_data/ossimDtedInfo.h>
 #include <ossim/support_data/ossimJ2kInfo.h>
 #include <ossim/support_data/ossimLasInfo.h>
@@ -82,6 +83,12 @@ ossimInfoBase* ossimInfoFactory::create(const ossimFilename& file) const
    {
       return result.release();
    }
+
+   result = new ossimDoqq();
+   if ( result->open(file) )
+   {
+      return result.release();
+   }   
    
    result = new ossimCcfInfo();
    if ( result->open(file) )

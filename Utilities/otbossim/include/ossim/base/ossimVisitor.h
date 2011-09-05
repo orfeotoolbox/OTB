@@ -1,4 +1,4 @@
-// $Id: ossimVisitor.h 19758 2011-06-18 23:57:52Z dburken $
+// $Id: ossimVisitor.h 19918 2011-08-09 11:30:03Z gpotts $
 
 #ifndef ossimVisitor_HEADER
 #define ossimVisitor_HEADER 1
@@ -16,12 +16,11 @@ class ossimConnectableObject;
 class OSSIM_DLL ossimVisitor : public ossimReferenced
 {
 public:
-   typedef std::set<ossimRefPtr<ossimObject> >               MarkCollectionRef;
-   typedef std::set<ossimRefPtr<ossimConnectableObject> >    CollectionRef;
-   typedef std::vector<ossimRefPtr<ossimConnectableObject> > ListRef;
-   typedef std::set<ossimObject* >               MarkCollection;
-   typedef std::set<ossimConnectableObject*>    Collection;
-   typedef std::vector<ossimConnectableObject* > List;
+   typedef std::set<ossimRefPtr<ossimObject> >    MarkCollectionRef;
+   typedef std::set<ossimRefPtr<ossimObject> >    CollectionRef;
+   typedef std::vector<ossimRefPtr<ossimObject> > ListRef;
+   typedef std::set<ossimObject*>                 Collection;
+   typedef std::vector<ossimObject* >             List;
    /**
     * Enumeration type can be a mask and will traverse a graph of connectables based on the values.
     */
@@ -41,26 +40,61 @@ public:
    virtual void visit(ossimObject* obj);
    virtual void visit(ossimConnectableObject* obj);
    VisitorType getVisitorType()const;
-   void setVisitorType(int vType);
+   void setVisitorType(int vType, bool on=true);
    void turnOffVisitorType(int vType);
    bool hasVisited(ossimObject* obj)const;
    bool stopTraversal()const;
 protected:
-   VisitorType  m_visitorType;
-   MarkCollection   m_markNode;
-   mutable bool m_stopTraversalFlag;
+   VisitorType            m_visitorType;
+   mutable Collection     m_markNode;
+   mutable bool           m_stopTraversalFlag;
 };
 
 class OSSIM_DLL ossimCollectionVisitor : public ossimVisitor
 {
 public:
-   
    ossimCollectionVisitor(int visitorType =(VISIT_INPUTS|VISIT_CHILDREN));
    ossimCollectionVisitor(const ossimCollectionVisitor& src);
    ListRef& getObjects();
    const ListRef& getObjects()const;
-   ossimConnectableObject* getObject(ossim_uint32 idx=0);
-   const ossimConnectableObject* getObject(ossim_uint32 idx=0)const;
+   ossimObject* getObject(ossim_uint32 idx = 0)
+   {
+      if(idx < m_collection.size())
+      {
+         return m_collection[idx].get();
+      }
+      
+      return 0;
+   }
+   const ossimObject* getObject(ossim_uint32 idx = 0)const
+   {
+      if(idx < m_collection.size())
+      {
+         return m_collection[idx].get();
+      }
+      
+      return 0;
+   }
+   template <class T>
+   T* getObjectAs(ossim_uint32 idx=0)
+   {
+      if(idx < m_collection.size())
+      {
+         return dynamic_cast<T*>(m_collection[idx].get());
+      }
+      
+      return 0;
+   }
+   template<class T>
+   const T* getObjectAs(ossim_uint32 idx=0)const
+   {
+      if(idx < m_collection.size())
+      {
+         return dynamic_cast<const T*>(m_collection[idx].get());
+      }
+      
+      return 0;
+   }
    virtual void reset();
  
 protected:
@@ -76,12 +110,13 @@ public:
    virtual ossimRefPtr<ossimVisitor> dup()const;
    virtual void visit(ossimConnectableObject* obj);
    virtual void reset();
+   
    ossimConnectableObject* getObject();
    const ossimConnectableObject* getObject()const;
    void setId(const ossimId& id);
    const ossimId& getId()const;
 protected:
-   ossimConnectableObject* m_connectableObject;
+   ossimConnectableObject* m_object;
    ossimId m_id;
 };
 
@@ -92,7 +127,7 @@ public:
    ossimTypeNameVisitor(const ossimString& typeName, bool firstofTypeFlag=false, int visitorType =(VISIT_INPUTS|VISIT_CHILDREN));
    ossimTypeNameVisitor(const ossimTypeNameVisitor& src);
    virtual ossimRefPtr<ossimVisitor> dup()const;
-   virtual void visit(ossimConnectableObject* obj);
+   virtual void visit(ossimObject* obj);
    void setTypeName(const ossimString& typeName);
    const ossimString& getTypeName()const;
 protected:
@@ -107,7 +142,7 @@ public:
    ossimTypeIdVisitor(const RTTItypeid& typeId, bool firstofTypeFlag=false, int visitorType =(VISIT_INPUTS|VISIT_CHILDREN));
    ossimTypeIdVisitor(const ossimTypeIdVisitor& src);
    virtual ossimRefPtr<ossimVisitor> dup()const;
-   virtual void visit(ossimConnectableObject* obj);
+   virtual void visit(ossimObject* obj);
    void setTypeId(const RTTItypeid& typeId);
    const RTTItypeid& getTypeId()const;
 protected:
@@ -122,7 +157,7 @@ public:
                       int visitorType =(VISIT_OUTPUTS|VISIT_CHILDREN));
    ossimEventVisitor(const ossimEventVisitor& src);
    virtual ossimRefPtr<ossimVisitor> dup()const;
-   virtual void visit(ossimConnectableObject* obj);
+   virtual void visit(ossimObject* obj);
    
 protected:
    ossimRefPtr<ossimEvent> m_event;
@@ -150,7 +185,7 @@ public:
     *
     * @param obj Object to visit.
     */
-   virtual void visit(ossimConnectableObject* obj);
+   virtual void visit(ossimObject* obj);
    
 protected:
    ossimRefPtr<ossimObject> m_view;

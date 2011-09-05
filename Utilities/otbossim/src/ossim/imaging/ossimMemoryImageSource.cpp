@@ -30,6 +30,7 @@ void ossimMemoryImageSource::setImage(ossimRefPtr<ossimImageData> image)
 	{
 		m_boundingRect.makeNan();
 	}
+   m_result = 0;
 }
 
 void ossimMemoryImageSource::setImage(ossimScalarType scalarType,
@@ -45,6 +46,7 @@ void ossimMemoryImageSource::setImage(ossimScalarType scalarType,
    m_image->initialize();
    
    m_boundingRect = m_image->getImageRectangle();
+   m_result = 0;
 }
 
 void ossimMemoryImageSource::setRect(ossim_uint32 ulx,
@@ -137,8 +139,7 @@ ossimIrect ossimMemoryImageSource::getBoundingRect(ossim_uint32 resLevel)const
 ossimRefPtr<ossimImageData> ossimMemoryImageSource::getTile(const ossimIrect& rect,
                                                             ossim_uint32 /* resLevel */)
 {
-   if(!m_image.valid()) return 0;
-   if(m_boundingRect.hasNans()) return 0;
+   if(!isSourceEnabled()||!m_image.valid()||m_boundingRect.hasNans()) return 0;
    if(!m_result.valid())
    {
       m_result = new ossimImageData(0, getOutputScalarType(), getNumberOfOutputBands(), rect.width(), rect.height());
@@ -166,6 +167,7 @@ bool ossimMemoryImageSource::canConnectMyInputTo(ossim_int32 /* myInputIndex */,
    
 void ossimMemoryImageSource::initialize()
 {
+   m_result = 0;
 }
 
 ossim_uint32 ossimMemoryImageSource::getNumberOfDecimationLevels() const
@@ -197,29 +199,46 @@ void ossimMemoryImageSource::getDecimationFactors(std::vector<ossimDpt>& decimat
 bool ossimMemoryImageSource::saveState(ossimKeywordlist& kwl, const char* prefix)const
 {
    
+   ossimString imagePrefix = ossimString(prefix) + "image.";
+   ossimString geomPrefix = ossimString(prefix) + "geom.";
+   if(m_image.valid())
+   {
+      m_image->saveState(kwl, imagePrefix);
+   }
+   if(m_geometry.valid())
+   {
+      m_geometry->saveState(kwl, geomPrefix);
+   }
    return ossimImageSource::saveState(kwl, prefix);
 }
 
 bool ossimMemoryImageSource::loadState(const ossimKeywordlist& kwl, const char* prefix)
 {
-   ossimString boundsString     = kwl.find(prefix, "rect");
-   ossimString scalarTypeString = kwl.find(prefix, ossimKeywordNames::SCALAR_TYPE_KW);
-   ossimString nBandsString     = kwl.find(prefix, ossimKeywordNames::NUMBER_BANDS_KW);
-   
-   m_boundingRect.makeNan();
-   if(!boundsString.empty()&&!scalarTypeString.empty()&&!nBandsString.empty())
+   bool returnResult =  ossimImageSource::loadState(kwl, prefix);
+   m_geometry = 0;
+   if(returnResult)
    {
-      m_boundingRect.toRect(boundsString);
-      ossimScalarType scalarType = ossimScalarTypeLut::instance()->getScalarTypeFromString(scalarTypeString);
-      ossim_uint32 numberOfBands = nBandsString.toUInt32();
+      ossimString imagePrefix = ossimString(prefix) + "image.";
+      ossimString geomPrefix = ossimString(prefix) + "geom.";
       
-      if(scalarType!=OSSIM_SCALAR_UNKNOWN)
+      ossimString type = kwl.find(imagePrefix, "type");
+      if(!type.empty())
       {
-         m_image = new ossimImageData(0, scalarType, numberOfBands, m_boundingRect.width(), m_boundingRect.height());
-         m_image->setImageRectangle(m_boundingRect);
-         m_image->initialize();
+         m_image = new ossimImageData();
+         returnResult = m_image->loadState(kwl, imagePrefix.c_str());
+         m_boundingRect = m_image->getImageRectangle();
+      }
+      
+      if(returnResult)
+      {
+         type = kwl.find(geomPrefix, "type");
+         if(!type.empty())
+         {
+            m_geometry = new ossimImageGeometry();
+            returnResult = m_geometry->loadState(kwl, geomPrefix.c_str());
+         }
       }
    }
-
-   return ossimImageSource::loadState(kwl, prefix);
+   m_result = 0;
+   return returnResult;
 }

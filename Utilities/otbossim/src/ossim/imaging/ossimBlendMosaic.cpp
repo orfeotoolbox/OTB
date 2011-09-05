@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimBlendMosaic.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimBlendMosaic.cpp 19900 2011-08-04 14:19:57Z dburken $
 
 #include <ossim/imaging/ossimBlendMosaic.h>
 #include <ossim/imaging/ossimImageData.h>
@@ -508,7 +508,7 @@ void ossimBlendMosaic::setNumberOfWeights(ossim_uint32 numberOfWeights)
 {
    if(numberOfWeights > theWeights.size())
    {
-      ossim_uint32 length = numberOfWeights - theWeights.size();
+      ossim_uint32 length = numberOfWeights - (ossim_uint32) theWeights.size();
       for(ossim_uint32 index= 0; index < length; ++ index)
       {
          theWeights.push_back(1.0);

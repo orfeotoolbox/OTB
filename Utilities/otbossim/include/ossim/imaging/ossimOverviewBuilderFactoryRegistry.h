@@ -7,18 +7,17 @@
 // Description: The factory registry for overview builders.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimOverviewBuilderFactoryRegistry.h 19184 2011-03-23 11:59:03Z gpotts $
+// $Id: ossimOverviewBuilderFactoryRegistry.h 19907 2011-08-05 19:55:46Z dburken $
 
 #ifndef ossimOverviewBuilderFactoryRegistry_HEADER
-#define ossimOverviewBuilderFactoryRegistry_HEADER
-
-#include <vector>
+#define ossimOverviewBuilderFactoryRegistry_HEADER 1
 
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimString.h>
 #include <ossim/imaging/ossimOverviewBuilderFactoryBase.h>
 #include <ossim/imaging/ossimOverviewBuilderBase.h>
 #include <ossim/base/ossimFactoryListInterface.h>
+#include <vector>
 
 /**
  * @class ossimOverviewBuilderFactoryRegistry
@@ -31,8 +30,9 @@
  * ossimOverviewBuilderFactoryRegistry::instance()->createBuilder(
  * someStringFromTypeList);
  */
-class OSSIM_DLL ossimOverviewBuilderFactoryRegistry : public ossimObjectFactory, 
-                                                      public ossimFactoryListInterface<ossimOverviewBuilderFactoryBase, ossimOverviewBuilderBase>
+class OSSIM_DLL ossimOverviewBuilderFactoryRegistry :
+   public ossimObjectFactory, 
+   public ossimFactoryListInterface<ossimOverviewBuilderFactoryBase, ossimOverviewBuilderBase>
 {
 public:
 
@@ -42,20 +42,16 @@ public:
     */
    static ossimOverviewBuilderFactoryRegistry* instance();
 
-
    /*!
     * Creates an object given a type name.
     */
-   virtual ossimObject* createObject(const ossimString& typeName)const
-   {
-      return createObjectFromRegistry(typeName);
-   }
+   virtual ossimObject* createObject(const ossimString& typeName) const;
    
    /*!
     * Creates and object given a keyword list.
     */
    virtual ossimObject* createObject(const ossimKeywordlist& kwl,
-                                     const char* prefix=0)const;
+                                     const char* prefix=0) const;
    /**
     * @brief Creates a builder from a string.  This should match a string from
     * the getTypeNameList() method.
@@ -75,10 +71,7 @@ public:
     *
     * @param typeList List of ossimStrings to add to.
     */
-   virtual void getTypeNameList(std::vector<ossimString>& typeList)const
-   {
-      getAllTypeNamesFromRegistry(typeList);
-   }
+   virtual void getTypeNameList(std::vector<ossimString>& typeList) const;
    
 private:
    /** default constructor hidden from use */
@@ -92,8 +85,6 @@ private:
 
    /** The static instance of this class. */
    static ossimOverviewBuilderFactoryRegistry* m_instance;
-
-   
 };
 
 #endif /* #ifndef ossimOverviewBuilderFactoryRegistry_HEADER */

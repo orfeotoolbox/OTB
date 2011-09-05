@@ -28,6 +28,8 @@ public:
    virtual int cancel();
    bool isEmpty()const;
    
+   bool isProcessingJob()const;
+   
 protected:
    virtual ~ossimJobThreadQueue();
    

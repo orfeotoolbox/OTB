@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageChain.cpp 19635 2011-05-24 13:26:31Z gpotts $
+// $Id: ossimImageChain.cpp 19968 2011-08-16 19:26:20Z gpotts $
 #include <algorithm>
 #include <iostream>
 #include <iterator>
@@ -164,6 +164,11 @@ bool ossimImageChain::addLast(ossimConnectableObject* obj)
          theImageChainList.push_back(obj);
          
          obj->addListener((ossimConnectableObjectListener*)this);
+         // Send an event to any listeners.
+         ossimContainerEvent event((ossimObject*)this,
+                                   OSSIM_EVENT_ADD_OBJECT_ID);
+         event.setObjectList(obj);
+         fireEvent(event);
          return true;
       }
    }
@@ -519,98 +524,68 @@ bool ossimImageChain::addChild(ossimConnectableObject* object)
 
 bool ossimImageChain::removeChild(ossimConnectableObject* object)
 {
-   vector<ossimRefPtr<ossimConnectableObject> >::iterator current =  theImageChainList.begin();
-   ossim_uint32 i = 0;
-   while(current != theImageChainList.end())
+   bool result = false;
+   vector<ossimRefPtr<ossimConnectableObject> >::iterator current =  std::find(theImageChainList.begin(), theImageChainList.end(), object);
+   
+   
+   if(current!=theImageChainList.end())
    {
-      if((*current).valid())
+      result = true;
+      object->removeListener((ossimConnectableObjectListener*)this);
+      if(current == theImageChainList.begin())
       {
-         if(object == (*current).get())
+         object->removeListener((ossimConnectableObjectListener*)theChildListener);
+      }
+      if(theImageChainList.size() == 1)
+      {
+         object->changeOwner(0);
+         current = theImageChainList.erase(current);
+      }
+      else 
+      {
+         ossimConnectableObject::ConnectableObjectList input  = object->getInputList();
+         ossimConnectableObject::ConnectableObjectList output = object->getOutputList();
+         object->changeOwner(0);// set the owner to 0
+         bool erasingBeginning = (current == theImageChainList.begin());
+         bool erasingEnd = (current+1) == theImageChainList.end();
+         current = theImageChainList.erase(current);
+         object->disconnect();
+         
+         if(!theImageChainList.empty())
          {
-            // Send an event to any listeners.
-            ossimContainerEvent event((ossimObject*)this,
-                                      (ossimObject*)object,
-                                      OSSIM_EVENT_REMOVE_OBJECT_ID);
-            fireEvent(event);
-            object->changeOwner(NULL);
-
-            // Remove listerners we added.
-            object->removeListener((ossimConnectableObjectListener*)this);
-            if ( i == 0 )
+            if(erasingBeginning) // the one that receives the first getTile
             {
-               object->removeListener((ossimConnectableObjectListener*)theChildListener);
+               (*theImageChainList.begin())->addListener(theChildListener);
             }
             
-            ossimConnectableObject::ConnectableObjectList input  = object->getInputList();
-            ossimConnectableObject::ConnectableObjectList output = object->getOutputList();
-            
-            // remember the old size before removing
-            ossim_uint32 chainSize = (ossim_uint32)theImageChainList.size();
-
-            // Erase from our list.
-            current = theImageChainList.erase(current);
-
-            // Disconnect input and outputs.
-            object->disconnect();
-
-            if( (i == 0) &&  theImageChainList.size() ) 
+            else if(current==theImageChainList.end()) // one that receives the last getTIle
             {
-               //---
-               // Child was first in the chain and there are still objects.
-               // Add input or "Child" listener to the new beginning of chain.
-               //---
-               theImageChainList[0]->addListener(theChildListener);
+               current = theImageChainList.begin()+(theImageChainList.size()-1);
+               (*current)->connectInputList(input);
+               theInputObjectList = (*current)->getInputList();
+               theInputListIsFixedFlag = (*current)->getInputListIsFixedFlag();
             }
-            else if(i == (chainSize-1)) // is it the last
+            else
             {
-               if(chainSize > 1)
+               // prepare interior setup and removal and connect surrounding nodes
+               // take the  outputs of the node we are removing and connect them to the old inputs 
+               ossim_uint32 outIndex = 0;
+               for(outIndex = 0; outIndex < output.size();++outIndex)
                {
-                  ossimConnectableObject* tempObj = theImageChainList[theImageChainList.size()-1].get();
-                  if(tempObj)
-                  {
-                     tempObj->connectInputList(input);
-                  }
+                  output[outIndex]->connectInputList(input);
                }
             }
-            else // must be an interior
-            {
-               ossim_uint32 inIndex  = 0;
-               
-               for(inIndex = 0; inIndex < input.size(); ++inIndex)
-               {
-                  if(input[inIndex].valid())
-                  {
-                     input[inIndex]->disconnectAllOutputs();
-                     input[inIndex]->connectOutputList(output);
-                  }
-               }
-            }
-            
-            return true;
          }
       }
-      ++current;
-      ++i;
+
+      // Send an event to any listeners.
+      ossimContainerEvent event((ossimObject*)this,
+                                OSSIM_EVENT_REMOVE_OBJECT_ID);
+      event.setObjectList(object);
+      fireEvent(event);
    }
    
-   current =  theImageChainList.begin();
-   
-   while(current != theImageChainList.end())
-   {
-      ossimConnectableContainerInterface* child=PTR_CAST(ossimConnectableContainerInterface, (*current).get());
-      
-      if(child)
-      {
-         bool result = child->removeChild(object);
-         if(result)
-         {
-            return result;
-         }
-      }
-      ++current;
-   }
-   
-   return false;
+   return result;
 }
 
 ossimConnectableObject* ossimImageChain::removeChild(const ossimId& id)
@@ -680,7 +655,6 @@ bool ossimImageChain::add(ossimConnectableObject* source)
      }
      else
      {
-#if 1
         theInputListIsFixedFlag = false;
         theOutputListIsFixedFlag = false;
         
@@ -688,36 +662,21 @@ bool ossimImageChain::add(ossimConnectableObject* source)
         {
            source->connectInputList(getInputList());
         }
-        else
-        {
-           theInputObjectList = source->getInputList();
-        }
-        theInputListIsFixedFlag = source->getInputListIsFixedFlag();
-        theOutputObjectList      = source->getOutputList();
-        theOutputListIsFixedFlag = source->getOutputListIsFixedFlag();
-        theImageChainList.push_back(source);
-        source->addListener((ossimConnectableObjectListener*)this);
-        theImageChainList[0]->addListener(theChildListener);
-        result = true;
-#endif
-#if 0
         theInputObjectList = source->getInputList();
         theInputListIsFixedFlag = source->getInputListIsFixedFlag();
-        
-        theOutputObjectList      = source->getOutputList();
-        theOutputListIsFixedFlag = source->getOutputListIsFixedFlag();
-   
+     //   theOutputObjectList     = source->getOutputList();
+     //   theOutputListIsFixedFlag= source->getOutputListIsFixedFlag();
         theImageChainList.push_back(source);
         source->addListener((ossimConnectableObjectListener*)this);
-        theImageChainList[0]->addListener(theChildListener);
+        source->addListener(theChildListener);
         result = true;
-#endif
      }
    }
 
    if (result && source)
    {
-      ossimContainerEvent event(this, source, OSSIM_EVENT_ADD_OBJECT_ID);
+      ossimContainerEvent event(this, OSSIM_EVENT_ADD_OBJECT_ID);
+      event.setObjectList(source);
       fireEvent(event);
    }
    
@@ -727,23 +686,16 @@ bool ossimImageChain::add(ossimConnectableObject* source)
 bool ossimImageChain::insertRight(ossimConnectableObject* newObj,
                                   ossimConnectableObject* rightOfThisObj)
 {
+   if(!newObj&&!rightOfThisObj) return false;
    if(!theImageChainList.size())
    {
       return add(newObj);
    }
+   std::vector<ossimRefPtr<ossimConnectableObject> >::iterator iter = std::find(theImageChainList.begin(), theImageChainList.end(), rightOfThisObj);
    
-   if(findObject(rightOfThisObj, false))
+   if(iter!=theImageChainList.end())
    {
-      std::vector<ossimRefPtr<ossimConnectableObject> >::iterator iter = theImageChainList.begin();
-      while(iter != theImageChainList.end())
-      {
-         if( (*iter) == rightOfThisObj)
-         {
-            break;
-         }
-         ++iter;
-      }
-      if(rightOfThisObj == theImageChainList[0].get())
+      if(iter == theImageChainList.begin())
       {
          return add(newObj);
       }
@@ -758,12 +710,10 @@ bool ossimImageChain::insertRight(ossimConnectableObject* newObj,
          newObj->changeOwner(this);
          newObj->addListener((ossimConnectableObjectListener*)this);
          theImageChainList.insert(iter, newObj);
-         if (newObj)
-         {
-            // Send event to any listeners.
-            ossimContainerEvent event(this, newObj, OSSIM_EVENT_ADD_OBJECT_ID);
-            fireEvent(event);
-         }
+         // Send event to any listeners.
+         ossimContainerEvent event(this, OSSIM_EVENT_ADD_OBJECT_ID);
+         event.setObjectList(newObj);
+         fireEvent(event);
          return true;
       }
    }
@@ -786,42 +736,33 @@ bool ossimImageChain::insertRight(ossimConnectableObject* newObj,
 bool ossimImageChain::insertLeft(ossimConnectableObject* newObj,
                                  ossimConnectableObject* leftOfThisObj)
 {
+   if(!newObj&&!leftOfThisObj) return false;
    if(!theImageChainList.size())
    {
       return add(newObj);
    }
-   
-   if(findObject(leftOfThisObj, false))
+   std::vector<ossimRefPtr<ossimConnectableObject> >::iterator iter = std::find(theImageChainList.begin(), theImageChainList.end(), leftOfThisObj);
+   if(iter!=theImageChainList.end())
    {
-      std::vector<ossimRefPtr<ossimConnectableObject> >::iterator iter = theImageChainList.begin();
-
-      while(iter != theImageChainList.end())
-      {
-         if( (*iter) == leftOfThisObj)
-         {
-            break;
-         }
-         ++iter;
-      }
-      if(leftOfThisObj==theImageChainList[theImageChainList.size()-1].get())
+      if((iter+1)==theImageChainList.end())
       {
          return addLast(newObj);
       }
-      else //if(PTR_CAST(ossimImageSource, newObj))
+      else
       {
          ossimConnectableObject::ConnectableObjectList inputList = leftOfThisObj->getInputList();
-         leftOfThisObj->disconnectAllInputs();
+         
          newObj->connectInputList(inputList);
+         
+         leftOfThisObj->disconnectAllInputs();
          leftOfThisObj->connectMyInputTo(newObj);
          newObj->changeOwner(this);
          newObj->addListener((ossimConnectableObjectListener*)this);
          theImageChainList.insert(iter+1, newObj);
-         if (newObj)
-         {
-            // Send an event to any listeners.
-            ossimContainerEvent event(this, newObj, OSSIM_EVENT_ADD_OBJECT_ID);
-            fireEvent(event);
-         }
+         // Send an event to any listeners.
+         ossimContainerEvent event(this, OSSIM_EVENT_ADD_OBJECT_ID);
+         event.setObjectList(newObj);
+         fireEvent(event);
          return true;
       }
    }
@@ -847,10 +788,11 @@ bool ossimImageChain::replace(ossimConnectableObject* newObj,
    ossim_int32 idx = indexOf(oldObj);
    if(idx >= 0)
    {
-      ossimConnectableObject::ConnectableObjectList& inputList = getInputList();
+      ossimConnectableObject::ConnectableObjectList& inputList  = oldObj->getInputList();
       ossimConnectableObject::ConnectableObjectList& outputList = oldObj->getOutputList();
       oldObj->removeListener((ossimConnectableObjectListener*)this);
       oldObj->removeListener(theChildListener);
+      oldObj->changeOwner(0);
       theImageChainList[idx] = newObj;
       newObj->connectInputList(inputList);
       newObj->connectOutputList(outputList);
@@ -1601,22 +1543,30 @@ void ossimImageChain::disableSource()
    theEnableFlag = false;
 }
 
+void ossimImageChain::prepareForRemoval(ossimConnectableObject* connectableObject)
+{
+   if(connectableObject)
+   {
+      connectableObject->removeListener((ossimConnectableObjectListener*)this);
+      connectableObject->removeListener(theChildListener);
+      connectableObject->changeOwner(0);
+      connectableObject->disconnect();   
+   }
+}
+
 bool ossimImageChain::deleteFirst()
 {
    if (theImageChainList.size() == 0) return false;
 
+   ossimContainerEvent event(this, OSSIM_EVENT_REMOVE_OBJECT_ID);
+   prepareForRemoval(theImageChainList[0].get());
    // Clear any listeners, memory.
-   ossim_uint32 idx = 0;
-   theImageChainList[idx]->
-      removeListener((ossimConnectableObjectListener*)this);
-   theImageChainList[idx]->removeListener(theChildListener);
-   theImageChainList[idx]->changeOwner(NULL);
-   theImageChainList[idx]->disconnect();   
-   theImageChainList[idx] = 0;
-   
+   event.setObjectList(theImageChainList[0].get());
+   theImageChainList[0] = 0;
    // Remove from the vector.
    std::vector<ossimRefPtr<ossimConnectableObject> >::iterator i = theImageChainList.begin();
    theImageChainList.erase(i);
+   fireEvent(event);
    return true;
 }
 
@@ -1624,16 +1574,15 @@ bool ossimImageChain::deleteLast()
 {
    if (theImageChainList.size() == 0) return false;
 
-   // Clear any listeners, memory.
+   ossimContainerEvent event(this, OSSIM_EVENT_REMOVE_OBJECT_ID);
+  // Clear any listeners, memory.
    ossim_uint32 idx = (ossim_uint32)theImageChainList.size() - 1;
-   theImageChainList[idx]->
-      removeListener((ossimConnectableObjectListener*)this);
-   theImageChainList[idx]->removeListener(theChildListener);
-   theImageChainList[idx]->changeOwner(NULL);
-   theImageChainList[idx]->disconnect();   
+   prepareForRemoval(theImageChainList[idx].get());
+   event.setObjectList(theImageChainList[idx].get());
    theImageChainList[idx] = 0;
    // Remove from the vector.
    theImageChainList.pop_back();
+   fireEvent(event);
    return true; 
 }
 
@@ -1641,21 +1590,21 @@ void ossimImageChain::deleteList()
 {
    ossim_uint32 upper = theImageChainList.size();
    ossim_uint32 idx = 0;
+   ossimContainerEvent event(this, OSSIM_EVENT_REMOVE_OBJECT_ID);
    for(; idx < upper; ++idx)
    {
       if(theImageChainList[idx].valid())
       {
-         theImageChainList[idx]->removeListener((ossimConnectableObjectListener*)this);
-         if(theChildListener)
-         {
-            theImageChainList[idx]->removeListener(theChildListener);
-         }
-         theImageChainList[idx]->disconnect();
+         event.getObjectList().push_back(theImageChainList[idx].get());
+         prepareForRemoval(theImageChainList[idx].get());
+         theImageChainList[idx] = 0;
       }
    }
-   
+  
    theImageChainList.clear();
+   fireEvent(event);
 }
+
 
 void ossimImageChain::disconnectInputEvent(ossimConnectionEvent& event)
 {

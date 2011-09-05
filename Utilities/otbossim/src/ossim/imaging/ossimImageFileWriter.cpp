@@ -8,7 +8,7 @@
 //
 // Contains class declaration for ossimImageFileWriter.
 //*******************************************************************
-//  $Id: ossimImageFileWriter.cpp 19180 2011-03-22 17:36:33Z oscarkramer $
+//  $Id: ossimImageFileWriter.cpp 19944 2011-08-12 18:10:54Z gpotts $
 
 
 #include <tiff.h> /* for tiff compression defines */
@@ -48,9 +48,10 @@
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
 
 static ossimTrace traceDebug("ossimImageFileWriter:debug");
+static const ossimString AUTO_CREATE_DIRECTORY_KW("auto_create_directory");
 
 #if OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimImageFileWriter.cpp 19180 2011-03-22 17:36:33Z oscarkramer $";
+static const char OSSIM_ID[] = "$Id: ossimImageFileWriter.cpp 19944 2011-08-12 18:10:54Z gpotts $";
 #endif
 
 RTTI_DEF3(ossimImageFileWriter,
@@ -89,6 +90,7 @@ ossimImageFileWriter::ossimImageFileWriter(const ossimFilename& file,
      theWriteReadmeFlag(false),
      theWriteTiffWorldFileFlag(false),
      theWriteWorldFileFlag(false),
+     theAutoCreateDirectoryFlag(true),
      theLinearUnits(OSSIM_UNIT_UNKNOWN),
      thePixelType(OSSIM_PIXEL_IS_POINT)
 {
@@ -218,7 +220,10 @@ bool ossimImageFileWriter::saveState(ossimKeywordlist& kwl,
            SCALE_TO_EIGHT_BIT_KW,
            (ossim_uint32)theScaleToEightBitFlag,
            true);
-
+   kwl.add(prefix,
+           AUTO_CREATE_DIRECTORY_KW,
+           theAutoCreateDirectoryFlag,
+           true);
    kwl.add(prefix,
            ossimKeywordNames::OVERVIEW_COMPRESSION_TYPE_KW,
            theOverviewCompressType,
@@ -393,6 +398,11 @@ bool ossimImageFileWriter::loadState(const ossimKeywordlist& kwl,
       theScaleToEightBitFlag = s.toBool();
    }
 
+   lookup = kwl.find(prefix, AUTO_CREATE_DIRECTORY_KW);
+   if(lookup)
+   {
+      theAutoCreateDirectoryFlag = ossimString(lookup).toBool();
+   }
    lookup = kwl.find(prefix, ossimKeywordNames::OVERVIEW_COMPRESSION_TYPE_KW);
    if(lookup)
    {
@@ -636,7 +646,7 @@ bool ossimImageFileWriter::writeMetaDataFiles()
 {
    bool status = true;
    
-   if(theWriteEnviHeaderFlag)
+   if(theWriteEnviHeaderFlag&&!needsAborting())
    {
       if(writeEnviHeaderFile() == false)
       {
@@ -647,7 +657,7 @@ bool ossimImageFileWriter::writeMetaDataFiles()
       }
    }
 
-   if(theWriteErsHeaderFlag)
+   if(theWriteErsHeaderFlag&&!needsAborting())
    {
       if(writeErsHeaderFile() == false)
       {
@@ -658,7 +668,7 @@ bool ossimImageFileWriter::writeMetaDataFiles()
       }
    }
 
-   if (theWriteExternalGeometryFlag)
+   if (theWriteExternalGeometryFlag&&!needsAborting())
    {
       if( writeExternalGeometryFile() == false)
       {
@@ -670,7 +680,7 @@ bool ossimImageFileWriter::writeMetaDataFiles()
          }
       }
    }
-   if(theWriteFgdcFlag)
+   if(theWriteFgdcFlag&&!needsAborting())
    {
       if(writeFgdcFile() == false)
       {
@@ -682,7 +692,7 @@ bool ossimImageFileWriter::writeMetaDataFiles()
          }
       }
    }
-   if(theWriteJpegWorldFileFlag)
+   if(theWriteJpegWorldFileFlag&&!needsAborting())
    {
       if(writeJpegWorldFile() == false)
       {
@@ -694,7 +704,7 @@ bool ossimImageFileWriter::writeMetaDataFiles()
          }
       }
    }
-   if(theWriteReadmeFlag)
+   if(theWriteReadmeFlag&&!needsAborting())
    {
       if(writeReadmeFile() == false)
       {
@@ -707,7 +717,7 @@ bool ossimImageFileWriter::writeMetaDataFiles()
          }
       }
    }
-   if(theWriteTiffWorldFileFlag)
+   if(theWriteTiffWorldFileFlag&&!needsAborting())
    {
       if(writeTiffWorldFile() == false)
       {
@@ -720,7 +730,7 @@ bool ossimImageFileWriter::writeMetaDataFiles()
       }
    }
 
-   if(theWriteWorldFileFlag)
+   if(theWriteWorldFileFlag&&!needsAborting())
    {
       if(writeWorldFile() == false)
       {
@@ -733,7 +743,7 @@ bool ossimImageFileWriter::writeMetaDataFiles()
       }
    }
    
-   if (theWriteHistogramFlag)
+   if (theWriteHistogramFlag&&!needsAborting())
    {
       if (!writeHistogramFile())
       {
@@ -751,6 +761,7 @@ bool ossimImageFileWriter::writeMetaDataFiles()
 
 bool ossimImageFileWriter::writeHistogramFile() 
 {
+   if(needsAborting()) return false;
    if(theFilename == "") return false;
 
    ossimFilename histogram_file = theFilename;
@@ -998,6 +1009,7 @@ bool ossimImageFileWriter::execute()
       return false;
    }
    
+   
    // make sure we have a region of interest
    if(theAreaOfInterest.hasNans())
    {
@@ -1043,6 +1055,11 @@ bool ossimImageFileWriter::execute()
       }
    }
 
+   ossimFilename path = theFilename.path();
+   if(!path.exists())
+   {
+      path.createDirectory(true);
+   }
    setProcessStatus(ossimProcessInterface::PROCESS_STATUS_EXECUTING);
    setPercentComplete(0.0);
    bool wroteFile = true;
@@ -1051,7 +1068,8 @@ bool ossimImageFileWriter::execute()
    {
       wroteFile = writeFile();
    }
-   
+  
+   /*
    if(needsAborting())
    {
       setProcessStatus(ossimProcessInterface::PROCESS_STATUS_ABORTED);
@@ -1060,8 +1078,8 @@ bool ossimImageFileWriter::execute()
    {
       setProcessStatus(ossimProcessInterface::PROCESS_STATUS_NOT_EXECUTING);
    }
-
-   if (theWriteOverviewFlag)
+   */
+   if (theWriteOverviewFlag&&!needsAborting())
    {
       // Writing overviews has been mpi'd so do on all processes.
       if (!writeOverviewFile(theOverviewCompressType,
@@ -1075,7 +1093,7 @@ bool ossimImageFileWriter::execute()
       }
    }
 
-   if(getProcessStatus() != ossimProcessInterface::PROCESS_STATUS_ABORTED)
+   if(!needsAborting())
    {
       // Do these only on the master process. Note left to right precedence!
       if (getSequencer() && getSequencer()->isMaster())
@@ -1104,6 +1122,15 @@ bool ossimImageFileWriter::execute()
          theInputConnection->connectMyInputTo(0, obj->getInput(0));
       }
    }
+   if(!needsAborting())
+   {
+      setProcessStatus(ossimProcessInterface::PROCESS_STATUS_NOT_EXECUTING);
+   }
+   else 
+   {
+      setProcessStatus(ossimProcessInterface::PROCESS_STATUS_ABORTED);   
+   }
+
    savedInput = 0;
    return result;
 }
@@ -1254,11 +1281,19 @@ void ossimImageFileWriter::setProperty(ossimRefPtr<ossimProperty> property)
    {
       theScaleToEightBitFlag = property->valueToString().toBool();
    }
+   else if(property->getName() == SCALE_TO_EIGHT_BIT_KW)
+   {
+      theAutoCreateDirectoryFlag = property->valueToString().toBool();
+   }
    else if (property->getName() == "linear_units")
    {
       theLinearUnits = (ossimUnitType)
          (ossimUnitTypeLut::instance()->
           getEntryNumber(property->valueToString()));
+   }
+   else if(property->getName() == ossimKeywordNames::IMAGE_TYPE_KW)
+   {
+      setOutputImageType(property->valueToString());
    }
    else if(property->getName() == ossimKeywordNames::PIXEL_TYPE_KW)
    {
@@ -1287,6 +1322,27 @@ ossimRefPtr<ossimProperty> ossimImageFileWriter::getProperty(const ossimString& 
       filenameProp->setIoType(ossimFilenameProperty::ossimFilenamePropertyIoType_OUTPUT);
 
       return filenameProp;
+   }
+   else if(name == ossimKeywordNames::IMAGE_TYPE_KW)
+   {
+      ossimStringProperty* prop =  new ossimStringProperty(name, theOutputImageType, false);
+      std::vector<ossimString> typeList;
+      getImageTypeList(typeList);
+      if(typeList.size() > 1)
+      {
+         prop->setReadOnlyFlag(false);
+         prop->setConstraints(typeList);
+         prop->setChangeType(ossimProperty::ossimPropertyChangeType_AFFECTS_OTHERS);
+      }
+      else
+      {
+         prop->setReadOnlyFlag(true);
+      }
+      return prop;
+   }
+   else if(name == AUTO_CREATE_DIRECTORY_KW)
+   {
+      return new ossimBooleanProperty(name, theAutoCreateDirectoryFlag);
    }
    else if (name == "create_envi_hdr")
    {
@@ -1396,9 +1452,12 @@ void ossimImageFileWriter::getPropertyNames(std::vector<ossimString>& propertyNa
    propertyNames.push_back(ossimString(ossimKeywordNames::CREATE_IMAGE_KW));
    propertyNames.push_back(ossimString(ossimKeywordNames::CREATE_OVERVIEW_KW));
    propertyNames.push_back(ossimString(ossimKeywordNames::CREATE_HISTOGRAM_KW));
+   propertyNames.push_back(ossimString(AUTO_CREATE_DIRECTORY_KW));
    propertyNames.push_back(ossimString(SCALE_TO_EIGHT_BIT_KW));
    propertyNames.push_back(ossimString("linear_units"));
    propertyNames.push_back(ossimString(ossimKeywordNames::PIXEL_TYPE_KW));
+   propertyNames.push_back(ossimString(ossimKeywordNames::IMAGE_TYPE_KW));
+
 }
 
 ossimString ossimImageFileWriter::getExtension() const

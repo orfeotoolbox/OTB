@@ -78,14 +78,17 @@ void ossimJobThreadQueue::run()
          }
          
          // if the job is ready to execute
-         if(!job->isStopped())
+         if(job->isReady())
          {
+            job->resetState(ossimJob::ossimJob_RUNNING);
             job->start();
+            job->setState(ossimJob::ossimJob_FINISHED);
          }
          {            
             OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_threadMutex);
             m_currentJob = 0;
          }
+         job = 0;
       }
       
       if (firstTime)
@@ -96,10 +99,16 @@ void ossimJobThreadQueue::run()
          firstTime = false;
       }
    } while (!m_doneFlag&&validQueue);
+   
    if(job.valid()&&m_doneFlag&&job->isReady())
    {
       job->cancel();
    }
+   {            
+      OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_threadMutex);
+      m_currentJob = 0;
+   }
+   job = 0;
 }
 
 void ossimJobThreadQueue::setDone(bool done)
@@ -132,6 +141,12 @@ bool ossimJobThreadQueue::isDone() const
    return m_doneFlag; 
 }
 
+bool ossimJobThreadQueue::isProcessingJob()const
+{
+   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_threadMutex);
+   return m_currentJob.valid();
+}
+
 int ossimJobThreadQueue::cancel()
 {
    
@@ -143,7 +158,6 @@ int ossimJobThreadQueue::cancel()
          if (m_currentJob.valid())
          {
             m_currentJob->cancel();
-            m_currentJob = 0;
          }
          
          if (m_jobQueue.valid()) 

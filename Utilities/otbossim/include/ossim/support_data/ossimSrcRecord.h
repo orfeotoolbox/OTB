@@ -5,7 +5,7 @@
 //   AUTHOR: Oscar Kramer
 //
 //*************************************************************************************************
-//  $Id$
+//  $Id: ossimSrcRecord.h 2788 2011-06-29 13:20:37Z oscar.kramer $
 #ifndef ossimSrcRecord_HEADER
 #define ossimSrcRecord_HEADER
 
@@ -29,7 +29,7 @@
 //!   image0.hist: <full/path/to/histogram.his>
 //!   image0.hist-op: auto-minmax | std-stretch N  (N=1|2|3)
 //!   image0.support: <path_to_support_files>
-//!   image0.rgb: R,G,rgbB  (unsigned integers starting with 1)
+//!   image0.rgb: R,G,B  (unsigned integers starting with 1)
 //!   image0.mask: <filename>
 //!   image0.opacity: <double>
 //!   image0.replacement_mode: <REPLACE_BAND_IF_TARGET | 

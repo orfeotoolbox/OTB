@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimPolyCutter.cpp 13660 2008-10-02 14:00:48Z gpotts $
+// $Id: ossimPolyCutter.cpp 19907 2011-08-05 19:55:46Z dburken $
 #include <ossim/imaging/ossimPolyCutter.h>
 #include <ossim/base/ossimPolyArea2d.h>
 #include <ossim/imaging/ossimImageData.h>
@@ -23,7 +23,8 @@ RTTI_DEF1(ossimPolyCutter, "ossimPolyCutter", ossimImageSourceFilter)
 ossimPolyCutter::ossimPolyCutter()
    : ossimImageSourceFilter(),
      theTile(NULL),
-     theCutType(OSSIM_POLY_NULL_OUTSIDE)
+     theCutType(OSSIM_POLY_NULL_OUTSIDE),
+     m_boundingOverwrite(false)
 {
    thePolygonList.push_back(ossimPolygon());
    theBoundingRect.makeNan();
@@ -35,7 +36,8 @@ ossimPolyCutter::ossimPolyCutter(ossimImageSource* inputSource,
                                  const ossimPolygon& polygon)
    : ossimImageSourceFilter(inputSource),
      theTile(NULL),
-     theCutType(OSSIM_POLY_NULL_INSIDE)
+     theCutType(OSSIM_POLY_NULL_INSIDE),
+     m_boundingOverwrite(false)
 {
    thePolygonList.push_back(polygon);
    computeBoundingRect();
@@ -278,7 +280,6 @@ bool ossimPolyCutter::loadState(const ossimKeywordlist& kwl,
    return ossimImageSourceFilter::loadState(kwl, prefix);
 }
 
-
 void ossimPolyCutter::setPolygon(const vector<ossimDpt>& polygon,
                                  ossim_uint32 index)
 {
@@ -355,7 +356,7 @@ void ossimPolyCutter::computeBoundingRect()
 {
    ossimIrect bounds;
    theBoundingRect.makeNan();
-   
+
    for(int i = 0; i < (int)thePolygonList.size(); ++i)
    {
       thePolygonList[i].getBoundingRect(bounds);
@@ -373,6 +374,18 @@ void ossimPolyCutter::computeBoundingRect()
       }
    }
 }
+
+const ossimIrect& ossimPolyCutter::getRectangle() const
+{
+   return theBoundingRect;
+}
+
+void ossimPolyCutter::setRectangle(const ossimIrect& rect)
+{
+   theBoundingRect = rect;
+   m_boundingOverwrite = true;
+}
+
 void ossimPolyCutter::setNumberOfPolygons(ossim_uint32 count)
 {
    if(!count)

@@ -10,7 +10,7 @@
 // Contains class declaration for ossimBandSelector.
 // 
 //*******************************************************************
-//  $Id: ossimBandSelector.cpp 19715 2011-06-03 17:24:30Z gpotts $
+//  $Id: ossimBandSelector.cpp 19807 2011-07-13 11:55:12Z gpotts $
 
 #include <iostream>
 #include <algorithm>
@@ -31,7 +31,7 @@ ossimBandSelector::ossimBandSelector()
       ossimImageSourceFilter(),
       theTile(0),
       theWithinRangeFlag(ossimBandSelectorWithinRangeFlagState_NOT_SET),
-      theOrderedCorrectlyFlag(false)
+      thePassThroughFlag(false)
 
 {
 //   theEnableFlag = false; // Start off disabled.
@@ -61,10 +61,10 @@ ossimRefPtr<ossimImageData> ossimBandSelector::getTile(
       return t;  // This tile source bypassed, return the input tile source.
    }
 
-   if (theOrderedCorrectlyFlag)
-   {
-      return t; // Input band order same as output band order.
-   }
+//   if (theOrderedCorrectlyFlag)
+//   {
+//      return t; // Input band order same as output band order.
+//   }
 
    if(!theTile.valid()) // First time through, might not be initialized...
    {
@@ -120,13 +120,14 @@ void ossimBandSelector::setOutputBandList(
       theTile = 0;       // Force an allocate call next getTile.
 
       theWithinRangeFlag = ossimBandSelectorWithinRangeFlagState_NOT_SET;
-      theOrderedCorrectlyFlag = isOrderedCorrectly();
+      checkPassThrough();
+      //theOrderedCorrectlyFlag = isOrderedCorrectly();
    }
 }
 
 ossim_uint32 ossimBandSelector::getNumberOfOutputBands() const
 {
-   if(theEnableFlag)
+   if(isSourceEnabled())
    {
       return (ossim_uint32)theOutputBandList.size();
    }
@@ -139,6 +140,7 @@ void ossimBandSelector::initialize()
    // Base class will recapture "theInputConnection".
    ossimImageSourceFilter::initialize();
    theWithinRangeFlag =  ossimBandSelectorWithinRangeFlagState_NOT_SET;  
+   checkPassThrough();
    if(theInputConnection)
    {
       if ( !theOutputBandList.size() ) 
@@ -149,9 +151,10 @@ void ossimBandSelector::initialize()
          theInputConnection->getOutputBandList(theOutputBandList);
       }
 
-      if ( theEnableFlag )
+      
+      if ( isSourceEnabled() )
       {
-         theOrderedCorrectlyFlag = isOrderedCorrectly();
+        // theOrderedCorrectlyFlag = isOrderedCorrectly();
 
          if ( theTile.valid() )
          {
@@ -161,8 +164,7 @@ void ossimBandSelector::initialize()
             // - band change
             // - scalar change
             //---
-            if( theOrderedCorrectlyFlag ||
-                ( theTile->getNumberOfBands() != theOutputBandList.size() ) ||
+            if( ( theTile->getNumberOfBands() != theOutputBandList.size() ) ||
                 ( theTile->getScalarType() !=
                   theInputConnection->getOutputScalarType() ) )
             {
@@ -189,11 +191,23 @@ void ossimBandSelector::allocate()
    theTile->initialize();
 }
 
+bool ossimBandSelector::isSourceEnabled()const
+{
+   bool result = ossimImageSourceFilter::isSourceEnabled();
+   if(result)
+   {
+      // if I am not marked to pass information on through then enable me
+      result = !thePassThroughFlag;
+   }
+   
+   return result;
+}
+
 double ossimBandSelector::getMinPixelValue(ossim_uint32 band)const
 {
    if(theInputConnection)
    {
-      if (theEnableFlag)
+      if (isSourceEnabled())
       {
          if(band < theOutputBandList.size())
          {
@@ -217,7 +231,7 @@ double ossimBandSelector::getNullPixelValue(ossim_uint32 band)const
 {
    if(theInputConnection)
    {
-      if (theEnableFlag)
+      if (isSourceEnabled())
       {
          if(band < theOutputBandList.size())
          {
@@ -242,7 +256,7 @@ double ossimBandSelector::getMaxPixelValue(ossim_uint32 band)const
 {
    if(theInputConnection)
    {
-      if (theEnableFlag)
+      if (isSourceEnabled())
       {
          if(band < theOutputBandList.size())
          {
@@ -337,10 +351,13 @@ bool ossimBandSelector::loadState(const ossimKeywordlist& kwl,
    return true;
 }
 
-bool ossimBandSelector::isOrderedCorrectly() const
+void ossimBandSelector::checkPassThrough() const
 {
-   bool result = false;
-
+   thePassThroughFlag = ((theInputConnection == 0)||!outputBandsWithinInputRange());
+   
+   // check if marked with improper bands
+   if(thePassThroughFlag) return;
+   
    if(theInputConnection)
    {
       std::vector<ossim_uint32> inputList;
@@ -362,7 +379,7 @@ bool ossimBandSelector::isOrderedCorrectly() const
          }
          if (i == SIZE)
          {
-            result = true;
+            thePassThroughFlag = true;
          }
       }
    }
@@ -376,7 +393,6 @@ bool ossimBandSelector::isOrderedCorrectly() const
       }
    }
 
-   return result;
 }
 
 bool ossimBandSelector::outputBandsWithinInputRange() const
@@ -389,11 +405,14 @@ bool ossimBandSelector::outputBandsWithinInputRange() const
       {
          if (theOutputBandList[i] > HIGHEST_BAND)
          {
-            ossimNotify(ossimNotifyLevel_WARN)
+            if(traceDebug())
+            {
+               ossimNotify(ossimNotifyLevel_WARN)
                << "ossimBandSelector::outputBandsWithinInputRange() ERROR:"
                << "Output band greater than highest input band. "
                << theOutputBandList[i] << " > " << HIGHEST_BAND << "."
                << std::endl;
+            }
             return false;
          }
       }
@@ -401,9 +420,12 @@ bool ossimBandSelector::outputBandsWithinInputRange() const
    }
    else
    {
-      ossimNotify(ossimNotifyLevel_WARN)
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_WARN)
          << "ossimBandSelector::outputBandsWithinInputRange() ERROR:"
          << "Method called prior to initialization!" << std::endl;
+      }
    }
 
    return false;
@@ -412,7 +434,7 @@ bool ossimBandSelector::outputBandsWithinInputRange() const
 void ossimBandSelector::getOutputBandList(
    std::vector<ossim_uint32>& bandList) const
 {
-   if ( theOutputBandList.size() )
+   if ( isSourceEnabled()&&theOutputBandList.size() )
    {
       bandList = theOutputBandList;
    }

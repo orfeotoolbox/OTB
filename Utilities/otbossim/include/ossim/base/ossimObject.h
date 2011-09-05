@@ -8,17 +8,19 @@
 // Description: Base class for ossim objects.
 //
 //*************************************************************************
-// $Id: ossimObject.h 15798 2009-10-23 19:15:20Z gpotts $
+// $Id: ossimObject.h 19852 2011-07-21 15:26:12Z gpotts $
 
 #ifndef ossimObject_HEADER
 #define ossimObject_HEADER
 
 #include <iosfwd>
 #include <ossim/base/ossimReferenced.h>
+#include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimRtti.h>
 
 class ossimKeywordlist;
 class ossimString;
+class ossimVisitor;
 
 class OSSIMDLLEXPORT ossimObject : public ossimReferenced
 {
@@ -77,6 +79,9 @@ public:
     */
    friend OSSIMDLLEXPORT std::ostream& operator<<(std::ostream& out,
                                                   const ossimObject& obj);
+   
+   virtual bool isEqualTo(const ossimObject& obj, ossimCompareType compareType = OSSIM_COMPARE_FULL)const;
+   virtual void accept(ossimVisitor& visitor);
 
  protected:
 TYPE_DATA

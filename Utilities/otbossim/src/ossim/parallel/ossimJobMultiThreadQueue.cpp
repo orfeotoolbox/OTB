@@ -52,3 +52,29 @@ void ossimJobMultiThreadQueue::setNumberOfThreads(ossim_uint32 nThreads)
       }
    }
 }
+
+ossim_uint32 ossimJobMultiThreadQueue::numberOfBusyThreads()const
+{
+   ossim_uint32 result = 0;
+   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_mutex);
+   ossim_uint32 idx = 0;
+   ossim_uint32 queueSize = m_threadQueueList.size();
+   for(idx = 0; idx < queueSize;++idx)
+   {
+      if(!m_threadQueueList[idx]->isProcessingJob()) ++result;
+   }
+   return result;
+}
+
+bool ossimJobMultiThreadQueue::areAllThreadsBusy()const
+{
+   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_mutex);
+   ossim_uint32 idx = 0;
+   ossim_uint32 queueSize = m_threadQueueList.size();
+   for(idx = 0; idx < queueSize;++idx)
+   {
+      if(!m_threadQueueList[idx]->isProcessingJob()) return false;
+   }
+   
+   return true;
+}

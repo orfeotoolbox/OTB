@@ -15,7 +15,7 @@ public:
    //utility functions to shift to and from the standard coordinates.
    //Users should use the shift instead!!!
    //
-
+   TYPE_DATA;
 };
 
 #endif

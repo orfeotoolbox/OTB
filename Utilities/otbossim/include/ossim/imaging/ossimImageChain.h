@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageChain.h 19553 2011-05-08 00:52:40Z gpotts $
+// $Id: ossimImageChain.h 19963 2011-08-16 18:11:18Z gpotts $
 #ifndef ossimImageChain_HEADER
 #define ossimImageChain_HEADER
 #include <vector>
@@ -30,6 +30,9 @@ public:
    ossimImageChain();
    virtual ~ossimImageChain();
 
+   ossimConnectableObject::ConnectableObjectList& getChainList(){return theImageChainList;}
+   const ossimConnectableObject::ConnectableObjectList& getChainList()const{return theImageChainList;}
+   
    /**
     * @param index Index of object to get.
     *
@@ -84,7 +87,7 @@ public:
     * Returns true on success, false on error.
     */
    bool addLast(ossimConnectableObject* obj);
-
+   
    /**
     * Deletes the first object.
     * Note this is really most right of the chain.
@@ -357,8 +360,11 @@ public:
  
    
    virtual void accept(ossimVisitor& visitor);
+   void deleteList();
 
 protected:
+   void prepareForRemoval(ossimConnectableObject* connectableObject);
+   
    friend class ossimImageChainChildListener;
   /**
     * This will hold a sequence of image sources.
@@ -385,7 +391,6 @@ protected:
                                const char* prefix=NULL);
    bool connectAllSources(const map<ossimId, vector<ossimId> >& idMapping);
    
-   void deleteList();
    
 TYPE_DATA
 };

@@ -5,7 +5,7 @@
 // Author: Garrett Potts (gpotts@imagelinks)
 //
 //*************************************************************************
-// $Id: ossimGeoPolyCutter.h 18423 2010-11-16 16:05:12Z gpotts $
+// $Id: ossimGeoPolyCutter.h 19907 2011-08-05 19:55:46Z dburken $
 #ifndef ossimGeoPolyCutter_HEADER
 #define ossimGeoPolyCutter_HEADER
 #include <ossim/imaging/ossimPolyCutter.h>
@@ -90,6 +90,7 @@ class OSSIM_DLL ossimGeoPolyCutter : public ossimPolyCutter,
 {
 public:
    ossimGeoPolyCutter();
+
    virtual bool saveState(ossimKeywordlist& kwl,
                           const char* prefix=0)const;
    

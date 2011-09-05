@@ -10,7 +10,7 @@
 // Description: Class declaration for ortho-image generator.
 //
 //*************************************************************************
-// $Id: ossimOrthoIgen.h 19695 2011-05-31 17:52:24Z dburken $
+// $Id: ossimOrthoIgen.h 19907 2011-08-05 19:55:46Z dburken $
 
 #ifndef ossimOrthoIgen_HEADER
 #define ossimOrthoIgen_HEADER
@@ -33,6 +33,7 @@ class ossimConnectableObject;
 class ossimMapProjection;
 class ossimImageSource;
 class ossimImageHandler;
+class ossimImageCombiner;
 
 class OSSIM_DLL ossimOrthoIgen : public ossimIgen
 {
@@ -51,7 +52,7 @@ public:
       OSSIM_CENTER_ORIGIN     = 0,
       OSSIM_UPPER_LEFT_ORIGIN = 1
    };
-   typedef std::map<ossimString,ossimString, ossimStringLtstr> PropertyMap;
+   typedef std::map<ossimString,ossimString> PropertyMap;
    
    ossimOrthoIgen();
 
@@ -107,7 +108,7 @@ protected:
    ossimOrthoIgenProjectionType theProjectionType;
    ossimString   theProjectionName;
    ossimString   theCrsString;
-   ossim_float64 theGeographicOriginOfLatitude;
+   ossim_float64 theGeoScalingLatitude;
    ossimString   theCombinerType;
    ossimString   theResamplerType;
    ossimString   theWriterType;
@@ -129,14 +130,23 @@ protected:
    ossim_float64 theHighPercentClip;
    ossim_int32   theStdDevClip;
    bool          theUseAutoMinMaxFlag;
-   bool          theScaleToEightBitFlag;
-   PropertyMap   theWriterProperties;
+   bool          theClipToValidRectFlag;
+   PropertyMap   theReaderProperties;
+   PropertyMap   theWriterProperties;   
    bool          theCutRectSpecIsConsolidated;
    ossimFilename theTargetHistoFileName;
    std::vector<ossimSrcRecord> theSrcRecords;
    ossimFilename theProductFilename;
    ossimRefPtr<ossimProjection> theReferenceProj;
-  
+   ossimFilename theMaskShpFile;
+   bool          theCacheExcludedFlag;
+   ossimString   thePixelReplacementMode;
+   ossim_float64 theClampPixelMin;
+   ossim_float64 theClampPixelMax;
+   ossim_float64 theClipPixelMin;
+   ossim_float64 theClipPixelMax;
+   ossimString   theOutputRadiometry;
+
    /**
    * @brief Sets up the igen keyword list for the process.
    *
@@ -146,6 +156,22 @@ protected:
 
    bool setupTiling();
    void setupCutter();
+
+   /** 
+   * Checks for the presence of a raster mask file alongside the image, and inserts the mask 
+   * filter in the chain if mask file exists. Returns pointer to the "current (last added) source 
+   * in the single image chain. 
+   */
+   ossimImageSource* setupRasterMask(ossimImageChain* single_image_chain,
+                                     const ossimSrcRecord& src_record);
+
+   /**
+   * Insert a partial-pixel flipper to remap null-valued pixels to min according to info in the
+   * source record and/or command line. Returns pointer to the "current (last added) source in the 
+   * single image chain.
+   */
+   ossimImageSource* setupPixelFlipper(ossimImageChain* single_image_chain, 
+                                       const ossimSrcRecord& src_record);
 
    /**
     * @brief Set up the writer for the process.
@@ -202,6 +228,31 @@ protected:
    */
    void generateLog();
   
-   
+   /**
+   * @brief Adds a scalar remapper to the extreme right of the chain is specified by the 
+   * --output-radiometry option.
+   */
+   void setupOutputRadiometry();
+
+   /**
+    * @brief Checks all input image projections to see if elevation is needed.
+    * @return true if affected, false if not.
+    */
+   bool isAffectedByElevation();
+
+   /**
+    * @brief Recomputes image gsds.
+    *
+    * Calls ossimImageGeometry::computeGsd() on all image handlers
+    * that have projections affected by elevation.  Used to recompute after a
+    * delayed load of elevation.
+    */
+   void reComputeChainGsds();
+
+   /**
+    * GSD Determination is nontrivial since there are various command-line options that control
+    * this quantity. This method considers all information before setting the product's GSD.
+    */
+   void setProductGsd();
 };
 #endif

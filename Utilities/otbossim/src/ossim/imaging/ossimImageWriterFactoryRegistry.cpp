@@ -8,16 +8,18 @@
 // Author: Frank Warmerdam (warmerda@home.com)
 //
 //*******************************************************************
-//  $Id: ossimImageWriterFactoryRegistry.cpp 18966 2011-02-25 19:39:58Z gpotts $
-#include <algorithm>
-#include <iterator>
-#include <ostream>
+//  $Id: ossimImageWriterFactoryRegistry.cpp 19907 2011-08-05 19:55:46Z dburken $
+
 #include <ossim/imaging/ossimImageWriterFactory.h>
 #include <ossim/imaging/ossimImageWriterFactoryRegistry.h>
 #include <ossim/imaging/ossimImageFileWriter.h>
+#include <ossim/base/ossimCommon.h>
 #include <ossim/base/ossimObjectFactoryRegistry.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimString.h>
+#include <algorithm>
+#include <iterator>
+#include <ostream>
 
 ossimImageWriterFactoryRegistry* ossimImageWriterFactoryRegistry::theInstance = NULL;
 
@@ -47,6 +49,22 @@ ossimImageFileWriter* ossimImageWriterFactoryRegistry::createWriter(const ossimF
    }
    
    return writer;
+}
+
+ossimObject* ossimImageWriterFactoryRegistry::createObject(const ossimKeywordlist &kwl,
+                                                           const char *prefix)const
+{
+   return createObjectFromRegistry(kwl, prefix);
+}
+
+ossimObject* ossimImageWriterFactoryRegistry::createObject(const ossimString& typeName)const
+{
+   return createObjectFromRegistry(typeName);
+}
+
+void ossimImageWriterFactoryRegistry::getTypeNameList(std::vector<ossimString>& typeList)const
+{
+   getAllTypeNamesFromRegistry(typeList);
 }
 
 ossimImageFileWriter *ossimImageWriterFactoryRegistry::createWriterFromExtension(const ossimString& fileExtension)const

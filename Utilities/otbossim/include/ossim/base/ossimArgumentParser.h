@@ -4,7 +4,7 @@
 // OSSIM.
 //
 //-------------------------------------------------------------------------
-// $Id: ossimArgumentParser.h 19682 2011-05-31 14:21:20Z dburken $
+// $Id: ossimArgumentParser.h 19900 2011-08-04 14:19:57Z dburken $
 #ifndef ossimArgumentParser_HEADER
 #define ossimArgumentParser_HEADER 1
 #include <ossim/base/ossimConstants.h>
@@ -67,7 +67,8 @@ public:
       
       ossimParameter(ossimString& value)
       {
-         theType = OSSIM_STRING_PARAMETER; theValue.theString = &(value.string());
+         theType = OSSIM_STRING_PARAMETER; theValue.theString =
+                                              &(value.string());
       }
       
       bool valid(const char* str) const;
@@ -95,6 +96,9 @@ public:
    ossimArgumentParser(int* argc,char **argv);
 
    ~ossimArgumentParser();
+
+   /** @brief Initialize from command arguments. */
+   void initialize(int* argc, const char **argv); 
    
    void setApplicationUsage(ossimApplicationUsage* usage) { theUsage = usage; }
    ossimApplicationUsage* getApplicationUsage() { return theUsage; }

@@ -6,7 +6,7 @@
 //
 // Description:
 //*******************************************************************
-//  $Id: ossimThreeParamDatum.cpp 17815 2010-08-03 13:23:14Z dburken $
+//  $Id: ossimThreeParamDatum.cpp 19795 2011-06-30 15:04:48Z gpotts $
 
 #include <cmath>
 
@@ -18,6 +18,7 @@
 #include <ossim/base/ossimEcefPoint.h>
 #include <ossim/base/ossimWgs84Datum.h>
 
+RTTI_DEF1(ossimThreeParamDatum, "ossimThreeParamDatum", ossimDatum);
 ossimGpt ossimThreeParamDatum::shiftToWgs84(const ossimGpt &aPt)const
 {
    
@@ -142,4 +143,20 @@ ossimGpt ossimThreeParamDatum::shift(const ossimGpt &aPt)const
    }
 
    return aPt;
+}
+
+bool ossimThreeParamDatum::isEqualTo(const ossimObject& obj, ossimCompareType compareType)const
+{
+   const ossimThreeParamDatum* datum = dynamic_cast<const ossimThreeParamDatum*> (&obj);
+   
+   bool result = datum&&ossimDatum::isEqualTo(obj, compareType);
+   
+   if(result)
+   {
+      result = (ossim::almostEqual(theParam1, datum->theParam1)&&
+                ossim::almostEqual(theParam2, datum->theParam2)&&
+                ossim::almostEqual(theParam3, datum->theParam3));
+   }
+   
+   return result;
 }

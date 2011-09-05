@@ -18,10 +18,6 @@
 #include <ossim/base/ossimRefPtr.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimKeywordNames.h>
-#include <ossim/base/ossimString.h>
-
-#include <cstring> /* for strlen */
-#include <utility> /* for std::make_pair */
 
 ossimEpsgDatumFactory* ossimEpsgDatumFactory::m_instance = 0;
 
@@ -128,22 +124,22 @@ const ossimDatum* ossimEpsgDatumFactory::create(const ossimString &epsg_spec) co
 {
    if ( epsg_spec.size() )
    {
-      ossim_uint32 gcs_code;
+      ossim_uint32 code;
       ossimString group; // assume we are working with EPSG codes
       if (epsg_spec.contains(":"))
       {
          group = epsg_spec.before(":");
-         gcs_code = epsg_spec.after(":").toUInt32();
+         code = epsg_spec.after(":").toUInt32();
       }
       else
       {
          group = "EPSG"; // No group spec provided, assuming EPSG:
-         gcs_code = epsg_spec.toUInt32();
+         code = epsg_spec.toUInt32();
       }
-      if ((group != "EPSG") || (gcs_code == 0))
+      if ((group != "EPSG") || (code == 0))
          return 0;
 
-      return create(gcs_code);
+      return create(code);
    }
    return 0;
 }
@@ -154,7 +150,7 @@ const ossimDatum* ossimEpsgDatumFactory::create(const ossimString &epsg_spec) co
 const ossimDatum* 
 ossimEpsgDatumFactory::create(const ossimKeywordlist& kwl, const char *prefix) const
 {
-   ossimString lookup = kwl.find(prefix, ossimKeywordNames::GCS_CODE_KW);
+   ossimString lookup = kwl.find(prefix, ossimKeywordNames::DATUM_KW);
    if(!lookup.empty())
       return create(lookup);
    return 0;
@@ -237,5 +233,3 @@ ossimString ossimEpsgDatumFactory::findAlphaCode(ossim_uint32 epsg_code) const
    }
    return result;
 }
-
-

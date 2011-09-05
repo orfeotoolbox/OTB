@@ -7,7 +7,7 @@
  * Description: Common file for global constants.
  *
  **************************************************************************
- * $Id: ossimConstants.h 19471 2011-05-03 15:03:05Z gpotts $
+ * $Id: ossimConstants.h 19793 2011-06-30 13:26:56Z gpotts $
  */
 #ifndef ossimConstants_HEADER
 #define ossimConstants_HEADER
@@ -426,6 +426,12 @@ enum ossimByteOrder
    OSSIM_BIG_ENDIAN    = 1
 };
 
+enum ossimCompareType
+{
+   OSSIM_COMPARE_FULL=0,      // compares full traversal if supported.  Not just instance pointers
+   OSSIM_COMPARE_IMMEDIATE=1  // Only immediate attributes are compared
+};
+   
 #ifndef M_PI
 #  define M_PI             ((ossim_float64)3.141592653589793238462643)
 #endif

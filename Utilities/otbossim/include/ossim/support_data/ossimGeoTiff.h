@@ -9,7 +9,7 @@
 // information.
 //
 //***************************************************************************
-// $Id: ossimGeoTiff.h 17815 2010-08-03 13:23:14Z dburken $
+// $Id: ossimGeoTiff.h 20026 2011-09-01 16:33:18Z dburken $
 
 #ifndef ossimGeoTiff_HEADER
 #define ossimGeoTiff_HEADER 1
@@ -109,8 +109,7 @@ public:
    static int getPcsUnitType(ossim_int32 pcsCode);
 
    static bool writeTags(TIFF* tiffOut,
-                         const ossimRefPtr<ossimMapProjectionInfo> projectionInfo,
-                         bool imagineNad27Flag=false);
+                         const ossimRefPtr<ossimMapProjectionInfo> projectionInfo);
 
    /**
     * @brief Writes a geotiff box to a buffer.

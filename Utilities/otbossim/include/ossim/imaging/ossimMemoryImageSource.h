@@ -76,12 +76,12 @@ public:
    /**
     *  save state is not implemented for this source and only passes to the base.
     */
-   virtual bool saveState(ossimKeywordlist& kwl, const char* prefix)const;
+   virtual bool saveState(ossimKeywordlist& kwl, const char* prefix=0)const;
    
    /**
     * loadState is here so one can construct a memory source as a blank tile.
     */
-   virtual bool loadState(const ossimKeywordlist& kwl, const char* prefix);
+   virtual bool loadState(const ossimKeywordlist& kwl, const char* prefix=0);
    
 protected:
    ossimRefPtr<ossimImageData> m_image;

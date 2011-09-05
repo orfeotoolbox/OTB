@@ -5,14 +5,9 @@
 // Author:  Frank Warmerdam (warmerda@home.com)
 //
 //*******************************************************************
-//  $Id: ossimTiffWriter.cpp 18949 2011-02-23 15:28:08Z gpotts $
-
-#include <algorithm>
-#include <sstream>
-#include <tiffio.h>
+//  $Id: ossimTiffWriter.cpp 20026 2011-09-01 16:33:18Z dburken $
 
 #include <ossim/ossimConfig.h>
-
 #include <ossim/imaging/ossimTiffWriter.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimKeywordlist.h>
@@ -39,8 +34,7 @@
 #include <ossim/imaging/ossimMemoryImageSource.h>
 #include <ossim/imaging/ossimScalarRemapper.h>
 
-static ossimTrace traceDebug("ossimTiffWriter:debug");
-
+#include <tiffio.h>
 #ifdef OSSIM_HAS_GEOTIFF
 #  if OSSIM_HAS_GEOTIFF
 #    include <xtiffio.h>
@@ -50,6 +44,10 @@ static ossimTrace traceDebug("ossimTiffWriter:debug");
 #  endif
 #endif
 
+#include <algorithm>
+#include <sstream>
+
+static ossimTrace traceDebug("ossimTiffWriter:debug");
 static const char* TIFF_WRITER_OUTPUT_TILE_SIZE_X_KW = "output_tile_size_x";
 static const char* TIFF_WRITER_OUTPUT_TILE_SIZE_Y_KW = "output_tile_size_y";
 static const int   PCS_BRITISH_NATIONAL_GRID = 27700;
@@ -58,7 +56,7 @@ static const long  DEFAULT_JPEG_QUALITY = 75;
 RTTI_DEF1(ossimTiffWriter, "ossimTiffWriter", ossimImageFileWriter);
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimTiffWriter.cpp 18949 2011-02-23 15:28:08Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimTiffWriter.cpp 20026 2011-09-01 16:33:18Z dburken $";
 #endif
 
 ossimTiffWriter::ossimTiffWriter()
@@ -68,7 +66,6 @@ ossimTiffWriter::ossimTiffWriter()
       theCompressionType("none"),
       theJpegQuality(DEFAULT_JPEG_QUALITY),
       theOutputGeotiffTagsFlag(true),
-      theImagineNad27Flag(false),
       theColorLutFlag(false),
       theProjectionInfo(NULL),
       theOutputTileSize(OSSIM_DEFAULT_TILE_WIDTH, OSSIM_DEFAULT_TILE_HEIGHT),
@@ -371,7 +368,7 @@ bool ossimTiffWriter::writeGeotiffTags(ossimRefPtr<ossimMapProjectionInfo> proje
    {
       if ( projectionInfo.valid() )
       {
-         result = ossimGeoTiff::writeTags(tiffPtr, projectionInfo, theImagineNad27Flag);
+         result = ossimGeoTiff::writeTags(tiffPtr, projectionInfo);
       }
    }
    return result;
@@ -806,17 +803,10 @@ bool ossimTiffWriter::loadState(const ossimKeywordlist& kwl,
       setFilename(ossimFilename(value));
    }
 
-   const char* flag              = kwl.find(prefix, "output_geotiff_flag");
-   const char* img_nad27_flag    = kwl.find(prefix, "imagine_nad27_flag");
-
+   const char* flag = kwl.find(prefix, "output_geotiff_flag");
    if(flag)
    {
       theOutputGeotiffTagsFlag = ossimString(flag).toBool();
-   }
-
-   if(img_nad27_flag)
-   {
-      theImagineNad27Flag = ossimString(img_nad27_flag).toBool();
    }
 
    ossimString newPrefix = ossimString(prefix) + "lut.";
@@ -910,13 +900,13 @@ bool ossimTiffWriter::writeToTiles()
    ossim_uint32 tileNumber = 0;
    vector<ossim_float64> minBands;
    vector<ossim_float64> maxBands;
-   for(ossim_uint32 i = 0; i < tilesHigh; i++)
+   for(ossim_uint32 i = 0; ((i < tilesHigh)&&!needsAborting()); i++)
    {
       ossimIpt origin(0,0);
       origin.y = i * tileHeight;
 
       // Tile loop in the sample (width) direction.
-      for(ossim_uint32 j = 0; j < tilesWide; j++)
+      for(ossim_uint32 j = 0; ((j < tilesWide)&&!needsAborting()); j++)
       {
          origin.x = j * tileWidth;
 
@@ -948,7 +938,7 @@ bool ossimTiffWriter::writeToTiles()
                            id->getImageRectangle(),
                            OSSIM_BIP);
             tempTile->setDataObjectStatus(id->getDataObjectStatus());
-            if(!theColorLutFlag)
+            if(!theColorLutFlag&&!needsAborting())
             {
                id->computeMinMaxPix(minBands, maxBands);
             }
@@ -990,7 +980,7 @@ bool ossimTiffWriter::writeToTiles()
 
    } // End of tile loop in the line (height) direction.
 
-   if(!theColorLutFlag)
+   if(!theColorLutFlag&&!needsAborting())
    {
       writeMinMaxTags(minBands, maxBands);
    }
@@ -1041,7 +1031,7 @@ bool ossimTiffWriter::writeToTilesBandSep()
       //---
       // Tile loop in the sample (width) direction.
       //---
-      for(ossim_uint32 j = 0; ((j < tilesWide)&!needsAborting()); ++j)
+      for(ossim_uint32 j = 0; ((j < tilesWide)&&!needsAborting()); ++j)
       {
          origin.x = j * tileWidth;
 
@@ -1080,7 +1070,7 @@ bool ossimTiffWriter::writeToTilesBandSep()
                                             (ossim_uint32)0,        // z
                                             (tsample_t)band);    // sample
             }
-            if (bytesWritten != tileSizeInBytes)
+            if ( ( bytesWritten != tileSizeInBytes ) && !needsAborting() )
             {
                if(traceDebug())
                {
@@ -1111,7 +1101,7 @@ bool ossimTiffWriter::writeToTilesBandSep()
 
    } // End of tile loop in the line (height) direction.
 
-   if(!theColorLutFlag)
+   if(!theColorLutFlag&&!needsAborting())
    {
       writeMinMaxTags(minBands, maxBands);
    }
@@ -1178,7 +1168,7 @@ bool ossimTiffWriter::writeToStrips()
             return false;
          }
          id->unloadTile(buffer, bufferRect, OSSIM_BIP);
-         if(!theColorLutFlag)
+         if(!theColorLutFlag&&!needsAborting())
          {
             id->computeMinMaxPix(minBands, maxBands);
          }

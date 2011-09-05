@@ -10,7 +10,7 @@
 // instance of a Wgs72Ellipsoid and set the initial defaults for
 // that are specific to a Wgs72Datum
 //*******************************************************************
-//  $Id: ossimWgs72Datum.cpp 9963 2006-11-28 21:11:01Z gpotts $
+//  $Id: ossimWgs72Datum.cpp 19795 2011-06-30 15:04:48Z gpotts $
 
 #include <iostream>
 using namespace std;
@@ -28,7 +28,7 @@ using namespace std;
  *                               DEFINES FROM GEOTRANS
  */
 
-
+RTTI_DEF1(ossimWgs72Datum, "ossimWgs72Datum", ossimThreeParamDatum);
 ossimWgs72Datum::ossimWgs72Datum()
    :ossimThreeParamDatum("WGD",
                          "World Geodetic System 1972",

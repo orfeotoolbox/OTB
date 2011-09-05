@@ -9,7 +9,7 @@
 // SevenParamDatum. This is a base class for all
 // seven param datums.
 //*******************************************************************
-//  $Id: ossimSevenParamDatum.cpp 9963 2006-11-28 21:11:01Z gpotts $
+//  $Id: ossimSevenParamDatum.cpp 19795 2011-06-30 15:04:48Z gpotts $
 
 #include <ossim/base/ossimSevenParamDatum.h>
 #include <ossim/base/ossimDatumFactory.h>
@@ -17,6 +17,7 @@
 #include <ossim/base/ossimEcefPoint.h>
 #include <ossim/base/ossimWgs84Datum.h>
 
+RTTI_DEF1(ossimSevenParamDatum, "ossimSevenParamDatum", ossimDatum);
 ossimGpt ossimSevenParamDatum::shift(const ossimGpt &aPt)const
 {
    const ossimDatum* aDatum = aPt.datum();
@@ -154,5 +155,26 @@ ossimGpt ossimSevenParamDatum::shiftFromWgs84(const ossimGpt &aPt)const
 //   }
    
    return ossimGpt(p2, this);
+}
+
+bool ossimSevenParamDatum::isEqualTo(const ossimObject& obj, ossimCompareType compareType)const
+{
+   const ossimSevenParamDatum* datum = dynamic_cast<const ossimSevenParamDatum*> (&obj);
+   
+   bool result = datum&&ossimDatum::isEqualTo(obj, compareType);
+   
+   if(result)
+   {
+      result = (ossim::almostEqual(theParam1, datum->theParam1)&&
+                ossim::almostEqual(theParam2, datum->theParam2)&&
+                ossim::almostEqual(theParam3, datum->theParam3)&&
+                ossim::almostEqual(theParam4, datum->theParam4)&&
+                ossim::almostEqual(theParam5, datum->theParam5)&&
+                ossim::almostEqual(theParam6, datum->theParam6)&&
+                ossim::almostEqual(theParam7, datum->theParam7)
+                );
+   }
+   
+   return result;
 }
 

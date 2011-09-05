@@ -664,3 +664,54 @@ void ossimImageGeometry::decimatePoint(const ossimDpt& inPt,
       rnPt = inPt; // No decimation.
    }
 }
+
+bool ossimImageGeometry::isEqualTo(const ossimObject& obj, ossimCompareType compareType)const
+{
+   bool result = ossimObject::isEqualTo(obj, compareType);
+   const ossimImageGeometry* rhs = dynamic_cast<const ossimImageGeometry*> (&obj);
+   if(rhs&&result) // we know the types are the same
+   {
+      result = (m_gsd.isEqualTo(rhs->m_gsd)&&
+                (m_decimationFactors.size() == rhs->m_decimationFactors.size())&&
+                m_imageSize.isEqualTo(rhs->m_imageSize)&& 
+                (m_targetRrds == rhs->m_targetRrds)); 
+      
+      if(result)
+      {
+         ossim_uint32 decimationIdx = 0;
+         for(decimationIdx = 0; result&&(decimationIdx < m_decimationFactors.size());++decimationIdx)
+         {
+            result = m_decimationFactors[decimationIdx].isEqualTo(rhs->m_decimationFactors[decimationIdx]);
+         }
+      }
+      
+      if(result && compareType==OSSIM_COMPARE_IMMEDIATE)
+      {
+         result = ((m_transform.get()  == rhs->m_transform.get())&& 
+                   (m_projection.get() == rhs->m_projection.get()));  //!< Maintains full_image-to-world_space transformation
+         
+      }
+      else
+      {
+         if(m_transform.valid()&&rhs->m_transform.valid())
+         {
+            result = m_transform->isEqualTo(*rhs->m_transform.get());
+         }
+         else if(reinterpret_cast<ossim_uint64>(m_transform.get()) | reinterpret_cast<ossim_uint64>(rhs->m_transform.get())) // one is null
+         {
+            result = false;
+         }
+         if(m_projection.valid()&&rhs->m_projection.valid())
+         {
+            result = m_projection->isEqualTo(*rhs->m_projection.get());
+         }
+         else if(reinterpret_cast<ossim_uint64>(m_projection.get()) | reinterpret_cast<ossim_uint64>(rhs->m_projection.get())) // one is null
+         {
+            result = false;
+         }
+         
+      }
+   }
+   return result;
+}
+

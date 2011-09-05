@@ -59,7 +59,6 @@ public:
       rhs.resize(_nof_vars);
       coef.resize(_nof_vars);
       growPoints();
-      std::cout << "rhs size = " << rhs.size() << " elements == " << rhs[0].size() << std::endl;
       for ( int v = 0; v < _nof_vars; v++ )
          for ( int i = 0; i < 3; i++ )
             //            rhs[i][v] = 0.0;

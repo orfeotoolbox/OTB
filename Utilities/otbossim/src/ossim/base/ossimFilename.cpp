@@ -7,7 +7,7 @@
 // Description: This class provides manipulation of filenames.
 //
 //*************************************************************************
-// $Id: ossimFilename.cpp 19682 2011-05-31 14:21:20Z dburken $
+// $Id: ossimFilename.cpp 19798 2011-06-30 15:34:43Z dburken $
 
 #include <ossim/ossimConfig.h>  /* to pick up platform defines */
 
@@ -216,19 +216,37 @@ ossimFilename::ossimFilename(const ossimFilename& src)
 ossimFilename::ossimFilename(const ossimString& src)
    : ossimString(src)
 {
-   convertToNative();
+   if ( m_str.size() )
+   {
+      convertToNative();
+   }
+}
+
+ossimFilename::ossimFilename(const std::string& src)
+   : ossimString(src)
+{
+   if ( m_str.size() )
+   {
+      convertToNative();
+   }
 }
 
 ossimFilename::ossimFilename(const char* src)
    : ossimString(src)
 {
-   convertToNative();
+   if ( m_str.size() )
+   {
+      convertToNative();
+   }
 }
 
 template <class Iter> ossimFilename::ossimFilename(Iter s, Iter e)
    : ossimString(s, e)
 {
-   convertToNative();
+   if ( m_str.size() )
+   {
+      convertToNative();
+   }
 }
 
 bool ossimFilename::operator == (const ossimFilename& rhs)const

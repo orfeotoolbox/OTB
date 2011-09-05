@@ -7,7 +7,7 @@
 //
 //
 //*************************************************************************
-// $Id: ossimRefreshEvent.h 19717 2011-06-03 17:26:52Z gpotts $
+// $Id: ossimRefreshEvent.h 19819 2011-07-14 17:28:48Z gpotts $
 #ifndef ossimRefreshEvent_HEADER
 #define ossimRefreshEvent_HEADER
 #include <ossim/base/ossimEvent.h>
@@ -33,13 +33,14 @@ public:
    :ossimEvent(object, OSSIM_EVENT_REFRESH_ID),
     m_refreshType(static_cast<RefreshType>(REFRESH_PIXELS|REFRESH_GEOMETRY)),
     m_anchor(ANCHOR_CENTER)
-      {}
+   {m_position.makeNan();}
    ossimRefreshEvent(RefreshType refreshType, ossimObject* object=0)
    :ossimEvent(object, OSSIM_EVENT_REFRESH_ID),
     m_refreshType(refreshType),
     m_anchor(ANCHOR_CENTER)
 
    {
+      m_position.makeNan();
    }
    ossimRefreshEvent(const ossimRefreshEvent& src)
    :ossimEvent(src),

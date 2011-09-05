@@ -2,15 +2,16 @@
 //
 // License:  See top level LICENSE.txt file.
 // 
-// Author: Garrett Potts (gpotts@imagelinks)
-// Description:
+// Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimBaseObjectFactory.cpp 9966 2006-11-29 02:01:07Z gpotts $
+// $Id: ossimBaseObjectFactory.cpp 19900 2011-08-04 14:19:57Z dburken $
 #include <ossim/base/ossimBaseObjectFactory.h>
 #include <ossim/base/ossimConnectableContainer.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimKeywordlist.h>
+#include <ossim/base/ossimString.h>
+#include <vector>
 
 RTTI_DEF1(ossimBaseObjectFactory, "ossimBaseObjectFactory", ossimObjectFactory);
 

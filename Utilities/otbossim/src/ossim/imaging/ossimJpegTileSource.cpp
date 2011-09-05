@@ -8,7 +8,7 @@
 //
 // Contains class definition for JpegTileSource.
 //*******************************************************************
-//  $Id: ossimJpegTileSource.cpp 18145 2010-09-27 14:22:32Z dburken $
+//  $Id: ossimJpegTileSource.cpp 19907 2011-08-05 19:55:46Z dburken $
 
 #if defined(__BORLANDC__)
 #  include <iostream>
@@ -39,6 +39,7 @@ extern "C"
 #include <ossim/base/ossimNotifyContext.h>
 #include <ossim/base/ossimStringProperty.h>
 #include <ossim/base/ossimContainerProperty.h>
+
 //---
 // Using windows .NET compiler there is a conflict in the libjpeg with INT32
 // in the file jmorecfg.h.  Defining XMD_H fixes this.
@@ -89,10 +90,10 @@ ossimJpegTileSource::ossimJpegTileSource()
 }
 
 //*******************************************************************
-  // Public Constructor:
-  //*******************************************************************
-  ossimJpegTileSource::ossimJpegTileSource(const ossimKeywordlist& kwl,
-                                           const char* prefix)
+// Public Constructor:
+//*******************************************************************
+ossimJpegTileSource::ossimJpegTileSource(const ossimKeywordlist& kwl,
+                                         const char* prefix)
    :
       ossimImageHandler(),
       theTile(0),
@@ -443,7 +444,6 @@ void ossimJpegTileSource::close()
 {
    destroy();
 }
-
 
 //*******************************************************************
 // Public method:

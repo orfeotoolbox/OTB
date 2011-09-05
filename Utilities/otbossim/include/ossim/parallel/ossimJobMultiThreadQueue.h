@@ -12,7 +12,8 @@ public:
    const ossimJobQueue* getJobQueue()const;
    void setQueue(ossimJobQueue* q);
    void setNumberOfThreads(ossim_uint32 nThreads);
-   
+   ossim_uint32 numberOfBusyThreads()const;
+   bool areAllThreadsBusy()const;
 protected:
    mutable OpenThreads::Mutex  m_mutex;
    ossimRefPtr<ossimJobQueue> m_jobQueue;

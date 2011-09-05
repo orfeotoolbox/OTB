@@ -13,16 +13,16 @@
 // Height is relative to the ellipsoid in meters.
 //
 //*******************************************************************
-//  $Id: ossimGpt.h 19071 2011-03-13 16:02:06Z dburken $
+//  $Id: ossimGpt.h 19900 2011-08-04 14:19:57Z dburken $
 
 #ifndef ossimGpt_HEADER
 #define ossimGpt_HEADER 1
 
-#include <iosfwd>
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimDpt.h>
 #include <ossim/base/ossimDatumFactory.h>
 #include <ossim/base/ossimString.h>
+#include <iosfwd>
 
 class  ossimDatum;
 class  ossimEcefPoint;
@@ -54,23 +54,17 @@ public:
             const ossimDatum* aDatum=ossimDatumFactory::instance()->wgs84());
 
    /**
-    * latr().  Returns the latitude in radian measure.  Since
-    * our internal format is radians we do not have to do any
-    * conversions.
+    * latr().  Returns the latitude in radian measure.  
     */
    double latr()const{return lat*RAD_PER_DEG;}
 
    /**
-    * Returns the latitude in radian measure.  Since
-    * our internal format is radians we do not have to do any
-    * conversions.
+    * Returns the latitude in radian measure.  
     */
    void latr(double radianValue){lat = radianValue*DEG_PER_RAD;}
 
    /**
-    * Returns the longitude in radian measure.  Since
-    * our internal format is radians we do not have to do any
-    * conversions.
+    * Returns the longitude in radian measure.  
     */
    double lonr()const{return lon*RAD_PER_DEG;}
 
@@ -205,13 +199,7 @@ public:
    void changeDatum(const ossimDatum *datum);
 
    const ossimGpt& operator = (const ossimGpt &aPt);
-   bool operator ==(const ossimGpt& gpt)const
-      {
-         return ( ossim::almostEqual(lat, gpt.lat)&&
-                  ossim::almostEqual(lon, gpt.lon)&&
-                  ossim::almostEqual(hgt, gpt.hgt)&&
-                  (theDatum == gpt.theDatum));
-      }
+   bool operator ==(const ossimGpt& gpt)const;
 
    bool operator != (const ossimGpt& gpt) const { return !(*this == gpt); }
    
@@ -220,7 +208,7 @@ public:
     * Converts the lon data member to a value between -180 and +180:
     */
    void  limitLonTo180()
-   { if (lon < -180.0) lon += 360.0; else if (lon > 180.0) lon -= 360.0; }
+   { if (lon <= -180.0) lon += 360.0; else if (lon > 180.0) lon -= 360.0; }
 
    /**
     * @brief Wrap method to maintain longitude between -180 and +180 and latitude between
@@ -264,6 +252,7 @@ public:
    
    ossimString toDmsString()const;
 
+   bool isEqualTo(const ossimGpt& rhs, ossimCompareType compareType=OSSIM_COMPARE_FULL)const;
    ossim_float64 lat; //> latitude in degrees measure
    ossim_float64 lon; //> longitude in degrees measure
 
@@ -291,7 +280,7 @@ inline const ossimGpt& ossimGpt::operator=(const ossimGpt& aPt)
       lat = aPt.lat;
       lon = aPt.lon;
       hgt = aPt.hgt;
-      
+
       if(aPt.datum())
       {
          theDatum = aPt.datum();

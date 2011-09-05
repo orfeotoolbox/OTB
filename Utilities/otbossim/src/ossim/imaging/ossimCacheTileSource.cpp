@@ -7,7 +7,7 @@
 // Description:  ossimCacheTileSource
 // 
 //*******************************************************************
-//  $Id: ossimCacheTileSource.cpp 16276 2010-01-06 01:54:47Z gpotts $
+//  $Id: ossimCacheTileSource.cpp 19953 2011-08-16 00:34:51Z gpotts $
 
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimNotify.h>
@@ -340,8 +340,7 @@ void ossimCacheTileSource::setProperty(ossimRefPtr<ossimProperty> property)
       ossimIpt pt;
       pt.toPoint(property->valueToString());
 
-      // Rule: Must be positive and at least 32.
-      if ( (pt.x > 31) && (pt.y > 31) )
+      if ( (pt.x > 7) && (pt.y > 7) )
       {
          setTileSize(pt);
       }
@@ -349,7 +348,7 @@ void ossimCacheTileSource::setProperty(ossimRefPtr<ossimProperty> property)
       {
          ossimNotify(ossimNotifyLevel_NOTICE)
             << "ossimCacheTileSource::setProperty NOTICE:"
-            << "\nTile dimensions must be at least 32!"
+            << "\nTile dimensions must be at least 8!"
             << "\nFormat = ( x, y )"
             << std::endl;
       }

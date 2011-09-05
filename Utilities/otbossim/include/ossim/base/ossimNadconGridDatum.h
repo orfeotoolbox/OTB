@@ -39,6 +39,8 @@ protected:
   ossimFilename theDatumDirectory;
   
   void checkGrid(const ossimDpt& latLon)const;
+   
+   TYPE_DATA;   
 };
 
 #endif

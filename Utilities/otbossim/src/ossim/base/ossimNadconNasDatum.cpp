@@ -1,5 +1,6 @@
 #include <ossim/base/ossimNadconNasDatum.h>
 
+RTTI_DEF1(ossimNadconNasDatum, "ossimNadconNasDatum", ossimNadconGridDatum);
 ossimNadconNasDatum::ossimNadconNasDatum(const ossimFilename& nadconDirectory)
    :
       ossimNadconGridDatum(nadconDirectory,

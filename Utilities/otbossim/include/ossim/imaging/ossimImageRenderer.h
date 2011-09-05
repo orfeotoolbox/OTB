@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*******************************************************************
-// $Id: ossimImageRenderer.h 17932 2010-08-19 20:34:35Z dburken $
+// $Id: ossimImageRenderer.h 19991 2011-08-18 19:43:06Z gpotts $
 
 #ifndef ossimImageRenderer_HEADER
 #define ossimImageRenderer_HEADER
@@ -106,6 +106,7 @@ public:
    void connectInputEvent(ossimConnectionEvent& event);
    void disconnectInputEvent(ossimConnectionEvent& event);
    void propertyEvent(ossimPropertyEvent& event);
+   virtual void refreshEvent(ossimRefreshEvent& event);
    
    virtual void setProperty(ossimRefPtr<ossimProperty> property);
    virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;
@@ -237,8 +238,6 @@ private:
     */
    void deallocate();
 
-   virtual void fireProgressEvent(double percentComplete);
-   
    ossimFilterResampler*       m_Resampler;
    ossimRefPtr<ossimImageData> m_BlankTile;
    ossimRefPtr<ossimImageData> m_Tile;

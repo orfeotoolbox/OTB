@@ -10,7 +10,7 @@
 // Used to represent an interger point containing an x and y data member.
 // 
 //*******************************************************************
-//  $Id: ossimIpt.h 14789 2009-06-29 16:48:14Z dburken $
+//  $Id: ossimIpt.h 19793 2011-06-30 13:26:56Z gpotts $
 
 #ifndef ossimIpt_HEADER
 #define ossimIpt_HEADER
@@ -106,6 +106,7 @@ public:
    friend OSSIMDLLEXPORT std::istream& operator>>(std::istream& is,
                                                   ossimIpt& pt);
    
+   bool isEqualTo(const ossimIpt& rhs, ossimCompareType compareType=OSSIM_COMPARE_FULL)const;
    /*!
     * METHOD: length()
     * Returns the RSS of the components.

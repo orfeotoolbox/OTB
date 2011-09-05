@@ -6,7 +6,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimImageViewAffineTransform.cpp 18999 2011-03-02 15:54:26Z gpotts $
+//  $Id: ossimImageViewAffineTransform.cpp 19802 2011-07-11 11:08:07Z gpotts $
 
 #include <ossim/projection/ossimImageViewAffineTransform.h>
 #include <ossim/base/ossimKeywordlist.h>
@@ -52,8 +52,6 @@ void ossimImageViewAffineTransform::imageToView(const ossimDpt& imagePoint,
                                                 ossimDpt&       viewPoint)const
 {
    
-//    viewPoint.x = m_transform[0][0]*(imagePoint.x - translateRotationOriginPoint.x) + m_transform[0][1]*(imagePoint.y - translateRotationOriginPoint.y) + m_transform[0][2];
-//    viewPoint.y = m_transform[1][0]*(imagePoint.x - translateRotationOriginPoint.x) + m_transform[1][1]*(imagePoint.y - translateRotationOriginPoint.y) + m_transform[1][2];
     viewPoint.x = m_transform[0][0]*imagePoint.x + m_transform[0][1]*imagePoint.y + m_transform[0][2];
     viewPoint.y = m_transform[1][0]*imagePoint.x + m_transform[1][1]*imagePoint.y + m_transform[1][2];
 }
@@ -61,12 +59,8 @@ void ossimImageViewAffineTransform::imageToView(const ossimDpt& imagePoint,
 void ossimImageViewAffineTransform::viewToImage(const ossimDpt& viewPoint,
                                                 ossimDpt&       imagePoint)const
 {
-   
-//    imagePoint.x = m_inverseTransform[0][0]*viewPoint.x + m_inverseTransform[0][1]*viewPoint.y + m_inverseTransform[0][2] + translateRotationOriginPoint.x;
-//    imagePoint.y = m_inverseTransform[1][0]*viewPoint.x + m_inverseTransform[1][1]*viewPoint.y + m_inverseTransform[1][2] + translateRotationOriginPoint.y;
    imagePoint.x = m_inverseTransform[0][0]*viewPoint.x + m_inverseTransform[0][1]*viewPoint.y + m_inverseTransform[0][2];
    imagePoint.y = m_inverseTransform[1][0]*viewPoint.x + m_inverseTransform[1][1]*viewPoint.y + m_inverseTransform[1][2];
-   
 }
 
 void ossimImageViewAffineTransform::setMatrix(NEWMAT::Matrix& matrix)
@@ -220,81 +214,6 @@ bool ossimImageViewAffineTransform::loadState(const ossimKeywordlist& kwl,
    }
    buildCompositeTransform();
    ossimImageViewTransform::loadState(kwl, prefix);
-#if 0
-   ossimString newPrefix = ossimString(prefix) + "transform.";
-   
-   const char* lookup = kwl.find(newPrefix.c_str(),
-                                 "m11");
-   if(lookup)
-   {
-      m_transform[0][0] = ossimString(lookup).toDouble();
-   }
-
-   lookup = kwl.find(newPrefix.c_str(),
-                     "m12");
-   if(lookup)
-   {
-      m_transform[0][1] = ossimString(lookup).toDouble();
-   }
-
-   lookup = kwl.find(newPrefix.c_str(),
-                     "m13");
-   if(lookup)
-   {
-      m_transform[0][2] = ossimString(lookup).toDouble();
-   }
-
-   lookup = kwl.find(newPrefix.c_str(),
-                     "m21");
-   if(lookup)
-   {
-      m_transform[1][0] = ossimString(lookup).toDouble();
-   }
-
-   lookup = kwl.find(newPrefix.c_str(),
-                     "m22");
-   if(lookup)
-   {
-      m_transform[1][1] = ossimString(lookup).toDouble();
-   }
-
-   lookup = kwl.find(newPrefix.c_str(),
-                     "m23");
-   if(lookup)
-   {
-      m_transform[1][2] = ossimString(lookup).toDouble();
-   }
-
-   lookup = kwl.find(newPrefix.c_str(),
-                     "m31");
-   if(lookup)
-   {
-      m_transform[2][0] = ossimString(lookup).toDouble();
-   }
-
-   lookup = kwl.find(newPrefix.c_str(),
-                     "m32");
-   if(lookup)
-   {
-      m_transform[2][1] = ossimString(lookup).toDouble();
-   }
-
-   lookup = kwl.find(newPrefix.c_str(),
-                     "m33");
-   if(lookup)
-   {
-      m_transform[2][2] = ossimString(lookup).toDouble();
-   }
-
-   lookup = kwl.find(newPrefix.c_str(),
-                     "rotate");
-   if(lookup)
-   {
-      double degrees = ossimString(lookup).toDouble();
-      m_transform *=  ossimMatrix3x3::createRotationZMatrix(degrees);
-   }
-   m_inverseTransform = m_transform.i();
-#endif
    return true;
 }
 
@@ -319,44 +238,6 @@ bool ossimImageViewAffineTransform::saveState(ossimKeywordlist& kwl,
            true);
            
    return ossimImageViewTransform::saveState(kwl,prefix);
-   /*
-   kwl.add(prefix,
-           "transform.m11",
-           m_transform[0][0],
-           true);
-   kwl.add(prefix,
-           "transform.m12",
-           m_transform[0][1],
-           true);
-   kwl.add(prefix,
-           "transform.m13",
-           m_transform[0][2],
-           true);
-   kwl.add(prefix,
-           "transform.m21",
-           m_transform[1][0],
-           true);
-   kwl.add(prefix,
-           "transform.m22",
-           m_transform[1][1],
-           true);
-   kwl.add(prefix,
-           "transform.m23",
-           m_transform[1][2],
-           true);
-   kwl.add(prefix,
-           "transform.m31",
-           m_transform[2][0],
-           true);
-   kwl.add(prefix,
-           "transform.m32",
-           m_transform[2][1],
-           true);
-   kwl.add(prefix,
-           "transform.m33",
-           m_transform[2][2],
-           true);
-   */
 }
 
 bool ossimImageViewAffineTransform::isValid()const
@@ -364,19 +245,29 @@ bool ossimImageViewAffineTransform::isValid()const
    return true;
 }
 
-bool ossimImageViewAffineTransform::setView(ossimObject* /* obj */)
+bool ossimImageViewAffineTransform::setView(ossimObject* obj)
 {
-   return false;
+   ossimImageViewAffineTransform* view = dynamic_cast<ossimImageViewAffineTransform*> (obj);
+   if(view)
+   {  
+      m_transform = view->m_transform;
+      m_inverseTransform = view->m_inverseTransform;
+      m_rotation = view->m_rotation;
+      m_scale = view->m_scale;
+      m_translate = view->m_translate;
+      m_pivot = view->m_pivot;
+   }
+   return (view!=0);
 }
 
 ossimObject* ossimImageViewAffineTransform::getView()
 {
-   return NULL;
+   return this;
 }
 
 const ossimObject* ossimImageViewAffineTransform::getView()const
 {
-   return NULL;
+   return this;
 }
 
 ossimDpt ossimImageViewAffineTransform::getInputMetersPerPixel()const
@@ -389,6 +280,27 @@ ossimDpt ossimImageViewAffineTransform::getOutputMetersPerPixel()const
    ossimDpt result;
    
    result.makeNan();
+   
+   return result;
+}
+
+bool ossimImageViewAffineTransform::isEqualTo(const ossimObject& obj, ossimCompareType compareType)const
+{
+   bool result = ossimImageViewTransform::isEqualTo(obj,compareType);
+   
+   if(result)
+   {
+      result = false;
+      const ossimImageViewAffineTransform* rhs = dynamic_cast<const ossimImageViewAffineTransform*> (&obj);
+      if(rhs)
+      {
+         result = (ossim::almostEqual(m_rotation, rhs->m_rotation)&&
+                   (m_scale.isEqualTo(rhs->m_scale))&&
+                   (m_translate.isEqualTo(rhs->m_translate))&&
+                   (m_pivot.isEqualTo(rhs->m_pivot))
+                   );  
+      }
+   }
    
    return result;
 }

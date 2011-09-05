@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimProperty.h 18405 2010-11-10 20:44:58Z gpotts $
+// $Id: ossimProperty.h 19917 2011-08-09 11:12:24Z gpotts $
 #ifndef ossimProperty_HEADER
 #define ossimProperty_HEADER
 #include <ossim/base/ossimObject.h>
@@ -25,7 +25,9 @@ public:
    {
       ossimPropertyChangeType_NOTSPECIFIED   = 0,
       ossimPropertyChangeType_CACHE_REFRESH  = 1,
-      ossimPropertyChangeType_FULL_REFRESH   = 2
+      ossimPropertyChangeType_FULL_REFRESH   = 2,
+      ossimPropertyChangeType_AFFECTS_OTHERS = 4, // used to identify if this property modification affects the values of other properties once set
+      ossimPropertyChangeType_ALL = (ossimPropertyChangeType_CACHE_REFRESH|ossimPropertyChangeType_FULL_REFRESH|ossimPropertyChangeType_AFFECTS_OTHERS)
    };
    ossimProperty(const ossimString& name=ossimString(""));
    ossimProperty(const ossimProperty& rhs);
@@ -42,9 +44,9 @@ public:
 
    virtual const ossimContainerProperty* asContainer()const;
    virtual ossimContainerProperty* asContainer();
-   
+   bool isChangeTypeSet(int type)const;
    void clearChangeType();
-   void setChangeType(ossimPropertyChangeType type);
+   void setChangeType(int type, bool on=true);
    void setFullRefreshBit();
    void setCacheRefreshBit();
    
@@ -52,8 +54,9 @@ public:
    bool isFullRefresh()const;
    bool isCacheRefresh()const;
    bool isChangeTypeSpecified()const;
-
-   void setReadOnlyFlag(bool flag);
+   bool affectsOthers()const;
+   
+   virtual void setReadOnlyFlag(bool flag);
    bool getReadOnlyFlag()const;
    bool isReadOnly()const;
 
@@ -69,6 +72,7 @@ public:
    virtual ossimRefPtr<ossimXmlNode> toXml()const;
    
    virtual void saveState(ossimKeywordlist& kwl, const ossimString& prefix = "")const;
+   virtual void accept(ossimVisitor& visitor);
    
 protected:
    virtual ~ossimProperty();

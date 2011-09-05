@@ -8,7 +8,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimEdgeFilter.cpp 17195 2010-04-23 17:32:18Z dburken $
+//  $Id: ossimEdgeFilter.cpp 19956 2011-08-16 00:36:25Z gpotts $
 #include <ossim/imaging/ossimEdgeFilter.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
 #include <ossim/imaging/ossimImageData.h>
@@ -188,6 +188,11 @@ void ossimEdgeFilter::setProperty(ossimRefPtr<ossimProperty> property)
    {
       theFilterType = property->valueToString();
    }
+   else 
+   {
+      ossimImageSourceFilter::setProperty(property.get());
+   }
+
 }
 
 ossimRefPtr<ossimProperty> ossimEdgeFilter::getProperty(const ossimString& name)const

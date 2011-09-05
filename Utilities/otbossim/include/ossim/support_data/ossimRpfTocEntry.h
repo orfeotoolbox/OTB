@@ -9,9 +9,12 @@
 // Description: Rpf support class
 // 
 //********************************************************************
-// $Id: ossimRpfTocEntry.h 18362 2010-11-01 15:20:47Z dburken $
+// $Id: ossimRpfTocEntry.h 19900 2011-08-04 14:19:57Z dburken $
 #ifndef ossimRpfTocEntry_HEADER
 #define ossimRpfTocEntry_HEADER
+
+#include <vector>
+#include <iosfwd>
 
 #include <ossim/support_data/ossimRpfBoundaryRectRecord.h>
 #include <ossim/base/ossimConstants.h>
@@ -19,12 +22,9 @@
 #include <ossim/imaging/ossimImageGeometry.h>
 #include <ossim/support_data/ossimRpfFrameEntry.h>
 
-#include <vector>
-#include <iosfwd>
-
 class ossimIrect;
 
-class OSSIM_DLL ossimRpfTocEntry
+class OSSIMDLLEXPORT ossimRpfTocEntry
 {
 public:
    friend std::ostream& operator <<(std::ostream& out,
@@ -106,6 +106,7 @@ private:
    void allocateFrameEntryArray();
    
    ossimRpfBoundaryRectRecord theBoundaryInformation;
+   ossim_uint32  theNumSamples; //!> May be less than actual image width in case of > 360 deg wrap condition. (OLK 10/10)
    std::vector< std::vector<ossimRpfFrameEntry> > theFrameEntryArray;
 };
 

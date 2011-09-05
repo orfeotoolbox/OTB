@@ -7,7 +7,7 @@
 // Description: implementation for image generator
 //
 //*************************************************************************
-// $Id: ossimIgen.cpp 19682 2011-05-31 14:21:20Z dburken $
+// $Id: ossimIgen.cpp 19907 2011-08-05 19:55:46Z dburken $
 
 #include <iterator>
 #include <sstream>
@@ -30,7 +30,10 @@
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
 #include <ossim/imaging/ossimImageChain.h>
 #include <ossim/imaging/ossimRectangleCutFilter.h>
+#include <ossim/imaging/ossimGeoPolyCutter.h>
 #include <ossim/imaging/ossimTiffWriter.h>
+#include <ossim/imaging/ossimTilingRect.h>
+#include <ossim/imaging/ossimTilingPoly.h>
 #include <ossim/base/ossimPreferences.h>
 #include <ossim/parallel/ossimMpi.h>
 
@@ -41,12 +44,14 @@ ossimIgen::ossimIgen()
 :
 theContainer(new ossimConnectableContainer()),
 theProductProjection(0),
+theProductChain(0),
+theTiling(new ossimTiling),
+theOutputRect(),
 theBuildThumbnailFlag(false),
 theThumbnailSize(0, 0),
 theNumberOfTilesToBuffer(2),
 theKwl(),
 theTilingEnabled(false),
-theTiling(),
 theProgressFlag(true),
 theStdoutFlag(false)
 {
@@ -56,6 +61,7 @@ theStdoutFlag(false)
 ossimIgen::~ossimIgen()
 {
    theProductProjection = 0;
+   theTiling = 0;
    theContainer->disconnect();
    theContainer->deleteAllChildren();
    theContainer = 0;
@@ -102,10 +108,10 @@ void ossimIgen::initializeAttributes()
          if(resStr)
          {
             theThumbnailSize = ossimIpt(0,0);
-            std::string s(resStr);
-            std::istringstream in(s);
+            std::istringstream in(resStr);
             ossimString x,y;
-            in >> x.string() >> y.string();
+
+            in >> x >> y;
 
             ossim_int32 ix = x.toInt32();
             ossim_int32 iy = y.toInt32();
@@ -144,7 +150,7 @@ void ossimIgen::initializeAttributes()
    if(tilingKw)
    {
       theTilingEnabled = true;
-      if(!theTiling.loadState(theKwl, "igen.tiling."))
+      if(!theTiling->loadState(theKwl, "igen.tiling."))
       {
          theTilingEnabled = false;
       }
@@ -416,14 +422,36 @@ void ossimIgen::outputProduct()
          throw(ossimException(err));
       }
    }
+   
    writer->initialize();
+
+   if ( theBuildThumbnailFlag )
+   {
+      //---
+      // Use theOutputRect as it has been clamped to be within the requested thumbnail size.
+      // 
+      // Relying of the bounding rectangle of the scaled product chain has given us off by
+      // one rectangles, i.e., a width of 513 instead of 512.
+      // 
+      // NOTE: This must be called after the writer->initialize() as
+      // ossimImageFileWriter::initialize incorrectly resets theAreaOfInterest
+      // back to the bounding rect.
+      //---
+      writer->setAreaOfInterest( ossimIrect(theOutputRect) );
+   }
 
    // If multi-file tiled output is not desired perform simple output, handle special:
    if(theTilingEnabled && theProductProjection.valid())
    {
-      theTiling.initialize(*(theProductProjection.get()), theOutputRect);
-      ossimRectangleCutFilter* cut = new ossimRectangleCutFilter;
-      theProductChain->addFirst(cut);
+      theTiling->initialize(*(theProductProjection.get()), theOutputRect);
+
+      ossimRectangleCutFilter* cut = NULL;
+      ossimTilingPoly* tilingPoly = PTR_CAST(ossimTilingPoly, theTiling.get());
+      if (tilingPoly == NULL)
+      {
+         cut = new ossimRectangleCutFilter;
+         theProductChain->addFirst(cut);
+      }
       
       ossimFilename tempFile = writer->getFilename();
       if(!tempFile.isDir())
@@ -434,10 +462,45 @@ void ossimIgen::outputProduct()
 
       // 'next' method modifies the mapProj which is the same instance as theProductProjection,
       // so this data member is modified here, then later accessed by setView:
-      while(theTiling.next(theProductProjection, clipRect, tileName))
+      while(theTiling->next(theProductProjection, clipRect, tileName))
       {
-         setView();
-         cut->setRectangle(clipRect);
+         if (cut && tilingPoly == NULL)//use ossimTiling or ossimTilingRect
+         {
+            setView();
+            cut->setRectangle(clipRect);
+         }
+         else //otherwise use ossimTilingPoly
+         {
+            if (tilingPoly != NULL)
+            {
+               if (!tilingPoly->isFeatureBoundingIntersect())//if clip rect does not intersect with output rect, do nothing
+               {
+                  continue;
+               }
+               if (tilingPoly->useMbr())//if use_mbr flag is set to true, all pixels within the MBR will be preserved
+               {
+                  if (cut == NULL)
+                  {
+                      cut = new ossimRectangleCutFilter;
+                      theProductChain->addFirst(cut);
+                  }
+                  setView();
+                  cut->setRectangle(clipRect);
+               }
+               else
+               {
+                  if ( tilingPoly->hasExteriorCut() )
+                  {
+                     theProductChain->addFirst( tilingPoly->getExteriorCut().get() );
+                  }
+                  if ( tilingPoly->hasInteriorCut() )
+                  {
+                     theProductChain->addFirst( tilingPoly->getInteriorCut().get() );
+                  }
+               }
+            }
+         }
+         
          initializeChain();
          writer->disconnect();
          writer->connectMyInputTo(theProductChain.get());
@@ -529,6 +592,9 @@ void ossimIgen::setView()
       if (viewClient)
          viewClient->setView(theProductProjection->dup());
    }
+
+   // Force recompute of bounding rect:
+   initializeChain();
 }
 
 //*************************************************************************************************
@@ -541,15 +607,27 @@ void ossimIgen::initThumbnailProjection()
 
    if(mapProj && !theOutputRect.hasNans())
    {
-      double xScale = theOutputRect.width()  / (double)thumb_size;
-      double yScale = theOutputRect.height() / (double)thumb_size;
+      double xScale = theOutputRect.width()  / thumb_size;
+      double yScale = theOutputRect.height() / thumb_size;
       double scale = ossim::max(xScale, yScale);
       mapProj->applyScale(ossimDpt(scale, scale), true);
    }
 
    // Need to change the view in the product chain:
    setView();
-   initializeChain();
+
+   // Clamp output rectangle to thumbnail bounds.
+   ossimDpt ul = theOutputRect.ul();
+   ossimDpt lr = theOutputRect.lr();
+   if ( (lr.x - ul.x + 1) > thumb_size)
+   {
+      lr.x = ul.x + thumb_size - 1;
+   }
+   if ( (lr.y - ul.y + 1) > thumb_size )
+   {
+      lr.y = ul.y + thumb_size - 1;
+   }
+   theOutputRect = ossimDrect(ul, lr);
 }
 
 //*************************************************************************************************
@@ -561,8 +639,17 @@ void ossimIgen::initializeChain()
    // Force initialization of the chain to recompute parameters:
    theProductChain->initialize();
    theOutputRect = theProductChain->getBoundingRect();
-
-   // Stretch the rectangle out to integer boundaries.
+   
    if(!theOutputRect.hasNans())
+   {
+      // Stretch the rectangle out to integer boundaries.
       theOutputRect.stretchOut();
+
+      // Communicate the new product size to the view's geometry object. This is a total HACK that 
+      // external code needs to worry about setting this. Something is wrong with this picture 
+      // (OLK 02/11)
+      ossimImageGeometry* geom = theProductChain->getImageGeometry().get();
+      if (geom)
+         geom->setImageSize(ossimIpt(theOutputRect.size()));
+   }
 }

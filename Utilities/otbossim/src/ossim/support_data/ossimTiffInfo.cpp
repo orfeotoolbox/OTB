@@ -1240,7 +1240,7 @@ bool ossimTiffInfo::getImageGeometry(const ossimKeywordlist& gtiffKwl,
          // Shift the tile to 0,0 pixel of image if not already there.
          ossimDpt tie;
          tie.x = ties[3] - ties[0] * scale.x;
-         tie.y = ties[4] - ties[1] * scale.y;
+         tie.y = ties[4] + ties[1] * scale.y;
          geomKwl.add(geomPrefix.c_str(),
                      ossimKeywordNames::TIE_POINT_XY_KW,
                      tie.toString().c_str());

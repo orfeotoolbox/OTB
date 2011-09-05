@@ -310,11 +310,13 @@ private:
    /**
     * @brief Creates ossimScalarRemapper and connects to source.
     * @param Source to connect to.
+    * @param scalar Scalar type.
     * @return End of chain with remapper on it.
     * @note Throws ossimException on error.
     */
    ossimRefPtr<ossimImageSource> addScalarRemapper(
-      ossimRefPtr<ossimImageSource> &source) const;
+      ossimRefPtr<ossimImageSource> &source,
+      ossimScalarType scalar) const;
 
    /**
     * @brief Set up ossimHistogramRemapper for a chain.
@@ -371,9 +373,6 @@ private:
    /** @return true if file extension is "src" */
    bool isSrcFile(const ossimFilename& file) const;
 
-   /** @return true if scale to eight bit option is set; false, if not. */
-   bool scaleToEightBit() const;
-
    /** @brief Initializes m_srcKwl if option was set. */
    void initializeSrcKwl();
 
@@ -391,6 +390,18 @@ private:
     * @note This does not cover SRS keyword which could be any type of projection.
     */
    ossimDemOutputProjection getOutputProjectionType() const;
+
+   /**
+    * @brief Returns the scalar type from OUTPUT_RADIOMETRY_KW keyword if
+    * present. Deprecated SCALE_2_8_BIT_KW is also checked.
+    *
+    * @return ossimScalarType Note this can be OSSIM_SCALAR_UNKNOWN if the
+    * keywords are not present.
+    */
+   ossimScalarType getOutputScalarType() const;
+
+   /** @return true if scale to eight bit option is set; false, if not. */
+   bool scaleToEightBit() const;
 
    /**
     * @brief Adds application arguments to the argument parser.

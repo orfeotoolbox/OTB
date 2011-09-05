@@ -9,7 +9,7 @@
 // SevenParamDatum. This is a base class for all
 // seven param datums.
 //*******************************************************************
-//  $Id: ossimSevenParamDatum.h 14789 2009-06-29 16:48:14Z dburken $
+//  $Id: ossimSevenParamDatum.h 19795 2011-06-30 15:04:48Z gpotts $
 
 #ifndef ossimSevenParamDatum_HEADER
 #define ossimSevenParamDatum_HEADER
@@ -82,6 +82,7 @@ public:
    virtual ossim_float64 param5()const{return theParam5;}
    virtual ossim_float64 param6()const{return theParam6;}
    virtual ossim_float64 param7()const{return theParam7;}
+   virtual bool isEqualTo(const ossimObject& obj, ossimCompareType compareType=OSSIM_COMPARE_FULL)const;
    
 private:
    ossim_float64 theParam1;
@@ -91,6 +92,8 @@ private:
    ossim_float64 theParam5;
    ossim_float64 theParam6;
    ossim_float64 theParam7;
+   
+   TYPE_DATA;
 };
 
 #endif

@@ -9,7 +9,7 @@
 // information.
 //
 //***************************************************************************
-// $Id: ossimGeoTiff.cpp 18693 2011-01-17 18:49:15Z dburken $
+// $Id: ossimGeoTiff.cpp 20026 2011-09-01 16:33:18Z dburken $
 
 #include <ossim/support_data/ossimGeoTiff.h>
 #include <ossim/base/ossimTrace.h>
@@ -53,7 +53,7 @@ static const ossimGeoTiffDatumLut DATUM_LUT;
 OpenThreads::Mutex ossimGeoTiff::theMutex;
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimGeoTiff.cpp 18693 2011-01-17 18:49:15Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimGeoTiff.cpp 20026 2011-09-01 16:33:18Z dburken $";
 #endif
 
 //---
@@ -220,8 +220,7 @@ int ossimGeoTiff::getPcsUnitType(ossim_int32 pcsCode)
 
 #define EPSG_CODE_MAX 32767
 bool ossimGeoTiff::writeTags(TIFF* tifPtr,
-                             const ossimRefPtr<ossimMapProjectionInfo> projectionInfo,
-                             bool imagineNad27Flag)
+                             const ossimRefPtr<ossimMapProjectionInfo> projectionInfo)
 {
    OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
 
@@ -273,7 +272,7 @@ bool ossimGeoTiff::writeTags(TIFF* tifPtr,
             pcsCode = meter_pcs;
       }
 
-      int gcs_code = mapProj->getGcsCode();
+      //int gcs_code = mapProj->getGcsCode();
       int datum_code = USER_DEFINED;
       int ellipsoid_code = USER_DEFINED;
       const ossimDatum* datum = mapProj->getDatum();
@@ -284,7 +283,10 @@ bool ossimGeoTiff::writeTags(TIFF* tifPtr,
          if (ellipsoid)
             ellipsoid_code = ellipsoid->getEpsgCode();
       }
-      GTIFKeySet(gtif, GeographicTypeGeoKey,    TYPE_SHORT, 1, gcs_code);
+      
+      if(mapProj->isGeographic())
+         GTIFKeySet(gtif, GeographicTypeGeoKey,    TYPE_SHORT, 1, pcsCode);
+
       GTIFKeySet(gtif, GeogGeodeticDatumGeoKey, TYPE_SHORT, 1, datum_code);
       GTIFKeySet(gtif, ProjectionGeoKey ,       TYPE_SHORT, 1, pcsCode);
       GTIFKeySet(gtif, GeogEllipsoidGeoKey,     TYPE_SHORT, 1, ellipsoid_code);
@@ -332,37 +334,8 @@ bool ossimGeoTiff::writeTags(TIFF* tifPtr,
          }
       }
 
-      // ***
-      // ERDAS Imagine < v8.7 has a NAD27 Conus Bug.  They are not using the
-      // proper GCS code.  They use user-defined fields and Geog citation tag to
-      // define.  Sucks!  It is an open issue at Leica.  This is a work around
-      // flag for this issue.
-      // ***
-      if((datumCode == "NAS-C") && imagineNad27Flag)
-      {
-         gcs = USER_DEFINED;
-
-         std::ostringstream os;
-         os << "IMAGINE GeoTIFF Support\nCopyright 1991 -  2001 by ERDAS, Inc. All Rights Reserved\n@(#)$RCSfile$ $Revision: 18693 $ $Date: 2011-01-17 10:49:15 -0800 (Mon, 17 Jan 2011) $\nUnable to match Ellipsoid (Datum) to a GeographicTypeGeoKey value\nEllipsoid = Clarke 1866\nDatum = NAD27 (CONUS)";
-
-         GTIFKeySet(gtif,
-                    GeogCitationGeoKey,
-                    TYPE_ASCII,
-                    1,
-                    os.str().c_str());
-
-         // User-Defined
-         GTIFKeySet(gtif, GeogGeodeticDatumGeoKey, TYPE_SHORT, 1,
-                    KvUserDefined );
-         // User-Defined
-         GTIFKeySet(gtif, GeogEllipsoidGeoKey, TYPE_SHORT, 1,
-                    KvUserDefined );
-      }
-      else
-      {
-         GTIFKeySet( gtif, GeographicTypeGeoKey, TYPE_SHORT, 1, gcs );
-         gcsTypeSet = true;
-      }
+      GTIFKeySet( gtif, GeographicTypeGeoKey, TYPE_SHORT, 1, gcs );
+      gcsTypeSet = true;
 
       // Write the projection parameters.
 
@@ -853,7 +826,7 @@ bool ossimGeoTiff::writeJp2GeotiffBox(const ossimFilename& tmpFile,
       {
          ossimRefPtr<ossimMapProjectionInfo> projectionInfo
 	   = new ossimMapProjectionInfo(mapProj, ossimDrect(rect));
-         ossimGeoTiff::writeTags(tiff, projectionInfo, false);
+         ossimGeoTiff::writeTags(tiff, projectionInfo);
       }
 
       // Basic tiff tags.
@@ -1188,8 +1161,12 @@ bool ossimGeoTiff::readTags(
    double* pixScale=0;
    if(TIFFGetField(theTiffPtr, TIFFTAG_GEOPIXELSCALE, &pixScaleSize, &pixScale))
    {
-      theScale.insert(theScale.begin(),
-                      pixScale, pixScale+pixScaleSize);
+      theScale.insert(theScale.begin(), pixScale, pixScale+pixScaleSize);
+      if ( theModelType == ModelTypeGeographic )
+      {
+         // The origin latitude must be computed so as to achieve the proper horizontal scaling:
+         theOriginLat = ossim::acosd(theScale[1]/theScale[0]);
+      }
    }
    theTiePoint.clear();
    ossim_uint16 tiePointSize = 0;
@@ -1211,6 +1188,8 @@ bool ossimGeoTiff::readTags(
             theOriginLon = tiepoints[3] - tiepoints[0] * pixScale[0]; 
          }
          
+         // In geographic projection, the origin lat indicates the horizontal scaling (as 
+         // 1/cos(lat) ), so it should not be computed here
          if(ossim::isnan(theOriginLat) && 
             (pixScaleSize > 1) &&
             (tiePointSize > 3))
@@ -1349,7 +1328,7 @@ bool ossimGeoTiff::addImageGeometry(ossimKeywordlist& kwl, const char* prefix) c
    }
 
    // NOT SURE THIS IS A GOOD IDEA HERE. KEPT FOR LEGACY SAKE. (OLK 5/10)
-   else if(theGcsCode == 3785)
+   if(theGcsCode == 3785)
    {
       ossimRefPtr<ossimProjection> proj = 
          ossimProjectionFactoryRegistry::instance()->createProjection(ossimString("EPSG:3785"));
@@ -1837,15 +1816,15 @@ bool ossimGeoTiff::parseProjection(ossimMapProjection* map_proj)
    else
       theModelType = ModelTypeProjected;
 
-   if (map_proj->getProjectionName() == "ossimEquDistCylProjection")
    theProjectionName = map_proj->getProjectionName();
    theFalseEasting   = map_proj->getFalseEasting();
    theFalseNorthing  = map_proj->getFalseNorthing();
    theStdPar1        = map_proj->getStandardParallel1();
    theStdPar2        = map_proj->getStandardParallel2();
    thePcsCode        = map_proj->getPcsCode();
-   theGcsCode        = map_proj->getGcsCode();
-   theDatumCode      = theGcsCode;
+
+   // GCS code only defined for geographic projections and is basically the same as PCS in OSSIM:
+   theGcsCode = 0;
    
    ossimGpt origin (map_proj->origin());
    theOriginLat      = origin.lat;
@@ -1853,10 +1832,17 @@ bool ossimGeoTiff::parseProjection(ossimMapProjection* map_proj)
    
    const ossimDatum* datum = map_proj->getDatum();
    if (datum)
+   {
       theDatumName  = datum->name();
+      theDatumCode  = datum->epsgCode();
+   }
    
    // Now intercept a select few that have additional parameters specific to their derived type:
-   if (theProjectionName == "ossimUtmProjection")
+   if (map_proj->getProjectionName() == "ossimEquDistCylProjection")
+   {
+      theGcsCode = map_proj->getPcsCode();
+   }
+   else if (theProjectionName == "ossimUtmProjection")
    {
       ossimUtmProjection* utm_proj = PTR_CAST(ossimUtmProjection, map_proj);
       theHemisphere = utm_proj->getHemisphere();

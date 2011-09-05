@@ -9,11 +9,12 @@
 //
 // Calls Geotrans Equidistant Cylinder projection code.  
 //*******************************************************************
-//  $Id: ossimEquDistCylProjection.cpp 19654 2011-05-26 11:39:34Z gpotts $
+//  $Id: ossimEquDistCylProjection.cpp 19880 2011-07-30 16:27:15Z dburken $
 
 #include <ossim/projection/ossimEquDistCylProjection.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimKeywordlist.h>
+#include <ossim/base/ossimCommon.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimDatum.h>
 #include <ossim/base/ossimNotifyContext.h>
@@ -89,13 +90,19 @@ void ossimEquDistCylProjection::update()
    theFalseEastingNorthing.x = Eqcy_False_Easting;
    theFalseEastingNorthing.y = Eqcy_False_Northing;
 
+   // Scale longitude to possible new origin:
+   theDegreesPerPixel.lon = theDegreesPerPixel.lat / Cos_Eqcy_Std_Parallel;
+   theMetersPerPixel.makeNan();
+
    ossimMapProjection::update();
 
-   // Check if the origin is at (0,0). This implies EPSG:4326
-   if ((theOrigin.lat == 0.0) && (theOrigin.lon == 0.0) && (theGcsCode == 4326))
-      setPcsCode(4326);
-   else if (getPcsCode() == 0)
-      setPcsCode(theGcsCode);
+   // For geographic projection, the PCS EPSG code can be derived from the datum in most cases:
+   if ((thePcsCode == 0) && (theDatum != NULL))
+   {
+      ossim_uint32 datum_code = theDatum->epsgCode();
+      if ((datum_code >= 6000) && (datum_code < 7000))
+         thePcsCode = datum_code - 2000;
+   }
 }
 
 void ossimEquDistCylProjection::setFalseEasting(double falseEasting)
@@ -338,6 +345,33 @@ bool ossimEquDistCylProjection::loadState(const ossimKeywordlist& kwl, const cha
             
    return true;
 }
+
+//*************************************************************************************************
+// Sets the GSD in x and y directions indirectly by specifying degrees/pixel instead of meters
+// per pixel. This necessarily implies a reference latitude where lat = arccos(y/x). The origin 
+// latitude will be modified accordingly. There will be ambiguity on the implied latitude's 
+// hemisphere which will be resolved by referencing the tiepoint's latitude.
+//*************************************************************************************************
+void ossimEquDistCylProjection::setDecimalDegreesPerPixel(const ossimDpt& dpp)
+{
+   // Adjust the origin latitude in order to achieve the gsd ratio scaling first:
+   if (dpp.lon != 0.0)
+   { 
+      double ratio = dpp.lat/dpp.lon;
+      if (ratio > 1.0)
+         ratio = 1.0;
+      else if (ratio < -1.0)
+         ratio = -1.0;
+      theOrigin.lat = ossim::acosd(ratio);
+   }
+
+   // Check hemisphere against tiepoint:
+   if (!theUlGpt.hasNans() && (theUlGpt.lat < 0))
+      theOrigin.lat *= -1.0;
+
+   ossimMapProjection::setDecimalDegreesPerPixel(dpp);
+}
+
 
 /***************************************************************************/
 /*

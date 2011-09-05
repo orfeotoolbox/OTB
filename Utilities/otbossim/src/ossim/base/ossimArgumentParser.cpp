@@ -4,7 +4,7 @@
 // OSSIM.
 //
 //-------------------------------------------------------------------------
-// $Id: ossimArgumentParser.cpp 17815 2010-08-03 13:23:14Z dburken $
+// $Id: ossimArgumentParser.cpp 19900 2011-08-04 14:19:57Z dburken $
 
 #include <cstring>
 #include <set>
@@ -169,6 +169,18 @@ ossimArgumentParser::ossimArgumentParser(int* argc,char **argv):
 
 ossimArgumentParser::~ossimArgumentParser()
 {
+}
+
+void ossimArgumentParser::initialize(int* argc, const char **argv)
+{
+   if(argc > 0) delete (theArgv);
+   theArgc = argc;
+   theArgv = new char*[*argc];
+   for(int i=0;i<*argc;i++)
+   {
+      theArgv[i] = new char[strlen(argv[i])];
+      strcpy(theArgv[i], argv[i]);
+   }
 }
 
 std::string ossimArgumentParser::getApplicationName() const

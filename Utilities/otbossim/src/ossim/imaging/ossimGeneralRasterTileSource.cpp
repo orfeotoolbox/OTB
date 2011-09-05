@@ -10,23 +10,27 @@
 //
 // Contains class definition for ossimGeneralRasterTileSource.
 //*******************************************************************
-//  $Id: ossimGeneralRasterTileSource.cpp 17815 2010-08-03 13:23:14Z dburken $
+//  $Id: ossimGeneralRasterTileSource.cpp 19900 2011-08-04 14:19:57Z dburken $
 
 #include <ossim/imaging/ossimGeneralRasterTileSource.h>
 #include <ossim/base/ossimConstants.h>
-#include <ossim/base/ossimErrorContext.h>
-#include <ossim/base/ossimInterleaveTypeLut.h>
-#include <ossim/base/ossimScalarTypeLut.h>
-#include <ossim/base/ossimEndian.h>
-#include <ossim/base/ossimIpt.h>
 #include <ossim/base/ossimDpt.h>
-#include <ossim/base/ossimIrect.h>
+#include <ossim/base/ossimEndian.h>
+#include <ossim/base/ossimErrorContext.h>
 #include <ossim/base/ossimFilename.h>
+#include <ossim/base/ossimInterleaveTypeLut.h>
+#include <ossim/base/ossimIpt.h>
+#include <ossim/base/ossimIrect.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimKeywordNames.h>
+#include <ossim/base/ossimScalarTypeLut.h>
+#include <ossim/base/ossimStreamFactoryRegistry.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
-#include <ossim/base/ossimStreamFactoryRegistry.h>
+#include <ossim/imaging/ossimImageGeometryRegistry.h>
+#include <ossim/projection/ossimMapProjectionFactory.h>
+#include <ossim/projection/ossimMapProjection.h>
+#include <ossim/support_data/ossimFgdcXmlDoc.h>
 
 RTTI_DEF1_INST(ossimGeneralRasterTileSource,
                "ossimGeneralRasterTileSource",
@@ -43,8 +47,8 @@ static const ossimInterleaveTypeLut ILUT;
 ossimGeneralRasterTileSource::ossimGeneralRasterTileSource()
    :
       ossimImageHandler(),
-      theTile(NULL),
-      theBuffer(NULL),
+      theTile(0),
+      theBuffer(0),
       theBufferInterleave(OSSIM_BIL),
       theFileStrList(0),
       theImageData(),
@@ -55,22 +59,7 @@ ossimGeneralRasterTileSource::ossimGeneralRasterTileSource()
 
 ossimGeneralRasterTileSource::~ossimGeneralRasterTileSource()
 {
-   if (theBuffer)
-   {
-      delete [] theBuffer;
-      theBuffer = NULL;
-   }
-
-   std::vector<ossimRefPtr<ossimIFStream> >::iterator is =
-      theFileStrList.begin();
-
-   while (is != theFileStrList.end())
-   {
-      (*is)->close();
-      ++is;
-   }
-
-   theFileStrList.clear();
+   close();
 }
 
 ossimRefPtr<ossimImageData> ossimGeneralRasterTileSource::getTile(
@@ -772,45 +761,50 @@ double ossimGeneralRasterTileSource::getMaxPixelValue(ossim_uint32 band)const
 
 bool ossimGeneralRasterTileSource::open()
 {
-  if(isOpen())
-  {
-     close();
-  }
-  static const char MODULE[] = "ossimGeneralRasterTileSource::open";
-  
-  if (traceDebug()) CLOG << " Entered..." << endl;
-  
-  //
-  // A general raster image requires a keyword list to get essential image
-  // information or meta data as its sometimes called.  The meta data file
-  // can have three types of extensions: ".omd", ".hdr" and ".kwl"
-  // Look for them in that order.
-  // Note that the ".omd" extension is for "Ossim Meta Data" and was made
-  // up to avoid conflicting with other software packages ".hdr" files.
-  //
-  
-  ossimFilename hdr = theImageFile;
-  
-  hdr.setExtension("omd");   
-  
-  // See if it's readable.
-  if ( ! hdr.isReadable() )
-  {
-     hdr.setExtension("hdr");   
-     
-     // See if this one's readable.
-     if ( ! hdr.isReadable() )
-     {
-        // Ok try .kwl extension.
-        hdr.setExtension("kwl");   
-        if ( ! hdr.isReadable() )
-        {
-           // No header file so get out.
-           return false;
-        }
-     }
-  }
-
+   static const char MODULE[] = "ossimGeneralRasterTileSource::open";
+   if (traceDebug()) CLOG << " Entered..." << endl;
+   
+   if(isOpen())
+   {
+      close();
+   }
+   
+   //
+   // A general raster image requires a keyword list to get essential image
+   // information or meta data as its sometimes called.  The meta data file
+   // can have three types of extensions: ".omd", ".hdr" and ".kwl"
+   // Look for them in that order.
+   // Note that the ".omd" extension is for "Ossim Meta Data" and was made
+   // up to avoid conflicting with other software packages ".hdr" files.
+   //
+   
+   ossimFilename hdr = theImageFile;
+   
+   hdr.setExtension("omd");   
+   
+   // See if it's readable.
+   if ( ! hdr.isReadable() )
+   {
+      hdr.setExtension("hdr");   
+      
+      // See if this one's readable.
+      if ( ! hdr.isReadable() )
+      {
+         // Ok try .kwl extension.
+         hdr.setExtension("kwl");   
+         if ( ! hdr.isReadable() )
+         {
+            //try .xml extension
+            hdr.setExtension("xml");
+            if (!hdr.isReadable())
+            {
+               // No header file so get out.
+               return false;
+            }
+         }
+      }
+   }
+   
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -820,13 +814,51 @@ bool ossimGeneralRasterTileSource::open()
    
    // Give the header file to the keyword list object.
    ossimKeywordlist kwl(hdr);
-
+   
+   if (hdr.ext() == "xml")
+   {
+      kwl.clear();
+      ossimKeywordlist xmlKwl = getXmlInfo(hdr);
+      if (xmlKwl.getSize() > 0)
+      {
+         kwl.addList(xmlKwl);
+         if (kwl.getSize() > 0)
+         {
+            kwl.setErrorStatus(ossimErrorCodes::OSSIM_OK);
+         }
+      }
+      else
+      {
+         return false;
+      }
+   }
+   
+   if ((kwl.getSize() == 0) || (kwl.find(ossimKeywordNames::NUMBER_SAMPLES_KW) == 0))
+   {
+      if (hdr.ext().downcase() != "hdr")
+      {
+         hdr = hdr.setExtension("hdr");
+      }
+      if (hdr.exists())
+      {
+         ossimKeywordlist hdrKwl = getHdrInfo(hdr);
+         if (hdrKwl.getSize() > 0)
+         {
+            kwl.addList(hdrKwl);
+            if (kwl.getSize() > 0)
+            {
+               kwl.setErrorStatus(ossimErrorCodes::OSSIM_OK);
+            }
+         }
+      }
+   }
+   
    // Check for errors.
    if (kwl.getErrorStatus() == ossimErrorCodes::OSSIM_ERROR)
    {
       if (traceDebug())
       {
-          ossimNotify(ossimNotifyLevel_WARN)
+         ossimNotify(ossimNotifyLevel_WARN)
              << MODULE
              << " Keywordlist open error detected." << endl;
       }
@@ -1071,7 +1103,7 @@ void ossimGeneralRasterTileSource::checkBuffer(const ossimIrect& rect)
       if(theBuffer)
 	{
 	  delete [] theBuffer;
-	  theBuffer = NULL;
+	  theBuffer = 0;
 	}
     }
 
@@ -1091,38 +1123,36 @@ void ossimGeneralRasterTileSource::checkBuffer(const ossimIrect& rect)
 
 bool ossimGeneralRasterTileSource::isOpen() const
 {
+   bool result = false;
    if (theFileStrList.size() > 0)
    {
       if(theFileStrList[0].valid())
       {
-         return !(theFileStrList[0]->fail());
+         result = !(theFileStrList[0]->fail());
       }
-//      return  const_cast<ifstream*>(theFileStrList[0])->is_open();
    }
-
-   return false;
+   return result;
 }
 
 void ossimGeneralRasterTileSource::close()
 {
    ossimImageHandler::close();  // base class
 
-   theTile = NULL;
+   theTile = 0;
    if (theBuffer)
    {
       delete [] theBuffer;
       theBuffer = 0;
    }
 
-   // Delete the list of input streams and clear the list.
-//    vector<istream*>::iterator is = theFileStrList.begin();
-//    while (is != theFileStrList.end())
-//    {
-//       delete *is;
-//       *is = NULL;
-//       ++is;
-//    }
-
+   std::vector<ossimRefPtr<ossimIFStream> >::iterator is = theFileStrList.begin();
+   while (is != theFileStrList.end())
+   {
+      (*is)->close();
+      // delete (*is);
+      // (*is) = 0;
+      ++is;
+   }
    theFileStrList.clear();
 }
 
@@ -1156,3 +1186,436 @@ ossim_uint32 ossimGeneralRasterTileSource::getNumberOfOutputBands() const
    return getNumberOfInputBands();
 }
 
+ossimKeywordlist ossimGeneralRasterTileSource::getHdrInfo(ossimFilename hdrFile)
+{
+   ossimKeywordlist kwl;
+   char delimeter = ' ';
+   kwl.change_delimiter(delimeter);
+   kwl.addFile(hdrFile);
+   kwl.downcaseKeywords();
+
+   ossimKeywordlist geoKwl;
+   ossim_uint32 lines = 0;
+   ossim_uint32 samples = 0;
+   ossim_float32 noData = -9999;
+   ossimString scalarType = "ossim_uint8";
+   ossim_int32 numBands = 1;
+   ossim_int32 skipBytes = 0;
+   ossim_int32 numBits = -1; 
+   ossimString chPixelType = "N"; // not defined
+   ossimString interleaveType = "BIL";
+   ossimString byteOrder;
+   bool noDataFound = false;
+
+   const char* lookup = kwl.find("ncols");
+   if (lookup)
+   {
+      samples = ossimString(lookup).toUInt32();
+      geoKwl.add(ossimKeywordNames::NUMBER_SAMPLES_KW, samples);
+   }
+
+   lookup = kwl.find("nrows");
+   if (lookup)
+   {
+      lines = ossimString(lookup).toUInt32();
+      geoKwl.add(ossimKeywordNames::NUMBER_LINES_KW, lines);
+   }
+
+   lookup = kwl.find("skipbytes");
+   if (lookup)
+   {
+      skipBytes = ossimString(lookup).toInt();
+   }
+
+   lookup = kwl.find("nbands");
+   if (lookup)
+   {
+      numBands = ossimString(lookup).toInt();
+   }
+
+   lookup = kwl.find("nodata");
+   if (lookup)
+   {
+      noData = ossimString(lookup).toFloat32();
+      noDataFound = true;
+   }
+   lookup = kwl.find("nodata_value");
+   if (lookup)
+   {
+      noData = ossimString(lookup).toFloat32();
+      noDataFound = true;
+   }
+
+   lookup = kwl.find("nbits");
+   if (lookup)
+   {
+      numBits = ossimString(lookup).toInt();
+   }
+
+   lookup = kwl.find("pixeltype");
+   if (lookup)
+   {
+      chPixelType = ossimString(lookup);
+   }
+
+   lookup = kwl.find("layout");
+   if (lookup)
+   {
+      interleaveType = ossimString(lookup);
+   }
+
+   lookup = kwl.find("byteorder");
+   if (lookup)
+   {
+      byteOrder = ossimString(lookup);
+   }
+
+   if (numBits == -1)
+   {
+      FILE* fp;
+      ossim_int64 size = 0;
+      fp = fopen(theImageFile.c_str(), "r");
+      if (fp != 0)
+      {
+         fseek(fp, 0, SEEK_END);
+         size = ftell(fp);
+      }
+      fclose(fp);
+
+      if (lines > 0 && samples > 0)
+      {
+         ossim_int32 numBytes = size/samples/lines/numBands;
+         if( numBytes > 0 && numBytes != 3 )
+         {
+            numBits = numBytes*8;
+
+            if( numBytes == 4 )
+            {
+               chPixelType = "F";
+            }
+         }
+      }
+   }
+
+   if( numBits == 16 )
+   {
+      if (chPixelType == "S")
+      {
+         scalarType = "ossim_sint16";
+      }
+      else
+      {
+         scalarType = "ossim_uint16"; // default
+      }
+   }
+   else if( numBits == 32 )
+   {
+      if( chPixelType == "S")
+      {
+         scalarType = "ossim_sint32";
+      }
+      else if( chPixelType == "F")
+      {
+         scalarType = "ossim_float32";
+      }
+      else
+      {
+         scalarType = "ossim_uint32"; // default 
+      }
+   }
+   else if( numBits == 8 )
+   {
+      scalarType = "ossim_uint8";
+      numBits = 8;
+   }
+   else if( numBits < 8 && numBits >= 1 )
+   {
+      scalarType = "ossim_uint8";
+   }
+   else if(numBits == -1)
+   {
+      if( chPixelType == "F")
+      {
+         scalarType = "ossim_float32";
+         numBits = 32;
+      }
+      else
+      {
+         scalarType = "ossim_uint8";
+         numBits = 8;
+      }
+   }
+
+   if (noDataFound)
+   {
+      for (ossim_int32 i = 0; i < numBands; i++)
+      {
+         ossimString prefix = "band" + ossimString::toString(i+1) + ": ";
+         geoKwl.add(prefix, ossimKeywordNames::NULL_VALUE_KW, noData);
+      }
+   }
+
+   geoKwl.add(ossimKeywordNames::NUMBER_BANDS_KW, numBands);
+   geoKwl.add(ossimKeywordNames::SCALAR_TYPE_KW, scalarType);
+   geoKwl.add(ossimKeywordNames::INTERLEAVE_TYPE_KW, interleaveType);
+
+   return geoKwl;
+}
+
+ossimKeywordlist ossimGeneralRasterTileSource::getXmlInfo(ossimFilename xmlFile)
+{
+   ossimKeywordlist kwl;
+   ossimFgdcXmlDoc file;
+   if (file.open(xmlFile))
+   {
+
+      ossimString scalarType = "ossim_uint8";
+      ossim_int32 numBits = -1; 
+      ossimString interleaveType = "BIL";
+
+      ossimIpt size;
+      ossim_int32 samples = 0;
+      ossim_int32 lines = 0;
+      if (file.getImageSize(size))
+      {
+         samples = size.x;
+         lines = size.y;
+      }
+      if (samples > 0)
+      {
+         kwl.add(ossimKeywordNames::NUMBER_SAMPLES_KW, samples);
+      }
+      if (lines > 0)
+      {
+         kwl.add(ossimKeywordNames::NUMBER_LINES_KW, lines);
+      }
+
+      ossim_int32 bands = file.getNumberOfBands();
+      if (bands > 0)
+      {
+         kwl.add(ossimKeywordNames::NUMBER_BANDS_KW, bands);
+      }
+      else
+      {
+         if (samples > 0 && lines > 0)//if there is no bands info but samples and lines info, default number of bands to 1
+         {
+            bands = 1;
+            kwl.add(ossimKeywordNames::NUMBER_BANDS_KW, bands);
+         }
+      }
+
+      ossimString eainfo;
+      file.getPath("/metadata/eainfo/detailed/enttyp/enttypd", eainfo);
+
+      if (numBits == -1)
+      {
+         if ( (lines > 0) && (samples > 0) && (bands > 0) )
+         {
+            ossim_int64 size = theImageFile.fileSize();            
+            ossim_int32 numBytes = size/samples/lines/bands;
+            if( numBytes > 0 && numBytes != 3 )
+            {
+               numBits = numBytes*8;
+            }
+         }
+      }
+
+      if( numBits == 16 )
+      {
+         scalarType = "ossim_uint16"; // default
+      }
+      else if( numBits == 32 )
+      {
+         if(eainfo.contains("float"))
+         {
+            scalarType = "ossim_float32";
+         }
+         else
+         {
+            scalarType = "ossim_uint32"; // default 
+         }
+      }
+      else if( numBits == 8 )
+      {
+         scalarType = "ossim_uint8";
+         numBits = 8;
+      }
+      else if( numBits < 8 && numBits >= 1 )
+      {
+         scalarType = "ossim_uint8";
+      }
+
+      kwl.add(ossimKeywordNames::SCALAR_TYPE_KW, scalarType);
+      kwl.add(ossimKeywordNames::INTERLEAVE_TYPE_KW, interleaveType);
+   }
+   return kwl;
+}
+
+ossimRefPtr<ossimImageGeometry> ossimGeneralRasterTileSource::getImageGeometry()
+{
+   if ( !theGeometry.valid() )
+   {
+      // Check for external geom:
+      theGeometry = getExternalImageGeometry();
+
+      if ( !theGeometry.valid() )
+      {
+         theGeometry = new ossimImageGeometry();
+         
+         ossimString ext = theImageFile.ext();
+         ossimFilename hdrFile = theImageFile;
+         ossimFilename xmlFile = theImageFile;
+         hdrFile = hdrFile.setExtension("hdr");
+         xmlFile = xmlFile.setExtension("xml");
+         if (hdrFile.exists())
+         {
+            ossimKeywordlist geoKwl;
+            ossimKeywordlist kwl(hdrFile, ' ');
+            kwl.downcaseKeywords();
+            
+            ossim_uint32 lines = 0;
+            ossim_uint32 samples = 0;
+            ossim_float32 ll_lon = 0.0;
+            ossim_float32 ll_lat = 0.0;
+            ossim_float32 xCellSize = 1.0;
+            ossim_float32 yCellSize = 1.0;
+            
+            const char* lookup = kwl.find("ncols");
+            if (lookup)
+            {
+               samples = ossimString(lookup).toUInt32();
+               geoKwl.add(ossimKeywordNames::NUMBER_SAMPLES_KW, samples);
+            }
+            
+            lookup = kwl.find("nrows");
+            if (lookup)
+            {
+               lines = ossimString(lookup).toUInt32();
+               geoKwl.add(ossimKeywordNames::NUMBER_LINES_KW, lines);
+            }
+            
+            lookup = kwl.find("cellsize");
+            if (lookup)
+            {
+               xCellSize = ossimString(lookup).toFloat32();
+               yCellSize = xCellSize;
+               geoKwl.add(ossimKeywordNames::DECIMAL_DEGREES_PER_PIXEL_LAT, yCellSize);
+               geoKwl.add(ossimKeywordNames::DECIMAL_DEGREES_PER_PIXEL_LON, xCellSize);
+            }
+            
+            lookup = kwl.find("xdim");
+            if (lookup)
+            {
+               xCellSize = ossimString(lookup).toFloat32();
+               geoKwl.add(ossimKeywordNames::DECIMAL_DEGREES_PER_PIXEL_LON, xCellSize);
+            }
+            
+            lookup = kwl.find("ydim");
+            if (lookup)
+            {
+               yCellSize = ossimString(lookup).toFloat32();
+               geoKwl.add(ossimKeywordNames::DECIMAL_DEGREES_PER_PIXEL_LAT, yCellSize);
+            }
+            
+            lookup = kwl.find("xllcenter");
+            if (lookup)
+            {
+               ossim_float32 centerX = ossimString(lookup).toFloat32();
+               ll_lon = centerX + xCellSize * 0.5;
+               geoKwl.add(ossimKeywordNames::TIE_POINT_LON_KW, ll_lon);
+            }
+            
+            lookup = kwl.find("yllcenter");
+            if (lookup)
+            {
+               ossim_float32 centerY = ossimString(lookup).toFloat32();
+               ll_lat = (centerY + (lines - 1) * yCellSize) + yCellSize * 0.5;
+               geoKwl.add(ossimKeywordNames::TIE_POINT_LAT_KW, ll_lat);
+            }
+            
+            lookup = kwl.find("xllcorner");
+            if (lookup)
+            {
+               ll_lon = ossimString(lookup).toFloat32();
+               geoKwl.add(ossimKeywordNames::TIE_POINT_LON_KW, ll_lon);
+            }
+            
+            lookup = kwl.find("yllcorner");
+            if (lookup)
+            {
+               ossim_uint32 centerY = ossimString(lookup).toFloat32();
+               ll_lat = centerY + lines * yCellSize;
+               geoKwl.add(ossimKeywordNames::TIE_POINT_LAT_KW, ll_lat);
+            }
+            
+            lookup = kwl.find("ulxmap");
+            if (lookup)
+            {
+               ll_lon = ossimString(lookup).toFloat32();
+               geoKwl.add(ossimKeywordNames::TIE_POINT_LON_KW, ll_lon);
+            }
+            
+            lookup = kwl.find("ulymap");
+            if (lookup)
+            {
+               ossim_uint32 centerY = ossimString(lookup).toFloat32();
+               ll_lat = centerY + lines * yCellSize;
+               geoKwl.add(ossimKeywordNames::TIE_POINT_LAT_KW, ll_lat);
+            }
+            
+            kwl.add(ossimKeywordNames::ORIGIN_LATITUDE_KW, ll_lat);
+            
+            geoKwl.add(ossimKeywordNames::TYPE_KW, "ossimEquDistCylProjection");
+            
+            geoKwl.add(ossimKeywordNames::DATUM_KW, ossimDatumFactory::instance()->wgs84()->
+                       code());
+            
+            ossimRefPtr<ossimProjection> proj = ossimMapProjectionFactory::instance()->
+               createProjection(geoKwl);
+
+            if ( proj.valid() )
+            {
+               theGeometry->setProjection(proj.get());
+            }
+         }
+         else if (xmlFile.exists())
+         {
+            ossimFgdcXmlDoc file;
+            if ( file.open(xmlFile) )
+            {
+               ossimRefPtr<ossimProjection> proj = file.getProjection();
+               if ( !proj.valid() )
+               {
+                  proj = file.getGridCoordSysProjection();
+               }
+               if ( proj.valid() )
+               {
+                  theGeometry->setProjection(proj.get());
+               }
+            }
+            
+         } // xml file exist...
+
+      } // Matches second if ( !theGeometry.valid() )
+
+      //---
+      // WARNING:
+      // Must have theGeometry at this point or the next call to
+      // ossimImageGeometryRegistry::extendGeometry will put us in an infinite loop
+      // as it does a recursive call back to ossimImageHandler::getImageGeometry().
+      //---         
+      
+      // Check for set projection.
+      if ( !theGeometry->getProjection() )
+      {
+         // Try factories for projection.
+         ossimImageGeometryRegistry::instance()->extendGeometry(this);
+      }
+
+      // Set image things the geometry object should know about.
+      initImageParameters( theGeometry.get() );
+      
+   } // Matches first if ( !theGeometry.valid() )
+
+   return theGeometry;
+}

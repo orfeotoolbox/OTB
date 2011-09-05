@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimPolyCutter.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimPolyCutter.h 19907 2011-08-05 19:55:46Z dburken $
 #ifndef ossimPolyCutter_HEADER
 #define ossimPolyCutter_HEADER
 #include <ossim/imaging/ossimImageSourceFilter.h>
@@ -69,6 +69,10 @@ public:
    ossimPolyCutterCutType getCutType()const;
 
    void clear();
+
+   const ossimIrect& getRectangle() const;
+
+   void setRectangle(const ossimIrect& rect);
    
    virtual void setProperty(ossimRefPtr<ossimProperty> property);
    virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;
@@ -97,6 +101,7 @@ protected:
     */
    ossimPolyCutterCutType theCutType;
    ossimImageDataHelper theHelper;
+   bool m_boundingOverwrite;
 
 TYPE_DATA  
 };

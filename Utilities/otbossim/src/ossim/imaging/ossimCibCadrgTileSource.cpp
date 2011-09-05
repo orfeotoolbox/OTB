@@ -7,7 +7,7 @@
 // Author: Garrett Potts
 //
 //********************************************************************
-// $Id: ossimCibCadrgTileSource.cpp 19552 2011-05-07 16:37:22Z dburken $
+// $Id: ossimCibCadrgTileSource.cpp 19900 2011-08-04 14:19:57Z dburken $
 #include <algorithm>
 
 #include <ossim/imaging/ossimCibCadrgTileSource.h>
@@ -40,7 +40,7 @@
 static ossimTrace traceDebug = ossimTrace("ossimCibCadrgTileSource:debug");
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimCibCadrgTileSource.cpp 19552 2011-05-07 16:37:22Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimCibCadrgTileSource.cpp 19900 2011-08-04 14:19:57Z dburken $";
 #endif
 
 RTTI_DEF1(ossimCibCadrgTileSource, "ossimCibCadrgTileSource", ossimImageHandler)
@@ -161,10 +161,8 @@ bool ossimCibCadrgTileSource::open()
                   if(theEntryToRender)
                   {
                      // a CADRG is 1536x1536 per frame.
-                     theNumberOfLines   =
-                        theEntryToRender->getNumberOfFramesVertical()*CIBCADRG_FRAME_HEIGHT;
-                     theNumberOfSamples =
-                        theEntryToRender->getNumberOfFramesHorizontal()*CIBCADRG_FRAME_WIDTH;
+                     theNumberOfLines   = theEntryToRender->getNumberOfLines();
+                     theNumberOfSamples = theEntryToRender->getNumberOfSamples();
                   }
 
                   if(theEntryToRender->getProductType().trim().upcase() == "CADRG")
@@ -511,10 +509,9 @@ void ossimCibCadrgTileSource::setTocEntryToRender(const ossimRpfTocEntry* entry)
 {
    if(isOpen()&&entry)
    {
-      // a CIB is 1536x1536 per frame.
       theEntryToRender = entry;
-      theNumberOfLines   = theEntryToRender->getNumberOfFramesVertical()*CIBCADRG_FRAME_HEIGHT;
-      theNumberOfSamples = theEntryToRender->getNumberOfFramesHorizontal()*CIBCADRG_FRAME_HEIGHT;
+      theNumberOfLines   = theEntryToRender->getNumberOfLines();
+      theNumberOfSamples = theEntryToRender->getNumberOfSamples();
       theEntryNumberToRender = theTableOfContents->getTocEntryIndex(entry);
    }
 }
@@ -1205,6 +1202,14 @@ void ossimCibCadrgTileSource::getPropertyNames(std::vector<ossimString>& propert
 {
    ossimImageHandler::getPropertyNames(propertyNames);
    propertyNames.push_back("file_type");
+   const ossimRpfHeader* header =
+      theTableOfContents->getRpfHeader();
+   
+   if(header)
+   {
+      std::ifstream in(theImageFile.c_str(), std::ios::in|std::ios::binary);
+      
+   }
 }
 
 void ossimCibCadrgTileSource::populateLut()

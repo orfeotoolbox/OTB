@@ -7,11 +7,13 @@
 // Description:
 //
 //*******************************************************************
-//  $Id: ossimDatum.cpp 19640 2011-05-25 15:58:00Z oscarkramer $
+//  $Id: ossimDatum.cpp 19795 2011-06-30 15:04:48Z gpotts $
 #include <ossim/base/ossimDatum.h>
 #include <ossim/base/ossimGpt.h>
 #include <ossim/base/ossimEllipsoid.h>
 #include <ossim/base/ossimEpsgDatumFactory.h> // For accessing the EPSG codes
+
+RTTI_DEF1(ossimDatum, "ossimDatum", ossimObject);
 
 ossimDatum::ossimDatum(const ossimString &alpha_code, const ossimString &name,
                        const ossimEllipsoid* anEllipsoid,
@@ -172,4 +174,43 @@ bool ossimDatum::operator==(const ossimDatum& rhs) const
       (theEastLongitude == rhs.theEastLongitude)&&
       (theSouthLatitude == rhs.theSouthLatitude)&&
       (theNorthLatitude == rhs.theNorthLatitude));
+}
+
+bool ossimDatum::isEqualTo(const ossimObject& obj, ossimCompareType compareType)const
+{
+   const ossimDatum* rhs = dynamic_cast<const ossimDatum*> (&obj);
+   bool result = rhs&&ossimObject::isEqualTo(obj, compareType);
+   if(result)
+   {
+      result = ((theCode == rhs->theCode)&&
+                (theEpsgCode == rhs->theEpsgCode)&&
+                (theName == rhs->theName)&&
+                (ossim::almostEqual(theSigmaX, rhs->theSigmaX))&&
+                (ossim::almostEqual(theSigmaY, rhs->theSigmaY))&&
+                (ossim::almostEqual(theSigmaZ, rhs->theSigmaZ))&&
+                (ossim::almostEqual(theWestLongitude, rhs->theWestLongitude))&&
+                (ossim::almostEqual(theEastLongitude, rhs->theEastLongitude))&&
+                (ossim::almostEqual(theSouthLatitude, rhs->theSouthLatitude))&&
+                (ossim::almostEqual(theNorthLatitude, rhs->theNorthLatitude)));
+      
+      if(result)
+      {
+         if(theEllipsoid&&rhs->theEllipsoid)
+         {
+            if(compareType == OSSIM_COMPARE_FULL)
+            {
+               result = theEllipsoid->isEqualTo(*rhs->theEllipsoid, compareType);
+            }
+            else 
+            {
+               result = theEllipsoid == rhs->theEllipsoid;
+            }
+         }
+         else if(reinterpret_cast<ossim_uint64>(theEllipsoid) | reinterpret_cast<ossim_uint64>(rhs->theEllipsoid)) // one is null
+         {
+            result = false;
+         }
+      }
+   }
+   return result;
 }

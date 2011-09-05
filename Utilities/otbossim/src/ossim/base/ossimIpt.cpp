@@ -10,7 +10,7 @@
 // Contains class definitions for ipt.
 //
 //*******************************************************************
-//  $Id: ossimIpt.cpp 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimIpt.cpp 19793 2011-06-30 13:26:56Z gpotts $
 
 #include <iostream>
 #include <sstream>
@@ -166,6 +166,7 @@ ossimString ossimIpt::toString() const
    return ossimString(os.str());
 }
 
+
 void ossimIpt::toPoint(const std::string& s)
 {
    std::istringstream is(s);
@@ -256,3 +257,10 @@ std::istream& operator>>(std::istream& is, ossimIpt &pt)
    // Finished
    return is;
 }
+
+bool ossimIpt::isEqualTo(const ossimIpt& rhs, ossimCompareType compareType)const
+{
+   return ((x==rhs.x)&&
+           (y==rhs.y));
+}
+

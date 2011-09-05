@@ -7,24 +7,28 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimContainerEvent.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimContainerEvent.h 19966 2011-08-16 18:12:56Z gpotts $
 #ifndef ossimContainerEvent_HEADER
 #define ossimContainerEvent_HEADER
 #include <ossim/base/ossimEvent.h>
 #include <ossim/base/ossimEventIds.h>
+#include <ossim/base/ossimRefPtr.h>
+#include <vector>
 
 class OSSIMDLLEXPORT ossimContainerEvent : public ossimEvent
 {
 public:
 
+   typedef std::vector<ossimRefPtr<ossimObject> > ObjectList;
+   
    /** constuctor */
-   ossimContainerEvent(ossimObject* obj1,// the object theEvent was sent to.
-                       ossimObject* obj2, // the object associated 
+   ossimContainerEvent(ossimObject* obj1,// the object firing the event.
                        long id);
 
-   ossimObject* getAssociatedObject();
-   const ossimObject* getAssociatedObject()const;
-   void setAssociatedObject(ossimObject* obj);
+   void setObjectList(ossimObject* obj);
+   void setObjectList(ObjectList& objects);
+   ObjectList& getObjectList(){return m_objectList;}
+   const ObjectList& getObjectList()const{return m_objectList;}
    
 protected:
    
@@ -33,7 +37,7 @@ protected:
     * if this was an add then it s the object added to the
     * container.
     */
-   ossimObject* theAssociatedObject;
+      ObjectList m_objectList;
 
 TYPE_DATA
 };

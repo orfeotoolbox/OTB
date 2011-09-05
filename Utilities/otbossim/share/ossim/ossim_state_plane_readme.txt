@@ -1,4 +1,4 @@
-// $Id$
+// $Id: ossim_state_plane_readme.txt 2644 2011-05-26 15:20:11Z oscar.kramer $
 
 This is a readme to document the state_plane.csv file keys.
 

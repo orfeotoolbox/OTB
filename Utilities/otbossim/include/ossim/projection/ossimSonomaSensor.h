@@ -171,6 +171,7 @@ protected:
    NEWMAT::Matrix m_compositeMatrixInverse;
    NEWMAT::Matrix m_pixelToCamera;
    NEWMAT::Matrix m_mount;
+   NEWMAT::Matrix m_mountInverse;
    double         m_roll;
    double         m_pitch;
    double         m_heading;

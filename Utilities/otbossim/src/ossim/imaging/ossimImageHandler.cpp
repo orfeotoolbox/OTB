@@ -12,7 +12,7 @@
 // derive from.
 //
 //*******************************************************************
-//  $Id: ossimImageHandler.cpp 19723 2011-06-06 21:03:49Z dburken $
+//  $Id: ossimImageHandler.cpp 19964 2011-08-16 18:11:44Z gpotts $
 
 #include <algorithm>
 
@@ -23,14 +23,16 @@
 #include <ossim/base/ossimEventIds.h>
 #include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimFilenameProperty.h>
+#include <ossim/base/ossimNumericProperty.h>
+#include <ossim/base/ossimStringProperty.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimNotify.h>
 #include <ossim/base/ossimPolygon.h>
 #include <ossim/base/ossimStdOutProgress.h>
-#include <ossim/base/ossimStringProperty.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimCommon.h>
+#include <ossim/base/ossimScalarTypeLut.h>
 #include <ossim/imaging/ossimHistogramWriter.h>
 #include <ossim/imaging/ossimImageGeometryRegistry.h>
 #include <ossim/imaging/ossimImageHandlerRegistry.h>
@@ -58,7 +60,7 @@ static const char SUPPLEMENTARY_DIRECTORY_KW[] = "supplementary_directory";
 static const char VALID_VERTICES_FILE_KW[]     = "valid_vertices_file";
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimImageHandler.cpp 19723 2011-06-06 21:03:49Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimImageHandler.cpp 19964 2011-08-16 18:11:44Z gpotts $";
 #endif
 
 // GARRETT! All of the decimation factors are scattered throughout. We want to fold that into 
@@ -865,8 +867,8 @@ bool ossimImageHandler::openOverview(const ossimFilename& overview_file)
          // This is not really a container event; however, using for now.
          //---
          ossimContainerEvent event(this,
-                                   theOverview.get(),
                                    OSSIM_EVENT_ADD_OBJECT_ID);
+         event.setObjectList(theOverview.get());
          fireEvent(event);
       }
    }
@@ -1316,7 +1318,42 @@ ossimRefPtr<ossimProperty> ossimImageHandler::getProperty(const ossimString& nam
 
       return stringProperty;
    }
-   if(name == "histogram_filename")
+   else if(name == ossimKeywordNames::NUMBER_SAMPLES_KW)
+   {
+      ossimNumericProperty* prop = new ossimNumericProperty(name, ossimString::toString(getNumberOfSamples()));
+      prop->setReadOnlyFlag(true);
+      
+      return prop;
+   }
+   else if(name == ossimKeywordNames::NUMBER_LINES_KW)
+   {
+      ossimNumericProperty* prop = new ossimNumericProperty(name, ossimString::toString(getNumberOfLines()));
+      prop->setReadOnlyFlag(true);
+      
+      return prop;
+   }
+   else if(name == ossimKeywordNames::NUMBER_BANDS_KW)
+   {
+      ossimNumericProperty* prop = new ossimNumericProperty(name, ossimString::toString(getNumberOfInputBands()));
+      prop->setReadOnlyFlag(true);
+      
+      return prop;
+   }
+   else if(name == ossimKeywordNames::NUMBER_REDUCED_RES_SETS_KW)
+   {
+      ossimNumericProperty* prop = new ossimNumericProperty(name, ossimString::toString(getNumberOfDecimationLevels()));
+      prop->setReadOnlyFlag(true);
+      
+      return prop;
+   }
+   else if(name == ossimKeywordNames::SCALAR_TYPE_KW)
+   {
+      ossimStringProperty* prop = new ossimStringProperty(name, ossimScalarTypeLut::instance()->getEntryString(getOutputScalarType()));
+      prop->setReadOnlyFlag(true);
+      
+      return prop;
+   }
+   else if(name == "histogram_filename")
    {
       ossimFilenameProperty* filenameProp =
          new ossimFilenameProperty(name, createDefaultHistogramFilename());
@@ -1327,7 +1364,7 @@ ossimRefPtr<ossimProperty> ossimImageHandler::getProperty(const ossimString& nam
       return filenameProp;
       
    }
-   if(name == "geometry_filename")
+   else if(name == "geometry_filename")
    {
       ossimFilenameProperty* filenameProp =
          new ossimFilenameProperty(name, createDefaultGeometryFilename());
@@ -1338,7 +1375,7 @@ ossimRefPtr<ossimProperty> ossimImageHandler::getProperty(const ossimString& nam
       return filenameProp;
       
    }
-   if(name == "valid_vertices_filename")
+   else if(name == "valid_vertices_filename")
    {
       ossimFilenameProperty* filenameProp =
          new ossimFilenameProperty(name, createDefaultValidVerticesFilename());
@@ -1348,7 +1385,7 @@ ossimRefPtr<ossimProperty> ossimImageHandler::getProperty(const ossimString& nam
       
       return filenameProp;
    }
-   if(name == "metadata_filename")
+   else if(name == "metadata_filename")
    {
       ossimFilenameProperty* filenameProp =
          new ossimFilenameProperty(name, createDefaultMetadataFilename());
@@ -1358,7 +1395,7 @@ ossimRefPtr<ossimProperty> ossimImageHandler::getProperty(const ossimString& nam
       
       return filenameProp;
    }
-   if(name == "overview_filename")
+   else if(name == "overview_filename")
    {
       ossimFilenameProperty* filenameProp =
          new ossimFilenameProperty(name, createDefaultOverviewFilename());
@@ -1368,7 +1405,7 @@ ossimRefPtr<ossimProperty> ossimImageHandler::getProperty(const ossimString& nam
       
       return filenameProp;
    }
-   if(name == "filename")
+   else if(name == "filename")
    {
       ossimFilenameProperty* filenameProp =
          new ossimFilenameProperty(name, getFilename());
@@ -1378,7 +1415,7 @@ ossimRefPtr<ossimProperty> ossimImageHandler::getProperty(const ossimString& nam
       
       return filenameProp;
    }
-   if ( name == OPEN_OVERVIEW_FLAG_KW)
+   else if ( name == OPEN_OVERVIEW_FLAG_KW)
    {
       ossimRefPtr<ossimProperty> result =
          new ossimBooleanProperty(ossimString(OPEN_OVERVIEW_FLAG_KW), theOpenOverviewFlag); 
@@ -1392,6 +1429,11 @@ void ossimImageHandler::getPropertyNames(std::vector<ossimString>& propertyNames
 {
    ossimImageSource::getPropertyNames(propertyNames);
    propertyNames.push_back(ossimKeywordNames::ENTRY_KW);
+   propertyNames.push_back(ossimKeywordNames::NUMBER_SAMPLES_KW);
+   propertyNames.push_back(ossimKeywordNames::NUMBER_LINES_KW);
+   propertyNames.push_back(ossimKeywordNames::NUMBER_BANDS_KW);
+   propertyNames.push_back(ossimKeywordNames::NUMBER_REDUCED_RES_SETS_KW);
+   propertyNames.push_back(ossimKeywordNames::SCALAR_TYPE_KW);
    propertyNames.push_back(OPEN_OVERVIEW_FLAG_KW);
 }
 

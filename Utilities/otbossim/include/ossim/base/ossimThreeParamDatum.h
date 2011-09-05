@@ -9,7 +9,7 @@
 // ossimThreeParamDatum. This is a base class for all
 // three param datums.
 //*******************************************************************
-//  $Id: ossimThreeParamDatum.h 13560 2008-09-10 11:42:57Z gpotts $
+//  $Id: ossimThreeParamDatum.h 19795 2011-06-30 15:04:48Z gpotts $
 
 #ifndef ossimThreeParamDatum_HEADER
 #define ossimThreeParamDatum_HEADER
@@ -70,11 +70,15 @@ public:
    virtual ossim_float64 param6()const{return 0.0;}
    virtual ossim_float64 param7()const{return 1.0;}
 
+   virtual bool isEqualTo(const ossimObject& obj, ossimCompareType compareType=OSSIM_COMPARE_FULL)const;
+
 protected:
    
    ossim_float64 theParam1;
    ossim_float64 theParam2;
    ossim_float64 theParam3;
+
+   TYPE_DATA;
 };
 
 

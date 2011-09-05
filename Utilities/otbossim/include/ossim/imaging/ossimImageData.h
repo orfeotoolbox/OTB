@@ -9,7 +9,7 @@
 // Description: Container class for a tile of image data.
 //
 //*******************************************************************
-// $Id: ossimImageData.h 19722 2011-06-06 21:02:52Z dburken $
+// $Id: ossimImageData.h 19931 2011-08-10 11:53:25Z gpotts $
 #ifndef ossimImageData_HEADER
 #define ossimImageData_HEADER 1
 
@@ -84,6 +84,8 @@ public:
 
    /** @brief copy constructor */
    ossimImageData(const ossimImageData &rhs);
+   
+   ossimImageData();
 
    /**
     * @brief Constructor
@@ -877,10 +879,10 @@ public:
    /** @return The indexed flag. */
    bool getIndexedFlag() const;
    
+   
+   virtual bool saveState(ossimKeywordlist& kwl, const char* prefix=0)const;
+   virtual bool loadState(const ossimKeywordlist& kwl, const char* prefix=0);
 protected:
-
-   ossimImageData();
-
    /** @brief Templated copy line method. */
    template <class T> void copyLineTemplate(T dummyTemplate,
                                             const void* src,

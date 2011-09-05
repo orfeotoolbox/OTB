@@ -6,7 +6,7 @@
 // Author: Oscar Kramer
 //
 //*************************************************************************************************
-//  $Id$
+//  $Id: ossimEpsgProjectionDatabase.h 19879 2011-07-30 16:21:50Z dburken $
 
 #ifndef ossimEpsgProjectionDatabase_HEADER
 #define ossimEpsgProjectionDatabase_HEADER
@@ -76,7 +76,6 @@ protected:
       FORMAT_A,
       FORMAT_B,
       FORMAT_C,
-      FORMAT_D,
       CUSTOM
    };
 

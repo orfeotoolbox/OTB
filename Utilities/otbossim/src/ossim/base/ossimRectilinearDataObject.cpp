@@ -8,10 +8,11 @@
 // Contributor: David A. Horner (DAH) - http://dave.thehorners.com
 //
 //*************************************************************************
-// $Id: ossimRectilinearDataObject.cpp 17195 2010-04-23 17:32:18Z dburken $
+// $Id: ossimRectilinearDataObject.cpp 19946 2011-08-12 18:45:36Z gpotts $
 
 #include <ossim/base/ossimRectilinearDataObject.h>
 #include <ossim/base/ossimScalarTypeLut.h>
+#include <ossim/base/ossimKeywordlist.h>
 
 RTTI_DEF1(ossimRectilinearDataObject, "ossimRectilinearDataObject", ossimDataObject);
 
@@ -239,3 +240,54 @@ const ossimRectilinearDataObject& ossimRectilinearDataObject::operator=(
    }
    return *this;
 }
+
+bool ossimRectilinearDataObject::saveState(ossimKeywordlist& kwl, const char* prefix)const
+{
+   ossimString byteEncoded;
+   ossim::toSimpleStringList(byteEncoded, m_dataBuffer);
+   kwl.add(prefix, "data_buffer", byteEncoded, true);
+   ossim::toSimpleStringList(byteEncoded, m_spatialExtents);
+   kwl.add(prefix, "spatial_extents", byteEncoded, true);
+   kwl.add(prefix, ossimKeywordNames::SCALAR_TYPE_KW, ossimScalarTypeLut::instance()->getEntryString(m_scalarType));
+   
+   return ossimDataObject::saveState(kwl, prefix);
+}
+
+bool ossimRectilinearDataObject::loadState(const ossimKeywordlist& kwl, const char* prefix)
+{
+   if(!ossimDataObject::loadState(kwl, prefix)) return false;
+   
+   const char* spatial_extents = kwl.find(prefix, "spatial_extents");
+   const char* data_buffer = kwl.find(prefix, "data_buffer");
+   const char* scalar_type = kwl.find(prefix, ossimKeywordNames::SCALAR_TYPE_KW);
+   m_spatialExtents.clear();
+   m_dataBuffer.clear();
+                                 
+   if(spatial_extents)
+   {
+      if(!ossim::toSimpleVector(m_spatialExtents, ossimString(spatial_extents)))
+      {
+         return false;
+      }
+   }
+   if(data_buffer)
+   {
+      if(!ossim::toSimpleVector(m_dataBuffer, ossimString(kwl.find(prefix, "data_buffer"))))
+      {
+         return false;
+      }
+   }
+   if(scalar_type)
+   {
+      ossimScalarTypeLut::instance()->getScalarTypeFromString(scalar_type);
+   }
+   else 
+   {
+      m_scalarType = OSSIM_SCALAR_UNKNOWN;
+   }
+
+   m_numberOfDataComponents = m_spatialExtents.size();
+   
+   return true;
+   
+}                     

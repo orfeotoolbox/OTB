@@ -10,15 +10,16 @@
 // for Geotrans datum.  For more thorough description of each function
 // look at the datum.h file.
 //*******************************************************************
-//  $Id: ossimDatum.h 19640 2011-05-25 15:58:00Z oscarkramer $
+//  $Id: ossimDatum.h 19793 2011-06-30 13:26:56Z gpotts $
 #ifndef ossimDatum_HEADER
 #define ossimDatum_HEADER
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimString.h>
 #include <ossim/base/ossimGpt.h>
 #include <ossim/base/ossimEllipsoid.h>
+#include <ossim/base/ossimObject.h>
 
-class OSSIMDLLEXPORT ossimDatum
+class OSSIMDLLEXPORT ossimDatum : public ossimObject
 {
    friend class ossimDatumFactory;
 
@@ -88,6 +89,7 @@ public:
    {
       return (!(*this == rhs));
    }
+   virtual bool isEqualTo(const ossimObject& obj, ossimCompareType compareType=OSSIM_COMPARE_FULL)const;
 
 protected:
    //! Only friend ossimDatumFactory is permitted to delete
@@ -126,7 +128,8 @@ protected:
          return ((lat < 89.75) && (lat > -89.75));
       }
 
-private:
+   
+protected:
    ossimString           theCode;
    ossim_uint32          theEpsgCode;
    ossimString           theName;
@@ -139,7 +142,9 @@ private:
    ossim_float64        theWestLongitude;
    ossim_float64        theEastLongitude;
    ossim_float64        theSouthLatitude;
-   ossim_float64        theNorthLatitude;   
+   ossim_float64        theNorthLatitude; 
+   
+TYPE_DATA;
 };
 
 #endif

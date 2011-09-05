@@ -5,9 +5,10 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimContainerProperty.cpp 18405 2010-11-10 20:44:58Z gpotts $
+// $Id: ossimContainerProperty.cpp 19920 2011-08-09 12:04:27Z gpotts $
 #include <ossim/base/ossimContainerProperty.h>
 #include <ossim/base/ossimStringProperty.h>
+#include <ossim/base/ossimVisitor.h>
 
 RTTI_DEF1(ossimContainerProperty, "ossimContainerProperty", ossimProperty);
 
@@ -198,3 +199,30 @@ ossimRefPtr<ossimXmlNode> ossimContainerProperty::toXml()const
 
    return result;
 }
+
+void ossimContainerProperty::setReadOnlyFlag(bool flag)
+{
+   ossimProperty::setReadOnlyFlag(flag);
+   ossim_uint32 idx = 0;
+   for(idx = 0; idx < theChildPropertyList.size(); ++idx)
+   {
+      theChildPropertyList[idx]->setReadOnlyFlag(flag);
+   }
+}
+
+void ossimContainerProperty::accept(ossimVisitor& visitor)
+{
+   ossim_uint32 idx = 0;
+   if(!visitor.hasVisited(this))
+   {
+      ossimProperty::accept(visitor);
+      if(visitor.getVisitorType()&ossimVisitor::VISIT_CHILDREN)
+      {
+         for(idx = 0; idx < theChildPropertyList.size(); ++idx)
+         {
+            theChildPropertyList[idx]->accept(visitor);
+         }
+      }
+   }
+}
+

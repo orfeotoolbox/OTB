@@ -1,5 +1,6 @@
 #include <ossim/base/ossimNadconGridDatum.h>
 
+RTTI_DEF1(ossimNadconGridDatum, "ossimNadconGridDatum", ossimThreeParamDatum);
 ossimNadconGridDatum::ossimNadconGridDatum(const ossimFilename& datumDirectory,
 					   const ossimString &code, const ossimString &name,
 					   const ossimEllipsoid* anEllipsoid,

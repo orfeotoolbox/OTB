@@ -28,6 +28,8 @@
 class OSSIMDLLEXPORT ossimPreferences
 {
 public:
+   // This is only here so we can swig wrap this.  The destructor should never be called directly.
+   ~ossimPreferences();
    /*!
     * METHOD: instance()
     * The static singleton instance of this object is accessed via this method:
@@ -97,7 +99,6 @@ protected:
    ossimPreferences();
    ossimPreferences(const ossimPreferences&) {}
 
-   ~ossimPreferences();
    void operator = (const ossimPreferences&) const {}
 
    static ossimPreferences* theInstance;

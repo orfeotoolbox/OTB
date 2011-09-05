@@ -12,9 +12,7 @@
 // models(dems).
 // 
 //----------------------------------------------------------------------------
-// $Id$
-
-#include <string>
+// $Id: ossimElevUtil.cpp 2796 2011-06-29 21:01:09Z david.burken $
 
 #include <ossim/util/ossimElevUtil.h>
 
@@ -29,6 +27,7 @@
 #include <ossim/base/ossimNotify.h>
 #include <ossim/base/ossimProperty.h>
 #include <ossim/base/ossimRefPtr.h>
+#include <ossim/base/ossimScalarTypeLut.h>
 #include <ossim/base/ossimStdOutProgress.h>
 #include <ossim/base/ossimStringProperty.h>
 #include <ossim/base/ossimTrace.h>
@@ -56,6 +55,8 @@
 
 #include <ossim/support_data/ossimSrcRecord.h>
 
+#include <string>
+
 static ossimTrace traceDebug   = ossimTrace("ossimElevUtil:debug");
 static ossimTrace traceLog     = ossimTrace("ossimElevUtil:log");
 static ossimTrace traceOptions = ossimTrace("ossimElevUtil:options");
@@ -77,8 +78,11 @@ static const char FILE_KW[]                 = "file";
 static const char HISTO_OP_KW[]             = "hist-op";
 static const char IMG_KW[]                  = "image";
 static const char LUT_FILE_KW[]             = "lut_file";
+static const char DEGREES_X_KW[]            = "degrees_x";
+static const char DEGREES_Y_KW[]            = "degrees_y";
 static const char METERS_KW[]               = "meters";
 static const char OP_KW[]                   = "operation";
+static const char OUTPUT_RADIOMETRY_KW[]    = "output_radiometry";
 static const char RESAMPLER_FILTER_KW[]     = "resampler_filter";
 static const char SCALE_2_8_BIT_KW[]        = "scale_2_8_bit";
 static const char SRC_FILE_KW[]             = "src_file";
@@ -128,7 +132,7 @@ void ossimElevUtil::addArguments(ossimArgumentParser& ap)
 
    appuse->addCommandLineOption("--elevation", "<elevation>\nhillshade option - Light source elevation angle for bumb shade.\nRange: 0 to 90, Default = 45.0");
    
-   appuse->addCommandLineOption("--gain", "<factor>\nMultiplier for elevation values when computing surface normals. Has the effect of lengthening shadows for oblique lighting.\nRange: .0001 to 50000, Default = 1.0");
+   appuse->addCommandLineOption("--exaggeration", "<factor>\nMultiplier for elevation values when computing surface normals. Has the effect of lengthening shadows for oblique lighting.\nRange: .0001 to 50000, Default = 1.0");
    
    appuse->addCommandLineOption("-h or --help", "Display this help and exit.");
 
@@ -148,19 +152,21 @@ void ossimElevUtil::addArguments(ossimArgumentParser& ap)
 
    appuse->addCommandLineOption("--origin-latitude","<latidude_in_decimal_degrees>\nNote if set this will be used for the origin latitude of the projection.  Setting this to something other than 0.0 with a geographic projection creates a scaled geographic projection.");
 
+   appuse->addCommandLineOption("--output-radiometry", "<R>\nSpecifies the desired product's pixel radiometry type. Possible values for <R> are: U8, U11, U16, S16, F32. Note this overrides the deprecated option \"scale-to-8-bit\"."); 
+
    appuse->addCommandLineOption("--projection", "<output_projection> Can be input, geo, geo-scaled, or utm.\nIf input and multiple sources the projection of the first image will be used.\nIf geo-scaled the origin of latitude will be set to scene center.\nIf utm the zone will be set from the scene center.\nIf --srs is used it takes precedence over this option.");
    
-   appuse->addCommandLineOption(
-      "--resample-filter","<type>\nSpecify what resampler filter to use, e.g. nearest neighbor, bilinear, cubic.\nSee ossim-info ----resampler-filters"); 
+   appuse->addCommandLineOption("--resample-filter","<type>\nSpecify what resampler filter to use, e.g. nearest neighbor, bilinear, cubic.\nSee ossim-info ----resampler-filters"); 
 
-   appuse->addCommandLineOption("--scale-to-8-bit","Scales output to eight bits if not already.");
-   
+   appuse->addCommandLineOption("--scale-to-8-bit", "Scales the output to unsigned eight bits per band. This option has been deprecated by the newer \"--output-radiometry\" option.");
+
    appuse->addCommandLineOption("--srs","<src_code>\nSpecify an output reference frame/projection. Example: --srs EPSG:4326");
 
+   appuse->addCommandLineOption("-t or --thumbnail", "<max_dimension>\nSpecify a thumbnail "
+      "resolution.\nScale will be adjusted so the maximum dimension = argument given.");
    appuse->addCommandLineOption("-t or --thumbnail", "<max_dimension>\nSpecify a thumbnail resolution.\nScale will be adjusted so the maximum dimension = argument given.");
    
-   appuse->addCommandLineOption(
-      "-w or --writer","<writer>\nSpecifies the output writer.  Default uses output file extension to determine writer.");
+   appuse->addCommandLineOption("-w or --writer","<writer>\nSpecifies the output writer.  Default uses output file extension to determine writer.");
    
    appuse->addCommandLineOption("--writer-prop", "<writer-property>\nPasses a name=value pair to the writer for setting it's property. Any number of these can appear on the line.");
 }
@@ -193,6 +199,10 @@ bool ossimElevUtil::initialize(ossimArgumentParser& ap)
    ossimArgumentParser::ossimParameter stringParam3(tempString3);
    ossimString tempString4;
    ossimArgumentParser::ossimParameter stringParam4(tempString4);
+   double tempDouble1;
+   ossimArgumentParser::ossimParameter doubleParam1(tempDouble1);
+   double tempDouble2;
+   ossimArgumentParser::ossimParameter doubleParam2(tempDouble2);
 
    ossim_uint32 demIdx  = 0;
    ossim_uint32 imgIdx  = 0;
@@ -205,7 +215,7 @@ bool ossimElevUtil::initialize(ossimArgumentParser& ap)
       m_kwl->add( ossimKeywordNames::AZIMUTH_ANGLE_KW, tempString1.c_str() );
    }
    
-   if( ap.read("--central-meridian") )
+   if( ap.read("--central-meridian", stringParam1) )
    {
       m_kwl->add( ossimKeywordNames::CENTRAL_MERIDIAN_KW, tempString1.c_str() );
    }
@@ -238,6 +248,30 @@ bool ossimElevUtil::initialize(ossimArgumentParser& ap)
       m_kwl->add( CUT_CENTER_HEIGHT_KW, tempString4.c_str() );
    }
 
+   int num_params = ap.numberOfParams("--degrees", doubleParam1);
+   if (num_params == 1)
+   {
+      ap.read("--degrees", doubleParam1);
+      m_kwl->add( DEGREES_X_KW, tempDouble1 );
+      m_kwl->add( DEGREES_Y_KW, tempDouble1 );
+   }
+   else if (num_params == 2)
+   {
+      ap.read("--degrees", doubleParam1, doubleParam2);
+      m_kwl->add( DEGREES_X_KW, tempDouble1 );
+      m_kwl->add( DEGREES_Y_KW, tempDouble2 );
+   }   
+
+   if( ap.read("--elevation", stringParam1) )
+   {
+      m_kwl->add( ossimKeywordNames::ELEVATION_ANGLE_KW, tempString1.c_str() );
+   }
+
+   if( ap.read("--exaggeration", stringParam1) )
+   {
+      m_kwl->add( GAIN_KW, tempString1.c_str() );
+   }
+
    if ( ap.read("--histogram-op", stringParam1) )
    {
       m_kwl->add( HISTO_OP_KW, tempString1.c_str() );
@@ -268,15 +302,6 @@ bool ossimElevUtil::initialize(ossimArgumentParser& ap)
       m_kwl->add( SRC_FILE_KW, tempString1.c_str() );
    }
    
-   if( ap.read("--elevation", stringParam1) )
-   {
-      m_kwl->add( ossimKeywordNames::ELEVATION_ANGLE_KW, tempString1.c_str() );
-   }
-
-   if( ap.read("--gain", stringParam1) )
-   {
-      m_kwl->add( GAIN_KW, tempString1.c_str() );
-   }
 
    if( ap.read("--meters", stringParam1) )
    {
@@ -316,6 +341,11 @@ bool ossimElevUtil::initialize(ossimArgumentParser& ap)
    if( ap.read("--projection", stringParam1) )
    {
       m_kwl->add( ossimKeywordNames::PROJECTION_KW, tempString1.c_str() );
+   }
+
+   if(ap.read("--output-radiometry", stringParam1))
+   {
+      m_kwl->add( OUTPUT_RADIOMETRY_KW, tempString1.c_str() );
    }
 
    if( ap.read("--origin-latitude", stringParam1) )
@@ -659,7 +689,10 @@ void ossimElevUtil::execute()
       else
       {
          // No LUT file provided, so doing the default 8-bit linear stretch:
-         source = addScalarRemapper( source );
+         if ( source->getOutputScalarType() != OSSIM_UINT8 )
+         {
+            source = addScalarRemapper( source, OSSIM_UINT8 );
+         }
       }
    }
    else if ( m_operation == OSSIM_DEM_OP_ORTHO )
@@ -669,10 +702,14 @@ void ossimElevUtil::execute()
 
    if ( source.valid() )
    {
-      // This is conditional.  May be set at the ossimSingleImageChain level.
-      if ( scaleToEightBit() && ( source->getOutputScalarType() != OSSIM_UINT8 ) )
+      //---
+      // This is conditional.  Output radiometry may of may not be set.  This can also be set at
+      // the ossimSingleImageChain level.
+      //---
+      if ( ( getOutputScalarType() != OSSIM_SCALAR_UNKNOWN) &&
+           ( source->getOutputScalarType() != getOutputScalarType() ) )
       {
-         source = addScalarRemapper( source );
+         source = addScalarRemapper( source, getOutputScalarType() );
       }
       
       //---
@@ -1122,6 +1159,7 @@ void ossimElevUtil::createOutputProjection()
    }
    
    bool usingInput = false;
+   ossimDemOutputProjection projType = getOutputProjectionType();
    
    // If an srs code use that first.
    if (srs)
@@ -1130,7 +1168,6 @@ void ossimElevUtil::createOutputProjection()
    }
    else if (op)
    {
-      ossimDemOutputProjection projType = getOutputProjectionType();
       switch ( projType )
       {
          case ossimElevUtil::OSSIM_DEM_PROJ_GEO:
@@ -1167,7 +1204,16 @@ void ossimElevUtil::createOutputProjection()
    {
       if ( *(inputProj.get()) == *(m_outputProjection.get()) )
       {
-         m_outputProjection = inputProj;
+         if ( projType == OSSIM_DEM_PROJ_GEO_SCALED )
+         {
+            ossimGpt origin = m_outputProjection->getOrigin();
+            m_outputProjection = inputProj;
+            m_outputProjection->setOrigin(origin);
+         }
+         else
+         {
+            m_outputProjection = inputProj;
+         }
          usingInput = true;
       }
    }
@@ -1203,7 +1249,7 @@ void ossimElevUtil::createOutputProjection()
    // the gsd to user selected "METERS_KW" or the best resolution of the inputs,
    // set the tie and then snap it to the projection origin.
    //---
-   if ( !usingInput || m_kwl->find(METERS_KW) )
+   if ( !usingInput || m_kwl->find(METERS_KW) || m_kwl->find(DEGREES_X_KW) )
    {
       // Set the scale.
       initializeProjectionGsd();
@@ -1281,18 +1327,49 @@ void ossimElevUtil::initializeProjectionGsd()
 
    if ( m_outputProjection.valid() )
    {
-      const char* lookup = m_kwl->find(METERS_KW);
-      if ( lookup )
+      // Check for GSD spec. Degrees/pixel takes priority over meters/pixel:
+      const char* gsdx = m_kwl->find(DEGREES_X_KW);
+      const char* gsdy = m_kwl->find(DEGREES_Y_KW);
+      
+      if ( gsdx || gsdy ) // Must have at least one...
       {
-         gsd.x = ossimString::toFloat64(lookup);
-         gsd.y = gsd.x;
+         if ( gsdx )
+         {
+            gsd.x = ossimString::toFloat64(gsdx);
+         }
+         if ( gsdy )
+         {
+            gsd.y = ossimString::toFloat64(gsdy);
+         }
+         if ( ossim::isnan(gsd.x) && !ossim::isnan(gsd.y) )
+         {
+            gsd.x = gsd.y;
+         }
+         else if ( ossim::isnan(gsd.y) && !ossim::isnan(gsd.x) )
+         {
+            gsd.y = gsd.x;
+         }
+         if ( gsd.hasNans() == false )
+         {
+            m_outputProjection->setDecimalDegreesPerPixel(gsd);
+         }
+      }
+      else
+      {
+         const char* lookup = m_kwl->find(METERS_KW);
+         if ( lookup )
+         {
+            gsd.x = ossimString::toFloat64(lookup);
+            gsd.y = gsd.x;
+            m_outputProjection->setMetersPerPixel(gsd);
+         }
       }
 
       if ( gsd.hasNans() )
       {
          // Get the best resolution from the inputs.
          getMetersPerPixel(gsd);
-
+         
          // See if the output projection is geo-scaled; if so, make the pixels square in meters.
          if ( getOutputProjectionType() == ossimElevUtil::OSSIM_DEM_PROJ_GEO_SCALED )
          {
@@ -1300,20 +1377,10 @@ void ossimElevUtil::initializeProjectionGsd()
             gsd.x = ossim::min<ossim_float64>(gsd.x, gsd.y);
             gsd.y = gsd.x;
          }
-
-      }
-
-      if ( !gsd.hasNans() )
-      {
+         
          // Set to input gsd.
          m_outputProjection->setMetersPerPixel(gsd);
-      }
-      else
-      {
-         std::string errMsg = MODULE;
-         errMsg += "gsd has nans!";
-         throw( ossimException(errMsg) );
-      }
+      } 
    }
    else
    {
@@ -2132,24 +2199,31 @@ ossimRefPtr<ossimImageSource> ossimElevUtil::addIndexToRgbLutFilter(
 }
 
 ossimRefPtr<ossimImageSource> ossimElevUtil::addScalarRemapper(
-   ossimRefPtr<ossimImageSource> &source) const
+   ossimRefPtr<ossimImageSource> &source, ossimScalarType scalar) const
 {
    static const char MODULE[] = "ossimElevUtil::addScalarRemapper(source)";
    if ( traceDebug() )
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
    }
-   
+
    ossimRefPtr<ossimImageSource> result = 0;
    
    if ( source.valid() )
    {
-      if ( source->getOutputScalarType() != OSSIM_UINT8 )
+      if ( ( scalar != OSSIM_SCALAR_UNKNOWN ) && ( source->getOutputScalarType() != scalar ) )
       {
          ossimRefPtr<ossimScalarRemapper> remapper = new ossimScalarRemapper();
-         remapper->setOutputScalarType(OSSIM_UINT8);
+         remapper->setOutputScalarType(scalar);
          remapper->connectMyInputTo( source.get() );
          result = remapper.get();
+         
+         if ( traceDebug() )
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << "\nOutput remapped to: "
+               << ossimScalarTypeLut::instance()->getEntryString(scalar) << "\n";
+         }
       }
       else
       {
@@ -2162,12 +2236,13 @@ ossimRefPtr<ossimImageSource> ossimElevUtil::addScalarRemapper(
       errMsg += " ERROR: Null source passed to method!";
       throw ossimException(errMsg);
    }
-
+   
    if ( traceDebug() )
    {
-      ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " exited...\n";
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << MODULE << " exited...\n";
    }
-
+   
    return result;
 }
 
@@ -2562,20 +2637,36 @@ bool ossimElevUtil::isSrcFile(const ossimFilename& file) const
    return result;
 }
 
+ossimScalarType ossimElevUtil::getOutputScalarType() const
+{
+   ossimScalarType scalar = OSSIM_SCALAR_UNKNOWN;
+   const char* lookup = m_kwl->find(OUTPUT_RADIOMETRY_KW);
+   if ( lookup )
+   {
+      scalar = ossimScalarTypeLut::instance()->getScalarTypeFromString( ossimString(lookup) );
+   }
+   if ( scalar == OSSIM_SCALAR_UNKNOWN )
+   {
+      // deprecated keyword...
+      lookup = m_kwl->find(SCALE_2_8_BIT_KW);
+      if ( lookup )
+      {
+         if ( ossimString(lookup).toBool() == true )
+         {
+            scalar = OSSIM_UINT8;
+         }
+      }
+   }
+   return scalar;
+}
+
 bool ossimElevUtil::scaleToEightBit() const
 {
    bool result = false;
-   if ( m_operation == OSSIM_DEM_OP_COLOR_RELIEF ) // Always 8 bit...
+   if ( ( m_operation == OSSIM_DEM_OP_COLOR_RELIEF ) || // Always 8 bit...
+        ( getOutputScalarType() == OSSIM_UINT8 ) )
    {
       result = true;
-   }
-   else if ( m_kwl.valid() )
-   {
-      const char* lookup = m_kwl->find(SCALE_2_8_BIT_KW);
-      if ( lookup )
-      {
-         result = ossimString(lookup).toBool();
-      }
    }
    return result;
 }

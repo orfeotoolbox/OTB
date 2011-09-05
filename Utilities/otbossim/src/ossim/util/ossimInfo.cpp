@@ -12,7 +12,7 @@
 // Utility class for getting information from the ossim library.
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimInfo.cpp 19752 2011-06-13 15:14:37Z dburken $
+// $Id: ossimInfo.cpp 19801 2011-07-04 15:13:23Z dburken $
 
 #include <ossim/util/ossimInfo.h>
 #include <ossim/base/ossimArgumentParser.h>
@@ -82,6 +82,7 @@ static const char PROJECTIONS_KW[]          = "projections";
 static const char RAD2DEG_KW[]              = "rad2deg";
 static const char READER_PROPS_KW[]         = "reader_props";
 static const char RESAMPLER_FILTERS_KW[]    = "resampler_filters";
+static const char WRITERS_KW[]              = "writers_kw";
 static const char WRITER_PROPS_KW[]         = "writer_props";
 
 // Static trace for debugging.  Use -T ossimInfo to turn on.
@@ -163,6 +164,8 @@ void ossimInfo::addArguments(ossimArgumentParser& ap)
    au->addCommandLineOption("-v", "Overwrite existing geometry.");
    
    au->addCommandLineOption("--writer-props", "Prints writers and properties.");
+
+   au->addCommandLineOption("--writers", "Prints list of available writers.");
    
 } // void ossimInfo::addArguments(ossimArgumentParser& ap)
 
@@ -450,6 +453,15 @@ bool ossimInfo::initialize(ossimArgumentParser& ap)
             }
          }
 
+         if( ap.read("--writers") )
+         {
+            m_kwl->add( WRITERS_KW, TRUE_KW );
+            if ( ap.argc() < 2 )
+            {
+               break;
+            }
+         }
+         
          // End of arg parsing.
          ap.reportRemainingOptionsAsUnrecognized();
          if ( ap.errors() )
@@ -674,6 +686,17 @@ void ossimInfo::execute()
             if ( value.toBool() )
             {
                printResamplerFilters();
+            }
+         }
+
+         lookup = m_kwl->find(WRITERS_KW);
+         if ( lookup )
+         {
+            ++consumedKeys;
+            value = lookup;
+            if ( value.toBool() )
+            {
+               printWriters();
             }
          }
 
@@ -1754,6 +1777,17 @@ std::ostream& ossimInfo::printResamplerFilters(std::ostream& out) const
    out << std::endl;
    return out;
 }
+
+void ossimInfo::printWriters() const
+{
+   printWriters(ossimNotify(ossimNotifyLevel_INFO));
+}
+
+std::ostream& ossimInfo::printWriters(std::ostream& out) const
+{
+   return ossimImageWriterFactoryRegistry::instance()->printImageTypeList( out );
+}
+
 
 void ossimInfo::printWriterProps() const
 {

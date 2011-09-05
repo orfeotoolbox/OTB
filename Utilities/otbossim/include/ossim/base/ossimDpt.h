@@ -10,7 +10,7 @@
 // Used to represent an double point containing an x and y data member.
 // 
 //*******************************************************************
-//  $Id: ossimDpt.h 17815 2010-08-03 13:23:14Z dburken $
+//  $Id: ossimDpt.h 19793 2011-06-30 13:26:56Z gpotts $
 #ifndef ossimDpt_HEADER
 #define ossimDpt_HEADER
 
@@ -143,7 +143,7 @@ public:
     */
    friend OSSIMDLLEXPORT std::istream& operator>>(std::istream& is,
                                                   ossimDpt& pt);
-   
+   bool isEqualTo(const ossimDpt& rhs, ossimCompareType compareType=OSSIM_COMPARE_FULL)const;
    //***
    // Public data members:
    //***

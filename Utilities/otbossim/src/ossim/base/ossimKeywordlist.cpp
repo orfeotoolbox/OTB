@@ -5,7 +5,7 @@
 // Description: This class provides capabilities for keywordlists.
 //
 //********************************************************************
-// $Id: ossimKeywordlist.cpp 19682 2011-05-31 14:21:20Z dburken $
+// $Id: ossimKeywordlist.cpp 20022 2011-09-01 15:45:14Z dburken $
 
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimDirectory.h>
@@ -28,7 +28,7 @@ static const char NULL_KEY_NOTICE[]
 
 #ifdef OSSIM_ID_ENABLED
 static const bool TRACE = false;
-static const char OSSIM_ID[] = "$Id: ossimKeywordlist.cpp 19682 2011-05-31 14:21:20Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimKeywordlist.cpp 20022 2011-09-01 15:45:14Z dburken $";
 #endif
 
 ossimKeywordlist::ossimKeywordlist(const ossimKeywordlist& src)
@@ -1002,10 +1002,14 @@ bool ossimKeywordlist::parseStream(std::istream& is)
                m_map.insert(std::make_pair(key.string(), value.string()));
             }
          }
+#if 1
+         // Commented out to allow an invalid line in keyword list without
+         // erroring out, effectively skipping bad line. drb - 01 Sep. 2001
          else
          {
             return false;
          }
+#endif
       }
       else if(state == KeywordlistParseState_BAD_STREAM)
       {

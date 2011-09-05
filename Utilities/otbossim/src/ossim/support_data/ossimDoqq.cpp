@@ -11,15 +11,9 @@
 //              header.
 //
 //********************************************************************
-// $Id: ossimDoqq.cpp 13175 2008-07-14 15:23:45Z gpotts $
-
-#include <fstream>
-#include <iostream>
+// $Id: ossimDoqq.cpp 19900 2011-08-04 14:19:57Z dburken $
 
 #include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
-
 #include <ossim/support_data/ossimDoqq.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimNotifyContext.h>
@@ -29,23 +23,37 @@ static ossimTrace traceDebug("ossimDoqq:debug");
 //**************************************************************************
 // CONSTRUCTOR
 //**************************************************************************
-ossimDoqq::ossimDoqq(ossimFilename file)
-   :
-      theErrorStatus(OSSIM_OK)
+ossimDoqq::ossimDoqq()
+   :  theErrorStatus(OSSIM_ERROR)
 {
-   static const char MODULE[] = "ossimDoqq Constructor";
+}
 
-   if(traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "Entering " << MODULE << std::endl;
-   }
-      
+//**************************************************************************
+// CONSTRUCTOR
+//**************************************************************************
+ossimDoqq::ossimDoqq(ossimFilename file)
+   :  theErrorStatus(OSSIM_ERROR)
+{
+   open(file);
+   theDoqFile.close();
+}
+
+//**************************************************************************
+// Opens the DOQ header and parses info.
+//**************************************************************************
+bool ossimDoqq::open(const ossimFilename& file)
+{
+   // Assume all kosher:
+   theErrorStatus = OSSIM_OK;
+
    // Check first line of header to determine which version to parse.
-   std::ifstream inFile(file.c_str(), std::ios::in);
+   if (theDoqFile.is_open())
+      theDoqFile.close();
+
+   theDoqFile.open(file.c_str(), std::ios::in);
    char header[23];
-   inFile.seekg(0, std::ios::beg);
-   inFile.get(header, 22);
+   theDoqFile.seekg(0, std::ios::beg);
+   theDoqFile.get(header, 22);
    header[22] = '\0';
    if(strcmp((const char*)header, "BEGIN_USGS_DOQ_HEADER") == 0)
    {
@@ -56,7 +64,7 @@ ossimDoqq::ossimDoqq(ossimFilename file)
             << std::endl;
       }
 
-      ldstr_v2(inFile);
+      ldstr_v2(theDoqFile);
    }
    else
    {
@@ -67,21 +75,13 @@ ossimDoqq::ossimDoqq(ossimFilename file)
             << std::endl;
       }
 
-      ldstr_v1(inFile);
+      ldstr_v1(theDoqFile);
    }
-
-   inFile.close();
 
    // Check for error.
    if(theErrorStatus)
-   {
-      return;
-   }
-
-   if(traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG) << *this << std::endl;
-   }
+      return false;
+   return true;
 }
 
 ossimDoqq::~ossimDoqq()
@@ -99,6 +99,11 @@ void ossimDoqq::ldstr_v2(std::istream& in)
    }
 
    char line[100];
+   char dum1[30];
+   char dum2[30];
+   char dum3[30];
+   char dum4[30];
+
    while((!strncmp(line, "END_USGS_HEADER", 15) == 0)&&
 			(in.good()))
    {
@@ -107,91 +112,67 @@ void ossimDoqq::ldstr_v2(std::istream& in)
       
       if(strncmp(line, "SAMPLES_AND_LINES", 17) == 0)
       {
-         char dum1[30];
-         char dum2[30];
-         char dum3[30];
          sscanf(line, "%s %s %s", dum1, dum2, dum3);
          theLine = atoi(dum3);
          theSample = atoi(dum2);
       }
 
-      if(strncmp(line, "HORIZONTAL_COORDINATE_SYSTEM", 28) == 0)
+      else if(strncmp(line, "HORIZONTAL_COORDINATE_SYSTEM", 28) == 0)
       {
-         char dum1[30];
-         char dum2[30];
          sscanf(line, "%s %s", dum1, dum2);
          theProjection = dum2;
       }
       
-      if(strncmp(line, "NW_QUAD_CORNER_XY", 17) == 0)
+      else if(strncmp(line, "NW_QUAD_CORNER_XY", 17) == 0)
       {         
-         char dum1[30];
-         char dum2[30];
-         char dum3[30];         
          sscanf(line, "%s %s %s", dum1, dum2, dum3);
          
          theUE = atof(dum2);
          theUN = atof(dum3);
       }
       
-      if(strncmp(line, "NE_QUAD_CORNER_XY", 17) == 0)
+      else if(strncmp(line, "NE_QUAD_CORNER_XY", 17) == 0)
       {
-         char dum1[30];
-         char dum2[30];
-         char dum3[30];
          sscanf(line, "%s %s %s", dum1, dum2, dum3);
          theLE = atof(dum2);
          theLN = atof(dum3);
       }
 
-      if(strncmp(line, "COORDINATE_ZONE", 15) == 0)
+      else if(strncmp(line, "COORDINATE_ZONE", 15) == 0)
       {
-         char dum1[30];
-         char dum2[30];
          sscanf(line, "%s %s", dum1, dum2);
          theUtmZone = atoi(dum2);
       }
 
-      if(strncmp(line, "SOURCE_IMAGE_DATE", 17) == 0)
+      else if(strncmp(line, "SOURCE_IMAGE_DATE", 17) == 0)
       {
-         char dum1[30];
-         char dum2[30];
-	 char dum3[30];
-	 char dum4[30];
          sscanf(line, "%s %s %s %s", dum1, dum2, dum3, dum4);
          theAcqYear  = ossimString(dum2);
-	 theAcqMonth = ossimString(dum3);
-	 theAcqDay   = ossimString(dum4);
+         theAcqMonth = ossimString(dum3);
+         theAcqDay   = ossimString(dum4);
       }
 
-      if((strncmp(line, "XY_ORIGIN", 9) == 0))
+      else if((strncmp(line, "XY_ORIGIN", 9) == 0))
       {
-         char dum1[30];
-         char dum2[30];
-         char dum3[30];
          sscanf(line, "%s %s %s", dum1, dum2, dum3);
          theEasting = atof(dum2);
          theNorthing = atof(dum3);        
       }
 
-      if((strncmp(line, "HORIZONTAL_DATUM", 16) == 0) && theDatum.empty())
+      else if((strncmp(line, "HORIZONTAL_DATUM", 16) == 0) && theDatum.empty())
       {
-         char dum1[30];
-         char dum2[30];
          ossimString datum;         
          sscanf(line, "%s %s", dum1, dum2);
          datum = dum2; 
          
          if(datum.contains("NAD27"))
-	   theDatum = "NAD";
+            theDatum = "NAD";
          else
-	   theDatum = "NAR";
+            theDatum = "NAR";
       }
 
-      if(strncmp(line, "BYTE_COUNT", 10) == 0)
+      else if(strncmp(line, "BYTE_COUNT", 10) == 0)
       {
-         char dum1[30];
-         char dum2[30];
          ossimString header;         
          sscanf(line, "%s %s", dum1, dum2);
          header = dum2;
@@ -199,10 +180,8 @@ void ossimDoqq::ldstr_v2(std::istream& in)
          theHeaderSize = atoi(header.chars());
       }
 
-      if(strncmp(line, "BAND_CONTENT", 12) == 0)
+      else if(strncmp(line, "BAND_CONTENT", 12) == 0)
       {
-         char dum1[30];
-         char dum2[30];
          ossimString rgbType;        
          sscanf(line, "%s %s", dum1, dum2);
          rgbType = dum2;
@@ -213,26 +192,65 @@ void ossimDoqq::ldstr_v2(std::istream& in)
             theRgb = 3;
       }
 
-      if(strncmp(line, "HORIZONTAL_RESOLUTION", 21) == 0)
+      else if(strncmp(line, "HORIZONTAL_RESOLUTION", 21) == 0)
       {
-         char dum1[30];
-         char dum2[30];
          ossimString gsd;
          sscanf(line, "%s %s", dum1, dum2);
          gsd = dum2;
 
          theGsd.x = gsd.toDouble();
          theGsd.y = gsd.toDouble();
-//         theGsd = atof(gsd.chars());
-//          theGsd.x = std::abs(ossimString(dum1).toDouble());
-//          theGsd.y = std::abs(ossimString(dum2).toDouble());
+      }
+
+      else if(strncmp(line, "QUADRANGLE_NAME", 15) == 0)
+      {
+         sscanf(line, "%s %29c", dum1, dum2);
+         dum2[29] = 0;
+         theQuadName = dum2;
+      }
+
+      else if(strncmp(line, "QUADRANT", 8) == 0)
+      {
+         sscanf(line, "%s %s", dum1, dum2);
+         theQuad = dum2;
+      }
+
+      else if(strncmp(line, "NATION", 6) == 0)
+      {
+         sscanf(line, "%s %s", dum1, dum2);
+         theNation = dum2;
+      }
+
+      else if(strncmp(line, "STATE", 5) == 0)
+      {
+         sscanf(line, "%s %s", dum1, dum2);
+         theState = dum2;
+      }
+
+      else if(strncmp(line, "RMSE_XY", 7) == 0)
+      {
+         sscanf(line, "%s %s", dum1, dum2);
+         theRMSE = ossimString(dum2).toDouble();
+      }
+
+      else if(strncmp(line, "IMAGE_SOURCE", 12) == 0)
+      {
+         sscanf(line, "%s %29c", dum1, dum2);
+         dum2[29] = 0;
+         theImageSource = dum2;
+      }
+
+      else if(strncmp(line, "SOURCE_IMAGE_ID", 15) == 0)
+      {
+         sscanf(line, "%s %29c", dum1, dum2);
+         dum2[29] = 0;
+         theSourceImageID = dum2;
       }
    }
 
-	if(!in.good())
+	if (!in.good())
 	{
       theErrorStatus = OSSIM_ERROR;
-		
       if(traceDebug())
       {
          ossimNotify(ossimNotifyLevel_WARN)
@@ -242,11 +260,11 @@ void ossimDoqq::ldstr_v2(std::istream& in)
       }
 		return;
 	}
+
    // Check for valid lines and samples and header size.
    if(theLine <= 0 || theSample <= 0 || theHeaderSize <= 0)
    {
       theErrorStatus = OSSIM_ERROR;
-
       if(traceDebug())
       {
          ossimNotify(ossimNotifyLevel_WARN)
@@ -254,9 +272,16 @@ void ossimDoqq::ldstr_v2(std::istream& in)
             << "\tInvalid lines or samples or header size."
             << std::endl;
       }
-      
       return;
    }
+
+   // Assign concatenated acquisition date:
+   theAcqYearMonthDay = theAcqYear;
+   theAcqYearMonthDay += "-";
+   theAcqYearMonthDay += theAcqMonth;
+   theAcqYearMonthDay += "-";
+   theAcqYearMonthDay += theAcqDay;
+
 }
 
 void ossimDoqq::ldstr_v1(std::istream& in)
@@ -386,22 +411,27 @@ ossim_float64 ossimDoqq::convertStr(const char* str) const
    return tmp.toFloat64();
 }
 
-std::ostream& operator<<(std::ostream& out, const ossimDoqq& doq)
+std::ostream& ossimDoqq::print(std::ostream& out) const
 {
-   out << "\nContents of DOQQ Update:\n"
-       << "\nLine:           " << doq.theLine
-       << "\nSample:         " << doq.theSample
-       << "\nProjection:     " << doq.theProjection
-       << "\nDatum:          " << doq.theDatum
-       << "\nEasting:        " << doq.theEasting
-       << "\nNorthing:       " << doq.theNorthing
-       << "\nUN:             " << doq.theUN
-       << "\nUE:             " << doq.theUE
-       << "\nLN:             " << doq.theLN
-       << "\nLE:             " << doq.theLE
-       << "\nGSD:            " << doq.theGsd
-       << "\nBand:           " << doq.theRgb
-       << "\nUtm Zone:       " << doq.theUtmZone << std::endl;
+   const char* prefix = "doqq.";
+   out << prefix << "Quadrangle_Name: " << theQuadName << std::endl;
+   out << prefix << "Quadrant: " << theQuad << std::endl;
+   out << prefix << "Image_Source: " << theImageSource << std::endl;
+   out << prefix << "Source_Image_ID: " << theSourceImageID << std::endl;
+   out << prefix << "RMSE_XY: " << theRMSE << std::endl;
+   out << prefix << "Line: " << theLine << std::endl;
+   out << prefix << "Sample: " << theSample << std::endl;
+   out << prefix << "Projection: " << theProjection << std::endl;
+   out << prefix << "Datum: " << theDatum << std::endl;
+   out << prefix << "Easting: " << theEasting << std::endl;
+   out << prefix << "Northing: " << theNorthing << std::endl;
+   out << prefix << "UN: " << theUN << std::endl;
+   out << prefix << "UE: " << theUE << std::endl;
+   out << prefix << "LN: " << theLN << std::endl;
+   out << prefix << "LE: " << theLE << std::endl;
+   out << prefix << "GSD: " << theGsd << std::endl;
+   out << prefix << "Band: " << theRgb << std::endl;
+   out << prefix << "Utm_Zone: " << theUtmZone << std::endl;
    
    return out;
 }

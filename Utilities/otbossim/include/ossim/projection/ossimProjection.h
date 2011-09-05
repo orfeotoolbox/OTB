@@ -7,7 +7,7 @@
 // Description: Base class for all projections (2D-to-3D transform)
 //
 //*******************************************************************
-//  $Id: ossimProjection.h 17815 2010-08-03 13:23:14Z dburken $
+//  $Id: ossimProjection.h 19793 2011-06-30 13:26:56Z gpotts $
 #ifndef ossimProjection_HEADER
 #define ossimProjection_HEADER
 #include <iostream>
@@ -89,6 +89,11 @@ public:
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix=0);
 
+   virtual bool isEqualTo(const ossimObject& obj, ossimCompareType compareType = OSSIM_COMPARE_FULL)const
+   {
+      return ossimObject::isEqualTo(obj, compareType);
+   }
+   
    /*!
     * OPERATOR: ==
     * Compares this instance with arg projection.

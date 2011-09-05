@@ -8,7 +8,7 @@
 // Author:  Frank Warmerdam (warmerda@home.com)
 //
 //*******************************************************************
-//  $Id: ossimImageWriterFactoryRegistry.h 18966 2011-02-25 19:39:58Z gpotts $
+//  $Id: ossimImageWriterFactoryRegistry.h 19907 2011-08-05 19:55:46Z dburken $
 
 #ifndef ossimImageWriterFactoryRegistry_HEADER
 #define ossimImageWriterFactoryRegistry_HEADER
@@ -17,14 +17,13 @@
 #include <ossim/base/ossimFactoryListInterface.h>
 #include <vector>
 #include <iosfwd>
-#include <ossim/base/ossimCommon.h>
 
 class ossimImageFileWriter;
 class ossimKeywordlist;
 
-class OSSIMDLLEXPORT ossimImageWriterFactoryRegistry : public ossimObjectFactory,
-                                    public ossimFactoryListInterface<ossimImageWriterFactoryBase, ossimImageFileWriter>
-
+class OSSIMDLLEXPORT ossimImageWriterFactoryRegistry :
+   public ossimObjectFactory,
+   public ossimFactoryListInterface<ossimImageWriterFactoryBase, ossimImageFileWriter>
 {   
 public:
    static ossimImageWriterFactoryRegistry* instance();
@@ -36,23 +35,15 @@ public:
    ossimImageFileWriter* createWriter(const ossimString& typeName)const;
    
    ossimObject* createObject(const ossimKeywordlist &kwl,
-                             const char *prefix=0)const
-   {
-      return createObjectFromRegistry(kwl, prefix);
-   }
-   ossimObject* createObject(const ossimString& typeName)const
-   {
-      return createObjectFromRegistry(typeName);
-   }
+                             const char *prefix=0)const;
+
+   ossimObject* createObject(const ossimString& typeName)const;
    
    /**
     * getTypeNameList.  This should return the class type of the object being
     * used to perform the writting.
     */
-   virtual void getTypeNameList(std::vector<ossimString>& typeList)const
-   {
-      getAllTypeNamesFromRegistry(typeList);
-   }
+   virtual void getTypeNameList(std::vector<ossimString>& typeList)const;
    
    /**
     * getImageTypeList.  This is the actual image type name.  So for

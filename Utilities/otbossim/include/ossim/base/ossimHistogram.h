@@ -15,7 +15,7 @@
 // frequency counts for each of these buckets.
 //
 //********************************************************************
-// $Id: ossimHistogram.h 11724 2007-09-13 19:28:07Z gpotts $
+// $Id: ossimHistogram.h 19799 2011-06-30 18:41:26Z gpotts $
 //
 
 #ifndef ossimHistogram_HEADER
@@ -33,6 +33,7 @@ class OSSIMDLLEXPORT ossimHistogram : public ossimObject
 
   protected:
 
+   
    virtual void deleteAll();
    
     float * vals;            // histogram x array
@@ -75,6 +76,11 @@ class OSSIMDLLEXPORT ossimHistogram : public ossimObject
    };
    
   public:
+   enum FillAlgorithmType
+   {
+      HISTOGRAM_FILL_DEFAULT    = 0,
+      HISTOGRAM_FILL_THIN_PLATE = 1
+   };
 // Constructors
     ossimHistogram();
     ossimHistogram(int xres, float min, float max);
@@ -84,6 +90,7 @@ class OSSIMDLLEXPORT ossimHistogram : public ossimObject
 
     virtual int GetIndex(float)const;
 // Other histogram formation operations    
+   ossimHistogram* fillInteriorEmptyBins(int type=HISTOGRAM_FILL_THIN_PLATE)const;
     ossimHistogram* Scale(float scale_factor); // Scale Transformation
     ossimHistogram* CumulativeGreaterThanEqual()const;// From density to cumulative
     ossimHistogram* CumulativeLessThanEqual()const;// From density to cumulative

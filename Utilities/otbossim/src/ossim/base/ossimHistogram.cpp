@@ -15,7 +15,7 @@
 // frequency counts for each of these buckets.
 //
 //********************************************************************
-// $Id: ossimHistogram.cpp 17765 2010-07-15 19:08:35Z gpotts $
+// $Id: ossimHistogram.cpp 19805 2011-07-11 11:10:12Z gpotts $
 //
 
 #include <stdio.h>
@@ -28,6 +28,7 @@ using namespace std;
 #include <ossim/base/ossimCommon.h>
 #include <ossim/base/ossimHistogram.h>
 #include <ossim/base/ossimNotifyContext.h>
+#include <ossim/base/ossimThinPlateSpline.h>
 
 // nonstandard versions that use operator>, so they behave differently
 // than std:::min/max and ossim::min/max.  kept here for now for that
@@ -342,6 +343,55 @@ void ossimHistogram::create(int xres, float val1, float val2)
          counts[i] = 0.0;
       }
    }   
+}
+ossimHistogram* ossimHistogram::fillInteriorEmptyBins(int type)const
+{
+   ossimHistogram* result = new ossimHistogram(*this);
+   if(num < 1) return 0;
+   switch(type)
+   {
+      case HISTOGRAM_FILL_THIN_PLATE:
+      case HISTOGRAM_FILL_DEFAULT:
+      {
+         ossimThinPlateSpline spline(1);
+         double pvars[1];
+         float* new_counts = result->GetCounts();
+         ossim_int32 idxLeft = 0;
+         ossim_int32 idxRight = num-1;
+         while((idxLeft < num) && (new_counts[idxLeft]  == 0.0))++idxLeft;
+         while((idxRight > -1) && (new_counts[idxRight] == 0.0))--idxRight;
+         
+         if(idxLeft < idxRight)
+         {
+            ossim_int32 idx = idxLeft;
+            while(idx <= idxRight)
+            {
+               if(new_counts[idx]!=0.0)
+               {
+                  pvars[0] = new_counts[idx];
+                  spline.addPoint(idx, 0, pvars);
+               }
+               ++idx;
+            }
+            if(spline.solve())
+            {
+               idx = idxLeft;
+               while(idx <= idxRight)
+               {
+                  if(spline.getPoint(idx, 0, pvars))
+                  {
+                     new_counts[idx] = pvars[0];
+                  }
+                  ++idx;
+               }
+            }
+         }
+         
+         break;
+      }
+   }
+   
+   return result;
 }
 //--------------------------------------------------
 // -- Transform the value axis of a histogram by a

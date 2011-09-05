@@ -5,7 +5,7 @@
 // Author: Garrett Potts (gpotts@imagelinks.com)
 //
 //*************************************************************************
-// $Id: ossimProperty.cpp 18406 2010-11-10 20:45:37Z gpotts $
+// $Id: ossimProperty.cpp 19917 2011-08-09 11:12:24Z gpotts $
 #include <ossim/base/ossimProperty.h>
 #include <ossim/base/ossimContainerProperty.h>
 #include <ossim/base/ossimKeywordlist.h>
@@ -79,24 +79,36 @@ ossimContainerProperty* ossimProperty::asContainer()
    return 0;
 }
 
+bool ossimProperty::isChangeTypeSet(int type)const
+{
+   return ((type&theChangeType)!=0);
+}
+
 void ossimProperty::clearChangeType()
 {
    theChangeType = ossimPropertyChangeType_NOTSPECIFIED;
 }
 
-void ossimProperty::setChangeType(ossimPropertyChangeType type)
+void ossimProperty::setChangeType(int type, bool on)
 {
-   theChangeType = type;
+   if(on)
+   {
+      theChangeType = static_cast<ossimPropertyChangeType>(theChangeType | type);
+   }
+   else 
+   {
+      theChangeType = static_cast<ossimPropertyChangeType>((~type)&theChangeType);
+   }
 }
 
 void ossimProperty::setFullRefreshBit()
 {
-   theChangeType = (ossimPropertyChangeType)(theChangeType | ossimPropertyChangeType_FULL_REFRESH);
+   setChangeType(ossimPropertyChangeType_FULL_REFRESH);
 }
 
 void ossimProperty::setCacheRefreshBit()
 {
-   theChangeType = (ossimPropertyChangeType)(theChangeType | ossimPropertyChangeType_CACHE_REFRESH);
+   setChangeType(ossimPropertyChangeType_CACHE_REFRESH);
 }
 
 ossimProperty::ossimPropertyChangeType ossimProperty::getChangeType()const
@@ -106,17 +118,22 @@ ossimProperty::ossimPropertyChangeType ossimProperty::getChangeType()const
 
 bool ossimProperty::isFullRefresh()const
 {
-   return ((theChangeType & ossimPropertyChangeType_FULL_REFRESH) != 0);
+   return isChangeTypeSet(ossimPropertyChangeType_FULL_REFRESH);
 }
 
 bool ossimProperty::isCacheRefresh()const
 {
-   return ((theChangeType & ossimPropertyChangeType_CACHE_REFRESH) != 0);
+   return isChangeTypeSet(ossimPropertyChangeType_CACHE_REFRESH);
 }
 
 bool ossimProperty::isChangeTypeSpecified()const
 {
    return (theChangeType != ossimPropertyChangeType_NOTSPECIFIED);
+}
+
+bool ossimProperty::affectsOthers()const
+{
+   return isChangeTypeSet(ossimPropertyChangeType_AFFECTS_OTHERS);
 }
 
 void ossimProperty::setReadOnlyFlag(bool flag)
@@ -162,6 +179,11 @@ void ossimProperty::setDescription(const ossimString& description)
 ossimString ossimProperty::getDescription()const
 {
    return theDescription;
+}
+
+void ossimProperty::accept(ossimVisitor& visitor)
+{
+   ossimObject::accept(visitor);
 }
 
 ossimRefPtr<ossimXmlNode> ossimProperty::toXml()const

@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimContainerProperty.h 18405 2010-11-10 20:44:58Z gpotts $
+// $Id: ossimContainerProperty.h 19917 2011-08-09 11:12:24Z gpotts $
 #ifndef ossimContainerProperty_HEADER
 #define ossimContainerProperty_HEADER
 #include <vector>
@@ -48,7 +48,9 @@ public:
       std::vector<ossimRefPtr<ossimProperty> >& children) const;
    
    virtual ossimRefPtr<ossimXmlNode> toXml()const;
+   virtual void setReadOnlyFlag(bool flag);
 
+   virtual void accept(ossimVisitor& visitor);
 protected:
    std::vector<ossimRefPtr<ossimProperty> > theChildPropertyList;
 

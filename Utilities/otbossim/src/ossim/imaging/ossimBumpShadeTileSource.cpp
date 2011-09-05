@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimBumpShadeTileSource.cpp 19197 2011-03-23 16:22:08Z dburken $
+// $Id: ossimBumpShadeTileSource.cpp 19970 2011-08-17 00:35:10Z gpotts $
 
 #include <ossim/imaging/ossimBumpShadeTileSource.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
@@ -477,7 +477,7 @@ ossimRefPtr<ossimProperty> ossimBumpShadeTileSource::getProperty(const ossimStri
    }
    else if(name == "lightSourceAzimuthAngle")
    {
-      ossimProperty* prop = new ossimNumericProperty(name, ossimString::toString(m_lightSourceAzimuthAngle), 0.0, 90.0);
+      ossimProperty* prop = new ossimNumericProperty(name, ossimString::toString(m_lightSourceAzimuthAngle), 0, 360);
       prop->setCacheRefreshBit();
       return prop;
    }

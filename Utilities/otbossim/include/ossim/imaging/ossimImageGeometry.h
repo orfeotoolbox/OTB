@@ -247,6 +247,7 @@ public:
    //! When either the projection or the transform changes, this method recomputes the GSD.
    void computeGsd()const;
 
+   virtual bool isEqualTo(const ossimObject& obj, ossimCompareType compareType = OSSIM_COMPARE_FULL)const;
 protected:
    //! @brief Method to back out decimation of a point.
    //! @param rnPt Is a point in resolution n.

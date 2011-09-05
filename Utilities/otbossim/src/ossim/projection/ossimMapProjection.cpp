@@ -9,7 +9,7 @@
 // Base class for all map projections.
 // 
 //*******************************************************************
-//  $Id: ossimMapProjection.cpp 19655 2011-05-26 11:40:25Z gpotts $
+//  $Id: ossimMapProjection.cpp 19880 2011-07-30 16:27:15Z dburken $
 
 #include <iostream>
 #include <cstdlib>
@@ -48,7 +48,6 @@ ossimMapProjection::ossimMapProjection(const ossimEllipsoid& ellipsoid,
     theUlEastingNorthing(0, 0),
     theFalseEastingNorthing(0, 0),
     thePcsCode(0),
-    theGcsCode(0),
     theElevationLookupFlag(false),
     theModelTransform(),
     theInverseModelTransform(),
@@ -71,7 +70,6 @@ ossimMapProjection::ossimMapProjection(const ossimMapProjection& src)
         theUlEastingNorthing(src.theUlEastingNorthing),
         theFalseEastingNorthing(src.theFalseEastingNorthing),
         thePcsCode(src.thePcsCode),
-        theGcsCode(src.theGcsCode),
         theElevationLookupFlag(false),
         theModelTransform(src.theModelTransform),
         theInverseModelTransform(src.theInverseModelTransform),
@@ -94,13 +92,6 @@ void ossimMapProjection::setPcsCode(ossim_uint32 pcsCode)
    thePcsCode = pcsCode;
 }
 
-void ossimMapProjection::setGcsCode(ossim_uint32 gcsCode)
-{
-   theGcsCode = gcsCode;
-}
-
-
-
 ossim_uint32 ossimMapProjection::getPcsCode() const
 {
    // The PCS code is not always set when the projection is instantiated with explicit parameters,
@@ -119,15 +110,6 @@ ossim_uint32 ossimMapProjection::getPcsCode() const
       return 0; // 32767 only used internally. To the rest of OSSIM, the PCS=0 is undefined
    
    return thePcsCode;
-}
-
-ossim_uint32 ossimMapProjection::getGcsCode() const
-{
-   // Take this opportunity to make sure the GCS code were initialized before saving state.
-   // See comments in getPcsCode()
-   if ((theGcsCode == 0) && theDatum)
-      theGcsCode = theDatum->epsgCode() - 2000;
-   return theGcsCode;
 }
 
 ossimString ossimMapProjection::getProjectionName() const
@@ -201,8 +183,8 @@ void ossimMapProjection::setDatum(const ossimDatum* datum)
    if (!datum || (*theDatum == *datum))
       return;
 
-      theDatum = datum; 
-      setEllipsoid( *(datum->ellipsoid()));
+   theDatum = datum; 
+   theEllipsoid = *(theDatum->ellipsoid());
 
    // Change the datum of the ossimGpt data members:
    theOrigin.changeDatum(theDatum);
@@ -210,20 +192,9 @@ void ossimMapProjection::setDatum(const ossimDatum* datum)
 
    update();
 
-   
-//#if 0
-   // A change of datum usually implies a change of EPSG codes. Only do this if codes were
-   // previously assigned, otherwise, the code will be determined later. This avoids unnecessary
-   // projection instantiations associated with findProjectionCode() calls:
-   if ((theGcsCode != 0) && (theGcsCode != datum->epsgCode()))
-      theGcsCode = datum->epsgCode();
-   if (thePcsCode != 0)
-   {
-      thePcsCode = 0; // set to default "unknown" first. 
-      // this will get set on next call to getPcsCode()
-//      thePcsCode = ossimEpsgProjectionDatabase::instance()->findProjectionCode(*this);
-   }
-//#endif
+   // A change of datum usually implies a change of EPSG codes. Reset the PCS code. It will be
+   // reestablished as needed in the getPcsCode() method:
+   thePcsCode = 0;
 }
 
 void ossimMapProjection::setOrigin(const ossimGpt& origin)
@@ -294,16 +265,6 @@ void ossimMapProjection::update()
       theUlGpt = theOrigin;
       theUlEastingNorthing = forward(theUlGpt);
    }
-
-   // Projection Coordinate System(PCS) code check. Since this projection may have changed, it may
-   // no longer correspond to it's original PCS code (same for datum GCS code):
-   //if ((thePcsCode != 0) && (thePcsCode != 32767))
-   //{
-   //   ossimRefPtr<ossimProjection> proj = ossimEpsgProjectionFactory::instance()->
-   //      createProjection(ossimString::toString(thePcsCode));
-   //   if (proj.valid() && (*proj.get() != *this))
-   //      thePcsCode = 0;
-   //}
 }
 
 void ossimMapProjection::updateFromTransform()
@@ -848,13 +809,9 @@ bool ossimMapProjection::saveState(ossimKeywordlist& kwl, const char* prefix) co
    ossim_uint32 code = getPcsCode();
    if (code)
    {
-      kwl.add(prefix, ossimKeywordNames::PCS_CODE_KW, code, true);
       ossimString epsg_spec = ossimString("EPSG:") + ossimString::toString(code);
       kwl.add(prefix, ossimKeywordNames::SRS_NAME_KW, epsg_spec, true);
    }
-   code = getGcsCode();
-   if(code != 0)
-      kwl.add(prefix, ossimKeywordNames::GCS_CODE_KW, code, true);
    
    if(isGeographic())
    {
@@ -895,18 +852,13 @@ bool ossimMapProjection::saveState(ossimKeywordlist& kwl, const char* prefix) co
               true);  
    }
 
-   kwl.add(prefix,
-           ossimKeywordNames::FALSE_EASTING_NORTHING_KW,
-           theFalseEastingNorthing.toString().c_str(),
-           true);
-   kwl.add(prefix,
-           ossimKeywordNames::FALSE_EASTING_NORTHING_UNITS_KW,
-           ossimUnitTypeLut::instance()->getEntryString(OSSIM_METERS),
-           true);
-   kwl.add(prefix,
-           ossimKeywordNames::ELEVATION_LOOKUP_FLAG_KW,
-           ossimString::toString(theElevationLookupFlag),
-           true);
+   kwl.add(prefix, ossimKeywordNames::PCS_CODE_KW, code, true);
+   kwl.add(prefix, ossimKeywordNames::FALSE_EASTING_NORTHING_KW,
+           theFalseEastingNorthing.toString().c_str(), true);
+   kwl.add(prefix, ossimKeywordNames::FALSE_EASTING_NORTHING_UNITS_KW,
+           ossimUnitTypeLut::instance()->getEntryString(OSSIM_METERS), true);
+   kwl.add(prefix, ossimKeywordNames::ELEVATION_LOOKUP_FLAG_KW,
+           ossimString::toString(theElevationLookupFlag), true);
 
    if(theModelTransformUnitType != OSSIM_UNIT_UNKNOWN)
    {
@@ -957,9 +909,9 @@ bool ossimMapProjection::loadState(const ossimKeywordlist& kwl, const char* pref
 
    const char *lookup;
 
-   // Get the Projection Coordinate System and Geographic Coordinate system (Datum) codes
-   // (assumed from EPSG database). NOTE: the codes are read here for saving in this object only. 
-   // The codes are not verified until a call to getPcs/GcsCode() is called. If ONLY these codes 
+   // Get the Projection Coordinate System (assumed from EPSG database). 
+   // NOTE: the code is read here for saving in this object only. 
+   // The code is not verified until a call to getPcs() is called. If ONLY this code
    // had been provided, then the EPSG projection factory would populate a new instance of the 
    // corresponding map projection and have it saveState for constructing again later in the 
    // conventional fashion here
@@ -967,24 +919,13 @@ bool ossimMapProjection::loadState(const ossimKeywordlist& kwl, const char* pref
    lookup = kwl.find(prefix, ossimKeywordNames::PCS_CODE_KW);
    if(lookup)
       thePcsCode = ossimString(lookup).toUInt32(); // EPSG PROJECTION CODE
-   theGcsCode = 0;
-   lookup = kwl.find(prefix, ossimKeywordNames::GCS_CODE_KW);
-   if(lookup)
-      theGcsCode = ossimString(lookup).toUInt32(); // EPSG DATUM CODE
 
-   // The datum can be specified in 2 ways: either via OSSIM/geotrans alpha-codes or EPSG GCS.
+   // The datum can be specified in 2 ways: either via OSSIM/geotrans alpha-codes or EPSG code.
    // Last resort use WGS 84 (consider throwing an exception to catch any bad datums): 
    theDatum = ossimDatumFactoryRegistry::instance()->create(kwl, prefix);
-   if (theDatum != NULL)
-   {
-      // Let's assign a proper GCS code from the EPSG database if needed and available:
-      if (theGcsCode == 0)
-         theGcsCode = theDatum->epsgCode();
-   }
-   else
+   if (theDatum == NULL)
    {
       theDatum = ossimDatumFactory::instance()->wgs84();
-      theGcsCode = theDatum->epsgCode();
    }
 
    // Set all ossimGpt-type members to use this datum:
@@ -1212,22 +1153,23 @@ bool ossimMapProjection::loadState(const ossimKeywordlist& kwl, const char* pref
 
       switch (theProjectionUnits)
       {
-      case OSSIM_METERS:
+         case OSSIM_METERS:
          {
             theFalseEastingNorthing = eastingNorthing;
             break;
          }
-      case OSSIM_FEET:
-      case OSSIM_US_SURVEY_FEET:
+         case OSSIM_FEET:
+         case OSSIM_US_SURVEY_FEET:
          {
             ossimUnitConversionTool ut;
             ut.setValue(eastingNorthing.x, theProjectionUnits);
             theFalseEastingNorthing.x = ut.getValue(OSSIM_METERS);
             ut.setValue(eastingNorthing.y, theProjectionUnits);
             theFalseEastingNorthing.y = ut.getValue(OSSIM_METERS);
+            theProjectionUnits = OSSIM_METERS;
             break;
          }
-      default:
+         default:
          {
             if(traceDebug())
             {
@@ -1417,8 +1359,7 @@ std::ostream& ossimMapProjection::print(std::ostream& out) const
        << theFalseEastingNorthing.toString().c_str()
        << "\n" << ossimKeywordNames::FALSE_EASTING_NORTHING_UNITS_KW << ": "
        << ossimUnitTypeLut::instance()->getEntryString(OSSIM_METERS)
-       << "\n" << ossimKeywordNames::PCS_CODE_KW << ": " << thePcsCode
-       << "\n" << ossimKeywordNames::GCS_CODE_KW << ": " << theGcsCode;
+       << "\n" << ossimKeywordNames::PCS_CODE_KW << ": " << thePcsCode;
 
    if(isGeographic())
    {
@@ -1585,6 +1526,46 @@ bool ossimMapProjection::operator==(const ossimProjection& projection) const
       return false;
 
    return true;
+}
+
+bool ossimMapProjection::isEqualTo(const ossimObject& obj, ossimCompareType compareType)const
+{
+   const ossimMapProjection* mapProj = dynamic_cast<const ossimMapProjection*>(&obj);
+   bool result = mapProj&&ossimProjection::isEqualTo(obj, compareType);
+   
+   if(result)
+   {
+      result = (theEllipsoid.isEqualTo(mapProj->theEllipsoid, compareType)&&
+                theOrigin.isEqualTo(mapProj->theOrigin, compareType)&&
+                theMetersPerPixel.isEqualTo(mapProj->theMetersPerPixel, compareType)&&             
+                theDegreesPerPixel.isEqualTo(mapProj->theDegreesPerPixel, compareType)&&             
+                theUlGpt.isEqualTo(mapProj->theUlGpt, compareType)&&             
+                theUlEastingNorthing.isEqualTo(mapProj->theUlEastingNorthing, compareType)&&             
+                theFalseEastingNorthing.isEqualTo(mapProj->theFalseEastingNorthing, compareType)&&             
+                (thePcsCode == mapProj->thePcsCode)&&
+                (theElevationLookupFlag == mapProj->theElevationLookupFlag)&&
+                (theElevationLookupFlag == mapProj->theElevationLookupFlag)&&
+                (theModelTransform.isEqualTo(mapProj->theModelTransform))&&
+                (theInverseModelTransform.isEqualTo(mapProj->theInverseModelTransform))&&
+                (theModelTransformUnitType == mapProj->theModelTransformUnitType)&&
+                (theProjectionUnits == mapProj->theProjectionUnits));
+      
+      if(result)
+      {
+         if(compareType == OSSIM_COMPARE_FULL)
+         {
+            if(theDatum&&mapProj->theDatum)
+            {
+               result = theDatum->isEqualTo(*mapProj->theDatum, compareType);
+            }
+         }
+         else 
+         {
+            result = (theDatum==mapProj->theDatum);
+         }
+      }
+   }
+   return result;
 }
 
 double ossimMapProjection::getFalseEasting() const

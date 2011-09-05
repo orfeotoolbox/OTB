@@ -7,7 +7,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimRectilinearDataObject.h 16052 2009-12-08 22:20:40Z dburken $
+// $Id: ossimRectilinearDataObject.h 19931 2011-08-10 11:53:25Z gpotts $
 #ifndef ossimRectilinearDataObject_HEADER
 #define ossimRectilinearDataObject_HEADER
 #include <ossim/base/ossimDataObject.h>
@@ -134,6 +134,9 @@ public:
     */
    virtual const ossimRectilinearDataObject& operator=(
       const ossimRectilinearDataObject& rhs);
+
+   virtual bool saveState(ossimKeywordlist& kwl, const char* prefix=0)const;
+   virtual bool loadState(const ossimKeywordlist& kwl, const char* prefix=0);
 
 protected:
    ossim_uint32              m_numberOfDataComponents;

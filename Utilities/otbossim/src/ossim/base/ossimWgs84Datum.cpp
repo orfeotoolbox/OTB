@@ -10,7 +10,7 @@
 // instance of a Wgs84Ellipsoid and set the initial defaults for
 // that are specific to a Wgs84Datum
 //*******************************************************************
-//  $Id: ossimWgs84Datum.cpp 9963 2006-11-28 21:11:01Z gpotts $
+//  $Id: ossimWgs84Datum.cpp 19795 2011-06-30 15:04:48Z gpotts $
 
 #include <ossim/base/ossimWgs84Datum.h>
 #include <ossim/base/ossimConstants.h>
@@ -18,6 +18,7 @@
 #include <ossim/base/ossimEllipsoid.h>
 
 
+RTTI_DEF1(ossimWgs84Datum, "ossimWgs84Datum", ossimThreeParamDatum);
 
 ossimWgs84Datum::ossimWgs84Datum()
    :ossimThreeParamDatum("WGE",

@@ -8,7 +8,7 @@
 // DESCRIPTION: Projection database for EPSG coded projections provided in database files
 //
 //*************************************************************************************************
-//  $Id$
+//  $Id: ossimEpsgProjectionDatabase.cpp 19879 2011-07-30 16:21:50Z dburken $
 #include <ossim/projection/ossimEpsgProjectionDatabase.h>
 #include <ossim/projection/ossimStatePlaneProjectionInfo.h>
 #include <ossim/base/ossimKeywordNames.h>
@@ -110,17 +110,6 @@ enum
 };
 static const ossimString SPCS_EPSG_MAP_FORMAT_C ("SPCS_EPSG_MAP");
 
-// Alternate projection Well Known Text naming scheme database CSV file format (format "D")
-// WKT_PCS coding is an alternate naming scheme that maps to EPSG.
-enum 
-{
-   D_CODE = 0,
-   D_NAME,
-   D_NUM_FIELDS   // Not an index, but a count
-};
-static const ossimString WKT_PCS_FORMAT_D ("WKT_PCS");
-
-
 //*************************************************************************************************
 //! Converts sexagesimal DMS to decimal degrees
 //*************************************************************************************************
@@ -220,12 +209,11 @@ void ossimEpsgProjectionDatabase::initialize()
       if (db_stream.good())
       {
          // Format specification implied in file's magic number:
-         getline(db_stream, format_id.string());
+         std::getline(db_stream, format_id.string());
          format_id.trim();
          if ((format_id == EPSG_DB_FORMAT_A) || 
              (format_id == STATE_PLANE_FORMAT_B) ||
-             (format_id == SPCS_EPSG_MAP_FORMAT_C) ||
-             (format_id == WKT_PCS_FORMAT_D))
+             (format_id == SPCS_EPSG_MAP_FORMAT_C))
             good_file = true;
       }
       if (!good_file)
@@ -237,7 +225,7 @@ void ossimEpsgProjectionDatabase::initialize()
       }
 
       // The file is good. Skip over the column descriptor line:
-      getline(db_stream, line.string());
+      std::getline(db_stream, line.string());
 
       // Loop to read all data records:
       while (!db_stream.eof())
@@ -277,17 +265,6 @@ void ossimEpsgProjectionDatabase::initialize()
                db_record->csvFormat = FORMAT_C;
             }
 
-            // This format is for alternate projection naming scheme database CSV file format.
-            // WKT_PCS coding is an alternate naming scheme that maps to EPSG.
-            // Note that no proj is instantiated and no KWL is populated. Only name and EPSG mapped
-            // code is saved.
-            else if (format_id == WKT_PCS_FORMAT_D)
-            {
-               db_record->code = db_record->csvRecord[D_CODE].toUInt32();
-               db_record->name = db_record->csvRecord[D_NAME];
-               db_record->csvFormat = FORMAT_D;
-            }
-
             m_projDatabase.insert(make_pair(db_record->code, db_record));
          }
       }
@@ -324,7 +301,7 @@ ossimProjection* ossimEpsgProjectionDatabase::findProjection(ossim_uint32 epsg_c
 
    else
    {
-   // Search database for entry:
+      // Search database for entry:
       std::multimap<ossim_uint32, ossimRefPtr<ProjDbRecord> >::iterator db_iter = 
          m_projDatabase.find(epsg_code);
       if (db_iter != m_projDatabase.end())
@@ -334,11 +311,11 @@ ossimProjection* ossimEpsgProjectionDatabase::findProjection(ossim_uint32 epsg_c
          if (db_record->proj.valid())
             proj = (ossimMapProjection*) db_record->proj->dup();
          else
-   {
+         {
             // Try decoding the EPSG code before accessing DB:
             proj = createProjFromUtmCode(epsg_code);
             if (proj)
-      {
+            {
                db_record->proj = proj;
                db_record->datumValid = true;
             }
@@ -347,7 +324,7 @@ ossimProjection* ossimEpsgProjectionDatabase::findProjection(ossim_uint32 epsg_c
             else if (db_iter->second->csvFormat == FORMAT_B)
                proj = createProjFromFormatBRecord(db_record);
 
-         if (proj)
+            if (proj)
             {
                // To save allocated memory, get rid of the original CSV entry since a real 
                // projection is now represented in the database:
@@ -357,6 +334,7 @@ ossimProjection* ossimEpsgProjectionDatabase::findProjection(ossim_uint32 epsg_c
          }
       }
    }
+
    return proj;
 }
 
@@ -387,8 +365,8 @@ ossimProjection* ossimEpsgProjectionDatabase::findProjection(const ossimString& 
    if ((spec_code != 0) && (spec_group == "epsg"))
       return findProjection(spec_code);
 
-   // The spec is probably a projection name. Need to search Db
-   // by the projection name. Search database for entry. The spec may use different delimiters than
+   // The spec is probably a projection name. Need to search Db by the projection name. 
+   // Search database for entry. The spec may use different delimiters than
    // the DB so need to split the strings and compare the words:
    ossimString separators ("_ /()");
    vector<ossimString> split_spec = spec.split(separators, true);
@@ -474,7 +452,7 @@ ossimEpsgProjectionDatabase::findProjectionCode(const ossimMapProjection& lost_p
    while ((db_iter != m_projDatabase.end()) && (found_code == 0))
    {
       ProjDbRecord* db_record = db_iter->second.get();
-
+      
       // Has a projection already been created for this db iter?
       if (!db_record->proj.valid())
       {
@@ -483,15 +461,15 @@ ossimEpsgProjectionDatabase::findProjectionCode(const ossimMapProjection& lost_p
          db_record->proj = dynamic_cast<ossimMapProjection*>(findProjection(db_record->code));
       }
       if (db_record->proj.valid() && (*(db_record->proj.get()) == lost_proj))
-         {
+      {
          found_code = db_record->code;
 
-            // Hack to remap projection code 4087 to 4326 (which is not really a projection 
-            // code but other packages like to see 4326 for geographic projections.
-            // Hacked under protest (OLK, 08/2010)
-            if (found_code == 4087)
-               found_code = 4326;
-         }
+         // Hack to remap projection code 4087 to 4326 (which is not really a projection 
+         // code but other packages like to see 4326 for geographic projections.
+         // Hacked under protest (OLK, 08/2010)
+         if (found_code == 4087)
+            found_code = 4326;
+      }
       db_iter++;
    }
    return found_code;
@@ -864,7 +842,7 @@ ossim_uint32 ossimEpsgProjectionDatabase::getCodeFromUtmProj(const ossimUtmProje
 
    else if ((hemisphere == 'S') && (datum_code == "PRP-M"))
       epsg_code += 24800 + 60;
-
+   
    else
       epsg_code = 0;
 

@@ -10,7 +10,7 @@
 // instance of a Wgs84Ellipsoid and set the initial defaults for
 // that are specific to a ossimWgs84Datum
 //*******************************************************************
-//  $Id: ossimWgs84Datum.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimWgs84Datum.h 19795 2011-06-30 15:04:48Z gpotts $
 
 #ifndef ossimWgs84Datum_HEADER
 #define ossimWgs84Datum_HEADER
@@ -28,7 +28,8 @@ public:
    virtual ossimGpt    shiftFromWgs84(const ossimGpt&aPt)const;
 
 protected:
-   
+ 
+   TYPE_DATA;
 };
 
 #endif

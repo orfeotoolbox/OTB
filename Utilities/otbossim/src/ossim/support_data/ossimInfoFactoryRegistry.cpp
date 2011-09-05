@@ -9,12 +9,14 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <algorithm> /* for std::find */
-
 #include <ossim/base/ossimFilename.h>
 #include <ossim/support_data/ossimInfoFactoryRegistry.h>
 #include <ossim/support_data/ossimInfoFactoryInterface.h>
 #include <ossim/support_data/ossimInfoFactory.h>
+
+#include <algorithm> /* for std::find */
+
+ossimInfoFactoryRegistry* ossimInfoFactoryRegistry::theInstance = 0;
 
 ossimInfoFactoryRegistry::~ossimInfoFactoryRegistry()
 {
@@ -23,8 +25,11 @@ ossimInfoFactoryRegistry::~ossimInfoFactoryRegistry()
 
 ossimInfoFactoryRegistry* ossimInfoFactoryRegistry::instance()
 {
-   static ossimInfoFactoryRegistry sharedInstance;
-   return &sharedInstance;
+   if ( !theInstance )
+   {
+      theInstance = new ossimInfoFactoryRegistry;
+   }
+   return theInstance;
 }
 
 void ossimInfoFactoryRegistry::registerFactory(

@@ -5,6 +5,15 @@
 class OSSIM_DLL ossimJobQueue : public ossimReferenced
 {
 public:
+   class OSSIM_DLL Callback : public ossimReferenced
+   {
+   public:
+      Callback(){}
+      virtual void adding(ossimJobQueue* /*q*/, ossimJob* /*job*/){}
+      virtual void added(ossimJobQueue* /*q*/, ossimJob* /*job*/){}
+      virtual void removed(ossimJobQueue* /*q*/, ossimJob* /*job*/){}
+   protected:
+   };
    ossimJobQueue();
    
    virtual void add(ossimJob* job, bool guaranteeUniqueFlag=true);
@@ -17,6 +26,9 @@ public:
    virtual void releaseBlock();
    bool isEmpty()const;
    ossim_uint32 size();
+   void setCallback(Callback* c);
+   Callback* callback();
+   
 protected:
    ossimJob::List::iterator findById(const ossimString& id);
    ossimJob::List::iterator findByName(const ossimString& name);
@@ -27,6 +39,7 @@ protected:
    mutable OpenThreads::Mutex m_jobQueueMutex;
    OpenThreads::Block m_block;
    ossimJob::List m_jobQueue;
+   ossimRefPtr<Callback> m_callback;
    
 };
 

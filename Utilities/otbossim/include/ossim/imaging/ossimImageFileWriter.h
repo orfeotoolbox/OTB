@@ -8,7 +8,7 @@
 //
 // Contains class declaration for ossimImageWriter
 //*******************************************************************
-//  $Id: ossimImageFileWriter.h 19180 2011-03-22 17:36:33Z oscarkramer $
+//  $Id: ossimImageFileWriter.h 19893 2011-08-04 11:43:57Z gpotts $
 
 #ifndef ossimImageFileWriter_HEADER
 #define ossimImageFileWriter_HEADER
@@ -461,8 +461,8 @@ protected:
    bool                       theWriteReadmeFlag;
    bool                       theWriteTiffWorldFileFlag;
    bool                       theWriteWorldFileFlag;
+   bool                       theAutoCreateDirectoryFlag;
    
-
    /**
     * If not a geographic projection this allows the user to set the linear
     * units of the output tag to be:

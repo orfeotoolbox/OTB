@@ -297,7 +297,7 @@ bool ossimSkyBoxLearSensor::saveState(ossimKeywordlist& kwl, const char* prefix)
    kwl.add(prefix, "yaw", ossimString::toString(m_yaw), true);
    kwl.add(prefix, "principal_point", m_principalPoint.toString(), true);
    kwl.add(prefix, "pixel_size", m_pixelSize.toString(), true);
-   kwl.add(prefix, "platform_postion",m_platformPosition.toString() ,true);
+   kwl.add(prefix, "platform_position",m_platformPosition.toString() ,true);
    kwl.add(prefix, "focal_length", ossimString::toString(m_focalLength) ,true);
    kwl.add(prefix, "image_size", theImageSize.toString() ,true);
    

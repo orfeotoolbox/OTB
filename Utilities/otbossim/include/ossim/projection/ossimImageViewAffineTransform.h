@@ -8,7 +8,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimImageViewAffineTransform.h 18629 2011-01-04 12:44:14Z gpotts $
+//  $Id: ossimImageViewAffineTransform.h 19803 2011-07-11 11:08:32Z gpotts $
 #ifndef ossimImageViewAffineTransform_HEADER
 #define ossimImageViewAffineTransform_HEADER
 #include <ossim/projection/ossimImageViewTransform.h>
@@ -130,11 +130,20 @@ public:
     */
    virtual void rotate(double degrees);
    
+   ossim_float64 getRotation()const{return m_rotation;}
+   const ossimDpt& getScale()const{return m_scale;}
+   const ossimDpt& getTranslate()const{return m_translate;}
+   const ossimDpt& getPivot()const{return m_pivot;}
+   
+   
+   virtual bool isEqualTo(const ossimObject& obj, ossimCompareType compareType = OSSIM_COMPARE_FULL)const;
+   
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix =0);
    
    virtual bool saveState(ossimKeywordlist& kwl,
                           const char* prefix =0)const;
+   
    
 protected:
    void buildCompositeTransform();

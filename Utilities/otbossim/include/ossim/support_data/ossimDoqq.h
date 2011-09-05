@@ -11,22 +11,27 @@
 //              header.
 //
 //********************************************************************
-// $Id: ossimDoqq.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimDoqq.h 19900 2011-08-04 14:19:57Z dburken $
 
 #ifndef ossimDoqq_HEADER
 #define ossimDoqq_HEADER
 
+//#include <iostream>
+#include <stdlib.h>
+#include <stdio.h>
+#include <fstream>
 #include <iostream>
 
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimDpt.h>
 #include <ossim/base/ossimString.h>
 #include <ossim/base/ossimFilename.h>
-#include <ossim/base/ossimReferenced.h>
+#include <ossim/support_data/ossimInfoBase.h>
 
-class OSSIM_DLL ossimDoqq : public ossimReferenced
+class OSSIM_DLL ossimDoqq : public ossimInfoBase
 {
 public:
+   ossimDoqq();
    ossimDoqq(ossimFilename file);
    ~ossimDoqq();
    
@@ -38,11 +43,6 @@ public:
 
    enum
    {
-      NUMBER_OF_RECORDS       = 4,
-      QUADRANGLE_NAME_OFFSET  = 0,
-      QUADRANT_OFFSET         = 38,
-      NATION_OFFSET           = 40,
-      STATE_OFFSET            = 44,
       GSD_X_OFFSET            = 59,
       GSD_Y_OFFSET            = 59,
       DATA_ORDER_OFFSET       = 142,      
@@ -55,10 +55,6 @@ public:
       UTM_ZONE_OFFSET         = 199,
       DATUM_OFFSET            = 168,
 
-      QUADRANGLE_NAME_SIZE    = 37,
-      QUADRANT_SIZE           = 2,
-      NATION_SIZE             = 4,
-      STATE_SIZE              = 2,
       DATA_ORDER_SIZE         = 3,
       LINE_SIZE               = 8,
       SAMPLE_SIZE             = 8,  
@@ -72,8 +68,13 @@ public:
       DATUM_SIZE              = 2,
       RADIOMETRY_SIZE         = 3,
       GSD_SIZE              = 12
-      
    };
+
+   //! Implementation of ossimInfoBase class pure virtual.
+   virtual bool open(const ossimFilename& file);
+
+   //! Implementation of ossimInfoBase class pure virtual.
+   virtual std::ostream& print(std::ostream& out) const;
 
    ossimString theProjection;
    ossimString theDatum;
@@ -84,7 +85,9 @@ public:
    ossimString theDataOrder;
    ossimString theMarkU;
    ossimString theMarkV;
-   
+   ossimString theImageSource;
+   ossimString theSourceImageID;
+
    ossim_int32 theUtmZone;
    ossim_int32 theLine;
    ossim_int32 theSample;
@@ -93,7 +96,10 @@ public:
    ossimString theAcqYear;
    ossimString theAcqMonth;
    ossimString theAcqDay;
-   
+   ossimString theAcqYearMonthDay;
+
+   ossim_float64 theRMSE;
+
    ossim_float64   theEasting;
    ossim_float64   theNorthing;
    ossim_float64   theUN;
@@ -104,14 +110,12 @@ public:
    ossim_int32     theHeaderSize;
    ossim_int32     theRecordSize;
 
-   friend std::ostream& operator<<(std::ostream& os, const ossimDoqq& doq);
    ossim_int32 errorStatus() const { return theErrorStatus; }
    
 private:
-   // prevent use
-   ossimDoqq();
 
-   ossimErrorStatus        theErrorStatus;
+   std::ifstream           theDoqFile;
+   ossimErrorStatus   theErrorStatus;
    
    ossim_float64 convertStr(const char* str) const;
 

@@ -10,7 +10,7 @@
 // Description: Common file for utility functions.
 //
 //*************************************************************************
-// $Id: ossimCommon.h 19008 2011-03-04 13:57:55Z gpotts $
+// $Id: ossimCommon.h 19948 2011-08-12 19:02:41Z gpotts $
 #ifndef ossimCommon_HEADER
 #define ossimCommon_HEADER
 
@@ -517,45 +517,50 @@ namespace ossim
     *
     * Parenthesis are required
     */ 
-   bool extractSimpleValues(std::vector<ossimString>& values, const ossimString& stringOfPoints);
+   OSSIM_DLL bool extractSimpleValues(std::vector<ossimString>& values, const ossimString& stringOfPoints);
 
    
-   /**
-    *  Takes input format of the form:
-    *  (value1,value2,...,valueN)
-    */
-   bool toSimpleVector(std::vector<ossim_uint32>& result,
-                       const ossimString& stringOfPoints);
-   /**
-    *  Takes input format of the form:
-    *  (value1,value2,...,valueN)
-    */
-   bool toSimpleVector(std::vector<ossim_int32>& result,
-                       const ossimString& stringOfPoints);
-   /**
-    *  Takes input format of the form:
-    *  (value1,value2,...,valueN)
-    */
-   bool toSimpleVector(std::vector<ossim_uint16>& result,
-                       const ossimString& stringOfPoints);
-   /**
-    *  Takes input format of the form:
-    *  (value1,value2,...,valueN)
-    */
-   bool toSimpleVector(std::vector<ossim_int16>& result,
-                       const ossimString& stringOfPoints);
-   /**
-    *  Takes input format of the form:
-    *  (value1,value2,...,valueN)
-    */
-   bool toSimpleVector(std::vector<ossim_uint8>& result,
-                       const ossimString& stringOfPoints);
-   /**
-    *  Takes input format of the form:
-    *  (value1,value2,...,valueN)
-    */
-   bool toSimpleVector(std::vector<ossim_int8>& result,
-                       const ossimString& stringOfPoints);
+   template <class T>
+   bool toSimpleVector(std::vector<T>& result, const ossimString& stringOfPoints)
+   {
+      std::istringstream in(stringOfPoints);
+      ossim::skipws(in);
+      bool returnValue = true;
+      char c = in.get();
+      ossimString value = "";
+      if(c == '(')
+      {
+         c = (char)in.get();
+         while((c!=')')&&
+               (c!= '\n')&&
+               (in.good()))
+         {
+            if(c!= ',')
+            {
+               value += ossimString(c);
+            }
+            else
+            {
+               result.push_back(static_cast<T>(value.toDouble()));
+               value = "";
+            }
+            c = in.get();
+         }
+      }
+      if(c!= ')')
+      {
+         returnValue = false;
+      }
+      else
+      {
+         if(!value.empty())
+         {
+            result.push_back(static_cast<T>(value.toDouble()));
+         }
+      }
+      
+      return returnValue;
+   }
    
         // lex str into tokens starting at position start using whitespace  
 	//    chars as delimiters and quotes[0] and quotes[1] as the opening

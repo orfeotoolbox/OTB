@@ -5,7 +5,7 @@
 // See LICENSE.txt file in the top level directory for more details.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimImageHandlerFactory.cpp 19737 2011-06-07 16:28:32Z dburken $
+// $Id: ossimImageHandlerFactory.cpp 19900 2011-08-04 14:19:57Z dburken $
 #include <ossim/imaging/ossimImageHandlerFactory.h>
 #include <ossim/imaging/ossimAdrgTileSource.h>
 #include <ossim/imaging/ossimCcfTileSource.h>
@@ -29,6 +29,7 @@
 #include <ossim/imaging/ossimImageCacheTileSource.h>
 #include <ossim/imaging/ossimQbTileFilesHandler.h>
 #include <ossim/imaging/ossimBitMaskTileSource.h>
+#include <ossim/imaging/ossimBandSeparateHandler.h>
 #include <ossim/base/ossimRegExp.h>
 
 static const ossimTrace traceDebug("ossimImageHandlerFactory:debug");
@@ -200,6 +201,11 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName,
       result->setOpenOverviewFlag(openOverview);
       if (result->open(copyFilename))  break;
 
+      if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying band-separated files...";
+      result = new ossimBandSeparateHandler();
+      result->setOpenOverviewFlag(openOverview);      
+      if (result->open(copyFilename))  break;
+
       if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying CCF...";
       result->setOpenOverviewFlag(openOverview);      
       result = new ossimCcfTileSource();
@@ -309,6 +315,10 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimKeywordlist& kwl,
 
       if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"trying ossimQbTileFilesHandler..."<<std::endl;
       result = new ossimQbTileFilesHandler;
+      if (result->loadState(kwl, prefix))  break;
+
+      if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<< "Trying band-separated files...";
+      result = new ossimBandSeparateHandler();
       if (result->loadState(kwl, prefix))  break;
 
       result = 0;
@@ -539,6 +549,10 @@ ossimObject* ossimImageHandlerFactory::createObject(const ossimString& typeName)
    {
       return new ossimBitMaskTileSource();
    }
+   if(STATIC_TYPE_NAME(ossimBandSeparateHandler) == typeName)
+   {
+      return new ossimBandSeparateHandler();
+   }
 
    return (ossimObject*)0;
 }
@@ -568,6 +582,7 @@ void ossimImageHandlerFactory::getSupportedExtensions(ossimImageHandlerFactoryBa
    extensionList.push_back("ntf");
    extensionList.push_back("til");
    extensionList.push_back("mask");
+   extensionList.push_back("txt");
 }
 
 void ossimImageHandlerFactory::getImageHandlersBySuffix(ossimImageHandlerFactoryBase::ImageHandlerList& result, const ossimString& ext)const
@@ -691,6 +706,13 @@ void ossimImageHandlerFactory::getImageHandlersBySuffix(ossimImageHandlerFactory
    if (testExt == "mask")
    {
       result.push_back(new ossimBitMaskTileSource);
+      return;
+   }
+   
+   if(traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)<<M<<"Testing TXT..."<<std::endl;
+   if (testExt == "txt")
+   {
+      result.push_back(new ossimBandSeparateHandler);
       return;
    }
 }

@@ -1,11 +1,12 @@
 //*******************************************************************
-  //
-  // License:  See LICENSE.txt file in the top level directory.
-  //
-  // Author: Garrett Potts
-  //
-  //*************************************************************************
-    // $Id: ossimImageHistogramSource.cpp 18916 2011-02-18 20:02:55Z gpotts $
+//
+// License:  See LICENSE.txt file in the top level directory.
+//
+// Author: Garrett Potts
+//
+//*************************************************************************
+// $Id: ossimImageHistogramSource.cpp 19900 2011-08-04 14:19:57Z dburken $
+
 #include <ossim/imaging/ossimImageHistogramSource.h>
 #include <ossim/base/ossimMultiResLevelHistogram.h>
 #include <ossim/base/ossimMultiBandHistogram.h>
@@ -463,9 +464,8 @@ void ossimImageHistogramSource::computeFastModeHistogram()
 bool ossimImageHistogramSource::loadState(const ossimKeywordlist& kwl,
                                           const char* prefix)
 {
-   ossimHistogramSource::loadState(kwl,
-                                   prefix);  
-	setNumberOfInputs(2);
+   ossimHistogramSource::loadState(kwl, prefix);  
+   setNumberOfInputs(2);
    ossimString rect = kwl.find(prefix, "rect");
    if(!rect.empty())
    {
@@ -489,7 +489,8 @@ bool ossimImageHistogramSource::loadState(const ossimKeywordlist& kwl,
       ossimString newPrefix = ossimString(prefix) + "rect.";
       theAreaOfInterest.loadState(kwl, newPrefix);
    }
-	ossimString mode = kwl.find(prefix, "mode");
+   
+   ossimString mode = kwl.find(prefix, "mode");
    mode = mode.downcase();
    if(mode == "normal")
    {
@@ -518,14 +519,11 @@ bool ossimImageHistogramSource::loadState(const ossimKeywordlist& kwl,
 bool ossimImageHistogramSource::saveState(ossimKeywordlist& kwl,
                                           const char* prefix)const
 {
-   bool result = ossimHistogramSource::saveState(kwl,
-                                                 prefix);
-   
+   bool result = ossimHistogramSource::saveState(kwl, prefix);
    if(result)
    {
       ossimString newPrefix = ossimString(prefix) + "rect.";
       theAreaOfInterest.saveState(kwl, newPrefix);
    }
-   
    return result;
 }

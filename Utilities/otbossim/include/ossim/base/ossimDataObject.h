@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimDataObject.h 15798 2009-10-23 19:15:20Z gpotts $
+// $Id: ossimDataObject.h 19931 2011-08-10 11:53:25Z gpotts $
 
 #ifndef ossimDataObject_HEADER
 #define ossimDataObject_HEADER
@@ -109,6 +109,8 @@ public:
    virtual bool operator!=(const ossimDataObject& rhs) const;
 
    virtual std::ostream& print(std::ostream& out) const;
+   virtual bool saveState(ossimKeywordlist& kwl, const char* prefix=0)const;
+   virtual bool loadState(const ossimKeywordlist& kwl, const char* prefix=0);
 
 protected:
 

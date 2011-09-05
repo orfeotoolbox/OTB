@@ -12,13 +12,14 @@
 // ossimGeneralRasterTileSource is derived from ImageHandler which is
 // derived from ossimTileSource.
 //*******************************************************************
-//  $Id: ossimGeneralRasterTileSource.h 16075 2009-12-10 15:46:43Z gpotts $
+//  $Id: ossimGeneralRasterTileSource.h 19900 2011-08-04 14:19:57Z dburken $
 
 #ifndef ossimGeneralRasterTileSource_HEADER
 #define ossimGeneralRasterTileSource_HEADER
 
-#include <ossim/base/ossimIoStream.h>
+
 #include <ossim/imaging/ossimImageHandler.h>
+#include <ossim/base/ossimIoStream.h>
 #include <ossim/imaging/ossimGeneralRasterInfo.h>
 
 class  ossimImageData;
@@ -140,6 +141,8 @@ public:
    virtual double getNullPixelValue(ossim_uint32 band=0)const;
    virtual double getMinPixelValue(ossim_uint32 band=0)const;
    virtual double getMaxPixelValue(ossim_uint32 band=0)const;
+
+   virtual ossimRefPtr<ossimImageGeometry> getImageGeometry();
    
 protected:
    virtual ~ossimGeneralRasterTileSource();
@@ -154,6 +157,9 @@ protected:
 
    virtual bool initializeHandler();
    virtual void checkBuffer(const ossimIrect& rect);
+   virtual ossimKeywordlist getHdrInfo(ossimFilename hdrFile);
+   virtual ossimKeywordlist getXmlInfo(ossimFilename xmlFile);
+   
    ossimRefPtr<ossimImageData>  theTile;
    ossim_uint8*                 theBuffer;
    ossimInterleaveType          theBufferInterleave;

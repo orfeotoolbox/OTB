@@ -11,7 +11,7 @@
 // longitude to x / y" projection.
 // 
 //*******************************************************************
-//  $Id: ossimLlxyProjection.cpp 19651 2011-05-25 18:49:22Z gpotts $
+//  $Id: ossimLlxyProjection.cpp 19882 2011-07-30 17:45:20Z dburken $
 
 #include <ossim/projection/ossimLlxyProjection.h>
 #include <ossim/elevation/ossimElevManager.h>
@@ -134,7 +134,7 @@ void ossimLlxyProjection::worldToLineSample(const ossimGpt& worldPoint,
 {
    ossimGpt gpt = worldPoint;
    
-   if (theOrigin.datum() != gpt.datum())
+   if (*theOrigin.datum() != *gpt.datum())
    {
       // Apply datum shift if it's not the same.
       gpt.changeDatum(theOrigin.datum());

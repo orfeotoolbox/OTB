@@ -7,7 +7,11 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimRpfTocEntry.cpp 18362 2010-11-01 15:20:47Z dburken $
+// $Id: ossimRpfTocEntry.cpp 19900 2011-08-04 14:19:57Z dburken $
+
+#include <istream>
+#include <ostream>
+#include <iterator>
 
 #include <ossim/support_data/ossimRpfTocEntry.h>
 #include <ossim/base/ossimCommon.h>
@@ -17,10 +21,6 @@
 #include <ossim/projection/ossimAzimEquDistProjection.h>
 #include <ossim/projection/ossimMapProjection.h>
 #include <ossim/support_data/ossimRpfFrameEntry.h>
-
-#include <istream>
-#include <ostream>
-#include <iterator>
 
 std::ostream& operator <<(std::ostream& out,
                           const ossimRpfTocEntry& data)
@@ -44,6 +44,15 @@ ossimErrorCode ossimRpfTocEntry::parseStream(
    {
       allocateFrameEntryArray();
    }
+
+   // Fetch the number of samples as data member since it may need to be adjusted due to 
+   // wrap (OLK 10/10):
+   theNumSamples =  theBoundaryInformation.getNumberOfFramesHorizontal() * 1536;
+   ossimDpt ddpp;
+   getDecimalDegreesPerPixel(ddpp);
+   ossim_float64 width_in_deg = theNumSamples*ddpp.x;
+   if (width_in_deg >= 360.0)
+      theNumSamples -= (width_in_deg - 360.0)/ddpp.x;
 
    return result;
 }
@@ -87,7 +96,7 @@ ossim_uint32 ossimRpfTocEntry::getNumberOfLines() const
 
 ossim_uint32 ossimRpfTocEntry::getNumberOfSamples() const
 {
-   return theBoundaryInformation.getNumberOfFramesHorizontal() * 1536;
+   return theNumSamples;
 }
 
 ossim_uint32 ossimRpfTocEntry::getNumberOfBands() const
@@ -184,33 +193,26 @@ bool ossimRpfTocEntry::isEmpty()const
 
 ossimRefPtr<ossimImageGeometry> ossimRpfTocEntry::getImageGeometry() const
 {
-   ossimRefPtr<ossimImageGeometry> geom =  new ossimImageGeometry;
 
-   ossimRpfBoundaryRectRecord boundaryInfo = getBoundaryInformation();
-
-   ossimGpt ul(boundaryInfo.getCoverage().getUlLat(),
-               boundaryInfo.getCoverage().getUlLon());
-
-   ossim_float64 lines = getNumberOfLines();
-   ossim_float64 samps = getNumberOfSamples();
+   ossimGpt ul(theBoundaryInformation.getCoverage().getUlLat(), 
+               theBoundaryInformation.getCoverage().getUlLon());
 
    // Decimal degrees per pixel:
    ossimDpt ddpp;
    getDecimalDegreesPerPixel(ddpp);
    
-   // Tie point - Shifted to point:
+   // Tie point - Shifted to pixel-is-point:
    ossimGpt tie( (ul.latd() - (ddpp.y/2.0)), (ul.lond() + (ddpp.x/2.0)), 0.0 );
    
-   // Origin - Use the center of the image aligning to tie point.
-   // ossimGpt origin((ul.latd()+lr.latd())*.5, (ul.lond()+lr.lond())*.5, 0.0);
-   ossimGpt origin( tie.latd() - (std::floor(lines/2.0) * ddpp.y),
-                    tie.lond() + (std::floor(samps/2.0) * ddpp.x) );
+   // Origin - Use the center latitude for horizontal scale, and the left edge as origin longitude
+   // (OLK 10/10)
+   ossimGpt origin ((ul.lat + theBoundaryInformation.getCoverage().getLlLat())/2.0, tie.lon);
 
 #if 0 /* Please leave for debug. (drb) */
    std::cout << "boundaryInfo:\n" << boundaryInfo << std::endl;
 #endif
 
-   int z = boundaryInfo.getZone();
+   int z = theBoundaryInformation.getZone();
    
    if (z == 74) z--; // Fix J to a zone.
    if (z > 64) z -= 64; // Below the equator
@@ -236,6 +238,7 @@ ossimRefPtr<ossimImageGeometry> ossimRpfTocEntry::getImageGeometry() const
    mapProj->setUlTiePoints(tie);
 
    // Give projection to the geometry object.
+   ossimRefPtr<ossimImageGeometry> geom =  new ossimImageGeometry;
    geom->setProjection( mapProj.get() );
 
    return geom;

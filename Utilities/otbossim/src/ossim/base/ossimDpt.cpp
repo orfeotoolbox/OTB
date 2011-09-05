@@ -8,7 +8,7 @@
 // Contains class definitions for ossimDpt.
 // 
 //*******************************************************************
-//  $Id: ossimDpt.cpp 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimDpt.cpp 19795 2011-06-30 15:04:48Z gpotts $
 
 #include <iostream>
 #include <iomanip>
@@ -148,6 +148,13 @@ std::ostream& ossimDpt::print(std::ostream& os, ossim_uint32 precision) const
 std::ostream& operator<<(std::ostream& os, const ossimDpt& pt)
 {
    return pt.print(os);
+}
+
+bool ossimDpt::isEqualTo(const ossimDpt& rhs, ossimCompareType compareType)const
+{
+   if(rhs.isNan()&&isNan()) return true;
+   return (ossim::almostEqual(x, rhs.x)&&
+           ossim::almostEqual(y, rhs.y));
 }
 
 ossimString ossimDpt::toString(ossim_uint32 precision) const

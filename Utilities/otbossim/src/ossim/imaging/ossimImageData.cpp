@@ -7,7 +7,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageData.cpp 19722 2011-06-06 21:02:52Z dburken $
+// $Id: ossimImageData.cpp 19977 2011-08-17 17:09:54Z dburken $
 
 #include <ossim/imaging/ossimImageData.h>
 #include <ossim/base/ossimSource.h>
@@ -3561,7 +3561,8 @@ void ossimImageData::computeMinMaxNulPix(T /* dummyValue */,
 {
    const ossim_uint32 BANDS = getNumberOfBands();
    const ossim_uint32 SPB   = getSizePerBand(); 
-   
+   T DEFAULT_NULL = static_cast<T>(ossim::defaultNull(getScalarType()));   
+
    if( minBands.size() != BANDS ||
        maxBands.size() != BANDS ||
        nulBands.size() != BANDS )
@@ -3584,7 +3585,6 @@ void ossimImageData::computeMinMaxNulPix(T /* dummyValue */,
       const T* bandBuffer = (const T*)getBuf(band);
       if(bandBuffer)
       {
-         const T NP   = static_cast<T>(getNullPix(band));
          ossim_float64 currentMin = minBands[band];
          ossim_float64 currentMax = maxBands[band];
          ossim_float64 currentNul = nulBands[band];
@@ -3592,15 +3592,18 @@ void ossimImageData::computeMinMaxNulPix(T /* dummyValue */,
          {
             T p = bandBuffer[offset];
 
-            // The existing null could be introduced by a make blank on a partial tile so ignore it.
-            if ( p != NP )
+            //---
+            // Since we are scanning for nulls this is making an assumption that the default
+            // null is incorrect and should be ignored in this scan as it could have been
+            // introduced by a make blank on a partial tile so ignore it.
+            //---
+            if ( p != DEFAULT_NULL )
             {
                // Must do null first as min depends on null.
                if ( p < currentNul )
                {
                   currentNul = p;
                }
-               
                if( ( p < currentMin ) && ( p > currentNul ) )
                {
                   currentMin = p;
@@ -6860,3 +6863,85 @@ bool ossimImageData::getIndexedFlag() const
 {
    return m_indexedFlag;
 }
+
+bool ossimImageData::saveState(ossimKeywordlist& kwl, const char* prefix)const
+{
+   bool result = ossimRectilinearDataObject::saveState(kwl, prefix);
+   ossimString null_pixels;
+   ossimString min_pixels;
+   ossimString max_pixels;
+   ossim::toSimpleStringList(null_pixels, m_nullPixelValue);
+   ossim::toSimpleStringList(min_pixels, m_minPixelValue);
+   ossim::toSimpleStringList(max_pixels, m_maxPixelValue);
+   
+   kwl.add(prefix, "null_pixels", null_pixels, true);
+   kwl.add(prefix, "min_pixels", min_pixels, true);
+   kwl.add(prefix, "max_pixels", max_pixels, true);
+   
+   ossimString alpha;
+   ossim::toSimpleStringList(alpha, m_alpha);
+   kwl.add(prefix, "alpha", alpha, true);
+   kwl.add(prefix, "indexed", m_indexedFlag, true);
+   kwl.add(prefix, "origin", m_origin.toString(), true);
+   return result;
+   
+}
+
+bool ossimImageData::loadState(const ossimKeywordlist& kwl, const char* prefix)
+{
+   bool result = ossimRectilinearDataObject::loadState(kwl, prefix);
+
+   if(result)
+   {
+      const char* null_pixels = kwl.find(prefix, "null_pixels");
+      const char* min_pixels = kwl.find(prefix, "min_pixels");
+      const char* max_pixels = kwl.find(prefix, "max_pixels");
+      const char* alpha = kwl.find(prefix, "alpha");
+      const char* origin = kwl.find(prefix, "origin");
+      const char* indexed = kwl.find(prefix, "indexed");
+      m_nullPixelValue.clear();
+      m_minPixelValue.clear();
+      m_maxPixelValue.clear();
+      m_alpha.clear();
+      if(null_pixels)
+      {
+         if(!ossim::toSimpleVector(m_nullPixelValue, ossimString(null_pixels)))
+         {
+            return false;
+         }
+      }
+      if(min_pixels)
+      {
+         if(!ossim::toSimpleVector(m_minPixelValue, ossimString(min_pixels)))
+         {
+            return false;
+         }
+      }
+      if(max_pixels)
+      {
+         if(!ossim::toSimpleVector(m_maxPixelValue, ossimString(max_pixels)))
+         {
+            return false;
+         }
+      }
+      if(alpha)
+      {
+         if(!ossim::toSimpleVector(m_alpha, ossimString(alpha)))
+         {
+            return false;
+         }
+      }
+      if(origin)
+      {
+         m_origin.toPoint(origin);
+      }
+      m_indexedFlag = false;
+      if(indexed)
+      {
+         m_indexedFlag = ossimString(indexed).toBool();
+      }
+      
+   }
+   
+   return result;
+}                     

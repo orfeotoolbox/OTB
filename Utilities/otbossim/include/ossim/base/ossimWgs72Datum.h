@@ -25,7 +25,7 @@ public:
    virtual ossimGpt    shiftToWgs84(const ossimGpt &aPt)const;
    virtual ossimGpt    shiftFromWgs84(const ossimGpt &aPt)const;
 
-   
+   TYPE_DATA;   
 };
 
 #endif

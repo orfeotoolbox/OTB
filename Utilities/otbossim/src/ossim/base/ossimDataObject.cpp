@@ -7,7 +7,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimDataObject.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimDataObject.cpp 19931 2011-08-10 11:53:25Z gpotts $
 #include <ossim/base/ossimDataObject.h>
 #include <ossim/base/ossimSource.h>
 #include <ossim/base/ossimScalarTypeLut.h>
@@ -155,3 +155,36 @@ std::ostream& ossimDataObject::print(ostream& out) const
 
    return out;
 }
+
+bool ossimDataObject::saveState(ossimKeywordlist& kwl, const char* prefix)const
+{
+   kwl.add(prefix, "data_object_status", getDataObjectStatusString(), true);
+   return ossimObject::saveState(kwl, prefix);
+}
+
+bool ossimDataObject::loadState(const ossimKeywordlist& kwl, const char* prefix)
+{
+   ossimString data_object_status = kwl.find(prefix, "data_object_status");
+   if(!data_object_status.empty())
+   {
+      data_object_status = data_object_status.upcase();
+      if(data_object_status == "OSSIM_FULL")
+      {
+         theDataObjectStatus = OSSIM_FULL;
+      }
+      else if(data_object_status == "OSSIM_PARTIAL")
+      {
+         theDataObjectStatus = OSSIM_PARTIAL;
+      }
+      else if(data_object_status == "OSSIM_EMPTY")
+      {
+         theDataObjectStatus = OSSIM_EMPTY;
+      }
+      else if(data_object_status == "OSSIM_STATUS_UNKNOWN")
+      {
+         theDataObjectStatus = OSSIM_STATUS_UNKNOWN;
+      }
+   }
+   
+   return ossimObject::loadState(kwl, prefix);
+}                     

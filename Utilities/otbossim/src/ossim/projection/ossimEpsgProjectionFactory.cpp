@@ -9,14 +9,15 @@
 // code.
 //
 //*************************************************************************************************
-//  $Id$
-#include <sstream>
+//  $Id: ossimEpsgProjectionFactory.cpp 19879 2011-07-30 16:21:50Z dburken $
+
 #include <ossim/projection/ossimEpsgProjectionFactory.h>
 #include <ossim/projection/ossimEquDistCylProjection.h>
 #include <ossim/projection/ossimOrthoGraphicProjection.h>
 #include <ossim/projection/ossimTransMercatorProjection.h>
 #include <ossim/projection/ossimUtmProjection.h>
 #include <ossim/base/ossimKeywordNames.h>
+#include <sstream>
 
 ossimEpsgProjectionFactory* ossimEpsgProjectionFactory::m_instance = 0;
 
@@ -65,10 +66,14 @@ ossimProjection* ossimEpsgProjectionFactory::createProjection(const ossimKeyword
    // The tie points and perhaps other params might still be in the KWL, so pass the KWL on to the
    // new projection after it has been amended with the default proj info extracted from the 
    // EPSG code (i.e., sans tiepoints and gsd):
-   ossimKeywordlist amended_kwl;
-   proj->saveState(amended_kwl, prefix);
-   amended_kwl.addList(keywordList, true); // true: overriding existing default items
-   proj->loadState(amended_kwl, prefix);
+   ossimKeywordlist proj_kwl;
+   proj->saveState(proj_kwl, prefix);
+   proj_kwl.remove(prefix, ossimKeywordNames::PIXEL_SCALE_XY_KW);
+   proj_kwl.remove(prefix, ossimKeywordNames::PIXEL_SCALE_UNITS_KW);
+   proj_kwl.remove(prefix, ossimKeywordNames::TIE_POINT_XY_KW);
+   proj_kwl.remove(prefix, ossimKeywordNames::TIE_POINT_UNITS_KW);
+   proj_kwl.addList(keywordList, false); // false: do not override existing items
+   proj->loadState(proj_kwl, prefix);
    
    return proj;
 }
@@ -97,8 +102,12 @@ ossimProjection* ossimEpsgProjectionFactory::createProjection(const ossimString 
       return createProjFromAutoCode(split_line);
    }
 
+   // Strip commonly found or bar '|' from end if present.
+   ossimString s = spec;
+   s.trim(ossimString("|"));
+
    // Otherwise, pass along the request to the database object for record search:
-   return m_projDatabase->findProjection(spec);
+   return m_projDatabase->findProjection(s);
 }
 
 //*************************************************************************************************
@@ -117,7 +126,7 @@ ossimEpsgProjectionFactory::createProjFromAutoCode(const std::vector<ossimString
    // Only a few AUTO codes are considered:
    switch(code)
    {
-   case 42001:
+      case 42001:
       {
          ossimUtmProjection* utm = new ossimUtmProjection;
          utm->setZone(origin);
@@ -127,8 +136,8 @@ ossimEpsgProjectionFactory::createProjFromAutoCode(const std::vector<ossimString
          utm->setPcsCode(42001);
          return utm;
       }
-
-   case 42002:
+      
+      case 42002:
       {
          ossimTransMercatorProjection* transMerc = new ossimTransMercatorProjection;
          transMerc->setFalseNorthing(origin.latd()>=0.0?0.0:10000000.0);
@@ -138,8 +147,8 @@ ossimEpsgProjectionFactory::createProjFromAutoCode(const std::vector<ossimString
          transMerc->setPcsCode(42002);
          return transMerc;
       }
-
-   case 42003:
+      
+      case 42003:
       {
          ossimOrthoGraphicProjection* ortho = new ossimOrthoGraphicProjection;
          ortho->setOrigin(origin);
@@ -147,8 +156,8 @@ ossimEpsgProjectionFactory::createProjFromAutoCode(const std::vector<ossimString
          ortho->setPcsCode(42003);
          return ortho;
       }
-
-   case 42004:
+      
+      case 42004:
       {
          ossimEquDistCylProjection* geographic = new ossimEquDistCylProjection;
          geographic->setOrigin(origin);

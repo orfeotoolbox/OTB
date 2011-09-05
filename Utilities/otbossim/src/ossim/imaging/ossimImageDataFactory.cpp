@@ -8,7 +8,7 @@
 // Contributor: David A. Horner (DAH) - http://dave.thehorners.com
 // 
 //*************************************************************************
-// $Id: ossimImageDataFactory.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimImageDataFactory.cpp 19900 2011-08-04 14:19:57Z dburken $
 
 #include <ossim/imaging/ossimImageDataFactory.h>
 #include <ossim/imaging/ossimU8ImageData.h>
@@ -17,6 +17,7 @@
 #include <ossim/imaging/ossimS16ImageData.h>
 #include <ossim/imaging/ossimImageData.h>
 #include <ossim/imaging/ossimImageSource.h>
+#include <ossim/base/ossimCommon.h>
 #include <ossim/base/ossimNotify.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimScalarTypeLut.h>
@@ -67,15 +68,16 @@ ossimRefPtr<ossimImageData> ossimImageDataFactory::create(
 
    if (traceDebug())
    {
-      cout << "ossimImageDataFactory::create DEBUG:"
-           << "\nCaller:  "
-           << (owner ? owner->getClassName().c_str() : "unknown")
-           << "\nbands:   " << bands
-           << "\nwidth:   " << width
-           << "\nheight:  " << height
-           << "\nScalar type:  "
-           << (ossimScalarTypeLut::instance()->getEntryString(scalar))
-           << endl;
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "ossimImageDataFactory::create DEBUG:"
+         << "\nCaller:  "
+         << (owner ? owner->getClassName().c_str() : "unknown")
+         << "\nbands:   " << bands
+         << "\nwidth:   " << width
+         << "\nheight:  " << height
+         << "\nScalar type:  "
+         << (ossimScalarTypeLut::instance()->getEntryString(scalar))
+         << std::endl;
    }
    
    ossimRefPtr<ossimImageData> result = 0;
@@ -129,15 +131,16 @@ ossimRefPtr<ossimImageData> ossimImageDataFactory::create(
 
    if (traceDebug())
    {
-      cout << "ossimImageDataFactory::create DEBUG:"
-           << "\nCaller:  "
-           << (owner ? owner->getClassName().c_str() : "unknown")
-           << "\nbands:   " << bands
-           << "\nwidth:   " << width
-           << "\nheight:  " << height
-           << "\nScalar type:  "
-           << (ossimScalarTypeLut::instance()->getEntryString(scalar))
-           << endl;
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "ossimImageDataFactory::create DEBUG:"
+         << "\nCaller:  "
+         << (owner ? owner->getClassName().c_str() : "unknown")
+         << "\nbands:   " << bands
+         << "\nwidth:   " << width
+         << "\nheight:  " << height
+         << "\nScalar type:  "
+         << (ossimScalarTypeLut::instance()->getEntryString(scalar))
+         << std::endl;
    }
    
    ossimRefPtr<ossimImageData> result = 0;
@@ -186,14 +189,16 @@ ossimRefPtr<ossimImageData> ossimImageDataFactory::create(
       ossimScalarType scalar = inputSource->getOutputScalarType();
       ossim_uint32 width  = inputSource->getTileWidth();
       ossim_uint32 height = inputSource->getTileHeight();
-      
+
       result = create(owner, scalar, bands, width, height);
-      
-      for(ossim_uint32 band = 0; band < bands; ++band)
+      if ( result.valid() )
       {
-         result->setMinPix(inputSource->getMinPixelValue(band),   band);
-         result->setMaxPix(inputSource->getMaxPixelValue(band),   band);
-         result->setNullPix(inputSource->getNullPixelValue(band), band);
+         for(ossim_uint32 band = 0; band < bands; ++band)
+         {
+            result->setMinPix(inputSource->getMinPixelValue(band),   band);
+            result->setMaxPix(inputSource->getMaxPixelValue(band),   band);
+            result->setNullPix(inputSource->getNullPixelValue(band), band);
+         }
       }
    }
    else
@@ -219,14 +224,16 @@ ossimRefPtr<ossimImageData> ossimImageDataFactory::create(
       ossim_uint32 bands  = inputSource->getNumberOfOutputBands();
       ossim_uint32 width  = inputSource->getTileWidth();
       ossim_uint32 height = inputSource->getTileHeight();
-      
+
       result = create(owner, scalar, bands, width, height);
-      
-      for(ossim_uint32 band = 0; band < bands; ++band)
+      if ( result.valid() )
       {
-         result->setMinPix(inputSource->getMinPixelValue(band),   band);
-         result->setMaxPix(inputSource->getMaxPixelValue(band),   band);
-         result->setNullPix(inputSource->getNullPixelValue(band), band);
+         for(ossim_uint32 band = 0; band < bands; ++band)
+         {
+            result->setMinPix(inputSource->getMinPixelValue(band),   band);
+            result->setMaxPix(inputSource->getMaxPixelValue(band),   band);
+            result->setNullPix(inputSource->getNullPixelValue(band), band);
+         }
       }
    }
    else

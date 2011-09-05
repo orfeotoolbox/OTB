@@ -13,7 +13,7 @@ public:
    // point with this datum.
    //
    virtual ossimGpt shift(const ossimGpt    &aPt)const;
-
+   TYPE_DATA;
 };
 
 #endif

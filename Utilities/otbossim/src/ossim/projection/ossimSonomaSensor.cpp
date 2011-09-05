@@ -30,8 +30,10 @@ RTTI_DEF1(ossimSonomaSensor, "ossimSonomaSensor", ossimSensorModel);
 ossimSonomaSensor::ossimSonomaSensor()
 {
    m_utmProjection = new ossimUtmProjection;
-   initAdjustableParameters();
    theSensorID = "Sonoma";
+   m_mount = ossimMatrix4x4::createIdentity();
+   m_mountInverse = m_mount;
+   initAdjustableParameters();
 }
 
 void ossimSonomaSensor::imagingRay(const ossimDpt& /* image_point */,
@@ -83,7 +85,7 @@ void ossimSonomaSensor::lineSampleHeightToWorld(const ossimDpt& image_point,
    else
    {
       ossimColumnVector3d origin = m_compositeMatrix*ossimColumnVector3d(0,0,0);
-      ossimColumnVector3d v = m_compositeMatrix*(m_mount*(m_pixelToCamera*ossimColumnVector3d(image_point.x, image_point.y, 1.0)));
+      ossimColumnVector3d v = m_compositeMatrix*(m_mountInverse*(m_pixelToCamera*ossimColumnVector3d(image_point.x, image_point.y, 1.0)));
       ossimDpt3d rayOrigin(origin[0], origin[1], origin[2]);
       ossimDpt3d rayDirection(v[0]-origin[0],
                               v[1]-origin[1],
@@ -121,7 +123,7 @@ void ossimSonomaSensor::lineSampleToWorld(const ossimDpt& image_point,
    }
    
    ossimColumnVector3d origin = m_compositeMatrix*ossimColumnVector3d(0,0,0);
-   ossimColumnVector3d v = m_compositeMatrix*(m_mount*(m_pixelToCamera*ossimColumnVector3d(image_point.x, image_point.y, 1.0)));
+   ossimColumnVector3d v = m_compositeMatrix*(m_mountInverse*(m_pixelToCamera*ossimColumnVector3d(image_point.x, image_point.y, 1.0)));
    ossimDpt3d rayOrigin(origin[0], origin[1], origin[2]);
    ossimDpt3d rayDirection(v[0]-origin[0],
                            v[1]-origin[1],
@@ -258,7 +260,7 @@ void ossimSonomaSensor::updateModel()
   
    m_compositeMatrix   = (rollM*pitchM*headingM*platformLsrMatrix4x4).i();
    m_compositeMatrixInverse = m_compositeMatrix.i();
-//   m_compositeMatrix = ((rollM*pitchM*headingM)*platformLsrMatrix4x4).t()*m_mount.t();
+//   m_compositeMatrix = ((rollM*pitchM*headingM)*platformLsrMatrix4x4).t()*m_mount;
 //   m_compositeMatrixInverse         = m_compositeMatrix.i();
 #endif
    
@@ -306,7 +308,7 @@ void ossimSonomaSensor::updateModel()
    
    
 //   ossimColumnVector3d v(0.0,0.0,1.0);
-//   v = m*(m_mount*(m_pixelToCamera*v));
+//   v = m*(m_mountInverse*(m_pixelToCamera*v));
 //   ossimEcefVector vec = ossimEcefPoint(v[0], v[1], v[2]) - m_ecefPlatformPosition;
 //   vec.normalize();
    
@@ -363,21 +365,21 @@ void ossimSonomaSensor::initAdjustableParameters()
 
 bool ossimSonomaSensor::loadState(const ossimKeywordlist& kwl, const char* prefix)
 {
-   if(getNumberOfAdjustableParameters() < 1)
-   {
-      initAdjustableParameters();
-   }
    theGSD.makeNan();
    theRefImgPt.makeNan();
    ossimSensorModel::loadState(kwl, prefix);
+   if(getNumberOfAdjustableParameters() < 7)
+   {
+      initAdjustableParameters();
+   }
    if(theRefImgPt.hasNans())
    {
       theRefImgPt = theImageClipRect.midPoint();
    }
    ossimString mount           = kwl.find(prefix, "mount");
-   ossimString pixel_size = kwl.find(prefix, "pixel_size");
+   ossimString pixel_size      = kwl.find(prefix, "pixel_size");
    ossimString principal_point = kwl.find(prefix, "principal_point");
-   ossimString focal_length = kwl.find(prefix, "focal_length");
+   ossimString focal_length    = kwl.find(prefix, "focal_length");
    ossimString roll;
    ossimString pitch;
    ossimString heading;
@@ -393,7 +395,7 @@ bool ossimSonomaSensor::loadState(const ossimKeywordlist& kwl, const char* prefi
                   !principal_point.empty()&&
                   !focal_length.empty()&&
                   !platform_position.empty());
-   if(mount)
+   if(!mount.empty())
    {
       mount = mount.trim();
       std::vector<ossimString> values;
@@ -411,17 +413,22 @@ bool ossimSonomaSensor::loadState(const ossimKeywordlist& kwl, const char* prefi
       }
       else 
       {
+         m_mount = ossimMatrix4x4::createIdentity();
+         m_mountInverse = m_mount;
          valid = false;
       }
 
-      ossim_uint32 idx = 0;
-      ossim_int32 row = -1;
-      for(idx = 0; idx < values.size(); ++idx)
+      if(valid)
       {
-         if(idx%4 == 0) ++row;
-         m_mount[row][idx%4] = values[idx].toDouble();
+         ossim_uint32 idx = 0;
+         ossim_int32 row = -1;
+         for(idx = 0; idx < values.size(); ++idx)
+         {
+            if(idx%4 == 0) ++row;
+            m_mount[row][idx%4] = values[idx].toDouble();
+         }
+         m_mountInverse = m_mount.i();
       }
-      m_mount = m_mount.i();
    }
    if(!focal_length.empty())
    {
@@ -486,12 +493,26 @@ bool ossimSonomaSensor::loadState(const ossimKeywordlist& kwl, const char* prefi
 bool ossimSonomaSensor::saveState(ossimKeywordlist& kwl, const char* prefix)const
 {
    ossimSensorModel::saveState(kwl, prefix);
+   
+   ossimString mount;
+   ossim_uint32 rowIdx = 0;
+   ossim_uint32 colIdx = 0;
+
+   for(rowIdx = 0; rowIdx < m_mount.Nrows(); ++rowIdx)
+   {
+      for(colIdx = 0; colIdx < m_mount.Ncols(); ++ colIdx)
+      {
+         mount += (ossimString::toString(m_mount[rowIdx][colIdx]) + " ");
+      }
+   }
+   
+   kwl.add(prefix, "mount", mount.trim(), true);
    kwl.add(prefix, "roll", ossimString::toString(m_roll), true);
    kwl.add(prefix, "pitch", ossimString::toString(m_pitch), true);
    kwl.add(prefix, "heading", ossimString::toString(m_heading), true);
    kwl.add(prefix, "principal_point", m_principalPoint.toString(), true);
    kwl.add(prefix, "pixel_size", m_pixelSize.toString(), true);
-   kwl.add(prefix, "platform_postion",m_platformPosition.toString() ,true);
+   kwl.add(prefix, "platform_position",m_platformPosition.toString() ,true);
    kwl.add(prefix, "focal_length", ossimString::toString(m_focalLength) ,true);
    
    return true;

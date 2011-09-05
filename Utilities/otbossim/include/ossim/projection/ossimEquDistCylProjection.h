@@ -8,7 +8,7 @@
 //
 // Calls Geotrans Equidistant Cylinder projection code.  
 //*******************************************************************
-//  $Id: ossimEquDistCylProjection.h 16414 2010-01-26 18:10:18Z gpotts $
+//  $Id: ossimEquDistCylProjection.h 19880 2011-07-30 16:27:15Z dburken $
 
 #ifndef ossimEquDistCylProjection_HEADER
 #define ossimEquDistCylProjection_HEADER
@@ -74,7 +74,6 @@ public:
       return true;
    }
    void setDefaults();
-//   virtual void setMetersPerPixel(const ossimDpt& pt);
 
    /*!
     * Method to save the state of an object to a keyword list.
@@ -90,7 +89,14 @@ public:
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix=0);
    
-   
+    /*!
+    * Sets the GSD in x and y directions indirectly by specifying degrees/pixel instead of meters
+    * per pixel. This necessarily implies a reference latitude where lat = arccos(y/x). The origin 
+    * latitude will be modified accordingly. There will be ambiguity on the implied latitude's 
+    * hemisphere which will be resolved by referencing the tiepoint's latitude.
+    */
+   virtual void setDecimalDegreesPerPixel(const ossimDpt& gsd);
+
 private:   
    //---------------------GEOTRANS-------------------------------
    mutable double Eqcy_a;                  /* Semi-major axis of ellipsoid in meters */
