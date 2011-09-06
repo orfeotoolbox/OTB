@@ -87,7 +87,7 @@ public:
     }
     // real public interface starts here
     void end_preamble(); // default implementation does nothing
-    unsigned int get_library_version() const;
+    library_version_type get_library_version() const;
     unsigned int get_flags() const;
 };
 

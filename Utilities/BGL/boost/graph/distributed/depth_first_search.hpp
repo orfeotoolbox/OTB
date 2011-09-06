@@ -19,6 +19,7 @@
 #include <boost/graph/properties.hpp>
 #include <boost/graph/distributed/concepts.hpp>
 #include <boost/static_assert.hpp>
+#include <boost/assert.hpp>
 #include <boost/graph/parallel/process_group.hpp>
 #include <boost/graph/parallel/container_traits.hpp>
 
@@ -64,7 +65,7 @@ namespace boost {
       void run(vertex_descriptor s)
       {
         vertex_iterator vi, vi_end;
-        for (tie(vi, vi_end) = vertices(g); vi != vi_end; ++vi) {
+        for (boost::tie(vi, vi_end) = vertices(g); vi != vi_end; ++vi) {
           put(color, *vi, Color::white());
           put(parent, *vi, *vi); 
           put(explore, *vi, *vi);
@@ -105,7 +106,7 @@ namespace boost {
                 if (shift_center_of_activity(p.first)) break;
                 
                 out_edge_iterator ei, ei_end;
-                for (tie(ei,ei_end) = out_edges(p.first, g); ei != ei_end; ++ei)
+                for (boost::tie(ei,ei_end) = out_edges(p.first, g); ei != ei_end; ++ei)
                 {
                   // Notify everyone who may not know that the source
                   // vertex has been visited. They can then mark the
@@ -163,7 +164,7 @@ namespace boost {
             break;
 
           default:
-            assert(false);
+            BOOST_ASSERT(false);
           }
         }
       }

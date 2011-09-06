@@ -13,10 +13,13 @@
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
 
-#if ((defined(__GLIBCPP__) || defined(__GLIBCXX__)) && defined(_GLIBCXX_DEBUG)) \
+#if defined(BOOST_DETAIL_NO_CONTAINER_FWD) \
+    || ((defined(__GLIBCPP__) || defined(__GLIBCXX__)) \
+        && (defined(_GLIBCXX_DEBUG) || defined(_GLIBCXX_PARALLEL))) \
     || BOOST_WORKAROUND(__BORLANDC__, > 0x551) \
     || BOOST_WORKAROUND(__DMC__, BOOST_TESTED_AT(0x842)) \
-    || (defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION))
+    || (defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)) \
+    || (defined(_LIBCPP_VERSION))
 
 #include <deque>
 #include <list>
@@ -66,7 +69,11 @@ namespace std
     template <class charT> struct char_traits;
 #endif
 
-    template <class T> class complex;
+    #if BOOST_CLANG
+        template <class T> struct complex;
+    #else
+        template <class T> class complex;
+    #endif
 }
 
 // gcc 3.4 and greater

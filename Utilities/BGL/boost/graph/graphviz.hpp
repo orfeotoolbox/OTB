@@ -25,6 +25,10 @@
 #include <boost/property_map/dynamic_property_map.hpp>
 #include <boost/graph/overloading.hpp>
 #include <boost/graph/dll_import_export.hpp>
+#include <boost/spirit/include/classic_multi_pass.hpp>
+#include <boost/lexical_cast.hpp>
+#include <boost/algorithm/string/replace.hpp>
+#include <boost/xpressive/xpressive_static.hpp>
 
 namespace boost {
 
@@ -55,13 +59,26 @@ namespace boost {
     }
   };
 
+  template <typename T>
+  inline std::string escape_dot_string(const T& obj) {
+    using namespace boost::xpressive;
+    static sregex valid_unquoted_id = (((alpha | '_') >> *_w) | (!as_xpr('-') >> (('.' >> *_d) | (+_d >> !('.' >> *_d)))));
+    std::string s(boost::lexical_cast<std::string>(obj));
+    if (regex_match(s, valid_unquoted_id)) {
+      return s;
+    } else {
+      boost::algorithm::replace_all(s, "\"", "\\\"");
+      return "\"" + s + "\"";
+    }
+  }
+
   template <class Name>
   class label_writer {
   public:
     label_writer(Name _name) : name(_name) {}
     template <class VertexOrEdge>
     void operator()(std::ostream& out, const VertexOrEdge& v) const {
-      out << "[label=\"" << get(name, v) << "\"]";
+      out << "[label=" << escape_dot_string(get(name, v)) << "]";
     }
   private:
     Name name;
@@ -92,7 +109,7 @@ namespace boost {
     iend = attr.end();
 
     while ( i != iend ) {
-      out << i->first << "=\"" << i->second << "\"";
+      out << i->first << "=" << escape_dot_string(i->second);
       ++i;
       if ( i != iend )
         out << ", ";
@@ -238,20 +255,20 @@ namespace boost {
     typedef typename graph_traits<Graph>::directed_category cat_type;
     typedef graphviz_io_traits<cat_type> Traits;
     std::string name = "G";
-    out << Traits::name() << " " << name << " {" << std::endl;
+    out << Traits::name() << " " << escape_dot_string(name) << " {" << std::endl;
 
     gpw(out); //print graph properties
 
     typename graph_traits<Graph>::vertex_iterator i, end;
 
-    for(tie(i,end) = vertices(g); i != end; ++i) {
-      out << get(vertex_id, *i);
+    for(boost::tie(i,end) = vertices(g); i != end; ++i) {
+      out << escape_dot_string(get(vertex_id, *i));
       vpw(out, *i); //print vertex attributes
       out << ";" << std::endl;
     }
     typename graph_traits<Graph>::edge_iterator ei, edge_end;
-    for(tie(ei, edge_end) = edges(g); ei != edge_end; ++ei) {
-      out << get(vertex_id, source(*ei, g)) << Traits::delimiter() << get(vertex_id, target(*ei, g)) << " ";
+    for(boost::tie(ei, edge_end) = edges(g); ei != edge_end; ++ei) {
+      out << escape_dot_string(get(vertex_id, source(*ei, g))) << Traits::delimiter() << escape_dot_string(get(vertex_id, target(*ei, g))) << " ";
       epw(out, *ei); //print edge attributes
       out << ";" << std::endl;
     }
@@ -323,7 +340,7 @@ namespace boost {
       else
         out << "subgraph";
 
-      out << " " << g_name << " {" << std::endl;
+      out << " " << escape_dot_string(g_name) << " {" << std::endl;
 
       typename Graph::const_children_iterator i_child, j_child;
 
@@ -345,7 +362,7 @@ namespace boost {
 #endif
 
       //print subgraph
-      for ( tie(i_child,j_child) = g.children();
+      for ( boost::tie(i_child,j_child) = g.children();
             i_child != j_child; ++i_child )
         write_graphviz_subgraph(out, *i_child, vertex_marker, edge_marker,
                                 vertex_id);
@@ -355,12 +372,12 @@ namespace boost {
       typename graph_traits<Graph>::vertex_iterator i, end;
       typename graph_traits<Graph>::edge_iterator ei, edge_end;
 
-      for(tie(i,end) = vertices(g); i != end; ++i) {
+      for(boost::tie(i,end) = vertices(g); i != end; ++i) {
         Vertex v = g.local_to_global(*i);
         int pos = get(vertex_id, v);
         if ( vertex_marker[pos] ) {
           vertex_marker[pos] = false;
-          out << pos;
+          out << escape_dot_string(pos);
 #if defined(BOOST_MSVC) && BOOST_MSVC <= 1300
           typedef typename property_map<Graph, vertex_attribute_t>::const_type
             VertexAttributeMap;
@@ -374,14 +391,14 @@ namespace boost {
         }
       }
 
-      for (tie(ei, edge_end) = edges(g); ei != edge_end; ++ei) {
+      for (boost::tie(ei, edge_end) = edges(g); ei != edge_end; ++ei) {
         Vertex u = g.local_to_global(source(*ei,g)),
           v = g.local_to_global(target(*ei, g));
         int pos = get(get(edge_index, g.root()), g.local_to_global(*ei));
         if ( edge_marker[pos] ) {
           edge_marker[pos] = false;
-          out << get(vertex_id, u) << " " << Traits::delimiter()
-              << " " << get(vertex_id, v);
+          out << escape_dot_string(get(vertex_id, u)) << " " << Traits::delimiter()
+              << " " << escape_dot_string(get(vertex_id, v));
 #if defined(BOOST_MSVC) && BOOST_MSVC <= 1300
           typedef typename property_map<Graph, edge_attribute_t>::const_type
             EdgeAttributeMap;
@@ -448,6 +465,8 @@ namespace boost {
                                     vertex_id);
   }
 
+#if 0
+  // This interface has not worked for a long time
   typedef std::map<std::string, std::string> GraphvizAttrList;
 
   typedef property<vertex_attribute_t, GraphvizAttrList>
@@ -477,15 +496,15 @@ namespace boost {
                    GraphvizGraphProperty> >
           GraphvizGraph;
 
-
   // These four require linking the BGL-Graphviz library: libbgl-viz.a
   // from the /src directory.
   // Library has not existed for a while
-  // extern void read_graphviz(const std::string& file, GraphvizDigraph& g);
-  // extern void read_graphviz(FILE* file, GraphvizDigraph& g);
-  //
-  // extern void read_graphviz(const std::string& file, GraphvizGraph& g);
-  // extern void read_graphviz(FILE* file, GraphvizGraph& g);
+  extern void read_graphviz(const std::string& file, GraphvizDigraph& g);
+  extern void read_graphviz(FILE* file, GraphvizDigraph& g);
+  
+  extern void read_graphviz(const std::string& file, GraphvizGraph& g);
+  extern void read_graphviz(FILE* file, GraphvizGraph& g);
+#endif
 
   class dynamic_properties_writer
   {
@@ -503,7 +522,7 @@ namespace boost {
           else out << ", ";
           first = false;
 
-          out << i->first << "=\"" << i->second->get_string(key) << "\"";
+          out << i->first << "=" << escape_dot_string(i->second->get_string(key));
         }
       }
 
@@ -533,7 +552,7 @@ namespace boost {
           else out << ", ";
           first = false;
 
-          out << i->first << "=\"" << i->second->get_string(key) << "\"";
+          out << i->first << "=" << escape_dot_string(i->second->get_string(key));
         }
       }
 
@@ -575,22 +594,22 @@ namespace boost {
 
   template<typename Graph>
   inline void
-  write_graphviz(std::ostream& out, const Graph& g,
-                 const dynamic_properties& dp,
-                 const std::string& node_id = "node_id"
-                 BOOST_GRAPH_ENABLE_IF_MODELS_PARM(Graph,vertex_list_graph_tag))
+  write_graphviz_dp(std::ostream& out, const Graph& g,
+                    const dynamic_properties& dp,
+                    const std::string& node_id = "node_id"
+                    BOOST_GRAPH_ENABLE_IF_MODELS_PARM(Graph,vertex_list_graph_tag))
   {
     typedef typename graph_traits<Graph>::vertex_descriptor Vertex;
-    write_graphviz(out, g, dp, node_id,
-                   graph::detail::node_id_property_map<Vertex>(dp, node_id));
+    write_graphviz_dp(out, g, dp, node_id,
+                      graph::detail::node_id_property_map<Vertex>(dp, node_id));
   }
 
   template<typename Graph, typename VertexID>
   void
-  write_graphviz(std::ostream& out, const Graph& g,
-                 const dynamic_properties& dp, const std::string& node_id,
-                 VertexID id
-                 BOOST_GRAPH_ENABLE_IF_MODELS_PARM(Graph,vertex_list_graph_tag))
+  write_graphviz_dp(std::ostream& out, const Graph& g,
+                    const dynamic_properties& dp, const std::string& node_id,
+                    VertexID id
+                    BOOST_GRAPH_ENABLE_IF_MODELS_PARM(Graph,vertex_list_graph_tag))
   {
     write_graphviz
       (out, g,
@@ -771,26 +790,7 @@ class mutate_graph_impl : public mutate_graph
   std::map<edge_t, bgl_edge_t> bgl_edges;
 };
 
-BOOST_GRAPH_DECL
-bool read_graphviz(std::istream& in, mutate_graph& graph);
-
-} } // end namespace detail::graph
-
-// Parse the passed stream as a GraphViz dot file.
-template <typename MutableGraph>
-bool read_graphviz(std::istream& in, MutableGraph& graph,
-                   dynamic_properties& dp,
-                   std::string const& node_id = "node_id")
-{
-  std::string data;
-  in >> std::noskipws;
-  std::copy(std::istream_iterator<char>(in),
-            std::istream_iterator<char>(),
-            std::back_inserter(data));
-  return read_graphviz(data,graph,dp,node_id);
-}
-
-} // namespace boost
+} } } // end namespace boost::detail::graph
 
 #ifdef BOOST_GRAPH_USE_SPIRIT_PARSER
 #  ifndef BOOST_GRAPH_READ_GRAPHVIZ_ITERATORS
@@ -800,6 +800,54 @@ bool read_graphviz(std::istream& in, MutableGraph& graph,
 #else // New default parser
 #  include <boost/graph/detail/read_graphviz_new.hpp>
 #endif // BOOST_GRAPH_USE_SPIRIT_PARSER
+
+namespace boost {
+
+// Parse the passed string as a GraphViz dot file.
+template <typename MutableGraph>
+bool read_graphviz(const std::string& data,
+                   MutableGraph& graph,
+                   dynamic_properties& dp,
+                   std::string const& node_id = "node_id") {
+#ifdef BOOST_GRAPH_USE_SPIRIT_PARSER
+  return read_graphviz_spirit(data.begin(), data.end(), graph, dp, node_id);
+#else // Non-Spirit parser
+  return read_graphviz_new(data,graph,dp,node_id);
+#endif
+}
+
+// Parse the passed iterator range as a GraphViz dot file.
+template <typename InputIterator, typename MutableGraph>
+bool read_graphviz(InputIterator user_first,
+                   InputIterator user_last,
+                   MutableGraph& graph,
+                   dynamic_properties& dp,
+                   std::string const& node_id = "node_id") {
+#ifdef BOOST_GRAPH_USE_SPIRIT_PARSER
+  typedef InputIterator is_t;
+  typedef boost::spirit::classic::multi_pass<is_t> iterator_t;
+
+  iterator_t first(boost::spirit::classic::make_multi_pass(user_first));
+  iterator_t last(boost::spirit::classic::make_multi_pass(user_last));
+
+  return read_graphviz_spirit(first, last, graph, dp, node_id);
+#else // Non-Spirit parser
+  return read_graphviz_new(std::string(user_first, user_last), graph, dp, node_id);
+#endif
+}
+
+// Parse the passed stream as a GraphViz dot file.
+template <typename MutableGraph>
+bool read_graphviz(std::istream& in, MutableGraph& graph,
+                   dynamic_properties& dp,
+                   std::string const& node_id = "node_id")
+{
+  typedef std::istream_iterator<char> is_t;
+  in >> std::noskipws;
+  return read_graphviz(is_t(in), is_t(), graph, dp, node_id);
+}
+
+} // namespace boost
 
 #ifdef BOOST_GRAPH_USE_MPI
 #  include <boost/graph/distributed/graphviz.hpp>

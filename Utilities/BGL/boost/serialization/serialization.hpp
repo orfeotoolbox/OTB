@@ -13,11 +13,6 @@
 #include <boost/config.hpp>
 #include <boost/serialization/strong_typedef.hpp>
 #include <boost/serialization/pfto.hpp>
-#include <boost/serialization/throw_exception.hpp>
-#include <boost/serialization/nvp.hpp>
-
-// incremented for each "release"
-#define BOOST_SERIALIZATION_LIBRARY_VERSION 19
 
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // serialization.hpp: interface for serialization system.

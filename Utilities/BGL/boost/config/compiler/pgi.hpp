@@ -16,11 +16,28 @@
 // if no threading API is detected.
 //
 
-#if (__PGIC__ >= 7)
+// PGI 10.x doesn't seem to define __PGIC__
+
+// versions earlier than 10.x do define __PGIC__
+#if __PGIC__ >= 10
+
+// options requested by configure --enable-test
+#define BOOST_HAS_PTHREADS
+#define BOOST_HAS_NRVO
+#define BOOST_HAS_LONG_LONG
+
+// options --enable-test wants undefined
+#undef BOOST_NO_STDC_NAMESPACE
+#undef BOOST_NO_EXCEPTION_STD_NAMESPACE
+#undef BOOST_DEDUCED_TYPENAME
+
+#elif __PGIC__ >= 7
 
 #define BOOST_FUNCTION_SCOPE_USING_DECLARATION_BREAKS_ADL 
 #define BOOST_NO_TWO_PHASE_NAME_LOOKUP
 #define BOOST_NO_SWPRINTF
+#define BOOST_NO_AUTO_MULTIDECLARATIONS
+#define BOOST_NO_AUTO_DECLARATIONS
 
 #else
 
@@ -32,11 +49,8 @@
 //
 //   See boost\config\suffix.hpp for BOOST_NO_LONG_LONG
 //
-#define BOOST_NO_AUTO_DECLARATIONS
-#define BOOST_NO_AUTO_MULTIDECLARATIONS
 #define BOOST_NO_CHAR16_T
 #define BOOST_NO_CHAR32_T
-#define BOOST_NO_CONCEPTS
 #define BOOST_NO_CONSTEXPR
 #define BOOST_NO_DECLTYPE
 #define BOOST_NO_DEFAULTED_FUNCTIONS
@@ -46,6 +60,7 @@
 #define BOOST_NO_FUNCTION_TEMPLATE_DEFAULT_ARGS
 #define BOOST_NO_INITIALIZER_LISTS
 #define BOOST_NO_LAMBDAS
+#define BOOST_NO_NOEXCEPT
 #define BOOST_NO_NULLPTR
 #define BOOST_NO_RAW_LITERALS
 #define BOOST_NO_RVALUE_REFERENCES
@@ -55,6 +70,8 @@
 #define BOOST_NO_TEMPLATE_ALIASES
 #define BOOST_NO_UNICODE_LITERALS
 #define BOOST_NO_VARIADIC_TEMPLATES
+#define BOOST_NO_VARIADIC_MACROS
+#define BOOST_NO_UNIFIED_INITIALIZATION_SYNTAX
 
 //
 // version check:

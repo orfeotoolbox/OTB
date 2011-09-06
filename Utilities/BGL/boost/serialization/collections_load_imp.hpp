@@ -22,7 +22,7 @@
 
 // helper function templates for serialization of collections
 
-#include <cassert>
+#include <boost/assert.hpp>
 #include <cstddef> // size_t
 #include <boost/config.hpp> // msvc 6.0 needs this for warning suppression
 #if defined(BOOST_NO_STDC_NAMESPACE)
@@ -32,11 +32,12 @@ namespace std{
 #endif
 #include <boost/detail/workaround.hpp>
 
+#include <boost/archive/detail/basic_iarchive.hpp>
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/detail/stack_constructor.hpp>
 #include <boost/serialization/collection_size_type.hpp>
-
+#include <boost/serialization/item_version_type.hpp>
 
 namespace boost{
 namespace serialization {
@@ -137,21 +138,23 @@ template<class Archive, class Container, class InputFunction, class R>
 inline void load_collection(Archive & ar, Container &s)
 {
     s.clear();
-    // retrieve number of elements
     collection_size_type count;
-    unsigned int item_version;
+    const boost::archive::library_version_type library_version(
+        ar.get_library_version()
+    );
+    // retrieve number of elements
+    item_version_type item_version(0);
     ar >> BOOST_SERIALIZATION_NVP(count);
-    if(3 < ar.get_library_version())
+    if(boost::archive::library_version_type(3) < library_version){
         ar >> BOOST_SERIALIZATION_NVP(item_version);
-    else
-        item_version = 0;
+    }
+
     R rx;
     rx(s, count);
-    std::size_t c = count;
     InputFunction ifunc;
     BOOST_DEDUCED_TYPENAME Container::iterator hint;
     hint = s.begin();
-    while(c-- > 0){
+    while(count-- > 0){
         hint = ifunc(ar, s, item_version, hint);
     }
 }

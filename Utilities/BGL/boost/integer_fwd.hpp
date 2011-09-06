@@ -77,12 +77,18 @@ template <  >
 template <  >
     class integer_traits< unsigned long >;
 
-#if !defined(BOOST_NO_INTEGRAL_INT64_T) && !defined(BOOST_NO_INT64_T) && (defined(BOOST_HAS_LONG_LONG) || defined(BOOST_HAS_MS_INT64))
+#if !defined(BOOST_NO_INTEGRAL_INT64_T) && !defined(BOOST_NO_INT64_T) && defined(BOOST_HAS_LONG_LONG)
 template <  >
-    class integer_traits<  ::boost::long_long_type>;
+class integer_traits<  ::boost::long_long_type>;
 
 template <  >
-    class integer_traits<  ::boost::ulong_long_type >;
+class integer_traits<  ::boost::ulong_long_type >;
+#elif !defined(BOOST_NO_INTEGRAL_INT64_T) && !defined(BOOST_NO_INT64_T) && defined(BOOST_HAS_MS_INT64)
+template <  >
+class integer_traits<__int64>;
+
+template <  >
+class integer_traits<unsigned __int64>;
 #endif
 
 
@@ -129,22 +135,6 @@ template < std::size_t Bits >
 
 template <  >
     struct low_bits_mask_t< ::std::numeric_limits<unsigned char>::digits >;
-
-#if USHRT_MAX > UCHAR_MAX
-template <  >
-    struct low_bits_mask_t< ::std::numeric_limits<unsigned short>::digits >;
-#endif
-
-#if UINT_MAX > USHRT_MAX
-template <  >
-    struct low_bits_mask_t< ::std::numeric_limits<unsigned int>::digits >;
-#endif
-
-#if ULONG_MAX > UINT_MAX
-template <  >
-    struct low_bits_mask_t< ::std::numeric_limits<unsigned long>::digits >;
-#endif
-
 
 //  From <boost/integer/static_log2.hpp>  ------------------------------------//
 

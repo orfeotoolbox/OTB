@@ -32,12 +32,6 @@ namespace boost { namespace unordered_detail {
     ////////////////////////////////////////////////////////////////////////////
     // primes
 
-    template<class T> struct prime_list_template
-    {
-        static std::size_t const value[];
-        static std::ptrdiff_t const length;
-    };
-
 #define BOOST_UNORDERED_PRIMES \
     (5ul)(11ul)(17ul)(29ul)(37ul)(53ul)(67ul)(79ul) \
     (97ul)(131ul)(193ul)(257ul)(389ul)(521ul)(769ul) \
@@ -47,14 +41,28 @@ namespace boost { namespace unordered_detail {
     (50331653ul)(100663319ul)(201326611ul)(402653189ul)(805306457ul) \
     (1610612741ul)(3221225473ul)(4294967291ul)
 
+    template<class T> struct prime_list_template
+    {
+        static std::size_t const value[];
+
+#if !defined(SUNPRO_CC)
+        static std::ptrdiff_t const length;
+#else
+        static std::ptrdiff_t const length
+            = BOOST_PP_SEQ_SIZE(BOOST_UNORDERED_PRIMES);
+#endif
+    };
+
     template<class T>
     std::size_t const prime_list_template<T>::value[] = {
         BOOST_PP_SEQ_ENUM(BOOST_UNORDERED_PRIMES)
     };
 
+#if !defined(SUNPRO_CC)
     template<class T>
     std::ptrdiff_t const prime_list_template<T>::length
         = BOOST_PP_SEQ_SIZE(BOOST_UNORDERED_PRIMES);
+#endif
 
 #undef BOOST_UNORDERED_PRIMES
 
@@ -291,7 +299,7 @@ namespace boost { namespace unordered_detail {
 #if BOOST_WORKAROUND(__CODEGEARC__, BOOST_TESTED_AT(0x0613))
                 struct dummy { hash_node<Alloc, Grouped> x; };
 #endif
-                boost::unordered_detail::destroy(&node_->value());
+                boost::unordered_detail::destroy(node_->value_ptr());
             }
 
             if (node_constructed_)
@@ -314,7 +322,7 @@ namespace boost { namespace unordered_detail {
         }
         else {
             BOOST_ASSERT(node_constructed_ && value_constructed_);
-            boost::unordered_detail::destroy(&node_->value());
+            boost::unordered_detail::destroy(node_->value_ptr());
             value_constructed_ = false;
         }
     }

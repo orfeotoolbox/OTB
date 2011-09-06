@@ -48,10 +48,10 @@ namespace detail {
 // checks for objects
 
 template<class T>
-void inline check_object_level(){
+inline void check_object_level(){
     typedef 
         BOOST_DEDUCED_TYPENAME mpl::greater_equal<
-            serialization::implementation_level<T>,
+            serialization::implementation_level< T >,
             mpl::int_<serialization::primitive_type>
         >::type typex;
 
@@ -61,15 +61,15 @@ void inline check_object_level(){
 }
 
 template<class T>
-void inline check_object_versioning(){
+inline void check_object_versioning(){
     typedef 
         BOOST_DEDUCED_TYPENAME mpl::or_<
             BOOST_DEDUCED_TYPENAME mpl::greater<
-                serialization::implementation_level<T>,
+                serialization::implementation_level< T >,
                 mpl::int_<serialization::object_serializable>
             >,
             BOOST_DEDUCED_TYPENAME mpl::equal_to<
-                serialization::version<T>,
+                serialization::version< T >,
                 mpl::int_<0>
             >
         > typex;
@@ -79,12 +79,12 @@ void inline check_object_versioning(){
 }
 
 template<class T>
-void inline check_object_tracking(){
+inline void check_object_tracking(){
     // presume it has already been determined that
     // T is not a const
-    BOOST_STATIC_ASSERT(! boost::is_const<T>::value);
+    BOOST_STATIC_ASSERT(! boost::is_const< T >::value);
     typedef BOOST_DEDUCED_TYPENAME mpl::equal_to<
-        serialization::tracking_level<T>,
+        serialization::tracking_level< T >,
         mpl::int_<serialization::track_never>
     >::type typex;
     // saving an non-const object of a type not marked "track_never)
@@ -101,18 +101,18 @@ void inline check_object_tracking(){
 // checks for pointers
 
 template<class T>
-void inline check_pointer_level(){
+inline void check_pointer_level(){
     // we should only invoke this once we KNOW that T
     // has been used as a pointer!!
     typedef 
         BOOST_DEDUCED_TYPENAME mpl::or_<
             BOOST_DEDUCED_TYPENAME mpl::greater<
-                serialization::implementation_level<T>,
+                serialization::implementation_level< T >,
                 mpl::int_<serialization::object_serializable>
             >,
             BOOST_DEDUCED_TYPENAME mpl::not_<
                 BOOST_DEDUCED_TYPENAME mpl::equal_to<
-                    serialization::tracking_level<T>,
+                    serialization::tracking_level< T >,
                     mpl::int_<serialization::track_selectively>
                 >
             >
@@ -140,7 +140,7 @@ void inline check_pointer_level(){
 template<class T>
 void inline check_pointer_tracking(){
     typedef BOOST_DEDUCED_TYPENAME mpl::greater<
-        serialization::tracking_level<T>,
+        serialization::tracking_level< T >,
         mpl::int_<serialization::track_never>
     >::type typex;
     // serializing an object of a type marked "track_never" through a pointer
@@ -149,12 +149,12 @@ void inline check_pointer_tracking(){
 }
 
 template<class T>
-void inline check_const_loading(){
+inline void check_const_loading(){
     typedef
         BOOST_DEDUCED_TYPENAME mpl::or_<
-            BOOST_DEDUCED_TYPENAME boost::serialization::is_wrapper<T>,
+            BOOST_DEDUCED_TYPENAME boost::serialization::is_wrapper< T >,
             BOOST_DEDUCED_TYPENAME mpl::not_<
-                BOOST_DEDUCED_TYPENAME boost::is_const<T>
+                BOOST_DEDUCED_TYPENAME boost::is_const< T >
             >
         >::type typex;
     // cannot load data into a "const" object unless it's a

@@ -84,8 +84,8 @@ public:
     );
     // real public API starts here
     void 
-    set_library_version(version_type archive_library_version);
-    unsigned int 
+    set_library_version(library_version_type archive_library_version);
+    library_version_type 
     get_library_version() const;
     unsigned int
     get_flags() const;

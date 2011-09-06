@@ -16,7 +16,7 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
-#include <cassert>
+#include <boost/assert.hpp>
 
 #include <boost/config.hpp> // for BOOST_DEDUCED_TYPENAME
 #include <boost/serialization/throw_exception.hpp>
@@ -99,7 +99,7 @@ public:
     template<class T>
     binary_from_base64(BOOST_PFTO_WRAPPER(T)  start) :
         super_t(
-            Base(BOOST_MAKE_PFTO_WRAPPER(static_cast<T>(start))), 
+            Base(BOOST_MAKE_PFTO_WRAPPER(static_cast< T >(start))), 
             detail::to_6_bit<CharType>()
         )
     {}

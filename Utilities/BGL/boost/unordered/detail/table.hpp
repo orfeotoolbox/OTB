@@ -12,6 +12,7 @@
 #include <algorithm>
 #include <boost/config/no_tr1/cmath.hpp>
 #include <boost/iterator/iterator_categories.hpp>
+#include <boost/throw_exception.hpp>
 
 #include <boost/unordered/detail/buckets.hpp>
 
@@ -608,15 +609,15 @@ namespace boost { namespace unordered_detail {
         hash_table<T>::at(key_type const& k) const
     {
         if(!this->size_)
-            throw std::out_of_range("Unable to find key in unordered_map.");
+            boost::throw_exception(std::out_of_range("Unable to find key in unordered_map."));
 
         bucket_ptr bucket = this->get_bucket(this->bucket_index(k));
         node_ptr it = find_iterator(bucket, k);
 
-        if (BOOST_UNORDERED_BORLAND_BOOL(it))
-            return node::get_value(it);
-        else
-            throw std::out_of_range("Unable to find key in unordered_map.");
+        if (!it)
+            boost::throw_exception(std::out_of_range("Unable to find key in unordered_map."));
+
+        return node::get_value(it);
     }
 
     // equal_range

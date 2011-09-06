@@ -23,6 +23,7 @@
 #include <boost/archive/basic_text_iprimitive.hpp>
 #include <boost/archive/basic_text_iarchive.hpp>
 #include <boost/archive/detail/register_archive.hpp>
+#include <boost/serialization/item_version_type.hpp>
 
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
@@ -51,6 +52,16 @@ protected:
     void load(T & t){
         basic_text_iprimitive<std::istream>::load(t);
     }
+    void load(version_type & t){
+        unsigned int v;
+        load(v);
+        t = version_type(v);
+    }
+    void load(boost::serialization::item_version_type & t){
+        unsigned int v;
+        load(v);
+        t = boost::serialization::item_version_type(v);
+    }
     BOOST_ARCHIVE_DECL(void) 
     load(char * t);
     #ifndef BOOST_NO_INTRINSIC_WCHAR_T
@@ -76,7 +87,8 @@ protected:
     init();
     BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) 
     text_iarchive_impl(std::istream & is, unsigned int flags);
-    BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) 
+    // don't import inline definitions! leave this as a reminder.
+    //BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) 
     ~text_iarchive_impl(){};
 };
 

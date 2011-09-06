@@ -20,7 +20,7 @@ namespace std{
 #include <boost/config.hpp> // msvc 6.0 needs this to suppress warnings
 #ifndef BOOST_NO_STD_WSTREAMBUF
 
-#include <cassert>
+#include <boost/assert.hpp>
 #include <algorithm>
 
 #include <boost/detail/workaround.hpp> // Dinkumware and RogueWave
@@ -147,7 +147,7 @@ BOOST_WARCHIVE_DECL(void)
 xml_wiarchive_impl<Archive>::init(){
     gimpl->init(is);
     this->set_library_version(
-        version_type(gimpl->rv.version)
+        library_version_type(gimpl->rv.version)
     );
 }
 

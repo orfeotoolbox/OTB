@@ -8,7 +8,7 @@
 //  Copyright (c) 2002-2003 David Abrahams
 //  Copyright (c) 2003 Gennaro Prota
 //  Copyright (c) 2003 Eric Friedman
-//
+//  Copyright (c) 2010 Eric Jourdanneau, Joel Falcou
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -24,6 +24,27 @@
 
 #ifndef BOOST_CONFIG_SUFFIX_HPP
 #define BOOST_CONFIG_SUFFIX_HPP
+
+#if defined(__GNUC__) && (__GNUC__ >= 4)
+//
+// Some GCC-4.x versions issue warnings even when __extension__ is used,
+// so use this as a workaround:
+//
+#pragma GCC system_header
+#endif
+
+//
+// ensure that visibility macros are always defined, thus symplifying use
+//
+#ifndef BOOST_SYMBOL_EXPORT
+# define BOOST_SYMBOL_EXPORT
+#endif
+#ifndef BOOST_SYMBOL_IMPORT
+# define BOOST_SYMBOL_IMPORT
+#endif
+#ifndef BOOST_SYMBOL_VISIBLE
+# define BOOST_SYMBOL_VISIBLE
+#endif
 
 //
 // look for long long by looking for the appropriate macros in <limits.h>.
@@ -80,6 +101,13 @@
 //
 #if !defined(BOOST_HAS_LONG_LONG) && !defined(BOOST_NO_LONG_LONG_NUMERIC_LIMITS)
 #  define BOOST_NO_LONG_LONG_NUMERIC_LIMITS
+#endif
+
+//
+// Normalize BOOST_NO_STATIC_ASSERT and (depricated) BOOST_HAS_STATIC_ASSERT:
+//
+#if !defined(BOOST_NO_STATIC_ASSERT) && !defined(BOOST_HAS_STATIC_ASSERT)
+#  define BOOST_HAS_STATIC_ASSERT
 #endif
 
 //
@@ -313,6 +341,23 @@
 #if defined(BOOST_NO_0X_HDR_INITIALIZER_LIST) && !defined(BOOST_NO_INITIALIZER_LISTS)
 #  define BOOST_NO_INITIALIZER_LISTS
 #endif
+#if defined(BOOST_NO_INITIALIZER_LISTS) && !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+#  define BOOST_NO_0X_HDR_INITIALIZER_LIST
+#endif
+
+//
+// Set BOOST_HAS_RVALUE_REFS when BOOST_NO_RVALUE_REFERENCES is not defined
+//
+#if !defined(BOOST_NO_RVALUE_REFERENCES) && !defined(BOOST_HAS_RVALUE_REFS)
+#define BOOST_HAS_RVALUE_REFS
+#endif
+
+//
+// Set BOOST_HAS_VARIADIC_TMPL when BOOST_NO_VARIADIC_TEMPLATES is not defined
+//
+#if !defined(BOOST_NO_VARIADIC_TEMPLATES) && !defined(BOOST_HAS_VARIADIC_TMPL)
+#define BOOST_HAS_VARIADIC_TMPL
+#endif
 
 //  BOOST_HAS_ABI_HEADERS
 //  This macro gets set if we have headers that fix the ABI,
@@ -334,7 +379,7 @@
 //  works as expected with standard conforming compilers.  The resulting
 //  double inclusion of <cstddef> is harmless.
 
-# ifdef BOOST_NO_STDC_NAMESPACE
+# if defined(BOOST_NO_STDC_NAMESPACE) && defined(__cplusplus)
 #   include <cstddef>
     namespace std { using ::ptrdiff_t; using ::size_t; }
 # endif
@@ -353,7 +398,7 @@
 
 //  BOOST_NO_STD_MIN_MAX workaround  -----------------------------------------//
 
-#  ifdef BOOST_NO_STD_MIN_MAX
+#  if defined(BOOST_NO_STD_MIN_MAX) && defined(__cplusplus)
 
 namespace std {
   template <class _Tp>
@@ -464,7 +509,7 @@ namespace std {
 // but it's use may generate either warnings (with -ansi), or errors
 // (with -pedantic -ansi) unless it's use is prefixed by __extension__
 //
-#if defined(BOOST_HAS_LONG_LONG)
+#if defined(BOOST_HAS_LONG_LONG) && defined(__cplusplus)
 namespace boost{
 #  ifdef __GNUC__
    __extension__ typedef long long long_long_type;
@@ -518,7 +563,7 @@ namespace boost{
 //
 
 
-#if defined BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS
+#if defined(BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS) && defined(__cplusplus)
 
 #  include "boost/type.hpp"
 #  include "boost/non_type.hpp"
@@ -554,6 +599,12 @@ namespace boost{
 
 #endif // defined BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS
 
+// When BOOST_NO_STD_TYPEINFO is defined, we can just import
+// the global definition into std namespace:
+#if defined(BOOST_NO_STD_TYPEINFO) && defined(__cplusplus)
+#include <typeinfo>
+namespace std{ using ::type_info; }
+#endif
 
 // ---------------------------------------------------------------------------//
 
@@ -596,6 +647,25 @@ namespace boost{
 #     endif
 #  endif
 
+//
+// Set some default values GPU support
+//
+#  ifndef BOOST_GPU_ENABLED
+#  define BOOST_GPU_ENABLED 
+#  endif
+
+//
+// constexpr workarounds
+// 
+#if defined(BOOST_NO_CONSTEXPR)
+#define BOOST_CONSTEXPR
+#define BOOST_CONSTEXPR_OR_CONST const
+#else
+#define BOOST_CONSTEXPR constexpr
+#define BOOST_CONSTEXPR_OR_CONST constexpr
 #endif
 
+#define BOOST_STATIC_CONSTEXPR  static BOOST_CONSTEXPR_OR_CONST
+
+#endif
 

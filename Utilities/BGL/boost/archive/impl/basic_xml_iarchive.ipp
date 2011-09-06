@@ -8,7 +8,7 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
-#include <cassert>
+#include <boost/assert.hpp>
 #include <cstddef> // NULL
 #include <algorithm>
 
@@ -32,7 +32,7 @@ basic_xml_iarchive<Archive>::load_start(const char *name){
     bool result = this->This()->gimpl->parse_start_tag(this->This()->get_is());
     if(true != result){
         boost::serialization::throw_exception(
-            archive_exception(archive_exception::stream_error)
+            archive_exception(archive_exception::input_stream_error)
         );
     }
     // don't check start tag at highest level
@@ -49,7 +49,7 @@ basic_xml_iarchive<Archive>::load_end(const char *name){
     bool result = this->This()->gimpl->parse_end_tag(this->This()->get_is());
     if(true != result){
         boost::serialization::throw_exception(
-            archive_exception(archive_exception::stream_error)
+            archive_exception(archive_exception::input_stream_error)
         );
     }
     
@@ -79,19 +79,19 @@ basic_xml_iarchive<Archive>::load_end(const char *name){
 template<class Archive>
 BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
 basic_xml_iarchive<Archive>::load_override(object_id_type & t, int){
-    t = this->This()->gimpl->rv.object_id;
+    t = object_id_type(this->This()->gimpl->rv.object_id);
 }
 
 template<class Archive>
 BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
 basic_xml_iarchive<Archive>::load_override(version_type & t, int){
-    t = this->This()->gimpl->rv.version;
+    t = version_type(this->This()->gimpl->rv.version);
 }
 
 template<class Archive>
 BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
 basic_xml_iarchive<Archive>::load_override(class_id_type & t, int){
-    t = this->This()->gimpl->rv.class_id;
+    t = class_id_type(this->This()->gimpl->rv.class_id);
 }
 
 template<class Archive>

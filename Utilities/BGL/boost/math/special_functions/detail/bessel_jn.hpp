@@ -13,6 +13,7 @@
 #include <boost/math/special_functions/detail/bessel_j0.hpp>
 #include <boost/math/special_functions/detail/bessel_j1.hpp>
 #include <boost/math/special_functions/detail/bessel_jy.hpp>
+#include <boost/math/special_functions/detail/bessel_jy_asym.hpp>
 
 // Bessel function of the first kind of integer order
 // J_n(z) is the minimal solution
@@ -56,6 +57,10 @@ T bessel_jn(int n, T x, const Policy& pol)
     {
         return static_cast<T>(0);
     }
+
+    typedef typename bessel_asymptotic_tag<T, Policy>::type tag_type;
+    if(fabs(x) > asymptotic_bessel_j_limit<T>(n, tag_type()))
+      return factor * asymptotic_bessel_j_large_x_2<T>(n, x);
 
     BOOST_ASSERT(n > 1);
     if (n < abs(x))                         // forward recurrence

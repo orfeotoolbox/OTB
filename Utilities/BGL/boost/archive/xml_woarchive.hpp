@@ -34,6 +34,7 @@ namespace std{
 #include <boost/archive/basic_text_oprimitive.hpp>
 #include <boost/archive/basic_xml_oarchive.hpp>
 #include <boost/archive/detail/register_archive.hpp>
+#include <boost/serialization/item_version_type.hpp>
 
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
@@ -44,14 +45,6 @@ namespace std{
 
 namespace boost {
 namespace archive {
-
-#if 0
-BOOST_WARCHIVE_DECL(std::wostream &)
-operator<<(std::wostream &os, const char *t);
-
-BOOST_WARCHIVE_DECL(std::wostream &)
-operator<<(std::wostream &os, const char t);
-#endif
 
 template<class Archive>
 class xml_woarchive_impl : 
@@ -73,6 +66,14 @@ protected:
     void 
     save(const T & t){
         basic_text_oprimitive<std::wostream>::save(t);
+    }
+    void 
+    save(const version_type & t){
+        save(static_cast<const unsigned int>(t));
+    }
+    void 
+    save(const boost::serialization::item_version_type & t){
+        save(static_cast<const unsigned int>(t));
     }
     BOOST_WARCHIVE_DECL(void)
     save(const char * t);

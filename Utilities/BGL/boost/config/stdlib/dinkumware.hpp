@@ -86,6 +86,11 @@
 #  define BOOST_NO_STD_LOCALE
 #endif
 
+#include <typeinfo>
+#if ( (!_HAS_EXCEPTIONS && !defined(__ghs__)) || (!_HAS_NAMESPACE && defined(__ghs__)) ) 
+#  define BOOST_NO_STD_TYPEINFO    
+#endif  
+
 //  C++0x headers implemented in 520 (as shipped by Microsoft)
 //
 #if !defined(_CPPLIB_VER) || _CPPLIB_VER < 520
@@ -96,25 +101,27 @@
 #  define BOOST_NO_0X_HDR_RANDOM
 #  define BOOST_NO_0X_HDR_REGEX
 #  define BOOST_NO_0X_HDR_SYSTEM_ERROR
-#  define BOOST_NO_0X_HDR_TYPE_TRAITS
 #  define BOOST_NO_STD_UNORDERED        // deprecated; see following
 #  define BOOST_NO_0X_HDR_UNORDERED_MAP
 #  define BOOST_NO_0X_HDR_UNORDERED_SET
+#  define BOOST_NO_0X_HDR_TUPLE
+#  define BOOST_NO_0X_HDR_TYPEINDEX
+#  define BOOST_NO_NUMERIC_LIMITS_LOWEST
 #endif
 
-//  C++0x headers not yet implemented
+#if !defined(_HAS_TR1_IMPORTS) && !defined(BOOST_NO_0X_HDR_TUPLE)
+#  define BOOST_NO_0X_HDR_TUPLE
+#endif
 //
+//  C++0x headers not yet (fully) implemented:
+//
+#  define BOOST_NO_0X_HDR_TYPE_TRAITS
 #  define BOOST_NO_0X_HDR_CHRONO
-#  define BOOST_NO_0X_HDR_CONCEPTS
 #  define BOOST_NO_0X_HDR_CONDITION_VARIABLE
-#  define BOOST_NO_0X_HDR_CONTAINER_CONCEPTS
 #  define BOOST_NO_0X_HDR_FUTURE
-#  define BOOST_NO_0X_HDR_ITERATOR_CONCEPTS
-#  define BOOST_NO_0X_HDR_MEMORY_CONCEPTS
 #  define BOOST_NO_0X_HDR_MUTEX
 #  define BOOST_NO_0X_HDR_RATIO
 #  define BOOST_NO_0X_HDR_THREAD
-#  define BOOST_NO_0X_HDR_TUPLE
 
 #ifdef _CPPLIB_VER
 #  define BOOST_DINKUMWARE_STDLIB _CPPLIB_VER

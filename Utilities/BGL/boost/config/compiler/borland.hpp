@@ -46,6 +46,8 @@
 // Borland C++Builder 5, command-line compiler 5.5:
 #       define BOOST_NO_OPERATORS_IN_NAMESPACE
 #     endif
+// Variadic macros do not exist for C++ Builder versions 5 and below
+#define BOOST_NO_VARIADIC_MACROS
 #   endif
 
 // Version 5.51 and below:
@@ -54,8 +56,13 @@
 #  define BOOST_NO_CV_VOID_SPECIALIZATIONS
 #  define BOOST_NO_DEDUCED_TYPENAME
 // workaround for missing WCHAR_MAX/WCHAR_MIN:
+#ifdef __cplusplus
 #include <climits>
 #include <cwchar>
+#else
+#include <limits.h>
+#include <wchar.h>
+#endif // __cplusplus
 #ifndef WCHAR_MAX
 #  define WCHAR_MAX 0xffff
 #endif
@@ -67,7 +74,7 @@
 // Borland C++ Builder 6 and below:
 #if (__BORLANDC__ <= 0x564)
 
-#  ifdef NDEBUG
+#  if defined(NDEBUG) && defined(__cplusplus)
       // fix broken <cstring> so that Boost.test works:
 #     include <cstring>
 #     undef strcmp
@@ -164,7 +171,6 @@
 
 #define BOOST_NO_AUTO_DECLARATIONS
 #define BOOST_NO_AUTO_MULTIDECLARATIONS
-#define BOOST_NO_CONCEPTS
 #define BOOST_NO_CONSTEXPR
 #define BOOST_NO_DEFAULTED_FUNCTIONS
 #define BOOST_NO_DELETED_FUNCTIONS
@@ -179,6 +185,8 @@
 #define BOOST_NO_TEMPLATE_ALIASES
 #define BOOST_NO_UNICODE_LITERALS    // UTF-8 still not supported
 #define BOOST_NO_VARIADIC_TEMPLATES
+#define BOOST_NO_NOEXCEPT
+#define BOOST_NO_UNIFIED_INITIALIZATION_SYNTAX
 
 #if __BORLANDC__ >= 0x590
 #  define BOOST_HAS_TR1_HASH
@@ -218,7 +226,7 @@
 //
 // check for exception handling support:
 //
-#if !defined(_CPPUNWIND) && !defined(BOOST_CPPUNWIND) && !defined(__EXCEPTIONS)
+#if !defined(_CPPUNWIND) && !defined(BOOST_CPPUNWIND) && !defined(__EXCEPTIONS) && !defined(BOOST_NO_EXCEPTIONS)
 #  define BOOST_NO_EXCEPTIONS
 #endif
 //
@@ -230,8 +238,9 @@
 //
 // all versions support __declspec:
 //
-#ifndef __STRICT_ANSI__
-#  define BOOST_HAS_DECLSPEC
+#if defined(__STRICT_ANSI__)
+// config/platform/win32.hpp will define BOOST_SYMBOL_EXPORT, etc., unless already defined  
+#  define BOOST_SYMBOL_EXPORT
 #endif
 //
 // ABI fixing headers:
@@ -261,7 +270,15 @@
 #  define BOOST_NO_VOID_RETURNS
 #endif
 
+// Borland did not implement value-initialization completely, as I reported
+// in 2007, Borland Report 51854, "Value-initialization: POD struct should be
+// zero-initialized", http://qc.embarcadero.com/wc/qcmain.aspx?d=51854
+// See also: http://www.boost.org/libs/utility/value_init.htm#compiler_issues
+// (Niels Dekker, LKEB, April 2010)
+#define BOOST_NO_COMPLETE_VALUE_INITIALIZATION
+
 #define BOOST_COMPILER "Borland C++ version " BOOST_STRINGIZE(__BORLANDC__)
+
 
 
 

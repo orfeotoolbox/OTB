@@ -21,8 +21,6 @@
 #include <boost/archive/detail/basic_iarchive.hpp>
 #include <boost/archive/detail/basic_pointer_iserializer.hpp>
 #include <boost/archive/detail/interface_iarchive.hpp>
-#include <boost/archive/detail/archive_serializer_map.hpp>
-#include <boost/serialization/singleton.hpp>
 
 #ifdef BOOST_MSVC
 #  pragma warning(push)

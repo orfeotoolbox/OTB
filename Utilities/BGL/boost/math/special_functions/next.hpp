@@ -200,7 +200,6 @@ T float_distance(const T& a, const T& b, const Policy& pol)
    BOOST_ASSERT(a >= 0);
    BOOST_ASSERT(b >= a);
 
-   BOOST_MATH_STD_USING
    int expon;
    //
    // Note that if a is a denorm then the usual formula fails

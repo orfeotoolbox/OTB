@@ -7,7 +7,7 @@
  *
  * See http://www.boost.org for most recent version including documentation.
  *
- * $Id: disable_warnings.hpp 58649 2010-01-02 21:23:17Z steven_watanabe $
+ * $Id: disable_warnings.hpp 60755 2010-03-22 00:45:06Z steven_watanabe $
  *
  */
 
@@ -19,4 +19,5 @@
 #pragma warning(push)
 #pragma warning(disable:4512)
 #pragma warning(disable:4127)
+#pragma warning(disable:4724)
 #endif

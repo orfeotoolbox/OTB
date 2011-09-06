@@ -17,7 +17,7 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <exception>
-#include <cassert>
+#include <boost/assert.hpp>
 #include <string>
 
 #include <boost/config.hpp> 
@@ -61,7 +61,7 @@ public:
         incompatible_native_format, // attempt to read native binary format
                             // on incompatible platform
         array_size_too_short,// array being loaded doesn't fit in array allocated
-        stream_error,       // i/o error on stream
+        input_stream_error, // error on input stream
         invalid_class_name, // class name greater than the maximum permitted.
                             // most likely a corrupted archive or an attempt
                             // to insert virus via buffer overrun method.
@@ -70,8 +70,9 @@ public:
         unsupported_class_version, // type saved with a version # greater than the 
                             // one used by the program.  This indicates that the proggram
                             // needs to be rebuilt.
-        multiple_code_instantiation // code for implementing serialization for some
+        multiple_code_instantiation, // code for implementing serialization for some
                             // type has been instantiated in more than one module.
+        output_stream_error // error on input stream
     } exception_code;
 protected:
     std::string m_msg;

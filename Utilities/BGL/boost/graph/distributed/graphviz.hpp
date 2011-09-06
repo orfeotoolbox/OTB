@@ -134,7 +134,7 @@ write_graphviz(std::ostream& out,
   gpw(local_graph_out);
 
   typename graph_traits<Graph>::vertex_iterator vi, vi_end;
-  for (tie(vi, vi_end) = vertices(g); vi != vi_end; ++vi) {
+  for (boost::tie(vi, vi_end) = vertices(g); vi != vi_end; ++vi) {
 
     int global_idx = get(global_index, *vi);
     local_graph_out << "    n" << global_idx;
@@ -145,7 +145,7 @@ write_graphviz(std::ostream& out,
 
   
   typename graph_traits<Graph>::edge_iterator ei, ei_end;
-  for (tie(ei, ei_end) = edges(g); ei != ei_end; ++ei) {
+  for (boost::tie(ei, ei_end) = edges(g); ei != ei_end; ++ei) {
     int source_idx = get(global_index, source(*ei, g));
     int target_idx = get(global_index, target(*ei, g));
     local_graph_out << "  n" << source_idx << " " << edge_kind << " n" 

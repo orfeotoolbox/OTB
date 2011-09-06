@@ -19,7 +19,7 @@
 #include <boost/unordered/detail/equivalent.hpp>
 #include <boost/unordered/detail/unique.hpp>
 
-#if !defined(BOOST_HAS_RVALUE_REFS)
+#if defined(BOOST_NO_RVALUE_REFERENCES)
 #include <boost/unordered/detail/move.hpp>
 #endif
 
@@ -153,7 +153,12 @@ namespace boost
         
         ~unordered_set() {}
 
-#if defined(BOOST_HAS_RVALUE_REFS)
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
+        unordered_set(unordered_set const& other)
+          : table_(other.table_)
+        {
+        }
+
         unordered_set(unordered_set&& other)
           : table_(other.table_, boost::unordered_detail::move_tag())
         {
@@ -162,6 +167,12 @@ namespace boost
         unordered_set(unordered_set&& other, allocator_type const& a)
           : table_(other.table_, a, boost::unordered_detail::move_tag())
         {
+        }
+
+        unordered_set& operator=(unordered_set const& x)
+        {
+            table_ = x.table_;
+            return *this;
         }
 
         unordered_set& operator=(unordered_set&& x)
@@ -359,6 +370,11 @@ namespace boost
         iterator erase(const_iterator first, const_iterator last)
         {
             return iterator(table_.erase_range(get(first), get(last)));
+        }
+
+        void quick_erase(const_iterator position)
+        {
+            table_.erase(get(position));
         }
 
         void erase_return_void(const_iterator position)
@@ -645,7 +661,12 @@ namespace boost
 
         ~unordered_multiset() {}
 
-#if defined(BOOST_HAS_RVALUE_REFS)
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
+        unordered_multiset(unordered_multiset const& other)
+          : table_(other.table_)
+        {
+        }
+
         unordered_multiset(unordered_multiset&& other)
           : table_(other.table_, boost::unordered_detail::move_tag())
         {
@@ -654,6 +675,12 @@ namespace boost
         unordered_multiset(unordered_multiset&& other, allocator_type const& a)
           : table_(other.table_, a, boost::unordered_detail::move_tag())
         {
+        }
+
+        unordered_multiset& operator=(unordered_multiset const& x)
+        {
+            table_ = x.table_;
+            return *this;
         }
 
         unordered_multiset& operator=(unordered_multiset&& x)
@@ -847,6 +874,11 @@ namespace boost
         iterator erase(const_iterator first, const_iterator last)
         {
             return iterator(table_.erase_range(get(first), get(last)));
+        }
+
+        void quick_erase(const_iterator position)
+        {
+            table_.erase(get(position));
         }
 
         void erase_return_void(const_iterator position)

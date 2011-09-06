@@ -37,7 +37,7 @@ basic_text_oprimitive<OStream>::save_binary(
     
     if(os.fail())
         boost::serialization::throw_exception(
-            archive_exception(archive_exception::stream_error)
+            archive_exception(archive_exception::output_stream_error)
         );
         
     os.put('\n');

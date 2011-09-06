@@ -24,7 +24,7 @@
 // in such cases.   So we can't use basic_ostream<OStream::char_type> but rather
 // use two template parameters
 
-#include <cassert>
+#include <boost/assert.hpp>
 #include <boost/config.hpp>
 #include <boost/serialization/pfto.hpp>
 #include <boost/detail/workaround.hpp>
@@ -83,34 +83,7 @@ public:
     // start new objects on a new line
     void save_override(const object_id_type & t, int){
         this->This()->newline();
-        // note extra .t to funciton with Borland 5.51 compiler
-        // and invoke prmitive to underlying value
-        this->This()->save(t.t);
-    }
-
-    void save_override(const object_reference_type & t, int){
-        this->This()->newline();
-        // note extra .t to funciton with Borland 5.51 compiler
-        // and invoke prmitive to underlying value
-        this->This()->save(t.t);
-    }
-
-    // note the following four overrides are necessary for some borland
-    // compilers(5.51) which don't handle BOOST_STRONG_TYPE properly.
-    void save_override(const version_type & t, int){
-        // note:t.t resolves borland ambguity
-        const unsigned int x = t.t;
-        * this->This() << x;
-    }
-    void save_override(const class_id_type & t, int){
-        // note:t.t resolves borland ambguity
-        const int x = t.t;
-        * this->This() << x;
-    }
-    void save_override(const class_id_reference_type & t, int){
-        // note:t.t resolves borland ambguity
-        const int x = t.t;
-        * this->This() << x;
+        this->detail_common_oarchive::save_override(t, 0);
     }
 
     // text file don't include the optional information 
