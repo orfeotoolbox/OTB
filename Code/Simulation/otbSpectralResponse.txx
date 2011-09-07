@@ -32,7 +32,7 @@ template <class TPrecision, class TValuePrecision>
 SpectralResponse<TPrecision, TValuePrecision>
 ::SpectralResponse()
 {
-  m_SensitivityThreshold = 0.1;
+  m_SensitivityThreshold = 0.01;
   m_IntervalComputed = false;
 }
 
@@ -235,38 +235,24 @@ SpectralResponse<TPrecision, TValuePrecision>
 ::ComputeInterval()
 {
   typename VectorPairType::const_iterator it = m_Response.begin();
-  
-  while ( (*it).second <= m_SensitivityThreshold )
-  {
-    ++it;
-  }
-  
-  if (it == m_Response.begin())
-  {
-    m_Interval.first = (*it).first;
-  }
-  else
-  {
-    m_Interval.first = (*(it-1)).first;
-  }
-  
-  it = m_Response.end() - 1;
-  while ((*it).second <= m_SensitivityThreshold )
-  {
-    --it;
-  }
-      
-  if (it == m_Response.end())
-  {
-    m_Interval.second = (*it).first;
-  }
-  else
-  {
-    m_Interval.second = (*(it+1)).first;
-  }
 
+  while ((*it).second <= m_SensitivityThreshold)
+    {
+    ++it;
+    }
+
+  m_Interval.first = (*it).first;
+
+  it = m_Response.end();
+
+  while ((*it).second <= m_SensitivityThreshold)
+    {
+    --it;
+    }
+
+  m_Interval.second = (*it).first;
   m_IntervalComputed = true;
-  
+
 }
 
 

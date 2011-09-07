@@ -62,8 +62,9 @@ class SatelliteRSR : public itk::DataObject
       itkGetConstMacro(NbBands, unsigned int);
       itkSetMacro(NbBands, unsigned int);
 
-  itkSetMacro(SortBands, bool);
-      
+      itkSetMacro(SortBands, bool);
+      static const double wavelengthPrecision = 0.0025; //in um
+
       /** Template parameters typedef */
       typedef TPrecision PrecisionType;
       typedef TValuePrecision ValuePrecisionType;
@@ -81,6 +82,13 @@ class SatelliteRSR : public itk::DataObject
       
       /** Fill from a ASCII file (spectral gauge)*/
       void Load( const std::string & filename , ValuePrecisionType coefNormalization = 1.0 );
+
+      /** Fill from user defined criteria (sampling band from lambdaMin to lambdaMax with Bandwidth width) */
+      void Load(PrecisionType lambdaMin, PrecisionType lambdaMax ,PrecisionType sampling, ValuePrecisionType coefNormalization = 1.0 );
+
+
+
+
 
       /** Compare RSR response (order bands from high to low frequency)*/
       struct sort_band {

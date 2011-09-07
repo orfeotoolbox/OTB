@@ -83,6 +83,40 @@ SatelliteRSR<TPrecision, TValuePrecision>
 }
 
 template <class TPrecision, class TValuePrecision>
+void
+SatelliteRSR<TPrecision, TValuePrecision>
+::Load(PrecisionType lambdaMin, PrecisionType lambdaMax ,PrecisionType sampling, ValuePrecisionType coefNormalization )
+{
+  m_NbBands = 1;
+  if (0 == sampling)
+    {
+    sampling = this->wavelengthPrecision;
+    }
+
+  // For each band
+  for (unsigned int i = 0; i < m_NbBands; ++i)
+    {
+    //Create a SpectralResponse for the band i
+    SpectralResponsePointerType RSRBand = SpectralResponseType::New();
+    m_RSR.push_back(RSRBand);
+    }
+
+  PrecisionType currentLambda;
+  ValuePrecisionType value = 1.0;
+
+  for (double j = lambdaMin; j < lambdaMax; j = j + sampling)
+    {
+    currentLambda = j;
+    std::pair<TPrecision, TValuePrecision> currentPair;
+    currentPair.first = currentLambda;
+    currentPair.second = value / coefNormalization;
+    m_RSR[0]->GetResponse().push_back(currentPair);
+    }
+
+}
+
+
+template <class TPrecision, class TValuePrecision>
 bool
 SatelliteRSR<TPrecision, TValuePrecision>
 ::Clear()
