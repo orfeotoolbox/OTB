@@ -17,6 +17,10 @@
 #include <fstream>
 
 #if defined(JPEG_DUAL_MODE_8_12)
+#undef JPEG_DUAL_MODE_8_12 
+#endif
+
+#if defined(JPEG_DUAL_MODE_8_12)
 #include <jpeg12/jpeglib.h>
 
 //ossim includes

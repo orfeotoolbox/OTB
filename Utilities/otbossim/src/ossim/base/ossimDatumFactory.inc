@@ -46,7 +46,7 @@ public:
 };
 
 #define NUMBER_OF_SEVEN_PARAM_DATUMS 2
-#define NUMBER_OF_THREE_PARAM_DATUMS 226
+#define NUMBER_OF_THREE_PARAM_DATUMS 229
 
 static ossimThreeParamDatumType threeParamDatum[] = {
 {"ADI-A", "ADINDAN, Ethiopia", "CD", 3, 3, 3, 26, 50, -3, 25, -165, -11, 206},
@@ -276,6 +276,7 @@ static ossimThreeParamDatumType threeParamDatum[] = {
 {"WGE", "World Geodetic System 1984", "WE", 0, 0, 0, -180.0, 180.0, -90, 90, 0, 0, 0},
 {"YAC", "YACARE, Uruguay", "IN", -1, -1, -1, -65, -47, -40, -25, -155, 171, 37},
 {"ZAN", "ZANDERIJ, Suriname", "IN", 5, 5, 8, -76, -47, -10, 20, -265, 120, -358},
+{"WE-EPSG-3857", "Ploppy", "PV", 0, 0, 0, -180.0, 180.0, -85, 85, 0, 0, 0},
 {"6055", "Popular Visualisation", "7059", 0, 0, 0, -180.0, 180.0, -85, 85, 0, 0, 0},
 {"", "", "", 0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0, 0, 0}
 };
