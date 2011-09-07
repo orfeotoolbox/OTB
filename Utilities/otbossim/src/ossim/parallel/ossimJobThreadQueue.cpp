@@ -82,12 +82,12 @@ void ossimJobThreadQueue::run()
          {
             job->resetState(ossimJob::ossimJob_RUNNING);
             job->start();
-            job->setState(ossimJob::ossimJob_FINISHED);
          }
          {            
             OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_threadMutex);
             m_currentJob = 0;
          }
+         job->setState(ossimJob::ossimJob_FINISHED);
          job = 0;
       }
       
@@ -102,6 +102,10 @@ void ossimJobThreadQueue::run()
    
    if(job.valid()&&m_doneFlag&&job->isReady())
    {
+      {            
+         OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_threadMutex);
+         m_currentJob = 0;
+      }
       job->cancel();
    }
    {            
@@ -210,6 +214,18 @@ void ossimJobThreadQueue::startThreadForQueue()
       }
    }
 }
+
+bool ossimJobThreadQueue::hasJobsToProcess()const
+{
+   bool result = false;
+   {
+      OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_threadMutex);
+      result = !m_jobQueue->isEmpty()||m_currentJob.valid();
+   }
+   
+   return result;
+}
+
 ossimRefPtr<ossimJob> ossimJobThreadQueue::nextJob()
 {
    ossimRefPtr<ossimJob> job;

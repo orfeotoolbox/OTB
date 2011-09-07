@@ -14,6 +14,9 @@ public:
    void setNumberOfThreads(ossim_uint32 nThreads);
    ossim_uint32 numberOfBusyThreads()const;
    bool areAllThreadsBusy()const;
+   
+   bool hasJobsToProcess()const;
+
 protected:
    mutable OpenThreads::Mutex  m_mutex;
    ossimRefPtr<ossimJobQueue> m_jobQueue;

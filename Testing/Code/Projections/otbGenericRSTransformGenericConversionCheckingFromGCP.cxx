@@ -112,17 +112,25 @@ int otbGenericRSTransformGenericConversionCheckingFromGCP(int argc, char* argv[]
 
     std::cerr<<"GCP #"<<GCPid<<": ["<<ImgGCP[0]<<","<<ImgGCP[1]<<"] -> "<<"["<<GeoGCP[0]<<","<<GeoGCP[1]<<"]"<<std::endl;
     std::cerr<<"Estimated Positions: "<<std::endl;
-    std::cerr<<"Geographic (WGS84): "<<" ["<<estimatedGeoGCP[0]<<","<<estimatedGeoGCP[1]<<"]"<<std::endl;
+    std::cerr<<"Geographic (WGS84): "<<" ["<<estimatedGeoGCP[0]<<","<<estimatedGeoGCP[1]<<"]";
     if((geoRes > geoTol) || vnl_math_isnan(geoRes))
       {
-      std::cerr<<"!!! Geographic (WGS84) residual is too high: "<<geoRes<<" meters !!!"<<std::endl;
+      std::cerr<<"   ->   !!! Geographic (WGS84) residual is too high: "<<geoRes<<" meters !!!"<<std::endl;
       pass = false;
       }
-    std::cerr<<"Image index: "<<" ["<<estimatedImgGCP[0]<<","<<estimatedImgGCP[1]<<"]"<<std::endl;
+    else
+      {
+      std::cerr<<std::endl;
+      }
+    std::cerr<<"Image index: "<<" ["<<estimatedImgGCP[0]<<","<<estimatedImgGCP[1]<<"]";
     if((imgRes > imgTol) || vnl_math_isnan(imgRes))
       {
-      std::cerr<<"!!! Image residual is too high: "<<imgRes<<" pixels !!!"<<std::endl;
+      std::cerr<<"   ->   !!! Image residual is too high: "<<imgRes<<" pixels !!!"<<std::endl;
       pass = false;
+      }
+    else
+      {
+      std::cerr<<std::endl;
       }
     std::cerr<<"## ---------- ##"<<std::endl;
     }

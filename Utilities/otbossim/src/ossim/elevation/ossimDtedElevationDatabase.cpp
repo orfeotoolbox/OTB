@@ -13,11 +13,26 @@ RTTI_DEF1(ossimDtedElevationDatabase, "ossimDtedElevationDatabase", ossimElevati
 double ossimDtedElevationDatabase::getHeightAboveMSL(const ossimGpt& gpt)
 {
    if(!isSourceEnabled()) return ossim::nan();
-   ossimRefPtr<ossimElevCellHandler> handler = getOrCreateCellHandler(gpt);
-   if(handler.valid())
+   m_mutex.lock();
+   if(m_lastHandler.valid())
    {
-      return handler->getHeightAboveMSL(gpt); // still need to shift
+      if(m_lastHandler->pointHasCoverage(gpt))
+      {
+         double result = m_lastHandler->getHeightAboveMSL(gpt);
+         m_mutex.unlock();
+         
+         return result;
+      }
    }
+   m_lastHandler = getOrCreateCellHandler(gpt);
+   
+   if(m_lastHandler.valid())
+   {
+      double result = m_lastHandler->getHeightAboveMSL(gpt);
+      m_mutex.unlock();
+     return result; // still need to shift
+   }
+   m_mutex.unlock();
    return ossim::nan();
 }
 

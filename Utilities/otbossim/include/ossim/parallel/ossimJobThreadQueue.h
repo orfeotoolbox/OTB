@@ -30,6 +30,8 @@ public:
    
    bool isProcessingJob()const;
    
+   bool hasJobsToProcess()const;
+   
 protected:
    virtual ~ossimJobThreadQueue();
    

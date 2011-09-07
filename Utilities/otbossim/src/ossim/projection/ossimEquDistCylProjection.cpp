@@ -9,7 +9,7 @@
 //
 // Calls Geotrans Equidistant Cylinder projection code.  
 //*******************************************************************
-//  $Id: ossimEquDistCylProjection.cpp 19880 2011-07-30 16:27:15Z dburken $
+//  $Id: ossimEquDistCylProjection.cpp 20042 2011-09-06 14:59:56Z gpotts $
 
 #include <ossim/projection/ossimEquDistCylProjection.h>
 #include <ossim/base/ossimKeywordNames.h>
@@ -355,10 +355,15 @@ bool ossimEquDistCylProjection::loadState(const ossimKeywordlist& kwl, const cha
 void ossimEquDistCylProjection::setDecimalDegreesPerPixel(const ossimDpt& dpp)
 {
    // Adjust the origin latitude in order to achieve the gsd ratio scaling first:
-   if (dpp.lon != 0.0)
+   //if (dpp.lon != 0.0)
+   if (!ossim::almostEqual(dpp.lon,0.0))
    { 
       double ratio = dpp.lat/dpp.lon;
-      if (ratio > 1.0)
+      if(ossim::almostEqual(ratio, 1.0))
+      {
+         ratio = 1.0;
+      }
+      else if (ratio > 1.0)
          ratio = 1.0;
       else if (ratio < -1.0)
          ratio = -1.0;
@@ -366,7 +371,7 @@ void ossimEquDistCylProjection::setDecimalDegreesPerPixel(const ossimDpt& dpp)
    }
 
    // Check hemisphere against tiepoint:
-   if (!theUlGpt.hasNans() && (theUlGpt.lat < 0))
+   if (!theUlGpt.isLatNan()&&!theUlGpt.isLonNan() && (theUlGpt.lat < 0))
       theOrigin.lat *= -1.0;
 
    ossimMapProjection::setDecimalDegreesPerPixel(dpp);

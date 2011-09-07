@@ -71,7 +71,9 @@ public:
    
 protected:
    ossimString                m_extension;
-
+   ossimRefPtr<ossimElevCellHandler> m_lastHandler;
+   mutable OpenThreads::Mutex m_mutex;
+   
    bool openDtedDirectory(const ossimFilename& dir);
    void createRelativePath(ossimFilename& file, const ossimGpt& gpt)const;
    void createFullPath(ossimFilename& file, const ossimGpt& gpt)const
@@ -81,42 +83,6 @@ protected:
       file = ossimFilename(m_connectionString).dirCat(relativeFile);
    }
    virtual ossimRefPtr<ossimElevCellHandler> createCell(const ossimGpt& gpt);
-#if 0
-   ossimRefPtr<ossimElevCellHandler> getOrCreateHandler(const ossimGpt& gpt)
-   {
-      ossimRefPtr<ossimElevCellHandler> result = 0;
-      ossim_uint64 id = createId(gpt);
-      m_cacheMapMutex.lock();
-      CellMap::iterator iter = m_cacheMap.find(id);
-      
-      if(iter != m_cacheMap.end())
-      {
-         iter->second->updateTimestamp();
-         result = iter->second->m_handler.get();
-      }
-      else
-      {
-         ossimFilename f;
-         createFullPath(f, gpt);
-         if(f.exists())
-         {
-            ossimRefPtr<ossimDtedHandler> h = new ossimDtedHandler(f, m_memoryMapCellsFlag);
-            if (!(h->getErrorStatus()))
-            {
-               m_cacheMap.insert(std::make_pair(id, new CellInfo(createId(gpt), h.get())));
-               result = h.get();
-            }
-         }
-         if(m_cacheMap.size() > m_maxOpenCells)
-         {
-            flushCacheToMinOpenCells();
-         }
-      }
-      m_cacheMapMutex.unlock();
-      
-      return result;
-   }
-#endif
 TYPE_DATA
 };
 #endif

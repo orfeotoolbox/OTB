@@ -78,3 +78,20 @@ bool ossimJobMultiThreadQueue::areAllThreadsBusy()const
    
    return true;
 }
+
+bool ossimJobMultiThreadQueue::hasJobsToProcess()const
+{
+   bool result = false;
+   {
+      OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_mutex);
+      ossim_uint32 queueSize = m_threadQueueList.size();
+      ossim_uint32 idx = 0;
+      for(idx = 0; ((idx<queueSize)&&!result);++idx)
+      {
+         result = m_threadQueueList[idx]->hasJobsToProcess();
+      }
+   }
+   
+   return result;
+}
+

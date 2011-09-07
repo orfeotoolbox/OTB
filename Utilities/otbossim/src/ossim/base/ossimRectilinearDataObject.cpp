@@ -8,7 +8,7 @@
 // Contributor: David A. Horner (DAH) - http://dave.thehorners.com
 //
 //*************************************************************************
-// $Id: ossimRectilinearDataObject.cpp 19946 2011-08-12 18:45:36Z gpotts $
+// $Id: ossimRectilinearDataObject.cpp 20045 2011-09-06 15:03:11Z oscarkramer $
 
 #include <ossim/base/ossimRectilinearDataObject.h>
 #include <ossim/base/ossimScalarTypeLut.h>
@@ -286,7 +286,7 @@ bool ossimRectilinearDataObject::loadState(const ossimKeywordlist& kwl, const ch
       m_scalarType = OSSIM_SCALAR_UNKNOWN;
    }
 
-   m_numberOfDataComponents = m_spatialExtents.size();
+   m_numberOfDataComponents = (ossim_uint32) m_spatialExtents.size();
    
    return true;
    

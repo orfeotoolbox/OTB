@@ -13,7 +13,7 @@
 //              Initial coding.
 //<
 //*****************************************************************************
-//  $Id: ossimEcefPoint.h 11860 2007-10-15 19:59:10Z dburken $
+//  $Id: ossimEcefPoint.h 20043 2011-09-06 15:00:55Z oscarkramer $
 
 #ifndef ossimEcefPoint_HEADER
 #define ossimEcefPoint_HEADER
@@ -22,10 +22,12 @@
 #include <ossim/base/ossimColumnVector3d.h>
 #include <ossim/base/ossimNotify.h>
 #include <ossim/base/ossimString.h>
+#include <ossim/matrix/newmat.h>
 
 class ossimGpt;
 class ossimEcefVector;
 class ossimDpt3d;
+
 //*****************************************************************************
 //  CLASS: ossimEcefPoint
 //
@@ -50,6 +52,9 @@ public:
       : theData(x, y, z) {}
 
    ossimEcefPoint(const ossimColumnVector3d& assign_this)
+      : theData(assign_this) {}
+
+   ossimEcefPoint(const NEWMAT::ColumnVector& assign_this)
       : theData(assign_this) {}
 
    ossimEcefPoint(const ossimDpt3d& pt);
@@ -151,6 +156,27 @@ public:
     */
    void toPoint(const std::string& s);
    
+   //! Converts this point to a 3D column vector.
+   NEWMAT::ColumnVector toVector() const
+   {
+      NEWMAT::ColumnVector v (3);
+      v(0) = theData[0];
+      v(1) = theData[1];
+      v(2) = theData[2];
+      return v;
+   }
+   
+   //! Converts 3D column vector to this point.
+   void toPoint(const NEWMAT::ColumnVector& v)
+   {
+      if (v.Nrows() == 3)
+      {
+         theData[0] = v[0];
+         theData[1] = v[1];
+         theData[2] = v[2];
+      }
+   }
+
    /*!
     * Debug Dump: 
     */

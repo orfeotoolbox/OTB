@@ -8,7 +8,7 @@
 //              coordinate.
 //
 //*******************************************************************
-//  $Id: ossimColumnVector3d.h 9532 2006-09-11 11:20:05Z dburken $
+//  $Id: ossimColumnVector3d.h 20039 2011-09-06 14:58:16Z oscarkramer $
 #ifndef ossimColumnVector3d_HEADER
 #define ossimColumnVector3d_HEADER
 #include <ossim/base/ossimConstants.h>
@@ -40,11 +40,16 @@ public:
       }
 
    ossimColumnVector3d(const ossimColumnVector3d &rhs)
-      {
-         data[0] = rhs.data[0];
-         data[1] = rhs.data[1];
-         data[2] = rhs.data[2];
-      }
+   {
+      data[0] = rhs.data[0];
+      data[1] = rhs.data[1];
+      data[2] = rhs.data[2];
+   }
+
+   ossimColumnVector3d(const NEWMAT::ColumnVector& rhs)
+   {
+      *this = rhs;
+   }
 
    const ossimColumnVector3d& operator=(const NEWMAT::ColumnVector& rhs)
    {

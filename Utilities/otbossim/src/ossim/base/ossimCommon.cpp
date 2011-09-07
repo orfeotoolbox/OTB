@@ -9,7 +9,7 @@
 // Description: Common file for global functions.
 //
 //*************************************************************************
-// $Id: ossimCommon.cpp 19927 2011-08-10 11:25:11Z gpotts $
+// $Id: ossimCommon.cpp 20041 2011-09-06 14:59:46Z oscarkramer $
 
 #include <sstream>
 
@@ -931,7 +931,7 @@ void ossim::toSimpleStringList(ossimString& result,
    if(!valuesList.empty())
    {
       ossim_uint32 idx = 0;
-      ossim_uint32 size = (valuesList.size()-1);
+      ossim_uint32 size = (ossim_uint32)(valuesList.size()-1);
       for(idx = 0; idx < size; ++idx)
       {
          out << ((ossim_uint32)valuesList[idx]) << ",";

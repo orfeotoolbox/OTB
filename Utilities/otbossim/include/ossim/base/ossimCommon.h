@@ -10,7 +10,7 @@
 // Description: Common file for utility functions.
 //
 //*************************************************************************
-// $Id: ossimCommon.h 19948 2011-08-12 19:02:41Z gpotts $
+// $Id: ossimCommon.h 20040 2011-09-06 14:59:05Z oscarkramer $
 #ifndef ossimCommon_HEADER
 #define ossimCommon_HEADER
 
@@ -486,7 +486,7 @@ namespace ossim
       if(!valuesList.empty())
       {
          ossim_uint32 idx = 0;
-         ossim_uint32 size = (valuesList.size()-1);
+         ossim_uint32 size = (ossim_uint32) (valuesList.size()-1);
          for(idx = 0; idx < size; ++idx)
          {
             out << valuesList[idx] << ",";

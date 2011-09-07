@@ -1,7 +1,7 @@
 //*****************************************************************************
-// FILE: ossimDblGrid.h
+//                                   O S S I M
 //
-// Copyright (C) 2001 ImageLinks, Inc.
+// FILE: ossimDblGrid.h
 //
 // License:  See top level LICENSE.txt file.
 //
@@ -24,7 +24,7 @@
 //   spacing are specified to the constructor.
 //
 //*****************************************************************************
-//  $Id: ossimDblGrid.h 19441 2011-04-25 16:47:28Z dburken $
+//  $Id: ossimDblGrid.h 20044 2011-09-06 15:02:43Z oscarkramer $
 
 #ifndef ossimDblGrid_HEADER
 #define ossimDblGrid_HEADER

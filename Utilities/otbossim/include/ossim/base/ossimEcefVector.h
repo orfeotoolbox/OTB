@@ -16,7 +16,7 @@
 //              Initial coding.
 //<
 //*****************************************************************************
-//  $Id: ossimEcefVector.h 11398 2007-07-26 13:29:58Z dburken $
+//  $Id: ossimEcefVector.h 20043 2011-09-06 15:00:55Z oscarkramer $
 
 #ifndef ossimEcefVector_HEADER
 #define ossimEcefVector_HEADER
@@ -26,6 +26,7 @@
 #include <ossim/base/ossimColumnVector3d.h>
 #include <ossim/base/ossimEcefPoint.h>
 #include <ossim/base/ossimString.h>
+#include <ossim/matrix/newmat.h>
 
 class ossimGpt;
 
@@ -44,6 +45,9 @@ public:
       
    ossimEcefVector(const ossimEcefVector& copy_this)
       : theData (copy_this.theData) {}
+
+   ossimEcefVector(const NEWMAT::ColumnVector& assign_this)
+      : theData (assign_this) {}
 
    ossimEcefVector(const ossimEcefPoint& from,
                    const ossimEcefPoint& to)
@@ -147,6 +151,16 @@ public:
     * @param s String to initialize from.
     */
    void toPoint(const std::string& s);
+
+   //! Converts this point to a 3D column vector.
+   NEWMAT::ColumnVector toVector() const
+   {
+      NEWMAT::ColumnVector v (3);
+      v(0) = theData[0];
+      v(1) = theData[1];
+      v(2) = theData[2];
+      return v;
+   }
 
    /*!
     * Debug Dump: 

@@ -13,6 +13,7 @@
 
 #include <ossim/imaging/ossimImageGeometry.h>
 #include <ossim/projection/ossimProjection.h>
+#include <ossim/projection/ossimMapProjection.h>
 #include <ossim/base/ossimRefPtr.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
 #include <ossim/base/ossimKeywordNames.h>
@@ -271,40 +272,40 @@ const ossimDpt& ossimImageGeometry::getMetersPerPixel() const
 //**************************************************************************************************
 void ossimImageGeometry::computeGsd()const
 {
-   //---
-   // We need to do the local-to-world but eliminating elevation effects,
-   // hence the complication:
-   //
-   // Note that by doing the rnToFull the tranform and decimation are account for.
-   //---
-
-   if (m_projection.valid())
-   {
-      // Get three points in full image space.
-      ossimDpt pL0 (m_imageSize/2);
-      ossimDpt pLx (pL0.x+1, pL0.y);
-      ossimDpt pLy (pL0.x, pL0.y+1);
-      ossimDpt pF0;
-      ossimDpt pFx;
-      ossimDpt pFy;
-      rnToFull(pL0, 0, pF0);
-      rnToFull(pLx, 0, pFx);
-      rnToFull(pLy, 0, pFy);
-      
-      ossimGpt g0, gx, gy;
-      
-      m_projection->lineSampleToWorld(pF0, g0);
-      m_projection->lineSampleHeightToWorld(pFx, g0.height(), gx);
-      m_projection->lineSampleHeightToWorld(pFy, g0.height(), gy);
-      
-      // Compute horizontal distance for one pixel:
-      m_gsd.x = g0.distanceTo(gx);
-      m_gsd.y = g0.distanceTo(gy);
-   }
-   else
+   if (!m_projection.valid())
    {
       m_gsd.makeNan();
+      return;
    }
+   
+   // See if we can just copy the map projection's GSD:
+   ossimMapProjection* map_proj = PTR_CAST(ossimMapProjection, m_projection.get());
+   if (map_proj != NULL)
+   {
+      m_gsd = map_proj->getMetersPerPixel();
+      return;
+   }
+
+   // Must be some kind of sensor model. Need to compute GSD. Get three points in full image space.
+   ossimDpt pL0 (m_imageSize/2);
+   ossimDpt pLx (pL0.x+1, pL0.y);
+   ossimDpt pLy (pL0.x, pL0.y+1);
+   ossimDpt pF0;
+   ossimDpt pFx;
+   ossimDpt pFy;
+   rnToFull(pL0, 0, pF0);
+   rnToFull(pLx, 0, pFx);
+   rnToFull(pLy, 0, pFy);
+
+   ossimGpt g0, gx, gy;
+
+   m_projection->lineSampleToWorld(pF0, g0);
+   m_projection->lineSampleHeightToWorld(pFx, g0.height(), gx);
+   m_projection->lineSampleHeightToWorld(pFy, g0.height(), gy);
+
+   // Compute horizontal distance for one pixel:
+   m_gsd.x = g0.distanceTo(gx);
+   m_gsd.y = g0.distanceTo(gy);
 }
 
 //**************************************************************************************************
