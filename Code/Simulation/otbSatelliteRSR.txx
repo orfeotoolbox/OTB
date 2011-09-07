@@ -85,7 +85,7 @@ SatelliteRSR<TPrecision, TValuePrecision>
 template <class TPrecision, class TValuePrecision>
 void
 SatelliteRSR<TPrecision, TValuePrecision>
-::Load(PrecisionType lambdaMin, PrecisionType lambdaMax ,PrecisionType sampling, ValuePrecisionType coefNormalization )
+::Load(PrecisionType lambdaMin, PrecisionType lambdaMax , PrecisionType sampling, ValuePrecisionType coefNormalization )
 {
   m_NbBands = 1;
   if (0 == sampling)
