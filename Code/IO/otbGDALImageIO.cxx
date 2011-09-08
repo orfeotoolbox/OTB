@@ -1571,10 +1571,12 @@ std::string GDALImageIO::FilenameToGdalDriverShortName(const std::string& name) 
     gdalDriverShortName = "NITF";
   else if ( extension == "png" )
     gdalDriverShortName="PNG";
-  else if ( extension == "jpg" || extension=="jpeg" )
+  else if ( extension == "jpg" || extension== "jpeg" )
     gdalDriverShortName="JPEG";
   else if ( extension == "pix" )
     gdalDriverShortName="PCIDSK";
+  else if ( extension == "lbl" || extension == "pds" )
+    gdalDriverShortName="ISIS2";
   else
     gdalDriverShortName = "NOT-FOUND";
 
