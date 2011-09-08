@@ -63,7 +63,6 @@ class SatelliteRSR : public itk::DataObject
       itkSetMacro(NbBands, unsigned int);
 
       itkSetMacro(SortBands, bool);
-      static const double wavelengthPrecision = 0.0025; //in um
 
       /** Template parameters typedef */
       typedef TPrecision PrecisionType;

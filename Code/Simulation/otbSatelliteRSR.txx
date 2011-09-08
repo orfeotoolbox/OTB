@@ -88,9 +88,11 @@ SatelliteRSR<TPrecision, TValuePrecision>
 ::Load(PrecisionType lambdaMin, PrecisionType lambdaMax , PrecisionType sampling, ValuePrecisionType coefNormalization )
 {
   m_NbBands = 1;
+  const double wavelengthPrecision = 0.0025; //in um
+
   if (0 == sampling)
     {
-    sampling = this->wavelengthPrecision;
+    sampling = wavelengthPrecision;
     }
 
   // For each band
