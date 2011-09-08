@@ -19,10 +19,9 @@
 #define __otbWrapperQtWidgetView_h
 
 #include <QtGui>
+#include <QObject>
 #include "otbWrapperApplication.h"
 #include "otbWrapperQtWidgetModel.h"
-#include "otbWrapperEventsListener.h"
-
 
 namespace otb
 {
@@ -41,16 +40,17 @@ public:
 
   void CreateGui();
 
-  /*
-  QWidget * GetMainWindow()
+  QtWidgetModel* GetModel()
   {
-    return m_MainWindow;
+    return m_Model;
   }
-  */
 
 public slots:
-  void ExecuteAndWriteOutputSlot();
   void CloseSlot();
+
+signals:
+  void QuitSignal();
+  
 
 private:
   QtWidgetView(const QtWidgetView&); //purposely not implemented
@@ -65,8 +65,6 @@ private:
   Application::Pointer m_Application;
 
   QtWidgetModel* m_Model;
-
-  //QWidget * m_MainWindow;
 
   QPushButton* m_ExecButton;
   QPushButton* m_QuitButton;

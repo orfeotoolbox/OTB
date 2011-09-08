@@ -31,7 +31,6 @@ namespace Wrapper
 
 QtWidgetView::QtWidgetView(Application* app)
 {
-
   m_Model = new QtWidgetModel(app);
   m_Application = app;
 }
@@ -50,7 +49,6 @@ void QtWidgetView::CreateGui()
   mainLayout->addWidget(CreateInputWidgets());
   mainLayout->addWidget(CreateFooter());
 
-
   QGroupBox *mainGroup = new QGroupBox();
   mainGroup->setLayout(mainLayout);
 
@@ -60,15 +58,13 @@ void QtWidgetView::CreateGui()
   scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
   scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
-  QVBoxLayout *scrollLayout = new QVBoxLayout();
+  QVBoxLayout  *scrollLayout = new QVBoxLayout();
   scrollLayout->addWidget(scrollArea);
 
   // Make the scroll layout the main layout
   this->setLayout(scrollLayout);
   this->setWindowIcon(QIcon( ":/otb_small.png" ));
   this->setWindowTitle(QString(m_Model->GetApplication()->GetName()).append(" - version ").append(OTB_VERSION_STRING));
-
-  this->show();
 }
 
 QWidget* QtWidgetView::CreateHeader()
@@ -112,6 +108,7 @@ QWidget* QtWidgetView::CreateInputWidgets()
   return params;
 }
 
+
 QWidget* QtWidgetView::CreateFooter()
 {
   // an HLayout with two buttons : Execute and Quit
@@ -126,7 +123,7 @@ QWidget* QtWidgetView::CreateFooter()
   m_ExecButton->setDefault(true);
   m_ExecButton->setEnabled(false);
   m_ExecButton->setText(QObject::tr("Execute"));
-  connect( m_ExecButton, SIGNAL(clicked()), this, SLOT(ExecuteAndWriteOutputSlot() ) );
+  connect( m_ExecButton, SIGNAL(clicked()), m_Model, SLOT(ExecuteAndWriteOutputSlot() ) );
   connect( m_Model, SIGNAL(SetApplicationReady(bool)), m_ExecButton, SLOT(setEnabled(bool)) );
 
   m_QuitButton = new QPushButton(footerGroup);
@@ -134,7 +131,6 @@ QWidget* QtWidgetView::CreateFooter()
   connect( m_QuitButton, SIGNAL(clicked()), this, SLOT(CloseSlot()) );
 
   // Put the buttons on the right
-  //footerLayout->addWidget(m_ProgressLabel);
   footerLayout->addStretch();
   footerLayout->addWidget(m_ExecButton);
   footerLayout->addWidget(m_QuitButton);
@@ -143,115 +139,13 @@ QWidget* QtWidgetView::CreateFooter()
   return footerGroup;
 }
 
-void QtWidgetView::ExecuteAndWriteOutputSlot()
-{
-  m_Model->ExecuteAndWriteOutput();
-
-  QWidget * progWin = new QWidget();
-  progWin->setWindowTitle( "Progress reporting..." );
-
-  QVBoxLayout *layout = new QVBoxLayout;  
-  
-  std::vector< QProgressBar * > barListIntern, barListWriter;
-  std::vector< QLabel * > labelListIntern, labelListWriter;
-  if( m_Application->GetInternalProcessList().size() != m_Application->GetInternalProcessListName().size())
-    {
-      itkGenericExceptionMacro ("Internal process list and list name size mismatch...");
-    }
-  
-
-  // Build the window : First internal process
-  for(unsigned int ii=0; ii<m_Application->GetInternalProcessList().size(); ii++)
-    {
-      QLabel *label = new QLabel(QString(m_Application->GetInternalProcessListName()[ii].c_str()));
-      QProgressBar * bar = new QProgressBar();
-      layout->addWidget(label);
-      layout->addWidget(bar);
-      barListIntern.push_back(bar);
-      labelListIntern.push_back(label);
-    }
-
-  
-  // Build the window : then writers
-  unsigned int nbOutput = 0;
-  std::vector<std::string> paramList = m_Application->GetParametersKeys(true);
-  for (std::vector<std::string>::const_iterator it = paramList.begin();
-       it != paramList.end();
-       ++it)
-    {
-      if ( m_Application->GetParameterType(*it) == ParameterType_OutputImage)
-        {
-          itk::OStringStream oss;
-          // create the label including the output description
-          Parameter* param =  m_Application->GetParameterByKey(*it);
-          OutputImageParameter* outputParam = dynamic_cast<OutputImageParameter*>(param);
-          oss << "Writer "<< nbOutput << ": ";
-          oss << outputParam->GetName() <<".";
-          QLabel *label = new QLabel(QString(oss.str().c_str()));
-          QProgressBar * bar = new QProgressBar();
-          bar->setToolTip( QString( outputParam->GetDescription()) );
-          layout->addWidget(label);
-          layout->addWidget(bar);
-          barListWriter.push_back(bar);
-          labelListWriter.push_back(label);
-          nbOutput++;
-        }
-    }
-  
-  // Display the window
-  progWin->setLayout(layout);
-  progWin->update();
-  progWin->show();
-  // PAY ATTENTION : launching a GUI modification in a slot is simple : you have to call the following method 
-  // to update the general GUI
-  QCoreApplication::processEvents();
-
-  // Watch process
-  double curWriterProgress = 0;
-  unsigned int curWriter = 0;
-  unsigned int countt = 0;
-  while( m_Application->GetExecuteAndWriteOutputDone() == false )
-    {
-      itk::OStringStream oss;
-      oss.str("");
-      
-      // Internal DoExecute process watcher
-      std::vector<double> progCount = m_Application->GetDoExecuteProgress();
-      for(unsigned int i=0; i<progCount.size(); i++)
-        {
-          barListIntern[i]->setValue( static_cast<int>(progCount[i]*100 ));
-          progWin->update();
-          QCoreApplication::processEvents();
-        }
-      
-      // Writer watcher
-      if(  nbOutput > 0)
-        {
-          double curProg = m_Application->GetExecuteProgress();
-          
-          if( curProg > -1 )
-            {
-              if( curWriterProgress > curProg )
-                {
-                  curWriter++;
-                }
-
-              barListWriter[curWriter]->setValue( static_cast<int>(curProg*100) );
-              curWriterProgress = curProg;
-              progWin->update();
-              QCoreApplication::processEvents();
-            }
-        }
-      
-      itksys::SystemTools::Delay(1000);
-      
-    }
-  progWin->close();
-}
-
 void QtWidgetView::CloseSlot()
 {
+  // Close the widget 
   this->close();
+
+  // Emit a signal to close any widget that this gui belonging to
+  emit QuitSignal();
 }
 
 }
