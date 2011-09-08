@@ -14,6 +14,8 @@ set( WrappersQtWidget_MOC_HDR
        otbWrapperQtWidgetParameterBase.h
        otbWrapperQtWidgetModel.h
        otbWrapperQtWidgetView.h
+       otbWrapperQtWidgetProgressReport.h
+       itkQtProgressBar.h
        )
 
 QT4_WRAP_CPP(WrappersQtWidget_MOC_SRC ${WrappersQtWidget_MOC_HDR})

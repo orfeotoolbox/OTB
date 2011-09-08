@@ -20,9 +20,6 @@
 
 #include <QtGui>
 #include "otbWrapperApplication.h"
-#include "otbWrapperChoiceParameter.h"
-#include "otbWrapperEventsSender.h"
-#include "otbWrapperEvent.h"
 
 namespace otb
 {
@@ -38,10 +35,25 @@ class AppliThread : public QThread
       m_Application = app;
     }
 
-  virtual ~AppliThread(){};
-  void run()
+  ~AppliThread()
+  {
+    wait();
+  }
+
+  void Execute()
+  {
+    // Call the signal start to begin running the program
+    start();
+  }
+
+signals:
+  void ApplicationExecutionDone();
+
+protected:
+  virtual void run()
   {
     m_Application->ExecuteAndWriteOutput();
+    emit ApplicationExecutionDone();
   }
 
 private:
@@ -49,7 +61,6 @@ private:
   void operator=(const AppliThread&); //purposely not implemented
 
   Application::Pointer m_Application;
-  QWidget * m_ProgressWindow;
 };
 
 
@@ -69,22 +80,25 @@ public:
     return m_Application;
   }
 
-  // slot called when execution is requested
-  void ExecuteAndWriteOutput();
-
 signals:
   void SetApplicationReady(bool);
+  void SetProgressReportBegin();
+  void SetProgressReportDone();
 
 protected slots:
   // slot called everytime one of the widget is updated
   void NotifyUpdate();
+  // slot called when execution is requested
+  void ExecuteAndWriteOutputSlot();
+  // slot called to activate the Execute button after the application
+  // is done
+  void ActivateExecuteButton();
 
 private:
   QtWidgetModel(const QtWidgetModel&); //purposely not implemented
   void operator=(const QtWidgetModel&); //purposely not implemented
 
   Application::Pointer m_Application;
-  QWidget * m_ProgressWindow;
 };
 
 

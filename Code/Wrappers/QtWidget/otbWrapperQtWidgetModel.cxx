@@ -16,10 +16,6 @@
 
 =========================================================================*/
 #include "otbWrapperQtWidgetModel.h"
-#include "otbWrapperOutputImageParameter.h"
-
-//#include <stdio.h>
-#include <time.h>
 
 namespace otb
 {
@@ -30,7 +26,6 @@ QtWidgetModel::QtWidgetModel(Application* app)
  : m_Application(app)
 {
   m_Application->Init();
-  m_ProgressWindow = new QWidget();
 }
 
 QtWidgetModel::~QtWidgetModel()
@@ -47,10 +42,27 @@ void QtWidgetModel::NotifyUpdate()
   emit SetApplicationReady(applicationStatus);
 }
 
-void QtWidgetModel::ExecuteAndWriteOutput()
+void QtWidgetModel::ExecuteAndWriteOutputSlot()
 {
+  // Deactivate the Execute button while processing
+  emit SetApplicationReady(false);
+
+  // launch the output image writing
   AppliThread * taskAppli = new AppliThread( m_Application );
-  taskAppli->start();
+  connect(taskAppli, SIGNAL(ApplicationExecutionDone()), this, SLOT(ActivateExecuteButton()));
+  taskAppli->Execute();
+
+  // Tell the Progress Reporter to begin
+  emit SetProgressReportBegin();
+}
+
+void QtWidgetModel::ActivateExecuteButton()
+{
+  // For the view to activate the button "Execute"
+  emit SetApplicationReady(true);
+
+  // For the progressReport to close the Progress widget
+  emit SetProgressReportDone();
 }
 
 }
