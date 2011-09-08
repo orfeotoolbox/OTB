@@ -16,15 +16,17 @@
 
  =========================================================================*/
 #include <QApplication>
+#include <QObject>
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationRegistry.h"
 #include "otbWrapperQtWidgetView.h"
+#include "otbWrapperQtWidgetProgressReport.h"
 #include "itksys/SystemTools.hxx"
 
 using otb::Wrapper::Application;
 using otb::Wrapper::ApplicationRegistry;
 using otb::Wrapper::QtWidgetView;
-
+using otb::Wrapper::QtWidgetProgressReport;
 int main(int argc, char* argv[])
 {
   QApplication qtApp(argc, argv);
@@ -72,7 +74,6 @@ int main(int argc, char* argv[])
 
     const char* modulePath = itksys::SystemTools::GetEnv("ITK_AUTOLOAD_PATH");
     std::cout << "Module search path : " << (modulePath ? modulePath : "") << std::endl;
-
     std::vector<std::string> list = ApplicationRegistry::GetAvailableApplications();
 
     std::cout << "Available applications : " << (list.empty() ? "None" : "") << std::endl;
@@ -83,10 +84,31 @@ int main(int argc, char* argv[])
     return EXIT_FAILURE;
     }
 
+  // MainWidget : that contains the view and any other widget
+  // (progress, logs...)
+  QMainWindow* mainWindow =  new QMainWindow();
+
   // Create GUI based on module
   QtWidgetView* gui = new QtWidgetView(app);
+
+  // Connect the View "Quit" signal, to the mainWindow close slot
+  QObject::connect(gui, SIGNAL(QuitSignal()), mainWindow, SLOT(close()));
+
+  // Create a progressReport object
+  QtWidgetProgressReport* progressReport =  new QtWidgetProgressReport(gui->GetModel());
+  progressReport->SetApplication(app);
+
+  // Create a dock widget containg the progress widget
+  QDockWidget* qdock = new QDockWidget("Progress Reporting ...", mainWindow);
+  qdock->setWidget(progressReport);
+
+  // build the main window, central widget is the plugin view, other
+  // are docked widget (progress, logs...)
+  mainWindow->setCentralWidget(gui);
+  mainWindow->addDockWidget(Qt::BottomDockWidgetArea, qdock);
+  
   gui->CreateGui();
-  //gui->GetMainWindow()->show();
+  mainWindow->show();
 
   // Start event processing loop
   return qtApp.exec();
