@@ -27,9 +27,6 @@
 #include "otbWrapperParameterGroup.h"
 #include "itkLogger.h"
 
-//#include "otbWrapperEventsSender.h"
-//#include "otbWrapperEvent.h"
-
 namespace otb
 {
 namespace Wrapper
@@ -40,7 +37,7 @@ namespace Wrapper
  *  TODO
  *
  */
-  class ITK_EXPORT Application: /*public EventsSender<Event>, */public itk::Object
+  class ITK_EXPORT Application: public itk::Object
 {
 public:
   /** Standard class typedefs. */
@@ -281,9 +278,6 @@ public:
     this->Modified();
   }
 
-  itkGetMacro( ExecuteAndWriteOutputDone, bool )
-  itkSetMacro( ExecuteAndWriteOutputDone, bool )
-  
   itk::Logger* GetLogger();
 
 protected:
@@ -330,7 +324,6 @@ private:
   std::vector<itk::ProcessObject *> m_InternalProcessList;
   std::vector<std::string> m_InternalProcessListName;
   unsigned int m_WroteOutput;
-  bool m_ExecuteAndWriteOutputDone;
 
   itk::Logger::Pointer m_Logger;
 

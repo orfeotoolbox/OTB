@@ -44,7 +44,6 @@ Application::Application()
    m_InternalProcessList(),
    m_InternalProcessListName(),
    m_WroteOutput(0),
-   m_ExecuteAndWriteOutputDone(false),
    m_Logger(itk::Logger::New())
 {
   // Don't call Init from the constructor, since it calls a virtual method !
@@ -111,7 +110,6 @@ void Application::Execute()
 
 void Application::ExecuteAndWriteOutput()
 {
-  m_ExecuteAndWriteOutputDone = false;
   this->Execute();
   m_WroteOutput = 0;
   std::vector<std::string> paramList = GetParametersKeys(true);
@@ -128,7 +126,6 @@ void Application::ExecuteAndWriteOutput()
       m_WroteOutput++;
       }
     }
-  m_ExecuteAndWriteOutputDone = true;
 }
 
 /* Enable the use of an optional parameter. Returns the previous state */
