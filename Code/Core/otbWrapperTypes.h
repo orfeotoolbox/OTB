@@ -54,7 +54,7 @@ typedef enum
   UserLevel_Advanced
 } UserLevel;
 
-typedef float                          PixelType;
+typedef double                         PixelType;
 typedef otb::VectorImage<PixelType, 2> VectorImageType;
 
 typedef std::complex<float>            ComplexPixelType;
