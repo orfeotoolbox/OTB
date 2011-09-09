@@ -86,7 +86,6 @@ class SatelliteRSR : public itk::DataObject
       void Load(PrecisionType lambdaMin, PrecisionType lambdaMax , PrecisionType sampling, ValuePrecisionType coefNormalization = 1.0 );
 
 
-
       /** Compare RSR response (order bands from high to low frequency)*/
       struct sort_band {
          bool operator() ( SpectralResponsePointerType  a , SpectralResponsePointerType  b )
