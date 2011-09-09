@@ -121,6 +121,7 @@ void Application::ExecuteAndWriteOutput()
       {
       Parameter* param = GetParameterByKey(*it);
       OutputImageParameter* outputParam = dynamic_cast<OutputImageParameter*>(param);
+      outputParam->InitializeWriter();
       m_CurrentProcess = outputParam->GetWriter();
       outputParam->Write();
       m_WroteOutput++;
@@ -368,6 +369,7 @@ void Application::SetParameterOutputImage(std::string parameter, VectorImageType
   if (dynamic_cast<OutputImageParameter*>(param))
     {
     OutputImageParameter* paramDown = dynamic_cast<OutputImageParameter*>(param);
+    paramDown->InitializeWriter();
     paramDown->SetValue(value);
     }
 }
@@ -560,7 +562,6 @@ Application::GetExecuteProgress()
       res = m_CurrentProcess->GetProgress();
     }
 
-  
   return res;
 }
 

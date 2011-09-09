@@ -33,14 +33,26 @@ OutputImageParameter::~OutputImageParameter()
 {
 }
 
+
+void
+OutputImageParameter::InitializeWriter( )
+{
+  m_Writer = WriterType::New();
+}
+
 void
 OutputImageParameter::Write( )
 {
+  if(!m_Writer.IsNotNull())
+    {
+    itkExceptionMacro(<< "The Writer is null, please call explicitly the OutputImageParameter::InitializeWriter() method");
+    }
+
   if (m_Image.IsNotNull())
     {
-      m_Writer->SetInput(m_Image);
-      m_Writer->SetFileName(this->GetFileName());
-      m_Writer->Update();
+    m_Writer->SetInput(m_Image);
+    m_Writer->SetFileName(this->GetFileName());
+    m_Writer->Update();
     }
 }
 

@@ -90,6 +90,7 @@ int main(int argc, char* argv[])
 
   // Create GUI based on module
   QtWidgetView* gui = new QtWidgetView(app);
+  gui->CreateGui();
 
   // Connect the View "Quit" signal, to the mainWindow close slot
   QObject::connect(gui, SIGNAL(QuitSignal()), mainWindow, SLOT(close()));
@@ -107,7 +108,7 @@ int main(int argc, char* argv[])
   mainWindow->setCentralWidget(gui);
   mainWindow->addDockWidget(Qt::BottomDockWidgetArea, qdock);
   
-  gui->CreateGui();
+  // Show the main window
   mainWindow->show();
 
   // Start event processing loop

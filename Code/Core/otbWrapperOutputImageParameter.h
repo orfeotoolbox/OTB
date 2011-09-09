@@ -68,6 +68,8 @@ public:
 
   void Write();
 
+  void InitializeWriter();
+
 protected:
   /** Constructor */
   OutputImageParameter();
