@@ -1012,6 +1012,7 @@ FOREACH( file ${GenericConversionChecking_INPUTS} )
 	${INPUTDATA}/DEM/egm96.grd #Not used
 	${current_tol_pix} # Tolerance in pixels
 	${current_tol_m}   # Tolerance in meters
+	1                  # Verbose
 )
 ENDFOREACH()
 

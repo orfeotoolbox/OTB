@@ -42,7 +42,14 @@ int otbGenericRSTransformGenericConversionCheckingFromGCP(int argc, char* argv[]
   double imgTol = atof(argv[4]);
   double geoTol = atof(argv[5]);
 
+  int verbose = atoi(argv[6]);
+
   bool pass = true;
+
+  double accSumPx;
+  double accSum2Px;
+  double accSumM;
+  double accSum2M;
 
   // Reader
   ReaderType::Pointer reader = ReaderType::New();
@@ -82,9 +89,9 @@ int otbGenericRSTransformGenericConversionCheckingFromGCP(int argc, char* argv[]
   std::cout << "GCPProjection is : " << reader->GetOutput()->GetGCPProjection() << std::endl;
 
   unsigned int nbGCP = reader->GetOutput()->GetGCPCount();
+  std::cerr << "There is " << nbGCP << " GCPs embedded in this image" << std::endl;
   if (nbGCP == 0)
     {
-    std::cerr << "There is " << nbGCP << " GCPs embedded in this image" << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -110,29 +117,39 @@ int otbGenericRSTransformGenericConversionCheckingFromGCP(int argc, char* argv[]
     double imgRes = distance->Evaluate(ImgGCP, estimatedImgGCP);
 
 
-    std::cerr<<"GCP #"<<GCPid<<": ["<<ImgGCP[0]<<","<<ImgGCP[1]<<"] -> "<<"["<<GeoGCP[0]<<","<<GeoGCP[1]<<"]"<<std::endl;
-    std::cerr<<"Estimated Positions: "<<std::endl;
-    std::cerr<<"Geographic (WGS84): "<<" ["<<estimatedGeoGCP[0]<<","<<estimatedGeoGCP[1]<<"]";
-    if((geoRes > geoTol) || vnl_math_isnan(geoRes))
+    if (verbose)
       {
-      std::cerr<<"   ->   !!! Geographic (WGS84) residual is too high: "<<geoRes<<" meters !!!"<<std::endl;
-      pass = false;
+       std::cerr<<"GCP #"<<GCPid<<": ["<<ImgGCP[0]<<","<<ImgGCP[1]<<"] -> "<<"["<<GeoGCP[0]<<","<<GeoGCP[1]<<"]"<<std::endl;
+       std::cerr<<"Estimated Positions: "<<std::endl;
+       std::cerr<<"Geographic (WGS84): "<<" ["<<estimatedGeoGCP[0]<<","<<estimatedGeoGCP[1]<<"]"<<std::endl;
+
+       if((geoRes > geoTol) || vnl_math_isnan(geoRes))
+         {
+         std::cerr<<"!!! Geographic (WGS84) residual is too high: "<<geoRes<<" meters !!!"<<std::endl;
+         pass = false;
+         }
+       std::cerr<<"Image index: "<<" ["<<estimatedImgGCP[0]<<","<<estimatedImgGCP[1]<<"]"<<std::endl;
+       if((imgRes > imgTol) || vnl_math_isnan(imgRes))
+         {
+         std::cerr<<"!!! Image residual is too high: "<<imgRes<<" pixels !!!"<<std::endl;
+         pass = false;
+         }
+       std::cerr<<"## ---------- ##"<<std::endl;
       }
     else
       {
-      std::cerr<<std::endl;
+      if((geoRes > geoTol) || vnl_math_isnan(geoRes) || (imgRes > imgTol) || vnl_math_isnan(imgRes))
+        {
+        pass = false;
+        }
       }
-    std::cerr<<"Image index: "<<" ["<<estimatedImgGCP[0]<<","<<estimatedImgGCP[1]<<"]";
-    if((imgRes > imgTol) || vnl_math_isnan(imgRes))
-      {
-      std::cerr<<"   ->   !!! Image residual is too high: "<<imgRes<<" pixels !!!"<<std::endl;
-      pass = false;
-      }
-    else
-      {
-      std::cerr<<std::endl;
-      }
-    std::cerr<<"## ---------- ##"<<std::endl;
+
+    accSumPx  += imgRes;
+    accSum2Px += (imgRes * imgRes);
+
+    accSumM  += geoRes;
+    accSum2M += (geoRes * geoRes);
+
     }
 
 
@@ -143,6 +160,14 @@ int otbGenericRSTransformGenericConversionCheckingFromGCP(int argc, char* argv[]
    else
      {
      std::cerr<<"There were imprecise results."<<std::endl;
+     std::cerr<<"Total geographic residual (in meters): "<<accSumM
+         << " - Mean: "<<accSumM/(double)(nbGCP)
+         << " - Standard Deviation: "<< (accSum2M/(double)(nbGCP)) - ((accSumM/(double)(nbGCP)) * (accSumM/(double)(nbGCP)))
+         <<std::endl;
+     std::cerr<<"Total image residual (in pixels): "<< accSumPx
+         << " - Mean: " <<accSumPx/(double)(nbGCP)
+         << " - Standard Deviation: "<< (accSum2Px/(double)(nbGCP)) - ((accSumPx/(double)(nbGCP)) * (accSumPx/(double)(nbGCP)))
+         <<std::endl;
      return EXIT_FAILURE;
      }
 }
