@@ -69,10 +69,10 @@ public:
    * - Load the paths
    * - Load the application using the ApplicationRegistry
    */
-  void Load();
+  bool Load();
 
   /** same as Load method but set the expression before. */
-  void Load( const std::string & exp );
+  bool Load( const std::string & exp );
 
   /** Launch the process, using the Execute application method 
    * The method will check if the user asked for help (looking at --help key) before loading parameter and launching process.
@@ -97,7 +97,7 @@ protected:
   virtual ~CommandLineLauncher();
 
   /** Load the executable path. It looks for the key --modulePath, extract and interpret as path the following strings. */
-  void LoadPath();
+  bool LoadPath();
 
  /** Load the application calling the CreateApplication method of the ApplicationRegistry classes. 
   * Pay attention, the executable paths have to be loaded or set in the environment before calling the function. */
@@ -105,6 +105,10 @@ protected:
 
   /** Parse the user expression, extract the key and the associated string and set it as value of each corresonding application parameter. */
   CommandLineLauncher::ParamResultType LoadParameters();
+
+
+  /** Create and display the help of the application */   
+  std::string DisplayParameterHelp( const Parameter::Pointer & param );
 
   /** Method used to determine the type of a a parameter (trying a dynamic_cast). */
   //template <class TParameterType>

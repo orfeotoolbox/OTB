@@ -65,16 +65,16 @@ CommandLineLauncher::~CommandLineLauncher()
 {
 }
 
-void
+bool
 CommandLineLauncher::Load( const std::string & exp )
 {
   m_Expression = exp;
 
-  this->Load();
+  return this->Load();
 }
 
 
-void
+bool
 CommandLineLauncher::Load()
 {
   if (m_Expression == "")
@@ -82,8 +82,15 @@ CommandLineLauncher::Load()
       itkExceptionMacro("No expression specified...");
     }
 
-  this->LoadPath();
+  if ( this->LoadPath() == false )
+    {
+      std::cout<<"Invalid paths..."<<std::endl;
+      std::cout<<"Please check values : "<<m_Parser->GetAttributAsString( "--modulePath", m_Expression )<<"."<<std::endl;
+      return false;
+    }
   this->LoadApplication();
+
+  return true;
 }
 
 void
@@ -101,7 +108,13 @@ CommandLineLauncher::Execute()
     }
   else
     {
-      this->LoadParameters();
+      if ( this->LoadParameters() != OKPARAM )
+        {
+          this->LoadApplication();
+          this->DisplayHelp();
+          
+          return;
+        }
       m_Application->Execute();
     }
 } 
@@ -121,19 +134,26 @@ CommandLineLauncher::ExecuteAndWriteOutput()
     }
   else
     {
-      this->LoadParameters();
+      if ( this->LoadParameters() != OKPARAM )
+        {
+          this->LoadApplication();
+          this->DisplayHelp();
+
+          return;
+        }
+
       m_Application->ExecuteAndWriteOutput();
     }
 }
 
-void
+bool
 CommandLineLauncher::LoadPath()
 {
   std::vector<std::string> pathList;
   // look for the paths
   if( m_Parser->GetPaths( pathList, m_Expression) != CommandLineParser::OK )
     {
-      return;
+      return false;
     }
   // Contain paths into a string, separating each path with ":"
   m_Path = std::string("");
@@ -149,6 +169,8 @@ CommandLineLauncher::LoadPath()
   itksys::SystemTools::PutEnv(specificEnv.c_str());
   // Reload factories to take into account new path
   itk::ObjectFactoryBase::ReHash();
+
+  return true;
 }
 
 
@@ -194,7 +216,7 @@ CommandLineLauncher::LoadParameters()
         {
           if( !m_Parser->IsAttributExists( std::string("--").append(param->GetKey()), m_Expression ) )
              {
-               std::cout<<param->GetKey()<<std::endl;
+               std::cout<<"No param for (tu fais quoi la??)... "<<param->GetKey()<<std::endl;
                return MISSINGMANDATORYPARAMETER;
              }
            values = m_Parser->GetAttribut( std::string("--").append(param->GetKey()), m_Expression);
@@ -268,6 +290,7 @@ CommandLineLauncher::LoadParameters()
             }
         }
     }
+  return OKPARAM;
 }
 
 
@@ -301,43 +324,8 @@ CommandLineLauncher::DisplayHelp()
       // Check if mandatory parameter are present and have value
       if( param->GetMandatory() == true )
         {
-          itk::OStringStream oss;
-          oss<<"--"<<param->GetKey()<<" ("<<param->GetName()<<")"<< std::endl;
-
-          if( std::string(param->GetDescription()).size() != 0 )
-            {
-              oss<<"\t   Description: "<<param->GetDescription()<<std::endl;
-            }
-          if( m_Application->HasValue( param->GetKey() ) )
-            oss << "\t Default value: "<<m_Application->GetParameterAsString( param->GetKey() )<< std::endl;
-          else
-            oss << "\t Default value: none"<<std::endl;
-
-
-          std::cout<<"sssiiiizzzee: "<<m_Parser->GetAttribut( std::string("--").append(param->GetKey()), m_Expression).size()<<std::endl;
-          if( !m_Parser->IsAttributExists( std::string("--").append(param->GetKey()), m_Expression) )
-            {
-              std::cout<<"exist pas "<<std::string("--").append(param->GetKey())<<" => "<<m_Application->HasValue( param->GetKey())<<std::endl;
-
-              if ( !m_Application->HasValue( param->GetKey() ) )
-                oss << "\t        Status: MISSING"<< std::endl;
-              else
-                oss << "\t        Status: DEFAULT VALUE"<< std::endl;
-            }
-          else if( m_Parser->GetAttribut( std::string("--").append(param->GetKey()), m_Expression).size() == 0 )
-            {
-              oss << "\t        Status: NO VALUE ASSOCIATED"<< std::endl;
-            }
-          else
-            {
-              oss << "\t        Status: USER VALUE: ";
-              oss << m_Parser->GetAttributAsString( std::string("--").append(param->GetKey()), m_Expression );
-              oss << std::endl;
-            }
-
-          std::cerr<< oss.str();
+          std::cerr<< this->DisplayParameterHelp( param );
         }
-std::cerr<<std::endl;
     }
  
   bool addOptionTag = true;
@@ -348,42 +336,55 @@ std::cerr<<std::endl;
       // Check if mandatory parameter are present and have value
       if( param->GetMandatory() != true )
         {
-          itk::OStringStream oss;
-          oss<<"--"<<param->GetKey()<<std::endl;
-          oss<<"\t          Name: "<<param->GetName()<< std::endl;
-
-                    if( std::string(param->GetDescription()).size() != 0 )
+          if( addOptionTag == true )
             {
-              oss<<"\t   Description: "<<param->GetDescription()<<std::endl;
-            }
-          if( m_Application->HasValue( param->GetKey() ) )
-            oss << "\t Default value: "<<m_Application->GetParameterAsString( param->GetKey() )<< std::endl;
-          else
-            oss << "\t Default value: none"<<std::endl;
-          if( !m_Parser->IsAttributExists( std::string("--").append(param->GetKey()), m_Expression) )
-            {
-              if ( !m_Application->HasValue( param->GetKey() ) )
-                oss << "\t        Status: MISSING"<< std::endl;
-              else
-                oss << "\t        Status: DEFAULT VALUE"<< std::endl;
-            }
-          else if( m_Parser->GetAttribut( std::string("--").append(param->GetKey()), m_Expression).size() == 0 )
-            {
-              oss << "\t        Status: NO VALUE ASSOCIATED"<< std::endl;
-            }
-          else
-            {
-              oss << "\t        Status: USER VALUE: ";
-              oss << m_Parser->GetAttributAsString( std::string("--").append(param->GetKey()), m_Expression );
-              oss << std::endl;
+              std::cerr<<"=== Optional parameters: "<<std::endl;
+              addOptionTag = false;
             }
 
-          std::cerr<< oss.str();
+          std::cerr << this->DisplayParameterHelp( param );
         }
  
 
     }
 
+}
+
+std::string
+CommandLineLauncher::DisplayParameterHelp( const Parameter::Pointer & param )
+{
+  itk::OStringStream oss;
+  oss<<"--"<<param->GetKey()<<" ("<<param->GetName()<<")"<< std::endl;
+  
+  if( std::string(param->GetDescription()).size() != 0 )
+    {
+      oss<<"\t   Description: "<<param->GetDescription()<<std::endl;
+    }
+  
+  if( m_Application->HasValue( param->GetKey() ) )
+    oss << "\t Default value: "<<m_Application->GetParameterAsString( param->GetKey() )<< std::endl;
+  else
+    oss << "\t Default value: none"<<std::endl;
+  
+  if( !m_Parser->IsAttributExists( std::string("--").append(param->GetKey()), m_Expression) )
+    {
+      if ( !m_Application->HasValue( param->GetKey() ) )
+        oss << "\t        Status: MISSING"<< std::endl;
+      else
+        oss << "\t        Status: DEFAULT VALUE"<< std::endl;
+    }
+  else if( m_Parser->GetAttribut( std::string("--").append(param->GetKey()), m_Expression).size() == 0 )
+    {
+      oss << "\t        Status: NO VALUE ASSOCIATED"<< std::endl;
+    }
+  else
+    {
+      oss << "\t        Status: USER VALUE (";
+      oss << m_Parser->GetAttributAsString( std::string("--").append(param->GetKey()), m_Expression ) <<")";
+      oss << std::endl;
+    }
+
+  return oss.str();
 }
 
 }

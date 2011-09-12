@@ -172,13 +172,22 @@ CommandLineParser::GetModuleName( std::string & modName, const std::string & exp
 std::vector<std::string> 
 CommandLineParser::GetAttribut( const std::string & key, const std::string & exp )
 {
-  std::size_t found = std::string(exp).find(key);
+  std::string keySpaced = key;
+  keySpaced.append(" ");
+  std::size_t found = std::string(exp).find(keySpaced);
   if( found == std::string::npos )
     {
       itkExceptionMacro("No key \""<<key<<"\" found in \""<<exp<<"\".");
     }
 
+ std::vector<std::string> res;
   std::string expFromKey = std::string(exp).substr(found+key.size(), std::string(exp).size());
+
+  if( expFromKey.size() == 0 )
+    {
+      return res;
+    }
+
   std::string tempModKey = expFromKey;
   // remove other key in the string if there's any
   if( expFromKey.find("--") != std::string::npos)
@@ -197,7 +206,6 @@ CommandLineParser::GetAttribut( const std::string & key, const std::string & exp
     }
 
   // Remove space at the begining of the string and cast into std::vector<std::string>
-  std::vector<std::string> res;
   for(unsigned int i=0; i<spaceSplitted.size(); i++)
     {
       while( spaceSplitted[i].size()>0  && spaceSplitted[i][0] == ' ' )
@@ -213,11 +221,21 @@ CommandLineParser::GetAttribut( const std::string & key, const std::string & exp
 std::string
 CommandLineParser::GetAttributAsString( const std::string & key, const std::string & exp )
 {
-  std::string res;
+  std::string res("");
   std::vector<std::string> values = this->GetAttribut( key, exp );
+
+  if( values.size() == 0 )
+    {
+      return "";
+    }
+  else if( values.size() == 1 && values[0] == " " )
+    {
+      return "";
+    }
+
   for( unsigned int i=0; i<values.size(); i++)
     {
-      if( i<values.size() )
+      if( i<values.size()-1 )
         {
           res.append(values[i]);
           res.append(" ");
@@ -234,8 +252,9 @@ CommandLineParser::GetAttributAsString( const std::string & key, const std::stri
 bool
 CommandLineParser::IsAttributExists( const std::string key, const std::string & exp  )
 {
-  std::cout<<"--------- "<<key<<"    "<<exp<<std::endl;
-  std::size_t found = std::string(exp).find(key);
+  std::string keySpaced = key;
+  keySpaced.append(" ");
+  std::size_t found = std::string(exp).find(keySpaced);
   if( found == std::string::npos )
     {
       return false;

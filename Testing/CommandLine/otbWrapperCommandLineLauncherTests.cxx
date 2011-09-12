@@ -35,8 +35,10 @@ int otbWrapperCommandLineLauncherTest(int argc, char* argv[])
   typedef otb::Wrapper::CommandLineLauncher LauncherType;
   LauncherType::Pointer launcher = LauncherType::New();
 
-  launcher->Load( argv[1]);
-  launcher->Execute();
+  if (launcher->Load( argv[1]) == true )
+    {
+      launcher->ExecuteAndWriteOutput();
+    }
 
   return EXIT_SUCCESS;
 }
