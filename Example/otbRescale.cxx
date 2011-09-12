@@ -68,9 +68,9 @@ private:
     AddParameter(ParameterType_Float,      "outmin", "Output min value");
     AddParameter(ParameterType_Float,      "outmax", "Output max value");
     SetParameterFloat("outmin", 0);
-    //SetDescription( "outmin", "Minimum value of the output image." );
+    SetParameterDescription( "outmin", "Minimum value of the output image." );
     SetParameterFloat("outmax", 255);
-    //SetDescription( "outmax", "Maximum value of the output image." );
+    SetParameterDescription( "outmax", "Maximum value of the output image." );
   }
 
   void DoUpdateParameters()

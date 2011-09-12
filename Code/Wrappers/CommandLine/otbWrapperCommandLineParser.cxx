@@ -210,10 +210,31 @@ CommandLineParser::GetAttribut( const std::string & key, const std::string & exp
    return res; 
 }
 
+std::string
+CommandLineParser::GetAttributAsString( const std::string & key, const std::string & exp )
+{
+  std::string res;
+  std::vector<std::string> values = this->GetAttribut( key, exp );
+  for( unsigned int i=0; i<values.size(); i++)
+    {
+      if( i<values.size() )
+        {
+          res.append(values[i]);
+          res.append(" ");
+        }
+      else
+        {
+          res.append(values[i]);
+        }
+    }
+  return res;
+}
+
 
 bool
 CommandLineParser::IsAttributExists( const std::string key, const std::string & exp  )
 {
+  std::cout<<"--------- "<<key<<"    "<<exp<<std::endl;
   std::size_t found = std::string(exp).find(key);
   if( found == std::string::npos )
     {

@@ -274,14 +274,26 @@ CommandLineLauncher::LoadParameters()
 void
 CommandLineLauncher::DisplayHelp()
 {
+  std::cerr<<std::endl;
   std::cerr<<"====================== HELP CONTEXT ======================"<<std::endl;
-  std::cerr<<"Name: "<<m_Application->GetName()<<std::endl;
-  std::cerr<<"Description: "<<m_Application->GetDescription()<<std::endl;
-  std::cerr<<"Parameters: "<<std::endl;
+  std::cerr<<"NAME: "<<m_Application->GetName()<<std::endl;
+  std::cerr<<"DESCRIPTION: "<<m_Application->GetDescription()<<std::endl;
+  std::cerr<<"PARAMETERS: "<<std::endl;
+
   ParameterGroup::Pointer paramGr = m_Application->GetParameterList();
   const unsigned int nbOfParam = paramGr->GetNumberOfParameters();
-  
-  bool addMandaTag = true;
+
+
+  std::cerr<<"=== Mandatory parameters: "<<std::endl;
+  std::cerr<<"--modPath (Executables paths)"<<std::endl;
+  std::cerr<<"\t   Description: Paths to the executable library."<<std::endl;
+  if( !m_Parser->IsAttributExists( "--modPath", m_Expression ) )
+    std::cerr<<"\t        Status: ENVIRONEMENT PATH"<<std::endl;
+  else if( m_Path == "") 
+    std::cerr<< "\t       Status: NO VALUE ASSOCIATED "<<m_Path<<std::endl;
+  else
+    std::cerr<< "\t       Status: USER VALUE: "<<m_Path<<std::endl;
+
   // Mandatory parameters
   for( unsigned int i=0; i<nbOfParam; i++ )
     {
@@ -291,44 +303,41 @@ CommandLineLauncher::DisplayHelp()
         {
           itk::OStringStream oss;
           oss<<"--"<<param->GetKey()<<" ("<<param->GetName()<<")"<< std::endl;
+
           if( std::string(param->GetDescription()).size() != 0 )
             {
-              oss<<"\t Description: "<<param->GetDescription()<<")."<<std::endl;
+              oss<<"\t   Description: "<<param->GetDescription()<<std::endl;
             }
-          //oss << "\t Default value: "<<param->GetDefaultValue()<< std::endl;
+          if( m_Application->HasValue( param->GetKey() ) )
+            oss << "\t Default value: "<<m_Application->GetParameterAsString( param->GetKey() )<< std::endl;
+          else
+            oss << "\t Default value: none"<<std::endl;
+
+
+          std::cout<<"sssiiiizzzee: "<<m_Parser->GetAttribut( std::string("--").append(param->GetKey()), m_Expression).size()<<std::endl;
           if( !m_Parser->IsAttributExists( std::string("--").append(param->GetKey()), m_Expression) )
             {
-              oss << "\t Status: MISSING."<< std::endl;
+              std::cout<<"exist pas "<<std::string("--").append(param->GetKey())<<" => "<<m_Application->HasValue( param->GetKey())<<std::endl;
+
+              if ( !m_Application->HasValue( param->GetKey() ) )
+                oss << "\t        Status: MISSING"<< std::endl;
+              else
+                oss << "\t        Status: DEFAULT VALUE"<< std::endl;
             }
           else if( m_Parser->GetAttribut( std::string("--").append(param->GetKey()), m_Expression).size() == 0 )
             {
-              oss << "\t Status: NO VALUE ASSOCIATED."<< std::endl;
+              oss << "\t        Status: NO VALUE ASSOCIATED"<< std::endl;
             }
           else
             {
-              oss << "\t Status: USER VALUE: ";
-              std::vector<std::string> values = m_Parser->GetAttribut( std::string("--").append(param->GetKey()), m_Expression);
-              for( unsigned int i=0; i<values.size(); i++)
-                {
-                  if( i<values.size() )
-                    {
-                      oss<<values[i]<<" ";
-                    }
-                  else
-                    {
-                      oss<<values[i];
-                    }
-                }
+              oss << "\t        Status: USER VALUE: ";
+              oss << m_Parser->GetAttributAsString( std::string("--").append(param->GetKey()), m_Expression );
               oss << std::endl;
             }
 
-          if( addMandaTag == true )
-            {
-              std::cerr<<"=== Mandatory parameters: "<<std::endl;
-              addMandaTag = false;
-            }
           std::cerr<< oss.str();
         }
+std::cerr<<std::endl;
     }
  
   bool addOptionTag = true;
@@ -340,131 +349,43 @@ CommandLineLauncher::DisplayHelp()
       if( param->GetMandatory() != true )
         {
           itk::OStringStream oss;
-          oss<<"--"<<param->GetKey()<<" ("<<param->GetName()<<")"<< std::endl;
-          if( std::string(param->GetDescription()).size() != 0 )
+          oss<<"--"<<param->GetKey()<<std::endl;
+          oss<<"\t          Name: "<<param->GetName()<< std::endl;
+
+                    if( std::string(param->GetDescription()).size() != 0 )
             {
-              oss<<"\t Description: "<<param->GetDescription()<<")."<<std::endl;
+              oss<<"\t   Description: "<<param->GetDescription()<<std::endl;
             }
-          //oss << "\t Default value: "<<param->GetDefaultValue()<< std::endl;
+          if( m_Application->HasValue( param->GetKey() ) )
+            oss << "\t Default value: "<<m_Application->GetParameterAsString( param->GetKey() )<< std::endl;
+          else
+            oss << "\t Default value: none"<<std::endl;
           if( !m_Parser->IsAttributExists( std::string("--").append(param->GetKey()), m_Expression) )
             {
-              oss << "\t Status: NOT USED."<< std::endl;
+              if ( !m_Application->HasValue( param->GetKey() ) )
+                oss << "\t        Status: MISSING"<< std::endl;
+              else
+                oss << "\t        Status: DEFAULT VALUE"<< std::endl;
             }
           else if( m_Parser->GetAttribut( std::string("--").append(param->GetKey()), m_Expression).size() == 0 )
             {
-              oss << "\t Status: NO VALUE ASSOCIATED."<< std::endl;
+              oss << "\t        Status: NO VALUE ASSOCIATED"<< std::endl;
             }
           else
             {
-              oss << "\t Status: USER VALUE: ";
-              std::vector<std::string> values = m_Parser->GetAttribut( std::string("--").append(param->GetKey()), m_Expression);
-              for( unsigned int i=0; i<values.size(); i++)
-                {
-                  if( i<values.size() )
-                    {
-                      oss<<values[i]<<" ";
-                    }
-                  else
-                    {
-                      oss<<values[i];
-                    }
-                }
+              oss << "\t        Status: USER VALUE: ";
+              oss << m_Parser->GetAttributAsString( std::string("--").append(param->GetKey()), m_Expression );
               oss << std::endl;
             }
 
-          if( addOptionTag == true )
-            {
-              std::cerr<<"=== Optional parameters: "<<std::endl;
-              addOptionTag = false;
-            }
-          std::cerr<< oss.str() << std::endl;
+          std::cerr<< oss.str();
         }
+ 
+
     }
 
-  std::cerr<<"Detected user paths: "<<m_Path<<std::endl;
-
 }
 
-/*
-template <class TParameterType>
-void
-CommandLineLauncher::SetValueToParameter(Parameter * param, const std::string & val )
-{
-  if( !this->CanCreateParameter<TParameterType>( param ) )
-    {
-      itkExceptionMacro("Impossible cast to add value to the parameter "<<param->GetKey()<<".");
-    }
-  
-  dynamic_cast<TParameterType *>(param)->SetValue( val );
-}
-
-template <class TParameterType>
-void
-CommandLineLauncher::SetValueToParameter(Parameter * param, const std::vector<std::string> & val )
-{
-  if( !this->CanCreateParameter<TParameterType>( param ) )
-    {
-      itkExceptionMacro("Impossible cast to add value to the parameter "<<param->GetKey()<<".");
-    }
-  
-  dynamic_cast<TParameterType *>(param)->SetValue( val );
-}
-
-template <class TParameterType>
-void
-CommandLineLauncher::SetFileNameToParameter(Parameter * param, const std::string & val )
-{
-  if( !this->CanCreateParameter<TParameterType>( param ) )
-    {
-      itkExceptionMacro("Impossible cast to add value to the parameter "<<param->GetKey()<<".");
-    }
-  
-  dynamic_cast<TParameterType *>(param)->SetFileName( val );
-}
-
-template <class TParameterType>
-void
-CommandLineLauncher::SetFileNameToParameter(Parameter * param, const std::vector<std::string> & val )
-{
-  if( !this->CanCreateParameter<TParameterType>( param ) )
-    {
-      itkExceptionMacro("Impossible cast to add value to the parameter "<<param->GetKey()<<".");
-    }
-  
-  dynamic_cast<TParameterType *>(param)->SetFileNameList( val );
-}
-
-template <class TParameterType>
-void
-CommandLineLauncher::SetFromFileNameToParameter(Parameter * param, const std::string & val )
-{
-  if( !this->CanCreateParameter<TParameterType>( param ) )
-    {
-      itkExceptionMacro("Impossible cast to add value to the parameter "<<param->GetKey()<<".");
-    }
-  
-  dynamic_cast<TParameterType *>(param)->SetFromFileName( val );
-}
-
-template <class TParameterType>
-void
-CommandLineLauncher::SetFromFileNameToParameter(Parameter * param, const std::vector<std::string> & val )
-{
-  if( !this->CanCreateParameter<TParameterType>( param ) )
-    {
-      itkExceptionMacro("Impossible cast to add value to the parameter "<<param->GetKey()<<".");
-    }
-  
-  dynamic_cast<TParameterType *>(param)->SetListFromFileName( val );
-}
-
-template <class TParameterType>
-bool
-CommandLineLauncher::CanCreateParameter( Parameter * param )
-{
-  return dynamic_cast<TParameterType *>(param) != 0;
-}
-*/
 }
 }
 

@@ -397,6 +397,12 @@ std::string Application::GetParameterDescription(std::string parameter)
   return param->GetDescription();
 }
 
+void Application::SetParameterDescription(std::string parameter, std::string desc)
+{
+  Parameter* param = GetParameterByKey(parameter);
+  param->SetDescription(desc);
+}
+
 int Application::GetParameterInt(std::string parameter)
 {
   int ret = 0;
@@ -538,6 +544,34 @@ VectorDataType* Application::GetParameterVectorData(std::string parameter)
   return ret;
 }
 
+
+std::string Application::GetParameterAsString(std::string paramKey)
+{
+  std::string ret;
+  ParameterType type = this->GetParameterType( paramKey );
+
+  if( type == ParameterType_String || type == ParameterType_Filename || type == ParameterType_Directory || 
+      type == ParameterType_InputImage || type == ParameterType_InputComplexImage || type == ParameterType_InputVectorData 
+      || type == ParameterType_OutputImage || type == ParameterType_OutputVectorData  )
+    {
+      ret = this->GetParameterString( paramKey );
+    }
+  else if ( type == ParameterType_Int || type == ParameterType_Radius || type == ParameterType_Choice )
+    {
+      itk::OStringStream oss;
+      oss << this->GetParameterInt( paramKey );
+      ret = oss.str();
+    }
+  else if( type == ParameterType_Float )
+    {
+      itk::OStringStream oss;
+      oss << this->GetParameterFloat( paramKey );
+      ret = oss.str();
+    }
+
+  //TODO: exception if not found ?
+  return ret;
+}
 
 void
 Application::AddChoice(std::string paramKey, std::string paramName)

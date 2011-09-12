@@ -107,6 +107,9 @@ public:
   /* Returns the description of a parameter */
   std::string GetParameterDescription(std::string paramKey);
 
+  /* Set the description of a parameter */
+  void SetParameterDescription(std::string paramKey, std::string dec);
+
   /* Enable the use of an optional parameter. Returns the previous state */
   void EnableParameter(std::string paramKey);
 
@@ -243,9 +246,28 @@ public:
   /* GetParameterInt
    *
    * Can be called for types :
+
    * \li ParameterType_InputVectorData
    */
   VectorDataType* GetParameterVectorData(std::string parameter);
+
+ /* Get the parameter as a std::string
+   *
+   * Can be called for types :
+   * \li ParameterType_Float
+   * \li ParameterType_Int
+   * \li ParameterType_Choice
+   * \li ParameterType_Radius
+   * \li ParameterType_String
+   * \li ParameterType_Filename
+   * \li ParameterType_Directory
+   * \li ParameterType_InputImage
+   * \li ParameterType_InputComplexImage
+   * \li ParameterType_InputVectorData
+   * \li ParameterType_OutputImage
+   * \li ParameterType_OutputVectorData
+   */
+  std::string GetParameterAsString(std::string paramKey);
 
   /* Get the list of all parameters
    */

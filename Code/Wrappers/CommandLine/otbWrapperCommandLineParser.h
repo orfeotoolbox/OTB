@@ -59,6 +59,7 @@ public:
                   
 
   std::vector<std::string> GetAttribut( const std::string & key, const std::string & exp );
+  std::string GetAttributAsString( const std::string & key, const std::string & exp );
   
   bool IsAttributExists(const std::string key, const std::string & exp );
 
