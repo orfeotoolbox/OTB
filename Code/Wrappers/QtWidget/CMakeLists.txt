@@ -21,13 +21,9 @@ set( WrappersQtWidget_MOC_HDR
 QT4_WRAP_CPP(WrappersQtWidget_MOC_SRC ${WrappersQtWidget_MOC_HDR})
 
 add_library(OTBWrapperQtWidget ${srcs} ${WrappersQtWidget_MOC_SRC})
-target_link_libraries(OTBWrapperQtWidget OTBCommon OTBIO OTBWrapperCore OTBWrapperCommon ${QT_LIBRARIES})
+target_link_libraries(OTBWrapperQtWidget OTBApplicationEngine ${QT_LIBRARIES})
 
 install(TARGETS OTBWrapperQtWidget
-        RUNTIME DESTINATION bin
-        LIBRARY DESTINATION lib
-        ARCHIVE DESTINATION lib/static)
- 
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include/otbapp
-        FILES_MATCHING PATTERN "*.h")
- 
+        RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR_CM24}
+        LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR_CM24}
+        ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR_CM24})
