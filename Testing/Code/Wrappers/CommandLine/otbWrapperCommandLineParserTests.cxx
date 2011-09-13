@@ -111,7 +111,7 @@ int otbWrapperCommandLineParserTest2(int argc, char* argv[])
     }
 
   std::cout<<"Module name found."<<std::endl;
-  return CheckReturn(res); 
+  return CheckReturn(res);
 }
 
 

@@ -27,7 +27,7 @@ namespace Wrapper
 {
 /** \class NumericalParameter
  *  \brief This class represents a numerical parameter
- */ 
+ */
 template <class T>
 class ITK_EXPORT NumericalParameter : public Parameter
 {
@@ -42,7 +42,7 @@ public:
   itkNewMacro(Self);
 
   /** RTTI support */
-  itkTypeMacro(NumericalParameter,Parameter);
+  itkTypeMacro(NumericalParameter, Parameter);
 
   /** Typedef of the scalar type */
   typedef T ScalarType;
@@ -84,26 +84,26 @@ public:
   }
 
   /** Set the default value */
-  itkSetMacro(DefaultValue,ScalarType);
+  itkSetMacro(DefaultValue, ScalarType);
 
   /** Get the default value */
-  itkGetMacro(DefaultValue,ScalarType);
+  itkGetMacro(DefaultValue, ScalarType);
 
   /** Set the minimum value */
-  itkSetMacro(MinimumValue,ScalarType);
+  itkSetMacro(MinimumValue, ScalarType);
 
   /** Get the minimum value */
-  itkGetMacro(MinimumValue,ScalarType);
+  itkGetMacro(MinimumValue, ScalarType);
 
   /** Set the maximum value */
-  itkSetMacro(MaximumValue,ScalarType);
+  itkSetMacro(MaximumValue, ScalarType);
 
   /** Get the maximum value */
-  itkGetMacro(MaximumValue,ScalarType);
+  itkGetMacro(MaximumValue, ScalarType);
 
 protected:
   /** Constructor */
-  NumericalParameter() 
+  NumericalParameter()
     : m_DefaultValue(itk::NumericTraits<T>::Zero),
       m_MinimumValue(itk::NumericTraits<T>::min()),
       m_MaximumValue(itk::NumericTraits<T>::max())

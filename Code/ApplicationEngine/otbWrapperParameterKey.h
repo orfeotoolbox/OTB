@@ -30,7 +30,7 @@ namespace Wrapper
 
 /** \class Application
  *  \brief This class is a the Parameter key representation.
- *  
+ *
  *  The constructor accepts a string key constructed as follow : parent.me.child.
  *  It implements some key manipulation as described in the code.
  */
@@ -66,13 +66,13 @@ last() : return "tata"
   std::string GetRoot();
 
    /** Returns the vector of string that contains each element separated by a point. */
-  std::vector<std::string> Split(); 
+  std::vector<std::string> Split();
 
   /** Append a string at the end of the key. A point separator will be added before the string. */
-  void Append( const std::string & val ); 
+  void Append( const std::string & val );
 
   /** Append a string at the end of the key. A point separator will be added before the string. */
-  void Append( const ParameterKey & pKey ); 
+  void Append( const ParameterKey & pKey );
 
   /** Get Key value */
   std::string GetKey()

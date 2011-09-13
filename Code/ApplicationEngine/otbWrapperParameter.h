@@ -31,9 +31,9 @@ namespace Wrapper
 {
 enum DefaultValueMode
   {
-    /** 
+    /**
      * This parameter has no default behaviour and should be set by
-     * the user. 
+     * the user.
      */
     DefaultValueMode_UNKNOWN,
     /**
@@ -42,7 +42,7 @@ enum DefaultValueMode
      */
     DefaultValueMode_RELATIVE,
 
-    /** 
+    /**
      * The default value of this parameter is not depending on any
      * other parameter.
      */
@@ -54,7 +54,7 @@ enum DefaultValueMode
  *  \brief This class represent a parameter for the wrapper framework
  *  This class is a high level class representing a parameter for the
  *  wrapper framework. It should be subclassed to represent different
- *  kinds of parameters 
+ *  kinds of parameters
  */
 class Parameter
   : public itk::Object
@@ -70,7 +70,7 @@ public:
   itkNewMacro(Self);
 
   /** RTTI support */
-  itkTypeMacro(Parameter,itk::Object);
+  itkTypeMacro(Parameter, itk::Object);
 
   /** Set the parameter name */
   itkSetStringMacro(Name);
@@ -91,34 +91,34 @@ public:
   itkGetStringMacro(Key);
 
   /** Set the parameter mandatory flag */
-  itkSetMacro(Active,bool);
+  itkSetMacro(Active, bool);
 
   /** Get the parameter mandatory flag */
-  itkGetConstMacro(Active,bool);
+  itkGetConstMacro(Active, bool);
 
   /** Set the parameter mandatory flag */
-  itkSetMacro(Mandatory,bool);
+  itkSetMacro(Mandatory, bool);
 
   /** Get the parameter mandatory flag */
-  itkGetConstMacro(Mandatory,bool);
+  itkGetConstMacro(Mandatory, bool);
 
   /** Toogle the parameter mandatory flag */
   itkBooleanMacro(Mandatory);
 
   /** Set the default value mode */
-  itkSetEnumMacro(DefaultValueMode,DefaultValueMode);
+  itkSetEnumMacro(DefaultValueMode, DefaultValueMode);
 
   /** Get the default value mode */
-  itkGetEnumMacro(DefaultValueMode,DefaultValueMode);
+  itkGetEnumMacro(DefaultValueMode, DefaultValueMode);
 
   /** Set the user access level */
-  itkSetEnumMacro(UserLevel,UserLevel);
+  itkSetEnumMacro(UserLevel, UserLevel);
 
   /** Get the user access level */
-  itkGetEnumMacro(UserLevel,UserLevel);
+  itkGetEnumMacro(UserLevel, UserLevel);
 
   /** Reset to the the default value. Default implementation does
-   * nothing 
+   * nothing
    */
   virtual void Reset()
   {

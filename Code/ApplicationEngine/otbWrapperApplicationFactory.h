@@ -118,5 +118,4 @@ private:
   }
 
 
-
 #endif // __otbWrapperApplication_h_

@@ -42,7 +42,7 @@ public:
   itkNewMacro(Self);
 
   /** RTTI support */
-  itkTypeMacro(OutputVectorDataParameter,Parameter);
+  itkTypeMacro(OutputVectorDataParameter, Parameter);
 
 
   /** Set the value */

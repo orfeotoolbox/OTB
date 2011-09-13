@@ -43,7 +43,7 @@ void QtWidgetStringParameter::DoCreateWidget()
   // Set up input text edit
   QHBoxLayout *hLayout = new QHBoxLayout;
   hLayout->setSpacing(0);
-  hLayout->setContentsMargins(0,0,0,0);
+  hLayout->setContentsMargins(0, 0, 0, 0);
 
   QLineEdit* input = new QLineEdit;
   input->setToolTip(m_StringParam->GetDescription());

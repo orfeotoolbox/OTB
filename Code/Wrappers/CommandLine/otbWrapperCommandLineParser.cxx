@@ -73,7 +73,7 @@ CommandLineParser::GetPaths( std::vector<std::string> & paths, const std::string
     }
   
   for( unsigned i=0; i<pathAttribut.size(); i++)
-    {  
+    {
       std::string fullPath = itksys::SystemTools::CollapseFullPath(pathAttribut[i].c_str());
       if( !itksys::SystemTools::FileIsDirectory(fullPath.c_str()) )
         {
@@ -114,11 +114,11 @@ CommandLineParser::GetModuleName( std::string & modName, const std::string & exp
   // First string mustn't start with --
   // Second string must contains -- (2 modules name not allow)
   // And must contain only alphanumerical character
-  if( spaceSplittedExp[0].substr(0,2) != "--" )
+  if( spaceSplittedExp[0].substr(0, 2) != "--" )
     {
       if( spaceSplittedExp.size() > 1 )
         {
-          if( spaceSplittedExp[1].substr(0,2) != "--" )
+          if( spaceSplittedExp[1].substr(0, 2) != "--" )
             {
               return MULTIPLEMODULENAME;
             }
@@ -168,8 +168,7 @@ CommandLineParser::GetModuleName( std::string & modName, const std::string & exp
 }
 
 
-
-std::vector<std::string> 
+std::vector<std::string>
 CommandLineParser::GetAttribut( const std::string & key, const std::string & exp )
 {
   std::string keySpaced = key;
@@ -215,7 +214,7 @@ CommandLineParser::GetAttribut( const std::string & key, const std::string & exp
       res.push_back(spaceSplitted[i]);
     }
 
-   return res; 
+   return res;
 }
 
 std::string

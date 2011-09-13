@@ -41,7 +41,7 @@ public:
 
   itkNewMacro(Self);
 
-  itkTypeMacro(ParameterList,Parameter);
+  itkTypeMacro(ParameterList, Parameter);
 
   void AddParameter(Parameter::Pointer p);
 

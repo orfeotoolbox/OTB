@@ -28,7 +28,7 @@ namespace Wrapper
 QtWidgetProgressReport::QtWidgetProgressReport(QtWidgetModel * model) : m_IsProgressReportGuiAlreadyBuilt(false)
 {
   m_Model = model;
-  connect(model, SIGNAL(SetProgressReportBegin()), this, SLOT(ReportProgress()) ); 
+  connect(model, SIGNAL(SetProgressReportBegin()), this, SLOT(ReportProgress()) );
   connect(model, SIGNAL(SetProgressReportDone()), this, SLOT(close()) );
 }
 
@@ -48,7 +48,7 @@ void QtWidgetProgressReport::ReportProgress()
   this->show();
 
   if(!m_IsProgressReportGuiAlreadyBuilt)
-    {  
+    {
     QVBoxLayout *layout = new QVBoxLayout;
     this->setLayout(layout);
   

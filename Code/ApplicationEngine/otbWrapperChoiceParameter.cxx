@@ -85,7 +85,6 @@ ChoiceParameter::GetChoiceNames( )
 }
 
 
-
 ParameterGroup::Pointer
 ChoiceParameter::GetChoiceParameterGroupByIndex( int i )
 {

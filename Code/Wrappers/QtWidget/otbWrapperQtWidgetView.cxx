@@ -76,8 +76,8 @@ QWidget* QtWidgetView::CreateHeader()
   headerGroup->setStyleSheet("border: 1px solid gray");
 
   headerGroup->setFixedHeight(50);
-  headerGroup->setContentsMargins(0,0,0,0);
-  headerLayout->setContentsMargins(5,5,5,5);
+  headerGroup->setContentsMargins(0, 0, 0, 0);
+  headerLayout->setContentsMargins(5, 5, 5, 5);
 
   QLabel *iconOTBLabel = new QLabel;
   iconOTBLabel->setStyleSheet("border-style: none");
@@ -116,8 +116,8 @@ QWidget* QtWidgetView::CreateFooter()
   QHBoxLayout *footerLayout = new QHBoxLayout;
 
   footerGroup->setFixedHeight(40);
-  footerGroup->setContentsMargins(0,0,0,0);
-  footerLayout->setContentsMargins(5,5,5,5);
+  footerGroup->setContentsMargins(0, 0, 0, 0);
+  footerLayout->setContentsMargins(5, 5, 5, 5);
 
   m_ExecButton = new QPushButton(footerGroup);
   m_ExecButton->setDefault(true);
@@ -141,7 +141,7 @@ QWidget* QtWidgetView::CreateFooter()
 
 void QtWidgetView::CloseSlot()
 {
-  // Close the widget 
+  // Close the widget
   this->close();
 
   // Emit a signal to close any widget that this gui belonging to

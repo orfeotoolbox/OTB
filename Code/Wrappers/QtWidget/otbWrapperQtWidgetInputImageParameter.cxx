@@ -42,7 +42,7 @@ void QtWidgetInputImageParameter::DoCreateWidget()
   // Set up input text edit
   m_HLayout = new QHBoxLayout;
   m_HLayout->setSpacing(0);
-  m_HLayout->setContentsMargins(0,0,0,0);
+  m_HLayout->setContentsMargins(0, 0, 0, 0);
   m_Input = new QLineEdit;
   m_Input->setToolTip( m_InputImageParam->GetDescription() );
   connect( m_Input, SIGNAL(textChanged(const QString&)), this, SLOT(SetFileName(const QString&)) );

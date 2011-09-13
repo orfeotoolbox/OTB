@@ -84,7 +84,7 @@ CommandLineLauncher::Load()
   if( this->CheckUnicity() == false )
     {
       std::cerr<<"ERROR: At least one key is not unique in the expression..."<<std::endl;
-      return false; 
+      return false;
     }
 
   if ( this->LoadPath() == false )
@@ -109,7 +109,7 @@ CommandLineLauncher::Execute()
   m_Application->Execute();
   return true;
  
-} 
+}
 
 
 bool
@@ -131,7 +131,7 @@ CommandLineLauncher::BeforeExecute()
 {
     if( m_Application.IsNull() )
     {
-      itkExceptionMacro("No application loaded");  
+      itkExceptionMacro("No application loaded");
     }
 
     // if help is asked...
@@ -174,7 +174,7 @@ CommandLineLauncher::LoadPath()
   // Contain paths into a string, separating each path with ":"
   m_Path = std::string("");
   for( unsigned i=0; i<pathList.size(); i++)
-    {  
+    {
       m_Path.append(pathList[i]);
       m_Path.append(":");
     }
@@ -197,7 +197,7 @@ CommandLineLauncher::LoadApplication()
   std::string moduleName;
   if( m_Parser->GetModuleName( moduleName, m_Expression ) != CommandLineParser::OK )
     {
-      std::cerr << "ERROR: LoadApplication, no module found..." <<std::endl;     
+      std::cerr << "ERROR: LoadApplication, no module found..." <<std::endl;
       return;
     }
 
@@ -275,8 +275,8 @@ CommandLineLauncher::LoadParameters()
 
       // Single value parameter
    
-      if( type == ParameterType_Choice || type == ParameterType_Float || type == ParameterType_Int || type == ParameterType_Radius 
-          || type == ParameterType_Directory || type == ParameterType_String || type == ParameterType_Filename || type == ParameterType_InputComplexImage 
+      if( type == ParameterType_Choice || type == ParameterType_Float || type == ParameterType_Int || type == ParameterType_Radius
+          || type == ParameterType_Directory || type == ParameterType_String || type == ParameterType_Filename || type == ParameterType_InputComplexImage
           || type == ParameterType_InputImage || type == ParameterType_InputVectorData || type == ParameterType_OutputImage || type == ParameterType_OutputVectorData )
         {
           m_Application->SetParameterString( param->GetKey(), values[0] );
@@ -319,7 +319,7 @@ CommandLineLauncher::DisplayHelp()
   std::cerr<<"\t   Description: Paths to the executable library."<<std::endl;
   if( !m_Parser->IsAttributExists( "--modPath", m_Expression ) )
     std::cerr<<"\t        Status: ENVIRONEMENT PATH"<<std::endl;
-  else if( m_Path == "") 
+  else if( m_Path == "")
     std::cerr<< "\t       Status: NO VALUE ASSOCIATED "<<m_Path<<std::endl;
   else
     std::cerr<< "\t       Status: USER VALUE: "<<m_Path<<std::endl;

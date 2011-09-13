@@ -45,7 +45,7 @@ public:
   itkNewMacro(Self);
 
   /** RTTI support */
-  itkTypeMacro(OutputImageParameter,Parameter);
+  itkTypeMacro(OutputImageParameter, Parameter);
 
   /** Set the value */
   itkSetObjectMacro(Image, VectorImageType);

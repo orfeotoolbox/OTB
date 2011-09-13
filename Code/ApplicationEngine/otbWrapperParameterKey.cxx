@@ -65,7 +65,7 @@ std::vector<std::string>
 ParameterKey::Split()
 {
   std::vector<std::string> res;
-  boost::split(res,m_Key,boost::is_any_of("."), boost::token_compress_on);
+  boost::split(res, m_Key, boost::is_any_of("."), boost::token_compress_on);
 
   return res;
 }

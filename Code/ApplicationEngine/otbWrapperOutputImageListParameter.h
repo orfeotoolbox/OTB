@@ -47,7 +47,7 @@ public:
   itkNewMacro(Self);
 
   /** RTTI support */
-  itkTypeMacro(OutputImageListParameter,Parameter);
+  itkTypeMacro(OutputImageListParameter, Parameter);
 
   /** Set the value */
   itkSetObjectMacro(ImageList, VectorImageListType);
@@ -86,7 +86,7 @@ public:
 
   void Write()
   {
-    if(m_ImageList->Size() != m_FileNameList.size()) 
+    if(m_ImageList->Size() != m_FileNameList.size())
       {
         itkExceptionMacro(<< "Image list and filename list size dismatch...");
       }
@@ -94,7 +94,7 @@ public:
     for (unsigned int i=0; i<m_ImageList->Size(); i++)
       {
         if (m_ImageList->GetNthElement( i ).IsNotNull())
-          {    
+          {
             ImageFileWriterType::Pointer writer = ImageFileWriterType::New();
             writer->SetInput(m_ImageList->GetNthElement( i ));
             writer->SetFileName( m_FileNameList[i]);

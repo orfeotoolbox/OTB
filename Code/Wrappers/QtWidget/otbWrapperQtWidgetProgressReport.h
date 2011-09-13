@@ -30,7 +30,7 @@ namespace Wrapper
 
 /** \class
  * \brief Create a widget reporting the progress of the application
- *        process. 
+ *        process.
  */
 class QtWidgetProgressReport : public QWidget//QDockWidget
 {

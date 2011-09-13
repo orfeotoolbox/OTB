@@ -30,7 +30,7 @@ namespace Wrapper
   
 /** \class CommandLineParser
  *  \brief This class check the validity of a command line application.
- *  
+ *
  * To be valid, the expression must be as follow:
  * ModuleName --attribut1_Key attrubut1_Value --attribut2_Key attrubut2_Value
  * After the attribut key, if the user give several values (expression without \"--\" separated by space), it will automacally be interpreted as a list.
@@ -51,7 +51,7 @@ public:
   itkNewMacro(Self);
   
   /** RTTI support */
-  itkTypeMacro(CommandLineParser,itk::Object);
+  itkTypeMacro(CommandLineParser, itk::Object);
   
   /** Parse result enum */
   typedef enum { OK, NOMODULENAME, MULTIPLEMODULENAME, INVALIDMODULENAME,

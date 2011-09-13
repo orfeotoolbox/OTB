@@ -48,7 +48,7 @@ public:
   itkNewMacro(Self);
 
   /** RTTI support */
-  itkTypeMacro(InputImageListParameter,Parameter);
+  itkTypeMacro(InputImageListParameter, Parameter);
 
   /** Set image form a list of filename */
   void SetListFromFileName(const std::vector<std::string> & filenames)

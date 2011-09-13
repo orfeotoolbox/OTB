@@ -42,7 +42,7 @@ public:
   itkNewMacro(Self);
 
   /** RTTI support */
-  itkTypeMacro(InputComplexImageParameter,Parameter);
+  itkTypeMacro(InputComplexImageParameter, Parameter);
 
   /** Set value from filename */
   void SetFromFileName(const std::string& filename)

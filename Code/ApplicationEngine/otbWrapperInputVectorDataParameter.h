@@ -42,7 +42,7 @@ public:
   itkNewMacro(Self);
 
   /** RTTI support */
-  itkTypeMacro(InputVectorDataParameter,Parameter);
+  itkTypeMacro(InputVectorDataParameter, Parameter);
 
   typedef double CoordinatePrecisionType;
   typedef double ValuePrecisionType;

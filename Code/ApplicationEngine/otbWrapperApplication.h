@@ -50,7 +50,7 @@ public:
   //itkNewMacro(Self);
 
   /** RTTI support */
-  itkTypeMacro(Application,itk::Object);
+  itkTypeMacro(Application, itk::Object);
 
   /** Set the parameter name */
   itkSetStringMacro(Name);

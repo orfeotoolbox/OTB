@@ -58,7 +58,7 @@ void QtWidgetFloatParameter::DoCreateWidget()
 {
   m_QHBoxLayout = new QHBoxLayout;
   m_QHBoxLayout->setSpacing(0);
-  m_QHBoxLayout->setContentsMargins(0,0,0,0);
+  m_QHBoxLayout->setContentsMargins(0, 0, 0, 0);
 
   m_QDoubleSpinBox = new QDoubleSpinBox;
   m_QDoubleSpinBox->setDecimals(5);
