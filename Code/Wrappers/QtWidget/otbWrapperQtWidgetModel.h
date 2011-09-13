@@ -84,6 +84,7 @@ signals:
   void SetApplicationReady(bool);
   void SetProgressReportBegin();
   void SetProgressReportDone();
+  void UpdateGui();
 
 protected slots:
   // slot called everytime one of the widget is updated

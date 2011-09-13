@@ -36,6 +36,7 @@ void QtWidgetModel::NotifyUpdate()
 {
   // Update the parameters
   m_Application->UpdateParameters();
+  emit UpdateGui();
 
   // Notify all
   bool applicationStatus = m_Application->IsApplicationReady();
