@@ -176,6 +176,9 @@ public:
    * \li ParameterType_Filename
    * \li ParameterType_Directory
    * \li ParameterType_Choice
+   * \li ParameterType_Float
+   * \li ParameterType_Int
+   * \li ParameterType_Radius
    * \li ParameterType_InputImageParameter
    * \li ParameterType_InputComplexImageParameter
    * \li ParameterType_InputVectorDataParameter

@@ -57,19 +57,26 @@ public:
   typedef enum { OK, NOMODULENAME, MULTIPLEMODULENAME, INVALIDMODULENAME,
                  NOMODULEPATH, INVALIDMODULEPATH, DEFAULT} ParseResultType;
                   
-
+  /** Get the attribut associatd to a key (list of element after the key and before the next "--") as a vector of string. */
   std::vector<std::string> GetAttribut( const std::string & key, const std::string & exp );
+  /** Get the attribut associatd to a key (list of element after the key and before the next "--") as a string separated by spaces. */
   std::string GetAttributAsString( const std::string & key, const std::string & exp );
   
+  /** Look if a given key is in an expression. */
   bool IsAttributExists(const std::string key, const std::string & exp );
 
+  /** Get the paths executables in an expression. Store the list in a vector of string. */
   CommandLineParser::ParseResultType GetPaths( std::vector<std::string> & paths, const std::string & exp );
+  /** Get the module name in an expression. It can be the first element of the expression (if the expression doesn't start with a "--" or the attribut associated to the key m_ModuleNameKey). */
   CommandLineParser::ParseResultType GetModuleName( std::string & modName, const std::string & exp );
 
+  /** Get the list of keys in an expression. That is to say each word starting by "--". */
+  std::vector<std::string> GetKeyList( const std::string & exp );
+
   itkGetStringMacro(ModuleNameKey);
-  itkGetStringMacro(PathKey);
+  itkGetStringMacro(ModulePathKey);
   itkSetStringMacro(ModuleNameKey);
-  itkSetStringMacro(PathKey);
+  itkSetStringMacro(ModulePathKey);
 
 protected:
   /** Constructor */
@@ -83,8 +90,10 @@ private:
   CommandLineParser(const CommandLineParser &); //purposely not implemented
   void operator =(const CommandLineParser&); //purposely not implemented
   
+  /** Module name key. Default is "--moduleName". */
   std::string m_ModuleNameKey;
-  std::string m_PathKey;
+  /** Module executable paths key. Default is "--modulePath". */
+  std::string m_ModulePathKey;
 
 }; //end class
 

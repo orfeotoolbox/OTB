@@ -37,7 +37,14 @@ int otbWrapperCommandLineLauncherTest(int argc, char* argv[])
 
   if (launcher->Load( argv[1]) == true )
     {
-      launcher->ExecuteAndWriteOutput();
+      if (launcher->ExecuteAndWriteOutput() == false)
+        {
+          return EXIT_FAILURE;
+        }
+    }
+  else
+    {
+      return EXIT_FAILURE;
     }
 
   return EXIT_SUCCESS;

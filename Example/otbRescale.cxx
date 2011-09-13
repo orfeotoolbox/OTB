@@ -87,12 +87,9 @@ private:
     m_MinMaxFilter->SetInput( inImage );
     std::cout<<inImage->GetLargestPossibleRegion()<<std::endl;
     otb::StandardFilterWatcher watcher(m_MinMaxFilter, "Min Max Computation");
-    std::cout<<"Updating min-max"<<std::endl;
+ 
     m_MinMaxFilter->Update();
-    std::cout<<"min-max computed"<<std::endl;
-    std::cout<<"min computed: "<<m_MinMaxFilter->GetMinimum()<<std::endl;
-    std::cout<<"max computed: "<<m_MinMaxFilter->GetMaximum()<<std::endl;
-
+ 
     VectorImageType::PixelType inMin, inMax;
 
     m_RescaleFilter->SetInput( inImage );
@@ -107,6 +104,10 @@ private:
 
     m_RescaleFilter->SetOutputMinimum( outMin );
     m_RescaleFilter->SetOutputMaximum( outMax );
+
+    std::cout<<"=========== min : "<<outMin<<std::endl;
+    std::cout<<"=========== max : "<<outMax<<std::endl;
+
 
     m_RescaleFilter->UpdateOutputInformation();
     

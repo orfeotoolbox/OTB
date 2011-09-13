@@ -334,6 +334,21 @@ void Application::SetParameterString(std::string parameter, std::string value)
     DirectoryParameter* paramDown = dynamic_cast<DirectoryParameter*>(param);
     paramDown->SetValue(value);
     }
+ else if (dynamic_cast<FloatParameter*>(param))
+    {
+    FloatParameter* paramDown = dynamic_cast<FloatParameter*>(param);
+    paramDown->SetValue(value);
+    }
+ else if (dynamic_cast<IntParameter*>(param))
+    {
+    IntParameter* paramDown = dynamic_cast<IntParameter*>(param);
+    paramDown->SetValue(value);
+    }
+ else if (dynamic_cast<RadiusParameter*>(param))
+    {
+    RadiusParameter* paramDown = dynamic_cast<RadiusParameter*>(param);
+    paramDown->SetValue(value);
+    }
   else if (dynamic_cast<InputImageParameter*>(param))
     {
     InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param);

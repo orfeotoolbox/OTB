@@ -34,7 +34,6 @@
 #include "otbWrapperOutputImageListParameter.h"
 #include "otbWrapperInputImageListParameter.h"
 #include "otbWrapperStringListParameter.h"
-//#include "otbWrapperParameterGroup.h"
 
 
 #include "otbWrapperApplicationRegistry.h"
@@ -82,10 +81,16 @@ CommandLineLauncher::Load()
       itkExceptionMacro("No expression specified...");
     }
 
+  if( this->CheckUnicity() == false )
+    {
+      std::cerr<<"ERROR: At least one key is not unique in the expression..."<<std::endl;
+      return false; 
+    }
+
   if ( this->LoadPath() == false )
     {
-      std::cout<<"Invalid paths..."<<std::endl;
-      std::cout<<"Please check values : "<<m_Parser->GetAttributAsString( "--modulePath", m_Expression )<<"."<<std::endl;
+      std::cerr<<"ERROR: Invalid paths..."<<std::endl;
+      std::cerr<<"ERROR: Please check values : "<<m_Parser->GetAttributAsString( "--modulePath", m_Expression )<<"."<<std::endl;
       return false;
     }
   this->LoadApplication();
@@ -93,57 +98,68 @@ CommandLineLauncher::Load()
   return true;
 }
 
-void
+bool
 CommandLineLauncher::Execute()
 {
-  if( m_Application.IsNull() )
+  if( this->BeforeExecute() == false )
     {
-      itkExceptionMacro("No application loaded");  
+      return false;
     }
   
-  // if help is asked...
-  if ( m_Parser->IsAttributExists( "--help", m_Expression ) == true )
-    {
-      this->DisplayHelp();
-    }
-  else
-    {
-      if ( this->LoadParameters() != OKPARAM )
-        {
-          this->LoadApplication();
-          this->DisplayHelp();
-          
-          return;
-        }
-      m_Application->Execute();
-    }
+  m_Application->Execute();
+  return true;
+ 
 } 
 
- void
+
+bool
 CommandLineLauncher::ExecuteAndWriteOutput()
 {
-  if( m_Application.IsNull() )
+  if( this->BeforeExecute() == false )
+    {
+      return false;
+    }
+
+  m_Application->ExecuteAndWriteOutput();
+  return true;
+ 
+}
+
+
+bool
+CommandLineLauncher::BeforeExecute()
+{
+    if( m_Application.IsNull() )
     {
       itkExceptionMacro("No application loaded");  
     }
 
-  // if help is asked...
-  if ( m_Parser->IsAttributExists( "--help", m_Expression ) == true )
-    {
-      this->DisplayHelp();
-    }
-  else
-    {
-      if ( this->LoadParameters() != OKPARAM )
-        {
-          this->LoadApplication();
-          this->DisplayHelp();
+    // if help is asked...
+    if ( m_Parser->IsAttributExists( "--help", m_Expression ) == true )
+      {
+        this->DisplayHelp();
+        return false;
+      }
 
-          return;
-        }
+    // Check the key validity (ie. exist in the application parameters)
+    if ( this->CheckKeyValidity() == false )
+      {
+        std::cerr<<"ERROR: At least one key is not known by the application..."<<std::endl;
+        this->DisplayHelp();
+        return false;
+      }
 
-      m_Application->ExecuteAndWriteOutput();
-    }
+    if ( this->LoadParameters() != OKPARAM )
+      {
+        std::cerr<<"ERROR: troubles loading parameter, please check your line argument..."<<std::endl;
+        // Force to reload the application, the LoadParameters can change wrong values
+        this->LoadApplication();
+        this->DisplayHelp();
+        
+        return false;
+      }
+
+    return true;
 }
 
 bool
@@ -181,15 +197,16 @@ CommandLineLauncher::LoadApplication()
   std::string moduleName;
   if( m_Parser->GetModuleName( moduleName, m_Expression ) != CommandLineParser::OK )
     {
-      std::cout << "LoadApplication, no module found..." <<std::endl;     
+      std::cerr << "ERROR: LoadApplication, no module found..." <<std::endl;     
       return;
     }
 
+  // Instanciate the application usingt the factory
   m_Application = ApplicationRegistry::CreateApplication(moduleName);
   
   if (m_Application.IsNull())
     {
-      std::cout << "Could not find application \"" << moduleName <<"\""<< std::endl;
+      std::cerr << "ERROR: Could not find application \"" << moduleName <<"\""<< std::endl;
       return;
     }
 }
@@ -208,7 +225,6 @@ CommandLineLauncher::LoadParameters()
   
   for( unsigned int i=0; i<nbOfParam; i++ )
     {
-      std::cout<<paramGr->GetParameterByIndex(i)->GetKey()<<std::endl;
       std::vector<std::string> values;
       Parameter::Pointer param =  paramGr->GetParameterByIndex(i);
       // Check if mandatory parameter are present and have value
@@ -216,13 +232,11 @@ CommandLineLauncher::LoadParameters()
         {
           if( !m_Parser->IsAttributExists( std::string("--").append(param->GetKey()), m_Expression ) )
              {
-               std::cout<<"No param for (tu fais quoi la??)... "<<param->GetKey()<<std::endl;
                return MISSINGMANDATORYPARAMETER;
              }
            values = m_Parser->GetAttribut( std::string("--").append(param->GetKey()), m_Expression);
            if(  values.size() == 0 )
              {
-               std::cout<<"No param for... "<<param->GetKey()<<std::endl;
                return MISSINGPARAMETERVALUE;
              }
         }
@@ -234,34 +248,27 @@ CommandLineLauncher::LoadParameters()
               values = m_Parser->GetAttribut( std::string("--").append(param->GetKey()), m_Expression);
               if(  values.size() == 0 )
                 {
-                  std::cout<<"No param for... "<<param->GetKey()<<std::endl;
                   return MISSINGPARAMETERVALUE;
                 }
             }
         }
 
-      // Cast into std::vecto<std::string>
-      std::vector<std::string> svValues;
-      for( unsigned int j=0; j<values.size(); j++)
-        {
-          svValues.push_back(values[j]);
-        }
-      
+   
       ParameterType type = m_Application->GetParameterType( param->GetKey());
       // List values parameter case
       if( type == ParameterType_InputImageList )
         {
-          dynamic_cast<InputImageListParameter *>(param.GetPointer())->SetListFromFileName( svValues );
+          dynamic_cast<InputImageListParameter *>(param.GetPointer())->SetListFromFileName( values );
         }
       else if( type == ParameterType_OutputImageList )
         {
-          dynamic_cast<OutputImageListParameter *>(param.GetPointer())->SetFileNameList( svValues );
+          dynamic_cast<OutputImageListParameter *>(param.GetPointer())->SetFileNameList( values );
         }
       else if( type == ParameterType_StringList )
         {
-          dynamic_cast<StringListParameter *>(param.GetPointer())->SetValue( svValues );
+          dynamic_cast<StringListParameter *>(param.GetPointer())->SetValue( values );
         }
-      else  if( svValues.size() != 1)
+      else  if( values.size() != 1)
         {
           return INVALIDNUMBEROFVALUE;
         }
@@ -272,15 +279,15 @@ CommandLineLauncher::LoadParameters()
           || type == ParameterType_Directory || type == ParameterType_String || type == ParameterType_Filename || type == ParameterType_InputComplexImage 
           || type == ParameterType_InputImage || type == ParameterType_InputVectorData || type == ParameterType_OutputImage || type == ParameterType_OutputVectorData )
         {
-          m_Application->SetParameterString( param->GetKey(), svValues[0] );
+          m_Application->SetParameterString( param->GetKey(), values[0] );
         }
       else if( type == ParameterType_Empty )
         {
-          if( svValues[0] == "1" || svValues[0] == "true")
+          if( values[0] == "1" || values[0] == "true")
             {
               dynamic_cast<EmptyParameter *>(param.GetPointer())->SetActive(true);
             }
-          else if( svValues[0] == "0" || svValues[0] == "false")
+          else if( values[0] == "0" || values[0] == "false")
             {
               dynamic_cast<EmptyParameter *>(param.GetPointer())->SetActive(false);
             }
@@ -308,7 +315,7 @@ CommandLineLauncher::DisplayHelp()
 
 
   std::cerr<<"=== Mandatory parameters: "<<std::endl;
-  std::cerr<<"--modPath (Executables paths)"<<std::endl;
+  std::cerr<<"--"<<m_Parser->GetModulePathKey()<<" (Executables paths)"<<std::endl;
   std::cerr<<"\t   Description: Paths to the executable library."<<std::endl;
   if( !m_Parser->IsAttributExists( "--modPath", m_Expression ) )
     std::cerr<<"\t        Status: ENVIRONEMENT PATH"<<std::endl;
@@ -385,6 +392,82 @@ CommandLineLauncher::DisplayParameterHelp( const Parameter::Pointer & param )
     }
 
   return oss.str();
+}
+
+
+bool
+CommandLineLauncher::CheckUnicity()
+{
+  bool res = true;
+  // Extract expression keys
+  std::vector<std::string> keyList = m_Parser->GetKeyList(m_Expression);
+
+  // Check Unicity
+  for( unsigned int i=0; i<keyList.size(); i++ )
+    {
+      std::vector<std::string> listTmp = keyList;
+      const std::string keyRef = keyList[i];
+      listTmp.erase(listTmp.begin()+i);
+      for( unsigned int j=0; j<listTmp.size(); j++ )
+        {
+          if( keyRef == listTmp[j] )
+            {
+              res = false;
+              break;
+            }
+        }
+      if (res == false )
+        break;
+    }
+
+  return res;
+}
+
+bool
+CommandLineLauncher::CheckKeyValidity()
+{
+  bool res = true;
+  // Extract expression keys
+  std::vector<std::string> expKeyList = m_Parser->GetKeyList(m_Expression);
+  
+  // Extract application keys
+  std::vector<std::string> appKeyList = m_Application->GetParametersKeys( true );
+  appKeyList.push_back( std::string(m_Parser->GetModulePathKey()).substr(2, std::string(m_Parser->GetModulePathKey()).size()) );
+  appKeyList.push_back( std::string(m_Parser->GetModuleNameKey()).substr(2, std::string(m_Parser->GetModuleNameKey()).size()) );
+  appKeyList.push_back( "--help" );
+
+  // Check if each key in the expression exists in the application
+  for( unsigned int i=0; i<expKeyList.size(); i++ )
+    {
+      const std::string refKey = expKeyList[i];
+      bool keyExist = false;
+      for( unsigned int j=0; j<appKeyList.size(); j++ )
+        {
+          if( refKey == appKeyList[j] )
+            {
+              keyExist = true;
+              break;
+            }
+        }
+      if( keyExist == false )
+        {
+          res = false;
+          break;
+        }
+    }
+
+  if(res == false)
+    {
+      for( unsigned int i=0; i<expKeyList.size(); i++ )
+        {
+          std::cout<< expKeyList[i]<<std::endl;
+        }
+      for( unsigned int j=0; j<appKeyList.size(); j++ )
+        {
+          std::cout<< appKeyList[j]<<std::endl;
+        }
+    }
+  return res;
 }
 
 }

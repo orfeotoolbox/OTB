@@ -77,12 +77,17 @@ public:
   /** Launch the process, using the Execute application method 
    * The method will check if the user asked for help (looking at --help key) before loading parameter and launching process.
    **/
-  void Execute();
+  bool Execute();
 
   /** Launch the process, using the ExecuteAndWriteOutput application method 
    * The method will check if the user asked for help (looking at --help key) before loading parameter and launching process.
    */
-  void ExecuteAndWriteOutput();
+  bool ExecuteAndWriteOutput();
+
+  /** Gather the code process to do before Execute and ExecuteAndWriteOutput 
+   * Returns false if a problem occurs, true otherwise.
+   */
+  bool BeforeExecute();
 
   /** Create and display the help of the application */   
   void DisplayHelp();
@@ -106,37 +111,14 @@ protected:
   /** Parse the user expression, extract the key and the associated string and set it as value of each corresonding application parameter. */
   CommandLineLauncher::ParamResultType LoadParameters();
 
-
   /** Create and display the help of the application */   
   std::string DisplayParameterHelp( const Parameter::Pointer & param );
 
-  /** Method used to determine the type of a a parameter (trying a dynamic_cast). */
-  //template <class TParameterType>
-  //bool CanCreateParameter(Parameter * param);
-  
-  /** Set value to prameter using SetValue(string) method. */
-  //template <class TParameterType>
-  //void SetValueToParameter(Parameter * param, const std::string & val );
-  
-  /** Set value to prameter using SetValue(vector<string>) method. */
-  //template <class TParameterType>
-  //void SetValueToParameter(Parameter * param, const std::vector<std::string> & val);
-        
-  /** Set value to prameter using SetValue(string) method. */              
-  //template <class TParameterType>
-  //void SetFileNameToParameter(Parameter * param, const std::string & val );
-  
-  /** Set value to prameter using SetValue(vector<string>) method. */
-  //template <class TParameterType>
-  //void SetFileNameToParameter(Parameter * param, const std::vector<std::string> & val);
-  
-  /** Set value to prameter using SetValue(string) method. */               
-  //template <class TParameterType>
-  //void SetFromFileNameToParameter(Parameter * param, const std::string & val );
-  
-  /** Set value to prameter using SetValue(vector<string>) method. */
-  //template <class TParameterType>
-  //void SetFromFileNameToParameter(Parameter * param, const std::vector<std::string> & val );
+  /** Check if each key is unique in the expression. */   
+  bool CheckUnicity();
+
+  /** Check if each key is valid for the application. */   
+  bool CheckKeyValidity();
 
 private:
 

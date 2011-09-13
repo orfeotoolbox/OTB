@@ -93,13 +93,45 @@ add_test(clTuWrapperCommandLineLauncherNew ${OTB_WRAPPER_COMMAND_LINE_TESTS}
 
 add_test(clTvWrapperCommandLineLauncherTest ${OTB_WRAPPER_COMMAND_LINE_TESTS}
 	otbWrapperCommandLineLauncherTest
-        "Rescale --modulePath ${PATH}"
+        "Rescale --modulePath ${PATH} --in ${INPUTDATA}/poupees.tif --out ${TEMP}/clTvWrapperCommandLineLauncherTest.tif --outmin 15 --outmax 200"
   )
 
 add_test(clTvWrapperCommandLineLauncherTest_Help ${OTB_WRAPPER_COMMAND_LINE_TESTS}
 	otbWrapperCommandLineLauncherTest
         "Rescale --modulePath ${PATH} --help"
   )
+SET_TESTS_PROPERTIES(clTvWrapperCommandLineLauncherTest_Help PROPERTIES WILL_FAIL true)
+
+add_test(clTvWrapperCommandLineLauncherTest_Help2 ${OTB_WRAPPER_COMMAND_LINE_TESTS}
+	otbWrapperCommandLineLauncherTest
+        "Rescale --modulePath ${PATH} --in ${INPUTDATA}/poupees.tif --out ${TEMP}/clTvWrapperCommandLineLauncherTest_Help2.tif --outmin 15 --outmax 200 --help"
+  )
+SET_TESTS_PROPERTIES(clTvWrapperCommandLineLauncherTest_Help2 PROPERTIES WILL_FAIL true)
+
+add_test(clTvWrapperCommandLineLauncherTest_MissingManParam ${OTB_WRAPPER_COMMAND_LINE_TESTS}
+	otbWrapperCommandLineLauncherTest
+        "Rescale --modulePath ${PATH}"
+  )
+SET_TESTS_PROPERTIES(clTvWrapperCommandLineLauncherTest_MissingManParam PROPERTIES WILL_FAIL true)
+
+add_test(clTvWrapperCommandLineLauncherTest_MissingDash ${OTB_WRAPPER_COMMAND_LINE_TESTS}
+	otbWrapperCommandLineLauncherTest
+        "Rescale --modulePath ${PATH} -in image1"
+  )
+SET_TESTS_PROPERTIES(clTvWrapperCommandLineLauncherTest_MissingDash PROPERTIES WILL_FAIL true)
+
+add_test(clTvWrapperCommandLineLauncherTest_DoubleParam ${OTB_WRAPPER_COMMAND_LINE_TESTS}
+	otbWrapperCommandLineLauncherTest
+        "Rescale --modulePath ${PATH} --in image1 --in image2"
+  )
+SET_TESTS_PROPERTIES(clTvWrapperCommandLineLauncherTest_DoubleParam PROPERTIES WILL_FAIL true)
+
+add_test(clTvWrapperCommandLineLauncherTest_WrongParam ${OTB_WRAPPER_COMMAND_LINE_TESTS}
+	otbWrapperCommandLineLauncherTest
+        "Rescale --modulePath ${PATH} --inn image"
+  )
+SET_TESTS_PROPERTIES(clTvWrapperCommandLineLauncherTest_WrongParam PROPERTIES WILL_FAIL true)
+
 
 # --------------------------------------------------------------------
 # ----------------Source files CXX -----------------------------------

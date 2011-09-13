@@ -48,7 +48,7 @@ namespace otb
 namespace Wrapper
 {
 
-  CommandLineParser::CommandLineParser() : m_ModuleNameKey("--moduleName"), m_PathKey("--modulePath")
+  CommandLineParser::CommandLineParser() : m_ModuleNameKey("--moduleName"), m_ModulePathKey("--modulePath")
 {
 }
 
@@ -59,13 +59,13 @@ CommandLineParser::~CommandLineParser()
 CommandLineParser::ParseResultType
 CommandLineParser::GetPaths( std::vector<std::string> & paths, const std::string & exp )
 {
-  std::size_t found = std::string(exp).find(m_PathKey);
+  std::size_t found = std::string(exp).find(m_ModulePathKey);
   if( found == std::string::npos )
     {
       return NOMODULEPATH;
     }
 
-  std::vector<std::string> pathAttribut = GetAttribut(m_PathKey, std::string(exp));
+  std::vector<std::string> pathAttribut = GetAttribut(m_ModulePathKey, std::string(exp));
   
   if( pathAttribut.size() == 0 )
     {
@@ -254,7 +254,7 @@ CommandLineParser::IsAttributExists( const std::string key, const std::string & 
 {
   std::string keySpaced = key;
   keySpaced.append(" ");
-  std::size_t found = std::string(exp).find(keySpaced);
+  std::size_t found = exp.find(keySpaced);
   if( found == std::string::npos )
     {
       return false;
@@ -262,6 +262,37 @@ CommandLineParser::IsAttributExists( const std::string key, const std::string & 
 
   return true;
 }
+
+
+std::vector<std::string>
+CommandLineParser::GetKeyList( const std::string & exp  )
+{
+  std::vector<std::string> keyList;
+  std::string cutExp(exp);
+  std::size_t found = exp.find("--");
+
+  while( found != std::string::npos )
+    {
+      // Supress everything before the key
+      cutExp = cutExp.substr(found+2, exp.size());
+      // Search the end of the key (a space)
+      std::size_t foundSpace = cutExp.find(" ");
+      if( foundSpace != std::string::npos )
+        {
+          keyList.push_back( cutExp.substr(0, foundSpace) );
+        }
+      else
+        {
+          keyList.push_back( cutExp );
+        }
+
+      // Search the next key (ie. "--")
+      found = cutExp.find("--");
+    }
+
+  return keyList;
+}
+
 
 }
 }
