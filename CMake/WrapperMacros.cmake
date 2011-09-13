@@ -12,7 +12,7 @@ macro(OTB_CREATE_APPLICATION)
    include_directories(${CMAKE_SOURCE_DIR}/Code/Core ${CMAKE_SOURCE_DIR}/Code/Common )
    include_directories(${APPLICATION_INCLUDE_DIRS})
    add_library(${APPLICATION_TARGET_NAME} MODULE ${APPLICATION_SOURCES})
-   target_link_libraries(${APPLICATION_TARGET_NAME} OTBWrapperCore ${APPLICATION_LINK_LIBRARIES})
+   target_link_libraries(${APPLICATION_TARGET_NAME} OTBApplicationEngine ${APPLICATION_LINK_LIBRARIES})
    set_target_properties(${APPLICATION_TARGET_NAME} PROPERTIES PREFIX "")
 
    if (APPLE)
@@ -20,6 +20,6 @@ macro(OTB_CREATE_APPLICATION)
    endif()
 
    install(TARGETS ${APPLICATION_TARGET_NAME}
-            RUNTIME DESTINATION lib/otbapp
-            LIBRARY DESTINATION lib/otbapp)
+            RUNTIME DESTINATION OTB_INSTALL_BIN_DIR_CM24
+            LIBRARY DESTINATION OTB_INSTALL_LIB_DIR_CM24)
 endmacro(OTB_CREATE_APPLICATION)
