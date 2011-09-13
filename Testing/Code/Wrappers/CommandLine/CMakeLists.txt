@@ -1,8 +1,10 @@
-set(CXX_TEST_PATH ${EXECUTABLE_OUTPUT_PATH})
 
-set(INPUTDATA ${OTB_DATA_ROOT}/Input)
-set(TEMP ${OTB-Wrapper_BINARY_DIR}/Testing/Temporary)
-set(PATH ${OTB-Wrapper_BINARY_DIR}/Example)
+SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
+SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
+SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
+SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
+
+SET(APPLICATIONSPATH ${OTB_BINARY_DIR}/bin)
 
 if(WIN32)
   add_definitions(-DWIN32)
@@ -36,30 +38,30 @@ SET_TESTS_PROPERTIES(clTvWrapperCommandLineParserTest_NoModule PROPERTIES WILL_F
 
 add_test(clTvWrapperCommandLineParserTest_NonAlphaNumModuleName ${OTB_WRAPPER_COMMAND_LINE_TESTS}
 	otbWrapperCommandLineParserTest2
-        "-Re+scale --modulePath ${PATH}"
+        "-Re+scale --modulePath ${APPLICATIONSPATH}"
   )
 SET_TESTS_PROPERTIES(clTvWrapperCommandLineParserTest_NonAlphaNumModuleName PROPERTIES WILL_FAIL true)
 
 add_test(clTvWrapperCommandLineParserTest_GoodModule ${OTB_WRAPPER_COMMAND_LINE_TESTS}
 	otbWrapperCommandLineParserTest2
-        "Rescale --modulePath ${PATH}"
+        "Rescale --modulePath ${APPLICATIONSPATH}"
 )
 
 add_test(clTvWrapperCommandLineParserTest_WithKeyNoModule ${OTB_WRAPPER_COMMAND_LINE_TESTS}
 	otbWrapperCommandLineParserTest2
-        "--moduleName --modulePath ${PATH}"
+        "--moduleName --modulePath ${APPLICATIONSPATH}"
   )
 SET_TESTS_PROPERTIES(clTvWrapperCommandLineParserTest_WithKeyNoModule PROPERTIES WILL_FAIL true)
 
 add_test(clTvWrapperCommandLineParserTest_WithKeyNonAlphaNumModuleName ${OTB_WRAPPER_COMMAND_LINE_TESTS}
 	otbWrapperCommandLineParserTest2
-        "--moduleName -Re+scale --modulePath ${PATH}"
+        "--moduleName -Re+scale --modulePath ${APPLICATIONSPATH}"
   )
 SET_TESTS_PROPERTIES(clTvWrapperCommandLineParserTest_WithKeyNonAlphaNumModuleName PROPERTIES WILL_FAIL true)
 
 add_test(clTvWrapperCommandLineParserTest_WithKeyGoodModule ${OTB_WRAPPER_COMMAND_LINE_TESTS}
 	otbWrapperCommandLineParserTest2
-        "--moduleName Rescale --modulePath ${PATH}"
+        "--moduleName Rescale --modulePath ${APPLICATIONSPATH}"
 )
 
 add_test(clTvWrapperCommandLineParserTest_NoPath ${OTB_WRAPPER_COMMAND_LINE_TESTS}
@@ -76,13 +78,13 @@ SET_TESTS_PROPERTIES(clTvWrapperCommandLineParserTest_WrongPath PROPERTIES WILL_
 
 add_test(clTvWrapperCommandLineParserTest_MultiplePathOneWrong ${OTB_WRAPPER_COMMAND_LINE_TESTS}
 	otbWrapperCommandLineParserTest2
-        "Rescale --modulePath ${PATH} FakePath"
+        "Rescale --modulePath ${APPLICATIONSPATH} FakePath"
 )
 SET_TESTS_PROPERTIES(clTvWrapperCommandLineParserTest_MultiplePathOneWrong PROPERTIES WILL_FAIL true)
 
 add_test(clTvWrapperCommandLineParserTest_MultiplePath ${OTB_WRAPPER_COMMAND_LINE_TESTS}
 	otbWrapperCommandLineParserTest2
-        "Rescale --modulePath ${PATH} ${PATH}"
+        "Rescale --modulePath ${APPLICATIONSPATH} ${APPLICATIONSPATH}"
 )
 
 
@@ -93,42 +95,42 @@ add_test(clTuWrapperCommandLineLauncherNew ${OTB_WRAPPER_COMMAND_LINE_TESTS}
 
 add_test(clTvWrapperCommandLineLauncherTest ${OTB_WRAPPER_COMMAND_LINE_TESTS}
 	otbWrapperCommandLineLauncherTest
-        "Rescale --modulePath ${PATH} --in ${INPUTDATA}/poupees.tif --out ${TEMP}/clTvWrapperCommandLineLauncherTest.tif --outmin 15 --outmax 200"
+        "Rescale --modulePath ${APPLICATIONSPATH} --in ${INPUTDATA}/poupees.tif --out ${TEMP}/clTvWrapperCommandLineLauncherTest.tif --outmin 15 --outmax 200"
   )
 
 add_test(clTvWrapperCommandLineLauncherTest_Help ${OTB_WRAPPER_COMMAND_LINE_TESTS}
 	otbWrapperCommandLineLauncherTest
-        "Rescale --modulePath ${PATH} --help"
+        "Rescale --modulePath ${APPLICATIONSPATH} --help"
   )
 SET_TESTS_PROPERTIES(clTvWrapperCommandLineLauncherTest_Help PROPERTIES WILL_FAIL true)
 
 add_test(clTvWrapperCommandLineLauncherTest_Help2 ${OTB_WRAPPER_COMMAND_LINE_TESTS}
 	otbWrapperCommandLineLauncherTest
-        "Rescale --modulePath ${PATH} --in ${INPUTDATA}/poupees.tif --out ${TEMP}/clTvWrapperCommandLineLauncherTest_Help2.tif --outmin 15 --outmax 200 --help"
+        "Rescale --modulePath ${APPLICATIONSPATH} --in ${INPUTDATA}/poupees.tif --out ${TEMP}/clTvWrapperCommandLineLauncherTest_Help2.tif --outmin 15 --outmax 200 --help"
   )
 SET_TESTS_PROPERTIES(clTvWrapperCommandLineLauncherTest_Help2 PROPERTIES WILL_FAIL true)
 
 add_test(clTvWrapperCommandLineLauncherTest_MissingManParam ${OTB_WRAPPER_COMMAND_LINE_TESTS}
 	otbWrapperCommandLineLauncherTest
-        "Rescale --modulePath ${PATH}"
+        "Rescale --modulePath ${APPLICATIONSPATH}"
   )
 SET_TESTS_PROPERTIES(clTvWrapperCommandLineLauncherTest_MissingManParam PROPERTIES WILL_FAIL true)
 
 add_test(clTvWrapperCommandLineLauncherTest_MissingDash ${OTB_WRAPPER_COMMAND_LINE_TESTS}
 	otbWrapperCommandLineLauncherTest
-        "Rescale --modulePath ${PATH} -in image1"
+        "Rescale --modulePath ${APPLICATIONSPATH} -in image1"
   )
 SET_TESTS_PROPERTIES(clTvWrapperCommandLineLauncherTest_MissingDash PROPERTIES WILL_FAIL true)
 
 add_test(clTvWrapperCommandLineLauncherTest_DoubleParam ${OTB_WRAPPER_COMMAND_LINE_TESTS}
 	otbWrapperCommandLineLauncherTest
-        "Rescale --modulePath ${PATH} --in image1 --in image2"
+        "Rescale --modulePath ${APPLICATIONSPATH} --in image1 --in image2"
   )
 SET_TESTS_PROPERTIES(clTvWrapperCommandLineLauncherTest_DoubleParam PROPERTIES WILL_FAIL true)
 
 add_test(clTvWrapperCommandLineLauncherTest_WrongParam ${OTB_WRAPPER_COMMAND_LINE_TESTS}
 	otbWrapperCommandLineLauncherTest
-        "Rescale --modulePath ${PATH} --inn image"
+        "Rescale --modulePath ${APPLICATIONSPATH} --inn image"
   )
 SET_TESTS_PROPERTIES(clTvWrapperCommandLineLauncherTest_WrongParam PROPERTIES WILL_FAIL true)
 
@@ -146,5 +148,3 @@ otbWrapperCommandLineLauncherTests.cxx
 include_directories(${CMAKE_SOURCE_DIR}/Code/Wrappers/CommandLine ${CMAKE_SOURCE_DIR}/Code/Core)
 add_executable(otbWrapperCommandLineTests ${Wrapper_Command_Line_SRCS})
 target_link_libraries(otbWrapperCommandLineTests OTBIO OTBCommon ITKIO ITKCommon OTBTesting OTBWrapperCommandLine)
-#target_link_libraries(otbWrapperCommandLineTests OTBIO OTBCommon ITKIO ITKCommon OTBTesting OTBWrapperCommandLine)
-

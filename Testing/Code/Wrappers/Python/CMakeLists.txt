@@ -1,5 +1,12 @@
 
-set(TEST_DRIVER "${OTB_TEST_DRIVER}"
+SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
+SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
+SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
+SET(SPECTRUM_DB ${OTB_DATA_ROOT}/Input/BD-CNES)
+SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
+
+
+set(TEST_DRIVER otbTestDriver
     --add-before-env PYTHONPATH        "${CMAKE_BINARY_DIR}/Code/Wrappers/SWIG"
     --add-before-env PYTHONPATH        $<TARGET_FILE_DIR:_otbApplication>
     --add-before-env ITK_AUTOLOAD_PATH $<TARGET_FILE_DIR:otbapp_Smoothing> )

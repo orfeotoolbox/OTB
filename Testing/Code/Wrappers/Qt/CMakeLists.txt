@@ -20,7 +20,7 @@ target_link_libraries(otbWrapperQtWidgetTests
                         OTBIO
                         OTBCommon
                         OTBTesting
-                        OTBWrapperCore
+                        OTBApplicationEngine
                         OTBWrapperQtWidget)
 
 add_test(owTvQtWidgetParameterFactory ${OTB_WRAPPER_QTWIDGET_TESTS}
