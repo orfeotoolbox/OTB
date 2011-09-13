@@ -1,7 +1,3 @@
-include_directories(../Core)
-include_directories(../Common)
-include_directories(../CommandLine)
-
 # Generate Qt based GUI
 option ( WRAP_QT "Enable Qt wrappers" OFF )
 option ( WRAP_PYQT "Enable PyQt wrappers" OFF )
