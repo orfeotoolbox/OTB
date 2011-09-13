@@ -150,7 +150,7 @@ private:
 
   void DoExecute()
   { 
-    typename ExtractROIFilterType::InputImageType* inImage = GetParameterImage("in");
+    ExtractROIFilterType::InputImageType* inImage = GetParameterImage("in");
     
     m_ExtractROIFilter->SetInput(inImage);
     m_ExtractROIFilter->SetStartX(GetParameterInt("startx"));
