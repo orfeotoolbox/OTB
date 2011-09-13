@@ -57,6 +57,7 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Code/Visu
   ${OTB_SOURCE_DIR}/Code/Visualization
   ${OTB_BINARY_DIR}/Code/Visualization
+  ${OTB_SOURCE_DIR}/Code/ApplicationEngine
   ${OTB_MSINTTYPES_INCLUDE_DIR_BUILDTREE}
   ${OTB_SOURCE_DIR}/Utilities/otbsvm
   ${OTB_SOURCE_DIR}/Utilities/otbossimplugins
@@ -311,6 +312,7 @@ SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
   OBIA
   Fuzzy
   ObjectDetection
+  ApplicationEngine
   Utilities
   Utilities/ITK
   ${OTB_MSINTTYPES_INCLUDE_RELATIVE_DIR}

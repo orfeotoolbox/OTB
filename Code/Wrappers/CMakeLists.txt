@@ -22,4 +22,4 @@ if ( WRAP_PYQT )
   add_subdirectory(PyQt)
 endif()
 
- add_subdirectory(CommandLine)
+add_subdirectory(CommandLine)
