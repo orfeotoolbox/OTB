@@ -149,7 +149,7 @@ protected:
   Parameter() : m_Name(""),
                 m_Description(""),
                 m_Key(""),
-                m_Mandatory(false),
+                m_Mandatory(true),
                 m_Active(false),
                 m_UserValue(false),
                 m_DefaultValueMode(DefaultValueMode_UNKNOWN),
