@@ -59,9 +59,9 @@ if ( WRAP_PYTHON )
   # Run swig
   set(CMAKE_SWIG_FLAGS ${CMAKE_SWIG_GLOBAL_FLAGS})
   set(CMAKE_SWIG_OUTDIR ${CMAKE_CURRENT_BINARY_DIR})
-  set(SWIG_MODULE_otbApplication_EXTRA_DEPS OTBWrapperCore ${SWIG_HEADERS})
+  set(SWIG_MODULE_otbApplication_EXTRA_DEPS OTBApplicationEngine ${SWIG_HEADERS})
   SWIG_add_module ( otbApplication python otbApplication.i otbApplicationPYTHON_wrap.cxx )
-  SWIG_link_libraries ( otbApplication ${PYTHON_LIBRARIES} OTBWrapperCore)
+  SWIG_link_libraries ( otbApplication ${PYTHON_LIBRARIES} OTBApplicationEngine)
   set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/otbApplicationPYTHON_wrap.cxx COMPILE_FLAGS "-w")
 
 endif()

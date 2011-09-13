@@ -10,7 +10,7 @@ if ( WRAP_JAVA )
 endif ()
 
 if ( WRAP_QT )
-  add_subdirectory(QtWidget)
+  add_subdirectory(Qt)
 endif ()
 
 if ( WRAP_PYQT )

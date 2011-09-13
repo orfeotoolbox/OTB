@@ -1,7 +1,7 @@
 set(CXX_TEST_PATH ${EXECUTABLE_OUTPUT_PATH})
 
 set(INPUTDATA ${OTB_DATA_ROOT}/Input)
-set(TEMP ${OTB-Wrapper_BINARY_DIR}/Testing/Temporary)
+set(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
 
 if(WIN32)
   add_definitions(-DWIN32)
@@ -165,4 +165,4 @@ otbWrapperStringListParameterTest.cxx
 
 include_directories(${CMAKE_SOURCE_DIR}/Code/Core)
 add_executable(otbWrapperTests ${Wrapper_SRCS})
-target_link_libraries(otbWrapperTests OTBIO OTBCommon ITKIO ITKCommon OTBTesting OTBWrapperCore)
+target_link_libraries(otbWrapperTests OTBApplicationEngine OTBTesting)
