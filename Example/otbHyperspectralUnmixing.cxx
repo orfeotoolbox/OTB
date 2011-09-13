@@ -168,7 +168,7 @@ private:
      */
     // Dimension Reduction
     DimReductionMethod dimReduction = DimReductionMethod_NONE;
-    if ( HasValue("dr") )
+    if ( IsParameterEnabled("dr") && HasValue("dr") )
       {
       std::string dimReductionStr = GetParameterString("dr");
       if ( boost::to_upper_copy(dimReductionStr) == "PCA" )
@@ -186,13 +186,13 @@ private:
 
     // Number of endmembers
     unsigned int nbEndmembers = 0;
-    if ( HasValue("ne") )
+    if ( IsParameterEnabled("ne") && HasValue("ne") )
       {
       nbEndmembers = GetParameterInt("ne");
       }
 
     // Dimensionnality estimation
-    if ( HasValue("de") )
+    if ( IsParameterEnabled("de") && HasValue("de") )
       {
       std::string dimEstMethodStr = GetParameterString("de");
       if (boost::to_upper_copy(dimEstMethodStr) != "ELM")
@@ -201,9 +201,9 @@ private:
         }
       }
 
-    if ( HasValue("ee") )
+    if ( IsParameterEnabled("ee") && HasValue("ee") )
       {
-      std::string eeEstMethodStr = GetParameterString("EndmembersEstimationMethod");
+      std::string eeEstMethodStr = GetParameterString("ee");
       if (boost::to_upper_copy(eeEstMethodStr) != "VCA")
         {
         std::cerr << "Only VCA is supported for parameter EndmembersEstimationMethod" << std::endl;
@@ -211,15 +211,18 @@ private:
       }
 
     std::string inputEndmembers;
-    if ( HasValue("InputEndmembers") )
+    if ( IsParameterEnabled("ie") && HasValue("ie") )
       {
-      inputEndmembers = GetParameterString("InputEndmembers");
+      inputEndmembers = GetParameterString("ie");
       }
 
     UnMixingMethod unmixingAlgo = UnMixingMethod_FCLS;
-    if ( HasValue("UnmixingAlgorithm") )
+    std::cout << " IsParameterEnabled(ua)  " << IsParameterEnabled("ua")  << std::endl;
+    std::cout << " HasValue(ua)  " << HasValue("ua") << std::endl;
+    if ( IsParameterEnabled("ua") && HasValue("ua") )
       {
-      std::string unmixingAlgoStr = GetParameterString("UnmixingAlgorithm");
+      std::string unmixingAlgoStr = GetParameterString("ua");
+
       if ( boost::to_upper_copy(unmixingAlgoStr) == "UCLS" )
         {
         unmixingAlgo = UnMixingMethod_UCLS;
@@ -234,7 +237,7 @@ private:
                     << " unmixing algorithm" );
 
     std::string outputEndmembers;
-    if ( HasValue("oe") && inputEndmembers.empty() )
+    if ( IsParameterEnabled("oe") && HasValue("oe") && inputEndmembers.empty() )
       {
       outputEndmembers = GetParameterString("oe");
       }
@@ -393,7 +396,7 @@ private:
       break;
     }
 
-    if ( outputEndmembers.empty() )
+    if ( !outputEndmembers.empty() )
       {
       /*
        * Write endmembers
