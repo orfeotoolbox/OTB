@@ -376,7 +376,6 @@ void Application::SetParameterString(std::string parameter, std::string value)
     }
 }
 
-
 void Application::SetParameterOutputImage(std::string parameter, VectorImageType* value)
 {
   Parameter* param = GetParameterByKey(parameter);
@@ -468,7 +467,12 @@ std::string Application::GetParameterString(std::string parameter)
   std::string ret;
   Parameter* param = GetParameterByKey(parameter);
 
-  if (dynamic_cast<StringParameter*>(param))
+  if (dynamic_cast<ChoiceParameter*>(param))
+    {
+    ChoiceParameter* paramDown = dynamic_cast<ChoiceParameter*>(param);
+    ret = paramDown->GetChoiceName( paramDown->GetValue() );
+    }
+  else if (dynamic_cast<StringParameter*>(param))
     {
     StringParameter* paramDown = dynamic_cast<StringParameter*>(param);
     ret = paramDown->GetValue();
