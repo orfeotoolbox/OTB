@@ -58,6 +58,7 @@ public:
     // everything went fine, store the object references
     m_Reader = reader;
     m_VectorData = reader->GetOutput();
+    SetActive(true);
   }
 
   std::string GetFileName() const

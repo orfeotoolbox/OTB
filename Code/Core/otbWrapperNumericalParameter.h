@@ -56,12 +56,15 @@ public:
   /** Set the value */
   void SetValue( ScalarType value)
   {
+    // TODO check minimum/maximum
     m_Value = value;
+    SetActive(true);
   }
 
-  void SetValue( const std::string & value )
+  void SetValue( const std::string & valueStr )
   {
-    m_Value = static_cast<ScalarType>(atof(value.c_str()));
+    ScalarType value = static_cast<ScalarType>(atof(valueStr.c_str()));
+    SetValue(value);
   }
 
   /** Get the value */

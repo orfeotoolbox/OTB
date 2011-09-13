@@ -117,8 +117,8 @@ ChoiceParameter::GetNbChoices( void )
 void
 ChoiceParameter::SetValue(unsigned int v)
 {
-  // Perform any cast
   m_CurrentChoice = v;
+  SetActive(true);
   // Call Modified();
   this->Modified();
 }
@@ -133,8 +133,7 @@ ChoiceParameter::SetValue(std::string choiceKey)
     {
     if ( it->m_Key == choiceKey )
       {
-      m_CurrentChoice = i;
-      this->Modified();
+      SetValue(i);
       return;
       }
     ++i;

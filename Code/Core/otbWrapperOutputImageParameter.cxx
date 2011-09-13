@@ -66,6 +66,7 @@ void
 OutputImageParameter::SetValue(VectorImageType* image)
 {
   m_Image = image;
+  SetActive(true);
 }
 
 bool

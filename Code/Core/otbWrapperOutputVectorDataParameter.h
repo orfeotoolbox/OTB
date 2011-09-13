@@ -55,6 +55,7 @@ public:
   void SetValue(VectorDataType* vd)
   {
     m_VectorData = vd;
+    SetActive(true);
   }
 
   /** Return any value */

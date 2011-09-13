@@ -52,6 +52,7 @@ public:
     reader->UpdateOutputInformation();
     m_Reader = reader;
     m_Image = reader->GetOutput();
+    SetActive(true);
   }
 
   std::string GetFileName() const

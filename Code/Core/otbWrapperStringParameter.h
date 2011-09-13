@@ -49,6 +49,7 @@ public:
   void SetValue( std::string value)
   {
     m_Value = value;
+    SetActive(true);
   }
 
   /** Get the value */

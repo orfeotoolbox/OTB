@@ -58,6 +58,7 @@ InputImageParameter::SetFromFileName(const std::string& filename)
     // everything went fine, store the object references
     m_Reader = reader;
     m_Image = reader->GetOutput();
+    SetActive(true);
     }
 }
 

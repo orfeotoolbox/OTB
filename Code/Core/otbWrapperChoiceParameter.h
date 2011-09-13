@@ -72,7 +72,6 @@ public:
   /** Get all parameters that are child of this choice parameter */
   std::vector<std::string> GetParametersKeys();
 
-
   /** Get the number of available choice */
   unsigned int GetNbChoices( void );
 

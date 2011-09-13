@@ -63,6 +63,7 @@ public:
         m_ReaderList->PushBack(reader);
         m_ImageList->PushBack(reader->GetOutput());
       }
+    SetActive(true);
 
     this->Modified();
   }
@@ -77,7 +78,7 @@ public:
     // everything went fine, store the object references
     m_ReaderList->PushBack(reader);
     m_ImageList->PushBack(reader->GetOutput());
-
+    SetActive(true);
     this->Modified();
   }
 
