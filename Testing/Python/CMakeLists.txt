@@ -43,12 +43,21 @@ add_test( NAME pyTvInternalReader
                   ${TEMP}/pyTvInternalReader.tif
                   )
 
-add_test( NAME pyTvHyperspectralUnmixing1
+add_test( NAME pyTvHyperspectralUnmixingUCLS
           COMMAND ${TEST_DRIVER} Execute
                   ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonHyperspectralUnmixing1.py
-                  ${OTB_DATA_ROOT}/Input/cupriteSubHsi.tif
-                  ${TEMP}/pyTvHyperspectralUnmixing1.tif
+                  ${OTB_DATA_ROOT}/Input/Hyperspectral/synthetic/hsi_cube.tif
+                  ${TEMP}/pyTvHyperspectralUnmixing_ucls.tif
                   5
-#                  ucls
-fcls
+                  ucls
                   )
+
+add_test( NAME pyTvHyperspectralUnmixingFCLS
+          COMMAND ${TEST_DRIVER} Execute
+                  ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonHyperspectralUnmixing1.py
+                  ${OTB_DATA_ROOT}/Input/Hyperspectral/synthetic/hsi_cube.tif
+                  ${TEMP}/pyTvHyperspectralUnmixing_fcls.tif
+                  5
+                  fcls
+                  )
+                  
