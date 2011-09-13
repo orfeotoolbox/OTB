@@ -42,3 +42,13 @@ add_test( NAME pyTvInternalReader
                   ${OTB_DATA_ROOT}/Input/ToulouseExtract_WithGeom.tif
                   ${TEMP}/pyTvInternalReader.tif
                   )
+
+add_test( NAME pyTvHyperspectralUnmixing1
+          COMMAND ${TEST_DRIVER} Execute
+                  ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonHyperspectralUnmixing1.py
+                  ${OTB_DATA_ROOT}/Input/cupriteSubHsi.tif
+                  ${TEMP}/pyTvHyperspectralUnmixing1.tif
+                  5
+#                  ucls
+fcls
+                  )
