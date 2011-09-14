@@ -75,15 +75,21 @@ private:
 
   void DoUpdateParameters()
   {
-    // Nothing to do here : all parameters are independent
+    // Nothing to do here for the parameters : all are independent
+    
+    // Reinitialize the object
+    m_RescaleFilter = RescaleImageFilterType::New();
+    m_MinMaxFilter = MinMaxFilterType::New();
+    this->ClearInternalProcessList();
+    this->AddInternalProcess( m_MinMaxFilter->GetStreamer(), "Min/Max computing" );
   }
 
   void DoExecute()
-  { 
+  {
     FloatVectorImageType::Pointer inImage = GetParameterImage("in");
-   
+
     m_MinMaxFilter->GetStreamer()->SetNumberOfLinesStrippedStreaming( 50 );
-   
+
     m_MinMaxFilter->SetInput( inImage );
     std::cout<<inImage->GetLargestPossibleRegion()<<std::endl;
     otb::StandardFilterWatcher watcher(m_MinMaxFilter, "Min Max Computation");
