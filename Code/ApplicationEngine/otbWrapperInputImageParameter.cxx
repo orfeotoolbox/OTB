@@ -74,14 +74,14 @@ InputImageParameter::GetFileName() const
 }
 
 
-VectorImageType*
+FloatVectorImageType*
 InputImageParameter::GetImage() const
 {
   return m_Image;
 }
 
 void
-InputImageParameter::SetImage(VectorImageType* image)
+InputImageParameter::SetImage(FloatVectorImageType* image)
 {
    m_Image = image;
    m_Reader = ImageFileReaderType::Pointer();
@@ -96,7 +96,7 @@ InputImageParameter::HasValue() const
 void
 InputImageParameter::ClearValue()
 {
-  m_Image = VectorImageType::Pointer();
+  m_Image = FloatVectorImageType::Pointer();
   m_Reader = ImageFileReaderType::Pointer();
 }
 

@@ -43,8 +43,8 @@ public:
   itkTypeMacro(ExtractROI, otb::Application);
 
   /** Filters typedef */
-  typedef otb::MultiChannelExtractROI<VectorImageType::InternalPixelType, 
-                                      VectorImageType::InternalPixelType> ExtractROIFilterType;
+  typedef otb::MultiChannelExtractROI<FloatVectorImageType::InternalPixelType, 
+                                      FloatVectorImageType::InternalPixelType> ExtractROIFilterType;
   
 private:
   ExtractROI()
@@ -131,7 +131,7 @@ private:
 
   bool CropRegionOfInterest()
   {
-    VectorImageType::RegionType region;
+    FloatVectorImageType::RegionType region;
     region.SetSize(0,  GetParameterInt("sizex"));
     region.SetSize(1,  GetParameterInt("sizey"));
     region.SetIndex(0, GetParameterInt("startx"));

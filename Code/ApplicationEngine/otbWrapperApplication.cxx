@@ -117,11 +117,11 @@ void Application::ExecuteAndWriteOutput()
       it != paramList.end();
       ++it)
     {
-    if (GetParameterType(*it) == ParameterType_OutputImage)
+    if (GetParameterType(*it) == ParameterType_OutputImage
+        && IsParameterEnabled(*it) )
       {
       Parameter* param = GetParameterByKey(*it);
       OutputImageParameter* outputParam = dynamic_cast<OutputImageParameter*>(param);
-      outputParam->InitializeWriter();
       m_CurrentProcess = outputParam->GetWriter();
       outputParam->Write();
       m_WroteOutput++;
@@ -376,14 +376,13 @@ void Application::SetParameterString(std::string parameter, std::string value)
     }
 }
 
-void Application::SetParameterOutputImage(std::string parameter, VectorImageType* value)
+void Application::SetParameterOutputImage(std::string parameter, FloatVectorImageType* value)
 {
   Parameter* param = GetParameterByKey(parameter);
 
   if (dynamic_cast<OutputImageParameter*>(param))
     {
     OutputImageParameter* paramDown = dynamic_cast<OutputImageParameter*>(param);
-    paramDown->InitializeWriter();
     paramDown->SetValue(value);
     }
 }
@@ -517,9 +516,9 @@ std::string Application::GetParameterString(std::string parameter)
   return ret;
 }
 
-VectorImageType* Application::GetParameterImage(std::string parameter)
+FloatVectorImageType* Application::GetParameterImage(std::string parameter)
 {
-  VectorImageType::Pointer ret;
+  FloatVectorImageType::Pointer ret;
   Parameter* param = GetParameterByKey(parameter);
 
   if (dynamic_cast<InputImageParameter*>(param))
@@ -532,9 +531,9 @@ VectorImageType* Application::GetParameterImage(std::string parameter)
   return ret;
 }
 
-VectorImageType* Application::GetParameterComplexImage(std::string parameter)
+ComplexFloatVectorImageType* Application::GetParameterComplexImage(std::string parameter)
 {
-  VectorImageType::Pointer ret;
+  ComplexFloatVectorImageType::Pointer ret;
   Parameter* param = GetParameterByKey(parameter);
 
   if (dynamic_cast<InputComplexImageParameter*>(param))

@@ -41,7 +41,7 @@ public:
   itkTypeMacro(InternalReader, otb::Application);
 
   /** Filters typedef */
-  typedef otb::ImageFileReader<VectorImageType>  ReaderFilterType;
+  typedef otb::ImageFileReader<FloatVectorImageType>  ReaderFilterType;
 
 private:
    InternalReader()

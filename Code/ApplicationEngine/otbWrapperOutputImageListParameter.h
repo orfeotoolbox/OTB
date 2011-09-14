@@ -39,8 +39,8 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef otb::ObjectList<VectorImageType>               VectorImageListType;
-  typedef otb::StreamingImageFileWriter<VectorImageType> ImageFileWriterType;
+  typedef otb::ObjectList<FloatVectorImageType>               VectorImageListType;
+  typedef otb::StreamingImageFileWriter<FloatVectorImageType> ImageFileWriterType;
   typedef otb::ObjectList<ImageFileWriterType>           ImageFileWriterListType;
 
   /** Defining ::New() static method */
@@ -55,13 +55,13 @@ public:
   /** Get the value */
   itkGetObjectMacro(ImageList, VectorImageListType);
 
-  void AddImage( VectorImageType * image )
+  void AddImage( FloatVectorImageType * image )
   {
     m_ImageList->PushBack( image );
     this->Modified();
   }
 
-  VectorImageType * GetNthImage( unsigned int i )
+  FloatVectorImageType * GetNthImage( unsigned int i )
   {
     return m_ImageList->GetNthElement(i);
   }

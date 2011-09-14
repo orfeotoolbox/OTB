@@ -54,16 +54,36 @@ typedef enum
   UserLevel_Advanced
 } UserLevel;
 
-typedef double                         PixelType;
-typedef otb::VectorImage<PixelType, 2> VectorImageType;
+typedef enum
+{
+  ImagePixelType_int8,
+  ImagePixelType_uint8,
+  ImagePixelType_int16,
+  ImagePixelType_uint16,
+  ImagePixelType_int32,
+  ImagePixelType_uint32,
+  ImagePixelType_float,
+  ImagePixelType_double,
+} ImagePixelType;
 
-typedef std::complex<float>            ComplexPixelType;
-typedef otb::VectorImage<PixelType, 2> ComplexVectorImageType;
+typedef otb::VectorImage<char>           Int8VectorImageType;
+typedef otb::VectorImage<unsigned char>  UInt8VectorImageType;
+typedef otb::VectorImage<short>          Int16VectorImageType;
+typedef otb::VectorImage<unsigned short> UInt16VectorImageType;
+typedef otb::VectorImage<int>            Int32VectorImageType;
+typedef otb::VectorImage<unsigned int>   UInt32VectorImageType;
+typedef otb::VectorImage<float>          FloatVectorImageType;
+typedef otb::VectorImage<double>         DoubleVectorImageType;
 
-typedef double                                             VectorDataCoordinatePrecisionType;
-typedef double                                             VectorDataValuePrecisionType;
-typedef otb::VectorData <VectorDataCoordinatePrecisionType,
-                         2, VectorDataValuePrecisionType>  VectorDataType;
+typedef std::complex<float>                   ComplexPixelType;
+typedef otb::VectorImage<ComplexPixelType, 2> ComplexFloatVectorImageType;
+
+typedef double VectorDataCoordinatePrecisionType;
+typedef double VectorDataValuePrecisionType;
+typedef otb::VectorData<VectorDataCoordinatePrecisionType,
+                        2,
+                        VectorDataValuePrecisionType>
+          VectorDataType;
 
 
 } // end namespace Wrapper

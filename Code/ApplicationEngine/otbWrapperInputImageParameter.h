@@ -50,9 +50,9 @@ public:
 
   std::string GetFileName() const;
 
-  VectorImageType* GetImage() const;
+  FloatVectorImageType* GetImage() const;
 
-  void SetImage(VectorImageType* image);
+  void SetImage(FloatVectorImageType* image);
 
   bool HasValue() const;
 
@@ -65,9 +65,9 @@ protected:
   /** Destructor */
   virtual ~InputImageParameter();
 
-  VectorImageType::Pointer m_Image;
+  FloatVectorImageType::Pointer m_Image;
 
-  typedef otb::ImageFileReader<VectorImageType> ImageFileReaderType;
+  typedef otb::ImageFileReader<FloatVectorImageType> ImageFileReaderType;
   ImageFileReaderType::Pointer m_Reader;
 
 private:

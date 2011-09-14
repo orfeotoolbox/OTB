@@ -42,8 +42,8 @@ public:
   itkTypeMacro(Rescale, otb::Application);
 
   /** Filters typedef */
-  typedef otb::StreamingMinMaxVectorImageFilter<VectorImageType>  MinMaxFilterType;
-  typedef otb::VectorRescaleIntensityImageFilter<VectorImageType> RescaleImageFilterType;
+  typedef otb::StreamingMinMaxVectorImageFilter<FloatVectorImageType>  MinMaxFilterType;
+  typedef otb::VectorRescaleIntensityImageFilter<FloatVectorImageType> RescaleImageFilterType;
 
 
 private:
@@ -80,7 +80,7 @@ private:
 
   void DoExecute()
   { 
-    VectorImageType::Pointer inImage = GetParameterImage("in");
+    FloatVectorImageType::Pointer inImage = GetParameterImage("in");
    
     m_MinMaxFilter->GetStreamer()->SetNumberOfLinesStrippedStreaming( 50 );
    
@@ -90,13 +90,13 @@ private:
  
     m_MinMaxFilter->Update();
  
-    VectorImageType::PixelType inMin, inMax;
+    FloatVectorImageType::PixelType inMin, inMax;
 
     m_RescaleFilter->SetInput( inImage );
     m_RescaleFilter->SetInputMinimum( m_MinMaxFilter->GetMinimum() );
     m_RescaleFilter->SetInputMaximum( m_MinMaxFilter->GetMaximum() );
 
-    VectorImageType::PixelType outMin, outMax;
+    FloatVectorImageType::PixelType outMin, outMax;
     outMin.SetSize( inImage->GetNumberOfComponentsPerPixel() );
     outMax.SetSize( inImage->GetNumberOfComponentsPerPixel() );
     outMin.Fill( GetParameterFloat("outmin") );

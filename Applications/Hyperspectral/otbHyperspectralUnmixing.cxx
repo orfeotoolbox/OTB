@@ -18,7 +18,7 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
-#include "otbVectorImage.h"
+//#include "otbVectorImage.h"
 //#include "otbImageFileReader.h"
 //#include "otbStreamingImageFileWriter.h"
 
@@ -37,36 +37,34 @@
 
 #include "otbVectorImageToMatrixImageFilter.h"
 
-#include "otbStandardWriterWatcher.h"
-
-const unsigned int Dimension = 2;
-typedef double PixelType;
-
-typedef otb::VectorImage<PixelType, Dimension> VectorImageType;
-
-//typedef otb::ImageFileReader<VectorImageType> ReaderType;
-//typedef otb::StreamingImageFileWriter<VectorImageType> WriterType;
-
-typedef otb::StreamingStatisticsVectorImageFilter<VectorImageType, PixelType> StreamingStatisticsVectorImageFilterType;
-typedef otb::EigenvalueLikelihoodMaximisation<PixelType> ELMType;
-typedef otb::VCAImageFilter<VectorImageType> VCAFilterType;
-
-typedef otb::UnConstrainedLeastSquareImageFilter<VectorImageType,VectorImageType,PixelType> UCLSUnmixingFilterType;
-typedef otb::ISRAUnmixingImageFilter<VectorImageType,VectorImageType,PixelType>             ISRAUnmixingFilterType;
-typedef otb::NCLSUnmixingImageFilter<VectorImageType,VectorImageType,PixelType>             NCLSUnmixingFilterType;
-typedef otb::FCLSUnmixingImageFilter<VectorImageType,VectorImageType,PixelType>             FCLSUnmixingFilterType;
-//typedef otb::CLSPSTOUnmixingImageFilter<VectorImageType,VectorImageType,PixelType>          CLSPSTOUnmixingFilterType;
-
-typedef otb::VectorImageToMatrixImageFilter<VectorImageType> VectorImageToMatrixImageFilterType;
-
-typedef vnl_vector<PixelType> VectorType;
-typedef vnl_matrix<PixelType> MatrixType;
+#include "itkCastImageFilter.h"
 
 
 namespace otb
 {
 namespace Wrapper
 {
+
+typedef itk::CastImageFilter<FloatVectorImageType, DoubleVectorImageType> FloatToDoubleFilterType;
+typedef itk::CastImageFilter<DoubleVectorImageType, FloatVectorImageType> DoubleToFloatFilterType;
+
+const unsigned int Dimension = 2;
+
+typedef otb::StreamingStatisticsVectorImageFilter<DoubleVectorImageType> StreamingStatisticsVectorImageFilterType;
+typedef otb::EigenvalueLikelihoodMaximisation<double> ELMType;
+typedef otb::VCAImageFilter<DoubleVectorImageType> VCAFilterType;
+
+typedef otb::UnConstrainedLeastSquareImageFilter<DoubleVectorImageType,DoubleVectorImageType,double> UCLSUnmixingFilterType;
+typedef otb::ISRAUnmixingImageFilter<DoubleVectorImageType,DoubleVectorImageType,double>             ISRAUnmixingFilterType;
+typedef otb::NCLSUnmixingImageFilter<DoubleVectorImageType,DoubleVectorImageType,double>             NCLSUnmixingFilterType;
+typedef otb::FCLSUnmixingImageFilter<DoubleVectorImageType,DoubleVectorImageType,double>             FCLSUnmixingFilterType;
+//typedef otb::CLSPSTOUnmixingImageFilter<DoubleVectorImageType,DoubleVectorImageType,double>          CLSPSTOUnmixingFilterType;
+
+typedef otb::VectorImageToMatrixImageFilter<DoubleVectorImageType> VectorImageToMatrixImageFilterType;
+
+typedef vnl_vector<double> VectorType;
+typedef vnl_matrix<double> MatrixType;
+
 
 enum DimReductionMethod
 {
@@ -161,6 +159,8 @@ private:
 
   void DoExecute()
   {
+    m_ProcessObjects.clear();
+
     /*
      *
      * EXTRACT PARAMETERS
@@ -247,9 +247,13 @@ private:
      * PROCESSING
      *
      */
-    VectorImageType::Pointer inputImage = GetParameterImage("in");
-    VectorImageType::Pointer endmembersImage;
 
+    FloatToDoubleFilterType::Pointer cast = FloatToDoubleFilterType::New();
+    cast->SetInput( GetParameterImage("in") );
+    DoubleVectorImageType::Pointer inputImage = cast->GetOutput();
+    m_ProcessObjects.push_back(cast.GetPointer());
+
+    DoubleVectorImageType::Pointer endmembersImage;
     if ( inputEndmembers.empty() )
       {
       if( nbEndmembers == 0 )
@@ -303,7 +307,7 @@ private:
       vca->SetInput(inputImage);
 
       endmembersImage = vca->GetOutput();
-      endmembersRef = vca;
+      m_ProcessObjects.push_back(vca.GetPointer());
       }
     else
       {
@@ -311,8 +315,12 @@ private:
        * Read input endmembers
        */
       std::cout << "Read Endmembers " << inputEndmembers << std::endl;
-      endmembersImage = GetParameterImage("ie");
-      //endmembersRef = readerEndmembers;
+
+      FloatToDoubleFilterType::Pointer cast = FloatToDoubleFilterType::New();
+      cast->SetInput( GetParameterImage("ie") );
+      endmembersImage = cast->GetOutput();
+      m_ProcessObjects.push_back(cast.GetPointer());
+
       }
   //  endmembersRef->Update();
 
@@ -331,9 +339,7 @@ private:
     /*
      * Unmix
      */
-    VectorImageType::Pointer abundanceMap;
-
-
+    DoubleVectorImageType::Pointer abundanceMap;
     switch (unmixingAlgo)
     {
     case UnMixingMethod_NONE:
@@ -349,8 +355,9 @@ private:
       unmixer->SetMatrix(endMembersMatrix);
       unmixer->SetNumberOfThreads(1); // FIXME : currently buggy
 
-      unmixerRef = unmixer;
       abundanceMap = unmixer->GetOutput();
+      m_ProcessObjects.push_back(unmixer.GetPointer());
+
       }
       break;
     case UnMixingMethod_ISRA:
@@ -362,8 +369,9 @@ private:
 
       unmixer->SetInput(inputImage);
       unmixer->SetEndmembersMatrix(endMembersMatrix);
-      unmixerRef = unmixer;
       abundanceMap = unmixer->GetOutput();
+      m_ProcessObjects.push_back(unmixer.GetPointer());
+
       }
       break;
     case UnMixingMethod_NCLS:
@@ -375,8 +383,9 @@ private:
 
       unmixer->SetInput(inputImage);
       unmixer->SetEndmembersMatrix(endMembersMatrix);
-      unmixerRef = unmixer;
       abundanceMap = unmixer->GetOutput();
+      m_ProcessObjects.push_back(unmixer.GetPointer());
+
       }
       break;
     case UnMixingMethod_FCLS:
@@ -388,8 +397,9 @@ private:
 
       unmixer->SetInput(inputImage);
       unmixer->SetEndmembersMatrix(endMembersMatrix);
-      unmixerRef = unmixer;
       abundanceMap = unmixer->GetOutput();
+      m_ProcessObjects.push_back(unmixer.GetPointer());
+
       }
       break;
     default:
@@ -402,7 +412,13 @@ private:
        * Write endmembers
        */
       std::cout << "Write endmembers " << outputEndmembers << std::endl;
-      SetParameterOutputImage("oe", endmembersImage);
+
+      DoubleToFloatFilterType::Pointer cast = DoubleToFloatFilterType::New();
+      cast->SetInput( endmembersImage );
+      FloatVectorImageType::Pointer endmembersImageFloat = cast->GetOutput();
+      m_ProcessObjects.push_back(cast.GetPointer());
+
+      SetParameterOutputImage("oe", endmembersImageFloat);
       }
 
     if ( unmixingAlgo != UnMixingMethod_NONE )
@@ -411,13 +427,16 @@ private:
        * Write abundance map
        */
       //std::cout << "Write abundance map" << outputImageName << std::endl;
-      SetParameterOutputImage("out", abundanceMap);
+      DoubleToFloatFilterType::Pointer cast = DoubleToFloatFilterType::New();
+      cast->SetInput( abundanceMap );
+      FloatVectorImageType::Pointer abundanceMapFloat = cast->GetOutput();
+      m_ProcessObjects.push_back(cast.GetPointer());
+
+      SetParameterOutputImage("out", abundanceMapFloat);
       }
   }
 
-  itk::ProcessObject::Pointer endmembersRef;
-  itk::ProcessObject::Pointer unmixerRef;
-
+  std::vector<itk::ProcessObject::Pointer> m_ProcessObjects;
 };
 
 }

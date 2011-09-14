@@ -43,7 +43,7 @@ private:
    AllocateOutput()
   {
     SetName("AllocateOutput");
-    m_Image = VectorImageType::New();
+    m_Image = FloatVectorImageType::New();
     SetDescription("Allocate output image inside the process.");
   }
 
@@ -63,17 +63,17 @@ private:
 
   void DoExecute()
   { 
-    VectorImageType::Pointer inImage = VectorImageType::New();
+    FloatVectorImageType::Pointer inImage = FloatVectorImageType::New();
     
-    VectorImageType::IndexType start;
+    FloatVectorImageType::IndexType start;
     start[0] =   0;  // first index on X
     start[1] =   0;  // first index on Y
 
-    VectorImageType::SizeType size;
+    FloatVectorImageType::SizeType size;
     size[0]  = 10;  // size along X
     size[1]  = 10;
 
-    VectorImageType::RegionType region;
+    FloatVectorImageType::RegionType region;
     
     region.SetSize(size);
     region.SetIndex(start);
@@ -82,7 +82,7 @@ private:
     m_Image->SetNumberOfComponentsPerPixel( 3 );
     m_Image->Allocate();
 
-    VectorImageType::PixelType initialValue;
+    FloatVectorImageType::PixelType initialValue;
     initialValue.SetSize(3);
     initialValue.Fill(0);
     m_Image->FillBuffer(initialValue);
@@ -90,7 +90,7 @@ private:
     SetParameterOutputImage("out", m_Image);
   }
 
-  VectorImageType::Pointer m_Image;
+  FloatVectorImageType::Pointer m_Image;
 };
 
 

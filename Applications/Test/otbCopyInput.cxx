@@ -64,9 +64,9 @@ private:
   void DoExecute()
   { 
     std::cout << "CopyInput 1" << std::endl;
-    VectorImageType::Pointer inImage = GetParameterImage("in");
+    FloatVectorImageType::Pointer inImage = GetParameterImage("in");
 
-    typedef itk::CastImageFilter<VectorImageType, VectorImageType> CastImageFilterType;
+    typedef itk::CastImageFilter<FloatVectorImageType, FloatVectorImageType> CastImageFilterType;
     CastImageFilterType::Pointer caster = CastImageFilterType::New();
     m_FilterRef = caster;
     std::cout << "CopyInput 2" << std::endl;

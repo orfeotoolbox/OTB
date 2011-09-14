@@ -20,7 +20,7 @@
 
 #include "otbVectorImage.h"
 #include "otbWrapperParameter.h"
-#include "otbImageFileWriter.h"
+#include "otbStreamingImageFileWriter.h"
 
 namespace otb
 {
@@ -39,8 +39,6 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef otb::ImageFileWriter<VectorImageType> WriterType;
-
   /** Defining ::New() static method */
   itkNewMacro(Self);
 
@@ -48,27 +46,30 @@ public:
   itkTypeMacro(OutputImageParameter, Parameter);
 
   /** Set the value */
-  itkSetObjectMacro(Image, VectorImageType);
+  itkSetObjectMacro(Image, FloatVectorImageType);
 
   /** Get the value */
-  itkGetObjectMacro(Image, VectorImageType);
+  itkGetObjectMacro(Image, FloatVectorImageType);
 
   /** Return any value */
-  void SetValue(VectorImageType* image);
+  void SetValue(FloatVectorImageType* image);
 
   /** Return any value */
-  VectorImageType* GetValue( void );
+  FloatVectorImageType* GetValue( void );
+
+  /** Set/Get PixelType to be used when saving */
+  itkSetMacro(PixelType, ImagePixelType);
+  itkGetMacro(PixelType, ImagePixelType);
 
   /** Return true if a filename is set */
   bool HasValue() const;
 
   itkSetStringMacro(FileName);
   itkGetStringMacro(FileName);
-  itkGetObjectMacro(Writer, WriterType);
 
   void Write();
 
-  void InitializeWriter();
+  itk::ProcessObject* GetWriter();
 
 protected:
   /** Constructor */
@@ -76,9 +77,27 @@ protected:
   /** Destructor */
   virtual ~OutputImageParameter();
 
-  VectorImageType::Pointer m_Image;
+  FloatVectorImageType::Pointer m_Image;
   std::string              m_FileName;
-  WriterType::Pointer      m_Writer;
+  ImagePixelType           m_PixelType;
+
+  typedef otb::StreamingImageFileWriter<Int8VectorImageType>   Int8WriterType;
+  typedef otb::StreamingImageFileWriter<UInt8VectorImageType>  UInt8WriterType;
+  typedef otb::StreamingImageFileWriter<Int16VectorImageType>  Int16WriterType;
+  typedef otb::StreamingImageFileWriter<UInt16VectorImageType> UInt16WriterType;
+  typedef otb::StreamingImageFileWriter<Int32VectorImageType>  Int32WriterType;
+  typedef otb::StreamingImageFileWriter<UInt32VectorImageType> UInt32WriterType;
+  typedef otb::StreamingImageFileWriter<FloatVectorImageType>  FloatWriterType;
+  typedef otb::StreamingImageFileWriter<DoubleVectorImageType> DoubleWriterType;
+
+  Int8WriterType::Pointer   m_Int8Writer;
+  UInt8WriterType::Pointer  m_UInt8Writer;
+  Int16WriterType::Pointer  m_Int16Writer;
+  UInt16WriterType::Pointer m_UInt16Writer;
+  Int32WriterType::Pointer  m_Int32Writer;
+  UInt32WriterType::Pointer m_UInt32Writer;
+  FloatWriterType::Pointer  m_FloatWriter;
+  DoubleWriterType::Pointer m_DoubleWriter;
 
 private:
   OutputImageParameter(const Parameter &); //purposely not implemented

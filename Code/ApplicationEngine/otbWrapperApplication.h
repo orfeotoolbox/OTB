@@ -192,7 +192,7 @@ public:
    * Can be called for types :
    * \li ParameterType_OutputImage
    */
-  void SetParameterOutputImage(std::string parameter, VectorImageType* value);
+  void SetParameterOutputImage(std::string parameter, FloatVectorImageType* value);
 
   /* Set an output vector data value
    *
@@ -237,14 +237,14 @@ public:
    * Can be called for types :
    * \li ParameterType_InputImage
    */
-  VectorImageType* GetParameterImage(std::string parameter);
+  FloatVectorImageType* GetParameterImage(std::string parameter);
 
   /* Get a complex image value
    *
    * Can be called for types :
    * \li ParameterType_InputComplexImage
    */
-  ComplexVectorImageType* GetParameterComplexImage(std::string parameter);
+  ComplexFloatVectorImageType* GetParameterComplexImage(std::string parameter);
 
   /* GetParameterInt
    *

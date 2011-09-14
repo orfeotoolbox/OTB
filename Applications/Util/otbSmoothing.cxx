@@ -36,7 +36,7 @@ enum
   Smoothing_Anisotropic
 };
 
-typedef otb::Image<VectorImageType::InternalPixelType, 2>  ImageType;
+typedef otb::Image<FloatVectorImageType::InternalPixelType, 2>  ImageType;
 
 class Smoothing : public Application
 {
@@ -97,7 +97,7 @@ private:
     GetLogger()->Debug("Entering DoExecute");
 
 
-    VectorImageType::Pointer inImage = GetParameterImage("in");
+    FloatVectorImageType::Pointer inImage = GetParameterImage("in");
 
     switch ( GetParameterInt("type") )
       {
@@ -106,7 +106,7 @@ private:
         GetLogger()->Debug("Using mean");
 
         typedef itk::MeanImageFilter<ImageType, ImageType>         MeanFilterType;
-        typedef otb::PerBandVectorImageFilter<VectorImageType, VectorImageType, MeanFilterType>
+        typedef otb::PerBandVectorImageFilter<FloatVectorImageType, FloatVectorImageType, MeanFilterType>
           PerBandMeanFilterType;
 
         PerBandMeanFilterType::Pointer perBand
@@ -126,7 +126,7 @@ private:
         GetLogger()->Debug("Using gaussian");
 
         typedef itk::DiscreteGaussianImageFilter<ImageType, ImageType>  DiscreteGaussianFilterType;
-        typedef otb::PerBandVectorImageFilter<VectorImageType, VectorImageType, DiscreteGaussianFilterType>
+        typedef otb::PerBandVectorImageFilter<FloatVectorImageType, FloatVectorImageType, DiscreteGaussianFilterType>
           PerBandDiscreteGaussianFilterType;
 
         PerBandDiscreteGaussianFilterType::Pointer perBand
@@ -146,7 +146,7 @@ private:
         GetLogger()->Debug("Using anisotropic diffusion");
 
         typedef itk::GradientAnisotropicDiffusionImageFilter<ImageType, ImageType>  GradientAnisotropicDiffusionFilterType;
-        typedef otb::PerBandVectorImageFilter<VectorImageType, VectorImageType, GradientAnisotropicDiffusionFilterType>
+        typedef otb::PerBandVectorImageFilter<FloatVectorImageType, FloatVectorImageType, GradientAnisotropicDiffusionFilterType>
           PerBandGradientAnisotropicDiffusionFilterType;
 
         PerBandGradientAnisotropicDiffusionFilterType::Pointer perBand

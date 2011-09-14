@@ -65,12 +65,12 @@ public:
     itkExceptionMacro(<< "No filename value");
   }
 
-  ComplexVectorImageType* GetImage() const
+  ComplexFloatVectorImageType* GetImage() const
   {
     return m_Image;
   }
 
-  void SetImage(ComplexVectorImageType* image)
+  void SetImage(ComplexFloatVectorImageType* image)
   {
      m_Image = image;
      m_Reader = ImageFileReaderType::Pointer();
@@ -83,7 +83,7 @@ public:
 
   void ClearValue()
   {
-    m_Image = ComplexVectorImageType::Pointer();
+    m_Image = ComplexFloatVectorImageType::Pointer();
     m_Reader = ImageFileReaderType::Pointer();
   }
 protected:
@@ -98,8 +98,8 @@ protected:
   virtual ~InputComplexImageParameter()
   {}
 
-  typedef otb::ImageFileReader<ComplexVectorImageType> ImageFileReaderType;
-  ComplexVectorImageType::Pointer m_Image;
+  typedef otb::ImageFileReader<ComplexFloatVectorImageType> ImageFileReaderType;
+  ComplexFloatVectorImageType::Pointer m_Image;
   ImageFileReaderType::Pointer m_Reader;
 
 private:

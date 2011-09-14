@@ -40,8 +40,8 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef otb::ObjectList<VectorImageType>      VectorImageListType;
-  typedef otb::ImageFileReader<VectorImageType> ImageFileReaderType;
+  typedef otb::ObjectList<FloatVectorImageType>      VectorImageListType;
+  typedef otb::ImageFileReader<FloatVectorImageType> ImageFileReaderType;
   typedef otb::ObjectList<ImageFileReaderType>  ImageFileReaderListType;
 
   /** Defining ::New() static method */
@@ -145,7 +145,7 @@ public:
   }
 
   /** Add an image to the list. */
-  void AddImage(VectorImageType* image)
+  void AddImage(FloatVectorImageType* image)
   {
     m_ImageList->PushBack( image );
     m_ReaderList->PushBack( ImageFileReaderType::Pointer() );

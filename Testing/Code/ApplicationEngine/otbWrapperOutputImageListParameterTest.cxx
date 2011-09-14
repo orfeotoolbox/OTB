@@ -37,7 +37,7 @@ int otbWrapperOutputImageListParameterTest1(int argc, char* argv[])
   typedef otb::Wrapper::OutputImageListParameter ParameterType;
   ParameterType::Pointer param = ParameterType::New();
 
-  typedef otb::ImageFileReader< otb::Wrapper::VectorImageType > ReaderType;
+  typedef otb::ImageFileReader< otb::Wrapper::FloatVectorImageType > ReaderType;
 
   ReaderType::Pointer reader1 = ReaderType::New();
   ReaderType::Pointer reader2 = ReaderType::New();
