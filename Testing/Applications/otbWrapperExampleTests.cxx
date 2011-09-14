@@ -26,6 +26,7 @@ numP
 
 void RegisterTests()
 {
-  REGISTER_TEST(otbSmoothingTest2);
+  REGISTER_TEST(otbSmoothingTest);
+  REGISTER_TEST(otbRescaleTest);
 }
 

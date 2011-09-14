@@ -15,35 +15,24 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
+#include "otbWrapperApplication.h"
+#include "otbWrapperApplicationRegistry.h"
 
-#include "otbSmoothing.cxx"
-#include "otbWrapperInputImageParameter.h"
-#include "otbWrapperOutputImageParameter.h"
-#include "otbWrapperNumericalParameter.h"
+using otb::Wrapper::Application;
+using otb::Wrapper::ApplicationRegistry;
 
-
-int otbSmoothingNew(int argc, char* argv[])
+int otbSmoothingTest(int argc, char* argv[])
 {
-  typedef otb::Wrapper::Smoothing SmoothingType;
-  SmoothingType::Pointer appli = SmoothingType::New();
+  ApplicationRegistry::SetApplicationPath(argv[1]);
 
-  return EXIT_SUCCESS;
-}
+  const char* in  = argv[2];
+  const char* out = argv[3];
 
+  Application::Pointer app = ApplicationRegistry::CreateApplication("Smoothing");
 
-int otbSmoothingTest1(int argc, char* argv[])
-{
-  typedef otb::Wrapper::Smoothing SmoothingType;
-  SmoothingType::Pointer appli = SmoothingType::New();
-
-  appli->SetParameterString("in", argv[1]);
-  appli->SetParameterString("out", argv[2]);
-  appli->SetParameterString("type", "gaussian");
-  appli->SetParameterInt("type.gaussian.radius", atoi(argv[3]));
-  appli->ExecuteAndWriteOutput();
-
+  app->SetParameterString("in", in );
+  app->SetParameterString("out", out );
+  app->SetParameterString("type", "mean");
+  app->ExecuteAndWriteOutput();
   return EXIT_SUCCESS;
 }

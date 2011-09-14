@@ -19,37 +19,28 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#include "otbRescale.cxx"
-#include "otbWrapperInputImageParameter.h"
-#include "otbWrapperOutputImageParameter.h"
-#include "otbWrapperNumericalParameter.h"
-#include "itkStdStreamLogOutput.h"
+#include "otbWrapperApplication.h"
+#include "otbWrapperApplicationRegistry.h"
 
-int otbRescaleNew(int argc, char* argv[])
+using otb::Wrapper::Application;
+using otb::Wrapper::ApplicationRegistry;
+
+int otbRescaleTest(int argc, char* argv[])
 {
-  typedef otb::Wrapper::Rescale RescaleType;
-  RescaleType::Pointer appli = RescaleType::New();
+  ApplicationRegistry::SetApplicationPath(argv[1]);
 
-  return EXIT_SUCCESS;
-}
+  const char* in = argv[2];
+  const char* out = argv[3];
+  const float outmin = atof(argv[4]);
+  const float outmax = atof(argv[5]);
 
+  Application::Pointer app = ApplicationRegistry::CreateApplication("Rescale");
 
-int otbRescaleTest1(int argc, char* argv[])
-{
-  typedef otb::Wrapper::Rescale RescaleType;
-  RescaleType::Pointer appli = RescaleType::New();
-  
-  itk::StdStreamLogOutput::Pointer coutput = itk::StdStreamLogOutput::New();
-  coutput->SetStream(std::cout);
-
-  appli->GetLogger()->AddLogOutput(coutput);
-  appli->GetLogger()->SetPriorityLevel(itk::LoggerBase::DEBUG);
-
-  appli->SetParameterString("in", argv[1]);
-  appli->SetParameterString("out", argv[2]);
-  appli->SetParameterFloat("outmin", atof(argv[3]));
-  appli->SetParameterFloat("outmax", atof(argv[4]));
-  appli->ExecuteAndWriteOutput();
+  app->SetParameterString("in", in );
+  app->SetParameterString("out", out );
+  app->SetParameterFloat("outmin", outmin);
+  app->SetParameterFloat("outmax", outmax);
+  app->ExecuteAndWriteOutput();
 
   return EXIT_SUCCESS;
 }
