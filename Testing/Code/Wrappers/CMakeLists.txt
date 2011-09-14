@@ -1,3 +1,4 @@
+if(BUILD_APPLICATIONS)
 
 add_subdirectory(CommandLine)
 
@@ -17,3 +18,4 @@ if ( WRAP_PYQT )
   add_subdirectory(PyQt)
 endif ()
 
+endif()
