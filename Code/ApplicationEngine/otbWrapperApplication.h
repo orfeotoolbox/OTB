@@ -41,9 +41,9 @@ namespace Wrapper
 {
 public:
   /** Standard class typedefs. */
-  typedef Application Self;
-  typedef itk::Object Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef Application                   Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Defining ::New() static method */
@@ -355,15 +355,15 @@ private:
   Application(const Application &); //purposely not implemented
   void operator =(const Application&); //purposely not implemented
 
-  std::string m_Name;
-  std::string m_Description;
-  ParameterGroup::Pointer m_ParameterList;
-  itk::ProcessObject::Pointer m_CurrentProcess;
+  std::string                       m_Name;
+  std::string                       m_Description;
+  ParameterGroup::Pointer           m_ParameterList;
+  itk::ProcessObject::Pointer       m_CurrentProcess;
   std::vector<itk::ProcessObject *> m_InternalProcessList;
-  std::vector<std::string> m_InternalProcessListName;
-  unsigned int m_WroteOutput;
+  std::vector<std::string>          m_InternalProcessListName;
+  unsigned int                      m_WroteOutput;
 
-  itk::Logger::Pointer m_Logger;
+  itk::Logger::Pointer              m_Logger;
 
 }; //end class
 

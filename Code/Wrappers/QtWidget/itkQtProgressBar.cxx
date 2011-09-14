@@ -52,7 +52,7 @@ void
 QtProgressBar::ProcessEvent( itk::Object * caller,
                              const itk::EventObject & event )
 {
-  if( typeid( itk::ProgressEvent )   ==  typeid( event ) )
+  if( typeid( itk::ProgressEvent ) == typeid( event ) )
     {
     ::itk::ProcessObject::Pointer  process =
       dynamic_cast< itk::ProcessObject *>( caller );
@@ -68,7 +68,7 @@ void
 QtProgressBar::ConstProcessEvent( const itk::Object * caller,
                                   const itk::EventObject & event )
 {
-  if( typeid( itk::ProgressEvent )   ==  typeid( event ) )
+  if( typeid( itk::ProgressEvent ) == typeid( event ) )
     {
     itk::ProcessObject::ConstPointer  process =
       dynamic_cast< const itk::ProcessObject *>( caller );
@@ -89,5 +89,3 @@ QtProgressBar::Observe( itk::Object *caller )
 }
 
 } // end namespace fltk
-
-

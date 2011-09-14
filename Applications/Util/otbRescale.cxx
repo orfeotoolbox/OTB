@@ -121,13 +121,10 @@ private:
   }
   
   RescaleImageFilterType::Pointer m_RescaleFilter;
-  MinMaxFilterType::Pointer m_MinMaxFilter;
+  MinMaxFilterType::Pointer       m_MinMaxFilter;
 };
-
-
 
 }
 }
 
 OTB_APPLICATION_EXPORT(otb::Wrapper::Rescale)
-

@@ -19,7 +19,6 @@
 
 namespace itk {
 
-
 class QtProgressBar : public ::QProgressBar
 {
   Q_OBJECT
