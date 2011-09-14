@@ -387,6 +387,17 @@ void Application::SetParameterOutputImage(std::string parameter, FloatVectorImag
     }
 }
 
+void Application::SetParameterOutputImagePixelType(std::string parameter, ImagePixelType pixelType)
+{
+  Parameter* param = GetParameterByKey(parameter);
+
+  if (dynamic_cast<OutputImageParameter*>(param))
+    {
+    OutputImageParameter* paramDown = dynamic_cast<OutputImageParameter*>(param);
+    paramDown->SetPixelType(pixelType);
+    }
+}
+
 void Application::SetParameterOutputVectorData(std::string parameter, VectorDataType* value)
 {
   Parameter* param = GetParameterByKey(parameter);

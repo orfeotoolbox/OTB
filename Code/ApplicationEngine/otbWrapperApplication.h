@@ -194,6 +194,13 @@ public:
    */
   void SetParameterOutputImage(std::string parameter, FloatVectorImageType* value);
 
+  /* Set the pixel type in which the image will be saved
+   *
+   * Can be called for types :
+   * \li ParameterType_OutputImage
+   */
+  void SetParameterOutputImagePixelType(std::string parameter, ImagePixelType pixelType);
+
   /* Set an output vector data value
    *
    * Can be called for types :

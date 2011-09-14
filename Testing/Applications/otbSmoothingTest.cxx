@@ -33,6 +33,9 @@ int otbSmoothingTest(int argc, char* argv[])
   app->SetParameterString("in", in );
   app->SetParameterString("out", out );
   app->SetParameterString("type", "mean");
+
+  app->SetParameterOutputImagePixelType("out", otb::Wrapper::ImagePixelType_float);
+
   app->ExecuteAndWriteOutput();
   return EXIT_SUCCESS;
 }
