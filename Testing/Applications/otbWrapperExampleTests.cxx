@@ -28,5 +28,6 @@ void RegisterTests()
 {
   REGISTER_TEST(otbSmoothingTest);
   REGISTER_TEST(otbRescaleTest);
+  REGISTER_TEST(otbReadImageInfoTest);
 }
 

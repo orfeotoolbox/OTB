@@ -26,5 +26,16 @@ add_test(NAME exTvSmoothingTest
                  ${INPUTDATA}/poupees.tif
                  ${TEMP}/owTvSmoothingTest2.tif )
 
-add_executable(otbWrapperExampleTests otbWrapperExampleTests.cxx otbRescaleTest.cxx otbSmoothingTest.cxx )
+add_test(NAME exTvReadImageInfoTest
+         COMMAND otbWrapperExampleTests
+          otbReadImageInfoTest
+          $<TARGET_FILE_DIR:otbapp_ReadImageInfo>
+          ${INPUTDATA}/poupees.tif )
+
+add_executable(otbWrapperExampleTests
+                 otbWrapperExampleTests.cxx
+                 otbRescaleTest.cxx
+                 otbSmoothingTest.cxx 
+                 otbReadImageInfoTest.cxx )
+
 target_link_libraries(otbWrapperExampleTests OTBApplicationEngine OTBTesting)
