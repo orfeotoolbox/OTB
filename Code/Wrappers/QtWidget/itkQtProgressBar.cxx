@@ -9,8 +9,8 @@
   Copyright (c) 2002 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     This software is distributed WITHOUT ANY WARRANTY; without even 
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -29,11 +29,16 @@ QtProgressBar::QtProgressBar( QWidget *parent):QProgressBar(parent)
   m_RedrawCommand->SetCallbackFunction( this, &QtProgressBar::ProcessEvent );
   m_RedrawCommand->SetCallbackFunction( this, &QtProgressBar::ConstProcessEvent );
 
+  m_Caller = itk::Object::New();
   this->setMaximum( 100 );
   this->reset();
 }
 
 
+QtProgressBar::~QtProgressBar()
+{
+  m_Caller->RemoveAllObservers();
+}
   
 /** Get Command */
 QtProgressBar::RedrawCommandType *
@@ -45,31 +50,31 @@ QtProgressBar::GetRedrawCommand( void ) const
 /** Manage a Progress event */
 void
 QtProgressBar::ProcessEvent( itk::Object * caller,
-                           const itk::EventObject & event )
+                             const itk::EventObject & event )
 {
   if( typeid( itk::ProgressEvent )   ==  typeid( event ) )
     {
     ::itk::ProcessObject::Pointer  process =
-             dynamic_cast< itk::ProcessObject *>( caller );
+      dynamic_cast< itk::ProcessObject *>( caller );
 
     const int value = static_cast<int>(
-                        process->GetProgress() * this->maximum() );
+      process->GetProgress() * this->maximum() );
 
     emit SetValueChanged( value );
     }
 }
 
-void
+void 
 QtProgressBar::ConstProcessEvent( const itk::Object * caller,
-                                const itk::EventObject & event )
+                                  const itk::EventObject & event )
 {
   if( typeid( itk::ProgressEvent )   ==  typeid( event ) )
     {
     itk::ProcessObject::ConstPointer  process =
-              dynamic_cast< const itk::ProcessObject *>( caller );
+      dynamic_cast< const itk::ProcessObject *>( caller );
 
     const int value = static_cast<int>(
-                        process->GetProgress() * this->maximum() );
+      process->GetProgress() * this->maximum() );
 
     emit SetValueChanged( value );
     }
@@ -79,7 +84,8 @@ QtProgressBar::ConstProcessEvent( const itk::Object * caller,
 void
 QtProgressBar::Observe( itk::Object *caller )
 {
-  caller->AddObserver(  itk::ProgressEvent(), m_RedrawCommand.GetPointer() );
+  m_Caller = caller;
+  m_Caller->AddObserver(  itk::ProgressEvent(), m_RedrawCommand.GetPointer() );
 }
 
 } // end namespace fltk
