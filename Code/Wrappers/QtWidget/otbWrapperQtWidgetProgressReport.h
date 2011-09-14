@@ -43,6 +43,7 @@ public:
 
 public slots:
   void ReportProgress();
+  void RemoveLayout();
 
 private:
   QtWidgetProgressReport(const QtWidgetProgressReport&); //purposely not implemented
@@ -57,6 +58,7 @@ private:
   std::vector< QLabel * >              m_LabelListWriter;
   
   bool                                 m_IsProgressReportGuiAlreadyBuilt;
+  QVBoxLayout *                        m_Layout;
 };
 
 
