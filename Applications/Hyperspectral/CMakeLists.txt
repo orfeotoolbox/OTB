@@ -1,0 +1,3 @@
+include(WrapperMacros)
+
+OTB_CREATE_APPLICATION(NAME HyperspectralUnmixing SOURCES otbHyperspectralUnmixing.cxx LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters)
