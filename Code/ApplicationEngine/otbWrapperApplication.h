@@ -310,6 +310,12 @@ public:
     this->Modified();
   }
 
+  void ClearInternalProcessList( ){
+    m_InternalProcessList.clear();
+    m_InternalProcessListName.clear();
+    this->Modified();
+  }
+
   itk::Logger* GetLogger();
 
 protected:
