@@ -35,6 +35,7 @@
 #include "otbWrapperInputImageListParameter.h"
 #include "otbWrapperStringListParameter.h"
 
+#include "otbStreamingImageFileWriter.h"
 
 #include "otbWrapperApplicationRegistry.h"
 #include "otbWrapperApplication.h"
@@ -48,7 +49,7 @@ namespace otb
 namespace Wrapper
 {
 
-CommandLineLauncher::CommandLineLauncher() : m_Expression("")
+  CommandLineLauncher::CommandLineLauncher() : m_Expression(""), m_FilterWatcherList(), m_WriterWatcherList()
 {
   m_Application = NULL;
   m_Parser = CommandLineParser::New();
@@ -84,7 +85,7 @@ CommandLineLauncher::Load()
   if( this->CheckUnicity() == false )
     {
       std::cerr<<"ERROR: At least one key is not unique in the expression..."<<std::endl;
-      return false;
+      return false; 
     }
 
   if ( this->LoadPath() == false )
@@ -109,7 +110,7 @@ CommandLineLauncher::Execute()
   m_Application->Execute();
   return true;
  
-}
+} 
 
 
 bool
@@ -131,7 +132,7 @@ CommandLineLauncher::BeforeExecute()
 {
     if( m_Application.IsNull() )
     {
-      itkExceptionMacro("No application loaded");
+      itkExceptionMacro("No application loaded");  
     }
 
     // if help is asked...
@@ -159,6 +160,40 @@ CommandLineLauncher::BeforeExecute()
         return false;
       }
 
+    // Check for the progress report
+    bool doProgressReport = true;
+    if( m_Parser->IsAttributExists( "--progress", m_Expression ) == true )
+      {
+        std::vector<std::string> val;
+        val = m_Parser->GetAttribut( "--progress", m_Expression );
+        if( val.size() != 1)
+          {
+            std::cerr<<"Invalid progress argument, must be unique value..."<<std::endl;
+            return false;
+          }
+          if( val[0] == "1" || val[0] == "true")
+            {
+              doProgressReport = true;
+            }
+          else if( val[0] == "0" || val[0] == "false")
+            {
+               doProgressReport = false;
+            }
+          else
+            {
+              std::cerr<<"Invalid progress argument, must be 0, 1, false or true..."<<std::endl;
+              // Force to reload the application, the LoadParameters can change wrong values
+              this->LoadApplication();
+              this->DisplayHelp();
+              return false;
+            }
+      }
+    
+    if( doProgressReport == true )
+      {
+        this->LinkWatchers();
+      }
+
     return true;
 }
 
@@ -174,7 +209,7 @@ CommandLineLauncher::LoadPath()
   // Contain paths into a string, separating each path with ":"
   m_Path = std::string("");
   for( unsigned i=0; i<pathList.size(); i++)
-    {
+    {  
       m_Path.append(pathList[i]);
       m_Path.append(":");
     }
@@ -197,7 +232,7 @@ CommandLineLauncher::LoadApplication()
   std::string moduleName;
   if( m_Parser->GetModuleName( moduleName, m_Expression ) != CommandLineParser::OK )
     {
-      std::cerr << "ERROR: LoadApplication, no module found..." <<std::endl;
+      std::cerr << "ERROR: LoadApplication, no module found..." <<std::endl;     
       return;
     }
 
@@ -275,8 +310,8 @@ CommandLineLauncher::LoadParameters()
 
       // Single value parameter
    
-      if( type == ParameterType_Choice || type == ParameterType_Float || type == ParameterType_Int || type == ParameterType_Radius
-          || type == ParameterType_Directory || type == ParameterType_String || type == ParameterType_Filename || type == ParameterType_InputComplexImage
+      if( type == ParameterType_Choice || type == ParameterType_Float || type == ParameterType_Int || type == ParameterType_Radius 
+          || type == ParameterType_Directory || type == ParameterType_String || type == ParameterType_Filename || type == ParameterType_InputComplexImage 
           || type == ParameterType_InputImage || type == ParameterType_InputVectorData || type == ParameterType_OutputImage || type == ParameterType_OutputVectorData )
         {
           m_Application->SetParameterString( param->GetKey(), values[0] );
@@ -302,6 +337,50 @@ CommandLineLauncher::LoadParameters()
 
 
 void
+CommandLineLauncher::LinkWatchers()
+{
+  /*
+  m_FilterWatcherList.clear();
+  m_WriterWatcherList.clear();
+  // Link internall filters watcher
+  for( unsigned int i=0; i<m_Application->GetInternalProcessList().size(); i++ )
+    {
+      //std::cout<<"BRRRRRRRRRRRRRRR"<<std::endl;
+      //StandardFilterWatcher watch(m_Application->GetInternalProcessList()[i], m_Application->GetInternalProcessListName()[i]);
+      //m_FilterWatcherList.push_back( watch );
+    }
+  
+  // Link output image writers watchers
+   std::vector<std::string> paramList = m_Application->GetParametersKeys(true);
+   std::vector<std::string>::const_iterator it = paramList.begin();
+   std::cout<<"BRRRRRRRRRRRRRRR"<<std::endl;
+   for ( ; it != paramList.end(); ++it)
+     {
+       if (m_Application->GetParameterType(*it) == ParameterType_OutputImage)
+         {
+              std::cout<<"-------------------------------------------------------------t'en as?"<<std::endl; 
+           Parameter* param = m_Application->GetParameterByKey(*it);
+           OutputImageParameter* outputParam = dynamic_cast<OutputImageParameter*>(param);
+           itk::OStringStream oss;
+           oss<< "Wrinting "<< param->GetName()<<std::endl;
+
+           std::cout<<"----++++"<<std::endl;
+           std::cout<<"----++++: "<<outputParam->GetWriter()<<std::endl;
+     std::cout<<"----++++"<<std::endl;
+           //typedef otb::StreamingImageFileWriter<FloatVectorImageType>  FloatWriterType;
+           //StandardWriterWatcher watch(static_cast<FloatWriterType::Pointer>(static_cast<FloatWriterType *>(outputParam->GetWriter())), "write that");
+           //StandardWriterWatcher watch(outputParam->GetWriter(), "write that");
+           //m_WriterWatcherList.push_back( watch );
+     StandardFilterWatcher watch(outputParam->GetWriter(), oss.str());
+           m_FilterWatcherList.push_back( watch );
+           
+        }
+    }
+   std::cout<<"BRRRRRRRRRRRRRRR fin"<<std::endl;
+   */
+}
+
+void
 CommandLineLauncher::DisplayHelp()
 {
   std::cerr<<std::endl;
@@ -315,11 +394,11 @@ CommandLineLauncher::DisplayHelp()
 
 
   std::cerr<<"=== Mandatory parameters: "<<std::endl;
-  std::cerr<<"--"<<m_Parser->GetModulePathKey()<<" (Executables paths)"<<std::endl;
+  std::cerr<<m_Parser->GetModulePathKey()<<" (Executables paths)"<<std::endl;
   std::cerr<<"\t   Description: Paths to the executable library."<<std::endl;
-  if( !m_Parser->IsAttributExists( "--modPath", m_Expression ) )
+  if( !m_Parser->IsAttributExists( m_Parser->GetModulePathKey(), m_Expression ) )
     std::cerr<<"\t        Status: ENVIRONEMENT PATH"<<std::endl;
-  else if( m_Path == "")
+  else if( m_Path == "") 
     std::cerr<< "\t       Status: NO VALUE ASSOCIATED "<<m_Path<<std::endl;
   else
     std::cerr<< "\t       Status: USER VALUE: "<<m_Path<<std::endl;
@@ -335,20 +414,23 @@ CommandLineLauncher::DisplayHelp()
         }
     }
  
-  bool addOptionTag = true;
   // Optional parameters
+  std::cerr<<"=== Optional parameters: "<<std::endl;
+  std::cerr<<"--progress (Report progress)"<<std::endl;
+  std::cerr<<"\t   Description: Do report progress."<<std::endl;
+  std::cerr<<"\t Default value: 1"<< std::endl;
+  if( !m_Parser->IsAttributExists( "--progress", m_Expression ) )
+    std::cerr<<"\t        Status: DEFAULT VALUE"<<std::endl;
+  else if( m_Parser->GetAttribut( "--progress", m_Expression ).size() == 0 ) 
+    std::cerr<< "\t       Status: none"<<m_Path<<std::endl;
+  else
+    std::cerr<< "\t       Status: USER VALUE: "<<m_Parser->GetAttribut( "--progress", m_Expression )[0]<<std::endl;
   for( unsigned int i=0; i<nbOfParam; i++ )
     {
       Parameter::Pointer param =  paramGr->GetParameterByIndex(i);
       // Check if mandatory parameter are present and have value
       if( param->GetMandatory() != true )
         {
-          if( addOptionTag == true )
-            {
-              std::cerr<<"=== Optional parameters: "<<std::endl;
-              addOptionTag = false;
-            }
-
           std::cerr << this->DisplayParameterHelp( param );
         }
  
@@ -434,7 +516,8 @@ CommandLineLauncher::CheckKeyValidity()
   std::vector<std::string> appKeyList = m_Application->GetParametersKeys( true );
   appKeyList.push_back( std::string(m_Parser->GetModulePathKey()).substr(2, std::string(m_Parser->GetModulePathKey()).size()) );
   appKeyList.push_back( std::string(m_Parser->GetModuleNameKey()).substr(2, std::string(m_Parser->GetModuleNameKey()).size()) );
-  appKeyList.push_back( "--help" );
+  appKeyList.push_back( "help" );
+  appKeyList.push_back( "progress" );
 
   // Check if each key in the expression exists in the application
   for( unsigned int i=0; i<expKeyList.size(); i++ )
@@ -456,6 +539,7 @@ CommandLineLauncher::CheckKeyValidity()
         }
     }
 
+  /*
   if(res == false)
     {
       for( unsigned int i=0; i<expKeyList.size(); i++ )
@@ -467,6 +551,8 @@ CommandLineLauncher::CheckKeyValidity()
           std::cout<< appKeyList[j]<<std::endl;
         }
     }
+  */
+
   return res;
 }
 
