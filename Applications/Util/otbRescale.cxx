@@ -20,7 +20,7 @@
 
 #include "otbStreamingMinMaxVectorImageFilter.h"
 #include "otbVectorRescaleIntensityImageFilter.h"
-#include "otbStandardFilterWatcher.h"
+
 namespace otb
 {
 namespace Wrapper
@@ -91,9 +91,6 @@ private:
     m_MinMaxFilter->GetStreamer()->SetNumberOfLinesStrippedStreaming( 50 );
 
     m_MinMaxFilter->SetInput( inImage );
-    std::cout<<inImage->GetLargestPossibleRegion()<<std::endl;
-    otb::StandardFilterWatcher watcher(m_MinMaxFilter, "Min Max Computation");
- 
     m_MinMaxFilter->Update();
  
     FloatVectorImageType::PixelType inMin, inMax;
@@ -110,11 +107,6 @@ private:
 
     m_RescaleFilter->SetOutputMinimum( outMin );
     m_RescaleFilter->SetOutputMaximum( outMax );
-
-    std::cout<<"=========== min : "<<outMin<<std::endl;
-    std::cout<<"=========== max : "<<outMax<<std::endl;
-
-
     m_RescaleFilter->UpdateOutputInformation();
     
     SetParameterOutputImage("out", m_RescaleFilter->GetOutput());
