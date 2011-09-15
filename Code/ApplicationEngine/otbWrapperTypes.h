@@ -85,6 +85,9 @@ typedef otb::VectorData<VectorDataCoordinatePrecisionType,
                         VectorDataValuePrecisionType>
           VectorDataType;
 
+typedef otb::ObjectList<FloatVectorImageType>      FloatVectorImageListType;
+
+
 
 } // end namespace Wrapper
 } //end namespace otb

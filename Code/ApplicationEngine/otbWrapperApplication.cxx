@@ -29,6 +29,8 @@
 #include "otbWrapperOutputVectorDataParameter.h"
 #include "otbWrapperRadiusParameter.h"
 #include "otbWrapperStringParameter.h"
+#include "otbWrapperStringListParameter.h"
+#include "otbWrapperInputImageListParameter.h"
 
 #include "otbWrapperParameterGroup.h"
 
@@ -376,6 +378,22 @@ void Application::SetParameterString(std::string parameter, std::string value)
     }
 }
 
+void Application::SetParameterStringList(std::string parameter, std::vector<std::string> value)
+{
+  Parameter* param = GetParameterByKey(parameter);
+
+  if (dynamic_cast<InputImageListParameter*>(param))
+    {
+    InputImageListParameter* paramDown = dynamic_cast<InputImageListParameter*>(param);
+    paramDown->SetListFromFileName(value);
+    }
+  else if (dynamic_cast<StringListParameter*>(param))
+    {
+    StringListParameter* paramDown = dynamic_cast<StringListParameter*>(param);
+    paramDown->SetValue(value);
+    }
+}
+
 void Application::SetParameterOutputImage(std::string parameter, FloatVectorImageType* value)
 {
   Parameter* param = GetParameterByKey(parameter);
@@ -527,6 +545,25 @@ std::string Application::GetParameterString(std::string parameter)
   return ret;
 }
 
+std::vector<std::string> Application::GetParameterStringList(std::string parameter)
+{
+  std::vector<std::string> ret;
+  Parameter* param = GetParameterByKey(parameter);
+
+  if (dynamic_cast<InputImageListParameter*>(param))
+    {
+    InputImageListParameter* paramDown = dynamic_cast<InputImageListParameter*>(param);
+    ret = paramDown->GetFileNameList();
+    }
+  else if (dynamic_cast<StringListParameter*>(param))
+    {
+    StringListParameter* paramDown = dynamic_cast<StringListParameter*>(param);
+    ret = paramDown->GetValue();
+    }
+  return ret;
+}
+
+
 FloatVectorImageType* Application::GetParameterImage(std::string parameter)
 {
   FloatVectorImageType::Pointer ret;
@@ -536,6 +573,21 @@ FloatVectorImageType* Application::GetParameterImage(std::string parameter)
     {
     InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param);
     ret = paramDown->GetImage();
+    }
+
+  //TODO: exception if not found ?
+  return ret;
+}
+
+FloatVectorImageListType* Application::GetParameterImageList(std::string parameter)
+{
+  FloatVectorImageListType::Pointer ret;
+  Parameter* param = GetParameterByKey(parameter);
+
+  if (dynamic_cast<InputImageListParameter*>(param))
+    {
+    InputImageListParameter* paramDown = dynamic_cast<InputImageListParameter*>(param);
+    ret = paramDown->GetImageList();
     }
 
   //TODO: exception if not found ?

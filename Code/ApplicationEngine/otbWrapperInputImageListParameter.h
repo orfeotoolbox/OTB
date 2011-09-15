@@ -40,7 +40,6 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef otb::ObjectList<FloatVectorImageType>      VectorImageListType;
   typedef otb::ImageFileReader<FloatVectorImageType> ImageFileReaderType;
   typedef otb::ObjectList<ImageFileReaderType>  ImageFileReaderListType;
 
@@ -116,23 +115,23 @@ public:
   }
 
   /** Get one list of the stored image. */
-  VectorImageListType* GetImageList() const
+  FloatVectorImageListType* GetImageList() const
   {
     return m_ImageList;
   }
 
   /** Get one specific stored image. */
-  VectorImageListType* GetNthImage(unsigned int i) const
+  FloatVectorImageType* GetNthImage(unsigned int i) const
   {
     if(m_ImageList->Size()<i)
       {
         itkExceptionMacro(<< "No image "<<i<<". Only "<<m_ImageList->Size()<<" images available.");
       }
-    return m_ImageList;
+    return m_ImageList->GetNthElement(i);
   }
 
   /** Set the list of image. */
-  void SetImageList(VectorImageListType* imList)
+  void SetImageList(FloatVectorImageListType* imList)
   {
     m_ImageList = imList;
     m_ReaderList = ImageFileReaderListType::Pointer();
@@ -163,7 +162,7 @@ public:
 
   void ClearValue()
   {
-    m_ImageList = VectorImageListType::Pointer();
+    m_ImageList = FloatVectorImageListType::Pointer();
     m_ReaderList = ImageFileReaderListType::Pointer();
   }
 
@@ -173,7 +172,7 @@ protected:
   {
     this->SetName("Input Image List");
     this->SetKey("inList");
-    m_ImageList = VectorImageListType::New();
+    m_ImageList = FloatVectorImageListType::New();
     m_ReaderList = ImageFileReaderListType::New();
   }
 
@@ -182,7 +181,7 @@ protected:
   {}
 
  
-  VectorImageListType::Pointer     m_ImageList;
+  FloatVectorImageListType::Pointer     m_ImageList;
   ImageFileReaderListType::Pointer m_ReaderList;
 
 private:

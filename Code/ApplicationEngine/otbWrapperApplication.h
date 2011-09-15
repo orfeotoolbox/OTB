@@ -187,6 +187,24 @@ public:
    */
   void SetParameterString(std::string parameter, std::string value);
 
+  /* Set a string value
+   *
+   * Can be called for types :
+   * \li ParameterType_String
+   * \li ParameterType_Filename
+   * \li ParameterType_Directory
+   * \li ParameterType_Choice
+   * \li ParameterType_Float
+   * \li ParameterType_Int
+   * \li ParameterType_Radius
+   * \li ParameterType_InputImageParameter
+   * \li ParameterType_InputComplexImageParameter
+   * \li ParameterType_InputVectorDataParameter
+   * \li ParameterType_OutputImageParameter
+   * \li ParameterType_OutputVectorDataParameter
+   */
+  void SetParameterStringList(std::string parameter, std::vector<std::string> value);
+
   /* Set an output image value
    *
    * Can be called for types :
@@ -239,12 +257,27 @@ public:
    */
   std::string GetParameterString(std::string parameter);
 
+  /* Get a string list parameter value
+   *
+   * Can be called for types :
+   * \li ParameterType_StringList
+   * \li ParameterType_InputImageList
+   */
+  std::vector<std::string> GetParameterStringList(std::string parameter);
+
   /* Get an image value
    *
    * Can be called for types :
    * \li ParameterType_InputImage
    */
   FloatVectorImageType* GetParameterImage(std::string parameter);
+
+  /* Get an image list value
+   *
+   * Can be called for types :
+   * \li ParameterType_InputImageList
+   */
+  FloatVectorImageListType* GetParameterImageList(std::string parameter);
 
   /* Get a complex image value
    *
