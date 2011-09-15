@@ -12,7 +12,7 @@ endmacro()
 # Setup the option for each laguage
 #
 option ( WRAP_PYTHON "Wrap Python" OFF )
-#option ( WRAP_JAVA   "Wrap Java"   OFF )
+option ( WRAP_JAVA   "Wrap Java"   OFF )
 #option ( WRAP_LUA    "Wrap Lua"    OFF )
 #option ( WRAP_RUBY   "Wrap Ruby"   OFF )
 #option ( WRAP_TCL    "Wrap Tcl"    OFF )
@@ -70,6 +70,9 @@ endif()
 # JAVA SWIG configuration
 #
 if ( WRAP_JAVA )
+  message( WARNING "You have enabled Java wrapping of the ApplicationEngine, which is currently known to NOT work" )
+
+
   check_PIC_flag ( Java )
   find_package ( Java REQUIRED )
   find_package ( JNI REQUIRED )
@@ -84,9 +87,9 @@ if ( WRAP_JAVA )
   # Nicely write the bridge code in org/itk/simple
   set(CMAKE_SWIG_OUTDIR ${JAVA_SOURCE_DIRECTORY})
   set(CMAKE_SWIG_FLAGS -package "org.otb.application" ${CMAKE_SWIG_GLOBAL_FLAGS})
-  set(SWIG_MODULE_otbApplicationJava_EXTRA_DEPS OTBWrapperCore  ${SWIG_HEADERS})
+  set(SWIG_MODULE_otbApplicationJava_EXTRA_DEPS OTBApplicationEngine  ${SWIG_HEADERS})
   SWIG_add_module ( otbApplicationJava java otbApplication.i otbApplicationJAVA_wrap.cxx)
-  SWIG_link_libraries(otbApplicationJava OTBWrapperCore)
+  SWIG_link_libraries(otbApplicationJava OTBApplicationEngine )
   set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/otbApplicationJAVA_wrap.cxx COMPILE_FLAGS "-w")
 
   # Add target for org.otb.Application.jar
@@ -99,7 +102,7 @@ if ( WRAP_JAVA )
     COMMENT "Creating jar file..."
     COMMAND ${Java_JAVAC_EXECUTABLE} -d ${JAVA_BINARY_DIRECTORY} ${JAVA_SOURCE_DIRECTORY}/*.java
     COMMAND ${Java_JAR_EXECUTABLE} cf ${CMAKE_CURRENT_BINARY_DIR}/org.otb.application.jar -C ${JAVA_BINARY_DIRECTORY} org
-    DEPENDS ${SWIG_MODULE_otbApplication_REAL_NAME} otbApplicationJava OTBWrapperCore
+    DEPENDS ${SWIG_MODULE_otbApplication_REAL_NAME} otbApplicationJava OTBApplicationEngine
     )
 
   # Get the location of the extension directory
@@ -129,13 +132,13 @@ if ( WRAP_LUA )
   # Run swig
   set(CMAKE_SWIG_FLAGS ${CMAKE_SWIG_GLOBAL_FLAGS})
   set(CMAKE_SWIG_OUTDIR ${CMAKE_CURRENT_BINARY_DIR})
-  set(SWIG_MODULE_otbApplicationLua_EXTRA_DEPS OTBWrapperCore ${SWIG_HEADERS})
+  set(SWIG_MODULE_otbApplicationLua_EXTRA_DEPS OTBApplicationEngine ${SWIG_HEADERS})
   SWIG_module_initialize ( otbApplicationLua lua )
   SWIG_add_source_to_module ( otbApplicationLua swig_generated_source otbApplication.i ${SWIG_HEADERS} )
   set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/otbApplicationLUA_wrap.cxx COMPILE_FLAGS "-w")
 
   add_executable ( otbApplicationLua otbApplicationLuaMain.cxx otbApplicationLUA_wrap.cxx )
-  target_link_libraries ( otbApplicationLua ${LUA_LIB} OTBWrapperCore )
+  target_link_libraries ( otbApplicationLua ${LUA_LIB} OTBApplicationEngine )
 
   if ( UNIX )
     target_link_libraries ( otbApplicationLua curses )
@@ -159,11 +162,11 @@ if ( WRAP_RUBY )
   # Run swig
   set(CMAKE_SWIG_FLAGS -autorename -module otbapplication ${CMAKE_SWIG_GLOBAL_FLAGS})
   set(CMAKE_SWIG_OUTDIR ${CMAKE_CURRENT_BINARY_DIR})
-  set(SWIG_MODULE_otbApplication_EXTRA_DEPS OTBWrapperCore ${SWIG_HEADERS})
+  set(SWIG_MODULE_otbApplication_EXTRA_DEPS OTBApplicationEngine ${SWIG_HEADERS})
   SWIG_MODULE_INITIALIZE ( otbApplication ruby )
 
   SWIG_add_module ( otbApplication ruby otbApplication.i otbApplicationRUBY_wrap.cxx )
-  SWIG_link_libraries ( otbApplication ${RUBY_LIBRARY} OTBWrapperCore)
+  SWIG_link_libraries ( otbApplication ${RUBY_LIBRARY} OTBApplicationEngine )
   set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/otbApplicationRUBY_wrap.cxx COMPILE_FLAGS "-w")
 
   install(TARGETS otbapplication
