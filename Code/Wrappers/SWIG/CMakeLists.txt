@@ -1,4 +1,7 @@
-
+#
+# SimpleITK does this check, but it does not seem necessary in our case
+# TODO: figure out why SimpleITK needs this...
+#
 macro(check_PIC_flag Language)
   if ( UNIX AND NOT APPLE )
     if ( NOT ${CMAKE_CXX_FLAGS} MATCHES "-fPIC")
