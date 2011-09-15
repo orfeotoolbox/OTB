@@ -28,6 +28,8 @@
 #include "otbWrapperOutputVectorDataParameter.h"
 #include "otbWrapperRadiusParameter.h"
 #include "otbWrapperStringParameter.h"
+#include "otbWrapperStringListParameter.h"
+#include "otbWrapperInputImageListParameter.h"
 #include "otbWrapperParameterKey.h"
 
 #include <boost/algorithm/string.hpp>
@@ -140,7 +142,6 @@ ParameterGroup::AddParameter(ParameterType type, std::string paramKey, std::stri
     {
       parentParam = this;
     }
-  
 
   ParameterGroup* parentAsGroup = dynamic_cast<ParameterGroup*>(parentParam.GetPointer());
   if (parentAsGroup)
@@ -218,12 +219,23 @@ ParameterGroup::AddParameter(ParameterType type, std::string paramKey, std::stri
         newParam = ParameterGroup::New();
         }
         break;
+      case ParameterType_StringList:
+        {
+        newParam = StringListParameter::New();
+        }
+        break;
+      case ParameterType_InputImageList:
+        {
+        newParam = InputImageListParameter::New();
+        }
+        break;
       }
 
     if (newParam.IsNull())
       {
       itkExceptionMacro(<< "Parameter type not supported for " << paramKey);
       }
+
     newParam->SetKey(lastkey);
     newParam->SetName(paramName);
 
