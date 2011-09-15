@@ -38,7 +38,7 @@ namespace Wrapper
   
 /** \class CommandLineLauncher
  *  \brief This class check the validity of a command line application.
- *  
+ *
  * To be valid, the expression must be as follow:
  * ModuleName --attribut1_Key attrubut1_Value --attribut2_Key attrubut2_Value
  * After the attribut key, if the user give several values (expression without \"--\" separated by space), it will automacally be interpreted as a list.
@@ -59,7 +59,7 @@ public:
   itkNewMacro(Self);
   
   /** RTTI support */
-  itkTypeMacro(CommandLineLauncher,itk::Object);
+  itkTypeMacro(CommandLineLauncher, itk::Object);
   
   /** Parse result enum */
   typedef CommandLineParser::ParseResultType ParseResultType;
@@ -79,22 +79,22 @@ public:
   /** same as Load method but set the expression before. */
   bool Load( const std::string & exp );
 
-  /** Launch the process, using the Execute application method 
+  /** Launch the process, using the Execute application method
    * The method will check if the user asked for help (looking at --help key) before loading parameter and launching process.
    **/
   bool Execute();
 
-  /** Launch the process, using the ExecuteAndWriteOutput application method 
+  /** Launch the process, using the ExecuteAndWriteOutput application method
    * The method will check if the user asked for help (looking at --help key) before loading parameter and launching process.
    */
   bool ExecuteAndWriteOutput();
 
-  /** Gather the code process to do before Execute and ExecuteAndWriteOutput 
+  /** Gather the code process to do before Execute and ExecuteAndWriteOutput
    * Returns false if a problem occurs, true otherwise.
    */
   bool BeforeExecute();
 
-  /** Create and display the help of the application */   
+  /** Create and display the help of the application */
   void DisplayHelp();
 
 protected:
@@ -109,20 +109,20 @@ protected:
   /** Load the executable path. It looks for the key --modulePath, extract and interpret as path the following strings. */
   bool LoadPath();
 
- /** Load the application calling the CreateApplication method of the ApplicationRegistry classes. 
+ /** Load the application calling the CreateApplication method of the ApplicationRegistry classes.
   * Pay attention, the executable paths have to be loaded or set in the environment before calling the function. */
   void LoadApplication();
 
   /** Parse the user expression, extract the key and the associated string and set it as value of each corresonding application parameter. */
   CommandLineLauncher::ParamResultType LoadParameters();
 
-  /** Create and display the help of the application */   
+  /** Create and display the help of the application */
   std::string DisplayParameterHelp( const Parameter::Pointer & param );
 
-  /** Check if each key is unique in the expression. */   
+  /** Check if each key is unique in the expression. */
   bool CheckUnicity();
 
-  /** Check if each key is valid for the application. */   
+  /** Check if each key is valid for the application. */
   bool CheckKeyValidity();
 
   /** Load the watchers for internal progress and writeing progress report. */
