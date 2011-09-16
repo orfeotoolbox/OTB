@@ -324,6 +324,12 @@ CONFIGURE_FILE(${OTB_SOURCE_DIR}/CMake/otbConfigure.h.in
 CONFIGURE_FILE(${OTB_SOURCE_DIR}/CMake/UseOTB.cmake.in
                ${OTB_BINARY_DIR}/UseOTB.cmake COPYONLY IMMEDIATE)
 
+# Copy the helper macros to the build tree for use from external projects
+CONFIGURE_FILE(${OTB_SOURCE_DIR}/CMake/OTBParseArguments.cmake
+               ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/OTBParseArguments.cmake COPYONLY IMMEDIATE)
+CONFIGURE_FILE(${OTB_SOURCE_DIR}/CMake/OTBWrapperMacros.cmake
+               ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/OTBWrapperMacros.cmake COPYONLY IMMEDIATE)
+
 # Save the compiler settings so another project can import them.
 INCLUDE(${CMAKE_ROOT}/Modules/CMakeExportBuildSettings.cmake)
 CMAKE_EXPORT_BUILD_SETTINGS(${OTB_BINARY_DIR}/OTBBuildSettings.cmake)
