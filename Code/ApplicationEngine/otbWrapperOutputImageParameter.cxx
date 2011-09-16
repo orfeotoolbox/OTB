@@ -17,7 +17,7 @@
 =========================================================================*/
 #include "otbWrapperOutputImageParameter.h"
 #include "itkCastImageFilter.h"
-
+#include "otbStandardFilterWatcher.h"
 namespace otb
 {
 namespace Wrapper
@@ -113,6 +113,7 @@ OutputImageParameter::Write( )
       {
       m_FloatWriter->SetFileName( this->GetFileName() );
       m_FloatWriter->SetInput(this->GetImage());
+      //StandardFilterWatcher watch(static_cast<itk::ProcessObject*>(m_FloatWriter), "oss.str()");
       m_FloatWriter->Update();
       }
       break;

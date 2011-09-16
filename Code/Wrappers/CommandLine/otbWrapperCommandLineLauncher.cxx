@@ -334,7 +334,6 @@ CommandLineLauncher::LoadParameters()
 void
 CommandLineLauncher::LinkWatchers()
 {
-  /*
   m_FilterWatcherList.clear();
   m_WriterWatcherList.clear();
   // Link internall filters watcher
@@ -361,18 +360,17 @@ CommandLineLauncher::LinkWatchers()
 
            std::cout<<"----++++"<<std::endl;
            std::cout<<"----++++: "<<outputParam->GetWriter()<<std::endl;
-     std::cout<<"----++++"<<std::endl;
+           std::cout<<"----++++"<<std::endl;
            //typedef otb::StreamingImageFileWriter<FloatVectorImageType>  FloatWriterType;
            //StandardWriterWatcher watch(static_cast<FloatWriterType::Pointer>(static_cast<FloatWriterType *>(outputParam->GetWriter())), "write that");
            //StandardWriterWatcher watch(outputParam->GetWriter(), "write that");
            //m_WriterWatcherList.push_back( watch );
-     StandardFilterWatcher watch(outputParam->GetWriter(), oss.str());
-           m_FilterWatcherList.push_back( watch );
+           //StandardFilterWatcher watch(outputParam->GetWriter(), oss.str());
+           //m_FilterWatcherList.push_back( watch );
            
         }
     }
    std::cout<<"BRRRRRRRRRRRRRRR fin"<<std::endl;
-   */
 }
 
 void

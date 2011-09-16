@@ -71,6 +71,8 @@ private:
     SetParameterDescription( "outmin", "Minimum value of the output image." );
     SetParameterFloat("outmax", 255);
     SetParameterDescription( "outmax", "Maximum value of the output image." );
+
+    MandatoryOff("outmin");
   }
 
   void DoUpdateParameters()
