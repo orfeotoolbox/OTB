@@ -340,6 +340,8 @@ IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
     ${OTB_BINARY_DIR}/OTBLibraryDepends.cmake
     ${OTB_BINARY_DIR}/UseOTB.cmake
     ${OTB_SOURCE_DIR}/CMake/FindOpenThreads.cmake
+    ${OTB_SOURCE_DIR}/CMake/OTBParseArguments.cmake
+    ${OTB_SOURCE_DIR}/CMake/OTBWrapperMacros.cmake
     DESTINATION ${OTB_INSTALL_PACKAGE_DIR_CM24}
     COMPONENT Development)
     
