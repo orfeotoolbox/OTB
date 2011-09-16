@@ -1,4 +1,9 @@
-include(OTBParseArguments)
+
+# When used externally, OTBParseArguments is included explicitely in UseOTB.cmake
+# Otherwise, let's include it here
+if (NOT COMMAND OTB_PARSE_ARGUMENTS)
+  include(OTBParseArguments)
+endif()
 
 macro(OTB_CREATE_APPLICATION)
   OTB_PARSE_ARGUMENTS(
