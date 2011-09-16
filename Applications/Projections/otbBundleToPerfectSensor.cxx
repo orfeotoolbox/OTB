@@ -15,81 +15,102 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#include "otbBundleToPerfectSensor.h"
+#include "otbWrapperApplication.h"
+#include "otbWrapperApplicationFactory.h"
 
-#include <iostream>
-
-#include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
-#include "otbImage.h"
-#include "otbVectorImage.h"
+#include "itkVectorIndexSelectionCastImageFilter.h"
 #include "otbGenericRSResampleImageFilter.h"
 #include "otbBCOInterpolateImageFunction.h"
-
-#include "itkExceptionObject.h"
-
-#include "otbStandardWriterWatcher.h"
 #include "otbSimpleRcsPanSharpeningFusionImageFilter.h"
 #include "itkPixelBuilder.h"
-
 #include "itkFixedArray.h"
 
 namespace otb
 {
-int BundleToPerfectSensor::Describe(ApplicationDescriptor* descriptor)
+namespace Wrapper
 {
-  descriptor->SetName("BundleToSensorModel");
-  descriptor->SetDescription("Using available image metadata to determine the sensor model, computes a cartographic projection of the image");
 
-  descriptor->AddOption("InputPanchro","The input panchromatic image","inP", 1, true, otb::ApplicationDescriptor::InputImage);
-  descriptor->AddOption("InputXS","The input multi-spectral image","inXS", 1, true, otb::ApplicationDescriptor::InputImage);
-  descriptor->AddOption("DEMDirectory","Directory were to find the DEM tiles","dem", 1, false, otb::ApplicationDescriptor::DirectoryName);
-  descriptor->AddOption("LocMapSpacing","Generate a coarser deformation field with the given spacing.","lmSpacing", 1, false, otb::ApplicationDescriptor::Real);
-  descriptor->AddOption("AvailableMemory","Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default)","ram", 1, false, otb::ApplicationDescriptor::Integer);
 
-  descriptor->AddOutputImage();
-
-  return EXIT_SUCCESS;
-}
-
-int BundleToPerfectSensor::Execute(otb::ApplicationOptionsResult* parseResult)
+class BundleToPerfectSensor : public Application
 {
-  try
-    {
+public:
+  /** Standard class typedefs. */
+  typedef BundleToPerfectSensor         Self;
+  typedef Application                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-    typedef unsigned short int PixelType;
+  /** Standard macro */
+  itkNewMacro(Self);
 
-    typedef otb::VectorImage<PixelType, 2>                XsImageType;
-    typedef otb::Image<PixelType, 2>                       PanImageType;
-    typedef otb::ImageFileReader<XsImageType>             XsReaderType;
-    typedef otb::ImageFileReader<PanImageType>            PanReaderType;
-    typedef otb::StreamingImageFileWriter<XsImageType>    WriterType;
-    typedef otb::BCOInterpolateImageFunction<XsImageType> InterpolatorType;
+  itkTypeMacro(BundleToPerfectSensor, otb::Application);
 
-    typedef otb::GenericRSResampleImageFilter<XsImageType, XsImageType>  ResamplerType;
+private:
 
-    typedef otb::SimpleRcsPanSharpeningFusionImageFilter<PanImageType, XsImageType, XsImageType> FusionFilterType;
+  BundleToPerfectSensor()
+  {
+    SetName("BundleToPerfectSensor");
+    SetDescription("Perform P+XS pansharpening");
+  }
 
-    typedef itk::ExtractImageFilter<XsImageType, XsImageType> ExtractFilterType;
+  virtual ~BundleToPerfectSensor()
+  {
+  }
 
-    // Read input images information
-    PanReaderType::Pointer preader= PanReaderType::New();
-    preader->SetFileName(parseResult->GetParameterString("InputPanchro"));
-    preader->GenerateOutputInformation();
+  void DoCreateParameters()
+  {
+    AddParameter(ParameterType_InputImage,   "inp",   "Input PAN Image");
+    AddParameter(ParameterType_InputImage,   "inxs",  "Input XS Image");
+    AddParameter(ParameterType_Directory,    "dem",   "DEM directory");
+    AddParameter(ParameterType_Float,        "lms",   "Spacing of the deformation field");
+    AddParameter(ParameterType_OutputImage,  "out",   "Output image");
 
-    XsReaderType::Pointer xsreader= XsReaderType::New();
-    xsreader->SetFileName(parseResult->GetParameterString("InputXS"));
-    xsreader->GenerateOutputInformation();
-    
+    MandatoryOff("lms");
+    MandatoryOff("dem");
+  }
+  
+  void DoUpdateParameters()
+  {
+    // Nothing to do here : all parameters are independent
+  }
+
+  void DoExecute()
+  {
+    FloatVectorImageType* panchroV = GetParameterImage("inp");
+    if ( panchroV->GetNumberOfComponentsPerPixel() != 1 )
+      {
+      itkExceptionMacro(<< "The panchromatic image must be a single channel image")
+      }
+
+    // Transform the PAN image to otb::Image
+    typedef otb::Image<FloatVectorImageType::InternalPixelType> FloatImageType;
+    typedef itk::VectorIndexSelectionCastImageFilter<FloatVectorImageType, FloatImageType> VectorIndexSelectionCastImageFilterType;
+
+    VectorIndexSelectionCastImageFilterType::Pointer channelSelect = VectorIndexSelectionCastImageFilterType::New();
+    m_Ref.push_back(channelSelect.GetPointer());
+    channelSelect->SetIndex(0);
+    channelSelect->SetInput(panchroV);
+    channelSelect->UpdateOutputInformation();
+    FloatImageType::Pointer panchro = channelSelect->GetOutput();
+
+
+    FloatVectorImageType* xs = GetParameterImage("inxs");
+
+    typedef otb::BCOInterpolateImageFunction<FloatVectorImageType> InterpolatorType;
+    typedef otb::GenericRSResampleImageFilter<FloatVectorImageType, FloatVectorImageType>  ResamplerType;
+    typedef otb::SimpleRcsPanSharpeningFusionImageFilter<FloatImageType, FloatVectorImageType, FloatVectorImageType> FusionFilterType;
+
     // Resample filter
     ResamplerType::Pointer    resampler = ResamplerType::New();
+    m_Ref.push_back(resampler.GetPointer());
+
     InterpolatorType::Pointer interpolator = InterpolatorType::New();
     resampler->SetInterpolator(interpolator);
     
     // Configure DEM directory
-    if(parseResult->IsOptionPresent("DEMDirectory"))
+    if(IsParameterEnabled("dem") && HasValue("dem"))
       {
-      resampler->SetDEMDirectory(parseResult->GetParameterString("DEMDirectory", 0));
+      resampler->SetDEMDirectory( GetParameterString("dem") );
       }
     else
       {
@@ -100,16 +121,16 @@ int BundleToPerfectSensor::Execute(otb::ApplicationOptionsResult* parseResult)
       }
 
     // Set up output image informations
-    XsImageType::SpacingType spacing = preader->GetOutput()->GetSpacing();
-    XsImageType::IndexType start = preader->GetOutput()->GetLargestPossibleRegion().GetIndex();
-    XsImageType::SizeType size = preader->GetOutput()->GetLargestPossibleRegion().GetSize();
-    XsImageType::PointType origin = preader->GetOutput()->GetOrigin();
+    FloatVectorImageType::SpacingType spacing = panchro->GetSpacing();
+    FloatVectorImageType::IndexType   start = panchro->GetLargestPossibleRegion().GetIndex();
+    FloatVectorImageType::SizeType    size = panchro->GetLargestPossibleRegion().GetSize();
+    FloatVectorImageType::PointType   origin = panchro->GetOrigin();
 
-    if(parseResult->IsOptionPresent("LocMapSpacing"))
+    if(IsParameterEnabled("lms") && HasValue("lms"))
       {
-      double defScalarSpacing = parseResult->GetParameterFloat("LocMapSpacing");
-      std::cout<<"Generating coarse deformation field (spacing="<<defScalarSpacing<<")"<<std::endl;
-      XsImageType::SpacingType defSpacing;
+      double defScalarSpacing = GetParameterFloat("lms");
+      std::cout << "Generating coarse deformation field (spacing="<<defScalarSpacing<<")" << std::endl;
+      FloatVectorImageType::SpacingType defSpacing;
 
       defSpacing[0] = defScalarSpacing;
       defSpacing[1] = defScalarSpacing;
@@ -118,66 +139,44 @@ int BundleToPerfectSensor::Execute(otb::ApplicationOptionsResult* parseResult)
       }
     else
       {
-      XsImageType::SpacingType defSpacing;
+      FloatVectorImageType::SpacingType defSpacing;
       defSpacing[0]=10*spacing[0];
       defSpacing[1]=10*spacing[1];
       resampler->SetDeformationFieldSpacing(defSpacing);
       }
     
-    XsImageType::PixelType defaultValue;
-    itk::PixelBuilder<XsImageType::PixelType>::Zero(defaultValue,
-                                                    xsreader->GetOutput()->GetNumberOfComponentsPerPixel());
+    FloatVectorImageType::PixelType defaultValue;
+    itk::PixelBuilder<FloatVectorImageType::PixelType>::Zero(defaultValue,
+                                                             xs->GetNumberOfComponentsPerPixel());
 
-    resampler->SetInput(xsreader->GetOutput());
+    resampler->SetInput(xs);
     resampler->SetOutputOrigin(origin);
     resampler->SetOutputSpacing(spacing);
     resampler->SetOutputSize(size);
     resampler->SetOutputStartIndex(start);
-    resampler->SetOutputKeywordList(preader->GetOutput()->GetImageKeywordlist());
-    resampler->SetOutputProjectionRef(preader->GetOutput()->GetProjectionRef());
+    resampler->SetOutputKeywordList(panchro->GetImageKeywordlist());
+    resampler->SetOutputProjectionRef(panchro->GetProjectionRef());
     resampler->SetEdgePaddingValue(defaultValue);
 
+    resampler->UpdateOutputInformation();
+    FloatVectorImageType::Pointer xsResample = resampler->GetOutput();
+
     FusionFilterType::Pointer  fusionFilter = FusionFilterType::New();
-    fusionFilter->SetPanInput(preader->GetOutput());
+    m_Ref.push_back(fusionFilter.GetPointer());
+
+    fusionFilter->SetPanInput(panchro);
     fusionFilter->SetXsInput(resampler->GetOutput());
-    fusionFilter->GetOutput()->UpdateOutputInformation();
+    fusionFilter->UpdateOutputInformation();
     
-    WriterType::Pointer writer = WriterType::New();
-    writer->SetFileName(parseResult->GetOutputImage());
-    writer->SetInput(fusionFilter->GetOutput());
-    writer->SetWriteGeomFile(true);
-    
-    unsigned int ram = 256;
-    if (parseResult->IsOptionPresent("AvailableMemory"))
-      {
-      ram = parseResult->GetParameterUInt("AvailableMemory");
-      }
+    SetParameterOutputImage("out", fusionFilter->GetOutput());
+  }
 
-    const double bias = 1.27;
-    writer->SetAutomaticTiledStreaming(ram, bias);
+  std::vector<itk::ProcessObject::Pointer> m_Ref;
 
-    otb::StandardWriterWatcher w4(writer, resampler,"Perfect sensor fusion");
-    writer->Update();
-    }
-  catch ( itk::ExceptionObject & err )
-    {
-    std::cout << "Exception itk::ExceptionObject raised !" << std::endl;
-    std::cout << err << std::endl;
-    return EXIT_FAILURE;
-    }
-  catch ( std::bad_alloc & err )
-    {
-    std::cout << "Exception bad_alloc : "<<(char*)err.what()<< std::endl;
-    return EXIT_FAILURE;
-    }
-  catch ( ... )
-    {
-    std::cout << "Unknown exception raised !" << std::endl;
-    return EXIT_FAILURE;
-    }
-  return EXIT_SUCCESS;
+};
 
 
 }
-
 }
+
+OTB_APPLICATION_EXPORT(otb::Wrapper::BundleToPerfectSensor)
