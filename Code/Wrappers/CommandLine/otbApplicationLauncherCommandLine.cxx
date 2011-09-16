@@ -18,7 +18,6 @@
 
 #include "otbWrapperCommandLineLauncher.h"
 
-
 int main(int argc, char* argv[])
 {
   if (argc < 2)
@@ -27,36 +26,34 @@ int main(int argc, char* argv[])
     return EXIT_FAILURE;
     }
 
-
   // Construct the string expression
   std::string exp;
-  for( unsigned int i=1; i<argc; i++)
+  for (int i = 1; i < argc; i++)
     {
-      if( i!= argc-1)
-        {
-          exp.append(argv[i]);
-          exp.append(" ");
-        }
-      else
-        {
-          exp.append(argv[i]);
-        }
-
+    if (i != argc - 1)
+      {
+      exp.append(argv[i]);
+      exp.append(" ");
+      }
+    else
+      {
+      exp.append(argv[i]);
+      }
     }
 
   typedef otb::Wrapper::CommandLineLauncher LauncherType;
   LauncherType::Pointer launcher = LauncherType::New();
 
-  if (launcher->Load( exp ) == true )
+  if (launcher->Load(exp) == true)
     {
-      if (launcher->ExecuteAndWriteOutput() == false)
-        {
-          return EXIT_FAILURE;
-        }
+    if (launcher->ExecuteAndWriteOutput() == false)
+      {
+      return EXIT_FAILURE;
+      }
     }
   else
     {
-      return EXIT_FAILURE;
+    return EXIT_FAILURE;
     }
 
   return EXIT_SUCCESS;
