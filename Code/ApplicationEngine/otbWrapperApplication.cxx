@@ -156,6 +156,16 @@ bool Application::IsMandatory(std::string paramKey) const
   return GetParameterByKey(paramKey)->GetMandatory();
 }
 
+void Application::MandatoryOn(std::string paramKey)
+{
+  GetParameterByKey(paramKey)->SetMandatory(true);
+}
+
+void Application::MandatoryOff(std::string paramKey)
+{
+  GetParameterByKey(paramKey)->SetMandatory(false);
+}
+
 /* Returns true if the parameter has an associated value provided externally
  *  (not automatically computed by the application) */
 bool Application::HasUserValue(std::string paramKey) const
