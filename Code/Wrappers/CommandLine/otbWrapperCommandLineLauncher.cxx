@@ -31,7 +31,6 @@
 #include "otbWrapperRadiusParameter.h"
 #include "otbWrapperStringParameter.h"
 // List value parameter
-#include "otbWrapperOutputImageListParameter.h"
 #include "otbWrapperInputImageListParameter.h"
 #include "otbWrapperStringListParameter.h"
 
@@ -49,7 +48,7 @@ namespace otb
 namespace Wrapper
 {
 
-  CommandLineLauncher::CommandLineLauncher() : m_Expression(""), m_FilterWatcherList(), m_WriterWatcherList()
+CommandLineLauncher::CommandLineLauncher() : m_Expression(""), m_FilterWatcherList(), m_WriterWatcherList()
 {
   m_Application = NULL;
   m_Parser = CommandLineParser::New();
@@ -294,10 +293,6 @@ CommandLineLauncher::LoadParameters()
       if( type == ParameterType_InputImageList )
         {
           dynamic_cast<InputImageListParameter *>(param.GetPointer())->SetListFromFileName( values );
-        }
-      else if( type == ParameterType_OutputImageList )
-        {
-          dynamic_cast<OutputImageListParameter *>(param.GetPointer())->SetFileNameList( values );
         }
       else if( type == ParameterType_StringList )
         {

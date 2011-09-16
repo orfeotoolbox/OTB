@@ -152,7 +152,6 @@ otbWrapperInputImageParameterTest.cxx
 otbWrapperInputVectorDataParameterTest.cxx
 otbWrapperInputImageListParameterTest.cxx
 otbWrapperOutputImageParameterTest.cxx
-otbWrapperOutputImageListParameterTest.cxx
 otbWrapperNumericalParameterTest.cxx
 otbWrapperParameterListTest.cxx
 otbWrapperParameterTest.cxx

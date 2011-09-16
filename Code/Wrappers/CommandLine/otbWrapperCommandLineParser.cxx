@@ -17,28 +17,11 @@
 =========================================================================*/
 #include "otbWrapperCommandLineParser.h"
 
-// Single value parameter
-#include "otbWrapperChoiceParameter.h"
-#include "otbWrapperDirectoryParameter.h"
-#include "otbWrapperEmptyParameter.h"
-#include "otbWrapperFilenameParameter.h"
-#include "otbWrapperInputComplexImageParameter.h"
-#include "otbWrapperInputImageParameter.h"
-#include "otbWrapperInputVectorDataParameter.h"
-#include "otbWrapperNumericalParameter.h"
-#include "otbWrapperOutputImageParameter.h"
-#include "otbWrapperOutputVectorDataParameter.h"
-#include "otbWrapperRadiusParameter.h"
-#include "otbWrapperStringParameter.h"
-// List value parameter
-#include "otbWrapperOutputImageListParameter.h"
-#include "otbWrapperInputImageListParameter.h"
-#include "otbWrapperStringListParameter.h"
-//#include "otbWrapperParameterGroup.h"
-
 
 #include "otbWrapperApplicationRegistry.h"
 #include "otbWrapperApplication.h"
+
+#include <itksys/SystemTools.hxx>
 #include <itksys/RegularExpression.hxx>
 #include <string>
 #include <iostream>
