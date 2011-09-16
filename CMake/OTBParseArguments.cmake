@@ -1,6 +1,6 @@
 # Source : http://www.itk.org/Wiki/CMakeMacroParseArguments
 
-macro(PARSE_ARGUMENTS prefix arg_names option_names)
+macro(OTB_PARSE_ARGUMENTS prefix arg_names option_names)
   set(DEFAULT_ARGS)
   foreach(arg_name ${arg_names})
     set(${prefix}_${arg_name})

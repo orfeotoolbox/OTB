@@ -1,7 +1,7 @@
-include(ParseArguments)
+include(OTBParseArguments)
 
 macro(OTB_CREATE_APPLICATION)
-  PARSE_ARGUMENTS(
+  OTB_PARSE_ARGUMENTS(
       APPLICATION
       "NAME;SOURCES;INCLUDE_DIRS;LINK_LIBRARIES;INSTALL_PATH"
       ""
