@@ -1,3 +1,4 @@
+include(OTBWrapperMacros)
 
 add_subdirectory(Classification)
 add_subdirectory(Hyperspectral)

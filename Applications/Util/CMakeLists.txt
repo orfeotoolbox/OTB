@@ -1,4 +1,3 @@
-include(WrapperMacros)
 
 OTB_CREATE_APPLICATION(NAME           ExtractROI
                        SOURCES        otbExtractROI.cxx
