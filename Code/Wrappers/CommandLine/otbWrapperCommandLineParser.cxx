@@ -31,7 +31,9 @@ namespace otb
 namespace Wrapper
 {
 
-  CommandLineParser::CommandLineParser() : m_ModuleNameKey("--moduleName"), m_ModulePathKey("--modulePath")
+CommandLineParser::CommandLineParser() :
+    m_ModuleNameKey("--moduleName"),
+    m_ModulePathKey("--modulePath")
 {
 }
 
