@@ -38,9 +38,13 @@ public:
   QtWidgetOutputImageParameter(OutputImageParameter*, QtWidgetModel*);
   virtual ~QtWidgetOutputImageParameter();
 
+  /** Get the PixelType*/
+  //itkGetMacro(PixelType, int);
+
 protected slots:
   void SetFileName( const QString& value );
   void SelectFile();
+  void SetPixelType(int pixelType);
 
 private:
   QtWidgetOutputImageParameter(const QtWidgetOutputImageParameter&); //purposely not implemented
@@ -56,6 +60,9 @@ private:
   QHBoxLayout * m_HLayout;
   QLineEdit*    m_Input;
   QPushButton * m_Button;
+  QComboBox*    m_ComboBox;
+  int           m_PixelType;
+  
 };
 
 

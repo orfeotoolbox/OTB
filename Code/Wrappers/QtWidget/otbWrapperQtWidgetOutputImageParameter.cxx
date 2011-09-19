@@ -16,6 +16,7 @@
 
 =========================================================================*/
 #include "otbWrapperQtWidgetOutputImageParameter.h"
+#include "otbWrapperTypes.h"
 
 namespace otb
 {
@@ -48,6 +49,22 @@ void QtWidgetOutputImageParameter::DoCreateWidget()
   connect( m_Input, SIGNAL(textChanged(const QString&)), this, SLOT(SetFileName(const QString&)) );
   connect( m_Input, SIGNAL(textChanged(const QString&)), GetModel(), SLOT(NotifyUpdate()) );
   m_HLayout->addWidget(m_Input);
+
+  // Set the Output PixelType choice Combobox
+  m_ComboBox = new QComboBox;
+  m_ComboBox->setToolTip("Output Pixel Type");
+  m_ComboBox->addItem( "char");
+  m_ComboBox->addItem( "unsigned char");
+  m_ComboBox->addItem( "short");
+  m_ComboBox->addItem( "unsigned short");
+  m_ComboBox->addItem( "int");
+  m_ComboBox->addItem( "unsigned int");
+  m_ComboBox->addItem( "float");
+  m_ComboBox->addItem( "double");
+  m_ComboBox->setCurrentIndex(m_OutputImageParam->GetPixelType());
+  connect( m_ComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(SetPixelType(int)) );
+  connect( m_ComboBox, SIGNAL(currentIndexChanged(int)), GetModel(), SLOT(NotifyUpdate()) );
+  m_HLayout->addWidget(m_ComboBox);
 
   // Set up input text edit
   m_Button = new QPushButton;
@@ -84,6 +101,12 @@ void QtWidgetOutputImageParameter::SetFileName(const QString& value)
   // notify of value change
   QString key( QString::fromStdString(m_OutputImageParam->GetKey()) );
   emit ParameterChanged(key);
+}
+
+void QtWidgetOutputImageParameter::SetPixelType(int  pixelType)
+{
+  m_OutputImageParam->SetPixelType(static_cast< ImagePixelType >(pixelType));
+  m_PixelType = pixelType;
 }
 
 }
