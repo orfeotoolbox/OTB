@@ -11,13 +11,13 @@ endif(WIN32)
 set(APPLICATIONS_TESTS ${CXX_TEST_PATH}/otbWrapperExampleTests_Smoothing)
 
 add_test(NAME exTvRescaleTest
-         COMMAND otbWrapperExampleTests
-          otbRescaleTest
-          $<TARGET_FILE_DIR:otbapp_Rescale>
-          ${INPUTDATA}/poupees.tif
-          ${TEMP}/owTvRescaleTest.tif
-          20
-          150 )
+         COMMAND otbApplicationLauncherCommandLine
+                 Rescale
+                 --modulePath $<TARGET_FILE_DIR:otbapp_Rescale>
+                 --in ${INPUTDATA}/poupees.tif
+                 --out ${TEMP}/owTvRescaleTest.tif
+                 --outmin 20
+                 --outmax 150 )
 
 add_test(NAME exTvSmoothingTest
          COMMAND otbWrapperExampleTests
@@ -26,11 +26,13 @@ add_test(NAME exTvSmoothingTest
                  ${INPUTDATA}/poupees.tif
                  ${TEMP}/owTvSmoothingTest2.tif )
 
+
 add_test(NAME exTvReadImageInfoTest
-         COMMAND otbWrapperExampleTests
-          otbReadImageInfoTest
-          $<TARGET_FILE_DIR:otbapp_ReadImageInfo>
-          ${INPUTDATA}/poupees.tif )
+         COMMAND otbApplicationLauncherCommandLine
+                 ReadImageInfo
+                 --modulePath $<TARGET_FILE_DIR:otbapp_ReadImageInfo>
+                 --in ${INPUTDATA}/poupees.tif )
+         
 
 add_executable(otbWrapperExampleTests
                  otbWrapperExampleTests.cxx
