@@ -95,7 +95,9 @@ private:
 
     m_MinMaxFilter->SetInput( inImage );
     m_MinMaxFilter->Update();
- 
+    otbAppLogDEBUG( << "Min/Max computation done : min=" << m_MinMaxFilter->GetMinimum()
+                    << " max= " << m_MinMaxFilter->GetMaximum() )
+
     FloatVectorImageType::PixelType inMin, inMax;
 
     m_RescaleFilter->SetInput( inImage );
