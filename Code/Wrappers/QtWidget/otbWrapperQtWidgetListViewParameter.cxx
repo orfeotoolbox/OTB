@@ -27,7 +27,7 @@ namespace Wrapper
 
 QtWidgetListViewParameter::QtWidgetListViewParameter(ListViewParameter* param, QtWidgetModel* m)
 : QtWidgetParameterBase(m),
-  m_ListViewParam(param),m_LineHeight(20)
+  m_ListViewParam(param), m_LineHeight(20)
 {
 }
 

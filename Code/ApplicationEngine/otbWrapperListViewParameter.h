@@ -28,7 +28,7 @@ namespace Wrapper
 
 /** \class ListViewParameter
  *  \brief This class represent a ListWidget parameter for the wrapper framework
- * 
+ *
  * The row selected in the ListWidget are stored in a std::vector. The
  * method GetSelectedItems() allow the user to access to this method.
  *

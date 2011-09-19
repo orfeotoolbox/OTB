@@ -656,8 +656,8 @@ std::string Application::GetParameterAsString(std::string paramKey)
   std::string ret;
   ParameterType type = this->GetParameterType( paramKey );
 
-  if( type == ParameterType_String || type == ParameterType_Filename 
-      || type == ParameterType_Directory || type == ParameterType_InputImage 
+  if( type == ParameterType_String || type == ParameterType_Filename
+      || type == ParameterType_Directory || type == ParameterType_InputImage
       || type == ParameterType_InputComplexImage || type == ParameterType_InputVectorData
       || type == ParameterType_OutputImage || type == ParameterType_OutputVectorData  )
     {

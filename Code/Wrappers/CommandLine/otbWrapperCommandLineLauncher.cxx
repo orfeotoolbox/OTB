@@ -397,7 +397,7 @@ CommandLineLauncher::LoadParameters()
         outPixType = ImagePixelType_float;
       else if( values[0] == "double" )
         outPixType = ImagePixelType_double;
-      else 
+      else
         {
           return WRONGPARAMETERVALUE;
         }
@@ -418,7 +418,6 @@ CommandLineLauncher::LoadParameters()
   
   return OKPARAM;
 }
-
 
 
 void
@@ -445,7 +444,7 @@ CommandLineLauncher::LinkWatchers()
            oss<< "Writing "<< param->GetName()<<"...";
 
            StandardFilterWatcher * watch = new StandardFilterWatcher(outputParam->GetWriter(), oss.str());
-           m_WatcherList.push_back( watch );          
+           m_WatcherList.push_back( watch );
         }
     }
 }
@@ -552,11 +551,11 @@ CommandLineLauncher::DisplayParameterHelp( const Parameter::Pointer & param, con
    // Display parameter description
   if( std::string(param->GetDescription()).size() != 0 )
     {
-      oss<<"\t   Description: "<<param->GetDescription()<< std::endl;;
+      oss<<"\t   Description: "<<param->GetDescription()<< std::endl; ;
     }
   else
     {
-      oss<<"\t   Description: none"<< std::endl;;
+      oss<<"\t   Description: none"<< std::endl; ;
     }
  
  // Display the type the parameter

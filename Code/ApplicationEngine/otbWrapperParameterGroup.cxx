@@ -407,8 +407,8 @@ ParameterGroup::GetParameterByKey(std::string name)
         {
         if (associatedParam.IsNull())
           {
-          itkExceptionMacro(<< "Choice " << splittedName[1] << "in " 
-                            << splittedName[0] << "  has no key named " 
+          itkExceptionMacro(<< "Choice " << splittedName[1] << "in "
+                            << splittedName[0] << "  has no key named "
                             << splittedName[2]);
           }
 
