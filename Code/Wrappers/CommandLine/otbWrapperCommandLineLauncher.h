@@ -27,6 +27,8 @@
 #include "itksys/SystemTools.hxx"
 #include "otbWrapperCommandLineParser.h"
 
+#include "itkStdStreamLogOutput.h"
+
 #include "otbStandardFilterWatcher.h"
 
 
@@ -140,6 +142,8 @@ private:
   CommandLineParser::Pointer m_Parser;
 
   WatcherListType m_WatcherList;
+
+  itk::StdStreamLogOutput::Pointer m_LogOutput;
 
 }; //end class
 

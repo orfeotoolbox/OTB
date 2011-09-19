@@ -52,6 +52,8 @@ CommandLineLauncher::CommandLineLauncher() : m_Expression(""), m_WatcherList()
 {
   m_Application = NULL;
   m_Parser = CommandLineParser::New();
+  m_LogOutput = itk::StdStreamLogOutput::New();
+  m_LogOutput->SetStream( std::cout );
 }
 
 CommandLineLauncher::CommandLineLauncher(const char * exp) : m_Expression(exp)
@@ -264,6 +266,10 @@ CommandLineLauncher::LoadApplication()
       std::cerr << "ERROR: Could not find application \"" << moduleName <<"\""<< std::endl;
       return;
     }
+
+  // Attach log output to the Application logger
+  m_Application->GetLogger()->SetTimeStampFormat(itk::LoggerBase::HUMANREADABLE);
+  m_Application->GetLogger()->AddLogOutput(m_LogOutput);
 }
 
 CommandLineLauncher::ParamResultType
