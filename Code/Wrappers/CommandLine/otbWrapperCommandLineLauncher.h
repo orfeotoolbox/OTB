@@ -106,7 +106,7 @@ protected:
   virtual ~CommandLineLauncher();
 
   /** Load the executable path. It looks for the key --modulePath, extract and interpret as path the following strings. */
-  bool LoadPath();
+  void LoadPath();
 
  /** Load the application calling the CreateApplication method of the ApplicationRegistry classes.
   * Pay attention, the executable paths have to be loaded or set in the environment before calling the function. */
@@ -116,7 +116,7 @@ protected:
   CommandLineLauncher::ParamResultType LoadParameters();
 
   /** Create and display the help of the application */
-  std::string DisplayParameterHelp( const Parameter::Pointer & param );
+  std::string DisplayParameterHelp( const Parameter::Pointer & param, const std::string paramKey );
 
   /** Check if each key is unique in the expression. */
   bool CheckUnicity();

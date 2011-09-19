@@ -237,11 +237,18 @@ bool
 CommandLineParser::IsAttributExists( const std::string key, const std::string & exp  )
 {
   std::string keySpaced = key;
+ // Add space to avoid troubles with key twhich starts by another one : --out and --outmax for example
   keySpaced.append(" ");
   std::size_t found = exp.find(keySpaced);
   if( found == std::string::npos )
     {
-      return false;
+      // Case the attribut is at the end of the expression : no space
+      found = exp.find(key);
+      if( found == std::string::npos )
+        {
+          return false;
+        }
+      return true;
     }
 
   return true;
