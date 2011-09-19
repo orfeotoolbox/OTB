@@ -164,42 +164,47 @@ CommandLineParser::GetAttribut( const std::string & key, const std::string & exp
       itkExceptionMacro("No key \""<<key<<"\" found in \""<<exp<<"\".");
     }
 
- std::vector<std::string> res;
+  std::vector<std::string> res;
   std::string expFromKey = std::string(exp).substr(found+key.size(), std::string(exp).size());
-
+  
   if( expFromKey.size() == 0 )
     {
       return res;
     }
-
+ 
   std::string tempModKey = expFromKey;
   // remove other key in the string if there's any
   if( expFromKey.find("--") != std::string::npos)
     {
       tempModKey = expFromKey.substr( 0, expFromKey.find("--")-1);
     }
-  std::vector<itksys::String> spaceSplitted = itksys::SystemTools::SplitString(tempModKey.substr(1, tempModKey.size()).c_str(), ' ', false);
-  // Remove " " string element
-  for(unsigned int i=0; i<spaceSplitted.size(); i++)
+
+  // Only if the key has values assciated
+  if( tempModKey.size() > 0 )
     {
-      if( spaceSplitted[i] == " ")
+      std::vector<itksys::String> spaceSplitted = itksys::SystemTools::SplitString(tempModKey.substr(1, tempModKey.size()).c_str(), ' ', false);
+      
+      // Remove " " string element
+      for(unsigned int i=0; i<spaceSplitted.size(); i++)
         {
-          spaceSplitted.erase(spaceSplitted.begin()+i);
-          i--;
+          if( spaceSplitted[i] == " ")
+            {
+              spaceSplitted.erase(spaceSplitted.begin()+i);
+              i--;
+            }
+        }
+    
+      // Remove space at the begining of the string and cast into std::vector<std::string>
+      for(unsigned int i=0; i<spaceSplitted.size(); i++)
+        {
+          while( spaceSplitted[i].size()>0  && spaceSplitted[i][0] == ' ' )
+            {
+              spaceSplitted[i] = spaceSplitted[i].substr(1, spaceSplitted[i].size());
+            }
+          res.push_back(spaceSplitted[i]);
         }
     }
-
-  // Remove space at the begining of the string and cast into std::vector<std::string>
-  for(unsigned int i=0; i<spaceSplitted.size(); i++)
-    {
-      while( spaceSplitted[i].size()>0  && spaceSplitted[i][0] == ' ' )
-        {
-          spaceSplitted[i] = spaceSplitted[i].substr(1, spaceSplitted[i].size());
-        }
-      res.push_back(spaceSplitted[i]);
-    }
-
-   return res;
+  return res;
 }
 
 std::string

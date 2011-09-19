@@ -224,7 +224,7 @@ CommandLineLauncher::LoadPath()
 {
   std::vector<std::string> pathList;
   // If users has set path...
-  if( m_Parser->GetPaths( pathList, m_Expression) == CommandLineParser::OK )
+  if( m_Parser->GetPaths( pathList, m_Expression ) == CommandLineParser::OK )
     {
       // Contain paths into a string, separating each path with ":"
       m_Path = std::string("");
@@ -233,7 +233,7 @@ CommandLineLauncher::LoadPath()
           m_Path.append(pathList[i]);
           m_Path.append(":");
         }
-      
+
       std::string specificEnv("ITK_AUTOLOAD_PATH=");
       specificEnv.append(m_Path);
       // do NOT use putenv() directly, since the string memory must be managed carefully
@@ -371,89 +371,54 @@ CommandLineLauncher::LoadParameters()
         }
     }
 
-  /*
-  // Mandatory case
-  ParameterGroup::Pointer paramGr = m_Application->GetParameterList();
-  const unsigned int nbOfParam = paramGr->GetNumberOfParameters();
-  
-  for( unsigned int i=0; i<nbOfParam; i++ )
+  // case of output pixel type...
+  if ( m_Parser->IsAttributExists( std::string("--outPix"), m_Expression )  )
     {
-      std::vector<std::string> values;
-      Parameter::Pointer param =  paramGr->GetParameterByIndex(i);
-      const std::string paramKey(param->GetKey());
-      ParameterType type = m_Application->GetParameterType( paramKey );
+      std::vector<std::string> values =  m_Parser->GetAttribut( "--outPix", m_Expression );
+      if( values.size() == 0 )
+        return MISSINGPARAMETERVALUE;
+      else if( values.size() > 1 )
+        return INVALIDNUMBEROFVALUE;
 
-      const bool paramExists( m_Parser->IsAttributExists( std::string("--").append(paramKey), m_Expression )  );
-      // Check if mandatory parameter are present and have value
-      if( param->GetMandatory() == true )
+      ImagePixelType outPixType = ImagePixelType_float;
+      if( values[0] == "int8" )
+        outPixType = ImagePixelType_int8;
+      else if( values[0] == "uint8" )
+        outPixType = ImagePixelType_uint8;
+      else if( values[0] == "int16" )
+        outPixType = ImagePixelType_int16;
+      else if( values[0] == "uint16" )
+        outPixType = ImagePixelType_uint16;
+      else if( values[0] == "int32" )
+        outPixType = ImagePixelType_int32;
+      else if( values[0] == "uint32" )
+        outPixType = ImagePixelType_uint32;
+      else if( values[0] == "float" )
+        outPixType = ImagePixelType_float;
+      else if( values[0] == "double" )
+        outPixType = ImagePixelType_double;
+      else 
         {
-          if( !paramExists )
-             {
-               return MISSINGMANDATORYPARAMETER;
-             }
-           values = m_Parser->GetAttribut( std::string("--").append(paramKey), m_Expression);
-           if(  values.size() == 0 )
-             {
-               return MISSINGPARAMETERVALUE;
-             }
-        }
-      // Check if non mandatory parameter have values
-      else
-        {
-          if( paramExists )
-            {
-              values = m_Parser->GetAttribut( std::string("--").append(paramKey), m_Expression);
-              if(  values.size() == 0 )
-                {
-                  return MISSINGPARAMETERVALUE;
-                }
-            }
+          return WRONGPARAMETERVALUE;
         }
 
-      // If the param is optionnal and hasn't been set : don't do anything
-      if( paramExists )
+      // Loop over each output image parameter
+      std::vector<std::string> paramList = m_Application->GetParametersKeys(true);
+      std::vector<std::string>::const_iterator it = paramList.begin();
+      for (; it != paramList.end(); ++it)
         {
-          // List values parameter case
-          if( type == ParameterType_InputImageList )
+          if (m_Application->GetParameterType(*it) == ParameterType_OutputImage)
             {
-              dynamic_cast<InputImageListParameter *>(param.GetPointer())->SetListFromFileName( values );
-            }
-          else if( type == ParameterType_StringList )
-            {
-              dynamic_cast<StringListParameter *>(param.GetPointer())->SetValue( values );
-            }
-          else  if( values.size() != 1)
-            {
-              return INVALIDNUMBEROFVALUE;
-            }
-          
-          // Single value parameter
-          if( type == ParameterType_Float || type == ParameterType_Int || type == ParameterType_Radius
-              || type == ParameterType_Directory || type == ParameterType_String || type == ParameterType_Filename || type == ParameterType_InputComplexImage
-              || type == ParameterType_InputImage || type == ParameterType_InputVectorData || type == ParameterType_OutputImage || type == ParameterType_OutputVectorData )
-            {
-              m_Application->SetParameterString( paramKey, values[0] );
-            }
-          else if( type == ParameterType_Empty )
-            {
-              if( values[0] == "1" || values[0] == "true")
-                {
-                  dynamic_cast<EmptyParameter *>(param.GetPointer())->SetActive(true);
-                }
-              else if( values[0] == "0" || values[0] == "false")
-                {
-                  dynamic_cast<EmptyParameter *>(param.GetPointer())->SetActive(false);
-                }
-              else
-                {
-                  return WRONGPARAMETERVALUE;
-                }
+              Parameter* param = m_Application->GetParameterByKey(*it);
+              OutputImageParameter* outputParam = dynamic_cast<OutputImageParameter*>(param);
+              outputParam->SetPixelType( outPixType );
             }
         }
     }
-*/
+  
   return OKPARAM;
 }
+
 
 
 void
@@ -543,6 +508,19 @@ CommandLineLauncher::DisplayHelp()
     std::cerr<< "\t       Status: none"<<m_Path<<std::endl;
   else
     std::cerr<< "\t       Status: USER VALUE: "<<m_Parser->GetAttribut( "--progress", m_Expression )[0]<<std::endl;
+
+  //// Output pixel type
+  std::cerr<<"--outPix (Output pixel type)"<<std::endl;
+  std::cerr<<"\t   Description: Defines the output images pixel type."<<std::endl;
+  std::cerr<<"\t          Type: String (int8, uint8, int16, uint16, int32, uint32, float or double)"<<std::endl;
+  std::cerr<<"\t Default value: float"<< std::endl;
+  if( !m_Parser->IsAttributExists( "--progress", m_Expression ) )
+    std::cerr<<"\t        Status: DEFAULT VALUE"<<std::endl;
+  else if( m_Parser->GetAttribut( "--outPix", m_Expression ).size() == 0 )
+    std::cerr<< "\t       Status: none"<<m_Path<<std::endl;
+  else
+    std::cerr<< "\t       Status: USER VALUE: "<<m_Parser->GetAttribut( "--outPix", m_Expression )[0]<<std::endl;
+
   for( unsigned int i=0; i<nbOfParam; i++ )
     {
       Parameter::Pointer param =  m_Application->GetParameterByKey(  appKeyList[i] );
@@ -726,7 +704,7 @@ CommandLineLauncher::CheckKeyValidity()
   appKeyList.push_back( std::string(m_Parser->GetModuleNameKey()).substr(2, std::string(m_Parser->GetModuleNameKey()).size()) );
   appKeyList.push_back( "help" );
   appKeyList.push_back( "progress" );
-
+  appKeyList.push_back( "outPix" );
   // Check if each key in the expression exists in the application
   for( unsigned int i=0; i<expKeyList.size(); i++ )
     {
@@ -746,20 +724,6 @@ CommandLineLauncher::CheckKeyValidity()
           break;
         }
     }
-
-  /*
-  if(res == false)
-    {
-      for( unsigned int i=0; i<expKeyList.size(); i++ )
-        {
-          std::cout<< expKeyList[i]<<std::endl;
-        }
-      for( unsigned int j=0; j<appKeyList.size(); j++ )
-        {
-          std::cout<< appKeyList[j]<<std::endl;
-        }
-    }
-  */
 
   return res;
 }
