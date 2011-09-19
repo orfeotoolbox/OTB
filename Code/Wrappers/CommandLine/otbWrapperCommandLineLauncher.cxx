@@ -385,7 +385,7 @@ CommandLineLauncher::LinkWatchers()
            Parameter* param = m_Application->GetParameterByKey(*it);
            OutputImageParameter* outputParam = dynamic_cast<OutputImageParameter*>(param);
            itk::OStringStream oss;
-           oss<< "Wrinting "<< param->GetName()<<"...";
+           oss<< "Writing "<< param->GetName()<<"...";
 
            StandardFilterWatcher * watch = new StandardFilterWatcher(outputParam->GetWriter(), oss.str());
            m_WatcherList.push_back( watch );          
