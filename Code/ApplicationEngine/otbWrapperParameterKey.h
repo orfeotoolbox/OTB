@@ -89,7 +89,7 @@ last() : return "tata"
   /** Set Key value */
   void SetKey( const std::string & val )
     {
-      // Check chain : minuscule, alphanumerical or "."
+      // Check chain : lowercase, alphanumerical or "."
       itksys::RegularExpression reg;
       reg.compile("([^0-9a-z\\.])");
 
