@@ -517,9 +517,6 @@ StreamingImageFileWriter<TInputImage>
 
   m_ImageIO->WriteImageInformation();
 
-  // Notify START event observers
-  this->InvokeEvent(itk::StartEvent());
-
   this->UpdateProgress(0);
 
   for (m_CurrentDivision = 0;
