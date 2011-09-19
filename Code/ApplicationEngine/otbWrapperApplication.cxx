@@ -752,4 +752,3 @@ Application::IsApplicationReady()
 
 }
 }
-

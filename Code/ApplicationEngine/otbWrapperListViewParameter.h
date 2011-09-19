@@ -38,7 +38,7 @@ class ListViewParameter
 {
 public:
   /** Standard class typedef */
-  typedef ListViewParameter               Self;
+  typedef ListViewParameter             Self;
   typedef Parameter                     Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;

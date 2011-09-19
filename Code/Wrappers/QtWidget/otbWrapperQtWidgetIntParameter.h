@@ -49,8 +49,8 @@ private:
 
   virtual void DoUpdateGUI();
 
-  QHBoxLayout * m_QHBoxLayout;
-  QSpinBox * m_QSpinBox;
+  QHBoxLayout *         m_QHBoxLayout;
+  QSpinBox *            m_QSpinBox;
 
   IntParameter::Pointer m_IntParam;
 };

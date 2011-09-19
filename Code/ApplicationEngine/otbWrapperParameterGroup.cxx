@@ -408,7 +408,9 @@ ParameterGroup::GetParameterByKey(std::string name)
         {
         if (associatedParam.IsNull())
           {
-          itkExceptionMacro(<< "Choice " << splittedName[1] << "in " << splittedName[0] << "  has no key named " << splittedName[2]);
+          itkExceptionMacro(<< "Choice " << splittedName[1] << "in " 
+                            << splittedName[0] << "  has no key named " 
+                            << splittedName[2]);
           }
 
         // Remove the parent and the choice value from the param name
@@ -443,4 +445,3 @@ ParameterGroup::GetNumberOfParameters()
 
 }
 }
-

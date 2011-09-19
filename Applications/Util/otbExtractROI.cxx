@@ -98,7 +98,7 @@ private:
       if (!HasUserValue("sizex")  && !HasUserValue("sizey") )
         {
         SetParameterInt("sizex", largestRegion.GetSize()[0]);
-        SetParameterInt("sizey", largestRegion.GetSize()[1]);       
+        SetParameterInt("sizey", largestRegion.GetSize()[1]);
         }
       
       // Put the limit of the index and the size relative the image
@@ -182,4 +182,3 @@ private:
 }
 
 OTB_APPLICATION_EXPORT(otb::Wrapper::ExtractROI)
-

@@ -48,8 +48,8 @@ private:
 
   virtual void DoUpdateGUI();
 
-  QHBoxLayout * m_QHBoxLayout;
-  QDoubleSpinBox * m_QDoubleSpinBox;
+  QHBoxLayout *           m_QHBoxLayout;
+  QDoubleSpinBox *        m_QDoubleSpinBox;
 
   FloatParameter::Pointer m_FloatParam;
 };
