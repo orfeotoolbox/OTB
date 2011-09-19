@@ -17,6 +17,7 @@
 =========================================================================*/
 #include "otbWrapperParameterGroup.h"
 #include "otbWrapperChoiceParameter.h"
+#include "otbWrapperListViewParameter.h"
 #include "otbWrapperDirectoryParameter.h"
 #include "otbWrapperEmptyParameter.h"
 #include "otbWrapperFilenameParameter.h"
@@ -100,12 +101,17 @@ ParameterGroup::AddChoice(std::string paramKey, std::string paramName)
       std::string parentkey = pKey.GetRoot();
       Parameter::Pointer parentParam = GetParameterByKey(parentkey);
 
-      // parentParam must be a choice or this is an error
-      ChoiceParameter* parentAsChoice = dynamic_cast<ChoiceParameter*>(parentParam.GetPointer());
+      // parentParam must be a choice, a listBox or this is an error
+      ChoiceParameter* comboboxParentAsChoice = dynamic_cast<ChoiceParameter*>(parentParam.GetPointer());
+      ListViewParameter* listBoxParentAsChoice = dynamic_cast<ListViewParameter*>(parentParam.GetPointer());
       
-      if (parentAsChoice)
+      if (comboboxParentAsChoice)
         {
-          parentAsChoice->AddChoice(lastkey, paramName);
+        comboboxParentAsChoice->AddChoice(lastkey, paramName);
+        }
+      else if (listBoxParentAsChoice)
+        {
+        listBoxParentAsChoice->AddChoice(lastkey, paramName);
         }
       else
         {
@@ -116,6 +122,77 @@ ParameterGroup::AddChoice(std::string paramKey, std::string paramName)
     {
       itkExceptionMacro(<<"No choice parameter key given");
     }
+}
+
+/** Remove the choices made for the ViewList parameter */
+void
+ParameterGroup::ClearChoices(std::string paramKey)
+{
+  ParameterKey pKey( paramKey );
+  // Split the parameter name
+  std::vector<std::string> splittedKey = pKey.Split();
+
+  std::string parentkey;
+  Parameter::Pointer parentParam;
+
+  if (splittedKey.size() > 1)
+    {
+    parentkey = pKey.GetRoot();
+    parentParam = GetParameterByKey(parentkey);
+    }
+  else
+    {
+    parentParam = GetParameterByKey(splittedKey[0]);
+    }
+
+   // parentParam must be a choice, a listBox or this is an error
+  ListViewParameter* listBoxParentAsChoice = dynamic_cast<ListViewParameter*>(parentParam.GetPointer());
+
+  if (listBoxParentAsChoice)
+    {
+    listBoxParentAsChoice->ClearChoices();
+    }
+  else
+    {
+    itkExceptionMacro(<<parentkey << " is not a ListView");
+    }
+}
+
+/** Get the choices made in the QListWidget */
+std::vector<int>
+ParameterGroup::GetSelectedItems(std::string paramKey)
+{
+  std::vector<int> selectedItems;
+  ParameterKey pKey( paramKey );
+  // Split the parameter name
+  std::vector<std::string> splittedKey = pKey.Split();
+
+  std::string parentkey;
+  Parameter::Pointer parentParam;
+
+  if (splittedKey.size() > 1)
+    {
+    parentkey = pKey.GetRoot();
+    parentParam = GetParameterByKey(parentkey);
+    }
+  else
+    {
+    parentParam = GetParameterByKey(splittedKey[0]);
+    }
+
+   // parentParam must be a choice, a listBox or this is an error
+  ListViewParameter* listBoxParentAsChoice = dynamic_cast<ListViewParameter*>(parentParam.GetPointer());
+  
+  if (listBoxParentAsChoice)
+    {
+    selectedItems = listBoxParentAsChoice->GetSelectedItems();
+    }
+  else
+    {
+    itkExceptionMacro(<<parentkey << " is not a ListView");
+    }
+
+  return selectedItems;
 }
   
   
@@ -227,6 +304,11 @@ ParameterGroup::AddParameter(ParameterType type, std::string paramKey, std::stri
       case ParameterType_InputImageList:
         {
         newParam = InputImageListParameter::New();
+        }
+        break;
+      case ParameterType_ListView:
+        {
+        newParam = ListViewParameter::New();
         }
         break;
       }

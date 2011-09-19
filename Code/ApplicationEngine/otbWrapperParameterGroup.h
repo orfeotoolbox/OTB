@@ -48,6 +48,12 @@ public:
   /** Add a new choice value to an existing choice parameter */
   void AddChoice(std::string paramKey, std::string paramName);
 
+  /** Remove choices made in ListViewParamter widget*/
+  void ClearChoices(std::string paramKey);
+
+  /** Get the choices made in a ListView Parameter widget*/
+  std::vector<int> GetSelectedItems(std::string paramKey);
+
   /** Add a new parameter to the parameter group
    * the parent key of paramKey can be the path to a parameter group
    * or the path to a choice value */
