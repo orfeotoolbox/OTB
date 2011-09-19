@@ -109,21 +109,6 @@ add_test(owTvOutputImageParameter ${OTB_WRAPPER_TESTS}
     "my description"
   )
 
-# Output image list parameter class test
-add_test(owTuOutputImageListParameter ${OTB_WRAPPER_TESTS}
-    otbWrapperOutputImageListParameterNew
-  )
-
-add_test(owTvOutputImageListParameter ${OTB_WRAPPER_TESTS}
-    otbWrapperOutputImageListParameterTest1
-    ${INPUTDATA}/poupees_c1.hdr
-    ${INPUTDATA}/poupees.tif
-    ${TEMP}/owTvOutputImageListParameter1.tif
-    ${TEMP}/owTvOutputImageListParameter2.tif
-    "mykey"
-    "my description"
-  )
-
 # Application class test
 add_test(owTuApplication ${OTB_WRAPPER_TESTS}
 	otbWrapperApplicationNew
