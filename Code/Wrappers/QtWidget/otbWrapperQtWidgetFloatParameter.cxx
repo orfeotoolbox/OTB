@@ -67,18 +67,13 @@ void QtWidgetFloatParameter::DoCreateWidget()
 
   connect( m_QDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(SetValue(double)) );
   connect( m_QDoubleSpinBox, SIGNAL(valueChanged(double)), GetModel(), SLOT(NotifyUpdate()) );
-  connect( GetModel(), SIGNAL(UpdateGui()), this, SLOT(SetUpdateGui() ) );
+  connect( GetModel(), SIGNAL(UpdateGui()), this, SLOT(UpdateGUI() ) );
 
   m_QHBoxLayout->addWidget(m_QDoubleSpinBox);
   m_QHBoxLayout->addStretch();
 
   this->setLayout(m_QHBoxLayout);
 
-}
-
-void QtWidgetFloatParameter::SetUpdateGui()
-{
-  this->DoUpdateGUI();
 }
 
 void QtWidgetFloatParameter::SetValue(double value)

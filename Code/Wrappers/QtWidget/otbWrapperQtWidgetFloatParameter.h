@@ -39,7 +39,6 @@ public:
 
 protected slots:
   void SetValue( double value );
-  void SetUpdateGui();
 
 private:
   QtWidgetFloatParameter(const QtWidgetFloatParameter&); //purposely not implemented

@@ -45,17 +45,12 @@ void QtWidgetIntParameter::DoCreateWidget()
 
   connect( m_QSpinBox, SIGNAL(valueChanged(int)), this, SLOT(SetValue(int)) );
   connect( m_QSpinBox, SIGNAL(valueChanged(int)), GetModel(), SLOT(NotifyUpdate()) );
-  connect( GetModel(), SIGNAL(UpdateGui()), this, SLOT(SetUpdateGui() ) );
+  connect( GetModel(), SIGNAL(UpdateGui()), this, SLOT(UpdateGUI() ) );
 
   m_QHBoxLayout->addWidget(m_QSpinBox);
   m_QHBoxLayout->addStretch();
 
   this->setLayout(m_QHBoxLayout);
-}
-
-void QtWidgetIntParameter::SetUpdateGui()
-{
-  this->DoUpdateGUI();
 }
 
 void QtWidgetIntParameter::DoUpdateGUI()

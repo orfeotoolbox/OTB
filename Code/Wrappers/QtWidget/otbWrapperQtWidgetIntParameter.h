@@ -40,7 +40,6 @@ public:
 
 protected slots:
   void SetValue( int value );
-  void SetUpdateGui();
 
 private:
   QtWidgetIntParameter(const QtWidgetIntParameter&); //purposely not implemented
