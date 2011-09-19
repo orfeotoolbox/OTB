@@ -99,7 +99,7 @@ last() : return "tata"
         }
       else
         {
-          itkGenericExceptionMacro( "Invalid key "<<val<<". Must be in minuscule, containing alphanumerical caracters or \".\"");
+          itkGenericExceptionMacro( "Invalid key "<<val<<". Must be in lowercase, containing alphanumerical characters or \".\"");
         }
     }
 
