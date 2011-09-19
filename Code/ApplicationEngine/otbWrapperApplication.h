@@ -25,7 +25,9 @@
 
 #include "otbWrapperTypes.h"
 #include "otbWrapperParameterGroup.h"
+
 #include "itkLogger.h"
+#include "otbWrapperMacros.h"
 
 namespace otb
 {

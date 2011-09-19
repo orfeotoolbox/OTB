@@ -52,7 +52,7 @@ Application::Application()
   // Don't call Init from the constructor, since it calls a virtual method !
 
   m_Logger->SetName("Application.logger");
-  m_Logger->SetPriorityLevel(itk::LoggerBase::INFO);
+  m_Logger->SetPriorityLevel(itk::LoggerBase::DEBUG);
   m_Logger->SetLevelForFlushing(itk::LoggerBase::CRITICAL);
 
 }
