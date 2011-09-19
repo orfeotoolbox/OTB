@@ -152,6 +152,14 @@ CommandLineLauncher::BeforeExecute()
     if ( this->LoadParameters() != OKPARAM )
       {
         std::cerr<<"ERROR: troubles loading parameter, please check your line argument..."<<std::endl;
+        std::cerr<<"ERROR:"<< this->LoadParameters()<<std::endl;
+        std::cerr<<OKPARAM<<std::endl;
+        std::cerr<<MISSINGMANDATORYPARAMETER<<std::endl;
+        std::cerr<<MISSINGPARAMETERVALUE<<std::endl;
+        std::cerr<<WRONGPARAMETERVALUE<<std::endl;
+        std::cerr<<INVALIDNUMBEROFVALUE<<std::endl;
+        std::cerr<<DEFAULT<<std::endl;
+
         // Force to reload the application, the LoadParameters can change wrong values
         this->LoadApplication();
         this->DisplayHelp();
@@ -261,14 +269,16 @@ CommandLineLauncher::LoadParameters()
     {
       std::vector<std::string> values;
       Parameter::Pointer param =  paramGr->GetParameterByIndex(i);
+      const std::string paramKey(param->GetKey());
+      const bool paramExists( m_Parser->IsAttributExists( std::string("--").append(paramKey), m_Expression )  );
       // Check if mandatory parameter are present and have value
       if( param->GetMandatory() == true )
         {
-          if( !m_Parser->IsAttributExists( std::string("--").append(param->GetKey()), m_Expression ) )
+          if( !paramExists )
              {
                return MISSINGMANDATORYPARAMETER;
              }
-           values = m_Parser->GetAttribut( std::string("--").append(param->GetKey()), m_Expression);
+           values = m_Parser->GetAttribut( std::string("--").append(paramKey), m_Expression);
            if(  values.size() == 0 )
              {
                return MISSINGPARAMETERVALUE;
@@ -277,9 +287,9 @@ CommandLineLauncher::LoadParameters()
       // Check if non mandatory parameter have values
       else
         {
-          if( m_Parser->IsAttributExists( std::string("--").append(param->GetKey()), m_Expression ) )
+          if( paramExists )
             {
-              values = m_Parser->GetAttribut( std::string("--").append(param->GetKey()), m_Expression);
+              values = m_Parser->GetAttribut( std::string("--").append(paramKey), m_Expression);
               if(  values.size() == 0 )
                 {
                   return MISSINGPARAMETERVALUE;
@@ -287,43 +297,47 @@ CommandLineLauncher::LoadParameters()
             }
         }
 
-   
-      ParameterType type = m_Application->GetParameterType( param->GetKey());
-      // List values parameter case
-      if( type == ParameterType_InputImageList )
+      // If the param is optionnal and hasn't been set : don't do anything
+      if( paramExists )
         {
-          dynamic_cast<InputImageListParameter *>(param.GetPointer())->SetListFromFileName( values );
-        }
-      else if( type == ParameterType_StringList )
-        {
-          dynamic_cast<StringListParameter *>(param.GetPointer())->SetValue( values );
-        }
-      else  if( values.size() != 1)
-        {
-          return INVALIDNUMBEROFVALUE;
-        }
-
-      // Single value parameter
-   
-      if( type == ParameterType_Choice || type == ParameterType_Float || type == ParameterType_Int || type == ParameterType_Radius
-          || type == ParameterType_Directory || type == ParameterType_String || type == ParameterType_Filename || type == ParameterType_InputComplexImage
-          || type == ParameterType_InputImage || type == ParameterType_InputVectorData || type == ParameterType_OutputImage || type == ParameterType_OutputVectorData )
-        {
-          m_Application->SetParameterString( param->GetKey(), values[0] );
-        }
-      else if( type == ParameterType_Empty )
-        {
-          if( values[0] == "1" || values[0] == "true")
+          ParameterType type = m_Application->GetParameterType( paramKey );
+          // List values parameter case
+          if( type == ParameterType_InputImageList )
             {
-              dynamic_cast<EmptyParameter *>(param.GetPointer())->SetActive(true);
+              dynamic_cast<InputImageListParameter *>(param.GetPointer())->SetListFromFileName( values );
             }
-          else if( values[0] == "0" || values[0] == "false")
+          else if( type == ParameterType_StringList )
             {
-              dynamic_cast<EmptyParameter *>(param.GetPointer())->SetActive(false);
+              dynamic_cast<StringListParameter *>(param.GetPointer())->SetValue( values );
             }
-          else
+          else  if( values.size() != 1)
             {
-              return WRONGPARAMETERVALUE;
+              std::cout<<values.size()<<std::endl;
+              std::cout<<paramKey <<std::endl;
+              return INVALIDNUMBEROFVALUE;
+            }
+          
+          // Single value parameter
+          if( type == ParameterType_Choice || type == ParameterType_Float || type == ParameterType_Int || type == ParameterType_Radius
+              || type == ParameterType_Directory || type == ParameterType_String || type == ParameterType_Filename || type == ParameterType_InputComplexImage
+              || type == ParameterType_InputImage || type == ParameterType_InputVectorData || type == ParameterType_OutputImage || type == ParameterType_OutputVectorData )
+            {
+              m_Application->SetParameterString( paramKey, values[0] );
+            }
+          else if( type == ParameterType_Empty )
+            {
+              if( values[0] == "1" || values[0] == "true")
+                {
+                  dynamic_cast<EmptyParameter *>(param.GetPointer())->SetActive(true);
+                }
+              else if( values[0] == "0" || values[0] == "false")
+                {
+                  dynamic_cast<EmptyParameter *>(param.GetPointer())->SetActive(false);
+                }
+              else
+                {
+                  return WRONGPARAMETERVALUE;
+                }
             }
         }
     }
