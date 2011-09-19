@@ -51,7 +51,6 @@ private:
   {
     SetName("ExtractROI");
     SetDescription("Extract a ROI defined by the user.");
-    m_ExtractROIFilter = ExtractROIFilterType::New();
   }
 
   virtual ~ExtractROI()
@@ -73,29 +72,29 @@ private:
     SetParameterInt("sizex",  0);
     SetParameterInt("sizey",  0);
 
-    // Output pixel type choices
-    AddParameter(ParameterType_Choice,  "t", "Output Pixel Type");
-    AddChoice("t.double",   "double");
-    AddChoice("t.uchar",    "unsigned Char");
-    AddChoice("t.shortint", "short int");
-    AddChoice("t.int",      "int");
-    AddChoice("t.float",    "float");
-    AddChoice("t.uishort",  "unsigned short int");
-    AddChoice("t.uint",     "unsigned int");
-
     // Channelist Parameters
-    
+    AddParameter(ParameterType_ListView,  "cl", "Output Image channels");
   }
 
   void DoUpdateParameters()
   {
-    
     // Update the sizes only if the user does not defined a size
     if ( HasValue("in") )
       {
       ExtractROIFilterType::InputImageType* inImage = GetParameterImage("in");
       ExtractROIFilterType::InputImageType::RegionType  largestRegion = inImage->GetLargestPossibleRegion();
-      
+
+      // Update the values of the channels to be selected
+      unsigned int nbComponents = inImage->GetNumberOfComponentsPerPixel();
+      ClearChoices("cl");
+      for (unsigned int idx = 0; idx < nbComponents; ++idx)
+        {
+        std::ostringstream key, item;
+        key<<"cl.channel"<<idx+1;
+        item<<"Channel "<<idx+1;
+        AddChoice(key.str(), item.str());
+        }
+
       if (!HasUserValue("sizex")  && !HasUserValue("sizey") )
         {
         SetParameterInt("sizex", largestRegion.GetSize()[0]);
@@ -115,7 +114,6 @@ private:
       dynamic_cast< NumericalParameter<int> * >(GetParameterByKey("starty"))->SetMinimumValue(0); 
       dynamic_cast< NumericalParameter<int> * >(GetParameterByKey("starty"))->SetMaximumValue(largestRegion.GetSize(1));
 
-      // Update the channel list
       }
     
     // Crop the roi region to be included in the largest possible
@@ -151,15 +149,29 @@ private:
   void DoExecute()
   { 
     ExtractROIFilterType::InputImageType* inImage = GetParameterImage("in");
-    
+    inImage->UpdateOutputInformation();
+
+    m_ExtractROIFilter = ExtractROIFilterType::New();
     m_ExtractROIFilter->SetInput(inImage);
     m_ExtractROIFilter->SetStartX(GetParameterInt("startx"));
     m_ExtractROIFilter->SetStartY(GetParameterInt("starty"));
-    m_ExtractROIFilter->SetSizeX(GetParameterInt("sizey"));
+    m_ExtractROIFilter->SetSizeX(GetParameterInt("sizex"));
     m_ExtractROIFilter->SetSizeY(GetParameterInt("sizey"));
 
-    m_ExtractROIFilter->UpdateOutputInformation();
-    SetParameterOutputImage("out", m_ExtractROIFilter->GetOutput());   
+    // std::cout <<"startx"<<GetParameterInt("startx") << std::endl;
+    // std::cout <<"starty"<<GetParameterInt("starty") << std::endl;
+    // std::cout <<"sizex"<<GetParameterInt("sizex") << std::endl;
+    // std::cout <<"sizey"<<GetParameterInt("sizey") << std::endl;
+
+    //std::cout <<"Channels added : ";
+    for (unsigned int idx = 0; idx < GetSelectedItems("cl").size(); ++idx)
+      {
+      //std::cout << GetSelectedItems("cl")[idx] + 1<<  " ";
+      m_ExtractROIFilter->SetChannel(GetSelectedItems("cl")[idx] + 1 );
+      }
+    //std::cout<<std::endl;
+
+    SetParameterOutputImage("out", m_ExtractROIFilter->GetOutput());
   }
 
   ExtractROIFilterType::Pointer   m_ExtractROIFilter;
