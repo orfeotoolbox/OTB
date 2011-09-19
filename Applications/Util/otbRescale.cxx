@@ -91,12 +91,14 @@ private:
   {
     FloatVectorImageType::Pointer inImage = GetParameterImage("in");
 
-    m_MinMaxFilter->GetStreamer()->SetNumberOfLinesStrippedStreaming( 50 );
+    otbAppLogDEBUG( << "Starting Min/Max computation" )
 
+    m_MinMaxFilter->GetStreamer()->SetNumberOfLinesStrippedStreaming( 50 );
     m_MinMaxFilter->SetInput( inImage );
     m_MinMaxFilter->Update();
+
     otbAppLogDEBUG( << "Min/Max computation done : min=" << m_MinMaxFilter->GetMinimum()
-                    << " max= " << m_MinMaxFilter->GetMaximum() )
+                    << " max=" << m_MinMaxFilter->GetMaximum() )
 
     FloatVectorImageType::PixelType inMin, inMax;
 
