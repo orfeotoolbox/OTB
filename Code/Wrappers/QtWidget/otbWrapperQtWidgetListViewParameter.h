@@ -61,6 +61,8 @@ private:
   QHBoxLayout*               m_VLayout;
   
   std::vector<int>           m_SelectedItems;
+
+  int                        m_LineHeight;
 };
 
 }

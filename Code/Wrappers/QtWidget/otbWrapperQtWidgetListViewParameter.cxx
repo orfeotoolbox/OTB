@@ -27,7 +27,7 @@ namespace Wrapper
 
 QtWidgetListViewParameter::QtWidgetListViewParameter(ListViewParameter* param, QtWidgetModel* m)
 : QtWidgetParameterBase(m),
-  m_ListViewParam(param)
+  m_ListViewParam(param),m_LineHeight(20)
 {
 }
 
@@ -60,14 +60,15 @@ void QtWidgetListViewParameter::DoCreateWidget()
   m_ListView = new QListWidget();
   m_ListView->setToolTip(m_ListViewParam->GetDescription());
   m_ListView->setSelectionMode(QAbstractItemView::MultiSelection);
-  m_ListView->setResizeMode(QListView::Adjust);
-  //m_ListView->resize(m_ListView->width(), 5);
+
   connect( m_ListView, SIGNAL(itemSelectionChanged()), this, SLOT(SelectedItems()) );
   connect( GetModel(), SIGNAL(UpdateGui()), this, SLOT(UpdateGUI() ) );
 
   m_VLayout = new QHBoxLayout;
   m_VLayout->setContentsMargins(0, 0, 0, 0);
   m_VLayout->addWidget(m_ListView);
+  m_ListView->setMaximumSize(m_ListView->width() ,  4* m_LineHeight);
+  m_VLayout->activate();
 
   this->setLayout(m_VLayout);
 }
