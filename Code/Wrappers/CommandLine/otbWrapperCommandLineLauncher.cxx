@@ -403,6 +403,7 @@ CommandLineLauncher::DisplayHelp()
   std::cerr<<"=== Mandatory parameters: "<<std::endl;
   std::cerr<<m_Parser->GetModulePathKey()<<" (Executables paths)"<<std::endl;
   std::cerr<<"\t   Description: Paths to the executable library."<<std::endl;
+  std::cerr<<"\t          Type: Boolean"<<std::endl;
   if( !m_Parser->IsAttributExists( m_Parser->GetModulePathKey(), m_Expression ) )
     std::cerr<<"\t        Status: ENVIRONEMENT PATH"<<std::endl;
   else if( m_Path == "")
@@ -425,6 +426,7 @@ CommandLineLauncher::DisplayHelp()
   std::cerr<<"=== Optional parameters: "<<std::endl;
   std::cerr<<"--progress (Report progress)"<<std::endl;
   std::cerr<<"\t   Description: Do report progress."<<std::endl;
+  std::cerr<<"\t          Type: Boolean"<<std::endl;
   std::cerr<<"\t Default value: 1"<< std::endl;
   if( !m_Parser->IsAttributExists( "--progress", m_Expression ) )
     std::cerr<<"\t        Status: DEFAULT VALUE"<<std::endl;
@@ -449,34 +451,95 @@ CommandLineLauncher::DisplayHelp()
 std::string
 CommandLineLauncher::DisplayParameterHelp( const Parameter::Pointer & param )
 {
+  const std::string paramKey( param->GetKey() );
   itk::OStringStream oss;
-  oss<<"--"<<param->GetKey()<<" ("<<param->GetName()<<")"<< std::endl;
+  oss<<"--"<<paramKey<<" ("<<param->GetName()<<")"<< std::endl;
   
   if( std::string(param->GetDescription()).size() != 0 )
     {
       oss<<"\t   Description: "<<param->GetDescription()<<std::endl;
     }
   
-  if( m_Application->HasValue( param->GetKey() ) )
-    oss << "\t Default value: "<<m_Application->GetParameterAsString( param->GetKey() )<< std::endl;
+  // Display the type the type
+  ParameterType type = m_Application->GetParameterType( paramKey );
+
+  if( type == ParameterType_Choice )
+    {
+      oss<<"\t          Type: String"<<std::endl;
+    }
+  else if( type == ParameterType_Radius )
+    {
+      oss<<"\t          Type: Int"<<std::endl;
+    }
+  else if( type == ParameterType_Empty )
+    {
+      oss<<"\t          Type: Boolean"<<std::endl;
+    }
+  else if( type == ParameterType_Int )
+    {
+      oss<<"\t          Type: Int"<<std::endl;
+    }
+  else if( type == ParameterType_Float )
+    {
+      oss<<"\t          Type: Float"<<std::endl;
+    }
+  else if( type == ParameterType_Filename )
+    {
+      oss<<"\t          Type: String (file name)"<<std::endl;
+    }
+  else if( type == ParameterType_Directory )
+    {
+      oss<<"\t          Type: String (Directory path)"<<std::endl;
+    }
+  else if( type == ParameterType_InputImage || type == ParameterType_InputComplexImage )
+    {
+      oss<<"\t          Type: String (input image file name)"<<std::endl;
+    }
+  else if( type == ParameterType_InputVectorData )
+    {
+      oss<<"\t          Type: String (input vector data file name)"<<std::endl;
+    }
+  else if( type == ParameterType_OutputImage )
+    {
+      oss<<"\t          Type: String (output image file name)"<<std::endl;
+    }
+  else if( type == ParameterType_OutputVectorData )
+    {
+      oss<<"\t          Type: String (output vector data file name)"<<std::endl;
+    }
+  else if( type == ParameterType_String )
+    {
+      oss<<"\t          Type: String"<<std::endl;
+    }
+  else if( type == ParameterType_Group )
+    {
+      oss<<"\t          Type: Group"<<std::endl;
+    }
+  else
+    {
+      oss<<"\t          Type: Type not handle yet"<<std::endl;
+    }
+
+  if( m_Application->HasValue( paramKey ) )
+    oss << "\t Default value: "<<m_Application->GetParameterAsString( paramKey )<< std::endl;
   else
     oss << "\t Default value: none"<<std::endl;
   
-  if( !m_Parser->IsAttributExists( std::string("--").append(param->GetKey()), m_Expression) )
+  if( !m_Parser->IsAttributExists( std::string("--").append(paramKey), m_Expression) )
     {
-      if ( !m_Application->HasValue( param->GetKey() ) )
+      if ( !m_Application->HasValue( paramKey ) )
         oss << "\t        Status: MISSING"<< std::endl;
       else
         oss << "\t        Status: DEFAULT VALUE"<< std::endl;
     }
-  else if( m_Parser->GetAttribut( std::string("--").append(param->GetKey()), m_Expression).size() == 0 )
+  else if( m_Parser->GetAttribut( std::string("--").append(paramKey), m_Expression).size() == 0 )
     {
       oss << "\t        Status: NO VALUE ASSOCIATED"<< std::endl;
     }
   else
     {
       oss << "\t        Status: USER VALUE (";
-      oss << m_Parser->GetAttributAsString( std::string("--").append(param->GetKey()), m_Expression ) <<")";
+      oss << m_Parser->GetAttributAsString( std::string("--").append(paramKey), m_Expression ) <<")";
       oss << std::endl;
     }
 
