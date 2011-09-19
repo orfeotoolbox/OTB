@@ -45,6 +45,7 @@ typedef enum
   ParameterType_OutputVectorData,
   ParameterType_Radius,
   ParameterType_Group,
+  ParameterType_ListView,
 } ParameterType;
 
 typedef enum
