@@ -18,6 +18,7 @@
 #include "otbWrapperApplication.h"
 
 #include "otbWrapperChoiceParameter.h"
+#include "otbWrapperListViewParameter.h"
 #include "otbWrapperDirectoryParameter.h"
 #include "otbWrapperEmptyParameter.h"
 #include "otbWrapperFilenameParameter.h"
@@ -203,6 +204,10 @@ ParameterType Application::GetParameterType(std::string paramKey) const
     {
     type = ParameterType_Choice;
     }
+  else if (dynamic_cast<const ListViewParameter*>(param))
+    {
+    type = ParameterType_ListView;
+    }
   else if (dynamic_cast<const RadiusParameter*>(param))
     {
     type = ParameterType_Radius;
@@ -329,6 +334,11 @@ void Application::SetParameterString(std::string parameter, std::string value)
   if (dynamic_cast<ChoiceParameter*>(param))
     {
     ChoiceParameter* paramDown = dynamic_cast<ChoiceParameter*>(param);
+    paramDown->SetValue(value);
+    }
+  else if (dynamic_cast<ListViewParameter*>(param))
+    {
+    ListViewParameter* paramDown = dynamic_cast<ListViewParameter*>(param);
     paramDown->SetValue(value);
     }
   else if (dynamic_cast<StringParameter*>(param))
@@ -510,6 +520,11 @@ std::string Application::GetParameterString(std::string parameter)
     ChoiceParameter* paramDown = dynamic_cast<ChoiceParameter*>(param);
     ret = paramDown->GetChoiceName( paramDown->GetValue() );
     }
+  else if (dynamic_cast<ListViewParameter*>(param))
+    {
+    ListViewParameter* paramDown = dynamic_cast<ListViewParameter*>(param);
+    ret = paramDown->GetChoiceName( paramDown->GetValue() );
+    }
   else if (dynamic_cast<StringParameter*>(param))
     {
     StringParameter* paramDown = dynamic_cast<StringParameter*>(param);
@@ -670,6 +685,17 @@ Application::AddChoice(std::string paramKey, std::string paramName)
   GetParameterList()->AddChoice(paramKey, paramName);
 }
 
+void
+Application::ClearChoices(std::string paramKey)
+{
+  GetParameterList()->ClearChoices(paramKey);
+}
+
+std::vector<int>
+Application::GetSelectedItems(std::string param)
+{
+  return GetParameterList()->GetSelectedItems(param);
+}
 
 void
 Application::AddParameter(ParameterType type, std::string paramKey, std::string paramName)

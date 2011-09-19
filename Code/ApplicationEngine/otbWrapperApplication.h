@@ -366,6 +366,12 @@ protected:
    * or the path to a choice value */
   void AddParameter(ParameterType type, std::string paramKey, std::string paramName);
 
+  /** Remove the items added to the ListWidget */
+  void ClearChoices(std::string key);
+
+  /** Get Items selected in the ListView Parameter*/
+  std::vector<int>  GetSelectedItems(std::string paramKey);
+
   /** Declare a parameter as mandatory */
   void MandatoryOn(std::string paramKey);
 
