@@ -73,6 +73,7 @@ private:
     SetParameterDescription( "outmax", "Maximum value of the output image." );
 
     MandatoryOff("outmin");
+    MandatoryOff("outmax");
   }
 
   void DoUpdateParameters()

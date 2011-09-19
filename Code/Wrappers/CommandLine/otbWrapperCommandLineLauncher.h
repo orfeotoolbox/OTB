@@ -27,7 +27,6 @@
 #include "itksys/SystemTools.hxx"
 #include "otbWrapperCommandLineParser.h"
 
-#include "otbStandardWriterWatcher.h"
 #include "otbStandardFilterWatcher.h"
 
 
@@ -66,9 +65,7 @@ public:
   typedef enum { OKPARAM, MISSINGMANDATORYPARAMETER, MISSINGPARAMETERVALUE, WRONGPARAMETERVALUE,  INVALIDNUMBEROFVALUE, DEFAULT} ParamResultType;
   
   /** Filter watcher list type */
-  typedef std::vector<StandardFilterWatcher> FilterWatcherListType;
-  /** Writer watcher list type */
-  typedef std::vector<StandardWriterWatcher> WriterWatcherListType;
+  typedef std::vector<StandardFilterWatcher *> WatcherListType;
 
   /** Load the application in several steps :
    * - Load the paths
@@ -128,6 +125,9 @@ protected:
   /** Load the watchers for internal progress and writeing progress report. */
   void LinkWatchers();
 
+  /** Clear watcher list, deleting its pointers. */
+  void DeleteWatcherList();
+
 private:
 
   CommandLineLauncher(const CommandLineLauncher &); //purposely not implemented
@@ -139,8 +139,7 @@ private:
   std::string m_Expression;
   CommandLineParser::Pointer m_Parser;
 
-  FilterWatcherListType m_FilterWatcherList;
-  WriterWatcherListType m_WriterWatcherList;
+  WatcherListType m_WatcherList;
 
 }; //end class
 

@@ -48,7 +48,7 @@ namespace otb
 namespace Wrapper
 {
 
-CommandLineLauncher::CommandLineLauncher() : m_Expression(""), m_FilterWatcherList(), m_WriterWatcherList()
+CommandLineLauncher::CommandLineLauncher() : m_Expression(""), m_WatcherList()
 {
   m_Application = NULL;
   m_Parser = CommandLineParser::New();
@@ -62,7 +62,20 @@ CommandLineLauncher::CommandLineLauncher(const char * exp) : m_Expression(exp)
 
 CommandLineLauncher::~CommandLineLauncher()
 {
+  this->DeleteWatcherList();
 }
+
+void
+CommandLineLauncher::DeleteWatcherList()
+{
+  for( unsigned int i= 0; i<m_WatcherList.size(); i++ )
+    {
+      delete m_WatcherList[i];
+      m_WatcherList[i] = NULL;
+    }
+  m_WatcherList.clear();
+}
+
 
 bool
 CommandLineLauncher::Load( const std::string & exp )
@@ -348,43 +361,30 @@ CommandLineLauncher::LoadParameters()
 void
 CommandLineLauncher::LinkWatchers()
 {
-  m_FilterWatcherList.clear();
-  m_WriterWatcherList.clear();
+  this->DeleteWatcherList();
   // Link internall filters watcher
   for( unsigned int i=0; i<m_Application->GetInternalProcessList().size(); i++ )
     {
-      //std::cout<<"BRRRRRRRRRRRRRRR"<<std::endl;
-      //StandardFilterWatcher watch(m_Application->GetInternalProcessList()[i], m_Application->GetInternalProcessListName()[i]);
-      //m_FilterWatcherList.push_back( watch );
+      StandardFilterWatcher * watch = new StandardFilterWatcher(m_Application->GetInternalProcessList()[i], m_Application->GetInternalProcessListName()[i]);
+      m_WatcherList.push_back( watch );
     }
   
   // Link output image writers watchers
    std::vector<std::string> paramList = m_Application->GetParametersKeys(true);
    std::vector<std::string>::const_iterator it = paramList.begin();
-   std::cout<<"BRRRRRRRRRRRRRRR"<<std::endl;
    for (; it != paramList.end(); ++it)
      {
        if (m_Application->GetParameterType(*it) == ParameterType_OutputImage)
          {
-              std::cout<<"-------------------------------------------------------------t'en as?"<<std::endl;
            Parameter* param = m_Application->GetParameterByKey(*it);
            OutputImageParameter* outputParam = dynamic_cast<OutputImageParameter*>(param);
            itk::OStringStream oss;
-           oss<< "Wrinting "<< param->GetName()<<std::endl;
+           oss<< "Wrinting "<< param->GetName()<<"...";
 
-           std::cout<<"----++++"<<std::endl;
-           std::cout<<"----++++: "<<outputParam->GetWriter()<<std::endl;
-           std::cout<<"----++++"<<std::endl;
-           //typedef otb::StreamingImageFileWriter<FloatVectorImageType>  FloatWriterType;
-           //StandardWriterWatcher watch(static_cast<FloatWriterType::Pointer>(static_cast<FloatWriterType *>(outputParam->GetWriter())), "write that");
-           //StandardWriterWatcher watch(outputParam->GetWriter(), "write that");
-           //m_WriterWatcherList.push_back( watch );
-           //StandardFilterWatcher watch(outputParam->GetWriter(), oss.str());
-           //m_FilterWatcherList.push_back( watch );
-           
+           StandardFilterWatcher * watch = new StandardFilterWatcher(outputParam->GetWriter(), oss.str());
+           m_WatcherList.push_back( watch );          
         }
     }
-   std::cout<<"BRRRRRRRRRRRRRRR fin"<<std::endl;
 }
 
 void
