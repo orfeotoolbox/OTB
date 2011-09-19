@@ -38,6 +38,8 @@ public:
   virtual ~QtWidgetParameterBase();
 
   void CreateWidget();
+
+public slots:
   void UpdateGUI();
 
 protected slots:
