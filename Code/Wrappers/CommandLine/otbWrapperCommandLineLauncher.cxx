@@ -427,25 +427,25 @@ CommandLineLauncher::LinkWatchers()
   // Link internall filters watcher
   for( unsigned int i=0; i<m_Application->GetInternalProcessList().size(); i++ )
     {
-      StandardFilterWatcher * watch = new StandardFilterWatcher(m_Application->GetInternalProcessList()[i], m_Application->GetInternalProcessListName()[i]);
-      m_WatcherList.push_back( watch );
+    StandardOneLineFilterWatcher * watch = new StandardOneLineFilterWatcher(m_Application->GetInternalProcessList()[i], m_Application->GetInternalProcessListName()[i]);
+    m_WatcherList.push_back( watch );
     }
   
   // Link output image writers watchers
-   std::vector<std::string> paramList = m_Application->GetParametersKeys(true);
-   std::vector<std::string>::const_iterator it = paramList.begin();
-   for (; it != paramList.end(); ++it)
-     {
-       if (m_Application->GetParameterType(*it) == ParameterType_OutputImage)
-         {
-           Parameter* param = m_Application->GetParameterByKey(*it);
-           OutputImageParameter* outputParam = dynamic_cast<OutputImageParameter*>(param);
-           itk::OStringStream oss;
-           oss<< "Writing "<< param->GetName()<<"...";
+  std::vector<std::string> paramList = m_Application->GetParametersKeys(true);
+  std::vector<std::string>::const_iterator it = paramList.begin();
+  for (; it != paramList.end(); ++it)
+    {
+    if (m_Application->GetParameterType(*it) == ParameterType_OutputImage)
+      {
+      Parameter* param = m_Application->GetParameterByKey(*it);
+      OutputImageParameter* outputParam = dynamic_cast<OutputImageParameter*> (param);
+      itk::OStringStream oss;
+      oss << "Writing " << param->GetName() << "...";
 
-           StandardFilterWatcher * watch = new StandardFilterWatcher(outputParam->GetWriter(), oss.str());
-           m_WatcherList.push_back( watch );
-        }
+      StandardOneLineFilterWatcher * watch = new StandardOneLineFilterWatcher(outputParam->GetWriter(), oss.str());
+      m_WatcherList.push_back(watch);
+      }
     }
 }
 

@@ -29,7 +29,7 @@
 
 #include "itkStdStreamLogOutput.h"
 
-#include "otbStandardFilterWatcher.h"
+#include "otbStandardOneLineFilterWatcher.h"
 
 
 namespace otb
@@ -67,7 +67,7 @@ public:
   typedef enum { OKPARAM, MISSINGMANDATORYPARAMETER, MISSINGPARAMETERVALUE, WRONGPARAMETERVALUE,  INVALIDNUMBEROFVALUE, DEFAULT} ParamResultType;
   
   /** Filter watcher list type */
-  typedef std::vector<StandardFilterWatcher *> WatcherListType;
+  typedef std::vector<StandardOneLineFilterWatcher *> WatcherListType;
 
   /** Load the application in several steps :
    * - Load the paths
