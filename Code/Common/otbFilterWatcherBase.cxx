@@ -25,20 +25,27 @@ namespace otb
 
 FilterWatcherBase
 ::FilterWatcherBase()
+: m_Comment("Not watching an object"),
+  m_Process(0),
+  m_StartTag(0),
+  m_EndTag(0),
+  m_ProgressTag(0),
+  m_Started(false),
+  m_Ended(false)
 {
-  // Initialize state
-  m_Comment = "Not watching an object";
-  m_Process = 0;
 }
 
 FilterWatcherBase
 ::FilterWatcherBase(itk::ProcessObject* process,
                     const char *comment)
+: m_Comment(comment),
+  m_Process(process),
+  m_StartTag(0),
+  m_EndTag(0),
+  m_ProgressTag(0),
+  m_Started(false),
+  m_Ended(false)
 {
-  // Initialize state
-  m_Process = process;
-  m_Comment = comment;
-
   // Create a series of commands
   m_StartFilterCommand = CommandType::New();
   m_EndFilterCommand = CommandType::New();

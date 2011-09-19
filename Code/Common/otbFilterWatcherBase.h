@@ -94,13 +94,21 @@ protected:
   /** Callback method to show the StartEvent */
   virtual void StartFilterCallback()
   {
-    this->StartFilter();
+    if (!m_Started)
+      {
+      this->StartFilter();
+      m_Started = true;
+      }
   }
 
   /** Callback method to show the EndEvent */
   virtual void EndFilterCallback()
   {
-    this->EndFilter();
+    if (!m_Ended)
+      {
+      this->EndFilter();
+      m_Ended = true;
+      }
   }
 
   /** Callback method to show the ProgressEvent */
@@ -141,6 +149,14 @@ protected:
 
   /** Progress observer */
   unsigned long m_ProgressTag;
+
+  /** Some filters (for ex. persistents) invoke the StartEvent several times
+   *  Work around this by remembering if it was called or not */
+  bool m_Started;
+
+  /** Some filters (for ex. persistents) invoke the EndEvent several times
+   *  Work around this by remembering if it was called or not */
+  bool m_Ended;
 
 private:
 
