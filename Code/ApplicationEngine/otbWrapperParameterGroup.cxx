@@ -399,7 +399,6 @@ ParameterGroup::GetParameterByKey(std::string name)
       {
       // Check that splittedName[1] is one of the choice
       ParameterGroup::Pointer associatedParam;
-      unsigned int nbChoices = parentAsChoice->GetNbChoices();
 
       // will throw if splittedName[1] is not a choice key
       associatedParam = parentAsChoice->GetChoiceParameterGroupByKey(splittedName[1]);
