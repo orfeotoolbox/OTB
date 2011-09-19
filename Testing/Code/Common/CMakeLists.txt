@@ -703,6 +703,12 @@ ADD_TEST(coTuStandardFilterWatcherNew ${COMMON_TESTS7}
      ${INPUTDATA}/qb_RoadExtract.img
 )
 
+# -------------  otb::StandardOneLineFilterWatcherNew ----------------------------
+ADD_TEST(coTuStandardOneLineFilterWatcher ${COMMON_TESTS7}
+     otbStandardOneLineFilterWatcherTest
+     ${INPUTDATA}/qb_RoadExtract.img
+)
+
 
 # -------------  otb::DataNode ----------------------------
 ADD_TEST(coTvDataNode ${COMMON_TESTS7}
@@ -1213,6 +1219,7 @@ otbCommonTests7.cxx
 otbGenericInterpolateImageFunctionNew.cxx
 otbMirrorBoundaryConditionTest.cxx
 otbStandardFilterWatcherNew.cxx
+otbStandardOneLineFilterWatcherTest.cxx
 otbDataNodeTest.cxx
 otbVectorDataNew.cxx
 otbVectorDataSourceNew.cxx
