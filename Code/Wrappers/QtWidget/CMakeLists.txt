@@ -15,6 +15,7 @@ set( WrappersQtWidget_MOC_HDR
        otbWrapperQtWidgetModel.h
        otbWrapperQtWidgetView.h
        otbWrapperQtWidgetProgressReport.h
+       otbWrapperQtWidgetListViewParameter.h
        itkQtProgressBar.h
        )
 

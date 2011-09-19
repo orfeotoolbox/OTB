@@ -27,6 +27,7 @@
 #include "otbWrapperQtWidgetFloatParameter.h"
 #include "otbWrapperQtWidgetStringParameter.h"
 #include "otbWrapperQtWidgetChoiceParameter.h"
+#include "otbWrapperQtWidgetListViewParameter.h"
 #include "otbWrapperQtWidgetInputImageParameter.h"
 #include "otbWrapperQtWidgetOutputImageParameter.h"
 #include "otbWrapperQtWidgetParameterGroup.h"
@@ -84,6 +85,7 @@ QtWidgetParameterFactory::CreateQtWidget( Parameter* param, QtWidgetModel* model
   CREATEWIDGET(FloatParameter,       QtWidgetFloatParameter)
   CREATEWIDGET(StringParameter,      QtWidgetStringParameter)
   CREATEWIDGET(ChoiceParameter,      QtWidgetChoiceParameter)
+  CREATEWIDGET(ListViewParameter,    QtWidgetListViewParameter)
   CREATEWIDGET(InputImageParameter,  QtWidgetInputImageParameter)
   CREATEWIDGET(OutputImageParameter, QtWidgetOutputImageParameter)
   CREATEWIDGET(EmptyParameter,       QtWidgetEmptyParameter)
