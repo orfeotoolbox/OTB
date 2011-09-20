@@ -367,7 +367,7 @@ CommandLineLauncher::LoadParameters()
                     outPixType = ImagePixelType_float;
                   else if( values[1] == "double" )
                     outPixType = ImagePixelType_double;
-                  else 
+                  else
                     {
                       return WRONGPARAMETERVALUE;
                     }
@@ -637,7 +637,7 @@ CommandLineLauncher::DisplayParameterHelp( const Parameter::Pointer & param, con
     }
   else
     {
-      if( type == ParameterType_OutputImage ) 
+      if( type == ParameterType_OutputImage )
         {
           oss << "\t Default value: filename: none"<< std::endl;
           oss << "\t                pixel type: float"<< std::endl;

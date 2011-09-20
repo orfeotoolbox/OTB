@@ -131,7 +131,7 @@ ListViewParameter::ClearChoices()
   m_ChoiceList.clear();
 }
 
-void 
+void
 ListViewParameter::SetSelectedItemsByNames()
 {
   std::vector<int> selectedItems;
@@ -140,10 +140,10 @@ ListViewParameter::SetSelectedItemsByNames()
     {
       const std::string selectedName = m_SelectedNames[i];
       unsigned int j(0);
-      for( ; j<names.size(); j++)
+      for(; j<names.size(); j++)
         {
           if( names[j] == selectedName )
-            { 
+            {
               selectedItems.push_back(j);
               break;
             }
@@ -163,8 +163,7 @@ ListViewParameter::SetSelectedItemsByNames()
 }
 
 
-
-void 
+void
 ListViewParameter::SetSelectedItemsByKeys()
 {
   std::vector<int> selectedItems;
@@ -174,10 +173,10 @@ ListViewParameter::SetSelectedItemsByKeys()
       const std::string selectedKey = m_SelectedKeys[i];
       unsigned int j(0);
       itk::OStringStream oss;
-      for( ; j<keys.size(); j++)
+      for(; j<keys.size(); j++)
         {
           if( keys[j] == selectedKey )
-            { 
+            {
               selectedItems.push_back(j);
               break;
             }
