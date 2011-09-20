@@ -123,29 +123,6 @@ ListViewParameter::GetValue()
   return m_CurrentChoice;
 }
 
-// TODO : not implemented yet
-std::vector<std::string>
-ListViewParameter::GetParametersKeys()
-{
-  std::vector<std::string> parameters;
-
-  ChoiceList::iterator cit = m_ChoiceList.begin();
-
-  // for (cit = m_ChoiceList.begin(); cit != m_ChoiceList.end(); ++cit)
-  //   {
-  //   if (cit->m_AssociatedParameter)
-  //     {
-  //     std::vector<std::string> subparams = cit->m_AssociatedParameter->GetParametersKeys();
-  //     for (std::vector<std::string>::const_iterator it = subparams.begin();
-  //          it != subparams.end(); ++it)
-  //       {
-  //       parameters.push_back( cit->m_Key + "."  + *it );
-  //       }
-  //     }
-  //   }
-  return parameters;
-}
-
 
 /** Clear choices */
 void
@@ -154,6 +131,67 @@ ListViewParameter::ClearChoices()
   m_ChoiceList.clear();
 }
 
+void 
+ListViewParameter::SetSelectedItemsByNames()
+{
+  std::vector<int> selectedItems;
+  std::vector<std::string> names = this->GetChoiceNames();
+  for(unsigned int i=0; i<m_SelectedNames.size(); i++)
+    {
+      const std::string selectedName = m_SelectedNames[i];
+      unsigned int j(0);
+      for( ; j<names.size(); j++)
+        {
+          if( names[j] == selectedName )
+            { 
+              selectedItems.push_back(j);
+              break;
+            }
+        }
+      // If not found
+      if( j==names.size() )
+        {
+          for( j=0; j<names.size(); j++)
+            {
+              std::cout<<names[j]<<std::endl;
+            }
+          itkExceptionMacro("Value "<<selectedName<<" not found in the ch888oices possibilities...");
+        }
+    }
+  this->SetSelectedItems(selectedItems);
+}
+
+
+
+void 
+ListViewParameter::SetSelectedItemsByKeys()
+{
+  std::vector<int> selectedItems;
+  std::vector<std::string> keys = this->GetChoiceKeys();
+  for(unsigned int i=0; i<m_SelectedKeys.size(); i++)
+    {
+      const std::string selectedKey = m_SelectedKeys[i];
+      unsigned int j(0);
+      for( ; j<keys.size(); j++)
+        {
+          if( keys[j] == selectedKey )
+            { 
+              selectedItems.push_back(j);
+              break;
+            }
+        }
+      // If not found
+      if( j==keys.size() )
+        {
+          for( j=0; j<keys.size(); j++)
+            {
+              std::cout<<keys[j]<<std::endl;
+            }
+          itkExceptionMacro("Value "<<selectedKey<<" not found in the choices possibilities...")
+        }
+    }
+  this->SetSelectedItems(selectedItems);
+}
 }
 }
 

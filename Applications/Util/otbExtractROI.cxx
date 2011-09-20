@@ -78,6 +78,7 @@ private:
 
   void DoUpdateParameters()
   {
+  std::cout<<"update????????????????????????????????????????????"<<std::endl;
     // Update the sizes only if the user does not defined a size
     if ( HasValue("in") )
       {
@@ -91,7 +92,7 @@ private:
         {
         std::ostringstream key, item;
         key<<"cl.channel"<<idx+1;
-        item<<"Channel "<<idx+1;
+        item<<"Channel"<<idx+1;
         AddChoice(key.str(), item.str());
         }
 
@@ -135,19 +136,23 @@ private:
     region.SetIndex(0, GetParameterInt("startx"));
     region.SetIndex(1, GetParameterInt("starty"));
     
-    if (region.Crop(GetParameterImage("in")->GetLargestPossibleRegion()))
+    if ( HasValue("in") )
       {
-      SetParameterInt("sizex", region.GetSize(0));
-      SetParameterInt("sizey", region.GetSize(1));
-      SetParameterInt("startx", region.GetIndex(0));
-      SetParameterInt("starty", region.GetIndex(1));
-      return true;
+        if (region.Crop(GetParameterImage("in")->GetLargestPossibleRegion()))
+          {
+            SetParameterInt("sizex", region.GetSize(0));
+            SetParameterInt("sizey", region.GetSize(1));
+            SetParameterInt("startx", region.GetIndex(0));
+            SetParameterInt("starty", region.GetIndex(1));
+            return true;
+          }
       }
     return false;
   }
 
   void DoExecute()
   { 
+    std::cout<<"goooooooooooooooooooooooooooooooooooooooooooooooooooooooo"<<std::endl;
     ExtractROIFilterType::InputImageType* inImage = GetParameterImage("in");
     inImage->UpdateOutputInformation();
 
@@ -163,13 +168,13 @@ private:
     // std::cout <<"sizex"<<GetParameterInt("sizex") << std::endl;
     // std::cout <<"sizey"<<GetParameterInt("sizey") << std::endl;
 
-    //std::cout <<"Channels added : ";
+    std::cout <<"Channels added : "<<std::endl;
     for (unsigned int idx = 0; idx < GetSelectedItems("cl").size(); ++idx)
       {
-      //std::cout << GetSelectedItems("cl")[idx] + 1<<  " ";
+        std::cout << GetSelectedItems("cl")[idx] + 1<<  " ";
       m_ExtractROIFilter->SetChannel(GetSelectedItems("cl")[idx] + 1 );
       }
-    //std::cout<<std::endl;
+    std::cout<<std::endl;
 
     SetParameterOutputImage("out", m_ExtractROIFilter->GetOutput());
   }

@@ -64,9 +64,6 @@ public:
   /** Get the list of the different choice keys */
   std::vector<std::string> GetChoiceNames();
 
-  /** Get all parameters that are child of this choice parameter */
-  std::vector<std::string> GetParametersKeys();
-
   /** Get the number of available choice */
   unsigned int GetNbChoices( void );
 
@@ -94,7 +91,57 @@ public:
 
   std::vector<int> GetSelectedItems()
   {
+    if( m_SelectedNames.size() != 0 )
+      {
+        this->SetSelectedItemsByNames();
+      }
+    else if( m_SelectedKeys.size() != 0 )
+      {
+        this->SetSelectedItemsByKeys();
+      }
+
     return m_SelectedItems;
+  }
+
+  void SetSelectedNames(std::vector<std::string> selectedNames)
+  {
+    m_SelectedNames = selectedNames;
+    m_SelectedItems.clear();
+    m_SelectedKeys.clear();
+  }
+
+  std::vector<std::string> GetSelectedNames()
+    {
+      return m_SelectedNames;
+    }
+
+
+  void SetSelectedKeys(std::vector<std::string> selectedKeys)
+  {
+    m_SelectedKeys = selectedKeys;
+    m_SelectedItems.clear();
+    m_SelectedNames.clear();
+  }
+
+  std::vector<std::string> GetSelectedKeys()
+    {
+      return m_SelectedKeys;
+    }
+
+  /** Set selected items using a lit of selected keys. */
+  void SetSelectedItemsByKeys();
+  /** Set selected items using a lit of selected names. */
+  void SetSelectedItemsByNames();
+  void SetSelectedItems(std::vector<std::string> selectedItems)
+  {
+    std::vector<int> items;
+    for( unsigned int i=0; i<selectedItems.size(); i++ )
+      {
+        items.push_back( atoi( selectedItems[i].c_str() ) );
+      }
+    m_SelectedItems = items;
+    m_SelectedNames.clear();
+    m_SelectedKeys.clear();
   }
 
   void SetSelectedItems(std::vector<int> selectedItems)
@@ -121,6 +168,8 @@ protected:
   ChoiceList                          m_ChoiceList;
   unsigned int                        m_CurrentChoice;
   std::vector<int>                    m_SelectedItems;
+  std::vector<std::string>            m_SelectedKeys;
+  std::vector<std::string>            m_SelectedNames;
 
 private:
   ListViewParameter(const ListViewParameter &); //purposely not implemented

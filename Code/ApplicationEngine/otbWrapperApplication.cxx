@@ -276,6 +276,11 @@ std::vector<std::string> Application::GetChoiceKeys(std::string name)
     ChoiceParameter* paramChoice = dynamic_cast<ChoiceParameter*>(param);
     return paramChoice->GetChoiceKeys();
     }
+  else if (dynamic_cast<ListViewParameter*>(param))
+    {
+    ListViewParameter* paramList = dynamic_cast<ListViewParameter*>(param);
+    return paramList->GetChoiceKeys();
+    }
   itkExceptionMacro(<< name << " is not a choice parameter");
 }
 
@@ -286,6 +291,11 @@ std::vector<std::string> Application::GetChoiceNames(std::string name)
     {
     ChoiceParameter* paramChoice = dynamic_cast<ChoiceParameter*>(param);
     return paramChoice->GetChoiceNames();
+    }
+  else if (dynamic_cast<ListViewParameter*>(param))
+    {
+    ListViewParameter* paramList = dynamic_cast<ListViewParameter*>(param);
+    return paramList->GetChoiceNames();
     }
   itkExceptionMacro(<< name << " is not a choice parameter");
 }

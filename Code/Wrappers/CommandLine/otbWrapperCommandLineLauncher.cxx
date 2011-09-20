@@ -30,6 +30,9 @@
 #include "otbWrapperOutputVectorDataParameter.h"
 #include "otbWrapperRadiusParameter.h"
 #include "otbWrapperStringParameter.h"
+#include "otbWrapperListViewParameter.h"
+
+
 // List value parameter
 #include "otbWrapperInputImageListParameter.h"
 #include "otbWrapperStringListParameter.h"
@@ -181,6 +184,8 @@ CommandLineLauncher::BeforeExecute()
         
         return false;
       }
+
+    m_Application->UpdateParameters();
 
     // Check for the progress report
     bool doProgressReport = true;
@@ -374,6 +379,10 @@ CommandLineLauncher::LoadParameters()
                   return INVALIDNUMBEROFVALUE;
                 }
             }
+          else if( type == ParameterType_ListView )
+            {
+              dynamic_cast<ListViewParameter *>(param.GetPointer())->SetSelectedNames( values );
+            }
           else  if( values.size() != 1)
             {
               std::cout<<"INVALIDNUMBEROFVALUE: "<<paramKey<<" "<<values.size()<<std::endl;
@@ -498,19 +507,6 @@ CommandLineLauncher::DisplayHelp()
   else
     std::cerr<< "\t       Status: USER VALUE: "<<m_Parser->GetAttribut( "--progress", m_Expression )[0]<<std::endl;
 
-  /*
-  //// Output pixel type
-  std::cerr<<"--outPix (Output pixel type)"<<std::endl;
-  std::cerr<<"\t   Description: Defines the output images pixel type."<<std::endl;
-  std::cerr<<"\t          Type: String (int8, uint8, int16, uint16, int32, uint32, float or double)"<<std::endl;
-  std::cerr<<"\t Default value: float"<< std::endl;
-  if( !m_Parser->IsAttributExists( "--progress", m_Expression ) )
-    std::cerr<<"\t        Status: DEFAULT VALUE"<<std::endl;
-  else if( m_Parser->GetAttribut( "--outPix", m_Expression ).size() == 0 )
-    std::cerr<< "\t       Status: none"<<m_Path<<std::endl;
-  else
-    std::cerr<< "\t       Status: USER VALUE: "<<m_Parser->GetAttribut( "--outPix", m_Expression )[0]<<std::endl;
-  */
   for( unsigned int i=0; i<nbOfParam; i++ )
     {
       Parameter::Pointer param =  m_Application->GetParameterByKey(  appKeyList[i] );
@@ -542,7 +538,7 @@ CommandLineLauncher::DisplayParameterHelp( const Parameter::Pointer & param, con
    // Display parameter description
   if( std::string(param->GetDescription()).size() != 0 )
     {
-      oss<<"\t   Description: "<<param->GetDescription()<< std::endl;;
+      oss<<"\t   Description: "<<param->GetDescription()<< std::endl;
     }
   else
     {
@@ -610,6 +606,20 @@ CommandLineLauncher::DisplayParameterHelp( const Parameter::Pointer & param, con
             }
         }
       oss<<std::endl;
+    }
+  else if( type == ParameterType_ListView )
+    {
+      oss<<"\t          Type: List of int ";
+      std::vector<std::string> names = m_Application->GetChoiceNames(paramKey);
+      for( unsigned int j=0; j<names.size(); j++ )
+        {
+          oss << names[j];
+          if( j<= names.size()-1 )
+            {
+              oss << ", ";
+            }
+        }
+      oss << std::endl;
     }
   else
     {
