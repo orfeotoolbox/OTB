@@ -1,9 +1,9 @@
 
 set(TEST_DRIVER otbTestDriver
-    --add-before-env ITK_AUTOLOAD_PATH $<TARGET_FILE_DIR:otbapp_Smoothing> )
+    --add-before-env ITK_AUTOLOAD_PATH $<TARGET_FILE_DIR:otbapp_ReadImageInfo> )
 
-
-add_test(NAME exTvRescaleTest
+#--- Rescale ---#
+add_test(NAME apTvUtRescaleTest
          COMMAND otbTestDriver
                  Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
                  Rescale
@@ -13,7 +13,8 @@ add_test(NAME exTvRescaleTest
                  --outmin 20
                  --outmax 150 )
 
-add_test(NAME exTvSmoothingTest
+#--- Smoothing ---#
+add_test(NAME apTvUtSmoothingTest
          COMMAND otbTestDriver
                  Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
                  Smoothing
@@ -22,15 +23,43 @@ add_test(NAME exTvSmoothingTest
                  --out ${TEMP}/owTvSmoothingTest2.tif
                  --type mean)
 
-add_test(NAME exTvReadImageInfoTest
+#--- ReadImageInfo ---#
+
+add_test(NAME apTvUtReadImageInfoTest
          COMMAND otbTestDriver
                  Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
                  ReadImageInfo
                  --modulePath $<TARGET_FILE_DIR:otbapp_ReadImageInfo>
                  --in ${INPUTDATA}/poupees.tif )
 
-add_test(NAME exTvExtractROIRightInputFile 
-         COMMAND otbTestDriver --compare-image ${TOL}
+IF(OTB_DATA_USE_LARGEINPUT)
+
+add_test(NAME apTvUtReadImageInfoSpot5
+         COMMAND otbTestDriver
+                 Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
+                 ReadImageInfo
+                 --modulePath $<TARGET_FILE_DIR:otbapp_ReadImageInfo>
+                 --in ${LARGEDATA}/SPOT5/TEHERAN/IMAGERY.TIF )
+
+add_test(NAME apTvUtReadImageInfoERS
+         COMMAND otbTestDriver
+                 Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
+                 ReadImageInfo
+                 --modulePath $<TARGET_FILE_DIR:otbapp_ReadImageInfo>
+                 --in ${LARGEDATA}/SAR_ERS2_SLCI_SCENE1/DAT_01.001 )
+
+add_test(NAME apTvUtReadImageInfoRADARSAT1
+         COMMAND otbTestDriver
+                 Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
+                 ReadImageInfo
+                 --modulePath $<TARGET_FILE_DIR:otbapp_ReadImageInfo>
+                 --in ${LARGEDATA}/RADARSAT1/GOMA/SCENE01/DAT_01.001 )
+
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
+#--- ExtractROI ---#
+add_test(NAME apTvUtExtractROIRightInputFile 
+         COMMAND otbTestDriver --compare-image ${NOTOL}
                    ${INPUTDATA}/couleurs_extrait.png
                    ${TEMP}/utExtractROIRightInputFile.tif
                  Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
@@ -38,3 +67,25 @@ add_test(NAME exTvExtractROIRightInputFile
                  --modulePath $<TARGET_FILE_DIR:otbapp_ExtractROI>
                  --in ${INPUTDATA}/couleurs_extrait.png
                  --out ${TEMP}/utExtractROIRightInputFile.tif )
+
+add_test(NAME apTvUtExtractROISizeNULL
+         COMMAND otbTestDriver --compare-image ${NOTOL}
+                   ${INPUTDATA}/couleurs_extrait.png
+                   ${TEMP}/utExtractROISizeNULL.tif
+                 Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
+                 ExtractROI
+                 --modulePath $<TARGET_FILE_DIR:otbapp_ExtractROI>
+                 --in ${INPUTDATA}/couleurs_extrait.png
+                 --out ${TEMP}/utExtractROISizeNULL.tif
+                 --sizex 0 )
+
+add_test(NAME apTvUtExtractROISizeTooBig
+         COMMAND otbTestDriver --compare-image ${NOTOL}
+                   ${INPUTDATA}/couleurs_extrait.png
+                   ${TEMP}/utExtractROISizeNULL.tif
+                 Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
+                 ExtractROI
+                 --modulePath $<TARGET_FILE_DIR:otbapp_ExtractROI>
+                 --in ${INPUTDATA}/couleurs_extrait.png
+                 --out ${TEMP}/utExtractROISizeNULL.tif
+                 --sizex 1000000 )
