@@ -18,22 +18,15 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
-//#include "otbVectorImage.h"
-//#include "otbImageFileReader.h"
-//#include "otbStreamingImageFileWriter.h"
-
 #include <boost/algorithm/string.hpp>
 
 #include "otbStreamingStatisticsVectorImageFilter.h"
-
 #include "otbEigenvalueLikelihoodMaximisation.h"
 #include "otbVcaImageFilter.h"
-
 #include "otbUnConstrainedLeastSquareImageFilter.h"
 #include "otbISRAUnmixingImageFilter.h"
 #include "otbNCLSUnmixingImageFilter.h"
 #include "otbFCLSUnmixingImageFilter.h"
-//#include "otbCLSPSTOUnmixingImageFilter.h"
 
 #include "otbVectorImageToMatrixImageFilter.h"
 
@@ -58,7 +51,6 @@ typedef otb::UnConstrainedLeastSquareImageFilter<DoubleVectorImageType,DoubleVec
 typedef otb::ISRAUnmixingImageFilter<DoubleVectorImageType,DoubleVectorImageType,double>             ISRAUnmixingFilterType;
 typedef otb::NCLSUnmixingImageFilter<DoubleVectorImageType,DoubleVectorImageType,double>             NCLSUnmixingFilterType;
 typedef otb::FCLSUnmixingImageFilter<DoubleVectorImageType,DoubleVectorImageType,double>             FCLSUnmixingFilterType;
-//typedef otb::CLSPSTOUnmixingImageFilter<DoubleVectorImageType,DoubleVectorImageType,double>          CLSPSTOUnmixingFilterType;
 
 typedef otb::VectorImageToMatrixImageFilter<DoubleVectorImageType> VectorImageToMatrixImageFilterType;
 
