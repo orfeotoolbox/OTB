@@ -122,19 +122,25 @@ private:
     AddChoice("dr.pca", "PCA");
     AddChoice("dr.mnf", "MNF");
     AddChoice("dr.napca", "NAPCA");
+    MandatoryOff("dr");
 
     AddParameter(ParameterType_Int, "ne", "Number of endmembers");
     SetParameterInt("ne", 1);
+    MandatoryOff("ne");
 
     AddParameter(ParameterType_Choice, "de", "Dimensionnality estimation");
+    MandatoryOff("de");
     AddChoice("de.elm", "ELM (Eigen Value Likelihood Estimation)");
 
     AddParameter(ParameterType_Choice, "ee", "Endmembers estimation method");
+    MandatoryOff("ee");
     AddChoice("ee.vca", "VCA (Vertex Component Analysis)");
 
     AddParameter(ParameterType_InputImage, "ie", "Input endmembers image");
+    MandatoryOff("ie");
 
     AddParameter(ParameterType_Choice, "ua", "Unmixing algorithm");
+    MandatoryOff("ua");
     AddChoice("ua.none", "None");
     AddChoice("ua.ucls", "UCLS");
     AddChoice("ua.isra", "ISRA");
@@ -142,6 +148,7 @@ private:
     AddChoice("ua.fcls", "FCLS");
 
     AddParameter(ParameterType_OutputImage, "oe", "Output Endmembers");
+    MandatoryOff("oe");
   }
 
   void DoUpdateParameters()
