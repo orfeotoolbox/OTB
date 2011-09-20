@@ -151,11 +151,12 @@ ListViewParameter::SetSelectedItemsByNames()
       // If not found
       if( j==names.size() )
         {
+          itk::OStringStream oss;
           for( j=0; j<names.size(); j++)
             {
-              std::cout<<names[j]<<std::endl;
+              oss<<names[j]<<", ";
             }
-          itkExceptionMacro("Value "<<selectedName<<" not found in the ch888oices possibilities...");
+          itkExceptionMacro("Value "<<selectedName<<" not found in the choices possibilities"<<oss.str()<<".");
         }
     }
   this->SetSelectedItems(selectedItems);
@@ -172,6 +173,7 @@ ListViewParameter::SetSelectedItemsByKeys()
     {
       const std::string selectedKey = m_SelectedKeys[i];
       unsigned int j(0);
+      itk::OStringStream oss;
       for( ; j<keys.size(); j++)
         {
           if( keys[j] == selectedKey )
@@ -186,8 +188,9 @@ ListViewParameter::SetSelectedItemsByKeys()
           for( j=0; j<keys.size(); j++)
             {
               std::cout<<keys[j]<<std::endl;
+              oss<<keys[j]<<", ";
             }
-          itkExceptionMacro("Value "<<selectedKey<<" not found in the choices possibilities...")
+          itkExceptionMacro("Value "<<selectedKey<<" not found in the choices possibilities"<<oss.str()<<".");
         }
     }
   this->SetSelectedItems(selectedItems);

@@ -113,6 +113,7 @@ OutputImageParameter::Write( )
       {
       m_FloatWriter->SetFileName( this->GetFileName() );
       m_FloatWriter->SetInput(this->GetImage());
+      m_FloatWriter->Modified();
       m_FloatWriter->Update();
       }
       break;

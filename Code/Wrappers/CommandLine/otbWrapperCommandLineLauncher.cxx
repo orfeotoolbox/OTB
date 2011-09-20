@@ -609,17 +609,8 @@ CommandLineLauncher::DisplayParameterHelp( const Parameter::Pointer & param, con
     }
   else if( type == ParameterType_ListView )
     {
-      oss<<"\t          Type: List of int ";
-      std::vector<std::string> names = m_Application->GetChoiceNames(paramKey);
-      for( unsigned int j=0; j<names.size(); j++ )
-        {
-          oss << names[j];
-          if( j<= names.size()-1 )
-            {
-              oss << ", ";
-            }
-        }
-      oss << std::endl;
+      // We don't have access to the possible values...
+      oss<<"\t          Type: List of String" << std::endl;
     }
   else
     {
