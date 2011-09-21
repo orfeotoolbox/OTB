@@ -184,7 +184,7 @@ CommandLineLauncher::BeforeExecute()
     {
     if ( this->LoadParameters() != OKPARAM )
       {
-      std::cerr<<"ERROR: troubles loading parameter, please check your line argument..."<<std::endl;
+      std::cerr<<"ERROR: Troubles loading parameter, please check your line argument..."<<std::endl;
       // Force to reload the application, the LoadParameters can change wrong values
       this->LoadApplication();
       this->DisplayHelp();
@@ -194,7 +194,7 @@ CommandLineLauncher::BeforeExecute()
     }
   catch(itk::ExceptionObject& err)
     {
-    std::cerr<<"ERROR: troubles in parameter setting, please check your line argument..."<<std::endl;
+    std::cerr<<"ERROR: Troubles in parameter setting, please check your line argument..."<<std::endl;
     std::cerr<<err.GetDescription()<<std::endl;
     // Force to reload the application, the LoadParameters can change wrong values
     this->LoadApplication();

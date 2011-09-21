@@ -240,6 +240,10 @@ ParameterType Application::GetParameterType(std::string paramKey) const
     {
     type = ParameterType_InputImage;
     }
+ else if (dynamic_cast<const InputImageListParameter*>(param))
+    {
+    type = ParameterType_InputImageList;
+    }
   else if (dynamic_cast<const InputComplexImageParameter*>(param))
     {
     type = ParameterType_InputComplexImage;

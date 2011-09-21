@@ -22,7 +22,6 @@
 
 #include "otbWrapperParameter.h"
 #include "otbObjectList.h"
-#include "otbImageList.h"
 
 namespace otb
 {
@@ -155,7 +154,7 @@ public:
   {
     if(m_ImageList->Size() == 0)
       {
-        itkExceptionMacro(<< "No image in the stack.");
+      return false;
       }
 
     return m_ImageList->GetNthElement(0).IsNotNull();
