@@ -31,6 +31,7 @@
 #include "otbWrapperRadiusParameter.h"
 #include "otbWrapperStringParameter.h"
 #include "otbWrapperListViewParameter.h"
+#include "otbWrapperAddProcessToWatchEvent.h"
 
 
 // List value parameter
@@ -51,12 +52,18 @@ namespace otb
 namespace Wrapper
 {
 
-CommandLineLauncher::CommandLineLauncher() : m_Expression(""), m_WatcherList()
+CommandLineLauncher::CommandLineLauncher() : m_Expression(""),
+                                             m_WatcherList(),
+                                             m_ReportProgress(true)
 {
   m_Application = NULL;
   m_Parser = CommandLineParser::New();
   m_LogOutput = itk::StdStreamLogOutput::New();
   m_LogOutput->SetStream( std::cout );
+
+  // Add the callback to be added when a AddProcessToWatch event is invoked
+  m_AddProcessCommand = AddProcessCommandType::New();
+  m_AddProcessCommand->SetCallbackFunction( this, &CommandLineLauncher::LinkWatchers );
 }
 
 CommandLineLauncher::CommandLineLauncher(const char * exp) : m_Expression(exp)
@@ -209,11 +216,11 @@ CommandLineLauncher::BeforeExecute()
       }
     if( val[0] == "1" || val[0] == "true")
       {
-      doProgressReport = true;
+      m_ReportProgress = true;
       }
     else if( val[0] == "0" || val[0] == "false")
       {
-      doProgressReport = false;
+      m_ReportProgress = false;
       }
     else
       {
@@ -223,11 +230,6 @@ CommandLineLauncher::BeforeExecute()
       this->DisplayHelp();
       return false;
       }
-    }
-    
-  if( doProgressReport == true )
-    {
-    this->LinkWatchers();
     }
 
   return true;
@@ -292,6 +294,9 @@ CommandLineLauncher::LoadApplication()
   // Attach log output to the Application logger
   m_Application->GetLogger()->SetTimeStampFormat(itk::LoggerBase::HUMANREADABLE);
   m_Application->GetLogger()->AddLogOutput(m_LogOutput);
+
+  // Add an observer to the AddedProcess event
+  m_Application->AddObserver( AddProcessToWatchEvent(), m_AddProcessCommand.GetPointer() );
 }
 
 CommandLineLauncher::ParamResultType
@@ -440,30 +445,21 @@ CommandLineLauncher::LoadParameters()
 
 
 void
-CommandLineLauncher::LinkWatchers()
+CommandLineLauncher::LinkWatchers(itk::Object * caller,
+                                  const itk::EventObject & event)
 {
-  this->DeleteWatcherList();
-  // Link internall filters watcher
-  for( unsigned int i=0; i<m_Application->GetInternalProcessList().size(); i++ )
+  // Report the progress only if asked
+  if(m_ReportProgress)
     {
-    StandardOneLineFilterWatcher * watch = new StandardOneLineFilterWatcher(m_Application->GetInternalProcessList()[i], m_Application->GetInternalProcessListName()[i]);
-    m_WatcherList.push_back( watch );
-    }
-  
-  // Link output image writers watchers
-  std::vector<std::string> paramList = m_Application->GetParametersKeys(true);
-  std::vector<std::string>::const_iterator it = paramList.begin();
-  for (; it != paramList.end(); ++it)
-    {
-    if (m_Application->GetParameterType(*it) == ParameterType_OutputImage)
+
+    if( typeid( otb::Wrapper::AddProcessToWatchEvent ) == typeid( event ) )
       {
-      Parameter* param = m_Application->GetParameterByKey(*it);
-      OutputImageParameter* outputParam = dynamic_cast<OutputImageParameter*> (param);
-      itk::OStringStream oss;
-      oss << "Writing " << param->GetName() << "...";
-          
-      StandardOneLineFilterWatcher * watch = new StandardOneLineFilterWatcher(outputParam->GetWriter(), oss.str());
-      m_WatcherList.push_back(watch);
+      const AddProcessToWatchEvent* eventToWacth = dynamic_cast< const  AddProcessToWatchEvent*> ( &event );
+
+      StandardOneLineFilterWatcher * watch =
+        new StandardOneLineFilterWatcher(eventToWacth->GetProcess(),
+                                         eventToWacth->GetProcessDescription());
+      m_WatcherList.push_back( watch );
       }
     }
 }
@@ -535,10 +531,7 @@ CommandLineLauncher::DisplayHelp()
       {
       std::cerr << this->DisplayParameterHelp( param, appKeyList[i] );
       }
- 
-
     }
-
 }
 
 std::string

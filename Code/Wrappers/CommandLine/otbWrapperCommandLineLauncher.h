@@ -31,6 +31,7 @@
 
 #include "otbStandardOneLineFilterWatcher.h"
 
+#include "itkCommand.h"
 
 namespace otb
 {
@@ -68,6 +69,9 @@ public:
   
   /** Filter watcher list type */
   typedef std::vector<StandardOneLineFilterWatcher *> WatcherListType;
+
+  /** Command Member */
+  typedef itk::MemberCommand< Self >        AddProcessCommandType;
 
   /** Load the application in several steps :
    * - Load the paths
@@ -125,7 +129,7 @@ protected:
   bool CheckKeyValidity();
 
   /** Load the watchers for internal progress and writeing progress report. */
-  void LinkWatchers();
+  void LinkWatchers(itk::Object * caller, const itk::EventObject & event);
 
   /** Clear watcher list, deleting its pointers. */
   void DeleteWatcherList();
@@ -144,6 +148,10 @@ private:
   WatcherListType m_WatcherList;
 
   itk::StdStreamLogOutput::Pointer m_LogOutput;
+
+  AddProcessCommandType::Pointer   m_AddProcessCommand;
+
+  bool                             m_ReportProgress;
 
 }; //end class
 

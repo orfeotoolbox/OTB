@@ -20,20 +20,28 @@
 #include "otbWrapperOutputImageParameter.h"
 #include "itksys/SystemTools.hxx"
 
+#include "otbWrapperAddProcessToWatchEvent.h"
+
 namespace otb
 {
 namespace Wrapper
 {
 
-QtWidgetProgressReport::QtWidgetProgressReport(QtWidgetModel * model) : m_IsProgressReportGuiAlreadyBuilt(false)
+QtWidgetProgressReport::QtWidgetProgressReport(QtWidgetModel * model)
 {
   m_Model = model;
-  connect(model, SIGNAL(SetProgressReportBegin()), this, SLOT(ReportProgress()) );
+  connect(model, SIGNAL(SetProgressReportBegin()), this, SLOT(show()) );
   connect(model, SIGNAL(SetProgressReportDone()), this, SLOT(close()) );
   connect(model, SIGNAL(SetProgressReportDone()), this, SLOT(RemoveLayout()) );
+  connect(this, SIGNAL(AddNewProcessToReport()), this, SLOT(ReportProcess()) );
 
   m_Layout = new QVBoxLayout;
   this->setLayout(m_Layout);
+
+  m_AddProcessCommand = AddProcessCommandType::New();
+  m_AddProcessCommand->SetCallbackFunction( this, &QtWidgetProgressReport::ProcessEvent );
+
+  this->show();
 }
 
 QtWidgetProgressReport::~QtWidgetProgressReport()
@@ -44,75 +52,40 @@ QtWidgetProgressReport::~QtWidgetProgressReport()
 void QtWidgetProgressReport::SetApplication(Application::Pointer app)
 {
   m_Application = app;
+  m_Application->AddObserver( AddProcessToWatchEvent(), m_AddProcessCommand.GetPointer() );
 }
 
-void QtWidgetProgressReport::ReportProgress()
+void
+QtWidgetProgressReport::ProcessEvent( itk::Object * caller,
+                                      const itk::EventObject & event )
 {
-  // clear previous progress bar added
-  m_BarListIntern.clear();
-  m_BarListWriter.clear();
-  m_LabelListIntern.clear();
-  m_LabelListWriter.clear();
-
-  // show the widget if closed due to a previous execution
-  this->show();
- 
-  if( m_Application->GetInternalProcessList().size() != m_Application->GetInternalProcessListName().size())
+  if( typeid( otb::Wrapper::AddProcessToWatchEvent ) == typeid( event ) )
     {
-    itkGenericExceptionMacro ("Internal process list and list name size mismatch...");
+    const AddProcessToWatchEvent* eventToWacth = dynamic_cast< const  AddProcessToWatchEvent*> ( &event );
+
+    m_CurrentProcess = eventToWacth->GetProcess();
+    m_CurrentDescription =  eventToWacth->GetProcessDescription();
+    emit AddNewProcessToReport();
     }
+}
 
-  // Build the window : First internal process
-  for (unsigned int ii=0; ii < m_Application->GetInternalProcessList().size(); ii++)
-    {
-    // Create a itk::QtProgressBar, observing the event ProgressEvent
-    itk::QtProgressBar * bar =  new itk::QtProgressBar(this);
-    connect( bar, SIGNAL(SetValueChanged(int)), bar, SLOT(setValue(int)) );
-    connect( m_Model, SIGNAL(SetProgressReportDone()), bar, SLOT(reset()) );
-    bar->Observe(m_Application->GetInternalProcessList()[ii]);
+void QtWidgetProgressReport::ReportProcess ( )
+{
+  // Build the widget containing the QtProgressBar for the current
+  // process
 
-    // label
-    QLabel *label = new QLabel(QString(m_Application->GetInternalProcessListName()[ii].c_str()));
+  // Create a itk::QtProgressBar, observing the event ProgressEvent
+  itk::QtProgressBar * bar =  new itk::QtProgressBar(this);
+  connect( bar, SIGNAL(SetValueChanged(int)), bar, SLOT(setValue(int)) );
+  connect( m_Model, SIGNAL(SetProgressReportDone()), bar, SLOT(reset()) );
+  bar->Observe(m_CurrentProcess);
+
+  // label
+  QLabel *label = new QLabel(QString(m_CurrentDescription.c_str()));
   
-    // Build the layout and store the pointers
-    m_Layout->addWidget(label);
-    m_Layout->addWidget(bar);
-    m_BarListIntern.push_back(bar);
-    m_LabelListIntern.push_back(label);
-    }
-  
-  // Build the window : then writers
-  unsigned int nbOutput = 0;
-  std::vector<std::string> paramList = m_Application->GetParametersKeys(true);
-  for (std::vector<std::string>::const_iterator it = paramList.begin();
-       it != paramList.end();
-       ++it)
-    {
-    if ( m_Application->GetParameterType(*it) == ParameterType_OutputImage)
-      {
-      Parameter* param =  m_Application->GetParameterByKey(*it);
-      OutputImageParameter* outputParam = dynamic_cast<OutputImageParameter*>(param);
-
-      // create the label including the output description
-      itk::OStringStream oss;
-      oss << "Writer "<< nbOutput << ": ";
-      oss << outputParam->GetName() <<".";
-      QLabel *label = new QLabel(QString(oss.str().c_str()));
-
-      // Create a itk::QtProgressBar, observing the event ProgressEvent
-      itk::QtProgressBar * bar =  new itk::QtProgressBar(this);
-      connect( bar, SIGNAL(SetValueChanged(int)), bar, SLOT(setValue(int)) );
-      connect( m_Model, SIGNAL(SetProgressReportDone()), bar, SLOT(reset()) );
-      bar->Observe(outputParam->GetWriter());
-
-      // Build the layout and store the pointers
-      bar->setToolTip( QString( outputParam->GetDescription()) );
-      m_Layout->addWidget(label);
-      m_Layout->addWidget(bar);
-      m_BarListWriter.push_back(bar);
-      m_LabelListWriter.push_back(label);
-      }
-    }
+  // Build the layout and store the pointers
+  m_Layout->addWidget(label);
+  m_Layout->addWidget(bar);
 }
 
 void QtWidgetProgressReport::RemoveLayout()

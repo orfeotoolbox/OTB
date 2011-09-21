@@ -22,6 +22,10 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperQtWidgetModel.h"
 #include "itkQtProgressBar.h"
+#include "itkProcessObject.h"
+
+#include "itkCommand.h"
+
 
 namespace otb
 {
@@ -32,7 +36,7 @@ namespace Wrapper
  * \brief Create a widget reporting the progress of the application
  *        process.
  */
-class QtWidgetProgressReport : public QWidget//QDockWidget
+class QtWidgetProgressReport : public QWidget
 {
   Q_OBJECT
 public:
@@ -41,26 +45,29 @@ public:
 
   void SetApplication(Application::Pointer app);
 
+  typedef itk::MemberCommand< QtWidgetProgressReport >  AddProcessCommandType;
+
+  void ProcessEvent( itk::Object * caller, const itk::EventObject & event );
+
 public slots:
-  void ReportProgress();
   void RemoveLayout();
+  void ReportProcess();
+
+  signals:
+  void AddNewProcessToReport();
 
 private:
   QtWidgetProgressReport(const QtWidgetProgressReport&); //purposely not implemented
   void operator=(const QtWidgetProgressReport&); //purposely not implemented
 
-  Application::Pointer                 m_Application;
-  QtWidgetModel *                      m_Model;
-  
-  std::vector< itk::QtProgressBar * >  m_BarListIntern;
-  std::vector< itk::QtProgressBar * >  m_BarListWriter;
-  std::vector< QLabel * >              m_LabelListIntern;
-  std::vector< QLabel * >              m_LabelListWriter;
-  
-  bool                                 m_IsProgressReportGuiAlreadyBuilt;
-  QVBoxLayout *                        m_Layout;
-};
+  Application::Pointer              m_Application;
+  QtWidgetModel *                   m_Model;
+  QVBoxLayout *                     m_Layout;
 
+  AddProcessCommandType::Pointer    m_AddProcessCommand;
+  itk::ProcessObject*               m_CurrentProcess;
+  std::string                       m_CurrentDescription;
+};
 
 }
 }
