@@ -376,7 +376,6 @@ CommandLineLauncher::LoadParameters()
             outPixType = ImagePixelType_float;
           else if( values[1] == "double" )
             outPixType = ImagePixelType_double;
-                  else
           else 
             {
             return WRONGPARAMETERVALUE;
