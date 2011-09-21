@@ -106,7 +106,7 @@ protected:
   virtual ~CommandLineLauncher();
 
   /** Load the executable path. It looks for the key --modulePath, extract and interpret as path the following strings. */
-  void LoadPath();
+  bool LoadPath();
 
  /** Load the application calling the CreateApplication method of the ApplicationRegistry classes.
   * Pay attention, the executable paths have to be loaded or set in the environment before calling the function. */

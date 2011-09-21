@@ -62,6 +62,7 @@ CommandLineParser::GetPaths( std::vector<std::string> & paths, const std::string
     std::string fullPath = itksys::SystemTools::CollapseFullPath(pathAttribut[i].c_str());
     if( !itksys::SystemTools::FileIsDirectory(fullPath.c_str()) )
       {
+  std::cout<<"module path INVALIDMODULEPATH"<<std::endl;
       return INVALIDMODULEPATH;
       }
     paths.push_back(fullPath);

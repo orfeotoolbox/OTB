@@ -50,20 +50,10 @@ int main(int argc, char* argv[])
     std::list<std::string>::const_iterator it = modulePathList.begin();
     while( it != modulePathList.end() )
       {
-      std::string modulePath = *it;
-
-      specificEnv += *it;
+      ApplicationRegistry::AddApplicationPath( *(it) );
       ++it;
-      if (it != modulePathList.end())
-        specificEnv += ":";
       }
-
-    // do NOT use putenv() directly, since the string memory must be managed carefully
-    itksys::SystemTools::PutEnv(specificEnv.c_str());
     }
-
-  // Reload factories to take into account new path
-  itk::ObjectFactoryBase::ReHash();
 
   // Create module
   Application::Pointer app = ApplicationRegistry::CreateApplication(moduleName);

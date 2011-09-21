@@ -105,7 +105,12 @@ CommandLineLauncher::Load()
     return false;
     }
 
-  this->LoadPath();
+  if( this->LoadPath() == false )
+    {
+    std::cerr << "ERROR: At least one specifed path within \""<< m_Parser->GetAttributAsString(m_Parser->GetModulePathKey(), m_Expression)<<"\" is invalid..." <<std::endl;
+    return false;
+    }
+
   this->LoadApplication();
 
   return true;
@@ -225,31 +230,25 @@ CommandLineLauncher::BeforeExecute()
   return true;
 }
 
-void
+bool
 CommandLineLauncher::LoadPath()
 {
   std::vector<std::string> pathList;
   // If users has set path...
   if( m_Parser->GetPaths( pathList, m_Expression ) == CommandLineParser::OK )
     {
-    // Contain paths into a string, separating each path with ":"
-    m_Path = std::string("");
     for( unsigned i=0; i<pathList.size(); i++)
       {
-      m_Path.append(pathList[i]);
-      if( i < pathList.size()-1 )
-        {
-        m_Path.append(":");
-        }
+      std::cout<<pathList[i]<<std::endl;
+      ApplicationRegistry::AddApplicationPath(pathList[i]);
       }
-
-    std::string specificEnv("ITK_AUTOLOAD_PATH=");
-    specificEnv.append(m_Path);
-    // do NOT use putenv() directly, since the string memory must be managed carefully
-    itksys::SystemTools::PutEnv(specificEnv.c_str());
-    // Reload factories to take into account new path
-    itk::ObjectFactoryBase::ReHash();
     }
+  else
+    {
+    return false;
+    }
+
+  return true;
 }
 
 
