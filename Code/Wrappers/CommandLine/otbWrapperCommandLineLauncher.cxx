@@ -237,7 +237,10 @@ CommandLineLauncher::LoadPath()
     for( unsigned i=0; i<pathList.size(); i++)
       {
       m_Path.append(pathList[i]);
-      m_Path.append(":");
+      if( i < pathList.size()-1 )
+        {
+        m_Path.append(":");
+        }
       }
 
     std::string specificEnv("ITK_AUTOLOAD_PATH=");
@@ -270,12 +273,19 @@ CommandLineLauncher::LoadApplication()
     std::cerr << "ERROR: Module search path: "<< itksys::SystemTools::GetEnv("ITK_AUTOLOAD_PATH") << std::endl;
     
     std::vector<std::string> list = ApplicationRegistry::GetAvailableApplications();
-    std::cerr << "ERROR: Available modules : " << (list.empty() ? "None" : "") << std::endl;
-    for (std::vector<std::string>::const_iterator it = list.begin(); it != list.end(); ++it)
+    if( list.size() == 0 )
       {
-      std::cout << "\t" << *it << std::endl;
+      std::cerr << "ERROR: Available modules : none." << std::endl;
       }
-    return;
+    else
+      {
+      std::cerr << "ERROR: Available modules :" << std::endl;
+      for (std::vector<std::string>::const_iterator it = list.begin(); it != list.end(); ++it)
+        {
+        std::cout << "\t" << *it << std::endl;
+        }
+      return;
+      }
     }
 
   // Attach log output to the Application logger
