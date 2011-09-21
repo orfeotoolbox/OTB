@@ -64,7 +64,16 @@ public:
   /** Return true if a filename is set */
   bool HasValue() const;
 
-  itkSetStringMacro(FileName);
+  void SetFileName (const char* filename)
+  {
+    m_FileName = filename;
+    SetActive(true);
+  }
+  void SetFileName (const std::string& filename)
+  {
+    this->SetFileName(filename.c_str());
+  }
+
   itkGetStringMacro(FileName);
 
   void Write();
