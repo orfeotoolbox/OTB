@@ -116,7 +116,9 @@ CommandLineLauncher::Load()
     {
     if( this->LoadPath() == false )
       {
-      std::cerr << "ERROR: At least one specifed path within \""<< m_Parser->GetAttributAsString(m_Parser->GetModulePathKey(), m_Expression)<<"\" is invalid or doesn't exist..." <<std::endl;
+      std::cerr << "ERROR: At least one specifed path within \""
+                << m_Parser->GetAttributAsString(m_Parser->GetModulePathKey(), m_Expression)
+                <<"\" is invalid or doesn't exist..." <<std::endl;
       return false;
       }
     }
@@ -415,9 +417,12 @@ CommandLineLauncher::LoadParameters()
         }
           
       // Single value parameter
-      if( type == ParameterType_Choice || type == ParameterType_Float || type == ParameterType_Int || type == ParameterType_Radius
-          || type == ParameterType_Directory || type == ParameterType_String || type == ParameterType_Filename || type == ParameterType_InputComplexImage
-          || type == ParameterType_InputImage || type == ParameterType_InputVectorData || type == ParameterType_OutputVectorData )
+      if( type == ParameterType_Choice || type == ParameterType_Float
+          || type == ParameterType_Int || type == ParameterType_Radius
+          || type == ParameterType_Directory || type == ParameterType_String 
+          || type == ParameterType_Filename || type == ParameterType_InputComplexImage
+          || type == ParameterType_InputImage || type == ParameterType_InputVectorData 
+          || type == ParameterType_OutputVectorData )
         {
         m_Application->SetParameterString( paramKey, values[0] );
         }
@@ -636,11 +641,15 @@ CommandLineLauncher::DisplayParameterHelp( const Parameter::Pointer & param, con
     // In the case choice, don't show the enum type.
     if( type == ParameterType_Choice )
       {
-      oss << "\t Default value: "<< m_Application->GetChoiceKeys(paramKey)[m_Application->GetParameterInt( paramKey )]<< std::endl;
+      oss << "\t Default value: "
+          << m_Application->GetChoiceKeys(paramKey)[m_Application->GetParameterInt( paramKey )]
+          << std::endl;
       }
     else if( type == ParameterType_OutputImage )
       {
-      oss << "\t Default value: filename: "<< m_Application->GetParameterAsString( paramKey )<< std::endl;
+      oss << "\t Default value: filename: "
+          << m_Application->GetParameterAsString( paramKey )
+          << std::endl;
       oss << "\t                pixel type: float"<< std::endl;
       }
     else
@@ -748,4 +757,3 @@ CommandLineLauncher::CheckKeyValidity()
 
 }
 }
-

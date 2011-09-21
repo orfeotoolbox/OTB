@@ -192,4 +192,3 @@ OutputImageParameter::HasValue() const
 
 }
 }
-

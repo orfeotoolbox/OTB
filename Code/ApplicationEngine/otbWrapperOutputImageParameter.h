@@ -34,7 +34,7 @@ class ITK_EXPORT OutputImageParameter : public Parameter
 {
 public:
   /** Standard class typedef */
-  typedef OutputImageParameter           Self;
+  typedef OutputImageParameter          Self;
   typedef Parameter                     Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -89,8 +89,8 @@ protected:
   virtual ~OutputImageParameter();
 
   FloatVectorImageType::Pointer m_Image;
-  std::string              m_FileName;
-  ImagePixelType           m_PixelType;
+  std::string                   m_FileName;
+  ImagePixelType                m_PixelType;
 
   typedef otb::StreamingImageFileWriter<Int8VectorImageType>   Int8WriterType;
   typedef otb::StreamingImageFileWriter<UInt8VectorImageType>  UInt8WriterType;
