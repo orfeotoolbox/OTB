@@ -19,8 +19,10 @@
 #define __otbWrapperTypes_h
 
 #include <complex>
+#include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbVectorData.h"
+#include "otbImageList.h"
 
 namespace otb
 {
@@ -66,6 +68,8 @@ typedef enum
   ImagePixelType_double,
 } ImagePixelType;
 
+typedef otb::Image<float>                FloatImageType;
+
 typedef otb::VectorImage<char>           Int8VectorImageType;
 typedef otb::VectorImage<unsigned char>  UInt8VectorImageType;
 typedef otb::VectorImage<short>          Int16VectorImageType;
@@ -85,8 +89,8 @@ typedef otb::VectorData<VectorDataCoordinatePrecisionType,
                         VectorDataValuePrecisionType>
           VectorDataType;
 
-typedef otb::ObjectList<FloatVectorImageType>      FloatVectorImageListType;
-
+typedef otb::ImageList<FloatVectorImageType> FloatVectorImageListType;
+typedef otb::ImageList<FloatImageType>       FloatImageListType;
 
 } // end namespace Wrapper
 } //end namespace otb

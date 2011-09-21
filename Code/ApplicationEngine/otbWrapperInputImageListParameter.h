@@ -22,6 +22,7 @@
 
 #include "otbWrapperParameter.h"
 #include "otbObjectList.h"
+#include "otbImageList.h"
 
 namespace otb
 {
