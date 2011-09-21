@@ -140,7 +140,7 @@ ListViewParameter::SetSelectedItemsByNames()
     {
     const std::string selectedName = m_SelectedNames[i];
     unsigned int j(0);
-      for( ; j<names.size(); j++)
+      for(; j<names.size(); j++)
       {
       if( names[j] == selectedName )
             {
@@ -203,4 +203,3 @@ ListViewParameter::SetSelectedItemsByKeys()
 }
 }
 }
-
