@@ -90,17 +90,19 @@ public:
 
   /** Launch the process, using the Execute application method
    * The method will check if the user asked for help (looking at
-  --help key) before loading parameter and launching process. 
+   * --help key) before loading parameter and launching process. 
    **/
   bool Execute();
 
-  /** Launch the process, using the ExecuteAndWriteOutput application method
+  /** Launch the process, using the ExecuteAndWriteOutput application
+   * method 
    * The method will check if the user asked for help (looking at
-  --help key) before loading parameter and launching process. 
+   * --help key) before loading parameter and launching process. 
    */
   bool ExecuteAndWriteOutput();
 
-  /** Gather the code process to do before Execute and ExecuteAndWriteOutput
+  /** Gather the code process to do before Execute and
+   * ExecuteAndWriteOutput 
    * Returns false if a problem occurs, true otherwise.
    */
   bool BeforeExecute();
@@ -117,18 +119,27 @@ protected:
   /** Destructor */
   virtual ~CommandLineLauncher();
 
-  /** Load the executable path. It looks for the key --modulePath, extract and interpret as path the following strings. */
+  /** Load the executable path. It looks for the key --modulePath,
+    * extract and interpret as path the following strings. 
+    */ 
   bool LoadPath();
 
- /** Load the application calling the CreateApplication method of the ApplicationRegistry classes.
-  * Pay attention, the executable paths have to be loaded or set in the environment before calling the function. */
+  /** Load the application calling the CreateApplication method of the
+    * ApplicationRegistry classes. 
+    * Pay attention, the executable paths have to be loaded or set in
+    * the environment before calling the function. 
+    */ 
   void LoadApplication();
 
-  /** Parse the user expression, extract the key and the associated string and set it as value of each corresonding application parameter. */
+  /** Parse the user expression, extract the key and the associated
+    * string and set it as value of each corresonding application
+    *  parameter. 
+    */ 
   CommandLineLauncher::ParamResultType LoadParameters();
 
   /** Create and display the help of the application */
-  std::string DisplayParameterHelp( const Parameter::Pointer & param, const std::string paramKey );
+  std::string DisplayParameterHelp( const Parameter::Pointer & param, 
+                                    const std::string paramKey );
 
   /** Check if each key is unique in the expression. */
   bool CheckUnicity();
