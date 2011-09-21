@@ -107,7 +107,7 @@ CommandLineLauncher::Load()
 
   if( this->LoadPath() == false )
     {
-    std::cerr << "ERROR: At least one specifed path within \""<< m_Parser->GetAttributAsString(m_Parser->GetModulePathKey(), m_Expression)<<"\" is invalid..." <<std::endl;
+    std::cerr << "ERROR: At least one specifed path within \""<< m_Parser->GetAttributAsString(m_Parser->GetModulePathKey(), m_Expression)<<"\" is invalid or doesn't exist..." <<std::endl;
     return false;
     }
 
@@ -239,7 +239,6 @@ CommandLineLauncher::LoadPath()
     {
     for( unsigned i=0; i<pathList.size(); i++)
       {
-      std::cout<<pathList[i]<<std::endl;
       ApplicationRegistry::AddApplicationPath(pathList[i]);
       }
     }
@@ -281,7 +280,7 @@ CommandLineLauncher::LoadApplication()
       std::cerr << "ERROR: Available modules :" << std::endl;
       for (std::vector<std::string>::const_iterator it = list.begin(); it != list.end(); ++it)
         {
-        std::cout << "\t" << *it << std::endl;
+        std::cerr << "\t" << *it << std::endl;
         }
       return;
       }

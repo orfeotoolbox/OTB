@@ -157,15 +157,16 @@ CommandLineParser::GetModuleName( std::string & modName, const std::string & exp
 std::vector<std::string>
 CommandLineParser::GetAttribut( const std::string & key, const std::string & exp )
 {
+  std::vector<std::string> res;
+
   std::string keySpaced = key;
   keySpaced.append(" ");
   std::size_t found = std::string(exp).find(keySpaced);
   if( found == std::string::npos )
     {
-    itkExceptionMacro("No key \""<<key<<"\" found in \""<<exp<<"\".");
+    return res;
     }
   
-  std::vector<std::string> res;
   std::string expFromKey = std::string(exp).substr(found+key.size(), std::string(exp).size());
   
   if( expFromKey.size() == 0 )
