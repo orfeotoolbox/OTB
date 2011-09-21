@@ -138,26 +138,30 @@ ListViewParameter::SetSelectedItemsByNames()
   std::vector<std::string> names = this->GetChoiceNames();
   for(unsigned int i=0; i<m_SelectedNames.size(); i++)
     {
-      const std::string selectedName = m_SelectedNames[i];
-      unsigned int j(0);
-      for(; j<names.size(); j++)
-        {
-          if( names[j] == selectedName )
+    const std::string selectedName = m_SelectedNames[i];
+    unsigned int j(0);
+      for( ; j<names.size(); j++)
+      {
+      if( names[j] == selectedName )
             {
-              selectedItems.push_back(j);
-              break;
-            }
+        selectedItems.push_back(j);
+        break;
         }
-      // If not found
-      if( j==names.size() )
+      }
+    // If not found
+    if( j==names.size() )
+      {
+      itk::OStringStream oss;
+      for( j=0; j<names.size(); j++)
         {
-          itk::OStringStream oss;
-          for( j=0; j<names.size(); j++)
-            {
-              oss<<names[j]<<", ";
-            }
-          itkExceptionMacro("Value "<<selectedName<<" not found in the choices possibilities"<<oss.str()<<".");
+        oss<<names[j];
+        if( j < names.size()-1 )
+          {
+          oss<<", ";
+          }
         }
+      itkExceptionMacro("Value "<<selectedName<<" not found in the choices possibilities"<<oss.str()<<".");
+      }
     }
   this->SetSelectedItems(selectedItems);
 }
@@ -170,27 +174,30 @@ ListViewParameter::SetSelectedItemsByKeys()
   std::vector<std::string> keys = this->GetChoiceKeys();
   for(unsigned int i=0; i<m_SelectedKeys.size(); i++)
     {
-      const std::string selectedKey = m_SelectedKeys[i];
-      unsigned int j(0);
-      itk::OStringStream oss;
+    const std::string selectedKey = m_SelectedKeys[i];
+    unsigned int j(0);
+    itk::OStringStream oss;
       for(; j<keys.size(); j++)
-        {
-          if( keys[j] == selectedKey )
+      {
+      if( keys[j] == selectedKey )
             {
-              selectedItems.push_back(j);
-              break;
-            }
+        selectedItems.push_back(j);
+        break;
         }
-      // If not found
-      if( j==keys.size() )
+      }
+    // If not found
+    if( j==keys.size() )
+      {
+      for( j=0; j<keys.size(); j++)
         {
-          for( j=0; j<keys.size(); j++)
-            {
-              std::cout<<keys[j]<<std::endl;
-              oss<<keys[j]<<", ";
-            }
-          itkExceptionMacro("Value "<<selectedKey<<" not found in the choices possibilities"<<oss.str()<<".");
+        oss<<keys[j];
+        if( j < keys.size()-1 )
+          {
+          oss<<", ";
+          }
         }
+      itkExceptionMacro("Value "<<selectedKey<<" not found in the choices possibilities"<<oss.str()<<".");
+      }
     }
   this->SetSelectedItems(selectedItems);
 }

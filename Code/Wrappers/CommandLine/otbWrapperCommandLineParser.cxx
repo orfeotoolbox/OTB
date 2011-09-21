@@ -47,27 +47,27 @@ CommandLineParser::GetPaths( std::vector<std::string> & paths, const std::string
   std::size_t found = std::string(exp).find(m_ModulePathKey);
   if( found == std::string::npos )
     {
-      return NOMODULEPATH;
+    return NOMODULEPATH;
     }
 
   std::vector<std::string> pathAttribut = GetAttribut(m_ModulePathKey, std::string(exp));
   
   if( pathAttribut.size() == 0 )
     {
-      return NOMODULEPATH;
+    return NOMODULEPATH;
     }
   
   for( unsigned i=0; i<pathAttribut.size(); i++)
     {
-      std::string fullPath = itksys::SystemTools::CollapseFullPath(pathAttribut[i].c_str());
-      if( !itksys::SystemTools::FileIsDirectory(fullPath.c_str()) )
-        {
-          return INVALIDMODULEPATH;
-        }
-      paths.push_back(fullPath);
+    std::string fullPath = itksys::SystemTools::CollapseFullPath(pathAttribut[i].c_str());
+    if( !itksys::SystemTools::FileIsDirectory(fullPath.c_str()) )
+      {
+      return INVALIDMODULEPATH;
+      }
+    paths.push_back(fullPath);
     }
   
-    
+  
   return OK;
 }
 
@@ -78,19 +78,19 @@ CommandLineParser::GetModuleName( std::string & modName, const std::string & exp
   // if the chain is "  module", SplitString will return: [ ], [module]
   for(unsigned int i=0; i<spaceSplittedExp.size(); i++)
     {
-      if( spaceSplittedExp[i] == " ")
-        {
-          spaceSplittedExp.erase(spaceSplittedExp.begin()+i);
-          i--;
-        }
+    if( spaceSplittedExp[i] == " ")
+      {
+      spaceSplittedExp.erase(spaceSplittedExp.begin()+i);
+      i--;
+      }
     }
-
+  
   // The SplitString keep the separator in the string.
   // If exists a space a the beginnig of the string, it will be interpreted...
   // We have to delete it
   if( spaceSplittedExp[0][0] == ' ' )
     {
-      spaceSplittedExp[0].erase(spaceSplittedExp[0].begin());
+    spaceSplittedExp[0].erase(spaceSplittedExp[0].begin());
     }
   
   itksys::RegularExpression reg;
@@ -101,21 +101,21 @@ CommandLineParser::GetModuleName( std::string & modName, const std::string & exp
   // And must contain only alphanumerical character
   if( spaceSplittedExp[0].substr(0, 2) != "--" )
     {
-      if( spaceSplittedExp.size() > 1 )
+    if( spaceSplittedExp.size() > 1 )
+      {
+      if( spaceSplittedExp[1].substr(0, 2) != "--" )
         {
-          if( spaceSplittedExp[1].substr(0, 2) != "--" )
-            {
-              return MULTIPLEMODULENAME;
-            }
+        return MULTIPLEMODULENAME;
         }
-      if(reg.find(spaceSplittedExp[0]))
-        {
-          return INVALIDMODULENAME;
-        }
-      else
-        {
-          modName = spaceSplittedExp[0];
-        }
+      }
+    if(reg.find(spaceSplittedExp[0]))
+      {
+      return INVALIDMODULENAME;
+      }
+    else
+      {
+      modName = spaceSplittedExp[0];
+      }
     }
   // CASE 2 : set as --moduleName
   // Must contain the string --moduleName
@@ -123,32 +123,32 @@ CommandLineParser::GetModuleName( std::string & modName, const std::string & exp
   // And must contain only alphanumerical character
   else
     {
-      std::size_t found = std::string(exp).find(m_ModuleNameKey);
-      if( found == std::string::npos )
+    std::size_t found = std::string(exp).find(m_ModuleNameKey);
+    if( found == std::string::npos )
+      {
+      return NOMODULENAME;
+      }
+    else
+      {
+      std::vector<std::string> moduleNameAttribut = GetAttribut(m_ModuleNameKey, std::string(exp));
+      
+      if( moduleNameAttribut.size() == 0 )
         {
-          return NOMODULENAME;
+        return NOMODULENAME;
         }
-      else
+      if( moduleNameAttribut.size() > 1 )
         {
-          std::vector<std::string> moduleNameAttribut = GetAttribut(m_ModuleNameKey, std::string(exp));
-          
-          if( moduleNameAttribut.size() == 0 )
-            {
-              return NOMODULENAME;
-            }
-          if( moduleNameAttribut.size() > 1 )
-            {
-              return MULTIPLEMODULENAME;
-            }
-          if(reg.find(moduleNameAttribut[0]))
-            {
-              return INVALIDMODULENAME;
-            }
-          
-          modName = moduleNameAttribut[0];
+        return MULTIPLEMODULENAME;
         }
+      if(reg.find(moduleNameAttribut[0]))
+        {
+        return INVALIDMODULENAME;
+        }
+      
+      modName = moduleNameAttribut[0];
+      }
     }
-
+  
   return OK;
 }
 
@@ -161,48 +161,48 @@ CommandLineParser::GetAttribut( const std::string & key, const std::string & exp
   std::size_t found = std::string(exp).find(keySpaced);
   if( found == std::string::npos )
     {
-      itkExceptionMacro("No key \""<<key<<"\" found in \""<<exp<<"\".");
+    itkExceptionMacro("No key \""<<key<<"\" found in \""<<exp<<"\".");
     }
-
+  
   std::vector<std::string> res;
   std::string expFromKey = std::string(exp).substr(found+key.size(), std::string(exp).size());
   
   if( expFromKey.size() == 0 )
     {
-      return res;
+    return res;
     }
  
   std::string tempModKey = expFromKey;
   // remove other key in the string if there's any
   if( expFromKey.find("--") != std::string::npos)
     {
-      tempModKey = expFromKey.substr( 0, expFromKey.find("--")-1);
+    tempModKey = expFromKey.substr( 0, expFromKey.find("--")-1);
     }
 
   // Only if the key has values assciated
   if( tempModKey.size() > 0 )
     {
-      std::vector<itksys::String> spaceSplitted = itksys::SystemTools::SplitString(tempModKey.substr(1, tempModKey.size()).c_str(), ' ', false);
+    std::vector<itksys::String> spaceSplitted = itksys::SystemTools::SplitString(tempModKey.substr(1, tempModKey.size()).c_str(), ' ', false);
       
-      // Remove " " string element
-      for(unsigned int i=0; i<spaceSplitted.size(); i++)
+    // Remove " " string element
+    for(unsigned int i=0; i<spaceSplitted.size(); i++)
+      {
+      if( spaceSplitted[i] == " ")
         {
-          if( spaceSplitted[i] == " ")
-            {
-              spaceSplitted.erase(spaceSplitted.begin()+i);
-              i--;
-            }
+        spaceSplitted.erase(spaceSplitted.begin()+i);
+        i--;
         }
+      }
     
-      // Remove space at the begining of the string and cast into std::vector<std::string>
-      for(unsigned int i=0; i<spaceSplitted.size(); i++)
+    // Remove space at the begining of the string and cast into std::vector<std::string>
+    for(unsigned int i=0; i<spaceSplitted.size(); i++)
+      {
+      while( spaceSplitted[i].size()>0  && spaceSplitted[i][0] == ' ' )
         {
-          while( spaceSplitted[i].size()>0  && spaceSplitted[i][0] == ' ' )
-            {
-              spaceSplitted[i] = spaceSplitted[i].substr(1, spaceSplitted[i].size());
-            }
-          res.push_back(spaceSplitted[i]);
+        spaceSplitted[i] = spaceSplitted[i].substr(1, spaceSplitted[i].size());
         }
+      res.push_back(spaceSplitted[i]);
+      }
     }
   return res;
 }
@@ -215,24 +215,24 @@ CommandLineParser::GetAttributAsString( const std::string & key, const std::stri
 
   if( values.size() == 0 )
     {
-      return "";
+    return "";
     }
   else if( values.size() == 1 && values[0] == " " )
     {
-      return "";
+    return "";
     }
 
   for( unsigned int i=0; i<values.size(); i++)
     {
-      if( i<values.size()-1 )
-        {
-          res.append(values[i]);
-          res.append(" ");
-        }
-      else
-        {
-          res.append(values[i]);
-        }
+    if( i<values.size()-1 )
+      {
+      res.append(values[i]);
+      res.append(" ");
+      }
+    else
+      {
+      res.append(values[i]);
+      }
     }
   return res;
 }
@@ -242,18 +242,18 @@ bool
 CommandLineParser::IsAttributExists( const std::string key, const std::string & exp  )
 {
   std::string keySpaced = key;
- // Add space to avoid troubles with key twhich starts by another one : --out and --outmax for example
+  // Add space to avoid troubles with key twhich starts by another one : --out and --outmax for example
   keySpaced.append(" ");
   std::size_t found = exp.find(keySpaced);
   if( found == std::string::npos )
     {
-      // Case the attribut is at the end of the expression : no space
-      found = exp.find(key);
-      if( found == std::string::npos )
-        {
-          return false;
-        }
-      return true;
+    // Case the attribut is at the end of the expression : no space
+    found = exp.find(key);
+    if( found == std::string::npos )
+      {
+      return false;
+      }
+    return true;
     }
 
   return true;
@@ -269,21 +269,21 @@ CommandLineParser::GetKeyList( const std::string & exp  )
 
   while( found != std::string::npos )
     {
-      // Supress everything before the key
-      cutExp = cutExp.substr(found+2, exp.size());
-      // Search the end of the key (a space)
-      std::size_t foundSpace = cutExp.find(" ");
-      if( foundSpace != std::string::npos )
-        {
-          keyList.push_back( cutExp.substr(0, foundSpace) );
-        }
-      else
-        {
-          keyList.push_back( cutExp );
-        }
+    // Supress everything before the key
+    cutExp = cutExp.substr(found+2, exp.size());
+    // Search the end of the key (a space)
+    std::size_t foundSpace = cutExp.find(" ");
+    if( foundSpace != std::string::npos )
+      {
+      keyList.push_back( cutExp.substr(0, foundSpace) );
+      }
+    else
+      {
+      keyList.push_back( cutExp );
+      }
 
-      // Search the next key (ie. "--")
-      found = cutExp.find("--");
+    // Search the next key (ie. "--")
+    found = cutExp.find("--");
     }
 
   return keyList;

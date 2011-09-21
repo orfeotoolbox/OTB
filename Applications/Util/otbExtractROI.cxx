@@ -78,7 +78,6 @@ private:
 
   void DoUpdateParameters()
   {
-  std::cout<<"update????????????????????????????????????????????"<<std::endl;
     // Update the sizes only if the user does not defined a size
     if ( HasValue("in") )
       {
@@ -152,7 +151,6 @@ private:
 
   void DoExecute()
   { 
-    std::cout<<"goooooooooooooooooooooooooooooooooooooooooooooooooooooooo"<<std::endl;
     ExtractROIFilterType::InputImageType* inImage = GetParameterImage("in");
     inImage->UpdateOutputInformation();
 

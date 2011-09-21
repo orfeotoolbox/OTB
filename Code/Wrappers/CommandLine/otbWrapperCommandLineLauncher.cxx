@@ -75,8 +75,8 @@ CommandLineLauncher::DeleteWatcherList()
 {
   for( unsigned int i= 0; i<m_WatcherList.size(); i++ )
     {
-      delete m_WatcherList[i];
-      m_WatcherList[i] = NULL;
+    delete m_WatcherList[i];
+    m_WatcherList[i] = NULL;
     }
   m_WatcherList.clear();
 }
@@ -96,13 +96,13 @@ CommandLineLauncher::Load()
 {
   if (m_Expression == "")
     {
-      itkExceptionMacro("No expression specified...");
+    itkExceptionMacro("No expression specified...");
     }
 
   if( this->CheckUnicity() == false )
     {
-      std::cerr<<"ERROR: At least one key is not unique in the expression..."<<std::endl;
-      return false;
+    std::cerr<<"ERROR: At least one key is not unique in the expression..."<<std::endl;
+    return false;
     }
 
   this->LoadPath();
@@ -116,7 +116,7 @@ CommandLineLauncher::Execute()
 {
   if( this->BeforeExecute() == false )
     {
-      return false;
+    return false;
     }
   
   m_Application->Execute();
@@ -130,7 +130,7 @@ CommandLineLauncher::ExecuteAndWriteOutput()
 {
   if( this->BeforeExecute() == false )
     {
-      return false;
+    return false;
     }
 
   m_Application->ExecuteAndWriteOutput();
@@ -142,86 +142,87 @@ CommandLineLauncher::ExecuteAndWriteOutput()
 bool
 CommandLineLauncher::BeforeExecute()
 {
-    if( m_Application.IsNull() )
+  if( m_Application.IsNull() )
     {
-      itkExceptionMacro("No application loaded");
+    std::cerr<<"ERROR: No loaded application..."<<std::endl;
+    return false;
     }
 
-    // if help is asked...
-    if ( m_Parser->IsAttributExists( "--help", m_Expression ) == true )
-      {
-        this->DisplayHelp();
-        return false;
-      }
+  // if help is asked...
+  if ( m_Parser->IsAttributExists( "--help", m_Expression ) == true )
+    {
+    this->DisplayHelp();
+    return false;
+    }
 
-    // Check the key validity (ie. exist in the application parameters)
-    if ( this->CheckKeyValidity() == false )
-      {
-        std::cerr<<"ERROR: At least one key is not known by the application..."<<std::endl;
-        this->DisplayHelp();
-        return false;
-      }
+  // Check the key validity (ie. exist in the application parameters)
+  if ( this->CheckKeyValidity() == false )
+    {
+    std::cerr<<"ERROR: At least one key is not known by the application..."<<std::endl;
+    this->DisplayHelp();
+    return false;
+    }
 
-    try
+  try
+    {
+    if ( this->LoadParameters() != OKPARAM )
       {
-        if ( this->LoadParameters() != OKPARAM )
-          {
-            std::cerr<<"ERROR: troubles loading parameter, please check your line argument..."<<std::endl;
-            // Force to reload the application, the LoadParameters can change wrong values
-            this->LoadApplication();
-            this->DisplayHelp();
+      std::cerr<<"ERROR: troubles loading parameter, please check your line argument..."<<std::endl;
+      // Force to reload the application, the LoadParameters can change wrong values
+      this->LoadApplication();
+      this->DisplayHelp();
             
-            return false;
-          }
+      return false;
       }
-    catch(itk::ExceptionObject& err)
-      {
-        std::cerr<<"ERROR: troubles in parameter setting, please check your line argument..."<<std::endl;
-        std::cerr<<err.GetDescription()<<std::endl;
-        // Force to reload the application, the LoadParameters can change wrong values
-        this->LoadApplication();
-        this->DisplayHelp();
+    }
+  catch(itk::ExceptionObject& err)
+    {
+    std::cerr<<"ERROR: troubles in parameter setting, please check your line argument..."<<std::endl;
+    std::cerr<<err.GetDescription()<<std::endl;
+    // Force to reload the application, the LoadParameters can change wrong values
+    this->LoadApplication();
+    this->DisplayHelp();
         
-        return false;
-      }
+    return false;
+    }
 
-    m_Application->UpdateParameters();
+  m_Application->UpdateParameters();
 
-    // Check for the progress report
-    bool doProgressReport = true;
-    if( m_Parser->IsAttributExists( "--progress", m_Expression ) == true )
+  // Check for the progress report
+  bool doProgressReport = true;
+  if( m_Parser->IsAttributExists( "--progress", m_Expression ) == true )
+    {
+    std::vector<std::string> val;
+    val = m_Parser->GetAttribut( "--progress", m_Expression );
+    if( val.size() != 1)
       {
-        std::vector<std::string> val;
-        val = m_Parser->GetAttribut( "--progress", m_Expression );
-        if( val.size() != 1)
-          {
-            std::cerr<<"Invalid progress argument, must be unique value..."<<std::endl;
-            return false;
-          }
-          if( val[0] == "1" || val[0] == "true")
-            {
-              doProgressReport = true;
-            }
-          else if( val[0] == "0" || val[0] == "false")
-            {
-               doProgressReport = false;
-            }
-          else
-            {
-              std::cerr<<"Invalid progress argument, must be 0, 1, false or true..."<<std::endl;
-              // Force to reload the application, the LoadParameters can change wrong values
-              this->LoadApplication();
-              this->DisplayHelp();
-              return false;
-            }
+      std::cerr<<"Invalid progress argument, must be unique value..."<<std::endl;
+      return false;
       }
+    if( val[0] == "1" || val[0] == "true")
+      {
+      doProgressReport = true;
+      }
+    else if( val[0] == "0" || val[0] == "false")
+      {
+      doProgressReport = false;
+      }
+    else
+      {
+      std::cerr<<"Invalid progress argument, must be 0, 1, false or true..."<<std::endl;
+      // Force to reload the application, the LoadParameters can change wrong values
+      this->LoadApplication();
+      this->DisplayHelp();
+      return false;
+      }
+    }
     
-    if( doProgressReport == true )
-      {
-        this->LinkWatchers();
-      }
+  if( doProgressReport == true )
+    {
+    this->LinkWatchers();
+    }
 
-    return true;
+  return true;
 }
 
 void
@@ -231,20 +232,20 @@ CommandLineLauncher::LoadPath()
   // If users has set path...
   if( m_Parser->GetPaths( pathList, m_Expression ) == CommandLineParser::OK )
     {
-      // Contain paths into a string, separating each path with ":"
-      m_Path = std::string("");
-      for( unsigned i=0; i<pathList.size(); i++)
-        {
-          m_Path.append(pathList[i]);
-          m_Path.append(":");
-        }
+    // Contain paths into a string, separating each path with ":"
+    m_Path = std::string("");
+    for( unsigned i=0; i<pathList.size(); i++)
+      {
+      m_Path.append(pathList[i]);
+      m_Path.append(":");
+      }
 
-      std::string specificEnv("ITK_AUTOLOAD_PATH=");
-      specificEnv.append(m_Path);
-      // do NOT use putenv() directly, since the string memory must be managed carefully
-      itksys::SystemTools::PutEnv(specificEnv.c_str());
-      // Reload factories to take into account new path
-      itk::ObjectFactoryBase::ReHash();
+    std::string specificEnv("ITK_AUTOLOAD_PATH=");
+    specificEnv.append(m_Path);
+    // do NOT use putenv() directly, since the string memory must be managed carefully
+    itksys::SystemTools::PutEnv(specificEnv.c_str());
+    // Reload factories to take into account new path
+    itk::ObjectFactoryBase::ReHash();
     }
 }
 
@@ -256,8 +257,8 @@ CommandLineLauncher::LoadApplication()
   std::string moduleName;
   if( m_Parser->GetModuleName( moduleName, m_Expression ) != CommandLineParser::OK )
     {
-      std::cerr << "ERROR: LoadApplication, no module found..." <<std::endl;
-      return;
+    std::cerr << "ERROR: LoadApplication, no module found..." <<std::endl;
+    return;
     }
 
   // Instanciate the application usingt the factory
@@ -265,8 +266,16 @@ CommandLineLauncher::LoadApplication()
   
   if (m_Application.IsNull())
     {
-      std::cerr << "ERROR: Could not find application \"" << moduleName <<"\""<< std::endl;
-      return;
+    std::cerr << "ERROR: Could not find application \"" << moduleName <<"\""<< std::endl;
+    std::cerr << "ERROR: Module search path: "<< itksys::SystemTools::GetEnv("ITK_AUTOLOAD_PATH") << std::endl;
+    
+    std::vector<std::string> list = ApplicationRegistry::GetAvailableApplications();
+    std::cerr << "ERROR: Available modules : " << (list.empty() ? "None" : "") << std::endl;
+    for (std::vector<std::string>::const_iterator it = list.begin(); it != list.end(); ++it)
+      {
+      std::cout << "\t" << *it << std::endl;
+      }
+    return;
     }
 
   // Attach log output to the Application logger
@@ -279,7 +288,7 @@ CommandLineLauncher::LoadParameters()
 {
   if( m_Application.IsNull() )
     {
-      itkExceptionMacro("No application loaded");
+    itkExceptionMacro("No application loaded");
     }
   
   const std::vector<std::string> appKeyList = m_Application->GetParametersKeys( true );
@@ -287,135 +296,136 @@ CommandLineLauncher::LoadParameters()
   // Loop over each parameter key declared in the application
   for( unsigned int i=0; i<appKeyList.size(); i++ )
     {
-      const std::string paramKey(appKeyList[i]);
-      std::vector<std::string> values;
-      Parameter::Pointer param =  m_Application->GetParameterByKey( paramKey );
-      ParameterType type = m_Application->GetParameterType( paramKey );
+    const std::string paramKey(appKeyList[i]);
+    std::vector<std::string> values;
+    Parameter::Pointer param =  m_Application->GetParameterByKey( paramKey );
+    ParameterType type = m_Application->GetParameterType( paramKey );
       
-      const bool paramExists( m_Parser->IsAttributExists( std::string("--").append(paramKey), m_Expression )  );
-      const bool hasValue = m_Application->HasValue( paramKey );
-      // Check if mandatory parameter are present and have value
-      if( param->GetMandatory() == true )
+    const bool paramExists( m_Parser->IsAttributExists( std::string("--").append(paramKey), m_Expression )  );
+    const bool hasValue = m_Application->HasValue( paramKey );
+    // Check if mandatory parameter are present and have value
+    if( param->GetMandatory() == true )
+      {
+      if( !paramExists )
         {
-          if( !paramExists )
-             {
-               // If key doesn't exist and parameter hasn't default value set...
-               if( !hasValue )
-                 {
-                   std::cout<<"MISSINGMANDATORYPARAMETER: "<<paramKey<<"  "<<m_Application->HasValue( paramKey )<<std::endl;
-                   return MISSINGMANDATORYPARAMETER;
-                 }
-             }
-
-          if( paramExists )
-            {
-              values = m_Parser->GetAttribut( std::string("--").append(paramKey), m_Expression);
-              if(  values.size() == 0 && !m_Application->HasValue( paramKey ) )
-                {
-                  std::cout<<"MISSINGPARAMETERVALUE: "<<paramKey<<std::endl;
-                  return MISSINGPARAMETERVALUE;
-                }
-            }
-        }
-      // Check if non mandatory parameter have values
-      else
-        {
-          if( paramExists )
-            {
-              values = m_Parser->GetAttribut( std::string("--").append(paramKey), m_Expression);
-              if(  values.size() == 0 )
-                {
-   std::cout<<"MISSINGPARAMETERVALUE: "<<paramKey<<std::endl;
-                  return MISSINGPARAMETERVALUE;
-                }
-            }
+        // If key doesn't exist and parameter hasn't default value set...
+        if( !hasValue )
+          {
+          std::cout<<"MISSINGMANDATORYPARAMETER: "<<paramKey<<"  "<<m_Application->HasValue( paramKey )<<std::endl;
+          return MISSINGMANDATORYPARAMETER;
+          }
         }
 
-      // If the param is optionnal and hasn't been set : don't do anything
-      // If the param is mandatory but a default value exists : don't do anything
       if( paramExists )
         {
-          // List values parameter case
-          if( type == ParameterType_InputImageList )
-            {
-              dynamic_cast<InputImageListParameter *>(param.GetPointer())->SetListFromFileName( values );
-            }
-          else if( type == ParameterType_StringList )
-            {
-              dynamic_cast<StringListParameter *>(param.GetPointer())->SetValue( values );
-            }
-          else if( type == ParameterType_OutputImage )
-            {
-              m_Application->SetParameterString( paramKey, values[0] );
-              // Check if pixel type is given
-              if( values.size() == 2  )
-                {
-                  ImagePixelType outPixType = ImagePixelType_float;
-                  if( values[1] == "int8" )
-                    outPixType = ImagePixelType_int8;
-                  else if( values[1] == "uint8" )
-                    outPixType = ImagePixelType_uint8;
-                  else if( values[1] == "int16" )
-                    outPixType = ImagePixelType_int16;
-                  else if( values[1] == "uint16" )
-                    outPixType = ImagePixelType_uint16;
-                  else if( values[1] == "int32" )
-                    outPixType = ImagePixelType_int32;
-                  else if( values[1] == "uint32" )
-                    outPixType = ImagePixelType_uint32;
-                  else if( values[1] == "float" )
-                    outPixType = ImagePixelType_float;
-                  else if( values[1] == "double" )
-                    outPixType = ImagePixelType_double;
-                  else
-                    {
-                      return WRONGPARAMETERVALUE;
-                    }
-                 dynamic_cast<OutputImageParameter *>(param.GetPointer())->SetPixelType( outPixType );
-                }
-              else if( values.size() != 1 && values.size() != 2 )
-                {
-                  std::cout<<"INVALIDNUMBEROFVALUE2: "<<paramKey<<" "<<values.size()<<std::endl;
-                  return INVALIDNUMBEROFVALUE;
-                }
-            }
-          else if( type == ParameterType_ListView )
-            {
-              dynamic_cast<ListViewParameter *>(param.GetPointer())->SetSelectedNames( values );
-            }
-          else  if( values.size() != 1)
-            {
-              std::cout<<"INVALIDNUMBEROFVALUE: "<<paramKey<<" "<<values.size()<<std::endl;
-              return INVALIDNUMBEROFVALUE;
-            }
-          
-          // Single value parameter
-          if( type == ParameterType_Choice || type == ParameterType_Float || type == ParameterType_Int || type == ParameterType_Radius
-              || type == ParameterType_Directory || type == ParameterType_String || type == ParameterType_Filename || type == ParameterType_InputComplexImage
-              || type == ParameterType_InputImage || type == ParameterType_InputVectorData || type == ParameterType_OutputVectorData )
-            {
-              m_Application->SetParameterString( paramKey, values[0] );
-            }
-          else if( type == ParameterType_Empty )
-            {
-              if( values[0] == "1" || values[0] == "true")
-                {
-                  dynamic_cast<EmptyParameter *>(param.GetPointer())->SetActive(true);
-                }
-              else if( values[0] == "0" || values[0] == "false")
-                {
-                  dynamic_cast<EmptyParameter *>(param.GetPointer())->SetActive(false);
-                }
-              else
-                {
-                  std::cout<<"WRONGPARAMETERVALUE: "<<paramKey<<std::endl;
-                  return WRONGPARAMETERVALUE;
-                }
-            }
+        values = m_Parser->GetAttribut( std::string("--").append(paramKey), m_Expression);
+        if(  values.size() == 0 && !m_Application->HasValue( paramKey ) )
+          {
+          std::cout<<"MISSINGPARAMETERVALUE: "<<paramKey<<std::endl;
+          return MISSINGPARAMETERVALUE;
+          }
         }
+      }
+    // Check if non mandatory parameter have values
+    else
+      {
+      if( paramExists )
+        {
+        values = m_Parser->GetAttribut( std::string("--").append(paramKey), m_Expression);
+        if(  values.size() == 0 )
+          {
+          std::cout<<"MISSINGPARAMETERVALUE: "<<paramKey<<std::endl;
+          return MISSINGPARAMETERVALUE;
+          }
+        }
+      }
+
+    // If the param is optionnal and hasn't been set : don't do anything
+    // If the param is mandatory but a default value exists : don't do anything
+    if( paramExists )
+      {
+      // List values parameter case
+      if( type == ParameterType_InputImageList )
+        {
+        dynamic_cast<InputImageListParameter *>(param.GetPointer())->SetListFromFileName( values );
+        }
+      else if( type == ParameterType_StringList )
+        {
+        dynamic_cast<StringListParameter *>(param.GetPointer())->SetValue( values );
+        }
+      else if( type == ParameterType_OutputImage )
+        {
+        m_Application->SetParameterString( paramKey, values[0] );
+        // Check if pixel type is given
+        if( values.size() == 2  )
+          {
+          ImagePixelType outPixType = ImagePixelType_float;
+          if( values[1] == "int8" )
+            outPixType = ImagePixelType_int8;
+          else if( values[1] == "uint8" )
+            outPixType = ImagePixelType_uint8;
+          else if( values[1] == "int16" )
+            outPixType = ImagePixelType_int16;
+          else if( values[1] == "uint16" )
+            outPixType = ImagePixelType_uint16;
+          else if( values[1] == "int32" )
+            outPixType = ImagePixelType_int32;
+          else if( values[1] == "uint32" )
+            outPixType = ImagePixelType_uint32;
+          else if( values[1] == "float" )
+            outPixType = ImagePixelType_float;
+          else if( values[1] == "double" )
+            outPixType = ImagePixelType_double;
+                  else
+          else 
+            {
+            return WRONGPARAMETERVALUE;
+            }
+          dynamic_cast<OutputImageParameter *>(param.GetPointer())->SetPixelType( outPixType );
+          }
+        else if( values.size() != 1 && values.size() != 2 )
+          {
+          std::cout<<"INVALIDNUMBEROFVALUE2: "<<paramKey<<" "<<values.size()<<std::endl;
+          return INVALIDNUMBEROFVALUE;
+          }
+        }
+      else if( type == ParameterType_ListView )
+        {
+        dynamic_cast<ListViewParameter *>(param.GetPointer())->SetSelectedNames( values );
+        }
+      else  if( values.size() != 1)
+        {
+        std::cout<<"INVALIDNUMBEROFVALUE: "<<paramKey<<" "<<values.size()<<std::endl;
+        return INVALIDNUMBEROFVALUE;
+        }
+          
+      // Single value parameter
+      if( type == ParameterType_Choice || type == ParameterType_Float || type == ParameterType_Int || type == ParameterType_Radius
+          || type == ParameterType_Directory || type == ParameterType_String || type == ParameterType_Filename || type == ParameterType_InputComplexImage
+          || type == ParameterType_InputImage || type == ParameterType_InputVectorData || type == ParameterType_OutputVectorData )
+        {
+        m_Application->SetParameterString( paramKey, values[0] );
+        }
+      else if( type == ParameterType_Empty )
+        {
+        if( values[0] == "1" || values[0] == "true")
+          {
+          dynamic_cast<EmptyParameter *>(param.GetPointer())->SetActive(true);
+          }
+        else if( values[0] == "0" || values[0] == "false")
+          {
+          dynamic_cast<EmptyParameter *>(param.GetPointer())->SetActive(false);
+          }
+        else
+          {
+          std::cout<<"WRONGPARAMETERVALUE: "<<paramKey<<std::endl;
+          return WRONGPARAMETERVALUE;
+          }
+        }
+      }
     }
   
-   return OKPARAM;
+  return OKPARAM;
 }
 
 
@@ -426,8 +436,8 @@ CommandLineLauncher::LinkWatchers()
   // Link internall filters watcher
   for( unsigned int i=0; i<m_Application->GetInternalProcessList().size(); i++ )
     {
-      StandardOneLineFilterWatcher * watch = new StandardOneLineFilterWatcher(m_Application->GetInternalProcessList()[i], m_Application->GetInternalProcessListName()[i]);
-      m_WatcherList.push_back( watch );
+    StandardOneLineFilterWatcher * watch = new StandardOneLineFilterWatcher(m_Application->GetInternalProcessList()[i], m_Application->GetInternalProcessListName()[i]);
+    m_WatcherList.push_back( watch );
     }
   
   // Link output image writers watchers
@@ -435,16 +445,16 @@ CommandLineLauncher::LinkWatchers()
   std::vector<std::string>::const_iterator it = paramList.begin();
   for (; it != paramList.end(); ++it)
     {
-      if (m_Application->GetParameterType(*it) == ParameterType_OutputImage)
-        {
-          Parameter* param = m_Application->GetParameterByKey(*it);
-          OutputImageParameter* outputParam = dynamic_cast<OutputImageParameter*> (param);
-          itk::OStringStream oss;
-          oss << "Writing " << param->GetName() << "...";
+    if (m_Application->GetParameterType(*it) == ParameterType_OutputImage)
+      {
+      Parameter* param = m_Application->GetParameterByKey(*it);
+      OutputImageParameter* outputParam = dynamic_cast<OutputImageParameter*> (param);
+      itk::OStringStream oss;
+      oss << "Writing " << param->GetName() << "...";
           
-          StandardOneLineFilterWatcher * watch = new StandardOneLineFilterWatcher(outputParam->GetWriter(), oss.str());
-          m_WatcherList.push_back(watch);
-        }
+      StandardOneLineFilterWatcher * watch = new StandardOneLineFilterWatcher(outputParam->GetWriter(), oss.str());
+      m_WatcherList.push_back(watch);
+      }
     }
 }
 
@@ -466,12 +476,12 @@ CommandLineLauncher::DisplayHelp()
   // Mandatory parameters
   for( unsigned int i=0; i<nbOfParam; i++ )
     {
-      Parameter::Pointer param =  m_Application->GetParameterByKey( appKeyList[i] );
-      // Check if mandatory parameter are present and have value
-      if( param->GetMandatory() == true )
-        {
-          std::cerr<< this->DisplayParameterHelp( param, appKeyList[i] );
-        }
+    Parameter::Pointer param =  m_Application->GetParameterByKey( appKeyList[i] );
+    // Check if mandatory parameter are present and have value
+    if( param->GetMandatory() == true )
+      {
+      std::cerr<< this->DisplayParameterHelp( param, appKeyList[i] );
+      }
     }
  
   // Optional parameters
@@ -482,15 +492,15 @@ CommandLineLauncher::DisplayHelp()
   std::cerr<<"\t          Type: List of string (list of path)"<<std::endl;
   if( !m_Parser->IsAttributExists( m_Parser->GetModulePathKey(), m_Expression ) )
     {
-      const std::string envVal = itksys::SystemTools::GetEnv("ITK_AUTOLOAD_PATH");
-      if( envVal.size() != 0)
-        std::cerr<< "\t       Status: ENVIRONEMENT PATH : "<<envVal<<std::endl;
-      else
-        std::cerr<< "\t       Status: NO VALUE "<<std::endl;
+    const std::string envVal = itksys::SystemTools::GetEnv("ITK_AUTOLOAD_PATH");
+    if( envVal.size() != 0)
+      std::cerr<< "\t       Status: ENVIRONEMENT PATH : "<<envVal<<std::endl;
+    else
+      std::cerr<< "\t       Status: NO VALUE "<<std::endl;
     }
   else if( m_Path == "")
     {
-        std::cerr<< "\t       Status: NO VALUE "<<std::endl;
+    std::cerr<< "\t       Status: NO VALUE "<<std::endl;
     }
   else
     std::cerr<< "\t       Status: USER VALUE: "<<m_Path<<std::endl;
@@ -509,12 +519,12 @@ CommandLineLauncher::DisplayHelp()
 
   for( unsigned int i=0; i<nbOfParam; i++ )
     {
-      Parameter::Pointer param =  m_Application->GetParameterByKey(  appKeyList[i] );
-      // Check if mandatory parameter are present and have value
-      if( param->GetMandatory() != true )
-        {
-          std::cerr << this->DisplayParameterHelp( param, appKeyList[i] );
-        }
+    Parameter::Pointer param =  m_Application->GetParameterByKey(  appKeyList[i] );
+    // Check if mandatory parameter are present and have value
+    if( param->GetMandatory() != true )
+      {
+      std::cerr << this->DisplayParameterHelp( param, appKeyList[i] );
+      }
  
 
     }
@@ -528,140 +538,140 @@ CommandLineLauncher::DisplayParameterHelp( const Parameter::Pointer & param, con
   ParameterType type = m_Application->GetParameterType( paramKey );
   if( type == ParameterType_Group )
     {
-      return "";
+    return "";
     }
 
   
   itk::OStringStream oss;
   oss<<"--"<<paramKey<<" ("<<param->GetName()<<")"<< std::endl;
 
-   // Display parameter description
+  // Display parameter description
   if( std::string(param->GetDescription()).size() != 0 )
     {
-      oss<<"\t   Description: "<<param->GetDescription()<< std::endl;
+    oss<<"\t   Description: "<<param->GetDescription()<< std::endl;
     }
   else
     {
-      oss<<"\t   Description: none"<< std::endl;
+    oss<<"\t   Description: none"<< std::endl;
     }
  
- // Display the type the parameter
+  // Display the type the parameter
   if( type == ParameterType_Radius )
     {
-      oss<<"\t          Type: Int"<<std::endl;
+    oss<<"\t          Type: Int"<<std::endl;
     }
   else if( type == ParameterType_Empty )
     {
-      oss<<"\t          Type: Boolean"<<std::endl;
+    oss<<"\t          Type: Boolean"<<std::endl;
     }
   else if( type == ParameterType_Int )
     {
-      oss<<"\t          Type: Int"<<std::endl;
+    oss<<"\t          Type: Int"<<std::endl;
     }
   else if( type == ParameterType_Float )
     {
-      oss<<"\t          Type: Float"<<std::endl;
+    oss<<"\t          Type: Float"<<std::endl;
     }
   else if( type == ParameterType_Filename )
     {
-      oss<<"\t          Type: String (file name)"<<std::endl;
+    oss<<"\t          Type: String (file name)"<<std::endl;
     }
   else if( type == ParameterType_Directory )
     {
-      oss<<"\t          Type: String (Directory path)"<<std::endl;
+    oss<<"\t          Type: String (Directory path)"<<std::endl;
     }
   else if( type == ParameterType_InputImage || type == ParameterType_InputComplexImage )
     {
-      oss<<"\t          Type: String (input image file name)"<<std::endl;
+    oss<<"\t          Type: String (input image file name)"<<std::endl;
     }
   else if( type == ParameterType_InputVectorData )
     {
-      oss<<"\t          Type: String (input vector data file name)"<<std::endl;
+    oss<<"\t          Type: String (input vector data file name)"<<std::endl;
     }
   else if( type == ParameterType_OutputImage )
     {
-      oss<<"\t          Type: String (output image file name and optionally its pixel type)"<<std::endl;
-      oss<<"\t                Possible pixel type: int8, uint8, int16, uint16, int32, uint32, float or double"<<std::endl;
+    oss<<"\t          Type: String (output image file name and optionally its pixel type)"<<std::endl;
+    oss<<"\t                Possible pixel type: int8, uint8, int16, uint16, int32, uint32, float or double"<<std::endl;
     }
   else if( type == ParameterType_OutputVectorData )
     {
-      oss<<"\t          Type: String (output vector data file name)"<<std::endl;
+    oss<<"\t          Type: String (output vector data file name)"<<std::endl;
     }
   else if( type == ParameterType_String )
     {
-      oss<<"\t          Type: String"<<std::endl;
+    oss<<"\t          Type: String"<<std::endl;
     }
   else if( type == ParameterType_Choice )
     {
-      oss<<"\t          Type: String: ";
+    oss<<"\t          Type: String: ";
       
-      std::vector<std::string> keys  = m_Application->GetChoiceKeys(paramKey);
-      std::vector<std::string> names = m_Application->GetChoiceNames(paramKey);
-      for( unsigned int j=0; j<keys.size(); j++ )
+    std::vector<std::string> keys  = m_Application->GetChoiceKeys(paramKey);
+    std::vector<std::string> names = m_Application->GetChoiceNames(paramKey);
+    for( unsigned int j=0; j<keys.size(); j++ )
+      {
+      oss << keys[j] << " for "<<names[j];
+      if( j<= keys.size()-1 )
         {
-          oss << keys[j] << " for "<<names[j];
-          if( j<= keys.size()-1 )
-            {
-              oss << ", ";
-            }
+        oss << ", ";
         }
-      oss<<std::endl;
+      }
+    oss<<std::endl;
     }
   else if( type == ParameterType_ListView )
     {
-      // We don't have access to the possible values...
-      oss<<"\t          Type: List of String" << std::endl;
+    // We don't have access to the possible values...
+    oss<<"\t          Type: List of String" << std::endl;
     }
   else
     {
-      oss<<"\t          Type: Type not handle yet"<<std::endl;
+    oss<<"\t          Type: Type not handle yet"<<std::endl;
     }
 
- // Display parameter values
+  // Display parameter values
   if( m_Application->HasValue( paramKey ) )
     {
-      // In the case choice, don't show the enum type.
-      if( type == ParameterType_Choice )
-        {
-          oss << "\t Default value: "<< m_Application->GetChoiceKeys(paramKey)[m_Application->GetParameterInt( paramKey )]<< std::endl;
-        }
-      else if( type == ParameterType_OutputImage )
-        {
-          oss << "\t Default value: filename: "<< m_Application->GetParameterAsString( paramKey )<< std::endl;
-          oss << "\t                pixel type: float"<< std::endl;
-        }
-      else
-        {
-          oss << "\t Default value: "<<m_Application->GetParameterAsString( paramKey )<< std::endl;
-        }
+    // In the case choice, don't show the enum type.
+    if( type == ParameterType_Choice )
+      {
+      oss << "\t Default value: "<< m_Application->GetChoiceKeys(paramKey)[m_Application->GetParameterInt( paramKey )]<< std::endl;
+      }
+    else if( type == ParameterType_OutputImage )
+      {
+      oss << "\t Default value: filename: "<< m_Application->GetParameterAsString( paramKey )<< std::endl;
+      oss << "\t                pixel type: float"<< std::endl;
+      }
+    else
+      {
+      oss << "\t Default value: "<<m_Application->GetParameterAsString( paramKey )<< std::endl;
+      }
     }
   else
     {
-      if( type == ParameterType_OutputImage )
-        {
-          oss << "\t Default value: filename: none"<< std::endl;
-          oss << "\t                pixel type: float"<< std::endl;
-        }
-      else
-        oss << "\t Default value: none"<<std::endl;
+    if( type == ParameterType_OutputImage ) 
+      {
+      oss << "\t Default value: filename: none"<< std::endl;
+      oss << "\t                pixel type: float"<< std::endl;
+      }
+    else
+      oss << "\t Default value: none"<<std::endl;
     }
 
   if( !m_Parser->IsAttributExists( std::string("--").append(paramKey), m_Expression) )
     {
-      if ( !m_Application->HasValue( paramKey ) )
-        oss << "\t        Status: MISSING"<< std::endl;
-      else
-        oss << "\t        Status: DEFAULT VALUE"<< std::endl;
+    if ( !m_Application->HasValue( paramKey ) )
+      oss << "\t        Status: MISSING"<< std::endl;
+    else
+      oss << "\t        Status: DEFAULT VALUE"<< std::endl;
     }
   else if( m_Parser->GetAttribut( std::string("--").append(paramKey), m_Expression).size() == 0 )
     {
-      oss << "\t        Status: NO VALUE ASSOCIATED"<< std::endl;
+    oss << "\t        Status: NO VALUE ASSOCIATED"<< std::endl;
     }
   else
     {
-      oss << "\t        Status: USER VALUE (";
-      oss << m_Parser->GetAttributAsString( std::string("--").append(paramKey), m_Expression ) <<")";
-      oss << std::endl;
+    oss << "\t        Status: USER VALUE (";
+    oss << m_Parser->GetAttributAsString( std::string("--").append(paramKey), m_Expression ) <<")";
+    oss << std::endl;
     }
 
   return oss.str();
@@ -678,19 +688,19 @@ CommandLineLauncher::CheckUnicity()
   // Check Unicity
   for( unsigned int i=0; i<keyList.size(); i++ )
     {
-      std::vector<std::string> listTmp = keyList;
-      const std::string keyRef = keyList[i];
-      listTmp.erase(listTmp.begin()+i);
-      for( unsigned int j=0; j<listTmp.size(); j++ )
+    std::vector<std::string> listTmp = keyList;
+    const std::string keyRef = keyList[i];
+    listTmp.erase(listTmp.begin()+i);
+    for( unsigned int j=0; j<listTmp.size(); j++ )
+      {
+      if( keyRef == listTmp[j] )
         {
-          if( keyRef == listTmp[j] )
-            {
-              res = false;
-              break;
-            }
-        }
-      if (res == false )
+        res = false;
         break;
+        }
+      }
+    if (res == false )
+      break;
     }
 
   return res;
@@ -713,21 +723,21 @@ CommandLineLauncher::CheckKeyValidity()
   // Check if each key in the expression exists in the application
   for( unsigned int i=0; i<expKeyList.size(); i++ )
     {
-      const std::string refKey = expKeyList[i];
-      bool keyExist = false;
-      for( unsigned int j=0; j<appKeyList.size(); j++ )
+    const std::string refKey = expKeyList[i];
+    bool keyExist = false;
+    for( unsigned int j=0; j<appKeyList.size(); j++ )
+      {
+      if( refKey == appKeyList[j] )
         {
-          if( refKey == appKeyList[j] )
-            {
-              keyExist = true;
-              break;
-            }
+        keyExist = true;
+        break;
         }
-      if( keyExist == false )
-        {
-          res = false;
-          break;
-        }
+      }
+    if( keyExist == false )
+      {
+      res = false;
+      break;
+      }
     }
 
   return res;
