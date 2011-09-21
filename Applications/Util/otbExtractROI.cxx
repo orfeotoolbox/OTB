@@ -113,17 +113,16 @@ private:
         
       dynamic_cast< NumericalParameter<int> * >(GetParameterByKey("starty"))->SetMinimumValue(0); 
       dynamic_cast< NumericalParameter<int> * >(GetParameterByKey("starty"))->SetMaximumValue(largestRegion.GetSize(1));
-
-      }
     
-    // Crop the roi region to be included in the largest possible
-    // region  
-    if(!this->CropRegionOfInterest())
-      {
-      // Put the index of the ROI to origin and try to crop again
-      SetParameterInt("startx", 0);
-      SetParameterInt("starty", 0);
-      this->CropRegionOfInterest();
+      // Crop the roi region to be included in the largest possible
+      // region
+      if(!this->CropRegionOfInterest())
+        {
+        // Put the index of the ROI to origin and try to crop again
+        SetParameterInt("startx", 0);
+        SetParameterInt("starty", 0);
+        this->CropRegionOfInterest();
+        }
       }
   }
 
@@ -152,7 +151,6 @@ private:
   void DoExecute()
   { 
     ExtractROIFilterType::InputImageType* inImage = GetParameterImage("in");
-    inImage->UpdateOutputInformation();
 
     m_ExtractROIFilter = ExtractROIFilterType::New();
     m_ExtractROIFilter->SetInput(inImage);
@@ -161,19 +159,11 @@ private:
     m_ExtractROIFilter->SetSizeX(GetParameterInt("sizex"));
     m_ExtractROIFilter->SetSizeY(GetParameterInt("sizey"));
 
-    // std::cout <<"startx"<<GetParameterInt("startx") << std::endl;
-    // std::cout <<"starty"<<GetParameterInt("starty") << std::endl;
-    // std::cout <<"sizex"<<GetParameterInt("sizex") << std::endl;
-    // std::cout <<"sizey"<<GetParameterInt("sizey") << std::endl;
-
-    std::cout <<"Channels added : "<<std::endl;
     for (unsigned int idx = 0; idx < GetSelectedItems("cl").size(); ++idx)
       {
-        std::cout << GetSelectedItems("cl")[idx] + 1<<  " ";
       m_ExtractROIFilter->SetChannel(GetSelectedItems("cl")[idx] + 1 );
       }
-    std::cout<<std::endl;
-
+    
     SetParameterOutputImage("out", m_ExtractROIFilter->GetOutput());
   }
 
