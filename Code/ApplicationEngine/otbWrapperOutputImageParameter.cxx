@@ -29,6 +29,16 @@ OutputImageParameter::OutputImageParameter()
   this->SetName("Output Image");
   this->SetKey("out");
 
+  this->InitializeWriters();
+
+}
+
+OutputImageParameter::~OutputImageParameter()
+{
+}
+
+void OutputImageParameter::InitializeWriters()
+{
   m_Int8Writer = Int8WriterType::New();
   m_UInt8Writer = UInt8WriterType::New();
   m_Int16Writer = Int16WriterType::New();
@@ -37,12 +47,8 @@ OutputImageParameter::OutputImageParameter()
   m_UInt32Writer = UInt32WriterType::New();
   m_FloatWriter = FloatWriterType::New();
   m_DoubleWriter = DoubleWriterType::New();
-
 }
 
-OutputImageParameter::~OutputImageParameter()
-{
-}
 
 void
 OutputImageParameter::Write( )

@@ -80,6 +80,8 @@ public:
 
   itk::ProcessObject* GetWriter();
 
+  void InitializeWriters();
+
 protected:
   /** Constructor */
   OutputImageParameter();
