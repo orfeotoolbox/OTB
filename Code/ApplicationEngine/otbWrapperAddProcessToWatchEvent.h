@@ -29,14 +29,14 @@ namespace Wrapper
 /** \class AddProcessToWatchEvent
  *  \brief This class implements an event storing a pointer to
  *  itk::ProcessObject and a string describing the process.
- * 
+ *
  */
 class ITK_EXPORT AddProcessToWatchEvent: public itk::EventObject
 {
 public:
  
-  typedef AddProcessToWatchEvent Self; 
-  typedef itk::EventObject       Superclass; 
+  typedef AddProcessToWatchEvent Self;
+  typedef itk::EventObject       Superclass;
 
   AddProcessToWatchEvent(){}
   AddProcessToWatchEvent(const Self& s) :itk::EventObject(s){};
@@ -66,7 +66,7 @@ public:
   /** Virtual pure method to implement */
   virtual itk::EventObject* MakeObject() const
   {
-    return new Self;    
+    return new Self;
   }
   
   virtual const char* GetEventName() const
@@ -75,7 +75,7 @@ public:
   }
   virtual bool CheckEvent(const itk::EventObject* e) const
   {
-    return dynamic_cast<const Self*>(e); 
+    return dynamic_cast<const Self*>(e);
   }
 
 private:

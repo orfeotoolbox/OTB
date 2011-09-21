@@ -43,12 +43,12 @@ namespace Wrapper
  *
  * To be valid, the expression must be as follow:
  * ModuleName --attribut1_Key attribut1_Value --attribut2_Key
- * attribut2_Value 
+ * attribut2_Value
  * After the attribut key, if the user give several values (expression
  * without \"--\" separated by space), it will automacally be
  * interpreted as a list.
  * The module name can be set as the first element of the expression
- * or in the expression with the key --moduleName. 
+ * or in the expression with the key --moduleName.
  * The exe path have to be set in with the option --modulePath.
  */
 
@@ -90,19 +90,19 @@ public:
 
   /** Launch the process, using the Execute application method
    * The method will check if the user asked for help (looking at
-   * --help key) before loading parameter and launching process. 
+   * --help key) before loading parameter and launching process.
    **/
   bool Execute();
 
   /** Launch the process, using the ExecuteAndWriteOutput application
-   * method 
+   * method
    * The method will check if the user asked for help (looking at
-   * --help key) before loading parameter and launching process. 
+   * --help key) before loading parameter and launching process.
    */
   bool ExecuteAndWriteOutput();
 
   /** Gather the code process to do before Execute and
-   * ExecuteAndWriteOutput 
+   * ExecuteAndWriteOutput
    * Returns false if a problem occurs, true otherwise.
    */
   bool BeforeExecute();
@@ -120,25 +120,25 @@ protected:
   virtual ~CommandLineLauncher();
 
   /** Load the executable path. It looks for the key --modulePath,
-    * extract and interpret as path the following strings. 
-    */ 
+    * extract and interpret as path the following strings.
+    */
   bool LoadPath();
 
   /** Load the application calling the CreateApplication method of the
-    * ApplicationRegistry classes. 
+    * ApplicationRegistry classes.
     * Pay attention, the executable paths have to be loaded or set in
-    * the environment before calling the function. 
-    */ 
+    * the environment before calling the function.
+    */
   void LoadApplication();
 
   /** Parse the user expression, extract the key and the associated
     * string and set it as value of each corresonding application
-    *  parameter. 
-    */ 
+    *  parameter.
+    */
   CommandLineLauncher::ParamResultType LoadParameters();
 
   /** Create and display the help of the application */
-  std::string DisplayParameterHelp( const Parameter::Pointer & param, 
+  std::string DisplayParameterHelp( const Parameter::Pointer & param,
                                     const std::string paramKey );
 
   /** Check if each key is unique in the expression. */
