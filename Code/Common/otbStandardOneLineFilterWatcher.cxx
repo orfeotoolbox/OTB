@@ -109,9 +109,16 @@ StandardOneLineFilterWatcher
 ::EndFilter()
 {
   m_TimeProbe.Stop();
+
+  // Ensure we don't depend on std::cout configuration
+  std::ostringstream elapsedTime;
+  elapsedTime.precision(1);
+  elapsedTime << m_TimeProbe.GetMeanTime();
+
   std::cout << " ("
-            << m_TimeProbe.GetMeanTime()
+            << elapsedTime.str()
             << " seconds)"
             << std::endl;
 }
+
 } // end namespace otb
