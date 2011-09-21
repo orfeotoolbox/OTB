@@ -35,6 +35,8 @@
 
 #include "otbWrapperParameterGroup.h"
 
+#include "otbWrapperAddProcessToWatchEvent.h"
+
 namespace otb
 {
 namespace Wrapper
@@ -125,7 +127,9 @@ void Application::ExecuteAndWriteOutput()
       {
       Parameter* param = GetParameterByKey(*it);
       OutputImageParameter* outputParam = dynamic_cast<OutputImageParameter*>(param);
+      outputParam->InitializeWriters();
       m_CurrentProcess = outputParam->GetWriter();
+      AddProcess(outputParam->GetWriter(),"Writer ");
       outputParam->Write();
       m_WroteOutput++;
       }
@@ -754,11 +758,20 @@ Application::IsApplicationReady()
     // Check all Input Parameters
     if (!this->HasValue(*it) && IsMandatory(*it))
       {
-      ready = false;
+      return false;
       }
     }
 
   return ready;
+}
+
+void
+Application::AddProcess(itk::ProcessObject* object, std::string description)
+{
+  AddProcessToWatchEvent event;
+  event.SetProcess(object);
+  event.SetProcessDescription(description);
+  this->InvokeEvent(event);
 }
 
 }

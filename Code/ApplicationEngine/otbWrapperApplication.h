@@ -39,7 +39,7 @@ namespace Wrapper
  *  TODO
  *
  */
-  class ITK_EXPORT Application: public itk::Object
+class ITK_EXPORT Application: public itk::Object
 {
 public:
   /** Standard class typedefs. */
@@ -352,6 +352,8 @@ public:
   }
 
   itk::Logger* GetLogger();
+
+  void AddProcess(itk::ProcessObject* object, std::string description);
 
 protected:
   /** Constructor */
