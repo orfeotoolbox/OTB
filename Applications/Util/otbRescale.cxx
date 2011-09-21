@@ -45,15 +45,11 @@ public:
   typedef otb::StreamingMinMaxVectorImageFilter<FloatVectorImageType>  MinMaxFilterType;
   typedef otb::VectorRescaleIntensityImageFilter<FloatVectorImageType> RescaleImageFilterType;
 
-
 private:
    Rescale()
   {
     SetName("Rescale");
     SetDescription("Rescale the image between two given values.");
-    m_RescaleFilter = RescaleImageFilterType::New();
-    m_MinMaxFilter = MinMaxFilterType::New();
-    this->AddInternalProcess( m_MinMaxFilter->GetStreamer(), "Min/Max computing" );
   }
 
   virtual ~Rescale()
@@ -83,8 +79,6 @@ private:
     // Reinitialize the object
     m_RescaleFilter = RescaleImageFilterType::New();
     m_MinMaxFilter = MinMaxFilterType::New();
-    this->ClearInternalProcessList();
-    this->AddInternalProcess( m_MinMaxFilter->GetStreamer(), "Min/Max computing" );
   }
 
   void DoExecute()
@@ -95,6 +89,7 @@ private:
 
     m_MinMaxFilter->GetStreamer()->SetNumberOfLinesStrippedStreaming( 50 );
     m_MinMaxFilter->SetInput( inImage );
+    AddProcess(m_MinMaxFilter->GetStreamer(), "Min/Max computing");
     m_MinMaxFilter->Update();
 
     otbAppLogDEBUG( << "Min/Max computation done : min=" << m_MinMaxFilter->GetMinimum()
