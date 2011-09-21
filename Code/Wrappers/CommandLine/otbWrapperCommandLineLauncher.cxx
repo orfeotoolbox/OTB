@@ -105,10 +105,13 @@ CommandLineLauncher::Load()
     return false;
     }
 
-  if( this->LoadPath() == false )
+  if( m_Parser->IsAttributExists(m_Parser->GetModulePathKey(), m_Expression) )
     {
-    std::cerr << "ERROR: At least one specifed path within \""<< m_Parser->GetAttributAsString(m_Parser->GetModulePathKey(), m_Expression)<<"\" is invalid or doesn't exist..." <<std::endl;
-    return false;
+    if( this->LoadPath() == false )
+      {
+      std::cerr << "ERROR: At least one specifed path within \""<< m_Parser->GetAttributAsString(m_Parser->GetModulePathKey(), m_Expression)<<"\" is invalid or doesn't exist..." <<std::endl;
+      return false;
+      }
     }
 
   this->LoadApplication();
