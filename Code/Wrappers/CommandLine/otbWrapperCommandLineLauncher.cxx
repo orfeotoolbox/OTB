@@ -550,7 +550,7 @@ CommandLineLauncher::DisplayParameterHelp( const Parameter::Pointer & param, con
     }
 
   
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss<<"--"<<paramKey<<" ("<<param->GetName()<<")"<< std::endl;
 
   // Display parameter description

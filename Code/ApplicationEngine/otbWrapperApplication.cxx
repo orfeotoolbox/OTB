@@ -679,13 +679,13 @@ std::string Application::GetParameterAsString(std::string paramKey)
     }
   else if ( type == ParameterType_Int || type == ParameterType_Radius || type == ParameterType_Choice )
     {
-      itk::OStringStream oss;
+      std::ostringstream oss;
       oss << this->GetParameterInt( paramKey );
       ret = oss.str();
     }
   else if( type == ParameterType_Float )
     {
-      itk::OStringStream oss;
+      std::ostringstream oss;
       oss << this->GetParameterFloat( paramKey );
       ret = oss.str();
     }

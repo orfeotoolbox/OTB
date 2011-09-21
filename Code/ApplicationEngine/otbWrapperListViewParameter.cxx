@@ -151,7 +151,7 @@ ListViewParameter::SetSelectedItemsByNames()
     // If not found
     if( j==names.size() )
       {
-      itk::OStringStream oss;
+      std::ostringstream oss;
       for( j=0; j<names.size(); j++)
         {
         oss<<names[j];
@@ -176,7 +176,7 @@ ListViewParameter::SetSelectedItemsByKeys()
     {
     const std::string selectedKey = m_SelectedKeys[i];
     unsigned int j(0);
-    itk::OStringStream oss;
+    std::ostringstream oss;
       for(; j<keys.size(); j++)
       {
       if( keys[j] == selectedKey )
