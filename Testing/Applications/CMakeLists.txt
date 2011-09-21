@@ -14,4 +14,5 @@ SET(NOTOL 0.0)
 SET(EPSILON_3 0.001)
 SET(EPSILON_9 0.000000001)
 
+add_subdirectory(Hyperspectral)
 add_subdirectory(Util)

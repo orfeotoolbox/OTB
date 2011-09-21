@@ -117,6 +117,7 @@ private:
   {
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
+    MandatoryOff("out");
 
     AddParameter(ParameterType_Choice, "dr", "Dimension reduction");
     AddChoice("dr.pca", "PCA");
@@ -146,6 +147,7 @@ private:
     AddChoice("ua.isra", "ISRA");
     AddChoice("ua.ncls", "NCLS");
     AddChoice("ua.fcls", "FCLS");
+    //SetParameterString("ua", "none");
 
     AddParameter(ParameterType_OutputImage, "oe", "Output Endmembers");
     MandatoryOff("oe");
@@ -179,15 +181,16 @@ private:
         dimReduction = DimReductionMethod_MNF;
         }
       }
-    otbMsgDevMacro( << "Using "
-                    << (dimReduction == DimReductionMethod_NONE ? "NONE" : (dimReduction == DimReductionMethod_PCA ? "PCA" : "MNF") )
-                    << " dimensionality reduction method" );
+    otbAppLogDEBUG(<< "Using "
+                   << (dimReduction == DimReductionMethod_NONE ? "NONE" : (dimReduction == DimReductionMethod_PCA ? "PCA" : "MNF") )
+                   << " dimensionality reduction method")
 
     // Number of endmembers
     unsigned int nbEndmembers = 0;
     if ( IsParameterEnabled("ne") && HasValue("ne") )
       {
       nbEndmembers = GetParameterInt("ne");
+      otbAppLogDEBUG(<< "nbEndmembers: " << nbEndmembers)
       }
 
     // Dimensionnality estimation
@@ -198,6 +201,8 @@ private:
         {
         std::cerr << "Only ELM is supported for parameter DimensionalityEstimationMethod" << std::endl;
         }
+      otbAppLogDEBUG(<< "dimEstMethodStr: " << dimEstMethodStr)
+
       }
 
     if ( IsParameterEnabled("ee") && HasValue("ee") )
@@ -207,17 +212,17 @@ private:
         {
         std::cerr << "Only VCA is supported for parameter EndmembersEstimationMethod" << std::endl;
         }
+      otbAppLogDEBUG(<< "eeEstMethodStr: " << eeEstMethodStr)
       }
 
     std::string inputEndmembers;
     if ( IsParameterEnabled("ie") && HasValue("ie") )
       {
       inputEndmembers = GetParameterString("ie");
+      otbAppLogDEBUG("inputEndmembers: " << inputEndmembers)
       }
 
-    UnMixingMethod unmixingAlgo = UnMixingMethod_FCLS;
-    std::cout << " IsParameterEnabled(ua)  " << IsParameterEnabled("ua")  << std::endl;
-    std::cout << " HasValue(ua)  " << HasValue("ua") << std::endl;
+    UnMixingMethod unmixingAlgo = UnMixingMethod_NONE;
     if ( IsParameterEnabled("ua") && HasValue("ua") )
       {
       std::string unmixingAlgoStr = GetParameterString("ua");
@@ -226,20 +231,33 @@ private:
         {
         unmixingAlgo = UnMixingMethod_UCLS;
         }
+      else if ( boost::to_upper_copy(unmixingAlgoStr) == "NCLS" )
+        {
+        unmixingAlgo = UnMixingMethod_NCLS;
+        }
+      else if ( boost::to_upper_copy(unmixingAlgoStr) == "FCLS" )
+        {
+        unmixingAlgo = UnMixingMethod_FCLS;
+        }
       else if ( boost::to_upper_copy(unmixingAlgoStr) == "ISRA" )
         {
         unmixingAlgo = UnMixingMethod_ISRA;
         }
       }
-    otbMsgDevMacro( << "Using "
+    otbAppLogDEBUG( << "Using "
                     << UnMixingMethodNames[unmixingAlgo]
-                    << " unmixing algorithm" );
+                    << " unmixing algorithm")
 
     std::string outputEndmembers;
     if ( IsParameterEnabled("oe") && HasValue("oe") && inputEndmembers.empty() )
       {
       outputEndmembers = GetParameterString("oe");
       }
+    otbAppLogDEBUG( << "IsParameterEnabled(oe) " << IsParameterEnabled("oe") )
+    otbAppLogDEBUG( << "HasValue(oe) " << HasValue("oe") )
+    otbAppLogDEBUG( << "inputEndmembers.empty() " << inputEndmembers.empty() )
+    otbAppLogDEBUG( << "outputEndmembers: " << outputEndmembers )
+
 
     /*
      *
