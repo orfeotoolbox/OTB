@@ -15,3 +15,6 @@ OTB_CREATE_APPLICATION(NAME           ReadImageInfo
                        SOURCES        otbReadImageInfo.cxx
                        LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters)
 
+OTB_CREATE_APPLICATION(NAME           MultiResolutionPyramid
+                       SOURCES        otbMultiResolutionPyramid.cxx
+                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters)
