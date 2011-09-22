@@ -62,7 +62,7 @@ public:
     SetActive(true);
   }
 
-  /** 
+  /**
     * Implement the reset method (replace value by default value = false)
     */
   virtual void Reset()
