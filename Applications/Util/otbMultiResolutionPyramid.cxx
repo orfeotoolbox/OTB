@@ -126,7 +126,8 @@ private:
     std::string path, fname, ext;
     if (dynamic_cast<OutputImageParameter*>(param))
       {
-      OutputImageParameter* paramDown = dynamic_cast<OutputImageParameter*>(param);
+      OutputImageParameter* paramDown =
+        dynamic_cast<OutputImageParameter*>(param);
       std::string ofname = paramDown->GetFileName();
 
       // Get the extension and the prefix of the filename
@@ -140,7 +141,8 @@ private:
 
     while(currentLevel <= nbLevels)
       {
-      otbAppLogDEBUG( << "Processing level " << currentLevel << " with shrink factor "<<currentFactor);
+      otbAppLogDEBUG( << "Processing level " << currentLevel
+                      << " with shrink factor "<<currentFactor);
 
       m_SmoothingFilter->SetInput(inImage);
 
@@ -155,7 +157,7 @@ private:
 
       if(!fastScheme)
         {
-        currentFactor*=shrinkFactor;
+        currentFactor *= shrinkFactor;
         }
 
       // Get the Output Parameter to change the current image filename
@@ -196,4 +198,3 @@ private:
 }
 
 OTB_APPLICATION_EXPORT(otb::Wrapper::MultiResolutionPyramid)
-
