@@ -148,6 +148,16 @@ ossimString ossimOgcWktTranslator::fromOssimKwl(const ossimKeywordlist &kwl,
    oSRS.SetLinearUnits("Meter", 1.0);
 
    int pcsCodeVal = (pcsCode.empty() == false) ? pcsCode.toInt() : EPSG_CODE_MAX;
+
+   // since approximately ossim version r20036
+   // kwl.find(prefix, ossimKeywordNames::PCS_CODE_KW)
+   // return 0 instead of "" previously.
+   // the to following lines ensure backward compatibility
+   // Since EPSG:0 is not a valid epsg code, the fix is safe
+   // (ref http://spatialreference.org/ref/epsg/)
+   if(pcsCodeVal == 0)
+     pcsCodeVal = EPSG_CODE_MAX;
+
    if(pcsCodeVal < EPSG_CODE_MAX)
    {
       // ESH 06/2008 -- HACK!!!
