@@ -15,7 +15,8 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#include "otbMultiResolutionPyramid.h"
+#include "otbWrapperApplication.h"
+#include "otbWrapperApplicationFactory.h"
 
 #include "otbImage.h"
 #include "otbVectorImage.h"
@@ -28,127 +29,187 @@
 #include "otbCommandLineArgumentParser.h"
 #include "otbStandardWriterWatcher.h"
 
+#include "otbWrapperParameter.h"
+#include "otbWrapperOutputImageParameter.h"
+
 namespace otb
 {
-
-int MultiResolutionPyramid::Describe(ApplicationDescriptor* descriptor)
+namespace Wrapper
 {
-  descriptor->SetName("Multi-resolution pyramid tool");
-  descriptor->SetDescription("Build a multi-resolution pyramid of the image.");
-  descriptor->AddInputImage();
-  descriptor->AddOption("NumberOfLevels","Number of levels in the pyramid (default is 1)","level", 1, false, ApplicationDescriptor::Integer);
-  descriptor->AddOption("ShrinkFactor","Subsampling factor (default is 2)","sfactor", 1, false, ApplicationDescriptor::Integer);
-  descriptor->AddOption("VarianceFactor","Before subsampling, image is smoothed with a gaussian kernel of variance VarianceFactor*ShrinkFactor. Higher values will result in more blur, lower in more aliasing (default is 0.6)","vfactor", 1, false, ApplicationDescriptor::Real);
-  descriptor->AddOption("FastScheme","If used, this option allows to speed-up computation by iteratively subsampling previous level of pyramid instead of processing the full input image each time. Please note that this may result in extra blur or extra aliasing.","fast", 0, false, ApplicationDescriptor::Integer);
-  descriptor->AddOption("OutputPrefixAndExtextension","prefix for the output files, and extension","out", 2, true, ApplicationDescriptor::String);
-  descriptor->AddOption("AvailableMemory","Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default)","ram", 1, false, otb::ApplicationDescriptor::Integer);
-  return EXIT_SUCCESS;
-}
 
-int MultiResolutionPyramid::Execute(otb::ApplicationOptionsResult* parseResult)
+class MultiResolutionPyramid : public Application
 {
-  const unsigned int Dimension = 2;
-  typedef otb::Image<unsigned short, Dimension> USImageType;
-  typedef otb::VectorImage<unsigned short, Dimension> USVectorImageType;
-  typedef otb::Image<short, Dimension> SImageType;
-  typedef otb::VectorImage<short, Dimension> SVectorImageType;
-  typedef otb::ImageFileReader<USVectorImageType> ReaderType;
-  typedef itk::DiscreteGaussianImageFilter<USImageType, SImageType> SmoothingImageFilterType;
-  typedef otb::PerBandVectorImageFilter<USVectorImageType, SVectorImageType,
-    SmoothingImageFilterType>                                               SmoothingVectorImageFilterType;
-  typedef itk::ShrinkImageFilter<SVectorImageType, USVectorImageType> ShrinkFilterType;
-  typedef otb::StreamingImageFileWriter<USVectorImageType> WriterType;
 
-  unsigned int nbLevels = 1;
+public:
+  /** Standard class typedefs. */
+  typedef MultiResolutionPyramid        Self;
+  typedef Application                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
+
+  /** Standard macro */
+  itkNewMacro(Self);
+
+  itkTypeMacro(MultiResolutionPyramid, otb::Application);
   
-  if(parseResult->IsOptionPresent("NumberOfLevels"))
-    {
-    nbLevels = parseResult->GetParameterUInt("NumberOfLevels");
-    }
+  /** Image and filters typedef */
+  typedef otb::Image<float>                                          SingleImageType;
+  typedef itk::DiscreteGaussianImageFilter<SingleImageType,  
+                                           SingleImageType>          SmoothingImageFilterType;
 
-  unsigned int shrinkFactor = 2;
+  typedef otb::PerBandVectorImageFilter<FloatVectorImageType, 
+                                        FloatVectorImageType,
+                                        SmoothingImageFilterType>     SmoothingVectorImageFilterType;
 
-  if(parseResult->IsOptionPresent("ShrinkFactor"))
-    {
-    shrinkFactor = parseResult->GetParameterUInt("ShrinkFactor");
-    }
+  typedef itk::ShrinkImageFilter<FloatVectorImageType, 
+                                 FloatVectorImageType>                ShrinkFilterType;
 
-  double varianceFactor = 0.6;
-  
-  if(parseResult->IsOptionPresent("VarianceFactor"))
-    {
-    varianceFactor = parseResult->GetParameterDouble("VarianceFactor");
-    }
+private:
+  MultiResolutionPyramid()
+  {
+    SetName("MultiResolutionPyramid");
+    SetDescription("Build a multi-resolution pyramid of the image.");
+  }
 
-  bool fastScheme = parseResult->IsOptionPresent("FastScheme");
-
-  std::string prefix = parseResult->GetParameterString("OutputPrefixAndExtextension", 0);
-  std::string ext = parseResult->GetParameterString("OutputPrefixAndExtextension", 1);
-
-  ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName(parseResult->GetInputImage());
-
-  unsigned int currentLevel = 1;
-  unsigned int currentFactor = shrinkFactor;
-
-  while(currentLevel <= nbLevels)
-    {
-    std::cout<<"Processing level "<<currentLevel<<" with shrink factor "<<currentFactor<<std::endl;
-
-    if(fastScheme && currentLevel > 1)
-      {
-      itk::OStringStream oss;
-      oss<<prefix<<"_"<<currentLevel-1<<"."<<ext;
-      reader = ReaderType::New();
-      reader->SetFileName(oss.str().c_str());
-      }
+  void DoCreateParameters()
+  {
+//     descriptor->SetName("Multi-resolution pyramid tool");
+//   descriptor->SetDescription("Build a multi-resolution pyramid of the image.");
+//   descriptor->AddInputImage();
+//   descriptor->AddOption("NumberOfLevels","Number of levels in the pyramid (default is 1)","level", 1, false, ApplicationDescriptor::Integer);
+//   descriptor->AddOption("ShrinkFactor","Subsampling factor (default is 2)","sfactor", 1, false, ApplicationDescriptor::Integer);
+//   descriptor->AddOption("VarianceFactor","Before subsampling, image
+//   is smoothed with a gaussian kernel of variance
+//   VarianceFactor*ShrinkFactor. 
+//Higher values will result in more blur, lower in more aliasing (default is 0.6)","vfactor", 1, false, ApplicationDescriptor::Real);
+//   descriptor->AddOption("FastScheme","If used, this option allows to speed-up computation by iteratively subsampling previous level of pyramid instead of processing the full input image each time. Please note that this may result in extra blur or extra aliasing.","fast", 0, false, ApplicationDescriptor::Integer);
+//   descriptor->AddOption("OutputPrefixAndExtextension","prefix for the output files, and extension","out", 2, true, ApplicationDescriptor::String);
+//   descriptor->AddOption("AvailableMemory","Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default)","ram", 1, false, otb::ApplicationDescriptor::Integer);
 
 
-    SmoothingVectorImageFilterType::Pointer smoothingFilter = SmoothingVectorImageFilterType::New();
-    smoothingFilter->SetInput(reader->GetOutput());
+    AddParameter(ParameterType_InputImage,  "in",   "Input Image");
 
-    // According to
-    // http://www.ipol.im/pub/algo/gjmr_line_segment_detector/
-    // This is a good balance between blur and aliasing
-    double variance = varianceFactor * static_cast<double>(currentFactor);
-    smoothingFilter->GetFilter()->SetVariance(variance);
+    AddParameter(ParameterType_OutputImage, "out",  "Output Image");
+    SetParameterDescription( "out","will be used to get the prefix and the extension of the images to write");
 
-    ShrinkFilterType::Pointer shrinkFilter = ShrinkFilterType::New();
-    shrinkFilter->SetInput(smoothingFilter->GetOutput());
-    shrinkFilter->SetShrinkFactors(currentFactor);
-
-    itk::OStringStream oss;
-    oss<<prefix<<"_"<<currentLevel<<"."<<ext;
-
-    WriterType::Pointer writer = WriterType::New();
-    writer->SetInput(shrinkFilter->GetOutput());
-    writer->SetFileName(oss.str().c_str());
-    writer->WriteGeomFileOn();
-
-    unsigned int ram = 256;
-    if (parseResult->IsOptionPresent("AvailableMemory"))
-      {
-      ram = parseResult->GetParameterUInt("AvailableMemory");
-      }
-    writer->SetAutomaticTiledStreaming(ram);
+    AddParameter(ParameterType_Int, "level", "Number Of Levels");
+    SetParameterInt("level", 1);
+    SetParameterDescription( "level", "Number of levels in the pyramid (default is 1)");
     
-    oss.str("");
-    oss<<"Writing "<<prefix<<"_"<<currentLevel<<"."<<ext;
+    AddParameter(ParameterType_Int, "sfactor", "Subsampling factor");
+    SetParameterInt("sfactor", 2);
 
-    otb::StandardWriterWatcher watcher(writer, shrinkFilter, oss.str().c_str());
+    AddParameter(ParameterType_Float,  "vfactor", "Subsampling factor");
+    SetParameterFloat("vfactor", 0.6);
 
-    writer->Update();
+    // Boolean Fast scheme
+        
+    // Available memory
+    
+    
+//     MandatoryOff("outmin");
+//     MandatoryOff("outmax");
+  }
 
-    if(!fastScheme)
+
+  void DoUpdateParameters()
+  {
+    // Nothing to do here for the parameters : all are independent
+    
+    // Reinitialize the internal process used
+  }
+
+  void DoExecute()
+  {
+    // Initializing the process
+    m_SmoothingFilter =  SmoothingVectorImageFilterType::New();
+    m_ShrinkFilter    = ShrinkFilterType::New();
+
+    // Extract Parameters
+    unsigned int nbLevels     = GetParameterInt("level");
+    unsigned int shrinkFactor = GetParameterInt("sfactor");
+    double varianceFactor     = GetParameterFloat("vfactor");
+    
+    //bool fastScheme = parseResult->IsOptionPresent("FastScheme");
+    bool fastScheme = false;
+
+    // Get the input image
+    FloatVectorImageType::Pointer inImage = GetParameterImage("in");
+
+
+    // Get the Initial Output Image FileName
+    Parameter* param = GetParameterByKey("out");
+    std::string path, fname, ext;
+    if (dynamic_cast<OutputImageParameter*>(param))
       {
-      currentFactor*=shrinkFactor;
+      OutputImageParameter* paramDown = dynamic_cast<OutputImageParameter*>(param);
+      std::string ofname = paramDown->GetFileName();
+
+      // Get the extension and the prefix of the filename
+      path  = itksys::SystemTools::GetFilenamePath(ofname);
+      fname = itksys::SystemTools::GetFilenameWithoutExtension(ofname);
+      ext   = itksys::SystemTools::GetFilenameExtension(ofname);
+      }
+
+    unsigned int currentLevel = 1;
+    unsigned int currentFactor = shrinkFactor;
+
+    while(currentLevel <= nbLevels)
+      {
+      otbAppLogDEBUG( << "Processing level " << currentLevel << " with shrink factor "<<currentFactor);
+      
+      m_SmoothingFilter->SetInput(inImage);
+
+      // According to
+      // http://www.ipol.im/pub/algo/gjmr_line_segment_detector/
+      // This is a good balance between blur and aliasing
+      double variance = varianceFactor * static_cast<double>(currentFactor);
+      m_SmoothingFilter->GetFilter()->SetVariance(variance);
+
+      m_ShrinkFilter->SetInput(m_SmoothingFilter->GetOutput());
+      m_ShrinkFilter->SetShrinkFactors(currentFactor);
+
+
+      if(!fastScheme)
+        {
+        currentFactor*=shrinkFactor;
+        }
+           
+      // Get the Output Parameter to change the current image filename
+      Parameter* param = GetParameterByKey("out");      
+      if (dynamic_cast<OutputImageParameter*>(param))
+        {
+        OutputImageParameter* paramDown = dynamic_cast<OutputImageParameter*>(param);
+        
+        // build the current image filename
+        std::ostringstream oss;
+        oss <<path<<"/"<<fname<<"_"<<currentLevel<<ext;
+        
+        // writer label
+        std::ostringstream osswriter;
+        osswriter<< "writer "<< currentLevel;
+
+        // Set the filename of the current output image
+        paramDown->SetFileName(oss.str());
+
+        // Add the current level to be written
+        SetParameterOutputImage("out", m_ShrinkFilter->GetOutput());
+        paramDown->InitializeWriters();
+        AddProcess(paramDown->GetWriter(),osswriter.str());
+        paramDown->Write();
+        }
+      ++currentLevel;
       }
     
-    ++currentLevel;
-    }
+    // Disable the output Image parameter to avoid writing 
+    // the last image (Application::ExecuteAndWriteOutput method)
+    GetParameterByKey("out")->SetActive(false);
+  }
 
-  return EXIT_SUCCESS;
+  SmoothingVectorImageFilterType::Pointer   m_SmoothingFilter;
+  ShrinkFilterType::Pointer                 m_ShrinkFilter;
+};
+}
 }
 
-}
-
+OTB_APPLICATION_EXPORT(otb::Wrapper::MultiResolutionPyramid)
