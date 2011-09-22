@@ -23,7 +23,8 @@ namespace Wrapper
 {
 
 QtWidgetEmptyParameter::QtWidgetEmptyParameter(EmptyParameter* emptyParam, QtWidgetModel* m)
-: QtWidgetParameterBase(m)
+  : QtWidgetParameterBase(m),
+    m_EmptyParam(emptyParam)
 {
 }
 
@@ -39,18 +40,18 @@ void QtWidgetEmptyParameter::DoUpdateGUI()
 void QtWidgetEmptyParameter::DoCreateWidget()
 {
   // Set up input text edit
-  QHBoxLayout *hLayout = new QHBoxLayout;
-  hLayout->setSpacing(0);
-  hLayout->setContentsMargins(0, 0, 0, 0);
+  m_QHBoxLayout = new QHBoxLayout;
+  m_QHBoxLayout->setSpacing(0);
+  m_QHBoxLayout->setContentsMargins(0, 0, 0, 0);
 
-  //QCheckBox* checkbox = new QCheckBox;
-  //checkbox->setToolTip(emptyParam->GetDescription());
+  m_QCheckBox = new QCheckBox;
+  m_QCheckBox->setToolTip(m_EmptyParam->GetDescription());
 
-  //QString optionID(emptyParam->GetName());
-  //hLayout->addWidget(checkbox);
-  hLayout->addStretch();
+  QString optionID(m_EmptyParam->GetName());
+  m_QHBoxLayout->addWidget(m_QCheckBox);
+  m_QHBoxLayout->addStretch();
 
-  this->setLayout(hLayout);
+  this->setLayout(m_QHBoxLayout);
 }
 
 }

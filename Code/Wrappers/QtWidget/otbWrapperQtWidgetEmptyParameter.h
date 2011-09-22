@@ -45,6 +45,10 @@ private:
   virtual void DoCreateWidget();
 
   virtual void DoUpdateGUI();
+
+  QHBoxLayout *           m_QHBoxLayout;
+  QCheckBox *             m_QCheckBox;
+  EmptyParameter::Pointer m_EmptyParam;
 };
 
 
