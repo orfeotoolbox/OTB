@@ -73,10 +73,10 @@ private:
 
   void DoCreateParameters()
   {
-    AddParameter(ParameterType_InputImage,  "in",   "Input Image");
+    AddParameter(ParameterType_InputImage, "in", "Input Image");
 
-    AddParameter(ParameterType_OutputImage, "out",  "Output Image");
-    SetParameterDescription( "out","will be used to get the prefix and the extension of the images to write");
+    AddParameter(ParameterType_OutputImage, "out", "Output Image");
+    SetParameterDescription("out","will be used to get the prefix and the extension of the images to write");
 
     AddParameter(ParameterType_Int, "level", "Number Of Levels");
     SetParameterInt("level", 1);
@@ -88,14 +88,13 @@ private:
     AddParameter(ParameterType_Float,  "vfactor", "Subsampling factor");
     SetParameterFloat("vfactor", 0.6);
 
-    // Boolean Fast scheme (remains)
-    //   descriptor->AddOption("FastScheme","If used, this option allows
-    //   to speed-up computation by iteratively
-    //    subsampling previous level of pyramid instead of processing the
-    //    full input
-   //image each time. Please note that this may result in extra blur
-    // or extra aliasing.","fast",
-    //0, false, ApplicationDescriptor::Integer);
+    // Boolean Fast scheme
+    //     AddParameter(ParameterType_Empty, "fast", "Use Fast Scheme");
+    //     std::ostringstream desc;
+    //     desc<<"If used, this option allows to speed-up computation by iteratively"
+    //        <<" subsampling previous level of pyramid instead of processing the full input";
+    //     SetParameterDescription("fast", desc.str());
+    //     MandatoryOff("fast");
   }
 
   void DoUpdateParameters()
@@ -171,7 +170,7 @@ private:
 
         // writer label
         std::ostringstream osswriter;
-        osswriter<< "writer "<< currentLevel;
+        osswriter<< "writer (level "<< currentLevel<<")";
 
         // Set the filename of the current output image
         paramDown->SetFileName(oss.str());
