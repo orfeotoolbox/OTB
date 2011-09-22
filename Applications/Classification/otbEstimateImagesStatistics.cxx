@@ -26,11 +26,11 @@ namespace otb
 namespace Wrapper
 {
 
-class EstimateImageStatistics: public Application
+class EstimateImagesStatistics: public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef EstimateImageStatistics Self;
+  typedef EstimateImagesStatistics Self;
   typedef Application Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -38,16 +38,16 @@ public:
   /** Standard macro */
   itkNewMacro(Self);
 
-  itkTypeMacro(EstimateImageStatistics, otb::Application);
+  itkTypeMacro(EstimateImagesStatistics, otb::Application);
 
 private:
-  EstimateImageStatistics()
+  EstimateImagesStatistics()
   {
-    SetName("EstimateImageStatistics");
+    SetName("EstimateImagesStatistics");
     SetDescription("Estimate mean/standard deviation for all images in the input list");
   }
 
-  virtual ~EstimateImageStatistics()
+  virtual ~EstimateImagesStatistics()
   {
   }
 
@@ -149,4 +149,4 @@ private:
 }
 }
 
-OTB_APPLICATION_EXPORT(otb::Wrapper::EstimateImageStatistics)
+OTB_APPLICATION_EXPORT(otb::Wrapper::EstimateImagesStatistics)
