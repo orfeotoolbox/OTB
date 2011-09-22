@@ -38,6 +38,9 @@ public:
   QtWidgetEmptyParameter(EmptyParameter*, QtWidgetModel*);
   virtual ~QtWidgetEmptyParameter();
 
+protected slots:
+  void SetValue( int value );
+
 private:
   QtWidgetEmptyParameter(const QtWidgetEmptyParameter&); //purposely not implemented
   void operator=(const QtWidgetEmptyParameter&); //purposely not implemented
