@@ -302,15 +302,4 @@ TARGET_LINK_LIBRARIES(SensorModelBorder OTBIO OTBCommon OTBBasicFilters OTBProje
 ADD_EXECUTABLE(WriteUnsignedLong WriteUnsignedLong.cxx)
 TARGET_LINK_LIBRARIES(WriteUnsignedLong OTBIO OTBCommon)
 
-
-
-IF ( OTB_DATA_ROOT )
-add_test(NAME tsTvTEMPORARYStripOTBData
-         COMMAND ${CMAKE_COMMAND}
-                 -DOTB_DATA_ROOT=${OTB_DATA_ROOT}
-                 -P ${CMAKE_CURRENT_SOURCE_DIR}/StripOTBData.cmake)
-ENDIF( OTB_DATA_ROOT )
-
-
-
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
