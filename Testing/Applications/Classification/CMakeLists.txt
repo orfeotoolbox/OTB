@@ -33,9 +33,9 @@ add_test(NAME apTvClEstimateImagesStatisticsQB456
                  Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
                  EstimateImagesStatistics
                  --modulePath $<TARGET_FILE_DIR:otbapp_EstimateImagesStatistics>
-                 --in ${INPUTDATA}/Classification/QB_4_ortho.tif
-                      ${INPUTDATA}/Classification/QB_5_ortho.tif
-                      ${INPUTDATA}/Classification/QB_6_ortho.tif
+                 --in ${INPUTDATA}/Classification/QB_4_extract.tif 
+                      ${INPUTDATA}/Classification/QB_5_extract.tif 
+                      ${INPUTDATA}/Classification/QB_6_extract.tif
                  --out ${TEMP}/apTvClEstimateImageStatisticsQB456.xml )
 
 
