@@ -6,8 +6,11 @@ endif(OTB_DATA_USE_LARGEINPUT)
 
 set(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
 
-SET(BASELINE       ${OTB_DATA_ROOT}/Baseline/OTB/Images)
-SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
+SET(BASELINE              ${OTB_DATA_ROOT}/Baseline/OTB/Images)
+SET(BASELINE_FILES        ${OTB_DATA_ROOT}/Baseline/OTB/Files)
+
+SET(OTBAPP_BASELINE       ${OTB_DATA_ROOT}/Baseline/OTB-Applications/Images)
+SET(OTBAPP_BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB-Applications/Files)
 
 
 SET(NOTOL 0.0)

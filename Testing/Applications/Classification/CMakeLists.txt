@@ -4,7 +4,7 @@
 add_test(NAME apTvClEstimateImagesStatisticsQB1
          COMMAND otbTestDriver
                 --compare-ascii ${NOTOL} 
-                  ${BASELINE_FILES}/clImageStatisticsQB1.xml
+                  ${OTBAPP_BASELINE_FILES}/clImageStatisticsQB1.xml
                   ${TEMP}/apTvClEstimateImageStatisticsQB1.xml
                  Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
                  EstimateImagesStatistics
@@ -15,7 +15,7 @@ add_test(NAME apTvClEstimateImagesStatisticsQB1
 add_test(NAME apTvClEstimateImagesStatisticsQB123
          COMMAND otbTestDriver
                 --compare-ascii ${NOTOL} 
-                  ${BASELINE_FILES}/clImageStatisticsQB123.xml
+                  ${OTBAPP_BASELINE_FILES}/clImageStatisticsQB123.xml
                   ${TEMP}/apTvClEstimateImageStatisticsQB123.xml
                  Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
                  EstimateImagesStatistics
@@ -28,7 +28,7 @@ add_test(NAME apTvClEstimateImagesStatisticsQB123
 add_test(NAME apTvClEstimateImagesStatisticsQB456
          COMMAND otbTestDriver
                 --compare-ascii ${NOTOL} 
-                  ${BASELINE_FILES}/clImageStatisticsQB456.xml
+                  ${OTBAPP_BASELINE_FILES}/clImageStatisticsQB456.xml
                   ${TEMP}/apTvClEstimateImageStatisticsQB456.xml
                  Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
                  EstimateImagesStatistics
