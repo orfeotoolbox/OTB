@@ -4,7 +4,7 @@
 add_test(NAME apTvHyHyperspectralUnmixing_UCLS
          COMMAND otbTestDriver
                  --compare-image ${EPSILON_9}
-                   ${BASELINE_FILES}/apTvHyHyperspectralUnmixing_UCLS.tif
+                   ${BASELINE}/apTvHyHyperspectralUnmixing_UCLS.tif
                    ${TEMP}/apTvHyHyperspectralUnmixing_UCLS.tif
                  Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
                  HyperspectralUnmixing
@@ -17,7 +17,7 @@ add_test(NAME apTvHyHyperspectralUnmixing_UCLS
 add_test(NAME apTvHyHyperspectralUnmixing_NCLS
          COMMAND otbTestDriver
                  --compare-image ${EPSILON_9}
-                   ${BASELINE_FILES}/apTvHyHyperspectralUnmixing_NCLS.tif
+                   ${BASELINE}/apTvHyHyperspectralUnmixing_NCLS.tif
                    ${TEMP}/apTvHyHyperspectralUnmixing_NCLS.tif
                  Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
                  HyperspectralUnmixing
@@ -30,7 +30,7 @@ add_test(NAME apTvHyHyperspectralUnmixing_NCLS
 #add_test(NAME apTvHyHyperspectralUnmixing_ISRA
 #         COMMAND otbTestDriver
 #                 --compare-image ${EPSILON_9}
-#                   ${BASELINE_FILES}/apTvHyHyperspectralUnmixing_ISRA.tif
+#                   ${BASELINE}/apTvHyHyperspectralUnmixing_ISRA.tif
 #                   ${TEMP}/apTvHyHyperspectralUnmixing_ISRA.tif
 #                 Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
 #                 HyperspectralUnmixing
@@ -43,7 +43,7 @@ add_test(NAME apTvHyHyperspectralUnmixing_NCLS
 add_test(NAME apTvHyHyperspectralUnmixing_FCLS
          COMMAND otbTestDriver
                  --compare-image ${EPSILON_9}
-                   ${BASELINE_FILES}/apTvHyHyperspectralUnmixing_FCLS.tif
+                   ${BASELINE}/apTvHyHyperspectralUnmixing_FCLS.tif
                    ${TEMP}/apTvHyHyperspectralUnmixing_FCLS.tif
                  Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
                  HyperspectralUnmixing
@@ -56,7 +56,7 @@ add_test(NAME apTvHyHyperspectralUnmixing_FCLS
 add_test(NAME apTvHyHyperspectralUnmixing_VCA
          COMMAND otbTestDriver
                  --compare-image ${EPSILON_9}
-                   ${BASELINE_FILES}/apTvHyHyperspectralUnmixing_VCA.tif
+                   ${BASELINE}/apTvHyHyperspectralUnmixing_VCA.tif
                    ${TEMP}/apTvHyHyperspectralUnmixing_VCA.tif
                  Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
                  HyperspectralUnmixing
