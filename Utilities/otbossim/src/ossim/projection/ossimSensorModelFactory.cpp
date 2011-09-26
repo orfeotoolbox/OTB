@@ -11,7 +11,7 @@
 //   Contains implementation of class ossimSensorModelFactory
 //
 //*****************************************************************************
-//  $Id: ossimSensorModelFactory.cpp 19682 2011-05-31 14:21:20Z dburken $
+//  $Id: ossimSensorModelFactory.cpp 20089 2011-09-09 17:32:31Z gpotts $
 #include <fstream>
 #include <algorithm>
 #include <ossim/projection/ossimSensorModelFactory.h>
@@ -43,6 +43,7 @@ static ossimTrace traceDebug = ossimTrace("ossimSensorModelFactory:debug");
 #include <ossim/projection/ossimSpot5Model.h>
 #include <ossim/projection/ossimBuckeyeSensor.h>
 #include <ossim/projection/ossimSarModel.h>
+#include <ossim/projection/ossimRS1SarModel.h>
 #include <ossim/support_data/ossimSpotDimapSupportData.h>
 #include <ossim/projection/ossimNitfMapModel.h>
 #include <ossim/projection/ossimFcsiModel.h>
@@ -187,15 +188,17 @@ ossimSensorModelFactory::createProjection(const ossimString &name) const
    {
       return new ossimApplanixEcefModel;
    }
-
    if(name == STATIC_TYPE_NAME(ossimSpot5Model))
    {
       return new ossimSpot5Model;
    }
-
    if(name == STATIC_TYPE_NAME(ossimSarModel))
    {
       return new ossimSarModel;
+   }
+   if(name == STATIC_TYPE_NAME(ossimRS1SarModel))
+   {
+      return new ossimRS1SarModel;
    }
 
    //***
@@ -245,6 +248,7 @@ ossimSensorModelFactory::getTypeNameList(std::vector<ossimString>& typeList)
    typeList.push_back(STATIC_TYPE_NAME(ossimFcsiModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimSpot5Model));
    typeList.push_back(STATIC_TYPE_NAME(ossimSarModel));
+   typeList.push_back(STATIC_TYPE_NAME(ossimRS1SarModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimBuckeyeSensor));
    typeList.push_back(STATIC_TYPE_NAME(ossimSkyBoxLearSensor));
 
@@ -443,8 +447,14 @@ ossimProjection* ossimSensorModelFactory::createProjection(
       }
       model = 0;
    }
-   model = 0;
    
+   model = new ossimRS1SarModel(filename);
+   if(model->getErrorStatus()!= ossimErrorCodes::OSSIM_OK)
+   {
+      return model.release();
+   }
+   model = 0;
+
    ossimFilename spot5Test = geomFile;
    if(!spot5Test.exists())
    {
@@ -480,6 +490,7 @@ ossimProjection* ossimSensorModelFactory::createProjection(
       }
       model = 0;
    }
+
    return model.release();
 }
    

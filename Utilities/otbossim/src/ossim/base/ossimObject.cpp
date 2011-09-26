@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimObject.cpp 19857 2011-07-21 18:42:15Z gpotts $
+// $Id: ossimObject.cpp 20070 2011-09-07 18:48:35Z dburken $
 #include <ossim/base/ossimObject.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimKeywordlist.h>
@@ -103,7 +103,7 @@ bool ossimObject::saveState(ossimKeywordlist& kwl,
    return true;
 }
 
-bool ossimObject::isEqualTo(const ossimObject& obj, ossimCompareType compareType)const
+bool ossimObject::isEqualTo(const ossimObject& obj, ossimCompareType /* compareType */)const
 {
    return (getClassName() == obj.getClassName());
 }

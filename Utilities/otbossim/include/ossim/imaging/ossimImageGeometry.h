@@ -122,6 +122,11 @@ public:
    //! information. If no DEM is available, the results will be incorrect or inaccurate.
    bool localToWorld(const ossimDpt& local_pt, ossimGpt& world_pt) const;
 
+   //! Exposes the 3D projection from image to world coordinates given a constant height above 
+   //! ellipsoid. The caller should verify that a valid projection exists before calling this
+   //! method. Returns TRUE if a valid ground point is available in the ground_pt argument.
+   bool localToWorld(const ossimDpt& local_pt, const double& h_ellipsoid, ossimGpt& world_pt) const;
+
    //! Exposes the 3D world-to-local image coordinate reverse projection. The caller should verify 
    //! that a valid projection exists before calling this method. Returns TRUE if a valid image 
    //! point is available in the local_pt argument.

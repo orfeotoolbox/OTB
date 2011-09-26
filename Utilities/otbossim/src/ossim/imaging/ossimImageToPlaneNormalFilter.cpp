@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageToPlaneNormalFilter.cpp 19198 2011-03-23 16:23:06Z dburken $
+// $Id: ossimImageToPlaneNormalFilter.cpp 20078 2011-09-09 12:25:50Z gpotts $
 #include <ossim/imaging/ossimImageToPlaneNormalFilter.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
@@ -75,6 +75,14 @@ ossimRefPtr<ossimImageData> ossimImageToPlaneNormalFilter::getTile(
 
    if(!input||(input->getDataObjectStatus()==OSSIM_EMPTY)||!input->getBuf())
    {
+      if(tileRect.completely_within(theInputBounds))
+      {
+         initializeTile();
+         theTile->validate();
+         theTile->setImageRectangle(tileRect);
+        return theTile.get();
+      }
+      
       return theBlankTile;
    }
 
@@ -104,11 +112,22 @@ ossimRefPtr<ossimImageData> ossimImageToPlaneNormalFilter::getTile(
    return theTile;
 }
 
+void ossimImageToPlaneNormalFilter::initializeTile()
+{
+   double* x = static_cast<double*>(theTile->getBuf(0));
+   double* y = static_cast<double*>(theTile->getBuf(1));
+   double* z = static_cast<double*>(theTile->getBuf(2));
+   
+   if(x) std::fill(x, x+theTile->getSizePerBand(), 0.0);
+   if(y) std::fill(y, y+theTile->getSizePerBand(), 0.0);
+   if(z) std::fill(z, z+theTile->getSizePerBand(), 1.0);
+}
 
 void ossimImageToPlaneNormalFilter::initialize()
 {
    if(theInputConnection)
    {
+      theInputBounds = theInputConnection->getBoundingRect();
       theTile      = ossimImageDataFactory::instance()->create(this, this);
       theBlankTile = (ossimImageData*)(theTile->dup());
       theTile->initialize();
@@ -380,7 +399,8 @@ double ossimImageToPlaneNormalFilter::getSmoothnessFactor()const
 void ossimImageToPlaneNormalFilter::setProperty(ossimRefPtr<ossimProperty> property)
 {
    ossimString name = property->getName();
-   if(name == "smoothnessFactor")
+   if((name == "smoothnessFactor")||
+      (name == "gain"))
    {
       theSmoothnessFactor = property->valueToString().toDouble();
       initialize();
@@ -408,9 +428,10 @@ void ossimImageToPlaneNormalFilter::setProperty(ossimRefPtr<ossimProperty> prope
 
 ossimRefPtr<ossimProperty> ossimImageToPlaneNormalFilter::getProperty(const ossimString& name)const
 {
-   if(name == "smoothnessFactor")
+   if((name == "smoothnessFactor")||
+      (name == "gain"))
    {
-      ossimNumericProperty* prop = new ossimNumericProperty(name, ossimString::toString(theSmoothnessFactor), .0001, 40);
+      ossimNumericProperty* prop = new ossimNumericProperty("gain", ossimString::toString(theSmoothnessFactor), .0001, 40);
       prop->setCacheRefreshBit();
       return prop;
    }
@@ -439,7 +460,7 @@ ossimRefPtr<ossimProperty> ossimImageToPlaneNormalFilter::getProperty(const ossi
 void ossimImageToPlaneNormalFilter::getPropertyNames(std::vector<ossimString>& propertyNames)const
 {
    ossimImageSourceFilter::getPropertyNames(propertyNames);
-   propertyNames.push_back("smoothnessFactor");
+   propertyNames.push_back("gain");
    propertyNames.push_back("xscale");
    propertyNames.push_back("yscale");
    propertyNames.push_back("autoTrackScaleFlag");

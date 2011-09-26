@@ -10,7 +10,7 @@
 // instance of a Wgs72Ellipsoid and set the initial defaults for
 // that are specific to a Wgs72Datum
 //*******************************************************************
-//  $Id: ossimWgs72Datum.cpp 19795 2011-06-30 15:04:48Z gpotts $
+//  $Id: ossimWgs72Datum.cpp 20096 2011-09-14 16:44:20Z dburken $
 
 #include <iostream>
 using namespace std;
@@ -157,7 +157,6 @@ ossimGpt ossimWgs72Datum::shiftFromWgs84(const ossimGpt &aPt)const
    double WGS84_a;       /* Semi-major axis of WGS84 ellipsoid               */
    double WGS84_f;       /* Flattening of WGS84 ellipsoid                    */
    double WGS72_a;       /* Semi-major axis of WGS72 ellipsoid               */
-   double WGS72_b;       /* Semi-minor axis of WGS72 ellipsoid               */
    double WGS72_f;       /* Flattening of WGS72 ellipsoid                    */
    double da;            /* WGS72_a - WGS84_a                                */
    double df;            /* WGS72_f - WGS84_f                                */
@@ -179,7 +178,6 @@ ossimGpt ossimWgs72Datum::shiftFromWgs84(const ossimGpt &aPt)const
    WGS84_a = wgs84Ellipsoid->a();
    WGS84_f = wgs84Ellipsoid->flattening();
    WGS72_a = wgs72Ellipsoid->a();
-   WGS72_b = wgs72Ellipsoid->b();  
    WGS72_f = wgs72Ellipsoid->flattening();
    
    da = WGS72_a - WGS84_a;

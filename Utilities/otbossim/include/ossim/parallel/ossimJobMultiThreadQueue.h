@@ -12,6 +12,7 @@ public:
    const ossimJobQueue* getJobQueue()const;
    void setQueue(ossimJobQueue* q);
    void setNumberOfThreads(ossim_uint32 nThreads);
+   ossim_uint32 getNumberOfThreads() const;
    ossim_uint32 numberOfBusyThreads()const;
    bool areAllThreadsBusy()const;
    

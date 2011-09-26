@@ -19,11 +19,12 @@
 //              Initial coding.
 //<
 //**************************************************************************
-// $Id: ossimElevManager.cpp 19444 2011-04-25 18:20:59Z dburken $
+// $Id: ossimElevManager.cpp 20109 2011-09-23 12:51:28Z gpotts $
 
 #include <algorithm>
 #include <ossim/elevation/ossimElevManager.h>
 #include <ossim/base/ossimEnvironmentUtility.h>
+#include <ossim/elevation/ossimElevationDatabase.h>
 #include <ossim/base/ossimDirectory.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimGeoidManager.h>
@@ -32,6 +33,23 @@
 
 ossimElevManager* ossimElevManager::m_instance = 0;
 static ossimTrace traceDebug("ossimElevManager:debug");
+
+void ossimElevManager::ConnectionStringVisitor::visit(ossimObject* obj)
+{
+   if(!hasVisited(obj))
+   {
+      ossimElevationDatabase* databsase = dynamic_cast<ossimElevationDatabase*>(obj);
+      if(databsase)
+      {
+         if(m_connectionString == databsase->getConnectionString())
+         {
+            m_database = databsase;
+            m_stopTraversalFlag = true;
+         }
+      }
+   }
+}
+
 
 ossimElevManager* ossimElevManager::instance()
 {
@@ -67,7 +85,7 @@ double ossimElevManager::getHeightAboveEllipsoid(const ossimGpt& gpt)
    double result = ossim::nan();
    ossim_uint32 idx = 0;
    {
-      OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_mutex);
+    //  OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_mutex);
       for(;(idx < m_elevationDatabaseList.size())&&ossim::isnan(result); ++idx)
       {
          result = m_elevationDatabaseList[idx]->getHeightAboveEllipsoid(gpt);
@@ -96,7 +114,7 @@ double ossimElevManager::getHeightAboveMSL(const ossimGpt& gpt)
    }
    double result = ossim::nan();
    {
-      OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_mutex);
+     // OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_mutex);
       
       ossim_uint32 idx = 0;
       for(;(idx < m_elevationDatabaseList.size())&&ossim::isnan(result); ++idx)
@@ -199,10 +217,18 @@ void ossimElevManager::getOpenCellList(std::vector<ossimFilename>& list) const
 
 void ossimElevManager::clear()
 {
-   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_mutex);
+   //OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_mutex);
 
   m_elevationDatabaseList.clear();
 
+}
+
+void ossimElevManager::accept(ossimVisitor& visitor)
+{
+   for(ossim_uint32 idx = 0; ((idx < m_elevationDatabaseList.size())&&!visitor.stopTraversal()); ++idx)
+   {
+      m_elevationDatabaseList[idx]->accept(visitor);
+   }
 }
 
 bool ossimElevManager::saveState(ossimKeywordlist& kwl,
@@ -310,7 +336,7 @@ void ossimElevManager::addDatabase(ossimElevationDatabase* database)
 {
    if(!database) return;
    ossimRefPtr<ossimElevationDatabase> tempDb = database;
-   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_mutex);
+  // OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_mutex);
    if(std::find(m_elevationDatabaseList.begin(), 
                 m_elevationDatabaseList.end(),
                 database) == m_elevationDatabaseList.end())

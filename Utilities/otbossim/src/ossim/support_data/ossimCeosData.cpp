@@ -1073,8 +1073,11 @@ void ossimCeosData::loadCeosRecords()
    FILE* fptr = fopen(theVolDirFileName.chars(), "r");
    if (!fptr)
    {
-      CLOG << " ERROR:\n\tCannot open CEOS Volume Directory file: "
-           << theVolDirFileName << endl;
+      if(traceDebug())
+      {
+         CLOG << " ERROR:\n\tCannot open CEOS Volume Directory file: "
+              << theVolDirFileName << endl;
+      }
       theErrorStatus = ERROR;
       return;
    }
@@ -1097,8 +1100,11 @@ void ossimCeosData::loadCeosRecords()
       fptr = fopen(theLeaderFileName.chars(), "r");
       if (!fptr)
       {
-         CLOG << " ERROR:\n\tCannot open CEOS Leader file: "
-              << theLeaderFileName << endl;
+         if(traceDebug())
+         {
+            CLOG << " ERROR:\n\tCannot open CEOS Leader file: "
+                  << theLeaderFileName << endl;
+         }
          theErrorStatus = ERROR;
          return;
       }

@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimBumpShadeTileSource.cpp 19970 2011-08-17 00:35:10Z gpotts $
+// $Id: ossimBumpShadeTileSource.cpp 20079 2011-09-09 12:27:42Z gpotts $
 
 #include <ossim/imaging/ossimBumpShadeTileSource.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
@@ -284,7 +284,7 @@ void ossimBumpShadeTileSource::computeLightDirection()
 {
    NEWMAT::Matrix m = ossimMatrix3x3::createRotationMatrix(m_lightSourceElevationAngle,
                                                            0.0,
-                                                           m_lightSourceAzimuthAngle);
+                                                           -m_lightSourceAzimuthAngle); // make positive rotation clockwise for azimuth
    NEWMAT::ColumnVector v(3);
    v[0] = 0;
    v[1] = 1;

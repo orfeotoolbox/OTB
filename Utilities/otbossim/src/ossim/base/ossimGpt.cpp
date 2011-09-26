@@ -9,7 +9,7 @@
 // LATITUDE AND LONGITUDE VALUES ARE IN DEGREES.
 //
 //*******************************************************************
-//  $Id: ossimGpt.cpp 19900 2011-08-04 14:19:57Z dburken $
+//  $Id: ossimGpt.cpp 20105 2011-09-21 17:50:35Z dburken $
 
 #include <ossim/base/ossimGpt.h>
 #include <ossim/base/ossimEcefPoint.h>
@@ -28,9 +28,12 @@ std::ostream& ossimGpt::print(std::ostream& os, ossim_uint32 precision) const
 {
    // Capture the original flags.
    std::ios_base::fmtflags f = os.flags();
-
-   os << setiosflags(ios::fixed) << setprecision(precision);
-   os << "( ";
+   
+   // Set the new precision capturing old.
+   std::streamsize oldPrecision = os.precision(precision);
+   
+   os << setiosflags(ios::fixed)
+      << "( "; 
 
    if(isLatNan())
    {
@@ -60,8 +63,9 @@ std::ostream& ossimGpt::print(std::ostream& os, ossim_uint32 precision) const
    
    os << (theDatum?theDatum->code().c_str():"") << " )";
 
-   // Reset flags.
+   // Reset flags and precision.
    os.setf(f);
+   os.precision(oldPrecision);
 
    return os;
 }

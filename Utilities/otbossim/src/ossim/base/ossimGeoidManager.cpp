@@ -10,7 +10,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimGeoidManager.cpp 16139 2009-12-18 18:37:07Z gpotts $
+//  $Id: ossimGeoidManager.cpp 20096 2011-09-14 16:44:20Z dburken $
 
 #include <ossim/base/ossimCommon.h>
 #include <ossim/base/ossimGeoidManager.h>
@@ -166,8 +166,7 @@ bool ossimGeoidManager::loadState(const ossimKeywordlist& kwl,
       geoidGrid1996 = geoidGrid1996.dirCat("egm96.grd");
    }
 
-   bool addedGeoid1996Grid = false;
-   if(geoidGrid1996.exists())
+   if( geoidGrid1996.exists() )
    {
       ossimRefPtr<ossimGeoid> geoid = new ossimGeoidEgm96(geoidGrid1996);
       if (geoid->getErrorStatus() == ossimErrorCodes::OSSIM_OK)
@@ -179,7 +178,6 @@ bool ossimGeoidManager::loadState(const ossimKeywordlist& kwl,
                << "\nAdded geoid egm 96:  " << geoidGrid1996.c_str()
                << "\n";
          }
-         addedGeoid1996Grid = true;
          addGeoid(geoid.get());
       }
       else

@@ -15,7 +15,7 @@
 
 #include <ossim/elevation/ossimTiledElevationDatabase.h>
 
-#include <ossim/base/ossimCallback2wRet.h>
+#include <ossim/base/ossimCallback1.h>
 #include <ossim/base/ossimDblGrid.h>
 #include <ossim/base/ossimDirectory.h>
 #include <ossim/base/ossimDpt.h>
@@ -44,25 +44,25 @@ RTTI_DEF1(ossimTiledElevationDatabase, "ossimTiledElevationDatabase", ossimEleva
 //
 // Placed here as it is unique to this class.
 //---
-class ProcessFileCB: public ossimCallback2wRet<const ossimFilename&, bool&, bool>
+class ProcessFileCB: public ossimCallback1<const ossimFilename&>
 {
 public:
    ProcessFileCB(
       ossimTiledElevationDatabase* obj,
-      bool (ossimTiledElevationDatabase::*func)(const ossimFilename&, bool&))
+      void (ossimTiledElevationDatabase::*func)(const ossimFilename&))
       :
       m_obj(obj),
       m_func(func)
    {}
       
-   virtual bool operator()(const ossimFilename& file, bool& flag) const
+   virtual void operator()(const ossimFilename& file) const
    {
-      return ( m_obj->*m_func)(file, flag);
+      (m_obj->*m_func)(file);
    }
 
 private:
    ossimTiledElevationDatabase* m_obj;
-   bool (ossimTiledElevationDatabase::*m_func)(const ossimFilename& file, bool& flag);
+   void (ossimTiledElevationDatabase::*m_func)(const ossimFilename& file);
 };
 
 ossimTiledElevationDatabase::ossimTiledElevationDatabase()
@@ -72,7 +72,8 @@ ossimTiledElevationDatabase::ossimTiledElevationDatabase()
    m_grid(0),
    m_referenceProj(0),
    m_requestedRect(),
-   m_entryListRect()
+   m_entryListRect(),
+   m_fileWalker(0)
 {
    m_requestedRect.makeNan();
    m_entryListRect.makeNan();
@@ -157,8 +158,7 @@ void ossimTiledElevationDatabase::mapRegion(const ossimGrect& region)
    if ( m_connectionString.size() )
    {
       // Put these outside the try block so we can delete if exception thrown.
-      ossimFileWalker* fw = 0;
-      ossimCallback2wRet<const ossimFilename&, bool&, bool>* cb = 0;
+      ossimCallback1<const ossimFilename&>* cb = 0;
 
       // Wrap in try catch block as excptions can be thrown under the hood.
       try
@@ -169,11 +169,11 @@ void ossimTiledElevationDatabase::mapRegion(const ossimGrect& region)
          if ( f.exists() )
          {
             // Walk the directory
-            fw = new ossimFileWalker();
-            fw->initializeDefaultFilterList();
+            m_fileWalker = new ossimFileWalker();
+            m_fileWalker->initializeDefaultFilterList();
             cb = new ProcessFileCB(this, &ossimTiledElevationDatabase::processFile);
-            fw->registerProcessFileCallback(cb);
-            fw->walk(f);
+            m_fileWalker->registerProcessFileCallback(cb);
+            m_fileWalker->walk(f);
 
             mapRegion();
          }
@@ -192,10 +192,10 @@ void ossimTiledElevationDatabase::mapRegion(const ossimGrect& region)
       }
 
       // cleanup:
-      if ( fw )
+      if ( m_fileWalker )
       {
-         delete fw;
-         fw = 0;
+         delete m_fileWalker;
+         m_fileWalker = 0;
       }
       if ( cb )
       {
@@ -210,8 +210,7 @@ void ossimTiledElevationDatabase::mapRegion(const ossimGrect& region)
    }
 }
 
-bool ossimTiledElevationDatabase::processFile(const ossimFilename& file,
-                                              bool& recurseFlag)
+void ossimTiledElevationDatabase::processFile(const ossimFilename& file)
 {
    static const char M[] = "ossimTiledElevationDatabase::processFile";
    if(traceDebug())
@@ -219,13 +218,15 @@ bool ossimTiledElevationDatabase::processFile(const ossimFilename& file,
       ossimNotify(ossimNotifyLevel_DEBUG)
          << M << " entered...\n" << "file: " << file << "\n";
    }
-   bool continueFlag = true;
 
    ossimRefPtr<ossimSingleImageChain> sic = new ossimSingleImageChain();
    if ( sic->open(file, false) ) // False for do not open overviews.
    {
-      // Set the directory walker flag.
-      recurseFlag = !(isDirectoryBasedImage(sic->getImageHandler()));
+      if ( isDirectoryBasedImage( sic->getImageHandler() ) )
+      {
+         // Tell the walker not to recurse this directory.
+         m_fileWalker->setRecurseFlag(false);
+      }
      
       ossimRefPtr<ossimImageHandler> ih = sic->getImageHandler();
       if ( ih.valid() && (m_requestedRect.isLonLatNan() == false) )
@@ -293,7 +294,11 @@ bool ossimTiledElevationDatabase::processFile(const ossimFilename& file,
                ossimTiledElevationEntry entry(boundingRect, sic);
                addEntry(entry);
 
-               continueFlag = m_requestedRect.completely_within(m_entryListRect);
+               // Once the requested rect is filled abort the file walk.
+               if ( m_requestedRect.completely_within( m_entryListRect ) )
+               {
+                  m_fileWalker->setAbortFlag(true);
+               }
             }
          }
       }
@@ -305,15 +310,12 @@ bool ossimTiledElevationDatabase::processFile(const ossimFilename& file,
          throw ossimException(errMsg);
       }
    }
-   
+
    if(traceDebug())
    {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << M << " recurseFlag=" << recurseFlag
-         << " continueFlag=" << continueFlag << "\n";
-   }
-
-   return continueFlag;
+      // Since ossimFileWalker is threaded output the file so we know which job exited.
+      ossimNotify(ossimNotifyLevel_DEBUG) << M << "\nfile: " << file << "\nexited...\n";
+   }   
 }
 
 void ossimTiledElevationDatabase::addEntry(const ossimTiledElevationEntry& entry)

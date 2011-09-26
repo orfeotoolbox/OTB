@@ -35,8 +35,6 @@ class ossimRS1SarModel : public ossimSensorModel
 public:
    ossimRS1SarModel();
    ossimRS1SarModel(const ossimFilename& imageDir);
-   ossimRS1SarModel(const ossimKeywordlist& geom_kwl);
-   ossimRS1SarModel(const ossimRS1SarModel& copy_this);
 
    virtual ~ossimRS1SarModel();
    
@@ -70,14 +68,19 @@ public:
    //! Returns true if successful.
    virtual bool loadState(const ossimKeywordlist& kwl, const char* prefix=NULL);
 
-   //! Establishes geographic 3D point given image line, sample and MSL elevation.
+   //! Establishes geographic 3D point given image line, sample and ellipsoid height.
    virtual void lineSampleHeightToWorld(const ossimDpt& imagePt, 
-                                        const double& heightMSL, 
+                                        const double& heightAboveEllipsoid, 
                                         ossimGpt& worldPt) const;
 
    //! Given an image point, returns a ray originating at some arbitrarily high
    //! point (in this model at the sensor position) and pointing towards the target.
    virtual void imagingRay(const ossimDpt& image_point, ossimEcefRay& image_ray) const;
+
+   inline virtual bool useForward() const { return false; } //!image to ground faster 
+
+   //!  Returns pointer to a new instance, copy of this.
+   virtual ossimObject* dup() const { return 0; } // TBR
 
 protected:
    void setImagingMode(char* modeStr);

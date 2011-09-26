@@ -127,7 +127,7 @@ ostream& operator << (ostream& stream, const ossimLagrangeInterpolator& interpol
           << "  " << interpolator.theTeeArray.size()
           << "  " << interpolator.theNumElements << endl;
 
-   for (int i=0; i<interpolator.theTeeArray.size(); i++)
+   for (ossim_uint32 i=0; i<interpolator.theTeeArray.size(); ++i)
    {
       stream << setprecision(20);
       stream << interpolator.theTeeArray[i]   << " "

@@ -6,7 +6,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimSFIMFusion.cpp 19860 2011-07-22 12:23:23Z gpotts $
+//  $Id: ossimSFIMFusion.cpp 20061 2011-09-07 16:46:16Z gpotts $
 #include <ossim/imaging/ossimSFIMFusion.h>
 #include <ossim/matrix/newmat.h>
 #include <ossim/matrix/newmatio.h>
@@ -206,10 +206,10 @@ void ossimSFIMFusion::initialize()
                                                      theIntensityConnection->getObject()));
       theHighPassFilter->connectMyInputTo(0, PTR_CAST(ossimConnectableObject,
                                                       theIntensityConnection->getObject()));
+      adjustableParametersChanged();
       setFilters();
       theLowPassFilter->initialize();
       theHighPassFilter->initialize();
-      
       if(theAutoAdjustScales)
       {
          if(theInputConnection && theIntensityConnection)
@@ -345,21 +345,27 @@ ossimRefPtr<ossimProperty> ossimSFIMFusion::getProperty(const ossimString& name)
 {
    if(name == "low_pass_kernel_width")
    {
-      return new ossimNumericProperty(name, 
+      ossimNumericProperty* prop =  new ossimNumericProperty(name, 
                                       ossimString::toString(computeParameterOffset(LOW_PASS_WIDTH_OFFSET)),
                                       getParameterCenter(LOW_PASS_WIDTH_OFFSET)-getParameterSigma(LOW_PASS_WIDTH_OFFSET),
                                       getParameterCenter(LOW_PASS_WIDTH_OFFSET)+getParameterSigma(LOW_PASS_WIDTH_OFFSET));
+      prop->setCacheRefreshBit();
+      return prop;
    }
    else if(name == "high_pass_gain")
    {
-      return new ossimNumericProperty(name, 
+      ossimNumericProperty* prop =  new ossimNumericProperty(name, 
                                       ossimString::toString(computeParameterOffset(HIGH_PASS_GAIN_OFFSET)),
                                       getParameterCenter(HIGH_PASS_GAIN_OFFSET)-getParameterSigma(HIGH_PASS_GAIN_OFFSET),
                                       getParameterCenter(HIGH_PASS_GAIN_OFFSET)+getParameterSigma(HIGH_PASS_GAIN_OFFSET));
+      prop->setCacheRefreshBit();
+      return prop;
    }
    else if(name=="auto_adjust_scales")
    {
-      return new ossimBooleanProperty(name,theAutoAdjustScales);
+      ossimBooleanProperty* prop = new ossimBooleanProperty(name,theAutoAdjustScales);
+      prop->setCacheRefreshBit();
+      return prop;
    }
    
    return ossimFusionCombiner::getProperty(name);

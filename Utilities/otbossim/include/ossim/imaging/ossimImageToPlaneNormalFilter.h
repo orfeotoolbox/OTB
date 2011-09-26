@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageToPlaneNormalFilter.h 13382 2008-08-04 18:53:26Z gpotts $
+// $Id: ossimImageToPlaneNormalFilter.h 20078 2011-09-09 12:25:50Z gpotts $
 #ifndef ossimImageToPlaneNormalFilter_HEADER
 #define ossimImageToPlaneNormalFilter_HEADER
 #include <ossim/imaging/ossimImageSourceFilter.h>
@@ -54,11 +54,13 @@ public:
 protected:
    ossimRefPtr<ossimImageData> theTile;
    ossimRefPtr<ossimImageData> theBlankTile;
-
+   ossimIrect      theInputBounds;
    bool            theTrackScaleFlag;
    double          theXScale;
    double          theYScale;
    double          theSmoothnessFactor;
+   
+   void initializeTile();
    virtual void computeNormals(ossimRefPtr<ossimImageData>& inputTile,
                                ossimRefPtr<ossimImageData>& outputTile);
 

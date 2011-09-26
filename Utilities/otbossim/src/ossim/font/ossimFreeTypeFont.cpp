@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 // 
 //********************************************************************
-// $Id: ossimFreeTypeFont.cpp 17108 2010-04-15 21:08:06Z dburken $
+// $Id: ossimFreeTypeFont.cpp 20070 2011-09-07 18:48:35Z dburken $
 
 // ossimFreeTypeFont.h should be load prior to checking for OSSIM_HAS_FREETYPE.
 #include <ossim/font/ossimFreeTypeFont.h>
@@ -169,8 +169,8 @@ void ossimFreeTypeFont::layoutGlyphs(const ossimString& s )
    int        n;
    FT_Vector  origin;
    FT_Pos     origin_x = 0;
-   FT_UInt    load_flags;
-   FT_UInt    num_grays;
+   // FT_UInt    load_flags;
+   // FT_UInt    num_grays;
    FT_UInt    prev_index = 0;
    FT_UInt num_glyphs = (FT_UInt)s.size();
    int error = 0;
@@ -185,9 +185,9 @@ void ossimFreeTypeFont::layoutGlyphs(const ossimString& s )
    
    int hasKerning = FT_HAS_KERNING(theFontFace);
    
-   load_flags = FT_LOAD_DEFAULT;
+   // load_flags = FT_LOAD_DEFAULT;
+   // num_grays = 256;
    
-   num_grays = 256;
    const char* c = s.c_str();
    for ( n = 0; n < (int)num_glyphs; n++)
    {

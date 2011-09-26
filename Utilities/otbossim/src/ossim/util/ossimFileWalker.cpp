@@ -18,50 +18,160 @@
 
 #include <ossim/util/ossimFileWalker.h>
 #include <ossim/base/ossimDirectory.h>
-#include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimTrace.h>
+#include <ossim/parallel/ossimJobQueue.h>
+#include <OpenThreads/Thread>
 
 static ossimTrace traceDebug(ossimString("ossimFileWalker:debug"));
 
 ossimFileWalker::ossimFileWalker()
    : m_processFileCallBackPtr(0),
-     m_filteredExtensions(0)
+     m_jobQueue(new ossimJobMultiThreadQueue(new ossimJobQueue(), 1)),     
+     m_filteredExtensions(0),
+     m_recurseFlag(true),
+     m_abortFlag(false),
+     m_mutex()
 {
 }
 
-void ossimFileWalker::walk(const ossimFilename& root) const
+ossimFileWalker::~ossimFileWalker()
+{
+   m_jobQueue = 0; // Not a leak, ref pointer.
+}
+
+void ossimFileWalker::walk(const std::vector<ossimFilename>& files)
 {
    static const char M[] = "ossimFileWalker::walk";
    if(traceDebug())
    {
-      ossimNotify(ossimNotifyLevel_DEBUG) << M << " entered root=" << root << "\n";
+      ossimNotify(ossimNotifyLevel_DEBUG) << M << " entered\n";
    }
-   ossimFilename rootFile = root.expand();
-   if ( rootFile.size() && rootFile.exists() )
+
+   if ( files.size() )
    {
-      if (rootFile.isDir())
+      std::vector<ossimFilename>::const_iterator i = files.begin();
+      while ( i != files.end() )
       {
-         walkDir(rootFile);
-      }
-      else
-      {
-         if ( isFiltered(rootFile) == false )
+         // Must have call back set at this point.
+         if ( !m_abortFlag && m_processFileCallBackPtr )
          {
-            bool recurseFlag; // Not used here but needed for call.
-            if ( m_processFileCallBackPtr )
+            ossimFilename file = (*i).expand();
+            if ( file.size() && file.exists() )
             {
-               m_processFileCallBackPtr->operator()(rootFile, recurseFlag);
+               if ( file.isDir() ) // Directory:
+               {
+                  walkDir(file);
+               }  
+               else // File:
+               {
+                  if ( isFiltered(file) == false )
+                  {
+                     if(traceDebug())
+                     {
+                        ossimNotify(ossimNotifyLevel_DEBUG)
+                           << "Making the job for: " << (*i) << std::endl;
+                     }
+                     
+                     // Make the job:
+                     ossimRefPtr<ossimFileWalkerJob> job =
+                        new ossimFileWalkerJob( m_processFileCallBackPtr, file );
+                     
+                     job->setName( ossimString( file.string() ) );
+                     
+                     job->setCallback( new ossimFileWalkerJobCallback() );
+                     
+                     // Set the state to ready:
+                     job->ready();
+                     
+                     // Add job to the queue:
+                     m_jobQueue->getJobQueue()->add( job.get() );
+                     
+                     m_mutex.lock();
+                     if ( m_abortFlag )
+                     {
+                        // Clear out the queue.
+                        m_jobQueue->getJobQueue()->clear();
+                        
+                        break; // Callee set our abort flag so break out of loop.
+                     }
+                     m_mutex.unlock();
+                  }
+               }
             }
          }
-      }  
-   }
+
+         ++i;
+      
+      } // while ( i != files.end() )
+
+      // FOREVER loop until all jobs are completed.
+      while (1)
+      {
+         if ( OpenThreads::Thread::microSleep(250) == 0 )
+         {
+            if ( m_jobQueue->hasJobsToProcess() == false )
+            {
+               break;
+            }
+         }
+      }
+
+   } // if ( files.size() )
+
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << M << " exiting...\n";
    }  
 }
 
-bool ossimFileWalker::walkDir(const ossimFilename& dir) const
+void ossimFileWalker::walk(const ossimFilename& root)
+{
+   static const char M[] = "ossimFileWalker::walk";
+   if(traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG) << M << " entered root=" << root << "\n";
+   }
+
+   // Must have call back set at this point.
+   if ( !m_abortFlag && m_processFileCallBackPtr )
+   {
+      ossimFilename rootFile = root.expand();
+      if ( rootFile.size() && rootFile.exists() )
+      {
+         if ( rootFile.isDir() )
+         {
+            walkDir(rootFile);
+
+            // FOREVER loop until all jobs are completed.
+            while (1)
+            {
+               if ( OpenThreads::Thread::microSleep(250) == 0 )
+               {
+                  if ( m_jobQueue->hasJobsToProcess() == false )
+                  {
+                     break;
+                  }
+               }
+            }
+         }
+         else
+         {
+            // Single file no job queue needed.
+            if ( isFiltered(rootFile) == false )
+            {
+               m_processFileCallBackPtr->operator()(rootFile);
+            }
+         }
+      }
+   }
+   
+   if(traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG) << M << " exiting...\n";
+   }  
+}
+
+void ossimFileWalker::walkDir(const ossimFilename& dir)
 {
    static const char M[] = "ossimFileWalker::walkDir";
    if(traceDebug())
@@ -70,18 +180,21 @@ bool ossimFileWalker::walkDir(const ossimFilename& dir) const
          << M << " entered...\n" << "processing dir: " << dir << "\n";
    }
 
-   bool continueWalkFlag = true;
-   
    // List of directories in this directory...
    std::vector<ossimFilename> dirs;
    
    // List of files in this directory...
    std::vector<ossimFilename> files;
-   
+
+   m_mutex.lock();
    ossimDirectory d;
-   if ( d.open(dir) )
+   bool ossimDirectoryStatus = d.open(dir);
+   m_mutex.unlock();
+
+   if ( ossimDirectoryStatus )
    {
       // Loop to get the list of files and directories in this directory.
+      m_mutex.lock();
       ossimFilename f;
       if ( d.getFirst(f) )
       {
@@ -101,49 +214,79 @@ bool ossimFileWalker::walkDir(const ossimFilename& dir) const
             d.getNext(f);
          }
       }
-         
-      // Process files first before recursing.
-
-      //---
-      // recurse is set by processFileCallback indicates recursion should stop if false.
-      // This typically is set false for a directory based image like a RPF a.toc.
-      //---
-      bool recurseFlag = true;
+      m_mutex.unlock();
       
+      //---
+      // Process files first before recursing directories.  If a file is a directory base image,
+      // e.g. RPF, then the callee should call ossimFileWalker::setRecurseFlag to false to
+      // stop us from going into sub directories.
+      //---
       std::vector<ossimFilename>::const_iterator i = files.begin();
       while (i != files.end())
       {
-         if ( m_processFileCallBackPtr )
+         if(traceDebug())
          {
-            continueWalkFlag = m_processFileCallBackPtr->operator()(*i, recurseFlag);
+            ossimNotify(ossimNotifyLevel_DEBUG) << "Making the job for: " << (*i) << std::endl;
          }
          
-         if (continueWalkFlag == false) break; // Callee is finished...
+         // Make the job:
+         ossimRefPtr<ossimFileWalkerJob> job =
+            new ossimFileWalkerJob( m_processFileCallBackPtr, (*i) );
+
+         job->setName( ossimString( (*i).string() ) );
+
+         job->setCallback( new ossimFileWalkerJobCallback() );
+
+         // Set the state to ready:
+         job->ready();
+
+         // Add job to the queue:
+         m_jobQueue->getJobQueue()->add( job.get() );
+
+         m_mutex.lock();
+         if ( m_abortFlag )
+         {
+            // Clear out the queue.
+            m_jobQueue->getJobQueue()->clear();
+            
+            break; // Callee set our abort flag so break out of loop.
+         }
+         m_mutex.unlock();
 
          ++i;
       }
-      
-      if ( continueWalkFlag && recurseFlag )
+
+      m_mutex.lock();
+      if ( !m_abortFlag && m_recurseFlag )
       {
          // Process sub directories...
          i = dirs.begin();
          while (i != dirs.end())
          {
-            continueWalkFlag = walkDir( (*i) );
-            
-            if ( continueWalkFlag == false ) break; // Callee is finished...
-            
+            m_mutex.unlock();
+            walkDir( (*i) );
+            m_mutex.lock();
+
+            if ( m_abortFlag )
+            {
+               break; // Callee set our abort flag so break out of loop.
+            }
             ++i;
          }
       }
-   }
+      m_mutex.unlock();
+      
+   } // if ( ossimDirectoryOpenStatus )
+
+   // Reset the m_recurseFlag.
+   m_mutex.lock();
+   m_recurseFlag = true;
+   m_mutex.unlock();
    
    if(traceDebug())
    {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << M << " continueWalkFlag=" << continueWalkFlag<< " exited...\n";
+      ossimNotify(ossimNotifyLevel_DEBUG) << M << " exited...\n";
    }
-   return continueWalkFlag;
 }
 
 bool ossimFileWalker::isFiltered(const ossimFilename& file) const
@@ -152,6 +295,10 @@ bool ossimFileWalker::isFiltered(const ossimFilename& file) const
    if ( file.size() )
    {
       if ( isDotFile(file) )
+      {
+         result = true;
+      }
+      else if ( file[file.size()-1] == '~' )
       {
          result = true;
       }
@@ -239,27 +386,94 @@ std::vector<std::string>& ossimFileWalker::getFilteredExtensions()
 
 void ossimFileWalker::initializeDefaultFilterList()
 {
+   m_mutex.lock();
+   
    // Common extensions to filter out, most common first.
    m_filteredExtensions.push_back(std::string("ovr"));
    m_filteredExtensions.push_back(std::string("omd"));
    m_filteredExtensions.push_back(std::string("his"));
-   m_filteredExtensions.push_back(std::string("aux"));
    m_filteredExtensions.push_back(std::string("geom"));
+   
+   // The rest alphabetical.
+   m_filteredExtensions.push_back(std::string("aux"));
+   m_filteredExtensions.push_back(std::string("dbf"));
    m_filteredExtensions.push_back(std::string("jpw"));
+   m_filteredExtensions.push_back(std::string("kwl"));
+   m_filteredExtensions.push_back(std::string("out"));
+   m_filteredExtensions.push_back(std::string("prj"));
+   m_filteredExtensions.push_back(std::string("save"));
    m_filteredExtensions.push_back(std::string("sdw"));
-   m_filteredExtensions.push_back(std::string("tfw"));
+   m_filteredExtensions.push_back(std::string("shx"));
    m_filteredExtensions.push_back(std::string("spec"));
    m_filteredExtensions.push_back(std::string("statistics"));
+   m_filteredExtensions.push_back(std::string("tfw"));
+   m_filteredExtensions.push_back(std::string("tmp"));
    m_filteredExtensions.push_back(std::string("txt"));
 
-   m_filteredExtensions.push_back(std::string("dbf"));
-   m_filteredExtensions.push_back(std::string("shx"));
+   m_mutex.unlock();
+}
 
-   
+void ossimFileWalker::setRecurseFlag(bool flag)
+{
+   m_mutex.lock();
+   m_recurseFlag = flag;
+   m_mutex.unlock();
+}
+
+void ossimFileWalker::setAbortFlag(bool flag)
+{
+   m_mutex.lock();
+   m_abortFlag = flag;
+   m_mutex.unlock();
+}
+
+void ossimFileWalker::setNumberOfThreads(ossim_uint32 nThreads)
+{
+   m_mutex.lock();
+   m_jobQueue->setNumberOfThreads(nThreads);
+   m_mutex.unlock();
 }
 
 void ossimFileWalker::registerProcessFileCallback(
-   ossimCallback2wRet<const ossimFilename&, bool&, bool>* cb)
+   ossimCallback1<const ossimFilename&>* cb)
 {
+   m_mutex.lock();
    m_processFileCallBackPtr = cb;
+   m_mutex.unlock();
+}
+
+ossimFileWalker::ossimFileWalkerJob::ossimFileWalkerJob(
+   ossimCallback1<const ossimFilename&>* cb,
+   const ossimFilename& file)
+   : m_processFileCallBackPtr(cb),
+     m_file(file)
+{
+}
+
+void ossimFileWalker::ossimFileWalkerJob::start()
+{
+   if ( m_processFileCallBackPtr && m_file.size() )
+   {
+      m_processFileCallBackPtr->operator()(m_file);
+   }
+}
+
+ossimFileWalker::ossimFileWalkerJobCallback::ossimFileWalkerJobCallback()
+   : ossimJobCallback()
+{
+}
+
+void ossimFileWalker::ossimFileWalkerJobCallback::started(ossimJob* job)
+{
+   ossimJobCallback::started(job);
+}
+
+void ossimFileWalker::ossimFileWalkerJobCallback::finished(ossimJob* job)
+{
+   ossimJobCallback::finished(job);
+}
+
+void ossimFileWalker::ossimFileWalkerJobCallback::canceled(ossimJob* job)
+{
+   ossimJobCallback::canceled(job);
 }

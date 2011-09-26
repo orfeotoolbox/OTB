@@ -7,7 +7,7 @@
 // Description: This class provides capabilities for keywordlists.
 //
 //********************************************************************
-// $Id: ossimKeywordlist.h 19692 2011-05-31 16:55:47Z dburken $
+// $Id: ossimKeywordlist.h 20069 2011-09-07 18:46:58Z dburken $
 
 #ifndef ossimKeywordlist_HEADER
 #define ossimKeywordlist_HEADER 1
@@ -256,9 +256,9 @@ public:
             int           precision    = 15);
 
    /*!
-    *  find methods
+    *  @brief Find methods that take std::string(s).
     *  Searches the map for key(/prefix) and returns the resulting value
-    *  or a null string if the key was not found.
+    *  or an empty string if the key was not found.
     */
    std::string findKey(const std::string& key) const;
    std::string findKey(const std::string& prefix,

@@ -11,7 +11,7 @@
 // longitude to x / y" projection.
 // 
 //*******************************************************************
-//  $Id: ossimLlxyProjection.cpp 19882 2011-07-30 17:45:20Z dburken $
+//  $Id: ossimLlxyProjection.cpp 20060 2011-09-07 12:33:46Z gpotts $
 
 #include <ossim/projection/ossimLlxyProjection.h>
 #include <ossim/elevation/ossimElevManager.h>
@@ -147,8 +147,9 @@ void ossimLlxyProjection::worldToLineSample(const ossimGpt& worldPoint,
 void ossimLlxyProjection::lineSampleToWorld(const ossimDpt& lineSampPt,
                                             ossimGpt&       worldPt) const
 {
+   worldPt.makeNan();
    // Start with the origin.  This will keep the origin's datum.
-   worldPt = theUlGpt;
+   worldPt.datum(theOrigin.datum());
    
    double lat = theUlGpt.latd() - (lineSampPt.line * theDegreesPerPixel.y);
    double lon = theUlGpt.lond() + (lineSampPt.samp * theDegreesPerPixel.x);

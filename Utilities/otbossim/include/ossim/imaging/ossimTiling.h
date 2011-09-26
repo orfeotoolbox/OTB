@@ -10,7 +10,7 @@
 // Description: implementation for image generator
 //
 //*************************************************************************
-// $Id: ossimTiling.h 13135 2008-07-06 14:47:46Z dburken $
+// $Id: ossimTiling.h 20103 2011-09-17 16:10:42Z dburken $
 #ifndef ossimTiling_HEADER
 #define ossimTiling_HEADER
 #include <ossim/base/ossimObject.h>
@@ -178,6 +178,12 @@ protected:
    ossim_int64         theTotalVerticalTiles;
    ossim_int64         theTotalTiles;
    ossimString         theTileNameMask;
+
+   /**
+    * This flags the code to shift the tie point so that the edge of the pixel
+    * falls on the tile boundary.  default=false
+    */
+   bool theEdgeToEdgeFlag; 
    
    bool validate()const;
    bool isAngularUnit(ossimUnitType unitType)const;

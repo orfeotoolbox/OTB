@@ -16,16 +16,18 @@ void ossimJob::setState(int value, bool on)
       newState = ((newState & ~value)&ossimJob_ALL);
    }
 
-   int oldState = 0;
+   int oldState     = 0;
+   int currentState = 0;
    ossimRefPtr<ossimJobCallback> callback;
+
    bool stateChangedFlag = false;
    {
       OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_jobMutex);
       
-      
       stateChangedFlag = newState != m_state;
       oldState = m_state;
       m_state = static_cast<State>(newState);
+      currentState = m_state;
       callback = m_callback.get();
    }
    
@@ -34,22 +36,22 @@ void ossimJob::setState(int value, bool on)
       if(callback.valid())
       {
          if(!(oldState&ossimJob_READY)&&
-            (m_state&ossimJob_READY))
+            (currentState&ossimJob_READY))
          {
             callback->ready(this);
          }
          else if(!(oldState&ossimJob_RUNNING)&&
-                 (m_state&ossimJob_RUNNING))
+                 (currentState&ossimJob_RUNNING))
          {
             callback->started(this);
          }
          else if(!(oldState&ossimJob_CANCEL)&&
-                 (m_state&ossimJob_CANCEL))
+                 (currentState&ossimJob_CANCEL))
          {
             callback->canceled(this);
          }
          else if(!(oldState&ossimJob_FINISHED)&&
-                 (m_state&ossimJob_FINISHED))
+                 (currentState&ossimJob_FINISHED))
          {
             callback->finished(this);
          }

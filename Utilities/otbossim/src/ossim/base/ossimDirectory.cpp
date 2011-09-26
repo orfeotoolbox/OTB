@@ -10,7 +10,7 @@
 // Description: A brief description of the contents of the file.
 //
 //*************************************************************************
-// $Id: ossimDirectory.cpp 14776 2009-06-25 14:34:06Z dburken $
+// $Id: ossimDirectory.cpp 20092 2011-09-12 19:09:17Z dburken $
 
 #include <cstring> /* for strncasecmp */
 #include <iostream>
@@ -153,10 +153,10 @@ bool ossimDirectory::getNext(ossimFilename &filename) const
 
 bool ossimDirectory::fileMatched(ossimFilename &filename) const
 {
-   bool matches=false;
+   bool matches = false;
 
-   // don't return "." and ".." unless asked for
-   if ( (filename == "..") || (filename == ".")   )
+   // Don't return "." and ".." unless asked for.
+   if ( (filename.file() == "..") || (filename.file() == ".")   )
    {
       if (theFlags & ossimDirectory::OSSIM_DIR_DOTDOT)
       {
@@ -171,17 +171,13 @@ bool ossimDirectory::fileMatched(ossimFilename &filename) const
    {
       matches = true;
    }
-   else
-   {
-      matches = false;
-   }
 
    return matches;
 }
 
 bool ossimDirectory::isOpened() const
 {
-	return theDirectoryName.isDir();
+   return theDirectoryName.isDir();
     //return theData != 0;
 }
 

@@ -9,7 +9,7 @@
 // Description: This class provides manipulation of filenames.
 //
 //*************************************************************************
-// $Id: ossimFilename.h 19798 2011-06-30 15:34:43Z dburken $
+// $Id: ossimFilename.h 20094 2011-09-14 14:15:12Z dburken $
 
 #ifndef ossimFilename_HEADER
 #define ossimFilename_HEADER
@@ -182,9 +182,12 @@ public:
                         int perm=0775)const;
 
    /*!
-    * Removes pathname from filesystem if supported by platform.
-    * Return true on success, false on error.
-    * If supported will set errno and output equivalent string if one occurs.
+    * @brief Removes pathname from filesystem if supported by platform.
+    *
+    * If pathname is a directory it will only be removed if empty. If supported
+    * will set errno and output equivalent string if one occurs.
+    *
+    * @return true on success, false on error.
     */
    static bool remove(const ossimFilename& pathname);
 

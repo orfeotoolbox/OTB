@@ -21,6 +21,7 @@
 #define ossimElevManager_HEADER
 #include <vector>
 #include <ossim/base/ossimConstants.h>
+#include <ossim/base/ossimVisitor.h>
 #include <ossim/elevation/ossimElevSource.h>
 #include <ossim/elevation/ossimElevationDatabase.h>
 #include <OpenThreads/ReadWriteMutex>
@@ -28,6 +29,21 @@ class OSSIM_DLL ossimElevManager : public ossimElevSource
 {
 public: 
    typedef std::vector<ossimRefPtr<ossimElevationDatabase> > ElevationDatabaseListType;
+   
+   class ConnectionStringVisitor : public ossimVisitor
+   {
+   public:
+      ConnectionStringVisitor(const ossimString& value):m_connectionString(value){}
+      virtual ossimRefPtr<ossimVisitor> dup()const{return new ConnectionStringVisitor(*this);}
+      const ossimString& getConnectionString()const{return m_connectionString;}
+      virtual void visit(ossimObject* obj);
+      ossimElevationDatabase* getElevationDatabase(){return m_database.get();} 
+      
+   protected:
+      ossimString m_connectionString;
+      ossimRefPtr<ossimElevationDatabase> m_database;
+   };
+   
    virtual ~ossimElevManager();
    
    /**
@@ -58,6 +74,7 @@ public:
       std::cout << "ossimElevManager::pointHasCoverage(): NOT IMPLEMENTED AND SHOULD NOT BE USED AT THIS LEVEL!!!\n";
       return 1.0;
    }
+   
    ossim_uint32 getNumberOfElevationDatabases()const
    {
       return (ossim_uint32)m_elevationDatabaseList.size();
@@ -110,6 +127,8 @@ public:
     */
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix=0);
+   
+   virtual void accept(ossimVisitor& visitor);
    
 protected:
    ossimElevManager();

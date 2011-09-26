@@ -52,7 +52,7 @@ public:
                   const double &minor_axis);
    ossimEllipsoid();
    
-   ~ossimEllipsoid(){};
+   virtual ~ossimEllipsoid(){};
 
    /*!
     * ACCESS METHOD...

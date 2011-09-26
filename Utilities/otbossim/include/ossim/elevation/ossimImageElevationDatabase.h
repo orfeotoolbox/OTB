@@ -17,13 +17,11 @@
 #define ossimImageElevationDatabase_HEADER 1
 
 #include <ossim/elevation/ossimElevationDatabase.h>
-
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimGrect.h>
 #include <ossim/base/ossimRefPtr.h>
 #include <ossim/base/ossimRtti.h>
-
 #include <map>
 
 class ossimString;
@@ -124,15 +122,8 @@ public:
     * the ossimFileWalker, e.g. don't recurse, stop altogether.
     * 
     * @param file to process.
-    *
-    * @param recurseFlag Is set by this method indicating to caller should
-    * continue to recurse directories. Typically set to false for directory
-    * based images like an RPF a.toc. 
-    *
-    * @return true Indicates caller should continue to walk files/directories,
-    * false indicates caller should stop.
     */
-   bool processFile(const ossimFilename& file, bool& recurseFlag);
+   void processFile(const ossimFilename& file);
    
 protected:
    /**
@@ -194,8 +185,8 @@ private:
    const ossimImageElevationDatabase& operator=(const ossimImageElevationDatabase& rhs);
 
    std::map<ossim_uint64, ossimImageElevationFileEntry> m_entryMap;
-   ossim_uint64 m_lastMapKey;
-   ossim_uint64 m_lastAccessedId;
+   ossim_uint64       m_lastMapKey;
+   ossim_uint64       m_lastAccessedId;
 
    TYPE_DATA 
 };

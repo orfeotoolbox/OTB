@@ -26,6 +26,7 @@
 
 class ossimDblGrid;
 class ossimFilename;
+class ossimFileWalker;
 class ossimImageData;
 class ossimImageGeometry;
 class ossimImageHandler;
@@ -126,15 +127,8 @@ public:
     * the ossimFileWalker, e.g. don't recurse, stop altogether.
     * 
     * @param file to process.
-    *
-    * @param recurseFlag Is set by this method indicating to caller should
-    * continue to recurse directories. Typically set to false for directory
-    * based images like an RPF a.toc. 
-    *
-    * @return true Indicates caller should continue to walk files/directories,
-    * false indicates caller should stop.
     */
-   bool processFile(const ossimFilename& file, bool& recurseFlag);
+   void processFile(const ossimFilename& file);
    
 protected:
    /** Protected destructor as this is derived from ossimRefenced. */
@@ -217,6 +211,8 @@ private:
    ossimGrect m_requestedRect;
    ossimGrect m_entryListRect;
    ossimGrect m_mappedRect; // Requested expanded to even post boundary.
+
+   ossimFileWalker* m_fileWalker;
 
    TYPE_DATA 
 };

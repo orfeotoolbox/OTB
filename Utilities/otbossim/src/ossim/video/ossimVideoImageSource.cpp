@@ -29,8 +29,8 @@ ossimVideoImageSource::ossimVideoImageSource()
 //! Constructor used when accessing a common video object (versus instantiating a new video for
 //! each frame.
 //*************************************************************************************************
-ossimVideoImageSource::ossimVideoImageSource(ossimVideoSource* video, 
-                                               const double& frame_time_seconds)
+ossimVideoImageSource::ossimVideoImageSource(ossimVideoSource* /* video */, 
+                                             const double& frame_time_seconds)
 :  m_frameTime (-1.0)
 {
    initialize();

@@ -510,7 +510,7 @@ bool ossimNitf20Writer::writeBlockBandSequential()
    int imageHeaderEnd = theOutputStream->tellp();
    int imageHeaderSize = imageHeaderEnd - imageHeaderStart;
 
-   ossimIpt ul = rect.ul();
+   // ossimIpt ul = rect.ul();
    ossimRefPtr<ossimImageData> data = theInputConnection->getNextTile();
    ossim_uint64 tileNumber = 0;
    ossimEndian endian;

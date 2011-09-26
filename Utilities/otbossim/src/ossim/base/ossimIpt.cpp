@@ -10,7 +10,7 @@
 // Contains class definitions for ipt.
 //
 //*******************************************************************
-//  $Id: ossimIpt.cpp 19793 2011-06-30 13:26:56Z gpotts $
+//  $Id: ossimIpt.cpp 20070 2011-09-07 18:48:35Z dburken $
 
 #include <iostream>
 #include <sstream>
@@ -258,7 +258,7 @@ std::istream& operator>>(std::istream& is, ossimIpt &pt)
    return is;
 }
 
-bool ossimIpt::isEqualTo(const ossimIpt& rhs, ossimCompareType compareType)const
+bool ossimIpt::isEqualTo(const ossimIpt& rhs, ossimCompareType /* compareType */)const
 {
    return ((x==rhs.x)&&
            (y==rhs.y));

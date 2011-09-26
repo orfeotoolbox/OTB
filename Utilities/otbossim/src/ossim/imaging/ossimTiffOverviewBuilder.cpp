@@ -11,7 +11,7 @@
 // Contains class definition for TiffOverviewBuilder
 // 
 //*******************************************************************
-//  $Id: ossimTiffOverviewBuilder.cpp 19724 2011-06-06 21:07:15Z dburken $
+//  $Id: ossimTiffOverviewBuilder.cpp 20099 2011-09-15 16:04:12Z oscarkramer $
 
 #include <algorithm> /* for std::fill */
 // #include <cstring>
@@ -54,7 +54,7 @@ static ossimTrace traceDebug("ossimTiffOverviewBuilder:degug");
 static const char COPY_ALL_KW[] = "copy_all_flag";
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimTiffOverviewBuilder.cpp 19724 2011-06-06 21:07:15Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimTiffOverviewBuilder.cpp 20099 2011-09-15 16:04:12Z oscarkramer $";
 #endif
 
 
@@ -346,7 +346,8 @@ bool ossimTiffOverviewBuilder::execute()
          // Since the overview file is being opened here, need to set its handler's starting res
          // level where the original image file left off. This is usually R1 since the original file
          // only has R0, but the original file may have more than R0:
-         ih->setStartingResLevel( m_imageHandler->getNumberOfDecimationLevels());
+         if (!m_copyAllFlag)
+            ih->setStartingResLevel( m_imageHandler->getNumberOfDecimationLevels());
       }
       
       // If mask is to be generated, need to notify both the writer and the reader of new 
@@ -357,7 +358,7 @@ bool ossimTiffOverviewBuilder::execute()
          m_maskWriter->connectMyInputTo(ih.get());
       }
 
-      if ( !writeRn( ih.get(), tif, i, (i==startingResLevel) ) )
+      if ( !writeRn( ih.get(), tif, i, (i==startingResLevel)&&(!m_copyAllFlag) ) )
       {
          // Set the error...
          ossimSetError(getClassName(),

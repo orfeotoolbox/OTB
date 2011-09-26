@@ -171,20 +171,45 @@ void ossimImageGeometry::worldToRn(const ossimGpt& wpt,
 //**************************************************************************************************
 bool ossimImageGeometry::localToWorld(const ossimDpt& local_pt, ossimGpt& world_pt) const
 {
-    //! Return a NAN point of no projection is defined:
-    if (!m_projection.valid())
-    {
-        world_pt.makeNan();
-        return false;
-    }
+   //! Return a NAN point of no projection is defined:
+   if (!m_projection.valid())
+   {
+      world_pt.makeNan();
+      return false;
+   }
 
-    // First transform local pixel to full-image pixel:
-    ossimDpt full_image_pt;
-    rnToFull(local_pt, m_targetRrds, full_image_pt);
+   // First transform local pixel to full-image pixel:
+   ossimDpt full_image_pt;
+   rnToFull(local_pt, m_targetRrds, full_image_pt);
 
-    // Perform projection to world coordinates:
-    m_projection->lineSampleToWorld(full_image_pt, world_pt);
-    return true;
+   // Perform projection to world coordinates:
+   m_projection->lineSampleToWorld(full_image_pt, world_pt);
+   return true;
+}
+
+//**************************************************************************************************
+//! Exposes the 3D projection from image to world coordinates given a constant height above 
+//! ellipsoid. The caller should verify that a valid projection exists before calling this
+//! method. Returns TRUE if a valid ground point is available in the ground_pt argument.
+//**************************************************************************************************
+bool ossimImageGeometry::localToWorld(const ossimDpt& local_pt, 
+                                      const double& h_ellipsoid, 
+                                      ossimGpt& world_pt) const
+{
+   //! Return a NAN point of no projection is defined:
+   if (!m_projection.valid())
+   {
+      world_pt.makeNan();
+      return false;
+   }
+
+   // First transform local pixel to full-image pixel:
+   ossimDpt full_image_pt;
+   rnToFull(local_pt, m_targetRrds, full_image_pt);
+
+   // Perform projection to world coordinates:
+   m_projection->lineSampleHeightToWorld(full_image_pt, h_ellipsoid, world_pt);
+   return true;
 }
 
 //**************************************************************************************************

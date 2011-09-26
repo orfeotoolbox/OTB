@@ -42,13 +42,19 @@ static const double EARTH_ANGULAR_VELOCITY   = 7.2921151467e-05;  // radians/sec
 static const char*  IMAGING_MODE_ID[] = 
 {"UNKNOWN", "SCN", "SCW", "SGC", "SGF", "SGX", "SLC", "SPG", "SSG","RAW","ERS"};
 
+//******************************************************************************
+// Default.
+//******************************************************************************
+ossimRS1SarModel::ossimRS1SarModel()
+:  theCeosData        (0),
+   theImagingMode     (UNKNOWN_MODE)
+{
+   setErrorStatus();
+}
 
 //******************************************************************************
-// CONSTRUCTOR: ossimRS1SarModel(const ossimFilename& imageDir)
-//
 // Takes a ossimFilename& directory containing support data, initializes the model,
 // and writes out the initial geometry file.
-//  
 //******************************************************************************
 ossimRS1SarModel::ossimRS1SarModel(const ossimFilename& imageFile)
    :
@@ -58,15 +64,17 @@ ossimRS1SarModel::ossimRS1SarModel(const ossimFilename& imageFile)
    static const char MODULE[] = "Constructor ossimRS1SarModel(ossimFilename)";
    if (traceDebug())  CLOG << "entering..." << endl;
 
+   clearErrorStatus();
+
    // Parse the CEOS data files:
    ossimFilename dataDirName (imageFile.path());
    initFromCeos(dataDirName);
-
-   if (theImagingMode == UNKNOWN_MODE) 
+   if(getErrorStatus() != ossimErrorCodes::OSSIM_OK)
    {
-      if (traceDebug())  CLOG << "returning with error..." << endl;
       return;
    }
+   if (theImagingMode == UNKNOWN_MODE) 
+      return;
 
    // Parse the image data file for the local ORPs interpolator:
    if ((theImagingMode == SCN) || (theImagingMode == SCW))
@@ -99,6 +107,7 @@ ossimRS1SarModel::~ossimRS1SarModel()
 bool ossimRS1SarModel::loadState(const ossimKeywordlist& kwl, const char* prefix)
 {
    // NOT YET IMPLEMENTED
+   setErrorStatus();
    return false;
 }
 
@@ -108,6 +117,7 @@ bool ossimRS1SarModel::loadState(const ossimKeywordlist& kwl, const char* prefix
 bool ossimRS1SarModel::saveState(ossimKeywordlist& kwl, const char* prefix) const
 {
    // NOT YET IMPLEMENTED
+   setErrorStatus();
    return false;
 }
 
@@ -213,16 +223,17 @@ void ossimRS1SarModel::imagingRay(const ossimDpt& image_point, ossimEcefRay& ima
 
    default:
       CLOG << "ERROR: Invalid imaging mode encountered." << endl;
+      setErrorStatus();
    }
 }
 
-//******************************************************************************
-// PUBLIC METHOD: ossimRS1SarModel::phiLambda(image_point, height, is_inside_image)
+//*************************************************************************************************
+// PUBLIC METHOD: ossimRS1SarModel::lineSampleHeightToWorld(image_point, height, is_inside_image)
 //
 //  Performs image to ground projection. 
-//******************************************************************************
+//*************************************************************************************************
 void ossimRS1SarModel::lineSampleHeightToWorld(const ossimDpt& image_point,
-                                               const double&   heightMSL,
+                                               const double&   height_ellip,
                                                ossimGpt&       worldPt) const
 {
    static const char MODULE[] = "ossimRS1SarModel::lineSampleHeightToWorld()";
@@ -233,26 +244,7 @@ void ossimRS1SarModel::lineSampleHeightToWorld(const ossimDpt& image_point,
 
    ossimEcefRay imaging_ray;
    imagingRay(image_point, imaging_ray);
-
-   // Convert MSL height to Ellipsoid height and do intersection:
-   worldPt = imaging_ray.intersectAboveEarthEllipsoid(0.0);
-   double hgt_ell = 0.0;
-   double delta_hgt;
-   int num_iters = 0;
-   ossimElevManager* emgr = ossimElevManager::instance();
-   do 
-   {
-      delta_hgt = heightMSL - worldPt.heightMSL();
-      hgt_ell += delta_hgt;
-      worldPt = imaging_ray.intersectAboveEarthEllipsoid(hgt_ell);
-      ++num_iters;
-   } while ((fabs(delta_hgt) > MAX_ELEV_DIFF) && (num_iters < MAX_NUM_ITERS));
-   
-   if (num_iters == MAX_NUM_ITERS)
-   {
-      ossimNotify(ossimNotifyLevel_WARN)<<MODULE<<" Exceeded max allowed number of iterations "
-         "solving for range arc intersection with elevation. Result may be incorrect."<<endl;
-   }
+   worldPt = imaging_ray.intersectAboveEarthEllipsoid(height_ellip);
          
    if (traceDebug())  CLOG << "returning..." << endl;
 }
@@ -353,6 +345,7 @@ void ossimRS1SarModel::initFromCeos(const ossimFilename& fname)
    // Instantiate a CeosData object:
    theCeosData = new ossimCeosData(fname);
    
+   if(theCeosData->errorStatus() != ossimErrorCodes::OSSIM_OK) return;
    const dataset_sum_rec* dsr = theCeosData->dataSetSumRec();
    const proc_parm_rec*   ppr = theCeosData->procParmRec();
    char buf[1024];
@@ -379,6 +372,7 @@ void ossimRS1SarModel::initFromCeos(const ossimFilename& fname)
          CLOG << "ERROR: Direction Flag: " << dsr->asc_des << " not supported"
               << endl;
          theDirectionFlag = UNKNOWN_DIRECTION;
+         setErrorStatus();
          if (traceDebug())  CLOG << "returning with error..." << endl;
          return;
       }
@@ -449,6 +443,7 @@ void ossimRS1SarModel::initFromCeos(const ossimFilename& fname)
       {
          CLOG << " ERROR:\n\tCannot open CEOS image file: "
               << theCeosData->imageFile() << endl;
+         setErrorStatus();
          return;
       }
       fseek(fptr, 0, SEEK_END);
@@ -763,6 +758,7 @@ void ossimRS1SarModel::establishOrpInterp()
    {
       CLOG << "ERROR: Could not open data file <" << theCeosData->imageFile()
            << ">" << endl;
+      setErrorStatus();
       return;
    }
    fseek(fptr, theCeosData->imopDescRec()->desc.length, SEEK_SET);
@@ -795,6 +791,7 @@ void ossimRS1SarModel::establishOrpInterp()
          CLOG << "\n\tERROR: Synchronization error reading image file. "
               << "Expected line number " << line_number+1
               << " but read line number " << prefix.line_num << "." << endl;
+         setErrorStatus();
          return;
       }
       
@@ -961,6 +958,7 @@ void ossimRS1SarModel::establishOrpGrid()
    {
       CLOG << "ERROR: Could not open data file <" << theCeosData->imageFile()
            << ">" << endl;
+      setErrorStatus();
       return;
    }
    fseek(fptr, theCeosData->imopDescRec()->desc.length, SEEK_SET);
@@ -998,6 +996,7 @@ void ossimRS1SarModel::establishOrpGrid()
          CLOG << "\n\tERROR: Synchronization error reading image file. "
               << "Expected line number " << line_number+1
               << " but read line number " << prefix.line_num << "." << endl;
+         setErrorStatus();
          return;
       }
       

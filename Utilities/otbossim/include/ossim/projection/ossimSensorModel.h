@@ -25,7 +25,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimSensorModel.h 19180 2011-03-22 17:36:33Z oscarkramer $
+//  $Id: ossimSensorModel.h 20075 2011-09-08 16:44:03Z gpotts $
 
 #ifndef ossimSensorModel_HEADER
 #define ossimSensorModel_HEADER
@@ -116,10 +116,10 @@ public:
    /*!
     * METHOD: lineSampleHeightToWorld
     * This is the pure virtual that performs the actual work of projecting
-    * the image point to the given elevation above MSL. 
+    * the image point to the given elevation above Ellipsoid. 
     */
    virtual void lineSampleHeightToWorld(const ossimDpt& lineSampPt,
-                                        const double&   heightAboveMSL,
+                                        const double&   heightEllipsoid,
                                         ossimGpt&       worldPt) const = 0;
    /*!
     * METHOD: imagingRay(image_point, &ossimEcefRay)

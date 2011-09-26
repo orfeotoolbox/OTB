@@ -10,7 +10,7 @@
 // Description: implementation for image generator
 //
 //*************************************************************************
-// $Id: ossimTiling.cpp 17170 2010-04-20 13:51:55Z gpotts $
+// $Id: ossimTiling.cpp 20103 2011-09-17 16:10:42Z dburken $
 
 #include <sstream>
 #include <iomanip>
@@ -40,7 +40,8 @@ ossimTiling::ossimTiling()
        theTotalHorizontalTiles(0),
        theTotalVerticalTiles(0),
        theTotalTiles(0),
-       theTileNameMask()
+       theTileNameMask(),
+       theEdgeToEdgeFlag(false)
 {
 }
 
@@ -233,16 +234,37 @@ bool ossimTiling::next(ossimRefPtr<ossimMapProjection>& resultProjection,
 
          if(theMapProjection->isGeographic())
          {
-            theMapProjection->setUlTiePoints(
-               ossimGpt(origin.lat,
-                        origin.lon,
-                        0.0,
-                        theMapProjection->origin().datum()));
+            if ( theEdgeToEdgeFlag )
+            {
+               theMapProjection->setUlTiePoints(
+                  ossimGpt( origin.lat - (deltaPerPixel.y/2.0),
+                            origin.lon + (deltaPerPixel.x/2.0),
+                            0.0,
+                            theMapProjection->origin().datum()) );
+            }
+            else
+            {
+               theMapProjection->setUlTiePoints(
+                  ossimGpt(origin.lat,
+                           origin.lon,
+                           0.0,
+                           theMapProjection->origin().datum()));
+               
+            }
             theMapProjection->setDecimalDegreesPerPixel(deltaPerPixel);
          }
          else
          {
-            theMapProjection->setUlTiePoints(ossimDpt(origin.x, origin.y));
+            if ( theEdgeToEdgeFlag )
+            {
+               theMapProjection->setUlTiePoints(
+                  ossimDpt( origin.x + (deltaPerPixel.x/2.0),
+                            origin.y - (deltaPerPixel.y/2.0) ) );
+            }
+            else
+            {
+               theMapProjection->setUlTiePoints(ossimDpt(origin.x, origin.y));
+            }
             theMapProjection->setMetersPerPixel(deltaPerPixel);
          }
          resultingBounds = ossimIrect(-(ossim_int32)thePaddingSizeInPixels.x,
@@ -725,6 +747,12 @@ bool ossimTiling::saveState(ossimKeywordlist& kwl,
               theNumberOfBytesPerPixelPerBand,
               true);
    }
+
+   kwl.add(prefix,
+           "edge_to_edge",
+           ossimString::toString(theEdgeToEdgeFlag),
+           true);
+   
    
    return true;
 }
@@ -866,7 +894,12 @@ bool ossimTiling::loadState(const ossimKeywordlist& kwl,
          theDeltaType = ossimTilingDeltaType_PER_PIXEL;
       }
    }
-      
+   
+   lookup = kwl.find(prefix, "edge_to_edge");
+   if ( lookup )
+   {
+      theEdgeToEdgeFlag = ossimString::toBool(lookup);
+   }
       
    if (traceDebug())
    {
@@ -893,7 +926,9 @@ std::ostream& ossimTiling::print(std::ostream& out) const
        << "\ntheOutputSizeInBytes:            " << theOutputSizeInBytes
        << "\ntheNumberOfBands:                " << theNumberOfBands
        << "\ntheNumberOfBytesPerPixelPerBand: " <<
-      theNumberOfBytesPerPixelPerBand << endl;
+      theNumberOfBytesPerPixelPerBand
+       << "\ntheEdgeToEdgeFlag:               " << theEdgeToEdgeFlag
+       << "\n";
 
    if (theMapProjection.valid())
    {

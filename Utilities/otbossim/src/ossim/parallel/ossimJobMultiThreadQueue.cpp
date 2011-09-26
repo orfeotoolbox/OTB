@@ -53,6 +53,12 @@ void ossimJobMultiThreadQueue::setNumberOfThreads(ossim_uint32 nThreads)
    }
 }
 
+ossim_uint32 ossimJobMultiThreadQueue::getNumberOfThreads() const
+{
+   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_mutex);
+   return static_cast<ossim_uint32>( m_threadQueueList.size() );
+}
+
 ossim_uint32 ossimJobMultiThreadQueue::numberOfBusyThreads()const
 {
    ossim_uint32 result = 0;

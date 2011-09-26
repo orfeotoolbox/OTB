@@ -7,7 +7,7 @@
 // Description: This class provides manipulation of filenames.
 //
 //*************************************************************************
-// $Id: ossimFilename.cpp 19798 2011-06-30 15:34:43Z dburken $
+// $Id: ossimFilename.cpp 20096 2011-09-14 16:44:20Z dburken $
 
 #include <ossim/ossimConfig.h>  /* to pick up platform defines */
 
@@ -76,38 +76,37 @@ public:
    };
    
    ossimFileHandle(const ossimString& filename, OpenMode mode)
-      {
-         m_hFile = ::CreateFile
-            (
-               filename.c_str(),              // name
-               mode == Read ? GENERIC_READ    // access mask
-               : GENERIC_WRITE,
-               FILE_SHARE_READ |              // sharing mode
-               FILE_SHARE_WRITE,              // (allow everything)
-               NULL,                          // no secutity attr
-               OPEN_EXISTING,                 // creation disposition
-               0,                             // no flags
-               NULL                           // no template file
-               );
+   {
+      m_hFile = ::CreateFile(
+         filename.c_str(),              // name
+         mode == Read ? GENERIC_READ    // access mask
+         : GENERIC_WRITE,
+         FILE_SHARE_READ |              // sharing mode
+         FILE_SHARE_WRITE,              // (allow everything)
+         NULL,                          // no secutity attr
+         OPEN_EXISTING,                 // creation disposition
+         0,                             // no flags
+         NULL                           // no template file
+         );
       
-         if ( m_hFile == INVALID_HANDLE_VALUE )
-         {
+      if ( m_hFile == INVALID_HANDLE_VALUE )
+      {
 //             wxLogSysError(_("Failed to open '%s' for %s"),
 //                           filename.c_str(),
 //                           mode == Read ? _("reading") : _("writing"));
-         }
       }
+   }
    
    ~ossimFileHandle()
+   {
+      if ( m_hFile != INVALID_HANDLE_VALUE )
       {
-         if ( m_hFile != INVALID_HANDLE_VALUE )
+         if ( !::CloseHandle(m_hFile) )
          {
-            if ( !::CloseHandle(m_hFile) )
-            {
 //                 wxLogSysError(_("Failed to close file handle"));
-            }
          }
       }
+   }
    
    // return true only if the file could be opened successfully
    bool isOk() const { return m_hFile != INVALID_HANDLE_VALUE; }
@@ -294,7 +293,11 @@ void ossimFilename::convertForwardToBackSlashes()
 
 bool ossimFilename::setTimes(ossimLocalTm* accessTime,
                              ossimLocalTm* modTime,
+#if defined(_WIN32)                             
                              ossimLocalTm* createTime)const
+#else
+                             ossimLocalTm* /* createTime */ )const
+#endif
 {
 #if defined(_WIN32)
    if(isDir())
@@ -1092,23 +1095,30 @@ bool ossimFilename::createDirectory( bool recurseFlag,
 bool ossimFilename::remove(const ossimFilename& pathname)
 {
    bool result = true;
+
 #if defined(__VISUALC__)  || defined(__BORLANDC__) || defined(__WATCOMC__) || \
    defined(__GNUWIN32__) || defined(_MSC_VER)
-   
-   if(::remove(pathname.c_str()) != 0)
-   {
-      result = false;
-   }
-#else
+
+   // Note: not sure if these work on all of the above flavors. drb - 14 Sep. 2011.
    if(pathname.isDir())
    {
-      result = (rmdir(pathname) >=0);
+      // Note this only removes empty directories.
+      result = ( RemoveDirectory( pathname.c_str() ) != 0 );
    }
-   else if (unlink(pathname.c_str()) < 0)
+   else
    {
-      result = false;
+      result = ( DeleteFile( pathname.c_str() ) != 0 );
    }
-#endif /* HAVE_UNISTD_H */
+#else /* Unix flavor from unistd.h. */
+   if(pathname.isDir())
+   {
+      result = ( rmdir( pathname.c_str() ) == 0 );
+   }
+   else
+   {
+      result = ( unlink( pathname.c_str() ) == 0 );
+   }
+#endif
 
    return result;
 }

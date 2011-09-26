@@ -14,14 +14,12 @@
 // $Id$
 
 #include <ossim/elevation/ossimImageElevationDatabase.h>
-
-#include <ossim/base/ossimCallback2wRet.h>
+#include <ossim/base/ossimCallback1.h>
 #include <ossim/base/ossimDpt.h>
 #include <ossim/base/ossimString.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/elevation/ossimImageElevationHandler.h>
 #include <ossim/util/ossimFileWalker.h>
-
 #include <cmath>
 
 static ossimTrace traceDebug(ossimString("ossimImageElevationDatabase:debug"));
@@ -34,25 +32,25 @@ RTTI_DEF1(ossimImageElevationDatabase, "ossimImageElevationDatabase", ossimEleva
 //
 // Placed here as it is unique to this class.
 //---
-class ProcessFileCB: public ossimCallback2wRet<const ossimFilename&, bool&, bool>
+class ProcessFileCB: public ossimCallback1<const ossimFilename&>
 {
 public:
    ProcessFileCB(
       ossimImageElevationDatabase* obj,
-      bool (ossimImageElevationDatabase::*func)(const ossimFilename&, bool&))
+      void (ossimImageElevationDatabase::*func)(const ossimFilename&))
       :
       m_obj(obj),
       m_func(func)
    {}
       
-   virtual bool operator()(const ossimFilename& file, bool& flag) const
+   virtual void operator()(const ossimFilename& file) const
    {
-      return ( m_obj->*m_func)(file, flag);
+      (m_obj->*m_func)(file);
    }
 
 private:
    ossimImageElevationDatabase* m_obj;
-   bool (ossimImageElevationDatabase::*m_func)(const ossimFilename& file, bool& flag);
+   void (ossimImageElevationDatabase::*m_func)(const ossimFilename& file);
 };
 
 ossimImageElevationDatabase::ossimImageElevationDatabase()
@@ -164,7 +162,18 @@ ossimRefPtr<ossimElevCellHandler> ossimImageElevationDatabase::createCell(
                ossimNotify(ossimNotifyLevel_WARN)
                   << "ossimImageElevationDatabase::createCell WARN:\nCould not open: "
                   << (*i).second.m_file << "\nRemoving file from map!" << std::endl;
-                  m_entryMap.erase(i);
+
+               // Get a copy of the iterator to delet.
+               std::map<ossim_uint64, ossimImageElevationFileEntry>::iterator badIter = i;
+               
+               ++i; // Go to next image.
+
+               // Must put lock around erase.
+               m_cacheMapMutex.lock();
+               m_entryMap.erase(badIter);
+               m_cacheMapMutex.unlock();
+               
+               continue; // Skip the rest of this loop.
             }
          }
 
@@ -203,6 +212,7 @@ ossimRefPtr<ossimElevCellHandler> ossimImageElevationDatabase::createCell(
 
       ++i;
    }
+   
    return result;
 }
 
@@ -312,8 +322,7 @@ bool ossimImageElevationDatabase::pointHasCoverage(const ossimGpt& gpt) const
       }
       ++i;
    }
-      
-   return false;
+   return result;
 }
 
 double ossimImageElevationDatabase::getAccuracyLE90(const ossimGpt& /* gpt */) const
@@ -363,8 +372,7 @@ bool ossimImageElevationDatabase::saveState(ossimKeywordlist& kwl, const char* p
    return ossimElevationDatabase::saveState(kwl, prefix);
 }
 
-bool ossimImageElevationDatabase::processFile(const ossimFilename& file,
-                                              bool& recurseFlag)
+void ossimImageElevationDatabase::processFile(const ossimFilename& file)
 {
    static const char M[] = "ossimImageElevationDatabase::processFile";
    if(traceDebug())
@@ -373,21 +381,14 @@ bool ossimImageElevationDatabase::processFile(const ossimFilename& file,
          << M << " entered...\n" << "file: " << file << "\n";
    }
 
-   // Set the flags for the walker.
-   bool continueFlag = true;
-   recurseFlag = true;
-
    // Add the file.
-   
    m_entryMap.insert( std::make_pair(m_lastMapKey++, ossimImageElevationFileEntry(file)) );
-   
+
    if(traceDebug())
    {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << M << " recurseNoMoreFlag=" << recurseFlag
-         << " continueFlag=" << continueFlag << "\n";
-   }
-   return continueFlag;
+      // Since ossimFileWalker is threaded output the file so we know which job exited.
+      ossimNotify(ossimNotifyLevel_DEBUG) << M << "\nfile: " << file << "\nexited...\n";
+   } 
 }
 
 void ossimImageElevationDatabase::loadFileMap()
@@ -397,7 +398,7 @@ void ossimImageElevationDatabase::loadFileMap()
       // Create a file walker which will find files we can load from the connection string.
       ossimFileWalker* fw = new ossimFileWalker();
       fw->initializeDefaultFilterList();
-      ossimCallback2wRet<const ossimFilename&, bool&, bool>* cb =
+      ossimCallback1<const ossimFilename&>* cb =
          new ProcessFileCB(this, &ossimImageElevationDatabase::processFile);
       fw->registerProcessFileCallback(cb);
       
