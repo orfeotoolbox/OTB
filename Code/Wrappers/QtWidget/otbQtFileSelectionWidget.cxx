@@ -15,38 +15,51 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbWrapperQtWidgetInputImageParameter.h"
+#include "otbQtFileSelectionWidget.h"
 
 namespace otb
 {
 namespace Wrapper
 {
 
-QtWidgetInputImageParameter::QtWidgetInputImageParameter(InputImageParameter* param, QtWidgetModel* m)
-: QtWidgetParameterBase(m),
-  m_InputImageParam(param)
+QtFileSelectionWidget::QtFileSelectionWidget()
+  : QWidget(), m_Index(0), m_AsValue(false)
+{
+  m_InputList = InputImageListParameter::New();
+  this->DoCreateWidget();
+}
+
+QtFileSelectionWidget::QtFileSelectionWidget( InputImageListParameter * il )
+  : QWidget(), m_Index(0), m_AsValue(false)
+{
+  m_InputList = il;
+  this->DoCreateWidget();
+}
+
+QtFileSelectionWidget::~QtFileSelectionWidget()
 {
 }
 
-QtWidgetInputImageParameter::~QtWidgetInputImageParameter()
-{
-}
-
-void QtWidgetInputImageParameter::DoUpdateGUI()
+void QtFileSelectionWidget::DoUpdateGUI()
 {
 
 }
 
-void QtWidgetInputImageParameter::DoCreateWidget()
+void QtFileSelectionWidget::DoCreateWidget()
 {
+  unsigned int sp = 2;
   // Set up input text edit
   m_HLayout = new QHBoxLayout;
-  m_HLayout->setSpacing(0);
-  m_HLayout->setContentsMargins(0, 0, 0, 0);
+  m_HLayout->setSpacing(sp);
+  m_HLayout->setContentsMargins(sp, sp, sp, sp);
+
+  m_Checkbox = new QCheckBox();
+  m_HLayout->addWidget(m_Checkbox);
+
   m_Input = new QLineEdit;
-  m_Input->setToolTip( m_InputImageParam->GetDescription() );
-  connect( m_Input, SIGNAL(textChanged(const QString&)), this, SLOT(SetFileName(const QString&)) );
-  connect( m_Input, SIGNAL(textChanged(const QString&)), GetModel(), SLOT(NotifyUpdate()) );
+
+  //connect( m_Input, SIGNAL(textChanged(const QString&)), this, SLOT(SetFileName(const QString&)) );
+  //connect( m_Input, SIGNAL(textChanged(const QString&)), GetModel(), SLOT(NotifyUpdate()) );
 
   m_HLayout->addWidget(m_Input);
 
@@ -61,8 +74,9 @@ void QtWidgetInputImageParameter::DoCreateWidget()
   this->setLayout(m_HLayout);
 }
 
-void QtWidgetInputImageParameter::SelectFile()
+void QtFileSelectionWidget::SelectFile()
 {
+  std::cout<<this<<std::endl;
   QFileDialog fileDialog;
   fileDialog.setConfirmOverwrite(true);
   fileDialog.setFileMode(QFileDialog::ExistingFile);
@@ -70,12 +84,26 @@ void QtWidgetInputImageParameter::SelectFile()
 
   if (fileDialog.exec())
     {
-    this->SetFileName(fileDialog.selectedFiles().at(0));
-    m_Input->setText(fileDialog.selectedFiles().at(0));
+    //this->SetFileName(fileDialog.selectedFiles().at(0));
+    QString filemane(fileDialog.selectedFiles().at(0));
+    m_Input->setText(filemane);
+
+    if( m_AsValue == false )
+      {
+      m_InputList->AddFromFileName(filemane.toStdString());
+      m_Index = m_InputList->GetImageList()->Size()-1;
+      m_AsValue = true;
+      }
+    else
+      {
+      m_InputList->SetNthFileName( m_Index, filemane.toStdString());
+      }
+
     }
 }
 
-void QtWidgetInputImageParameter::SetFileName(const QString& value)
+/*
+void QtFileSelectionWidget::SetFileName(const QString& value)
 {
   // save value
   m_InputImageParam->SetFromFileName(value.toStdString());
@@ -84,6 +112,7 @@ void QtWidgetInputImageParameter::SetFileName(const QString& value)
   QString key( QString::fromStdString(m_InputImageParam->GetKey()) );
   emit ParameterChanged(key);
 }
+*/
 
 }
 }

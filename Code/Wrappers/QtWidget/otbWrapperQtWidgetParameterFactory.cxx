@@ -29,6 +29,7 @@
 #include "otbWrapperQtWidgetChoiceParameter.h"
 #include "otbWrapperQtWidgetListViewParameter.h"
 #include "otbWrapperQtWidgetInputImageParameter.h"
+#include "otbWrapperQtWidgetInputImageListParameter.h"
 #include "otbWrapperQtWidgetOutputImageParameter.h"
 #include "otbWrapperQtWidgetParameterGroup.h"
 
@@ -80,16 +81,17 @@ QtWidgetParameterFactory::CreateQtWidget( Parameter* param, QtWidgetModel* model
     }
 
   if (0) {}
-  CREATEWIDGET(EmptyParameter,       QtWidgetEmptyParameter)
-  CREATEWIDGET(IntParameter,         QtWidgetIntParameter)
-  CREATEWIDGET(FloatParameter,       QtWidgetFloatParameter)
-  CREATEWIDGET(StringParameter,      QtWidgetStringParameter)
-  CREATEWIDGET(ChoiceParameter,      QtWidgetChoiceParameter)
-  CREATEWIDGET(ListViewParameter,    QtWidgetListViewParameter)
-  CREATEWIDGET(InputImageParameter,  QtWidgetInputImageParameter)
-  CREATEWIDGET(OutputImageParameter, QtWidgetOutputImageParameter)
-  CREATEWIDGET(EmptyParameter,       QtWidgetEmptyParameter)
-  CREATEWIDGET(ParameterGroup,       QtWidgetParameterGroup)
+  CREATEWIDGET(EmptyParameter,          QtWidgetEmptyParameter)
+  CREATEWIDGET(IntParameter,            QtWidgetIntParameter)
+  CREATEWIDGET(FloatParameter,          QtWidgetFloatParameter)
+  CREATEWIDGET(StringParameter,         QtWidgetStringParameter)
+  CREATEWIDGET(ChoiceParameter,         QtWidgetChoiceParameter)
+  CREATEWIDGET(ListViewParameter,       QtWidgetListViewParameter)
+  CREATEWIDGET(InputImageParameter,     QtWidgetInputImageParameter)
+  CREATEWIDGET(InputImageListParameter, QtWidgetInputImageListParameter)
+  CREATEWIDGET(OutputImageParameter,    QtWidgetOutputImageParameter)
+  CREATEWIDGET(EmptyParameter,          QtWidgetEmptyParameter)
+  CREATEWIDGET(ParameterGroup,          QtWidgetParameterGroup)
 
 #undef CREATEWIDGET
 

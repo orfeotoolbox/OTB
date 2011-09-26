@@ -81,6 +81,22 @@ public:
     this->Modified();
   }
 
+ /** Set one specific stored image filename. */
+  void SetNthFileName( const unsigned int id, const std::string & filename )
+  {
+    if( m_ReaderList->Size()<id )
+      {
+      itkExceptionMacro(<< "No image "<<id<<". Only "<<m_ReaderList->Size()<<" images available.");
+      }
+    
+    ImageFileReaderType::Pointer reader = ImageFileReaderType::New();
+    reader->SetFileName(filename);
+    reader->UpdateOutputInformation();
+    m_ReaderList->SetNthElement(id, reader);
+    m_ImageList->SetNthElement(id, reader->GetOutput());
+  }
+
+
   /** Get the stored image filename list */
   std::vector<std::string> GetFileNameList() const
   {

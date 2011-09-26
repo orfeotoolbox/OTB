@@ -15,11 +15,11 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperQtWidgetInputImageParameter_h
-#define __otbWrapperQtWidgetInputImageParameter_h
+#ifndef __otbQtFileSelectionWidget_h
+#define __otbQtFileSelectionWidget_h
 
 #include <QtGui>
-#include "otbWrapperInputImageParameter.h"
+#include "otbWrapperInputImageListParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
 
 
@@ -31,31 +31,49 @@ namespace Wrapper
 /** \class
  * \brief
  */
-class QtWidgetInputImageParameter : public QtWidgetParameterBase
+class QtFileSelectionWidget : public QWidget
 {
   Q_OBJECT
-public:
-  QtWidgetInputImageParameter(InputImageParameter*, QtWidgetModel*);
-  virtual ~QtWidgetInputImageParameter();
+public: 
+  QtFileSelectionWidget();
+  QtFileSelectionWidget( InputImageListParameter * il );
+  virtual ~QtFileSelectionWidget();
+
+  InputImageListParameter * GetInputList()
+  {
+    return m_InputList;
+  }
+
+  void SetInputList(InputImageListParameter * il)
+  {
+    m_InputList = il;
+  }
+
+  unsigned int GetIndex()
+  {
+    return m_Index;
+  }
 
 protected slots:
-  void SetFileName( const QString& value );
+  //void SetFileName( const QString& value );
   void SelectFile();
 
 private:
-  QtWidgetInputImageParameter(const QtWidgetInputImageParameter&); //purposely not implemented
-  void operator=(const QtWidgetInputImageParameter&); //purposely not implemented
+  QtFileSelectionWidget(const QtFileSelectionWidget&); //purposely not implemented
+  void operator=(const QtFileSelectionWidget&); //purposely not implemented
 
   virtual void DoCreateWidget();
 
   virtual void DoUpdateGUI();
 
 
-  InputImageParameter::Pointer m_InputImageParam;
-
   QHBoxLayout * m_HLayout;
   QLineEdit*    m_Input;
   QPushButton * m_Button;
+  QCheckBox *   m_Checkbox;
+  InputImageListParameter::Pointer m_InputList;
+  unsigned int m_Index;
+  bool m_AsValue;
 };
 
 

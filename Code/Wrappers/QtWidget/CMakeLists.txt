@@ -8,6 +8,7 @@ set( WrappersQtWidget_MOC_HDR
        otbWrapperQtWidgetStringParameter.h
        otbWrapperQtWidgetChoiceParameter.h
        otbWrapperQtWidgetInputImageParameter.h
+       otbWrapperQtWidgetInputImageListParameter.h
        otbWrapperQtWidgetOutputImageParameter.h
        otbWrapperQtWidgetParameterGroup.h
        otbWrapperQtWidgetParameterLabel.h
@@ -16,8 +17,9 @@ set( WrappersQtWidget_MOC_HDR
        otbWrapperQtWidgetView.h
        otbWrapperQtWidgetProgressReport.h
        otbWrapperQtWidgetListViewParameter.h
+       otbQtFileSelectionWidget.h
        itkQtProgressBar.h
-       )
+      )
 
 QT4_WRAP_CPP(WrappersQtWidget_MOC_SRC ${WrappersQtWidget_MOC_HDR})
 
