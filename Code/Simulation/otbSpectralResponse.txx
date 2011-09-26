@@ -239,7 +239,7 @@ SpectralResponse<TPrecision, TValuePrecision>
   while ((*it).second <= m_SensitivityThreshold)
     {
     ++it;
-    if (it == m_Response.end())
+    if (it == (m_Response.end()-1))
       {
       m_Interval.first = static_cast<TPrecision> (0.0);
       m_Interval.second = static_cast<TPrecision> (0.0);
@@ -249,15 +249,16 @@ SpectralResponse<TPrecision, TValuePrecision>
 
     }
   m_Interval.first = (*it).first;
-
-  while ((*it).second > m_SensitivityThreshold)
+  it = (m_Response.end()-1);
+  while ((*it).second <= m_SensitivityThreshold)
     {
-    if (it == m_Response.end())
+    if (it == (m_Response.begin()))
       {
       m_Interval.second = (*it).first;
+      m_IntervalComputed = true;
       return;
       }
-    ++it;
+    --it;
 
     }
 
