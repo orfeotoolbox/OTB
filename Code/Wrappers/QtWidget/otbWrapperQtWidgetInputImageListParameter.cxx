@@ -16,7 +16,6 @@
 
 =========================================================================*/
 #include "otbWrapperQtWidgetInputImageListParameter.h"
-#include "otbQtFileSelectionWidget.h"
 
 namespace otb
 {
@@ -41,106 +40,114 @@ void QtWidgetInputImageListParameter::DoUpdateGUI()
 
 void QtWidgetInputImageListParameter::DoCreateWidget()
 {
+
   //m_FileSelectionList.clear();
   const unsigned int sp = 2;
   // Global layout
-  m_HLayout = new QHBoxLayout;
-  m_HLayout->setSpacing(sp);
-  m_HLayout->setContentsMargins(sp, sp, sp, sp);
-
+  QHBoxLayout * hLayout = new QHBoxLayout;
+  hLayout->setSpacing(sp);
+  hLayout->setContentsMargins(sp, sp, sp, sp);
+ 
   // Button layout
-  m_ButtonLayout = new QVBoxLayout;
-  m_ButtonLayout->setSpacing(sp);
-  m_ButtonLayout->setContentsMargins(sp, sp, sp, sp);
+  QVBoxLayout * buttonLayout = new QVBoxLayout;
+  buttonLayout->setSpacing(sp);
+  buttonLayout->setContentsMargins(sp, sp, sp, sp);
 
-  m_AddSupLayout = new QHBoxLayout;
-  m_AddSupLayout->setSpacing(sp);
-  m_AddSupLayout->setContentsMargins(sp, sp, sp, sp);
+  QHBoxLayout * addSupLayout = new QHBoxLayout;
+  addSupLayout->setSpacing(sp);
+  addSupLayout->setContentsMargins(sp, sp, sp, sp);
 
-  m_UpDownLayout = new QHBoxLayout;
-  m_UpDownLayout->setSpacing(sp);
-  m_UpDownLayout->setContentsMargins(sp, sp, sp, sp);
+  QHBoxLayout * upDownLayout = new QHBoxLayout;
+  upDownLayout->setSpacing(sp);
+  upDownLayout->setContentsMargins(sp, sp, sp, sp);
 
   // Add file button
-  m_AddButton = new QPushButton;
-  m_AddButton->setText("+");
-  m_AddButton->setToolTip("Add a file selector...");
-  m_AddButton->setMaximumWidth(m_AddButton->width());
-  connect( m_AddButton, SIGNAL(clicked()), this, SLOT(AddFile()) );
-  m_AddSupLayout->addWidget(m_AddButton);
+  QPushButton * addButton = new QPushButton;
+  addButton->setText("+");
+  addButton->setToolTip("Add a file selector...");
+  addButton->setMaximumWidth(addButton->width());
+  connect( addButton, SIGNAL(clicked()), this, SLOT(AddFile()) );
+  addSupLayout->addWidget(addButton);
 
   // Supress file button
-  m_SupButton = new QPushButton;
-  m_SupButton->setText("-");
-  m_SupButton->setToolTip("Supress the selected file...");
-  m_SupButton->setMaximumWidth(m_SupButton->width());
-  connect( m_SupButton, SIGNAL(clicked()), this, SLOT(SupressFile()) );
-  m_AddSupLayout->addWidget(m_SupButton);
-  m_ButtonLayout->addLayout(m_AddSupLayout);
+  QPushButton * supButton = new QPushButton;
+  supButton->setText("-");
+  supButton->setToolTip("Supress the selected file...");
+  supButton->setMaximumWidth(supButton->width());
+  connect( supButton, SIGNAL(clicked()), this, SLOT(SupressFile()) );
+  addSupLayout->addWidget(supButton);
+  buttonLayout->addLayout(addSupLayout);
 
   // Up file edit
-  m_UpButton = new QPushButton;
-  m_UpButton->setText("Up");
-  m_UpButton->setToolTip("Up the selected file in the list...");
-  m_UpButton->setMaximumWidth(m_UpButton->width());
-  connect( m_UpButton, SIGNAL(clicked()), this, SLOT(UpFile()) );
-  m_UpDownLayout->addWidget(m_UpButton);
+  QPushButton * upButton = new QPushButton;
+  upButton->setText("Up");
+  upButton->setToolTip("Up the selected file in the list...");
+  upButton->setMaximumWidth(upButton->width());
+  connect( upButton, SIGNAL(clicked()), this, SLOT(UpFile()) );
+  upDownLayout->addWidget(upButton);
 
   // Down file edit
-  m_DownButton = new QPushButton;
-  m_DownButton->setText("Down");
-  m_DownButton->setToolTip("Down the selected file in the list...");
-  m_DownButton->setMaximumWidth(m_DownButton->width());
-  connect( m_DownButton, SIGNAL(clicked()), this, SLOT(DownFile()) );
-  m_UpDownLayout->addWidget(m_DownButton);
-  m_ButtonLayout->addLayout(m_UpDownLayout);
+  QPushButton * downButton = new QPushButton;
+  downButton->setText("Down");
+  downButton->setToolTip("Down the selected file in the list...");
+  downButton->setMaximumWidth(downButton->width());
+  connect( downButton, SIGNAL(clicked()), this, SLOT(DownFile()) );
+  upDownLayout->addWidget(downButton);
+  buttonLayout->addLayout(upDownLayout);
 
   // Erase file edit
-  m_EraseButton = new QPushButton;
-  m_EraseButton->setText("Erase");
-  m_EraseButton->setToolTip("Erase the selected file of the list...");
-  m_EraseButton->setMaximumWidth(m_EraseButton->width());
-  connect( m_EraseButton, SIGNAL(clicked()), this, SLOT(EraseFile()) );
-  m_ButtonLayout->addWidget(m_EraseButton);
+  QPushButton * eraseButton = new QPushButton;
+  eraseButton->setText("Erase");
+  eraseButton->setToolTip("Erase the selected file of the list...");
+  eraseButton->setMaximumWidth(eraseButton->width());
+  connect( eraseButton, SIGNAL(clicked()), this, SLOT(EraseFile()) );
+  buttonLayout->addWidget(eraseButton);
 
-  m_FileLayout = new QVBoxLayout();
-/*
+  QVBoxLayout * fileLayout = new QVBoxLayout();
+
   QtFileSelectionWidget * fileSelection = new QtFileSelectionWidget();
-  m_FileLayout->addWidget( fileSelection );
-QtFileSelectionWidget * fileSelection1 = new QtFileSelectionWidget();
-  m_FileLayout->addWidget( fileSelection1 );
-QtFileSelectionWidget * fileSelection2 = new QtFileSelectionWidget();
-  m_FileLayout->addWidget( fileSelection2 );
-QtFileSelectionWidget * fileSelection3 = new QtFileSelectionWidget();
-  m_FileLayout->addWidget( fileSelection3 );
-QtFileSelectionWidget * fileSelection4 = new QtFileSelectionWidget();
-  m_FileLayout->addWidget( fileSelection4 );
-QtFileSelectionWidget * fileSelection5 = new QtFileSelectionWidget();
-  m_FileLayout->addWidget( fileSelection5 );
-QtFileSelectionWidget * fileSelection6 = new QtFileSelectionWidget();
-  m_FileLayout->addWidget( fileSelection6 );
+  fileSelection->setFixedHeight(40);
+  fileLayout->addWidget( fileSelection );
+/*
+  QtFileSelectionWidget * fileSelection1 = new QtFileSelectionWidget();
+  fileSelection1->setFixedHeight(40);
+  fileLayout->addWidget( fileSelection1 );
+  QtFileSelectionWidget * fileSelection2 = new QtFileSelectionWidget();
+  fileSelection2->setFixedHeight(40);
+  fileLayout->addWidget( fileSelection2 );
+  QtFileSelectionWidget * fileSelection3 = new QtFileSelectionWidget();
+  fileSelection3->setFixedHeight(40);
+  fileLayout->addWidget( fileSelection3 );
+  QtFileSelectionWidget * fileSelection4 = new QtFileSelectionWidget();
+  fileSelection4->setFixedHeight(40);
+  fileLayout->addWidget( fileSelection4 );
+  QtFileSelectionWidget * fileSelection5 = new QtFileSelectionWidget();
+  fileSelection5->setFixedHeight(40);
+  fileLayout->addWidget( fileSelection5 );
+  QtFileSelectionWidget * fileSelection6 = new QtFileSelectionWidget();
+  fileSelection6->setFixedHeight(40);
+  fileLayout->addWidget( fileSelection6 );
 */
- QLineEdit * fileSelection = new QLineEdit();
-  m_FileLayout->addWidget( fileSelection );
+  m_FileSelectionList.push_back(fileSelection);
+
   QGroupBox *mainGroup = new QGroupBox();
-  mainGroup->setLayout(m_FileLayout);
-  m_Scroll = new QScrollArea();
-  //m_Scroll->setLayout(m_FileLayout);
-  m_Scroll->setWidget(mainGroup);
-  m_Scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);//ScrollBarAlwaysOn);
-  m_Scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);//ScrollBarAlwaysOn);
+  mainGroup->setLayout(fileLayout);
+  QScrollArea * scroll = new QScrollArea();
+  scroll->setWidget(mainGroup);
+  scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);//ScrollBarAlwaysOn);
+  scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);//ScrollBarAlwaysOn);
 
-  QVBoxLayout  *scrollLayout = new QVBoxLayout();
-  scrollLayout->addWidget(m_Scroll);
+  hLayout->addWidget(scroll);
+  hLayout->addLayout(buttonLayout);
 
+  hLayout->addStretch();
+ 
+  this->setLayout(hLayout);
 
-  //m_HLayout->addWidget(m_Scroll);
-  m_HLayout->addLayout(scrollLayout);
-  m_HLayout->addLayout(m_ButtonLayout);
+ m_FileLayout = fileLayout;
+ m_HLayout = hLayout;
+ m_Scroll = scroll;
 
-  m_HLayout->addStretch();
-  
-  this->setLayout(m_HLayout);
 }
 
 void QtWidgetInputImageListParameter::SelectFile()
@@ -171,17 +178,21 @@ QtWidgetInputImageListParameter::DownFile()
 void
 QtWidgetInputImageListParameter::AddFile()
 {
-  //QtFileSelectionWidget * fileSelection = new
-  //QtFileSelectionWidget();
-  QLineEdit * fileSelection = new QLineEdit();
-  //std::cout<< fileSelection->height()<<std::endl;
-  //fileSelection->setMinimumHeight( 20 );//fileSelection->height() / 2 );
-  //std::cout<<fileSelection->minimumHeight()<<std::endl;
-  
+  m_FileLayout = new QVBoxLayout();
+  for(unsigned int i=0; i<m_FileSelectionList.size(); i++ )
+    {
+    m_FileLayout->addWidget( m_FileSelectionList[i] );
+    }
+
+  QtFileSelectionWidget * fileSelection = new QtFileSelectionWidget();
+  fileSelection->setFixedHeight( 40 ); 
   m_FileLayout->addWidget( fileSelection );
-  m_FileLayout->update();
-  m_Scroll->update();
-  m_HLayout->update();
+  m_FileSelectionList.push_back(fileSelection);
+
+  QGroupBox *mainGroup = new QGroupBox();
+  mainGroup->setLayout(m_FileLayout);
+  m_Scroll->setWidget(mainGroup);
+
   this->update();
 }
 
@@ -193,32 +204,37 @@ QtWidgetInputImageListParameter::SupressFile()
 void
 QtWidgetInputImageListParameter::EraseFile()
 {
+  m_FileSelectionList.clear();
+
   //m_HLayout->removeItem( m_FileLayout );
-  m_HLayout->removeWidget( m_Scroll );
-  m_HLayout->update();
+  //m_HLayout->removeWidget( m_Scroll );
+  //m_HLayout->update();
 
   m_FileLayout = new QVBoxLayout();
   //QtFileSelectionWidget * fileSelection = new QtFileSelectionWidget();
-  QLineEdit * fileSelection = new QLineEdit();
-  m_FileLayout->addWidget( fileSelection );
+  //QLineEdit * fileSelection = new QLineEdit();
+  //fileSelection->setFixedHeight( 40 );
+  //fileLayout->addWidget( fileSelection );
 
- QGroupBox *mainGroup = new QGroupBox();
+  QtFileSelectionWidget * fileSelection = new QtFileSelectionWidget();
+  fileSelection->setFixedHeight( 40 ); 
+  m_FileLayout->addWidget( fileSelection );
+  m_FileSelectionList.push_back(fileSelection);
+
+  QGroupBox *mainGroup = new QGroupBox();
   mainGroup->setLayout(m_FileLayout);
-  m_Scroll = new QScrollArea();
+  //m_Scroll = new QScrollArea();
   //m_Scroll->setLayout(m_FileLayout);
   m_Scroll->setWidget(mainGroup);
-  m_Scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);//ScrollBarAlwaysOn);
-  m_Scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);//ScrollBarAlwaysOn)
-/*
-  m_Scroll = new QScrollArea();
-    m_Scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);//AsNeeded);
-  m_Scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-  m_Scroll->setLayout(m_FileLayout);
-*/
+  //scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);//ScrollBarAlwaysOn);
+  //scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);//ScrollBarAlwaysOn)
 
-  m_HLayout->insertWidget(0, m_Scroll);
-  m_HLayout->update();
-  //m_HLayout->takeAt(2) = m_Scroll;
+  //m_HLayout->insertWidget(0, m_Scroll);
+  //m_HLayout->update();
+  this->update();
+  //m_FileLayout = fileLayout;
+  //m_Scroll = scroll;
+  
  std::cout<<"cleancleanclean"<<std::endl;
 }
 /*
