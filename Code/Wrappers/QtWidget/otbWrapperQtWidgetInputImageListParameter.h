@@ -69,7 +69,7 @@ private:
   QPushButton * m_UpButton;
   QPushButton * m_DownButton;
   QScrollArea * m_Scroll;
-  std::vector<QtFileSelectionWidget *> m_FileSelectionList; 
+  std::vector<QtFileSelectionWidget *> m_FileSelectionList;
 };
 
 

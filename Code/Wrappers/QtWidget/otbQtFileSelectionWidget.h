@@ -34,7 +34,7 @@ namespace Wrapper
 class QtFileSelectionWidget : public QWidget
 {
   Q_OBJECT
-public: 
+public:
   QtFileSelectionWidget();
   QtFileSelectionWidget( InputImageListParameter * il );
   virtual ~QtFileSelectionWidget();

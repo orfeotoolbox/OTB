@@ -134,8 +134,8 @@ void QtWidgetInputImageListParameter::DoCreateWidget()
   mainGroup->setLayout(fileLayout);
   QScrollArea * scroll = new QScrollArea();
   scroll->setWidget(mainGroup);
-  scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);//ScrollBarAlwaysOn);
-  scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);//ScrollBarAlwaysOn);
+  scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded); //ScrollBarAlwaysOn);
+  scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded); //ScrollBarAlwaysOn);
 
   hLayout->addWidget(scroll);
   hLayout->addLayout(buttonLayout);
@@ -185,7 +185,7 @@ QtWidgetInputImageListParameter::AddFile()
     }
 
   QtFileSelectionWidget * fileSelection = new QtFileSelectionWidget();
-  fileSelection->setFixedHeight( 40 ); 
+  fileSelection->setFixedHeight( 40 );
   m_FileLayout->addWidget( fileSelection );
   m_FileSelectionList.push_back(fileSelection);
 
@@ -217,7 +217,7 @@ QtWidgetInputImageListParameter::EraseFile()
   //fileLayout->addWidget( fileSelection );
 
   QtFileSelectionWidget * fileSelection = new QtFileSelectionWidget();
-  fileSelection->setFixedHeight( 40 ); 
+  fileSelection->setFixedHeight( 40 );
   m_FileLayout->addWidget( fileSelection );
   m_FileSelectionList.push_back(fileSelection);
 
@@ -226,8 +226,8 @@ QtWidgetInputImageListParameter::EraseFile()
   //m_Scroll = new QScrollArea();
   //m_Scroll->setLayout(m_FileLayout);
   m_Scroll->setWidget(mainGroup);
-  //scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);//ScrollBarAlwaysOn);
-  //scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);//ScrollBarAlwaysOn)
+  //scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded); //ScrollBarAlwaysOn);
+  //scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded); //ScrollBarAlwaysOn)
 
   //m_HLayout->insertWidget(0, m_Scroll);
   //m_HLayout->update();
