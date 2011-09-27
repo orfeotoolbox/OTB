@@ -39,7 +39,7 @@ void QtWidgetInputImageListParameter::DoUpdateGUI()
 
 void QtWidgetInputImageListParameter::DoCreateWidget()
 {
-hg   m_FileSelectionList.clear();
+  m_FileSelectionList.clear();
   const unsigned int sp(2);
   const unsigned int buttonSize(30);
 
