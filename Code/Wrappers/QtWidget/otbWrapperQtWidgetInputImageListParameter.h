@@ -40,7 +40,7 @@ public:
 
 protected slots:
   //void SetFileName( const QString& value );
-  virtual void SelectFile();
+  //virtual void SelectFile();
   virtual void UpFile();
   virtual void DownFile();
   virtual void AddFile();
@@ -56,18 +56,21 @@ private:
 
   virtual void DoUpdateGUI();
 
+  void RecreateImageList();
+  void UpdateFileList( std::map<unsigned int, unsigned int> idMap );
+
   InputImageListParameter::Pointer m_InputImageListParam;
 
   QHBoxLayout * m_HLayout;
   QVBoxLayout * m_FileLayout;
-  QVBoxLayout * m_ButtonLayout;
-  QHBoxLayout * m_AddSupLayout;
-  QHBoxLayout * m_UpDownLayout;
-  QPushButton * m_SupButton;
-  QPushButton * m_AddButton;
-  QPushButton * m_EraseButton;
-  QPushButton * m_UpButton;
-  QPushButton * m_DownButton;
+  //QVBoxLayout * m_ButtonLayout;
+  //QHBoxLayout * m_AddSupLayout;
+  //QHBoxLayout * m_UpDownLayout;
+  //QPushButton * m_SupButton;
+  //QPushButton * m_AddButton;
+  //QPushButton * m_EraseButton;
+  //QPushButton * m_UpButton;
+  //QPushButton * m_DownButton;
   QScrollArea * m_Scroll;
   std::vector<QtFileSelectionWidget *> m_FileSelectionList;
 };

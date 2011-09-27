@@ -39,6 +39,7 @@ public:
   QtFileSelectionWidget( InputImageListParameter * il );
   virtual ~QtFileSelectionWidget();
 
+/*
   InputImageListParameter * GetInputList()
   {
     return m_InputList;
@@ -48,7 +49,9 @@ public:
   {
     m_InputList = il;
   }
+*/
 
+/*
   unsigned int GetIndex()
   {
     return m_Index;
@@ -58,7 +61,7 @@ public:
   {
     m_Index = id;
   }
-
+*/
 
   bool IsChecked()
   {
@@ -68,6 +71,11 @@ public:
   void SetChecked( bool val )
   {
     return m_Checkbox->setChecked( val );
+  }
+
+  std::string GetFilename()
+  {
+    return m_Input->text().toStdString();
   }
 
 
@@ -88,9 +96,9 @@ private:
   QLineEdit*    m_Input;
   QPushButton * m_Button;
   QCheckBox *   m_Checkbox;
-  InputImageListParameter::Pointer m_InputList;
-  unsigned int m_Index;
-  bool m_AsValue;
+  //InputImageListParameter::Pointer m_InputList;
+  //unsigned int m_Index;
+  //bool m_AsValue;
 };
 
 

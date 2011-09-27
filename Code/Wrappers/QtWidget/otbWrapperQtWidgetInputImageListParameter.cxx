@@ -24,8 +24,7 @@ namespace Wrapper
 
 QtWidgetInputImageListParameter::QtWidgetInputImageListParameter(InputImageListParameter* param, QtWidgetModel* m)
 : QtWidgetParameterBase(m),
-  m_InputImageListParam(param)/*,
-  m_FileSelectionList()*/
+  m_InputImageListParam(param)
 {
 }
 
@@ -138,20 +137,6 @@ hg   m_FileSelectionList.clear();
 
 }
 
-void QtWidgetInputImageListParameter::SelectFile()
-{
-  QFileDialog fileDialog;
-  fileDialog.setConfirmOverwrite(true);
-  fileDialog.setFileMode(QFileDialog::ExistingFile);
-  fileDialog.setNameFilter("Raster files (*)");
-
-  if (fileDialog.exec())
-    {
-    //this->SetFileName(fileDialog.selectedFiles().at(0));
-    //m_Input->setText(fileDialog.selectedFiles().at(0));
-    }
-}
-
 
 void
 QtWidgetInputImageListParameter::UpFile()
@@ -161,7 +146,8 @@ QtWidgetInputImageListParameter::UpFile()
 
   m_FileLayout = new QVBoxLayout();
   m_FileLayout->setSpacing(2);
-  std::vector<QtFileSelectionWidget *> tmpList;
+  m_FileLayout->addStretch();
+
   // Map link between old and new index in the list
   std::map<unsigned int, unsigned int> idMap;
   
@@ -191,28 +177,9 @@ QtWidgetInputImageListParameter::UpFile()
       }
     }
 
-   // Keys become values and inverse
-   std::map<unsigned int, unsigned int> idMapBis;
-   for(unsigned int i=0; i<idMap.size(); i++ )
-     {
-     idMapBis[ idMap[i] ] = i;
-     }
-
-  // Create the new item list
-  for(unsigned int i=0; i<m_FileSelectionList.size(); i++ )
-    {
-    m_FileLayout->addWidget( m_FileSelectionList[ idMapBis[i] ] );
-    tmpList.push_back(m_FileSelectionList[ idMapBis[i] ]);
-    }
-      
-  m_FileSelectionList =  tmpList;
-  
-
-  QGroupBox *mainGroup = new QGroupBox();
-  mainGroup->setLayout(m_FileLayout);
-  m_Scroll->setWidget(mainGroup);
-
-  this->update();
+  this->UpdateFileList( idMap );
+ 
+  this->RecreateImageList();
 }
 
 void
@@ -223,7 +190,8 @@ QtWidgetInputImageListParameter::DownFile()
 
   m_FileLayout = new QVBoxLayout();
   m_FileLayout->setSpacing(0);
-  std::vector<QtFileSelectionWidget *> tmpList;
+  m_FileLayout->addStretch();
+
   // Map link between old and new index in the list
   std::map<unsigned int, unsigned int> idMap;
   
@@ -253,37 +221,38 @@ QtWidgetInputImageListParameter::DownFile()
       }
     }
     
- // Keys become values and inverse
-   std::map<unsigned int, unsigned int> idMapBis;
-   for(unsigned int i=0; i<idMap.size(); i++ )
-     {
-     idMapBis[ idMap[i] ] = i;
-     }
+  this->UpdateFileList( idMap );
 
+  this->RecreateImageList();
+}
+
+
+void
+QtWidgetInputImageListParameter::UpdateFileList( std::map<unsigned int, unsigned int> idMap )
+{
+  std::vector<QtFileSelectionWidget *> tmpList;
+  // Keys become values and inverse
+  std::map<unsigned int, unsigned int> idMapBis;
+  for(unsigned int i=0; i<idMap.size(); i++ )
+    {
+    idMapBis[ idMap[i] ] = i;
+    }
+  
   // Create the new item list
   for(unsigned int i=0; i<m_FileSelectionList.size(); i++ )
     {
-  // Update QtFileSelectionWidget index
-    m_FileSelectionList[ idMapBis[i] ]->SetIndex(idMapBis[i]);
     m_FileLayout->addWidget( m_FileSelectionList[ idMapBis[i] ] );
     tmpList.push_back(m_FileSelectionList[ idMapBis[i] ]);
     }
-      
-  // Update input image list parameter order
-  m_InputImageListParam->SwitchOrder( idMapBis );
-
-  // Update QtFileSelectionWidget index
-
-
+  
+  
   m_FileSelectionList =  tmpList;
-
   QGroupBox *mainGroup = new QGroupBox();
   mainGroup->setLayout(m_FileLayout);
   m_Scroll->setWidget(mainGroup);
-
+  
   this->update();
 }
-
 
 
 void
@@ -291,12 +260,13 @@ QtWidgetInputImageListParameter::AddFile()
 {
   m_FileLayout = new QVBoxLayout();
   m_FileLayout->setSpacing(0);
+  m_FileLayout->addStretch();
   for(unsigned int i=0; i<m_FileSelectionList.size(); i++ )
     {
     m_FileLayout->addWidget( m_FileSelectionList[i] );
     }
 
-  QtFileSelectionWidget * fileSelection = new QtFileSelectionWidget(m_InputImageListParam);
+  QtFileSelectionWidget * fileSelection = new QtFileSelectionWidget();
   fileSelection->setFixedHeight( 30 ); 
   m_FileLayout->addWidget( fileSelection );
   m_FileSelectionList.push_back(fileSelection);
@@ -306,6 +276,7 @@ QtWidgetInputImageListParameter::AddFile()
   m_Scroll->setWidget(mainGroup);
 
   this->update();
+  this->RecreateImageList();
 }
 
 void
@@ -313,25 +284,15 @@ QtWidgetInputImageListParameter::SupressFile()
 {
   m_FileLayout = new QVBoxLayout();
   m_FileLayout->setSpacing(0);
+  m_FileLayout->addStretch();
   std::vector<QtFileSelectionWidget *> tmpList;
   for(unsigned int i=0; i<m_FileSelectionList.size(); i++ )
     {
     if( !m_FileSelectionList[i]->IsChecked() )
       {
       m_FileLayout->addWidget( m_FileSelectionList[i] );
+      tmpList.push_back(m_FileSelectionList[i]);
       }
-    else
-      {
-      const unsigned int curId( m_FileSelectionList[i]->GetIndex() );
-      for(unsigned int j=0; j<m_FileSelectionList.size(); j++ )
-        {
-        if( m_FileSelectionList[j]->GetIndex() > curId )
-          {
-          m_FileSelectionList[j]->SetIndex( m_FileSelectionList[j]->GetIndex()-1 );
-          }
-        }
-      }
-    tmpList.push_back(m_FileSelectionList[i]);
     }
       
   m_FileSelectionList =  tmpList;
@@ -341,7 +302,7 @@ QtWidgetInputImageListParameter::SupressFile()
   m_Scroll->setWidget(mainGroup);
 
   this->update();
- std::cout<<"supsupsup"<<std::endl;
+  this->RecreateImageList();
 }
 
 
@@ -352,7 +313,7 @@ QtWidgetInputImageListParameter::EraseFile()
 
   m_FileLayout = new QVBoxLayout();
 
-  QtFileSelectionWidget * fileSelection = new QtFileSelectionWidget(m_InputImageListParam);
+  QtFileSelectionWidget * fileSelection = new QtFileSelectionWidget();
   fileSelection->setFixedHeight( 40 );
   m_FileLayout->addWidget( fileSelection );
   m_FileSelectionList.push_back(fileSelection);
@@ -362,18 +323,25 @@ QtWidgetInputImageListParameter::EraseFile()
   m_Scroll->setWidget(mainGroup);
 
   this->update();
+  this->RecreateImageList();
 }
-/*
-void QtWidgetInputImageListParameter::SetFileName(const QString& value)
+
+
+void QtWidgetInputImageListParameter::RecreateImageList()
 {
   // save value
-  m_InputImageParam->SetFromFileName(value.toStdString());
+  m_InputImageListParam->Clear();
+  for(unsigned int j=0; j<m_FileSelectionList.size(); j++ )
+    {
+    if( m_FileSelectionList[j]->GetFilename() != "" )
+      m_InputImageListParam->AddFromFileName(m_FileSelectionList[j]->GetFilename());
+    }
 
   // notify of value change
-  QString key( QString::fromStdString(m_InputImageParam->GetKey()) );
+  QString key( QString::fromStdString(m_InputImageListParam->GetKey()) );
   emit ParameterChanged(key);
 }
-*/
+
 
 
 }

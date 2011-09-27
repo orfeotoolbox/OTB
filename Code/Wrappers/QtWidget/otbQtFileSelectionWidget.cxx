@@ -23,16 +23,16 @@ namespace Wrapper
 {
 
 QtFileSelectionWidget::QtFileSelectionWidget()
-  : QWidget(), m_Index(0), m_AsValue(false)
+  : QWidget() /*, m_Index(0), m_AsValue(false)*/
 {
-  m_InputList = InputImageListParameter::New();
+  //m_InputList = InputImageListParameter::New();
   this->DoCreateWidget();
 }
 
 QtFileSelectionWidget::QtFileSelectionWidget( InputImageListParameter * il )
-  : QWidget(), m_Index(0), m_AsValue(false)
+  : QWidget()/*, m_Index(0), m_AsValue(false)*/
 {
-  m_InputList = il;
+  //m_InputList = il;
   this->DoCreateWidget();
 }
 
@@ -85,7 +85,7 @@ void QtFileSelectionWidget::SelectFile()
     //this->SetFileName(fileDialog.selectedFiles().at(0));
     QString filemane(fileDialog.selectedFiles().at(0));
     m_Input->setText(filemane);
-
+/*
     if( m_AsValue == false )
       {
       m_InputList->AddFromFileName(filemane.toStdString());
@@ -96,21 +96,10 @@ void QtFileSelectionWidget::SelectFile()
       {
       m_InputList->SetNthFileName( m_Index, filemane.toStdString());
       }
-
+*/
     }
 }
 
-/*
-void QtFileSelectionWidget::SetFileName(const QString& value)
-{
-  // save value
-  m_InputImageParam->SetFromFileName(value.toStdString());
-
-  // notify of value change
-  QString key( QString::fromStdString(m_InputImageParam->GetKey()) );
-  emit ParameterChanged(key);
-}
-*/
 
 }
 }

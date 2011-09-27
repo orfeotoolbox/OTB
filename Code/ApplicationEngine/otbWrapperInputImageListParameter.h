@@ -187,32 +187,13 @@ public:
     m_ReaderList->Erase( id );
   }
 
-  void ClearValue()
+  void Clear()
   {
-    m_ImageList = FloatVectorImageListType::Pointer();
-    m_ReaderList = ImageFileReaderListType::Pointer();
+    m_ImageList->Clear();
+    m_ReaderList->Clear();
   }
 
-  void SwitchOrder( std::map<unisgned int, unsigned int> idMap )
-  {
-    if(idMap.size() != m_ImageList->Size())
-      {
-      itkExceptionMacro(<< "Map size and the number of image mismatches ("<<idMap.size()<<" vs. "<<m_ImageList->Size()<<").");
-      }
-
-    FloatVectorImageListType::Pointer tmpImageList = FloatVectorImageListType::New();
-    ImageFileReaderListType::Pointer  tmpReaderList = ImageFileReaderListType::New();
-
-    for( unsigned int i=0; i<idMap.size(); i++)
-      {
-      tmpImageList->PushBack( m_ImageList->GetNthElement(idMap[i]) );
-      tmpReaderList->PushBack( m_ReaderList->GetNthElement(idMap[i]) );
-
-      m_ReaderList = tmpReaderList;
-      m_ImageList = tmpImageList;
-      }
-  }
-
+ 
 protected:
   /** Constructor */
   InputImageListParameter()
