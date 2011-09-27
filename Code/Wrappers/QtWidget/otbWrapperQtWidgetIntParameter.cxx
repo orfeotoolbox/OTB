@@ -23,7 +23,7 @@ namespace Wrapper
 {
 
 QtWidgetIntParameter::QtWidgetIntParameter(IntParameter* param, QtWidgetModel* m)
-: QtWidgetParameterBase(m),
+: QtWidgetParameterBase(param, m),
   m_IntParam(param)
 {
 }
@@ -73,7 +73,6 @@ void QtWidgetIntParameter::DoUpdateGUI()
     font.setBold(false);
     }
   m_QSpinBox->setFont(font);
-
 }
 
 void QtWidgetIntParameter::SetValue(int value)

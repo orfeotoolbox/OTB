@@ -23,7 +23,7 @@ namespace Wrapper
 {
 
 QtWidgetFloatParameter::QtWidgetFloatParameter(FloatParameter* floatParam, QtWidgetModel* m)
-: QtWidgetParameterBase(m),
+: QtWidgetParameterBase(floatParam, m),
   m_FloatParam(floatParam)
 {
 }
@@ -73,7 +73,6 @@ void QtWidgetFloatParameter::DoCreateWidget()
   m_QHBoxLayout->addStretch();
 
   this->setLayout(m_QHBoxLayout);
-
 }
 
 void QtWidgetFloatParameter::SetValue(double value)

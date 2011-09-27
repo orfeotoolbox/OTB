@@ -23,7 +23,7 @@ namespace Wrapper
 {
 
 QtWidgetInputImageListParameter::QtWidgetInputImageListParameter(InputImageListParameter* param, QtWidgetModel* m)
-: QtWidgetParameterBase(m),
+: QtWidgetParameterBase(param, m),
   m_InputImageListParam(param)
 {
 }

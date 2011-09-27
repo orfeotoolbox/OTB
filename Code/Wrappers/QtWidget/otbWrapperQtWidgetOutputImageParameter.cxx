@@ -24,7 +24,7 @@ namespace Wrapper
 {
 
 QtWidgetOutputImageParameter::QtWidgetOutputImageParameter(OutputImageParameter* param, QtWidgetModel* m)
-: QtWidgetParameterBase(m),
+: QtWidgetParameterBase(param, m),
   m_OutputImageParam(param)
 {
 }

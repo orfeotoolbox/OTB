@@ -26,7 +26,7 @@ namespace Wrapper
 {
 
 QtWidgetChoiceParameter::QtWidgetChoiceParameter(ChoiceParameter* param, QtWidgetModel* m)
-: QtWidgetParameterBase(m),
+: QtWidgetParameterBase(param, m),
   m_ChoiceParam(param)
 {
 }

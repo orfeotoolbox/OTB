@@ -23,7 +23,7 @@ namespace Wrapper
 {
 
 QtWidgetStringParameter::QtWidgetStringParameter(StringParameter* param, QtWidgetModel* m)
-: QtWidgetParameterBase(m),
+: QtWidgetParameterBase(param, m),
   m_StringParam(param)
 {
 }
