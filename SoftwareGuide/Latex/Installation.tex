@@ -176,6 +176,19 @@ sudo zypper install Monteverdi-beta
 sudo zypper install Orfeo-Applications-beta
 \end{verbatim}
 
+There is also support for the recently introduced 'rolling' openSUSE distribution named 'Tumbleweed'.
+For Tumbleweed you need to add the following repositories with these command-lines:
+\begin{verbatim}
+sudo zypper ar 
+http://download.opensuse.org/repositories/games/openSUSE_Tumbleweed/ Games
+sudo zypper ar 
+http://download.opensuse.org/repositories/Application:/Geo/openSUSE_Tumbleweed/ GEO
+sudo zypper ar 
+http://download.opensuse.org/repositories/home:/tzotsos/openSUSE_Tumbleweed/ tzotsos
+\end{verbatim}
+and then add the OTB packages as shown above.
+
+
 \section{Building from sources}
 \label{sec:source}
 OTB has been developed and tested across different combinations of
