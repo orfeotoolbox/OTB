@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperQtEmptyWidgetFactory_h
-#define __otbWrapperQtEmptyWidgetFactory_h
+#ifndef __otbWrapperQtWidgetEmptyParameter_h
+#define __otbWrapperQtWidgetEmptyParameter_h
 
 #include <QtGui>
 #include "otbWrapperEmptyParameter.h"
