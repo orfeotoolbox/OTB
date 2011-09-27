@@ -40,6 +40,10 @@ ChoiceParameter::AddChoice( std::string choicekey, std::string choiceName )
   choice.m_Name = choiceName;
   choice.m_AssociatedParameter = ParameterGroup::New();
   m_ChoiceList.push_back(choice);
+
+  // Add the associated parameter as a child
+  // in order to not have a gap in the children hierarchy
+  this->AddChild(choice.m_AssociatedParameter.GetPointer());
 }
 
 std::string
