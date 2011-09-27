@@ -58,16 +58,15 @@ void QtFileSelectionWidget::DoCreateWidget()
 
   m_Input = new QLineEdit;
 
-  //connect( m_Input, SIGNAL(textChanged(const QString&)), this, SLOT(SetFileName(const QString&)) );
-  //connect( m_Input, SIGNAL(textChanged(const QString&)), GetModel(), SLOT(NotifyUpdate()) );
-
   m_HLayout->addWidget(m_Input);
 
   // Set up input text edit
   m_Button = new QPushButton;
   m_Button->setText("...");
   m_Button->setToolTip("Select file...");
-  m_Button->setMaximumWidth(m_Button->width());
+  m_Button->setFixedWidth(30);
+ 
+  //m_Button->setMaximumWidth(m_Button->width());
   connect( m_Button, SIGNAL(clicked()), this, SLOT(SelectFile()) );
   m_HLayout->addWidget(m_Button);
 
@@ -76,7 +75,6 @@ void QtFileSelectionWidget::DoCreateWidget()
 
 void QtFileSelectionWidget::SelectFile()
 {
-  std::cout<<this<<std::endl;
   QFileDialog fileDialog;
   fileDialog.setConfirmOverwrite(true);
   fileDialog.setFileMode(QFileDialog::ExistingFile);

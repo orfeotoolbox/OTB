@@ -54,6 +54,23 @@ public:
     return m_Index;
   }
 
+  unsigned int SetIndex( unsigned int id )
+  {
+    m_Index = id;
+  }
+
+
+  bool IsChecked()
+  {
+    return m_Checkbox->isChecked();
+  }
+
+  void SetChecked( bool val )
+  {
+    return m_Checkbox->setChecked( val );
+  }
+
+
 protected slots:
   //void SetFileName( const QString& value );
   void SelectFile();
