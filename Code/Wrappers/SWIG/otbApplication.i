@@ -51,16 +51,19 @@ namespace Wrapper
     ParameterType_Int,
     ParameterType_Float,
     ParameterType_String,
+    ParameterType_StringList,
     ParameterType_Filename,
     ParameterType_Directory,
     ParameterType_Choice,
     ParameterType_InputImage,
+    ParameterType_InputImageList,
     ParameterType_InputComplexImage,
     ParameterType_InputVectorData,
     ParameterType_OutputImage,
     ParameterType_OutputVectorData,
     ParameterType_Radius,
     ParameterType_Group,
+    ParameterType_ListView,
   } ParameterType;
   
   typedef enum
@@ -68,6 +71,19 @@ namespace Wrapper
     UserLevel_Basic,
     UserLevel_Advanced
   } UserLevel;
+  
+  typedef enum
+  {
+    ImagePixelType_int8,
+    ImagePixelType_uint8,
+    ImagePixelType_int16,
+    ImagePixelType_uint16,
+    ImagePixelType_int32,
+    ImagePixelType_uint32,
+    ImagePixelType_float,
+    ImagePixelType_double,
+  } ImagePixelType;
+  
 }
 }
 
@@ -88,6 +104,7 @@ public:
   std::vector<std::string> GetParametersKeys(bool recursive = true);
   std::string GetParameterName(std::string);
   std::string GetParameterDescription(std::string);
+  void SetParameterDescription(std::string paramKey, std::string dec);
   
   void EnableParameter(std::string paramKey);
   void DisableParameter(std::string paramKey);
@@ -98,32 +115,31 @@ public:
   bool HasValue(std::string paramKey) const;
   otb::Wrapper::UserLevel GetParameterUserLevel(std::string paramKey) const;
   otb::Wrapper::ParameterType GetParameterType(std::string paramKey) const;
+ 
+  std::vector<std::string> GetChoiceKeys(std::string choiceKey);
+  std::vector<std::string> GetChoiceNames(std::string choiceKey);
+  
+  bool IsApplicationReady();
   
   void SetParameterInt(std::string parameter, int value);
   void SetParameterFloat(std::string parameter, float value);
   void SetParameterString(std::string parameter, std::string value);
+  void SetParameterStringList(std::string parameter, std::vector<std::string> value);
+  
   
   int GetParameterInt(std::string parameter);
   float GetParameterFloat(std::string parameter);
   std::string GetParameterString(std::string parameter);
-
-  std::vector<std::string> GetChoiceKeys(std::string choiceKey);
-  std::vector<std::string> GetChoiceNames(std::string choiceKey);
+  std::vector<std::string> GetParameterStringList(std::string parameter);
+  
+  std::string GetParameterAsString(std::string paramKey);
+  std::vector<std::string> GetParametersKeys(bool recursive);
   
 protected:
   Application();
   //virtual ~Application();
-  
-  void AddChoice(std::string paramKey, std::string paramName);
-  void AddParameter(otb::Wrapper::ParameterType type, std::string paramKey, std::string paramName);
-  void MandatoryOn(std::string paramKey);
-  void MandatoryOff(std::string paramKey);
-  void SetParameterUserLevel(std::string paramKey, otb::Wrapper::UserLevel level);
-  
+
 private:
-  virtual void DoCreateParameters() = 0;
-  virtual void DoUpdateParameters() = 0;
-  virtual void DoExecute() = 0;
 
   Application(const Application &);
   void operator =(const Application&);
