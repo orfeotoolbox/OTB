@@ -34,19 +34,23 @@ class QtWidgetParameterBase : public QWidget
 {
   Q_OBJECT
 public:
-  QtWidgetParameterBase(QtWidgetModel*);
+  QtWidgetParameterBase(Parameter *, QtWidgetModel*);
   virtual ~QtWidgetParameterBase();
 
   void CreateWidget();
 
 public slots:
   void UpdateGUI();
+  void SetValue( int value );
+  void SetValue( bool v );
 
 protected slots:
   void ParameterChanged(const QString& key);
 
 protected:
   QtWidgetModel* GetModel();
+
+  virtual void ProcessChild(Parameter * currentNode, bool status);
 
 private:
   QtWidgetParameterBase(const QtWidgetParameterBase&); //purposely not implemented
@@ -57,6 +61,8 @@ private:
   virtual void DoCreateWidget() = 0;
 
   QtWidgetModel* m_Model;
+
+  Parameter*      m_Param;
 };
 
 
