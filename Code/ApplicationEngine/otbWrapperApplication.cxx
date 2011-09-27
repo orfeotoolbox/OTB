@@ -45,9 +45,6 @@ namespace Wrapper
 Application::Application()
  : m_Name(""),
    m_Description(""),
-   m_CurrentProcess(),
-   m_InternalProcessList(),
-   m_InternalProcessListName(),
    m_WroteOutput(0),
    m_Logger(itk::Logger::New())
 {
@@ -99,7 +96,6 @@ const Parameter* Application::GetParameterByKey(std::string name) const
 void Application::Init()
 {
   m_ParameterList = ParameterGroup::New();
-  m_CurrentProcess = NULL;
   this->DoCreateParameters();
 }
 
@@ -128,7 +124,6 @@ void Application::ExecuteAndWriteOutput()
       Parameter* param = GetParameterByKey(*it);
       OutputImageParameter* outputParam = dynamic_cast<OutputImageParameter*>(param);
       outputParam->InitializeWriters();
-      m_CurrentProcess = outputParam->GetWriter();
       AddProcess(outputParam->GetWriter(),"Writer ");
       outputParam->Write();
       m_WroteOutput++;
@@ -720,32 +715,6 @@ void
 Application::AddParameter(ParameterType type, std::string paramKey, std::string paramName)
 {
   GetParameterList()->AddParameter(type, paramKey, paramName);
-}
-
-
-double
-Application::GetExecuteProgress()
-{
-  double res = -1;
-  if ( m_CurrentProcess.IsNotNull() )
-    {
-      res = m_CurrentProcess->GetProgress();
-    }
-
-  return res;
-}
-
-
-std::vector<double>
-Application::GetDoExecuteProgress()
-{
-  std::vector<double> res;
-  for(unsigned int i=0; i<m_InternalProcessList.size(); i++)
-    {
-      res.push_back(m_InternalProcessList[i]->GetProgress());
-    }
-
-  return res;
 }
 
 bool

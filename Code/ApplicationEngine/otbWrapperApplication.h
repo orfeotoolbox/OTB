@@ -318,39 +318,6 @@ public:
    */
   std::vector<std::string> GetParametersKeys(bool recursive = true);
 
-  virtual double GetExecuteProgress();
-  virtual std::vector<double> GetDoExecuteProgress();
-  
-  std::vector<itk::ProcessObject *> GetInternalProcessList(){
-    return m_InternalProcessList;
-  }
- 
-  void SetInternalProcessList(  std::vector<itk::ProcessObject *> lList ){
-    m_InternalProcessList = lList;
-    this->Modified();
-  }
-
-  std::vector<std::string> GetInternalProcessListName(){
-    return m_InternalProcessListName;
-  }
- 
-  void SetInternalProcessListName(  std::vector<std::string> lList ){
-    m_InternalProcessListName = lList;
-    this->Modified();
-  }
-
-  void AddInternalProcess( itk::ProcessObject * lProcess, const std::string & name ){
-    m_InternalProcessList.push_back( lProcess );
-    m_InternalProcessListName.push_back( name );
-    this->Modified();
-  }
-
-  void ClearInternalProcessList( ){
-    m_InternalProcessList.clear();
-    m_InternalProcessListName.clear();
-    this->Modified();
-  }
-
   itk::Logger* GetLogger();
 
   void AddProcess(itk::ProcessObject* object, std::string description);
@@ -401,9 +368,6 @@ private:
   std::string                       m_Name;
   std::string                       m_Description;
   ParameterGroup::Pointer           m_ParameterList;
-  itk::ProcessObject::Pointer       m_CurrentProcess;
-  std::vector<itk::ProcessObject *> m_InternalProcessList;
-  std::vector<std::string>          m_InternalProcessListName;
   unsigned int                      m_WroteOutput;
 
   itk::Logger::Pointer              m_Logger;

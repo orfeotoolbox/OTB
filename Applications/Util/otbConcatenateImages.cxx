@@ -81,7 +81,6 @@ private:
     m_Concatener = ListConcatenerFilterType::New();
     m_ImageList = FloatImageListType::New();
     m_ExtractorList = ExtractROIFilterListType::New();
-    this->ClearInternalProcessList();
   }
 
   void DoExecute()
