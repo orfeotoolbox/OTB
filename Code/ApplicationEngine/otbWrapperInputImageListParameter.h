@@ -50,163 +50,51 @@ public:
   itkTypeMacro(InputImageListParameter, Parameter);
 
   /** Set image form a list of filename */
-  void SetListFromFileName(const std::vector<std::string> & filenames)
-  {
-    for(unsigned int i=0; i<filenames.size(); i++)
-      {
-        ImageFileReaderType::Pointer reader = ImageFileReaderType::New();
-        reader->SetFileName(filenames[i]);
-        reader->UpdateOutputInformation();
-        
-        // everything went fine, store the object references
-        m_ReaderList->PushBack(reader);
-        m_ImageList->PushBack(reader->GetOutput());
-      }
-    SetActive(true);
+  void SetListFromFileName(const std::vector<std::string> & filenames);
 
-    this->Modified();
-  }
 
   /** Add an image from a filename */
-  void AddFromFileName(const std::string & filename)
-  {
-    ImageFileReaderType::Pointer reader = ImageFileReaderType::New();
-    reader->SetFileName(filename);
-    reader->UpdateOutputInformation();
-        
-    // everything went fine, store the object references
-    m_ReaderList->PushBack(reader);
-    m_ImageList->PushBack(reader->GetOutput());
-    SetActive(true);
-    this->Modified();
-  }
+  void AddFromFileName(const std::string & filename);
 
  /** Set one specific stored image filename. */
-  void SetNthFileName( const unsigned int id, const std::string & filename )
-  {
-    if( m_ReaderList->Size()<id )
-      {
-      itkExceptionMacro(<< "No image "<<id<<". Only "<<m_ReaderList->Size()<<" images available.");
-      }
-    
-    ImageFileReaderType::Pointer reader = ImageFileReaderType::New();
-    reader->SetFileName(filename);
-    reader->UpdateOutputInformation();
-    m_ReaderList->SetNthElement(id, reader);
-    m_ImageList->SetNthElement(id, reader->GetOutput());
-  }
+  void SetNthFileName( const unsigned int id, const std::string & filename );
 
 
   /** Get the stored image filename list */
-  std::vector<std::string> GetFileNameList() const
-  {
-    if (m_ReaderList)
-      {
-        std::vector<std::string> filenames;
-        for(unsigned int i=0; i<m_ReaderList->Size(); i++)
-          {
-            filenames.push_back( m_ReaderList->GetNthElement(i)->GetFileName() );
-          }
-
-      return filenames;
-      }
-
-    itkExceptionMacro(<< "No filename value");
-  }
+  std::vector<std::string> GetFileNameList() const;
 
  /** Get one specific stored image filename. */
-  std::string GetNthFileName( unsigned int i ) const
-  {
-    if (m_ReaderList)
-      {
-        if(m_ReaderList->Size()<i)
-          {
-            itkExceptionMacro(<< "No image "<<i<<". Only "<<m_ReaderList->Size()<<" images available.");
-          }
-
-        return m_ReaderList->GetNthElement(i)->GetFileName();
-      }
-
-    itkExceptionMacro(<< "No filename value");
-  }
+  std::string GetNthFileName( unsigned int i ) const;
 
   /** Get one list of the stored image. */
-  FloatVectorImageListType* GetImageList() const
-  {
-    return m_ImageList;
-  }
+  FloatVectorImageListType* GetImageList() const;
 
   /** Get one specific stored image. */
-  FloatVectorImageType* GetNthImage(unsigned int i) const
-  {
-    if(m_ImageList->Size()<i)
-      {
-        itkExceptionMacro(<< "No image "<<i<<". Only "<<m_ImageList->Size()<<" images available.");
-      }
-    return m_ImageList->GetNthElement(i);
-  }
+  FloatVectorImageType* GetNthImage(unsigned int i) const;
 
   /** Set the list of image. */
-  void SetImageList(FloatVectorImageListType* imList)
-  {
-    m_ImageList = imList;
-    m_ReaderList = ImageFileReaderListType::Pointer();
-    for(unsigned int i=0; i<m_ImageList->Size(); i++)
-      {
-        m_ReaderList->PushBack( ImageFileReaderType::Pointer() );
-      }
-
-    this->Modified();
-  }
+  void SetImageList(FloatVectorImageListType* imList);
 
   /** Add an image to the list. */
-  void AddImage(FloatVectorImageType* image)
-  {
-    m_ImageList->PushBack( image );
-    m_ReaderList->PushBack( ImageFileReaderType::Pointer() );
-  }
+  void AddImage(FloatVectorImageType* image);
 
-  bool HasValue() const
-  {
-    if(m_ImageList->Size() == 0)
-      {
-      return false;
-      }
+  bool HasValue() const;
 
-    return m_ImageList->GetNthElement(0).IsNotNull();
-  }
 
-  void Erase( unsigned int id )
-  {
-    if(m_ImageList->Size()<id)
-      {
-      itkExceptionMacro(<< "No image "<<id<<". Only "<<m_ImageList->Size()<<" images available.");
-      }
-    
-    m_ImageList->Erase( id );
-    m_ReaderList->Erase( id );
-  }
-
-  void Clear()
-  {
-    m_ImageList->Clear();
-    m_ReaderList->Clear();
-  }
+  /** Erase one element of the list. */
+  void Erase( unsigned int id );
+  
+ /** Clear all the list. */
+  void Clear();
 
  
 protected:
   /** Constructor */
-  InputImageListParameter()
-  {
-    this->SetName("Input Image List");
-    this->SetKey("inList");
-    m_ImageList = FloatVectorImageListType::New();
-    m_ReaderList = ImageFileReaderListType::New();
-  }
+  InputImageListParameter();
 
   /** Destructor */
-  virtual ~InputImageListParameter()
-  {}
+  virtual ~InputImageListParameter();
+  
 
  
   FloatVectorImageListType::Pointer m_ImageList;
