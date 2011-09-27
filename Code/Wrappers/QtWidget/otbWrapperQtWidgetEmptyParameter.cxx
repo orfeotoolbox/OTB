@@ -41,7 +41,7 @@ void QtWidgetEmptyParameter::DoCreateWidget()
   // Set up input text edit
   QHBoxLayout *hLayout = new QHBoxLayout;
   hLayout->setSpacing(0);
-  hLayout->setContentsMargins(0,0,0,0);
+  hLayout->setContentsMargins(0, 0, 0, 0);
 
   //QCheckBox* checkbox = new QCheckBox;
   //checkbox->setToolTip(emptyParam->GetDescription());

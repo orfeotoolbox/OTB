@@ -259,7 +259,7 @@ QtWidgetInputImageListParameter::AddFile()
     }
 
   QtFileSelectionWidget * fileSelection = new QtFileSelectionWidget();
-  fileSelection->setFixedHeight( 30 ); 
+  fileSelection->setFixedHeight( 30 );
   m_FileLayout->addWidget( fileSelection );
   m_FileSelectionList.push_back(fileSelection);
 
@@ -332,7 +332,6 @@ void QtWidgetInputImageListParameter::RecreateImageList()
   QString key( QString::fromStdString(m_InputImageListParam->GetKey()) );
   emit ParameterChanged(key);
 }
-
 
 
 }

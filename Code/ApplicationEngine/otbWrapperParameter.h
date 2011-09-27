@@ -163,7 +163,7 @@ public:
 
   /** Add a child of this parameter when the param is a Group or a
     * choice
-    */ 
+    */
   virtual void AddChild(Parameter::Pointer child)
   {
     m_ChildrenList.push_back(child);
