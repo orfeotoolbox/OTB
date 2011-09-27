@@ -53,6 +53,7 @@ private:
     std::cout << "TestApplication::DoCreateParameters" << std::endl;
     AddParameter(ParameterType_Empty, "boolean", "Boolean");
     AddParameter(ParameterType_Int, "int", "Integer");
+    MandatoryOff("int");
     AddParameter(ParameterType_Float, "float", "Float");
     AddParameter(ParameterType_String, "string", "String");
     AddParameter(ParameterType_Filename, "filename", "File name");
@@ -73,15 +74,16 @@ private:
 
 
     AddParameter(ParameterType_Group, "ingroup", "Input Group");
-    AddParameter(ParameterType_Int,  "ingroup.integer", "Integer of Group");
+    MandatoryOff("ingroup");
+    AddParameter(ParameterType_Float,  "ingroup.integer", "Integer of Group");
     AddParameter(ParameterType_Group, "ingroup.images", "Input Images Group");
     AddParameter(ParameterType_InputImage, "ingroup.images.inputimage", "Input Image");
-    AddParameter(ParameterType_InputComplexImage, "ingroup.images.inputcompleximage", "Input Complex Image");
-    AddParameter(ParameterType_InputVectorData, "ingroup.inputvectordata", "Input Vector Data");
+    //AddParameter(ParameterType_InputComplexImage, "ingroup.images.inputcompleximage", "Input Complex Image");
+    //AddParameter(ParameterType_InputVectorData, "ingroup.inputvectordata", "Input Vector Data");
 
     AddParameter(ParameterType_Group, "outgroup", "Output Group");
     AddParameter(ParameterType_OutputImage, "outgroup.outputimage", "Output Image");
-    AddParameter(ParameterType_OutputVectorData, "outgroup.outputvectordata", "Output Vector Data");
+    //AddParameter(ParameterType_OutputVectorData, "outgroup.outputvectordata", "Output Vector Data");
 
     AddParameter(ParameterType_Radius, "radius", "Radius");
   }
