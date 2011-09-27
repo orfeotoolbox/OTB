@@ -27,6 +27,7 @@
 #include <cstdlib>
 #include <ossim/projection/ossimCoarseGridModel.h>
 #include <otb/CivilDateTime.h>
+#include <ossim/elevation/ossimElevManager.h>
 
 namespace ossimplugins
 {
@@ -161,6 +162,9 @@ public:
    double get_optimizationBiasY()   const { return _optimizationBiasY; }
 
    ossimRefPtr<ossimCoarseGridModel> getReplacementOcgModel() { return _replacementOcgModel; }
+
+   virtual void lineSampleToWorld(const ossimDpt& image_point,
+                                  ossimGpt&       gpt) const;
 
 protected:
    /**
