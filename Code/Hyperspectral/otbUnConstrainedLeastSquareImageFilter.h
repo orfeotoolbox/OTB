@@ -47,7 +47,7 @@ public:
   UnConstrainedLeastSquareFunctor() : m_OutputSize(0) {}
   virtual ~UnConstrainedLeastSquareFunctor() {}
 
-  unsigned int GetOutputSize()
+  unsigned int GetOutputSize() const
   {
     return m_OutputSize;
   }
