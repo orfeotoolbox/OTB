@@ -93,7 +93,7 @@ ParameterGroup::AddChoice(std::string paramKey, std::string paramName)
   // Split the parameter name
   std::vector<std::string> splittedKey = pKey.Split();
 
-  if( splittedKey.size() >1 )
+  if( splittedKey.size() > 1 )
     {
       // Get the last subkey
       std::string lastkey = pKey.GetLastElement();
@@ -320,6 +320,16 @@ ParameterGroup::AddParameter(ParameterType type, std::string paramKey, std::stri
 
     newParam->SetKey(lastkey);
     newParam->SetName(paramName);
+
+    // If splittedKey is greater than 1, that means that the parameter
+    // is not a root, and have a parent(s):
+    // - Add the parent as root of this param
+    // - Add the param as a child of its parents
+    if (splittedKey.size() > 1)
+      {
+      newParam->SetRoot(parentParam);
+      parentParam->AddChild(newParam);
+      }
 
     parentAsGroup->AddParameter(newParam);
     }
