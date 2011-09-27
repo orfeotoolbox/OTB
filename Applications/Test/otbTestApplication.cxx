@@ -55,6 +55,7 @@ private:
     AddParameter(ParameterType_Int, "int", "Integer");
     MandatoryOff("int");
     AddParameter(ParameterType_Float, "float", "Float");
+    MandatoryOff("float");
     AddParameter(ParameterType_String, "string", "String");
     AddParameter(ParameterType_Filename, "filename", "File name");
     AddParameter(ParameterType_Directory, "directory", "Directory name");

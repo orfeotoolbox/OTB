@@ -53,7 +53,7 @@ QtWidgetModel* QtWidgetParameterBase::GetModel()
 
 // Slot connected to the signal emitted the checkBox relative to
 // current widget
-void QtWidgetParameterBase::SetValue( int value )
+void QtWidgetParameterBase::SetActivationState( int value )
 {
   switch(value)
     {

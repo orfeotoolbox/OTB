@@ -41,7 +41,7 @@ public:
 
 public slots:
   void UpdateGUI();
-  void SetValue( int value );
+  void SetActivationState( int value );
   void SetValue( bool v );
 
 protected slots:
