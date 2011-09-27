@@ -27,7 +27,7 @@ class TestApplication : public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef TestApplication                      Self;
+  typedef TestApplication               Self;
   typedef Application                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;

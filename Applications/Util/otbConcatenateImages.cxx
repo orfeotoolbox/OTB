@@ -111,13 +111,12 @@ private:
   }
   
 
-  ListConcatenerFilterType::Pointer m_Concatener;
-  ExtractROIFilterListType::Pointer         m_ExtractorList;
-  FloatImageListType::Pointer               m_ImageList;
+  ListConcatenerFilterType::Pointer  m_Concatener;
+  ExtractROIFilterListType::Pointer  m_ExtractorList;
+  FloatImageListType::Pointer        m_ImageList;
 };
 
 }
 }
 
 OTB_APPLICATION_EXPORT(otb::Wrapper::ConcatenateImages)
-
