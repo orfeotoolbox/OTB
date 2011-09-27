@@ -143,6 +143,53 @@ public:
   {
     itkExceptionMacro(<<"ClearValue() method must be re-implemented by sub-classes.");
   }
+  
+  /** Set/Get the root of the current parameter (direct parent) */
+  virtual void SetRoot(const Parameter::Pointer  root)
+  {
+    m_Root = root;
+  }
+
+  virtual const Parameter::Pointer GetRoot()
+  {
+    return m_Root;
+  }
+
+  /** Is the paramter a root or a child of another param */
+  virtual bool IsRoot()
+  {
+    return  m_Root.IsNull();
+  }
+
+  /** Add a child of this parameter when the param is a Group or a
+    * choice
+    */ 
+  virtual void AddChild(Parameter::Pointer child)
+  {
+    m_ChildrenList.push_back(child);
+  }
+
+  /** Get the children pointer list : not const cause we need to
+    * alterate the m_Active status and the m_IsCheckbox
+    */
+  virtual std::vector<Parameter::Pointer > GetChildrenList()
+  {
+    return m_ChildrenList;
+  }
+
+  /** Store the state of the check box relative to this parameter (TO
+    * BE MOVED to QtWrapper Model )
+    */
+  virtual bool IsChecked()
+  {
+    return m_IsChecked;
+  }
+
+  /** Modify the state of the checkbox relative to this paramter */
+  virtual void SetChecked(const bool value)
+  {
+    m_IsChecked = value;
+  }
 
 protected:
   /** Constructor */
@@ -153,7 +200,8 @@ protected:
                 m_Active(false),
                 m_UserValue(false),
                 m_DefaultValueMode(DefaultValueMode_UNKNOWN),
-                m_UserLevel(UserLevel_Basic)
+                m_UserLevel(UserLevel_Basic),
+                m_IsChecked(false)
   {}
 
   /** Destructor */
@@ -161,27 +209,36 @@ protected:
   {}
 
   /** Name of the parameter */
-  std::string m_Name;
+  std::string                        m_Name;
 
   /** Description of the parameter */
-  std::string m_Description;
+  std::string                        m_Description;
 
   /** Key of the parameter */
-  std::string m_Key;
+  std::string                        m_Key;
 
   /** True if the parameter is mandatory */
-  bool m_Mandatory;
+  bool                               m_Mandatory;
 
   /** True if activated (a mandatory parameter is always active) */
-  bool m_Active;
+  bool                               m_Active;
 
   /** True if the value is set in user mode */
-  bool m_UserValue;
+  bool                               m_UserValue;
 
   /** Default value behaviour */
-  DefaultValueMode m_DefaultValueMode;
+  DefaultValueMode                   m_DefaultValueMode;
 
-  UserLevel m_UserLevel;
+  UserLevel                          m_UserLevel;
+
+  /** List of parents Parameters */
+  Parameter::Pointer                 m_Root;
+
+  /** List of children parameters */
+  std::vector<Parameter::Pointer >   m_ChildrenList;
+
+  /** Store the status of the checkbox */
+  bool                               m_IsChecked;
 
 private:
   Parameter(const Parameter &); //purposely not implemented
