@@ -48,6 +48,7 @@ void QtWidgetView::CreateGui()
   mainLayout->addWidget(CreateHeader());
   mainLayout->addWidget(CreateInputWidgets());
   mainLayout->addWidget(CreateFooter());
+  //mainLayout->addStretch();
 
   QGroupBox *mainGroup = new QGroupBox();
   mainGroup->setLayout(mainLayout);
@@ -57,9 +58,11 @@ void QtWidgetView::CreateGui()
   scrollArea->setWidget(mainGroup);
   scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
   scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+  scrollArea->setWidgetResizable(true);
 
   QVBoxLayout  *scrollLayout = new QVBoxLayout();
   scrollLayout->addWidget(scrollArea);
+  //scrollLayout->addStretch();
 
   // Make the scroll layout the main layout
   this->setLayout(scrollLayout);

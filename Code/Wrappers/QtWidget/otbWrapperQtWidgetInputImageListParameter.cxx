@@ -66,7 +66,7 @@ void QtWidgetInputImageListParameter::DoCreateWidget()
   addButton->setText("+");
   addButton->setFixedWidth(buttonSize);
   addButton->setToolTip("Add a file selector...");
-  addButton->setMaximumWidth(addButton->width());
+  //addButton->setMaximumWidth(addButton->width());
   connect( addButton, SIGNAL(clicked()), this, SLOT(AddFile()) );
   addSupLayout->addWidget(addButton);
 
@@ -75,7 +75,6 @@ void QtWidgetInputImageListParameter::DoCreateWidget()
   supButton->setText("-");
   supButton->setFixedWidth(buttonSize);
   supButton->setToolTip("Supress the selected file...");
-  supButton->setMaximumWidth(supButton->width());
   connect( supButton, SIGNAL(clicked()), this, SLOT(SupressFile()) );
   addSupLayout->addWidget(supButton);
   buttonLayout->addLayout(addSupLayout);
@@ -85,7 +84,6 @@ void QtWidgetInputImageListParameter::DoCreateWidget()
   upButton->setText("Up");
   upButton->setFixedWidth(buttonSize);
   upButton->setToolTip("Up the selected file in the list...");
-  upButton->setMaximumWidth(upButton->width());
   connect( upButton, SIGNAL(clicked()), this, SLOT(UpFile()) );
   upDownLayout->addWidget(upButton);
 
@@ -94,7 +92,6 @@ void QtWidgetInputImageListParameter::DoCreateWidget()
   downButton->setText("Down");
   downButton->setFixedWidth(buttonSize);
   downButton->setToolTip("Down the selected file in the list...");
-  downButton->setMaximumWidth(downButton->width());
   connect( downButton, SIGNAL(clicked()), this, SLOT(DownFile()) );
   upDownLayout->addWidget(downButton);
   buttonLayout->addLayout(upDownLayout);
@@ -102,9 +99,8 @@ void QtWidgetInputImageListParameter::DoCreateWidget()
   // Erase file edit
   QPushButton * eraseButton = new QPushButton;
   eraseButton->setText("Erase");
-  eraseButton->setFixedWidth(2*buttonSize);
+  eraseButton->setFixedWidth(2*(buttonSize+sp));
   eraseButton->setToolTip("Erase the selected file of the list...");
-  eraseButton->setMaximumWidth(eraseButton->width());
   connect( eraseButton, SIGNAL(clicked()), this, SLOT(EraseFile()) );
   buttonLayout->addWidget(eraseButton);
 
@@ -120,15 +116,13 @@ void QtWidgetInputImageListParameter::DoCreateWidget()
   mainGroup->setLayout(fileLayout);
   QScrollArea * scroll = new QScrollArea();
   scroll->setWidget(mainGroup);
-  //scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
   scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+  scroll->setWidgetResizable(true);
 
   hLayout->addWidget(scroll);
   hLayout->addLayout(buttonLayout);
 
-  hLayout->addStretch();
- 
   this->setLayout(hLayout);
 
   m_FileLayout = fileLayout;
@@ -146,7 +140,6 @@ QtWidgetInputImageListParameter::UpFile()
 
   m_FileLayout = new QVBoxLayout();
   m_FileLayout->setSpacing(2);
-  m_FileLayout->addStretch();
 
   // Map link between old and new index in the list
   std::map<unsigned int, unsigned int> idMap;
@@ -190,7 +183,6 @@ QtWidgetInputImageListParameter::DownFile()
 
   m_FileLayout = new QVBoxLayout();
   m_FileLayout->setSpacing(0);
-  m_FileLayout->addStretch();
 
   // Map link between old and new index in the list
   std::map<unsigned int, unsigned int> idMap;
@@ -260,7 +252,7 @@ QtWidgetInputImageListParameter::AddFile()
 {
   m_FileLayout = new QVBoxLayout();
   m_FileLayout->setSpacing(0);
-  m_FileLayout->addStretch();
+
   for(unsigned int i=0; i<m_FileSelectionList.size(); i++ )
     {
     m_FileLayout->addWidget( m_FileSelectionList[i] );
@@ -284,7 +276,6 @@ QtWidgetInputImageListParameter::SupressFile()
 {
   m_FileLayout = new QVBoxLayout();
   m_FileLayout->setSpacing(0);
-  m_FileLayout->addStretch();
   std::vector<QtFileSelectionWidget *> tmpList;
   for(unsigned int i=0; i<m_FileSelectionList.size(); i++ )
     {
