@@ -89,12 +89,12 @@ private:
     SetParameterFloat("vfactor", 0.6);
 
     // Boolean Fast scheme
-    //     AddParameter(ParameterType_Empty, "fast", "Use Fast Scheme");
-    //     std::ostringstream desc;
-    //     desc<<"If used, this option allows to speed-up computation by iteratively"
-    //        <<" subsampling previous level of pyramid instead of processing the full input";
-    //     SetParameterDescription("fast", desc.str());
-    //     MandatoryOff("fast");
+    AddParameter(ParameterType_Empty, "fast", "Use Fast Scheme");
+    std::ostringstream desc;
+    desc<<"If used, this option allows to speed-up computation by iteratively"
+        <<" subsampling previous level of pyramid instead of processing the full input";
+    SetParameterDescription("fast", desc.str());
+    MandatoryOff("fast");
   }
 
   void DoUpdateParameters()
@@ -115,8 +115,7 @@ private:
     unsigned int shrinkFactor = GetParameterInt("sfactor");
     double varianceFactor     = GetParameterFloat("vfactor");
 
-    //bool fastScheme = parseResult->IsOptionPresent("FastScheme");
-    bool fastScheme = false;
+    bool fastScheme = IsParameterEnabled("fast");
 
     // Get the input image
     FloatVectorImageType::Pointer inImage = GetParameterImage("in");
@@ -158,6 +157,10 @@ private:
       if(!fastScheme)
         {
         currentFactor *= shrinkFactor;
+        }
+      else
+        {
+        std::cout <<"fast scheme enabled : not implemented for the moment " << std::endl;
         }
 
       // Get the Output Parameter to change the current image filename
