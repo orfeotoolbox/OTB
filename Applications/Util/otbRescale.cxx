@@ -75,10 +75,6 @@ private:
   void DoUpdateParameters()
   {
     // Nothing to do here for the parameters : all are independent
-    
-    // Reinitialize the object
-    m_RescaleFilter = RescaleImageFilterType::New();
-    m_MinMaxFilter = MinMaxFilterType::New();
   }
 
   void DoExecute()
@@ -87,8 +83,10 @@ private:
 
     otbAppLogDEBUG( << "Starting Min/Max computation" )
 
-    m_MinMaxFilter->GetStreamer()->SetNumberOfLinesStrippedStreaming( 50 );
+    m_MinMaxFilter = MinMaxFilterType::New();
     m_MinMaxFilter->SetInput( inImage );
+    m_MinMaxFilter->GetStreamer()->SetNumberOfLinesStrippedStreaming( 50 );
+
     AddProcess(m_MinMaxFilter->GetStreamer(), "Min/Max computing");
     m_MinMaxFilter->Update();
 
@@ -97,6 +95,7 @@ private:
 
     FloatVectorImageType::PixelType inMin, inMax;
 
+    m_RescaleFilter = RescaleImageFilterType::New();
     m_RescaleFilter->SetInput( inImage );
     m_RescaleFilter->SetInputMinimum( m_MinMaxFilter->GetMinimum() );
     m_RescaleFilter->SetInputMaximum( m_MinMaxFilter->GetMaximum() );
