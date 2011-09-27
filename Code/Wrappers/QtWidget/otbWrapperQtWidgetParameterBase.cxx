@@ -53,60 +53,19 @@ QtWidgetModel* QtWidgetParameterBase::GetModel()
 
 // Slot connected to the signal emitted the checkBox relative to
 // current widget
-void QtWidgetParameterBase::SetActivationState( int value )
+void QtWidgetParameterBase::SetActivationState( bool value )
 {
-  switch(value)
+  if (value)
     {
-    case Qt::Unchecked:
-      this->setEnabled(false);
-      m_Param->SetChecked(false);
-      m_Param->SetActive(false);
-      break;
-    case Qt::PartiallyChecked:
-      break;
-    case Qt::Checked:
-      this->setEnabled(true);
-      m_Param->SetChecked(true);
-      m_Param->SetActive(true);
-      break;
+    this->setEnabled(true);
+    m_Param->SetChecked(true);
+    m_Param->SetActive(true);
     }
-}
-
-// A slot connected to a signal emitted by a ParameterGroup
-// we need to modify the children availabitily status
-void QtWidgetParameterBase::SetValue( bool v)
-{
-  // Update the Group status
-  this->setEnabled(v);
-
-  // Update iteratively the children status
-  for (unsigned int idx = 0; idx < m_Param->GetChildrenList().size(); ++idx)
+  else
     {
-    this->ProcessChild(m_Param->GetChildrenList()[idx], v);
-    }
-}
-
-// Activate iteratively  the children
-void QtWidgetParameterBase::ProcessChild(Parameter* currentNode, bool status)
-{
-  // Activate the current node if it was checked
-  if ( currentNode->IsChecked() && status)
-    {
-    currentNode->SetActive(status);
-    }
-
-  // If the status is false (deactivating) deactivate all the children
-  // tree
-  if (!status)
-    {
-    currentNode->SetActive(status);
-    }
-
-  unsigned int counter = 0;
-  while(counter < currentNode->GetChildrenList().size())
-    {
-    this->ProcessChild(currentNode->GetChildrenList()[counter], status);
-    ++counter;
+    this->setEnabled(false);
+    m_Param->SetChecked(false);
+    m_Param->SetActive(false);
     }
 }
 

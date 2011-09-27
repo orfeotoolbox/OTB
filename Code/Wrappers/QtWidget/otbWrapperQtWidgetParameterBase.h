@@ -41,8 +41,7 @@ public:
 
 public slots:
   void UpdateGUI();
-  void SetActivationState( int value );
-  void SetValue( bool v );
+  virtual void SetActivationState( bool value );
 
 protected slots:
   void ParameterChanged(const QString& key);
@@ -50,7 +49,6 @@ protected slots:
 protected:
   QtWidgetModel* GetModel();
 
-  virtual void ProcessChild(Parameter * currentNode, bool status);
 
 private:
   QtWidgetParameterBase(const QtWidgetParameterBase&); //purposely not implemented

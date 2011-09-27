@@ -73,7 +73,7 @@ void QtWidgetParameterGroup::DoCreateWidget()
 
         // CheckBox (col 1)
         QCheckBox * checkBox = new QCheckBox;
-        connect(checkBox, SIGNAL(stateChanged(int)), specificWidget, SLOT(SetActivationState(int)));
+        connect(checkBox, SIGNAL(clicked(bool)), specificWidget, SLOT(SetActivationState(bool)));
         
         if (param->IsRoot())
            {
@@ -115,7 +115,7 @@ void QtWidgetParameterGroup::DoCreateWidget()
           {
           group->setCheckable(true);
           }
-        connect(group, SIGNAL(clicked(bool)), specificWidget, SLOT(SetValue(bool)));
+        connect(group, SIGNAL(clicked(bool)), specificWidget, SLOT(SetActivationState(bool)));
 
         group->setTitle(param->GetName());
         gridLayout->addWidget(group, i, 0, 1, -1);
@@ -128,6 +128,47 @@ void QtWidgetParameterGroup::DoCreateWidget()
   this->setLayout(gridLayout);
 }
 
+
+// Slot connected to the signal emitted the checkBox relative to
+// current widget
+void QtWidgetParameterGroup::SetActivationState( bool value )
+{
+  // First call the superclass implementation
+  this->QtWidgetParameterBase::SetActivationState(value);
+
+  // Update the Group status
+  this->setEnabled(value);
+
+  // Update iteratively the children status
+  for (unsigned int idx = 0; idx < m_ParamList->GetChildrenList().size(); ++idx)
+    {
+    this->ProcessChild(m_ParamList->GetChildrenList()[idx], value);
+    }
+}
+
+// Activate iteratively  the children
+void QtWidgetParameterGroup::ProcessChild(Parameter* currentNode, bool status)
+{
+  // Activate the current node if it was checked
+  if ( currentNode->IsChecked() && status)
+    {
+    currentNode->SetActive(status);
+    }
+
+  // If the status is false (deactivating) deactivate all the children
+  // tree
+  if (!status)
+    {
+    currentNode->SetActive(status);
+    }
+
+  unsigned int counter = 0;
+  while(counter < currentNode->GetChildrenList().size())
+    {
+    this->ProcessChild(currentNode->GetChildrenList()[counter], status);
+    ++counter;
+    }
+}
 
 
 }

@@ -37,6 +37,9 @@ public:
   QtWidgetParameterGroup(ParameterGroup::Pointer, QtWidgetModel*);
   virtual ~QtWidgetParameterGroup();
 
+public slots:
+  virtual void SetActivationState( bool value );
+
 private:
   QtWidgetParameterGroup(const QtWidgetParameterGroup&); //purposely not implemented
   void operator=(const QtWidgetParameterGroup&); //purposely not implemented
@@ -44,6 +47,8 @@ private:
   void DoCreateWidget();
 
   virtual void DoUpdateGUI();
+
+  virtual void ProcessChild(Parameter * currentNode, bool status);
 
   ParameterGroup::Pointer m_ParamList;
 
