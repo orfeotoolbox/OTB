@@ -26,7 +26,7 @@ namespace Wrapper
 {
 
 QtWidgetParameterGroup::QtWidgetParameterGroup(ParameterGroup::Pointer paramList, QtWidgetModel* m)
-: QtWidgetParameterBase(m),
+: QtWidgetParameterBase(paramList, m),
   m_ParamList(paramList)
 {
 }
@@ -63,10 +63,42 @@ void QtWidgetParameterGroup::DoCreateWidget()
 
       if (paramAsGroup == 0 && paramAsChoice == 0)
         {
+        // Label (col 0)
         QWidget* label = new QtWidgetParameterLabel( param );
-        gridLayout->addWidget(label, i, 0);
+        gridLayout->addWidget(label, i, 1);
+
+        // Parameter Widget (col 2)
         QtWidgetParameterBase* specificWidget = QtWidgetParameterFactory::CreateQtWidget( param, GetModel() );
-        gridLayout->addWidget(specificWidget, i, 1);
+        gridLayout->addWidget(specificWidget, i, 2 );
+
+        // CheckBox (col 1)
+        QCheckBox * checkBox = new QCheckBox;
+        connect(checkBox, SIGNAL(stateChanged(int)), specificWidget, SLOT(SetValue(int)));
+        
+        if (param->IsRoot())
+           {
+          // if Mandatory make the checkbox checked and deactivated
+          if (param->GetMandatory())
+            {
+            checkBox->setCheckState(Qt::Checked);
+            checkBox->setEnabled(false);
+            specificWidget->setEnabled(true);
+            }
+          else
+            {
+            checkBox->setCheckState(Qt::Unchecked);
+            checkBox->setEnabled(true);
+            specificWidget->setEnabled(false);
+            }
+          }
+        else
+          {
+          // If this widget belongs to a Group, make it disabled by
+          // defaut
+          specificWidget->setEnabled(false);
+          }
+        gridLayout->addWidget(checkBox, i, 0);
+
         m_WidgetList.push_back(specificWidget);
         }
       else
@@ -77,6 +109,14 @@ void QtWidgetParameterGroup::DoCreateWidget()
         vboxLayout->addWidget(specificWidget);
         QGroupBox* group = new QGroupBox;
         group->setLayout(vboxLayout);
+
+        // Make the paramter Group checkable when it is not mandatory
+        if (!param->GetMandatory() )
+          {
+          group->setCheckable(true);
+          }
+        connect(group, SIGNAL(clicked(bool)), specificWidget, SLOT(SetValue(bool)));
+
         group->setTitle(param->GetName());
         gridLayout->addWidget(group, i, 0, 1, -1);
 
@@ -87,6 +127,8 @@ void QtWidgetParameterGroup::DoCreateWidget()
 
   this->setLayout(gridLayout);
 }
+
+
 
 }
 }
