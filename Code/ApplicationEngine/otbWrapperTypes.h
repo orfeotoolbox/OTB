@@ -44,7 +44,6 @@ typedef enum
   ParameterType_InputComplexImage,
   ParameterType_InputVectorData,
   ParameterType_OutputImage,
-  ParameterType_OutputImageList,
   ParameterType_OutputVectorData,
   ParameterType_Radius,
   ParameterType_Group,
