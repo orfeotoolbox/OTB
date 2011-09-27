@@ -23,8 +23,7 @@ namespace Wrapper
 {
 
 QtWidgetEmptyParameter::QtWidgetEmptyParameter(EmptyParameter* emptyParam, QtWidgetModel* m)
-  : QtWidgetParameterBase(m),
-    m_EmptyParam(emptyParam)
+  : QtWidgetParameterBase(emptyParam, m)
 {
 }
 
@@ -40,34 +39,18 @@ void QtWidgetEmptyParameter::DoUpdateGUI()
 void QtWidgetEmptyParameter::DoCreateWidget()
 {
   // Set up input text edit
-  m_QHBoxLayout = new QHBoxLayout;
-  m_QHBoxLayout->setSpacing(0);
-  m_QHBoxLayout->setContentsMargins(0, 0, 0, 0);
+  QHBoxLayout *hLayout = new QHBoxLayout;
+  hLayout->setSpacing(0);
+  hLayout->setContentsMargins(0,0,0,0);
 
-  m_QCheckBox = new QCheckBox;
-  m_QCheckBox->setToolTip(m_EmptyParam->GetDescription());
-  connect(m_QCheckBox, SIGNAL(stateChanged(int)), this, SLOT(SetValue(int)));
+  //QCheckBox* checkbox = new QCheckBox;
+  //checkbox->setToolTip(emptyParam->GetDescription());
 
-  QString optionID(m_EmptyParam->GetName());
-  m_QHBoxLayout->addWidget(m_QCheckBox);
-  m_QHBoxLayout->addStretch();
+  //QString optionID(emptyParam->GetName());
+  //hLayout->addWidget(checkbox);
+  hLayout->addStretch();
 
-  this->setLayout(m_QHBoxLayout);
-}
-
-void QtWidgetEmptyParameter::SetValue( int value )
-{
-  switch(value)
-    {
-    case Qt::Unchecked:
-      m_EmptyParam->SetValue(false);
-      break;
-    case Qt::PartiallyChecked:
-      break;
-    case Qt::Checked:
-      m_EmptyParam->SetValue(true);
-      break;
-    }
+  this->setLayout(hLayout);
 }
 
 }

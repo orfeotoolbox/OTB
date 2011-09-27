@@ -38,9 +38,6 @@ public:
   QtWidgetEmptyParameter(EmptyParameter*, QtWidgetModel*);
   virtual ~QtWidgetEmptyParameter();
 
-protected slots:
-  void SetValue( int value );
-
 private:
   QtWidgetEmptyParameter(const QtWidgetEmptyParameter&); //purposely not implemented
   void operator=(const QtWidgetEmptyParameter&); //purposely not implemented
@@ -48,10 +45,6 @@ private:
   virtual void DoCreateWidget();
 
   virtual void DoUpdateGUI();
-
-  QHBoxLayout *           m_QHBoxLayout;
-  QCheckBox *             m_QCheckBox;
-  EmptyParameter::Pointer m_EmptyParam;
 };
 
 
