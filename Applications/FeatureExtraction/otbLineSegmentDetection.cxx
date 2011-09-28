@@ -15,7 +15,9 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbLineSegmentDetection.h"
+#include "otbWrapperApplication.h"
+#include "otbWrapperApplicationFactory.h"
+
 #include "otbStreamingLineSegmentDetector.h"
 
 #include "otbImage.h"
@@ -32,141 +34,161 @@
 #include "otbVectorDataTransformFilter.h"
 #include "itkAffineTransform.h"
 
+
+
+
 namespace otb
 {
-
-int LineSegmentDetection::Describe(ApplicationDescriptor* descriptor)
+namespace Wrapper
 {
-  descriptor->SetName("Line Segment Detection");
-  descriptor->SetDescription(
-                             "Detects line segment in an image");
-  descriptor->AddInputImage();
-  descriptor->AddOption("OutputVectorData", "Output Shape file name", "outshape", 1, true,
-                        ApplicationDescriptor::FileName);
-  descriptor->AddOption("DEMDirectory", "DEM directory (used to reproject in WGS84 if input is in sensor model geometry)",
-                        "dem", 1, false, ApplicationDescriptor::DirectoryName);
-  descriptor->AddOption("NoRescale", "Do not rescale input image in [0 255] before extracting the segments (default : true)",
-                        "nrs", 0, false, ApplicationDescriptor::Boolean);
-  return EXIT_SUCCESS;
-}
 
-
-int LineSegmentDetection::Execute(otb::ApplicationOptionsResult* parseResult)
+class LineSegmentDetection: public Application
 {
-  typedef float InputPixelType;
-  const unsigned int Dimension = 2;
-  typedef otb::Image<InputPixelType, Dimension>       ImageType;
-  typedef otb::VectorImage<InputPixelType, Dimension> VectorImageType;
-  typedef otb::ImageFileReader<VectorImageType>       ReaderType;
+public:
+  /** Standard class typedefs. */
+  typedef LineSegmentDetection          Self;
+  typedef Application                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef otb::VectorData<double, Dimension>          VectorDataType;
-  typedef VectorDataType::Pointer                     VectorDataPointerType;
-  typedef otb::VectorDataFileWriter<VectorDataType>   VectorDataFileWriterType;
-  typedef VectorDataFileWriterType::Pointer           VectorDataFileWriterPointerType;
+  /** Standard macro */
+  itkNewMacro(Self);
 
-  typedef otb::VectorImageToAmplitudeImageFilter<VectorImageType, ImageType>
-    VectorImageToAmplitudeImageFilterType;
+  itkTypeMacro(LineSegmentDetection, otb::Wrapper::Application);
 
-  typedef otb::StreamingStatisticsImageFilter<ImageType>
-    StreamingStatisticsImageFilterType;
+private:
+  LineSegmentDetection()
+  {
+    SetName("LineSegmentDetection");
+    SetDescription("Detect line segments in raster");
+  }
 
-  typedef itk::ShiftScaleImageFilter<ImageType, ImageType>
-    ShiftScaleImageFilterType;
+  virtual ~LineSegmentDetection()
+  {
+  }
 
-  typedef otb::StreamingLineSegmentDetector
-    < ImageType >::FilterType LSDFilterType;
+  void DoCreateParameters()
+  {
+    AddParameter(ParameterType_InputImage, "in", "Input Image");
 
-  ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName(parseResult->GetInputImage());
-  reader->UpdateOutputInformation();
+    AddParameter(ParameterType_OutputVectorData, "out", "Output detected line segments");
 
-  VectorImageToAmplitudeImageFilterType::Pointer amplitudeConverter
-    = VectorImageToAmplitudeImageFilterType::New();
-  amplitudeConverter->SetInput(reader->GetOutput());
+    AddParameter(ParameterType_Directory, "dem", "DEM directory");
+    MandatoryOff("dem");
 
-  ImageType::Pointer image = amplitudeConverter->GetOutput();
+    AddParameter(ParameterType_Empty, "norescale", "No rescaling in [0 255]");
+    MandatoryOff("norescale");
+  }
 
-  StreamingStatisticsImageFilterType::Pointer stats
-     = StreamingStatisticsImageFilterType::New();
+  void DoUpdateParameters()
+  {
+  }
 
-  ShiftScaleImageFilterType::Pointer shiftScale
-    = ShiftScaleImageFilterType::New();
+  void DoExecute()
+  {
+    typedef otb::VectorImageToAmplitudeImageFilter<FloatVectorImageType, FloatImageType>
+      VectorImageToAmplitudeImageFilterType;
 
-  // Default behavior is to do the rescaling
-  if ( !parseResult->IsOptionPresent("NoRescale") )
-    {
-    stats->SetInput(amplitudeConverter->GetOutput());
-    stats->Update();
-    InputPixelType min = stats->GetMinimum();
-    InputPixelType max = stats->GetMaximum();
+    typedef otb::StreamingStatisticsImageFilter<FloatImageType>
+      StreamingStatisticsImageFilterType;
 
-    shiftScale->SetInput(amplitudeConverter->GetOutput());
-    shiftScale->SetShift( -min );
-    shiftScale->SetScale( 255.0 / (max - min) );
+    typedef itk::ShiftScaleImageFilter<FloatImageType, FloatImageType>
+      ShiftScaleImageFilterType;
 
-    image = shiftScale->GetOutput();
-    }
+    typedef otb::StreamingLineSegmentDetector
+      < FloatImageType >::FilterType LSDFilterType;
 
-  LSDFilterType::Pointer lsd
-    = LSDFilterType::New();
-  lsd->GetFilter()->SetInput(image);
+    VectorImageToAmplitudeImageFilterType::Pointer amplitudeConverter
+      = VectorImageToAmplitudeImageFilterType::New();
 
-  otb::StandardFilterWatcher watcher(lsd->GetStreamer(),"Line Segment Detection");
-  lsd->Update();
+    amplitudeConverter->SetInput( GetParameterImage("in") );
 
-  /*
-   * Reprojection of the output VectorData
-   *
-   * The output of LSDFilterType is in image physical coordinates,
-   * projection WKT applied if the input image has one
-   *
-   * We need to reproject in WGS84 if the input image is in sensor model geometry
-   */
+    FloatImageType::Pointer image = amplitudeConverter->GetOutput();
 
-  std::string projRef = reader->GetOutput()->GetProjectionRef();
-  ImageKeywordlist kwl = reader->GetOutput()->GetImageKeywordlist();
+    StreamingStatisticsImageFilterType::Pointer stats
+       = StreamingStatisticsImageFilterType::New();
 
-  VectorDataType::Pointer vd = lsd->GetFilter()->GetOutputVectorData();
-  VectorDataType::Pointer projectedVD = vd;
+    ShiftScaleImageFilterType::Pointer shiftScale
+      = ShiftScaleImageFilterType::New();
 
-  if ( projRef.empty() && kwl.GetSize() > 0 )
-    {
-    // image is in sensor model geometry
-
-    // Reproject VectorData in image projection
-    typedef otb::VectorDataProjectionFilter
-      <VectorDataType, VectorDataType>                     VectorDataProjectionFilterType;
-
-    VectorDataProjectionFilterType::Pointer vproj = VectorDataProjectionFilterType::New();
-    vproj->SetInput(vd);
-    vproj->SetInputKeywordList(reader->GetOutput()->GetImageKeywordlist());
-    vproj->SetInputOrigin(reader->GetOutput()->GetOrigin());
-    vproj->SetInputSpacing(reader->GetOutput()->GetSpacing());
-
-    // Configure DEM directory
-    if(parseResult->IsOptionPresent("DEMDirectory"))
+    // Default behavior is to do the rescaling
+    if ( !IsParameterEnabled("norescale") )
       {
-      vproj->SetDEMDirectory(parseResult->GetParameterString("DEMDirectory"));
+      stats->SetInput(amplitudeConverter->GetOutput());
+
+      AddProcess(stats->GetStreamer(), "Image statistics");
+      stats->Update();
+      FloatImageType::PixelType min = stats->GetMinimum();
+      FloatImageType::PixelType max = stats->GetMaximum();
+
+      shiftScale->SetInput(amplitudeConverter->GetOutput());
+      shiftScale->SetShift( -min );
+      shiftScale->SetScale( 255.0 / (max - min) );
+
+      image = shiftScale->GetOutput();
       }
-    else
+
+    LSDFilterType::Pointer lsd
+      = LSDFilterType::New();
+    lsd->GetFilter()->SetInput(image);
+
+    AddProcess(lsd->GetStreamer(), "Running Line Segment Detector");
+    lsd->Update();
+
+    /*
+     * Reprojection of the output VectorData
+     *
+     * The output of LSDFilterType is in image physical coordinates,
+     * projection WKT applied if the input image has one
+     *
+     * We need to reproject in WGS84 if the input image is in sensor model geometry
+     */
+
+    std::string projRef = GetParameterImage("in")->GetProjectionRef();
+    ImageKeywordlist kwl = GetParameterImage("in")->GetImageKeywordlist();
+
+    VectorDataType::Pointer vd = lsd->GetFilter()->GetOutputVectorData();
+    VectorDataType::Pointer projectedVD = vd;
+
+    if ( projRef.empty() && kwl.GetSize() > 0 )
       {
-      if ( otb::ConfigurationFile::GetInstance()->IsValid() )
+      // image is in sensor model geometry
+
+      // Reproject VectorData in image projection
+      typedef otb::VectorDataProjectionFilter
+        <VectorDataType, VectorDataType>                     VectorDataProjectionFilterType;
+
+      VectorDataProjectionFilterType::Pointer vproj = VectorDataProjectionFilterType::New();
+      vproj->SetInput(vd);
+      vproj->SetInputKeywordList(GetParameterImage("in")->GetImageKeywordlist());
+      vproj->SetInputOrigin(GetParameterImage("in")->GetOrigin());
+      vproj->SetInputSpacing(GetParameterImage("in")->GetSpacing());
+
+      // Configure DEM directory
+      if(IsParameterEnabled("dem"))
         {
-        vproj->SetDEMDirectory(otb::ConfigurationFile::GetInstance()->GetDEMDirectory());
+        vproj->SetDEMDirectory( GetParameterString("dem") );
         }
+      else
+        {
+        if ( otb::ConfigurationFile::GetInstance()->IsValid() )
+          {
+          vproj->SetDEMDirectory(otb::ConfigurationFile::GetInstance()->GetDEMDirectory());
+          }
+        }
+
+      AddProcess(vproj, "Reprojecting output vector data");
+      vproj->Update();
+
+      projectedVD = vproj->GetOutput();
       }
 
-    vproj->Update();
+    SetParameterOutputVectorData("out", projectedVD);
+  }
 
-    projectedVD = vproj->GetOutput();
-    }
-
-  VectorDataFileWriterPointerType vdwriter = VectorDataFileWriterType::New();
-  vdwriter->SetInput(projectedVD);
-  vdwriter->SetFileName(parseResult->GetParameterString("OutputVectorData"));
-  vdwriter->Update();
-
-  return EXIT_SUCCESS;
-}
+};
 
 }
+}
+
+OTB_APPLICATION_EXPORT(otb::Wrapper::LineSegmentDetection)
