@@ -63,8 +63,8 @@ MaximumAutocorrelationFactorImageFilter<TInputImage, TOutputImage>
   InputImageRegionType largestInputRegion = inputPtr->GetLargestPossibleRegion();
   InputImageRegionType referenceRegion;
   InputImageSizeType size = largestInputRegion.GetSize();
-  size[0]-=1;
-  size[1]-=1;
+  size[0] -= 1;
+  size[1] -= 1;
   referenceRegion.SetSize(size);
   InputImageIndexType index = largestInputRegion.GetIndex();
   referenceRegion.SetIndex(index);
@@ -72,13 +72,13 @@ MaximumAutocorrelationFactorImageFilter<TInputImage, TOutputImage>
   InputImageRegionType dhRegion;
   InputImageRegionType dvRegion;
   
-  index[0]+=1;
+  index[0] += 1;
   
   dhRegion.SetSize(size);
   dhRegion.SetIndex(index);
 
-  index[0]-=1;
-  index[1]+=1;
+  index[0] -= 1;
+  index[1] += 1;
 
   dvRegion.SetSize(size);
   dvRegion.SetIndex(index);
@@ -175,7 +175,7 @@ MaximumAutocorrelationFactorImageFilter<TInputImage, TOutputImage>
 
 
   typedef itk::ImageRegionConstIterator<InputImageType>  ConstIteratorType;
-  typedef itk::ImageRegionIterator<OutputImageType> IteratorType;
+  typedef itk::ImageRegionIterator<OutputImageType>      IteratorType;
 
   IteratorType outIt(outputPtr, outputRegionForThread);
   ConstIteratorType inIt(inputPtr, outputRegionForThread);
