@@ -133,7 +133,6 @@ public:
   std::vector<std::string> GetParameterStringList(std::string parameter);
   
   std::string GetParameterAsString(std::string paramKey);
-  std::vector<std::string> GetParametersKeys(bool recursive);
   
 protected:
   Application();
