@@ -67,6 +67,16 @@ ADD_TEST(siTuReduceSpectralResponse ${Simulation_TESTS2}
         4 #nb band
         )
 
+ADD_TEST(siTvReduceSpectralResponse ${Simulation_TESTS2}
+    --compare-ascii ${TOL} ${BASELINE_FILES}/Simulation/siTvReduceSpectralResponse.txt
+                   ${TEMP}/siTvReduceSpectralResponse.txt     
+        otbReduceSpectralResponse
+        ${INPUTDATA}/SpectralResponse1.txt
+        ${INPUTDATA}/Radiometry/Test/rep6S.dat
+        4 #nb band
+        ${TEMP}/siTvReduceSpectralResponse.txt
+        )
+
 ADD_TEST(siTuReduceSpectralResponseClassifierRAndNIR ${Simulation_TESTS2}
         otbReduceSpectralResponseClassifierRAndNIR
         ${SPECTRUM_DB}/JHU/becknic/manmade/txt/0092uuu.txt

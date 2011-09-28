@@ -49,83 +49,91 @@ template <class TSpectralResponse , class TRSR>
 class ReduceSpectralResponse : public itk::DataObject
 {
 
-   public:
-      
-      /** Standard class typedefs */
-      typedef ReduceSpectralResponse Self;
-      typedef itk::DataObject Superclass;
-      typedef itk::SmartPointer<Self> Pointer;
-      typedef itk::SmartPointer<const Self> ConstPointer;
+public:
 
-      /** Template parameters typedef */
-      typedef TSpectralResponse InputSpectralResponseType;
-      typedef TRSR InputRSRType;
-      
-      typedef typename InputSpectralResponseType::PairType PairType;
-      typedef typename InputRSRType::Pointer InputRSRPointerType;
-      typedef typename InputSpectralResponseType::Pointer InputSpectralResponsePointerType;
-      
-      typedef typename InputRSRType::PrecisionType PrecisionType;
-      typedef typename InputRSRType::ValuePrecisionType ValuePrecisionType;
-      
-      typedef typename InputSpectralResponseType::VectorPairType VectorPairType;
-      
-      //TODO need a specific class for the integration of stectral responses (now it is in the functor)
-      typedef typename InputRSRType::RSRVectorType       RSRVectorType;
-      typedef typename std::vector<ValuePrecisionType>  ReduceSpectralResponseVectorType;
-      /** Standard macros */
-      itkNewMacro(Self);
-      itkTypeMacro(ReduceSpectralResponse, DataObject);
-      
-      itkGetConstObjectMacro(InputSatRSR, InputRSRType);
-      itkSetObjectMacro(InputSatRSR, InputRSRType);
-      
-      itkGetConstObjectMacro(InputSpectralResponse, InputSpectralResponseType);
-      itkSetObjectMacro(InputSpectralResponse, InputSpectralResponseType);
+  /** Standard class typedefs */
+  typedef ReduceSpectralResponse Self;
+  typedef itk::DataObject Superclass;
+  typedef itk::SmartPointer<Self> Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-      /** The GetReduceResponse method gives the output. The first value in the pair is the central wavelength of the band (see SpectralResponse). */
-      itkGetObjectMacro(ReduceResponse, InputSpectralResponseType);
+  /** Template parameters typedef */
+  typedef TSpectralResponse InputSpectralResponseType;
+  typedef TRSR InputRSRType;
 
-      /** Clear the vector data  */
-      virtual bool Clear();
-      
-      
-      /** PrintSelf method */
-      void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  typedef typename InputSpectralResponseType::PairType PairType;
+  typedef typename InputRSRType::Pointer InputRSRPointerType;
+  typedef typename InputSpectralResponseType::Pointer InputSpectralResponsePointerType;
 
-      /**
-      * \param PrecisionType
-      * \return The integrate value of the RSR for the input spectral response.
-      */
-      inline ValuePrecisionType operator()(const unsigned int numBand);
-      
-      /** Calculate the vector response for each band of the sensor*/
-      void CalculateResponse();
-      
-      /** Create and load Spectral response and satellite RSR from files*/
-      void LoadInputsFromFiles (const std::string & spectralResponseFile, const std::string & RSRFile, const unsigned int nbRSRBands, ValuePrecisionType coefNormSpectre = 1.0, ValuePrecisionType coefNormRSR = 1.0);
-          
-   protected:
-      /** Constructor */
-      ReduceSpectralResponse();
-      /** Constructor from a ASCII file */
-      //ReduceSpectralResponse( const std::string & filename );
-      /** Destructor */
-      virtual ~ReduceSpectralResponse() {};
-      /** PrintSelf method */
-      //void PrintSelf(std::ostream& os, itk::Indent indent) const;
-      
-      /** Input relative spectral sensor model of response */
-      InputRSRPointerType  m_InputSatRSR;
-      /** Input spectral response (usually from a library) */
-      InputSpectralResponsePointerType  m_InputSpectralResponse;
-          
-   private:
-      ReduceSpectralResponse(const Self&); //purposely not implemented
-      void operator=(const Self&); //purposely not implemented
+  typedef typename InputRSRType::PrecisionType PrecisionType;
+  typedef typename InputRSRType::ValuePrecisionType ValuePrecisionType;
 
-      /** the computed response */
-      InputSpectralResponsePointerType m_ReduceResponse;
+  typedef typename InputSpectralResponseType::VectorPairType VectorPairType;
+
+  //TODO need a specific class for the integration of stectral responses (now it is in the functor)
+  typedef typename InputRSRType::RSRVectorType RSRVectorType;
+  typedef typename std::vector<ValuePrecisionType> ReduceSpectralResponseVectorType;
+  /** Standard macros */
+  itkNewMacro(Self)
+  ;itkTypeMacro(ReduceSpectralResponse, DataObject)
+  ;
+
+  itkGetConstObjectMacro(InputSatRSR, InputRSRType)
+  ;itkSetObjectMacro(InputSatRSR, InputRSRType)
+  ;
+
+  itkGetConstObjectMacro(InputSpectralResponse, InputSpectralResponseType)
+  ;itkSetObjectMacro(InputSpectralResponse, InputSpectralResponseType)
+  ;
+
+  /** The GetReduceResponse method gives the output. The first value in the pair is the central wavelength of the band (see SpectralResponse). */
+  itkGetObjectMacro(ReduceResponse, InputSpectralResponseType)
+  ;
+
+  /** Clear the vector data  */
+  virtual bool Clear();
+
+  /** PrintSelf method */
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+
+  /**
+   * \param PrecisionType
+   * \return The integrate value of the RSR for the input spectral response.
+   */
+  inline ValuePrecisionType operator()(const unsigned int numBand);
+
+  /** Calculate the vector response for each band of the sensor*/
+  void CalculateResponse();
+
+  /** Create and load Spectral response and satellite RSR from files*/
+  void LoadInputsFromFiles(const std::string & spectralResponseFile, const std::string & RSRFile,
+                           const unsigned int nbRSRBands, ValuePrecisionType coefNormSpectre = 1.0,
+                           ValuePrecisionType coefNormRSR = 1.0);
+
+protected:
+  /** Constructor */
+  ReduceSpectralResponse();
+  /** Constructor from a ASCII file */
+  //ReduceSpectralResponse( const std::string & filename );
+  /** Destructor */
+  virtual ~ReduceSpectralResponse()
+  {
+  }
+  ;
+  /** PrintSelf method */
+  //void PrintSelf(std::ostream& os, itk::Indent indent) const;
+
+  /** Input relative spectral sensor model of response */
+  InputRSRPointerType m_InputSatRSR;
+  /** Input spectral response (usually from a library) */
+  InputSpectralResponsePointerType m_InputSpectralResponse;
+
+private:
+  ReduceSpectralResponse(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
+
+  /** the computed response */
+  InputSpectralResponsePointerType m_ReduceResponse;
 };
 
 }// end namespace otb

@@ -46,58 +46,164 @@ inline typename ReduceSpectralResponse<TSpectralResponse , TRSR>::ValuePrecision
 ReduceSpectralResponse<TSpectralResponse , TRSR>
 ::operator()(const unsigned int numBand)
 {
-   if ( numBand >= m_InputSatRSR->GetNbBands() )
-   {
-      itkExceptionMacro(<< "There is no band num " << numBand << " in the RSR vector!(Size of the current RSR vector is " << m_InputSatRSR->GetNbBands() << ")" );
-   }
-   else
-   {
-      ValuePrecisionType res = itk::NumericTraits<ValuePrecisionType>::ZeroValue();
-      ValuePrecisionType response1;
-      ValuePrecisionType response2;
-      ValuePrecisionType inputRSR1;
-      ValuePrecisionType inputRSR2;
+  if (numBand >= m_InputSatRSR->GetNbBands())
+    {
+    itkExceptionMacro(<< "There is no band num " << numBand << " in the RSR vector!(Size of the current RSR vector is " << m_InputSatRSR->GetNbBands() << ")" );
+    }
+  else
+    {
+    ValuePrecisionType res = itk::NumericTraits<ValuePrecisionType>::ZeroValue();
+    ValuePrecisionType response1;
+    ValuePrecisionType response2;
+    ValuePrecisionType inputSatRSR1;
+    ValuePrecisionType inputSatRSR2;
 
-      PrecisionType lambda1;
-      PrecisionType lambda2;
+    ValuePrecisionType inputRSR1;
+    ValuePrecisionType inputRSR2;
+    PrecisionType lambda1;
+    PrecisionType lambda2;
 
-      typename VectorPairType::const_iterator it;
-      VectorPairType pairs = (m_InputSatRSR->GetRSR())[numBand]->GetResponse();
-      it = pairs.begin();
+    typename VectorPairType::const_iterator it;
+    VectorPairType pairs = (m_InputSatRSR->GetRSR())[numBand]->GetResponse();
+    it = pairs.begin();
 
-      ValuePrecisionType totalArea = static_cast<ValuePrecisionType>(0);
-      while ( it != pairs.end() -1 )
+    PrecisionType lambdaMin=(this->m_InputSatRSR->GetRSR())[numBand]->GetInterval().first;
+    PrecisionType lambdaMax=(this->m_InputSatRSR->GetRSR())[numBand]->GetInterval().second;
+
+    ValuePrecisionType totalArea = static_cast<ValuePrecisionType> (0);
+    totalArea =lambdaMax - lambdaMin;
+    if (totalArea == 0) return static_cast<ValuePrecisionType> (0.0);
+
+
+    while (it != pairs.end() - 1)
       {
 
-      lambda1=(*it).first;
-      lambda2=(*(it+1)).first;
-      inputRSR1=(*it).second;
-      inputRSR2=(*(it+1)).second;
-      response1 = (*m_InputSpectralResponse)( lambda1 ) * inputRSR1;
-      response2 = (*m_InputSpectralResponse)( lambda2 ) * inputRSR2;
+      lambda1 = (*it).first;
+      lambda2 = (*(it + 1)).first;
+      if((lambda1<lambdaMax) && (lambda2>lambdaMin))
+        {
+        inputSatRSR1 = (*it).second;
+        inputSatRSR2 = (*(it + 1)).second;
 
-      ValuePrecisionType rmin = std::min(response1, response2);
-      ValuePrecisionType rmax = std::max(response1, response2);
-      /*
-                  rmax +\
-                       | ---\
-                       |     --| rmin
-                       |       |
-                       |       |
-                       |       |
-                       |       |
-                       |-------+
-                     lambda1   lambda2
-      */
-      
-      //Compute the surface of the trapezoid
-      ValuePrecisionType area = (lambda2-lambda1)*(rmax+rmin)/2.0;
-      res += area;
-      totalArea += (lambda2-lambda1);
+        inputRSR1 = (*m_InputSpectralResponse)(lambda1);
+        inputRSR2 = (*m_InputSpectralResponse)(lambda2);
+
+        // lambda1 need to be resampled
+        /*
+
+                                /------+ inputRSR2
+                            /---       |
+                           /           |
+                          |            |
+                          |            |
+                          |            |
+                          |            |
+         inputRSR1=0+------------------+
+         lambda1            lambda2
+                          ^
+                          |
+         first non zero val in inputRSR
+
+         - after resampling
+
+                          /------+ inputRSR2
+                      /---       |
+                     /           |
+         inputRSR1  +            |
+                    |            |
+                    |            |
+                    |            |
+                    +------------+
+                 lambda1      lambda2
+         */
+        if ((inputRSR1 == 0) && (inputRSR2 != 0))
+          {
+          PrecisionType lambdaRSRmin = m_InputSpectralResponse->GetInterval().first;
+          if ((lambdaRSRmin > lambda2) || (lambdaRSRmin < lambda1))
+            {
+            itkExceptionMacro(<<"Spectral response problem");
+            }
+
+          PrecisionType lambdaDist = lambdaRSRmin - lambda1;
+          PrecisionType ratio = lambdaDist / (lambda2 - lambda1);
+
+          lambda1 = lambdaRSRmin;
+
+          inputSatRSR1 = ratio * inputSatRSR1 + (1 - ratio) * inputSatRSR2;
+
+          }
+
+        // lambda2 need to be resampled
+        /*
+
+         inputRSR1  +---\
+                    |    \
+                    |     ------\
+                    |            |
+                    |            |
+                    |            |
+                    +----------------------------+ inputRSR2=0
+                 lambda1                       lambda2
+                                 ^
+                                 |
+         first non zero val in inputRSR
+
+         - after resampling
+
+
+         inputRSR1  +---\
+                    |    \
+                    |     ------\
+                    |            +inputRSR2
+                    |            |
+                    |            |
+                    +------------+
+                 lambda1        lambda2
+
+         */
+        if ((inputRSR1 != 0) && (inputRSR2 == 0))
+          {
+          PrecisionType lambdaRSRmax = m_InputSpectralResponse->GetInterval().second;
+          if ((lambdaRSRmax > lambda2) || (lambdaRSRmax < lambda1))
+            {
+            itkExceptionMacro(<<"Spectral response problem");
+            }
+          PrecisionType lambdaDist = lambdaRSRmax - lambda1;
+          PrecisionType ratio = lambdaDist / (lambda2 - lambda1);
+
+          lambda2 = lambdaRSRmax;
+
+          inputSatRSR2 = ratio * inputSatRSR1 + (1 - ratio) * inputSatRSR2;
+          }
+
+        response1 = (*m_InputSpectralResponse)(lambda1) * inputSatRSR1;
+        response2 = (*m_InputSpectralResponse)(lambda2) * inputSatRSR2;
+
+        ValuePrecisionType rmin = std::min(response1, response2);
+        ValuePrecisionType rmax = std::max(response1, response2);
+
+        /*
+          rmax +\
+            | ---\
+            |     --| rmin
+            |       |
+            |       |
+            |       |
+            |       |
+            |-------+
+           lambda1   lambda2
+         */
+
+        //Compute the surface of the trapezoid
+
+        ValuePrecisionType area = (lambda2 - lambda1) * (rmax + rmin) / 2.0;
+        res += area;
+        }
       ++it;
       }
-      return res/totalArea;
-   }
+
+    return res / totalArea;
+    }
 
 }
 

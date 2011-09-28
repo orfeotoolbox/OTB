@@ -1,20 +1,20 @@
 /*=========================================================================
 
-  Program:   ORFEO Toolbox
-  Language:  C++
-  Date:      $Date$
-  Version:   $Revision$
+ Program:   ORFEO Toolbox
+ Language:  C++
+ Date:      $Date$
+ Version:   $Revision$
 
 
-  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-  See OTBCopyright.txt for details.
+ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+ See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-  PURPOSE.  See the above copyright notices for more information.
+ This software is distributed WITHOUT ANY WARRANTY; without even
+ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ PURPOSE.  See the above copyright notices for more information.
 
-=========================================================================*/
+ =========================================================================*/
 
 #include "otbMacro.h"
 
@@ -24,37 +24,39 @@
 
 int otbReduceSpectralResponse(int argc, char * argv[])
 {
-  if ( argc!=4 )
-  {
-    std::cout << argv[0] << std::endl << "\t" << "<Spectral_response_filename>"<< "\t" << "<RSR_filename>"<< "\t" << "<Nb total satelite band>"<< std::endl;
+  if ((argc != 4) && (argc != 5))
+    {
+    std::cout << argv[0] << std::endl << "\t" << "<Spectral_response_filename>";
+    std::cout << "\t" << "<RSR_filename>" << "\t" << "<Nb total satellite band>";
+    std::cout << "\t" << "(<Output_filename>)" << std::endl;
     return EXIT_FAILURE;
-  }
-  
-  typedef otb::SpectralResponse< double, double>  ResponseType;
-  typedef ResponseType::Pointer  ResponsePointerType;
-  
-  typedef otb::SatelliteRSR< double, double>  SatRSRType;
-  typedef SatRSRType::Pointer  SatRSRPointerType;
-  
-  typedef otb::ReduceSpectralResponse < ResponseType, SatRSRType>  ReduceResponseType;
-  typedef ReduceResponseType::Pointer  ReduceResponseTypePointerType;
-  
+    }
+
+  typedef otb::SpectralResponse<double, double> ResponseType;
+  typedef ResponseType::Pointer ResponsePointerType;
+
+  typedef otb::SatelliteRSR<double, double> SatRSRType;
+  typedef SatRSRType::Pointer SatRSRPointerType;
+
+  typedef otb::ReduceSpectralResponse<ResponseType, SatRSRType> ReduceResponseType;
+  typedef ReduceResponseType::Pointer ReduceResponseTypePointerType;
+
   const std::string spectreFile(argv[1]);
   const std::string RSRfile(argv[2]);
   unsigned int nbBand = atoi(argv[3]);
-  
+
   //Instantiation
-  ResponsePointerType  mySpectralResponse=ResponseType::New();
+  ResponsePointerType mySpectralResponse = ResponseType::New();
   /** Load the spectral response file*/
   mySpectralResponse->Load(spectreFile, 100.0);
-  
-  SatRSRPointerType  myRSR=SatRSRType::New();
+
+  SatRSRPointerType myRSR = SatRSRType::New();
   /** Set the satelite number of bands */
   myRSR->SetNbBands(nbBand);
   /** Load the satelite response file*/
   myRSR->Load(RSRfile);
-  
-  ReduceResponseTypePointerType  myReduceResponse=ReduceResponseType::New();
+
+  ReduceResponseTypePointerType myReduceResponse = ReduceResponseType::New();
   //Instantiation
   //ResponsePointerType  myResponse=ResponseType::New();
   /** Load the satelite response in the simulator */
@@ -62,7 +64,7 @@ int otbReduceSpectralResponse(int argc, char * argv[])
   /** Load the spectral response of the object in the simulator*/
   myReduceResponse->SetInputSpectralResponse(mySpectralResponse);
   //Load file into vector
-  
+
   /** Print the input spectral response*/
   //std::cout << mySpectralResponse << std::endl;
   //itk::Indent ind;
@@ -73,5 +75,14 @@ int otbReduceSpectralResponse(int argc, char * argv[])
   myReduceResponse->CalculateResponse();
   /** Print the Reduce SR*/
   std::cout << myReduceResponse << std::endl;
+  if (argc == 5)
+    {
+    char * outputName = argv[4];
+    std::ofstream outputFile(outputName, std::ios::out);
+
+    outputFile << myReduceResponse << std::endl;
+    }
+  else std::cout << myReduceResponse << std::endl;
+
   return EXIT_SUCCESS;
 }
