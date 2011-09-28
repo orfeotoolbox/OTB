@@ -55,19 +55,8 @@ QtWidgetModel* QtWidgetParameterBase::GetModel()
 // current widget
 void QtWidgetParameterBase::SetActivationState( bool value )
 {
-  if (value)
-    {
-    this->setEnabled(true);
-    m_Param->SetChecked(true);
-    m_Param->SetActive(true);
-    }
-  else
-    {
-    this->setEnabled(false);
-    m_Param->SetChecked(false);
-    m_Param->SetActive(false);
-    }
-}
-
+  this->setEnabled(value);
+  m_Param->SetChecked(value);
+  m_Param->SetActive(value);
 }
 }
