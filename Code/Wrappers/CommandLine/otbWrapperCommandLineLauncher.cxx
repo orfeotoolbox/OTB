@@ -206,7 +206,6 @@ CommandLineLauncher::BeforeExecute()
   m_Application->UpdateParameters();
 
   // Check for the progress report
-  bool doProgressReport = true;
   if( m_Parser->IsAttributExists( "--progress", m_Expression ) == true )
     {
     std::vector<std::string> val;

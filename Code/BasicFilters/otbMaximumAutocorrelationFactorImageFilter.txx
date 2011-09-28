@@ -51,7 +51,7 @@ MaximumAutocorrelationFactorImageFilter<TInputImage, TOutputImage>
 
   // Retrieve input images pointers
   TInputImage * inputPtr = const_cast<TInputImage *>(this->GetInput());
-  TOutputImage * outputPtr = this->GetOutput();
+  //TOutputImage * outputPtr = this->GetOutput();
 
   // TODO: set the number of output components
   unsigned int nbComp = inputPtr->GetNumberOfComponentsPerPixel();
