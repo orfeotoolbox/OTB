@@ -1,22 +1,24 @@
 /*=========================================================================
 
- Program:   ORFEO Toolbox
- Language:  C++
- Date:      $Date$
- Version:   $Revision$
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
 
 
- Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
- See OTBCopyright.txt for details.
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
 
 
- This software is distributed WITHOUT ANY WARRANTY; without even
- the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- PURPOSE.  See the above copyright notices for more information.
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
 
- =========================================================================*/
+=========================================================================*/
+
 #include <QApplication>
 #include <QObject>
+#include <QTimer>
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationRegistry.h"
 #include "otbWrapperQtWidgetView.h"
@@ -28,7 +30,8 @@ using otb::Wrapper::ApplicationRegistry;
 using otb::Wrapper::QtWidgetView;
 using otb::Wrapper::QtWidgetProgressReport;
 
-int main(int argc, char* argv[])
+
+int otbWrapperQtWidgetShowWidget(int argc, char* argv[])
 {
   QApplication qtApp(argc, argv);
 
@@ -98,9 +101,11 @@ int main(int argc, char* argv[])
   // are docked widget (progress, logs...)
   mainWindow->setCentralWidget(gui);
   mainWindow->addDockWidget(Qt::BottomDockWidgetArea, qdock);
-  
+
   // Show the main window
   mainWindow->show();
+
+  QTimer::singleShot(1000, &qtApp, SLOT(quit()));
 
   // Start event processing loop
   return qtApp.exec();

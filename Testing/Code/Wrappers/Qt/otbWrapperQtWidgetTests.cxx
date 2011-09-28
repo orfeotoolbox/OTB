@@ -26,4 +26,5 @@ void RegisterTests()
 {
   REGISTER_TEST(otbWrapperQtWidgetParameterFactory);
   REGISTER_TEST(otbWrapperQtWidgetParameterGroup);
+  REGISTER_TEST(otbWrapperQtWidgetShowWidget);
 }

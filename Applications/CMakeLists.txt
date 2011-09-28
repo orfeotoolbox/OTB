@@ -1,5 +1,9 @@
 include(OTBWrapperMacros)
 
+# This var will contain the list of all application name
+# usefull for batch testing
+set(OTB_APPLICATIONS_NAME_LIST "" CACHE STRING "List of all applications name" FORCE)
+
 add_subdirectory(Classification)
 add_subdirectory(Hyperspectral)
 add_subdirectory(Projections)
