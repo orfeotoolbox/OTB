@@ -60,3 +60,4 @@ void QtWidgetParameterBase::SetActivationState( bool value )
   m_Param->SetActive(value);
 }
 }
+}
