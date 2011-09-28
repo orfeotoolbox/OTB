@@ -88,12 +88,25 @@ private:
     // Get the input image list
     FloatVectorImageListType::Pointer inList = this->GetParameterImageList("il");
 
+    if( inList->Size() == 0 )
+      {
+      itkExceptionMacro("No input Image set...");
+      }
+
+    inList->GetNthElement(0)->UpdateOutputInformation();
+    FloatVectorImageType::SizeType size = inList->GetNthElement(0)->GetLargestPossibleRegion().GetSize();
+
     // Split each input vector image into image
     // and generate an mono channel image list
     for( unsigned int i=0; i<inList->Size(); i++ )
       {
       FloatVectorImageType::Pointer vectIm = inList->GetNthElement(i);
       vectIm->UpdateOutputInformation();
+      if( size != vectIm->GetLargestPossibleRegion().GetSize() )
+        { 
+        itkExceptionMacro("Input Image size mismatch...");
+        }
+
       for( unsigned int j=0; j<vectIm->GetNumberOfComponentsPerPixel(); j++)
         {
         ExtractROIFilterType::Pointer extractor = ExtractROIFilterType::New();
@@ -104,6 +117,8 @@ private:
         m_ImageList->PushBack( extractor->GetOutput() );
         }
       }
+
+
 
     m_Concatener->SetInput( m_ImageList );
 

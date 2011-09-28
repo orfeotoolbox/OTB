@@ -23,16 +23,8 @@ namespace Wrapper
 {
 
 QtFileSelectionWidget::QtFileSelectionWidget()
-  : QWidget() /*, m_Index(0), m_AsValue(false)*/
+  : QWidget()
 {
-  //m_InputList = InputImageListParameter::New();
-  this->DoCreateWidget();
-}
-
-QtFileSelectionWidget::QtFileSelectionWidget( InputImageListParameter * il )
-  : QWidget()/*, m_Index(0), m_AsValue(false)*/
-{
-  //m_InputList = il;
   this->DoCreateWidget();
 }
 
@@ -66,7 +58,6 @@ void QtFileSelectionWidget::DoCreateWidget()
   m_Button->setToolTip("Select file...");
   m_Button->setFixedWidth(30);
  
-  //m_Button->setMaximumWidth(m_Button->width());
   connect( m_Button, SIGNAL(clicked()), this, SLOT(SelectFile()) );
   m_HLayout->addWidget(m_Button);
 
@@ -82,21 +73,8 @@ void QtFileSelectionWidget::SelectFile()
 
   if (fileDialog.exec())
     {
-    //this->SetFileName(fileDialog.selectedFiles().at(0));
     QString filemane(fileDialog.selectedFiles().at(0));
     m_Input->setText(filemane);
-/*
-    if( m_AsValue == false )
-      {
-      m_InputList->AddFromFileName(filemane.toStdString());
-      m_Index = m_InputList->GetImageList()->Size()-1;
-      m_AsValue = true;
-      }
-    else
-      {
-      m_InputList->SetNthFileName( m_Index, filemane.toStdString());
-      }
-*/
     }
 }
 

@@ -52,11 +52,13 @@ public:
   /** Set image form a list of filename */
   void SetListFromFileName(const std::vector<std::string> & filenames);
 
+  /** Add null element to lists. */
+  void AddNullElement();
 
   /** Add an image from a filename */
   void AddFromFileName(const std::string & filename);
 
- /** Set one specific stored image filename. */
+  /** Set one specific stored image filename. */
   void SetNthFileName( const unsigned int id, const std::string & filename );
 
 
@@ -85,7 +87,7 @@ public:
   void Erase( unsigned int id );
   
  /** Clear all the list. */
-  void Clear();
+  virtual void ClearValue();
 
  
 protected:

@@ -38,33 +38,79 @@ InputImageListParameter::~InputImageListParameter()
 void
 InputImageListParameter::SetListFromFileName(const std::vector<std::string> & filenames)
 {
+  // First clear previous file choosen
+  this->ClearValue();
+
+  bool isOk = false;
   for(unsigned int i=0; i<filenames.size(); i++)
     {
-    ImageFileReaderType::Pointer reader = ImageFileReaderType::New();
-    reader->SetFileName(filenames[i]);
-    reader->UpdateOutputInformation();
-    
-    // everything went fine, store the object references
-    m_ReaderList->PushBack(reader);
-    m_ImageList->PushBack(reader->GetOutput());
+    const std::string filename = filenames[i];
+    // TODO : when the logger will be available, redirect the exception
+    // in the logger (like what is done in MsgReporter)
+    if (!filename.empty()
+        && itksys::SystemTools::FileExists(filename.c_str()))
+      {
+      ImageFileReaderType::Pointer reader = ImageFileReaderType::New();
+      reader->SetFileName(filename);
+      try
+        {
+        reader->UpdateOutputInformation();
+        }
+      catch(itk::ExceptionObject & err)
+        {
+        this->ClearValue();
+        isOk = false;
+        break;
+        }
+      
+      // everything went fine, store the object references
+      m_ReaderList->PushBack(reader);
+      m_ImageList->PushBack(reader->GetOutput());
+      }
     }
-  SetActive(true);
   
-  this->Modified();
+  if( isOk == true )
+    {
+    SetActive(true);
+    this->Modified();
+    }
+}
+
+
+void
+InputImageListParameter::AddNullElement()
+{
+  m_ReaderList->PushBack(NULL);
+  m_ImageList->PushBack(NULL);
+    SetActive(false);
+    this->Modified();
 }
 
 void
 InputImageListParameter::AddFromFileName(const std::string & filename)
 {
-  ImageFileReaderType::Pointer reader = ImageFileReaderType::New();
-  reader->SetFileName(filename);
-  reader->UpdateOutputInformation();
+  // TODO : when the logger will be available, redirect the exception
+  // in the logger (like what is done in MsgReporter)
+  if (!filename.empty()
+      && itksys::SystemTools::FileExists(filename.c_str()))
+    {
+    ImageFileReaderType::Pointer reader = ImageFileReaderType::New();
+    reader->SetFileName(filename);
+    try
+      {
+      reader->UpdateOutputInformation();
+      }
+    catch(itk::ExceptionObject & err)
+      {
+      this->ClearValue();
+      }
   
-  // everything went fine, store the object references
-  m_ReaderList->PushBack(reader);
-  m_ImageList->PushBack(reader->GetOutput());
-  SetActive(true);
-  this->Modified();
+    // everything went fine, store the object references
+    m_ReaderList->PushBack(reader);
+    m_ImageList->PushBack(reader->GetOutput());
+    SetActive(true);
+    this->Modified();
+    }
 }
 
 void
@@ -74,12 +120,27 @@ InputImageListParameter::SetNthFileName( const unsigned int id, const std::strin
     {
     itkExceptionMacro(<< "No image "<<id<<". Only "<<m_ReaderList->Size()<<" images available.");
     }
-  
-  ImageFileReaderType::Pointer reader = ImageFileReaderType::New();
-  reader->SetFileName(filename);
-  reader->UpdateOutputInformation();
-  m_ReaderList->SetNthElement(id, reader);
-  m_ImageList->SetNthElement(id, reader->GetOutput());
+
+  // TODO : when the logger will be available, redirect the exception
+  // in the logger (like what is done in MsgReporter)
+  if (!filename.empty()
+      && itksys::SystemTools::FileExists(filename.c_str()))
+    {
+    ImageFileReaderType::Pointer reader = ImageFileReaderType::New();
+    reader->SetFileName(filename);
+    try
+      {
+      reader->UpdateOutputInformation();
+      }
+    catch(itk::ExceptionObject & err)
+      {
+      this->ClearValue();
+      }
+    m_ReaderList->SetNthElement(id, reader);
+    m_ImageList->SetNthElement(id, reader->GetOutput());
+
+    this->Modified();
+    }
 }
 
 
@@ -136,21 +197,51 @@ InputImageListParameter::GetNthImage(unsigned int i) const
 void
 InputImageListParameter::SetImageList(FloatVectorImageListType* imList)
 {
+  // Check input availability
+  // TODO : when the logger will be available, redirect the exception
+  // in the logger (like what is done in MsgReporter)
+  try
+    {
+    for(unsigned int i=0; i<imList->Size(); i++)
+      {
+      imList->GetNthElement( i )->UpdateOutputInformation();
+      }
+    }
+  catch(itk::ExceptionObject & err)
+    {
+    return;
+    }
+  
   m_ImageList = imList;
   m_ReaderList = ImageFileReaderListType::Pointer();
   for(unsigned int i=0; i<m_ImageList->Size(); i++)
     {
     m_ReaderList->PushBack( ImageFileReaderType::Pointer() );
     }
-  
+
+  SetActive(true);
   this->Modified();
 }
 
 void
 InputImageListParameter::AddImage(FloatVectorImageType* image)
 {
+  // Check input availability
+  // TODO : when the logger will be available, redirect the exception
+  // in the logger (like what is done in MsgReporter)
+  try
+    {
+    image->UpdateOutputInformation();
+    }
+  catch(itk::ExceptionObject & err)
+    {
+    return;
+    }
+  
   m_ImageList->PushBack( image );
   m_ReaderList->PushBack( ImageFileReaderType::Pointer() );
+
+  this->Modified();
 }
 
 bool
@@ -161,7 +252,16 @@ InputImageListParameter::HasValue() const
     return false;
     }
   
-  return m_ImageList->GetNthElement(0).IsNotNull();
+
+  bool res(true);
+  unsigned int i(0);
+  while(i<m_ImageList->Size() && res==true)
+    {
+    res = m_ImageList->GetNthElement(i).IsNotNull();
+    i++;
+    }
+
+  return res;
 }
 
 
@@ -175,13 +275,18 @@ InputImageListParameter::Erase( unsigned int id )
   
   m_ImageList->Erase( id );
   m_ReaderList->Erase( id );
+
+  this->Modified();
 }
 
 void
-InputImageListParameter::Clear()
+InputImageListParameter::ClearValue()
 {
   m_ImageList->Clear();
   m_ReaderList->Clear();
+
+  SetActive(false);
+  this->Modified();
 }
 
 

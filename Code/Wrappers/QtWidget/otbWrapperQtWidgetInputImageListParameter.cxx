@@ -26,6 +26,7 @@ QtWidgetInputImageListParameter::QtWidgetInputImageListParameter(InputImageListP
 : QtWidgetParameterBase(param, m),
   m_InputImageListParam(param)
 {
+ connect( this, SIGNAL(Change()), GetModel(), SLOT(NotifyUpdate()) );
 }
 
 QtWidgetInputImageListParameter::~QtWidgetInputImageListParameter()
@@ -66,7 +67,6 @@ void QtWidgetInputImageListParameter::DoCreateWidget()
   addButton->setText("+");
   addButton->setFixedWidth(buttonSize);
   addButton->setToolTip("Add a file selector...");
-  //addButton->setMaximumWidth(addButton->width());
   connect( addButton, SIGNAL(clicked()), this, SLOT(AddFile()) );
   addSupLayout->addWidget(addButton);
 
@@ -107,9 +107,12 @@ void QtWidgetInputImageListParameter::DoCreateWidget()
   QVBoxLayout * fileLayout = new QVBoxLayout();
   fileLayout->setSpacing(0);
 
-  QtFileSelectionWidget * fileSelection = new QtFileSelectionWidget(m_InputImageListParam);
-  fileSelection->setFixedHeight(40);
+  QtFileSelectionWidget * fileSelection = new QtFileSelectionWidget();
+  fileSelection->setFixedHeight(30);
   fileLayout->addWidget( fileSelection );
+  m_InputImageListParam->AddNullElement();
+  connect( fileSelection->GetInput(), SIGNAL(textChanged(const QString&)), this, SLOT(UpdateImageList()) );
+
   m_FileSelectionList.push_back(fileSelection);
 
   QGroupBox *mainGroup = new QGroupBox();
@@ -129,6 +132,18 @@ void QtWidgetInputImageListParameter::DoCreateWidget()
   m_HLayout = hLayout;
   m_Scroll = scroll;
 
+}
+
+void 
+QtWidgetInputImageListParameter::UpdateImageList()
+{
+  // save value
+  for(unsigned int j=0; j<m_InputImageListParam->GetImageList()->Size(); j++ )
+    {
+    m_InputImageListParam->SetNthFileName(j, m_FileSelectionList[j]->GetFilename());
+    }
+
+  emit Change();
 }
 
 
@@ -244,6 +259,10 @@ QtWidgetInputImageListParameter::UpdateFileList( std::map<unsigned int, unsigned
   m_Scroll->setWidget(mainGroup);
   
   this->update();
+
+    // notify of value change
+  QString key( QString::fromStdString(m_InputImageListParam->GetKey()) );
+  emit ParameterChanged(key);
 }
 
 
@@ -262,13 +281,15 @@ QtWidgetInputImageListParameter::AddFile()
   fileSelection->setFixedHeight( 30 );
   m_FileLayout->addWidget( fileSelection );
   m_FileSelectionList.push_back(fileSelection);
+  m_InputImageListParam->AddNullElement();
+  connect( fileSelection->GetInput(), SIGNAL(textChanged(const QString&)), this, SLOT(UpdateImageList()) );
 
   QGroupBox *mainGroup = new QGroupBox();
   mainGroup->setLayout(m_FileLayout);
   m_Scroll->setWidget(mainGroup);
 
+ 
   this->update();
-  this->RecreateImageList();
 }
 
 void
@@ -305,9 +326,11 @@ QtWidgetInputImageListParameter::EraseFile()
   m_FileLayout = new QVBoxLayout();
 
   QtFileSelectionWidget * fileSelection = new QtFileSelectionWidget();
-  fileSelection->setFixedHeight( 40 );
+  fileSelection->setFixedHeight( 30 );
   m_FileLayout->addWidget( fileSelection );
   m_FileSelectionList.push_back(fileSelection);
+  m_InputImageListParam->AddNullElement();
+  connect( fileSelection->GetInput(), SIGNAL(textChanged(const QString&)), this, SLOT(UpdateImageList()) );
 
   QGroupBox *mainGroup = new QGroupBox();
   mainGroup->setLayout(m_FileLayout);
@@ -321,13 +344,14 @@ QtWidgetInputImageListParameter::EraseFile()
 void QtWidgetInputImageListParameter::RecreateImageList()
 {
   // save value
-  m_InputImageListParam->Clear();
+  m_InputImageListParam->ClearValue();
   for(unsigned int j=0; j<m_FileSelectionList.size(); j++ )
     {
-    if( m_FileSelectionList[j]->GetFilename() != "" )
-      m_InputImageListParam->AddFromFileName(m_FileSelectionList[j]->GetFilename());
+    m_InputImageListParam->AddFromFileName(m_FileSelectionList[j]->GetFilename());
+    connect( m_FileSelectionList[j]->GetInput(), SIGNAL(textChanged(const QString&)), this, SLOT(UpdateImageList()) );
     }
 
+  emit Change();
   // notify of value change
   QString key( QString::fromStdString(m_InputImageListParam->GetKey()) );
   emit ParameterChanged(key);
