@@ -15,6 +15,7 @@ SET(EPSILON_3 0.001)
 
 SET(Hyperspectral_TESTS1 ${CXX_TEST_PATH}/otbHyperspectralTests1)
 SET(Hyperspectral_TESTS2 ${CXX_TEST_PATH}/otbHyperspectralTests2)
+SET(Hyperspectral_TESTS3 ${CXX_TEST_PATH}/otbHyperspectralTests3)
 
 # HyperspectralTests1
 ADD_TEST(hyTuEigenvalueLikelihoodMaximizationNew
@@ -136,6 +137,23 @@ ADD_TEST(hyTvFCLSUnmixingImageFilterTest
          ${TEMP}/hyTvFCLSUnmixingImageFilterTest.tif
          10)
 
+# HyperspectralTests3
+ADD_TEST(hyTuMDMDNMFImageFilterNew
+         ${Hyperspectral_TESTS3}
+         otbMDMDNMFImageFilterNewTest)         
+
+ADD_TEST(hyTvMDMDNMFImageFilterTest
+         ${Hyperspectral_TESTS3}
+         --compare-image ${EPSILON_9}
+         ${BASELINE}/hyTvMDMDNMFImageFilterTest.tif
+         ${TEMP}/hyTvMDMDNMFImageFilterTest.tif
+         otbMDMDNMFImageFilterTest
+         ${INPUTDATA}/cupriteSubHsi.tif
+         ${INPUTDATA}/Hyperspectral/synthetic/endmembers.tif
+         ${TEMP}/hyTvMDMDNMFImageFilterTest.tif
+         100)
+
+
 
 SET(Hyperspectral_SRCS1
 otbHyperspectralTests1.cxx
@@ -155,10 +173,18 @@ otbLocalRxDetectorTest.cxx
 otbLocalRxDetectorRoiTest.cxx
 )
 
+SET(Hyperspectral_SRCS3
+otbHyperspectralTests3.cxx
+otbMDMDNMFImageFilter.cxx
+)
+
 ADD_EXECUTABLE(otbHyperspectralTests1 otbHyperspectralTests1.cxx ${Hyperspectral_SRCS1})
 TARGET_LINK_LIBRARIES(otbHyperspectralTests1 OTBIO OTBHyperspectral OTBMultiScale OTBTesting)
 
 ADD_EXECUTABLE(otbHyperspectralTests2 otbHyperspectralTests2.cxx ${Hyperspectral_SRCS2})
 TARGET_LINK_LIBRARIES(otbHyperspectralTests2 OTBIO OTBHyperspectral OTBTesting)
+
+ADD_EXECUTABLE(otbHyperspectralTests3 otbHyperspectralTests3.cxx ${Hyperspectral_SRCS3})
+TARGET_LINK_LIBRARIES(otbHyperspectralTests3 OTBIO OTBHyperspectral OTBTesting)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
