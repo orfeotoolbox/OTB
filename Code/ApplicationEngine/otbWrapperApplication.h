@@ -368,7 +368,6 @@ private:
   std::string                       m_Name;
   std::string                       m_Description;
   ParameterGroup::Pointer           m_ParameterList;
-  unsigned int                      m_WroteOutput;
 
   itk::Logger::Pointer              m_Logger;
 

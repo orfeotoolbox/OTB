@@ -45,7 +45,6 @@ namespace Wrapper
 Application::Application()
  : m_Name(""),
    m_Description(""),
-   m_WroteOutput(0),
    m_Logger(itk::Logger::New())
 {
   // Don't call Init from the constructor, since it calls a virtual method !
@@ -112,7 +111,6 @@ void Application::Execute()
 void Application::ExecuteAndWriteOutput()
 {
   this->Execute();
-  m_WroteOutput = 0;
   std::vector<std::string> paramList = GetParametersKeys(true);
   for (std::vector<std::string>::const_iterator it = paramList.begin();
       it != paramList.end();
@@ -124,9 +122,17 @@ void Application::ExecuteAndWriteOutput()
       Parameter* param = GetParameterByKey(*it);
       OutputImageParameter* outputParam = dynamic_cast<OutputImageParameter*>(param);
       outputParam->InitializeWriters();
-      AddProcess(outputParam->GetWriter(),"Writer ");
+      AddProcess(outputParam->GetWriter(),"Writer");
       outputParam->Write();
-      m_WroteOutput++;
+      }
+    else if (GetParameterType(*it) == ParameterType_OutputVectorData
+             && IsParameterEnabled(*it) )
+      {
+      Parameter* param = GetParameterByKey(*it);
+      OutputVectorDataParameter* outputParam = dynamic_cast<OutputVectorDataParameter*>(param);
+      outputParam->InitializeWriters();
+      AddProcess(outputParam->GetWriter(),"Writer");
+      outputParam->Write();
       }
     }
 }

@@ -18,8 +18,10 @@
 #ifndef __otbWrapperOutputVectorDataParameter_h
 #define __otbWrapperOutputVectorDataParameter_h
 
-#include "otbVectorData.h"
 #include "otbWrapperParameter.h"
+
+#include "otbVectorData.h"
+#include "otbVectorDataFileWriter.h"
 
 namespace otb
 {
@@ -51,6 +53,13 @@ public:
   /** Get the value */
   itkGetObjectMacro(VectorData, VectorDataType);
 
+  /** Return true if a filename is set */
+  bool HasValue() const
+  {
+    std::string filename(this->GetFileName());
+    return !filename.empty();
+  }
+
   /** Return any value */
   void SetValue(VectorDataType* vd)
   {
@@ -64,8 +73,34 @@ public:
     return m_VectorData;
   }
 
-  itkSetStringMacro(FileName);
+  void SetFileName (const char* filename)
+  {
+    m_FileName = filename;
+    SetActive(true);
+  }
+  void SetFileName (const std::string& filename)
+  {
+    this->SetFileName(filename.c_str());
+  }
+
   itkGetStringMacro(FileName);
+
+  void Write()
+  {
+    m_Writer->SetFileName(m_FileName);
+    m_Writer->SetInput(m_VectorData);
+    m_Writer->Update();
+  }
+
+  itk::ProcessObject* GetWriter()
+  {
+    return m_Writer;
+  }
+
+  void InitializeWriters()
+  {
+    m_Writer = otb::VectorDataFileWriter<VectorDataType>::New();
+  }
 
 protected:
   /** Constructor */
@@ -79,8 +114,11 @@ protected:
   virtual ~OutputVectorDataParameter()
   {}
 
+
   VectorDataType::Pointer m_VectorData;
   std::string m_FileName;
+
+  otb::VectorDataFileWriter<VectorDataType>::Pointer m_Writer;
 
 private:
   OutputVectorDataParameter(const Parameter &); //purposely not implemented
