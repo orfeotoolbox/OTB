@@ -87,6 +87,15 @@ private:
     //AddParameter(ParameterType_OutputVectorData, "outgroup.outputvectordata", "Output Vector Data");
 
     AddParameter(ParameterType_Radius, "radius", "Radius");
+
+    AddParameter(ParameterType_InputImageList,  "il",   "Input image list");
+    MandatoryOff("il");
+    
+    AddParameter(ParameterType_ListView,  "cl", "Output Image channels");
+    AddChoice("cl.choice1", "cl.choice1");
+    AddChoice("cl.choice2", "cl.choice2");
+    MandatoryOff("cl");
+    
   }
 
   void DoUpdateParameters()
