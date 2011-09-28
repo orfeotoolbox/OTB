@@ -134,7 +134,7 @@ void QtWidgetInputImageListParameter::DoCreateWidget()
 
 }
 
-void 
+void
 QtWidgetInputImageListParameter::UpdateImageList()
 {
   // save value

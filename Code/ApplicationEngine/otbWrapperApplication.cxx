@@ -629,7 +629,7 @@ FloatVectorImageListType* Application::GetParameterImageList(std::string paramet
   Parameter* param = GetParameterByKey(parameter);
 
   if (dynamic_cast<InputImageListParameter*>(param))
-    {   
+    {
     InputImageListParameter* paramDown = dynamic_cast<InputImageListParameter*>(param);
     ret = paramDown->GetImageList();
     }

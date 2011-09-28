@@ -75,20 +75,20 @@ public:
   typedef typename std::vector<ValuePrecisionType> ReduceSpectralResponseVectorType;
   /** Standard macros */
   itkNewMacro(Self)
-  ;itkTypeMacro(ReduceSpectralResponse, DataObject)
-  ;
+ ; itkTypeMacro(ReduceSpectralResponse, DataObject)
+ ;
 
   itkGetConstObjectMacro(InputSatRSR, InputRSRType)
-  ;itkSetObjectMacro(InputSatRSR, InputRSRType)
-  ;
+ ; itkSetObjectMacro(InputSatRSR, InputRSRType)
+ ;
 
   itkGetConstObjectMacro(InputSpectralResponse, InputSpectralResponseType)
-  ;itkSetObjectMacro(InputSpectralResponse, InputSpectralResponseType)
-  ;
+ ; itkSetObjectMacro(InputSpectralResponse, InputSpectralResponseType)
+ ;
 
   /** The GetReduceResponse method gives the output. The first value in the pair is the central wavelength of the band (see SpectralResponse). */
   itkGetObjectMacro(ReduceResponse, InputSpectralResponseType)
-  ;
+ ;
 
   /** Clear the vector data  */
   virtual bool Clear();
@@ -119,7 +119,7 @@ protected:
   virtual ~ReduceSpectralResponse()
   {
   }
-  ;
+ ;
   /** PrintSelf method */
   //void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

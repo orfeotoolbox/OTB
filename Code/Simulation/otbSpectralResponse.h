@@ -79,12 +79,12 @@ public:
   typedef std::pair<TPrecision, TPrecision> IntervalType;
   /** Standard macros */
   itkNewMacro(Self)
-  ;itkTypeMacro(SpectralResponse, DataObject)
-  ;
+ ; itkTypeMacro(SpectralResponse, DataObject)
+ ;
 
   itkSetMacro(SensitivityThreshold, TPrecision)
-  ;itkGetConstMacro(SensitivityThreshold, TPrecision)
-  ;
+ ; itkGetConstMacro(SensitivityThreshold, TPrecision)
+ ;
 
   /** Clear the vector of data pairs  */
   virtual bool Clear();
@@ -153,7 +153,7 @@ protected:
   virtual ~SpectralResponse()
   {
   }
-  ;
+ ;
   /** PrintSelf method */
   //void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
