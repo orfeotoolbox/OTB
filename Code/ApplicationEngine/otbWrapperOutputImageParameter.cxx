@@ -16,7 +16,8 @@
 
 =========================================================================*/
 #include "otbWrapperOutputImageParameter.h"
-#include "itkCastImageFilter.h"
+//#include "itkCastImageFilter.h"
+#include "otbVectorRescaleIntensityImageFilter.h"
 
 namespace otb
 {
@@ -50,89 +51,74 @@ void OutputImageParameter::InitializeWriters()
 }
 
 
+#define otbRescaleAndWriteMacro(OutputImageType, writer)                       \
+  {                                                                     \
+    typedef VectorRescaleIntensityImageFilter<FloatVectorImageType, OutputImageType> RescaleFilterType; \
+    RescaleFilterType::Pointer rescaler = RescaleFilterType::New();     \
+    OutputImageType::PixelType outputMinimum(nbChannel);                \
+    outputMinimum.Fill(itk::NumericTraits<OutputImageType::InternalPixelType>::min()); \
+    OutputImageType::PixelType outputMaximum(nbChannel);                \
+    outputMaximum.Fill(itk::NumericTraits<OutputImageType::InternalPixelType>::max()); \
+    rescaler->SetOutputMinimum(outputMinimum);                          \
+    rescaler->SetOutputMaximum(outputMaximum);                          \
+    rescaler->SetAutomaticInputMinMaxComputation( true );               \
+    rescaler->SetInput( this->GetImage() );                             \
+    writer->SetFileName( this->GetFileName() );                   \
+    writer->SetInput(rescaler->GetOutput());                      \
+    writer->Update();                                             \
+  }
+
 void
 OutputImageParameter::Write( )
 {
+  this->GetImage()->UpdateOutputInformation();
+  const unsigned int nbChannel( this->GetImage()->GetNumberOfComponentsPerPixel() );
+
   switch(m_PixelType )
   {
     case ImagePixelType_int8:
       {
-      typedef itk::CastImageFilter<FloatVectorImageType, Int8VectorImageType> CastFilterType;
-      CastFilterType::Pointer cast = CastFilterType::New();
-      cast->SetInput( this->GetImage() );
-      m_Int8Writer->SetFileName( this->GetFileName() );
-      m_Int8Writer->SetInput(cast->GetOutput());
-      m_Int8Writer->Update();
-      }
+      otbRescaleAndWriteMacro(Int8VectorImageType, m_Int8Writer);
       break;
+      }
     case ImagePixelType_uint8:
       {
-      typedef itk::CastImageFilter<FloatVectorImageType, UInt8VectorImageType> CastFilterType;
-      CastFilterType::Pointer cast = CastFilterType::New();
-      cast->SetInput( this->GetImage() );
-      m_UInt8Writer->SetFileName( this->GetFileName() );
-      m_UInt8Writer->SetInput(cast->GetOutput());
-      m_UInt8Writer->Update();
-      }
+      otbRescaleAndWriteMacro(UInt8VectorImageType, m_UInt8Writer);
       break;
+      }
     case ImagePixelType_int16:
       {
-      typedef itk::CastImageFilter<FloatVectorImageType, Int16VectorImageType> CastFilterType;
-      CastFilterType::Pointer cast = CastFilterType::New();
-      cast->SetInput( this->GetImage() );
-      m_Int16Writer->SetFileName( this->GetFileName() );
-      m_Int16Writer->SetInput(cast->GetOutput());
-      m_Int16Writer->Update();
-      }
+      otbRescaleAndWriteMacro(Int16VectorImageType, m_Int16Writer);
       break;
+      }
     case ImagePixelType_uint16:
       {
-      typedef itk::CastImageFilter<FloatVectorImageType, UInt16VectorImageType> CastFilterType;
-      CastFilterType::Pointer cast = CastFilterType::New();
-      cast->SetInput( this->GetImage() );
-      m_UInt16Writer->SetFileName( this->GetFileName() );
-      m_UInt16Writer->SetInput(cast->GetOutput());
-      m_UInt16Writer->Update();
-      }
+      otbRescaleAndWriteMacro(UInt16VectorImageType, m_UInt16Writer);
       break;
+      }
     case ImagePixelType_int32:
       {
-      typedef itk::CastImageFilter<FloatVectorImageType, Int32VectorImageType> CastFilterType;
-      CastFilterType::Pointer cast = CastFilterType::New();
-      cast->SetInput( this->GetImage() );
-      m_Int32Writer->SetFileName( this->GetFileName() );
-      m_Int32Writer->SetInput(cast->GetOutput());
-      m_Int32Writer->Update();
-      }
+      otbRescaleAndWriteMacro(Int32VectorImageType, m_Int32Writer);
       break;
+      }
     case ImagePixelType_uint32:
       {
-      typedef itk::CastImageFilter<FloatVectorImageType, UInt32VectorImageType> CastFilterType;
-      CastFilterType::Pointer cast = CastFilterType::New();
-      cast->SetInput( this->GetImage() );
-      m_UInt32Writer->SetFileName( this->GetFileName() );
-      m_UInt32Writer->SetInput(cast->GetOutput());
-      m_UInt32Writer->Update();
-      }
+      otbRescaleAndWriteMacro(UInt32VectorImageType, m_UInt32Writer);
       break;
+      }
     case ImagePixelType_float:
       {
       m_FloatWriter->SetFileName( this->GetFileName() );
       m_FloatWriter->SetInput(this->GetImage());
       m_FloatWriter->Modified();
       m_FloatWriter->Update();
-      }
       break;
+      }
     case ImagePixelType_double:
       {
-      typedef itk::CastImageFilter<FloatVectorImageType, DoubleVectorImageType> CastFilterType;
-      CastFilterType::Pointer cast = CastFilterType::New();
-      cast->SetInput( this->GetImage() );
-      m_DoubleWriter->SetFileName( this->GetFileName() );
-      m_DoubleWriter->SetInput(cast->GetOutput());
-      m_DoubleWriter->Update();
-      }
+      otbRescaleAndWriteMacro(DoubleVectorImageType, m_DoubleWriter);
       break;
+      }
   }
 }
 
