@@ -162,11 +162,11 @@ int otbGenericRSTransformGenericConversionCheckingFromGCP(int argc, char* argv[]
      std::cerr<<"There were imprecise results."<<std::endl;
      std::cerr<<"Total geographic residual (in meters): "<<accSumM
          << " - Mean: "<<accSumM/(double)(nbGCP)
-         << " - Standard Deviation: "<< (accSum2M/(double)(nbGCP)) - ((accSumM/(double)(nbGCP)) * (accSumM/(double)(nbGCP)))
+         << " - Standard Deviation: "<< vcl_sqrt((accSum2M/(double)(nbGCP)) - ((accSumM/(double)(nbGCP)) * (accSumM/(double)(nbGCP))))
          <<std::endl;
      std::cerr<<"Total image residual (in pixels): "<< accSumPx
          << " - Mean: " <<accSumPx/(double)(nbGCP)
-         << " - Standard Deviation: "<< (accSum2Px/(double)(nbGCP)) - ((accSumPx/(double)(nbGCP)) * (accSumPx/(double)(nbGCP)))
+         << " - Standard Deviation: "<< vcl_sqrt((accSum2Px/(double)(nbGCP)) - ((accSumPx/(double)(nbGCP)) * (accSumPx/(double)(nbGCP))))
          <<std::endl;
      return EXIT_FAILURE;
      }
