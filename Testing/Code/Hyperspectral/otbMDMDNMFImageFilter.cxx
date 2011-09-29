@@ -42,6 +42,47 @@ int otbMDMDNMFImageFilterTest(int argc, char * argv[])
   typedef otb::VectorImageToMatrixImageFilter<ImageType> VectorImageToMatrixImageFilterType;
   
   const char * inputImage = argv[1];
+  const char * outputImage = argv[2];
+  const unsigned int maxIter = atoi(argv[3]);
+
+  ReaderType::Pointer readerImage = ReaderType::New();
+  readerImage->SetFileName(inputImage);
+  readerImage->UpdateOutputInformation();
+
+  MDMDNMFImageFilterType::Pointer unmixer = MDMDNMFImageFilterType::New();
+
+  unmixer->SetInput(readerImage->GetOutput());
+
+  typename MDMDNMFImageFilterType::MatrixType A;
+  A.set_size(readerImage->GetOutput()->GetNumberOfComponentsPerPixel(), 5);
+  A.fill(100.);
+  A.set_column(1,200.);
+  A.set_column(2,300.);
+  A.set_column(3,400.);
+  A.set_column(4,500.);
+  unmixer->SetEndmembersMatrix(A);
+  unmixer->SetMaxIter(maxIter);
+
+  WriterType::Pointer writer = WriterType::New();
+  writer->SetFileName(outputImage);
+  writer->SetInput(unmixer->GetOutput());
+
+  otb::StandardWriterWatcher w4(writer, unmixer,"MDMDNMFImageFilter");
+  writer->Update();
+
+  return EXIT_SUCCESS;
+}
+
+int otbMDMDNMFImageFilterTest2(int argc, char * argv[])
+{
+  typedef double PixelType;
+  typedef otb::VectorImage<PixelType, 2> ImageType;
+  typedef otb::MDMDNMFImageFilter<ImageType, ImageType> MDMDNMFImageFilterType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::StreamingImageFileWriter<ImageType> WriterType;
+  typedef otb::VectorImageToMatrixImageFilter<ImageType> VectorImageToMatrixImageFilterType;
+  
+  const char * inputImage = argv[1];
   const char * inputEndmembers = argv[2];
   const char * outputImage = argv[3];
   const unsigned int maxIter = atoi(argv[4]);
@@ -64,15 +105,7 @@ int otbMDMDNMFImageFilterTest(int argc, char * argv[])
 
   unmixer->SetInput(readerImage->GetOutput());
 
-  typename MDMDNMFImageFilterType::MatrixType A;
-  A.set_size(readerImage->GetOutput()->GetNumberOfComponentsPerPixel(), 5);
-  A.fill(100.);
-  A.set_column(1,200.);
-  A.set_column(2,300.);
-  A.set_column(3,400.);
-  A.set_column(4,500.);
-  unmixer->SetEndmembersMatrix(A);
-  //unmixer->SetEndmembers(endMember2Matrix->GetMatrix());
+  unmixer->SetEndmembersMatrix(endMember2Matrix->GetMatrix());
   unmixer->SetMaxIter(maxIter);
 
   WriterType::Pointer writer = WriterType::New();

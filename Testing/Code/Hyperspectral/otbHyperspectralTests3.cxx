@@ -25,4 +25,5 @@ void RegisterTests()
 {
   REGISTER_TEST(otbMDMDNMFImageFilterNewTest);
   REGISTER_TEST(otbMDMDNMFImageFilterTest);
+  REGISTER_TEST(otbMDMDNMFImageFilterTest2);
 }

@@ -14,7 +14,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
 #ifndef __otbMDMDNMFImageFilter_txx
 #define __otbMDMDNMFImageFilter_txx
 
@@ -31,6 +30,10 @@ MDMDNMFImageFilter<TInputImage, TOutputImage>
 ::MDMDNMFImageFilter()
 {
   m_MaxIter = 100;
+  m_CritStopValue = 00.5;
+  m_Delt = 1.;
+  m_LambdD = 0.01;
+  m_LambdS = 0.01;
 }
 
 /**
@@ -42,7 +45,6 @@ MDMDNMFImageFilter<TInputImage, TOutputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-
   os << indent << "Input Endmembers Matrix: " << m_Endmembers << std::endl;
 }
 
@@ -54,9 +56,17 @@ MDMDNMFImageFilter<TInputImage, TOutputImage>
 ::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
-  //this->GetOutput()->SetNumberOfComponentsPerPixel(5);
-  std::cout << "nb endmembers matrix columns number " << m_Endmembers.columns() << std::endl;
-  this->GetOutput()->SetNumberOfComponentsPerPixel(m_Endmembers.columns());
+  const unsigned int nbEndmembers = m_Endmembers.columns();
+  if ( nbEndmembers != 0 )
+    {
+    this->GetOutput()->SetNumberOfComponentsPerPixel(m_Endmembers.columns());
+    }
+  else 
+    {
+    throw itk::ExceptionObject(__FILE__, __LINE__,
+			       "Endmembers matrix columns size required to know the output size",
+			       ITK_LOCATION);
+    }
 }
 
 
@@ -66,13 +76,13 @@ MDMDNMFImageFilter<TInputImage, TOutputImage>
 ::AddOneRowOfOnes(const MatrixType & m,
 		  MatrixType & M) const
 {
-	M.set_size(m.rows()+1, m.cols());
+  M.set_size(m.rows()+1, m.cols());
 
-	for (unsigned int i=0; i<M.rows()-1; ++i)
-	{
-		M.set_row(i, m.get_row(i));
-	}
-	M.set_row(M.rows()-1, 1.0);
+  for (unsigned int i=0; i<M.rows()-1; ++i)
+    {
+    M.set_row(i, m.get_row(i));
+    }
+  M.set_row(M.rows()-1, 1.0);
 }
 
 
@@ -80,56 +90,56 @@ template <class TInputImage, class TOutputImage>
 double
 MDMDNMFImageFilter<TInputImage, TOutputImage>
 ::Criterion(const MatrixType & X,
-		const MatrixType & A,
-		const MatrixType & S,
-		const double &delt,
-		const double &lambdS,
-		const double &lambdD) const
+	    const MatrixType & A,
+	    const MatrixType & S,
+	    const double &m_Delt,
+	    const double &m_LambdS,
+	    const double &m_LambdD) const
 {
-	// This function computes
-	// f =	||Xsu-Asu.S||_2^2 -
-	//		lambdS * ||1/J*ones - S||_2^2 +
-	//		lambdD * (trace(transpose(A)*A)-1/L*trace(transpose(A).ones.A));
-	//
-	//	 =	||E1||_2^2 -
-	//		lambdS * ||E2||_2^2 +
-	//		lambdD * (trace(A'*A)-1/L*trace(E3);
-	//
-	// where	|| ||_2 is the L2 frobenius_norm,
-	//			J is the number of endmembers and
-	//			L is the number of spectral bands
+  // This function computes
+  // f =	||Xsu-Asu.S||_2^2 -
+  //		m_LambdS * ||1/J*ones - S||_2^2 +
+  //		m_LambdD * (trace(transpose(A)*A)-1/L*trace(transpose(A).ones.A));
+  //
+  //	 =	||E1||_2^2 -
+  //		m_LambdS * ||E2||_2^2 +
+  //		m_LambdD * (trace(A'*A)-1/L*trace(E3);
+  //
+  // where	|| ||_2 is the L2 frobenius_norm,
+  //			J is the number of endmembers and
+  //			L is the number of spectral bands
 
-	const unsigned int nbEndmembers = A.cols();
-	const unsigned nbBands = A.rows();
-	MatrixType Xsu, Asu, ones, E1, E2;	//, E3;
-	double evalf, sumColsOfA, trE3;
+  const unsigned int nbEndmembers = A.cols();
+  const unsigned nbBands = A.rows();
+  MatrixType Xsu, Asu, ones, E1, E2;	//, E3;
+  double evalf, sumColsOfA, trE3;
 
-	Xsu.set_size(X.rows()+1, X.cols());
-	Asu.set_size(A.rows()+1, A.cols());
-	AddOneRowOfOnes(A, Asu);
-	AddOneRowOfOnes(X, Xsu);
+  Xsu.set_size(X.rows()+1, X.cols());
+  Asu.set_size(A.rows()+1, A.cols());
+  AddOneRowOfOnes(A, Asu);
+  AddOneRowOfOnes(X, Xsu);
 
-	//-------   Computing the function blocs E1, E2 and E3   -------//
-	// Bloc 1
-	E1 = Xsu - Asu*S;
+  //-------   Computing the function blocs E1, E2 and E3   -------//
+  // Bloc 1
+  E1 = Xsu - Asu*S;
 
-	// Bloc 2
-	E2 = S - 1./ ((double) nbEndmembers);// * ones - S;
+  // Bloc 2
+  E2 = S - 1./ ((double) nbEndmembers);// * ones - S;
 
-	// Computing trace(transpose(A)*A)
-	double trAtA = 0;
-	for (unsigned int i=0; i<A.columns(); ++i)
-	{
-		trAtA += A.get_column(i).two_norm() * A.get_column(i).two_norm();
-	}
+  // Computing trace(transpose(A)*A)
+  double trAtA = 0;
+  for (unsigned int i=0; i<A.columns(); ++i)
+    {
+    trAtA += A.get_column(i).two_norm() * A.get_column(i).two_norm();
+    }
 
-	// Bloc 3: computing fast trE3 = trace(transpose(A)*ones*A)
-	trE3 = 0;
-	for (unsigned int j=0; j<nbEndmembers; ++j)
-	{
-		sumColsOfA = A.get_column(j).sum();
-		trE3 += sumColsOfA * sumColsOfA;
-	}
+  // Bloc 3: computing fast trE3 = trace(transpose(A)*ones*A)
+  trE3 = 0;
+  for (unsigned int j=0; j<nbEndmembers; ++j)
+    {
+    sumColsOfA = A.get_column(j).sum();
+    trE3 += sumColsOfA * sumColsOfA;
+    }
 
 
 /*	for (int j=0; j<nbEndmembers; ++j)
@@ -146,72 +156,72 @@ MDMDNMFImageFilter<TInputImage, TOutputImage>
 		}
 	}
 */
-	//--------------------   Computing f   --------------------------//
-	evalf = E1.frobenius_norm() * E1.frobenius_norm()
-			- lambdS * E2.frobenius_norm() * E2.frobenius_norm()
-			+ lambdD * (trAtA - (1./ ((double) nbBands) * trE3));
-	return evalf;
+  //--------------------   Computing f   --------------------------//
+  evalf = E1.frobenius_norm() * E1.frobenius_norm()
+    - m_LambdS * E2.frobenius_norm() * E2.frobenius_norm()
+    + m_LambdD * (trAtA - (1./ ((double) nbBands) * trE3));
+  return evalf;
 }
 
 template <class TInputImage, class TOutputImage>
 void
 MDMDNMFImageFilter<TInputImage, TOutputImage>
 ::EvalGradS(const MatrixType &X,
-		const MatrixType &A,
-		const MatrixType &S,
-		const double &delt,
-		const double &lambdS,
-		MatrixType & gradS) const
+	    const MatrixType &A,
+	    const MatrixType &S,
+	    const double &m_Delt,
+	    const double &m_LambdS,
+	    MatrixType & gradS) const
 {
-	// Calculus of: gradS = 2 * Asu' * (Asu*S-Xsu) - lambd * 2 * (S - 1/J*ones(J,I));
+  // Calculus of: gradS = 2 * Asu' * (Asu*S-Xsu) - lambd * 2 * (S - 1/J*ones(J,I));
 
-	MatrixType Xsu, Asu, ones;
-	Xsu.set_size(X.rows()+1, X.cols());
-	Asu.set_size(A.rows()+1, A.cols());
-	ones.set_size(S.rows(), S.cols());
-	ones.fill(1.);
-	AddOneRowOfOnes(A, Asu);
-	AddOneRowOfOnes(X, Xsu);
+  MatrixType Xsu, Asu, ones;
+  Xsu.set_size(X.rows()+1, X.cols());
+  Asu.set_size(A.rows()+1, A.cols());
+  ones.set_size(S.rows(), S.cols());
+  ones.fill(1.);
+  AddOneRowOfOnes(A, Asu);
+  AddOneRowOfOnes(X, Xsu);
 
-	gradS = 2. * Asu.transpose() * (Asu*S-Xsu) - lambdS * 2. * (S - (1./(static_cast<double>( S.rows() ))));
+  gradS = 2. * Asu.transpose() * (Asu*S-Xsu) - m_LambdS * 2. * (S - (1./(static_cast<double>( S.rows() ))));
 }
 
 template <class TInputImage, class TOutputImage>
 void
 MDMDNMFImageFilter<TInputImage, TOutputImage>
 ::EvalGradA(const MatrixType &X,
-		const MatrixType &A,
-		const MatrixType &S,
-		const double &delt,
-		const double &lambdD,
-		MatrixType &gradA) const
+	    const MatrixType &A,
+	    const MatrixType &S,
+	    const double &m_Delt,
+	    const double &m_LambdD,
+	    MatrixType &gradA) const
 {
-	// Compute gradA
-	//	= (A*S-X) * (transpose(S)) + lambdD*(A-1/nbBands*ones(L,L)*A)
-	//	= (A*S-X) * (transpose(S)) + lambdD*A- lambdD*/nbBands*ones(L,L)*A)
+  // Compute gradA
+  //	= (A*S-X) * (transpose(S)) + m_LambdD*(A-1/nbBands*ones(L,L)*A)
+  //	= (A*S-X) * (transpose(S)) + m_LambdD*A- m_LambdD*/nbBands*ones(L,L)*A)
 
-	MatrixType onesA;
-	VectorType sumColulmnsOfA;
-	sumColulmnsOfA.set_size(A.cols());
-	unsigned int nbBands = A.rows();
+  MatrixType onesA;
+  VectorType sumColulmnsOfA;
+  sumColulmnsOfA.set_size(A.cols());
+  unsigned int nbBands = A.rows();
 
-	// Computing vector onesA
-	for (unsigned int j=0; j<onesA.size(); ++j)
-	{
-		sumColulmnsOfA(j) = A.get_column(j).sum();
-	}
+  // Computing vector onesA
+  for (unsigned int j=0; j<onesA.size(); ++j)
+    {
+    sumColulmnsOfA(j) = A.get_column(j).sum();
+    }
 
-	// Initialize gradA
-	gradA = (A*S-X) * S.transpose();
+  // Initialize gradA
+  gradA = (A*S-X) * S.transpose();
 
-	// 1st update of gradA
-	gradA += A*lambdD;
+  // 1st update of gradA
+  gradA += A*m_LambdD;
 
-	// 2nd and last update id gradA, row by row (for performance reasons)
-	for (unsigned int i=0; i<nbBands; ++i)
-	{
-	gradA.set_row(i, gradA.get_row(i) - ( sumColulmnsOfA*lambdD / ( static_cast<double>( nbBands ) ) ) );
-	}
+  // 2nd and last update id gradA, row by row (for performance reasons)
+  for (unsigned int i=0; i<nbBands; ++i)
+    {
+    gradA.set_row(i, gradA.get_row(i) - ( sumColulmnsOfA*m_LambdD / ( static_cast<double>( nbBands ) ) ) );
+    }
 }
 
 
@@ -219,59 +229,57 @@ template <class TInputImage, class TOutputImage>
 void
 MDMDNMFImageFilter<TInputImage, TOutputImage>
 ::ProjGradOneStep(
-		const MatrixType & X,
-		const MatrixType & fixedMat,
-		const MatrixType & gradVariMat,
-		const double & sig,
-		const double & betinit,
-		const double & delt,
-		const double & lambdS,
-		const double & lambdD,
-		MatrixType & variMat,
-		double & alph, const bool isDirectEvalDirection ) const
+  const MatrixType & X,
+  const MatrixType & fixedMat,
+  const MatrixType & gradVariMat,
+  const double & sig,
+  const double & betinit,
+  const double & m_Delt,
+  const double & m_LambdS,
+  const double & m_LambdD,
+  MatrixType & variMat,
+  double & alph, const bool isDirectEvalDirection ) const
 
 {
+  double evalf, newEvalf, bet;
+  evalf = this->Call(variMat, fixedMat, X, m_Delt, m_LambdS, m_LambdD, isDirectEvalDirection);	// compute evalf
 
+  MatrixType newVariMat = variMat - alph*gradVariMat;
+  SetNegativeCoefficientsToZero(newVariMat);
+  newEvalf = Call(newVariMat, fixedMat, X, m_Delt, m_LambdS, m_LambdD, isDirectEvalDirection);	// compute newEvalf
+  bool bit = ArmijoTest(sig, variMat, newVariMat, evalf, newEvalf, gradVariMat, alph);
 
-	double evalf, newEvalf, bet;
-	evalf = this->Call(variMat, fixedMat, X, delt, lambdS, lambdD, isDirectEvalDirection);	// compute evalf
-
-	MatrixType newVariMat = variMat - alph*gradVariMat;
-	SetNegativeCoefficientsToZero(newVariMat);
-	newEvalf = Call(newVariMat, fixedMat, X, delt, lambdS, lambdD, isDirectEvalDirection);	// compute newEvalf
-	bool bit = ArmijoTest(sig, variMat, newVariMat, evalf, newEvalf, gradVariMat, alph);
-
-	int count = 1;
-	if (bit == true)
-	{
-		while (bit == true)
-		{
-			bet = pow(betinit, count);
-			alph = alph/bet;
-			newVariMat = variMat - alph*gradVariMat;
-			SetNegativeCoefficientsToZero(newVariMat);
-			newEvalf = Call(newVariMat, fixedMat, X, delt, lambdS, lambdD, isDirectEvalDirection);
-			bit = ArmijoTest(sig, variMat, newVariMat, evalf, newEvalf, gradVariMat, alph);
-			++count;
-		}
-		alph = alph*bet;
-		newVariMat = variMat - alph*gradVariMat;
-		SetNegativeCoefficientsToZero(newVariMat);
-	}
-	else
-	{
-		while (bit == false)
-		{
-			bet = pow(betinit, count);
-			alph = alph*bet;
-			newVariMat = variMat - alph*gradVariMat;
-			SetNegativeCoefficientsToZero(newVariMat);
-			newEvalf = Call(newVariMat, fixedMat, X, delt, lambdS, lambdD, isDirectEvalDirection);
-			bit = ArmijoTest(sig, variMat, newVariMat, evalf, newEvalf, gradVariMat, alph);
-			++count;
-		}
-	}
-	variMat = newVariMat;
+  int count = 1;
+  if (bit == true)
+    {
+    while (bit == true)
+      {
+      bet = pow(betinit, count);
+      alph = alph/bet;
+      newVariMat = variMat - alph*gradVariMat;
+      SetNegativeCoefficientsToZero(newVariMat);
+      newEvalf = Call(newVariMat, fixedMat, X, m_Delt, m_LambdS, m_LambdD, isDirectEvalDirection);
+      bit = ArmijoTest(sig, variMat, newVariMat, evalf, newEvalf, gradVariMat, alph);
+      ++count;
+      }
+    alph = alph*bet;
+    newVariMat = variMat - alph*gradVariMat;
+    SetNegativeCoefficientsToZero(newVariMat);
+    }
+  else
+    {
+    while (bit == false)
+      {
+      bet = pow(betinit, count);
+      alph = alph*bet;
+      newVariMat = variMat - alph*gradVariMat;
+      SetNegativeCoefficientsToZero(newVariMat);
+      newEvalf = Call(newVariMat, fixedMat, X, m_Delt, m_LambdS, m_LambdD, isDirectEvalDirection);
+      bit = ArmijoTest(sig, variMat, newVariMat, evalf, newEvalf, gradVariMat, alph);
+      ++count;
+      }
+    }
+  variMat = newVariMat;
 }
 
 
@@ -281,18 +289,18 @@ MDMDNMFImageFilter<TInputImage, TOutputImage>
 ::Call(const MatrixType & variMat,
        const MatrixType & fixedMat,
        const MatrixType & X,
-       const double & delt,
-       const double & lambdS,
-       const double & lambdD, const bool isDirectEvalDirection) const
+       const double & m_Delt,
+       const double & m_LambdS,
+       const double & m_LambdD, const bool isDirectEvalDirection) const
 {
   double evalf;
   if ( isDirectEvalDirection )
     {
-    evalf = Criterion(X, variMat, fixedMat, delt, lambdS, lambdD);
+    evalf = Criterion(X, variMat, fixedMat, m_Delt, m_LambdS, m_LambdD);
     }
   else
     {
-    evalf = Criterion(X, fixedMat, variMat, delt, lambdS, lambdD);
+    evalf = Criterion(X, fixedMat, variMat, m_Delt, m_LambdS, m_LambdD);
     }
   return evalf;
 }
@@ -303,14 +311,14 @@ void
 MDMDNMFImageFilter<TInputImage, TOutputImage>
 ::SetNegativeCoefficientsToZero(MatrixType & M) const 
 {
-	for (unsigned int i=0; i<M.rows(); ++i)
-	{
-		for (unsigned int j=0; j<M.cols(); ++j)
-		{
-			if (M(i,j)<0)
-				M(i,j) = 0;
-		}
-	}
+  for (unsigned int i=0; i<M.rows(); ++i)
+    {
+    for (unsigned int j=0; j<M.cols(); ++j)
+      {
+      if (M(i,j)<0)
+	M(i,j) = 0;
+      }
+    }
 }
 
 template <class TInputImage, class TOutputImage>
@@ -319,16 +327,16 @@ typename MDMDNMFImageFilter<TInputImage, TOutputImage>
 MDMDNMFImageFilter<TInputImage, TOutputImage>
 ::TermByTermMatrixProduct(const MatrixType & M1, const MatrixType & M2) const
 {
-	MatrixType M;
-	M.set_size(M1.rows(), M1.cols());
-	for (unsigned int i=0; i<M.rows(); ++i)
-	{
-		for (unsigned int j=0; j<M.cols(); ++j)
-		{
-			M(i,j) = M1(i,j) * M2(i,j);
-		}
-	}
-	return M;
+  MatrixType M;
+  M.set_size(M1.rows(), M1.cols());
+  for (unsigned int i=0; i<M.rows(); ++i)
+    {
+    for (unsigned int j=0; j<M.cols(); ++j)
+      {
+      M(i,j) = M1(i,j) * M2(i,j);
+      }
+    }
+  return M;
 }
 
 template <class TInputImage, class TOutputImage>
@@ -336,39 +344,39 @@ double
 MDMDNMFImageFilter<TInputImage, TOutputImage>
 ::SumMatrixElements(const MatrixType & M) const
 {
-	double sum = 0;
-	for (unsigned int i = 0; i<M.cols(); ++i)
-	{
-		sum += M.get_column(i).sum();
-	}
-	return sum;
+  double sum = 0;
+  for (unsigned int i = 0; i<M.cols(); ++i)
+    {
+    sum += M.get_column(i).sum();
+    }
+  return sum;
 }
 
 template <class TInputImage, class TOutputImage>
 bool
 MDMDNMFImageFilter<TInputImage, TOutputImage>
 ::ArmijoTest(const double & sig,
-		const MatrixType variMat,
-		const MatrixType & newVariMat,
-		const double & evalf,
-		const double & newEvalf,
-		const MatrixType & gradVariMat,
-		const double & alph) const
+	     const MatrixType variMat,
+	     const MatrixType & newVariMat,
+	     const double & evalf,
+	     const double & newEvalf,
+	     const MatrixType & gradVariMat,
+	     const double & alph) const
 {
-	bool bit;
+  bool bit;
 
-	//const unsigned int I = variMat.rows();
-	//const unsigned int J = variMat.cols();
+  //const unsigned int I = variMat.rows();
+  //const unsigned int J = variMat.cols();
 
-	const MatrixType prod = TermByTermMatrixProduct(gradVariMat, newVariMat-variMat);
-	double sumProd = SumMatrixElements(prod);
+  const MatrixType prod = TermByTermMatrixProduct(gradVariMat, newVariMat-variMat);
+  double sumProd = SumMatrixElements(prod);
 
-	if (newEvalf-evalf <= sig*alph*sumProd)
-		bit = true;
-	else
-		bit = false;
+  if (newEvalf-evalf <= sig*alph*sumProd)
+    bit = true;
+  else
+    bit = false;
 
-	return bit;
+  return bit;
 }
 
 
@@ -380,7 +388,6 @@ void
 MDMDNMFImageFilter<TInputImage, TOutputImage>
 ::GenerateData()
 {
-
   this->AllocateOutputs();
 
   // Get the input and output pointers
@@ -404,21 +411,18 @@ MDMDNMFImageFilter<TInputImage, TOutputImage>
   const unsigned int nbComponentsPerPixel = inputPtr->GetNumberOfComponentsPerPixel();
   const unsigned int nbPixels = inputPtr->GetLargestPossibleRegion().GetNumberOfPixels();
   
-  std::cout << "nbEndmembers " << nbEndmembers << std::endl;
-  std::cout << "nbComponentsPerPixel " << nbComponentsPerPixel << std::endl;
-  std::cout << "nbPixels " << nbPixels << std::endl;
-
-  // Stop value for the criterion
-  const double critStopValue = 	0.005;
+  // std::cout << "nbEndmembers " << nbEndmembers << std::endl;
+  // std::cout << "nbComponentsPerPixel " << nbComponentsPerPixel << std::endl;
+  // std::cout << "nbPixels " << nbPixels << std::endl;
   
   // Other declarations
   double critA, critS, crit = 1;
   const unsigned int divisorParam = 10;
   
   // Tunning the optimized function parameters
-  const double delt = 			1.;
-  const double lambdD = 			0.01;
-  const double lambdS = 			0.01 * nbEndmembers;
+  //const double m_Delt = 			1.;
+  //const double m_LambdD = 			0.01;
+  m_LambdS *= nbEndmembers;
   
   // Tunning the projected gradient parameters
   double sig = 0.05;
@@ -463,20 +467,20 @@ MDMDNMFImageFilter<TInputImage, TOutputImage>
 
   unsigned int counter = 0;
 
-  while ((crit > critStopValue) && (counter < m_MaxIter))
+  while ((crit > m_CritStopValue) && (counter < m_MaxIter))
     {
 
     //----------------   Update S   -----------------//
     Sold = S;
     //std::cout << "gradS1 " << gradS << std::endl;
-    this->EvalGradS(X, A, S, delt, lambdS, gradS);	// Compute gradS
-    //std::cout << "lambdS " << lambdS << std::endl;
+    this->EvalGradS(X, A, S, m_Delt, m_LambdS, gradS);	// Compute gradS
+    //std::cout << "m_LambdS " << m_LambdS << std::endl;
     //std::cout << "gradS " << gradS << std::endl;
     if (counter%divisorParam == 0)
       {
 
       std::cout << "Iteration = " << counter << std::endl;
-      std::cout << "Criterion = " << Criterion(X, A, S, delt, lambdS, lambdD) << std::endl;
+      std::cout << "Criterion = " << Criterion(X, A, S, m_Delt, m_LambdS, m_LambdD) << std::endl;
       std::cout << "statGradS = " << gradS.fro_norm() << std::endl;
       std::cout << "gradS(0,0) = " << gradS(0,0) << std::endl;
       std::cout << "alphS = " << alphS << std::endl;
@@ -484,7 +488,7 @@ MDMDNMFImageFilter<TInputImage, TOutputImage>
       std::cout << "S(0,0) = " << S(0,0) << std::endl;
       }
 
-    ProjGradOneStep(X, A, gradS, sig, bet, delt,lambdS, lambdD, S, alphS, false);
+    ProjGradOneStep(X, A, gradS, sig, bet, m_Delt,m_LambdS, m_LambdD, S, alphS, false);
 
     if (counter%divisorParam == 0)
       {
@@ -493,11 +497,10 @@ MDMDNMFImageFilter<TInputImage, TOutputImage>
       std::cout << "S(0,0) = " << S(0,0) << std::endl;
       }
 
-    //std::cout << std::endl;
     //----------------   Update A   -----------------//
     Aold = A;
 
-    this->EvalGradA(X, A, S, delt, lambdD, gradA);	// Compute gradS
+    this->EvalGradA(X, A, S, m_Delt, m_LambdD, gradA);	// Compute gradS
 
     if (counter%divisorParam == 0)
       {
@@ -511,7 +514,7 @@ MDMDNMFImageFilter<TInputImage, TOutputImage>
       std::cout << "normA = " << A.fro_norm() << std::endl;
       std::cout << "A(0,0) = " << A(0,0) << std::endl;
       }
-    ProjGradOneStep(X, S, gradA, sig, bet, delt, lambdS, lambdD, A, alphA, true);
+    ProjGradOneStep(X, S, gradA, sig, bet, m_Delt, m_LambdS, m_LambdD, A, alphA, true);
 
     if (counter%divisorParam == 0)
       {
@@ -519,8 +522,6 @@ MDMDNMFImageFilter<TInputImage, TOutputImage>
       std::cout << "normA = " << A.fro_norm() << std::endl;
       std::cout << "A(0,0) = " << A(0,0) << std::endl;
       }
-
-
     
     //------------   crit evaluation   --------------//
     Adiff = Aold-A;
@@ -534,7 +535,7 @@ MDMDNMFImageFilter<TInputImage, TOutputImage>
       std::cout << "critA value: " <<  critA << std::endl;
       std::cout << "critS value: " <<  critS << std::endl;
       std::cout << "crit value: " <<  crit << std::endl;
-      std::cout << "criterion value: " <<  Criterion(X, A, S, delt, lambdS, lambdD) << std::endl;
+      std::cout << "criterion value: " <<  Criterion(X, A, S, m_Delt, m_LambdS, m_LambdD) << std::endl;
       std::cout << std::endl;
       }
 
@@ -543,9 +544,7 @@ MDMDNMFImageFilter<TInputImage, TOutputImage>
   
   //---   Putting the rows of in the bands of the output vector image   ---//
   //---> Could be impoved choosing an imageList for the abundance maps and a vector list for the endmember spectra (columns of A).
-  //outputPtr->SetRegions(inputPtr->GetRequestedRegion());
-  //outputPtr->SetNumberOfComponentsPerPixel(m_EndMembers.cols());
-  //outputPtr->Allocate();
+  
   itk::ImageRegionIterator<OutputImageType> outputIt(outputPtr, outputPtr->GetRequestedRegion());
   
   typename OutputImageType::PixelType vectorPixel;

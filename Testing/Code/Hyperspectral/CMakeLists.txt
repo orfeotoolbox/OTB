@@ -149,10 +149,16 @@ ADD_TEST(hyTvMDMDNMFImageFilterTest
          ${TEMP}/hyTvMDMDNMFImageFilterTest.tif
          otbMDMDNMFImageFilterTest
          ${INPUTDATA}/cupriteSubHsi.tif
-         ${INPUTDATA}/Hyperspectral/synthetic/endmembers.tif
          ${TEMP}/hyTvMDMDNMFImageFilterTest.tif
          100)
 
+ADD_TEST(hyTvMDMDNMFImageFilterTest2
+         ${Hyperspectral_TESTS3}
+         otbMDMDNMFImageFilterTest2
+         ${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif
+         ${INPUTDATA}/Hyperspectral/synthetic/endmembers.tif
+         ${TEMP}/hyTvMDMDNMFImageFilterTest2.tif
+         100)
 
 
 SET(Hyperspectral_SRCS1
