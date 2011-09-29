@@ -78,13 +78,16 @@ public:
 
   typedef std::pair<TPrecision, TPrecision> IntervalType;
   /** Standard macros */
-  itkNewMacro(Self)
- ; itkTypeMacro(SpectralResponse, DataObject)
- ;
+  itkNewMacro(Self);
+  itkTypeMacro(SpectralResponse, DataObject);
 
-  itkSetMacro(SensitivityThreshold, TPrecision)
- ; itkGetConstMacro(SensitivityThreshold, TPrecision)
- ;
+
+  itkSetMacro(SensitivityThreshold, TPrecision);
+  itkGetConstMacro(SensitivityThreshold, TPrecision);
+
+  itkSetMacro(UsePosGuess, bool);
+  itkGetConstMacro(UsePosGuess, bool);
+
 
   /** Clear the vector of data pairs  */
   virtual bool Clear();
@@ -115,6 +118,8 @@ public:
    */
   inline ValuePrecisionType operator()(const PrecisionType & lambda);
 
+
+
   /** Operator for comparing Pair Lambda/Response
    * Pairs are ordered by wavelength
    */
@@ -144,6 +149,10 @@ public:
     return m_Interval;
   }
 
+  /** set index in m_Response vector to accelerate () operator **/
+  void SetPosGuessMin(const PrecisionType & lambda);
+
+
 protected:
   /** Constructor */
   SpectralResponse();
@@ -153,7 +162,7 @@ protected:
   virtual ~SpectralResponse()
   {
   }
- ;
+  ;
   /** PrintSelf method */
   //void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
@@ -163,8 +172,9 @@ protected:
   /** Minimum value to consider that the spectral response is not null  */
   TPrecision m_SensitivityThreshold;
   IntervalType m_Interval;
+  unsigned long m_PosGuess;
   bool m_IntervalComputed;
-
+  bool m_UsePosGuess;
   void ComputeInterval();
 
 private:

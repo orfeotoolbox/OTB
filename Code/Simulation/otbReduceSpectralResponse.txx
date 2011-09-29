@@ -63,6 +63,8 @@ ReduceSpectralResponse<TSpectralResponse , TRSR>
     PrecisionType lambda1;
     PrecisionType lambda2;
 
+
+
     typename VectorPairType::const_iterator it;
     VectorPairType pairs = (m_InputSatRSR->GetRSR())[numBand]->GetResponse();
     it = pairs.begin();
@@ -87,6 +89,7 @@ ReduceSpectralResponse<TSpectralResponse , TRSR>
 
         inputRSR1 = (*m_InputSpectralResponse)(lambda1);
         inputRSR2 = (*m_InputSpectralResponse)(lambda2);
+
 
         // lambda1 need to be resampled
         /*
@@ -126,10 +129,12 @@ ReduceSpectralResponse<TSpectralResponse , TRSR>
 
           PrecisionType lambdaDist = lambdaRSRmin - lambda1;
           PrecisionType ratio = lambdaDist / (lambda2 - lambda1);
-
+          std::cout<<"modif lambda 1 !!! "<< lambda1<<" ";
           lambda1 = lambdaRSRmin;
-
+          std::cout<<" "<<lambda1<<std::endl;
           inputSatRSR1 = ratio * inputSatRSR1 + (1 - ratio) * inputSatRSR2;
+
+          inputRSR1=(*m_InputSpectralResponse)(lambda1);
 
           }
 
@@ -170,14 +175,17 @@ ReduceSpectralResponse<TSpectralResponse , TRSR>
             }
           PrecisionType lambdaDist = lambdaRSRmax - lambda1;
           PrecisionType ratio = lambdaDist / (lambda2 - lambda1);
-
+          std::cout<<"modif lambda 2 !!! "<< lambda2<<" ";
           lambda2 = lambdaRSRmax;
-
+          std::cout<<" "<<lambda2<<std::endl;
           inputSatRSR2 = ratio * inputSatRSR1 + (1 - ratio) * inputSatRSR2;
+
+          inputRSR2=(*m_InputSpectralResponse)(lambda2);
+
           }
 
-        response1 = (*m_InputSpectralResponse)(lambda1) * inputSatRSR1;
-        response2 = (*m_InputSpectralResponse)(lambda2) * inputSatRSR2;
+        response1 = inputRSR1 * inputSatRSR1;
+        response2 = inputRSR2 * inputSatRSR2;
 
         ValuePrecisionType rmin = std::min(response1, response2);
         ValuePrecisionType rmax = std::max(response1, response2);
@@ -216,13 +224,17 @@ ReduceSpectralResponse<TSpectralResponse , TRSR>
    //Compute the reduce response for each band of the sensor
    for (unsigned int i=0; i<m_InputSatRSR->GetNbBands(); ++i)
    {
-      PairType pair;
-      //pair.first = center wavelength of the band
-      pair.first=( (this->m_InputSatRSR->GetRSR())[i]->GetInterval().first + (this->m_InputSatRSR->GetRSR())[i]->GetInterval().second );
-      pair.first=pair.first/2.0;
-      pair.second=(*this)(i);
-      m_ReduceResponse->GetResponse().push_back(pair);
-   }
+    m_InputSpectralResponse->SetPosGuessMin((this->m_InputSatRSR->GetRSR())[i]->GetInterval().first);
+    m_InputSpectralResponse->SetUsePosGuess(true);
+    PairType pair;
+    //pair.first = center wavelength of the band
+    pair.first = ((this->m_InputSatRSR->GetRSR())[i]->GetInterval().first
+        + (this->m_InputSatRSR->GetRSR())[i]->GetInterval().second);
+    pair.first = pair.first / 2.0;
+    pair.second = (*this)(i);
+    m_ReduceResponse->GetResponse().push_back(pair);
+    m_InputSpectralResponse->SetUsePosGuess(false);
+    }
 
 }
 

@@ -32,6 +32,8 @@ SpectralResponse<TPrecision, TValuePrecision>::SpectralResponse()
 {
   m_SensitivityThreshold = 0.01;
   m_IntervalComputed = false;
+  m_PosGuess = 0;
+  m_UsePosGuess=false;
 }
 
 template<class TPrecision, class TValuePrecision>
@@ -85,6 +87,34 @@ unsigned int SpectralResponse<TPrecision, TValuePrecision>::Size() const
   return m_Response.size();
 }
 
+
+
+template<class TPrecision, class TValuePrecision>
+void SpectralResponse<TPrecision, TValuePrecision>::SetPosGuessMin(const PrecisionType & lambda)
+{
+  m_PosGuess = 0;
+  if (m_Response.size() <= 1)
+    {
+    itkExceptionMacro(<<"ERROR spectral response need at least 2 value to perform interpolation.");
+    }
+
+  TPrecision lambdaMax = this->GetInterval().second;
+  if (lambda > lambdaMax) return;
+  typename VectorPairType::const_iterator it = m_Response.begin();
+
+  while (((*it).first < lambda))
+    {
+    m_PosGuess++;
+    ++it;
+    if (it == (m_Response.end())) return;
+    }
+
+  if (m_PosGuess > 0) m_PosGuess--;
+  return;
+}
+
+
+
 template<class TPrecision, class TValuePrecision>
 inline typename SpectralResponse<TPrecision, TValuePrecision>::ValuePrecisionType SpectralResponse<TPrecision,
     TValuePrecision>::operator()(const PrecisionType & lambda)
@@ -108,7 +138,12 @@ inline typename SpectralResponse<TPrecision, TValuePrecision>::ValuePrecisionTyp
   if (lambda < lambdaMin) return static_cast<TValuePrecision> (0.0);
   if (lambda > lambdaMax) return static_cast<TValuePrecision> (0.0);
 
-  typename VectorPairType::const_iterator it = m_Response.begin();
+  typename VectorPairType::const_iterator it;
+
+  if(m_UsePosGuess)
+    it= beg + m_PosGuess;
+  else
+    it= beg;
 
   TPrecision lambda1 = (*beg).first;
   TValuePrecision SR1 = static_cast<TValuePrecision> (0.0);
