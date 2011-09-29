@@ -129,9 +129,7 @@ ReduceSpectralResponse<TSpectralResponse , TRSR>
 
           PrecisionType lambdaDist = lambdaRSRmin - lambda1;
           PrecisionType ratio = lambdaDist / (lambda2 - lambda1);
-          std::cout<<"modif lambda 1 !!! "<< lambda1<<" ";
           lambda1 = lambdaRSRmin;
-          std::cout<<" "<<lambda1<<std::endl;
           inputSatRSR1 = ratio * inputSatRSR1 + (1 - ratio) * inputSatRSR2;
 
           inputRSR1=(*m_InputSpectralResponse)(lambda1);
@@ -175,9 +173,7 @@ ReduceSpectralResponse<TSpectralResponse , TRSR>
             }
           PrecisionType lambdaDist = lambdaRSRmax - lambda1;
           PrecisionType ratio = lambdaDist / (lambda2 - lambda1);
-          std::cout<<"modif lambda 2 !!! "<< lambda2<<" ";
           lambda2 = lambdaRSRmax;
-          std::cout<<" "<<lambda2<<std::endl;
           inputSatRSR2 = ratio * inputSatRSR1 + (1 - ratio) * inputSatRSR2;
 
           inputRSR2=(*m_InputSpectralResponse)(lambda2);
