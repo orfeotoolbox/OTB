@@ -16,8 +16,8 @@
 
 =========================================================================*/
 #include "otbWrapperOutputImageParameter.h"
-//#include "itkCastImageFilter.h"
 #include "otbVectorRescaleIntensityImageFilter.h"
+#include "itkCastImageFilter.h"
 
 namespace otb
 {
@@ -116,7 +116,12 @@ OutputImageParameter::Write( )
       }
     case ImagePixelType_double:
       {
-      otbRescaleAndWriteMacro(DoubleVectorImageType, m_DoubleWriter);
+      typedef itk::CastImageFilter<FloatVectorImageType, DoubleVectorImageType> CastFilterType;
+      CastFilterType::Pointer cast = CastFilterType::New();
+      cast->SetInput( this->GetImage() );
+      m_DoubleWriter->SetFileName( this->GetFileName() );
+      m_DoubleWriter->SetInput(cast->GetOutput());
+      m_DoubleWriter->Update();
       break;
       }
   }
