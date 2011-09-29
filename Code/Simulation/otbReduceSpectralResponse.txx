@@ -64,7 +64,6 @@ ReduceSpectralResponse<TSpectralResponse , TRSR>
     PrecisionType lambda2;
 
 
-
     typename VectorPairType::const_iterator it;
     VectorPairType pairs = (m_InputSatRSR->GetRSR())[numBand]->GetResponse();
     it = pairs.begin();

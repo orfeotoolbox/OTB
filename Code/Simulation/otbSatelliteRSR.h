@@ -54,17 +54,17 @@ public:
 
   /** Standard macros */
   itkNewMacro(Self)
- ; itkTypeMacro(SatelliteRSR, DataObject)
- ;
+; itkTypeMacro(SatelliteRSR, DataObject)
+;
 
   /** Set the number of band of the satellite from an ASCII file
    * Need to parse first all the file to determine the number of columns */
   itkGetConstMacro(NbBands, unsigned int)
- ; itkSetMacro(NbBands, unsigned int)
- ;
+; itkSetMacro(NbBands, unsigned int)
+;
 
   itkSetMacro(SortBands, bool)
- ;
+;
 
   /** Template parameters typedef */
   typedef TPrecision PrecisionType;
@@ -141,7 +141,7 @@ protected:
   virtual ~SatelliteRSR()
   {
   }
- ;
+;
 
   bool m_SortBands;
 

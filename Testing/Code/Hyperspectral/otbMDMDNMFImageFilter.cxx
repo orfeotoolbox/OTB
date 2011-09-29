@@ -56,10 +56,10 @@ int otbMDMDNMFImageFilterTest(int argc, char * argv[])
   MDMDNMFImageFilterType::MatrixType A;
   A.set_size(readerImage->GetOutput()->GetNumberOfComponentsPerPixel(), 5);
   A.fill(100.);
-  A.set_column(1,200.);
-  A.set_column(2,300.);
-  A.set_column(3,400.);
-  A.set_column(4,500.);
+  A.set_column(1, 200.);
+  A.set_column(2, 300.);
+  A.set_column(3, 400.);
+  A.set_column(4, 500.);
   unmixer->SetEndmembersMatrix(A);
   unmixer->SetMaxIter(maxIter);
 

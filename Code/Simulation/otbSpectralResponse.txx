@@ -88,7 +88,6 @@ unsigned int SpectralResponse<TPrecision, TValuePrecision>::Size() const
 }
 
 
-
 template<class TPrecision, class TValuePrecision>
 void SpectralResponse<TPrecision, TValuePrecision>::SetPosGuessMin(const PrecisionType & lambda)
 {
@@ -112,7 +111,6 @@ void SpectralResponse<TPrecision, TValuePrecision>::SetPosGuessMin(const Precisi
   if (m_PosGuess > 0) m_PosGuess--;
   return;
 }
-
 
 
 template<class TPrecision, class TValuePrecision>

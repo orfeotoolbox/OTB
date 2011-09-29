@@ -119,7 +119,6 @@ public:
   inline ValuePrecisionType operator()(const PrecisionType & lambda);
 
 
-
   /** Operator for comparing Pair Lambda/Response
    * Pairs are ordered by wavelength
    */
@@ -162,7 +161,7 @@ protected:
   virtual ~SpectralResponse()
   {
   }
-  ;
+ ;
   /** PrintSelf method */
   //void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
