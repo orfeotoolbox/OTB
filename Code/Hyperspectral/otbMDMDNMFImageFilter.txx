@@ -412,7 +412,7 @@ MDMDNMFImageFilter<TInputImage, TOutputImage>
   
   // Other declarations
   double critA, critS, crit = 1;
-  const unsigned int divisorParam = 10
+  const unsigned int divisorParam = 10;
   
   // Tunning the optimized function parameters
   //const double m_Delt =                       1.;
