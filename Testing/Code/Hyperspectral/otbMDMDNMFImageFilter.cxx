@@ -24,12 +24,12 @@
 
 int otbMDMDNMFImageFilterNewTest(int argc, char * argv[])
 {
-       typedef double                                                    PixelType;
-       typedef otb::VectorImage<PixelType, 2>                            VectorImageType;
-       typedef otb::MDMDNMFImageFilter<VectorImageType, VectorImageType> MDMDNMFImageFilterType;
+  typedef double                                                    PixelType;
+  typedef otb::VectorImage<PixelType, 2>                            VectorImageType;
+  typedef otb::MDMDNMFImageFilter<VectorImageType, VectorImageType> MDMDNMFImageFilterType;
 
-       MDMDNMFImageFilterType::Pointer mdmd = MDMDNMFImageFilterType::New();
-       return EXIT_SUCCESS;
+  MDMDNMFImageFilterType::Pointer mdmd = MDMDNMFImageFilterType::New();
+  return EXIT_SUCCESS;
 }
 
 int otbMDMDNMFImageFilterTest(int argc, char * argv[])
@@ -53,7 +53,7 @@ int otbMDMDNMFImageFilterTest(int argc, char * argv[])
 
   unmixer->SetInput(readerImage->GetOutput());
 
-  typename MDMDNMFImageFilterType::MatrixType A;
+  MDMDNMFImageFilterType::MatrixType A;
   A.set_size(readerImage->GetOutput()->GetNumberOfComponentsPerPixel(), 5);
   A.fill(100.);
   A.set_column(1,200.);
