@@ -22,10 +22,6 @@
 
 namespace otb
 {
-
-/**
- *
- */
 template <class TInputImage, class TOutputImage>
 MDMDNMFImageFilter<TInputImage, TOutputImage>
 ::MDMDNMFImageFilter()
@@ -48,8 +44,6 @@ MDMDNMFImageFilter<TInputImage, TOutputImage>
   Superclass::PrintSelf(os, indent);
   os << indent << "Input Endmembers Matrix: " << m_Endmembers << std::endl;
 }
-
-
 
 template <class TInputImage, class TOutputImage>
 void
@@ -418,7 +412,7 @@ MDMDNMFImageFilter<TInputImage, TOutputImage>
   
   // Other declarations
   double critA, critS, crit = 1;
-  const unsigned int divisorParam = 10;
+  const unsigned int divisorParam = 10
   
   // Tunning the optimized function parameters
   //const double m_Delt =                       1.;
@@ -431,7 +425,7 @@ MDMDNMFImageFilter<TInputImage, TOutputImage>
   double alphA = 1.;
   double alphS = 1.;
   
-  MatrixType X = inputImage2Matrix->GetMatrix() ;
+  MatrixType X = inputImage2Matrix->GetMatrix();
   //std::cout << "X " << X  << std::endl;
   //-------   A and S declaration and initialization   --------//
   //---> These values fit with the ones chosen in the matlab
@@ -566,8 +560,6 @@ MDMDNMFImageFilter<TInputImage, TOutputImage>
     ++outputIt;
     }
 }
-
-
 
 /**
 *

@@ -75,11 +75,11 @@ int otbMDMDNMFImageFilterTest(int argc, char * argv[])
 
 int otbMDMDNMFImageFilterTest2(int argc, char * argv[])
 {
-  typedef double PixelType;
-  typedef otb::VectorImage<PixelType, 2> ImageType;
-  typedef otb::MDMDNMFImageFilter<ImageType, ImageType> MDMDNMFImageFilterType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::StreamingImageFileWriter<ImageType> WriterType;
+  typedef double                                         PixelType;
+  typedef otb::VectorImage<PixelType, 2>                 ImageType;
+  typedef otb::MDMDNMFImageFilter<ImageType, ImageType>  MDMDNMFImageFilterType;
+  typedef otb::ImageFileReader<ImageType>                ReaderType;
+  typedef otb::StreamingImageFileWriter<ImageType>       WriterType;
   typedef otb::VectorImageToMatrixImageFilter<ImageType> VectorImageToMatrixImageFilterType;
   
   const char * inputImage = argv[1];
