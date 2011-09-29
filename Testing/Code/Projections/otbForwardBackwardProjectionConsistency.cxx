@@ -143,6 +143,7 @@ int otbForwardBackwardProjectionConsistency(int argc, char* argv[])
 
   if (identityCounter == nbTestedPoint)
     {
+    std::cerr<<"ERROR: img2wgs projection is identity!"<<std::endl;
     pass = false;
     }
 
@@ -155,7 +156,7 @@ int otbForwardBackwardProjectionConsistency(int argc, char* argv[])
      std::cerr<<"There were imprecise results."<<std::endl;
      std::cerr<<"Total image residual (in pixels): "<< accSumPx
          << " - Mean: " <<accSumPx/(double)(nbTestedPoint)
-         << " - Standard Deviation: "<< vcl_sqrt((accSum2Px/(double)(nbTestedPoint)) - ((accSumPx/(double)(nbTestedPoint)) * (accSumPx/(double)(nbTestedPoint))))
+         //<< " - Standard Deviation: "<< vcl_sqrt((accSum2Px/(double)(nbTestedPoint)) - ((accSumPx/(double)(nbTestedPoint)) * (accSumPx/(double)(nbTestedPoint))))
          <<std::endl;
      return EXIT_FAILURE;
      }
