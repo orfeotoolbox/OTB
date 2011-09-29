@@ -5,11 +5,12 @@
   Date:      $Date$
   Version:   $Revision$
 
+
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
 
-     This software is istributed WITHOUT ANY WARRANTY; without even
+     This software is distributed WITHOUT ANY WARRANTY; without even
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
@@ -131,13 +132,13 @@ public:
   itkTypeMacro(MDMDNMFImageFilter, ImageToImageFilter);
 
   /** typedef related to input and output images */
-  typedef TInputImage                            InputImageType;
+  typedef          TInputImage                   InputImageType;
   typedef typename InputImageType::Pointer       InputPointerType;
   typedef typename InputImageType::ConstPointer  InputConstPointerType;
   typedef typename InputImageType::IndexType     InputIndexType;
   typedef typename InputImageType::SizeType      InputSizeType;
 
-  typedef TOutputImage                           OutputImageType;
+  typedef          TOutputImage                  OutputImageType;
   typedef typename OutputImageType::Pointer      OutputPointerType;
   typedef typename OutputImageType::IndexType    OutputIndexType;
   typedef typename OutputImageType::OffsetType   OutputOffsetType;
@@ -148,7 +149,7 @@ public:
   typedef double                                                       PrecisionType;
   typedef vnl_matrix<PrecisionType>                                    MatrixType;
   typedef typename otb::VectorImageToMatrixImageFilter<InputImageType> VectorImageToMatrixImageFilterType;
- 
+  
   /* vector type */
   typedef vnl_vector<double> VectorType;
   /** Main computation method */
@@ -197,32 +198,32 @@ private:
   void AddOneRowOfOnes(const MatrixType & m,MatrixType & M) const;
   
   double Criterion(const MatrixType & X,
-		   const MatrixType & A,
-		   const MatrixType & S,
-		   const double &delt,
-		   const double &lambdS,
-		   const double &lambdD) const;
+                   const MatrixType & A,
+                   const MatrixType & S,
+                   const double &delt,
+                   const double &lambdS,
+                   const double &lambdD) const;
 
   void EvalGradS(const MatrixType &X,
-		 const MatrixType &A,
-		 const MatrixType &S,
-		 const double &delt,
-		 const double &lambdS,
-		 MatrixType & gradS) const;
+                 const MatrixType &A,
+                 const MatrixType &S,
+                 const double &delt,
+                 const double &lambdS,
+                 MatrixType & gradS) const;
 
   void EvalGradA(const MatrixType &X,
-		 const MatrixType &A,
-		 const MatrixType &S,
-		 const double &delt,
-		 const double &lambdD,
-		 MatrixType &gradA) const;
+                 const MatrixType &A,
+                 const MatrixType &S,
+                 const double &delt,
+                 const double &lambdD,
+                 MatrixType &gradA) const;
 
   double Call(const MatrixType & variMat,
-	      const MatrixType & fixedMat,
-	      const MatrixType & X,
-	      const double & delt,
-	      const double & lambdS,
-	      const double & lambdD, const bool isDirectEvalDirection) const;
+              const MatrixType & fixedMat,
+              const MatrixType & X,
+              const double & delt,
+              const double & lambdS,
+              const double & lambdD, const bool isDirectEvalDirection) const;
   
   void ProjGradOneStep(
     const MatrixType & X,
@@ -243,17 +244,17 @@ private:
   double SumMatrixElements(const MatrixType & M) const;
   
   bool ArmijoTest(const double & sig,
-		  const MatrixType variMat,
-		  const MatrixType & newVariMat,
-		  const double & evalf,
-		  const double & newEvalf,
-		  const MatrixType & gradVariMat,
-		  const double & alph) const;
+                  const MatrixType variMat,
+                  const MatrixType & newVariMat,
+                  const double & evalf,
+                  const double & newEvalf,
+                  const MatrixType & gradVariMat,
+                  const double & alph) const;
   
   // attributes
-  MatrixType m_Endmembers;
+  MatrixType   m_Endmembers;
   unsigned int m_MaxIter;
-  double m_CritStopValue;
+  double       m_CritStopValue;
 
   // Optimized function parameters
   double m_Delt;
