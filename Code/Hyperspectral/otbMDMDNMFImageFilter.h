@@ -9,7 +9,7 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even
+     This software is istributed WITHOUT ANY WARRANTY; without even
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
@@ -33,7 +33,7 @@ namespace otb
  *  works:
  *  K. S. F.J. Theis and T. Tanaka, First results on uniqueness of
     sparse non-negative matrix factorisation.
- *  M. G. A. Huck and J. Blanc-Talon, IEEE TGRS, vol. 48, no. 6,pp. 2590 – 2602, 2010.
+ *  M. G. A. Huck and J. Blanc-Talon, IEEE TGRS, vol. 48, no. 6,pp. 2590-2602, 2010.
  *  A. Huck and M. Guillaume, in WHISPERS, 2010, Grenoble.
  * 
  *  Let $\matR$ be the matrix of the hyperspectral data, whose $I$ columns are the
