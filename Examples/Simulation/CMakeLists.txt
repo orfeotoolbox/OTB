@@ -67,20 +67,19 @@ ADD_TEST(siTvLAIFromNDVIImageTransfromExampleTest  ${EXE_TESTS}
 )
 
 ADD_TEST(siTvLAIAndPROSAILToSensorResponseExampleTest  ${EXE_TESTS}
- --compare-image ${TOL_8}   ${BASELINE_IMAGES_APPLI}/siTvLAIAndPROSAILToSensorResponse.tif
-                  ${TEMP}/siTvLAIAndPROSAILToSensorResponse.tif
+ --compare-image ${TOL_8}   ${BASELINE_IMAGES_APPLI}/siTvLAIAndPROSAILToSensorResponseSmall.tif
+                  ${TEMP}/siTvLAIAndPROSAILToSensorResponseSmall.tif
         LAIAndPROSAILToSensorResponse
-        ${INPUTDATA}/LAIverySmallFSATSW.tif
-        ${TEMP}/siTvLAIAndPROSAILToSensorResponse.tif
-        ${INPUTDATA}/Simu_label_LAI.png
-        ${INPUTDATA}/Simu_mask_LAI_0.png
+        ${INPUTDATA}/LAIveryverySmallFSATSW.tif
+        ${TEMP}/siTvLAIAndPROSAILToSensorResponseSmall.tif
+        ${INPUTDATA}/Simu_label_LAI_small.png
+        ${INPUTDATA}/Simu_mask_LAI_0_small.png
         ${INPUTDATA}/label-params-SO-2006-Level-2.txt
         ${INPUTDATA}/acqui-params.txt
         ${INPUTDATA}/Radiometry/FORMOSAT2/RSI/rep6S.dat
         5
         ${INPUTDATA}/
 )
-
 
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
