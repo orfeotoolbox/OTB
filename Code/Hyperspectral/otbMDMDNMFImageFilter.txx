@@ -159,7 +159,7 @@ MDMDNMFImageFilter<TInputImage, TOutputImage>
   //--------------------   Computing f   --------------------------//
   evalf = E1.frobenius_norm() * E1.frobenius_norm()
     - m_LambdS * E2.frobenius_norm() * E2.frobenius_norm()
-    + m_LambdD * (trAtA - (1./ ((double) nbBands) * trE3));
+    + m_LambdD * (trAtA - (1./ (static_cast <double> (nbBands)) * trE3));
   return evalf;
 }
 

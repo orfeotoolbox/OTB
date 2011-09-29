@@ -14,18 +14,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
 #ifndef __otbMDMDNMFImageFilter_h
 #define __otbMDMDNMFImageFilter_h
 
 #include "itkImageToImageFilter.h"
-
-#include "itkConstShapedNeighborhoodIterator.h"
-#include "itkNeighborhoodAlgorithm.h"
-#include "itkImageRegionIterator.h"
-#include "itkListSample.h"
-#include "itkMeanCalculator.h"
-#include "itkCovarianceCalculator.h"
 #include "itkVariableSizeMatrix.h"
 #include "otbVectorImageToMatrixImageFilter.h"
 
@@ -127,10 +119,10 @@ class ITK_EXPORT MDMDNMFImageFilter:
 public:
 
   /** Standard class typedefs. */
-  typedef MDMDNMFImageFilter                                                     Self;
-  typedef itk::ImageToImageFilter< TInputImage, TOutputImage >       Superclass;
-  typedef itk::SmartPointer<Self>                                                         Pointer;
-  typedef itk::SmartPointer<const Self>                                             ConstPointer;
+  typedef MDMDNMFImageFilter                                    Self;
+  typedef itk::ImageToImageFilter< TInputImage, TOutputImage >  Superclass;
+  typedef itk::SmartPointer<Self>                               Pointer;
+  typedef itk::SmartPointer<const Self>                         ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -139,22 +131,22 @@ public:
   itkTypeMacro(MDMDNMFImageFilter, ImageToImageFilter);
 
   /** typedef related to input and output images */
-  typedef TInputImage                                                        InputImageType;
-  typedef typename InputImageType::Pointer              InputPointerType;
-  typedef typename InputImageType::ConstPointer       InputConstPointerType;
-  typedef typename InputImageType::IndexType              InputIndexType;
-  typedef typename InputImageType::SizeType              InputSizeType;
+  typedef TInputImage                            InputImageType;
+  typedef typename InputImageType::Pointer       InputPointerType;
+  typedef typename InputImageType::ConstPointer  InputConstPointerType;
+  typedef typename InputImageType::IndexType     InputIndexType;
+  typedef typename InputImageType::SizeType      InputSizeType;
 
-  typedef TOutputImage                                                  OutputImageType;
-  typedef typename OutputImageType::Pointer              OutputPointerType;
-  typedef typename OutputImageType::IndexType              OutputIndexType;
-  typedef typename OutputImageType::OffsetType       OutputOffsetType;
-  typedef typename OutputImageType::SizeType              OutputSizeType;
-  typedef typename OutputImageType::RegionType       OutputImageRegionType;
+  typedef TOutputImage                           OutputImageType;
+  typedef typename OutputImageType::Pointer      OutputPointerType;
+  typedef typename OutputImageType::IndexType    OutputIndexType;
+  typedef typename OutputImageType::OffsetType   OutputOffsetType;
+  typedef typename OutputImageType::SizeType     OutputSizeType;
+  typedef typename OutputImageType::RegionType   OutputImageRegionType;
 
   /* Matrix type */
-  typedef double PrecisionType;
-  typedef vnl_matrix<PrecisionType> MatrixType;
+  typedef double                                                       PrecisionType;
+  typedef vnl_matrix<PrecisionType>                                    MatrixType;
   typedef typename otb::VectorImageToMatrixImageFilter<InputImageType> VectorImageToMatrixImageFilterType;
  
   /* vector type */
@@ -187,6 +179,7 @@ public:
   
   itkSetMacro(LambdS, double);
   itkGetMacro(LambdS, double);
+
 protected:
   MDMDNMFImageFilter();
   virtual ~MDMDNMFImageFilter() {}
