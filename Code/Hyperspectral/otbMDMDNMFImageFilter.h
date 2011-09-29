@@ -152,9 +152,6 @@ public:
   
   /* vector type */
   typedef vnl_vector<double> VectorType;
-  /** Main computation method */
-  virtual void GenerateInputRequestedRegion();
-  virtual void GenerateData();
 
   MatrixType GetEndmembersMatrix() const
   {
@@ -186,10 +183,16 @@ protected:
   virtual ~MDMDNMFImageFilter() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
+  virtual void GenerateInputRequestedRegion();
+
   /** GenerateOutputInformation
    * Propagate vector length info and modify if needed
    */
   virtual void GenerateOutputInformation();
+
+  /** Main computation method */
+  virtual void GenerateData();
+
 
 private:
   MDMDNMFImageFilter(const Self&); //purposely not implemented
