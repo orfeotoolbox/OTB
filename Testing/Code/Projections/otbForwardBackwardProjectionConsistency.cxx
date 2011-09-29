@@ -50,6 +50,8 @@ int otbForwardBackwardProjectionConsistency(int argc, char* argv[])
   double accSumPx;
   double accSum2Px;
 
+  unsigned int identityCounter = 0;
+
   // Reader
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(argv[1]);
@@ -107,6 +109,10 @@ int otbForwardBackwardProjectionConsistency(int argc, char* argv[])
     // Distance Computation
     double imgRes = distance->Evaluate(ImgPoint, estimatedImgPoint);
 
+    if (distance->Evaluate(ImgPoint, estimatedGeoPoint) == 0)
+      {
+      identityCounter ++;
+      }
 
     if (verbose)
       {
@@ -135,6 +141,10 @@ int otbForwardBackwardProjectionConsistency(int argc, char* argv[])
 
     }
 
+  if (identityCounter == nbTestedPoint)
+    {
+    pass = false;
+    }
 
   if(pass)
      {
