@@ -198,37 +198,37 @@ private:
   MDMDNMFImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  void AddOneRowOfOnes(const MatrixType & m,MatrixType & M) const;
+  static void AddOneRowOfOnes(const MatrixType & m,MatrixType & M);
   
-  double Criterion(const MatrixType & X,
+  static double Criterion(const MatrixType & X,
                    const MatrixType & A,
                    const MatrixType & S,
                    const double &delt,
                    const double &lambdS,
-                   const double &lambdD) const;
+                   const double &lambdD);
 
-  void EvalGradS(const MatrixType &X,
+  static void EvalGradS(const MatrixType &X,
                  const MatrixType &A,
                  const MatrixType &S,
                  const double &delt,
                  const double &lambdS,
-                 MatrixType & gradS) const;
+                 MatrixType & gradS);
 
-  void EvalGradA(const MatrixType &X,
+  static void EvalGradA(const MatrixType &X,
                  const MatrixType &A,
                  const MatrixType &S,
                  const double &delt,
                  const double &lambdD,
-                 MatrixType &gradA) const;
+                 MatrixType &gradA);
 
-  double Call(const MatrixType & variMat,
+  static double Call(const MatrixType & variMat,
               const MatrixType & fixedMat,
               const MatrixType & X,
               const double & delt,
               const double & lambdS,
-              const double & lambdD, const bool isDirectEvalDirection) const;
+              const double & lambdD, const bool isDirectEvalDirection);
   
-  void ProjGradOneStep(
+  static void ProjGradOneStep(
     const MatrixType & X,
     const MatrixType & fixedMat,
     const MatrixType & gradVariMat,
@@ -238,21 +238,21 @@ private:
     const double & lambdS,
     const double & lambdD,
     MatrixType & variMat,
-    double & alph, const bool isDirectEvalDirection ) const;
+    double & alph, const bool isDirectEvalDirection );
 
-  void SetNegativeCoefficientsToZero(MatrixType & M) const;
+  static void SetNegativeCoefficientsToZero(MatrixType & M);
   
-  MatrixType TermByTermMatrixProduct(const MatrixType & M1, const MatrixType & M2) const;
+  static MatrixType TermByTermMatrixProduct(const MatrixType & M1, const MatrixType & M2);
 
-  double SumMatrixElements(const MatrixType & M) const;
+  static double SumMatrixElements(const MatrixType & M);
   
-  bool ArmijoTest(const double & sig,
+  static bool ArmijoTest(const double & sig,
                   const MatrixType variMat,
                   const MatrixType & newVariMat,
                   const double & evalf,
                   const double & newEvalf,
                   const MatrixType & gradVariMat,
-                  const double & alph) const;
+                  const double & alph);
   
   // attributes
   MatrixType   m_Endmembers;

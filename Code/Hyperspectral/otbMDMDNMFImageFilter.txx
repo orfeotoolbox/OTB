@@ -69,7 +69,7 @@ template <class TInputImage, class TOutputImage>
 void
 MDMDNMFImageFilter<TInputImage, TOutputImage>
 ::AddOneRowOfOnes(const MatrixType & m,
-                  MatrixType & M) const
+                  MatrixType & M)
 {
   M.set_size(m.rows()+1, m.cols());
 
@@ -89,7 +89,7 @@ MDMDNMFImageFilter<TInputImage, TOutputImage>
             const MatrixType & S,
             const double &m_Delt,
             const double &m_LambdS,
-            const double &m_LambdD) const
+            const double &m_LambdD)
 {
   // This function computes
   // f =        ||Xsu-Asu.S||_2^2 -
@@ -166,7 +166,7 @@ MDMDNMFImageFilter<TInputImage, TOutputImage>
             const MatrixType &S,
             const double &m_Delt,
             const double &m_LambdS,
-            MatrixType & gradS) const
+            MatrixType & gradS)
 {
   // Calculus of: gradS = 2 * Asu' * (Asu*S-Xsu) - lambd * 2 * (S - 1/J*ones(J,I));
 
@@ -189,7 +189,7 @@ MDMDNMFImageFilter<TInputImage, TOutputImage>
             const MatrixType &S,
             const double &m_Delt,
             const double &m_LambdD,
-            MatrixType &gradA) const
+            MatrixType &gradA)
 {
   // Compute gradA
   //    = (A*S-X) * (transpose(S)) + m_LambdD*(A-1/nbBands*ones(L,L)*A)
@@ -233,11 +233,11 @@ MDMDNMFImageFilter<TInputImage, TOutputImage>
   const double & m_LambdS,
   const double & m_LambdD,
   MatrixType & variMat,
-  double & alph, const bool isDirectEvalDirection ) const
+  double & alph, const bool isDirectEvalDirection )
 
 {
   double evalf, newEvalf, bet;
-  evalf = this->Call(variMat, fixedMat, X, m_Delt, m_LambdS, m_LambdD, isDirectEvalDirection);  // compute evalf
+  evalf = Call(variMat, fixedMat, X, m_Delt, m_LambdS, m_LambdD, isDirectEvalDirection);  // compute evalf
 
   MatrixType newVariMat = variMat - alph*gradVariMat;
   SetNegativeCoefficientsToZero(newVariMat);
@@ -286,7 +286,7 @@ MDMDNMFImageFilter<TInputImage, TOutputImage>
        const MatrixType & X,
        const double & m_Delt,
        const double & m_LambdS,
-       const double & m_LambdD, const bool isDirectEvalDirection) const
+       const double & m_LambdD, const bool isDirectEvalDirection)
 {
   double evalf;
   if ( isDirectEvalDirection )
@@ -304,7 +304,7 @@ MDMDNMFImageFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 MDMDNMFImageFilter<TInputImage, TOutputImage>
-::SetNegativeCoefficientsToZero(MatrixType & M) const 
+::SetNegativeCoefficientsToZero(MatrixType & M)
 {
   for (unsigned int i=0; i<M.rows(); ++i)
     {
@@ -320,7 +320,7 @@ template <class TInputImage, class TOutputImage>
 typename MDMDNMFImageFilter<TInputImage, TOutputImage>
 ::MatrixType
 MDMDNMFImageFilter<TInputImage, TOutputImage>
-::TermByTermMatrixProduct(const MatrixType & M1, const MatrixType & M2) const
+::TermByTermMatrixProduct(const MatrixType & M1, const MatrixType & M2)
 {
   MatrixType M;
   M.set_size(M1.rows(), M1.cols());
@@ -337,7 +337,7 @@ MDMDNMFImageFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 double
 MDMDNMFImageFilter<TInputImage, TOutputImage>
-::SumMatrixElements(const MatrixType & M) const
+::SumMatrixElements(const MatrixType & M)
 {
   double sum = 0;
   for (unsigned int i = 0; i<M.cols(); ++i)
@@ -356,7 +356,7 @@ MDMDNMFImageFilter<TInputImage, TOutputImage>
              const double & evalf,
              const double & newEvalf,
              const MatrixType & gradVariMat,
-             const double & alph) const
+             const double & alph)
 {
   bool bit;
 
