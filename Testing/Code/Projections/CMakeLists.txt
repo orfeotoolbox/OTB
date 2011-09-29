@@ -1068,7 +1068,7 @@ FOREACH( file ${FWDBWDChecking_INPUTS} )
 	${INPUTDATA}/DEM/egm96.grd #Not used
 	20 # nb Tested Points
 	1  # Tolerance in pixels
-	0  # Verbose
+	1  # Verbose
 )
 ENDFOREACH()
 
