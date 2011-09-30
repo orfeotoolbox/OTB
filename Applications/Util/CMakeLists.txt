@@ -22,3 +22,7 @@ OTB_CREATE_APPLICATION(NAME           MultiResolutionPyramid
 OTB_CREATE_APPLICATION(NAME           ConcatenateImages
                        SOURCES        otbConcatenateImages.cxx
                        LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters)
+
+OTB_CREATE_APPLICATION(NAME           Convert
+                       SOURCES        otbConvert.cxx
+                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters)
