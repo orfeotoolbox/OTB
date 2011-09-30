@@ -318,6 +318,13 @@ public:
    */
   std::vector<std::string> GetParametersKeys(bool recursive = true);
 
+  /* Get the pixel type in which the image will be saved
+   *
+   * Can be called for types :
+   * \li ParameterType_OutputImage
+   */
+  ImagePixelType GetParameterOutputImagePixelType(std::string parameter);
+
   itk::Logger* GetLogger();
 
   void AddProcess(itk::ProcessObject* object, std::string description);

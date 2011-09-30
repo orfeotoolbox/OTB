@@ -699,6 +699,21 @@ std::string Application::GetParameterAsString(std::string paramKey)
   return ret;
 }
 
+ImagePixelType Application::GetParameterOutputImagePixelType(std::string parameter)
+{
+  Parameter* param = GetParameterByKey(parameter);
+  ImagePixelType ret;
+
+  if (dynamic_cast<OutputImageParameter*>(param))
+    {
+    OutputImageParameter* paramDown = dynamic_cast<OutputImageParameter*>(param);
+    ret = paramDown->GetPixelType();
+    }
+
+  //TODO: exception if not found ?
+  return ret;
+}
+
 void
 Application::AddChoice(std::string paramKey, std::string paramName)
 {
