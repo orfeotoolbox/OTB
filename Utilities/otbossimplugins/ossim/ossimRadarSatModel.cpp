@@ -700,7 +700,13 @@ bool ossimRadarSatModel::loadState (const ossimKeywordlist &kwl,
      }
   }
 
-  bool result = ossimGeometricSarSensorModel::loadState(kwl, prefix);
+  //bool result = ossimGeometricSarSensorModel::loadState(kwl, prefix);
+
+  bool result = true;
+  if (result)
+    {
+    result = this->internalLoadState(kwl, prefix);
+    }
 
   if (traceDebug())
   {
