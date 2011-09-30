@@ -170,11 +170,9 @@ MDMDNMFImageFilter<TInputImage, TOutputImage>
 {
   // Calculus of: gradS = 2 * Asu' * (Asu*S-Xsu) - lambd * 2 * (S - 1/J*ones(J, I));
 
-  MatrixType Xsu, Asu, ones;
+  MatrixType Xsu, Asu;
   Xsu.set_size(X.rows()+1, X.cols());
   Asu.set_size(A.rows()+1, A.cols());
-  ones.set_size(S.rows(), S.cols());
-  ones.fill(1.);
   AddOneRowOfOnes(A, Asu);
   AddOneRowOfOnes(X, Xsu);
 
