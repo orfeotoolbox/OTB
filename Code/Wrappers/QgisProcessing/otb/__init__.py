@@ -44,5 +44,8 @@ def classFactory(iface):
     global theOTBPlugin
     if not theOTBPlugin :
       theOTBPlugin = OTBPlugin(iface)
+      print "****************************************"
+      print "OTB"
+      print "****************************************"
     return theOTBPlugin
     
