@@ -185,7 +185,8 @@ int main(int argc, char* argv[])
                                            OutputImageType> RescalerType;
   
   typedef otb::VectorRescaleIntensityImageFilter<ImageType,
-						 OutputPrettyImageType> RescalerType2;
+                                                 OutputPrettyImageType> RescalerType2;
+  
   typedef ImageType::PixelType                  VectorPixelType;
 
   for (unsigned int cpt = 0; cpt < numberOfPrincipalComponentsRequired; cpt++)
