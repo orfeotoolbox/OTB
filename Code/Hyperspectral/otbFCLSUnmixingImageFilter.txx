@@ -116,7 +116,7 @@ FCLSUnmixingFunctor<TInput, TOutput, TPrecision>
   unsigned int nbBands = in.Size();
 
   // Apply FCLS iterations
-  const double Delta = 1.0E-6;
+  //const double Delta = 1.0E-6;
   VectorType s(nbBands + 1);
   for (unsigned int r = 0; r < nbBands; ++r)
     {
