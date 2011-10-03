@@ -33,13 +33,6 @@
   this->GetLogger()->Write( itk::LoggerBase::CRITICAL, message.str() ); \
   }
 
-#define otbAppLogERROR(x) \
-  { \
-  std::ostringstream message; \
-  message << "" x << std::endl; \
-  this->GetLogger()->Write( itk::LoggerBase::ERROR, message.str() ); \
-  }
-
 #define otbAppLogWARNING(x) \
   { \
   std::ostringstream message; \
