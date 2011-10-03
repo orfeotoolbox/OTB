@@ -222,10 +222,8 @@ private:
         inputMax[i] = histogramsGenerator->GetOutput()->GetNthElement(i)->Quantile(0, 0.98);
         }
       
-      otbAppLogDEBUG( << "Min/Max computation done : min=" << inputMin
+      otbAppLogDEBUG( << std::setprecision(5) << "Min/Max computation done : min=" << inputMin
                       << " max=" << inputMax );
-      std::cout << "Min/Max computation done : min=" << inputMin
-                << " max=" << inputMax <<std::endl;
 
       rescaler->AutomaticInputMinMaxComputationOff();
       rescaler->SetInputMinimum(inputMin);
