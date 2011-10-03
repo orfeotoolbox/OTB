@@ -21,10 +21,11 @@
 #include "otbImageFileWriter.h"
 #include "otbMultiToMonoChannelExtractROI.h"
 #include "itkRescaleIntensityImageFilter.h"
+#include "otbVectorRescaleIntensityImageFilter.h"
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {ROI_QB_MUL_1.png}
-//    OUTPUTS: {PCAOutput.tif}, {PCAOutput1.png}, {PCAOutput2.png}, {PCAOutput3.png}
+//    OUTPUTS: {PCAOutput.tif}, {InversePCAOutput.tif},{InversePCAOutput1.png}, {PCAOutput1.png}, {PCAOutput2.png}, {PCAOutput3.png}
 //    3
 //  Software Guide : EndCommandLineArgs
 
@@ -50,7 +51,8 @@ int main(int argc, char* argv[])
   const unsigned int Dimension = 2;
   const char *       inputFileName = argv[1];
   const char *       outputFilename = argv[2];
-  const unsigned int numberOfPrincipalComponentsRequired(atoi(argv[6]));
+  const char *       outputInverseFilename = argv[3];
+  const unsigned int numberOfPrincipalComponentsRequired(atoi(argv[8]));
 
   // Software Guide : BeginLatex
   //
@@ -127,6 +129,29 @@ int main(int argc, char* argv[])
   writer->Update();
   // Software Guide : EndCodeSnippet
 
+  // Software Guide : BeginLatex
+  //
+  // \doxygen{otb}{PCAImageFilter} allows also to compute inverse
+  // transformation from PCA coefficients. In REVERSE mode, the 
+  // covariance matrix or the transformation matrix
+  // (which may not be square) has to be given.
+  //
+  // Software Guide : EndLatex
+  
+  // Software Guide : BeginCodeSnippet
+  typedef otb::PCAImageFilter< ImageType, ImageType, otb::Transform::INVERSE > InvPCAFilterType;
+  InvPCAFilterType::Pointer invFilter = InvPCAFilterType::New();
+  invFilter->SetInput(pcafilter->GetOutput());
+  invFilter->SetTransformationMatrix(pcafilter->GetTransformationMatrix());
+    
+  WriterType::Pointer invWriter = WriterType::New();
+  invWriter->SetFileName(outputInverseFilename );
+  invWriter->SetInput(invFilter->GetOutput() );
+
+  invWriter->Update();
+
+  // Software Guide : EndCodeSnippet
+  
   //  Software Guide : BeginLatex
   // Figure~\ref{fig:PCA_FILTER} shows the result of applying
   // the PCA to a 3 band RGB image.
@@ -136,10 +161,11 @@ int main(int argc, char* argv[])
   // \includegraphics[width=0.25\textwidth]{PCAOutput1.eps}
   // \includegraphics[width=0.25\textwidth]{PCAOutput2.eps}
   // \includegraphics[width=0.25\textwidth]{PCAOutput3.eps}
+  // \includegraphics[width=0.25\textwidth]{InversePCAOutput1.eps}
   // \itkcaption[PCA Filter (forward trasnformation)]{Result of applying the
   // \doxygen{otb}{PCAImageFilter} to an image. From left
   // to right and top to bottom:
-  // original image, first PC, second PC, third PC.}
+  // original image, first PC, second PC, third PC and inverse mode output.}
   // \label{fig:PCA_FILTER}
   // \end{figure}
   //
@@ -150,11 +176,17 @@ int main(int argc, char* argv[])
   typedef otb::MultiToMonoChannelExtractROI<PixelType, PixelType>
   ExtractROIFilterType;
 
-  typedef otb::Image<unsigned char, 2>          OutputImageType;
-  typedef otb::ImageFileWriter<OutputImageType> WriterType2;
+  typedef otb::Image<unsigned char, 2>                OutputImageType;
+  typedef otb::VectorImage<unsigned char, 2>          OutputPrettyImageType;
+  typedef otb::ImageFileWriter<OutputImageType>       WriterType2;
+  typedef otb::ImageFileWriter<OutputPrettyImageType> WriterType3;
   
   typedef itk::RescaleIntensityImageFilter<MonoImageType,
                                            OutputImageType> RescalerType;
+  
+  typedef otb::VectorRescaleIntensityImageFilter<ImageType,
+						 OutputPrettyImageType> RescalerType2;
+  typedef ImageType::PixelType                  VectorPixelType;
 
   for (unsigned int cpt = 0; cpt < numberOfPrincipalComponentsRequired; cpt++)
     {
@@ -170,9 +202,25 @@ int main(int argc, char* argv[])
     rescaler->SetOutputMaximum(255);
 
     writer2->SetInput(rescaler->GetOutput());
-    writer2->SetFileName(argv[cpt + 3]);
+    writer2->SetFileName(argv[cpt + 5]);
     writer2->Update();
     }
+
+  WriterType3::Pointer          writerInverse = WriterType3::New();
+  RescalerType2::Pointer        rescalerInverse = RescalerType2::New();
+  rescalerInverse->SetInput(invFilter->GetOutput());
+  
+  VectorPixelType minimum, maximum;
+  minimum.SetSize(3);
+  maximum.SetSize(3);
+  minimum.Fill(0);
+  maximum.Fill(255);
+  rescalerInverse->SetOutputMinimum(minimum);
+  rescalerInverse->SetOutputMaximum(maximum);
+
+  writerInverse->SetInput(rescalerInverse->GetOutput());
+  writerInverse->SetFileName(argv[4]);
+  writerInverse->Update();
 
   return EXIT_SUCCESS;
 }
