@@ -102,8 +102,8 @@ namespace otb
  *  (\bar\matA\matS-\bar\matR)-\lambda_S(\matS-\frac{1}{J}\1_{JI})\right)\right
  *  ]\\ \nonumber \matA &\leftarrow &P\left [\matA-\mu_A \left(
  *  (\matA\matS-\matR)\matS^T +\lambda_A(\matA-\frac{1}{L}\ \mathbf
- *  1_{LL}\matA)\right)\right ] 
- *  \end{eqnarray} \f$ 
+ *  1_{LL}\matA)\right)\right ]
+ *  \end{eqnarray} \f$
  *  where \f$ \mu_A\f$ and \f$\mu_S \f$
  *  are the step sizes.
  *  Huck propose a
@@ -111,7 +111,7 @@ namespace otb
  *  \f$ \mu_S \f$.  The projection operator \f$ P \f$ at each step ensures the
  *  positivity constraint for \f$ \matA \f$ and \f$ \matS \f$, and \f$
  *  \bar\matR \f$ and
- *  \f$ \bar\matA \f$ include the sum-to-one constraint: 
+ *  \f$ \bar\matA \f$ include the sum-to-one constraint:
  *  \f$ \bar\matR=\left[
  *  \begin{array}{c} \matR \\
  *  \delta\cdot\1_{1I}\end{array}\right],\enspace \bar\matA=\left[

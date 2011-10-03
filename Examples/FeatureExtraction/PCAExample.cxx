@@ -25,7 +25,7 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {ROI_QB_MUL_1.png}
-//    OUTPUTS: {PCAOutput.tif}, {InversePCAOutput.tif},{InversePCAOutput1.png}, {PCAOutput1.png}, {PCAOutput2.png}, {PCAOutput3.png}
+//    OUTPUTS: {PCAOutput.tif}, {InversePCAOutput.tif}, {InversePCAOutput1.png}, {PCAOutput1.png}, {PCAOutput2.png}, {PCAOutput3.png}
 //    3
 //  Software Guide : EndCommandLineArgs
 
@@ -132,7 +132,7 @@ int main(int argc, char* argv[])
   // Software Guide : BeginLatex
   //
   // \doxygen{otb}{PCAImageFilter} allows also to compute inverse
-  // transformation from PCA coefficients. In REVERSE mode, the 
+  // transformation from PCA coefficients. In REVERSE mode, the
   // covariance matrix or the transformation matrix
   // (which may not be square) has to be given.
   //
@@ -149,7 +149,6 @@ int main(int argc, char* argv[])
   invWriter->SetInput(invFilter->GetOutput() );
 
   invWriter->Update();
-
   // Software Guide : EndCodeSnippet
   
   //  Software Guide : BeginLatex
