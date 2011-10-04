@@ -68,7 +68,15 @@ typedef enum
   ImagePixelType_double,
 } ImagePixelType;
 
-typedef otb::Image<float>                FloatImageType;
+
+typedef otb::Image<char>           Int8ImageType;
+typedef otb::Image<unsigned char>  UInt8ImageType;
+typedef otb::Image<short>          Int16ImageType;
+typedef otb::Image<unsigned short> UInt16ImageType;
+typedef otb::Image<int>            Int32ImageType;
+typedef otb::Image<unsigned int>   UInt32ImageType;
+typedef otb::Image<float>          FloatImageType;
+typedef otb::Image<double>         DoubleImageType;
 
 typedef otb::VectorImage<char>           Int8VectorImageType;
 typedef otb::VectorImage<unsigned char>  UInt8VectorImageType;
