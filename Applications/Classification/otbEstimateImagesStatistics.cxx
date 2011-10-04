@@ -44,7 +44,7 @@ private:
   EstimateImagesStatistics()
   {
     SetName("EstimateImagesStatistics");
-    SetDescription("Estimate mean/standard deviation for all images in the input list");
+    SetDescription("Estimate mean/standard deviation for all images in the input list. Possibility to write the output in an xml file or just display the result.");
   }
 
   virtual ~EstimateImagesStatistics()
@@ -53,8 +53,10 @@ private:
 
   void DoCreateParameters()
   {
-    AddParameter(ParameterType_InputImageList, "in", "Input Image");
+    AddParameter(ParameterType_InputImageList, "il", "Input Image List");
     AddParameter(ParameterType_Filename, "out", "Output xml file");
+    SetParameterDescription( "out", "If set, will write the statistics into the given html file." );
+    MandatoryOff("out");
   }
 
   void DoUpdateParameters()
@@ -134,13 +136,21 @@ private:
       stddev[i] = vcl_sqrt(variance[i]);
       }
 
-    // Write the Statistics via the statistic writer
-    typedef otb::StatisticsXMLFileWriter<MeasurementType> StatisticsWriter;
-    StatisticsWriter::Pointer writer = StatisticsWriter::New();
-    writer->SetFileName(GetParameterString("out"));
-    writer->AddInput("mean", mean);
-    writer->AddInput("stddev", stddev);
-    writer->Update();
+    if( HasValue( "out" )==true )
+      {
+      // Write the Statistics via the statistic writer
+      typedef otb::StatisticsXMLFileWriter<MeasurementType> StatisticsWriter;
+      StatisticsWriter::Pointer writer = StatisticsWriter::New();
+      writer->SetFileName(GetParameterString("out"));
+      writer->AddInput("mean", mean);
+      writer->AddInput("stddev", stddev);
+      writer->Update();
+      }
+    else
+      {
+      std::cout<<"Mean: "<<mean<<std::endl;
+      std::cout<<"Standard Devoiation: "<<stddev<<std::endl;
+      }
   }
 
   itk::LightObject::Pointer m_FilterRef;
