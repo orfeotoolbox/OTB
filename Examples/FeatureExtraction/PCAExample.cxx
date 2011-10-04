@@ -132,15 +132,17 @@ int main(int argc, char* argv[])
   // Software Guide : BeginLatex
   //
   // \doxygen{otb}{PCAImageFilter} allows also to compute inverse
-  // transformation from PCA coefficients. In REVERSE mode, the
+  // transformation from PCA coefficients. In reverse mode, the 
   // covariance matrix or the transformation matrix
   // (which may not be square) has to be given.
   //
   // Software Guide : EndLatex
   
   // Software Guide : BeginCodeSnippet
-  typedef otb::PCAImageFilter< ImageType, ImageType, otb::Transform::INVERSE > InvPCAFilterType;
+  typedef otb::PCAImageFilter< ImageType, ImageType, 
+			       otb::Transform::INVERSE > InvPCAFilterType;
   InvPCAFilterType::Pointer invFilter = InvPCAFilterType::New();
+  
   invFilter->SetInput(pcafilter->GetOutput());
   invFilter->SetTransformationMatrix(pcafilter->GetTransformationMatrix());
     
@@ -152,8 +154,8 @@ int main(int argc, char* argv[])
   // Software Guide : EndCodeSnippet
   
   //  Software Guide : BeginLatex
-  // Figure~\ref{fig:PCA_FILTER} shows the result of applying
-  // the PCA to a 3 band RGB image.
+  // Figure~\ref{fig:PCA_FILTER} shows the result of applying forward
+  // and reverse PCA transformation to a 3 band RGB image.
   // \begin{figure}
   // \center
   // \includegraphics[width=0.25\textwidth]{ROI_QB_MUL_1.eps}
@@ -164,7 +166,8 @@ int main(int argc, char* argv[])
   // \itkcaption[PCA Filter (forward trasnformation)]{Result of applying the
   // \doxygen{otb}{PCAImageFilter} to an image. From left
   // to right and top to bottom:
-  // original image, first PC, second PC, third PC and inverse mode output.}
+  // original image, first PC, second PC, third PC and output of the
+  // inverse mode (the input RGB image).}
   // \label{fig:PCA_FILTER}
   // \end{figure}
   //
