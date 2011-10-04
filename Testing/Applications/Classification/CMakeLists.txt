@@ -9,7 +9,7 @@ add_test(NAME apTvClEstimateImagesStatisticsQB1
                  Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
                  EstimateImagesStatistics
                  --modulePath $<TARGET_FILE_DIR:otbapp_EstimateImagesStatistics>
-                 --in ${INPUTDATA}/Classification/QB_1_ortho.tif
+                 --il ${INPUTDATA}/Classification/QB_1_ortho.tif
                  --out ${TEMP}/apTvClEstimateImageStatisticsQB1.xml )
 
 add_test(NAME apTvClEstimateImagesStatisticsQB123
@@ -20,7 +20,7 @@ add_test(NAME apTvClEstimateImagesStatisticsQB123
                  Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
                  EstimateImagesStatistics
                  --modulePath $<TARGET_FILE_DIR:otbapp_EstimateImagesStatistics>
-                 --in ${INPUTDATA}/Classification/QB_1_ortho.tif
+                 --il ${INPUTDATA}/Classification/QB_1_ortho.tif
                       ${INPUTDATA}/Classification/QB_2_ortho.tif
                       ${INPUTDATA}/Classification/QB_3_ortho.tif
                  --out ${TEMP}/apTvClEstimateImageStatisticsQB123.xml )
@@ -33,7 +33,7 @@ add_test(NAME apTvClEstimateImagesStatisticsQB456
                  Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
                  EstimateImagesStatistics
                  --modulePath $<TARGET_FILE_DIR:otbapp_EstimateImagesStatistics>
-                 --in ${INPUTDATA}/Classification/QB_4_extract.tif 
+                 --il ${INPUTDATA}/Classification/QB_4_extract.tif 
                       ${INPUTDATA}/Classification/QB_5_extract.tif 
                       ${INPUTDATA}/Classification/QB_6_extract.tif
                  --out ${TEMP}/apTvClEstimateImageStatisticsQB456.xml )
