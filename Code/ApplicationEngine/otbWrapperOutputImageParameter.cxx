@@ -16,8 +16,8 @@
 
 =========================================================================*/
 #include "otbWrapperOutputImageParameter.h"
-#include "otbVectorRescaleIntensityImageFilter.h"
 #include "itkCastImageFilter.h"
+
 
 namespace otb
 {
@@ -31,8 +31,8 @@ OutputImageParameter::OutputImageParameter()
   this->SetKey("out");
 
   this->InitializeWriters();
-
 }
+
 
 OutputImageParameter::~OutputImageParameter()
 {
@@ -48,127 +48,298 @@ void OutputImageParameter::InitializeWriters()
   m_UInt32Writer = UInt32WriterType::New();
   m_FloatWriter = FloatWriterType::New();
   m_DoubleWriter = DoubleWriterType::New();
+
+  m_VectorInt8Writer = VectorInt8WriterType::New();
+  m_VectorUInt8Writer = VectorUInt8WriterType::New();
+  m_VectorInt16Writer = VectorInt16WriterType::New();
+  m_VectorUInt16Writer = VectorUInt16WriterType::New();
+  m_VectorInt32Writer = VectorInt32WriterType::New();
+  m_VectorUInt32Writer = VectorUInt32WriterType::New();
+  m_VectorFloatWriter = VectorFloatWriterType::New();
+  m_VectorDoubleWriter = VectorDoubleWriterType::New();
 }
 
 
-#define otbRescaleAndWriteMacro(OutputImageType, writer)                       \
+#define otbRescaleAndWriteMacro(InputImageType, OutputImageType, writer) \
   {                                                                     \
-    typedef VectorRescaleIntensityImageFilter<FloatVectorImageType, OutputImageType> RescaleFilterType; \
-    RescaleFilterType::Pointer rescaler = RescaleFilterType::New();     \
-    OutputImageType::PixelType outputMinimum(nbChannel);                \
-    outputMinimum.Fill(itk::NumericTraits<OutputImageType::InternalPixelType>::min()); \
-    OutputImageType::PixelType outputMaximum(nbChannel);                \
-    outputMaximum.Fill(itk::NumericTraits<OutputImageType::InternalPixelType>::max()); \
-    rescaler->SetOutputMinimum(outputMinimum);                          \
-    rescaler->SetOutputMaximum(outputMaximum);                          \
-    rescaler->SetAutomaticInputMinMaxComputation( true );               \
-    rescaler->SetInput( this->GetImage() );                             \
-    writer->SetFileName( this->GetFileName() );                   \
-    writer->SetInput(rescaler->GetOutput());                      \
-    writer->Update();                                             \
+    typedef itk::CastImageFilter<InputImageType, OutputImageType> CastFilterType; \
+    typename CastFilterType::Pointer caster = CastFilterType::New();    \
+    caster->SetInput( dynamic_cast<InputImageType*>(m_Image.GetPointer()) ); \
+    writer->SetFileName( this->GetFileName() );                         \
+    writer->SetInput(caster->GetOutput());                              \
+    writer->Update();                                                   \
   }
+
+
+template <class TInputImageType>
+void 
+OutputImageParameter::SwitchImageWrite()
+{
+  switch(m_PixelType )
+    {
+    case ImagePixelType_int8:
+    {
+    otbRescaleAndWriteMacro(TInputImageType, Int8ImageType, m_Int8Writer);
+    break;
+    }
+    case ImagePixelType_uint8:
+    {
+    otbRescaleAndWriteMacro(TInputImageType, UInt8ImageType, m_UInt8Writer);
+    break;
+    }
+    case ImagePixelType_int16:
+    {
+    otbRescaleAndWriteMacro(TInputImageType, Int16ImageType, m_Int16Writer);
+    break;
+    }
+    case ImagePixelType_uint16:
+    {
+    otbRescaleAndWriteMacro(TInputImageType, UInt16ImageType, m_UInt16Writer);
+    break;
+    }
+    case ImagePixelType_int32:
+    {
+    otbRescaleAndWriteMacro(TInputImageType, Int32ImageType, m_Int32Writer);
+    break;
+    }
+    case ImagePixelType_uint32:
+    {
+    otbRescaleAndWriteMacro(TInputImageType, UInt32ImageType, m_UInt32Writer);
+    break;
+    }
+    case ImagePixelType_float:
+    {
+    otbRescaleAndWriteMacro(TInputImageType, FloatImageType, m_FloatWriter);
+    break;
+    }
+    case ImagePixelType_double:
+    {
+    otbRescaleAndWriteMacro(TInputImageType, DoubleImageType, m_DoubleWriter);
+    break;
+    }
+    }
+}
+
+
+template <class TInputVectoImageType>
+void
+OutputImageParameter::SwitchVectorImageWrite()
+  {
+  switch(m_PixelType )
+    {
+    case ImagePixelType_int8:
+    {
+    otbRescaleAndWriteMacro(TInputVectoImageType, Int8VectorImageType, m_VectorInt8Writer);
+    break;
+    }
+    case ImagePixelType_uint8:
+    {
+    otbRescaleAndWriteMacro(TInputVectoImageType, UInt8VectorImageType, m_VectorUInt8Writer);
+    break;
+    }
+    case ImagePixelType_int16:
+    {
+    otbRescaleAndWriteMacro(TInputVectoImageType, Int16VectorImageType, m_VectorInt16Writer);
+    break;
+    }
+    case ImagePixelType_uint16:
+    {
+    otbRescaleAndWriteMacro(TInputVectoImageType, UInt16VectorImageType, m_VectorUInt16Writer);
+    break;
+    }
+    case ImagePixelType_int32:
+    {
+    otbRescaleAndWriteMacro(TInputVectoImageType, Int32VectorImageType, m_VectorInt32Writer);
+    break;
+    }
+    case ImagePixelType_uint32:
+    {
+    otbRescaleAndWriteMacro(TInputVectoImageType, UInt32VectorImageType, m_VectorUInt32Writer);
+    break;
+    }
+    case ImagePixelType_float:
+    {
+    otbRescaleAndWriteMacro(TInputVectoImageType, FloatVectorImageType, m_VectorFloatWriter);
+    break;
+    }
+    case ImagePixelType_double:
+    {
+    otbRescaleAndWriteMacro(TInputVectoImageType, DoubleVectorImageType, m_VectorDoubleWriter);
+    break;
+    }
+    }
+  }
+
+
+
 
 void
-OutputImageParameter::Write( )
+OutputImageParameter::Write()
 {
-  this->GetImage()->UpdateOutputInformation();
-  const unsigned int nbChannel( this->GetImage()->GetNumberOfComponentsPerPixel() );
-
-  switch(m_PixelType )
-  {
-    case ImagePixelType_int8:
-      {
-      otbRescaleAndWriteMacro(Int8VectorImageType, m_Int8Writer);
-      break;
-      }
-    case ImagePixelType_uint8:
-      {
-      otbRescaleAndWriteMacro(UInt8VectorImageType, m_UInt8Writer);
-      break;
-      }
-    case ImagePixelType_int16:
-      {
-      otbRescaleAndWriteMacro(Int16VectorImageType, m_Int16Writer);
-      break;
-      }
-    case ImagePixelType_uint16:
-      {
-      otbRescaleAndWriteMacro(UInt16VectorImageType, m_UInt16Writer);
-      break;
-      }
-    case ImagePixelType_int32:
-      {
-      otbRescaleAndWriteMacro(Int32VectorImageType, m_Int32Writer);
-      break;
-      }
-    case ImagePixelType_uint32:
-      {
-      otbRescaleAndWriteMacro(UInt32VectorImageType, m_UInt32Writer);
-      break;
-      }
-    case ImagePixelType_float:
-      {
-      m_FloatWriter->SetFileName( this->GetFileName() );
-      m_FloatWriter->SetInput(this->GetImage());
-      m_FloatWriter->Modified();
-      m_FloatWriter->Update();
-      break;
-      }
-    case ImagePixelType_double:
-      {
-      typedef itk::CastImageFilter<FloatVectorImageType, DoubleVectorImageType> CastFilterType;
-      CastFilterType::Pointer cast = CastFilterType::New();
-      cast->SetInput( this->GetImage() );
-      m_DoubleWriter->SetFileName( this->GetFileName() );
-      m_DoubleWriter->SetInput(cast->GetOutput());
-      m_DoubleWriter->Update();
-      break;
-      }
+  m_Image->UpdateOutputInformation();
+  
+  if (dynamic_cast<Int8ImageType*>(m_Image.GetPointer())) 
+    {
+    SwitchImageWrite<Int8ImageType>();
+    }
+  else if (dynamic_cast<UInt8ImageType*>(m_Image.GetPointer()))
+    {
+    SwitchImageWrite<UInt8ImageType>();
+    }
+  else if (dynamic_cast<Int16ImageType*>(m_Image.GetPointer()))
+    {
+    SwitchImageWrite<Int16ImageType>();
+    }
+  else if (dynamic_cast<UInt16ImageType*>(m_Image.GetPointer()))
+    {
+    SwitchImageWrite<UInt16ImageType>();
+    }
+  else if (dynamic_cast<Int32ImageType*>(m_Image.GetPointer()))
+    {
+    SwitchImageWrite<Int32ImageType>();
+    }
+  else if (dynamic_cast<UInt32ImageType*>(m_Image.GetPointer()))
+    {
+    SwitchImageWrite<UInt32ImageType>();
+    }
+  else if (dynamic_cast<FloatImageType*>(m_Image.GetPointer()))
+    {
+    SwitchImageWrite<FloatImageType>();
+    }
+  else if (dynamic_cast<DoubleImageType*>(m_Image.GetPointer()))
+    {
+    SwitchImageWrite<DoubleImageType>();
+    }
+  else if (dynamic_cast<Int8VectorImageType*>(m_Image.GetPointer()))
+    {
+    SwitchVectorImageWrite<Int8VectorImageType>();
+    }
+  else if (dynamic_cast<UInt8VectorImageType*>(m_Image.GetPointer()))
+    {
+    SwitchVectorImageWrite<UInt8VectorImageType>();
+    }
+  else if (dynamic_cast<Int16VectorImageType*>(m_Image.GetPointer()))
+    {
+    SwitchVectorImageWrite<Int16VectorImageType>();
+    }
+  else if (dynamic_cast<UInt16VectorImageType*>(m_Image.GetPointer()))
+    {
+    SwitchVectorImageWrite<UInt16VectorImageType>();
+    }
+  else if (dynamic_cast<Int32VectorImageType*>(m_Image.GetPointer()))
+    {
+    SwitchVectorImageWrite<Int32VectorImageType>();
+    }
+  else if (dynamic_cast<UInt32VectorImageType*>(m_Image.GetPointer()))
+    {
+    SwitchVectorImageWrite<UInt32VectorImageType>();
+    }
+  else if (dynamic_cast<FloatVectorImageType*>(m_Image.GetPointer()))
+    {
+    SwitchVectorImageWrite<FloatVectorImageType>();
+    }
+  else if (dynamic_cast<DoubleVectorImageType*>(m_Image.GetPointer()))
+    {
+    SwitchVectorImageWrite<DoubleVectorImageType>();
+    }
+  else
+    {
+    itkExceptionMacro("Unknown image type");
+    }
   }
-}
+
 
 itk::ProcessObject*
 OutputImageParameter::GetWriter( )
 {
+  bool isVectorImage = true;
+  if ( dynamic_cast<Int8ImageType*>(m_Image.GetPointer())  || dynamic_cast<UInt8ImageType*>(m_Image.GetPointer()) ||
+       dynamic_cast<Int16ImageType*>(m_Image.GetPointer()) ||  dynamic_cast<UInt16ImageType*>(m_Image.GetPointer()) ||
+       dynamic_cast<Int32ImageType*>(m_Image.GetPointer()) || dynamic_cast<UInt32ImageType*>(m_Image.GetPointer()) ||
+       dynamic_cast<FloatImageType*>(m_Image.GetPointer()) || dynamic_cast<DoubleImageType*>(m_Image.GetPointer())    )         
+    {
+    isVectorImage = false;
+    }                  
+  
   itk::ProcessObject* writer = 0;
   switch ( GetPixelType() )
-  {
+    {
     case ImagePixelType_int8:
+    {
+    if( isVectorImage )
+      writer = m_VectorInt8Writer;
+    else
       writer = m_Int8Writer;
-      break;
+    break;
+    }
     case ImagePixelType_uint8:
+    {
+    if( isVectorImage )
+      writer = m_VectorUInt8Writer;
+    else
       writer = m_UInt8Writer;
-      break;
+    break;
+    }
     case ImagePixelType_int16:
+    {
+    if( isVectorImage )
+      writer = m_VectorInt16Writer;
+    else
       writer = m_Int16Writer;
-      break;
+    break;
+    }
     case ImagePixelType_uint16:
+    {
+    if( isVectorImage )
+      writer = m_VectorUInt16Writer;
+    else
       writer = m_UInt16Writer;
-      break;
+    break;
+    }
     case ImagePixelType_int32:
+    {
+    if( isVectorImage )
+      writer = m_VectorInt32Writer;
+    else
       writer = m_Int32Writer;
-      break;
+    break;
+    }
     case ImagePixelType_uint32:
+    {
+    if( isVectorImage )
+      writer = m_VectorUInt32Writer;
+    else
       writer = m_UInt32Writer;
-      break;
+    break;
+    }
     case ImagePixelType_float:
+    {
+    if( isVectorImage )
+      writer = m_VectorFloatWriter;
+    else
       writer = m_FloatWriter;
-      break;
+    break;
+    }
     case ImagePixelType_double:
+    {
+    if( isVectorImage )
+      writer = m_VectorDoubleWriter;
+    else
       writer = m_DoubleWriter;
-      break;
-  }
+    break;
+    }
+    }
   return writer;
 }
 
-FloatVectorImageType*
+OutputImageParameter::ImageBaseType*
 OutputImageParameter::GetValue( )
 {
   return m_Image;
 }
 
 void
-OutputImageParameter::SetValue(FloatVectorImageType* image)
+OutputImageParameter::SetValue(ImageBaseType* image)
 {
   m_Image = image;
   SetActive(true);
