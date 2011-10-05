@@ -30,40 +30,36 @@ import otbApplication as otb
 
 class OTBPlugin():
     def __init__(self, iface):
-        print "OTBPlugin::__init__"
         self._modules = None
-        self.iface = iface
-        self.window = iface.mainWindow()
-        pass
+        self._iface = iface
         
     def initGui(self):
-        print "OTBPlugin::initGui"
         processing.framework.registerModuleProvider(self)
         
     def unload(self):
-        print "OTBPlugin::unload"
         pass # TODO : unload the modules
     
     def modules(self):
-        print "OTBPlugin::modules"
         if self._modules is None:
             apps = otb.Registry.GetAvailableApplications()
             print "available apps : " + str(apps)
             self._modules = set()
             for app in apps:
-                self._modules.add(OTBModule(app))
+                self._modules.add(OTBModule(app, self._iface))
         return self._modules
 
 class OTBModule(processing.Module):
-    def __init__(self, modulename):
+    def __init__(self, modulename, iface):
         print "OTBModule __init__ " + modulename
+        
         self._app = otb.Registry.CreateApplication(modulename)
+        self._iface = iface
         processing.Module.__init__(self,
             self._app.GetName(),
             self._app.GetDescription())
+
         
         self._parameters = []
-        
         self._instance = OTBModuleInstance(self)
         
         self.layerRegistry = QgsMapLayerRegistry.instance()
@@ -71,6 +67,9 @@ class OTBModule(processing.Module):
         for p in self._app.GetParametersKeys():
             #print p
             self.addParameter(p)
+
+    def instance(self):
+        return self._instance
 
     def addParameter(self, otbParamKey):
         print "addParameter " + otbParamKey
@@ -132,6 +131,7 @@ class OTBModule(processing.Module):
             self._parameters.append(qgisParam)
 
             # register callback to instance for parameter
+            print "connecting signal " + str(self._instance.valueChangedSignal(qgisParam))
             QObject.connect(self._instance,
                             self._instance.valueChangedSignal(qgisParam),
                             lambda x: self.onParameterChanged(qgisParam, x))
@@ -151,56 +151,62 @@ class OTBModule(processing.Module):
         pc = qgisParam.__class__
         app = qgisParam._app
         key = qgisParam._key
-
+        ptype = app.GetParameterType(key)
         print "onParameterChanged " + key + " " + str(value)
-        
-        if pc == parameters.VectorLayerParameter:
-                qgisParam.layer = value
-                if value is None: return
-                dpUri = str(param.layer.dataProvider().dataSourceUri())
-                dpDescription = param.layer.dataProvider().description()              
-                isLocal = dpDescription.startsWith('GDAL provider')
-                if isLocal:
-                  print "Setting " + dpUri + " to param VectorLayerParameter " + key
-                  app.SetParameterString(key, dpUri)
-        elif pc == parameters.RasterLayerParameter:
-                print "onParameterChanged " + key + " " + str(value)
-                if value is None: return
-                qgisParam.layer = value
-                dpUri = str(qgisParam.layer.dataProvider().dataSourceUri())
-                dpDescription = qgisParam.layer.dataProvider().description()              
-                isLocal = dpDescription.startsWith('OGR data provider')
-                if isLocal:
-                  print "Setting " + dpUri + " to param RasterLayerParameter " + key
-                  app.SetParameterString(key, dpUri)
-#        elif pc == RangeParameter:
-#            low, high = value
-#            sagaParam.asRange().Set_Range(low, high)
-#        elif pc == GridSystemParameter:
-#            cellsize = value.cellsize
-#            xMin, xMax = value.xRange
-#            yMin, yMax = value.yRange
-#            self.module.Get_System().Assign(cellsize, xMin, yMin,
-#                xMax, yMax)
-        elif pc == StringParameter:
-            # convert QString to CSG_String
-            print "Setting " + str(value) + " to param StringParameter " + key
-            app.SetParameterString(key, value)
-        elif pc == NumericParameter:
-            if app.GetParameterType(key) == ParameterType_Int:
-              print "Setting " + str(value) + " to param intParameter " + key
-              app.SetParameterInt(key, int(value))
-            else:
-              print "Setting " + str(value) + " to param floatParameter " + key
-              app.SetParameterFloat(key, float(value))
-        elif pc == BooleanParameter:
+
+        if ptype == otb.ParameterType_Empty:
             if value :
               print "Enable " + key
               app.EnableParameter(key)
             else :
               print "Disable " + key
               app.DisableParameter(key)
-            
+
+        elif ptype == otb.ParameterType_Int or ptype == otb.ParameterType_Radius:
+            print "SetParameterInt " + key
+            app.SetParameterInt(key, int(value))
+
+        elif ptype == otb.ParameterType_Float:
+            print "SetParameterFloat " + key
+            app.SetParameterFloat(key, float(value))
+
+        elif ptype == otb.ParameterType_String \
+             or ptype == otb.ParameterType_Filename \
+             or ptype == otb.ParameterType_Directory \
+             or ptype == otb.ParameterType_String:
+            print "SetParameterString " + key
+            app.SetParameterString(key, value)
+
+        elif ptype == otb.ParameterType_InputImage \
+             or ptype == otb.ParameterType_InputComplexImage:
+            if value is None: return
+            qgisParam.layer = value
+            dpUri = str(qgisParam.layer.dataProvider().dataSourceUri())
+            dpDescription = qgisParam.layer.dataProvider().description()              
+            isLocal = dpDescription.startsWith('GDAL provider')
+            if isLocal:
+              print "Setting " + dpUri + " to param RasterLayerParameter " + key
+              app.SetParameterString(key, dpUri)
+
+        elif ptype == otb.ParameterType_InputVectorData:
+            if value is None: return
+            qgisParam.layer = value
+            dpUri = str(qgisParam.layer.dataProvider().dataSourceUri())
+            dpDescription = qgisParam.layer.dataProvider().description()              
+            isLocal = dpDescription.startsWith('OGR data provider')
+            if isLocal:
+              print "Setting " + dpUri + " to param VectorLayerParameter " + key
+              app.SetParameterString(key, dpUri)
+
+        elif ptype == otb.ParameterType_OutputImage:
+            print "SetParameterString " + key
+            app.SetParameterString(key, str(value))
+
+        elif ptype == otb.ParameterType_OutputVectorData:
+            print "SetParameterString " + key
+            app.SetParameterString(key, str(value))
+
+
 
 
 class OTBModuleInstance(processing.ModuleInstance):
@@ -217,34 +223,30 @@ class OTBModuleInstance(processing.ModuleInstance):
         """ Only reacts to start running state, ignore others.
         """
         print "stateParameterValueChanged " + str(state)
-        sm = self.module().module # the SAGA module
-        if state != StateParameter.State.running:
+        if state != parameters.StateParameter.State.running:
             return
         modName = self.module().name()
  
         print "Executing " + modName
         app = self.module()._app
+
+        #try:
         app.ExecuteAndWriteOutput()
 
-        if sm.Execute() != 0:
-            self.setFeedback("SAGA Module execution suceeded.")
-            
-            # umm- what if there is no iface?
-            iface = self.module().iface
-            # now import output layers
-            for param in self.outLayer:
-                basename = "otb-qgis-%s-%s-%s" % (self.module().name(), param._key, id(param))
-                pc = param.__class__
-                if pc == parameters.VectorLayerParameter:
-                    iface.addVectorLayer(app.GetParameterString(param._key), basename, "ogr")
-                elif pc == parameters.RasterLayerParameter:
-                    iface.addRasterLayer(app.GetParameterString(param._key), basename)
-        else:
-            self.setFeedback("Module execution failed.")
-        self.setState(StateParameter.State.stopped)
+        # umm- what if there is no iface?
+        iface = self.module()._iface
 
+        # now import output layers
+        for key in app.GetParametersKeys():
+            if app.GetParameterType(key) == otb.ParameterType_OutputImage:
+                iface.addRasterLayer(app.GetParameterString(key))
+            elif app.GetParameterType(key) == otb.ParameterType_OutputVectorData:
+                basename = os.path.splitext( os.path.basename(app.GetParameterString(key)) )[0]
+                iface.addVectorLayer(app.GetParameterString(key), basename, "ogr")
 
+        self.setFeedback("OTB Module execution suceeded.")
+        #except:
+        #  self.setFeedback("OTB Module execution failed.")
 
-
-
+        self.setState(parameters.StateParameter.State.stopped)
 
