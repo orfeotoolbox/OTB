@@ -29,7 +29,7 @@ int main(int argc, char * argv[])
   parser->AddOption("--TrainingSetProbability","Probability for a sample to be selected in the training set","-tp", 1, true);
   parser->AddOption("--NumberOfClasses","Number of classes","-nc", 1, true);
   parser->AddOption("--InitialCentroidProbability","Probability for a pixel to be selected as an initial class centroid","-cp", 1, true);
-  parser->AddOption("--StreamingNumberOfLines","Number of lined for each streaming block","-sl", 1, true);
+  parser->AddOption("--StreamingNumberOfLines","Number of lines for each streaming block","-sl", 1, true);
 
 
   typedef otb::CommandLineArgumentParseResult ParserResultType;
