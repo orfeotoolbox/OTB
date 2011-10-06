@@ -75,6 +75,7 @@ template <class TInputImageType>
 void 
 OutputImageParameter::SwitchImageWrite()
 {
+ std::cout<<"OutputImageParameter::SwitchImageWrite start"<<std::endl;
   switch(m_PixelType )
     {
     case ImagePixelType_int8:
@@ -84,6 +85,7 @@ OutputImageParameter::SwitchImageWrite()
     }
     case ImagePixelType_uint8:
     {
+ std::cout<<"OutputImageParameter::SwitchImageWrite UNIN8"<<std::endl;
     otbRescaleAndWriteMacro(TInputImageType, UInt8ImageType, m_UInt8Writer);
     break;
     }
@@ -118,6 +120,7 @@ OutputImageParameter::SwitchImageWrite()
     break;
     }
     }
+ std::cout<<"OutputImageParameter::SwitchImageWrite end"<<std::endl;
 }
 
 
@@ -176,14 +179,16 @@ OutputImageParameter::SwitchVectorImageWrite()
 void
 OutputImageParameter::Write()
 {
+  std::cout<<"OutputImageParameter::Write"<<std::endl;
   m_Image->UpdateOutputInformation();
-  
+  std::cout<<"OutputImageParameter::Write1"<<std::endl;
   if (dynamic_cast<Int8ImageType*>(m_Image.GetPointer())) 
     {
     SwitchImageWrite<Int8ImageType>();
     }
   else if (dynamic_cast<UInt8ImageType*>(m_Image.GetPointer()))
     {
+ std::cout<<"OutputImageParameter::Write UNIN8"<<std::endl;
     SwitchImageWrite<UInt8ImageType>();
     }
   else if (dynamic_cast<Int16ImageType*>(m_Image.GetPointer()))
@@ -246,6 +251,8 @@ OutputImageParameter::Write()
     {
     itkExceptionMacro("Unknown image type");
     }
+
+ std::cout<<"OutputImageParameter::Write2"<<std::endl;
   }
 
 

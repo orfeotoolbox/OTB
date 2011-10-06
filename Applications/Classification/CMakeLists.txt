@@ -4,4 +4,4 @@ OTB_CREATE_APPLICATION(NAME           EstimateImagesStatistics
 
 OTB_CREATE_APPLICATION(NAME           ImageSVMClassifier
                        SOURCES        otbImageSVMClassifier.cxx
-                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters)
+                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction;OTBLearning;OTBApplicationEngine)

@@ -82,13 +82,14 @@ private:
 
     AddParameter(ParameterType_InputImage,  "mask",   "Input Mask to classify");
     SetParameterDescription( "mask", "A mask associated with the new image to classify");
+    MandatoryOff("mask");
 
     AddParameter(ParameterType_Filename, "imstat", "Image statistics file.");
     SetParameterDescription("imstat", "a XML file containing mean and standard deviation of input images used to train svm model.");
-    MandatoryOff("instat");
+    MandatoryOff("imstat");
 
-    AddParameter(ParameterType_Filename, "svmmodel", "SVM Model.");
-    SetParameterDescription("svmmodel", "An estimated svm model previously computed");
+    AddParameter(ParameterType_Filename, "svm", "SVM Model.");
+    SetParameterDescription("svm", "An estimated svm model previously computed");
     
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
     SetParameterDescription( "out", "Output labeled image");
@@ -109,21 +110,20 @@ private:
     inImage->UpdateOutputInformation();
 
     // Load svm model
-    ModelPointerType modelSVM = ModelType::New();
-    modelSVM->LoadModel(GetParameterString("svmmodel").c_str());
+    m_ModelSVM = ModelType::New();
+    m_ModelSVM->LoadModel(GetParameterString("svm").c_str());
 
 
     // Normalize input image (optional)
     StatisticsReader::Pointer  statisticsReader = StatisticsReader::New();
     MeasurementType  meanMeasurementVector;
     MeasurementType  stddevMeasurementVector;
-    RescalerType::Pointer rescaler = RescalerType::New();
+    m_Rescaler = RescalerType::New();
     
     // Classify
-    ClassificationFilterType::Pointer classificationFilter = ClassificationFilterType::New();
-    classificationFilter->SetModel(modelSVM);
-
-
+    m_ClassificationFilter = ClassificationFilterType::New();
+    m_ClassificationFilter->SetModel(m_ModelSVM);
+  
     // Normalize input image if asked
     if( HasValue("imstat")  )
       {
@@ -135,18 +135,19 @@ private:
       otbAppLogDEBUG( "mean used: " << meanMeasurementVector );
       otbAppLogDEBUG( "standard deviation used: " << stddevMeasurementVector );
       // Rescale vector image
-      rescaler->SetScale(stddevMeasurementVector);
-      rescaler->SetShift(meanMeasurementVector);
-      rescaler->SetInput(inImage);
+      m_Rescaler->SetScale(stddevMeasurementVector);
+      m_Rescaler->SetShift(meanMeasurementVector);
+      m_Rescaler->SetInput(inImage);
       
-      classificationFilter->SetInput(rescaler->GetOutput());
+      m_ClassificationFilter->SetInput(m_Rescaler->GetOutput());
       }
     else
       {
       otbAppLogDEBUG("Input image normalization deactivated.");
-      classificationFilter->SetInput(inImage);
+      m_ClassificationFilter->SetInput(inImage);
       }
     
+  
     if( HasValue("mask")  )
       {
       otbAppLogDEBUG("Use input mask.");
@@ -157,17 +158,24 @@ private:
       extract->SetChannel(0);
       extract->UpdateOutputInformation();
       
-      classificationFilter->SetInputMask(extract->GetOutput());
+      m_ClassificationFilter->SetInputMask(extract->GetOutput());
       }
+
+      std::cout<<"-------------3-----------------"<<std::endl;
     
+    m_FinalCast = CastImageFilterType::New();
+    m_FinalCast->SetInput( m_ClassificationFilter->GetOutput() );
     
-    CastImageFilterType::Pointer finalCast = CastImageFilterType::New();
-    finalCast->SetInput( classificationFilter->GetOutput() );
+    SetParameterOutputImage("out", m_FinalCast->GetOutput());
     
-    SetParameterOutputImage("out", finalCast->GetOutput());
+    //SetParameterOuutputImage<UInt8ImageType>("out", m_ClassificationFilter->GetOutput());
+    std::cout<<"---------------4---------------"<<std::endl;
   }
 
-  //itk::LightObject::Pointer m_FilterRef;
+  ClassificationFilterType::Pointer m_ClassificationFilter;
+  ModelPointerType m_ModelSVM;
+  RescalerType::Pointer m_Rescaler;
+  CastImageFilterType::Pointer m_FinalCast;
 };
 
 

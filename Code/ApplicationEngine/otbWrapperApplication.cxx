@@ -435,6 +435,7 @@ void Application::SetParameterStringList(std::string parameter, std::vector<std:
 
 void Application::SetParameterOutputImage(std::string parameter, FloatVectorImageType* value)
 {
+ std::cout<<"Application::SetParameterOutputImage 1"<<std::endl;
   Parameter* param = GetParameterByKey(parameter);
 
   if (dynamic_cast<OutputImageParameter*>(param))
@@ -443,6 +444,21 @@ void Application::SetParameterOutputImage(std::string parameter, FloatVectorImag
     paramDown->SetValue(value);
     }
 }
+
+template <class TImageType>
+void Application::SetParameterOuutputImage(std::string parameter, TImageType* value)
+{ std::cout<<"Application::SetParameterOutputImage"<<std::endl;
+  Parameter* param = GetParameterByKey(parameter);
+
+  if (dynamic_cast<OutputImageParameter*>(param))
+    {
+    std::cout<<"Application::SetParameterOutputImage 0000"<<std::endl;
+    OutputImageParameter* paramDown = dynamic_cast<OutputImageParameter*>(param);
+    paramDown->SetValue(value);
+    std::cout<<"Application::SetParameterOutputImage plop"<<std::endl;
+    }
+}
+
 
 void Application::SetParameterOutputImagePixelType(std::string parameter, ImagePixelType pixelType)
 {
