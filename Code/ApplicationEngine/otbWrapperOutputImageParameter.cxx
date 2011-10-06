@@ -81,7 +81,7 @@ void OutputImageParameter::InitializeWriters()
 
 
 template <class TInputImageType>
-void 
+void
 OutputImageParameter::SwitchImageWrite()
 {
   switch(m_PixelType )
@@ -237,7 +237,7 @@ OutputImageParameter::Write()
 {
   m_Image->UpdateOutputInformation();
 
-  if (dynamic_cast<Int8ImageType*>(m_Image.GetPointer())) 
+  if (dynamic_cast<Int8ImageType*>(m_Image.GetPointer()))
     {
     SwitchImageWrite<Int8ImageType>();
     }
@@ -349,24 +349,24 @@ OutputImageParameter::GetWriter()
   // 1 : VectorImage
   // 2 : RGBAImage
   
-  if ( dynamic_cast<Int8VectorImageType*>(  m_Image.GetPointer()) || 
+  if ( dynamic_cast<Int8VectorImageType*>(  m_Image.GetPointer()) ||
        dynamic_cast<UInt8VectorImageType*>( m_Image.GetPointer()) ||
-       dynamic_cast<Int16VectorImageType*>( m_Image.GetPointer()) ||  
+       dynamic_cast<Int16VectorImageType*>( m_Image.GetPointer()) ||
        dynamic_cast<UInt16VectorImageType*>(m_Image.GetPointer()) ||
-       dynamic_cast<Int32VectorImageType*>( m_Image.GetPointer()) || 
+       dynamic_cast<Int32VectorImageType*>( m_Image.GetPointer()) ||
        dynamic_cast<UInt32VectorImageType*>(m_Image.GetPointer()) ||
        dynamic_cast<FloatVectorImageType*>( m_Image.GetPointer()) ||
        dynamic_cast<DoubleVectorImageType*>(m_Image.GetPointer())   )
     {
     type = 1;
-    }                  
-  else if( dynamic_cast<Int8RGBAImageType*>(  m_Image.GetPointer()) || 
+    }
+  else if( dynamic_cast<Int8RGBAImageType*>(  m_Image.GetPointer()) ||
            dynamic_cast<UInt8RGBAImageType*>( m_Image.GetPointer()) ||
-           dynamic_cast<Int16RGBAImageType*>( m_Image.GetPointer()) ||  
+           dynamic_cast<Int16RGBAImageType*>( m_Image.GetPointer()) ||
            dynamic_cast<UInt16RGBAImageType*>(m_Image.GetPointer()) ||
-           dynamic_cast<Int32RGBAImageType*>( m_Image.GetPointer()) || 
+           dynamic_cast<Int32RGBAImageType*>( m_Image.GetPointer()) ||
            dynamic_cast<UInt32RGBAImageType*>(m_Image.GetPointer()) ||
-           dynamic_cast<FloatRGBAImageType*>( m_Image.GetPointer()) || 
+           dynamic_cast<FloatRGBAImageType*>( m_Image.GetPointer()) ||
            dynamic_cast<DoubleRGBAImageType*>(m_Image.GetPointer())   )
     {
     type = 2;
