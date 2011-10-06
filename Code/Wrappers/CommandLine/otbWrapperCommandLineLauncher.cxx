@@ -649,7 +649,28 @@ CommandLineLauncher::DisplayParameterHelp( const Parameter::Pointer & param, con
       oss << "\t Default value: filename: "
           << m_Application->GetParameterAsString( paramKey )
           << std::endl;
-      oss << "\t                pixel type: float"<< std::endl;
+      oss << "\t                pixel type: ";
+      ImagePixelType outPixType = m_Application->GetParameterOutputImagePixelType( paramKey );
+      if( outPixType == ImagePixelType_int8 )
+        oss << "int8";
+      else if( outPixType == ImagePixelType_uint8 )
+        oss << "uint8";
+      else if( outPixType == ImagePixelType_int16 )
+        oss << "int16";
+      else if( outPixType == ImagePixelType_uint16 )
+        oss << "uint16";
+      else if( outPixType == ImagePixelType_int32 )
+        oss << "int32";
+      else if( outPixType == ImagePixelType_uint32 )
+        oss << "uint32";
+      else if( outPixType == ImagePixelType_float )
+        oss << "float";
+      else if( outPixType == ImagePixelType_double )
+        oss << "double";
+      else
+        {
+        itkExceptionMacro("Unknown output pixel type.");
+        }
       }
     else
       {
@@ -661,7 +682,28 @@ CommandLineLauncher::DisplayParameterHelp( const Parameter::Pointer & param, con
     if( type == ParameterType_OutputImage )
       {
       oss << "\t Default value: filename: none"<< std::endl;
-      oss << "\t                pixel type: float"<< std::endl;
+      oss << "\t                pixel type: ";
+      ImagePixelType outPixType = m_Application->GetParameterOutputImagePixelType( paramKey );
+      if( outPixType == ImagePixelType_int8 )
+        oss << "int8"<<std::endl;
+      else if( outPixType == ImagePixelType_uint8 )
+        oss << "uint8"<<std::endl;
+      else if( outPixType == ImagePixelType_int16 )
+        oss << "int16"<<std::endl;
+      else if( outPixType == ImagePixelType_uint16 )
+        oss << "uint16"<<std::endl;
+      else if( outPixType == ImagePixelType_int32 )
+        oss << "int32"<<std::endl;
+      else if( outPixType == ImagePixelType_uint32 )
+        oss << "uint32"<<std::endl;
+      else if( outPixType == ImagePixelType_float )
+        oss << "float"<<std::endl;
+      else if( outPixType == ImagePixelType_double )
+        oss << "double"<<std::endl;
+      else
+        {
+        itkExceptionMacro("Unknown output pixel type.");
+        }
       }
     else
       oss << "\t Default value: none"<<std::endl;
@@ -680,9 +722,21 @@ CommandLineLauncher::DisplayParameterHelp( const Parameter::Pointer & param, con
     }
   else
     {
-    oss << "\t        Status: USER VALUE (";
-    oss << m_Parser->GetAttributAsString( std::string("--").append(paramKey), m_Expression ) <<")";
-    oss << std::endl;
+    if( type == ParameterType_OutputImage )
+      {
+      std::vector<std::string> values = m_Parser->GetAttribut( std::string("--").append(paramKey), m_Expression );
+      oss << "\t        Status: filename : USER VALUE ("<<values[0]<<")"<<std::endl;
+      if( values.size() == 2)
+        oss << "\t        Status: pixel type : USER VALUE ("<<values[1]<<")"<<std::endl;
+      else
+        oss << "\t        Status: pixel type : DEFAULT VALUE"<<std::endl;
+      }
+    else
+      {
+      oss << "\t        Status: USER VALUE (";
+      oss << m_Parser->GetAttributAsString( std::string("--").append(paramKey), m_Expression ) <<")";
+      oss << std::endl;
+      }
     }
 
   return oss.str();

@@ -18,6 +18,8 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
+//#include "otbWrapperTypes.h"
+
 #include "itkVariableLengthVector.h"
 #include "otbChangeLabelImageFilter.h"
 #include "otbStandardWriterWatcher.h"
@@ -93,7 +95,7 @@ private:
     
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
     SetParameterDescription( "out", "Output labeled image");
-
+    SetParameterOutputImagePixelType( "out", ImagePixelType_uint8);
   }
 
   void DoUpdateParameters()
@@ -161,15 +163,7 @@ private:
       m_ClassificationFilter->SetInputMask(extract->GetOutput());
       }
 
-      std::cout<<"-------------3-----------------"<<std::endl;
-    
-    m_FinalCast = CastImageFilterType::New();
-    m_FinalCast->SetInput( m_ClassificationFilter->GetOutput() );
-    
-    SetParameterOutputImage("out", m_FinalCast->GetOutput());
-    
-    //SetParameterOuutputImage<UInt8ImageType>("out", m_ClassificationFilter->GetOutput());
-    std::cout<<"---------------4---------------"<<std::endl;
+    SetParameterOuutputImage<UInt8ImageType>("out", m_ClassificationFilter->GetOutput());
   }
 
   ClassificationFilterType::Pointer m_ClassificationFilter;

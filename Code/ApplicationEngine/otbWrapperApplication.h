@@ -28,6 +28,8 @@
 
 #include "itkLogger.h"
 #include "otbWrapperMacros.h"
+#include "otbWrapperTypes.h"
+#include "otbWrapperOutputImageParameter.h"
 
 namespace otb
 {
@@ -220,8 +222,7 @@ public:
    * \li ParameterType_OutputImage
    */
   template <class TImageType>
-  void SetParameterOuutputImage(std::string parameter, TImageType* value);
-
+    void SetParameterOuutputImage(std::string parameter, TImageType* value);
 
   /* Set the pixel type in which the image will be saved
    *
@@ -391,5 +392,10 @@ private:
 
 } // end namespace Wrapper
 } //end namespace otb
+
+
+#ifndef OTB_MANUAL_INSTANTIATION
+#include "otbWrapperApplication.txx"
+#endif
 
 #endif // __otbWrapperApplication_h_

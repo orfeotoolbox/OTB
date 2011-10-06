@@ -97,10 +97,13 @@ protected:
   template <class TInputVectorImageType>
     void SwitchVectorImageWrite();
 
+  template <class TInputVectorImageType>
+    void SwitchRGBAImageWrite();
+
   //FloatVectorImageType::Pointer m_Image;
-  ImageBaseType::Pointer       m_Image;
-  std::string                   m_FileName;
-  ImagePixelType                m_PixelType;
+  ImageBaseType::Pointer m_Image;
+  std::string            m_FileName;
+  ImagePixelType         m_PixelType;
 
   typedef otb::StreamingImageFileWriter<Int8ImageType>   Int8WriterType;
   typedef otb::StreamingImageFileWriter<UInt8ImageType>  UInt8WriterType;
@@ -120,6 +123,15 @@ protected:
   typedef otb::StreamingImageFileWriter<FloatVectorImageType>  VectorFloatWriterType;
   typedef otb::StreamingImageFileWriter<DoubleVectorImageType> VectorDoubleWriterType;
 
+  typedef otb::StreamingImageFileWriter<Int8RGBAImageType>   RGBAInt8WriterType;
+  typedef otb::StreamingImageFileWriter<UInt8RGBAImageType>  RGBAUInt8WriterType;
+  typedef otb::StreamingImageFileWriter<Int16RGBAImageType>  RGBAInt16WriterType;
+  typedef otb::StreamingImageFileWriter<UInt16RGBAImageType> RGBAUInt16WriterType;
+  typedef otb::StreamingImageFileWriter<Int32RGBAImageType>  RGBAInt32WriterType;
+  typedef otb::StreamingImageFileWriter<UInt32RGBAImageType> RGBAUInt32WriterType;
+  typedef otb::StreamingImageFileWriter<FloatRGBAImageType>  RGBAFloatWriterType;
+  typedef otb::StreamingImageFileWriter<DoubleRGBAImageType> RGBADoubleWriterType;
+
   Int8WriterType::Pointer   m_Int8Writer;
   UInt8WriterType::Pointer  m_UInt8Writer;
   Int16WriterType::Pointer  m_Int16Writer;
@@ -138,6 +150,14 @@ protected:
   VectorFloatWriterType::Pointer  m_VectorFloatWriter;
   VectorDoubleWriterType::Pointer m_VectorDoubleWriter;
 
+  RGBAInt8WriterType::Pointer   m_RGBAInt8Writer;
+  RGBAUInt8WriterType::Pointer  m_RGBAUInt8Writer;
+  RGBAInt16WriterType::Pointer  m_RGBAInt16Writer;
+  RGBAUInt16WriterType::Pointer m_RGBAUInt16Writer;
+  RGBAInt32WriterType::Pointer  m_RGBAInt32Writer;
+  RGBAUInt32WriterType::Pointer m_RGBAUInt32Writer;
+  RGBAFloatWriterType::Pointer  m_RGBAFloatWriter;
+  RGBADoubleWriterType::Pointer m_RGBADoubleWriter;
 
 private:
   OutputImageParameter(const Parameter &); //purposely not implemented
@@ -149,16 +169,3 @@ private:
 } // End namespace otb
 
 #endif
-
-/*m_FloatWriter->SetFileName( this->GetFileName() );                    \
-    m_FloatWriter->SetInput(this->GetImage());                          \
-    m_FloatWriter->Modified();                                          \
-    m_FloatWriter->Update();    
-
- typedef itk::CastImageFilter<FloatVectorImageType, DoubleVectorImageType> CastFilterType; \
-    CastFilterType::Pointer cast = CastFilterType::New();               \
-    cast->SetInput( this->GetImage() );                                 \
-    m_DoubleWriter->SetFileName( this->GetFileName() );                 \
-    m_DoubleWriter->SetInput(cast->GetOutput());                        \
-    m_DoubleWriter->Update();
-*/ 

@@ -17,7 +17,7 @@
 =========================================================================*/
 #include "otbWrapperOutputImageParameter.h"
 #include "itkCastImageFilter.h"
-
+#include "itkVectorCastImageFilter.h"
 
 namespace otb
 {
@@ -49,6 +49,8 @@ void OutputImageParameter::InitializeWriters()
   m_FloatWriter = FloatWriterType::New();
   m_DoubleWriter = DoubleWriterType::New();
 
+  m_RGBAUInt8Writer = RGBAUInt8WriterType::New();
+
   m_VectorInt8Writer = VectorInt8WriterType::New();
   m_VectorUInt8Writer = VectorUInt8WriterType::New();
   m_VectorInt16Writer = VectorInt16WriterType::New();
@@ -60,7 +62,7 @@ void OutputImageParameter::InitializeWriters()
 }
 
 
-#define otbRescaleAndWriteMacro(InputImageType, OutputImageType, writer) \
+#define otbCastAndWriteImageMacro(InputImageType, OutputImageType, writer) \
   {                                                                     \
     typedef itk::CastImageFilter<InputImageType, OutputImageType> CastFilterType; \
     typename CastFilterType::Pointer caster = CastFilterType::New();    \
@@ -75,56 +77,56 @@ template <class TInputImageType>
 void 
 OutputImageParameter::SwitchImageWrite()
 {
- std::cout<<"OutputImageParameter::SwitchImageWrite start"<<std::endl;
   switch(m_PixelType )
     {
     case ImagePixelType_int8:
     {
-    otbRescaleAndWriteMacro(TInputImageType, Int8ImageType, m_Int8Writer);
+    otbCastAndWriteImageMacro(TInputImageType, Int8ImageType, m_Int8Writer);
     break;
     }
     case ImagePixelType_uint8:
     {
- std::cout<<"OutputImageParameter::SwitchImageWrite UNIN8"<<std::endl;
-    otbRescaleAndWriteMacro(TInputImageType, UInt8ImageType, m_UInt8Writer);
+   std::cout<<"Write, output is image uint8"<<std::endl;
+    otbCastAndWriteImageMacro(TInputImageType, UInt8ImageType, m_UInt8Writer);
     break;
     }
     case ImagePixelType_int16:
     {
-    otbRescaleAndWriteMacro(TInputImageType, Int16ImageType, m_Int16Writer);
+    otbCastAndWriteImageMacro(TInputImageType, Int16ImageType, m_Int16Writer);
     break;
     }
     case ImagePixelType_uint16:
     {
-    otbRescaleAndWriteMacro(TInputImageType, UInt16ImageType, m_UInt16Writer);
+    otbCastAndWriteImageMacro(TInputImageType, UInt16ImageType, m_UInt16Writer);
     break;
     }
     case ImagePixelType_int32:
     {
-    otbRescaleAndWriteMacro(TInputImageType, Int32ImageType, m_Int32Writer);
+    otbCastAndWriteImageMacro(TInputImageType, Int32ImageType, m_Int32Writer);
     break;
     }
     case ImagePixelType_uint32:
     {
-    otbRescaleAndWriteMacro(TInputImageType, UInt32ImageType, m_UInt32Writer);
+    otbCastAndWriteImageMacro(TInputImageType, UInt32ImageType, m_UInt32Writer);
     break;
     }
     case ImagePixelType_float:
     {
-    otbRescaleAndWriteMacro(TInputImageType, FloatImageType, m_FloatWriter);
+   std::cout<<"Write, output is image float"<<std::endl;
+    otbCastAndWriteImageMacro(TInputImageType, FloatImageType, m_FloatWriter);
     break;
     }
     case ImagePixelType_double:
     {
-    otbRescaleAndWriteMacro(TInputImageType, DoubleImageType, m_DoubleWriter);
+ std::cout<<"Write, output is image double"<<std::endl;
+    otbCastAndWriteImageMacro(TInputImageType, DoubleImageType, m_DoubleWriter);
     break;
     }
     }
- std::cout<<"OutputImageParameter::SwitchImageWrite end"<<std::endl;
 }
 
 
-template <class TInputVectoImageType>
+template <class TInputVectorImageType>
 void
 OutputImageParameter::SwitchVectorImageWrite()
   {
@@ -132,63 +134,109 @@ OutputImageParameter::SwitchVectorImageWrite()
     {
     case ImagePixelType_int8:
     {
-    otbRescaleAndWriteMacro(TInputVectoImageType, Int8VectorImageType, m_VectorInt8Writer);
+    otbCastAndWriteImageMacro(TInputVectorImageType, Int8VectorImageType, m_VectorInt8Writer);
     break;
     }
     case ImagePixelType_uint8:
     {
-    otbRescaleAndWriteMacro(TInputVectoImageType, UInt8VectorImageType, m_VectorUInt8Writer);
+    otbCastAndWriteImageMacro(TInputVectorImageType, UInt8VectorImageType, m_VectorUInt8Writer);
     break;
     }
     case ImagePixelType_int16:
     {
-    otbRescaleAndWriteMacro(TInputVectoImageType, Int16VectorImageType, m_VectorInt16Writer);
+    otbCastAndWriteImageMacro(TInputVectorImageType, Int16VectorImageType, m_VectorInt16Writer);
     break;
     }
     case ImagePixelType_uint16:
     {
-    otbRescaleAndWriteMacro(TInputVectoImageType, UInt16VectorImageType, m_VectorUInt16Writer);
+    otbCastAndWriteImageMacro(TInputVectorImageType, UInt16VectorImageType, m_VectorUInt16Writer);
     break;
     }
     case ImagePixelType_int32:
     {
-    otbRescaleAndWriteMacro(TInputVectoImageType, Int32VectorImageType, m_VectorInt32Writer);
+    otbCastAndWriteImageMacro(TInputVectorImageType, Int32VectorImageType, m_VectorInt32Writer);
     break;
     }
     case ImagePixelType_uint32:
     {
-    otbRescaleAndWriteMacro(TInputVectoImageType, UInt32VectorImageType, m_VectorUInt32Writer);
+    otbCastAndWriteImageMacro(TInputVectorImageType, UInt32VectorImageType, m_VectorUInt32Writer);
     break;
     }
     case ImagePixelType_float:
     {
-    otbRescaleAndWriteMacro(TInputVectoImageType, FloatVectorImageType, m_VectorFloatWriter);
+    otbCastAndWriteImageMacro(TInputVectorImageType, FloatVectorImageType, m_VectorFloatWriter);
     break;
     }
     case ImagePixelType_double:
     {
-    otbRescaleAndWriteMacro(TInputVectoImageType, DoubleVectorImageType, m_VectorDoubleWriter);
+    otbCastAndWriteImageMacro(TInputVectorImageType, DoubleVectorImageType, m_VectorDoubleWriter);
     break;
     }
     }
   }
 
 
-
+template <class TInputRGBAImageType>
+void
+OutputImageParameter::SwitchRGBAImageWrite()
+  {
+  switch(m_PixelType )
+    {
+    case ImagePixelType_int8:
+    {
+    otbCastAndWriteImageMacro(TInputRGBAImageType, Int8RGBAImageType, m_RGBAInt8Writer);
+    break;
+    }
+    case ImagePixelType_uint8:
+    {
+    otbCastAndWriteImageMacro(TInputRGBAImageType, UInt8RGBAImageType, m_RGBAUInt8Writer);
+    break;
+    }
+    case ImagePixelType_int16:
+    {
+    otbCastAndWriteImageMacro(TInputRGBAImageType, Int16RGBAImageType, m_RGBAInt16Writer);
+    break;
+    }
+    case ImagePixelType_uint16:
+    {
+    otbCastAndWriteImageMacro(TInputRGBAImageType, UInt16RGBAImageType, m_RGBAUInt16Writer);
+    break;
+    }
+    case ImagePixelType_int32:
+    {
+    otbCastAndWriteImageMacro(TInputRGBAImageType, Int32RGBAImageType, m_RGBAInt32Writer);
+    break;
+    }
+    case ImagePixelType_uint32:
+    {
+    otbCastAndWriteImageMacro(TInputRGBAImageType, UInt32RGBAImageType, m_RGBAUInt32Writer);
+    break;
+    }
+    case ImagePixelType_float:
+    {
+    otbCastAndWriteImageMacro(TInputRGBAImageType, FloatRGBAImageType, m_RGBAFloatWriter);
+    break;
+    }
+    case ImagePixelType_double:
+    {
+    otbCastAndWriteImageMacro(TInputRGBAImageType, DoubleRGBAImageType, m_RGBADoubleWriter);
+    break;
+    }
+    }
+  }
 
 void
 OutputImageParameter::Write()
 {
-  std::cout<<"OutputImageParameter::Write"<<std::endl;
   m_Image->UpdateOutputInformation();
-  std::cout<<"OutputImageParameter::Write1"<<std::endl;
+
   if (dynamic_cast<Int8ImageType*>(m_Image.GetPointer())) 
     {
     SwitchImageWrite<Int8ImageType>();
     }
   else if (dynamic_cast<UInt8ImageType*>(m_Image.GetPointer()))
     {
- std::cout<<"OutputImageParameter::Write UNIN8"<<std::endl;
+    std::cout<<"Write, input is image uint8"<<std::endl;
     SwitchImageWrite<UInt8ImageType>();
     }
   else if (dynamic_cast<Int16ImageType*>(m_Image.GetPointer()))
@@ -247,92 +295,158 @@ OutputImageParameter::Write()
     {
     SwitchVectorImageWrite<DoubleVectorImageType>();
     }
+  else if (dynamic_cast<Int8ImageType*>(m_Image.GetPointer()))
+    {
+    SwitchRGBAImageWrite<Int8RGBAImageType>();
+    }
+  else if (dynamic_cast<UInt8RGBAImageType*>(m_Image.GetPointer()))
+    {
+    SwitchRGBAImageWrite<UInt8RGBAImageType>();
+    }
+  else if (dynamic_cast<Int16RGBAImageType*>(m_Image.GetPointer()))
+    {
+    SwitchRGBAImageWrite<Int16RGBAImageType>();
+    }
+  else if (dynamic_cast<UInt16RGBAImageType*>(m_Image.GetPointer()))
+    {
+    SwitchRGBAImageWrite<UInt16RGBAImageType>();
+    }
+  else if (dynamic_cast<Int32RGBAImageType*>(m_Image.GetPointer()))
+    {
+    SwitchRGBAImageWrite<Int32RGBAImageType>();
+    }
+  else if (dynamic_cast<UInt32RGBAImageType*>(m_Image.GetPointer()))
+    {
+    SwitchRGBAImageWrite<UInt32RGBAImageType>();
+    }
+  else if (dynamic_cast<FloatRGBAImageType*>(m_Image.GetPointer()))
+    {
+    SwitchRGBAImageWrite<FloatRGBAImageType>();
+    }
+  else if (dynamic_cast<DoubleRGBAImageType*>(m_Image.GetPointer()))
+    {
+    SwitchRGBAImageWrite<DoubleRGBAImageType>();
+    }
   else
     {
     itkExceptionMacro("Unknown image type");
     }
-
- std::cout<<"OutputImageParameter::Write2"<<std::endl;
   }
 
 
 itk::ProcessObject*
-OutputImageParameter::GetWriter( )
+OutputImageParameter::GetWriter()
 {
-  bool isVectorImage = true;
-  if ( dynamic_cast<Int8ImageType*>(m_Image.GetPointer())  || dynamic_cast<UInt8ImageType*>(m_Image.GetPointer()) ||
-       dynamic_cast<Int16ImageType*>(m_Image.GetPointer()) ||  dynamic_cast<UInt16ImageType*>(m_Image.GetPointer()) ||
-       dynamic_cast<Int32ImageType*>(m_Image.GetPointer()) || dynamic_cast<UInt32ImageType*>(m_Image.GetPointer()) ||
-       dynamic_cast<FloatImageType*>(m_Image.GetPointer()) || dynamic_cast<DoubleImageType*>(m_Image.GetPointer())    )         
-    {
-    isVectorImage = false;
-    }                  
+  int type = 0;
+  // 0 : image
+  // 1 : VectorImage
+  // 2 : RGBAImage
   
+  if ( dynamic_cast<Int8VectorImageType*>(  m_Image.GetPointer()) || 
+       dynamic_cast<UInt8VectorImageType*>( m_Image.GetPointer()) ||
+       dynamic_cast<Int16VectorImageType*>( m_Image.GetPointer()) ||  
+       dynamic_cast<UInt16VectorImageType*>(m_Image.GetPointer()) ||
+       dynamic_cast<Int32VectorImageType*>( m_Image.GetPointer()) || 
+       dynamic_cast<UInt32VectorImageType*>(m_Image.GetPointer()) ||
+       dynamic_cast<FloatVectorImageType*>( m_Image.GetPointer()) ||
+       dynamic_cast<DoubleVectorImageType*>(m_Image.GetPointer())   )
+    {
+    type = 1;
+    }                  
+  else if( dynamic_cast<Int8RGBAImageType*>(  m_Image.GetPointer()) || 
+           dynamic_cast<UInt8RGBAImageType*>( m_Image.GetPointer()) ||
+           dynamic_cast<Int16RGBAImageType*>( m_Image.GetPointer()) ||  
+           dynamic_cast<UInt16RGBAImageType*>(m_Image.GetPointer()) ||
+           dynamic_cast<Int32RGBAImageType*>( m_Image.GetPointer()) || 
+           dynamic_cast<UInt32RGBAImageType*>(m_Image.GetPointer()) ||
+           dynamic_cast<FloatRGBAImageType*>( m_Image.GetPointer()) || 
+           dynamic_cast<DoubleRGBAImageType*>(m_Image.GetPointer())   )
+    {
+    type = 2;
+    }
+
+
   itk::ProcessObject* writer = 0;
   switch ( GetPixelType() )
     {
     case ImagePixelType_int8:
     {
-    if( isVectorImage )
+    if( type == 1 )
       writer = m_VectorInt8Writer;
-    else
+    else if(type == 0)
       writer = m_Int8Writer;
+    else
+      writer = m_RGBAInt8Writer;
     break;
     }
     case ImagePixelType_uint8:
     {
-    if( isVectorImage )
+    if( type == 1 )
       writer = m_VectorUInt8Writer;
-    else
+    else if(type == 0)
       writer = m_UInt8Writer;
+    else
+      writer = m_RGBAUInt8Writer;
     break;
     }
     case ImagePixelType_int16:
     {
-    if( isVectorImage )
+    if( type == 1 )
       writer = m_VectorInt16Writer;
-    else
+    else if(type == 0)
       writer = m_Int16Writer;
+    else
+      writer = m_RGBAInt16Writer;
     break;
     }
     case ImagePixelType_uint16:
     {
-    if( isVectorImage )
+    if( type == 1 )
       writer = m_VectorUInt16Writer;
-    else
+    else if(type == 0)
       writer = m_UInt16Writer;
+    else
+      writer = m_RGBAUInt16Writer;
     break;
     }
     case ImagePixelType_int32:
     {
-    if( isVectorImage )
+    if( type == 1 )
       writer = m_VectorInt32Writer;
-    else
+    else if(type == 0)
       writer = m_Int32Writer;
+    else
+      writer = m_RGBAInt32Writer;
     break;
     }
     case ImagePixelType_uint32:
     {
-    if( isVectorImage )
+    if( type == 1 )
       writer = m_VectorUInt32Writer;
-    else
+    else if(type == 0)
       writer = m_UInt32Writer;
+    else
+      writer = m_RGBAUInt32Writer;
     break;
     }
     case ImagePixelType_float:
     {
-    if( isVectorImage )
+    if( type == 1 )
       writer = m_VectorFloatWriter;
-    else
+    else if(type == 0)
       writer = m_FloatWriter;
+    else
+      writer = m_RGBAFloatWriter;
     break;
     }
     case ImagePixelType_double:
     {
-    if( isVectorImage )
+    if( type == 1 )
       writer = m_VectorDoubleWriter;
-    else
+    else if(type == 0)
       writer = m_DoubleWriter;
+    else
+      writer = m_RGBADoubleWriter;
     break;
     }
     }
