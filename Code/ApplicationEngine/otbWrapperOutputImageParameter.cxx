@@ -49,8 +49,6 @@ void OutputImageParameter::InitializeWriters()
   m_FloatWriter = FloatWriterType::New();
   m_DoubleWriter = DoubleWriterType::New();
 
-  m_RGBAUInt8Writer = RGBAUInt8WriterType::New();
-
   m_VectorInt8Writer = VectorInt8WriterType::New();
   m_VectorUInt8Writer = VectorUInt8WriterType::New();
   m_VectorInt16Writer = VectorInt16WriterType::New();
@@ -59,6 +57,15 @@ void OutputImageParameter::InitializeWriters()
   m_VectorUInt32Writer = VectorUInt32WriterType::New();
   m_VectorFloatWriter = VectorFloatWriterType::New();
   m_VectorDoubleWriter = VectorDoubleWriterType::New();
+
+  m_RGBAInt8Writer = RGBAInt8WriterType::New();
+  m_RGBAUInt8Writer = RGBAUInt8WriterType::New();
+  m_RGBAInt16Writer = RGBAInt16WriterType::New();
+  m_RGBAUInt16Writer = RGBAUInt16WriterType::New();
+  m_RGBAInt32Writer = RGBAInt32WriterType::New();
+  m_RGBAUInt32Writer = RGBAUInt32WriterType::New();
+  m_RGBAFloatWriter = RGBAFloatWriterType::New();
+  m_RGBADoubleWriter = RGBADoubleWriterType::New();
 }
 
 
