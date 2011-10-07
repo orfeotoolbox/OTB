@@ -222,7 +222,7 @@ public:
    * \li ParameterType_OutputImage
    */
   template <class TImageType>
-    void SetParameterOuutputImage(std::string parameter, TImageType* value);
+    void SetParameterOutputImage(std::string parameter, TImageType* value);
 
   /* Set the pixel type in which the image will be saved
    *

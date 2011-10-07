@@ -28,7 +28,7 @@ namespace Wrapper
 {
 
 template <class TImageType>
-void Application::SetParameterOuutputImage(std::string parameter, TImageType* value)
+void Application::SetParameterOutputImage(std::string parameter, TImageType* value)
 {
   Parameter* param = GetParameterByKey(parameter);
 

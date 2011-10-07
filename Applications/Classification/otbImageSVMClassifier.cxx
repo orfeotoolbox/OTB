@@ -163,7 +163,7 @@ private:
       m_ClassificationFilter->SetInputMask(extract->GetOutput());
       }
 
-    SetParameterOuutputImage<UInt8ImageType>("out", m_ClassificationFilter->GetOutput());
+    SetParameterOutputImage<UInt8ImageType>("out", m_ClassificationFilter->GetOutput());
   }
 
   ClassificationFilterType::Pointer m_ClassificationFilter;
