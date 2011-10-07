@@ -149,7 +149,7 @@ private:
     else
       {
       std::cout<<"Mean: "<<mean<<std::endl;
-      std::cout<<"Standard Devoiation: "<<stddev<<std::endl;
+      std::cout<<"Standard Deviation: "<<stddev<<std::endl;
       }
   }
 
