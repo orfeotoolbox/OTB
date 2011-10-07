@@ -83,7 +83,7 @@ std::istream& operator>>(std::istream& is, EnvisatAsarData& data)
 				EnvisatAsarRecord* record = factory.Instanciate(str);
 				if (record != NULL)
 				{
-					is.seekg((it->get_ds_offset())+ i*(it->get_dsr_size()));
+					is.seekg((std::streampos)(it->get_ds_offset())+ (std::streampos)(i*(it->get_dsr_size())));
 					record->Read(is);
 					data._records.push_back(record);
 				}
