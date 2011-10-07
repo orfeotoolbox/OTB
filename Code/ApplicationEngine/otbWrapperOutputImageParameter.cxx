@@ -29,8 +29,6 @@ OutputImageParameter::OutputImageParameter()
 {
   this->SetName("Output Image");
   this->SetKey("out");
-
-  this->InitializeWriters();
 }
 
 
@@ -69,14 +67,15 @@ void OutputImageParameter::InitializeWriters()
 }
 
 
-#define otbCastAndWriteImageMacro(InputImageType, OutputImageType, writer) \
-  {                                                                     \
+#define otbCastAndWriteImageMacro(InputImageType, OutputImageType, writer)        \
+  {                                                                               \
     typedef itk::CastImageFilter<InputImageType, OutputImageType> CastFilterType; \
-    typename CastFilterType::Pointer caster = CastFilterType::New();    \
-    caster->SetInput( dynamic_cast<InputImageType*>(m_Image.GetPointer()) ); \
-    writer->SetFileName( this->GetFileName() );                         \
-    writer->SetInput(caster->GetOutput());                              \
-    writer->Update();                                                   \
+    typename CastFilterType::Pointer caster = CastFilterType::New();              \
+    caster->SetInput( dynamic_cast<InputImageType*>(m_Image.GetPointer()) );      \
+    caster->InPlaceOn();                                                          \
+    writer->SetFileName( this->GetFileName() );                                   \
+    writer->SetInput(caster->GetOutput());                                        \
+    writer->Update();                                                             \
   }
 
 
