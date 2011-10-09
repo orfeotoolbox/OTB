@@ -1235,6 +1235,15 @@ void GDALImageIO::Write(const void* buffer)
                                                  option, NULL, NULL );
     GDALClose(hOutputDS);
     }
+
+
+  if (lFirstLine + lNbLines == m_Dimensions[1]
+      && lFirstColumn + lNbColumns == m_Dimensions[0])
+    {
+    // Last pixel written
+    // Reinitialize to close the file
+    m_Dataset = GDALDatasetWrapperPointer();
+    }
 }
 
 /** TODO : Methode WriteImageInformation non implementee */
