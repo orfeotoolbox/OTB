@@ -19,33 +19,43 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbStreamingStatisticsVectorImageFilter.h"
-#include "otbEigenvalueLikelihoodMaximisation.h"
 #include "otbVcaImageFilter.h"
 #include "otbUnConstrainedLeastSquareImageFilter.h"
-
+#include "otbVectorRescaleIntensityImageFilter.h"
 #include "otbVectorImageToMatrixImageFilter.h"
-
+#include "itkRescaleIntensityImageFilter.h"
+#include "otbVectorRescaleIntensityImageFilter.h"
+#include "otbMultiToMonoChannelExtractROI.h"
+//  Software Guide : BeginCommandLineArgs
+//    INPUTS: {ROI_QB_MUL_1.png}
+//    OUTPUTS: {PCAOutput.tif}, {InversePCAOutput.tif}, {InversePCAOutput1.png}, {PCAOutput1.png}, {PCAOutput2.png}, {PCAOutput3.png}
+//    3
+//  Software Guide : EndCommandLineArgs
 int main(int argc, char * argv[])
 {
-  if (argc != 3)
+  if (argc != 5)
     {
     std::cerr << "Usage: " << argv[0];
-    std::cerr << "inputFileName outputFileName " << std::endl;
+    std::cerr << "inputFileName outputFileName EstimatenumberOfEndmembers outputPrettyFilename1 outputPrettyFilename2 outputPrettyFilename3   " << std::endl;
     return EXIT_FAILURE;
     }
 
   const char *       infname = argv[1];
   const char *       outfname = argv[2];
+  const unsigned int estimateNumberOfEndmembers = atoi(argv[3]);
   const unsigned int Dimension = 2;
 
   typedef double                                  PixelType;
   typedef otb::VectorImage<PixelType, Dimension>  ImageType;
-  
+  typedef otb::VectorImage<unsigned char, 2>      OutputPrettyImageType;
+
   typedef otb::ImageFileReader<ImageType>         ReaderType;
-  typedef otb::ImageFileWriter<FloatImageType>    WriterType;
+  typedef otb::ImageFileWriter<ImageType>    WriterType;
+  
+  typedef otb::VectorRescaleIntensityImageFilter<ImageType,ImageType>             RescalerType;
+  typedef otb::VectorRescaleIntensityImageFilter<ImageType,OutputPrettyImageType> RescalerType2;
   
   typedef otb::StreamingStatisticsVectorImageFilter<ImageType> StreamingStatisticsVectorImageFilterType;
-  typedef otb::EigenvalueLikelihoodMaximisation<double>        ELMType;
   typedef otb::VCAImageFilter<ImageType>                       VCAFilterType;
 
   typedef otb::UnConstrainedLeastSquareImageFilter<ImageType,ImageType,double> UCLSUnmixingFilterType;
@@ -55,7 +65,7 @@ int main(int argc, char * argv[])
   typedef vnl_vector<double> VectorType;
   typedef vnl_matrix<double> MatrixType;
 
-/// / Noise filtering
+  /// / Noise filtering
   //  typedef otb::LocalActivityVectorImageFilter< ImageType, ImageType > NoiseFilterType;
 
   // // Image filtering
@@ -66,45 +76,21 @@ int main(int argc, char * argv[])
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
   reader->UpdateOutputInformation();
+  
 
-  std::cout << "Computing stats" << std::endl;
-
-  StreamingStatisticsVectorImageFilterType::Pointer stats = StreamingStatisticsVectorImageFilterType::New();
-
-  stats->SetInput(reader->GetOutput());
-  otb::StandardWriterWatcher watcher(stats->GetStreamer(), stats->GetFilter(), "Computing image stats");
-  stats->Update();
-
-  VectorType mean (stats->GetMean().GetDataPointer(), stats->GetMean().GetSize());
-  MatrixType covariance  = stats->GetCovariance().GetVnlMatrix();
-  MatrixType correlation = stats->GetCorrelation().GetVnlMatrix();
-
+  //rescale input image between 0 and 1
+  RescalerType::Pointer         rescaler = RescalerType::New();
+  rescaler->SetInput(reader->GetOutput());
+  rescaler->SetOutputMinimum(0);
+  rescaler->SetOutputMaximum(1.);
   /*
-         * Estimate Endmembers Numbers
-         */
-  std::cout << "Estimate Endmembers Numbers by ELM" << std::endl;
-
-  ELMType::Pointer elm = ELMType::New();
-  elm->SetCovariance(covariance);
-  elm->SetCorrelation(correlation);
-  elm->SetNumberOfPixels(reader->GetOutput()->GetLargestPossibleRegion().GetNumberOfPixels());
-  elm->Compute();
-
-  const unsigned int nbEndmembers = elm->GetNumberOfEndmembers();
-
-  std::cout << "ELM : " << nbEndmembers << " estimated endmembers" << std::endl;
-
-  std::cout << "ELM likelihood values: " << elm->GetLikelihood() << std::endl;
-    
-
-/*
-       * Estimate Endmembers
-       */
+  * Estimate Endmembers
+  */
   std::cout << "Estimate Endmembers by VCA" << std::endl;
 
   VCAFilterType::Pointer vca = VCAFilterType::New();
-  vca->SetNumberOfEndmembers(nbEndmembers);
-  vca->SetInput(reader->GetOutput());
+  vca->SetNumberOfEndmembers(estimateNumberOfEndmembers);
+  vca->SetInput(rescaler->GetOutput());
 
   ImageType::Pointer endmembersImage;
   endmembersImage = vca->GetOutput();
@@ -122,12 +108,12 @@ int main(int argc, char * argv[])
   std::cout << "Endmembers matrix : " << endMembersMatrix << std::endl;
 
   /*
-     * Unmix
-     */
+  * Unmix
+  */
   UCLSUnmixingFilterType::Pointer unmixer =
     UCLSUnmixingFilterType::New();
 
-  unmixer->SetInput(reader->GetOutput());
+  unmixer->SetInput(rescaler->GetOutput());
   unmixer->SetMatrix(endMembersMatrix);
   unmixer->SetNumberOfThreads(1); // FIXME : currently buggy
       
@@ -144,6 +130,31 @@ int main(int argc, char * argv[])
   writer->SetFileName(outfname);
   
   writer->Update();
+  
+  typedef otb::Image<PixelType, Dimension>                        MonoImageType;
+  typedef otb::MultiToMonoChannelExtractROI<PixelType, PixelType> ExtractROIFilterType;
+  typedef otb::Image<unsigned char, 2>                            OutputImageType;
+  typedef itk::RescaleIntensityImageFilter<MonoImageType,
+                                           OutputImageType>       PrettyRescalerType;
+  typedef otb::ImageFileWriter<OutputImageType>                   WriterType2;
+
+  for (unsigned int cpt = 0; cpt < 3; ++cpt)
+    {
+    ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
+    PrettyRescalerType::Pointer   prettyRescaler = PrettyRescalerType::New();
+    WriterType2::Pointer          writer2 = WriterType2::New();
+
+    extractROIFilter->SetInput(abundanceMap);
+    extractROIFilter->SetChannel(cpt + 1);
+
+    prettyRescaler->SetInput(extractROIFilter->GetOutput());
+    prettyRescaler->SetOutputMinimum(0);
+    prettyRescaler->SetOutputMaximum(255);
+
+    writer2->SetInput(prettyRescaler->GetOutput());
+    writer2->SetFileName(argv[cpt + 4]);
+    writer2->Update();
+    }
 
   return EXIT_SUCCESS;
 } // end main
