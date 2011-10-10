@@ -33,7 +33,8 @@ template<class TPrecision>
 VirtualDimensionality<TPrecision>
 ::VirtualDimensionality()
  : m_NumberOfPixels(0),
-   m_NumberOfEndmembers(0)
+   m_NumberOfEndmembers(0),
+   m_FAR(1.0E-3)
 {
 }
 
