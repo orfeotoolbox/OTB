@@ -161,3 +161,6 @@ private:
   void operator=(const Self&);
 };
 
+%include "PyCommand.i"
+
+

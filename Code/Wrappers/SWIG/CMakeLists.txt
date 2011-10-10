@@ -34,6 +34,7 @@ if ( WRAP_LUA OR WRAP_PYTHON OR WRAP_JAVA OR WRAP_CSHARP OR WRAP_TCL OR WRAP_R O
   set ( SWIG_HEADERS ${SWIG_HEADERS}
     ${CMAKE_CURRENT_SOURCE_DIR}/itkBase.i
     ${CMAKE_CURRENT_SOURCE_DIR}/itkMacro.i
+    ${CMAKE_CURRENT_SOURCE_DIR}/PyCommand.i
 
     ${CMAKE_CURRENT_SOURCE_DIR}/Python.i
     ${CMAKE_CURRENT_SOURCE_DIR}/Java.i
@@ -63,7 +64,7 @@ if ( WRAP_PYTHON )
   set(CMAKE_SWIG_FLAGS ${CMAKE_SWIG_GLOBAL_FLAGS})
   set(CMAKE_SWIG_OUTDIR ${CMAKE_CURRENT_BINARY_DIR})
   set(SWIG_MODULE_otbApplication_EXTRA_DEPS OTBApplicationEngine ${SWIG_HEADERS})
-  SWIG_add_module ( otbApplication python otbApplication.i otbApplicationPYTHON_wrap.cxx )
+  SWIG_add_module ( otbApplication python otbApplication.i otbApplicationPYTHON_wrap.cxx itkPyCommand.cxx )
   SWIG_link_libraries ( otbApplication ${PYTHON_LIBRARIES} OTBApplicationEngine)
   set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/otbApplicationPYTHON_wrap.cxx COMPILE_FLAGS "-w")
 
