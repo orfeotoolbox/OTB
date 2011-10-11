@@ -762,11 +762,25 @@ Application::IsApplicationReady()
 void
 Application::AddProcess(itk::ProcessObject* object, std::string description)
 {
+  m_ProgressSource = object;
+  m_ProgressSourceDescription = description;
+
   AddProcessToWatchEvent event;
   event.SetProcess(object);
   event.SetProcessDescription(description);
   this->InvokeEvent(event);
 }
+
+itk::ProcessObject* Application::GetProgressSource() const
+{
+  return m_ProgressSource;
+}
+
+std::string Application::GetProgressDescription() const
+{
+  return m_ProgressSourceDescription;
+}
+
 
 }
 }

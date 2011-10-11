@@ -337,7 +337,10 @@ public:
 
   itk::Logger* GetLogger();
 
-  void AddProcess(itk::ProcessObject* object, std::string description);
+  itk::ProcessObject* GetProgressSource() const;
+
+  std::string GetProgressDescription() const;
+
 
 protected:
   /** Constructor */
@@ -345,6 +348,9 @@ protected:
 
   /** Destructor */
   virtual ~Application();
+
+  /* Register a ProcessObject as a new progress source */
+  void AddProcess(itk::ProcessObject* object, std::string description);
 
   /** Add a new choice value to an existing choice parameter */
   void AddChoice(std::string paramKey, std::string paramName);
@@ -387,6 +393,9 @@ private:
   ParameterGroup::Pointer           m_ParameterList;
 
   itk::Logger::Pointer              m_Logger;
+
+  itk::ProcessObject::Pointer       m_ProgressSource;
+  std::string                       m_ProgressSourceDescription;
 
 }; //end class
 

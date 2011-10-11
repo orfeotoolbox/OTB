@@ -166,6 +166,7 @@ class itkIndent {
    public:
      //static itkProcessObject_Pointer New();
      virtual itkLightObject_Pointer CreateAnother() const;
+     const float& GetProgress();
    private:
      itkProcessObject(itkProcessObject const & arg0);
      void operator=(itkProcessObject const & arg0);

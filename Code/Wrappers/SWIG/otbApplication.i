@@ -134,6 +134,10 @@ public:
   
   std::string GetParameterAsString(std::string paramKey);
   
+  itkProcessObject* GetProgressSource() const;
+
+  std::string GetProgressDescription() const;
+
 protected:
   Application();
   //virtual ~Application();
