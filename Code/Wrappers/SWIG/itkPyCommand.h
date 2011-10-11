@@ -1,7 +1,7 @@
 /*=========================================================================
 
   Program:   Insight Segmentation & Registration Toolkit
-  Module:    $RCSfile: itkPyCommand.h,v $
+  Module:    $RCSfile: itkPyCommand.h, v $
   Language:  C++
   Date:      $Date: 2006/09/06 20:58:42 $
   Version:   $Revision: 1.1 $
@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -29,10 +29,10 @@ namespace itk
 /** \class PyCommand
  *  \brief Command subclass that calls a Python callable object, e.g.
  *  a Python function.
- * 
+ *
  * With this class, arbitrary Python callable objects (e.g. functions)
  * can be associated with an instance to be used in AddObserver calls.
- * This is analogous to itk::TclCommand, but then a tad more flexible. ;)
+ * This is analogous to itk::TclCommand, but then a tad more flexible.; )
  *
  * This class was contributed by Charl P. Botha <cpbotha |AT| ieee.org>
  */
@@ -46,12 +46,12 @@ public:
   typedef SmartPointer<Self>  Pointer;
 
   ///! Run-time type information (and related methods).
-  itkTypeMacro(PyCommand,Command);
+  itkTypeMacro(PyCommand, Command);
 
   ///! Method for creation through the object factory.
   itkNewMacro(Self);
 
-  /** 
+  /**
    * Assign a Python callable object to be used.  You don't have to keep
    * a binding to the callable, PyCommand will also take out a reference
    * to make sure the Callable sticks around.
