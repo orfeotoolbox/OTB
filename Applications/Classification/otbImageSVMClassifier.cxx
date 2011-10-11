@@ -154,12 +154,12 @@ private:
       otbAppLogINFO("Using input mask");
       // Load mask image and cast into LabeledImageType
       FloatVectorImageType::Pointer inMask = GetParameterImage("mask");
-      ExtractImageFilterType::Pointer extract = ExtractImageFilterType::New();
-      extract->SetInput( inMask );
-      extract->SetChannel(0);
-      extract->UpdateOutputInformation();
+      m_Extract = ExtractImageFilterType::New();
+      m_Extract->SetInput( inMask );
+      m_Extract->SetChannel(0);
+      m_Extract->UpdateOutputInformation();
       
-      m_ClassificationFilter->SetInputMask(extract->GetOutput());
+      m_ClassificationFilter->SetInputMask(m_Extract->GetOutput());
       }
 
     SetParameterOutputImage<UInt8ImageType>("out", m_ClassificationFilter->GetOutput());
@@ -168,7 +168,7 @@ private:
   ClassificationFilterType::Pointer m_ClassificationFilter;
   ModelPointerType m_ModelSVM;
   RescalerType::Pointer m_Rescaler;
-  CastImageFilterType::Pointer m_FinalCast;
+  ExtractImageFilterType::Pointer m_Extract;
 };
 
 
