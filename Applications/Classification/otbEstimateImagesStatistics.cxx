@@ -44,7 +44,7 @@ private:
   EstimateImagesStatistics()
   {
     SetName("EstimateImagesStatistics");
-    SetDescription("Estimate mean/standard deviation for all images in the input list. Possibility to write the output in an xml file or just display the result.");
+    SetDescription("Estimate mean/standard deviation for all images in the input list and optionally save the results in an XML file");
   }
 
   virtual ~EstimateImagesStatistics()
@@ -54,8 +54,8 @@ private:
   void DoCreateParameters()
   {
     AddParameter(ParameterType_InputImageList, "il", "Input Image List");
-    AddParameter(ParameterType_Filename, "out", "Output xml file");
-    SetParameterDescription( "out", "If set, will write the statistics into the given html file." );
+    AddParameter(ParameterType_Filename, "out", "Output XML file");
+    SetParameterDescription( "out", "Name of the XML file where the statistics are saved for future reuse" );
     MandatoryOff("out");
   }
 

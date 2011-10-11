@@ -70,7 +70,7 @@ private:
   ImageSVMClassifier()
   {
     SetName("ImageSVMClassifier");
-    SetDescription("Perform SVM classification based a previous computed svm model to an new input image.");
+    SetDescription("Perform SVM classification based a previous computed SVM model");
   }
 
   virtual ~ImageSVMClassifier()
@@ -91,7 +91,7 @@ private:
     MandatoryOff("imstat");
 
     AddParameter(ParameterType_Filename, "svm", "SVM Model.");
-    SetParameterDescription("svm", "An estimated svm model previously computed");
+    SetParameterDescription("svm", "An estimated SVM model previously computed");
     
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
     SetParameterDescription( "out", "Output labeled image");
@@ -105,16 +105,15 @@ private:
 
   void DoExecute()
   {
-    otbAppLogDEBUG("Entering DoExecute");
-
     // Load input image
     FloatVectorImageType::Pointer inImage = GetParameterImage("in");
     inImage->UpdateOutputInformation();
 
     // Load svm model
+    otbAppLogINFO("Loading SVM model");
     m_ModelSVM = ModelType::New();
     m_ModelSVM->LoadModel(GetParameterString("svm").c_str());
-
+    otbAppLogINFO("SVM model loaded");
 
     // Normalize input image (optional)
     StatisticsReader::Pointer  statisticsReader = StatisticsReader::New();
@@ -129,13 +128,13 @@ private:
     // Normalize input image if asked
     if( HasValue("imstat")  )
       {
-      otbAppLogDEBUG("Input image normalization activated.");
+      otbAppLogINFO("Input image normalization activated.");
       // Load input image statistics
       statisticsReader->SetFileName(GetParameterString("imstat"));
       meanMeasurementVector   = statisticsReader->GetStatisticVectorByName("mean");
       stddevMeasurementVector = statisticsReader->GetStatisticVectorByName("stddev");
-      otbAppLogDEBUG( "mean used: " << meanMeasurementVector );
-      otbAppLogDEBUG( "standard deviation used: " << stddevMeasurementVector );
+      otbAppLogINFO( "mean used: " << meanMeasurementVector );
+      otbAppLogINFO( "standard deviation used: " << stddevMeasurementVector );
       // Rescale vector image
       m_Rescaler->SetScale(stddevMeasurementVector);
       m_Rescaler->SetShift(meanMeasurementVector);
@@ -145,14 +144,14 @@ private:
       }
     else
       {
-      otbAppLogDEBUG("Input image normalization deactivated.");
+      otbAppLogINFO("Input image normalization deactivated.");
       m_ClassificationFilter->SetInput(inImage);
       }
     
   
     if( HasValue("mask")  )
       {
-      otbAppLogDEBUG("Use input mask.");
+      otbAppLogINFO("Using input mask");
       // Load mask image and cast into LabeledImageType
       FloatVectorImageType::Pointer inMask = GetParameterImage("mask");
       ExtractImageFilterType::Pointer extract = ExtractImageFilterType::New();
