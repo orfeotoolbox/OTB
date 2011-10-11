@@ -44,7 +44,7 @@ public:
 
   virtual const char* GetDescription(void) const
     {
-    return "Smoothing";
+    return "ApplicationFactory";
     }
 
   /** Method for class instantiation. */
