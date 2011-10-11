@@ -24,8 +24,8 @@ from PyQt4.QtGui import *
 from qgis.core import *
 
 import os
-import processingplugin.processing as processing
-import processingplugin.processing.parameters as parameters
+import processing
+import processing.parameters as parameters
 import otbApplication as otb
 
 class OTBPlugin():
@@ -42,7 +42,6 @@ class OTBPlugin():
     def modules(self):
         if self._modules is None:
             apps = otb.Registry.GetAvailableApplications()
-            print "available apps : " + str(apps)
             self._modules = set()
             for app in apps:
                 self._modules.add(OTBModule(app, self._iface))
@@ -50,29 +49,25 @@ class OTBPlugin():
 
 class OTBModule(processing.Module):
     def __init__(self, modulename, iface):
-        print "OTBModule __init__ " + modulename
-        
         self._app = otb.Registry.CreateApplication(modulename)
         self._iface = iface
         processing.Module.__init__(self,
             self._app.GetName(),
             self._app.GetDescription())
 
-        
+        self._blockSignals = False
         self._parameters = []
         self._instance = OTBModuleInstance(self)
         
         self.layerRegistry = QgsMapLayerRegistry.instance()
         
         for p in self._app.GetParametersKeys():
-            #print p
             self.addParameter(p)
 
     def instance(self):
         return self._instance
 
     def addParameter(self, otbParamKey):
-        print "addParameter " + otbParamKey
         otbToQGisParam = {
             otb.ParameterType_Empty:               parameters.BooleanParameter,
             otb.ParameterType_Int:                 parameters.NumericParameter,
@@ -107,31 +102,42 @@ class OTBModule(processing.Module):
             qgisParam._app = self._app
             qgisParam._key = otbParamKey
 
-            if qgisParamClass == parameters.NumericParameter:
-                # TODO (handle no value case) qgisParam.setDefaultValue(self._app.GetParameterFloat(otbParamKey))
-                qgisParam.setDefaultValue(0)
-
-            elif qgisParamClass == parameters.ChoiceParameter:
+            try:
+              if typ == otb.ParameterType_Empty:
+                qgisParam.setDefaultValue(self._app.IsParameterEnabled(otbParamKey))
+              elif typ == otb.ParameterType_Int:
+                qgisParam.setDefaultValue(self._app.GetParameterInt(otbParamKey))
+              elif typ == otb.ParameterType_Float:
+                qgisParam.setDefaultValue(self._app.GetParameterFloat(otbParamKey))
+              elif typ == otb.ParameterType_String:
+                qgisParam.setDefaultValue(self._app.GetParameterString(otbParamKey))
+              elif typ == otb.ParameterType_Filename:
+                qgisParam.setDefaultValue(self._app.GetParameterString(otbParamKey))
+              elif typ == otb.ParameterType_Directory:
+                qgisParam.setDefaultValue(self._app.GetParameterString(otbParamKey))
+              elif typ == otb.ParameterType_Choice:
                 qgisParam.setChoices(self._app.GetChoiceNames(otbParamKey))
                 qgisParam.setDefaultValue(self._app.GetParameterInt(otbParamKey))
-
-            elif (qgisParamClass == parameters.VectorLayerParameter or
-                qgisParamClass == parameters.RasterLayerParameter):
-                if role == parameters.Parameter.Role.output:
-                    self._instance.outLayer.append(qgisParam)
-                else:
-                    self._instance.inLayer.append(qgisParam)
-                
-                # force update of layer
-                self.onParameterChanged(qgisParam, None)
-
+              elif typ == otb.ParameterType_InputImage:
+                qgisParam.setDefaultValue(self._app.GetParameterString(otbParamKey))
+              elif typ == otb.ParameterType_InputComplexImage:
+                qgisParam.setDefaultValue(self._app.GetParameterString(otbParamKey))
+              elif typ == otb.ParameterType_InputVectorData:
+                qgisParam.setDefaultValue(self._app.GetParameterString(otbParamKey))
+              elif typ == otb.ParameterType_OutputImage:
+                qgisParam.setDefaultValue(self._app.GetParameterString(otbParamKey))
+              elif typ == otb.ParameterType_OutputVectorData:
+                qgisParam.setDefaultValue(self._app.GetParameterString(otbParamKey))
+              elif typ == otb.ParameterType_Radius:
+                qgisParam.setDefaultValue(self._app.GetParameterInt(otbParamKey))
+            except:
+              pass
             # TODO validator            
 
             qgisParam.setMandatory(mandatory)
             self._parameters.append(qgisParam)
 
             # register callback to instance for parameter
-            print "connecting signal " + str(self._instance.valueChangedSignal(qgisParam))
             QObject.connect(self._instance,
                             self._instance.valueChangedSignal(qgisParam),
                             lambda x: self.onParameterChanged(qgisParam, x))
@@ -148,6 +154,12 @@ class OTBModule(processing.Module):
         return processing.Module.tags(self) | set([processing.Tag('otb')])
     
     def onParameterChanged(self, qgisParam, value):
+        if self._blockSignals == True:
+            print "signals blocked"
+            return
+
+        self._blockSignals = True
+
         pc = qgisParam.__class__
         app = qgisParam._app
         key = qgisParam._key
@@ -170,12 +182,15 @@ class OTBModule(processing.Module):
             print "SetParameterFloat " + key
             app.SetParameterFloat(key, float(value))
 
+        elif ptype == otb.ParameterType_Choice:
+            print "SetParameterInt " + key
+            app.SetParameterInt(key, int(value))
+
         elif ptype == otb.ParameterType_String \
              or ptype == otb.ParameterType_Filename \
-             or ptype == otb.ParameterType_Directory \
-             or ptype == otb.ParameterType_String:
+             or ptype == otb.ParameterType_Directory:
             print "SetParameterString " + key
-            app.SetParameterString(key, value)
+            app.SetParameterString(key, str(value))
 
         elif ptype == otb.ParameterType_InputImage \
              or ptype == otb.ParameterType_InputComplexImage:
@@ -206,7 +221,66 @@ class OTBModule(processing.Module):
             print "SetParameterString " + key
             app.SetParameterString(key, str(value))
 
+        elif ptype == otb.ParameterType_StringList:
+            print "StringList not supported yet"
 
+        elif ptype == otb.ParameterType_InputImageList:
+            print "InputImageList not supported yet"
+
+        elif ptype == otb.ParameterType_ListView:
+            print "ListView not supported yet"
+
+        # trigger global update
+        app.UpdateParameters()
+        self.notifyInternalUpdate()
+        self._blockSignals = False
+
+
+    def notifyInternalUpdate(self):
+        """ To update the GUI from application instance content 
+        """
+        for param in self._parameters:
+            key = param.name()
+            typ = self._app.GetParameterType(key)
+            value = None
+
+            try:
+              if typ == otb.ParameterType_Empty:
+                value = self._app.IsParameterEnabled(key)
+              elif typ == otb.ParameterType_Int:
+                value = float(self._app.GetParameterInt(key))
+              elif typ == otb.ParameterType_Float:
+                value = float(self._app.GetParameterFloat(key))
+              elif typ == otb.ParameterType_String:
+                value = self._app.GetParameterString(key)
+              elif typ == otb.ParameterType_Filename:
+                value = self._app.GetParameterString(key)
+              elif typ == otb.ParameterType_Directory:
+                value = self._app.GetParameterString(key)
+              elif typ == otb.ParameterType_Choice:
+                value = self._app.GetParameterInt(key)
+              elif typ == otb.ParameterType_InputImage:
+                value = self._app.GetParameterString(key)
+              elif typ == otb.ParameterType_InputComplexImage:
+                value = self._app.GetParameterString(key)
+              elif typ == otb.ParameterType_InputVectorData:
+                value = self._app.GetParameterString(key)
+              elif typ == otb.ParameterType_OutputImage:
+                value = self._app.GetParameterString(key)
+              elif typ == otb.ParameterType_OutputVectorData:
+                value = self._app.GetParameterString(key)
+              elif typ == otb.ParameterType_Radius:
+                value = self._app.GetParameterInt(key)
+            except:
+              pass
+
+            signal = self.instance().valueChangedSignal(param)
+
+            if typ != otb.ParameterType_InputImage \
+               and  typ != otb.ParameterType_InputComplexImage \
+               and typ != otb.ParameterType_InputVectorData \
+               and value is not None:
+                QObject.emit( self.instance(), signal, value )
 
 
 class OTBModuleInstance(processing.ModuleInstance):
@@ -216,9 +290,7 @@ class OTBModuleInstance(processing.ModuleInstance):
         QObject.connect(
             self, self.valueChangedSignal(self.stateParameter),
             self.stateParameterValueChanged)
-        self.inLayer = list()
-        self.outLayer = list()
-        
+
     def stateParameterValueChanged(self, state):
         """ Only reacts to start running state, ignore others.
         """
@@ -230,6 +302,14 @@ class OTBModuleInstance(processing.ModuleInstance):
         print "Executing " + modName
         app = self.module()._app
 
+        if not app.IsApplicationReady():
+          self.setFeedback("Missing mandatory parameters")
+          self.setState(parameters.StateParameter.State.stopped)
+          return
+
+        command = otb.itkPyCommand.New()
+        command.SetCommandCallable(self.newProgressSource)
+        app.AddObserver( otb.AddProcessToWatchEvent(), command.GetPointer() )
         #try:
         app.ExecuteAndWriteOutput()
 
@@ -249,4 +329,17 @@ class OTBModuleInstance(processing.ModuleInstance):
         #  self.setFeedback("OTB Module execution failed.")
 
         self.setState(parameters.StateParameter.State.stopped)
+
+    def newProgressSource(self):
+        # Setup the feedback with a null progress
+        self.setFeedback(self.module()._app.GetProgressDescription(), 0)
+        command = otb.itkPyCommand.New()
+        command.SetCommandCallable(self.newProgressCallback)
+        self.module()._app.GetProgressSource().AddObserver( otb.itkProgressEvent(), command.GetPointer() )
+
+    def newProgressCallback(self):
+        # Setup the feedback and the associated progress
+        self.setFeedback(self.module()._app.GetProgressDescription(), False, int(100 * self.module()._app.GetProgressSource().GetProgress()))
+
+
 
