@@ -38,11 +38,26 @@ add_test(NAME apTvClEstimateImagesStatisticsQB456
                       ${INPUTDATA}/Classification/QB_6_extract.tif
                  --out ${TEMP}/apTvClEstimateImageStatisticsQB456.xml )
 
+
+ADD_TEST(NAME apTvClImageSVMClassifierQB1  
+ COMMAND otbTestDriver
+  --compare-image ${NOTOL} 
+    ${OTBAPP_BASELINE}/clLabeledImageQB1.tif
+    ${TEMP}/clLabeledImageQB1.tif
+   Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
+   ImageSVMClassifier
+   --modulePath $<TARGET_FILE_DIR:otbapp_ImageSVMClassifier>
+   --in  ${INPUTDATA}/Classification/QB_1_ortho.tif
+   --imstat  ${OTBAPP_BASELINE_FILES}/clImageStatisticsQB1.xml
+   --svm ${OTBAPP_BASELINE_FILES}/clsvmModelQB1.svm
+   --out ${TEMP}/clLabeledImageQB1.tif
+)
+
 add_test(NAME apTvClKMeansImageClassification
          COMMAND otbTestDriver
-                --compare-ascii ${NOTOL} 
-                  ${OTBAPP_BASELINE}/apTvClKMeansImageClassificationFilterOuptut.hdr
-                  ${TEMP}/apTvClKMeansImageClassificationFilterOuptut.hdr
+                --compare-image ${NOTOL} 
+                  ${OTBAPP_BASELINE}/apTvClKMeansImageClassificationFilterOuptut.tif
+                  ${TEMP}/apTvClKMeansImageClassificationFilterOuptut.tif
                  Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
                  KMeansClassification
                  --modulePath $<TARGET_FILE_DIR:otbapp_KMeansClassification>
@@ -53,8 +68,6 @@ add_test(NAME apTvClKMeansImageClassification
                  --nc 5 
                  --cp 0.9 
                  --sl 100
-                 --out ${TEMP}/apTvClKMeansImageClassificationFilterOuptut.hdr )
-
-
+                 --out ${TEMP}/apTvClKMeansImageClassificationFilterOuptut.tif )
 
                  
