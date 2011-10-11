@@ -36,10 +36,13 @@ namespace otb
 template <class TInputImage>
 StreamingImageVirtualWriter<TInputImage>
 ::StreamingImageVirtualWriter()
+ : m_NumberOfDivisions(0),
+   m_CurrentDivision(0),
+   m_DivisionProgress(0.0)
 {
   // By default, we use tiled streaming, with automatic tile size
-  // We don't set any parameter, so the memory size is retrieved rom the OTB configuration options
-  m_StreamingManager = otb::RAMDrivenTiledStreamingManager<TInputImage>::New();
+  // We don't set any parameter, so the memory size is retrieved from the OTB configuration options
+  this->SetAutomaticTiledStreaming();
 }
 
 template <class TInputImage>

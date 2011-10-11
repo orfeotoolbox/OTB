@@ -49,11 +49,16 @@ namespace otb
 template <class TInputImage>
 StreamingImageFileWriter<TInputImage>
 ::StreamingImageFileWriter()
-  : m_WriteGeomFile(false)
+  : m_NumberOfDivisions(0),
+    m_CurrentDivision(0),
+    m_DivisionProgress(0.0),
+    m_UserSpecifiedImageIO(true),
+    m_UserSpecifiedIORegion(false),
+    m_FactorySpecifiedImageIO(false),
+    m_UseCompression(false),
+    m_UseInputMetaDataDictionary(false),
+    m_WriteGeomFile(false)
 {
-  m_UserSpecifiedIORegion = true;
-  m_FactorySpecifiedImageIO = false;
-
   // By default, we use tiled streaming, with automatic tile size
   // We don't set any parameter, so the memory size is retrieved from the OTB configuration options
   this->SetAutomaticTiledStreaming();
