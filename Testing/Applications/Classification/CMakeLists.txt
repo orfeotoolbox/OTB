@@ -38,6 +38,23 @@ add_test(NAME apTvClEstimateImagesStatisticsQB456
                       ${INPUTDATA}/Classification/QB_6_extract.tif
                  --out ${TEMP}/apTvClEstimateImageStatisticsQB456.xml )
 
+add_test(NAME apTvClKMeansImageClassification
+         COMMAND otbTestDriver
+                --compare-ascii ${NOTOL} 
+                  ${OTBAPP_BASELINE}/apTvClKMeansImageClassificationFilterOuptut.hdr
+                  ${TEMP}/apTvClKMeansImageClassificationFilterOuptut.hdr
+                 Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
+                 KMeansClassification
+                 --modulePath $<TARGET_FILE_DIR:otbapp_KMeansClassification>
+                 --in ${INPUTDATA}/poupees_sub.png
+                 --vm ${INPUTDATA}/mask_KMeans.png 
+                 --ts 100 
+                 --tp 0.6 
+                 --nc 5 
+                 --cp 0.9 
+                 --sl 100
+                 --out ${TEMP}/apTvClKMeansImageClassificationFilterOuptut.hdr )
+
 
 
                  
