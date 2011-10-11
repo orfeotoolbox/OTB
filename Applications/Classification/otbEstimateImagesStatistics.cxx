@@ -82,7 +82,7 @@ private:
     // Build a MeasurementVector of variance
     MeasurementType variance;
 
-    FloatVectorImageListType* imageList = GetParameterImageList("in");
+    FloatVectorImageListType* imageList = GetParameterImageList("il");
 
     //Iterate over all input images
     for (unsigned int imageId = 0; imageId < imageList->Size(); ++imageId)
