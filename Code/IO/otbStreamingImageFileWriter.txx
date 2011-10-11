@@ -518,6 +518,27 @@ StreamingImageFileWriter<TInputImage>
   m_ImageIO->WriteImageInformation();
 
   this->UpdateProgress(0);
+  m_CurrentDivision = 0;
+  m_DivisionProgress = 0;
+
+  // Get the source process object
+  itk::ProcessObject* source = inputPtr->GetSource();
+
+  // Check if source exists
+  if(source)
+    {
+    typedef itk::MemberCommand<Self> CommandType;
+    typedef typename CommandType::Pointer CommandPointerType;
+
+    CommandPointerType command = CommandType::New();
+    command->SetCallbackFunction(this, &Self::ObserveSourceFilterProgress);
+
+    source->AddObserver(itk::ProgressEvent(), command);
+    }
+  else
+    {
+    itkWarningMacro(<< "Could not get the source process object. Progress report might be buggy");
+    }
 
   for (m_CurrentDivision = 0;
        m_CurrentDivision < m_NumberOfDivisions && !this->GetAbortGenerateData();
