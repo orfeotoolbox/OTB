@@ -162,6 +162,16 @@ class itkIndent {
  DECLARE_REF_COUNT_CLASS( itkObject )
 
  
+ class itkProcessObject : public itkObject {
+   public:
+     //static itkProcessObject_Pointer New();
+     virtual itkLightObject_Pointer CreateAnother() const;
+   private:
+     itkProcessObject(itkProcessObject const & arg0);
+     void operator=(itkProcessObject const & arg0);
+ };
+ DECLARE_REF_COUNT_CLASS( itkProcessObject )
+
 
  class itkObjectFactoryBase : public itkObject {
    public:

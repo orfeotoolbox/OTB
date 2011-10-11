@@ -23,6 +23,7 @@
 
 #include "itkLightObject.h"
 #include "itkObject.h"
+#include "itkProcessObject.h"
 #include "itkObjectFactoryBase.h"
 
 #include "itkCommand.h"
@@ -32,6 +33,8 @@ typedef itk::LightObject                itkLightObject;
 typedef itk::LightObject::Pointer       itkLightObject_Pointer;
 typedef itk::Object                     itkObject;
 typedef itk::Object::Pointer            itkObject_Pointer;
+typedef itk::ProcessObject              itkProcessObject;
+typedef itk::ProcessObject::Pointer     itkProcessObject_Pointer;
 typedef itk::ObjectFactoryBase          itkObjectFactoryBase;
 typedef itk::ObjectFactoryBase::Pointer itkObjectFactoryBase_Pointer;
 typedef itk::MetaDataDictionary         itkMetaDataDictionary;

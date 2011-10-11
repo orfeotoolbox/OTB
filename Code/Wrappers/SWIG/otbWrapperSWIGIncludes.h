@@ -20,10 +20,11 @@
 
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationRegistry.h"
+#include "otbWrapperAddProcessToWatchEvent.h"
 
 typedef otb::Wrapper::Application                        Application;
 typedef otb::Wrapper::Application::Pointer               Application_Pointer;
 typedef otb::Wrapper::ApplicationRegistry                Registry;
-
+typedef otb::Wrapper::AddProcessToWatchEvent             AddProcessToWatchEvent;
 
 #endif
