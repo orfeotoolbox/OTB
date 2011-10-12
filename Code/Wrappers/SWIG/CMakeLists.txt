@@ -68,6 +68,22 @@ if ( WRAP_PYTHON )
   SWIG_link_libraries ( otbApplication ${PYTHON_LIBRARIES} OTBApplicationEngine)
   set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/otbApplicationPYTHON_wrap.cxx COMPILE_FLAGS "-w")
 
+  # byte-compile the resulting python file
+  add_custom_command(
+      TARGET _otbApplication
+      POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E echo "Byte-compiling otbApplication.py"
+      COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/CMake/PythonCompile.py otbApplication.py
+      DEPENDS _otbApplication
+    )
+
+  install( TARGETS _otbApplication
+           DESTINATION ${OTB_INSTALL_PYTHON_DIR_CM24} )
+
+  install( FILES ${CMAKE_CURRENT_BINARY_DIR}/otbApplication.py
+                 ${CMAKE_CURRENT_BINARY_DIR}/otbApplication.pyc
+           DESTINATION ${OTB_INSTALL_PYTHON_DIR_CM24} )
+
 endif()
 
 #
