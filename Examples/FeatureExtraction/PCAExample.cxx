@@ -140,7 +140,7 @@ int main(int argc, char* argv[])
   
   // Software Guide : BeginCodeSnippet
   typedef otb::PCAImageFilter< ImageType, ImageType, 
-			       otb::Transform::INVERSE > InvPCAFilterType;
+                               otb::Transform::INVERSE > InvPCAFilterType;
   InvPCAFilterType::Pointer invFilter = InvPCAFilterType::New();
   
   invFilter->SetInput(pcafilter->GetOutput());
