@@ -132,14 +132,14 @@ int main(int argc, char* argv[])
   // Software Guide : BeginLatex
   //
   // \doxygen{otb}{PCAImageFilter} allows also to compute inverse
-  // transformation from PCA coefficients. In reverse mode, the 
+  // transformation from PCA coefficients. In reverse mode, the
   // covariance matrix or the transformation matrix
   // (which may not be square) has to be given.
   //
   // Software Guide : EndLatex
   
   // Software Guide : BeginCodeSnippet
-  typedef otb::PCAImageFilter< ImageType, ImageType, 
+  typedef otb::PCAImageFilter< ImageType, ImageType,
                                otb::Transform::INVERSE > InvPCAFilterType;
   InvPCAFilterType::Pointer invFilter = InvPCAFilterType::New();
   

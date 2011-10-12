@@ -77,7 +77,7 @@ int main(int argc, char * argv[])
   typedef otb::ImageFileWriter<ImageType>         WriterType;
   // Software Guide : EndCodeSnippet
       
-  typedef otb::VectorRescaleIntensityImageFilter<ImageType,ImageType> RescalerType;
+  typedef otb::VectorRescaleIntensityImageFilter<ImageType, ImageType> RescalerType;
   typedef otb::StreamingStatisticsVectorImageFilter<ImageType>        StreamingStatisticsVectorImageFilterType;
   typedef otb::VectorImageToMatrixImageFilter<ImageType>              VectorImageToMatrixImageFilterType;
 
@@ -101,7 +101,7 @@ int main(int argc, char * argv[])
   // Software Guide : BeginLatex
   //
   // For now we need to rescale the input image between 0 and 1 to
-  // perform the unmixing algorithm. We use the 
+  // perform the unmixing algorithm. We use the
   // \doxygen{otb}{VectorRescaleIntensityImageFilter}.
   //
   // Software Guide : EndLatex
@@ -159,7 +159,7 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
   
   // Software Guide : BeginCodeSnippet
-  typedef otb::UnConstrainedLeastSquareImageFilter<ImageType,ImageType,double> UCLSUnmixingFilterType;
+  typedef otb::UnConstrainedLeastSquareImageFilter<ImageType, ImageType, double> UCLSUnmixingFilterType;
   UCLSUnmixingFilterType::Pointer unmixer = UCLSUnmixingFilterType::New();
   unmixer->SetInput(rescaler->GetOutput());
   unmixer->SetMatrix(endMember2Matrix->GetMatrix());
