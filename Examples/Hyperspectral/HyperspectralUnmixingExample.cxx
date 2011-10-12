@@ -18,7 +18,6 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbStreamingStatisticsVectorImageFilter.h"
 #include "otbVectorRescaleIntensityImageFilter.h"
 #include "otbVectorImageToMatrixImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
@@ -45,6 +44,7 @@
 #include "otbVcaImageFilter.h"
 #include "otbUnConstrainedLeastSquareImageFilter.h"
 // Software Guide : EndCodeSnippet
+
 int main(int argc, char * argv[])
 {
   if (argc != 7)
@@ -83,8 +83,7 @@ int main(int argc, char * argv[])
 
   typedef vnl_vector<double> VectorType;
   typedef vnl_matrix<double> MatrixType;
-
-  // Software Guide : EndCodeSnippet
+  
   // Software Guide : BeginLatex
   //
   // We instantiate now the image reader and we set the image file name.
@@ -106,7 +105,6 @@ int main(int argc, char * argv[])
   // \doxygen{otb}{VectorRescaleIntensityImageFilter}.
   //
   // Software Guide : EndLatex
-  //rescale input image between 0 and 1
  
   // Software Guide : BeginCodeSnippet
   RescalerType::Pointer         rescaler = RescalerType::New();
@@ -199,6 +197,7 @@ int main(int argc, char * argv[])
   // \end{figure}
   //
   //  Software Guide : EndLatex
+
   typedef otb::Image<PixelType, Dimension>                        MonoImageType;
   typedef otb::MultiToMonoChannelExtractROI<PixelType, PixelType> ExtractROIFilterType;
   typedef otb::Image<unsigned char, 2>                            OutputImageType;
@@ -225,4 +224,4 @@ int main(int argc, char * argv[])
     }
 
   return EXIT_SUCCESS;
-} // end main
+}
