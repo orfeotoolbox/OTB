@@ -23,9 +23,9 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(Unmixing);
+  REGISTER_TEST(HyperspectralUnmixingExample);
 }
 
 #undef main
 #define main Unmixing
-#include "HyperspectralUnmixing.cxx"
+#include "HyperspectralUnmixingExample.cxx"

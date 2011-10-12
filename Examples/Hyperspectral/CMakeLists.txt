@@ -5,8 +5,8 @@
 PROJECT(HyperspectralExamples)
 INCLUDE_REGULAR_EXPRESSION("^.*$")
 
-ADD_EXECUTABLE(Unmixing HyperspectralUnmixing.cxx )
-TARGET_LINK_LIBRARIES(Unmixing OTBCommon OTBIO OTBHyperspectral)
+ADD_EXECUTABLE(HyperspectralUnmixingExample HyperspectralUnmixing.cxx )
+TARGET_LINK_LIBRARIES(HyperspectralUnmixingExample OTBCommon OTBIO OTBHyperspectral)
 
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
@@ -23,15 +23,18 @@ SET(EXE_TESTS ${CXX_TEST_PATH}/otbHyperspectralExamplesTests)
 SET(TOL 0.0)
 
 # tests#
-# ------- ProsailModelExampleTest ----------
+# ------- HyperspectralUnmixingExampleTest ----------
 
 ADD_TEST(siTvHyperspectralExampleTest ${EXE_TESTS}
      #--compare-image ${TOL} ${BASELINE}/siTvUnmixingExampleTest.txt
      #              ${TEMP}/siTvUnmixingExampleTest.txt
-     Unmixing
-     #${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif
-     ${INPUTDATA}/cupriteSubHsi.tif
+     HyperspectralUnmixingExample
+     ${INPUTDATA_EXAMPLES}/Indian_pines_corrected.tif
      ${TEMP}/siTvHyperspectralUnmixingExampleTest.tif
+     ${TEMP}/siTvHyperspectralUnmixingExampleTestBand1.png
+     ${TEMP}/siTvHyperspectralUnmixingExampleTestBand2.png
+     ${TEMP}/siTvHyperspectralUnmixingExampleTestBand3.png
+     16
 )
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
