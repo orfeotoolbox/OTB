@@ -156,7 +156,7 @@ private:
       FloatVectorImageType::Pointer inMask = GetParameterImage("mask");
       m_Extract = ExtractImageFilterType::New();
       m_Extract->SetInput( inMask );
-      m_Extract->SetChannel(0);
+      m_Extract->SetChannel(1);
       m_Extract->UpdateOutputInformation();
       
       m_ClassificationFilter->SetInputMask(m_Extract->GetOutput());
