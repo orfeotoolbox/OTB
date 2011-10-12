@@ -82,8 +82,14 @@ ENDIF(GENERATE_WRAPPING_DOC)
 # Configure the default OTB_DATA_ROOT for the location of OTB Data.
 FIND_PATH(OTB_DATA_ROOT README-OTB-Data PATHS $ENV{OTB_DATA_ROOT} ${OTB_SOURCE_DIR}/../OTB-Data)
 
+FIND_PATH(OTB_DATA_LARGEINPUT_ROOT OTBData.readme PATHS $ENV{OTB_DATA_LARGEINPUT_ROOT})
+
+IF( NOT OTB_DATA_LARGEINPUT_ROOT )
+  MESSAGE(FATAL_ERROR "Large input directory is not set")
+ENDIF( NOT OTB_DATA_LARGEINPUT_ROOT )
+
 # OTB_DATA_PATHS is searched recursively.. you need not enter sub-directories
-SET(OTB_DATA_PATHS "${OTB_DATA_ROOT}/Examples::${OTB_DATA_ROOT}/Input" CACHE STRING "Where the OTB data is. Enter a double colon seperated list.")
+SET(OTB_DATA_PATHS "${OTB_DATA_ROOT}/Examples::${OTB_DATA_ROOT}/Input::${OTB_DATA_LARGEINPUT_ROOT}" CACHE STRING "Where the OTB data is. Enter a double colon seperated list.")
 
 #
 # Rebuild the Software Guide figures or not ?
