@@ -400,6 +400,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Simulation/ProsailModel.cxx
   ${OTB_SOURCE_DIR}/Examples/Simulation/LAIFromNDVIImageTransform.cxx
   ${OTB_SOURCE_DIR}/Examples/Simulation/LAIAndPROSAILToSensorResponse.cxx
+  ${OTB_SOURCE_DIR}/Examples/Hyperspectral/HyperspectralUnmixingExample.cxx
 )
 
 IF(OTB_USE_PATENTED)
@@ -459,7 +460,7 @@ IF( BUILD_FIGURES )
       EXEC_PROGRAM(${PERL_EXECUTABLE}
 #"${SoftwareGuide_BINARY_DIR}/Art/Generated" ${Examples_BINARY_DIR}
 #THOMAS
-#        ARGS      ${RUN_EXAMPLES_SCRIPT} ${example} ${OTB_EXECUTABLES_DIR} "${OTB_DATA_PATHS}" ${ExampleCmakeFile} ${TEX_FILE} ${GeneratedFolder}
+#        ARGS      ${RUN_EXAMPLES_SCRIPT} ${example} ${OTB_EXECUTABLES_DIR} "${IsAnInputFile}" ${ExampleCmakeFile} ${TEX_FILE} ${GeneratedFolder}
 #        ARGS      ${RUN_EXAMPLES_SCRIPT} ${example} ${OTB_EXECUTABLES_DIR} "${OTB_DATA_PATHS}" ${ExampleCmakeFile} ${TEX_FILE} ${GeneratedFolder} ${OTB_DATA_PATHS}
 	ARGS       ${RUN_EXAMPLES_SCRIPT} ${example} ${OTB_DIR}/bin ${OTB_DATA_PATHS} ${ExampleCmakeFile} ${TEX_FILE} ${GeneratedFolder}
       )
