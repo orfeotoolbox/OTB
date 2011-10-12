@@ -45,6 +45,14 @@ macro(OTB_CREATE_APPLICATION)
                        @ONLY )
        install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/otbcli_${APPLICATION_NAME}.sh
                DESTINATION ${OTB_INSTALL_BIN_DIR_CM24})
+               
+       if (WRAP_QT)
+           configure_file( ${CMAKE_SOURCE_DIR}/CMake/otbgui.sh.in
+                           ${CMAKE_CURRENT_BINARY_DIR}/otbgui_${APPLICATION_NAME}.sh
+                           @ONLY )
+           install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/otbgui_${APPLICATION_NAME}.sh
+                   DESTINATION ${OTB_INSTALL_BIN_DIR_CM24})
+       endif(WRAP_QT)
      endif(NOT WIN32)
    endif()
    
