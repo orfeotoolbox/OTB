@@ -38,6 +38,14 @@ macro(OTB_CREATE_APPLICATION)
    if (APPLICATION_INSTALL_PATH)
      install(TARGETS ${APPLICATION_TARGET_NAME}
              LIBRARY DESTINATION ${APPLICATION_INSTALL_PATH})
+
+     if (NOT WIN32)
+       configure_file( ${CMAKE_SOURCE_DIR}/CMake/otbcli.sh.in
+                       ${CMAKE_CURRENT_BINARY_DIR}/otbcli_${APPLICATION_NAME}.sh
+                       @ONLY )
+       install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/otbcli_${APPLICATION_NAME}.sh
+               DESTINATION ${OTB_INSTALL_BIN_DIR_CM24})
+     endif(NOT WIN32)
    endif()
    
    list(APPEND OTB_APPLICATIONS_NAME_LIST ${APPLICATION_NAME})
