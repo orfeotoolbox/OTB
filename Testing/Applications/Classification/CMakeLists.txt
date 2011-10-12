@@ -181,7 +181,7 @@ ADD_TEST(NAME apTvClImageSVMClassifierQB456_6
    Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
    ImageSVMClassifier
    --modulePath $<TARGET_FILE_DIR:otbapp_ImageSVMClassifier>
-   --in  ${INPUTDATA}/Classification/QB_6_extract.tif
+   --in   ${INPUTDATA}/Classification/QB_6_extract.tif
    --mask ${INPUTDATA}/Classification/QB_6_mask.tif
    --imstat  ${OTBAPP_BASELINE_FILES}/clImageStatisticsQB456.xml
    --svm ${OTBAPP_BASELINE_FILES}/clsvmModelQB456.svm
