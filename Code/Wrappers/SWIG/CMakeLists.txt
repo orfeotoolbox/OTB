@@ -58,7 +58,9 @@ if ( WRAP_PYTHON )
   check_PIC_flag ( Python )
   find_package ( PythonLibs REQUIRED )
   find_package ( PythonInterp REQUIRED )
-  include_directories ( ${PYTHON_INCLUDE_DIR} )
+
+  # cmake 2.6 FindPython defines PYTHON_INCLUDE_PATH instead of PYTHON_INCLUDE_DIR
+  include_directories ( ${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH} )
 
   # Run swig
   set(CMAKE_SWIG_FLAGS ${CMAKE_SWIG_GLOBAL_FLAGS})
