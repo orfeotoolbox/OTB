@@ -404,9 +404,9 @@ MDMDNMFImageFilter<TInputImage, TOutputImage>
   const unsigned int nbComponentsPerPixel = inputPtr->GetNumberOfComponentsPerPixel();
   const unsigned int nbPixels = inputPtr->GetLargestPossibleRegion().GetNumberOfPixels();
   
-  // std::cout << "nbEndmembers " << nbEndmembers << std::endl;
-  // std::cout << "nbComponentsPerPixel " << nbComponentsPerPixel << std::endl;
-  // std::cout << "nbPixels " << nbPixels << std::endl;
+  // otbGenericMsgDebugMacro( << "nbEndmembers " << nbEndmembers );
+  // otbGenericMsgDebugMacro( << "nbComponentsPerPixel " << nbComponentsPerPixel );
+  // otbGenericMsgDebugMacro( << "nbPixels " << nbPixels );
   
   // Other declarations
   double critA, critS, crit = 1;
@@ -424,7 +424,7 @@ MDMDNMFImageFilter<TInputImage, TOutputImage>
   double alphS = 1.;
   
   MatrixType X = inputImage2Matrix->GetMatrix();
-  //std::cout << "X " << X  << std::endl;
+  //otbGenericMsgDebugMacro( << "X " << X  );
   //-------   A and S declaration and initialization   --------//
   //---> These values fit with the ones chosen in the matlab
   //---"nmf_validationOtb.m" function to validate the OTB code.
@@ -435,7 +435,7 @@ MDMDNMFImageFilter<TInputImage, TOutputImage>
   MatrixType S;
   S.set_size(nbEndmembers, nbPixels);
   S.fill(1.);
-  //std::cout << "S " << S.cols() << std::endl;
+  //otbGenericMsgDebugMacro( << "S " << S.cols() );
   //-----------   Declaration of useful variables   -----------//
 
   MatrixType Sold, Sdiff;
@@ -456,7 +456,7 @@ MDMDNMFImageFilter<TInputImage, TOutputImage>
   //FA fA;
   //FS fS;
 
-  std::cout << "normX = " << X.fro_norm() << std::endl;
+  otbGenericMsgDebugMacro( << "normX = " << X.fro_norm() );
 
   unsigned int counter = 0;
 
@@ -465,29 +465,29 @@ MDMDNMFImageFilter<TInputImage, TOutputImage>
 
     //----------------   Update S   -----------------//
     Sold = S;
-    //std::cout << "gradS1 " << gradS << std::endl;
+    //otbGenericMsgDebugMacro( << "gradS1 " << gradS );
     this->EvalGradS(X, A, S, m_Delt, m_LambdS, gradS);  // Compute gradS
-    //std::cout << "m_LambdS " << m_LambdS << std::endl;
-    //std::cout << "gradS " << gradS << std::endl;
+    //otbGenericMsgDebugMacro( << "m_LambdS " << m_LambdS );
+    //otbGenericMsgDebugMacro( << "gradS " << gradS );
     if (counter%divisorParam == 0)
       {
 
-      std::cout << "Iteration = " << counter << std::endl;
-      std::cout << "Criterion = " << Criterion(X, A, S, m_Delt, m_LambdS, m_LambdD) << std::endl;
-      std::cout << "statGradS = " << gradS.fro_norm() << std::endl;
-      std::cout << "gradS(0, 0) = " << gradS(0, 0) << std::endl;
-      std::cout << "alphS = " << alphS << std::endl;
-      std::cout << "normS = " << S.fro_norm() << std::endl;
-      std::cout << "S(0, 0) = " << S(0, 0) << std::endl;
+      otbGenericMsgDebugMacro( << "Iteration = " << counter );
+      otbGenericMsgDebugMacro( << "Criterion = " << Criterion(X, A, S, m_Delt, m_LambdS, m_LambdD) );
+      otbGenericMsgDebugMacro( << "statGradS = " << gradS.fro_norm() );
+      otbGenericMsgDebugMacro( << "gradS(0, 0) = " << gradS(0, 0) );
+      otbGenericMsgDebugMacro( << "alphS = " << alphS );
+      otbGenericMsgDebugMacro( << "normS = " << S.fro_norm() );
+      otbGenericMsgDebugMacro( << "S(0, 0) = " << S(0, 0) );
       }
 
     ProjGradOneStep(X, A, gradS, sig, bet, m_Delt, m_LambdS, m_LambdD, S, alphS, false);
 
     if (counter%divisorParam == 0)
       {
-      std::cout << "alphS = " << alphS << std::endl;
-      std::cout << "normS = " << S.fro_norm() << std::endl;
-      std::cout << "S(0, 0) = " << S(0, 0) << std::endl;
+      otbGenericMsgDebugMacro( << "alphS = " << alphS );
+      otbGenericMsgDebugMacro( << "normS = " << S.fro_norm() );
+      otbGenericMsgDebugMacro( << "S(0, 0) = " << S(0, 0) );
       }
 
     //----------------   Update A   -----------------//
@@ -497,23 +497,23 @@ MDMDNMFImageFilter<TInputImage, TOutputImage>
 
     if (counter%divisorParam == 0)
       {
-      std::cout << "gradA(0, 0) = " << gradA(0, 0) << std::endl;
+      otbGenericMsgDebugMacro( << "gradA(0, 0) = " << gradA(0, 0) );
       }
 
 
     if (counter%divisorParam == 0)
       {
-      std::cout << "alphA = " << alphA << std::endl;
-      std::cout << "normA = " << A.fro_norm() << std::endl;
-      std::cout << "A(0, 0) = " << A(0, 0) << std::endl;
+      otbGenericMsgDebugMacro( << "alphA = " << alphA );
+      otbGenericMsgDebugMacro( << "normA = " << A.fro_norm() );
+      otbGenericMsgDebugMacro( << "A(0, 0) = " << A(0, 0) );
       }
     ProjGradOneStep(X, S, gradA, sig, bet, m_Delt, m_LambdS, m_LambdD, A, alphA, true);
 
     if (counter%divisorParam == 0)
       {
-      std::cout << "alphA = " << alphA << std::endl;
-      std::cout << "normA = " << A.fro_norm() << std::endl;
-      std::cout << "A(0, 0) = " << A(0, 0) << std::endl;
+      otbGenericMsgDebugMacro( << "alphA = " << alphA );
+      otbGenericMsgDebugMacro( << "normA = " << A.fro_norm() );
+      otbGenericMsgDebugMacro( << "A(0, 0) = " << A(0, 0) );
       }
     
     //------------   crit evaluation   --------------//
@@ -525,11 +525,10 @@ MDMDNMFImageFilter<TInputImage, TOutputImage>
 
     if (counter%divisorParam == 0)
       {
-      std::cout << "critA value: " <<  critA << std::endl;
-      std::cout << "critS value: " <<  critS << std::endl;
-      std::cout << "crit value: " <<  crit << std::endl;
-      std::cout << "criterion value: " <<  Criterion(X, A, S, m_Delt, m_LambdS, m_LambdD) << std::endl;
-      std::cout << std::endl;
+      otbGenericMsgDebugMacro( << "critA value: " <<  critA );
+      otbGenericMsgDebugMacro( << "critS value: " <<  critS );
+      otbGenericMsgDebugMacro( << "crit value: " <<  crit );
+      otbGenericMsgDebugMacro( << "criterion value: " <<  Criterion(X, A, S, m_Delt, m_LambdS, m_LambdD) );
       }
 
     ++counter;
