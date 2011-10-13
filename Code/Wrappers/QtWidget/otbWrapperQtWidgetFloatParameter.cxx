@@ -34,6 +34,10 @@ QtWidgetFloatParameter::~QtWidgetFloatParameter()
 
 void QtWidgetFloatParameter::DoUpdateGUI()
 {
+  // TODO : search for a better solution
+  m_QDoubleSpinBox->setRange(m_FloatParam->GetMinimumValue(),
+                             m_FloatParam->GetMaximumValue());
+
   bool signalsBlocked = m_QDoubleSpinBox->blockSignals( true );
 
   if (m_FloatParam->HasValue())
@@ -62,6 +66,7 @@ void QtWidgetFloatParameter::DoCreateWidget()
 
   m_QDoubleSpinBox = new QDoubleSpinBox;
   m_QDoubleSpinBox->setDecimals(5);
+  m_QDoubleSpinBox->setSingleStep(0.1);
   m_QDoubleSpinBox->setRange(m_FloatParam->GetMinimumValue(), m_FloatParam->GetMaximumValue());
   m_QDoubleSpinBox->setToolTip(m_FloatParam->GetDescription());
 

@@ -74,6 +74,7 @@ void QtWidgetParameterGroup::DoCreateWidget()
         // CheckBox (col 1)
         QCheckBox * checkBox = new QCheckBox;
         connect(checkBox, SIGNAL(clicked(bool)), specificWidget, SLOT(SetActivationState(bool)));
+        connect( checkBox, SIGNAL(clicked(bool)), GetModel(), SLOT(NotifyUpdate()) );
         
         if (param->IsRoot())
            {
