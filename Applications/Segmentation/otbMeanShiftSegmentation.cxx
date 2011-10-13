@@ -94,10 +94,14 @@ private:
 
     m_Ref = filter;
 
-    SetParameterOutputImage("fout", filter->GetOutput());
-    SetParameterOutputImage("cout", filter->GetClusteredOutput());
-    SetParameterOutputImage("lout", filter->GetLabeledClusteredOutput());
-    SetParameterOutputImage("cbout", filter->GetClusterBoundariesOutput());
+    if (IsParameterEnabled("fout") && HasValue("fout"))
+      SetParameterOutputImage("fout", filter->GetOutput());
+    if (IsParameterEnabled("cout") && HasValue("cout"))
+      SetParameterOutputImage("cout", filter->GetClusteredOutput());
+    if (IsParameterEnabled("lout") && HasValue("lout"))
+      SetParameterOutputImage("lout", filter->GetLabeledClusteredOutput());
+    if (IsParameterEnabled("cbout") && HasValue("cbout"))
+      SetParameterOutputImage("cbout", filter->GetClusterBoundariesOutput());
   }
 
   itk::LightObject::Pointer m_Ref;
