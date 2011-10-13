@@ -181,7 +181,7 @@ CommandLineParser::GetAttribut( const std::string & key, const std::string & exp
     tempModKey = expFromKey.substr( 0, expFromKey.find("--")-1);
     }
 
-  // Only if the key has values assciated
+  // Only if the key has values associated
   if( tempModKey.size() > 0 )
     {
     std::vector<itksys::String> spaceSplitted = itksys::SystemTools::SplitString(tempModKey.substr(1, tempModKey.size()).c_str(), ' ', false);
@@ -196,7 +196,7 @@ CommandLineParser::GetAttribut( const std::string & key, const std::string & exp
         }
       }
     
-    // Remove space at the begining of the string and cast into std::vector<std::string>
+    // Remove space at the beginning of the string and cast into std::vector<std::string>
     for(unsigned int i=0; i<spaceSplitted.size(); i++)
       {
       while( spaceSplitted[i].size()>0  && spaceSplitted[i][0] == ' ' )
@@ -244,21 +244,12 @@ bool
 CommandLineParser::IsAttributExists( const std::string key, const std::string & exp  )
 {
   std::string keySpaced = key;
-  // Add space to avoid troubles with key twhich starts by another one : --out and --outmax for example
+  std::string expSpaced = exp;
+  // Add space to avoid troubles with key which starts by another one : --out and --outmax for example
   keySpaced.append(" ");
-  std::size_t found = exp.find(keySpaced);
-  if( found == std::string::npos )
-    {
-    // Case the attribut is at the end of the expression : no space
-    found = exp.find(key);
-    if( found == std::string::npos )
-      {
-      return false;
-      }
-    return true;
-    }
-
-  return true;
+  expSpaced.append(" ");
+  std::size_t found = expSpaced.find(keySpaced);
+  return (found != std::string::npos);
 }
 
 
