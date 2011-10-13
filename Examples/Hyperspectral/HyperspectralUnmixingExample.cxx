@@ -145,7 +145,7 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
   
   // Software Guide : BeginCodeSnippet
-  VectorImageToMatrixImageFilterType::Pointer 
+  VectorImageToMatrixImageFilterType::Pointer
     endMember2Matrix = VectorImageToMatrixImageFilterType::New();
   endMember2Matrix->SetInput(vca->GetOutput());
   endMember2Matrix->Update();
@@ -161,7 +161,7 @@ int main(int argc, char * argv[])
   
   // Software Guide : BeginCodeSnippet
   typedef otb::UnConstrainedLeastSquareImageFilter<ImageType, ImageType, double> UCLSUnmixingFilterType;
-  UCLSUnmixingFilterType::Pointer 
+  UCLSUnmixingFilterType::Pointer
     unmixer = UCLSUnmixingFilterType::New();
   unmixer->SetInput(rescaler->GetOutput());
   unmixer->SetMatrix(endMember2Matrix->GetMatrix());

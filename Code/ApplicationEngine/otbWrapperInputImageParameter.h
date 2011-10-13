@@ -69,7 +69,7 @@ public:
     void SetImage(TImageType* image);
   
   
-    /** Generic cast method that will be specified for each image type. */  
+    /** Generic cast method that will be specified for each image type. */
   template <class TInputImage, class TOutputImage>
     TOutputImage* CastImage()
   {

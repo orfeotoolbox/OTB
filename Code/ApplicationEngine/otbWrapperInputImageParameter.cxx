@@ -96,7 +96,7 @@ InputImageParameter::GetImage()
       }
     
     m_Image = reader->GetOutput();
-    m_Reader = reader;  
+    m_Reader = reader;
     
     // Pay attention, don't return m_Image because it is a ImageBase...
     return reader->GetOutput();
@@ -141,7 +141,7 @@ InputImageParameter::GetImage()
     else if (dynamic_cast<DoubleImageType*>(m_Image.GetPointer()))
       {
       return CastImage<DoubleImageType, TOutputImage>();
-      }     
+      }
     else if (dynamic_cast<Int8VectorImageType*>(m_Image.GetPointer()))
       {
       return CastImage<Int8VectorImageType, TOutputImage>();
@@ -173,7 +173,7 @@ InputImageParameter::GetImage()
     else if (dynamic_cast<DoubleVectorImageType*>(m_Image.GetPointer()))
       {
       return CastImage<DoubleVectorImageType, TOutputImage>();
-      }     
+      }
     else if (dynamic_cast<Int8RGBAImageType*>(m_Image.GetPointer()))
       {
       return CastImage<Int8RGBAImageType, TOutputImage>();
@@ -205,7 +205,7 @@ InputImageParameter::GetImage()
     else if (dynamic_cast<DoubleRGBAImageType*>(m_Image.GetPointer()))
       {
       return CastImage<DoubleRGBAImageType, TOutputImage>();
-      }     
+      }
     else
       {
       itkExceptionMacro("Unknown image type");
@@ -236,7 +236,7 @@ InputImageParameter::SimpleCastImage()
   
                        
 template <class TInputImage, class TOutputImage>
-TOutputImage* 
+TOutputImage*
 InputImageParameter::CastVectorImageFromImage()
 {
   TInputImage* realInputImage = dynamic_cast<TInputImage*>(m_Image.GetPointer());
@@ -288,12 +288,12 @@ InputImageParameter::CastImage<Int8ImageType, UInt32ImageType>(){
   return this->SimpleCastImage<Int8ImageType, UInt32ImageType>();
 }
 
-template <> FloatImageType *                                                 
+template <> FloatImageType *
 InputImageParameter::CastImage<Int8ImageType, FloatImageType>(){
   return this->SimpleCastImage<Int8ImageType, FloatImageType>();
 }
 
-template <> DoubleImageType *                                                 
+template <> DoubleImageType *
 InputImageParameter::CastImage<Int8ImageType, DoubleImageType>(){
   return this->SimpleCastImage<Int8ImageType, DoubleImageType>();
 }
@@ -331,12 +331,12 @@ InputImageParameter::CastImage<UInt8ImageType, UInt32ImageType>(){
   return this->SimpleCastImage<UInt8ImageType, UInt32ImageType>();
 }
 
-template <> FloatImageType *                                                 
+template <> FloatImageType *
 InputImageParameter::CastImage<UInt8ImageType, FloatImageType>(){
   return this->SimpleCastImage<UInt8ImageType, FloatImageType>();
 }
 
-template <> DoubleImageType *                                                 
+template <> DoubleImageType *
 InputImageParameter::CastImage<UInt8ImageType, DoubleImageType>(){
   return this->SimpleCastImage<UInt8ImageType, DoubleImageType>();
 }
@@ -373,12 +373,12 @@ InputImageParameter::CastImage<Int16ImageType, UInt32ImageType>(){
   return this->SimpleCastImage<Int16ImageType, UInt32ImageType>();
 }
 
-template <> FloatImageType *                                                 
+template <> FloatImageType *
 InputImageParameter::CastImage<Int16ImageType, FloatImageType>(){
   return this->SimpleCastImage<Int16ImageType, FloatImageType>();
 }
 
-template <> DoubleImageType *                                                 
+template <> DoubleImageType *
 InputImageParameter::CastImage<Int16ImageType, DoubleImageType>(){
   return this->SimpleCastImage<Int16ImageType, DoubleImageType>();
 }
@@ -415,12 +415,12 @@ InputImageParameter::CastImage<UInt16ImageType, UInt32ImageType>(){
   return this->SimpleCastImage<UInt16ImageType, UInt32ImageType>();
 }
 
-template <> FloatImageType *                                                 
+template <> FloatImageType *
 InputImageParameter::CastImage<UInt16ImageType, FloatImageType>(){
   return this->SimpleCastImage<UInt16ImageType, FloatImageType>();
 }
 
-template <> DoubleImageType *                                                 
+template <> DoubleImageType *
 InputImageParameter::CastImage<UInt16ImageType, DoubleImageType>(){
   return this->SimpleCastImage<UInt16ImageType, DoubleImageType>();
 }
@@ -457,12 +457,12 @@ InputImageParameter::CastImage<Int32ImageType, UInt32ImageType>(){
   return this->SimpleCastImage<Int32ImageType, UInt32ImageType>();
 }
 
-template <> FloatImageType *                                                 
+template <> FloatImageType *
 InputImageParameter::CastImage<Int32ImageType, FloatImageType>(){
   return this->SimpleCastImage<Int32ImageType, FloatImageType>();
 }
 
-template <> DoubleImageType *                                                 
+template <> DoubleImageType *
 InputImageParameter::CastImage<Int32ImageType, DoubleImageType>(){
   return this->SimpleCastImage<Int32ImageType, DoubleImageType>();
 }
@@ -500,12 +500,12 @@ InputImageParameter::CastImage<UInt32ImageType, UInt32ImageType>(){
   return this->SimpleCastImage<UInt32ImageType, UInt32ImageType>();
 }
 
-template <> FloatImageType *                                                 
+template <> FloatImageType *
 InputImageParameter::CastImage<UInt32ImageType, FloatImageType>(){
   return this->SimpleCastImage<UInt32ImageType, FloatImageType>();
 }
 
-template <> DoubleImageType *                                                 
+template <> DoubleImageType *
 InputImageParameter::CastImage<UInt32ImageType, DoubleImageType>(){
   return this->SimpleCastImage<UInt32ImageType, DoubleImageType>();
 }
@@ -542,12 +542,12 @@ InputImageParameter::CastImage<FloatImageType, UInt32ImageType>(){
   return this->SimpleCastImage<FloatImageType, UInt32ImageType>();
 }
 
-template <> FloatImageType *                                                 
+template <> FloatImageType *
 InputImageParameter::CastImage<FloatImageType, FloatImageType>(){
   return this->SimpleCastImage<FloatImageType, FloatImageType>();
 }
 
-template <> DoubleImageType *                                                 
+template <> DoubleImageType *
 InputImageParameter::CastImage<FloatImageType, DoubleImageType>(){
   return this->SimpleCastImage<FloatImageType, DoubleImageType>();
 }
@@ -584,16 +584,15 @@ InputImageParameter::CastImage<DoubleImageType, UInt32ImageType>(){
   return this->SimpleCastImage<DoubleImageType, UInt32ImageType>();
 }
 
-template <> FloatImageType *                                                 
+template <> FloatImageType *
 InputImageParameter::CastImage<DoubleImageType, FloatImageType>(){
   return this->SimpleCastImage<DoubleImageType, FloatImageType>();
 }
 
-template <> DoubleImageType *                                                 
+template <> DoubleImageType *
 InputImageParameter::CastImage<DoubleImageType, DoubleImageType>(){
   return this->SimpleCastImage<DoubleImageType, DoubleImageType>();
 }
-
 
 
 /*********************************************************************
@@ -631,12 +630,12 @@ InputImageParameter::CastImage<Int8VectorImageType, UInt32VectorImageType>(){
   return this->SimpleCastImage<Int8VectorImageType, UInt32VectorImageType>();
 }
 
-template <> FloatVectorImageType *                                                 
+template <> FloatVectorImageType *
 InputImageParameter::CastImage<Int8VectorImageType, FloatVectorImageType>(){
   return this->SimpleCastImage<Int8VectorImageType, FloatVectorImageType>();
 }
 
-template <> DoubleVectorImageType *                                                 
+template <> DoubleVectorImageType *
 InputImageParameter::CastImage<Int8VectorImageType, DoubleVectorImageType>(){
   return this->SimpleCastImage<Int8VectorImageType, DoubleVectorImageType>();
 }
@@ -674,12 +673,12 @@ InputImageParameter::CastImage<UInt8VectorImageType, UInt32VectorImageType>(){
   return this->SimpleCastImage<UInt8VectorImageType, UInt32VectorImageType>();
 }
 
-template <> FloatVectorImageType *                                                 
+template <> FloatVectorImageType *
 InputImageParameter::CastImage<UInt8VectorImageType, FloatVectorImageType>(){
   return this->SimpleCastImage<UInt8VectorImageType, FloatVectorImageType>();
 }
 
-template <> DoubleVectorImageType *                                                 
+template <> DoubleVectorImageType *
 InputImageParameter::CastImage<UInt8VectorImageType, DoubleVectorImageType>(){
   return this->SimpleCastImage<UInt8VectorImageType, DoubleVectorImageType>();
 }
@@ -716,12 +715,12 @@ InputImageParameter::CastImage<Int16VectorImageType, UInt32VectorImageType>(){
   return this->SimpleCastImage<Int16VectorImageType, UInt32VectorImageType>();
 }
 
-template <> FloatVectorImageType *                                                 
+template <> FloatVectorImageType *
 InputImageParameter::CastImage<Int16VectorImageType, FloatVectorImageType>(){
   return this->SimpleCastImage<Int16VectorImageType, FloatVectorImageType>();
 }
 
-template <> DoubleVectorImageType *                                                 
+template <> DoubleVectorImageType *
 InputImageParameter::CastImage<Int16VectorImageType, DoubleVectorImageType>(){
   return this->SimpleCastImage<Int16VectorImageType, DoubleVectorImageType>();
 }
@@ -758,12 +757,12 @@ InputImageParameter::CastImage<UInt16VectorImageType, UInt32VectorImageType>(){
   return this->SimpleCastImage<UInt16VectorImageType, UInt32VectorImageType>();
 }
 
-template <> FloatVectorImageType *                                                 
+template <> FloatVectorImageType *
 InputImageParameter::CastImage<UInt16VectorImageType, FloatVectorImageType>(){
   return this->SimpleCastImage<UInt16VectorImageType, FloatVectorImageType>();
 }
 
-template <> DoubleVectorImageType *                                                 
+template <> DoubleVectorImageType *
 InputImageParameter::CastImage<UInt16VectorImageType, DoubleVectorImageType>(){
   return this->SimpleCastImage<UInt16VectorImageType, DoubleVectorImageType>();
 }
@@ -800,12 +799,12 @@ InputImageParameter::CastImage<Int32VectorImageType, UInt32VectorImageType>(){
   return this->SimpleCastImage<Int32VectorImageType, UInt32VectorImageType>();
 }
 
-template <> FloatVectorImageType *                                                 
+template <> FloatVectorImageType *
 InputImageParameter::CastImage<Int32VectorImageType, FloatVectorImageType>(){
   return this->SimpleCastImage<Int32VectorImageType, FloatVectorImageType>();
 }
 
-template <> DoubleVectorImageType *                                                 
+template <> DoubleVectorImageType *
 InputImageParameter::CastImage<Int32VectorImageType, DoubleVectorImageType>(){
   return this->SimpleCastImage<Int32VectorImageType, DoubleVectorImageType>();
 }
@@ -843,12 +842,12 @@ InputImageParameter::CastImage<UInt32VectorImageType, UInt32VectorImageType>(){
   return this->SimpleCastImage<UInt32VectorImageType, UInt32VectorImageType>();
 }
 
-template <> FloatVectorImageType *                                                 
+template <> FloatVectorImageType *
 InputImageParameter::CastImage<UInt32VectorImageType, FloatVectorImageType>(){
   return this->SimpleCastImage<UInt32VectorImageType, FloatVectorImageType>();
 }
 
-template <> DoubleVectorImageType *                                                 
+template <> DoubleVectorImageType *
 InputImageParameter::CastImage<UInt32VectorImageType, DoubleVectorImageType>(){
   return this->SimpleCastImage<UInt32VectorImageType, DoubleVectorImageType>();
 }
@@ -885,12 +884,12 @@ InputImageParameter::CastImage<FloatVectorImageType, UInt32VectorImageType>(){
   return this->SimpleCastImage<FloatVectorImageType, UInt32VectorImageType>();
 }
 
-template <> FloatVectorImageType *                                                 
+template <> FloatVectorImageType *
 InputImageParameter::CastImage<FloatVectorImageType, FloatVectorImageType>(){
   return this->SimpleCastImage<FloatVectorImageType, FloatVectorImageType>();
 }
 
-template <> DoubleVectorImageType *                                                 
+template <> DoubleVectorImageType *
 InputImageParameter::CastImage<FloatVectorImageType, DoubleVectorImageType>(){
   return this->SimpleCastImage<FloatVectorImageType, DoubleVectorImageType>();
 }
@@ -927,12 +926,12 @@ InputImageParameter::CastImage<DoubleVectorImageType, UInt32VectorImageType>(){
   return this->SimpleCastImage<DoubleVectorImageType, UInt32VectorImageType>();
 }
 
-template <> FloatVectorImageType *                                                 
+template <> FloatVectorImageType *
 InputImageParameter::CastImage<DoubleVectorImageType, FloatVectorImageType>(){
   return this->SimpleCastImage<DoubleVectorImageType, FloatVectorImageType>();
 }
 
-template <> DoubleVectorImageType *                                                 
+template <> DoubleVectorImageType *
 InputImageParameter::CastImage<DoubleVectorImageType, DoubleVectorImageType>(){
   return this->SimpleCastImage<DoubleVectorImageType, DoubleVectorImageType>();
 }
@@ -973,12 +972,12 @@ InputImageParameter::CastImage<Int8RGBAImageType, UInt32RGBAImageType>(){
   return this->SimpleCastImage<Int8RGBAImageType, UInt32RGBAImageType>();
 }
 
-template <> FloatRGBAImageType *                                                 
+template <> FloatRGBAImageType *
 InputImageParameter::CastImage<Int8RGBAImageType, FloatRGBAImageType>(){
   return this->SimpleCastImage<Int8RGBAImageType, FloatRGBAImageType>();
 }
 
-template <> DoubleRGBAImageType *                                                 
+template <> DoubleRGBAImageType *
 InputImageParameter::CastImage<Int8RGBAImageType, DoubleRGBAImageType>(){
   return this->SimpleCastImage<Int8RGBAImageType, DoubleRGBAImageType>();
 }
@@ -1016,12 +1015,12 @@ InputImageParameter::CastImage<UInt8RGBAImageType, UInt32RGBAImageType>(){
   return this->SimpleCastImage<UInt8RGBAImageType, UInt32RGBAImageType>();
 }
 
-template <> FloatRGBAImageType *                                                 
+template <> FloatRGBAImageType *
 InputImageParameter::CastImage<UInt8RGBAImageType, FloatRGBAImageType>(){
   return this->SimpleCastImage<UInt8RGBAImageType, FloatRGBAImageType>();
 }
 
-template <> DoubleRGBAImageType *                                                 
+template <> DoubleRGBAImageType *
 InputImageParameter::CastImage<UInt8RGBAImageType, DoubleRGBAImageType>(){
   return this->SimpleCastImage<UInt8RGBAImageType, DoubleRGBAImageType>();
 }
@@ -1058,12 +1057,12 @@ InputImageParameter::CastImage<Int16RGBAImageType, UInt32RGBAImageType>(){
   return this->SimpleCastImage<Int16RGBAImageType, UInt32RGBAImageType>();
 }
 
-template <> FloatRGBAImageType *                                                 
+template <> FloatRGBAImageType *
 InputImageParameter::CastImage<Int16RGBAImageType, FloatRGBAImageType>(){
   return this->SimpleCastImage<Int16RGBAImageType, FloatRGBAImageType>();
 }
 
-template <> DoubleRGBAImageType *                                                 
+template <> DoubleRGBAImageType *
 InputImageParameter::CastImage<Int16RGBAImageType, DoubleRGBAImageType>(){
   return this->SimpleCastImage<Int16RGBAImageType, DoubleRGBAImageType>();
 }
@@ -1100,12 +1099,12 @@ InputImageParameter::CastImage<UInt16RGBAImageType, UInt32RGBAImageType>(){
   return this->SimpleCastImage<UInt16RGBAImageType, UInt32RGBAImageType>();
 }
 
-template <> FloatRGBAImageType *                                                 
+template <> FloatRGBAImageType *
 InputImageParameter::CastImage<UInt16RGBAImageType, FloatRGBAImageType>(){
   return this->SimpleCastImage<UInt16RGBAImageType, FloatRGBAImageType>();
 }
 
-template <> DoubleRGBAImageType *                                                 
+template <> DoubleRGBAImageType *
 InputImageParameter::CastImage<UInt16RGBAImageType, DoubleRGBAImageType>(){
   return this->SimpleCastImage<UInt16RGBAImageType, DoubleRGBAImageType>();
 }
@@ -1142,12 +1141,12 @@ InputImageParameter::CastImage<Int32RGBAImageType, UInt32RGBAImageType>(){
   return this->SimpleCastImage<Int32RGBAImageType, UInt32RGBAImageType>();
 }
 
-template <> FloatRGBAImageType *                                                 
+template <> FloatRGBAImageType *
 InputImageParameter::CastImage<Int32RGBAImageType, FloatRGBAImageType>(){
   return this->SimpleCastImage<Int32RGBAImageType, FloatRGBAImageType>();
 }
 
-template <> DoubleRGBAImageType *                                                 
+template <> DoubleRGBAImageType *
 InputImageParameter::CastImage<Int32RGBAImageType, DoubleRGBAImageType>(){
   return this->SimpleCastImage<Int32RGBAImageType, DoubleRGBAImageType>();
 }
@@ -1185,12 +1184,12 @@ InputImageParameter::CastImage<UInt32RGBAImageType, UInt32RGBAImageType>(){
   return this->SimpleCastImage<UInt32RGBAImageType, UInt32RGBAImageType>();
 }
 
-template <> FloatRGBAImageType *                                                 
+template <> FloatRGBAImageType *
 InputImageParameter::CastImage<UInt32RGBAImageType, FloatRGBAImageType>(){
   return this->SimpleCastImage<UInt32RGBAImageType, FloatRGBAImageType>();
 }
 
-template <> DoubleRGBAImageType *                                                 
+template <> DoubleRGBAImageType *
 InputImageParameter::CastImage<UInt32RGBAImageType, DoubleRGBAImageType>(){
   return this->SimpleCastImage<UInt32RGBAImageType, DoubleRGBAImageType>();
 }
@@ -1227,12 +1226,12 @@ InputImageParameter::CastImage<FloatRGBAImageType, UInt32RGBAImageType>(){
   return this->SimpleCastImage<FloatRGBAImageType, UInt32RGBAImageType>();
 }
 
-template <> FloatRGBAImageType *                                                 
+template <> FloatRGBAImageType *
 InputImageParameter::CastImage<FloatRGBAImageType, FloatRGBAImageType>(){
   return this->SimpleCastImage<FloatRGBAImageType, FloatRGBAImageType>();
 }
 
-template <> DoubleRGBAImageType *                                                 
+template <> DoubleRGBAImageType *
 InputImageParameter::CastImage<FloatRGBAImageType, DoubleRGBAImageType>(){
   return this->SimpleCastImage<FloatRGBAImageType, DoubleRGBAImageType>();
 }
@@ -1269,12 +1268,12 @@ InputImageParameter::CastImage<DoubleRGBAImageType, UInt32RGBAImageType>(){
   return this->SimpleCastImage<DoubleRGBAImageType, UInt32RGBAImageType>();
 }
 
-template <> FloatRGBAImageType *                                                 
+template <> FloatRGBAImageType *
 InputImageParameter::CastImage<DoubleRGBAImageType, FloatRGBAImageType>(){
   return this->SimpleCastImage<DoubleRGBAImageType, FloatRGBAImageType>();
 }
 
-template <> DoubleRGBAImageType *                                                 
+template <> DoubleRGBAImageType *
 InputImageParameter::CastImage<DoubleRGBAImageType, DoubleRGBAImageType>(){
   return this->SimpleCastImage<DoubleRGBAImageType, DoubleRGBAImageType>();
 }
@@ -1315,12 +1314,12 @@ InputImageParameter::CastImage<Int8ImageType, UInt32VectorImageType>(){
   return this->CastVectorImageFromImage<Int8ImageType, UInt32VectorImageType>();
 }
 
-template <> FloatVectorImageType *                                                 
+template <> FloatVectorImageType *
 InputImageParameter::CastImage<Int8ImageType, FloatVectorImageType>(){
   return this->CastVectorImageFromImage<Int8ImageType, FloatVectorImageType>();
 }
 
-template <> DoubleVectorImageType *                                                 
+template <> DoubleVectorImageType *
 InputImageParameter::CastImage<Int8ImageType, DoubleVectorImageType>(){
   return this->CastVectorImageFromImage<Int8ImageType, DoubleVectorImageType>();
 }
@@ -1358,12 +1357,12 @@ InputImageParameter::CastImage<UInt8ImageType, UInt32VectorImageType>(){
   return this->CastVectorImageFromImage<UInt8ImageType, UInt32VectorImageType>();
 }
 
-template <> FloatVectorImageType *                                                 
+template <> FloatVectorImageType *
 InputImageParameter::CastImage<UInt8ImageType, FloatVectorImageType>(){
   return this->CastVectorImageFromImage<UInt8ImageType, FloatVectorImageType>();
 }
 
-template <> DoubleVectorImageType *                                                 
+template <> DoubleVectorImageType *
 InputImageParameter::CastImage<UInt8ImageType, DoubleVectorImageType>(){
   return this->CastVectorImageFromImage<UInt8ImageType, DoubleVectorImageType>();
 }
@@ -1400,12 +1399,12 @@ InputImageParameter::CastImage<Int16ImageType, UInt32VectorImageType>(){
   return this->CastVectorImageFromImage<Int16ImageType, UInt32VectorImageType>();
 }
 
-template <> FloatVectorImageType *                                                 
+template <> FloatVectorImageType *
 InputImageParameter::CastImage<Int16ImageType, FloatVectorImageType>(){
   return this->CastVectorImageFromImage<Int16ImageType, FloatVectorImageType>();
 }
 
-template <> DoubleVectorImageType *                                                 
+template <> DoubleVectorImageType *
 InputImageParameter::CastImage<Int16ImageType, DoubleVectorImageType>(){
   return this->CastVectorImageFromImage<Int16ImageType, DoubleVectorImageType>();
 }
@@ -1442,12 +1441,12 @@ InputImageParameter::CastImage<UInt16ImageType, UInt32VectorImageType>(){
   return this->CastVectorImageFromImage<UInt16ImageType, UInt32VectorImageType>();
 }
 
-template <> FloatVectorImageType *                                                 
+template <> FloatVectorImageType *
 InputImageParameter::CastImage<UInt16ImageType, FloatVectorImageType>(){
   return this->CastVectorImageFromImage<UInt16ImageType, FloatVectorImageType>();
 }
 
-template <> DoubleVectorImageType *                                                 
+template <> DoubleVectorImageType *
 InputImageParameter::CastImage<UInt16ImageType, DoubleVectorImageType>(){
   return this->CastVectorImageFromImage<UInt16ImageType, DoubleVectorImageType>();
 }
@@ -1484,12 +1483,12 @@ InputImageParameter::CastImage<Int32ImageType, UInt32VectorImageType>(){
   return this->CastVectorImageFromImage<Int32ImageType, UInt32VectorImageType>();
 }
 
-template <> FloatVectorImageType *                                                 
+template <> FloatVectorImageType *
 InputImageParameter::CastImage<Int32ImageType, FloatVectorImageType>(){
   return this->CastVectorImageFromImage<Int32ImageType, FloatVectorImageType>();
 }
 
-template <> DoubleVectorImageType *                                                 
+template <> DoubleVectorImageType *
 InputImageParameter::CastImage<Int32ImageType, DoubleVectorImageType>(){
   return this->CastVectorImageFromImage<Int32ImageType, DoubleVectorImageType>();
 }
@@ -1527,12 +1526,12 @@ InputImageParameter::CastImage<UInt32ImageType, UInt32VectorImageType>(){
   return this->CastVectorImageFromImage<UInt32ImageType, UInt32VectorImageType>();
 }
 
-template <> FloatVectorImageType *                                                 
+template <> FloatVectorImageType *
 InputImageParameter::CastImage<UInt32ImageType, FloatVectorImageType>(){
   return this->CastVectorImageFromImage<UInt32ImageType, FloatVectorImageType>();
 }
 
-template <> DoubleVectorImageType *                                                 
+template <> DoubleVectorImageType *
 InputImageParameter::CastImage<UInt32ImageType, DoubleVectorImageType>(){
   return this->CastVectorImageFromImage<UInt32ImageType, DoubleVectorImageType>();
 }
@@ -1569,12 +1568,12 @@ InputImageParameter::CastImage<FloatImageType, UInt32VectorImageType>(){
   return this->CastVectorImageFromImage<FloatImageType, UInt32VectorImageType>();
 }
 
-template <> FloatVectorImageType *                                                 
+template <> FloatVectorImageType *
 InputImageParameter::CastImage<FloatImageType, FloatVectorImageType>(){
   return this->CastVectorImageFromImage<FloatImageType, FloatVectorImageType>();
 }
 
-template <> DoubleVectorImageType *                                                 
+template <> DoubleVectorImageType *
 InputImageParameter::CastImage<FloatImageType, DoubleVectorImageType>(){
   return this->CastVectorImageFromImage<FloatImageType, DoubleVectorImageType>();
 }
@@ -1611,16 +1610,15 @@ InputImageParameter::CastImage<DoubleImageType, UInt32VectorImageType>(){
   return this->CastVectorImageFromImage<DoubleImageType, UInt32VectorImageType>();
 }
 
-template <> FloatVectorImageType *                                                 
+template <> FloatVectorImageType *
 InputImageParameter::CastImage<DoubleImageType, FloatVectorImageType>(){
   return this->CastVectorImageFromImage<DoubleImageType, FloatVectorImageType>();
 }
 
-template <> DoubleVectorImageType *                                                 
+template <> DoubleVectorImageType *
 InputImageParameter::CastImage<DoubleImageType, DoubleVectorImageType>(){
   return this->CastVectorImageFromImage<DoubleImageType, DoubleVectorImageType>();
 }
-
 
 
 void
