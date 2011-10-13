@@ -23,6 +23,31 @@ add_test(clTvWrapperCommandLineParserTest_GetAtt ${OTB_WRAPPER_COMMAND_LINE_TEST
         "this is a line test to extract --key name1 name2"
   )
 
+add_test(clTvWrapperCommandLineParserTest_IsAttExists_Wrong ${OTB_WRAPPER_COMMAND_LINE_TESTS}
+	otbWrapperCommandLineParserTest3
+        "--m"
+        " TrainImagesClassifier --il QB_1_ortho.tif --vd vd .shape --modulePath test"
+  )
+  
+  
+add_test(clTvWrapperCommandLineParserTest_IsAttExists ${OTB_WRAPPER_COMMAND_LINE_TESTS}
+	otbWrapperCommandLineParserTest4
+        "--m"
+         " TrainImagesClassifier --il QB_1_ortho.tif --vd vd .shape --m name --modulePath test"
+  )
+   
+add_test(clTvWrapperCommandLineParserTest_IsAttExistsEnd ${OTB_WRAPPER_COMMAND_LINE_TESTS}
+	otbWrapperCommandLineParserTest4
+        "--m"
+         " TrainImagesClassifier --il QB_1_ortho.tif --vd vd .shape --modulePath test --m name"
+  )
+    
+add_test(clTvWrapperCommandLineParserTest_IsAttExistsEndNoParam ${OTB_WRAPPER_COMMAND_LINE_TESTS}
+	otbWrapperCommandLineParserTest4
+        "--m"
+        " TrainImagesClassifier --il QB_1_ortho.tif --vd vd .shape --modulePath test --m"
+  )
+   
 add_test(clTvWrapperCommandLineParserTest_GetAttWithoutValue ${OTB_WRAPPER_COMMAND_LINE_TESTS}
 	otbWrapperCommandLineParserTest1
         "--key"

@@ -114,5 +114,26 @@ int otbWrapperCommandLineParserTest2(int argc, char* argv[])
   return CheckReturn(res);
 }
 
+int otbWrapperCommandLineParserTest3(int argc, char* argv[])
+{
+  ParserType::Pointer parser = ParserType::New();
 
+  if (parser->IsAttributExists(argv[1], argv[2]))
+    {
+    return EXIT_FAILURE;
+    }
+  return EXIT_SUCCESS;
+}
+
+
+int otbWrapperCommandLineParserTest4(int argc, char* argv[])
+{
+  ParserType::Pointer parser = ParserType::New();
+
+  if (parser->IsAttributExists(argv[1], argv[2]))
+    {
+    return EXIT_SUCCESS;
+    }
+  return EXIT_FAILURE;
+}
 
