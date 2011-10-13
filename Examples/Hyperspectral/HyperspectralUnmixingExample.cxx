@@ -145,7 +145,8 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
   
   // Software Guide : BeginCodeSnippet
-  VectorImageToMatrixImageFilterType::Pointer endMember2Matrix = VectorImageToMatrixImageFilterType::New();
+  VectorImageToMatrixImageFilterType::Pointer 
+    endMember2Matrix = VectorImageToMatrixImageFilterType::New();
   endMember2Matrix->SetInput(vca->GetOutput());
   endMember2Matrix->Update();
   
@@ -160,7 +161,8 @@ int main(int argc, char * argv[])
   
   // Software Guide : BeginCodeSnippet
   typedef otb::UnConstrainedLeastSquareImageFilter<ImageType, ImageType, double> UCLSUnmixingFilterType;
-  UCLSUnmixingFilterType::Pointer unmixer = UCLSUnmixingFilterType::New();
+  UCLSUnmixingFilterType::Pointer 
+    unmixer = UCLSUnmixingFilterType::New();
   unmixer->SetInput(rescaler->GetOutput());
   unmixer->SetMatrix(endMember2Matrix->GetMatrix());
   // Software Guide : EndCodeSnippet
@@ -183,7 +185,8 @@ int main(int argc, char * argv[])
   
   //  Software Guide : BeginLatex
   // Figure~\ref{fig:UNMIXING_FILTER} shows the result of applying unmixing
-  // to a 220 band AVIRIS image.
+  // to an AVIRIS image (220 bands). This dataset is freely available
+  // at \url{http://www.ehu.es/ccwintco/index.php/Hyperspectral_Remote_Sensing_Scenes#Indian_Pines}
   // \begin{figure}
   // \center
   // \includegraphics[width=0.25\textwidth]{UnmixingbandOutput1.eps}
