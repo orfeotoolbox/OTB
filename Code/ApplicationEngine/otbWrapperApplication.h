@@ -284,6 +284,15 @@ public:
    */
   FloatVectorImageType* GetParameterImage(std::string parameter);
 
+  /* Get an image value
+   *
+   * Can be called for types :
+   * \li ParameterType_InputImage
+   */
+  template <class TImageType>
+    TImageType* GetParameterImage(std::string parameter);
+
+
   /* Get an image list value
    *
    * Can be called for types :

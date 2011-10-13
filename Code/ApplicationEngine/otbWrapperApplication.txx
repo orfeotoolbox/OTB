@@ -18,7 +18,7 @@
 #include "otbWrapperApplication.h"
 
 #include "otbWrapperOutputImageParameter.h"
-
+#include "otbWrapperInputImageParameter.h"
 //#include "otbWrapperParameterGroup.h"
 
 
@@ -37,6 +37,22 @@ void Application::SetParameterOutputImage(std::string parameter, TImageType* val
     OutputImageParameter* paramDown = dynamic_cast<OutputImageParameter*>(param);
     paramDown->SetValue(value);
     }
+}
+
+template <class TImageType>
+TImageType* Application::GetParameterImage(std::string parameter)
+{
+  typename TImageType::Pointer ret;
+  Parameter* param = GetParameterByKey(parameter);
+
+  if (dynamic_cast<InputImageParameter*>(param))
+    {
+    InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param);
+    ret = paramDown->GetImage<TImageType>();
+    }
+
+  //TODO: exception if not found ?
+  return ret;
 }
 
 }

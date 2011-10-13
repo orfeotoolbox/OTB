@@ -19,7 +19,7 @@
 #define __otbWrapperInputImageParameter_h
 
 #include "otbImageFileReader.h"
-
+#include "itkImageBase.h"
 #include "otbWrapperParameter.h"
 
 namespace otb
@@ -39,6 +39,8 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
+  typedef itk::ImageBase<2> ImageBaseType;
+
   /** Defining ::New() static method */
   itkNewMacro(Self);
 
@@ -47,17 +49,49 @@ public:
 
   /** Set value from filename */
   void SetFromFileName(const std::string& filename);
+  itkGetConstMacro(FileName, std::string);
 
-  std::string GetFileName() const;
+  /** Get the input image as FloatVectorImageType */
+  FloatVectorImageType* GetImage();
+  
+  /** Get the input image as templated image type. */
+  template <class TImageType>
+    TImageType* GetImage();
 
-  FloatVectorImageType* GetImage() const;
+  template <class TOutputImage>
+    TOutputImage* GetImage(unsigned int typeIn);
 
+  /** Set a FloatVectorImageType image.*/
   void SetImage(FloatVectorImageType* image);
 
+  /** Set a templated image.*/
+  template <class TImageType>
+    void SetImage(TImageType* image);
+  
+  
+    /** Generic cast method that will be specified for each image type. */  
+  template <class TInputImage, class TOutputImage>
+    TOutputImage* CastImage()
+  {
+    itkExceptionMacro("Cast from "<<typeid(TInputImage).name()<<" to "<<typeid(TInputImage).name()<<" not authorized.");
+  }
+
+  /** Cast an image to an image of the same type
+  * Image to Image, VectorImage to VectorImage, RGBAImage to RGBAImage. */
+  template <class TInputImage, class TOutputImage>
+    TOutputImage* SimpleCastImage();
+
+
+  /** Cast an image to a vector image. */
+  template <class TInputImage, class TOutputImage>
+    TOutputImage* CastVectorImageFromImage();
+  
+  
   bool HasValue() const;
 
   void ClearValue();
 
+  
 protected:
   /** Constructor */
   InputImageParameter();
@@ -65,10 +99,69 @@ protected:
   /** Destructor */
   virtual ~InputImageParameter();
 
-  FloatVectorImageType::Pointer m_Image;
+  ImageBaseType::Pointer m_Image;
+  std::string m_FileName;
 
-  typedef otb::ImageFileReader<FloatVectorImageType> ImageFileReaderType;
-  ImageFileReaderType::Pointer m_Reader;
+
+  /** Readers typedefs */
+
+  typedef otb::ImageFileReader<Int8ImageType> Int8ReaderType;
+  typedef otb::ImageFileReader<UInt8ImageType> UInt8ReaderType;
+  typedef otb::ImageFileReader<Int16ImageType> Int16ReaderType;
+  typedef otb::ImageFileReader<UInt16ImageType> UInt16ReaderType;
+  typedef otb::ImageFileReader<Int32ImageType> Int32ReaderType;
+  typedef otb::ImageFileReader<UInt32ImageType> UInt32ReaderType;
+  typedef otb::ImageFileReader<FloatImageType> FloatReaderType;
+  typedef otb::ImageFileReader<DoubleImageType> DoubleReaderType;
+
+  typedef otb::ImageFileReader<Int8VectorImageType> Int8VectorReaderType;
+  typedef otb::ImageFileReader<UInt8VectorImageType> UInt8VectorReaderType;
+  typedef otb::ImageFileReader<Int16VectorImageType> Int16VectorReaderType;
+  typedef otb::ImageFileReader<UInt16VectorImageType> UInt16VectorReaderType;
+  typedef otb::ImageFileReader<Int32VectorImageType> Int32VectorReaderType;
+  typedef otb::ImageFileReader<UInt32VectorImageType> UInt32VectorReaderType;
+  typedef otb::ImageFileReader<FloatVectorImageType> FloatVectorReaderType;
+  typedef otb::ImageFileReader<DoubleVectorImageType> DoubleVectorReaderType;
+
+  typedef otb::ImageFileReader<Int8RGBAImageType> Int8RGBAReaderType;
+  typedef otb::ImageFileReader<UInt8RGBAImageType> UInt8RGBAReaderType;
+  typedef otb::ImageFileReader<Int16RGBAImageType> Int16RGBAReaderType;
+  typedef otb::ImageFileReader<UInt16RGBAImageType> UInt16RGBAReaderType;
+  typedef otb::ImageFileReader<Int32RGBAImageType> Int32RGBAReaderType;
+  typedef otb::ImageFileReader<UInt32RGBAImageType> UInt32RGBAReaderType;
+  typedef otb::ImageFileReader<FloatRGBAImageType> FloatRGBAReaderType;
+  typedef otb::ImageFileReader<DoubleRGBAImageType> DoubleRGBAReaderType;
+
+/*
+  Int8ReaderType::Pointer   m_Int8Reader;
+  UInt8ReaderType::Pointer  m_UInt8Reader;
+  Int16ReaderType::Pointer  m_Int16Reader;
+  UInt16ReaderType::Pointer m_UInt16Reader;
+  Int32ReaderType::Pointer  m_Int32Reader;
+  UInt32ReaderType::Pointer m_UInt32Reader;
+  FloatReaderType::Pointer  m_FloatReader;
+  DoubleReaderType::Pointer m_DoubleReader;
+
+  VectorInt8ReaderType::Pointer   m_VectorInt8Reader;
+  VectorUInt8ReaderType::Pointer  m_VectorUInt8Reader;
+  VectorInt16ReaderType::Pointer  m_VectorInt16Reader;
+  VectorUInt16ReaderType::Pointer m_VectorUInt16Reader;
+  VectorInt32ReaderType::Pointer  m_VectorInt32Reader;
+  VectorUInt32ReaderType::Pointer m_VectorUInt32Reader;
+  VectorFloatReaderType::Pointer  m_VectorFloatReader;
+  VectorDoubleReaderType::Pointer m_VectorDoubleReader;
+
+  RGBAInt8ReaderType::Pointer   m_RGBAInt8Reader;
+  RGBAUInt8ReaderType::Pointer  m_RGBAUInt8Reader;
+  RGBAInt16ReaderType::Pointer  m_RGBAInt16Reader;
+  RGBAUInt16ReaderType::Pointer m_RGBAUInt16Reader;
+  RGBAInt32ReaderType::Pointer  m_RGBAInt32Reader;
+  RGBAUInt32ReaderType::Pointer m_RGBAUInt32Reader;
+  RGBAFloatReaderType::Pointer  m_RGBAFloatReader;
+  RGBADoubleReaderType::Pointer m_RGBADoubleReader;
+*/
+  itk::ProcessObject * m_Reader;
+  itk::ProcessObject * m_Caster;
 
 private:
   InputImageParameter(const Parameter &); //purposely not implemented
