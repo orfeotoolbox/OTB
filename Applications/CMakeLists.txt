@@ -8,6 +8,7 @@ add_subdirectory(Classification)
 add_subdirectory(FeatureExtraction)
 add_subdirectory(Hyperspectral)
 add_subdirectory(Projections)
+add_subdirectory(Segmentation)
 add_subdirectory(Util)
 
 add_subdirectory(Test)
