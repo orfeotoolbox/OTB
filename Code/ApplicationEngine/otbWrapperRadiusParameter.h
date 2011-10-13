@@ -44,6 +44,11 @@ public:
   /** RTTI support */
   itkTypeMacro(RadiusParameter, Parameter);
 
+  bool HasValue() const
+  {
+    return true;
+  }
+
 protected:
   /** Constructor */
   RadiusParameter()

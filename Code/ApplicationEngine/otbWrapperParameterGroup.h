@@ -67,6 +67,12 @@ public:
 
   std::vector<std::string> GetParametersKeys(bool recursive = true);
 
+  // Always has value
+  bool HasValue() const
+  {
+    return true;
+  }
+
 protected:
   ParameterGroup();
   virtual ~ParameterGroup();
