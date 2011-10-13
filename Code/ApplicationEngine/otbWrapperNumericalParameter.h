@@ -58,7 +58,7 @@ public:
   {
     // TODO check minimum/maximum
     m_Value = value;
-    SetActive(true);
+    //SetActive(true);
   }
 
   void SetValue( const std::string & valueStr )
