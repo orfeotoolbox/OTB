@@ -268,7 +268,7 @@ CommandLineLauncher::LoadApplication()
     return;
     }
 
-  // Instanciate the application usingt the factory
+  // Instantiate the application using the factory
   m_Application = ApplicationRegistry::CreateApplication(moduleName);
   
   if (m_Application.IsNull())
@@ -357,7 +357,7 @@ CommandLineLauncher::LoadParameters()
         }
       }
 
-    // If the param is optionnal and hasn't been set : don't do anything
+    // If the param is optional and hasn't been set : don't do anything
     // If the param is mandatory but a default value exists : don't do anything
     if( paramExists )
       {
