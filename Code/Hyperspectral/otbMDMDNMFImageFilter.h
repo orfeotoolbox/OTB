@@ -45,7 +45,7 @@ namespace otb
  *     \matR=\matA \matS + \matN= \matX + \matN
  *  \end{equation} \f$
  *  The \f$ I \f$ columns of \f$ \matR \f$ contain the spectral pixels
- *  and the \f $I \f$ columns of \f $\matS \f$ hold their respective sets of abundance
+ *  and the \f$ I \f$ columns of \f$ \matS \f$ hold their respective sets of abundance
  *  fractions.  The \f$ J \f$ rows of \f$ \matS \f$ are the abundance maps
  *  corresponding to the respective end-members. The \f$ J \f$ columns of
  *  \f$ \matA \f$ are the end members spectra, and \f$ \matX \f$ is the signal
@@ -58,7 +58,7 @@ namespace otb
  *  \end{equation} \f$
  *  NMF based algorithms consider the
  *  properties of the dual spaces \f$ span^+(\matA')\f$ and
- *  \f $span^+(\matS) \f$, in
+ *  \f$ span^+(\matS) \f$, in
  *  which \f$ span^+(\mathbf m^1 ...\mathbf m^d)=\{\mathbf v=\sum_i \mathbf
  *  m^i\mathbf a_i|\mathbf a\in \matR _+^d\} \f$. The
  *  positiveness is then a fundamental assumption and is exploited to
