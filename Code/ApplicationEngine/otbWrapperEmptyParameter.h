@@ -44,35 +44,15 @@ public:
   /** RTTI support */
   itkTypeMacro(EmptyParameter, Parameter);
 
-  bool HasValue() const
+  /** HasValue */
+  bool HasValue() const 
   {
-    return m_Value;
-  }
-  
-  virtual void ClearValue()
-  {
-    m_Value = false;
-  }
-
-  /** Set the value */
-  void SetValue( bool value)
-  {
-    // TODO check minimum/maximum
-    m_Value = value;
-    SetActive(true);
-  }
-
-  /**
-    * Implement the reset method (replace value by default value = false)
-    */
-  virtual void Reset()
-  {
-    m_Value = false;
+    return false;
   }
 
 protected:
   /** Constructor */
-  EmptyParameter():m_Value(false)
+  EmptyParameter()
   {}
 
   /** Destructor */
@@ -83,10 +63,7 @@ private:
   EmptyParameter(const EmptyParameter &); //purposely not implemented
   void operator =(const EmptyParameter&); //purposely not implemented
 
-  /** Value */
-  bool         m_Value;
-
-}; // End class EmptyParameter
+}; // End class Parameter
 
 } // End namespace Wrapper
 } // End namespace otb
