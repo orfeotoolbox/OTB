@@ -45,6 +45,13 @@ enum
   Interpolator_BCO
 };
 
+enum
+{
+  Mode_UserDefined,
+  Mode_AutomaticSize,
+  Mode_AutomaticSpacing
+};
+
 namespace Wrapper
 {
 
@@ -90,40 +97,42 @@ private:
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
     SetParameterDescription("out","Projected image");
 
-
     // Add the output paramters in a group
     AddParameter(ParameterType_Group, "outputs", "Output Parameters Group");
-    MandatoryOn("outputs");
+    MandatoryOff("outputs");
 
     // UserDefined values
-    AddParameter(ParameterType_Empty, "outputs.uservalues",  "User defined Parameters");
+    AddParameter(ParameterType_Choice,  "outputs.mode", "Mode Type");
+    AddChoice("outputs.mode.auto",       "User Defined");
+    AddChoice("outputs.mode.autosize",   "Automatic Size ");
+    AddChoice("outputs.mode.autospacing","Automatic Spacing");    
 
     // Upper left point coordinates
     AddParameter(ParameterType_Float, "outputs.ulx", "Upper Left X");    
     SetParameterDescription("outputs.ulx","Cartographic X coordinate of upper left corner");
-    //MandatoryOn("outputs.ulx");
+    MandatoryOff("outputs.ulx");
 
     AddParameter(ParameterType_Float, "outputs.uly", "Upper Left Y");
     SetParameterDescription("outputs.uly","Cartographic Y coordinate of upper left corner");
-    //MandatoryOn("outputs.uly");
+    MandatoryOff("outputs.uly");
 
     // Size of the output image
     AddParameter(ParameterType_Int, "outputs.sizex", "Size X");
     SetParameterDescription("outputs.sizex","Size of projected image along X");
-    MandatoryOn("outputs.sizex");
+    MandatoryOff("outputs.sizex");
 
     AddParameter(ParameterType_Int, "outputs.sizey", "Size Y");
     SetParameterDescription("outputs.sizey","Size of projected image along Y");
-    MandatoryOn("outputs.sizey");
+    MandatoryOff("outputs.sizey");
     
     // Spacing of the output image
     AddParameter(ParameterType_Float, "outputs.spacingx", "Pixel Size X");
     SetParameterDescription("outputs.spacingx","Size of each pixel along X axis");
-    MandatoryOn("outputs.spacingx");
+    MandatoryOff("outputs.spacingx");
 
     AddParameter(ParameterType_Float, "outputs.spacingy", "Pixel Size Y");
     SetParameterDescription("outputs.spacingy","Size of each pixel along Y axis");
-    MandatoryOn("outputs.spacingy");
+    MandatoryOff("outputs.spacingy");
 
     // DEM
     AddParameter(ParameterType_Directory, "dem",   "DEM directory");
@@ -131,9 +140,9 @@ private:
 
     // Estimate a RPC model (for spot image for instance)
     AddParameter(ParameterType_Group, "rpc", "Estimate RPC model");
+    MandatoryOff("rpc");
     AddParameter(ParameterType_Int, "rpc.ncp", "Nb control Points");
     SetParameterDescription("rpc","Activate RPC sensor model estimation. Parameter is the number of control points per axis");
-    MandatoryOff("rpc");
     MandatoryOff("rpc.ncp");
 
     // Interpolators
@@ -150,8 +159,8 @@ private:
     AddChoice("map.utm",   "UTM");   // OK
     AddParameter(ParameterType_Int, "map.utm.zone", "Zone number");
     AddParameter(ParameterType_Empty, "map.utm.hem",  "Hemisphere North");
-    MandatoryOff("map.utm.zone");
-    MandatoryOff("map.utm.hem");    
+    //MandatoryOff("map.utm.zone");
+    //MandatoryOff("map.utm.hem");    
     
 
     AddChoice("map.lambert2",     "Lambert II Etendu"); // OK
@@ -175,8 +184,6 @@ private:
 
       // Get the output projection Ref
       this->UpdateOutputProjectionRef();
-
-      
 
       // Compute the output image spacing and size
       typedef otb::ImageToGenericRSOutputParameters<FloatVectorImageType> OutputParametersEstimatorType;
@@ -210,53 +217,80 @@ private:
       if (!HasUserValue("outputs.spacingy"))
         SetParameterFloat("outputs.spacingy", genericRSEstimator->GetOutputSpacing()[1]);
 
-//       // Mode : user defined
-//       if (!IsParameterEnabled("outputs.uservalues"))
-//         {
-//         // Enable UL corners widget
-//         DisableParameter("outputs.ulx");
-//         DisableParameter("outputs.uly");
-//         // Force size or spacing to user defined params
-//         if (HasUserValue("outputs.sizex") || HasUserValue("outputs.sizey"))
-//           {
-//           ResampleFilterType::SizeType size;        
-//           size[0] = GetParameterInt("outputs.sizex");
-//           size[1] = GetParameterInt("outputs.sizey");
-//           genericRSEstimator->ForceSizeTo(size);
-//           genericRSEstimator->Compute();
-        
-//           std::cout <<"Size Forced to "<<size  << " --> implies Sapcing : "
-//                     <<genericRSEstimator->GetOutputSpacing()  << std::endl;
-        
-//           // Set the  processed spacing relative to this forced size
-//           SetParameterFloat("outputs.spacingx", genericRSEstimator->GetOutputSpacing()[0]);
-//           SetParameterFloat("outputs.spacingy", genericRSEstimator->GetOutputSpacing()[1]);
-//           }
-       
-//         if (HasUserValue("outputs.spacingy") || HasUserValue("outputs.spacingx"))
-//           {
-//           ResampleFilterType::SpacingType spacing;
-//           spacing[0] = GetParameterFloat("outputs.spacingx");
-//           spacing[1] = GetParameterFloat("outputs.spacingy");
+      
+      // Handle the spacing and size field following the mode 
+      // choosed by the user
+      switch (GetParameterInt("outputs.mode") )
+        {
+        case Mode_UserDefined:
+        {
+        // nothing to do, all the parameters are set before        
+        }
+        break;
+        case Mode_AutomaticSize:
+        {
+        // Disable the size fields
+        DisableParameter("outputs.sizex");
+        DisableParameter("outputs.sizey");
 
-//           genericRSEstimator->ForceSpacingTo(spacing);
-//           genericRSEstimator->Compute();
+        EnableParameter("outputs.spacingx");
+        EnableParameter("outputs.spacingy");
 
-//           std::cout <<"Spacing Forced to "<< spacing<< " --> implies Size : "
-//                     <<genericRSEstimator->GetOutputSize()  << std::endl;
+
+//         MandatoryOn("outputs.spacingx");
+//         MandatoryOn("outputs.spacingy");
+
+//         MandatoryOff("outputs.sizex");
+//         MandatoryOff("outputs.sizey");
+
+        ResampleFilterType::SpacingType spacing;
+        spacing[0] = GetParameterFloat("outputs.spacingx");
+        spacing[1] = GetParameterFloat("outputs.spacingy");
         
-//           // Set the  processed size relative to this forced spacing
-//           SetParameterInt("outputs.sizex", genericRSEstimator->GetOutputSize()[0]);
-//           SetParameterInt("outputs.sizey", genericRSEstimator->GetOutputSize()[1]);
-//           }
-//         }
-//       else
-//         {
-//         // Enable UL corners widget
-//         EnableParameter("outputs.ulx");
-//         EnableParameter("outputs.uly");
+        genericRSEstimator->ForceSpacingTo(spacing);
+        genericRSEstimator->Compute();
+        
+//         std::cout <<"Spacing Forced to "<< spacing<< " --> implies Size : "
+//                   <<genericRSEstimator->GetOutputSize()  << std::endl;
+        
+        // Set the  processed size relative to this forced spacing
+        SetParameterInt("outputs.sizex", genericRSEstimator->GetOutputSize()[0]);
+        SetParameterInt("outputs.sizey", genericRSEstimator->GetOutputSize()[1]);
+        }
+        break;
+        case Mode_AutomaticSpacing:
+        {
+        std::cout <<"Avant : Mode Automatic spacing " << std::endl;
+        // Disable the spacing fields
+        DisableParameter("outputs.spacingx");
+        DisableParameter("outputs.spacingy");
 
-//         }
+//         MandatoryOff("outputs.spacingx");
+//         MandatoryOff("outputs.spacingy");
+
+//         MandatoryOn("outputs.sizex");
+//         MandatoryOn("outputs.sizey");
+
+        EnableParameter("outputs.sizex");
+        EnableParameter("outputs.sizey");
+
+        std::cout <<"apres : Mode Automatic spacing " << std::endl;
+
+        ResampleFilterType::SizeType size;        
+        size[0] = GetParameterInt("outputs.sizex");
+        size[1] = GetParameterInt("outputs.sizey");
+        genericRSEstimator->ForceSizeTo(size);
+        genericRSEstimator->Compute();
+        
+//         std::cout <<"Size Forced to "<<size  << " --> implies Sapcing : "
+//                   <<genericRSEstimator->GetOutputSpacing()  << std::endl;
+        
+        // Set the  processed spacing relative to this forced size
+        SetParameterFloat("outputs.spacingx", genericRSEstimator->GetOutputSpacing()[0]);
+        SetParameterFloat("outputs.spacingy", genericRSEstimator->GetOutputSpacing()[1]);
+        }
+        break;
+        }
       }
   }
 
