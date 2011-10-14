@@ -38,8 +38,15 @@ void QtWidgetParameterBase::CreateWidget()
 
 void QtWidgetParameterBase::UpdateGUI()
 {
-  this->DoUpdateGUI();
+  //
+ this->DoUpdateGUI();
+
+ // Emit State of the Parameter to update this paramter checkbox
+ bool state = m_Param->GetActive();
+ emit ParameterActiveStatus(state);
 }
+
+
 
 void QtWidgetParameterBase::ParameterChanged(const QString& key)
 {

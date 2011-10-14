@@ -46,6 +46,9 @@ public slots:
 protected slots:
   void ParameterChanged(const QString& key);
 
+signals:
+  virtual void ParameterActiveStatus(bool value);
+
 protected:
   QtWidgetModel* GetModel();
 

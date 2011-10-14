@@ -73,9 +73,11 @@ void QtWidgetParameterGroup::DoCreateWidget()
 
         // CheckBox (col 1)
         QCheckBox * checkBox = new QCheckBox;
-        connect(checkBox, SIGNAL(clicked(bool)), specificWidget, SLOT(SetActivationState(bool)));
+        connect( checkBox, SIGNAL(clicked(bool)), specificWidget, SLOT(SetActivationState(bool)));
         connect( checkBox, SIGNAL(clicked(bool)), GetModel(), SLOT(NotifyUpdate()) );
-        
+        connect( specificWidget, SIGNAL(ParameterActiveStatus(bool)), checkBox, SLOT(setChecked(bool)));
+        connect( specificWidget, SIGNAL(ParameterActiveStatus(bool)), specificWidget, SLOT(SetActivationState(bool)));
+    
         if (param->IsRoot())
            {
           // if Mandatory make the checkbox checked and deactivated
