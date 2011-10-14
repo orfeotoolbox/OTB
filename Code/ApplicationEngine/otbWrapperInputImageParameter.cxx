@@ -29,10 +29,14 @@ namespace Wrapper
 
 InputImageParameter::InputImageParameter()
 {
+  std::cout<<this<<" InputImageParameter::GetImage m_Image.IsNull() "<<m_Image.IsNull()<<std::endl;
+
   this->SetName("Input Image");
   this->SetKey("in");
   m_FileName="";
   this->ClearValue();
+  std::cout<<this<<" InputImageParameter::GetImage m_Image.IsNull() "<<m_Image.IsNull()<<std::endl;
+
 }
 
 InputImageParameter::~InputImageParameter()
@@ -42,6 +46,7 @@ InputImageParameter::~InputImageParameter()
 void
 InputImageParameter::SetFromFileName(const std::string& filename)
 {
+  std::cout<<this<<" InputImageParameter::SetFromFileName"<<std::endl;
   // First clear previous file choosen
   this->ClearValue();
 
@@ -58,7 +63,6 @@ InputImageParameter::SetFromFileName(const std::string& filename)
       }
     catch(itk::ExceptionObject & err)
       {
-      this->ClearValue();
       }
 
     // the specified filename is valid => store the value
@@ -71,6 +75,7 @@ InputImageParameter::SetFromFileName(const std::string& filename)
 FloatVectorImageType*
 InputImageParameter::GetImage()
 {
+  std::cout<<this<<" GetImage<FloatVectorImageType>"<<std::endl;
   return this->GetImage<FloatVectorImageType>();
 }
 
@@ -79,6 +84,11 @@ template <class TOutputImage>
 TOutputImage *
 InputImageParameter::GetImage()
 {
+  std::cout<<this<<" InputImageParameter::GetImage inside"<<std::endl;
+  std::cout<<this<<" InputImageParameter::GetImage m_FileName "<<m_FileName<<std::endl;
+  std::cout<<this<<" InputImageParameter::GetImage m_FileName.empty() "<<m_FileName.empty()<<std::endl;
+  std::cout<<this<<" InputImageParameter::GetImage m_Image.IsNull() "<<m_Image.IsNull()<<std::endl;
+
   // 2 cases : the user set a filename vs. the user set an image
   //////////////////////// Filename case:
   if( !m_FileName.empty() )
@@ -104,7 +114,8 @@ InputImageParameter::GetImage()
   //////////////////////// Image case:
   else
     {
-    if( m_Image.IsNull())
+    std::cout<<this<<" GetImage<FloatVectorImageType>"<<std::endl;
+    if( m_Image.IsNull() )
       {
       itkExceptionMacro("No input image or filename detected...");
       }
@@ -213,6 +224,7 @@ InputImageParameter::GetImage()
   
       }
     }
+std::cout<<this<<" InputImageParameter::GetImage outside"<<std::endl;
 }
 
 
@@ -1632,6 +1644,7 @@ template <class TInputImage>
 void
 InputImageParameter::SetImage(TInputImage* image)
 {
+std::cout<<this<<" InputImageParameter::SetImage"<<std::endl;
    m_Image = image;
 }
 
@@ -1648,9 +1661,10 @@ InputImageParameter::HasValue() const
 void
 InputImageParameter::ClearValue()
 {
-  m_Image = ImageBaseType::New();
-  m_Reader = NULL;
-  m_Caster = NULL;
+ std::cout<<this<<" InputImageParameter::ClearValue"<<std::endl;
+ m_Image   = NULL;
+ m_Reader = NULL;
+ m_Caster = NULL;
 }
 
 
