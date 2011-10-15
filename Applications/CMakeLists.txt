@@ -4,6 +4,7 @@ include(OTBWrapperMacros)
 # usefull for batch testing
 set(OTB_APPLICATIONS_NAME_LIST "" CACHE STRING "List of all applications name" FORCE)
 
+add_subdirectory(ChangeDetection)
 add_subdirectory(Classification)
 add_subdirectory(FeatureExtraction)
 add_subdirectory(Hyperspectral)
