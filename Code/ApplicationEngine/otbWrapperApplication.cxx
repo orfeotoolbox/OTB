@@ -116,19 +116,20 @@ void Application::ExecuteAndWriteOutput()
       it != paramList.end();
       ++it)
     {
-    if (GetParameterType(*it) == ParameterType_OutputImage
-        && IsParameterEnabled(*it) )
+    std::string key = *it;
+    if (GetParameterType(key) == ParameterType_OutputImage
+        && IsParameterEnabled(key) && HasValue(key) )
       {
-      Parameter* param = GetParameterByKey(*it);
+      Parameter* param = GetParameterByKey(key);
       OutputImageParameter* outputParam = dynamic_cast<OutputImageParameter*>(param);
       outputParam->InitializeWriters();
       AddProcess(outputParam->GetWriter(),"Writer");
       outputParam->Write();
       }
-    else if (GetParameterType(*it) == ParameterType_OutputVectorData
-             && IsParameterEnabled(*it) )
+    else if (GetParameterType(key) == ParameterType_OutputVectorData
+             && IsParameterEnabled(key) && HasValue(key) )
       {
-      Parameter* param = GetParameterByKey(*it);
+      Parameter* param = GetParameterByKey(key);
       OutputVectorDataParameter* outputParam = dynamic_cast<OutputVectorDataParameter*>(param);
       outputParam->InitializeWriters();
       AddProcess(outputParam->GetWriter(),"Writer");
