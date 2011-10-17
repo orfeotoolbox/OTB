@@ -2,6 +2,11 @@
 # Sources of non-templated classes.
 FILE(GLOB OTBApplicationEngine_SRCS "*.cxx" )
 
+IF (WIN32)
+  SET(CMAKE_C_FLAGS   "/bigobj ${CMAKE_CXX_FLAGS}")
+  SET(CMAKE_CXX_FLAGS "/bigobj ${CMAKE_CXX_FLAGS}")
+ENDIF(WIN32)
+
 ADD_LIBRARY(OTBApplicationEngine ${OTBApplicationEngine_SRCS})
 TARGET_LINK_LIBRARIES (OTBApplicationEngine OTBCommon OTBIO)
 
