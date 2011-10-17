@@ -86,7 +86,7 @@ private:
     SetName("OrthoRectification");
     std::ostringstream oss;
     oss << "Using available image metadata to determine the sensor model,"<<std::endl;
-    oss << "computes a cartographic projection of the image"
+    oss << "computes a cartographic projection of the image";
     SetDescription(oss.str());
   }
 
@@ -144,7 +144,7 @@ private:
     AddParameter(ParameterType_Int, "rpc.ncp", "Nb control Points");
     std::ostringstream oss;
     oss << "Activate RPC sensor model estimation"<<std::endl;;
-    oss << "Parameter is the number of control points per axis"
+    oss << "Parameter is the number of control points per axis";
     SetParameterDescription("rpc",oss.str().c_str());
     MandatoryOff("rpc");
     MandatoryOff("rpc.ncp");
@@ -175,9 +175,9 @@ private:
     SetParameterString("map", "epsg");
     MandatoryOff("map.epsg.code");
 
-   //     descriptor->AddOption("LocMapSpacing",
-   //     "Generate a coarser deformation field with the given spacing.","lmSpacing", 
-   //     1, false, otb::ApplicationDescriptor::Real);
+    // Deformation Field Spacing
+    AddParameter(ParameterType_Float, "gridspacing", "Generate a coarser deformation field with the given spacing");
+    MandatoryOff("gridspacing");
   }
 
   void DoUpdateParameters()
@@ -448,6 +448,16 @@ private:
       ul[0] = GetParameterFloat("outputs.ulx");
       ul[1] = GetParameterFloat("outputs.uly");
       m_ResampleFilter->SetOutputOrigin(ul);
+      }
+
+    // Deformation Field spacing
+    ResampleFilterType::SpacingType gridSpacing;
+    if (IsParameterEnabled("gridspacing"))
+      {
+      gridSpacing[0] = GetParameterFloat("gridspacing");
+      gridSpacing[1] = -GetParameterFloat("gridspacing");
+      std::cout <<"grid spacing is "<<  gridSpacing << std::endl;
+      m_ResampleFilter->SetDeformationFieldSpacing(gridSpacing);
       }
 
     // Output Image 
