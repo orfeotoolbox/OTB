@@ -58,7 +58,12 @@ public:
   {
     // TODO check minimum/maximum
     m_Value = value;
-    //SetActive(true);
+
+    // Set Active only if the parameter is not automatically set
+    if (!GetAutomaticValue())
+      {
+      SetActive(true);
+      }
   }
 
   void SetValue( const std::string & valueStr )
