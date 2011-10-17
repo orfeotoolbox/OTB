@@ -159,8 +159,8 @@ private:
     AddChoice("map.utm",   "UTM");   // OK
     AddParameter(ParameterType_Int, "map.utm.zone", "Zone number");
     AddParameter(ParameterType_Empty, "map.utm.hem",  "Hemisphere North");
-    //MandatoryOff("map.utm.zone");
-    //MandatoryOff("map.utm.hem");    
+    MandatoryOff("map.utm.zone");
+    MandatoryOff("map.utm.hem");
     
 
     AddChoice("map.lambert2",     "Lambert II Etendu"); // OK
@@ -169,6 +169,7 @@ private:
     AddParameter(ParameterType_Int, "map.epsg.code", "EPSG Code");    
     SetParameterInt("map.epsg.code",32631);
     SetParameterString("map", "epsg");
+    MandatoryOff("map.epsg.code");
 
    //     descriptor->AddOption("LocMapSpacing",
    //     "Generate a coarser deformation field with the given spacing.","lmSpacing", 
@@ -182,6 +183,9 @@ private:
       // input image 
       FloatVectorImageType* inImage = GetParameterImage("in");
 
+      // Update the UTM zone params
+      InitializeUTMParameters();
+
       // Get the output projection Ref
       this->UpdateOutputProjectionRef();
 
@@ -192,9 +196,7 @@ private:
       genericRSEstimator->SetOutputProjectionRef(m_OutputProjectionRef);
       genericRSEstimator->Compute();
       
-      // TODO : Add a ParameterGroup with the output Parameters
-      //        Add an option user defined param or automatic params
-
+      // Update the GUI
       dynamic_cast< NumericalParameter<float> * >(GetParameterByKey("outputs.spacingy"))->SetMinimumValue(-50000.0);
       dynamic_cast< NumericalParameter<float> * >(GetParameterByKey("outputs.spacingy"))->SetMaximumValue(10000.0);
       
@@ -217,14 +219,23 @@ private:
       if (!HasUserValue("outputs.spacingy"))
         SetParameterFloat("outputs.spacingy", genericRSEstimator->GetOutputSpacing()[1]);
 
-      
       // Handle the spacing and size field following the mode 
       // choosed by the user
       switch (GetParameterInt("outputs.mode") )
         {
         case Mode_UserDefined:
         {
-        // nothing to do, all the parameters are set before        
+        // Automatic set to off
+        AutomaticValueOff("outputs.sizex");
+        AutomaticValueOff("outputs.sizey");
+        AutomaticValueOff("outputs.spacingx");
+        AutomaticValueOff("outputs.spacingy");
+
+        // Enable add the parameters
+        EnableParameter("outputs.spacingx");
+        EnableParameter("outputs.spacingy");
+        EnableParameter("outputs.sizex");
+        EnableParameter("outputs.sizey");
         }
         break;
         case Mode_AutomaticSize:
@@ -232,16 +243,13 @@ private:
         // Disable the size fields
         DisableParameter("outputs.sizex");
         DisableParameter("outputs.sizey");
-
         EnableParameter("outputs.spacingx");
         EnableParameter("outputs.spacingy");
-
-
-//         MandatoryOn("outputs.spacingx");
-//         MandatoryOn("outputs.spacingy");
-
-//         MandatoryOff("outputs.sizex");
-//         MandatoryOff("outputs.sizey");
+        // Update the automatic value mode of each filed
+        AutomaticValueOn("outputs.sizex");
+        AutomaticValueOn("outputs.sizey");
+        AutomaticValueOff("outputs.spacingx");
+        AutomaticValueOff("outputs.spacingy");
 
         ResampleFilterType::SpacingType spacing;
         spacing[0] = GetParameterFloat("outputs.spacingx");
@@ -250,9 +258,6 @@ private:
         genericRSEstimator->ForceSpacingTo(spacing);
         genericRSEstimator->Compute();
         
-//         std::cout <<"Spacing Forced to "<< spacing<< " --> implies Size : "
-//                   <<genericRSEstimator->GetOutputSize()  << std::endl;
-        
         // Set the  processed size relative to this forced spacing
         SetParameterInt("outputs.sizex", genericRSEstimator->GetOutputSize()[0]);
         SetParameterInt("outputs.sizey", genericRSEstimator->GetOutputSize()[1]);
@@ -260,21 +265,16 @@ private:
         break;
         case Mode_AutomaticSpacing:
         {
-        std::cout <<"Avant : Mode Automatic spacing " << std::endl;
-        // Disable the spacing fields
+        // Disable the spacing fields and enable the size fields
         DisableParameter("outputs.spacingx");
         DisableParameter("outputs.spacingy");
-
-//         MandatoryOff("outputs.spacingx");
-//         MandatoryOff("outputs.spacingy");
-
-//         MandatoryOn("outputs.sizex");
-//         MandatoryOn("outputs.sizey");
-
         EnableParameter("outputs.sizex");
         EnableParameter("outputs.sizey");
-
-        std::cout <<"apres : Mode Automatic spacing " << std::endl;
+        // Update the automatic value mode of each filed
+        AutomaticValueOn("outputs.spacingx");
+        AutomaticValueOn("outputs.spacingy");
+        AutomaticValueOff("outputs.sizex");
+        AutomaticValueOff("outputs.sizey");
 
         ResampleFilterType::SizeType size;        
         size[0] = GetParameterInt("outputs.sizex");
@@ -282,15 +282,41 @@ private:
         genericRSEstimator->ForceSizeTo(size);
         genericRSEstimator->Compute();
         
-//         std::cout <<"Size Forced to "<<size  << " --> implies Sapcing : "
-//                   <<genericRSEstimator->GetOutputSpacing()  << std::endl;
-        
         // Set the  processed spacing relative to this forced size
         SetParameterFloat("outputs.spacingx", genericRSEstimator->GetOutputSpacing()[0]);
         SetParameterFloat("outputs.spacingy", genericRSEstimator->GetOutputSpacing()[1]);
         }
         break;
         }
+      }
+  }
+
+  void InitializeUTMParameters()
+  {
+    // Compute the zone and the hemisphere if not UserValue defined
+    if(!HasUserValue("map.utm.zone")
+       && HasValue("in")
+       && !HasAutomaticValue("map.utm.zone"))
+      {
+      // Compute the Origin lat/long coordinate
+      typedef otb::ImageToGenericRSOutputParameters<FloatVectorImageType> OutputParametersEstimatorType;
+      OutputParametersEstimatorType::Pointer genericRSEstimator = OutputParametersEstimatorType::New();
+      genericRSEstimator->SetInput(GetParameterImage("in"));
+      genericRSEstimator->SetOutputProjectionRef(otb::GeoInformationConversion::ToWKT(4326));
+      genericRSEstimator->Compute();
+
+      int zone = otb::Utils::GetZoneFromGeoPoint(genericRSEstimator->GetOutputOrigin()[0],
+                                                 genericRSEstimator->GetOutputOrigin()[1]);
+      // Update the UTM Gui fields
+      SetParameterInt("map.utm.zone",zone);
+      if(genericRSEstimator->GetOutputOrigin()[0] > 0.)
+        {
+        std::cout <<"Hemisphere is north" << std::endl;
+        EnableParameter("map.utm.hem");
+        }
+
+      AutomaticValueOn("map.utm.zone");
+      AutomaticValueOn("map.utm.hem");
       }
   }
 
