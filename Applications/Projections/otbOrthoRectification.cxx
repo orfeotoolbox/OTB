@@ -80,8 +80,6 @@ public:
                                                        double>     NearestNeighborInterpolationType;
   typedef otb::BCOInterpolateImageFunction<FloatVectorImageType>   BCOInterpolationType;
 
-  typedef otb::PipelineMemoryPrintCalculator                       MemoryCalculatorType;
-
 private:
   OrthoRectification()
   {
@@ -140,9 +138,9 @@ private:
 
     // Estimate a RPC model (for spot image for instance)
     AddParameter(ParameterType_Group, "rpc", "Estimate RPC model");
-    MandatoryOff("rpc");
     AddParameter(ParameterType_Int, "rpc.ncp", "Nb control Points");
     SetParameterDescription("rpc","Activate RPC sensor model estimation. Parameter is the number of control points per axis");
+    MandatoryOff("rpc");
     MandatoryOff("rpc.ncp");
 
     // Interpolators
@@ -161,6 +159,7 @@ private:
     AddParameter(ParameterType_Empty, "map.utm.hem",  "Hemisphere North");
     MandatoryOff("map.utm.zone");
     MandatoryOff("map.utm.hem");
+    MandatoryOff("map.utm");
 
     AddChoice("map.lambert2",  "Lambert II Etendu"); 
 
@@ -177,14 +176,13 @@ private:
 
   void DoUpdateParameters()
   {
-    if (HasValue("in")) 
+    if (HasValue("in"))
       {
       // input image 
-      FloatVectorImageType* inImage = GetParameterImage("in");
+      FloatVectorImageType::Pointer inImage = GetParameterImage("in");
 
       // Update the UTM zone params
       InitializeUTMParameters();
-
       // Get the output projection Ref
       this->UpdateOutputProjectionRef();
 
@@ -443,10 +441,6 @@ private:
       ul[1] = GetParameterFloat("outputs.uly");
       m_ResampleFilter->SetOutputOrigin(ul);
       }
-
-//     std::cout <<"Resampler : Output Origin "<<m_ResampleFilter->GetOutputOrigin()  << std::endl;
-//     std::cout <<"Resampler : Output Spacing "<<m_ResampleFilter->GetOutputSpacing()  << std::endl;
-//     std::cout <<"Resampler : Output Size "<<  m_ResampleFilter->GetOutputSize()<< std::endl;
 
     // Output Image 
     SetParameterOutputImage("out", m_ResampleFilter->GetOutput());
