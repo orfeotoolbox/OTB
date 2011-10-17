@@ -127,6 +127,11 @@ public:
   /* Return true if the specified parameter is mandatory */
   bool IsMandatory(std::string paramKey) const;
 
+  /* Return true if the specified parameter was set automtically in
+   * the applciation
+   */
+  bool HasAutomaticValue(std::string paramKey) const;
+
   /* Returns true if the parameter has an associated value provided externally
    *  (not automatically computed by the application) */
   bool HasUserValue(std::string paramKey) const;
@@ -277,11 +282,6 @@ public:
    */
   FloatVectorImageType* GetParameterImage(std::string parameter);
 
-  /* Get an image value
-   *
-   * Can be called for types :
-   * \li ParameterType_InputImage
-   */
 #define otbGetParameterImageMacro( Image )                              \
   Image##Type * GetParameter##Image( std::string parameter )            \
     {                                                                   \
@@ -321,8 +321,6 @@ public:
   otbGetParameterImageMacro(Int32RGBAImage);
   otbGetParameterImageMacro(FloatRGBAImage);
   otbGetParameterImageMacro(DoubleRGBAImage);
-
-
   /* Get an image list value
    *
    * Can be called for types :
@@ -433,6 +431,12 @@ protected:
     //TODO: exception if not found ?
     return ret;
   }
+
+  /** Declare a parameter as having an automatic value */
+  void AutomaticValueOn(std::string paramKey);
+  
+  /** Declare a parameter as NOT having an automatic value */
+  void AutomaticValueOff(std::string paramKey);
   
   /* Set an output image value
    *

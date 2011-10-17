@@ -175,6 +175,24 @@ void Application::MandatoryOff(std::string paramKey)
   GetParameterByKey(paramKey)->SetMandatory(false);
 }
 
+/* Return true if the specified parameter was set automatically in the
+ * application
+ */
+bool Application::HasAutomaticValue(std::string paramKey) const
+{
+  return GetParameterByKey(paramKey)->GetAutomaticValue();
+}
+
+void Application::AutomaticValueOn(std::string paramKey)
+{
+  GetParameterByKey(paramKey)->SetAutomaticValue(true);
+}
+
+void Application::AutomaticValueOff(std::string paramKey)
+{
+  GetParameterByKey(paramKey)->SetAutomaticValue(false);
+}
+
 /* Returns true if the parameter has an associated value provided externally
  *  (not automatically computed by the application) */
 bool Application::HasUserValue(std::string paramKey) const
