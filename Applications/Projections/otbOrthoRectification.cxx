@@ -74,7 +74,7 @@ public:
                                             FloatVectorImageType>       ResampleFilterType;
   
   /** Interpolators typedefs*/
-  typedef itk::LinearInterpolateImageFunction<FloatVectorImageType, 
+  typedef itk::LinearInterpolateImageFunction<FloatVectorImageType,
                                               double>              LinearInterpolationType;
   typedef itk::NearestNeighborInterpolateImageFunction<FloatVectorImageType,
                                                        double>     NearestNeighborInterpolationType;
@@ -84,7 +84,10 @@ private:
   OrthoRectification()
   {
     SetName("OrthoRectification");
-    SetDescription("Using available image metadata to determine the sensor model, \ncomputes a cartographic projection of the image");
+    std::ostringstream oss;
+    oss << "Using available image metadata to determine the sensor model,"<<std::endl;
+    oss << "computes a cartographic projection of the image"
+    SetDescription(oss.str());
   }
 
   void DoCreateParameters()
@@ -100,13 +103,13 @@ private:
     MandatoryOff("outputs");
 
     // UserDefined values
-    AddParameter(ParameterType_Choice,  "outputs.mode", "Mode Type");
-    AddChoice("outputs.mode.auto",       "User Defined");
-    AddChoice("outputs.mode.autosize",   "Automatic Size ");
-    AddChoice("outputs.mode.autospacing","Automatic Spacing");    
+    AddParameter(ParameterType_Choice, "outputs.mode", "Mode Type");
+    AddChoice("outputs.mode.auto", "User Defined");
+    AddChoice("outputs.mode.autosize", "Automatic Size ");
+    AddChoice("outputs.mode.autospacing", "Automatic Spacing");    
 
     // Upper left point coordinates
-    AddParameter(ParameterType_Float, "outputs.ulx", "Upper Left X");    
+    AddParameter(ParameterType_Float, "outputs.ulx", "Upper Left X");
     SetParameterDescription("outputs.ulx","Cartographic X coordinate of upper left corner");
     MandatoryOff("outputs.ulx");
 
@@ -139,7 +142,10 @@ private:
     // Estimate a RPC model (for spot image for instance)
     AddParameter(ParameterType_Group, "rpc", "Estimate RPC model");
     AddParameter(ParameterType_Int, "rpc.ncp", "Nb control Points");
-    SetParameterDescription("rpc","Activate RPC sensor model estimation. Parameter is the number of control points per axis");
+    std::ostringstream oss;
+    oss << "Activate RPC sensor model estimation"<<std::endl;;
+    oss << "Parameter is the number of control points per axis"
+    SetParameterDescription("rpc",oss.str().c_str());
     MandatoryOff("rpc");
     MandatoryOff("rpc.ncp");
 
@@ -327,7 +333,7 @@ private:
 
       // Set the zone
       utmProjection->SetZone(GetParameterInt("map.utm.zone"));
-        
+
       // Set the hem
       std::string hem = "N";
       if (!IsParameterEnabled("map.utm.hem"))
@@ -374,21 +380,23 @@ private:
       {
       case Interpolator_Linear:
       {
-      typedef itk::LinearInterpolateImageFunction<FloatVectorImageType, double>          LinearInterpolationType;
+      typedef itk::LinearInterpolateImageFunction<FloatVectorImageType,
+        double>          LinearInterpolationType;
       LinearInterpolationType::Pointer interpolator = LinearInterpolationType::New();
       m_ResampleFilter->SetInterpolator(interpolator);
       }
       break;
       case Interpolator_NNeighbor:
       {
-      typedef itk::NearestNeighborInterpolateImageFunction<FloatVectorImageType, double> NearestNeighborInterpolationType;
+      typedef itk::NearestNeighborInterpolateImageFunction<FloatVectorImageType,
+        double> NearestNeighborInterpolationType;
       NearestNeighborInterpolationType::Pointer interpolator = NearestNeighborInterpolationType::New();
       m_ResampleFilter->SetInterpolator(interpolator);
       }
       break;
       case Interpolator_BCO:
       {
-      typedef otb::BCOInterpolateImageFunction<FloatVectorImageType>                     BCOInterpolationType;
+      typedef otb::BCOInterpolateImageFunction<FloatVectorImageType>     BCOInterpolationType;
       BCOInterpolationType::Pointer interpolator = BCOInterpolationType::New();
       interpolator->SetRadius(GetParameterInt("interpolator.bco.radius"));
       m_ResampleFilter->SetInterpolator(interpolator);
@@ -449,8 +457,6 @@ private:
   ResampleFilterType::Pointer  m_ResampleFilter;
   std::string                  m_OutputProjectionRef;
   };
-
-
 
   } // namespace Wrapper
 } // namespace otb

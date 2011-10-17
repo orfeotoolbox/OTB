@@ -49,8 +49,6 @@ void QtWidgetParameterBase::UpdateGUI()
    }
 }
 
-
-
 void QtWidgetParameterBase::ParameterChanged(const QString& key)
 {
 
