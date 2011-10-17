@@ -105,6 +105,15 @@ public:
   /** Toogle the parameter mandatory flag */
   itkBooleanMacro(Mandatory);
 
+  /** Set the parameter mandatory flag */
+  itkSetMacro(AutomaticValue, bool);
+
+  /** Get the parameter mandatory flag */
+  itkGetConstMacro(AutomaticValue, bool);
+
+  /** Toogle the parameter mandatory flag */
+  itkBooleanMacro(AutomaticValue);
+
   /** Set the default value mode */
   itkSetEnumMacro(DefaultValueMode, DefaultValueMode);
 
@@ -201,6 +210,7 @@ protected:
                 m_UserValue(false),
                 m_DefaultValueMode(DefaultValueMode_UNKNOWN),
                 m_UserLevel(UserLevel_Basic),
+                m_AutomaticValue(false),
                 m_IsChecked(false)
   {}
 
@@ -225,6 +235,9 @@ protected:
 
   /** True if the value is set in user mode */
   bool                               m_UserValue;
+
+  /** True if the application change the value of this parameter */
+  bool                               m_AutomaticValue;
 
   /** Default value behaviour */
   DefaultValueMode                   m_DefaultValueMode;
