@@ -37,49 +37,49 @@ namespace otb
  *  M. G. A. Huck and J. Blanc-Talon, IEEE TGRS, vol. 48, no. 6, pp. 2590-2602, 2010.
  *  A. Huck and M. Guillaume, in WHISPERS, 2010, Grenoble.
  *
- *  Let \f$ \matR \f$ be the matrix of the hyperspectral data, whose
+ *  Let \f$ \mathbf R \f$ be the matrix of the hyperspectral data, whose
  *  \f$ I \f$ columns are the
  *  spectral pixels and the \f$ L \f$ rows are the vectorial spectral band
  *  images.  The linear mixing model can be written as follow :
  *  \f$ \begin{equation}
- *     \matR=\matA \matS + \matN= \matX + \matN
+ *     \mathbf R=\mathbf A \mathbf S + \mathbf N= \mathbf X + \mathbf N
  *  \end{equation} \f$
- *  The \f$ I \f$ columns of \f$ \matR \f$ contain the spectral pixels
- *  and the \f$ I \f$ columns of \f$ \matS \f$ hold their respective sets of abundance
- *  fractions.  The \f$ J \f$ rows of \f$ \matS \f$ are the abundance maps
+ *  The \f$ I \f$ columns of \f$ \mathbf R \f$ contain the spectral pixels
+ *  and the \f$ I \f$ columns of \f$ \mathbf S \f$ hold their respective sets of abundance
+ *  fractions.  The \f$ J \f$ rows of \f$ \mathbf S \f$ are the abundance maps
  *  corresponding to the respective end-members. The \f$ J \f$ columns of
- *  \f$ \matA \f$ are the end members spectra, and \f$ \matX \f$ is the signal
- *  matrix. Both \f$ \matA \f$ and \f$ \matS \f$ are unknown.
+ *  \f$ \mathbf A \f$ are the end members spectra, and \f$ \mathbf X \f$ is the signal
+ *  matrix. Both \f$ \mathbf A \f$ and \f$ \mathbf S \f$ are unknown.
  *
- *  The basic NMF formulation is to find two matrices \f$ \hat{\matA} \f$ and
- *  \f$ \hat{ \matS} \f$ such as:
+ *  The basic NMF formulation is to find two matrices \f$ \hat{\mathbf A} \f$ and
+ *  \f$ \hat{ \mathbf S} \f$ such as:
  *  \f$ \begin{equation}
- *    \matX\simeq \hat{\matA} \hat{\matS}
+ *    \mathbf X\simeq \hat{\mathbf A} \hat{\mathbf S}
  *  \end{equation} \f$
  *  NMF based algorithms consider the
- *  properties of the dual spaces \f$ span^+(\matA')\f$ and
- *  \f$ span^+(\matS) \f$, in
- *  which \f$ span^+(\mathbf m^1 ...\mathbf m^d)=\{\mathbf v=\sum_i \mathbf
- *  m^i\mathbf a_i|\mathbf a\in \matR _+^d\} \f$. The
+ *  properties of the dual spaces \f$ span^+(\mathbf A')\f$ and
+ *  \f$ span^+(\mathbf S) \f$, in
+ *  which \f$ span^+(\mathbf hbf m^1 ...\mathbf hbf m^d)=\{\mathbf hbf v=\sum_i \mathbf hbf
+ *  m^i\mathbf hbf a_i|\mathbf hbf a\in \mathbf R _+^d\} \f$. The
  *  positiveness is then a fundamental assumption and is exploited to
  *  restrict the admissible solutions set.
  *
  *  A common used solution is to minimize the reconstruction quadratic
  *  error :
- *  \f$ RQE({\matA}, {\matS})=\|\matR-{\matA} {\matS}\|^2_F \f$. In order to
+ *  \f$ RQE({\mathbf A}, {\mathbf S})=\|\mathbf R-{\mathbf A} {\mathbf S}\|^2_F \f$. In order to
  *  satisfy the sum-to-one constraint for hyperspectral data, a
- *  regularization term \f$ STU(\matS) \f$ can be added to the objective
+ *  regularization term \f$ STU(\mathbf S) \f$ can be added to the objective
  *  function.
  *
  *  A generic expression for the optimized function is \f$
- *  f(\matA,\matS)=\|\matA \matS-\matR\|_{norm}+\sum_i \lambda_i
- *  D_i(\matA) + \sum_j \lambda_j D_j(\matS) \f$ in which \f$ \|\matA
- *  \matS-\matR\|_{norm} \f$ is the connection-to-the-data term, and
+ *  f(\mathbf A,\mathbf S)=\|\mathbf A \mathbf S-\mathbf R\|_{norm}+\sum_i \lambda_i
+ *  D_i(\mathbf A) + \sum_j \lambda_j D_j(\mathbf S) \f$ in which \f$ \|\mathbf A
+ *  \mathbf S-\mathbf R\|_{norm} \f$ is the connection-to-the-data term, and
  *  \f$ \lambda_{\{i, j\}} \f$ are regularization parameters for end members and
  *  abundances constraints \f$ D_{\{i, j\}} \f$.
  *  Huck
  *  propose an other regularization term,
- *  \f$ D_A(\matA)=Tr(\matA^T\matA)-\frac{1}{L}Tr\left ( \matA^T \1_{LL}\matA
+ *  \f$ D_A(\mathbf A)=Tr(\mathbf A^T\mathbf A)-\frac{1}{L}Tr\left ( \mathbf A^T \1_{LL}\mathbf A
  *  \right) \f$, which ensures low spectral dispersion on endmembers.
  *  The physical
  *  motivation is based on the assuption that in most situations, the
@@ -87,9 +87,9 @@ namespace otb
  *  selectively in multiple piece-wise convex sets. As a consequence, the mean value of the abundance,
  *  \f$ \frac{1}{J} \f$, is the least likely one.  The maximum abundance
  *  dispersion condition is given by
- *  \f$ D_s(\matS)=-\|\matS-\frac{1}{J}\1_{JI}\|^2_F \f$. MDMD-NMF algorithm
- *  minimizes the following function \f$ f(\matA,\matS) =RQE(\matA,
- *  \matS)+\delta.STU(\matS)+\lambda_A D_A(\matA)-\lambda_S D_S(\matS)
+ *  \f$ D_s(\mathbf S)=-\|\mathbf S-\frac{1}{J}\1_{JI}\|^2_F \f$. MDMD-NMF algorithm
+ *  minimizes the following function \f$ f(\mathbf A,\mathbf S) =RQE(\mathbf A,
+ *  \mathbf S)+\delta.STU(\mathbf S)+\lambda_A D_A(\mathbf A)-\lambda_S D_S(\mathbf S)
  *  \f$,
  *  \f$ STU \f$ the sum-to-one constraint.
  *
@@ -98,24 +98,24 @@ namespace otb
  *  iterations, or else on alternate least square methods. In MDMD-NMF, the update rules
  *  at each iteration become :
  *  \f$ \begin{eqnarray}
- *  \label{algomdmd} \matS&\leftarrow &P\left [\matS-\mu_S \left( \bar \matA^T
- *  (\bar\matA\matS-\bar\matR)-\lambda_S(\matS-\frac{1}{J}\1_{JI})\right)\right
- *  ]\\ \nonumber \matA &\leftarrow &P\left [\matA-\mu_A \left(
- *  (\matA\matS-\matR)\matS^T +\lambda_A(\matA-\frac{1}{L}\ \mathbf
- *  1_{LL}\matA)\right)\right ]
+ *  \label{algomdmd} \mathbf S&\leftarrow &P\left [\mathbf S-\mu_S \left( \bar \mathbf A^T
+ *  (\bar\mathbf A\mathbf S-\bar\mathbf R)-\lambda_S(\mathbf S-\frac{1}{J}\1_{JI})\right)\right
+ *  ]\\ \nonumber \mathbf A &\leftarrow &P\left [\mathbf A-\mu_A \left(
+ *  (\mathbf A\mathbf S-\mathbf R)\mathbf S^T +\lambda_A(\mathbf A-\frac{1}{L}\ \mathbf hbf
+ *  1_{LL}\mathbf A)\right)\right ]
  *  \end{eqnarray} \f$
  *  where \f$ \mu_A\f$ and \f$\mu_S \f$
  *  are the step sizes.
  *  Huck propose a
  *  multiscale method to determine the coefficients \f$ \mu_A \f$ and
  *  \f$ \mu_S \f$.  The projection operator \f$ P \f$ at each step ensures the
- *  positivity constraint for \f$ \matA \f$ and \f$ \matS \f$, and \f$
- *  \bar\matR \f$ and
- *  \f$ \bar\matA \f$ include the sum-to-one constraint:
- *  \f$ \bar\matR=\left[
- *  \begin{array}{c} \matR \\
- *  \delta\cdot\1_{1I}\end{array}\right],\enspace \bar\matA=\left[
- *  \begin{array}{c} \matA \\
+ *  positivity constraint for \f$ \mathbf A \f$ and \f$ \mathbf S \f$, and \f$
+ *  \bar\mathbf R \f$ and
+ *  \f$ \bar\mathbf A \f$ include the sum-to-one constraint:
+ *  \f$ \bar\mathbf R=\left[
+ *  \begin{array}{c} \mathbf R \\
+ *  \delta\cdot\1_{1I}\end{array}\right],\enspace \bar\mathbf A=\left[
+ *  \begin{array}{c} \mathbf A \\
  *  \delta\cdot\1_{1J}\end{array}\right]\enspace \f$.
  *
  * \ingroup ImageFilters
