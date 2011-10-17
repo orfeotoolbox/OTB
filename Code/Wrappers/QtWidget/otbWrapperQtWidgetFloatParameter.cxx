@@ -84,6 +84,7 @@ void QtWidgetFloatParameter::SetValue(double value)
 {
   m_FloatParam->SetValue( static_cast<float>(value) );
   m_FloatParam->SetUserValue(true);
+  m_FloatParam->SetAutomaticValue(false);
 }
 
 }
