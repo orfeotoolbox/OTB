@@ -176,7 +176,9 @@ private:
     MandatoryOff("map.epsg.code");
 
     // Deformation Field Spacing
-    AddParameter(ParameterType_Float, "gridspacing", "Generate a coarser deformation field with the given spacing");
+    AddParameter(ParameterType_Float, "gridspacing", "Deformation Field Spacing");
+    SetParameterInt("gridspacing", 4.);
+    SetParameterDescription("gridspacing", "Generate a coarser deformation field with the given spacing");
     MandatoryOff("gridspacing");
   }
 
