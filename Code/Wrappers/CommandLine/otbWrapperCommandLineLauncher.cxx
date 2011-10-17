@@ -442,6 +442,8 @@ CommandLineLauncher::LoadParameters()
           }
         }
       }
+    // Update the flag UserValue
+    param->SetUserValue(true);
     }
   
   return OKPARAM;
