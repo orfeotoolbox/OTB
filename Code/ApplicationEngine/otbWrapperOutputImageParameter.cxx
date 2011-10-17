@@ -92,7 +92,6 @@ OutputImageParameter::SwitchImageWrite()
     }
     case ImagePixelType_uint8:
     {
-   std::cout<<"Write, output is image uint8"<<std::endl;
     otbCastAndWriteImageMacro(TInputImageType, UInt8ImageType, m_UInt8Writer);
     break;
     }
@@ -118,13 +117,11 @@ OutputImageParameter::SwitchImageWrite()
     }
     case ImagePixelType_float:
     {
-   std::cout<<"Write, output is image float"<<std::endl;
     otbCastAndWriteImageMacro(TInputImageType, FloatImageType, m_FloatWriter);
     break;
     }
     case ImagePixelType_double:
     {
- std::cout<<"Write, output is image double"<<std::endl;
     otbCastAndWriteImageMacro(TInputImageType, DoubleImageType, m_DoubleWriter);
     break;
     }
@@ -242,7 +239,6 @@ OutputImageParameter::Write()
     }
   else if (dynamic_cast<UInt8ImageType*>(m_Image.GetPointer()))
     {
-    std::cout<<"Write, input is image uint8"<<std::endl;
     SwitchImageWrite<UInt8ImageType>();
     }
   else if (dynamic_cast<Int16ImageType*>(m_Image.GetPointer()))
