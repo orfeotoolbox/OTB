@@ -67,7 +67,6 @@ InputImageParameter::SetFromFileName(const std::string& filename)
 }
 
 
-
 FloatVectorImageType*
 InputImageParameter::GetImage()
 {
@@ -289,7 +288,6 @@ InputImageParameter::CastVectorImageFromImage()
 }
 
 
-
 #define otbCastImageMacro(InputImageType, OutputImageType, theMethod)   \
   template<> OutputImageType *                                          \
   InputImageParameter::CastImage<InputImageType , OutputImageType>()    \
@@ -305,8 +303,7 @@ InputImageParameter::CastVectorImageFromImage()
   otbCastImageMacro(InputImageType, UInt32##prefix##ImageType, theMethod) \
   otbCastImageMacro(InputImageType, Int32##prefix##ImageType, theMethod) \
   otbCastImageMacro(InputImageType, Float##prefix##ImageType, theMethod) \
-  otbCastImageMacro(InputImageType, Double##prefix##ImageType, theMethod)              
-
+  otbCastImageMacro(InputImageType, Double##prefix##ImageType, theMethod)
 
 
 /*********************************************************************
@@ -324,7 +321,6 @@ otbGenericCastImageMacro(DoubleImageType, SimpleCastImage, )
 
 
 
-
 /*********************************************************************
 ********************** VectorImage -> VectorImage
 **********************************************************************/
@@ -336,7 +332,6 @@ otbGenericCastImageMacro(Int32VectorImageType, SimpleCastImage, Vector)
 otbGenericCastImageMacro(UInt32VectorImageType, SimpleCastImage, Vector)
 otbGenericCastImageMacro(FloatVectorImageType, SimpleCastImage, Vector)
 otbGenericCastImageMacro(DoubleVectorImageType, SimpleCastImage, Vector)
-
 
 
 /*********************************************************************

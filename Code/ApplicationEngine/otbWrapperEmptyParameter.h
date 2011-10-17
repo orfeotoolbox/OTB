@@ -45,7 +45,7 @@ public:
   itkTypeMacro(EmptyParameter, Parameter);
 
   /** HasValue */
-  bool HasValue() const 
+  bool HasValue() const
   {
     return false;
   }
