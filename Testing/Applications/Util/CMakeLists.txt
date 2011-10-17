@@ -89,3 +89,23 @@ add_test(NAME apTvUtExtractROISizeTooBig
                  --in ${INPUTDATA}/couleurs_extrait.png
                  --out ${TEMP}/utExtractROISizeNULL.tif
                  --sizex 1000000 )
+
+add_test(NAME apTvUtConcatenateImages_1Image
+         COMMAND otbTestDriver --compare-image ${NOTOL}
+                   ${INPUTDATA}/poupees_c1
+                   ${TEMP}/apTvUtConcatenateImages_1Image.tif
+                 Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
+                 ConcatenateImages
+                 --modulePath $<TARGET_FILE_DIR:otbapp_ExtractROI>
+                 --il ${INPUTDATA}/poupees_c1
+                 --out ${TEMP}/apTvUtConcatenateImages_1Image.tif)
+
+add_test(NAME apTvUtConcatenateImages
+         COMMAND otbTestDriver --compare-image ${NOTOL}
+                   ${INPUTDATA}/poupees.lum
+                   ${TEMP}/apTvUtConcatenateImages.tif
+                 Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
+                 ConcatenateImages
+                 --modulePath $<TARGET_FILE_DIR:otbapp_ExtractROI>
+                 --il ${INPUTDATA}/poupees_I1.lum ${INPUTDATA}/poupees_I2.lun ${INPUTDATA}/poupees_I3.lum ${INPUTDATA}/poupees_I4.lum
+                 --out ${TEMP}/apTvUtConcatenateImages.tif )
