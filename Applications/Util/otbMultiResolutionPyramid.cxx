@@ -18,8 +18,6 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
-#include "otbImage.h"
-#include "otbVectorImage.h"
 #include "otbPerBandVectorImageFilter.h"
 #include "itkDiscreteGaussianImageFilter.h"
 #include "itkShrinkImageFilter.h"
@@ -53,9 +51,8 @@ public:
   itkTypeMacro(MultiResolutionPyramid, otb::Application);
 
   /** Image and filters typedef */
-  typedef otb::Image<float>                                         SingleImageType;
-  typedef itk::DiscreteGaussianImageFilter<SingleImageType,
-                                           SingleImageType>         SmoothingImageFilterType;
+  typedef itk::DiscreteGaussianImageFilter<FloatImageType,
+                                           FloatImageType>         SmoothingImageFilterType;
 
   typedef otb::PerBandVectorImageFilter<FloatVectorImageType,
                                         FloatVectorImageType,

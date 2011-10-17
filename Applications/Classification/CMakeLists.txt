@@ -8,4 +8,4 @@ OTB_CREATE_APPLICATION(NAME           ImageSVMClassifier
 
 OTB_CREATE_APPLICATION(NAME           KMeansClassification
                        SOURCES        otbKMeansClassification.cxx
-                       LINK_LIBRARIES OTBBasicFilters)
+                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction;OTBLearning)

@@ -62,9 +62,9 @@ public:
 
   // Cast filter
   // TODO: supress that !!
-  typedef MultiToMonoChannelExtractROI<FloatVectorImageType::InternalPixelType, 
-                                       UInt8ImageType::PixelType>               ExtractImageFilterType;
-  typedef ImageToVectorImageCastFilter<UInt8ImageType, FloatVectorImageType>    CastImageFilterType;
+  //typedef MultiToMonoChannelExtractROI<FloatVectorImageType::InternalPixelType, 
+  //                                     UInt8ImageType::PixelType>               ExtractImageFilterType;
+//typedef ImageToVectorImageCastFilter<UInt8ImageType, FloatVectorImageType>    CastImageFilterType;
 
 private:
   ImageSVMClassifier()
@@ -153,13 +153,9 @@ private:
       {
       otbAppLogINFO("Using input mask");
       // Load mask image and cast into LabeledImageType
-      FloatVectorImageType::Pointer inMask = GetParameterImage("mask");
-      m_Extract = ExtractImageFilterType::New();
-      m_Extract->SetInput( inMask );
-      m_Extract->SetChannel(1);
-      m_Extract->UpdateOutputInformation();
+      UInt8ImageType::Pointer inMask = GetParameterUInt8Image("mask");
       
-      m_ClassificationFilter->SetInputMask(m_Extract->GetOutput());
+      m_ClassificationFilter->SetInputMask(inMask);
       }
 
     SetParameterOutputImage<UInt8ImageType>("out", m_ClassificationFilter->GetOutput());
@@ -168,7 +164,6 @@ private:
   ClassificationFilterType::Pointer m_ClassificationFilter;
   ModelPointerType m_ModelSVM;
   RescalerType::Pointer m_Rescaler;
-  ExtractImageFilterType::Pointer m_Extract;
 };
 
 

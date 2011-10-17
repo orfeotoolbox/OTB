@@ -30,16 +30,11 @@
 
 #include "otbVectorImageToMatrixImageFilter.h"
 
-#include "itkCastImageFilter.h"
-
 
 namespace otb
 {
 namespace Wrapper
 {
-
-typedef itk::CastImageFilter<FloatVectorImageType, DoubleVectorImageType> FloatToDoubleFilterType;
-typedef itk::CastImageFilter<DoubleVectorImageType, FloatVectorImageType> DoubleToFloatFilterType;
 
 const unsigned int Dimension = 2;
 
@@ -265,10 +260,7 @@ private:
      *
      */
 
-    FloatToDoubleFilterType::Pointer cast = FloatToDoubleFilterType::New();
-    cast->SetInput( GetParameterImage("in") );
-    DoubleVectorImageType::Pointer inputImage = cast->GetOutput();
-    m_ProcessObjects.push_back(cast.GetPointer());
+    DoubleVectorImageType::Pointer inputImage = GetParameterImage<DoubleVectorImageType>("in");
 
     DoubleVectorImageType::Pointer endmembersImage;
     if ( inputEndmembers.empty() )
@@ -332,11 +324,7 @@ private:
        * Read input endmembers
        */
       std::cout << "Read Endmembers " << inputEndmembers << std::endl;
-
-      FloatToDoubleFilterType::Pointer cast = FloatToDoubleFilterType::New();
-      cast->SetInput( GetParameterImage("ie") );
-      endmembersImage = cast->GetOutput();
-      m_ProcessObjects.push_back(cast.GetPointer());
+      endmembersImage = GetParameterImage<DoubleVectorImageType>("ie");
 
       }
   //  endmembersRef->Update();
@@ -430,12 +418,7 @@ private:
        */
       std::cout << "Write endmembers " << outputEndmembers << std::endl;
 
-      DoubleToFloatFilterType::Pointer cast = DoubleToFloatFilterType::New();
-      cast->SetInput( endmembersImage );
-      FloatVectorImageType::Pointer endmembersImageFloat = cast->GetOutput();
-      m_ProcessObjects.push_back(cast.GetPointer());
-
-      SetParameterOutputImage("oe", endmembersImageFloat);
+      SetParameterOutputImage<DoubleVectorImageType>("oe", endmembersImage);
       }
 
     if ( unmixingAlgo != UnMixingMethod_NONE )
@@ -444,12 +427,8 @@ private:
        * Write abundance map
        */
       //std::cout << "Write abundance map" << outputImageName << std::endl;
-      DoubleToFloatFilterType::Pointer cast = DoubleToFloatFilterType::New();
-      cast->SetInput( abundanceMap );
-      FloatVectorImageType::Pointer abundanceMapFloat = cast->GetOutput();
-      m_ProcessObjects.push_back(cast.GetPointer());
 
-      SetParameterOutputImage("out", abundanceMapFloat);
+      SetParameterOutputImage<DoubleVectorImageType>("out", abundanceMap);
       }
   }
 

@@ -117,8 +117,7 @@ private:
  void GenericDoExecute()
   {  
     // Get the input image list
-    FloatVectorImageType::Pointer input = this->GetParameterImage("in");
-    input->UpdateOutputInformation();
+  
     
     typename TImageType::Pointer castIm;
     
@@ -131,14 +130,13 @@ private:
     
     if( rescaleType == "None" )
       {
-      typedef itk::CastImageFilter<FloatVectorImageType, TImageType> CastFilterType;
-      typename CastFilterType::Pointer cast = CastFilterType::New();
-      cast->SetInput( input );
-      m_TmpFilter = cast;
-      castIm = cast->GetOutput();
+      castIm = this->GetParameterImage<TImageType>("in");
       }
     else
       {
+      FloatVectorImageType::Pointer input = this->GetParameterImage("in");
+      input->UpdateOutputInformation();
+
       const unsigned int nbComp(input->GetNumberOfComponentsPerPixel());
       
       typedef otb::VectorRescaleIntensityImageFilter<FloatVectorImageType, TImageType> RescalerType;
@@ -233,14 +231,8 @@ private:
       castIm = rescaler->GetOutput();
       }
     
-    
-    typedef itk::CastImageFilter<TImageType, FloatVectorImageType> EndCastFilterType;
-    typename EndCastFilterType::Pointer endCast = EndCastFilterType::New();
-    endCast->SetInput( castIm );
-    endCast->UpdateOutputInformation();
-
-    m_FinalCaster = endCast;
-    SetParameterOutputImage("out", endCast->GetOutput());
+   
+    SetParameterOutputImage<TImageType>("out", castIm);
   }
 
 
@@ -278,7 +270,6 @@ private:
       }
   }
 
-  itk::ProcessObject::Pointer m_FinalCaster;
   itk::ProcessObject::Pointer m_TmpFilter;
   TransferLogType::Pointer m_TransferLog;
 };;

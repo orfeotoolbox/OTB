@@ -37,6 +37,8 @@
 
 #include "otbWrapperAddProcessToWatchEvent.h"
 
+
+#include "otbWrapperTypes.h"
 namespace otb
 {
 namespace Wrapper

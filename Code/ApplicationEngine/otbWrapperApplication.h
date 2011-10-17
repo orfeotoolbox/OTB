@@ -30,6 +30,7 @@
 #include "otbWrapperMacros.h"
 #include "otbWrapperTypes.h"
 #include "otbWrapperOutputImageParameter.h"
+#include "otbWrapperInputImageParameter.h"
 
 namespace otb
 {
@@ -216,14 +217,6 @@ public:
    */
   void SetParameterOutputImage(std::string parameter, FloatVectorImageType* value);
 
-  /* Set an output image value
-   *
-   * Can be called for types :
-   * \li ParameterType_OutputImage
-   */
-  template <class TImageType>
-    void SetParameterOutputImage(std::string parameter, TImageType* value);
-
   /* Set the pixel type in which the image will be saved
    *
    * Can be called for types :
@@ -289,8 +282,45 @@ public:
    * Can be called for types :
    * \li ParameterType_InputImage
    */
-  template <class TImageType>
-    TImageType* GetParameterImage(std::string parameter);
+#define otbGetParameterImageMacro( Image )                              \
+  Image##Type * GetParameter##Image( std::string parameter )            \
+    {                                                                   \
+    Image##Type::Pointer ret;                                           \
+    Parameter* param = GetParameterByKey(parameter);                    \
+    if (dynamic_cast<InputImageParameter*>(param))                      \
+      {                                                                 \
+      InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param); \
+      ret = paramDown->Get##Image();                                    \
+      }                                                                 \
+    return ret;                                                         \
+    }
+   
+  otbGetParameterImageMacro(UInt8Image);
+  otbGetParameterImageMacro(Int8Image);
+  otbGetParameterImageMacro(UInt16Image);
+  otbGetParameterImageMacro(Int16Image);
+  otbGetParameterImageMacro(UInt32Image);
+  otbGetParameterImageMacro(Int32Image);
+  otbGetParameterImageMacro(FloatImage);
+  otbGetParameterImageMacro(DoubleImage);
+
+  otbGetParameterImageMacro(UInt8VectorImage);
+  otbGetParameterImageMacro(Int8VectorImage);
+  otbGetParameterImageMacro(UInt16VectorImage);
+  otbGetParameterImageMacro(Int16VectorImage);
+  otbGetParameterImageMacro(UInt32VectorImage);
+  otbGetParameterImageMacro(Int32VectorImage);
+  otbGetParameterImageMacro(FloatVectorImage);
+  otbGetParameterImageMacro(DoubleVectorImage);
+
+  otbGetParameterImageMacro(UInt8RGBAImage);
+  otbGetParameterImageMacro(Int8RGBAImage);
+  otbGetParameterImageMacro(UInt16RGBAImage);
+  otbGetParameterImageMacro(Int16RGBAImage);
+  otbGetParameterImageMacro(UInt32RGBAImage);
+  otbGetParameterImageMacro(Int32RGBAImage);
+  otbGetParameterImageMacro(FloatRGBAImage);
+  otbGetParameterImageMacro(DoubleRGBAImage);
 
 
   /* Get an image list value
@@ -384,6 +414,43 @@ protected:
   /* Set the user level of access to a parameter */
   void SetParameterUserLevel(std::string paramKey, UserLevel level);
 
+  /* Get an image value
+   *
+   * Can be called for types :
+   * \li ParameterType_InputImage
+   */
+  template <class TImageType>
+    TImageType* GetParameterImage(std::string parameter)
+  {
+    typename TImageType::Pointer ret;
+    Parameter* param = GetParameterByKey(parameter);
+    if (dynamic_cast<InputImageParameter*>(param))
+      {
+      InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param);
+      ret = paramDown->GetImage<TImageType>();
+      }
+    
+    //TODO: exception if not found ?
+    return ret;
+  }
+  
+  /* Set an output image value
+   *
+   * Can be called for types :
+   * \li ParameterType_OutputImage
+   */
+  template <class TImageType>
+    void SetParameterOutputImage(std::string parameter, TImageType* value)
+  {
+    Parameter* param = GetParameterByKey(parameter);
+    
+    if (dynamic_cast<OutputImageParameter*>(param))
+      {
+      OutputImageParameter* paramDown = dynamic_cast<OutputImageParameter*>(param);
+      paramDown->SetValue(value);
+      }
+  }
+
 private:
   /* Implement this method to add parameters */
   virtual void DoCreateParameters() = 0;
@@ -412,8 +479,8 @@ private:
 } //end namespace otb
 
 
-#ifndef OTB_MANUAL_INSTANTIATION
-#include "otbWrapperApplication.txx"
-#endif
+//#ifndef OTB_MANUAL_INSTANTIATION
+//#include "otbWrapperApplication.txx"
+//#endif
 
 #endif // __otbWrapperApplication_h_

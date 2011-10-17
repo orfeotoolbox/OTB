@@ -20,21 +20,14 @@
 
 #include "otbStreamingLineSegmentDetector.h"
 
-#include "otbImage.h"
-#include "otbVectorImage.h"
 #include "otbVectorImageToAmplitudeImageFilter.h"
 #include "otbVectorData.h"
-#include "otbImageFileReader.h"
-#include "otbVectorDataFileWriter.h"
-#include "otbStandardFilterWatcher.h"
 #include "otbStreamingStatisticsImageFilter.h"
 #include "itkShiftScaleImageFilter.h"
 
 #include "otbVectorDataProjectionFilter.h"
 #include "otbVectorDataTransformFilter.h"
 #include "itkAffineTransform.h"
-
-
 
 
 namespace otb

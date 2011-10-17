@@ -30,35 +30,28 @@
 #include "itkWeightedCentroidKdTreeGenerator.h"
 #include "itkKdTreeBasedKmeansEstimator.h"
 #include "itkMersenneTwisterRandomVariateGenerator.h"
-#include "itkCastImageFilter.h"
-#include "otbMultiToMonoChannelExtractROI.h"
 
 namespace otb
 {
 namespace Wrapper
 {
 
-typedef otb::Image<FloatVectorImageType::InternalPixelType, 2> ImageReaderType;
-
-typedef UInt8ImageType LabeledImageType;
-typedef ImageReaderType::PixelType PixelType;
+typedef FloatImageType::PixelType PixelType;
 
 typedef itk::FixedArray<PixelType, 108> SampleType;
 typedef itk::Statistics::ListSample<SampleType> ListSampleType;
 typedef itk::Statistics::WeightedCentroidKdTreeGenerator<ListSampleType> TreeGeneratorType;
 typedef TreeGeneratorType::KdTreeType TreeType;
 typedef itk::Statistics::KdTreeBasedKmeansEstimator<TreeType> EstimatorType;
-typedef itk::CastImageFilter<FloatImageListType, FloatImageType> CastMaskFilterType;
-typedef otb::MultiToMonoChannelExtractROI<FloatVectorImageType::InternalPixelType,LabeledImageType::InternalPixelType > ExtractorType;
 
 typedef otb::StreamingTraits<FloatVectorImageType> StreamingTraitsType;
 typedef itk::ImageRegionSplitter<2> SplitterType;
-typedef ImageReaderType::RegionType RegionType;
+typedef FloatImageType::RegionType RegionType;
 
 typedef itk::ImageRegionConstIterator<FloatVectorImageType> IteratorType;
-typedef itk::ImageRegionConstIterator<LabeledImageType> LabeledIteratorType;
+typedef itk::ImageRegionConstIterator<UInt8ImageType> LabeledIteratorType;
 
-typedef otb::KMeansImageClassificationFilter<FloatVectorImageType, LabeledImageType, 108> ClassificationFilterType;
+typedef otb::KMeansImageClassificationFilter<FloatVectorImageType, UInt8ImageType, 108> ClassificationFilterType;
 
 class KMeansClassification: public Application
 {
@@ -116,12 +109,11 @@ private:
     itk::Statistics::MersenneTwisterRandomVariateGenerator::Pointer
         randomGen = itk::Statistics::MersenneTwisterRandomVariateGenerator::New();
     m_InImage = GetParameterImage("in");
-    m_Extractor = ExtractorType::New();
-    m_Extractor->SetInput(GetParameterImage("vm"));
-    m_Extractor->SetChannel(1);
-    m_Extractor->UpdateOutputInformation();
-    LabeledImageType::Pointer maskImage = m_Extractor->GetOutput();
+    std::cout<<"mask in progress"<<std::endl;
 
+    UInt8ImageType::Pointer maskImage = GetParameterUInt8Image("vm");
+
+    std::cout<<"mask in progress done"<<std::endl;
     std::ostringstream message("");
 
     const unsigned int nbsamples = GetParameterInt("ts");
@@ -331,11 +323,10 @@ private:
 
     m_Classifier->SetCentroids(estimator->GetParameters());
 
-    SetParameterOutputImage<LabeledImageType> ("out", m_Classifier->GetOutput());
+    SetParameterOutputImage<UInt8ImageType> ("out", m_Classifier->GetOutput());
 
   }
 
-  ExtractorType::Pointer m_Extractor;
   ClassificationFilterType::Pointer m_Classifier;
   FloatVectorImageType::Pointer m_InImage;
 

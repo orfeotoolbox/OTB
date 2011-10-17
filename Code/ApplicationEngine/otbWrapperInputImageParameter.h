@@ -51,15 +51,42 @@ public:
   void SetFromFileName(const std::string& filename);
   itkGetConstMacro(FileName, std::string);
 
-  /** Get the input image as FloatVectorImageType */
+
+  /** Get the input image as FloatVectorImageType. */
   FloatVectorImageType* GetImage();
-  
+
+  /** Get the input image as XXXImageType */
+  UInt8ImageType* GetUInt8Image();
+  Int8ImageType* GetInt8Image();
+  UInt16ImageType* GetUInt16Image();
+  Int16ImageType* GetInt16Image();
+  UInt32ImageType* GetUInt32Image();
+  Int32ImageType* GetInt32Image();
+  FloatImageType* GetFloatImage();
+  DoubleImageType* GetDoubleImage();
+
+  UInt8VectorImageType* GetUInt8VectorImage();
+  Int8VectorImageType* GetInt8VectorImage();
+  UInt16VectorImageType* GetUInt16VectorImage();
+  Int16VectorImageType* GetInt16VectorImage();
+  UInt32VectorImageType* GetUInt32VectorImage();
+  Int32VectorImageType* GetInt32VectorImage();
+  FloatVectorImageType* GetFloatVectorImage();
+  DoubleVectorImageType* GetDoubleVectorImage();
+ 
+  UInt8RGBAImageType* GetUInt8RGBAImage();
+  Int8RGBAImageType* GetInt8RGBAImage();
+  UInt16RGBAImageType* GetUInt16RGBAImage();
+  Int16RGBAImageType* GetInt16RGBAImage();
+  UInt32RGBAImageType* GetUInt32RGBAImage();
+  Int32RGBAImageType* GetInt32RGBAImage();
+  FloatRGBAImageType* GetFloatRGBAImage();
+  DoubleRGBAImageType* GetDoubleRGBAImage();
+
   /** Get the input image as templated image type. */
   template <class TImageType>
     TImageType* GetImage();
 
-  template <class TOutputImage>
-    TOutputImage* GetImage(unsigned int typeIn);
 
   /** Set a FloatVectorImageType image.*/
   void SetImage(FloatVectorImageType* image);
@@ -160,8 +187,8 @@ protected:
   RGBAFloatReaderType::Pointer  m_RGBAFloatReader;
   RGBADoubleReaderType::Pointer m_RGBADoubleReader;
 */
-  itk::ProcessObject * m_Reader;
-  itk::ProcessObject * m_Caster;
+  itk::ProcessObject::Pointer m_Reader;
+  itk::ProcessObject::Pointer m_Caster;
 
 private:
   InputImageParameter(const Parameter &); //purposely not implemented
