@@ -156,14 +156,13 @@ private:
     // Built the Output Map Projection
     AddParameter(ParameterType_Choice, "map", "Map Projection");
     
-    AddChoice("map.utm",   "UTM");   // OK
+    AddChoice("map.utm",   "UTM");
     AddParameter(ParameterType_Int, "map.utm.zone", "Zone number");
     AddParameter(ParameterType_Empty, "map.utm.hem",  "Hemisphere North");
     MandatoryOff("map.utm.zone");
     MandatoryOff("map.utm.hem");
-    
 
-    AddChoice("map.lambert2",     "Lambert II Etendu"); // OK
+    AddChoice("map.lambert2",  "Lambert II Etendu"); 
 
     AddChoice("map.epsg","EPSG");
     AddParameter(ParameterType_Int, "map.epsg.code", "EPSG Code");    
@@ -311,7 +310,6 @@ private:
       SetParameterInt("map.utm.zone",zone);
       if(genericRSEstimator->GetOutputOrigin()[0] > 0.)
         {
-        std::cout <<"Hemisphere is north" << std::endl;
         EnableParameter("map.utm.hem");
         }
 
