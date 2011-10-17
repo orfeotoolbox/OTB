@@ -1331,7 +1331,10 @@ IF(OTB_DATA_USE_LARGEINPUT)
 
 
 ADD_TEST(prTvotbGenericRSResampleImageFilter ${PROJECTIONS_TESTS4}
-  otbGenericRSResampleImageFilter
+  --compare-image ${NOTOL}
+    ${BASELINE}/prTvotbGenericRSResampleImageFilterOutput.tif
+    ${TEMP}/prTvotbGenericRSResampleImageFilterOutput.tif
+    otbGenericRSResampleImageFilter
   ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
   1000
   15
@@ -1358,6 +1361,9 @@ FOREACH( file ${SENSOR_TYPES})
   STRING(REGEX REPLACE "${sharp_regexp}" "\\1" sensor_name "${file}")
   # Tests
   ADD_TEST(prTvotbGenericRSResampleImageFilterFromMap_${sensor_name} ${PROJECTIONS_TESTS4}
+    --compare-image ${NOTOL}
+    ${BASELINE}/prTvotbGenericRSResampleImageFilterOutputFromMap_${sensor_name}.tif
+    ${TEMP}/prTvotbGenericRSResampleImageFilterOutputFromMap_${sensor_name}.tif
     otbGenericRSResampleImageFilterFromMap
     ${LARGEINPUT}/${file}
     15

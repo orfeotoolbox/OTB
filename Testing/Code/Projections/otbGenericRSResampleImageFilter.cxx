@@ -174,7 +174,7 @@ int otbGenericRSResampleImageFilterFromMap(int argc, char* argv[])
   SizeType              roiSize;
   
   // Fill the size
-  roiSize.Fill(1000);
+  roiSize.Fill(500);
   
   // Fill the start index
   roiIndex[0] = (unsigned int)((reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0] - roiSize[0]) /2);
