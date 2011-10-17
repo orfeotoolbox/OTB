@@ -377,17 +377,17 @@ CommandLineLauncher::LoadParameters()
         if( values.size() == 2  )
           {
           ImagePixelType outPixType = ImagePixelType_float;
-          if( values[1] == "int8" )
+          if( values[1] == "char" )
             outPixType = ImagePixelType_int8;
-          else if( values[1] == "uint8" )
+          else if( values[1] == "uchar" )
             outPixType = ImagePixelType_uint8;
-          else if( values[1] == "int16" )
+          else if( values[1] == "short" )
             outPixType = ImagePixelType_int16;
-          else if( values[1] == "uint16" )
+          else if( values[1] == "ushort" )
             outPixType = ImagePixelType_uint16;
-          else if( values[1] == "int32" )
+          else if( values[1] == "int" )
             outPixType = ImagePixelType_int32;
-          else if( values[1] == "uint32" )
+          else if( values[1] == "uint" )
             outPixType = ImagePixelType_uint32;
           else if( values[1] == "float" )
             outPixType = ImagePixelType_float;
@@ -600,7 +600,7 @@ CommandLineLauncher::DisplayParameterHelp( const Parameter::Pointer & param, con
   else if( type == ParameterType_OutputImage )
     {
     oss<<"\t          Type: String (output image file name and optionally its pixel type)"<<std::endl;
-    oss<<"\t                Possible pixel type: int8, uint8, int16, uint16, int32, uint32, float or double"<<std::endl;
+    oss<<"\t                Possible pixel type: char, uchar, short, ushort, int, uint, float or double"<<std::endl;
     }
   else if( type == ParameterType_OutputVectorData )
     {
@@ -654,17 +654,17 @@ CommandLineLauncher::DisplayParameterHelp( const Parameter::Pointer & param, con
       oss << "\t                pixel type: ";
       ImagePixelType outPixType = m_Application->GetParameterOutputImagePixelType( paramKey );
       if( outPixType == ImagePixelType_int8 )
-        oss << "int8";
+        oss << "char";
       else if( outPixType == ImagePixelType_uint8 )
-        oss << "uint8";
+        oss << "uchar";
       else if( outPixType == ImagePixelType_int16 )
-        oss << "int16";
+        oss << "short";
       else if( outPixType == ImagePixelType_uint16 )
-        oss << "uint16";
+        oss << "ushort";
       else if( outPixType == ImagePixelType_int32 )
-        oss << "int32";
+        oss << "int";
       else if( outPixType == ImagePixelType_uint32 )
-        oss << "uint32";
+        oss << "uint";
       else if( outPixType == ImagePixelType_float )
         oss << "float";
       else if( outPixType == ImagePixelType_double )
