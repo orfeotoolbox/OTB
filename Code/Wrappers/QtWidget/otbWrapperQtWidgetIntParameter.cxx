@@ -79,6 +79,7 @@ void QtWidgetIntParameter::SetValue(int value)
 {
   m_IntParam->SetValue(value);
   m_IntParam->SetUserValue(true);
+  m_IntParam->SetAutomaticValue(false);
 }
 
 }
