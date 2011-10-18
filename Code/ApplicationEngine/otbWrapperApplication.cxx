@@ -39,6 +39,8 @@
 
 
 #include "otbWrapperTypes.h"
+#include <exception>
+
 namespace otb
 {
 namespace Wrapper
@@ -107,7 +109,18 @@ void Application::UpdateParameters()
 
 void Application::Execute()
 {
-  this->DoExecute();
+  try
+    {
+    this->DoExecute();
+    }
+  catch(std::exception& err)
+    {
+    otbAppLogFATAL(<<err.what());
+    }
+  catch(...)
+    {
+    otbAppLogFATAL(<<"Unknown exception thrown.");
+    }
 }
 
 void Application::ExecuteAndWriteOutput()
