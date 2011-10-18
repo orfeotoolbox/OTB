@@ -11,5 +11,6 @@ add_subdirectory(Hyperspectral)
 add_subdirectory(Projections)
 add_subdirectory(Segmentation)
 add_subdirectory(Util)
+add_subdirectory(Radiometry)
 
 add_subdirectory(Test)

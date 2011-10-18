@@ -159,23 +159,22 @@ private:
       itkGenericExceptionMacro("Invalid input image medadata. The parsing returns the following error");
       }
 
-    ImageToLuminanceImageFilterType ::Pointer imageToLuminanceFilter                = ImageToLuminanceImageFilterType::New();
-    LuminanceToReflectanceImageFilterType::Pointer luminanceToReflectanceFilter     = LuminanceToReflectanceImageFilterType::New();
-    ReflectanceToSurfaceReflectanceImageFilterType::Pointer reflectanceToSurfaceReflectanceFilter = ReflectanceToSurfaceReflectanceImageFilterType::New();
+    m_ImageToLuminanceFilter                = ImageToLuminanceImageFilterType::New();
+    m_LuminanceToReflectanceFilter          = LuminanceToReflectanceImageFilterType::New();
+    m_ReflectanceToSurfaceReflectanceFilter = ReflectanceToSurfaceReflectanceImageFilterType::New();
 
-    imageToLuminanceFilter->SetInput(inImage);
-    luminanceToReflectanceFilter->SetInput(imageToLuminanceFilter->GetOutput());
-    reflectanceToSurfaceReflectanceFilter->SetInput(luminanceToReflectanceFilter->GetOutput());
+    m_ImageToLuminanceFilter->SetInput(inImage);
+    m_LuminanceToReflectanceFilter->SetInput(m_ImageToLuminanceFilter->GetOutput());
+    m_ReflectanceToSurfaceReflectanceFilter->SetInput(m_LuminanceToReflectanceFilter->GetOutput());
 
-    ScaleFilterType::Pointer scaleFilter = ScaleFilterType::New();
-    scaleFilter->SetCoef(1000.);
-
+    m_ScaleFilter = ScaleFilterType::New();
+    m_ScaleFilter->SetCoef(1000.);
     
     switch ( GetParameterInt("level") )
       {
       case Level_TOA:
       {
-      AtmosphericCorrectionParametersType::Pointer atmosphericParam = reflectanceToSurfaceReflectanceFilter->GetCorrectionParameters();
+      m_AtmosphericParam = m_ReflectanceToSurfaceReflectanceFilter->GetCorrectionParameters();
       AerosolModelType aeroMod = AtmosphericCorrectionParametersType::NO_AEROSOL;
 
       switch ( GetParameterInt("aerosol") )
@@ -184,62 +183,65 @@ private:
         {
         // Aerosol_Desertic correspond to 4 in the enum but actually in
         // the class atmosphericParam it is known as parameter 5
-        atmosphericParam->SetAerosolModel(static_cast<AerosolModelType>(5));
+        m_AtmosphericParam->SetAerosolModel(static_cast<AerosolModelType>(5));
         }
         break;
         default:
         {
-        atmosphericParam->SetAerosolModel(static_cast<AerosolModelType>(GetParameterInt("aerosol")));
+        m_AtmosphericParam->SetAerosolModel(static_cast<AerosolModelType>(GetParameterInt("aerosol")));
         }
         break;
         }
-
       // Set the atmospheric param 
-      atmosphericParam->SetOzoneAmount(GetParameterFloat("oz"));
-      atmosphericParam->SetWaterVaporAmount(GetParameterFloat("wa"));
-      atmosphericParam->SetAtmosphericPressure(GetParameterFloat("atmo"));
-      atmosphericParam->SetAerosolOptical(GetParameterFloat("opt"));
+      m_AtmosphericParam->SetOzoneAmount(GetParameterFloat("oz"));
+      m_AtmosphericParam->SetWaterVaporAmount(GetParameterFloat("wa"));
+      m_AtmosphericParam->SetAtmosphericPressure(GetParameterFloat("atmo"));
+      m_AtmosphericParam->SetAerosolOptical(GetParameterFloat("opt"));
       
       // Relative Spectral Response File
       if (IsParameterEnabled("rsr"))
         {
-        reflectanceToSurfaceReflectanceFilter->SetFilterFunctionValuesFileName(GetParameterString("rsr"));
+        m_ReflectanceToSurfaceReflectanceFilter->SetFilterFunctionValuesFileName(GetParameterString("rsr"));
         }
       else
         {
-        reflectanceToSurfaceReflectanceFilter->SetFilterFunctionCoef(lImageMetadataInterface->GetSpectralSensitivity());
+        m_ReflectanceToSurfaceReflectanceFilter->SetFilterFunctionCoef(lImageMetadataInterface->GetSpectralSensitivity());
         }
 
       // Aeronet file
       if (IsParameterEnabled("aeronet"))
         {
-        reflectanceToSurfaceReflectanceFilter->SetAeronetFileName(GetParameterString("AeronetFile"));
+        m_ReflectanceToSurfaceReflectanceFilter->SetAeronetFileName(GetParameterString("AeronetFile"));
         }
       
       // 
       AtmosphericRadiativeTerms::Pointer radTerms = AtmosphericRadiativeTerms::New();
       radTerms->ValuesInitialization(inImage->GetNumberOfComponentsPerPixel());
-      reflectanceToSurfaceReflectanceFilter->SetAtmosphericRadiativeTerms(radTerms);
-
-      reflectanceToSurfaceReflectanceFilter->SetIsSetAtmosphericRadiativeTerms(true);
-      reflectanceToSurfaceReflectanceFilter->GenerateAtmosphericRadiativeTerms();
-      reflectanceToSurfaceReflectanceFilter->GenerateParameters();
-      reflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(false);
+      m_ReflectanceToSurfaceReflectanceFilter->SetAtmosphericRadiativeTerms(radTerms);
+      m_ReflectanceToSurfaceReflectanceFilter->SetIsSetAtmosphericRadiativeTerms(true);
+      m_ReflectanceToSurfaceReflectanceFilter->GenerateAtmosphericRadiativeTerms();
+      m_ReflectanceToSurfaceReflectanceFilter->GenerateParameters();
+      m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(false);
 
       //rescale the surface reflectance in milli-reflectance
-      scaleFilter->SetInput(reflectanceToSurfaceReflectanceFilter->GetOutput());      
+      m_ScaleFilter->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
       }
       break;
       case Level_TOC:
       {
-      scaleFilter->SetInput(luminanceToReflectanceFilter->GetOutput());
+      m_ScaleFilter->SetInput(m_LuminanceToReflectanceFilter->GetOutput());
       }
       break;
       }
 
     // Output Image 
-    SetParameterOutputImage("out", scaleFilter->GetOutput());
+    SetParameterOutputImage("out", m_ScaleFilter->GetOutput());
   }
+  ImageToLuminanceImageFilterType ::Pointer m_ImageToLuminanceFilter;
+  LuminanceToReflectanceImageFilterType::Pointer m_LuminanceToReflectanceFilter;
+  ReflectanceToSurfaceReflectanceImageFilterType::Pointer m_ReflectanceToSurfaceReflectanceFilter;
+  ScaleFilterType::Pointer m_ScaleFilter;
+  AtmosphericCorrectionParametersType::Pointer m_AtmosphericParam;
 };
 
 }// namespace Wrapper
