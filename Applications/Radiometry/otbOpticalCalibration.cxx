@@ -79,7 +79,10 @@ private:
   OpticalCalibration()
   {
     SetName("OpticalCalibration");
-    SetDescription("Perform optical calibration TOA/TOC(Top Of Atmosphere/Top Of Canopy). Output image is in milli-reflectance.");
+    std::ostringstream oss;
+    oss << "Perform optical calibration TOA/TOC(Top Of Atmosphere/Top Of Canopy)"<<std::endl;
+    oss << "Output image is in milli-reflectance.";
+    SetDescription(oss.str());
   }
 
   void DoCreateParameters()
