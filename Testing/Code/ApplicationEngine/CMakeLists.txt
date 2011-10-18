@@ -96,6 +96,22 @@ add_test(owTvInputImageListParameter ${OTB_WRAPPER_TESTS}
     "mykey"
     "my description"
   )
+
+ 
+# Input vector data list parameter class test
+add_test(owTuInputVectorDataListParameter ${OTB_WRAPPER_TESTS}
+    otbWrapperInputVectorDataListParameterNew
+  )
+
+add_test(owTvInputVectorDataListParameter ${OTB_WRAPPER_TESTS}
+    otbWrapperInputVectorDataListParameterTest1
+    ${INPUTDATA}/ToulousePoints-examples.shp
+    ${INPUTDATA}/ToulouseRoads-examples.shp
+    "mykey"
+    "my description"
+  )
+  
+  
 # Output image parameter class test
 add_test(owTuOutputImageParameter ${OTB_WRAPPER_TESTS}
     otbWrapperOutputImageParameterNew
@@ -136,6 +152,7 @@ otbWrapperEmptyParameterTest.cxx
 otbWrapperInputImageParameterTest.cxx
 otbWrapperInputVectorDataParameterTest.cxx
 otbWrapperInputImageListParameterTest.cxx
+otbWrapperInputVectorDataListParameterTest.cxx
 otbWrapperOutputImageParameterTest.cxx
 otbWrapperNumericalParameterTest.cxx
 otbWrapperParameterListTest.cxx
