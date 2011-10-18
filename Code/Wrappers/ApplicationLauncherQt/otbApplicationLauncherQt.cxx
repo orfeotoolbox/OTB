@@ -20,13 +20,14 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationRegistry.h"
 #include "otbWrapperQtWidgetView.h"
-#include "otbWrapperQtWidgetProgressReport.h"
+#include "otbWrapperQtWidgetSimpleProgressReport.h"
 #include "itksys/SystemTools.hxx"
 
 using otb::Wrapper::Application;
 using otb::Wrapper::ApplicationRegistry;
 using otb::Wrapper::QtWidgetView;
 using otb::Wrapper::QtWidgetProgressReport;
+using otb::Wrapper::QtWidgetSimpleProgressReport;
 
 int main(int argc, char* argv[])
 {
@@ -87,7 +88,7 @@ int main(int argc, char* argv[])
   QObject::connect(gui, SIGNAL(QuitSignal()), mainWindow, SLOT(close()));
 
   // Create a progressReport object
-  QtWidgetProgressReport* progressReport =  new QtWidgetProgressReport(gui->GetModel());
+  QtWidgetSimpleProgressReport * progressReport =  new QtWidgetSimpleProgressReport(gui->GetModel());
   progressReport->SetApplication(app);
 
   // Create a dock widget containg the progress widget

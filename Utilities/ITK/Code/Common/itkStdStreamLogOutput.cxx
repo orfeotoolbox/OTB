@@ -96,7 +96,6 @@ void StdStreamLogOutput::Write(std::string const &content, double timestamp)
 void StdStreamLogOutput::PrintSelf(std::ostream &os, Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
-  os << indent << "Stream: " << m_Stream << std::endl;
 }
 
 }

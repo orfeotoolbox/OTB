@@ -41,3 +41,6 @@ add_test(NAME owTvQtWidgetShow_${app}
            $<TARGET_FILE_DIR:otbapp_${app}> )
        
 endforeach(app)
+
+add_test(owTvQtLogOutputNew ${OTB_WRAPPER_QTWIDGET_TESTS}
+        otbQtLogOutputNew)

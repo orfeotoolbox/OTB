@@ -20,6 +20,7 @@
 
 #include <QtGui>
 #include "otbWrapperApplication.h"
+#include "otbQtLogOutput.h"
 
 namespace otb
 {
@@ -80,6 +81,11 @@ public:
     return m_Application;
   }
 
+  QtLogOutput::Pointer GetLogOutput()
+  {
+    return m_LogOutput;
+  }
+
 signals:
   void SetApplicationReady(bool);
   void SetProgressReportBegin();
@@ -100,6 +106,8 @@ private:
   void operator=(const QtWidgetModel&); //purposely not implemented
 
   Application::Pointer m_Application;
+
+  QtLogOutput::Pointer  m_LogOutput;
 };
 
 

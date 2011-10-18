@@ -48,10 +48,30 @@ public:
   typedef itk::MemberCommand< QtWidgetProgressReport >  AddProcessCommandType;
 
   void ProcessEvent( itk::Object * caller, const itk::EventObject & event );
+                                                                           
+  std::string GetCurrentDescription()
+  {
+    return m_CurrentDescription;
+  }
+
+  itk::ProcessObject* GetCurrentProcess()
+  {
+    return m_CurrentProcess;
+  }
+  
+  QtWidgetModel * GetModel()
+  {
+    m_Model;
+  }
+
+  QVBoxLayout * GetLayout()
+  {
+    return m_Layout;
+  }
 
 public slots:
   void RemoveLayout();
-  void ReportProcess();
+  virtual void ReportProcess();
 
   signals:
   void AddNewProcessToReport();

@@ -19,7 +19,7 @@
 
 #include "otbWrapperQtWidgetParameterGroup.h"
 #include "otbWrapperQtWidgetParameterFactory.h"
-
+#include "otbWrapperQtWidgetProgressReport.h"
 #include "otbWrapperOutputImageParameter.h"
 
 #include "itksys/SystemTools.hxx"
@@ -44,11 +44,19 @@ void QtWidgetView::CreateGui()
 {
   // Create a VBoxLayout with the header, the input widgets, and the footer
   QVBoxLayout *mainLayout = new QVBoxLayout();
+  QTabWidget *tab = new QTabWidget();
 
   mainLayout->addWidget(CreateHeader());
-  mainLayout->addWidget(CreateInputWidgets());
+  tab->addTab(CreateInputWidgets(), "Parameters");
+  mainLayout->addWidget(tab);
+  QTextEdit *log = new QTextEdit();
+  connect( m_Model->GetLogOutput(), SIGNAL(NewContentLog(QString)), log, SLOT(append(QString) ) );
+  tab->addTab(log, "Logs");
+  QtWidgetProgressReport* prog =  new QtWidgetProgressReport(m_Model);
+  prog->SetApplication(m_Application);
+  tab->addTab(prog, "Progress Reporting ...");
+  //mainLayout->addWidget(CreateInputWidgets());
   mainLayout->addWidget(CreateFooter());
-  //mainLayout->addStretch();
 
   QGroupBox *mainGroup = new QGroupBox();
   mainGroup->setLayout(mainLayout);
@@ -62,7 +70,6 @@ void QtWidgetView::CreateGui()
 
   QVBoxLayout  *scrollLayout = new QVBoxLayout();
   scrollLayout->addWidget(scrollArea);
-  //scrollLayout->addStretch();
 
   // Make the scroll layout the main layout
   this->setLayout(scrollLayout);

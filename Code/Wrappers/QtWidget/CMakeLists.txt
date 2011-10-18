@@ -22,6 +22,8 @@ set( WrappersQtWidget_MOC_HDR
        otbQtFileSelectionWidget.h
        itkQtProgressBar.h
        otbWrapperQtWidgetFilenameParameter.h
+       otbQtLogOutput.h
+       otbWrapperQtWidgetSimpleProgressReport.h
       )
 
 QT4_WRAP_CPP(WrappersQtWidget_MOC_SRC ${WrappersQtWidget_MOC_HDR})
