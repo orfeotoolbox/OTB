@@ -143,24 +143,20 @@ private:
     itk::MetaDataDictionary             dict = inImage->GetMetaDataDictionary();
     OpticalImageMetadataInterface::Pointer lImageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(dict);
 
-    // Test if needed data are available.
-    try
-      {
-      // ImageToLuminance
-      lImageMetadataInterface->GetPhysicalGain();
-      lImageMetadataInterface->GetPhysicalBias();
+    // Test if needed data are available : an exception will be thrown
+    // if one the following Get* return failure. the exception is then
+    // catched in the Wrapper::Application class which redirect it to
+    // the logger
+    // ImageToLuminance
+    lImageMetadataInterface->GetPhysicalGain();
+    lImageMetadataInterface->GetPhysicalBias();
 
-      // LuminanceToReflectance
-      lImageMetadataInterface->GetDay();
-      lImageMetadataInterface->GetMonth();
-
-      lImageMetadataInterface->GetSolarIrradiance();
-      lImageMetadataInterface->GetSunElevation();
-      }
-    catch (itk::ExceptionObject& err)
-      {
-      itkGenericExceptionMacro("Invalid input image medadata. The parsing returns the following error");
-      }
+    // LuminanceToReflectance
+    lImageMetadataInterface->GetDay();
+    lImageMetadataInterface->GetMonth();
+    
+    lImageMetadataInterface->GetSolarIrradiance();
+    lImageMetadataInterface->GetSunElevation();
 
     m_ImageToLuminanceFilter                = ImageToLuminanceImageFilterType::New();
     m_LuminanceToReflectanceFilter          = LuminanceToReflectanceImageFilterType::New();
@@ -240,11 +236,12 @@ private:
     // Output Image 
     SetParameterOutputImage("out", m_ScaleFilter->GetOutput());
   }
-  ImageToLuminanceImageFilterType ::Pointer m_ImageToLuminanceFilter;
-  LuminanceToReflectanceImageFilterType::Pointer m_LuminanceToReflectanceFilter;
+
+  ImageToLuminanceImageFilterType ::Pointer               m_ImageToLuminanceFilter;
+  LuminanceToReflectanceImageFilterType::Pointer          m_LuminanceToReflectanceFilter;
   ReflectanceToSurfaceReflectanceImageFilterType::Pointer m_ReflectanceToSurfaceReflectanceFilter;
-  ScaleFilterType::Pointer m_ScaleFilter;
-  AtmosphericCorrectionParametersType::Pointer m_AtmosphericParam;
+  ScaleFilterType::Pointer                                m_ScaleFilter;
+  AtmosphericCorrectionParametersType::Pointer            m_AtmosphericParam;
 };
 
 }// namespace Wrapper
