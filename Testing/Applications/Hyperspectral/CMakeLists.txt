@@ -8,7 +8,7 @@ add_test(NAME apTvHyHyperspectralUnmixing_UCLS
                    ${TEMP}/apTvHyHyperspectralUnmixing_UCLS.tif
                  Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
                  HyperspectralUnmixing
-                 --modulePath $<TARGET_FILE_DIR:otbapp_HyperspectralUnmixing>
+                 $<TARGET_FILE_DIR:otbapp_HyperspectralUnmixing>
                  --in ${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif
                  --ie ${INPUTDATA}/Hyperspectral/synthetic/endmembers.tif
                  --out ${TEMP}/apTvHyHyperspectralUnmixing_UCLS.tif double
@@ -21,7 +21,7 @@ add_test(NAME apTvHyHyperspectralUnmixing_NCLS
                    ${TEMP}/apTvHyHyperspectralUnmixing_NCLS.tif
                  Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
                  HyperspectralUnmixing
-                 --modulePath $<TARGET_FILE_DIR:otbapp_HyperspectralUnmixing>
+                 $<TARGET_FILE_DIR:otbapp_HyperspectralUnmixing>
                  --in ${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif
                  --ie ${INPUTDATA}/Hyperspectral/synthetic/endmembers.tif
                  --out ${TEMP}/apTvHyHyperspectralUnmixing_NCLS.tif double
@@ -34,7 +34,7 @@ add_test(NAME apTvHyHyperspectralUnmixing_NCLS
 #                   ${TEMP}/apTvHyHyperspectralUnmixing_ISRA.tif
 #                 Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
 #                 HyperspectralUnmixing
-#                 --modulePath $<TARGET_FILE_DIR:otbapp_HyperspectralUnmixing>
+#                 $<TARGET_FILE_DIR:otbapp_HyperspectralUnmixing>
 #                 --in ${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif
 #                 --ie ${INPUTDATA}/Hyperspectral/synthetic/endmembers.tif
 #                 --out ${TEMP}/apTvHyHyperspectralUnmixing_ISRA.tif double
@@ -47,7 +47,7 @@ add_test(NAME apTvHyHyperspectralUnmixing_FCLS
                    ${TEMP}/apTvHyHyperspectralUnmixing_FCLS.tif
                  Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
                  HyperspectralUnmixing
-                 --modulePath $<TARGET_FILE_DIR:otbapp_HyperspectralUnmixing>
+                 $<TARGET_FILE_DIR:otbapp_HyperspectralUnmixing>
                  --in ${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif
                  --ie ${INPUTDATA}/Hyperspectral/synthetic/endmembers.tif
                  --out ${TEMP}/apTvHyHyperspectralUnmixing_FCLS.tif double
@@ -60,7 +60,7 @@ add_test(NAME apTvHyHyperspectralUnmixing_VCA
                    ${TEMP}/apTvHyHyperspectralUnmixing_VCA.tif
                  Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
                  HyperspectralUnmixing
-                 --modulePath $<TARGET_FILE_DIR:otbapp_HyperspectralUnmixing>
+                 $<TARGET_FILE_DIR:otbapp_HyperspectralUnmixing>
                  --in ${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif
                  --ne 5 
                  --oe ${TEMP}/apTvHyHyperspectralUnmixing_VCA.tif double )
@@ -69,7 +69,7 @@ add_test(NAME apTvHyHyperspectralUnmixing_VCA_UCLS
          COMMAND otbTestDriver
                  Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
                  HyperspectralUnmixing
-                 --modulePath $<TARGET_FILE_DIR:otbapp_HyperspectralUnmixing>
+                 $<TARGET_FILE_DIR:otbapp_HyperspectralUnmixing>
                  --in ${OTB_DATA_ROOT}/Input/Hyperspectral/synthetic/hsi_cube.tif
                  --out ${TEMP}/apTvHyHyperspectralUnmixing_ucls.tif double
                  --ne 5
@@ -79,7 +79,7 @@ add_test(NAME apTvHyHyperspectralUnmixing_VCA_FCLS
          COMMAND otbTestDriver
                  Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
                  HyperspectralUnmixing
-                 --modulePath $<TARGET_FILE_DIR:otbapp_HyperspectralUnmixing>
+                 $<TARGET_FILE_DIR:otbapp_HyperspectralUnmixing>
                  --in ${OTB_DATA_ROOT}/Input/Hyperspectral/synthetic/hsi_cube.tif
                  --out ${TEMP}/apTvHyHyperspectralUnmixing_fcls.tif double
                  --ne 5

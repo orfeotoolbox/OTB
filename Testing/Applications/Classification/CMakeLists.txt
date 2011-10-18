@@ -8,7 +8,7 @@ add_test(NAME apTvClEstimateImagesStatisticsQB1
                   ${TEMP}/apTvClEstimateImageStatisticsQB1.xml
                  Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
                  EstimateImagesStatistics
-                 --modulePath $<TARGET_FILE_DIR:otbapp_EstimateImagesStatistics>
+                 $<TARGET_FILE_DIR:otbapp_EstimateImagesStatistics>
                  --il ${INPUTDATA}/Classification/QB_1_ortho.tif
                  --out ${TEMP}/apTvClEstimateImageStatisticsQB1.xml )
 
@@ -19,7 +19,7 @@ add_test(NAME apTvClEstimateImagesStatisticsQB123
                   ${TEMP}/apTvClEstimateImageStatisticsQB123.xml
                  Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
                  EstimateImagesStatistics
-                 --modulePath $<TARGET_FILE_DIR:otbapp_EstimateImagesStatistics>
+                 $<TARGET_FILE_DIR:otbapp_EstimateImagesStatistics>
                  --il ${INPUTDATA}/Classification/QB_1_ortho.tif
                       ${INPUTDATA}/Classification/QB_2_ortho.tif
                       ${INPUTDATA}/Classification/QB_3_ortho.tif
@@ -32,7 +32,7 @@ add_test(NAME apTvClEstimateImagesStatisticsQB456
                   ${TEMP}/apTvClEstimateImageStatisticsQB456.xml
                  Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
                  EstimateImagesStatistics
-                 --modulePath $<TARGET_FILE_DIR:otbapp_EstimateImagesStatistics>
+                 $<TARGET_FILE_DIR:otbapp_EstimateImagesStatistics>
                  --il ${INPUTDATA}/Classification/QB_4_extract.tif 
                       ${INPUTDATA}/Classification/QB_5_extract.tif 
                       ${INPUTDATA}/Classification/QB_6_extract.tif
@@ -46,7 +46,7 @@ ADD_TEST(NAME apTvClImageSVMClassifierQB1
     ${TEMP}/clLabeledImageQB1.tif
    Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
    ImageSVMClassifier
-   --modulePath $<TARGET_FILE_DIR:otbapp_ImageSVMClassifier>
+   $<TARGET_FILE_DIR:otbapp_ImageSVMClassifier>
    --in  ${INPUTDATA}/Classification/QB_1_ortho.tif
    --imstat  ${OTBAPP_BASELINE_FILES}/clImageStatisticsQB1.xml
    --svm ${OTBAPP_BASELINE_FILES}/clsvmModelQB1.svm
@@ -61,7 +61,7 @@ ADD_TEST(NAME apTvClImageSVMClassifierQB2
     ${TEMP}/clLabeledImageQB2.tif
    Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
    ImageSVMClassifier
-   --modulePath $<TARGET_FILE_DIR:otbapp_ImageSVMClassifier>
+   $<TARGET_FILE_DIR:otbapp_ImageSVMClassifier>
    --in  ${INPUTDATA}/Classification/QB_2_ortho.tif
    --imstat  ${OTBAPP_BASELINE_FILES}/clImageStatisticsQB1.xml
    --svm ${OTBAPP_BASELINE_FILES}/clsvmModelQB1.svm
@@ -75,7 +75,7 @@ ADD_TEST(NAME apTvClImageSVMClassifierQB3
     ${TEMP}/clLabeledImageQB3.tif
    Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
    ImageSVMClassifier
-   --modulePath $<TARGET_FILE_DIR:otbapp_ImageSVMClassifier>
+   $<TARGET_FILE_DIR:otbapp_ImageSVMClassifier>
    --in  ${INPUTDATA}/Classification/QB_3_ortho.tif
    --imstat  ${OTBAPP_BASELINE_FILES}/clImageStatisticsQB1.xml
    --svm ${OTBAPP_BASELINE_FILES}/clsvmModelQB1.svm
@@ -89,7 +89,7 @@ ADD_TEST(NAME apTvClImageSVMClassifierQB123_1
     ${TEMP}/clLabeledImageQB123_1.tif
    Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
    ImageSVMClassifier
-   --modulePath $<TARGET_FILE_DIR:otbapp_ImageSVMClassifier>
+   $<TARGET_FILE_DIR:otbapp_ImageSVMClassifier>
    --in  ${INPUTDATA}/Classification/QB_1_ortho.tif
    --imstat  ${OTBAPP_BASELINE_FILES}/clImageStatisticsQB123.xml
    --svm ${OTBAPP_BASELINE_FILES}/clsvmModelQB123.svm
@@ -104,7 +104,7 @@ ADD_TEST(NAME apTvClImageSVMClassifierQB123_2
     ${TEMP}/clLabeledImageQB123_2.tif
    Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
    ImageSVMClassifier
-   --modulePath $<TARGET_FILE_DIR:otbapp_ImageSVMClassifier>
+   $<TARGET_FILE_DIR:otbapp_ImageSVMClassifier>
    --in  ${INPUTDATA}/Classification/QB_2_ortho.tif
    --imstat  ${OTBAPP_BASELINE_FILES}/clImageStatisticsQB123.xml
    --svm ${OTBAPP_BASELINE_FILES}/clsvmModelQB123.svm
@@ -119,7 +119,7 @@ ADD_TEST(NAME apTvClImageSVMClassifierQB123_3
     ${TEMP}/clLabeledImageQB123_3.tif
    Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
    ImageSVMClassifier
-   --modulePath $<TARGET_FILE_DIR:otbapp_ImageSVMClassifier>
+   $<TARGET_FILE_DIR:otbapp_ImageSVMClassifier>
    --in  ${INPUTDATA}/Classification/QB_3_ortho.tif
    --imstat  ${OTBAPP_BASELINE_FILES}/clImageStatisticsQB123.xml
    --svm ${OTBAPP_BASELINE_FILES}/clsvmModelQB123.svm
@@ -134,7 +134,7 @@ ADD_TEST(NAME apTvClImageSVMClassifierQB123_6
     ${TEMP}/clLabeledImageQB123_6.tif
    Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
    ImageSVMClassifier
-   --modulePath $<TARGET_FILE_DIR:otbapp_ImageSVMClassifier>
+   $<TARGET_FILE_DIR:otbapp_ImageSVMClassifier>
    --in  ${INPUTDATA}/Classification/QB_6_extract.tif
    --imstat  ${OTBAPP_BASELINE_FILES}/clImageStatisticsQB123.xml
    --svm ${OTBAPP_BASELINE_FILES}/clsvmModelQB123.svm
@@ -150,7 +150,7 @@ ADD_TEST(NAME apTvClImageSVMClassifierQB456_4
     ${TEMP}/clLabeledImageQB456_4.tif
    Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
    ImageSVMClassifier
-   --modulePath $<TARGET_FILE_DIR:otbapp_ImageSVMClassifier>
+   $<TARGET_FILE_DIR:otbapp_ImageSVMClassifier>
    --in  ${INPUTDATA}/Classification/QB_4_extract.tif
    --imstat  ${OTBAPP_BASELINE_FILES}/clImageStatisticsQB456.xml
    --svm ${OTBAPP_BASELINE_FILES}/clsvmModelQB456.svm
@@ -165,7 +165,7 @@ ADD_TEST(NAME apTvClImageSVMClassifierQB456_5
     ${TEMP}/clLabeledImageQB456_5.tif
    Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
    ImageSVMClassifier
-   --modulePath $<TARGET_FILE_DIR:otbapp_ImageSVMClassifier>
+   $<TARGET_FILE_DIR:otbapp_ImageSVMClassifier>
    --in  ${INPUTDATA}/Classification/QB_5_extract.tif
    --imstat  ${OTBAPP_BASELINE_FILES}/clImageStatisticsQB456.xml
    --svm ${OTBAPP_BASELINE_FILES}/clsvmModelQB456.svm
@@ -180,7 +180,7 @@ ADD_TEST(NAME apTvClImageSVMClassifierQB456_6
     ${TEMP}/clLabeledImageQB456_6.tif
    Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
    ImageSVMClassifier
-   --modulePath $<TARGET_FILE_DIR:otbapp_ImageSVMClassifier>
+   $<TARGET_FILE_DIR:otbapp_ImageSVMClassifier>
    --in   ${INPUTDATA}/Classification/QB_6_extract.tif
    --mask ${INPUTDATA}/Classification/QB_6_mask.tif
    --imstat  ${OTBAPP_BASELINE_FILES}/clImageStatisticsQB456.xml
@@ -196,7 +196,7 @@ ADD_TEST(NAME apTvClImageSVMClassifierQB456_1
     ${TEMP}/clLabeledImageQB456_1.tif
    Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
    ImageSVMClassifier
-   --modulePath $<TARGET_FILE_DIR:otbapp_ImageSVMClassifier>
+   $<TARGET_FILE_DIR:otbapp_ImageSVMClassifier>
    --in  ${INPUTDATA}/Classification/QB_1_ortho.tif
    --imstat  ${OTBAPP_BASELINE_FILES}/clImageStatisticsQB456.xml
    --svm ${OTBAPP_BASELINE_FILES}/clsvmModelQB456.svm
@@ -210,7 +210,7 @@ add_test(NAME apTvClKMeansImageClassification
                   ${TEMP}/apTvClKMeansImageClassificationFilterOuptut.tif
                  Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
                  KMeansClassification
-                 --modulePath $<TARGET_FILE_DIR:otbapp_KMeansClassification>
+                 $<TARGET_FILE_DIR:otbapp_KMeansClassification>
                  --in ${INPUTDATA}/poupees_sub.png
                  --vm ${INPUTDATA}/mask_KMeans.png 
                  --ts 100 

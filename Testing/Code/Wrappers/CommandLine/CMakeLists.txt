@@ -26,26 +26,26 @@ add_test(clTvWrapperCommandLineParserTest_GetAtt ${OTB_WRAPPER_COMMAND_LINE_TEST
 add_test(clTvWrapperCommandLineParserTest_IsAttExists_Wrong ${OTB_WRAPPER_COMMAND_LINE_TESTS}
 	otbWrapperCommandLineParserTest3
         "--m"
-        " TrainImagesClassifier --il QB_1_ortho.tif --vd vd .shape --modulePath test"
+        " TrainImagesClassifier test --il QB_1_ortho.tif --vd vd .shape "
   )
   
   
 add_test(clTvWrapperCommandLineParserTest_IsAttExists ${OTB_WRAPPER_COMMAND_LINE_TESTS}
 	otbWrapperCommandLineParserTest4
         "--m"
-         " TrainImagesClassifier --il QB_1_ortho.tif --vd vd .shape --m name --modulePath test"
+         " TrainImagesClassifier test --il QB_1_ortho.tif --vd vd .shape --m name"
   )
    
 add_test(clTvWrapperCommandLineParserTest_IsAttExistsEnd ${OTB_WRAPPER_COMMAND_LINE_TESTS}
 	otbWrapperCommandLineParserTest4
         "--m"
-         " TrainImagesClassifier --il QB_1_ortho.tif --vd vd .shape --modulePath test --m name"
+         " TrainImagesClassifier test --il QB_1_ortho.tif --vd vd .shape --m name"
   )
     
 add_test(clTvWrapperCommandLineParserTest_IsAttExistsEndNoParam ${OTB_WRAPPER_COMMAND_LINE_TESTS}
 	otbWrapperCommandLineParserTest4
         "--m"
-        " TrainImagesClassifier --il QB_1_ortho.tif --vd vd .shape --modulePath test --m"
+        " TrainImagesClassifier test --il QB_1_ortho.tif --vd vd .shape test --m"
   )
    
 add_test(clTvWrapperCommandLineParserTest_GetAttWithoutValue ${OTB_WRAPPER_COMMAND_LINE_TESTS}
@@ -63,53 +63,53 @@ SET_TESTS_PROPERTIES(clTvWrapperCommandLineParserTest_NoModule PROPERTIES WILL_F
 
 add_test(clTvWrapperCommandLineParserTest_NonAlphaNumModuleName ${OTB_WRAPPER_COMMAND_LINE_TESTS}
 	otbWrapperCommandLineParserTest2
-        "-Re+scale --modulePath ${APPLICATIONSPATH}"
+        "-Re+scale ${APPLICATIONSPATH}"
   )
 SET_TESTS_PROPERTIES(clTvWrapperCommandLineParserTest_NonAlphaNumModuleName PROPERTIES WILL_FAIL true)
 
 add_test(clTvWrapperCommandLineParserTest_GoodModule ${OTB_WRAPPER_COMMAND_LINE_TESTS}
 	otbWrapperCommandLineParserTest2
-        "Rescale --modulePath ${APPLICATIONSPATH}"
+        "Rescale ${APPLICATIONSPATH}"
 )
 
 add_test(clTvWrapperCommandLineParserTest_WithKeyNoModule ${OTB_WRAPPER_COMMAND_LINE_TESTS}
 	otbWrapperCommandLineParserTest2
-        "--moduleName --modulePath ${APPLICATIONSPATH}"
+        "${APPLICATIONSPATH}"
   )
 SET_TESTS_PROPERTIES(clTvWrapperCommandLineParserTest_WithKeyNoModule PROPERTIES WILL_FAIL true)
 
 add_test(clTvWrapperCommandLineParserTest_WithKeyNonAlphaNumModuleName ${OTB_WRAPPER_COMMAND_LINE_TESTS}
 	otbWrapperCommandLineParserTest2
-        "--moduleName -Re+scale --modulePath ${APPLICATIONSPATH}"
+        "-Re+scale ${APPLICATIONSPATH}"
   )
 SET_TESTS_PROPERTIES(clTvWrapperCommandLineParserTest_WithKeyNonAlphaNumModuleName PROPERTIES WILL_FAIL true)
 
 add_test(clTvWrapperCommandLineParserTest_WithKeyGoodModule ${OTB_WRAPPER_COMMAND_LINE_TESTS}
 	otbWrapperCommandLineParserTest2
-        "--moduleName Rescale --modulePath ${APPLICATIONSPATH}"
+        "Rescale ${APPLICATIONSPATH}"
 )
 
 add_test(clTvWrapperCommandLineParserTest_NoPath ${OTB_WRAPPER_COMMAND_LINE_TESTS}
 	otbWrapperCommandLineParserTest2
-        "Rescale --modulePath"
+        "Rescale"
 )
 SET_TESTS_PROPERTIES(clTvWrapperCommandLineParserTest_NoPath PROPERTIES WILL_FAIL true)
 
 add_test(clTvWrapperCommandLineParserTest_WrongPath ${OTB_WRAPPER_COMMAND_LINE_TESTS}
 	otbWrapperCommandLineParserTest2
-        "Rescale --modulePath FakePath"
+        "Rescale FakePath"
 )
 SET_TESTS_PROPERTIES(clTvWrapperCommandLineParserTest_WrongPath PROPERTIES WILL_FAIL true)
 
 add_test(clTvWrapperCommandLineParserTest_MultiplePathOneWrong ${OTB_WRAPPER_COMMAND_LINE_TESTS}
 	otbWrapperCommandLineParserTest2
-        "Rescale --modulePath ${APPLICATIONSPATH} FakePath"
+        "Rescale ${APPLICATIONSPATH} FakePath"
 )
 SET_TESTS_PROPERTIES(clTvWrapperCommandLineParserTest_MultiplePathOneWrong PROPERTIES WILL_FAIL true)
 
 add_test(clTvWrapperCommandLineParserTest_MultiplePath ${OTB_WRAPPER_COMMAND_LINE_TESTS}
 	otbWrapperCommandLineParserTest2
-        "Rescale --modulePath ${APPLICATIONSPATH} ${APPLICATIONSPATH}"
+        "Rescale ${APPLICATIONSPATH} ${APPLICATIONSPATH}"
 )
 
 
@@ -120,42 +120,42 @@ add_test(clTuWrapperCommandLineLauncherNew ${OTB_WRAPPER_COMMAND_LINE_TESTS}
 
 add_test(clTvWrapperCommandLineLauncherTest ${OTB_WRAPPER_COMMAND_LINE_TESTS}
 	otbWrapperCommandLineLauncherTest
-        "Rescale --modulePath ${APPLICATIONSPATH} --in ${INPUTDATA}/poupees.tif --out ${TEMP}/clTvWrapperCommandLineLauncherTest.tif --outmin 15 --outmax 200"
+        "Rescale ${APPLICATIONSPATH} --in ${INPUTDATA}/poupees.tif --out ${TEMP}/clTvWrapperCommandLineLauncherTest.tif --outmin 15 --outmax 200"
   )
 
 add_test(clTvWrapperCommandLineLauncherTest_Help ${OTB_WRAPPER_COMMAND_LINE_TESTS}
 	otbWrapperCommandLineLauncherTest
-        "Rescale --modulePath ${APPLICATIONSPATH} --help"
+        "Rescale ${APPLICATIONSPATH} --help"
   )
 SET_TESTS_PROPERTIES(clTvWrapperCommandLineLauncherTest_Help PROPERTIES WILL_FAIL true)
 
 add_test(clTvWrapperCommandLineLauncherTest_Help2 ${OTB_WRAPPER_COMMAND_LINE_TESTS}
 	otbWrapperCommandLineLauncherTest
-        "Rescale --modulePath ${APPLICATIONSPATH} --in ${INPUTDATA}/poupees.tif --out ${TEMP}/clTvWrapperCommandLineLauncherTest_Help2.tif --outmin 15 --outmax 200 --help"
+        "Rescale ${APPLICATIONSPATH} --in ${INPUTDATA}/poupees.tif --out ${TEMP}/clTvWrapperCommandLineLauncherTest_Help2.tif --outmin 15 --outmax 200 --help"
   )
 SET_TESTS_PROPERTIES(clTvWrapperCommandLineLauncherTest_Help2 PROPERTIES WILL_FAIL true)
 
 add_test(clTvWrapperCommandLineLauncherTest_MissingManParam ${OTB_WRAPPER_COMMAND_LINE_TESTS}
 	otbWrapperCommandLineLauncherTest
-        "Rescale --modulePath ${APPLICATIONSPATH}"
+        "Rescale ${APPLICATIONSPATH}"
   )
 SET_TESTS_PROPERTIES(clTvWrapperCommandLineLauncherTest_MissingManParam PROPERTIES WILL_FAIL true)
 
 add_test(clTvWrapperCommandLineLauncherTest_MissingDash ${OTB_WRAPPER_COMMAND_LINE_TESTS}
 	otbWrapperCommandLineLauncherTest
-        "Rescale --modulePath ${APPLICATIONSPATH} -in image1"
+        "Rescale ${APPLICATIONSPATH} -in image1"
   )
 SET_TESTS_PROPERTIES(clTvWrapperCommandLineLauncherTest_MissingDash PROPERTIES WILL_FAIL true)
 
 add_test(clTvWrapperCommandLineLauncherTest_DoubleParam ${OTB_WRAPPER_COMMAND_LINE_TESTS}
 	otbWrapperCommandLineLauncherTest
-        "Rescale --modulePath ${APPLICATIONSPATH} --in image1 --in image2"
+        "Rescale ${APPLICATIONSPATH} --in image1 --in image2"
   )
 SET_TESTS_PROPERTIES(clTvWrapperCommandLineLauncherTest_DoubleParam PROPERTIES WILL_FAIL true)
 
 add_test(clTvWrapperCommandLineLauncherTest_WrongParam ${OTB_WRAPPER_COMMAND_LINE_TESTS}
 	otbWrapperCommandLineLauncherTest
-        "Rescale --modulePath ${APPLICATIONSPATH} --inn image"
+        "Rescale ${APPLICATIONSPATH} --inn image"
   )
 SET_TESTS_PROPERTIES(clTvWrapperCommandLineLauncherTest_WrongParam PROPERTIES WILL_FAIL true)
 

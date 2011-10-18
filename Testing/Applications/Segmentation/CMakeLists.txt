@@ -13,7 +13,7 @@ add_test(NAME apTvSeMeanShift
                     ${TEMP}/apTvSeMeanShift_ClusterBoundariesOutput.tif
                  Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
                  MeanShiftSegmentation
-                 --modulePath $<TARGET_FILE_DIR:otbapp_MeanShiftSegmentation>
+                 $<TARGET_FILE_DIR:otbapp_MeanShiftSegmentation>
                  --in ${INPUTDATA}/qb_RoadExtract2sub200x200.tif
                  --fout ${TEMP}/apTvSeMeanShift_FilterOutput.tif
                  --cout ${TEMP}/apTvSeMeanShift_ClusteredOutput.tif

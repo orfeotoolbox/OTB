@@ -32,10 +32,8 @@ namespace Wrapper
  *  \brief This class check the validity of a command line application.
  *
  * To be valid, the expression must be as follow:
- * ModuleName --attribut1_Key attrubut1_Value --attribut2_Key attrubut2_Value
+ * ModuleName (ModulePaths) --attribut1_Key attrubut1_Value --attribut2_Key attrubut2_Value
  * After the attribut key, if the user give several values (expression without \"--\" separated by space), it will automacally be interpreted as a list.
- * The module name can be set as the first element of the expression or in the expression with the key --moduleName.
- * The exe path have to be set in with the option --modulePath.
  */
 
 class ITK_EXPORT CommandLineParser : public itk::Object
@@ -67,16 +65,14 @@ public:
 
   /** Get the paths executables in an expression. Store the list in a vector of string. */
   CommandLineParser::ParseResultType GetPaths( std::vector<std::string> & paths, const std::string & exp );
+  /** Get the paths executables in an expression. Store the list in a vector of string. */
+  std::string GetPathsAsString( const std::string & exp );
+
   /** Get the module name in an expression. It can be the first element of the expression (if the expression doesn't start with a "--" or the attribut associated to the key m_ModuleNameKey). */
   CommandLineParser::ParseResultType GetModuleName( std::string & modName, const std::string & exp );
 
   /** Get the list of keys in an expression. That is to say each word starting by "--". */
   std::vector<std::string> GetKeyList( const std::string & exp );
-
-  itkGetStringMacro(ModuleNameKey);
-  itkGetStringMacro(ModulePathKey);
-  itkSetStringMacro(ModuleNameKey);
-  itkSetStringMacro(ModulePathKey);
 
 protected:
   /** Constructor */
@@ -89,12 +85,6 @@ private:
 
   CommandLineParser(const CommandLineParser &); //purposely not implemented
   void operator =(const CommandLineParser&); //purposely not implemented
-  
-  /** Module name key. Default is "--moduleName". */
-  std::string m_ModuleNameKey;
-  /** Module executable paths key. Default is "--modulePath". */
-  std::string m_ModulePathKey;
-
 }; //end class
 
 } // end namespace Wrapper
