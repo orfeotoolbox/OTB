@@ -12,7 +12,7 @@ add_test(NAME apTvUtORthorectificationTest_UTM
          COMMAND otbTestDriver
                  Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
                  OrthoRectification
-                 --modulePath $<TARGET_FILE_DIR:otbapp_Rescale>
+                 $<TARGET_FILE_DIR:otbapp_Rescale>
                  --in ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
                  --out ${TEMP}/owTvOrthorectifTest_UTM.tif
                  --dem ${INPUTDATA}/DEM/srtm_directory/

@@ -42,14 +42,11 @@ namespace Wrapper
  *  \brief This class check the validity of a command line application.
  *
  * To be valid, the expression must be as follow:
- * ModuleName --attribut1_Key attribut1_Value --attribut2_Key
+ * ModuleName (ModulePath) --attribut1_Key attribut1_Value --attribut2_Key
  * attribut2_Value
  * After the attribut key, if the user give several values (expression
  * without \"--\" separated by space), it will automacally be
  * interpreted as a list.
- * The module name can be set as the first element of the expression
- * or in the expression with the key --moduleName.
- * The exe path have to be set in with the option --modulePath.
  */
 
 class ITK_EXPORT CommandLineLauncher : public itk::Object

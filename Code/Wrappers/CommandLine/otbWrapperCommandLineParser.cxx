@@ -31,9 +31,7 @@ namespace otb
 namespace Wrapper
 {
 
-CommandLineParser::CommandLineParser() :
-    m_ModuleNameKey("--moduleName"),
-    m_ModulePathKey("--modulePath")
+CommandLineParser::CommandLineParser()
 {
 }
 
@@ -41,36 +39,82 @@ CommandLineParser::~CommandLineParser()
 {
 }
 
+std::string
+CommandLineParser::GetPathsAsString( const std::string & exp )
+{
+  std::string res;
+  // The first element must be the module path, non "--" allowed.
+  // The module path list element are the strings between the first
+  // element and the next key (ie. "--" string).
+  std::string tempModPath = exp;
+  if( exp.find("--") != std::string::npos)
+    {
+    tempModPath = exp.substr( 0, exp.find("--")-1);
+    }
+
+
+  // Get everything after the module path
+  if( tempModPath.find(" ") != std::string::npos)
+    {
+    res = tempModPath.substr( tempModPath.find(" ")+1, tempModPath.size());
+    }
+    
+  // Suppress possible multi space at the beginning of the string
+  while (res.size()>0 && res[0]==' ')
+    {
+    res.erase(0, 1);
+    }
+
+  return res;
+}
+
 CommandLineParser::ParseResultType
 CommandLineParser::GetPaths( std::vector<std::string> & paths, const std::string & exp )
 {
-  std::size_t found = std::string(exp).find(m_ModulePathKey);
-  if( found == std::string::npos )
+  std::string pathsList = this->GetPathsAsString( exp );
+
+  if( pathsList.size() == 0 )
     {
     return NOMODULEPATH;
     }
 
-  std::vector<std::string> pathAttribut = GetAttribut(m_ModulePathKey, std::string(exp));
-  
-  if( pathAttribut.size() == 0 )
+  std::string tempModPath = pathsList;
+  // remove other key in the string if there's any
+  if( pathsList.find("--") != std::string::npos)
+    {
+    tempModPath = pathsList.substr( 0, pathsList.find("--")-1);
+    }
+
+  if( tempModPath.size() > 0 )
+    {
+    std::vector<itksys::String> pathAttribut = itksys::SystemTools::SplitString(tempModPath.substr(0, tempModPath.size()).c_str(), ' ', false);
+      
+    // Remove " " string element
+    for(unsigned int i=0; i<pathAttribut.size(); i++)
+      {
+      // Suppress possible multi space at the beginning of the string
+      while (pathAttribut[i].size()>0 && pathAttribut[i][0]==' ')
+      {
+      pathAttribut[i].erase(0, 1);
+      }
+      std::string fullPath = itksys::SystemTools::CollapseFullPath(pathAttribut[i].c_str());
+      if( !itksys::SystemTools::FileIsDirectory(fullPath.c_str()) )
+        {
+        std::cout<<"module path INVALIDMODULEPATH"<<std::endl;
+        return INVALIDMODULEPATH;
+        }
+      paths.push_back(fullPath);
+      }
+    }
+  else
     {
     return NOMODULEPATH;
-    }
-  
-  for( unsigned i=0; i<pathAttribut.size(); i++)
-    {
-    std::string fullPath = itksys::SystemTools::CollapseFullPath(pathAttribut[i].c_str());
-    if( !itksys::SystemTools::FileIsDirectory(fullPath.c_str()) )
-      {
-  std::cout<<"module path INVALIDMODULEPATH"<<std::endl;
-      return INVALIDMODULEPATH;
-      }
-    paths.push_back(fullPath);
     }
   
   
   return OK;
 }
+
 
 CommandLineParser::ParseResultType
 CommandLineParser::GetModuleName( std::string & modName, const std::string & exp )
@@ -96,60 +140,22 @@ CommandLineParser::GetModuleName( std::string & modName, const std::string & exp
   
   itksys::RegularExpression reg;
   reg.compile("([^0-9a-zA-Z])");
-  // CASE 1 : direct module name
-  // First string mustn't start with --
-  // Second string must contains -- (2 modules name not allow)
-  // And must contain only alphanumerical character
-  if( spaceSplittedExp[0].substr(0, 2) != "--" )
+  // The first element must be the module path, non "--" allowed.
+  if( spaceSplittedExp[0].substr(0, 2) == "--" || spaceSplittedExp.size() == 0 )
     {
-    if( spaceSplittedExp.size() > 1 )
-      {
-      if( spaceSplittedExp[1].substr(0, 2) != "--" )
-        {
-        return MULTIPLEMODULENAME;
-        }
-      }
-    if(reg.find(spaceSplittedExp[0]))
-      {
-      return INVALIDMODULENAME;
-      }
-    else
-      {
-      modName = spaceSplittedExp[0];
-      }
+    return NOMODULENAME;
     }
-  // CASE 2 : set as --moduleName
-  // Must contain the string --moduleName
-  // Only 1 string before the following --
-  // And must contain only alphanumerical character
+
+  // It must contain only alphanumerical character
+  if(reg.find(spaceSplittedExp[0]))
+    {
+    return INVALIDMODULENAME;
+    }
   else
     {
-    std::size_t found = std::string(exp).find(m_ModuleNameKey);
-    if( found == std::string::npos )
-      {
-      return NOMODULENAME;
-      }
-    else
-      {
-      std::vector<std::string> moduleNameAttribut = GetAttribut(m_ModuleNameKey, std::string(exp));
-      
-      if( moduleNameAttribut.size() == 0 )
-        {
-        return NOMODULENAME;
-        }
-      if( moduleNameAttribut.size() > 1 )
-        {
-        return MULTIPLEMODULENAME;
-        }
-      if(reg.find(moduleNameAttribut[0]))
-        {
-        return INVALIDMODULENAME;
-        }
-      
-      modName = moduleNameAttribut[0];
-      }
+    modName = spaceSplittedExp[0];
     }
-  
+      
   return OK;
 }
 

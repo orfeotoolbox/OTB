@@ -112,15 +112,19 @@ CommandLineLauncher::Load()
     return false;
     }
 
-  if( m_Parser->IsAttributExists(m_Parser->GetModulePathKey(), m_Expression) )
+  if( this->LoadPath() == false )
     {
-    if( this->LoadPath() == false )
+    if (m_Parser->GetPathsAsString(m_Expression).size() != 0 )
       {
-      std::cerr << "ERROR: At least one specifed path within \""
-                << m_Parser->GetAttributAsString(m_Parser->GetModulePathKey(), m_Expression)
+      std::cerr << "ERROR: At least one specified path within \""
+                << m_Parser->GetPathsAsString(m_Expression)
                 <<"\" is invalid or doesn't exist..." <<std::endl;
-      return false;
       }
+    else
+      {
+      std::cerr << "ERROR: Trouble loading path, please check your command line..." <<std::endl;
+      }
+    return false;
     }
 
   this->LoadApplication();
@@ -499,10 +503,10 @@ CommandLineLauncher::DisplayHelp()
   // Optional parameters
   std::cerr<<"====== Optional parameters: ======"<<std::endl;
   //// Module path parameter
-  std::cerr<<m_Parser->GetModulePathKey()<<" (Executables paths)"<<std::endl;
+  std::cerr<<m_Parser->GetPathsAsString(m_Expression)<<" (Executables paths)"<<std::endl;
   std::cerr<<"\t   Description: Paths to the executable library."<<std::endl;
   std::cerr<<"\t          Type: List of string (list of path)"<<std::endl;
-  if( !m_Parser->IsAttributExists( m_Parser->GetModulePathKey(), m_Expression ) )
+  if( m_Parser->GetPathsAsString(m_Expression).size() != 0 )
     {
     const std::string envVal = itksys::SystemTools::GetEnv("ITK_AUTOLOAD_PATH");
     if( envVal.size() != 0)
@@ -782,8 +786,6 @@ CommandLineLauncher::CheckKeyValidity()
   
   // Extract application keys
   std::vector<std::string> appKeyList = m_Application->GetParametersKeys( true );
-  appKeyList.push_back( std::string(m_Parser->GetModulePathKey()).substr(2, std::string(m_Parser->GetModulePathKey()).size()) );
-  appKeyList.push_back( std::string(m_Parser->GetModuleNameKey()).substr(2, std::string(m_Parser->GetModuleNameKey()).size()) );
   appKeyList.push_back( "help" );
   appKeyList.push_back( "progress" );
 

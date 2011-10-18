@@ -10,7 +10,7 @@ add_test(NAME apTvFeLineSegmentDetection
                    ${TEMP}/feTvLineSegmentDetection_LI.shp
                  Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
                  LineSegmentDetection
-                 --modulePath $<TARGET_FILE_DIR:otbapp_LineSegmentDetection>
+                 $<TARGET_FILE_DIR:otbapp_LineSegmentDetection>
                  --in ${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/ROI_QB_TOULOUSE.TIF
                  --out ${TEMP}/feTvLineSegmentDetection_LI.shp)
 
@@ -21,7 +21,7 @@ add_test(NAME apTvFeLineSegmentDetectionNoRescale
                    ${TEMP}/feTvLineSegmentDetection_LI_NoRescale.shp
                  Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
                  LineSegmentDetection
-                 --modulePath $<TARGET_FILE_DIR:otbapp_LineSegmentDetection>
+                 $<TARGET_FILE_DIR:otbapp_LineSegmentDetection>
                  --in ${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/ROI_QB_TOULOUSE.TIF
                  --out ${TEMP}/feTvLineSegmentDetection_LI_NoRescale.shp)
 
