@@ -351,7 +351,6 @@ public:
     VectorDataListType* GetParameterVectorDataList(std::string parameter);
 
 
-
  /* Get the parameter as a std::string
    *
    * Can be called for types :

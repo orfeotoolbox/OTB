@@ -320,7 +320,6 @@ otbGenericCastImageMacro(FloatImageType, SimpleCastImage, )
 otbGenericCastImageMacro(DoubleImageType, SimpleCastImage, )
 
 
-
 /*********************************************************************
 ********************** VectorImage -> VectorImage
 **********************************************************************/
