@@ -108,48 +108,56 @@ void Application::UpdateParameters()
   this->DoUpdateParameters();
 }
 
-void Application::Execute()
+bool Application::Execute()
 {
+  bool ret = true;
+  
   try
     {
     this->DoExecute();
     }
   catch(std::exception& err)
     {
+    ret = false;
     otbAppLogFATAL(<<err.what());
     }
   catch(...)
     {
+    ret = false;
     otbAppLogFATAL(<<"Unknown exception thrown.");
     }
+
+  return ret;
 }
 
 void Application::ExecuteAndWriteOutput()
 {
-  this->Execute();
-  std::vector<std::string> paramList = GetParametersKeys(true);
-  for (std::vector<std::string>::const_iterator it = paramList.begin();
-      it != paramList.end();
-      ++it)
+  if (this->Execute())
     {
-    std::string key = *it;
-    if (GetParameterType(key) == ParameterType_OutputImage
-        && IsParameterEnabled(key) && HasValue(key) )
+    std::vector<std::string> paramList = GetParametersKeys(true);
+    for (std::vector<std::string>::const_iterator it = paramList.begin();
+         it != paramList.end();
+         ++it)
       {
-      Parameter* param = GetParameterByKey(key);
-      OutputImageParameter* outputParam = dynamic_cast<OutputImageParameter*>(param);
-      outputParam->InitializeWriters();
-      AddProcess(outputParam->GetWriter(),"Writer");
-      outputParam->Write();
-      }
-    else if (GetParameterType(key) == ParameterType_OutputVectorData
-             && IsParameterEnabled(key) && HasValue(key) )
-      {
-      Parameter* param = GetParameterByKey(key);
-      OutputVectorDataParameter* outputParam = dynamic_cast<OutputVectorDataParameter*>(param);
-      outputParam->InitializeWriters();
-      AddProcess(outputParam->GetWriter(),"Writer");
-      outputParam->Write();
+      std::string key = *it;
+      if (GetParameterType(key) == ParameterType_OutputImage
+          && IsParameterEnabled(key) && HasValue(key) )
+        {
+        Parameter* param = GetParameterByKey(key);
+        OutputImageParameter* outputParam = dynamic_cast<OutputImageParameter*>(param);
+        outputParam->InitializeWriters();
+        AddProcess(outputParam->GetWriter(),"Writer");
+        outputParam->Write();
+        }
+      else if (GetParameterType(key) == ParameterType_OutputVectorData
+               && IsParameterEnabled(key) && HasValue(key) )
+        {
+        Parameter* param = GetParameterByKey(key);
+        OutputVectorDataParameter* outputParam = dynamic_cast<OutputVectorDataParameter*>(param);
+        outputParam->InitializeWriters();
+        AddProcess(outputParam->GetWriter(),"Writer");
+        outputParam->Write();
+        }
       }
     }
 }

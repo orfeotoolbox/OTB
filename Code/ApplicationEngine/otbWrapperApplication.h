@@ -82,7 +82,7 @@ public:
    *
    * In other cases, the application must handle
    * the I/O (intermediary results for example) */
-  void Execute();
+  bool Execute();
 
   /** Run the application, then writes all the output to disk
    * if they have an associated filename.
