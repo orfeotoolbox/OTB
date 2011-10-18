@@ -77,7 +77,10 @@ void QtWidgetChoiceParameter::DoCreateWidget()
 
   m_VLayout = new QVBoxLayout;
   m_VLayout->addWidget(m_ComboBox);
-  m_VLayout->addWidget(m_StackWidget);
+  if (!m_WidgetList.empty())
+    {
+    m_VLayout->addWidget(m_StackWidget);
+    }
   m_VLayout->addStretch();
 
   this->setLayout(m_VLayout);
