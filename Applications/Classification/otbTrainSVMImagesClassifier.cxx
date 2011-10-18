@@ -67,11 +67,11 @@ namespace otb
 namespace Wrapper
 {
 
-class TrainImagesClassifier: public Application
+class TrainSVMImagesClassifier: public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef TrainImagesClassifier Self;
+  typedef TrainSVMImagesClassifier Self;
   typedef Application Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -80,7 +80,7 @@ public:
   itkNewMacro(Self)
   ;
 
-  itkTypeMacro(TrainImagesClassifier, otb::Application)
+  itkTypeMacro(TrainSVMImagesClassifier, otb::Application)
   ;
 
   typedef otb::Image<FloatVectorImageType::InternalPixelType, 2> ImageReaderType;
@@ -127,13 +127,13 @@ public:
   typedef otb::VectorDataIntoImageProjectionFilter<VectorDataType, VectorImageType> VectorDataReprojectionType;
 
 private:
-  TrainImagesClassifier()
+  TrainSVMImagesClassifier()
   {
-    SetName("TrainImagesClassifier");
+    SetName("TrainSVMImagesClassifier");
     SetDescription("Perform SVM training from multiple input images and multiple vector data.");
   }
 
-  virtual ~TrainImagesClassifier()
+  virtual ~TrainSVMImagesClassifier()
   {
   }
 
@@ -420,5 +420,5 @@ private:
 }
 }
 
-OTB_APPLICATION_EXPORT(otb::Wrapper::TrainImagesClassifier)
+OTB_APPLICATION_EXPORT(otb::Wrapper::TrainSVMImagesClassifier)
 
