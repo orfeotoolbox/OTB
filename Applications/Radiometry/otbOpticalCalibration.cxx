@@ -15,193 +15,237 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-
-#include "otbOpticalCalibration.h"
-
-#include <iostream>
-
-#include "otbVectorImage.h"
-#include "otbImageFileReader.h"
+#include "otbWrapperApplication.h"
+#include "otbWrapperApplicationFactory.h"
 
 #include "otbImageToLuminanceImageFilter.h"
 #include "otbLuminanceToReflectanceImageFilter.h"
 #include "otbReflectanceToSurfaceReflectanceImageFilter.h"
-
-#include "otbStreamingImageFileWriter.h"
-#include "otbStandardWriterWatcher.h"
 #include "otbMultiplyByScalarImageFilter.h"
 
 namespace otb
 {
 
-int OpticalCalibration::Describe(ApplicationDescriptor* descriptor)
+enum
 {
-  descriptor->SetName("OpticalCalibration");
-  descriptor->SetDescription("Perform optical calibration TOA/TOC(Top Of Atmosphere/Top Of Canopy). Output image is in milli-reflectance.");
-  descriptor->AddInputImage();
-  descriptor->AddOutputImage();
-  descriptor->AddOptionNParams("Level",
-                               "Level of calibration TOA(Top Of Atmosphere) or TOC(Top Of Canopy) (default is TOA)",
-                               "level", false, otb::ApplicationDescriptor::String);
-  descriptor->AddOption("RelativeSpectralResponseFile","Sensor relative spectral response file(by default the application gets these informations in the metadata)","rsr", 1, false, otb::ApplicationDescriptor::FileName);
-  descriptor->AddOption("AerosolModel","AerosolModel: NO_AEROSOL(0), CONTINENTAL(1), MARITIME(2), URBAN(3), DESERTIC(5); default 0","aerosol", 1, false, otb::ApplicationDescriptor::Integer);
-  descriptor->AddOption("OzoneAmount","Amount of Ozone ","oz", 1, false, otb::ApplicationDescriptor::Real);
-  descriptor->AddOption("WaterVaporAmount","WaterVaporAmount ","wa", 1, false, otb::ApplicationDescriptor::Real);
-  descriptor->AddOption("AtmosphericPressure","Atmospheric pressure ","atmo", 1, false, otb::ApplicationDescriptor::Real);
-  descriptor->AddOption("AerosolOptical","AerosolOptical ","opt", 1, false, otb::ApplicationDescriptor::Real);
-  descriptor->AddOption("AeronetFile","Aeronet file to get atmospheric parameters","aeronet", 1, false, otb::ApplicationDescriptor::FileName);
-  descriptor->AddOption("AvailableMemory","Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default)","ram", 1, false, otb::ApplicationDescriptor::Integer);
-  return EXIT_SUCCESS;
-}
+  Level_TOC,
+  Level_TOA
+};
 
-int OpticalCalibration::Execute(otb::ApplicationOptionsResult* parseResult)
+enum
 {
-  typedef otb::VectorImage<unsigned short int, 2>       ImageType;
-  typedef otb::VectorImage<float, 2>                    FloatImageType;
-  typedef otb::ImageFileReader<ImageType>               ReaderType;
-  typedef otb::StreamingImageFileWriter<ImageType>      WriterType;
+  Aerosol_NoAerosol,
+  Aerosol_Continental,
+  Aerosol_Maritime,
+  Aerosol_Urban,
+  Aerosol_Desertic,
+};
 
-  typedef ImageToLuminanceImageFilter<ImageType, FloatImageType> ImageToLuminanceImageFilterType;
-  typedef LuminanceToReflectanceImageFilter<FloatImageType,
-      FloatImageType>                      LuminanceToReflectanceImageFilterType;
-  typedef otb::MultiplyByScalarImageFilter<FloatImageType, ImageType> ScaleFilterType;
-  typedef ReflectanceToSurfaceReflectanceImageFilter<FloatImageType,
-      FloatImageType>             ReflectanceToSurfaceReflectanceImageFilterType;
+namespace Wrapper
+{
+
+class OpticalCalibration : public Application
+{
+
+public:
+/** Standard class typedefs. */
+  typedef OpticalCalibration            Self;
+  typedef Application                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
+
+  /** Standard macro */
+  itkNewMacro(Self);
+
+  itkTypeMacro(OpticalCalibration, Application);
+
+  typedef ImageToLuminanceImageFilter<UInt16VectorImageType, 
+                                      FloatVectorImageType>              ImageToLuminanceImageFilterType;
+  
+  typedef LuminanceToReflectanceImageFilter<FloatVectorImageType,
+                                            FloatVectorImageType>        LuminanceToReflectanceImageFilterType;
+
+  typedef otb::MultiplyByScalarImageFilter<FloatVectorImageType, 
+                                           UInt16VectorImageType>        ScaleFilterType;
+
+  typedef ReflectanceToSurfaceReflectanceImageFilter<FloatVectorImageType,
+                                                     FloatVectorImageType>          ReflectanceToSurfaceReflectanceImageFilterType;
   typedef ReflectanceToSurfaceReflectanceImageFilterType::FilterFunctionValuesType  FilterFunctionValuesType;
   typedef FilterFunctionValuesType::ValuesVectorType                                ValuesVectorType;
-  typedef AtmosphericCorrectionParameters AtmosphericCorrectionParametersType;
-  typedef AtmosphericCorrectionParametersType::AerosolModelType AerosolModelType;
+  typedef AtmosphericCorrectionParameters                                           AtmosphericCorrectionParametersType;
+  typedef AtmosphericCorrectionParametersType::AerosolModelType                     AerosolModelType;
 
-  // Read input image information
-  ReaderType::Pointer reader=ReaderType::New();
-  reader->SetFileName(parseResult->GetInputImage().c_str());
-  reader->GenerateOutputInformation();
-
-  //Check if valid metadata informations are available to compute ImageToLuminance and LuminanceToReflectance
-  itk::MetaDataDictionary             dict = reader->GetOutput()->GetMetaDataDictionary();
-  OpticalImageMetadataInterface::Pointer lImageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(dict);
-  // Test if needed data are available.
-  try
+private:
+  OpticalCalibration()
   {
-    // ImageToLuminance
-    lImageMetadataInterface->GetPhysicalGain();
-    lImageMetadataInterface->GetPhysicalBias();
-
-    // LuminanceToReflectance
-    lImageMetadataInterface->GetDay();
-    lImageMetadataInterface->GetMonth();
-
-    lImageMetadataInterface->GetSolarIrradiance();
-    lImageMetadataInterface->GetSunElevation();
-
-  }
-  catch (itk::ExceptionObject& err)
-  {
-    std::cout << "Invalid input image medadata. The parsing returns the following error:\n" << err << std::endl;
-    return EXIT_FAILURE;
+    SetName("OpticalCalibration");
+    SetDescription("Perform optical calibration TOA/TOC(Top Of Atmosphere/Top Of Canopy). Output image is in milli-reflectance.");
   }
 
-  ImageToLuminanceImageFilterType ::Pointer imageToLuminanceFilter                = ImageToLuminanceImageFilterType::New();
-  LuminanceToReflectanceImageFilterType::Pointer luminanceToReflectanceFilter          = LuminanceToReflectanceImageFilterType::New();
-  ReflectanceToSurfaceReflectanceImageFilterType::Pointer reflectanceToSurfaceReflectanceFilter = ReflectanceToSurfaceReflectanceImageFilterType::New();
+  void DoCreateParameters()
+  {
+    AddParameter(ParameterType_InputImage,  "in",  "Input Image");
 
-  imageToLuminanceFilter->SetInput(reader->GetOutput());
-  luminanceToReflectanceFilter->SetInput(imageToLuminanceFilter->GetOutput());
-  reflectanceToSurfaceReflectanceFilter->SetInput(luminanceToReflectanceFilter->GetOutput());
+    AddParameter(ParameterType_OutputImage, "out", "Output Image");
+    SetParameterDescription("out","Projected image");
 
-  ScaleFilterType::Pointer scaleFilter = ScaleFilterType::New();
-  scaleFilter->SetCoef(1000.);
+    AddParameter(ParameterType_Choice,   "level", "Calibration Level");
+    AddChoice("level.toa",     "TOA : Top Of Atmosphere");
+    AddChoice("level.toc",     "TOC : Top Of Canopy");
+    
+    AddParameter(ParameterType_Filename,   "rsr", "Relative Spectral Response File");
+    std::ostringstream oss;
+    oss << "Sensor relative spectral response file"<<std::endl;
+    oss << "By default the application gets these informations in the metadata";
+    SetParameterDescription("rsr",oss.str());
+    MandatoryOff("rsr");
 
-  if(parseResult->GetParameterString("Level") == "TOC")
-    {
-    std::cout << "Compute TOC level" << std::endl;
-    AtmosphericCorrectionParametersType::Pointer atmosphericParam = reflectanceToSurfaceReflectanceFilter->GetCorrectionParameters();
+    AddParameter(ParameterType_Choice,   "aerosol", "Aerosol Model");
+    AddChoice("aerosol.noaersol",    "No Aerosol");
+    AddChoice("aerosol.continental", "Continental");
+    AddChoice("aerosol.maritime",    "Maritime");
+    AddChoice("aerosol.urban",       "Urban");
+    AddChoice("aerosol.desertic",    "Desertic");
 
-    AerosolModelType aeroMod = AtmosphericCorrectionParametersType::NO_AEROSOL;
+    AddParameter(ParameterType_Float, "oz",   "Amount of Ozone");
+    AddParameter(ParameterType_Float, "wa",   "Water Vapor Amount");
+    AddParameter(ParameterType_Float, "atmo", "Atmospheric Pressure");
+    AddParameter(ParameterType_Float, "opt",  "Aerosol Optical");
 
-    if(parseResult->IsOptionPresent("AerosolModel"))
+    SetParameterFloat("oz", 0.);
+    SetParameterFloat("wa",  2.5);
+    SetParameterFloat("atmo", 1030.);
+
+    SetParameterFloat("opt", 0.2);
+    MandatoryOff("oz");
+    MandatoryOff("wa");
+    MandatoryOff("atmo");
+    MandatoryOff("opt");
+
+    AddParameter(ParameterType_Filename,   "aeronet", "Aeronet File");
+    SetParameterDescription("aeronet","Aeronet file to get atmospheric parameters");
+    MandatoryOff("aeronet");
+  }
+
+  void DoUpdateParameters()
+  {
+    // Nothing to update
+  }
+
+  void DoExecute()
+  {
+    UInt16VectorImageType::Pointer inImage = GetParameterUInt16VectorImage("in");
+
+    //Check if valid metadata informations are available to compute ImageToLuminance and LuminanceToReflectance
+    itk::MetaDataDictionary             dict = inImage->GetMetaDataDictionary();
+    OpticalImageMetadataInterface::Pointer lImageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(dict);
+
+    // Test if needed data are available.
+    try
       {
-      aeroMod = static_cast<AerosolModelType>(parseResult->GetParameterUInt("AerosolModel"));
+      // ImageToLuminance
+      lImageMetadataInterface->GetPhysicalGain();
+      lImageMetadataInterface->GetPhysicalBias();
+
+      // LuminanceToReflectance
+      lImageMetadataInterface->GetDay();
+      lImageMetadataInterface->GetMonth();
+
+      lImageMetadataInterface->GetSolarIrradiance();
+      lImageMetadataInterface->GetSunElevation();
       }
-    atmosphericParam->SetAerosolModel(static_cast<AerosolModelType>(aeroMod));
-
-    double ozoneAmount = 0.;
-    double waterVaporAmount = 2.5;
-    double atmosphericPressure = 1030.;
-    double aerosolOptical = 0.2;
-
-    if (parseResult->IsOptionPresent("OzoneAmount"))
+    catch (itk::ExceptionObject& err)
       {
-      ozoneAmount = parseResult->GetParameterFloat("OzoneAmount");
+      itkGenericExceptionMacro("Invalid input image medadata. The parsing returns the following error");
       }
-    atmosphericParam->SetOzoneAmount(ozoneAmount);
 
-    if (parseResult->IsOptionPresent("WaterVaporAmount"))
+    ImageToLuminanceImageFilterType ::Pointer imageToLuminanceFilter                = ImageToLuminanceImageFilterType::New();
+    LuminanceToReflectanceImageFilterType::Pointer luminanceToReflectanceFilter     = LuminanceToReflectanceImageFilterType::New();
+    ReflectanceToSurfaceReflectanceImageFilterType::Pointer reflectanceToSurfaceReflectanceFilter = ReflectanceToSurfaceReflectanceImageFilterType::New();
+
+    imageToLuminanceFilter->SetInput(inImage);
+    luminanceToReflectanceFilter->SetInput(imageToLuminanceFilter->GetOutput());
+    reflectanceToSurfaceReflectanceFilter->SetInput(luminanceToReflectanceFilter->GetOutput());
+
+    ScaleFilterType::Pointer scaleFilter = ScaleFilterType::New();
+    scaleFilter->SetCoef(1000.);
+
+    
+    switch ( GetParameterInt("level") )
       {
-      waterVaporAmount = parseResult->GetParameterFloat("WaterVaporAmount");
-      }
-    atmosphericParam->SetWaterVaporAmount(waterVaporAmount);
-
-    if (parseResult->IsOptionPresent("AtmosphericPressure"))
+      case Level_TOA:
       {
-      atmosphericPressure = parseResult->GetParameterFloat("AtmosphericPressure");
-      }
-    atmosphericParam->SetAtmosphericPressure(atmosphericPressure);
+      AtmosphericCorrectionParametersType::Pointer atmosphericParam = reflectanceToSurfaceReflectanceFilter->GetCorrectionParameters();
+      AerosolModelType aeroMod = AtmosphericCorrectionParametersType::NO_AEROSOL;
 
-    if (parseResult->IsOptionPresent("AerosolOptical"))
+      switch ( GetParameterInt("aerosol") )
+        {
+        case Aerosol_Desertic:
+        {
+        // Aerosol_Desertic correspond to 4 in the enum but actually in
+        // the class atmosphericParam it is known as parameter 5
+        atmosphericParam->SetAerosolModel(static_cast<AerosolModelType>(5));
+        }
+        break;
+        default:
+        {
+        atmosphericParam->SetAerosolModel(static_cast<AerosolModelType>(GetParameterInt("aerosol")));
+        }
+        break;
+        }
+
+      // Set the atmospheric param 
+      atmosphericParam->SetOzoneAmount(GetParameterFloat("oz"));
+      atmosphericParam->SetWaterVaporAmount(GetParameterFloat("wa"));
+      atmosphericParam->SetAtmosphericPressure(GetParameterFloat("atmo"));
+      atmosphericParam->SetAerosolOptical(GetParameterFloat("opt"));
+      
+      // Relative Spectral Response File
+      if (IsParameterEnabled("rsr"))
+        {
+        reflectanceToSurfaceReflectanceFilter->SetFilterFunctionValuesFileName(GetParameterString("rsr"));
+        }
+      else
+        {
+        reflectanceToSurfaceReflectanceFilter->SetFilterFunctionCoef(lImageMetadataInterface->GetSpectralSensitivity());
+        }
+
+      // Aeronet file
+      if (IsParameterEnabled("aeronet"))
+        {
+        reflectanceToSurfaceReflectanceFilter->SetAeronetFileName(GetParameterString("AeronetFile"));
+        }
+      
+      // 
+      AtmosphericRadiativeTerms::Pointer radTerms = AtmosphericRadiativeTerms::New();
+      radTerms->ValuesInitialization(inImage->GetNumberOfComponentsPerPixel());
+      reflectanceToSurfaceReflectanceFilter->SetAtmosphericRadiativeTerms(radTerms);
+
+      reflectanceToSurfaceReflectanceFilter->SetIsSetAtmosphericRadiativeTerms(true);
+      reflectanceToSurfaceReflectanceFilter->GenerateAtmosphericRadiativeTerms();
+      reflectanceToSurfaceReflectanceFilter->GenerateParameters();
+      reflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(false);
+
+      //rescale the surface reflectance in milli-reflectance
+      scaleFilter->SetInput(reflectanceToSurfaceReflectanceFilter->GetOutput());      
+      }
+      break;
+      case Level_TOC:
       {
-      aerosolOptical = parseResult->GetParameterFloat("AerosolOptical");
+      scaleFilter->SetInput(luminanceToReflectanceFilter->GetOutput());
       }
-    atmosphericParam->SetAerosolOptical(aerosolOptical);
-
-    if (parseResult->IsOptionPresent("RelativeSpectralResponseFile"))
-      {
-      reflectanceToSurfaceReflectanceFilter->SetFilterFunctionValuesFileName(parseResult->GetParameterString("RelativeSpectralResponseFile", 0));
-      }
-    else
-      {
-      reflectanceToSurfaceReflectanceFilter->SetFilterFunctionCoef(lImageMetadataInterface->GetSpectralSensitivity());
+      break;
       }
 
-    if (parseResult->IsOptionPresent("AeronetFile"))
-      {
-      reflectanceToSurfaceReflectanceFilter->SetAeronetFileName(parseResult->GetParameterString("AeronetFile", 0));
-      }
+    // Output Image 
+    SetParameterOutputImage("out", scaleFilter->GetOutput());
+  }
+};
 
-    AtmosphericRadiativeTerms::Pointer radTerms = AtmosphericRadiativeTerms::New();
-    radTerms->ValuesInitialization(reader->GetOutput()->GetNumberOfComponentsPerPixel());
-    reflectanceToSurfaceReflectanceFilter->SetAtmosphericRadiativeTerms(radTerms);
+}// namespace Wrapper
+} // namespace otb
 
-    reflectanceToSurfaceReflectanceFilter->SetIsSetAtmosphericRadiativeTerms(true);
-    reflectanceToSurfaceReflectanceFilter->GenerateAtmosphericRadiativeTerms();
-    reflectanceToSurfaceReflectanceFilter->GenerateParameters();
-    reflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(false);
+OTB_APPLICATION_EXPORT(otb::Wrapper::OpticalCalibration)
 
-    //rescale the surface reflectance in milli-reflectance
-    scaleFilter->SetInput(reflectanceToSurfaceReflectanceFilter->GetOutput());
-    }
-  else
-    {
-    //Rescale luminanceToReflectance filter output (TOA level)
-    scaleFilter->SetInput(luminanceToReflectanceFilter->GetOutput());
-    }
-
-  //Instantiate the writer
-  WriterType::Pointer writer = WriterType::New();
-  writer->SetFileName(parseResult->GetOutputImage());
-  writer->SetInput(scaleFilter->GetOutput());
-  writer->SetWriteGeomFile(true);
-
-  unsigned int ram = 256;
-  if (parseResult->IsOptionPresent("AvailableMemory"))
-    {
-    ram = parseResult->GetParameterUInt("AvailableMemory");
-    }
-  writer->SetAutomaticTiledStreaming(ram);
-
-  otb::StandardWriterWatcher watcher(writer,"OpticalCalibration");
-  writer->Update();
-
-  return EXIT_SUCCESS;
-}
-}
+  
+  
