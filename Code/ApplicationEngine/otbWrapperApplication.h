@@ -28,7 +28,6 @@
 
 #include "itkLogger.h"
 #include "otbWrapperMacros.h"
-#include "otbWrapperTypes.h"
 #include "otbWrapperOutputImageParameter.h"
 #include "otbWrapperInputImageParameter.h"
 
@@ -335,13 +334,23 @@ public:
    */
   ComplexFloatVectorImageType* GetParameterComplexImage(std::string parameter);
 
-  /* GetParameterInt
+  /* GetParameterVectorData
    *
    * Can be called for types :
 
    * \li ParameterType_InputVectorData
    */
   VectorDataType* GetParameterVectorData(std::string parameter);
+
+  /* GetParameteVetorDataList
+     *
+     * Can be called for types :
+
+     * \li ParameterType_InputVectorDatalist
+     */
+    VectorDataListType* GetParameterVectorDataList(std::string parameter);
+
+
 
  /* Get the parameter as a std::string
    *

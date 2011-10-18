@@ -25,6 +25,7 @@
 #include "otbWrapperInputComplexImageParameter.h"
 #include "otbWrapperInputImageParameter.h"
 #include "otbWrapperInputVectorDataParameter.h"
+#include "otbWrapperInputVectorDataListParameter.h"
 #include "otbWrapperNumericalParameter.h"
 #include "otbWrapperOutputImageParameter.h"
 #include "otbWrapperOutputVectorDataParameter.h"
@@ -287,6 +288,10 @@ ParameterType Application::GetParameterType(std::string paramKey) const
     {
     type = ParameterType_InputVectorData;
     }
+  else if (dynamic_cast<const InputVectorDataListParameter*>(param))
+    {
+    type = ParameterType_InputVectorDataList;
+    }
   else if (dynamic_cast<const OutputImageParameter*>(param))
     {
     type = ParameterType_OutputImage;
@@ -460,6 +465,11 @@ void Application::SetParameterStringList(std::string parameter, std::vector<std:
     InputImageListParameter* paramDown = dynamic_cast<InputImageListParameter*>(param);
     paramDown->SetListFromFileName(value);
     }
+  else if (dynamic_cast<InputVectorDataListParameter*>(param))
+     {
+     InputVectorDataListParameter* paramDown = dynamic_cast<InputVectorDataListParameter*>(param);
+     paramDown->SetListFromFileName(value);
+     }
   else if (dynamic_cast<StringListParameter*>(param))
     {
     StringListParameter* paramDown = dynamic_cast<StringListParameter*>(param);
@@ -628,16 +638,23 @@ std::vector<std::string> Application::GetParameterStringList(std::string paramet
   std::vector<std::string> ret;
   Parameter* param = GetParameterByKey(parameter);
 
-  if (dynamic_cast<InputImageListParameter*>(param))
+  if (dynamic_cast<InputImageListParameter*> (param))
     {
-    InputImageListParameter* paramDown = dynamic_cast<InputImageListParameter*>(param);
+    InputImageListParameter* paramDown = dynamic_cast<InputImageListParameter*> (param);
     ret = paramDown->GetFileNameList();
     }
-  else if (dynamic_cast<StringListParameter*>(param))
-    {
-    StringListParameter* paramDown = dynamic_cast<StringListParameter*>(param);
-    ret = paramDown->GetValue();
-    }
+  else
+    if (dynamic_cast<InputVectorDataListParameter*> (param))
+      {
+      InputVectorDataListParameter* paramDown = dynamic_cast<InputVectorDataListParameter*> (param);
+      ret = paramDown->GetFileNameList();
+      }
+    else
+      if (dynamic_cast<StringListParameter*> (param))
+        {
+        StringListParameter* paramDown = dynamic_cast<StringListParameter*> (param);
+        ret = paramDown->GetValue();
+        }
   return ret;
 }
 
@@ -697,6 +714,21 @@ VectorDataType* Application::GetParameterVectorData(std::string parameter)
     {
     InputVectorDataParameter* paramDown = dynamic_cast<InputVectorDataParameter*>(param);
     ret = paramDown->GetVectorData();
+    }
+
+  //TODO: exception if not found ?
+  return ret;
+}
+
+VectorDataListType* Application::GetParameterVectorDataList(std::string parameter)
+{
+  VectorDataListType::Pointer ret;
+  Parameter* param = GetParameterByKey(parameter);
+
+  if (dynamic_cast<InputVectorDataListParameter*>(param))
+    {
+    InputVectorDataListParameter* paramDown = dynamic_cast<InputVectorDataListParameter*>(param);
+    ret = paramDown->GetVectorDataList();
     }
 
   //TODO: exception if not found ?

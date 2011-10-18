@@ -44,6 +44,7 @@ typedef enum
   ParameterType_InputImageList,
   ParameterType_InputComplexImage,
   ParameterType_InputVectorData,
+  ParameterType_InputVectorDataList,
   ParameterType_OutputImage,
   ParameterType_OutputVectorData,
   ParameterType_Radius,
@@ -104,10 +105,12 @@ typedef double VectorDataValuePrecisionType;
 typedef otb::VectorData<VectorDataCoordinatePrecisionType,
                         2,
                         VectorDataValuePrecisionType>
-          VectorDataType;
+           VectorDataType;
+typedef otb::ObjectList<VectorDataType> VectorDataListType;
 
 typedef otb::ImageList<FloatVectorImageType> FloatVectorImageListType;
 typedef otb::ImageList<FloatImageType>       FloatImageListType;
+
 
 } // end namespace Wrapper
 } //end namespace otb

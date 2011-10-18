@@ -31,6 +31,7 @@
 #include "otbWrapperStringParameter.h"
 #include "otbWrapperStringListParameter.h"
 #include "otbWrapperInputImageListParameter.h"
+#include "otbWrapperInputVectorDataListParameter.h"
 #include "otbWrapperParameterKey.h"
 
 #include <boost/algorithm/string.hpp>
@@ -200,27 +201,27 @@ ParameterGroup::GetSelectedItems(std::string paramKey)
 void
 ParameterGroup::AddParameter(ParameterType type, std::string paramKey, std::string paramName)
 {
-  ParameterKey pKey( paramKey );
+  ParameterKey pKey(paramKey);
   // Split the parameter name
   std::vector<std::string> splittedKey = pKey.Split();
- 
+
   // Get the last subkey
   std::string lastkey = pKey.GetLastElement();
-  
+
   std::string parentkey;
   Parameter::Pointer parentParam;
- 
+
   if (splittedKey.size() > 1)
     {
-       parentkey = pKey.GetRoot();
-       parentParam = GetParameterByKey(parentkey);
+    parentkey = pKey.GetRoot();
+    parentParam = GetParameterByKey(parentkey);
     }
   else
     {
-      parentParam = this;
+    parentParam = this;
     }
 
-  ParameterGroup* parentAsGroup = dynamic_cast<ParameterGroup*>(parentParam.GetPointer());
+  ParameterGroup* parentAsGroup = dynamic_cast<ParameterGroup*> (parentParam.GetPointer());
   if (parentAsGroup)
     {
     Parameter::Pointer newParam;
@@ -304,6 +305,11 @@ ParameterGroup::AddParameter(ParameterType type, std::string paramKey, std::stri
       case ParameterType_InputImageList:
         {
         newParam = InputImageListParameter::New();
+        }
+        break;
+      case ParameterType_InputVectorDataList:
+        {
+        newParam = InputVectorDataListParameter::New();
         }
         break;
       case ParameterType_ListView:

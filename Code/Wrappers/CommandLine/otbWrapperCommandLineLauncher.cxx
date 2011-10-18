@@ -36,6 +36,7 @@
 
 // List value parameter
 #include "otbWrapperInputImageListParameter.h"
+#include "otbWrapperInputVectorDataListParameter.h"
 #include "otbWrapperStringListParameter.h"
 
 #include "otbStreamingImageFileWriter.h"
@@ -366,85 +367,102 @@ CommandLineLauncher::LoadParameters()
     if( paramExists )
       {
       // List values parameter case
-      if( type == ParameterType_InputImageList )
+      if (type == ParameterType_InputVectorDataList)
         {
-        dynamic_cast<InputImageListParameter *>(param.GetPointer())->SetListFromFileName( values );
+        dynamic_cast<InputVectorDataListParameter *> (param.GetPointer())->SetListFromFileName(values);
         }
-      else if( type == ParameterType_StringList )
-        {
-        dynamic_cast<StringListParameter *>(param.GetPointer())->SetValue( values );
-        }
-      else if( type == ParameterType_OutputImage )
-        {
-        m_Application->SetParameterString( paramKey, values[0] );
-        // Check if pixel type is given
-        if( values.size() == 2  )
+      else
+        if (type == ParameterType_InputImageList)
           {
-          ImagePixelType outPixType = ImagePixelType_float;
-          if( values[1] == "char" )
-            outPixType = ImagePixelType_int8;
-          else if( values[1] == "uchar" )
-            outPixType = ImagePixelType_uint8;
-          else if( values[1] == "short" )
-            outPixType = ImagePixelType_int16;
-          else if( values[1] == "ushort" )
-            outPixType = ImagePixelType_uint16;
-          else if( values[1] == "int" )
-            outPixType = ImagePixelType_int32;
-          else if( values[1] == "uint" )
-            outPixType = ImagePixelType_uint32;
-          else if( values[1] == "float" )
-            outPixType = ImagePixelType_float;
-          else if( values[1] == "double" )
-            outPixType = ImagePixelType_double;
-          else
-            {
-            return WRONGPARAMETERVALUE;
-            }
-          dynamic_cast<OutputImageParameter *>(param.GetPointer())->SetPixelType( outPixType );
-          }
-        else if( values.size() != 1 && values.size() != 2 )
-          {
-          std::cout<<"INVALIDNUMBEROFVALUE2: "<<paramKey<<" "<<values.size()<<std::endl;
-          return INVALIDNUMBEROFVALUE;
-          }
-        }
-      else if( type == ParameterType_ListView )
-        {
-        dynamic_cast<ListViewParameter *>(param.GetPointer())->SetSelectedNames( values );
-        }
-      else  if( values.size() != 1)
-        {
-        std::cout<<"INVALIDNUMBEROFVALUE: "<<paramKey<<" "<<values.size()<<std::endl;
-        return INVALIDNUMBEROFVALUE;
-        }
-          
-      // Single value parameter
-      if( type == ParameterType_Choice || type == ParameterType_Float
-          || type == ParameterType_Int || type == ParameterType_Radius
-          || type == ParameterType_Directory || type == ParameterType_String
-          || type == ParameterType_Filename || type == ParameterType_InputComplexImage
-          || type == ParameterType_InputImage || type == ParameterType_InputVectorData
-          || type == ParameterType_OutputVectorData )
-        {
-        m_Application->SetParameterString( paramKey, values[0] );
-        }
-      else if( type == ParameterType_Empty )
-        {
-        if( values[0] == "1" || values[0] == "true")
-          {
-          dynamic_cast<EmptyParameter *>(param.GetPointer())->SetActive(true);
-          }
-        else if( values[0] == "0" || values[0] == "false")
-          {
-          dynamic_cast<EmptyParameter *>(param.GetPointer())->SetActive(false);
+          dynamic_cast<InputImageListParameter *> (param.GetPointer())->SetListFromFileName(values);
           }
         else
-          {
-          std::cout<<"WRONGPARAMETERVALUE: "<<paramKey<<std::endl;
-          return WRONGPARAMETERVALUE;
-          }
+          if (type == ParameterType_StringList)
+            {
+            dynamic_cast<StringListParameter *> (param.GetPointer())->SetValue(values);
+            }
+          else
+            if (type == ParameterType_OutputImage)
+              {
+              m_Application->SetParameterString(paramKey, values[0]);
+              // Check if pixel type is given
+              if (values.size() == 2)
+                {
+                ImagePixelType outPixType = ImagePixelType_float;
+                if (values[1] == "char")
+                  outPixType = ImagePixelType_int8;
+                else
+                  if (values[1] == "uchar")
+                    outPixType = ImagePixelType_uint8;
+                  else
+                    if (values[1] == "short")
+                      outPixType = ImagePixelType_int16;
+                    else
+                      if (values[1] == "ushort")
+                        outPixType = ImagePixelType_uint16;
+                      else
+                        if (values[1] == "int")
+                          outPixType = ImagePixelType_int32;
+                        else
+                          if (values[1] == "uint")
+                            outPixType = ImagePixelType_uint32;
+                          else
+                            if (values[1] == "float")
+                              outPixType = ImagePixelType_float;
+                            else
+                              if (values[1] == "double")
+                                outPixType = ImagePixelType_double;
+                              else
+                                {
+                                return WRONGPARAMETERVALUE;
+                                }
+                dynamic_cast<OutputImageParameter *> (param.GetPointer())->SetPixelType(outPixType);
+                }
+              else
+                if (values.size() != 1 && values.size() != 2)
+                  {
+                  std::cout << "INVALIDNUMBEROFVALUE2: " << paramKey << " " << values.size() << std::endl;
+                  return INVALIDNUMBEROFVALUE;
+                  }
+              }
+            else
+              if (type == ParameterType_ListView)
+                {
+                dynamic_cast<ListViewParameter *> (param.GetPointer())->SetSelectedNames(values);
+                }
+              else
+                if (values.size() != 1)
+                  {
+                  std::cout << "INVALIDNUMBEROFVALUE: " << paramKey << " " << values.size() << std::endl;
+                  return INVALIDNUMBEROFVALUE;
+                  }
+
+      // Single value parameter
+      if (type == ParameterType_Choice || type == ParameterType_Float || type == ParameterType_Int || type
+          == ParameterType_Radius || type == ParameterType_Directory || type == ParameterType_String || type
+          == ParameterType_Filename || type == ParameterType_InputComplexImage || type == ParameterType_InputImage ||
+          type == ParameterType_InputVectorData || type == ParameterType_InputVectorDataList ||  type == ParameterType_OutputVectorData)
+        {
+        m_Application->SetParameterString(paramKey, values[0]);
         }
+      else
+        if (type == ParameterType_Empty)
+          {
+          if (values[0] == "1" || values[0] == "true")
+            {
+            dynamic_cast<EmptyParameter *> (param.GetPointer())->SetActive(true);
+            }
+          else
+            if (values[0] == "0" || values[0] == "false")
+              {
+              dynamic_cast<EmptyParameter *> (param.GetPointer())->SetActive(false);
+              }
+            else
+              {
+              std::cout << "WRONGPARAMETERVALUE: " << paramKey << std::endl;
+              return WRONGPARAMETERVALUE;
+              }
+          }
       }
     // Update the flag UserValue
     param->SetUserValue(true);
