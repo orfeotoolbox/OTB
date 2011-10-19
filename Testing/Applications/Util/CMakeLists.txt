@@ -97,7 +97,7 @@ add_test(NAME apTvUtConcatenateImages_1Image
                    ${TEMP}/apTvUtConcatenateImages_1Image.tif
                  Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
                  ConcatenateImages
-                  $<TARGET_FILE_DIR:otbapp_ExtractROI>
+                  $<TARGET_FILE_DIR:otbapp_ConcatenateImages>
                  --il ${INPUTDATA}/poupees_c1
                  --out ${TEMP}/apTvUtConcatenateImages_1Image.tif)
 
@@ -107,6 +107,21 @@ add_test(NAME apTvUtConcatenateImages
                    ${TEMP}/apTvUtConcatenateImages.png
                  Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
                  ConcatenateImages
-                  $<TARGET_FILE_DIR:otbapp_ExtractROI>
+                  $<TARGET_FILE_DIR:otbapp_ConcatenateImages>
                  --il ${INPUTDATA}/poupees_sub_c1.png ${INPUTDATA}/poupees_sub_c2.png ${INPUTDATA}/poupees_sub_c3.png
                  --out ${TEMP}/apTvUtConcatenateImages.png uchar )
+
+#--- BandMath application -----
+add_test(NAME apTvUtBandMath
+         COMMAND otbTestDriver --compare-image ${NOTOL}
+                   ${INPUTDATA}/apTvUtBandMathOutput.tif
+                   ${TEMP}/apTvUtBandMathOutput.tif
+                 Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
+                 BandMath
+                  $<TARGET_FILE_DIR:otbapp_BandMath>
+                 --il   ${INPUTDATA}/poupees_sub_c1.png
+                 ${INPUTDATA}/poupees_sub_c2.png
+                 ${INPUTDATA}/poupees_sub.png
+                 --out ${TEMP}/apTvUtBandMathOutput.tif
+                 --exp "cos(im1b1)+im2b1*im3b1-im3b2+ndvi(im3b3,im3b4)"
+                 )

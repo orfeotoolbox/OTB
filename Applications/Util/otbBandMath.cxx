@@ -148,7 +148,7 @@ private:
     // checking the input images list validity
     const unsigned int nbImages = inList->Size();
 
-    if (nbImages)
+    if (nbImages == 0)
       {
        itkExceptionMacro("No input Image set...; please set at least one input image");
       }
