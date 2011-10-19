@@ -15,128 +15,123 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
+#include "otbWrapperApplication.h"
+#include "otbWrapperApplicationFactory.h"
+#include "otbWrapperParameter.h"
+#include "otbWrapperOutputImageParameter.h"
 
-#include "otbSplitImage.h"
-
-#include <iostream>
-#include "otbImage.h"
-#include "otbVectorImage.h"
-#include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
 #include "otbMultiToMonoChannelExtractROI.h"
-#include "otbStandardFilterWatcher.h"
 
 namespace otb
 {
 
-template<typename PixelType>
-int generic_main_split(otb::ApplicationOptionsResult* parseResult)
+namespace Wrapper
 {
-  std::string base;
-  std::string extension;
-  std::string baseName = parseResult->GetParameterString("OutputImagesBaseName");
-  size_t pointPos = baseName.rfind(".");
-  if (pointPos != std::string::npos)
-    {
-    base = baseName.substr(0, pointPos);
-    extension = baseName.substr(pointPos);
-    }
-  else
-    {
-    base = baseName;
-    extension = "";
-    }
-  
-  const unsigned int Dimension = 2;
-  typedef otb::VectorImage<PixelType, Dimension> InputImageType;
-  typedef otb::ImageFileReader<InputImageType>   ImageReaderType;
-  typename ImageReaderType::Pointer reader = ImageReaderType::New();
-  reader->SetFileName(parseResult->GetInputImage().c_str());
-  reader->UpdateOutputInformation();
 
-  typedef otb::MultiToMonoChannelExtractROI<PixelType, PixelType> FilterType;
-  typename FilterType::Pointer filter = FilterType::New();
-  filter->SetInput(reader->GetOutput());
+class  SplitImage : public Application
+{
 
-  typedef otb::Image<PixelType, Dimension>               OutputImageType;
-  typedef otb::StreamingImageFileWriter<OutputImageType> ImageWriterType;
-  typename ImageWriterType::Pointer writer = ImageWriterType::New();
-  writer->SetInput(filter->GetOutput());
+public:
+  /** Standard class typedefs. */
+  typedef SplitImage                    Self;
+  typedef Application                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
+  /** Standard macro */
+  itkNewMacro(Self);
 
-  for (unsigned int i = 0;
-       i < reader->GetOutput()->GetNumberOfComponentsPerPixel();
-       ++i )
-    {
-    std::stringstream filename; // = baseName + "-" + str()
-    filename << base << "-" << i << extension;
-    filter->SetChannel(i+1); //FIXME change the convention
-    writer->SetFileName(filename.str());
-    otb::StandardFilterWatcher watcher(writer, "Writing "+filename.str());
+  itkTypeMacro(SplitImage, Application);
 
-    unsigned int ram = 256;
-    if (parseResult->IsOptionPresent("AvailableMemory"))
+  /** Filters typedef */
+  typedef otb::MultiToMonoChannelExtractROI<FloatVectorImageType::InternalPixelType, 
+                                            FloatVectorImageType::InternalPixelType> FilterType;
+
+private:
+  SplitImage()
+  {
+    SetName("SplitImage");
+    SetDescription("Split a N multiband image into N images");
+  }
+
+  void DoCreateParameters()
+  {
+    AddParameter(ParameterType_InputImage, "in", "Input Image");
+    
+    AddParameter(ParameterType_OutputImage, "out", "Output Image");
+    SetParameterDescription("out",
+                            "will be used to get the prefix and the extension of the output images to write");
+  }
+
+  void DoUpdateParameters()
+  {
+    // Nothing to do here for the parameters : all are independent
+  }
+
+  void DoExecute()
+  {
+    // Get the input image
+    FloatVectorImageType::Pointer inImage = GetParameterImage("in");
+
+    // Get the path/fileWithoutextension/extension of the output images filename
+    Parameter* param = GetParameterByKey("out");
+    std::string path, fname, ext;
+    if (dynamic_cast<OutputImageParameter*>(param))
       {
-      ram = parseResult->GetParameterUInt("AvailableMemory");
+      OutputImageParameter* paramDown = dynamic_cast<OutputImageParameter*>(param);
+      std::string ofname = paramDown->GetFileName();
+
+      // Get the extension and the prefix of the filename
+      path  = itksys::SystemTools::GetFilenamePath(ofname);
+      fname = itksys::SystemTools::GetFilenameWithoutExtension(ofname);
+      ext   = itksys::SystemTools::GetFilenameExtension(ofname);
       }
-    writer->SetAutomaticTiledStreaming(ram);
 
-    writer->Update();
-    }
+    // Set the extract filter input image
+    m_Filter = FilterType::New();
+    m_Filter->SetInput(inImage);
 
-  return EXIT_SUCCESS;
-}
+    for (unsigned int i = 0; i < inImage->GetNumberOfComponentsPerPixel(); ++i)
+      {
+      // Set the channel to extract
+      m_Filter->SetChannel(i+1); 
+      
+      // build the current output filename
+      std::ostringstream oss;
+      oss <<path<<"/"<<fname<<"_"<<i<<ext;
+      
+      // Get the Output Parameter to change the current image filename
+      Parameter* param = GetParameterByKey("out");
+      if (dynamic_cast<OutputImageParameter*>(param))
+        {
+        OutputImageParameter* paramDown = dynamic_cast<OutputImageParameter*>(param);
+        
+        // Set the filename of the current output image
+        paramDown->SetFileName(oss.str());
 
-int SplitImage::Describe(ApplicationDescriptor* descriptor)
-{
-  descriptor->SetName("SplitImage");
-  descriptor->SetDescription("Split a N multiband image into N images");
-  descriptor->AddInputImage();
-  descriptor->AddOption("OutputImagesBaseName", "Base name for the output images", "on", 1, true, ApplicationDescriptor::String);
-  descriptor->AddOption("OutputPixelType",
-                    "OutputPixelType: unsigned char (1), short int (2), int (3), float (4),"
-                    " double (5), unsigned short int (12), unsigned int (13); default 1",
-                    "t", 1, false, ApplicationDescriptor::Integer);
-  descriptor->AddOption("AvailableMemory","Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default)","ram", 1, false, otb::ApplicationDescriptor::Integer);
+        // writer label
+        std::ostringstream osswriter;
+        osswriter<< "writer (Channel : "<< i<<")";
+      
+        // Add the current level to be written
+        SetParameterOutputImage("out", m_Filter->GetOutput());
+        paramDown->InitializeWriters();
+        AddProcess(paramDown->GetWriter(),osswriter.str());
+        paramDown->Write();
+        }
+      }
 
-  return EXIT_SUCCESS;
-}
+    // Disable the output Image parameter to avoid writing 
+    // the last image (Application::ExecuteAndWriteOutput method)
+    GetParameterByKey("out")->SetActive(false);
+  }
 
-int SplitImage::Execute(otb::ApplicationOptionsResult* parseResult)
-{
-  unsigned int type = 1;
-  if (parseResult->IsOptionPresent("OutputPixelType"))
-    {
-    type = parseResult->GetParameterUInt("OutputPixelType");
-    }
-
-  switch (type)
-    {
-    case 1:
-      generic_main_split<unsigned char> (parseResult);
-      break;
-    case 2:
-      generic_main_split<short int> (parseResult);
-      break;
-    case 3:
-      generic_main_split<int> (parseResult);
-      break;
-    case 4:
-      generic_main_split<float> (parseResult);
-      break;
-    case 5:
-      generic_main_split<double> (parseResult);
-      break;
-    case 12:
-      generic_main_split<unsigned short int> (parseResult);
-      break;
-    case 13:
-      generic_main_split<unsigned int> (parseResult);
-      break;
-    default:
-      generic_main_split<unsigned char> (parseResult);
-      break;
-    }
-  return EXIT_SUCCESS;
+  FilterType::Pointer        m_Filter;
+};
 }
 }
+
+OTB_APPLICATION_EXPORT(otb::Wrapper::SplitImage)
+
+
+  
