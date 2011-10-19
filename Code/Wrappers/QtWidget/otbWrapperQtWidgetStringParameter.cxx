@@ -35,24 +35,25 @@ QtWidgetStringParameter::~QtWidgetStringParameter()
 
 void QtWidgetStringParameter::DoUpdateGUI()
 {
-
+  m_Input->setToolTip(m_StringParam->GetDescription());
 }
 
 void QtWidgetStringParameter::DoCreateWidget()
 {
   // Set up input text edit
-  QHBoxLayout *hLayout = new QHBoxLayout;
-  hLayout->setSpacing(0);
-  hLayout->setContentsMargins(0, 0, 0, 0);
+  m_HLayout = new QHBoxLayout;
+  m_HLayout->setSpacing(0);
+  m_HLayout->setContentsMargins(0, 0, 0, 0);
 
-  QLineEdit* input = new QLineEdit;
-  input->setToolTip(m_StringParam->GetDescription());
-  hLayout->addWidget(input);
+  m_Input = new QLineEdit;
+  m_Input->setToolTip(m_StringParam->GetDescription());
+  m_HLayout->addWidget(m_Input);
 
-  connect( input, SIGNAL(textChanged(const QString&)), this, SLOT(SetValue(const QString&)) );
-  connect( input, SIGNAL(textChanged(const QString&)), GetModel(), SLOT(NotifyUpdate()) );
+  connect( m_Input, SIGNAL(textChanged(const QString&)), this, SLOT(SetValue(const QString&)) );
+  connect( m_Input, SIGNAL(textChanged(const QString&)), GetModel(), SLOT(NotifyUpdate()) );
+  connect( GetModel(), SIGNAL(UpdateGui()), this, SLOT(UpdateGUI() ) );
 
-  this->setLayout(hLayout);
+  this->setLayout(m_HLayout);
 }
 
 void QtWidgetStringParameter::SetValue(const QString& value)

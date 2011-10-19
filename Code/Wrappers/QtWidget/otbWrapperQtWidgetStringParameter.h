@@ -49,6 +49,8 @@ private:
   virtual void DoUpdateGUI();
 
   StringParameter::Pointer m_StringParam;
+  QHBoxLayout *            m_HLayout;
+  QLineEdit*               m_Input;
 };
 
 
