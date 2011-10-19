@@ -65,7 +65,8 @@ private:
     SetParameterDescription("out","Output image");
 
     AddParameter(ParameterType_String, "exp", "Expression");
-    SetParameterDescription("exp","The mathematical expression to apply. \nUse im1b1 for the first band, im1b2 for the second one...");
+    SetParameterDescription("exp",
+                            "The mathematical expression to apply. \nUse im1b1 for the first band, im1b2 for the second one...");
   }
   
   void DoUpdateParameters()
@@ -91,7 +92,7 @@ private:
       {
       FloatVectorImageType::Pointer currentImage = inList->GetNthElement(i);
       currentImage->UpdateOutputInformation();
-      
+   
       for (unsigned int j = 0; j < currentImage->GetNumberOfComponentsPerPixel(); j++)
         {
         std::ostringstream tmpParserVarName;
@@ -111,16 +112,16 @@ private:
 
     otb::Parser::Pointer dummyParser = otb::Parser::New();
     std::vector<double> dummyVars;
-    double              value = 0.;
     std::string         success = "The expression is Valid";
+    SetParameterDescription("exp",success);
     std::ostringstream  failure;
 
     if (HasValue("exp"))
       {
       // Setup the dummy parser
-      for (unsigned int i = 0; i < nbInputs; ++i)
+      for (unsigned int i = 0; i < bandId; i++)
         {
-        dummyVars.push_back(1);
+        dummyVars.push_back(1.);
         dummyParser->DefineVar(m_Filter->GetNthInputName(i), &(dummyVars.at(i)));
         }
       dummyParser->SetExpr(GetParameterString("exp"));
@@ -128,11 +129,13 @@ private:
       // Check the expression
       try
         {
-        value = dummyParser->Eval();
+        dummyParser->Eval();
         }
       catch(itk::ExceptionObject& err)
         {
-        std::cout << err.GetDescription() << std::endl;
+        // Change the parameter description to be able to have the
+        // parser errors in the tooltip
+        SetParameterDescription("exp",err.GetDescription());
         }
       }
   }
@@ -141,15 +144,15 @@ private:
   {
     // Get the input image list
     FloatVectorImageListType::Pointer inList = GetParameterImageList("il");
-    
+
     // checking the input images list validity
     const unsigned int nbImages = inList->Size();
-    
+
     if (nbImages)
       {
        itkExceptionMacro("No input Image set...; please set at least one input image");
       }
-    
+
     m_ChannelExtractorList = ExtractROIFilterListType::New();
     m_Filter               = BandMathImageFilterType::New();
 
@@ -164,7 +167,7 @@ private:
       otbAppLogINFO( << "Image #" << i + 1 << " has " 
                      << currentImage->GetNumberOfComponentsPerPixel()
                      << " components" << std::endl );
-      
+
       for (unsigned int j = 0; j < currentImage->GetNumberOfComponentsPerPixel(); j++)
         {
         std::ostringstream tmpParserVarName;
