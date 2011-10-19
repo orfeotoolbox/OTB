@@ -26,3 +26,7 @@ OTB_CREATE_APPLICATION(NAME           ConcatenateImages
 OTB_CREATE_APPLICATION(NAME           Convert
                        SOURCES        otbConvert.cxx
                        LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters)
+
+OTB_CREATE_APPLICATION(NAME           BandMath
+                       SOURCES        otbBandMath.cxx
+                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters)
