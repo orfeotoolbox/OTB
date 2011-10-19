@@ -15,98 +15,188 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#include "otbBandMath.h"
-#include <iostream>
-#include "otbImage.h"
-#include "otbVectorImage.h"
-#include "otbImageFileReader.h"
+#include "otbWrapperApplication.h"
+#include "otbWrapperApplicationFactory.h"
+
+#include "otbBandMathImageFilter.h"
 #include "otbMultiToMonoChannelExtractROI.h"
 #include "otbObjectList.h"
-#include "otbStreamingImageFileWriter.h"
-#include "otbCommandLineArgumentParser.h"
-#include "otbBandMathImageFilter.h"
 
 namespace otb
 {
 
-int BandMath::Describe(ApplicationDescriptor* descriptor)
+namespace Wrapper
 {
-  descriptor->SetName("BandMath");
-  descriptor->SetDescription("Perform a mathematical operation on monoband images");
-  descriptor->AddOptionNParams("InputImages", "Input images file names", "ims", true, ApplicationDescriptor::InputImage);
-  descriptor->AddOutputImage();
-  descriptor->AddOption("Expression", "The mathematical expression to apply. \nUse im1b1 for the first band, im1b2 for the second one...",
-                        "exp", 1, true, ApplicationDescriptor::String);
-  descriptor->AddOption("AvailableMemory","Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default)","ram", 1, false, otb::ApplicationDescriptor::Integer);
-  return EXIT_SUCCESS;
-}
 
-int BandMath::Execute(otb::ApplicationOptionsResult* parseResult)
+class BandMath : public Application
 {
-  const unsigned int NbImages = parseResult->GetNumberOfParameters("InputImages");
 
-  const unsigned int Dimension = 2;
-  typedef otb::Image<double, Dimension> ImageType;
-  typedef otb::VectorImage<double, Dimension> VectorImageType;
-  typedef otb::ImageFileReader<VectorImageType> ImageReaderType;
-  typedef otb::ObjectList<ImageReaderType> ReaderListType;
-  typedef otb::MultiToMonoChannelExtractROI<ImageType::PixelType, ImageType::PixelType> ExtractROIFilterType;
-  typedef otb::ObjectList<ExtractROIFilterType> ExtractROIFilterListType;
-  typedef otb::BandMathImageFilter<ImageType> BandMathImageFilterType;
+public:
+  /** Standard class typedefs. */
+  typedef BandMath                      Self;
+  typedef Application                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-  ReaderListType::Pointer readerList = ReaderListType::New();
-  ExtractROIFilterListType::Pointer channelExtractorList = ExtractROIFilterListType::New();
-  BandMathImageFilterType::Pointer filter = BandMathImageFilterType::New();
+  /** Standard macro */
+  itkNewMacro(Self);
 
-  unsigned int bandId = 0;
-  unsigned int imageId = 0;
+  itkTypeMacro(BandMath, otb::Application);
 
-  for (unsigned int i = 0; i < NbImages; i++)
-    {
-    ImageReaderType::Pointer imageReader = ImageReaderType::New();
-    imageReader->SetFileName(parseResult->GetParameterString("InputImages", i).c_str());
+  typedef otb::MultiToMonoChannelExtractROI<FloatVectorImageType::InternalPixelType,
+                                            FloatImageType::PixelType>    ExtractROIFilterType;
+  typedef otb::ObjectList<ExtractROIFilterType>                           ExtractROIFilterListType;
+  typedef otb::BandMathImageFilter<FloatImageType>                             BandMathImageFilterType;
 
-    imageReader->UpdateOutputInformation();
 
-    otbMsgDevMacro( << "Image #" << i + 1 << " has " << imageReader->GetOutput()->GetNumberOfComponentsPerPixel()
-        << " components" << std::endl );
+private:
+  BandMath()
+  {
+    SetName("BandMath");
+    SetDescription("Perform a mathematical operation on monoband images");
+  }
 
-    for (unsigned int j = 0; j < imageReader->GetOutput()->GetNumberOfComponentsPerPixel(); j++)
+  void DoCreateParameters()
+  {
+    AddParameter(ParameterType_InputImageList,  "il",   "Input image list");
+    SetParameterDescription("il", "Image list to perform computation on");
+
+    AddParameter(ParameterType_OutputImage, "out", "Output Image");
+    SetParameterDescription("out","Output image");
+
+    AddParameter(ParameterType_String, "exp", "Expression");
+    SetParameterDescription("exp","The mathematical expression to apply. \nUse im1b1 for the first band, im1b2 for the second one...");
+  }
+  
+  void DoUpdateParameters()
+  {
+    // Check if the expression is correctly set
+    if (HasValue("il"))
       {
-      std::ostringstream tmpParserVarName;
-      tmpParserVarName << "im" << imageId + 1 << "b" << j + 1;
-
-      ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
-      extractROIFilter->SetInput(imageReader->GetOutput());
-      extractROIFilter->SetChannel(j + 1);
-      extractROIFilter->GetOutput()->UpdateOutputInformation();
-      channelExtractorList->PushBack(extractROIFilter);
-      filter->SetNthInput(bandId, channelExtractorList->Back()->GetOutput(), tmpParserVarName.str());
-
-      bandId++;
+      LiveCheck();
       }
-    imageId++;
-    readerList->PushBack(imageReader);
-    }
+  }
 
-  filter->SetExpression(parseResult->GetParameterString("Expression", 0));
+  void LiveCheck()
+  {
+    // Initialize a bandMath Filter first
+    m_ChannelExtractorList = ExtractROIFilterListType::New();
+    m_Filter               = BandMathImageFilterType::New();
+    
+    FloatVectorImageListType::Pointer inList   = GetParameterImageList("il");
+    unsigned int                      nbInputs = inList->Size();
+    unsigned int                      imageId  = 0, bandId = 0;
+    
+    for (unsigned int i = 0; i < nbInputs; i++)
+      {
+      FloatVectorImageType::Pointer currentImage = inList->GetNthElement(i);
+      currentImage->UpdateOutputInformation();
+      
+      for (unsigned int j = 0; j < currentImage->GetNumberOfComponentsPerPixel(); j++)
+        {
+        std::ostringstream tmpParserVarName;
+        tmpParserVarName << "im" << imageId + 1 << "b" << j + 1;
 
-  typedef otb::StreamingImageFileWriter<ImageType> ImageWriterType;
-  ImageWriterType::Pointer imageWriter = ImageWriterType::New();
-  imageWriter->SetFileName(parseResult->GetOutputImage());
-  imageWriter->SetInput(filter->GetOutput());
+        m_ExtractROIFilter = ExtractROIFilterType::New();
+        m_ExtractROIFilter->SetInput(currentImage);
+        m_ExtractROIFilter->SetChannel(j + 1);
+        m_ExtractROIFilter->GetOutput()->UpdateOutputInformation();
+        m_ChannelExtractorList->PushBack(m_ExtractROIFilter);
+        m_Filter->SetNthInput(bandId, m_ChannelExtractorList->Back()->GetOutput(), tmpParserVarName.str());
 
-  unsigned int ram = 256;
-  if (parseResult->IsOptionPresent("AvailableMemory"))
-    {
-    ram = parseResult->GetParameterUInt("AvailableMemory");
-    }
-  imageWriter->SetAutomaticTiledStreaming(ram);
+        bandId++;
+        }
+      imageId++;
+      }
 
-  imageWriter->Update();
+    otb::Parser::Pointer dummyParser = otb::Parser::New();
+    std::vector<double> dummyVars;
+    double              value = 0.;
+    std::string         success = "The expression is Valid";
+    std::ostringstream  failure;
 
-  return EXIT_SUCCESS;
-}
+    if (HasValue("exp"))
+      {
+      // Setup the dummy parser
+      for (unsigned int i = 0; i < nbInputs; ++i)
+        {
+        dummyVars.push_back(1);
+        dummyParser->DefineVar(m_Filter->GetNthInputName(i), &(dummyVars.at(i)));
+        }
+      dummyParser->SetExpr(GetParameterString("exp"));
 
-}
+      // Check the expression
+      try
+        {
+        value = dummyParser->Eval();
+        }
+      catch(itk::ExceptionObject& err)
+        {
+        std::cout << err.GetDescription() << std::endl;
+        }
+      }
+  }
+  
+  void DoExecute()
+  {
+    // Get the input image list
+    FloatVectorImageListType::Pointer inList = GetParameterImageList("il");
+    
+    // checking the input images list validity
+    const unsigned int nbImages = inList->Size();
+    
+    if (nbImages)
+      {
+       itkExceptionMacro("No input Image set...; please set at least one input image");
+      }
+    
+    m_ChannelExtractorList = ExtractROIFilterListType::New();
+    m_Filter               = BandMathImageFilterType::New();
 
+    unsigned int bandId = 0;
+    unsigned int imageId = 0;
+
+    for (unsigned int i = 0; i < nbImages; i++)
+      {
+      FloatVectorImageType::Pointer currentImage = inList->GetNthElement(i);
+      currentImage->UpdateOutputInformation();
+
+      otbAppLogINFO( << "Image #" << i + 1 << " has " 
+                     << currentImage->GetNumberOfComponentsPerPixel()
+                     << " components" << std::endl );
+      
+      for (unsigned int j = 0; j < currentImage->GetNumberOfComponentsPerPixel(); j++)
+        {
+        std::ostringstream tmpParserVarName;
+        tmpParserVarName << "im" << imageId + 1 << "b" << j + 1;
+
+        m_ExtractROIFilter = ExtractROIFilterType::New();
+        m_ExtractROIFilter->SetInput(currentImage);
+        m_ExtractROIFilter->SetChannel(j + 1);
+        m_ExtractROIFilter->GetOutput()->UpdateOutputInformation();
+        m_ChannelExtractorList->PushBack(m_ExtractROIFilter);
+        m_Filter->SetNthInput(bandId, m_ChannelExtractorList->Back()->GetOutput(), tmpParserVarName.str());
+
+        bandId++;
+        }
+      imageId++;
+      }
+
+    m_Filter->SetExpression(GetParameterString("exp"));
+
+    // Set the output image
+    SetParameterOutputImage("out", m_Filter->GetOutput());
+  }
+
+  ExtractROIFilterType::Pointer     m_ExtractROIFilter;
+  ExtractROIFilterListType::Pointer m_ChannelExtractorList;
+  BandMathImageFilterType::Pointer  m_Filter;
+};
+
+} // namespace Wrapper
+} // namespace otb
+
+OTB_APPLICATION_EXPORT(otb::Wrapper::BandMath)
+
+  
+  
