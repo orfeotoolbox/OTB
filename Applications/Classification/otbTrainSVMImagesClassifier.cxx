@@ -241,7 +241,6 @@ private:
 
       //m_sampleGenerator = sampleGenerator;
       //Set inputs of the sample generator
-      GetLogger()->Debug("sample set input");
       sampleGenerator->SetInput(image);
       sampleGenerator->SetInputVectorData(vdreproj->GetOutput());
 
