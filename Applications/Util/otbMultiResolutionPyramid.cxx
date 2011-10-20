@@ -21,14 +21,10 @@
 #include "otbPerBandVectorImageFilter.h"
 #include "itkDiscreteGaussianImageFilter.h"
 #include "itkShrinkImageFilter.h"
-#include "otbImageFileReader.h"
-#include "otbObjectList.h"
-#include "otbStreamingImageFileWriter.h"
-#include "otbCommandLineArgumentParser.h"
-#include "otbStandardWriterWatcher.h"
 
 #include "otbWrapperParameter.h"
 #include "otbWrapperOutputImageParameter.h"
+#include "otbWrapperFilenameParameter.h"
 
 namespace otb
 {
@@ -72,8 +68,9 @@ private:
   {
     AddParameter(ParameterType_InputImage, "in", "Input Image");
 
-    AddParameter(ParameterType_OutputImage, "out", "Output Image");
+    AddParameter(ParameterType_Filename, "out", "Output Image");
     SetParameterDescription("out","will be used to get the prefix and the extension of the images to write");
+    SetParameterRole("out",Role_Output);
 
     AddParameter(ParameterType_Int, "level", "Number Of Levels");
     SetParameterInt("level", 1);
@@ -120,11 +117,11 @@ private:
     // Get the Initial Output Image FileName
     Parameter* param = GetParameterByKey("out");
     std::string path, fname, ext;
-    if (dynamic_cast<OutputImageParameter*>(param))
+    if (dynamic_cast<FilenameParameter*>(param))
       {
-      OutputImageParameter* paramDown =
-        dynamic_cast<OutputImageParameter*>(param);
-      std::string ofname = paramDown->GetFileName();
+      FilenameParameter* paramDown =
+        dynamic_cast<FilenameParameter*>(param);
+      std::string ofname = paramDown->GetValue();
 
       // Get the extension and the prefix of the filename
       path  = itksys::SystemTools::GetFilenamePath(ofname);
@@ -160,35 +157,27 @@ private:
         std::cout <<"fast scheme enabled : not implemented for the moment " << std::endl;
         }
 
-      // Get the Output Parameter to change the current image filename
-      Parameter* param = GetParameterByKey("out");
-      if (dynamic_cast<OutputImageParameter*>(param))
-        {
-        OutputImageParameter* paramDown = dynamic_cast<OutputImageParameter*>(param);
+      // Create an output parameter to write the current output image
+      OutputImageParameter::Pointer paramOut = OutputImageParameter::New();
         
-        // build the current image filename
-        std::ostringstream oss;
-        oss <<path<<"/"<<fname<<"_"<<currentLevel<<ext;
+      // build the current image filename
+      std::ostringstream oss;
+      oss <<path<<"/"<<fname<<"_"<<currentLevel<<ext;
 
-        // writer label
-        std::ostringstream osswriter;
-        osswriter<< "writer (level "<< currentLevel<<")";
+      // writer label
+      std::ostringstream osswriter;
+      osswriter<< "writer (level "<< currentLevel<<")";
 
-        // Set the filename of the current output image
-        paramDown->SetFileName(oss.str());
+      // Set the filename of the current output image
+      paramOut->SetFileName(oss.str());
+      paramOut->SetValue(m_ShrinkFilter->GetOutput());
+      // Add the current level to be written
+      paramOut->InitializeWriters();
+      AddProcess(paramOut->GetWriter(),osswriter.str());
+      paramOut->Write();
 
-        // Add the current level to be written
-        SetParameterOutputImage("out", m_ShrinkFilter->GetOutput());
-        paramDown->InitializeWriters();
-        AddProcess(paramDown->GetWriter(),osswriter.str());
-        paramDown->Write();
-        }
       ++currentLevel;
       }
-
-    // Disable the output Image parameter to avoid writing 
-    // the last image (Application::ExecuteAndWriteOutput method)
-    GetParameterByKey("out")->SetActive(false);
   }
 
   SmoothingVectorImageFilterType::Pointer   m_SmoothingFilter;
