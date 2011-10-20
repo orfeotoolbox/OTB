@@ -79,7 +79,7 @@ QtWidgetSimpleProgressReport::ProcessEvent( itk::Object * caller,
 void QtWidgetSimpleProgressReport::ReportProcess()
 {
   m_Bar->Observe(m_CurrentProcess);
-  m_Label->setText(QString(m_CurrentDescription.c_str()));  
+  m_Label->setText(QString(m_CurrentDescription.c_str()));
 }
 
 

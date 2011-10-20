@@ -66,7 +66,7 @@ void QtLogOutput::Write(std::string const &content, double timestamp)
 
 void QtLogOutput::PrintSelf(std::ostream &os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 
 }
