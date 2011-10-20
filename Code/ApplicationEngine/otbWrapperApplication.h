@@ -146,6 +146,10 @@ public:
   /* Return the user level of access to a parameter */
   UserLevel GetParameterUserLevel(std::string paramKey) const;
 
+  /** Set/Get the role of the parameter */
+  Role GetParameterRole(std::string paramKey) const;
+  void SetParameterRole(std::string paramKey, Role role);
+
   /* Get the parameter type from its name */
   ParameterType GetParameterType(std::string paramKey) const;
 

@@ -242,6 +242,19 @@ UserLevel Application::GetParameterUserLevel(std::string paramKey) const
   return GetParameterByKey(paramKey)->GetUserLevel();
 }
 
+
+/* Return the role (input/output) of a parameter */
+Role Application::GetParameterRole(std::string paramKey) const
+{
+  return GetParameterByKey(paramKey)->GetRole();
+}
+
+/* Return the role (input/output) of a parameter */
+void Application::SetParameterRole(std::string paramKey, Role role)
+{
+  GetParameterByKey(paramKey)->SetRole(role);
+}
+
 /* Get the parameter type from its name */
 ParameterType Application::GetParameterType(std::string paramKey) const
 {
