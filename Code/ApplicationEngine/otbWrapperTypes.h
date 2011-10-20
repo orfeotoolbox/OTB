@@ -69,6 +69,13 @@ typedef enum
   ImagePixelType_double,
 } ImagePixelType;
 
+typedef enum
+{
+  Role_Input,
+  Role_Output
+} Role;
+
+
 typedef otb::Image<char>                       Int8ImageType;
 typedef otb::Image<unsigned char>              UInt8ImageType;
 typedef otb::Image<short>                      Int16ImageType;

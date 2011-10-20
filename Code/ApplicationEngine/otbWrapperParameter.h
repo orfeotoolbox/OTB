@@ -126,6 +126,12 @@ public:
   /** Get the user access level */
   itkGetEnumMacro(UserLevel, UserLevel);
 
+  /** Set the parameter io type*/
+  itkSetEnumMacro(Role, Role);
+
+  /** Get the user access level */
+  itkGetEnumMacro(Role, Role);
+
   /** Reset to the the default value. Default implementation does
    * nothing
    */
@@ -210,6 +216,7 @@ protected:
                 m_UserValue(false),
                 m_DefaultValueMode(DefaultValueMode_UNKNOWN),
                 m_UserLevel(UserLevel_Basic),
+                m_Role(Role_Input),
                 m_AutomaticValue(false),
                 m_IsChecked(false)
   {}
@@ -243,6 +250,9 @@ protected:
   DefaultValueMode                   m_DefaultValueMode;
 
   UserLevel                          m_UserLevel;
+
+  /** Default iotype mode */
+  Role                               m_Role;
 
   /** List of parents Parameters */
   Parameter::Pointer                 m_Root;
