@@ -22,6 +22,7 @@
 #include "otbMultiToMonoChannelExtractROI.h"
 #include "otbObjectList.h"
 #include "otbWrapperTypes.h"
+#include "otbImageList.h"
 
 namespace otb
 {
@@ -44,7 +45,8 @@ public:
   itkTypeMacro(ConcatenateImages, otb::Application);
 
   /** Filters typedef */
-  typedef ImageListToVectorImageFilter<FloatImageListType, 
+  typedef otb::ImageList<FloatImageType>  ImageListType;
+  typedef ImageListToVectorImageFilter<ImageListType,
                                        FloatVectorImageType >                   ListConcatenerFilterType;
   typedef MultiToMonoChannelExtractROI<FloatVectorImageType::InternalPixelType, 
                                        FloatImageType::PixelType>               ExtractROIFilterType;
@@ -54,10 +56,10 @@ private:
    ConcatenateImages()
   {
     SetName("ConcatenateImages");
-    SetDescription("Concatenate a list of image into a single mulit channel one.");
+    SetDescription("Concatenate a list of images into a single multi channel one.");
     m_Concatener = ListConcatenerFilterType::New();
     m_ExtractorList = ExtractROIFilterListType::New();
-    m_ImageList = FloatImageListType::New();
+    m_ImageList = ImageListType::New();
   }
 
   virtual ~ConcatenateImages()
@@ -70,7 +72,7 @@ private:
     SetParameterDescription("il", "Image list to concatenate");
 
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
-    SetParameterDescription("out", "Outmput multiband image");
+    SetParameterDescription("out", "Output multiband image");
   }
 
   void DoUpdateParameters()
@@ -79,7 +81,7 @@ private:
     
     // Reinitialize the object
     m_Concatener = ListConcatenerFilterType::New();
-    m_ImageList = FloatImageListType::New();
+    m_ImageList = ImageListType::New();
     m_ExtractorList = ExtractROIFilterListType::New();
   }
 
@@ -128,7 +130,7 @@ private:
 
   ListConcatenerFilterType::Pointer  m_Concatener;
   ExtractROIFilterListType::Pointer  m_ExtractorList;
-  FloatImageListType::Pointer        m_ImageList;
+  ImageListType::Pointer        m_ImageList;
 };
 
 }
