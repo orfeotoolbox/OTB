@@ -35,9 +35,9 @@ class LabeledImageColorMapping: public Application
 {
 public:
 /** Standard class typedefs. */
- typedef LabeledImageColorMapping Self;
- typedef Application Superclass;
- typedef itk::SmartPointer<Self> Pointer;
+ typedef LabeledImageColorMapping      Self;
+ typedef Application                   Superclass;
+ typedef itk::SmartPointer<Self>       Pointer;
  typedef itk::SmartPointer<const Self> ConstPointer;
 
  /** Standard macro */
@@ -88,48 +88,48 @@ private:
 
     std::ifstream ifs;
 
+    ifs.open(GetParameterString("ct").c_str());
 
-      ifs.open(GetParameterString("ct").c_str());
+    if (!ifs)
+      {
+      itkExceptionMacro("Can not read file " << GetParameterString("ct") << std::endl);
+      }
 
-      if (!ifs)
+    otbAppLogINFO("Parsing color map file " << GetParameterString("ct") << "." << std::endl);
+
+    while (!ifs.eof())
+      {
+      std::string line;
+      std::getline(ifs, line);
+
+      // Avoid commented lines or too short ones
+      if (!line.empty() && line[0] != '#')
         {
-        itkExceptionMacro("Can not read file " << GetParameterString("ct") << std::endl);
-        }
-
-      otbAppLogINFO("Parsing color map file " << GetParameterString("ct") << "." << std::endl);
-
-      while (!ifs.eof())
-        {
-        std::string line;
-        std::getline(ifs, line);
-
-        // Avoid commented lines or too short ones
-        if (!line.empty() && line[0] != '#')
+        // retrieve the label
+        std::string::size_type pos = line.find_first_of(" ", 0);
+        LabelType clabel = atoi(line.substr(0, pos).c_str());
+        ++pos;
+        // Retrieve the color
+        VectorPixelType color(3);
+        color.Fill(0);
+        for (unsigned int i = 0; i < 3; ++i)
           {
-          // retrieve the label
-          std::string::size_type pos = line.find_first_of(" ", 0);
-          LabelType clabel = atoi(line.substr(0, pos).c_str());
-          ++pos;
-          // Retrieve the color
-          VectorPixelType color(3);
-          color.Fill(0);
-          for (unsigned int i = 0; i < 3; ++i)
-            {
-            std::string::size_type nextpos = line.find_first_of(" ", pos);
-            int value = atoi(line.substr(pos, nextpos).c_str());
-            if (value < 0 || value > 255) otbAppLogWARNING("WARNING: color value outside 8-bits range (<0 or >255). Value will be clamped." << std::endl);
-            color[i] = static_cast<PixelType> (value);
-            pos = nextpos + 1;
-            nextpos = line.find_first_of(" ", pos);
-            }
-          otbAppLogINFO("Adding color mapping " << clabel << " -> [" << (int) color[0] << " " << (int) color[1] << " "<< (int) color[2] << " ]" << std::endl);
-          m_Mapper->SetChange(clabel, color);
+          std::string::size_type nextpos = line.find_first_of(" ", pos);
+          int value = atoi(line.substr(pos, nextpos).c_str());
+          if (value < 0 || value > 255)
+          otbAppLogWARNING("WARNING: color value outside 8-bits range (<0 or >255). Value will be clamped." << std::endl);
+          color[i] = static_cast<PixelType> (value);
+          pos = nextpos + 1;
+          nextpos = line.find_first_of(" ", pos);
           }
+        otbAppLogINFO("Adding color mapping " << clabel << " -> [" << (int) color[0] << " " << (int) color[1] << " "<< (int) color[2] << " ]" << std::endl);
+        m_Mapper->SetChange(clabel, color);
         }
-      ifs.close();
+      }
+    ifs.close();
 
     /***/
-   SetParameterOutputImage<VectorImageType> ("out", m_Mapper->GetOutput());
+    SetParameterOutputImage<VectorImageType> ("out", m_Mapper->GetOutput());
 
   }
 
