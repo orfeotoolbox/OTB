@@ -30,6 +30,7 @@
 #include "otbWrapperMacros.h"
 #include "otbWrapperOutputImageParameter.h"
 #include "otbWrapperInputImageParameter.h"
+#include "otbWrapperComplexInputImageParameter.h"
 
 namespace otb
 {
@@ -324,6 +325,32 @@ public:
   otbGetParameterImageMacro(Int32RGBAImage);
   otbGetParameterImageMacro(FloatRGBAImage);
   otbGetParameterImageMacro(DoubleRGBAImage);
+
+  /* Get a complex image value
+   *
+   * Can be called for types :
+   * \li ParameterType_ComplexInputImage
+   */
+
+#define otbGetParameterComplexImageMacro( Image )                       \
+  Image##Type * GetParameter##Image( std::string parameter )            \
+    {                                                                   \
+    Image##Type::Pointer ret;                                           \
+    Parameter* param = GetParameterByKey(parameter);                    \
+    if (dynamic_cast<ComplexInputImageParameter*>(param))               \
+      {                                                                 \
+      ComplexInputImageParameter* paramDown = dynamic_cast<ComplexInputImageParameter*>(param); \
+      ret = paramDown->Get##Image();                                    \
+      }                                                                 \
+    return ret;                                                         \
+    }
+
+  otbGetParameterComplexImageMacro(ComplexFloatImage);
+  otbGetParameterComplexImageMacro(ComplexDoubleImage);
+
+  otbGetParameterComplexImageMacro(ComplexFloatVectorImage);
+  otbGetParameterComplexImageMacro(ComplexDoubleVectorImage);
+
   /* Get an image list value
    *
    * Can be called for types :

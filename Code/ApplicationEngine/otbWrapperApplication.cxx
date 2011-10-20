@@ -301,9 +301,9 @@ ParameterType Application::GetParameterType(std::string paramKey) const
     {
     type = ParameterType_InputImageList;
     }
-  else if (dynamic_cast<const InputComplexImageParameter*>(param))
+  else if (dynamic_cast<const ComplexInputImageParameter*>(param))
     {
-    type = ParameterType_InputComplexImage;
+    type = ParameterType_ComplexInputImage;
     }
   else if (dynamic_cast<const InputVectorDataParameter*>(param))
     {
@@ -715,7 +715,7 @@ ComplexFloatVectorImageType* Application::GetParameterComplexImage(std::string p
   ComplexFloatVectorImageType::Pointer ret;
   Parameter* param = GetParameterByKey(parameter);
 
-  if (dynamic_cast<InputComplexImageParameter*>(param))
+  if (dynamic_cast<ComplexInputImageParameter*>(param))
     {
     InputComplexImageParameter* paramDown = dynamic_cast<InputComplexImageParameter*>(param);
     ret = paramDown->GetImage();
