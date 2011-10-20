@@ -115,19 +115,13 @@ private:
     FloatVectorImageType::Pointer inImage = GetParameterImage("in");
 
     // Get the Initial Output Image FileName
-    Parameter* param = GetParameterByKey("out");
     std::string path, fname, ext;
-    if (dynamic_cast<FilenameParameter*>(param))
-      {
-      FilenameParameter* paramDown =
-        dynamic_cast<FilenameParameter*>(param);
-      std::string ofname = paramDown->GetValue();
+    std::string ofname = GetParameterString("out");
 
-      // Get the extension and the prefix of the filename
-      path  = itksys::SystemTools::GetFilenamePath(ofname);
-      fname = itksys::SystemTools::GetFilenameWithoutExtension(ofname);
-      ext   = itksys::SystemTools::GetFilenameExtension(ofname);
-      }
+    // Get the extension and the prefix of the filename
+    path  = itksys::SystemTools::GetFilenamePath(ofname);
+    fname = itksys::SystemTools::GetFilenameWithoutExtension(ofname);
+    ext   = itksys::SystemTools::GetFilenameExtension(ofname);
 
     unsigned int currentLevel = 1;
     unsigned int currentFactor = shrinkFactor;
