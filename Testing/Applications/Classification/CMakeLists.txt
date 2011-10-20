@@ -49,10 +49,24 @@ ADD_TEST(NAME apTvClTrainSVMImagesClassifierQB1_allOpt
     --out ${TEMP}/clsvmModelQB1_allOpt.svm.svm
 )
 
-
 SET_TESTS_PROPERTIES(apTvClTrainSVMImagesClassifierQB1_allOpt PROPERTIES DEPENDS apTvClEstimateImagesStatisticsQB1)
 
+ADD_TEST(NAME apTvClValidateSVMImagesClassifierQB1   
+  COMMAND otbTestDriver
+  --compare-ascii ${NOTOL} 
+    ${OTBAPP_BASELINE_FILES}/clsvmPerformanceEstimationQB1.txt
+    ${TEMP}/clsvmPerformanceEstimationQB1.txt
+     Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
+     ValidateSVMImagesClassifier
+      $<TARGET_FILE_DIR:otbapp_ValidateSVMImagesClassifier>
+    --il     ${INPUTDATA}/Classification/QB_1_ortho.tif
+    --vd     ${INPUTDATA}/Classification/VectorData_QB1_bis.shp
+    --imstat ${TEMP}/apTvClEstimateImageStatisticsQB1.xml
+    --svm     ${TEMP}/clsvmModelQB1.svm
+    --out    ${TEMP}/clsvmPerformanceEstimationQB1.txt
+)
 
+SET_TESTS_PROPERTIES(apTvClValidateSVMImagesClassifierQB1 PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB1)
 
 ADD_TEST(NAME apTvClImageSVMClassifierQB1  
  COMMAND otbTestDriver
@@ -141,6 +155,23 @@ ADD_TEST(NAME apTvClTrainSVMImagesClassifierQB123
 )
 
 SET_TESTS_PROPERTIES(apTvClTrainSVMImagesClassifierQB123 PROPERTIES DEPENDS apTvClEstimateImagesStatisticsQB123)
+
+ADD_TEST(NAME apTvClValidateSVMImagesClassifierQB123  
+  COMMAND otbTestDriver
+  --compare-ascii ${NOTOL} 
+    ${OTBAPP_BASELINE_FILES}/clsvmPerformanceEstimationQB123.txt
+    ${TEMP}/clsvmPerformanceEstimationQB123.txt
+     Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
+     ValidateSVMImagesClassifier
+      $<TARGET_FILE_DIR:otbapp_ValidateSVMImagesClassifier>
+    --il     ${INPUTDATA}/Classification/QB_1_ortho.tif
+    --vd     ${INPUTDATA}/Classification/VectorData_QB1_bis.shp
+    --imstat ${TEMP}/apTvClEstimateImageStatisticsQB123.xml
+    --svm     ${TEMP}/clsvmModelQB123.svm
+    --out    ${TEMP}/clsvmPerformanceEstimationQB123.txt
+)
+
+SET_TESTS_PROPERTIES(apTvClValidateSVMImagesClassifierQB123 PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB123)
 
 
 ADD_TEST(NAME apTvClImageSVMClassifierQB123_1  
@@ -249,6 +280,23 @@ ADD_TEST(NAME apTvClTrainSVMImagesClassifierQB456
 
 SET_TESTS_PROPERTIES(apTvClTrainSVMImagesClassifierQB456 PROPERTIES DEPENDS apTvClEstimateImagesStatisticsQB456)
 
+
+ADD_TEST(NAME apTvClValidateSVMImagesClassifierQB456  
+  COMMAND otbTestDriver
+  --compare-ascii ${NOTOL} 
+    ${OTBAPP_BASELINE_FILES}/clsvmPerformanceEstimationQB456.txt
+    ${TEMP}/clsvmPerformanceEstimationQB456.txt
+     Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
+     ValidateSVMImagesClassifier
+      $<TARGET_FILE_DIR:otbapp_ValidateSVMImagesClassifier>
+    --il     ${INPUTDATA}/Classification/QB_5_extract.tif
+    --vd     ${INPUTDATA}/Classification/VectorData_QB5_bis.shp
+    --imstat ${TEMP}/apTvClEstimateImageStatisticsQB456.xml
+    --svm     ${TEMP}/clsvmModelQB456.svm
+    --out    ${TEMP}/clsvmPerformanceEstimationQB456.txt
+)
+
+SET_TESTS_PROPERTIES(apTvClValidateSVMImagesClassifierQB456 PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB456)
 
 
 ADD_TEST(NAME apTvClImageSVMClassifierQB456_4
