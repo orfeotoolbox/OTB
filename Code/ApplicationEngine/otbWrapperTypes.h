@@ -49,6 +49,7 @@ typedef enum
   ParameterType_Radius,
   ParameterType_Group,
   ParameterType_ListView,
+  ParameterType_ComplexInputImage,
 } ParameterType;
 
 typedef enum
@@ -103,8 +104,16 @@ typedef otb::Image< itk::RGBAPixel<unsigned int> >   UInt32RGBAImageType;
 typedef otb::Image< itk::RGBAPixel<float> >          FloatRGBAImageType;
 typedef otb::Image< itk::RGBAPixel<double> >         DoubleRGBAImageType;
 
-typedef std::complex<float>                   ComplexPixelType;
-typedef otb::VectorImage<ComplexPixelType, 2> ComplexFloatVectorImageType;
+typedef std::complex<float>                   FloatComplexPixelType;
+typedef std::complex<double>                  DoubleComplexPixelType;
+
+// Complex Image Type (first : double and float)
+typedef otb::Image< FloatComplexPixelType, 2 >          ComplexFloatImageType;
+typedef otb::Image< DoubleComplexPixelType, 2 >         ComplexDoubleImageType;
+
+typedef otb::VectorImage<FloatComplexPixelType, 2 >    ComplexFloatVectorImageType;
+typedef otb::VectorImage< DoubleComplexPixelType, 2 >   ComplexDoubleVectorImageType;
+
 
 typedef double VectorDataCoordinatePrecisionType;
 typedef double VectorDataValuePrecisionType;
