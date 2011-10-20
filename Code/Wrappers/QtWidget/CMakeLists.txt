@@ -8,6 +8,7 @@ set( WrappersQtWidget_MOC_HDR
        otbWrapperQtWidgetStringParameter.h
        otbWrapperQtWidgetChoiceParameter.h
        otbWrapperQtWidgetInputImageParameter.h
+       otbWrapperQtWidgetComplexInputImageParameter.h
        otbWrapperQtWidgetInputImageListParameter.h
        otbWrapperQtWidgetInputVectorDataListParameter.h
        otbWrapperQtWidgetOutputImageParameter.h
