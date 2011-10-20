@@ -418,6 +418,31 @@ public:
   std::string GetProgressDescription() const;
 
 
+  /** Doc element accessors. */
+  itkSetStringMacro(DocLongDescription);
+  itkGetStringMacro(DocLongDescription);
+  itkSetStringMacro(DocCLExample);
+  itkGetStringMacro(DocCLExample);
+  itkSetStringMacro(DocAuthors);
+  itkGetStringMacro(DocAuthors);
+  itkSetStringMacro(DocLimitations);
+  itkGetStringMacro(DocLimitations);
+  itkSetStringMacro(DocSeeAlso);
+  itkGetStringMacro(DocSeeAlso);
+  std::vector<std::string> GetDocTags(){
+    return m_DocTags;
+  }
+  void SetDocTags( std::vector<std::string> val ){
+    m_DocTags = val;
+    this->Modified();
+  }
+
+  void AddDocTag( const std::string & tag )
+  {
+    m_DocTags.push_back( tag );
+    this->Modified();
+  }
+
 protected:
   /** Constructor */
   Application();
@@ -515,6 +540,20 @@ private:
 
   itk::ProcessObject::Pointer       m_ProgressSource;
   std::string                       m_ProgressSourceDescription;
+
+  /** Long and precise application description . */
+  std::string                       m_DocLongDescription;
+  /** Commanline example. Use ${OTB-DATA} for OTB-Data directory
+* path and ${OTB-BIN} for the directory bin of the OTB binary directory. */
+  std::string m_DocCLExample;
+  /** Author List. Format : John Doe, Bob Moran.*/
+  std::string m_DocAuthors;
+  /** Known limitations (threading, unvalid pixel type ...) or bugs */
+  std::string m_DocLimitations;
+  /** Related applications */
+  std::string m_DocSeeAlso;
+  /** Tags that define the applcation (ex : segmentation, OBIA).*/
+  std::vector<std::string> m_DocTags;
 
 }; //end class
 

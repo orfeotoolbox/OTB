@@ -6,17 +6,44 @@ endif(OTB_DATA_USE_LARGEINPUT)
 
 set(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
 
-SET(BASELINE              ${OTB_DATA_ROOT}/Baseline/OTB/Images)
-SET(BASELINE_FILES        ${OTB_DATA_ROOT}/Baseline/OTB/Files)
+set(BASELINE              ${OTB_DATA_ROOT}/Baseline/OTB/Images)
+set(BASELINE_FILES        ${OTB_DATA_ROOT}/Baseline/OTB/Files)
 
-SET(OTBAPP_BASELINE       ${OTB_DATA_ROOT}/Baseline/OTB-Applications/Images)
-SET(OTBAPP_BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB-Applications/Files)
+set(OTBAPP_BASELINE       ${OTB_DATA_ROOT}/Baseline/OTB-Applications/Images)
+set(OTBAPP_BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB-Applications/Files)
+
+set(NOTOL 0.0)
+set(EPSILON_3 0.001)
+set(EPSILON_7 0.0000001)
+set(EPSILON_9 0.000000001)
+
+set(OTB_WRAPPER_APPLICATION_TESTS ${CXX_TEST_PATH}/otbWrapperApplicationDocTests)
+
+set(WrapperApplication_SRCS
+    otbWrapperApplicationTests1.cxx
+    otbWrapperApplicationDocTests.cxx
+    )
+
+include_directories(${CMAKE_SOURCE_DIR}/Code/Core)
+include_directories(${CMAKE_SOURCE_DIR}/Code/Common)
+
+add_executable(otbWrapperApplicationDocTests ${WrapperApplication_SRCS})
+target_link_libraries(otbWrapperApplicationDocTests
+                        OTBIO
+                        OTBCommon
+                        OTBTesting
+                        OTBApplicationEngine)
 
 
-SET(NOTOL 0.0)
-SET(EPSILON_3 0.001)
-SET(EPSILON_7 0.0000001)
-SET(EPSILON_9 0.000000001)
+foreach(app ${OTB_APPLICATIONS_NAME_LIST})
+
+add_test(NAME apTvDocAppli_${app}
+         COMMAND ${OTB_WRAPPER_APPLICATION_TESTS}
+           otbWrapperApplicationDocTest
+           ${app}
+           $<TARGET_FILE_DIR:otbapp_${app}> )
+       
+endforeach(app)
 
 add_subdirectory(Classification)
 add_subdirectory(FeatureExtraction)

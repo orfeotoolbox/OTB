@@ -126,7 +126,7 @@ add_test(NAME apTvUtBandMath
                  --exp "cos(im1b1)+im2b1*im3b1-im3b2+ndvi(im3b3,im3b4)"
                  )
 
-# Split Image applciation 
+#--- Split Image application ----
 add_test(NAME apTvUtSplitImage
          COMMAND otbTestDriver --compare-n-images ${NOTOL} 3
                    ${INPUTDATA}/poupees_sub_c1.png
@@ -143,4 +143,25 @@ add_test(NAME apTvUtSplitImage
                   $<TARGET_FILE_DIR:otbapp_BandMath>
                  --in   ${INPUTDATA}/poupees_sub.png
                  --out ${TEMP}/apTvUtSplitImageOutput.tif
+                 )
+
+
+#--- Convert ----
+add_test(NAME apTvUtConvertBasic
+         COMMAND otbTestDriver
+                 Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
+                 Convert
+                 $<TARGET_FILE_DIR:otbapp_BandMath>
+                 --in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+                 --out ${TEMP}/otbConvertBasicOutput.tif
+                 )
+
+add_test(NAME apTvUtConvertWithScaling
+         COMMAND otbTestDriver
+                 Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
+                 Convert
+                 $<TARGET_FILE_DIR:otbapp_BandMath>
+                 --in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+                 --out ${TEMP}/otbConvertWithScalingOutput.png uchar
+                 --type linear
                  )

@@ -81,8 +81,17 @@ private:
     SetName("Convert");
     SetDescription("Convert an image to a different format, eventually rescaling the data"
                    " and/or changing the pixel type.");
-    //m_Concatener = ListConcatenerFilterType::New();
- itk::ProcessObject::Pointer m_FinalCaster;
+
+    // Documentation
+    SetDocLongDescription("This application performs an image pixel type conversion (short, ushort, char, uchar, int, uint, float and double types are handled). The output image is written in the specified format (ie. taht corresponds to the given extension).\n The convertion can include a rescale usiong the image 2% minimum and maximum values. The rescale can be linear or log2.");
+    SetDocLimitations("None");
+    SetDocAuthors("CS-OTB Team");
+    SetDocSeeAlso("Rescale application");
+    SetDocCLExample("otbApplicationLauncherCommandLine Convert ${OTB-BIN} --il ${OTB-Data} ");
+    AddDocTag("Conversion");
+    AddDocTag("Image Dynamic");
+
+    itk::ProcessObject::Pointer m_FinalCaster;
   }
 
   virtual ~Convert()
@@ -108,17 +117,11 @@ private:
   void DoUpdateParameters()
   {
     // Nothing to do here for the parameters : all are independent
-    
-    // Reinitialize the object
-    //m_Concatener = ListConcatenerFilterType::New();
   }
 
  template<class TImageType>
  void GenericDoExecute()
   {  
-    // Get the input image list
-  
-    
     typename TImageType::Pointer castIm;
     
     std::string rescaleType = this->GetParameterString("type");

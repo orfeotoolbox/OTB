@@ -16,11 +16,13 @@
 
 =========================================================================*/
 
-#include "otbQtLogOutput.h"
+// this file defines the otbCommonTest for the test driver
+// and all it expects is that you have a function called RegisterTests
 
 
-int otbQtLogOutputNew(int /*argc*/, char* /*argv[]*/)
+#include "otbTestMain.h"
+
+void RegisterTests()
 {
-  otb::Wrapper::QtLogOutput::Pointer log = otb::Wrapper::QtLogOutput::New();
-  return EXIT_SUCCESS;
+  REGISTER_TEST(otbWrapperApplicationDocTest);
 }

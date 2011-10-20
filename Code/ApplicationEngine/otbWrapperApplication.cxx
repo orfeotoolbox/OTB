@@ -50,6 +50,12 @@ namespace Wrapper
 Application::Application()
  : m_Name(""),
    m_Description(""),
+   m_DocLongDescription(""),
+   m_DocCLExample(""),
+   m_DocAuthors(""),
+   m_DocLimitations(""),
+   m_DocSeeAlso(""),
+   m_DocTags(),
    m_Logger(itk::Logger::New())
 {
   // Don't call Init from the constructor, since it calls a virtual method !

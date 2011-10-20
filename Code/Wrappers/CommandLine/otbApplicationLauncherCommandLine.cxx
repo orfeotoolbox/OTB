@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
 {
   if (argc < 2)
     {
-    std::cerr << "Usage : " << argv[0] << " module_name [--modulePath MODULEPATH] [arguments]" << std::endl;
+    std::cerr << "Usage : " << argv[0] << " module_name [MODULEPATH] [arguments]" << std::endl;
     return EXIT_FAILURE;
     }
 

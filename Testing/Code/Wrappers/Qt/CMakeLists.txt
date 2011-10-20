@@ -10,6 +10,7 @@ set(WrapperQtWidget_SRCS
     otbWrapperQtWidgetTests.cxx
     otbWrapperQtWidgetParameterFactory.cxx
     otbWrapperQtWidgetShowWidget.cxx
+    otbQtLogOutputTests.cxx
     )
 
 include_directories(${QT_INCLUDE_DIRS})
