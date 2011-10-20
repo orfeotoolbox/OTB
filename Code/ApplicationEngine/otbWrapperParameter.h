@@ -214,10 +214,10 @@ protected:
                 m_Mandatory(true),
                 m_Active(false),
                 m_UserValue(false),
+		m_AutomaticValue(false),
                 m_DefaultValueMode(DefaultValueMode_UNKNOWN),
                 m_UserLevel(UserLevel_Basic),
                 m_Role(Role_Input),
-                m_AutomaticValue(false),
                 m_IsChecked(false)
   {}
 
