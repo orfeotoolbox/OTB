@@ -23,6 +23,7 @@ set( WrappersQtWidget_MOC_HDR
        itkQtProgressBar.h
        otbWrapperQtWidgetFilenameParameter.h
        otbQtLogOutput.h
+       otbWrapperQtWidgetDirectoryParameter.h
        otbWrapperQtWidgetSimpleProgressReport.h
       )
 
