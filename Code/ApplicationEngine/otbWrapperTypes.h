@@ -23,7 +23,6 @@
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbVectorData.h"
-#include "otbImageList.h"
 
 namespace otb
 {
@@ -108,8 +107,8 @@ typedef otb::VectorData<VectorDataCoordinatePrecisionType,
            VectorDataType;
 typedef otb::ObjectList<VectorDataType> VectorDataListType;
 
-typedef otb::ImageList<FloatVectorImageType> FloatVectorImageListType;
-typedef otb::ImageList<FloatImageType>       FloatImageListType;
+typedef otb::ObjectList<FloatVectorImageType> FloatVectorImageListType;
+typedef otb::ObjectList<FloatImageType>       FloatImageListType;
 
 
 } // end namespace Wrapper
