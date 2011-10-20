@@ -191,6 +191,22 @@ ADD_TEST(NAME apTvClImageSVMClassifierQB123_1
 SET_TESTS_PROPERTIES(apTvClImageSVMClassifierQB123_1 PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB123)
 
 
+
+ADD_TEST(NAME apTvClLabeledImageColorMappingQB123_1  
+ COMMAND otbTestDriver
+  --compare-image ${NOTOL} 
+    ${OTBAPP_BASELINE}/clLabeledFancyImageQB123_1.tif
+    ${TEMP}/clLabeledFancyImageQB123_1.tif
+   Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
+   LabeledImageColorMapping
+   $<TARGET_FILE_DIR:otbapp_LabeledImageColorMapping>
+   --in      ${TEMP}/clLabeledImageQB123_1.tif
+   --ct      ${INPUTDATA}/Classification/ColorTable.txt
+   --out     ${TEMP}/clLabeledFancyImageQB123_1.tif
+)
+
+SET_TESTS_PROPERTIES(apTvClLabeledImageColorMappingQB123_1 PROPERTIES DEPENDS apTvClImageSVMClassifierQB123_1)
+
 ADD_TEST(NAME apTvClImageSVMClassifierQB123_2 
  COMMAND otbTestDriver
   --compare-image ${NOTOL} 
