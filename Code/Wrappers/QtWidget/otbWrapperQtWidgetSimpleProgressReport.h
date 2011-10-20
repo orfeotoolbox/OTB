@@ -15,17 +15,16 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbWrapperQtWidgetProgressReport_h
-#define __otbWrapperQtWidgetProgressReport_h
+#ifndef __otbWrapperQtWidgetSimpleProgressReport_h
+#define __otbWrapperQtWidgetSimpleProgressReport_h
 
 #include <QtGui>
 #include "otbWrapperApplication.h"
 #include "otbWrapperQtWidgetModel.h"
-#include "itkQtProgressBar.h"
 #include "itkProcessObject.h"
+#include "itkQtProgressBar.h"
 
 #include "itkCommand.h"
-
 
 namespace otb
 {
@@ -36,50 +35,30 @@ namespace Wrapper
  * \brief Create a widget reporting the progress of the application
  *        process.
  */
-class QtWidgetProgressReport : public QWidget
+class QtWidgetSimpleProgressReport : public QWidget
 {
   Q_OBJECT
 public:
-  QtWidgetProgressReport(QtWidgetModel * model);
-  virtual ~QtWidgetProgressReport();
-
-  void SetApplication(Application::Pointer app);
-
-  typedef itk::MemberCommand< QtWidgetProgressReport >  AddProcessCommandType;
-
-  void ProcessEvent( itk::Object * caller, const itk::EventObject & event );
-                                                                           
-  std::string GetCurrentDescription()
-  {
-    return m_CurrentDescription;
-  }
-
-/*
-  itk::ProcessObject* GetCurrentProcess()
-  {
-    return m_CurrentProcess;
-  }
+  QtWidgetSimpleProgressReport(QtWidgetModel * model);
+  virtual ~QtWidgetSimpleProgressReport();
   
-  QtWidgetModel * GetModel()
-  {
-    m_Model;
-  }
-
-  QVBoxLayout * GetLayout()
-  {
-    return m_Layout;
-  }
-*/
+  void SetApplication(Application::Pointer app);
+  
+  typedef itk::MemberCommand< QtWidgetSimpleProgressReport >  AddProcessCommandType;
+  
+  void ProcessEvent( itk::Object * caller, const itk::EventObject & event );
+ 
 public slots:
-  void RemoveLayout();
-  /*virtual */void ReportProcess();
+  void Init();
+  void ReportProcess();
 
   signals:
   void AddNewProcessToReport();
 
 private:
-  QtWidgetProgressReport(const QtWidgetProgressReport&); //purposely not implemented
-  void operator=(const QtWidgetProgressReport&); //purposely not implemented
+  QtWidgetSimpleProgressReport(const QtWidgetSimpleProgressReport&); //purposely not implemented
+  void operator=(const QtWidgetSimpleProgressReport&); //purposely not
+                                                       //implemented
 
   Application::Pointer              m_Application;
   QtWidgetModel *                   m_Model;
@@ -88,6 +67,10 @@ private:
   AddProcessCommandType::Pointer    m_AddProcessCommand;
   itk::ProcessObject*               m_CurrentProcess;
   std::string                       m_CurrentDescription;
+
+  itk::QtProgressBar * m_Bar;
+  QLabel * m_Label;
+
 };
 
 }

@@ -21,6 +21,7 @@
 #include "otbWrapperQtWidgetParameterFactory.h"
 #include "otbWrapperQtWidgetProgressReport.h"
 #include "otbWrapperOutputImageParameter.h"
+#include "otbWrapperQtWidgetSimpleProgressReport.h"
 
 #include "itksys/SystemTools.hxx"
 
@@ -48,15 +49,21 @@ void QtWidgetView::CreateGui()
 
   mainLayout->addWidget(CreateHeader());
   tab->addTab(CreateInputWidgets(), "Parameters");
-  mainLayout->addWidget(tab);
   QTextEdit *log = new QTextEdit();
   connect( m_Model->GetLogOutput(), SIGNAL(NewContentLog(QString)), log, SLOT(append(QString) ) );
   tab->addTab(log, "Logs");
   QtWidgetProgressReport* prog =  new QtWidgetProgressReport(m_Model);
   prog->SetApplication(m_Application);
   tab->addTab(prog, "Progress Reporting ...");
-  //mainLayout->addWidget(CreateInputWidgets());
-  mainLayout->addWidget(CreateFooter());
+  mainLayout->addWidget(tab);
+
+
+  QtWidgetSimpleProgressReport * progressReport =  new QtWidgetSimpleProgressReport(m_Model);
+  progressReport->SetApplication(m_Application);
+  QHBoxLayout *footLayout = new QHBoxLayout;
+  footLayout->addWidget(progressReport);
+  footLayout->addWidget(CreateFooter());
+  mainLayout->addLayout(footLayout);
 
   QGroupBox *mainGroup = new QGroupBox();
   mainGroup->setLayout(mainLayout);
@@ -124,7 +131,7 @@ QWidget* QtWidgetView::CreateFooter()
   // an HLayout with two buttons : Execute and Quit
   QGroupBox *footerGroup = new QGroupBox;
   QHBoxLayout *footerLayout = new QHBoxLayout;
-
+ 
   footerGroup->setFixedHeight(40);
   footerGroup->setContentsMargins(0, 0, 0, 0);
   footerLayout->setContentsMargins(5, 5, 5, 5);
@@ -144,6 +151,7 @@ QWidget* QtWidgetView::CreateFooter()
   footerLayout->addStretch();
   footerLayout->addWidget(m_ExecButton);
   footerLayout->addWidget(m_QuitButton);
+
   footerGroup->setLayout(footerLayout);
 
   return footerGroup;

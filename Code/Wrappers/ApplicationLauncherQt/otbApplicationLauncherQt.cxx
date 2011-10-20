@@ -26,7 +26,7 @@
 using otb::Wrapper::Application;
 using otb::Wrapper::ApplicationRegistry;
 using otb::Wrapper::QtWidgetView;
-using otb::Wrapper::QtWidgetProgressReport;
+//using otb::Wrapper::QtWidgetProgressReport;
 using otb::Wrapper::QtWidgetSimpleProgressReport;
 
 int main(int argc, char* argv[])
@@ -88,17 +88,17 @@ int main(int argc, char* argv[])
   QObject::connect(gui, SIGNAL(QuitSignal()), mainWindow, SLOT(close()));
 
   // Create a progressReport object
-  QtWidgetSimpleProgressReport * progressReport =  new QtWidgetSimpleProgressReport(gui->GetModel());
-  progressReport->SetApplication(app);
+  //QtWidgetSimpleProgressReport * progressReport =  new QtWidgetSimpleProgressReport(gui->GetModel());
+  //progressReport->SetApplication(app);
 
   // Create a dock widget containg the progress widget
-  QDockWidget* qdock = new QDockWidget("Progress Reporting ...", mainWindow);
-  qdock->setWidget(progressReport);
+  //QDockWidget* qdock = new QDockWidget("Progress Reporting ...", mainWindow);
+  //qdock->setWidget(progressReport);
 
   // build the main window, central widget is the plugin view, other
   // are docked widget (progress, logs...)
   mainWindow->setCentralWidget(gui);
-  mainWindow->addDockWidget(Qt::BottomDockWidgetArea, qdock);
+  //mainWindow->addDockWidget(Qt::BottomDockWidgetArea, qdock);
   
   // Show the main window
   mainWindow->show();

@@ -14,6 +14,9 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifndef __itkQtProgressBar_h
+#define __itkQtProgressBar_h
+
 #include <QtGui>
 #include "itkCommand.h"
 
@@ -55,3 +58,5 @@ private:
 
 
 }  // end of namespace
+
+#endif
