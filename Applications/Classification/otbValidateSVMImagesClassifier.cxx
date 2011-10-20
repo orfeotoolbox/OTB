@@ -48,8 +48,8 @@
 // Classification filter
 #include "otbSVMImageClassificationFilter.h"
 
-// VectorData projection filter
-#include "otbVectorDataProjectionFilter.h"
+// Extract a ROI of the vectordata
+#include "otbVectorDataIntoImageProjectionFilter.h"
 
 namespace otb
 {
@@ -111,8 +111,8 @@ public:
   typedef otb::ConfusionMatrixCalculator<LabelListSampleType, LabelListSampleType> ConfusionMatrixCalculatorType;
   typedef ClassifierType::OutputType ClassifierOutputType;
 
-  // Projection of a vectorData
-  typedef otb::VectorDataProjectionFilter<VectorDataType, VectorDataType> VectorDataProjectionFilterType;
+ // Extract ROI and Project vectorData
+ typedef otb::VectorDataIntoImageProjectionFilter<VectorDataType, VectorImageType> VectorDataReprojectionType;
 
 private:
   ValidateSVMImagesClassifier()
@@ -180,21 +180,33 @@ private:
       VectorDataType::Pointer vectorData = vectorDataList->GetNthElement(imgIndex);
       vectorData->Update();
 
-      // Project the vectorData in the Image Coodinate system
-      VectorDataProjectionFilterType::Pointer vproj = VectorDataProjectionFilterType::New();
-      vproj->SetInput(vectorData);
-      vproj->SetInputProjectionRef(vectorData->GetProjectionRef());
-      vproj->SetOutputKeywordList(image->GetImageKeywordlist());
-      vproj->SetOutputProjectionRef(image->GetProjectionRef());
-      // TODO add DEM support
-      vproj->Update();
+      VectorDataReprojectionType::Pointer vdreproj = VectorDataReprojectionType::New();
+      vdreproj->SetInputImage(image);
+      vdreproj->SetInput(vectorData);
+      vdreproj->SetUseOutputSpacingAndOriginFromImage(false);
+
+      // Configure DEM directory
+      if (HasUserValue("dem"))
+        {
+        vdreproj->SetDEMDirectory(GetParameterString("dem"));
+        }
+      else
+        {
+        if (otb::ConfigurationFile::GetInstance()->IsValid())
+          {
+          vdreproj->SetDEMDirectory(otb::ConfigurationFile::GetInstance()->GetDEMDirectory());
+          }
+        }
+
+      vdreproj->Update();
+
       //Sample list generator
       ListSampleGeneratorType::Pointer sampleGenerator = ListSampleGeneratorType::New();
 
       //Set inputs of the sample generator
       //TODO the ListSampleGenerator perform UpdateOutputData over the input image (need a persistent implementation)
       sampleGenerator->SetInput(image);
-      sampleGenerator->SetInputVectorData(vproj->GetOutput());
+      sampleGenerator->SetInputVectorData(vdreproj->GetOutput());
       sampleGenerator->SetValidationTrainingProportion(1.0); // All in validation
 
       sampleGenerator->SetClassKey("Class");
