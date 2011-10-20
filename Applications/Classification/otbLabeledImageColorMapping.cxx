@@ -15,119 +15,131 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#include "otbLabeledImageColorMapping.h"
+#include "otbWrapperApplication.h"
+#include "otbWrapperApplicationFactory.h"
+
 
 #include <fstream>
-#include "otbCommandLineArgumentParser.h"
 
-#include "otbImage.h"
-#include "otbVectorImage.h"
-#include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
 #include "otbChangeLabelImageFilter.h"
-#include "otbStandardWriterWatcher.h"
+
+
+
 
 namespace otb
 {
-
-int LabeledImageColorMapping::Describe(ApplicationDescriptor* descriptor)
+namespace Wrapper
 {
-  descriptor->SetName("LabeledImageColorMapping");
-  descriptor->SetDescription("Replace labels of a classification map with user defined 8-bits RGB colors. Unknown label are mapped to black by default.");
-  descriptor->AddInputImage();
-  descriptor->AddOutputImage();
-  descriptor->AddOption("ColorTable",
-                        "An ascii file containing the color table with one color per line (for instance line 1 255 0 0 means that all pixel with label 1 will be replaced by RGB  color 255 0 0). Lines begining with a # are ignored.",
-                        "ct", 1, true, ApplicationDescriptor::FileName);
-  descriptor->AddOption("AvailableMemory",
-                        "Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default)",
-                        "ram", 1, false, otb::ApplicationDescriptor::Integer);
 
-  return EXIT_SUCCESS;
-}
-
-int LabeledImageColorMapping::Execute(otb::ApplicationOptionsResult* parseResult)
+class LabeledImageColorMapping: public Application
 {
-  // Pixel type
-  typedef unsigned char PixelType;
-  typedef unsigned short LabelType;
+public:
+/** Standard class typedefs. */
+ typedef LabeledImageColorMapping Self;
+ typedef Application Superclass;
+ typedef itk::SmartPointer<Self> Pointer;
+ typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef otb::VectorImage<PixelType, 2> VectorImageType;
-  typedef VectorImageType::PixelType VectorPixelType;
-  typedef otb::Image<LabelType, 2> LabelImageType;
-  typedef otb::ImageFileReader<LabelImageType> ReaderType;
-  typedef otb::StreamingImageFileWriter<VectorImageType> WriterType;
-  typedef otb::ChangeLabelImageFilter<LabelImageType, VectorImageType> ChangeLabelFilterType;
+ /** Standard macro */
+ itkNewMacro(Self);
 
-  ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName(parseResult->GetInputImage().c_str());
+ itkTypeMacro(LabeledImageColorMapping, otb::Application);
 
-  ChangeLabelFilterType::Pointer mapper = ChangeLabelFilterType::New();
-  mapper->SetInput(reader->GetOutput());
-  mapper->SetNumberOfComponentsPerPixel(3);
+ typedef FloatImageType::PixelType   PixelType;
+ typedef UInt16ImageType             LabelImageType;
+ typedef LabelImageType::PixelType   LabelType;
+ typedef UInt8VectorImageType        VectorImageType;
+ typedef VectorImageType::PixelType  VectorPixelType;
 
-  WriterType::Pointer writer = WriterType::New();
-  writer->SetInput(mapper->GetOutput());
-  writer->SetFileName(parseResult->GetOutputImage());
+ typedef otb::ChangeLabelImageFilter<LabelImageType, VectorImageType> ChangeLabelFilterType;
 
-  std::ifstream ifs;
+private:
+ LabeledImageColorMapping()
+  {
+    SetName("LabeledImageColorMapping");
+    SetDescription("Replace labels of a classification map with user defined 8-bits RGB colors. Unknown label are mapped to black by default.");
+  }
 
-  const char * colormap = parseResult->GetParameterString("ColorTable").c_str();
+  virtual ~LabeledImageColorMapping()
+  {
+  }
 
-  ifs.open(colormap);
+  void DoCreateParameters()
+  {
+    AddParameter(ParameterType_InputImage, "in", "Input Image.");
+    AddParameter(ParameterType_OutputImage, "out", "Output Image.");
+    AddParameter(ParameterType_Filename, "ct", "An ASCII file containing the color table with one color per line (for instance line 1 255 0 0 means that all pixel with label 1 will be replaced by RGB  color 255 0 0). Lines begining with a # are ignored.");
 
-  if (!ifs)
-    {
-    std::cerr << "Can not read file " << colormap << std::endl;
-    return EXIT_FAILURE;
-    }
+  }
 
-  std::cout << "Parsing color map file " << colormap << "." << std::endl;
+  void DoUpdateParameters()
+  {
+    // Nothing to do here : all parameters are independent
+  }
 
-  while (!ifs.eof())
-    {
-    std::string line;
-    std::getline(ifs, line);
+  void DoExecute()
+  {
 
-    // Avoid commented lines or too short ones
-    if (!line.empty() && line[0] != '#')
-      {
-      // retrieve the label
-      std::string::size_type pos = line.find_first_of(" ", 0);
-      LabelType clabel = atoi(line.substr(0, pos).c_str());
-      ++pos;
-      // Retrieve the color
-      VectorPixelType color(3);
-      color.Fill(0);
-      for (unsigned int i = 0; i < 3; ++i)
+    m_LabeledImage = GetParameterUInt16Image("in");
+
+    m_Mapper = ChangeLabelFilterType::New();
+    m_Mapper->SetInput(m_LabeledImage);
+    m_Mapper->SetNumberOfComponentsPerPixel(3);
+
+    std::ifstream ifs;
+
+
+      ifs.open(GetParameterString("ct").c_str());
+
+      if (!ifs)
         {
-        std::string::size_type nextpos = line.find_first_of(" ", pos);
-        int value = atoi(line.substr(pos, nextpos).c_str());
-        if (value < 0 || value > 255) std::cerr
-            << "WARNING: color value outside 8-bits range (<0 or >255). Value will be clamped." << std::endl;
-        color[i] = static_cast<PixelType> (value);
-        pos = nextpos + 1;
-        nextpos = line.find_first_of(" ", pos);
+        itkExceptionMacro("Can not read file " << GetParameterString("ct") << std::endl);
         }
-      std::cout << "Adding color mapping " << clabel << " -> [" << (int) color[0] << " " << (int) color[1] << " "
-          << (int) color[2] << " ]" << std::endl;
-      mapper->SetChange(clabel, color);
-      }
-    }
-  ifs.close();
 
-  unsigned int ram = 256;
-  if (parseResult->IsOptionPresent("AvailableMemory"))
-    {
-    ram = parseResult->GetParameterUInt("AvailableMemory");
-    }
-  writer->SetAutomaticTiledStreaming(ram);
+      otbAppLogINFO("Parsing color map file " << GetParameterString("ct") << "." << std::endl);
 
-  otb::StandardWriterWatcher watcher(writer, mapper, "Color mapping");
+      while (!ifs.eof())
+        {
+        std::string line;
+        std::getline(ifs, line);
 
-  writer->Update();
+        // Avoid commented lines or too short ones
+        if (!line.empty() && line[0] != '#')
+          {
+          // retrieve the label
+          std::string::size_type pos = line.find_first_of(" ", 0);
+          LabelType clabel = atoi(line.substr(0, pos).c_str());
+          ++pos;
+          // Retrieve the color
+          VectorPixelType color(3);
+          color.Fill(0);
+          for (unsigned int i = 0; i < 3; ++i)
+            {
+            std::string::size_type nextpos = line.find_first_of(" ", pos);
+            int value = atoi(line.substr(pos, nextpos).c_str());
+            if (value < 0 || value > 255) otbAppLogWARNING("WARNING: color value outside 8-bits range (<0 or >255). Value will be clamped." << std::endl);
+            color[i] = static_cast<PixelType> (value);
+            pos = nextpos + 1;
+            nextpos = line.find_first_of(" ", pos);
+            }
+          otbAppLogINFO("Adding color mapping " << clabel << " -> [" << (int) color[0] << " " << (int) color[1] << " "<< (int) color[2] << " ]" << std::endl);
+          m_Mapper->SetChange(clabel, color);
+          }
+        }
+      ifs.close();
 
-  return EXIT_SUCCESS;
+    /***/
+   SetParameterOutputImage<VectorImageType> ("out", m_Mapper->GetOutput());
+
+  }
+
+  ChangeLabelFilterType::Pointer m_Mapper;
+  LabelImageType::Pointer m_LabeledImage;
+
+};
+}
 }
 
-}
+OTB_APPLICATION_EXPORT(otb::Wrapper::LabeledImageColorMapping)
+
+
