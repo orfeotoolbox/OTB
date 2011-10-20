@@ -65,7 +65,20 @@ void QtWidgetFilenameParameter::SelectFile()
 {
   QFileDialog fileDialog;
   fileDialog.setConfirmOverwrite(true);
-  fileDialog.setFileMode(QFileDialog::ExistingFile);
+  switch(m_FilenameParam->GetRole())
+    {
+    case Role_Input:
+    {
+    fileDialog.setFileMode(QFileDialog::ExistingFile);
+    }
+    break;
+    case Role_Output:
+    {
+    fileDialog.setFileMode(QFileDialog::AnyFile);
+    }
+    break;
+    }
+
   fileDialog.setNameFilter("File (*)");
 
   if (fileDialog.exec())
