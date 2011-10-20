@@ -21,7 +21,7 @@
 #include "otbWrapperDirectoryParameter.h"
 #include "otbWrapperEmptyParameter.h"
 #include "otbWrapperFilenameParameter.h"
-#include "otbWrapperInputComplexImageParameter.h"
+#include "otbWrapperComplexInputImageParameter.h"
 #include "otbWrapperInputImageParameter.h"
 #include "otbWrapperInputVectorDataParameter.h"
 #include "otbWrapperNumericalParameter.h"
@@ -262,11 +262,6 @@ ParameterGroup::AddParameter(ParameterType type, std::string paramKey, std::stri
         newParam = InputImageParameter::New();
         }
         break;
-      case ParameterType_InputComplexImage:
-        {
-        newParam = InputComplexImageParameter::New();
-        }
-        break;
       case ParameterType_InputVectorData:
         {
         newParam = InputVectorDataParameter::New();
@@ -315,6 +310,11 @@ ParameterGroup::AddParameter(ParameterType type, std::string paramKey, std::stri
       case ParameterType_ListView:
         {
         newParam = ListViewParameter::New();
+        }
+        break;
+      case ParameterType_ComplexInputImage:
+        {
+        newParam = ComplexInputImageParameter::New();
         }
         break;
       }
