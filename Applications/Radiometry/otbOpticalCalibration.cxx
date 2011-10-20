@@ -173,6 +173,11 @@ private:
       {
       case Level_TOA:
       {
+      m_ScaleFilter->SetInput(m_LuminanceToReflectanceFilter->GetOutput());
+      }
+      break;
+      case Level_TOC:
+      {
       m_AtmosphericParam = m_ReflectanceToSurfaceReflectanceFilter->GetCorrectionParameters();
       AerosolModelType aeroMod = AtmosphericCorrectionParametersType::NO_AEROSOL;
 
@@ -224,11 +229,6 @@ private:
 
       //rescale the surface reflectance in milli-reflectance
       m_ScaleFilter->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
-      }
-      break;
-      case Level_TOC:
-      {
-      m_ScaleFilter->SetInput(m_LuminanceToReflectanceFilter->GetOutput());
       }
       break;
       }
