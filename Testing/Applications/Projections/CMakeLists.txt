@@ -1,7 +1,7 @@
 
 IF(OTB_DATA_USE_LARGEINPUT)
 
-add_test(NAME apTvUtORthorectificationTest_UTM
+add_test(NAME apTvPrOrthorectification_UTM
          COMMAND otbTestDriver
                  --compare-image 0.0
                  ${BASELINE}/owTvOrthorectifTest_UTM.tif
