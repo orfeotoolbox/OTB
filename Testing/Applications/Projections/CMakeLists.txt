@@ -10,7 +10,7 @@ add_test(NAME apTvPrOrthorectification_UTM
                  OrthoRectification
                  $<TARGET_FILE_DIR:otbapp_OrthoRectification>
                  --in ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
-                 --out ${TEMP}/owTvOrthorectifTest_UTM.tif 
+                 --out ${TEMP}/owTvOrthorectifTest_UTM.tif
                  --dem ${INPUTDATA}/DEM/srtm_directory/
                  --outputs.ulx  374100.8
                  --outputs.uly  4829184.8
