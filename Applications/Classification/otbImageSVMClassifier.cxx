@@ -18,8 +18,6 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
-//#include "otbWrapperTypes.h"
-
 #include "itkVariableLengthVector.h"
 #include "otbChangeLabelImageFilter.h"
 #include "otbStandardWriterWatcher.h"
@@ -49,28 +47,19 @@ public:
   itkTypeMacro(ImageSVMClassifier, otb::Application);
 
   /** Filters typedef */
-  // Statistic XML file Reader
   typedef itk::VariableLengthVector<FloatVectorImageType::InternalPixelType>            MeasurementType;
   typedef otb::StatisticsXMLFileReader<MeasurementType>                                 StatisticsReader;
   typedef otb::ShiftScaleVectorImageFilter<FloatVectorImageType, FloatVectorImageType>  RescalerType;
-
-  /// Classification typedefs
-  typedef otb::SVMImageClassificationFilter<FloatVectorImageType, UInt8ImageType>   ClassificationFilterType;
-  typedef ClassificationFilterType::Pointer                                      ClassificationFilterPointerType;
-  typedef ClassificationFilterType::ModelType                                    ModelType;
-  typedef ModelType::Pointer                                                     ModelPointerType;
-
-  // Cast filter
-  // TODO: supress that !!
-  //typedef MultiToMonoChannelExtractROI<FloatVectorImageType::InternalPixelType, 
-  //                                     UInt8ImageType::PixelType>               ExtractImageFilterType;
-//typedef ImageToVectorImageCastFilter<UInt8ImageType, FloatVectorImageType>    CastImageFilterType;
+  typedef otb::SVMImageClassificationFilter<FloatVectorImageType, UInt8ImageType>       ClassificationFilterType;
+  typedef ClassificationFilterType::Pointer                                             ClassificationFilterPointerType;
+  typedef ClassificationFilterType::ModelType                                           ModelType;
+  typedef ModelType::Pointer                                                            ModelPointerType;
 
 private:
   ImageSVMClassifier()
   {
     SetName("ImageSVMClassifier");
-    SetDescription("Perform SVM classification based a previous computed SVM model");
+    SetDescription("Perform SVM classification based on a previous computed SVM model");
   }
 
   virtual ~ImageSVMClassifier()
@@ -87,7 +76,7 @@ private:
     MandatoryOff("mask");
 
     AddParameter(ParameterType_Filename, "imstat", "Image statistics file.");
-    SetParameterDescription("imstat", "a XML file containing mean and standard deviation of input images used to train svm model.");
+    SetParameterDescription("imstat", "a XML file containing mean and standard deviation of input images used to train svm model");
     MandatoryOff("imstat");
 
     AddParameter(ParameterType_Filename, "svm", "SVM Model.");
