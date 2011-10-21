@@ -57,7 +57,7 @@ namespace Wrapper
     ParameterType_Choice,
     ParameterType_InputImage,
     ParameterType_InputImageList,
-    ParameterType_InputComplexImage,
+    ParameterType_ComplexInputImage,
     ParameterType_InputVectorData,
     ParameterType_OutputImage,
     ParameterType_OutputVectorData,

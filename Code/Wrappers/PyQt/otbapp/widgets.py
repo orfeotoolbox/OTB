@@ -322,7 +322,7 @@ class QParameterGroup(QParameterBase):
             otbApplication.ParameterType_Directory : QParameterDirectory,
             otbApplication.ParameterType_Choice : QParameterChoice,
             otbApplication.ParameterType_InputImage : QParameterInputFilename,
-            otbApplication.ParameterType_InputComplexImage : QParameterInputFilename,
+            otbApplication.ParameterType_ComplexInputImage : QParameterInputFilename,
             otbApplication.ParameterType_InputVectorData : QParameterInputFilename,
             otbApplication.ParameterType_OutputImage : QParameterOutputImage,
             otbApplication.ParameterType_OutputVectorData : QParameterOutputImage, # todo

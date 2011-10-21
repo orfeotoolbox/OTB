@@ -77,7 +77,7 @@ class OTBModule(processing.Module):
             otb.ParameterType_Directory:           parameters.PathParameter,
             otb.ParameterType_Choice:              parameters.ChoiceParameter,
             otb.ParameterType_InputImage:          parameters.RasterLayerParameter,
-            otb.ParameterType_InputComplexImage:   parameters.RasterLayerParameter,
+            otb.ParameterType_ComplexInputImage:   parameters.RasterLayerParameter,
             otb.ParameterType_InputVectorData:     parameters.VectorLayerParameter,
             otb.ParameterType_OutputImage:         parameters.PathParameter,
             otb.ParameterType_OutputVectorData:    parameters.PathParameter,
@@ -120,7 +120,7 @@ class OTBModule(processing.Module):
                 qgisParam.setDefaultValue(self._app.GetParameterInt(otbParamKey))
               elif typ == otb.ParameterType_InputImage:
                 qgisParam.setDefaultValue(self._app.GetParameterString(otbParamKey))
-              elif typ == otb.ParameterType_InputComplexImage:
+              elif typ == otb.ParameterType_ComplexInputImage:
                 qgisParam.setDefaultValue(self._app.GetParameterString(otbParamKey))
               elif typ == otb.ParameterType_InputVectorData:
                 qgisParam.setDefaultValue(self._app.GetParameterString(otbParamKey))
@@ -193,7 +193,7 @@ class OTBModule(processing.Module):
             app.SetParameterString(key, str(value))
 
         elif ptype == otb.ParameterType_InputImage \
-             or ptype == otb.ParameterType_InputComplexImage:
+             or ptype == otb.ParameterType_ComplexInputImage:
             if value is None: return
             qgisParam.layer = value
             dpUri = str(qgisParam.layer.dataProvider().dataSourceUri())
@@ -261,7 +261,7 @@ class OTBModule(processing.Module):
                 value = self._app.GetParameterInt(key)
               elif typ == otb.ParameterType_InputImage:
                 value = self._app.GetParameterString(key)
-              elif typ == otb.ParameterType_InputComplexImage:
+              elif typ == otb.ParameterType_ComplexInputImage:
                 value = self._app.GetParameterString(key)
               elif typ == otb.ParameterType_InputVectorData:
                 value = self._app.GetParameterString(key)
@@ -277,7 +277,7 @@ class OTBModule(processing.Module):
             signal = self.instance().valueChangedSignal(param)
 
             if typ != otb.ParameterType_InputImage \
-               and  typ != otb.ParameterType_InputComplexImage \
+               and  typ != otb.ParameterType_ComplexInputImage \
                and typ != otb.ParameterType_InputVectorData \
                and value is not None:
                 QObject.emit( self.instance(), signal, value )
