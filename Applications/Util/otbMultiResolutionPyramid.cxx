@@ -24,7 +24,6 @@
 
 #include "otbWrapperParameter.h"
 #include "otbWrapperOutputImageParameter.h"
-#include "otbWrapperFilenameParameter.h"
 
 namespace otb
 {
