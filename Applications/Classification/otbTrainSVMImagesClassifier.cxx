@@ -144,25 +144,29 @@ private:
     AddParameter(ParameterType_InputVectorDataList, "vd", "Vector Data of sample used to train the estimator");
     AddParameter(ParameterType_Filename, "dem", "A DEM repository");
     MandatoryOff("dem");
-    AddParameter(ParameterType_Filename, "imstat", "XML file containing mean and standard deviation of input images.");
+    AddParameter(ParameterType_Filename, "imstat", "XML file containing mean and standard deviation of input images");
     MandatoryOff("imstat");
-    AddParameter(ParameterType_Filename, "out", "Output SVM model.");
-    AddParameter(ParameterType_Float, "m", "Margin for SVM learning.");
+    AddParameter(ParameterType_Filename, "out", "Output SVM model");
+    AddParameter(ParameterType_Float, "m", "Margin for SVM learning");
     MandatoryOff("m");
-    AddParameter(ParameterType_Int, "b", "Balance and grow the training set.");
+    AddParameter(ParameterType_Int, "b", "Balance and grow the training set");
     MandatoryOff("b");
-    AddParameter(ParameterType_Int, "k",
-                 "Type of kernel use to estimate SVM model : 0 = LINEAR (default), 1 = RBF,  2 = POLY, 3 = SIGMOID.");
+    AddParameter(ParameterType_Choice, "k",
+                 "SVM Kernel Type");
     MandatoryOff("k");
-    SetParameterInt("k", 0);
-    AddParameter(ParameterType_Int, "mt", "Maximum size of the training sample (default = -1).");
+    AddChoice("k.linear",  "Linear");
+    AddChoice("k.rbf",     "Neareast Neighbor");
+    AddChoice("k.poly",    "Polynomial");
+    AddChoice("k.sigmoid", "Sigmoid");
+    SetParameterString("k", "linear");
+    AddParameter(ParameterType_Int, "mt", "Maximum size of the training sample (default = -1)");
     MandatoryOff("mt");
     SetParameterInt("mt", -1);
-    AddParameter(ParameterType_Int, "mv", "Maximum size of the validation sample (default = -1).");
+    AddParameter(ParameterType_Int, "mv", "Maximum size of the validation sample (default = -1)");
     MandatoryOff("mv");
     SetParameterInt("mv", -1);
     AddParameter(ParameterType_Float, "vtr",
-                 "Ratio between training and validation sample (0.0 = all training, 1.0 = all validation) default = 0.5.");
+                 "Ratio between training and validation sample (0.0 = all training, 1.0 = all validation) default = 0.5");
     MandatoryOff("vtr");
     SetParameterFloat("vtr", 0.5);
     AddParameter(ParameterType_Empty, "opt", "Use SVM parameters optimization");
