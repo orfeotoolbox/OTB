@@ -548,7 +548,7 @@ void Application::SetParameterOutputImagePixelType(std::string parameter, ImageP
     }
 }
 
-void Application::SetParameterComplexOutputImagePixelType(std::string parameter, 
+void Application::SetParameterComplexOutputImagePixelType(std::string parameter,
                                                           ComplexImagePixelType cpixelType)
 {
   Parameter* param = GetParameterByKey(parameter);
