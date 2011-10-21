@@ -148,9 +148,8 @@ public:
   /* Return the user level of access to a parameter */
   UserLevel GetParameterUserLevel(std::string paramKey) const;
 
-  /** Set/Get the role of the parameter */
+  /** Get the role of the parameter */
   Role GetParameterRole(std::string paramKey) const;
-  void SetParameterRole(std::string paramKey, Role role);
 
   /* Get the parameter type from its name */
   ParameterType GetParameterType(std::string paramKey) const;
@@ -426,6 +425,13 @@ public:
    */
   ImagePixelType GetParameterOutputImagePixelType(std::string parameter);
 
+  /* Get the pixel type in which the complex image will be saved
+   *
+   * Can be called for types :
+   * \li ParameterType_ComplexOutputImage
+   */
+  ComplexImagePixelType GetParameterComplexOutputImagePixelType(std::string parameter);
+
   itk::Logger* GetLogger();
 
   itk::ProcessObject* GetProgressSource() const;
@@ -492,6 +498,9 @@ protected:
 
   /* Set the user level of access to a parameter */
   void SetParameterUserLevel(std::string paramKey, UserLevel level);
+
+  /*  Set the parameter role (input/output) */
+  void SetParameterRole(std::string paramKey, Role role);
 
   /* Get an image value
    *

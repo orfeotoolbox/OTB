@@ -839,6 +839,22 @@ ImagePixelType Application::GetParameterOutputImagePixelType(std::string paramet
   return ret;
 }
 
+ComplexImagePixelType Application::GetParameterComplexOutputImagePixelType(std::string parameter)
+{
+  Parameter* param = GetParameterByKey(parameter);
+  ComplexImagePixelType ret;
+
+  if (dynamic_cast<ComplexOutputImageParameter*>(param))
+    {
+    ComplexOutputImageParameter* paramDown = dynamic_cast<ComplexOutputImageParameter*>(param);
+    ret = paramDown->GetComplexPixelType();
+    }
+
+  //TODO: exception if not found ?
+  return ret;
+}
+
+
 void
 Application::AddChoice(std::string paramKey, std::string paramName)
 {
