@@ -51,50 +51,52 @@ private:
   void DoCreateParameters()
   {
     std::cout << "TestApplication::DoCreateParameters" << std::endl;
-    AddParameter(ParameterType_Empty, "boolean", "Boolean");
-    AddParameter(ParameterType_Int, "int", "Integer");
-    MandatoryOff("int");
-    AddParameter(ParameterType_Float, "float", "Float");
-    MandatoryOff("float");
-    AddParameter(ParameterType_String, "string", "String");
-    AddParameter(ParameterType_Filename, "filename", "File name");
-    AddParameter(ParameterType_Directory, "directory", "Directory name");
+    //AddParameter(ParameterType_Empty, "boolean", "Boolean");
+//     AddParameter(ParameterType_Int, "int", "Integer");
+//     MandatoryOff("int");
+//     AddParameter(ParameterType_Float, "float", "Float");
+//     MandatoryOff("float");
+//     AddParameter(ParameterType_String, "string", "String");
+//     AddParameter(ParameterType_Filename, "filename", "File name");
+//     AddParameter(ParameterType_Directory, "directory", "Directory name");
 
 
-    AddParameter(ParameterType_Choice, "choice", "Choice");
-    AddChoice("choice.choice1", "Choice 1");
-    AddChoice("choice.choice2", "Choice 2");
-    AddChoice("choice.choice3", "Choice 3");
-    AddParameter(ParameterType_Float,  "choice.choice1.floatchoice1", "Float of choice1");
-    SetParameterFloat("choice.choice1.floatchoice1",   0.125);
-//  Test a choice without associated parameter
-//    AddParameter(ParameterType_Float,  "choice.choice2.floatchoice2", "Float of choice2");
-//    SetParameterFloat("choice.choice2.floatchoice2",   1.0);
-    AddParameter(ParameterType_Float,  "choice.choice3.floatchoice3", "Float of choice3");
-    SetParameterFloat("choice.choice3.floatchoice3",   5.0);
+//     AddParameter(ParameterType_Choice, "choice", "Choice");
+//     AddChoice("choice.choice1", "Choice 1");
+//     AddChoice("choice.choice2", "Choice 2");
+//     AddChoice("choice.choice3", "Choice 3");
+//     AddParameter(ParameterType_Float,  "choice.choice1.floatchoice1", "Float of choice1");
+//     SetParameterFloat("choice.choice1.floatchoice1",   0.125);
+// //  Test a choice without associated parameter
+// //    AddParameter(ParameterType_Float,  "choice.choice2.floatchoice2", "Float of choice2");
+// //    SetParameterFloat("choice.choice2.floatchoice2",   1.0);
+//     AddParameter(ParameterType_Float,  "choice.choice3.floatchoice3", "Float of choice3");
+//     SetParameterFloat("choice.choice3.floatchoice3",   5.0);
 
 
-    AddParameter(ParameterType_Group, "ingroup", "Input Group");
-    MandatoryOff("ingroup");
-    AddParameter(ParameterType_Float,  "ingroup.integer", "Integer of Group");
-    AddParameter(ParameterType_Group, "ingroup.images", "Input Images Group");
-    AddParameter(ParameterType_InputImage, "ingroup.images.inputimage", "Input Image");
-    //AddParameter(ParameterType_InputComplexImage, "ingroup.images.inputcompleximage", "Input Complex Image");
-    //AddParameter(ParameterType_InputVectorData, "ingroup.inputvectordata", "Input Vector Data");
+//     AddParameter(ParameterType_Group, "ingroup", "Input Group");
+//     MandatoryOff("ingroup");
+//     AddParameter(ParameterType_Float,  "ingroup.integer", "Integer of Group");
+//     AddParameter(ParameterType_Group, "ingroup.images", "Input Images Group");
+//     AddParameter(ParameterType_InputImage, "ingroup.images.inputimage", "Input Image");
+//     //AddParameter(ParameterType_InputComplexImage, "ingroup.images.inputcompleximage", "Input Complex Image");
+//     //AddParameter(ParameterType_InputVectorData, "ingroup.inputvectordata", "Input Vector Data");
 
-    AddParameter(ParameterType_Group, "outgroup", "Output Group");
-    AddParameter(ParameterType_OutputImage, "outgroup.outputimage", "Output Image");
-    //AddParameter(ParameterType_OutputVectorData, "outgroup.outputvectordata", "Output Vector Data");
+//     AddParameter(ParameterType_Group, "outgroup", "Output Group");
+//     AddParameter(ParameterType_OutputImage, "outgroup.outputimage", "Output Image");
+//     //AddParameter(ParameterType_OutputVectorData, "outgroup.outputvectordata", "Output Vector Data");
 
-    AddParameter(ParameterType_Radius, "radius", "Radius");
+//     AddParameter(ParameterType_Radius, "radius", "Radius");
 
-    AddParameter(ParameterType_InputImageList,  "il",   "Input image list");
-    MandatoryOff("il");
+//     AddParameter(ParameterType_InputImageList,  "il",   "Input image list");
+//     MandatoryOff("il");
     
-    AddParameter(ParameterType_ListView,  "cl", "Output Image channels");
-    AddChoice("cl.choice1", "cl.choice1");
-    AddChoice("cl.choice2", "cl.choice2");
-    MandatoryOff("cl");
+//     AddParameter(ParameterType_ListView,  "cl", "Output Image channels");
+//     AddChoice("cl.choice1", "cl.choice1");
+//     AddChoice("cl.choice2", "cl.choice2");
+//     MandatoryOff("cl");
+
+    AddParameter(ParameterType_ComplexInputImage,  "cin", "Input Complex Image");
     
   }
 
@@ -105,6 +107,12 @@ private:
 
   void DoExecute()
   {
+    ComplexFloatVectorImageType*  myFloatVectorComplexImage = GetParameterComplexFloatVectorImage("cin");
+    ComplexDoubleVectorImageType* myDoubleVectorComplexImage = GetParameterComplexDoubleVectorImage("cin");
+
+    ComplexFloatImageType*  myFloatComplexImage = GetParameterComplexFloatImage("cin");
+    ComplexDoubleImageType* myDoubleComplexImage = GetParameterComplexDoubleImage("cin");
+
     std::cout << "TestApplication::DoExecute" << std::endl;
   }
 };

@@ -22,7 +22,7 @@
 #include "otbWrapperDirectoryParameter.h"
 #include "otbWrapperEmptyParameter.h"
 #include "otbWrapperFilenameParameter.h"
-#include "otbWrapperInputComplexImageParameter.h"
+#include "otbWrapperComplexInputImageParameter.h"
 #include "otbWrapperInputImageParameter.h"
 #include "otbWrapperInputVectorDataParameter.h"
 #include "otbWrapperNumericalParameter.h"
@@ -440,7 +440,7 @@ CommandLineLauncher::LoadParameters()
       // Single value parameter
       if (type == ParameterType_Choice || type == ParameterType_Float || type == ParameterType_Int || type
           == ParameterType_Radius || type == ParameterType_Directory || type == ParameterType_String || type
-          == ParameterType_Filename || type == ParameterType_InputComplexImage || type == ParameterType_InputImage ||
+          == ParameterType_Filename || type == ParameterType_ComplexInputImage || type == ParameterType_InputImage ||
           type == ParameterType_InputVectorData || type == ParameterType_InputVectorDataList ||  type == ParameterType_OutputVectorData)
         {
         m_Application->SetParameterString(paramKey, values[0]);
@@ -611,7 +611,7 @@ CommandLineLauncher::DisplayParameterHelp( const Parameter::Pointer & param, con
     {
     oss<<"\t          Type: String (Directory path)"<<std::endl;
     }
-  else if( type == ParameterType_InputImage || type == ParameterType_InputComplexImage )
+  else if( type == ParameterType_InputImage || type == ParameterType_ComplexInputImage )
     {
     oss<<"\t          Type: String (input image file name)"<<std::endl;
     }

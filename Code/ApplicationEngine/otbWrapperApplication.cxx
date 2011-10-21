@@ -22,7 +22,7 @@
 #include "otbWrapperDirectoryParameter.h"
 #include "otbWrapperEmptyParameter.h"
 #include "otbWrapperFilenameParameter.h"
-#include "otbWrapperInputComplexImageParameter.h"
+#include "otbWrapperComplexInputImageParameter.h"
 #include "otbWrapperInputImageParameter.h"
 #include "otbWrapperInputVectorDataParameter.h"
 #include "otbWrapperInputVectorDataListParameter.h"
@@ -461,9 +461,9 @@ void Application::SetParameterString(std::string parameter, std::string value)
     InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param);
     paramDown->SetFromFileName(value);
     }
-  else if (dynamic_cast<InputComplexImageParameter*>(param))
+  else if (dynamic_cast<ComplexInputImageParameter*>(param))
     {
-    InputComplexImageParameter* paramDown = dynamic_cast<InputComplexImageParameter*>(param);
+    ComplexInputImageParameter* paramDown = dynamic_cast<ComplexInputImageParameter*>(param);
     paramDown->SetFromFileName(value);
     }
   else if (dynamic_cast<InputVectorDataParameter*>(param))
@@ -635,9 +635,9 @@ std::string Application::GetParameterString(std::string parameter)
     InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param);
     ret = paramDown->GetFileName();
     }
-  else if (dynamic_cast<InputComplexImageParameter*>(param))
+  else if (dynamic_cast<ComplexInputImageParameter*>(param))
     {
-    InputComplexImageParameter* paramDown = dynamic_cast<InputComplexImageParameter*>(param);
+    ComplexInputImageParameter* paramDown = dynamic_cast<ComplexInputImageParameter*>(param);
     ret = paramDown->GetFileName();
     }
   else if (dynamic_cast<InputVectorDataParameter*>(param))
@@ -723,13 +723,12 @@ ComplexFloatVectorImageType* Application::GetParameterComplexImage(std::string p
 
   if (dynamic_cast<ComplexInputImageParameter*>(param))
     {
-    InputComplexImageParameter* paramDown = dynamic_cast<InputComplexImageParameter*>(param);
+    ComplexInputImageParameter* paramDown = dynamic_cast<ComplexInputImageParameter*>(param);
     ret = paramDown->GetImage();
     }
 
   //TODO: exception if not found ?
   return ret;
-
 }
 
 VectorDataType* Application::GetParameterVectorData(std::string parameter)
@@ -770,7 +769,7 @@ std::string Application::GetParameterAsString(std::string paramKey)
 
   if( type == ParameterType_String || type == ParameterType_Filename
       || type == ParameterType_Directory || type == ParameterType_InputImage
-      || type == ParameterType_InputComplexImage || type == ParameterType_InputVectorData
+      || type == ParameterType_ComplexInputImage || type == ParameterType_InputVectorData
       || type == ParameterType_OutputImage || type == ParameterType_OutputVectorData  )
     {
       ret = this->GetParameterString( paramKey );

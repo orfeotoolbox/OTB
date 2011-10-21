@@ -41,7 +41,6 @@ typedef enum
   ParameterType_Choice,
   ParameterType_InputImage,
   ParameterType_InputImageList,
-  ParameterType_InputComplexImage,
   ParameterType_InputVectorData,
   ParameterType_InputVectorDataList,
   ParameterType_OutputImage,
