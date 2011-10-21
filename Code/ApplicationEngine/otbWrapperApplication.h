@@ -28,9 +28,10 @@
 
 #include "itkLogger.h"
 #include "otbWrapperMacros.h"
-#include "otbWrapperOutputImageParameter.h"
 #include "otbWrapperInputImageParameter.h"
+#include "otbWrapperOutputImageParameter.h"
 #include "otbWrapperComplexInputImageParameter.h"
+#include "otbWrapperComplexOutputImageParameter.h"
 
 namespace otb
 {
@@ -226,12 +227,26 @@ public:
    */
   void SetParameterOutputImage(std::string parameter, FloatVectorImageType* value);
 
+  /* Set a complex output image value
+   *
+   * Can be called for types :
+   * \li ParameterType_ComplexOutputImage
+   */
+  void SetParameterComplexOutputImage(std::string parameter, ComplexFloatVectorImageType* value);
+
   /* Set the pixel type in which the image will be saved
    *
    * Can be called for types :
    * \li ParameterType_OutputImage
    */
   void SetParameterOutputImagePixelType(std::string parameter, ImagePixelType pixelType);
+
+  /* Set the complex pixel type in which the image will be saved
+   *
+   * Can be called for types :
+   * \li ParameterType_ComplexOutputImage
+   */
+  void SetParameterComplexOutputImagePixelType(std::string parameter, ComplexImagePixelType cpixelType);
 
   /* Set an output vector data value
    *
@@ -517,6 +532,23 @@ protected:
     if (dynamic_cast<OutputImageParameter*>(param))
       {
       OutputImageParameter* paramDown = dynamic_cast<OutputImageParameter*>(param);
+      paramDown->SetValue(value);
+      }
+  }
+
+    /* Set a complex output image value
+   *
+   * Can be called for types :
+   * \li ParameterType_CompelxOutputImage
+   */
+  template <class TImageType>
+    void SetParameterComplexOutputImage(std::string parameter, TImageType* value)
+  {
+    Parameter* param = GetParameterByKey(parameter);
+    
+    if (dynamic_cast<ComplexOutputImageParameter*>(param))
+      {
+      ComplexOutputImageParameter* paramDown = dynamic_cast<ComplexOutputImageParameter*>(param);
       paramDown->SetValue(value);
       }
   }

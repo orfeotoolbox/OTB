@@ -22,12 +22,9 @@
 #include "otbWrapperDirectoryParameter.h"
 #include "otbWrapperEmptyParameter.h"
 #include "otbWrapperFilenameParameter.h"
-#include "otbWrapperComplexInputImageParameter.h"
-#include "otbWrapperInputImageParameter.h"
 #include "otbWrapperInputVectorDataParameter.h"
 #include "otbWrapperInputVectorDataListParameter.h"
 #include "otbWrapperNumericalParameter.h"
-#include "otbWrapperOutputImageParameter.h"
 #include "otbWrapperOutputVectorDataParameter.h"
 #include "otbWrapperRadiusParameter.h"
 #include "otbWrapperStringParameter.h"
@@ -158,6 +155,15 @@ void Application::ExecuteAndWriteOutput()
         std::ostringstream progressId;
         progressId << "Writing " << outputParam->GetFileName() << "...";
         AddProcess(outputParam->GetWriter(), progressId.str());
+        outputParam->Write();
+        }
+      else if (GetParameterType(key) == ParameterType_ComplexOutputImage
+               && IsParameterEnabled(key) && HasValue(key) )
+        {
+        Parameter* param = GetParameterByKey(key);
+        ComplexOutputImageParameter* outputParam = dynamic_cast<ComplexOutputImageParameter*>(param);
+        outputParam->InitializeWriters();
+        AddProcess(outputParam->GetWriter(),"Complex Writer");
         outputParam->Write();
         }
       }
@@ -319,6 +325,10 @@ ParameterType Application::GetParameterType(std::string paramKey) const
     {
     type = ParameterType_OutputImage;
     }
+    else if (dynamic_cast<const ComplexOutputImageParameter*>(param))
+    {
+    type = ParameterType_ComplexOutputImage;
+    }
   else if (dynamic_cast<const OutputVectorDataParameter*>(param))
     {
     type = ParameterType_OutputVectorData;
@@ -472,6 +482,11 @@ void Application::SetParameterString(std::string parameter, std::string value)
     OutputImageParameter* paramDown = dynamic_cast<OutputImageParameter*>(param);
     paramDown->SetFileName(value);
     }
+  else if (dynamic_cast<ComplexOutputImageParameter*>(param))
+    {
+    ComplexOutputImageParameter* paramDown = dynamic_cast<ComplexOutputImageParameter*>(param);
+    paramDown->SetFileName(value);
+    }
   else if (dynamic_cast<OutputVectorDataParameter*>(param))
     {
     OutputVectorDataParameter* paramDown = dynamic_cast<OutputVectorDataParameter*>(param);
@@ -511,6 +526,17 @@ void Application::SetParameterOutputImage(std::string parameter, FloatVectorImag
     }
 }
 
+void Application::SetParameterComplexOutputImage(std::string parameter, ComplexFloatVectorImageType* value)
+{
+  Parameter* param = GetParameterByKey(parameter);
+
+  if (dynamic_cast<ComplexOutputImageParameter*>(param))
+    {
+    ComplexOutputImageParameter* paramDown = dynamic_cast<ComplexOutputImageParameter*>(param);
+    paramDown->SetValue(value);
+    }
+}
+
 void Application::SetParameterOutputImagePixelType(std::string parameter, ImagePixelType pixelType)
 {
   Parameter* param = GetParameterByKey(parameter);
@@ -522,6 +548,17 @@ void Application::SetParameterOutputImagePixelType(std::string parameter, ImageP
     }
 }
 
+void Application::SetParameterComplexOutputImagePixelType(std::string parameter, 
+                                                          ComplexImagePixelType cpixelType)
+{
+  Parameter* param = GetParameterByKey(parameter);
+
+  if (dynamic_cast<ComplexOutputImageParameter*>(param))
+    {
+    ComplexOutputImageParameter* paramDown = dynamic_cast<ComplexOutputImageParameter*>(param);
+    paramDown->SetComplexPixelType(cpixelType);
+    }
+}
 void Application::SetParameterOutputVectorData(std::string parameter, VectorDataType* value)
 {
   Parameter* param = GetParameterByKey(parameter);

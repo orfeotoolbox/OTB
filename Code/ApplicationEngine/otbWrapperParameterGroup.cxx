@@ -26,6 +26,7 @@
 #include "otbWrapperInputVectorDataParameter.h"
 #include "otbWrapperNumericalParameter.h"
 #include "otbWrapperOutputImageParameter.h"
+#include "otbWrapperComplexOutputImageParameter.h"
 #include "otbWrapperOutputVectorDataParameter.h"
 #include "otbWrapperRadiusParameter.h"
 #include "otbWrapperStringParameter.h"
@@ -315,6 +316,11 @@ ParameterGroup::AddParameter(ParameterType type, std::string paramKey, std::stri
       case ParameterType_ComplexInputImage:
         {
         newParam = ComplexInputImageParameter::New();
+        }
+        break;
+      case ParameterType_ComplexOutputImage:
+        {
+        newParam = ComplexOutputImageParameter::New();
         }
         break;
       }
