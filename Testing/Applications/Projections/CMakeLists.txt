@@ -1,12 +1,4 @@
 
-
-IF(OTB_DATA_USE_LARGEINPUT)
-  SET(LARGEINPUT ${OTB_DATA_LARGEINPUT_ROOT} )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
-
-set(TEST_DRIVER otbTestDriver
-    --add-before-env ITK_AUTOLOAD_PATH $<TARGET_FILE_DIR:otbapp_ReadImageInfo> )
-
 IF(OTB_DATA_USE_LARGEINPUT)
 
 add_test(NAME apTvUtORthorectificationTest_UTM
@@ -17,7 +9,7 @@ add_test(NAME apTvUtORthorectificationTest_UTM
                  Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
                  OrthoRectification
                  $<TARGET_FILE_DIR:otbapp_OrthoRectification>
-                 --in ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+                 --in ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
                  --out ${TEMP}/owTvOrthorectifTest_UTM.tif 
                  --dem ${INPUTDATA}/DEM/srtm_directory/
                  --outputs.ulx  374100.8
