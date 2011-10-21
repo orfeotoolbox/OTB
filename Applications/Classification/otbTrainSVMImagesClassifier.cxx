@@ -141,29 +141,28 @@ private:
   {
 
     AddParameter(ParameterType_InputImageList, "il", "Input Image List");
-    SetParameterDescription("il","a list of input images.");
+    SetParameterDescription("il", "a list of input images.");
     AddParameter(ParameterType_InputVectorDataList, "vd", "Vector Data List");
-    SetParameterDescription("vd","a list of vector data sample used to train the estimator.");
+    SetParameterDescription("vd", "a list of vector data sample used to train the estimator.");
     AddParameter(ParameterType_Filename, "dem", "DEM repository");
     MandatoryOff("dem");
-    SetParameterDescription("dem","path to SRTM repository");
+    SetParameterDescription("dem", "path to SRTM repository");
     AddParameter(ParameterType_Filename, "imstat", "XML image statistics file");
     MandatoryOff("imstat");
-    SetParameterDescription("imstat","filename of an XML file containing mean and standard deviation of input images.");
+    SetParameterDescription("imstat", "filename of an XML file containing mean and standard deviation of input images.");
     AddParameter(ParameterType_Filename, "out", "Output SVM model");
-    SetParameterDescription("out","Output SVM model");
+    SetParameterDescription("out", "Output SVM model");
     AddParameter(ParameterType_Float, "m", "Margin for SVM learning");
     MandatoryOff("m");
-    SetParameterDescription("m","Margin for SVM learning");
+    SetParameterDescription("m", "Margin for SVM learning");
     AddParameter(ParameterType_Int, "b", "Balance and grow the training set");
     SetParameterDescription("b", "Balance and grow the training set");
     MandatoryOff("b");
-    AddParameter(ParameterType_Choice, "k",
-                 "SVM Kernel Type");
+    AddParameter(ParameterType_Choice, "k", "SVM Kernel Type");
     MandatoryOff("k");
-    AddChoice("k.linear",  "Linear");
-    AddChoice("k.rbf",     "Neareast Neighbor");
-    AddChoice("k.poly",    "Polynomial");
+    AddChoice("k.linear", "Linear");
+    AddChoice("k.rbf", "Neareast Neighbor");
+    AddChoice("k.poly", "Polynomial");
     AddChoice("k.sigmoid", "Sigmoid");
     SetParameterString("k", "linear");
     SetParameterDescription("k", "SVM Kernel Type");
@@ -175,17 +174,15 @@ private:
     MandatoryOff("mv");
     SetParameterInt("mv", -1);
     SetParameterDescription("mv", "Maximum size of the validation sample (default = -1)");
-    AddParameter(ParameterType_Float, "vtr",
-                 "training and validation sample ratio");
+    AddParameter(ParameterType_Float, "vtr", "training and validation sample ratio");
     SetParameterDescription("vtr",
-                 "Ratio between training and validation sample (0.0 = all training, 1.0 = all validation) default = 0.5");
+                            "Ratio between training and validation sample (0.0 = all training, 1.0 = all validation) default = 0.5");
     MandatoryOff("vtr");
     SetParameterFloat("vtr", 0.5);
     AddParameter(ParameterType_Empty, "opt", "parameters optimization");
     MandatoryOff("opt");
-    SetParameterDescription("opt","SVM parameters optimization");
-    AddParameter(ParameterType_Filename, "vfn",
-                 "Name of the discrimination field");
+    SetParameterDescription("opt", "SVM parameters optimization");
+    AddParameter(ParameterType_Filename, "vfn", "Name of the discrimination field");
     MandatoryOff("vfn");
     SetParameterDescription("vfn", "Name of the field using to discriminate class in the vector data files");
     SetParameterString("vfn", "Class");
