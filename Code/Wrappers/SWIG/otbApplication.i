@@ -57,13 +57,14 @@ namespace Wrapper
     ParameterType_Choice,
     ParameterType_InputImage,
     ParameterType_InputImageList,
-    ParameterType_ComplexInputImage,
     ParameterType_InputVectorData,
     ParameterType_OutputImage,
     ParameterType_OutputVectorData,
     ParameterType_Radius,
     ParameterType_Group,
     ParameterType_ListView,
+    ParameterType_ComplexInputImage,
+    ParameterType_ComplexOutputImage
   } ParameterType;
   
   typedef enum
@@ -83,6 +84,18 @@ namespace Wrapper
     ImagePixelType_float,
     ImagePixelType_double,
   } ImagePixelType;
+
+ typedef enum
+ {
+   Role_Input,
+   Role_Output
+ } Role;
+
+ typedef enum
+ {
+   ComplexImagePixelType_float,
+   ComplexImagePixelType_double,
+ } ComplexImagePixelType;
   
 }
 }
@@ -110,11 +123,13 @@ public:
   void DisableParameter(std::string paramKey);
   bool IsParameterEnabled(std::string paramKey) const;
   bool IsMandatory(std::string paramKey) const;
+  bool HasAutomaticValue(std::string paramKey) const;
   bool HasUserValue(std::string paramKey) const;
   void ClearValue(std::string paramKey);
   bool HasValue(std::string paramKey) const;
   otb::Wrapper::UserLevel GetParameterUserLevel(std::string paramKey) const;
   otb::Wrapper::ParameterType GetParameterType(std::string paramKey) const;
+  otb::Wrapper::Role GetParameterRole(std::string paramKey) const;
  
   std::vector<std::string> GetChoiceKeys(std::string choiceKey);
   std::vector<std::string> GetChoiceNames(std::string choiceKey);
@@ -126,17 +141,36 @@ public:
   void SetParameterString(std::string parameter, std::string value);
   void SetParameterStringList(std::string parameter, std::vector<std::string> value);
   
+  void SetParameterOutputImagePixelType(std::string parameter, otb::Wrapper::ImagePixelType pixelType);
+  void SetParameterComplexOutputImagePixelType(std::string parameter, otb::Wrapper::ComplexImagePixelType cpixelType);
+
+  otb::Wrapper::ImagePixelType GetParameterOutputImagePixelType(std::string parameter);
+  otb::Wrapper::ComplexImagePixelType GetParameterComplexOutputImagePixelType(std::string parameter);
   
   int GetParameterInt(std::string parameter);
   float GetParameterFloat(std::string parameter);
   std::string GetParameterString(std::string parameter);
   std::vector<std::string> GetParameterStringList(std::string parameter);
-  
   std::string GetParameterAsString(std::string paramKey);
   
   itkProcessObject* GetProgressSource() const;
 
   std::string GetProgressDescription() const;
+
+  itkSetStringMacro(DocName);
+  itkGetStringMacro(DocName);
+  itkSetStringMacro(DocLongDescription);
+  itkGetStringMacro(DocLongDescription);
+  itkSetStringMacro(DocCLExample);
+  itkGetStringMacro(DocCLExample);
+  itkSetStringMacro(DocAuthors);
+  itkGetStringMacro(DocAuthors);
+  itkSetStringMacro(DocLimitations);
+  itkGetStringMacro(DocLimitations);
+  itkSetStringMacro(DocSeeAlso);
+  itkGetStringMacro(DocSeeAlso);
+  void SetDocTags( std::vector<std::string> val );
+  void AddDocTag( const std::string & tag );
 
 protected:
   Application();
