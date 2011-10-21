@@ -254,14 +254,6 @@ ADD_TEST(raTvLuminanceToReflectanceImageFilterAutoQuickbirdXS ${RADIOMETRY_TESTS
         ${TEMP}/raTvLuminanceToReflectanceImageFilterAutoQuickbirdXS.tif
          )
 
-ADD_TEST(raTvLuminanceToReflectanceImageFilterAutoQuickbirdXS ${RADIOMETRY_TESTS2}
-   --compare-image ${EPSILON_12}  ${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoQuickbirdXS.tif
-                       ${TEMP}/raTvLuminanceToReflectanceImageFilterAutoQuickbirdXS.tif
-        otbLuminanceToReflectanceImageFilterAuto
-        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
-        ${TEMP}/raTvLuminanceToReflectanceImageFilterAutoQuickbirdXS.tif
-         )
-
 ADD_TEST(raTvLuminanceToReflectanceImageFilterAutoFORMOSAT ${RADIOMETRY_TESTS2}
    --compare-image ${EPSILON_12}  ${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoFormosat.tif
                        ${TEMP}/raTvLuminanceToReflectanceImageFilterAutoFormosat.tif
@@ -269,9 +261,7 @@ ADD_TEST(raTvLuminanceToReflectanceImageFilterAutoFORMOSAT ${RADIOMETRY_TESTS2}
         ${LARGEINPUT}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF
         ${TEMP}/raTvLuminanceToReflectanceImageFilterAutoFormosat.tif
          )
-         
-         
-         
+
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 # -------            otb::ImageToReflectanceImageFilter   ------------------------------
