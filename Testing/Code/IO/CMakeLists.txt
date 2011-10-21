@@ -867,6 +867,9 @@ ADD_TEST(ioTuGDALImageIOCanRead_IKONOS_NIR ${IO_TESTS5} otbGDALImageIOTestCanRea
 
 ADD_TEST(ioTuGDALImageIOCanRead_FORMOSAT2 ${IO_TESTS5} otbGDALImageIOTestCanRead
         ${LARGEDATA}/FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF)
+        
+ADD_TEST(ioTuGDALImageIOCanRead_COSMOSKYMED ${IO_TESTS5} otbGDALImageIOTestCanRead
+        ${LARGEDATA}/COSMOSKYMED/Toulouse_spotlight/CSKS3_GTC_B_S2_08_HH_RD_SF_20110418180325_20110418180332.h5)
 
 
 
@@ -1412,6 +1415,13 @@ ADD_TEST(ioTvOtbVectorImageTestFORMOSAT2 ${IO_TESTS9}
         otbVectorImageLegacyTest
         ${LARGEDATA}/FORMOSAT/Sudouest_20071013_MS_fmsat/
         ${TEMP}/ioOtbVectorImageTestFORMOSAT2.txt)
+
+ADD_TEST(ioTvOtbVectorImageTestCOSMOSKYMED ${IO_TESTS9}
+   --compare-ascii ${EPSILON_3}  ${BASELINE_FILES}/ioOtbVectorImageTestCOSMOSKYMED.txt
+                     ${TEMP}/ioOtbVectorImageTestCOSMOSKYMED.txt
+        otbVectorImageLegacyTest
+        ${LARGEDATA}/COSMOSKYMED/Toulouse_spotlight/CSKS3_GTC_B_S2_08_HH_RD_SF_20110418180325_20110418180332.h5
+        ${TEMP}/ioOtbVectorImageTestCOSMOSKYMED.txt)
 
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
