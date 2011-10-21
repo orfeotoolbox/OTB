@@ -16,6 +16,7 @@ set(NOTOL 0.0)
 set(EPSILON_3 0.001)
 set(EPSILON_7 0.0000001)
 set(EPSILON_9 0.000000001)
+set(EPSILON_12 0.000000000001)
 
 set(OTB_WRAPPER_APPLICATION_TESTS ${CXX_TEST_PATH}/otbWrapperApplicationDocTests)
 
@@ -49,6 +50,8 @@ add_subdirectory(ChangeDetection)
 add_subdirectory(Classification)
 add_subdirectory(FeatureExtraction)
 add_subdirectory(Hyperspectral)
+add_subdirectory(Projections)
+add_subdirectory(Radiometry)
 add_subdirectory(Segmentation)
 add_subdirectory(Util)
-add_subdirectory(Projections)
+
