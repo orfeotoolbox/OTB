@@ -58,9 +58,10 @@ private:
   {
     AddParameter(ParameterType_InputImage, "in", "Input Image");
     
-    AddParameter(ParameterType_OutputImage, "out", "Output Image");
+    AddParameter(ParameterType_Filename, "out", "Output Image");
     SetParameterDescription("out",
                             "will be used to get the prefix and the extension of the output images to write");
+    SetParameterRole("out",Role_Output);
   }
 
   void DoUpdateParameters()
@@ -74,18 +75,13 @@ private:
     FloatVectorImageType::Pointer inImage = GetParameterImage("in");
 
     // Get the path/fileWithoutextension/extension of the output images filename
-    Parameter* param = GetParameterByKey("out");
     std::string path, fname, ext;
-    if (dynamic_cast<OutputImageParameter*>(param))
-      {
-      OutputImageParameter* paramDown = dynamic_cast<OutputImageParameter*>(param);
-      std::string ofname = paramDown->GetFileName();
-
-      // Get the extension and the prefix of the filename
-      path  = itksys::SystemTools::GetFilenamePath(ofname);
-      fname = itksys::SystemTools::GetFilenameWithoutExtension(ofname);
-      ext   = itksys::SystemTools::GetFilenameExtension(ofname);
-      }
+    std::string ofname = GetParameterString("out");
+    
+    // Get the extension and the prefix of the filename
+    path  = itksys::SystemTools::GetFilenamePath(ofname);
+    fname = itksys::SystemTools::GetFilenameWithoutExtension(ofname);
+    ext   = itksys::SystemTools::GetFilenameExtension(ofname);
 
     // Set the extract filter input image
     m_Filter = FilterType::New();
@@ -100,25 +96,20 @@ private:
       std::ostringstream oss;
       oss <<path<<"/"<<fname<<"_"<<i<<ext;
       
-      // Get the Output Parameter to change the current image filename
-      Parameter* param = GetParameterByKey("out");
-      if (dynamic_cast<OutputImageParameter*>(param))
-        {
-        OutputImageParameter* paramDown = dynamic_cast<OutputImageParameter*>(param);
+      // Create an output parameter to write the current output image
+      OutputImageParameter::Pointer paramOut = OutputImageParameter::New();
         
-        // Set the filename of the current output image
-        paramDown->SetFileName(oss.str());
+      // writer label
+      std::ostringstream osswriter;
+      osswriter<< "writer (Channel : "<< i<<")";
 
-        // writer label
-        std::ostringstream osswriter;
-        osswriter<< "writer (Channel : "<< i<<")";
-      
-        // Add the current level to be written
-        SetParameterOutputImage("out", m_Filter->GetOutput());
-        paramDown->InitializeWriters();
-        AddProcess(paramDown->GetWriter(),osswriter.str());
-        paramDown->Write();
-        }
+      // Set the filename of the current output image
+      paramOut->SetFileName(oss.str());
+      paramOut->SetValue(m_Filter->GetOutput());
+      // Add the current level to be written
+      paramOut->InitializeWriters();
+      AddProcess(paramOut->GetWriter(),osswriter.str());
+      paramOut->Write();
       }
 
     // Disable the output Image parameter to avoid writing 
