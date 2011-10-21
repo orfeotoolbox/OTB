@@ -47,7 +47,6 @@ void QtWidgetView::CreateGui()
   QVBoxLayout *mainLayout = new QVBoxLayout();
   QTabWidget *tab = new QTabWidget();
 
-  mainLayout->addWidget(CreateHeader());
   tab->addTab(CreateInputWidgets(), "Parameters");
   QTextEdit *log = new QTextEdit();
   connect( m_Model->GetLogOutput(), SIGNAL(NewContentLog(QString)), log, SLOT(append(QString) ) );
@@ -55,8 +54,8 @@ void QtWidgetView::CreateGui()
   QtWidgetProgressReport* prog =  new QtWidgetProgressReport(m_Model);
   prog->SetApplication(m_Application);
   tab->addTab(prog, "Progress Reporting ...");
+  tab->addTab(CreateDoc(), "Documentation");
   mainLayout->addWidget(tab);
-
 
   QtWidgetSimpleProgressReport * progressReport =  new QtWidgetSimpleProgressReport(m_Model);
   progressReport->SetApplication(m_Application);
@@ -80,44 +79,9 @@ void QtWidgetView::CreateGui()
 
   // Make the scroll layout the main layout
   this->setLayout(scrollLayout);
-  this->setWindowIcon(QIcon( ":/otb_small.png" ));
-  this->setWindowTitle(QString(m_Model->GetApplication()->GetName()).append(" - version ").append(OTB_VERSION_STRING));
 }
 
-QWidget* QtWidgetView::CreateHeader()
-{
-  // an HLayout with the description of the application, and two icons
-  QHBoxLayout *headerLayout = new QHBoxLayout;
 
-  QGroupBox *headerGroup = new QGroupBox;
-  headerGroup->setStyleSheet("border: 1px solid gray");
-
-  headerGroup->setFixedHeight(50);
-  headerGroup->setContentsMargins(0, 0, 0, 0);
-  headerLayout->setContentsMargins(5, 5, 5, 5);
-
-  QLabel *iconOTBLabel = new QLabel;
-  iconOTBLabel->setStyleSheet("border-style: none");
-  //iconOTBLabel->setPixmap(QIcon( ":/otb_big.png" ).pixmap(32, QIcon::Normal, QIcon::On));
-
-  QLabel *descriptionLabel = new QLabel;
-  descriptionLabel->setStyleSheet("border-style: none");
-  QString descriptionLabelText(m_Model->GetApplication()->GetDescription());
-  descriptionLabel->setText(descriptionLabelText);
-
-  QLabel *iconCNESLabel = new QLabel;
-  iconCNESLabel->setStyleSheet("border-style: none");
-  //iconCNESLabel->setPixmap(QIcon( ":/cnes.png" ).pixmap(32, QIcon::Normal, QIcon::On));
-
-  headerLayout->addWidget(iconOTBLabel);
-  headerLayout->addStretch();
-  headerLayout->addWidget(descriptionLabel);
-  headerLayout->addStretch();
-  headerLayout->addWidget(iconCNESLabel);
-  headerGroup->setLayout(headerLayout);
-
-  return headerGroup;
-}
 
 QWidget* QtWidgetView::CreateInputWidgets()
 {
@@ -155,6 +119,87 @@ QWidget* QtWidgetView::CreateFooter()
   footerGroup->setLayout(footerLayout);
 
   return footerGroup;
+}
+
+QWidget* QtWidgetView::CreateDoc()
+{
+  // an HLayout with two buttons : Execute and Quit
+  QTextEdit *text = new QTextEdit;
+
+  QTextDocument * doc = new QTextDocument();
+  itk::OStringStream oss;
+  oss << "<center><h2>"<<m_Application->GetDocName()<<"</center></h2>";
+  oss << "<h3>Brief Description</h3>";
+  oss << "<body>"<<m_Application->GetDescription()<<"</body>";
+  oss << "<h3>Tags</h3>";
+  oss << "<body>";
+  for(unsigned int i=0; i<m_Application->GetDocTags().size(); i++)
+    {
+    oss << m_Application->GetDocTags()[i]<<" ";;
+    }
+  oss <<"</body>";
+
+  oss << "<h3>Long Description</h3>";
+  oss << "<body>"<<m_Application->GetDocLongDescription()<<"</body>";
+
+  oss << this->SetDocParameters();
+
+  oss << "<h3>Limitations</h3>";
+  oss << "<body>"<<m_Application->GetDocLimitations()<<"</body>";
+  oss << "<h3>Authors</h3>";
+  oss << "<body>"<<m_Application->GetDocAuthors()<<"</body>";
+  oss << "<h3>See also</h3>";
+  oss << "<body>"<<m_Application->GetDocSeeAlso()<<"</body>";
+  oss << "<h3>Command line example</h3>";
+  oss << "<code>"<<m_Application->GetDocCLExample()<<"</code>";
+
+  doc->setHtml( oss.str().c_str());
+
+
+  text->setDocument( doc );
+  return text;
+}
+
+const char * QtWidgetView::SetDocParameters()
+{
+ const std::vector<std::string> appKeyList = m_Application->GetParametersKeys( true );
+ const unsigned int nbOfParam = appKeyList.size();
+
+ itk::OStringStream oss;
+ oss << "<h3>Parameters</h3>";
+ // Mandatory parameters
+ oss << "<h2>Mandatory parameters</h2>";
+ oss << "<li>";
+
+ for( unsigned int i=0; i<nbOfParam; i++ )
+   {
+   Parameter::Pointer param =  m_Application->GetParameterByKey( appKeyList[i] );
+   // Check if mandatory parameter are present and have value
+   if( param->GetMandatory() == true )
+     {
+     oss << "<body><i>"<< param->GetName() << "</i>: "<<param->GetDescription()<<"</body>";
+     }
+   }
+ oss << "</body></li>";
+// Optionnal parameters
+ oss << "<h2>Optionnal parameters</h2>";
+ oss << "<body><li>";
+ bool found = false;
+ for( unsigned int i=0; i<nbOfParam; i++ )
+   {
+   Parameter::Pointer param =  m_Application->GetParameterByKey( appKeyList[i] );
+   // Check if mandatory parameter are present and have value
+   if( param->GetMandatory() == false )
+     {
+     oss << "<body><i>" <<param->GetName() << "</i>: "<<param->GetDescription()<<"</body>";
+     found = true;
+     }
+   }
+ if( !found )
+   oss << "None";
+ oss << "</li>";
+
+ return oss.str().c_str();
 }
 
 void QtWidgetView::CloseSlot()

@@ -81,13 +81,13 @@ private:
     SetName("Convert");
     SetDescription("Convert an image to a different format, eventually rescaling the data"
                    " and/or changing the pixel type.");
-
     // Documentation
+    SetDocName("Image Conversion Application");
     SetDocLongDescription("This application performs an image pixel type conversion (short, ushort, char, uchar, int, uint, float and double types are handled). The output image is written in the specified format (ie. taht corresponds to the given extension).\n The convertion can include a rescale usiong the image 2% minimum and maximum values. The rescale can be linear or log2.");
     SetDocLimitations("None");
-    SetDocAuthors("CS-OTB Team");
+    SetDocAuthors("Otmane Lahlou");
     SetDocSeeAlso("Rescale application");
-    SetDocCLExample("otbApplicationLauncherCommandLine Convert ${OTB-BIN} --il ${OTB-Data} ");
+    SetDocCLExample("otbApplicationLauncherCommandLine Convert ${OTB-BIN}/bin --in ${OTB-Data}/Input/QB_Toulouse_Ortho_XS.tif --out otbConvertWithScalingOutput.png uchar --type linear");
     AddDocTag("Conversion");
     AddDocTag("Image Dynamic");
 

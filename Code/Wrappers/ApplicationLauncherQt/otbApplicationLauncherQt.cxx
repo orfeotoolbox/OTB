@@ -79,6 +79,8 @@ int main(int argc, char* argv[])
   // MainWidget : that contains the view and any other widget
   // (progress, logs...)
   QMainWindow* mainWindow =  new QMainWindow();
+  mainWindow->setWindowIcon(QIcon( ":/otb_small.png" ));
+  mainWindow->setWindowTitle(QString(app->GetDocName()).append(" - version ").append(OTB_VERSION_STRING));
 
   // Create GUI based on module
   QtWidgetView* gui = new QtWidgetView(app);
@@ -87,18 +89,9 @@ int main(int argc, char* argv[])
   // Connect the View "Quit" signal, to the mainWindow close slot
   QObject::connect(gui, SIGNAL(QuitSignal()), mainWindow, SLOT(close()));
 
-  // Create a progressReport object
-  //QtWidgetSimpleProgressReport * progressReport =  new QtWidgetSimpleProgressReport(gui->GetModel());
-  //progressReport->SetApplication(app);
-
-  // Create a dock widget containg the progress widget
-  //QDockWidget* qdock = new QDockWidget("Progress Reporting ...", mainWindow);
-  //qdock->setWidget(progressReport);
-
   // build the main window, central widget is the plugin view, other
   // are docked widget (progress, logs...)
   mainWindow->setCentralWidget(gui);
-  //mainWindow->addDockWidget(Qt::BottomDockWidgetArea, qdock);
   
   // Show the main window
   mainWindow->show();

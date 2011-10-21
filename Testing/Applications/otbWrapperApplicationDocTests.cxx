@@ -46,6 +46,16 @@ int otbWrapperApplicationDocTest(int argc, char* argv[])
 
   bool isOK = true;
   // Check doc element...
+  if( app->GetName() == "" )
+    {
+    std::cout<<"Missing Name."<<std::endl;
+    isOK = false;
+    }
+  if( app->GetDocName() == "" )
+    {
+    std::cout<<"Missing Doc Name."<<std::endl;
+    isOK = false;
+    }
   if( app->GetDescription() == "" )
     {
     std::cout<<"Missing Description."<<std::endl;

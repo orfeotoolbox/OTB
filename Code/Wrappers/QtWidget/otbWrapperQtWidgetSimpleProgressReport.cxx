@@ -42,7 +42,7 @@ QtWidgetSimpleProgressReport::QtWidgetSimpleProgressReport(QtWidgetModel * model
   m_AddProcessCommand->SetCallbackFunction( this, &QtWidgetSimpleProgressReport::ProcessEvent );
 
   m_Bar =  new itk::QtProgressBar(this);
-  m_Label = new QLabel("No process...");
+  m_Label = new QLabel("No process");
   connect( m_Bar, SIGNAL(SetValueChanged(int)), m_Bar, SLOT(setValue(int)) );
   connect( m_Model, SIGNAL(SetProgressReportDone()), m_Bar, SLOT(reset()) );
 

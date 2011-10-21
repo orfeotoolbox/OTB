@@ -419,6 +419,8 @@ public:
 
 
   /** Doc element accessors. */
+  itkSetStringMacro(DocName);
+  itkGetStringMacro(DocName);
   itkSetStringMacro(DocLongDescription);
   itkGetStringMacro(DocLongDescription);
   itkSetStringMacro(DocCLExample);
@@ -541,6 +543,8 @@ private:
   itk::ProcessObject::Pointer       m_ProgressSource;
   std::string                       m_ProgressSourceDescription;
 
+  /** Long name of the application (thatcan be displayed...) */
+  std::string m_DocName;
   /** Long and precise application description . */
   std::string                       m_DocLongDescription;
   /** Commanline example. Use ${OTB-DATA} for OTB-Data directory

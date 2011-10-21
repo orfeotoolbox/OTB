@@ -56,11 +56,14 @@ private:
   QtWidgetView(const QtWidgetView&); //purposely not implemented
   void operator=(const QtWidgetView&); //purposely not implemented
 
-  QWidget* CreateHeader();
-
   QWidget* CreateFooter();
 
   QWidget* CreateInputWidgets();
+
+  QWidget* CreateDoc();
+
+  /** Add the parameter description in the flux of the documentation tab. */
+  const char * SetDocParameters();
 
   Application::Pointer m_Application;
 
