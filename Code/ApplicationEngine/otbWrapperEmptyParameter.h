@@ -53,7 +53,10 @@ public:
 protected:
   /** Constructor */
   EmptyParameter()
-  {}
+  {
+  // It does not make sense for an empty parameter to be mandatory
+  this->MandatoryOff();
+  }
 
   /** Destructor */
   virtual ~EmptyParameter()
