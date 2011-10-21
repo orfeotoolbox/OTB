@@ -46,47 +46,47 @@ int otbWrapperApplicationDocTest(int argc, char* argv[])
 
   bool isOK = true;
   // Check doc element...
-  if( app->GetName() == "" )
+  if( std::string(app->GetName()) == "" )
     {
     std::cout<<"Missing Name."<<std::endl;
     isOK = false;
     }
-  if( app->GetDocName() == "" )
+  if( std::string(app->GetDocName()) == "" )
     {
     std::cout<<"Missing Doc Name."<<std::endl;
     isOK = false;
     }
-  if( app->GetDescription() == "" )
+  if( std::string(app->GetDescription()) == "" )
     {
     std::cout<<"Missing Description."<<std::endl;
     isOK = false;
     }
-  if( app->GetDocLongDescription() == "" )
+  if( std::string(app->GetDocLongDescription()) == "" )
     {
     std::cout<<"Missing DocLongDescription."<<std::endl;
     isOK = false;
     }
-  if( std::string(app->GetDocLongDescription()).size() < 30 )
+  else if( std::string(app->GetDocLongDescription()).size() < 30 )
     {
     std::cout<<"DocLongDescription too small..."<<std::endl;
     isOK = false;
     }
- if( app->GetDocCLExample() == "" )
+  if( std::string(app->GetDocCLExample()) == "" )
     {
     std::cout<<"Missing DocCLExample."<<std::endl;
     isOK = false;
     }
- if( app->GetDocAuthors() == "" )
+   if( std::string(app->GetDocAuthors()) == "" )
     {
     std::cout<<"Missing DocAuthors."<<std::endl;
     isOK = false;
     }
- if( app->GetDocLimitations() == "" )
+   if( std::string(app->GetDocLimitations()) == "" )
     {
     std::cout<<"Missing DocLimitations."<<std::endl;
     isOK = false;
     }
- if( app->GetDocSeeAlso() == "" )
+   if( std::string(app->GetDocSeeAlso()) == "" )
     {
     std::cout<<"Missing DocSeeAlso."<<std::endl;
     isOK = false;

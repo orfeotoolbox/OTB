@@ -123,8 +123,8 @@ QWidget* QtWidgetView::CreateFooter()
 
 QWidget* QtWidgetView::CreateDoc()
 {
-  // an HLayout with two buttons : Execute and Quit
   QTextEdit *text = new QTextEdit;
+  text->setReadOnly(true);
 
   QTextDocument * doc = new QTextDocument();
   itk::OStringStream oss;
@@ -142,7 +142,9 @@ QWidget* QtWidgetView::CreateDoc()
   oss << "<h3>Long Description</h3>";
   oss << "<body>"<<m_Application->GetDocLongDescription()<<"</body>";
 
-  oss << this->SetDocParameters();
+  std::string val;
+  this->SetDocParameters(val);
+  oss<<val;
 
   oss << "<h3>Limitations</h3>";
   oss << "<body>"<<m_Application->GetDocLimitations()<<"</body>";
@@ -157,18 +159,20 @@ QWidget* QtWidgetView::CreateDoc()
 
 
   text->setDocument( doc );
+ 
   return text;
 }
 
-const char * QtWidgetView::SetDocParameters()
+void QtWidgetView::SetDocParameters( std::string & val )
 {
  const std::vector<std::string> appKeyList = m_Application->GetParametersKeys( true );
  const unsigned int nbOfParam = appKeyList.size();
 
  itk::OStringStream oss;
  oss << "<h3>Parameters</h3>";
- // Mandatory parameters
- oss << "<h2>Mandatory parameters</h2>";
+
+// Mandatory parameters
+ oss << "<h4>Mandatory parameters</h4>";
  oss << "<li>";
 
  for( unsigned int i=0; i<nbOfParam; i++ )
@@ -181,8 +185,9 @@ const char * QtWidgetView::SetDocParameters()
      }
    }
  oss << "</body></li>";
+
 // Optionnal parameters
- oss << "<h2>Optionnal parameters</h2>";
+ oss << "<h4>Optionnal parameters</h4>";
  oss << "<body><li>";
  bool found = false;
  for( unsigned int i=0; i<nbOfParam; i++ )
@@ -197,9 +202,10 @@ const char * QtWidgetView::SetDocParameters()
    }
  if( !found )
    oss << "None";
+
  oss << "</li>";
 
- return oss.str().c_str();
+ val = oss.str();
 }
 
 void QtWidgetView::CloseSlot()

@@ -111,7 +111,7 @@ private:
     SetParameterString("type", "none");
 
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
-    SetParameterDescription("out", "Outmput image");
+    SetParameterDescription("out", "Output image");
   }
 
   void DoUpdateParameters()

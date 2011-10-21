@@ -63,7 +63,7 @@ private:
   QWidget* CreateDoc();
 
   /** Add the parameter description in the flux of the documentation tab. */
-  const char * SetDocParameters();
+  void SetDocParameters( std::string & val );
 
   Application::Pointer m_Application;
 
