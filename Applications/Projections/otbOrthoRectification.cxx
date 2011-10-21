@@ -99,7 +99,7 @@ private:
     SetParameterDescription("out","Projected image");
 
     // Add the output paramters in a group
-    AddParameter(ParameterType_Group, "outputs", "Output Parameters Group");
+    AddParameter(ParameterType_Group, "outputs", "Output Parameters");
     MandatoryOff("outputs");
 
     // UserDefined values
@@ -143,7 +143,7 @@ private:
     AddParameter(ParameterType_Group, "rpc", "Estimate RPC model");
     AddParameter(ParameterType_Int, "rpc.ncp", "Nb control Points");
     std::ostringstream oss;
-    oss << "Activate RPC sensor model estimation"<<std::endl;;
+    oss << "Activate RPC sensor model estimation"<<std::endl;
     oss << "Parameter is the number of control points per axis";
     SetParameterDescription("rpc",oss.str().c_str());
     MandatoryOff("rpc");
@@ -151,9 +151,9 @@ private:
 
     // Interpolators
     AddParameter(ParameterType_Choice,   "interpolator", "Interpolator");
-    AddChoice("interpolator.linear",     "Linear");
-    AddChoice("interpolator.nn", "Neareast Neighbor");
-    AddChoice("interpolator.bco",   "BCO");
+    AddChoice("interpolator.linear", "Linear");
+    AddChoice("interpolator.nn",     "Nearest Neighbor");
+    AddChoice("interpolator.bco",    "BCO");
     AddParameter(ParameterType_Radius, "interpolator.bco.radius", "Radius");
     SetParameterInt("interpolator.bco.radius", 2);
 
