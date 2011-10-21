@@ -49,6 +49,7 @@ typedef enum
   ParameterType_Group,
   ParameterType_ListView,
   ParameterType_ComplexInputImage,
+  ParameterType_ComplexOutputImage
 } ParameterType;
 
 typedef enum
@@ -68,6 +69,12 @@ typedef enum
   ImagePixelType_float,
   ImagePixelType_double,
 } ImagePixelType;
+
+typedef enum
+{
+  ComplexImagePixelType_float,
+  ComplexImagePixelType_double,
+} ComplexImagePixelType;
 
 typedef enum
 {
