@@ -28,8 +28,8 @@ namespace otb
 
 enum
 {
-  Level_TOC,
-  Level_TOA
+  Level_TOA,
+  Level_TOC
 };
 
 enum
@@ -59,14 +59,14 @@ public:
 
   itkTypeMacro(OpticalCalibration, Application);
 
-  typedef ImageToLuminanceImageFilter<UInt16VectorImageType, 
+  typedef ImageToLuminanceImageFilter<UInt16VectorImageType,
                                       FloatVectorImageType>              ImageToLuminanceImageFilterType;
   
   typedef LuminanceToReflectanceImageFilter<FloatVectorImageType,
                                             FloatVectorImageType>        LuminanceToReflectanceImageFilterType;
 
-  typedef otb::MultiplyByScalarImageFilter<FloatVectorImageType, 
-                                           UInt16VectorImageType>        ScaleFilterType;
+  typedef otb::MultiplyByScalarImageFilter<FloatVectorImageType,
+                                           FloatVectorImageType>        ScaleFilterType;
 
   typedef ReflectanceToSurfaceReflectanceImageFilter<FloatVectorImageType,
                                                      FloatVectorImageType>          ReflectanceToSurfaceReflectanceImageFilterType;
@@ -80,8 +80,8 @@ private:
   {
     SetName("OpticalCalibration");
     std::ostringstream oss;
-    oss << "Perform optical calibration TOA/TOC(Top Of Atmosphere/Top Of Canopy)"<<std::endl;
-    oss << "Output image is in milli-reflectance.";
+    oss << "Perform optical calibration TOA/TOC (Top Of Atmosphere/Top Of Canopy)" << std::endl;
+    oss << "Supported sensors : QuickBird, Ikonos, WorldView2, Formosat, Spot5";
     SetDescription(oss.str());
   }
 
@@ -90,11 +90,18 @@ private:
     AddParameter(ParameterType_InputImage,  "in",  "Input Image");
 
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
-    SetParameterDescription("out","Projected image");
+    SetParameterDescription("out","Calibrated image");
+
+    AddParameter(ParameterType_Empty, "milli", "Convert to milli reflectance");
+    SetParameterDescription("milli", "Output milli-reflectance instead of reflectance.\n"
+                                     "This allows to put save the image in integer pixel type instead of floating point.");
+    DisableParameter("milli");
+    MandatoryOff("milli");
 
     AddParameter(ParameterType_Choice,   "level", "Calibration Level");
     AddChoice("level.toa",     "TOA : Top Of Atmosphere");
-    AddChoice("level.toc",     "TOC : Top Of Canopy");
+    AddChoice("level.toc",     "TOC : Top Of Canopy (EXPERIMENTAL)");
+    SetParameterString("level", "toa");
     
     AddParameter(ParameterType_Filename,   "rsr", "Relative Spectral Response File");
     std::ostringstream oss;
@@ -128,6 +135,7 @@ private:
     AddParameter(ParameterType_Filename,   "aeronet", "Aeronet File");
     SetParameterDescription("aeronet","Aeronet file to get atmospheric parameters");
     MandatoryOff("aeronet");
+
   }
 
   void DoUpdateParameters()
@@ -145,7 +153,7 @@ private:
 
     // Test if needed data are available : an exception will be thrown
     // if one the following Get* return failure. the exception is then
-    // catched in the Wrapper::Application class which redirect it to
+    // caught in the Wrapper::Application class which redirect it to
     // the logger
     // ImageToLuminance
     lImageMetadataInterface->GetPhysicalGain();
@@ -167,12 +175,13 @@ private:
     m_ReflectanceToSurfaceReflectanceFilter->SetInput(m_LuminanceToReflectanceFilter->GetOutput());
 
     m_ScaleFilter = ScaleFilterType::New();
-    m_ScaleFilter->SetCoef(1000.);
-    
+    m_ScaleFilter->InPlaceOn();
+
     switch ( GetParameterInt("level") )
       {
       case Level_TOA:
       {
+      m_LuminanceToReflectanceFilter->UpdateOutputInformation();
       m_ScaleFilter->SetInput(m_LuminanceToReflectanceFilter->GetOutput());
       }
       break;
@@ -228,12 +237,16 @@ private:
       m_ReflectanceToSurfaceReflectanceFilter->SetUseGenerateParameters(false);
 
       //rescale the surface reflectance in milli-reflectance
+      m_ReflectanceToSurfaceReflectanceFilter->UpdateOutputInformation();
       m_ScaleFilter->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
       }
       break;
       }
 
-    // Output Image 
+    // Output Image
+    const double scale = IsParameterEnabled("milli") ? 1000.0 : 1.0;
+    m_ScaleFilter->SetCoef(scale);
+
     SetParameterOutputImage("out", m_ScaleFilter->GetOutput());
   }
 
