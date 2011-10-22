@@ -58,6 +58,7 @@ namespace Wrapper
     ParameterType_InputImage,
     ParameterType_InputImageList,
     ParameterType_InputVectorData,
+    ParameterType_InputVectorDataList,
     ParameterType_OutputImage,
     ParameterType_OutputVectorData,
     ParameterType_Radius,
