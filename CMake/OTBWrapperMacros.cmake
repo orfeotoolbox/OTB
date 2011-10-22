@@ -61,3 +61,24 @@ macro(OTB_CREATE_APPLICATION)
        CACHE STRING "List of all applications" FORCE)
    
 endmacro(OTB_CREATE_APPLICATION)
+
+
+
+
+
+macro(OTB_TEST_APPLICATION)
+  OTB_PARSE_ARGUMENTS(
+      TESTAPPLICATION
+      "NAME;APP;OPTIONS;VALID"
+      ""
+      ${ARGN})
+
+   add_test(NAME ${TESTAPPLICATION_NAME}
+            COMMAND otbTestDriver
+                    ${TESTAPPLICATION_VALIDATION}
+                    Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
+                    ${TESTAPPLICATION_APP}
+                    $<TARGET_FILE_DIR:otbapp_${TESTAPPLICATION_APP}>
+                    ${TESTAPPLICATION_OPTIONS})
+   
+endmacro(OTB_TEST_APPLICATION)
