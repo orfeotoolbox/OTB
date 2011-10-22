@@ -72,7 +72,7 @@ private:
     SetParameterDescription("ct",  "An ASCII file containing the color table\n"
                                    "with one color per line\n"
                                    "(for instance the line '1 255 0 0' means that all pixels with label 1 will be replaced by RGB color 255 0 0)\n"
-                                   "Lines beginning with a # are ignored")
+                                   "Lines beginning with a # are ignored");
   }
 
   void DoUpdateParameters()
