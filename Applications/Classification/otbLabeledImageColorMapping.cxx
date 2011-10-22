@@ -68,8 +68,11 @@ private:
   {
     AddParameter(ParameterType_InputImage, "in", "Input Image.");
     AddParameter(ParameterType_OutputImage, "out", "Output Image.");
-    AddParameter(ParameterType_Filename, "ct", "An ASCII file containing the color table with one color per line (for instance line 1 255 0 0 means that all pixel with label 1 will be replaced by RGB  color 255 0 0). Lines begining with a # are ignored.");
-
+    AddParameter(ParameterType_Filename, "ct", "Color table");
+    SetParameterDescription("ct",  "An ASCII file containing the color table\n"
+                                   "with one color per line\n"
+                                   "(for instance the line '1 255 0 0' means that all pixels with label 1 will be replaced by RGB color 255 0 0)\n"
+                                   "Lines beginning with a # are ignored")
   }
 
   void DoUpdateParameters()
