@@ -61,10 +61,10 @@ private:
 
   void DoCreateParameters()
   {
-    AddParameter(ParameterType_InputImageList, "il", "Input Image List ");
+    AddParameter(ParameterType_InputImageList, "il", "Input Image List");
     SetParameterDescription( "il", "Input Image List filename." );
 
-    AddParameter(ParameterType_Filename, "out", "Output XML file ");
+    AddParameter(ParameterType_Filename, "out", "Output XML file");
     SetParameterDescription( "out", "Name of the XML file where the statistics are saved for future reuse" );
     MandatoryOff("out");
   }
