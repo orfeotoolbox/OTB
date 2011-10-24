@@ -180,7 +180,7 @@ void QtWidgetView::SetDocParameters( std::string & val )
    // Check if mandatory parameter are present and have value
    if( param->GetMandatory() == true )
      {
-     oss << "<body><i>"<< param->GetName() << "</i>: "<<param->GetDescription()<<"</body>";
+     oss << "<body><i>"<< param->GetName() << "</i> : "<<param->GetDescription()<<"</body>";
      }
    }
  oss << "</body></li>";
@@ -195,7 +195,7 @@ void QtWidgetView::SetDocParameters( std::string & val )
    // Check if mandatory parameter are present and have value
    if( param->GetMandatory() == false )
      {
-     oss << "<body><i>" <<param->GetName() << "</i>: "<<param->GetDescription()<<"</body>";
+     oss << "<body><i>" <<param->GetName() << "</i> : "<<param->GetDescription()<<"</body>";
      found = true;
      }
    }
