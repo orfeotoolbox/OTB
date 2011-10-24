@@ -205,8 +205,8 @@ void QtWidgetView::SetDocParameters( std::string & val )
       }
     }
   
-  // Optionnal parameters
-  oss << "<h4>Optionnal parameters</h4>";
+  // Optional parameters
+  oss << "<h4>Optional parameters</h4>";
   oss << "<body><li>";
   bool found = false;
   for( unsigned int i=0; i<nbOfParam; i++ )
