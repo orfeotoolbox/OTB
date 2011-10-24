@@ -21,6 +21,7 @@
 #include "otbWrapperQtWidgetParameterFactory.h"
 #include "otbWrapperQtWidgetProgressReport.h"
 #include "otbWrapperOutputImageParameter.h"
+#include "otbWrapperParameterGroup.h"
 #include "otbWrapperQtWidgetSimpleProgressReport.h"
 
 #include "itksys/SystemTools.hxx"
@@ -53,7 +54,7 @@ void QtWidgetView::CreateGui()
   tab->addTab(log, "Logs");
   QtWidgetProgressReport* prog =  new QtWidgetProgressReport(m_Model);
   prog->SetApplication(m_Application);
-  tab->addTab(prog, "Progress Reporting ...");
+  tab->addTab(prog, "Progress");
   tab->addTab(CreateDoc(), "Documentation");
   mainLayout->addWidget(tab);
 
@@ -163,53 +164,116 @@ QWidget* QtWidgetView::CreateDoc()
 
   text->setDocument(doc);
 
+
+  //std::cout<<text->toHtml().toStdString()<<std::endl;
+
   return text;
 }
 
 void QtWidgetView::SetDocParameters( std::string & val )
 {
- const std::vector<std::string> appKeyList = m_Application->GetParametersKeys( true );
- const unsigned int nbOfParam = appKeyList.size();
-
- itk::OStringStream oss;
- oss << "<h3>Parameters</h3>";
-
-// Mandatory parameters
- oss << "<h4>Mandatory parameters</h4>";
- oss << "<li>";
-
- for( unsigned int i=0; i<nbOfParam; i++ )
-   {
-   Parameter::Pointer param =  m_Application->GetParameterByKey( appKeyList[i] );
-   // Check if mandatory parameter are present and have value
-   if( param->GetMandatory() == true )
-     {
-     oss << "<body><i>"<< param->GetName() << "</i> : "<<param->GetDescription()<<"</body>";
-     }
-   }
- oss << "</body></li>";
-
-// Optional parameters
- oss << "<h4>Optional parameters</h4>";
- oss << "<body><li>";
- bool found = false;
- for( unsigned int i=0; i<nbOfParam; i++ )
-   {
-   Parameter::Pointer param =  m_Application->GetParameterByKey( appKeyList[i] );
-   // Check if mandatory parameter are present and have value
-   if( param->GetMandatory() == false )
-     {
-     oss << "<body><i>" <<param->GetName() << "</i> : "<<param->GetDescription()<<"</body>";
-     found = true;
-     }
-   }
- if( !found )
-   oss << "None";
-
- oss << "</li>";
-
- val = oss.str();
+  const std::vector<std::string> appKeyList = m_Application->GetParametersKeys( false );//true );
+  const unsigned int nbOfParam = appKeyList.size();
+    
+  itk::OStringStream oss;
+  oss << "<h3>Parameters</h3>";
+  
+  // Mandatory parameters
+  oss << "<h4>Mandatory parameters</h4>";
+  
+  for( unsigned int i=0; i<nbOfParam; i++ )
+    {
+    Parameter::Pointer param =  m_Application->GetParameterByKey( appKeyList[i] );
+    // Check if mandatory parameter are present and have value
+    if( param->GetMandatory() == true )
+      {
+      if( m_Application->GetParameterType(appKeyList[i]) !=  ParameterType_Group && param->IsRoot() )
+        {
+        oss << "<i>" << param->GetName() << ":</i><br />";
+        oss << param->GetDescription()<< "<br />";
+        oss << "<br />";
+        }
+      else if( m_Application->GetParameterType(appKeyList[i]) ==  ParameterType_Group )
+        {
+        oss << param->GetName()<<"<br />";
+        oss << param->GetDescription()<<"<br />";
+        oss << "Parameters:<<br />";
+        std::string grDoc;
+        GetDocParameterGroup( grDoc, appKeyList[i]);
+        oss<<grDoc;
+        }
+      }
+    }
+  
+  // Optionnal parameters
+  oss << "<h4>Optionnal parameters</h4>";
+  oss << "<body><li>";
+  bool found = false;
+  for( unsigned int i=0; i<nbOfParam; i++ )
+    {
+    Parameter::Pointer param =  m_Application->GetParameterByKey( appKeyList[i] );
+    // Check if mandatory parameter are present and have value
+    if( param->GetMandatory() == false )
+      {
+      if( m_Application->GetParameterType(appKeyList[i]) !=  ParameterType_Group && param->IsRoot() )
+        {
+        oss << "<i>" << param->GetName() << ":</i><br />";
+        oss << param->GetDescription()<< "<br />";
+        oss << "<br />";
+        
+        found = true;
+        }
+      else if( m_Application->GetParameterType(appKeyList[i]) ==  ParameterType_Group )
+        {
+        oss << "<b><i>"<<param->GetName()<<"</b></i> ("<<param->GetDescription()<<"):<br />";
+        std::string grDoc;
+        GetDocParameterGroup( grDoc, appKeyList[i]);
+        oss<<grDoc;
+        
+        found = true;
+        }
+      }
+    }
+  if( !found )
+    oss << "None";
+  
+  
+  val.append(oss.str());
 }
+
+void QtWidgetView::GetDocParameterGroup( std::string & val, const std::string & key )
+{
+  Parameter * paramGr  = m_Application->GetParameterByKey( key );
+  if( !dynamic_cast<ParameterGroup *>(paramGr) )
+    {
+    itkGenericExceptionMacro("Invlaid parameter type for key "<<key<<", wait for ParameterGroup...");
+    }
+
+  ParameterGroup * group = dynamic_cast<ParameterGroup *>(paramGr);
+  const std::vector<std::string> appKeyList = group->GetParametersKeys( false );
+  unsigned int nbOfParam = appKeyList.size();
+  itk::OStringStream oss;
+  for( unsigned int i=0; i<nbOfParam; i++ )
+    {
+    const std::string fullKey(std::string(key).append(".").append(appKeyList[i]));
+    Parameter::Pointer param =  m_Application->GetParameterByKey( fullKey );
+    if( m_Application->GetParameterType(fullKey) !=  ParameterType_Group )
+      {
+      oss << "<i>" << param->GetName()<< ":</i><br />";
+      oss << param->GetDescription()<<"<br>";
+      //oss << "<br />";
+      }
+    else
+      {
+      oss << "<b><i>"<<param->GetName()<<"</b></i> ("<<param->GetDescription()<<"):<br />";
+      std::string grDoc;
+      GetDocParameterGroup( grDoc, fullKey);
+      oss<<grDoc;
+      }
+    }
+  val.append(oss.str());
+}
+
 
 void QtWidgetView::CloseSlot()
 {
