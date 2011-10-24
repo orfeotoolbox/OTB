@@ -127,38 +127,42 @@ QWidget* QtWidgetView::CreateDoc()
 
   QTextDocument * doc = new QTextDocument();
   itk::OStringStream oss;
-  oss << "<center><h2>"<<m_Application->GetDocName()<<"</center></h2>";
+  oss << "<center><h2>" << m_Application->GetDocName() << "</center></h2>";
   oss << "<h3>Brief Description</h3>";
-  oss << "<body>"<<m_Application->GetDescription()<<"</body>";
+  oss << "<body>" << m_Application->GetDescription() << "</body>";
   oss << "<h3>Tags</h3>";
   oss << "<body>";
-  for(unsigned int i=0; i<m_Application->GetDocTags().size(); i++)
+  if (m_Application->GetDocTags().size() > 0)
     {
-    oss << m_Application->GetDocTags()[i]<<" "; ;
+    for (unsigned int i = 0; i < m_Application->GetDocTags().size() - 1; i++)
+      {
+      oss << m_Application->GetDocTags()[i] << ", ";
+      ;
+      }
+    oss << m_Application->GetDocTags()[m_Application->GetDocTags().size() - 1];
     }
-  oss <<"</body>";
+  oss << "</body>";
 
   oss << "<h3>Long Description</h3>";
-  oss << "<body>"<<m_Application->GetDocLongDescription()<<"</body>";
+  oss << "<body>" << m_Application->GetDocLongDescription() << "</body>";
 
   std::string val;
   this->SetDocParameters(val);
-  oss<<val;
+  oss << val;
 
   oss << "<h3>Limitations</h3>";
-  oss << "<body>"<<m_Application->GetDocLimitations()<<"</body>";
+  oss << "<body>" << m_Application->GetDocLimitations() << "</body>";
   oss << "<h3>Authors</h3>";
-  oss << "<body>"<<m_Application->GetDocAuthors()<<"</body>";
+  oss << "<body>" << m_Application->GetDocAuthors() << "</body>";
   oss << "<h3>See also</h3>";
-  oss << "<body>"<<m_Application->GetDocSeeAlso()<<"</body>";
+  oss << "<body>" << m_Application->GetDocSeeAlso() << "</body>";
   oss << "<h3>Command line example</h3>";
-  oss << "<code>"<<m_Application->GetDocCLExample()<<"</code>";
+  oss << "<code>" << m_Application->GetDocCLExample() << "</code>";
 
-  doc->setHtml( oss.str().c_str());
+  doc->setHtml(oss.str().c_str());
 
+  text->setDocument(doc);
 
-  text->setDocument( doc );
- 
   return text;
 }
 
@@ -185,8 +189,8 @@ void QtWidgetView::SetDocParameters( std::string & val )
    }
  oss << "</body></li>";
 
-// Optionnal parameters
- oss << "<h4>Optionnal parameters</h4>";
+// Optional parameters
+ oss << "<h4>Optional parameters</h4>";
  oss << "<body><li>";
  bool found = false;
  for( unsigned int i=0; i<nbOfParam; i++ )
