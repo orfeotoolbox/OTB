@@ -57,7 +57,17 @@ private:
  LabeledImageColorMapping()
   {
     SetName("LabeledImageColorMapping");
-    SetDescription("Replace labels of a classification map with user defined 8-bits RGB colors. Unknown label are mapped to black by default.");
+    SetDescription("Replace labels of a classification map with user defined 8-bits RGB colors.");
+
+    SetDocName("Labeled Image Color Mapping Application");
+    SetDocLongDescription("Create and save a classification map label image (given by ImageSVMClassifier Application for example) with user defined 8-bits RGB colors LUT. Unknown labels are mapped to black by default.");
+    SetDocLimitations("None");
+    SetDocAuthors("OTB-Team");
+    SetDocSeeAlso(" ");
+    SetDocCLExample("otbApplicationLauncherCommandLine LabeledImageColorMapping   --in ${OTBAPP_BASELINE}/clLabeledImageQB123_1.tif --ct ${OTB-Data}/Input/Classification/ColorTable.txt --out clLabeledFancyImageQB123_1.tif");
+    AddDocTag("Classification");
+
+
   }
 
   virtual ~LabeledImageColorMapping()
@@ -66,8 +76,10 @@ private:
 
   void DoCreateParameters()
   {
-    AddParameter(ParameterType_InputImage, "in", "Input Image.");
-    AddParameter(ParameterType_OutputImage, "out", "Output Image.");
+    AddParameter(ParameterType_InputImage, "in", "Input Image");
+    SetParameterDescription("in", "Input image filename.");
+    AddParameter(ParameterType_OutputImage, "out", "Output Image");
+    SetParameterDescription("out","Output image filename.");
     AddParameter(ParameterType_Filename, "ct", "Color table");
     SetParameterDescription("ct",  "An ASCII file containing the color table\n"
                                    "with one color per line\n"
