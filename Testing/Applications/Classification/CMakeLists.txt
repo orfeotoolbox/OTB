@@ -183,7 +183,7 @@ ADD_TEST(NAME apTvClImageSVMClassifierQB123_1
    ImageSVMClassifier
    $<TARGET_FILE_DIR:otbapp_ImageSVMClassifier>
    --in      ${INPUTDATA}/Classification/QB_1_ortho.tif
-   --imstat  ${TEMP}/clImageStatisticsQB123.xml
+   --imstat  ${TEMP}/apTvClEstimateImageStatisticsQB123.xml
    --svm     ${TEMP}/clsvmModelQB123.svm
    --out     ${TEMP}/clLabeledImageQB123_1.tif
 )
@@ -216,7 +216,7 @@ ADD_TEST(NAME apTvClImageSVMClassifierQB123_2
    ImageSVMClassifier
    $<TARGET_FILE_DIR:otbapp_ImageSVMClassifier>
    --in      ${INPUTDATA}/Classification/QB_2_ortho.tif
-   --imstat  ${TEMP}/clImageStatisticsQB123.xml
+   --imstat  ${TEMP}/apTvClEstimateImageStatisticsQB123.xml
    --svm     ${TEMP}/clsvmModelQB123.svm
    --out     ${TEMP}/clLabeledImageQB123_2.tif
 )
@@ -234,7 +234,7 @@ ADD_TEST(NAME apTvClImageSVMClassifierQB123_3
    ImageSVMClassifier
    $<TARGET_FILE_DIR:otbapp_ImageSVMClassifier>
    --in      ${INPUTDATA}/Classification/QB_3_ortho.tif
-   --imstat  ${TEMP}/clImageStatisticsQB123.xml
+   --imstat  ${TEMP}/apTvClEstimateImageStatisticsQB123.xml
    --svm     ${TEMP}/clsvmModelQB123.svm
    --out     ${TEMP}/clLabeledImageQB123_3.tif
 )
@@ -252,7 +252,7 @@ ADD_TEST(NAME apTvClImageSVMClassifierQB123_6
    ImageSVMClassifier
    $<TARGET_FILE_DIR:otbapp_ImageSVMClassifier>
    --in      ${INPUTDATA}/Classification/QB_6_extract.tif
-   --imstat  ${TEMP}/clImageStatisticsQB123.xml
+   --imstat  ${TEMP}/apTvClEstimateImageStatisticsQB123.xml
    --svm     ${TEMP}/clsvmModelQB123.svm
    --out     ${TEMP}/clLabeledImageQB123_6.tif
 )
@@ -324,7 +324,7 @@ ADD_TEST(NAME apTvClImageSVMClassifierQB456_4
    ImageSVMClassifier
    $<TARGET_FILE_DIR:otbapp_ImageSVMClassifier>
    --in      ${INPUTDATA}/Classification/QB_4_extract.tif
-   --imstat  ${TEMP}/clImageStatisticsQB456.xml
+   --imstat  ${TEMP}/apTvClEstimateImageStatisticsQB456.xml
    --svm     ${TEMP}/clsvmModelQB456.svm
    --out     ${TEMP}/clLabeledImageQB456_4.tif
 )
@@ -340,7 +340,7 @@ ADD_TEST(NAME apTvClImageSVMClassifierQB456_5
    ImageSVMClassifier
    $<TARGET_FILE_DIR:otbapp_ImageSVMClassifier>
    --in      ${INPUTDATA}/Classification/QB_5_extract.tif
-   --imstat  ${TEMP}/clImageStatisticsQB456.xml
+   --imstat  ${TEMP}/apTvClEstimateImageStatisticsQB456.xml
    --svm     ${TEMP}/clsvmModelQB456.svm
    --out     ${TEMP}/clLabeledImageQB456_5.tif
 )
@@ -358,7 +358,7 @@ ADD_TEST(NAME apTvClImageSVMClassifierQB456_6
    $<TARGET_FILE_DIR:otbapp_ImageSVMClassifier>
    --in      ${INPUTDATA}/Classification/QB_6_extract.tif
    --mask    ${INPUTDATA}/Classification/QB_6_mask.tif
-   --imstat  ${TEMP}/clImageStatisticsQB456.xml
+   --imstat  ${TEMP}/apTvClEstimateImageStatisticsQB456.xml
    --svm     ${TEMP}/clsvmModelQB456.svm
    --out     ${TEMP}/clLabeledImageQB456_6.tif
 )
@@ -376,7 +376,7 @@ ADD_TEST(NAME apTvClImageSVMClassifierQB456_1
    ImageSVMClassifier
    $<TARGET_FILE_DIR:otbapp_ImageSVMClassifier>
    --in      ${INPUTDATA}/Classification/QB_1_ortho.tif
-   --imstat  ${TEMP}/clImageStatisticsQB456.xml
+   --imstat  ${TEMP}/apTvClEstimateImageStatisticsQB456.xml
    --svm     ${TEMP}/clsvmModelQB456.svm
    --out     ${TEMP}/clLabeledImageQB456_1.tif
 )
