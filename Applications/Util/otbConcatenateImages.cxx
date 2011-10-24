@@ -60,9 +60,9 @@ private:
 
     // Documentation
     SetDocName("Images Concatenation Application");
-    SetDocLongDescription("This application performs images concatenation. It will take the input image list (mono or multi channel) and generate a single multi channel image. The channel order is the one of the mist.");
+    SetDocLongDescription("This application performs images concatenation. It will take the input image list (mono or multi channel) and generate a single multi channel image. The channel order is the one of the list.");
     SetDocLimitations("None");
-    SetDocAuthors("Otmane Lahlou");
+    SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Rescale application, Convert application");
     SetDocCLExample("otbApplicationLauncherCommandLine ConcatenateImages ${OTB-BIN}/bin --in ${OTB-DATA}/poupees_sub_c1.png ${OTB-DATA}/poupees_sub_c2.png ${OTB-DATA}/poupees_sub_c3.png --out otbConcatenateImages.png uchar");
     AddDocTag("Concatenation");
