@@ -44,7 +44,15 @@ private:
   EstimateImagesStatistics()
   {
     SetName("EstimateImagesStatistics");
-    SetDescription("Estimate mean/standard deviation for all images in the input list and optionally save the results in an XML file");
+    SetDescription("Estimates mean/standard deviation for all images in the input list and optionally saves the results in an XML file");
+
+    SetDocName("Estimate Image Statistics Application");
+    SetDocLongDescription("This application estimates mean/standard deviation for all images in the input list and optionally saves the results in an XML file.");
+    SetDocLimitations("None");
+    SetDocAuthors("OTB-Team");
+    SetDocSeeAlso(" ");
+    SetDocCLExample("otbApplicationLauncherCommandLine EstimateImagesStatistics ${OTB-BIN}/bin  --il ${OTB-Data}/Input/Classification/QB_1_ortho.tif ${OTB-Data}/Input/Classification/QB_2_ortho.tif ${OTB-Data}/Input/Classification/QB_3_ortho.tif --out EstimateImageStatisticsQB123.xml");
+    AddDocTag("Classification");
   }
 
   virtual ~EstimateImagesStatistics()
@@ -53,8 +61,10 @@ private:
 
   void DoCreateParameters()
   {
-    AddParameter(ParameterType_InputImageList, "il", "Input Image List");
-    AddParameter(ParameterType_Filename, "out", "Output XML file");
+    AddParameter(ParameterType_InputImageList, "il", "Input Image List ");
+    SetParameterDescription( "il", "Input Image List filename." );
+
+    AddParameter(ParameterType_Filename, "out", "Output XML file ");
     SetParameterDescription( "out", "Name of the XML file where the statistics are saved for future reuse" );
     MandatoryOff("out");
   }
