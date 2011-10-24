@@ -127,15 +127,20 @@ private:
 
   void DoCreateParameters()
   {
-    AddParameter(ParameterType_InputImageList, "il", "Input Image List");
-    AddParameter(ParameterType_InputVectorDataList, "vd", "Vector Data of sample used to validate the estimator");
-    AddParameter(ParameterType_Filename, "dem", "A DEM repository");
+    AddParameter(ParameterType_InputImageList, "il", "Input Image List ");
+    SetParameterDescription("il", "Input Image List.");
+    AddParameter(ParameterType_InputVectorDataList, "vd", "Vector Data List ");
+    SetParameterDescription("vd", "Vector Data of sample used to validate the estimator.");
+    AddParameter(ParameterType_Filename, "dem", "DEM repository ");
+    SetParameterDescription("dem", "Path to DEM repository.");
     MandatoryOff("dem");
-    AddParameter(ParameterType_Filename, "imstat", "XML file containing mean and standard deviation of input images.");
+    AddParameter(ParameterType_Filename, "imstat", "XML stat filename ");
     MandatoryOff("imstat");
-    AddParameter(ParameterType_Filename, "svm", "SVM model to validate its performances.");
-    AddParameter(ParameterType_Filename, "out", "File which will contain the performance of the SVM model.");
-
+    SetParameterDescription("imstat","Path to XML file containing mean and standard deviation of input images.");
+    AddParameter(ParameterType_Filename, "svm", "SVM validation filename ");
+    SetParameterDescription("svm","SVM model to validate its performances (given by TrainSVMImagesClassification output for instance).");
+    AddParameter(ParameterType_Filename, "out", "Output filename ");
+    SetParameterDescription("out","Filename, which will contain the performance of the SVM model.");
   }
 
   void DoUpdateParameters()
