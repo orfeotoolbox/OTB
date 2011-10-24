@@ -41,12 +41,12 @@ namespace otb
 {
 
 template<class T>
-bool PixelIsComplex(const std::complex<T>& dummy)
+bool PixelIsComplex(const std::complex<T>& /*dummy*/)
 {
   return true;
 }
 template<class T>
-bool PixelIsComplex(const T& dummy)
+bool PixelIsComplex(const T& /*dummy*/)
 {
   return false;
 }
