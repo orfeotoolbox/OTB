@@ -154,7 +154,7 @@ void
 StreamingImageFileWriter<TInputImage>
 ::SetBufferMemorySize(unsigned long memory_size_divisions)
 {
-  itkWarningMacro("SetNumberOfDivisionsStrippedStreaming is DEPRECATED. "
+  itkWarningMacro("SetBufferMemorySize is DEPRECATED. "
                   "Use one of SetNumberOfLinesStrippedStreaming, "
                   "SetAutomaticStrippedStreaming, SetTileDimensionTiledStreaming, "
                   "or SetAutomaticTiledStreaming." );
