@@ -57,6 +57,17 @@ private:
   {
     SetName("ConcatenateImages");
     SetDescription("Concatenate a list of images into a single multi channel one.");
+
+    // Documentation
+    SetDocName("Images Concatenation Application");
+    SetDocLongDescription("This application performs images concatenation. It will take the input image list (mono or multi channel) and generate a single multi channel image. The channel order is the one of the mist.");
+    SetDocLimitations("None");
+    SetDocAuthors("Otmane Lahlou");
+    SetDocSeeAlso("Rescale application, Convert application");
+    SetDocCLExample("otbApplicationLauncherCommandLine ConcatenateImages ${OTB-BIN}/bin --in ${OTB-DATA}/poupees_sub_c1.png ${OTB-DATA}/poupees_sub_c2.png ${OTB-DATA}/poupees_sub_c3.png --out otbConcatenateImages.png uchar");
+    AddDocTag("Concatenation");
+    AddDocTag("Multi channel");
+
     m_Concatener = ListConcatenerFilterType::New();
     m_ExtractorList = ExtractROIFilterListType::New();
     m_ImageList = ImageListType::New();
