@@ -71,7 +71,18 @@ private:
   KMeansClassification()
   {
     SetName("KMeansClassification");
-    SetDescription("Unsupervised KMeans image classification.");
+    SetDescription("Unsupervised KMeans image classification");
+
+    SetDocName("Unsupervised KMeans image classification Application");
+    SetDocLongDescription("Performs Unsupervised KMeans image classification.");
+    SetDocLimitations("None");
+    SetDocAuthors("OTB-Team");
+    SetDocSeeAlso(" ");
+    SetDocCLExample("otbApplicationLauncherCommandLine KMeansClassification "
+      "--in ${OTB-Data}/Input/poupees_sub.png --vm ${OTB-Data}/Input/mask_KMeans.png "
+      "--ts 100 --tp 0.6 --nc 5 --cp 0.9 --sl 100 --out ClassificationFilterOuptut.tif ");
+    AddDocTag("Classification");
+
   }
 
   virtual ~KMeansClassification()
@@ -82,17 +93,25 @@ private:
   {
 
     AddParameter(ParameterType_InputImage, "in", "Input Image");
+    SetParameterDescription("in","Input image filename.");
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
+    SetParameterDescription("out","Output image filename.");
     AddParameter(ParameterType_InputImage, "vm", "Validity Mask");
-    AddParameter(ParameterType_Int, "ts", "Size of the training set");
+    SetParameterDescription("vm","Validity mask. Only non-zero pixels will be used to estimate KMeans modes.");
+    AddParameter(ParameterType_Int, "ts", "Training set size");
+    SetParameterDescription("ts", "Size of the training set.");
     SetParameterInt("ts", 100);
-    AddParameter(ParameterType_Float, "tp", "Probability for a sample to be selected in the training set");
+    AddParameter(ParameterType_Float, "tp", "Training set sample selection probability");
+    SetParameterDescription("tp", "Probability for a sample to be selected in the training set.");
     SetParameterFloat("tp", 0.5);
     AddParameter(ParameterType_Int, "nc", "Number of classes");
+    SetParameterDescription("nc","number of modes, which will be used to generate class membership.");
     SetParameterInt("nc", 3);
-    AddParameter(ParameterType_Float, "cp", "Probability for a pixel to be selected as an initial class centroid");
+    AddParameter(ParameterType_Float, "cp", "Initial class centroid probability");
+    SetParameterDescription("cp", "Probability for a pixel to be selected as an initial class centroid");
     SetParameterFloat("cp", 0.8);
     AddParameter(ParameterType_Int, "sl", "Number of lines for each streaming block");
+    SetParameterDescription("sl","input image will be divided into sl lines.");
     SetParameterInt("sl", 1000);
   }
 
