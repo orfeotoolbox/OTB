@@ -138,7 +138,7 @@ QWidget* QtWidgetView::CreateDoc()
     for (unsigned int i = 0; i < m_Application->GetDocTags().size() - 1; i++)
       {
       oss << m_Application->GetDocTags()[i] << ", ";
-      ;
+     ;
       }
     oss << m_Application->GetDocTags()[m_Application->GetDocTags().size() - 1];
     }
@@ -172,7 +172,7 @@ QWidget* QtWidgetView::CreateDoc()
 
 void QtWidgetView::SetDocParameters( std::string & val )
 {
-  const std::vector<std::string> appKeyList = m_Application->GetParametersKeys( false );//true );
+  const std::vector<std::string> appKeyList = m_Application->GetParametersKeys( false ); //true );
   const unsigned int nbOfParam = appKeyList.size();
     
   itk::OStringStream oss;
