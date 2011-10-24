@@ -31,7 +31,7 @@ namespace otb
  *  \brief This filter implements unmixing based non negative matrix factorization (NMF) which
  *  finds simultaneously the end members and abundances matrix which
  *  product is the closer to the observed data, based on the following
- *  works:
+ *  works: 
  *  K. S. F.J. Theis and T. Tanaka, First results on uniqueness of
     sparse non-negative matrix factorisation.
  *  M. G. A. Huck and J. Blanc-Talon, IEEE TGRS, vol. 48, no. 6, pp. 2590-2602, 2010.
@@ -68,7 +68,7 @@ namespace otb
  *  error :
  *  \f$ RQE({\mathbf A}, {\mathbf S})=\|\mathbf R-{\mathbf A} {\mathbf S}\|^2_F \f$. In order to
  *  satisfy the sum-to-one constraint for hyperspectral data, a
- *  regularization term \f$ STU(\mathbf S) \f$ can be added to the objective
+ *  regularization term \f$ STU({\mathbf S}) \f$ can be added to the objective
  *  function.
  *
  *  A generic expression for the optimized function is \f$
@@ -97,13 +97,13 @@ namespace otb
  *  on multiplicative rules, or else alternate gradient descent
  *  iterations, or else on alternate least square methods. In MDMD-NMF, the update rules
  *  at each iteration become :
- *  \f$ \begin{eqnarray}
- *  \label{algomdmd} \mathbf S&\leftarrow &P\left [\mathbf S-\mu_S \left( \bar \mathbf A^T
+ *  \f$ \begin{tabular}
+ *  \mathbf S&\leftarrow &P\left [\mathbf S-\mu_S \left( \bar \mathbf A^T
  *  (\bar\mathbf A\mathbf S-\bar\mathbf R)-\lambda_S(\mathbf S-\frac{1}{J}\1_{JI})\right)\right
  *  ]\\ \nonumber \mathbf A &\leftarrow &P\left [\mathbf A-\mu_A \left(
  *  (\mathbf A\mathbf S-\mathbf R)\mathbf S^T +\lambda_A(\mathbf A-\frac{1}{L}\ \mathbf hbf
  *  1_{LL}\mathbf A)\right)\right ]
- *  \end{eqnarray} \f$
+ *  \end{tabular} \f$
  *  where \f$ \mu_A\f$ and \f$\mu_S \f$
  *  are the step sizes.
  *  Huck propose a
