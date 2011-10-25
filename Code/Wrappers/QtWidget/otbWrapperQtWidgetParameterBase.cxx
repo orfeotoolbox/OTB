@@ -38,15 +38,24 @@ void QtWidgetParameterBase::CreateWidget()
 
 void QtWidgetParameterBase::UpdateGUI()
 {
-  //
- this->DoUpdateGUI();
+  // Update the GUI
+  this->DoUpdateGUI();
 
- // Emit State of the Parameter to update this paramter checkbox
- if (!m_Param->GetMandatory())
-   {
-   bool state = m_Param->GetActive();
-   emit ParameterActiveStatus(state);
+  // Emit State of the Parameter to update this paramter checkbox
+  if (!m_Param->GetMandatory())
+    {
+    bool state = m_Param->GetActive();
+    emit ParameterActiveStatus(state);
    }
+  else
+    {
+    // Activate the Mandatory param and the Mandatory subparam in an
+    // activated Group
+   if (m_Param->GetRoot()->GetActive())
+     {
+     emit ParameterActiveStatus(true);
+     }
+    }
 }
 
 void QtWidgetParameterBase::ParameterChanged(const QString& key)
