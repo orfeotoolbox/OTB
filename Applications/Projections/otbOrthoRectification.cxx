@@ -130,7 +130,11 @@ private:
     SetParameterDescription("outputs.spacingy","Size of each pixel along Y axis");
 
     AddParameter(ParameterType_Empty,"outputs.isotropic","Force isotropic spacing by default");
-    SetParameterDescription("outputs.isotropic","Default spacing values are estimated from the sensor modelling of the image. It can therefore result in a non-isotropic spacing. This option allows you to force default values to be isotropic (in this case, the minimum of spacing in both direction is applied. Values overriden by user are not affected by this option.");
+    std::ostringstream isotropOss;
+    isotropOss << "Default spacing values are estimated from the sensor modelling of the image. It can therefore result in a non-isotropic spacing. ";
+    isotropOss << "This option allows you to force default values to be isotropic (in this case, the minimum of spacing in both direction is applied. ";
+    isotropOss << "Values overriden by user are not affected by this option.";
+    SetParameterDescription("outputs.isotropic",isotropOss.str());
     EnableParameter("outputs.isotropic");
     
     // DEM
@@ -244,6 +248,12 @@ private:
         EnableParameter("outputs.spacingy");
         EnableParameter("outputs.sizex");
         EnableParameter("outputs.sizey");
+
+        // Make all the parameters in this mode mandatory
+        MandatoryOn("outputs.spacingx");
+        MandatoryOn("outputs.spacingy");
+        MandatoryOn("outputs.sizex");
+        MandatoryOn("outputs.sizey");
         }
         break;
         case Mode_AutomaticSize:
@@ -253,11 +263,18 @@ private:
         DisableParameter("outputs.sizey");
         EnableParameter("outputs.spacingx");
         EnableParameter("outputs.spacingy");
+
         // Update the automatic value mode of each filed
         AutomaticValueOn("outputs.sizex");
         AutomaticValueOn("outputs.sizey");
         AutomaticValueOff("outputs.spacingx");
         AutomaticValueOff("outputs.spacingy");
+
+        // Adapat the status of the param to this mode
+        MandatoryOn("outputs.spacingx");
+        MandatoryOn("outputs.spacingy");
+        MandatoryOff("outputs.sizex");
+        MandatoryOff("outputs.sizey");
 
         ResampleFilterType::SpacingType spacing;
         spacing[0] = GetParameterFloat("outputs.spacingx");
@@ -278,11 +295,18 @@ private:
         DisableParameter("outputs.spacingy");
         EnableParameter("outputs.sizex");
         EnableParameter("outputs.sizey");
+
         // Update the automatic value mode of each filed
         AutomaticValueOn("outputs.spacingx");
         AutomaticValueOn("outputs.spacingy");
         AutomaticValueOff("outputs.sizex");
         AutomaticValueOff("outputs.sizey");
+
+        // Adapat the status of the param to this mode
+        MandatoryOff("outputs.spacingx");
+        MandatoryOff("outputs.spacingy");
+        MandatoryOn("outputs.sizex");
+        MandatoryOn("outputs.sizey");
 
         ResampleFilterType::SizeType size;        
         size[0] = GetParameterInt("outputs.sizex");
@@ -433,28 +457,19 @@ private:
     
     // Set Output information
     ResampleFilterType::SizeType size;
-    if (IsParameterEnabled("outputs.sizex") && IsParameterEnabled("outputs.sizey"))
-      {
-      size[0] = GetParameterInt("outputs.sizex");
-      size[1] = GetParameterInt("outputs.sizey");
-      m_ResampleFilter->SetOutputSize(size);
-      }
+    size[0] = GetParameterInt("outputs.sizex");
+    size[1] = GetParameterInt("outputs.sizey");
+    m_ResampleFilter->SetOutputSize(size);
 
     ResampleFilterType::SpacingType spacing;
-    if (IsParameterEnabled("outputs.spacingx") && IsParameterEnabled("outputs.spacingy"))
-      {
-      spacing[0] = GetParameterFloat("outputs.spacingx");
-      spacing[1] = GetParameterFloat("outputs.spacingy");
-      m_ResampleFilter->SetOutputSpacing(spacing);
-      }
+    spacing[0] = GetParameterFloat("outputs.spacingx");
+    spacing[1] = GetParameterFloat("outputs.spacingy");
+    m_ResampleFilter->SetOutputSpacing(spacing);
     
     ResampleFilterType::OriginType ul;
-    if (IsParameterEnabled("outputs.ulx") && IsParameterEnabled("outputs.uly"))
-      {
-      ul[0] = GetParameterFloat("outputs.ulx");
-      ul[1] = GetParameterFloat("outputs.uly");
-      m_ResampleFilter->SetOutputOrigin(ul);
-      }
+    ul[0] = GetParameterFloat("outputs.ulx");
+    ul[1] = GetParameterFloat("outputs.uly");
+    m_ResampleFilter->SetOutputOrigin(ul);
 
     // Deformation Field spacing
     ResampleFilterType::SpacingType gridSpacing;
