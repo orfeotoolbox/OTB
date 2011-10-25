@@ -42,6 +42,17 @@ private:
   {
     SetName("ReadImageInfo");
     SetDescription("Get information about the image");
+
+    // Documentation
+    SetDocName("read image information Application");
+    SetDocLongDescription("Display informations about the image in the logger tab.");
+    SetDocLimitations("None");
+    SetDocAuthors("OTB-Team");
+    SetDocSeeAlso(" ");
+    SetDocCLExample("otbApplicationLauncherCommandLine ReadImageInfo ${OTB-BIN}/bin "
+                      "--in ${OTB-Data}/Input/QB_Toulouse_Ortho_XS.tif");
+     AddDocTag("Util");
+
   }
 
   virtual ~ReadImageInfo()
