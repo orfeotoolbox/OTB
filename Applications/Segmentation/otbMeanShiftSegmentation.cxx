@@ -45,8 +45,20 @@ private:
   MeanShiftSegmentation()
   {
     SetName("MeanShiftSegmentation");
-    SetDescription("Perfrom mean shift clustering");
-  }
+    SetDescription("Perform mean shift clustering");
+
+    // Documentation
+    SetDocName("Mean Shift segmentation application");
+    SetDocLongDescription("This application performs mean shift clustering.");
+    SetDocLimitations("None");
+    SetDocAuthors("OTB-Team");
+    SetDocSeeAlso(" ");
+    SetDocCLExample("otbApplicationLauncherCommandLine MeanShiftClustering ${OTB-BIN}/bin "
+      "--in ${OTB-Data}/Input/qb_RoadExtract2sub200x200.tif --cout MeanShift_ClusteredOutput.tif"
+        "--fout MeanShift_FilterOutput.tif --lout MeanShift_LabeledClusteredOutput.tif"
+        "--cbout MeanShift_ClusterBoundariesOutput.tif ---spatialr 16 --ranger 16 --minsize 10 --scale 1.0 ");
+    AddDocTag("Segmentation");
+    }
 
   virtual ~MeanShiftSegmentation()
   {
