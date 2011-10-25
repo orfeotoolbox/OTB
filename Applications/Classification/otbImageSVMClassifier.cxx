@@ -63,10 +63,14 @@ private:
     
     // Documentation
     SetDocName("Image SVM Classifier Application");
-    SetDocLongDescription("This application performs an image classification based on the SVM classifier. The image to classify and the SVM model are given in input, the application will generate the classified output image. Optionnally, the user can give an image statistics file (that contains min, max) to normalize the input image before the classification. Furthemore, the user can give a mask to define area of work (only pixel with value greater to 0 will be porceed), this no classify pixels will appear in the output image with the value 0.");
+    SetDocLongDescription("This application performs an image classification based on the SVM classifier."
+        "The image to classify and the SVM model are given in input, the application will generate the classified output image. "
+        " Optionally, the user can give an image statistics file (that contains min, max) to normalize the input image before the classification."
+        " Furthemore, the user can give a mask to define area of work (only pixels with values greater to 0 will be proceed), "
+        "these no classify pixels will appear in the output image with the value 0.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("TrainSVMImagesClassifier application, ValidateSVMImagesClassifier");
+    SetDocSeeAlso("TrainSVMImagesClassifier, ValidateSVMImagesClassifier, EstimatesImagesStatistics");
     SetDocCLExample("otbApplicationLauncherCommandLine ImageSVMClassifier ${OTB-BIN}/bin --in ${OTB-DATA}/Classification/QB_1_ortho.tif  --imstat ${OTB-DATA}/Baseline/OTB-Applications/Files/clImageStatisticsQB1.xml --svn ${OTB-DATA}/Baseline/OTB-Applications/Files/clsvmModelQB1.svm --out otbConcatenateImages.png uchar");
     AddDocTag("Classification");
     AddDocTag("SVM");
