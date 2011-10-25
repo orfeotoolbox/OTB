@@ -61,6 +61,17 @@ private:
   {
     SetName("MultiResolutionPyramid");
     SetDescription("Build a multi-resolution pyramid of the image.");
+
+    // Documentation
+    SetDocName("Multi Resolution Pyramid Application");
+        SetDocLongDescription("This application builds a multi-resolution pyramid of the input image.");
+        SetDocLimitations("None");
+        SetDocAuthors("OTB-Team");
+        SetDocSeeAlso(" ");
+        SetDocCLExample("otbApplicationLauncherCommandLine MultiResolutionPyramid ${OTB-BIN}/bin "
+            "--in ${OTB-Data}/Input/QB_Toulouse_Ortho_XS.tif  --out multiResolutionImage.tif --level 1 --sfactor 2 --vfactor 0.6 --fast false");
+        AddDocTag("Conversion");
+        AddDocTag("Image Manipulation");
   }
 
   void DoCreateParameters()
@@ -73,7 +84,7 @@ private:
 
     AddParameter(ParameterType_Int, "level", "Number Of Levels");
     SetParameterInt("level", 1);
-    SetParameterDescription( "level", "Number of levels in the pyramid (default is 1)");
+    SetParameterDescription( "level", "Number of levels in the pyramid (default is 1).");
 
     AddParameter(ParameterType_Int, "sfactor", "Subsampling factor");
     SetParameterInt("sfactor", 2);
@@ -85,7 +96,7 @@ private:
     AddParameter(ParameterType_Empty, "fast", "Use Fast Scheme");
     std::ostringstream desc;
     desc<<"If used, this option allows to speed-up computation by iteratively"
-        <<" subsampling previous level of pyramid instead of processing the full input";
+        <<" subsampling previous level of pyramid instead of processing the full input.";
     SetParameterDescription("fast", desc.str());
     MandatoryOff("fast");
   }
