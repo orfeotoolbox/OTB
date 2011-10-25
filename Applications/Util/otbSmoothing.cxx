@@ -57,6 +57,16 @@ private:
   {
     SetName("Smoothing");
     SetDescription("Apply a smoothing filter to an image");
+
+    SetDocName("Smoothing Application");
+    SetDocLongDescription("This application applies smoothing filter to an image."
+      " Either gaussian, mean, or anisotropic diffusion are available.");
+    SetDocLimitations("None");
+    SetDocAuthors("OTB-Team");
+    SetDocSeeAlso(" ");
+    SetDocCLExample("otbApplicationLauncherCommandLine Smoothing ${OTB-BIN}/bin"
+      " --in ${OTB-DATA}/Input/poupees.tif --out smoothedImage.tif --type mean");
+    AddDocTag("Filtering");
   }
 
   virtual ~Smoothing()
@@ -66,16 +76,18 @@ private:
   void DoCreateParameters()
   {
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
+    SetParameterDescription("in", "Input image to filter.");
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
-
+    SetParameterDescription("out", "filtered image.");
     AddParameter(ParameterType_Choice,      "type", "Smoothing Type");
-
+    SetParameterDescription("type", "smoothing kernel to apply : mean, gaussian, anisotropric diffusion.");
     AddChoice("type.mean",     "Mean");
     AddParameter(ParameterType_Radius, "type.mean.radius", "Radius");
     SetParameterInt("type.mean.radius", 2);
 
     AddChoice("type.gaussian", "Gaussian");
     AddParameter(ParameterType_Radius, "type.gaussian.radius", "Radius");
+
     SetParameterInt("type.gaussian.radius", 2);
 
     AddChoice("type.anidif",   "Anisotropic Diffusion");
