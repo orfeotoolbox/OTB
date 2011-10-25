@@ -131,6 +131,21 @@ private:
   {
     SetName("TrainSVMImagesClassifier");
     SetDescription("Perform SVM training from multiple input images and multiple vector data.");
+
+    // Documentation
+    SetDocName("Train SVM images Application");
+    SetDocLongDescription("This application performs SVM training from multiple input images and multiple vector data.");
+    SetDocLimitations("None");
+    SetDocAuthors("OTB-Team");
+    SetDocSeeAlso(" ");
+    SetDocCLExample("otbApplicationLauncherCommandLine TrainSVMImagesClassifier ${OTB-BIN}/bin"
+      "--il ${OTB-DATA}/Classification/QB_1_ortho.tif "
+      "--vd ${OTB-DATA}/Classification/ectorData_QB1.shp"
+      "--imstat ${OTB-Data}/Baseline/OTB-Applications/Files/clImageStatisticsQB1.xml"
+      "--b 2 --mv 100 --vtr 0.5 --opt true -out svmModelQB1_allOpt.svm");
+    AddDocTag("Classification");
+    AddDocTag("Training");
+    AddDocTag("SVM");
   }
 
   virtual ~TrainSVMImagesClassifier()
@@ -143,7 +158,7 @@ private:
     AddParameter(ParameterType_InputImageList, "il", "Input Image List");
     SetParameterDescription("il", "a list of input images.");
     AddParameter(ParameterType_InputVectorDataList, "vd", "Vector Data List");
-    SetParameterDescription("vd", "a list of vector data sample used to train the estimator.");
+    SetParameterDescription("vd", "A list of vector data sample used to train the estimator.");
     AddParameter(ParameterType_Filename, "dem", "DEM repository");
     MandatoryOff("dem");
     SetParameterDescription("dem", "path to SRTM repository");
@@ -154,9 +169,9 @@ private:
     SetParameterDescription("out", "Output SVM model");
     AddParameter(ParameterType_Float, "m", "Margin for SVM learning");
     MandatoryOff("m");
-    SetParameterDescription("m", "Margin for SVM learning");
+    SetParameterDescription("m", "Margin for SVM learning.");
     AddParameter(ParameterType_Int, "b", "Balance and grow the training set");
-    SetParameterDescription("b", "Balance and grow the training set");
+    SetParameterDescription("b", "Balance and grow the training set.");
     MandatoryOff("b");
     AddParameter(ParameterType_Choice, "k", "SVM Kernel Type");
     MandatoryOff("k");
@@ -165,18 +180,18 @@ private:
     AddChoice("k.poly", "Polynomial");
     AddChoice("k.sigmoid", "Sigmoid");
     SetParameterString("k", "linear");
-    SetParameterDescription("k", "SVM Kernel Type");
+    SetParameterDescription("k", "SVM Kernel Type.");
     AddParameter(ParameterType_Int, "mt", "Maximum training sample size");
     MandatoryOff("mt");
     SetParameterInt("mt", -1);
-    SetParameterDescription("mt", "Maximum size of the training sample (default = -1)");
+    SetParameterDescription("mt", "Maximum size of the training sample (default = -1).");
     AddParameter(ParameterType_Int, "mv", "Maximum validation sample size");
     MandatoryOff("mv");
     SetParameterInt("mv", -1);
     SetParameterDescription("mv", "Maximum size of the validation sample (default = -1)");
     AddParameter(ParameterType_Float, "vtr", "training and validation sample ratio");
     SetParameterDescription("vtr",
-                            "Ratio between training and validation sample (0.0 = all training, 1.0 = all validation) default = 0.5");
+                            "Ratio between training and validation sample (0.0 = all training, 1.0 = all validation) default = 0.5.");
     MandatoryOff("vtr");
     SetParameterFloat("vtr", 0.5);
     AddParameter(ParameterType_Empty, "opt", "parameters optimization");
@@ -184,7 +199,7 @@ private:
     SetParameterDescription("opt", "SVM parameters optimization");
     AddParameter(ParameterType_Filename, "vfn", "Name of the discrimination field");
     MandatoryOff("vfn");
-    SetParameterDescription("vfn", "Name of the field using to discriminate class in the vector data files");
+    SetParameterDescription("vfn", "Name of the field using to discriminate class in the vector data files.");
     SetParameterString("vfn", "Class");
 
   }
