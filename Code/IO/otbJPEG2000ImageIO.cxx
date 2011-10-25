@@ -19,8 +19,9 @@
 
 
 #include "otbMacro.h"
-
 #include "otbSystem.h"
+
+#include "itkTimeProbe.h"
 
 /**
    sample error debug callback expecting no client object
@@ -191,6 +192,9 @@ void JPEG2000ImageIO::Read(void* buffer)
     buffer_size_y - 1);
   otbMsgDevMacro(<< "Component type: " << this->GetComponentTypeAsString(this->GetComponentType()));
 
+  itk::TimeProbe chrono;
+  chrono.Start();
+
   // Creating openjpeg objects
   if (System::SetToLower(System::GetExtension(m_FileName)) == "j2k")
     {
@@ -346,6 +350,9 @@ void JPEG2000ImageIO::Read(void* buffer)
   fclose(m_File);
   otb_openjpeg_opj_destroy_codec(m_Codec);
   otb_openjpeg_opj_image_destroy(m_OpenJpegImage);
+
+  chrono.Stop();
+  otbMsgDevMacro(<< "JPEG2000_IO Read took " << chrono.GetTotal() << " sec")
 }
 
 void JPEG2000ImageIO::ReadImageInformation()

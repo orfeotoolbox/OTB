@@ -1961,8 +1961,9 @@ IF(OTB_DATA_USE_LARGEINPUT)
          otbMultiChannelExtractROI
          -ushort ${LARGEDATA}/PLEIADES-PRE/VERSION2/IMG_PHR_001/IMG_R3C1.JP2
          -ushort ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R3C1.tif
-         -startX 0 -startY 0 -sizeX 128 -sizeY 128
-         -channels 1
+         -startX 256 -startY 512 -sizeX 256 -sizeY 128
+         -channels 1 2 3 4
+         -time
          )
          
   ADD_TEST(ioTvVectorImageFileReaderWriterJP22TIF_PLEIADES-PRE-R3C1-4tiles ${COMMON_TESTS2}
@@ -1971,8 +1972,9 @@ IF(OTB_DATA_USE_LARGEINPUT)
          otbMultiChannelExtractROI
          -ushort ${LARGEDATA}/PLEIADES-PRE/VERSION2/IMG_PHR_001/IMG_R3C1.JP2
          -ushort ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R3C1-4tiles.tif
-         -startX 2000 -startY 2000 -sizeX 128 -sizeY 128
-         -channels 1
+         -startX 2000 -startY 2000 -sizeX 256 -sizeY 128
+         -channels 1 2 3 4
+         -time
          )
 
   ADD_TEST(ioTvVectorImageFileReaderWriterJP22TIF_PLEIADES-PRE-R4C1 ${COMMON_TESTS2}
@@ -1981,8 +1983,9 @@ IF(OTB_DATA_USE_LARGEINPUT)
          otbMultiChannelExtractROI
          -ushort ${LARGEDATA}/PLEIADES-PRE/VERSION2/IMG_PHR_001/IMG_R4C1.JP2
          -ushort ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1.tif
-         -startX 0 -startY 0 -sizeX 128 -sizeY 128
-         -channels 3
+         -startX 256 -startY 512 -sizeX 256 -sizeY 128
+         -channels 1 2 3 4
+         -time
          )
          
   ADD_TEST(ioTvVectorImageFileReaderWriterJP22TIF_PLEIADES-PRE-R4C1-4tiles ${COMMON_TESTS2}
@@ -1990,9 +1993,10 @@ IF(OTB_DATA_USE_LARGEINPUT)
                                        ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1-4tiles.tif
          otbMultiChannelExtractROI
          -ushort ${LARGEDATA}/PLEIADES-PRE/VERSION2/IMG_PHR_001/IMG_R4C1.JP2
-         -ushort ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R3C1-4tiles.tif
-         -startX 2000 -startY 2000 -sizeX 128 -sizeY 128
-         -channels 1
+         -ushort ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1-4tiles.tif
+         -startX 2000 -startY 2000 -sizeX 256 -sizeY 128
+         -channels 1 2 3 4
+         -time
          )
 
 ENDIF(OTB_DATA_USE_LARGEINPUT)

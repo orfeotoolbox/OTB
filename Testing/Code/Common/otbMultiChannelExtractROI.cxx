@@ -24,11 +24,16 @@
 
 #include "otbImage.h"
 
+#include "itkTimeProbe.h"
+
+
 template <typename  InputPixelType /*= unsigned char */, typename OutputPixelType /*= unsigned char*/>
 int generic_otbMultiChannelExtractROI(int argc, char * argv[], const char * inputFilename, const char * outputFilename)
 {
   typedef otb::MultiChannelExtractROI<InputPixelType,
       OutputPixelType>  ExtractROIFilterType;
+
+  int computeExtractTime = 0;
 
   typename ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
   int cpt(0), nbcanaux(0);
@@ -60,6 +65,12 @@ int generic_otbMultiChannelExtractROI(int argc, char * argv[], const char * inpu
       std::cout << " ->SetSizeY(" << ::atoi(argv[cpt + 1]) << ")" << std::endl;
       cpt += 2;
       }
+    else if (strArgv == "-time")
+    {
+        std::cout << " ->Extract time will be computed" << std::endl;
+        computeExtractTime = 1;
+        cpt += 1;
+    }
     else if (strArgv == "-channels")
       {
       ++cpt;
@@ -71,7 +82,7 @@ int generic_otbMultiChannelExtractROI(int argc, char * argv[], const char * inpu
           searchChannels = false;
           }
         else
-        //Regarde si ce n'est pas une autre otption
+        // Check if we have set another option
           {
           if (argv[cpt][0] == '-')
             {
@@ -89,12 +100,12 @@ int generic_otbMultiChannelExtractROI(int argc, char * argv[], const char * inpu
       }
     }
 
-  // Resume de la ligne de commande
-  std::cout << " ROI selectionnee : startX " << extractROIFilter->GetStartX() << std::endl;
-  std::cout << "                    startY " << extractROIFilter->GetStartY() << std::endl;
-  std::cout << "                    sizeX  " << extractROIFilter->GetSizeX() << std::endl;
-  std::cout << "                    sizeY  " << extractROIFilter->GetSizeY() << std::endl;
-  std::cout << " Canaux selectionnes (" << extractROIFilter->GetNbChannels() << ") : ";
+  // Resume the command line
+  std::cout << " Selected ROI: startX " << extractROIFilter->GetStartX() << std::endl;
+  std::cout << "               startY " << extractROIFilter->GetStartY() << std::endl;
+  std::cout << "               sizeX  " << extractROIFilter->GetSizeX() << std::endl;
+  std::cout << "               sizeY  " << extractROIFilter->GetSizeY() << std::endl;
+  std::cout << " Selected Channels: (" << extractROIFilter->GetNbChannels() << ") : ";
   typename ExtractROIFilterType::ChannelsType lChannels;
   lChannels = extractROIFilter->GetChannels();
   for (unsigned int i = 0; i < lChannels.size(); ++i)
@@ -102,7 +113,7 @@ int generic_otbMultiChannelExtractROI(int argc, char * argv[], const char * inpu
     std::cout << lChannels[i] << " ";
     }
 
-  std::cout << " Extraction de " << nbcanaux << " de l'image source." << std::endl;
+  std::cout << " Extracted " << nbcanaux << " channels from input image." << std::endl;
 
   // OTB-FA-00008-CS
   typedef otb::ImageFileReader<ITK_TYPENAME ExtractROIFilterType::InputImageType>  ReaderType;
@@ -111,16 +122,30 @@ int generic_otbMultiChannelExtractROI(int argc, char * argv[], const char * inpu
   typename WriterType::Pointer writer = WriterType::New();
 
   reader->SetFileName(inputFilename);
-  //THOMAS
-  //        reader->Update(); //Necessaire pour connaitre le nombre de canaux dans l'image
   writer->SetFileName(outputFilename);
+
   extractROIFilter->SetInput(reader->GetOutput());
 
   writer->SetInput(extractROIFilter->GetOutput());
+
+  itk::TimeProbe chrono;
+
+  if (computeExtractTime)
+  {
+	  chrono.Start();
+  }
+
   writer->Update();
-  std::cout << " Nb canaux dans l'image d'entree : " << reader->GetOutput()->GetNumberOfComponentsPerPixel() <<
+
+  if (computeExtractTime)
+  {
+	  chrono.Stop();
+	  std::cout << " Time to compute the extracted image: " << chrono.GetTotal() << " seconds" << std::endl;
+  }
+
+  std::cout << " Number of channels in the input image: " << reader->GetOutput()->GetNumberOfComponentsPerPixel() <<
   std::endl;
-  std::cout << " Nb canaux dans l'image de sortie : " <<
+  std::cout << " Number of channels in the output image: " <<
   extractROIFilter->GetOutput()->GetNumberOfComponentsPerPixel() << std::endl;
 
   return EXIT_SUCCESS;
@@ -163,8 +188,8 @@ int otbMultiChannelExtractROI(int argc, char * argv[])
 
   argc -= cpt;
   argv += cpt;
-  std::cout << " -> " << linputPixelType << " pour " << inputFilename << std::endl;
-  std::cout << " -> " << loutputPixelType << " pour " << outputFilename << std::endl;
+  std::cout << " -> " << linputPixelType << " for " << inputFilename << std::endl;
+  std::cout << " -> " << loutputPixelType << " for " << outputFilename << std::endl;
   std::string pixelType;
   if ((linputPixelType == "-uchar") &&
       (loutputPixelType ==
@@ -225,9 +250,9 @@ int otbMultiChannelExtractROI(int argc, char * argv[])
                                                                      outputFilename));
   else
     {
-    std::cout << " Erreur : le format des images en entree est mal precise dans la ligne de commande !!!" << std::endl;
-    std::cout << "          valeurs autorisees : -uchar, -char, -ushort, -uint, -float, -double" << std::endl;
-    std::cout << "          valeurs par defaut : -uchar" << std::endl;
+    std::cout << " Error : the output image format is not well defined by the command line !!!" << std::endl;
+    std::cout << "          possible values: -uchar, -char, -ushort, -uint, -float, -double" << std::endl;
+    std::cout << "          default value: -uchar" << std::endl;
     return EXIT_FAILURE;
     }
 
