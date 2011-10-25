@@ -100,7 +100,6 @@ private:
 
     // Add the output paramters in a group
     AddParameter(ParameterType_Group, "outputs", "Output Parameters");
-    MandatoryOff("outputs");
 
     // UserDefined values
     AddParameter(ParameterType_Choice, "outputs.mode", "Mode Type");
@@ -111,30 +110,24 @@ private:
     // Upper left point coordinates
     AddParameter(ParameterType_Float, "outputs.ulx", "Upper Left X");
     SetParameterDescription("outputs.ulx","Cartographic X coordinate of upper left corner");
-    MandatoryOff("outputs.ulx");
 
     AddParameter(ParameterType_Float, "outputs.uly", "Upper Left Y");
     SetParameterDescription("outputs.uly","Cartographic Y coordinate of upper left corner");
-    MandatoryOff("outputs.uly");
 
     // Size of the output image
     AddParameter(ParameterType_Int, "outputs.sizex", "Size X");
     SetParameterDescription("outputs.sizex","Size of projected image along X");
-    MandatoryOff("outputs.sizex");
 
     AddParameter(ParameterType_Int, "outputs.sizey", "Size Y");
     SetParameterDescription("outputs.sizey","Size of projected image along Y");
-    MandatoryOff("outputs.sizey");
     
     // Spacing of the output image
     AddParameter(ParameterType_Float, "outputs.spacingx", "Pixel Size X");
     SetParameterDescription("outputs.spacingx","Size of each pixel along X axis");
 
-    MandatoryOff("outputs.spacingx");
 
     AddParameter(ParameterType_Float, "outputs.spacingy", "Pixel Size Y");
     SetParameterDescription("outputs.spacingy","Size of each pixel along Y axis");
-    MandatoryOff("outputs.spacingy");
 
     AddParameter(ParameterType_Empty,"outputs.isotropic","Force isotropic spacing by default");
     SetParameterDescription("outputs.isotropic","Default spacing values are estimated from the sensor modelling of the image. It can therefore result in a non-isotropic spacing. This option allows you to force default values to be isotropic (in this case, the minimum of spacing in both direction is applied. Values overriden by user are not affected by this option.");
@@ -152,7 +145,6 @@ private:
     oss << "Parameter is the number of control points per axis";
     SetParameterDescription("rpc",oss.str().c_str());
     MandatoryOff("rpc");
-    MandatoryOff("rpc.ncp");
 
     // Interpolators
     AddParameter(ParameterType_Choice,   "interpolator", "Interpolator");
@@ -168,9 +160,6 @@ private:
     AddChoice("map.utm",   "UTM");
     AddParameter(ParameterType_Int, "map.utm.zone", "Zone number");
     AddParameter(ParameterType_Empty, "map.utm.hem",  "Hemisphere North");
-    MandatoryOff("map.utm.zone");
-    MandatoryOff("map.utm.hem");
-    MandatoryOff("map.utm");
 
     AddChoice("map.lambert2",  "Lambert II Etendu"); 
 
@@ -178,7 +167,6 @@ private:
     AddParameter(ParameterType_Int, "map.epsg.code", "EPSG Code");    
     SetParameterInt("map.epsg.code",32631);
     SetParameterString("map", "epsg");
-    MandatoryOff("map.epsg.code");
 
     // Deformation Field Spacing
     AddParameter(ParameterType_Float, "gridspacing", "Deformation Field Spacing");
