@@ -132,15 +132,15 @@ int generic_otbMultiChannelExtractROI(int argc, char * argv[], const char * inpu
 
   if (computeExtractTime)
   {
-	  chrono.Start();
+         chrono.Start();
   }
 
   writer->Update();
 
   if (computeExtractTime)
   {
-	  chrono.Stop();
-	  std::cout << " Time to compute the extracted image: " << chrono.GetTotal() << " seconds" << std::endl;
+         chrono.Stop();
+         std::cout << " Time to compute the extracted image: " << chrono.GetTotal() << " seconds" << std::endl;
   }
 
   std::cout << " Number of channels in the input image: " << reader->GetOutput()->GetNumberOfComponentsPerPixel() <<

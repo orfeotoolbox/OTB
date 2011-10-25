@@ -100,8 +100,8 @@ public:
   itkGetMacro(OutputSize, SizeType);
 
   /** Isotropic spacing flag */
-  itkSetMacro(EstimateIsotropicSpacing,bool);
-  itkGetMacro(EstimateIsotropicSpacing,bool);
+  itkSetMacro(EstimateIsotropicSpacing, bool);
+  itkGetMacro(EstimateIsotropicSpacing, bool);
   itkBooleanMacro(EstimateIsotropicSpacing);
 
   /**
