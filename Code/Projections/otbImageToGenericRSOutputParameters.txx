@@ -31,6 +31,7 @@ ImageToGenericRSOutputParameters<TImage>
   m_Transform   = GenericRSTransformType::New();
   m_ForceSpacing = false;
   m_ForceSize    = false;
+  m_EstimateIsotropicSpacing = false;
 }
 
 /**
@@ -217,8 +218,19 @@ ImageToGenericRSOutputParameters<TImage>
 
   // Evaluate spacing
   SpacingType outputSpacing;
-  outputSpacing[0] = sizeCartoX / OxLength;
-  outputSpacing[1] = -sizeCartoY / OyLength;
+
+
+  if(m_EstimateIsotropicSpacing)
+    {
+    double isotropicSpacing = std::min(sizeCartoX / OxLength, sizeCartoY / OyLength);
+    outputSpacing[0] = isotropicSpacing;
+    outputSpacing[1] = -isotropicSpacing;
+    }
+  else
+    {
+    outputSpacing[0] = sizeCartoX / OxLength;
+    outputSpacing[1] = -sizeCartoY / OyLength;
+    }
 
   this->SetOutputSpacing(outputSpacing);
 }

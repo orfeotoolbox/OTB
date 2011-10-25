@@ -99,6 +99,11 @@ public:
   itkSetMacro(OutputSize, SizeType);
   itkGetMacro(OutputSize, SizeType);
 
+  /** Isotropic spacing flag */
+  itkSetMacro(EstimateIsotropicSpacing,bool);
+  itkGetMacro(EstimateIsotropicSpacing,bool);
+  itkBooleanMacro(EstimateIsotropicSpacing);
+
   /**
    * Method to Force the use of the spacing selected by the user
    * The output size is computed using this spacing
@@ -175,6 +180,7 @@ private:
 
   bool                          m_ForceSpacing;
   bool                          m_ForceSize;
+  bool                          m_EstimateIsotropicSpacing;
   
 }; // end of class ImageToGenericRSOutputParameters
 
