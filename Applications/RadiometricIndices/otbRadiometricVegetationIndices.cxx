@@ -48,7 +48,7 @@ public:
   /** Output  containers typedef */
   typedef ObjectList<itk::ProcessObject>  FilterListType;
   typedef ImageList<FloatImageType> ImageListType;
-  typedef ImageListToVectorImageFilter<ImageListType, FloatVectorImageType> ImageListToVectorImageFilter;
+  typedef ImageListToVectorImageFilter<ImageListType, FloatVectorImageType> ImageListToVectorImageFilterType;
 
   /** Radiometric indices functors typedef */
   typedef Functor::NDVI<FloatVectorImageType::InternalPixelType, FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> NDVIFunctor;
@@ -192,7 +192,7 @@ private:
   {
     m_FilterList = FilterListType::New();
     m_ImageList = ImageListType::New();
-    m_Concatener = ImageListToVectorImageFilter::New();
+    m_Concatener = ImageListToVectorImageFilterType::New();
 
     unsigned int redChannel = this->GetParameterInt("channels.red");
     unsigned int nirChannel = this->GetParameterInt("channels.nir");
@@ -224,7 +224,7 @@ private:
   
   FilterListType::Pointer  m_FilterList;
   ImageListType::Pointer m_ImageList;
-  ImageListToVectorImageFilter::Pointer m_Concatener;
+  ImageListToVectorImageFilterType::Pointer m_Concatener;
 
 };
 
