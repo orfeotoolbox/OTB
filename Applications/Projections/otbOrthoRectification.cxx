@@ -129,12 +129,17 @@ private:
     // Spacing of the output image
     AddParameter(ParameterType_Float, "outputs.spacingx", "Pixel Size X");
     SetParameterDescription("outputs.spacingx","Size of each pixel along X axis");
+
     MandatoryOff("outputs.spacingx");
 
     AddParameter(ParameterType_Float, "outputs.spacingy", "Pixel Size Y");
     SetParameterDescription("outputs.spacingy","Size of each pixel along Y axis");
     MandatoryOff("outputs.spacingy");
 
+    AddParameter(ParameterType_Empty,"outputs.isotropic","Force isotropic spacing by default");
+    SetParameterDescription("outputs.isotropic","Default spacing values are estimated from the sensor modelling of the image. It can therefore result in a non-isotropic spacing. This option allows you to force default values to be isotropic (in this case, the minimum of spacing in both direction is applied. Values overriden by user are not affected by this option.");
+    EnableParameter("outputs.isotropic");
+    
     // DEM
     AddParameter(ParameterType_Directory, "dem",   "DEM directory");
     MandatoryOff("dem");
@@ -197,6 +202,16 @@ private:
       // Compute the output image spacing and size
       typedef otb::ImageToGenericRSOutputParameters<FloatVectorImageType> OutputParametersEstimatorType;
       OutputParametersEstimatorType::Pointer genericRSEstimator = OutputParametersEstimatorType::New();
+      
+      if(IsParameterEnabled("outputs.isotropic"))
+        {
+        genericRSEstimator->EstimateIsotropicSpacingOn();
+        }
+      else
+        {
+        genericRSEstimator->EstimateIsotropicSpacingOff();
+        }
+      
       genericRSEstimator->SetInput(inImage);
       genericRSEstimator->SetOutputProjectionRef(m_OutputProjectionRef);
       genericRSEstimator->Compute();
@@ -284,6 +299,7 @@ private:
         ResampleFilterType::SizeType size;        
         size[0] = GetParameterInt("outputs.sizex");
         size[1] = GetParameterInt("outputs.sizey");
+
         genericRSEstimator->ForceSizeTo(size);
         genericRSEstimator->Compute();
         
