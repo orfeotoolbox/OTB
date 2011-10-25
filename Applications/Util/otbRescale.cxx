@@ -50,6 +50,16 @@ private:
   {
     SetName("Rescale");
     SetDescription("Rescale the image between two given values.");
+
+    SetDocName("Rescale Image Application");
+    SetDocLongDescription("This application scale the given image pixel intensity between two given values. "
+      "By default min (resp. max) value is set to 0 (resp. 255).");
+    SetDocLimitations("None");
+    SetDocAuthors("OTB-Team");
+    SetDocSeeAlso(" ");
+    SetDocCLExample("otbApplicationLauncherCommandLine Rescale ${OTB-BIN}/bin"
+      " --in ${OTB-DATA}/Input/poupees.tif --out rescaledImage.tif --outmin 20 --outmax 150");
+    AddDocTag("Image Manipulation");
   }
 
   virtual ~Rescale()
@@ -59,13 +69,14 @@ private:
   void DoCreateParameters()
   {
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
+    SetParameterDescription( "in", "The image to scale." );
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
-
+    SetParameterDescription( "out" , "The rescaled image filename." );
     AddParameter(ParameterType_Float,      "outmin", "Output min value");
     AddParameter(ParameterType_Float,      "outmax", "Output max value");
-    SetParameterFloat("outmin", 0);
+    SetParameterFloat("outmin", 0.0);
     SetParameterDescription( "outmin", "Minimum value of the output image." );
-    SetParameterFloat("outmax", 255);
+    SetParameterFloat("outmax", 255.0);
     SetParameterDescription( "outmax", "Maximum value of the output image." );
 
     MandatoryOff("outmin");
