@@ -41,7 +41,18 @@ private:
   TestApplication()
   {
     SetName("TestApplication");
-    SetDescription("This application demonstrate the use of all parameters types");
+    SetDescription("This application helps developers to test parameters types");
+
+
+    SetDocName("Test Application");
+    SetDocLongDescription("The purpose of this application is to test parameters types.");
+    SetDocLimitations("None");
+    SetDocAuthors("OTB-Team");
+    SetDocSeeAlso(" ");
+    SetDocCLExample("otbApplicationLauncherCommandLine TestApplication ${OTB-BIN}/bin"
+      " (input data depends on which type to test ...)");
+    AddDocTag("Test");
+
   }
 
   virtual ~TestApplication()
