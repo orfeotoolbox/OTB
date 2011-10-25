@@ -891,7 +891,9 @@ Application::IsApplicationReady()
       ++it)
     {
     // Check all Input Parameters
-    if (!this->HasValue(*it) && IsMandatory(*it))
+    if (!this->HasValue(*it) 
+        && IsMandatory(*it) 
+        && GetParameterByKey(*it)->GetRoot()->GetActive())
       {
       return false;
       }
