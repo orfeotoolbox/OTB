@@ -326,7 +326,7 @@ CommandLineLauncher::LoadParameters()
     const bool paramExists( m_Parser->IsAttributExists( std::string("--").append(paramKey), m_Expression )  );
     const bool hasValue = m_Application->HasValue( paramKey );
     // Check if mandatory parameter are present and have value
-    if( param->GetMandatory() == true )
+    if( param->GetMandatory() == true && param->GetRoot()->GetActive())
       {
       if( !paramExists )
         {
