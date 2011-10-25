@@ -54,6 +54,17 @@ private:
   {
     SetName("BandMath");
     SetDescription("Perform a mathematical operation on monoband images");
+
+    SetDocName("Band Math Application");
+    SetDocLongDescription("This application performs a mathematical operation on monoband images."
+      " Mathematical formula interpretation is done via MuPasrer libraries http://muparser.sourceforge.net/");
+    SetDocLimitations("None");
+    SetDocAuthors("OTB-Team");
+    SetDocSeeAlso(" ");
+    SetDocCLExample("otbApplicationLauncherCommandLine BandMath ${OTB-BIN}/bin"
+      " --il ${OTB-Data}/oupees_sub_c1.png ${OTB-Data}/oupees_sub_c2.png ${OTB-Data}/oupees_sub.png"
+      "--out apTvUtBandMathOutput.tif --exp \"cos(im1b1)+im2b1*im3b1-im3b2+ndvi(im3b3,im3b4)\"");
+    AddDocTag("Util");
   }
 
   void DoCreateParameters()
