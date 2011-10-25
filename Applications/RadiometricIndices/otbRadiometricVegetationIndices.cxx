@@ -105,7 +105,7 @@ private:
     AddParameter(ParameterType_InputImage, "in", "Input Image");
     SetParameterDescription("in", "Input image, with at least red and NIR channels");
 
-    AddParameter(ParameterType_OutputImage, "out", "output Image");
+    AddParameter(ParameterType_OutputImage, "out", "Output Image");
     SetParameterDescription("out", "Radiometric indices output image");
 
     AddParameter(ParameterType_Group, "channels", "Channels selection");
@@ -129,7 +129,7 @@ private:
 
     AddParameter(ParameterType_Empty, "index.savi", "SAVI");
     MandatoryOff("index.savi");
-    SetParameterDescription("index.savi", "Soil Adjusted Vegetation Inde");
+    SetParameterDescription("index.savi", "Soil Adjusted Vegetation Index");
 
     AddParameter(ParameterType_Empty, "index.tsavi", "TSAVI");
     MandatoryOff("index.tsavi");
