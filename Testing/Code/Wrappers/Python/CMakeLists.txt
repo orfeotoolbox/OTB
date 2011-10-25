@@ -4,11 +4,6 @@ SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
 SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
 SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
-IF(OTB_DATA_USE_LARGEINPUT)
-  SET(LARGEINPUT ${OTB_DATA_LARGEINPUT_ROOT} )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
-
-
 set(TEST_DRIVER otbTestDriver
     --add-before-env PYTHONPATH        "${CMAKE_BINARY_DIR}/Code/Wrappers/SWIG"
     --add-before-env PYTHONPATH        $<TARGET_FILE_DIR:_otbApplication>
@@ -53,7 +48,7 @@ add_test( NAME pyTvOrthoRectification_UTM
                   ${TEMP}/pyTvOrthorectifTest_UTM.tif
                   Execute
                   ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonOrthoRectification.py
-                  ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+                  ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
                   ${TEMP}/pyTvOrthorectifTest_UTM.tif
                   374100.8
                   4829184.8
