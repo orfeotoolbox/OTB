@@ -53,6 +53,7 @@ add_subdirectory(FeatureExtraction)
 add_subdirectory(Hyperspectral)
 add_subdirectory(Projections)
 add_subdirectory(Radiometry)
+add_subdirectory(RadiometricIndices)
 add_subdirectory(Segmentation)
 add_subdirectory(Util)
 

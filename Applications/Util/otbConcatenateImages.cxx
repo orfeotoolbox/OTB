@@ -64,7 +64,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Rescale application, Convert application");
-    SetDocCLExample("otbApplicationLauncherCommandLine ConcatenateImages ${OTB-BIN}/bin --in ${OTB-DATA}/poupees_sub_c1.png ${OTB-DATA}/poupees_sub_c2.png ${OTB-DATA}/poupees_sub_c3.png --out otbConcatenateImages.png uchar");
+    SetDocCLExample("otbApplicationLauncherCommandLine ConcatenateImages ${OTB-BIN}/bin --in ${OTB-DATA/Input}/poupees_sub_c1.png ${OTB-DATA}/poupees_sub_c2.png ${OTB-DATA}/poupees_sub_c3.png --out otbConcatenateImages.png uchar");
     AddDocTag("Concatenation");
     AddDocTag("Multi channel");
 
