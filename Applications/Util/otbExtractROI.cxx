@@ -51,6 +51,16 @@ private:
   {
     SetName("ExtractROI");
     SetDescription("Extract a ROI defined by the user.");
+
+    // Documentation
+    SetDocName("Extract ROI Application");
+    SetDocLongDescription("This application extracts a Region Of Interest with user defined size.");
+    SetDocLimitations("None");
+    SetDocAuthors("OTB-Team");
+    SetDocSeeAlso(" ");
+    SetDocCLExample("otbApplicationLauncherCommandLine ExtractROI ${OTB-BIN}/bin "
+      "--in ${OTB-Data}/Input/couleurs_extrait.png --out ROIImage.tif --sizex 256");
+    AddDocTag("Image Manipulation");
   }
 
   virtual ~ExtractROI()
@@ -60,12 +70,17 @@ private:
   void DoCreateParameters()
   {
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
+    SetParameterDescription("in", "Input image.");
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
-
+    SetParameterDescription("out", "Output image.");
     AddParameter(ParameterType_Int,  "startx", "Start X");
+    SetParameterDescription("startx", "ROI start x position.");
     AddParameter(ParameterType_Int,  "starty", "Start Y");
+    SetParameterDescription("starty", "ROI start y position.");
     AddParameter(ParameterType_Int,  "sizex",  "Size X");
+    SetParameterDescription("sizex","size along x in pixels.");
     AddParameter(ParameterType_Int,  "sizey",  "Size Y");
+    SetParameterDescription("sizey","size along y in pixels.");
     // Default values
     SetParameterInt("startx", 0);
     SetParameterInt("starty", 0);
