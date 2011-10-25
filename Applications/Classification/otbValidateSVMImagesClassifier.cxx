@@ -119,6 +119,20 @@ private:
   {
     SetName("ValidateSVMImagesClassifier");
     SetDescription("Perform SVM validation from multiple input images and multiple vector data.");
+
+    SetDocName("Validate SVM Images Classifier Application");
+    SetDocLongDescription(
+                          "This application performs SVM validation from multiple input images and multiple vector data.");
+    SetDocLimitations("None");
+    SetDocAuthors("OTB-Team");
+    SetDocSeeAlso(" ");
+    SetDocCLExample("otbApplicationLauncherCommandLine ValidateSVMImagesClassifier ${OTB-BIN}/bin"
+      "--il ${OTB-Data}/Classification/QB_1_ortho.tif --vd  ${OTB-Data}/Classification/VectorData_QB1_bis.shp"
+      " --imstat ${OTB-Data}/Baseline/OTB-Applications/Files/clImageStatisticsQB123.xml "
+      " --svm  ${OTB-Data}/Baseline/OTB-Applications/Files/clsvmModelQB123.svm"
+      " --out PerformanceEstimationQB123.txt ");
+    AddDocTag("Classification");
+
   }
 
   virtual ~ValidateSVMImagesClassifier()
@@ -127,20 +141,21 @@ private:
 
   void DoCreateParameters()
   {
-    AddParameter(ParameterType_InputImageList, "il", "Input Image List ");
-    SetParameterDescription("il", "Input Image List.");
-    AddParameter(ParameterType_InputVectorDataList, "vd", "Vector Data List ");
+    AddParameter(ParameterType_InputImageList, "il", "Input Image List");
+    SetParameterDescription("il", "Input image list filename.");
+    AddParameter(ParameterType_InputVectorDataList, "vd", "Vector Data List");
     SetParameterDescription("vd", "Vector Data of sample used to validate the estimator.");
-    AddParameter(ParameterType_Filename, "dem", "DEM repository ");
+    AddParameter(ParameterType_Filename, "dem", "DEM repository");
     SetParameterDescription("dem", "Path to DEM repository.");
     MandatoryOff("dem");
-    AddParameter(ParameterType_Filename, "imstat", "XML stat filename ");
+    AddParameter(ParameterType_Filename, "imstat", "XML image statistics file");
     MandatoryOff("imstat");
-    SetParameterDescription("imstat","Path to XML file containing mean and standard deviation of input images.");
-    AddParameter(ParameterType_Filename, "svm", "SVM validation filename ");
-    SetParameterDescription("svm","SVM model to validate its performances (given by TrainSVMImagesClassification output for instance).");
-    AddParameter(ParameterType_Filename, "out", "Output filename ");
-    SetParameterDescription("out","Filename, which will contain the performance of the SVM model.");
+    SetParameterDescription("imstat", "filename of an XML file containing mean and standard deviation of input images.");
+    AddParameter(ParameterType_Filename, "svm", "SVM validation filename");
+    SetParameterDescription("svm",
+                            "SVM model to validate its performances (given by TrainSVMImagesClassification output for instance).");
+    AddParameter(ParameterType_Filename, "out", "Output filename");
+    SetParameterDescription("out", "Filename, which will contain the performance of the SVM model.");
   }
 
   void DoUpdateParameters()
