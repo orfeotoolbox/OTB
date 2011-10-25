@@ -52,15 +52,25 @@ private:
   {
     SetName("SplitImage");
     SetDescription("Split a N multiband image into N images");
+
+    SetDocName("Split Image Application");
+    SetDocLongDescription("This application splits a N multiband image into N images.");
+    SetDocLimitations("None");
+    SetDocAuthors("OTB-Team");
+    SetDocSeeAlso(" ");
+    SetDocCLExample("otbApplicationLauncherCommandLine SplitImage ${OTB-BIN}/bin"
+      " --in ${OTB-DATA}/Input/poupees_sub.png --out splittedImage.tif");
+    AddDocTag("Image Manipulation");
   }
 
   void DoCreateParameters()
   {
     AddParameter(ParameterType_InputImage, "in", "Input Image");
-    
+    SetParameterDescription("in","Input image filename.");
+
     AddParameter(ParameterType_Filename, "out", "Output Image");
     SetParameterDescription("out",
-                            "will be used to get the prefix and the extension of the output images to write");
+                            "Will be used to get the prefix and the extension of the output images to write");
     SetParameterRole("out",Role_Output);
   }
 
