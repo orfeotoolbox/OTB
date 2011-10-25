@@ -70,10 +70,10 @@ private:
   void DoCreateParameters()
   {
     AddParameter(ParameterType_InputImageList,  "il",   "Input image list");
-    SetParameterDescription("il", "Image list to perform computation on");
+    SetParameterDescription("il", "Image list to perform computation on.");
 
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
-    SetParameterDescription("out","Output image");
+    SetParameterDescription("out","Output image.");
 
     AddParameter(ParameterType_String, "exp", "Expression");
     SetParameterDescription("exp",
