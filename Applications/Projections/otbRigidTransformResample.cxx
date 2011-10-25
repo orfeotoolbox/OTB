@@ -47,6 +47,15 @@ private:
   {
     SetName("RigidTransformResample");
     SetDescription("Resample an image with a rigid transform");
+    // Documentation
+    SetDocName("Image resampling with a rigid transform");
+    SetDocLongDescription("This application performs an translation on the input image.\n Parameters of the translation can be set with tx and ty options.");
+    SetDocLimitations("None");
+    SetDocAuthors("OTB-Team");
+    SetDocSeeAlso("Translation application");
+    SetDocCLExample("otbApplicationLauncherCommandLine RigidTransformResample ${OTB-BIN}/bin --in ${OTB-Data}/Input/QB_Toulouse_Ortho_XS.tif --out otbConvertWithScalingOutput.png uchar --type linear");
+    AddDocTag("Conversion");
+    AddDocTag("Image Dynamic");
   }
 
   virtual ~RigidTransformResample()
