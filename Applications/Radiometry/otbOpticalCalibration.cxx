@@ -83,7 +83,16 @@ private:
     oss << "Perform optical calibration TOA/TOC (Top Of Atmosphere/Top Of Canopy)" << std::endl;
     oss << "Supported sensors : QuickBird, Ikonos, WorldView2, Formosat, Spot5";
     SetDescription(oss.str());
-  }
+    // Documentation
+    SetDocName("Optical calibration application");
+    SetDocLongDescription(oss.str());
+    SetDocLimitations("None");
+    SetDocAuthors("OTB-Team");
+    SetDocSeeAlso(" ");
+    SetDocCLExample("otbApplicationLauncherCommandLine OpticalCalibration ${OTB-BIN}/bin "
+      "--in --out --milli --level toa");
+    AddDocTag("Calibration");
+}
 
   void DoCreateParameters()
   {
