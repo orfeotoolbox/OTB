@@ -86,7 +86,7 @@ private:
     AddParameter(ParameterType_OutputImage, "outgroup.outputimage", "Output Image");
     //AddParameter(ParameterType_OutputVectorData, "outgroup.outputvectordata", "Output Vector Data");
 
-    AddParameter(ParameterType_Radius, "radius", "Radius");
+    //AddParameter(ParameterType_Radius, "radius", "Radius");
 
     AddParameter(ParameterType_InputImageList,  "il",   "Input image list");
     MandatoryOff("il");
@@ -95,7 +95,7 @@ private:
     AddChoice("cl.choice1", "cl.choice1");
     AddChoice("cl.choice2", "cl.choice2");
     MandatoryOff("cl");
-
+    
     AddParameter(ParameterType_ComplexInputImage,  "cin", "Input Complex Image");
     AddParameter(ParameterType_ComplexOutputImage,  "cout", "Output Complex Image");
   }
