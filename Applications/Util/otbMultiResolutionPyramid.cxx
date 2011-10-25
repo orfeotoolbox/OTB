@@ -64,14 +64,16 @@ private:
 
     // Documentation
     SetDocName("Multi Resolution Pyramid Application");
-        SetDocLongDescription("This application builds a multi-resolution pyramid of the input image.");
-        SetDocLimitations("None");
-        SetDocAuthors("OTB-Team");
-        SetDocSeeAlso(" ");
-        SetDocCLExample("otbApplicationLauncherCommandLine MultiResolutionPyramid ${OTB-BIN}/bin "
-            "--in ${OTB-Data}/Input/QB_Toulouse_Ortho_XS.tif  --out multiResolutionImage.tif --level 1 --sfactor 2 --vfactor 0.6 --fast false");
-        AddDocTag("Conversion");
-        AddDocTag("Image Manipulation");
+    SetDocLongDescription("This application builds a multi-resolution pyramid of the input image.");
+    SetDocLimitations("None");
+    SetDocAuthors("OTB-Team");
+    SetDocSeeAlso(" ");
+    SetDocCLExample(
+                    "otbApplicationLauncherCommandLine MultiResolutionPyramid ${OTB-BIN}/bin "
+                      "--in ${OTB-Data}/Input/QB_Toulouse_Ortho_XS.tif  --out multiResolutionImage.tif --level 1 --sfactor 2 --vfactor 0.6 --fast false");
+    AddDocTag("Conversion");
+    AddDocTag("Image Manipulation");
+    AddDocTag("Util");
   }
 
   void DoCreateParameters()
