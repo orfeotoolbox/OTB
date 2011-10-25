@@ -77,31 +77,22 @@ void QtWidgetParameterGroup::DoCreateWidget()
         connect( checkBox, SIGNAL(clicked(bool)), GetModel(), SLOT(NotifyUpdate()) );
         connect( specificWidget, SIGNAL(ParameterActiveStatus(bool)), checkBox, SLOT(setChecked(bool)));
         connect( specificWidget, SIGNAL(ParameterActiveStatus(bool)), specificWidget, SLOT(SetActivationState(bool)));
-    
-        if (param->IsRoot())
-           {
-          // if Mandatory make the checkbox checked and deactivated
-          if (param->GetMandatory())
-            {
-            checkBox->setCheckState(Qt::Checked);
-            checkBox->setEnabled(false);
-            specificWidget->setEnabled(true);
-            }
-          else
-            {
-            checkBox->setCheckState(Qt::Unchecked);
-            checkBox->setEnabled(true);
-            specificWidget->setEnabled(false);
-            }
+
+        // if Mandatory make the checkbox checked and deactivated
+        if (param->GetMandatory())
+          {
+          checkBox->setCheckState(Qt::Checked);
+          checkBox->setEnabled(false);
+          specificWidget->setEnabled(true);
           }
         else
           {
-          // If this widget belongs to a Group, make it disabled by
-          // defaut
+          checkBox->setCheckState(Qt::Unchecked);
+          checkBox->setEnabled(true);
           specificWidget->setEnabled(false);
           }
-        gridLayout->addWidget(checkBox, i, 0);
 
+        gridLayout->addWidget(checkBox, i, 0);
         m_WidgetList.push_back(specificWidget);
         }
       else
@@ -117,6 +108,18 @@ void QtWidgetParameterGroup::DoCreateWidget()
         if (!param->GetMandatory() )
           {
           group->setCheckable(true);
+          group->setChecked(false);
+
+          // Update iteratively the children status
+          for (unsigned int idx = 0; idx < param->GetChildrenList().size(); ++idx)
+            {
+            // deactivate the children tree
+            this->ProcessChild(param->GetChildrenList()[idx], false);
+            }
+          }
+        else
+          {
+          param->SetActive(true);
           }
         connect(group, SIGNAL(clicked(bool)), specificWidget, SLOT(SetActivationState(bool)));
 
