@@ -275,7 +275,7 @@ private:
 
   itk::ProcessObject::Pointer m_TmpFilter;
   TransferLogType::Pointer m_TransferLog;
-};;
+};
 
 }
 }

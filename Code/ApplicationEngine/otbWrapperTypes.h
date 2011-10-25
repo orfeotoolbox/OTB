@@ -134,6 +134,6 @@ typedef otb::ObjectList<FloatImageType>       FloatImageListType;
 
 
 } // end namespace Wrapper
-} //end namespace otb
+} // end namespace otb
 
 #endif // __otbWrapperApplication_h_
