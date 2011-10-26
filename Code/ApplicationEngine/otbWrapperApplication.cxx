@@ -38,6 +38,7 @@
 
 #include "otbWrapperTypes.h"
 #include <exception>
+#include "itkMacro.h"
 
 namespace otb
 {
@@ -613,29 +614,35 @@ int Application::GetParameterInt(std::string parameter)
     ChoiceParameter* paramChoice = dynamic_cast<ChoiceParameter*>(param);
     ret = paramChoice->GetValue();
     }
+  else
+    {
+     itkExceptionMacro("parameter can't be casted to int");
+    }
 
-  //TODO: exception if not found ?
   return ret;
 }
 
 float Application::GetParameterFloat(std::string parameter)
 {
-  float ret = 0;
+  float ret = 0.0;
   Parameter* param = GetParameterByKey(parameter);
 
-  if (dynamic_cast<FloatParameter*>(param))
-   {
-    FloatParameter* paramFloat = dynamic_cast<FloatParameter*>(param);
+  if (dynamic_cast<FloatParameter*> (param))
+    {
+    FloatParameter* paramFloat = dynamic_cast<FloatParameter*> (param);
     ret = paramFloat->GetValue();
     }
+  else
+    {
+    itkExceptionMacro("parameter can't be casted to float");
+    }
 
-  //TODO: exception if not found ?
   return ret;
 }
 
 std::string Application::GetParameterString(std::string parameter)
 {
-  std::string ret;
+  std::string ret="";
   Parameter* param = GetParameterByKey(parameter);
 
   if (dynamic_cast<ChoiceParameter*>(param))
@@ -688,8 +695,11 @@ std::string Application::GetParameterString(std::string parameter)
     OutputVectorDataParameter* paramDown = dynamic_cast<OutputVectorDataParameter*>(param);
     ret = paramDown->GetFileName();
     }
+  else
+   {
+    itkExceptionMacro("parameter can't be casted to string");
+    }
 
-  //TODO: exception if not found ?
   return ret;
 }
 
@@ -715,28 +725,36 @@ std::vector<std::string> Application::GetParameterStringList(std::string paramet
         StringListParameter* paramDown = dynamic_cast<StringListParameter*> (param);
         ret = paramDown->GetValue();
         }
+      else
+       {
+            itkExceptionMacro("parameter can't be casted to StringList");
+       }
+
   return ret;
 }
 
 
 FloatVectorImageType* Application::GetParameterImage(std::string parameter)
 {
-  FloatVectorImageType::Pointer ret;
+  FloatVectorImageType::Pointer ret = NULL;
   Parameter* param = GetParameterByKey(parameter);
 
-  if (dynamic_cast<InputImageParameter*>(param))
+  if (dynamic_cast<InputImageParameter*> (param))
     {
-    InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param);
+    InputImageParameter* paramDown = dynamic_cast<InputImageParameter*> (param);
     ret = paramDown->GetImage();
     }
+  else
+    {
+    itkExceptionMacro("parameter can't be casted to ImageType");
+    }
 
-  //TODO: exception if not found ?
   return ret;
 }
 
 FloatVectorImageListType* Application::GetParameterImageList(std::string parameter)
 {
-  FloatVectorImageListType::Pointer ret;
+  FloatVectorImageListType::Pointer ret=NULL;
   Parameter* param = GetParameterByKey(parameter);
 
   if (dynamic_cast<InputImageListParameter*>(param))
@@ -744,14 +762,17 @@ FloatVectorImageListType* Application::GetParameterImageList(std::string paramet
     InputImageListParameter* paramDown = dynamic_cast<InputImageListParameter*>(param);
     ret = paramDown->GetImageList();
     }
+  else
+    {
+    itkExceptionMacro("parameter can't be casted to ImageListType");
+    }
 
-  //TODO: exception if not found ?
   return ret;
 }
 
 ComplexFloatVectorImageType* Application::GetParameterComplexImage(std::string parameter)
 {
-  ComplexFloatVectorImageType::Pointer ret;
+  ComplexFloatVectorImageType::Pointer ret=NULL;
   Parameter* param = GetParameterByKey(parameter);
 
   if (dynamic_cast<ComplexInputImageParameter*>(param))
@@ -759,14 +780,17 @@ ComplexFloatVectorImageType* Application::GetParameterComplexImage(std::string p
     ComplexInputImageParameter* paramDown = dynamic_cast<ComplexInputImageParameter*>(param);
     ret = paramDown->GetImage();
     }
+  else
+    {
+    itkExceptionMacro("parameter can't be casted to ComplexImageType");
+    }
 
-  //TODO: exception if not found ?
   return ret;
 }
 
 VectorDataType* Application::GetParameterVectorData(std::string parameter)
 {
-  VectorDataType::Pointer ret;
+  VectorDataType::Pointer ret=NULL;
   Parameter* param = GetParameterByKey(parameter);
 
   if (dynamic_cast<InputVectorDataParameter*>(param))
@@ -774,14 +798,16 @@ VectorDataType* Application::GetParameterVectorData(std::string parameter)
     InputVectorDataParameter* paramDown = dynamic_cast<InputVectorDataParameter*>(param);
     ret = paramDown->GetVectorData();
     }
-
-  //TODO: exception if not found ?
+  else
+    {
+    itkExceptionMacro("parameter can't be casted to Vector Data");
+    }
   return ret;
 }
 
 VectorDataListType* Application::GetParameterVectorDataList(std::string parameter)
 {
-  VectorDataListType::Pointer ret;
+  VectorDataListType::Pointer ret=NULL;
   Parameter* param = GetParameterByKey(parameter);
 
   if (dynamic_cast<InputVectorDataListParameter*>(param))
@@ -789,15 +815,17 @@ VectorDataListType* Application::GetParameterVectorDataList(std::string paramete
     InputVectorDataListParameter* paramDown = dynamic_cast<InputVectorDataListParameter*>(param);
     ret = paramDown->GetVectorDataList();
     }
-
-  //TODO: exception if not found ?
+  else
+   {
+    itkExceptionMacro("parameter can't be casted to Vector Data List");
+   }
   return ret;
 }
 
 
 std::string Application::GetParameterAsString(std::string paramKey)
 {
-  std::string ret;
+  std::string ret="";
   ParameterType type = this->GetParameterType( paramKey );
 
   if( type == ParameterType_String || type == ParameterType_Filename
@@ -819,38 +847,46 @@ std::string Application::GetParameterAsString(std::string paramKey)
       oss << this->GetParameterFloat( paramKey );
       ret = oss.str();
     }
-
-  //TODO: exception if not found ?
-  return ret;
+  else
+    {
+      itkExceptionMacro("parameter can't be casted to string");
+    }
+   return ret;
 }
 
 ImagePixelType Application::GetParameterOutputImagePixelType(std::string parameter)
 {
   Parameter* param = GetParameterByKey(parameter);
-  ImagePixelType ret;
+  ImagePixelType ret=ImagePixelType_int8; //by default to avoid warning
 
   if (dynamic_cast<OutputImageParameter*>(param))
     {
     OutputImageParameter* paramDown = dynamic_cast<OutputImageParameter*>(param);
     ret = paramDown->GetPixelType();
     }
+  else
+    {
+      itkExceptionMacro("unable to find PixelType");
+    }
 
-  //TODO: exception if not found ?
   return ret;
 }
 
 ComplexImagePixelType Application::GetParameterComplexOutputImagePixelType(std::string parameter)
 {
   Parameter* param = GetParameterByKey(parameter);
-  ComplexImagePixelType ret;
+  ComplexImagePixelType ret=ComplexImagePixelType_float;  //by default to avoid warning
 
   if (dynamic_cast<ComplexOutputImageParameter*>(param))
     {
     ComplexOutputImageParameter* paramDown = dynamic_cast<ComplexOutputImageParameter*>(param);
     ret = paramDown->GetComplexPixelType();
     }
+  else
+    {
+       itkExceptionMacro("unable to find PixelType");
+    }
 
-  //TODO: exception if not found ?
   return ret;
 }
 
