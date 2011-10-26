@@ -1,6 +1,5 @@
 /*
- * Copyright (c) 2005, Hervé Drolon, FreeImage Team
- * Copyright (c) 2008, Jerome Fimes, Communications & Systemes <jerome.fimes@c-s.fr>
+ * Copyright (c) 2005, Herve Drolon, FreeImage Team
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,25 +31,31 @@
 
 The functions in IMAGE.C have for goal to realize operations on images.
 */
+
 struct opj_image;
-struct opj_cp;
+struct opj_cp_v2;
+
 /** @defgroup IMAGE IMAGE - Implementation of operations on images */
 /*@{*/
 
 /**
-Create an empty image
-@todo this function should be removed
-@return returns an empty image if successful, returns NULL otherwise
-*/
-struct opj_image* opj_image_create0(void);
+ * Create an empty image
+ *
+ * @return returns an empty image if successful, returns NULL otherwise
+ */
+opj_image_t* opj_image_create0(void);
+
+
 
 /**
- * Updates the components of the image from the coding parameters.
- * 
- * @param p_image		the image to update.
- * @param p_cp			the coding parameters from which to update the image.
+ * Updates the components characteristics of the image from the coding parameters.
+ *
+ * @param p_image_header		the image header to update.
+ * @param p_cp					the coding parameters from which to update the image.
  */
-void opj_image_comp_update(struct opj_image * p_image,const struct opj_cp * p_cp);
+void opj_image_comp_header_update(opj_image_t * p_image, const struct opj_cp_v2* p_cp);
+
+void opj_copy_image_header(const opj_image_t* p_image_src, opj_image_t* p_image_dest);
 
 /*@}*/
 

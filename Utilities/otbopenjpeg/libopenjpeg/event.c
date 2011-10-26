@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005, Hervé Drolon, FreeImage Team
+ * Copyright (c) 2005, Herve Drolon, FreeImage Team
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -24,59 +24,86 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "event.h"
-#include "openjpeg.h"
 #include "opj_includes.h"
-
 
 /* ==========================================================
      Utility functions
    ==========================================================*/
 
-#if !defined(_MSC_VER) && !defined(__MINGW32__)
-static OPJ_CHAR*
-i2a(OPJ_UINT32 i, OPJ_CHAR *a, OPJ_UINT32 r) {
+#ifdef OPJ_CODE_NOT_USED
+#ifndef _WIN32
+static char*
+i2a(unsigned i, char *a, unsigned r) {
 	if (i/r > 0) a = i2a(i/r,a,r);
 	*a = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"[i%r];
 	return a+1;
 }
+
+/** 
+ Transforms integer i into an ascii string and stores the result in a; 
+ string is encoded in the base indicated by r.
+ @param i Number to be converted
+ @param a String result
+ @param r Base of value; must be in the range 2 - 36
+ @return Returns a
+*/
+static char *
+_itoa(int i, char *a, int r) {
+	r = ((r < 2) || (r > 36)) ? 10 : r;
+	if(i < 0) {
+		*a = '-';
+		*i2a(-i, a+1, r) = 0;
+	}
+	else *i2a(i, a, r) = 0;
+	return a;
+}
+
+#endif /* !_WIN32 */
 #endif
+
 /* ----------------------------------------------------------------------- */
+opj_event_mgr_t* OPJ_CALLCONV opj_set_event_mgr(opj_common_ptr cinfo, opj_event_mgr_t *event_mgr, void *context) {
+	if(cinfo) {
+		opj_event_mgr_t *previous = cinfo->event_mgr;
+		cinfo->event_mgr = event_mgr;
+		cinfo->client_data = context;
+		return previous;
+	}
 
-OPJ_BOOL opj_event_msg(opj_event_mgr_t * p_event_mgr, OPJ_INT32 event_type, const OPJ_CHAR *fmt, ...) {
+	return NULL;
+}
+
+/* ----------------------------------------------------------------------- */
+opj_bool opj_event_msg(opj_common_ptr cinfo, int event_type, const char *fmt, ...) {
 #define MSG_SIZE 512 /* 512 bytes should be more than enough for a short message */
-	opj_msg_callback msg_handler = 00;
-	void * l_data = 00;
+	opj_msg_callback msg_handler = NULL;
 
-	
-	if(p_event_mgr != 00) {
+	opj_event_mgr_t *event_mgr = cinfo->event_mgr;
+	if(event_mgr != NULL) {
 		switch(event_type) {
 			case EVT_ERROR:
-				msg_handler = p_event_mgr->error_handler;
-				l_data = p_event_mgr->m_error_data;
+				msg_handler = event_mgr->error_handler;
 				break;
 			case EVT_WARNING:
-				msg_handler = p_event_mgr->warning_handler;
-				l_data = p_event_mgr->m_warning_data;
+				msg_handler = event_mgr->warning_handler;
 				break;
 			case EVT_INFO:
-				msg_handler = p_event_mgr->info_handler;
-				l_data = p_event_mgr->m_info_data;
+				msg_handler = event_mgr->info_handler;
 				break;
 			default:
 				break;
 		}
-		if(msg_handler == 00) {
-			return false;
+		if(msg_handler == NULL) {
+			return OPJ_FALSE;
 		}
 	} else {
-		return false;
+		return OPJ_FALSE;
 	}
 
-	if ((fmt != 00) && (p_event_mgr != 00)) {
+	if ((fmt != NULL) && (event_mgr != NULL)) {
 		va_list arg;
-		OPJ_INT32 str_length/*, i, j*/; /* UniPG */
-		OPJ_CHAR message[MSG_SIZE];
+		int str_length/*, i, j*/; /* UniPG */
+		char message[MSG_SIZE];
 		memset(message, 0, MSG_SIZE);
 		/* initialize the optional parameter list */
 		va_start(arg, fmt);
@@ -88,9 +115,119 @@ OPJ_BOOL opj_event_msg(opj_event_mgr_t * p_event_mgr, OPJ_INT32 event_type, cons
 		va_end(arg);
 
 		/* output the message to the user program */
-		msg_handler(message, l_data);
+		msg_handler(message, cinfo->client_data);
 	}
 
-	return true;
+	return OPJ_TRUE;
 }
 
+/* ----------------------------------------------------------------------- */
+opj_bool opj_event_msg_v2(opj_event_mgr_t* event_mgr, int event_type, const char *fmt, ...) {
+#define MSG_SIZE 512 /* 512 bytes should be more than enough for a short message */
+	opj_msg_callback msg_handler = NULL;
+
+	if(event_mgr != NULL) {
+		switch(event_type) {
+			case EVT_ERROR:
+				msg_handler = event_mgr->error_handler;
+				break;
+			case EVT_WARNING:
+				msg_handler = event_mgr->warning_handler;
+				break;
+			case EVT_INFO:
+				msg_handler = event_mgr->info_handler;
+				break;
+			default:
+				break;
+		}
+		if(msg_handler == NULL) {
+			return OPJ_FALSE;
+		}
+	} else {
+		return OPJ_FALSE;
+	}
+
+	if ((fmt != NULL) && (event_mgr != NULL)) {
+		va_list arg;
+		int str_length/*, i, j*/; /* UniPG */
+		char message[MSG_SIZE];
+		memset(message, 0, MSG_SIZE);
+		/* initialize the optional parameter list */
+		va_start(arg, fmt);
+		/* check the length of the format string */
+		str_length = (strlen(fmt) > MSG_SIZE) ? MSG_SIZE : strlen(fmt);
+		/* parse the format string and put the result in 'message' */
+		vsprintf(message, fmt, arg); /* UniPG */
+		/* deinitialize the optional parameter list */
+		va_end(arg);
+
+		/* output the message to the user program */
+		msg_handler(message, event_mgr->client_data);
+	}
+
+	return OPJ_TRUE;
+}
+
+/* ----------------------------------------------------------------------- */
+void OPJ_CALLCONV opj_initialize_default_event_handler(opj_event_mgr_t * p_event, opj_bool verbose)
+{
+	if (! p_event){
+		fprintf(stderr, "[ERROR] Event structure provided to the opj_set_default_event_handler is equal to null pointer.\n");
+		return;
+	}
+
+	p_event->client_data = NULL;
+	p_event->error_handler = opj_error_default_callback;
+
+	if (verbose) {
+		p_event->info_handler = opj_info_default_callback;
+		p_event->warning_handler = opj_warning_default_callback;
+	}
+	else {
+		/* FIXME (MSD) This message should be remove when the documentation will be updated */
+		fprintf(stdout, "[INFO] Verbose mode = OFF => no other info/warning output.\n");
+		p_event->info_handler = opj_default_callback ;
+		p_event->warning_handler = opj_default_callback ;
+	}
+}
+
+/* ---------------------------------------------------------------------- */
+/* Default callback functions                                             */
+
+/**
+ * Default callback function.
+ * Do nothing.
+ */
+void opj_default_callback (const char *msg, void *client_data)
+{
+}
+
+/**
+ * Default info callback function.
+ * Output = stdout.
+ */
+void opj_info_default_callback (const char *msg, void *client_data)
+{
+	(void)client_data;
+	fprintf(stdout, "[INFO] %s", msg);
+}
+
+/**
+ * Default warning callback function.
+ * Output = stderr.
+ */
+void opj_warning_default_callback (const char *msg, void *client_data)
+{
+	(void)client_data;
+	fprintf(stderr, "[WARNING] %s", msg);
+}
+
+/**
+ * Default error callback function.
+ * Output = stderr.
+ */
+void opj_error_default_callback (const char *msg, void *client_data)
+{
+	(void)client_data;
+	fprintf(stderr, "[ERROR] %s", msg);
+}

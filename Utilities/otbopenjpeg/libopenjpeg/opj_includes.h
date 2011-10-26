@@ -1,6 +1,5 @@
 /*
- * Copyright (c) 2005, Hervé Drolon, FreeImage Team
- * Copyright (c) 2008, Jerome Fimes, Communications & Systemes <jerome.fimes@c-s.fr>
+ * Copyright (c) 2005, Herve Drolon, FreeImage Team
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -48,6 +47,7 @@
    OpenJPEG interface
  ==========================================================
  */
+#include "openjpeg.h"
 
 /*
  ==========================================================
@@ -66,7 +66,7 @@ Most compilers implement their own version of this keyword ...
 */
 #ifndef INLINE
 	#if defined(_MSC_VER)
-		#define INLINE __inline
+		#define INLINE __forceinline
 	#elif defined(__GNUC__)
 		#define INLINE __inline__
 	#elif defined(__MWERKS__)
@@ -87,50 +87,58 @@ Most compilers implement their own version of this keyword ...
 	#endif
 #endif
 
-/* MSVC does not have lrintf */
-#ifdef _MSC_VER
+/* MSVC and Borland C do not have lrintf */
+#if defined(_MSC_VER) || defined(__BORLANDC__)
 static INLINE long lrintf(float f){
-	int i;
-
-	_asm{
-		fld f
-		fistp i
-	};
-
-	return i;
+#ifdef _M_X64
+    return (long)((f>0.0f) ? (f + 0.5f):(f -0.5f));
+#else
+    int i;
+ 
+    _asm{
+        fld f
+        fistp i
+    };
+ 
+    return i;
+#endif
 }
 #endif
 
-/* SUN does not have lrintf */
-#ifdef __sun
-static INLINE long lrintf(float f){
-	int i = ((f>0) ? (int)(floor(f+0.5)):(int)(floor(f-0.5)));
-	return i;
-}
-#endif
+#include "j2k_lib.h"
+#include "opj_malloc.h"
+#include "event.h"
+#include "bio.h"
+#include "cio.h"
 
-/* 
-==========================================================
-   Useful constant definitions
-==========================================================
-*/
+#include "image.h"
+#include "j2k.h"
+#include "jp2.h"
+#include "jpt.h"
 
+#include "mqc.h"
+#include "raw.h"
+#include "bio.h"
+#include "tgt.h"
+#include "pi.h"
+#include "tcd.h"
+#include "t1.h"
+#include "dwt.h"
+#include "t2.h"
+#include "mct.h"
+#include "int.h"
+#include "fix.h"
 
+#include "cidx_manager.h"
+#include "indexbox_manager.h"
 
-#define J2K_MAXBANDS					(3*J2K_MAXRLVLS-2)	/**< Number of maximum sub-band linked to number of resolution level */
-#define J2K_DEFAULT_NB_SEGS				10
-#define J2K_STREAM_CHUNK_SIZE			0x100000 /** 1 mega by default */
-#define J2K_DEFAULT_HEADER_SIZE			1000
-#define J2K_MCC_DEFAULT_NB_RECORDS		10
-#define J2K_MCT_DEFAULT_NB_RECORDS		10
+/* JPWL>> */
+#ifdef USE_JPWL
+#include "./jpwl/jpwl.h"
+#endif /* USE_JPWL */
+/* <<JPWL */
 
-/* UniPG>> */
-#define JPWL_MAX_NO_MARKERS	512 /**< Maximum number of JPWL markers: increase at your will */
-#define JPWL_PRIVATEINDEX_NAME "jpwl_index_privatefilename" /**< index file name used when JPWL is on */
-#define JPWL_EXPECTED_COMPONENTS 3 /**< Expect this number of components, so you'll find better the first EPB */
-#define JPWL_MAXIMUM_TILES 8192 /**< Expect this maximum number of tiles, to avoid some crashes */
-#define JPWL_MAXIMUM_HAMMING 2 /**< Expect this maximum number of bit errors in marker id's */
-#define JPWL_MAXIMUM_EPB_ROOM 65450 /**< Expect this maximum number of bytes for composition of EPBs */
-/* <<UniPG */
+// V2
+#include "function_list.h"
 
 #endif /* OPJ_INCLUDES_H */

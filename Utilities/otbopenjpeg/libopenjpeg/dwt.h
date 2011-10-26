@@ -5,7 +5,6 @@
  * Copyright (c) 2002-2003, Yannick Verschueren
  * Copyright (c) 2003-2007, Francois-Olivier Devaux and Antonin Descampe
  * Copyright (c) 2005, Herve Drolon, FreeImage Team
- * Copyright (c) 2008, Jerome Fimes, Communications & Systemes <jerome.fimes@c-s.fr>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,10 +39,6 @@ The functions in DWT.C have for goal to realize forward and inverse discret wave
 transform with filter 5-3 (reversible) and filter 9-7 (irreversible). The functions in
 DWT.C are used by some function in TCD.C.
 */
-#include "openjpeg.h"
-
-struct opj_tcd_tilecomp;
-struct opj_tccp;
 
 /** @defgroup DWT DWT - Implementation of a discrete wavelet transform */
 /*@{*/
@@ -57,59 +52,73 @@ Forward 5-3 wavelet tranform in 2-D.
 Apply a reversible DWT transform to a component of an image.
 @param tilec Tile component information (current tile)
 */
-OPJ_BOOL dwt_encode(struct opj_tcd_tilecomp * tilec);
+void dwt_encode(opj_tcd_tilecomp_t * tilec);
 /**
 Inverse 5-3 wavelet tranform in 2-D.
 Apply a reversible inverse DWT transform to a component of an image.
 @param tilec Tile component information (current tile)
 @param numres Number of resolution levels to decode
 */
-OPJ_BOOL dwt_decode(struct opj_tcd_tilecomp* tilec, OPJ_UINT32 numres);
+#ifdef OPJ_V1
+void dwt_decode(opj_tcd_tilecomp_t* tilec, int numres);
+#endif
+opj_bool dwt_decode(opj_tcd_tilecomp_t* tilec, OPJ_UINT32 numres);
+
+opj_bool dwt_decode_v2(opj_tcd_tilecomp_v2_t* tilec, OPJ_UINT32 numres);
+
 /**
 Get the gain of a subband for the reversible 5-3 DWT.
 @param orient Number that identifies the subband (0->LL, 1->HL, 2->LH, 3->HH)
 @return Returns 0 if orient = 0, returns 1 if orient = 1 or 2, returns 2 otherwise
 */
-OPJ_UINT32 dwt_getgain(OPJ_UINT32 orient);
+int dwt_getgain(int orient);
+
+OPJ_UINT32 dwt_getgain_v2(OPJ_UINT32 orient) ;
 /**
 Get the norm of a wavelet function of a subband at a specified level for the reversible 5-3 DWT.
 @param level Level of the wavelet function
 @param orient Band of the wavelet function
 @return Returns the norm of the wavelet function
 */
-OPJ_FLOAT64 dwt_getnorm(OPJ_UINT32 level, OPJ_UINT32 orient);
+double dwt_getnorm(int level, int orient);
 /**
 Forward 9-7 wavelet transform in 2-D. 
 Apply an irreversible DWT transform to a component of an image.
 @param tilec Tile component information (current tile)
 */
-OPJ_BOOL dwt_encode_real(struct opj_tcd_tilecomp * tilec);
+void dwt_encode_real(opj_tcd_tilecomp_t * tilec);
 /**
+KEEP TRUNK VERSION + return type of v2 because rev557
 Inverse 9-7 wavelet transform in 2-D. 
 Apply an irreversible inverse DWT transform to a component of an image.
 @param tilec Tile component information (current tile)
 @param numres Number of resolution levels to decode
 */
-OPJ_BOOL dwt_decode_real(struct opj_tcd_tilecomp* tilec, OPJ_UINT32 numres);
+// V1 void dwt_decode_real(opj_tcd_tilecomp_t* tilec, int numres);
+opj_bool dwt_decode_real(opj_tcd_tilecomp_t* tilec, int numres);
+
+opj_bool dwt_decode_real_v2(opj_tcd_tilecomp_v2_t* restrict tilec, OPJ_UINT32 numres);
+
 /**
 Get the gain of a subband for the irreversible 9-7 DWT.
 @param orient Number that identifies the subband (0->LL, 1->HL, 2->LH, 3->HH)
 @return Returns the gain of the 9-7 wavelet transform
 */
-OPJ_UINT32 dwt_getgain_real(OPJ_UINT32 orient);
+int dwt_getgain_real(int orient);
+OPJ_UINT32 dwt_getgain_real_v2(OPJ_UINT32 orient);
 /**
 Get the norm of a wavelet function of a subband at a specified level for the irreversible 9-7 DWT
 @param level Level of the wavelet function
 @param orient Band of the wavelet function
 @return Returns the norm of the 9-7 wavelet
 */
-OPJ_FLOAT64 dwt_getnorm_real(OPJ_UINT32 level, OPJ_UINT32 orient);
+double dwt_getnorm_real(int level, int orient);
 /**
 Explicit calculation of the Quantization Stepsizes 
 @param tccp Tile-component coding parameters
 @param prec Precint analyzed
 */
-void dwt_calc_explicit_stepsizes(struct opj_tccp * tccp, OPJ_UINT32 prec);
+void dwt_calc_explicit_stepsizes(opj_tccp_t * tccp, int prec);
 /* ----------------------------------------------------------------------- */
 /*@}*/
 

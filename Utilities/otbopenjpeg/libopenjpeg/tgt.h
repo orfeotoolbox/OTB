@@ -39,33 +39,42 @@
 The functions in TGT.C have for goal to realize a tag-tree coder. The functions in TGT.C
 are used by some function in T2.C.
 */
-#include "openjpeg.h"
+
 /** @defgroup TGT TGT - Implementation of a tag-tree coder */
 /*@{*/
-struct opj_bio;
 
 /**
 Tag node
 */
-typedef struct opj_tgt_node 
-{
+typedef struct opj_tgt_node {
   struct opj_tgt_node *parent;
   OPJ_INT32 value;
   OPJ_INT32 low;
-  OPJ_UINT32 known : 1;
+  OPJ_UINT32 known;
 } opj_tgt_node_t;
+
+///** OPJ_V1
+//Tag tree
+//*/
+//typedef struct opj_tgt_tree {
+//  int numleafsh;
+//  int numleafsv;
+//  int numnodes;
+//  opj_tgt_node_t *nodes;
+//} opj_tgt_tree_t;
 
 /**
 Tag tree
 */
-typedef struct opj_tgt_tree 
+typedef struct opj_tgt_tree
 {
-  OPJ_UINT32  numleafsh;
-  OPJ_UINT32  numleafsv;
-  OPJ_UINT32 numnodes;
-  opj_tgt_node_t *nodes;
-  OPJ_UINT32  nodes_size;		/* maximum size taken by nodes */
+	OPJ_UINT32  numleafsh;
+	OPJ_UINT32  numleafsv;
+	OPJ_UINT32 numnodes;
+	opj_tgt_node_t *nodes;
+	OPJ_UINT32  nodes_size;		/* maximum size taken by nodes */
 } opj_tgt_tree_t;
+
 
 /** @name Exported functions */
 /*@{*/
@@ -76,17 +85,19 @@ Create a tag-tree
 @param numleafsv Height of the array of leafs of the tree
 @return Returns a new tag-tree if successful, returns NULL otherwise
 */
-opj_tgt_tree_t *tgt_create(OPJ_UINT32 numleafsh, OPJ_UINT32 numleafsv);
+opj_tgt_tree_t *tgt_create(int numleafsh, int numleafsv);
+opj_tgt_tree_t *tgt_create_v2(OPJ_UINT32 numleafsh, OPJ_UINT32 numleafsv);
 
 /**
  * Reinitialises a tag-tree from an exixting one.
- * 
+ *
  * @param	p_tree				the tree to reinitialize.
  * @param	p_num_leafs_h		the width of the array of leafs of the tree
  * @param	p_num_leafs_v		the height of the array of leafs of the tree
  * @return	a new tag-tree if successful, NULL otherwise
 */
-opj_tgt_tree_t *tgt_init(opj_tgt_tree_t * p_tree,OPJ_UINT32  p_num_leafs_h, OPJ_UINT32  p_num_leafs_v);
+opj_tgt_tree_t *tgt_init(opj_tgt_tree_t * p_tree, OPJ_UINT32  p_num_leafs_h, OPJ_UINT32  p_num_leafs_v);
+
 
 /**
 Destroy a tag-tree, liberating memory
@@ -112,7 +123,7 @@ Encode the value of a leaf of the tag-tree up to a given threshold
 @param leafno Number that identifies the leaf to encode
 @param threshold Threshold to use when encoding value of the leaf
 */
-void tgt_encode(struct opj_bio *bio, opj_tgt_tree_t *tree, OPJ_UINT32 leafno, OPJ_INT32 threshold);
+void tgt_encode(opj_bio_t *bio, opj_tgt_tree_t *tree, OPJ_UINT32 leafno, OPJ_INT32 threshold);
 /**
 Decode the value of a leaf of the tag-tree up to a given threshold
 @param bio Pointer to a BIO handle
@@ -121,7 +132,7 @@ Decode the value of a leaf of the tag-tree up to a given threshold
 @param threshold Threshold to use when decoding value of the leaf
 @return Returns 1 if the node's value < threshold, returns 0 otherwise
 */
-OPJ_UINT32 tgt_decode(struct opj_bio *bio, opj_tgt_tree_t *tree, OPJ_UINT32 leafno, OPJ_INT32 threshold);
+OPJ_UINT32 tgt_decode(opj_bio_t *bio, opj_tgt_tree_t *tree, OPJ_UINT32 leafno, OPJ_INT32 threshold);
 /* ----------------------------------------------------------------------- */
 /*@}*/
 

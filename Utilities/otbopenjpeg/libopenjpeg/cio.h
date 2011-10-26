@@ -5,7 +5,6 @@
  * Copyright (c) 2002-2003, Yannick Verschueren
  * Copyright (c) 2003-2007, Francois-Olivier Devaux and Antonin Descampe
  * Copyright (c) 2005, Herve Drolon, FreeImage Team
- * Copyright (c) 2008, Jerome Fimes, Communications & Systemes <jerome.fimes@c-s.fr>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -42,40 +41,72 @@ The functions in CIO.C have for goal to realize a byte input / output process.
 /** @defgroup CIO CIO - byte input-output stream */
 /*@{*/
 
-#include "openjpeg.h"
-#include "opj_configure.h"
-struct opj_event_mgr;
+#include "opj_config.h"
+
 /** @name Exported functions (see also openjpeg.h) */
 /*@{*/
 /* ----------------------------------------------------------------------- */
+/**
+Number of bytes left before the end of the stream
+@param cio CIO handle
+@return Returns the number of bytes before the end of the stream
+*/
+int cio_numbytesleft(opj_cio_t *cio);
+/**
+Get pointer to the current position in the stream
+@param cio CIO handle
+@return Returns a pointer to the current position
+*/
+unsigned char *cio_getbp(opj_cio_t *cio);
+/**
+Write some bytes
+@param cio CIO handle
+@param v Value to write
+@param n Number of bytes to write
+@return Returns the number of bytes written or 0 if an error occured
+*/
+unsigned int cio_write(opj_cio_t *cio, unsigned long long int v, int n);
+/**
+Read some bytes
+@param cio CIO handle
+@param n Number of bytes to read
+@return Returns the value of the n bytes read
+*/
+unsigned int cio_read(opj_cio_t *cio, int n);
+/**
+Skip some bytes
+@param cio CIO handle
+@param n Number of bytes to skip
+*/
+void cio_skip(opj_cio_t *cio, int n);
+/* ----------------------------------------------------------------------- */
+/*@}*/
 
-#if defined(OPJ_BIG_ENDIAN) 
-	#if !defined(OPJ_LITTLE_ENDIAN)
-			#define opj_write_bytes		opj_write_bytes_BE
-			#define opj_read_bytes		opj_read_bytes_BE
-			#define opj_write_double	opj_write_double_BE
-			#define opj_read_double		opj_read_double_BE
-			#define opj_write_float		opj_write_float_BE
-			#define opj_read_float		opj_read_float_BE
-	#else
-			#error "Either BIG_ENDIAN or LITTLE_ENDIAN must be #defined, but not both."
-	#endif
+/*@}*/
+
+
+
+/* ----------------------------------------------------------------------- */
+
+#if defined(OPJ_BIG_ENDIAN)
+	#define opj_write_bytes		opj_write_bytes_BE
+	#define opj_read_bytes		opj_read_bytes_BE
+	#define opj_write_double	opj_write_double_BE
+	#define opj_read_double		opj_read_double_BE
+	#define opj_write_float		opj_write_float_BE
+	#define opj_read_float		opj_read_float_BE
 #else
-	#if defined(OPJ_LITTLE_ENDIAN)
-			#define opj_write_bytes		opj_write_bytes_LE
-			#define opj_read_bytes		opj_read_bytes_LE
-			#define opj_write_double	opj_write_double_LE
-			#define opj_read_double		opj_read_double_LE
-			#define opj_write_float		opj_write_float_LE
-			#define opj_read_float		opj_read_float_LE
-	#else
-		#error "Either BIG_ENDIAN or LITTLE_ENDIAN must be #defined, but not none."
-	#endif
+	#define opj_write_bytes		opj_write_bytes_LE
+	#define opj_read_bytes		opj_read_bytes_LE
+	#define opj_write_double	opj_write_double_LE
+	#define opj_read_double		opj_read_double_LE
+	#define opj_write_float		opj_write_float_LE
+	#define opj_read_float		opj_read_float_LE
 #endif
 
 
 
-typedef enum  
+typedef enum
 {
 	opj_stream_e_output		= 0x1,
 	opj_stream_e_input		= 0x2,
@@ -93,23 +124,28 @@ typedef struct opj_stream_private
 	 * User data, be it files, ... The actual data depends on the type of the stream.
 	 */
 	void *					m_user_data;
-	
+
+	/**
+	 * User data length
+	 */
+	OPJ_UINT32 				m_user_data_length;
+
 	/**
 	 * Pointer to actual read function (NULL at the initialization of the cio.
 	 */
 	opj_stream_read_fn		m_read_fn;
-	
+
 	/**
 	 * Pointer to actual write function (NULL at the initialization of the cio.
 	 */
 	opj_stream_write_fn		m_write_fn;
-	
+
 	/**
 	 * Pointer to actual skip function (NULL at the initialization of the cio.
 	 * There is no seek function to prevent from back and forth slow procedures.
 	 */
 	opj_stream_skip_fn		m_skip_fn;
-	
+
 	/**
 	 * Pointer to actual seek function (if available).
 	 */
@@ -130,19 +166,19 @@ typedef struct opj_stream_private
 	OPJ_BYTE *					m_current_data;
 
 	OPJ_SIZE_T (* m_opj_skip)(struct opj_stream_private * ,OPJ_SIZE_T , struct opj_event_mgr *);
-	
-	OPJ_BOOL (* m_opj_seek) (struct opj_stream_private * , OPJ_SIZE_T , struct opj_event_mgr *);
-	
+
+	opj_bool (* m_opj_seek) (struct opj_stream_private * , OPJ_SIZE_T , struct opj_event_mgr *);
+
 	/**
 	 * number of bytes containing in the buffer.
 	 */
 	OPJ_UINT32			m_bytes_in_buffer;
-	
+
 	/**
 	 * The number of bytes read/written.
 	 */
 	OPJ_SIZE_T			m_byte_offset;
-	
+
 	/**
 	 * The size of the buffer.
 	 */
@@ -152,8 +188,8 @@ typedef struct opj_stream_private
 	 * Flags to tell the status of the stream.
 	 */
 	OPJ_UINT32			m_status;
-	
-} 
+
+}
 opj_stream_private_t;
 
 
@@ -275,7 +311,7 @@ OPJ_UINT32 opj_stream_write_data (opj_stream_private_t * p_stream,const OPJ_BYTE
  * @param		p_event_mgr	the user event manager to be notified of special events.
  * @return		true if the data could be flushed, false else.
  */
-OPJ_BOOL opj_stream_flush (opj_stream_private_t * p_stream, struct opj_event_mgr * p_event_mgr);
+opj_bool opj_stream_flush (opj_stream_private_t * p_stream, struct opj_event_mgr * p_event_mgr);
 
 /**
  * Skips a number of bytes from the stream.
@@ -288,12 +324,22 @@ OPJ_SIZE_T opj_stream_skip (opj_stream_private_t * p_stream,OPJ_SIZE_T p_size, s
 
 /**
  * Tells the byte offset on the stream (similar to ftell).
- * 
+ *
  * @param		p_stream	the stream to get the information from.
- * 
+ *
  * @return		the current position o fthe stream.
  */
 OPJ_SIZE_T opj_stream_tell (const opj_stream_private_t * p_stream);
+
+
+/**
+ * Get the number of bytes left before the end of the stream (similar to cio_numbytesleft).
+ *
+ * @param		p_stream	the stream to get the information from.
+ *
+ * @return		Number of bytes left before the end of the stream.
+ */
+OPJ_SIZE_T opj_stream_get_number_byte_left (const opj_stream_private_t * p_stream);
 
 /**
  * Skips a number of bytes from the stream.
@@ -320,7 +366,7 @@ OPJ_SIZE_T opj_stream_read_skip (opj_stream_private_t * p_stream, OPJ_SIZE_T p_s
  * @param		p_event_mgr	the user event manager to be notified of special events.
  * @return		the number of bytes skipped, or -1 if an error occured.
  */
-OPJ_BOOL opj_stream_read_seek (opj_stream_private_t * p_stream, OPJ_SIZE_T p_size, struct opj_event_mgr * p_event_mgr);
+opj_bool opj_stream_read_seek (opj_stream_private_t * p_stream, OPJ_SIZE_T p_size, struct opj_event_mgr * p_event_mgr);
 
 /**
  * Skips a number of bytes from the stream.
@@ -329,7 +375,7 @@ OPJ_BOOL opj_stream_read_seek (opj_stream_private_t * p_stream, OPJ_SIZE_T p_siz
  * @param		p_event_mgr	the user event manager to be notified of special events.
  * @return		the number of bytes skipped, or -1 if an error occured.
  */
-OPJ_BOOL opj_stream_write_seek (opj_stream_private_t * p_stream, OPJ_SIZE_T p_size, struct opj_event_mgr * p_event_mgr);
+opj_bool opj_stream_write_seek (opj_stream_private_t * p_stream, OPJ_SIZE_T p_size, struct opj_event_mgr * p_event_mgr);
 
 /**
  * Seeks a number of bytes from the stream.
@@ -338,22 +384,19 @@ OPJ_BOOL opj_stream_write_seek (opj_stream_private_t * p_stream, OPJ_SIZE_T p_si
  * @param		p_event_mgr	the user event manager to be notified of special events.
  * @return		true if the stream is seekable.
  */
-OPJ_BOOL opj_stream_seek (opj_stream_private_t * p_stream, OPJ_SIZE_T p_size, struct opj_event_mgr * p_event_mgr);
+opj_bool opj_stream_seek (opj_stream_private_t * p_stream, OPJ_SIZE_T p_size, struct opj_event_mgr * p_event_mgr);
 
 /**
  * Tells if the given stream is seekable.
  */
-OPJ_BOOL opj_stream_has_seek (const opj_stream_private_t * p_stream);
+opj_bool opj_stream_has_seek (const opj_stream_private_t * p_stream);
 
 OPJ_UINT32 opj_stream_default_read (void * p_buffer, OPJ_UINT32 p_nb_bytes, void * p_user_data);
 OPJ_UINT32 opj_stream_default_write (void * p_buffer, OPJ_UINT32 p_nb_bytes, void * p_user_data);
 OPJ_SIZE_T opj_stream_default_skip (OPJ_SIZE_T p_nb_bytes, void * p_user_data);
-OPJ_BOOL opj_stream_default_seek (OPJ_SIZE_T p_nb_bytes, void * p_user_data);
+opj_bool opj_stream_default_seek (OPJ_SIZE_T p_nb_bytes, void * p_user_data);
 
-/* ----------------------------------------------------------------------- */
-/*@}*/
 
-/*@}*/
 
 #endif /* __CIO_H */
 

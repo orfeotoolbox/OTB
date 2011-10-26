@@ -24,9 +24,12 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "function_list.h"
+//#include "function_list.h"
+//#include "opj_includes.h"
+//#include "opj_malloc.h"
+
 #include "opj_includes.h"
-#include "opj_malloc.h"
+
 /**
  * Default size of the validation list, if not sufficient, data will be reallocated with a double size.
  */
@@ -49,7 +52,8 @@ opj_procedure_list_t *  opj_procedure_list_create()
 	/* initialization */
 	memset(l_validation,0,sizeof(opj_procedure_list_t));
 	l_validation->m_nb_max_procedures = OPJ_VALIDATION_SIZE;
-	l_validation->m_procedures = opj_malloc(OPJ_VALIDATION_SIZE * sizeof(opj_procedure));
+	l_validation->m_procedures = (void**)opj_malloc(
+		OPJ_VALIDATION_SIZE * sizeof(opj_procedure));
 	if
 		(! l_validation->m_procedures)
 	{
@@ -89,24 +93,25 @@ void  opj_procedure_list_destroy(opj_procedure_list_t * p_list)
  * @param	p_validation_list the list of procedure to modify.
  * @param	p_procedure		the procedure to add.
  */
-OPJ_BOOL  opj_procedure_list_add_procedure (opj_procedure_list_t * p_validation_list, opj_procedure p_procedure)
+opj_bool  opj_procedure_list_add_procedure (opj_procedure_list_t * p_validation_list, opj_procedure p_procedure)
 {
 	if
 		(p_validation_list->m_nb_max_procedures == p_validation_list->m_nb_procedures)
 	{
 		p_validation_list->m_nb_max_procedures += OPJ_VALIDATION_SIZE;
-		p_validation_list->m_procedures = opj_realloc(p_validation_list->m_procedures,p_validation_list->m_nb_max_procedures * sizeof(opj_procedure));
+		p_validation_list->m_procedures = (void**)opj_realloc(
+		p_validation_list->m_procedures,p_validation_list->m_nb_max_procedures * sizeof(opj_procedure));
 		if
 			(! p_validation_list->m_procedures)
 		{
 			p_validation_list->m_nb_max_procedures = 0;
 			p_validation_list->m_nb_procedures = 0;
-			return false;
+			return OPJ_FALSE;
 		}
 	}
 	p_validation_list->m_procedures[p_validation_list->m_nb_procedures] = p_procedure;
 	++p_validation_list->m_nb_procedures;
-	return true;
+	return OPJ_TRUE;
 }
 
 /**

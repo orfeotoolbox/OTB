@@ -5,7 +5,6 @@
  * Copyright (c) 2002-2003, Yannick Verschueren
  * Copyright (c) 2003-2007, Francois-Olivier Devaux and Antonin Descampe
  * Copyright (c) 2005, Herve Drolon, FreeImage Team
- * Copyright (c) 2008, Jerome Fimes, Communications & Systemes <jerome.fimes@c-s.fr>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,8 +36,7 @@
 
 The functions in INT.H have for goal to realize operations on integers.
 */
-#include "openjpeg.h"
-#include "opj_includes.h"
+
 /** @defgroup INT INT - Implementation of operations on integers */
 /*@{*/
 
@@ -49,7 +47,7 @@ The functions in INT.H have for goal to realize operations on integers.
 Get the minimum of two integers
 @return Returns a if a < b else b
 */
-static INLINE OPJ_INT32 int_min(OPJ_INT32 a, OPJ_INT32 b) {
+static INLINE int int_min(int a, int b) {
 	return a < b ? a : b;
 }
 
@@ -65,7 +63,7 @@ static INLINE OPJ_UINT32 uint_min(OPJ_UINT32 a, OPJ_UINT32 b) {
 Get the maximum of two integers
 @return Returns a if a > b else b
 */
-static INLINE OPJ_INT32 int_max(OPJ_INT32  a, OPJ_INT32  b) {
+static INLINE int int_max(int a, int b) {
 	return (a > b) ? a : b;
 }
 
@@ -76,6 +74,7 @@ Get the maximum of two integers
 static INLINE OPJ_UINT32 uint_max(OPJ_UINT32  a, OPJ_UINT32  b) {
 	return (a > b) ? a : b;
 }
+
 /**
 Clamp an integer inside an interval
 @return
@@ -85,7 +84,7 @@ Clamp an integer inside an interval
 <li>Returns min if (a < min) 
 </ul>
 */
-static INLINE OPJ_INT32  int_clamp(OPJ_INT32  a, OPJ_INT32  min, OPJ_INT32  max) {
+static INLINE int int_clamp(int a, int min, int max) {
 	if (a < min)
 		return min;
 	if (a > max)
@@ -95,62 +94,54 @@ static INLINE OPJ_INT32  int_clamp(OPJ_INT32  a, OPJ_INT32  min, OPJ_INT32  max)
 /**
 @return Get absolute value of integer
 */
-static INLINE OPJ_INT32  int_abs(OPJ_INT32  a) {
+static INLINE int int_abs(int a) {
 	return a < 0 ? -a : a;
 }
 /**
 Divide an integer and round upwards
 @return Returns a divided by b
 */
-static INLINE OPJ_INT32  int_ceildiv(OPJ_INT32  a, OPJ_INT32  b) {
-	return (a + b - 1) / b;
-}
-
-/**
-Divide an integer and round upwards
-@return Returns a divided by b
-*/
-static INLINE OPJ_UINT32  uint_ceildiv(OPJ_UINT32  a, OPJ_UINT32  b) {
+static INLINE int int_ceildiv(int a, int b) {
 	return (a + b - 1) / b;
 }
 /**
 Divide an integer by a power of 2 and round upwards
 @return Returns a divided by 2^b
 */
-static INLINE OPJ_INT32  int_ceildivpow2(OPJ_INT32  a, OPJ_INT32  b) {
+static INLINE int int_ceildivpow2(int a, int b) {
 	return (a + (1 << b) - 1) >> b;
 }
 /**
 Divide an integer by a power of 2 and round downwards
 @return Returns a divided by 2^b
 */
-static INLINE OPJ_INT32  int_floordivpow2(OPJ_INT32  a, OPJ_INT32  b) {
+static INLINE int int_floordivpow2(int a, int b) {
 	return a >> b;
 }
 /**
 Get logarithm of an integer and round downwards
 @return Returns log2(a)
 */
-static INLINE OPJ_INT32  int_floorlog2(OPJ_INT32  a) {
-	OPJ_INT32  l;
+static INLINE int int_floorlog2(int a) {
+	int l;
 	for (l = 0; a > 1; l++) {
 		a >>= 1;
 	}
 	return l;
 }
-
 /**
 Get logarithm of an integer and round downwards
 @return Returns log2(a)
 */
 static INLINE OPJ_UINT32  uint_floorlog2(OPJ_UINT32  a) {
 	OPJ_UINT32  l;
-	for (l = 0; a > 1; ++l) 
+	for (l = 0; a > 1; ++l)
 	{
 		a >>= 1;
 	}
 	return l;
 }
+
 /* ----------------------------------------------------------------------- */
 /*@}*/
 

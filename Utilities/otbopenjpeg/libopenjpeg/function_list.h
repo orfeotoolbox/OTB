@@ -37,7 +37,7 @@
 /** @defgroup validation validation procedure*/
 /*@{*/
 
-#include "openjpeg.h"
+//#include "openjpeg.h"
 /**************************************************************************************************
  ***************************************** FORWARD DECLARATION ************************************
  **************************************************************************************************/
@@ -95,7 +95,7 @@ void  opj_procedure_list_destroy(opj_procedure_list_t * p_list);
  *
  * @return	true if the procedure could ne added.
  */
-OPJ_BOOL  opj_procedure_list_add_procedure (opj_procedure_list_t * p_validation_list, opj_procedure p_procedure);
+opj_bool  opj_procedure_list_add_procedure (opj_procedure_list_t * p_validation_list, opj_procedure p_procedure);
 
 /**
  * Gets the number of validation procedures.

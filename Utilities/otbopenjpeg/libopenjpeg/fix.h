@@ -31,8 +31,11 @@
 #ifndef __FIX_H
 #define __FIX_H
 
-#include "openjpeg.h"
-#include "opj_includes.h"
+#if defined(_MSC_VER) || defined(__BORLANDC__)
+#define int64 __int64
+#else
+#define int64 long long
+#endif
 
 /**
 @file fix.h
@@ -40,6 +43,7 @@
 
 The functions in FIX.H have for goal to realize specific multiplication.
 */
+
 /** @defgroup FIX FIX - Implementation of operations of specific multiplication */
 /*@{*/
 
@@ -50,7 +54,7 @@ Multiply two fixed-precision rational numbers.
 @return Returns a * b
 */
 static INLINE int fix_mul(int a, int b) {
-    OPJ_INT64 temp = (OPJ_INT64) a * (OPJ_INT64) b ;
+    int64 temp = (int64) a * (int64) b ;
     temp += temp & 4096;
     return (int) (temp >> 13) ;
 }

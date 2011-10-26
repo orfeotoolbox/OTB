@@ -1,6 +1,5 @@
 /*
- * Copyright (c) 2005, Hervé Drolon, FreeImage Team
- * Copyright (c) 2008, Jerome Fimes, Communications & Systemes <jerome.fimes@c-s.fr>
+ * Copyright (c) 2005, Herve Drolon, FreeImage Team
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -26,39 +25,12 @@
  */
 #ifndef __EVENT_H
 #define __EVENT_H
-
-#include "openjpeg.h"
-
 /**
 @file event.h
 @brief Implementation of a event callback system
 
 The functions in EVENT.C have for goal to send output messages (errors, warnings, debug) to the user.
 */
-/**
-Message handler object
-used for 
-<ul>
-<li>Error messages
-<li>Warning messages
-<li>Debugging messages
-</ul>
-*/
-typedef struct opj_event_mgr 
-{
-	/** Data to call the event manager upon */
-	void *			m_error_data;
-	/** Data to call the event manager upon */
-	void *			m_warning_data;
-	/** Data to call the event manager upon */
-	void *			m_info_data;
-	/** Error message callback if available, NULL otherwise */
-	opj_msg_callback error_handler;
-	/** Warning message callback if available, NULL otherwise */
-	opj_msg_callback warning_handler;
-	/** Debug message callback if available, NULL otherwise */
-	opj_msg_callback info_handler;
-} opj_event_mgr_t;
 
 #define EVT_ERROR	1	/**< Error event type */
 #define EVT_WARNING	2	/**< Warning event type */
@@ -71,15 +43,49 @@ typedef struct opj_event_mgr
 /*@{*/
 /* ----------------------------------------------------------------------- */
 /**
- * Writes formatted data to a string and send the string to a user callback. 
- * @param p_event_mgr the event manager to display messages.
- * @param event_type Event type of the message
- * @param fmt Format-control string (plus optionnal arguments)
- * @return Returns true if successful, returns false otherwise
+Write formatted data to a string and send the string to a user callback. 
+@param cinfo Codec context info
+@param event_type Event type or callback to use to send the message
+@param fmt Format-control string (plus optional arguments)
+@return Returns true if successful, returns false otherwise
+* FIXME Change by its v2 version this function after ended the merge 
 */
-OPJ_BOOL opj_event_msg(struct opj_event_mgr * p_event_mgr, OPJ_INT32 event_type, const OPJ_CHAR *fmt, ...);
+opj_bool opj_event_msg(opj_common_ptr cinfo, int event_type, const char *fmt, ...);
+
 /* ----------------------------------------------------------------------- */
 /*@}*/
+
+/**
+ * Write formatted data to a string and send the string to a user callback.
+ *
+ * @param event_mgr			Event handler
+ * @param event_type 		Event type or callback to use to send the message
+ * @param fmt 				Format-control string (plus optional arguments)
+ *
+ * @return Returns true if successful, returns false otherwise
+ */
+opj_bool opj_event_msg_v2(opj_event_mgr_t* event_mgr, int event_type, const char *fmt, ...);
+
+/**
+ * Default callback function. No message sent to output.
+ */
+void opj_default_callback (const char *msg, void *client_data);
+
+/**
+ * Default info callback function, message is sent to the stdout output.
+ */
+void opj_info_default_callback (const char *msg, void *client_data);
+
+/**
+ * Default warning callback function, message is sent to stderr output.
+ */
+void opj_warning_default_callback (const char *msg, void *client_data);
+
+/**
+ * Default error callback function, message is sent to stderr output.
+ */
+void opj_error_default_callback (const char *msg, void *client_data);
+
 
 /*@}*/
 

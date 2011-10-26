@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005, Hervé Drolon, FreeImage Team
+ * Copyright (c) 2005, Herve Drolon, FreeImage Team
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -31,7 +31,7 @@
 
 The functions in J2K_LIB.C are internal utilities mainly used for timing.
 */
-#include "openjpeg.h"
+
 /** @defgroup MISC MISC - Miscellaneous internal functions */
 /*@{*/
 
@@ -43,7 +43,7 @@ The functions in J2K_LIB.C are internal utilities mainly used for timing.
 Difference in successive opj_clock() calls tells you the elapsed time
 @return Returns time in seconds
 */
-OPJ_FLOAT64 opj_clock(void);
+double opj_clock(void);
 
 /* ----------------------------------------------------------------------- */
 /*@}*/

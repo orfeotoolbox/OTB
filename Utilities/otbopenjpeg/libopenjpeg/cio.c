@@ -5,7 +5,6 @@
  * Copyright (c) 2002-2003, Yannick Verschueren
  * Copyright (c) 2003-2007, Francois-Olivier Devaux and Antonin Descampe
  * Copyright (c) 2005, Herve Drolon, FreeImage Team
- * Copyright (c) 2008, Jerome Fimes, Communications & Systemes <jerome.fimes@c-s.fr>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -30,10 +29,164 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "cio.h"
 #include "opj_includes.h"
-#include "opj_malloc.h"
-#include "event.h"
+
+/* ----------------------------------------------------------------------- */
+
+opj_cio_t* OPJ_CALLCONV opj_cio_open(opj_common_ptr cinfo, unsigned char *buffer, int length) {
+	opj_cp_t *cp = NULL;
+	opj_cio_t *cio = (opj_cio_t*)opj_malloc(sizeof(opj_cio_t));
+	if(!cio) return NULL;
+	cio->cinfo = cinfo;
+	if(buffer && length) {
+		/* wrap a user buffer containing the encoded image */
+		cio->openmode = OPJ_STREAM_READ;
+		cio->buffer = buffer;
+		cio->length = length;
+	}
+	else if(!buffer && !length && cinfo) {
+		/* allocate a buffer for the encoded image */
+		cio->openmode = OPJ_STREAM_WRITE;
+		switch(cinfo->codec_format) {
+			case CODEC_J2K:
+				cp = ((opj_j2k_t*)cinfo->j2k_handle)->cp;
+				break;
+			case CODEC_JP2:
+				cp = ((opj_jp2_t*)cinfo->jp2_handle)->j2k->cp;
+				break;
+			default:
+				opj_free(cio);
+				return NULL;
+		}
+		cio->length = (unsigned int) (0.1625 * cp->img_size + 2000); /* 0.1625 = 1.3/8 and 2000 bytes as a minimum for headers */
+		cio->buffer = (unsigned char *)opj_malloc(cio->length);
+		if(!cio->buffer) {
+			opj_event_msg(cio->cinfo, EVT_ERROR, "Error allocating memory for compressed bitstream\n");
+			opj_free(cio);
+			return NULL;
+		}
+	}
+	else {
+		opj_free(cio);
+		return NULL;
+	}
+
+	/* Initialize byte IO */
+	cio->start = cio->buffer;
+	cio->end = cio->buffer + cio->length;
+	cio->bp = cio->buffer;
+
+	return cio;
+}
+
+void OPJ_CALLCONV opj_cio_close(opj_cio_t *cio) {
+	if(cio) {
+		if(cio->openmode == OPJ_STREAM_WRITE) {
+			/* destroy the allocated buffer */
+			opj_free(cio->buffer);
+		}
+		/* destroy the cio */
+		opj_free(cio);
+	}
+}
+
+
+/* ----------------------------------------------------------------------- */
+
+/*
+ * Get position in byte stream.
+ */
+int OPJ_CALLCONV cio_tell(opj_cio_t *cio) {
+	return cio->bp - cio->start;
+}
+
+/*
+ * Set position in byte stream.
+ *
+ * pos : position, in number of bytes, from the beginning of the stream
+ */
+void OPJ_CALLCONV cio_seek(opj_cio_t *cio, int pos) {
+	cio->bp = cio->start + pos;
+}
+
+/*
+ * Number of bytes left before the end of the stream.
+ */
+int cio_numbytesleft(opj_cio_t *cio) {
+	return cio->end - cio->bp;
+}
+
+/*
+ * Get pointer to the current position in the stream.
+ */
+unsigned char *cio_getbp(opj_cio_t *cio) {
+	return cio->bp;
+}
+
+/*
+ * Write a byte.
+ */
+opj_bool cio_byteout(opj_cio_t *cio, unsigned char v) {
+	if (cio->bp >= cio->end) {
+		opj_event_msg(cio->cinfo, EVT_ERROR, "write error\n");
+		return OPJ_FALSE;
+	}
+	*cio->bp++ = v;
+	return OPJ_TRUE;
+}
+
+/*
+ * Read a byte.
+ */
+unsigned char cio_bytein(opj_cio_t *cio) {
+	if (cio->bp >= cio->end) {
+		opj_event_msg(cio->cinfo, EVT_ERROR, "read error: passed the end of the codestream (start = %d, current = %d, end = %d\n", cio->start, cio->bp, cio->end);
+		return 0;
+	}
+	return *cio->bp++;
+}
+
+/*
+ * Write some bytes.
+ *
+ * v : value to write
+ * n : number of bytes to write
+ */
+unsigned int cio_write(opj_cio_t *cio, unsigned long long int v, int n) {
+	int i;
+	for (i = n - 1; i >= 0; i--) {
+		if( !cio_byteout(cio, (unsigned char) ((v >> (i << 3)) & 0xff)) )
+			return 0;
+	}
+	return n;
+}
+
+/*
+ * Read some bytes.
+ *
+ * n : number of bytes to read
+ *
+ * return : value of the n bytes read
+ */
+unsigned int cio_read(opj_cio_t *cio, int n) {
+	int i;
+	unsigned int v;
+	v = 0;
+	for (i = n - 1; i >= 0; i--) {
+		v += cio_bytein(cio) << (i << 3);
+	}
+	return v;
+}
+
+/* 
+ * Skip some bytes.
+ *
+ * n : number of bytes to skip
+ */
+void cio_skip(opj_cio_t *cio, int n) {
+	cio->bp += n;
+}
+
 
 /* ----------------------------------------------------------------------- */
 
@@ -47,7 +200,9 @@
 void opj_write_bytes_BE (OPJ_BYTE * p_buffer, OPJ_UINT32 p_value, OPJ_UINT32 p_nb_bytes)
 {
 	const OPJ_BYTE * l_data_ptr = ((const OPJ_BYTE *) &p_value) + p_nb_bytes;
+
 	assert(p_nb_bytes > 0 && p_nb_bytes <=  sizeof(OPJ_UINT32));
+
 	memcpy(p_buffer,l_data_ptr,p_nb_bytes);
 }
 
@@ -64,9 +219,8 @@ void opj_write_bytes_LE (OPJ_BYTE * p_buffer, OPJ_UINT32 p_value, OPJ_UINT32 p_n
 	OPJ_UINT32 i;
 
 	assert(p_nb_bytes > 0 && p_nb_bytes <= sizeof(OPJ_UINT32));
-	for
-		(i=0;i<p_nb_bytes;++i)
-	{
+
+	for	(i=0;i<p_nb_bytes;++i) {
 		*(p_buffer++) = *(l_data_ptr--);
 	}
 }
@@ -81,7 +235,9 @@ void opj_write_bytes_LE (OPJ_BYTE * p_buffer, OPJ_UINT32 p_value, OPJ_UINT32 p_n
 void opj_read_bytes_BE(const OPJ_BYTE * p_buffer, OPJ_UINT32 * p_value, OPJ_UINT32 p_nb_bytes)
 {
 	OPJ_BYTE * l_data_ptr = ((OPJ_BYTE *) p_value);
+
 	assert(p_nb_bytes > 0 && p_nb_bytes <= sizeof(OPJ_UINT32));
+
 	*p_value = 0;
 	memcpy(l_data_ptr+4-p_nb_bytes,p_buffer,p_nb_bytes);
 }
@@ -99,10 +255,9 @@ void opj_read_bytes_LE(const OPJ_BYTE * p_buffer, OPJ_UINT32 * p_value, OPJ_UINT
 	OPJ_UINT32 i;
 
 	assert(p_nb_bytes > 0 && p_nb_bytes <= sizeof(OPJ_UINT32));
+
 	*p_value = 0;
-	for
-		(i=0;i<p_nb_bytes;++i)
-	{
+	for (i=0;i<p_nb_bytes;++i) {
 		*(l_data_ptr--) = *(p_buffer++);
 	}
 }
@@ -128,9 +283,7 @@ void opj_write_double_LE(OPJ_BYTE * p_buffer, OPJ_FLOAT64 p_value)
 {
 	const OPJ_BYTE * l_data_ptr = ((const OPJ_BYTE *) &p_value) + sizeof(OPJ_FLOAT64) - 1;
 	OPJ_UINT32 i;
-	for
-		(i=0;i<sizeof(OPJ_FLOAT64);++i)
-	{
+	for	(i=0;i<sizeof(OPJ_FLOAT64);++i) {
 		*(p_buffer++) = *(l_data_ptr--);
 	}
 }
@@ -156,9 +309,7 @@ void opj_read_double_LE(const OPJ_BYTE * p_buffer, OPJ_FLOAT64 * p_value)
 {
 	OPJ_BYTE * l_data_ptr = ((OPJ_BYTE *) p_value) + sizeof(OPJ_FLOAT64)-1;
 	OPJ_UINT32 i;
-	for
-		(i=0;i<sizeof(OPJ_FLOAT64);++i)
-	{
+	for (i=0;i<sizeof(OPJ_FLOAT64);++i) {
 		*(l_data_ptr--) = *(p_buffer++);
 	}
 }
@@ -184,9 +335,7 @@ void opj_write_float_LE(OPJ_BYTE * p_buffer, OPJ_FLOAT32 p_value)
 {
 	const OPJ_BYTE * l_data_ptr = ((const OPJ_BYTE *) &p_value) + sizeof(OPJ_FLOAT32) - 1;
 	OPJ_UINT32 i;
-	for
-		(i=0;i<sizeof(OPJ_FLOAT32);++i)
-	{
+	for	(i=0;i<sizeof(OPJ_FLOAT32);++i) {
 		*(p_buffer++) = *(l_data_ptr--);
 	}
 }
@@ -212,9 +361,7 @@ void opj_read_float_LE(const OPJ_BYTE * p_buffer, OPJ_FLOAT32 * p_value)
 {
 	OPJ_BYTE * l_data_ptr = ((OPJ_BYTE *) p_value) + sizeof(OPJ_FLOAT32)-1;
 	OPJ_UINT32 i;
-	for
-		(i=0;i<sizeof(OPJ_FLOAT32);++i)
-	{
+	for	(i=0;i<sizeof(OPJ_FLOAT32);++i) {
 		*(l_data_ptr--) = *(p_buffer++);
 	}
 }
@@ -224,38 +371,35 @@ void opj_read_float_LE(const OPJ_BYTE * p_buffer, OPJ_FLOAT32 * p_value)
  * Creates an abstract stream. This function does nothing except allocating memory and initializing the abstract stream.
  * @return a stream object.
 */
-opj_stream_t* OPJ_CALLCONV opj_stream_create(OPJ_UINT32 p_size,OPJ_BOOL l_is_input)
+opj_stream_t* OPJ_CALLCONV opj_stream_create(OPJ_UINT32 p_size,opj_bool l_is_input)
 {
 	opj_stream_private_t * l_stream = 00;
 	l_stream = (opj_stream_private_t*) opj_malloc(sizeof(opj_stream_private_t));
-	if
-		(! l_stream)
-	{
+	if (! l_stream) {
 		return 00;
 	}
+
 	memset(l_stream,0,sizeof(opj_stream_private_t));
 	l_stream->m_buffer_size = p_size;
 	l_stream->m_stored_data = (OPJ_BYTE *) opj_malloc(p_size);
-	if
-		(! l_stream->m_stored_data)
-	{
+	if (! l_stream->m_stored_data) {
 		opj_free(l_stream);
 		return 00;
 	}
+
 	l_stream->m_current_data = l_stream->m_stored_data;
-	if
-		(l_is_input)
-	{
+
+	if (l_is_input) {
 		l_stream->m_status |= opj_stream_e_input;
 		l_stream->m_opj_skip = opj_stream_read_skip;
 		l_stream->m_opj_seek = opj_stream_read_seek;
 	}
-	else
-	{
+	else {
 		l_stream->m_status |= opj_stream_e_output;
 		l_stream->m_opj_skip = opj_stream_write_skip;
 		l_stream->m_opj_seek = opj_stream_write_seek;
 	}
+
 	l_stream->m_read_fn = opj_stream_default_read;
 	l_stream->m_write_fn = opj_stream_default_write;
 	l_stream->m_skip_fn = opj_stream_default_skip;
@@ -268,26 +412,23 @@ opj_stream_t* OPJ_CALLCONV opj_stream_create(OPJ_UINT32 p_size,OPJ_BOOL l_is_inp
  * Creates an abstract stream. This function does nothing except allocating memory and initializing the abstract stream.
  * @return a stream object.
 */
-opj_stream_t* OPJ_CALLCONV opj_stream_default_create(OPJ_BOOL l_is_input)
+opj_stream_t* OPJ_CALLCONV opj_stream_default_create(opj_bool l_is_input)
 {
 	return opj_stream_create(J2K_STREAM_CHUNK_SIZE,l_is_input);
 }
 
 /**
- * Destroys a stream created by opj_create_stream. This function does NOT close the abstract stream. If needed the user must 
+ * Destroys a stream created by opj_create_stream. This function does NOT close the abstract stream. If needed the user must
  * close its own implementation of the stream.
  */
 OPJ_API void OPJ_CALLCONV opj_stream_destroy(opj_stream_t* p_stream)
 {
 	opj_stream_private_t* l_stream = (opj_stream_private_t*) p_stream;
-	if
-		(l_stream)
-	{
+	if (l_stream) {
 		opj_free(l_stream->m_stored_data);
 		l_stream->m_stored_data = 00;
 		opj_free(l_stream);
 	}
-
 }
 
 /**
@@ -298,11 +439,11 @@ OPJ_API void OPJ_CALLCONV opj_stream_destroy(opj_stream_t* p_stream)
 OPJ_API void OPJ_CALLCONV opj_stream_set_read_function(opj_stream_t* p_stream, opj_stream_read_fn p_function)
 {
 	opj_stream_private_t* l_stream = (opj_stream_private_t*) p_stream;
-	if
-		((!l_stream) || (! (l_stream->m_status & opj_stream_e_input)))
-	{
+
+	if ((!l_stream) || (! (l_stream->m_status & opj_stream_e_input))) {
 		return;
 	}
+
 	l_stream->m_read_fn = p_function;
 }
 
@@ -361,6 +502,18 @@ OPJ_API void OPJ_CALLCONV opj_stream_set_user_data(opj_stream_t* p_stream, void 
 }
 
 /**
+ * Sets the given data to be used as a user data for the stream.
+ * @param		p_stream	the stream to modify
+ * @param		p_data		the data to set.
+*/
+OPJ_API void OPJ_CALLCONV opj_stream_set_user_data_length(opj_stream_t* p_stream, OPJ_UINT32 data_length)
+{
+	opj_stream_private_t* l_stream = (opj_stream_private_t*) p_stream;
+
+	l_stream->m_user_data_length = data_length;
+}
+
+/**
  * Reads some bytes from the stream.
  * @param		p_stream	the stream to read data from.
  * @param		p_buffer	pointer to the data buffer that will receive the data.
@@ -406,10 +559,16 @@ OPJ_UINT32 opj_stream_read_data (opj_stream_private_t * p_stream,OPJ_BYTE * p_bu
 		p_stream->m_byte_offset += p_stream->m_bytes_in_buffer;
 		p_stream->m_bytes_in_buffer = 0;
 	}
+  else
+  {
+    /* case where we are already at the end of the buffer
+       so reset the m_current_data to point to the start of the
+       stored buffer to get ready to read from disk*/
+    p_stream->m_current_data = p_stream->m_stored_data;
+  }
 
-	while
-		(true)
-	{
+
+	while(1){
 		// we should read less than a chunk -> read a chunk
 		if
 			(p_size < p_stream->m_buffer_size)
@@ -420,7 +579,8 @@ OPJ_UINT32 opj_stream_read_data (opj_stream_private_t * p_stream,OPJ_BYTE * p_bu
 				(p_stream->m_bytes_in_buffer == -1)
 			{
 				// end of stream
-				opj_event_msg(p_event_mgr, EVT_INFO, "Stream reached its end !\n");
+				opj_event_msg_v2(p_event_mgr, EVT_INFO, "Stream reached its end !\n");
+
 				p_stream->m_bytes_in_buffer = 0;
 				p_stream->m_status |= opj_stream_e_end;
 				// end of stream
@@ -456,7 +616,8 @@ OPJ_UINT32 opj_stream_read_data (opj_stream_private_t * p_stream,OPJ_BYTE * p_bu
 				(p_stream->m_bytes_in_buffer == -1)
 			{
 				// end of stream
-				opj_event_msg(p_event_mgr, EVT_INFO, "Stream reached its end !\n");
+				opj_event_msg_v2(p_event_mgr, EVT_INFO, "Stream reached its end !\n");
+
 				p_stream->m_bytes_in_buffer = 0;
 				p_stream->m_status |= opj_stream_e_end;
 				// end of stream
@@ -505,8 +666,7 @@ OPJ_UINT32 opj_stream_write_data (opj_stream_private_t * p_stream,const OPJ_BYTE
 		return -1;
 	}
 
-	while
-		(true)
+	while(1)
 	{
 		l_remaining_bytes = p_stream->m_buffer_size - p_stream->m_bytes_in_buffer;
 		// we have more memory than required
@@ -548,7 +708,7 @@ OPJ_UINT32 opj_stream_write_data (opj_stream_private_t * p_stream,const OPJ_BYTE
  * @param		p_event_mgr	the user event manager to be notified of special events.
  * @return		the number of bytes written, or -1 if an error occured.
  */
-OPJ_BOOL opj_stream_flush (opj_stream_private_t * p_stream, opj_event_mgr_t * p_event_mgr)
+opj_bool opj_stream_flush (opj_stream_private_t * p_stream, opj_event_mgr_t * p_event_mgr)
 {
 	// the number of bytes written on the media.
 	OPJ_UINT32 l_current_write_nb_bytes = 0;
@@ -563,14 +723,15 @@ OPJ_BOOL opj_stream_flush (opj_stream_private_t * p_stream, opj_event_mgr_t * p_
 			(l_current_write_nb_bytes == -1)
 		{
 			p_stream->m_status |= opj_stream_e_error;
-			opj_event_msg(p_event_mgr, EVT_INFO, "Error on writting stream!\n");
-			return false;
+			opj_event_msg_v2(p_event_mgr, EVT_INFO, "Error on writting stream!\n");
+
+			return EXIT_FAILURE;
 		}
 		p_stream->m_current_data += l_current_write_nb_bytes;
 		p_stream->m_bytes_in_buffer -= l_current_write_nb_bytes;
 	}
 	p_stream->m_current_data = p_stream->m_stored_data;
-	return true;
+	return EXIT_SUCCESS;
 }
 
 /**
@@ -584,7 +745,7 @@ OPJ_SIZE_T opj_stream_read_skip (opj_stream_private_t * p_stream, OPJ_SIZE_T p_s
 {
 	OPJ_SIZE_T l_skip_nb_bytes = 0;
 	OPJ_SIZE_T l_current_skip_nb_bytes = 0;
-	
+
 	if
 		(p_stream->m_bytes_in_buffer >= p_size)
 	{
@@ -605,7 +766,7 @@ OPJ_SIZE_T opj_stream_read_skip (opj_stream_private_t * p_stream, OPJ_SIZE_T p_s
 		p_stream->m_byte_offset += l_skip_nb_bytes;
 		return l_skip_nb_bytes ? l_skip_nb_bytes : (OPJ_SIZE_T) -1;
 	}
-	
+
 	// the flag is not set, we copy data and then do an actual skip on the stream
 	if
 		(p_stream->m_bytes_in_buffer)
@@ -615,7 +776,7 @@ OPJ_SIZE_T opj_stream_read_skip (opj_stream_private_t * p_stream, OPJ_SIZE_T p_s
 		p_size -= p_stream->m_bytes_in_buffer;
 		p_stream->m_bytes_in_buffer = 0;
 	}
-	
+
 	while
 		(p_size > 0)
 	{
@@ -624,7 +785,8 @@ OPJ_SIZE_T opj_stream_read_skip (opj_stream_private_t * p_stream, OPJ_SIZE_T p_s
 		if
 			(l_current_skip_nb_bytes == (OPJ_SIZE_T) -1)
 		{
-			opj_event_msg(p_event_mgr, EVT_INFO, "Stream reached its end !\n");
+			opj_event_msg_v2(p_event_mgr, EVT_INFO, "Stream reached its end !\n");
+
 			p_stream->m_status |= opj_stream_e_end;
 			p_stream->m_byte_offset += l_skip_nb_bytes;
 			// end if stream
@@ -646,7 +808,7 @@ OPJ_SIZE_T opj_stream_read_skip (opj_stream_private_t * p_stream, OPJ_SIZE_T p_s
  */
 OPJ_SIZE_T opj_stream_write_skip (opj_stream_private_t * p_stream, OPJ_SIZE_T p_size, opj_event_mgr_t * p_event_mgr)
 {
-	OPJ_BOOL l_is_written = 0;
+	opj_bool l_is_written = 0;
 	OPJ_SIZE_T l_current_skip_nb_bytes = 0;
 	OPJ_SIZE_T l_skip_nb_bytes = 0;
 
@@ -655,7 +817,7 @@ OPJ_SIZE_T opj_stream_write_skip (opj_stream_private_t * p_stream, OPJ_SIZE_T p_
 	{
 		return (OPJ_SIZE_T) -1;
 	}
-	
+
 	// we should flush data
 	l_is_written = opj_stream_flush (p_stream, p_event_mgr);
 	if
@@ -676,7 +838,8 @@ OPJ_SIZE_T opj_stream_write_skip (opj_stream_private_t * p_stream, OPJ_SIZE_T p_
 		if
 			(l_current_skip_nb_bytes == (OPJ_SIZE_T)-1)
 		{
-			opj_event_msg(p_event_mgr, EVT_INFO, "Stream error!\n");
+			opj_event_msg_v2(p_event_mgr, EVT_INFO, "Stream error!\n");
+
 			p_stream->m_status |= opj_stream_e_error;
 			p_stream->m_byte_offset += l_skip_nb_bytes;
 			// end if stream
@@ -691,14 +854,29 @@ OPJ_SIZE_T opj_stream_write_skip (opj_stream_private_t * p_stream, OPJ_SIZE_T p_
 
 /**
  * Tells the byte offset on the stream (similar to ftell).
- * 
+ *
  * @param		p_stream	the stream to get the information from.
- * 
- * @return		the current position o fthe stream.
+ *
+ * @return		the current position of the stream.
  */
 OPJ_SIZE_T opj_stream_tell (const opj_stream_private_t * p_stream)
 {
 	return p_stream->m_byte_offset;
+}
+
+
+/**
+ * Get the number of bytes left before the end of the stream (similar to cio_numbytesleft).
+ *
+ * @param		p_stream	the stream to get the information from.
+ *
+ * @return		Number of bytes left before the end of the stream.
+ */
+OPJ_SIZE_T opj_stream_get_number_byte_left (const opj_stream_private_t * p_stream)
+{
+	return p_stream->m_user_data_length ?
+				p_stream->m_user_data_length - p_stream->m_byte_offset :
+				0;
 }
 
 /**
@@ -721,7 +899,7 @@ OPJ_SIZE_T opj_stream_skip (opj_stream_private_t * p_stream, OPJ_SIZE_T p_size, 
  * @param		p_event_mgr	the user event manager to be notified of special events.
  * @return		the number of bytes skipped, or -1 if an error occured.
  */
-OPJ_BOOL opj_stream_read_seek (opj_stream_private_t * p_stream, OPJ_SIZE_T p_size, opj_event_mgr_t * p_event_mgr)
+opj_bool opj_stream_read_seek (opj_stream_private_t * p_stream, OPJ_SIZE_T p_size, opj_event_mgr_t * p_event_mgr)
 {
 	p_stream->m_current_data = p_stream->m_stored_data;
 	p_stream->m_bytes_in_buffer = 0;
@@ -729,7 +907,7 @@ OPJ_BOOL opj_stream_read_seek (opj_stream_private_t * p_stream, OPJ_SIZE_T p_siz
 		(! p_stream->m_seek_fn(p_size,p_stream->m_user_data))
 	{
 		p_stream->m_status |= opj_stream_e_end;
-		return false;
+		return EXIT_FAILURE;
 	}
 	else
 	{
@@ -738,7 +916,7 @@ OPJ_BOOL opj_stream_read_seek (opj_stream_private_t * p_stream, OPJ_SIZE_T p_siz
 		p_stream->m_byte_offset = p_size;
 
 	}
-	return true;
+	return EXIT_SUCCESS;
 }
 
 /**
@@ -748,29 +926,29 @@ OPJ_BOOL opj_stream_read_seek (opj_stream_private_t * p_stream, OPJ_SIZE_T p_siz
  * @param		p_event_mgr	the user event manager to be notified of special events.
  * @return		the number of bytes skipped, or -1 if an error occured.
  */
-OPJ_BOOL opj_stream_write_seek (opj_stream_private_t * p_stream, OPJ_SIZE_T p_size, opj_event_mgr_t * p_event_mgr)
+opj_bool opj_stream_write_seek (opj_stream_private_t * p_stream, OPJ_SIZE_T p_size, opj_event_mgr_t * p_event_mgr)
 {
 	if
 		(! opj_stream_flush(p_stream,p_event_mgr))
 	{
 		p_stream->m_status |= opj_stream_e_error;
-		return false;
+		return EXIT_FAILURE;
 	}
 
 	p_stream->m_current_data = p_stream->m_stored_data;
 	p_stream->m_bytes_in_buffer = 0;
-	
+
 	if
 		(! p_stream->m_seek_fn(p_size,p_stream->m_user_data))
 	{
 		p_stream->m_status |= opj_stream_e_error;
-		return false;
+		return EXIT_FAILURE;
 	}
 	else
 	{
 		p_stream->m_byte_offset = p_size;
 	}
-	return true;
+	return EXIT_SUCCESS;
 }
 
 
@@ -781,7 +959,7 @@ OPJ_BOOL opj_stream_write_seek (opj_stream_private_t * p_stream, OPJ_SIZE_T p_si
  * @param		p_event_mgr	the user event manager to be notified of special events.
  * @return		true if the stream is seekable.
  */
-OPJ_BOOL opj_stream_seek (opj_stream_private_t * p_stream, OPJ_SIZE_T p_size, struct opj_event_mgr * p_event_mgr)
+opj_bool opj_stream_seek (opj_stream_private_t * p_stream, OPJ_SIZE_T p_size, struct opj_event_mgr * p_event_mgr)
 {
 	return p_stream->m_opj_seek(p_stream,p_size,p_event_mgr);
 }
@@ -789,7 +967,7 @@ OPJ_BOOL opj_stream_seek (opj_stream_private_t * p_stream, OPJ_SIZE_T p_size, st
 /**
  * Tells if the given stream is seekable.
  */
-OPJ_BOOL opj_stream_has_seek (const opj_stream_private_t * p_stream)
+opj_bool opj_stream_has_seek (const opj_stream_private_t * p_stream)
 {
 	return p_stream->m_seek_fn != opj_stream_default_seek;
 }
@@ -811,10 +989,11 @@ OPJ_SIZE_T opj_stream_default_skip (OPJ_SIZE_T p_nb_bytes, void * p_user_data)
 	return (OPJ_SIZE_T) -1;
 }
 
-OPJ_BOOL opj_stream_default_seek (OPJ_SIZE_T p_nb_bytes, void * p_user_data)
+opj_bool opj_stream_default_seek (OPJ_SIZE_T p_nb_bytes, void * p_user_data)
 {
-	return false;
+	return EXIT_FAILURE;
 }
+
 
 
 
