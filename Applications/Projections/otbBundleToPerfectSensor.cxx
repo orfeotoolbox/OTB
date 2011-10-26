@@ -51,6 +51,19 @@ private:
   {
     SetName("BundleToPerfectSensor");
     SetDescription("Perform P+XS pansharpening");
+
+    // Documentation
+    SetDocName("Bundle to perfect sensor application");
+    SetDocLongDescription("This application performs P+XS pansharpening.");
+    SetDocLimitations("None");
+    SetDocAuthors("OTB-Team");
+    SetDocSeeAlso(" ");
+    SetDocCLExample("otbApplicationLauncherCommandLine BundleToPerfectSensor ${OTB-BIN}/bin "
+      "--inp ${OTB-Data}/Examples/QB_Toulouse_Ortho_PAN.tif --inxs ${OTB-Data}/Examples/QB_Toulouse_Ortho_XS.tif "
+     "--out PanSharpenedImage.tif");
+    AddDocTag("Projection");
+    AddDocTag("Image manipulation");
+    AddDocTag("Pansharpening");
   }
 
   virtual ~BundleToPerfectSensor()
