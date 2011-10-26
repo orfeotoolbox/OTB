@@ -241,12 +241,13 @@ void QtWidgetView::SetDocParameters( std::string & val )
 
 void QtWidgetView::GetDocParameterGroup( std::string & val, const std::string & key, int level )
 {
-  std::string spaces0, equal0;
+  std::string spaces, equals;
   for(unsigned int i=0; i<level; i++)
     {
-    spaces0.append("&nbsp&nbsp&nbsp");
-    equal0.append("===");
+    spaces.append("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+    equals.append("===");
     }
+  equals.append("===");
 
   Parameter * paramGr  = m_Application->GetParameterByKey( key );
   if( !dynamic_cast<ParameterGroup *>(paramGr) )
@@ -264,13 +265,13 @@ void QtWidgetView::GetDocParameterGroup( std::string & val, const std::string & 
     Parameter::Pointer param =  m_Application->GetParameterByKey( fullKey );
     if( m_Application->GetParameterType(fullKey) !=  ParameterType_Group )
       {
-      oss << "<i>" << param->GetName()<< ":</i><br />";
-      oss << param->GetDescription()<<"<br>";
+      oss << "<i>" << spaces << param->GetName()<< ":</i><br />";
+      oss  << spaces << param->GetDescription()<<"<br>";
       oss << "<br />";
       }
     else
       {
-      oss << "<b><i>"<<param->GetName()<<"</i></b> ("<<param->GetDescription()<<")<br />";
+      oss << "<b><i>" << equals << param->GetName()<<"</i></b> ("<<param->GetDescription()<<")<br />";
       std::string grDoc;
       GetDocParameterGroup( grDoc, fullKey, level+1);
       oss<<grDoc;
