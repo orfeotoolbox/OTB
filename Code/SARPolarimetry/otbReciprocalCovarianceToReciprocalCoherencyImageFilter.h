@@ -74,7 +74,7 @@ public:
     const ComplexType C23 =  static_cast<ComplexType>(Covariance[4]);
     const ComplexType C33 =  static_cast<ComplexType>(Covariance[5]);
 
-    const ComplexType C21 =  vcl_conj(C12);
+    //const ComplexType C21 =  vcl_conj(C12);
     const ComplexType C31 =  vcl_conj(C13);
     const ComplexType C32 =  vcl_conj(C23);
 

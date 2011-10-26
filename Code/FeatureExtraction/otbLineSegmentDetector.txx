@@ -504,8 +504,8 @@ LineSegmentDetector<TInputImage, TPrecision>
     }
   else
     {
-    itkExceptionMacro(<< "Can't access to index " << index << ", outside the image largest region (" << region.GetIndex(
-                        ) << ", " << region.GetSize() << ")");
+    itkExceptionMacro(<< "Can't access to index " << index << ", outside the image largest region (" << indexRef
+                      << ", " << region.GetSize() << ")");
     }
 
   return isNotUsed;
@@ -534,8 +534,8 @@ LineSegmentDetector<TInputImage, TPrecision>
     }
   else
     {
-    itkExceptionMacro(<< "Can't access to index " << index << ", outside the image largest region (" << region.GetIndex(
-                        ) << ", " << region.GetSize() << ")");
+    itkExceptionMacro(<< "Can't access to index " << index << ", outside the image largest region (" <<indexRef
+                        << ", " << region.GetSize() << ")");
     }
 
   return isUsed;
@@ -565,8 +565,8 @@ LineSegmentDetector<TInputImage, TPrecision>
     }
   else
     {
-    itkExceptionMacro(<< "Can't access to index " << index << ", outside the image largest region (" << region.GetIndex(
-                        ) << ", " << region.GetSize() << ")");
+    itkExceptionMacro(<< "Can't access to index " << index << ", outside the image largest region (" << indexRef
+                      << ", " << region.GetSize() << ")");
     }
 
   return isNotIni;

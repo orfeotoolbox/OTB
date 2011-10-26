@@ -83,9 +83,9 @@ public:
     const ComplexType Slr = coef * ( -S_hh+-S_vv );
     const ComplexType Srr = coef * ( -S_hh+j2S_hv+S_vv );
 
-    const ComplexType conjSll = vcl_conj(Sll);
-    const ComplexType conjSlr = vcl_conj(Slr);
-    const ComplexType conjSrr = vcl_conj(Srr);
+    //const ComplexType conjSll = vcl_conj(Sll);
+    //const ComplexType conjSlr = vcl_conj(Slr);
+    //const ComplexType conjSrr = vcl_conj(Srr);
 
     SinclairToReciprocalCovarianceFunctorType funct;
     return ( funct(Sll, Slr, Srr ) );

@@ -113,7 +113,7 @@ LabeledSampleLocalizationGenerator<TVectorData>
   RegionType generatorRegion = node->GetPolygonExteriorRing()->GetBoundingRegion();
   typename RegionType::SizeType generatorRegionSize = generatorRegion.GetSize();
   typename RegionType::IndexType generatorRegionIndex = generatorRegion.GetIndex();
-  typename RegionType::IndexType generatorRegionOrigin = generatorRegion.GetOrigin();
+  //typename RegionType::IndexType generatorRegionOrigin = generatorRegion.GetOrigin();
   
   // Identify inside known points
   std::vector<PointType> insiders;
