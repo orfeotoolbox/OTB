@@ -81,11 +81,11 @@ private:
     SetParameterDescription("sizex","size along x in pixels.");
     AddParameter(ParameterType_Int,  "sizey",  "Size Y");
     SetParameterDescription("sizey","size along y in pixels.");
-//     // Default values
-//     SetDefaultParameterInt("startx", 0);
-//     SetDefaultParameterInt("starty", 0);
-//     SetDefaultParameterInt("sizex",  0);
-//     SetDefaultParameterInt("sizey",  0);
+    // Default values
+    SetDefaultParameterInt("startx", 0);
+    SetDefaultParameterInt("starty", 0);
+    SetDefaultParameterInt("sizex",  0);
+    SetDefaultParameterInt("sizey",  0);
 
     // Channelist Parameters
     AddParameter(ParameterType_ListView,  "cl", "Output Image channels");
