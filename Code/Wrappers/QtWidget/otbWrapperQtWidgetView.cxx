@@ -247,10 +247,6 @@ void QtWidgetView::GetDocParameterGroup( std::string & val, const std::string & 
     spaces0.append("&nbsp&nbsp&nbsp");
     equal0.append("===");
     }
-  std::string spaces1(space0);
-  spaces1.append("&nbsp&nbsp&nbsp");
-  std::string equal1(equal0);
-  equal1.append("===");
 
   Parameter * paramGr  = m_Application->GetParameterByKey( key );
   if( !dynamic_cast<ParameterGroup *>(paramGr) )
@@ -276,7 +272,7 @@ void QtWidgetView::GetDocParameterGroup( std::string & val, const std::string & 
       {
       oss << "<b><i>"<<param->GetName()<<"</i></b> ("<<param->GetDescription()<<")<br />";
       std::string grDoc;
-      GetDocParameterGroup( grDoc, fullKey);
+      GetDocParameterGroup( grDoc, fullKey, level+1);
       oss<<grDoc;
       }
     }
