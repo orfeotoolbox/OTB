@@ -30,7 +30,7 @@ int otbWrapperApplicationDocTest(int argc, char* argv[])
     return EXIT_FAILURE;
     }
   // Load path
-  for( unsigned int i=2; i<argc; i++)
+  for( int i=2; i<argc; i++)
     {
     otb::Wrapper::ApplicationRegistry::AddApplicationPath(argv[i]);
     }
