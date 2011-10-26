@@ -218,8 +218,8 @@ protected:
                 m_DefaultValueMode(DefaultValueMode_UNKNOWN),
                 m_UserLevel(UserLevel_Basic),
                 m_Role(Role_Input),
-                m_IsChecked(false),
-                m_Root(this)
+                m_Root(this),
+                m_IsChecked(false)
   {}
 
   /** Destructor */
