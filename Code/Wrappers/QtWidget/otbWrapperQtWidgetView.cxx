@@ -68,11 +68,11 @@ void QtWidgetView::CreateGui()
   QGroupBox *mainGroup = new QGroupBox();
   mainGroup->setLayout(mainLayout);
 
-  QVBoxLayout  *mainLayout = new QVBoxLayout();
-  mainLayout->addWidget(mainGroup);
+  QVBoxLayout  *finalLayout = new QVBoxLayout();
+  finalLayout->addWidget(mainGroup);
 
-  // Make the scroll layout the main layout
-  this->setLayout(mainLayout);
+  // Make the final layout to the widget
+  this->setLayout(finalLayout);
 }
 
 
