@@ -55,6 +55,10 @@ void QtWidgetIntParameter::DoCreateWidget()
 
 void QtWidgetIntParameter::DoUpdateGUI()
 {
+  // TODO : search for a better solution
+  m_QSpinBox->setRange(m_IntParam->GetMinimumValue(),
+                       m_IntParam->GetMaximumValue());
+
   bool signalsBlocked = m_QSpinBox->blockSignals( true );
 
   if (m_IntParam->HasValue())
