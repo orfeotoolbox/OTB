@@ -109,12 +109,16 @@ private:
     SetParameterDescription("out", "Radiometric indices output image");
 
     AddParameter(ParameterType_Group, "channels", "Channels selection");
+    SetParameterDescription("channels", "Channels selection");
     AddParameter(ParameterType_Int,  "channels.red",  "Red Channel");
+    SetParameterDescription("channels.red", "Red channel index");
     SetParameterInt("channels.red", 3);
     AddParameter(ParameterType_Int,  "channels.nir",  "NIR Channel");
+    SetParameterDescription("channels.nir", "NIR channel index");
     SetParameterInt("channels.nir", 4);
     
     AddParameter(ParameterType_Group, "index", "Indices selection");
+    SetParameterDescription("index", "List of available radiometric indices");
     AddParameter(ParameterType_Empty, "index.ndvi", "NDVI");
     MandatoryOff("index.ndvi");
     SetParameterDescription("index.ndvi", "Normalized Difference Vegetation Index");

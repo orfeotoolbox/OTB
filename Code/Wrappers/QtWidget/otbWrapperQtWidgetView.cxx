@@ -187,19 +187,17 @@ void QtWidgetView::SetDocParameters( std::string & val )
     // Check if mandatory parameter are present and have value
     if( param->GetMandatory() == true )
       {
-      if( m_Application->GetParameterType(appKeyList[i]) !=  ParameterType_Group && param->IsRoot() )
+      if( m_Application->GetParameterType(appKeyList[i]) !=  ParameterType_Group )
         {
         oss << "<i>" << param->GetName() << ":</i><br />";
         oss << param->GetDescription()<< "<br />";
         oss << "<br />";
         }
-      else if( m_Application->GetParameterType(appKeyList[i]) ==  ParameterType_Group )
+      else
         {
-        oss << param->GetName()<<"<br />";
-        oss << param->GetDescription()<<"<br />";
-        oss << "Parameters:<<br />";
+        oss << "<b><i>=== "<<param->GetName()<<"</i></b> ("<<param->GetDescription()<<")<br />";
         std::string grDoc;
-        GetDocParameterGroup( grDoc, appKeyList[i]);
+        GetDocParameterGroup( grDoc, appKeyList[i], 1);
         oss<<grDoc;
         }
       }
@@ -215,7 +213,7 @@ void QtWidgetView::SetDocParameters( std::string & val )
     // Check if mandatory parameter are present and have value
     if( param->GetMandatory() == false )
       {
-      if( m_Application->GetParameterType(appKeyList[i]) !=  ParameterType_Group && param->IsRoot() )
+      if( m_Application->GetParameterType(appKeyList[i]) )
         {
         oss << "<i>" << param->GetName() << ":</i><br />";
         oss << param->GetDescription()<< "<br />";
@@ -223,11 +221,11 @@ void QtWidgetView::SetDocParameters( std::string & val )
         
         found = true;
         }
-      else if( m_Application->GetParameterType(appKeyList[i]) ==  ParameterType_Group )
+      else
         {
-        oss << "<b><i>"<<param->GetName()<<"</b></i> ("<<param->GetDescription()<<"):<br />";
+        oss << "<b><i>=== "<<param->GetName()<<"</i></b> ("<<param->GetDescription()<<"):<br />";
         std::string grDoc;
-        GetDocParameterGroup( grDoc, appKeyList[i]);
+        GetDocParameterGroup( grDoc, appKeyList[i], 1);
         oss<<grDoc;
         
         found = true;
@@ -241,8 +239,19 @@ void QtWidgetView::SetDocParameters( std::string & val )
   val.append(oss.str());
 }
 
-void QtWidgetView::GetDocParameterGroup( std::string & val, const std::string & key )
+void QtWidgetView::GetDocParameterGroup( std::string & val, const std::string & key, int level )
 {
+  std::string spaces0, equal0;
+  for(unsigned int i=0; i<level; i++)
+    {
+    spaces0.append("&nbsp&nbsp&nbsp");
+    equal0.append("===");
+    }
+  std::string spaces1(space0);
+  spaces1.append("&nbsp&nbsp&nbsp");
+  std::string equal1(equal0);
+  equal1.append("===");
+
   Parameter * paramGr  = m_Application->GetParameterByKey( key );
   if( !dynamic_cast<ParameterGroup *>(paramGr) )
     {
@@ -261,11 +270,11 @@ void QtWidgetView::GetDocParameterGroup( std::string & val, const std::string & 
       {
       oss << "<i>" << param->GetName()<< ":</i><br />";
       oss << param->GetDescription()<<"<br>";
-      //oss << "<br />";
+      oss << "<br />";
       }
     else
       {
-      oss << "<b><i>"<<param->GetName()<<"</b></i> ("<<param->GetDescription()<<"):<br />";
+      oss << "<b><i>"<<param->GetName()<<"</i></b> ("<<param->GetDescription()<<")<br />";
       std::string grDoc;
       GetDocParameterGroup( grDoc, fullKey);
       oss<<grDoc;

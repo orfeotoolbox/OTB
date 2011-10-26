@@ -66,7 +66,7 @@ private:
   void SetDocParameters( std::string & val );
 
   /** generate the documentation associated to a group.*/
-  void GetDocParameterGroup( std::string & val, const std::string & key);
+  void GetDocParameterGroup( std::string & val, const std::string & key, int level);
 
   Application::Pointer m_Application;
 
