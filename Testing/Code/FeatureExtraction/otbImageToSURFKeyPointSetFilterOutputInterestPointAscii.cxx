@@ -70,7 +70,7 @@ int otbImageToSURFKeyPointSetFilterOutputInterestPointAscii(int argc, char * arg
   filter->Update();
 
   PointsIteratorType    pIt = filter->GetOutput()->GetPoints()->Begin();
-  PointDataIteratorType pDataIt = filter->GetOutput()->GetPointData()->Begin();
+  filter->GetOutput()->GetPointData()->Begin();
 
   std::ofstream outfile(outfname);
 

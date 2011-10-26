@@ -627,7 +627,7 @@ ImageToSIFTKeyPointSetFilter<TInputImage, TOutputPointSet>
   double secondMax = 0;
   double sum = 0;
   int    maxIndex = 0;
-  int    secondMaxIndex = -1;
+  //int    secondMaxIndex = -1;
   int    j = 0;
   int    i = 0;
 
@@ -648,14 +648,14 @@ ImageToSIFTKeyPointSetFilter<TInputImage, TOutputPointSet>
     if (lSmoothedHistogram[i] > max)
       {
       secondMax = max;
-      secondMaxIndex = maxIndex;
+      //secondMaxIndex = maxIndex;
       max = lSmoothedHistogram[i];
       maxIndex = i;
       }
     else if (sum > secondMax)
       {
       secondMax = lSmoothedHistogram[i];
-      secondMaxIndex = i;
+      //secondMaxIndex = i;
       }
     }
   // This structure will hold the located maximums

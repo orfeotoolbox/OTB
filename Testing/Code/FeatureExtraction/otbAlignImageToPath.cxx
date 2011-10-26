@@ -129,7 +129,8 @@ int otbAlignImageToPath(int argc, char * argv[])
   typedef VertexListType::ConstPointer               VertexListTypePointer;
   VertexListTypePointer vertexList;
   VertexType            cindex;
-  double                x1, y1, x2, y2;
+  double                x1, y1;
+  //double                x2, y2;
 
   int nbPath = sortiePath->Size();
   otbGenericMsgDebugMacro(<< "NbSegment: " << nbPath);
@@ -141,8 +142,8 @@ int otbAlignImageToPath(int argc, char * argv[])
     x1 = cindex[0];
     y1 = cindex[1];
     cindex = vertexList->GetElement(1);
-    x2 = cindex[0];
-    y2 = cindex[1];
+    //x2 = cindex[0];
+    //y2 = cindex[1];
     fprintf(file, "%8.3f %8.3f\n", x1, y1);
     }
   fclose(file);

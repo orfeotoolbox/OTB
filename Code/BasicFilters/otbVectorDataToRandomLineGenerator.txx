@@ -77,7 +77,7 @@ VectorDataToRandomLineGenerator<TVectorData>
   RegionType generatorRegion = node->GetPolygonExteriorRing()->GetBoundingRegion();
   typename RegionType::SizeType generatorRegionSize = generatorRegion.GetSize();
   typename RegionType::IndexType generatorRegionIndex = generatorRegion.GetIndex();
-  typename RegionType::IndexType generatorRegionOrigin = generatorRegion.GetOrigin();
+  //typename RegionType::IndexType generatorRegionOrigin = generatorRegion.GetOrigin();
 
   // Generation
   PointType rangeMin, rangeMax;

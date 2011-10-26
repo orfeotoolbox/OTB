@@ -71,10 +71,8 @@ public:
   inline TOutput operator ()(const TInput1& amplitude, const TInput2& coherence, const TInput3& phase) const
   {
 //           std::cout << amplitude << " - " << phase << std::endl;
-    double hinc, sinc, vinc;
+    double hinc;
     hinc = 0.6 / (CONST_2PI);
-    sinc = 0.0;
-    vinc = 0.0;
 
     double hue, sat, val;
 

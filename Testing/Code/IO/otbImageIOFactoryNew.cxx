@@ -24,7 +24,7 @@
 
 int otbImageIOFactoryNew(int argc, char* argv[])
 {
-  otb::ImageIOFactory * lImageIOFactory;
+  otb::ImageIOFactory *lImageIOFactory;
   lImageIOFactory = NULL;
-  return EXIT_SUCCESS;
+  return lImageIOFactory != NULL; //to avoid unused variable warning
 }
