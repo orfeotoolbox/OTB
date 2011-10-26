@@ -386,9 +386,10 @@ InputImageParameter::HasValue() const
 void
 InputImageParameter::ClearValue()
 {
- m_Image   = NULL;
+ m_Image  = NULL;
  m_Reader = NULL;
  m_Caster = NULL;
+ m_FileName = "";
 }
 
 
