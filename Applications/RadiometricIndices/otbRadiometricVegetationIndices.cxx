@@ -160,11 +160,11 @@ private:
     SetParameterDescription("index.laindvilog", "Leaf Area Index from NDVI using a logarithmic relationship");
 
     AddParameter(ParameterType_Empty, "index.lairefl", "LAIFromReflLinear");
-    MandatoryOff("index.lairefl"); 
+    MandatoryOff("index.lairefl");
     SetParameterDescription("index.lairefl", "Leaf Area Index from reflectance using a linear relationship");
 
     AddParameter(ParameterType_Empty, "index.laindviformo", "LAIFromNDVIFormo");
-    MandatoryOff("index.laindviformo"); 
+    MandatoryOff("index.laindviformo");
     SetParameterDescription("index.laindviformo", "Leaf Area Index from reflectance using using formula a*(exp(nir-red)/((red+nir)*b)-exp(c*b)), with a = 0.1519 b = 3.9443 c = 0.13. This formula is only valid for Formosat 2 reflectance TOCa linear relationship.");
   }
 
@@ -173,9 +173,9 @@ private:
     if ( HasValue("in") )
       {
        // Put the limit of the channel indices
-      dynamic_cast< NumericalParameter<int> * >(GetParameterByKey("channels.red"))->SetMinimumValue(1); 
+      dynamic_cast< NumericalParameter<int> * >(GetParameterByKey("channels.red"))->SetMinimumValue(1);
       dynamic_cast< NumericalParameter<int> * >(GetParameterByKey("channels.red"))->SetMaximumValue(GetParameterImage("in")->GetNumberOfComponentsPerPixel());
-      dynamic_cast< NumericalParameter<int> * >(GetParameterByKey("channels.nir"))->SetMinimumValue(1); 
+      dynamic_cast< NumericalParameter<int> * >(GetParameterByKey("channels.nir"))->SetMinimumValue(1);
       dynamic_cast< NumericalParameter<int> * >(GetParameterByKey("channels.nir"))->SetMaximumValue(GetParameterImage("in")->GetNumberOfComponentsPerPixel());
       }
   }

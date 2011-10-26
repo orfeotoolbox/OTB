@@ -183,9 +183,9 @@ public:
    */
   void SetParameterFloat(std::string parameter, float value);
 
-  /* Set an default integer value,must used in the 
+  /* Set an default integer value, must used in the
    * DoCreateParameters when setting a value by default
-   * for the parameter  
+   * for the parameter
    *
    * Can be called for types :
    * \li ParameterType_Int
@@ -195,9 +195,9 @@ public:
    */
   void SetDefaultParameterInt(std::string parameter, int value);
 
-  /* Set a default floating value, must used in the 
+  /* Set a default floating value, must used in the
    * DoCreateParameters when setting a value by default
-   * for the parameter 
+   * for the parameter
    *
    * Can be called for types :
    * \li ParameterType_Float

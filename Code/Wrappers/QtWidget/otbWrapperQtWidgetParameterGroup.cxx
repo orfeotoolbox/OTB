@@ -93,10 +93,10 @@ void QtWidgetParameterGroup::DoCreateWidget()
           }
         gridLayout->addWidget(checkBox, i, 0);
 
-        // Reset Button 
+        // Reset Button
         // Make sense only for NumericalParameter
         if (dynamic_cast<IntParameter*>(param)
-            || dynamic_cast<FloatParameter*>(param) 
+            || dynamic_cast<FloatParameter*>(param)
             || dynamic_cast<RadiusParameter*>(param) )
           {
           QPushButton* resetButton = new QPushButton;

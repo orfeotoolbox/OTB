@@ -67,7 +67,7 @@ private:
     AddParameter(ParameterType_Filename, "out", "Output XML file");
     SetParameterDescription( "out", "Name of the XML file where the statistics are saved for future reuse" );
     MandatoryOff("out");
-    SetParameterRole("out",Role_Output);
+    SetParameterRole("out", Role_Output);
   }
 
   void DoUpdateParameters()

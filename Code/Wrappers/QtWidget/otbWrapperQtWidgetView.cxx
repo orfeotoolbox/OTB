@@ -155,7 +155,7 @@ QWidget* QtWidgetView::CreateDoc()
     for (unsigned int i = 0; i < m_Application->GetDocTags().size() - 1; i++)
       {
       oss << m_Application->GetDocTags()[i] << ", ";
-    ;
+   ;
       }
     oss << m_Application->GetDocTags()[m_Application->GetDocTags().size() - 1];
     }
@@ -256,7 +256,7 @@ void QtWidgetView::GetDocParameterGroup( std::string & val, const std::string & 
   std::string spaces, equals;
   for(unsigned int i=0; i<level; i++)
     {
-    spaces.append("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+    spaces.append("&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;");
     equals.append("===");
     }
   equals.append("===");

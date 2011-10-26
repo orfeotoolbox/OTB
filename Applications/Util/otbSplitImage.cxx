@@ -44,7 +44,7 @@ public:
   itkTypeMacro(SplitImage, Application);
 
   /** Filters typedef */
-  typedef otb::MultiToMonoChannelExtractROI<FloatVectorImageType::InternalPixelType, 
+  typedef otb::MultiToMonoChannelExtractROI<FloatVectorImageType::InternalPixelType,
                                             FloatVectorImageType::InternalPixelType> FilterType;
 
 private:
@@ -71,7 +71,7 @@ private:
     AddParameter(ParameterType_Filename, "out", "Output Image");
     SetParameterDescription("out",
                             "Will be used to get the prefix and the extension of the output images to write");
-    SetParameterRole("out",Role_Output);
+    SetParameterRole("out", Role_Output);
   }
 
   void DoUpdateParameters()
@@ -100,7 +100,7 @@ private:
     for (unsigned int i = 0; i < inImage->GetNumberOfComponentsPerPixel(); ++i)
       {
       // Set the channel to extract
-      m_Filter->SetChannel(i+1); 
+      m_Filter->SetChannel(i+1);
       
       // build the current output filename
       std::ostringstream oss;
@@ -118,11 +118,11 @@ private:
       paramOut->SetValue(m_Filter->GetOutput());
       // Add the current level to be written
       paramOut->InitializeWriters();
-      AddProcess(paramOut->GetWriter(),osswriter.str());
+      AddProcess(paramOut->GetWriter(), osswriter.str());
       paramOut->Write();
       }
 
-    // Disable the output Image parameter to avoid writing 
+    // Disable the output Image parameter to avoid writing
     // the last image (Application::ExecuteAndWriteOutput method)
     GetParameterByKey("out")->SetActive(false);
   }

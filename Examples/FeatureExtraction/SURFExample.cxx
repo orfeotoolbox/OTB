@@ -247,7 +247,6 @@ int main(int argc, char * argv[])
  // Software Guide : EndLatex
 
  // Software Guide : BeginCodeSnippet
-
   while (pIt != filter->GetOutput()->GetPoints()->End())
     {
 // Software Guide : EndCodeSnippet

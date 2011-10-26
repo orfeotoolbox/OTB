@@ -48,7 +48,7 @@ public:
   typedef otb::ImageList<FloatImageType>  ImageListType;
   typedef ImageListToVectorImageFilter<ImageListType,
                                        FloatVectorImageType >                   ListConcatenerFilterType;
-  typedef MultiToMonoChannelExtractROI<FloatVectorImageType::InternalPixelType, 
+  typedef MultiToMonoChannelExtractROI<FloatVectorImageType::InternalPixelType,
                                        FloatImageType::PixelType>               ExtractROIFilterType;
   typedef ObjectList<ExtractROIFilterType>                                      ExtractROIFilterListType;
 
@@ -97,7 +97,7 @@ private:
   }
 
   void DoExecute()
-  {  
+  {
     // Get the input image list
     FloatVectorImageListType::Pointer inList = this->GetParameterImageList("il");
 
@@ -116,7 +116,7 @@ private:
       FloatVectorImageType::Pointer vectIm = inList->GetNthElement(i);
       vectIm->UpdateOutputInformation();
       if( size != vectIm->GetLargestPossibleRegion().GetSize() )
-        { 
+        {
         itkExceptionMacro("Input Image size mismatch...");
         }
 
@@ -130,7 +130,6 @@ private:
         m_ImageList->PushBack( extractor->GetOutput() );
         }
       }
-
 
 
     m_Concatener->SetInput( m_ImageList );

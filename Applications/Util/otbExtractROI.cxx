@@ -43,7 +43,7 @@ public:
   itkTypeMacro(ExtractROI, otb::Application);
 
   /** Filters typedef */
-  typedef otb::MultiChannelExtractROI<FloatVectorImageType::InternalPixelType, 
+  typedef otb::MultiChannelExtractROI<FloatVectorImageType::InternalPixelType,
                                       FloatVectorImageType::InternalPixelType> ExtractROIFilterType;
   
 private:
@@ -117,16 +117,16 @@ private:
         }
       
       // Put the limit of the index and the size relative the image
-      dynamic_cast< NumericalParameter<int> * >(GetParameterByKey("sizex"))->SetMinimumValue(0); 
+      dynamic_cast< NumericalParameter<int> * >(GetParameterByKey("sizex"))->SetMinimumValue(0);
       dynamic_cast< NumericalParameter<int> * >(GetParameterByKey("sizex"))->SetMaximumValue(largestRegion.GetSize(0));
 
-      dynamic_cast< NumericalParameter<int> * >(GetParameterByKey("sizey"))->SetMinimumValue(0); 
+      dynamic_cast< NumericalParameter<int> * >(GetParameterByKey("sizey"))->SetMinimumValue(0);
       dynamic_cast< NumericalParameter<int> * >(GetParameterByKey("sizey"))->SetMaximumValue(largestRegion.GetSize(1));
 
-      dynamic_cast< NumericalParameter<int> * >(GetParameterByKey("startx"))->SetMinimumValue(0); 
+      dynamic_cast< NumericalParameter<int> * >(GetParameterByKey("startx"))->SetMinimumValue(0);
       dynamic_cast< NumericalParameter<int> * >(GetParameterByKey("startx"))->SetMaximumValue(largestRegion.GetSize(0));
         
-      dynamic_cast< NumericalParameter<int> * >(GetParameterByKey("starty"))->SetMinimumValue(0); 
+      dynamic_cast< NumericalParameter<int> * >(GetParameterByKey("starty"))->SetMinimumValue(0);
       dynamic_cast< NumericalParameter<int> * >(GetParameterByKey("starty"))->SetMaximumValue(largestRegion.GetSize(1));
     
       // Crop the roi region to be included in the largest possible
@@ -164,7 +164,7 @@ private:
   }
 
   void DoExecute()
-  { 
+  {
     ExtractROIFilterType::InputImageType* inImage = GetParameterImage("in");
 
     m_ExtractROIFilter = ExtractROIFilterType::New();

@@ -63,7 +63,7 @@ private:
     SetDocSeeAlso(" ");
     SetDocCLExample("otbApplicationLauncherCommandLine BandMath ${OTB-BIN}/bin"
       " --il ${OTB-Data}/oupees_sub_c1.png ${OTB-Data}/oupees_sub_c2.png ${OTB-Data}/oupees_sub.png"
-      "--out apTvUtBandMathOutput.tif --exp \"cos(im1b1)+im2b1*im3b1-im3b2+ndvi(im3b3,im3b4)\"");
+      "--out apTvUtBandMathOutput.tif --exp \"cos(im1b1)+im2b1*im3b1-im3b2+ndvi(im3b3, im3b4)\"");
     AddDocTag("Util");
   }
 
@@ -124,7 +124,7 @@ private:
     otb::Parser::Pointer dummyParser = otb::Parser::New();
     std::vector<double> dummyVars;
     std::string         success = "The expression is Valid";
-    SetParameterDescription("exp",success);
+    SetParameterDescription("exp", success);
     std::ostringstream  failure;
 
     if (HasValue("exp"))
@@ -146,7 +146,7 @@ private:
         {
         // Change the parameter description to be able to have the
         // parser errors in the tooltip
-        SetParameterDescription("exp",err.GetDescription());
+        SetParameterDescription("exp", err.GetDescription());
         }
       }
   }
@@ -175,7 +175,7 @@ private:
       FloatVectorImageType::Pointer currentImage = inList->GetNthElement(i);
       currentImage->UpdateOutputInformation();
 
-      otbAppLogINFO( << "Image #" << i + 1 << " has " 
+      otbAppLogINFO( << "Image #" << i + 1 << " has "
                      << currentImage->GetNumberOfComponentsPerPixel()
                      << " components" << std::endl );
 

@@ -80,7 +80,7 @@ private:
     AddParameter(ParameterType_Directory, "dem", "DEM directory");
     MandatoryOff("dem");
 
-    AddParameter(ParameterType_Empty, "norescale", "No rescaling in [0,255]");
+    AddParameter(ParameterType_Empty, "norescale", "No rescaling in [0, 255]");
     MandatoryOff("norescale");
   }
 

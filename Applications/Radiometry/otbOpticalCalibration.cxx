@@ -116,7 +116,7 @@ private:
     std::ostringstream oss;
     oss << "Sensor relative spectral response file"<<std::endl;
     oss << "By default the application gets these informations in the metadata";
-    SetParameterDescription("rsr",oss.str());
+    SetParameterDescription("rsr", oss.str());
     MandatoryOff("rsr");
 
     AddParameter(ParameterType_Choice,   "aerosol", "Aerosol Model");
@@ -214,7 +214,7 @@ private:
         }
         break;
         }
-      // Set the atmospheric param 
+      // Set the atmospheric param
       m_AtmosphericParam->SetOzoneAmount(GetParameterFloat("oz"));
       m_AtmosphericParam->SetWaterVaporAmount(GetParameterFloat("wa"));
       m_AtmosphericParam->SetAtmosphericPressure(GetParameterFloat("atmo"));
@@ -236,7 +236,7 @@ private:
         m_ReflectanceToSurfaceReflectanceFilter->SetAeronetFileName(GetParameterString("AeronetFile"));
         }
       
-      // 
+      //
       AtmosphericRadiativeTerms::Pointer radTerms = AtmosphericRadiativeTerms::New();
       radTerms->ValuesInitialization(inImage->GetNumberOfComponentsPerPixel());
       m_ReflectanceToSurfaceReflectanceFilter->SetAtmosphericRadiativeTerms(radTerms);

@@ -121,7 +121,7 @@ private:
 
  template<class TImageType>
  void GenericDoExecute()
-  {  
+  {
     typename TImageType::Pointer castIm;
     
     std::string rescaleType = this->GetParameterString("type");
@@ -240,7 +240,7 @@ private:
 
 
  void DoExecute()
-  {  
+  {
     switch ( this->GetParameterOutputImagePixelType("out") )
       {
       case ImagePixelType_int8:

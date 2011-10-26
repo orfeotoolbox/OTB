@@ -82,7 +82,7 @@ private:
 
     AddParameter(ParameterType_Filename, "out", "Output Image");
     SetParameterDescription("out","will be used to get the prefix and the extension of the images to write");
-    SetParameterRole("out",Role_Output);
+    SetParameterRole("out", Role_Output);
 
     AddParameter(ParameterType_Int, "level", "Number Of Levels");
     SetDefaultParameterInt("level", 1);
@@ -179,7 +179,7 @@ private:
       paramOut->SetValue(m_ShrinkFilter->GetOutput());
       // Add the current level to be written
       paramOut->InitializeWriters();
-      AddProcess(paramOut->GetWriter(),osswriter.str());
+      AddProcess(paramOut->GetWriter(), osswriter.str());
       paramOut->Write();
 
       ++currentLevel;

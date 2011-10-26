@@ -114,7 +114,7 @@ private:
     AddParameter(ParameterType_Choice, "outputs.mode", "Mode Type");
     AddChoice("outputs.mode.auto", "User Defined");
     AddChoice("outputs.mode.autosize", "Automatic Size ");
-    AddChoice("outputs.mode.autospacing", "Automatic Spacing");    
+    AddChoice("outputs.mode.autospacing", "Automatic Spacing");
 
     // Upper left point coordinates
     AddParameter(ParameterType_Float, "outputs.ulx", "Upper Left X");
@@ -143,7 +143,7 @@ private:
     isotropOss << "Default spacing values are estimated from the sensor modelling of the image. It can therefore result in a non-isotropic spacing. ";
     isotropOss << "This option allows you to force default values to be isotropic (in this case, the minimum of spacing in both direction is applied. ";
     isotropOss << "Values overriden by user are not affected by this option.";
-    SetParameterDescription("outputs.isotropic",isotropOss.str());
+    SetParameterDescription("outputs.isotropic", isotropOss.str());
     EnableParameter("outputs.isotropic");
     
     // DEM
@@ -156,7 +156,7 @@ private:
     std::ostringstream oss;
     oss << "Activate RPC sensor model estimation"<<std::endl;
     oss << "Parameter is the number of control points per axis";
-    //SetParameterDescription("rpc",oss.str().c_str());
+    //SetParameterDescription("rpc", oss.str().c_str());
     MandatoryOff("rpc");
 
     // Interpolators
@@ -174,11 +174,11 @@ private:
     AddParameter(ParameterType_Int, "map.utm.zone", "Zone number");
     AddParameter(ParameterType_Empty, "map.utm.hem",  "Hemisphere North");
 
-    AddChoice("map.lambert2",  "Lambert II Etendu"); 
+    AddChoice("map.lambert2",  "Lambert II Etendu");
 
     AddChoice("map.epsg","EPSG");
-    AddParameter(ParameterType_Int, "map.epsg.code", "EPSG Code");    
-    SetDefaultParameterInt("map.epsg.code",32631);
+    AddParameter(ParameterType_Int, "map.epsg.code", "EPSG Code");
+    SetDefaultParameterInt("map.epsg.code", 32631);
     SetParameterString("map", "epsg");
 
     // Deformation Field Spacing
@@ -192,7 +192,7 @@ private:
   {
     if (HasValue("in"))
       {
-      // input image 
+      // input image
       FloatVectorImageType::Pointer inImage = GetParameterImage("in");
 
       // Update the UTM zone params
@@ -221,7 +221,7 @@ private:
       dynamic_cast< NumericalParameter<float> * >(GetParameterByKey("outputs.spacingy"))->SetMinimumValue(-50000.0);
       dynamic_cast< NumericalParameter<float> * >(GetParameterByKey("outputs.spacingy"))->SetMaximumValue(10000.0);
       
-      // Fill the Gui with the computed parameters      
+      // Fill the Gui with the computed parameters
       if (!HasUserValue("outputs.ulx"))
         {
         SetParameterFloat("outputs.ulx", genericRSEstimator->GetOutputOrigin()[0]);
@@ -242,7 +242,7 @@ private:
       if (!HasUserValue("outputs.spacingy"))
         SetParameterFloat("outputs.spacingy", genericRSEstimator->GetOutputSpacing()[1]);
 
-      // Handle the spacing and size field following the mode 
+      // Handle the spacing and size field following the mode
       // choosed by the user
       switch (GetParameterInt("outputs.mode") )
         {
@@ -319,7 +319,7 @@ private:
         MandatoryOn("outputs.sizex");
         MandatoryOn("outputs.sizey");
 
-        ResampleFilterType::SizeType size;        
+        ResampleFilterType::SizeType size;
         size[0] = GetParameterInt("outputs.sizex");
         size[1] = GetParameterInt("outputs.sizey");
 
@@ -352,7 +352,7 @@ private:
       int zone = otb::Utils::GetZoneFromGeoPoint(genericRSEstimator->GetOutputOrigin()[0],
                                                  genericRSEstimator->GetOutputOrigin()[1]);
       // Update the UTM Gui fields
-      SetParameterInt("map.utm.zone",zone);
+      SetParameterInt("map.utm.zone", zone);
       if(genericRSEstimator->GetOutputOrigin()[0] > 0.)
         {
         EnableParameter("map.utm.hem");
@@ -379,7 +379,7 @@ private:
       std::string hem = "N";
       if (!IsParameterEnabled("map.utm.hem"))
         hem = "S";
-      utmProjection->SetHemisphere(hem[0]);            
+      utmProjection->SetHemisphere(hem[0]);
         
       // Get the projection ref
       m_OutputProjectionRef = utmProjection->GetWkt();
@@ -411,7 +411,7 @@ private:
     m_ResampleFilter = ResampleFilterType::New();
     m_ResampleFilter->SetInput(inImage);
 
-    // Set the output projection Ref 
+    // Set the output projection Ref
     m_ResampleFilter->SetInputProjectionRef(inImage->GetProjectionRef());
     m_ResampleFilter->SetInputKeywordList(inImage->GetImageKeywordlist());
     m_ResampleFilter->SetOutputProjectionRef(m_OutputProjectionRef);
@@ -445,7 +445,7 @@ private:
       break;
       }
 
-    // DEM 
+    // DEM
     if (IsParameterEnabled("dem") && HasValue("dem"))
       {
       m_ResampleFilter->SetDEMDirectory(GetParameterString("dem"));
@@ -492,7 +492,7 @@ private:
       m_ResampleFilter->SetDeformationFieldSpacing(gridSpacing);
       }
 
-    // Output Image 
+    // Output Image
     SetParameterOutputImage("out", m_ResampleFilter->GetOutput());
     }
 
