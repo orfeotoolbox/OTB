@@ -82,15 +82,15 @@ private:
   RadiometricVegetationIndices()
   {
     SetName("RadiometricVegetationIndices");
-    SetDescription("Compute radimetric indices based Red and NIT channels.");
+    SetDescription("Compute radiometric indices based on Red and NIT channels.");
 
     // Documentation
-    SetDocName("Images Concatenation Application");
+    SetDocName("Radiometric Vegetation Application");
     SetDocLongDescription("This application computes radiometric indices that uses red and NIR channels of the input image. The output image is a multi channel one which each channel is one of the selected index. The channel order is the one of the selected indices.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("otbVecgetationIndices class");
-    SetDocCLExample("otbApplicationLauncherCommandLine RadiometricVegetationIndices ${OTB-BIN}/bin --in ${OTB-DATA}/Inputqb_RoadExtract.img --index.ndvi 1 --index.rvi 1 --index.ipvi 1 --out otbRadiometricVegetationIndicesImages.tif");
+    SetDocCLExample("otbApplicationLauncherCommandLine RadiometricVegetationIndices ${OTB-BIN}/bin --in ${OTB-DATA}/Input/qb_RoadExtract.img --index.ndvi 1 --index.rvi 1 --index.ipvi 1 --out otbRadiometricVegetationIndicesImages.tif");
     AddDocTag("Radiometric Indices");
     AddDocTag("Vegetation Indices");
     AddDocTag("Feature");
@@ -157,11 +157,11 @@ private:
 
     AddParameter(ParameterType_Empty, "index.lairefl", "LAIFromReflLinear");
     MandatoryOff("index.lairefl"); 
-    SetParameterDescription("index.lairefl", "Leaf Area Index from reflectances using a linear relationship");
+    SetParameterDescription("index.lairefl", "Leaf Area Index from reflectance using a linear relationship");
 
     AddParameter(ParameterType_Empty, "index.laindviformo", "LAIFromNDVIFormo");
     MandatoryOff("index.laindviformo"); 
-    SetParameterDescription("index.laindviformo", "Leaf Area Index from reflectances using using formula a*(exp(nir-red)/((red+nir)*b)-exp(c*b)), with a = 0.1519 b = 3.9443 c = 0.13. This formula is only valid for Formosat 2 reflectance TOCa linear relationship");
+    SetParameterDescription("index.laindviformo", "Leaf Area Index from reflectance using using formula a*(exp(nir-red)/((red+nir)*b)-exp(c*b)), with a = 0.1519 b = 3.9443 c = 0.13. This formula is only valid for Formosat 2 reflectance TOCa linear relationship.");
   }
 
   void DoUpdateParameters()
