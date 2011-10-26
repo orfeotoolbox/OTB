@@ -44,6 +44,17 @@ private:
   {
     SetName("MultivariateAlterationDetector");
     SetDescription("Multivariate Alteration Detector");
+
+    // Documentation
+    SetDocName("Multivariate alteration detector");
+    SetDocLongDescription("This application detects change between two given images.");
+    SetDocLimitations("None");
+    SetDocAuthors("OTB-Team");
+    SetDocSeeAlso(" ");
+    SetDocCLExample("otbApplicationLauncherCommandLine MultivariateAlterationDetector ${OTB-BIN}/bin "
+      "--in1 ${OTB-Data}/Input/Spot5-Gloucester-before.tif --in2 ${OTB-Data}/Input/Spot5-Gloucester-after.tif "
+      "--out detectedChangeImage.tif ");
+    AddDocTag("Feature extraction");
   }
 
   virtual ~MultivariateAlterationDetector()
@@ -55,6 +66,7 @@ private:
     AddParameter(ParameterType_InputImage,  "in1", "Input Image 1");
     AddParameter(ParameterType_InputImage,  "in2", "Input Image 2");
     AddParameter(ParameterType_OutputImage, "out", "Change Map");
+    SetParameterDescription("out","Image of detected changes.");
   }
 
   void DoUpdateParameters()
