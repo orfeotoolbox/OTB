@@ -65,6 +65,9 @@ private:
   /** Add the parameter description in the flux of the documentation tab. */
   void SetDocParameters( std::string & val );
 
+  /** Get the parameter description of one parameter. */
+  void GetDocParameters( std::string & val, bool mandatory );
+
   /** generate the documentation associated to a group.*/
   void GetDocParameterGroup( std::string & val, const std::string & key, int level);
 

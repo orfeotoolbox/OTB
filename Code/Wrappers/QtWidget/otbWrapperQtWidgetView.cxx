@@ -172,7 +172,7 @@ QWidget* QtWidgetView::CreateDoc()
 
 void QtWidgetView::SetDocParameters( std::string & val )
 {
-  const std::vector<std::string> appKeyList = m_Application->GetParametersKeys( false ); //true );
+  const std::vector<std::string> appKeyList = m_Application->GetParametersKeys( false );
   const unsigned int nbOfParam = appKeyList.size();
     
   itk::OStringStream oss;
@@ -180,64 +180,59 @@ void QtWidgetView::SetDocParameters( std::string & val )
   
   // Mandatory parameters
   oss << "<h4>Mandatory parameters</h4>";
-  
-  for( unsigned int i=0; i<nbOfParam; i++ )
-    {
-    Parameter::Pointer param =  m_Application->GetParameterByKey( appKeyList[i] );
-    // Check if mandatory parameter are present and have value
-    if( param->GetMandatory() == true )
-      {
-      if( m_Application->GetParameterType(appKeyList[i]) !=  ParameterType_Group )
-        {
-        oss << "<i>" << param->GetName() << ":</i><br />";
-        oss << param->GetDescription()<< "<br />";
-        oss << "<br />";
-        }
-      else
-        {
-        oss << "<b><i>=== "<<param->GetName()<<"</i></b> ("<<param->GetDescription()<<")<br />";
-        std::string grDoc;
-        GetDocParameterGroup( grDoc, appKeyList[i], 1);
-        oss<<grDoc;
-        }
-      }
-    }
-  
+  std::string paramDocs("");
+
+  this->GetDocParameters( paramDocs, true );
+  oss<<paramDocs;
+
+  paramDocs  ="";
+
   // Optional parameters
   oss << "<h4>Optional parameters</h4>";
   oss << "<body><li>";
-  bool found = false;
-  for( unsigned int i=0; i<nbOfParam; i++ )
-    {
-    Parameter::Pointer param =  m_Application->GetParameterByKey( appKeyList[i] );
-    // Check if mandatory parameter are present and have value
-    if( param->GetMandatory() == false )
-      {
-      if( m_Application->GetParameterType(appKeyList[i]) )
-        {
-        oss << "<i>" << param->GetName() << ":</i><br />";
-        oss << param->GetDescription()<< "<br />";
-        oss << "<br />";
-        
-        found = true;
-        }
-      else
-        {
-        oss << "<b><i>=== "<<param->GetName()<<"</i></b> ("<<param->GetDescription()<<"):<br />";
-        std::string grDoc;
-        GetDocParameterGroup( grDoc, appKeyList[i], 1);
-        oss<<grDoc;
-        
-        found = true;
-        }
-      }
-    }
-  if( !found )
-    oss << "None";
-  
+
+  this->GetDocParameters( paramDocs, false );
+
+  oss<<paramDocs;
   
   val.append(oss.str());
 }
+
+void QtWidgetView::GetDocParameters( std::string & val, bool mandatory)
+{
+  itk::OStringStream oss;
+  const std::vector<std::string> appKeyList = m_Application->GetParametersKeys( false );
+  const unsigned int nbOfParam = appKeyList.size();
+  
+  std::string paramDocs("");
+   for( unsigned int i=0; i<nbOfParam; i++ )
+     {
+     const std::string key(appKeyList[i]);
+     Parameter::Pointer param =  m_Application->GetParameterByKey( key );
+     if( param->GetMandatory() == mandatory )
+       {
+       if( m_Application->GetParameterType(key) !=  ParameterType_Group )
+         {
+         oss << "<i>" << param->GetName() << ":</i><br />";
+         oss << param->GetDescription()<< "<br />";
+         oss << "<br />";
+         }
+       else
+         {
+         oss << "<b><i>=== "<<param->GetName()<<"</i></b> ("<<param->GetDescription()<<"):<br />";
+         std::string grDoc;
+         GetDocParameterGroup( grDoc, key, 1);
+         oss<<grDoc;
+         }
+       }
+     }
+   
+   if( oss.str() == "" )
+     oss << "None";
+
+   val = oss.str();
+}
+
 
 void QtWidgetView::GetDocParameterGroup( std::string & val, const std::string & key, int level )
 {
