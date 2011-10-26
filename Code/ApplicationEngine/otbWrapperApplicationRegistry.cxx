@@ -129,6 +129,13 @@ ApplicationRegistry::GetAvailableApplications()
     {
     availableApp.push_back((*k)->GetName());
     }
+  // If the ITK_AUTOLOAD_PATH contains
+  // several times the same path, application will appears several
+  // times in the list.To be cleaner, we erase multiple
+  std::vector<std::string>::iterator it;
+  it = std::unique(availableApp.begin(), availableApp.end());
+  availableApp.resize( it - availableApp.begin() );
+
   return availableApp;
 }
 
