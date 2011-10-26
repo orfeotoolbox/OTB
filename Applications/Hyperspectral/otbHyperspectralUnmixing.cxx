@@ -101,7 +101,17 @@ private:
   HyperspectralUnmixing()
   {
     SetName("HyperspectralUnmixing");
-    SetDescription("Unmix an hyperpsectral image");
+    SetDescription("Unmix an hyperspectral image");
+
+    // Documentation
+    SetDocName("Hyper spectral unmixing application");
+    SetDocLongDescription("This application \"unmix\" an hyperspectral image.");
+    SetDocLimitations("None");
+    SetDocAuthors("OTB-Team");
+    SetDocSeeAlso(" ");
+    SetDocCLExample(" ");
+    AddDocTag("Image manipulation");
+    AddDocTag("Hyperspectral");
   }
 
   virtual ~HyperspectralUnmixing()
