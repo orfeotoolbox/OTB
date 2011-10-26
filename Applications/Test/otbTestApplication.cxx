@@ -77,12 +77,12 @@ private:
     AddChoice("choice.choice2", "Choice 2");
     AddChoice("choice.choice3", "Choice 3");
     AddParameter(ParameterType_Float,  "choice.choice1.floatchoice1", "Float of choice1");
-    SetParameterFloat("choice.choice1.floatchoice1",   0.125);
+    SetDefaultParameterFloat("choice.choice1.floatchoice1",   0.125);
 //  Test a choice without associated parameter
 //    AddParameter(ParameterType_Float,  "choice.choice2.floatchoice2", "Float of choice2");
 //    SetParameterFloat("choice.choice2.floatchoice2",   1.0);
     AddParameter(ParameterType_Float,  "choice.choice3.floatchoice3", "Float of choice3");
-    SetParameterFloat("choice.choice3.floatchoice3",   5.0);
+    SetDefaultParameterFloat("choice.choice3.floatchoice3",   5.0);
 
 
     AddParameter(ParameterType_Group, "ingroup", "Input Group");

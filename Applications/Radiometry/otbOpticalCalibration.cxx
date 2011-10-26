@@ -131,11 +131,11 @@ private:
     AddParameter(ParameterType_Float, "atmo", "Atmospheric Pressure");
     AddParameter(ParameterType_Float, "opt",  "Aerosol Optical");
 
-    SetParameterFloat("oz", 0.);
-    SetParameterFloat("wa",  2.5);
-    SetParameterFloat("atmo", 1030.);
+    SetDefaultParameterFloat("oz", 0.);
+    SetDefaultParameterFloat("wa",  2.5);
+    SetDefaultParameterFloat("atmo", 1030.);
 
-    SetParameterFloat("opt", 0.2);
+    SetDefaultParameterFloat("opt", 0.2);
     MandatoryOff("oz");
     MandatoryOff("wa");
     MandatoryOff("atmo");

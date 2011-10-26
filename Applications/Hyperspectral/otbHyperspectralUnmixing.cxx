@@ -131,7 +131,7 @@ private:
     MandatoryOff("dr");
 
     AddParameter(ParameterType_Int, "ne", "Number of endmembers");
-    SetParameterInt("ne", 1);
+    SetDefaultParameterInt("ne", 1);
     MandatoryOff("ne");
 
     AddParameter(ParameterType_Choice, "de", "Dimensionnality estimation");

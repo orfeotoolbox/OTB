@@ -74,9 +74,9 @@ private:
     SetParameterDescription( "out" , "The rescaled image filename." );
     AddParameter(ParameterType_Float,      "outmin", "Output min value");
     AddParameter(ParameterType_Float,      "outmax", "Output max value");
-    SetParameterFloat("outmin", 0.0);
+    SetDefaultParameterFloat("outmin", 0.0);
     SetParameterDescription( "outmin", "Minimum value of the output image." );
-    SetParameterFloat("outmax", 255.0);
+    SetDefaultParameterFloat("outmax", 255.0);
     SetParameterDescription( "outmax", "Maximum value of the output image." );
 
     MandatoryOff("outmin");

@@ -83,18 +83,18 @@ private:
     SetParameterDescription("type", "smoothing kernel to apply : mean, gaussian, anisotropric diffusion.");
     AddChoice("type.mean",     "Mean");
     AddParameter(ParameterType_Radius, "type.mean.radius", "Radius");
-    SetParameterInt("type.mean.radius", 2);
+    SetDefaultParameterInt("type.mean.radius", 2);
 
     AddChoice("type.gaussian", "Gaussian");
     AddParameter(ParameterType_Radius, "type.gaussian.radius", "Radius");
 
-    SetParameterInt("type.gaussian.radius", 2);
+    SetDefaultParameterInt("type.gaussian.radius", 2);
 
     AddChoice("type.anidif",   "Anisotropic Diffusion");
     AddParameter(ParameterType_Float,  "type.anidif.timestep", "Time Step");
     AddParameter(ParameterType_Int,  "type.anidif.nbiter", "Nb Iterations");
-    SetParameterFloat("type.anidif.timestep",   0.125);
-    SetParameterInt("type.anidif.nbiter",     10);
+    SetDefaultParameterFloat("type.anidif.timestep",   0.125);
+    SetDefaultParameterInt("type.anidif.nbiter",     10);
 
     SetParameterString("type", "anidif");
   }

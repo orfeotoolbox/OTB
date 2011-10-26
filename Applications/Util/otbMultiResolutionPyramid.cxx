@@ -85,14 +85,14 @@ private:
     SetParameterRole("out",Role_Output);
 
     AddParameter(ParameterType_Int, "level", "Number Of Levels");
-    SetParameterInt("level", 1);
+    SetDefaultParameterInt("level", 1);
     SetParameterDescription( "level", "Number of levels in the pyramid (default is 1).");
 
     AddParameter(ParameterType_Int, "sfactor", "Subsampling factor");
-    SetParameterInt("sfactor", 2);
+    SetDefaultParameterInt("sfactor", 2);
 
     AddParameter(ParameterType_Float,  "vfactor", "Subsampling factor");
-    SetParameterFloat("vfactor", 0.6);
+    SetDefaultParameterFloat("vfactor", 0.6);
 
     // Boolean Fast scheme
     AddParameter(ParameterType_Empty, "fast", "Use Fast Scheme");

@@ -80,10 +80,10 @@ private:
     AddParameter(ParameterType_Float,        "ranger",   "Range radius");
     AddParameter(ParameterType_Int,          "minsize",   "Min region size");
     AddParameter(ParameterType_Float,        "scale",   "Scale");
-    SetParameterInt("spatialr",   5);
-    SetParameterFloat("ranger",   15.0);
-    SetParameterInt("minsize",    100);
-    SetParameterFloat("scale",    100000.);
+    SetDefaultParameterInt("spatialr",   5);
+    SetDefaultParameterFloat("ranger",   15.0);
+    SetDefaultParameterInt("minsize",    100);
+    SetDefaultParameterFloat("scale",    100000.);
   }
   
   void DoUpdateParameters()

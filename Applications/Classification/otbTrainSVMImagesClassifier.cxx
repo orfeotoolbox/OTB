@@ -183,11 +183,11 @@ private:
     SetParameterDescription("k", "SVM Kernel Type.");
     AddParameter(ParameterType_Int, "mt", "Maximum training sample size");
     MandatoryOff("mt");
-    SetParameterInt("mt", -1);
+    SetDefaultParameterInt("mt", -1);
     SetParameterDescription("mt", "Maximum size of the training sample (default = -1).");
     AddParameter(ParameterType_Int, "mv", "Maximum validation sample size");
     MandatoryOff("mv");
-    SetParameterInt("mv", -1);
+    SetDefaultParameterInt("mv", -1);
     SetParameterDescription("mv", "Maximum size of the validation sample (default = -1)");
     AddParameter(ParameterType_Float, "vtr", "training and validation sample ratio");
     SetParameterDescription("vtr",

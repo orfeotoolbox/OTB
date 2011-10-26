@@ -100,19 +100,19 @@ private:
     SetParameterDescription("vm","Validity mask. Only non-zero pixels will be used to estimate KMeans modes.");
     AddParameter(ParameterType_Int, "ts", "Training set size");
     SetParameterDescription("ts", "Size of the training set.");
-    SetParameterInt("ts", 100);
+    SetDefaultParameterInt("ts", 100);
     AddParameter(ParameterType_Float, "tp", "Training set sample selection probability");
     SetParameterDescription("tp", "Probability for a sample to be selected in the training set.");
-    SetParameterFloat("tp", 0.5);
+    SetDefaultParameterFloat("tp", 0.5);
     AddParameter(ParameterType_Int, "nc", "Number of classes");
     SetParameterDescription("nc","number of modes, which will be used to generate class membership.");
-    SetParameterInt("nc", 3);
+    SetDefaultParameterInt("nc", 3);
     AddParameter(ParameterType_Float, "cp", "Initial class centroid probability");
     SetParameterDescription("cp", "Probability for a pixel to be selected as an initial class centroid");
-    SetParameterFloat("cp", 0.8);
+    SetDefaultParameterFloat("cp", 0.8);
     AddParameter(ParameterType_Int, "sl", "Number of lines for each streaming block");
     SetParameterDescription("sl","input image will be divided into sl lines.");
-    SetParameterInt("sl", 1000);
+    SetDefaultParameterInt("sl", 1000);
   }
 
   void DoUpdateParameters()
