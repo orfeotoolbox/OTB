@@ -68,25 +68,24 @@ void QtWidgetView::CreateGui()
   QGroupBox *mainGroup = new QGroupBox();
   mainGroup->setLayout(mainLayout);
 
-  // Put the main group inside a scroll area
-  QScrollArea *scrollArea = new QScrollArea;
-  scrollArea->setWidget(mainGroup);
-  scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-  scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-  scrollArea->setWidgetResizable(true);
-
-  QVBoxLayout  *scrollLayout = new QVBoxLayout();
-  scrollLayout->addWidget(scrollArea);
+  QVBoxLayout  *mainLayout = new QVBoxLayout();
+  mainLayout->addWidget(mainGroup);
 
   // Make the scroll layout the main layout
-  this->setLayout(scrollLayout);
+  this->setLayout(mainLayout);
 }
 
 
 QWidget* QtWidgetView::CreateInputWidgets()
 {
-  QtWidgetParameterBase* params = QtWidgetParameterFactory::CreateQtWidget(m_Model->GetApplication()->GetParameterList(), m_Model);
-  return params;
+  QScrollArea *scrollArea = new QScrollArea;
+  // Put the main group inside a scroll area
+  scrollArea->setWidget(QtWidgetParameterFactory::CreateQtWidget(m_Model->GetApplication()->GetParameterList(), m_Model));
+  scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+  scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+  scrollArea->setWidgetResizable(true);
+
+  return scrollArea;
 }
 
 
