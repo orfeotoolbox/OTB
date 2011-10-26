@@ -54,6 +54,16 @@ private:
   {
     SetName("LineSegmentDetection");
     SetDescription("Detect line segments in raster");
+
+    // Documentation
+    SetDocName("Line segment detection application");
+    SetDocLongDescription("This application detects line segments in raster. Detected lines are saved in a shape file.");
+    SetDocLimitations("None");
+    SetDocAuthors("OTB-Team");
+    SetDocSeeAlso(" ");
+    SetDocCLExample("otbApplicationLauncherCommandLine BundleToPerfectSensor ${OTB-BIN}/bin "
+      "--in ${OTB-Data}/Input/QB_Suburb.png --out linesDetected.shp ");
+     AddDocTag("Feature extraction");
   }
 
   virtual ~LineSegmentDetection()
@@ -64,12 +74,13 @@ private:
   {
     AddParameter(ParameterType_InputImage, "in", "Input Image");
 
-    AddParameter(ParameterType_OutputVectorData, "out", "Output detected line segments");
 
+    AddParameter(ParameterType_OutputVectorData, "out", "Output detected");
+    SetParameterDescription("out"," Output detected line segments raster.");
     AddParameter(ParameterType_Directory, "dem", "DEM directory");
     MandatoryOff("dem");
 
-    AddParameter(ParameterType_Empty, "norescale", "No rescaling in [0 255]");
+    AddParameter(ParameterType_Empty, "norescale", "No rescaling in [0,255]");
     MandatoryOff("norescale");
   }
 
