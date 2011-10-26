@@ -188,7 +188,7 @@ StatisticsAttributesLabelObjectFunctor<TLabelObject, TFeatureImage>
 
   if (!m_ReducedAttributeSet)
     {
-    double elongation = 0;
+    double elongation = std::numeric_limits<double>::quiet_NaN();
     if (sum != 0)
       {
       // Normalize using the total mass
@@ -256,6 +256,11 @@ StatisticsAttributesLabelObjectFunctor<TLabelObject, TFeatureImage>
             }
           }
         }
+
+
+      oss.str("");
+      oss << "STATS::" << m_FeatureName << "::Elongation";
+      lo->SetAttribute(oss.str().c_str(), (double) elongation);
 
       oss.str("");
       oss << "STATS::" << m_FeatureName << "::Minimum";
