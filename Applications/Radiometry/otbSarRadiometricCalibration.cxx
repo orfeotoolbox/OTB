@@ -47,6 +47,17 @@ private:
   {
     SetName("SarRadiometricCalibration");
     SetDescription("Perform SAR calibration on input complex images");
+
+    // Documentation
+    SetDocName("SAR Radiometric calibration application");
+    SetDocLongDescription("This application performs SAR calibration on input complex images.");
+    SetDocLimitations("None");
+    SetDocAuthors("OTB-Team");
+    SetDocSeeAlso(" ");
+    SetDocCLExample("otbApplicationLauncherCommandLine sarRadiometricCalibration ${OTB-BIN}/bin "
+      "--cin ${OTB-DATA}/Input/scene.png --out calibratedImage.tif");
+    AddDocTag("Calibration");
+    AddDocTag("SAR");
   }
 
   virtual ~SarRadiometricCalibration()
