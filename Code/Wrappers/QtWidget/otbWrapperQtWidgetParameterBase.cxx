@@ -76,5 +76,14 @@ void QtWidgetParameterBase::SetActivationState( bool value )
   m_Param->SetChecked(value);
   m_Param->SetActive(value);
 }
+
+// Slot connected to the signal emitted by the Reset Button
+void QtWidgetParameterBase::Reset(  )
+{
+  m_Param->Reset();
+  m_Param->SetUserValue(false);
+  m_Param->SetAutomaticValue(false);
+  this->UpdateGUI();
+}
 }
 }

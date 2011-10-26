@@ -20,6 +20,8 @@
 
 #include <QtGui>
 #include "otbWrapperParameterGroup.h"
+#include "otbWrapperNumericalParameter.h"
+#include "otbWrapperRadiusParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
 
 namespace otb

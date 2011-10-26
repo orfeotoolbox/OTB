@@ -156,7 +156,7 @@ private:
     std::ostringstream oss;
     oss << "Activate RPC sensor model estimation"<<std::endl;
     oss << "Parameter is the number of control points per axis";
-    SetParameterDescription("rpc",oss.str().c_str());
+    //SetParameterDescription("rpc",oss.str().c_str());
     MandatoryOff("rpc");
 
     // Interpolators
@@ -165,7 +165,7 @@ private:
     AddChoice("interpolator.nn",     "Nearest Neighbor");
     AddChoice("interpolator.bco",    "BCO");
     AddParameter(ParameterType_Radius, "interpolator.bco.radius", "Radius");
-    SetParameterInt("interpolator.bco.radius", 2);
+    SetDefaultParameterInt("interpolator.bco.radius", 2);
 
     // Built the Output Map Projection
     AddParameter(ParameterType_Choice, "map", "Map Projection");
@@ -178,12 +178,12 @@ private:
 
     AddChoice("map.epsg","EPSG");
     AddParameter(ParameterType_Int, "map.epsg.code", "EPSG Code");    
-    SetParameterInt("map.epsg.code",32631);
+    SetDefaultParameterInt("map.epsg.code",32631);
     SetParameterString("map", "epsg");
 
     // Deformation Field Spacing
     AddParameter(ParameterType_Float, "gridspacing", "Deformation Field Spacing");
-    SetParameterInt("gridspacing", 4.);
+    SetDefaultParameterFloat("gridspacing", 4.);
     SetParameterDescription("gridspacing", "Generate a coarser deformation field with the given spacing");
     MandatoryOff("gridspacing");
   }
@@ -223,7 +223,9 @@ private:
       
       // Fill the Gui with the computed parameters      
       if (!HasUserValue("outputs.ulx"))
+        {
         SetParameterFloat("outputs.ulx", genericRSEstimator->GetOutputOrigin()[0]);
+        }
       
       if (!HasUserValue("outputs.uly"))
         SetParameterFloat("outputs.uly", genericRSEstimator->GetOutputOrigin()[1]);

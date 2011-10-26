@@ -63,7 +63,7 @@ void QtWidgetParameterGroup::DoCreateWidget()
 
       if (paramAsGroup == 0 && paramAsChoice == 0)
         {
-        // Label (col 0)
+        // Label (col 1)
         QWidget* label = new QtWidgetParameterLabel( param );
         gridLayout->addWidget(label, i, 1);
 
@@ -71,7 +71,7 @@ void QtWidgetParameterGroup::DoCreateWidget()
         QtWidgetParameterBase* specificWidget = QtWidgetParameterFactory::CreateQtWidget( param, GetModel() );
         gridLayout->addWidget(specificWidget, i, 2 );
 
-        // CheckBox (col 1)
+        // CheckBox (col 0)
         QCheckBox * checkBox = new QCheckBox;
         connect( checkBox, SIGNAL(clicked(bool)), specificWidget, SLOT(SetActivationState(bool)));
         connect( checkBox, SIGNAL(clicked(bool)), GetModel(), SLOT(NotifyUpdate()) );
@@ -91,8 +91,24 @@ void QtWidgetParameterGroup::DoCreateWidget()
           checkBox->setEnabled(true);
           specificWidget->setEnabled(false);
           }
-
         gridLayout->addWidget(checkBox, i, 0);
+
+        // Reset Button 
+        // Make sense only for NumericalParameter
+        if (dynamic_cast<IntParameter*>(param)
+            || dynamic_cast<FloatParameter*>(param) 
+            || dynamic_cast<RadiusParameter*>(param) )
+          {
+          QPushButton* resetButton = new QPushButton;
+          resetButton->setText("Reset");
+          resetButton->setToolTip("Reset the value of this parameter");
+          gridLayout->addWidget(resetButton, i, 3);
+          
+          // Slots to connect to the reset button
+          connect( resetButton, SIGNAL(clicked()), specificWidget, SLOT(Reset()) );
+          connect( resetButton, SIGNAL(clicked()), GetModel(), SLOT(NotifyUpdate()) );
+          }
+
         m_WidgetList.push_back(specificWidget);
         }
       else

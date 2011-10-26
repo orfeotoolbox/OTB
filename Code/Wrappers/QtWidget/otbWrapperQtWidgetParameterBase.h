@@ -42,6 +42,7 @@ public:
 public slots:
   void UpdateGUI();
   virtual void SetActivationState( bool value );
+  void Reset();
 
 protected slots:
   void ParameterChanged(const QString& key);
