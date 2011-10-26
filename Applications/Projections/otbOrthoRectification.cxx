@@ -88,6 +88,15 @@ private:
     oss << "Using available image metadata to determine the sensor model,"<<std::endl;
     oss << "computes a cartographic projection of the image";
     SetDescription(oss.str());
+    // Documentation
+       SetDocName("Ortho Rectification application");
+       SetDocLongDescription(oss.str());
+       SetDocLimitations("None");
+       SetDocAuthors("OTB-Team");
+       SetDocSeeAlso(" ");
+       SetDocCLExample(" ");
+       AddDocTag("Image manipulation");
+       AddDocTag("projection");
   }
 
   void DoCreateParameters()
