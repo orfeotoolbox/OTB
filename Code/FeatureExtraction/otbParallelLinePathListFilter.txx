@@ -254,9 +254,10 @@ ParallelLinePathListFilter<TPath>
 ::VerifyCommonDistanceCondition(VertexType v1, VertexType v2, VertexType v3, VertexType v4)
 {
 // Compute the length of each line
-  double length12 = 0., length34 = 0.;
+  double length12 = 0.;
+  // double length34 = 0.;
   length12 = sqrt(pow((v2[0] - v1[0]), 2) + pow((v2[1] - v1[1]), 2));
-  length34 = sqrt(pow((v4[0] - v3[0]), 2) + pow((v4[1] - v3[1]), 2));
+  //length34 = sqrt(pow((v4[0] - v3[0]), 2) + pow((v4[1] - v3[1]), 2));
 
   // Set v1[0] to zero and align the y-axis of
   // the new coordinate system with line one (v1 and v2).

@@ -234,19 +234,20 @@ int main(int argc, char * argv[])
 //
 // Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
-  ImageType::SpacingType    spacing = reader->GetOutput()->GetSpacing();
-  ImageType::PointType      origin = reader->GetOutput()->GetOrigin();
-  OutputImageType::SizeType size =
-    outputImage->GetLargestPossibleRegion().GetSize();
-// Software Guide : EndCodeSnippet
-// Software Guide : BeginLatex
-//
-// And we iterate through the SURF set:
-//
-// Software Guide : EndLatex
+ // Software Guide : BeginCodeSnippet
+ ImageType::SpacingType spacing = reader->GetOutput()->GetSpacing();
+ ImageType::PointType origin = reader->GetOutput()->GetOrigin();
+ //OutputImageType::SizeType size = outputImage->GetLargestPossibleRegion().GetSize();
 
-// Software Guide : BeginCodeSnippet
+ // Software Guide : EndCodeSnippet
+ // Software Guide : BeginLatex
+ //
+ // And we iterate through the SURF set:
+ //
+ // Software Guide : EndLatex
+
+ // Software Guide : BeginCodeSnippet
+
   while (pIt != filter->GetOutput()->GetPoints()->End())
     {
 // Software Guide : EndCodeSnippet

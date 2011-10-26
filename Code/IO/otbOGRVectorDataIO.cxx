@@ -280,6 +280,8 @@ void OGRVectorDataIO::Write(const itk::DataObject* datag, char ** papszOptions)
   OGRIOHelper::Pointer IOConversion = OGRIOHelper::New();
   layerKept = IOConversion->ProcessNodeWrite(inputRoot, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
 
+  otbMsgDevMacro( << "layerKept " << layerKept );
+
   OGRDataSource::DestroyDataSource(m_DataSource);
   m_DataSource = NULL;
 

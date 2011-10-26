@@ -172,17 +172,17 @@ RemoveCarvingPathFilter<TInputImage, TInputPath, TOutputImage>
   typename Superclass::OutputImagePointer     outputPtr = this->GetOutput();
 
   unsigned int dir0;
-  unsigned int dir1;
+  //unsigned int dir1;
 
   if (m_Direction == 0)
     {
     dir0 = 0;
-    dir1 = 1;
+    //dir1 = 1;
     }
   else
     {
     dir0 = 1;
-    dir1 = 0;
+    //dir1 = 0;
     }
 
   // we need to compute the output spacing, the output image size, and the

@@ -1607,9 +1607,7 @@ std::string GDALImageIO::GetGdalWriteImageFileName(const std::string& gdalDriver
 
 bool GDALImageIO::GDALInfoReportCorner(const char * /*corner_name*/, double x, double y, double& GeoX, double& GeoY) const
 {
-  const char *pszProjection;
-  double      adfGeoTransform[6];
-
+  double adfGeoTransform[6];
   bool IsTrue;
 
   /* -------------------------------------------------------------------- */
@@ -1617,12 +1615,8 @@ bool GDALImageIO::GDALInfoReportCorner(const char * /*corner_name*/, double x, d
   /* -------------------------------------------------------------------- */
   if (m_Dataset->GetDataSet()->GetGeoTransform(adfGeoTransform) == CE_None)
     {
-    pszProjection = m_Dataset->GetDataSet()->GetProjectionRef();
-
-    GeoX = adfGeoTransform[0] + adfGeoTransform[1] * x
-           + adfGeoTransform[2] * y;
-    GeoY = adfGeoTransform[3] + adfGeoTransform[4] * x
-           + adfGeoTransform[5] * y;
+    GeoX = adfGeoTransform[0] + adfGeoTransform[1] * x + adfGeoTransform[2] * y;
+    GeoY = adfGeoTransform[3] + adfGeoTransform[4] * x + adfGeoTransform[5] * y;
     IsTrue = true;
     }
 

@@ -264,7 +264,7 @@ SailModel
 
    double lambda, Es, Ed, Rsoil1, Rsoil2, rsoil0, rho, tau, PARdiro, PARdifo;
    double sigb, sigf, att, m2, m, sb, sf, vb, vf, w;
-   double tss, too, tsstoo, rdd, tdd, rsd, tsd, rdo, tdo, rso, rsos, rsod;
+   double tss, too, tsstoo, rdd, tdd, rsd, tsd, rdo, tdo, rsos, rsod;
    double rddt, rsdt, rdot, rsodt, rsost, rsot, dn;
    double e1, e2, rinf, rinf2, re, denom, J1ks, J2ks, J1ko, J2ko;
    double Ps, Qs, Pv, Qv, z, g1, g2, Tv1, Tv2, T1, T2, T3;
@@ -321,7 +321,7 @@ SailModel
          tsd = 0;
          rdo = 0;
          tdo = 0;
-         rso = 0;
+         //rso = 0;
          rsos = 0;
          rsod = 0;
    
@@ -415,7 +415,7 @@ SailModel
       // Single scattering contribution
       rsos = w*m_LAI*sumint;
       // Total canopy contribution
-      rso=rsos+rsod;
+      // rso=rsos+rsod;
       //Interaction with the soil
       dn=1.-rsoil0*rdd;
       
