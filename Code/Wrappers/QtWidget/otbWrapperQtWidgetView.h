@@ -48,6 +48,10 @@ public:
 public slots:
   void CloseSlot();
 
+private slots:
+  void UpdateMessageAfterExcuteClicked();
+  void UpdateMessageAfterApplicationReady(bool val);
+
 signals:
   void QuitSignal();
   
@@ -77,6 +81,7 @@ private:
 
   QPushButton* m_ExecButton;
   QPushButton* m_QuitButton;
+  QLabel* m_Message;
 };
 
 

@@ -47,7 +47,7 @@ void QtWidgetView::CreateGui()
   // Create a VBoxLayout with the header, the input widgets, and the footer
   QVBoxLayout *mainLayout = new QVBoxLayout();
   QTabWidget *tab = new QTabWidget();
-
+ 
   tab->addTab(CreateInputWidgets(), "Parameters");
   QTextEdit *log = new QTextEdit();
   connect( m_Model->GetLogOutput(), SIGNAL(NewContentLog(QString)), log, SLOT(append(QString) ) );
@@ -58,8 +58,13 @@ void QtWidgetView::CreateGui()
   tab->addTab(CreateDoc(), "Documentation");
   mainLayout->addWidget(tab);
 
+  m_Message = new QLabel("<center><font color=\"#FF0000\">Select parameters</font></center>");
+  connect( m_Model, SIGNAL(SetApplicationReady(bool)), this, SLOT(UpdateMessageAfterApplicationReady(bool)) );
+  mainLayout->addWidget(m_Message);
+
   QtWidgetSimpleProgressReport * progressReport =  new QtWidgetSimpleProgressReport(m_Model);
   progressReport->SetApplication(m_Application);
+   
   QHBoxLayout *footLayout = new QHBoxLayout;
   footLayout->addWidget(progressReport);
   footLayout->addWidget(CreateFooter());
@@ -75,6 +80,18 @@ void QtWidgetView::CreateGui()
   this->setLayout(finalLayout);
 }
 
+void QtWidgetView::UpdateMessageAfterExcuteClicked()
+{
+  m_Message->setText("<center><font color=\"#FF0000\">Running</font></center>");
+}
+
+void QtWidgetView::UpdateMessageAfterApplicationReady( bool val )
+{
+  if(val == true)
+    m_Message->setText("<center><font color=\"#00FF00\">Ready to run</font></center>");
+  else
+    m_Message->setText("<center><font color=\"#FF0000\">Select parameters</font></center>");
+}
 
 QWidget* QtWidgetView::CreateInputWidgets()
 {
@@ -105,6 +122,7 @@ QWidget* QtWidgetView::CreateFooter()
   m_ExecButton->setText(QObject::tr("Execute"));
   connect( m_ExecButton, SIGNAL(clicked()), m_Model, SLOT(ExecuteAndWriteOutputSlot() ) );
   connect( m_Model, SIGNAL(SetApplicationReady(bool)), m_ExecButton, SLOT(setEnabled(bool)) );
+  connect( m_ExecButton, SIGNAL(clicked()), this, SLOT(UpdateMessageAfterExcuteClicked() ) );
 
   m_QuitButton = new QPushButton(footerGroup);
   m_QuitButton->setText(QObject::tr("Quit"));
