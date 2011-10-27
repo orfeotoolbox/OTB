@@ -50,6 +50,8 @@ int otbWrapperOutputImageParameterTest1(int argc, char* argv[])
   param->SetKey(argv[3]);
   param->SetDescription(argv[4]);
 
+  // an explicit writer initialization is needed
+  param->InitializeWriters();
   param->Write();
 
   return EXIT_SUCCESS;
