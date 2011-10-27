@@ -24,7 +24,6 @@
 #include "otbChangeLabelImageFilter.h"
 
 
-
 namespace otb
 {
 namespace Wrapper

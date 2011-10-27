@@ -78,10 +78,10 @@ public:
 
   /** Standard macro */
   itkNewMacro(Self)
- ;
+;
 
   itkTypeMacro(TrainSVMImagesClassifier, otb::Application)
- ;
+;
 
   typedef otb::Image<FloatVectorImageType::InternalPixelType, 2> ImageReaderType;
 

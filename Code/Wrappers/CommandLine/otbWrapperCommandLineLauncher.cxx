@@ -421,7 +421,7 @@ CommandLineLauncher::LoadParameters()
               else
                 if (values.size() != 1 && values.size() != 2)
                   {
-                  std::cerr << "ERROR: Invalid number of value: " << paramKey << " ,invalid number of values " << values.size() << std::endl;
+                  std::cerr << "ERROR: Invalid number of value: " << paramKey << " , invalid number of values " << values.size() << std::endl;
                   return INVALIDNUMBEROFVALUE;
                   }
               }

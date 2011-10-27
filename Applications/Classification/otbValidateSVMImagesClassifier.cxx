@@ -68,10 +68,10 @@ public:
 
   /** Standard macro */
   itkNewMacro(Self)
- ;
+;
 
   itkTypeMacro(ValidateSVMImagesClassifier, otb::Application)
- ;
+;
 
   typedef otb::Image<FloatVectorImageType::InternalPixelType, 2> ImageReaderType;
 

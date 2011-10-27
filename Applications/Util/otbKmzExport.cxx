@@ -85,19 +85,19 @@ private:
     SetParameterDescription("out", "Output Kmz product directory (with .kmz extension)");
     
     AddParameter(ParameterType_Int, "tilesize",  "Tile Size");
-    SetParameterDescription("tilesize", "Size of the tiles in the kmz product, in number of pixels.");   
+    SetParameterDescription("tilesize", "Size of the tiles in the kmz product, in number of pixels.");
     MandatoryOff("tilesize");
     
     AddParameter(ParameterType_InputImage, "logo",  "Image logo");
-    SetParameterDescription("logo", "Path to the image logo to add to the KMZ product."); 
+    SetParameterDescription("logo", "Path to the image logo to add to the KMZ product.");
     MandatoryOff("logo");
 
     AddParameter(ParameterType_InputImage, "legend",  "Image legend");
-    SetParameterDescription("legend", "Path to the image legend to add to the KMZ product."); 
+    SetParameterDescription("legend", "Path to the image legend to add to the KMZ product.");
     MandatoryOff("legend");
 
     AddParameter(ParameterType_Directory, "dem",  "DEM directory");
-    SetParameterDescription("dem", "Path to the directory that contains elevation information."); 
+    SetParameterDescription("dem", "Path to the directory that contains elevation information.");
     MandatoryOff("dem");
   }
 
@@ -150,7 +150,6 @@ private:
 }
 
 OTB_APPLICATION_EXPORT(otb::Wrapper::KmzExport)
-
 
 
 /*
