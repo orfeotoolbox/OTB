@@ -652,7 +652,7 @@ int Application::GetParameterInt(std::string parameter)
     }
   else
     {
-     itkExceptionMacro("parameter can't be casted to int");
+     itkExceptionMacro(<<parameter << "parameter can't be casted to int");
     }
 
   return ret;
@@ -670,7 +670,7 @@ float Application::GetParameterFloat(std::string parameter)
     }
   else
     {
-    itkExceptionMacro("parameter can't be casted to float");
+    itkExceptionMacro(<<parameter << "parameter can't be casted to float");
     }
 
   return ret;
@@ -733,7 +733,7 @@ std::string Application::GetParameterString(std::string parameter)
     }
   else
    {
-    itkExceptionMacro("parameter can't be casted to string");
+    itkExceptionMacro(<<parameter << "parameter can't be casted to string");
     }
 
   return ret;
@@ -763,7 +763,7 @@ std::vector<std::string> Application::GetParameterStringList(std::string paramet
         }
       else
        {
-            itkExceptionMacro("parameter can't be casted to StringList");
+            itkExceptionMacro(<<parameter << "parameter can't be casted to StringList");
        }
 
   return ret;
@@ -782,7 +782,7 @@ FloatVectorImageType* Application::GetParameterImage(std::string parameter)
     }
   else
     {
-    itkExceptionMacro("parameter can't be casted to ImageType");
+    itkExceptionMacro(<<parameter << "parameter can't be casted to ImageType");
     }
 
   return ret;
@@ -800,7 +800,7 @@ FloatVectorImageListType* Application::GetParameterImageList(std::string paramet
     }
   else
     {
-    itkExceptionMacro("parameter can't be casted to ImageListType");
+    itkExceptionMacro(<<parameter << "parameter can't be casted to ImageListType");
     }
 
   return ret;
@@ -818,7 +818,7 @@ ComplexFloatVectorImageType* Application::GetParameterComplexImage(std::string p
     }
   else
     {
-    itkExceptionMacro("parameter can't be casted to ComplexImageType");
+    itkExceptionMacro(<<parameter << "parameter can't be casted to ComplexImageType");
     }
 
   return ret;
@@ -836,7 +836,7 @@ VectorDataType* Application::GetParameterVectorData(std::string parameter)
     }
   else
     {
-    itkExceptionMacro("parameter can't be casted to Vector Data");
+    itkExceptionMacro(<<parameter << "parameter can't be casted to Vector Data");
     }
   return ret;
 }
@@ -853,7 +853,7 @@ VectorDataListType* Application::GetParameterVectorDataList(std::string paramete
     }
   else
    {
-    itkExceptionMacro("parameter can't be casted to Vector Data List");
+    itkExceptionMacro(<<parameter << "parameter can't be casted to Vector Data List");
    }
   return ret;
 }
@@ -885,7 +885,7 @@ std::string Application::GetParameterAsString(std::string paramKey)
     }
   else
     {
-      itkExceptionMacro("parameter can't be casted to string");
+      itkExceptionMacro(<<paramKey << "parameter can't be casted to string");
     }
    return ret;
 }
@@ -902,7 +902,7 @@ ImagePixelType Application::GetParameterOutputImagePixelType(std::string paramet
     }
   else
     {
-      itkExceptionMacro("unable to find PixelType");
+    itkExceptionMacro("Unable to find PixelType in parameter "<<parameter<<".");
     }
 
   return ret;
@@ -920,7 +920,7 @@ ComplexImagePixelType Application::GetParameterComplexOutputImagePixelType(std::
     }
   else
     {
-       itkExceptionMacro("unable to find PixelType");
+    itkExceptionMacro("Unable to find PixelType in parameter "<<parameter<<".");
     }
 
   return ret;
