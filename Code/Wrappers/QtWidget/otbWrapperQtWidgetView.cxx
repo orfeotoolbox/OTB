@@ -254,7 +254,7 @@ void QtWidgetView::GetDocParameters( std::string & val, bool mandatory)
 void QtWidgetView::GetDocParameterGroup( std::string & val, const std::string & key, int level )
 {
   std::string spaces, equals;
-  for(unsigned int i=0; i<level; i++)
+  for(int i=0; i<level; i++)
     {
     spaces.append("&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;");
     equals.append("===");
