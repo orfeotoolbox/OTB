@@ -297,7 +297,7 @@ OutputImageParameter::Write()
     {
     SwitchVectorImageWrite<DoubleVectorImageType>();
     }
-  else if (dynamic_cast<Int8ImageType*>(m_Image.GetPointer()))
+  else if (dynamic_cast<Int8RGBAImageType*>(m_Image.GetPointer()))
     {
     SwitchRGBAImageWrite<Int8RGBAImageType>();
     }
