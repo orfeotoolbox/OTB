@@ -95,10 +95,21 @@ public:
   itkGetMacro(DefaultValue, ScalarType);
 
   /** Set the minimum value */
-  itkSetMacro(MinimumValue, ScalarType);
+  //itkSetMacro(MinimumValue, ScalarType);
+
+  void SetMinimumValue(ScalarType min)
+  {
+    std::cout <<"SetMinimum Value (old value :  "<< m_MinimumValue << " ) -- ( new value :"<< min << " )"  << std::endl;
+    m_MinimumValue = min;
+  }
 
   /** Get the minimum value */
-  itkGetMacro(MinimumValue, ScalarType);
+  //itkGetMacro(MinimumValue, ScalarType);
+  ScalarType GetMinimumValue()
+  {
+    std::cout <<"Param "<< GetKey()<<" GetMinimum Value "<< m_MinimumValue << std::endl;
+    return m_MinimumValue;
+  }
 
   /** Set the maximum value */
   itkSetMacro(MaximumValue, ScalarType);
@@ -110,7 +121,7 @@ protected:
   /** Constructor */
   NumericalParameter()
     : m_DefaultValue(itk::NumericTraits<T>::Zero),
-      m_MinimumValue(itk::NumericTraits<T>::min()),
+      m_MinimumValue(itk::NumericTraits<T>::NonpositiveMin()),
       m_MaximumValue(itk::NumericTraits<T>::max())
   {}
 

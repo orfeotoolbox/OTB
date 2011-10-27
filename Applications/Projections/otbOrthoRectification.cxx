@@ -217,10 +217,6 @@ private:
       genericRSEstimator->SetOutputProjectionRef(m_OutputProjectionRef);
       genericRSEstimator->Compute();
       
-      // Update the GUI
-      dynamic_cast< NumericalParameter<float> * >(GetParameterByKey("outputs.spacingy"))->SetMinimumValue(-50000.0);
-      dynamic_cast< NumericalParameter<float> * >(GetParameterByKey("outputs.spacingy"))->SetMaximumValue(10000.0);
-      
       // Fill the Gui with the computed parameters
       if (!HasUserValue("outputs.ulx"))
         {
