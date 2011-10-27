@@ -46,10 +46,10 @@ int otbGenericRSTransformGenericConversionCheckingFromGCP(int argc, char* argv[]
 
   bool pass = true;
 
-  double accSumPx;
-  double accSum2Px;
-  double accSumM;
-  double accSum2M;
+  double accSumPx=0.0;
+  double accSum2Px=0.0;
+  double accSumM=0.0;
+  double accSum2M=0.0;
 
   // Reader
   ReaderType::Pointer reader = ReaderType::New();
@@ -70,7 +70,7 @@ int otbGenericRSTransformGenericConversionCheckingFromGCP(int argc, char* argv[]
   // demHandler->OpenDEMDirectory(demDir);
   // demHandler->OpenGeoidFile(geoidFile); TODO: use geoid
 
-  // Instanciate Image->WGS transform
+  // Instantiate Image->WGS transform
   TransformType::Pointer img2wgs = TransformType::New();
   img2wgs->SetInputProjectionRef(reader->GetOutput()->GetProjectionRef());
   img2wgs->SetInputKeywordList(reader->GetOutput()->GetImageKeywordlist());
