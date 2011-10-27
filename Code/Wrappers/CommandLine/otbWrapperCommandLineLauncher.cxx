@@ -217,7 +217,7 @@ CommandLineLauncher::BeforeExecute()
     val = m_Parser->GetAttribut( "--progress", m_Expression );
     if( val.size() != 1)
       {
-      std::cerr<<"Invalid progress argument, must be unique value..."<<std::endl;
+      std::cerr<<"ERROR: Invalid progress argument, must be unique value..."<<std::endl;
       return false;
       }
     if( val[0] == "1" || val[0] == "true")
@@ -230,7 +230,7 @@ CommandLineLauncher::BeforeExecute()
       }
     else
       {
-      std::cerr<<"Invalid progress argument, must be 0, 1, false or true..."<<std::endl;
+      std::cerr<<"ERROR: Invalid progress argument, must be 0, 1, false or true..."<<std::endl;
       // Force to reload the application, the LoadParameters can change wrong values
       this->LoadApplication();
       this->DisplayHelp();
@@ -333,7 +333,7 @@ CommandLineLauncher::LoadParameters()
         // If key doesn't exist and parameter hasn't default value set...
         if( !hasValue )
           {
-          std::cout<<"MISSINGMANDATORYPARAMETER: "<<paramKey<<"  "<<m_Application->HasValue( paramKey )<<std::endl;
+          std::cerr<<"ERROR: Missing mandatory parameter: "<<paramKey<<"  "<<m_Application->HasValue( paramKey )<<std::endl;
           return MISSINGMANDATORYPARAMETER;
           }
         }
@@ -343,7 +343,7 @@ CommandLineLauncher::LoadParameters()
         values = m_Parser->GetAttribut( std::string("--").append(paramKey), m_Expression);
         if(  values.size() == 0 && !m_Application->HasValue( paramKey ) )
           {
-          std::cout<<"MISSINGPARAMETERVALUE: "<<paramKey<<std::endl;
+          std::cerr<<"ERROR: Missing mandatory parameter: "<<paramKey<<std::endl;
           return MISSINGPARAMETERVALUE;
           }
         }
@@ -356,7 +356,7 @@ CommandLineLauncher::LoadParameters()
         values = m_Parser->GetAttribut( std::string("--").append(paramKey), m_Expression);
         if(  values.size() == 0 )
           {
-          std::cout<<"MISSINGPARAMETERVALUE: "<<paramKey<<std::endl;
+          std::cerr<<"ERROR: Missing mandatory parameter: "<<paramKey<<std::endl;
           return MISSINGPARAMETERVALUE;
           }
         }
@@ -421,7 +421,7 @@ CommandLineLauncher::LoadParameters()
               else
                 if (values.size() != 1 && values.size() != 2)
                   {
-                  std::cout << "INVALIDNUMBEROFVALUE2: " << paramKey << " " << values.size() << std::endl;
+                  std::cerr << "ERROR: Invalid number of value: " << paramKey << " ,invalid number of values " << values.size() << std::endl;
                   return INVALIDNUMBEROFVALUE;
                   }
               }
@@ -433,7 +433,7 @@ CommandLineLauncher::LoadParameters()
               else
                 if (values.size() != 1)
                   {
-                  std::cout << "INVALIDNUMBEROFVALUE: " << paramKey << " " << values.size() << std::endl;
+                  std::cerr << "ERROR: Invalid number of value:" << paramKey << ", must have 1 value, not  " << values.size() << std::endl;
                   return INVALIDNUMBEROFVALUE;
                   }
 
@@ -459,7 +459,7 @@ CommandLineLauncher::LoadParameters()
               }
             else
               {
-              std::cout << "WRONGPARAMETERVALUE: " << paramKey << std::endl;
+              std::cerr << "ERROR: Wrong parameter value: " << paramKey << std::endl;
               return WRONGPARAMETERVALUE;
               }
           }
