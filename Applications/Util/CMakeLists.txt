@@ -34,3 +34,7 @@ OTB_CREATE_APPLICATION(NAME           BandMath
 OTB_CREATE_APPLICATION(NAME           SplitImage
                        SOURCES        otbSplitImage.cxx
                        LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters)
+
+OTB_CREATE_APPLICATION(NAME           KmzExport
+                       SOURCES        otbKmzExport.cxx
+                       LINK_LIBRARIES OTBIO)

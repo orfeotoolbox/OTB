@@ -165,3 +165,16 @@ add_test(NAME apTvUtConvertWithScaling
                  --out ${TEMP}/otbConvertWithScalingOutput.png uchar
                  --type linear
                  )
+
+#--- KmzExport ----
+add_test(NAME apTvUtKmzExport
+         COMMAND otbTestDriver
+                 Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
+                 KmzExport
+                 $<TARGET_FILE_DIR:otbapp_KmzExport>
+                 --in   ${INPUTDATA}/qb_RoadExtract2sub200x200.tif
+                 --out ${TEMP}/apTvUtKmzExport.kmz
+                 --logo ${INPUTDATA}/cnes.png
+                 --legend ${INPUTDATA}/otb_big.png
+                 --dem ${INPUTDATA}/DEM/srtm_directory
+                 )
