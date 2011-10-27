@@ -95,21 +95,10 @@ public:
   itkGetMacro(DefaultValue, ScalarType);
 
   /** Set the minimum value */
-  //itkSetMacro(MinimumValue, ScalarType);
-
-  void SetMinimumValue(ScalarType min)
-  {
-    std::cout <<"SetMinimum Value (old value :  "<< m_MinimumValue << " ) -- ( new value :"<< min << " )"  << std::endl;
-    m_MinimumValue = min;
-  }
+  itkSetMacro(MinimumValue, ScalarType);
 
   /** Get the minimum value */
-  //itkGetMacro(MinimumValue, ScalarType);
-  ScalarType GetMinimumValue()
-  {
-    std::cout <<"Param "<< GetKey()<<" GetMinimum Value "<< m_MinimumValue << std::endl;
-    return m_MinimumValue;
-  }
+  itkGetMacro(MinimumValue, ScalarType);
 
   /** Set the maximum value */
   itkSetMacro(MaximumValue, ScalarType);
