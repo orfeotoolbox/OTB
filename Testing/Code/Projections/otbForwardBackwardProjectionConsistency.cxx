@@ -47,8 +47,8 @@ int otbForwardBackwardProjectionConsistency(int argc, char* argv[])
 
   bool pass = true;
 
-  double accSumPx;
-  double accSum2Px;
+  double accSumPx=0.0;
+  double accSum2Px=0.0;
 
   unsigned int identityCounter = 0;
 
@@ -75,7 +75,7 @@ int otbForwardBackwardProjectionConsistency(int argc, char* argv[])
   // demHandler->OpenDEMDirectory(demDir);
   // demHandler->OpenGeoidFile(geoidFile); TODO: use geoid
 
-  // Instanciate Image->WGS transform
+  // Instantiate Image->WGS transform
   TransformType::Pointer img2wgs = TransformType::New();
   img2wgs->SetInputProjectionRef(reader->GetOutput()->GetProjectionRef());
   img2wgs->SetInputKeywordList(reader->GetOutput()->GetImageKeywordlist());
@@ -83,7 +83,7 @@ int otbForwardBackwardProjectionConsistency(int argc, char* argv[])
   img2wgs->SetDEMDirectory(demDir);
   img2wgs->InstanciateTransform();
 
-  // Instanciate WGS->Image transform
+  // Instantiate WGS->Image transform
   TransformType::Pointer wgs2img = TransformType::New();
   wgs2img->SetInputProjectionRef(wgsRef);
   wgs2img->SetOutputProjectionRef(reader->GetOutput()->GetProjectionRef());
