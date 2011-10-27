@@ -162,7 +162,7 @@ add_test(NAME apTvUtConvertWithScaling
                  Convert
                  $<TARGET_FILE_DIR:otbapp_BandMath>
                  --in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
-                 --out ${TEMP}/otbConvertWithScalingOutput.png uchar
+                 --out ${TEMP}/otbConvertWithScalingOutput.png
                  --type linear
                  )
 
