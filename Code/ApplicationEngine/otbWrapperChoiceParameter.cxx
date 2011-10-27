@@ -155,7 +155,23 @@ ChoiceParameter::GetValue()
 std::vector<std::string>
 ChoiceParameter::GetParametersKeys()
 {
-  return this->GetChoiceKeys();
+  std::vector<std::string> parameters;
+
+  ChoiceList::iterator cit = m_ChoiceList.begin();
+
+  for (cit = m_ChoiceList.begin(); cit != m_ChoiceList.end(); ++cit)
+    {
+    if (cit->m_AssociatedParameter)
+      {
+      std::vector<std::string> subparams = cit->m_AssociatedParameter->GetParametersKeys();
+      for (std::vector<std::string>::const_iterator it = subparams.begin();
+           it != subparams.end(); ++it)
+        {
+        parameters.push_back( cit->m_Key + "."  + *it );
+        }
+      }
+    }
+  return parameters;
 }
 
 }
