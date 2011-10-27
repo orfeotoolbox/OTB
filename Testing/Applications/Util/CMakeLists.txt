@@ -109,7 +109,7 @@ add_test(NAME apTvUtConcatenateImages
                  ConcatenateImages
                   $<TARGET_FILE_DIR:otbapp_ConcatenateImages>
                  --il ${INPUTDATA}/poupees_sub_c1.png ${INPUTDATA}/poupees_sub_c2.png ${INPUTDATA}/poupees_sub_c3.png
-                 --out ${TEMP}/apTvUtConcatenateImages.png uchar )
+                 --out ${TEMP}/apTvUtConcatenateImages.png)
 
 #--- BandMath application -----
 add_test(NAME apTvUtBandMath
