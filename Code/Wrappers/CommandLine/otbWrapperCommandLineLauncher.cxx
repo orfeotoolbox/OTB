@@ -389,22 +389,22 @@ CommandLineLauncher::LoadParameters()
               if (values.size() == 2)
                 {
                 ImagePixelType outPixType = ImagePixelType_float;
-                if (values[1] == "char")
+                if (values[1] == "int8")
                   outPixType = ImagePixelType_int8;
                 else
-                  if (values[1] == "uchar")
+                  if (values[1] == "uint8")
                     outPixType = ImagePixelType_uint8;
                   else
-                    if (values[1] == "short")
+                    if (values[1] == "int16")
                       outPixType = ImagePixelType_int16;
                     else
-                      if (values[1] == "ushort")
+                      if (values[1] == "uint16")
                         outPixType = ImagePixelType_uint16;
                       else
-                        if (values[1] == "int")
+                        if (values[1] == "int32")
                           outPixType = ImagePixelType_int32;
                         else
-                          if (values[1] == "uint")
+                          if (values[1] == "uint32")
                             outPixType = ImagePixelType_uint32;
                           else
                             if (values[1] == "float")
@@ -622,7 +622,7 @@ CommandLineLauncher::DisplayParameterHelp( const Parameter::Pointer & param, con
   else if( type == ParameterType_OutputImage )
     {
     oss<<"\t          Type: String (output image file name and optionally its pixel type)"<<std::endl;
-    oss<<"\t                Possible pixel type: char, uchar, short, ushort, int, uint, float or double"<<std::endl;
+    oss<<"\t                Possible pixel type: int8, uint8, int16, uint16, int32, uint32, flooat or double"<<std::endl;
     }
   else if( type == ParameterType_OutputVectorData )
     {
@@ -676,17 +676,17 @@ CommandLineLauncher::DisplayParameterHelp( const Parameter::Pointer & param, con
       oss << "\t                pixel type: ";
       ImagePixelType outPixType = m_Application->GetParameterOutputImagePixelType( paramKey );
       if( outPixType == ImagePixelType_int8 )
-        oss << "char";
+        oss << "int8";
       else if( outPixType == ImagePixelType_uint8 )
-        oss << "uchar";
+        oss << "uint8";
       else if( outPixType == ImagePixelType_int16 )
-        oss << "short";
+        oss << "int16";
       else if( outPixType == ImagePixelType_uint16 )
-        oss << "ushort";
+        oss << "uint16";
       else if( outPixType == ImagePixelType_int32 )
-        oss << "int";
+        oss << "int32";
       else if( outPixType == ImagePixelType_uint32 )
-        oss << "uint";
+        oss << "uint32";
       else if( outPixType == ImagePixelType_float )
         oss << "float";
       else if( outPixType == ImagePixelType_double )

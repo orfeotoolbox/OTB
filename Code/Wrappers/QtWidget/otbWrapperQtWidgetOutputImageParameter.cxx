@@ -53,12 +53,12 @@ void QtWidgetOutputImageParameter::DoCreateWidget()
   // Set the Output PixelType choice Combobox
   m_ComboBox = new QComboBox;
   m_ComboBox->setToolTip("Output Pixel Type");
-  m_ComboBox->addItem( "char");
-  m_ComboBox->addItem( "unsigned char");
-  m_ComboBox->addItem( "short");
-  m_ComboBox->addItem( "unsigned short");
-  m_ComboBox->addItem( "int");
-  m_ComboBox->addItem( "unsigned int");
+  m_ComboBox->addItem( "int 8");
+  m_ComboBox->addItem( "uint 8");
+  m_ComboBox->addItem( "int 16");
+  m_ComboBox->addItem( "uint 16");
+  m_ComboBox->addItem( "int 32");
+  m_ComboBox->addItem( "uint 32");
   m_ComboBox->addItem( "float");
   m_ComboBox->addItem( "double");
   m_ComboBox->setCurrentIndex(m_OutputImageParam->GetPixelType());
