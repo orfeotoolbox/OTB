@@ -28,6 +28,8 @@
 
 #include "otbMacro.h"
 
+#include "otbWrapperRAMParameter.h"
+
 namespace otb
 {
 
@@ -107,6 +109,11 @@ private:
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
     SetParameterDescription("out","Projected image");
 
+    // RAM available
+    AddParameter(ParameterType_RAM, "ram", "Available RAM");
+    SetDefaultParameterInt("ram", 256);
+    MandatoryOff("ram");
+    
     // Add the output paramters in a group
     AddParameter(ParameterType_Group, "outputs", "Output Parameters");
 
@@ -156,7 +163,7 @@ private:
     std::ostringstream oss;
     oss << "Activate RPC sensor model estimation"<<std::endl;
     oss << "Parameter is the number of control points per axis";
-    //SetParameterDescription("rpc", oss.str().c_str());
+    SetParameterDescription("rpc", oss.str().c_str());
     MandatoryOff("rpc");
 
     // Interpolators
