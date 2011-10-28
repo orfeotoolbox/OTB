@@ -25,7 +25,7 @@ namespace Wrapper
 {
 
 OutputImageParameter::OutputImageParameter()
-: m_PixelType(ImagePixelType_float)
+  : m_PixelType(ImagePixelType_float),m_RAMValue(256)
 {
   this->SetName("Output Image");
   this->SetKey("out");
@@ -75,6 +75,7 @@ void OutputImageParameter::InitializeWriters()
     caster->InPlaceOn();                                                          \
     writer->SetFileName( this->GetFileName() );                                   \
     writer->SetInput(caster->GetOutput());                                        \
+    writer->SetAutomaticTiledStreaming(m_RAMValue);                               \
     writer->Update();                                                             \
   }
 

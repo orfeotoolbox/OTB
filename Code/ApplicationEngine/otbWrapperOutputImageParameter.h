@@ -64,6 +64,10 @@ public:
   itkSetMacro(PixelType, ImagePixelType);
   itkGetMacro(PixelType, ImagePixelType);
 
+  /** Set/Get available RAM value */
+  itkSetMacro(RAMValue, unsigned int);
+  itkGetMacro(RAMValue, unsigned int);
+
   /** Return true if a filename is set */
   bool HasValue() const;
 
@@ -162,6 +166,8 @@ protected:
 private:
   OutputImageParameter(const Parameter &); //purposely not implemented
   void operator =(const Parameter&); //purposely not implemented
+
+  unsigned int                  m_RAMValue;
 
 }; // End class OutputImage Parameter
 

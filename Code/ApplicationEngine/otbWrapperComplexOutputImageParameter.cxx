@@ -53,6 +53,7 @@ void ComplexOutputImageParameter::InitializeWriters()
     caster->InPlaceOn();                                                          \
     writer->SetFileName( this->GetFileName() );                                   \
     writer->SetInput(caster->GetOutput());                                        \
+    writer->SetAutomaticTiledStreaming(m_RAMValue);                               \
     writer->Update();                                                             \
   }
 
