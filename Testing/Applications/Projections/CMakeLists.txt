@@ -24,4 +24,17 @@ add_test(NAME apTvPrOrthorectification_UTM
 
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
+add_test(NAME apTvPrRigidTransform
+                 COMMAND otbTestDriver
+		 --compare-image 0.0
+                 ${BASELINE}/owTvRigidTransformResampleTest.tif
+                 ${TEMP}/owTvRigidTransformResampleTest.tif
+                 Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
+                 RigidTransformResample
+                 $<TARGET_FILE_DIR:otbapp_RigidTransformResample>
+                 --in ${INPUTDATA}/poupees.tif
+                 --out ${TEMP}/owTvRigidTransformResampleTest.tif
+		 --tx 5 
+		 --ty -5
+                 )
 
