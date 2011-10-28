@@ -140,6 +140,11 @@ add_test(owTvParameterKey ${OTB_WRAPPER_TESTS}
     otbWrapperParameterKey
   )
 
+# Parameter RAM class test
+add_test(owTvParameterRAM ${OTB_WRAPPER_TESTS}
+    otbWrapperRAMParameterNew
+  )
+
 
 # ----------------Source files CXX -----------------------------------
 
@@ -159,8 +164,8 @@ otbWrapperParameterListTest.cxx
 otbWrapperParameterTest.cxx
 otbWrapperApplicationRegistryTest.cxx
 otbWrapperParameterKeyTest.cxx
-
 otbWrapperStringParameterTest.cxx
+otbWrapperRAMParameterTest.cxx
 otbWrapperStringListParameterTest.cxx
 )
 
