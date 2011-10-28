@@ -42,7 +42,7 @@ template <class TImage>
 typename StreamingManager<TImage>::MemoryPrintType
 StreamingManager<TImage>::GetActualAvailableRAMInBytes(MemoryPrintType availableRAMInMB)
 {
-  unsigned int availableRAMInBytes = availableRAMInMB * 1024 * 1024;
+  MemoryPrintType availableRAMInBytes = availableRAMInMB * 1024 * 1024;
 
   if (availableRAMInBytes == 0)
     {
@@ -53,7 +53,7 @@ StreamingManager<TImage>::GetActualAvailableRAMInBytes(MemoryPrintType available
       typedef otb::ConfigurationFile ConfigurationType;
       ConfigurationType::Pointer conf = ConfigurationType::GetInstance();
 
-      availableRAMInBytes = conf->GetParameter<unsigned int>(
+      availableRAMInBytes = conf->GetParameter<MemoryPrintType>(
           "OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING");
       }
     catch(...)
