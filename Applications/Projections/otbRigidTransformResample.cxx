@@ -26,7 +26,6 @@ namespace otb
 namespace Wrapper
 {
 
-
 class RigidTransformResample : public Application
 {
 public:
@@ -53,9 +52,9 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Translation application");
-    SetDocCLExample("otbApplicationLauncherCommandLine RigidTransformResample ${OTB-BIN}/bin --in ${OTB-Data}/Input/QB_Toulouse_Ortho_XS.tif --out otbConvertWithScalingOutput.png uchar --type linear");
+    //SetDocCLExample("otbApplicationLauncherCommandLine RigidTransformResample ${OTB-BIN}/bin --in ${OTB-Data}/Input/QB_Toulouse_Ortho_XS.tif --out otbConvertWithScalingOutput.png uchar --type linear");
     AddDocTag("Conversion");
-    AddDocTag("Image Dynamic");
+    AddDocTag("Image Projection");
   }
 
   virtual ~RigidTransformResample()
