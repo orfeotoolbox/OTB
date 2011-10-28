@@ -30,6 +30,7 @@
 #include "otbWrapperStringParameter.h"
 #include "otbWrapperStringListParameter.h"
 #include "otbWrapperInputImageListParameter.h"
+#include "otbWrapperRAMParameter.h"
 
 #include "otbWrapperParameterGroup.h"
 
@@ -131,6 +132,25 @@ void Application::ExecuteAndWriteOutput()
   if (this->Execute())
     {
     std::vector<std::string> paramList = GetParametersKeys(true);
+    // First Get the value of the available memory to use with the
+    // writer if a RAMParameter is set
+    bool useRAM = false;
+    unsigned int ram = 256;
+    for (std::vector<std::string>::const_iterator it = paramList.begin();
+         it != paramList.end();
+         ++it)
+      {
+      std::string key = *it;
+      if (GetParameterType(key) == ParameterType_RAM
+        && IsParameterEnabled(key))
+        {
+        Parameter* param = GetParameterByKey(key);
+        RAMParameter* ramParam = dynamic_cast<RAMParameter*>(param);
+        ram = ramParam->GetValue();
+        useRAM = true;
+        }
+      }
+
     for (std::vector<std::string>::const_iterator it = paramList.begin();
          it != paramList.end();
          ++it)
@@ -142,6 +162,10 @@ void Application::ExecuteAndWriteOutput()
         Parameter* param = GetParameterByKey(key);
         OutputImageParameter* outputParam = dynamic_cast<OutputImageParameter*>(param);
         outputParam->InitializeWriters();
+        if (useRAM)
+          {
+          outputParam->SetRAMValue(ram);
+          }
         std::ostringstream progressId;
         progressId << "Writing " << outputParam->GetFileName() << "...";
         AddProcess(outputParam->GetWriter(), progressId.str());
@@ -164,6 +188,10 @@ void Application::ExecuteAndWriteOutput()
         Parameter* param = GetParameterByKey(key);
         ComplexOutputImageParameter* outputParam = dynamic_cast<ComplexOutputImageParameter*>(param);
         outputParam->InitializeWriters();
+        if (useRAM)
+          {
+          outputParam->SetRAMValue(ram);
+          }
         AddProcess(outputParam->GetWriter(),"Complex Writer");
         outputParam->Write();
         }
@@ -338,6 +366,10 @@ ParameterType Application::GetParameterType(std::string paramKey) const
     {
     type = ParameterType_String;
     }
+  else if (dynamic_cast<const RAMParameter*>(param))
+    {
+    type = ParameterType_RAM;
+    }
   else if (dynamic_cast<const ParameterGroup*>(param))
     {
     type = ParameterType_Group;
@@ -399,7 +431,7 @@ void Application::SetParameterInt(std::string parameter, int value)
   else if (dynamic_cast<RadiusParameter*>(param))
     {
     RadiusParameter* paramRadius = dynamic_cast<RadiusParameter*>(param);
-    paramRadius->SetValue(value);
+    paramRadius->SetValue(static_cast<unsigned int>(value));
     }
   else if (dynamic_cast<ChoiceParameter*>(param))
     {
@@ -423,7 +455,13 @@ void Application::SetDefaultParameterInt(std::string parameter, int value)
 {
   Parameter* param = GetParameterByKey(parameter);
 
-  if (dynamic_cast<IntParameter*>(param))
+  if (dynamic_cast<RadiusParameter*>(param))
+    {
+    RadiusParameter* paramRadius = dynamic_cast<RadiusParameter*>(param);
+    paramRadius->SetDefaultValue(value);
+    paramRadius->SetValue(value);
+    }
+   else if (dynamic_cast<IntParameter*>(param))
     {
     IntParameter* paramInt = dynamic_cast<IntParameter*>(param);
     paramInt->SetDefaultValue(value);
@@ -435,11 +473,11 @@ void Application::SetDefaultParameterInt(std::string parameter, int value)
     paramFloat->SetDefaultValue(static_cast<float>(value));
     paramFloat->SetValue(static_cast<float>(value));
     }
-  else if (dynamic_cast<RadiusParameter*>(param))
+  else if (dynamic_cast<RAMParameter*>(param))
     {
-    RadiusParameter* paramRadius = dynamic_cast<RadiusParameter*>(param);
-    paramRadius->SetDefaultValue(value);
-    paramRadius->SetValue(value);
+    RAMParameter* paramRAM = dynamic_cast<RAMParameter*>(param);
+    paramRAM->SetDefaultValue(static_cast<unsigned int>(value));
+    paramRAM->SetValue(static_cast<unsigned int>(value));
     }
 }
 
@@ -489,14 +527,14 @@ void Application::SetParameterString(std::string parameter, std::string value)
     FloatParameter* paramDown = dynamic_cast<FloatParameter*>(param);
     paramDown->SetValue(value);
     }
- else if (dynamic_cast<IntParameter*>(param))
-    {
-    IntParameter* paramDown = dynamic_cast<IntParameter*>(param);
-    paramDown->SetValue(value);
-    }
  else if (dynamic_cast<RadiusParameter*>(param))
     {
     RadiusParameter* paramDown = dynamic_cast<RadiusParameter*>(param);
+    paramDown->SetValue(value);
+    }
+ else if (dynamic_cast<IntParameter*>(param))
+    {
+    IntParameter* paramDown = dynamic_cast<IntParameter*>(param);
     paramDown->SetValue(value);
     }
   else if (dynamic_cast<InputImageParameter*>(param))
@@ -528,6 +566,11 @@ void Application::SetParameterString(std::string parameter, std::string value)
     {
     OutputVectorDataParameter* paramDown = dynamic_cast<OutputVectorDataParameter*>(param);
     paramDown->SetFileName(value);
+    }
+  else if (dynamic_cast<RAMParameter*>(param))
+    {
+    RAMParameter* paramDown = dynamic_cast<RAMParameter*>(param);
+    paramDown->SetValue(value);
     }
 }
 
@@ -644,6 +687,11 @@ int Application::GetParameterInt(std::string parameter)
     {
     RadiusParameter* paramRadius = dynamic_cast<RadiusParameter*>(param);
     ret = paramRadius->GetValue();
+    }
+  else if (dynamic_cast<RAMParameter*>(param))
+    {
+    RAMParameter* paramRAM = dynamic_cast<RAMParameter*>(param);
+    ret = paramRAM->GetValue();
     }
   else if (dynamic_cast<ChoiceParameter*>(param))
     {
@@ -871,7 +919,8 @@ std::string Application::GetParameterAsString(std::string paramKey)
     {
       ret = this->GetParameterString( paramKey );
     }
-  else if ( type == ParameterType_Int || type == ParameterType_Radius || type == ParameterType_Choice )
+  else if ( type == ParameterType_Int || type == ParameterType_Radius || type == ParameterType_Choice 
+            || type == ParameterType_RAM)
     {
       std::ostringstream oss;
       oss << this->GetParameterInt( paramKey );

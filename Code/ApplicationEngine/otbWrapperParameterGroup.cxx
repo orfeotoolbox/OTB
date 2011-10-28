@@ -34,6 +34,7 @@
 #include "otbWrapperInputImageListParameter.h"
 #include "otbWrapperInputVectorDataListParameter.h"
 #include "otbWrapperParameterKey.h"
+#include "otbWrapperRAMParameter.h"
 
 #include <boost/algorithm/string.hpp>
 
@@ -321,6 +322,11 @@ ParameterGroup::AddParameter(ParameterType type, std::string paramKey, std::stri
       case ParameterType_ComplexOutputImage:
         {
         newParam = ComplexOutputImageParameter::New();
+        }
+        break;
+      case ParameterType_RAM:
+        {
+        newParam = RAMParameter::New();
         }
         break;
       }
