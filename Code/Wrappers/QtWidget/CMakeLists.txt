@@ -27,6 +27,7 @@ set( WrappersQtWidget_MOC_HDR
        otbQtLogOutput.h
        otbWrapperQtWidgetDirectoryParameter.h
        otbWrapperQtWidgetSimpleProgressReport.h
+       otbWrapperQtWidgetRAMParameter.h
       )
 
 QT4_WRAP_CPP(WrappersQtWidget_MOC_SRC ${WrappersQtWidget_MOC_HDR})
