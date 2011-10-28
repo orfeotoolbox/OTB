@@ -9,7 +9,7 @@ add_test(NAME apTvRIRadiometricVegetationIndices
                  Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
                     RadiometricVegetationIndices
                     $<TARGET_FILE_DIR:otbapp_RadiometricVegetationIndices>
-                    --in ${INPUTDATA}/qb_RoadExtract.img
+                    --in ${INPUTDATA}/veryverySmallFSATSW.tif
                     --index.ndvi 1 
                     --index.rvi 1 
                     --index.ipvi 1
