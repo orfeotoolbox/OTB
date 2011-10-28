@@ -43,8 +43,7 @@ add_test(NAME apTvHyHyperspectralUnmixing_NCLS
 add_test(NAME apTvHyHyperspectralUnmixing_FCLS
          COMMAND otbTestDriver
                  --compare-image ${EPSILON_9}
-                 /home/jonathan/workspace/ORFEO-TOOLBOX/src/OTB-Data/Baseline/OTB/Files/hyTvFCLSUnmixingImageFilterTest.tif
-#                   ${BASELINE}/apTvHyHyperspectralUnmixing_FCLS.tif
+                   ${BASELINE}/apTvHyHyperspectralUnmixing_FCLS.tif
                    ${TEMP}/apTvHyHyperspectralUnmixing_FCLS.tif
                  Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
                  HyperspectralUnmixing
