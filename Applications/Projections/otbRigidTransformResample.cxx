@@ -75,9 +75,9 @@ private:
   }
 
   void DoExecute()
-  { 
+  {
     typedef itk::TranslationTransform<double, FloatVectorImageType::ImageDimension> TransformType;
-    typedef otb::StreamingResampleImageFilter<FloatVectorImageType,FloatVectorImageType,double>    ResampleFilterType;
+    typedef otb::StreamingResampleImageFilter<FloatVectorImageType, FloatVectorImageType, double>    ResampleFilterType;
     FloatVectorImageType* inputImage = GetParameterImage("in");
     
     TransformType::Pointer transform = TransformType::New();
@@ -96,7 +96,7 @@ private:
                                                              inputImage->GetNumberOfComponentsPerPixel());
     resampler->SetEdgePaddingValue(defaultValue);
 
-    // Output Image 
+    // Output Image
     SetParameterOutputImage("out", resampler->GetOutput());
   }
 }; //class

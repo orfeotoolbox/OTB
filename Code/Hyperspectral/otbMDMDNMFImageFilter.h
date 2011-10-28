@@ -31,7 +31,7 @@ namespace otb
  *  \brief This filter implements unmixing based non negative matrix factorization (NMF) which
  *  finds simultaneously the end members and abundances matrix which
  *  product is the closer to the observed data, based on the following
- *  works: 
+ *  works:
  *  K. S. F.J. Theis and T. Tanaka, First results on uniqueness of
     sparse non-negative matrix factorisation.
  *  M. G. A. Huck and J. Blanc-Talon, IEEE TGRS, vol. 48, no. 6, pp. 2590-2602, 2010.

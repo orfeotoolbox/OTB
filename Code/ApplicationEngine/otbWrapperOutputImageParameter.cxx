@@ -25,7 +25,7 @@ namespace Wrapper
 {
 
 OutputImageParameter::OutputImageParameter()
-  : m_PixelType(ImagePixelType_float),m_RAMValue(256)
+  : m_PixelType(ImagePixelType_float), m_RAMValue(256)
 {
   this->SetName("Output Image");
   this->SetKey("out");

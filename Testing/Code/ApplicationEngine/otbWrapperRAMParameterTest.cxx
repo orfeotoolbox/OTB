@@ -35,7 +35,7 @@ int otbWrapperRAMParameterNew(int argc, char* argv[])
   // Test Set/Get Default, extremum value
   RAMParameterType::ScalarType  min = 0;
   RAMParameterType::ScalarType  max = 1024;
-  RAMParameterType::ScalarType  def = 256; 
+  RAMParameterType::ScalarType  def = 256;
   
   parameter->SetDefaultValue(def);
   parameter->SetMinimumValue(min);

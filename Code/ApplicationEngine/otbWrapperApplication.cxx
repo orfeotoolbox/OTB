@@ -919,7 +919,7 @@ std::string Application::GetParameterAsString(std::string paramKey)
     {
       ret = this->GetParameterString( paramKey );
     }
-  else if ( type == ParameterType_Int || type == ParameterType_Radius || type == ParameterType_Choice 
+  else if ( type == ParameterType_Int || type == ParameterType_Radius || type == ParameterType_Choice
             || type == ParameterType_RAM)
     {
       std::ostringstream oss;
