@@ -93,7 +93,7 @@ private:
     resampler->SetOutputParametersFromImage(inputImage);
     FloatVectorImageType::PixelType defaultValue;
     itk::PixelBuilder<FloatVectorImageType::PixelType>::Zero(defaultValue,
-							     inputImage->GetNumberOfComponentsPerPixel());
+                                                             inputImage->GetNumberOfComponentsPerPixel());
     resampler->SetEdgePaddingValue(defaultValue);
 
     // Output Image 
