@@ -34,7 +34,7 @@ QtWidgetFloatParameter::~QtWidgetFloatParameter()
 
 void QtWidgetFloatParameter::DoUpdateGUI()
 {
-  // TODO : search for a better solution
+  // Update the valid range if updated
   m_QDoubleSpinBox->setRange(m_FloatParam->GetMinimumValue(),
                              m_FloatParam->GetMaximumValue());
 

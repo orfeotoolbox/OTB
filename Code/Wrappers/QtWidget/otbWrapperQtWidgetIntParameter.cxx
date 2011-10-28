@@ -55,7 +55,7 @@ void QtWidgetIntParameter::DoCreateWidget()
 
 void QtWidgetIntParameter::DoUpdateGUI()
 {
-  // TODO : search for a better solution
+  // Update the valid range if updated
   m_QSpinBox->setRange(m_IntParam->GetMinimumValue(),
                        m_IntParam->GetMaximumValue());
 
