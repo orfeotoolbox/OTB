@@ -190,7 +190,7 @@ QWidget* QtWidgetView::CreateDoc()
 void QtWidgetView::SetDocParameters( std::string & val )
 {
   const std::vector<std::string> appKeyList = m_Application->GetParametersKeys( false );
-  const unsigned int nbOfParam = appKeyList.size();
+  //const unsigned int nbOfParam = appKeyList.size();
     
   itk::OStringStream oss;
   oss << "<h3>Parameters</h3>";

@@ -197,7 +197,7 @@ private:
       case Level_TOC:
       {
       m_AtmosphericParam = m_ReflectanceToSurfaceReflectanceFilter->GetCorrectionParameters();
-      AerosolModelType aeroMod = AtmosphericCorrectionParametersType::NO_AEROSOL;
+      //AerosolModelType aeroMod = AtmosphericCorrectionParametersType::NO_AEROSOL;
 
       switch ( GetParameterInt("aerosol") )
         {
