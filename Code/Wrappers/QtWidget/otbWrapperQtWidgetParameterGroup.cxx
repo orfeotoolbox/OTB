@@ -97,7 +97,8 @@ void QtWidgetParameterGroup::DoCreateWidget()
         // Make sense only for NumericalParameter
         if (dynamic_cast<IntParameter*>(param)
             || dynamic_cast<FloatParameter*>(param)
-            || dynamic_cast<RadiusParameter*>(param) )
+            || dynamic_cast<RadiusParameter*>(param) 
+            /*|| dynamic_cast<RAMParameter*>(param)*/)
           {
           QPushButton* resetButton = new QPushButton;
           resetButton->setText("Reset");

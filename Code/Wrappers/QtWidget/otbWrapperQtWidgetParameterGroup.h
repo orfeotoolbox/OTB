@@ -22,6 +22,7 @@
 #include "otbWrapperParameterGroup.h"
 #include "otbWrapperNumericalParameter.h"
 #include "otbWrapperRadiusParameter.h"
+#include "otbWrapperRAMParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
 
 namespace otb
