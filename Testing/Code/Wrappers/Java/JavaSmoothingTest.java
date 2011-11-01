@@ -9,16 +9,16 @@ class SmoothingTest {
 
   public static void main( String argv[] ) {
 
-    vectorstring appAvailable = Registry.GetAvailableApplications();
+    String[] appAvailable = Registry.GetAvailableApplications();
     System.out.println( "Available applications :" );
     
-    for (int i = 0; i < appAvailable.size(); i++)
+    for (int i = 0; i < appAvailable.length; i++)
     {
-      System.out.println( appAvailable.get(i) );
+      System.out.println( appAvailable[i] );
     }
 
     System.out.println( "Creating application " + "Smoothing");
-    Application_Pointer app = Registry.CreateApplication("Smoothing");
+    Application app = Registry.CreateApplication("Smoothing");
     
     System.out.println( Registry.CreateApplication("Smoothing").GetDescription() );
     

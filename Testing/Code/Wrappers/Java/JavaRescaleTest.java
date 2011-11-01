@@ -9,18 +9,19 @@ class RescaleTest {
 
   public static void main( String argv[] ) {
 
-    vectorstring appAvailable = Registry.GetAvailableApplications();
+    String[] appAvailable = Registry.GetAvailableApplications();
     System.out.println( "Available applications :" );
     
-    for (int i = 0; i < appAvailable.size(); i++)
+    for (int i = 0; i < appAvailable.length; i++)
     {
-      System.out.println( appAvailable.get(i) );
+      System.out.println( appAvailable[i] );
     }
 
-    System.out.println( "Creating application " + "Rescale");
-    Application_Pointer app = Registry.CreateApplication("Rescale");
-    
     System.out.println( Registry.CreateApplication("Rescale").GetDescription() );
+    System.out.println( "Creating application " + "Rescale");
+    Application app = Registry.CreateApplication("Rescale");
+    System.out.println( "Created application Rescale");
+    System.out.println( "Rescale doc : " + app.GetDescription() );
     
   }
 
