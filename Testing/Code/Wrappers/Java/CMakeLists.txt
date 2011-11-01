@@ -26,5 +26,7 @@ add_dependencies( JavaRescaleTest org_otb_Application_jar )
 add_test( NAME jaTvRescale
           COMMAND ${TEST_DRIVER} Execute
           ${JAVA_COMMAND} -cp ${CMAKE_JAVA_INCLUDE_PATH}:JavaRescaleTest.jar RescaleTest
-            ${OTB_DATA_ROOT}/Input/ToulouseExtract_WithGeom.tif
-            ${TEMP}/jaTvRescale )
+            ${INPUTDATA}/poupees.tif
+            ${TEMP}/jaTvRescaleTest.tif
+            20
+            150 )
