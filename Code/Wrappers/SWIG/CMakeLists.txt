@@ -92,9 +92,6 @@ endif()
 # JAVA SWIG configuration
 #
 if ( WRAP_JAVA )
-  message( WARNING "You have enabled Java wrapping of the ApplicationEngine, which is currently known to NOT work" )
-
-
   check_PIC_flag ( Java )
   find_package ( Java REQUIRED )
   find_package ( JNI REQUIRED )
