@@ -25,7 +25,7 @@ namespace Wrapper
 {
 
 ComplexOutputImageParameter::ComplexOutputImageParameter()
-: m_ComplexPixelType(ComplexImagePixelType_float)
+  : m_ComplexPixelType(ComplexImagePixelType_float),m_RAMValue(0)
 {
   this->SetName("Complex Output Image");
   this->SetKey("cout");
@@ -53,7 +53,8 @@ void ComplexOutputImageParameter::InitializeWriters()
     caster->InPlaceOn();                                                          \
     writer->SetFileName( this->GetFileName() );                                   \
     writer->SetInput(caster->GetOutput());                                        \
-    writer->SetAutomaticTiledStreaming(m_RAMValue);                               \
+    if (m_RAMValue != 0)                                                          \
+      writer->SetAutomaticTiledStreaming(m_RAMValue);                             \
     writer->Update();                                                             \
   }
 
