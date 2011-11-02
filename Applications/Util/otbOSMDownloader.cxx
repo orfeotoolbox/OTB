@@ -15,98 +15,120 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbOSMDownloader.h"
-
-#include <iostream>
-#include "otbCommandLineArgumentParser.h"
-
-#include "otbVectorImage.h"
-#include "otbImageFileReader.h"
+#include "otbWrapperApplication.h"
+#include "otbWrapperApplicationFactory.h"
 
 #include "otbImageToEnvelopeVectorDataFilter.h"
 #include "otbVectorDataProperties.h"
 #include "otbOSMDataToVectorDataGenerator.h"
-#include "otbVectorDataFileWriter.h"
+
 
 namespace otb
 {
-
-int OSMDownloader::Describe(ApplicationDescriptor* descriptor)
+namespace Wrapper
 {
-  descriptor->SetName("OSMDownloader");
-  descriptor->SetDescription("Generate a vector data from OSM on the input image extend");
-  descriptor->AddOption("InputImage", "Support to estimate the models on",
-                        "in", 1, true, ApplicationDescriptor::InputImage);
-  descriptor->AddOption("OSMKey", "OSM key (highway, building...)",
-                        "key", 1, false, ApplicationDescriptor::String);
-  descriptor->AddOption("OSMValue", "OSM Value (motorway, footway...)",
-                        "val", 1, false, ApplicationDescriptor::String);
-  descriptor->AddOption("DEMDirectory", "DEM directory",
-                        "dem", 1, false, ApplicationDescriptor::DirectoryName);
-  descriptor->AddOption("Output", "OutputVectorData",
-                        "out", 1, false, ApplicationDescriptor::FileName);
-  
-  std::ostringstream oss;
-  oss << "Print the key/value classes available for the bounding box of the input image "<<std::endl;
-  oss << "\t\t\t\t  ** If not used : Note that the options OSMKey (-key) and Output (-out) become mandatory";
-  descriptor->AddOption("PrintClasses", oss.str().c_str(), "print", 0, false, ApplicationDescriptor::Boolean);
-  
-  return EXIT_SUCCESS;
-}
 
-int OSMDownloader::Execute(otb::ApplicationOptionsResult* parseResult)
+class OSMDownloader : public Application
 {
-  // CASE:  when the -print option is not required and the User
-  // does not set the option OSMKey or the option Output or does not
-  // set both of them
-  if (!parseResult->IsOptionPresent("PrintClasses"))
-    {
-    if( !parseResult->IsOptionPresent("Output") && !parseResult->IsOptionPresent("OSMKey"))
-      {
-      itkExceptionMacro(<<"Missing Options : Output (-out) and OSMKey (-key)");
-      }
+public:
+  /** Standard class typedefs. */
+  typedef OSMDownloader                       Self;
+  typedef Application                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-    if(!parseResult->IsOptionPresent("OSMKey") )
-      {
-      itkExceptionMacro(<<"Missing Option : OSMKey (-key)");
-      }
-    
-    if( !parseResult->IsOptionPresent("Output"))
-      {
-      itkExceptionMacro(<<"Missing Option : Output (-out)");
-      }
-    }
+  /** Standard macro */
+  itkNewMacro(Self);
 
+  itkTypeMacro(OSMDownloader, otb::Application);
+  
+  /** Filter typedef */
   typedef otb::OSMDataToVectorDataGenerator           VectorDataProviderType;
-  typedef VectorDataProviderType::KeyMapType          KeyMapType;
-  typedef VectorDataProviderType::VectorDataType      VectorDataType;
-  typedef VectorDataType::ValuePrecisionType          PrecisionType;
-  typedef VectorDataType::PrecisionType               CoordRepType;
 
-  typedef otb::VectorImage<PrecisionType , 2>         ImageType;
-  typedef otb::ImageFileReader<ImageType>             ImageReaderType;
+private:
+   OSMDownloader()
+  {
+    SetName("OSMDownloader");
+    SetDescription("Generate a vector data from OSM on the input image extend");
+    // Documentation
+    SetDocName("Image to KMZ Export Application");
+    SetDocLongDescription("This application exports the input image in a kmz product that can be display in the Google Earth software. The user can set the size of the product size, a logo and a legend to the product. Furthemore, to obtain a product that fits the relief, a DEM can be used.");
+    SetDocLimitations("None");
+    SetDocAuthors("OTB-Team");
+    SetDocSeeAlso("Convertion");
+    SetDocCLExample("otbApplicationLauncherCommandLine OSMDownloader ${OTB-BIN}/bin --in ${OTB-Data}/Input/qb_RoadExtract.img --out otbOSMDownloader --logo ${OTB-Data}/Input/cnes.png ${OTB-Data}/Input/otb_big.png");
+    AddDocTag("KMZ");
+    AddDocTag("Export");
+  }
 
-  typedef otb::ImageToEnvelopeVectorDataFilter<ImageType, VectorDataType>
-                                                      EnvelopeFilterType;
-  typedef otb::VectorDataProperties<VectorDataType>   VectorDataPropertiesType;
-  typedef otb::VectorDataFileWriter<VectorDataType>   VectorDataWriterType;
+  virtual ~OSMDownloader()
+  {
+  }
+  
+  void DoCreateParameters()
+  {
+    AddParameter(ParameterType_OutputVectorData,  "out",   "Output vector data");
+    SetParameterDescription("out", "Generated output vector data path");
+
+    AddParameter(ParameterType_InputImage,  "support",   "Support image");
+    SetParameterDescription("support", "Image used as support to estimate the models");
+
+    AddParameter(ParameterType_String, "key",  "OSM tag key");
+    SetParameterDescription("key", "OSM tag key to extract (highway, building...)");
+    MandatoryOff("key");
+
+    AddParameter(ParameterType_String, "value",  "OSM tag value");
+    SetParameterDescription("key", "OSM tag value to extract (motorway, footway...)");
+    MandatoryOff("value");
+
+    AddParameter(ParameterType_Directory, "dem",  "DEM directory");
+    SetParameterDescription("dem", "Path to the directory that contains elevation information."); 
+    MandatoryOff("dem");
+
+    AddParameter(ParameterType_Empty, "printclasses", "option to display available key/value classes");
+    std::ostringstream oss;
+    oss << "Print the key/value classes available for the bounding box of the input image "<<std::endl;
+    oss << "\t\t\t\t  ** If not used : Note that the options OSMKey (-key) and Output (-out) become mandatory";
+    SetParameterDescription("printclasses", oss.str().c_str());
+    MandatoryOff("printclasses");
+ 
+  }
+
+
+  void DoUpdateParameters()
+  {
+    // CASE:  when the -print option is not required and the User
+    // does not set the option OSMKey or the option Output or does not
+    // set both of them
+    if ( !this->HasValue("printclasses") )
+      {
+      MandatoryOn("out");
+      MandatoryOn("key");
+      }
+    else
+      {
+      MandatoryOff("out");
+      MandatoryOff("key");
+      }
+  }
+
+ void DoExecute()
+  {      
+    typedef otb::ImageToEnvelopeVectorDataFilter<FloatVectorImageType, VectorDataType>
+      EnvelopeFilterType;
+    typedef otb::VectorDataProperties<VectorDataType>   VectorDataPropertiesType;
 
   //Instantiate
-  ImageReaderType::Pointer                 imgReader = ImageReaderType::New();
-  EnvelopeFilterType::Pointer         envelopeFilter = EnvelopeFilterType::New();
-  VectorDataProviderType::Pointer     vdOSMGenerator = VectorDataProviderType::New();
-  VectorDataPropertiesType::Pointer     vdProperties = VectorDataPropertiesType::New();
-  VectorDataWriterType::Pointer             vdWriter = VectorDataWriterType::New();
+  EnvelopeFilterType::Pointer       envelopeFilter = EnvelopeFilterType::New();
+  VectorDataPropertiesType::Pointer vdProperties = VectorDataPropertiesType::New();
+  m_VdOSMGenerator = VectorDataProviderType::New();
 
-  //Read the image
-  imgReader->SetFileName(parseResult->GetParameterString("InputImage"));
-  imgReader->UpdateOutputInformation();
 
   //Generate the envelope
-  envelopeFilter->SetInput(imgReader->GetOutput()); //->Output in WGS84
-  if (parseResult->IsOptionPresent("DEMDirectory"))
+  envelopeFilter->SetInput( this->GetParameterImage("support") ); //->Output in WGS84
+  if ( this->HasValue("dem"))
     {
-    envelopeFilter->SetDEMDirectory(parseResult->GetParameterString("DEMDirectory"));
+    envelopeFilter->SetDEMDirectory(this->GetParameterString("dem"));
     }
   envelopeFilter->Update();
 
@@ -121,62 +143,69 @@ int OSMDownloader::Execute(otb::ApplicationOptionsResult* parseResult)
            + vdProperties->GetBoundingRegion().GetSize()[0];
   west  = vdProperties->GetBoundingRegion().GetIndex()[0];
 
-  vdOSMGenerator->SetNorth(north);
-  vdOSMGenerator->SetSouth(south);
-  vdOSMGenerator->SetEast(east);
-  vdOSMGenerator->SetWest(west);
+  m_VdOSMGenerator->SetNorth(north);
+  m_VdOSMGenerator->SetSouth(south);
+  m_VdOSMGenerator->SetEast(east);
+  m_VdOSMGenerator->SetWest(west);
 
   try
   {
-    vdOSMGenerator->Update();
+    m_VdOSMGenerator->Update();
   }
   catch ( itk::ExceptionObject & err )
   {
-    std::cout << "Exception itk::ExceptionObject raised !" << std::endl;
-    std::cout << err << std::endl;
-    return EXIT_FAILURE;
+  otbAppLogCRITICAL("Exception itk::ExceptionObject raised !");
+  otbAppLogCRITICAL( << err );
+  return;
   }
 
   // If the user wants to print the Key/Values present in the XML file
   // downloaded  :
-  if (parseResult->IsOptionPresent("PrintClasses"))
+  if ( this->HasValue("printclasses"))
     {
     // Print the classes
-    KeyMapType  keymap = vdOSMGenerator->GetKeysMap();
+    VectorDataProviderType::KeyMapType  keymap = m_VdOSMGenerator->GetKeysMap();
 
-    KeyMapType::iterator  it = keymap.begin();
+    VectorDataProviderType::KeyMapType::iterator  it = keymap.begin();
 
     while(it != keymap.end())
       {
-      std::cout << " Key : "<< (*it).first<< " value : ";
+      otbAppLogINFO(" Key : "<< (*it).first<< " value : ");
+      itk::OStringStream oss;
       for(unsigned int i = 0; i < (*it).second.size(); i++)
-        std::cout<< (*it).second[i]<< " ";
-      std::cout<< std::endl;
+        {
+        oss.str();
+        oss << ((*it).second[i]) << " ";
+        }
+      otbAppLogINFO( << oss.str() );
       ++it;
       }
-    return EXIT_SUCCESS;
+    return;
     }
 
   // Get the VectorData By name
-  if (parseResult->IsOptionPresent("OSMValue"))
+  if ( this->HasValue("value") )
     {
-    vdWriter->SetInput(vdOSMGenerator->GetVectorDataByName(parseResult->GetParameterString("OSMKey"),
-                                                           parseResult->GetParameterString("OSMValue")));
+    SetParameterOutputVectorData("out", const_cast<VectorDataType*>(m_VdOSMGenerator->GetVectorDataByName(this->GetParameterString("key"),
+                                                                                                          this->GetParameterString("value"))));
 
-    std::cout << vdOSMGenerator->GetVectorDataByName(parseResult->GetParameterString("OSMKey"),
-                                                     parseResult->GetParameterString("OSMValue"))->Size()-3
-              << " elements retrieved" << std::endl;
+    
+    otbAppLogINFO( << m_VdOSMGenerator->GetVectorDataByName(this->GetParameterString("key"), this->GetParameterString("value"))->Size()-3 
+                   << " elements retrieved");    
     }
   else
     {
-    vdWriter->SetInput(vdOSMGenerator->GetVectorDataByName(parseResult->GetParameterString("OSMKey")));
-    std::cout << vdOSMGenerator->GetVectorDataByName(parseResult->GetParameterString("OSMKey"))->Size()-3
-              << " elements retrieved" << std::endl;
+    SetParameterOutputVectorData("out", const_cast<VectorDataType*>(m_VdOSMGenerator->GetVectorDataByName(this->GetParameterString("key"))));
+    
+    otbAppLogINFO( << m_VdOSMGenerator->GetVectorDataByName(this->GetParameterString("key"))->Size()-3
+                   << " elements retrieved");
     }
+  }
+  VectorDataProviderType::Pointer m_VdOSMGenerator;
+};
 
-  vdWriter->SetFileName(parseResult->GetParameterString("Output"));
-  vdWriter->Update();
-
-  return EXIT_SUCCESS;
 }
 }
+
+OTB_APPLICATION_EXPORT(otb::Wrapper::OSMDownloader)
+

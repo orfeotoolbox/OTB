@@ -178,3 +178,29 @@ add_test(NAME apTvUtKmzExport
                  --legend ${INPUTDATA}/otb_big.png
                  --dem ${INPUTDATA}/DEM/srtm_directory
                  )
+
+
+#--- OSMDownloader ---
+IF(OTB_DATA_USE_LARGEINPUT)
+add_test(NAME apTvUtOSMDownloader
+         COMMAND otbTestDriver --compare-ogr ${NOTOL} 
+                 ${OTBAPP_BASELINE_FILES}/otbOSMDownloaderOutput.shp
+                 ${TEMP}/apTvUtOSMDownloader.shp
+                 Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
+                 OSMDownloader
+                 $<TARGET_FILE_DIR:otbapp_OSMDownloader>
+                 --support ${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/ROI_QB_TOULOUSE.TIF
+                 --key highway
+                 --out ${TEMP}/apTvUtOSMDownloader.shp
+                 )
+
+#ADD_TEST(utTvOSMDownloader   ${OTB_TEST_DRIVER} 
+#  --compare-ogr ${TOL} 
+#  ${BASELINE_FILES}/otbOSMDownloaderOutput.shp
+#  ${TEMP}/otbOSMDownloaderOutput.shp
+ # Execute otbOSMDownloader-cli
+ # -in ${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/ROI_QB_TOULOUSE.TIF
+ # -key "highway"
+ # -out ${TEMP}/otbOSMDownloaderOutput.shp
+#)
+ENDIF(OTB_DATA_USE_LARGEINPUT)

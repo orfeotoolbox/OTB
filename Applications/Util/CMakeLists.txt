@@ -38,3 +38,7 @@ OTB_CREATE_APPLICATION(NAME           SplitImage
 OTB_CREATE_APPLICATION(NAME           KmzExport
                        SOURCES        otbKmzExport.cxx
                        LINK_LIBRARIES OTBIO)
+
+OTB_CREATE_APPLICATION(NAME           OSMDownloader
+                       SOURCES        otbOSMDownloader.cxx
+                       LINK_LIBRARIES OTBIO)
