@@ -25,7 +25,7 @@ namespace Wrapper
 {
 
 ComplexOutputImageParameter::ComplexOutputImageParameter()
-  : m_ComplexPixelType(ComplexImagePixelType_float),m_RAMValue(0)
+  : m_ComplexPixelType(ComplexImagePixelType_float), m_RAMValue(0)
 {
   this->SetName("Complex Output Image");
   this->SetKey("cout");

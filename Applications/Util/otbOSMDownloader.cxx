@@ -82,7 +82,7 @@ private:
     MandatoryOff("value");
 
     AddParameter(ParameterType_Directory, "dem",  "DEM directory");
-    SetParameterDescription("dem", "Path to the directory that contains elevation information."); 
+    SetParameterDescription("dem", "Path to the directory that contains elevation information.");
     MandatoryOff("dem");
 
     AddParameter(ParameterType_Empty, "printclasses", "option to display available key/value classes");
@@ -113,7 +113,7 @@ private:
   }
 
  void DoExecute()
-  {      
+  {
     typedef otb::ImageToEnvelopeVectorDataFilter<FloatVectorImageType, VectorDataType>
       EnvelopeFilterType;
     typedef otb::VectorDataProperties<VectorDataType>   VectorDataPropertiesType;
@@ -190,8 +190,8 @@ private:
                                                                                                           this->GetParameterString("value"))));
 
     
-    otbAppLogINFO( << m_VdOSMGenerator->GetVectorDataByName(this->GetParameterString("key"), this->GetParameterString("value"))->Size()-3 
-                   << " elements retrieved");    
+    otbAppLogINFO( << m_VdOSMGenerator->GetVectorDataByName(this->GetParameterString("key"), this->GetParameterString("value"))->Size()-3
+                   << " elements retrieved");
     }
   else
     {

@@ -44,7 +44,7 @@ public:
   typedef unsigned short int PixelType;
 
   typedef otb::BCOInterpolateImageFunction<UInt16VectorImageType>   InterpolatorType;
-  typedef otb::GenericRSResampleImageFilter<UInt16VectorImageType, 
+  typedef otb::GenericRSResampleImageFilter<UInt16VectorImageType,
                                             UInt16VectorImageType>  ResamplerType;
 
 private:
