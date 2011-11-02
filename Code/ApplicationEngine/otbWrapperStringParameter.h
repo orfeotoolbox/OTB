@@ -55,7 +55,7 @@ public:
   /** Get the value */
   std::string GetValue() const
   {
-    return boost::any_cast<std::string>(m_Value);
+    return m_Value;
   }
 
   bool HasValue() const
@@ -65,7 +65,7 @@ public:
 
   void ClearValue()
   {
-    m_Value = boost::any();
+    m_Value = "";
   }
 
 protected:
@@ -77,7 +77,7 @@ protected:
   virtual ~StringParameter()
   {}
 
-  boost::any m_Value;
+  std::string  m_Value;
 
 private:
   StringParameter(const StringParameter &); //purposely not implemented
