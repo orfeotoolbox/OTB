@@ -96,6 +96,9 @@ private:
     SetParameterDescription("in","Input image filename.");
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
     SetParameterDescription("out","Output image filename.");
+    AddParameter(ParameterType_RAM, "ram", "Available RAM");
+    SetDefaultParameterInt("ram", 256);
+    MandatoryOff("ram");
     AddParameter(ParameterType_InputImage, "vm", "Validity Mask");
     SetParameterDescription("vm","Validity mask. Only non-zero pixels will be used to estimate KMeans modes.");
     AddParameter(ParameterType_Int, "ts", "Training set size");

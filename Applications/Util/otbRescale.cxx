@@ -72,6 +72,11 @@ private:
     SetParameterDescription( "in", "The image to scale." );
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
     SetParameterDescription( "out" , "The rescaled image filename." );
+
+    AddParameter(ParameterType_RAM, "ram", "Available RAM");
+    SetDefaultParameterInt("ram", 256);
+    MandatoryOff("ram");
+
     AddParameter(ParameterType_Float,      "outmin", "Output min value");
     AddParameter(ParameterType_Float,      "outmax", "Output max value");
     SetDefaultParameterFloat("outmin", 0.0);

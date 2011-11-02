@@ -100,6 +100,10 @@ private:
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
     SetParameterDescription( "out", "Output labeled image");
     SetParameterOutputImagePixelType( "out", ImagePixelType_uint8);
+
+    AddParameter(ParameterType_RAM, "ram", "Available RAM");
+    SetDefaultParameterInt("ram", 256);
+    MandatoryOff("ram");
   }
 
   void DoUpdateParameters()

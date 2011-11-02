@@ -68,6 +68,9 @@ private:
   {
     AddParameter(ParameterType_ComplexInputImage,  "cin", "Input Complex Image");
     AddParameter(ParameterType_ComplexOutputImage,  "out", "Output Image");
+    AddParameter(ParameterType_RAM, "ram", "Available RAM");
+    SetDefaultParameterInt("ram", 256);
+    MandatoryOff("ram");
     AddParameter(ParameterType_Empty, "noise", "Disable Noise");
     MandatoryOff("noise");
   }

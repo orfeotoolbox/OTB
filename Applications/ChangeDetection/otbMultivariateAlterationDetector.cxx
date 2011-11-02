@@ -67,6 +67,9 @@ private:
     AddParameter(ParameterType_InputImage,  "in2", "Input Image 2");
     AddParameter(ParameterType_OutputImage, "out", "Change Map");
     SetParameterDescription("out","Image of detected changes.");
+    AddParameter(ParameterType_RAM, "ram", "Available RAM");
+    SetDefaultParameterInt("ram", 256);
+    MandatoryOff("ram");
   }
 
   void DoUpdateParameters()

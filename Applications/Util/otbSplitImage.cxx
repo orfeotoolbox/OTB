@@ -72,6 +72,10 @@ private:
     SetParameterDescription("out",
                             "Will be used to get the prefix and the extension of the output images to write");
     SetParameterRole("out", Role_Output);
+
+    AddParameter(ParameterType_RAM, "ram", "Available RAM");
+    SetDefaultParameterInt("ram", 256);
+    MandatoryOff("ram");
   }
 
   void DoUpdateParameters()

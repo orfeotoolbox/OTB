@@ -84,6 +84,10 @@ private:
     SetParameterDescription("out","will be used to get the prefix and the extension of the images to write");
     SetParameterRole("out", Role_Output);
 
+    AddParameter(ParameterType_RAM, "ram", "Available RAM");
+    SetDefaultParameterInt("ram", 256);
+    MandatoryOff("ram");
+
     AddParameter(ParameterType_Int, "level", "Number Of Levels");
     SetDefaultParameterInt("level", 1);
     SetParameterDescription( "level", "Number of levels in the pyramid (default is 1).");

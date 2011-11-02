@@ -77,9 +77,12 @@ private:
     AddParameter(ParameterType_Directory,    "dem",   "DEM directory");
     AddParameter(ParameterType_Float,        "lms",   "Spacing of the deformation field");
     AddParameter(ParameterType_OutputImage,  "out",   "Output image");
+    AddParameter(ParameterType_RAM, "ram", "Available RAM");
+    SetDefaultParameterInt("ram", 256);
 
     MandatoryOff("lms");
     MandatoryOff("dem");
+    MandatoryOff("ram");
   }
   
   void DoUpdateParameters()

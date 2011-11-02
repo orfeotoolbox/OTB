@@ -78,6 +78,9 @@ private:
     SetParameterDescription("in", "Input image filename.");
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
     SetParameterDescription("out","Output image filename.");
+    AddParameter(ParameterType_RAM, "ram", "Available RAM");
+    SetDefaultParameterInt("ram", 256);
+    MandatoryOff("ram");
     AddParameter(ParameterType_Filename, "ct", "Color table");
     SetParameterDescription("ct",  "An ASCII file containing the color table\n"
                                    "with one color per line\n"

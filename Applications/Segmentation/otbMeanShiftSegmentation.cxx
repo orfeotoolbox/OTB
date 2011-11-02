@@ -76,6 +76,10 @@ private:
     MandatoryOff("lout");
     MandatoryOff("cbout");
 
+    AddParameter(ParameterType_RAM, "ram", "Available RAM");
+    SetDefaultParameterInt("ram", 256);
+    MandatoryOff("ram");
+
     AddParameter(ParameterType_Int,          "spatialr",   "Spatial radius");
     AddParameter(ParameterType_Float,        "ranger",   "Range radius");
     AddParameter(ParameterType_Int,          "minsize",   "Min region size");

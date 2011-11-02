@@ -73,6 +73,11 @@ private:
     SetParameterDescription("in", "Input image.");
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
     SetParameterDescription("out", "Output image.");
+
+    AddParameter(ParameterType_RAM, "ram", "Available RAM");
+    SetDefaultParameterInt("ram", 256);
+    MandatoryOff("ram");
+
     AddParameter(ParameterType_Int,  "startx", "Start X");
     SetParameterDescription("startx", "ROI start x position.");
     AddParameter(ParameterType_Int,  "starty", "Start Y");
@@ -81,6 +86,7 @@ private:
     SetParameterDescription("sizex","size along x in pixels.");
     AddParameter(ParameterType_Int,  "sizey",  "Size Y");
     SetParameterDescription("sizey","size along y in pixels.");
+
     // Default values
     SetDefaultParameterInt("startx", 0);
     SetDefaultParameterInt("starty", 0);
