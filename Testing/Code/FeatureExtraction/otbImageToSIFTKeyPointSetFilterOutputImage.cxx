@@ -117,7 +117,7 @@ int otbImageToSIFTKeyPointSetFilterOutputImage(int argc, char * argv[])
   PointsIteratorType        pIt = filter->GetOutput()->GetPoints()->Begin();
   ImageType::SpacingType    spacing = reader->GetOutput()->GetSpacing();
   ImageType::PointType      origin = reader->GetOutput()->GetOrigin();
-  OutputImageType::SizeType size = outputImage->GetLargestPossibleRegion().GetSize();
+  //OutputImageType::SizeType size = outputImage->GetLargestPossibleRegion().GetSize();
 
   while (pIt != filter->GetOutput()->GetPoints()->End())
     {
