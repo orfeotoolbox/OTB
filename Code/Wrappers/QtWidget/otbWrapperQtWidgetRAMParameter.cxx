@@ -46,6 +46,15 @@ void QtWidgetRAMParameter::DoCreateWidget()
   connect( m_QSpinBox, SIGNAL(valueChanged(int)), GetModel(), SLOT(NotifyUpdate()) );
   connect( GetModel(), SIGNAL(UpdateGui()), this, SLOT(UpdateGUI() ) );
 
+  // Set a valid range
+  // Using m_UnsignedIntParam->GetMaximum() to set the maximum range
+  // of the SpinBox give a maximum of 0. The SpinBox max is an
+  // interger and m_UnsignedIntParam->GetMaximum() returns an unsigned
+  // integer which is 2 times the itk::NumericTraits<int>::max().
+  // static_cast<int>(m_UnsignedIntParam->GetMaximum()) = 0 then.
+  // 0 RAM is not allowed, make the minimum to 1
+  m_QSpinBox->setRange(1, itk::NumericTraits<int>::max());
+
   m_QHBoxLayout->addWidget(m_QSpinBox);
   m_QHBoxLayout->addStretch();
 
@@ -54,15 +63,6 @@ void QtWidgetRAMParameter::DoCreateWidget()
 
 void QtWidgetRAMParameter::DoUpdateGUI()
 {
-  // Update the valid range if updated
-  // Using m_UnsignedIntParam->GetMaximum() to set the maximum range
-  // of the SpinBox give a maximum of 0. The SpinBox max is an
-  // interger and m_UnsignedIntParam->GetMaximum() returns an unsigned
-  // integer which returns 2 times the itk::NumericTraits<int>::max().
-  // static_cast<int>m_UnsignedIntParam->GetMaximum() = 0 then.
-  m_QSpinBox->setRange(itk::NumericTraits<int>::NonpositiveMin(),
-                       itk::NumericTraits<int>::max());
-
   bool signalsBlocked = m_QSpinBox->blockSignals( true );
 
   if (m_RAMParam->HasValue())
