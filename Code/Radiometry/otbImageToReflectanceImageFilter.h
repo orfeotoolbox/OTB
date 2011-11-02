@@ -304,8 +304,8 @@ protected:
           otb_6s_doublereal dsol = 0.;
           otb_6s_integer    day = static_cast<otb_6s_integer>(m_Day);
           otb_6s_integer    month = static_cast<otb_6s_integer>(m_Month);
-          int               cr(0);
-          cr = otb_6s_varsol_(&day, &month, &dsol);
+          //int               cr(0);
+          otb_6s_varsol_(&day, &month, &dsol);
           coefTemp = vcl_cos(m_ZenithalSolarAngle * CONST_PI_180) * static_cast<double>(dsol);
           }
         else

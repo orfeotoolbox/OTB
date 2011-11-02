@@ -173,7 +173,7 @@ private:
   {
     const GLubyte * estring = gluErrorString(errorCode);
     otbMsgDevMacro(<< "Glu Tesselation error: " << estring);
-    estring = 0; // avoid unused variable warning
+    //estring = 0; // avoid unused variable warning
   }
 
   // Static begin callback for tesselation

@@ -267,7 +267,7 @@ void OGRVectorDataIO::Write(const itk::DataObject* datag, char ** papszOptions)
     }
   DataNodePointerType root = tree->GetRoot()->Get();
 
-  unsigned int layerKept = 0;
+  unsigned int layerKept;
   OGRLayer *   ogrCurrentLayer = NULL;
 //   OGRFeatureVectorType ogrFeatures;
   OGRGeometryCollection * ogrCollection = NULL;
