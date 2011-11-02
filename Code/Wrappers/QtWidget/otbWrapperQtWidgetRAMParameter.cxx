@@ -52,8 +52,8 @@ void QtWidgetRAMParameter::DoCreateWidget()
   // interger and m_UnsignedIntParam->GetMaximum() returns an unsigned
   // integer which is 2 times the itk::NumericTraits<int>::max().
   // static_cast<int>(m_UnsignedIntParam->GetMaximum()) = 0 then.
-  // 0 RAM is not allowed, make the minimum to 1
-  m_QSpinBox->setRange(1, itk::NumericTraits<int>::max());
+  m_QSpinBox->setRange(itk::NumericTraits<int>::Zero,
+                       itk::NumericTraits<int>::max());
 
   m_QHBoxLayout->addWidget(m_QSpinBox);
   m_QHBoxLayout->addStretch();
