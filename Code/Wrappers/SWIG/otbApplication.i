@@ -65,7 +65,8 @@ namespace Wrapper
     ParameterType_Group,
     ParameterType_ListView,
     ParameterType_ComplexInputImage,
-    ParameterType_ComplexOutputImage
+    ParameterType_ComplexOutputImage,
+    ParameterType_RAM
   } ParameterType;
   
   typedef enum
