@@ -15,149 +15,153 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#include "otbSuperimpose.h"
+#include "otbWrapperApplication.h"
+#include "otbWrapperApplicationFactory.h"
 
-#include <iostream>
-
-#include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
-#include "otbImage.h"
-#include "otbVectorImage.h"
 #include "otbGenericRSResampleImageFilter.h"
 #include "otbBCOInterpolateImageFunction.h"
-#include "itkExceptionObject.h"
-#include "otbStandardWriterWatcher.h"
 
 namespace otb
 {
 
-int Superimpose::Describe(ApplicationDescriptor* descriptor)
+namespace Wrapper
 {
-  descriptor->SetName("Superimpose");
-  descriptor->SetDescription("Using available image metadata, project one image onto another one");
-  descriptor->AddOption("DEMDirectory","Directory were to find the DEM tiles","dem", 1, false, otb::ApplicationDescriptor::DirectoryName);
-  descriptor->AddOption("NumStreamDivisions","Number of streaming divisions (optional)","stream", 1, false, otb::ApplicationDescriptor::Integer);
-  descriptor->AddOption("LocMapSpacing","Generate a coarser deformation field with the given spacing.","lmSpacing", 1, false, otb::ApplicationDescriptor::Real);
-  descriptor->AddOption("ReferenceInput","The reference input","inR", 1, true, otb::ApplicationDescriptor::InputImage);
-  descriptor->AddOption("MovingInput","The image to reproject","inM", 1, true, otb::ApplicationDescriptor::InputImage);
-  descriptor->AddOption("AvailableMemory","Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default)","ram", 1, false, otb::ApplicationDescriptor::Integer);
-  descriptor->AddOutputImage();
 
-  return EXIT_SUCCESS;
-}
-
-int Superimpose::Execute(otb::ApplicationOptionsResult* parseResult)
+class Superimpose : public Application
 {
-  try
-    {
+public:
+  /** Standard class typedefs. */
+  typedef Superimpose         Self;
+  typedef Application                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-    typedef unsigned short int PixelType;
+  /** Standard macro */
+  itkNewMacro(Self);
 
-    typedef otb::VectorImage<PixelType, 2>                ImageType;
-    typedef otb::ImageFileReader<ImageType>               ReaderType;
-    typedef otb::StreamingImageFileWriter<ImageType>      WriterType;
-    typedef otb::BCOInterpolateImageFunction<ImageType>   InterpolatorType;
+  itkTypeMacro(Superimpose, Application);
 
-    typedef otb::GenericRSResampleImageFilter<ImageType, ImageType>  ResamplerType;
+  typedef unsigned short int PixelType;
 
-    // Read input images information
-    ReaderType::Pointer refReader = ReaderType::New();
-    refReader->SetFileName(parseResult->GetParameterString("ReferenceInput"));
-    refReader->GenerateOutputInformation();
+  typedef otb::BCOInterpolateImageFunction<UInt16VectorImageType>   InterpolatorType;
+  typedef otb::GenericRSResampleImageFilter<UInt16VectorImageType, 
+                                            UInt16VectorImageType>  ResamplerType;
 
-    ReaderType::Pointer movingReader = ReaderType::New();
-    movingReader->SetFileName(parseResult->GetParameterString("MovingInput"));
-    movingReader->GenerateOutputInformation();
+private:
+
+  Superimpose()
+  {
+    SetName("Superimpose");
+    SetDescription("Using available image metadata, project one image onto another one");
+
+    // Documentation
+    SetDocName("Superimpose sensor application");
+    SetDocLongDescription("This application performs /....");
+    SetDocLimitations("None");
+    SetDocAuthors("OTB-Team");
+    SetDocSeeAlso(" ");
+    SetDocCLExample("otbApplicationLauncherCommandLine Superimpose ${OTB-BIN}/bin "
+                    "--inr ${OTB-Data}/Examples/QB_Toulouse_Ortho_PAN.tif --inm ${OTB-Data}/Examples/QB_Toulouse_Ortho_XS.tif "
+                    "--out otbSuperimposedXS_to_PAN.tif");
+    AddDocTag("Projection");
+    AddDocTag("Image manipulation");
+    AddDocTag("Superimposition");
+  }
+
+  virtual ~Superimpose()
+  {
+  }
+
+  void DoCreateParameters()
+  {
+    AddParameter(ParameterType_InputImage,   "inr",   "Reference input");
+    AddParameter(ParameterType_InputImage,   "inm",   "The image to reproject");
+    AddParameter(ParameterType_Directory,    "dem",   "DEM directory");
+    AddParameter(ParameterType_Float,        "lms",   "Spacing of the deformation field");
+    SetParameterDescription("lms","Generate a coarser deformation field with the given spacing");
+    SetDefaultParameterFloat("lms", 4.);
+
+    AddParameter(ParameterType_OutputImage,  "out",   "Output image");
+    AddParameter(ParameterType_RAM,          "ram", "Available RAM");
+    SetDefaultParameterInt("ram", 256);
+
+    MandatoryOff("dem");
+    MandatoryOff("lms");
+    MandatoryOff("ram");
+  }
+
+  void DoUpdateParameters()
+  {
+    // Nothing to do here : all parameters are independent
+  }
+
+  
+  void DoExecute()
+  {
+    // Get the inputs
+    UInt16VectorImageType* refImage = GetParameterUInt16VectorImage("inr");
+    UInt16VectorImageType* movingImage = GetParameterUInt16VectorImage("inm");
     
     // Resample filter
-    ResamplerType::Pointer    resampler = ResamplerType::New();
-    InterpolatorType::Pointer interpolator = InterpolatorType::New();
-    resampler->SetInterpolator(interpolator);
+    m_Resampler    = ResamplerType::New();
+    m_Interpolator = InterpolatorType::New();
+    m_Resampler->SetInterpolator(m_Interpolator);
     
     // Configure DEM directory
-    if(parseResult->IsOptionPresent("DEMDirectory"))
+    if(IsParameterEnabled("dem"))
       {
-      resampler->SetDEMDirectory(parseResult->GetParameterString("DEMDirectory", 0));
+      m_Resampler->SetDEMDirectory(GetParameterString("dem"));
       }
     else
       {
       if ( otb::ConfigurationFile::GetInstance()->IsValid() )
         {
-        resampler->SetDEMDirectory(otb::ConfigurationFile::GetInstance()->GetDEMDirectory());
+        m_Resampler->SetDEMDirectory(otb::ConfigurationFile::GetInstance()->GetDEMDirectory());
         }
       }
     
     // Set up output image informations
-    ImageType::SpacingType spacing = refReader->GetOutput()->GetSpacing();
-    ImageType::IndexType start = refReader->GetOutput()->GetLargestPossibleRegion().GetIndex();
-    ImageType::SizeType size = refReader->GetOutput()->GetLargestPossibleRegion().GetSize();
-    ImageType::PointType origin = refReader->GetOutput()->GetOrigin();
+    UInt16VectorImageType::SpacingType spacing = refImage->GetSpacing();
+    UInt16VectorImageType::IndexType   start   = refImage->GetLargestPossibleRegion().GetIndex();
+    UInt16VectorImageType::SizeType    size    = refImage->GetLargestPossibleRegion().GetSize();
+    UInt16VectorImageType::PointType   origin  = refImage->GetOrigin();
 
-    if(parseResult->IsOptionPresent("LocMapSpacing"))
+    if(IsParameterEnabled("lms"))
       {
-      double defScalarSpacing = parseResult->GetParameterFloat("LocMapSpacing");
+      float defScalarSpacing = GetParameterFloat("lms");
       std::cout<<"Generating coarse deformation field (spacing="<<defScalarSpacing<<")"<<std::endl;
-      ImageType::SpacingType defSpacing;
+      UInt16VectorImageType::SpacingType defSpacing;
 
       defSpacing[0] = defScalarSpacing;
       defSpacing[1] = defScalarSpacing;
       
-      resampler->SetDeformationFieldSpacing(defSpacing);
-      }
-    else
-      {
-      ImageType::SpacingType defSpacing;
-      defSpacing[0]=10*spacing[0];
-      defSpacing[1]=10*spacing[1];
-      resampler->SetDeformationFieldSpacing(defSpacing);
+      m_Resampler->SetDeformationFieldSpacing(defSpacing);
       }
     
-    ImageType::PixelType defaultValue;
-    itk::PixelBuilder<ImageType::PixelType>::Zero(defaultValue,
-                                                  movingReader->GetOutput()->GetNumberOfComponentsPerPixel());
+    UInt16VectorImageType::PixelType defaultValue;
+    itk::PixelBuilder<UInt16VectorImageType::PixelType>::Zero(defaultValue,
+                                                              movingImage->GetNumberOfComponentsPerPixel());
 
-    resampler->SetInput(movingReader->GetOutput());
-    resampler->SetOutputOrigin(origin);
-    resampler->SetOutputSpacing(spacing);
-    resampler->SetOutputSize(size);
-    resampler->SetOutputStartIndex(start);
-    resampler->SetOutputKeywordList(refReader->GetOutput()->GetImageKeywordlist());
-    resampler->SetOutputProjectionRef(refReader->GetOutput()->GetProjectionRef());
-    resampler->SetEdgePaddingValue(defaultValue);
+    m_Resampler->SetInput(movingImage);
+    m_Resampler->SetOutputOrigin(origin);
+    m_Resampler->SetOutputSpacing(spacing);
+    m_Resampler->SetOutputSize(size);
+    m_Resampler->SetOutputStartIndex(start);
+    m_Resampler->SetOutputKeywordList(refImage->GetImageKeywordlist());
+    m_Resampler->SetOutputProjectionRef(refImage->GetProjectionRef());
+    m_Resampler->SetEdgePaddingValue(defaultValue);
     
-    WriterType::Pointer writer = WriterType::New();
-    writer->SetFileName(parseResult->GetOutputImage());
-    writer->SetInput(resampler->GetOutput());
-    writer->SetWriteGeomFile(true);
+    // Set the output image
+    SetParameterOutputImage("out", m_Resampler->GetOutput());
+  }
 
-    unsigned int ram = 256;
-    if (parseResult->IsOptionPresent("AvailableMemory"))
-      {
-      ram = parseResult->GetParameterUInt("AvailableMemory");
-      }
-    writer->SetAutomaticTiledStreaming(ram);
+  ResamplerType::Pointer           m_Resampler;
+  InterpolatorType::Pointer        m_Interpolator;
+};
 
-    otb::StandardWriterWatcher w4(writer, resampler,"Superimposition");
-    writer->Update();
-    }
-  catch ( itk::ExceptionObject & err )
-    {
-    std::cout << "Exception itk::ExceptionObject raised !" << std::endl;
-    std::cout << err << std::endl;
-    return EXIT_FAILURE;
-    }
-  catch ( std::bad_alloc & err )
-    {
-    std::cout << "Exception bad_alloc : "<<(char*)err.what()<< std::endl;
-    return EXIT_FAILURE;
-    }
-  catch ( ... )
-    {
-    std::cout << "Unknown exception raised !" << std::endl;
-    return EXIT_FAILURE;
-    }
-  return EXIT_SUCCESS;
+} // end namespace Wrapper
+} // end namespace otb
 
-}
+OTB_APPLICATION_EXPORT(otb::Wrapper::Superimpose)
 
-}
+  
