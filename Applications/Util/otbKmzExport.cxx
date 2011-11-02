@@ -26,22 +26,6 @@ namespace otb
 namespace Wrapper
 {
 
-namespace Functor
-{
-template< class TScalar >
-class ITK_EXPORT LogFunctor
-{
-public:
-  LogFunctor(){};
-  ~LogFunctor(){};
-  TScalar operator() (const TScalar& v) const
-  {
-    return vcl_log(v);
-  }
-};
-} // end namespace Functor
-
-
 class KmzExport : public Application
 {
 public:
@@ -67,7 +51,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Convertion");
-    SetDocCLExample("otbApplicationLauncherCommandLine KmzExport ${OTB-BIN}/bin --in ${OTB-Data}/Input/qb_RoadExtract.img --out otbKmzExport --logo ${OTB-Data}/Input/cnes.png ${OTB-Data}/Input/otb_big.png");
+    SetDocCLExample("otbApplicationLauncherCommandLine KmzExport ${OTB-BIN}/bin --in ${OTB-Data}/Input/qb_RoadExtract.img --out otbKmzExport.kmz --logo ${OTB-Data}/Input/cnes.png ${OTB-Data}/Input/otb_big.png");
     AddDocTag("KMZ");
     AddDocTag("Export");
   }
@@ -151,71 +135,3 @@ private:
 
 OTB_APPLICATION_EXPORT(otb::Wrapper::KmzExport)
 
-
-/*
-namespace otb
-{
-
-int KmzExport::Describe(ApplicationDescriptor* descriptor)
-{
-  descriptor->SetName("KmzExport");
-  descriptor->SetDescription("Export the input image as Kmz");
-  descriptor->AddInputImage();
-  descriptor->AddOption("OutputProductName", "Output Kmz product", "kmz", 1, true,
-                        ApplicationDescriptor::InputImage);
-  descriptor->AddOption("TileSize", "Set the size of the tiles", "s", 1, false,
-                        ApplicationDescriptor::Integer);
-  descriptor->AddOption("LogoImage", "Add a logo to the final Kmz", "lo", 1, false,
-                        ApplicationDescriptor::FileName);
-  descriptor->AddOption("LegendImage", "Add a legend to the image exported", "le", 1,
-                        false, ApplicationDescriptor::FileName);
- 
-  return EXIT_SUCCESS;
-}
-
-int KmzExport::Execute(otb::ApplicationOptionsResult* parseResult)
-{
-  typedef otb::VectorImage<float, 2>                      ImageType;
-  typedef otb::KmzProductWriter<ImageType>                KmzProductWriterType;
-  typedef otb::ImageFileReader<ImageType>                 ReaderType;
-
-  // Instanciate reader
-  ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName(parseResult->GetInputImage());
-  reader->UpdateOutputInformation();
-  
-  // Second part : Image To Kmz
-  KmzProductWriterType::Pointer    kmzWriter  = KmzProductWriterType::New();
-  kmzWriter->SetInput(reader->GetOutput());
-  kmzWriter->SetPath(parseResult->GetParameterString("OutputProductName"));
-
-  // If the tilesize is set
-  if(parseResult->IsOptionPresent("TileSize"))
-    {
-    kmzWriter->SetTileSize(parseResult->GetParameterUInt("TileSize"));
-    }
-  // Read the logo if any
-  if(parseResult->IsOptionPresent("LogoImage"))
-    {
-    ReaderType::Pointer logoReader  = ReaderType::New();
-    logoReader->SetFileName(parseResult->GetParameterString("LogoImage"));
-    logoReader->Update();
-    kmzWriter->SetLogo(logoReader->GetOutput());
-    }
-  // Read the legend if any
-  if(parseResult->IsOptionPresent("LegendImage"))
-    {
-    ReaderType::Pointer legendReader  = ReaderType::New();
-    legendReader->SetFileName(parseResult->GetParameterString("LegendImage"));
-    legendReader->Update();
-    kmzWriter->AddLegend("Input Legend", legendReader->GetOutput());
-    kmzWriter->AddLegend(legendReader->GetOutput());
-    }
-  
-  // trigger the writing
-  kmzWriter->Update();
-
-  return EXIT_SUCCESS;
-}
-}
-*/
