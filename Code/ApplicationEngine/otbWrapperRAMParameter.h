@@ -87,10 +87,9 @@ protected:
     
     // Initialize the unsigned int NumericalParam
     m_UnsignedIntParam = UnsignedIntParameter::New();
-    // Set a default value
-    //this->SetDefaultValue(256);
-    // the value of the RAM param is its default param
-    //this->SetValue(256);
+
+    // 0 RAM is not allowed, make the minimum to 1 by default
+    this->SetMinimumValue(1);
   }
 
   /** Destructor */
