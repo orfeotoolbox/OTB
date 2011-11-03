@@ -87,15 +87,19 @@ private:
   {
     SetName("OrthoRectification");
     std::ostringstream oss;
-    oss << "Using available image metadata to determine the sensor model," << std::endl;
-    oss << "computes a cartographic projection of the image";
+    oss << "This application allows to ortho-rectify optical images from supported sensors." << std::endl;
     SetDescription(oss.str());
     // Documentation
-    SetDocName("Ortho Rectification application");
+    SetDocName("Ortho-rectification application");
+    oss.str("");
+    oss<<"An inverse sensor model is built from the input image metadata to convert geographical to raw geometry coordinates. ";
+    oss<<"This inverse sensor model is then combined with the chosen map projection to build a global coordinate mapping grid. Last, this grid is used to resample using the chosen interpolation algorithm. ";
+    oss<<"A Digital Elevation Model can be specified to account for terrain deformations. "<<std::endl;
+    oss<<"In case of SPOT5 images, the sensor model can be approximated by an RPC model in order to speed-up computation.";
     SetDocLongDescription(oss.str());
-    SetDocLimitations("None");
+    SetDocLimitations("Supported sensors are SPOT5 (TIF format), Ikonos, Quickbird, Worldview2, GeoEye.");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso(" ");
+    SetDocSeeAlso("Ortho-rectification chapter from the OTB Software Guide");
     SetDocCLExample(" ");
     AddDocTag("Image manipulation");
     AddDocTag("Projection");
@@ -104,103 +108,125 @@ private:
   void DoCreateParameters()
   {
     // Set the parameters
-    AddParameter(ParameterType_InputImage, "in", "Input Image");
+    AddParameter(ParameterType_Group,"io","Input and output data");
+    SetParameterDescription("io","This group of parameters allows to set the input and output images.");
+    AddParameter(ParameterType_InputImage, "io.in", "Input Image");
+    SetParameterDescription("io.in","The input image to ortho-rectify");
+    AddParameter(ParameterType_OutputImage, "io.out", "Output Image");
+    SetParameterDescription("io.out","The ortho-rectified output image");
 
-    AddParameter(ParameterType_OutputImage, "out", "Output Image");
-    SetParameterDescription("out","Projected image");
+    // Built the Output Map Projection
+    AddParameter(ParameterType_Choice, "map", "Output Map Projection");
+    SetParameterDescription("map","Parameters of the ouptut map projection.");
+    
+    AddChoice("map.utm",   "Universal Trans-Mercator (UTM)");
+    SetParameterDescription("map.utm","A system of transverse mercator projections dividing the surface of Earth between 80S and 84N latitude.");
+    AddParameter(ParameterType_Int, "map.utm.zone", "Zone number");
+    SetParameterDescription("map.utm.zone","The zone number ranges from 1 to 60 and allows to define the transverse mercator projection (along with the hemisphere)");
+    AddParameter(ParameterType_Empty, "map.utm.hem",  "Northern Hemisphere");
+    SetParameterDescription("map.utm.hem","The transverse mercator projections are defined by their zone number as well as the hemisphere. Activate this parameter if your image is in the northern hemisphere.");
+    AddChoice("map.lambert2",  "Lambert II Etendu");
+    SetParameterDescription("map.lambert2","This is a Lambert Conformal Conic projection mainly used in France.");
 
-    // RAM available
-    AddParameter(ParameterType_RAM, "ram", "Available RAM");
-    SetDefaultParameterInt("ram", 256);
-    MandatoryOff("ram");
+    AddChoice("map.epsg","EPSG Code");
+    SetParameterDescription("map.epsg","This code is a generic way of identifying map projections, and allows to specify a large amount of them. See www.spatialreference.org to find which EPSG code is associated to your projection;");
+    AddParameter(ParameterType_Int, "map.epsg.code", "EPSG Code");
+    SetParameterDescription("map.epsg.code","See www.spatialreference.org to find which EPSG code is associated to your projection");
+    SetDefaultParameterInt("map.epsg.code", 32631);
+    SetParameterString("map", "epsg");
+
     
     // Add the output paramters in a group
-    AddParameter(ParameterType_Group, "outputs", "Output Parameters");
+    AddParameter(ParameterType_Group, "outputs", "Output Image Grid");
+    SetParameterDescription("outputs","This group of parameters allows to define the grid on which the input image will be resampled.");
 
     // UserDefined values
-    AddParameter(ParameterType_Choice, "outputs.mode", "Mode Type");
+    AddParameter(ParameterType_Choice, "outputs.mode", "Parameters estimation modes");
     AddChoice("outputs.mode.auto", "User Defined");
-    AddChoice("outputs.mode.autosize", "Automatic Size ");
-    AddChoice("outputs.mode.autospacing", "Automatic Spacing");
-
+    SetParameterDescription("outputs.mode.auto","This mode allows you to fully modify default values.");
+    AddChoice("outputs.mode.autosize", "Automatic Size from Spacing");
+    SetParameterDescription("outputs.mode.autosize","This mode allows you to automatically compute the optimal image size from given spacing (pixel size) values");
+    AddChoice("outputs.mode.autospacing", "Automatic Spacing from Size");
+    SetParameterDescription("outputs.mode.autospacing","This mode allows you to automatically compute the optimal image spacing (pixel size) from the given size");
     // Upper left point coordinates
     AddParameter(ParameterType_Float, "outputs.ulx", "Upper Left X");
-    SetParameterDescription("outputs.ulx","Cartographic X coordinate of upper left corner");
+    SetParameterDescription("outputs.ulx","Cartographic X coordinate of upper-left corner (meters for cartographic projections, degrees for geographic ones)");
 
     AddParameter(ParameterType_Float, "outputs.uly", "Upper Left Y");
-    SetParameterDescription("outputs.uly","Cartographic Y coordinate of upper left corner");
+    SetParameterDescription("outputs.uly","Cartographic Y coordinate of the upper-left corner (meters for cartographic projections, degrees for geographic ones)");
 
     // Size of the output image
     AddParameter(ParameterType_Int, "outputs.sizex", "Size X");
-    SetParameterDescription("outputs.sizex","Size of projected image along X");
+    SetParameterDescription("outputs.sizex","Size of projected image along X (in pixels)");
 
     AddParameter(ParameterType_Int, "outputs.sizey", "Size Y");
-    SetParameterDescription("outputs.sizey","Size of projected image along Y");
+    SetParameterDescription("outputs.sizey","Size of projected image along Y (in pixels)");
     
     // Spacing of the output image
     AddParameter(ParameterType_Float, "outputs.spacingx", "Pixel Size X");
-    SetParameterDescription("outputs.spacingx","Size of each pixel along X axis");
+    SetParameterDescription("outputs.spacingx","Size of each pixel along X axis (meters for cartographic projections, degrees for geographic ones)");
 
 
     AddParameter(ParameterType_Float, "outputs.spacingy", "Pixel Size Y");
-    SetParameterDescription("outputs.spacingy","Size of each pixel along Y axis");
+    SetParameterDescription("outputs.spacingy","Size of each pixel along Y axis (meters for cartographic projections, degrees for geographic ones)");
 
     AddParameter(ParameterType_Empty,"outputs.isotropic","Force isotropic spacing by default");
     std::ostringstream isotropOss;
-    isotropOss << "Default spacing values are estimated from the sensor modelling of the image. It can therefore result in a non-isotropic spacing. ";
+    isotropOss << "Default spacing (pixel size) values are estimated from the sensor modeling of the image. It can therefore result in a non-isotropic spacing. ";
     isotropOss << "This option allows you to force default values to be isotropic (in this case, the minimum of spacing in both direction is applied. ";
     isotropOss << "Values overriden by user are not affected by this option.";
     SetParameterDescription("outputs.isotropic", isotropOss.str());
     EnableParameter("outputs.isotropic");
     
-    // DEM
-    AddParameter(ParameterType_Directory, "dem",   "DEM directory");
-    MandatoryOff("dem");
+    AddParameter(ParameterType_Group,"elev","Elevation management");
+    SetParameterDescription("elev","This group of parameters allows to manage elevation values in the ortho-rectification process.");
 
-    // Estimate a RPC model (for spot image for instance)
-    AddParameter(ParameterType_Group, "rpc", "Estimate RPC model");
-    AddParameter(ParameterType_Int, "rpc.ncp", "Nb control Points");
-    std::ostringstream oss;
-    oss << "Activate RPC sensor model estimation"<<std::endl;
-    oss << "Parameter is the number of control points per axis";
-    SetParameterDescription("rpc", oss.str().c_str());
-    MandatoryOff("rpc");
+    // DEM
+    AddParameter(ParameterType_Directory, "elev.dem",   "DEM directory");
+    SetParameterDescription("elev.dem","This parameter allows to select a directory containing Digital Elevation Model tiles. Supported formats are SRTM, DTED or any geotiff processed by the DEM import application");
+    MandatoryOff("elev.dem");
 
     // Interpolators
-    AddParameter(ParameterType_Choice,   "interpolator", "Interpolator");
-    AddChoice("interpolator.linear", "Linear");
-    AddChoice("interpolator.nn",     "Nearest Neighbor");
-    AddChoice("interpolator.bco",    "BCO");
-    AddParameter(ParameterType_Radius, "interpolator.bco.radius", "Radius");
+    AddParameter(ParameterType_Choice,   "interpolator", "Interpolation");
+    SetParameterDescription("interpolator","This group of parameters allows to define how the input image will be interpolated during resampling.");
+    AddChoice("interpolator.nn",     "Nearest Neighbor interpolation");
+    SetParameterDescription("interpolator.nn","Nearest neighbor interpolation leads to poor image quality, but it is very fast.");
+    AddChoice("interpolator.linear", "Linear interpolation");
+    SetParameterDescription("interpolator.linear","Linear interpolation leads to average image quality but is quite fast");
+    AddChoice("interpolator.bco",    "Bicubic interpolation");
+    AddParameter(ParameterType_Radius, "interpolator.bco.radius", "Radius for bicubic interpolation");
+    SetParameterDescription("interpolator.bco.radius","This parameter allows to control the size of the bicubic interpolation filter. If the target pixel size is higher than the input pixel size, increasing this parameter will reduce aliasing artefacts.");
     SetDefaultParameterInt("interpolator.bco.radius", 2);
 
-    // Built the Output Map Projection
-    AddParameter(ParameterType_Choice, "map", "Map Projection");
-    
-    AddChoice("map.utm",   "UTM");
-    AddParameter(ParameterType_Int, "map.utm.zone", "Zone number");
-    AddParameter(ParameterType_Empty, "map.utm.hem",  "Hemisphere North");
+    AddParameter(ParameterType_Group,"opt","Speed optimization parameters");
+    SetParameterDescription("opt","This group of parameters allows to optimize processing time.");
 
-    AddChoice("map.lambert2",  "Lambert II Etendu");
+    // Estimate a RPC model (for spot image for instance)
+    AddParameter(ParameterType_Int, "opt.rpc", "RPC modeling (points per axis)");
+    SetDefaultParameterInt("opt.rpc",10);
+    SetParameterDescription("opt.rpc","Enabling RPC modeling allows to speed-up SPOT5 ortho-rectification. Value is the number of control points per axis for RPC estimation");
+    DisableParameter("opt.rpc");
+    MandatoryOff("opt.rpc");
 
-    AddChoice("map.epsg","EPSG");
-    AddParameter(ParameterType_Int, "map.epsg.code", "EPSG Code");
-    SetDefaultParameterInt("map.epsg.code", 32631);
-    SetParameterString("map", "epsg");
+    // RAM available
+    AddParameter(ParameterType_RAM, "opt.ram", "Available memory for processing (in MB)");
+    SetParameterDescription("opt.ram","This allows to set the maximum amount of RAM available for processing. As the writing task is time consuming, it is better to write large pieces of data, which can be achieved by increasing this parameter (pay attention to your system capabilities)");
+    SetDefaultParameterInt("opt.ram", 256);
+    MandatoryOff("opt.ram");
 
     // Deformation Field Spacing
-    AddParameter(ParameterType_Float, "gridspacing", "Deformation Field Spacing");
-    SetDefaultParameterFloat("gridspacing", 4.);
-    SetParameterDescription("gridspacing", "Generate a coarser deformation field with the given spacing");
-    MandatoryOff("gridspacing");
+    AddParameter(ParameterType_Float, "opt.gridspacing", "Resampling grid spacing");
+    SetDefaultParameterFloat("opt.gridspacing", 4.);
+    SetParameterDescription("opt.gridspacing", "Resampling is done according to a coordinate mapping grid, whose pixel size is set by this parameter. The closer to the output spacing this parameter is, the more precise will be the ortho-rectified image, but increasing this parameter allows to reduce processing time.");
+    MandatoryOff("opt.gridspacing");
   }
 
   void DoUpdateParameters()
   {
-    if (HasValue("in"))
+    if (HasValue("io.in"))
       {
       // input image
-      FloatVectorImageType::Pointer inImage = GetParameterImage("in");
+      FloatVectorImageType::Pointer inImage = GetParameterImage("io.in");
 
       // Update the UTM zone params
       InitializeUTMParameters();
@@ -342,13 +368,13 @@ private:
   {
     // Compute the zone and the hemisphere if not UserValue defined
     if(!HasUserValue("map.utm.zone")
-       && HasValue("in")
+       && HasValue("io.in")
        && !HasAutomaticValue("map.utm.zone"))
       {
       // Compute the Origin lat/long coordinate
       typedef otb::ImageToGenericRSOutputParameters<FloatVectorImageType> OutputParametersEstimatorType;
       OutputParametersEstimatorType::Pointer genericRSEstimator = OutputParametersEstimatorType::New();
-      genericRSEstimator->SetInput(GetParameterImage("in"));
+      genericRSEstimator->SetInput(GetParameterImage("io.in"));
       genericRSEstimator->SetOutputProjectionRef(otb::GeoInformationConversion::ToWKT(4326));
       genericRSEstimator->Compute();
 
@@ -408,7 +434,7 @@ private:
     GetLogger()->Debug("Entering DoExecute");
     
     // Get the input image
-    FloatVectorImageType* inImage = GetParameterImage("in");
+    FloatVectorImageType* inImage = GetParameterImage("io.in");
 
     // Resampler Instanciation
     m_ResampleFilter = ResampleFilterType::New();
@@ -449,9 +475,9 @@ private:
       }
 
     // DEM
-    if (IsParameterEnabled("dem") && HasValue("dem"))
+    if (IsParameterEnabled("elev.dem") && HasValue("elev.dem"))
       {
-      m_ResampleFilter->SetDEMDirectory(GetParameterString("dem"));
+      m_ResampleFilter->SetDEMDirectory(GetParameterString("elev.dem"));
       }
     else
       {
@@ -462,11 +488,11 @@ private:
       }
 
     // If activated, generate RPC model
-    if(IsParameterEnabled("rpc.ncp"))
+    if(IsParameterEnabled("opt.rpc"))
       {
       //std::cout <<"Estimating the rpc Model " <<std::endl;
       m_ResampleFilter->EstimateInputRpcModelOn();
-      m_ResampleFilter->SetInputRpcGridSize( GetParameterInt("rpc.ncp"));
+      m_ResampleFilter->SetInputRpcGridSize( GetParameterInt("opt.rpc"));
       }
     
     // Set Output information
@@ -487,16 +513,15 @@ private:
 
     // Deformation Field spacing
     ResampleFilterType::SpacingType gridSpacing;
-    if (IsParameterEnabled("gridspacing"))
+    if (IsParameterEnabled("opt.gridspacing"))
       {
-      gridSpacing[0] = GetParameterFloat("gridspacing");
-      gridSpacing[1] = -GetParameterFloat("gridspacing");
-      std::cout <<"grid spacing is "<<  gridSpacing << std::endl;
+      gridSpacing[0] = GetParameterFloat("opt.gridspacing");
+      gridSpacing[1] = -GetParameterFloat("opt.gridspacing");
       m_ResampleFilter->SetDeformationFieldSpacing(gridSpacing);
       }
 
     // Output Image
-    SetParameterOutputImage("out", m_ResampleFilter->GetOutput());
+    SetParameterOutputImage("io.out", m_ResampleFilter->GetOutput());
     }
 
   ResampleFilterType::Pointer  m_ResampleFilter;
