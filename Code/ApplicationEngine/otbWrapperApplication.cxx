@@ -116,12 +116,12 @@ bool Application::Execute()
   catch(std::exception& err)
     {
     ret = false;
-    otbAppLogFATAL(<<err.what());
+    otbAppLogFATAL(<<"The following error occurred during application execution : " << err.what());
     }
   catch(...)
     {
     ret = false;
-    otbAppLogFATAL(<<"Unknown exception thrown.");
+    otbAppLogFATAL(<<"An unknown exception has been raised during application execution");
     }
 
   return ret;
@@ -196,7 +196,9 @@ bool Application::ExecuteAndWriteOutput()
             {
             outputParam->SetRAMValue(ram);
             }
-          AddProcess(outputParam->GetWriter(),"Complex Writer");
+          std::ostringstream progressId;
+          progressId << "Writing " << outputParam->GetFileName() << "...";
+          AddProcess(outputParam->GetWriter(), progressId.str());
           outputParam->Write();
           }
         }
@@ -204,12 +206,12 @@ bool Application::ExecuteAndWriteOutput()
     catch(std::exception& err)
       {
       status = false;
-      otbAppLogFATAL(<<err.what());
+      otbAppLogFATAL(<<"The following error occurred when writing outputs : " << err.what());
       }
     catch(...)
       {
       status = false;
-      otbAppLogFATAL(<<"Unknown exception thrown.");
+      otbAppLogFATAL(<<"Unknown exception raised when writing outputs");
       }
     }
 
