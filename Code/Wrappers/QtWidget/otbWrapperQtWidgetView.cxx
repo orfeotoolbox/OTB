@@ -355,7 +355,6 @@ void QtWidgetView::GetDocParameterChoice( std::string & val, const std::string &
 }
 
 
-
 void QtWidgetView::CloseSlot()
 {
   // Close the widget

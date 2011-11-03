@@ -203,7 +203,7 @@ private:
 
     // Estimate a RPC model (for spot image for instance)
     AddParameter(ParameterType_Int, "opt.rpc", "RPC modeling (points per axis)");
-    SetDefaultParameterInt("opt.rpc",10);
+    SetDefaultParameterInt("opt.rpc", 10);
     SetParameterDescription("opt.rpc","Enabling RPC modeling allows to speed-up SPOT5 ortho-rectification. Value is the number of control points per axis for RPC estimation");
     DisableParameter("opt.rpc");
     MandatoryOff("opt.rpc");
