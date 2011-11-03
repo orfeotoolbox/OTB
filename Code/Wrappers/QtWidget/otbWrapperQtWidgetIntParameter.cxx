@@ -51,6 +51,11 @@ void QtWidgetIntParameter::DoCreateWidget()
   m_QHBoxLayout->addStretch();
 
   this->setLayout(m_QHBoxLayout);
+
+  if (m_IntParam->GetRole() == Role_Output)
+    {
+    m_QSpinBox->setEnabled( false );
+    }
 }
 
 void QtWidgetIntParameter::DoUpdateGUI()

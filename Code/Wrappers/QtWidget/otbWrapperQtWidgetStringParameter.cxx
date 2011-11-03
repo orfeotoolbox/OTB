@@ -54,6 +54,11 @@ void QtWidgetStringParameter::DoCreateWidget()
   connect( GetModel(), SIGNAL(UpdateGui()), this, SLOT(UpdateGUI() ) );
 
   this->setLayout(m_HLayout);
+
+  if (m_StringParam->GetRole() == Role_Output)
+    {
+    m_Input->setEnabled( false );
+    }
 }
 
 void QtWidgetStringParameter::SetValue(const QString& value)

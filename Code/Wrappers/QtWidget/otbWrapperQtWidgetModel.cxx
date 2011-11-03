@@ -55,7 +55,9 @@ void QtWidgetModel::ExecuteAndWriteOutputSlot()
 
   // launch the output image writing
   AppliThread * taskAppli = new AppliThread( m_Application );
+  connect(taskAppli, SIGNAL(ApplicationExecutionDone()), this, SLOT(NotifyUpdate()));
   connect(taskAppli, SIGNAL(ApplicationExecutionDone()), this, SLOT(ActivateExecuteButton()));
+
   taskAppli->Execute();
 
   // Tell the Progress Reporter to begin

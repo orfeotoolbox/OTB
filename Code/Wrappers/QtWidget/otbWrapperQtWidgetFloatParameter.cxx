@@ -55,6 +55,7 @@ void QtWidgetFloatParameter::DoUpdateGUI()
     {
     font.setBold(false);
     }
+
   m_QDoubleSpinBox->setFont(font);
 }
 
@@ -78,6 +79,11 @@ void QtWidgetFloatParameter::DoCreateWidget()
   m_QHBoxLayout->addStretch();
 
   this->setLayout(m_QHBoxLayout);
+
+  if (m_FloatParam->GetRole() == Role_Output)
+    {
+    m_QDoubleSpinBox->setEnabled( false );
+    }
 }
 
 void QtWidgetFloatParameter::SetValue(double value)
