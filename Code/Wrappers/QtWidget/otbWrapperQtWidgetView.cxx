@@ -256,7 +256,7 @@ void QtWidgetView::GetDocParameters( std::string & val, bool mandatory)
          }
        else
          {
-         oss << "<li><code>[param] " << param->GetName() << ": </code> ";
+         oss << "<li><b><code>[param] " << param->GetName() << ": </code></b>";
          oss << param->GetDescription()<< "</li>";
          }
        }
@@ -287,7 +287,7 @@ void QtWidgetView::GetDocParameterGroup( std::string & val, const std::string & 
     Parameter::Pointer param =  m_Application->GetParameterByKey( fullKey );
     if( m_Application->GetParameterType(fullKey) ==  ParameterType_Group)
       {
-      oss << "<li><code>[group] "<< param->GetName()<<": </code>";
+      oss << "<li><b><code>[group] "<< param->GetName()<<": </code></b>";
       if(std::string(param->GetDescription()).size()!=0)
         {
         oss<<param->GetDescription();
@@ -299,7 +299,7 @@ void QtWidgetView::GetDocParameterGroup( std::string & val, const std::string & 
       }
     else if( m_Application->GetParameterType(fullKey) ==  ParameterType_Choice )
       {
-      oss << "<li><code>[choice] "<<param->GetName()<<": </code>";
+      oss << "<li><b><code>[choice] "<<param->GetName()<<": </code></b>";
       if(std::string(param->GetDescription()).size()!=0)
         {
         oss<<param->GetDescription();
@@ -311,7 +311,7 @@ void QtWidgetView::GetDocParameterGroup( std::string & val, const std::string & 
       }
     else
       {
-      oss << "<li><code>[param] "<< param->GetName()<< ": </code>";
+      oss << "<li><b><code>[param] "<< param->GetName()<< ": </code></b>";
       oss  << param->GetDescription()<<"</li>";
       }
     }
@@ -338,7 +338,7 @@ void QtWidgetView::GetDocParameterChoice( std::string & val, const std::string &
     const std::string fullKey(std::string(key).append(".").append(appKeyList[i]));
     ParameterGroup * group = choice->GetChoiceParameterGroupByIndex(i);
     std::string grDoc;
-    oss << "<li><code>[group] "<< group->GetName()<<": </code>";
+    oss << "<li><b><code>[group] "<< group->GetName()<<": </code></b>";
       if(std::string(group->GetDescription()).size()!=0)
         {
         oss<<group->GetDescription();
