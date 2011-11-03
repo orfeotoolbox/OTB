@@ -52,37 +52,18 @@ add_test(NAME apTvHyHyperspectralUnmixing_FCLS
                  --ie ${INPUTDATA}/Hyperspectral/synthetic/endmembers.tif
                  --out ${TEMP}/apTvHyHyperspectralUnmixing_FCLS.tif double
                  --ua fcls )
-                 
-add_test(NAME apTvHyHyperspectralUnmixing_VCA
-         COMMAND otbTestDriver
-                 --compare-image ${EPSILON_9}
-                   ${BASELINE}/apTvHyHyperspectralUnmixing_VCA.tif
-                   ${TEMP}/apTvHyHyperspectralUnmixing_VCA.tif
-                 Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
-                 HyperspectralUnmixing
-                 $<TARGET_FILE_DIR:otbapp_HyperspectralUnmixing>
-                 --in ${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif
-                 --ne 5 
-                 --oe ${TEMP}/apTvHyHyperspectralUnmixing_VCA.tif double )
 
-add_test(NAME apTvHyHyperspectralUnmixing_VCA_UCLS
-         COMMAND otbTestDriver
-                 Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
-                 HyperspectralUnmixing
-                 $<TARGET_FILE_DIR:otbapp_HyperspectralUnmixing>
-                 --in ${OTB_DATA_ROOT}/Input/Hyperspectral/synthetic/hsi_cube.tif
-                 --out ${TEMP}/apTvHyHyperspectralUnmixing_ucls.tif double
-                 --ne 5
-                 --ua ucls )
+#--- VertexComponentAnalysis ---#
 
-add_test(NAME apTvHyHyperspectralUnmixing_VCA_FCLS
+add_test(NAME apTvHyVertexComponentAnalysis
          COMMAND otbTestDriver
                  Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
-                 HyperspectralUnmixing
-                 $<TARGET_FILE_DIR:otbapp_HyperspectralUnmixing>
+                 VertexComponentAnalysis
+                 $<TARGET_FILE_DIR:otbapp_VertexComponentAnalysis>
                  --in ${OTB_DATA_ROOT}/Input/Hyperspectral/synthetic/hsi_cube.tif
-                 --out ${TEMP}/apTvHyHyperspectralUnmixing_fcls.tif double
                  --ne 5
-                 --ua fcls )
+                 --outendm ${TEMP}/apTvHyHyperspectralUnmixing_VCA.tif double )
+
+
 
     
