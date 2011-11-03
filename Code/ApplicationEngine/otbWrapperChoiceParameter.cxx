@@ -39,6 +39,7 @@ ChoiceParameter::AddChoice( std::string choicekey, std::string choiceName )
   choice.m_Key = choicekey;
   choice.m_Name = choiceName;
   choice.m_AssociatedParameter = ParameterGroup::New();
+  choice.m_AssociatedParameter->SetName(choiceName);
   m_ChoiceList.push_back(choice);
 
   // Add the associated parameter as a child
