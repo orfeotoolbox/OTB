@@ -12,3 +12,18 @@ add_test(NAME apTvChMultivariateAlterationDetector
                  --in1 ${INPUTDATA}/Spot5-Gloucester-before.tif
                  --in2 ${INPUTDATA}/Spot5-Gloucester-after.tif
                  --out ${TEMP}/apTvChMultivariateAlterationDetectorSameNbBands.tif )
+
+
+#--- MaximumAutocorrelationFactor ---#
+
+add_test(NAME apTvChMaximumAutocorrelationFactor
+         COMMAND otbTestDriver
+               --compare-image 0.025
+                   ${BASELINE}/bfTvMaximumAutocorrelationFactorImageFilterOutput.tif
+                   ${TEMP}/apTvChMaximumAutocorrelationFactor.tif
+                 Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
+                 MaximumAutocorrelationFactor
+                 $<TARGET_FILE_DIR:otbapp_MaximumAutocorrelationFactor>
+                 --in ${INPUTDATA}/cupriteSubHsi.tif
+                 --out ${TEMP}/apTvChMaximumAutocorrelationFactor.tif )
+
