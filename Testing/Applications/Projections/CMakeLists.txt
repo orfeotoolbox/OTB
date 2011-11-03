@@ -38,3 +38,14 @@ add_test(NAME apTvPrRigidTransform
 		 --ty -5
                  )
 
+add_test(NAME apTvPrConvertCartoToGeoPoint
+                 COMMAND otbTestDriver
+	         Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
+                 otbConvertCartoToGeoPoint
+                 $<TARGET_FILE_DIR:otbapp_ConvertCartoToGeoPoint>
+                 --xcarto 367074.625
+                 --ycarto 4835740
+                 --mapproj utm
+                 --mapproj.utm.hemisphere true
+                 --mapproj.utm.zone 31
+                 )
