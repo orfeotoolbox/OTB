@@ -161,11 +161,14 @@ IF(OTB_USE_EXTERNAL_GDAL)
     ENDIF (NOT OGR_LIBRARY)
   ENDIF(GDAL_HAS_OGR)
 
+  
   # Check for some possible crashes when reading TIFF files, when GDAL embeds geotiff and tiff libraries
   # Known to lead to a crash with the official gdal package available in ubuntu & debian 
   INCLUDE(CheckCXXSourceRunsWithArgs)
   
+  IF(NOT WIN32)
   # This test is known to fail with the Debian gdal package
+  # On Windows, the try-compile are always run in Debug, leading to runtime issues, so we disable them
   SET(CMAKE_REQUIRED_INCLUDES ${GDAL_INCLUDE_DIR})
   SET(CMAKE_REQUIRED_LIBRARIES "${GEOTIFF_LIBRARY};${GDAL_LIBRARY}")
   CHECK_CXX_SOURCE_RUNS_ARGS(
@@ -196,7 +199,8 @@ IF(OTB_USE_EXTERNAL_GDAL)
     "You might consider building GDAL yourself without using --with-hide-internal-symbols"
     "and pointing GEOTIFF_INCLUDE_DIRS to the geotiff headers included in gdal sources" )
   ENDIF(NOT CHECK_XTIFFOPEN_SYMBOL)
-  
+  ENDIF(NOT WIN32)
+
   # This test is known to fail with gdal build with some versions of hdf library
   #${OTB_DATA_ROOT}/Input/MOD09Q1G_EVI.A2006233.h07v03.005.2008338190308.hdf  -> Test KO
   #${OTB_DATA_ROOT}/Input/GSSTF_NCEP.2b.2008.12.31.he5  -> Test OK
