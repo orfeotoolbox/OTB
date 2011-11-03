@@ -6,10 +6,15 @@ OTB_CREATE_APPLICATION(NAME           BundleToPerfectSensor
 OTB_CREATE_APPLICATION(NAME           OrthoRectification
                        SOURCES        otbOrthoRectification.cxx
                        LINK_LIBRARIES OTBBasicFilters)
+
 OTB_CREATE_APPLICATION(NAME           RigidTransformResample
                        SOURCES        otbRigidTransformResample.cxx
                        LINK_LIBRARIES OTBBasicFilters)
 
 OTB_CREATE_APPLICATION(NAME           Superimpose
                        SOURCES        otbSuperimpose.cxx
+                       LINK_LIBRARIES OTBBasicFilters)
+
+OTB_CREATE_APPLICATION(NAME           ConvertCartoToGeoPoint
+                       SOURCES        otbConvertCartoToGeoPoint.cxx
                        LINK_LIBRARIES OTBBasicFilters)

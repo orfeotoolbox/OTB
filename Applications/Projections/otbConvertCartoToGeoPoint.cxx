@@ -15,230 +15,288 @@
      PURPOSE,  See the above copyright notices for more information.
 
 =========================================================================*/
+#include "otbWrapperApplication.h"
+#include "otbWrapperApplicationFactory.h"
 
 #include <iostream>
 #include <iomanip>
 
-#include "otbCommandLineArgumentParser.h"
-#include "otbImageFileReader.h"
 #include "otbMapProjections.h"
-#include "otbImage.h"
-#include "otbMacro.h"
+#include "otbWrapperNumericalParameter.h"
 
-#include "itkExceptionObject.h"
-#include "itkMacro.h"
-
-template<typename TMapProjection>
-int generic_main_carto_geo(TMapProjection* mapProjection,
-                           otb::CommandLineArgumentParseResult* parseResult)
+namespace otb
 {
-  try
+namespace Wrapper
+{
+
+enum
+{
+  UTM,
+  LAMBERT,
+  LAMBERT2,
+  LAMBERT93,
+  SINUS,
+  ECKERT4,
+  TRANSMERCATOR,
+  MOLLWEID,
+  SVY21
+};
+
+class ConvertCartoToGeoPoint : public Application
+{
+public:
+  /** Standard class typedefs. */
+  typedef ConvertCartoToGeoPoint                    Self;
+  typedef Application                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
+
+  /** Standard macro */
+  itkNewMacro(Self);
+
+  itkTypeMacro(ConvertCartoToGeoPoint, otb::Application);
+  
+private:
+  ConvertCartoToGeoPoint()
+  {
+    SetName("ConvertCartoToGeoPoint");
+    SetDescription("Convert cartographic coordinates to geographic one.");
+
+    // Documentation
+    SetDocName("Cartographic to geographic coordinates conversion");
+    SetDocLongDescription("This application computes the geographic coordinates from a cartographic one. user has to give the X and Y coordinate and the cartographic projection (UTM/LAMBERT/LAMBERT2/LAMBERT93/SINUS/ECKERT4/TRANSMERCATOR/MOLLWEID/SVY21).");
+    SetDocLimitations("None");
+    SetDocAuthors("OTB-Team");
+    SetDocSeeAlso(" ");
+    SetDocCLExample("otbApplicationLauncherCommandLine ConvertCartoToGeoPoint ${OTB-BIN}/bin --xcarto --ycarto --mapproj lambert93");
+    AddDocTag("Coordinates");
+    AddDocTag("Projection");
+  }
+
+  virtual ~ConvertCartoToGeoPoint()
+  {
+  }
+
+  void DoCreateParameters()
+  {
+    AddParameter(ParameterType_Float, "xcarto", "X cartographic coordinates");
+    SetParameterDescription("xcarto", "X cartographic coordinates in the specified projection.");
+ 
+    AddParameter(ParameterType_Float, "ycarto", "Y cartographic coordinates");
+    SetParameterDescription("ycarto", "Y cartographic coordinates in the specified projection.");
+
+    AddParameter(ParameterType_Choice, "mapproj", "Map projection type");
+    SetParameterDescription("mapproj", "Type of projection used for the conversion. Possible values are: utm, lambert, lambert2, lambert93, sinus, eckert4, transmercator, mollweid and svy21.");
+
+    AddChoice("mapproj.utm", "utm");
+    AddParameter(ParameterType_Int, "mapproj.utm.zone", "zone");
+    SetParameterDescription( "mapproj.utm.zone", "UTM zone of the point.");
+    dynamic_cast< NumericalParameter<int> * >(GetParameterByKey("mapproj.utm.zone"))->SetMinimumValue(1);
+    AddParameter(ParameterType_Empty, "mapproj.utm.hemisphere", "Is in north hemisphere");
+    SetParameterDescription( "mapproj.utm.hemisphere", "Is the point is in the north hemisphere or not.");
+    EnableParameter( "mapproj.utm.hemisphere");
+
+    AddChoice("mapproj.lambert", "lambert");
+    AddParameter(ParameterType_Float, "mapproj.lambert.parallel1degree", "First parallele degree");
+    SetParameterDescription( "mapproj.lambert.parallel1degree", "First Lambert parallele degree.");
+    AddParameter(ParameterType_Float, "mapproj.lambert.parallel2degree", "Second parallele degree");
+    SetParameterDescription( "mapproj.lambert.parallel2degree", "Second Lambert parallele degree.");
+    AddParameter(ParameterType_Float, "mapproj.lambert.falseeasting", "False easting");
+    SetParameterDescription( "mapproj.lambert.falseeasting", "Lambert false easting value.");
+    AddParameter(ParameterType_Float, "mapproj.lambert.falsenorthing", "False easting");
+    SetParameterDescription( "mapproj.lambert.falsenorthing", "Lambert false easting value.");
+
+    AddChoice("mapproj.lambert", "lambert3");
+
+    AddChoice("mapproj.lambert", "lambert93");
+
+    AddChoice("mapproj.sinus", "sinus");
+    AddParameter(ParameterType_Float, "mapproj.sinus.falseeasting", "False easting");
+    SetParameterDescription( "mapproj.sinus.falseeasting", "Sinus false easting value.");
+    AddParameter(ParameterType_Float, "mapproj.sinus.falsenorthing", "False easting");
+    SetParameterDescription( "mapproj.sinus.falsenorthing", "Sinus false easting value.");
+
+    AddChoice("mapproj.eckert4", "eckert4");
+    AddParameter(ParameterType_Float, "mapproj.eckert4.falseeasting", "False easting");
+    SetParameterDescription( "mapproj.eckert4.falseeasting", "Eckert4 false easting value.");
+    AddParameter(ParameterType_Float, "mapproj.eckert4.falsenorthing", "False easting");
+    SetParameterDescription( "mapproj.eckert4.falsenorthing", "Eckert4 false easting value.");
+
+    AddChoice("mapproj.transmercator", "transmercator");
+    AddParameter(ParameterType_Float, "mapproj.transmercator.falseeasting", "False easting");
+    SetParameterDescription( "mapproj.transmercator.falseeasting", " Transmercator false easting value.");
+    AddParameter(ParameterType_Float, "mapproj.transmercator.falsenorthing", "False easting");
+    SetParameterDescription( "mapproj.transmercator.falsenorthing", " Transmercator false easting value.");
+    AddParameter(ParameterType_Float, "mapproj.transmercator.scale", "Scale factor");
+    SetParameterDescription( "mapproj.transmercator.falsenorthing", " Transmercator scale factor value.");
+
+    AddChoice("mapproj.mollweid", "mollweid");
+    AddParameter(ParameterType_Float, "mapproj.mollweid.falseeasting", "False easting");
+    SetParameterDescription( "mapproj.mollweid.falseeasting", "Mollweid false easting value.");
+    AddParameter(ParameterType_Float, "mapproj.mollweid.falsenorthing", "False easting");
+    SetParameterDescription( "mapproj.mollweid.falsenorthing", "Mollweid false easting value.");
+
+    AddChoice("mapproj.svy21", "svy21");
+    
+/*
+    AddParameter(ParameterType_Group, "carto", "Cartographic coordinates");
+    SetParameterRole("carto", Role_Output);
+    AddParameter(ParameterType_Float, "carto.long", "Point long");
+    SetParameterDescription("carto.long", "Point long coordinates.");
+    SetParameterRole("carto.long", Role_Output);
+
+    AddParameter(ParameterType_Float, "carto.lat", "Point latitude");
+    SetParameterDescription("carto.lat", "Point latitude coordinates.");
+    SetParameterRole("carto.lat", Role_Output);
+       */
+
+    AddParameter(ParameterType_Float, "long", "Point long");
+    SetParameterDescription("long", "Point long coordinates.");
+    SetParameterRole("long", Role_Output);
+
+    AddParameter(ParameterType_Float, "lat", "Point latitude");
+    SetParameterDescription("lat", "Point latitude coordinates.");
+    SetParameterRole("lat", Role_Output);
+  }
+
+  void DoUpdateParameters()
+  {
+  }
+
+
+  template<typename TMapProjection>
+  void Generic_DoExecute( TMapProjection* mapProjection )
   {
     typedef TMapProjection MapProjectionType;
-
+    
     typename MapProjectionType::InputPointType cartoPoint;
     typename MapProjectionType::OutputPointType geoPoint;
 
-    cartoPoint[0]=parseResult->GetParameterDouble("--XCarto");
-    cartoPoint[1]=parseResult->GetParameterDouble("--YCarto");
+    cartoPoint[0] = this->GetParameterFloat("xcarto");
+    cartoPoint[1] = this->GetParameterFloat("ycarto");
 
     geoPoint = mapProjection->TransformPoint(cartoPoint);
 
-    if (!parseResult->IsOptionPresent("--OTBTesting"))
-    {
-      std::cout << std::setprecision(10) << "Cartographic Point  (x , y)  : (" << cartoPoint[0] << ", " << cartoPoint[1] << ")" << std::endl;
-      std::cout << std::setprecision(10) << "Geographic   Point (Lat, Lon) : (" << geoPoint[1] << ", " <<  geoPoint[0] << ")" << std::endl;
-    }
-    else
-    {
-      std::string outputTestFileName = parseResult->GetParameterString("--OTBTesting", 0);
+    otbAppLogINFO( << std::setprecision(10) << "Cartographic Point  (x , y)  : (" << cartoPoint[0] << ", " << cartoPoint[1] << ")" );
+    otbAppLogINFO( << std::setprecision(10) << "Geographic   Point (Long, Lat) : (" << geoPoint[0] << ", " <<  geoPoint[1] << ")" );
 
-      std::ofstream outputTestFile;
-      outputTestFile.open(outputTestFileName.c_str());
 
-      outputTestFile << std::setprecision(10) << "Cartographic Point  (x , y)  : (" << cartoPoint[0] << "," << cartoPoint[1] << ")" << std::endl;
-      outputTestFile << std::setprecision(10) << "Geographic   Point (Lat, Lon) : (" << geoPoint[1] << "," <<  geoPoint[0] << ")" << std::endl;
-
-      outputTestFile.close();
-    }
-
+    SetParameterFloat( "long", geoPoint[0] );
+    SetParameterFloat( "lat", geoPoint[1] );
 
   }
-  catch ( itk::ExceptionObject & err )
+  
+  void DoExecute()
   {
-    std::cout << "Exception itk::ExceptionObject raised !" << std::endl;
-    std::cout << err << std::endl;
-    return EXIT_FAILURE;
-  }
-  catch ( std::bad_alloc & err )
-  {
-    std::cout << "Exception bad_alloc : "<<(char*)err.what()<< std::endl;
-    return EXIT_FAILURE;
-  }
-  catch ( ... )
-  {
-    std::cout << "Unknown exception raised !" << std::endl;
-    return EXIT_FAILURE;
-  }
-  return EXIT_SUCCESS;
-
-}//End main()
-
-
-int main(int argc, char* argv[])
-{
-  try
-  {
-    // Parse command line parameters
-    typedef otb::CommandLineArgumentParser ParserType;
-    ParserType::Pointer parser = ParserType::New();
-
-    parser->SetProgramDescription("Cartographic to geographic coordinates conversion");
-    parser->AddOption("--XCarto","X cartographic value of desired point","-x");
-    parser->AddOption("--YCarto","Y cartographic value of desired point","-y");
-    parser->AddOptionNParams("--MapProjectionType","Type (UTM/LAMBERT/LAMBERT2/LAMBERT93/SINUS/ECKERT4/TRANSMERCATOR/MOLLWEID/SVY21) and parameters of map projection used","-mapProj");
-
-    typedef otb::CommandLineArgumentParseResult ParserResultType;
-    ParserResultType::Pointer  parseResult = ParserResultType::New();
-
-    try
-    {
-      parser->ParseCommandLine(argc, argv, parseResult);
-    }
-    catch ( itk::ExceptionObject & err )
-    {
-      std::string descriptionException = err.GetDescription();
-      if (descriptionException.find("ParseCommandLine(): Help Parser") != std::string::npos)
+    const int typeMap = this->GetParameterInt("mapproj");
+    
+    switch( typeMap )
       {
-        std::cout << "WARNING : output file pixels are converted in 'unsigned char'" << std::endl;
-        return EXIT_SUCCESS;
-      }
-      if (descriptionException.find("ParseCommandLine(): Version Parser") != std::string::npos)
+      case UTM:
       {
-        return EXIT_SUCCESS;
-      }
-      return EXIT_FAILURE;
-    }
-
-    // Code
-
-    std::string typeMap = parseResult->GetParameterString("--MapProjectionType", 0);
-    int nbParams = parseResult->GetNumberOfParameters("--MapProjectionType");
-    nbParams--;
-
-    if ((typeMap == "UTM")&&(nbParams==2))
-    {
-      int numZone = parseResult->GetParameterUInt("--MapProjectionType", 1);
-      char hemisphere = parseResult->GetParameterChar("--MapProjectionType", 2);
-
       typedef otb::UtmInverseProjection UtmProjectionType;
       UtmProjectionType::Pointer utmProjection = UtmProjectionType::New();
+      
+      utmProjection->SetZone(this->GetParameterInt("mapproj.utm.zone"));
 
-      utmProjection->SetZone(numZone);
-      utmProjection->SetHemisphere(hemisphere);
-
-      return generic_main_carto_geo<UtmProjectionType>(utmProjection, parseResult);
-    }
-    else
-    {
-      std::vector<double> parameters;
-
-      for (int i=1; i<nbParams+1; i++)
-      {
-        parameters.push_back(parseResult->GetParameterDouble("--MapProjectionType", i));
+      if( this->IsParameterEnabled("mapproj.utm.hemisphere"))
+        utmProjection->SetHemisphere('N');
+      else
+        utmProjection->SetHemisphere('S');
+      
+      this->Generic_DoExecute<UtmProjectionType>(utmProjection);
+      break;
       }
-
-      if ((typeMap == "LAMBERT")&&(nbParams==4))
+      case LAMBERT:
       {
-        typedef otb::LambertConformalConicInverseProjection LambertProjectionType;
-        LambertProjectionType::Pointer lambertProjection = LambertProjectionType::New();
-
-        lambertProjection->SetParameters(parameters[0], parameters[1], parameters[2], parameters[3]);
-
-        return generic_main_carto_geo<LambertProjectionType>(lambertProjection, parseResult);
+      typedef otb::LambertConformalConicInverseProjection LambertProjectionType;
+      LambertProjectionType::Pointer lambertProjection = LambertProjectionType::New();
+      
+      lambertProjection->SetParameters(this->GetParameterFloat( "mapproj.lambert.parallel1degree" ),
+                                       this->GetParameterFloat( "mapproj.lambert.parallel2degree" ),
+                                       this->GetParameterFloat( "mapproj.lambert.falseeasting" ),
+                                       this->GetParameterFloat( "mapproj.lambert.falsenorthing" ));
+      
+      this->Generic_DoExecute<LambertProjectionType>(lambertProjection);
+      break;
       }
-      else if ((typeMap == "LAMBERT2")&&(nbParams==0))
+      case LAMBERT2:
       {
-        typedef otb::Lambert2EtenduInverseProjection Lambert2ProjectionType;
-        Lambert2ProjectionType::Pointer lambert2Projection = Lambert2ProjectionType::New();
-
-        return generic_main_carto_geo<Lambert2ProjectionType>(lambert2Projection, parseResult);
+      typedef otb::Lambert2EtenduInverseProjection Lambert2ProjectionType;
+      Lambert2ProjectionType::Pointer lambert2Projection = Lambert2ProjectionType::New();
+      
+      this->Generic_DoExecute<Lambert2ProjectionType>(lambert2Projection);
+      break;
       }
-      else if ((typeMap == "LAMBERT93")&&(nbParams==0))
+      case LAMBERT93:
       {
-        typedef otb::Lambert93InverseProjection Lambert93ProjectionType;
-        Lambert93ProjectionType::Pointer lambert93Projection = Lambert93ProjectionType::New();
-
-        return generic_main_carto_geo<Lambert93ProjectionType>(lambert93Projection, parseResult);
+      typedef otb::Lambert93InverseProjection Lambert93ProjectionType;
+      Lambert93ProjectionType::Pointer lambert93Projection = Lambert93ProjectionType::New();
+      
+      this->Generic_DoExecute<Lambert93ProjectionType>(lambert93Projection);
+      break;
       }
-      else if ((typeMap == "SINUS")&&(nbParams==2))
+      case SINUS:
       {
-        typedef otb::SinusoidalInverseProjection SinusoidalProjectionType;
-        SinusoidalProjectionType::Pointer sinusoidalProjection = SinusoidalProjectionType::New();
-
-        sinusoidalProjection->SetParameters(parameters[0], parameters[1]);
-
-        return generic_main_carto_geo<SinusoidalProjectionType>(sinusoidalProjection, parseResult);
+      typedef otb::SinusoidalInverseProjection SinusoidalProjectionType;
+      SinusoidalProjectionType::Pointer sinusoidalProjection = SinusoidalProjectionType::New();
+      
+      sinusoidalProjection->SetParameters(  this->GetParameterFloat( "mapproj.sinus.falseeasting" ),
+                                            this->GetParameterFloat( "mapproj.sinus.falsenorthing" ) );
+      
+      this->Generic_DoExecute<SinusoidalProjectionType>(sinusoidalProjection);
+      break;
       }
-      else if ((typeMap == "ECKERT4")&&(nbParams==2))
+      case ECKERT4:
       {
-        typedef otb::Eckert4InverseProjection Eckert4ProjectionType;
-        Eckert4ProjectionType::Pointer eckert4Projection = Eckert4ProjectionType::New();
+      typedef otb::Eckert4InverseProjection Eckert4ProjectionType;
+      Eckert4ProjectionType::Pointer eckert4Projection = Eckert4ProjectionType::New();
+      
+      eckert4Projection->SetParameters(this->GetParameterFloat( "mapproj.eckert4.falseeasting" ),
+                                       this->GetParameterFloat( "mapproj.eckert4.falsenorthing" ));
 
-        eckert4Projection->SetParameters(parameters[0], parameters[1]);
-
-        return generic_main_carto_geo<Eckert4ProjectionType>(eckert4Projection, parseResult);
+      this->Generic_DoExecute<Eckert4ProjectionType>(eckert4Projection);
       }
-      else if ((typeMap == "TRANSMERCATOR")&&(nbParams==3))
+     case TRANSMERCATOR:
       {
-        typedef otb::TransMercatorInverseProjection TransMercatorProjectionType;
-        TransMercatorProjectionType::Pointer transMercatorProjection = TransMercatorProjectionType::New();
+      typedef otb::TransMercatorInverseProjection TransMercatorProjectionType;
+      TransMercatorProjectionType::Pointer transMercatorProjection = TransMercatorProjectionType::New();
 
-        transMercatorProjection->SetParameters(parameters[0], parameters[1], parameters[2]);
+      transMercatorProjection->SetParameters(this->GetParameterFloat( "mapproj.transmercator.falseeasting" ),
+                                             this->GetParameterFloat( "mapproj.transmercator.falsenorthing" ),
+                                             this->GetParameterFloat( "mapproj.transmercator.scale" ) );
 
-        return generic_main_carto_geo<TransMercatorProjectionType>(transMercatorProjection, parseResult);
+      this->Generic_DoExecute<TransMercatorProjectionType>(transMercatorProjection);
+      break;
       }
-      else if ((typeMap == "MOLLWEID")&&(nbParams==2))
+      case MOLLWEID:
       {
         typedef otb::MollweidInverseProjection MollweidProjectionType;
         MollweidProjectionType::Pointer mollweidProjection = MollweidProjectionType::New();
 
-        mollweidProjection->SetParameters(parameters[0], parameters[1]);
+        mollweidProjection->SetParameters(this->GetParameterFloat( "mapproj.mollweid.falseeasting" ),
+                                          this->GetParameterFloat( "mapproj.mollweid.falsenorthing" ) );
 
-        return generic_main_carto_geo<MollweidProjectionType>(mollweidProjection, parseResult);
+        this->Generic_DoExecute<MollweidProjectionType>(mollweidProjection);
+        break;
       }
-      else if ((typeMap == "SVY21")&&(nbParams==0))
+      case SVY21:
       {
-        typedef otb::SVY21InverseProjection SVY21ProjectionType;
-        SVY21ProjectionType::Pointer svy21Projection = SVY21ProjectionType::New();
-
-        return generic_main_carto_geo<SVY21ProjectionType>(svy21Projection, parseResult);
+      typedef otb::SVY21InverseProjection SVY21ProjectionType;
+      SVY21ProjectionType::Pointer svy21Projection = SVY21ProjectionType::New();
+      
+      this->Generic_DoExecute<SVY21ProjectionType>(svy21Projection);
+      break;
       }
-      else
+      default:
       {
-        itkGenericExceptionMacro(<< "TypeMap not recognized, choose one with (parameters) : UTM(2), LAMBERT(4), LAMBERT2(0), LAMBERT2(93), SINUS(2), ECKERT4(2), TRANSMERCATOR(3), MOLLWEID(2), SVY21(0)");
+      otbAppLogFATAL( << "Unknow map projection "<<typeMap<<".");
       }
+      }
+}
+};
 
-    }
-
-
-  }
-  catch ( itk::ExceptionObject & err )
-  {
-    std::cout << "Exception itk::ExceptionObject raised !" << std::endl;
-    std::cout << err << std::endl;
-    return EXIT_FAILURE;
-  }
-  catch ( std::bad_alloc & err )
-  {
-    std::cout << "Exception bad_alloc : "<<(char*)err.what()<< std::endl;
-    return EXIT_FAILURE;
-  }
-  catch ( ... )
-  {
-    std::cout << "Unknown exception raised !" << std::endl;
-    return EXIT_FAILURE;
-  }
-  return EXIT_SUCCESS;
+}
 }
 
+OTB_APPLICATION_EXPORT(otb::Wrapper::ConvertCartoToGeoPoint)
