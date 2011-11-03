@@ -208,12 +208,14 @@ void QtWidgetView::SetDocParameters( std::string & val )
 
   // Optional parameters
   oss << "<h3>Optional parameters</h3>";
-  oss << "<body><li>";
+  oss << "<ul>";
 
   this->GetDocParameters( paramDocs, false );
 
   oss<<paramDocs;
   
+  oss<<"</ul>";
+
   val.append(oss.str());
 }
 
