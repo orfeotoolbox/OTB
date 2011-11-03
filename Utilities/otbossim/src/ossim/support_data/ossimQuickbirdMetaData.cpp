@@ -199,8 +199,11 @@ bool ossimQuickbirdMetaData::saveState(ossimKeywordlist& kwl,
    }
    else
    {
-    if (theAbsCalFactors.size() > 0) kwl.add(prefix, "absCalFactor", theAbsCalFactors[0], true);
-    }
+      kwl.add(prefix,
+              "absCalFactor",
+              theAbsCalFactors[0],
+              true);  	
+   }
 
    return true;
 }
