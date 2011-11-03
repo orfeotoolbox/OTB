@@ -105,9 +105,9 @@ void Application::UpdateParameters()
   this->DoUpdateParameters();
 }
 
-bool Application::Execute()
+int Application::Execute()
 {
-  bool ret = true;
+  int ret = 0;
   
   try
     {
@@ -115,23 +115,23 @@ bool Application::Execute()
     }
   catch(std::exception& err)
     {
-    ret = false;
+    ret = 1;
     otbAppLogFATAL(<<"The following error occurred during application execution : " << err.what());
     }
   catch(...)
     {
-    ret = false;
+    ret = 1;
     otbAppLogFATAL(<<"An unknown exception has been raised during application execution");
     }
 
   return ret;
 }
 
-bool Application::ExecuteAndWriteOutput()
+int Application::ExecuteAndWriteOutput()
 {
-  bool status = this->Execute();
+  int status = this->Execute();
 
-  if (status)
+  if (status == 0)
     {
     try
       {
@@ -205,12 +205,12 @@ bool Application::ExecuteAndWriteOutput()
       }
     catch(std::exception& err)
       {
-      status = false;
+      status = 1;
       otbAppLogFATAL(<<"The following error occurred when writing outputs : " << err.what());
       }
     catch(...)
       {
-      status = false;
+      status = 1;
       otbAppLogFATAL(<<"Unknown exception raised when writing outputs");
       }
     }

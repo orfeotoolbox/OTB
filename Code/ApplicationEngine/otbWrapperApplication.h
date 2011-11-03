@@ -85,17 +85,17 @@ public:
    * In other cases, the application must handle
    * the I/O (intermediary results for example)
    *
-   * Returns true on success, false on failure
+   * Returns 0 on success, or a non-null integer on error
    */
-  bool Execute();
+  int Execute();
 
   /** Run the application, then writes all the output to disk
    * if they have an associated filename.
    * This is a helper function for wrappers without pipeline support.
    *
-   * Returns true on success, false on failure
+   * Returns 0 on success, or a non-null integer on error
    */
-  bool ExecuteAndWriteOutput();
+  int ExecuteAndWriteOutput();
 
   /* Get the internal application parameters
    *

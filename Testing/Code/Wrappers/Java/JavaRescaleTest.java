@@ -37,7 +37,9 @@ class RescaleTest {
     app.SetParameterFloat ("outmin", Float.valueOf(argv[2]).floatValue() );
     app.SetParameterFloat ("outmax", Float.valueOf(argv[3]).floatValue() );
 
-    app.ExecuteAndWriteOutput();
+    int result = app.ExecuteAndWriteOutput();
+    
+    //System.exit( result );
   }
 
 }
