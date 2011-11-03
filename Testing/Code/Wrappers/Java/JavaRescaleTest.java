@@ -39,7 +39,7 @@ class RescaleTest {
 
     int result = app.ExecuteAndWriteOutput();
     
-    //System.exit( result );
+    System.exit( result );
   }
 
 }
