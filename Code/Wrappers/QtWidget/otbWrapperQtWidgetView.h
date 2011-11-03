@@ -75,6 +75,9 @@ private:
   /** generate the documentation associated to a group.*/
   void GetDocParameterGroup( std::string & val, const std::string & key, int level);
 
+  /** generate the documentation associated to a choice.*/
+  void GetDocParameterChoice( std::string & val, const std::string & key, int level);
+
   Application::Pointer m_Application;
 
   QtWidgetModel* m_Model;
