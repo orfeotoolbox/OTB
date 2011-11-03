@@ -127,76 +127,93 @@ bool Application::Execute()
   return ret;
 }
 
-void Application::ExecuteAndWriteOutput()
+bool Application::ExecuteAndWriteOutput()
 {
-  if (this->Execute())
+  bool status = this->Execute();
+
+  if (status)
     {
-    std::vector<std::string> paramList = GetParametersKeys(true);
-    // First Get the value of the available memory to use with the
-    // writer if a RAMParameter is set
-    bool useRAM = false;
-    unsigned int ram = 256;
-    for (std::vector<std::string>::const_iterator it = paramList.begin();
-         it != paramList.end();
-         ++it)
+    try
       {
-      std::string key = *it;
-      if (GetParameterType(key) == ParameterType_RAM
-        && IsParameterEnabled(key))
+      std::vector<std::string> paramList = GetParametersKeys(true);
+      // First Get the value of the available memory to use with the
+      // writer if a RAMParameter is set
+      bool useRAM = false;
+      unsigned int ram = 256;
+      for (std::vector<std::string>::const_iterator it = paramList.begin();
+           it != paramList.end();
+           ++it)
         {
-        Parameter* param = GetParameterByKey(key);
-        RAMParameter* ramParam = dynamic_cast<RAMParameter*>(param);
-        ram = ramParam->GetValue();
-        useRAM = true;
+        std::string key = *it;
+        if (GetParameterType(key) == ParameterType_RAM
+          && IsParameterEnabled(key))
+          {
+          Parameter* param = GetParameterByKey(key);
+          RAMParameter* ramParam = dynamic_cast<RAMParameter*>(param);
+          ram = ramParam->GetValue();
+          useRAM = true;
+          }
+        }
+
+      for (std::vector<std::string>::const_iterator it = paramList.begin();
+           it != paramList.end();
+           ++it)
+        {
+        std::string key = *it;
+        if (GetParameterType(key) == ParameterType_OutputImage
+            && IsParameterEnabled(key) && HasValue(key) )
+          {
+          Parameter* param = GetParameterByKey(key);
+          OutputImageParameter* outputParam = dynamic_cast<OutputImageParameter*>(param);
+          outputParam->InitializeWriters();
+          if (useRAM)
+            {
+            outputParam->SetRAMValue(ram);
+            }
+          std::ostringstream progressId;
+          progressId << "Writing " << outputParam->GetFileName() << "...";
+          AddProcess(outputParam->GetWriter(), progressId.str());
+          outputParam->Write();
+          }
+        else if (GetParameterType(key) == ParameterType_OutputVectorData
+                 && IsParameterEnabled(key) && HasValue(key) )
+          {
+          Parameter* param = GetParameterByKey(key);
+          OutputVectorDataParameter* outputParam = dynamic_cast<OutputVectorDataParameter*>(param);
+          outputParam->InitializeWriters();
+          std::ostringstream progressId;
+          progressId << "Writing " << outputParam->GetFileName() << "...";
+          AddProcess(outputParam->GetWriter(), progressId.str());
+          outputParam->Write();
+          }
+        else if (GetParameterType(key) == ParameterType_ComplexOutputImage
+                 && IsParameterEnabled(key) && HasValue(key) )
+          {
+          Parameter* param = GetParameterByKey(key);
+          ComplexOutputImageParameter* outputParam = dynamic_cast<ComplexOutputImageParameter*>(param);
+          outputParam->InitializeWriters();
+          if (useRAM)
+            {
+            outputParam->SetRAMValue(ram);
+            }
+          AddProcess(outputParam->GetWriter(),"Complex Writer");
+          outputParam->Write();
+          }
         }
       }
-
-    for (std::vector<std::string>::const_iterator it = paramList.begin();
-         it != paramList.end();
-         ++it)
+    catch(std::exception& err)
       {
-      std::string key = *it;
-      if (GetParameterType(key) == ParameterType_OutputImage
-          && IsParameterEnabled(key) && HasValue(key) )
-        {
-        Parameter* param = GetParameterByKey(key);
-        OutputImageParameter* outputParam = dynamic_cast<OutputImageParameter*>(param);
-        outputParam->InitializeWriters();
-        if (useRAM)
-          {
-          outputParam->SetRAMValue(ram);
-          }
-        std::ostringstream progressId;
-        progressId << "Writing " << outputParam->GetFileName() << "...";
-        AddProcess(outputParam->GetWriter(), progressId.str());
-        outputParam->Write();
-        }
-      else if (GetParameterType(key) == ParameterType_OutputVectorData
-               && IsParameterEnabled(key) && HasValue(key) )
-        {
-        Parameter* param = GetParameterByKey(key);
-        OutputVectorDataParameter* outputParam = dynamic_cast<OutputVectorDataParameter*>(param);
-        outputParam->InitializeWriters();
-        std::ostringstream progressId;
-        progressId << "Writing " << outputParam->GetFileName() << "...";
-        AddProcess(outputParam->GetWriter(), progressId.str());
-        outputParam->Write();
-        }
-      else if (GetParameterType(key) == ParameterType_ComplexOutputImage
-               && IsParameterEnabled(key) && HasValue(key) )
-        {
-        Parameter* param = GetParameterByKey(key);
-        ComplexOutputImageParameter* outputParam = dynamic_cast<ComplexOutputImageParameter*>(param);
-        outputParam->InitializeWriters();
-        if (useRAM)
-          {
-          outputParam->SetRAMValue(ram);
-          }
-        AddProcess(outputParam->GetWriter(),"Complex Writer");
-        outputParam->Write();
-        }
+      status = false;
+      otbAppLogFATAL(<<err.what());
+      }
+    catch(...)
+      {
+      status = false;
+      otbAppLogFATAL(<<"Unknown exception thrown.");
       }
     }
+
+  return status;
 }
 
 /* Enable the use of an optional parameter. Returns the previous state */

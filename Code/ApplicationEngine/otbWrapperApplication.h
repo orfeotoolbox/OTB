@@ -83,14 +83,19 @@ public:
    * the output image or vector data parameters as pointers.
    *
    * In other cases, the application must handle
-   * the I/O (intermediary results for example) */
+   * the I/O (intermediary results for example)
+   *
+   * Returns true on success, false on failure
+   */
   bool Execute();
 
   /** Run the application, then writes all the output to disk
    * if they have an associated filename.
    * This is a helper function for wrappers without pipeline support.
+   *
+   * Returns true on success, false on failure
    */
-  void ExecuteAndWriteOutput();
+  bool ExecuteAndWriteOutput();
 
   /* Get the internal application parameters
    *

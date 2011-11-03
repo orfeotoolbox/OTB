@@ -113,8 +113,8 @@ public:
 
   void Init();
   void UpdateParameters();
-  void Execute();
-  void ExecuteAndWriteOutput();
+  bool Execute();
+  bool ExecuteAndWriteOutput();
   
   std::vector<std::string> GetParametersKeys(bool recursive = true);
   std::string GetParameterName(std::string);
