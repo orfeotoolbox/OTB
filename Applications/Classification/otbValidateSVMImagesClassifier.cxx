@@ -156,6 +156,8 @@ private:
                             "SVM model to validate its performances (given by TrainSVMImagesClassification output for instance).");
     AddParameter(ParameterType_Filename, "out", "Output filename");
     SetParameterDescription("out", "Filename, which will contain the performance of the SVM model.");
+    MandatoryOff("out");
+    SetParameterRole("out",Role_Output);
   }
 
   void DoUpdateParameters()
@@ -206,7 +208,7 @@ private:
       vdreproj->SetUseOutputSpacingAndOriginFromImage(false);
 
       // Configure DEM directory
-      if (HasUserValue("dem"))
+      if (IsParameterEnabled("dem"))
         {
         vdreproj->SetDEMDirectory(GetParameterString("dem"));
         }
@@ -242,7 +244,7 @@ private:
     concatenateValidationSamples->Update();
     concatenateValidationLabels->Update();
 
-    if (HasValue("imstat"))
+    if (IsParameterEnabled("imstat"))
       {
       StatisticsReader::Pointer statisticsReader = StatisticsReader::New();
       statisticsReader->SetFileName(GetParameterString("imstat"));
