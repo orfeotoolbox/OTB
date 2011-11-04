@@ -68,7 +68,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
-    SetDocCLExample("otbApplicationLauncherCommandLine ConvertCartoToGeoPoint ${OTB-BIN}/bin --xcarto --ycarto --mapproj lambert93");
+    SetDocCLExample("otbApplicationLauncherCommandLine ConvertCartoToGeoPoint ${OTB-BIN}/bin --carto.x 367074.625 --carto.y 4835740 --mapproj utm --mapproj.utm.hemisphere true --mapproj.utm.zone 31");
     AddDocTag("Coordinates");
     AddDocTag("Projection");
   }
@@ -79,11 +79,14 @@ private:
 
   void DoCreateParameters()
   {
-    AddParameter(ParameterType_Float, "xcarto", "X cartographic coordinates");
-    SetParameterDescription("xcarto", "X cartographic coordinates in the specified projection.");
- 
-    AddParameter(ParameterType_Float, "ycarto", "Y cartographic coordinates");
-    SetParameterDescription("ycarto", "Y cartographic coordinates in the specified projection.");
+    AddParameter(ParameterType_Group, "carto", "Input cartographic coordinates");
+    AddParameter(ParameterType_Float, "carto.x", "X cartographic coordinates");
+    SetParameterDescription("carto.x", "X cartographic coordinates in the specified projection.");
+    //SetParameterFloat("carto.x", 0.);
+
+    AddParameter(ParameterType_Float, "carto.y", "Y cartographic coordinates");
+    SetParameterDescription("carto.y", "Y cartographic coordinates in the specified projection.");
+    //SetParameterFloat("carto.y", 0.);
 
     AddParameter(ParameterType_Choice, "mapproj", "Map projection type");
     SetParameterDescription("mapproj", "Type of projection used for the conversion. Possible values are: utm, lambert, lambert2, lambert93, sinus, eckert4, transmercator, mollweid and svy21.");
@@ -92,6 +95,7 @@ private:
     AddParameter(ParameterType_Int, "mapproj.utm.zone", "zone");
     SetParameterDescription( "mapproj.utm.zone", "UTM zone of the point.");
     dynamic_cast< NumericalParameter<int> * >(GetParameterByKey("mapproj.utm.zone"))->SetMinimumValue(1);
+    SetParameterInt( "mapproj.utm.zone", 1);
     AddParameter(ParameterType_Empty, "mapproj.utm.hemisphere", "Is in north hemisphere");
     SetParameterDescription( "mapproj.utm.hemisphere", "Is the point is in the north hemisphere or not.");
     EnableParameter( "mapproj.utm.hemisphere");
@@ -138,23 +142,11 @@ private:
 
     AddChoice("mapproj.svy21", "svy21");
     
-/*
-    AddParameter(ParameterType_Group, "carto", "Cartographic coordinates");
-    SetParameterRole("carto", Role_Output);
-    AddParameter(ParameterType_Float, "carto.long", "Point long");
-    SetParameterDescription("carto.long", "Point long coordinates.");
-    SetParameterRole("carto.long", Role_Output);
-
-    AddParameter(ParameterType_Float, "carto.lat", "Point latitude");
-    SetParameterDescription("carto.lat", "Point latitude coordinates.");
-    SetParameterRole("carto.lat", Role_Output);
-       */
-
-    AddParameter(ParameterType_Float, "long", "Point long");
-    SetParameterDescription("long", "Point long coordinates.");
+    AddParameter(ParameterType_Float, "long", "Output long");
+    SetParameterDescription("long", "Point longitude coordinates.");
     SetParameterRole("long", Role_Output);
 
-    AddParameter(ParameterType_Float, "lat", "Point latitude");
+    AddParameter(ParameterType_Float, "lat", "Output lat");
     SetParameterDescription("lat", "Point latitude coordinates.");
     SetParameterRole("lat", Role_Output);
   }
@@ -172,8 +164,8 @@ private:
     typename MapProjectionType::InputPointType cartoPoint;
     typename MapProjectionType::OutputPointType geoPoint;
 
-    cartoPoint[0] = this->GetParameterFloat("xcarto");
-    cartoPoint[1] = this->GetParameterFloat("ycarto");
+    cartoPoint[0] = this->GetParameterFloat("carto.x");
+    cartoPoint[1] = this->GetParameterFloat("carto.y");
 
     geoPoint = mapProjection->TransformPoint(cartoPoint);
 
