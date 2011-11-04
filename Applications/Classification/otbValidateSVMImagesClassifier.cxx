@@ -157,7 +157,7 @@ private:
     AddParameter(ParameterType_Filename, "out", "Output filename");
     SetParameterDescription("out", "Filename, which will contain the performance of the SVM model.");
     MandatoryOff("out");
-    SetParameterRole("out",Role_Output);
+    SetParameterRole("out", Role_Output);
   }
 
   void DoUpdateParameters()

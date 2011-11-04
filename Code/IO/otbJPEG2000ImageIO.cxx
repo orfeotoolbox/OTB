@@ -25,7 +25,6 @@
 #include "itkMacro.h"
 
 
-
 /**
    sample error debug callback expecting no client object
 */
@@ -59,17 +58,17 @@ class JPEG2000ReaderInternal
 public:
   JPEG2000ReaderInternal();
 
-  opj_codec_t* GetCodec(){return this->m_Codec;};
-  FILE* GetFile(){return this->m_File;};
-  opj_image_t* GetImage(){return this->m_Image;};
-  opj_stream_t* GetStream(){return this->m_Stream;};
-  opj_codestream_info_v2* GetCstrInfo(){return this->m_CstrInfo;};
+  opj_codec_t* GetCodec(){return this->m_Codec; };
+  FILE* GetFile(){return this->m_File; };
+  opj_image_t* GetImage(){return this->m_Image; };
+  opj_stream_t* GetStream(){return this->m_Stream; };
+  opj_codestream_info_v2* GetCstrInfo(){return this->m_CstrInfo; };
 
-	void Clean();
+       void Clean();
 
-	int CanRead();
+       int CanRead();
 
-	int Open(const char *filename);
+       int Open(const char *filename);
 
   bool m_IsOpen;
   OPJ_CODEC_FORMAT m_CodecFormat;
@@ -239,7 +238,7 @@ int JPEG2000ReaderInternal::Initialize()
 
     // Set default event mgr  FIXME
     opj_event_mgr_t event_mgr;
-    otbopenjpeg_opj_initialize_default_event_handler(&event_mgr,true);
+    otbopenjpeg_opj_initialize_default_event_handler(&event_mgr, true);
 
     // Setting default parameters
     opj_dparameters_t parameters;
@@ -291,7 +290,7 @@ int JPEG2000ReaderInternal::Initialize()
       this->m_Precision[itComp] = this->m_Image->comps[itComp].prec;
       }
 
-    this->m_Signed = new int[this->m_NbOfComponent] ;
+    this->m_Signed = new int[this->m_NbOfComponent];
     if (!this->m_Signed)
       {
       this->Clean();
@@ -479,7 +478,6 @@ void JPEG2000ImageIO::Read(void* buffer)
     }
 
 
-
   unsigned int nbPixel = (m_InternalReader->GetImage()->x1 - m_InternalReader->GetImage()->x0) *
                          (m_InternalReader->GetImage()->y1 - m_InternalReader->GetImage()->y0);
   //std::cout<< "NbPixel = " <<  nbPixel << std::endl;
@@ -487,7 +485,6 @@ void JPEG2000ImageIO::Read(void* buffer)
 
   // Convert buffer from void * to unsigned char *
   //unsigned char *p = static_cast<unsigned char *>(buffer);
-
 
 
   // move the data into the buffer

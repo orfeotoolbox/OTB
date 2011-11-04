@@ -198,7 +198,7 @@ private:
     SetParameterString("vfn", "Class");
     AddParameter(ParameterType_Filename, "out", "Output SVM model");
     SetParameterDescription("out", "Output SVM model");
-    SetParameterRole("out",Role_Output);
+    SetParameterRole("out", Role_Output);
 
   }
 
