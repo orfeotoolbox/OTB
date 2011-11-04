@@ -177,10 +177,10 @@ private:
     if ( HasValue("in") )
       {
        // Put the limit of the channel indices
-      dynamic_cast< NumericalParameter<int> * >(GetParameterByKey("channels.red"))->SetMinimumValue(1);
-      dynamic_cast< NumericalParameter<int> * >(GetParameterByKey("channels.red"))->SetMaximumValue(GetParameterImage("in")->GetNumberOfComponentsPerPixel());
-      dynamic_cast< NumericalParameter<int> * >(GetParameterByKey("channels.nir"))->SetMinimumValue(1);
-      dynamic_cast< NumericalParameter<int> * >(GetParameterByKey("channels.nir"))->SetMaximumValue(GetParameterImage("in")->GetNumberOfComponentsPerPixel());
+      SetMinimumValue("channels.red", 1);
+      SetMaximumValue("channels.red", GetParameterImage("in")->GetNumberOfComponentsPerPixel());
+      SetMinimumValue("channels.nir", 1);
+      SetMaximumValue("channels.nir", GetParameterImage("in")->GetNumberOfComponentsPerPixel());
       }
   }
 

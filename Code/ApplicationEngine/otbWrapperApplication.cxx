@@ -512,6 +512,61 @@ void Application::SetDefaultParameterFloat(std::string parameter, float value)
     }
 }
 
+void Application::SetMinimumParameterValue(std::string parameter, int value)
+{
+  Parameter* param = GetParameterByKey(parameter);
+
+  if (dynamic_cast<IntParameter*>(param))
+    {
+    IntParameter* paramInt = dynamic_cast<IntParameter*>(param);
+    paramInt->SetMinimumValue(value);
+    }
+ else
+    itkExceptionMacro(<<parameter << "parameter can't be casted to int");
+}
+
+void Application::SetMaximumParameterValue(std::string parameter, int value)
+{
+  Parameter* param = GetParameterByKey(parameter);
+
+  if (dynamic_cast<IntParameter*>(param))
+    {
+    IntParameter* paramInt = dynamic_cast<IntParameter*>(param);
+    paramInt->SetMaximumValue(value);
+    }
+  else
+    itkExceptionMacro(<<parameter << "parameter can't be casted to int");
+  
+}
+
+void Application::SetMinimumParameterValue(std::string parameter, float value)
+{
+  Parameter* param = GetParameterByKey(parameter);
+
+  if (dynamic_cast<FloatParameter*>(param))
+    {
+    FloatParameter* paramFloat = dynamic_cast<FloatParameter*>(param);
+    paramFloat->SetMinimumValue(value);
+    }
+ else
+    itkExceptionMacro(<<parameter << "parameter can't be casted to float");
+}
+
+void Application::SetMaximumParameterValue(std::string parameter, float value)
+{
+  Parameter* param = GetParameterByKey(parameter);
+
+  if (dynamic_cast<FloatParameter*>(param))
+    {
+    FloatParameter* paramFloat = dynamic_cast<FloatParameter*>(param);
+    paramFloat->SetMaximumValue(value);
+    }
+  else
+    itkExceptionMacro(<<parameter << "parameter can't be casted to float");
+  
+}
+
+
 void Application::SetParameterString(std::string parameter, std::string value)
 {
   Parameter* param = GetParameterByKey(parameter);

@@ -123,17 +123,17 @@ private:
         }
       
       // Put the limit of the index and the size relative the image
-      dynamic_cast< NumericalParameter<int> * >(GetParameterByKey("sizex"))->SetMinimumValue(0);
-      dynamic_cast< NumericalParameter<int> * >(GetParameterByKey("sizex"))->SetMaximumValue(largestRegion.GetSize(0));
+      SetMinimumValue("sizex", 0);
+      SetMaximumValue("sizex", largestRegion.GetSize(0));
 
-      dynamic_cast< NumericalParameter<int> * >(GetParameterByKey("sizey"))->SetMinimumValue(0);
-      dynamic_cast< NumericalParameter<int> * >(GetParameterByKey("sizey"))->SetMaximumValue(largestRegion.GetSize(1));
+      SetMinimumValue("sizey", 0);
+      SetMaximumValue("sizey", largestRegion.GetSize(1));
 
-      dynamic_cast< NumericalParameter<int> * >(GetParameterByKey("startx"))->SetMinimumValue(0);
-      dynamic_cast< NumericalParameter<int> * >(GetParameterByKey("startx"))->SetMaximumValue(largestRegion.GetSize(0));
+      SetMinimumValue("startx", 0);
+      SetMaximumValue("startx", largestRegion.GetSize(0));
         
-      dynamic_cast< NumericalParameter<int> * >(GetParameterByKey("starty"))->SetMinimumValue(0);
-      dynamic_cast< NumericalParameter<int> * >(GetParameterByKey("starty"))->SetMaximumValue(largestRegion.GetSize(1));
+      SetMinimumValue("starty", 0);
+      SetMaximumValue("starty", largestRegion.GetSize(1));
     
       // Crop the roi region to be included in the largest possible
       // region
