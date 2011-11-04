@@ -107,6 +107,12 @@ CommandLineLauncher::Load()
     itkExceptionMacro("No expression specified...");
     }
 
+  if( this->CheckParametersPrefix() == false )
+    {
+    std::cerr<<"ERROR: Parameter keys have to set using \"--\""<<std::endl;
+    return false;
+    }
+
   if( this->CheckUnicity() == false )
     {
     std::cerr<<"ERROR: At least one key is not unique in the expression..."<<std::endl;
@@ -793,6 +799,35 @@ CommandLineLauncher::CheckUnicity()
       }
     if (res == false )
       break;
+    }
+
+  return res;
+}
+
+bool
+CommandLineLauncher::CheckParametersPrefix()
+{
+  bool res = true;
+  // Extract Expression elements
+  std::vector<itksys::String> spaceSplittedExp = itksys::SystemTools::SplitString(m_Expression.c_str(), ' ', false);
+  // if the chain is "  module", SplitString will return: [ ], [module]
+  for(unsigned int i=0; i<spaceSplittedExp.size(); i++)
+    {
+    if( spaceSplittedExp[i] == " ")
+      {
+      spaceSplittedExp.erase(spaceSplittedExp.begin()+i);
+      i--;
+      }
+    }
+
+  // If the expression contains parameters
+  if( spaceSplittedExp.size() > 2 )
+    {
+    // Check if the chain "--" appears at least one time
+    if( m_Expression.find("--") == std::string::npos)
+    {
+    res = false;
+    }
     }
 
   return res;

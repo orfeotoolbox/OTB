@@ -141,6 +141,12 @@ protected:
   /** Check if each key is unique in the expression. */
   bool CheckUnicity();
 
+  /** Check if option contains at least one "--".
+  * return false if m_Expression contains more than 2 element (module
+  * name and path) and doesn't contains "--"
+  */
+  bool CheckParametersPrefix();
+
   /** Check if each key is valid for the application. */
   bool CheckKeyValidity();
 
