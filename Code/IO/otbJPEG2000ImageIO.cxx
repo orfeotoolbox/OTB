@@ -23,13 +23,17 @@
 
 #include "itkTimeProbe.h"
 
+
+
+
+
 /**
    sample error debug callback expecting no client object
 */
 void error_callback(const char *msg, void *client_data)
 {
   (void) client_data;
-  itkGenericExceptionMacro(<< "OpenJpeg error: " << msg);
+  itkGenericExceptionMacro(<< "OpenJPEG error: " << msg);
 }
 /**
    sample warning debug callback expecting no client object
@@ -37,7 +41,7 @@ void error_callback(const char *msg, void *client_data)
 void warning_callback(const char *msg, void *client_data)
 {
   (void) client_data;
-  otbGenericMsgDebugMacro(<< "OpenJpeg warning: " << msg);
+  otbGenericMsgDebugMacro(<< "OpenJPEG warning: " << msg);
 }
 /**
    sample debug callback expecting no client object
@@ -45,14 +49,324 @@ void warning_callback(const char *msg, void *client_data)
 void info_callback(const char *msg, void *client_data)
 {
   (void) client_data;
-  otbMsgDevMacro(<< "OpenJpeg info: " << msg);
+  otbMsgDevMacro(<< "OpenJPEG info: " << msg);
 }
 
 namespace otb
 {
 
+class JPEG2000ReaderInternal
+{
+public:
+  JPEG2000ReaderInternal();
+
+  int Initialize();
+
+	void Clean();
+
+	int CanRead();
+
+	int Open(const char *filename);
+
+  opj_codec_t *  m_Codec;
+  FILE* m_File;
+  opj_image_t* m_Image;
+  opj_stream_t* m_Stream;
+  opj_codestream_info_v2* m_CstrInfo;
+
+  bool m_IsOpen;
+  OPJ_CODEC_FORMAT m_CodecFormat;
+
+  unsigned int         m_Width;
+  unsigned int         m_Height;
+
+  unsigned int         m_NbOfComponent;
+
+  unsigned int*        m_XResolution;
+  unsigned int*        m_YResolution;
+  unsigned int*        m_Precision;
+  int*                 m_Signed;
+
+  unsigned int         m_TileWidth;
+  unsigned int         m_TileHeight;
+  unsigned int         m_XNbOfTile;
+  unsigned int         m_YNbOfTile;
+
+};
+
+int JPEG2000ReaderInternal::Open(const char *filename)
+{
+  std::cout << "OPEN" << std::endl;
+  this->Clean();
+
+  // Open the file
+  this->m_File  = fopen(filename, "rb");
+  if (!this->m_File)
+    {
+    return 0;
+    }
+
+  // Find the codec file format
+  std::string lFileName(filename);
+
+  if (System::SetToLower(System::GetExtension(lFileName)) == "j2k")
+    {
+    this->m_CodecFormat = CODEC_J2K;
+    }
+  else if (System::SetToLower(System::GetExtension(lFileName)) == "jp2"
+           || System::SetToLower(System::GetExtension(lFileName)) == "jpx")
+    {
+    this->m_CodecFormat = CODEC_JP2;
+    }
+  else
+    {
+    this->Clean();
+    return 0;
+    }
+
+  // Initialize the codec and the stream
+  if (!this->Initialize())
+    {
+    this->Clean();
+    return 0;
+    }
+
+  this->m_IsOpen = true;
+  return 1;
+}
+
+void JPEG2000ReaderInternal::Clean()
+{
+  std::cout << "CLEAN" << std::endl;
+  // Close the byte stream
+  if (this->m_Stream)
+    {
+    otbopenjpeg_opj_stream_destroy(this->m_Stream);
+    }
+  this->m_Stream = NULL;
+
+  // Close the file
+  if (this->m_File)
+    {
+    fclose(this->m_File);
+    }
+  this->m_File = NULL;
+
+  // Destroy the codec
+  if (this->m_Codec)
+    {
+    otbopenjpeg_opj_destroy_codec(this->m_Codec);
+    }
+  this->m_Codec = NULL;
+
+  // Destroy the image
+  if (this->m_Image)
+    {
+    otbopenjpeg_opj_image_destroy(this->m_Image);
+    }
+  this->m_Image = NULL;
+
+  // Destroy the codestream info
+  if (this->m_CstrInfo)
+    {
+    otbopenjpeg_opj_destroy_cstr_info_v2(&(this->m_CstrInfo));
+    }
+
+  delete[] this->m_XResolution;
+  delete[] this->m_YResolution;
+  delete[] this->m_Precision;
+  delete[] this->m_Signed;
+
+
+  this->m_XResolution = NULL;
+  this->m_YResolution = NULL;
+  this->m_Precision = NULL;
+  this->m_Signed = NULL;
+
+
+  this->m_Width = 0;
+  this->m_Height = 0;
+  this->m_NbOfComponent = 0;
+  this->m_TileWidth = 0;
+  this->m_TileHeight = 0;
+  this->m_XNbOfTile = 0;
+  this->m_YNbOfTile = 0;
+
+  this->m_IsOpen = false;
+  this->m_CodecFormat = CODEC_UNKNOWN;
+
+}
+
+JPEG2000ReaderInternal::JPEG2000ReaderInternal()
+{
+  this->m_Image = NULL;
+  this->m_Codec = NULL;
+  this->m_Stream = NULL;
+  this->m_File = NULL;
+  this->m_CstrInfo = NULL;
+
+  this->m_XResolution = NULL;
+  this->m_YResolution = NULL;
+  this->m_Precision = NULL;
+  this->m_Signed = NULL;
+
+  this->Clean();
+}
+
+int JPEG2000ReaderInternal::Initialize()
+{
+  std::cout << "INITIALIZE" << std::endl;
+
+  if (this->m_File)
+    {
+    // Creating the file stream
+    this->m_Stream = otbopenjpeg_opj_stream_create_default_file_stream(this->m_File, true);
+    if (!this->m_Stream)
+      {
+      this->Clean();
+      return 0;
+      }
+
+    // Creating the codec
+    this->m_Codec = otbopenjpeg_opj_create_decompress_v2(this->m_CodecFormat);
+
+    if (!this->m_Codec)
+      {
+      return 0;
+      }
+
+    // Set default event mgr  FIXME
+    opj_event_mgr_t event_mgr;
+    otbopenjpeg_opj_initialize_default_event_handler(&event_mgr,true);
+
+    // Setting default parameters
+    opj_dparameters_t parameters;
+    otbopenjpeg_opj_set_default_decoder_parameters(&parameters);
+
+    // Setup the decoder decoding parameters using user parameters
+    if (!otbopenjpeg_opj_setup_decoder_v2(this->m_Codec, &parameters, &event_mgr))
+      {
+      this->Clean();
+      return 0;
+      }
+
+    // Read the main header of the codestream and if necessary the JP2 boxes
+    if (!otbopenjpeg_opj_read_header(this->m_Stream, this->m_Codec, &(this->m_Image)))
+      {
+      this->Clean();
+      return 0;
+      }
+
+    // Get the codestream information
+    this->m_CstrInfo = otbopenjpeg_opj_get_cstr_info(this->m_Codec);
+    if (!this->m_CstrInfo)
+      {
+      std::cout << "ERROR while get codestream info" << std::endl;
+      this->Clean();
+      return 0;
+      }
+
+    std::cout << "codestream info ok" << std::endl;
+
+    // We can now retrieve the main information  of the image and the codestream
+    this->m_Width = this->m_Image->x1 - this->m_Image->x0;
+    this->m_Height = this->m_Image->x1 - this->m_Image->x0;
+
+    this->m_TileHeight = this->m_CstrInfo->tdy;
+    this->m_TileWidth = this->m_CstrInfo->tdx;
+    this->m_XNbOfTile = this->m_CstrInfo->tw;
+    this->m_YNbOfTile = this->m_CstrInfo->th;
+
+    this->m_NbOfComponent = this->m_Image->numcomps;
+
+    this->m_Precision = new unsigned int[this->m_NbOfComponent];
+    if (!this->m_Precision)
+      {
+      this->Clean();
+      return 0;
+      }
+
+    for (int itComp = 0; itComp < this->m_NbOfComponent; itComp++)
+      {
+      this->m_Precision[itComp] = this->m_Image->comps[itComp].prec;
+      }
+
+    this->m_Signed = new int[this->m_NbOfComponent] ;
+    if (!this->m_Signed)
+      {
+      this->Clean();
+      return 0;
+      }
+    for (int itComp = 0; itComp < this->m_NbOfComponent; itComp++)
+      {
+      this->m_Signed[itComp] = this->m_Image->comps[itComp].sgnd;
+      }
+
+    this->m_XResolution = new unsigned int[this->m_NbOfComponent];
+    if (!this->m_XResolution)
+      {
+      this->Clean();
+      return 0;
+      }
+
+    for (int itComp = 0; itComp < this->m_NbOfComponent; itComp++)
+      {
+      this->m_XResolution[itComp] = this->m_Image->comps[itComp].dx;
+      }
+
+    this->m_YResolution = new unsigned int[this->m_NbOfComponent];
+    if (!this->m_YResolution)
+      {
+      this->Clean();
+      return 0;
+      }
+
+    for (int itComp = 0; itComp < this->m_NbOfComponent; itComp++)
+      {
+      this->m_YResolution[itComp] = this->m_Image->comps[itComp].dy;
+      }
+
+    }
+
+  return 1;
+}
+
+int JPEG2000ReaderInternal::CanRead()
+ {
+   if  ( this->m_File &&
+       this->m_Codec &&
+       this->m_Stream &&
+       this->m_CstrInfo &&
+       this->m_Image &&
+       ( this->m_Width > 0 ) && ( this->m_Height > 0 ) &&
+       ( this->m_TileWidth > 0 ) && ( this->m_TileHeight > 0 ) &&
+       ( this->m_XNbOfTile > 0 ) && ( this->m_YNbOfTile > 0 ) &&
+       ( this->m_NbOfComponent > 0 ) )
+     {
+
+     // We manage only JPEG2000 file with characteristics which are equal between components
+     for(int itComp = 0; itComp < this->m_NbOfComponent - 1; itComp++)
+       {
+       if ( (this->m_Precision[itComp] != this->m_Precision[itComp+1]) &&
+            (this->m_Signed[itComp] != this->m_Signed[itComp+1]) &&
+            (this->m_XResolution[itComp] != this->m_XResolution[itComp+1]) &&
+            (!this->m_XResolution[itComp]) &&
+            (this->m_YResolution[itComp] != this->m_YResolution[itComp+1]) &&
+            (!this->m_YResolution[itComp]) )
+         {
+         return 0;
+         }
+       }
+
+     return 1;
+     }
+   else return 0;
+ }
+
 JPEG2000ImageIO::JPEG2000ImageIO()
 {
+  m_InternalImage = new JPEG2000ReaderInternal;
+
   // By default set number of dimensions to two.
   this->SetNumberOfDimensions(2);
   m_PixelType = SCALAR;
@@ -69,94 +383,29 @@ JPEG2000ImageIO::JPEG2000ImageIO()
 }
 
 JPEG2000ImageIO::~JPEG2000ImageIO()
-{}
+{
+  m_InternalImage->Clean();
+  delete m_InternalImage;
+}
 
 bool JPEG2000ImageIO::CanReadFile(const char* filename)
 {
+
   if (filename == NULL)
     {
+    itkDebugMacro(<< "No filename specified.");
     return false;
     }
 
-  std::string lFileName(filename);
-
-  // Creating a codec
-  opj_codec_t * codec = NULL;
-
-  if (System::SetToLower(System::GetExtension(lFileName)) == "j2k")
+  if ( !this->m_InternalImage->Open(filename) )
     {
-    otbMsgDebugMacro(<< "Jpeg2000ImageIO: Creating J2K codec.");
-    codec = otb_openjpeg_opj_create_decompress(CODEC_J2K);
-    }
-  else if (System::SetToLower(System::GetExtension(lFileName)) == "jp2"
-           || System::SetToLower(System::GetExtension(lFileName)) == "jpx")
-    {
-    otbMsgDebugMacro(<< "Jpeg2000ImageIO: Creating JP2 codec.");
-    codec = otb_openjpeg_opj_create_decompress(CODEC_JP2);
-    }
-  else
-    {
-    otbMsgDebugMacro(<< "Jpeg2000ImageIO: Extension not recognized.");
+    this->m_InternalImage->Clean();
     return false;
     }
 
-  if (!codec)
-    {
-    otbMsgDebugMacro(<< "Impossible to create codec.");
-    return false;
-    }
-  otb_openjpeg_opj_set_info_handler(codec, info_callback, 00);
-  otb_openjpeg_opj_set_warning_handler(codec, warning_callback, 00);
-  otb_openjpeg_opj_set_error_handler(codec, error_callback, 00);
+  std::cout<< "JPEG2000 file can be read and it is open" << std::endl;
 
-  // Setting default parameters
-  opj_dparameters_t parameters;
-  otb_openjpeg_opj_set_default_decoder_parameters(&parameters);
-
-  if (!otb_openjpeg_opj_setup_decoder(codec, &parameters))
-    {
-    otbMsgDebugMacro(<< "Impossible to set parameter.");
-    otb_openjpeg_opj_destroy_codec(codec);
-    return false;
-    }
-
-  // Creating a file
-  FILE * file  = fopen(filename, "rb");
-  if (!file)
-    {
-    otbMsgDebugMacro(<< "Impossible to open file.");
-    otb_openjpeg_opj_destroy_codec(codec);
-    return false;
-    }
-  // Creating a file stream
-  opj_stream_t * stream  = otb_openjpeg_opj_stream_create_default_file_stream(file, true);
-  if (!stream)
-    {
-    otbMsgDebugMacro(<< "Impossible to create stream.");
-    otb_openjpeg_opj_destroy_codec(codec);
-    fclose(file);
-    return false;
-    }
-
-  // trying to read image header
-  opj_image_t * image;
-  OPJ_INT32     tile_x0, tile_y0;
-  OPJ_UINT32    tile_width, tile_height, nb_tiles_x, nb_tiles_y;
-  bool          resp = otb_openjpeg_opj_read_header(codec,
-                                                    &image,
-                                                    &tile_x0,
-                                                    &tile_y0,
-                                                    &tile_width,
-                                                    &tile_height,
-                                                    &nb_tiles_x,
-                                                    &nb_tiles_y,
-                                                    stream);
-  // Destroy the codec
-  otb_openjpeg_opj_stream_destroy(stream);
-  fclose(file);
-  otb_openjpeg_opj_destroy_codec(codec);
-  otb_openjpeg_opj_image_destroy(image);
-  return resp;
+  return true;
 }
 
 // Used to print information about this object
@@ -165,7 +414,7 @@ void JPEG2000ImageIO::PrintSelf(std::ostream& os, itk::Indent indent) const
   Superclass::PrintSelf(os, indent);
 }
 
-// Read a 3D image (or event more bands)... not implemented yet
+// Read a 3D image not implemented yet
 void JPEG2000ImageIO::ReadVolume(void*)
 {
 }
@@ -173,255 +422,155 @@ void JPEG2000ImageIO::ReadVolume(void*)
 // Read image
 void JPEG2000ImageIO::Read(void* buffer)
 {
-  //  unsigned long step = this->GetNumberOfComponents();
-  char * charstarbuffer = static_cast<char *>(buffer);
+  std::cout<< "ReadImageInformation: START" << std::endl;
 
-  int buffer_size_y = this->GetIORegion().GetSize()[1];
-  int buffer_size_x = this->GetIORegion().GetSize()[0];
-  int buffer_y0     = this->GetIORegion().GetIndex()[1];
-  int buffer_x0     = this->GetIORegion().GetIndex()[0];
+  // Check if conversion succeed
+  if (buffer == NULL)
+    {
+    itkExceptionMacro(<< "JPEG2000ImageIO : Bad alloc");
+    return;
+    }
+
+  // Re-open the file if it was closed
+  if ( !m_InternalImage->m_IsOpen )
+    {
+    if ( !this->CanReadFile( m_FileName.c_str() ) )
+      {
+      itkExceptionMacro(<< "Cannot open file " << this->m_FileName << "!");
+      return;
+      }
+    }
+
+  // Get nb. of lines and columns of the region to read
+  int lNbLines     = this->GetIORegion().GetSize()[1];
+  int lNbColumns   = this->GetIORegion().GetSize()[0];
+  int lFirstLine   = this->GetIORegion().GetIndex()[1]; // [1... ]
+  int lFirstColumn = this->GetIORegion().GetIndex()[0]; // [1... ]
 
   otbMsgDevMacro(<< " JPEG2000ImageIO::Read()  ");
   otbMsgDevMacro(<< " ImageDimension   : " << m_Dimensions[0] << "," << m_Dimensions[1]);
   otbMsgDevMacro(<< " IORegion         : " << this->GetIORegion());
   otbMsgDevMacro(<< " Nb Of Components : " << this->GetNumberOfComponents());
-
   otbMsgDevMacro(<< "IORegion: " << this->GetIORegion());
-  otbMsgDevMacro(
-    << "Area to read: " << buffer_x0 << " " << buffer_y0  << " " << buffer_x0 + buffer_size_x - 1 << " " << buffer_y0 +
-    buffer_size_y - 1);
+  otbMsgDevMacro(<< "Area to read: " << buffer_x0 << " " << buffer_y0  << " "
+                 << buffer_x0 + buffer_size_x - 1 << " " << buffer_y0 + buffer_size_y - 1);
   otbMsgDevMacro(<< "Component type: " << this->GetComponentTypeAsString(this->GetComponentType()));
 
   itk::TimeProbe chrono;
   chrono.Start();
 
-  // Creating openjpeg objects
-  if (System::SetToLower(System::GetExtension(m_FileName)) == "j2k")
+  std::cout<< "Try to set decoded area: START" << std::endl;
+  // Set the decoded area
+  if( !otbopenjpeg_opj_set_decode_area(m_InternalImage->m_Codec,
+                                       m_InternalImage->m_Image,
+                                       lFirstColumn,
+                                       lFirstLine,
+                                       lFirstColumn + lNbColumns,
+                                       lFirstLine + lNbLines) )
     {
-    m_Codec = otb_openjpeg_opj_create_decompress(CODEC_J2K);
-    }
-  else if (System::SetToLower(System::GetExtension(m_FileName)) == "jp2"
-           || System::SetToLower(System::GetExtension(m_FileName)) == "jpx")
-    {
-    m_Codec = otb_openjpeg_opj_create_decompress(CODEC_JP2);
-    }
-
-  otb_openjpeg_opj_set_info_handler(m_Codec, info_callback, 00);
-  otb_openjpeg_opj_set_warning_handler(m_Codec, warning_callback, 00);
-  otb_openjpeg_opj_set_error_handler(m_Codec, error_callback, 00);
-
-  if (!m_Codec)
-    {
-    itkExceptionMacro(<< "Failed to create openjpeg codec.");
+    itkExceptionMacro(<< "The decoded area is not correct!");
+    m_InternalImage->Clean();
+    return;
     }
 
-  // Create default parameters
-  otb_openjpeg_opj_set_default_decoder_parameters(&m_Parameters);
-  // Set the requested region
-  otb_openjpeg_opj_restrict_decoding(&m_Parameters,
-                                     buffer_x0,
-                                     buffer_y0,
-                                     buffer_x0 + buffer_size_x - 1,
-                                     buffer_y0 + buffer_size_y - 1);
+  std::cout<< "Try to set decoded area: END" << std::endl;
 
-  if (!otb_openjpeg_opj_setup_decoder(m_Codec, &m_Parameters))
+  std::cout<< "Try to decode the area: START" << std::endl;
+  if ( !( otbopenjpeg_opj_decode_v2(m_InternalImage->m_Codec, m_InternalImage->m_Stream, m_InternalImage->m_Image) &&
+          otbopenjpeg_opj_end_decompress(m_InternalImage->m_Codec, m_InternalImage->m_Stream) )
+     )
     {
-    itkExceptionMacro(<< "Failed to set up decoder parameters.");
+    itkExceptionMacro(<< "Failed to decode the image!");
+    m_InternalImage->Clean();
+    return;
     }
 
-  m_File = fopen(m_FileName.c_str(), "rb");
+  std::cout<< "Try to decode the area: END" << std::endl;
 
-  if (!m_File)
-    {
-    itkExceptionMacro(<< "Failed to open file: " << m_FileName);
-    }
+  unsigned int nbPixel = (m_InternalImage->m_Image->x1 - m_InternalImage->m_Image->x0) *
+                         (m_InternalImage->m_Image->y1 - m_InternalImage->m_Image->y0);
+  std::cout<< "NbPixel = " <<  nbPixel << std::endl;
+  std::cout<< "NbOfComp = " <<  m_InternalImage->m_NbOfComponent << std::endl;
 
-  m_OpenJpegStream = otb_openjpeg_opj_stream_create_default_file_stream(m_File, true);
+  // Convert buffer from void * to unsigned char *
+  //unsigned char *p = static_cast<unsigned char *>(buffer);
 
-  if (!m_OpenJpegStream)
-    {
-    itkExceptionMacro(<< "Failed to create file stream.");
-    }
 
-  OPJ_INT32  tile_x0, tile_y0;
-  OPJ_UINT32 tile_width, tile_height, nb_tiles_x, nb_tiles_y;
 
-  if (!otb_openjpeg_opj_read_header(m_Codec,
-                                    &m_OpenJpegImage,
-                                    &tile_x0,
-                                    &tile_y0,
-                                    &tile_width,
-                                    &tile_height,
-                                    &nb_tiles_x,
-                                    &nb_tiles_y,
-                                    m_OpenJpegStream))
-    {
-    itkExceptionMacro(<< "Failed to read image header.");
-    }
-
-  OPJ_BYTE * tile_data;
-  OPJ_INT32  tile_x1, tile_y1;
-  OPJ_UINT32 data_size, nb_comps;
-  OPJ_UINT32 tile_index;
-  OPJ_BOOL   goesOn = true;
-
-  while (goesOn)
-    {
-    if (!otb_openjpeg_opj_read_tile_header(m_Codec,
-                                           &tile_index,
-                                           &data_size,
-                                           &tile_x0,
-                                           &tile_y0,
-                                           &tile_x1,
-                                           &tile_y1,
-                                           &nb_comps,
-                                           &goesOn,
-                                           m_OpenJpegStream))
+  // move the data into the buffer
+  switch (this->GetComponentType())
+  {
+//    case CHAR:
+//    case UCHAR:
+//    case SHORT:
+    case USHORT:
       {
-      itkExceptionMacro(<< "Error while reading tile header.");
-      }
-    if (goesOn)
-      {
-      otbMsgDebugMacro(<< "==========================");
-      otbMsgDebugMacro(<< "Tile index: " << tile_index);
-      otbMsgDebugMacro(<< "Data size: " << data_size);
-      otbMsgDebugMacro(<< "Tile (x0, y0): " << tile_x0 << " " << tile_y0);
-      otbMsgDebugMacro(<< "Tile (x1, y1): " << tile_x1 << " " << tile_y1);
-      otbMsgDebugMacro(<< "Tile number of component: " << nb_comps);
-      otbMsgDebugMacro(<< "Goes on: " << goesOn);
-      otbMsgDevMacro(<< "--------------------------");
-
-      tile_data = new OPJ_BYTE[data_size];
-
-      if (!otb_openjpeg_opj_decode_tile_data(m_Codec, tile_index, tile_data, data_size, m_OpenJpegStream))
+      unsigned short *p = static_cast<unsigned short *>(buffer);
+      for(unsigned int itPixel = 0; itPixel < nbPixel; itPixel++)
         {
-        itkExceptionMacro(<< "Error while reading tile data.");
-        }
-
-      std::streamsize tile_component_size = data_size / nb_comps;
-      std::streamoff  buffer_skip         =
-        std::max(0, tile_y0 - buffer_y0) * buffer_size_x * nb_comps * m_BytePerPixel;
-      std::streamoff  tile_skip            = std::max(0, buffer_y0 - tile_y0) * (tile_x1 - tile_x0) * m_BytePerPixel;
-      std::streamoff  tile_offset_begin    = std::max(0, buffer_x0 - tile_x0) * m_BytePerPixel;
-      std::streamoff  buffer_offset_begin  = std::max(0, tile_x0 - buffer_x0) * nb_comps * m_BytePerPixel;
-      std::streamsize line_size           =
-        (std::min(tile_x1, buffer_x0 + buffer_size_x - 1) - std::max(tile_x0, buffer_x0) + 1);
-      std::streamsize nb_lines            = std::min(tile_y1, buffer_y0 + buffer_size_y - 1) - std::max(tile_y0,
-                                                                                                        buffer_y0) + 1;
-      std::streamsize buffer_line_size    = buffer_size_x * nb_comps * m_BytePerPixel;
-      std::streamsize tile_line_size      = (tile_x1 - tile_x0) * m_BytePerPixel;
-      std::streampos  buffer_step          = nb_comps * m_BytePerPixel;
-
-      otbMsgDevMacro(<< "buffer_skip: " << buffer_skip);
-      otbMsgDevMacro(<< "tile_skip: " << tile_skip);
-      otbMsgDevMacro(<< "buffer_offset_begin: " << buffer_offset_begin);
-      otbMsgDevMacro(<< "tile_offset_begin: " << tile_offset_begin);
-      otbMsgDevMacro(<< "buffer_line_size: " << buffer_line_size);
-      otbMsgDevMacro(<< "tile_line_size: " << tile_line_size);
-      otbMsgDevMacro(<< "line_size: " << line_size);
-      otbMsgDevMacro(<< "nb_lines: " << nb_lines);
-      otbMsgDevMacro(<< "buffer_step: " << buffer_step);
-
-      std::streamoff buffer_pos, tile_pos;
-
-      for (unsigned int comp = 0; comp < nb_comps; ++comp)
-        {
-        for (int line = 0; line < nb_lines; ++line)
+        for (unsigned int itComp = 0; itComp < m_InternalImage->m_NbOfComponent; itComp++)
           {
-          buffer_pos = buffer_skip + comp * m_BytePerPixel + line * buffer_line_size + buffer_offset_begin;
-          tile_pos   = comp * tile_component_size + tile_skip + line * tile_line_size + tile_offset_begin;
-
-          for (int cols = 0; cols < line_size; ++cols)
-            {
-            for (unsigned int octet = 0; octet < m_BytePerPixel; ++octet)
-              {
-              charstarbuffer[buffer_pos + cols * buffer_step +
-                             octet] = tile_data[tile_pos + cols * m_BytePerPixel + octet];
-              }
-            }
+          OPJ_INT32* data = m_InternalImage->m_Image->comps[itComp].data;
+          //unsigned short* datashort = reinterpret_cast<unsigned short*>(data);
+          //OPJ_INT32 value = m_InternalImage->m_Image->comps[itComp].data[itPixel];
+          *p = static_cast<unsigned short>(data[itPixel] & 0xffff);
+          //p += m_BytePerPixel;
+          p++;
           }
         }
-      delete[] tile_data;
       }
-    }
-  otbMsgDebugMacro(<< "==========================");
-
-  otb_openjpeg_opj_stream_destroy(m_OpenJpegStream);
-  fclose(m_File);
-  otb_openjpeg_opj_destroy_codec(m_Codec);
-  otb_openjpeg_opj_image_destroy(m_OpenJpegImage);
+      break;
+//    case INT:
+//    case UINT:
+  }
 
   chrono.Stop();
-  otbMsgDevMacro(<< "JPEG2000_IO Read took " << chrono.GetTotal() << " sec")
+  otbMsgDevMacro(<< "JPEG2000ImageIO::Read took " << chrono.GetTotal() << " sec")
+
+  m_InternalImage->Clean();
+
+
+
 }
 
 void JPEG2000ImageIO::ReadImageInformation()
 {
-  if (m_FileName.empty() == true)
+  std::cout<< "ReadImageInformation: START" << std::endl;
+  // If the internal image was not open we open it.
+  // This is usually done when the user sets the ImageIO manually
+  if ( !m_InternalImage->m_IsOpen )
     {
-    itkExceptionMacro(<< "JPEG2000ImageIO: empty image filename.");
+    if ( !this->CanReadFile( m_FileName.c_str() ) )
+      {
+      itkExceptionMacro(<< "Cannot open file " << this->m_FileName << "!");
+      return;
+      }
     }
 
-  // Creating openjpeg objects
-  if (System::SetToLower(System::GetExtension(m_FileName)) == "j2k")
+  // Check some internal parameters of the JPEG2000 file
+  if ( !this->m_InternalImage->CanRead())
     {
-    m_Codec = otb_openjpeg_opj_create_decompress(CODEC_J2K);
-    }
-  else if (System::SetToLower(System::GetExtension(m_FileName)) == "jp2"
-           || System::SetToLower(System::GetExtension(m_FileName)) == "jpx")
-    {
-    m_Codec = otb_openjpeg_opj_create_decompress(CODEC_JP2);
+    itkExceptionMacro(<< "Cannot read this file because some JPEG2000 parameters are not supported!");
+    this->m_InternalImage->Clean();
+    return;
     }
 
-  otb_openjpeg_opj_set_info_handler(m_Codec, info_callback, 00);
-  otb_openjpeg_opj_set_warning_handler(m_Codec, warning_callback, 00);
-  otb_openjpeg_opj_set_error_handler(m_Codec, error_callback, 00);
+  m_Spacing[0] = 1.0;
+  m_Spacing[1] = 1.0;
 
-  if (!m_Codec)
+  // If we have some spacing information we use it
+  if ( (m_InternalImage->m_XResolution > 0) && (m_InternalImage->m_YResolution > 0) )
     {
-    itkExceptionMacro(<< "Failed to create openjpeg codec.");
+      // We check previously that the X and Y resolution is equal between the components
+      m_Spacing[0] = m_InternalImage->m_XResolution[0];
+      m_Spacing[1] = m_InternalImage->m_YResolution[0];
     }
 
-  // Create default parameters
-  otb_openjpeg_opj_set_default_decoder_parameters(&m_Parameters);
+  m_Origin[0] = 0.0;
+  m_Origin[1] = 0.0;
 
-  if (!otb_openjpeg_opj_setup_decoder(m_Codec, &m_Parameters))
-    {
-    itkExceptionMacro(<< "Failed to set up decoder parameters.");
-    }
-
-  m_File = fopen(m_FileName.c_str(), "rb");
-
-  if (!m_File)
-    {
-    itkExceptionMacro(<< "Failed to open file: " << m_FileName);
-    }
-
-  m_OpenJpegStream = otb_openjpeg_opj_stream_create_default_file_stream(m_File, true);
-
-  if (!m_OpenJpegStream)
-    {
-    itkExceptionMacro(<< "Failed to create file stream.");
-    }
-
-  OPJ_INT32  tile_x0, tile_y0;
-  OPJ_UINT32 tile_width, tile_height, nb_tiles_x, nb_tiles_y;
-
-  if (!otb_openjpeg_opj_read_header(m_Codec,
-                                    &m_OpenJpegImage,
-                                    &tile_x0,
-                                    &tile_y0,
-                                    &tile_width,
-                                    &tile_height,
-                                    &nb_tiles_x,
-                                    &nb_tiles_y,
-                                    m_OpenJpegStream))
-    {
-    itkExceptionMacro(<< "Failed to read image header.");
-    }
-
-  m_Dimensions[0] = m_OpenJpegImage->x1 - m_OpenJpegImage->x0;
-  m_Dimensions[1] = m_OpenJpegImage->y1 - m_OpenJpegImage->y0;
+  m_Dimensions[0] = m_InternalImage->m_Width;
+  m_Dimensions[1] = m_InternalImage->m_Height;
 
   this->SetNumberOfDimensions(2);
 
@@ -430,12 +579,14 @@ void JPEG2000ImageIO::ReadImageInformation()
     itkExceptionMacro(<< "Image size is null.");
     }
 
-  this->SetNumberOfComponents(m_OpenJpegImage->numcomps);
+  this->SetNumberOfComponents(m_InternalImage->m_NbOfComponent);
 
+  // Automatically set the Type to Binary for JPEG2000 data
   this->SetFileTypeToBinary();
 
-  unsigned int precision = m_OpenJpegImage->comps->prec;
-  int          isSigned = m_OpenJpegImage->comps->sgnd;
+  // We check previously that these values are equal between all components
+  unsigned int precision = m_InternalImage->m_Precision[0];
+  int          isSigned = m_InternalImage->m_Signed[0];
 
   if (precision <= 8)
     {
@@ -485,9 +636,10 @@ void JPEG2000ImageIO::ReadImageInformation()
 
   otbMsgDebugMacro(<< "==========================");
   otbMsgDebugMacro(<< "ReadImageInformation: ");
-  otbMsgDebugMacro(<< "Tile (x0, y0): " << tile_x0 << " " << tile_y0);
-  otbMsgDebugMacro(<< "Tile size: " << tile_width << " x " << tile_height);
-  otbMsgDebugMacro(<< "Number of tiles: " << nb_tiles_x << " " << nb_tiles_y);
+  otbMsgDebugMacro(<< "Tile size (WxH): " << m_InternalImage->m_TileWidth << " x "
+                   << m_InternalImage->m_TileHeight);
+  otbMsgDebugMacro(<< "Number of tiles (Xdim x Ydim) : " << m_InternalImage->m_XNbOfTile
+                   << " x " << m_InternalImage->m_YNbOfTile);
   otbMsgDebugMacro(<< "Precision: " << precision);
   otbMsgDebugMacro(<< "Signed: " << isSigned);
   otbMsgDebugMacro(<< "Number of octet per value: " << m_BytePerPixel);
@@ -501,247 +653,19 @@ void JPEG2000ImageIO::ReadImageInformation()
   otbMsgDebugMacro(<< "         ComponentSize      : " << this->GetComponentSize());
   otbMsgDebugMacro(<< "         GetPixelSize       : " << this->GetPixelSize());
 
-  otb_openjpeg_opj_stream_destroy(m_OpenJpegStream);
-  fclose(m_File);
-  otb_openjpeg_opj_destroy_codec(m_Codec);
-  otb_openjpeg_opj_image_destroy(m_OpenJpegImage);
+  std::cout<< "ReadImageInformation: END" << std::endl;
 }
 
+// Not yet implemented
 bool JPEG2000ImageIO::CanWriteFile(const char* /*filename*/)
 {
   return false;
-//     std::string lFileName(filename);
-//     if( System::IsADirName(lFileName) == true )
-//       {
-//   return false;
-//       }
-//     const std::string Extension = System::GetExtension(filename);
-//     if( (Extension == "j2k") || (Extension == "J2K") || (Extension == "jp2") || (Extension == "JP2"))
-//       {
-//   return true;
-//       }
-//     else
-//       {
-//   return false;
-//       }
 }
 
+// Not yet implemented
 void JPEG2000ImageIO::Write(const void* /*buffer*/)
 {
-  // char * charstarbuffer = static_cast<char *>(buffer);
 
-// m_NbBands = this->GetNumberOfComponents();
-
-//       if( (m_Dimensions[0]==0) && (m_Dimensions[1]==0))
-//         {
-//                 itkExceptionMacro(<<"Dimensions are not defined.");
-//         }
-
-//         if ( this->GetComponentType() == CHAR )
-//         {
-//                 m_BytePerPixel = 1;
-//                 m_PxType = GDT_Byte;
-//         }
-//         else if ( this->GetComponentType() == UCHAR )
-//         {
-//                 m_BytePerPixel = 1;
-//                 m_PxType = GDT_Byte;
-//         }
-//         else if ( this->GetComponentType() == USHORT )
-//         {
-//                 m_BytePerPixel = 2;
-//                 m_PxType = GDT_UInt16;
-//         }
-//         else if ( this->GetComponentType() == SHORT )
-//         {
-//                 m_BytePerPixel = 2;
-//                 m_PxType = GDT_Int16;
-//         }
-//         else if ( this->GetComponentType() == INT )
-//         {
-//                 m_BytePerPixel = 4;
-//                 m_PxType = GDT_Int32;
-//         }
-//         else if ( this->GetComponentType() == UINT )
-//         {
-//                 m_BytePerPixel = 4;
-//                 m_PxType = GDT_UInt32;
-//         }
-//         else if ( this->GetComponentType() == FLOAT )
-//         {
-//                 m_BytePerPixel = 4;
-//                 m_PxType = GDT_Float32;
-//         }
-//         else if ( this->GetComponentType() == DOUBLE )
-//         {
-//                 m_BytePerPixel = 8;
-//                 m_PxType = GDT_Float64;
-//         }
-//         else
-//         {
-//                 m_BytePerPixel = 1;
-//                 m_PxType = GDT_Byte;
-//         }
-
-//         // Automatically set the Type to Binary for GDAL data
-//         this->SetFileTypeToBinary();
-
-//     /** you may here add custom encoding parameters */
-//     /* rate specifications */
-//     /** number of quality layers in the stream */
-//     m_Parameters.tcp_numlayers = 1;
-//     m_Parameters.cp_fixed_quality = 1;
-//     m_Parameters.tcp_distoratio[0] = 20;
-//     /* is using others way of calculation */
-//     /* m_Parameters.cp_disto_alloc = 1 or m_Parameters.cp_fixed_alloc = 1 */
-//     /* m_Parameters.tcp_rates[0] = ... */
-
-//     /* tile definitions parameters */
-//     /* position of the tile grid aligned with the image */
-//     m_Parameters.cp_tx0 = 0;
-//     m_Parameters.cp_ty0 = 0;
-//     /* tile size, we are using tile based encoding */
-//     m_Parameters.tile_size_on = true;
-//     m_Parameters.cp_tdx = 512;
-//     m_Parameters.cp_tdy = 512;
-
-//     /* use irreversible encoding ?*/
-//     m_Parameters.irreversible = 1;
-
-//     /* do not bother with mct, the rsiz is set when calling opj_set_MCT*/
-//     /*m_Parameters.cp_rsiz = STD_RSIZ; */
-
-//     /* no cinema */
-//     /*m_Parameters.cp_cinema = 0; */
-
-//     /* no not bother using SOP or EPH markers, do not use custom size precinct */
-//     /* number of precincts to specify */
-//     /* m_Parameters.csty = 0; */
-//     /* m_Parameters.res_spec = ... */
-//     /* m_Parameters.prch_init[i] = .. */
-//     /* m_Parameters.prcw_init[i] = .. */
-
-//     /* do not use progression order changes */
-//     /*m_Parameters.numpocs = 0; */
-//     /* m_Parameters.POC[i].... */
-
-//     /* do not restrain the size for a component.*/
-//     /* m_Parameters.max_comp_size = 0; */
-
-//     /** block encoding style for each component, do not use at the moment */
-//     /** J2K_CCP_CBLKSTY_TERMALL, J2K_CCP_CBLKSTY_LAZY, J2K_CCP_CBLKSTY_VSC, J2K_CCP_CBLKSTY_SEGSYM, J2K_CCP_CBLKSTY_RESET */
-//     /* m_Parameters.mode = 0; */
-
-//     /** number of resolutions */
-//     m_Parameters.numresolution = 6;
-
-//     /** progression order to use*/
-//     /** LRCP, RLCP, RPCL, PCRL, CPRL */
-//     m_Parameters.prog_order = LRCP;
-
-//     /** no "region" of interest, more precisally component */
-//     /* m_Parameters.roi_compno = -1; */
-//     /* m_Parameters.roi_shift = 0; */
-
-//     /* we are not using multiple tile parts for a tile. */
-//     /* m_Parameters.tp_on = 0; */
-//     /* m_Parameters.tp_flag = 0; */
-
-//     /* if we are using mct */
-//     /* opj_set_MCT(&m_Parameters, l_mct, l_offsets, NUM_COMPS); */
-
-//     /* image definition */
-//     l_current_param_ptr = m_Parameters;
-//     for
-//       (i=0; i<NUM_COMPS; ++i)
-//       {
-//   /* do not bother bpp useless */
-//   /*l_current_param_ptr->bpp = COMP_PREC; */
-//   l_current_param_ptr->dx = 1;
-//   l_current_param_ptr->dy = 1;
-//   l_current_param_ptr->h = m_Dimensions[1];
-//   l_current_param_ptr->sgnd = 0;
-//   l_current_param_ptr->prec = 8*m_BytePerPixel;
-//   l_current_param_ptr->w = m_Dimensions[0];
-//   l_current_param_ptr->x0 = 0;
-//   l_current_param_ptr->y0 = 0;
-//   ++l_current_param_ptr;
-//       }
-
-//     m_Codec = opj_create_compress(CODEC_JP2);
-//     opj_set_info_handler(m_Codec, info_callback, 00);
-//     opj_set_warning_handler(m_Codec, warning_callback, 00);
-//     opj_set_error_handler(m_Codec, error_callback, 00);
-
-//     if(!m_Codec)
-//       {
-//   itkExceptionMacro(<<"Failed to create openjpeg codec.");
-//       }
-
-//     m_OpenJpegImage = opj_image_tile_create(m_NbBands, m_Parameters, CLRSPC_SRGB);
-
-//     m_OpenJpegImage->x0 = 0;
-//     m_OpenJpegImage->y0 = 0;
-//     m_OpenJpegImage->x1 = m_Dimensions[0]-1;
-//     m_OpenJpegImage->y1 = m_Dimensions[1]-1;
-//     m_OpenJpegImage->color_space = CLRSPC_SRGB;
-
-//     if(!m_OpenJpegImage)
-//       {
-//   opj_destroy_codec(m_Code);
-//   itkExceptionMacro(<<"Failed to create openjpeg image.");
-//       }
-
-//     // Create default parameters
-//     opj_set_default_encoder_parameters(&m_Parameters);
-//     // TODO: add custom parameters here
-
-//     if(!opj_setup_encoder(m_Codec, &m_Parameters, m_OpenJpegImage))
-//       {
-//   itkExceptionMacro(<<"Failed to set up decoder parameters.");
-//       }
-
-//     m_File = fopen(m_FileName.c_str(),"wb");
-
-//     if(!m_File)
-//       {
-//   itkExceptionMacro(<<"Failed to open file: "<<m_FileName);
-//       }
-
-//     m_OpenJpegStream = opj_stream_create_default_file_stream(m_File, true);
-
-//     if(!m_OpenJpegStream)
-//       {
-//   itkExceptionMacro(<<"Failed to create file stream.");
-//       }
-
-//     std::streamoff buffer_x0 = this->GetIORegion().GetIndex()[0];
-//     std::streamoff buffer_y0 = this->GetIORegion().GetIndex()[1];
-//     std::streamsize buffer_size_x = this->GetIORegion().GetSize()[0];
-//     std::streamsize buffer_size_y = this->GetIORegion().GetSize()[1];
-
-//     std::streamsize buffer_size = this->GetIORegion().GetNumberOfPixels()*m_BytePerPixel*m_nbBands;
-
-//     unsigned int nb_tile_x = (unsigned int)vcl_ceil((double)m_Dimensions[0]/(double)m_Parameters.cp_tdx);
-//     unsigned int nb_tile_y = (unsigned int)vcl_ceil((double)m_Dimensions[1]/(double)m_Parameters.cp_tdy);
-
-//     unsigned int tile_index = nb_tile_x*buffer_y0/m_Parameters.cp_tdy+buffer_x0/m_Parameters.cp_tdx;
-
-//     OPJ_BYTE * desinterleaved_data = new OPJ_BYTE[buffer_size];
-
-//     std::streamoff step = m_NbBands*m_BytePerPixel;
-
-//     std::streamsize component_size = new
-
-//     for(comp = 0; comp<m_NbBands; ++comp)
-//       {
-
-//       }
-
-//     if(! opj_write_tile(m_Codec, tile_index, charstarbuffer, buffer_size, m_OpenJpegStream))
-//       {
-
-//       }
 }
 
 void JPEG2000ImageIO::WriteImageInformation()
