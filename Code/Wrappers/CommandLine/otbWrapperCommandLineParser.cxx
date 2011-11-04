@@ -93,14 +93,24 @@ CommandLineParser::GetPaths( std::vector<std::string> & paths, const std::string
     for(unsigned int i=0; i<pathAttribut.size(); i++)
       {
       // Suppress possible multi space at the beginning of the string
-      while (pathAttribut[i].size()>0 && pathAttribut[i][0]==' ')
+      while (pathAttribut[i].size()>1 && pathAttribut[i][0]==' ')
       {
       pathAttribut[i].erase(0, 1);
       }
+      
+      // case where the user set -key instead of --key
+      // Having __key is not not, we've splitted the expression to the
+      // first "--"
+      if(pathAttribut[i][0] == '-')
+        {
+        std::cerr<<"ERROR: Parameter keys have to set using \"--\", not \"-\""<<std::endl;
+        return INVALIDMODULEPATH;
+        }
       std::string fullPath = itksys::SystemTools::CollapseFullPath(pathAttribut[i].c_str());
+
       if( !itksys::SystemTools::FileIsDirectory(fullPath.c_str()) )
         {
-        std::cerr<<"module path Inavlid module path"<<std::endl;
+        std::cerr<<"module path Invalid module path: "<<fullPath<<std::endl;
         return INVALIDMODULEPATH;
         }
       paths.push_back(fullPath);

@@ -109,7 +109,7 @@ CommandLineLauncher::Load()
 
   if( this->CheckParametersPrefix() == true )
     {
-    std::cerr<<"ERROR: Parameter keys have to set using \"--\""<<std::endl;
+    std::cerr<<"ERROR: Parameter keys have to set using \"--\", not \"-\""<<std::endl;
     return true;
     }
 
@@ -430,7 +430,7 @@ CommandLineLauncher::LoadParameters()
               else
                 if (values.size() != 1 && values.size() != 2)
                   {
-                  std::cerr << "ERROR: Invalid number of value: " << paramKey << " , invalid number of values " << values.size() << std::endl;
+                  std::cerr << "ERROR: Invalid number of value for: \"" << paramKey << "\", invalid number of values " << values.size() << std::endl;
                   return INVALIDNUMBEROFVALUE;
                   }
               }
@@ -442,7 +442,19 @@ CommandLineLauncher::LoadParameters()
               else
                 if (values.size() != 1)
                   {
-                  std::cerr << "ERROR: Invalid number of value:" << paramKey << ", must have 1 value, not  " << values.size() << std::endl;
+                  std::cerr << "ERROR: Invalid number of value for: \"" << paramKey << "\", must have 1 value, not  " << values.size() << std::endl;
+                  // Try to find a "-" instead of "--"...
+                  itk::OStringStream oss;
+                  for(unsigned int i=0; i<values.size(); i++)
+                    {
+                    if(values[i][0] == '-')
+                      {
+                      oss<<std::string(values[i]).substr(1, std::string(values[i]).size()-1)<<", ";
+                      }
+                    }
+                  if( oss.str().size() >0 )
+                    std::cerr << "ERROR: If values \""<<oss.str().substr(0, oss.str().size()-2)<<"\" is/are keys, it should be prefix by \"--\"..."<< std::endl;
+               
                   return INVALIDNUMBEROFVALUE;
                   }
 
@@ -823,8 +835,8 @@ CommandLineLauncher::CheckParametersPrefix()
   // If the expression contains parameters
   if( spaceSplittedExp.size() > 2 )
     {
-    // Check if the chain "--" appears at least one time
-    if( m_Expression.find("--") == std::string::npos)
+    // Check if the chain "--" appears at least one time when "-" is present
+    if( m_Expression.find("--") == std::string::npos && m_Expression.find("-") != std::string::npos)
     {
     res = true;
     }
