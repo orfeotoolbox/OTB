@@ -50,13 +50,29 @@ ApplicationRegistry::AddApplicationPath(std::string newpath)
   std::ostringstream putEnvPath;
   putEnvPath << "ITK_AUTOLOAD_PATH=";
 
+  // Can be NULL if the env var is not set
   const char* currentEnv = itksys::SystemTools::GetEnv("ITK_AUTOLOAD_PATH");
-  if (currentEnv)
+
+#if defined(WIN32)
+  char pathSeparator = ';';
+#else
+  char pathSeparator = ':';
+#endif
+
+  if (currentEnv && strlen(currentEnv) > 0)
     {
-    putEnvPath << currentEnv << ":";
+    putEnvPath << currentEnv;
+
+    // The current value of the env var can already end with the pathSeparator
+    char lastChar = currentEnv[ strlen(currentEnv) - 1 ];
+    if ( lastChar != pathSeparator )
+      {
+      putEnvPath << pathSeparator;
+      }
     }
   putEnvPath << newpath;
 
+  std::cout << "ITK_AUTOLOAD_PATH " << putEnvPath.str() << std::endl;
   // do NOT use putenv() directly, since the string memory must be managed carefully
   itksys::SystemTools::PutEnv(putEnvPath.str().c_str());
 
