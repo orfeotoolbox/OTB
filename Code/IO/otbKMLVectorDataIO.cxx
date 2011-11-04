@@ -517,16 +517,21 @@ void KMLVectorDataIO::Write(const itk::DataObject* datag, char ** itkNotUsed(pap
   chrono.Start();
   // Retrieve data required for georeferencing
 
-  VectorDataConstPointerType data = dynamic_cast<const VectorDataType*>(datag);
+  VectorDataConstPointerType data_in = dynamic_cast<const VectorDataType*>(datag);
+  VectorDataConstPointerType data = data_in;
 
   std::string           projectionRefWkt = data->GetProjectionRef();
   OGRSpatialReferenceH oSRS = OSRNewSpatialReference(projectionRefWkt.c_str());
   if (!OSRIsGeographic(oSRS))
     {
     itkWarningMacro(<< "Vector data should be reprojected in geographic coordinates"
-                    << " before saving to KML. Please use otbVectorDataProjectionFilter. "
+                    << " before saving to KML. You may use the otbVectorDataProjectionFilter. "
                     << " The projection information is currently: " << projectionRefWkt
-                    << "\n We assume that you know what you're doing and proceed to save the KML file.");
+                    << "\n We will do the projection for you in WGS84 coordinates.");
+    ProjectionFilterType::Pointer projectionFilter = ProjectionFilterType::New();
+    projectionFilter->SetInput(data_in);
+    projectionFilter->Update();
+    data = projectionFilter->GetOutput();
     }
   OSRRelease(oSRS);
 

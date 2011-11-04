@@ -24,6 +24,7 @@
 #include "otbVectorData.h"
 
 #include "kml/dom/kml_ptr.h"
+#include "otbVectorDataProjectionFilter.h"
 
 namespace kmldom
 {
@@ -79,7 +80,7 @@ public:
   typedef PolygonListType::Pointer               PolygonListPointerType;
   typedef VectorDataType::Pointer                VectorDataPointerType;
   typedef VectorDataType::ConstPointer           VectorDataConstPointerType;
-
+  typedef VectorDataProjectionFilter<VectorDataType,VectorDataType> ProjectionFilterType;
   /*-------- This part of the interface deals with reading data. ------ */
 
   /** Determine the file type. Returns true if this VectorDataIO can read the
