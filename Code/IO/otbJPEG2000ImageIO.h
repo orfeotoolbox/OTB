@@ -107,7 +107,7 @@ protected:
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  JPEG2000ReaderInternal *m_InternalImage;
+  JPEG2000ReaderInternal* m_InternalReader;
 
 private:
   JPEG2000ImageIO(const Self &); //purposely not implemented

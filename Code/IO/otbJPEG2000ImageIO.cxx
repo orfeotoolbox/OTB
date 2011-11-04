@@ -22,8 +22,7 @@
 #include "otbSystem.h"
 
 #include "itkTimeProbe.h"
-
-
+#include "itkMacro.h"
 
 
 
@@ -60,19 +59,17 @@ class JPEG2000ReaderInternal
 public:
   JPEG2000ReaderInternal();
 
-  int Initialize();
+  opj_codec_t* GetCodec(){return this->m_Codec;};
+  FILE* GetFile(){return this->m_File;};
+  opj_image_t* GetImage(){return this->m_Image;};
+  opj_stream_t* GetStream(){return this->m_Stream;};
+  opj_codestream_info_v2* GetCstrInfo(){return this->m_CstrInfo;};
 
 	void Clean();
 
 	int CanRead();
 
 	int Open(const char *filename);
-
-  opj_codec_t *  m_Codec;
-  FILE* m_File;
-  opj_image_t* m_Image;
-  opj_stream_t* m_Stream;
-  opj_codestream_info_v2* m_CstrInfo;
 
   bool m_IsOpen;
   OPJ_CODEC_FORMAT m_CodecFormat;
@@ -92,11 +89,19 @@ public:
   unsigned int         m_XNbOfTile;
   unsigned int         m_YNbOfTile;
 
+private:
+  opj_codec_t *  m_Codec;
+  FILE* m_File;
+  opj_image_t* m_Image;
+  opj_stream_t* m_Stream;
+  opj_codestream_info_v2* m_CstrInfo;
+
+  int Initialize();
+
 };
 
 int JPEG2000ReaderInternal::Open(const char *filename)
 {
-  std::cout << "OPEN" << std::endl;
   this->Clean();
 
   // Open the file
@@ -137,7 +142,6 @@ int JPEG2000ReaderInternal::Open(const char *filename)
 
 void JPEG2000ReaderInternal::Clean()
 {
-  std::cout << "CLEAN" << std::endl;
   // Close the byte stream
   if (this->m_Stream)
     {
@@ -215,8 +219,6 @@ JPEG2000ReaderInternal::JPEG2000ReaderInternal()
 
 int JPEG2000ReaderInternal::Initialize()
 {
-  std::cout << "INITIALIZE" << std::endl;
-
   if (this->m_File)
     {
     // Creating the file stream
@@ -265,8 +267,6 @@ int JPEG2000ReaderInternal::Initialize()
       this->Clean();
       return 0;
       }
-
-    std::cout << "codestream info ok" << std::endl;
 
     // We can now retrieve the main information  of the image and the codestream
     this->m_Width = this->m_Image->x1 - this->m_Image->x0;
@@ -365,7 +365,7 @@ int JPEG2000ReaderInternal::CanRead()
 
 JPEG2000ImageIO::JPEG2000ImageIO()
 {
-  m_InternalImage = new JPEG2000ReaderInternal;
+  m_InternalReader = new JPEG2000ReaderInternal;
 
   // By default set number of dimensions to two.
   this->SetNumberOfDimensions(2);
@@ -384,8 +384,8 @@ JPEG2000ImageIO::JPEG2000ImageIO()
 
 JPEG2000ImageIO::~JPEG2000ImageIO()
 {
-  m_InternalImage->Clean();
-  delete m_InternalImage;
+  m_InternalReader->Clean();
+  delete m_InternalReader;
 }
 
 bool JPEG2000ImageIO::CanReadFile(const char* filename)
@@ -397,13 +397,11 @@ bool JPEG2000ImageIO::CanReadFile(const char* filename)
     return false;
     }
 
-  if ( !this->m_InternalImage->Open(filename) )
+  if ( !this->m_InternalReader->Open(filename) )
     {
-    this->m_InternalImage->Clean();
+    this->m_InternalReader->Clean();
     return false;
     }
-
-  std::cout<< "JPEG2000 file can be read and it is open" << std::endl;
 
   return true;
 }
@@ -422,8 +420,6 @@ void JPEG2000ImageIO::ReadVolume(void*)
 // Read image
 void JPEG2000ImageIO::Read(void* buffer)
 {
-  std::cout<< "ReadImageInformation: START" << std::endl;
-
   // Check if conversion succeed
   if (buffer == NULL)
     {
@@ -432,7 +428,7 @@ void JPEG2000ImageIO::Read(void* buffer)
     }
 
   // Re-open the file if it was closed
-  if ( !m_InternalImage->m_IsOpen )
+  if ( !m_InternalReader->m_IsOpen )
     {
     if ( !this->CanReadFile( m_FileName.c_str() ) )
       {
@@ -459,38 +455,35 @@ void JPEG2000ImageIO::Read(void* buffer)
   itk::TimeProbe chrono;
   chrono.Start();
 
-  std::cout<< "Try to set decoded area: START" << std::endl;
   // Set the decoded area
-  if( !otbopenjpeg_opj_set_decode_area(m_InternalImage->m_Codec,
-                                       m_InternalImage->m_Image,
+  if( !otbopenjpeg_opj_set_decode_area(m_InternalReader->GetCodec(),
+                                       m_InternalReader->GetImage(),
                                        lFirstColumn,
                                        lFirstLine,
                                        lFirstColumn + lNbColumns,
                                        lFirstLine + lNbLines) )
     {
     itkExceptionMacro(<< "The decoded area is not correct!");
-    m_InternalImage->Clean();
+    m_InternalReader->Clean();
     return;
     }
 
-  std::cout<< "Try to set decoded area: END" << std::endl;
 
-  std::cout<< "Try to decode the area: START" << std::endl;
-  if ( !( otbopenjpeg_opj_decode_v2(m_InternalImage->m_Codec, m_InternalImage->m_Stream, m_InternalImage->m_Image) &&
-          otbopenjpeg_opj_end_decompress(m_InternalImage->m_Codec, m_InternalImage->m_Stream) )
+  if ( !( otbopenjpeg_opj_decode_v2(m_InternalReader->GetCodec(), m_InternalReader->GetStream(), m_InternalReader->GetImage()) &&
+          otbopenjpeg_opj_end_decompress(m_InternalReader->GetCodec(), m_InternalReader->GetStream()) )
      )
     {
     itkExceptionMacro(<< "Failed to decode the image!");
-    m_InternalImage->Clean();
+    m_InternalReader->Clean();
     return;
     }
 
-  std::cout<< "Try to decode the area: END" << std::endl;
 
-  unsigned int nbPixel = (m_InternalImage->m_Image->x1 - m_InternalImage->m_Image->x0) *
-                         (m_InternalImage->m_Image->y1 - m_InternalImage->m_Image->y0);
-  std::cout<< "NbPixel = " <<  nbPixel << std::endl;
-  std::cout<< "NbOfComp = " <<  m_InternalImage->m_NbOfComponent << std::endl;
+
+  unsigned int nbPixel = (m_InternalReader->GetImage()->x1 - m_InternalReader->GetImage()->x0) *
+                         (m_InternalReader->GetImage()->y1 - m_InternalReader->GetImage()->y0);
+  //std::cout<< "NbPixel = " <<  nbPixel << std::endl;
+  //std::cout<< "NbOfComp = " <<  m_InternalReader->m_NbOfComponent << std::endl;
 
   // Convert buffer from void * to unsigned char *
   //unsigned char *p = static_cast<unsigned char *>(buffer);
@@ -508,11 +501,11 @@ void JPEG2000ImageIO::Read(void* buffer)
       unsigned short *p = static_cast<unsigned short *>(buffer);
       for(unsigned int itPixel = 0; itPixel < nbPixel; itPixel++)
         {
-        for (unsigned int itComp = 0; itComp < m_InternalImage->m_NbOfComponent; itComp++)
+        for (unsigned int itComp = 0; itComp < m_InternalReader->m_NbOfComponent; itComp++)
           {
-          OPJ_INT32* data = m_InternalImage->m_Image->comps[itComp].data;
+          OPJ_INT32* data = m_InternalReader->GetImage()->comps[itComp].data;
           //unsigned short* datashort = reinterpret_cast<unsigned short*>(data);
-          //OPJ_INT32 value = m_InternalImage->m_Image->comps[itComp].data[itPixel];
+          //OPJ_INT32 value = m_InternalReader->m_Image->comps[itComp].data[itPixel];
           *p = static_cast<unsigned short>(data[itPixel] & 0xffff);
           //p += m_BytePerPixel;
           p++;
@@ -527,18 +520,14 @@ void JPEG2000ImageIO::Read(void* buffer)
   chrono.Stop();
   otbMsgDevMacro(<< "JPEG2000ImageIO::Read took " << chrono.GetTotal() << " sec")
 
-  m_InternalImage->Clean();
-
-
-
+  m_InternalReader->Clean();
 }
 
 void JPEG2000ImageIO::ReadImageInformation()
 {
-  std::cout<< "ReadImageInformation: START" << std::endl;
   // If the internal image was not open we open it.
   // This is usually done when the user sets the ImageIO manually
-  if ( !m_InternalImage->m_IsOpen )
+  if ( !m_InternalReader->m_IsOpen )
     {
     if ( !this->CanReadFile( m_FileName.c_str() ) )
       {
@@ -548,10 +537,10 @@ void JPEG2000ImageIO::ReadImageInformation()
     }
 
   // Check some internal parameters of the JPEG2000 file
-  if ( !this->m_InternalImage->CanRead())
+  if ( !this->m_InternalReader->CanRead())
     {
     itkExceptionMacro(<< "Cannot read this file because some JPEG2000 parameters are not supported!");
-    this->m_InternalImage->Clean();
+    this->m_InternalReader->Clean();
     return;
     }
 
@@ -559,18 +548,18 @@ void JPEG2000ImageIO::ReadImageInformation()
   m_Spacing[1] = 1.0;
 
   // If we have some spacing information we use it
-  if ( (m_InternalImage->m_XResolution > 0) && (m_InternalImage->m_YResolution > 0) )
+  if ( (m_InternalReader->m_XResolution > 0) && (m_InternalReader->m_YResolution > 0) )
     {
       // We check previously that the X and Y resolution is equal between the components
-      m_Spacing[0] = m_InternalImage->m_XResolution[0];
-      m_Spacing[1] = m_InternalImage->m_YResolution[0];
+      m_Spacing[0] = m_InternalReader->m_XResolution[0];
+      m_Spacing[1] = m_InternalReader->m_YResolution[0];
     }
 
   m_Origin[0] = 0.0;
   m_Origin[1] = 0.0;
 
-  m_Dimensions[0] = m_InternalImage->m_Width;
-  m_Dimensions[1] = m_InternalImage->m_Height;
+  m_Dimensions[0] = m_InternalReader->m_Width;
+  m_Dimensions[1] = m_InternalReader->m_Height;
 
   this->SetNumberOfDimensions(2);
 
@@ -579,14 +568,14 @@ void JPEG2000ImageIO::ReadImageInformation()
     itkExceptionMacro(<< "Image size is null.");
     }
 
-  this->SetNumberOfComponents(m_InternalImage->m_NbOfComponent);
+  this->SetNumberOfComponents(m_InternalReader->m_NbOfComponent);
 
   // Automatically set the Type to Binary for JPEG2000 data
   this->SetFileTypeToBinary();
 
   // We check previously that these values are equal between all components
-  unsigned int precision = m_InternalImage->m_Precision[0];
-  int          isSigned = m_InternalImage->m_Signed[0];
+  unsigned int precision = m_InternalReader->m_Precision[0];
+  int          isSigned = m_InternalReader->m_Signed[0];
 
   if (precision <= 8)
     {
@@ -636,10 +625,10 @@ void JPEG2000ImageIO::ReadImageInformation()
 
   otbMsgDebugMacro(<< "==========================");
   otbMsgDebugMacro(<< "ReadImageInformation: ");
-  otbMsgDebugMacro(<< "Tile size (WxH): " << m_InternalImage->m_TileWidth << " x "
-                   << m_InternalImage->m_TileHeight);
-  otbMsgDebugMacro(<< "Number of tiles (Xdim x Ydim) : " << m_InternalImage->m_XNbOfTile
-                   << " x " << m_InternalImage->m_YNbOfTile);
+  otbMsgDebugMacro(<< "Tile size (WxH): " << m_InternalReader->m_TileWidth << " x "
+                   << m_InternalReader->m_TileHeight);
+  otbMsgDebugMacro(<< "Number of tiles (Xdim x Ydim) : " << m_InternalReader->m_XNbOfTile
+                   << " x " << m_InternalReader->m_YNbOfTile);
   otbMsgDebugMacro(<< "Precision: " << precision);
   otbMsgDebugMacro(<< "Signed: " << isSigned);
   otbMsgDebugMacro(<< "Number of octet per value: " << m_BytePerPixel);
@@ -653,7 +642,6 @@ void JPEG2000ImageIO::ReadImageInformation()
   otbMsgDebugMacro(<< "         ComponentSize      : " << this->GetComponentSize());
   otbMsgDebugMacro(<< "         GetPixelSize       : " << this->GetPixelSize());
 
-  std::cout<< "ReadImageInformation: END" << std::endl;
 }
 
 // Not yet implemented
