@@ -1,4 +1,4 @@
- /*
+/*
  * Copyright (c) 2002-2007, Communications and Remote Sensing Laboratory, Universite catholique de Louvain (UCL), Belgium
  * Copyright (c) 2002-2007, Professor Benoit Macq
  * Copyright (c) 2001-2003, David Janssens
@@ -33,6 +33,7 @@
  */
 #ifndef OPENJPEG_H
 #define OPENJPEG_H
+
 
 
 /* 
@@ -74,6 +75,8 @@ typedef unsigned char	OPJ_BYTE;
 typedef unsigned int	OPJ_SIZE_T;
 typedef double			OPJ_FLOAT64;
 typedef float			OPJ_FLOAT32;
+
+#include "openjpeg_mangle.h"
 
 // Avoid compile-time warning because parameter is not used
 #define OPJ_ARG_NOT_USED(x) (void)(x)

@@ -99,8 +99,8 @@ ENDIF(NOT OTB_USE_EXTERNAL_OSSIM)
 
 IF(OTB_COMPILE_JPEG2000)
   SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
-        ${OTB_SOURCE_DIR}/Utilities/otbopenjpeg
-        ${OTB_SOURCE_DIR}/Utilities/otbopenjpeg/libopenjpeg)
+        ${OTB_SOURCE_DIR}/Utilities/otbopenjpeg/libopenjpeg
+        ${OTB_BINARY_DIR}/Utilities/otbopenjpeg)
 ENDIF(OTB_COMPILE_JPEG2000)
 
 IF(OTB_USE_PQXX)

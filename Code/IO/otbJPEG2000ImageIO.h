@@ -26,7 +26,7 @@
 
 extern "C"
 {
-#include "otb_openjpeg.h"
+#include "openjpeg.h"
 }
 
 namespace otb
