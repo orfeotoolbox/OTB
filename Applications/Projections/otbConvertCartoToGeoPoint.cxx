@@ -82,11 +82,9 @@ private:
     AddParameter(ParameterType_Group, "carto", "Input cartographic coordinates");
     AddParameter(ParameterType_Float, "carto.x", "X cartographic coordinates");
     SetParameterDescription("carto.x", "X cartographic coordinates in the specified projection.");
-    //SetParameterFloat("carto.x", 0.);
 
     AddParameter(ParameterType_Float, "carto.y", "Y cartographic coordinates");
     SetParameterDescription("carto.y", "Y cartographic coordinates in the specified projection.");
-    //SetParameterFloat("carto.y", 0.);
 
     AddParameter(ParameterType_Choice, "mapproj", "Map projection type");
     SetParameterDescription("mapproj", "Type of projection used for the conversion. Possible values are: utm, lambert, lambert2, lambert93, sinus, eckert4, transmercator, mollweid and svy21.");
@@ -94,7 +92,7 @@ private:
     AddChoice("mapproj.utm", "utm");
     AddParameter(ParameterType_Int, "mapproj.utm.zone", "zone");
     SetParameterDescription( "mapproj.utm.zone", "UTM zone of the point.");
-    dynamic_cast< NumericalParameter<int> * >(GetParameterByKey("mapproj.utm.zone"))->SetMinimumValue(1);
+    SetMinimumParameterValue("mapproj.utm.zone", 1);
     SetParameterInt( "mapproj.utm.zone", 1);
     AddParameter(ParameterType_Empty, "mapproj.utm.hemisphere", "Is in north hemisphere");
     SetParameterDescription( "mapproj.utm.hemisphere", "Is the point is in the north hemisphere or not.");
