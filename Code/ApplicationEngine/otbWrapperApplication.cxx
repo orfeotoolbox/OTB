@@ -512,7 +512,7 @@ void Application::SetDefaultParameterFloat(std::string parameter, float value)
     }
 }
 
-void Application::SetMinimumParameterValue(std::string parameter, int value)
+void Application::SetMinimumParameterIntValue(std::string parameter, int value)
 {
   Parameter* param = GetParameterByKey(parameter);
 
@@ -525,7 +525,7 @@ void Application::SetMinimumParameterValue(std::string parameter, int value)
     itkExceptionMacro(<<parameter << "parameter can't be casted to int");
 }
 
-void Application::SetMaximumParameterValue(std::string parameter, int value)
+void Application::SetMaximumParameterIntValue(std::string parameter, int value)
 {
   Parameter* param = GetParameterByKey(parameter);
 
@@ -539,7 +539,7 @@ void Application::SetMaximumParameterValue(std::string parameter, int value)
   
 }
 
-void Application::SetMinimumParameterValue(std::string parameter, float value)
+void Application::SetMinimumParameterFloatValue(std::string parameter, float value)
 {
   Parameter* param = GetParameterByKey(parameter);
 
@@ -552,7 +552,7 @@ void Application::SetMinimumParameterValue(std::string parameter, float value)
     itkExceptionMacro(<<parameter << "parameter can't be casted to float");
 }
 
-void Application::SetMaximumParameterValue(std::string parameter, float value)
+void Application::SetMaximumParameterFloatValue(std::string parameter, float value)
 {
   Parameter* param = GetParameterByKey(parameter);
 

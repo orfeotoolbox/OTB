@@ -216,7 +216,7 @@ public:
    * Can be called for types :
    * \li ParameterType_Int
    */
-  void SetMinimumParameterValue(std::string parameter, int value);
+  void SetMinimumParameterIntValue(std::string parameter, int value);
 
  /* Set a maximum int value, must used in the
    * DoCreateParameters when setting a value by default
@@ -225,7 +225,7 @@ public:
    * Can be called for types :
    * \li ParameterType_Int
    */
-  void SetMaximumParameterValue(std::string parameter, int value);
+  void SetMaximumParameterIntValue(std::string parameter, int value);
 
  /* Set a minimum int value, must used in the
    * DoCreateParameters when setting a value by default
@@ -234,7 +234,7 @@ public:
    * Can be called for types :
    * \li ParameterType_Float
    */
-  void SetMinimumParameterValue(std::string parameter, float value);
+  void SetMinimumParameterFloatValue(std::string parameter, float value);
 
  /* Set a maximum int value, must used in the
    * DoCreateParameters when setting a value by default
@@ -243,7 +243,7 @@ public:
    * Can be called for types :
    * \li ParameterType_Float
    */
-  void SetMaximumParameterValue(std::string parameter, float value);
+  void SetMaximumParameterFloatValue(std::string parameter, float value);
 
   /* Set a string value
    *

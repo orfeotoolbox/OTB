@@ -92,7 +92,7 @@ private:
     AddChoice("mapproj.utm", "utm");
     AddParameter(ParameterType_Int, "mapproj.utm.zone", "zone");
     SetParameterDescription( "mapproj.utm.zone", "UTM zone of the point.");
-    SetMinimumParameterValue("mapproj.utm.zone", 1);
+    SetMinimumParameterIntValue("mapproj.utm.zone", 1);
     SetParameterInt( "mapproj.utm.zone", 1);
     AddParameter(ParameterType_Empty, "mapproj.utm.hemisphere", "Is in north hemisphere");
     SetParameterDescription( "mapproj.utm.hemisphere", "Is the point is in the north hemisphere or not.");

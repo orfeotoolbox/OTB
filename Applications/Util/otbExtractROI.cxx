@@ -123,17 +123,17 @@ private:
         }
       
       // Put the limit of the index and the size relative the image
-      SetMinimumValue("sizex", 0);
-      SetMaximumValue("sizex", largestRegion.GetSize(0));
+      SetMinimumParameterIntValue("sizex", 0);
+      SetMaximumParameterIntValue("sizex", largestRegion.GetSize(0));
 
-      SetMinimumValue("sizey", 0);
-      SetMaximumValue("sizey", largestRegion.GetSize(1));
+      SetMinimumParameterIntValue("sizey", 0);
+      SetMaximumParameterIntValue("sizey", largestRegion.GetSize(1));
 
-      SetMinimumValue("startx", 0);
-      SetMaximumValue("startx", largestRegion.GetSize(0));
+      SetMinimumParameterIntValue("startx", 0);
+      SetMaximumParameterIntValue("startx", largestRegion.GetSize(0));
         
-      SetMinimumValue("starty", 0);
-      SetMaximumValue("starty", largestRegion.GetSize(1));
+      SetMinimumParameterIntValue("starty", 0);
+      SetMaximumParameterIntValue("starty", largestRegion.GetSize(1));
     
       // Crop the roi region to be included in the largest possible
       // region

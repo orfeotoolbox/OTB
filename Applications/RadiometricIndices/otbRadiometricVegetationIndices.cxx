@@ -177,22 +177,22 @@ private:
     if ( HasValue("in") )
       {
        // Put the limit of the channel indices
-      SetMinimumValue("channels.red", 1);
-      SetMaximumValue("channels.red", GetParameterImage("in")->GetNumberOfComponentsPerPixel());
-      SetMinimumValue("channels.nir", 1);
-      SetMaximumValue("channels.nir", GetParameterImage("in")->GetNumberOfComponentsPerPixel());
+      SetMinimumParameterIntValue("channels.red", 1);
+      SetMaximumParameterIntValue("channels.red", GetParameterImage("in")->GetNumberOfComponentsPerPixel());
+      SetMinimumParameterIntValue("channels.nir", 1);
+      SetMaximumParameterIntValue("channels.nir", GetParameterImage("in")->GetNumberOfComponentsPerPixel());
       }
   }
 
-#define otbRadiometricVegetationIndicesMacro( key, type )             \
-  if( this->IsParameterEnabled(key) )                                 \
-    {                                                                 \
-    type##Filter::Pointer l_##type##Filter = type##Filter::New();     \
-    l_##type##Filter->SetRedIndex(redChannel);                        \
-    l_##type##Filter->SetNIRIndex(nirChannel);                        \
-    l_##type##Filter->SetInput(inImage);                              \
-    m_FilterList->PushBack( l_##type##Filter );                       \
-    m_ImageList->PushBack( l_##type##Filter->GetOutput() );           \
+#define otbRadiometricVegetationIndicesMacro( key, type )              \
+  if( this->IsParameterEnabled(key) )                                  \
+    {                                                                  \
+    type##Filter::Pointer l_##type##Filter = type##Filter::New();      \
+    l_##type##Filter->SetRedIndex(redChannel);                         \
+    l_##type##Filter->SetNIRIndex(nirChannel);                         \
+    l_##type##Filter->SetInput(inImage);                               \
+    m_FilterList->PushBack( l_##type##Filter );                        \
+    m_ImageList->PushBack( l_##type##Filter->GetOutput() );            \
     otbAppLogINFO(key << " indice added.");                            \
     }
 
