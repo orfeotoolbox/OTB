@@ -9,9 +9,9 @@ add_test(NAME apTvPrOrthorectification_UTM
                  Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
                  OrthoRectification
                  $<TARGET_FILE_DIR:otbapp_OrthoRectification>
-                 --in ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
-                 --out ${TEMP}/owTvOrthorectifTest_UTM.tif
-                 --dem ${INPUTDATA}/DEM/srtm_directory/
+                 --io.in ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+                 --io.out ${TEMP}/owTvOrthorectifTest_UTM.tif
+                 --elev.dem ${INPUTDATA}/DEM/srtm_directory/
                  --outputs.ulx  374100.8
                  --outputs.uly  4829184.8
                  --outputs.sizex 500
@@ -19,7 +19,7 @@ add_test(NAME apTvPrOrthorectification_UTM
                  --outputs.spacingx  0.5
                  --outputs.spacingy  -0.5
                  --map utm
-                 --gridspacing 4 # Spacing of the deformation field
+                 --opt.gridspacing 4 # Spacing of the deformation field
                  )
 
 ENDIF(OTB_DATA_USE_LARGEINPUT)
