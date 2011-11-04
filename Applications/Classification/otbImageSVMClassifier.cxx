@@ -134,7 +134,7 @@ private:
     m_ClassificationFilter->SetModel(m_ModelSVM);
   
     // Normalize input image if asked
-    if( HasValue("imstat")  )
+    if(IsParameterEnabled("imstat")  )
       {
       otbAppLogINFO("Input image normalization activated.");
       // Load input image statistics
@@ -157,7 +157,7 @@ private:
       }
     
   
-    if( HasValue("mask")  )
+    if(IsParameterEnabled("mask"))
       {
       otbAppLogINFO("Using input mask");
       // Load mask image and cast into LabeledImageType
