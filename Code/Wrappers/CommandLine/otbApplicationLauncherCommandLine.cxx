@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
 
   if (launcher->Load(exp) == true)
     {
-    if (launcher->ExecuteAndWriteOutput() == false)
+    if (launcher->ExecuteAndWriteOutput() == true)
       {
       return EXIT_FAILURE;
       }

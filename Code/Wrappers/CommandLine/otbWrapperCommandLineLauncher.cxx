@@ -138,26 +138,29 @@ CommandLineLauncher::Execute()
 {
   if( this->BeforeExecute() == false )
     {
-    return false;
+    return true;
     }
   
-  m_Application->Execute();
-  return true;
- 
+  int res = m_Application->Execute();
+  if (res == 0)
+    return false;
+  else return true;
 }
 
 
 bool
 CommandLineLauncher::ExecuteAndWriteOutput()
 {
-  if( this->BeforeExecute() == false )
+  if (this->BeforeExecute() == false)
     {
-    return false;
+    return true;
     }
 
-  m_Application->ExecuteAndWriteOutput();
-  return true;
- 
+  int res = m_Application->ExecuteAndWriteOutput();
+
+  if (res == 0)
+    return false;
+  else return true;
 }
 
 
