@@ -107,19 +107,19 @@ CommandLineLauncher::Load()
     itkExceptionMacro("No expression specified...");
     }
 
-  if( this->CheckParametersPrefix() == false )
+  if( this->CheckParametersPrefix() == true )
     {
     std::cerr<<"ERROR: Parameter keys have to set using \"--\""<<std::endl;
-    return false;
+    return true;
     }
 
-  if( this->CheckUnicity() == false )
+  if( this->CheckUnicity() == true )
     {
     std::cerr<<"ERROR: At least one key is not unique in the expression..."<<std::endl;
-    return false;
+    return true;
     }
 
-  if( this->LoadPath() == false )
+  if( this->LoadPath() == true )
     {
     if (m_Parser->GetPathsAsString(m_Expression).size() != 0 )
       {
@@ -131,18 +131,18 @@ CommandLineLauncher::Load()
       {
       std::cerr << "ERROR: Trouble loading path, please check your command line..." <<std::endl;
       }
-    return false;
+    return true;
     }
 
   this->LoadApplication();
 
-  return true;
+  return false;
 }
 
 bool
 CommandLineLauncher::Execute()
 {
-  if( this->BeforeExecute() == false )
+  if( this->BeforeExecute() == true )
     {
     return true;
     }
@@ -157,7 +157,7 @@ CommandLineLauncher::Execute()
 bool
 CommandLineLauncher::ExecuteAndWriteOutput()
 {
-  if (this->BeforeExecute() == false)
+  if (this->BeforeExecute() == true)
     {
     return true;
     }
@@ -176,22 +176,22 @@ CommandLineLauncher::BeforeExecute()
   if( m_Application.IsNull() )
     {
     std::cerr<<"ERROR: No loaded application..."<<std::endl;
-    return false;
+    return true;
     }
 
   // if help is asked...
   if ( m_Parser->IsAttributExists( "--help", m_Expression ) == true )
     {
     this->DisplayHelp();
-    return false;
+    return true;
     }
 
   // Check the key validity (ie. exist in the application parameters)
-  if ( this->CheckKeyValidity() == false )
+  if ( this->CheckKeyValidity() == true )
     {
     std::cerr<<"ERROR: At least one key is not known by the application..."<<std::endl;
     this->DisplayHelp();
-    return false;
+    return true;
     }
 
   try
@@ -203,7 +203,7 @@ CommandLineLauncher::BeforeExecute()
       this->LoadApplication();
       this->DisplayHelp();
             
-      return false;
+      return true;
       }
     }
   catch(itk::ExceptionObject& err)
@@ -214,7 +214,7 @@ CommandLineLauncher::BeforeExecute()
     this->LoadApplication();
     this->DisplayHelp();
         
-    return false;
+    return true;
     }
 
   m_Application->UpdateParameters();
@@ -227,7 +227,7 @@ CommandLineLauncher::BeforeExecute()
     if( val.size() != 1)
       {
       std::cerr<<"ERROR: Invalid progress argument, must be unique value..."<<std::endl;
-      return false;
+      return true;
       }
     if( val[0] == "1" || val[0] == "true")
       {
@@ -243,11 +243,11 @@ CommandLineLauncher::BeforeExecute()
       // Force to reload the application, the LoadParameters can change wrong values
       this->LoadApplication();
       this->DisplayHelp();
-      return false;
+      return true;
       }
     }
 
-  return true;
+  return false;
 }
 
 bool
@@ -264,10 +264,10 @@ CommandLineLauncher::LoadPath()
     }
   else
     {
-    return false;
+    return true;
     }
 
-  return true;
+  return false;
 }
 
 
@@ -779,7 +779,7 @@ CommandLineLauncher::DisplayParameterHelp( const Parameter::Pointer & param, con
 bool
 CommandLineLauncher::CheckUnicity()
 {
-  bool res = true;
+  bool res = false;
   // Extract expression keys
   std::vector<std::string> keyList = m_Parser->GetKeyList(m_Expression);
 
@@ -793,11 +793,11 @@ CommandLineLauncher::CheckUnicity()
       {
       if( keyRef == listTmp[j] )
         {
-        res = false;
+        res = true;
         break;
         }
       }
-    if (res == false )
+    if (res == true )
       break;
     }
 
@@ -807,7 +807,7 @@ CommandLineLauncher::CheckUnicity()
 bool
 CommandLineLauncher::CheckParametersPrefix()
 {
-  bool res = true;
+  bool res = false;
   // Extract Expression elements
   std::vector<itksys::String> spaceSplittedExp = itksys::SystemTools::SplitString(m_Expression.c_str(), ' ', false);
   // if the chain is "  module", SplitString will return: [ ], [module]
@@ -826,7 +826,7 @@ CommandLineLauncher::CheckParametersPrefix()
     // Check if the chain "--" appears at least one time
     if( m_Expression.find("--") == std::string::npos)
     {
-    res = false;
+    res = true;
     }
     }
 
@@ -836,7 +836,7 @@ CommandLineLauncher::CheckParametersPrefix()
 bool
 CommandLineLauncher::CheckKeyValidity()
 {
-  bool res = true;
+  bool res = false;
   // Extract expression keys
   std::vector<std::string> expKeyList = m_Parser->GetKeyList(m_Expression);
   
@@ -860,7 +860,7 @@ CommandLineLauncher::CheckKeyValidity()
       }
     if( keyExist == false )
       {
-      res = false;
+      res = true;
       break;
       }
     }

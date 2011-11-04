@@ -44,7 +44,7 @@ int main(int argc, char* argv[])
   typedef otb::Wrapper::CommandLineLauncher LauncherType;
   LauncherType::Pointer launcher = LauncherType::New();
 
-  if (launcher->Load(exp) == true)
+  if (launcher->Load(exp) == false)
     {
     if (launcher->ExecuteAndWriteOutput() == true)
       {
