@@ -68,7 +68,9 @@ class itkIndent {
      virtual void SetReferenceCount(int arg0);
    protected:
      itkLightObject();
-     //~itkLightObject();
+#if SWIGJAVA
+     ~itkLightObject();
+#endif
  };
  DECLARE_REF_COUNT_CLASS( itkLightObject )
  
@@ -100,7 +102,9 @@ class itkIndent {
      void SetMetaDataDictionary(itkMetaDataDictionary const & rhs);
    protected:
      itkObject();
-     //~itkObject();
+#if SWIGJAVA
+     ~itkObject();
+#endif
  };
  DECLARE_REF_COUNT_CLASS( itkObject )
 
@@ -110,7 +114,9 @@ class itkIndent {
      const float& GetProgress();
    protected:
      itkProcessObject();
-     //~itkProcessObject();
+#if SWIGJAVA
+     ~itkProcessObject();
+#endif
  };
  DECLARE_REF_COUNT_CLASS( itkProcessObject )
 
@@ -136,7 +142,9 @@ class itkIndent {
      char const * GetLibraryPath();
    protected:
      itkObjectFactoryBase();
-     //~itkObjectFactoryBase();
+#if SWIGJAVA
+     ~itkObjectFactoryBase();
+#endif
  };
  DECLARE_REF_COUNT_CLASS( itkObjectFactoryBase )
 
@@ -156,7 +164,9 @@ class itkIndent {
      virtual void Execute(itkObject * caller, itkEventObject const & event) = 0;
    protected:
      itkCommand();
-     //~itkCommand();
+#if SWIGJAVA
+     ~itkCommand();
+#endif
  };
  DECLARE_REF_COUNT_CLASS( itkCommand )
 

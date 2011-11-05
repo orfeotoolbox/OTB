@@ -61,7 +61,7 @@
        void UnRegister();
      protected:
   };
-
+/*
   %extend itkClass {
     public:
     itkClass() {
@@ -75,7 +75,7 @@
       self->UnRegister();
     }
   }
-/*
+
   %typemap(out) itkClass##_Pointer {
     itkClass* ptrRaw = $1.GetPointer();
     if (ptrRaw) {
