@@ -106,7 +106,6 @@ class itkIndent {
 
  class itkProcessObject : public itkObject {
    public:
-     //static itkProcessObject_Pointer New();
      virtual itkLightObject_Pointer CreateAnother() const;
      const float& GetProgress();
    protected:
