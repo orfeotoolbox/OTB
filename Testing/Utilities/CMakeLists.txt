@@ -350,18 +350,18 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 # -------            lib OpenJpeg   ------------------------------
 # Case for release 2.2.1
-IF(OTB_COMPILE_JPEG2000)
-ADD_TEST(utTvOpenJpegEncoder ${UTILITIES_TESTS}
-        openJpegEncoder
-        ${TEMP}/testjpeg.j2k
-)
-
-ADD_TEST(utTvOpenJpegDecoder ${UTILITIES_TESTS}
-        openJpegDecoder
-        ${TEMP}/testjpeg.j2k
-)
-SET_TESTS_PROPERTIES(utTvOpenJpegDecoder PROPERTIES DEPENDS utTvOpenJpegEncoder)
-ENDIF(OTB_COMPILE_JPEG2000)
+#IF(OTB_COMPILE_JPEG2000)
+#ADD_TEST(utTvOpenJpegEncoder ${UTILITIES_TESTS}
+#        openJpegEncoder
+#        ${TEMP}/testjpeg.j2k
+#)
+#
+#ADD_TEST(utTvOpenJpegDecoder ${UTILITIES_TESTS}
+#        openJpegDecoder
+#        ${TEMP}/testjpeg.j2k
+#)
+#SET_TESTS_PROPERTIES(utTvOpenJpegDecoder PROPERTIES DEPENDS utTvOpenJpegEncoder)
+#ENDIF(OTB_COMPILE_JPEG2000)
 
 # -------            lib expat  ------------------------------
 IF(NOT OTB_USE_EXTERNAL_EXPAT)
