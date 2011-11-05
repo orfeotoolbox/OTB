@@ -47,16 +47,11 @@
 
 class itkIndent {
    public:
-     ~itkIndent();
-     itkIndent & operator=(itkIndent const & arg0);
-     itkIndent(itkIndent const & arg0);
      static itkIndent * New();
      void Delete();
      itkIndent(int ind = 0);
      static char const * GetNameOfClass();
      itkIndent GetNextIndent();
-   private:
-   protected:
  };
 
  class itkLightObject {
@@ -71,15 +66,9 @@ class itkIndent {
      virtual void UnRegister() const;
      virtual int GetReferenceCount() const;
      virtual void SetReferenceCount(int arg0);
-   private:
-     itkLightObject(itkLightObject const & arg0);
-     void operator=(itkLightObject const & arg0);
    protected:
      itkLightObject();
      //~itkLightObject();
-     virtual void PrintSelf(std::ostream & os, itkIndent indent) const;
-     virtual void PrintHeader(std::ostream & os, itkIndent indent) const;
-     virtual void PrintTrailer(std::ostream & os, itkIndent indent) const;
  };
  DECLARE_REF_COUNT_CLASS( itkLightObject )
  
@@ -112,14 +101,9 @@ class itkIndent {
      itkMetaDataDictionary & GetMetaDataDictionary();
      itkMetaDataDictionary const & GetMetaDataDictionary() const;
      void SetMetaDataDictionary(itkMetaDataDictionary const & rhs);
-   private:
-     itkObject(itkObject const & arg0);
-     void operator=(itkObject const & arg0);
    protected:
      itkObject();
      //~itkObject();
-     virtual void PrintSelf(std::ostream & os, itkIndent indent) const;
-     bool PrintObservers(std::ostream & os, itkIndent indent) const;
  };
  DECLARE_REF_COUNT_CLASS( itkObject )
 
@@ -129,9 +113,9 @@ class itkIndent {
      //static itkProcessObject_Pointer New();
      virtual itkLightObject_Pointer CreateAnother() const;
      const float& GetProgress();
-   private:
-     itkProcessObject(itkProcessObject const & arg0);
-     void operator=(itkProcessObject const & arg0);
+   protected:
+     itkProcessObject();
+     //~itkProcessObject();
  };
  DECLARE_REF_COUNT_CLASS( itkProcessObject )
 
@@ -156,18 +140,7 @@ class itkIndent {
      virtual bool GetEnableFlag(char const * className, char const * subclassName);
      virtual void Disable(char const * className);
      char const * GetLibraryPath();
-   private:
-     itkObjectFactoryBase(itkObjectFactoryBase const & arg0);
-     void operator=(itkObjectFactoryBase const & arg0);
-     static void Initialize();
-     static void RegisterDefaults();
-     static void LoadDynamicFactories();
-     static void LoadLibrariesInPath(char const * arg0);
    protected:
-     virtual void PrintSelf(std::ostream & os, itkIndent indent) const;
-     void RegisterOverride(char const * classOverride, char const * overrideClassName, char const * description, bool enableFlag, itk::CreateObjectFunctionBase * createFunction);
-     virtual itkLightObject_Pointer CreateObject(char const * itkclassname);
-     virtual std::list< itkLightObject_Pointer > CreateAllObject(char const * itkclassname);
      itkObjectFactoryBase();
      //~itkObjectFactoryBase();
  };
@@ -185,8 +158,6 @@ class itkIndent {
      itkMetaDataObjectBase_Pointer & operator[](std::string const & arg0);
      itkMetaDataObjectBase const * operator[](std::string const & arg0) const;
      bool HasKey(std::string const & arg0) const;
-   private:
-   protected:
  };
 
 
@@ -196,9 +167,6 @@ class itkIndent {
      virtual char const * GetNameOfClass() const;
      virtual void Execute(itkObject * caller, itkEventObject const & event) = 0;
 //     virtual void Execute(itkObject const * caller, itkEventObject const & event) = 0;
-   private:
-     itkCommand(itkCommand const & arg0);
-     void operator=(itkCommand const & arg0);
    protected:
      itkCommand();
      //~itkCommand();
@@ -216,12 +184,6 @@ class itkIndent {
      virtual void Print(std::ostream & os) const;
      virtual char const * GetEventName() const = 0;
      virtual bool CheckEvent(itkEventObject const * arg0) const = 0;
-   private:
-     void operator=(itkEventObject const & arg0);
-   protected:
-     virtual void PrintSelf(std::ostream & os, itkIndent indent) const;
-     virtual void PrintHeader(std::ostream & os, itkIndent indent) const;
-     virtual void PrintTrailer(std::ostream & os, itkIndent indent) const;
  };
 
 %define DECLARE_itkEventObject_CLASS(class_name, superclass_name)
@@ -234,9 +196,6 @@ class itkIndent {
      virtual bool CheckEvent(itkEventObject const * e) const;
      virtual itkEventObject * MakeObject() const;
      class_name(class_name const & s);
-   private:
-     void operator=(class_name const & arg0);
-   protected:
  };
 
 %enddef

@@ -33,7 +33,6 @@ public:
   void SetCommandCallable(PyObject *obj);
   PyObject * GetCommandCallable();
   void Execute(itkObject *, const itkEventObject&);
-  //void Execute(const itkObject *, const EventObject&);
 protected:
   itkPyCommand();
   ~itkPyCommand();

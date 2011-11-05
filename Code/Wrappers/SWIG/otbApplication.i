@@ -195,30 +195,23 @@ public:
 protected:
   Registry();
   virtual ~Registry();
-
-private:
-  Registry(const Self&);
-  void operator=(const Self&);
 };
 
 
-class AddProcessToWatchEvent : public itkEventObject {
-   public:
-     AddProcessToWatchEvent();
-     ~AddProcessToWatchEvent();
-     virtual char const * GetEventName() const;
-     virtual bool CheckEvent(itkEventObject const * e) const;
-     virtual itkEventObject * MakeObject() const;
-     AddProcessToWatchEvent(AddProcessToWatchEvent const & s);
+class AddProcessToWatchEvent : public itkEventObject
+{
+public:
+  AddProcessToWatchEvent();
+  ~AddProcessToWatchEvent();
+  virtual char const * GetEventName() const;
+  virtual bool CheckEvent(itkEventObject const * e) const;
+  virtual itkEventObject * MakeObject() const;
+  AddProcessToWatchEvent(AddProcessToWatchEvent const & s);
 
-     itkProcessObject * GetProcess() const;
-     void SetProcess(itkProcessObject * process);
-     void SetProcessDescription(const std::string desc);
-     std::string GetProcessDescription() const;
-
-   private:
-     void operator=(AddProcessToWatchEvent const & arg0);
-   protected:
+  itkProcessObject * GetProcess() const;
+  void SetProcess(itkProcessObject * process);
+  void SetProcessDescription(const std::string desc);
+  std::string GetProcessDescription() const;
 };
 
 %include "PyCommand.i"
