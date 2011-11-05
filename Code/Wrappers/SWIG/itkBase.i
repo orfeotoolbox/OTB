@@ -91,10 +91,8 @@ class itkIndent {
      static void GlobalWarningDisplayOn();
      static void GlobalWarningDisplayOff();
      unsigned long AddObserver(itkEventObject const & event, itkCommand * arg1);
-//     unsigned long AddObserver(itkEventObject const & event, itkCommand * arg1) const;
      itkCommand * GetCommand(unsigned long tag);
      void InvokeEvent(itkEventObject const & arg0);
-//     void InvokeEvent(itkEventObject const & arg0) const;
      void RemoveObserver(unsigned long tag);
      void RemoveAllObservers();
      bool HasObserver(itkEventObject const & event) const;
@@ -166,7 +164,6 @@ class itkIndent {
    public:
      virtual char const * GetNameOfClass() const;
      virtual void Execute(itkObject * caller, itkEventObject const & event) = 0;
-//     virtual void Execute(itkObject const * caller, itkEventObject const & event) = 0;
    protected:
      itkCommand();
      //~itkCommand();
