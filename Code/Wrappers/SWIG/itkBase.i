@@ -93,7 +93,7 @@ class itkIndent {
      unsigned long AddObserver(itkEventObject const & event, itkCommand * arg1);
 //     unsigned long AddObserver(itkEventObject const & event, itkCommand * arg1) const;
      itkCommand * GetCommand(unsigned long tag);
-//     void InvokeEvent(itkEventObject const & arg0);
+     void InvokeEvent(itkEventObject const & arg0);
 //     void InvokeEvent(itkEventObject const & arg0) const;
      void RemoveObserver(unsigned long tag);
      void RemoveAllObservers();
