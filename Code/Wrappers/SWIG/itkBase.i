@@ -30,58 +30,20 @@
     std::ostringstream oss;
     oss << "Exception thrown in otbApplication $symname: " << ex.what();
     SWIG_exception( SWIG_RuntimeError, oss.str().c_str() );
+  } catch( const std::exception &ex ) {
+    SWIG_exception( SWIG_RuntimeError, ex.what() );
   } catch( ... ) {
     SWIG_exception( SWIG_UnknownError, "Unknown exception thrown in otbApplication $symname" );
   }
 }
-/*
-%exception {
-  try {
-    $action
-  } catch (const std::out_of_range& e) {
-    SWIG_exception(SWIG_IndexError, e.what());
-  } catch( const std::exception &ex ) {
-    SWIG_exception( SWIG_RuntimeError, ex.what() );
-  } catch (...) {
-    SWIG_exception( SWIG_UnknownError, "Unknown exception thrown in otbApplication $symname" );
-  }
-}
-*/
 
 // Some code from STL
 // Do not wrap if not necessary as it really slows down compilation
 
-//%include <std_iostream.i>
-//%include <std_sstream.i>
 %include <std_string.i>
 %include <std_vector.i>
-//%include "std_list.i"
-
 
 %template(vectorstring)   std::vector< std::string >;
-
-// list cannot be found for Java
-//%template(liststring)     std::list< std::string >;
-
-//%template(vectorB)        std::vector< bool >;
-//%template(vectorUC)       std::vector< unsigned char >;
-//%template(vectorUS)       std::vector< unsigned short >;
-//%template(vectorUL)       std::vector< unsigned long >;
-//%template(vectorSC)       std::vector< signed char >;
-//%template(vectorSS)       std::vector< signed short >;
-//%template(vectorSL)       std::vector< signed long >;
-//%template(vectorF)        std::vector< float >;
-//%template(vectorD)        std::vector< double >;
-
-//%template(listB)          std::list< bool >;
-//%template(listUC)         std::list< unsigned char >;
-//%template(listUS)         std::list< unsigned short >;
-//%template(listUL)         std::list< unsigned long >;
-//%template(listSC)         std::list< signed char >;
-//%template(listSS)         std::list< signed short >;
-//%template(listSL)         std::list< signed long >;
-//%template(listF)          std::list< float >;
-//%template(listD)          std::list< double >;
 
 class itkIndent {
    public:
