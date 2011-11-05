@@ -97,7 +97,6 @@ class itkIndent {
      void RemoveAllObservers();
      bool HasObserver(itkEventObject const & event) const;
      itkMetaDataDictionary & GetMetaDataDictionary();
-     itkMetaDataDictionary const & GetMetaDataDictionary() const;
      void SetMetaDataDictionary(itkMetaDataDictionary const & rhs);
    protected:
      itkObject();
