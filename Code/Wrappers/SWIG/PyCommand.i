@@ -35,7 +35,7 @@ public:
   void Execute(itkObject *, const itkEventObject&);
 protected:
   itkPyCommand();
-  ~itkPyCommand();
+  //~itkPyCommand();
 };
 DECLARE_REF_COUNT_CLASS( itkPyCommand )
 
