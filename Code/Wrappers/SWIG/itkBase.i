@@ -105,7 +105,6 @@ class itkIndent {
  };
  DECLARE_REF_COUNT_CLASS( itkObject )
 
- 
  class itkProcessObject : public itkObject {
    public:
      //static itkProcessObject_Pointer New();
@@ -116,7 +115,6 @@ class itkIndent {
      //~itkProcessObject();
  };
  DECLARE_REF_COUNT_CLASS( itkProcessObject )
-
 
  class itkObjectFactoryBase : public itkObject {
    public:
@@ -144,7 +142,6 @@ class itkIndent {
  };
  DECLARE_REF_COUNT_CLASS( itkObjectFactoryBase )
 
-
  class itkMetaDataDictionary {
    public:
      virtual void Print(std::ostream & os) const;
@@ -153,13 +150,9 @@ class itkIndent {
      void operator=(itkMetaDataDictionary const & arg0);
      ~itkMetaDataDictionary();
      std::vector< std::string > GetKeys() const;
-     itkMetaDataObjectBase_Pointer & operator[](std::string const & arg0);
-     itkMetaDataObjectBase const * operator[](std::string const & arg0) const;
      bool HasKey(std::string const & arg0) const;
  };
-
-
-
+ 
  class itkCommand : public itkObject {
    public:
      virtual char const * GetNameOfClass() const;
@@ -169,8 +162,6 @@ class itkIndent {
      //~itkCommand();
  };
  DECLARE_REF_COUNT_CLASS( itkCommand )
-
-
 
  class itkEventObject {
    public:
