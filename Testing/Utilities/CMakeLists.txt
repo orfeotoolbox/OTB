@@ -525,9 +525,9 @@ classifyKNN2.cxx
 )
 
 
-IF(OTB_COMPILE_JPEG2000)
-  SET(UtilitiesTests_SRCS ${UtilitiesTests_SRCS}  openJpegEncoder.cxx openJpegDecoder.cxx)
-ENDIF(OTB_COMPILE_JPEG2000)
+#IF(OTB_COMPILE_JPEG2000)
+#  SET(UtilitiesTests_SRCS ${UtilitiesTests_SRCS}  openJpegEncoder.cxx openJpegDecoder.cxx)
+#ENDIF(OTB_COMPILE_JPEG2000)
 
 IF(NOT OTB_USE_EXTERNAL_OPENTHREADS)
   SET(UtilitiesTests_SRCS ${UtilitiesTests_SRCS}
