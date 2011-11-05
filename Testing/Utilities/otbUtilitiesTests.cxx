@@ -43,10 +43,10 @@ REGISTER_TEST(otbSVMComposedKernelFunctorTest);
 REGISTER_TEST(ossimRadarSatSupport);
 REGISTER_TEST(itk2DScaleInvariantFeatureImageFilterTest);
 // register openJpeg tests if necessary
-#ifdef OTB_COMPILE_JPEG2000
- REGISTER_TEST(openJpegEncoder);
- REGISTER_TEST(openJpegDecoder);
-#endif
+//#ifdef OTB_COMPILE_JPEG2000
+// REGISTER_TEST(openJpegEncoder);
+// REGISTER_TEST(openJpegDecoder);
+//#endif
 // register OPENTHREADS testing
 #ifdef OTB_USE_INTERNAL_OPENTHREADS
  REGISTER_TEST(openthreadsSimpleThreader);
