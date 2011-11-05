@@ -56,13 +56,6 @@
        bool IsNotNull() const;
        bool IsNull() const;
        itkClass * GetPointer() const;
-       bool operator<(itkClass##_Pointer const & r) const;
-       bool operator>(itkClass##_Pointer const & r) const;
-       bool operator<=(itkClass##_Pointer const & r) const;
-       bool operator>=(itkClass##_Pointer const & r) const;
-       itkClass##_Pointer & operator=(itkClass##_Pointer const & r);
-       itkClass##_Pointer & operator=(itkClass## * r);
-//       itkClass * Print(std::ostream & os) const;
      private:
        void Register();
        void UnRegister();

@@ -52,13 +52,6 @@
        bool IsNotNull() const;
        bool IsNull() const;
        class_name * GetPointer() const;
-       bool operator<(class_name##_Pointer const & r) const;
-       bool operator>(class_name##_Pointer const & r) const;
-       bool operator<=(class_name##_Pointer const & r) const;
-       bool operator>=(class_name##_Pointer const & r) const;
-       class_name##_Pointer & operator=(class_name##_Pointer const & r);
-       class_name##_Pointer & operator=(class_name## * r);
-//       class_name * Print(std::ostream & os) const;
   };
 
   // pointers and references
