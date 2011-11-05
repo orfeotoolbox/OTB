@@ -447,8 +447,8 @@ void JPEG2000ImageIO::Read(void* buffer)
   otbMsgDevMacro(<< " IORegion         : " << this->GetIORegion());
   otbMsgDevMacro(<< " Nb Of Components : " << this->GetNumberOfComponents());
   otbMsgDevMacro(<< "IORegion: " << this->GetIORegion());
-  otbMsgDevMacro(<< "Area to read: " << buffer_x0 << " " << buffer_y0  << " "
-                 << buffer_x0 + buffer_size_x - 1 << " " << buffer_y0 + buffer_size_y - 1);
+  otbMsgDevMacro(<< "Area to read: " << lFirstColumn << " " << lFirstLine  << " "
+                 << lFirstColumn + lNbColumns << " " << lFirstLine + lNbLines);
   otbMsgDevMacro(<< "Component type: " << this->GetComponentTypeAsString(this->GetComponentType()));
 
   itk::TimeProbe chrono;
