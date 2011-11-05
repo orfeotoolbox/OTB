@@ -145,7 +145,6 @@ class itkIndent {
      virtual void Print(std::ostream & os) const;
      itkMetaDataDictionary();
      itkMetaDataDictionary(itkMetaDataDictionary const & arg0);
-     void operator=(itkMetaDataDictionary const & arg0);
      ~itkMetaDataDictionary();
      std::vector< std::string > GetKeys() const;
      bool HasKey(std::string const & arg0) const;
