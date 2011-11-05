@@ -160,9 +160,9 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/openjpeg_mangle_private.h.cmake.in
 #-----------------------------------------------------------------------------
 # pkgconfig support
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/libopenjpeg1.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/libopenjpeg1.pc @ONLY)
-INSTALL( FILES  ${CMAKE_CURRENT_BINARY_DIR}/libopenjpeg1.pc DESTINATION ${OPENJPEG_INSTALL_LIB_DIR}/pkgconfig )
-INSTALL( CODE
-  "EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E create_symlink \"libopenjpeg1.pc\" \"\$ENV{DESTDIR}${OPENJPEG_INSTALL_LIB_DIR}/pkgconfig/libopenjpeg.pc\")")
+#INSTALL( FILES  ${CMAKE_CURRENT_BINARY_DIR}/libopenjpeg1.pc DESTINATION ${OPENJPEG_INSTALL_LIB_DIR}/pkgconfig )
+#INSTALL( CODE
+#  "EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E create_symlink \"libopenjpeg1.pc\" \"\$ENV{DESTDIR}${OPENJPEG_INSTALL_LIB_DIR}/pkgconfig/libopenjpeg.pc\")")
 
 #-----------------------------------------------------------------------------
 # Compiler specific flags:
@@ -284,31 +284,18 @@ ENDIF(BUILD_TESTING)
 
 #-----------------------------------------------------------------------------
 # install all targets referenced as OPENJPEGTargets
-INSTALL(EXPORT OpenJPEGTargets DESTINATION ${OPENJPEG_INSTALL_PACKAGE_DIR})
-CONFIGURE_FILE( ${OPENJPEG_SOURCE_DIR}/CMake/OpenJPEGConfig.cmake.in
-  ${OPENJPEG_BINARY_DIR}/OpenJPEGConfig.cmake
-  @ONLY
-)
-INSTALL( FILES ${OPENJPEG_BINARY_DIR}/OpenJPEGConfig.cmake
-  DESTINATION ${OPENJPEG_INSTALL_PACKAGE_DIR}
-)
+#INSTALL(EXPORT OpenJPEGTargets DESTINATION ${OPENJPEG_INSTALL_PACKAGE_DIR})
+#CONFIGURE_FILE( ${OPENJPEG_SOURCE_DIR}/CMake/OpenJPEGConfig.cmake.in
+#  ${OPENJPEG_BINARY_DIR}/OpenJPEGConfig.cmake
+#  @ONLY
+#)
+#INSTALL( FILES ${OPENJPEG_BINARY_DIR}/OpenJPEGConfig.cmake
+#  DESTINATION ${OPENJPEG_INSTALL_PACKAGE_DIR}
+#)
 
 #-----------------------------------------------------------------------------
 # install CHANGES and LICENSE
-INSTALL(
-  FILES       CHANGES 
-              LICENSE
-  DESTINATION ${OPENJPEG_INSTALL_DOC_DIR})
-  
-
-#-----------------------------------------------------------------------------
-# otb added  
-IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
-  # Install OTB specifics includes files
-
-  INSTALL(FILES otb_openjpeg.h otb_openjpeg_mangle.h
-          DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbopenjpeg
-          COMPONENT Development)
-
-ENDIF(NOT OTB_INSTALL_NO_DEVELOPMENT)
-  
+#INSTALL(
+#  FILES       CHANGES 
+#              LICENSE
+#  DESTINATION ${OPENJPEG_INSTALL_DOC_DIR})
