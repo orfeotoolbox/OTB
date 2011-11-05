@@ -115,25 +115,6 @@ SET(OTB_EXECUTABLE_PATH "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
 SET(CXX_TEST_PATH ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 
 #-----------------------------------------------------------------------------
-# External libraries
-
-FIND_PACKAGE(OSGeo4W)
-# Put GDAL first, since on Windows, include dirs for other libs (curl, expat, mapnik)  contain gdal 1.5 includes
-INCLUDE(ImportGdal)
-INCLUDE(ImportLibLAS) # depends on ImportGdal
-INCLUDE(ImportExpat)
-INCLUDE(ImportITK)
-INCLUDE(ImportJPEG2000)
-INCLUDE(ImportFLTK) # depends on ImportGdal
-INCLUDE(ImportCurl)
-INCLUDE(ImportPqxx)
-INCLUDE(ImportBoost)
-INCLUDE(ImportMapnik) # depends on ImportBoost
-INCLUDE(ImportGetText)
-INCLUDE(ImportOpenThreads)
-INCLUDE(ImportOssim)
-
-#-----------------------------------------------------------------------------
 # Installation vars.
 # OTB_INSTALL_BIN_DIR          - binary dir (executables)
 # OTB_INSTALL_LIB_DIR          - library dir (libs)
@@ -212,6 +193,28 @@ STRING(REGEX REPLACE "^/" "" OTB_INSTALL_PACKAGE_DIR_CM24 "${OTB_INSTALL_PACKAGE
 STRING(REGEX REPLACE "^/" "" OTB_INSTALL_PYTHON_DIR_CM24 "${OTB_INSTALL_PYTHON_DIR}")
 
 INCLUDE(PreventInstallOnBuildTree)
+
+
+#-----------------------------------------------------------------------------
+# External libraries
+
+FIND_PACKAGE(OSGeo4W)
+# Put GDAL first, since on Windows, include dirs for other libs (curl, expat, mapnik)  contain gdal 1.5 includes
+INCLUDE(ImportGdal)
+INCLUDE(ImportLibLAS) # depends on ImportGdal
+INCLUDE(ImportExpat)
+INCLUDE(ImportITK)
+INCLUDE(ImportJPEG2000)
+INCLUDE(ImportFLTK) # depends on ImportGdal
+INCLUDE(ImportCurl)
+INCLUDE(ImportPqxx)
+INCLUDE(ImportBoost)
+INCLUDE(ImportMapnik) # depends on ImportBoost
+INCLUDE(ImportGetText)
+INCLUDE(ImportOpenThreads)
+INCLUDE(ImportOssim)
+
+
 
 INCLUDE_DIRECTORIES (
   ${OTB_BINARY_DIR}
