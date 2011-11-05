@@ -20,14 +20,6 @@
 
 #include "itkImageIOBase.h"
 
-#ifndef USE_OPJ_DEPRECATED
-#define USE_OPJ_DEPRECATED
-#endif
-
-extern "C"
-{
-#include "openjpeg.h" // FIXME otb_openjpeg.h
-}
 
 namespace otb
 {
@@ -112,11 +104,6 @@ protected:
 private:
   JPEG2000ImageIO(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
-
-  /** Openjpeg decoder parameters */
-  opj_dparameters_t m_Parameters;
-  /** Openjpeg codec */
-  opj_codec_t * m_Codec;
 
   /** pixel nb of octets */
   unsigned int m_BytePerPixel;

@@ -24,6 +24,11 @@
 #include "itkTimeProbe.h"
 #include "itkMacro.h"
 
+extern "C"
+{
+#include "openjpeg.h" // FIXME otb_openjpeg.h
+}
+
 
 /**
    sample error debug callback expecting no client object
