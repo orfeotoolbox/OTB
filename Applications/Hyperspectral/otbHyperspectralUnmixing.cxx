@@ -42,10 +42,10 @@ typedef otb::StreamingStatisticsVectorImageFilter<DoubleVectorImageType> Streami
 typedef otb::EigenvalueLikelihoodMaximisation<double> ELMType;
 typedef otb::VCAImageFilter<DoubleVectorImageType> VCAFilterType;
 
-typedef otb::UnConstrainedLeastSquareImageFilter<DoubleVectorImageType,DoubleVectorImageType,double> UCLSUnmixingFilterType;
-typedef otb::ISRAUnmixingImageFilter<DoubleVectorImageType,DoubleVectorImageType,double>             ISRAUnmixingFilterType;
-typedef otb::NCLSUnmixingImageFilter<DoubleVectorImageType,DoubleVectorImageType,double>             NCLSUnmixingFilterType;
-typedef otb::FCLSUnmixingImageFilter<DoubleVectorImageType,DoubleVectorImageType,double>             FCLSUnmixingFilterType;
+typedef otb::UnConstrainedLeastSquareImageFilter<DoubleVectorImageType, DoubleVectorImageType, double> UCLSUnmixingFilterType;
+typedef otb::ISRAUnmixingImageFilter<DoubleVectorImageType, DoubleVectorImageType, double>             ISRAUnmixingFilterType;
+typedef otb::NCLSUnmixingImageFilter<DoubleVectorImageType, DoubleVectorImageType, double>             NCLSUnmixingFilterType;
+typedef otb::FCLSUnmixingImageFilter<DoubleVectorImageType, DoubleVectorImageType, double>             FCLSUnmixingFilterType;
 
 typedef otb::VectorImageToMatrixImageFilter<DoubleVectorImageType> VectorImageToMatrixImageFilterType;
 
