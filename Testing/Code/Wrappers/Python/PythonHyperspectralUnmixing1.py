@@ -14,8 +14,8 @@ app.SetParameterString("in", argv[1])
 #output image
 app.SetParameterString("out", argv[2])
 
-#number of endmembers
-app.SetParameterInt("ne", int(argv[3]))
+#input endmembers
+app.SetParameterString("ie", argv[3])
 
 #unmixing algorithm
 app.SetParameterString("ua", argv[4])

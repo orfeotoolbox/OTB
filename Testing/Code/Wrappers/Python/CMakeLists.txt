@@ -21,13 +21,12 @@ add_test( NAME pyTvRescale
                   ${OTB_DATA_ROOT}/Input/ToulouseExtract_WithGeom.tif
                   ${TEMP}/pyTvRescale)
                   
-
 add_test( NAME pyTvHyperspectralUnmixingUCLS
           COMMAND ${TEST_DRIVER} Execute
                   ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonHyperspectralUnmixing1.py
                   ${OTB_DATA_ROOT}/Input/Hyperspectral/synthetic/hsi_cube.tif
                   ${TEMP}/pyTvHyperspectralUnmixing_ucls.tif
-                  5
+                  ${OTB_DATA_ROOT}/Input/Hyperspectral/synthetic/endmembers.tif
                   ucls
                   )
 
@@ -36,7 +35,7 @@ add_test( NAME pyTvHyperspectralUnmixingFCLS
                   ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonHyperspectralUnmixing1.py
                   ${OTB_DATA_ROOT}/Input/Hyperspectral/synthetic/hsi_cube.tif
                   ${TEMP}/pyTvHyperspectralUnmixing_fcls.tif
-                  5
+                  ${OTB_DATA_ROOT}/Input/Hyperspectral/synthetic/endmembers.tif
                   fcls
                   )
 
