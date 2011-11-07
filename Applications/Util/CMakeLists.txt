@@ -42,3 +42,7 @@ OTB_CREATE_APPLICATION(NAME           KmzExport
 OTB_CREATE_APPLICATION(NAME           OSMDownloader
                        SOURCES        otbOSMDownloader.cxx
                        LINK_LIBRARIES OTBIO)
+
+OTB_CREATE_APPLICATION(NAME           ConcatenateVectorData
+                       SOURCES        otbConcatenateVectorData.cxx
+                       LINK_LIBRARIES OTBIO)
