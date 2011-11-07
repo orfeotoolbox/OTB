@@ -191,35 +191,21 @@ QWidget* QtWidgetView::CreateDoc()
 void QtWidgetView::SetDocParameters( std::string & val )
 {
   const std::vector<std::string> appKeyList = m_Application->GetParametersKeys( false );
-  //const unsigned int nbOfParam = appKeyList.size();
     
   itk::OStringStream oss;
   
-  // Mandatory parameters
-  oss << "<h3>Mandatory parameters</h3>";
+  oss << "<h3>Parameters</h3>";
   oss<<"<ul>";
   std::string paramDocs("");
 
-  this->GetDocParameters( paramDocs, true );
+  this->GetDocParameters( paramDocs );
   oss<<paramDocs;
-  oss<<"</ul>";
-
-  paramDocs  ="";
-
-  // Optional parameters
-  oss << "<h3>Optional parameters</h3>";
-  oss << "<ul>";
-
-  this->GetDocParameters( paramDocs, false );
-
-  oss<<paramDocs;
-  
   oss<<"</ul>";
 
   val.append(oss.str());
 }
 
-void QtWidgetView::GetDocParameters( std::string & val, bool mandatory)
+void QtWidgetView::GetDocParameters( std::string & val )
 {
   itk::OStringStream oss;
   const std::vector<std::string> appKeyList = m_Application->GetParametersKeys( false );
@@ -230,37 +216,34 @@ void QtWidgetView::GetDocParameters( std::string & val, bool mandatory)
      {
      const std::string key(appKeyList[i]);
      Parameter::Pointer param =  m_Application->GetParameterByKey( key );
-     if( param->GetMandatory() == mandatory )
+     if( m_Application->GetParameterType(key) ==  ParameterType_Group)
        {
-       if( m_Application->GetParameterType(key) ==  ParameterType_Group)
+       oss << "<li><b>[group] "<<param->GetName()<<": </b>";
+       if(std::string(param->GetDescription()).size()!=0)
          {
-         oss << "<li><b>[group] "<<param->GetName()<<": </b>";
-         if(std::string(param->GetDescription()).size()!=0)
-           {
-           oss<<param->GetDescription();
-           }
-         std::string grDoc;
-         GetDocParameterGroup( grDoc, key, 1);
-         oss<<grDoc;
-         oss<<"</li><br />";
+         oss<<param->GetDescription();
          }
-       else if( m_Application->GetParameterType(key) ==  ParameterType_Choice )
+       std::string grDoc;
+       GetDocParameterGroup( grDoc, key );
+       oss<<grDoc;
+       oss<<"</li><br />";
+       }
+     else if( m_Application->GetParameterType(key) ==  ParameterType_Choice )
+       {
+       oss << "<li><b> [choice] "<<param->GetName()<<": </b>";
+       if(std::string(param->GetDescription()).size()!=0)
          {
-        oss << "<li><b> [choice] "<<param->GetName()<<": </b>";
-         if(std::string(param->GetDescription()).size()!=0)
-           {
-           oss<<param->GetDescription();
-           }
-         std::string grDoc;
-         GetDocParameterChoice(grDoc, key, 1);
-         oss<<grDoc;
-         oss<<"</li><br />";
+         oss<<param->GetDescription();
          }
-       else
-         {
-         oss << "<li><b><code>[param] " << param->GetName() << ": </code></b>";
-         oss << param->GetDescription()<< "</li>";
-         }
+       std::string grDoc;
+       GetDocParameterChoice(grDoc, key);
+       oss<<grDoc;
+       oss<<"</li><br />";
+       }
+     else
+       {
+       oss << "<li><b><code>[param] " << param->GetName() << ": </code></b>";
+       oss << param->GetDescription()<< "</li>";
        }
      }
    
@@ -271,7 +254,7 @@ void QtWidgetView::GetDocParameters( std::string & val, bool mandatory)
 }
 
 
-void QtWidgetView::GetDocParameterGroup( std::string & val, const std::string & key, int level )
+void QtWidgetView::GetDocParameterGroup( std::string & val, const std::string & key )
 {
   Parameter * paramGr  = m_Application->GetParameterByKey( key );
   if( !dynamic_cast<ParameterGroup *>(paramGr))
@@ -295,7 +278,7 @@ void QtWidgetView::GetDocParameterGroup( std::string & val, const std::string & 
         oss<<param->GetDescription();
         }
       std::string grDoc;
-      GetDocParameterGroup( grDoc, fullKey, level+1);
+      GetDocParameterGroup( grDoc, fullKey );
       oss<<grDoc;
       oss<<"</li>";
       }
@@ -307,7 +290,7 @@ void QtWidgetView::GetDocParameterGroup( std::string & val, const std::string & 
         oss<<param->GetDescription();
         }
       std::string grDoc;
-      GetDocParameterChoice(grDoc, fullKey, level+1);
+      GetDocParameterChoice(grDoc, fullKey );
       oss<<grDoc;
       oss<<"</li>";
       }
@@ -322,7 +305,7 @@ void QtWidgetView::GetDocParameterGroup( std::string & val, const std::string & 
 }
 
 
-void QtWidgetView::GetDocParameterChoice( std::string & val, const std::string & key, int level )
+void QtWidgetView::GetDocParameterChoice( std::string & val, const std::string & key )
 {
   Parameter * paramCh  = m_Application->GetParameterByKey( key );
   if( !dynamic_cast<ChoiceParameter *>(paramCh))
@@ -346,7 +329,7 @@ void QtWidgetView::GetDocParameterChoice( std::string & val, const std::string &
         oss<<group->GetDescription();
         }
 
-    GetDocParameterGroup( grDoc, fullKey, level+1);
+    GetDocParameterGroup( grDoc, fullKey );
     oss<<grDoc;
     oss<<"</li>";
     }
