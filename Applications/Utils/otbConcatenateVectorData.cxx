@@ -15,75 +15,89 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#include "otbConcatenateVectorData.h"
-
+#include "otbWrapperApplication.h"
+#include "otbWrapperApplicationFactory.h"
 
 #include "otbConcatenateVectorDataFilter.h"
-#include "otbVectorData.h"
-#include "otbVectorDataFileWriter.h"
-#include "otbVectorDataFileReader.h"
 
 namespace otb
 {
-
-int ConcatenateVectorData::Describe(ApplicationDescriptor* descriptor)
+namespace Wrapper
 {
-  descriptor->SetName("ConcatenateVectorData");
-  descriptor->SetDescription("Concatenate VectorDatas");
-  descriptor->AddOptionNParams("InputVectorDatas","Input VectorDatas to concatenate","in", true, ApplicationDescriptor::FileName);
-  descriptor->AddOption("OutputVectorData","Output vector data","out", 1, true, ApplicationDescriptor::FileName);
 
-  return EXIT_SUCCESS;
-}
-
-int ConcatenateVectorData::Execute(otb::ApplicationOptionsResult* parseResult)
+class ConcatenateVectorData : public Application
 {
-  try
-    {
-    typedef otb::VectorData<>                                 VectorDataType;
-    typedef otb::VectorDataFileReader<VectorDataType>         ReaderType;
-    typedef otb::VectorDataFileWriter<VectorDataType>         WriterType;
-    typedef otb::ConcatenateVectorDataFilter<VectorDataType>  ConcatenateFilterType;
+
+public:
+  /** Standard class typedefs. */
+  typedef ConcatenateVectorData         Self;
+  typedef Application                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
+
+  /** Standard macro */
+  itkNewMacro(Self);
+
+  itkTypeMacro(ConcatenateVectorData, otb::Application);
+
+  /** VectorData Concatenate filter*/
+  typedef otb::ConcatenateVectorDataFilter<VectorDataType>  ConcatenateFilterType;
+
+private:
+  ConcatenateVectorData()
+  {
+    SetName("ConcatenateVectorData");
+    SetDescription("Concatenate VectorDatas");
+
+//     SetDocName("Rescale Image Application");
+//     SetDocLongDescription("This application scale the given image pixel intensity between two given values. "
+//                           "By default min (resp. max) value is set to 0 (resp. 255).");
+//     SetDocLimitations("None");
+//     SetDocAuthors("OTB-Team");
+//     SetDocSeeAlso(" ");
+//     SetDocCLExample("otbApplicationLauncherCommandLine Rescale ${OTB-BIN}/bin"
+//                     " --in ${OTB-DATA}/Input/poupees.tif --out rescaledImage.tif --outmin 20 --outmax 150");
+//     AddDocTag("Image Manipulation");
+  }
+
+  virtual ~ConcatenateVectorData()
+  {
+  }
+
+  void DoCreateParameters()
+  {
+    AddParameter(ParameterType_InputVectorDataList, "vd", "Input VectorDatas to concatenate");
+    SetParameterDescription("vd", "Vector Data of sample used to validate the estimator.");
+
+    AddParameter(ParameterType_OutputVectorData, "out", "Concatenated VectorData");
+  }
 
 
-    // Get number of input vectorDatas
-    unsigned int nbInputs = parseResult->GetNumberOfParameters("InputVectorDatas");
+  void DoUpdateParameters()
+  {
+    // Nothing to do here for the parameters : all are independent
+  }
 
-    // Instanciate a concatenate filter Concatenate the vector datas
-    ConcatenateFilterType::Pointer concatenate = ConcatenateFilterType::New();
-  
-    for (unsigned int idx = 0; idx < nbInputs; idx++)
+  void DoExecute()
+  {
+    // Get the input VectorData list
+    VectorDataListType* vectorDataList = GetParameterVectorDataList("vd");
+    
+    // Concatenate filter object
+    m_ConcatenateFilter = ConcatenateFilterType::New();
+    
+    for (unsigned int idx = 0; idx < vectorDataList->Size(); idx++)
       {
-      // Reader object
-      ReaderType::Pointer reader = ReaderType::New();
-      reader->SetFileName(parseResult->GetParameterString("InputVectorDatas", idx ).c_str());
-      reader->Update();
-      concatenate->AddInput(reader->GetOutput());
+      m_ConcatenateFilter->AddInput(vectorDataList->GetNthElement(idx));
       }
-    
-    // Write the output
-    WriterType::Pointer writer = WriterType::New();
-    writer->SetFileName(parseResult->GetParameterString("OutputVectorData").c_str());
-    writer->SetInput(concatenate->GetOutput());
-    writer->Update();
-    
-    }
-  catch ( itk::ExceptionObject & err )
-    {
-    std::cout << "Following otbException caught :" << std::endl;
-    std::cout << err << std::endl;
-    return EXIT_FAILURE;
-    }
-  catch ( std::bad_alloc & err )
-    {
-    std::cout << "Exception bad_alloc : "<<(char*)err.what()<< std::endl;
-    return EXIT_FAILURE;
-    }
-  catch ( ... )
-    {
-    std::cout << "Unknown Exception found !" << std::endl;
-    return EXIT_FAILURE;
-    }
-  return EXIT_SUCCESS;
+
+    // Set the output
+    SetParameterOutputVectorData("out", m_ConcatenateFilter->GetOutput());
+  }
+  
+  ConcatenateFilterType::Pointer m_ConcatenateFilter;
+  };
+
 }
 }
+OTB_APPLICATION_EXPORT(otb::Wrapper::ConcatenateVectorData)
