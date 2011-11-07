@@ -335,7 +335,22 @@ CommandLineLauncher::LoadParameters()
     const bool paramExists( m_Parser->IsAttributExists( std::string("--").append(paramKey), m_Expression )  );
     const bool hasValue = m_Application->HasValue( paramKey );
     // Check if mandatory parameter are present and have value
-    if( param->GetMandatory() == true && param->GetRoot()->GetActive())
+    std::cout<<"=========== Key: "<<paramKey<<std::endl;
+    std::cout<<"manda: "<<param->GetMandatory()<<std::endl;
+    std::cout<<"actibe: "<<param->GetRoot()->GetActive()<<std::endl;
+    std::cout<<"!paramExists: "<<!paramExists<<std::endl;
+    std::cout<<"hasValue: "<<hasValue<<std::endl;
+    std::cout<<"root: "<<param->IsRoot()<<std::endl;
+
+    // A param has to be set if it is mandatory and :
+    // is root OR its parent is active
+    // NB: a root parameter is not active
+    bool mustBeSet = false;
+    if( param->GetMandatory() == true )
+      if( param->GetRoot()->GetActive() || param->IsRoot() )
+        mustBeSet = true;
+
+    if( mustBeSet )//param->GetMandatory() == true && param->GetRoot()->GetActive())
       {
       if( !paramExists )
         {
@@ -346,8 +361,7 @@ CommandLineLauncher::LoadParameters()
           return MISSINGMANDATORYPARAMETER;
           }
         }
-
-      if( paramExists )
+      else
         {
         values = m_Parser->GetAttribut( std::string("--").append(paramKey), m_Expression);
         if(  values.size() == 0 && !m_Application->HasValue( paramKey ) )
@@ -357,9 +371,11 @@ CommandLineLauncher::LoadParameters()
           }
         }
       }
+    
     // Check if non mandatory parameter have values
     else
       {
+      std::cout<<"hereeeeeeeeeeeeeee else"<<std::endl;
       if( paramExists )
         {
         values = m_Parser->GetAttribut( std::string("--").append(paramKey), m_Expression);
@@ -369,6 +385,7 @@ CommandLineLauncher::LoadParameters()
           return MISSINGPARAMETERVALUE;
           }
         }
+
       }
 
     // If the param is optional and hasn't been set : don't do anything
