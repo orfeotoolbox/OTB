@@ -52,7 +52,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Translation application");
-    //SetDocCLExample("otbApplicationLauncherCommandLine RigidTransformResample ${OTB-BIN}/bin --in ${OTB-Data}/Input/QB_Toulouse_Ortho_XS.tif --out otbConvertWithScalingOutput.png uchar --type linear");
+    SetDocCLExample("otbApplicationLauncherCommandLine RigidTransformResample ${OTB-BIN}/bin --in ${OTB-Data}/Input/poupees.tif --out rigitTransformImage.tf --tx 5 --ty 5");
     AddDocTag("Conversion");
     AddDocTag("Image Projection");
   }
