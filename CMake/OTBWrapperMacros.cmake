@@ -75,10 +75,11 @@ macro(OTB_TEST_APPLICATION)
 
    add_test(NAME ${TESTAPPLICATION_NAME}
             COMMAND otbTestDriver
-                    ${TESTAPPLICATION_VALIDATION}
+                    ${TESTAPPLICATION_VALID}
                     Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
                     ${TESTAPPLICATION_APP}
                     $<TARGET_FILE_DIR:otbapp_${TESTAPPLICATION_APP}>
-                    ${TESTAPPLICATION_OPTIONS})
+                    ${TESTAPPLICATION_OPTIONS}
+--testenv)
    
 endmacro(OTB_TEST_APPLICATION)
