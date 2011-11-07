@@ -44,8 +44,8 @@ namespace Wrapper
  * To be valid, the expression must be as follow:
  * ModuleName (ModulePath) --attribut1_Key attribut1_Value --attribut2_Key
  * attribut2_Value
- * After the attribut key, if the user give several values (expression
- * without \"--\" separated by space), it will automacally be
+ * After the attribute key, if the user give several values (expression
+ * without \"--\" separated by space), it will automatically be
  * interpreted as a list.
  */
 
@@ -106,6 +106,9 @@ public:
 
   /** Create and display the help of the application */
   void DisplayHelp();
+
+  /** Performs specific action for testing environment */
+  void LoadTestEnv();
 
 protected:
   /** Constructor */
