@@ -39,6 +39,7 @@ int otbPointSetFileReader(int argc, char * argv[])
   for (unsigned long i = 0; i < nPoints; ++i)
     {
     PointSetType::PointType point;
+    point.Fill(0);
     data->GetPoint(i, &point);
     fout << point << " : ";
     PointSetType::PixelType value(itk::NumericTraits<PointSetType::PixelType>::Zero);
