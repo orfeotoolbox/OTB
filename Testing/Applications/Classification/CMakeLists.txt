@@ -27,6 +27,7 @@ ADD_TEST(NAME apTvClTrainSVMImagesClassifierQB1
     --b 2
     --opt true
     --out ${TEMP}/clsvmModelQB1.svm
+    --testenv
 )
 SET_TESTS_PROPERTIES(apTvClTrainSVMImagesClassifierQB1 PROPERTIES DEPENDS apTvClEstimateImagesStatisticsQB1)
 
@@ -47,6 +48,7 @@ ADD_TEST(NAME apTvClTrainSVMImagesClassifierQB1_allOpt
     --vtr 0.5
     --opt true
     --out ${TEMP}/clsvmModelQB1_allOpt.svm.svm
+    --testenv
 )
 
 SET_TESTS_PROPERTIES(apTvClTrainSVMImagesClassifierQB1_allOpt PROPERTIES DEPENDS apTvClEstimateImagesStatisticsQB1)
@@ -64,6 +66,7 @@ ADD_TEST(NAME apTvClValidateSVMImagesClassifierQB1
     --imstat ${TEMP}/apTvClEstimateImageStatisticsQB1.xml
     --svm     ${TEMP}/clsvmModelQB1.svm
     --out    ${TEMP}/clsvmPerformanceEstimationQB1.txt
+    --testenv
 )
 
 SET_TESTS_PROPERTIES(apTvClValidateSVMImagesClassifierQB1 PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB1)
@@ -80,6 +83,7 @@ ADD_TEST(NAME apTvClImageSVMClassifierQB1
    --imstat  ${TEMP}/apTvClEstimateImageStatisticsQB1.xml
    --svm     ${TEMP}/clsvmModelQB1.svm
    --out     ${TEMP}/clLabeledImageQB1.tif
+   --testenv
 )
 
 SET_TESTS_PROPERTIES(apTvClImageSVMClassifierQB1 PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB1)
@@ -96,6 +100,7 @@ ADD_TEST(NAME apTvClImageSVMClassifierQB2
    --imstat ${TEMP}/apTvClEstimateImageStatisticsQB1.xml 
    --svm    ${TEMP}/clsvmModelQB1.svm
    --out    ${TEMP}/clLabeledImageQB2.tif
+   --testenv
 )
 
 SET_TESTS_PROPERTIES(apTvClImageSVMClassifierQB2 PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB1)
@@ -113,6 +118,7 @@ ADD_TEST(NAME apTvClImageSVMClassifierQB3
    --imstat  ${TEMP}/apTvClEstimateImageStatisticsQB1.xml
    --svm     ${TEMP}/clsvmModelQB1.svm
    --out     ${TEMP}/clLabeledImageQB3.tif
+   --testenv
 )
 
 SET_TESTS_PROPERTIES(apTvClImageSVMClassifierQB3 PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB1)
@@ -152,6 +158,7 @@ ADD_TEST(NAME apTvClTrainSVMImagesClassifierQB123
     --b 2
     --opt true
     --out ${TEMP}/clsvmModelQB123.svm
+    --testenv
 )
 
 SET_TESTS_PROPERTIES(apTvClTrainSVMImagesClassifierQB123 PROPERTIES DEPENDS apTvClEstimateImagesStatisticsQB123)
@@ -169,6 +176,7 @@ ADD_TEST(NAME apTvClValidateSVMImagesClassifierQB123
     --imstat ${TEMP}/apTvClEstimateImageStatisticsQB123.xml
     --svm     ${TEMP}/clsvmModelQB123.svm
     --out    ${TEMP}/clsvmPerformanceEstimationQB123.txt
+    --testenv
 )
 
 SET_TESTS_PROPERTIES(apTvClValidateSVMImagesClassifierQB123 PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB123)
@@ -186,6 +194,7 @@ ADD_TEST(NAME apTvClImageSVMClassifierQB123_1
    --imstat  ${TEMP}/apTvClEstimateImageStatisticsQB123.xml
    --svm     ${TEMP}/clsvmModelQB123.svm
    --out     ${TEMP}/clLabeledImageQB123_1.tif
+   --testenv
 )
 
 SET_TESTS_PROPERTIES(apTvClImageSVMClassifierQB123_1 PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB123)
@@ -219,6 +228,7 @@ ADD_TEST(NAME apTvClImageSVMClassifierQB123_2
    --imstat  ${TEMP}/apTvClEstimateImageStatisticsQB123.xml
    --svm     ${TEMP}/clsvmModelQB123.svm
    --out     ${TEMP}/clLabeledImageQB123_2.tif
+   --testenv
 )
 
 
@@ -237,6 +247,7 @@ ADD_TEST(NAME apTvClImageSVMClassifierQB123_3
    --imstat  ${TEMP}/apTvClEstimateImageStatisticsQB123.xml
    --svm     ${TEMP}/clsvmModelQB123.svm
    --out     ${TEMP}/clLabeledImageQB123_3.tif
+   --testenv
 )
 
 
@@ -255,6 +266,7 @@ ADD_TEST(NAME apTvClImageSVMClassifierQB123_6
    --imstat  ${TEMP}/apTvClEstimateImageStatisticsQB123.xml
    --svm     ${TEMP}/clsvmModelQB123.svm
    --out     ${TEMP}/clLabeledImageQB123_6.tif
+   --testenv
 )
 
 SET_TESTS_PROPERTIES(apTvClImageSVMClassifierQB123_6 PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB123)
@@ -292,6 +304,7 @@ ADD_TEST(NAME apTvClTrainSVMImagesClassifierQB456
     --b 2
     --opt true
     --out ${TEMP}/clsvmModelQB456.svm
+    --testenv
 )
 
 SET_TESTS_PROPERTIES(apTvClTrainSVMImagesClassifierQB456 PROPERTIES DEPENDS apTvClEstimateImagesStatisticsQB456)
@@ -310,6 +323,7 @@ ADD_TEST(NAME apTvClValidateSVMImagesClassifierQB456
     --imstat ${TEMP}/apTvClEstimateImageStatisticsQB456.xml
     --svm     ${TEMP}/clsvmModelQB456.svm
     --out    ${TEMP}/clsvmPerformanceEstimationQB456.txt
+    --testenv
 )
 
 SET_TESTS_PROPERTIES(apTvClValidateSVMImagesClassifierQB456 PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB456)
@@ -327,6 +341,7 @@ ADD_TEST(NAME apTvClImageSVMClassifierQB456_4
    --imstat  ${TEMP}/apTvClEstimateImageStatisticsQB456.xml
    --svm     ${TEMP}/clsvmModelQB456.svm
    --out     ${TEMP}/clLabeledImageQB456_4.tif
+   --testenv
 )
 
 SET_TESTS_PROPERTIES(apTvClImageSVMClassifierQB456_4 PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB456)
@@ -343,6 +358,7 @@ ADD_TEST(NAME apTvClImageSVMClassifierQB456_5
    --imstat  ${TEMP}/apTvClEstimateImageStatisticsQB456.xml
    --svm     ${TEMP}/clsvmModelQB456.svm
    --out     ${TEMP}/clLabeledImageQB456_5.tif
+   --testenv
 )
 
 
@@ -361,6 +377,7 @@ ADD_TEST(NAME apTvClImageSVMClassifierQB456_6
    --imstat  ${TEMP}/apTvClEstimateImageStatisticsQB456.xml
    --svm     ${TEMP}/clsvmModelQB456.svm
    --out     ${TEMP}/clLabeledImageQB456_6.tif
+   --testenv
 )
 
 
