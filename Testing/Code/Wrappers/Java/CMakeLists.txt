@@ -11,7 +11,7 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
 
 set( CMAKE_JAVA_INCLUDE_PATH ${OTB_BINARY_DIR}/Code/Wrappers/SWIG/org.otb.application.jar )
-set( JAVA_COMMAND "${Java_JAVA_EXECUTABLE}" -Djava.library.path=${OTB_BINARY_DIR}/Code/Wrappers/SWIG:${OTB_BINARY_DIR}/bin)
+set( JAVA_COMMAND "${Java_JAVA_EXECUTABLE}" -Djava.library.path=${OTB_BINARY_DIR}/Code/Wrappers/SWIG:$<TARGET_FILE_DIR:otbApplicationJava> )
 
 add_jar( JavaSmoothingTest JavaSmoothingTest.java )
 add_dependencies( JavaSmoothingTest org_otb_Application_jar )
