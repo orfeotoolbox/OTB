@@ -23,6 +23,7 @@
 #include "otbImage.h"
 #include "itkRGBAPixel.h"
 #include "otbRenderingFunction.h"
+#include "itkImageRegionConstIterator.h"
 
 #include "itkMetaDataDictionary.h"
 
