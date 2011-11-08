@@ -49,6 +49,7 @@ endforeach(app)
 
 add_subdirectory(ChangeDetection)
 add_subdirectory(Classification)
+add_subdirectory(DimensionnalityReduction)
 add_subdirectory(FeatureExtraction)
 add_subdirectory(Hyperspectral)
 add_subdirectory(Projections)
