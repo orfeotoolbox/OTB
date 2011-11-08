@@ -30,7 +30,6 @@ int otbWrapperCommandLineParserNew(int argc, char* argv[])
   return EXIT_SUCCESS;
 }
 
-
 int CheckReturn(ParserType::ParseResultType res)
 {
  if( res == ParserType::OK )
@@ -87,30 +86,40 @@ int otbWrapperCommandLineParserTest1(int argc, char* argv[])
 int otbWrapperCommandLineParserTest2(int argc, char* argv[])
 {
   ParserType::Pointer parser = ParserType::New();
-  
-  std::cout<<"Search for paths..."<<std::endl;
+
+  std::cout << "Search for paths..." << std::endl;
+
+  std::ostringstream input;
+  if (argc > 2)
+    {
+    input << argv[1];
+    for (int i = 2; i < argc; i++)
+      {
+      input << " " << argv[i];
+      }
+    }
 
   std::vector<std::string> paths;
-  ParserType::ParseResultType res = parser->GetPaths( paths, argv[1] );
-  if( CheckReturn(res) != ParserType::OK )
+  ParserType::ParseResultType res = parser->GetPaths(paths, input.str());
+  if (CheckReturn(res) != ParserType::OK)
     {
-      std::cout<<"Can't find paths."<<std::endl;
-      return EXIT_FAILURE;
+    std::cout << "Can't find paths." << std::endl;
+    return EXIT_FAILURE;
     }
 
-  std::cout<<"Paths found."<<std::endl;
-  std::cout<<"Search for module name..."<<std::endl;
+  std::cout << "Paths found." << std::endl;
+  std::cout << "Search for module name..." << std::endl;
 
   std::string name;
-  res = parser->GetModuleName( name, argv[1] );
-  
-  if( CheckReturn(res) != ParserType::OK )
+  res = parser->GetModuleName(name, argv[1]);
+
+  if (CheckReturn(res) != ParserType::OK)
     {
-      std::cout<<"Can't find module name."<<std::endl;
-      return EXIT_FAILURE;
+    std::cout << "Can't find module name." << std::endl;
+    return EXIT_FAILURE;
     }
 
-  std::cout<<"Module name found."<<std::endl;
+  std::cout << "Module name found." << std::endl;
   return CheckReturn(res);
 }
 

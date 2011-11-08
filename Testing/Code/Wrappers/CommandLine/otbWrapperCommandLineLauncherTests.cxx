@@ -30,21 +30,34 @@ int otbWrapperCommandLineLauncherNew(int argc, char* argv[])
   return EXIT_SUCCESS;
 }
 
+
+
+
 int otbWrapperCommandLineLauncherTest(int argc, char* argv[])
 {
   typedef otb::Wrapper::CommandLineLauncher LauncherType;
   LauncherType::Pointer launcher = LauncherType::New();
 
-  if (launcher->Load( argv[1]) == false )
+  std::ostringstream input;
+  if (argc > 2)
     {
-      if (launcher->ExecuteAndWriteOutput() == true)
-        {
-          return EXIT_FAILURE;
-        }
+    input << argv[1];
+    for (int i = 2; i < argc; i++)
+      {
+      input << " " << argv[i];
+      }
+    }
+
+  if (launcher->Load(input.str()) == false)
+    {
+    if (launcher->ExecuteAndWriteOutput() == true)
+      {
+      return EXIT_FAILURE;
+      }
     }
   else
     {
-      return EXIT_FAILURE;
+    return EXIT_FAILURE;
     }
 
   return EXIT_SUCCESS;
