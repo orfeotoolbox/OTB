@@ -65,6 +65,12 @@ public:
   otbSetObjectMemberMacro(UnsignedIntParam,  MaximumValue, ScalarType);
   otbGetObjectMemberMacro(UnsignedIntParam,  MaximumValue, ScalarType);
 
+  // Set the Key of the parameter
+  void SetKey( const char * value )
+  {
+    Superclass::SetKey( value );
+  }
+
   // Clear Value
   void ClearValue()
   {
@@ -77,14 +83,23 @@ public:
     m_UnsignedIntParam->Reset();
   }
 
+  // Reimplement the SetActive method
+  void SetActive(  const bool value )
+  {
+    Superclass::SetActive( value );
+    m_UnsignedIntParam->SetActive( value );
+  }
+
+  otbGetObjectMemberConstMacro(UnsignedIntParam, Active, bool);
+
 protected:
   /** Constructor */
   RAMParameter()
   {
     this->SetName("RAM");
-    this->SetKey("ram");
     this->SetDescription("Available RAM");
-    
+    this->SetKey("ram");
+
     // Initialize the unsigned int NumericalParam
     m_UnsignedIntParam = UnsignedIntParameter::New();
 
