@@ -173,7 +173,7 @@ public:
   /** Is the paramter a root or a child of another param */
   virtual bool IsRoot()
   {
-    return  m_Root.IsNull();
+    return  m_Root == this;
   }
 
   /** Add a child of this parameter when the param is a Group or a
