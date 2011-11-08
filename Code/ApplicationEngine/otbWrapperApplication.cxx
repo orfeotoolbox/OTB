@@ -1075,6 +1075,30 @@ Application::AddParameter(ParameterType type, std::string paramKey, std::string 
   GetParameterList()->AddParameter(type, paramKey, paramName);
 }
 
+void Application::AddRAMParameter(std::string paramKey, std::string paramName, unsigned int defaultValue)
+{
+  GetParameterList()->AddParameter(ParameterType_RAM, paramKey, paramName);
+  SetDefaultParameterInt(paramKey, defaultValue);
+}
+
+void Application::AddRAMParameter()
+{
+  // Get the  RAM Parameter from the configuration file
+  if (otb::ConfigurationFile::GetInstance()->IsValid() )
+    {
+    AddRAMParameter("ram",
+                    "Available RAM",
+                    otb::ConfigurationFile::GetInstance()->GetAvailableRAMInMBytes());
+    }
+  else
+    {
+    // TODO check this
+    AddRAMParameter("ram",
+                    "Available RAM",
+                    128);
+    }
+}
+
 bool
 Application::IsApplicationReady()
 {

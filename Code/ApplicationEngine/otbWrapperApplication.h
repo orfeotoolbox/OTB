@@ -537,6 +537,12 @@ protected:
    * or the path to a choice value */
   void AddParameter(ParameterType type, std::string paramKey, std::string paramName);
 
+  /** Add a parameterRAM method with parameter*/
+  void AddRAMParameter(std::string paramKey, std::string paramName, unsigned int defaultValue);
+
+  /** Add a parameterRAM method with no parameter*/
+  void AddRAMParameter();
+
   /** Remove the items added to the ListWidget */
   void ClearChoices(std::string key);
 
