@@ -65,12 +65,6 @@ public:
   otbSetObjectMemberMacro(UnsignedIntParam,  MaximumValue, ScalarType);
   otbGetObjectMemberMacro(UnsignedIntParam,  MaximumValue, ScalarType);
 
-  // Set the Key of the parameter
-  void SetKey( const char * value )
-  {
-    Superclass::SetKey( value );
-  }
-
   // Clear Value
   void ClearValue()
   {
