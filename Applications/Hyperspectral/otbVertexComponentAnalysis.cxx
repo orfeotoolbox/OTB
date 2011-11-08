@@ -81,7 +81,7 @@ private:
   void DoCreateParameters()
   {
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
-    SetParameterDescription("out","Input hyperspectral data cube");
+    SetParameterDescription("in","Input hyperspectral data cube");
 
     AddParameter(ParameterType_Int, "ne", "Number of endmembers");
     SetParameterDescription("ne","The number of endmembers to extract from the data cube");
