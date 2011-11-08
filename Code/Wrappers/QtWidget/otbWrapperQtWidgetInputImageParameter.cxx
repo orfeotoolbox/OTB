@@ -78,11 +78,12 @@ void QtWidgetInputImageParameter::SelectFile()
 void QtWidgetInputImageParameter::SetFileName(const QString& value)
 {
   // save value
-  m_InputImageParam->SetFromFileName(value.toStdString());
-
-  // notify of value change
-  QString key( QString::fromStdString(m_InputImageParam->GetKey()) );
-  emit ParameterChanged(key);
+  if(m_InputImageParam->SetFromFileName(value.toStdString()) == false )
+    {
+    // notify of value change
+    QString key( QString::fromStdString(m_InputImageParam->GetKey()) );
+    emit ParameterChanged(key);
+    }
 }
 
 }
