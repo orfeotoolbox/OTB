@@ -73,8 +73,7 @@ private:
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
     SetParameterDescription( "out" , "The rescaled image filename." );
 
-    AddParameter(ParameterType_RAM, "ram", "Available RAM");
-    SetDefaultParameterInt("ram", 256);
+    AddRAMParameter();
     MandatoryOff("ram");
 
     AddParameter(ParameterType_Float,      "outmin", "Output min value");
