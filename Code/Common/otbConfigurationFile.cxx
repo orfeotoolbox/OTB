@@ -139,6 +139,33 @@ ConfigurationFile
   return ret;
 }
 
+itk::uint64_t
+ConfigurationFile
+::GetAvailableRAMInBytes() const
+{
+  itk::uint64_t availableRAMInBytes = 0;
+
+  otbMsgDevMacro(<< "Retrieving available RAM size from configuration");
+  // Retrieve it from the configuration
+  try
+    {
+    typedef otb::ConfigurationFile ConfigurationType;
+    ConfigurationType::Pointer conf = ConfigurationType::GetInstance();
+    
+    availableRAMInBytes = conf->GetParameter< itk::uint64_t >(
+      "OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING");
+    }
+  catch(...)
+    {
+    // We should never have to go here if the configuration file is
+    // correct and found.
+    // In case it is not, fallback on the cmake
+    // defined constants.
+    return OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING;
+    }
+  return availableRAMInBytes;
+}
+
 ConfigurationFile::Pointer
 ConfigurationFile
 ::GetInstance()

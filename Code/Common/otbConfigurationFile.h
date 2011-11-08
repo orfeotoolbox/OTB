@@ -23,6 +23,7 @@
 #include "itkObject.h"
 #include "itkObjectFactory.h"
 #include "ConfigFile.h"
+#include "itkIntTypes.h"
 
 namespace otb
 {
@@ -78,6 +79,15 @@ public:
 
   /** Returns the Geoid entry in the config file, or an empty string if not found */
   std::string GetGeoidFile() const;
+
+  /** Returns the available RAM in bytes  */
+  itk::uint64_t GetAvailableRAMInBytes() const;
+
+  /** Returns the available RAM in MBytes*/
+  itk::uint64_t GetAvailableRAMInMBytes() const
+  {
+    return static_cast< itk::uint64_t >(GetAvailableRAMInBytes() / 1024 / 1024);
+  }
 
 protected:
   /** This is protected for the singleton. Use GetInstance() instead. */
