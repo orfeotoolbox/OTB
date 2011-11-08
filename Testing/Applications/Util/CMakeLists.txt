@@ -161,3 +161,13 @@ OTB_TEST_APPLICATION(NAME apTvUtOSMDownloader
  # -out ${TEMP}/otbOSMDownloaderOutput.shp
 #)
 ENDIF(OTB_DATA_USE_LARGEINPUT)
+
+# Concatenate VectorData
+OTB_TEST_APPLICATION(NAME apTuUtConcatenateVectorData
+                     APP ConcatenateVectorData
+                     OPTIONS --vd   ${INPUTDATA}/waterways.shp
+                                    ${INPUTDATA}/france_coastline.shp
+                             --out ${TEMP}/apTuUtConcatenateVectorDataOutputTest.shp
+                     VALID   --compare-ogr ${NOTOL}
+                             ${OTBAPP_BASELINE_FILES}/utTvConcatenateVectorData.shp
+                             ${TEMP}/apTuUtConcatenateVectorDataOutputTest.shp)
