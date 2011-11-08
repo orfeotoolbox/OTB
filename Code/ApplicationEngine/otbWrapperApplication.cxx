@@ -139,12 +139,13 @@ int Application::ExecuteAndWriteOutput()
       // First Get the value of the available memory to use with the
       // writer if a RAMParameter is set
       bool useRAM = false;
-      unsigned int ram = 256;
+      unsigned int ram = 0;
       for (std::vector<std::string>::const_iterator it = paramList.begin();
            it != paramList.end();
            ++it)
         {
         std::string key = *it;
+
         if (GetParameterType(key) == ParameterType_RAM
           && IsParameterEnabled(key))
           {
@@ -1086,13 +1087,13 @@ Application::IsApplicationReady()
       ++it)
     {
     // Check all Input Parameters
-    if (!this->HasValue(*it)
-        && IsMandatory(*it)
-        && GetParameterByKey(*it)->GetRoot()->GetActive())
-      {
-      return false;
-      }
+    if (!this->HasValue(*it) && IsMandatory(*it))
+      if (GetParameterByKey(*it)->IsRoot() || GetParameterByKey(*it)->GetRoot()->GetActive())
+    {
+    return false;
     }
+}
+
 
   return ready;
 }
