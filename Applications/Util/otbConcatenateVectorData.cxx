@@ -67,7 +67,7 @@ private:
   void DoCreateParameters()
   {
     AddParameter(ParameterType_InputVectorDataList, "vd", "Input VectorDatas to concatenate");
-    SetParameterDescription("vd", "Vector Data of sample used to validate the estimator.");
+    SetParameterDescription("vd", "VectorData files to be concatenated in an unique VectorData");
 
     AddParameter(ParameterType_OutputVectorData, "out", "Concatenated VectorData");
   }
