@@ -36,6 +36,7 @@
 #define OPENJPEG_H
 
 
+
 /* 
 ==========================================================
    Compiler directives
@@ -85,6 +86,8 @@ typedef unsigned char	OPJ_BYTE;
 typedef unsigned int	OPJ_SIZE_T;
 typedef double			OPJ_FLOAT64;
 typedef float			OPJ_FLOAT32;
+
+#include "openjpeg_mangle.h"
 
 // Avoid compile-time warning because parameter is not used
 #define OPJ_ARG_NOT_USED(x) (void)(x)

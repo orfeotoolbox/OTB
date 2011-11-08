@@ -55,6 +55,8 @@
  ==========================================================
 */
 
+#include "openjpeg_mangle_private.h"
+
 /* Ignore GCC attributes if this is not GCC */
 #ifndef __GNUC__
 	#define __attribute__(x) /* __attribute__(x) */
