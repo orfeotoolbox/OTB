@@ -43,7 +43,19 @@ private:
   MaximumAutocorrelationFactor()
   {
     SetName("MaximumAutocorrelationFactor");
-    SetDescription("Maximum autocorrelation factor");
+    SetDescription("Performs Kernel maximum autocorrelation factor transformationMaximum autocorrelation factor filter.");
+    SetDocName("Maximum autocorrelation factor filter");
+    SetDocLongDescription("This application calculates the Maximum Autocorrelation Factor based on A. Nielsen works (\"Kernel maximum autocorrelation factor and minimum"
+                       " noise fraction transformations,\" IEEE Transactions on Image Processing, vol. 20, no. 3, pp. 612-624, (2011))."
+        "Maximum Autocorrelation Factor can be considered as a spatial extension of the PCA.");
+    SetDocLimitations("Though the inverse transform can be computed, this filter only provides the forward transform for now.");
+    SetDocAuthors("OTB-Team");
+    SetDocSeeAlso(" ");
+    SetDocCLExample("otbApplicationLauncherCommandLine MaximumAutocorrelationFactor ${OTB-BIN}/bin  --in ${OTB-Data}/Input/cupriteSubHsi.tif--out MaximumAutocorrelationFactorImageFilterOutput.tif");
+    AddDocTag("Dimension reduction");
+    AddDocTag("filtering");
+
+
   }
 
   virtual ~MaximumAutocorrelationFactor()
@@ -52,7 +64,7 @@ private:
 
   void DoCreateParameters()
   {
-    AddParameter(ParameterType_InputImage,  "in", "Input Image 1");
+    AddParameter(ParameterType_InputImage,  "in", "Input Image");
     AddParameter(ParameterType_OutputImage, "out", "Change Map");
   }
 
