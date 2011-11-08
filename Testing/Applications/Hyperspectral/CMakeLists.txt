@@ -1,31 +1,26 @@
 
 #--- HyperspectralUnmixing ---#
 
-add_test(NAME apTvHyHyperspectralUnmixing_UCLS
-         COMMAND otbTestDriver
-                 --compare-image ${EPSILON_9}
-                   ${BASELINE}/apTvHyHyperspectralUnmixing_UCLS.tif
-                   ${TEMP}/apTvHyHyperspectralUnmixing_UCLS.tif
-                 Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
-                 HyperspectralUnmixing
-                 $<TARGET_FILE_DIR:otbapp_HyperspectralUnmixing>
-                 --in ${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif
-                 --ie ${INPUTDATA}/Hyperspectral/synthetic/endmembers.tif
-                 --out ${TEMP}/apTvHyHyperspectralUnmixing_UCLS.tif double
-                 --ua ucls )
+OTB_TEST_APPLICATION(NAME  apTvHyHyperspectralUnmixing_UCLS
+                     APP  HyperspectralUnmixing
+                     OPTIONS --in ${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif
+                			 --ie ${INPUTDATA}/Hyperspectral/synthetic/endmembers.tif
+                 			 --out ${TEMP}/apTvHyHyperspectralUnmixing_UCLS.tif double
+                 			 --ua ucls 
+                     VALID   --compare-image ${EPSILON_9}
+                              ${BASELINE}/apTvHyHyperspectralUnmixing_UCLS.tif
+                  			  ${TEMP}/apTvHyHyperspectralUnmixing_UCLS.tif)
 
-add_test(NAME apTvHyHyperspectralUnmixing_NCLS
-         COMMAND otbTestDriver
-                 --compare-image ${EPSILON_9}
-                   ${BASELINE}/apTvHyHyperspectralUnmixing_NCLS.tif
-                   ${TEMP}/apTvHyHyperspectralUnmixing_NCLS.tif
-                 Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
-                 HyperspectralUnmixing
-                 $<TARGET_FILE_DIR:otbapp_HyperspectralUnmixing>
-                 --in ${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif
-                 --ie ${INPUTDATA}/Hyperspectral/synthetic/endmembers.tif
-                 --out ${TEMP}/apTvHyHyperspectralUnmixing_NCLS.tif double
-                 --ua ncls )
+OTB_TEST_APPLICATION(NAME  apTvHyHyperspectralUnmixing_NCLS
+                     APP  HyperspectralUnmixing
+                     OPTIONS --in ${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif
+                			 --ie ${INPUTDATA}/Hyperspectral/synthetic/endmembers.tif
+                 			 --out ${TEMP}/apTvHyHyperspectralUnmixing_NCLS.tif double
+                 			 --ua ncls 
+                     VALID   --compare-image ${EPSILON_9}
+                              ${BASELINE}/apTvHyHyperspectralUnmixing_NCLS.tif
+                  			  ${TEMP}/apTvHyHyperspectralUnmixing_NCLS.tif)
+
 # Too long !                
 #add_test(NAME apTvHyHyperspectralUnmixing_ISRA
 #         COMMAND otbTestDriver
@@ -39,31 +34,22 @@ add_test(NAME apTvHyHyperspectralUnmixing_NCLS
 #                 --ie ${INPUTDATA}/Hyperspectral/synthetic/endmembers.tif
 #                 --out ${TEMP}/apTvHyHyperspectralUnmixing_ISRA.tif double
 #                 --ua isra )
-                 
-add_test(NAME apTvHyHyperspectralUnmixing_FCLS
-         COMMAND otbTestDriver
-                 --compare-image ${EPSILON_9}
-                   ${BASELINE}/apTvHyHyperspectralUnmixing_FCLS.tif
-                   ${TEMP}/apTvHyHyperspectralUnmixing_FCLS.tif
-                 Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
-                 HyperspectralUnmixing
-                 $<TARGET_FILE_DIR:otbapp_HyperspectralUnmixing>
-                 --in ${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif
-                 --ie ${INPUTDATA}/Hyperspectral/synthetic/endmembers.tif
-                 --out ${TEMP}/apTvHyHyperspectralUnmixing_FCLS.tif double
-                 --ua fcls )
+                
+OTB_TEST_APPLICATION(NAME  apTvHyHyperspectralUnmixing_FCLS
+                     APP  HyperspectralUnmixing
+                     OPTIONS --in ${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif
+                			 --ie ${INPUTDATA}/Hyperspectral/synthetic/endmembers.tif
+                 			 --out ${TEMP}/apTvHyHyperspectralUnmixing_FCLS.tif double
+                 			 --ua fcls 
+                     VALID   --compare-image ${EPSILON_9}
+                              ${BASELINE}/apTvHyHyperspectralUnmixing_FCLS.tif
+                  			  ${TEMP}/apTvHyHyperspectralUnmixing_FCLS.tif)
 
 #--- VertexComponentAnalysis ---#
-
-add_test(NAME apTvHyVertexComponentAnalysis
-         COMMAND otbTestDriver
-                 Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
-                 VertexComponentAnalysis
-                 $<TARGET_FILE_DIR:otbapp_VertexComponentAnalysis>
-                 --in ${OTB_DATA_ROOT}/Input/Hyperspectral/synthetic/hsi_cube.tif
-                 --ne 5
-                 --outendm ${TEMP}/apTvHyHyperspectralUnmixing_VCA.tif double )
-
-
+OTB_TEST_APPLICATION(NAME  apTuHyVertexComponentAnalysis
+                     APP  VertexComponentAnalysis
+                     OPTIONS --in ${OTB_DATA_ROOT}/Input/Hyperspectral/synthetic/hsi_cube.tif
+                			 --ne 5
+                 			 --outendm ${TEMP}/apTvHyVertexComponentAnalysis.tif double)
 
     
