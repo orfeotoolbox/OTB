@@ -20,6 +20,7 @@
 
 #include "itkProcessObject.h"
 #include "itkDataObject.h"
+#include "itkIntTypes.h"
 #include <set>
 
 namespace otb
@@ -73,7 +74,7 @@ public:
   typedef ProcessObjectType::Pointer          ProcessObjectPointerType;
   typedef itk::DataObject                     DataObjectType;
   typedef DataObjectType::Pointer             DataObjectPointerType;
-  typedef long long int                       MemoryPrintType;
+  typedef itk::uint64_t                       MemoryPrintType;
   typedef std::set<const ProcessObjectType *> ProcessObjectPointerSetType;
 
   /** Run-time type information (and related methods). */
