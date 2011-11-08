@@ -35,7 +35,7 @@ InputImageListParameter::~InputImageListParameter()
 {
 }
 
-void
+bool
 InputImageListParameter::SetListFromFileName(const std::vector<std::string> & filenames)
 {
   // First clear previous file choosen
@@ -73,7 +73,10 @@ InputImageListParameter::SetListFromFileName(const std::vector<std::string> & fi
     {
     SetActive(true);
     this->Modified();
+    return false;
     }
+
+  return true;
 }
 
 
@@ -86,7 +89,7 @@ InputImageListParameter::AddNullElement()
     this->Modified();
 }
 
-void
+bool
 InputImageListParameter::AddFromFileName(const std::string & filename)
 {
   // TODO : when the logger will be available, redirect the exception
@@ -103,6 +106,7 @@ InputImageListParameter::AddFromFileName(const std::string & filename)
     catch(itk::ExceptionObject & err)
       {
       this->ClearValue();
+      return true;
       }
   
     // everything went fine, store the object references
@@ -110,10 +114,11 @@ InputImageListParameter::AddFromFileName(const std::string & filename)
     m_ImageList->PushBack(reader->GetOutput());
     SetActive(true);
     this->Modified();
+    return false;
     }
 }
 
-void
+bool
 InputImageListParameter::SetNthFileName( const unsigned int id, const std::string & filename )
 {
   if( m_ReaderList->Size()<id )
@@ -135,11 +140,14 @@ InputImageListParameter::SetNthFileName( const unsigned int id, const std::strin
     catch(itk::ExceptionObject & err)
       {
       this->ClearValue();
+      return true;
+
       }
     m_ReaderList->SetNthElement(id, reader);
     m_ImageList->SetNthElement(id, reader->GetOutput());
 
     this->Modified();
+    return false;
     }
 }
 

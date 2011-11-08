@@ -614,7 +614,9 @@ void Application::SetParameterString(std::string parameter, std::string value)
   else if (dynamic_cast<InputImageParameter*>(param))
     {
     InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param);
-    paramDown->SetFromFileName(value);
+    if (paramDown->SetFromFileName(value) == true )
+      otbAppLogCRITICAL( <<"Invalid image filename " << value <<".");
+      
     }
   else if (dynamic_cast<ComplexInputImageParameter*>(param))
     {
@@ -624,7 +626,8 @@ void Application::SetParameterString(std::string parameter, std::string value)
   else if (dynamic_cast<InputVectorDataParameter*>(param))
     {
     InputVectorDataParameter* paramDown = dynamic_cast<InputVectorDataParameter*>(param);
-    paramDown->SetFromFileName(value);
+    if (paramDown->SetFromFileName(value) == true )
+      otbAppLogCRITICAL( <<"Invalid vector data filename " << value <<".");
     }
   else if (dynamic_cast<OutputImageParameter*>(param))
     {
@@ -655,12 +658,14 @@ void Application::SetParameterStringList(std::string parameter, std::vector<std:
   if (dynamic_cast<InputImageListParameter*>(param))
     {
     InputImageListParameter* paramDown = dynamic_cast<InputImageListParameter*>(param);
-    paramDown->SetListFromFileName(value);
+    if( paramDown->SetListFromFileName(value) == true )
+    otbAppLogCRITICAL( <<"At least one image filename is invalid.");
     }
   else if (dynamic_cast<InputVectorDataListParameter*>(param))
      {
      InputVectorDataListParameter* paramDown = dynamic_cast<InputVectorDataListParameter*>(param);
-     paramDown->SetListFromFileName(value);
+     if( paramDown->SetListFromFileName(value) == true )
+       otbAppLogCRITICAL( <<"At least one vector data filename is invalid..");
      }
   else if (dynamic_cast<StringListParameter*>(param))
     {
@@ -1085,10 +1090,10 @@ Application::IsApplicationReady()
       it != paramList.end();
       ++it)
     {
+
     // Check all Input Parameters
-    if (!this->HasValue(*it)
-        && IsMandatory(*it)
-        && GetParameterByKey(*it)->GetRoot()->GetActive())
+    if ( !this->HasValue(*it)  && IsMandatory(*it) )
+      if( GetParameterByKey(*it)->IsRoot() || GetParameterByKey(*it)->GetRoot()->GetActive() )
       {
       return false;
       }

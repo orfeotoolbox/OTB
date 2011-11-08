@@ -334,23 +334,18 @@ CommandLineLauncher::LoadParameters()
       
     const bool paramExists( m_Parser->IsAttributExists( std::string("--").append(paramKey), m_Expression )  );
     const bool hasValue = m_Application->HasValue( paramKey );
+    
     // Check if mandatory parameter are present and have value
-    std::cout<<"=========== Key: "<<paramKey<<std::endl;
-    std::cout<<"manda: "<<param->GetMandatory()<<std::endl;
-    std::cout<<"actibe: "<<param->GetRoot()->GetActive()<<std::endl;
-    std::cout<<"!paramExists: "<<!paramExists<<std::endl;
-    std::cout<<"hasValue: "<<hasValue<<std::endl;
-    std::cout<<"root: "<<param->IsRoot()<<std::endl;
-
     // A param has to be set if it is mandatory and :
     // is root OR its parent is active
     // NB: a root parameter is not active
+    
     bool mustBeSet = false;
     if( param->GetMandatory() == true )
       if( param->GetRoot()->GetActive() || param->IsRoot() )
         mustBeSet = true;
 
-    if( mustBeSet )//param->GetMandatory() == true && param->GetRoot()->GetActive())
+    if( mustBeSet )
       {
       if( !paramExists )
         {
