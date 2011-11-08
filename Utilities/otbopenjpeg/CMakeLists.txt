@@ -34,26 +34,15 @@ SET(OPENJPEG_VERSION
   "${OPENJPEG_VERSION_MAJOR}.${OPENJPEG_VERSION_MINOR}.${OPENJPEG_VERSION_BUILD}")
 SET(PACKAGE_VERSION
   "${OPENJPEG_VERSION_MAJOR}.${OPENJPEG_VERSION_MINOR}.${OPENJPEG_VERSION_BUILD}")
-
-# svn revision number of this openjpeg fork (used for .so versioning)
-SET(OPENJPEG_SVN_REVISION "1029")
-# patch number for OTB modifications applied on top of OPENJPEG_SVN_REVISION (used for .so versioning)
-SET(OPENJPEG_OTB_PATCH "1")
-
-#SET(OPENJPEG_LIBRARY_PROPERTIES
-#  VERSION   "${OPENJPEG_VERSION_MAJOR}.${OPENJPEG_VERSION_MINOR}.${OPENJPEG_VERSION_BUILD}"
-#  SOVERSION "${OPENJPEG_VERSION_MAJOR}"
-#)
-
 SET(OPENJPEG_LIBRARY_PROPERTIES
-  VERSION   "${OPENJPEG_SVN_REVISION}.${OPENJPEG_OTB_PATCH}.0"
-  SOVERSION "${OPENJPEG_SVN_REVISION}.${OPENJPEG_OTB_PATCH}"
+  VERSION   "${OPENJPEG_VERSION_MAJOR}.${OPENJPEG_VERSION_MINOR}.${OPENJPEG_VERSION_BUILD}"
+  SOVERSION "${OPENJPEG_VERSION_MAJOR}"
 )
 
 # --------------------------------------------------------------------------
 # Path to additional CMake modules
 SET(CMAKE_MODULE_PATH
-    ${OPENJPEG_SOURCE_DIR}/CMake
+    ${CMAKE_SOURCE_DIR}/CMake
     ${CMAKE_MODULE_PATH})
 
 # --------------------------------------------------------------------------
@@ -126,8 +115,8 @@ INCLUDE (${CMAKE_ROOT}/Modules/CMakeBackwardCompatibilityC.cmake)
 #-----------------------------------------------------------------------------
 # Setup file for setting custom ctest vars
 CONFIGURE_FILE(
-  ${OPENJPEG_SOURCE_DIR}/CMake/CTestCustom.cmake.in
-  ${OPENJPEG_BINARY_DIR}/CTestCustom.cmake
+  ${CMAKE_SOURCE_DIR}/CMake/CTestCustom.cmake.in
+  ${CMAKE_BINARY_DIR}/CTestCustom.cmake
   @ONLY
   )
 
@@ -141,28 +130,19 @@ MARK_AS_ADVANCED(LIBRARY_OUTPUT_PATH EXECUTABLE_OUTPUT_PATH)
 #-----------------------------------------------------------------------------
 # configure name mangling to allow multiple libraries to coexist
 # peacefully
-
-#SET(OPJ_MANGLE_PREFIX "" CACHE STRING "Prefix used to mangle all the symbols")
-IF(OPJ_MANGLE_PREFIX)
-  SET(OPJ_USE_MANGLE_PREFIX ON)
-ELSE(OPJ_MANGLE_PREFIX)
-  SET(OPJ_USE_MANGLE_PREFIX OFF)
-ENDIF(OPJ_MANGLE_PREFIX)
-
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/openjpeg_mangle.h.cmake.in
-                ${CMAKE_CURRENT_BINARY_DIR}/openjpeg_mangle.h
-                @ONLY IMMEDIATE)
-
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/openjpeg_mangle_private.h.cmake.in
-               ${CMAKE_CURRENT_BINARY_DIR}/openjpeg_mangle_private.h
+IF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/openjpeg_mangle.h.in)
+SET(MANGLE_PREFIX ${OPENJPEG_LIBRARY_NAME})
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/openjpeg_mangle.h.in
+               ${CMAKE_CURRENT_BINARY_DIR}/openjpeg_mangle.h
                @ONLY IMMEDIATE)
+ENDIF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/openjpeg_mangle.h.in)
 
 #-----------------------------------------------------------------------------
 # pkgconfig support
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/libopenjpeg1.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/libopenjpeg1.pc @ONLY)
-#INSTALL( FILES  ${CMAKE_CURRENT_BINARY_DIR}/libopenjpeg1.pc DESTINATION ${OPENJPEG_INSTALL_LIB_DIR}/pkgconfig )
-#INSTALL( CODE
-#  "EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E create_symlink \"libopenjpeg1.pc\" \"\$ENV{DESTDIR}${OPENJPEG_INSTALL_LIB_DIR}/pkgconfig/libopenjpeg.pc\")")
+INSTALL( FILES  ${CMAKE_CURRENT_BINARY_DIR}/libopenjpeg1.pc DESTINATION ${OPENJPEG_INSTALL_LIB_DIR}/pkgconfig )
+INSTALL( CODE
+  "EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E create_symlink \"libopenjpeg1.pc\" \"\$ENV{DESTDIR}${OPENJPEG_INSTALL_LIB_DIR}/pkgconfig/libopenjpeg.pc\")")
 
 #-----------------------------------------------------------------------------
 # Compiler specific flags:
@@ -228,9 +208,9 @@ ADD_SUBDIRECTORY(libopenjpeg)
 
 #-----------------------------------------------------------------------------
 # Build Applications
-#OPTION(BUILD_CODEC "Build the CODEC executables" ON)
-#OPTION(BUILD_MJ2 "Build the MJ2 executables." OFF)
-#OPTION(BUILD_JPIP "Build the JPIP library and executables." OFF)
+OPTION(BUILD_CODEC "Build the CODEC executables" ON)
+OPTION(BUILD_MJ2 "Build the MJ2 executables." OFF)
+OPTION(BUILD_JPIP "Build the JPIP library and executables." OFF)
 
 IF(BUILD_CODEC OR BUILD_MJ2 OR BUILD_JPIP)
   OPTION(BUILD_THIRDPARTY "Build the thirdparty executables if it is needed" OFF)
@@ -247,18 +227,18 @@ CONFIGURE_FILE("${OPENJPEG_SOURCE_DIR}/opj_config.h.cmake.in"
 
 #-----------------------------------------------------------------------------
 # Build JPWL-flavoured library and executables
-#OPTION(BUILD_JPWL "Build the JPWL library and executables" OFF)
+OPTION(BUILD_JPWL "Build the JPWL library and executables" OFF)
 
 #-----------------------------------------------------------------------------
 # Build DOCUMENTATION (not in ALL target and only if Doxygen is found)
-#OPTION(BUILD_DOC "Build the HTML documentation (with doxygen if available)." OFF)
-#IF(BUILD_DOC)
-#    ADD_SUBDIRECTORY(doc)
-#ENDIF(BUILD_DOC)
+OPTION(BUILD_DOC "Build the HTML documentation (with doxygen if available)." OFF)
+IF(BUILD_DOC)
+    ADD_SUBDIRECTORY(doc)
+ENDIF(BUILD_DOC)
 
 #-----------------------------------------------------------------------------
 # Buld Testing
-#OPTION(BUILD_TESTING "Build the tests." OFF)
+OPTION(BUILD_TESTING "Build the tests." OFF)
 IF(BUILD_TESTING)
   IF(BUILD_CODEC)
     ENABLE_TESTING()
@@ -284,18 +264,18 @@ ENDIF(BUILD_TESTING)
 
 #-----------------------------------------------------------------------------
 # install all targets referenced as OPENJPEGTargets
-#INSTALL(EXPORT OpenJPEGTargets DESTINATION ${OPENJPEG_INSTALL_PACKAGE_DIR})
-#CONFIGURE_FILE( ${OPENJPEG_SOURCE_DIR}/CMake/OpenJPEGConfig.cmake.in
-#  ${OPENJPEG_BINARY_DIR}/OpenJPEGConfig.cmake
-#  @ONLY
-#)
-#INSTALL( FILES ${OPENJPEG_BINARY_DIR}/OpenJPEGConfig.cmake
-#  DESTINATION ${OPENJPEG_INSTALL_PACKAGE_DIR}
-#)
+INSTALL(EXPORT OpenJPEGTargets DESTINATION ${OPENJPEG_INSTALL_PACKAGE_DIR})
+CONFIGURE_FILE( ${OPENJPEG_SOURCE_DIR}/CMake/OpenJPEGConfig.cmake.in
+  ${OPENJPEG_BINARY_DIR}/OpenJPEGConfig.cmake
+  @ONLY
+)
+INSTALL( FILES ${OPENJPEG_BINARY_DIR}/OpenJPEGConfig.cmake
+  DESTINATION ${OPENJPEG_INSTALL_PACKAGE_DIR}
+)
 
 #-----------------------------------------------------------------------------
 # install CHANGES and LICENSE
-#INSTALL(
-#  FILES       CHANGES 
-#              LICENSE
-#  DESTINATION ${OPENJPEG_INSTALL_DOC_DIR})
+INSTALL(
+  FILES       CHANGES 
+              LICENSE
+  DESTINATION ${OPENJPEG_INSTALL_DOC_DIR})
