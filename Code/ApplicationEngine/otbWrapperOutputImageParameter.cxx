@@ -76,8 +76,7 @@ void OutputImageParameter::InitializeWriters()
     writer->SetFileName( this->GetFileName() );                                   \
     writer->SetInput(caster->GetOutput());                                        \
     writer->WriteGeomFileOn();                                                    \
-    if (m_RAMValue != 0)                                                          \
-      writer->SetAutomaticTiledStreaming(m_RAMValue);                             \
+    writer->SetAutomaticTiledStreaming(m_RAMValue);                               \
     writer->Update();                                                             \
   }
 
