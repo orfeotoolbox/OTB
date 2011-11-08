@@ -57,7 +57,9 @@
 #define opj_decode_v2                       @OPJ_MANGLE_PREFIX@_opj_decode_v2                   
 #define opj_default_callback                @OPJ_MANGLE_PREFIX@_opj_default_callback                        
 #define opj_destroy_codec                   @OPJ_MANGLE_PREFIX@_opj_destroy_codec                        
-#define opj_end_decompress                  @OPJ_MANGLE_PREFIX@_opj_end_decompress                                                    
+#define opj_end_decompress                  @OPJ_MANGLE_PREFIX@_opj_end_decompress          
+
+#define opj_get_decoded_tile                @OPJ_MANGLE_PREFIX@_opj_get_decoded_tile                            
    
 #define opj_dump_codec                      @OPJ_MANGLE_PREFIX@_opj_dump_codec                                       
 #define opj_get_cstr_index                  @OPJ_MANGLE_PREFIX@_opj_get_cstr_index                      

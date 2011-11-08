@@ -271,6 +271,11 @@
 #define tgt_init                                @OPJ_MANGLE_PREFIX@_tgt_init
 
 
+#define j2k_decode_one_tile						@OPJ_MANGLE_PREFIX@_j2k_decode_one_tile
+#define j2k_get_tile							@OPJ_MANGLE_PREFIX@_j2k_get_tile
+#define j2k_setup_decoding_tile					@OPJ_MANGLE_PREFIX@_j2k_setup_decoding_tile
+#define jp2_get_tile							@OPJ_MANGLE_PREFIX@_jp2_get_tile
+
 #endif
 
 #endif
