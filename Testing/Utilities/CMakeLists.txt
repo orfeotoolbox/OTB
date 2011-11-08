@@ -525,9 +525,20 @@ classifyKNN2.cxx
 )
 
 
-#IF(OTB_COMPILE_JPEG2000)
+IF(OTB_COMPILE_JPEG2000)
 #  SET(UtilitiesTests_SRCS ${UtilitiesTests_SRCS}  openJpegEncoder.cxx openJpegDecoder.cxx)
-#ENDIF(OTB_COMPILE_JPEG2000)
+
+  IF (UNIX AND OPJ_MANGLE_PREFIX)
+  # Rely on "nm" for this test, so enable it only on Unix platform  
+  ADD_TEST(NAME utTvOpenJpegMangling
+           COMMAND ${CMAKE_COMMAND}
+                   -DOPJ_TARGET_PATH=$<TARGET_FILE:otbopenjpeg>
+                   -DOPJ_MANGLE_PREFIX=${OPJ_MANGLE_PREFIX}
+                   -P ${CMAKE_CURRENT_SOURCE_DIR}/TestOpenJPEGMangling.cmake)
+  
+  ENDIF()
+
+ENDIF(OTB_COMPILE_JPEG2000)
 
 IF(NOT OTB_USE_EXTERNAL_OPENTHREADS)
   SET(UtilitiesTests_SRCS ${UtilitiesTests_SRCS}
