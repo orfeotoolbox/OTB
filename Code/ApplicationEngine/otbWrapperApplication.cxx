@@ -615,7 +615,7 @@ void Application::SetParameterString(std::string parameter, std::string value)
   else if (dynamic_cast<InputImageParameter*>(param))
     {
     InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param);
-    if (paramDown->SetFromFileName(value) == true )
+    if ( !paramDown->SetFromFileName(value) )
       otbAppLogCRITICAL( <<"Invalid image filename " << value <<".");
       
     }
@@ -627,7 +627,7 @@ void Application::SetParameterString(std::string parameter, std::string value)
   else if (dynamic_cast<InputVectorDataParameter*>(param))
     {
     InputVectorDataParameter* paramDown = dynamic_cast<InputVectorDataParameter*>(param);
-    if (paramDown->SetFromFileName(value) == true )
+    if ( !paramDown->SetFromFileName(value) )
       otbAppLogCRITICAL( <<"Invalid vector data filename " << value <<".");
     }
   else if (dynamic_cast<OutputImageParameter*>(param))
@@ -659,13 +659,13 @@ void Application::SetParameterStringList(std::string parameter, std::vector<std:
   if (dynamic_cast<InputImageListParameter*>(param))
     {
     InputImageListParameter* paramDown = dynamic_cast<InputImageListParameter*>(param);
-    if( paramDown->SetListFromFileName(value) == true )
+    if( !paramDown->SetListFromFileName(value) )
     otbAppLogCRITICAL( <<"At least one image filename is invalid.");
     }
   else if (dynamic_cast<InputVectorDataListParameter*>(param))
      {
      InputVectorDataListParameter* paramDown = dynamic_cast<InputVectorDataListParameter*>(param);
-     if( paramDown->SetListFromFileName(value) == true )
+     if( !paramDown->SetListFromFileName(value)  )
        otbAppLogCRITICAL( <<"At least one vector data filename is invalid..");
      }
   else if (dynamic_cast<StringListParameter*>(param))

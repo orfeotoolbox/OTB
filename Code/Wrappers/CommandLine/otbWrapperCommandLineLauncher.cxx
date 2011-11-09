@@ -103,19 +103,19 @@ bool CommandLineLauncher::Load()
     itkExceptionMacro("No expression specified...");
     }
 
-  if (this->CheckParametersPrefix() == true)
+  if (this->CheckParametersPrefix() == false)
     {
     std::cerr << "ERROR: Parameter keys have to set using \"--\", not \"-\"" << std::endl;
-    return true;
+    return false;
     }
 
-  if (this->CheckUnicity() == true)
+  if (this->CheckUnicity() == false)
     {
     std::cerr << "ERROR: At least one key is not unique in the expression..." << std::endl;
-    return true;
+    return false;
     }
 
-  if (this->LoadPath() == true)
+  if (this->LoadPath() == false)
     {
     if (m_Parser->GetPathsAsString(m_Expression).size() != 0)
       {
@@ -126,39 +126,41 @@ bool CommandLineLauncher::Load()
       {
       std::cerr << "ERROR: Trouble loading path, please check your command line..." << std::endl;
       }
-    return true;
+    return false;
     }
 
   this->LoadApplication();
 
-  return false;
+  return true;
 }
 
 bool CommandLineLauncher::Execute()
 {
-  if (this->BeforeExecute() == true)
+  if (this->BeforeExecute() == false)
     {
-    return true;
+    return false;
     }
 
   int res = m_Application->Execute();
   if (res == 0)
+    return true;
+  else 
     return false;
-  else return true;
 }
 
 bool CommandLineLauncher::ExecuteAndWriteOutput()
 {
-  if (this->BeforeExecute() == true)
+  if (this->BeforeExecute() == false)
     {
-    return true;
+    return false;
     }
 
   int res = m_Application->ExecuteAndWriteOutput();
 
   if (res == 0)
+    return true;
+  else 
     return false;
-  else return true;
 }
 
 bool CommandLineLauncher::BeforeExecute()
@@ -166,14 +168,14 @@ bool CommandLineLauncher::BeforeExecute()
   if (m_Application.IsNull())
     {
     std::cerr << "ERROR: No loaded application..." << std::endl;
-    return true;
+    return false;
     }
 
   // if help is asked...
   if (m_Parser->IsAttributExists("--help", m_Expression) == true)
     {
     this->DisplayHelp();
-    return true;
+    return false;
     }
 
   // if we want to load test environnement
@@ -184,11 +186,11 @@ bool CommandLineLauncher::BeforeExecute()
 
 
   // Check the key validity (ie. exist in the application parameters)
-  if (this->CheckKeyValidity() == true)
+  if (this->CheckKeyValidity() == false)
     {
     std::cerr << "ERROR: At least one key is not known by the application..." << std::endl;
     this->DisplayHelp();
-    return true;
+    return false;
     }
 
   try
@@ -200,7 +202,7 @@ bool CommandLineLauncher::BeforeExecute()
       this->LoadApplication();
       this->DisplayHelp();
 
-      return true;
+      return false;
       }
     }
   catch (itk::ExceptionObject& err)
@@ -211,7 +213,7 @@ bool CommandLineLauncher::BeforeExecute()
     this->LoadApplication();
     this->DisplayHelp();
 
-    return true;
+    return false;
     }
 
   m_Application->UpdateParameters();
@@ -224,7 +226,7 @@ bool CommandLineLauncher::BeforeExecute()
     if (val.size() != 1)
       {
       std::cerr << "ERROR: Invalid progress argument, must be unique value..." << std::endl;
-      return true;
+      return false;
       }
     if (val[0] == "1" || val[0] == "true")
       {
@@ -241,11 +243,11 @@ bool CommandLineLauncher::BeforeExecute()
         // Force to reload the application, the LoadParameters can change wrong values
         this->LoadApplication();
         this->DisplayHelp();
-        return true;
+        return false;
         }
     }
 
-  return false;
+  return true;
 }
 
 bool CommandLineLauncher::LoadPath()
@@ -261,10 +263,10 @@ bool CommandLineLauncher::LoadPath()
     }
   else
     {
-    return true;
+    return false;
     }
 
-  return false;
+  return true;
 }
 
 void CommandLineLauncher::LoadApplication()
@@ -828,7 +830,7 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
 
 bool CommandLineLauncher::CheckUnicity()
 {
-  bool res = false;
+  bool res = true;
   // Extract expression keys
   std::vector<std::string> keyList = m_Parser->GetKeyList(m_Expression);
 
@@ -842,11 +844,12 @@ bool CommandLineLauncher::CheckUnicity()
       {
       if (keyRef == listTmp[j])
         {
-        res = true;
+        res = false;
         break;
         }
       }
-    if (res == true) break;
+    if (!res)
+      break;
     }
 
   return res;
@@ -854,7 +857,7 @@ bool CommandLineLauncher::CheckUnicity()
 
 bool CommandLineLauncher::CheckParametersPrefix()
 {
-  bool res = false;
+  bool res = true;
   // Extract Expression elements
   std::vector<itksys::String> spaceSplittedExp = itksys::SystemTools::SplitString(m_Expression.c_str(), ' ', false);
   // if the chain is "  module", SplitString will return: [ ], [module]
@@ -873,7 +876,7 @@ bool CommandLineLauncher::CheckParametersPrefix()
     // Check if the chain "--" appears at least one time when "-" is present
     if (m_Expression.find("--") == std::string::npos && m_Expression.find("-") != std::string::npos)
       {
-      res = true;
+      res = false;
       }
     }
 
@@ -882,7 +885,7 @@ bool CommandLineLauncher::CheckParametersPrefix()
 
 bool CommandLineLauncher::CheckKeyValidity()
 {
-  bool res = false;
+  bool res = true;
   // Extract expression keys
   std::vector<std::string> expKeyList = m_Parser->GetKeyList(m_Expression);
 
@@ -907,7 +910,7 @@ bool CommandLineLauncher::CheckKeyValidity()
       }
     if (keyExist == false)
       {
-      res = true;
+      res = false;
       break;
       }
     }

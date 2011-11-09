@@ -139,7 +139,7 @@ QtWidgetInputVectorDataListParameter::UpdateVectorDataList()
 {
   for(unsigned int j=0; j<m_InputVectorDataListParam->GetVectorDataList()->Size(); j++ )
     {
-    if( m_InputVectorDataListParam->SetNthFileName(j, m_FileSelectionList[j]->GetFilename()) == true )
+    if( m_InputVectorDataListParam->SetNthFileName(j, m_FileSelectionList[j]->GetFilename()) == false )
       {
       itk::OStringStream oss;
       oss << "The given file " << m_FileSelectionList[j]->GetFilename() << " is not valid.";

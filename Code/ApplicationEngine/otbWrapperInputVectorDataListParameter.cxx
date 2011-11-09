@@ -43,7 +43,7 @@ InputVectorDataListParameter::SetListFromFileName(const std::vector<std::string>
   // First clear previous file choosen
   this->ClearValue();
 
-  bool isOk = false;
+  bool isOk = true;
   for(unsigned int i=0; i<filenames.size(); i++)
     {
     const std::string filename = filenames[i];
@@ -71,14 +71,14 @@ InputVectorDataListParameter::SetListFromFileName(const std::vector<std::string>
       }
     }
   
-  if( isOk == true )
+  if( !isOk )
     {
-    SetActive(true);
-    this->Modified();
     return false;
     }
 
- return true;
+  SetActive(true);
+  this->Modified();
+  return true;
 }
 
 
@@ -108,7 +108,7 @@ InputVectorDataListParameter::AddFromFileName(const std::string & filename)
       }
     catch(itk::ExceptionObject & err)
       {
-      return true;
+      return false;
       }
     
     // everything went fine, store the object references
@@ -116,8 +116,10 @@ InputVectorDataListParameter::AddFromFileName(const std::string & filename)
     m_VectorDataList->PushBack(reader->GetOutput());
     SetActive(true);
     this->Modified();
-  return false;
+    return true;
     }
+
+  return false;
 }
 
 bool
@@ -143,15 +145,16 @@ InputVectorDataListParameter::SetNthFileName( const unsigned int id, const std::
     catch(itk::ExceptionObject & err)
       {
       this->ClearValue();
-      return true;
+      return false;
       }
 
     m_ReaderList->SetNthElement(id, reader);
     m_VectorDataList->SetNthElement(id, reader->GetOutput());
     
     this->Modified();
-    return false;
+    return true;
     }
+  return false;
 }
 
 

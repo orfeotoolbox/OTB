@@ -58,12 +58,13 @@ InputImageParameter::SetFromFileName(const std::string& filename)
       }
     catch(itk::ExceptionObject & err)
       {
-      return true;
+      return false;
       }
 
     // the specified filename is valid => store the value
     m_FileName = filename;
     SetActive(true);
+    return true;
     }
   return false;
 }

@@ -48,9 +48,9 @@ int otbWrapperCommandLineLauncherTest(int argc, char* argv[])
       }
     }
 
-  if (launcher->Load(input.str()) == false)
+  if (launcher->Load(input.str()) == true)
     {
-    if (launcher->ExecuteAndWriteOutput() == true)
+    if (launcher->ExecuteAndWriteOutput() == false)
       {
       return EXIT_FAILURE;
       }

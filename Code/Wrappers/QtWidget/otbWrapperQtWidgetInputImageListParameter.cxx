@@ -140,7 +140,7 @@ QtWidgetInputImageListParameter::UpdateImageList()
   // save value
   for(unsigned int j=0; j<m_InputImageListParam->GetImageList()->Size(); j++ )
     {
-    if( m_InputImageListParam->SetNthFileName(j, m_FileSelectionList[j]->GetFilename()) == true )
+    if( m_InputImageListParam->SetNthFileName(j, m_FileSelectionList[j]->GetFilename()) == false )
       {
       itk::OStringStream oss;
       oss << "The given file " << m_FileSelectionList[j]->GetFilename() << " is not valid.";

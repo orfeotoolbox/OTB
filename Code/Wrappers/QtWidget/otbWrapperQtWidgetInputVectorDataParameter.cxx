@@ -70,14 +70,20 @@ void QtWidgetInputVectorDataParameter::SelectFile()
 
   if (fileDialog.exec())
     {
-    if ( this->SetFileName(fileDialog.selectedFiles().at(0)) == false )
+    if ( this->SetFileName(fileDialog.selectedFiles().at(0)) == true )
       m_Input->setText(fileDialog.selectedFiles().at(0));
+    else
+      {
+      itk::OStringStream oss;
+      oss << "The given file " << fileDialog.selectedFiles().at(0).toStdString() << " is not valid.";
+      this->GetModel()->SendLogWARNING( oss.str() );
+      }
     }
 }
 
 bool QtWidgetInputVectorDataParameter::SetFileName(const QString& value)
 {
-  bool res = false;
+  bool res = true;
   // save value
   if(m_InputVectorDataParam->SetFromFileName(value.toStdString()) == false )
     {
@@ -86,7 +92,7 @@ bool QtWidgetInputVectorDataParameter::SetFileName(const QString& value)
     emit ParameterChanged(key);
     }
   else
-    res = true;
+    res = false;
 
   return res;
 }
