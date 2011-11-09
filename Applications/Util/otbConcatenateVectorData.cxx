@@ -49,15 +49,15 @@ private:
     SetName("ConcatenateVectorData");
     SetDescription("Concatenate VectorDatas");
 
-//     SetDocName("Rescale Image Application");
-//     SetDocLongDescription("This application scale the given image pixel intensity between two given values. "
-//                           "By default min (resp. max) value is set to 0 (resp. 255).");
-//     SetDocLimitations("None");
-//     SetDocAuthors("OTB-Team");
-//     SetDocSeeAlso(" ");
-//     SetDocCLExample("otbApplicationLauncherCommandLine Rescale ${OTB-BIN}/bin"
-//                     " --in ${OTB-DATA}/Input/poupees.tif --out rescaledImage.tif --outmin 20 --outmax 150");
-//     AddDocTag("Image Manipulation");
+    SetDocName("Concatenate Application");
+    SetDocLongDescription("This application concatenate a list of VectorData to produce a unique VectorData as output"
+                          "Note that the VectorDatas must be of the same type (Storing polygons only, lines only, or points only)");
+    SetDocLimitations("None");
+    SetDocAuthors("OTB-Team");
+    SetDocSeeAlso(" ");
+    SetDocCLExample("otbApplicationLauncherCommandLine ConcatenateVectorData ${OTB-BIN}/bin"
+                    " --vd --out ConcatenatedVectorData.shp");
+    AddDocTag("Vector Data Manipulation");
   }
 
   virtual ~ConcatenateVectorData()
