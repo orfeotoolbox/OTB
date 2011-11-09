@@ -293,7 +293,7 @@ int JPEG2000ReaderInternal::Initialize()
       return 0;
       }
 
-    for (int itComp = 0; itComp < this->m_NbOfComponent; itComp++)
+    for (unsigned int itComp = 0; itComp < this->m_NbOfComponent; itComp++)
       {
       this->m_Precision[itComp] = this->m_Image->comps[itComp].prec;
       }
@@ -304,7 +304,7 @@ int JPEG2000ReaderInternal::Initialize()
       this->Clean();
       return 0;
       }
-    for (int itComp = 0; itComp < this->m_NbOfComponent; itComp++)
+    for (unsigned int itComp = 0; itComp < this->m_NbOfComponent; itComp++)
       {
       this->m_Signed[itComp] = this->m_Image->comps[itComp].sgnd;
       }
@@ -316,7 +316,7 @@ int JPEG2000ReaderInternal::Initialize()
       return 0;
       }
 
-    for (int itComp = 0; itComp < this->m_NbOfComponent; itComp++)
+    for (unsigned int itComp = 0; itComp < this->m_NbOfComponent; itComp++)
       {
       this->m_XResolution[itComp] = this->m_Image->comps[itComp].dx;
       }
@@ -328,7 +328,7 @@ int JPEG2000ReaderInternal::Initialize()
       return 0;
       }
 
-    for (int itComp = 0; itComp < this->m_NbOfComponent; itComp++)
+    for (unsigned int itComp = 0; itComp < this->m_NbOfComponent; itComp++)
       {
       this->m_YResolution[itComp] = this->m_Image->comps[itComp].dy;
       }
@@ -352,7 +352,7 @@ int JPEG2000ReaderInternal::CanRead()
      {
 
      // We manage only JPEG2000 file with characteristics which are equal between components
-     for(int itComp = 0; itComp < this->m_NbOfComponent - 1; itComp++)
+     for(unsigned int itComp = 0; itComp < this->m_NbOfComponent - 1; itComp++)
        {
        if ( (this->m_Precision[itComp] != this->m_Precision[itComp+1]) &&
             (this->m_Signed[itComp] != this->m_Signed[itComp+1]) &&
@@ -489,17 +489,67 @@ void JPEG2000ImageIO::Read(void* buffer)
 
     this->ComputeOffsets(lWidthSrc, lHeightDest, lWidthDest, lStartOffsetPxlDest, lStartOffsetPxlSrc);
 
+    std::cout << "Extraction tuile " << *itTile << std::endl;
     switch (this->GetComponentType())
       {
-      //    case CHAR:
-      //    case UCHAR:
-      //    case SHORT:
+      case CHAR:
+        {
+        char *p = static_cast<char *> (buffer);
+        for (unsigned int j = 0; j < lHeightDest; ++j)
+          {
+          char* current_dst_line = p + (lStartOffsetPxlDest + j * lNbColumns) * this->m_NumberOfComponents;
+
+          for (unsigned int k = 0; k < lWidthDest; ++k)
+            {
+            for (unsigned int itComp = 0; itComp < this->m_NumberOfComponents; itComp++)
+              {
+              OPJ_INT32* data = m_InternalReader->GetImage()->comps[itComp].data;
+              *(current_dst_line++) = static_cast<char> (data[lStartOffsetPxlSrc + k + j * lWidthSrc]);
+              }
+            }
+          }
+        }
+        break;
+      case UCHAR:
+        {
+        unsigned char *p = static_cast<unsigned char *> (buffer);
+        for (unsigned int j = 0; j < lHeightDest; ++j)
+          {
+          unsigned char* current_dst_line = p + (lStartOffsetPxlDest + j * lNbColumns) * this->m_NumberOfComponents;
+
+          for (unsigned int k = 0; k < lWidthDest; ++k)
+            {
+            for (unsigned int itComp = 0; itComp < this->m_NumberOfComponents; itComp++)
+              {
+              OPJ_INT32* data = m_InternalReader->GetImage()->comps[itComp].data;
+              unsigned char component_val = data[lStartOffsetPxlSrc + k + j * lWidthSrc] & 0xff;
+              *(current_dst_line++) = static_cast<unsigned char> (component_val);
+              }
+            }
+          }
+        }
+        break;
+      case SHORT:
+        {
+        short *p = static_cast<short *> (buffer);
+        for (unsigned int j = 0; j < lHeightDest; ++j)
+          {
+          short* current_dst_line = p + (lStartOffsetPxlDest + j * lNbColumns) * this->m_NumberOfComponents;
+
+          for (unsigned int k = 0; k < lWidthDest; ++k)
+            {
+            for (unsigned int itComp = 0; itComp < this->m_NumberOfComponents; itComp++)
+              {
+              OPJ_INT32* data = m_InternalReader->GetImage()->comps[itComp].data;
+              *(current_dst_line++) = static_cast<short> (data[lStartOffsetPxlSrc + k + j * lWidthSrc]);
+              }
+            }
+          }
+        }
+        break;
       case USHORT:
         {
         unsigned short *p = static_cast<unsigned short *> (buffer);
-
-        /* Move the output buffer to the first place where we will write*/
-
         for (unsigned int j = 0; j < lHeightDest; ++j)
           {
           unsigned short* current_dst_line = p + (lStartOffsetPxlDest + j * lNbColumns) * this->m_NumberOfComponents;
@@ -509,16 +559,17 @@ void JPEG2000ImageIO::Read(void* buffer)
             for (unsigned int itComp = 0; itComp < this->m_NumberOfComponents; itComp++)
               {
               OPJ_INT32* data = m_InternalReader->GetImage()->comps[itComp].data;
-
               *(current_dst_line++) = static_cast<unsigned short> (data[lStartOffsetPxlSrc + k + j * lWidthSrc] & 0xffff);
               }
             }
           }
         }
-
         break;
-        //    case INT:
-        //    case UINT:
+      case INT:
+      case UINT:
+      default:
+        itkGenericExceptionMacro(<< "This data type is not handled");
+        break;
       }
 
     }
