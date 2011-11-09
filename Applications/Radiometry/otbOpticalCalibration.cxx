@@ -60,16 +60,16 @@ public:
   itkTypeMacro(OpticalCalibration, Application);
 
   typedef ImageToLuminanceImageFilter<UInt16VectorImageType,
-                                      FloatVectorImageType>              ImageToLuminanceImageFilterType;
+                                      DoubleVectorImageType>              ImageToLuminanceImageFilterType;
   
-  typedef LuminanceToReflectanceImageFilter<FloatVectorImageType,
-                                            FloatVectorImageType>        LuminanceToReflectanceImageFilterType;
+  typedef LuminanceToReflectanceImageFilter<DoubleVectorImageType,
+                                            DoubleVectorImageType>        LuminanceToReflectanceImageFilterType;
 
-  typedef otb::MultiplyByScalarImageFilter<FloatVectorImageType,
-                                           FloatVectorImageType>        ScaleFilterType;
+  typedef otb::MultiplyByScalarImageFilter<DoubleVectorImageType,
+                                           DoubleVectorImageType>         ScaleFilterType;
 
-  typedef ReflectanceToSurfaceReflectanceImageFilter<FloatVectorImageType,
-                                                     FloatVectorImageType>          ReflectanceToSurfaceReflectanceImageFilterType;
+  typedef ReflectanceToSurfaceReflectanceImageFilter<DoubleVectorImageType,
+                                                     DoubleVectorImageType>         ReflectanceToSurfaceReflectanceImageFilterType;
   typedef ReflectanceToSurfaceReflectanceImageFilterType::FilterFunctionValuesType  FilterFunctionValuesType;
   typedef FilterFunctionValuesType::ValuesVectorType                                ValuesVectorType;
   typedef AtmosphericCorrectionParameters                                           AtmosphericCorrectionParametersType;
