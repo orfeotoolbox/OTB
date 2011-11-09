@@ -35,22 +35,25 @@ extern "C"
 */
 void error_callback(const char *msg, void *client_data)
 {
+  (void) msg;
   (void) client_data;
-  itkGenericExceptionMacro(<< "OpenJPEG error: " << msg);
+  otbMsgDevMacro(<< "OpenJPEG error: " << msg);
 }
 /**
    sample warning debug callback expecting no client object
 */
 void warning_callback(const char *msg, void *client_data)
 {
+  (void) msg;
   (void) client_data;
-  otbGenericMsgDebugMacro(<< "OpenJPEG warning: " << msg);
+  otbMsgDevMacro(<< "OpenJPEG warning: " << msg);
 }
 /**
    sample debug callback expecting no client object
 */
 void info_callback(const char *msg, void *client_data)
 {
+  (void) msg;
   (void) client_data;
   otbMsgDevMacro(<< "OpenJPEG info: " << msg);
 }
