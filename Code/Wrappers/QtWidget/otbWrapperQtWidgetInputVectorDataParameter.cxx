@@ -75,8 +75,9 @@ void QtWidgetInputVectorDataParameter::SelectFile()
     }
 }
 
-void QtWidgetInputVectorDataParameter::SetFileName(const QString& value)
+bool QtWidgetInputVectorDataParameter::SetFileName(const QString& value)
 {
+  bool res = false;
   // save value
   if(m_InputVectorDataParam->SetFromFileName(value.toStdString()) == false )
     {
@@ -84,6 +85,10 @@ void QtWidgetInputVectorDataParameter::SetFileName(const QString& value)
     QString key( QString::fromStdString(m_InputVectorDataParam->GetKey()) );
     emit ParameterChanged(key);
     }
+  else
+    res = true;
+
+  return res;
 }
 
 }
