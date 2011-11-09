@@ -46,3 +46,8 @@ OTB_CREATE_APPLICATION(NAME           OSMDownloader
 OTB_CREATE_APPLICATION(NAME           ConcatenateVectorData
                        SOURCES        otbConcatenateVectorData.cxx
                        LINK_LIBRARIES OTBIO)
+
+OTB_CREATE_APPLICATION(NAME           CompareImages
+                       SOURCES        otbCompareImages.cxx
+                       LINK_LIBRARIES OTBIO)
+
