@@ -72,6 +72,12 @@ void QtWidgetInputImageParameter::SelectFile()
     {
     if ( this->SetFileName(fileDialog.selectedFiles().at(0)) == false )
       m_Input->setText(fileDialog.selectedFiles().at(0));
+    else
+      {
+      itk::OStringStream oss;
+      oss << "The given file " << m_FileSelectionList[j]->GetFilename() << " is not valid.";
+      this->GetModel()->SendLogWARNING( oss.str() );
+      }
     }
 }
 
