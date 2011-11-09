@@ -23,7 +23,7 @@ OTB_TEST_APPLICATION(NAME apTvRaOpticalCalibration_Spot5
                              --level toa
                              --out ${TEMP}/apTvRaOpticalCalibration_Spot5.tif
                      VALID   --compare-image ${EPSILON_7}
-                             ${BASELINE}/raTvImageToLuminanceImageFilterAutoSpot5.tif
+                             ${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoSpot5.tif
                              ${TEMP}/apTvRaOpticalCalibration_Spot5.tif )
 
 OTB_TEST_APPLICATION(NAME apTvRaOpticalCalibration_Ikonos
@@ -32,7 +32,7 @@ OTB_TEST_APPLICATION(NAME apTvRaOpticalCalibration_Ikonos
                              --level toa
                              --out ${TEMP}/apTvRaOpticalCalibration_Ikonos.tif
                      VALID   --compare-image ${EPSILON_7}
-                             ${BASELINE}/raTvImageToLuminanceImageFilterAutoIkonos.tif
+                             ${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoIkonos.tif
                              ${TEMP}/apTvRaOpticalCalibration_Ikonos.tif )
 
 OTB_TEST_APPLICATION(NAME apTvRaOpticalCalibration_WV2PAN
@@ -41,7 +41,7 @@ OTB_TEST_APPLICATION(NAME apTvRaOpticalCalibration_WV2PAN
                              --level toa
                              --out ${TEMP}/apTvRaOpticalCalibration_WV2PAN.tif
                      VALID   --compare-image ${EPSILON_7}
-                             ${BASELINE}/raTvImageToLuminanceImageFilterAutoWV2PAN.tif
+                             ${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoWV2PAN.tif
                              ${TEMP}/apTvRaOpticalCalibration_WV2PAN.tif )
 
 OTB_TEST_APPLICATION(NAME apTvRaOpticalCalibration_WV2Multi
@@ -50,14 +50,14 @@ OTB_TEST_APPLICATION(NAME apTvRaOpticalCalibration_WV2Multi
                              --level toa
                              --out ${TEMP}/apTvRaOpticalCalibration_WV2Multi.tif
                      VALID   --compare-image ${EPSILON_7}
-                             ${BASELINE}/raTvImageToLuminanceImageFilterAutoWV2Multi.tif
+                             ${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoWV2Multi.tif
                              ${TEMP}/apTvRaOpticalCalibration_WV2Multi.tif )
 
 OTB_TEST_APPLICATION(NAME apTvRaOpticalCalibration_Formosat
                      APP  OpticalCalibration
-                     OPTIONS --in ${INPUTDATA}/WV2_MUL_ROI_1000_100.tif
+                     OPTIONS --in ${INPUTDATA}/FORMOSAT_ROI_1000_100.tif
                              --level toa
                              --out ${TEMP}/apTvRaOpticalCalibration_Formosat.tif
                      VALID   --compare-image ${EPSILON_7}
-                             ${BASELINE}/raTvImageToLuminanceImageFilterAutoFormosat.tif
+                             ${BASELINE}/raTvLuminanceToReflectanceImageFilterAutoFormosat.tif
                              ${TEMP}/apTvRaOpticalCalibration_Formosat.tif )
