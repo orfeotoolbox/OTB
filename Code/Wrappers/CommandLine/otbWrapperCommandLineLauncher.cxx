@@ -338,7 +338,7 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
     
     bool mustBeSet = false;
     if( param->GetMandatory() == true )
-      if( param->GetRoot()->GetActive() || param->IsRoot() )
+      if( param->GetRoot()->GetMandatory() || param->IsRoot() )
         mustBeSet = true;
 
     if( mustBeSet )
