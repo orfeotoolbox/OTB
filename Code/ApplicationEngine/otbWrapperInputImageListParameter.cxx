@@ -56,7 +56,7 @@ InputImageListParameter::SetListFromFileName(const std::vector<std::string> & fi
         {
         reader->UpdateOutputInformation();
         }
-      catch(itk::ExceptionObject & err)
+      catch(itk::ExceptionObject & /*err*/)
         {
         this->ClearValue();
         isOk = false;

@@ -51,7 +51,7 @@ InputVectorDataParameter::SetFromFileName(const std::string& filename)
       {
       reader->UpdateOutputInformation();
       }
-    catch(itk::ExceptionObject & err)
+    catch(itk::ExceptionObject & /*err*/)
       {
       return false;
       }
