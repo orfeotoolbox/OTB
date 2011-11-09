@@ -23,7 +23,7 @@
 #include "itkObject.h"
 #include "itkObjectFactory.h"
 #include "ConfigFile.h"
-#include "itkIntTypes.h"
+#include "itksys/FundamentalType.h"
 
 namespace otb
 {
@@ -81,12 +81,12 @@ public:
   std::string GetGeoidFile() const;
 
   /** Returns the available RAM in bytes  */
-  itk::uint64_t GetAvailableRAMInBytes() const;
+  ::itksysFundamentalType_UInt64 GetAvailableRAMInBytes() const;
 
   /** Returns the available RAM in MBytes*/
-  itk::uint64_t GetAvailableRAMInMBytes() const
+  ::itksysFundamentalType_UInt64 GetAvailableRAMInMBytes() const
   {
-    return static_cast< itk::uint64_t >(GetAvailableRAMInBytes() / 1024 / 1024);
+    return static_cast< ::itksysFundamentalType_UInt64 >(GetAvailableRAMInBytes() / 1024 / 1024);
   }
 
 protected:

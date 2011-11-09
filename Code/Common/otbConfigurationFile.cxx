@@ -139,11 +139,11 @@ ConfigurationFile
   return ret;
 }
 
-itk::uint64_t
+::itksysFundamentalType_UInt64
 ConfigurationFile
 ::GetAvailableRAMInBytes() const
 {
-  itk::uint64_t availableRAMInBytes = 0;
+  ::itksysFundamentalType_UInt64 availableRAMInBytes = 0;
 
   otbMsgDevMacro(<< "Retrieving available RAM size from configuration");
   // Retrieve it from the configuration
@@ -152,7 +152,7 @@ ConfigurationFile
     typedef otb::ConfigurationFile ConfigurationType;
     ConfigurationType::Pointer conf = ConfigurationType::GetInstance();
     
-    availableRAMInBytes = conf->GetParameter< itk::uint64_t >(
+    availableRAMInBytes = conf->GetParameter< ::itksysFundamentalType_UInt64 >(
       "OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING");
     }
   catch(...)
