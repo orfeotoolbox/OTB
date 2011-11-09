@@ -80,6 +80,6 @@ macro(OTB_TEST_APPLICATION)
                     ${TESTAPPLICATION_APP}
                     $<TARGET_FILE_DIR:otbapp_${TESTAPPLICATION_APP}>
                     ${TESTAPPLICATION_OPTIONS}
---testenv)
+                    --testenv)
    
 endmacro(OTB_TEST_APPLICATION)
