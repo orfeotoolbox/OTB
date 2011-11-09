@@ -174,7 +174,7 @@ verified, it will produce an estimation error of the endmembers spectra. The his
 algorithmic complexity. The three best known are :
 \begin{itemize}
 \item PPI (Pixel Purity Index)
-\item VCA NFINDER (Vertex Component Analysis) [Nascimento2005]
+\item VCA NFINDER (Vertex Component Analysis) \cite{Nascimento2005}
 \end{itemize}
 
 In addition to its success recognized by the
@@ -205,11 +205,11 @@ data have remained on the simplex and possibly by constraints C1, C2 and C3.
 Existing algorithms are: 
 \begin{itemize}
 \item {MVSA (Minimum Volume Simplex
-Analysis) [Li2008].}
+Analysis) \cite{Li2008}.}
 \item { MVES (Minimum Volume Encosing Simplex)
 [Chan2009].}
 \item {SISAL (Simplex Identification via Split Augmented
-Lagrangian) [Dias2009].}
+Lagrangian) \cite{Dias2009}.}
 \end{itemize}  
   
 Main differences between algorithms are: 
@@ -221,7 +221,7 @@ constraints are taken into account.}
 \end{itemize}  
 These issues impact the computational complexity and the precision of the estimation.
  
-\paragraph{MVSA aLi2008]} 
+\paragraph{MVSA \cite{Li2008} } 
 MVSA key points: 
 \begin{itemize}
 \item {Initialization by VCA.}
@@ -235,7 +235,7 @@ MVSA key points:
   ``Quasi-Newton''under constraint.}
 \end{itemize} 
 
-\paragraph{MVES [Chan2009]}
+\paragraph{MVES \cite{Chan2009}}
  MVES key points: 
 \begin{itemize}
 \item {Initialization by non-trivial
@@ -245,7 +245,7 @@ MVSA key points:
 \end{itemize} 
  
 
-\paragraph{SISAL [Dias2009]}
+\paragraph{SISAL \cite{Dias2009}}
 SISAL key points:
 \begin{itemize}
 \item {Initialisation by VCA.}
@@ -266,7 +266,7 @@ Non negative matrix factorization algorithms (NMF for Non-negative Matrix Factor
 branch of applied mathematics is to factor a non-negative matrix, X in our case, into a product of non negative matrices: AS by minimizing a distance between X and AS and
 with an adapted regularization to lift the degeneration in an appropriate manner adapted to the physical problems associated with unmixing.
 
-\paragraph{MDMD-NMF [Huck2010b]} 
+\paragraph{MDMD-NMF \cite{Huck2010b}} 
 Key points of MDMD-NMF:
 \begin{itemize}
 \item {VCA initialization.}
@@ -277,7 +277,7 @@ Frobenius with a spectral regularization and a regularization ``Space''(the matr
 Dispersion: the spectral regularization encourages the  variance of 
 coefficients of a spectrum of endmembers to be low.}
 \item {Maximum spatial dispersion: the spatial regularization
-  encourages the vector of abundances to occupy all the admissible parts (more information in [Huck2009]). it
+  encourages the vector of abundances to occupy all the admissible parts (more information in \cite{Huck2009}). it
   presents a certain analogy with the minimum volume constraint.}
 \end{itemize}
 \end{itemize}
@@ -289,7 +289,7 @@ coefficients of a spectrum of endmembers to be low.}
 Algorithms of families 1 and 2 estimate `` only'' the spectra of
 endmembers. The estimated abundance maps held
 \textit{a posteri} and requires the application of an algorithm like Fully
-Constrained Least Square (FCLS)\doxygen{otb}{FCLSUnmixingImageFilter} [Heinz2001]. VSS includes an specific algorithm
+Constrained Least Square (FCLS)\doxygen{otb}{FCLSUnmixingImageFilter} \cite{Heinz2001}. VSS includes an specific algorithm
 for the estimation of the abundances.
 The unmixing is a general non-convex problem,
 which explains the importance of the initialization of algorithms.
@@ -385,7 +385,7 @@ where anomalies contrast very strongly with the background. But the automatic es
 \end{itemize}
 
 Algorithms described here are RX (presented in the first version
-in [Reed1990] and GMRF [Schweizer2001]. They are based on probability models, statistics and hypothesis tests and
+in \cite{Reed1990} and GMRF \cite{Schweizer2001}. They are based on probability models, statistics and hypothesis tests and
 sliding window. These approaches consist in answering the following question : ``The pixel (or set of neighboring pixels) tests looks like background pixels?'', by a process of test
 statistics. More fully, this approach requires:
 
@@ -449,4 +449,4 @@ GMRF, taken herein in the following sections.}
   \label{fig:sliding_anomaly}
 \end{figure}
 
-\subsection{Local RX}
+%\subsection{Local RX}
