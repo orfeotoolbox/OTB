@@ -144,7 +144,7 @@ bool CommandLineLauncher::Execute()
   int res = m_Application->Execute();
   if (res == 0)
     return true;
-  else 
+  else
     return false;
 }
 
@@ -159,7 +159,7 @@ bool CommandLineLauncher::ExecuteAndWriteOutput()
 
   if (res == 0)
     return true;
-  else 
+  else
     return false;
 }
 

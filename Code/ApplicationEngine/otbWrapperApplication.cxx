@@ -1118,7 +1118,7 @@ Application::IsApplicationReady()
     // Check all Input Parameters with Input Role
     if (GetParameterByKey(*it)->GetRole() == Role_Input)
       {
-      // When a parameter is mandatory : 
+      // When a parameter is mandatory :
       // return false when does not have value and:
       //  - The param is root
       //  - The param is not root and belonging to a Mandatory Group

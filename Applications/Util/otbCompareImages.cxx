@@ -118,7 +118,7 @@ private:
   }
 
   void DoUpdateParameters()
-  {   
+  {
     // Set channel interval
     if( HasValue("ref.in") )
       {
@@ -156,7 +156,7 @@ private:
     SetMaximumParameterIntValue("roi.startx", region.GetSize()[0]);
     SetMaximumParameterIntValue("roi.starty", region.GetSize()[1]);
     SetMaximumParameterIntValue("roi.sizex", region.GetSize()[0]-userRegion.GetIndex()[0]);
-    SetMaximumParameterIntValue("roi.sizey", region.GetSize()[1]-userRegion.GetIndex()[1]);   
+    SetMaximumParameterIntValue("roi.sizey", region.GetSize()[1]-userRegion.GetIndex()[1]);
   }
 
   void DoExecute()

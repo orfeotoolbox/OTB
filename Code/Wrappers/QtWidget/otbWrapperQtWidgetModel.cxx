@@ -89,6 +89,5 @@ void QtWidgetModel::SendLogDEBUG( const std::string & mes )
 }
 
 
-
 }
 }

@@ -165,7 +165,7 @@ InputVectorDataListParameter::GetFileNameList() const
     {
     std::vector<std::string> filenames;
     for(unsigned int i=0; i<m_ReaderList->Size(); i++)
-      {    
+      {
       if( m_ReaderList->GetNthElement(i) )
         filenames.push_back( m_ReaderList->GetNthElement(i)->GetFileName() );
       }

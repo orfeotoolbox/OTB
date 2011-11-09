@@ -314,7 +314,7 @@ QtWidgetInputVectorDataListParameter::SupressFile()
   mainGroup->setLayout(m_FileLayout);
   m_Scroll->setWidget(mainGroup);
 
-  this->update(); 
+  this->update();
   this->RecreateVectorDataList();
 }
 

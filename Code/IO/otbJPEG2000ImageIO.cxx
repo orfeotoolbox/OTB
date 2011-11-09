@@ -754,7 +754,7 @@ void JPEG2000ImageIO::ComputeOffsets( unsigned int &l_width_src, // Width of the
   // Characteristics of the otb region
   unsigned int l_x0_dest = this->GetIORegion().GetIndex()[0];
   unsigned int l_x1_dest = this->GetIORegion().GetIndex()[0] + this->GetIORegion().GetSize()[0];
-  unsigned int l_y0_dest = this->GetIORegion().GetIndex()[1] ;
+  unsigned int l_y0_dest = this->GetIORegion().GetIndex()[1];
   unsigned int l_y1_dest = this->GetIORegion().GetIndex()[1] + this->GetIORegion().GetSize()[1];
 
   unsigned int l_start_x_dest , l_start_y_dest;
@@ -841,8 +841,8 @@ void JPEG2000ImageIO::ComputeOffsets( unsigned int &l_width_src, // Width of the
       std::cout << "SRC buffer offset: "<< l_start_offset_src << std::endl;
 
       std::cout << "DEST coordinates: l_start_x_dest= "<<  l_start_x_dest << ", l_start_y_dest= " << l_start_y_dest
-                << ", l_width_dest= " << l_width_dest << ", l_height_dest= " << l_height_dest << std::endl ;
-      std::cout << "DEST start offset: " << l_start_offset_dest << std::endl ;
+                << ", l_width_dest= " << l_width_dest << ", l_height_dest= " << l_height_dest << std::endl;
+      std::cout << "DEST start offset: " << l_start_offset_dest << std::endl;
       */
 }
 
