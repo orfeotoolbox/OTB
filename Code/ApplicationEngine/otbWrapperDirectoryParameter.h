@@ -18,8 +18,10 @@
 #ifndef __otbWrapperDirectoryParameter_h
 #define __otbWrapperDirectoryParameter_h
 
-#include <string>
 #include "otbWrapperStringParameter.h"
+#include "otbMacro.h"
+
+#include <string>
 
 namespace otb
 {
@@ -30,12 +32,12 @@ namespace Wrapper
  *  \brief This class represent a string parameter for the wrapper framework
  */
 class DirectoryParameter
-  : public StringParameter
+  : public Parameter
 {
 public:
   /** Standard class typedef */
   typedef DirectoryParameter            Self;
-  typedef StringParameter               Superclass;
+  typedef Parameter                     Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -45,10 +47,37 @@ public:
   /** RTTI support */
   itkTypeMacro(DirectoryParameter, Parameter);
 
+  bool HasValue() const
+  {
+    return m_StringParam->HasValue();
+  }
+
+  // Set/Get Value
+  otbSetObjectMemberMacro(StringParam, Value , std::string);
+  otbGetObjectMemberMacro(StringParam, Value , std::string);
+
+  // Clear Value
+  void ClearValue()
+  {
+    m_StringParam->ClearValue();
+  }
+
+  // Reimplement the SetActive method
+  void SetActive(  const bool value )
+  {
+    Superclass::SetActive( value );
+    m_StringParam->SetActive( value );
+  }
+
+  // GetActive method
+  otbGetObjectMemberConstMacro(StringParam, Active, bool);
+  
 protected:
   /** Constructor */
   DirectoryParameter()
-  {}
+  {
+    m_StringParam = StringParameter::New();
+  }
 
   /** Destructor */
   virtual ~DirectoryParameter()
@@ -56,7 +85,10 @@ protected:
 
 private:
   DirectoryParameter(const DirectoryParameter &); //purposely not implemented
-  void operator =(const DirectoryParameter&); //purposely not implemented
+  void operator =(const DirectoryParameter&); //purposely not
+                                              //implemented
+
+  StringParameter::Pointer   m_StringParam;
 
 }; // End class Parameter
 
