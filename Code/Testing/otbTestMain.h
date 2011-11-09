@@ -28,6 +28,9 @@
 
 #include "otbTestHelper.h"
 
+#include "itkMersenneTwisterRandomVariateGenerator.h"
+
+
 typedef int (*MainFuncPointer)(int, char*[]);
 std::map<std::string, MainFuncPointer> StringToTestFunctionMap;
 
@@ -47,6 +50,14 @@ void PrintAvailableTests()
     ++i;
     ++j;
     }
+}
+
+//apply dedicated treatment to test
+void LoadTestEnv()
+{
+  //Set seed for rand and itk mersenne twister
+  srand(1);
+  itk::Statistics::MersenneTwisterRandomVariateGenerator::GetInstance()->SetSeed(1234);
 }
 
 int main(int ac, char* av[])
@@ -77,6 +88,8 @@ int main(int ac, char* av[])
   otb::TestHelper::Pointer testHelper = otb::TestHelper::New();
 
   RegisterTests();
+
+  LoadTestEnv(); // load specific treatments for testing
   std::string testToRun;
   if (ac < 2)
     {
