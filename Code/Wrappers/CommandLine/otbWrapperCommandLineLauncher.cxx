@@ -328,8 +328,18 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
 
     const bool paramExists(m_Parser->IsAttributExists(std::string("--").append(paramKey), m_Expression));
     const bool hasValue = m_Application->HasValue(paramKey);
+
     // Check if mandatory parameter are present and have value
-    if (param->GetMandatory() == true && param->GetRoot()->GetActive())
+    // A param has to be set if it is mandatory and :
+    // is root OR its parent is active
+    // NB: a root parameter is not active
+    
+    bool mustBeSet = false;
+    if( param->GetMandatory() == true )
+      if( param->GetRoot()->GetActive() || param->IsRoot() )
+        mustBeSet = true;
+    
+    if( mustBeSet )
       {
       if (!paramExists)
         {
@@ -341,8 +351,7 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
           return MISSINGMANDATORYPARAMETER;
           }
         }
-
-      if (paramExists)
+      else
         {
         values = m_Parser->GetAttribut(std::string("--").append(paramKey), m_Expression);
         if (values.size() == 0 && !m_Application->HasValue(paramKey))
