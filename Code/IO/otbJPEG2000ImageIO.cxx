@@ -29,7 +29,6 @@ extern "C"
 #include "openjpeg.h"
 }
 
-
 /**
    sample error debug callback expecting no client object
 */
@@ -270,14 +269,14 @@ int JPEG2000ReaderInternal::Initialize()
     this->m_CstrInfo = otbopenjpeg_opj_get_cstr_info(this->m_Codec);
     if (!this->m_CstrInfo)
       {
-      std::cout << "ERROR while get codestream info" << std::endl;
+      std::cerr << "ERROR while get codestream info" << std::endl;
       this->Clean();
       return 0;
       }
 
     // We can now retrieve the main information  of the image and the codestream
     this->m_Width = this->m_Image->x1 - this->m_Image->x0;
-    this->m_Height = this->m_Image->x1 - this->m_Image->x0;
+    this->m_Height = this->m_Image->y1 - this->m_Image->y0;
 
     this->m_TileHeight = this->m_CstrInfo->tdy;
     this->m_TileWidth = this->m_CstrInfo->tdx;
@@ -472,6 +471,7 @@ void JPEG2000ImageIO::Read(void* buffer)
   // Decode tile need
   for (std::vector<unsigned int>::iterator itTile = tileList.begin(); itTile < tileList.end(); itTile++)
     {
+
     if (!otbopenjpeg_opj_get_decoded_tile(m_InternalReader->GetCodec(), m_InternalReader->GetStream(),
                                      m_InternalReader->GetImage(), *itTile))
       {
@@ -489,7 +489,6 @@ void JPEG2000ImageIO::Read(void* buffer)
 
     this->ComputeOffsets(lWidthSrc, lHeightDest, lWidthDest, lStartOffsetPxlDest, lStartOffsetPxlSrc);
 
-    std::cout << "Extraction tuile " << *itTile << std::endl;
     switch (this->GetComponentType())
       {
       case CHAR:
@@ -575,7 +574,7 @@ void JPEG2000ImageIO::Read(void* buffer)
     }
 
   chrono.Stop();
-  otbMsgDevMacro(<< "JPEG2000ImageIO::Read took " << chrono.GetTotal() << " sec")
+  otbMsgDevMacro( << "JPEG2000ImageIO::Read took " << chrono.GetTotal() << " sec");
 
   m_InternalReader->Clean();
 }
@@ -713,14 +712,17 @@ std::vector<unsigned int> JPEG2000ImageIO::ComputeTileList()
   int lFirstColumn = this->GetIORegion().GetIndex()[0];
 
   // Compute index of tile recover by the decoded area
-  unsigned int l_tile_x_start =  lFirstColumn / m_InternalReader->GetCstrInfo()->tdx;
-  unsigned int l_tile_x_end =  (lFirstColumn + lNbColumns) / m_InternalReader->GetCstrInfo()->tdx;
-  unsigned int l_tile_y_start =  lFirstLine / m_InternalReader->GetCstrInfo()->tdy;
-  unsigned int l_tile_y_end =  (lFirstLine + lNbLines) / m_InternalReader->GetCstrInfo()->tdy;
+  unsigned int tile_size_x = m_InternalReader->GetCstrInfo()->tdx;
+  unsigned int tile_size_y = m_InternalReader->GetCstrInfo()->tdy;
 
-  for (unsigned int itTileY = l_tile_x_start; itTileY <= l_tile_x_end; itTileY++)
+  unsigned int l_tile_x_start =  lFirstColumn / tile_size_x;
+  unsigned int l_tile_x_end =  (lFirstColumn + lNbColumns + tile_size_x - 1) / tile_size_x;
+  unsigned int l_tile_y_start =  lFirstLine / m_InternalReader->GetCstrInfo()->tdy;
+  unsigned int l_tile_y_end =  (lFirstLine + lNbLines + tile_size_y - 1) / tile_size_y;
+
+  for (unsigned int itTileY = l_tile_y_start; itTileY < l_tile_y_end; itTileY++)
     {
-    for (unsigned int itTileX = l_tile_x_start; itTileX <= l_tile_x_end; itTileX++)
+    for (unsigned int itTileX = l_tile_x_start; itTileX < l_tile_x_end; itTileX++)
       {
       tileVector.push_back(itTileX + itTileY * m_InternalReader->GetCstrInfo()->tw);
       }
@@ -766,6 +768,7 @@ void JPEG2000ImageIO::ComputeOffsets( unsigned int &l_width_src, // Width of the
    * l_start_y_dest, l_width_dest, l_height_dest)  which will be modified
    * by this input area.
    */
+
   if (l_x0_dest < l_x0_src)
       {
       l_start_x_dest = l_x0_src - l_x0_dest;
@@ -831,15 +834,16 @@ void JPEG2000ImageIO::ComputeOffsets( unsigned int &l_width_src, // Width of the
       /* Compute the output buffer offset */
       l_start_offset_dest = l_start_x_dest + l_start_y_dest * (l_x1_dest - l_x0_dest);
 
-      /*std::cout << "SRC coordinates: l_start_x_src= "<< l_x0_src << ", l_start_y_src= " <<  l_y0_src
+      /*
+      std::cout << "SRC coordinates: l_start_x_src= "<< l_x0_src << ", l_start_y_src= " <<  l_y0_src
                 << ", l_width_src= "<< l_width_src << ", l_height_src= " << l_height_src << std::endl;
       std::cout << "SRC tile offset: "<< l_offset_x0_src << ", " << l_offset_y0_src << std::endl;
       std::cout << "SRC buffer offset: "<< l_start_offset_src << std::endl;
 
       std::cout << "DEST coordinates: l_start_x_dest= "<<  l_start_x_dest << ", l_start_y_dest= " << l_start_y_dest
                 << ", l_width_dest= " << l_width_dest << ", l_height_dest= " << l_height_dest << std::endl ;
-      std::cout << "DEST start offset: " << l_start_offset_dest << std::endl ;*/
-
+      std::cout << "DEST start offset: " << l_start_offset_dest << std::endl ;
+      */
 }
 
 // Not yet implemented
