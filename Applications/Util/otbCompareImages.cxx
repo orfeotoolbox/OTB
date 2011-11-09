@@ -15,118 +15,209 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
+#include "otbWrapperApplication.h"
+#include "otbWrapperApplicationFactory.h"
 
-#include "otbCompareImages.h"
-#include "otbVectorImage.h"
-#include "otbImageFileReader.h"
 #include "otbMultiToMonoChannelExtractROI.h"
 #include "otbStreamingCompareImageFilter.h"
 
-#include <iostream>
-
 namespace otb
 {
-
-int CompareImages::Describe(ApplicationDescriptor* descriptor)
+namespace Wrapper
 {
-  descriptor->SetName("CompareImages");
-  descriptor->SetDescription("Estimator between 2 images");
-  descriptor->AddOption("InputReference","The reference image","inR", 1, true, ApplicationDescriptor::InputImage);
-  descriptor->AddOption("InputMeasured","The measured image","inM", 1, true, ApplicationDescriptor::InputImage);
-  descriptor->AddOption("NumBandRefImage","The channel number to compare in the reference image (between 1 and number of channels)","chR", 1, false, ApplicationDescriptor::Integer);
-  descriptor->AddOption("NumBandMeasuredImage","The channel number to compare in the measured image (between 1 and number of channels)","chM", 1, false, ApplicationDescriptor::Integer);
-  descriptor->AddOption("StartX", "first point in x-axis ", "x0", 1, false, ApplicationDescriptor::Real);
-  descriptor->AddOption("StartY", "first point in y-axis ", "y0", 1, false, ApplicationDescriptor::Real);
-  descriptor->AddOption("SizeX", "size in x-axis ", "Nx", 1, false, ApplicationDescriptor::Integer);
-  descriptor->AddOption("SizeY", "size in y-axis ", "Ny", 1, false, ApplicationDescriptor::Integer);
-  descriptor->AddOption("AvailableMemory","Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default)","ram", 1, false, otb::ApplicationDescriptor::Integer);
-  return EXIT_SUCCESS;
-}
 
-int CompareImages::Execute(otb::ApplicationOptionsResult* parseResult)
+
+class CompareImages : public Application
 {
-  typedef double PixelType;
+public:
+  /** Standard class typedefs. */
+  typedef CompareImages             Self;
+  typedef Application                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef otb::VectorImage<PixelType, 2>                                              ImageType;
-  typedef otb::ImageFileReader<ImageType>                                             ReaderType;
-  typedef otb::MultiToMonoChannelExtractROI<PixelType, PixelType>                     ExtractROIMonoFilterType;
-  typedef otb::StreamingCompareImageFilter<ExtractROIMonoFilterType::OutputImageType> StreamingCompareImageFilterType;
-  //typedef otb::StreamingStatisticsImageFilter<ExtractROIMonoFilterType::OutputImageType> StreamingCompareImageFilterType;
-  // Read input images information
-  ReaderType::Pointer reader1= ReaderType::New();
-  reader1->SetFileName(parseResult->GetParameterString("InputReference"));
-  reader1->GenerateOutputInformation();
+  /** Standard macro */
+  itkNewMacro(Self);
 
-  ReaderType::Pointer reader2= ReaderType::New();
-  reader2->SetFileName(parseResult->GetParameterString("InputMeasured"));
-  reader2->GenerateOutputInformation();
+  itkTypeMacro(CompareImages, otb::Application);
 
-  unsigned int layer1 = 1;
-  unsigned int layer2 = 1;
+  /** Filters typedef */
+  typedef otb::MultiToMonoChannelExtractROI<FloatVectorImageType::InternalPixelType, FloatVectorImageType::InternalPixelType> ExtractROIMonoFilterType;
+  typedef otb::StreamingCompareImageFilter<FloatImageType> StreamingCompareImageFilterType;
 
-  if (parseResult->IsOptionPresent("NumBandRefImage"))
-    {
-    layer1 = parseResult->GetParameterUInt("NumBandRefImage");
-    }
-  
-  if (parseResult->IsOptionPresent("NumBandMeasuredImage"))
-    {
-    layer2 = parseResult->GetParameterUInt("NumBandMeasuredImage");
-    }
- 
-  ExtractROIMonoFilterType::Pointer extractROIMonoFilter1= ExtractROIMonoFilterType::New();
-  extractROIMonoFilter1->SetInput(reader1->GetOutput());
-  extractROIMonoFilter1->SetChannel( layer1 );
+private:
+   CompareImages()
+  {
+    SetName("CompareImages");
+    SetDescription("Estimator between 2 images.");
 
-  ExtractROIMonoFilterType::Pointer extractROIMonoFilter2= ExtractROIMonoFilterType::New();
-  extractROIMonoFilter2->SetInput(reader2->GetOutput());
-  extractROIMonoFilter2->SetChannel( layer2 );
+    // Documentation
+    SetDocName("Images comparaison");
+    SetDocLongDescription("This application computes MSE (Mean Squared Error), MAE (Mean Absolute Error) and PSNR(Peak Signal to Noise Ratio) between the channel of two images (reference and measurement). The user has to set the used channel and can specified an ROI.");
+    SetDocLimitations("None");
+    SetDocAuthors("OTB-Team");
+    SetDocSeeAlso("BandMath application, ImageStatistics application");
+    //SetDocCLExample("otbApplicationLauncherCommandLine CompareImages ${OTB-BIN}/bin --in ${OTB-DATA/Input}/poupees_sub_c1.png ${OTB-DATA}/poupees_sub_c2.png ${OTB-DATA}/poupees_sub_c3.png --out otbCompareImages.png uchar");
+    AddDocTag("Statistics");
+  }
 
-  if (parseResult->IsOptionPresent("StartX"))
-    {
-    extractROIMonoFilter1->SetStartX(parseResult->GetParameterULong("StartX"));
-    extractROIMonoFilter2->SetStartX(parseResult->GetParameterULong("StartX"));
-    }
-  if (parseResult->IsOptionPresent("StartY"))
-    {
-    extractROIMonoFilter1->SetStartY(parseResult->GetParameterULong("StartY"));
-    extractROIMonoFilter2->SetStartY(parseResult->GetParameterULong("StartY"));
-    }
+  virtual ~CompareImages()
+  {
+  }
 
-  if (parseResult->IsOptionPresent("SizeX"))
-    {
-    extractROIMonoFilter1->SetSizeX(parseResult->GetParameterULong("SizeX"));
-    extractROIMonoFilter2->SetSizeX(parseResult->GetParameterULong("SizeX"));
-    }
-  if (parseResult->IsOptionPresent("SizeY"))
-    {
-    extractROIMonoFilter1->SetSizeY(parseResult->GetParameterULong("SizeY"));
-    extractROIMonoFilter2->SetSizeY(parseResult->GetParameterULong("SizeY"));
-    }
+  void DoCreateParameters()
+  {
+    AddParameter(ParameterType_Group, "ref", "Reference image properties");
+    AddParameter(ParameterType_InputImage,  "ref.in",   "Reference image");
+    SetParameterDescription("ref.in", "Image used as reference in the comparaison");
+    AddParameter(ParameterType_Int,  "ref.channel",   "Reference image channel");
+    SetParameterDescription("ref.channel", "Used channel for the reference image");
+    SetDefaultParameterInt("ref.channel", 1);
+    SetMinimumParameterIntValue("ref.channel", 1);
+
+    AddParameter(ParameterType_Group, "meas", "Measured image properties");
+    AddParameter(ParameterType_InputImage,  "meas.in",   "Measured image");
+    SetParameterDescription("meas.in", "Image used as measured in the comparaison");
+    AddParameter(ParameterType_Int,  "meas.channel",   "Measured image channel");
+    SetParameterDescription("meas.channel", "Used channel for the measured image");
+    SetDefaultParameterInt("meas.channel", 1);
+    SetMinimumParameterIntValue("meas.channel", 1);
+
+    AddParameter(ParameterType_Group, "roi", "Region Of Interest");
+    AddParameter(ParameterType_Int,  "roi.startx", "Start X");
+    SetDefaultParameterInt("roi.startx", 0);
+    SetMinimumParameterIntValue("roi.startx", 0);
+
+    SetParameterDescription("roi.startx", "ROI start x position.");
+    AddParameter(ParameterType_Int,  "roi.starty", "Start Y");
+    SetDefaultParameterInt("roi.starty", 0);
+    SetMinimumParameterIntValue("roi.starty", 0);
     
-  StreamingCompareImageFilterType::Pointer filter = StreamingCompareImageFilterType::New();
+    SetParameterDescription("roi.starty", "ROI start y position.");
+    AddParameter(ParameterType_Int,  "roi.sizex",  "Size X");
+    SetDefaultParameterInt("roi.sizex",  0);
+    SetMinimumParameterIntValue("roi.sizex",  1);
 
-  filter->SetInput1(extractROIMonoFilter1->GetOutput());
-  filter->SetInput2(extractROIMonoFilter2->GetOutput());
+    SetParameterDescription("roi.sizex","size along x in pixels.");
+    AddParameter(ParameterType_Int,  "roi.sizey",  "Size Y");
+    SetParameterDescription("roi.sizey","size along y in pixels.");
+    SetDefaultParameterInt("roi.sizey", 0);
+    SetMinimumParameterIntValue("roi.sizey",  1);
 
-  unsigned int ram = 256;
-  if (parseResult->IsOptionPresent("AvailableMemory"))
-    {
-    ram = parseResult->GetParameterUInt("AvailableMemory");
-    }
-  filter->GetStreamer()->SetAutomaticTiledStreaming(ram);
+    AddParameter(ParameterType_Float, "mse",  "MSE");
+    SetParameterDescription("mse", "Mean Squared Error value");
+    SetParameterRole("mse", Role_Output );
 
-  filter->Update();
+    AddParameter(ParameterType_Float, "mae",  "MAE");
+    SetParameterDescription("mae", "Mean Absolute Error value");
+    SetParameterRole("mae", Role_Output );
 
-  std::cout << "MSE: " << filter->GetMSE() << std::endl;
-  std::cout << "MAE: " << filter->GetMAE() << std::endl;
-  std::cout << "PSNR: " << filter->GetPSNR() << std::endl;
+    AddParameter(ParameterType_Float, "psnr",  "PSNR");
+    SetParameterDescription("psnr", "Peak Signal to Noise Ratio value");
+    SetParameterRole("psnr", Role_Output);
+  }
 
+  void DoUpdateParameters()
+  {   
+    // Set channel interval
+    if( HasValue("ref.in") )
+      {
+      SetMaximumParameterIntValue("ref.channel", this->GetParameterImage("ref.in")->GetNumberOfComponentsPerPixel());
+      }
+    if( HasValue("meas.in") )
+      {
+      SetMaximumParameterIntValue("meas.channel", this->GetParameterImage("meas.in")->GetNumberOfComponentsPerPixel());
+      }
+
+    // ROI
+    FloatVectorImageType::RegionType region, userRegion;
+    FloatVectorImageType::SizeType size;
+    FloatVectorImageType::IndexType id;
+    id[0] = this->GetParameterInt("roi.startx");
+    id[1] = this->GetParameterInt("roi.starty");
+    size[0] = this->GetParameterInt("roi.sizex");
+    size[1] = this->GetParameterInt("roi.sizey");
+    userRegion.SetSize(size);
+    userRegion.SetIndex(id);
+      
+    if ( HasValue("ref.in") &&  HasValue("meas.in") )
+      {
+      region = this->GetParameterImage("ref.in")->GetLargestPossibleRegion();
+      }
+    else if ( HasValue("ref.in") &&  HasValue("meas.in") )
+      {
+      region = this->GetParameterImage("ref.in")->GetLargestPossibleRegion();
+      }
+    else if ( HasValue("meas.in") )
+      {
+      region = this->GetParameterImage("meas.in")->GetLargestPossibleRegion();
+      }
+
+    SetMaximumParameterIntValue("roi.startx", region.GetSize()[0]);
+    SetMaximumParameterIntValue("roi.starty", region.GetSize()[1]);
+    SetMaximumParameterIntValue("roi.sizex", region.GetSize()[0]-userRegion.GetIndex()[0]);
+    SetMaximumParameterIntValue("roi.sizey", region.GetSize()[1]-userRegion.GetIndex()[1]);   
+  }
+
+  void DoExecute()
+  {
+    // Init filters
+    m_ExtractRefFilter = ExtractROIMonoFilterType::New();
+    m_ExtractMeasFilter = ExtractROIMonoFilterType::New();
+    m_CompareFilter = StreamingCompareImageFilterType::New();
+
+    // Get input image pointers
+    FloatVectorImageType::Pointer refIm = this->GetParameterImage("ref.in");
+    FloatVectorImageType::Pointer measIm = this->GetParameterImage("meas.in");
+
+    // Get the region of interest
+    FloatVectorImageType::RegionType region;
+    FloatVectorImageType::SizeType size;
+    FloatVectorImageType::IndexType id;
+    id[0] = this->GetParameterInt("roi.startx");
+    id[1] = this->GetParameterInt("roi.starty");
+    size[0] = this->GetParameterInt("roi.sizex");
+    size[1] = this->GetParameterInt("roi.sizey");
+    region.SetSize(size);
+    region.SetIndex(id);
+
+    if( !region.Crop(refIm->GetLargestPossibleRegion()) || !region.Crop(measIm->GetLargestPossibleRegion()) )
+      {
+      otbAppLogFATAL( << "ROI is not contained in the images");
+      }
+
+    m_ExtractRefFilter->SetInput( refIm );
+    m_ExtractMeasFilter->SetInput( measIm );
+
+    m_ExtractRefFilter->SetExtractionRegion(region);
+    m_ExtractMeasFilter->SetExtractionRegion(region);
+
+    // Set channels to extract
+    m_ExtractRefFilter->SetChannel( this->GetParameterInt("ref.channel") );
+    m_ExtractMeasFilter->SetChannel( this->GetParameterInt("meas.channel") );
+
+    // Compute comparaison
+    m_CompareFilter->SetInput1(m_ExtractRefFilter->GetOutput());
+    m_CompareFilter->SetInput2(m_ExtractMeasFilter->GetOutput());
+    m_CompareFilter->Update();
+
+    // Show result
+    otbAppLogINFO( << "MSE: " << m_CompareFilter->GetMSE() );
+    otbAppLogINFO( << "MAE: " << m_CompareFilter->GetMAE() );
+    otbAppLogINFO( << "PSNR: " << m_CompareFilter->GetPSNR() );
+
+    SetParameterFloat( "mse", m_CompareFilter->GetMSE() );
+    SetParameterFloat( "mae", m_CompareFilter->GetMAE() );
+    SetParameterFloat( "psnr", m_CompareFilter->GetPSNR() );
+  }
   
+  
+  ExtractROIMonoFilterType::Pointer m_ExtractRefFilter;
+  ExtractROIMonoFilterType::Pointer m_ExtractMeasFilter;
+  StreamingCompareImageFilterType::Pointer m_CompareFilter;
+};
 
-
-  return EXIT_SUCCESS;
+}
 }
 
-}
-
+OTB_APPLICATION_EXPORT(otb::Wrapper::CompareImages)

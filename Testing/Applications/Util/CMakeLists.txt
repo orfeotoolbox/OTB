@@ -151,18 +151,9 @@ OTB_TEST_APPLICATION(NAME apTvUtOSMDownloader
                              ${OTBAPP_BASELINE_FILES}/otbOSMDownloaderOutput.shp
                              ${TEMP}/apTvUtOSMDownloader.shp)
 
-#ADD_TEST(utTvOSMDownloader   ${OTB_TEST_DRIVER} 
-#  --compare-ogr ${TOL} 
-#  ${BASELINE_FILES}/otbOSMDownloaderOutput.shp
-#  ${TEMP}/otbOSMDownloaderOutput.shp
- # Execute otbOSMDownloader-cli
- # -in ${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/ROI_QB_TOULOUSE.TIF
- # -key "highway"
- # -out ${TEMP}/otbOSMDownloaderOutput.shp
-#)
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
-# Concatenate VectorData
+#--- Concatenate VectorData ---
 OTB_TEST_APPLICATION(NAME apTuUtConcatenateVectorData
                      APP ConcatenateVectorData
                      OPTIONS --vd   ${INPUTDATA}/waterways.shp
@@ -171,3 +162,15 @@ OTB_TEST_APPLICATION(NAME apTuUtConcatenateVectorData
                      VALID   --compare-ogr ${NOTOL}
                              ${OTBAPP_BASELINE_FILES}/utTvConcatenateVectorData.shp
                              ${TEMP}/apTuUtConcatenateVectorDataOutputTest.shp)
+
+#--- CompareImages ---
+OTB_TEST_APPLICATION(NAME apTvUtCompareImages
+                     APP CompareImages
+                     OPTIONS --ref.in ${INPUTDATA}/poupees.tif
+                             --ref.channel 2
+                             --meas.in ${INPUTDATA}/brain.png
+                             --meas.channel 1
+                             --roi.startx 20
+                             --roi.starty 15
+                             --roi.sizex 150
+                             --roi.sizey 200 )
