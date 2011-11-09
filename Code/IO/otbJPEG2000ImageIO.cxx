@@ -26,7 +26,7 @@
 
 extern "C"
 {
-#include "openjpeg.h" // FIXME otb_openjpeg.h
+#include "openjpeg.h"
 }
 
 
@@ -35,25 +35,22 @@ extern "C"
 */
 void error_callback(const char *msg, void *client_data)
 {
-  (void) msg;
   (void) client_data;
-  otbMsgDevMacro(<< "OpenJPEG error: " << msg);
+  itkGenericExceptionMacro(<< "OpenJPEG error: " << msg);
 }
 /**
    sample warning debug callback expecting no client object
 */
 void warning_callback(const char *msg, void *client_data)
 {
-  (void) msg;
   (void) client_data;
-  otbMsgDevMacro(<< "OpenJPEG warning: " << msg);
+  otbGenericMsgDebugMacro(<< "OpenJPEG warning: " << msg);
 }
 /**
    sample debug callback expecting no client object
 */
 void info_callback(const char *msg, void *client_data)
 {
-  (void) msg;
   (void) client_data;
   otbMsgDevMacro(<< "OpenJPEG info: " << msg);
 }
@@ -72,11 +69,11 @@ public:
   opj_stream_t* GetStream(){return this->m_Stream; };
   opj_codestream_info_v2* GetCstrInfo(){return this->m_CstrInfo; };
 
-       void Clean();
+  void Clean();
 
-       int CanRead();
+  int CanRead();
 
-       int Open(const char *filename);
+  int Open(const char *filename);
 
   bool m_IsOpen;
   OPJ_CODEC_FORMAT m_CodecFormat;
@@ -427,6 +424,9 @@ void JPEG2000ImageIO::ReadVolume(void*)
 // Read image
 void JPEG2000ImageIO::Read(void* buffer)
 {
+  itk::TimeProbe chrono;
+  chrono.Start();
+
   // Check if conversion succeed
   if (buffer == NULL)
     {
@@ -444,6 +444,13 @@ void JPEG2000ImageIO::Read(void* buffer)
       }
     }
 
+  std::vector<unsigned int> tileList = this->ComputeTileList();
+  if (tileList.empty())
+    {
+    this->m_InternalReader->Clean();
+    itkExceptionMacro(<< " IORegion is not correct in terme of tile!");
+    }
+
   // Get nb. of lines and columns of the region to read
   int lNbLines     = this->GetIORegion().GetSize()[1];
   int lNbColumns   = this->GetIORegion().GetSize()[0];
@@ -454,73 +461,64 @@ void JPEG2000ImageIO::Read(void* buffer)
   otbMsgDevMacro(<< " ImageDimension   : " << m_Dimensions[0] << "," << m_Dimensions[1]);
   otbMsgDevMacro(<< " IORegion         : " << this->GetIORegion());
   otbMsgDevMacro(<< " Nb Of Components : " << this->GetNumberOfComponents());
-  otbMsgDevMacro(<< "IORegion: " << this->GetIORegion());
-  otbMsgDevMacro(<< "Area to read: " << lFirstColumn << " " << lFirstLine  << " "
+  otbMsgDevMacro(<< " Area to read: " << lFirstColumn << " " << lFirstLine  << " "
                  << lFirstColumn + lNbColumns << " " << lFirstLine + lNbLines);
   otbMsgDevMacro(<< "Component type: " << this->GetComponentTypeAsString(this->GetComponentType()));
 
-  itk::TimeProbe chrono;
-  chrono.Start();
 
-  // Set the decoded area
-  if( !otbopenjpeg_opj_set_decode_area(m_InternalReader->GetCodec(),
-                                       m_InternalReader->GetImage(),
-                                       lFirstColumn,
-                                       lFirstLine,
-                                       lFirstColumn + lNbColumns,
-                                       lFirstLine + lNbLines) )
+  // Decode tile need
+  for (std::vector<unsigned int>::iterator itTile = tileList.begin(); itTile < tileList.end(); itTile++)
     {
-    itkExceptionMacro(<< "The decoded area is not correct!");
-    m_InternalReader->Clean();
-    return;
-    }
-
-
-  if ( !( otbopenjpeg_opj_decode_v2(m_InternalReader->GetCodec(), m_InternalReader->GetStream(), m_InternalReader->GetImage()) &&
-          otbopenjpeg_opj_end_decompress(m_InternalReader->GetCodec(), m_InternalReader->GetStream()) )
-     )
-    {
-    itkExceptionMacro(<< "Failed to decode the image!");
-    m_InternalReader->Clean();
-    return;
-    }
-
-
-  unsigned int nbPixel = (m_InternalReader->GetImage()->x1 - m_InternalReader->GetImage()->x0) *
-                         (m_InternalReader->GetImage()->y1 - m_InternalReader->GetImage()->y0);
-  //std::cout<< "NbPixel = " <<  nbPixel << std::endl;
-  //std::cout<< "NbOfComp = " <<  m_InternalReader->m_NbOfComponent << std::endl;
-
-  // Convert buffer from void * to unsigned char *
-  //unsigned char *p = static_cast<unsigned char *>(buffer);
-
-
-  // move the data into the buffer
-  switch (this->GetComponentType())
-  {
-//    case CHAR:
-//    case UCHAR:
-//    case SHORT:
-    case USHORT:
+    if (!otbopenjpeg_opj_get_decoded_tile(m_InternalReader->GetCodec(), m_InternalReader->GetStream(),
+                                     m_InternalReader->GetImage(), *itTile))
       {
-      unsigned short *p = static_cast<unsigned short *>(buffer);
-      for(unsigned int itPixel = 0; itPixel < nbPixel; itPixel++)
+      this->m_InternalReader->Clean();
+      itkExceptionMacro(<< " otbopenjpeg failed to decode the desired tile "<< *itTile << "!");
+      }
+
+    otbMsgDevMacro(<< " Tile " << *itTile << " is decoded.");
+
+    unsigned int lWidthSrc; // Width of the input pixel in nb of pixel
+    unsigned int lHeightDest; // Height of the area where write in nb of pixel
+    unsigned int lWidthDest; // Width of the area where write in nb of pixel
+    unsigned int lStartOffsetPxlDest; // Offset where begin to write the area in the otb buffer in nb of pixel
+    unsigned int lStartOffsetPxlSrc; // Offset where begin to write the area in the otb buffer in nb of pixel
+
+    this->ComputeOffsets(lWidthSrc, lHeightDest, lWidthDest, lStartOffsetPxlDest, lStartOffsetPxlSrc);
+
+    switch (this->GetComponentType())
+      {
+      //    case CHAR:
+      //    case UCHAR:
+      //    case SHORT:
+      case USHORT:
         {
-        for (unsigned int itComp = 0; itComp < m_InternalReader->m_NbOfComponent; itComp++)
+        unsigned short *p = static_cast<unsigned short *> (buffer);
+
+        /* Move the output buffer to the first place where we will write*/
+
+        for (unsigned int j = 0; j < lHeightDest; ++j)
           {
-          OPJ_INT32* data = m_InternalReader->GetImage()->comps[itComp].data;
-          //unsigned short* datashort = reinterpret_cast<unsigned short*>(data);
-          //OPJ_INT32 value = m_InternalReader->m_Image->comps[itComp].data[itPixel];
-          *p = static_cast<unsigned short>(data[itPixel] & 0xffff);
-          //p += m_BytePerPixel;
-          p++;
+          unsigned short* current_dst_line = p + (lStartOffsetPxlDest + j * lNbColumns) * this->m_NumberOfComponents;
+
+          for (unsigned int k = 0; k < lWidthDest; ++k)
+            {
+            for (unsigned int itComp = 0; itComp < this->m_NumberOfComponents; itComp++)
+              {
+              OPJ_INT32* data = m_InternalReader->GetImage()->comps[itComp].data;
+
+              *(current_dst_line++) = static_cast<unsigned short> (data[lStartOffsetPxlSrc + k + j * lWidthSrc] & 0xffff);
+              }
+            }
           }
         }
+
+        break;
+        //    case INT:
+        //    case UINT:
       }
-      break;
-//    case INT:
-//    case UINT:
-  }
+
+    }
 
   chrono.Stop();
   otbMsgDevMacro(<< "JPEG2000ImageIO::Read took " << chrono.GetTotal() << " sec")
@@ -646,6 +644,147 @@ void JPEG2000ImageIO::ReadImageInformation()
   otbMsgDebugMacro(<< "         NumberOfComponents : " << this->GetNumberOfComponents());
   otbMsgDebugMacro(<< "         ComponentSize      : " << this->GetComponentSize());
   otbMsgDebugMacro(<< "         GetPixelSize       : " << this->GetPixelSize());
+
+}
+
+// Compute the tile index list from the GetRegion
+std::vector<unsigned int> JPEG2000ImageIO::ComputeTileList()
+{
+  std::vector<unsigned int> tileVector;
+
+  // Get nb. of lines and columns of the region to decode
+  int lNbLines     = this->GetIORegion().GetSize()[1];
+  int lNbColumns   = this->GetIORegion().GetSize()[0];
+  int lFirstLine   = this->GetIORegion().GetIndex()[1];
+  int lFirstColumn = this->GetIORegion().GetIndex()[0];
+
+  // Compute index of tile recover by the decoded area
+  unsigned int l_tile_x_start =  lFirstColumn / m_InternalReader->GetCstrInfo()->tdx;
+  unsigned int l_tile_x_end =  (lFirstColumn + lNbColumns) / m_InternalReader->GetCstrInfo()->tdx;
+  unsigned int l_tile_y_start =  lFirstLine / m_InternalReader->GetCstrInfo()->tdy;
+  unsigned int l_tile_y_end =  (lFirstLine + lNbLines) / m_InternalReader->GetCstrInfo()->tdy;
+
+  for (unsigned int itTileY = l_tile_x_start; itTileY <= l_tile_x_end; itTileY++)
+    {
+    for (unsigned int itTileX = l_tile_x_start; itTileX <= l_tile_x_end; itTileX++)
+      {
+      tileVector.push_back(itTileX + itTileY * m_InternalReader->GetCstrInfo()->tw);
+      }
+    }
+
+  return tileVector;
+}
+
+/** Compute the offsets in Pixel to move the input buffer from openjpeg
+ * to the corresponding area of the otb output buffer
+ * */
+void JPEG2000ImageIO::ComputeOffsets( unsigned int &l_width_src, // Width of the input pixel in nb of pixel
+                                      unsigned int &l_height_dest, // Height of the area where write in nb of pixel
+                                      unsigned int &l_width_dest, // Width of the area where write in nb of pixel
+                                      unsigned int &l_start_offset_dest, // Offset where begin to write the area in the otb buffer in nb of pixel
+                                      unsigned int &l_start_offset_src // Offset where begin to read the data in the openjpeg decoded data in nb of pixel
+                                      )
+{
+  // Characteristics of the input buffer from openpjeg
+  unsigned int l_x0_src = m_InternalReader->GetImage()->x0;
+  unsigned int l_y0_src = m_InternalReader->GetImage()->y0;
+  unsigned int l_x1_src = m_InternalReader->GetImage()->x1;
+  unsigned int l_y1_src = m_InternalReader->GetImage()->y1;
+
+  // Size of input buffer from openjpeg
+  l_width_src = l_x1_src - l_x0_src;
+  unsigned int l_height_src = l_y1_src - l_y0_src;
+
+  // Characteristics of the otb region
+  unsigned int l_x0_dest = this->GetIORegion().GetIndex()[0];
+  unsigned int l_x1_dest = this->GetIORegion().GetIndex()[0] + this->GetIORegion().GetSize()[0];
+  unsigned int l_y0_dest = this->GetIORegion().GetIndex()[1] ;
+  unsigned int l_y1_dest = this->GetIORegion().GetIndex()[1] + this->GetIORegion().GetSize()[1];
+
+  unsigned int l_start_x_dest , l_start_y_dest;
+  unsigned int l_offset_x0_src, l_offset_y0_src;
+
+  /*-----*/
+  /* Compute the origin (l_offset_x0_src, l_offset_y0_src )
+   * of the input buffer (decoded tile) which will be move
+   * in the output buffer.
+   * Compute the area of the output buffer (l_start_x_dest,
+   * l_start_y_dest, l_width_dest, l_height_dest)  which will be modified
+   * by this input area.
+   */
+  if (l_x0_dest < l_x0_src)
+      {
+      l_start_x_dest = l_x0_src - l_x0_dest;
+      l_offset_x0_src = 0;
+
+      if (l_x1_dest >= l_x1_src)
+        {
+        l_width_dest = l_width_src;
+        }
+      else
+        {
+        l_width_dest = l_x1_dest - l_x0_src;
+        }
+      }
+    else
+      {
+      l_start_x_dest = 0;
+      l_offset_x0_src = l_x0_dest - l_x0_src;
+
+      if (l_x1_dest >= l_x1_src)
+        {
+        l_width_dest = l_width_src - l_offset_x0_src;
+        }
+      else
+        {
+        l_width_dest = l_x1_dest - l_x0_dest;
+        }
+      }
+
+      if (l_y0_dest < l_y0_src)
+      {
+      l_start_y_dest = l_y0_src - l_y0_dest;
+      l_offset_y0_src = 0;
+
+      if (l_y1_dest >= l_y1_src)
+        {
+        l_height_dest = l_height_src;
+        }
+      else
+        {
+        l_height_dest = l_y1_dest - l_y0_src;
+        }
+      }
+    else
+      {
+      l_start_y_dest = 0;
+      l_offset_y0_src = l_y0_dest - l_y0_src;
+
+      if (l_y1_dest >= l_y1_src)
+        {
+        l_height_dest = l_height_src - l_offset_y0_src;
+        }
+      else
+        {
+        l_height_dest = l_y1_dest - l_y0_dest;
+        }
+      }
+      /*-----*/
+
+      /* Compute the input buffer offset */
+      l_start_offset_src = l_offset_x0_src + l_offset_y0_src * l_width_src;
+
+      /* Compute the output buffer offset */
+      l_start_offset_dest = l_start_x_dest + l_start_y_dest * (l_x1_dest - l_x0_dest);
+
+      /*std::cout << "SRC coordinates: l_start_x_src= "<< l_x0_src << ", l_start_y_src= " <<  l_y0_src
+                << ", l_width_src= "<< l_width_src << ", l_height_src= " << l_height_src << std::endl;
+      std::cout << "SRC tile offset: "<< l_offset_x0_src << ", " << l_offset_y0_src << std::endl;
+      std::cout << "SRC buffer offset: "<< l_start_offset_src << std::endl;
+
+      std::cout << "DEST coordinates: l_start_x_dest= "<<  l_start_x_dest << ", l_start_y_dest= " << l_start_y_dest
+                << ", l_width_dest= " << l_width_dest << ", l_height_dest= " << l_height_dest << std::endl ;
+      std::cout << "DEST start offset: " << l_start_offset_dest << std::endl ;*/
 
 }
 
