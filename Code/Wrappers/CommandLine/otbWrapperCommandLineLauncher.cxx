@@ -328,7 +328,7 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
 
     const bool paramExists(m_Parser->IsAttributExists(std::string("--").append(paramKey), m_Expression));
     const bool hasValue = m_Application->HasValue(paramKey);
-
+    
     // Check if mandatory parameter are present and have value
     // A param has to be set if it is mandatory and :
     // is root OR its parent is active
@@ -338,7 +338,7 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
     if( param->GetMandatory() == true )
       if( param->GetRoot()->GetActive() || param->IsRoot() )
         mustBeSet = true;
-    
+
     if( mustBeSet )
       {
       if (!paramExists)
@@ -361,10 +361,11 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
           }
         }
       }
+    
     // Check if non mandatory parameter have values
     else
       {
-      if (paramExists)
+      if( paramExists )
         {
         values = m_Parser->GetAttribut(std::string("--").append(paramKey), m_Expression);
         if (values.size() == 0)
@@ -373,6 +374,7 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
           return MISSINGPARAMETERVALUE;
           }
         }
+
       }
 
     // If the param is optional and hasn't been set : don't do anything
@@ -434,8 +436,7 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
               else
                 if (values.size() != 1 && values.size() != 2)
                   {
-                  std::cerr << "ERROR: Invalid number of value for: \"" << paramKey << "\", invalid number of values "
-                      << values.size() << std::endl;
+                  std::cerr << "ERROR: Invalid number of value for: \"" << paramKey << "\", invalid number of values " << values.size() << std::endl;
                   return INVALIDNUMBEROFVALUE;
                   }
               }

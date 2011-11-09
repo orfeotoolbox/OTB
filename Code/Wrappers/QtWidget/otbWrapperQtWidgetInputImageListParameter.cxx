@@ -345,16 +345,26 @@ void QtWidgetInputImageListParameter::RecreateImageList()
 {
   // save value
   m_InputImageListParam->ClearValue();
+  const unsigned int initSize = m_FileSelectionList.size();
   for(unsigned int j=0; j<m_FileSelectionList.size(); j++ )
     {
-    m_InputImageListParam->AddFromFileName(m_FileSelectionList[j]->GetFilename());
-    connect( m_FileSelectionList[j]->GetInput(), SIGNAL(textChanged(const QString&)), this, SLOT(UpdateImageList()) );
+    if(m_InputImageListParam->AddFromFileName(m_FileSelectionList[j]->GetFilename()) == true )
+      connect( m_FileSelectionList[j]->GetInput(), SIGNAL(textChanged(const QString&)), this, SLOT(UpdateImageList()) );
+    else
+      {
+      m_FileSelectionList[j]->SetChecked(true);
+      }
     }
-
-  emit Change();
-  // notify of value change
-  QString key( QString::fromStdString(m_InputImageListParam->GetKey()) );
-  emit ParameterChanged(key);
+  
+  if( initSize == m_FileSelectionList.size() )
+    {
+    emit Change();
+      // notify of value change
+    QString key( QString::fromStdString(m_InputImageListParam->GetKey()) );
+    emit ParameterChanged(key);
+    }
+  else
+    this->SupressFile();
 }
 
 

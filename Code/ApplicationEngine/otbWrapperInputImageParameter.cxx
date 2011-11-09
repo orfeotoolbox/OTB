@@ -39,7 +39,7 @@ InputImageParameter::~InputImageParameter()
 {
 }
 
-void
+bool
 InputImageParameter::SetFromFileName(const std::string& filename)
 {
   // First clear previous file choosen
@@ -58,12 +58,14 @@ InputImageParameter::SetFromFileName(const std::string& filename)
       }
     catch(itk::ExceptionObject & err)
       {
+      return true;
       }
 
     // the specified filename is valid => store the value
     m_FileName = filename;
     SetActive(true);
     }
+  return false;
 }
 
 

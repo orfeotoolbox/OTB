@@ -48,7 +48,7 @@ public:
   itkTypeMacro(InputImageParameter, Parameter);
 
   /** Set value from filename */
-  void SetFromFileName(const std::string& filename);
+  bool SetFromFileName(const std::string& filename);
   itkGetConstMacro(FileName, std::string);
 
 

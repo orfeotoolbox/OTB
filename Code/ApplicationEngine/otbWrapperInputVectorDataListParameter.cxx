@@ -18,6 +18,8 @@
 #include "otbWrapperInputVectorDataListParameter.h"
 #include "itksys/SystemTools.hxx"
 
+#include "otbWrapperMacros.h"
+
 namespace otb
 {
 namespace Wrapper
@@ -35,7 +37,7 @@ InputVectorDataListParameter::~InputVectorDataListParameter()
 {
 }
 
-void
+bool
 InputVectorDataListParameter::SetListFromFileName(const std::vector<std::string> & filenames)
 {
   // First clear previous file choosen
@@ -73,7 +75,10 @@ InputVectorDataListParameter::SetListFromFileName(const std::vector<std::string>
     {
     SetActive(true);
     this->Modified();
+    return false;
     }
+
+ return true;
 }
 
 
@@ -86,7 +91,7 @@ InputVectorDataListParameter::AddNullElement()
     this->Modified();
 }
 
-void
+bool
 InputVectorDataListParameter::AddFromFileName(const std::string & filename)
 {
   // TODO : when the logger will be available, redirect the exception
@@ -96,24 +101,26 @@ InputVectorDataListParameter::AddFromFileName(const std::string & filename)
     {
     VectorDataFileReaderType::Pointer reader = VectorDataFileReaderType::New();
     reader->SetFileName(filename);
+
     try
       {
       reader->UpdateOutputInformation();
       }
     catch(itk::ExceptionObject & err)
       {
-      this->ClearValue();
+      return true;
       }
-  
+    
     // everything went fine, store the object references
     m_ReaderList->PushBack(reader);
     m_VectorDataList->PushBack(reader->GetOutput());
     SetActive(true);
     this->Modified();
+  return false;
     }
 }
 
-void
+bool
 InputVectorDataListParameter::SetNthFileName( const unsigned int id, const std::string & filename )
 {
   if( m_ReaderList->Size()<id )
@@ -128,6 +135,7 @@ InputVectorDataListParameter::SetNthFileName( const unsigned int id, const std::
     {
     VectorDataFileReaderType::Pointer reader = VectorDataFileReaderType::New();
     reader->SetFileName(filename);
+
     try
       {
       reader->UpdateOutputInformation();
@@ -135,11 +143,14 @@ InputVectorDataListParameter::SetNthFileName( const unsigned int id, const std::
     catch(itk::ExceptionObject & err)
       {
       this->ClearValue();
+      return true;
       }
+
     m_ReaderList->SetNthElement(id, reader);
     m_VectorDataList->SetNthElement(id, reader->GetOutput());
-
+    
     this->Modified();
+    return false;
     }
 }
 
@@ -147,17 +158,23 @@ InputVectorDataListParameter::SetNthFileName( const unsigned int id, const std::
 std::vector<std::string>
 InputVectorDataListParameter::GetFileNameList() const
 {
+  std::cout<<"InputVectorDataListParameter::GetFileNameList()"<<std::endl;
   if (m_ReaderList)
     {
+    std::cout<<"InputVectorDataListParameter::GetFileNameList().size() "<<m_ReaderList->Size()<<std::endl;
     std::vector<std::string> filenames;
     for(unsigned int i=0; i<m_ReaderList->Size(); i++)
-      {
-      filenames.push_back( m_ReaderList->GetNthElement(i)->GetFileName() );
+      {    
+      std::cout<<i<<std::endl;
+      
+      if( m_ReaderList->GetNthElement(i) )
+        filenames.push_back( m_ReaderList->GetNthElement(i)->GetFileName() );
       }
     
     return filenames;
     }
-  
+
+   std::cout<<"InputVectorDataListParameter::GetFileNameList() out"<<std::endl;
   itkExceptionMacro(<< "No filename value");
 }
 
@@ -174,7 +191,7 @@ InputVectorDataListParameter::GetNthFileName( unsigned int i ) const
     
     return m_ReaderList->GetNthElement(i)->GetFileName();
     }
-  
+ 
   itkExceptionMacro(<< "No filename value");
 }
 

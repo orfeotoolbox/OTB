@@ -49,65 +49,29 @@ public:
   typedef otb::VectorData<CoordinatePrecisionType, 2, ValuePrecisionType>  VectorDataType;
 
   /** Set value from filename */
-  void SetFromFileName(const std::string& filename)
-  {
-    VectorDataFileReaderType::Pointer reader = VectorDataFileReaderType::New();
-    reader->SetFileName(filename);
-    reader->UpdateOutputInformation();
+  bool SetFromFileName(const std::string& filename);
+  itkGetConstMacro(FileName, std::string);
 
-    // everything went fine, store the object references
-    m_Reader = reader;
-    m_VectorData = reader->GetOutput();
-    SetActive(true);
-  }
+  VectorDataType* GetVectorData() const;
 
-  std::string GetFileName() const
-  {
-    if (m_Reader)
-      {
-      return m_Reader->GetFileName();
-      }
+  void SetVectorData(VectorDataType* vectorData);
 
-    itkExceptionMacro(<< "No value filename value");
-  }
+  bool HasValue() const;
 
-  VectorDataType* GetVectorData() const
-  {
-    return m_VectorData;
-  }
-
-  void SetVectorData(VectorDataType* vectorData)
-  {
-    m_VectorData = vectorData;
-    m_Reader = VectorDataFileReaderType::Pointer();
-  }
-
-  bool HasValue() const
-  {
-    return m_VectorData.IsNotNull();
-  }
-
-  void ClearValue()
-  {
-    m_VectorData = VectorDataType::Pointer();
-    m_Reader = VectorDataFileReaderType::Pointer();
-  }
+  void ClearValue();
 
 protected:
   /** Constructor */
-  InputVectorDataParameter()
-  {
-    this->SetName("Input Vector Data");
-    this->SetKey("ivd");
-  }
+  InputVectorDataParameter();
 
   /** Destructor */
-  virtual ~InputVectorDataParameter()
-  {}
+  virtual ~InputVectorDataParameter();
 
   typedef otb::VectorDataFileReader<VectorDataType> VectorDataFileReaderType;
   VectorDataType::Pointer m_VectorData;
   VectorDataFileReaderType::Pointer m_Reader;
+
+  std::string m_FileName;
 
 private:
   InputVectorDataParameter(const Parameter &); //purposely not implemented

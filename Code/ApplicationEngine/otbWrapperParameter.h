@@ -173,7 +173,7 @@ public:
   /** Is the paramter a root or a child of another param */
   virtual bool IsRoot()
   {
-    return  m_Root == this;
+    return (this == m_Root);
   }
 
   /** Add a child of this parameter when the param is a Group or a

@@ -137,13 +137,38 @@ void QtWidgetInputVectorDataListParameter::DoCreateWidget()
 void
 QtWidgetInputVectorDataListParameter::UpdateVectorDataList()
 {
+std::cout<<"UpdateVectorDataList"<<std::endl;
   // save value
+  bool update = false;
+
+ std::cout<<m_FileSelectionList.size()<<std::endl;
+ std::cout<<m_InputVectorDataListParam<<std::endl;
+ std::cout<<"m_InputVectorDataListParam->GetFileNameList().size()"<<std::endl;
+  std::cout<<m_InputVectorDataListParam->GetFileNameList().size()<<std::endl;
+  std::cout<<m_InputVectorDataListParam->GetVectorDataList()->Size()<<std::endl;
+
+
   for(unsigned int j=0; j<m_InputVectorDataListParam->GetVectorDataList()->Size(); j++ )
     {
-    m_InputVectorDataListParam->SetNthFileName(j, m_FileSelectionList[j]->GetFilename());
+    std::cout<<"UpdateVectorDataList,loop "<<j<<std::endl;
+    if( m_InputVectorDataListParam->SetNthFileName(j, m_FileSelectionList[j]->GetFilename()) == true )
+      {
+      std::cout<<"UpdateVectorDataList, can't create vd"<<std::endl;
+      m_FileSelectionList[j]->SetChecked(true);
+      m_InputVectorDataListParam->AddNullElement();
+      update = true;
+      }
     }
 
-  emit Change();
+ std::cout<<m_FileSelectionList.size()<<std::endl;
+  std::cout<<m_InputVectorDataListParam->GetFileNameList().size()<<std::endl;
+  std::cout<<m_InputVectorDataListParam->GetVectorDataList()->Size()<<std::endl;
+
+  if(update)
+    this->SupressFile();
+  else
+    emit Change();
+ 
 }
 
 
@@ -291,15 +316,21 @@ QtWidgetInputVectorDataListParameter::AddFile()
 void
 QtWidgetInputVectorDataListParameter::SupressFile()
 {
+  std::cout<<"QtWidgetInputVectorDataListParameter::SupressFile "<<m_FileSelectionList.size()<<std::endl;
   m_FileLayout = new QVBoxLayout();
-  m_FileLayout->setSpacing(0);
+  m_FileLayout->setSpacing(0 );
   std::vector<QtFileSelectionWidget *> tmpList;
   for (unsigned int i = 0; i < m_FileSelectionList.size(); i++)
     {
+    std::cout<<"QtWidgetInputVectorDataListParameter::SupressFile "<<i<<std::endl;
     if (!m_FileSelectionList[i]->IsChecked())
       {
       m_FileLayout->addWidget(m_FileSelectionList[i]);
       tmpList.push_back(m_FileSelectionList[i]);
+      }
+    else
+      {
+      //m_InputVectorDataListParam->GetVectorDataList()->Erase(i-count);
       }
     }
 
@@ -339,19 +370,33 @@ QtWidgetInputVectorDataListParameter::EraseFile()
 
 void QtWidgetInputVectorDataListParameter::RecreateVectorDataList()
 {
+  std::cout<<"QtWidgetInputVectorDataListParameter::RecreateVectorDataList"<<std::endl;
   // save value
   m_InputVectorDataListParam->ClearValue();
-  for (unsigned int j = 0; j < m_FileSelectionList.size(); j++)
-    {
-    m_InputVectorDataListParam->AddFromFileName(m_FileSelectionList[j]->GetFilename());
-    connect(m_FileSelectionList[j]->GetInput(), SIGNAL(textChanged(const QString&)), this, SLOT(UpdateVectorDataList()));
-    }
 
-  emit
-  Change();
-  // notify of value change
-  QString key(QString::fromStdString(m_InputVectorDataListParam->GetKey()));
-  emit ParameterChanged(key);
+  if( m_FileSelectionList.size() == 0)
+    {
+std::cout<<"QtWidgetInputVectorDataListParameter::RecreateVectorDataList:: Addfile"<<std::endl;
+    this->AddFile();
+    }
+  else
+    {
+    std::cout<<"QtWidgetInputVectorDataListParameter::RecreateVectorDataList else "<<m_FileSelectionList.size()<<std::endl;
+    for (unsigned int j = 0; j < m_FileSelectionList.size(); j++)
+      {
+    std::cout<<j<<std::endl;
+      m_InputVectorDataListParam->AddFromFileName(m_FileSelectionList[j]->GetFilename());
+      connect(m_FileSelectionList[j]->GetInput(), SIGNAL(textChanged(const QString&)), this, SLOT(UpdateVectorDataList()));
+      }
+    
+    emit Change();
+    // notify of value change
+    QString key(QString::fromStdString(m_InputVectorDataListParam->GetKey()));
+    emit ParameterChanged(key);
+   
+    }
+ std::cout<<"QtWidgetInputVectorDataListParameter::RecreateVectorDataList done"<<std::endl;
+
 }
 
 

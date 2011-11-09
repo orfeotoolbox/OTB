@@ -50,16 +50,16 @@ public:
   itkTypeMacro(InputVectorDataListParameter, Parameter);
 
   /** Set image form a list of filename */
-  void SetListFromFileName(const std::vector<std::string> & filenames);
+  bool SetListFromFileName(const std::vector<std::string> & filenames);
 
   /** Add null element to lists. */
   void AddNullElement();
 
   /** Add an image from a filename */
-  void AddFromFileName(const std::string & filename);
+  bool AddFromFileName(const std::string & filename);
 
   /** Set one specific stored image filename. */
-  void SetNthFileName( const unsigned int id, const std::string & filename );
+  bool SetNthFileName( const unsigned int id, const std::string & filename );
 
 
   /** Get the stored image filename list */
