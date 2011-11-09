@@ -1112,15 +1112,22 @@ Application::IsApplicationReady()
 
   std::vector<std::string> paramList = GetParametersKeys(true);
   for (std::vector<std::string>::const_iterator it = paramList.begin();
-      it != paramList.end();
-      ++it)
+       it != paramList.end();
+       ++it)
     {
-
-    // Check all Input Parameters
-    if ( !this->HasValue(*it)  && IsMandatory(*it) )
-      if( GetParameterByKey(*it)->IsRoot() || GetParameterByKey(*it)->GetRoot()->GetActive() )
+    // Check all Input Parameters with Input Role
+    if (GetParameterByKey(*it)->GetRole() == Role_Input)
       {
-      return false;
+      // When a parameter is mandatory : 
+      // return false when does not have value and:
+      //  - The param is root
+      //  - The param is not root and belonging to a Mandatory Group
+      //    wich is activated
+      if ( !this->HasValue(*it)  && IsMandatory(*it) )
+        if( GetParameterByKey(*it)->IsRoot() || GetParameterByKey(*it)->GetRoot()->GetActive() )
+          {
+          return false;
+          }
       }
     }
 
