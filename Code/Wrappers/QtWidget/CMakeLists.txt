@@ -12,6 +12,7 @@ set( WrappersQtWidget_MOC_HDR
        otbWrapperQtWidgetComplexOutputImageParameter.h
        otbWrapperQtWidgetInputImageListParameter.h
        otbWrapperQtWidgetInputVectorDataListParameter.h
+       otbWrapperQtWidgetInputVectorDataParameter.h
        otbWrapperQtWidgetOutputImageParameter.h
        otbWrapperQtWidgetOutputVectorDataParameter.h
        otbWrapperQtWidgetParameterGroup.h
