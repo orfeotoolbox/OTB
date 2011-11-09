@@ -53,6 +53,11 @@ public:
     return m_Input->text().toStdString();
   }
 
+  void ClearFilename()
+  {
+    m_Input->clear();
+  }
+
   QLineEdit* GetInput()
   {
     return m_Input;

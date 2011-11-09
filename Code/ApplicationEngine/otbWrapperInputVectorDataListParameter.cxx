@@ -158,15 +158,11 @@ InputVectorDataListParameter::SetNthFileName( const unsigned int id, const std::
 std::vector<std::string>
 InputVectorDataListParameter::GetFileNameList() const
 {
-  std::cout<<"InputVectorDataListParameter::GetFileNameList()"<<std::endl;
   if (m_ReaderList)
     {
-    std::cout<<"InputVectorDataListParameter::GetFileNameList().size() "<<m_ReaderList->Size()<<std::endl;
     std::vector<std::string> filenames;
     for(unsigned int i=0; i<m_ReaderList->Size(); i++)
       {    
-      std::cout<<i<<std::endl;
-      
       if( m_ReaderList->GetNthElement(i) )
         filenames.push_back( m_ReaderList->GetNthElement(i)->GetFileName() );
       }
@@ -174,7 +170,7 @@ InputVectorDataListParameter::GetFileNameList() const
     return filenames;
     }
 
-   std::cout<<"InputVectorDataListParameter::GetFileNameList() out"<<std::endl;
+
   itkExceptionMacro(<< "No filename value");
 }
 

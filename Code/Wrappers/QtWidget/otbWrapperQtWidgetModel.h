@@ -86,6 +86,13 @@ public:
     return m_LogOutput;
   }
 
+  /** Logger warning message sender */
+  void SendLogWARNING( const std::string & mes );
+  /** Logger info message sender */
+  void SendLogINFO( const std::string & mes );
+  /** Logger debug message sender */
+  void SendLogDEBUG( const std::string & mes );
+
 signals:
   void SetApplicationReady(bool);
   void SetProgressReportBegin();

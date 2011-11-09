@@ -73,5 +73,22 @@ void QtWidgetModel::ActivateExecuteButton()
   emit SetProgressReportDone();
 }
 
+void QtWidgetModel::SendLogWARNING( const std::string & mes )
+{
+  m_Application->GetLogger()->Write( itk::LoggerBase::WARNING, mes );
+}
+
+void QtWidgetModel::SendLogINFO( const std::string & mes )
+{
+  m_Application->GetLogger()->Write( itk::LoggerBase::INFO, mes );
+}
+
+void QtWidgetModel::SendLogDEBUG( const std::string & mes )
+{
+  m_Application->GetLogger()->Write( itk::LoggerBase::DEBUG, mes );
+}
+
+
+
 }
 }

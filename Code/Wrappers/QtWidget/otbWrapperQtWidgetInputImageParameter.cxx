@@ -70,13 +70,14 @@ void QtWidgetInputImageParameter::SelectFile()
 
   if (fileDialog.exec())
     {
-    this->SetFileName(fileDialog.selectedFiles().at(0));
-    m_Input->setText(fileDialog.selectedFiles().at(0));
+    if ( this->SetFileName(fileDialog.selectedFiles().at(0)) == false )
+      m_Input->setText(fileDialog.selectedFiles().at(0));
     }
 }
 
-void QtWidgetInputImageParameter::SetFileName(const QString& value)
+bool QtWidgetInputImageParameter::SetFileName(const QString& value)
 {
+  bool res = false;
   // save value
   if(m_InputImageParam->SetFromFileName(value.toStdString()) == false )
     {
@@ -84,6 +85,10 @@ void QtWidgetInputImageParameter::SetFileName(const QString& value)
     QString key( QString::fromStdString(m_InputImageParam->GetKey()) );
     emit ParameterChanged(key);
     }
+  else
+    res = true;
+
+  return res;
 }
 
 }
