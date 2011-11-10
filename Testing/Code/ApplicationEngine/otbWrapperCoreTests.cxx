@@ -51,5 +51,7 @@ void RegisterTests()
   REGISTER_TEST(otbWrapperApplicationRegistry);
   REGISTER_TEST(otbWrapperParameterKey);
   REGISTER_TEST(otbWrapperRAMParameterNew);
+  REGISTER_TEST(otbWrapperApplicationHtmlDocGeneratorNew);
+  REGISTER_TEST(otbWrapperApplicationHtmlDocGeneratorTest1);
 }
 

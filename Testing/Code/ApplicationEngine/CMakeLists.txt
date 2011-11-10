@@ -145,6 +145,18 @@ add_test(owTvParameterRAM ${OTB_WRAPPER_TESTS}
     otbWrapperRAMParameterNew
   )
 
+# ApplicationHtmlDocGenerator
+add_test(owTvApplicationHtmlDocGeneratorNew ${OTB_WRAPPER_TESTS}
+    otbWrapperApplicationHtmlDocGeneratorNew
+  )
+
+add_test(owTvApplicationHtmlDocGeneratorTest ${OTB_WRAPPER_TESTS}
+  otbWrapperApplicationHtmlDocGeneratorTest1
+  ReadImageInfo
+  $<TARGET_FILE_DIR:otbapp_ReadImageInfo>
+  ${TEMP}/owTvOReadImageInfoDoc.html
+)
+
 
 # ----------------Source files CXX -----------------------------------
 
@@ -167,6 +179,7 @@ otbWrapperParameterKeyTest.cxx
 otbWrapperStringParameterTest.cxx
 otbWrapperRAMParameterTest.cxx
 otbWrapperStringListParameterTest.cxx
+otbWrapperApplicationHtmlDocGeneratorTest.cxx
 )
 
 include_directories(${CMAKE_SOURCE_DIR}/Code/Core)
