@@ -73,23 +73,23 @@ private:
     SetParameterDescription("transform.tx","Translation in the X direction");
     AddParameter(ParameterType_Float, "transform.ty", "Translation Y");
     SetParameterDescription("transform.ty","Translation in the Y direction");
-    SetDefaultParameterFloat("transform.tx",0.);
-    SetDefaultParameterFloat("transform.ty",0.);
+    SetDefaultParameterFloat("transform.tx", 0.);
+    SetDefaultParameterFloat("transform.ty", 0.);
       
-    AddParameter(ParameterType_Float, "transform.ro", "Rotation Angle");  
+    AddParameter(ParameterType_Float, "transform.ro", "Rotation Angle");
     SetParameterDescription("transform.ro","Angle of the rotation to apply in degrees");
-    SetDefaultParameterFloat("transform.ro",0.);
+    SetDefaultParameterFloat("transform.ro", 0.);
 
     AddParameter(ParameterType_Float, "transform.centerx", "Center X");
     SetParameterDescription("transform.centerx","The first coordinate of the rotation center");
     AddParameter(ParameterType_Float, "transform.centery", "Center Y");
     SetParameterDescription("transform.centery","The second coordinate of the rotation center");
-    SetDefaultParameterFloat("transform.centerx",0.);
-    SetDefaultParameterFloat("transform.centery",0.);
+    SetDefaultParameterFloat("transform.centerx", 0.);
+    SetDefaultParameterFloat("transform.centery", 0.);
 
     AddParameter(ParameterType_Float, "transform.scale", "Scale");
     SetParameterDescription("transform.scale","The scale to apply");
-    SetDefaultParameterFloat("transform.scale",1.);
+    SetDefaultParameterFloat("transform.scale", 1.);
   }
 
   void DoUpdateParameters()
@@ -112,7 +112,7 @@ private:
     m_VectorDataProj->SetOutputKeywordList(inImage->GetImageKeywordlist());
     m_VectorDataProj->SetOutputProjectionRef(inImage->GetProjectionRef());
     
-    // Set up the transform 
+    // Set up the transform
     m_Transform = TransformType::New();
     TransformType::ParametersType parameters(6);
 

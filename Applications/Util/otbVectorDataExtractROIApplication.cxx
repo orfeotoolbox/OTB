@@ -103,7 +103,7 @@ private:
   void DoUpdateParameters()
   {
     // Nothing to do here for the parameters : all are independent
-  } 
+  }
 
   void DoExecute()
   {

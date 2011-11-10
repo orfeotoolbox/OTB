@@ -346,7 +346,7 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
           }
         
         if (type == ParameterType_InputVectorDataList)
-          {          
+          {
           dynamic_cast<InputVectorDataListParameter *> (param.GetPointer())->SetListFromFileName(values);
           }
         else
@@ -466,7 +466,7 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
     // Check if mandatory parameter are present and have value
     // A param has to be set if it is mandatory and :
     // is root OR its parent is active
-    // NB: a root parameter is not active    
+    // NB: a root parameter is not active
     bool mustBeSet = false;
     const bool hasValue = m_Application->HasValue(paramKey);
 
@@ -674,11 +674,11 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
                     {
                     oss << "\t          Type: String (output image file name and optionally its pixel type)"
                         << std::endl;
-		    oss
+                  oss
                         << "\t          You can also add after the filename the output pixel type"
-			<< std::endl;
+                     << std::endl;
                     oss
-                        << "\t          Possible pixel types:{int8,uint8,int16,uint16,int32,uint32,float,double}"
+                        << "\t          Possible pixel types:{int8, uint8, int16, uint16, int32, uint32, float, double}"
                       << std::endl;
                     }
                   else

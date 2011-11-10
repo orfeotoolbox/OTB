@@ -72,7 +72,7 @@ private:
   }
   
   void DoCreateParameters()
-  {  
+  {
     AddParameter(ParameterType_InputVectorData, "in", "Input");
     SetParameterDescription("in", "Input Vector Data");
     AddParameter(ParameterType_OutputVectorData, "out", "Output");
@@ -86,7 +86,7 @@ private:
 
   void DoUpdateParameters()
   {
-    // Nothing to do (for now)   
+    // Nothing to do (for now)
   }
   
   void DoExecute()
@@ -102,12 +102,12 @@ private:
       it.Get()->SetFieldAsString(GetParameterAsString("fn"), GetParameterAsString("fv"));
     }
 
-    SetParameterOutputVectorData("out",m_InputData);
+    SetParameterOutputVectorData("out", m_InputData);
 
   }
   
   VectorDataType::Pointer m_InputData;
-};  
+};
 
 }
 }

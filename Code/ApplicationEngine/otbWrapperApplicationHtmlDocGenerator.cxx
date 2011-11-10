@@ -60,12 +60,12 @@ namespace Wrapper
 
 
 #define otbDocHtmlBodyCodeMacro( value )                                         \
-  oss << "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Courier New,courier';\">"; \
+  oss << "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Courier New, courier';\">"; \
   oss << value;                                                         \
   oss << "</p>";
 
 #define otbDocHtmlBodyBoldCodeMacro( value )                                     \
-  oss << "<span style=\" font-weight:600;\"><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Courier New,courier';\">"; \
+  oss << "<span style=\" font-weight:600;\"><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Courier New, courier';\">"; \
   oss << value;                                                         \
   oss << "</p></span>";
 
@@ -99,12 +99,12 @@ ApplicationHtmlDocGenerator::GenerateDoc(const Application::Pointer app, const s
     {
     for (unsigned int i = 0; i < app->GetDocTags().size() - 1; i++)
       {
-      tagList.append( app->GetDocTags()[i] ).append(", "); 
+      tagList.append( app->GetDocTags()[i] ).append(", ");
       }
-    tagList.append( app->GetDocTags()[app->GetDocTags().size() - 1]); 
+    tagList.append( app->GetDocTags()[app->GetDocTags().size() - 1]);
     otbDocHtmlBodyMacro( tagList );
     }
-  else 
+  else
     {
     otbDocHtmlBodyMacro( "None" );
     }
