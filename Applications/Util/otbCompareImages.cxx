@@ -57,7 +57,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("BandMath application, ImageStatistics application");
-    SetDocCLExample("otbApplicationLauncherCommandLine CompareImages ${OTB-BIN}/bin --ref.in ${OTB-DATA/Input}/GomaApres.png --ref.channel 1 --meas.in ${OTB-DATA}/GomaAvant.png --meas.channel 2 --roi.startx 20 --roi.starty 30 --roi.sizex 150 --roi.sizez 200");
+    SetDocCLExample("otbApplicationLauncherCommandLine CompareImages ${OTB-BIN}/bin --ref.in ${OTB-DATA/Input}/GomaApres.png --ref.channel 1 --meas.in ${OTB-DATA}/GomaAvant.png --meas.channel 2 --roi.startx 20 --roi.starty 30 --roi.sizex 150 --roi.sizey 200");
     AddDocTag("Statistics");
   }
 
