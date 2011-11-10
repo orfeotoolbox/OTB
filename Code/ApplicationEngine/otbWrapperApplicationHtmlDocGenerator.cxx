@@ -189,6 +189,7 @@ void ApplicationHtmlDocGenerator::GetDocParameters( const Application::Pointer a
        }
      else
        {
+       oss << "<li>";
        otbDocHtmlBodyBoldCodeMacro( std::string("[param] ").append( param->GetName() ).append(":"));
        otbDocHtmlBodyMacro( param->GetDescription() );
        oss << "</li>";
@@ -263,11 +264,11 @@ void ApplicationHtmlDocGenerator::GetDocParameterChoice( const Application::Poin
     {
     itkGenericExceptionMacro("Invalid parameter type for key "<<key<<", wait for ChoiceParameter...");
     }
-    ChoiceParameter * choice = dynamic_cast<ChoiceParameter *>(paramCh);
-    const std::vector<std::string> appKeyList = choice->GetChoiceKeys();
-    unsigned int nbOfParam = choice->GetNbChoices();
-    itk::OStringStream oss;
-    oss<<"<ul>";
+  ChoiceParameter * choice = dynamic_cast<ChoiceParameter *>(paramCh);
+  const std::vector<std::string> appKeyList = choice->GetChoiceKeys();
+  unsigned int nbOfParam = choice->GetNbChoices();
+  itk::OStringStream oss;
+  oss<<"<ul>";
   
   for( unsigned int i=0; i<nbOfParam; i++ )
     {

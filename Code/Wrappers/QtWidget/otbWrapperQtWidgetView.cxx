@@ -183,7 +183,7 @@ QWidget* QtWidgetView::CreateDoc()
   text->setDocument(doc);
 
 
-  std::cout<<text->toHtml().toStdString()<<std::endl;
+  //std::cout<<text->toHtml().toStdString()<<std::endl;
 
   return text;
 }
