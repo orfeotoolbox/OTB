@@ -108,7 +108,7 @@ private:
     // Reproject the VectorData in the image coordinate system
     m_VectorDataProj = VectorDataProjectionFilterType::New();
     m_VectorDataProj->SetInput(vd);
-    m_VectorDataProj->SetInputProjectionRef(inImage->GetProjectionRef());
+    m_VectorDataProj->SetInputProjectionRef(vd->GetProjectionRef());
     m_VectorDataProj->SetOutputKeywordList(inImage->GetImageKeywordlist());
     m_VectorDataProj->SetOutputProjectionRef(inImage->GetProjectionRef());
     
@@ -128,13 +128,13 @@ private:
     m_Transform->SetParameters(parameters);
     
     m_TransformFilter = VectorDataTransformFilterType::New();
-    m_TransformFilter->SetInput(vd);
+    m_TransformFilter->SetInput(m_VectorDataProj->GetOutput());
     m_TransformFilter->SetTransform(m_Transform);
   
     // retransform int the input vector projection
     m_ReverseVectorDataProj = VectorDataProjectionFilterType::New();
     m_ReverseVectorDataProj->SetInput(m_TransformFilter->GetOutput());
-    m_ReverseVectorDataProj->SetOutputProjectionRef(inImage->GetProjectionRef());
+    m_ReverseVectorDataProj->SetOutputProjectionRef(vd->GetProjectionRef());
     m_ReverseVectorDataProj->SetInputKeywordList(inImage->GetImageKeywordlist());
     m_ReverseVectorDataProj->SetInputProjectionRef(inImage->GetProjectionRef());
 
