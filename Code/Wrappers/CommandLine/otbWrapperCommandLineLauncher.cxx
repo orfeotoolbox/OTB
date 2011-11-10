@@ -327,6 +327,7 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
 
     const bool paramExists(m_Parser->IsAttributExists(std::string("--").append(paramKey), m_Expression));
 
+
     // if param is a Group, dont do anything, ParamGroup dont have values
     if (type != ParameterType_Group)
       {
@@ -547,24 +548,7 @@ void CommandLineLauncher::DisplayHelp()
   std::cerr << "DESCRIPTION: " << m_Application->GetDescription() << std::endl;
   std::cerr << "PARAMETERS: " << std::endl;
 
-  std::cerr << "====== Mandatory parameters: ======" << std::endl;
-
-  const std::vector<std::string> appKeyList = m_Application->GetParametersKeys(true);
-  const unsigned int nbOfParam = appKeyList.size();
-
-  // Mandatory parameters
-  for (unsigned int i = 0; i < nbOfParam; i++)
-    {
-    Parameter::Pointer param = m_Application->GetParameterByKey(appKeyList[i]);
-    // Check if mandatory parameter are present and have value
-    if (param->GetMandatory() == true)
-      {
-      std::cerr << this->DisplayParameterHelp(param, appKeyList[i]);
-      }
-    }
-
-  // Optional parameters
-  std::cerr << "====== Optional parameters: ======" << std::endl;
+  std::cerr << "====== Parameters: ======" << std::endl;
   //// Module path parameter
   std::cerr << m_Parser->GetPathsAsString(m_Expression) << " (Executables paths)" << std::endl;
   std::cerr << "\t   Description: Paths to the executable library." << std::endl;
@@ -596,11 +580,14 @@ void CommandLineLauncher::DisplayHelp()
     else std::cerr << "\t       Status: USER VALUE: " << m_Parser->GetAttribut("--progress", m_Expression)[0]
                    << std::endl;
 
+  const std::vector<std::string> appKeyList = m_Application->GetParametersKeys(true);
+  const unsigned int nbOfParam = appKeyList.size();
+
   for (unsigned int i = 0; i < nbOfParam; i++)
     {
     Parameter::Pointer param = m_Application->GetParameterByKey(appKeyList[i]);
     // Check if mandatory parameter are present and have value
-    if (param->GetMandatory() != true)
+    if (param->GetMandatory() == true)
       {
       std::cerr << this->DisplayParameterHelp(param, appKeyList[i]);
       }
