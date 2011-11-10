@@ -16,71 +16,100 @@
 
  =========================================================================*/
 
-#include "otbVectorDataSetField.h"
+#include "otbWrapperApplication.h"
+#include "otbWrapperApplicationFactory.h"
 
-#include <iostream>
+//#include <iostream>
 
 #include "otbVectorData.h"
-#include "otbVectorDataFileWriter.h"
-#include "otbVectorDataFileReader.h"
+//#include "otbVectorDataFileWriter.h"
+//#include "otbVectorDataFileReader.h"
 
 namespace otb
 {
-
-int VectorDataSetField::Describe(ApplicationDescriptor* descriptor)
+namespace Wrapper
 {
-  descriptor->SetName("VectorDataSetField");
-  descriptor->SetDescription("Set a specified field to a specified value on all features of a vector data");
-  descriptor->AddOption("Input","Input vector data","in", 1, true, ApplicationDescriptor::FileName);
-  descriptor->AddOption("Output","Output vector data","out", 1, true, ApplicationDescriptor::FileName);
-  descriptor->AddOption("Field","Field name","fn", 1, true, ApplicationDescriptor::String);
-  descriptor->AddOption("Value","Field value","fv", 1, true, ApplicationDescriptor::String);
+
+class VectorDataSetField : public Application
+{
+public:
+  /** Standard class typedefs. */
+  typedef VectorDataSetField            Self;
+  typedef Application                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
+
+  /** Standard macro */
+  itkNewMacro(Self);
+
+  itkTypeMacro(VectorDataSetField, otb::Application);
+
+  /** Filters typedef */
+  //typedef otb::MultiChannelExtractROI<FloatVectorImageType::InternalPixelType,
+  //                                    FloatVectorImageType::InternalPixelType> ExtractROIFilterType;
+
+
+private:
   
-  return EXIT_SUCCESS;
-}
+  VectorDataSetField()
+  {
+    SetName("VectorDataSetField");
+    SetDescription("Set a field in vector data.");
 
-int VectorDataSetField::Execute(otb::ApplicationOptionsResult* parseResult)
-{
-  try
-    {
-    typedef otb::VectorData<> VectorDataType;
-    typedef otb::VectorDataFileReader<VectorDataType> ReaderVectorType;
-    ReaderVectorType::Pointer reader = ReaderVectorType::New();
-    reader->SetFileName(parseResult->GetParameterString("Input"));
-    reader->Update();
+    // Documentation
+    SetDocName("Vector data set field Application");
+    SetDocLongDescription("Set a specified field to a specified value on all features of a vector data (Note: doesn't work with KML files yet)");
+    SetDocLimitations("None");
+    SetDocAuthors("OTB-Team");
+    SetDocSeeAlso(" ");
+    SetDocCLExample("otbApplicationLauncherCommandLine VectorDataSetField ${OTB-BIN}/bin "
+      "--in ${OTB-DATA}/Input/ToulousePoints-examples.shp --out dataOut.shp  --fn MyField --fv MyValue");
+    AddDocTag("VectorData Manipulation");
+  }
 
+  virtual ~VectorDataSetField()
+  {
+  }
+  
+  void DoCreateParameters()
+  {  
+    AddParameter(ParameterType_InputVectorData, "in", "Input");
+    SetParameterDescription("in", "Input Vector Data");
+    AddParameter(ParameterType_OutputVectorData, "out", "Output");
+    SetParameterDescription("out", "Output Vector Data");
+    
+    AddParameter(ParameterType_String, "fn", "Field");
+    SetParameterDescription("fn", "Field name");
+    AddParameter(ParameterType_String, "fv", "Value");
+    SetParameterDescription("fv", "Field value");
+  }
+
+  void DoUpdateParameters()
+  {
+    // Nothing to do (for now)   
+  }
+  
+  void DoExecute()
+  {
+    m_InputData = GetParameterVectorData("in");
+    
     typedef VectorDataType::DataTreeType            DataTreeType;
     typedef itk::PreOrderTreeIterator<DataTreeType> TreeIteratorType;
-    TreeIteratorType it(reader->GetOutput()->GetDataTree());
+    TreeIteratorType it(m_InputData->GetDataTree());
 
     for (it.GoToBegin(); !it.IsAtEnd(); ++it)
-      {
-      it.Get()->SetFieldAsString(parseResult->GetParameterString("Field"), parseResult->GetParameterString("Value"));
-      }
+    {
+      it.Get()->SetFieldAsString(GetParameterAsString("fn"), GetParameterAsString("fv"));
+    }
 
-    typedef otb::VectorDataFileWriter<VectorDataType> WriterVectorType;
-    WriterVectorType::Pointer writerVector = WriterVectorType::New();
-    writerVector->SetFileName(parseResult->GetParameterString("Output"));
-    writerVector->SetInput(reader->GetOutput());
-    writerVector->Update();
+    SetParameterOutputVectorData("out",m_InputData);
 
-    }
-  catch ( itk::ExceptionObject & err )
-    {
-    std::cout << "Following otbException caught :" << std::endl;
-    std::cout << err << std::endl;
-    return EXIT_FAILURE;
-    }
-  catch ( std::bad_alloc & err )
-    {
-    std::cout << "Exception bad_alloc : "<<(char*)err.what()<< std::endl;
-    return EXIT_FAILURE;
-    }
-  catch ( ... )
-    {
-    std::cout << "Unknown Exception found !" << std::endl;
-    return EXIT_FAILURE;
-    }
-  return EXIT_SUCCESS;
+  }
+  
+  VectorDataType::Pointer m_InputData;
+};  
+
 }
 }
+
+OTB_APPLICATION_EXPORT(otb::Wrapper::VectorDataSetField)
