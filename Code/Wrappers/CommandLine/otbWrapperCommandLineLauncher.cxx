@@ -687,8 +687,11 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
                     {
                     oss << "\t          Type: String (output image file name and optionally its pixel type)"
                         << std::endl;
+		    oss
+                        << "\t          You can also add after the filename the output pixel type"
+			<< std::endl;
                     oss
-                      << "\t                Possible pixel type: int8, uint8, int16, uint16, int32, uint32, flooat or double"
+                        << "\t          Possible pixel types:{int8,uint8,int16,uint16,int32,uint32,float,double}"
                       << std::endl;
                     }
                   else
