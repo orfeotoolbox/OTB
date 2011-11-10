@@ -120,7 +120,7 @@ bool CommandLineLauncher::Load()
     if (m_Parser->GetPathsAsString(m_Expression).size() != 0)
       {
       std::cerr << "ERROR: At least one specified path within \"" << m_Parser->GetPathsAsString(m_Expression)
-          << "\" is invalid or doesn't exist..." << std::endl;
+                << "\" is invalid or doesn't exist..." << std::endl;
       }
     else
       {
@@ -156,7 +156,6 @@ bool CommandLineLauncher::ExecuteAndWriteOutput()
     }
 
   int res = m_Application->ExecuteAndWriteOutput();
-
   if (res == 0)
     return true;
   else
@@ -179,10 +178,10 @@ bool CommandLineLauncher::BeforeExecute()
     }
 
   // if we want to load test environnement
-   if (m_Parser->IsAttributExists("--testenv", m_Expression) == true)
-     {
-     this->LoadTestEnv();
-     }
+  if (m_Parser->IsAttributExists("--testenv", m_Expression) == true)
+    {
+    this->LoadTestEnv();
+    }
 
 
   // Check the key validity (ie. exist in the application parameters)
@@ -215,8 +214,6 @@ bool CommandLineLauncher::BeforeExecute()
 
     return false;
     }
-
-  m_Application->UpdateParameters();
 
   // Check for the progress report
   if (m_Parser->IsAttributExists("--progress", m_Expression) == true)
@@ -329,18 +326,160 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
     ParameterType type = m_Application->GetParameterType(paramKey);
 
     const bool paramExists(m_Parser->IsAttributExists(std::string("--").append(paramKey), m_Expression));
-    const bool hasValue = m_Application->HasValue(paramKey);
+
+    // if param is a Group, dont do anything, ParamGroup dont have values
+    if (type != ParameterType_Group)
+      {
+      // Get the attribute relative to this key
+      values = m_Parser->GetAttribut(std::string("--").append(paramKey), m_Expression);
+      
+      // If the param does not exists in the cli, dont try to set a
+      // value on it, an exception will be thrown later in this function
+      if (paramExists)
+        {
+        // Check if there is a value associated to the attribute
+        if ( values.empty() )
+          {
+          std::cerr << "ERROR: No value associated to the parameter : \"" << paramKey << "\", invalid number of values " << values.size() << std::endl;
+          return INVALIDNUMBEROFVALUE;
+          }
+        
+        if (type == ParameterType_InputVectorDataList)
+          {          
+          dynamic_cast<InputVectorDataListParameter *> (param.GetPointer())->SetListFromFileName(values);
+          }
+        else
+          if (type == ParameterType_InputImageList)
+            {
+            dynamic_cast<InputImageListParameter *> (param.GetPointer())->SetListFromFileName(values);
+            }
+          else
+            if (type == ParameterType_StringList)
+              {
+              dynamic_cast<StringListParameter *> (param.GetPointer())->SetValue(values);
+              }
+            else
+              if (type == ParameterType_OutputImage)
+                {
+                m_Application->SetParameterString(paramKey, values[0]);
+                // Check if pixel type is given
+                if (values.size() == 2)
+                  {
+                  ImagePixelType outPixType = ImagePixelType_float;
+                  if (values[1] == "int8")
+                    outPixType = ImagePixelType_int8;
+                  else
+                    if (values[1] == "uint8")
+                      outPixType = ImagePixelType_uint8;
+                    else
+                      if (values[1] == "int16")
+                        outPixType = ImagePixelType_int16;
+                      else
+                        if (values[1] == "uint16")
+                          outPixType = ImagePixelType_uint16;
+                        else
+                          if (values[1] == "int32")
+                            outPixType = ImagePixelType_int32;
+                          else
+                            if (values[1] == "uint32")
+                              outPixType = ImagePixelType_uint32;
+                            else
+                              if (values[1] == "float")
+                                outPixType = ImagePixelType_float;
+                              else
+                                if (values[1] == "double")
+                                  outPixType = ImagePixelType_double;
+                                else
+                                  {
+                                  return WRONGPARAMETERVALUE;
+                                  }
+                  dynamic_cast<OutputImageParameter *> (param.GetPointer())->SetPixelType(outPixType);
+                  }
+                else
+                  if (values.size() != 1 && values.size() != 2)
+                    {
+                    std::cerr << "ERROR: Invalid number of value for: \"" << paramKey << "\", invalid number of values " << values.size() << std::endl;
+                    return INVALIDNUMBEROFVALUE;
+                    }
+                }
+              else
+                if (type == ParameterType_ListView)
+                  {
+                  dynamic_cast<ListViewParameter *> (param.GetPointer())->SetSelectedNames(values);
+                  }
+                else
+                  if (values.size() != 1 && !param->GetAutomaticValue())
+                    {
+                    std::cerr << "ERROR: Invalid number of value for: \"" << paramKey << "\", must have 1 value, not  "
+                              << values.size() << std::endl;
+                    // Try to find a "-" instead of "--"...
+                    itk::OStringStream oss;
+                    for (unsigned int i = 0; i < values.size(); i++)
+                      {
+                      if (values[i][0] == '-')
+                        {
+                        oss << std::string(values[i]).substr(1, std::string(values[i]).size() - 1) << ", ";
+                        }
+                      }
+                    if (oss.str().size() > 0) std::cerr << "ERROR: If values \""
+                                                        << oss.str().substr(0, oss.str().size() - 2)
+                                                        << "\" is/are keys, it should be prefix by \"--\"..." << std::endl;
+
+                    return INVALIDNUMBEROFVALUE;
+                    }
+
+        // Single value parameter
+        if (type == ParameterType_Choice || type == ParameterType_Float || type == ParameterType_Int || type
+            == ParameterType_Radius || type == ParameterType_Directory || type == ParameterType_String || type
+            == ParameterType_Filename || type == ParameterType_ComplexInputImage || type == ParameterType_InputImage ||
+            type == ParameterType_InputVectorData || type == ParameterType_InputVectorDataList ||  type == ParameterType_OutputVectorData
+            || type == ParameterType_RAM)
+          {
+          m_Application->SetParameterString(paramKey, values[0]);
+          }
+        else
+          if (type == ParameterType_Empty)
+            {
+            if (values[0] == "1" || values[0] == "true")
+              {
+              dynamic_cast<EmptyParameter *> (param.GetPointer())->SetActive(true);
+              }
+            else
+              if (values[0] == "0" || values[0] == "false")
+                {
+                dynamic_cast<EmptyParameter *> (param.GetPointer())->SetActive(false);
+                }
+              else
+                {
+                std::cerr << "ERROR: Wrong parameter value: " << paramKey << std::endl;
+                return WRONGPARAMETERVALUE;
+                }
+            }
+        // Update the flag UserValue
+        param->SetUserValue(true);
+        // Call the DoUpdateParameter to update dependant params
+        m_Application->UpdateParameters();
+        }
+      }
     
     // Check if mandatory parameter are present and have value
     // A param has to be set if it is mandatory and :
     // is root OR its parent is active
-    // NB: a root parameter is not active
-    
+    // NB: a root parameter is not active    
     bool mustBeSet = false;
-    if( param->GetMandatory() == true )
-      if( param->GetRoot()->GetMandatory() || param->IsRoot() )
-        mustBeSet = true;
+    const bool hasValue = m_Application->HasValue(paramKey);
 
+    if( param->GetMandatory() == true && param->GetActive())
+      {
+      if( param->GetRoot()->GetActive() || param->IsRoot() )
+        {
+        if (type != ParameterType_Group)
+          {
+          mustBeSet = true;
+          }
+        }
+      }
+    
     if( mustBeSet )
       {
       if (!paramExists)
@@ -349,7 +488,7 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
         if (!hasValue)
           {
           std::cerr << "ERROR: Missing mandatory parameter: " << paramKey << "  " << m_Application->HasValue(paramKey)
-              << std::endl;
+                    << std::endl;
           return MISSINGMANDATORYPARAMETER;
           }
         }
@@ -378,126 +517,6 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
         }
 
       }
-
-    // If the param is optional and hasn't been set : don't do anything
-    // If the param is mandatory but a default value exists : don't do anything
-    if (paramExists)
-      {
-      // List values parameter case
-      if (type == ParameterType_InputVectorDataList)
-        {
-        dynamic_cast<InputVectorDataListParameter *> (param.GetPointer())->SetListFromFileName(values);
-        }
-      else
-        if (type == ParameterType_InputImageList)
-          {
-          dynamic_cast<InputImageListParameter *> (param.GetPointer())->SetListFromFileName(values);
-          }
-        else
-          if (type == ParameterType_StringList)
-            {
-            dynamic_cast<StringListParameter *> (param.GetPointer())->SetValue(values);
-            }
-          else
-            if (type == ParameterType_OutputImage)
-              {
-              m_Application->SetParameterString(paramKey, values[0]);
-              // Check if pixel type is given
-              if (values.size() == 2)
-                {
-                ImagePixelType outPixType = ImagePixelType_float;
-                if (values[1] == "int8")
-                  outPixType = ImagePixelType_int8;
-                else
-                  if (values[1] == "uint8")
-                    outPixType = ImagePixelType_uint8;
-                  else
-                    if (values[1] == "int16")
-                      outPixType = ImagePixelType_int16;
-                    else
-                      if (values[1] == "uint16")
-                        outPixType = ImagePixelType_uint16;
-                      else
-                        if (values[1] == "int32")
-                          outPixType = ImagePixelType_int32;
-                        else
-                          if (values[1] == "uint32")
-                            outPixType = ImagePixelType_uint32;
-                          else
-                            if (values[1] == "float")
-                              outPixType = ImagePixelType_float;
-                            else
-                              if (values[1] == "double")
-                                outPixType = ImagePixelType_double;
-                              else
-                                {
-                                return WRONGPARAMETERVALUE;
-                                }
-                dynamic_cast<OutputImageParameter *> (param.GetPointer())->SetPixelType(outPixType);
-                }
-              else
-                if (values.size() != 1 && values.size() != 2)
-                  {
-                  std::cerr << "ERROR: Invalid number of value for: \"" << paramKey << "\", invalid number of values " << values.size() << std::endl;
-                  return INVALIDNUMBEROFVALUE;
-                  }
-              }
-            else
-              if (type == ParameterType_ListView)
-                {
-                dynamic_cast<ListViewParameter *> (param.GetPointer())->SetSelectedNames(values);
-                }
-              else
-                if (values.size() != 1)
-                  {
-                  std::cerr << "ERROR: Invalid number of value for: \"" << paramKey << "\", must have 1 value, not  "
-                      << values.size() << std::endl;
-                  // Try to find a "-" instead of "--"...
-                  itk::OStringStream oss;
-                  for (unsigned int i = 0; i < values.size(); i++)
-                    {
-                    if (values[i][0] == '-')
-                      {
-                      oss << std::string(values[i]).substr(1, std::string(values[i]).size() - 1) << ", ";
-                      }
-                    }
-                  if (oss.str().size() > 0) std::cerr << "ERROR: If values \""
-                      << oss.str().substr(0, oss.str().size() - 2)
-                      << "\" is/are keys, it should be prefix by \"--\"..." << std::endl;
-
-                  return INVALIDNUMBEROFVALUE;
-                  }
-
-      // Single value parameter
-      if (type == ParameterType_Choice || type == ParameterType_Float || type == ParameterType_Int || type
-          == ParameterType_Radius || type == ParameterType_Directory || type == ParameterType_String || type
-          == ParameterType_Filename || type == ParameterType_ComplexInputImage || type == ParameterType_InputImage ||
-          type == ParameterType_InputVectorData || type == ParameterType_InputVectorDataList ||  type == ParameterType_OutputVectorData
-        || type == ParameterType_RAM)
-        {
-        m_Application->SetParameterString(paramKey, values[0]);
-        }
-      else
-        if (type == ParameterType_Empty)
-          {
-          if (values[0] == "1" || values[0] == "true")
-            {
-            dynamic_cast<EmptyParameter *> (param.GetPointer())->SetActive(true);
-            }
-          else
-            if (values[0] == "0" || values[0] == "false")
-              {
-              dynamic_cast<EmptyParameter *> (param.GetPointer())->SetActive(false);
-              }
-            else
-              {
-              std::cerr << "ERROR: Wrong parameter value: " << paramKey << std::endl;
-              return WRONGPARAMETERVALUE;
-              }
-          }
-      }
-    // Update the flag UserValue
-    param->SetUserValue(true);
     }
 
   return OKPARAM;
@@ -575,7 +594,7 @@ void CommandLineLauncher::DisplayHelp()
     if (m_Parser->GetAttribut("--progress", m_Expression).size() == 0)
       std::cerr << "\t       Status: none" << m_Path << std::endl;
     else std::cerr << "\t       Status: USER VALUE: " << m_Parser->GetAttribut("--progress", m_Expression)[0]
-        << std::endl;
+                   << std::endl;
 
   for (unsigned int i = 0; i < nbOfParam; i++)
     {
@@ -633,10 +652,10 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
       if (type == ParameterType_Int)
         {
         oss << "\t          Type: Int" << std::endl;
-    }
-  else if( type == ParameterType_RAM )
-    {
-    oss<<"\t          Type: RAM"<<std::endl;
+        }
+      else if( type == ParameterType_RAM )
+        {
+        oss<<"\t          Type: RAM"<<std::endl;
         }
       else
         if (type == ParameterType_Float)
@@ -668,9 +687,9 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
                     {
                     oss << "\t          Type: String (output image file name and optionally its pixel type)"
                         << std::endl;
-                            oss
-                            << "\t                Possible pixel type: int8, uint8, int16, uint16, int32, uint32, flooat or double"
-                        << std::endl;
+                    oss
+                      << "\t                Possible pixel type: int8, uint8, int16, uint16, int32, uint32, flooat or double"
+                      << std::endl;
                     }
                   else
                     if (type == ParameterType_OutputVectorData)
