@@ -58,3 +58,7 @@ OTB_CREATE_APPLICATION(NAME           VectorDataSetField
 OTB_CREATE_APPLICATION(NAME           VectorDataTransform
                        SOURCES        otbVectorDataTransform.cxx
                        LINK_LIBRARIES OTBBasicFilters)
+
+OTB_CREATE_APPLICATION(NAME           VectorDataExtractROIApplication
+                       SOURCES        otbVectorDataExtractROIApplication.cxx
+                       LINK_LIBRARIES OTBBasicFilters)
