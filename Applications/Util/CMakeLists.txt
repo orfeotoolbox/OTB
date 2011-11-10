@@ -54,3 +54,7 @@ OTB_CREATE_APPLICATION(NAME           CompareImages
 OTB_CREATE_APPLICATION(NAME           VectorDataSetField
                        SOURCES        otbVectorDataSetField.cxx
                        LINK_LIBRARIES OTBBasicFilters)
+
+OTB_CREATE_APPLICATION(NAME           VectorDataTransform
+                       SOURCES        otbVectorDataTransform.cxx
+                       LINK_LIBRARIES OTBBasicFilters)
