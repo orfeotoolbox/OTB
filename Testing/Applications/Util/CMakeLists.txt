@@ -139,9 +139,9 @@ OTB_TEST_APPLICATION(NAME apTuUtKmzExport
                              --legend ${INPUTDATA}/otb_big.png
                              --dem ${INPUTDATA}/DEM/srtm_directory)
 
-#--- OSMDownloader ---
-IF(OTB_DATA_USE_LARGEINPUT)
 
+IF(OTB_DATA_USE_LARGEINPUT)
+#--- OSMDownloader ---
 OTB_TEST_APPLICATION(NAME apTvUtOSMDownloader
                      APP OSMDownloader
                      OPTIONS --support ${OTB_DATA_LARGEINPUT_ROOT}/DEMPSTER-SHAFER/ROI_QB_TOULOUSE.TIF
@@ -150,6 +150,29 @@ OTB_TEST_APPLICATION(NAME apTvUtOSMDownloader
                      VALID   --compare-ogr ${NOTOL}  
                              ${OTBAPP_BASELINE_FILES}/otbOSMDownloaderOutput.shp
                              ${TEMP}/apTvUtOSMDownloader.shp)
+
+#--- VectorDataTransfomr ---
+OTB_TEST_APPLICATION(NAME apTvUtVectorDataTransform_Rotation
+                     APP VectorDataTransform
+                     OPTIONS --in ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+                             --vd ${INPUTDATA}/ToulouseRoad-examples.shp
+                             --out ${TEMP}/apTvUtVectorDataTransform_rotation.shp
+                             --transform.ro 15
+                     VALID   --compare-ogr ${NOTOL}  
+                             ${OTBAPP_BASELINE_FILES}/utTvVectorDataTransformFilter_Rotation.shp
+                             ${TEMP}/apTvUtVectorDataTransform_rotation.shp)
+
+OTB_TEST_APPLICATION(NAME apTvUtVectorDataTransform_Translation_Rotation
+                     APP VectorDataTransform
+                     OPTIONS --in ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+                             --vd ${INPUTDATA}/ToulouseRoad-examples.shp
+                             --out ${TEMP}/apTvUtVectorDataTransform_Translation_rotation.shp
+                             --transform.ro 15
+                             --transform.tx  5
+                             --transform.ty  6
+                     VALID   --compare-ogr ${NOTOL}  
+                             ${OTBAPP_BASELINE_FILES}/utTvVectorDataTransformFilter_Translation_rotation.shp
+                             ${TEMP}/apTvUtVectorDataTransform_Translation_rotation.shp)
 
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
