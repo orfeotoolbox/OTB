@@ -151,7 +151,7 @@ OTB_TEST_APPLICATION(NAME apTvUtOSMDownloader
                              ${OTBAPP_BASELINE_FILES}/otbOSMDownloaderOutput.shp
                              ${TEMP}/apTvUtOSMDownloader.shp)
 
-#--- VectorDataTransfomr ---
+#--- VectorDataTransform ---
 OTB_TEST_APPLICATION(NAME apTvUtVectorDataTransform_Rotation
                      APP VectorDataTransform
                      OPTIONS --in ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
@@ -173,6 +173,17 @@ OTB_TEST_APPLICATION(NAME apTvUtVectorDataTransform_Translation_Rotation
                      VALID   --compare-ogr ${NOTOL}  
                              ${OTBAPP_BASELINE_FILES}/utTvVectorDataTransformFilter_Translation_rotation.shp
                              ${TEMP}/apTvUtVectorDataTransform_Translation_rotation.shp)
+
+#--- VectorDataExtractROIApplication ---
+OTB_TEST_APPLICATION(NAME apTvUtVectorDataExtractROIApplication
+                     APP VectorDataExtractROIApplication
+                     OPTIONS --io.in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+                             --io.vd ${OTB_DATA_LARGEINPUT_ROOT}/VECTOR/MidiPyrenees/roads.shp
+                             --io.out ${TEMP}/utTvVectorDataExtractROIApplicationOutput.shp
+                     #VALID   --compare-ogr ${NOTOL}  
+                     #        ${OTBAPP_BASELINE_FILES}/utTvVectorDataTransformFilter_Translation_rotation.shp
+                     #        ${TEMP}/apTvUtVectorDataTransform_Translation_rotation.shp
+                     )
 
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
