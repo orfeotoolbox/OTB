@@ -716,13 +716,11 @@ void GDALImageIO::InternalReadImageInformation()
     }
   else if (this->GetComponentType() == LONG)
     {
-    long tmp;
-    m_BytePerPixel = sizeof(tmp);
+    m_BytePerPixel = sizeof(long);
     }
   else if (this->GetComponentType() == ULONG)
     {
-    long tmp;
-    m_BytePerPixel = sizeof(tmp);
+    m_BytePerPixel = sizeof(unsigned long);
     }
   else if (this->GetComponentType() == FLOAT)
     {
@@ -1325,8 +1323,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
       }
     else if (this->GetComponentType() == LONG)
       {
-        long tmp;
-        m_BytePerPixel = sizeof(tmp);
+		m_BytePerPixel = sizeof(long);
         if( m_BytePerPixel == 8 )
           {
             itkWarningMacro(<< "Cast a long (64 bits) image into an int (32 bits) one.")
@@ -1335,8 +1332,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
       }
     else if (this->GetComponentType() == ULONG)
       {
-        unsigned long tmp;
-        m_BytePerPixel = sizeof(tmp);
+        m_BytePerPixel = sizeof(unsigned long);
         if( m_BytePerPixel == 8 )
           {
             itkWarningMacro(<< "Cast an unsigned long (64 bits) image into an unsigned int (32 bits) one.")

@@ -58,7 +58,7 @@ InputVectorDataListParameter::SetListFromFileName(const std::vector<std::string>
         {
         reader->UpdateOutputInformation();
         }
-      catch(itk::ExceptionObject & err)
+      catch(itk::ExceptionObject &)
         {
         this->ClearValue();
         isOk = false;
@@ -142,7 +142,7 @@ InputVectorDataListParameter::SetNthFileName( const unsigned int id, const std::
       {
       reader->UpdateOutputInformation();
       }
-    catch(itk::ExceptionObject & err)
+    catch(itk::ExceptionObject &)
       {
       this->ClearValue();
       return false;
@@ -223,7 +223,7 @@ InputVectorDataListParameter::SetVectorDataList(VectorDataListType* vdList)
       vdList->GetNthElement( i )->UpdateOutputInformation();
       }
     }
-  catch(itk::ExceptionObject & err)
+  catch(itk::ExceptionObject &)
     {
     return;
     }
@@ -249,7 +249,7 @@ InputVectorDataListParameter::AddVectorData(VectorDataType* vectorData)
     {
     vectorData->UpdateOutputInformation();
     }
-  catch(itk::ExceptionObject & err)
+  catch(itk::ExceptionObject &)
     {
     return;
     }

@@ -81,7 +81,7 @@ InputVectorDataParameter::GetVectorData()
       // Update the viewer here to load the file => no streaming for VectorData
       m_Reader->Update();
       }
-    catch (itk::ExceptionObject & err)
+    catch (itk::ExceptionObject &)
       {
       this->ClearValue();
       }

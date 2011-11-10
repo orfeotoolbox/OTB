@@ -127,7 +127,7 @@ InputImageParameter::GetImage()
       {
       reader->UpdateOutputInformation();
       }
-    catch (itk::ExceptionObject & err)
+    catch (itk::ExceptionObject &)
       {
       this->ClearValue();
       }

@@ -103,7 +103,7 @@ InputImageListParameter::AddFromFileName(const std::string & filename)
       {
       reader->UpdateOutputInformation();
       }
-    catch(itk::ExceptionObject & err)
+    catch(itk::ExceptionObject &)
       {
       this->ClearValue();
       return false;
@@ -139,7 +139,7 @@ InputImageListParameter::SetNthFileName( const unsigned int id, const std::strin
       {
       reader->UpdateOutputInformation();
       }
-    catch(itk::ExceptionObject & err)
+    catch(itk::ExceptionObject &)
       {
       this->ClearValue();
       return false;
@@ -219,7 +219,7 @@ InputImageListParameter::SetImageList(FloatVectorImageListType* imList)
       imList->GetNthElement( i )->UpdateOutputInformation();
       }
     }
-  catch(itk::ExceptionObject & err)
+  catch(itk::ExceptionObject &)
     {
     return;
     }
@@ -245,7 +245,7 @@ InputImageListParameter::AddImage(FloatVectorImageType* image)
     {
     image->UpdateOutputInformation();
     }
-  catch(itk::ExceptionObject & err)
+  catch(itk::ExceptionObject &)
     {
     return;
     }

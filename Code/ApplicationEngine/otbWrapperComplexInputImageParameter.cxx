@@ -56,7 +56,7 @@ ComplexInputImageParameter::SetFromFileName(const std::string& filename)
       {
       reader->UpdateOutputInformation();
       }
-    catch(itk::ExceptionObject & err)
+    catch(itk::ExceptionObject &)
       {
       }
 
@@ -102,7 +102,7 @@ ComplexInputImageParameter::GetImage()
       {
       reader->UpdateOutputInformation();
       }
-    catch(itk::ExceptionObject & err)
+    catch(itk::ExceptionObject &)
       {
       this->ClearValue();
       }
