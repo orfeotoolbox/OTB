@@ -52,7 +52,7 @@ public:
   bool SetFromFileName(const std::string& filename);
   itkGetConstMacro(FileName, std::string);
 
-  VectorDataType* GetVectorData() const;
+  VectorDataType* GetVectorData();
 
   void SetVectorData(VectorDataType* vectorData);
 

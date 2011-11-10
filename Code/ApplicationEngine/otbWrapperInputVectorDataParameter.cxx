@@ -66,8 +66,38 @@ InputVectorDataParameter::SetFromFileName(const std::string& filename)
 
 
 VectorDataType*
-InputVectorDataParameter::GetVectorData() const
+InputVectorDataParameter::GetVectorData()
 {
+  // 2 cases : the user sets a filename vs. the user sets a vector data
+  //////////////////////// Filename case:
+  if (!m_FileName.empty())
+    {
+    //typedef otb::ImageFileReader<TOutputImage> ReaderType;
+    //typename ReaderType::Pointer reader = ReaderType::New();
+    m_Reader = VectorDataFileReaderType::New();
+    m_Reader->SetFileName(m_FileName);
+    try
+      {
+      // Update the viewer here to load the file => no streaming for VectorData
+      m_Reader->Update();
+      }
+    catch (itk::ExceptionObject & err)
+      {
+      this->ClearValue();
+      }
+
+    m_VectorData = m_Reader->GetOutput();
+    }
+  //////////////////////// VectorData case:
+  else
+    {
+    if (m_VectorData.IsNull())
+      {
+      // Else : error
+      itkExceptionMacro("No input vector data or filename detected...");
+      }
+    }
+  
   return m_VectorData;
 }
 
