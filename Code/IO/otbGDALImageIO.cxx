@@ -1323,7 +1323,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
       }
     else if (this->GetComponentType() == LONG)
       {
-		m_BytePerPixel = sizeof(long);
+              m_BytePerPixel = sizeof(long);
         if( m_BytePerPixel == 8 )
           {
             itkWarningMacro(<< "Cast a long (64 bits) image into an int (32 bits) one.")
