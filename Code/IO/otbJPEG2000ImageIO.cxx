@@ -24,6 +24,8 @@
 #include "itkTimeProbe.h"
 #include "itkMacro.h"
 
+#include <deque>
+
 extern "C"
 {
 #include "openjpeg.h"
@@ -63,6 +65,10 @@ namespace otb
 class JPEG2000ReaderInternal
 {
 public:
+  typedef std::pair<unsigned int, opj_image_t *> CachedTileType;
+  typedef std::deque<CachedTileType> TileCacheType;
+
+
   JPEG2000ReaderInternal();
 
   opj_codec_t* GetCodec(){return this->m_Codec; };
@@ -71,7 +77,11 @@ public:
   opj_stream_t* GetStream(){return this->m_Stream; };
   opj_codestream_info_v2* GetCstrInfo(){return this->m_CstrInfo; };
 
-  void Clean();
+  bool LoadTileFromCache(unsigned int tileIndex);
+  
+  bool ReadTileFromFile(unsigned int tileIndex);
+
+   void Clean();
 
   int CanRead();
 
@@ -101,10 +111,16 @@ private:
   opj_image_t* m_Image;
   opj_stream_t* m_Stream;
   opj_codestream_info_v2* m_CstrInfo;
+  unsigned int m_CacheSizeInTiles;
+  TileCacheType m_Cache;
 
   int Initialize();
 
+  void InsertTileInCache(unsigned int tileIndex,opj_image_t * tileData);
+
+  void ClearCache();
 };
+
 
 int JPEG2000ReaderInternal::Open(const char *filename)
 {
@@ -148,6 +164,9 @@ int JPEG2000ReaderInternal::Open(const char *filename)
 
 void JPEG2000ReaderInternal::Clean()
 {
+  // Clear the tile cache
+  this->ClearCache();
+
   // Close the byte stream
   if (this->m_Stream)
     {
@@ -168,13 +187,6 @@ void JPEG2000ReaderInternal::Clean()
     otbopenjpeg_opj_destroy_codec(this->m_Codec);
     }
   this->m_Codec = NULL;
-
-  // Destroy the image
-  if (this->m_Image)
-    {
-    otbopenjpeg_opj_image_destroy(this->m_Image);
-    }
-  this->m_Image = NULL;
 
   // Destroy the codestream info
   if (this->m_CstrInfo)
@@ -207,6 +219,92 @@ void JPEG2000ReaderInternal::Clean()
 
 }
 
+
+void JPEG2000ReaderInternal::ClearCache()
+{
+  for(TileCacheType::iterator it = m_Cache.begin();
+      it != m_Cache.end();++it)
+    {
+    CachedTileType erasedTile = *it;
+    
+    // Destroy the image
+    if (erasedTile.second)
+      {
+      //otbopenjpeg_opj_image_destroy(erasedTile.second);
+      }
+    erasedTile.second = NULL;
+    } 
+  m_Cache.clear();
+}
+
+bool JPEG2000ReaderInternal::LoadTileFromCache(unsigned int tileIndex)
+{
+  for(TileCacheType::const_iterator it = m_Cache.begin();
+      it != m_Cache.end();++it)
+    {
+    if(it->first == tileIndex)
+      {
+      this->m_Image = it->second;
+      std::cout<<"Tile "<<tileIndex<<" loaded from cache."<<std::endl;
+      return true;
+      }
+    }
+  return false;
+}
+
+bool JPEG2000ReaderInternal::ReadTileFromFile(unsigned int tileIndex)
+{
+  bool success = otbopenjpeg_opj_get_decoded_tile(this->GetCodec(),this->GetStream(),this->GetImage(),tileIndex);
+  
+
+  if(success)
+    {
+    std::cout<<"Tile "<<tileIndex<<" decoded from file"<<std::endl;
+    std::cout<<"Tile "<<this->GetImage()->x0<<" "<<this->GetImage()->y0<<" "<<this->GetImage()->x1<<" "<<this->GetImage()->y1<<std::endl;
+    InsertTileInCache(tileIndex,this->GetImage());
+    }
+  
+  std::cout<<"Cache status: ";
+
+  for(TileCacheType::const_iterator it = m_Cache.begin();
+      it != m_Cache.end();++it)
+    {
+    std::cout<<it->first<<" ";
+    }
+  std::cout<<std::endl;
+
+  return success;
+}
+
+void JPEG2000ReaderInternal::InsertTileInCache(unsigned int tileIndex, opj_image_t * tileData)
+{
+  for(TileCacheType::const_iterator it = m_Cache.begin();
+      it != m_Cache.end();++it)
+    {
+    if(it->first == tileIndex)
+      {
+      return;
+      }
+    }
+  std::cout<<"Registering new tile"<<std::endl;
+  if(m_Cache.size() >= m_CacheSizeInTiles)
+    {
+    CachedTileType erasedTile = *m_Cache.begin();
+    
+    // Destroy the image
+    if (erasedTile.second)
+      {
+      otbopenjpeg_opj_image_destroy(erasedTile.second);
+      }
+    erasedTile.second = NULL;
+
+    m_Cache.pop_front();
+    }
+  
+  m_Cache.push_back(CachedTileType(tileIndex,tileData));
+}
+
+
 JPEG2000ReaderInternal::JPEG2000ReaderInternal()
 {
   this->m_Image = NULL;
@@ -219,6 +317,9 @@ JPEG2000ReaderInternal::JPEG2000ReaderInternal()
   this->m_YResolution = NULL;
   this->m_Precision = NULL;
   this->m_Signed = NULL;
+
+  this->m_Cache = TileCacheType();
+  this->m_CacheSizeInTiles = 4;
 
   this->Clean();
 }
@@ -369,6 +470,8 @@ int JPEG2000ReaderInternal::CanRead()
    else return 0;
  }
 
+
+
 JPEG2000ImageIO::JPEG2000ImageIO()
 {
   m_InternalReader = new JPEG2000ReaderInternal;
@@ -471,12 +574,15 @@ void JPEG2000ImageIO::Read(void* buffer)
   // Decode tile need
   for (std::vector<unsigned int>::iterator itTile = tileList.begin(); itTile < tileList.end(); itTile++)
     {
-
-    if (!otbopenjpeg_opj_get_decoded_tile(m_InternalReader->GetCodec(), m_InternalReader->GetStream(),
-                                     m_InternalReader->GetImage(), *itTile))
+    // First, try to read from the Cache
+    if(!m_InternalReader->LoadTileFromCache(*itTile))
       {
-      this->m_InternalReader->Clean();
+      // If failed, try to read tile from file
+      if(!m_InternalReader->ReadTileFromFile(*itTile))
+        {
+        this->m_InternalReader->Clean();
       itkExceptionMacro(<< " otbopenjpeg failed to decode the desired tile "<< *itTile << "!");
+        }
       }
 
     otbMsgDevMacro(<< " Tile " << *itTile << " is decoded.");
@@ -576,7 +682,7 @@ void JPEG2000ImageIO::Read(void* buffer)
   chrono.Stop();
   otbMsgDevMacro( << "JPEG2000ImageIO::Read took " << chrono.GetTotal() << " sec");
 
-  m_InternalReader->Clean();
+  //m_InternalReader->Clean();
 }
 
 void JPEG2000ImageIO::ReadImageInformation()
@@ -741,6 +847,7 @@ void JPEG2000ImageIO::ComputeOffsets( unsigned int &l_width_src, // Width of the
                                       unsigned int &l_start_offset_src // Offset where begin to read the data in the openjpeg decoded data in nb of pixel
                                       )
 {
+  std::cout<<"Tile "<<m_InternalReader->GetImage()->x0<<" "<<m_InternalReader->GetImage()->y0<<" "<<m_InternalReader->GetImage()->x1<<" "<<m_InternalReader->GetImage()->y1<<std::endl;
   // Characteristics of the input buffer from openpjeg
   unsigned int l_x0_src = m_InternalReader->GetImage()->x0;
   unsigned int l_y0_src = m_InternalReader->GetImage()->y0;
