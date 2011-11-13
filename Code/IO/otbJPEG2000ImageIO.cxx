@@ -255,7 +255,10 @@ bool JPEG2000ReaderInternal::LoadTileFromCache(unsigned int tileIndex)
     {
     if(it->first == tileIndex)
       {
-      this->m_Image = it->second;
+      CachedTileType cachedTile = (*it);
+      this->m_Image = cachedTile.second;
+      m_Cache.erase(it);
+      m_Cache.push_back(cachedTile);
       std::cout<<"Tile "<<tileIndex<<" loaded from cache."<<std::endl;
       return true;
       }
