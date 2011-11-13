@@ -39,8 +39,9 @@
 #define opj_destroy_decompress              @OPJ_MANGLE_PREFIX@_opj_destroy_decompress
 
 #define opj_image_create                    @OPJ_MANGLE_PREFIX@_opj_image_create
+#define opj_image_create0                   @OPJ_MANGLE_PREFIX@_opj_image_create0
 #define opj_image_destroy                   @OPJ_MANGLE_PREFIX@_opj_image_destroy
-
+#define opj_copy_image_header               @OPJ_MANGLE_PREFIX@_opj_copy_image_header
 
 #define opj_set_default_decoder_parameters  @OPJ_MANGLE_PREFIX@_opj_set_default_decoder_parameters
 #define opj_set_default_encoder_parameters  @OPJ_MANGLE_PREFIX@_opj_set_default_encoder_parameters

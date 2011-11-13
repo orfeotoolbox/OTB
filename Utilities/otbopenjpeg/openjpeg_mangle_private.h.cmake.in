@@ -64,13 +64,11 @@
 #define jp2_setup_decoder_v2                    @OPJ_MANGLE_PREFIX@_jp2_setup_decoder_v2
 #define mct_decode_custom                       @OPJ_MANGLE_PREFIX@_mct_decode_custom
 #define opj_clock                               @OPJ_MANGLE_PREFIX@_opj_clock
-#define opj_copy_image_header                   @OPJ_MANGLE_PREFIX@_opj_copy_image_header
 #define opj_error_default_callback              @OPJ_MANGLE_PREFIX@_opj_error_default_callback
 #define opj_event_msg                           @OPJ_MANGLE_PREFIX@_opj_event_msg
 #define opj_event_msg_v2                        @OPJ_MANGLE_PREFIX@_opj_event_msg_v2
 #define opj_get_data_length_from_file           @OPJ_MANGLE_PREFIX@_opj_get_data_length_from_file
 #define opj_image_comp_header_update            @OPJ_MANGLE_PREFIX@_opj_image_comp_header_update
-#define opj_image_create0                       @OPJ_MANGLE_PREFIX@_opj_image_create0
 #define opj_info_default_callback               @OPJ_MANGLE_PREFIX@_opj_info_default_callback
 #define opj_jp2_decode                          @OPJ_MANGLE_PREFIX@_opj_jp2_decode
 #define opj_jp2_encode                          @OPJ_MANGLE_PREFIX@_opj_jp2_encode
