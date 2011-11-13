@@ -71,9 +71,18 @@ public:
 
   JPEG2000ReaderInternal();
 
+  ~JPEG2000ReaderInternal()
+  {    
+    // Clear the cache
+    this->ClearCache();
+
+    this->Clean();
+  }
+
   opj_codec_t* GetCodec(){return this->m_Codec; };
   FILE* GetFile(){return this->m_File; };
   opj_image_t* GetImage(){return this->m_Image; };
+  opj_image_t* GetPersistentImage(){return this->m_PersistentImage; };
   opj_stream_t* GetStream(){return this->m_Stream; };
   opj_codestream_info_v2* GetCstrInfo(){return this->m_CstrInfo; };
 
@@ -109,6 +118,7 @@ private:
   opj_codec_t *  m_Codec;
   FILE* m_File;
   opj_image_t* m_Image;
+  opj_image_t* m_PersistentImage;
   opj_stream_t* m_Stream;
   opj_codestream_info_v2* m_CstrInfo;
   unsigned int m_CacheSizeInTiles;
@@ -166,7 +176,7 @@ void JPEG2000ReaderInternal::Clean()
 {
   // Clear the tile cache
   this->ClearCache();
-
+  
   // Close the byte stream
   if (this->m_Stream)
     {
@@ -230,7 +240,7 @@ void JPEG2000ReaderInternal::ClearCache()
     // Destroy the image
     if (erasedTile.second)
       {
-      //otbopenjpeg_opj_image_destroy(erasedTile.second);
+      otbopenjpeg_opj_image_destroy(erasedTile.second);
       }
     erasedTile.second = NULL;
     } 
@@ -254,6 +264,9 @@ bool JPEG2000ReaderInternal::LoadTileFromCache(unsigned int tileIndex)
 
 bool JPEG2000ReaderInternal::ReadTileFromFile(unsigned int tileIndex)
 {
+  this->m_Image = otbopenjpeg_opj_image_create0();
+  otbopenjpeg_opj_copy_image_header(this->GetPersistentImage(), this->m_Image);
+
   bool success = otbopenjpeg_opj_get_decoded_tile(this->GetCodec(),this->GetStream(),this->GetImage(),tileIndex);
   
 
@@ -269,7 +282,7 @@ bool JPEG2000ReaderInternal::ReadTileFromFile(unsigned int tileIndex)
   for(TileCacheType::const_iterator it = m_Cache.begin();
       it != m_Cache.end();++it)
     {
-    std::cout<<it->first<<" ";
+    std::cout<<it->first<<"("<<it->second<<") ";
     }
   std::cout<<std::endl;
 
@@ -325,7 +338,9 @@ JPEG2000ReaderInternal::JPEG2000ReaderInternal()
 }
 
 int JPEG2000ReaderInternal::Initialize()
-{
+{  
+  this->ClearCache();
+
   if (this->m_File)
     {
     // Creating the file stream
@@ -360,7 +375,7 @@ int JPEG2000ReaderInternal::Initialize()
       }
 
     // Read the main header of the codestream and if necessary the JP2 boxes
-    if (!otbopenjpeg_opj_read_header(this->m_Stream, this->m_Codec, &(this->m_Image)))
+    if (!otbopenjpeg_opj_read_header(this->m_Stream, this->m_Codec, &(this->m_PersistentImage)))
       {
       this->Clean();
       return 0;
@@ -376,15 +391,15 @@ int JPEG2000ReaderInternal::Initialize()
       }
 
     // We can now retrieve the main information  of the image and the codestream
-    this->m_Width = this->m_Image->x1 - this->m_Image->x0;
-    this->m_Height = this->m_Image->y1 - this->m_Image->y0;
+    this->m_Width = this->m_PersistentImage->x1 - this->m_PersistentImage->x0;
+    this->m_Height = this->m_PersistentImage->y1 - this->m_PersistentImage->y0;
 
     this->m_TileHeight = this->m_CstrInfo->tdy;
     this->m_TileWidth = this->m_CstrInfo->tdx;
     this->m_XNbOfTile = this->m_CstrInfo->tw;
     this->m_YNbOfTile = this->m_CstrInfo->th;
 
-    this->m_NbOfComponent = this->m_Image->numcomps;
+    this->m_NbOfComponent = this->m_PersistentImage->numcomps;
 
     this->m_Precision = new unsigned int[this->m_NbOfComponent];
     if (!this->m_Precision)
@@ -395,7 +410,7 @@ int JPEG2000ReaderInternal::Initialize()
 
     for (unsigned int itComp = 0; itComp < this->m_NbOfComponent; itComp++)
       {
-      this->m_Precision[itComp] = this->m_Image->comps[itComp].prec;
+      this->m_Precision[itComp] = this->m_PersistentImage->comps[itComp].prec;
       }
 
     this->m_Signed = new int[this->m_NbOfComponent];
@@ -406,7 +421,7 @@ int JPEG2000ReaderInternal::Initialize()
       }
     for (unsigned int itComp = 0; itComp < this->m_NbOfComponent; itComp++)
       {
-      this->m_Signed[itComp] = this->m_Image->comps[itComp].sgnd;
+      this->m_Signed[itComp] = this->m_PersistentImage->comps[itComp].sgnd;
       }
 
     this->m_XResolution = new unsigned int[this->m_NbOfComponent];
@@ -418,7 +433,7 @@ int JPEG2000ReaderInternal::Initialize()
 
     for (unsigned int itComp = 0; itComp < this->m_NbOfComponent; itComp++)
       {
-      this->m_XResolution[itComp] = this->m_Image->comps[itComp].dx;
+      this->m_XResolution[itComp] = this->m_PersistentImage->comps[itComp].dx;
       }
 
     this->m_YResolution = new unsigned int[this->m_NbOfComponent];
@@ -430,7 +445,7 @@ int JPEG2000ReaderInternal::Initialize()
 
     for (unsigned int itComp = 0; itComp < this->m_NbOfComponent; itComp++)
       {
-      this->m_YResolution[itComp] = this->m_Image->comps[itComp].dy;
+      this->m_YResolution[itComp] = this->m_PersistentImage->comps[itComp].dy;
       }
 
     }
@@ -444,7 +459,7 @@ int JPEG2000ReaderInternal::CanRead()
        this->m_Codec &&
        this->m_Stream &&
        this->m_CstrInfo &&
-       this->m_Image &&
+       this->m_PersistentImage &&
        ( this->m_Width > 0 ) && ( this->m_Height > 0 ) &&
        ( this->m_TileWidth > 0 ) && ( this->m_TileHeight > 0 ) &&
        ( this->m_XNbOfTile > 0 ) && ( this->m_YNbOfTile > 0 ) &&
