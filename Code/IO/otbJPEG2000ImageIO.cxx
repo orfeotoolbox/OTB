@@ -259,7 +259,7 @@ bool JPEG2000ReaderInternal::LoadTileFromCache(unsigned int tileIndex)
       this->m_Image = cachedTile.second;
       m_Cache.erase(it);
       m_Cache.push_back(cachedTile);
-      std::cout<<"Tile "<<tileIndex<<" loaded from cache."<<std::endl;
+      otbMsgDebugMacro(<<"Tile "<<tileIndex<<" loaded from cache");
       return true;
       }
     }
@@ -276,20 +276,10 @@ bool JPEG2000ReaderInternal::ReadTileFromFile(unsigned int tileIndex)
 
   if(success)
     {
-    std::cout<<"Tile "<<tileIndex<<" decoded from file"<<std::endl;
-    std::cout<<"Tile "<<this->GetImage()->x0<<" "<<this->GetImage()->y0<<" "<<this->GetImage()->x1<<" "<<this->GetImage()->y1<<std::endl;
+    otbMsgDebugMacro(<<"Tile "<<tileIndex<<" decoded from file");
     InsertTileInCache(tileIndex,this->GetImage());
     }
   
-  std::cout<<"Cache status: ";
-
-  for(TileCacheType::const_iterator it = m_Cache.begin();
-      it != m_Cache.end();++it)
-    {
-    std::cout<<it->first<<"("<<it->second<<") ";
-    }
-  std::cout<<std::endl;
-
   return success;
 }
 
@@ -303,7 +293,6 @@ void JPEG2000ReaderInternal::InsertTileInCache(unsigned int tileIndex, opj_image
       return;
       }
     }
-  std::cout<<"Registering new tile"<<std::endl;
   if(m_Cache.size() >= m_CacheSizeInTiles)
     {
     CachedTileType erasedTile = *m_Cache.begin();
@@ -865,7 +854,6 @@ void JPEG2000ImageIO::ComputeOffsets( unsigned int &l_width_src, // Width of the
                                       unsigned int &l_start_offset_src // Offset where begin to read the data in the openjpeg decoded data in nb of pixel
                                       )
 {
-  std::cout<<"Tile "<<m_InternalReader->GetImage()->x0<<" "<<m_InternalReader->GetImage()->y0<<" "<<m_InternalReader->GetImage()->x1<<" "<<m_InternalReader->GetImage()->y1<<std::endl;
   // Characteristics of the input buffer from openpjeg
   unsigned int l_x0_src = m_InternalReader->GetImage()->x0;
   unsigned int l_y0_src = m_InternalReader->GetImage()->y0;
