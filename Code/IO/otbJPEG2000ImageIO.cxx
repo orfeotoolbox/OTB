@@ -259,7 +259,7 @@ bool JPEG2000ReaderInternal::LoadTileFromCache(unsigned int tileIndex)
       this->m_Image = cachedTile.second;
       m_Cache.erase(it);
       m_Cache.push_back(cachedTile);
-      otbMsgDebugMacro(<<"Tile "<<tileIndex<<" loaded from cache");
+      otbGenericMsgDebugMacro(<<"Tile "<<tileIndex<<" loaded from cache");
       return true;
       }
     }
@@ -276,7 +276,7 @@ bool JPEG2000ReaderInternal::ReadTileFromFile(unsigned int tileIndex)
 
   if(success)
     {
-    otbMsgDebugMacro(<<"Tile "<<tileIndex<<" decoded from file");
+    otbGenericMsgDebugMacro(<<"Tile "<<tileIndex<<" decoded from file");
     InsertTileInCache(tileIndex,this->GetImage());
     }
   
