@@ -73,9 +73,6 @@ public:
 
   ~JPEG2000ReaderInternal()
   {    
-    // Clear the cache
-    this->ClearCache();
-
     this->Clean();
   }
 
@@ -174,9 +171,13 @@ int JPEG2000ReaderInternal::Open(const char *filename)
 
 void JPEG2000ReaderInternal::Clean()
 {
-  // Clear the tile cache
-  this->ClearCache();
-  
+  // Destroy the image
+  if (this->m_PersistentImage)
+    {
+    otbopenjpeg_opj_image_destroy(this->m_PersistentImage);
+    }
+  this->m_PersistentImage = NULL;
+
   // Close the byte stream
   if (this->m_Stream)
     {
@@ -249,7 +250,7 @@ void JPEG2000ReaderInternal::ClearCache()
 
 bool JPEG2000ReaderInternal::LoadTileFromCache(unsigned int tileIndex)
 {
-  for(TileCacheType::const_iterator it = m_Cache.begin();
+  for(TileCacheType::iterator it = m_Cache.begin();
       it != m_Cache.end();++it)
     {
     if(it->first == tileIndex)
@@ -321,6 +322,7 @@ void JPEG2000ReaderInternal::InsertTileInCache(unsigned int tileIndex, opj_image
 JPEG2000ReaderInternal::JPEG2000ReaderInternal()
 {
   this->m_Image = NULL;
+  this->m_PersistentImage = NULL;
   this->m_Codec = NULL;
   this->m_Stream = NULL;
   this->m_File = NULL;
@@ -339,8 +341,6 @@ JPEG2000ReaderInternal::JPEG2000ReaderInternal()
 
 int JPEG2000ReaderInternal::Initialize()
 {  
-  this->ClearCache();
-
   if (this->m_File)
     {
     // Creating the file stream
@@ -596,7 +596,7 @@ void JPEG2000ImageIO::Read(void* buffer)
       if(!m_InternalReader->ReadTileFromFile(*itTile))
         {
         this->m_InternalReader->Clean();
-      itkExceptionMacro(<< " otbopenjpeg failed to decode the desired tile "<< *itTile << "!");
+        itkExceptionMacro(<< " otbopenjpeg failed to decode the desired tile "<< *itTile << "!");
         }
       }
 
@@ -697,7 +697,7 @@ void JPEG2000ImageIO::Read(void* buffer)
   chrono.Stop();
   otbMsgDevMacro( << "JPEG2000ImageIO::Read took " << chrono.GetTotal() << " sec");
 
-  //m_InternalReader->Clean();
+  m_InternalReader->Clean();
 }
 
 void JPEG2000ImageIO::ReadImageInformation()
