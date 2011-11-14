@@ -18,8 +18,6 @@
 #ifndef __otbLineSegmentDetector_txx
 #define __otbLineSegmentDetector_txx
 
-#include <boost/math/special_functions/beta.hpp>
-
 #include "otbLineSegmentDetector.h"
 #include "itkImageRegionIterator.h"
 #include "itkNumericTraits.h"
@@ -37,6 +35,10 @@
 
 #include "itkMatrix.h"
 #include "itkSymmetricEigenAnalysis.h"
+
+
+extern "C" double dlngam_(double *x);
+extern "C" double dbetai_(double *x, double *a, double *b);
 
 namespace otb
 {
@@ -1018,12 +1020,20 @@ LineSegmentDetector<TInputImage, TPrecision>
   if (k == 0)
     return -logNT;
 
-  val = -logNT - log10( boost::math::ibeta(k_d, n_d - k_d + 1, p) );
+  double x = p;
+  double a = k_d;
+  double b = n_d - k_d + 1.0;
+  val = -logNT - log10( dbetai_(&p, &a, &b) );
 
   if (vnl_math_isinf(val)) /* approximate by the first term of the tail */
-    val = -logNT - (boost::math::lgamma(n_d + 1.0) - boost::math::lgamma(k_d + 1) - boost::math::lgamma(n_d - k_d + 1)) / CONST_LN10
-          - k_d * log10(p) - (n_d - k_d) * log10(1.0 - p);
+  {
+    double x1 = n_d + 1.0;
+    double x2 = k_d + 1.0;
+    double x3 = n_d - k_d + 1.0;
 
+    val = -logNT - (dlngam_(&x1) - dlngam_(&x2) - dlngam_(&x3)) / CONST_LN10
+          - k_d * log10(p) - (n_d - k_d) * log10(1.0 - p);
+  }
   return val;
 }
 
