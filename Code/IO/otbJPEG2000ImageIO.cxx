@@ -61,31 +61,27 @@ void info_callback(const char *msg, void *client_data)
 
 namespace otb
 {
+/** Compute offsets needed to read the data from the tile decoded and offsets needed to write into the output buffer */
+void ComputeOffsets(opj_image_t * tile,
+                    const itk::ImageIORegion & ioRegion,
+                    unsigned int &l_width_src,
+                    unsigned int &l_height_dest,
+                    unsigned int &l_width_dest,
+                    unsigned int &l_start_offset_dest,
+                    unsigned int &l_start_offset_src);
+
 
 class JPEG2000ReaderInternal
 {
 public:
-  typedef std::pair<unsigned int, opj_image_t *> CachedTileType;
-  typedef std::deque<CachedTileType> TileCacheType;
-
-
   JPEG2000ReaderInternal();
 
   ~JPEG2000ReaderInternal()
   {
     this->Clean();
   }
-
-  opj_codec_t* GetCodec(){return this->m_Codec; };
-  FILE* GetFile(){return this->m_File; };
-  opj_image_t* GetImage(){return this->m_Image; };
-  opj_image_t* GetPersistentImage(){return this->m_PersistentImage; };
-  opj_stream_t* GetStream(){return this->m_Stream; };
-  opj_codestream_info_v2* GetCstrInfo(){return this->m_CstrInfo; };
-
-  bool LoadTileFromCache(unsigned int tileIndex);
   
-  bool ReadTileFromFile(unsigned int tileIndex);
+  opj_image_t * DecodeTile(unsigned int tileIndex);
 
    void Clean();
 
@@ -111,21 +107,19 @@ public:
   unsigned int         m_XNbOfTile;
   unsigned int         m_YNbOfTile;
 
+  opj_codestream_info_v2 * GetCstrInfo()
+  {
+    return m_CstrInfo;
+  }
+
 private:
   opj_codec_t *  m_Codec;
   FILE* m_File;
   opj_image_t* m_Image;
-  opj_image_t* m_PersistentImage;
   opj_stream_t* m_Stream;
   opj_codestream_info_v2* m_CstrInfo;
-  unsigned int m_CacheSizeInTiles;
-  TileCacheType m_Cache;
 
   int Initialize();
-
-  void InsertTileInCache(unsigned int tileIndex, opj_image_t * tileData);
-
-  void ClearCache();
 };
 
 
@@ -172,11 +166,11 @@ int JPEG2000ReaderInternal::Open(const char *filename)
 void JPEG2000ReaderInternal::Clean()
 {
   // Destroy the image
-  if (this->m_PersistentImage)
+  if (this->m_Image)
     {
-    otbopenjpeg_opj_image_destroy(this->m_PersistentImage);
+    otbopenjpeg_opj_image_destroy(this->m_Image);
     }
-  this->m_PersistentImage = NULL;
+  this->m_Image = NULL;
 
   // Close the byte stream
   if (this->m_Stream)
@@ -230,91 +224,20 @@ void JPEG2000ReaderInternal::Clean()
 
 }
 
-
-void JPEG2000ReaderInternal::ClearCache()
+opj_image_t * JPEG2000ReaderInternal::DecodeTile(unsigned int tileIndex)
 {
-  for(TileCacheType::iterator it = m_Cache.begin();
-      it != m_Cache.end(); ++it)
-    {
-    CachedTileType erasedTile = *it;
-    
-    // Destroy the image
-    if (erasedTile.second)
-      {
-      otbopenjpeg_opj_image_destroy(erasedTile.second);
-      }
-    erasedTile.second = NULL;
-    }
-  m_Cache.clear();
-}
+  opj_image_t * image = otbopenjpeg_opj_image_create0();
+  otbopenjpeg_opj_copy_image_header(m_Image,image);
 
-bool JPEG2000ReaderInternal::LoadTileFromCache(unsigned int tileIndex)
-{
-  for(TileCacheType::iterator it = m_Cache.begin();
-      it != m_Cache.end(); ++it)
-    {
-    if(it->first == tileIndex)
-      {
-      CachedTileType cachedTile = (*it);
-      this->m_Image = cachedTile.second;
-      m_Cache.erase(it);
-      m_Cache.push_back(cachedTile);
-      otbGenericMsgDebugMacro(<<"Tile "<<tileIndex<<" loaded from cache");
-      return true;
-      }
-    }
-  return false;
-}
-
-bool JPEG2000ReaderInternal::ReadTileFromFile(unsigned int tileIndex)
-{
-  this->m_Image = otbopenjpeg_opj_image_create0();
-  otbopenjpeg_opj_copy_image_header(this->GetPersistentImage(), this->m_Image);
-
-  bool success = otbopenjpeg_opj_get_decoded_tile(this->GetCodec(), this->GetStream(), this->GetImage(), tileIndex);
+  bool success = otbopenjpeg_opj_get_decoded_tile(m_Codec,m_Stream,image,tileIndex);
   
-
-  if(success)
-    {
-    otbGenericMsgDebugMacro(<<"Tile "<<tileIndex<<" decoded from file");
-    InsertTileInCache(tileIndex, this->GetImage());
-    }
-  
-  return success;
+  return image;
 }
-
-void JPEG2000ReaderInternal::InsertTileInCache(unsigned int tileIndex, opj_image_t * tileData)
-{
-  for(TileCacheType::const_iterator it = m_Cache.begin();
-      it != m_Cache.end(); ++it)
-    {
-    if(it->first == tileIndex)
-      {
-      return;
-      }
-    }
-  if(m_Cache.size() >= m_CacheSizeInTiles)
-    {
-    CachedTileType erasedTile = *m_Cache.begin();
-    
-    // Destroy the image
-    if (erasedTile.second)
-      {
-      otbopenjpeg_opj_image_destroy(erasedTile.second);
-      }
-    erasedTile.second = NULL;
-
-    m_Cache.pop_front();
-    }
-  
-  m_Cache.push_back(CachedTileType(tileIndex, tileData));
-}
-
 
 JPEG2000ReaderInternal::JPEG2000ReaderInternal()
 {
   this->m_Image = NULL;
-  this->m_PersistentImage = NULL;
+  this->m_Image = NULL;
   this->m_Codec = NULL;
   this->m_Stream = NULL;
   this->m_File = NULL;
@@ -324,9 +247,6 @@ JPEG2000ReaderInternal::JPEG2000ReaderInternal()
   this->m_YResolution = NULL;
   this->m_Precision = NULL;
   this->m_Signed = NULL;
-
-  this->m_Cache = TileCacheType();
-  this->m_CacheSizeInTiles = 4;
 
   this->Clean();
 }
@@ -367,7 +287,7 @@ int JPEG2000ReaderInternal::Initialize()
       }
 
     // Read the main header of the codestream and if necessary the JP2 boxes
-    if (!otbopenjpeg_opj_read_header(this->m_Stream, this->m_Codec, &(this->m_PersistentImage)))
+    if (!otbopenjpeg_opj_read_header(this->m_Stream, this->m_Codec, &(this->m_Image)))
       {
       this->Clean();
       return 0;
@@ -383,15 +303,15 @@ int JPEG2000ReaderInternal::Initialize()
       }
 
     // We can now retrieve the main information  of the image and the codestream
-    this->m_Width = this->m_PersistentImage->x1 - this->m_PersistentImage->x0;
-    this->m_Height = this->m_PersistentImage->y1 - this->m_PersistentImage->y0;
+    this->m_Width = this->m_Image->x1 - this->m_Image->x0;
+    this->m_Height = this->m_Image->y1 - this->m_Image->y0;
 
     this->m_TileHeight = this->m_CstrInfo->tdy;
     this->m_TileWidth = this->m_CstrInfo->tdx;
     this->m_XNbOfTile = this->m_CstrInfo->tw;
     this->m_YNbOfTile = this->m_CstrInfo->th;
 
-    this->m_NbOfComponent = this->m_PersistentImage->numcomps;
+    this->m_NbOfComponent = this->m_Image->numcomps;
 
     this->m_Precision = new unsigned int[this->m_NbOfComponent];
     if (!this->m_Precision)
@@ -402,7 +322,7 @@ int JPEG2000ReaderInternal::Initialize()
 
     for (unsigned int itComp = 0; itComp < this->m_NbOfComponent; itComp++)
       {
-      this->m_Precision[itComp] = this->m_PersistentImage->comps[itComp].prec;
+      this->m_Precision[itComp] = this->m_Image->comps[itComp].prec;
       }
 
     this->m_Signed = new int[this->m_NbOfComponent];
@@ -413,7 +333,7 @@ int JPEG2000ReaderInternal::Initialize()
       }
     for (unsigned int itComp = 0; itComp < this->m_NbOfComponent; itComp++)
       {
-      this->m_Signed[itComp] = this->m_PersistentImage->comps[itComp].sgnd;
+      this->m_Signed[itComp] = this->m_Image->comps[itComp].sgnd;
       }
 
     this->m_XResolution = new unsigned int[this->m_NbOfComponent];
@@ -425,7 +345,7 @@ int JPEG2000ReaderInternal::Initialize()
 
     for (unsigned int itComp = 0; itComp < this->m_NbOfComponent; itComp++)
       {
-      this->m_XResolution[itComp] = this->m_PersistentImage->comps[itComp].dx;
+      this->m_XResolution[itComp] = this->m_Image->comps[itComp].dx;
       }
 
     this->m_YResolution = new unsigned int[this->m_NbOfComponent];
@@ -437,7 +357,7 @@ int JPEG2000ReaderInternal::Initialize()
 
     for (unsigned int itComp = 0; itComp < this->m_NbOfComponent; itComp++)
       {
-      this->m_YResolution[itComp] = this->m_PersistentImage->comps[itComp].dy;
+      this->m_YResolution[itComp] = this->m_Image->comps[itComp].dy;
       }
 
     }
@@ -451,7 +371,7 @@ int JPEG2000ReaderInternal::CanRead()
        this->m_Codec &&
        this->m_Stream &&
        this->m_CstrInfo &&
-       this->m_PersistentImage &&
+       this->m_Image &&
        ( this->m_Width > 0 ) && ( this->m_Height > 0 ) &&
        ( this->m_TileWidth > 0 ) && ( this->m_TileHeight > 0 ) &&
        ( this->m_XNbOfTile > 0 ) && ( this->m_YNbOfTile > 0 ) &&
@@ -478,9 +398,100 @@ int JPEG2000ReaderInternal::CanRead()
  }
 
 
+class JPEG2000TileCache
+{
+public:
+  JPEG2000TileCache();
+  ~JPEG2000TileCache();
+
+  typedef std::pair<unsigned int, opj_image_t *> CachedTileType;
+  typedef std::deque<CachedTileType> TileCacheType;
+
+  /** Get a tile in cache, return null if cache does not cotain the
+  tile */
+  opj_image_t * GetTile(unsigned int tileIndex);
+
+  /** Register a new tile in cache */
+  void AddTile(unsigned int tileIndex,opj_image_t * tileData);
+
+  /** Clear the cache */
+  void Clear();
+
+private:
+  TileCacheType m_Cache;
+  unsigned int m_CacheSizeInTiles;
+
+};
+
+JPEG2000TileCache::JPEG2000TileCache() : m_Cache(), m_CacheSizeInTiles(4)
+{}
+
+JPEG2000TileCache::~JPEG2000TileCache()
+{
+  this->Clear();
+}
+
+void JPEG2000TileCache::Clear()
+{
+  for(TileCacheType::iterator it = m_Cache.begin();
+      it != m_Cache.end();++it)
+    {
+    CachedTileType erasedTile = *it;
+    
+    // Destroy the image
+    if (erasedTile.second)
+      {
+      otbopenjpeg_opj_image_destroy(erasedTile.second);
+      }
+    erasedTile.second = NULL;
+    } 
+  m_Cache.clear();
+}
+
+
+opj_image_t * JPEG2000TileCache::GetTile(unsigned int tileIndex)
+{
+  for(TileCacheType::iterator it = m_Cache.begin();
+      it != m_Cache.end();++it)
+    {
+    if(it->first == tileIndex)
+      {
+      return it->second;
+      }
+    }
+  return NULL;
+}
+
+void JPEG2000TileCache::AddTile(unsigned int tileIndex, opj_image_t * tileData)
+{
+  for(TileCacheType::const_iterator it = m_Cache.begin();
+      it != m_Cache.end();++it)
+    {
+    if(it->first == tileIndex)
+      {
+      return;
+      }
+    }
+  if(m_Cache.size() >= m_CacheSizeInTiles)
+    {
+    CachedTileType erasedTile = *m_Cache.begin();
+    
+    // Destroy the image
+    if (erasedTile.second)
+      {
+      otbopenjpeg_opj_image_destroy(erasedTile.second);
+      }
+    erasedTile.second = NULL;
+
+    m_Cache.pop_front();
+    }
+  m_Cache.push_back(CachedTileType(tileIndex,tileData));
+}
+
 JPEG2000ImageIO::JPEG2000ImageIO()
 {
   m_InternalReader = new JPEG2000ReaderInternal;
+  m_TileCache      = new JPEG2000TileCache;
 
   // By default set number of dimensions to two.
   this->SetNumberOfDimensions(2);
@@ -501,6 +512,9 @@ JPEG2000ImageIO::~JPEG2000ImageIO()
 {
   m_InternalReader->Clean();
   delete m_InternalReader;
+
+  m_TileCache->Clear();
+  delete m_TileCache;
 }
 
 bool JPEG2000ImageIO::CanReadFile(const char* filename)
@@ -580,15 +594,18 @@ void JPEG2000ImageIO::Read(void* buffer)
   // Decode tile need
   for (std::vector<unsigned int>::iterator itTile = tileList.begin(); itTile < tileList.end(); itTile++)
     {
-    // First, try to read from the Cache
-    if(!m_InternalReader->LoadTileFromCache(*itTile))
+    opj_image_t * currentTile = m_TileCache->GetTile(*itTile);
+    
+    if(!currentTile)
       {
-      // If failed, try to read tile from file
-      if(!m_InternalReader->ReadTileFromFile(*itTile))
+      currentTile = m_InternalReader->DecodeTile(*itTile);
+      
+      if(!currentTile)
         {
         this->m_InternalReader->Clean();
         itkExceptionMacro(<< " otbopenjpeg failed to decode the desired tile "<< *itTile << "!");
         }
+      m_TileCache->AddTile((*itTile),currentTile);
       }
 
     otbMsgDevMacro(<< " Tile " << *itTile << " is decoded.");
@@ -599,7 +616,7 @@ void JPEG2000ImageIO::Read(void* buffer)
     unsigned int lStartOffsetPxlDest; // Offset where begin to write the area in the otb buffer in nb of pixel
     unsigned int lStartOffsetPxlSrc; // Offset where begin to write the area in the otb buffer in nb of pixel
 
-    this->ComputeOffsets(lWidthSrc, lHeightDest, lWidthDest, lStartOffsetPxlDest, lStartOffsetPxlSrc);
+    ComputeOffsets(currentTile,this->GetIORegion(),lWidthSrc, lHeightDest, lWidthDest, lStartOffsetPxlDest, lStartOffsetPxlSrc);
 
     switch (this->GetComponentType())
       {
@@ -614,7 +631,7 @@ void JPEG2000ImageIO::Read(void* buffer)
             {
             for (unsigned int itComp = 0; itComp < this->m_NumberOfComponents; itComp++)
               {
-              OPJ_INT32* data = m_InternalReader->GetImage()->comps[itComp].data;
+              OPJ_INT32* data = currentTile->comps[itComp].data;
               *(current_dst_line++) = static_cast<char> (data[lStartOffsetPxlSrc + k + j * lWidthSrc]);
               }
             }
@@ -632,7 +649,7 @@ void JPEG2000ImageIO::Read(void* buffer)
             {
             for (unsigned int itComp = 0; itComp < this->m_NumberOfComponents; itComp++)
               {
-              OPJ_INT32* data = m_InternalReader->GetImage()->comps[itComp].data;
+              OPJ_INT32* data = currentTile->comps[itComp].data;
               unsigned char component_val = data[lStartOffsetPxlSrc + k + j * lWidthSrc] & 0xff;
               *(current_dst_line++) = static_cast<unsigned char> (component_val);
               }
@@ -651,7 +668,7 @@ void JPEG2000ImageIO::Read(void* buffer)
             {
             for (unsigned int itComp = 0; itComp < this->m_NumberOfComponents; itComp++)
               {
-              OPJ_INT32* data = m_InternalReader->GetImage()->comps[itComp].data;
+              OPJ_INT32* data = currentTile->comps[itComp].data;
               *(current_dst_line++) = static_cast<short> (data[lStartOffsetPxlSrc + k + j * lWidthSrc]);
               }
             }
@@ -669,7 +686,7 @@ void JPEG2000ImageIO::Read(void* buffer)
             {
             for (unsigned int itComp = 0; itComp < this->m_NumberOfComponents; itComp++)
               {
-              OPJ_INT32* data = m_InternalReader->GetImage()->comps[itComp].data;
+              OPJ_INT32* data = currentTile->comps[itComp].data;
               *(current_dst_line++) = static_cast<unsigned short> (data[lStartOffsetPxlSrc + k + j * lWidthSrc] & 0xffff);
               }
             }
@@ -846,28 +863,30 @@ std::vector<unsigned int> JPEG2000ImageIO::ComputeTileList()
 /** Compute the offsets in Pixel to move the input buffer from openjpeg
  * to the corresponding area of the otb output buffer
  * */
-void JPEG2000ImageIO::ComputeOffsets( unsigned int &l_width_src, // Width of the input pixel in nb of pixel
-                                      unsigned int &l_height_dest, // Height of the area where write in nb of pixel
-                                      unsigned int &l_width_dest, // Width of the area where write in nb of pixel
-                                      unsigned int &l_start_offset_dest, // Offset where begin to write the area in the otb buffer in nb of pixel
-                                      unsigned int &l_start_offset_src // Offset where begin to read the data in the openjpeg decoded data in nb of pixel
-                                      )
+void ComputeOffsets( opj_image_t * currentTile,
+                     const itk::ImageIORegion & ioRegion,
+                     unsigned int &l_width_src, // Width of the input pixel in nb of pixel
+                     unsigned int &l_height_dest, // Height of the area where write in nb of pixel
+                     unsigned int &l_width_dest, // Width of the area where write in nb of pixel
+                     unsigned int &l_start_offset_dest, // Offset where begin to write the area in the otb buffer in nb of pixel
+                     unsigned int &l_start_offset_src // Offset where begin to read the data in the openjpeg decoded data in nb of pixel
+  )
 {
   // Characteristics of the input buffer from openpjeg
-  unsigned int l_x0_src = m_InternalReader->GetImage()->x0;
-  unsigned int l_y0_src = m_InternalReader->GetImage()->y0;
-  unsigned int l_x1_src = m_InternalReader->GetImage()->x1;
-  unsigned int l_y1_src = m_InternalReader->GetImage()->y1;
+  unsigned int l_x0_src = currentTile->x0;
+  unsigned int l_y0_src = currentTile->y0;
+  unsigned int l_x1_src = currentTile->x1;
+  unsigned int l_y1_src = currentTile->y1;
 
   // Size of input buffer from openjpeg
   l_width_src = l_x1_src - l_x0_src;
   unsigned int l_height_src = l_y1_src - l_y0_src;
 
   // Characteristics of the otb region
-  unsigned int l_x0_dest = this->GetIORegion().GetIndex()[0];
-  unsigned int l_x1_dest = this->GetIORegion().GetIndex()[0] + this->GetIORegion().GetSize()[0];
-  unsigned int l_y0_dest = this->GetIORegion().GetIndex()[1];
-  unsigned int l_y1_dest = this->GetIORegion().GetIndex()[1] + this->GetIORegion().GetSize()[1];
+  unsigned int l_x0_dest = ioRegion.GetIndex()[0];
+  unsigned int l_x1_dest = ioRegion.GetIndex()[0] + ioRegion.GetSize()[0];
+  unsigned int l_y0_dest = ioRegion.GetIndex()[1];
+  unsigned int l_y1_dest = ioRegion.GetIndex()[1] + ioRegion.GetSize()[1];
 
   unsigned int l_start_x_dest , l_start_y_dest;
   unsigned int l_offset_x0_src, l_offset_y0_src;

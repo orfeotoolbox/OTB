@@ -25,6 +25,7 @@ namespace otb
 {
 
 class JPEG2000ReaderInternal;
+class JPEG2000TileCache;
 
 /** \class JPEG2000ImageIO
  *
@@ -100,6 +101,7 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   JPEG2000ReaderInternal* m_InternalReader;
+  JPEG2000TileCache*      m_TileCache;
 
 private:
   JPEG2000ImageIO(const Self &); //purposely not implemented
@@ -107,13 +109,6 @@ private:
 
   /** Compute the tile index list from the GetRegion*/
   std::vector<unsigned int> ComputeTileList();
-
-  /** Compute offsets needed to read the data from the tile decoded and offsets needed to write into the output buffer */
-  void ComputeOffsets(unsigned int &l_width_src,
-                      unsigned int &l_height_dest,
-                      unsigned int &l_width_dest,
-                      unsigned int &l_start_offset_dest,
-                      unsigned int &l_start_offset_src);
 
   /** pixel nb of octets */
   unsigned int m_BytePerPixel;
