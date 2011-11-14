@@ -66,18 +66,6 @@ private:
 
   QWidget* CreateDoc();
 
-  /** Add the parameter description in the flux of the documentation tab. */
-  void SetDocParameters( std::string & val );
-
-  /** Get the parameter description of one parameter. */
-  void GetDocParameters( std::string & val );
-
-  /** generate the documentation associated to a group.*/
-  void GetDocParameterGroup( std::string & val, const std::string & key );
-
-  /** generate the documentation associated to a choice.*/
-  void GetDocParameterChoice( std::string & val, const std::string & key );
-
   Application::Pointer m_Application;
 
   QtWidgetModel* m_Model;
