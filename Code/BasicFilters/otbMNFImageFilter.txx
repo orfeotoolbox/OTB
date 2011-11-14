@@ -65,9 +65,9 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
 {
   Superclass::GenerateOutputInformation();
 
-  switch ( DirectionOfTransformation )
+  switch ( static_cast<int>(DirectionOfTransformation) )
   {
-    case Transform::FORWARD:
+  case static_cast<int>(Transform::FORWARD):
     {
       if ( m_NumberOfPrincipalComponentsRequired == 0
           || m_NumberOfPrincipalComponentsRequired
@@ -81,7 +81,7 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
         m_NumberOfPrincipalComponentsRequired );
       break;
     }
-    case Transform::INVERSE:
+  case static_cast<int>(Transform::INVERSE):
     {
       unsigned int theOutputDimension = 0;
       if ( m_GivenTransformationMatrix )
@@ -122,14 +122,14 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
 {
   switch ( DirectionOfTransformation )
   {
-    case Transform::FORWARD:
-      return ForwardGenerateData();
-    case Transform::INVERSE:
-      return ReverseGenerateData();
-    default: // should not go so far
-      throw itk::ExceptionObject(__FILE__, __LINE__,
-          "Class should be templated with FORWARD or INVERSE only...",
-          ITK_LOCATION );
+  case static_cast<int>(Transform::FORWARD):
+    return ForwardGenerateData();
+  case static_cast<int>(Transform::INVERSE):
+    return ReverseGenerateData();
+  default: // should not go so far
+    throw itk::ExceptionObject(__FILE__, __LINE__,
+                               "Class should be templated with FORWARD or INVERSE only...",
+                               ITK_LOCATION );
   }
 }
 

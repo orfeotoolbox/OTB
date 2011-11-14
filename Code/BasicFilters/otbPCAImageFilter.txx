@@ -57,55 +57,54 @@ template < class TInputImage, class TOutputImage,
 void
 PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 ::GenerateOutputInformation()
-// throw itk::ExceptionObject
 {
   Superclass::GenerateOutputInformation();
 
-  switch ( DirectionOfTransformation )
-  {
-    case Transform::FORWARD:
+  switch ( static_cast<int>(DirectionOfTransformation) )
     {
-      if ( m_NumberOfPrincipalComponentsRequired == 0
-          || m_NumberOfPrincipalComponentsRequired
-            > this->GetInput()->GetNumberOfComponentsPerPixel() )
+    case static_cast<int>(Transform::FORWARD):
+    {
+    if ( m_NumberOfPrincipalComponentsRequired == 0
+         || m_NumberOfPrincipalComponentsRequired
+         > this->GetInput()->GetNumberOfComponentsPerPixel() )
       {
-        m_NumberOfPrincipalComponentsRequired =
-          this->GetInput()->GetNumberOfComponentsPerPixel();
+      m_NumberOfPrincipalComponentsRequired =
+        this->GetInput()->GetNumberOfComponentsPerPixel();
       }
-
-      this->GetOutput()->SetNumberOfComponentsPerPixel(
-        m_NumberOfPrincipalComponentsRequired );
-      break;
+    
+    this->GetOutput()->SetNumberOfComponentsPerPixel(
+      m_NumberOfPrincipalComponentsRequired );
+    break;
     }
-    case Transform::INVERSE:
+    case static_cast<int>(Transform::INVERSE):
     {
-      unsigned int theOutputDimension = 0;
-      if ( m_GivenTransformationMatrix )
+    unsigned int theOutputDimension = 0;
+    if ( m_GivenTransformationMatrix )
       {
-        theOutputDimension = m_TransformationMatrix.Rows() >= m_TransformationMatrix.Cols() ?
-          m_TransformationMatrix.Rows() : m_TransformationMatrix.Cols();
+      theOutputDimension = m_TransformationMatrix.Rows() >= m_TransformationMatrix.Cols() ?
+        m_TransformationMatrix.Rows() : m_TransformationMatrix.Cols();
       }
-      else if ( m_GivenCovarianceMatrix )
+    else if ( m_GivenCovarianceMatrix )
       {
-        theOutputDimension = m_CovarianceMatrix.Rows() >= m_CovarianceMatrix.Cols() ?
-          m_CovarianceMatrix.Rows() : m_CovarianceMatrix.Cols();
+      theOutputDimension = m_CovarianceMatrix.Rows() >= m_CovarianceMatrix.Cols() ?
+        m_CovarianceMatrix.Rows() : m_CovarianceMatrix.Cols();
       }
-      else
+    else
       {
-        throw itk::ExceptionObject(__FILE__, __LINE__,
-          "Covariance or transformation matrix required to know the output size",
-          ITK_LOCATION);
+      throw itk::ExceptionObject(__FILE__, __LINE__,
+                                 "Covariance or transformation matrix required to know the output size",
+                                 ITK_LOCATION);
       }
-
-      this->GetOutput()->SetNumberOfComponentsPerPixel( theOutputDimension );
-
-      break;
+    
+    this->GetOutput()->SetNumberOfComponentsPerPixel( theOutputDimension );
+    
+    break;
     }
     default:
       throw itk::ExceptionObject(__FILE__, __LINE__,
-          "Class should be templeted with FORWARD or INVERSE only...",
-          ITK_LOCATION );
-  }
+                                 "Class should be templeted with FORWARD or INVERSE only...",
+                                 ITK_LOCATION );
+    }
 }
 
 template < class TInputImage, class TOutputImage,
@@ -114,11 +113,11 @@ void
 PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 ::GenerateData ()
 {
-  switch ( DirectionOfTransformation )
+  switch ( static_cast<int>(DirectionOfTransformation) )
   {
-    case Transform::FORWARD:
+  case static_cast<int>(Transform::FORWARD):
       return ForwardGenerateData();
-    case Transform::INVERSE:
+    case static_cast<int>(Transform::INVERSE):
       return ReverseGenerateData();
     default:
       throw itk::ExceptionObject(__FILE__, __LINE__,

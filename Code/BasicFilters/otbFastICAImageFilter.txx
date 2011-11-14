@@ -65,9 +65,9 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 {
   Superclass::GenerateOutputInformation();
 
-  switch ( DirectionOfTransformation )
+  switch ( static_cast<int>(DirectionOfTransformation) )
   {
-    case Transform::FORWARD:
+  case static_cast<int>(Transform::FORWARD):
     {
       if ( m_NumberOfPrincipalComponentsRequired == 0
           || m_NumberOfPrincipalComponentsRequired
@@ -81,7 +81,7 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
         m_NumberOfPrincipalComponentsRequired );
       break;
     }
-    case Transform::INVERSE:
+  case static_cast<int>(Transform::INVERSE):
     {
       unsigned int theOutputDimension = 0;
       if ( m_GivenTransformationMatrix )
@@ -113,17 +113,17 @@ void
 FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 ::GenerateData ()
 {
-  switch ( DirectionOfTransformation )
-  {
-    case Transform::FORWARD:
+  switch ( static_cast<int>(DirectionOfTransformation) )
+    {
+    case static_cast<int>(Transform::FORWARD):
       return ForwardGenerateData();
-    case Transform::INVERSE:
+    case static_cast<int>(Transform::INVERSE):
       return ReverseGenerateData();
     default:
       throw itk::ExceptionObject(__FILE__, __LINE__,
-          "Class should be templated with FORWARD or INVERSE only...",
-          ITK_LOCATION );
-  }
+                                 "Class should be templated with FORWARD or INVERSE only...",
+                                 ITK_LOCATION );
+    }
 }
 
 template < class TInputImage, class TOutputImage,
