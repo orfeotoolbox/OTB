@@ -15,131 +15,169 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
+#include "otbWrapperApplication.h"
+#include "otbWrapperApplicationFactory.h"
 
-#include "otbDEMConvert.h"
-
-#include "otbImage.h"
-#include "otbVectorImage.h"
-#include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
 #include "otbDEMConvertAdapter.h"
+
+#include "itkImageIOBase.h"
+#include "itkImageIOFactory.h"
 
 namespace otb
 {
-
-template<typename TPixelType>
-int generic_convert_to_tif(otb::ApplicationOptionsResult* parseResult, std::string tempFilename)
+namespace Wrapper
 {
-  typedef otb::VectorImage<TPixelType>             ImageType;
-  typedef otb::ImageFileReader<ImageType>          ReaderType;
-  typedef otb::StreamingImageFileWriter<ImageType> WriterType;
 
-  typename ReaderType::Pointer reader = ReaderType::New();
-  typename WriterType::Pointer writer = WriterType::New();
+class DEMConvert : public Application
+{
+public:
+  /** Standard class typedefs. */
+  typedef DEMConvert                    Self;
+  typedef Application                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-  reader->SetFileName(parseResult->GetInputImage().c_str());
-  writer->SetFileName(tempFilename);
+  /** Standard macro */
+  itkNewMacro(Self);
 
-  writer->SetInput(reader->GetOutput());\
-  writer->Update();
+  itkTypeMacro(DEMConvert, otb::Application);
 
-  return EXIT_SUCCESS;
+private:
+  DEMConvert()
+  {
+    SetName("DEMConvert");
+    SetDescription("Convert a DEM file into a general raster ");
+
+    SetDocName("DEM Convert Application");
+    SetDocLongDescription("This application convert a DEM file into a general raster (.ras, .geom and .omd). To be used, those files have to be in a stand alone directory");
+    SetDocLimitations("None");
+    SetDocAuthors("OTB-Team");
+    SetDocSeeAlso(" ");
+    SetDocCLExample("otbApplicationLauncherCommandLine DEMConvert ${OTB-BIN}/bin"
+      " --in ${OTB-DATA}/Input/QB_MUL_ROI_1000_100.tif --out ${TEMP}/outputDEM.any");
+    AddDocTag("Image manipulation");
+  }
+
+  virtual ~DEMConvert()
+  {
+  }
+
+void DoCreateParameters()
+  {
+    AddParameter(ParameterType_InputImage,  "in",  "Input Image");
+    SetParameterDescription("in", "Input image to filter.");
+
+    AddParameter(ParameterType_Filename,    "out", "Output prefix");
+    std::ostringstream oss;
+    oss << "will be used to get the prefix of the images to write. ";
+    oss << "The files - Output.geom, Output.omd and Output.ras - will be generated";
+    SetParameterDescription("out", oss.str());
+    SetParameterRole("out", Role_Output);
 }
 
-int DEMConvert::Describe(ApplicationDescriptor* descriptor)
-{
-  descriptor->SetName("DEMConvertApplication");
-  descriptor->SetDescription("Convert a DEM file into a general raster (.ras, .geom and .omd). To be used, those files have to be in a stand alone directory");
-  descriptor->AddInputImage();
-  descriptor->AddOption("OutputPath", "The filename (or path filename) of the output. It generates a Output.geom, Output.omd and Output.ras file.","out", 1, true, ApplicationDescriptor::String);
-  descriptor->AddOption("KeepTif", "Keep the temporary generate tif file.","ktif", 0, false, ApplicationDescriptor::Boolean);
+  void DoUpdateParameters()
+  {
+    // nothing to update
+  }
   
-  return EXIT_SUCCESS;
-}
-
 /* The main is simple : read image using OTB and write it as a tif.
-* Read this tif using OSSIM and convert it as a general raster file (.ras, .geom and . omd)
-* first write the image as a tif (supported by OSSIM) allows to not only be abble to work
-* with OSSIM supported format but any more.
+*  Read this tif using OSSIM and convert it as a general raster file
+*  (.ras, .geom and . omd) 
 */
 
-int DEMConvert::Execute(otb::ApplicationOptionsResult* parseResult)
+void DoExecute()
 {
-  // Load input and output filename
-  const char * input_file = parseResult->GetInputImage().c_str();
-
-  std::string tempFilename(parseResult->GetParameterString("OutputPath"));
-  tempFilename += "_DEMConvert.tif";
+  // Load input image
+  FloatVectorImageType::Pointer inImage = GetParameterImage("in");
   
-  // Search for the input
-  typedef otb::VectorImage<double, 2> InputImageType;
-  typedef otb::ImageFileReader<InputImageType> ReaderType;
-  ReaderType::Pointer reader=ReaderType::New();
-  reader->SetFileName(input_file);
-  reader->UpdateOutputInformation();
+  // Set temporary tif filename (for ossim)
+  std::string ofname = GetParameterString("out");;
+  std::string path   = itksys::SystemTools::GetFilenamePath(ofname);
+  std::string fname  = itksys::SystemTools::GetFilenameWithoutExtension(ofname);
+  std::string tempFilename = path+"/"+fname+"_DEMConvert.tif";
+  std::string tempFilenameGeom = path+"/"+fname+"_DEMConvert.geom";
+  
+  // Generate the tif image using OTB while keeping the same  pixel
+  // type then the input image 
+  // Initialize an outputParameter and set its output pixeltype
+  OutputImageParameter::Pointer paramOut = OutputImageParameter::New();
+  std::ostringstream osswriter;
+  osswriter<< "writing temporary tif file";
+  
+  // Set the filename of the current output image
+  paramOut->SetFileName(tempFilename);
+  paramOut->SetValue(inImage);
 
-  // Generate the tif image using OTB
-  // We keep the same pixel type
-  std::string componentTypeInfo(reader->GetImageIO()->GetComponentTypeInfo().name());
+  // Set the output pixel type
+  itk::ImageIOBase::Pointer  imageIO = ImageIOFactory::CreateImageIO( GetParameterString("in").c_str(), 
+                                                                      ImageIOFactory::ReadMode);
+  std::string componentTypeInfo(imageIO->GetComponentTypeInfo().name());
   if( componentTypeInfo == typeid(unsigned char).name())
     {
-    generic_convert_to_tif<unsigned char>(parseResult, tempFilename);
+    paramOut->SetPixelType(ImagePixelType_uint8);
     }
   else if( componentTypeInfo == typeid(char).name())
     {
-    generic_convert_to_tif<char>(parseResult, tempFilename);
+    paramOut->SetPixelType(ImagePixelType_int8);
     }
   else if( componentTypeInfo == typeid(unsigned short).name())
     {
-    generic_convert_to_tif<unsigned short>(parseResult, tempFilename);
+    paramOut->SetPixelType(ImagePixelType_uint16);
     }
   else if( componentTypeInfo == typeid(short).name())
     {
-    generic_convert_to_tif<short>(parseResult, tempFilename);
+    paramOut->SetPixelType(ImagePixelType_int16);
     }
   else if( componentTypeInfo == typeid(unsigned int).name())
     {
-    generic_convert_to_tif<unsigned int>(parseResult, tempFilename);
+    paramOut->SetPixelType(ImagePixelType_uint32);
     }
   else if( componentTypeInfo == typeid(int).name())
     {
-    generic_convert_to_tif<int>(parseResult, tempFilename);
-    }
-  else if( componentTypeInfo == typeid(unsigned long).name())
-    {
-    generic_convert_to_tif<unsigned long>(parseResult, tempFilename);
-    }
-  else if( componentTypeInfo == typeid(long).name())
-    {
-    generic_convert_to_tif<long>(parseResult, tempFilename);
+    paramOut->SetPixelType(ImagePixelType_int32);
     }
   else if( componentTypeInfo == typeid(float).name())
     {
-    generic_convert_to_tif<float>(parseResult, tempFilename);
+    paramOut->SetPixelType(ImagePixelType_float);
     }
   else if( componentTypeInfo == typeid(double).name())
     {
-    generic_convert_to_tif<double>(parseResult, tempFilename);
+    paramOut->SetPixelType(ImagePixelType_double);
     }
   else
     {
     itkExceptionMacro("This application doesn't support image pixel type " << componentTypeInfo);
-    return EXIT_FAILURE;
     }
-  std::string output = parseResult->GetParameterString("OutputPath")+".ras";
+
+  // Add the tempfilename to be written
+  paramOut->InitializeWriters();
+  AddProcess(paramOut->GetWriter(), osswriter.str());
+  paramOut->Write();
+
+  // Set the output ras file
+  std::string output = path+"/"+fname+".ras";
 
   DEMConvertAdapter::Pointer DEMConverter = DEMConvertAdapter::New();
-  return DEMConverter->Convert(tempFilename, output);
+  DEMConverter->Convert(tempFilename, output);
 
-  if ( parseResult->IsOptionPresent("KeepTif") == false)
+  // remove the temprorary tif file
+  if( !itksys::SystemTools::RemoveFile(tempFilename.c_str()) )
     {
-    bool resRemove = itksys::SystemTools::RemoveFile(tempFilename.c_str());
-    if( resRemove == false )
-      {
-      std::cout<<"Enable to erase the output temporary file "<<tempFilename<<"."<<std::endl;
-      }
+    itkExceptionMacro("Problem while removing the file " << tempFilename);
     }
-  return EXIT_SUCCESS;
-}
+  
+  // remove the geom file if any
+  if( itksys::SystemTools::FileExists(tempFilenameGeom.c_str()) 
+      && !itksys::SystemTools::RemoveFile(tempFilenameGeom.c_str()))
+    {
+    itkExceptionMacro("Problem while removing the Geom file " << tempFilenameGeom);
+    }
+  }
+
+};
 
 } // namespace otb
+}
+OTB_APPLICATION_EXPORT(otb::Wrapper::DEMConvert)
+
+
