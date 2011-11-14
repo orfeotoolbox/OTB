@@ -1,3 +1,10 @@
+if( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
+
+SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
+set(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
+#Tolerance on  pixel image diff
+SET(NOTOL 0.0)
+
 set(CXX_TEST_PATH ${EXECUTABLE_OUTPUT_PATH})
 
 set(INPUTDATA ${OTB_DATA_ROOT}/Input)
@@ -151,6 +158,9 @@ add_test(owTvApplicationHtmlDocGeneratorNew ${OTB_WRAPPER_TESTS}
   )
 
 add_test(owTvApplicationHtmlDocGeneratorTest ${OTB_WRAPPER_TESTS}
+  --compare-ascii ${NOTOL}
+  ${TEMP}/owTvOReadImageInfoDoc.html
+  ${BASELINE}/owTvOReadImageInfoDoc.html
   otbWrapperApplicationHtmlDocGeneratorTest1
   ReadImageInfo
   $<TARGET_FILE_DIR:otbapp_ReadImageInfo>
@@ -185,3 +195,5 @@ otbWrapperApplicationHtmlDocGeneratorTest.cxx
 include_directories(${CMAKE_SOURCE_DIR}/Code/Core)
 add_executable(otbWrapperTests ${Wrapper_SRCS})
 target_link_libraries(otbWrapperTests OTBApplicationEngine OTBTesting)
+
+endif( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

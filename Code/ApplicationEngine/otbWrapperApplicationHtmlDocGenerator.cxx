@@ -47,27 +47,21 @@ namespace Wrapper
   oss << value;                                                         \
   oss << "</p>";
 
-#define otbDocHtmlBodyItalicMacro( value )                                   \
-  oss << "<span style=\" font-style:italic;\">";                        \
-  oss << value;                                                         \
-  oss << "</span>";
-
-
-#define otbDocHtmlBodyBoldMacro( value )                                     \
-  oss << "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">";                          \
-  oss << value;                                                         \
-  oss << "</span></p>";
-
-
 #define otbDocHtmlBodyCodeMacro( value )                                         \
   oss << "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Courier New, courier';\">"; \
   oss << value;                                                         \
   oss << "</p>";
 
-#define otbDocHtmlBodyBoldCodeMacro( value )                                     \
-  oss << "<span style=\" font-weight:600;\"><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Courier New, courier';\">"; \
-  oss << value;                                                         \
-  oss << "</p></span>";
+#define otbDocHtmlParamMacro( type, param )                             \
+  oss << "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Courier New,courier'; font-weight:600;\";>"; \
+  oss << "["<<type<<"] "<< param->GetName() <<": ";                     \
+  oss << "</span>";                                                     \
+  if( std::string(param->GetDescription()).size()!=0 )                  \
+    {                                                                   \
+    oss << param->GetDescription();                                     \
+    }                                                                   \
+  oss << "</p>"; 
+
 
 ApplicationHtmlDocGenerator::ApplicationHtmlDocGenerator()
 {
@@ -164,11 +158,7 @@ void ApplicationHtmlDocGenerator::GetDocParameters( const Application::Pointer a
      if( app->GetParameterType(key) ==  ParameterType_Group)
        {
        oss << "<li>";
-       otbDocHtmlBodyBoldMacro( std::string("[group] ").append( param->GetName() ).append(":") );
-       if(std::string(param->GetDescription()).size()!=0)
-         {
-         otbDocHtmlBodyMacro(oss<<param->GetDescription());
-         }
+       otbDocHtmlParamMacro( "group", param);
        std::string grDoc;
        ApplicationHtmlDocGenerator::GetDocParameterGroup( app, grDoc, key );
        oss<<grDoc;
@@ -177,11 +167,7 @@ void ApplicationHtmlDocGenerator::GetDocParameters( const Application::Pointer a
      else if( app->GetParameterType(key) ==  ParameterType_Choice )
        {
        oss << "<li>";
-       otbDocHtmlBodyBoldMacro( std::string("[choice] ").append( param->GetName() ).append(":"));
-       if(std::string(param->GetDescription()).size()!=0)
-         {
-         otbDocHtmlBodyMacro(param->GetDescription());
-         }
+       otbDocHtmlParamMacro( "choice", param);
        std::string grDoc;
        ApplicationHtmlDocGenerator::GetDocParameterChoice(app, grDoc, key);
        oss<<grDoc;
@@ -190,8 +176,7 @@ void ApplicationHtmlDocGenerator::GetDocParameters( const Application::Pointer a
      else
        {
        oss << "<li>";
-       otbDocHtmlBodyBoldCodeMacro( std::string("[param] ").append( param->GetName() ).append(":"));
-       otbDocHtmlBodyMacro( param->GetDescription() );
+       otbDocHtmlParamMacro("param", param);
        oss << "</li>";
        }
      }
@@ -221,11 +206,7 @@ void ApplicationHtmlDocGenerator::GetDocParameterGroup( const Application::Point
     if( app->GetParameterType(fullKey) ==  ParameterType_Group)
       {
       oss<<"<li>";
-      otbDocHtmlBodyBoldCodeMacro( std::string("[group] ").append( param->GetName() ).append(":"));
-      if(std::string(param->GetDescription()).size()!=0)
-        {
-        otbDocHtmlBodyMacro( param->GetDescription() );
-        }
+       otbDocHtmlParamMacro( "group", param);
       std::string grDoc;
       ApplicationHtmlDocGenerator::GetDocParameterGroup( app, grDoc, fullKey );
       oss<<grDoc;
@@ -234,11 +215,7 @@ void ApplicationHtmlDocGenerator::GetDocParameterGroup( const Application::Point
     else if( app->GetParameterType(fullKey) ==  ParameterType_Choice )
       {
       oss<<"<li>";
-      otbDocHtmlBodyBoldCodeMacro( std::string("[choice] ").append( param->GetName() ).append(":"));
-      if(std::string(param->GetDescription()).size()!=0)
-        {
-        otbDocHtmlBodyMacro( param->GetDescription() );
-        }
+      otbDocHtmlParamMacro( "choice", param);
       std::string grDoc;
       ApplicationHtmlDocGenerator::GetDocParameterChoice(app, grDoc, fullKey );
       oss<<grDoc;
@@ -247,8 +224,7 @@ void ApplicationHtmlDocGenerator::GetDocParameterGroup( const Application::Point
     else
       {
       oss << "<li>";
-      otbDocHtmlBodyBoldCodeMacro( std::string("[param] ").append( param->GetName() ).append(":"));
-      otbDocHtmlBodyMacro( param->GetDescription() );
+      otbDocHtmlParamMacro( "param", param );
       oss <<"</li>";
       }
     }
@@ -277,12 +253,7 @@ void ApplicationHtmlDocGenerator::GetDocParameterChoice( const Application::Poin
     std::string grDoc;
 
     oss << "<li>";
-    otbDocHtmlBodyBoldCodeMacro( std::string("[group] ").append( group->GetName() ).append(":"));
-    if(std::string(group->GetDescription()).size()!=0)
-      {
-      otbDocHtmlBodyMacro( group->GetDescription() );
-      }
-    
+    otbDocHtmlParamMacro( "group", group);
     ApplicationHtmlDocGenerator::GetDocParameterGroup( app, grDoc, fullKey );
     oss<<grDoc;
     oss<<"</li>";
