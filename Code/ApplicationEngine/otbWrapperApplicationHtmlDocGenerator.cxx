@@ -71,12 +71,11 @@ ApplicationHtmlDocGenerator::~ApplicationHtmlDocGenerator()
 {
 }
 
-
 void
-ApplicationHtmlDocGenerator::GenerateDoc(const Application::Pointer app, const std::string& filename)
+ApplicationHtmlDocGenerator::GenerateDoc( const Application::Pointer app, std::string & val )
 {
   itk::OStringStream oss;
-
+  
   oss << "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd\">";
   oss << "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">";
   oss << "p, li { white-space: pre-wrap; }";
@@ -127,13 +126,24 @@ ApplicationHtmlDocGenerator::GenerateDoc(const Application::Pointer app, const s
 
   oss << "</body></html>";
 
+  val = oss.str();
+}
+
+void
+ApplicationHtmlDocGenerator::GenerateDoc(const Application::Pointer app, const std::string& filename)
+{
+  std::string doc;
+  
+  ApplicationHtmlDocGenerator::GenerateDoc( app, doc );
+
+  
   FILE *file = fopen(filename.c_str(), "w");
   if (file == NULL)
     {
     fprintf(stderr, "Error, can't open file");
     itkGenericExceptionMacro( << "Error, can't open file "<<filename<<".");
     }
-  fprintf(file, oss.str().c_str());
+  fprintf(file, doc.c_str());
   fclose(file);
 
 }
