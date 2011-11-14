@@ -15,320 +15,279 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbStereoSensorModelToElevationMap.h"
+#include "otbWrapperApplication.h"
+#include "otbWrapperApplicationFactory.h"
 
 #include "otbImage.h"
 #include "otbStereoSensorModelToElevationMapFilter.h"
-#include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
-#include "otbStandardWriterWatcher.h"
 #include "otbImageList.h"
 #include "otbImageListToVectorImageFilter.h"
 #include "otbVectorImage.h"
-#include "itkDiscreteGaussianImageFilter.h"
-#include "itkMedianImageFilter.h"
-#include <iostream>
+#include "otbVectorImageToIntensityImageFilter.h"
 
-#include "otbCommandLineArgumentParser.h"
+#include "itkDiscreteGaussianImageFilter.h"
 
 namespace otb
 {
-
-typedef otb::Image<short, 2> ImageType;
-typedef otb::Image<float, 2> HeightImageType;
-typedef otb::ImageFileReader<ImageType> ReaderType;
-typedef itk::DiscreteGaussianImageFilter<ImageType, ImageType> GaussianFilterType;
-typedef otb::StereoSensorModelToElevationFilter<ImageType, HeightImageType> StereoFilterType;
-typedef otb::VectorImage<float, 2> VectorImageType;
-typedef otb::ImageList<HeightImageType> ImageListType;
-typedef otb::ImageListToVectorImageFilter<ImageListType, VectorImageType> IL2VIFilterType;
-typedef otb::StreamingImageFileWriter<VectorImageType> WriterType;
-
-int StereoSensorModelToElevationMap::Describe(ApplicationDescriptor* descriptor)
+namespace Wrapper
 {
-  descriptor->SetName("StereoSensorModelToElevationMap");
-  
-  descriptor->SetDescription("Produce an elevation map from a pair of stereo images along-track by implicit exploration of their epipolar lines.");
-  
-  descriptor->AddOption("Reference", "The reference image",
-                        "ref", 1, true, ApplicationDescriptor::InputImage);
-  
-  descriptor->AddOption("Secondary", "The secondary image",
-                        "sec", 1, true, ApplicationDescriptor::InputImage);
-  
-  descriptor->AddOption("OutputImage", "The output image",
-                        "out", 1, true, ApplicationDescriptor::OutputImage);
 
-  descriptor->AddOption("Radius","Radius (in pixels) of the metric computation window (default is 3).",
-                        "r", 1, false, ApplicationDescriptor::Integer);
-
-  descriptor->AddOption("CorrelationThreshold","Threshold bellow which correlation is considered invalid (default is 0.7).",
-                        "ct", 1, false, ApplicationDescriptor::Real);
-
-  descriptor->AddOption("VarianceThreshold","Threshold on the master patch variance bellow which no height exploration is performed (default is 4).",
-                        "vt", 1, false, ApplicationDescriptor::Real);
-  
-  descriptor->AddOption("MinHeightOffset","Minimum height offset with respect to local initial height for height exploration (default is -20 meters).",
-                        "minh", 1, false, ApplicationDescriptor::Real);
-
-  descriptor->AddOption("MaxHeightOffset","Maximum height offset with respect to local initial height for height exploration (default is 20 meters).",
-                        "maxh", 1, false, ApplicationDescriptor::Real);
-
-  descriptor->AddOption("HeightStep","Step of height exploration (default is 1 meter).",
-                        "step", 1, false, ApplicationDescriptor::Real);
-
-  descriptor->AddOption("AverageElevation","If no DEM is used, provide the initial height value (default is 0 meters)",
-                        "ae", 1, false, ApplicationDescriptor::Real);
-
-  descriptor->AddOption("DEMDirectory","Use DEM tiles to derive initial height values (AverageElevation option is ignored in this case)","dem", 1, false, ApplicationDescriptor::String);
-
-  descriptor->AddOption("GeoidFile","Use a geoid file along with the DEM tiles","geoid", 1, false, ApplicationDescriptor::String);
-
-  descriptor->AddOption("ReferenceGaussianSmoothing","(optional) Perform a gaussian smoothing of the reference image. Parameter is gaussian sigma (in pixels). Default is no smoothing.",
-                        "rgs", 1, false, ApplicationDescriptor::Real);
-
-  descriptor->AddOption("SecondaryGaussianSmoothing","(optional) Perform a gaussian smoothing of the secondary image. Parameter is gaussian sigma (in pixels). Default is no smoothing.",
-                        "sgs", 1, false, ApplicationDescriptor::Real);
-
-  descriptor->AddOption("SubtractInitialHeight","If activated, the elevation map will contain only the estimated height offset from the initial height (either average elevation or DEM)","s", 0, false, ApplicationDescriptor::Boolean);
-
-  descriptor->AddOption("AvailableMemory","Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default)","ram", 1, false, otb::ApplicationDescriptor::Integer);
-
-  return EXIT_SUCCESS;
-}
-
-
-int StereoSensorModelToElevationMap::Execute(otb::ApplicationOptionsResult* parseResult)
+class StereoSensorModelToElevationMap : public Application
 {
-  // Parse arguments
-  unsigned int radius = 3;
+public:
+  /** Standard class typedefs. */
+  typedef StereoSensorModelToElevationMap Self;
+  typedef Application                     Superclass;
+  typedef itk::SmartPointer<Self>         Pointer;
+  typedef itk::SmartPointer<const Self>   ConstPointer;
 
-  if(parseResult->IsOptionPresent("Radius"))
-    {
-    radius = parseResult->GetParameterUInt("Radius");
-    }
+  /** Standard macro */
+  itkNewMacro(Self);
 
-  std::cout<<"Radius:\t"<<radius<<std::endl;
+  itkTypeMacro(StereoSensorModelToElevationMap, otb::Application);
 
-  double correlationThreshold = 0.7;
-
-  if(parseResult->IsOptionPresent("CorrelationThreshold"))
-    {
-    correlationThreshold = parseResult->GetParameterDouble("CorrelationThreshold");
-    }
-
-  std::cout<<"Correlation threshold:\t"<<correlationThreshold<<std::endl;
-
-  double varianceThreshold = 4;
-
-  if(parseResult->IsOptionPresent("VarianceThreshold"))
-    {
-    varianceThreshold = parseResult->GetParameterDouble("VarianceThreshold");
-    }
-
-  std::cout<<"Variance threshold:\t"<<varianceThreshold<<std::endl;
-
-  double minHeightOffset = -20;
-
-  if(parseResult->IsOptionPresent("MinHeightOffset"))
-    {
-    minHeightOffset = parseResult->GetParameterDouble("MinHeightOffset");
-    }
-
-  std::cout<<"Minimum height offset:\t"<<minHeightOffset<<" meters"<<std::endl;
-
-  double maxHeightOffset = 20;
-
-  if(parseResult->IsOptionPresent("MaxHeightOffset"))
-    {
-    maxHeightOffset = parseResult->GetParameterDouble("MaxHeightOffset");
-    }
-
-  std::cout<<"Maximum height offset:\t"<<maxHeightOffset<<" meters"<<std::endl;
-
-
-  double heightStep = 1.;
-
-  if(parseResult->IsOptionPresent("HeightStep"))
-    {
-    heightStep = parseResult->GetParameterDouble("HeightStep");
-    }
-
-  std::cout<<"Height step:\t"<<heightStep<<" meters"<<std::endl;
-
-  bool referenceSmoothing = false;
-  double referenceSigma = 1.;
-
-  if(parseResult->IsOptionPresent("ReferenceGaussianSmoothing"))
-    {
-    referenceSmoothing = true;
-    referenceSigma = parseResult->GetParameterDouble("ReferenceGaussianSmoothing");
-    }
-
-  if(referenceSmoothing)
-    {
-    std::cout<<"Reference image gaussian smoothing with sigma = "<<referenceSigma<<" pixels."<<std::endl;
-    }
-  else
-    {
-    std::cout<<"Reference image gaussian smoothing disabled."<<std::endl;
-    }
-
-  bool secondarySmoothing = false;
-  double secondarySigma = 1.;
-
-  if(parseResult->IsOptionPresent("SecondaryGaussianSmoothing"))
-    {
-    secondarySmoothing = true;
-    secondarySigma = parseResult->GetParameterDouble("SecondaryGaussianSmoothing");
-    }
-
-  if(secondarySmoothing)
-    {
-    std::cout<<"Secondary image gaussian smoothing with sigma = "<<secondarySigma<<" pixels."<<std::endl;
-    }
-  else
-    {
-    std::cout<<"Secondary image gaussian smoothing disabled."<<std::endl;
-    }
+  /** Filters typedef */
+  typedef otb::Image<short, 2> ImageType;
+  typedef otb::Image<float, 2> HeightImageType;
   
-  double averageElevation = 0.;
+  typedef itk::DiscreteGaussianImageFilter<ImageType, ImageType> GaussianFilterType;
+  typedef otb::StereoSensorModelToElevationFilter<ImageType, HeightImageType> StereoFilterType;
+  typedef otb::VectorImage<float, 2> VectorImageType;
+  typedef otb::ImageList<HeightImageType> ImageListType;
+  typedef otb::ImageListToVectorImageFilter<ImageListType, VectorImageType> IL2VIFilterType;
+  
+  /* conversion from VectorImage to Intensity Image */
+  typedef otb::VectorImageToIntensityImageFilter<FloatVectorImageType,ImageType> IntensityFilterType;
+  
 
-  if(parseResult->IsOptionPresent("AverageElevation"))
-    {
-    averageElevation = parseResult->GetParameterDouble("AverageElevation");
-    }
+private:
+  StereoSensorModelToElevationMap()
+  {
+    SetName("StereoSensorModelToElevationMap");
+    SetDescription("Convert a stereo sensor model to elevation map.");
 
-  std::string demDirectory = "";
-  std::string geoidFile = "";
-  bool useDEM = false;
-  bool useGeoid = false;
+    // Documentation
+    SetDocName("Stereo sensor model to elevation map Application");
+    SetDocLongDescription("Produce an elevation map from a pair of stereo images along-track by implicit exploration of their epipolar lines.");
+    SetDocLimitations("None");
+    SetDocAuthors("OTB-Team");
+    SetDocSeeAlso(" ");
+    SetDocCLExample("otbApplicationLauncherCommandLine StereoSensorModelToElevationMap ${OTB-BIN}/bin "
+      "--ref ${OTB-Data}/Input/sensor_stereo_left.tif --sec ${OTB-Data}/Input/sensor_stereo_right.tif "
+      "--out result.tif "
+      "--dem ${OTB-Data}/Input/DEM --geoid ${OTB-Data}/Input/DEM/egm96.grd");
+    AddDocTag("Image Manipulation");
+  }
 
-  if(parseResult->IsOptionPresent("DEMDirectory"))
-    {
-    demDirectory = parseResult->GetParameterString("DEMDirectory");
-    useDEM = true;
-    }
+  virtual ~StereoSensorModelToElevationMap()
+  {
+  }
 
-  if(parseResult->IsOptionPresent("GeoidFile"))
-    {
-    geoidFile = parseResult->GetParameterString("GeoidFile");
-    useGeoid = true;
-    }
-
-  if(useDEM)
-    {
-    std::cout<<"Initial elevation extracted from DEM ("<<demDirectory<<")"<<std::endl;
+  void DoCreateParameters()
+  {
+    // Mandatory parameters
+    AddParameter(ParameterType_InputImage,  "ref",   "Reference");
+    SetParameterDescription("ref", "The reference image.");
+    AddParameter(ParameterType_InputImage,  "sec",   "Secondary");
+    SetParameterDescription("sec", "The secondary image.");
+    AddParameter(ParameterType_OutputImage, "out",  "Output Image");
+    SetParameterDescription("out", "The output image.");
     
-    if(useGeoid)
+    // Optional parameters
+    AddParameter(ParameterType_RAM, "ram", "Available RAM");
+    SetParameterDescription("ram","Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default)");
+    SetDefaultParameterInt("ram", 256);
+    MandatoryOff("ram");
+    
+    AddParameter(ParameterType_Int, "r",  "Radius");
+    SetParameterDescription("r", "Radius (in pixels) of the metric computation window (default is 3).");
+    SetDefaultParameterInt("r",3);
+    SetMinimumParameterIntValue("r",0);
+    MandatoryOff("r");
+    
+    AddParameter(ParameterType_Float, "ct",  "Correlation Threshold");
+    SetParameterDescription("ct", "Threshold bellow which correlation is considered invalid (default is 0.7).");
+    SetDefaultParameterFloat("ct",0.7);
+    SetMinimumParameterFloatValue("ct",0.0);
+    MandatoryOff("ct");
+    
+    AddParameter(ParameterType_Float, "vt",  "Variance Threshold");
+    SetParameterDescription("vt", "Threshold on the master patch variance bellow which no height exploration is performed (default is 4).");
+    SetDefaultParameterFloat("vt",4.0);
+    SetMinimumParameterFloatValue("vt",0.0);
+    MandatoryOff("vt");
+    
+    AddParameter(ParameterType_Float, "minh",  "MinHeightOffset");
+    SetParameterDescription("minh", "Minimum height offset with respect to local initial height for height exploration (default is -20 meters).");
+    SetDefaultParameterFloat("minh",-20.0);
+    MandatoryOff("minh");
+    
+    AddParameter(ParameterType_Float, "maxh",  "MaxHeightOffset");
+    SetParameterDescription("maxh", "Maximum height offset with respect to local initial height for height exploration (default is 20 meters).");
+    SetDefaultParameterFloat("maxh", 20.0);
+    MandatoryOff("maxh");
+    
+    AddParameter(ParameterType_Float, "step",  "HeightStep");
+    SetParameterDescription("step", "Step of height exploration (default is 1 meter).");
+    SetDefaultParameterFloat("step", 1.0);
+    SetMinimumParameterFloatValue("step",0.0);
+    MandatoryOff("step");
+    
+    AddParameter(ParameterType_Float, "ae",  "AverageElevation");
+    SetParameterDescription("ae", "If no DEM is used, provide the initial height value (default is 0 meters)");
+    SetDefaultParameterFloat("ae", 0.0);
+    MandatoryOff("ae");
+    
+    AddParameter(ParameterType_String, "dem",  "DEMDirectory");
+    SetParameterDescription("dem", "Use DEM tiles to derive initial height values (AverageElevation option is ignored in this case)");
+    MandatoryOff("dem");
+    DisableParameter("dem");
+    
+    AddParameter(ParameterType_String, "geoid",  "GeoidFile");
+    SetParameterDescription("geoid", "Use a geoid file along with the DEM tiles");
+    MandatoryOff("geoid");
+    DisableParameter("geoid");
+    
+    AddParameter(ParameterType_Float, "rgs",  "ReferenceGaussianSmoothing");
+    SetParameterDescription("rgs", "(optional) Perform a gaussian smoothing of the reference image. Parameter is gaussian sigma (in pixels). Default is no smoothing.");
+    SetDefaultParameterFloat("rgs", 1.0);
+    SetMinimumParameterFloatValue("rgs",0.0);
+    MandatoryOff("rgs");
+    DisableParameter("rgs");
+    
+    AddParameter(ParameterType_Float, "sgs",  "SecondaryGaussianSmoothing");
+    SetParameterDescription("sgs", "(optional) Perform a gaussian smoothing of the secondary image. Parameter is gaussian sigma (in pixels). Default is no smoothing.");
+    SetDefaultParameterFloat("sgs", 1.0);
+    SetMinimumParameterFloatValue("sgs",0.0);
+    MandatoryOff("sgs");
+    DisableParameter("sgs");
+    
+    AddParameter(ParameterType_Empty, "s",  "SubtractInitialHeight");
+    SetParameterDescription("s", "If activated, the elevation map will contain only the estimated height offset from the initial height (either average elevation or DEM)");
+    MandatoryOff("s"); // Not necessary, already optional by default
+    
+  }
+
+  void DoUpdateParameters()
+  {
+    // The algorithm needs at least 1 samples in the height exploration
+    if (GetParameterFloat("minh") > GetParameterFloat("maxh"))
+    {
+      SetParameterFloat("maxh",GetParameterFloat("minh") + GetParameterFloat("step"));
+    }
+  }
+
+  void DoExecute()
+  {
+    bool referenceSmoothing = IsParameterEnabled("rgs");
+    
+    bool secondarySmoothing = IsParameterEnabled("sgs");
+    
+    bool useDEM = IsParameterEnabled("dem") && HasValue("dem");
+    
+    bool useGeoid = IsParameterEnabled("geoid") && HasValue("geoid");
+    
+    bool subtractInitialHeight = IsParameterEnabled("s");
+     
+    FloatVectorImageType::Pointer inputRef = GetParameterImage("ref");
+    FloatVectorImageType::Pointer inputSec = GetParameterImage("sec");
+    
+    m_Intensity1 = IntensityFilterType::New();
+    m_Intensity1->SetInput(inputRef);
+    
+    m_Intensity2 = IntensityFilterType::New();
+    m_Intensity2->SetInput(inputSec);
+    
+    m_Sigma1.Fill(GetParameterFloat("rgs"));
+    
+    m_Sigma2.Fill(GetParameterFloat("sgs"));
+    
+    m_Gaussian1 = GaussianFilterType::New();
+    m_Gaussian1->SetInput(m_Intensity1->GetOutput());
+    m_Gaussian1->SetVariance(m_Sigma1);
+    m_Gaussian1->SetUseImageSpacingOff();
+  
+    m_Gaussian2 = GaussianFilterType::New();
+    m_Gaussian2->SetInput(m_Intensity2->GetOutput());
+    m_Gaussian2->SetVariance(m_Sigma2);
+    m_Gaussian2->SetUseImageSpacingOff();
+    
+    StereoFilterType::Pointer m_StereoFilter = StereoFilterType::New();
+    
+    if(referenceSmoothing)
       {
-      std::cout<<"Using geoid ("<<geoidFile<<")"<<std::endl;
+      m_StereoFilter->SetMasterInput(m_Gaussian1->GetOutput());
       }
-    }
-  else
-    {
-    std::cout<<"Initial elevation is constant and equal to "<<averageElevation<<" meters"<<std::endl;
-    }
-
-  bool subtractInitialHeight = parseResult->IsOptionPresent("SubtractInitialHeight");
-
-  if(subtractInitialHeight)
-    {
-    std::cout<<"Output elevation map will contain offset from the initial height."<<std::endl;
-    }
-
-  std::string refFileName = parseResult->GetParameterString("Reference");
-  std::string secFileName = parseResult->GetParameterString("Secondary");
-  std::string outFileName = parseResult->GetParameterString("OutputImage");
-  
-  ReaderType::Pointer masterReader = ReaderType::New();
-  masterReader->SetFileName(refFileName);
-  
-  ReaderType::Pointer slaveReader = ReaderType::New();
-  slaveReader->SetFileName(secFileName);
-
-  GaussianFilterType::ArrayType sigma1;
-  sigma1.Fill(referenceSigma);
-  
-  GaussianFilterType::ArrayType sigma2;
-  sigma2.Fill(secondarySigma);
-
-
-  GaussianFilterType::Pointer gaussian1 = GaussianFilterType::New();
-  gaussian1->SetInput(masterReader->GetOutput());
-  gaussian1->SetVariance(sigma1);
-
-  GaussianFilterType::Pointer gaussian2 = GaussianFilterType::New();
-  gaussian2->SetInput(slaveReader->GetOutput());
-  gaussian2->SetVariance(sigma2);
-
-  StereoFilterType::Pointer stereoFilter = StereoFilterType::New();
-  
-  if(referenceSmoothing)
-    {
-    stereoFilter->SetMasterInput(gaussian1->GetOutput());
-    }
-  else
-    {
-    stereoFilter->SetMasterInput(masterReader->GetOutput());
-    }
-  if(secondarySmoothing)
-    {
-    stereoFilter->SetSlaveInput(gaussian2->GetOutput());
-    }
-  else
-    {
-    stereoFilter->SetSlaveInput(slaveReader->GetOutput());
-    }
-
-  stereoFilter->SetUseDEM(useDEM);
-  if(useDEM)
-    {
-    stereoFilter->SetDEMDirectory(demDirectory);
-  
-    if(useGeoid)
+    else
       {
-      stereoFilter->SetGeoidFile(geoidFile);
+      m_StereoFilter->SetMasterInput(m_Intensity1->GetOutput());
       }
-    }
-  else
-    {
-    stereoFilter->SetAverageElevation(averageElevation);
-    }
+    if(secondarySmoothing)
+      {
+      m_StereoFilter->SetSlaveInput(m_Gaussian2->GetOutput());
+      }
+    else
+      {
+      m_StereoFilter->SetSlaveInput(m_Intensity2->GetOutput());
+      }
   
-  stereoFilter->SetSubtractInitialElevation(subtractInitialHeight);
-
-  stereoFilter->SetLowerElevation(minHeightOffset);
-  stereoFilter->SetHigherElevation(maxHeightOffset);
-  stereoFilter->SetCorrelationThreshold(correlationThreshold);
-  stereoFilter->SetVarianceThreshold(varianceThreshold);
-  stereoFilter->SetElevationStep(heightStep);
-  stereoFilter->SetRadius(radius);
-
-  ImageListType::Pointer il = ImageListType::New();
-
-  il->PushBack(stereoFilter->GetOutput());
-  il->PushBack(stereoFilter->GetCorrelationOutput());
-
-  IL2VIFilterType::Pointer il2vi = IL2VIFilterType::New();
-  il2vi->SetInput(il);
-
-  WriterType::Pointer writer = WriterType::New();
+    m_StereoFilter->SetUseDEM(useDEM);
+    if(useDEM)
+      {
+      m_StereoFilter->SetDEMDirectory(GetParameterString("dem"));
+    
+      if(useGeoid)
+        {
+        m_StereoFilter->SetGeoidFile(GetParameterString("geoid"));
+        }
+      }
+    else
+      {
+      m_StereoFilter->SetAverageElevation(GetParameterFloat("ae"));
+      }
+    
+    m_StereoFilter->SetSubtractInitialElevation(subtractInitialHeight);
   
-  otb::StandardWriterWatcher watcher(writer, stereoFilter,"Performing stereo-matching");
-
-  writer->SetInput(il2vi->GetOutput());
-  writer->SetFileName(outFileName);
-
-  unsigned int ram = 256;
-  if (parseResult->IsOptionPresent("AvailableMemory"))
-    {
-    ram = parseResult->GetParameterUInt("AvailableMemory");
+    m_StereoFilter->SetLowerElevation(GetParameterFloat("minh"));
+    m_StereoFilter->SetHigherElevation(GetParameterFloat("maxh"));
+    m_StereoFilter->SetCorrelationThreshold(GetParameterFloat("ct"));
+    m_StereoFilter->SetVarianceThreshold(GetParameterFloat("vt"));
+    m_StereoFilter->SetElevationStep(GetParameterFloat("step"));
+    m_StereoFilter->SetRadius(GetParameterInt("r"));
+    
+    AddProcess(m_StereoFilter,"Processing elevation");
+    m_StereoFilter->Update();
+    
+    ImageListType::Pointer il = ImageListType::New();
+    
+    il->PushBack(m_StereoFilter->GetOutput());
+    il->PushBack(m_StereoFilter->GetCorrelationOutput());
+    
+    IL2VIFilterType::Pointer m_Il2vi = IL2VIFilterType::New();
+    m_Il2vi->SetInput(il);
+    
+    m_Il2vi->Update();
+    
+    SetParameterOutputImage("out",m_Il2vi->GetOutput());
+    
     }
-  writer->SetAutomaticTiledStreaming(ram);
 
-  writer->Update();
+  /* Members */
+  IntensityFilterType::Pointer m_Intensity1;
+  IntensityFilterType::Pointer m_Intensity2;
+  
+  GaussianFilterType::ArrayType m_Sigma1;
+  GaussianFilterType::ArrayType m_Sigma2;
+  
+  GaussianFilterType::Pointer m_Gaussian1;
+  GaussianFilterType::Pointer m_Gaussian2;
+  
+  StereoFilterType::Pointer m_StereoFilter;
+  
+  IL2VIFilterType::Pointer m_Il2vi;
+};
 
-  return EXIT_SUCCESS;
 }
 }
+
+OTB_APPLICATION_EXPORT(otb::Wrapper::StereoSensorModelToElevationMap)
