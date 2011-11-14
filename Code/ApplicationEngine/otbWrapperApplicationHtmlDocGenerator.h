@@ -43,6 +43,8 @@ public:
 
   static void GenerateDoc( const Application::Pointer app, const std::string & filename );
 
+  static void GenerateDoc( const Application::Pointer app, std::string & val);
+
 protected:
 
 /** Get the parameter description of one parameter. */
