@@ -57,7 +57,7 @@ public:
   typedef otb::ImageListToVectorImageFilter<ImageListType, VectorImageType> IL2VIFilterType;
   
   /* conversion from VectorImage to Intensity Image */
-  typedef otb::VectorImageToIntensityImageFilter<FloatVectorImageType,ImageType> IntensityFilterType;
+  typedef otb::VectorImageToIntensityImageFilter<FloatVectorImageType, ImageType> IntensityFilterType;
   
 
 private:
@@ -101,25 +101,25 @@ private:
     
     AddParameter(ParameterType_Int, "r",  "Radius");
     SetParameterDescription("r", "Radius (in pixels) of the metric computation window (default is 3).");
-    SetDefaultParameterInt("r",3);
-    SetMinimumParameterIntValue("r",0);
+    SetDefaultParameterInt("r", 3);
+    SetMinimumParameterIntValue("r", 0);
     MandatoryOff("r");
     
     AddParameter(ParameterType_Float, "ct",  "Correlation Threshold");
     SetParameterDescription("ct", "Threshold bellow which correlation is considered invalid (default is 0.7).");
-    SetDefaultParameterFloat("ct",0.7);
-    SetMinimumParameterFloatValue("ct",0.0);
+    SetDefaultParameterFloat("ct", 0.7);
+    SetMinimumParameterFloatValue("ct", 0.0);
     MandatoryOff("ct");
     
     AddParameter(ParameterType_Float, "vt",  "Variance Threshold");
     SetParameterDescription("vt", "Threshold on the master patch variance bellow which no height exploration is performed (default is 4).");
-    SetDefaultParameterFloat("vt",4.0);
-    SetMinimumParameterFloatValue("vt",0.0);
+    SetDefaultParameterFloat("vt", 4.0);
+    SetMinimumParameterFloatValue("vt", 0.0);
     MandatoryOff("vt");
     
     AddParameter(ParameterType_Float, "minh",  "MinHeightOffset");
     SetParameterDescription("minh", "Minimum height offset with respect to local initial height for height exploration (default is -20 meters).");
-    SetDefaultParameterFloat("minh",-20.0);
+    SetDefaultParameterFloat("minh", -20.0);
     MandatoryOff("minh");
     
     AddParameter(ParameterType_Float, "maxh",  "MaxHeightOffset");
@@ -130,7 +130,7 @@ private:
     AddParameter(ParameterType_Float, "step",  "HeightStep");
     SetParameterDescription("step", "Step of height exploration (default is 1 meter).");
     SetDefaultParameterFloat("step", 1.0);
-    SetMinimumParameterFloatValue("step",0.0);
+    SetMinimumParameterFloatValue("step", 0.0);
     MandatoryOff("step");
     
     AddParameter(ParameterType_Float, "ae",  "AverageElevation");
@@ -151,14 +151,14 @@ private:
     AddParameter(ParameterType_Float, "rgs",  "ReferenceGaussianSmoothing");
     SetParameterDescription("rgs", "(optional) Perform a gaussian smoothing of the reference image. Parameter is gaussian sigma (in pixels). Default is no smoothing.");
     SetDefaultParameterFloat("rgs", 1.0);
-    SetMinimumParameterFloatValue("rgs",0.0);
+    SetMinimumParameterFloatValue("rgs", 0.0);
     MandatoryOff("rgs");
     DisableParameter("rgs");
     
     AddParameter(ParameterType_Float, "sgs",  "SecondaryGaussianSmoothing");
     SetParameterDescription("sgs", "(optional) Perform a gaussian smoothing of the secondary image. Parameter is gaussian sigma (in pixels). Default is no smoothing.");
     SetDefaultParameterFloat("sgs", 1.0);
-    SetMinimumParameterFloatValue("sgs",0.0);
+    SetMinimumParameterFloatValue("sgs", 0.0);
     MandatoryOff("sgs");
     DisableParameter("sgs");
     
@@ -173,7 +173,7 @@ private:
     // The algorithm needs at least 1 samples in the height exploration
     if (GetParameterFloat("minh") > GetParameterFloat("maxh"))
     {
-      SetParameterFloat("maxh",GetParameterFloat("minh") + GetParameterFloat("step"));
+      SetParameterFloat("maxh", GetParameterFloat("minh") + GetParameterFloat("step"));
     }
   }
 
@@ -268,7 +268,7 @@ private:
     
     m_Il2vi->Update();
     
-    SetParameterOutputImage("out",m_Il2vi->GetOutput());
+    SetParameterOutputImage("out", m_Il2vi->GetOutput());
     
     }
 

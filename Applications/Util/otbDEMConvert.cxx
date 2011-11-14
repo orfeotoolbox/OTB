@@ -82,7 +82,7 @@ void DoCreateParameters()
   
 /* The main is simple : read image using OTB and write it as a tif.
 *  Read this tif using OSSIM and convert it as a general raster file
-*  (.ras, .geom and . omd) 
+*  (.ras, .geom and . omd)
 */
 
 void DoExecute()
@@ -91,14 +91,14 @@ void DoExecute()
   FloatVectorImageType::Pointer inImage = GetParameterImage("in");
   
   // Set temporary tif filename (for ossim)
-  std::string ofname = GetParameterString("out");;
+  std::string ofname = GetParameterString("out"); ;
   std::string path   = itksys::SystemTools::GetFilenamePath(ofname);
   std::string fname  = itksys::SystemTools::GetFilenameWithoutExtension(ofname);
   std::string tempFilename = path+"/"+fname+"_DEMConvert.tif";
   std::string tempFilenameGeom = path+"/"+fname+"_DEMConvert.geom";
   
   // Generate the tif image using OTB while keeping the same  pixel
-  // type then the input image 
+  // type then the input image
   // Initialize an outputParameter and set its output pixeltype
   OutputImageParameter::Pointer paramOut = OutputImageParameter::New();
   std::ostringstream osswriter;
@@ -109,7 +109,7 @@ void DoExecute()
   paramOut->SetValue(inImage);
 
   // Set the output pixel type
-  itk::ImageIOBase::Pointer  imageIO = ImageIOFactory::CreateImageIO( GetParameterString("in").c_str(), 
+  itk::ImageIOBase::Pointer  imageIO = ImageIOFactory::CreateImageIO( GetParameterString("in").c_str(),
                                                                       ImageIOFactory::ReadMode);
   std::string componentTypeInfo(imageIO->GetComponentTypeInfo().name());
   if( componentTypeInfo == typeid(unsigned char).name())
@@ -167,7 +167,7 @@ void DoExecute()
     }
   
   // remove the geom file if any
-  if( itksys::SystemTools::FileExists(tempFilenameGeom.c_str()) 
+  if( itksys::SystemTools::FileExists(tempFilenameGeom.c_str())
       && !itksys::SystemTools::RemoveFile(tempFilenameGeom.c_str()))
     {
     itkExceptionMacro("Problem while removing the Geom file " << tempFilenameGeom);

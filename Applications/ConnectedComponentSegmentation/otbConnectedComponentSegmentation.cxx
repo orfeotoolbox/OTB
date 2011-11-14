@@ -101,8 +101,8 @@ private:
     
     AddParameter(ParameterType_Int, "minsize", "Minimum Object Size");
     SetParameterDescription("minsize", "Min object size (area in pixel)");
-    SetDefaultParameterInt("minsize",2);
-    SetMinimumParameterIntValue("minsize",1);
+    SetDefaultParameterInt("minsize", 2);
+    SetMinimumParameterIntValue("minsize", 1);
     MandatoryOff("minsize");
     
     AddParameter(ParameterType_String, "obia", "OBIA Expression");
@@ -184,7 +184,7 @@ private:
       projectedVD = m_Vproj->GetOutput();
       }
     
-    SetParameterOutputVectorData("out",projectedVD); 
+    SetParameterOutputVectorData("out", projectedVD);
   }
 
   /** Members */

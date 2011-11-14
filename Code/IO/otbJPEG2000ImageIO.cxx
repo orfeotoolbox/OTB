@@ -72,7 +72,7 @@ public:
   JPEG2000ReaderInternal();
 
   ~JPEG2000ReaderInternal()
-  {    
+  {
     this->Clean();
   }
 
@@ -123,7 +123,7 @@ private:
 
   int Initialize();
 
-  void InsertTileInCache(unsigned int tileIndex,opj_image_t * tileData);
+  void InsertTileInCache(unsigned int tileIndex, opj_image_t * tileData);
 
   void ClearCache();
 };
@@ -234,7 +234,7 @@ void JPEG2000ReaderInternal::Clean()
 void JPEG2000ReaderInternal::ClearCache()
 {
   for(TileCacheType::iterator it = m_Cache.begin();
-      it != m_Cache.end();++it)
+      it != m_Cache.end(); ++it)
     {
     CachedTileType erasedTile = *it;
     
@@ -244,14 +244,14 @@ void JPEG2000ReaderInternal::ClearCache()
       otbopenjpeg_opj_image_destroy(erasedTile.second);
       }
     erasedTile.second = NULL;
-    } 
+    }
   m_Cache.clear();
 }
 
 bool JPEG2000ReaderInternal::LoadTileFromCache(unsigned int tileIndex)
 {
   for(TileCacheType::iterator it = m_Cache.begin();
-      it != m_Cache.end();++it)
+      it != m_Cache.end(); ++it)
     {
     if(it->first == tileIndex)
       {
@@ -271,13 +271,13 @@ bool JPEG2000ReaderInternal::ReadTileFromFile(unsigned int tileIndex)
   this->m_Image = otbopenjpeg_opj_image_create0();
   otbopenjpeg_opj_copy_image_header(this->GetPersistentImage(), this->m_Image);
 
-  bool success = otbopenjpeg_opj_get_decoded_tile(this->GetCodec(),this->GetStream(),this->GetImage(),tileIndex);
+  bool success = otbopenjpeg_opj_get_decoded_tile(this->GetCodec(), this->GetStream(), this->GetImage(), tileIndex);
   
 
   if(success)
     {
     otbGenericMsgDebugMacro(<<"Tile "<<tileIndex<<" decoded from file");
-    InsertTileInCache(tileIndex,this->GetImage());
+    InsertTileInCache(tileIndex, this->GetImage());
     }
   
   return success;
@@ -286,7 +286,7 @@ bool JPEG2000ReaderInternal::ReadTileFromFile(unsigned int tileIndex)
 void JPEG2000ReaderInternal::InsertTileInCache(unsigned int tileIndex, opj_image_t * tileData)
 {
   for(TileCacheType::const_iterator it = m_Cache.begin();
-      it != m_Cache.end();++it)
+      it != m_Cache.end(); ++it)
     {
     if(it->first == tileIndex)
       {
@@ -307,7 +307,7 @@ void JPEG2000ReaderInternal::InsertTileInCache(unsigned int tileIndex, opj_image
     m_Cache.pop_front();
     }
   
-  m_Cache.push_back(CachedTileType(tileIndex,tileData));
+  m_Cache.push_back(CachedTileType(tileIndex, tileData));
 }
 
 
@@ -332,7 +332,7 @@ JPEG2000ReaderInternal::JPEG2000ReaderInternal()
 }
 
 int JPEG2000ReaderInternal::Initialize()
-{  
+{
   if (this->m_File)
     {
     // Creating the file stream
@@ -476,7 +476,6 @@ int JPEG2000ReaderInternal::CanRead()
      }
    else return 0;
  }
-
 
 
 JPEG2000ImageIO::JPEG2000ImageIO()

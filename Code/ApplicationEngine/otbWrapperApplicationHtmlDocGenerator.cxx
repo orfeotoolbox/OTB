@@ -53,14 +53,14 @@ namespace Wrapper
   oss << "</p>";
 
 #define otbDocHtmlParamMacro( type, param )                             \
-  oss << "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Courier New,courier'; font-weight:600;\";>"; \
+  oss << "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Courier New, courier'; font-weight:600;\"; >"; \
   oss << "["<<type<<"] "<< param->GetName() <<": ";                     \
   oss << "</span>";                                                     \
   if( std::string(param->GetDescription()).size()!=0 )                  \
     {                                                                   \
     oss << param->GetDescription();                                     \
     }                                                                   \
-  oss << "</p>"; 
+  oss << "</p>";
 
 
 ApplicationHtmlDocGenerator::ApplicationHtmlDocGenerator()
