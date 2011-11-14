@@ -38,6 +38,9 @@ public:
   /** Standard macro */
   itkNewMacro(Self);
 
+  typedef itk::TranslationTransform<double, FloatVectorImageType::ImageDimension> TransformType;
+  typedef otb::StreamingResampleImageFilter<FloatVectorImageType, FloatVectorImageType, double>    ResampleFilterType;
+
   itkTypeMacro(RigidTransformResample, otb::Application);
 
 private:
@@ -76,29 +79,32 @@ private:
 
   void DoExecute()
   {
-    typedef itk::TranslationTransform<double, FloatVectorImageType::ImageDimension> TransformType;
-    typedef otb::StreamingResampleImageFilter<FloatVectorImageType, FloatVectorImageType, double>    ResampleFilterType;
+    
     FloatVectorImageType* inputImage = GetParameterImage("in");
     
-    TransformType::Pointer transform = TransformType::New();
+    m_Transform = TransformType::New();
     TransformType::OutputVectorType offset;
     offset[0] = GetParameterFloat("tx");
     offset[1] = GetParameterFloat("ty");
-    std::cout << "Offset : " << offset << std::endl;
-    transform->SetOffset(offset);
+    otbAppLogINFO( << "Offset : " << offset );
+    m_Transform->SetOffset(offset);
 
-    ResampleFilterType::Pointer resampler = ResampleFilterType::New();
-    resampler->SetInput(inputImage);
-    resampler->SetTransform(transform);
-    resampler->SetOutputParametersFromImage(inputImage);
+    m_Resampler = ResampleFilterType::New();
+    m_Resampler->SetInput(inputImage);
+    m_Resampler->SetTransform(m_Transform);
+    m_Resampler->SetOutputParametersFromImage(inputImage);
     FloatVectorImageType::PixelType defaultValue;
     itk::PixelBuilder<FloatVectorImageType::PixelType>::Zero(defaultValue,
                                                              inputImage->GetNumberOfComponentsPerPixel());
-    resampler->SetEdgePaddingValue(defaultValue);
-
+    m_Resampler->SetEdgePaddingValue(defaultValue);
+    m_Resampler->UpdateOutputInformation();
+    
     // Output Image
-    SetParameterOutputImage("out", resampler->GetOutput());
+    SetParameterOutputImage("out", m_Resampler->GetOutput());
   }
+
+  ResampleFilterType::Pointer m_Resampler;
+  TransformType::Pointer m_Transform;
 }; //class
 
 
