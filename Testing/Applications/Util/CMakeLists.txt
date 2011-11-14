@@ -5,36 +5,42 @@ set(TEST_DRIVER otbTestDriver
 #--- Rescale ---#
 
 
-OTB_TEST_APPLICATION(NAME  apTuUtRescaleTest
+OTB_TEST_APPLICATION(NAME  apTvUtRescaleTest
                      APP  Rescale
                      OPTIONS --in ${INPUTDATA}/poupees.tif
-                             --out ${TEMP}/owTvRescaleTest.tif
+                             --out ${TEMP}/apTvUtRescaleTest.png uint8
                              --outmin 20
-                             --outmax 150)
+                             --outmax 150
+                     VALID   --compare-image ${NOTOL}
+                             ${BASELINE}/apTvUtRescaleTest.png
+                             ${TEMP}/apTvUtRescaleTest.png)
 
 #--- Smoothing ---#
-OTB_TEST_APPLICATION(NAME  apTuUtSmoothingTest
+OTB_TEST_APPLICATION(NAME  apTvUtSmoothingTest
                      APP  Smoothing
                      OPTIONS --in ${INPUTDATA}/poupees.tif
-               			     --out ${TEMP}/apTuUtSmoothingTest2.tif
-                 			 --type mean)
+               	             --out ${TEMP}/apTvUtSmoothingTest.tif
+                             --type mean
+                     VALID   --compare-image ${NOTOL}
+                             ${BASELINE}/apTvUtSmoothingTest.tif
+                             ${TEMP}/apTvUtSmoothingTest.tif)
 #--- ReadImageInfo ---#
 
-OTB_TEST_APPLICATION(NAME  apTuUtReadImageInfoTest
+OTB_TEST_APPLICATION(NAME  apTvUtReadImageInfoTest
                      APP  ReadImageInfo
                      OPTIONS --in ${INPUTDATA}/poupees.tif)
 
 IF(OTB_DATA_USE_LARGEINPUT)
 
-OTB_TEST_APPLICATION(NAME  apTuUtReadImageInfoSpot5
+OTB_TEST_APPLICATION(NAME  apTvUtReadImageInfoSpot5
                      APP  ReadImageInfo
                      OPTIONS --in ${LARGEDATA}/SPOT5/TEHERAN/IMAGERY.TIF)
                      
-OTB_TEST_APPLICATION(NAME  apTuUtReadImageInfoERS
+OTB_TEST_APPLICATION(NAME  apTvUtReadImageInfoERS
                      APP  ReadImageInfo
                      OPTIONS --in ${LARGEDATA}/SAR_ERS2_SLCI_SCENE1/DAT_01.001)
 
-OTB_TEST_APPLICATION(NAME  apTuUtReadImageInfoRADARSAT1
+OTB_TEST_APPLICATION(NAME  apTvUtReadImageInfoRADARSAT1
                      APP  ReadImageInfo
                      OPTIONS --in ${LARGEDATA}/RADARSAT1/GOMA/SCENE01/DAT_01.001)
 
@@ -99,7 +105,7 @@ OTB_TEST_APPLICATION(NAME apTvUtBandMath
                              --exp "cos(im1b1)+im2b1*im3b1-im3b2+ndvi(im3b3,im3b4)"
                      VALID   --compare-image ${NOTOL}
                              ${INPUTDATA}/apTvUtBandMathOutput.tif
-                		     ${TEMP}/apTvUtBandMathOutput.tif)
+                             ${TEMP}/apTvUtBandMathOutput.tif)
 
 
 #--- Split Image application ----
@@ -119,19 +125,27 @@ OTB_TEST_APPLICATION(NAME apTvUtSplitImage
                              ${TEMP}/apTvUtSplitImageOutput_2.tif)
 
 #--- Convert ----
-OTB_TEST_APPLICATION(NAME apTuUtConvertBasic
+OTB_TEST_APPLICATION(NAME apTvUtConvertBasic
                      APP Convert
                      OPTIONS --in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
-                             --out ${TEMP}/apTuUtConvertBasicOutput.tif)
+                             --out ${TEMP}/apTuUtConvertBasicOutput.tif
+                     VALID   --compare-image ${NOTOL}
+                             ${INPUTDATA}/apTuUtConvertBasicOutput.tif
+                	     ${TEMP}/apTuUtConvertBasicOutput.tif
+)
 
-OTB_TEST_APPLICATION(NAME apTuUtConvertWithScaling
+OTB_TEST_APPLICATION(NAME apTvUtConvertWithScaling
                      APP Convert
                      OPTIONS --in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
-                             --out ${TEMP}/apTuUtConvertWithScaling.tif
-                             --type linear)
+                             --out ${TEMP}/apTvUtConvertWithScalingOutput.tif
+                             --type linear
+                     VALID   --compare-image ${NOTOL}
+                             ${INPUTDATA}/apTvUtConvertWithScalingOutput.tif
+                	     ${TEMP}/apTvUtConvertWithScalingOutput.tif
+)
 
 #--- KmzExport ----
-OTB_TEST_APPLICATION(NAME apTuUtKmzExport
+OTB_TEST_APPLICATION(NAME apTvUtKmzExport
                      APP KmzExport
                      OPTIONS --in   ${INPUTDATA}/qb_RoadExtract.img
                              --out ${TEMP}/apTvUtKmzExport.kmz
@@ -188,14 +202,14 @@ OTB_TEST_APPLICATION(NAME apTvUtVectorDataExtractROIApplication
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 #--- Concatenate VectorData ---
-OTB_TEST_APPLICATION(NAME apTuUtConcatenateVectorData
+OTB_TEST_APPLICATION(NAME apTvUtConcatenateVectorData
                      APP ConcatenateVectorData
                      OPTIONS --vd   ${INPUTDATA}/waterways.shp
                                     ${INPUTDATA}/france_coastline.shp
-                             --out ${TEMP}/apTuUtConcatenateVectorDataOutputTest.shp
+                             --out ${TEMP}/apTvUtConcatenateVectorDataOutputTest.shp
                      VALID   --compare-ogr ${NOTOL}
                              ${OTBAPP_BASELINE_FILES}/utTvConcatenateVectorData.shp
-                             ${TEMP}/apTuUtConcatenateVectorDataOutputTest.shp)
+                             ${TEMP}/apTvUtConcatenateVectorDataOutputTest.shp)
 
 #--- CompareImages ---
 OTB_TEST_APPLICATION(NAME apTvUtCompareImages

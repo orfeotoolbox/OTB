@@ -49,7 +49,11 @@ OTB_TEST_APPLICATION(NAME  apTvHyHyperspectralUnmixing_FCLS
 OTB_TEST_APPLICATION(NAME  apTuHyVertexComponentAnalysis
                      APP  VertexComponentAnalysis
                      OPTIONS --in ${OTB_DATA_ROOT}/Input/Hyperspectral/synthetic/hsi_cube.tif
-                			 --ne 5
-                 			 --outendm ${TEMP}/apTvHyVertexComponentAnalysis.tif double)
+                             --ne 5
+                 	     --outendm ${TEMP}/apTvHyVertexComponentAnalysis.tif double
+                             VALID   --compare-image ${EPSILON_9}
+                                     ${BASELINE}/apTvHyVertexComponentAnalysis.tif
+                  	             ${TEMP}/apTvHyVertexComponentAnalysis.tif
+)
 
     
