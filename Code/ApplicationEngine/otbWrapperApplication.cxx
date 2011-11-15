@@ -386,6 +386,10 @@ ParameterType Application::GetParameterType(std::string paramKey) const
     {
     type = ParameterType_String;
     }
+  else if (dynamic_cast<const StringListParameter*>(param))
+    {
+    type = ParameterType_StringList;
+    }
   else if (dynamic_cast<const RAMParameter*>(param))
     {
     type = ParameterType_RAM;
