@@ -193,10 +193,10 @@ OTB_TEST_APPLICATION(NAME apTvUtVectorDataExtractROIApplication
                      APP VectorDataExtractROIApplication
                      OPTIONS --io.in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
                              --io.vd ${OTB_DATA_LARGEINPUT_ROOT}/VECTOR/MidiPyrenees/roads.shp
-                             --io.out ${TEMP}/utTvVectorDataExtractROIApplicationOutput.shp
-                     #VALID   --compare-ogr ${NOTOL}  
-                     #        ${OTBAPP_BASELINE_FILES}/utTvVectorDataTransformFilter_Translation_rotation.shp
-                     #        ${TEMP}/apTvUtVectorDataTransform_Translation_rotation.shp
+                             --io.out ${TEMP}/apTvUtVectorDataExtractROIApplicationTest.shp
+                     VALID   --compare-ogr ${NOTOL}
+                             ${BASELINE_FILES}/apTvUtVectorDataExtractROIApplicationTest.shp
+                             ${TEMP}/apTvUtVectorDataExtractROIApplicationTest.shp
                      )
 
 ENDIF(OTB_DATA_USE_LARGEINPUT)
@@ -222,3 +222,4 @@ OTB_TEST_APPLICATION(NAME apTvUtCompareImages
                              --roi.starty 15
                              --roi.sizex 150
                              --roi.sizey 200 )
+
