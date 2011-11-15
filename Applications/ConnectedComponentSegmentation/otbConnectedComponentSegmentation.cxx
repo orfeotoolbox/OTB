@@ -77,6 +77,7 @@ private:
       "--in ${OTB-DATA}/Input/ROI_QB_MUL_4.tif --mask \"((b1>80)*intensity>95)\" --expr \"distance<10\" "
       "--minsize 15 --obia \"SHAPE_Elongation>8\" --out ./result.shp");
     AddDocTag(Tags::Analysis);
+    AddDocTag(Tags::Segmentation);
   }
 
   virtual ~ConnectedComponentSegmentation()
@@ -91,14 +92,15 @@ private:
     AddParameter(ParameterType_OutputVectorData, "out", "Output Shape");
     SetParameterDescription("out", "The segmentation shape.");
     
-    AddParameter(ParameterType_String, "expr", "Connected Component Expression");
-    SetParameterDescription("expr", "Formula used for connected component segmentation");
     
     AddParameter(ParameterType_String, "mask", "Mask expression");
     SetParameterDescription("mask", "Mask mathematical expression (only if support image is given)");
     MandatoryOff("mask");
     DisableParameter("mask");
     
+    AddParameter(ParameterType_String, "expr", "Connected Component Expression");
+    SetParameterDescription("expr", "Formula used for connected component segmentation");
+
     AddParameter(ParameterType_Int, "minsize", "Minimum Object Size");
     SetParameterDescription("minsize", "Min object size (area in pixel)");
     SetDefaultParameterInt("minsize", 2);
