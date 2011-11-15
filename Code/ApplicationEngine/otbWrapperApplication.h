@@ -24,6 +24,7 @@
 #include "itkObjectFactory.h"
 
 #include "otbWrapperTypes.h"
+#include "otbWrapperTags.h"
 #include "otbWrapperParameterGroup.h"
 
 #include "itkLogger.h"
