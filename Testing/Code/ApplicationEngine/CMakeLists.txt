@@ -157,15 +157,15 @@ add_test(owTvApplicationHtmlDocGeneratorNew ${OTB_WRAPPER_TESTS}
     otbWrapperApplicationHtmlDocGeneratorNew
   )
 
-add_test(owTvApplicationHtmlDocGeneratorTest ${OTB_WRAPPER_TESTS}
-  --compare-ascii ${NOTOL}
-  ${TEMP}/owTvOReadImageInfoDoc.html
-  ${BASELINE}/owTvOReadImageInfoDoc.html
-  otbWrapperApplicationHtmlDocGeneratorTest1
-  ReadImageInfo
-  $<TARGET_FILE_DIR:otbapp_ReadImageInfo>
-  ${TEMP}/owTvOReadImageInfoDoc.html
-)
+add_test(NAME owTvApplicationHtmlDocGeneratorTest
+         COMMAND ${OTB_WRAPPER_TESTS}
+                  --compare-ascii ${NOTOL}
+                    ${TEMP}/owTvOReadImageInfoDoc.html
+                    ${BASELINE}/owTvOReadImageInfoDoc.html
+                  otbWrapperApplicationHtmlDocGeneratorTest1
+                    ReadImageInfo
+                    $<TARGET_FILE_DIR:otbapp_ReadImageInfo>
+                    ${TEMP}/owTvOReadImageInfoDoc.html )
 
 
 # ----------------Source files CXX -----------------------------------
