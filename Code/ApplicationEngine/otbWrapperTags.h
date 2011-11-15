@@ -21,24 +21,32 @@
 
 namespace otb
 {
+namespace Wrapper
+{
 namespace Tags
 {
 
+static const std::string Analysis="Image Analysis";
 static const std::string Calibration="Calibration";
 static const std::string ChangeDetection="Change Detection";
-static const std::string Classification="Classification";
+static const std::string Coordinates="Coordinates";
 static const std::string DimensionReduction="Dimensionnality Reduction";
 static const std::string FeatureExtraction="Feature Extraction";
 static const std::string Filter="Image Filtering";
-static const std::string HyperSpectral="Hyper Spectral";
+static const std::string Hyperspectral="Hyperspectral";
 static const std::string Learning="Learning";
 static const std::string Manip="Image Manipulation";
-static const std::string Projection="Projection";
-static const std::string RadiometricIndices="Radiometric Indices";
+static const std::string Meta="Image MetaData";
+static const std::string Multi="Image MultiResolution";
+static const std::string Pansharpening="Pansharpening";
+static const std::string Geometry="Geometry";
 static const std::string Raster="Raster";
+static const std::string SAR="SAR";
+static const std::string Stereo="Stereo";
 static const std::string Segmentation="Segmentation";
-static const std::string Vector="Vector";
+static const std::string Vector="VectorData Manipulation";
 
+} // end namespace Wrappers
 } // end namespace Tags
 } // end namespace otb
 
