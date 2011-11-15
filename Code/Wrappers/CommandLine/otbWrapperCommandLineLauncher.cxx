@@ -170,6 +170,19 @@ bool CommandLineLauncher::BeforeExecute()
     return false;
     }
 
+  std::cout << "CommandLineLauncher::BeforeExecuter..." << std::endl;
+  
+  // Check if there's keys in the expression if the application takes
+  // at least 1 mandatory parameter
+  const std::vector<std::string> appKeyList = m_Application->GetParametersKeys(true);
+  std::vector<std::string> keyList = m_Parser->GetKeyList( m_Expression );
+  if( appKeyList.size()!=0 && keyList.size()==0 )
+    {
+    std::cerr << "ERROR: Waiting for at least one parameter..." << std::endl;
+    this->DisplayHelp();
+    return false;
+    }
+
   // if help is asked...
   if (m_Parser->IsAttributExists("--help", m_Expression) == true)
     {
