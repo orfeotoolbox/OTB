@@ -230,8 +230,16 @@ opj_image_t * JPEG2000ReaderInternal::DecodeTile(unsigned int tileIndex)
   otbopenjpeg_opj_copy_image_header(m_Image,image);
 
   bool success = otbopenjpeg_opj_get_decoded_tile(m_Codec,m_Stream,image,tileIndex);
-  
-  return image;
+
+  if(success)
+    {
+    otbMsgDevMacro(<<"Tile "<<tileIndex<<" read from file");
+    return image;
+    }
+  else
+    {
+    return NULL;
+    }
 }
 
 JPEG2000ReaderInternal::JPEG2000ReaderInternal()
@@ -273,7 +281,9 @@ int JPEG2000ReaderInternal::Initialize()
 
     // Set default event mgr  FIXME
     opj_event_mgr_t event_mgr;
-    otbopenjpeg_opj_initialize_default_event_handler(&event_mgr, true);
+    event_mgr.info_handler = info_callback;
+    event_mgr.warning_handler = warning_callback;
+    event_mgr.error_handler = error_callback;
 
     // Setting default parameters
     opj_dparameters_t parameters;
@@ -456,6 +466,7 @@ opj_image_t * JPEG2000TileCache::GetTile(unsigned int tileIndex)
     {
     if(it->first == tileIndex)
       {
+      otbMsgDevMacro(<<"Tile "<<it->first<<" loaded from cache");
       return it->second;
       }
     }
