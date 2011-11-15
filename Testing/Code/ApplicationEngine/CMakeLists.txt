@@ -157,6 +157,8 @@ add_test(owTvApplicationHtmlDocGeneratorNew ${OTB_WRAPPER_TESTS}
     otbWrapperApplicationHtmlDocGeneratorNew
   )
 
+
+if (BUILD_APPLICATIONS)
 add_test(NAME owTvApplicationHtmlDocGeneratorTest
          COMMAND ${OTB_WRAPPER_TESTS}
                   --compare-ascii ${NOTOL}
@@ -166,7 +168,7 @@ add_test(NAME owTvApplicationHtmlDocGeneratorTest
                     ReadImageInfo
                     $<TARGET_FILE_DIR:otbapp_ReadImageInfo>
                     ${TEMP}/owTvOReadImageInfoDoc.html )
-
+endif (BUILD_APPLICATIONS)
 
 # ----------------Source files CXX -----------------------------------
 
