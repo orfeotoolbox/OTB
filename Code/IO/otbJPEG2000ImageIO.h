@@ -121,6 +121,9 @@ private:
   /** pixel nb of octets */
   unsigned int m_BytePerPixel;
 
+  /** Load data from a tile into the buffer. 2nd argument is a
+* pointer to opj_image_t, hidden in void * to avoid forward declaration. */
+  void LoadTileData(void * buffer, void * tile);
 
   /** Support processing data in multiple threads. Used by subclasses
    * (e.g., ImageSource). */

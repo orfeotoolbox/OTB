@@ -635,22 +635,8 @@ void JPEG2000ImageIO::Read(void* buffer)
       {
       (*it)->Clean();
       }
-    itkExceptionMacro(<< " IORegion is not correct in terme of tile!");
+    itkExceptionMacro(<< " IORegion does not correspond to any tile!");
     }
-  // Get nb. of lines and columns of the region to read
-  int lNbLines     = this->GetIORegion().GetSize()[1];
-  int lNbColumns   = this->GetIORegion().GetSize()[0];
-  int lFirstLine   = this->GetIORegion().GetIndex()[1]; // [1... ]
-  int lFirstColumn = this->GetIORegion().GetIndex()[0]; // [1... ]
-
-  otbMsgDevMacro(<< " JPEG2000ImageIO::Read()  ");
-  otbMsgDevMacro(<< " ImageDimension   : " << m_Dimensions[0] << "," << m_Dimensions[1]);
-  otbMsgDevMacro(<< " IORegion         : " << this->GetIORegion());
-  otbMsgDevMacro(<< " Nb Of Components : " << this->GetNumberOfComponents());
-  otbMsgDevMacro(<< " Area to read: " << lFirstColumn << " " << lFirstLine  << " "
-                 << lFirstColumn + lNbColumns << " " << lFirstLine + lNbLines);
-  otbMsgDevMacro(<< "Component type: " << this->GetComponentTypeAsString(this->GetComponentType()));
-
 
   // Here we sort between tiles from cache and tiles to read
   std::vector<JPEG2000TileCache::CachedTileType> cachedTiles;
@@ -688,20 +674,6 @@ void JPEG2000ImageIO::Read(void* buffer)
     this->GetMultiThreader()->SingleMethodExecute();
     }
 
-  // for (std::vector<JPEG2000TileCache::CachedTileType>::iterator itTile = toReadTiles.begin(); itTile < toReadTiles.end(); ++itTile)
-  //   {
-  //   // Call the reader
-  //   itTile->second = m_InternalReaders.front()->DecodeTile(itTile->first);
-    
-  //   // Check if tile is valid
-  //   if(!itTile->second)
-  //     {
-  //     this->m_InternalReaders.front()->Clean();
-  //     itkExceptionMacro(<< " otbopenjpeg failed to decode the desired tile "<< itTile->first << "!");
-  //     }
-  //   otbMsgDevMacro(<< " Tile " << itTile->first << " is decoded.");
-  //   }
-
   // Build the list of all tiles
   allNeededTiles = cachedTiles;
   allNeededTiles.insert(allNeededTiles.end(),toReadTiles.begin(),toReadTiles.end());
@@ -709,102 +681,7 @@ void JPEG2000ImageIO::Read(void* buffer)
   
   for (std::vector<JPEG2000TileCache::CachedTileType>::iterator itTile = allNeededTiles.begin(); itTile < allNeededTiles.end(); ++itTile)
     {
-    opj_image_t * currentTile = itTile->second;
-
-    if(!currentTile)
-      {
-      itkExceptionMacro(<<"Tile "<<itTile->first<<" needed but not loaded.");
-      }
-
-    unsigned int lWidthSrc; // Width of the input pixel in nb of pixel
-    unsigned int lHeightDest; // Height of the area where write in nb of pixel
-    unsigned int lWidthDest; // Width of the area where write in nb of pixel
-    unsigned int lStartOffsetPxlDest; // Offset where begin to write the area in the otb buffer in nb of pixel
-    unsigned int lStartOffsetPxlSrc; // Offset where begin to write the area in the otb buffer in nb of pixel
-
-    ComputeOffsets(currentTile,this->GetIORegion(),lWidthSrc, lHeightDest, lWidthDest, lStartOffsetPxlDest, lStartOffsetPxlSrc);
-
-    switch (this->GetComponentType())
-      {
-      case CHAR:
-        {
-        char *p = static_cast<char *> (buffer);
-        for (unsigned int j = 0; j < lHeightDest; ++j)
-          {
-          char* current_dst_line = p + (lStartOffsetPxlDest + j * lNbColumns) * this->m_NumberOfComponents;
-
-          for (unsigned int k = 0; k < lWidthDest; ++k)
-            {
-            for (unsigned int itComp = 0; itComp < this->m_NumberOfComponents; itComp++)
-              {
-              OPJ_INT32* data = currentTile->comps[itComp].data;
-              *(current_dst_line++) = static_cast<char> (data[lStartOffsetPxlSrc + k + j * lWidthSrc]);
-              }
-            }
-          }
-        }
-        break;
-      case UCHAR:
-        {
-        unsigned char *p = static_cast<unsigned char *> (buffer);
-        for (unsigned int j = 0; j < lHeightDest; ++j)
-          {
-          unsigned char* current_dst_line = p + (lStartOffsetPxlDest + j * lNbColumns) * this->m_NumberOfComponents;
-
-          for (unsigned int k = 0; k < lWidthDest; ++k)
-            {
-            for (unsigned int itComp = 0; itComp < this->m_NumberOfComponents; itComp++)
-              {
-              OPJ_INT32* data = currentTile->comps[itComp].data;
-              unsigned char component_val = data[lStartOffsetPxlSrc + k + j * lWidthSrc] & 0xff;
-              *(current_dst_line++) = static_cast<unsigned char> (component_val);
-              }
-            }
-          }
-        }
-        break;
-      case SHORT:
-        {
-        short *p = static_cast<short *> (buffer);
-        for (unsigned int j = 0; j < lHeightDest; ++j)
-          {
-          short* current_dst_line = p + (lStartOffsetPxlDest + j * lNbColumns) * this->m_NumberOfComponents;
-
-          for (unsigned int k = 0; k < lWidthDest; ++k)
-            {
-            for (unsigned int itComp = 0; itComp < this->m_NumberOfComponents; itComp++)
-              {
-              OPJ_INT32* data = currentTile->comps[itComp].data;
-              *(current_dst_line++) = static_cast<short> (data[lStartOffsetPxlSrc + k + j * lWidthSrc]);
-              }
-            }
-          }
-        }
-        break;
-      case USHORT:
-        {
-        unsigned short *p = static_cast<unsigned short *> (buffer);
-        for (unsigned int j = 0; j < lHeightDest; ++j)
-          {
-          unsigned short* current_dst_line = p + (lStartOffsetPxlDest + j * lNbColumns) * this->m_NumberOfComponents;
-
-          for (unsigned int k = 0; k < lWidthDest; ++k)
-            {
-            for (unsigned int itComp = 0; itComp < this->m_NumberOfComponents; itComp++)
-              {
-              OPJ_INT32* data = currentTile->comps[itComp].data;
-              *(current_dst_line++) = static_cast<unsigned short> (data[lStartOffsetPxlSrc + k + j * lWidthSrc] & 0xffff);
-              }
-            }
-          }
-        }
-        break;
-      case INT:
-      case UINT:
-      default:
-        itkGenericExceptionMacro(<< "This data type is not handled");
-        break;
-      }
+    this->LoadTileData(buffer,itTile->second);
     }
   
 
@@ -822,6 +699,111 @@ void JPEG2000ImageIO::Read(void* buffer)
       ++it)
     {
     (*it)->Clean();
+    }
+}
+
+void JPEG2000ImageIO::LoadTileData(void * buffer, void * tile)
+{
+  opj_image_t * currentTile = static_cast<opj_image_t *>(tile);
+
+  if(!currentTile)
+    {
+    itkExceptionMacro(<<"Tile needed but not loaded.");
+    }
+
+ // Get nb. of lines and columns of the region to read
+  int lNbLines     = this->GetIORegion().GetSize()[1];
+  int lNbColumns   = this->GetIORegion().GetSize()[0];
+  int lFirstLine   = this->GetIORegion().GetIndex()[1]; // [1... ]
+  int lFirstColumn = this->GetIORegion().GetIndex()[0]; // [1... ]
+  unsigned int lWidthSrc; // Width of the input pixel in nb of pixel
+  unsigned int lHeightDest; // Height of the area where write in nb of pixel
+  unsigned int lWidthDest; // Width of the area where write in nb of pixel
+  unsigned int lStartOffsetPxlDest; // Offset where begin to write the area in the otb buffer in nb of pixel
+  unsigned int lStartOffsetPxlSrc; // Offset where begin to write the area in the otb buffer in nb of pixel
+
+  ComputeOffsets(currentTile,this->GetIORegion(),lWidthSrc, lHeightDest, lWidthDest, lStartOffsetPxlDest, lStartOffsetPxlSrc);
+
+  switch (this->GetComponentType())
+    {
+    case CHAR:
+    {
+    char *p = static_cast<char *> (buffer);
+    for (unsigned int j = 0; j < lHeightDest; ++j)
+      {
+      char* current_dst_line = p + (lStartOffsetPxlDest + j * lNbColumns) * this->m_NumberOfComponents;
+
+      for (unsigned int k = 0; k < lWidthDest; ++k)
+        {
+        for (unsigned int itComp = 0; itComp < this->m_NumberOfComponents; itComp++)
+          {
+          OPJ_INT32* data = currentTile->comps[itComp].data;
+          *(current_dst_line++) = static_cast<char> (data[lStartOffsetPxlSrc + k + j * lWidthSrc]);
+          }
+        }
+      }
+    }
+    break;
+    case UCHAR:
+    {
+    unsigned char *p = static_cast<unsigned char *> (buffer);
+    for (unsigned int j = 0; j < lHeightDest; ++j)
+      {
+      unsigned char* current_dst_line = p + (lStartOffsetPxlDest + j * lNbColumns) * this->m_NumberOfComponents;
+
+      for (unsigned int k = 0; k < lWidthDest; ++k)
+        {
+        for (unsigned int itComp = 0; itComp < this->m_NumberOfComponents; itComp++)
+          {
+          OPJ_INT32* data = currentTile->comps[itComp].data;
+          unsigned char component_val = data[lStartOffsetPxlSrc + k + j * lWidthSrc] & 0xff;
+          *(current_dst_line++) = static_cast<unsigned char> (component_val);
+          }
+        }
+      }
+    }
+    break;
+    case SHORT:
+    {
+    short *p = static_cast<short *> (buffer);
+    for (unsigned int j = 0; j < lHeightDest; ++j)
+      {
+      short* current_dst_line = p + (lStartOffsetPxlDest + j * lNbColumns) * this->m_NumberOfComponents;
+
+      for (unsigned int k = 0; k < lWidthDest; ++k)
+        {
+        for (unsigned int itComp = 0; itComp < this->m_NumberOfComponents; itComp++)
+          {
+          OPJ_INT32* data = currentTile->comps[itComp].data;
+          *(current_dst_line++) = static_cast<short> (data[lStartOffsetPxlSrc + k + j * lWidthSrc]);
+          }
+        }
+      }
+    }
+    break;
+    case USHORT:
+    {
+    unsigned short *p = static_cast<unsigned short *> (buffer);
+    for (unsigned int j = 0; j < lHeightDest; ++j)
+      {
+      unsigned short* current_dst_line = p + (lStartOffsetPxlDest + j * lNbColumns) * this->m_NumberOfComponents;
+
+      for (unsigned int k = 0; k < lWidthDest; ++k)
+        {
+        for (unsigned int itComp = 0; itComp < this->m_NumberOfComponents; itComp++)
+          {
+          OPJ_INT32* data = currentTile->comps[itComp].data;
+          *(current_dst_line++) = static_cast<unsigned short> (data[lStartOffsetPxlSrc + k + j * lWidthSrc] & 0xffff);
+          }
+        }
+      }
+    }
+    break;
+    case INT:
+    case UINT:
+    default:
+      itkGenericExceptionMacro(<< "This data type is not handled");
+      break;
     }
 }
 
