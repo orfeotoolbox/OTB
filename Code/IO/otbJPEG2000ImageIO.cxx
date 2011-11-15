@@ -711,6 +711,11 @@ void JPEG2000ImageIO::Read(void* buffer)
     {
     opj_image_t * currentTile = itTile->second;
 
+    if(!currentTile)
+      {
+      itkExceptionMacro(<<"Tile "<<itTile->first<<" needed but not loaded.");
+      }
+
     unsigned int lWidthSrc; // Width of the input pixel in nb of pixel
     unsigned int lHeightDest; // Height of the area where write in nb of pixel
     unsigned int lWidthDest; // Width of the area where write in nb of pixel
@@ -864,6 +869,22 @@ ITK_THREAD_RETURN_TYPE JPEG2000ImageIO::ThreaderCallback( void *arg )
       itkGenericExceptionMacro(" otbopenjpeg failed to decode the desired tile "<<tiles->at(i).first << "!");
       }
     otbMsgDevMacro(<< " Tile " << tiles->at(i).first << " decoded by thread "<<threadId);
+    }
+
+  unsigned int lastTile = threadCount*tilesPerThread + threadId;
+
+  // TODO: check this last part
+
+  if(lastTile < tiles->size())
+    {
+    tiles->at(lastTile).second = readers.at(threadId)->DecodeTile(tiles->at(lastTile).first);    
+    
+    if(!tiles->at(lastTile).second)
+      {
+      readers.at(threadId)->Clean();
+      itkGenericExceptionMacro(" otbopenjpeg failed to decode the desired tile "<<tiles->at(lastTile).first << "!");
+      }
+    otbMsgDevMacro(<<" Tile " << tiles->at(lastTile).first << " decoded by thread "<<threadId);
     }
 
   return ITK_THREAD_RETURN_VALUE;
