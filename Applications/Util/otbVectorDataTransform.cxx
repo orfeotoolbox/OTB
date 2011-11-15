@@ -55,6 +55,7 @@ private:
   {
     SetName("VectorDataTransform");
     SetDescription("Apply a transform to each vertex of the input VectorData");
+    AddDocTag(Tags::Vector);
   }
 
   void DoCreateParameters()

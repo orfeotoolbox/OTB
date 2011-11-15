@@ -54,7 +54,7 @@ private:
     SetDocCLExample("otbApplicationLauncherCommandLine MultivariateAlterationDetector ${OTB-BIN}/bin "
       "--in1 ${OTB-Data}/Input/Spot5-Gloucester-before.tif --in2 ${OTB-Data}/Input/Spot5-Gloucester-after.tif "
       "--out detectedChangeImage.tif ");
-    AddDocTag("Feature extraction");
+    AddDocTag(Tags::FeatureExtraction);
   }
 
   virtual ~MultivariateAlterationDetector()

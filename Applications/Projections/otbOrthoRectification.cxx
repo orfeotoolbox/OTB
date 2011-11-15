@@ -101,8 +101,8 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Ortho-rectification chapter from the OTB Software Guide");
     SetDocCLExample(" ");
-    AddDocTag("Image manipulation");
-    AddDocTag("Projection");
+    AddDocTag(Tags::Manip);
+    AddDocTag(Tags::Geometry);
   }
 
   void DoCreateParameters()

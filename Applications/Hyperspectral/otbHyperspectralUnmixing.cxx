@@ -109,7 +109,7 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
     SetDocCLExample("otbApplicationLauncherCommandLine VertexComponentAnalysis ${OTB-BIN}/bin --in ${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif --ie ${INPUTDATA}/Hyperspectral/synthetic/endmembers.tif --out ${TEMP}/apTvHyHyperspectralUnmixing_UCLS.tif double --ua ucls");
-    AddDocTag("Hyperspectral");
+    AddDocTag(Tags::Hyperspectral);
   }
 
   virtual ~HyperspectralUnmixing()

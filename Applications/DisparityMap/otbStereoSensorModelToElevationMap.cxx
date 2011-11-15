@@ -76,7 +76,8 @@ private:
       "--ref ${OTB-Data}/Input/sensor_stereo_left.tif --sec ${OTB-Data}/Input/sensor_stereo_right.tif "
       "--out result.tif "
       "--dem ${OTB-Data}/Input/DEM --geoid ${OTB-Data}/Input/DEM/egm96.grd");
-    AddDocTag("Image Manipulation");
+    AddDocTag(Tags::Manip);
+    AddDocTag(Tags::Stereo);
   }
 
   virtual ~StereoSensorModelToElevationMap()

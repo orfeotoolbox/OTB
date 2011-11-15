@@ -72,7 +72,8 @@ private:
                     "otbApplicationLauncherCommandLine MultiResolutionPyramid ${OTB-BIN}/bin "
                       "--in ${OTB-Data}/Input/QB_Toulouse_Ortho_XS.tif  --out multiResolutionImage.tif --level 1 --sfactor 2 --vfactor 0.6 --fast false");
     AddDocTag("Conversion");
-    AddDocTag("Image Manipulation");
+    AddDocTag(Tags::Manip);
+    AddDocTag(Tags::Multi);
     AddDocTag("Util");
   }
 

@@ -50,7 +50,7 @@ private:
     SetDocLongDescription("This application exports the input image in a kmz product that can be display in the Google Earth software. The user can set the size of the product size, a logo and a legend to the product. Furthemore, to obtain a product that fits the relief, a DEM can be used.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("Convertion");
+    SetDocSeeAlso("Conversion");
     SetDocCLExample("otbApplicationLauncherCommandLine KmzExport ${OTB-BIN}/bin --in ${OTB-Data}/Input/qb_RoadExtract.img --out otbKmzExport.kmz --logo ${OTB-Data}/Input/cnes.png ${OTB-Data}/Input/otb_big.png");
     AddDocTag("KMZ");
     AddDocTag("Export");

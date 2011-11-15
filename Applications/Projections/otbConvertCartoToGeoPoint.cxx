@@ -69,8 +69,8 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
     SetDocCLExample("otbApplicationLauncherCommandLine ConvertCartoToGeoPoint ${OTB-BIN}/bin --carto.x 367074.625 --carto.y 4835740 --mapproj utm --mapproj.utm.hemisphere true --mapproj.utm.zone 31");
-    AddDocTag("Coordinates");
-    AddDocTag("Projection");
+    AddDocTag(Tags::Coordinates);
+    AddDocTag(Tags::Geometry);
   }
 
   virtual ~ConvertCartoToGeoPoint()

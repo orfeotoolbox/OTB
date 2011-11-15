@@ -57,7 +57,7 @@ private:
     SetDocSeeAlso(" ");
     SetDocCLExample("otbApplicationLauncherCommandLine ConcatenateVectorData ${OTB-BIN}/bin"
                     " --vd --out ConcatenatedVectorData.shp");
-    AddDocTag("Vector Data Manipulation");
+    AddDocTag(Tags::Vector);
   }
 
   virtual ~ConcatenateVectorData()

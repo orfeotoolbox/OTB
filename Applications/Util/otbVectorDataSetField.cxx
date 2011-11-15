@@ -64,7 +64,7 @@ private:
     SetDocSeeAlso(" ");
     SetDocCLExample("otbApplicationLauncherCommandLine VectorDataSetField ${OTB-BIN}/bin "
       "--in ${OTB-DATA}/Input/ToulousePoints-examples.shp --out dataOut.shp  --fn MyField --fv MyValue");
-    AddDocTag("VectorData Manipulation");
+    AddDocTag(Tags::Vector);
   }
 
   virtual ~VectorDataSetField()

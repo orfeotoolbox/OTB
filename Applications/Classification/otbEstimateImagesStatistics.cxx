@@ -52,7 +52,8 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
     SetDocCLExample("otbApplicationLauncherCommandLine EstimateImagesStatistics ${OTB-BIN}/bin  --il ${OTB-Data}/Input/Classification/QB_1_ortho.tif ${OTB-Data}/Input/Classification/QB_2_ortho.tif ${OTB-Data}/Input/Classification/QB_3_ortho.tif --out EstimateImageStatisticsQB123.xml");
-    AddDocTag("Classification");
+
+    AddDocTag(Tags::Learning);
   }
 
   virtual ~EstimateImagesStatistics()

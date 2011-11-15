@@ -63,8 +63,8 @@ private:
     SetDocCLExample("otbApplicationLauncherCommandLine Superimpose ${OTB-BIN}/bin "
                     "--inr ${OTB-Data}/Examples/QB_Toulouse_Ortho_PAN.tif --inm ${OTB-Data}/Examples/QB_Toulouse_Ortho_XS.tif "
                     "--out otbSuperimposedXS_to_PAN.tif");
-    AddDocTag("Projection");
-    AddDocTag("Image manipulation");
+    AddDocTag(Tags::Geometry);
+    AddDocTag(Tags::Manip);
     AddDocTag("Superimposition");
   }
 

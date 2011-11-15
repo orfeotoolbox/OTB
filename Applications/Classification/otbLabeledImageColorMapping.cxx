@@ -63,7 +63,7 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
     SetDocCLExample("otbApplicationLauncherCommandLine LabeledImageColorMapping   --in ${OTBAPP_BASELINE}/clLabeledImageQB123_1.tif --ct ${OTB-Data}/Input/Classification/ColorTable.txt --out clLabeledFancyImageQB123_1.tif");
-    AddDocTag("Classification");
+    AddDocTag(Tags::Learning);
 
 
   }

@@ -60,7 +60,7 @@ private:
     SetDocSeeAlso(" ");
     SetDocCLExample("otbApplicationLauncherCommandLine ExtractROI ${OTB-BIN}/bin "
       "--in ${OTB-Data}/Input/couleurs_extrait.png --out ROIImage.tif --sizex 256");
-    AddDocTag("Image Manipulation");
+    AddDocTag(Tags::Manip);
   }
 
   virtual ~ExtractROI()

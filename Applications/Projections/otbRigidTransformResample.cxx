@@ -57,7 +57,7 @@ private:
     SetDocSeeAlso("Translation application");
     SetDocCLExample("otbApplicationLauncherCommandLine RigidTransformResample ${OTB-BIN}/bin --in ${OTB-Data}/Input/poupees.tif --out rigitTransformImage.tf --tx 5 --ty 5");
     AddDocTag("Conversion");
-    AddDocTag("Image Projection");
+    AddDocTag(Tags::Geometry);
   }
 
   virtual ~RigidTransformResample()

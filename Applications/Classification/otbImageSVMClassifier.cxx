@@ -72,8 +72,7 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("TrainSVMImagesClassifier, ValidateSVMImagesClassifier, EstimatesImagesStatistics");
     SetDocCLExample("otbApplicationLauncherCommandLine ImageSVMClassifier ${OTB-BIN}/bin --in ${OTB-DATA}/Classification/QB_1_ortho.tif  --imstat ${OTB-DATA}/Baseline/OTB-Applications/Files/clImageStatisticsQB1.xml --svn ${OTB-DATA}/Baseline/OTB-Applications/Files/clsvmModelQB1.svm --out otbConcatenateImages.png uchar");
-    AddDocTag("Classification");
-    AddDocTag("SVM");
+    AddDocTag(Tags::Learning);
 
   }
 

@@ -66,7 +66,7 @@ private:
     SetDocSeeAlso(" ");
     SetDocCLExample("otbApplicationLauncherCommandLine Smoothing ${OTB-BIN}/bin"
       " --in ${OTB-DATA}/Input/poupees.tif --out smoothedImage.tif --type mean");
-    AddDocTag("Filtering");
+    AddDocTag(Tags::Filter);
   }
 
   virtual ~Smoothing()

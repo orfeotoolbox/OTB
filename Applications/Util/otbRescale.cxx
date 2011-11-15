@@ -59,7 +59,7 @@ private:
     SetDocSeeAlso(" ");
     SetDocCLExample("otbApplicationLauncherCommandLine Rescale ${OTB-BIN}/bin"
       " --in ${OTB-DATA}/Input/poupees.tif --out rescaledImage.tif --outmin 20 --outmax 150");
-    AddDocTag("Image Manipulation");
+    AddDocTag(Tags::Manip);
   }
 
   virtual ~Rescale()

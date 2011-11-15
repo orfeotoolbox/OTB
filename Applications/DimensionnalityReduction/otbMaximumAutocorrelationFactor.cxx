@@ -52,9 +52,8 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
     SetDocCLExample("otbApplicationLauncherCommandLine MaximumAutocorrelationFactor ${OTB-BIN}/bin  --in ${OTB-Data}/Input/cupriteSubHsi.tif--out MaximumAutocorrelationFactorImageFilterOutput.tif");
-    AddDocTag("Dimension reduction");
-    AddDocTag("filtering");
-
+    AddDocTag(Tags::DimensionReduction);
+    AddDocTag(Tags::Filter);
 
   }
 

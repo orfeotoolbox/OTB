@@ -74,7 +74,7 @@ private:
     SetDocSeeAlso(" ");
     SetDocCLExample("otbApplicationLauncherCommandLine VectorDataExtractROI ${OTB-BIN}/bin"
                     " --vd ${OTB-DATA}/Input/franceCoastline.shp --in ${OTB-DATA}/Input/ --out franceCoastline_extract.shp");
-    AddDocTag("VectorData Manipulation");
+    AddDocTag(Tags::Vector);
   }
 
   virtual ~VectorDataExtractROIApplication()

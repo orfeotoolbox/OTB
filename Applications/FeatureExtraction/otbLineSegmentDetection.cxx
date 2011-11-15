@@ -63,7 +63,7 @@ private:
     SetDocSeeAlso(" ");
     SetDocCLExample("otbApplicationLauncherCommandLine BundleToPerfectSensor ${OTB-BIN}/bin "
       "--in ${OTB-Data}/Input/QB_Suburb.png --out linesDetected.shp ");
-     AddDocTag("Feature extraction");
+     AddDocTag(Tags::FeatureExtraction);
   }
 
   virtual ~LineSegmentDetection()

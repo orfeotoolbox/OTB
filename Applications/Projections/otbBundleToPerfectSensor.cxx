@@ -61,9 +61,9 @@ private:
     SetDocCLExample("otbApplicationLauncherCommandLine BundleToPerfectSensor ${OTB-BIN}/bin "
       "--inp ${OTB-Data}/Examples/QB_Toulouse_Ortho_PAN.tif --inxs ${OTB-Data}/Examples/QB_Toulouse_Ortho_XS.tif "
      "--out PanSharpenedImage.tif");
-    AddDocTag("Projection");
-    AddDocTag("Image manipulation");
-    AddDocTag("Pansharpening");
+    AddDocTag(Tags::Geometry);
+    AddDocTag(Tags::Manip);
+    AddDocTag(Tags::Pansharpening);
   }
 
   virtual ~BundleToPerfectSensor()

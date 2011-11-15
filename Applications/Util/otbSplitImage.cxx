@@ -60,7 +60,7 @@ private:
     SetDocSeeAlso(" ");
     SetDocCLExample("otbApplicationLauncherCommandLine SplitImage ${OTB-BIN}/bin"
       " --in ${OTB-DATA}/Input/poupees_sub.png --out splittedImage.tif");
-    AddDocTag("Image Manipulation");
+    AddDocTag(Tags::Manip);
   }
 
   void DoCreateParameters()

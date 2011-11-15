@@ -57,7 +57,7 @@ private:
       "--in ${OTB-Data}/Input/qb_RoadExtract2sub200x200.tif --cout MeanShift_ClusteredOutput.tif"
         "--fout MeanShift_FilterOutput.tif --lout MeanShift_LabeledClusteredOutput.tif"
         "--cbout MeanShift_ClusterBoundariesOutput.tif ---spatialr 16 --ranger 16 --minsize 10 --scale 1.0 ");
-    AddDocTag("Segmentation");
+    AddDocTag(Tags::Segmentation);
     }
 
   virtual ~MeanShiftSegmentation()

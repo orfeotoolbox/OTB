@@ -70,7 +70,8 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
     SetDocCLExample("otbApplicationLauncherCommandLine VertexComponentAnalysis ${OTB-BIN}/bin --in ${OTB_DATA_ROOT}/Input/Hyperspectral/synthetic/hsi_cube.tif --ne 5 --outendm ${TEMP}/apTvHyHyperspectralUnmixing_VCA.tif double");
-    AddDocTag("Hyperspectral");
+    AddDocTag(Tags::Hyperspectral);
+    AddDocTag(Tags::DimensionReduction);
 
   }
 

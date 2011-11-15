@@ -81,8 +81,9 @@ private:
     SetDocCLExample("otbApplicationLauncherCommandLine KMeansClassification "
       "--in ${OTB-Data}/Input/poupees_sub.png --vm ${OTB-Data}/Input/mask_KMeans.png "
       "--ts 100 --tp 0.6 --nc 5 --cp 0.9 --sl 100 --out ClassificationFilterOuptut.tif ");
-    AddDocTag("Classification");
 
+    AddDocTag(Tags::Segmentation);
+    AddDocTag(Tags::Learning);
   }
 
   virtual ~KMeansClassification()

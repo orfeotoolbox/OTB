@@ -131,7 +131,7 @@ private:
       " --imstat ${OTB-Data}/Baseline/OTB-Applications/Files/clImageStatisticsQB123.xml "
       " --svm  ${OTB-Data}/Baseline/OTB-Applications/Files/clsvmModelQB123.svm"
       " --out PerformanceEstimationQB123.txt ");
-    AddDocTag("Classification");
+    AddDocTag(Tags::Learning);
 
   }
 

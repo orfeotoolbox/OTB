@@ -143,9 +143,8 @@ private:
       "--vd ${OTB-DATA}/Classification/ectorData_QB1.shp"
       "--imstat ${OTB-Data}/Baseline/OTB-Applications/Files/clImageStatisticsQB1.xml"
       "--b 2 --mv 100 --vtr 0.5 --opt true -out svmModelQB1_allOpt.svm");
-    AddDocTag("Classification");
-    AddDocTag("Training");
-    AddDocTag("SVM");
+    AddDocTag(Tags::Learning);
+
   }
 
   virtual ~TrainSVMImagesClassifier()

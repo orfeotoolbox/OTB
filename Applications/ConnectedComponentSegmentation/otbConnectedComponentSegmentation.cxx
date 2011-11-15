@@ -76,7 +76,7 @@ private:
     SetDocCLExample("otbApplicationLauncherCommandLine ConnectedComponentSegmentation ${OTB-BIN}/bin "
       "--in ${OTB-DATA}/Input/ROI_QB_MUL_4.tif --mask \"((b1>80)*intensity>95)\" --expr \"distance<10\" "
       "--minsize 15 --obia \"SHAPE_Elongation>8\" --out ./result.shp");
-    AddDocTag("Image Analysis");
+    AddDocTag(Tags::Analysis);
   }
 
   virtual ~ConnectedComponentSegmentation()

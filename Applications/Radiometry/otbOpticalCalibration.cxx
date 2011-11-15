@@ -91,7 +91,8 @@ private:
     SetDocSeeAlso(" ");
     SetDocCLExample("otbApplicationLauncherCommandLine OpticalCalibration ${OTB-BIN}/bin "
       "--in --out --milli --level toa");
-    AddDocTag("Calibration");
+    AddDocTag(Tags::Calibration);
+
 }
 
   void DoCreateParameters()

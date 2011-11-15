@@ -91,9 +91,8 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("otbVecgetationIndices class");
     SetDocCLExample("otbApplicationLauncherCommandLine RadiometricVegetationIndices ${OTB-BIN}/bin --in ${OTB-DATA}/Input/qb_RoadExtract.img --index.ndvi 1 --index.rvi 1 --index.ipvi 1 --out otbRadiometricVegetationIndicesImages.tif");
-    AddDocTag("Radiometric Indices");
     AddDocTag("Vegetation Indices");
-    AddDocTag("Feature");
+    AddDocTag(Tags::FeatureExtraction);
   }
 
   virtual ~RadiometricVegetationIndices()

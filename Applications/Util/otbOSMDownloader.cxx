@@ -57,8 +57,8 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Convertion");
     SetDocCLExample("otbApplicationLauncherCommandLine OSMDownloader ${OTB-BIN}/bin --in ${OTB-Data}/Input/qb_RoadExtract.img --out otbOSMDownloader --logo ${OTB-Data}/Input/cnes.png ${OTB-Data}/Input/otb_big.png");
-    AddDocTag("KMZ");
-    AddDocTag("Export");
+    AddDocTag(Tags::Meta);
+
   }
 
   virtual ~OSMDownloader()

@@ -56,8 +56,8 @@ private:
     SetDocSeeAlso(" ");
     SetDocCLExample("otbApplicationLauncherCommandLine sarRadiometricCalibration ${OTB-BIN}/bin "
       "--cin ${OTB-DATA}/Input/scene.png --out calibratedImage.tif");
-    AddDocTag("Calibration");
-    AddDocTag("SAR");
+    AddDocTag(Tags::Calibration);
+    AddDocTag(Tags::SAR);
   }
 
   virtual ~SarRadiometricCalibration()
