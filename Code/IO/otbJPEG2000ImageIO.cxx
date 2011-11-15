@@ -501,7 +501,14 @@ void JPEG2000TileCache::AddTile(unsigned int tileIndex, opj_image_t * tileData)
 
 JPEG2000ImageIO::JPEG2000ImageIO()
 {
-  m_InternalReader = new JPEG2000ReaderInternal;
+  // Initialize multi-threader
+  m_Threader = itk::MultiThreader::New();
+  m_NumberOfThreads = m_Threader->GetNumberOfThreads();
+
+  for(int i = 0; i<m_NumberOfThreads;++i)
+    {
+    m_InternalReaders.push_back(new JPEG2000ReaderInternal);
+    }
   m_TileCache      = new JPEG2000TileCache;
 
   // By default set number of dimensions to two.
@@ -521,8 +528,14 @@ JPEG2000ImageIO::JPEG2000ImageIO()
 
 JPEG2000ImageIO::~JPEG2000ImageIO()
 {
-  m_InternalReader->Clean();
-  delete m_InternalReader;
+  for(ReaderVectorType::iterator it = m_InternalReaders.begin();
+      it != m_InternalReaders.end();
+      ++it)
+    {
+    (*it)->Clean();
+    delete (*it);
+    }
+  m_InternalReaders.clear();
 
   m_TileCache->Clear();
   delete m_TileCache;
@@ -530,20 +543,37 @@ JPEG2000ImageIO::~JPEG2000ImageIO()
 
 bool JPEG2000ImageIO::CanReadFile(const char* filename)
 {
-
   if (filename == NULL)
     {
     itkDebugMacro(<< "No filename specified.");
     return false;
     }
 
-  if ( !this->m_InternalReader->Open(filename) )
+  bool success = true;
+
+  for(ReaderVectorType::iterator it = m_InternalReaders.begin();
+      it != m_InternalReaders.end();
+      ++it)
     {
-    this->m_InternalReader->Clean();
-    return false;
+
+    if ( !(*it)->Open(filename) )
+      {
+      success = false;
+      }
     }
 
-  return true;
+  // If one of the readers fails, clean everything
+  if(!success)
+    {
+    for(ReaderVectorType::iterator it = m_InternalReaders.begin();
+        it != m_InternalReaders.end();
+        ++it)
+      {
+      (*it)->Clean();
+      }
+    }
+
+  return success;
 }
 
 // Used to print information about this object
@@ -571,7 +601,15 @@ void JPEG2000ImageIO::Read(void* buffer)
     }
 
   // Re-open the file if it was closed
-  if ( !m_InternalReader->m_IsOpen )
+  bool open = true;
+  for(ReaderVectorType::iterator it = m_InternalReaders.begin();
+        it != m_InternalReaders.end();
+        ++it)
+      {
+      open &= (*it)->m_IsOpen;
+      }
+  
+  if ( !open )
     {
     if ( !this->CanReadFile( m_FileName.c_str() ) )
       {
@@ -583,7 +621,12 @@ void JPEG2000ImageIO::Read(void* buffer)
   std::vector<unsigned int> tileList = this->ComputeTileList();
   if (tileList.empty())
     {
-    this->m_InternalReader->Clean();
+    for(ReaderVectorType::iterator it = m_InternalReaders.begin();
+        it != m_InternalReaders.end();
+        ++it)
+      {
+      (*it)->Clean();
+      }
     itkExceptionMacro(<< " IORegion is not correct in terme of tile!");
     }
 
@@ -609,11 +652,11 @@ void JPEG2000ImageIO::Read(void* buffer)
     
     if(!currentTile)
       {
-      currentTile = m_InternalReader->DecodeTile(*itTile);
+      currentTile = m_InternalReaders.front()->DecodeTile(*itTile);
       
       if(!currentTile)
         {
-        this->m_InternalReader->Clean();
+        this->m_InternalReaders.front()->Clean();
         itkExceptionMacro(<< " otbopenjpeg failed to decode the desired tile "<< *itTile << "!");
         }
       m_TileCache->AddTile((*itTile),currentTile);
@@ -716,14 +759,20 @@ void JPEG2000ImageIO::Read(void* buffer)
   chrono.Stop();
   otbMsgDevMacro( << "JPEG2000ImageIO::Read took " << chrono.GetTotal() << " sec");
 
-  m_InternalReader->Clean();
+
+  for(ReaderVectorType::iterator it = m_InternalReaders.begin();
+      it != m_InternalReaders.end();
+      ++it)
+    {
+    (*it)->Clean();
+    }
 }
 
 void JPEG2000ImageIO::ReadImageInformation()
 {
   // If the internal image was not open we open it.
   // This is usually done when the user sets the ImageIO manually
-  if ( !m_InternalReader->m_IsOpen )
+  if ( !m_InternalReaders.front()->m_IsOpen )
     {
     if ( !this->CanReadFile( m_FileName.c_str() ) )
       {
@@ -733,10 +782,10 @@ void JPEG2000ImageIO::ReadImageInformation()
     }
 
   // Check some internal parameters of the JPEG2000 file
-  if ( !this->m_InternalReader->CanRead())
+  if ( !this->m_InternalReaders.front()->CanRead())
     {
     itkExceptionMacro(<< "Cannot read this file because some JPEG2000 parameters are not supported!");
-    this->m_InternalReader->Clean();
+    this->m_InternalReaders.front()->Clean();
     return;
     }
 
@@ -744,18 +793,18 @@ void JPEG2000ImageIO::ReadImageInformation()
   m_Spacing[1] = 1.0;
 
   // If we have some spacing information we use it
-  if ( (m_InternalReader->m_XResolution > 0) && (m_InternalReader->m_YResolution > 0) )
+  if ( (m_InternalReaders.front()->m_XResolution > 0) && (m_InternalReaders.front()->m_YResolution > 0) )
     {
       // We check previously that the X and Y resolution is equal between the components
-      m_Spacing[0] = m_InternalReader->m_XResolution[0];
-      m_Spacing[1] = m_InternalReader->m_YResolution[0];
+      m_Spacing[0] = m_InternalReaders.front()->m_XResolution[0];
+      m_Spacing[1] = m_InternalReaders.front()->m_YResolution[0];
     }
 
   m_Origin[0] = 0.0;
   m_Origin[1] = 0.0;
 
-  m_Dimensions[0] = m_InternalReader->m_Width;
-  m_Dimensions[1] = m_InternalReader->m_Height;
+  m_Dimensions[0] = m_InternalReaders.front()->m_Width;
+  m_Dimensions[1] = m_InternalReaders.front()->m_Height;
 
   this->SetNumberOfDimensions(2);
 
@@ -764,14 +813,14 @@ void JPEG2000ImageIO::ReadImageInformation()
     itkExceptionMacro(<< "Image size is null.");
     }
 
-  this->SetNumberOfComponents(m_InternalReader->m_NbOfComponent);
+  this->SetNumberOfComponents(m_InternalReaders.front()->m_NbOfComponent);
 
   // Automatically set the Type to Binary for JPEG2000 data
   this->SetFileTypeToBinary();
 
   // We check previously that these values are equal between all components
-  unsigned int precision = m_InternalReader->m_Precision[0];
-  int          isSigned = m_InternalReader->m_Signed[0];
+  unsigned int precision = m_InternalReaders.front()->m_Precision[0];
+  int          isSigned = m_InternalReaders.front()->m_Signed[0];
 
   if (precision <= 8)
     {
@@ -821,10 +870,10 @@ void JPEG2000ImageIO::ReadImageInformation()
 
   otbMsgDebugMacro(<< "==========================");
   otbMsgDebugMacro(<< "ReadImageInformation: ");
-  otbMsgDebugMacro(<< "Tile size (WxH): " << m_InternalReader->m_TileWidth << " x "
-                   << m_InternalReader->m_TileHeight);
-  otbMsgDebugMacro(<< "Number of tiles (Xdim x Ydim) : " << m_InternalReader->m_XNbOfTile
-                   << " x " << m_InternalReader->m_YNbOfTile);
+  otbMsgDebugMacro(<< "Tile size (WxH): " << m_InternalReaders.front()->m_TileWidth << " x "
+                   << m_InternalReaders.front()->m_TileHeight);
+  otbMsgDebugMacro(<< "Number of tiles (Xdim x Ydim) : " << m_InternalReaders.front()->m_XNbOfTile
+                   << " x " << m_InternalReaders.front()->m_YNbOfTile);
   otbMsgDebugMacro(<< "Precision: " << precision);
   otbMsgDebugMacro(<< "Signed: " << isSigned);
   otbMsgDebugMacro(<< "Number of octet per value: " << m_BytePerPixel);
@@ -852,19 +901,19 @@ std::vector<unsigned int> JPEG2000ImageIO::ComputeTileList()
   int lFirstColumn = this->GetIORegion().GetIndex()[0];
 
   // Compute index of tile recover by the decoded area
-  unsigned int tile_size_x = m_InternalReader->GetCstrInfo()->tdx;
-  unsigned int tile_size_y = m_InternalReader->GetCstrInfo()->tdy;
+  unsigned int tile_size_x = m_InternalReaders.front()->GetCstrInfo()->tdx;
+  unsigned int tile_size_y = m_InternalReaders.front()->GetCstrInfo()->tdy;
 
   unsigned int l_tile_x_start =  lFirstColumn / tile_size_x;
   unsigned int l_tile_x_end =  (lFirstColumn + lNbColumns + tile_size_x - 1) / tile_size_x;
-  unsigned int l_tile_y_start =  lFirstLine / m_InternalReader->GetCstrInfo()->tdy;
+  unsigned int l_tile_y_start =  lFirstLine / m_InternalReaders.front()->GetCstrInfo()->tdy;
   unsigned int l_tile_y_end =  (lFirstLine + lNbLines + tile_size_y - 1) / tile_size_y;
 
   for (unsigned int itTileY = l_tile_y_start; itTileY < l_tile_y_end; itTileY++)
     {
     for (unsigned int itTileX = l_tile_x_start; itTileX < l_tile_x_end; itTileX++)
       {
-      tileVector.push_back(itTileX + itTileY * m_InternalReader->GetCstrInfo()->tw);
+      tileVector.push_back(itTileX + itTileY * m_InternalReaders.front()->GetCstrInfo()->tw);
       }
     }
 

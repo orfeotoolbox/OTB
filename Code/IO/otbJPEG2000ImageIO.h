@@ -19,6 +19,7 @@
 #define __otbJPEG2000ImageIO_h
 
 #include "itkImageIOBase.h"
+#include "itkMultiThreader.h"
 
 
 namespace otb
@@ -92,6 +93,11 @@ public:
    * that the IORegion has been set properly. */
   virtual void Write(const void* buffer);
 
+
+  /** Return the multithreader used by this class. */
+  itk::MultiThreader * GetMultiThreader()
+  {return m_Threader;}
+
 protected:
   /** Constructor.*/
   JPEG2000ImageIO();
@@ -100,8 +106,10 @@ protected:
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  JPEG2000ReaderInternal* m_InternalReader;
-  JPEG2000TileCache*      m_TileCache;
+  typedef std::vector<JPEG2000ReaderInternal *> ReaderVectorType;
+
+  ReaderVectorType    m_InternalReaders;
+  JPEG2000TileCache*  m_TileCache;
 
 private:
   JPEG2000ImageIO(const Self &); //purposely not implemented
@@ -113,6 +121,11 @@ private:
   /** pixel nb of octets */
   unsigned int m_BytePerPixel;
 
+
+  /** Support processing data in multiple threads. Used by subclasses
+   * (e.g., ImageSource). */
+  itk::MultiThreader::Pointer m_Threader;
+  int                    m_NumberOfThreads;
 };
 
 } // end namespace otb
