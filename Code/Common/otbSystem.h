@@ -70,6 +70,9 @@ public:
 
   /** Parse a filename with dataset information */
   static bool ParseHdfFileName(const std::string& id, std::string& file, unsigned int& datasetNum);
+
+  /** Parse a filename with additional information */
+  static bool ParseFileNameForAdditonalInfo(const std::string& id, std::string& file, unsigned int& addNum);
 };
 
 } // namespace otb

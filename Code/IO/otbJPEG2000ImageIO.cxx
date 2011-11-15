@@ -32,6 +32,14 @@ extern "C"
 }
 
 /**
+Divide an integer by a power of 2 and round upwards
+@return Returns a divided by 2^b
+*/
+inline int int_ceildivpow2(int a, int b) {
+  return (a + (1 << b) - 1) >> b;
+}
+
+/**
    sample error debug callback expecting no client object
 */
 void error_callback(const char *msg, void *client_data)
@@ -82,8 +90,10 @@ public:
   }
   
   opj_image_t * DecodeTile(unsigned int tileIndex);
+  std::vector<unsigned int> GetResolution(){return this->m_Resolution;};
 
-   void Clean();
+
+  void Clean();
 
   int CanRead();
 
@@ -106,6 +116,8 @@ public:
   unsigned int         m_TileHeight;
   unsigned int         m_XNbOfTile;
   unsigned int         m_YNbOfTile;
+  
+  std::vector<unsigned int> m_Resolution;
 
   opj_codestream_info_v2 * GetCstrInfo()
   {
@@ -373,8 +385,17 @@ int JPEG2000ReaderInternal::Initialize()
 
     }
 
+  // This value is based on the first component of the default tile parameters.
+  unsigned int numResAvailable = this->m_CstrInfo->m_default_tile_info.tccp_info[0].numresolutions;
+  for (unsigned int itRes = 0; itRes < numResAvailable; itRes++)
+    {
+    m_Resolution.push_back(itRes);
+    }
+
   return 1;
 }
+
+
 
 int JPEG2000ReaderInternal::CanRead()
  {
@@ -525,6 +546,7 @@ JPEG2000ImageIO::JPEG2000ImageIO()
   m_Origin[1] = 0.0;
 
   m_BytePerPixel = 1;
+  m_ResolutionFactor = 0; // Full resolution by default
 }
 
 JPEG2000ImageIO::~JPEG2000ImageIO()
@@ -595,6 +617,38 @@ struct ThreadStruct
   std::vector<JPEG2000TileCache::CachedTileType> * Tiles;
 };
 
+
+/** Get Info about all resolution in jpeg2000 file */
+bool JPEG2000ImageIO::GetResolutionInfo(std::vector<unsigned int>& res, std::vector<std::string>& desc)
+{
+  res = this->m_InternalReader->GetResolution();
+
+  if (res.empty())
+    return false;
+
+  int originalWidth = m_InternalReader->m_Width ;
+  int originalHeight = m_InternalReader->m_Height ;
+
+  for (std::vector<unsigned int>::iterator itRes = res.begin(); itRes < res.end(); itRes++)
+    {
+    // For each resolution we will compute the tile dim and image dim
+    std::ostringstream oss;
+
+    int w = int_ceildivpow2( originalWidth, *itRes);
+    int h = int_ceildivpow2( originalHeight, *itRes);
+
+    int tw = int_ceildivpow2(m_InternalReader->GetCstrInfo()->tdx, *itRes);
+    int th = int_ceildivpow2(m_InternalReader->GetCstrInfo()->tdy, *itRes);
+
+    oss << "Resolution: " << *itRes << " (Image [w x h]: " << w << "x" << h << ", Tile [w x h]: " << tw << "x" << th << ")";
+
+    desc.push_back(oss.str());
+    }
+
+
+  return true;
+}
+
 // Read image
 void JPEG2000ImageIO::Read(void* buffer)
 {
@@ -625,6 +679,14 @@ void JPEG2000ImageIO::Read(void* buffer)
       return;
       }
     }
+
+  if (m_ResolutionFactor >= this->m_InternalReader->m_Resolution.size())
+    {
+    itkExceptionMacro(<< "Resolution not available in the file!");
+    return;
+    }
+  //else set the resolution in openjpeg
+
 
   std::vector<unsigned int> tileList = this->ComputeTileList();
   if (tileList.empty())
@@ -1140,6 +1202,12 @@ void ComputeOffsets( opj_image_t * currentTile,
                 << ", l_width_dest= " << l_width_dest << ", l_height_dest= " << l_height_dest << std::endl;
       std::cout << "DEST start offset: " << l_start_offset_dest << std::endl;
       */
+}
+
+/** Get Info about all resolution in jpeg2000 file */
+bool GetResolutionInfo(std::vector<unsigned int>& res, std::vector<std::string>& desc)
+{
+  return true;
 }
 
 // Not yet implemented

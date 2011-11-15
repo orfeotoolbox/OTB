@@ -67,6 +67,10 @@ public:
   /** Set the spacing and dimention information for the set filename. */
   virtual void ReadImageInformation();
 
+  /** Get Info about all resolution in jpeg2000 file */
+  bool GetResolutionInfo(std::vector<unsigned int>& res, std::vector<std::string>& desc);
+
+
   /** Reads the data from disk into the memory buffer provided. */
   virtual void Read(void* buffer);
 
@@ -120,6 +124,8 @@ private:
 
   /** pixel nb of octets */
   unsigned int m_BytePerPixel;
+
+  unsigned int m_ResolutionFactor;
 
   /** Load data from a tile into the buffer. 2nd argument is a
 * pointer to opj_image_t, hidden in void * to avoid forward declaration. */
