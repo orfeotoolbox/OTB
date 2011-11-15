@@ -674,17 +674,19 @@ void JPEG2000ImageIO::Read(void* buffer)
     }
 
   // Decode all tiles not in cache in parallel
-  
-  // Set up the multithreaded processing
-  ThreadStruct str;
-  str.Readers = m_InternalReaders;
-  str.Tiles = &toReadTiles;
-
-  // Set-up multi-threader
-  this->GetMultiThreader()->SetSingleMethod(this->ThreaderCallback, &str);
-  
-  // multithread the execution
-  this->GetMultiThreader()->SingleMethodExecute();
+  if(!toReadTiles.empty())
+    {
+    // Set up the multithreaded processing
+    ThreadStruct str;
+    str.Readers = m_InternalReaders;
+    str.Tiles = &toReadTiles;
+    
+    // Set-up multi-threader
+    this->GetMultiThreader()->SetSingleMethod(this->ThreaderCallback, &str);
+    
+    // multithread the execution
+    this->GetMultiThreader()->SingleMethodExecute();
+    }
 
   // for (std::vector<JPEG2000TileCache::CachedTileType>::iterator itTile = toReadTiles.begin(); itTile < toReadTiles.end(); ++itTile)
   //   {
