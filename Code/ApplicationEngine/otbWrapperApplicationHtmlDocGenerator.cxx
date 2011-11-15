@@ -143,7 +143,7 @@ ApplicationHtmlDocGenerator::GenerateDoc(const Application::Pointer app, const s
     fprintf(stderr, "Error, can't open file");
     itkGenericExceptionMacro( << "Error, can't open file "<<filename<<".");
     }
-  fprintf(file, doc.c_str());
+  fprintf(file, "%s", doc.c_str());
   fclose(file);
 
 }
