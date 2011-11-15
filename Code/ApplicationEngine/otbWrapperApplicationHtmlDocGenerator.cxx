@@ -136,16 +136,14 @@ ApplicationHtmlDocGenerator::GenerateDoc(const Application::Pointer app, const s
   
   ApplicationHtmlDocGenerator::GenerateDoc( app, doc );
 
-  
-  FILE *file = fopen(filename.c_str(), "w");
-  if (file == NULL)
+    std::ofstream ofs(filename.c_str());
+  if (!ofs.is_open())
     {
     fprintf(stderr, "Error, can't open file");
     itkGenericExceptionMacro( << "Error, can't open file "<<filename<<".");
     }
-  fprintf(file,"%s",doc.c_str());
-  fclose(file);
-
+  ofs << doc;
+  ofs.close();
 }
 
 void ApplicationHtmlDocGenerator::GetDocParameters( const Application::Pointer app, std::string & val)
