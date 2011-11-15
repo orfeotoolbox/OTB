@@ -963,7 +963,7 @@ void CommandLineLauncher::DisplayOutputParameters()
     {
     std::vector<std::string> val = m_Parser->GetAttribut("--testenv", m_Expression);
     if( val.size() == 1 )
-      { 
+      {
       std::ofstream ofs(val[0].c_str());
       if (!ofs.is_open())
         {
@@ -971,7 +971,7 @@ void CommandLineLauncher::DisplayOutputParameters()
         itkExceptionMacro( << "Error, can't open file "<<val[0]<<".");
         }
       ofs << oss.str();
-      ofs.close(); 
+      ofs.close();
       }
     }
 

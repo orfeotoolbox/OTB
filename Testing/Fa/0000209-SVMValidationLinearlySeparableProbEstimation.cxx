@@ -39,7 +39,7 @@ This test show a problem with the SVM library using the probability
 estimation : bug 209.
 If the probability estimation is activated, the classifier isn't
 abble to find the hyperplan even if the sample are linearly
-seperable. 
+seperable.
 cf. test leTvBug209_SVMValidationLinearlySeparableWithoutProbEstimate
 => OK
 and leTvBug209_SVMValidationLinearlySeparableWithProbEstimate => KO

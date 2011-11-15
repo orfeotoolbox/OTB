@@ -96,7 +96,7 @@ public:
 
   /** Return the multithreader used by this class. */
   itk::MultiThreader * GetMultiThreader()
-  {return m_Threader;}
+  {return m_Threader; }
 
 protected:
   /** Constructor.*/

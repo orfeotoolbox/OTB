@@ -228,9 +228,9 @@ void JPEG2000ReaderInternal::Clean()
 opj_image_t * JPEG2000ReaderInternal::DecodeTile(unsigned int tileIndex)
 {
   opj_image_t * image = otbopenjpeg_opj_image_create0();
-  otbopenjpeg_opj_copy_image_header(m_Image,image);
+  otbopenjpeg_opj_copy_image_header(m_Image, image);
 
-  bool success = otbopenjpeg_opj_get_decoded_tile(m_Codec,m_Stream,image,tileIndex);
+  bool success = otbopenjpeg_opj_get_decoded_tile(m_Codec, m_Stream, image, tileIndex);
 
   if(success)
     {
@@ -423,7 +423,7 @@ public:
   opj_image_t * GetTile(unsigned int tileIndex);
 
   /** Register a new tile in cache */
-  void AddTile(unsigned int tileIndex,opj_image_t * tileData);
+  void AddTile(unsigned int tileIndex, opj_image_t * tileData);
 
   /** Clear the cache */
   void Clear();
@@ -445,7 +445,7 @@ JPEG2000TileCache::~JPEG2000TileCache()
 void JPEG2000TileCache::Clear()
 {
   for(TileCacheType::iterator it = m_Cache.begin();
-      it != m_Cache.end();++it)
+      it != m_Cache.end(); ++it)
     {
     CachedTileType erasedTile = *it;
     
@@ -455,7 +455,7 @@ void JPEG2000TileCache::Clear()
       otbopenjpeg_opj_image_destroy(erasedTile.second);
       }
     erasedTile.second = NULL;
-    } 
+    }
   m_Cache.clear();
 }
 
@@ -463,7 +463,7 @@ void JPEG2000TileCache::Clear()
 opj_image_t * JPEG2000TileCache::GetTile(unsigned int tileIndex)
 {
   for(TileCacheType::iterator it = m_Cache.begin();
-      it != m_Cache.end();++it)
+      it != m_Cache.end(); ++it)
     {
     if(it->first == tileIndex)
       {
@@ -477,7 +477,7 @@ opj_image_t * JPEG2000TileCache::GetTile(unsigned int tileIndex)
 void JPEG2000TileCache::AddTile(unsigned int tileIndex, opj_image_t * tileData)
 {
   for(TileCacheType::const_iterator it = m_Cache.begin();
-      it != m_Cache.end();++it)
+      it != m_Cache.end(); ++it)
     {
     if(it->first == tileIndex)
       {
@@ -497,7 +497,7 @@ void JPEG2000TileCache::AddTile(unsigned int tileIndex, opj_image_t * tileData)
 
     m_Cache.pop_front();
     }
-  m_Cache.push_back(CachedTileType(tileIndex,tileData));
+  m_Cache.push_back(CachedTileType(tileIndex, tileData));
 }
 
 JPEG2000ImageIO::JPEG2000ImageIO()
@@ -506,7 +506,7 @@ JPEG2000ImageIO::JPEG2000ImageIO()
   m_Threader = itk::MultiThreader::New();
   m_NumberOfThreads = m_Threader->GetNumberOfThreads();
 
-  for(int i = 0; i<m_NumberOfThreads;++i)
+  for(int i = 0; i<m_NumberOfThreads; ++i)
     {
     m_InternalReaders.push_back(new JPEG2000ReaderInternal);
     }
@@ -592,7 +592,7 @@ void JPEG2000ImageIO::ReadVolume(void*)
 struct ThreadStruct
 {
   std::vector<JPEG2000ReaderInternal *> Readers;
-  std::vector<JPEG2000TileCache::CachedTileType> * Tiles; 
+  std::vector<JPEG2000TileCache::CachedTileType> * Tiles;
 };
 
 // Read image
@@ -647,7 +647,7 @@ void JPEG2000ImageIO::Read(void* buffer)
     {
     opj_image_t * currentImage = m_TileCache->GetTile(*itTile);
 
-    JPEG2000TileCache::CachedTileType currentTile = std::make_pair((*itTile),currentImage);
+    JPEG2000TileCache::CachedTileType currentTile = std::make_pair((*itTile), currentImage);
 
     if(!currentImage)
       {
@@ -676,19 +676,19 @@ void JPEG2000ImageIO::Read(void* buffer)
 
   // Build the list of all tiles
   allNeededTiles = cachedTiles;
-  allNeededTiles.insert(allNeededTiles.end(),toReadTiles.begin(),toReadTiles.end());
+  allNeededTiles.insert(allNeededTiles.end(), toReadTiles.begin(), toReadTiles.end());
 
   
   for (std::vector<JPEG2000TileCache::CachedTileType>::iterator itTile = allNeededTiles.begin(); itTile < allNeededTiles.end(); ++itTile)
     {
-    this->LoadTileData(buffer,itTile->second);
+    this->LoadTileData(buffer, itTile->second);
     }
   
 
   // Now, do cache book-keeping
   for (std::vector<JPEG2000TileCache::CachedTileType>::iterator itTile = toReadTiles.begin(); itTile < toReadTiles.end(); ++itTile)
     {
-    m_TileCache->AddTile(itTile->first,itTile->second);
+    m_TileCache->AddTile(itTile->first, itTile->second);
     }
   chrono.Stop();
   otbMsgDevMacro( << "JPEG2000ImageIO::Read took " << chrono.GetTotal() << " sec");
@@ -722,7 +722,7 @@ void JPEG2000ImageIO::LoadTileData(void * buffer, void * tile)
   unsigned int lStartOffsetPxlDest; // Offset where begin to write the area in the otb buffer in nb of pixel
   unsigned int lStartOffsetPxlSrc; // Offset where begin to write the area in the otb buffer in nb of pixel
 
-  ComputeOffsets(currentTile,this->GetIORegion(),lWidthSrc, lHeightDest, lWidthDest, lStartOffsetPxlDest, lStartOffsetPxlSrc);
+  ComputeOffsets(currentTile, this->GetIORegion(), lWidthSrc, lHeightDest, lWidthDest, lStartOffsetPxlDest, lStartOffsetPxlSrc);
 
   switch (this->GetComponentType())
     {
@@ -822,7 +822,7 @@ ITK_THREAD_RETURN_TYPE JPEG2000ImageIO::ThreaderCallback( void *arg )
   std::vector<JPEG2000ReaderInternal *> readers = str->Readers;
   std::vector<JPEG2000TileCache::CachedTileType> *  tiles = str->Tiles;
 
-  total = std::min((unsigned int)tiles->size(),threadCount);
+  total = std::min((unsigned int)tiles->size(), threadCount);
 
   if(total == 0)
     {
@@ -837,7 +837,7 @@ ITK_THREAD_RETURN_TYPE JPEG2000ImageIO::ThreaderCallback( void *arg )
     tilesPerThread = 1;
     }
 
-  for(unsigned int i = threadId * tilesPerThread; 
+  for(unsigned int i = threadId * tilesPerThread;
         i < tilesPerThread * (threadId+1)
         && i < total;
         ++i)
@@ -859,7 +859,7 @@ ITK_THREAD_RETURN_TYPE JPEG2000ImageIO::ThreaderCallback( void *arg )
 
   if(lastTile < tiles->size())
     {
-    tiles->at(lastTile).second = readers.at(threadId)->DecodeTile(tiles->at(lastTile).first);    
+    tiles->at(lastTile).second = readers.at(threadId)->DecodeTile(tiles->at(lastTile).first);
     
     if(!tiles->at(lastTile).second)
       {

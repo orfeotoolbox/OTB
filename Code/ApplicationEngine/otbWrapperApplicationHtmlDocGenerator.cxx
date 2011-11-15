@@ -143,7 +143,7 @@ ApplicationHtmlDocGenerator::GenerateDoc(const Application::Pointer app, const s
     itkGenericExceptionMacro( << "Error, can't open file "<<filename<<".");
     }
   ofs << doc;
-  ofs.close(); 
+  ofs.close();
 }
 
 void ApplicationHtmlDocGenerator::GetDocParameters( const Application::Pointer app, std::string & val)

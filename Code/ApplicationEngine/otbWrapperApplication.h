@@ -521,7 +521,7 @@ public:
   }
 
   /** Return all parameters which role is Role_Output in a vector of paris that contains the
-  * parameter key and its value. 
+  * parameter key and its value.
   */
   std::vector< std::pair<std::string, std::string> > GetOutputParametersSumUp();
 

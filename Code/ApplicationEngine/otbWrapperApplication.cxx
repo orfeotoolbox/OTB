@@ -999,7 +999,7 @@ std::string Application::GetParameterAsString(std::string paramKey)
   if( type == ParameterType_String || type == ParameterType_Filename
       || type == ParameterType_Directory || type == ParameterType_InputImage
       || type == ParameterType_ComplexInputImage || type == ParameterType_InputVectorData
-      || type == ParameterType_OutputImage || type == ParameterType_OutputVectorData  
+      || type == ParameterType_OutputImage || type == ParameterType_OutputVectorData
       || type == ParameterType_ListView)
     {
       ret = this->GetParameterString( paramKey );
@@ -1109,7 +1109,7 @@ void Application::AddRAMParameter()
     }
 }
 
-std::vector< std::pair<std::string, std::string> > 
+std::vector< std::pair<std::string, std::string> >
 Application::GetOutputParametersSumUp()
 {
   std::vector< std::pair<std::string, std::string> > res;
