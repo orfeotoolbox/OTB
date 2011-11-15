@@ -258,6 +258,14 @@ ADD_TEST(faTvWriteUnsignedLong ${CXX_TEST_PATH}/WriteUnsignedLong
 ${TEMP}/WriteUnsignedLong.tif
 )
 
+
+# ------- FA 0000209 : SVM Validation issue -------------------------
+ADD_TEST(FA-000209-SVMValidationLinearlySeparableWithoutProbEstimate_OK ${CXX_TEST_PATH}/otbSVMValidation
+otbSVMValidation 500 500 0.0025 0.0075 0.0075 0.0025 0. 0.0025 0. 0.0025 0 0)
+
+ADD_TEST(FA-000209-SVMValidationLinearlySeparableWithProbEstimate_KO ${CXX_TEST_PATH}/otbSVMValidation
+otbSVMValidation 500 500 0.0025 0.0075 0.0075 0.0025 0. 0.0025 0. 0.0025 0 1)
+
 # -------       Vectorization issue   -----------------------------------
 # FIXME Desactivated until http://bugs.orfeo-toolbox.org/view.php?id=94
 # has somebody working on it
@@ -301,5 +309,8 @@ TARGET_LINK_LIBRARIES(SensorModelBorder OTBIO OTBCommon OTBBasicFilters OTBProje
 
 ADD_EXECUTABLE(WriteUnsignedLong WriteUnsignedLong.cxx)
 TARGET_LINK_LIBRARIES(WriteUnsignedLong OTBIO OTBCommon)
+
+ADD_EXECUTABLE(otbSVMValidation otbSVMValidation.cxx)
+TARGET_LINK_LIBRARIES(otbSVMValidation OTBIO OTBLearning)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

@@ -549,13 +549,6 @@ SET_TESTS_PROPERTIES(leTvConfusionMatrixCalculatorWrongSize PROPERTIES WILL_FAIL
 ADD_TEST(leTvConfusionMatrixCalculatorUpdate ${LEARNING_TESTS4}
 otbConfusionMatrixCalculatorUpdate 1000 4)
 
-# ------- SVM Validation -------------------------
-ADD_TEST(leTvSVMValidationLinearlySeparableWithoutProbEstimate ${LEARNING_TESTS4}
-otbSVMValidation 500 500 0.0025 0.0075 0.0075 0.0025 0. 0.0025 0. 0.0025 0 0)
-
-ADD_TEST(leTvSVMValidationLinearlySeparableWithProbEstimate ${LEARNING_TESTS4}
-otbSVMValidation 500 500 0.0025 0.0075 0.0075 0.0025 0. 0.0025 0. 0.0025 0 1)
-
 # ShiftScaleSampleListFilter tests ----------
 ADD_TEST(leTuShiftScaleSampleListFilterNew ${LEARNING_TESTS4}
 otbShiftScaleSampleListFilterNew)
@@ -715,7 +708,6 @@ otbExhaustiveExponentialOptimizerNew.cxx
 otbExhaustiveExponentialOptimizerTest.cxx
 otbListSampleGeneratorTest.cxx
 otbConfusionMatrixCalculatorTest.cxx
-otbSVMValidation.cxx
 otbShiftScaleSampleListFilter.cxx
 otbGaussianAdditiveNoiseSampleListFilter.cxx
 otbConcatenateSampleListFilter.cxx

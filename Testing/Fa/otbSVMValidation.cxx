@@ -43,27 +43,28 @@ seperable.
 cf. test leTvBug209_SVMValidationLinearlySeparableWithoutProbEstimate
 => OK
 and leTvBug209_SVMValidationLinearlySeparableWithProbEstimate => KO
+http://bugs.orfeo-toolbox.org/view.php?id=209
 */
 
-int otbSVMValidation(int argc, char* argv[])
+int main(int argc, char* argv[])
 {
- if(argc != 13)
+  if(argc != 14)
  {
    std::cerr<<"Usage: "<<argv[0]<<" nbTrainingSamples nbValidationSamples positiveCenterX positiveCenterY negativeCenterX negativeCenterY positiveRadiusMin positiveRadiusMax negativeRadiusMin negativeRadiusMax kernel probEstimate"<<std::endl;
    return EXIT_FAILURE;
  }
- unsigned int nbTrainingSamples = atoi(argv[1]);
- unsigned int nbValidationSamples = atoi(argv[2]);
- double cpx = atof(argv[3]);
- double cpy = atof(argv[4]);
- double cnx = atof(argv[5]);
- double cny = atof(argv[6]);
- double prmin = atof(argv[7]);
- double prmax = atof(argv[8]);
- double nrmin = atof(argv[9]);
- double nrmax = atof(argv[10]);
- unsigned int kernel = atoi(argv[11]);
- bool   probEstimate = atoi(argv[12]);
+ unsigned int nbTrainingSamples = atoi(argv[2]);
+ unsigned int nbValidationSamples = atoi(argv[3]);
+ double cpx = atof(argv[4]);
+ double cpy = atof(argv[5]);
+ double cnx = atof(argv[6]);
+ double cny = atof(argv[7]);
+ double prmin = atof(argv[8]);
+ double prmax = atof(argv[9]);
+ double nrmin = atof(argv[10]);
+ double nrmax = atof(argv[11]);
+ unsigned int kernel = atoi(argv[12]);
+ bool   probEstimate = atoi(argv[13]);
 
   typedef double                                          InputPixelType;
   typedef unsigned short                                  LabelType;
