@@ -629,7 +629,6 @@ void JPEG2000ImageIO::Read(void* buffer)
       }
     itkExceptionMacro(<< " IORegion is not correct in terme of tile!");
     }
-
   // Get nb. of lines and columns of the region to read
   int lNbLines     = this->GetIORegion().GetSize()[1];
   int lNbColumns   = this->GetIORegion().GetSize()[0];
@@ -645,24 +644,50 @@ void JPEG2000ImageIO::Read(void* buffer)
   otbMsgDevMacro(<< "Component type: " << this->GetComponentTypeAsString(this->GetComponentType()));
 
 
-  // Decode tile need
-  for (std::vector<unsigned int>::iterator itTile = tileList.begin(); itTile < tileList.end(); itTile++)
-    {
-    opj_image_t * currentTile = m_TileCache->GetTile(*itTile);
-    
-    if(!currentTile)
-      {
-      currentTile = m_InternalReaders.front()->DecodeTile(*itTile);
-      
-      if(!currentTile)
-        {
-        this->m_InternalReaders.front()->Clean();
-        itkExceptionMacro(<< " otbopenjpeg failed to decode the desired tile "<< *itTile << "!");
-        }
-      m_TileCache->AddTile((*itTile),currentTile);
-      }
+  // Here we sort between tiles from cache and tiles to read
+  std::vector<JPEG2000TileCache::CachedTileType> cachedTiles;
+  std::vector<JPEG2000TileCache::CachedTileType> toReadTiles;
+  std::vector<JPEG2000TileCache::CachedTileType> allNeededTiles;
 
-    otbMsgDevMacro(<< " Tile " << *itTile << " is decoded.");
+  for (std::vector<unsigned int>::iterator itTile = tileList.begin(); itTile < tileList.end(); ++itTile)
+    {
+    opj_image_t * currentImage = m_TileCache->GetTile(*itTile);
+
+    JPEG2000TileCache::CachedTileType currentTile = std::make_pair((*itTile),currentImage);
+
+    if(!currentImage)
+      {
+      toReadTiles.push_back(currentTile);
+      }
+    else
+      {
+      cachedTiles.push_back(currentTile);
+      }
+    }
+
+  // Decode all tiles not in cache
+  for (std::vector<JPEG2000TileCache::CachedTileType>::iterator itTile = toReadTiles.begin(); itTile < toReadTiles.end(); ++itTile)
+    {
+    // Call the reader
+    itTile->second = m_InternalReaders.front()->DecodeTile(itTile->first);
+    
+    // Check if tile is valid
+    if(!itTile->second)
+      {
+      this->m_InternalReaders.front()->Clean();
+      itkExceptionMacro(<< " otbopenjpeg failed to decode the desired tile "<< itTile->first << "!");
+      }
+    otbMsgDevMacro(<< " Tile " << itTile->first << " is decoded.");
+    }
+
+  // Build the list of all tiles
+  allNeededTiles = cachedTiles;
+  allNeededTiles.insert(allNeededTiles.end(),toReadTiles.begin(),toReadTiles.end());
+
+  
+  for (std::vector<JPEG2000TileCache::CachedTileType>::iterator itTile = allNeededTiles.begin(); itTile < allNeededTiles.end(); ++itTile)
+    {
+    opj_image_t * currentTile = itTile->second;
 
     unsigned int lWidthSrc; // Width of the input pixel in nb of pixel
     unsigned int lHeightDest; // Height of the area where write in nb of pixel
@@ -753,9 +778,14 @@ void JPEG2000ImageIO::Read(void* buffer)
         itkGenericExceptionMacro(<< "This data type is not handled");
         break;
       }
-
     }
+  
 
+  // Now, do cache book-keeping
+  for (std::vector<JPEG2000TileCache::CachedTileType>::iterator itTile = toReadTiles.begin(); itTile < toReadTiles.end(); ++itTile)
+    {
+    m_TileCache->AddTile(itTile->first,itTile->second);
+    }
   chrono.Stop();
   otbMsgDevMacro( << "JPEG2000ImageIO::Read took " << chrono.GetTotal() << " sec");
 
