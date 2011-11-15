@@ -835,6 +835,12 @@ ITK_THREAD_RETURN_TYPE JPEG2000ImageIO::ThreaderCallback( void *arg )
 
   total = std::min((unsigned int)tiles->size(),threadCount);
 
+  if(total == 0)
+    {
+    return ITK_THREAD_RETURN_VALUE;
+    }
+
+
   unsigned int tilesPerThread = tiles->size()/total;
 
   if(tilesPerThread == 0)
