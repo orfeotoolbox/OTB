@@ -91,7 +91,7 @@ int main(int argc, char* argv[])
   TrainingListSampleType::Pointer validationLabels = TrainingListSampleType::New();
 
   // Generate training set
-  std::ofstream training("training.csv");
+  //std::ofstream training("training.csv");
   for(unsigned int i =0; i < nbTrainingSamples; ++i)
   {
     // Generate a positive sample
@@ -105,7 +105,7 @@ int main(int argc, char* argv[])
     trainingSamples->PushBack(pSample);
     trainingLabels->PushBack(label);
 
-    training<<"1 1:"<<pSample[0]<<" 2:"<<pSample[1]<<std::endl;
+    //training<<"1 1:"<<pSample[0]<<" 2:"<<pSample[1]<<std::endl;
 
     // Generate a negative sample
     angle = random->GetVariateWithOpenUpperRange( otb::CONST_2PI );
@@ -117,10 +117,10 @@ int main(int argc, char* argv[])
     trainingSamples->PushBack(nSample);
     trainingLabels->PushBack(label);
 
-    training<<"2 1:"<<nSample[0]<<" 2:"<<nSample[1]<<std::endl;
+    //training<<"2 1:"<<nSample[0]<<" 2:"<<nSample[1]<<std::endl;
 
   }
-  training.close();
+  //training.close();
 
   // Generate validation set
 
@@ -137,7 +137,7 @@ int main(int argc, char* argv[])
       label[0]=1;
       validationSamples->PushBack(pSample);
       validationLabels->PushBack(label);
-    validation<<"1 1:"<<pSample[0]<<" 2:"<<pSample[1]<<std::endl;
+      //validation<<"1 1:"<<pSample[0]<<" 2:"<<pSample[1]<<std::endl;
 
       // Generate a negative sample
       angle = random->GetVariateWithOpenUpperRange( otb::CONST_2PI );
@@ -148,10 +148,10 @@ int main(int argc, char* argv[])
       label[0]=2;
       validationSamples->PushBack(nSample);
       validationLabels->PushBack(label);
-    validation<<"2 1:"<<nSample[0]<<" 2:"<<nSample[1]<<std::endl;
+      //validation<<"2 1:"<<nSample[0]<<" 2:"<<nSample[1]<<std::endl;
 
     }
-  validation.close();
+  //validation.close();
 
   // Learn
   EstimatorType::Pointer estimator = EstimatorType::New();
@@ -163,7 +163,7 @@ int main(int argc, char* argv[])
 //  estimator->SetParametersOptimization(true);
   estimator->Update();
 
-  estimator->SaveModel("model.svm");
+  //estimator->SaveModel("model.svm");
 
   // Classify
   ClassifierType::Pointer validationClassifier = ClassifierType::New();
