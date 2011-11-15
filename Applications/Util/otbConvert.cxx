@@ -198,7 +198,7 @@ private:
         
       
       // TODO : how to deal with that?
-      shrinkFilter->GetStreamer()->SetAutomaticTiledStreaming(256);
+      shrinkFilter->GetStreamer()->SetAutomaticTiledStreaming(GetParameterInt("ram"));
       
       otbAppLogDEBUG( << "Evaluating input Min/Max..." );
       itk::ImageRegionConstIterator<FloatVectorImageType> it(shrinkFilter->GetOutput(), shrinkFilter->GetOutput()->GetLargestPossibleRegion());
