@@ -34,25 +34,37 @@
 
 #include <fstream>
 
-int otbSVMValidation(int argc, char* argv[])
+/*
+This test show a problem with the SVM library using the probability
+estimation : bug 209.
+If the probability estimation is activated, the classifier isn't
+abble to find the hyperplan even if the sample are linearly
+seperable. 
+cf. test leTvBug209_SVMValidationLinearlySeparableWithoutProbEstimate
+=> OK
+and leTvBug209_SVMValidationLinearlySeparableWithProbEstimate => KO
+http://bugs.orfeo-toolbox.org/view.php?id=209
+*/
+
+int main(int argc, char* argv[])
 {
- if(argc != 13)
+  if(argc != 14)
  {
    std::cerr<<"Usage: "<<argv[0]<<" nbTrainingSamples nbValidationSamples positiveCenterX positiveCenterY negativeCenterX negativeCenterY positiveRadiusMin positiveRadiusMax negativeRadiusMin negativeRadiusMax kernel probEstimate"<<std::endl;
    return EXIT_FAILURE;
  }
- unsigned int nbTrainingSamples = atoi(argv[1]);
- unsigned int nbValidationSamples = atoi(argv[2]);
- double cpx = atof(argv[3]);
- double cpy = atof(argv[4]);
- double cnx = atof(argv[5]);
- double cny = atof(argv[6]);
- double prmin = atof(argv[7]);
- double prmax = atof(argv[8]);
- double nrmin = atof(argv[9]);
- double nrmax = atof(argv[10]);
- unsigned int kernel = atoi(argv[11]);
- bool   probEstimate = atoi(argv[12]);
+ unsigned int nbTrainingSamples = atoi(argv[2]);
+ unsigned int nbValidationSamples = atoi(argv[3]);
+ double cpx = atof(argv[4]);
+ double cpy = atof(argv[5]);
+ double cnx = atof(argv[6]);
+ double cny = atof(argv[7]);
+ double prmin = atof(argv[8]);
+ double prmax = atof(argv[9]);
+ double nrmin = atof(argv[10]);
+ double nrmax = atof(argv[11]);
+ unsigned int kernel = atoi(argv[12]);
+ bool   probEstimate = atoi(argv[13]);
 
   typedef double                                          InputPixelType;
   typedef unsigned short                                  LabelType;
@@ -79,7 +91,7 @@ int otbSVMValidation(int argc, char* argv[])
   TrainingListSampleType::Pointer validationLabels = TrainingListSampleType::New();
 
   // Generate training set
-//  std::ofstream training("training.csv");
+  //std::ofstream training("training.csv");
   for(unsigned int i =0; i < nbTrainingSamples; ++i)
   {
     // Generate a positive sample
@@ -93,7 +105,7 @@ int otbSVMValidation(int argc, char* argv[])
     trainingSamples->PushBack(pSample);
     trainingLabels->PushBack(label);
 
-//    training<<"1 1:"<<pSample[0]<<" 2:"<<pSample[1]<<std::endl;
+    //training<<"1 1:"<<pSample[0]<<" 2:"<<pSample[1]<<std::endl;
 
     // Generate a negative sample
     angle = random->GetVariateWithOpenUpperRange( otb::CONST_2PI );
@@ -105,14 +117,14 @@ int otbSVMValidation(int argc, char* argv[])
     trainingSamples->PushBack(nSample);
     trainingLabels->PushBack(label);
 
-//    training<<"2 1:"<<nSample[0]<<" 2:"<<nSample[1]<<std::endl;
+    //training<<"2 1:"<<nSample[0]<<" 2:"<<nSample[1]<<std::endl;
 
   }
-//  training.close();
+  //training.close();
 
   // Generate validation set
 
-//  std::ofstream validation("validation.csv");
+  std::ofstream validation("validation.csv");
   for(unsigned int i =0; i < nbValidationSamples; ++i)
     {
       // Generate a positive sample
@@ -125,7 +137,7 @@ int otbSVMValidation(int argc, char* argv[])
       label[0]=1;
       validationSamples->PushBack(pSample);
       validationLabels->PushBack(label);
-//    validation<<"1 1:"<<pSample[0]<<" 2:"<<pSample[1]<<std::endl;
+      //validation<<"1 1:"<<pSample[0]<<" 2:"<<pSample[1]<<std::endl;
 
       // Generate a negative sample
       angle = random->GetVariateWithOpenUpperRange( otb::CONST_2PI );
@@ -136,10 +148,10 @@ int otbSVMValidation(int argc, char* argv[])
       label[0]=2;
       validationSamples->PushBack(nSample);
       validationLabels->PushBack(label);
-//    validation<<"2 1:"<<nSample[0]<<" 2:"<<nSample[1]<<std::endl;
+      //validation<<"2 1:"<<nSample[0]<<" 2:"<<nSample[1]<<std::endl;
 
     }
-//  validation.close();
+  //validation.close();
 
   // Learn
   EstimatorType::Pointer estimator = EstimatorType::New();
@@ -151,7 +163,7 @@ int otbSVMValidation(int argc, char* argv[])
 //  estimator->SetParametersOptimization(true);
   estimator->Update();
 
-//  estimator->SaveModel("model.svm");
+  //estimator->SaveModel("model.svm");
 
   // Classify
   ClassifierType::Pointer validationClassifier = ClassifierType::New();
