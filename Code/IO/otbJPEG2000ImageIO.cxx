@@ -118,6 +118,7 @@ private:
   opj_image_t* m_Image;
   opj_stream_t* m_Stream;
   opj_codestream_info_v2* m_CstrInfo;
+  opj_event_mgr_t m_EventManager;
 
   int Initialize();
 };
@@ -256,6 +257,12 @@ JPEG2000ReaderInternal::JPEG2000ReaderInternal()
   this->m_Precision = NULL;
   this->m_Signed = NULL;
 
+  // Set default event mgr
+  m_EventManager.info_handler = info_callback;
+  m_EventManager.warning_handler = warning_callback;
+  m_EventManager.error_handler = error_callback;
+
+
   this->Clean();
 }
 
@@ -279,18 +286,12 @@ int JPEG2000ReaderInternal::Initialize()
       return 0;
       }
 
-    // Set default event mgr  FIXME
-    opj_event_mgr_t event_mgr;
-    event_mgr.info_handler = info_callback;
-    event_mgr.warning_handler = warning_callback;
-    event_mgr.error_handler = error_callback;
-
     // Setting default parameters
     opj_dparameters_t parameters;
     otbopenjpeg_opj_set_default_decoder_parameters(&parameters);
 
     // Setup the decoder decoding parameters using user parameters
-    if (!otbopenjpeg_opj_setup_decoder_v2(this->m_Codec, &parameters, &event_mgr))
+    if (!otbopenjpeg_opj_setup_decoder_v2(this->m_Codec, &parameters, &m_EventManager))
       {
       this->Clean();
       return 0;
@@ -587,6 +588,13 @@ void JPEG2000ImageIO::ReadVolume(void*)
 {
 }
 
+/** Internal structure used for passing image data into the threading library */
+struct ThreadStruct
+{
+  std::vector<JPEG2000ReaderInternal *> Readers;
+  std::vector<JPEG2000TileCache::CachedTileType> * Tiles; 
+};
+
 // Read image
 void JPEG2000ImageIO::Read(void* buffer)
 {
@@ -665,20 +673,32 @@ void JPEG2000ImageIO::Read(void* buffer)
       }
     }
 
-  // Decode all tiles not in cache
-  for (std::vector<JPEG2000TileCache::CachedTileType>::iterator itTile = toReadTiles.begin(); itTile < toReadTiles.end(); ++itTile)
-    {
-    // Call the reader
-    itTile->second = m_InternalReaders.front()->DecodeTile(itTile->first);
+  // Decode all tiles not in cache in parallel
+  
+  // Set up the multithreaded processing
+  ThreadStruct str;
+  str.Readers = m_InternalReaders;
+  str.Tiles = &toReadTiles;
+
+  // Set-up multi-threader
+  this->GetMultiThreader()->SetSingleMethod(this->ThreaderCallback, &str);
+  
+  // multithread the execution
+  this->GetMultiThreader()->SingleMethodExecute();
+
+  // for (std::vector<JPEG2000TileCache::CachedTileType>::iterator itTile = toReadTiles.begin(); itTile < toReadTiles.end(); ++itTile)
+  //   {
+  //   // Call the reader
+  //   itTile->second = m_InternalReaders.front()->DecodeTile(itTile->first);
     
-    // Check if tile is valid
-    if(!itTile->second)
-      {
-      this->m_InternalReaders.front()->Clean();
-      itkExceptionMacro(<< " otbopenjpeg failed to decode the desired tile "<< itTile->first << "!");
-      }
-    otbMsgDevMacro(<< " Tile " << itTile->first << " is decoded.");
-    }
+  //   // Check if tile is valid
+  //   if(!itTile->second)
+  //     {
+  //     this->m_InternalReaders.front()->Clean();
+  //     itkExceptionMacro(<< " otbopenjpeg failed to decode the desired tile "<< itTile->first << "!");
+  //     }
+  //   otbMsgDevMacro(<< " Tile " << itTile->first << " is decoded.");
+  //   }
 
   // Build the list of all tiles
   allNeededTiles = cachedTiles;
@@ -791,12 +811,56 @@ void JPEG2000ImageIO::Read(void* buffer)
 
 
   for(ReaderVectorType::iterator it = m_InternalReaders.begin();
-      it != m_InternalReaders.end();
+       it != m_InternalReaders.end();
       ++it)
     {
     (*it)->Clean();
     }
 }
+
+ITK_THREAD_RETURN_TYPE JPEG2000ImageIO::ThreaderCallback( void *arg )
+{
+  ThreadStruct *str;
+  unsigned int total, threadCount;
+  int threadId;
+
+  threadId = ((itk::MultiThreader::ThreadInfoStruct *)(arg))->ThreadID;
+  threadCount = ((itk::MultiThreader::ThreadInfoStruct *)(arg))->NumberOfThreads;
+  
+  str = (ThreadStruct *)(((itk::MultiThreader::ThreadInfoStruct *)(arg))->UserData);
+
+  // Retrieve data
+  std::vector<JPEG2000ReaderInternal *> readers = str->Readers;
+  std::vector<JPEG2000TileCache::CachedTileType> *  tiles = str->Tiles;
+
+  total = std::min((unsigned int)tiles->size(),threadCount);
+
+  unsigned int tilesPerThread = tiles->size()/total;
+
+  if(tilesPerThread == 0)
+    {
+    tilesPerThread = 1;
+    }
+
+  for(unsigned int i = threadId * tilesPerThread; 
+        i < tilesPerThread * (threadId+1)
+        && i < total;
+        ++i)
+    {
+    tiles->at(i).second = readers.at(threadId)->DecodeTile(tiles->at(i).first);
+
+    // Check if tile is valid
+    if(!tiles->at(i).second)
+      {
+      readers.at(threadId)->Clean();
+      itkGenericExceptionMacro(" otbopenjpeg failed to decode the desired tile "<<tiles->at(i).first << "!");
+      }
+    otbMsgDevMacro(<< " Tile " << tiles->at(i).first << " decoded by thread "<<threadId);
+    }
+
+  return ITK_THREAD_RETURN_VALUE;
+}
+
 
 void JPEG2000ImageIO::ReadImageInformation()
 {
