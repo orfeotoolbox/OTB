@@ -141,9 +141,11 @@ bool CommandLineLauncher::Execute()
     return false;
     }
 
-  int res = m_Application->Execute();
-  if (res == 0)
+  if( m_Application->Execute() == 0 )
+    {
+    this->DisplayOutputParameters();
     return true;
+    }
   else
     return false;
 }
@@ -155,9 +157,11 @@ bool CommandLineLauncher::ExecuteAndWriteOutput()
     return false;
     }
 
-  int res = m_Application->ExecuteAndWriteOutput();
-  if (res == 0)
+  if( m_Application->ExecuteAndWriteOutput() == 0 )
+    {
+    this->DisplayOutputParameters();
     return true;
+    }
   else
     return false;
 }
@@ -170,8 +174,6 @@ bool CommandLineLauncher::BeforeExecute()
     return false;
     }
 
-  std::cout << "CommandLineLauncher::BeforeExecuter..." << std::endl;
-  
   // Check if there's keys in the expression if the application takes
   // at least 1 mandatory parameter
   const std::vector<std::string> appKeyList = m_Application->GetParametersKeys(true);
@@ -938,6 +940,42 @@ bool CommandLineLauncher::CheckKeyValidity()
     }
 
   return res;
+}
+
+void CommandLineLauncher::DisplayOutputParameters()
+{
+  std::vector< std::pair<std::string, std::string> > paramList;
+  paramList = m_Application->GetOutputParametersSumUp();
+  if( paramList.size() == 0 )
+    return;
+
+  itk::OStringStream oss;
+  for( unsigned int i=0; i<paramList.size(); i++)
+    {
+    oss << paramList[i].first;
+    oss << ": ";
+    oss << paramList[i].second;
+    oss << std::endl;
+    }
+
+  
+  if ( m_Parser->IsAttributExists("--testenv", m_Expression) )
+    {
+    std::vector<std::string> val = m_Parser->GetAttribut("--testenv", m_Expression);
+    if( val.size() == 1 )
+      { 
+      std::ofstream ofs(val[0].c_str());
+      if (!ofs.is_open())
+        {
+        fprintf(stderr, "Error, can't open file");
+        itkExceptionMacro( << "Error, can't open file "<<val[0]<<".");
+        }
+      ofs << oss.str();
+      ofs.close(); 
+      }
+    }
+
+  std::cout << oss.str() << std::endl;
 }
 
 }

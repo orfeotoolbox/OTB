@@ -153,6 +153,9 @@ protected:
   /** Check if each key is valid for the application. */
   bool CheckKeyValidity();
 
+  /** Display the output parameter (Role == RoleOutput) */
+  void DisplayOutputParameters();
+
   /** Load the watchers for internal progress and writeing progress report. */
   void LinkWatchers(itk::Object * caller, const itk::EventObject & event);
 
