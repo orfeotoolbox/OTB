@@ -44,7 +44,14 @@ ListViewParameter::AddChoice( std::string choicekey, std::string choiceName )
 std::string
 ListViewParameter::GetChoiceKey( int i )
 {
-  return m_ChoiceList[i].m_Key;
+  if (m_ChoiceList.empty())
+  {
+    return "";
+  }
+  else
+  {
+    return m_ChoiceList[i].m_Key;
+  }
 }
 
 
@@ -66,7 +73,14 @@ ListViewParameter::GetChoiceKeys( )
 std::string
 ListViewParameter::GetChoiceName( int i )
 {
-  return m_ChoiceList[i].m_Name;
+  if (m_ChoiceList.empty())
+  {
+    return "";
+  }
+  else
+  {
+    return m_ChoiceList[i].m_Name;
+  }
 }
 
 
