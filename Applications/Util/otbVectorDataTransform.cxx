@@ -55,6 +55,15 @@ private:
   {
     SetName("VectorDataTransform");
     SetDescription("Apply a transform to each vertex of the input VectorData");
+    
+    SetDocName("Vector Data Transformation Application");
+    SetDocLongDescription("This application performs a transformation to an input vector data transforming each vertex that composed the vector data. The applied transformation manages translation, rotation and scale, and be be centered or not.");
+    SetDocLimitations("None");
+    SetDocAuthors("OTB-Team");
+    SetDocSeeAlso(" ");
+    SetDocCLExample("otbApplicationLauncherCommandLine VectorDataTransform ${OTB-BIN}/bin"
+      " --in ${OTB-DATA}/ToulouseRoad-examples.shp --out transformVectorData.tif --transform.ro 15");
+
     AddDocTag(Tags::Vector);
   }
 
