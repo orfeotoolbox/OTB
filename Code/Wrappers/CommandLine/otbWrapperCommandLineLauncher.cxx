@@ -485,7 +485,7 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
     bool mustBeSet = false;
     const bool hasValue = m_Application->HasValue(paramKey);
 
-    if( param->GetMandatory() == true && param->GetActive())
+    if( param->GetMandatory() == true )
       {
       if( param->GetRoot()->GetActive() || param->IsRoot() )
         {
