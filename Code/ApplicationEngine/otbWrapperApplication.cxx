@@ -1014,6 +1014,7 @@ std::string Application::GetParameterAsString(std::string paramKey)
   else if( type == ParameterType_Float )
     {
       std::ostringstream oss;
+      oss << std::setprecision(10);
       oss << this->GetParameterFloat( paramKey );
       ret = oss.str();
     }
@@ -1127,79 +1128,7 @@ Application::GetOutputParametersSumUp()
         {
         std::pair<std::string, std::string> keyVal;
         keyVal.first = (*it);
-        itk::OStringStream oss;
-        oss << std::setprecision(10);
-        if (dynamic_cast<ChoiceParameter*>(param))
-          {
-          ChoiceParameter* paramDown = dynamic_cast<ChoiceParameter*>(param);
-          oss << paramDown->GetChoiceName( paramDown->GetValue() );
-          }
-        else if (dynamic_cast<ListViewParameter*>(param))
-          {
-          ListViewParameter* paramDown = dynamic_cast<ListViewParameter*>(param);
-          oss << paramDown->GetChoiceName( paramDown->GetValue() );
-          }
-        else if (dynamic_cast<StringParameter*>(param))
-          {
-          StringParameter* paramDown = dynamic_cast<StringParameter*>(param);
-          oss << paramDown->GetValue();
-          }
-        else if (dynamic_cast<FilenameParameter*>(param))
-          {
-          FilenameParameter* paramDown = dynamic_cast<FilenameParameter*>(param);
-          oss << paramDown->GetValue();
-          }
-        else if (dynamic_cast<DirectoryParameter*>(param))
-          {
-          DirectoryParameter* paramDown = dynamic_cast<DirectoryParameter*>(param);
-          oss << paramDown->GetValue();
-          }
-        else if (dynamic_cast<InputImageParameter*>(param))
-          {
-          InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param);
-          oss << paramDown->GetFileName();
-          }
-        else if (dynamic_cast<ComplexInputImageParameter*>(param))
-          {
-          ComplexInputImageParameter* paramDown = dynamic_cast<ComplexInputImageParameter*>(param);
-          oss << paramDown->GetFileName();
-          }
-        else if (dynamic_cast<InputVectorDataParameter*>(param))
-          {
-          InputVectorDataParameter* paramDown = dynamic_cast<InputVectorDataParameter*>(param);
-          oss << paramDown->GetFileName();
-          }
-        else if (dynamic_cast<OutputImageParameter*>(param))
-          {
-          OutputImageParameter* paramDown = dynamic_cast<OutputImageParameter*>(param);
-          oss << paramDown->GetFileName();
-          }
-        else if (dynamic_cast<OutputVectorDataParameter*>(param))
-          {
-          OutputVectorDataParameter* paramDown = dynamic_cast<OutputVectorDataParameter*>(param);
-          oss << paramDown->GetFileName();
-          }
-        if (dynamic_cast<IntParameter*>(param))
-          {
-          IntParameter* paramInt = dynamic_cast<IntParameter*>(param);
-          oss << paramInt->GetValue();
-          }
-        else if (dynamic_cast<FloatParameter*>(param))
-          {
-          FloatParameter* paramFloat = dynamic_cast<FloatParameter*>(param);
-          oss << paramFloat->GetValue();
-          }
-        else if (dynamic_cast<RadiusParameter*>(param))
-          {
-          RadiusParameter* paramRadius = dynamic_cast<RadiusParameter*>(param);
-          oss << paramRadius->GetValue();
-          }
-        else
-          {
-          itkExceptionMacro(<<param << "parameter type unknown");
-          }
-        
-        keyVal.second = oss.str();
+        keyVal.second = GetParameterAsString(*it);
         res.push_back( keyVal );
         }
       }
