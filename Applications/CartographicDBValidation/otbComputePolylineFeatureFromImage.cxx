@@ -15,13 +15,13 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbComputePolylineFeatureFromImage.h"
-
 #include <iostream>
-#include "otbCommandLineArgumentParser.h"
 
 #include "otbVectorImage.h"
-#include "otbImageFileReader.h"
+
+#include "otbWrapperApplication.h"
+#include "otbWrapperApplicationFactory.h"
+
 
 #include "otbVectorData.h"
 #include "otbVectorDataFileReader.h"
@@ -38,200 +38,261 @@
 
 namespace otb
 {
-
-int ComputePolylineFeatureFromImage::Describe(ApplicationDescriptor* descriptor)
+namespace Wrapper
 {
-  descriptor->SetName("ComputePolylineFeatureFromImage");
-  descriptor->SetDescription("Compute a polyline feature descriptors from an input image which are part of the polyline pixels that verify the FeatureExpression");
-  descriptor->AddOption("InputImage", "An image from which to compute description",
-                        "img",   1, true, ApplicationDescriptor::InputImage);
-  descriptor->AddOption("InputVectorData", "Vector data containing the polylines onto which the feature will be computed",
-                        "vdin",  1, true, ApplicationDescriptor::FileName);
-  descriptor->AddOption("FeatureExpression", "The feature formula (b1 > 0.3)",
-                        "expr",  1, true, ApplicationDescriptor::String);
-  descriptor->AddOption("FieldName", "The feature name (NONDVI, ROADSA...)",
-                        "field", 1, true, ApplicationDescriptor::String);
-  descriptor->AddOption("OutputVectorData", "The output vector data containing the feature",
-                        "out",   1, true, ApplicationDescriptor::FileName);
 
-  descriptor->AddOption("DEMDirectory", "DEM directory",
-                        "dem", 1, false, ApplicationDescriptor::DirectoryName);
-
-  return EXIT_SUCCESS;
-}
-
-int ComputePolylineFeatureFromImage::Execute(otb::ApplicationOptionsResult* parseResult)
+class ComputePolylineFeatureFromImage: public Application
 {
+public:
+  /** Standard class typedefs. */
+  typedef ComputePolylineFeatureFromImage Self;
+  typedef Application Superclass;
+  typedef itk::SmartPointer<Self> Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
   // Images
-  typedef float                                           PixelType;
-  typedef VectorImage<PixelType, 2>                       ImageType;
-  typedef otb::ImageFileReader<ImageType>                 ReaderType;
+  typedef FloatVectorImageType::PixelType PixelType;
+  typedef FloatVectorImageType ImageType;
 
   // VectorData
-  typedef VectorData<>                                    VectorDataType;
-  typedef VectorDataType::DataNodeType                    DataNodeType;
-  typedef DataNodeType::ValuePrecisionType                PrecisionType;
-  typedef DataNodeType::PrecisionType                     CoordRepType;
-  typedef itk::PreOrderTreeIterator<VectorDataType::DataTreeType>
-                                                          TreeIteratorType;
-  typedef VectorDataFileReader<VectorDataType>            VectorDataReaderType;
-  typedef VectorDataFileWriter<VectorDataType>            VectorDataWriterType;
-
-  typedef VectorDataIntoImageProjectionFilter
-    <VectorDataType, ImageType>                           VectorDataIntoImageProjType;
-  typedef VectorDataProjectionFilter
-    <VectorDataType, VectorDataType>                      VectorDataProjectionFilterType;
+  typedef VectorData<> VectorDataType;
+  typedef VectorDataType::DataNodeType DataNodeType;
+  typedef DataNodeType::ValuePrecisionType PrecisionType;
+  typedef DataNodeType::PrecisionType CoordRepType;
+  typedef itk::PreOrderTreeIterator<VectorDataType::DataTreeType> TreeIteratorType;
+  typedef VectorDataIntoImageProjectionFilter<VectorDataType, ImageType> VectorDataIntoImageProjType;
+  typedef VectorDataProjectionFilter<VectorDataType, VectorDataType> VectorDataProjectionFilterType;
 
   typedef ParserConditionDataNodeFeatureFunction<ImageType, CoordRepType, PrecisionType>
-                                                          ParserConditionFeatureFunctionType;
+      ParserConditionFeatureFunctionType;
 
-  // Vector Data into Image projection
-  //// Read the Image
-  ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName(parseResult->GetParameterString("InputImage"));
-  reader->UpdateOutputInformation();
-  reader->Update();
-  ImageType::Pointer inputImage = reader->GetOutput();
-  //// Read the Vectordata
-  VectorDataReaderType::Pointer vdreader = VectorDataReaderType::New();
-  vdreader->SetFileName(parseResult->GetParameterString("InputVectorData"));
-  vdreader->Update();
-  //// Projection
-  VectorDataIntoImageProjType::Pointer vprojIm = VectorDataIntoImageProjType::New();
-  vprojIm->SetInputVectorData(vdreader->GetOutput());
-  vprojIm->SetInputImage(inputImage);
-  if( parseResult->IsOptionPresent("DEMDirectory") )
-    {
-      vprojIm->SetDEMDirectory(parseResult->GetParameterString("DEMDirectory"));
-    }
-  vprojIm->SetUseOutputSpacingAndOriginFromImage(true); // we want index as input;
-  vprojIm->Update();
+  /** Standard macro */
+  itkNewMacro(Self)
+  ;
 
-  // Add description
-  ParserConditionFeatureFunctionType::Pointer vdescriptor = ParserConditionFeatureFunctionType::New();
-  vdescriptor->SetExpression(parseResult->GetParameterString("FeatureExpression"));
-  vdescriptor->SetInputImage(inputImage);
+  itkTypeMacro(ComputePolylineFeatureFromImage, otb::Application)
+  ;
 
-  VectorDataType::Pointer outVD = VectorDataType::New();
-  // Retrieving root node
-  DataNodeType::Pointer root = outVD->GetDataTree()->GetRoot()->Get();
-  // Create the document node
-  DataNodeType::Pointer document = DataNodeType::New();
-  document->SetNodeType(otb::DOCUMENT);
-  // Adding the layer to the data tree
-  outVD->GetDataTree()->Add(document, root);
-  // Create the folder node
-  DataNodeType::Pointer folder = DataNodeType::New();
-  folder->SetNodeType(otb::FOLDER);
-  // Adding the layer to the data tree
-  outVD->GetDataTree()->Add(folder, document);
+private:
+  ComputePolylineFeatureFromImage()
+  {
+    SetName("ComputePolylineFeatureFromImage");
+    SetDescription(
+                   "Compute a polyline feature descriptors from an input image which are part of the polyline pixels that verify the FeatureExpression");
 
-  TreeIteratorType itVector(vprojIm->GetOutput()->GetDataTree());
-  itVector.GoToBegin();
+    SetDocName("Compute Polyline Feature From Image Application");
+    SetDocLongDescription("This application.");
+    SetDocLimitations("None");
+    SetDocAuthors("OTB-Team");
+    SetDocSeeAlso(" ");
+    SetDocCLExample(
+                    "otbApplicationLauncherCommandLine  ComputePolylineFeatureFromImage ${OTB-BIN}/bin  --in ${OTB-LargeInput}/DEMPSTER-SHAFER/NDVI.TIF"
+                    " --vd  ${OTB-LargeInput}/DEMPSTER-SHAFER/roads_ground_truth.shp --expr (b1 > 0.4) --field NONDVI "
+                    "--out PolylineFeatureFromImage_LI_NONDVI_gt.shp");
 
-  while (!itVector.IsAtEnd())
-    {
-    vdescriptor->SetInputImage(reader->GetOutput());
-    if (!itVector.Get()->IsRoot() && !itVector.Get()->IsDocument() && !itVector.Get()->IsFolder())
+    AddDocTag(Tags::FeatureExtraction);
+  }
+
+  virtual ~ComputePolylineFeatureFromImage()
+  {
+  }
+
+  void DoCreateParameters()
+  {
+    AddParameter(ParameterType_InputImage, "in", "Input Image");
+    SetParameterDescription("in", "An image from which to compute description.");
+
+    AddParameter(ParameterType_InputVectorData, "vd", "Vector Data");
+    SetParameterDescription("vd", "Vector data containing the polylines onto which the feature will be computed.");
+
+    AddParameter(ParameterType_Filename, "dem", "DEM repository");
+    MandatoryOff("dem");
+    SetParameterDescription("dem", "path to SRTM repository");
+
+    AddParameter(ParameterType_String, "expr", "Feature expression");
+    SetParameterDescription("expr", "The feature formula (b1 > 0.3)");
+
+    AddParameter(ParameterType_String, "field", "Feature name");
+    SetParameterDescription("field", "The feature name (NONDVI, ROADSA...)");
+
+    AddParameter(ParameterType_OutputVectorData, "out", "Output Vector Data");
+    SetParameterDescription("out", "The output vector data containing the features");
+
+  }
+
+  void DoUpdateParameters()
+  {
+    // Nothing to do here : all parameters are independent
+  }
+
+  void DoExecute()
+  {
+    // Vector Data into Image projection
+    FloatVectorImageType::Pointer inImage = GetParameterImage("in");
+
+    otbAppLogDEBUG( << "Starting PolylineFeature extraction process" )
+
+    // Vector Data into Image projection
+    //// Read the Vectordata
+
+    VectorDataType* inVectorData = GetParameterVectorData("vd");
+
+    //// Projection
+    VectorDataIntoImageProjType::Pointer vprojIm = VectorDataIntoImageProjType::New();
+    vprojIm->SetInputVectorData(inVectorData);
+    vprojIm->SetInputImage(inImage);
+
+    // Configure DEM directory
+    if (IsParameterEnabled("dem"))
       {
-      DataNodeType::Pointer currentGeometry = itVector.Get();
-      currentGeometry->SetFieldAsDouble(parseResult->GetParameterString("FieldName"),
-                                        (double)(vdescriptor->Evaluate(*(currentGeometry.GetPointer()))[0]));
-
-      outVD->GetDataTree()->Add(currentGeometry, folder);
+      vprojIm->SetDEMDirectory(GetParameterString("dem"));
       }
-    ++itVector;
-    }
-
-  /*
-   * Reprojection of the output VectorData
-   *
-   * The output of VectorDataToRoadDescription is in image index coordinates
-   *
-   * 3 cases :
-   * - input image has no geo-information : pass through
-   * - input image is in cartographic projection : apply image spacing and origin, and set the ProjectionRef
-   * - input image is in sensor model geometry : reproject in WGS84
-   *
-   */
-
-  std::string projRef = inputImage->GetProjectionRef();
-  ImageKeywordlist kwl;
-  itk::ExposeMetaData<ImageKeywordlist>(inputImage->GetMetaDataDictionary(),
-                                        MetaDataKey::OSSIMKeywordlistKey,
-                                        kwl);
-
-  VectorDataType::Pointer projectedVD;
-
-  if ( !projRef.empty() )
-    {
-    // image is in cartographic projection
-    // apply spacing and origin + set projection WKT
-    // The VectorData in output of the chain is in image index coordinate,
-    // and the projection information is lost
-    // Apply an affine transform to apply image origin and spacing,
-    // and arbitrarily set the ProjectionRef to the input image ProjectionRef
-
-    typedef itk::AffineTransform<VectorDataType::PrecisionType, 2> TransformType;
-    typedef otb::VectorDataTransformFilter<VectorDataType, VectorDataType> VDTransformType;
-
-    TransformType::ParametersType params;
-    params.SetSize(6);
-    params[0] = inputImage->GetSpacing()[0];
-    params[1] = 0;
-    params[2] = 0;
-    params[3] = inputImage->GetSpacing()[1];
-    params[4] = inputImage->GetOrigin()[0];
-    params[5] = inputImage->GetOrigin()[1];
-
-    TransformType::Pointer transform = TransformType::New();
-    transform->SetParameters(params);
-
-    VDTransformType::Pointer vdTransform = VDTransformType::New();
-    vdTransform->SetTransform(transform);
-    vdTransform->SetInput(outVD);
-    vdTransform->Update();
-
-    projectedVD = vdTransform->GetOutput();
-
-    projectedVD->SetProjectionRef(inputImage->GetProjectionRef());
-    }
-    else if ( kwl.GetSize() > 0 )
-    {
-    // image is in sensor model geometry
-
-    // Reproject VectorData in image projection
-    VectorDataProjectionFilterType::Pointer vproj = VectorDataProjectionFilterType::New();
-    vproj->SetInput(outVD);
-
-    vproj->SetOutputKeywordList(inputImage->GetImageKeywordlist());
-    vproj->SetOutputProjectionRef(inputImage->GetProjectionRef());
-    vproj->SetOutputOrigin(inputImage->GetOrigin());
-    vproj->SetOutputSpacing(inputImage->GetSpacing());
-
-    if( parseResult->IsOptionPresent("DEMDirectory") )
-      {
-      vproj->SetDEMDirectory(parseResult->GetParameterString("DEMDirectory"));
-      }
-
-    vproj->Update();
-    projectedVD = vproj->GetOutput();
-    }
     else
-    {
-    // no georeferencing information
+      {
+      if (otb::ConfigurationFile::GetInstance()->IsValid())
+        {
+        vprojIm->SetDEMDirectory(otb::ConfigurationFile::GetInstance()->GetDEMDirectory());
+        }
+      }
 
-    projectedVD = outVD;
+    vprojIm->SetUseOutputSpacingAndOriginFromImage(true); // we want index as input;
+    vprojIm->Update();
 
-    }
+    // Add description
+    ParserConditionFeatureFunctionType::Pointer vdescriptor = ParserConditionFeatureFunctionType::New();
+    vdescriptor->SetExpression(GetParameterString("expr"));
+    vdescriptor->SetInputImage(inImage);
 
-   // Write vectordata with description
-   VectorDataWriterType::Pointer vdwriter = VectorDataWriterType::New();
-   vdwriter->SetFileName(parseResult->GetParameterString("OutputVectorData"));
-   vdwriter->SetInput(projectedVD);
-   vdwriter->Update();
+    m_OutVectorData = VectorDataType::New();
+    // Retrieving root node
+    DataNodeType::Pointer root = m_OutVectorData->GetDataTree()->GetRoot()->Get();
+    // Create the document node
+    DataNodeType::Pointer document = DataNodeType::New();
+    document->SetNodeType(otb::DOCUMENT);
+    // Adding the layer to the data tree
+    m_OutVectorData->GetDataTree()->Add(document, root);
+    // Create the folder node
+    DataNodeType::Pointer folder = DataNodeType::New();
+    folder->SetNodeType(otb::FOLDER);
+    // Adding the layer to the data tree
+    m_OutVectorData->GetDataTree()->Add(folder, document);
 
-  return EXIT_SUCCESS;
+    TreeIteratorType itVector(vprojIm->GetOutput()->GetDataTree());
+    itVector.GoToBegin();
+
+    while (!itVector.IsAtEnd())
+      {
+      vdescriptor->SetInputImage(inImage);
+      if (!itVector.Get()->IsRoot() && !itVector.Get()->IsDocument() && !itVector.Get()->IsFolder())
+        {
+        DataNodeType::Pointer currentGeometry = itVector.Get();
+        currentGeometry->SetFieldAsDouble(GetParameterString("field"),
+                                          (double) (vdescriptor->Evaluate(*(currentGeometry.GetPointer()))[0]));
+
+        m_OutVectorData->GetDataTree()->Add(currentGeometry, folder);
+        }
+      ++itVector;
+      }
+
+    /*
+     * Reprojection of the output VectorData
+     *
+     * The output of VectorDataToRoadDescription is in image index coordinates
+     *
+     * 3 cases :
+     * - input image has no geo-information : pass through
+     * - input image is in cartographic projection : apply image spacing and origin, and set the ProjectionRef
+     * - input image is in sensor model geometry : reproject in WGS84
+     *
+     */
+
+    std::string projRef = inImage->GetProjectionRef();
+    ImageKeywordlist kwl;
+    itk::ExposeMetaData<ImageKeywordlist>(inImage->GetMetaDataDictionary(), MetaDataKey::OSSIMKeywordlistKey, kwl);
+
+    m_ProjectedVectorData;
+
+    if (!projRef.empty())
+      {
+      // image is in cartographic projection
+      // apply spacing and origin + set projection WKT
+      // The VectorData in output of the chain is in image index coordinate,
+      // and the projection information is lost
+      // Apply an affine transform to apply image origin and spacing,
+      // and arbitrarily set the ProjectionRef to the input image ProjectionRef
+
+      typedef itk::AffineTransform<VectorDataType::PrecisionType, 2> TransformType;
+      typedef otb::VectorDataTransformFilter<VectorDataType, VectorDataType> VDTransformType;
+
+      TransformType::ParametersType params;
+      params.SetSize(6);
+      params[0] = inImage->GetSpacing()[0];
+      params[1] = 0;
+      params[2] = 0;
+      params[3] = inImage->GetSpacing()[1];
+      params[4] = inImage->GetOrigin()[0];
+      params[5] = inImage->GetOrigin()[1];
+
+      TransformType::Pointer transform = TransformType::New();
+      transform->SetParameters(params);
+
+      VDTransformType::Pointer vdTransform = VDTransformType::New();
+      vdTransform->SetTransform(transform);
+      vdTransform->SetInput(m_OutVectorData);
+      vdTransform->Update();
+
+      m_ProjectedVectorData = vdTransform->GetOutput();
+
+      m_ProjectedVectorData->SetProjectionRef(inImage->GetProjectionRef());
+      }
+    else
+      if (kwl.GetSize() > 0)
+        {
+        // image is in sensor model geometry
+
+        // Reproject VectorData in image projection
+        VectorDataProjectionFilterType::Pointer vproj = VectorDataProjectionFilterType::New();
+        vproj->SetInput(m_OutVectorData);
+
+        vproj->SetOutputKeywordList(inImage->GetImageKeywordlist());
+        vproj->SetOutputProjectionRef(inImage->GetProjectionRef());
+        vproj->SetOutputOrigin(inImage->GetOrigin());
+        vproj->SetOutputSpacing(inImage->GetSpacing());
+
+        // Configure DEM directory
+        if (IsParameterEnabled("dem"))
+          {
+          vproj->SetDEMDirectory(GetParameterString("dem"));
+          }
+        else
+          {
+          if (otb::ConfigurationFile::GetInstance()->IsValid())
+            {
+            vproj->SetDEMDirectory(otb::ConfigurationFile::GetInstance()->GetDEMDirectory());
+            }
+          }
+
+        vproj->Update();
+        m_ProjectedVectorData = vproj->GetOutput();
+        }
+      else
+        {
+        // no georeferencing information
+        m_ProjectedVectorData = m_OutVectorData;
+        }
+
+    // Set the output vectorData
+    SetParameterOutputVectorData("out", m_ProjectedVectorData);
+
+  };
+
+  VectorDataType::Pointer m_ProjectedVectorData;
+  VectorDataType::Pointer m_OutVectorData;
+
+};
+
+}
 }
 
-}
+OTB_APPLICATION_EXPORT(otb::Wrapper::ComputePolylineFeatureFromImage)
+
+
