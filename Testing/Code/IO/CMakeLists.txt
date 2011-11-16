@@ -242,8 +242,12 @@ ADD_TEST(ioTvImageFileReaderMW2TIFMW ${IO_TESTS1}
 
 
 # CanWrite()
-ADD_TEST(ioTuMWImageIOCanWrite ${IO_TESTS1} otbMWImageIOTestCanWrite
+ADD_TEST(ioTuMWImageIOCanWriteMW ${IO_TESTS1} otbMWImageIOTestCanWrite
         ${TEMP}/QB_Toulouse_Ortho_PAN.mw)
+
+ADD_TEST(ioTuMWImageIOCanWriteIMG ${IO_TESTS1} otbMWImageIOTestCanWrite
+        ${TEMP}/QB_Toulouse_Ortho_PAN.img)
+SET_TESTS_PROPERTIES(ioTuMWImageIOCanWriteIMG PROPERTIES WILL_FAIL true)
 
 ADD_TEST(ioTvImageFileReaderTIF2MW ${IO_TESTS1}
   --compare-image ${EPSILON_9}        ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
