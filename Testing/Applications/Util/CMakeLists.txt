@@ -227,3 +227,14 @@ OTB_TEST_APPLICATION(NAME apTvUtCompareImages
                              ${BASELINE_FILES}/apTvUtCompareImages.txt
                 	     ${TEMP}/apTvUtCompareImages.txt)
 
+#--- VectorDataSetField ---
+OTB_TEST_APPLICATION(NAME apTvUtVectorDataSetField
+                     APP VectorDataSetField
+                     OPTIONS --in ${INPUTDATA}/ToulousePoints-examples.shp
+                             --out ${TEMP}/apTvUtVectorDataSetFieldTest.shp
+                             --fn MyField
+                             --fv MyValue
+                     VALID   --compare-ogr ${NOTOL}
+                             ${BASELINE_FILES}/apTvUtVectorDataSetFieldTest.shp
+                             ${TEMP}/apTvUtVectorDataSetFieldTest.shp
+                     )
