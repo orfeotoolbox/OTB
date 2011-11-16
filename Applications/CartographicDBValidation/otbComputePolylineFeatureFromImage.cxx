@@ -209,8 +209,6 @@ private:
     ImageKeywordlist kwl;
     itk::ExposeMetaData<ImageKeywordlist>(inImage->GetMetaDataDictionary(), MetaDataKey::OSSIMKeywordlistKey, kwl);
 
-    m_ProjectedVectorData;
-
     if (!projRef.empty())
       {
       // image is in cartographic projection
