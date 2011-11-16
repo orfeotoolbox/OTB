@@ -221,5 +221,9 @@ OTB_TEST_APPLICATION(NAME apTvUtCompareImages
                              --roi.startx 20
                              --roi.starty 15
                              --roi.sizex 150
-                             --roi.sizey 200 )
+                             --roi.sizey 200
+                             TESTENVOPTIONS ${TEMP}/apTvUtCompareImages.txt
+                     VALID   --compare-ascii ${EPSILON_7}
+                             ${BASELINE_FILES}/apTvUtCompareImages.txt
+                	     ${TEMP}/apTvUtCompareImages.txt)
 
