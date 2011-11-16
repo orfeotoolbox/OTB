@@ -30,11 +30,15 @@ OTB_TEST_APPLICATION(NAME apTvPrRigidTransformResample
                               ${BASELINE}/owTvRigidTransformResampleTest.tif
                 			  ${TEMP}/apTvPrRigidTransformResampleTest.tif)
 
-OTB_TEST_APPLICATION(NAME  apTuPrConvertCartoToGeoPoint
+
+OTB_TEST_APPLICATION(NAME  apTvPrConvertCartoToGeoPoint
                      APP  ConvertCartoToGeoPoint
-                     OPTIONS --carto.x 367074.625
-                 			 --carto.y 4835740
-                 			 --mapproj utm
-                 			 --mapproj.utm.hemisphere true
-                 			 --mapproj.utm.zone 31)
-                     
+                     OPTIONS --carto.x 374100.828
+                             --carto.y 4829184.806
+                 	     --mapproj utm
+                 	     --mapproj.utm.hemisphere true
+                 	     --mapproj.utm.zone 31
+                     TESTENVOPTIONS ${TEMP}/apTvPrConvertCartoToGeoPoint.txt
+                     VALID   --compare-ascii ${EPSILON_7}
+                             ${BASELINE_FILES}/apTvPrConvertCartoToGeoPoint.txt
+                	     ${TEMP}/apTvPrConvertCartoToGeoPoint.txt)
