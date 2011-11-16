@@ -49,6 +49,7 @@ endforeach(app)
 
 add_subdirectory(ChangeDetection)
 add_subdirectory(Classification)
+add_subdirectory(ConnectedComponentSegmentation)
 add_subdirectory(DimensionnalityReduction)
 add_subdirectory(DisparityMap)
 add_subdirectory(FeatureExtraction)
