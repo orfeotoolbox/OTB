@@ -398,22 +398,6 @@ ADD_TEST(coTuPathListToHistogramGenerator ${COMMON_TESTS3}
 ADD_TEST(coTuLineSpatialObjectListToPointSetFilter ${COMMON_TESTS3}
          otbLineSpatialObjectListToPointSetFilterNew)
 
-
-# -------  Compare region propagation of ExtractROI filters  ------------------------------
-ADD_TEST(coTuITKExtractImageFilterTestRegion ${COMMON_TESTS3}
-         otbITKExtractImageFilterROITestRegion)
-  
-ADD_TEST(coTuITKVectorIndexSelectionCastTestRegion ${COMMON_TESTS3}
-         otbITKVectorIndexSelectionCastTestRegion)
-         
-ADD_TEST(coTuMultiToMonoChannelExtractROITestRegion ${COMMON_TESTS3}
-         otbMultiToMonoChannelExtractROITestRegion)
-       
-ADD_TEST(coTuMultiChannelExtractROITestRegion ${COMMON_TESTS3}
-         otbMultiChannelExtractROITestRegion)
-         
-ADD_TEST(coTuExtractROITestRegion ${COMMON_TESTS3}
-         otbExtractROITestRegion)
          
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(coTvExtractROITestMetaData_TIFF ${COMMON_TESTS3}
@@ -1156,7 +1140,6 @@ otbVectorDataExtractROI.cxx
 )
 SET(BasicCommon_SRCS3
 otbCommonTests3.cxx
-otbExtractROICompareRegionsImplementations.cxx
 otbMultiToMonoChannelExtractROI.cxx
 otbMultiToMonoChannelExtractROINew.cxx
 otbExtractROITestMetaData.cxx

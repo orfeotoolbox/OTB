@@ -337,3 +337,82 @@ int otbExtractROITestRegion(int argc, char * argv[])
 }
 
 
+
+int main(int argc, char * argv[])
+{
+  int unitaryResult;
+  int finalResult = EXIT_SUCCESS;
+
+  std::cout << "*******************************" << std::endl;
+  std::cout << "Starting test itk::ExtractImageFilter" << std::endl;
+  unitaryResult = otbITKExtractImageFilterROITestRegion(argc, argv);
+  if (unitaryResult == EXIT_FAILURE)
+    {
+    std::cout << "-> Testing itk::ExtractImageFilter FAILED" << std::endl;
+    finalResult = EXIT_FAILURE;
+    }
+  else
+    {
+    std::cout << "-> Testing itk::ExtractImageFilter OK" << std::endl;
+    }
+
+
+  std::cout << "*******************************" << std::endl;
+  std::cout << "Starting test itk::VectorIndexSelectionCast" << std::endl;
+  unitaryResult = otbITKVectorIndexSelectionCastTestRegion(argc, argv);
+  if (unitaryResult == EXIT_FAILURE)
+    {
+    std::cout << "-> Testing itk::VectorIndexSelectionCast FAILED" << std::endl;
+    finalResult = EXIT_FAILURE;
+    }
+  else
+    {
+    std::cout << "-> Testing itk::VectorIndexSelectionCast OK" << std::endl;
+    }
+
+
+  std::cout << "*******************************" << std::endl;
+  std::cout << "Starting test otb::MultiToMonoChannelExtractROI" << std::endl;
+  unitaryResult = otbMultiToMonoChannelExtractROITestRegion(argc, argv);
+  if (unitaryResult == EXIT_FAILURE)
+    {
+    std::cout << "-> Testing otb::MultiToMonoChannelExtractROI FAILED" << std::endl;
+    finalResult = EXIT_FAILURE;
+    }
+  else
+    {
+    std::cout << "-> Testing otb::MultiToMonoChannelExtractROI OK" << std::endl;
+    }
+
+
+  std::cout << "*******************************" << std::endl;
+  std::cout << "Starting test otb::MultiChannelExtractROI" << std::endl;
+  unitaryResult = otbMultiChannelExtractROITestRegion(argc, argv);
+  if (unitaryResult == EXIT_FAILURE)
+    {
+    std::cout << "-> Testing otb::MultiChannelExtractROI FAILED" << std::endl;
+    finalResult = EXIT_FAILURE;
+    }
+  else
+    {
+    std::cout << "-> Testing otb::MultiChannelExtractROI OK" << std::endl;
+    }
+
+
+  std::cout << "*******************************" << std::endl;
+  std::cout << "Starting test otb::ExtractROI" << std::endl;
+  unitaryResult = otbExtractROITestRegion(argc, argv);
+  if (unitaryResult == EXIT_FAILURE)
+    {
+    std::cout << "-> Testing otb::ExtractROI FAILED" << std::endl;
+    finalResult = EXIT_FAILURE;
+    }
+  else
+    {
+    std::cout << "-> Testing otb::ExtractROI OK" << std::endl;
+    }
+
+  return finalResult;
+
+}
+
