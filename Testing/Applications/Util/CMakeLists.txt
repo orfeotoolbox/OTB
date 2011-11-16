@@ -128,10 +128,10 @@ OTB_TEST_APPLICATION(NAME apTvUtSplitImage
 OTB_TEST_APPLICATION(NAME apTvUtConvertBasic
                      APP Convert
                      OPTIONS --in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
-                             --out ${TEMP}/apTuUtConvertBasicOutput.tif
+                             --out ${TEMP}/apTvUtConvertBasicOutput.tif
                      VALID   --compare-image ${NOTOL}
-                             ${INPUTDATA}/apTuUtConvertBasicOutput.tif
-                	     ${TEMP}/apTuUtConvertBasicOutput.tif
+                             ${INPUTDATA}/apTvUtConvertBasicOutput.tif
+                	     ${TEMP}/apTvUtConvertBasicOutput.tif
 )
 
 OTB_TEST_APPLICATION(NAME apTvUtConvertWithScaling
