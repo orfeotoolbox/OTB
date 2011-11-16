@@ -346,9 +346,10 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
     // if param is a Group, dont do anything, ParamGroup dont have values
     if (type != ParameterType_Group)
       {
-      // Get the attribute relative to this key
+      // Get the attribute relative to this key as vector
       values = m_Parser->GetAttribut(std::string("--").append(paramKey), m_Expression);
-      
+    
+
       // If the param does not exists in the cli, dont try to set a
       // value on it, an exception will be thrown later in this function
       if (paramExists)
@@ -375,78 +376,83 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
               dynamic_cast<StringListParameter *> (param.GetPointer())->SetValue(values);
               }
             else
-              if (type == ParameterType_OutputImage)
+              if (type == ParameterType_String)
                 {
-                m_Application->SetParameterString(paramKey, values[0]);
-                // Check if pixel type is given
-                if (values.size() == 2)
-                  {
-                  ImagePixelType outPixType = ImagePixelType_float;
-                  if (values[1] == "int8")
-                    outPixType = ImagePixelType_int8;
-                  else
-                    if (values[1] == "uint8")
-                      outPixType = ImagePixelType_uint8;
-                    else
-                      if (values[1] == "int16")
-                        outPixType = ImagePixelType_int16;
-                      else
-                        if (values[1] == "uint16")
-                          outPixType = ImagePixelType_uint16;
-                        else
-                          if (values[1] == "int32")
-                            outPixType = ImagePixelType_int32;
-                          else
-                            if (values[1] == "uint32")
-                              outPixType = ImagePixelType_uint32;
-                            else
-                              if (values[1] == "float")
-                                outPixType = ImagePixelType_float;
-                              else
-                                if (values[1] == "double")
-                                  outPixType = ImagePixelType_double;
-                                else
-                                  {
-                                  return WRONGPARAMETERVALUE;
-                                  }
-                  dynamic_cast<OutputImageParameter *> (param.GetPointer())->SetPixelType(outPixType);
-                  }
-                else
-                  if (values.size() != 1 && values.size() != 2)
-                    {
-                    std::cerr << "ERROR: Invalid number of value for: \"" << paramKey << "\", invalid number of values " << values.size() << std::endl;
-                    return INVALIDNUMBEROFVALUE;
-                    }
+                dynamic_cast<StringParameter *> (param.GetPointer())->SetValue( m_Parser->GetAttributAsString(std::string("--").append(paramKey), m_Expression) );
                 }
               else
-                if (type == ParameterType_ListView)
+                if (type == ParameterType_OutputImage)
                   {
-                  dynamic_cast<ListViewParameter *> (param.GetPointer())->SetSelectedNames(values);
+                  m_Application->SetParameterString(paramKey, values[0]);
+                  // Check if pixel type is given
+                  if (values.size() == 2)
+                    {
+                    ImagePixelType outPixType = ImagePixelType_float;
+                    if (values[1] == "int8")
+                      outPixType = ImagePixelType_int8;
+                    else
+                      if (values[1] == "uint8")
+                        outPixType = ImagePixelType_uint8;
+                      else
+                        if (values[1] == "int16")
+                          outPixType = ImagePixelType_int16;
+                        else
+                          if (values[1] == "uint16")
+                            outPixType = ImagePixelType_uint16;
+                          else
+                            if (values[1] == "int32")
+                              outPixType = ImagePixelType_int32;
+                            else
+                              if (values[1] == "uint32")
+                                outPixType = ImagePixelType_uint32;
+                              else
+                                if (values[1] == "float")
+                                  outPixType = ImagePixelType_float;
+                                else
+                                  if (values[1] == "double")
+                                    outPixType = ImagePixelType_double;
+                                  else
+                                    {
+                                    return WRONGPARAMETERVALUE;
+                                    }
+                    dynamic_cast<OutputImageParameter *> (param.GetPointer())->SetPixelType(outPixType);
+                    }
+                  else
+                    if (values.size() != 1 && values.size() != 2)
+                      {
+                      std::cerr << "ERROR: Invalid number of value for: \"" << paramKey << "\", invalid number of values " << values.size() << std::endl;
+                      return INVALIDNUMBEROFVALUE;
+                      }
                   }
                 else
-                  if (values.size() != 1 && !param->GetAutomaticValue())
+                  if (type == ParameterType_ListView)
                     {
-                    std::cerr << "ERROR: Invalid number of value for: \"" << paramKey << "\", must have 1 value, not  "
-                              << values.size() << std::endl;
-                    // Try to find a "-" instead of "--"...
-                    itk::OStringStream oss;
-                    for (unsigned int i = 0; i < values.size(); i++)
-                      {
-                      if (values[i][0] == '-')
-                        {
-                        oss << std::string(values[i]).substr(1, std::string(values[i]).size() - 1) << ", ";
-                        }
-                      }
-                    if (oss.str().size() > 0) std::cerr << "ERROR: If values \""
-                                                        << oss.str().substr(0, oss.str().size() - 2)
-                                                        << "\" is/are keys, it should be prefix by \"--\"..." << std::endl;
-
-                    return INVALIDNUMBEROFVALUE;
+                    dynamic_cast<ListViewParameter *> (param.GetPointer())->SetSelectedNames(values);
                     }
+                  else
+                    if (values.size() != 1 && !param->GetAutomaticValue())
+                      {
+                      std::cerr << "ERROR: Invalid number of value for: \"" << paramKey << "\", must have 1 value, not  "
+                                << values.size() << std::endl;
+                      // Try to find a "-" instead of "--"...
+                      itk::OStringStream oss;
+                      for (unsigned int i = 0; i < values.size(); i++)
+                        {
+                        if (values[i][0] == '-')
+                          {
+                          oss << std::string(values[i]).substr(1, std::string(values[i]).size() - 1) << ", ";
+                          }
+                        }
+                      if (oss.str().size() > 0) std::cerr << "ERROR: If values \""
+                                                          << oss.str().substr(0, oss.str().size() - 2)
+                                                          << "\" is/are keys, it should be prefix by \"--\"..." << std::endl;
+
+                      return INVALIDNUMBEROFVALUE;
+                      }
 
         // Single value parameter
         if (type == ParameterType_Choice || type == ParameterType_Float || type == ParameterType_Int || type
-            == ParameterType_Radius || type == ParameterType_Directory || type == ParameterType_String || type
+            == ParameterType_Radius || type == ParameterType_Directory || type
             == ParameterType_Filename || type == ParameterType_ComplexInputImage || type == ParameterType_InputImage ||
             type == ParameterType_InputVectorData || type == ParameterType_InputVectorDataList ||  type == ParameterType_OutputVectorData
             || type == ParameterType_RAM)
