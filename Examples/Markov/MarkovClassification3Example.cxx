@@ -308,7 +308,7 @@ int main(int argc, char* argv[] )
   // \includegraphics[width=0.44\textwidth]{MarkovRandomField3_color_value.eps}
   // \itkcaption[MRF restauration]{Result of applying
   // the \doxygen{otb}{MarkovRandomFieldFilter} to an extract from a PAN Quickbird
-  // image for classification into fourt classes using the Fisher-distribution as
+  // image for classification into four classes using the Fisher-distribution as
   // likehood term. From left to right : original image,
   // classification.}
   // \label{fig:MRF_CLASSIFICATION3}
