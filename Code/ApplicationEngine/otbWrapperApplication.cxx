@@ -1128,6 +1128,7 @@ Application::GetOutputParametersSumUp()
         std::pair<std::string, std::string> keyVal;
         keyVal.first = (*it);
         itk::OStringStream oss;
+        oss << std::setprecision(10);
         if (dynamic_cast<ChoiceParameter*>(param))
           {
           ChoiceParameter* paramDown = dynamic_cast<ChoiceParameter*>(param);
@@ -1186,7 +1187,7 @@ Application::GetOutputParametersSumUp()
         else if (dynamic_cast<FloatParameter*>(param))
           {
           FloatParameter* paramFloat = dynamic_cast<FloatParameter*>(param);
-          oss << static_cast<int>(paramFloat->GetValue());
+          oss << paramFloat->GetValue();
           }
         else if (dynamic_cast<RadiusParameter*>(param))
           {
