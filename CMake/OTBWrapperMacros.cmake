@@ -69,17 +69,28 @@ endmacro(OTB_CREATE_APPLICATION)
 macro(OTB_TEST_APPLICATION)
   OTB_PARSE_ARGUMENTS(
       TESTAPPLICATION
-      "NAME;APP;OPTIONS;VALID"
+      "NAME;APP;OPTIONS;TESTENVOPTIONS;VALID"
       ""
       ${ARGN})
 
-   add_test(NAME ${TESTAPPLICATION_NAME}
-            COMMAND otbTestDriver
-                    ${TESTAPPLICATION_VALID}
-                    Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
-                    ${TESTAPPLICATION_APP}
-                    $<TARGET_FILE_DIR:otbapp_${TESTAPPLICATION_APP}>
-                    ${TESTAPPLICATION_OPTIONS}
-                    --testenv)
+   if (NOT TESTAPPLICATION_TESTENVOPTIONS)
+     add_test(NAME ${TESTAPPLICATION_NAME}
+              COMMAND otbTestDriver
+              ${TESTAPPLICATION_VALID}
+              Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
+              ${TESTAPPLICATION_APP}
+              $<TARGET_FILE_DIR:otbapp_${TESTAPPLICATION_APP}>
+              ${TESTAPPLICATION_OPTIONS}
+              --testenv)
+   else (NOT TESTAPPLICATION_TESTENVOPTIONS)
+     add_test(NAME ${TESTAPPLICATION_NAME}
+              COMMAND otbTestDriver
+              ${TESTAPPLICATION_VALID}
+              Execute $<TARGET_FILE:otbApplicationLauncherCommandLine>
+              ${TESTAPPLICATION_APP}
+              $<TARGET_FILE_DIR:otbapp_${TESTAPPLICATION_APP}>
+              ${TESTAPPLICATION_OPTIONS}
+              --testenv ${TESTAPPLICATION_TESTENVOPTIONS})
+   endif (NOT TESTAPPLICATION_TESTENVOPTIONS)
    
 endmacro(OTB_TEST_APPLICATION)

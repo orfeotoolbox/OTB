@@ -974,7 +974,8 @@ void CommandLineLauncher::DisplayOutputParameters()
       ofs.close();
       }
     }
-
+  
+  std::cout << "Output parameters value:" << std::endl;
   std::cout << oss.str() << std::endl;
 }
 
