@@ -27,6 +27,10 @@
 
 
 
+#define opj_set_decoded_resolution_factor   @OPJ_MANGLE_PREFIX@_opj_set_decoded_resolution_factor
+
+
+
 #define opj_create_compress                 @OPJ_MANGLE_PREFIX@_opj_create_compress
 #define opj_create_decompress               @OPJ_MANGLE_PREFIX@_opj_create_decompress
 #define opj_setup_decoder                   @OPJ_MANGLE_PREFIX@_opj_setup_decoder
