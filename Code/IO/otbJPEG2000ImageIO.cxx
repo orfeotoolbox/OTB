@@ -621,13 +621,13 @@ struct ThreadStruct
 /** Get Info about all resolution in jpeg2000 file */
 bool JPEG2000ImageIO::GetResolutionInfo(std::vector<unsigned int>& res, std::vector<std::string>& desc)
 {
-  res = this->m_InternalReader->GetResolution();
+  res = this->m_InternalReaders[0]->GetResolution();
 
   if (res.empty())
     return false;
 
-  int originalWidth = m_InternalReader->m_Width ;
-  int originalHeight = m_InternalReader->m_Height ;
+  int originalWidth = m_InternalReaders[0]->m_Width ;
+  int originalHeight = m_InternalReaders[0]->m_Height ;
 
   for (std::vector<unsigned int>::iterator itRes = res.begin(); itRes < res.end(); itRes++)
     {
@@ -637,8 +637,8 @@ bool JPEG2000ImageIO::GetResolutionInfo(std::vector<unsigned int>& res, std::vec
     int w = int_ceildivpow2( originalWidth, *itRes);
     int h = int_ceildivpow2( originalHeight, *itRes);
 
-    int tw = int_ceildivpow2(m_InternalReader->GetCstrInfo()->tdx, *itRes);
-    int th = int_ceildivpow2(m_InternalReader->GetCstrInfo()->tdy, *itRes);
+    int tw = int_ceildivpow2(m_InternalReaders[0]->GetCstrInfo()->tdx, *itRes);
+    int th = int_ceildivpow2(m_InternalReaders[0]->GetCstrInfo()->tdy, *itRes);
 
     oss << "Resolution: " << *itRes << " (Image [w x h]: " << w << "x" << h << ", Tile [w x h]: " << tw << "x" << th << ")";
 
@@ -680,7 +680,7 @@ void JPEG2000ImageIO::Read(void* buffer)
       }
     }
 
-  if (m_ResolutionFactor >= this->m_InternalReader->m_Resolution.size())
+  if (m_ResolutionFactor >= this->m_InternalReaders[0]->m_Resolution.size())
     {
     itkExceptionMacro(<< "Resolution not available in the file!");
     return;
