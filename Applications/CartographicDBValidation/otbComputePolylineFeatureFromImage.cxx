@@ -67,10 +67,10 @@ public:
 
   /** Standard macro */
   itkNewMacro(Self)
- ;
+;
 
   itkTypeMacro(ComputePolylineFeatureFromImage, otb::Application)
- ;
+;
 
 private:
   ComputePolylineFeatureFromImage()
@@ -136,7 +136,7 @@ private:
       }
     catch (...)
       {
-      itkGenericExceptionMacro(<< "Error during image update,maybe your image is to big.");
+      itkGenericExceptionMacro(<< "Error during image update, maybe your image is to big.");
       }
 
     otbAppLogDEBUG( << "Starting PolylineFeature extraction process" )
