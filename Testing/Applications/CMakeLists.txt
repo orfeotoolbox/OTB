@@ -47,6 +47,7 @@ add_test(NAME apTvDocAppli_${app}
        
 endforeach(app)
 
+add_subdirectory(CartographicDBValidation)
 add_subdirectory(ChangeDetection)
 add_subdirectory(Classification)
 add_subdirectory(ConnectedComponentSegmentation)
