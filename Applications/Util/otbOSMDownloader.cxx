@@ -32,7 +32,7 @@ class OSMDownloader : public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef OSMDownloader                       Self;
+  typedef OSMDownloader                 Self;
   typedef Application                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -43,7 +43,7 @@ public:
   itkTypeMacro(OSMDownloader, otb::Application);
   
   /** Filter typedef */
-  typedef otb::OSMDataToVectorDataGenerator           VectorDataProviderType;
+  typedef otb::OSMDataToVectorDataGenerator  VectorDataProviderType;
 
 private:
    OSMDownloader()
