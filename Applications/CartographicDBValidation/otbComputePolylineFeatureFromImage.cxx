@@ -81,7 +81,7 @@ private:
 
     SetDocName("Compute Polyline Feature From Image Application");
     SetDocLongDescription("This application.");
-    SetDocLimitations("None");
+    SetDocLimitations("Since it do not rely on streaming process, take care of the size of input image before launching application.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
     SetDocCLExample(
@@ -129,13 +129,23 @@ private:
     // Vector Data into Image projection
     FloatVectorImageType::Pointer inImage = GetParameterImage("in");
 
+    inImage->UpdateOutputInformation();
+    try
+      {
+      inImage->Update();
+      }
+    catch (...)
+      {
+      itkGenericExceptionMacro(<< "Error during image update,maybe your image is to big.");
+      }
+
     otbAppLogDEBUG( << "Starting PolylineFeature extraction process" )
 
     // Vector Data into Image projection
     //// Read the Vectordata
 
     VectorDataType* inVectorData = GetParameterVectorData("vd");
-
+    inVectorData->Update();
     //// Projection
     VectorDataIntoImageProjType::Pointer vprojIm = VectorDataIntoImageProjType::New();
     vprojIm->SetInputVectorData(inVectorData);
@@ -187,7 +197,6 @@ private:
         DataNodeType::Pointer currentGeometry = itVector.Get();
         currentGeometry->SetFieldAsDouble(GetParameterString("field"),
                                           (double) (vdescriptor->Evaluate(*(currentGeometry.GetPointer()))[0]));
-
         m_OutVectorData->GetDataTree()->Add(currentGeometry, folder);
         }
       ++itVector;
