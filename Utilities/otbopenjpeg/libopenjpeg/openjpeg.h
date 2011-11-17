@@ -36,7 +36,6 @@
 #define OPENJPEG_H
 
 
-
 /* 
 ==========================================================
    Compiler directives
@@ -86,8 +85,6 @@ typedef unsigned char	OPJ_BYTE;
 typedef unsigned int	OPJ_SIZE_T;
 typedef double			OPJ_FLOAT64;
 typedef float			OPJ_FLOAT32;
-
-#include "openjpeg_mangle.h"
 
 // Avoid compile-time warning because parameter is not used
 #define OPJ_ARG_NOT_USED(x) (void)(x)
@@ -441,6 +438,11 @@ typedef struct opj_dparameters {
 	OPJ_UINT32 DA_y1;
 	/** Verbose mode */
 	opj_bool m_verbose;
+
+	/** tile number ot the decoded tile*/
+	OPJ_UINT32 tile_index;
+	/** Nb of tile to decode */
+	OPJ_UINT32 nb_tile_to_decode;
 
 	/*@}*/
 
@@ -1280,12 +1282,24 @@ OPJ_API opj_bool OPJ_CALLCONV opj_decode_v2(opj_codec_t *p_decompressor,
  * @param	p_image			output image
  * @param	tile_index		index of the tile which will be decode
  *
- * @return					a pointer to a JP2 index structure.
+ * @return					opj_true if all is ok.
  */
 OPJ_API opj_bool OPJ_CALLCONV opj_get_decoded_tile(	opj_codec_t *p_codec,
 													opj_stream_t *p_cio,
 													opj_image_t *p_image,
 													OPJ_UINT32 tile_index);
+
+
+/**
+ * Set the resolution factor of the decoded image
+ * @param	p_codec			the jpeg2000 codec.
+ * @param	res_factor		resolution factor to set
+ *
+ * @return					opj_true if all is ok.
+ */
+OPJ_API opj_bool OPJ_CALLCONV opj_set_decoded_resolution_factor(opj_codec_t *p_codec, OPJ_UINT32 res_factor);
+
+
 
 /**
  * Reads a tile header. This function is compulsory and allows one to know the size of the tile thta will be decoded.
@@ -1492,9 +1506,8 @@ OPJ_API opj_jp2_metadata_t* OPJ_CALLCONV opj_get_jp2_metadata(opj_codec_t *p_cod
 OPJ_API opj_jp2_index_t* OPJ_CALLCONV opj_get_jp2_index(opj_codec_t *p_codec);
 
 
-OPJ_API opj_image_t* OPJ_CALLCONV opj_image_create0();
 
-OPJ_API void opj_copy_image_header(const opj_image_t* p_image_src, opj_image_t* p_image_dest);
+
 
 #ifdef __cplusplus
 }
