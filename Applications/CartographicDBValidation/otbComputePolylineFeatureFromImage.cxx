@@ -67,10 +67,10 @@ public:
 
   /** Standard macro */
   itkNewMacro(Self)
-  ;
+ ;
 
   itkTypeMacro(ComputePolylineFeatureFromImage, otb::Application)
-  ;
+ ;
 
 private:
   ComputePolylineFeatureFromImage()
