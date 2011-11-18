@@ -257,6 +257,15 @@ ADD_TEST(faTvWriteUnsignedLong ${CXX_TEST_PATH}/WriteUnsignedLong
 ${TEMP}/WriteUnsignedLong.tif
 )
 
+ADD_TEST(FA-0000428-CastImageFilterStreaming 
+#  ${COMMON_TESTS}
+#  --compare-image ${TOL} ${INPUTDATA}/poupees.jpg 
+#                        ${TEMP}/FA-0000428-pou.tif
+  ${CXX_TEST_PATH}/0000428-CastImageFilterStreaming
+    ${INPUTDATA}/poupees.jpg
+    ${TEMP}/FA-0000428-pou.tif
+  )
+
 # -------  Compare region propagation of ExtractROI filters  ------------------------------
 ADD_TEST(FA-000307-ExtractROIRegion ${CXX_TEST_PATH}/0000307-ExtractROICompareRegion)
 
@@ -317,5 +326,8 @@ TARGET_LINK_LIBRARIES(0000209-SVMValidationLinearlySeparableProbEstimation OTBIO
 
 ADD_EXECUTABLE(0000307-ExtractROICompareRegion  0000307-ExtractROICompareRegionsImplementations.cxx)
 TARGET_LINK_LIBRARIES(0000307-ExtractROICompareRegion OTBIO OTBCommon)
+
+ADD_EXECUTABLE(0000428-CastImageFilterStreaming  0000428-CastImageFilterStreaming.cxx)
+TARGET_LINK_LIBRARIES(0000428-CastImageFilterStreaming OTBIO OTBCommon OTBBasicFilters)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
