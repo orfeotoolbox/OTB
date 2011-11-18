@@ -102,6 +102,9 @@ public:
   itk::MultiThreader * GetMultiThreader()
   {return m_Threader; }
 
+  itkSetMacro(ResolutionFactor, unsigned int);
+  itkGetMacro(ResolutionFactor, unsigned int);
+
 protected:
   /** Constructor.*/
   JPEG2000ImageIO();

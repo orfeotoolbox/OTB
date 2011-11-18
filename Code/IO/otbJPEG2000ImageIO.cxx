@@ -31,6 +31,9 @@ extern "C"
 #include "openjpeg.h"
 }
 
+#define LOG_BEGIN(x) std::cout << x << " BEGIN " << std::endl;
+#define LOG_END(x) std::cout << x << " END " << std::endl;
+
 /**
 Divide an integer by a power of 2 and round upwards
 @return Returns a divided by 2^b
@@ -90,14 +93,14 @@ public:
   }
   
   opj_image_t * DecodeTile(unsigned int tileIndex);
-  std::vector<unsigned int> GetResolution(){return this->m_Resolution;};
+  std::vector<unsigned int> GetResolutionsAvailable(){return this->m_ResolutionAvailable;};
 
 
   void Clean();
 
   int CanRead();
 
-  int Open(const char *filename);
+  int Open(const char *filename, unsigned int resolution);
 
   bool m_IsOpen;
   OPJ_CODEC_FORMAT m_CodecFormat;
@@ -117,7 +120,9 @@ public:
   unsigned int         m_XNbOfTile;
   unsigned int         m_YNbOfTile;
   
-  std::vector<unsigned int> m_Resolution;
+  std::vector<unsigned int> m_ResolutionAvailable;
+
+  unsigned int m_ResolutionFactor;
 
   opj_codestream_info_v2 * GetCstrInfo()
   {
@@ -136,8 +141,10 @@ private:
 };
 
 
-int JPEG2000ReaderInternal::Open(const char *filename)
+int JPEG2000ReaderInternal::Open(const char *filename, unsigned int resolution)
 {
+LOG_BEGIN("JPEG2000ReaderInternal::Open");
+
   this->Clean();
 
   // Open the file
@@ -165,6 +172,9 @@ int JPEG2000ReaderInternal::Open(const char *filename)
     return 0;
     }
 
+  this->m_ResolutionFactor = resolution;
+  std::cout << "JPEG2000ReaderInternal resolution = " << resolution << std::endl;
+
   // Initialize the codec and the stream
   if (!this->Initialize())
     {
@@ -173,6 +183,8 @@ int JPEG2000ReaderInternal::Open(const char *filename)
     }
 
   this->m_IsOpen = true;
+
+  LOG_END("JPEG2000ReaderInternal::Open");
   return 1;
 }
 
@@ -301,6 +313,9 @@ int JPEG2000ReaderInternal::Initialize()
     // Setting default parameters
     opj_dparameters_t parameters;
     otbopenjpeg_opj_set_default_decoder_parameters(&parameters);
+    parameters.cp_reduce = static_cast<int>(this->m_ResolutionFactor);
+
+    std::cout << "Initialize decoder with cp_reduce = " << parameters.cp_reduce <<std::endl;
 
     // Setup the decoder decoding parameters using user parameters
     if (!otbopenjpeg_opj_setup_decoder_v2(this->m_Codec, &parameters, &m_EventManager))
@@ -326,8 +341,11 @@ int JPEG2000ReaderInternal::Initialize()
       }
 
     // We can now retrieve the main information  of the image and the codestream
-    this->m_Width = this->m_Image->x1 - this->m_Image->x0;
-    this->m_Height = this->m_Image->y1 - this->m_Image->y0;
+    this->m_Width = this->m_Image->comps->w; //this->m_Image->x1 - this->m_Image->x0;
+    this->m_Height = this->m_Image->comps->h ;// this->m_Image->y1 - this->m_Image->y0;
+
+    std::cout << "JPEG2000InternalReader dimension (after reading header) = " << this->m_Image->comps->w << " x "
+              << this->m_Image->comps->h <<std::endl;
 
     this->m_TileHeight = this->m_CstrInfo->tdy;
     this->m_TileWidth = this->m_CstrInfo->tdx;
@@ -389,7 +407,7 @@ int JPEG2000ReaderInternal::Initialize()
   unsigned int numResAvailable = this->m_CstrInfo->m_default_tile_info.tccp_info[0].numresolutions;
   for (unsigned int itRes = 0; itRes < numResAvailable; itRes++)
     {
-    m_Resolution.push_back(itRes);
+    m_ResolutionAvailable.push_back(itRes);
     }
 
   return 1;
@@ -566,6 +584,7 @@ JPEG2000ImageIO::~JPEG2000ImageIO()
 
 bool JPEG2000ImageIO::CanReadFile(const char* filename)
 {
+  std::cout << "JPEG2000ImageIO::CanReadFile() BEGIN" << std::endl;
   if (filename == NULL)
     {
     itkDebugMacro(<< "No filename specified.");
@@ -579,7 +598,7 @@ bool JPEG2000ImageIO::CanReadFile(const char* filename)
       ++it)
     {
 
-    if ( !(*it)->Open(filename) )
+    if ( !(*it)->Open(filename, m_ResolutionFactor) )
       {
       success = false;
       }
@@ -595,7 +614,7 @@ bool JPEG2000ImageIO::CanReadFile(const char* filename)
       (*it)->Clean();
       }
     }
-
+  std::cout << "JPEG2000ImageIO::CanReadFile() END" << std::endl;
   return success;
 }
 
@@ -603,6 +622,7 @@ bool JPEG2000ImageIO::CanReadFile(const char* filename)
 void JPEG2000ImageIO::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
+  os << indent << "Resolution Factor: " << m_ResolutionFactor << "\n";
 }
 
 // Read a 3D image not implemented yet
@@ -621,7 +641,7 @@ struct ThreadStruct
 /** Get Info about all resolution in jpeg2000 file */
 bool JPEG2000ImageIO::GetResolutionInfo(std::vector<unsigned int>& res, std::vector<std::string>& desc)
 {
-  res = this->m_InternalReaders[0]->GetResolution();
+  res = this->m_InternalReaders[0]->GetResolutionsAvailable();
 
   if (res.empty())
     return false;
@@ -668,7 +688,7 @@ void JPEG2000ImageIO::Read(void* buffer)
         it != m_InternalReaders.end();
         ++it)
       {
-      open &= (*it)->m_IsOpen;
+      open = (*it)->m_IsOpen && open;
       }
   
   if ( !open )
@@ -680,13 +700,11 @@ void JPEG2000ImageIO::Read(void* buffer)
       }
     }
 
-  if (m_ResolutionFactor >= this->m_InternalReaders[0]->m_Resolution.size())
+  if (m_ResolutionFactor >= this->m_InternalReaders[0]->m_ResolutionAvailable.size())
     {
     itkExceptionMacro(<< "Resolution not available in the file!");
     return;
     }
-  //else set the resolution in openjpeg
-
 
   std::vector<unsigned int> tileList = this->ComputeTileList();
   if (tileList.empty())
@@ -724,6 +742,12 @@ void JPEG2000ImageIO::Read(void* buffer)
   // Decode all tiles not in cache in parallel
   if(!toReadTiles.empty())
     {
+    std::cout << "toReadTiles size = " << toReadTiles.size() <<std::endl;
+    std::cout << "nb of thread = " << this->GetMultiThreader()->GetNumberOfThreads() << std::endl;
+
+    if (this->GetMultiThreader()->GetNumberOfThreads() > toReadTiles.size())
+      this->GetMultiThreader()->SetNumberOfThreads(toReadTiles.size());
+
     // Set up the multithreaded processing
     ThreadStruct str;
     str.Readers = m_InternalReaders;
@@ -893,6 +917,7 @@ ITK_THREAD_RETURN_TYPE JPEG2000ImageIO::ThreaderCallback( void *arg )
 
 
   unsigned int tilesPerThread = tiles->size()/total;
+  //std::cout << "tilesPerThread: " << tilesPerThread << std::endl;
 
   if(tilesPerThread == 0)
     {
@@ -900,8 +925,7 @@ ITK_THREAD_RETURN_TYPE JPEG2000ImageIO::ThreaderCallback( void *arg )
     }
 
   for(unsigned int i = threadId * tilesPerThread;
-        i < tilesPerThread * (threadId+1)
-        && i < total;
+        i < tilesPerThread * (threadId+1) ;
         ++i)
     {
     tiles->at(i).second = readers.at(threadId)->DecodeTile(tiles->at(i).first);
@@ -913,6 +937,7 @@ ITK_THREAD_RETURN_TYPE JPEG2000ImageIO::ThreaderCallback( void *arg )
       itkGenericExceptionMacro(" otbopenjpeg failed to decode the desired tile "<<tiles->at(i).first << "!");
       }
     otbMsgDevMacro(<< " Tile " << tiles->at(i).first << " decoded by thread "<<threadId);
+    std::cout << " Tile " << tiles->at(i).first << " decoded by thread "<<threadId << std::endl;
     }
 
   unsigned int lastTile = threadCount*tilesPerThread + threadId;
@@ -929,6 +954,7 @@ ITK_THREAD_RETURN_TYPE JPEG2000ImageIO::ThreaderCallback( void *arg )
       itkGenericExceptionMacro(" otbopenjpeg failed to decode the desired tile "<<tiles->at(lastTile).first << "!");
       }
     otbMsgDevMacro(<<" Tile " << tiles->at(lastTile).first << " decoded by thread "<<threadId);
+    std::cout <<" Last Tile " << tiles->at(lastTile).first << " decoded by thread "<<threadId << std::endl;
     }
 
   return ITK_THREAD_RETURN_VALUE;
@@ -937,6 +963,7 @@ ITK_THREAD_RETURN_TYPE JPEG2000ImageIO::ThreaderCallback( void *arg )
 
 void JPEG2000ImageIO::ReadImageInformation()
 {
+  std::cout << "JPEG2000ImageIO::ReadImageInformation() BEGIN" << std::endl;
   // If the internal image was not open we open it.
   // This is usually done when the user sets the ImageIO manually
   if ( !m_InternalReaders.front()->m_IsOpen )
@@ -955,6 +982,48 @@ void JPEG2000ImageIO::ReadImageInformation()
     this->m_InternalReaders.front()->Clean();
     return;
     }
+
+  // If one of the readers fails, clean everything
+  std::cout << "this->m_ResolutionFactor: " << this->m_ResolutionFactor << std::endl;
+  if(this->m_ResolutionFactor != 0)
+    {
+    for(ReaderVectorType::iterator it = m_InternalReaders.begin();
+        it != m_InternalReaders.end();
+        ++it)
+      {
+      (*it)->Clean();
+      }
+
+    bool success = true;
+
+    for(ReaderVectorType::iterator it = m_InternalReaders.begin();
+        it != m_InternalReaders.end();
+        ++it)
+        {
+
+        if ( !(*it)->Open( m_FileName.c_str(), this->m_ResolutionFactor ) )
+          {
+          success = false;
+          }
+        (*it)->m_IsOpen = true;
+        }
+
+    // If one of the readers fails, clean everything
+    if(!success)
+      {
+      for(ReaderVectorType::iterator it = m_InternalReaders.begin();
+          it != m_InternalReaders.end();
+          ++it)
+        {
+        (*it)->Clean();
+        }
+
+      itkExceptionMacro(<< "Cannot open this file with this resolution!");
+      return;
+      }
+    }
+
+
 
   m_Spacing[0] = 1.0;
   m_Spacing[1] = 1.0;
@@ -1054,6 +1123,7 @@ void JPEG2000ImageIO::ReadImageInformation()
   otbMsgDebugMacro(<< "         ComponentSize      : " << this->GetComponentSize());
   otbMsgDebugMacro(<< "         GetPixelSize       : " << this->GetPixelSize());
 
+  std::cout << "JPEG2000ImageIO::ReadImageInformation() END" << std::endl;
 }
 
 // Compute the tile index list from the GetRegion
@@ -1068,8 +1138,8 @@ std::vector<unsigned int> JPEG2000ImageIO::ComputeTileList()
   int lFirstColumn = this->GetIORegion().GetIndex()[0];
 
   // Compute index of tile recover by the decoded area
-  unsigned int tile_size_x = m_InternalReaders.front()->GetCstrInfo()->tdx;
-  unsigned int tile_size_y = m_InternalReaders.front()->GetCstrInfo()->tdy;
+  unsigned int tile_size_x = int_ceildivpow2(m_InternalReaders.front()->GetCstrInfo()->tdx, m_InternalReaders.front()->m_ResolutionFactor) ;
+  unsigned int tile_size_y = int_ceildivpow2(m_InternalReaders.front()->GetCstrInfo()->tdy, m_InternalReaders.front()->m_ResolutionFactor);
 
   unsigned int l_tile_x_start =  lFirstColumn / tile_size_x;
   unsigned int l_tile_x_end =  (lFirstColumn + lNbColumns + tile_size_x - 1) / tile_size_x;
@@ -1081,8 +1151,10 @@ std::vector<unsigned int> JPEG2000ImageIO::ComputeTileList()
     for (unsigned int itTileX = l_tile_x_start; itTileX < l_tile_x_end; itTileX++)
       {
       tileVector.push_back(itTileX + itTileY * m_InternalReaders.front()->GetCstrInfo()->tw);
+      std::cout << tileVector.back() << ", " ;
       }
     }
+  std::cout << std::endl;
 
   return tileVector;
 }
@@ -1100,10 +1172,10 @@ void ComputeOffsets( opj_image_t * currentTile,
   )
 {
   // Characteristics of the input buffer from openpjeg
-  unsigned int l_x0_src = currentTile->x0;
-  unsigned int l_y0_src = currentTile->y0;
-  unsigned int l_x1_src = currentTile->x1;
-  unsigned int l_y1_src = currentTile->y1;
+  unsigned int l_x0_src = int_ceildivpow2(currentTile->x0, currentTile->comps->factor);
+  unsigned int l_y0_src = int_ceildivpow2(currentTile->y0, currentTile->comps->factor);
+  unsigned int l_x1_src = int_ceildivpow2(currentTile->x1, currentTile->comps->factor);
+  unsigned int l_y1_src = int_ceildivpow2(currentTile->y1, currentTile->comps->factor );
 
   // Size of input buffer from openjpeg
   l_width_src = l_x1_src - l_x0_src;
@@ -1192,7 +1264,7 @@ void ComputeOffsets( opj_image_t * currentTile,
       /* Compute the output buffer offset */
       l_start_offset_dest = l_start_x_dest + l_start_y_dest * (l_x1_dest - l_x0_dest);
 
-      /*
+
       std::cout << "SRC coordinates: l_start_x_src= "<< l_x0_src << ", l_start_y_src= " <<  l_y0_src
                 << ", l_width_src= "<< l_width_src << ", l_height_src= " << l_height_src << std::endl;
       std::cout << "SRC tile offset: "<< l_offset_x0_src << ", " << l_offset_y0_src << std::endl;
@@ -1201,7 +1273,7 @@ void ComputeOffsets( opj_image_t * currentTile,
       std::cout << "DEST coordinates: l_start_x_dest= "<<  l_start_x_dest << ", l_start_y_dest= " << l_start_y_dest
                 << ", l_width_dest= " << l_width_dest << ", l_height_dest= " << l_height_dest << std::endl;
       std::cout << "DEST start offset: " << l_start_offset_dest << std::endl;
-      */
+
 }
 
 /** Get Info about all resolution in jpeg2000 file */

@@ -31,6 +31,7 @@
 #include "otbMetaDataKey.h"
 
 #include "otbGDALImageIO.h" //FIXME find a better way
+#include "otbJPEG2000ImageIO.h" //FIXME find a better way
 #include "otbTileMapImageIO.h"
 
 #include "itksys/SystemTools.hxx"
@@ -299,6 +300,16 @@ ImageFileReader<TOutputImage>
     // Pass the dataset number (used for hdf files for example)
     imageIO->SetDatasetNumber(m_AdditionalNumber);
     }
+
+
+  // Special actions for the JPEG2000ImageIO
+  if (strcmp(this->m_ImageIO->GetNameOfClass(), "JPEG2000ImageIO") == 0)
+      {
+      typename JPEG2000ImageIO::Pointer imageIO = dynamic_cast<JPEG2000ImageIO*>(this->GetImageIO());
+
+      // Pass the Resolution Factor
+      imageIO->SetResolutionFactor(m_AdditionalNumber);
+      }
 
 
   // Got to allocate space for the image. Determine the characteristics of
