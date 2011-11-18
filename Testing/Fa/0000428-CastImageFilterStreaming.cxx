@@ -24,7 +24,7 @@
 
 /**
  * This test reproduces a problem encountered with CastImageFilter and a streaming
- * writer. When the image to write is already loaded in memory and InPlaceOn() is 
+ * writer. When the image to write is already loaded in memory and InPlaceOn() is
  * called, only the first stripe is repeated across the output image.
  * Issue number 0000428
  */
@@ -36,23 +36,23 @@ int main(int argc, char* argv[])
     return EXIT_FAILURE;
     }
   
-  typedef otb::Image<float,2>                   ImageType;
+  typedef otb::Image<float, 2>                   ImageType;
   typedef otb::ImageFileReader<ImageType>             ReaderType;
   typedef otb::StreamingImageFileWriter<ImageType>    WriterType;
-  typedef itk::CastImageFilter<ImageType,ImageType>   CastFilterType;
+  typedef itk::CastImageFilter<ImageType, ImageType>   CastFilterType;
   
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(argv[1]);
   reader->Update();
   
-  CastFilterType::Pointer caster = CastFilterType::New();              
-  caster->SetInput( reader->GetOutput() );      
+  CastFilterType::Pointer caster = CastFilterType::New();
+  caster->SetInput( reader->GetOutput() );
   caster->InPlaceOn();
   
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput(caster->GetOutput());
   writer->SetFileName(argv[2]);
-  //writer->SetAutomaticTiledStreaming(1024);   
+  //writer->SetAutomaticTiledStreaming(1024);
   writer->SetNumberOfDivisionsStrippedStreaming(10);
   writer->Update();
   
