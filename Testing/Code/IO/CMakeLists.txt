@@ -2007,6 +2007,19 @@ IF(OTB_DATA_USE_LARGEINPUT)
          -time
          )
 
+  # Between tiles 328 and 329, the codestream offset crosses the 2**31-1 boundary (max of 32 bit signed integer)
+  # This reveals a problem on 32 bits systems since fseek takes an integer
+  ADD_TEST(ioTvVectorImageFileReaderWriterJP22TIF_PLEIADES-PRE-R4C1-tile328-329 ${COMMON_TESTS2}
+         --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1-tile328-329.tif
+                                       ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1-tile328-329.tif
+         otbMultiChannelExtractROI
+         -ushort ${LARGEDATA}/PLEIADES-PRE/VERSION2/IMG_PHR_001/IMG_R4C1.JP2:5
+         -ushort ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1-tile328-329.tif
+         -startX 1330 -startY 928 -sizeX 32 -sizeY 32
+         -channels 1 2 3 4
+         -time
+         )
+
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 
@@ -2109,6 +2122,17 @@ ADD_TEST(ioTvMultiChannelROI_JPEG2000_2_TIF_res5 ${COMMON_TESTS2}
          ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_0_0_81_61_OUT.tif
          -startX 0 -startY 0 -sizeX 81 -sizeY 61
          -channels 1 2 3 )
+
+IF(OTB_DATA_USE_LARGEINPUT)
+
+ADD_TEST(ioTvMultiChannelROI_JPEG2000_2_TIF_PLEIADES_res5_FullQuicklook ${COMMON_TESTS2}
+   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_pleiades_ql_OUT.tif
+                     ${TEMP}/ioExtractROI_JPEG2K_2_TIF_pleiades_ql_OUT.tif
+         otbMultiChannelExtractROI
+         -ushort ${LARGEDATA}/PLEIADES-PRE/VERSION2/IMG_PHR_001/IMG_R4C1.JP2:5
+         -ushort ${TEMP}/ioExtractROI_JPEG2K_2_TIF_pleiades_ql_OUT.tif
+         )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 ENDIF(OTB_COMPILE_JPEG2000)
 
