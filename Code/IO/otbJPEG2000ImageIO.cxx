@@ -1175,7 +1175,7 @@ void ComputeOffsets( opj_image_t * currentTile,
   unsigned int l_x0_src = int_ceildivpow2(currentTile->x0, currentTile->comps->factor);
   unsigned int l_y0_src = int_ceildivpow2(currentTile->y0, currentTile->comps->factor);
   unsigned int l_x1_src = int_ceildivpow2(currentTile->x1, currentTile->comps->factor);
-  unsigned int l_y1_src = int_ceildivpow2(currentTile->y1, currentTile->comps->factor );
+  unsigned int l_y1_src = int_ceildivpow2(currentTile->y1, currentTile->comps->factor);
 
   // Size of input buffer from openjpeg
   l_width_src = l_x1_src - l_x0_src;
@@ -1187,7 +1187,7 @@ void ComputeOffsets( opj_image_t * currentTile,
   unsigned int l_y0_dest = ioRegion.GetIndex()[1];
   unsigned int l_y1_dest = ioRegion.GetIndex()[1] + ioRegion.GetSize()[1];
 
-  unsigned int l_start_x_dest , l_start_y_dest;
+  unsigned int l_start_x_dest, l_start_y_dest;
   unsigned int l_offset_x0_src, l_offset_y0_src;
 
   /*-----*/
@@ -1200,79 +1200,78 @@ void ComputeOffsets( opj_image_t * currentTile,
    */
 
   if (l_x0_dest < l_x0_src)
-      {
-      l_start_x_dest = l_x0_src - l_x0_dest;
-      l_offset_x0_src = 0;
+    {
+    l_start_x_dest = l_x0_src - l_x0_dest;
+    l_offset_x0_src = 0;
 
-      if (l_x1_dest >= l_x1_src)
-        {
-        l_width_dest = l_width_src;
-        }
-      else
-        {
-        l_width_dest = l_x1_dest - l_x0_src;
-        }
+    if (l_x1_dest >= l_x1_src)
+      {
+      l_width_dest = l_width_src;
       }
     else
       {
-      l_start_x_dest = 0;
-      l_offset_x0_src = l_x0_dest - l_x0_src;
-
-      if (l_x1_dest >= l_x1_src)
-        {
-        l_width_dest = l_width_src - l_offset_x0_src;
-        }
-      else
-        {
-        l_width_dest = l_x1_dest - l_x0_dest;
-        }
+      l_width_dest = l_x1_dest - l_x0_src;
       }
+    }
+  else
+    {
+    l_start_x_dest = 0;
+    l_offset_x0_src = l_x0_dest - l_x0_src;
 
-      if (l_y0_dest < l_y0_src)
+    if (l_x1_dest >= l_x1_src)
       {
-      l_start_y_dest = l_y0_src - l_y0_dest;
-      l_offset_y0_src = 0;
-
-      if (l_y1_dest >= l_y1_src)
-        {
-        l_height_dest = l_height_src;
-        }
-      else
-        {
-        l_height_dest = l_y1_dest - l_y0_src;
-        }
+      l_width_dest = l_width_src - l_offset_x0_src;
       }
     else
       {
-      l_start_y_dest = 0;
-      l_offset_y0_src = l_y0_dest - l_y0_src;
-
-      if (l_y1_dest >= l_y1_src)
-        {
-        l_height_dest = l_height_src - l_offset_y0_src;
-        }
-      else
-        {
-        l_height_dest = l_y1_dest - l_y0_dest;
-        }
+      l_width_dest = l_x1_dest - l_x0_dest;
       }
-      /*-----*/
+    }
 
-      /* Compute the input buffer offset */
-      l_start_offset_src = l_offset_x0_src + l_offset_y0_src * l_width_src;
+  if (l_y0_dest < l_y0_src)
+    {
+    l_start_y_dest = l_y0_src - l_y0_dest;
+    l_offset_y0_src = 0;
 
-      /* Compute the output buffer offset */
-      l_start_offset_dest = l_start_x_dest + l_start_y_dest * (l_x1_dest - l_x0_dest);
+    if (l_y1_dest >= l_y1_src)
+      {
+      l_height_dest = l_height_src;
+      }
+    else
+      {
+      l_height_dest = l_y1_dest - l_y0_src;
+      }
+    }
+  else
+    {
+    l_start_y_dest = 0;
+    l_offset_y0_src = l_y0_dest - l_y0_src;
 
+    if (l_y1_dest >= l_y1_src)
+      {
+      l_height_dest = l_height_src - l_offset_y0_src;
+      }
+    else
+      {
+      l_height_dest = l_y1_dest - l_y0_dest;
+      }
+    }
+  /*-----*/
 
-      std::cout << "SRC coordinates: l_start_x_src= "<< l_x0_src << ", l_start_y_src= " <<  l_y0_src
-                << ", l_width_src= "<< l_width_src << ", l_height_src= " << l_height_src << std::endl;
-      std::cout << "SRC tile offset: "<< l_offset_x0_src << ", " << l_offset_y0_src << std::endl;
-      std::cout << "SRC buffer offset: "<< l_start_offset_src << std::endl;
+  /* Compute the input buffer offset */
+  l_start_offset_src = l_offset_x0_src + l_offset_y0_src * l_width_src;
 
-      std::cout << "DEST coordinates: l_start_x_dest= "<<  l_start_x_dest << ", l_start_y_dest= " << l_start_y_dest
-                << ", l_width_dest= " << l_width_dest << ", l_height_dest= " << l_height_dest << std::endl;
-      std::cout << "DEST start offset: " << l_start_offset_dest << std::endl;
+  /* Compute the output buffer offset */
+  l_start_offset_dest = l_start_x_dest + l_start_y_dest * (l_x1_dest - l_x0_dest);
+
+  std::cout << "SRC coordinates: l_start_x_src= " << l_x0_src << ", l_start_y_src= " << l_y0_src << ", l_width_src= "
+      << l_width_src << ", l_height_src= " << l_height_src << std::endl;
+  std::cout << "SRC tile offset: " << l_offset_x0_src << ", " << l_offset_y0_src << std::endl;
+  std::cout << "SRC buffer offset: " << l_start_offset_src << std::endl;
+
+  std::cout << "DEST coordinates: l_start_x_dest= " << l_start_x_dest << ", l_start_y_dest= " << l_start_y_dest
+      << ", l_width_dest= " << l_width_dest << ", l_height_dest= " << l_height_dest << std::endl;
+  std::cout << "DEST start offset: " << l_start_offset_dest << std::endl;
 
 }
 
