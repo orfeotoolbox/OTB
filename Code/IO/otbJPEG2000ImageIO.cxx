@@ -1143,7 +1143,7 @@ std::vector<unsigned int> JPEG2000ImageIO::ComputeTileList()
 
   unsigned int l_tile_x_start =  lFirstColumn / tile_size_x;
   unsigned int l_tile_x_end =  (lFirstColumn + lNbColumns + tile_size_x - 1) / tile_size_x;
-  unsigned int l_tile_y_start =  lFirstLine / m_InternalReaders.front()->GetCstrInfo()->tdy;
+  unsigned int l_tile_y_start =  lFirstLine / tile_size_y;
   unsigned int l_tile_y_end =  (lFirstLine + lNbLines + tile_size_y - 1) / tile_size_y;
 
   for (unsigned int itTileY = l_tile_y_start; itTileY < l_tile_y_end; itTileY++)
