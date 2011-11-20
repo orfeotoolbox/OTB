@@ -30,6 +30,7 @@
 
 #include "opj_config.h"
 #include "opj_includes.h"
+#include "limits.h"
 
 
 /**
@@ -165,7 +166,21 @@ OPJ_SIZE_T opj_skip_from_file (OPJ_SIZE_T p_nb_bytes, FILE * p_user_data)
 
 opj_bool opj_seek_from_file (OPJ_SIZE_T p_nb_bytes, FILE * p_user_data)
 {
-	if (fseek(p_user_data,p_nb_bytes,SEEK_SET)) {
+  /*
+   * p_nb_bytes is OPJ_SIZE_T
+   * but fseek takes a signed long
+   */
+  if (p_nb_bytes > LONG_MAX) {
+    if (fseek(p_user_data,LONG_MAX,SEEK_SET)) {
+      return EXIT_FAILURE;
+    }
+    p_nb_bytes -= LONG_MAX;
+
+    if (fseek(p_user_data,p_nb_bytes,SEEK_CUR)) {
+      return EXIT_FAILURE;
+    }
+  }
+  else if (fseek(p_user_data,p_nb_bytes,SEEK_SET)) {
 		return EXIT_FAILURE;
 	}
 
