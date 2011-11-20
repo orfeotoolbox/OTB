@@ -745,8 +745,12 @@ void JPEG2000ImageIO::Read(void* buffer)
     std::cout << "toReadTiles size = " << toReadTiles.size() <<std::endl;
     std::cout << "nb of thread = " << this->GetMultiThreader()->GetNumberOfThreads() << std::endl;
 
-    if (this->GetMultiThreader()->GetNumberOfThreads() > toReadTiles.size())
-      this->GetMultiThreader()->SetNumberOfThreads(toReadTiles.size());
+    int nbThreads = itk::MultiThreader::GetGlobalDefaultNumberOfThreads();
+    if (nbThreads > toReadTiles.size())
+      {
+      nbThreads = toReadTiles.size();
+      }
+    this->GetMultiThreader()->SetNumberOfThreads(nbThreads);
 
     // Set up the multithreaded processing
     ThreadStruct str;
