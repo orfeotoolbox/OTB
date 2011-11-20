@@ -2010,6 +2010,7 @@ IF(OTB_DATA_USE_LARGEINPUT)
   # Between tiles 328 and 329, the codestream offset crosses the 2**31-1 boundary (max of 32 bit signed integer)
   # This reveals a problem on 32 bits systems since fseek takes an integer
   ADD_TEST(ioTvVectorImageFileReaderWriterJP22TIF_PLEIADES-PRE-R4C1-tile328-329 ${COMMON_TESTS2}
+         --without-threads
          --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1-tile328-329.tif
                                        ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1-tile328-329.tif
          otbMultiChannelExtractROI
