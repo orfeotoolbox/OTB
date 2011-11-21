@@ -34,28 +34,30 @@ class StringListParameter
 {
 public:
   /** Standard class typedef */
-  typedef StringListParameter           Self;
-  typedef Parameter                     Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
+  typedef StringListParameter Self;
+  typedef Parameter Superclass;
+  typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef std::vector< std::string >    StringListType;
+  typedef std::vector<std::string> StringListType;
 
   /** Defining ::New() static method */
-  itkNewMacro(Self);
+  itkNewMacro(Self)
+  ;
 
   /** RTTI support */
-  itkTypeMacro(StringListParameter, Parameter);
+  itkTypeMacro(StringListParameter, Parameter)
+  ;
 
   /** Set the value */
-  void SetValue( StringListType sList)
+  void SetValue(StringListType sList)
   {
     m_Value = sList;
   }
 
-  void AddValue( std::string value)
+  void AddString(std::string value)
   {
-    m_Value.push_back( value );
+    m_Value.push_back(value);
   }
 
   /** Get the value */
@@ -65,14 +67,24 @@ public:
   }
 
   /** Get the value */
-  std::string GetNthElement( unsigned int i ) const
+  std::string GetNthElement(unsigned int i) const
   {
-    if( m_Value.size() < i )
+    if (m_Value.size() < i)
       {
-        itkExceptionMacro( "Invalid index "<<i<<" the string list has only "<<m_Value.size()<<" elements...")
+      itkExceptionMacro( "Invalid index "<<i<<" the string list has only "<<m_Value.size()<<" elements...")
       }
 
     return m_Value[i];
+  }
+
+  /** Get the value */
+  void SetNthElement(unsigned int i, std::string value)
+  {
+    if (m_Value.size() < i)
+      {
+      itkExceptionMacro( "Invalid index "<<i<<" the string list has only "<<m_Value.size()<<" elements...")
+      }
+    m_Value[i] = value;
   }
 
   bool HasValue() const
@@ -85,14 +97,25 @@ public:
     m_Value.clear();
   }
 
+  void AddNullElement()
+  {
+    m_Value.push_back("");
+    SetActive(false);
+    this->Modified();
+  }
+
 protected:
   /** Constructor */
   StringListParameter()
-  {}
+  {
+    this->SetName("String List");
+    this->SetKey("strList");
+  }
 
   /** Destructor */
   virtual ~StringListParameter()
-  {}
+  {
+  }
 
   StringListType m_Value;
 

@@ -6,6 +6,7 @@ set( WrappersQtWidget_MOC_HDR
        otbWrapperQtWidgetFloatParameter.h
        otbWrapperQtWidgetIntParameter.h
        otbWrapperQtWidgetStringParameter.h
+       otbWrapperQtWidgetStringListParameter.h
        otbWrapperQtWidgetChoiceParameter.h
        otbWrapperQtWidgetInputImageParameter.h
        otbWrapperQtWidgetComplexInputImageParameter.h
@@ -23,6 +24,7 @@ set( WrappersQtWidget_MOC_HDR
        otbWrapperQtWidgetProgressReport.h
        otbWrapperQtWidgetListViewParameter.h
        otbQtFileSelectionWidget.h
+       otbQtStringSelectionWidget.h
        itkQtProgressBar.h
        otbWrapperQtWidgetFilenameParameter.h
        otbQtLogOutput.h

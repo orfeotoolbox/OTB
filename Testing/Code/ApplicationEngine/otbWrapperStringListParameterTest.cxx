@@ -41,7 +41,7 @@ int otbWrapperStringListParameterTest1(int argc, char* argv[])
   const std::string key    = argv[4];
   const std::string desc   = argv[5];
 
-  numParam->AddValue(value1);
+  numParam->AddString(value1);
   StringListParameterType::StringListType sList;
   sList.push_back(value2);
   sList.push_back(value3);
