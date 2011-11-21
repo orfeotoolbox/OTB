@@ -15,14 +15,13 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbDSFuzzyModelEstimation.h"
 
 #include <iostream>
-#include "otbCommandLineArgumentParser.h"
 
+#include "otbWrapperApplication.h"
+#include "otbWrapperApplicationFactory.h"
+#include "otbWrapperStringListParameter.h"
 #include "otbVectorData.h"
-#include "otbVectorDataFileReader.h"
-#include "otbVectorDataFileWriter.h"
 #include "otbImageToEnvelopeVectorDataFilter.h"
 #include "otbVectorDataToRandomLineGenerator.h"
 #include "itkAmoebaOptimizer.h"
@@ -31,8 +30,12 @@
 #include "otbFuzzyDescriptorsModelManager.h"
 
 
-//  The following piece of code implements an observer
-//  that will monitor the evolution of the registration process.
+namespace otb
+{
+
+namespace Wrapper
+{
+
 #include "itkCommand.h"
 class CommandIterationUpdate : public itk::Command
 {
@@ -47,6 +50,9 @@ public:
 typedef itk::AmoebaOptimizer         OptimizerType;
 typedef   const OptimizerType   *    OptimizerPointer;
 
+
+
+
 void Execute(itk::Object *caller, const itk::EventObject & event)
 {
   Execute( (const itk::Object *)caller, event);
@@ -60,331 +66,390 @@ void Execute(const itk::Object * object, const itk::EventObject & event)
     {
     return;
     }
-  std::cout << optimizer->GetCachedValue() << "   ";
-  std::cout << optimizer->GetCachedCurrentPosition() << std::endl;
+  std::ostringstream message;
+  message << optimizer->GetCachedValue() << "   ";
+  message << optimizer->GetCachedCurrentPosition() << std::endl;
+  std::cout<<message.str()<<std::endl;
 }
+
+
 };
 
 
-//namespace otb
-//{
 
-int otb::DSFuzzyModelEstimation::Describe(ApplicationDescriptor* descriptor)
+class DSFuzzyModelEstimation: public Application
 {
-  descriptor->SetName("DSFuzzyModelEstimation");
-  descriptor->SetDescription("Estimate feature fuzzy model parameters using 2 vector data (ground truth samples and wrong samples)");
-  descriptor->AddOption("InputPositiveVectorData", "Ground truth vector data",
-                        "psin", 1, true, ApplicationDescriptor::FileName);
-  descriptor->AddOption("InputNegativeVectorData", "Negative samples vector data",
-                        "nsin", 1, true, ApplicationDescriptor::FileName);
-  descriptor->AddOptionNParams("BeliefSupport", "Dempster Shafer study hypothesis to compute belief",
-                               "BelSup", true, ApplicationDescriptor::StringList);
-  descriptor->AddOptionNParams("PlausibilitySupport", "Dempster Shafer study hypothesis to compute plausibility",
-                               "PlaSup", true, ApplicationDescriptor::StringList);
-  descriptor->AddOption("Criterion", "Dempster Shafer criterion (by default (belief+plausibility)/2)",
-                        "cri", 1, false, ApplicationDescriptor::String);
-  descriptor->AddOption("Weighting", "Coefficient between 0 and 1 to promote undetection or false detections (default 0.5)",
-                        "wgt", 1, false, ApplicationDescriptor::Real);
-  descriptor->AddOption("InitModel", "Initial state for the model Optimizer",
-                        "InitMod", 1, false, ApplicationDescriptor::FileName);
-  descriptor->AddOptionNParams("DescriptorList", "List of the descriptors used in the model (must be specified to perform an automatic initialization)",
-                        "DescList", false, ApplicationDescriptor::StringList);
-  descriptor->AddOption("MaximumNumberOfIterations", "Maximum number of optimizer iteration (default 200)",
-                        "MaxNbIt", 1, false, ApplicationDescriptor::Integer);
-  descriptor->AddOption("OptimizerObserver", "Activate or not the optimizer observer",
-                        "OptObs", 0, false, ApplicationDescriptor::Boolean);
-  descriptor->AddOption("Output", "Output model file name (xml file)",
-                        "out", 1,  true, ApplicationDescriptor::FileName);
+public:
+  /** Standard class typedefs. */
+  typedef DSFuzzyModelEstimation Self;
+  typedef Application Superclass;
+  typedef itk::SmartPointer<Self> Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-  return EXIT_SUCCESS;
-}
+  typedef VectorData<double>                          VectorDataType;
 
+  typedef VectorDataType::DataTreeType                DataTreeType;
+  typedef VectorDataType::DataNodeType                DataNodeType;
 
-int otb::DSFuzzyModelEstimation::Execute(otb::ApplicationOptionsResult* parseResult)
-{
-  typedef otb::VectorData<double>                     VectorDataType;
   typedef VectorDataType::ValuePrecisionType          PrecisionType;
   typedef VectorDataType::PrecisionType               CoordRepType;
-  typedef otb::VectorDataFileReader<VectorDataType>   VectorDataReaderType;
+
+  typedef otb::Wrapper::StringListParameter::StringListType         StringListType;
 
   typedef otb::VectorDataToDSValidatedVectorDataFilter<VectorDataType, PrecisionType>
-                                                      ValidationFilterType;
+                                                            ValidationFilterType;
   typedef otb::StandardDSCostFunction<ValidationFilterType> CostFunctionType;
-  typedef CostFunctionType::LabelSetType              LabelSetType;
+  typedef CostFunctionType::LabelSetType                    LabelSetType;
 
-  typedef itk::AmoebaOptimizer                        OptimizerType;
+  typedef itk::AmoebaOptimizer                            OptimizerType;
 
   typedef otb::FuzzyDescriptorsModelManager::DescriptorsModelType
-                                                      DescriptorsModelType;
+                                                          DescriptorsModelType;
   typedef otb::FuzzyDescriptorsModelManager::DescriptorListType
-                                                      DescriptorListType;
-  //Instantiate
-  VectorDataReaderType::Pointer               psReader = VectorDataReaderType::New();
-  VectorDataReaderType::Pointer               nsReader = VectorDataReaderType::New();
-  CostFunctionType::Pointer                   costFunction = CostFunctionType::New();
-  OptimizerType::Pointer                      optimizer = OptimizerType::New();
+                                                          DescriptorListType;
 
-  if ((parseResult->IsOptionPresent("DescriptorList") && parseResult->IsOptionPresent("InitModel"))
-      || (!parseResult->IsOptionPresent("DescriptorList") && !parseResult->IsOptionPresent("InitModel")))
-    {
-    std::cout << "ERROR: An Initial Model OR a Descriptor List must be specified (but not both)" << std::endl;
-    return EXIT_FAILURE;
-    }
-
-  //Read the vector datas
-  psReader->SetFileName(parseResult->GetParameterString("InputPositiveVectorData"));
-  psReader->Update();
-
-  nsReader->SetFileName(parseResult->GetParameterString("InputNegativeVectorData"));
-  nsReader->Update();
-
-  // Load the initial descriptor model
-  DescriptorListType   descList;
-  DescriptorsModelType descMod;
-  if (parseResult->IsOptionPresent("InitModel"))
-    {
-    std::string descModFile = parseResult->GetParameterString("InitModel");
-    descMod  = FuzzyDescriptorsModelManager::Read( descModFile.c_str() );
-    descList = FuzzyDescriptorsModelManager::GetDescriptorList(descMod);
-    }
-  else
-    {
-    int nbsdDesc = parseResult->GetNumberOfParameters("DescriptorList");
-    for (int i = 0; i < nbsdDesc; i++)
-        {
-        descList.push_back(parseResult->GetParameterString("DescriptorList", i));
-        }
-    }
-  costFunction->SetDescriptorList(descList);
-
-  // Compute statistics of all the descriptors
-  typedef VectorDataType::DataTreeType DataTreeType;
-  typedef VectorDataType::DataNodeType DataNodeType;
-  typedef itk::PreOrderTreeIterator<VectorDataType::DataTreeType>
-  TreeIteratorType;
-
-  std::vector<double> accFirstOrderPS, accSecondOrderPS, minPS, maxPS;
-  accFirstOrderPS.resize(descList.size());
-  accSecondOrderPS.resize(descList.size());
-  std::fill(accFirstOrderPS.begin(), accFirstOrderPS.end(), 0);
-  std::fill(accSecondOrderPS.begin(), accSecondOrderPS.end(), 0);
-  minPS.resize(descList.size());
-  maxPS.resize(descList.size());
-  unsigned int accNbElemPS = 0;
-
-  TreeIteratorType itVectorPS(psReader->GetOutput()->GetDataTree());
-  for( itVectorPS.GoToBegin(); !itVectorPS.IsAtEnd(); ++itVectorPS )
-    {
-    if (!itVectorPS.Get()->IsRoot()
-        && !itVectorPS.Get()->IsDocument()
-        && !itVectorPS.Get()->IsFolder())
-      {
-      DataNodeType::Pointer currentGeometry = itVectorPS.Get();
-
-      for (unsigned int i = 0; i < descList.size(); ++i)
-        {
-        double desc = currentGeometry->GetFieldAsDouble(descList[i]);
-
-        accFirstOrderPS[i] += desc;
-        accSecondOrderPS[i] += desc * desc;
-
-        if (desc < minPS[i])
-          {
-          minPS[i] = desc;
-          }
-        if (desc > maxPS[i])
-          {
-          maxPS[i] = desc;
-          }
-
-        }
-      accNbElemPS ++;
-      }
-    }
-
-  TreeIteratorType itVectorNS(nsReader->GetOutput()->GetDataTree());
-  std::vector<double> accFirstOrderNS, accSecondOrderNS, minNS, maxNS;
-  minNS.resize(descList.size());
-  maxNS.resize(descList.size());
-  accFirstOrderNS.resize(descList.size());
-  accSecondOrderNS.resize(descList.size());
-  std::fill(accFirstOrderNS.begin(), accFirstOrderNS.end(), 0);
-  std::fill(accSecondOrderNS.begin(), accSecondOrderNS.end(), 0);
-  std::fill(minNS.begin(), minNS.end(), 1);
-  std::fill(maxNS.begin(), maxNS.end(), 0);
-  unsigned int accNbElemNS = 0;
-
-  for( itVectorNS.GoToBegin(); !itVectorNS.IsAtEnd(); ++itVectorNS )
-    {
-    if (!itVectorNS.Get()->IsRoot()
-        && !itVectorNS.Get()->IsDocument()
-        && !itVectorNS.Get()->IsFolder())
-      {
-      DataNodeType::Pointer currentGeometry = itVectorNS.Get();
-
-      for (unsigned int i = 0; i < descList.size(); ++i)
-        {
-        double desc = currentGeometry->GetFieldAsDouble(descList[i]);
-
-        accFirstOrderNS[i] += desc;
-        accSecondOrderNS[i] += desc * desc;
-
-        if (desc < minNS[i])
-          {
-          minNS[i] = desc;
-          }
-        if (desc > maxNS[i])
-          {
-          maxNS[i] = desc;
-          }
-
-        }
-      accNbElemNS ++;
-      }
-    }
-  std::cout << "Descriptors Stats : " << std::endl;
-  std::cout << "Positive Samples" << std::endl;
-  for (unsigned int i = 0; i < descList.size(); ++i)
-    {
-    double mean = accFirstOrderPS[i] / accNbElemPS;
-    double stddev = vcl_sqrt( accSecondOrderPS[i]/accNbElemPS - mean*mean );
-    std::cout << descList[i] << "  :  " << mean << " +/- " << stddev
-        << "  (min: " << minPS[i] << "  max: " << maxPS[i] << ")"<< std::endl;
-    }
-
-  std::cout << "Negative Samples" << std::endl;
-  for (unsigned int i = 0; i < descList.size(); ++i)
-    {
-    double mean = accFirstOrderNS[i] / accNbElemNS;
-    double stddev = vcl_sqrt( accSecondOrderNS[i]/accNbElemNS - mean*mean );
-    std::cout << descList[i] << "  :  " << mean << " +/- " << stddev
-        << "  (min: " << minNS[i] << "  max: " << maxNS[i] << ")"<< std::endl;
-    }
+     typedef itk::PreOrderTreeIterator<VectorDataType::DataTreeType>
+     TreeIteratorType;
 
 
-  OptimizerType::ParametersType
-  initialPosition( 4 * descList.size() );
+  /** Standard macro */
+  itkNewMacro(Self) ;
 
-  if (parseResult->IsOptionPresent("InitModel"))
-    {
-    for(unsigned int i=0; i<4; i++)
-      {
-      for(unsigned int j=0; j< descList.size(); j++)
-        {
-        initialPosition.SetElement(i+4*j,   otb::FuzzyDescriptorsModelManager::GetDescriptor(descList[j].c_str(), descMod).second[i]);
-        }
-      }
-    }
-  else
-    {
-    for(unsigned int j=0; j< descList.size(); j++)
-      {
-      initialPosition.SetElement((j*4),   std::min(minNS[j], maxPS[j]));
-      initialPosition.SetElement((j*4)+2, std::max(minNS[j], maxPS[j]));
-      initialPosition.SetElement((j*4)+1, 0.5*(initialPosition.GetElement((j*4)) + initialPosition.GetElement((j*4)+2)));
-      initialPosition.SetElement((j*4)+3, 0.95);
-      }
-    }
+  itkTypeMacro(DSFuzzyModelEstimation, otb::Application) ;
 
-  //Cost Function
-  //Format Hypothesis
-  LabelSetType Bhyp, Phyp;
-  int nbSet;
+private:
 
-  nbSet = parseResult->GetNumberOfParameters("BeliefSupport");
 
-  for (int i = 0; i < nbSet; i++)
-    {
-    std::string str = parseResult->GetParameterString("BeliefSupport", i);
-    Bhyp.insert(str);
-    }
-  costFunction->SetBeliefHypothesis(Bhyp);
-  nbSet = parseResult->GetNumberOfParameters("PlausibilitySupport");
-  for (int i = 0; i < nbSet; i++)
-    {
-    std::string str = parseResult->GetParameterString("PlausibilitySupport", i);
-    Phyp.insert(str);
-    }
-  costFunction->SetPlausibilityHypothesis(Phyp);
 
-  if (parseResult->IsOptionPresent("Weighting"))
-    {
-    costFunction->SetWeight(parseResult->GetParameterDouble("Weighting"));
-    }
-  if (parseResult->IsOptionPresent("Criterion"))
-    {
-    costFunction->SetCriterionFormula(parseResult->GetParameterString("Criterion"));
-    }
-
-  costFunction->SetGTVectorData(psReader->GetOutput());
-  costFunction->SetNSVectorData(nsReader->GetOutput());
-  //Optimizer
-  optimizer->SetCostFunction(costFunction);
-  if (parseResult->IsOptionPresent("MaximumNumberOfIterations"))
-    {
-    optimizer->SetMaximumNumberOfIterations(parseResult->GetParameterInt("MaximumNumberOfIterations"));
-    }
-  else
-    {
-    optimizer->SetMaximumNumberOfIterations(200);
-    }
-  /*
-  optimizer->SetParametersConvergenceTolerance( 0.01 );
-  optimizer->SetFunctionConvergenceTolerance(0.001);
-  */
-  OptimizerType::ParametersType
-  simplexDelta( costFunction->GetNumberOfParameters() );
-  simplexDelta.Fill(0.1);
-
-  optimizer->AutomaticInitialSimplexOff();
-  optimizer->SetInitialSimplexDelta( simplexDelta );
-
-  optimizer->SetInitialPosition(initialPosition);
-
-  // Create the Command observer and register it with the optimizer.
-  CommandIterationUpdate::Pointer observer = CommandIterationUpdate::New();
-  if (parseResult->IsOptionPresent("OptimizerObserver"))
-    {
-    optimizer->AddObserver( itk::IterationEvent(), observer );
-    }
-
-  try
+  DSFuzzyModelEstimation()
   {
-    // do the optimization
-    optimizer->StartOptimization();
+    SetName("DSFuzzyModelEstimation");
+    SetDescription("Estimate feature fuzzy model parameters using 2 vector data (ground truth samples and wrong samples).");
+
+    SetDocName("Fuzzy Model estimation Application");
+    SetDocLongDescription(" ");
+    SetDocLimitations("");
+    SetDocAuthors("OTB-Team");
+    SetDocSeeAlso(" ");
+    SetDocCLExample(
+                    "otbApplicationLauncherCommandLine DSFuzzyModelEstimation  ${OTB-BIN}/bin  --psin ${OTB-Data}/Baseline/OTB-Applications/Files/cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_gt.shp"
+                    " --nsin ${OTB-Data}/Baseline/OTB-Applications/Files/cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_wr.shp --belsup \"ROADSA\" --plasup \"NONDVI\" \"ROADSA\" \"NOBUIL\""
+                    " --initmod ${OTB-Data}/Input/Dempster-Shafer/DSFuzzyModel_Init.xml --maxnbit 4 --optobs true"
+                    "--out DSFuzzyModelEstimation.xml");
+
+    AddDocTag(Tags::FeatureExtraction);
   }
-  catch( itk::ExceptionObject& err )
+
+
+  virtual ~DSFuzzyModelEstimation()
   {
-    // An error has occurred in the optimization.
-    // Update the parameters
-    std::cout << "ERROR: Exception Catched!" << std::endl;
-    std::cout << err.GetDescription() << std::endl;
-    const unsigned int numberOfIterations
-    = optimizer->GetOptimizer()->get_num_evaluations();
-    std::cout << "numberOfIterations : " << numberOfIterations << std::endl;
-    std::cout << "Results : " << optimizer->GetCurrentPosition() << std::endl;
   }
-  // get the results
-  const unsigned int numberOfIterations
-  = optimizer->GetOptimizer()->get_num_evaluations();
-  std::cout << "numberOfIterations : " << numberOfIterations << std::endl;
-  std::cout << "Results : " << optimizer->GetCurrentPosition() << std::endl;
 
-  otb::FuzzyDescriptorsModelManager::DescriptorsModelType model;
+  void DoCreateParameters()
+  {
 
-  for (unsigned int i=0; i < descList.size(); i++)
-    {
-    otb::FuzzyDescriptorsModelManager::ParameterType        tmpParams;
-    for (unsigned int j = 0; j<4; j++)
+    AddParameter(ParameterType_InputVectorData, "psin", "Input Positive Vector Data");
+    SetParameterDescription("psin", "Ground truth vector data for positive samples");
+
+    AddParameter(ParameterType_InputVectorData, "nsin", "Input Negative Vector Data");
+    SetParameterDescription("nsin", "Ground truth vector data for negative samples");
+
+    AddParameter(ParameterType_StringList, "belsup", "Belief Support");
+    SetParameterDescription("belsup", "Dempster Shafer study hypothesis to compute belief");
+
+    AddParameter(ParameterType_StringList, "plasup", "Plausibility Support");
+    SetParameterDescription("plasup", "Dempster Shafer study hypothesis to compute plausibility");
+
+    AddParameter(ParameterType_String, "cri", "Criterion");
+    SetParameterDescription("cri", "Dempster Shafer criterion (by default (belief+plausibility)/2)");
+    MandatoryOff("cri");
+    SetParameterString("cri","((Belief + Plausibility)/2.)");
+
+    AddParameter(ParameterType_Float,"wgt","Weighting");
+    SetParameterDescription("wgt","Coefficient between 0 and 1 to promote undetection or false detections (default 0.5)");
+    MandatoryOff("wgt");
+    SetParameterFloat("wgt",0.5);
+
+    AddParameter(ParameterType_Filename,"initmod","initial model");
+    SetParameterDescription("initmod","Initial state for the model Optimizer");
+    MandatoryOff("initmod");
+
+    AddParameter(ParameterType_StringList, "desclist","Descriptor list");
+    SetParameterDescription("desclist","List of the descriptors used in the model (must be specified to perform an automatic initialization)");
+    MandatoryOff("desclist");
+    SetParameterString("desclist","");
+
+    AddParameter(ParameterType_Int,"maxnbit","Maximum number of iterations");
+    MandatoryOff("maxnbit");
+    SetParameterDescription("maxnbit","Maximum number of optimizer iteration (default 200)");
+    SetParameterInt("maxnbit",200);
+
+    AddParameter(ParameterType_Empty,"optobs","Optimizer Observer");
+    SetParameterDescription("optobs","Activate the optimizer observer");
+    MandatoryOff("optobs");
+
+    AddParameter(ParameterType_Filename,"out","Output filename");
+    SetParameterDescription("out","Output model file name (xml file)");
+    SetParameterRole("out",Role_Output);
+
+  }
+
+  void DoUpdateParameters()
+  {
+    // Nothing to do here : all parameters are independent
+
+
+    // .. //
+
+
+  }
+
+  void DoExecute()
+  {
+
+    //Instantiate
+    m_CostFunction = CostFunctionType::New();
+    m_Optimizer = OptimizerType::New();
+
+    //Read the vector datas
+    VectorDataType::Pointer psVectorData = GetParameterVectorData("psin");
+    psVectorData->Update();
+    VectorDataType::Pointer nsVectorData = GetParameterVectorData("psin");
+    nsVectorData->Update();
+
+    // Load the initial descriptor model
+    DescriptorListType descList;
+    DescriptorsModelType descMod;
+    if (IsParameterEnabled("initmod"))
       {
-      tmpParams.push_back(optimizer->GetCurrentPosition()[(i*4)+j]);
+      std::string descModFile = GetParameterString("initmod");
+      descMod = FuzzyDescriptorsModelManager::Read(descModFile.c_str());
+      descList = FuzzyDescriptorsModelManager::GetDescriptorList(descMod);
       }
-    otb::FuzzyDescriptorsModelManager::AddDescriptor(descList[i],
-                                                     tmpParams,
-                                                     model);
-    }
-  otb::FuzzyDescriptorsModelManager::Save(parseResult->GetParameterString("Output"),
-                                          model);
+    else
+      {
+      StringListType stringList = GetParameterStringList("desclist");
+      int nbsdDesc = stringList.size();
+      for (int i = 0; i < nbsdDesc; i++)
+        {
+        descList.push_back(stringList[i]);
+        }
+      }
 
-  return EXIT_SUCCESS;
+    m_CostFunction->SetDescriptorList(descList);
+
+    // Compute statistics of all the descriptors
+
+    std::vector<double> accFirstOrderPS, accSecondOrderPS, minPS, maxPS;
+    accFirstOrderPS.resize(descList.size());
+    accSecondOrderPS.resize(descList.size());
+    std::fill(accFirstOrderPS.begin(), accFirstOrderPS.end(), 0);
+    std::fill(accSecondOrderPS.begin(), accSecondOrderPS.end(), 0);
+    minPS.resize(descList.size());
+    maxPS.resize(descList.size());
+    unsigned int accNbElemPS = 0;
+
+    TreeIteratorType itVectorPS(psVectorData->GetDataTree());
+    for (itVectorPS.GoToBegin(); !itVectorPS.IsAtEnd(); ++itVectorPS)
+      {
+      if (!itVectorPS.Get()->IsRoot() && !itVectorPS.Get()->IsDocument() && !itVectorPS.Get()->IsFolder())
+        {
+        DataNodeType::Pointer currentGeometry = itVectorPS.Get();
+
+        for (unsigned int i = 0; i < descList.size(); ++i)
+          {
+          double desc = currentGeometry->GetFieldAsDouble(descList[i]);
+
+          accFirstOrderPS[i] += desc;
+          accSecondOrderPS[i] += desc * desc;
+
+          if (desc < minPS[i])
+            {
+            minPS[i] = desc;
+            }
+          if (desc > maxPS[i])
+            {
+            maxPS[i] = desc;
+            }
+
+          }
+        accNbElemPS++;
+        }
+      }
+
+    TreeIteratorType itVectorNS(nsVectorData->GetDataTree());
+    std::vector<double> accFirstOrderNS, accSecondOrderNS, minNS, maxNS;
+    minNS.resize(descList.size());
+    maxNS.resize(descList.size());
+    accFirstOrderNS.resize(descList.size());
+    accSecondOrderNS.resize(descList.size());
+    std::fill(accFirstOrderNS.begin(), accFirstOrderNS.end(), 0);
+    std::fill(accSecondOrderNS.begin(), accSecondOrderNS.end(), 0);
+    std::fill(minNS.begin(), minNS.end(), 1);
+    std::fill(maxNS.begin(), maxNS.end(), 0);
+    unsigned int accNbElemNS = 0;
+
+    for (itVectorNS.GoToBegin(); !itVectorNS.IsAtEnd(); ++itVectorNS)
+      {
+      if (!itVectorNS.Get()->IsRoot() && !itVectorNS.Get()->IsDocument() && !itVectorNS.Get()->IsFolder())
+        {
+        DataNodeType::Pointer currentGeometry = itVectorNS.Get();
+
+        for (unsigned int i = 0; i < descList.size(); ++i)
+          {
+          double desc = currentGeometry->GetFieldAsDouble(descList[i]);
+
+          accFirstOrderNS[i] += desc;
+          accSecondOrderNS[i] += desc * desc;
+
+          if (desc < minNS[i])
+            {
+            minNS[i] = desc;
+            }
+          if (desc > maxNS[i])
+            {
+            maxNS[i] = desc;
+            }
+
+          }
+        accNbElemNS++;
+        }
+      }
+    otbAppLogINFO( << "Descriptors Stats : ");
+    otbAppLogINFO( << "Positive Samples");
+    for (unsigned int i = 0; i < descList.size(); ++i)
+      {
+      double mean = accFirstOrderPS[i] / accNbElemPS;
+      double stddev = vcl_sqrt(accSecondOrderPS[i] / accNbElemPS - mean * mean);
+      otbAppLogINFO( << descList[i] << "  :  " << mean << " +/- " << stddev << "  (min: " << minPS[i] << "  max: " << maxPS[i] << ")"<< std::endl);
+      }
+
+    otbAppLogINFO( << "Negative Samples" << std::endl);
+    for (unsigned int i = 0; i < descList.size(); ++i)
+      {
+      double mean = accFirstOrderNS[i] / accNbElemNS;
+      double stddev = vcl_sqrt(accSecondOrderNS[i] / accNbElemNS - mean * mean);
+      otbAppLogINFO(<< descList[i] << "  :  " << mean << " +/- " << stddev << "  (min: " << minNS[i] << "  max: " << maxNS[i] << ")"<< std::endl);
+      }
+
+    OptimizerType::ParametersType initialPosition(4 * descList.size());
+
+    if (IsParameterEnabled("initmod"))
+      {
+
+      for (unsigned int i = 0; i < 4; i++)
+        {
+        for (unsigned int j = 0; j < descList.size(); j++)
+          {
+          initialPosition.SetElement(
+                                     i + 4 * j,
+                                     otb::FuzzyDescriptorsModelManager::GetDescriptor(descList[j].c_str(), descMod).second[i]);
+          }
+        }
+      }
+    else
+      {
+      for (unsigned int j = 0; j < descList.size(); j++)
+        {
+        initialPosition.SetElement((j * 4), std::min(minNS[j], maxPS[j]));
+        initialPosition.SetElement((j * 4) + 2, std::max(minNS[j], maxPS[j]));
+        initialPosition.SetElement(
+                                   (j * 4) + 1,
+                                       0.5
+                                       * (initialPosition.GetElement((j * 4)) + initialPosition.GetElement((j * 4) + 2)));
+        initialPosition.SetElement((j * 4) + 3, 0.95);
+        }
+      }
+
+    //Cost Function
+    //Format Hypothesis
+    LabelSetType Bhyp, Phyp;
+    int nbSet;
+
+    StringListType stringList = GetParameterStringList("belsup");
+    nbSet = stringList.size();
+
+    for (int i = 0; i < nbSet; i++)
+      {
+      std::string str = stringList[i];
+      Bhyp.insert(str);
+      }
+    m_CostFunction->SetBeliefHypothesis(Bhyp);
+    stringList = GetParameterStringList("plasup");
+    nbSet = stringList.size();
+    for (int i = 0; i < nbSet; i++)
+      {
+      std::string str = stringList[i];
+      Phyp.insert(str);
+      }
+    m_CostFunction->SetPlausibilityHypothesis(Phyp);
+
+    m_CostFunction->SetWeight(GetParameterFloat("wgt"));
+
+    m_CostFunction->SetCriterionFormula(GetParameterString("cri"));
+
+    m_CostFunction->SetGTVectorData(psVectorData);
+    m_CostFunction->SetNSVectorData(nsVectorData);
+    //Optimizer
+    m_Optimizer->SetCostFunction(m_CostFunction);
+
+    m_Optimizer->SetMaximumNumberOfIterations(GetParameterInt("maxnbit"));
+
+    OptimizerType::ParametersType simplexDelta(m_CostFunction->GetNumberOfParameters());
+    simplexDelta.Fill(0.1);
+
+    m_Optimizer->AutomaticInitialSimplexOff();
+    m_Optimizer->SetInitialSimplexDelta(simplexDelta);
+
+    m_Optimizer->SetInitialPosition(initialPosition);
+
+    // Create the Command observer and register it with the optimizer.
+    CommandIterationUpdate::Pointer observer = CommandIterationUpdate::New();
+    if (IsParameterEnabled("optobs"))
+      {
+      m_Optimizer->AddObserver(itk::IterationEvent(), observer);
+      }
+
+    try
+      {
+      // do the optimization
+      m_Optimizer->StartOptimization();
+      }
+    catch (itk::ExceptionObject& err)
+      {
+      // An error has occurred in the optimization.
+      // Update the parameters
+      otbAppLogFATAL("ERROR: Exception Catched!" << std::endl);
+      otbAppLogFATAL(<< err.GetDescription() << std::endl);
+      const unsigned int numberOfIterations = m_Optimizer->GetOptimizer()->get_num_evaluations();
+      otbAppLogFATAL("numberOfIterations : " << numberOfIterations << std::endl);
+      otbAppLogFATAL("Results : " << m_Optimizer->GetCurrentPosition() << std::endl);
+      }
+    // get the results
+    const unsigned int numberOfIterations = m_Optimizer->GetOptimizer()->get_num_evaluations();
+    otbAppLogFATAL("numberOfIterations : " << numberOfIterations << std::endl);
+    otbAppLogFATAL("Results : " << m_Optimizer->GetCurrentPosition() << std::endl);
+
+    for (unsigned int i = 0; i < descList.size(); i++)
+      {
+      otb::FuzzyDescriptorsModelManager::ParameterType tmpParams;
+      for (unsigned int j = 0; j < 4; j++)
+        {
+        tmpParams.push_back(m_Optimizer->GetCurrentPosition()[(i * 4) + j]);
+        }
+      otb::FuzzyDescriptorsModelManager::AddDescriptor(descList[i], tmpParams, m_Model);
+      }
+    otb::FuzzyDescriptorsModelManager::Save(GetParameterString("out"), m_Model);
+
+  };
+
+  CostFunctionType::Pointer                               m_CostFunction;
+  OptimizerType::Pointer                                  m_Optimizer;
+  otb::FuzzyDescriptorsModelManager::DescriptorsModelType m_Model;
+};
+
 }
+}
+
+OTB_APPLICATION_EXPORT(otb::Wrapper::DSFuzzyModelEstimation)
+
