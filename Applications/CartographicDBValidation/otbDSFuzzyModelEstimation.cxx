@@ -52,7 +52,6 @@ typedef   const OptimizerType   *    OptimizerPointer;
 
 
 
-
 void Execute(itk::Object *caller, const itk::EventObject & event)
 {
   Execute( (const itk::Object *)caller, event);
@@ -74,7 +73,6 @@ void Execute(const itk::Object * object, const itk::EventObject & event)
 
 
 };
-
 
 
 class DSFuzzyModelEstimation: public Application
@@ -113,12 +111,11 @@ public:
 
 
   /** Standard macro */
-  itkNewMacro(Self) ;
+  itkNewMacro(Self);
 
-  itkTypeMacro(DSFuzzyModelEstimation, otb::Application) ;
+  itkTypeMacro(DSFuzzyModelEstimation, otb::Application);
 
 private:
-
 
 
   DSFuzzyModelEstimation()
@@ -168,7 +165,7 @@ private:
     AddParameter(ParameterType_Float,"wgt","Weighting");
     SetParameterDescription("wgt","Coefficient between 0 and 1 to promote undetection or false detections (default 0.5)");
     MandatoryOff("wgt");
-    SetParameterFloat("wgt",0.5);
+    SetParameterFloat("wgt", 0.5);
 
     AddParameter(ParameterType_Filename,"initmod","initial model");
     SetParameterDescription("initmod","Initial state for the model Optimizer");
@@ -182,7 +179,7 @@ private:
     AddParameter(ParameterType_Int,"maxnbit","Maximum number of iterations");
     MandatoryOff("maxnbit");
     SetParameterDescription("maxnbit","Maximum number of optimizer iteration (default 200)");
-    SetParameterInt("maxnbit",200);
+    SetParameterInt("maxnbit", 200);
 
     AddParameter(ParameterType_Empty,"optobs","Optimizer Observer");
     SetParameterDescription("optobs","Activate the optimizer observer");
@@ -190,7 +187,7 @@ private:
 
     AddParameter(ParameterType_Filename,"out","Output filename");
     SetParameterDescription("out","Output model file name (xml file)");
-    SetParameterRole("out",Role_Output);
+    SetParameterRole("out", Role_Output);
 
   }
 

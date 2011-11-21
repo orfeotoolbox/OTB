@@ -113,7 +113,7 @@ void QtWidgetStringListParameter::DoCreateWidget()
   m_StringListParam->AddNullElement();
   connect( fileSelection->GetInput(), SIGNAL(textChanged(const QString&)), this, SLOT(UpdateStringList()) );
 
-  m_LineEditList.push_back(fileSelection);*/
+  m_LineEditList.push_back(fileSelection); */
 
   QGroupBox *mainGroup = new QGroupBox();
   mainGroup->setLayout(fileLayout);
@@ -140,7 +140,7 @@ QtWidgetStringListParameter::UpdateStringList()
   // save value
   for(unsigned int j=0; j<m_StringListParam->GetValue().size(); j++ )
     {
-      m_StringListParam->SetNthElement(j,m_LineEditList[j]->GetStringName());
+      m_StringListParam->SetNthElement(j, m_LineEditList[j]->GetStringName());
     }
   emit Change();
 }
@@ -266,7 +266,6 @@ QtWidgetStringListParameter::UpdateStringList( std::map<unsigned int, unsigned i
 
 
 
-
 void QtWidgetStringListParameter::SetString(const QString& value)
 {
   m_StringListParam->AddString(value.toStdString());
@@ -302,7 +301,6 @@ QtWidgetStringListParameter::AddString()
  
   this->update();
 }
-
 
 
 void

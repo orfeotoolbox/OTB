@@ -90,7 +90,7 @@ public:
   }
   
   opj_image_t * DecodeTile(unsigned int tileIndex);
-  std::vector<unsigned int> GetResolutionsAvailable(){return this->m_ResolutionAvailable;};
+  std::vector<unsigned int> GetResolutionsAvailable(){return this->m_ResolutionAvailable; };
 
 
   void Clean();
@@ -331,7 +331,7 @@ int JPEG2000ReaderInternal::Initialize()
 
     // We can now retrieve the main information  of the image and the codestream
     this->m_Width = this->m_Image->comps->w; //this->m_Image->x1 - this->m_Image->x0;
-    this->m_Height = this->m_Image->comps->h ;// this->m_Image->y1 - this->m_Image->y0;
+    this->m_Height = this->m_Image->comps->h; // this->m_Image->y1 - this->m_Image->y0;
 
     otbMsgDevMacro(<< "JPEG2000InternalReader dimension (after reading header) = " << this->m_Image->comps->w << " x "
                    << this->m_Image->comps->h );
@@ -401,7 +401,6 @@ int JPEG2000ReaderInternal::Initialize()
 
   return 1;
 }
-
 
 
 int JPEG2000ReaderInternal::CanRead()
@@ -633,8 +632,8 @@ bool JPEG2000ImageIO::GetResolutionInfo(std::vector<unsigned int>& res, std::vec
   if (res.empty())
     return false;
 
-  int originalWidth = m_InternalReaders[0]->m_Width ;
-  int originalHeight = m_InternalReaders[0]->m_Height ;
+  int originalWidth = m_InternalReaders[0]->m_Width;
+  int originalHeight = m_InternalReaders[0]->m_Height;
 
   for (std::vector<unsigned int>::iterator itRes = res.begin(); itRes < res.end(); itRes++)
     {
@@ -910,7 +909,7 @@ ITK_THREAD_RETURN_TYPE JPEG2000ImageIO::ThreaderCallback( void *arg )
     }
 
   for(unsigned int i = threadId * tilesPerThread;
-        i < tilesPerThread * (threadId+1) ;
+        i < tilesPerThread * (threadId+1);
         ++i)
     {
     tiles->at(i).second = readers.at(threadId)->DecodeTile(tiles->at(i).first);
@@ -1003,7 +1002,6 @@ void JPEG2000ImageIO::ReadImageInformation()
       return;
       }
     }
-
 
 
   m_Spacing[0] = 1.0 / vcl_pow(2.0, m_ResolutionFactor);
@@ -1117,7 +1115,7 @@ std::vector<unsigned int> JPEG2000ImageIO::ComputeTileList()
   int lFirstColumn = this->GetIORegion().GetIndex()[0];
 
   // Compute index of tile recover by the decoded area
-  unsigned int tile_size_x = int_ceildivpow2(m_InternalReaders.front()->GetCstrInfo()->tdx, m_InternalReaders.front()->m_ResolutionFactor) ;
+  unsigned int tile_size_x = int_ceildivpow2(m_InternalReaders.front()->GetCstrInfo()->tdx, m_InternalReaders.front()->m_ResolutionFactor);
   unsigned int tile_size_y = int_ceildivpow2(m_InternalReaders.front()->GetCstrInfo()->tdy, m_InternalReaders.front()->m_ResolutionFactor);
 
   unsigned int l_tile_x_start =  lFirstColumn / tile_size_x;

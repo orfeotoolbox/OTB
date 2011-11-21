@@ -43,11 +43,11 @@ public:
 
   /** Defining ::New() static method */
   itkNewMacro(Self)
-  ;
+ ;
 
   /** RTTI support */
   itkTypeMacro(StringListParameter, Parameter)
-  ;
+ ;
 
   /** Set the value */
   void SetValue(StringListType sList)
