@@ -93,3 +93,31 @@ SET_TESTS_PROPERTIES(apTuCdComputePolylineFeatureFromImage_LI_ROADSA_RoadExtract
 SET_TESTS_PROPERTIES(apTvCdComputePolylineFeatureFromImage_LI_NOBUIL_RoadExtractionApplication PROPERTIES DEPENDS apTuCdComputePolylineFeatureFromImage_LI_ROADSA_RoadExtractionApplication)
         
 ENDIF(OTB_DATA_USE_LARGEINPUT)
+
+
+
+OTB_TEST_APPLICATION(NAME cdbTuDSFuzzyModelEstimation_LI
+                     APP  DSFuzzyModelEstimation
+                     OPTIONS --psin ${OTBAPP_BASELINE_FILES}/cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_gt.shp
+                		     --nsin ${OTBAPP_BASELINE_FILES}/cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_wr.shp
+                		     --belsup "ROADSA" 
+                		     --plasup "NONDVI" "ROADSA" "NOBUIL" 
+                		     --initmod ${OTB_DATA_ROOT}/Input/Dempster-Shafer/DSFuzzyModel_Init.xml 
+                		     --maxnbit 4 
+                		     --optobs true
+                		     --out ${TEMP}/cdbTuDSFuzzyModelEstimatorOutput_LI.xml)
+
+OTB_TEST_APPLICATION(NAME cdbTuDSFuzzyModelEstimation_LI_autoInit
+                     APP  DSFuzzyModelEstimation
+                     OPTIONS --psin ${OTBAPP_BASELINE_FILES}/cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_gt.shp
+                		     --nsin ${OTBAPP_BASELINE_FILES}/cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_wr.shp
+                		     --belsup "ROADSA" 
+                		     --plasup "NONDVI" "ROADSA" "NOBUIL" 
+                		     --desclist "NONDVI" "ROADSA" "NOBUIL"
+                		     --maxnbit 4 
+                		     --optobs true
+                		     --out ${TEMP}/cdbTuDSFuzzyModelEstimatorOutput_LI_autoInit.xml)
+
+
+
+
