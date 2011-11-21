@@ -127,8 +127,8 @@ private:
     SetDescription("Estimate feature fuzzy model parameters using 2 vector data (ground truth samples and wrong samples).");
 
     SetDocName("Fuzzy Model estimation Application");
-    SetDocLongDescription(" ");
-    SetDocLimitations("");
+    SetDocLongDescription("Estimate feature fuzzy model parameters using 2 vector data (ground truth samples and wrong samples).");
+    SetDocLimitations("None.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
     SetDocCLExample(
