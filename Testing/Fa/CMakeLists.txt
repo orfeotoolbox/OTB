@@ -235,9 +235,8 @@ ADD_TEST(FA-00134-feature_extraction ${CXX_TEST_PATH}/00134-feature_extraction
         500 # extract start index
         300 # extract size
         )
-        
-        
-        ADD_TEST(FA-Spot5SensorModel ${CXX_TEST_PATH}/SensorModelBorder
+
+ADD_TEST(FA-Spot5SensorModel ${CXX_TEST_PATH}/SensorModelBorder
   ${IMAGEDATA}/SPOT5/TEHERAN/IMAGERY.TIF
   ${TEMP}/FA-Spot5SensorModel.txt
   )
@@ -257,6 +256,18 @@ ENDIF(USE_FFTWD OR USE_FFTWF)
 ADD_TEST(faTvWriteUnsignedLong ${CXX_TEST_PATH}/WriteUnsignedLong
 ${TEMP}/WriteUnsignedLong.tif
 )
+
+ADD_TEST(FA-0000428-CastImageFilterStreaming 
+#  ${COMMON_TESTS}
+#  --compare-image ${TOL} ${INPUTDATA}/poupees.jpg 
+#                        ${TEMP}/FA-0000428-pou.tif
+  ${CXX_TEST_PATH}/0000428-CastImageFilterStreaming
+    ${INPUTDATA}/poupees.jpg
+    ${TEMP}/FA-0000428-pou.tif
+  )
+
+# -------  Compare region propagation of ExtractROI filters  ------------------------------
+ADD_TEST(FA-000307-ExtractROIRegion ${CXX_TEST_PATH}/0000307-ExtractROICompareRegion)
 
 
 # ------- FA 0000209 : SVM Validation issue -------------------------
@@ -312,5 +323,11 @@ TARGET_LINK_LIBRARIES(WriteUnsignedLong OTBIO OTBCommon)
 
 ADD_EXECUTABLE(0000209-SVMValidationLinearlySeparableProbEstimation 0000209-SVMValidationLinearlySeparableProbEstimation.cxx)
 TARGET_LINK_LIBRARIES(0000209-SVMValidationLinearlySeparableProbEstimation OTBIO OTBLearning)
+
+ADD_EXECUTABLE(0000307-ExtractROICompareRegion  0000307-ExtractROICompareRegionsImplementations.cxx)
+TARGET_LINK_LIBRARIES(0000307-ExtractROICompareRegion OTBIO OTBCommon)
+
+ADD_EXECUTABLE(0000428-CastImageFilterStreaming  0000428-CastImageFilterStreaming.cxx)
+TARGET_LINK_LIBRARIES(0000428-CastImageFilterStreaming OTBIO OTBCommon OTBBasicFilters)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

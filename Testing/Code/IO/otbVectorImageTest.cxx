@@ -131,10 +131,10 @@ int otbVectorImageTest(int argc, char* argv[])
     }
   const char * inputFilename  = argv[1];
   const char * outputAsciiFilename  = argv[2];
-  int datasetNumber = -1;
+  int addNumber = -1;
   if (argc > 3)
     {
-    datasetNumber = atoi(argv[3]);
+    addNumber = atoi(argv[3]);
     }
 
   typedef double PixelType;
@@ -145,9 +145,9 @@ int otbVectorImageTest(int argc, char* argv[])
   ReaderType::Pointer reader = ReaderType::New();
 
   reader->SetFileName(inputFilename);
-  if (datasetNumber != -1)
+  if (addNumber != -1)
     {
-    reader->SetDatasetNumber(datasetNumber);
+    reader->SetAdditionalNumber(addNumber);
     }
   reader->UpdateOutputInformation();
 

@@ -274,6 +274,9 @@
 #define j2k_setup_decoding_tile					@OPJ_MANGLE_PREFIX@_j2k_setup_decoding_tile
 #define jp2_get_tile							@OPJ_MANGLE_PREFIX@_jp2_get_tile
 
+#define j2k_set_decoded_resolution_factor       @OPJ_MANGLE_PREFIX@_j2k_set_decoded_resolution_factor
+#define jp2_set_decoded_resolution_factor       @OPJ_MANGLE_PREFIX@_jp2_set_decoded_resolution_factor
+
 #endif
 
 #endif

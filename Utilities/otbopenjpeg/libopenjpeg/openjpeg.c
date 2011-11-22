@@ -30,6 +30,7 @@
 
 #include "opj_config.h"
 #include "opj_includes.h"
+#include "limits.h"
 
 
 /**
@@ -85,6 +86,10 @@ typedef struct opj_decompression
 										opj_image_t *p_image,
 										struct opj_event_mgr * p_manager,
 										OPJ_UINT32 tile_index);
+
+	/** Set the decoded resolution factor */
+	opj_bool (*opj_set_decoded_resolution_factor) (void * p_codec, OPJ_UINT32 res_factor, struct opj_event_mgr * p_manager);
+
 }opj_decompression_t;
 
 /**
@@ -161,7 +166,21 @@ OPJ_SIZE_T opj_skip_from_file (OPJ_SIZE_T p_nb_bytes, FILE * p_user_data)
 
 opj_bool opj_seek_from_file (OPJ_SIZE_T p_nb_bytes, FILE * p_user_data)
 {
-	if (fseek(p_user_data,p_nb_bytes,SEEK_SET)) {
+  /*
+   * p_nb_bytes is OPJ_SIZE_T
+   * but fseek takes a signed long
+   */
+  if (p_nb_bytes > LONG_MAX) {
+    if (fseek(p_user_data,LONG_MAX,SEEK_SET)) {
+      return EXIT_FAILURE;
+    }
+    p_nb_bytes -= LONG_MAX;
+
+    if (fseek(p_user_data,p_nb_bytes,SEEK_CUR)) {
+      return EXIT_FAILURE;
+    }
+  }
+  else if (fseek(p_user_data,p_nb_bytes,SEEK_SET)) {
 		return EXIT_FAILURE;
 	}
 
@@ -299,6 +318,10 @@ opj_codec_t* OPJ_CALLCONV opj_create_decompress_v2(OPJ_CODEC_FORMAT p_format)
 																						struct opj_event_mgr * p_manager,
 																						OPJ_UINT32 tile_index)) j2k_get_tile;
 
+			l_info->m_codec_data.m_decompression.opj_set_decoded_resolution_factor = (opj_bool (*) (void * p_codec,
+																									OPJ_UINT32 res_factor,
+																									struct opj_event_mgr * p_manager)) j2k_set_decoded_resolution_factor;
+
 			l_info->m_codec = j2k_create_decompress_v2();
 
 			if (! l_info->m_codec) {
@@ -356,6 +379,10 @@ opj_codec_t* OPJ_CALLCONV opj_create_decompress_v2(OPJ_CODEC_FORMAT p_format)
 																						opj_image_t *p_image,
 																						struct opj_event_mgr * p_manager,
 																						OPJ_UINT32 tile_index)) jp2_get_tile;
+
+			l_info->m_codec_data.m_decompression.opj_set_decoded_resolution_factor = (opj_bool (*) (void * p_codec,
+																									OPJ_UINT32 res_factor,
+																									opj_event_mgr_t * p_manager)) jp2_set_decoded_resolution_factor;
 
 			l_info->m_codec = jp2_create(OPJ_TRUE);
 
@@ -1001,4 +1028,23 @@ opj_bool OPJ_CALLCONV opj_get_decoded_tile(	opj_codec_t *p_codec,
 	}
 
 	return OPJ_FALSE;
+}
+
+/*
+ *
+ *
+ */
+opj_bool OPJ_CALLCONV opj_set_decoded_resolution_factor(opj_codec_t *p_codec, OPJ_UINT32 res_factor)
+{
+	opj_codec_private_t * l_codec = (opj_codec_private_t *) p_codec;
+
+	if ( !l_codec ){
+		fprintf(stderr, "[ERROR] Input parameters of the setup_decoder function are incorrect.\n");
+		return OPJ_FALSE;
+	}
+
+
+	l_codec->m_codec_data.m_decompression.opj_set_decoded_resolution_factor(l_codec->m_codec, res_factor, l_codec->m_event_mgr);
+
+	return OPJ_TRUE;
 }

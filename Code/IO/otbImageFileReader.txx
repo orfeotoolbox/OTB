@@ -31,6 +31,7 @@
 #include "otbMetaDataKey.h"
 
 #include "otbGDALImageIO.h" //FIXME find a better way
+#include "otbJPEG2000ImageIO.h" //FIXME find a better way
 #include "otbTileMapImageIO.h"
 
 #include "itksys/SystemTools.hxx"
@@ -53,7 +54,7 @@ bool PixelIsComplex(const T& /*dummy*/)
 
 template <class TOutputImage>
 ImageFileReader<TOutputImage>
-::ImageFileReader() : itk::ImageFileReader<TOutputImage>(), m_DatasetNumber(0)
+::ImageFileReader() : itk::ImageFileReader<TOutputImage>(), m_AdditionalNumber(0)
 {
   m_Curl = CurlHelper::New();
 }
@@ -297,8 +298,18 @@ ImageFileReader<TOutputImage>
       imageIO->SetIsVectorImage(false);
 
     // Pass the dataset number (used for hdf files for example)
-    imageIO->SetDatasetNumber(m_DatasetNumber);
+    imageIO->SetDatasetNumber(m_AdditionalNumber);
     }
+
+
+  // Special actions for the JPEG2000ImageIO
+  if (strcmp(this->m_ImageIO->GetNameOfClass(), "JPEG2000ImageIO") == 0)
+      {
+      typename JPEG2000ImageIO::Pointer imageIO = dynamic_cast<JPEG2000ImageIO*>(this->GetImageIO());
+
+      // Pass the Resolution Factor
+      imageIO->SetResolutionFactor(m_AdditionalNumber);
+      }
 
 
   // Got to allocate space for the image. Determine the characteristics of
@@ -463,16 +474,17 @@ ImageFileReader<TOutputImage>
     return;
     }
 
-  // Test if we have an hdf file with dataset spec
+  // Test if we have a file with an additional information specified
+  // (used for hdf dataset or jpeg2000 resolution)
   std::string realfile(this->m_FileName);
-  unsigned int datasetNum;
-  if (System::ParseHdfFileName(this->m_FileName, realfile, datasetNum))
+  unsigned int addNum;
+  if (System::ParseFileNameForAdditonalInfo(this->m_FileName, realfile, addNum))
     {
-    otbMsgDevMacro(<< "HDF name with dataset specification detected");
+    otbMsgDevMacro(<< "Filename with additinal information specification detected");
     otbMsgDevMacro(<< " - " << realfile);
-    otbMsgDevMacro(<< " - " << datasetNum);
+    otbMsgDevMacro(<< " - " << addNum);
     this->m_FileName = realfile;
-    m_DatasetNumber = datasetNum;
+    m_AdditionalNumber = addNum;
     }
 
   // Test if the file exists.

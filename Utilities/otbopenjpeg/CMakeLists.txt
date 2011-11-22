@@ -36,7 +36,7 @@ SET(PACKAGE_VERSION
   "${OPENJPEG_VERSION_MAJOR}.${OPENJPEG_VERSION_MINOR}.${OPENJPEG_VERSION_BUILD}")
   
 # svn revision number of this openjpeg fork (used for .so versioning)
-SET(OPENJPEG_SVN_REVISION "1055")
+SET(OPENJPEG_SVN_REVISION "1076")
 # patch number for OTB modifications applied on top of OPENJPEG_SVN_REVISION (used for .so versioning)
 SET(OPENJPEG_OTB_PATCH "1")
 

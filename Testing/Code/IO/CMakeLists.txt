@@ -2007,6 +2007,132 @@ IF(OTB_DATA_USE_LARGEINPUT)
          -time
          )
 
+  # Between tiles 328 and 329, the codestream offset crosses the 2**31-1 boundary (max of 32 bit signed integer)
+  # This reveals a problem on 32 bits systems since fseek takes an integer
+  ADD_TEST(ioTvVectorImageFileReaderWriterJP22TIF_PLEIADES-PRE-R4C1-tile328-329 ${COMMON_TESTS2}
+         --without-threads
+         --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1-tile328-329.tif
+                                       ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1-tile328-329.tif
+         otbMultiChannelExtractROI
+         -ushort ${LARGEDATA}/PLEIADES-PRE/VERSION2/IMG_PHR_001/IMG_R4C1.JP2:5
+         -ushort ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1-tile328-329.tif
+         -startX 1330 -startY 928 -sizeX 32 -sizeY 32
+         -channels 1 2 3 4
+         -time
+         )
+
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
+
+# Tests to check if we can open JPEG2000 files using a otb::VectorImage and IFReader->SetAdditionalNumber() function.
+# no access to data only PrintSelf() method.
+ADD_TEST(ioTvMultiResolutionReading0 ${IO_TESTS13}
+  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReading0.txt
+                             ${TEMP}/ioTvMultiResolutionReading0.txt
+      otbVectorImageTest
+      ${INPUTDATA}/bretagne.j2k
+      ${TEMP}/ioTvMultiResolutionReading0.txt
+      0
+      )
+ADD_TEST(ioTvMultiResolutionReading3 ${IO_TESTS13}
+  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReading3.txt
+                             ${TEMP}/ioTvMultiResolutionReading3.txt
+      otbVectorImageTest
+      ${INPUTDATA}/bretagne.j2k
+      ${TEMP}/ioTvMultiResolutionReading3.txt
+      3
+      )
+
+# Tests to check if we can open JPEG2000 files using a otb::VectorImage and filename:NumSubDataset syntax.
+# no access to data only PrintSelf() method.
+ADD_TEST(ioTvMultiResolutionReadingInName0 ${IO_TESTS13}
+  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReading0.txt
+                             ${TEMP}/ioTvMultiResolutionReadingInName0.txt
+      otbVectorImageTest
+      ${INPUTDATA}/bretagne.j2k:0
+      ${TEMP}/ioTvMultiResolutionReadingInName0.txt
+      )
+ADD_TEST(ioTvMultiResolutionReadingInName3 ${IO_TESTS13}
+  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReading3.txt
+                             ${TEMP}/ioTvMultiResolutionReadingInName3.txt
+      otbVectorImageTest
+      ${INPUTDATA}/bretagne.j2k:3
+      ${TEMP}/ioTvMultiResolutionReadingInName3.txt
+      )
+
+# Test to check behavior of function JPEG2000reader->GetResolutionInfo() which return info about resolution available in the JPEG2000 file.
+ADD_TEST(ioTvMultiResolutionReadingInfo ${IO_TESTS13}
+  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReadingInfoOut.txt
+                             ${TEMP}/ioTvMultiResolutionReadingInfoOut.txt
+      otbMultiResolutionReadingInfo
+      ${INPUTDATA}/bretagne.j2k
+      ${TEMP}/ioTvMultiResolutionReadingInfoOut.txt
+      )
+
+# Tests which read data in JPEG2000 files.
+#ADD_TEST(ioTvMultiChannelROI_JPEG2000_2_TIF_res0 ${COMMON_TESTS2}
+#   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_bretagne_0_0_2592_1944.tif
+#                     ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_0_0_2592_1944_OUT.tif
+#         otbMultiChannelExtractROI
+#         ${INPUTDATA}/bretagne.j2k:0
+#         ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_0_0_2592_1944_OUT.tif
+#         -startX 0 -startY 0 -sizeX 2592 -sizeY 1944
+#         -channels 1 2 3 )
+
+ADD_TEST(ioTvMultiChannelROI_JPEG2000_2_TIF_res0_1 ${COMMON_TESTS2}
+   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_bretagne_700_1000_500_400.tif
+                     ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_700_1000_500_400_OUT.tif
+         otbMultiChannelExtractROI
+         ${INPUTDATA}/bretagne.j2k:0
+         ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_700_1000_500_400_OUT.tif
+         -startX 700 -startY 1000 -sizeX 500 -sizeY 400
+         -channels 1 2 3 )
+
+ADD_TEST(ioTvMultiChannelROI_JPEG2000_2_TIF_res0_2 ${COMMON_TESTS2}
+   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_bretagne_500_950_1200_350.tif
+                     ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_500_950_1200_350_OUT.tif
+         otbMultiChannelExtractROI
+         ${INPUTDATA}/bretagne.j2k:0
+         ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_500_950_1200_350_OUT.tif
+         -startX 500 -startY 950 -sizeX 1200 -sizeY 350
+         -channels 1 2 3 )
+
+ADD_TEST(ioTvMultiChannelROI_JPEG2000_2_TIF_res3 ${COMMON_TESTS2}
+   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_bretagne_0_0_324_243.tif
+                     ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_0_0_324_243_OUT.tif
+         otbMultiChannelExtractROI
+         ${INPUTDATA}/bretagne.j2k:3
+         ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_0_0_324_243_OUT.tif
+         -startX 0 -startY 0 -sizeX 324 -sizeY 243
+         -channels 1 2 3 )
+         
+ADD_TEST(ioTvMultiChannelROI_JPEG2000_2_TIF_res3_1 ${COMMON_TESTS2}
+   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_bretagne_40_30_80_60.tif
+                     ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_40_30_80_60_OUT.tif
+         otbMultiChannelExtractROI
+         ${INPUTDATA}/bretagne.j2k:3
+         ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_40_30_80_60_OUT.tif
+         -startX 40 -startY 30 -sizeX 80 -sizeY 60
+         -channels 1 2 3 )
+         
+ADD_TEST(ioTvMultiChannelROI_JPEG2000_2_TIF_res5 ${COMMON_TESTS2}
+   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_bretagne_0_0_81_61.tif
+                     ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_0_0_81_61_OUT.tif
+         otbMultiChannelExtractROI
+         ${INPUTDATA}/bretagne.j2k:5
+         ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_0_0_81_61_OUT.tif
+         -startX 0 -startY 0 -sizeX 81 -sizeY 61
+         -channels 1 2 3 )
+
+IF(OTB_DATA_USE_LARGEINPUT)
+
+ADD_TEST(ioTvMultiChannelROI_JPEG2000_2_TIF_PLEIADES_res5_FullQuicklook ${COMMON_TESTS2}
+   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_pleiades_ql_OUT.tif
+                     ${TEMP}/ioExtractROI_JPEG2K_2_TIF_pleiades_ql_OUT.tif
+         otbMultiChannelExtractROI
+         -ushort ${LARGEDATA}/PLEIADES-PRE/VERSION2/IMG_PHR_001/IMG_R4C1.JP2:5
+         -ushort ${TEMP}/ioExtractROI_JPEG2K_2_TIF_pleiades_ql_OUT.tif
+         )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 ENDIF(OTB_COMPILE_JPEG2000)
@@ -3393,6 +3519,8 @@ SET(BasicIO_SRCS13
 otbIOTests13.cxx
 otbJPEG2000ImageIOTestCanRead.cxx
 otbJPEG2000ImageIOTestCanWrite.cxx
+otbVectorImageTest.cxx
+otbMultiReadingInfo.cxx
 )
 ENDIF(OTB_COMPILE_JPEG2000)
 
@@ -3504,7 +3632,7 @@ IF(CHECK_GDAL_BUILDED_WITH_HDF)
 SET(BasicIO_SRCS22
 otbIOTests22.cxx
 otbVectorImageTest.cxx
-otbMultiDatasetReadingInfo.cxx
+otbMultiReadingInfo.cxx
 )
 ENDIF(CHECK_GDAL_BUILDED_WITH_HDF)
 

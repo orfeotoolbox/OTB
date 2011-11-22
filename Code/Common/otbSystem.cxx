@@ -285,4 +285,28 @@ bool System::ParseHdfFileName(const std::string& id, std::string& file, unsigned
   return true;
 }
 
+/** Parse a filename indicating an additional information
+ * if id is filelocation/file.***:10
+ * it will return filelocation/file.*** in file
+ * and 10 in addNum additional
+ */
+bool System::ParseFileNameForAdditonalInfo(const std::string& id, std::string& file, unsigned int& addNum)
+{
+  std::size_t pos = id.rfind(":");
+  if (pos == std::string::npos) return false;
+
+  std::string addNumString(id.substr(pos+1, id.size() - pos - 1));
+  addNum = atoi(addNumString.c_str());
+  // a value of 0 could be the sign that the conversion failed, we need to check that the character was really 0
+  if (addNum == 0)
+    {
+      if (addNumString.compare("0") != 0)
+        {
+        return false;
+        }
+    }
+  file = id.substr(0, pos);
+  return true;
+}
+
 }

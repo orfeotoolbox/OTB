@@ -32,7 +32,7 @@ class OSMDownloader : public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef OSMDownloader                       Self;
+  typedef OSMDownloader                 Self;
   typedef Application                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -43,7 +43,7 @@ public:
   itkTypeMacro(OSMDownloader, otb::Application);
   
   /** Filter typedef */
-  typedef otb::OSMDataToVectorDataGenerator           VectorDataProviderType;
+  typedef otb::OSMDataToVectorDataGenerator  VectorDataProviderType;
 
 private:
    OSMDownloader()
@@ -51,14 +51,13 @@ private:
     SetName("OSMDownloader");
     SetDescription("Generate a vector data from OSM on the input image extend");
     // Documentation
-    SetDocName("Image to KMZ Export Application");
-    SetDocLongDescription("This application exports the input image in a kmz product that can be display in the Google Earth software. The user can set the size of the product size, a logo and a legend to the product. Furthemore, to obtain a product that fits the relief, a DEM can be used.");
+    SetDocName("Open Street Map layers importations applications");
+    SetDocLongDescription("Generate a vector data from Open Street Map data. A DEM could be use. By default, the entire layer is downloaded, an image can be use as support for the OSM data. The application can provide also available classes in layers . This application required an Internet access. Informations about the OSM project : http://www.openstreetmap.fr/");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Convertion");
     SetDocCLExample("otbApplicationLauncherCommandLine OSMDownloader ${OTB-BIN}/bin --in ${OTB-Data}/Input/qb_RoadExtract.img --out otbOSMDownloader --logo ${OTB-Data}/Input/cnes.png ${OTB-Data}/Input/otb_big.png");
     AddDocTag(Tags::Meta);
-
   }
 
   virtual ~OSMDownloader()

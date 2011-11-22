@@ -74,11 +74,14 @@ public:
    * enlarge the RequestedRegion to the size of the image on disk. */
   virtual void EnlargeOutputRequestedRegion(itk::DataObject *output);
 
-  /** Set/Get the dataset index to extract (starting at 0)
-   * used in the case of image file containing multiple datasets
-   * (Modis hdf files for example) */
-  itkSetMacro(DatasetNumber, unsigned int);
-  itkGetMacro(DatasetNumber, unsigned int);
+  /** Set/Get the additional index to extract (starting at 0)
+   * used
+   * in the case of image file containing multiple datasets (Modis hdf files for example)
+   * or
+   * in the case of JPEG2000 image file containing multiple resolution
+   * */
+  itkSetMacro(AdditionalNumber, unsigned int);
+  itkGetMacro(AdditionalNumber, unsigned int);
 
   itkSetObjectMacro(Curl, CurlHelperInterface);
 
@@ -87,7 +90,7 @@ protected:
   virtual ~ImageFileReader();
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  unsigned int m_DatasetNumber;
+  unsigned int m_AdditionalNumber;
 
 private:
   /** Test whether the given filename exist and it is readable,

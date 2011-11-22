@@ -160,8 +160,8 @@ private:
       }
     else
       {
-      std::cout<<"Mean: "<<mean<<std::endl;
-      std::cout<<"Standard Deviation: "<<stddev<<std::endl;
+      otbAppLogINFO("Mean: "<<mean<<std::endl);
+      otbAppLogINFO("Standard Deviation: "<<stddev<<std::endl);
       }
   }
 
