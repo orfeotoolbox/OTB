@@ -56,6 +56,5 @@ void QtStringSelectionWidget::DoCreateWidget()
 }
 
 
-
 }
 }

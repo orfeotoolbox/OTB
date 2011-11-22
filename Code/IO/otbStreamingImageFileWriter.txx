@@ -657,9 +657,9 @@ StreamingImageFileWriter<TInputImage>
   InputImageRegionType bufferedRegion = input->GetBufferedRegion();
   
   // before this test, bad stuff would happend when they don't match
-  if (bufferedRegion != ioRegion) 
+  if (bufferedRegion != ioRegion)
     {
-    if ( m_NumberOfDivisions > 1 || m_UserSpecifiedIORegion) 
+    if ( m_NumberOfDivisions > 1 || m_UserSpecifiedIORegion)
       {
       itkDebugMacro("Requested stream region does not match generated output");
       itkDebugMacro("input filter may not support streaming well");
@@ -676,15 +676,15 @@ StreamingImageFileWriter<TInputImage>
       IteratorType out(cacheImage, ioRegion);
      
       // copy the data into a buffer to match the ioregion
-      for (in.GoToBegin(), out.GoToBegin(); !in.IsAtEnd(); ++in, ++out) 
+      for (in.GoToBegin(), out.GoToBegin(); !in.IsAtEnd(); ++in, ++out)
         {
         out.Set(in.Get());
         }
       
       dataPtr = (const void*) cacheImage->GetBufferPointer();
       
-      } 
-    else 
+      }
+    else
       {
       itk::ImageFileWriterException e(__FILE__, __LINE__);
       std::ostringstream msg;
@@ -697,7 +697,7 @@ StreamingImageFileWriter<TInputImage>
       e.SetLocation(ITK_LOCATION);
       throw e;
       }
-    } 
+    }
 
   m_ImageIO->Write(dataPtr);
 

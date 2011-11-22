@@ -51,7 +51,6 @@ typedef itk::AmoebaOptimizer         OptimizerType;
 typedef   const OptimizerType   *    OptimizerPointer;
 
 
-
 void Execute(itk::Object *caller, const itk::EventObject & event)
 {
   Execute( (const itk::Object *)caller, event);

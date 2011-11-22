@@ -265,7 +265,6 @@ QtWidgetStringListParameter::UpdateStringList( std::map<unsigned int, unsigned i
 }
 
 
-
 void QtWidgetStringListParameter::SetString(const QString& value)
 {
   m_StringListParam->AddString(value.toStdString());
