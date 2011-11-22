@@ -623,6 +623,8 @@ StreamingImageFileWriter<TInputImage>
 ::GenerateData(void)
 {
   const InputImageType * input = this->GetInput();
+  InputImagePointer cacheImage;
+  InputImageRegionType largestRegion = input->GetLargestPossibleRegion();
 
   // Make sure that the image is the right type and no more than
   // four components.
@@ -646,6 +648,57 @@ StreamingImageFileWriter<TInputImage>
   //
   //okay, now extract the data as a raw buffer pointer
   const void* dataPtr = (const void*) input->GetBufferPointer();
+  
+  // check that the image's buffered region is the same as
+  // ImageIO is expecting and we requested
+  InputImageRegionType ioRegion;
+  itk::ImageIORegionAdaptor<TInputImage::ImageDimension>::
+    Convert(m_ImageIO->GetIORegion(), ioRegion, largestRegion.GetIndex());
+  InputImageRegionType bufferedRegion = input->GetBufferedRegion();
+  
+  // before this test, bad stuff would happend when they don't match
+  if (bufferedRegion != ioRegion) 
+    {
+    if ( m_NumberOfDivisions > 1 || m_UserSpecifiedIORegion) 
+      {
+      itkDebugMacro("Requested stream region does not match generated output");
+      itkDebugMacro("input filter may not support streaming well");
+      
+      cacheImage = InputImageType::New();
+      cacheImage->CopyInformation(input);
+      cacheImage->SetBufferedRegion(ioRegion);
+      cacheImage->Allocate();
+
+      typedef itk::ImageRegionConstIterator<TInputImage> ConstIteratorType;
+      typedef itk::ImageRegionIterator<TInputImage>      IteratorType;
+      
+      ConstIteratorType in(input, ioRegion);
+      IteratorType out(cacheImage, ioRegion);
+     
+      // copy the data into a buffer to match the ioregion
+      for (in.GoToBegin(), out.GoToBegin(); !in.IsAtEnd(); ++in, ++out) 
+        {
+        out.Set(in.Get());
+        }
+      
+      dataPtr = (const void*) cacheImage->GetBufferPointer();
+      
+      } 
+    else 
+      {
+      itk::ImageFileWriterException e(__FILE__, __LINE__);
+      std::ostringstream msg;
+      msg << "Did not get requested region!" << std::endl;
+      msg << "Requested:" << std::endl;
+      msg << ioRegion;
+      msg << "Actual:" << std::endl;
+      msg << bufferedRegion;
+      e.SetDescription(msg.str().c_str());
+      e.SetLocation(ITK_LOCATION);
+      throw e;
+      }
+    } 
+
   m_ImageIO->Write(dataPtr);
 
   if (m_WriteGeomFile)
