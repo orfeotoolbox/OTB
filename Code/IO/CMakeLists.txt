@@ -13,6 +13,7 @@ ENDIF(NOT OTB_COMPILE_JPEG2000)
 
 # otbopenjpeg
 IF(OTB_COMPILE_JPEG2000)
+
   IF(WIN32)
     IF(OTB_BUILD_SHARED_LIBS)
       ADD_DEFINITIONS(-DOPJ_EXPORTS)
@@ -20,6 +21,14 @@ IF(OTB_COMPILE_JPEG2000)
       ADD_DEFINITIONS(-DOPJ_STATIC)
     ENDIF(OTB_BUILD_SHARED_LIBS)
   ENDIF(WIN32)
+
+  # This is the only place where we need to include openjpeg headers
+  # Use BEFORE since we can have a conflict with system-installed openjpeg
+  # and we want to ensure the internal version is used for now
+  INCLUDE_DIRECTORIES(BEFORE
+                      ${OTB_SOURCE_DIR}/Utilities/otbopenjpeg/libopenjpeg
+                      ${OTB_BINARY_DIR}/Utilities/otbopenjpeg )
+  
 ENDIF(OTB_COMPILE_JPEG2000)
 
 
