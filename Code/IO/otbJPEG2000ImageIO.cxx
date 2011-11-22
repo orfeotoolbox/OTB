@@ -90,8 +90,8 @@ public:
   }
   
   opj_image_t * DecodeTile(unsigned int tileIndex);
-  std::vector<unsigned int> GetResolutionsAvailable(){return this->m_ResolutionAvailable; };
 
+  std::vector<unsigned int> GetResolutionsAvailable(){return this->m_ResolutionAvailable; };
 
   void Clean();
 
@@ -107,10 +107,10 @@ public:
 
   unsigned int         m_NbOfComponent;
 
-  unsigned int*        m_XResolution;
-  unsigned int*        m_YResolution;
-  unsigned int*        m_Precision;
-  int*                 m_Signed;
+  std::vector<unsigned int>        m_XResolution;
+  std::vector<unsigned int>        m_YResolution;
+  std::vector<unsigned int>        m_Precision;
+  std::vector<int>                 m_Signed;
 
   unsigned int         m_TileWidth;
   unsigned int         m_TileHeight;
@@ -216,15 +216,10 @@ void JPEG2000ReaderInternal::Clean()
     otbopenjpeg_opj_destroy_cstr_info_v2(&(this->m_CstrInfo));
     }
 
-  delete[] this->m_XResolution;
-  delete[] this->m_YResolution;
-  delete[] this->m_Precision;
-  delete[] this->m_Signed;
-
-  this->m_XResolution = NULL;
-  this->m_YResolution = NULL;
-  this->m_Precision = NULL;
-  this->m_Signed = NULL;
+  this->m_XResolution.clear();
+  this->m_YResolution.clear();
+  this->m_Precision.clear();
+  this->m_Signed.clear();
 
   this->m_Width = 0;
   this->m_Height = 0;
@@ -265,16 +260,10 @@ JPEG2000ReaderInternal::JPEG2000ReaderInternal()
   this->m_File = NULL;
   this->m_CstrInfo = NULL;
 
-  this->m_XResolution = NULL;
-  this->m_YResolution = NULL;
-  this->m_Precision = NULL;
-  this->m_Signed = NULL;
-
   // Set default event mgr
   m_EventManager.info_handler = info_callback;
   m_EventManager.warning_handler = warning_callback;
   m_EventManager.error_handler = error_callback;
-
 
   this->Clean();
 }
@@ -329,9 +318,10 @@ int JPEG2000ReaderInternal::Initialize()
       return 0;
       }
 
-    // We can now retrieve the main information  of the image and the codestream
-    this->m_Width = this->m_Image->comps->w; //this->m_Image->x1 - this->m_Image->x0;
-    this->m_Height = this->m_Image->comps->h; // this->m_Image->y1 - this->m_Image->y0;
+    // We can now retrieve the main information of the image and the codestream
+    // (based on the first component and with no subsampling)
+    this->m_Width = this->m_Image->comps->w;
+    this->m_Height = this->m_Image->comps->h;
 
     otbMsgDevMacro(<< "JPEG2000InternalReader dimension (after reading header) = " << this->m_Image->comps->w << " x "
                    << this->m_Image->comps->h );
@@ -343,56 +333,16 @@ int JPEG2000ReaderInternal::Initialize()
 
     this->m_NbOfComponent = this->m_Image->numcomps;
 
-    this->m_Precision = new unsigned int[this->m_NbOfComponent];
-    if (!this->m_Precision)
-      {
-      this->Clean();
-      return 0;
-      }
-
     for (unsigned int itComp = 0; itComp < this->m_NbOfComponent; itComp++)
       {
-      this->m_Precision[itComp] = this->m_Image->comps[itComp].prec;
+      this->m_Precision.push_back( this->m_Image->comps[itComp].prec);
+      this->m_Signed.push_back( this->m_Image->comps[itComp].sgnd);
+      this->m_XResolution.push_back( this->m_Image->comps[itComp].dx);
+      this->m_YResolution.push_back( this->m_Image->comps[itComp].dy);
       }
-
-    this->m_Signed = new int[this->m_NbOfComponent];
-    if (!this->m_Signed)
-      {
-      this->Clean();
-      return 0;
-      }
-    for (unsigned int itComp = 0; itComp < this->m_NbOfComponent; itComp++)
-      {
-      this->m_Signed[itComp] = this->m_Image->comps[itComp].sgnd;
-      }
-
-    this->m_XResolution = new unsigned int[this->m_NbOfComponent];
-    if (!this->m_XResolution)
-      {
-      this->Clean();
-      return 0;
-      }
-
-    for (unsigned int itComp = 0; itComp < this->m_NbOfComponent; itComp++)
-      {
-      this->m_XResolution[itComp] = this->m_Image->comps[itComp].dx;
-      }
-
-    this->m_YResolution = new unsigned int[this->m_NbOfComponent];
-    if (!this->m_YResolution)
-      {
-      this->Clean();
-      return 0;
-      }
-
-    for (unsigned int itComp = 0; itComp < this->m_NbOfComponent; itComp++)
-      {
-      this->m_YResolution[itComp] = this->m_Image->comps[itComp].dy;
-      }
-
     }
 
-  // This value is based on the first component of the default tile parameters.
+  // Warning: This value is based on the first component of the default tile parameters.
   unsigned int numResAvailable = this->m_CstrInfo->m_default_tile_info.tccp_info[0].numresolutions;
   for (unsigned int itRes = 0; itRes < numResAvailable; itRes++)
     {
@@ -728,7 +678,7 @@ void JPEG2000ImageIO::Read(void* buffer)
   // Decode all tiles not in cache in parallel
   if(!toReadTiles.empty())
     {
-    int nbThreads = itk::MultiThreader::GetGlobalDefaultNumberOfThreads();
+    unsigned int nbThreads = itk::MultiThreader::GetGlobalDefaultNumberOfThreads();
     if (nbThreads > toReadTiles.size())
       {
       nbThreads = toReadTiles.size();
@@ -1008,7 +958,7 @@ void JPEG2000ImageIO::ReadImageInformation()
   m_Spacing[1] = 1.0 / vcl_pow(2.0, static_cast<double>(m_ResolutionFactor));
 
   // If we have some spacing information we use it
-  if ( (m_InternalReaders.front()->m_XResolution > 0) && (m_InternalReaders.front()->m_YResolution > 0) )
+  if ( (m_InternalReaders.front()->m_XResolution.front() > 0) && (m_InternalReaders.front()->m_YResolution.front() > 0) )
     {
       // We check previously that the X and Y resolution is equal between the components
       m_Spacing[0] = m_InternalReaders.front()->m_XResolution[0];
