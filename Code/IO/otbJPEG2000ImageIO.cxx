@@ -1004,8 +1004,8 @@ void JPEG2000ImageIO::ReadImageInformation()
     }
 
 
-  m_Spacing[0] = 1.0 / vcl_pow(2.0, m_ResolutionFactor);
-  m_Spacing[1] = 1.0 / vcl_pow(2.0, m_ResolutionFactor);
+  m_Spacing[0] = 1.0 / vcl_pow(2.0, static_cast<double>(m_ResolutionFactor));
+  m_Spacing[1] = 1.0 / vcl_pow(2.0, static_cast<double>(m_ResolutionFactor));
 
   // If we have some spacing information we use it
   if ( (m_InternalReaders.front()->m_XResolution > 0) && (m_InternalReaders.front()->m_YResolution > 0) )
