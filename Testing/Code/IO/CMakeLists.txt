@@ -2135,6 +2135,46 @@ ADD_TEST(ioTvMultiChannelROI_JPEG2000_2_TIF_PLEIADES_res5_FullQuicklook ${COMMON
          )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
+# Test the possibility to modify the size of cache used to reduce the decoding operations
+# O tile in the cache
+ADD_TEST(ioTvJPEG2000ImageIO_CacheSize_500 ${IO_TESTS13}
+   --compare-image ${EPSILON_9}   
+         ${BASELINE}/ioClassicalQLJPEG2K_bretagne.tif
+         ${TEMP}/ioClassicalQLJPEG2K_bretagne_500.tif
+         otbGenerateClassicalQLWithJPEG2000
+         ${INPUTDATA}/bretagne.j2k
+         ${TEMP}/ioClassicalQLJPEG2K_bretagne_500.tif
+         500)
+
+# 1 tile in the cache
+ADD_TEST(ioTvJPEG2000ImageIO_CacheSize_1000 ${IO_TESTS13}
+   --compare-image ${EPSILON_9}   
+         ${BASELINE}/ioClassicalQLJPEG2K_bretagne.tif
+         ${TEMP}/ioClassicalQLJPEG2K_bretagne_1000.tif
+         otbGenerateClassicalQLWithJPEG2000
+         ${INPUTDATA}/bretagne.j2k
+         ${TEMP}/ioClassicalQLJPEG2K_bretagne_1000.tif
+         1000)
+
+# 5 tiles in the cache         
+ADD_TEST(ioTvJPEG2000ImageIO_CacheSize_5000 ${IO_TESTS13}
+   --compare-image ${EPSILON_9}   
+         ${BASELINE}/ioClassicalQLJPEG2K_bretagne.tif
+         ${TEMP}/ioClassicalQLJPEG2K_bretagne_5000.tif
+         otbGenerateClassicalQLWithJPEG2000
+         ${INPUTDATA}/bretagne.j2k
+         ${TEMP}/ioClassicalQLJPEG2K_bretagne_5000.tif
+         5000)
+
+# 135Mb in the cache          
+ADD_TEST(ioTvJPEG2000ImageIO_CacheSize_25000 ${IO_TESTS13}
+   --compare-image ${EPSILON_9}   
+         ${BASELINE}/ioClassicalQLJPEG2K_bretagne.tif
+         ${TEMP}/ioClassicalQLJPEG2K_bretagne_25000.tif
+         otbGenerateClassicalQLWithJPEG2000
+         ${INPUTDATA}/bretagne.j2k
+         ${TEMP}/ioClassicalQLJPEG2K_bretagne_25000.tif)
+
 ENDIF(OTB_COMPILE_JPEG2000)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -3521,6 +3561,7 @@ otbJPEG2000ImageIOTestCanRead.cxx
 otbJPEG2000ImageIOTestCanWrite.cxx
 otbVectorImageTest.cxx
 otbMultiReadingInfo.cxx
+otbGenerateClassicalQLWithJPEG2000.cxx
 )
 ENDIF(OTB_COMPILE_JPEG2000)
 
@@ -3665,7 +3706,6 @@ OTB_ADD_EXECUTABLE(otbIOTests10 "${BasicIO_SRCS10}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbIOTests11 "${BasicIO_SRCS11}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbIOTests12 "${BasicIO_SRCS12}" "OTBIO;OTBTesting")
 
-# Case for releae 2.2.1
 IF(OTB_COMPILE_JPEG2000)
    IF(NOT BUILD_SHARED_LIBS)
       ADD_DEFINITIONS(-DOPJ_STATIC)

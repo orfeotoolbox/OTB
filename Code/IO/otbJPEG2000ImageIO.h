@@ -105,6 +105,9 @@ public:
   itkSetMacro(ResolutionFactor, unsigned int);
   itkGetMacro(ResolutionFactor, unsigned int);
 
+  itkSetMacro(CacheSizeInByte, unsigned int);
+  itkGetMacro(CacheSizeInByte, unsigned int);
+
 protected:
   /** Constructor.*/
   JPEG2000ImageIO();
@@ -128,7 +131,11 @@ private:
   /** pixel nb of octets */
   unsigned int m_BytePerPixel;
 
+  /** Resolution factor*/
   unsigned int m_ResolutionFactor;
+
+  /** Size of the cache used to reduce number of decoding operations*/
+  unsigned int m_CacheSizeInByte;
 
   /** Load data from a tile into the buffer. 2nd argument is a
 * pointer to opj_image_t, hidden in void * to avoid forward declaration. */

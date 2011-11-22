@@ -395,7 +395,7 @@ public:
   typedef std::pair<unsigned int, opj_image_t *> CachedTileType;
   typedef std::deque<CachedTileType> TileCacheType;
 
-  /** Get a tile in cache, return null if cache does not cotain the
+  /** Get a tile in cache, return null if cache does not contain the
   tile */
   opj_image_t * GetTile(unsigned int tileIndex);
 
@@ -405,18 +405,78 @@ public:
   /** Clear the cache */
   void Clear();
 
+  /** Initialize some parameters linked to the cache size in memory*/
+  void Initialize(unsigned int originalWidthTile, unsigned int originalHeightTile,
+                  unsigned int nbComponent,
+                  unsigned int precision,
+                  unsigned int resolution)
+  {
+    this->EstimateTileCacheSize(originalWidthTile, originalHeightTile,
+                                nbComponent,
+                                precision,
+                                resolution);
+    m_CacheSizeInByte = m_CacheSizeInTiles * m_TileCacheSizeInByte;
+    m_IsReady = true;
+  };
+
+  /** Set the size of the cache with in terms of number of tiles */
+  void SetCacheSizeInTiles(unsigned int nbOfTiles)
+  {
+    if (nbOfTiles > 0 && m_IsReady)
+      {
+      m_CacheSizeInTiles = nbOfTiles;
+      m_CacheSizeInByte = m_CacheSizeInTiles * m_TileCacheSizeInByte;
+      }
+  };
+
+  /** Get the size of the cache in terms of number of tiles */
+  unsigned int GetCacheSizeInTiles() {return m_CacheSizeInTiles;};
+
+  /** Set the size of the cache with in terms of Bytes */
+  void SetCacheSizeInByte(unsigned int sizeInByte)
+  {
+    if (sizeInByte > 0 && m_IsReady)
+      {
+      m_CacheSizeInByte = sizeInByte;
+      m_CacheSizeInTiles = m_CacheSizeInByte / m_TileCacheSizeInByte;
+      }
+  };
+
 private:
   TileCacheType m_Cache;
   unsigned int m_CacheSizeInTiles;
+  unsigned int m_CacheSizeInByte;
+  unsigned int m_TileCacheSizeInByte;
+  bool m_IsReady;
+
+  /** Estimate the size of a tile in memory*/
+  void EstimateTileCacheSize(unsigned int originalWidthTile, unsigned int originalHeightTile,
+                             unsigned int nbComponent,
+                             unsigned int precision,
+                             unsigned int resolution);
 
 };
 
-JPEG2000TileCache::JPEG2000TileCache() : m_Cache(), m_CacheSizeInTiles(4)
+JPEG2000TileCache::JPEG2000TileCache() : m_Cache(), m_CacheSizeInTiles(4), m_CacheSizeInByte(0), m_IsReady(false)
 {}
 
 JPEG2000TileCache::~JPEG2000TileCache()
 {
   this->Clear();
+}
+
+
+void JPEG2000TileCache::EstimateTileCacheSize(unsigned int originalWidthTile, unsigned int originalHeightTile,
+                                              unsigned int nbComponent,
+                                              unsigned int precision,
+                                              unsigned int resolution)
+{
+  this->m_TileCacheSizeInByte = originalWidthTile * originalHeightTile
+                              * nbComponent
+                              * precision
+                              / vcl_pow(2, 2*static_cast<double>(resolution) ) ;
+
+  otbMsgDevMacro( << "m_TileCacheSizeInByte = " << m_TileCacheSizeInByte );
 }
 
 void JPEG2000TileCache::Clear()
@@ -434,6 +494,11 @@ void JPEG2000TileCache::Clear()
     erasedTile.second = NULL;
     }
   m_Cache.clear();
+
+  m_CacheSizeInTiles = 4;
+  m_CacheSizeInByte = 0;
+
+  m_IsReady = false;
 }
 
 
@@ -461,6 +526,7 @@ void JPEG2000TileCache::AddTile(unsigned int tileIndex, opj_image_t * tileData)
       return;
       }
     }
+
   if(m_Cache.size() >= m_CacheSizeInTiles)
     {
     CachedTileType erasedTile = *m_Cache.begin();
@@ -474,6 +540,7 @@ void JPEG2000TileCache::AddTile(unsigned int tileIndex, opj_image_t * tileData)
 
     m_Cache.pop_front();
     }
+
   m_Cache.push_back(CachedTileType(tileIndex, tileData));
 }
 
@@ -503,6 +570,8 @@ JPEG2000ImageIO::JPEG2000ImageIO()
 
   m_BytePerPixel = 1;
   m_ResolutionFactor = 0; // Full resolution by default
+
+  m_CacheSizeInByte = 0; // By default no cache
 }
 
 JPEG2000ImageIO::~JPEG2000ImageIO()
@@ -708,11 +777,15 @@ void JPEG2000ImageIO::Read(void* buffer)
     }
   
 
-  // Now, do cache book-keeping
-  for (std::vector<JPEG2000TileCache::CachedTileType>::iterator itTile = toReadTiles.begin(); itTile < toReadTiles.end(); ++itTile)
+  // Now, do cache book-keeping if necessary
+  if (m_TileCache->GetCacheSizeInTiles() != 0)
     {
-    m_TileCache->AddTile(itTile->first, itTile->second);
+    for (std::vector<JPEG2000TileCache::CachedTileType>::iterator itTile = toReadTiles.begin(); itTile < toReadTiles.end(); ++itTile)
+      {
+      m_TileCache->AddTile(itTile->first, itTile->second);
+      }
     }
+
   chrono.Stop();
   otbMsgDevMacro( << "JPEG2000ImageIO::Read took " << chrono.GetTotal() << " sec");
 
@@ -953,7 +1026,6 @@ void JPEG2000ImageIO::ReadImageInformation()
       }
     }
 
-
   m_Spacing[0] = 1.0 / vcl_pow(2.0, static_cast<double>(m_ResolutionFactor));
   m_Spacing[1] = 1.0 / vcl_pow(2.0, static_cast<double>(m_ResolutionFactor));
 
@@ -1032,6 +1104,17 @@ void JPEG2000ImageIO::ReadImageInformation()
     {
     this->SetPixelType(VECTOR);
     }
+
+  // Initialize some parameters of the tile cache
+  this->m_TileCache->Initialize(m_InternalReaders.front()->m_TileWidth,
+                                m_InternalReaders.front()->m_TileHeight,
+                                m_InternalReaders.front()->m_NbOfComponent,
+                                m_BytePerPixel,
+                                m_ResolutionFactor);
+
+  // If available set the size of the cache
+  if (this->m_CacheSizeInByte)
+    this->m_TileCache->SetCacheSizeInByte(this->m_CacheSizeInByte);
 
   otbMsgDebugMacro(<< "==========================");
   otbMsgDebugMacro(<< "ReadImageInformation: ");

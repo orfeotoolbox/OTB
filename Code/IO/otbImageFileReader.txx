@@ -309,6 +309,8 @@ ImageFileReader<TOutputImage>
 
       // Pass the Resolution Factor
       imageIO->SetResolutionFactor(m_AdditionalNumber);
+      if (!imageIO->GetCacheSizeInByte())
+        imageIO->SetCacheSizeInByte(135000000); // Useful for Pleiades Images 135Mb => 4tiles in cache
       }
 
 
