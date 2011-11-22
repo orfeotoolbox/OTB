@@ -23,9 +23,11 @@
 
 #include "base/ossimKeywordlist.h"
 #include "base/ossimString.h"
-#include "ossim/ossimPluginProjectionFactory.h"
+#include "ossimPluginProjectionFactory.h"
 #include "imaging/ossimImageHandlerRegistry.h"
 #include "ossimTileMapModel.h"
+#include "projection/ossimProjectionFactoryRegistry.h"
+
 
 namespace otb
 {
@@ -175,9 +177,6 @@ ReadGeometry(const std::string& filename)
 
   if (!hasMetaData)
     {
-    // Add the radar factory
-    // ossimImageHandlerRegistry::instance()->addFactory(ossimImageHandlerSarFactory::instance());
-
     ossimImageHandler* handler = ossimImageHandlerRegistry::instance()
                                  ->open(ossimFilename(filename.c_str()));
     if (!handler)
@@ -188,6 +187,10 @@ ReadGeometry(const std::string& filename)
     else
       {
       otbMsgDevMacro(<< "OSSIM Open Image SUCCESS ! ");
+      
+      // Add ossimPlugins model
+      ossimProjectionFactoryRegistry::instance()->registerFactory(ossimplugins::ossimPluginProjectionFactory::instance());
+
       //     hasMetaData = handler->getImageGeometry(geom_kwl);
       ossimRefPtr<ossimImageGeometry> geom = handler->getImageGeometry();
 
