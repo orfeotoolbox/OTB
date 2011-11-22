@@ -80,7 +80,7 @@ private:
                    "Compute a polyline feature descriptors from an input image which are part of the polyline pixels that verify the FeatureExpression");
 
     SetDocName("Compute Polyline Feature From Image Application");
-    SetDocLongDescription("This application.");
+    SetDocLongDescription("This application computes a polyline feature descriptors from an input image which are part of the polyline pixels that verify the FeatureExpression.");
     SetDocLimitations("Since it do not rely on streaming process, take care of the size of input image before launching application.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
