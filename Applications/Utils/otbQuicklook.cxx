@@ -99,8 +99,8 @@ private:
     
     AddParameter(ParameterType_Int, "sr",  "Sampling ratio");
     SetParameterDescription( "sr" , "Sampling Ratio, default is 2" );
-    SetDefaultParameterInt("sr",2);
-    SetMinimumParameterIntValue("sr",1);
+    SetDefaultParameterInt("sr", 2);
+    SetMinimumParameterIntValue("sr", 1);
     MandatoryOff("sr");
     
     AddParameter(ParameterType_Int, "sx",  "Size X");
@@ -116,7 +116,7 @@ private:
     SetDefaultParameterInt("rox", 0);
     SetDefaultParameterInt("roy", 0);
     SetDefaultParameterInt("rsx", 0);
-    SetDefaultParameterInt("rsy", 0); 
+    SetDefaultParameterInt("rsy", 0);
      
   }
   
@@ -132,7 +132,7 @@ private:
       // Update the values of the channels to be selected
       unsigned int nbComponents = inImage->GetNumberOfComponentsPerPixel();
       if (nbComponents != GetChoiceKeys("cl").size())
-        {  
+        {
         ClearChoices("cl");
         for (unsigned int idx = 0; idx < nbComponents; ++idx)
           {
@@ -207,7 +207,7 @@ bool CropRegionOfInterest()
     // The image on which the quicklook will be generated
     // Will eventually be the m_ExtractROIFilter output
 
-    if (HasUserValue("rox") || HasUserValue("roy") 
+    if (HasUserValue("rox") || HasUserValue("roy")
         || HasUserValue("rsx") || HasUserValue("rsy")
         || (GetSelectedItems("cl").size() > 0))
       {
@@ -269,7 +269,7 @@ bool CropRegionOfInterest()
       {
       otbAppLogFATAL( << "Error in SizeX and/or SizeY : ratio must be greater than 1.");
       return;
-      }   
+      }
     otbAppLogINFO( << "Ratio used: "<<Ratio << ".");
     
     m_ResamplingFilter->SetShrinkFactor( Ratio );
