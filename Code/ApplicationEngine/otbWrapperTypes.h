@@ -102,10 +102,10 @@ typedef otb::VectorImage<unsigned int>   UInt32VectorImageType;
 typedef otb::VectorImage<float>          FloatVectorImageType;
 typedef otb::VectorImage<double>         DoubleVectorImageType;
 
-typedef otb::Image< itk::RGBAPixel<short> >          Int8RGBAImageType;
-typedef otb::Image< itk::RGBAPixel<unsigned short> > UInt8RGBAImageType;
-typedef otb::Image< itk::RGBAPixel<char> >           Int16RGBAImageType;
-typedef otb::Image< itk::RGBAPixel<unsigned char> >  UInt16RGBAImageType;
+typedef otb::Image< itk::RGBAPixel<char> >           Int8RGBAImageType;
+typedef otb::Image< itk::RGBAPixel<unsigned char> >  UInt8RGBAImageType;
+typedef otb::Image< itk::RGBAPixel<short> >          Int16RGBAImageType;
+typedef otb::Image< itk::RGBAPixel<unsigned short> > UInt16RGBAImageType;
 typedef otb::Image< itk::RGBAPixel<int> >            Int32RGBAImageType;
 typedef otb::Image< itk::RGBAPixel<unsigned int> >   UInt32RGBAImageType;
 typedef otb::Image< itk::RGBAPixel<float> >          FloatRGBAImageType;
