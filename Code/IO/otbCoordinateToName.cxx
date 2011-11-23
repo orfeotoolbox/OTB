@@ -92,7 +92,7 @@ CoordinateToName::ThreadFunction(void *arg)
   struct itk::MultiThreader::ThreadInfoStruct * pInfo = (itk::MultiThreader::ThreadInfoStruct *) (arg);
   CoordinateToName::Pointer  lThis = (CoordinateToName*) (pInfo->UserData);
   lThis->DoEvaluate();
-  return 0;
+  return ITK_THREAD_RETURN_VALUE;
 }
 
 void CoordinateToName::DoEvaluate()
