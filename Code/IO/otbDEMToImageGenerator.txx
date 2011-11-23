@@ -64,7 +64,6 @@ template <class TDEMImage>
 void DEMToImageGenerator<TDEMImage>
 ::GenerateOutputInformation()
 {
-
   DEMImageType *output;
   output = this->GetOutput(0);
 
@@ -80,6 +79,20 @@ void DEMToImageGenerator<TDEMImage>
   output->SetLargestPossibleRegion(largestPossibleRegion);
   output->SetSpacing(m_OutputSpacing);
   output->SetOrigin(m_OutputOrigin);
+
+
+// Get the Output MetaData Dictionary
+  itk::MetaDataDictionary& dict = output->GetMetaDataDictionary();
+  
+  // Encapsulate the   metadata set by the user
+  itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey,
+                                        m_Transform->GetInputProjectionRef());
+  
+  if (this->GetOutputKeywordList().GetSize() > 0)
+    {
+    itk::EncapsulateMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey,
+                                               m_Transform->GetInputKeywordList());
+    }
 }
 
 // InstanciateTransform method
