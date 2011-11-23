@@ -32,13 +32,6 @@
 
 #include "boost/algorithm/string.hpp"
 
-/*
-* First related to the bug
-* http://bugs.orfeo-toolbox.org/view.php?id=303. Bug cloased.
-* 
-* Still failing because of the test http://bugs.orfeo-toolbox.org/view.php?id=333
-*/
-
 int otbExtractROITestMetaData(int argc, char * argv[])
 {
   typedef float PixelType;
