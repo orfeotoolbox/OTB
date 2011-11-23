@@ -79,12 +79,12 @@ void ComputeOffsets(opj_image_t * tile,
                     unsigned int &l_start_offset_src);
 
 
-class JPEG2000ReaderInternal
+class JPEG2000InternalReader
 {
 public:
-  JPEG2000ReaderInternal();
+  JPEG2000InternalReader();
 
-  ~JPEG2000ReaderInternal()
+  ~JPEG2000InternalReader()
   {
     this->Clean();
   }
@@ -138,7 +138,7 @@ private:
 };
 
 
-int JPEG2000ReaderInternal::Open(const char *filename, unsigned int resolution)
+int JPEG2000InternalReader::Open(const char *filename, unsigned int resolution)
 {
   this->Clean();
 
@@ -180,7 +180,7 @@ int JPEG2000ReaderInternal::Open(const char *filename, unsigned int resolution)
   return 1;
 }
 
-void JPEG2000ReaderInternal::Clean()
+void JPEG2000InternalReader::Clean()
 {
   // Destroy the image
   if (this->m_Image)
@@ -233,7 +233,7 @@ void JPEG2000ReaderInternal::Clean()
   this->m_CodecFormat = CODEC_UNKNOWN;
 }
 
-opj_image_t * JPEG2000ReaderInternal::DecodeTile(unsigned int tileIndex)
+opj_image_t * JPEG2000InternalReader::DecodeTile(unsigned int tileIndex)
 {
   opj_image_t * image = otbopenjpeg_opj_image_create0();
   otbopenjpeg_opj_copy_image_header(m_Image, image);
@@ -251,7 +251,7 @@ opj_image_t * JPEG2000ReaderInternal::DecodeTile(unsigned int tileIndex)
     }
 }
 
-JPEG2000ReaderInternal::JPEG2000ReaderInternal()
+JPEG2000InternalReader::JPEG2000InternalReader()
 {
   this->m_Image = NULL;
   this->m_Image = NULL;
@@ -268,7 +268,7 @@ JPEG2000ReaderInternal::JPEG2000ReaderInternal()
   this->Clean();
 }
 
-int JPEG2000ReaderInternal::Initialize()
+int JPEG2000InternalReader::Initialize()
 {
   if (this->m_File)
     {
@@ -353,7 +353,7 @@ int JPEG2000ReaderInternal::Initialize()
 }
 
 
-int JPEG2000ReaderInternal::CanRead()
+int JPEG2000InternalReader::CanRead()
  {
    if  ( this->m_File &&
        this->m_Codec &&
@@ -552,7 +552,7 @@ JPEG2000ImageIO::JPEG2000ImageIO()
 
   for(int i = 0; i<m_NumberOfThreads; ++i)
     {
-    m_InternalReaders.push_back(new JPEG2000ReaderInternal);
+    m_InternalReaders.push_back(new JPEG2000InternalReader);
     }
   m_TileCache      = new JPEG2000TileCache;
 
@@ -638,7 +638,7 @@ void JPEG2000ImageIO::ReadVolume(void*)
 /** Internal structure used for passing image data into the threading library */
 struct ThreadStruct
 {
-  std::vector<JPEG2000ReaderInternal *> Readers;
+  std::vector<JPEG2000InternalReader *> Readers;
   std::vector<JPEG2000TileCache::CachedTileType> * Tiles;
 };
 
@@ -914,7 +914,7 @@ ITK_THREAD_RETURN_TYPE JPEG2000ImageIO::ThreaderCallback( void *arg )
   str = (ThreadStruct *)(((itk::MultiThreader::ThreadInfoStruct *)(arg))->UserData);
 
   // Retrieve data
-  std::vector<JPEG2000ReaderInternal *> readers = str->Readers;
+  std::vector<JPEG2000InternalReader *> readers = str->Readers;
   std::vector<JPEG2000TileCache::CachedTileType> *  tiles = str->Tiles;
 
   total = std::min((unsigned int)tiles->size(), threadCount);

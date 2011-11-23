@@ -25,7 +25,7 @@
 namespace otb
 {
 
-class JPEG2000ReaderInternal;
+class JPEG2000InternalReader;
 class JPEG2000TileCache;
 
 /** \class JPEG2000ImageIO
@@ -116,7 +116,7 @@ protected:
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  typedef std::vector<JPEG2000ReaderInternal *> ReaderVectorType;
+  typedef std::vector<JPEG2000InternalReader *> ReaderVectorType;
 
   ReaderVectorType    m_InternalReaders;
   JPEG2000TileCache*  m_TileCache;
