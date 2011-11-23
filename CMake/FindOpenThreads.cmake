@@ -62,6 +62,7 @@ FIND_PATH(OPENTHREADS_INCLUDE_DIR OpenThreads/Thread
     /opt/local/include # DarwinPorts
     /opt/csw/include # Blastwave
     /opt/include
+    $ENV{OSGEO4W_ROOT}/include
     [HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session\ Manager\\Environment;OpenThreads_ROOT]/include
     [HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session\ Manager\\Environment;OSG_ROOT]/include
 )
@@ -103,6 +104,7 @@ FIND_LIBRARY(OPENTHREADS_LIBRARY
     /opt/csw/lib
     /opt/lib64
     /opt/lib
+    $ENV{OSGEO4W_ROOT}/lib
     [HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session\ Manager\\Environment;OpenThreads_ROOT]/lib
     [HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session\ Manager\\Environment;OSG_ROOT]/lib
 )
