@@ -97,11 +97,9 @@ ELSE(OTB_BINARY_DIR)
   STRING(REGEX REPLACE "^/" "" OTB_INSTALL_INCLUDE_DIR_CM24 "${OTB_INSTALL_INCLUDE_DIR}")
 
   #Prevents conflicts with visual min/max function
-  #Add the OSSIMSTATIC flag to prevent from including dclspec(dllimport) from ossim
   IF(WIN32)
-  ADD_DEFINITIONS(-DNOMINMAX -DOSSIM_STATIC)
+    ADD_DEFINITIONS(-DNOMINMAX)
   ENDIF(WIN32)
-
 
 ENDIF(OTB_BINARY_DIR)
 
