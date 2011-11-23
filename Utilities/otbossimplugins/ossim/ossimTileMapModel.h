@@ -14,6 +14,7 @@
 #ifndef ossimTileMapModel_HEADER
 #define ossimTileMapModel_HEADER
 
+#include <ossimPluginConstants.h>
 #include <ossim/projection/ossimSensorModel.h>
 #include <ossim/projection/ossimMapProjection.h>
 #include <ossim/base/ossimGpt.h>
@@ -30,7 +31,7 @@ namespace ossimplugins
 //* CLASS:  ossimTileMapModel
 //*
 //*******************************************************************************
-class OSSIMDLLEXPORT ossimTileMapModel : public ossimSensorModel
+class OSSIM_PLUGINS_DLL ossimTileMapModel : public ossimSensorModel
 {
 public:
   /*!
