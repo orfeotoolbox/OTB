@@ -24,10 +24,9 @@
 
 int otbImageWidgetImageDump(int argc, char * argv[])
 {
-  const char * infname    =      argv[1];
+  const char * infname    = argv[1];
   const bool   useAccel   = atoi(argv[2]);
-  unsigned int sizeFactor = atoi(argv[3]);
-  const char * filename   = argv[4];
+  const char * filename   = argv[3];
 
 
   // typedefs
@@ -43,8 +42,11 @@ int otbImageWidgetImageDump(int argc, char * argv[])
   ImageType::RegionType region = reader->GetOutput()->GetLargestPossibleRegion();
   ImageType::RegionType::SizeType size = region.GetSize();
   
-  size[0] /= sizeFactor;
-  size[1] /= sizeFactor;
+  if( argc == 5 )
+    {
+    size[0] /= atoi(argv[4]);
+    size[1] /= atoi(argv[4]);
+    }
   region.SetSize(size);
   
   // Create a widget

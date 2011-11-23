@@ -48,8 +48,8 @@ ${TEMP}/vrTvImageWidgetImageDumpWithoutGlAcceleration.png
 otbImageWidgetImageDump
 ${INPUTDATA}/qb_RoadExtract2sub200x200.tif # input image
 0 # use glAcceleration
-2 # resize factor
 ${TEMP}/vrTvImageWidgetImageDumpWithoutGlAcceleration.png
+2 # resize factor
 )
 
 IF(OTB_GL_USE_ACCEL)
