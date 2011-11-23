@@ -30,6 +30,8 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
+#include "boost/algorithm/string.hpp"
+
 /*
 * First related to the bug
 * http://bugs.orfeo-toolbox.org/view.php?id=303. Bug cloased.
@@ -92,22 +94,24 @@ int otbExtractROITestMetaData(int argc, char * argv[])
   // Write left up image
   writer00->SetFileName(argv[2]);
   writer00->SetInput(extract00->GetOutput());
-  writer00->SetWriteGeomFile(true);
+  //writer00->SetWriteGeomFile(true);
   writer00->Update();
 
   // Write image with non zero index
   writer57->SetFileName(argv[3]);
   writer57->SetInput(extract57->GetOutput());
-  writer57->SetWriteGeomFile(true);
+  //writer57->SetWriteGeomFile(true);
   writer57->Update();
 
   // Reading image with left up index
   reader00->SetFileName(argv[2]);
   reader00->GenerateOutputInformation();
 
-  if( reader00->GetOutput()->GetProjectionRef() != "")
+  if( reader00->GetOutput()->GetProjectionRef() != "" || boost::algorithm::istarts_with(reader00->GetOutput()->GetProjectionRef(), "LOCAL_CS") )
     {
     std::cout<<"The read generated extract from index (0,0) must NOT contain a ProjectionReference."<<std::endl;
+    std::cout<<"Found ProjectionReference: "<<reader00->GetOutput()->GetProjectionRef()<<std::endl;
+  
     return EXIT_FAILURE;
     }
 
@@ -121,9 +125,10 @@ int otbExtractROITestMetaData(int argc, char * argv[])
   reader57->SetFileName(argv[3]);
   reader57->GenerateOutputInformation();
 
-  if( reader57->GetOutput()->GetProjectionRef() != "")
+  if( reader00->GetOutput()->GetProjectionRef() != "" || boost::algorithm::istarts_with(reader00->GetOutput()->GetProjectionRef(), "LOCAL_CS") )
     {
     std::cout<<"The read generated extract from index (x,y) must NOT contain a ProjectionReference."<<std::endl;
+    std::cout<<"Found ProjectionReference: "<<reader57->GetOutput()->GetProjectionRef()<<std::endl;
     return EXIT_FAILURE;
     }
   
