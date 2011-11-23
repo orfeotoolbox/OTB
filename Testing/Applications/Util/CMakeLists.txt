@@ -238,3 +238,14 @@ OTB_TEST_APPLICATION(NAME apTvUtVectorDataSetField
                              ${BASELINE_FILES}/apTvUtVectorDataSetFieldTest.shp
                              ${TEMP}/apTvUtVectorDataSetFieldTest.shp
                      )
+
+#--- Quicklook ---
+OTB_TEST_APPLICATION(NAME apTvUtQuicklookROI1Channel
+                     APP Quicklook
+                     OPTIONS --in ${INPUTDATA}/couleurs_extrait.png
+                             --out ${TEMP}/apTvUtQuicklookROI1Channel.tif
+                             --cl Channel1
+                     VALID   --compare-image ${NOTOL}
+                             ${BASELINE}/apTvUtQuicklookROI1Channel.tif
+                             ${TEMP}/apTvUtQuicklookROI1Channel.tif
+                     )

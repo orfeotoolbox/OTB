@@ -66,3 +66,7 @@ OTB_CREATE_APPLICATION(NAME           VectorDataExtractROIApplication
 OTB_CREATE_APPLICATION(NAME           DEMConvert
                        SOURCES        otbDEMConvert.cxx
                        LINK_LIBRARIES OTBBasicFilters)
+
+OTB_CREATE_APPLICATION(NAME           Quicklook
+                       SOURCES        otbQuicklook.cxx
+                       LINK_LIBRARIES OTBBasicFilters)
