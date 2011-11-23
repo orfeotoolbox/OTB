@@ -54,6 +54,7 @@ ${TEMP}/vrTvImageWidgetImageDumpWithoutGlAcceleration.png
 
 IF(OTB_GL_USE_ACCEL)
 ADD_TEST(vrTvImageWidgetImageDumpWithGlAcceleration ${VISUALIZATION_TESTS1}
+--compare-image ${NOTOL}
 ${BASELINE}/vrTvImageWidgetImageDumpWithGlAcceleration.png
 ${TEMP}/vrTvImageWidgetImageDumpWithGlAcceleration.png
 otbImageWidgetImageDump
