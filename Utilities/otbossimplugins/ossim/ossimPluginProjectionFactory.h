@@ -9,13 +9,14 @@
 
 #ifndef ossimPluginProjectionFactory_HEADER
 #define ossimPluginProjectionFactory_HEADER
+#include <ossimPluginConstants.h>
 #include <ossim/projection/ossimProjectionFactoryBase.h>
 
 namespace ossimplugins
 {
 
 
-class ossimPluginProjectionFactory : public ossimProjectionFactoryBase
+class OSSIM_PLUGINS_DLL ossimPluginProjectionFactory : public ossimProjectionFactoryBase
 {
 public:
 

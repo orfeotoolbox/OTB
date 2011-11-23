@@ -19,13 +19,14 @@
 
 #include <ossim/base/ossimCommon.h>
 #include <ossim/base/ossimString.h>
+#include <ossimPluginConstants.h>
 
 #include <map>
 #include <string>
 
 class ossimKeywordlist;
 
-class ossimOgcWktTranslator
+class OSSIM_PLUGINS_DLL ossimOgcWktTranslator
 {
 public:
    ossimOgcWktTranslator();
