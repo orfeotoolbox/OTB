@@ -60,7 +60,8 @@ public:
     m_Epsilon(0),
     m_EpsilonBoundaryChecking(1.0e-30),
     m_ReportErrors(false),
-    m_IgnoreLineOrder(false)
+    m_IgnoreLineOrder(false),
+    m_MaxArea(1024*1024)
   {}
 
   ~TestHelper(){}
@@ -146,6 +147,7 @@ private:
   double m_EpsilonBoundaryChecking;
   bool   m_ReportErrors;
   bool   m_IgnoreLineOrder;
+  const bool m_MaxArea;
 
   void AddWhiteSpace(const std::string& strIn, std::string &strOut) const;
 };

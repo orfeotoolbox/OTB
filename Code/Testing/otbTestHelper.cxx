@@ -32,6 +32,7 @@
 #include "otbImageFileWriter.h"
 #include "otbDifferenceImageFilter.h"
 #include "otbPrintableImageFilter.h"
+#include "otbStreamingShrinkImageFilter.h"
 
 #define ITK_TEST_DIMENSION_MAX 6
 
@@ -658,111 +659,140 @@ int TestHelper::RegressionTestImage(int cpt, const char *testImageFilename, cons
     {
     typedef otb::PrintableImageFilter<ImageType> RescaleType;
     typedef RescaleType::OutputImageType         OutputType;
-    /*     typedef itk::ExtractImageFilter<OutputType, DiffOutputType> ExtractType; */
     typedef otb::ImageFileWriter<RescaleType::OutputImageType> WriterType;
-
+    
     RescaleType::Pointer rescale = RescaleType::New();
-
     WriterType::Pointer writer = WriterType::New();
     writer->SetInput(rescale->GetOutput());
 
-    //    std::cout << "<DartMeasurement name=\"ImageError\" type=\"numeric/double\">";
     std::cout << "<DartMeasurement name=\"ImageError " << cpt << "\" type=\"numeric/double\">";
     std::cout << status;
     std::cout << "</DartMeasurement>" << std::endl;
-
+    
     std::cout << "<DartMeasurement name=\"NumberOfPixelsWithDifferences " << cpt << "\" type=\"numeric/integer\">";
     std::cout << numberOfPixelsWithDifferences;
     std::cout << "</DartMeasurement>" << std::endl;
-
+    
     std::cout << "<DartMeasurement name=\"ToleranceDiffPixelImage\" type=\"numeric/double\">";
     std::cout << toleranceDiffPixelImage;
     std::cout << "</DartMeasurement>" << std::endl;
+    
+    diff->UpdateOutputInformation();
+    ImageType::SizeType size = diff->GetOutput()->GetLargestPossibleRegion().GetSize();
 
-    std::ostringstream diffName;
-    diffName << testImageFilename << ".diff.png";
-    try
+    if( size[0]*size[1] <= m_MaxArea)
       {
-      rescale->SetInput(diff->GetOutput());
-
-      for (unsigned int i = 1; i <= std::min(diff->GetOutput()->GetNumberOfComponentsPerPixel(), 3U); ++i)
+      std::ostringstream diffName;
+      diffName << testImageFilename << ".diff.png";
+      try
         {
-        rescale->SetChannel(i);
+        rescale->SetInput(diff->GetOutput());
+        
+        for (unsigned int i = 1; i <= std::min(diff->GetOutput()->GetNumberOfComponentsPerPixel(), 3U); ++i)
+          {
+          rescale->SetChannel(i);
+          }
+        
+        rescale->Update();
         }
-
-      rescale->Update();
+      catch (...)
+        {
+        itkGenericExceptionMacro(<< "Error during rescale of " << diffName.str());
+        }
+      writer->SetFileName(diffName.str().c_str());
+      try
+        {
+        writer->Update();
+        }
+      catch (...)
+        {
+        itkGenericExceptionMacro(<< "Error during write of " << diffName.str());
+        }
+      
+      std::cout << "<DartMeasurementFile name=\"DifferenceImage " << cpt << "\" type=\"image/png\">";
+      std::cout << diffName.str();
+      std::cout << "</DartMeasurementFile>" << std::endl;
       }
-    catch (...)
+    else
       {
-      itkGenericExceptionMacro(<< "Error during rescale of " << diffName.str());
-      }
-    writer->SetFileName(diffName.str().c_str());
-    try
-      {
-      writer->Update();
-      }
-    catch (...)
-      {
-      itkGenericExceptionMacro(<< "Error during write of " << diffName.str());
-      }
-
-    //    std::cout << "<DartMeasurementFile name=\"DifferenceImage\" type=\"image/png\">";
-    std::cout << "<DartMeasurementFile name=\"DifferenceImage " << cpt << "\" type=\"image/png\">";
-    std::cout << diffName.str();
-    std::cout << "</DartMeasurementFile>" << std::endl;
-
-    std::ostringstream baseName;
-    baseName << testImageFilename << ".base.png";
-    try
-      {
-      rescale->SetInput(baselineReader->GetOutput());
-      rescale->Update();
-      }
-    catch (...)
-      {
-      itkGenericExceptionMacro(<< "Error during rescale of " << baseName.str());
-      }
-    try
-      {
-      writer->SetFileName(baseName.str().c_str());
-      writer->Update();
-      }
-    catch (...)
-      {
-      itkGenericExceptionMacro(<< "Error during write of " << baseName.str());
+      std::cout << "<DartMeasurementFile name=\"DifferenceImage " << cpt << "\" type=\"text/string\">";
+      std::cout << "DIFFERENCE IMAGE TOO BIG TO BE EXPORTED";
+      std::cout << "</DartMeasurementFile>" << std::endl;
       }
 
-    //    std::cout << "<DartMeasurementFile name=\"baselineImage\" type=\"image/png\">";
-    std::cout << "<DartMeasurementFile name=\"baselineImage " << cpt << "\" type=\"image/png\">";
-    std::cout << baseName.str();
-    std::cout << "</DartMeasurementFile>" << std::endl;
+    baselineReader->UpdateOutputInformation();
+    size = baselineReader->GetOutput()->GetLargestPossibleRegion().GetSize();
+    
+    if( size[0]*size[1] <= m_MaxArea)
+      {
+      std::ostringstream baseName;
+      baseName << testImageFilename << ".base.png";
+      try
+        {
+        rescale->SetInput(baselineReader->GetOutput());
+        rescale->Update();
+        }
+      catch (...)
+        {
+        itkGenericExceptionMacro(<< "Error during rescale of " << baseName.str());
+        }
+      try
+        {
+        writer->SetFileName(baseName.str().c_str());
+        writer->Update();
+        }
+      catch (...)
+        {
+        itkGenericExceptionMacro(<< "Error during write of " << baseName.str());
+        }
+      
+      std::cout << "<DartMeasurementFile name=\"BaselineImage " << cpt << "\" type=\"image/png\">";
+      std::cout << baseName.str();
+      std::cout << "</DartMeasurementFile>" << std::endl;
+      }
+    else
+      {
+      std::cout << "<DartMeasurementFile name=\"BaselineImage " << cpt << "\" type=\"text/string\">";
+      std::cout << "BASELINE IMAGE TOO BIG TO BE EXPORTED";
+      std::cout << "</DartMeasurementFile>" << std::endl;
+      }
 
-    std::ostringstream testName;
-    testName << testImageFilename << ".test.png";
-    try
+    testReader->UpdateOutputInformation();
+    size = testReader->GetOutput()->GetLargestPossibleRegion().GetSize();
+    
+    if( size[0]*size[1] <= m_MaxArea)
       {
-      rescale->SetInput(testReader->GetOutput());
-      rescale->Update();
+      std::ostringstream testName;
+      testName << testImageFilename << ".test.png";
+      try
+        {
+        rescale->SetInput(testReader->GetOutput());
+        rescale->Update();
+        }
+      catch (...)
+        {
+        itkGenericExceptionMacro(<< "Error during rescale of " << testName.str());
+        }
+      try
+        {
+        writer->SetFileName(testName.str().c_str());
+        writer->Update();
+        }
+      catch (...)
+        {
+        itkGenericExceptionMacro(<< "Error during write of " << testName.str());
+        }
+      
+      std::cout << "<DartMeasurementFile name=\"TestImage " << cpt << "\" type=\"image/png\">";
+      std::cout << testName.str();
+      std::cout << "</DartMeasurementFile>" << std::endl;
       }
-    catch (...)
+    else
       {
-      itkGenericExceptionMacro(<< "Error during rescale of " << testName.str());
+      std::cout << "<DartMeasurementFile name=\"TestImage " << cpt << "\" type=\"text/string\">";
+      std::cout << "TEST IMAGE TOO BIG TO BE EXPORTED";
+      std::cout << "</DartMeasurementFile>" << std::endl;
       }
-    try
-      {
-      writer->SetFileName(testName.str().c_str());
-      writer->Update();
-      }
-    catch (...)
-      {
-      itkGenericExceptionMacro(<< "Error during write of " << testName.str());
-      }
-
-    //    std::cout << "<DartMeasurementFile name=\"TestImage\" type=\"image/png\">";
-    std::cout << "<DartMeasurementFile name=\"TestImage " << cpt << "\" type=\"image/png\">";
-    std::cout << testName.str();
-    std::cout << "</DartMeasurementFile>" << std::endl;
-
     }
   return (status.GetSquaredNorm() > 0) ? 1 : 0;
 }
