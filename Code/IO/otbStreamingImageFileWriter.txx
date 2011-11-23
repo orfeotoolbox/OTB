@@ -672,8 +672,11 @@ StreamingImageFileWriter<TInputImage>
       cacheImage->SetBufferedRegion(ioRegion);
       cacheImage->Allocate();
 
-      itk::ImageRegionConstIterator<TInputImage> in(input, ioRegion);
-      itk::ImageRegionIterator<TInputImage> out(cacheImage, ioRegion);
+      typedef itk::ImageRegionConstIterator<TInputImage> ConstIteratorType;
+      typedef itk::ImageRegionIterator<TInputImage>      IteratorType;
+      
+      ConstIteratorType in(input, ioRegion);
+      IteratorType out(cacheImage, ioRegion);
      
       // copy the data into a buffer to match the ioregion
       for (in.GoToBegin(), out.GoToBegin(); !in.IsAtEnd(); ++in, ++out)
