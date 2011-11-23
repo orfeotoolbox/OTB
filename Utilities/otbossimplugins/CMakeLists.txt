@@ -16,6 +16,13 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}
 )
 IF(OTB_USE_EXTERNAL_OSSIM)
   INCLUDE_DIRECTORIES(${OSSIM_INCLUDE_DIR})
+  
+  # When using External ossim, compile ossimplugin as a DLL
+  # even if we compile OTB as a static lib
+  IF (WIN32)
+    SET(ossimplugins_LIBTYPE SHARED)
+  ENDIF (WIN32)
+  
 ELSE(OTB_USE_EXTERNAL_OSSIM)
   INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Utilities/otbossim/include)
   INCLUDE_DIRECTORIES(${OTB_BINARY_DIR}/Utilities/otbossim/include)
@@ -33,7 +40,7 @@ SET(ossimplugins_SOURCES
   ${ossimplugins_ossim_SRCS}
 )
 
-ADD_LIBRARY(otbossimplugins ${ossimplugins_SOURCES} )
+ADD_LIBRARY(otbossimplugins ${ossimplugins_LIBTYPE} ${ossimplugins_SOURCES} )
 TARGET_LINK_LIBRARIES(otbossimplugins ${GEOTIFF_LIBRARY} ${GDAL_LIBRARY} ${OGR_LIBRARY} ${OSSIM_LIBRARY})
 SET_TARGET_PROPERTIES(otbossimplugins
                       PROPERTIES VERSION "${OSSIMPLUGINS_SVN_REVISION}.${OSSIMPLUGINS_OTB_PATCH}.0"
