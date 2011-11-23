@@ -102,14 +102,8 @@ otbGetImageMacro(Int32VectorImage);
 otbGetImageMacro(FloatVectorImage);
 otbGetImageMacro(DoubleVectorImage);
 
+otbGetImageMacro(UInt8RGBImage);
 otbGetImageMacro(UInt8RGBAImage);
-otbGetImageMacro(Int8RGBAImage);
-otbGetImageMacro(UInt16RGBAImage);
-otbGetImageMacro(Int16RGBAImage);
-otbGetImageMacro(UInt32RGBAImage);
-otbGetImageMacro(Int32RGBAImage);
-otbGetImageMacro(FloatRGBAImage);
-otbGetImageMacro(DoubleRGBAImage);
 
 
 template <class TOutputImage>
@@ -211,37 +205,14 @@ InputImageParameter::GetImage()
         {
         return CastImage<DoubleVectorImageType, TOutputImage> ();
         }
-      else if (dynamic_cast<Int8RGBAImageType*> (m_Image.GetPointer()))
-        {
-        return CastImage<Int8RGBAImageType, TOutputImage> ();
-        }
+      
       else if (dynamic_cast<UInt8RGBAImageType*> (m_Image.GetPointer()))
         {
         return CastImage<UInt8RGBAImageType, TOutputImage> ();
         }
-      else if (dynamic_cast<Int16RGBAImageType*> (m_Image.GetPointer()))
+      else if (dynamic_cast<UInt8RGBImageType*> (m_Image.GetPointer()))
         {
-        return CastImage<Int16RGBAImageType, TOutputImage> ();
-        }
-      else if (dynamic_cast<UInt16RGBAImageType*> (m_Image.GetPointer()))
-        {
-        return CastImage<UInt16RGBAImageType, TOutputImage> ();
-        }
-      else if (dynamic_cast<Int32RGBAImageType*> (m_Image.GetPointer()))
-        {
-        return CastImage<Int32RGBAImageType, TOutputImage> ();
-        }
-      else if (dynamic_cast<UInt32RGBAImageType*> (m_Image.GetPointer()))
-        {
-        return CastImage<UInt32RGBAImageType, TOutputImage> ();
-        }
-      else if (dynamic_cast<FloatRGBAImageType*> (m_Image.GetPointer()))
-        {
-        return CastImage<FloatRGBAImageType, TOutputImage> ();
-        }
-      else if (dynamic_cast<DoubleRGBAImageType*> (m_Image.GetPointer()))
-        {
-        return CastImage<DoubleRGBAImageType, TOutputImage> ();
+        return CastImage<UInt8RGBImageType, TOutputImage> ();
         }
       else
         {
@@ -333,19 +304,6 @@ otbGenericCastImageMacro(Int32VectorImageType, SimpleCastImage, Vector)
 otbGenericCastImageMacro(UInt32VectorImageType, SimpleCastImage, Vector)
 otbGenericCastImageMacro(FloatVectorImageType, SimpleCastImage, Vector)
 otbGenericCastImageMacro(DoubleVectorImageType, SimpleCastImage, Vector)
-
-
-/*********************************************************************
-********************** RGBAImage -> RGBAImage
-**********************************************************************/
-otbGenericCastImageMacro(Int8RGBAImageType, SimpleCastImage, RGBA)
-otbGenericCastImageMacro(UInt8RGBAImageType, SimpleCastImage, RGBA)
-otbGenericCastImageMacro(Int16RGBAImageType, SimpleCastImage, RGBA)
-otbGenericCastImageMacro(UInt16RGBAImageType, SimpleCastImage, RGBA)
-otbGenericCastImageMacro(Int32RGBAImageType, SimpleCastImage, RGBA)
-otbGenericCastImageMacro(UInt32RGBAImageType, SimpleCastImage, RGBA)
-otbGenericCastImageMacro(FloatRGBAImageType, SimpleCastImage, RGBA)
-otbGenericCastImageMacro(DoubleRGBAImageType, SimpleCastImage, RGBA)
 
 
 /*********************************************************************

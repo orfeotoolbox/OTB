@@ -19,6 +19,7 @@
 #define __otbWrapperTypes_h
 
 #include <complex>
+#include "itkRGBPixel.h"
 #include "itkRGBAPixel.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
@@ -102,14 +103,8 @@ typedef otb::VectorImage<unsigned int>   UInt32VectorImageType;
 typedef otb::VectorImage<float>          FloatVectorImageType;
 typedef otb::VectorImage<double>         DoubleVectorImageType;
 
-typedef otb::Image< itk::RGBAPixel<char> >           Int8RGBAImageType;
+typedef otb::Image< itk::RGBPixel<unsigned char> >  UInt8RGBImageType;
 typedef otb::Image< itk::RGBAPixel<unsigned char> >  UInt8RGBAImageType;
-typedef otb::Image< itk::RGBAPixel<short> >          Int16RGBAImageType;
-typedef otb::Image< itk::RGBAPixel<unsigned short> > UInt16RGBAImageType;
-typedef otb::Image< itk::RGBAPixel<int> >            Int32RGBAImageType;
-typedef otb::Image< itk::RGBAPixel<unsigned int> >   UInt32RGBAImageType;
-typedef otb::Image< itk::RGBAPixel<float> >          FloatRGBAImageType;
-typedef otb::Image< itk::RGBAPixel<double> >         DoubleRGBAImageType;
 
 typedef std::complex<float>                   FloatComplexPixelType;
 typedef std::complex<double>                  DoubleComplexPixelType;

@@ -73,15 +73,10 @@ public:
   Int32VectorImageType* GetInt32VectorImage();
   FloatVectorImageType* GetFloatVectorImage();
   DoubleVectorImageType* GetDoubleVectorImage();
- 
+
+  UInt8RGBImageType* GetUInt8RGBImage();
   UInt8RGBAImageType* GetUInt8RGBAImage();
-  Int8RGBAImageType* GetInt8RGBAImage();
-  UInt16RGBAImageType* GetUInt16RGBAImage();
-  Int16RGBAImageType* GetInt16RGBAImage();
-  UInt32RGBAImageType* GetUInt32RGBAImage();
-  Int32RGBAImageType* GetInt32RGBAImage();
-  FloatRGBAImageType* GetFloatRGBAImage();
-  DoubleRGBAImageType* GetDoubleRGBAImage();
+
 
   /** Get the input image as templated image type. */
   template <class TImageType>
@@ -150,15 +145,9 @@ protected:
   typedef otb::ImageFileReader<FloatVectorImageType> FloatVectorReaderType;
   typedef otb::ImageFileReader<DoubleVectorImageType> DoubleVectorReaderType;
 
-  typedef otb::ImageFileReader<Int8RGBAImageType> Int8RGBAReaderType;
-  typedef otb::ImageFileReader<UInt8RGBAImageType> UInt8RGBAReaderType;
-  typedef otb::ImageFileReader<Int16RGBAImageType> Int16RGBAReaderType;
-  typedef otb::ImageFileReader<UInt16RGBAImageType> UInt16RGBAReaderType;
-  typedef otb::ImageFileReader<Int32RGBAImageType> Int32RGBAReaderType;
-  typedef otb::ImageFileReader<UInt32RGBAImageType> UInt32RGBAReaderType;
-  typedef otb::ImageFileReader<FloatRGBAImageType> FloatRGBAReaderType;
-  typedef otb::ImageFileReader<DoubleRGBAImageType> DoubleRGBAReaderType;
 
+  typedef otb::ImageFileReader<UInt8RGBImageType>  UInt8RGBReaderType;
+  typedef otb::ImageFileReader<UInt8RGBAImageType> UInt8RGBAReaderType;
 /*
   Int8ReaderType::Pointer   m_Int8Reader;
   UInt8ReaderType::Pointer  m_UInt8Reader;

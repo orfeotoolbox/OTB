@@ -385,14 +385,8 @@ public:
   otbGetParameterImageMacro(FloatVectorImage);
   otbGetParameterImageMacro(DoubleVectorImage);
 
+  otbGetParameterImageMacro(UInt8RGBImage);
   otbGetParameterImageMacro(UInt8RGBAImage);
-  otbGetParameterImageMacro(Int8RGBAImage);
-  otbGetParameterImageMacro(UInt16RGBAImage);
-  otbGetParameterImageMacro(Int16RGBAImage);
-  otbGetParameterImageMacro(UInt32RGBAImage);
-  otbGetParameterImageMacro(Int32RGBAImage);
-  otbGetParameterImageMacro(FloatRGBAImage);
-  otbGetParameterImageMacro(DoubleRGBAImage);
 
   /* Get a complex image value
    *
