@@ -32,6 +32,11 @@
 #include "otbVectorDataExtractROI.h"
 #include "otbVectorDataProjectionFilter.h"
 
+/*
+* Tests prTvVectorDataIntoImageProjectionFilterTest_2 and
+* prTvVectorDataIntoImageProjectionFilterTest_4 failed because of the bug http://bugs.orfeo-toolbox.org/view.php?id=333.
+*/
+
 int otbVectorDataIntoImageProjectionFilterTest(int argc, char * argv[])
 {
   typedef float                                           PixelType;
