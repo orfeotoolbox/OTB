@@ -92,32 +92,47 @@ int otbExtractROITestMetaData(int argc, char * argv[])
   // Write left up image
   writer00->SetFileName(argv[2]);
   writer00->SetInput(extract00->GetOutput());
+  writer00->SetWriteGeomFile(true);
   writer00->Update();
 
   // Write image with non zero index
   writer57->SetFileName(argv[3]);
   writer57->SetInput(extract57->GetOutput());
+  writer57->SetWriteGeomFile(true);
   writer57->Update();
 
   // Reading image with left up index
   reader00->SetFileName(argv[2]);
   reader00->GenerateOutputInformation();
 
-  // Save extract image information
-  std::ofstream file00_read;
-  file00_read.open(argv[6]);
-  file00_read << static_cast<ImageType::Pointer>(reader00->GetOutput()) << std::endl;
-  file00_read.close();
+  if( reader00->GetOutput()->GetProjectionRef() != "")
+    {
+    std::cout<<"The read generated extract from index (0,0) must NOT contain a ProjectionReference."<<std::endl;
+    return EXIT_FAILURE;
+    }
+
+  if( reader00->GetOutput()->GetGCPCount() == 0)
+    {
+    std::cout<<"The read generated extract from index (0,0) must contain a list a GCPs.."<<std::endl;
+    return EXIT_FAILURE;
+    }
 
   // Reading image with non-zero index
   reader57->SetFileName(argv[3]);
   reader57->GenerateOutputInformation();
 
-  // Save extract image information
-  std::ofstream file57_read;
-  file57_read.open(argv[7]);
-  file57_read << static_cast<ImageType::Pointer>(reader57->GetOutput()) << std::endl;
-  file57_read.close();
+  if( reader57->GetOutput()->GetProjectionRef() != "")
+    {
+    std::cout<<"The read generated extract from index (x,y) must NOT contain a ProjectionReference."<<std::endl;
+    return EXIT_FAILURE;
+    }
+  
+  if( reader57->GetOutput()->GetGCPCount() != 0)
+    {
+    std::cout<<"The read generated extract from index (x,y) must NOT contain a list a GCPs.."<<std::endl;
+    return EXIT_FAILURE;
+    }
+
 
   return EXIT_SUCCESS;
 }
