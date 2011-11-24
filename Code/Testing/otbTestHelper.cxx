@@ -715,9 +715,9 @@ int TestHelper::RegressionTestImage(int cpt, const char *testImageFilename, cons
       }
     else
       {
-      std::cout << "<DartMeasurementFile name=\"DifferenceImage " << cpt << "\" type=\"text/string\">";
+      std::cout << "<DartMeasurement name=\"DifferenceImage " << cpt << "\" type=\"text/string\">";
       std::cout << "DIFFERENCE IMAGE TOO BIG TO BE EXPORTED";
-      std::cout << "</DartMeasurementFile>" << std::endl;
+      std::cout << "</DartMeasurement>" << std::endl;
       }
 
     baselineReader->UpdateOutputInformation();
@@ -752,9 +752,9 @@ int TestHelper::RegressionTestImage(int cpt, const char *testImageFilename, cons
       }
     else
       {
-      std::cout << "<DartMeasurementFile name=\"BaselineImage " << cpt << "\" type=\"text/string\">";
+      std::cout << "<DartMeasurement name=\"BaselineImage " << cpt << "\" type=\"text/string\">";
       std::cout << "BASELINE IMAGE TOO BIG TO BE EXPORTED";
-      std::cout << "</DartMeasurementFile>" << std::endl;
+      std::cout << "</DartMeasurement>" << std::endl;
       }
 
     testReader->UpdateOutputInformation();
@@ -789,9 +789,9 @@ int TestHelper::RegressionTestImage(int cpt, const char *testImageFilename, cons
       }
     else
       {
-      std::cout << "<DartMeasurementFile name=\"TestImage " << cpt << "\" type=\"text/string\">";
+      std::cout << "<DartMeasurement name=\"TestImage " << cpt << "\" type=\"text/string\">";
       std::cout << "TEST IMAGE TOO BIG TO BE EXPORTED";
-      std::cout << "</DartMeasurementFile>" << std::endl;
+      std::cout << "</DartMeasurement>" << std::endl;
       }
     }
   return (status.GetSquaredNorm() > 0) ? 1 : 0;
