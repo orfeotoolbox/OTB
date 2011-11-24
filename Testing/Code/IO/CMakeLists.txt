@@ -1915,22 +1915,6 @@ ADD_TEST(ioTuJP2ImageIOCanRead ${IO_TESTS13}
          )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
-ADD_TEST(ioTvVectorImageFileReaderWriterJ2K2TIF ${IO_TESTS9}
---compare-image ${EPSILON_9}  ${BASELINE}/ioTvVectorImageFileReaderWriterJ2K2TIFOutput.tif
-                        ${TEMP}/ioTvVectorImageFileReaderWriterJ2K2TIFOutput.tif
-         otbVectorImageFileReaderWriterTest
-         ${INPUTDATA}/bretagne.j2k
-         ${TEMP}/ioTvVectorImageFileReaderWriterJ2K2TIFOutput.tif
-         )
-
-ADD_TEST(ioTvImageFileReaderWriterJ2K2TIF ${IO_TESTS2}
---compare-image ${EPSILON_9}  ${BASELINE}/ioTvImageFileReaderWriterJ2K2TIFOutput.tif
-                        ${TEMP}/ioTvImageFileReaderWriterJ2K2TIFOutput.tif
-         otbDoubleImageIOTest
-         ${INPUTDATA}/bretagne.j2k
-         ${TEMP}/ioTvImageFileReaderWriterJ2K2TIFOutput.tif
-        )
-
 #NOTE: we are comparing with the kakadu output in raw format.
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(ioTvVectorImageFileReaderWriterJP22TIF ${IO_TESTS9}
@@ -2012,12 +1996,23 @@ IF(OTB_DATA_USE_LARGEINPUT)
   ADD_TEST(ioTvVectorImageFileReaderWriterJP22TIF_PLEIADES-PRE-R4C1-tile328-329 ${COMMON_TESTS2}
          --without-threads
          --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1-tile328-329.tif
-                                       ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1-tile328-329.tif
+                                       ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1-tile328-329_OUT.tif
          otbMultiChannelExtractROI
          -ushort ${LARGEDATA}/PLEIADES-PRE/VERSION2/IMG_PHR_001/IMG_R4C1.JP2:5
-         -ushort ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1-tile328-329.tif
+         -ushort ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1-tile328-329_OUT.tif
          -startX 1330 -startY 928 -sizeX 32 -sizeY 32
          -channels 1 2 3 4
+         -time
+         )
+         
+  # Generate the QL used in monteverdi (take only first bands to put the image in the baseline) 
+  ADD_TEST(ioTvVectorImageFileReaderWriterJP22TIF_PLEIADES-PRE-R4C1-FullQL ${COMMON_TESTS2}
+         --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_pleiades_ql.tif
+                                        ${TEMP}/ioExtractROI_JPEG2K_2_TIF_pleiades_ql_OUT.tif
+         otbMultiChannelExtractROI
+         -ushort ${LARGEDATA}/PLEIADES-PRE/VERSION2/IMG_PHR_001/IMG_R4C1.JP2:5
+         -ushort ${TEMP}/ioExtractROI_JPEG2K_2_TIF_pleiades_ql_OUT.tif
+         -channels 1
          -time
          )
 
@@ -2043,33 +2038,36 @@ ADD_TEST(ioTvMultiResolutionReading3 ${IO_TESTS13}
       3
       )
 
-# Tests to check if we can open JPEG2000 files using a otb::VectorImage and filename:NumSubDataset syntax.
+# Tests to check if we can open JPEG2000 files using a otb::VectorImage 
+# and filename:ResolutionFactor syntax.
 # no access to data only PrintSelf() method.
 ADD_TEST(ioTvMultiResolutionReadingInName0 ${IO_TESTS13}
   --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReading0.txt
-                             ${TEMP}/ioTvMultiResolutionReadingInName0.txt
+                            ${TEMP}/ioTvMultiResolutionReadingInName0.txt
       otbVectorImageTest
       ${INPUTDATA}/bretagne.j2k:0
       ${TEMP}/ioTvMultiResolutionReadingInName0.txt
       )
 ADD_TEST(ioTvMultiResolutionReadingInName3 ${IO_TESTS13}
   --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReading3.txt
-                             ${TEMP}/ioTvMultiResolutionReadingInName3.txt
+                            ${TEMP}/ioTvMultiResolutionReadingInName3.txt
       otbVectorImageTest
       ${INPUTDATA}/bretagne.j2k:3
       ${TEMP}/ioTvMultiResolutionReadingInName3.txt
       )
 
-# Test to check behavior of function JPEG2000reader->GetResolutionInfo() which return info about resolution available in the JPEG2000 file.
+# Test to check behavior of function JPEG2000reader->GetResolutionInfo() 
+# which return info about resolution available in the JPEG2000 file.
 ADD_TEST(ioTvMultiResolutionReadingInfo ${IO_TESTS13}
   --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReadingInfoOut.txt
-                             ${TEMP}/ioTvMultiResolutionReadingInfoOut.txt
+                            ${TEMP}/ioTvMultiResolutionReadingInfoOut.txt
       otbMultiResolutionReadingInfo
       ${INPUTDATA}/bretagne.j2k
       ${TEMP}/ioTvMultiResolutionReadingInfoOut.txt
       )
 
 # Tests which read data in JPEG2000 files.
+# Generate a too big output image to be used in baseline repository (useful only for dev)
 #ADD_TEST(ioTvMultiChannelROI_JPEG2000_2_TIF_res0 ${COMMON_TESTS2}
 #   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_bretagne_0_0_2592_1944.tif
 #                     ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_0_0_2592_1944_OUT.tif
@@ -2079,64 +2077,60 @@ ADD_TEST(ioTvMultiResolutionReadingInfo ${IO_TESTS13}
 #         -startX 0 -startY 0 -sizeX 2592 -sizeY 1944
 #         -channels 1 2 3 )
 
+# Read an area inside one tile at resolution 0
 ADD_TEST(ioTvMultiChannelROI_JPEG2000_2_TIF_res0_1 ${COMMON_TESTS2}
-   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_bretagne_700_1000_500_400.tif
-                     ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_700_1000_500_400_OUT.tif
+   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_bretagne_700_1000_50_40.tif
+                                  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_700_1000_50_40_OUT.tif
          otbMultiChannelExtractROI
-         ${INPUTDATA}/bretagne.j2k:0
-         ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_700_1000_500_400_OUT.tif
-         -startX 700 -startY 1000 -sizeX 500 -sizeY 400
-         -channels 1 2 3 )
-
+            ${INPUTDATA}/bretagne.j2k:0
+            ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_700_1000_50_40_OUT.tif
+            -startX 700 -startY 1000 -sizeX 50 -sizeY 40 )
+           
+# Read an area which need to decode 4 tiles at resolution 0
 ADD_TEST(ioTvMultiChannelROI_JPEG2000_2_TIF_res0_2 ${COMMON_TESTS2}
-   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_bretagne_500_950_1200_350.tif
-                     ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_500_950_1200_350_OUT.tif
+   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_bretagne_1260_950_40_20.tif
+                                  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_1260_950_40_20_OUT.tif
          otbMultiChannelExtractROI
-         ${INPUTDATA}/bretagne.j2k:0
-         ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_500_950_1200_350_OUT.tif
-         -startX 500 -startY 950 -sizeX 1200 -sizeY 350
-         -channels 1 2 3 )
+            ${INPUTDATA}/bretagne.j2k:0
+            ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_1260_950_40_20_OUT.tif
+            -startX 1260 -startY 950 -sizeX 40 -sizeY 20 )
 
+# Read all the image with a resolution 3
 ADD_TEST(ioTvMultiChannelROI_JPEG2000_2_TIF_res3 ${COMMON_TESTS2}
-   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_bretagne_0_0_324_243.tif
-                     ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_0_0_324_243_OUT.tif
+   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_bretagne_res3.tif
+                                  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_res3_OUT.tif
          otbMultiChannelExtractROI
-         ${INPUTDATA}/bretagne.j2k:3
-         ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_0_0_324_243_OUT.tif
-         -startX 0 -startY 0 -sizeX 324 -sizeY 243
-         -channels 1 2 3 )
-         
+            ${INPUTDATA}/bretagne.j2k:3
+            ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_res3_OUT.tif )
+
+# Read area inside one tile at resolution 3         
 ADD_TEST(ioTvMultiChannelROI_JPEG2000_2_TIF_res3_1 ${COMMON_TESTS2}
-   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_bretagne_40_30_80_60.tif
-                     ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_40_30_80_60_OUT.tif
+   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_bretagne_res3_90_70_20_30.tif
+                                  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_res3_90_70_20_30_OUT.tif
          otbMultiChannelExtractROI
-         ${INPUTDATA}/bretagne.j2k:3
-         ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_40_30_80_60_OUT.tif
-         -startX 40 -startY 30 -sizeX 80 -sizeY 60
-         -channels 1 2 3 )
-         
+           ${INPUTDATA}/bretagne.j2k:3
+           ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_res3_90_70_20_30_OUT.tif
+           -startX 90 -startY 70 -sizeX 20 -sizeY 30 )
+
+# Read an area which need to decode 4 tiles at resolution 3           
+ADD_TEST(ioTvMultiChannelROI_JPEG2000_2_TIF_res3_2 ${COMMON_TESTS2}
+   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_bretagne_res3_40_30_80_60.tif
+                                  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_res3_40_30_80_60_OUT.tif
+         otbMultiChannelExtractROI
+           ${INPUTDATA}/bretagne.j2k:3
+           ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_res3_40_30_80_60_OUT.tif
+           -startX 40 -startY 30 -sizeX 80 -sizeY 60 )           
+
+# Read all the image with a resolution 5         
 ADD_TEST(ioTvMultiChannelROI_JPEG2000_2_TIF_res5 ${COMMON_TESTS2}
-   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_bretagne_0_0_81_61.tif
-                     ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_0_0_81_61_OUT.tif
+   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_bretagne_res5.tif
+                                  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_res5_OUT.tif
          otbMultiChannelExtractROI
-         ${INPUTDATA}/bretagne.j2k:5
-         ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_0_0_81_61_OUT.tif
-         -startX 0 -startY 0 -sizeX 81 -sizeY 61
-         -channels 1 2 3 )
-
-IF(OTB_DATA_USE_LARGEINPUT)
-
-ADD_TEST(ioTvMultiChannelROI_JPEG2000_2_TIF_PLEIADES_res5_FullQuicklook ${COMMON_TESTS2}
-   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_pleiades_ql_OUT.tif
-                     ${TEMP}/ioExtractROI_JPEG2K_2_TIF_pleiades_ql_OUT.tif
-         otbMultiChannelExtractROI
-         -ushort ${LARGEDATA}/PLEIADES-PRE/VERSION2/IMG_PHR_001/IMG_R4C1.JP2:5
-         -ushort ${TEMP}/ioExtractROI_JPEG2K_2_TIF_pleiades_ql_OUT.tif
-         )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
+           ${INPUTDATA}/bretagne.j2k:5
+           ${TEMP}/ioExtractROI_JPEG2K_2_TIF_bretagne_res5_OUT.tif )
 
 # Test the possibility to modify the size of cache used to reduce the decoding operations
-# O tile in the cache
+# O tile in the cache (500K)
 ADD_TEST(ioTvJPEG2000ImageIO_CacheSize_500 ${IO_TESTS13}
    --compare-image ${EPSILON_9}   
          ${BASELINE}/ioClassicalQLJPEG2K_bretagne.tif
@@ -2146,7 +2140,7 @@ ADD_TEST(ioTvJPEG2000ImageIO_CacheSize_500 ${IO_TESTS13}
          ${TEMP}/ioClassicalQLJPEG2K_bretagne_500.tif
          500)
 
-# 1 tile in the cache
+# 1 tile in the cache (1000K)
 ADD_TEST(ioTvJPEG2000ImageIO_CacheSize_1000 ${IO_TESTS13}
    --compare-image ${EPSILON_9}   
          ${BASELINE}/ioClassicalQLJPEG2K_bretagne.tif
@@ -2156,7 +2150,7 @@ ADD_TEST(ioTvJPEG2000ImageIO_CacheSize_1000 ${IO_TESTS13}
          ${TEMP}/ioClassicalQLJPEG2K_bretagne_1000.tif
          1000)
 
-# 5 tiles in the cache         
+# 5 tiles in the cache (5000K)        
 ADD_TEST(ioTvJPEG2000ImageIO_CacheSize_5000 ${IO_TESTS13}
    --compare-image ${EPSILON_9}   
          ${BASELINE}/ioClassicalQLJPEG2K_bretagne.tif
@@ -2166,14 +2160,14 @@ ADD_TEST(ioTvJPEG2000ImageIO_CacheSize_5000 ${IO_TESTS13}
          ${TEMP}/ioClassicalQLJPEG2K_bretagne_5000.tif
          5000)
 
-# 135Mb in the cache          
+# 135Mb in the cache (set by otbIFR for JPEG2000)         
 ADD_TEST(ioTvJPEG2000ImageIO_CacheSize_25000 ${IO_TESTS13}
    --compare-image ${EPSILON_9}   
          ${BASELINE}/ioClassicalQLJPEG2K_bretagne.tif
-         ${TEMP}/ioClassicalQLJPEG2K_bretagne_25000.tif
+         ${TEMP}/ioClassicalQLJPEG2K_bretagne_OUT.tif
          otbGenerateClassicalQLWithJPEG2000
          ${INPUTDATA}/bretagne.j2k
-         ${TEMP}/ioClassicalQLJPEG2K_bretagne_25000.tif)
+         ${TEMP}/ioClassicalQLJPEG2K_bretagne_OUT.tif)
 
 ENDIF(OTB_COMPILE_JPEG2000)
 
