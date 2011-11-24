@@ -1130,12 +1130,12 @@ ADD_TEST(prTvVectorDataProjectionFilterFromMapToGeo ${PROJECTIONS_TESTS3}
 
 ADD_TEST(prTvVectorDataProjectionFilterFromMapToImage ${PROJECTIONS_TESTS3}
         --compare-ascii ${NOTOL}
-        ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToImage.kml
-        ${TEMP}/prTvVectorDataProjectionFilterFromMapToImage.kml
+        ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToImage.shp
+        ${TEMP}/prTvVectorDataProjectionFilterFromMapToImage.shp
         otbVectorDataProjectionFilterFromMapToImage
         ${INPUTDATA}/ToulousePoints-examples.shp
         ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
-        ${TEMP}/prTvVectorDataProjectionFilterFromMapToImage.kml
+        ${TEMP}/prTvVectorDataProjectionFilterFromMapToImage.shp
 )
 
 # With QGIS the two vectordata are equal
