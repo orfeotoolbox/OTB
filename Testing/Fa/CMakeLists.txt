@@ -277,6 +277,20 @@ ADD_TEST(FA-000209-SVMValidationLinearlySeparableWithoutProbEstimate_OK ${CXX_TE
 ADD_TEST(FA-000209-SVMValidationLinearlySeparableWithProbEstimate_KO ${CXX_TEST_PATH}/0000209-SVMValidationLinearlySeparableProbEstimation
 0000209-SVMValidationLinearlySeparableProbEstimation 500 500 0.0025 0.0075 0.0075 0.0025 0. 0.0025 0. 0.0025 0 1)
 
+
+# ------- FA 0000433 : LSD 8bots vs 16bits -------------------------
+ADD_TEST(FA-0000433-LineSegmentDetector_8b_16b_compare ${CXX_TEST_PATH}/0000433-LineSegmentDetector_8b_16b_compare
+#--compare-ogr  ${EPSILON_8}
+#                 ${TEMP}/FA-0000433-LSD_8b.shp
+#                 ${TEMP}/FA-0000433-LSD_16b.shp
+0000433-LineSegmentDetector_8b_16b_compare 
+  ${INPUTDATA}/scene_8.tif
+  ${INPUTDATA}/scene_16.tif
+  ${TEMP}/FA-0000433-LSD_8b.shp
+  ${TEMP}/FA-0000433-LSD_16b.shp)
+
+
+
 # -------       Vectorization issue   -----------------------------------
 # FIXME Desactivated until http://bugs.orfeo-toolbox.org/view.php?id=94
 # has somebody working on it
@@ -329,5 +343,8 @@ TARGET_LINK_LIBRARIES(0000307-ExtractROICompareRegion OTBIO OTBCommon)
 
 ADD_EXECUTABLE(0000428-CastImageFilterStreaming  0000428-CastImageFilterStreaming.cxx)
 TARGET_LINK_LIBRARIES(0000428-CastImageFilterStreaming OTBIO OTBCommon OTBBasicFilters)
+
+ADD_EXECUTABLE(0000433-LineSegmentDetector_8b_16b_compare 0000433-LineSegmentDetector_8b_16b_compare.cxx)
+TARGET_LINK_LIBRARIES(0000433-LineSegmentDetector_8b_16b_compare OTBIO OTBFeatureExtraction)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
