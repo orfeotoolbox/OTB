@@ -716,7 +716,9 @@ int TestHelper::RegressionTestImage(int cpt, const char *testImageFilename, cons
     else
       {
       std::cout << "<DartMeasurement name=\"DifferenceImage " << cpt << "\" type=\"text/string\">";
-      std::cout << "DIFFERENCE IMAGE TOO BIG TO BE EXPORTED";
+      std::cout << "*************************************************************\n";
+      std::cout << "********** DIFFERENCE IMAGE TOO BIG TO BE SUBMITTED *********\n";
+      std::cout << "*************************************************************";
       std::cout << "</DartMeasurement>" << std::endl;
       }
 
@@ -753,7 +755,9 @@ int TestHelper::RegressionTestImage(int cpt, const char *testImageFilename, cons
     else
       {
       std::cout << "<DartMeasurement name=\"BaselineImage " << cpt << "\" type=\"text/string\">";
-      std::cout << "BASELINE IMAGE TOO BIG TO BE EXPORTED";
+      std::cout << "*************************************************************\n";
+      std::cout << "*********** BASELINE IMAGE TOO BIG TO BE SUBMITTED **********\n";
+      std::cout << "*************************************************************";
       std::cout << "</DartMeasurement>" << std::endl;
       }
 
@@ -790,7 +794,9 @@ int TestHelper::RegressionTestImage(int cpt, const char *testImageFilename, cons
     else
       {
       std::cout << "<DartMeasurement name=\"TestImage " << cpt << "\" type=\"text/string\">";
-      std::cout << "TEST IMAGE TOO BIG TO BE EXPORTED";
+      std::cout << "*************************************************************\n";
+      std::cout << "************* TEST IMAGE TOO BIG TO BE SUBMITTED ************\n";
+      std::cout << "*************************************************************";
       std::cout << "</DartMeasurement>" << std::endl;
       }
     }
