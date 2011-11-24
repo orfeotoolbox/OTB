@@ -430,7 +430,7 @@ public:
   };
 
   /** Get the size of the cache in terms of number of tiles */
-  unsigned int GetCacheSizeInTiles() {return m_CacheSizeInTiles;};
+  unsigned int GetCacheSizeInTiles() {return m_CacheSizeInTiles; };
 
   /** Set the size of the cache with in terms of Bytes */
   void SetCacheSizeInByte(unsigned int sizeInByte)
@@ -474,7 +474,7 @@ void JPEG2000TileCache::EstimateTileCacheSize(unsigned int originalWidthTile, un
   this->m_TileCacheSizeInByte = originalWidthTile * originalHeightTile
                               * nbComponent
                               * precision
-                              / vcl_pow(2, 2*static_cast<double>(resolution) ) ;
+                              / vcl_pow(2, 2*static_cast<double>(resolution) );
 
   otbMsgDevMacro( << "m_TileCacheSizeInByte = " << m_TileCacheSizeInByte );
 }
