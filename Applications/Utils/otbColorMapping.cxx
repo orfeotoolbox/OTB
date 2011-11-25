@@ -75,11 +75,11 @@ private:
     SetDescription("Maps an input grayscale image into 8-bits RGB using look-up tables.");
 
     SetDocName("Color Mapping");
-    SetDocLongDescription("");
-    SetDocLimitations("None");
+    SetDocLongDescription("This application allows to map an input grayscale into a 8-bits RGB image using three different methods.\n" "-The custom method allows to apply a custom look-up table to a labeled image. The look-up table is loaded from a text file where each line describes an entry. The typical use of this method is to colorise a classification map.\n" "-The continuous method allows to map a range of values in a scalar input image into a colored image using continuous look-up table, in order to enhance image interpretation. Several look-up tables can ben chosen with different color ranges.\n" "-The segmentation method is dedicated to segmentation labeled outputs where each segment correspond to a unique labeled. It computes an optimal look-up table such that color difference between adjacent segmented regions is maximised.");
+    SetDocLimitations("The segmentation method does not support streaming, and thus large images.");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso(" ");
-    SetDocCLExample("otbApplicationLauncherCommandLine ColorMapping   --in ${OTBAPP_BASELINE}/clLabeledImageQB123_1.tif --ct ${OTB-Data}/Input/Classification/ColorTable.txt --out clLabeledFancyImageQB123_1.tif");
+    SetDocSeeAlso("ImageSVMClassifier application");
+    SetDocCLExample("otbApplicationLauncherCommandLine ColorMapping  --in ${OTBAPP_BASELINE}/clLabeledImageQB123_1.tif --method custom --method.custom.lut ${OTB-Data}/Input/Classification/ColorTable.txt --out clLabeledFancyImageQB123_1.tif");
     AddDocTag(Tags::Learning);
 
     // Build lut map
@@ -107,9 +107,9 @@ private:
   void DoCreateParameters()
   {
     AddParameter(ParameterType_InputImage, "in", "Input Image");
-    SetParameterDescription("in", "Input image filename.");
+    SetParameterDescription("in", "Input image filename");
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
-    SetParameterDescription("out","Output image filename.");
+    SetParameterDescription("out","Output image filename");
     AddParameter(ParameterType_RAM, "ram", "Available RAM");
     SetDefaultParameterInt("ram", 256);
     MandatoryOff("ram");
@@ -117,6 +117,7 @@ private:
 
     AddParameter(ParameterType_Choice, "method", "Color mapping method");
     SetParameterDescription("method","Selection of color mapping methods and their parameters.");
+
     // Custom LUT
     AddChoice("method.custom","Color mapping with custom labeled look-up table");
     SetParameterDescription("method.custom","Apply a user-defined look-up table to a labeled image. Look-up table is loaded from a text file.");
