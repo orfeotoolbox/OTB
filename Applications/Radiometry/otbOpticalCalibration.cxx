@@ -277,6 +277,3 @@ private:
 } // namespace otb
 
 OTB_APPLICATION_EXPORT(otb::Wrapper::OpticalCalibration)
-
-  
-  
