@@ -2,8 +2,8 @@
 #--- EstimateImageStatistics ---#
 # QB1 chain
 
-OTB_TEST_APPLICATION(NAME apTvClEstimateImagesStatisticsQB1
-                     APP  EstimateImagesStatistics
+OTB_TEST_APPLICATION(NAME apTvClComputeImagesStatisticsQB1
+                     APP  ComputeImagesStatistics
                      OPTIONS --il ${INPUTDATA}/Classification/QB_1_ortho.tif
                 			 --out ${TEMP}/apTvClEstimateImageStatisticsQB1.xml 
                      VALID   --compare-ascii ${NOTOL}
@@ -23,7 +23,7 @@ OTB_TEST_APPLICATION(NAME apTvClTrainSVMImagesClassifierQB1
                              ${OTBAPP_BASELINE_FILES}/clsvmModelQB1.svm
    					 		 ${TEMP}/clsvmModelQB1.svm)
        
-SET_TESTS_PROPERTIES(apTvClTrainSVMImagesClassifierQB1 PROPERTIES DEPENDS apTvClEstimateImagesStatisticsQB1)
+SET_TESTS_PROPERTIES(apTvClTrainSVMImagesClassifierQB1 PROPERTIES DEPENDS apTvClComputeImagesStatisticsQB1)
 
 OTB_TEST_APPLICATION(NAME apTvClTrainSVMImagesClassifierQB1_allOpt      
                      APP  TrainSVMImagesClassifier
@@ -40,7 +40,7 @@ OTB_TEST_APPLICATION(NAME apTvClTrainSVMImagesClassifierQB1_allOpt
                              ${OTBAPP_BASELINE_FILES}/clsvmModelQB1.svm
    					 		 ${TEMP}/clsvmModelQB1_allOpt.svm)
   
-SET_TESTS_PROPERTIES(apTvClTrainSVMImagesClassifierQB1_allOpt PROPERTIES DEPENDS apTvClEstimateImagesStatisticsQB1)
+SET_TESTS_PROPERTIES(apTvClTrainSVMImagesClassifierQB1_allOpt PROPERTIES DEPENDS apTvClComputeImagesStatisticsQB1)
 
 
 OTB_TEST_APPLICATION(NAME apTvClValidateSVMImagesClassifierQB1     
@@ -96,8 +96,8 @@ SET_TESTS_PROPERTIES(apTvClImageSVMClassifierQB3 PROPERTIES DEPENDS apTvClTrainS
 #--------
 # QB multi chain
 
-OTB_TEST_APPLICATION(NAME apTvClEstimateImagesStatisticsQB123
-                     APP  EstimateImagesStatistics
+OTB_TEST_APPLICATION(NAME apTvClComputeImagesStatisticsQB123
+                     APP  ComputeImagesStatistics
                      OPTIONS --il ${INPUTDATA}/Classification/QB_1_ortho.tif
                     			  ${INPUTDATA}/Classification/QB_2_ortho.tif
                    			      ${INPUTDATA}/Classification/QB_3_ortho.tif
@@ -124,7 +124,7 @@ OTB_TEST_APPLICATION(NAME apTvClTrainSVMImagesClassifierQB123
    					 		 ${TEMP}/clsvmModelQB123.svm)
      
 
-SET_TESTS_PROPERTIES(apTvClTrainSVMImagesClassifierQB123 PROPERTIES DEPENDS apTvClEstimateImagesStatisticsQB123)
+SET_TESTS_PROPERTIES(apTvClTrainSVMImagesClassifierQB123 PROPERTIES DEPENDS apTvClComputeImagesStatisticsQB123)
 
 
 OTB_TEST_APPLICATION(NAME apTvClValidateSVMImagesClassifierQB123     
@@ -202,8 +202,8 @@ OTB_TEST_APPLICATION(NAME apTvClImageSVMClassifierQB123_6
 
 SET_TESTS_PROPERTIES(apTvClImageSVMClassifierQB123_6 PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB123)
 
-OTB_TEST_APPLICATION(NAME apTvClEstimateImagesStatisticsQB456
-                     APP  EstimateImagesStatistics
+OTB_TEST_APPLICATION(NAME apTvClComputeImagesStatisticsQB456
+                     APP  ComputeImagesStatistics
                      OPTIONS --il ${INPUTDATA}/Classification/QB_4_extract.tif
                     			  ${INPUTDATA}/Classification/QB_5_extract.tif
                    			      ${INPUTDATA}/Classification/QB_6_extract.tif
@@ -230,7 +230,7 @@ OTB_TEST_APPLICATION(NAME apTvClTrainSVMImagesClassifierQB456
      
 
 
-SET_TESTS_PROPERTIES(apTvClTrainSVMImagesClassifierQB456 PROPERTIES DEPENDS apTvClEstimateImagesStatisticsQB456)
+SET_TESTS_PROPERTIES(apTvClTrainSVMImagesClassifierQB456 PROPERTIES DEPENDS apTvClComputeImagesStatisticsQB456)
 
 OTB_TEST_APPLICATION(NAME apTvClValidateSVMImagesClassifierQB456    
                      APP  ValidateSVMImagesClassifier

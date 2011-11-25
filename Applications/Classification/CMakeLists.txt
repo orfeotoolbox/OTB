@@ -1,5 +1,5 @@
-OTB_CREATE_APPLICATION(NAME           EstimateImagesStatistics
-                       SOURCES        otbEstimateImagesStatistics.cxx
+OTB_CREATE_APPLICATION(NAME           ComputeImagesStatistics
+                       SOURCES        otbComputeImagesStatistics.cxx
                        LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters)
 
 OTB_CREATE_APPLICATION(NAME           ImageSVMClassifier

@@ -26,11 +26,11 @@ namespace otb
 namespace Wrapper
 {
 
-class EstimateImagesStatistics: public Application
+class ComputeImagesStatistics: public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef EstimateImagesStatistics Self;
+  typedef ComputeImagesStatistics Self;
   typedef Application Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -38,25 +38,25 @@ public:
   /** Standard macro */
   itkNewMacro(Self);
 
-  itkTypeMacro(EstimateImagesStatistics, otb::Application);
+  itkTypeMacro(ComputeImagesStatistics, otb::Application);
 
 private:
-  EstimateImagesStatistics()
+  ComputeImagesStatistics()
   {
-    SetName("EstimateImagesStatistics");
+    SetName("ComputeImagesStatistics");
     SetDescription("Computes global mean and standard deviation for each band from a set of images and optionally saves the results in an XML file.");
     SetDocName("Compute Images second order statistics");
-    SetDocLongDescription("This application computes a global mean and standard deviation for each band of a set of images and optionally saves the results in an XML file. The output XML is intended to use an input for the TrainImagesSVMClassifier application to normalize samples before learning.");
+    SetDocLongDescription("This application computes a global mean and standard deviation for each band of a set of images and optionally saves the results in an XML file. The output XML is intended to be used an input for the TrainImagesSVMClassifier application to normalize samples before learning.");
     SetDocLimitations("The set of input images must have the same number of bands. Input images must be of the same number, type and order of bands.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Documentation of the TrainImagesSVMClassifier application.");
-    SetDocCLExample("otbApplicationLauncherCommandLine EstimateImagesStatistics ${OTB-BIN}/bin  --il ${OTB-Data}/Input/Classification/QB_1_ortho.tif ${OTB-Data}/Input/Classification/QB_2_ortho.tif ${OTB-Data}/Input/Classification/QB_3_ortho.tif --out EstimateImageStatisticsQB123.xml");
+    SetDocCLExample("otbApplicationLauncherCommandLine ComputeImagesStatistics ${OTB-BIN}/bin  --il ${OTB-Data}/Input/Classification/QB_1_ortho.tif ${OTB-Data}/Input/Classification/QB_2_ortho.tif ${OTB-Data}/Input/Classification/QB_3_ortho.tif --out EstimateImageStatisticsQB123.xml");
 
     AddDocTag(Tags::Learning);
     AddDocTag(Tags::Analysis);
   }
 
-  virtual ~EstimateImagesStatistics()
+  virtual ~ComputeImagesStatistics()
   {
   }
 
@@ -171,4 +171,4 @@ private:
 }
 }
 
-OTB_APPLICATION_EXPORT(otb::Wrapper::EstimateImagesStatistics)
+OTB_APPLICATION_EXPORT(otb::Wrapper::ComputeImagesStatistics)
