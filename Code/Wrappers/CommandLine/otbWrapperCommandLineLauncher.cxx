@@ -607,11 +607,7 @@ void CommandLineLauncher::DisplayHelp()
   for (unsigned int i = 0; i < nbOfParam; i++)
     {
     Parameter::Pointer param = m_Application->GetParameterByKey(appKeyList[i]);
-    // Check if mandatory parameter are present and have value
-    if (param->GetMandatory() == true)
-      {
-      std::cerr << this->DisplayParameterHelp(param, appKeyList[i]);
-      }
+    std::cerr << this->DisplayParameterHelp(param, appKeyList[i]);
     }
 }
 
