@@ -118,11 +118,10 @@ private:
   ValidateSVMImagesClassifier()
   {
     SetName("ValidateSVMImagesClassifier");
-    SetDescription("Perform SVM validation from multiple input images and multiple vector data.");
+    SetDescription("Estimate the performance of the SVM model with a new set of validation samples and another image.");
 
     SetDocName("Validate SVM Images Classifier Application");
-    SetDocLongDescription(
-                          "This application performs SVM validation from multiple input images and multiple vector data.");
+    SetDocLongDescription("Estimate the performance of the SVM model obtained by the ImagesSVMClassifier with a new set of validation samples and another image.\n The application asks for images statisctics as input (XML file generated with the ComputeImagesStatistics application) and a SVM model (text file) generated with the ImagesSVMClassifier application.\n It will compute the global confusion matrix and kappa index and also the precision, recall and F-score of each class.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
@@ -144,20 +143,20 @@ private:
     AddParameter(ParameterType_InputImageList, "il", "Input Image List");
     SetParameterDescription("il", "Input image list filename.");
     AddParameter(ParameterType_InputVectorDataList, "vd", "Vector Data List");
-    SetParameterDescription("vd", "Vector Data of sample used to validate the estimator.");
+    SetParameterDescription("vd", "Vector Data of samples used to validate the estimator.");
     AddParameter(ParameterType_Filename, "dem", "DEM repository");
     SetParameterDescription("dem", "Path to DEM repository.");
     MandatoryOff("dem");
     AddParameter(ParameterType_Filename, "imstat", "XML image statistics file");
     MandatoryOff("imstat");
     SetParameterDescription("imstat", "filename of an XML file containing mean and standard deviation of input images.");
-    AddParameter(ParameterType_Filename, "svm", "SVM validation filename");
-    SetParameterDescription("svm",
-                            "SVM model to validate its performances (given by TrainSVMImagesClassification output for instance).");
     AddParameter(ParameterType_Filename, "out", "Output filename");
     SetParameterDescription("out", "Filename, which will contain the performance of the SVM model.");
     MandatoryOff("out");
     SetParameterRole("out", Role_Output);
+    AddParameter(ParameterType_Filename, "svm", "SVM validation filename");
+    SetParameterDescription("svm",
+                            "SVM model to validate its performances (given by TrainSVMImagesClassification output for instance).");
   }
 
   void DoUpdateParameters()
