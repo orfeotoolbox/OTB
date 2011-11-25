@@ -35,9 +35,9 @@ SET(IO_TESTS10    ${CXX_TEST_PATH}/otbIOTests10)
 SET(IO_TESTS11    ${CXX_TEST_PATH}/otbIOTests11)
 SET(IO_TESTS12    ${CXX_TEST_PATH}/otbIOTests12)
 
-IF(OTB_COMPILE_JPEG2000)
+IF(OTB_USE_JPEG2000)
    SET(IO_TESTS13    ${CXX_TEST_PATH}/otbIOTests13)
-ENDIF(OTB_COMPILE_JPEG2000)
+ENDIF(OTB_USE_JPEG2000)
 
 SET(IO_TESTS14    ${CXX_TEST_PATH}/otbIOTests14)
 SET(IO_TESTS15    ${CXX_TEST_PATH}/otbIOTests15)
@@ -1900,7 +1900,7 @@ ADD_TEST(ioTvMapProjectionAdapterTest ${IO_TESTS12}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS13 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-IF(OTB_COMPILE_JPEG2000)
+IF(OTB_USE_JPEG2000)
 
 # ---  JPEG2000 can read ---
 ADD_TEST(ioTuJ2KImageIOCanRead ${IO_TESTS13}
@@ -2169,7 +2169,7 @@ ADD_TEST(ioTvJPEG2000ImageIO_CacheSize_25000 ${IO_TESTS13}
          ${INPUTDATA}/bretagne.j2k
          ${TEMP}/ioClassicalQLJPEG2K_bretagne_OUT.tif)
 
-ENDIF(OTB_COMPILE_JPEG2000)
+ENDIF(OTB_USE_JPEG2000)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS14 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -3547,7 +3547,7 @@ otbMapProjectionAdapterTest.cxx
 )
 
 
-IF(OTB_COMPILE_JPEG2000)
+IF(OTB_USE_JPEG2000)
 #Reserved for jpeg 2000
 SET(BasicIO_SRCS13
 otbIOTests13.cxx
@@ -3557,7 +3557,7 @@ otbVectorImageTest.cxx
 otbMultiResolutionReadingInfo.cxx
 otbGenerateClassicalQLWithJPEG2000.cxx
 )
-ENDIF(OTB_COMPILE_JPEG2000)
+ENDIF(OTB_USE_JPEG2000)
 
 
 SET(BasicIO_SRCS14
@@ -3700,13 +3700,13 @@ OTB_ADD_EXECUTABLE(otbIOTests10 "${BasicIO_SRCS10}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbIOTests11 "${BasicIO_SRCS11}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbIOTests12 "${BasicIO_SRCS12}" "OTBIO;OTBTesting")
 
-IF(OTB_COMPILE_JPEG2000)
+IF(OTB_USE_JPEG2000)
    IF(NOT BUILD_SHARED_LIBS)
       ADD_DEFINITIONS(-DOPJ_STATIC)
    ENDIF(NOT BUILD_SHARED_LIBS)
 
    OTB_ADD_EXECUTABLE(otbIOTests13 "${BasicIO_SRCS13}" "OTBIO;OTBTesting")
-ENDIF(OTB_COMPILE_JPEG2000)
+ENDIF(OTB_USE_JPEG2000)
 
 OTB_ADD_EXECUTABLE(otbIOTests14 "${BasicIO_SRCS14}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbIOTests15 "${BasicIO_SRCS15}" "OTBIO;OTBTesting")

@@ -30,7 +30,7 @@
 #include "otbRADImageIOFactory.h"
 #include "otbMWImageIOFactory.h"
 
-#ifdef OTB_COMPILE_JPEG2000
+#ifdef OTB_USE_JPEG2000
 #include "otbJPEG2000ImageIOFactory.h"
 #endif
 
@@ -69,7 +69,7 @@ ImageIOFactory::RegisterBuiltInFactories()
       // LUM format for OTB
       itk::ObjectFactoryBase::RegisterFactory(LUMImageIOFactory::New());
 
-#ifdef OTB_COMPILE_JPEG2000
+#ifdef OTB_USE_JPEG2000
       // JPEG2000 : New format for OTB
       itk::ObjectFactoryBase::RegisterFactory(JPEG2000ImageIOFactory::New());
 #endif

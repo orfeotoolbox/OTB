@@ -350,7 +350,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 # -------            lib OpenJpeg   ------------------------------
 # Case for release 2.2.1
-#IF(OTB_COMPILE_JPEG2000)
+#IF(OTB_USE_JPEG2000)
 #ADD_TEST(utTvOpenJpegEncoder ${UTILITIES_TESTS}
 #        openJpegEncoder
 #        ${TEMP}/testjpeg.j2k
@@ -361,7 +361,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 #        ${TEMP}/testjpeg.j2k
 #)
 #SET_TESTS_PROPERTIES(utTvOpenJpegDecoder PROPERTIES DEPENDS utTvOpenJpegEncoder)
-#ENDIF(OTB_COMPILE_JPEG2000)
+#ENDIF(OTB_USE_JPEG2000)
 
 # -------            lib expat  ------------------------------
 IF(NOT OTB_USE_EXTERNAL_EXPAT)
@@ -525,7 +525,7 @@ classifyKNN2.cxx
 )
 
 
-IF(OTB_COMPILE_JPEG2000)
+IF(OTB_USE_JPEG2000)
 #  SET(UtilitiesTests_SRCS ${UtilitiesTests_SRCS}  openJpegEncoder.cxx openJpegDecoder.cxx)
 
   IF (UNIX AND OPJ_MANGLE_PREFIX)
@@ -538,7 +538,7 @@ IF(OTB_COMPILE_JPEG2000)
   
   ENDIF()
 
-ENDIF(OTB_COMPILE_JPEG2000)
+ENDIF(OTB_USE_JPEG2000)
 
 IF(NOT OTB_USE_EXTERNAL_OPENTHREADS)
   SET(UtilitiesTests_SRCS ${UtilitiesTests_SRCS}
@@ -584,9 +584,9 @@ ENDIF(NOT BUILD_SHARED_LIBS)
 ADD_EXECUTABLE(otbUtilitiesTests otbUtilitiesTests.cxx ${UtilitiesTests_SRCS})
 TARGET_LINK_LIBRARIES(otbUtilitiesTests OTBIO OTBCommon OTBTesting otbsvm otb6S tinyXML otbkml otbsiftfast)
 
-IF(OTB_COMPILE_JPEG2000)
+IF(OTB_USE_JPEG2000)
   TARGET_LINK_LIBRARIES(otbUtilitiesTests otbopenjpeg)
-ENDIF(OTB_COMPILE_JPEG2000)
+ENDIF(OTB_USE_JPEG2000)
 
 IF(NOT OTB_USE_EXTERNAL_OPENTHREADS)
   TARGET_LINK_LIBRARIES(otbUtilitiesTests OpenThreads)
