@@ -103,9 +103,7 @@ public:
   // Statistic XML file Reader
   typedef otb::StatisticsXMLFileReader<MeasurementType> StatisticsReader;
 
-  // Enhance List Sample
-  typedef otb::Statistics::ListSampleToBalancedListSampleFilter<ListSampleType, LabelListSampleType>
-      BalancingListSampleFilterType;
+  // Enhance List Sample  typedef otb::Statistics::ListSampleToBalancedListSampleFilter<ListSampleType, LabelListSampleType>      BalancingListSampleFilterType;
   typedef otb::Statistics::ShiftScaleSampleListFilter<ListSampleType, ListSampleType> ShiftScaleFilterType;
 
   // SVM Estimator
@@ -133,7 +131,7 @@ private:
 
     // Documentation
     SetDocName("Train SVM classifier from multiple image");
-    SetDocLongDescription("This application performs SVM classifier training from multiple pairs of input images and training vector data.Samples are composed of pixel values in each band optionally centered and reduced using XML statistics file produce by the ComputeImagesStatistics application. The training vector data must contain polygons with a positive integer field representing the class label. Name of the field can be set using the \"Class label field\" parameter. Training and validation sample lists are built such that each class is equally represented in the two lists. One parameter allows to control the ratio between the number of samples in training and validation sets. Two parameters allow to manage the size of the training and validation sets per class and per image.");
+    SetDocLongDescription("This application performs SVM classifier training from multiple pairs of input images and training vector data.Samples are composed of pixel values in each band optionally centered and reduced using XML statistics file produce by the ComputeImagesStatistics application. The training vector data must contain polygons with a positive integer field representing the class label. Name of the field can be set using the \"Class label field\" parameter. Training and validation sample lists are built such that each class is equally represented in the two lists. One parameter allows to control the ratio between the number of samples in training and validation sets. Two parameters allow to manage the size of the training and validation sets per class and per image. Several SVM classifier parameters cas be set. The kernel function which defined the feature space (for example if the kernel is a Gaussian radial basis function kernel the corresponding feature space of infinite dimensions). To allow some flexibility in separating the categories, SVM models have a cost parameter, C, that controls the trade off between allowing training errors and forcing rigid margins. It creates a soft margin that permits some misclassifications. Increasing the value of C increases the cost of misclassifying points and forces the creation of a more accurate model that may not generalize well. Clasifier parameters can also be optimize.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
@@ -200,14 +198,14 @@ private:
     SetParameterDescription("svm","This group of parameters allows to set SVM classifier parameters.");
     AddParameter(ParameterType_Choice, "svm.k", "SVM Kernel Type");
     AddChoice("svm.k.linear", "Linear");
-    AddChoice("svm.k.rbf", "Neareast Neighbor");
+    AddChoice("svm.k.rbf", "Gaussian radial basis function");
     AddChoice("svm.k.poly", "Polynomial");
     AddChoice("svm.k.sigmoid", "Sigmoid");
     SetParameterString("svm.k", "linear");
     SetParameterDescription("svm.k", "SVM Kernel Type.");
-    AddParameter(ParameterType_Float, "svm.m", "Margin for SVM learning");
-    SetParameterFloat("svm.m", 1.0);
-    SetParameterDescription("svm.m", "Margin for SVM learning.(1 by default).");
+    AddParameter(ParameterType_Float, "svm.c", "Control trade off between training errors and forcing rigid margins.");
+    SetParameterFloat("svm.c", 1.0);
+    SetParameterDescription("svm.c", "SVM models have a cost parameter C.(1 by default).");
     AddParameter(ParameterType_Empty, "svm.opt", "parameters optimization");
     MandatoryOff("svm.opt");
     SetParameterDescription("svm.opt", "SVM parameters optimization");
@@ -378,7 +376,7 @@ private:
       }
 
 
-    svmestimator->SetC(GetParameterFloat("svm.m"));
+    svmestimator->SetC(GetParameterFloat("svm.c"));
 
 
     switch (GetParameterInt("svm.k"))
