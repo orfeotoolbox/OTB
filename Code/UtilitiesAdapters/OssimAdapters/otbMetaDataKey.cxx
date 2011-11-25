@@ -19,7 +19,7 @@
 #include "otbMetaDataKey.h"
 #include "gdal.h"
 
-#define NBKEYS  19
+#define NBKEYS  21
 
 namespace otb
 {
@@ -59,47 +59,29 @@ const std::string MetaDataKey::CacheSizeInBytes = "CacheSizeInBytes";
 MetaDataKey::MetaDataKey() {}
 MetaDataKey::~MetaDataKey() {}
 
-/*const MetaDataKey::KeyTypeDef Types[] =
-  {
-    {MetaDataKey::DriverShortNameKey,     MetaDataKey::TSTRING},
-    {MetaDataKey::DriverLongNameKey,     MetaDataKey::TSTRING},
-    {MetaDataKey::ProjectionRefKey,     MetaDataKey::TSTRING},
-    {MetaDataKey::GCPProjectionKey,     MetaDataKey::TSTRING},
-    {MetaDataKey::GCPParametersKey ,        MetaDataKey::TOTB_GCP},
-    {MetaDataKey::GCPCountKey,          MetaDataKey::TENTIER},
-    {MetaDataKey::GeoTransformKey,        MetaDataKey::TSTRING},
-    {MetaDataKey::MetadataKey,          MetaDataKey::TSTRING},
-    {MetaDataKey::UpperLeftCornerKey,        MetaDataKey::TVECTOR},
-    {MetaDataKey::UpperRightCornerKey,      MetaDataKey::TVECTOR},
-    {MetaDataKey::LowerLeftCornerKey,        MetaDataKey::TVECTOR},
-    {MetaDataKey::LowerRightCornerKey,      MetaDataKey::TVECTOR},
-    {MetaDataKey::ColorTableNameKey,        MetaDataKey::TSTRING},
-    {MetaDataKey::ColorEntryCountKey,       MetaDataKey::TENTIER},
-    {MetaDataKey::ColorEntryAsRGBKey,        MetaDataKey::TVECTOR}
-
-
-  }; */
 const MetaDataKey::KeyTypeDef Types[] =
   {
-  MetaDataKey::KeyTypeDef(MetaDataKey::DriverShortNameKey,    MetaDataKey::TSTRING),
-  MetaDataKey::KeyTypeDef(MetaDataKey::DriverLongNameKey,     MetaDataKey::TSTRING),
-  MetaDataKey::KeyTypeDef(MetaDataKey::ProjectionRefKey,     MetaDataKey::TSTRING),
-  MetaDataKey::KeyTypeDef(MetaDataKey::GCPProjectionKey,     MetaDataKey::TSTRING),
-  MetaDataKey::KeyTypeDef(MetaDataKey::GCPParametersKey,       MetaDataKey::TOTB_GCP),
-  MetaDataKey::KeyTypeDef(MetaDataKey::GCPCountKey,          MetaDataKey::TENTIER),
-  MetaDataKey::KeyTypeDef(MetaDataKey::GeoTransformKey,        MetaDataKey::TSTRING),
-  MetaDataKey::KeyTypeDef(MetaDataKey::MetadataKey,          MetaDataKey::TSTRING),
-  MetaDataKey::KeyTypeDef(MetaDataKey::UpperLeftCornerKey,      MetaDataKey::TVECTOR),
-  MetaDataKey::KeyTypeDef(MetaDataKey::UpperRightCornerKey,      MetaDataKey::TVECTOR),
-  MetaDataKey::KeyTypeDef(MetaDataKey::LowerLeftCornerKey,      MetaDataKey::TVECTOR),
-  MetaDataKey::KeyTypeDef(MetaDataKey::LowerRightCornerKey,      MetaDataKey::TVECTOR),
-  MetaDataKey::KeyTypeDef(MetaDataKey::ColorTableNameKey,      MetaDataKey::TSTRING),
-  MetaDataKey::KeyTypeDef(MetaDataKey::ColorEntryCountKey,     MetaDataKey::TENTIER),
-  MetaDataKey::KeyTypeDef(MetaDataKey::ColorEntryAsRGBKey,      MetaDataKey::TVECTOR),
-  MetaDataKey::KeyTypeDef(MetaDataKey::OSSIMKeywordlistKey,    MetaDataKey::TOSSIMKEYWORDLIST),
-  MetaDataKey::KeyTypeDef(MetaDataKey::OSSIMKeywordlistDelimiterKey, MetaDataKey::TSTRING),
-  MetaDataKey::KeyTypeDef(MetaDataKey::VectorDataKeywordlistKey,    MetaDataKey::TVECTORDATAKEYWORDLIST),
-  MetaDataKey::KeyTypeDef(MetaDataKey::VectorDataKeywordlistDelimiterKey, MetaDataKey::TSTRING)
+  MetaDataKey::KeyTypeDef(MetaDataKey::DriverShortNameKey,                MetaDataKey::TSTRING),
+  MetaDataKey::KeyTypeDef(MetaDataKey::DriverLongNameKey,                 MetaDataKey::TSTRING),
+  MetaDataKey::KeyTypeDef(MetaDataKey::ProjectionRefKey,                  MetaDataKey::TSTRING),
+  MetaDataKey::KeyTypeDef(MetaDataKey::GCPProjectionKey,                  MetaDataKey::TSTRING),
+  MetaDataKey::KeyTypeDef(MetaDataKey::GCPParametersKey,                  MetaDataKey::TOTB_GCP),
+  MetaDataKey::KeyTypeDef(MetaDataKey::GCPCountKey,                       MetaDataKey::TENTIER),
+  MetaDataKey::KeyTypeDef(MetaDataKey::GeoTransformKey,                   MetaDataKey::TSTRING),
+  MetaDataKey::KeyTypeDef(MetaDataKey::MetadataKey,                       MetaDataKey::TSTRING),
+  MetaDataKey::KeyTypeDef(MetaDataKey::UpperLeftCornerKey,                MetaDataKey::TVECTOR),
+  MetaDataKey::KeyTypeDef(MetaDataKey::UpperRightCornerKey,               MetaDataKey::TVECTOR),
+  MetaDataKey::KeyTypeDef(MetaDataKey::LowerLeftCornerKey,                MetaDataKey::TVECTOR),
+  MetaDataKey::KeyTypeDef(MetaDataKey::LowerRightCornerKey,               MetaDataKey::TVECTOR),
+  MetaDataKey::KeyTypeDef(MetaDataKey::ColorTableNameKey,                 MetaDataKey::TSTRING),
+  MetaDataKey::KeyTypeDef(MetaDataKey::ColorEntryCountKey,                MetaDataKey::TENTIER),
+  MetaDataKey::KeyTypeDef(MetaDataKey::ColorEntryAsRGBKey,                MetaDataKey::TVECTOR),
+  MetaDataKey::KeyTypeDef(MetaDataKey::OSSIMKeywordlistKey,               MetaDataKey::TOSSIMKEYWORDLIST),
+  MetaDataKey::KeyTypeDef(MetaDataKey::OSSIMKeywordlistDelimiterKey,      MetaDataKey::TSTRING),
+  MetaDataKey::KeyTypeDef(MetaDataKey::VectorDataKeywordlistKey,          MetaDataKey::TVECTORDATAKEYWORDLIST),
+  MetaDataKey::KeyTypeDef(MetaDataKey::VectorDataKeywordlistDelimiterKey, MetaDataKey::TSTRING),
+  MetaDataKey::KeyTypeDef(MetaDataKey::ResolutionFactor,                  MetaDataKey::TENTIER),
+  MetaDataKey::KeyTypeDef(MetaDataKey::CacheSizeInBytes,                  MetaDataKey::TENTIER)
   };
 
 MetaDataKey::KeyType MetaDataKey::GetKeyType(const std::string& name)
