@@ -13,12 +13,12 @@ OTB_TEST_APPLICATION(NAME apTvClEstimateImagesStatisticsQB1
                         
 OTB_TEST_APPLICATION(NAME apTvClTrainSVMImagesClassifierQB1   
                      APP  TrainSVMImagesClassifier
-                     OPTIONS --il ${INPUTDATA}/Classification/QB_1_ortho.tif
-  							 --vd ${INPUTDATA}/Classification/VectorData_QB1.shp
-  							 --imstat ${TEMP}/apTvClEstimateImageStatisticsQB1.xml
-  						     --b 2
-					         --opt true
-    						 --out ${TEMP}/clsvmModelQB1.svm
+                     OPTIONS --io.il ${INPUTDATA}/Classification/QB_1_ortho.tif
+  							 --io.vd ${INPUTDATA}/Classification/VectorData_QB1.shp
+  							 --io.imstat ${TEMP}/apTvClEstimateImageStatisticsQB1.xml
+  						     --sample.b 2
+					         --svm.opt true
+    						 --io.out ${TEMP}/clsvmModelQB1.svm
                      VALID   --compare-ascii ${NOTOL}
                              ${OTBAPP_BASELINE_FILES}/clsvmModelQB1.svm
    					 		 ${TEMP}/clsvmModelQB1.svm)
@@ -27,15 +27,15 @@ SET_TESTS_PROPERTIES(apTvClTrainSVMImagesClassifierQB1 PROPERTIES DEPENDS apTvCl
 
 OTB_TEST_APPLICATION(NAME apTvClTrainSVMImagesClassifierQB1_allOpt      
                      APP  TrainSVMImagesClassifier
-                     OPTIONS --il ${INPUTDATA}/Classification/QB_1_ortho.tif
-  						     --vd ${INPUTDATA}/Classification/VectorData_QB1.shp
- 							 --imstat ${TEMP}/apTvClEstimateImageStatisticsQB1.xml
-  						     --b 2
-  						     --mv 100
-   							 --mt 100
-    					     --vtr 0.5
-    						 --opt true
-    					     --out ${TEMP}/clsvmModelQB1_allOpt.svm
+                     OPTIONS --io.il ${INPUTDATA}/Classification/QB_1_ortho.tif
+  						     --io.vd ${INPUTDATA}/Classification/VectorData_QB1.shp
+ 							 --io.imstat ${TEMP}/apTvClEstimateImageStatisticsQB1.xml
+  						     --sample.b 2
+  						     --sample.mv 100
+   							 --sample.mt 100
+    					     --sample.vtr 0.5
+    						 --svm.opt true
+    					     --io.out ${TEMP}/clsvmModelQB1_allOpt.svm
                      VALID   --compare-ascii ${NOTOL}
                              ${OTBAPP_BASELINE_FILES}/clsvmModelQB1.svm
    					 		 ${TEMP}/clsvmModelQB1_allOpt.svm)
@@ -109,16 +109,16 @@ OTB_TEST_APPLICATION(NAME apTvClEstimateImagesStatisticsQB123
 
 OTB_TEST_APPLICATION(NAME apTvClTrainSVMImagesClassifierQB123   
                      APP  TrainSVMImagesClassifier
-                     OPTIONS --il ${INPUTDATA}/Classification/QB_1_ortho.tif
+                     OPTIONS --io.il ${INPUTDATA}/Classification/QB_1_ortho.tif
                     			  ${INPUTDATA}/Classification/QB_2_ortho.tif
                    			      ${INPUTDATA}/Classification/QB_3_ortho.tif              	
-							 --vd ${INPUTDATA}/Classification/VectorData_QB1.shp
+							 --io.vd ${INPUTDATA}/Classification/VectorData_QB1.shp
         						  ${INPUTDATA}/Classification/VectorData_QB2.shp
          						  ${INPUTDATA}/Classification/VectorData_QB3.shp
-    						 --imstat ${TEMP}/apTvClEstimateImageStatisticsQB123.xml
-    						 --b 2
-   							 --opt true
-    						 --out ${TEMP}/clsvmModelQB123.svm
+    						 --io.imstat ${TEMP}/apTvClEstimateImageStatisticsQB123.xml
+    						 --sample.b 2
+   							 --svm.opt true
+    						 --io.out ${TEMP}/clsvmModelQB123.svm
                      VALID   --compare-ascii ${NOTOL}
                              ${OTBAPP_BASELINE_FILES}/clsvmModelQB123.svm
    					 		 ${TEMP}/clsvmModelQB123.svm)
@@ -214,16 +214,16 @@ OTB_TEST_APPLICATION(NAME apTvClEstimateImagesStatisticsQB456
    
 OTB_TEST_APPLICATION(NAME apTvClTrainSVMImagesClassifierQB456   
                      APP  TrainSVMImagesClassifier
-                     OPTIONS --il ${INPUTDATA}/Classification/QB_4_extract.tif
+                     OPTIONS --io.il ${INPUTDATA}/Classification/QB_4_extract.tif
                     			  ${INPUTDATA}/Classification/QB_5_extract.tif
                    			      ${INPUTDATA}/Classification/QB_6_extract.tif              	
-							 --vd ${INPUTDATA}/Classification/VectorData_QB4.shp
+							 --io.vd ${INPUTDATA}/Classification/VectorData_QB4.shp
         						  ${INPUTDATA}/Classification/VectorData_QB5.shp
          						  ${INPUTDATA}/Classification/VectorData_QB6.shp
-    						 --imstat ${TEMP}/apTvClEstimateImageStatisticsQB456.xml
-    						 --b 2
-   							 --opt true
-    						 --out ${TEMP}/clsvmModelQB456.svm
+    						 --io.imstat ${TEMP}/apTvClEstimateImageStatisticsQB456.xml
+    						 --sample.b 2
+   							 --svm.opt true
+    						 --io.out ${TEMP}/clsvmModelQB456.svm
                      VALID   --compare-ascii ${NOTOL}
                              ${OTBAPP_BASELINE_FILES}/clsvmModelQB456.svm
    					 		 ${TEMP}/clsvmModelQB456.svm)

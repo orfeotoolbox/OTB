@@ -130,19 +130,19 @@ private:
   TrainSVMImagesClassifier()
   {
     SetName("TrainSVMImagesClassifier");
-    SetDescription("Perform SVM training from multiple input images and multiple vector data.");
+    SetDescription("Train a SVM classifier from multiple pairs of images and training vector data.");
 
     // Documentation
-    SetDocName("Train SVM images Application");
-    SetDocLongDescription("This application performs SVM training from multiple input images and multiple vector data.");
+    SetDocName("Train SVM classifier from multiple image");
+    SetDocLongDescription("This application performs SVM classifier training from multiple pairs of input images and training vector data.Samples are composed of pixel values in each band optionally centered and reduced using XML statistics file produce by the ComputeImagesStatistics application. The training vector data must contain polygons with a positive integer field representing the class label. Name of the field can be set using the \"Class label field\" parameter. Training and validation sample lists are built such that each class is equally represented in the two lists. One parameter allows to control the ratio between the number of samples in training and validation sets. Two parameters allow to manage the size of the training and validation sets per class and per image.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
     SetDocCLExample("otbApplicationLauncherCommandLine TrainSVMImagesClassifier ${OTB-BIN}/bin"
-      "--il ${OTB-DATA}/Classification/QB_1_ortho.tif "
-      "--vd ${OTB-DATA}/Classification/ectorData_QB1.shp"
-      "--imstat ${OTB-Data}/Baseline/OTB-Applications/Files/clImageStatisticsQB1.xml"
-      "--b 2 --mv 100 --vtr 0.5 --opt true -out svmModelQB1_allOpt.svm");
+      "--io.il ${OTB-DATA}/Classification/QB_1_ortho.tif "
+      "--io.vd ${OTB-DATA}/Classification/ectorData_QB1.shp"
+      "--io.imstat ${OTB-Data}/Baseline/OTB-Applications/Files/clImageStatisticsQB1.xml"
+      "--b 2 --mv 100 --vtr 0.5 --opt true --io.out svmModelQB1_allOpt.svm");
     AddDocTag(Tags::Learning);
 
   }
@@ -153,52 +153,63 @@ private:
 
   void DoCreateParameters()
   {
+    //Group IO
+    AddParameter(ParameterType_Group,"io","Input and output data");
+    SetParameterDescription("io","This group of parameters allows to set input and output data.");
+    AddParameter(ParameterType_InputImageList, "io.il", "Input Image List");
+    SetParameterDescription("io.il", "A list of input images.");
+    AddParameter(ParameterType_InputVectorDataList, "io.vd", "Vector Data List");
+    SetParameterDescription("io.vd", "A list of vector data sample used to train the estimator.");
+    AddParameter(ParameterType_Filename, "io.dem", "DEM repository");
+    MandatoryOff("io.dem");
+    SetParameterDescription("io.dem", "Path to SRTM repository");
+    AddParameter(ParameterType_Filename, "io.imstat", "XML image statistics file");
+    MandatoryOff("io.imstat");
+    SetParameterDescription("io.imstat", "Filename of an XML file containing mean and standard deviation of input images.");
+    AddParameter(ParameterType_Filename, "io.out", "Output SVM model");
+    SetParameterDescription("io.out", "Output SVM model");
+    SetParameterRole("io.out", Role_Output);
 
-    AddParameter(ParameterType_InputImageList, "il", "Input Image List");
-    SetParameterDescription("il", "a list of input images.");
-    AddParameter(ParameterType_InputVectorDataList, "vd", "Vector Data List");
-    SetParameterDescription("vd", "A list of vector data sample used to train the estimator.");
-    AddParameter(ParameterType_Filename, "dem", "DEM repository");
-    MandatoryOff("dem");
-    SetParameterDescription("dem", "path to SRTM repository");
-    AddParameter(ParameterType_Filename, "imstat", "XML image statistics file");
-    MandatoryOff("imstat");
-    SetParameterDescription("imstat", "filename of an XML file containing mean and standard deviation of input images.");
-    AddParameter(ParameterType_Float, "m", "Margin for SVM learning");
-    SetParameterFloat("m", 1.0);
-    SetParameterDescription("m", "Margin for SVM learning.(1 by default).");
-    AddParameter(ParameterType_Int, "b", "Balance and grow the training set");
-    SetParameterDescription("b", "Balance and grow the training set.");
-    MandatoryOff("b");
-    AddParameter(ParameterType_Choice, "k", "SVM Kernel Type");
-    AddChoice("k.linear", "Linear");
-    AddChoice("k.rbf", "Neareast Neighbor");
-    AddChoice("k.poly", "Polynomial");
-    AddChoice("k.sigmoid", "Sigmoid");
-    SetParameterString("k", "linear");
-    SetParameterDescription("k", "SVM Kernel Type.");
-    AddParameter(ParameterType_Int, "mt", "Maximum training sample size");
+    //Group SVM
+    AddParameter(ParameterType_Group,"svm","SVM classifier parameters");
+    SetParameterDescription("svm","This group of parameters allows to set SVM classifier parameters.");
+    AddParameter(ParameterType_Choice, "svm.k", "SVM Kernel Type");
+    AddChoice("svm.k.linear", "Linear");
+    AddChoice("svm.k.rbf", "Neareast Neighbor");
+    AddChoice("svm.k.poly", "Polynomial");
+    AddChoice("svm.k.sigmoid", "Sigmoid");
+    SetParameterString("svm.k", "linear");
+    SetParameterDescription("svm.k", "SVM Kernel Type.");
+    AddParameter(ParameterType_Float, "svm.m", "Margin for SVM learning");
+    SetParameterFloat("svm.m", 1.0);
+    SetParameterDescription("svm.m", "Margin for SVM learning.(1 by default).");
+    AddParameter(ParameterType_Empty, "svm.opt", "parameters optimization");
+    MandatoryOff("svm.opt");
+    SetParameterDescription("svm.opt", "SVM parameters optimization");
+    
+    //Group Sample list
+    AddParameter(ParameterType_Group,"sample","Training and validation samples parameters");
+    SetParameterDescription("svm","This group of parameters allows to set training and validation sample lists parameters.");
+    AddParameter(ParameterType_Int, "sample.b", "Balance and grow the training set");
+    SetParameterDescription("sample.b", "Balance and grow the training set.");
+    MandatoryOff("sample.b");
+    
+    AddParameter(ParameterType_Int, "sample.mt", "Maximum training sample size");
     //MandatoryOff("mt");
-    SetDefaultParameterInt("mt", -1);
-    SetParameterDescription("mt", "Maximum size of the training sample (default = -1).");
-    AddParameter(ParameterType_Int, "mv", "Maximum validation sample size");
+    SetDefaultParameterInt("sample.mt", -1);
+    SetParameterDescription("sample.mt", "Maximum size of the training sample (default = -1).");
+    AddParameter(ParameterType_Int, "sample.mv", "Maximum validation sample size");
     // MandatoryOff("mv");
-    SetDefaultParameterInt("mv", -1);
-    SetParameterDescription("mv", "Maximum size of the validation sample (default = -1)");
-    AddParameter(ParameterType_Float, "vtr", "training and validation sample ratio");
-    SetParameterDescription("vtr",
+    SetDefaultParameterInt("sample.mv", -1);
+    SetParameterDescription("sample.mv", "Maximum size of the validation sample (default = -1)");
+    AddParameter(ParameterType_Float, "sample.vtr", "training and validation sample ratio");
+    SetParameterDescription("sample.vtr",
                             "Ratio between training and validation sample (0.0 = all training, 1.0 = all validation) default = 0.5.");
-    SetParameterFloat("vtr", 0.5);
-    AddParameter(ParameterType_Empty, "opt", "parameters optimization");
-    MandatoryOff("opt");
-    SetParameterDescription("opt", "SVM parameters optimization");
-    AddParameter(ParameterType_Filename, "vfn", "Name of the discrimination field");
-    SetParameterDescription("vfn", "Name of the field using to discriminate class in the vector data files.");
-    SetParameterString("vfn", "Class");
-    AddParameter(ParameterType_Filename, "out", "Output SVM model");
-    SetParameterDescription("out", "Output SVM model");
-    SetParameterRole("out", Role_Output);
-
+    SetParameterFloat("sample.vtr", 0.5);
+    
+    AddParameter(ParameterType_Filename, "sample.vfn", "Name of the discrimination field");
+    SetParameterDescription("sample.vfn", "Name of the field using to discriminate class in the vector data files.");
+    SetParameterString("sample.vfn", "Class");
   }
 
   void DoUpdateParameters()
@@ -225,8 +236,8 @@ private:
     unsigned int nbBands = 0;
     //Iterate over all input images
 
-    FloatVectorImageListType* imageList = GetParameterImageList("il");
-    VectorDataListType* vectorDataList = GetParameterVectorDataList("vd");
+    FloatVectorImageListType* imageList = GetParameterImageList("io.il");
+    VectorDataListType* vectorDataList = GetParameterVectorDataList("io.vd");
 
     //Iterate over all input images
     for (unsigned int imgIndex = 0; imgIndex < imageList->Size(); ++imgIndex)
@@ -249,9 +260,9 @@ private:
       vdreproj->SetUseOutputSpacingAndOriginFromImage(false);
 
       // Configure DEM directory
-      if (IsParameterEnabled("dem"))
+      if (IsParameterEnabled("io.dem"))
         {
-        vdreproj->SetDEMDirectory(GetParameterString("dem"));
+        vdreproj->SetDEMDirectory(GetParameterString("io.dem"));
         }
       else
         {
@@ -271,10 +282,10 @@ private:
       sampleGenerator->SetInput(image);
       sampleGenerator->SetInputVectorData(vdreproj->GetOutput());
 
-      sampleGenerator->SetClassKey(GetParameterString("vfn"));
-      sampleGenerator->SetMaxTrainingSize(GetParameterInt("mt"));
-      sampleGenerator->SetMaxValidationSize(GetParameterInt("mv"));
-      sampleGenerator->SetValidationTrainingProportion(GetParameterFloat("vtr"));
+      sampleGenerator->SetClassKey(GetParameterString("sample.vfn"));
+      sampleGenerator->SetMaxTrainingSize(GetParameterInt("sample.mt"));
+      sampleGenerator->SetMaxValidationSize(GetParameterInt("sample.mv"));
+      sampleGenerator->SetValidationTrainingProportion(GetParameterFloat("sample.vtr"));
 
       sampleGenerator->Update();
 
@@ -290,10 +301,10 @@ private:
     concatenateValidationSamples->Update();
     concatenateValidationLabels->Update();
 
-    if (IsParameterEnabled("imstat"))
+    if (IsParameterEnabled("io.imstat"))
       {
       StatisticsReader::Pointer statisticsReader = StatisticsReader::New();
-      statisticsReader->SetFileName(GetParameterString("imstat"));
+      statisticsReader->SetFileName(GetParameterString("io.imstat"));
       meanMeasurementVector = statisticsReader->GetStatisticVectorByName("mean");
       stddevMeasurementVector = statisticsReader->GetStatisticVectorByName("stddev");
       }
@@ -322,14 +333,14 @@ private:
     LabelListSampleType::Pointer labelListSample;
     //--------------------------
     // Balancing training sample (if needed)
-    if (IsParameterEnabled("b"))
+    if (IsParameterEnabled("sample.b"))
       {
       // Balance the list sample.
       otbAppLogINFO("Number of training samples before balancing: " << concatenateTrainingSamples->GetOutputSampleList()->Size())
       BalancingListSampleFilterType::Pointer balancingFilter = BalancingListSampleFilterType::New();
       balancingFilter->SetInput(trainingShiftScaleFilter->GetOutput()/*GetOutputSampleList()*/);
       balancingFilter->SetInputLabel(concatenateTrainingLabels->GetOutput()/*GetOutputSampleList()*/);
-      balancingFilter->SetBalancingFactor(GetParameterInt("b"));
+      balancingFilter->SetBalancingFactor(GetParameterInt("sample.b"));
       balancingFilter->Update();
       listSample = balancingFilter->GetOutputSampleList();
       labelListSample = balancingFilter->GetOutputLabelSampleList();
@@ -360,16 +371,16 @@ private:
     svmestimator->SetTrainingSampleList(trainingLabeledListSample);
     //SVM Option
     //TODO : Add other options ?
-    if (IsParameterEnabled("opt"))
+    if (IsParameterEnabled("svm.opt"))
       {
       svmestimator->SetParametersOptimization(true);
       }
 
 
-    svmestimator->SetC(GetParameterFloat("m"));
+    svmestimator->SetC(GetParameterFloat("svm.m"));
 
 
-    switch (GetParameterInt("k"))
+    switch (GetParameterInt("svm.k"))
       {
       case 0: // LINEAR
         svmestimator->SetKernelType(LINEAR);
@@ -389,7 +400,7 @@ private:
       }
 
     svmestimator->Update();
-    svmestimator->GetModel()->SaveModel(GetParameterString("out"));
+    svmestimator->GetModel()->SaveModel(GetParameterString("io.out"));
 
     otbAppLogINFO( "Learning done -> Final SVM accuracy: " << svmestimator->GetFinalCrossValidationAccuracy() << std::endl);
 
