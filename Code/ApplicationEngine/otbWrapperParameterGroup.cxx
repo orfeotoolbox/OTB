@@ -449,7 +449,7 @@ ParameterGroup::GetParameterByKey(std::string name)
           ++it;
           if (it != splittedName.end())
             {
-            childNameOss << "." << std::endl;
+            childNameOss << ".";
             }
           }
         std::string childName = childNameOss.str();
