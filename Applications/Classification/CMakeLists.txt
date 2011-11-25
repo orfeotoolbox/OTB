@@ -16,9 +16,4 @@ OTB_CREATE_APPLICATION(NAME           TrainSVMImagesClassifier
 
 OTB_CREATE_APPLICATION(NAME           ValidateSVMImagesClassifier
                        SOURCES        otbValidateSVMImagesClassifier.cxx
-                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction;OTBLearning)
-
-OTB_CREATE_APPLICATION(NAME           LabeledImageColorMapping
-                       SOURCES        otbLabeledImageColorMapping.cxx
-                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction)
-                                            
+                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction;OTBLearning)                                            

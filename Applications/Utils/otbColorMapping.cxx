@@ -32,11 +32,11 @@ namespace otb
 namespace Wrapper
 {
 
-class LabeledImageColorMapping: public Application
+class ColorMapping: public Application
 {
 public:
 /** Standard class typedefs. */
-  typedef LabeledImageColorMapping      Self;
+  typedef ColorMapping      Self;
   typedef Application                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -44,7 +44,7 @@ public:
   /** Standard macro */
   itkNewMacro(Self);
 
-  itkTypeMacro(LabeledImageColorMapping, otb::Application);
+  itkTypeMacro(ColorMapping, otb::Application);
 
   typedef FloatImageType::PixelType   PixelType;
   typedef UInt16ImageType             LabelImageType;
@@ -69,7 +69,7 @@ public:
   <PixelType, RGBPixelType>           ReliefColorMapFunctorType;
 
 private:
-  LabeledImageColorMapping()
+  ColorMapping()
   {
     SetName("ColorMapping");
     SetDescription("Maps an input grayscale image into 8-bits RGB using look-up tables.");
@@ -79,7 +79,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
-    SetDocCLExample("otbApplicationLauncherCommandLine LabeledImageColorMapping   --in ${OTBAPP_BASELINE}/clLabeledImageQB123_1.tif --ct ${OTB-Data}/Input/Classification/ColorTable.txt --out clLabeledFancyImageQB123_1.tif");
+    SetDocCLExample("otbApplicationLauncherCommandLine ColorMapping   --in ${OTBAPP_BASELINE}/clLabeledImageQB123_1.tif --ct ${OTB-Data}/Input/Classification/ColorTable.txt --out clLabeledFancyImageQB123_1.tif");
     AddDocTag(Tags::Learning);
 
     // Build lut map
@@ -100,7 +100,7 @@ private:
     m_LutMap["OverUnder"]=ColorMapFilterType::OverUnder;
   }
 
-  virtual ~LabeledImageColorMapping()
+  virtual ~ColorMapping()
   {
   }
 
@@ -274,6 +274,6 @@ private:
 }
 }
 
-OTB_APPLICATION_EXPORT(otb::Wrapper::LabeledImageColorMapping)
+OTB_APPLICATION_EXPORT(otb::Wrapper::ColorMapping)
 
 

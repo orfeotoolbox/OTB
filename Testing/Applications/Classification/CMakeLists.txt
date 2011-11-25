@@ -155,9 +155,10 @@ SET_TESTS_PROPERTIES(apTvClImageSVMClassifierQB123_1 PROPERTIES DEPENDS apTvClTr
 
 
 OTB_TEST_APPLICATION(NAME apTvClLabeledImageColorMappingQB123_1   
-                     APP   LabeledImageColorMapping
-                     OPTIONS --in      ${TEMP}/clLabeledImageQB123_1.tif   
-                             --ct      ${INPUTDATA}/Classification/ColorTable.txt
+                     APP   ColorMapping
+                     OPTIONS --in      ${TEMP}/clLabeledImageQB123_1.tif
+                             --method  custom
+                             --method.custom.lut ${INPUTDATA}/Classification/ColorTable.txt
                              --out     ${TEMP}/clLabeledFancyImageQB123_1.tif
    		             VALID   --compare-image ${NOTOL}
                              ${OTBAPP_BASELINE}/clLabeledFancyImageQB123_1.tif

@@ -70,3 +70,7 @@ OTB_CREATE_APPLICATION(NAME           DEMConvert
 OTB_CREATE_APPLICATION(NAME           Quicklook
                        SOURCES        otbQuicklook.cxx
                        LINK_LIBRARIES OTBBasicFilters)
+
+OTB_CREATE_APPLICATION(NAME           ColorMapping
+                       SOURCES        otbColorMapping.cxx
+                       LINK_LIBRARIES OTBIO;OTBCommon;OTBBasicFilters;OTBFeatureExtraction)
