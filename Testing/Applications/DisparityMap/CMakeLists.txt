@@ -37,3 +37,24 @@ OTB_TEST_APPLICATION(NAME  apTvDmStereoSensorModelToElevationMapWithSmoothing
                      VALID   --compare-image ${EPSILON_10}
                              ${BASELINE}/apTvDmStereoSensorModelToElevationMapWithSmoothing.tif
                              ${TEMP}/apTvDmStereoSensorModelToElevationMapWithSmoothing.tif)
+
+#--- FineRegistration ---#
+OTB_TEST_APPLICATION(NAME apTvDmFineRegistrationTest
+                     APP  FineRegistration
+                     OPTIONS --ref ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
+                             --sec ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub_warped_centered_rigid.tif
+                             --out ${TEMP}/apTvDmFineRegistrationTest.tif
+                             --erx 5
+                             --ery 5
+                             --mrx 3
+                             --mry 3
+                             --ssrx 8
+                             --ssry 8
+                             --spa 0.1
+                             --cox -2
+                             --vmlt 0.999
+                     VALID   --compare-image ${EPSILON_10}
+                             ${BASELINE}/apTvDmFineRegistrationTest.tif
+                             ${TEMP}/apTvDmFineRegistrationTest.tif
+                     )
+
