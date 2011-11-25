@@ -289,6 +289,12 @@ ADD_TEST(FA-0000433-LineSegmentDetector_8b_16b_compare ${CXX_TEST_PATH}/0000433-
   ${TEMP}/FA-0000433-LSD_8b.shp
   ${TEMP}/FA-0000433-LSD_16b.shp)
 
+# ------- FA 0000436 : WrapperInputImage::GetImage -------------------------
+ADD_TEST(FA-0000436-WrapperInputImage_GetImage ${CXX_TEST_PATH}/0000436-WrapperInputImage_GetImage
+0000436-WrapperInputImage_GetImage
+  ${INPUTDATA}/scene_8.tif
+)
+
 
 
 # -------       Vectorization issue   -----------------------------------
@@ -346,5 +352,8 @@ TARGET_LINK_LIBRARIES(0000428-CastImageFilterStreaming OTBIO OTBCommon OTBBasicF
 
 ADD_EXECUTABLE(0000433-LineSegmentDetector_8b_16b_compare 0000433-LineSegmentDetector_8b_16b_compare.cxx)
 TARGET_LINK_LIBRARIES(0000433-LineSegmentDetector_8b_16b_compare OTBIO OTBFeatureExtraction)
+
+ADD_EXECUTABLE(0000436-WrapperInputImage_GetImage 0000436-WrapperInputImage_GetImage.cxx)
+TARGET_LINK_LIBRARIES(0000436-WrapperInputImage_GetImage OTBApplicationEngine)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
