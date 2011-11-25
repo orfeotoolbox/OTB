@@ -21,8 +21,11 @@
 
 #include <fstream>
 
+// Include differents method for color mapping
 #include "otbChangeLabelImageFilter.h"
-
+#include "itkLabelToRGBImageFilter.h"
+#include "itkScalarToRGBColormapImageFilter.h"
+#include "otbReliefColormapFunctor.h"
 
 namespace otb
 {
@@ -33,26 +36,41 @@ class LabeledImageColorMapping: public Application
 {
 public:
 /** Standard class typedefs. */
- typedef LabeledImageColorMapping      Self;
- typedef Application                   Superclass;
- typedef itk::SmartPointer<Self>       Pointer;
- typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef LabeledImageColorMapping      Self;
+  typedef Application                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
- /** Standard macro */
- itkNewMacro(Self);
+  /** Standard macro */
+  itkNewMacro(Self);
 
- itkTypeMacro(LabeledImageColorMapping, otb::Application);
+  itkTypeMacro(LabeledImageColorMapping, otb::Application);
 
- typedef FloatImageType::PixelType   PixelType;
- typedef UInt16ImageType             LabelImageType;
- typedef LabelImageType::PixelType   LabelType;
- typedef UInt8VectorImageType        VectorImageType;
- typedef VectorImageType::PixelType  VectorPixelType;
+  typedef FloatImageType::PixelType   PixelType;
+  typedef UInt16ImageType             LabelImageType;
+  typedef LabelImageType::PixelType   LabelType;
+  typedef UInt8VectorImageType        VectorImageType;
+  typedef VectorImageType::PixelType  VectorPixelType;
+  typedef UInt8RGBImageType           RGBImageType;
+  typedef RGBImageType::PixelType     RGBPixelType;
 
- typedef otb::ChangeLabelImageFilter<LabelImageType, VectorImageType> ChangeLabelFilterType;
+  // Manual label LUT
+  typedef otb::ChangeLabelImageFilter
+  <LabelImageType,VectorImageType>    ChangeLabelFilterType;
+
+  // Segmentation contrast maximisation LUT
+  typedef itk::LabelToRGBImageFilter
+  <LabelImageType,RGBImageType>       LabelToRGBFilterType;
+
+  // Continuous LUT mapping
+  typedef itk::ScalarToRGBColormapImageFilter
+  <FloatImageType, RGBImageType>      ColorMapFilterType;
+  typedef otb::Functor::ReliefColormapFunctor
+  <PixelType, RGBPixelType>           ReliefColorMapFunctorType;
+
 
 private:
- LabeledImageColorMapping()
+  LabeledImageColorMapping()
   {
     SetName("LabeledImageColorMapping");
     SetDescription("Replace labels of a classification map with user defined 8-bits RGB colors.");
@@ -81,11 +99,53 @@ private:
     AddParameter(ParameterType_RAM, "ram", "Available RAM");
     SetDefaultParameterInt("ram", 256);
     MandatoryOff("ram");
-    AddParameter(ParameterType_Filename, "ct", "Color table");
-    SetParameterDescription("ct",  "An ASCII file containing the color table\n"
-                                   "with one color per line\n"
-                                   "(for instance the line '1 255 0 0' means that all pixels with label 1 will be replaced by RGB color 255 0 0)\n"
-                                   "Lines beginning with a # are ignored");
+
+
+    AddParameter(ParameterType_Choice, "method", "Color mapping method");
+    SetParameterDescription("method","Selection of color mapping methods and their parameters.");
+    // Custom LUT
+    AddChoice("method.custom","Color mapping with custom labeled look-up table");
+    SetParameterDescription("method.custom","Apply a user-defined look-up table to a labeled image. Look-up table is loaded from a text file.");
+    AddParameter(ParameterType_Filename, "method.custom.lut", "Look-up table file");
+    SetParameterDescription("method.custom.lut",  "An ASCII file containing the look-up table\n"
+                            "with one color per line\n"
+                            "(for instance the line '1 255 0 0' means that all pixels with label 1 will be replaced by RGB color 255 0 0)\n"
+                            "Lines beginning with a # are ignored");
+
+    // Continuous LUT
+    AddChoice("method.continuous","Color mapping with continuous look-up table");
+    SetParameterDescription("method.continuous","Apply a continuous look-up table to a range of input values.");
+    AddParameter(ParameterType_Choice,"method.continuous.lut","Look-up tables");
+    SetParameterDescription("method.continuous.lut","Available look-up tables.");
+
+    AddChoice("method.continuous.lut.red","Red");
+    // AddChoice("method.continuous.lut.green","Green");
+    // AddChoice("method.continuous.lut.blue","Blue");
+    // AddChoice("method.continuous.lut.grey","Grey");
+    // AddChoice("method.continuous.lut.hot","Hot");
+    // AddChoice("method.continuous.lut.cool","Cool");
+    // AddChoice("method.continuous.lut.spring","Spring");
+    // AddChoice("method.continuous.lut.summer","Summer");
+    // AddChoice("method.continuous.lut.autumn","Autumn");
+    // AddChoice("method.continuous.lut.winter","Winter");
+    // AddChoice("method.continuous.lut.copper","Copper");
+    // AddChoice("method.continuous.lut.jet","Jet");
+    // AddChoice("method.continuous.lut.overunder","OverUnder");
+    // AddChoice("method.continuous.lut.relief","Relief");
+
+    AddParameter(ParameterType_Float,"method.continuous.min","Mapping range lower value");
+    SetParameterDescription("method.continuous.min","Set the lower input value of the mapping range.");
+    
+    AddParameter(ParameterType_Float,"method.continuous.max","Mapping range higher value");
+    SetParameterDescription("method.continuous.max","Set the higher input value of the mapping range.");
+    
+    // Segmentation LUT
+    AddChoice("method.segmentation","Color mapping with a look-up table optimised for segmentation");
+    SetParameterDescription("method.segmentation","Compute an optimal look-up table such that neighbouring labels in a segmentation are mapped to highly contrasted colors.");
+    AddParameter(ParameterType_Int,"method.segmentation.background", "Background label");
+    SetParameterDescription("method.segmentation.background","Value of the background label");
+    SetParameterInt("method.segmentation.background",0);
+
   }
 
   void DoUpdateParameters()
@@ -133,7 +193,7 @@ private:
           std::string::size_type nextpos = line.find_first_of(" ", pos);
           int value = atoi(line.substr(pos, nextpos).c_str());
           if (value < 0 || value > 255)
-          otbAppLogWARNING("WARNING: color value outside 8-bits range (<0 or >255). Value will be clamped." << std::endl);
+            otbAppLogWARNING("WARNING: color value outside 8-bits range (<0 or >255). Value will be clamped." << std::endl);
           color[i] = static_cast<PixelType> (value);
           pos = nextpos + 1;
           nextpos = line.find_first_of(" ", pos);
