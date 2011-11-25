@@ -103,7 +103,7 @@ ADD_TEST(prTeMapProjectionExampleTest ${EXE_TESTS}
 
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(prTeVectorDataProjectionExampleTest ${EXE_TESTS}
-        --compare-binary
+        --compare-ogr ${TOL}
         ${BASELINE}/vectorDataProjectionExample.shp
         ${TEMP}/vectorDataProjectionExample.shp
     VectorDataProjectionExampleTest
