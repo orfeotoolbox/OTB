@@ -179,28 +179,24 @@ template <class TInputRGBAImageType>
 void
 OutputImageParameter::SwitchRGBAImageWrite()
   {
-  switch(m_PixelType )
-    {
-    case ImagePixelType_uint8:
+  if( m_PixelType == ImagePixelType_uint8 )
     {
     otbCastAndWriteImageMacro(TInputRGBAImageType, UInt8RGBAImageType, m_RGBAUInt8Writer);
-    break;
     }
-    }
+   else
+     itkExceptionMacro("Unknown PixelType for RGBA Image.");
   }
 
 template <class TInputRGBImageType>
 void
 OutputImageParameter::SwitchRGBImageWrite()
   {
-  switch(m_PixelType )
-    {
-    case ImagePixelType_uint8:
+   if( m_PixelType == ImagePixelType_uint8 )
     {
     otbCastAndWriteImageMacro(TInputRGBImageType, UInt8RGBImageType, m_RGBUInt8Writer);
-    break;
     }
-    }
+   else
+     itkExceptionMacro("Unknown PixelType for RGB Image.");
   }
 
 void
