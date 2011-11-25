@@ -30,7 +30,7 @@ static const std::string Analysis="Image Analysis";
 static const std::string Calibration="Calibration";
 static const std::string ChangeDetection="Change Detection";
 static const std::string Coordinates="Coordinates";
-static const std::string DimensionReduction="Dimensionnality Reduction";
+static const std::string DimensionReduction="Dimensionality Reduction";
 static const std::string FeatureExtraction="Feature Extraction";
 static const std::string Filter="Image Filtering";
 static const std::string Geometry="Geometry";
@@ -44,7 +44,7 @@ static const std::string Raster="Raster";
 static const std::string SAR="SAR";
 static const std::string Stereo="Stereo";
 static const std::string Segmentation="Segmentation";
-static const std::string Vector="VectorData Manipulation";
+static const std::string Vector="Vector data Manipulation";
 
 } // end namespace Wrappers
 } // end namespace Tags
