@@ -1179,17 +1179,6 @@ ADD_TEST(feTvLineSegmentDetector ${FEATUREEXTRACTION_TESTS11}
      ${TEMP}/feTvLineSegmentDetectorOutput.shp
 )
 
-ADD_TEST(feTvLineSegmentDetector_8b_16b_compare ${FEATUREEXTRACTION_TESTS11}
---compare-ogr  ${EPSILON_8}
-            ${TEMP}/feTvLineSegmentDetectorOutput8.shp
-            ${TEMP}/feTvLineSegmentDetectorOutput16.shp
-    otbLineSegmentDetector_8b_16b_compare
-     ${INPUTDATA}/scene_8.tif
-     ${INPUTDATA}/scene_16.tif
-     ${TEMP}/feTvLineSegmentDetectorOutput8.shp
-     ${TEMP}/feTvLineSegmentDetectorOutput16.shp
-)
-
 # -------            otb::LineSpatialObjectListToRightAnglePointSetFilter   -------------
 ADD_TEST(feTuLineSpatialObjectListToRightAnglePointSetFilterNew ${FEATUREEXTRACTION_TESTS11}
     otbLineSpatialObjectListToRightAnglePointSetFilterNew)
