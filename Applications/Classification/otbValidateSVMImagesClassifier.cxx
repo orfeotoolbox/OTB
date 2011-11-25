@@ -149,14 +149,14 @@ private:
     MandatoryOff("dem");
     AddParameter(ParameterType_Filename, "imstat", "XML image statistics file");
     MandatoryOff("imstat");
-    SetParameterDescription("imstat", "filename of an XML file containing mean and standard deviation of input images.");
+    SetParameterDescription("imstat", "Filename of an XML file containing mean and standard deviation of input images.");
     AddParameter(ParameterType_Filename, "out", "Output filename");
-    SetParameterDescription("out", "Filename, which will contain the performance of the SVM model.");
+    SetParameterDescription("out", "Filename, which contains the performances of the SVM model.");
     MandatoryOff("out");
     SetParameterRole("out", Role_Output);
     AddParameter(ParameterType_Filename, "svm", "SVM validation filename");
     SetParameterDescription("svm",
-                            "SVM model to validate its performances (given by TrainSVMImagesClassification output for instance).");
+                            "SVM model to validate (given by TrainSVMImagesClassification output for instance).");
   }
 
   void DoUpdateParameters()
