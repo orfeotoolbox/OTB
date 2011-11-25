@@ -7,7 +7,6 @@ set(OTB_APPLICATIONS_NAME_LIST "" CACHE STRING "List of all applications name" F
 add_subdirectory(CartographicDBValidation)
 add_subdirectory(ChangeDetection)
 add_subdirectory(Classification)
-add_subdirectory(ConnectedComponentSegmentation)
 add_subdirectory(DimensionnalityReduction)
 add_subdirectory(DisparityMap)
 add_subdirectory(FeatureExtraction)
