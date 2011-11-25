@@ -131,7 +131,7 @@ private:
 
     // Documentation
     SetDocName("Train SVM classifier from multiple image");
-    SetDocLongDescription("This application performs SVM classifier training from multiple pairs of input images and training vector data.Samples are composed of pixel values in each band optionally centered and reduced using XML statistics file produce by the ComputeImagesStatistics application. The training vector data must contain polygons with a positive integer field representing the class label. Name of the field can be set using the \"Class label field\" parameter. Training and validation sample lists are built such that each class is equally represented in the two lists. One parameter allows to control the ratio between the number of samples in training and validation sets. Two parameters allow to manage the size of the training and validation sets per class and per image. Several SVM classifier parameters cas be set. The kernel function which defined the feature space (for example if the kernel is a Gaussian radial basis function kernel the corresponding feature space of infinite dimensions). To allow some flexibility in separating the categories, SVM models have a cost parameter, C, that controls the trade off between allowing training errors and forcing rigid margins. It creates a soft margin that permits some misclassifications. Increasing the value of C increases the cost of misclassifying points and forces the creation of a more accurate model that may not generalize well. Clasifier parameters can also be optimize.");
+    SetDocLongDescription("This application performs SVM classifier training from multiple pairs of input images and training vector data.Samples are composed of pixel values in each band optionally centered and reduced using XML statistics file produce by the ComputeImagesStatistics application.\n The training vector data must contain polygons with a positive integer field representing the class label. Name of the field can be set using the \"Class label field\" parameter. Training and validation sample lists are built such that each class is equally represented in the two lists. One parameter allows to control the ratio between the number of samples in training and validation sets. Two parameters allow to manage the size of the training and validation sets per class and per image.\n Several SVM classifier parameters cas be set. The kernel function which defined the feature space (for example if the kernel is a Gaussian radial basis function kernel the corresponding feature space of infinite dimensions). To allow some flexibility in separating the classes, SVM models have a cost parameter, C, that controls the trade off between allowing training errors and forcing rigid margins. It creates a soft margin that permits some misclassifications. Increasing the value of C increases the cost of misclassifying points and forces the creation of a more accurate model that may not generalize well. Classifier parameters can also be optimize.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
@@ -139,7 +139,7 @@ private:
       "--io.il ${OTB-DATA}/Classification/QB_1_ortho.tif "
       "--io.vd ${OTB-DATA}/Classification/ectorData_QB1.shp"
       "--io.imstat ${OTB-Data}/Baseline/OTB-Applications/Files/clImageStatisticsQB1.xml"
-      "--b 2 --mv 100 --vtr 0.5 --opt true --io.out svmModelQB1_allOpt.svm");
+      "--sample.mv 100 --sample.vtr 0.5 --svm.opt true --io.out svmModelQB1_allOpt.svm");
     AddDocTag(Tags::Learning);
 
   }
