@@ -16,7 +16,7 @@ OTB_TEST_APPLICATION(NAME apTvClTrainSVMImagesClassifierQB1
                      OPTIONS --io.il ${INPUTDATA}/Classification/QB_1_ortho.tif
   							 --io.vd ${INPUTDATA}/Classification/VectorData_QB1.shp
   							 --io.imstat ${TEMP}/apTvClEstimateImageStatisticsQB1.xml
-  						     --sample.b 2
+  						     ##--sample.b 2
 					         --svm.opt true
     						 --io.out ${TEMP}/clsvmModelQB1.svm
                      VALID   --compare-ascii ${NOTOL}
@@ -30,7 +30,7 @@ OTB_TEST_APPLICATION(NAME apTvClTrainSVMImagesClassifierQB1_allOpt
                      OPTIONS --io.il ${INPUTDATA}/Classification/QB_1_ortho.tif
   						     --io.vd ${INPUTDATA}/Classification/VectorData_QB1.shp
  							 --io.imstat ${TEMP}/apTvClEstimateImageStatisticsQB1.xml
-  						     --sample.b 2
+  						     ##--sample.b 2
   						     --sample.mv 100
    							 --sample.mt 100
     					     --sample.vtr 0.5
@@ -116,7 +116,7 @@ OTB_TEST_APPLICATION(NAME apTvClTrainSVMImagesClassifierQB123
         						  ${INPUTDATA}/Classification/VectorData_QB2.shp
          						  ${INPUTDATA}/Classification/VectorData_QB3.shp
     						 --io.imstat ${TEMP}/apTvClEstimateImageStatisticsQB123.xml
-    						 --sample.b 2
+    						 #--sample.b 2
    							 --svm.opt true
     						 --io.out ${TEMP}/clsvmModelQB123.svm
                      VALID   --compare-ascii ${NOTOL}
@@ -221,7 +221,7 @@ OTB_TEST_APPLICATION(NAME apTvClTrainSVMImagesClassifierQB456
         						  ${INPUTDATA}/Classification/VectorData_QB5.shp
          						  ${INPUTDATA}/Classification/VectorData_QB6.shp
     						 --io.imstat ${TEMP}/apTvClEstimateImageStatisticsQB456.xml
-    						 --sample.b 2
+    						 #--sample.b 2
    							 --svm.opt true
     						 --io.out ${TEMP}/clsvmModelQB456.svm
                      VALID   --compare-ascii ${NOTOL}

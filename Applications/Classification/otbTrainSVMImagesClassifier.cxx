@@ -1,5 +1,4 @@
 /*=========================================================================
-
   Program:   ORFEO Toolbox
   Language:  C++
   Date:      $Date$
@@ -170,6 +169,32 @@ private:
     SetParameterDescription("io.out", "Output SVM model");
     SetParameterRole("io.out", Role_Output);
 
+    //Group Sample list
+    AddParameter(ParameterType_Group,"sample","Training and validation samples parameters");
+    SetParameterDescription("sample","This group of parameters allows to set training and validation sample lists parameters.");
+    
+    AddParameter(ParameterType_Int, "sample.mt", "Maximum training sample size");
+    //MandatoryOff("mt");
+    SetDefaultParameterInt("sample.mt", -1);
+    SetParameterDescription("sample.mt", "Maximum size of the training sample (default = -1).");
+    AddParameter(ParameterType_Int, "sample.mv", "Maximum validation sample size");
+    // MandatoryOff("mv");
+    SetDefaultParameterInt("sample.mv", -1);
+    SetParameterDescription("sample.mv", "Maximum size of the validation sample (default = -1)");
+
+    // AddParameter(ParameterType_Int, "sample.b", "Balance and grow the training set");
+    // SetParameterDescription("sample.b", "Balance and grow the training set.");
+    // MandatoryOff("sample.b");
+        
+    AddParameter(ParameterType_Float, "sample.vtr", "training and validation sample ratio");
+    SetParameterDescription("sample.vtr",
+                            "Ratio between training and validation sample (0.0 = all training, 1.0 = all validation) default = 0.5.");
+    SetParameterFloat("sample.vtr", 0.5);
+    
+    AddParameter(ParameterType_Filename, "sample.vfn", "Name of the discrimination field");
+    SetParameterDescription("sample.vfn", "Name of the field using to discriminate class in the vector data files.");
+    SetParameterString("sample.vfn", "Class");
+
     //Group SVM
     AddParameter(ParameterType_Group,"svm","SVM classifier parameters");
     SetParameterDescription("svm","This group of parameters allows to set SVM classifier parameters.");
@@ -186,30 +211,6 @@ private:
     AddParameter(ParameterType_Empty, "svm.opt", "parameters optimization");
     MandatoryOff("svm.opt");
     SetParameterDescription("svm.opt", "SVM parameters optimization");
-    
-    //Group Sample list
-    AddParameter(ParameterType_Group,"sample","Training and validation samples parameters");
-    SetParameterDescription("svm","This group of parameters allows to set training and validation sample lists parameters.");
-    AddParameter(ParameterType_Int, "sample.b", "Balance and grow the training set");
-    SetParameterDescription("sample.b", "Balance and grow the training set.");
-    MandatoryOff("sample.b");
-    
-    AddParameter(ParameterType_Int, "sample.mt", "Maximum training sample size");
-    //MandatoryOff("mt");
-    SetDefaultParameterInt("sample.mt", -1);
-    SetParameterDescription("sample.mt", "Maximum size of the training sample (default = -1).");
-    AddParameter(ParameterType_Int, "sample.mv", "Maximum validation sample size");
-    // MandatoryOff("mv");
-    SetDefaultParameterInt("sample.mv", -1);
-    SetParameterDescription("sample.mv", "Maximum size of the validation sample (default = -1)");
-    AddParameter(ParameterType_Float, "sample.vtr", "training and validation sample ratio");
-    SetParameterDescription("sample.vtr",
-                            "Ratio between training and validation sample (0.0 = all training, 1.0 = all validation) default = 0.5.");
-    SetParameterFloat("sample.vtr", 0.5);
-    
-    AddParameter(ParameterType_Filename, "sample.vfn", "Name of the discrimination field");
-    SetParameterDescription("sample.vfn", "Name of the field using to discriminate class in the vector data files.");
-    SetParameterString("sample.vfn", "Class");
   }
 
   void DoUpdateParameters()
@@ -333,26 +334,26 @@ private:
     LabelListSampleType::Pointer labelListSample;
     //--------------------------
     // Balancing training sample (if needed)
-    if (IsParameterEnabled("sample.b"))
-      {
-      // Balance the list sample.
-      otbAppLogINFO("Number of training samples before balancing: " << concatenateTrainingSamples->GetOutputSampleList()->Size())
-      BalancingListSampleFilterType::Pointer balancingFilter = BalancingListSampleFilterType::New();
-      balancingFilter->SetInput(trainingShiftScaleFilter->GetOutput()/*GetOutputSampleList()*/);
-      balancingFilter->SetInputLabel(concatenateTrainingLabels->GetOutput()/*GetOutputSampleList()*/);
-      balancingFilter->SetBalancingFactor(GetParameterInt("sample.b"));
-      balancingFilter->Update();
-      listSample = balancingFilter->GetOutputSampleList();
-      labelListSample = balancingFilter->GetOutputLabelSampleList();
-      otbAppLogINFO("Number of samples after balancing: " << balancingFilter->GetOutputSampleList()->Size());
+    // if (IsParameterEnabled("sample.b"))
+    //   {
+    //   // Balance the list sample.
+    //   otbAppLogINFO("Number of training samples before balancing: " << concatenateTrainingSamples->GetOutputSampleList()->Size())
+    //   BalancingListSampleFilterType::Pointer balancingFilter = BalancingListSampleFilterType::New();
+    //   balancingFilter->SetInput(trainingShiftScaleFilter->GetOutput()/*GetOutputSampleList()*/);
+    //   balancingFilter->SetInputLabel(concatenateTrainingLabels->GetOutput()/*GetOutputSampleList()*/);
+    //   balancingFilter->SetBalancingFactor(GetParameterInt("sample.b"));
+    //   balancingFilter->Update();
+    //   listSample = balancingFilter->GetOutputSampleList();
+    //   labelListSample = balancingFilter->GetOutputLabelSampleList();
+    //   otbAppLogINFO("Number of samples after balancing: " << balancingFilter->GetOutputSampleList()->Size());
 
-      }
-    else
-      {
+    //   }
+    // else
+    //   {
       listSample = trainingShiftScaleFilter->GetOutputSampleList();
       labelListSample = concatenateTrainingLabels->GetOutputSampleList();
       otbAppLogINFO("Number of training samples: " << concatenateTrainingSamples->GetOutputSampleList()->Size());
-      }
+    //  }
     //--------------------------
     // Split the data set into training/validation set
     ListSampleType::Pointer trainingListSample = listSample;
