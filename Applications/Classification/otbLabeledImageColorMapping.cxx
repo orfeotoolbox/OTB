@@ -68,22 +68,36 @@ public:
   typedef otb::Functor::ReliefColormapFunctor
   <PixelType, RGBPixelType>           ReliefColorMapFunctorType;
 
-
 private:
   LabeledImageColorMapping()
   {
-    SetName("LabeledImageColorMapping");
-    SetDescription("Replace labels of a classification map with user defined 8-bits RGB colors.");
+    SetName("ColorMapping");
+    SetDescription("Maps an input grayscale image into 8-bits RGB using look-up tables.");
 
-    SetDocName("Labeled Image Color Mapping Application");
-    SetDocLongDescription("Create and save a classification map label image (given by ImageSVMClassifier Application for example) with user defined 8-bits RGB colors LUT. Unknown labels are mapped to black by default.");
+    SetDocName("Color Mapping");
+    SetDocLongDescription("");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
     SetDocCLExample("otbApplicationLauncherCommandLine LabeledImageColorMapping   --in ${OTBAPP_BASELINE}/clLabeledImageQB123_1.tif --ct ${OTB-Data}/Input/Classification/ColorTable.txt --out clLabeledFancyImageQB123_1.tif");
     AddDocTag(Tags::Learning);
 
+    // Build lut map
 
+    m_LutMap["Red"]=ColorMapFilterType::Red;
+    m_LutMap["Green"]=ColorMapFilterType::Green;
+    m_LutMap["Blue"]=ColorMapFilterType::Blue;
+    m_LutMap["Grey"]=ColorMapFilterType::Grey;
+    m_LutMap["Hot"]=ColorMapFilterType::Hot;
+    m_LutMap["Cool"]=ColorMapFilterType::Cool;
+    m_LutMap["Spring"]=ColorMapFilterType::Spring;
+    m_LutMap["Summer"]=ColorMapFilterType::Summer;
+    m_LutMap["Autumn"]=ColorMapFilterType::Autumn;
+    m_LutMap["Winter"]=ColorMapFilterType::Winter;
+    m_LutMap["Copper"]=ColorMapFilterType::Copper;
+    m_LutMap["Jet"]=ColorMapFilterType::Jet;
+    m_LutMap["HSV"]=ColorMapFilterType::HSV;
+    m_LutMap["OverUnder"]=ColorMapFilterType::OverUnder;
   }
 
   virtual ~LabeledImageColorMapping()
@@ -119,33 +133,37 @@ private:
     SetParameterDescription("method.continuous.lut","Available look-up tables.");
 
     AddChoice("method.continuous.lut.red","Red");
-    // AddChoice("method.continuous.lut.green","Green");
-    // AddChoice("method.continuous.lut.blue","Blue");
-    // AddChoice("method.continuous.lut.grey","Grey");
-    // AddChoice("method.continuous.lut.hot","Hot");
-    // AddChoice("method.continuous.lut.cool","Cool");
-    // AddChoice("method.continuous.lut.spring","Spring");
-    // AddChoice("method.continuous.lut.summer","Summer");
-    // AddChoice("method.continuous.lut.autumn","Autumn");
-    // AddChoice("method.continuous.lut.winter","Winter");
-    // AddChoice("method.continuous.lut.copper","Copper");
-    // AddChoice("method.continuous.lut.jet","Jet");
-    // AddChoice("method.continuous.lut.overunder","OverUnder");
-    // AddChoice("method.continuous.lut.relief","Relief");
+    AddChoice("method.continuous.lut.green","Green");
+    AddChoice("method.continuous.lut.blue","Blue");
+    AddChoice("method.continuous.lut.grey","Grey");
+    AddChoice("method.continuous.lut.hot","Hot");
+    AddChoice("method.continuous.lut.cool","Cool");
+    AddChoice("method.continuous.lut.spring","Spring");
+    AddChoice("method.continuous.lut.summer","Summer");
+    AddChoice("method.continuous.lut.autumn","Autumn");
+    AddChoice("method.continuous.lut.winter","Winter");
+    AddChoice("method.continuous.lut.copper","Copper");
+    AddChoice("method.continuous.lut.jet","Jet");
+    AddChoice("method.continuous.lut.hsv","HSV");
+    AddChoice("method.continuous.lut.overunder","OverUnder");
+    AddChoice("method.continuous.lut.relief","Relief");
 
     AddParameter(ParameterType_Float,"method.continuous.min","Mapping range lower value");
     SetParameterDescription("method.continuous.min","Set the lower input value of the mapping range.");
+    SetParameterFloat("method.continuous.min",0.);
     
     AddParameter(ParameterType_Float,"method.continuous.max","Mapping range higher value");
     SetParameterDescription("method.continuous.max","Set the higher input value of the mapping range.");
-    
+    SetParameterFloat("method.continuous.max",255.);
+
     // Segmentation LUT
     AddChoice("method.segmentation","Color mapping with a look-up table optimised for segmentation");
     SetParameterDescription("method.segmentation","Compute an optimal look-up table such that neighbouring labels in a segmentation are mapped to highly contrasted colors.");
     AddParameter(ParameterType_Int,"method.segmentation.background", "Background label");
     SetParameterDescription("method.segmentation.background","Value of the background label");
     SetParameterInt("method.segmentation.background",0);
-
+    SetMinimumParameterIntValue("method.segmentation.background",0);
+    SetMaximumParameterIntValue("method.segmentation.background",255);
   }
 
   void DoUpdateParameters()
@@ -155,23 +173,66 @@ private:
 
   void DoExecute()
   {
+    if(GetParameterInt("method")==0)
+      {
+      m_CustomMapper = ChangeLabelFilterType::New();
+      m_CustomMapper->SetInput(GetParameterUInt16Image("in"));
+      m_CustomMapper->SetNumberOfComponentsPerPixel(3);
+      
+      ReadLutFromFile();
+      
+      SetParameterOutputImage("out", m_CustomMapper->GetOutput());
+      }
+    else if(GetParameterInt("method")==1)
+      {
+      m_ContinuousColorMapper = ColorMapFilterType::New();
 
-    m_LabeledImage = GetParameterUInt16Image("in");
+      m_ContinuousColorMapper->SetInput(GetParameterFloatImage("in"));
 
-    m_Mapper = ChangeLabelFilterType::New();
-    m_Mapper->SetInput(m_LabeledImage);
-    m_Mapper->SetNumberOfComponentsPerPixel(3);
+      // Disable automatic scaling
+      m_ContinuousColorMapper->UseInputImageExtremaForScalingOff();
 
+      // Set the lut
+      std::string lut = GetParameterString("method.continuous.lut");
+
+      std::cout<<"LUT: "<<lut<<std::endl;
+
+      if(lut == "Relief")
+        {
+        ReliefColorMapFunctorType::Pointer reliefFunctor = ReliefColorMapFunctorType::New();
+        m_ContinuousColorMapper->SetColormap(reliefFunctor);
+        }
+      else
+        {
+        m_ContinuousColorMapper->SetColormap((ColorMapFilterType::ColormapEnumType)m_LutMap[lut]);
+        }
+
+      m_ContinuousColorMapper->GetColormap()->SetMinimumInputValue(GetParameterFloat("method.continuous.min"));
+      m_ContinuousColorMapper->GetColormap()->SetMaximumInputValue(GetParameterFloat("method.continuous.max"));
+
+      SetParameterOutputImage("out", m_ContinuousColorMapper->GetOutput());
+      }
+    else if(GetParameterInt("method")==2)
+      {
+      m_SegmentationColorMapper = LabelToRGBFilterType::New();
+      m_SegmentationColorMapper->SetInput(GetParameterUInt16Image("in"));
+      m_SegmentationColorMapper->SetBackgroundValue(GetParameterInt("method.segmentation.background")); 
+      SetParameterOutputImage("out", m_SegmentationColorMapper->GetOutput());
+      }
+  }
+
+  void ReadLutFromFile()
+  {
     std::ifstream ifs;
 
-    ifs.open(GetParameterString("ct").c_str());
+    ifs.open(GetParameterString("method.custom.lut").c_str());
 
     if (!ifs)
       {
-      itkExceptionMacro("Can not read file " << GetParameterString("ct") << std::endl);
+      itkExceptionMacro("Can not read file " << GetParameterString("method.custom.lut") << std::endl);
       }
 
-    otbAppLogINFO("Parsing color map file " << GetParameterString("ct") << "." << std::endl);
+    otbAppLogINFO("Parsing color map file " << GetParameterString("method.custom.lut") << "." << std::endl);
 
     while (!ifs.eof())
       {
@@ -199,19 +260,16 @@ private:
           nextpos = line.find_first_of(" ", pos);
           }
         otbAppLogINFO("Adding color mapping " << clabel << " -> [" << (int) color[0] << " " << (int) color[1] << " "<< (int) color[2] << " ]" << std::endl);
-        m_Mapper->SetChange(clabel, color);
+        m_CustomMapper->SetChange(clabel, color);
         }
       }
     ifs.close();
-
-    /***/
-    SetParameterOutputImage<VectorImageType> ("out", m_Mapper->GetOutput());
-
   }
 
-  ChangeLabelFilterType::Pointer m_Mapper;
-  LabelImageType::Pointer m_LabeledImage;
-
+  ChangeLabelFilterType::Pointer m_CustomMapper;
+  ColorMapFilterType::Pointer    m_ContinuousColorMapper;
+  LabelToRGBFilterType::Pointer  m_SegmentationColorMapper;
+  std::map<std::string,unsigned int> m_LutMap;  
 };
 }
 }
