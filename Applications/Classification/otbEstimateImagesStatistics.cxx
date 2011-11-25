@@ -44,16 +44,16 @@ private:
   EstimateImagesStatistics()
   {
     SetName("EstimateImagesStatistics");
-    SetDescription("Estimates mean/standard deviation for all images in the input list and optionally saves the results in an XML file");
-
-    SetDocName("Estimate Image Statistics Application");
-    SetDocLongDescription("This application estimates mean/standard deviation for all images in the input list and optionally saves the results in an XML file.");
-    SetDocLimitations("None");
+    SetDescription("Computes global mean and standard deviation for each band from a set of images and optionally saves the results in an XML file.");
+    SetDocName("Compute Images second order statistics");
+    SetDocLongDescription("This application computes a global mean and standard deviation for each band of a set of images and optionally saves the results in an XML file. The output XML is intended to use an input for the TrainImagesSVMClassifier application to normalize samples before learning.");
+    SetDocLimitations("The set of input images must have the same number of bands. Input images must be of the same number/type and order of bands.");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso(" ");
+    SetDocSeeAlso("Documentation of the TrainImagesSVMClassifier application.");
     SetDocCLExample("otbApplicationLauncherCommandLine EstimateImagesStatistics ${OTB-BIN}/bin  --il ${OTB-Data}/Input/Classification/QB_1_ortho.tif ${OTB-Data}/Input/Classification/QB_2_ortho.tif ${OTB-Data}/Input/Classification/QB_3_ortho.tif --out EstimateImageStatisticsQB123.xml");
 
     AddDocTag(Tags::Learning);
+    AddDocTag(Tags::Analysis);
   }
 
   virtual ~EstimateImagesStatistics()
@@ -62,11 +62,11 @@ private:
 
   void DoCreateParameters()
   {
-    AddParameter(ParameterType_InputImageList, "il", "Input Image List");
-    SetParameterDescription( "il", "Input Image List filename." );
+    AddParameter(ParameterType_InputImageList, "il", "Input images");
+    SetParameterDescription( "il", "List of input images filenames." );
 
     AddParameter(ParameterType_Filename, "out", "Output XML file");
-    SetParameterDescription( "out", "Name of the XML file where the statistics are saved for future reuse" );
+    SetParameterDescription( "out", "XML filename where the statistics are saved for future reuse" );
     MandatoryOff("out");
     SetParameterRole("out", Role_Output);
   }
