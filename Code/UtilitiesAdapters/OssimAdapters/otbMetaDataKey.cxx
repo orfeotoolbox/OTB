@@ -53,6 +53,9 @@ const std::string MetaDataKey::OSSIMKeywordlistDelimiterKey = "OSSIMKeywordlistD
 const std::string MetaDataKey::VectorDataKeywordlistKey = "VectorDataKeywordlist";
 const std::string MetaDataKey::VectorDataKeywordlistDelimiterKey = "VectorDataKeywordlistDelimiter";
 
+const std::string MetaDataKey::ResolutionFactor = "ResolutionFactor";
+const std::string MetaDataKey::CacheSizeInBytes = "CacheSizeInBytes";
+
 MetaDataKey::MetaDataKey() {}
 MetaDataKey::~MetaDataKey() {}
 

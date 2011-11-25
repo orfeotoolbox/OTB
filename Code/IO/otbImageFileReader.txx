@@ -22,6 +22,7 @@
 
 #include <fstream>
 
+#include "itksys/SystemTools.hxx"
 #include "itkMetaDataObject.h"
 
 #include "otbMacro.h"
@@ -30,12 +31,8 @@
 #include "otbImageKeywordlist.h"
 #include "otbMetaDataKey.h"
 
-#include "otbGDALImageIO.h" //FIXME find a better way
-#include "otbJPEG2000ImageIO.h" //FIXME find a better way
-#include "otbTileMapImageIO.h"
-
-#include "itksys/SystemTools.hxx"
-
+#include "otbGDALImageIO.h" //FIXME avoid requiring GDALImageIO here
+#include "otbTileMapImageIO.h" //FIXME avoid requiring TileMapImageIO here
 #include "otbCurlHelper.h"
 
 namespace otb
@@ -281,6 +278,10 @@ ImageFileReader<TOutputImage>
     return;
     }
 
+
+  // Get the ImageIO MetaData Dictionary
+  itk::MetaDataDictionary& dict = this->m_ImageIO->GetMetaDataDictionary();
+
   // Special actions for the gdal image IO
   if (strcmp(this->m_ImageIO->GetNameOfClass(), "GDALImageIO") == 0)
     {
@@ -301,18 +302,14 @@ ImageFileReader<TOutputImage>
     imageIO->SetDatasetNumber(m_AdditionalNumber);
     }
 
-
   // Special actions for the JPEG2000ImageIO
-  if (strcmp(this->m_ImageIO->GetNameOfClass(), "JPEG2000ImageIO") == 0)
-      {
-      typename JPEG2000ImageIO::Pointer imageIO = dynamic_cast<JPEG2000ImageIO*>(this->GetImageIO());
-
-      // Pass the Resolution Factor
-      imageIO->SetResolutionFactor(m_AdditionalNumber);
-      if (!imageIO->GetCacheSizeInByte())
-        imageIO->SetCacheSizeInByte(135000000); // Useful for Pleiades Images 135Mb => 4tiles in cache
-      }
-
+  if( strcmp(this->m_ImageIO->GetNameOfClass(), "JPEG2000ImageIO") == 0 )
+    {
+    itk::EncapsulateMetaData<unsigned int>(dict,
+                                           MetaDataKey::ResolutionFactor, m_AdditionalNumber);
+    itk::EncapsulateMetaData<unsigned int>(dict,
+                                           MetaDataKey::CacheSizeInBytes, 135000000);
+    }
 
   // Got to allocate space for the image. Determine the characteristics of
   // the image.
@@ -390,9 +387,6 @@ ImageFileReader<TOutputImage>
     }
 
   otbMsgDevMacro(<< otb_kwl);
-
-  // Update itk MetaData Dictionary
-  itk::MetaDataDictionary& dict = this->m_ImageIO->GetMetaDataDictionary();
 
   // Don't add an empty ossim keyword list
   if( otb_kwl.GetSize() != 0 )

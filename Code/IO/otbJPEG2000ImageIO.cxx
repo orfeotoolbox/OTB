@@ -23,6 +23,8 @@
 
 #include "itkTimeProbe.h"
 #include "itkMacro.h"
+#include "itkMetaDataObject.h"
+#include "otbMetaDataKey.h"
 
 #include <deque>
 
@@ -968,6 +970,17 @@ ITK_THREAD_RETURN_TYPE JPEG2000ImageIO::ThreaderCallback( void *arg )
 
 void JPEG2000ImageIO::ReadImageInformation()
 {
+  // Extract metadata
+  // In case the metadata are not set, the function silently returns, doing nothing
+  itk::ExposeMetaData<unsigned int>(this->GetMetaDataDictionary(),
+                                    MetaDataKey::ResolutionFactor,
+                                    m_ResolutionFactor);
+
+  itk::ExposeMetaData<unsigned int>(this->GetMetaDataDictionary(),
+                                    MetaDataKey::CacheSizeInBytes,
+                                    m_CacheSizeInByte);
+
+
   // If the internal image was not open we open it.
   // This is usually done when the user sets the ImageIO manually
   if ( !m_InternalReaders.front()->m_IsOpen )

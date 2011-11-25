@@ -70,6 +70,9 @@ public:
   static const std::string VectorDataKeywordlistKey;
   static const std::string VectorDataKeywordlistDelimiterKey;
 
+  static const std::string ResolutionFactor;
+  static const std::string CacheSizeInBytes;
+
   enum  KeyType
     {
     TSTRING,
