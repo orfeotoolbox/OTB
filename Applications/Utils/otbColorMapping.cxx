@@ -56,11 +56,11 @@ public:
 
   // Manual label LUT
   typedef otb::ChangeLabelImageFilter
-  <LabelImageType,VectorImageType>    ChangeLabelFilterType;
+  <LabelImageType, VectorImageType>    ChangeLabelFilterType;
 
   // Segmentation contrast maximisation LUT
   typedef itk::LabelToRGBImageFilter
-  <LabelImageType,RGBImageType>       LabelToRGBFilterType;
+  <LabelImageType, RGBImageType>       LabelToRGBFilterType;
 
   // Continuous LUT mapping
   typedef itk::ScalarToRGBColormapImageFilter
@@ -151,20 +151,20 @@ private:
 
     AddParameter(ParameterType_Float,"method.continuous.min","Mapping range lower value");
     SetParameterDescription("method.continuous.min","Set the lower input value of the mapping range.");
-    SetParameterFloat("method.continuous.min",0.);
+    SetParameterFloat("method.continuous.min", 0.);
     
     AddParameter(ParameterType_Float,"method.continuous.max","Mapping range higher value");
     SetParameterDescription("method.continuous.max","Set the higher input value of the mapping range.");
-    SetParameterFloat("method.continuous.max",255.);
+    SetParameterFloat("method.continuous.max", 255.);
 
     // Segmentation LUT
     AddChoice("method.segmentation","Color mapping with a look-up table optimised for segmentation");
     SetParameterDescription("method.segmentation","Compute an optimal look-up table such that neighbouring labels in a segmentation are mapped to highly contrasted colors.");
     AddParameter(ParameterType_Int,"method.segmentation.background", "Background label");
     SetParameterDescription("method.segmentation.background","Value of the background label");
-    SetParameterInt("method.segmentation.background",0);
-    SetMinimumParameterIntValue("method.segmentation.background",0);
-    SetMaximumParameterIntValue("method.segmentation.background",255);
+    SetParameterInt("method.segmentation.background", 0);
+    SetMinimumParameterIntValue("method.segmentation.background", 0);
+    SetMaximumParameterIntValue("method.segmentation.background", 255);
   }
 
   void DoUpdateParameters()
@@ -217,7 +217,7 @@ private:
       {
       m_SegmentationColorMapper = LabelToRGBFilterType::New();
       m_SegmentationColorMapper->SetInput(GetParameterUInt16Image("in"));
-      m_SegmentationColorMapper->SetBackgroundValue(GetParameterInt("method.segmentation.background")); 
+      m_SegmentationColorMapper->SetBackgroundValue(GetParameterInt("method.segmentation.background"));
       SetParameterOutputImage("out", m_SegmentationColorMapper->GetOutput());
       }
   }
@@ -270,7 +270,7 @@ private:
   ChangeLabelFilterType::Pointer m_CustomMapper;
   ColorMapFilterType::Pointer    m_ContinuousColorMapper;
   LabelToRGBFilterType::Pointer  m_SegmentationColorMapper;
-  std::map<std::string,unsigned int> m_LutMap;  
+  std::map<std::string, unsigned int> m_LutMap;
 };
 }
 }

@@ -42,22 +42,22 @@
 // #include "otbImage.h"
 // #include "otbImageFileReader.h"
 // #include "otbStreamingImageFileWriter.h"
-// 
+//
 // #include "otbStandardWriterWatcher.h"
 // #include "otbVectorImage.h"
 // #include "otbImageList.h"
-// 
-// 
+//
+//
 // #include "itkTimeProbe.h"
-// 
-// 
+//
+//
 
-// 
-// 
-// 
-// 
-// 
-// 
+//
+//
+//
+//
+//
+//
 // #include "itkCastImageFilter.h"
 
 namespace otb
@@ -114,7 +114,7 @@ public:
   typedef itk::BinaryThresholdImageFilter
                 <ScalarImageType, ScalarImageType>      BinaryThresholdImageFilterType;
   typedef otb::VectorImageToIntensityImageFilter
-                <FloatVectorImageType,ScalarImageType>  IntensityFilterType;
+                <FloatVectorImageType, ScalarImageType>  IntensityFilterType;
   typedef itk::NormalizedCorrelationImageToImageMetric
                 <ScalarImageType, ScalarImageType>      NCCType;
   typedef itk::MeanSquaresImageToImageMetric
@@ -167,19 +167,19 @@ private:
     
     AddParameter(ParameterType_Int,  "erx",   "Exploration Radius X");
     SetParameterDescription( "erx", "The exploration radius along x (in pixels)" );
-    SetMinimumParameterIntValue("erx",0);
+    SetMinimumParameterIntValue("erx", 0);
     
     AddParameter(ParameterType_Int,  "ery",   "Exploration Radius Y");
     SetParameterDescription( "ery", "The exploration radius along y (in pixels)" );
-    SetMinimumParameterIntValue("ery",0);
+    SetMinimumParameterIntValue("ery", 0);
     
     AddParameter(ParameterType_Int,  "mrx",   "Metric Radius X");
     SetParameterDescription( "mrx", "Radius along x (in pixels) of the metric computation window" );
-    SetMinimumParameterIntValue("mrx",0);
+    SetMinimumParameterIntValue("mrx", 0);
     
     AddParameter(ParameterType_Int,  "mry",   "Metric Radius Y");
     SetParameterDescription( "mry", "Radius along y (in pixels) of the metric computation window" );
-    SetMinimumParameterIntValue("mry",0);
+    SetMinimumParameterIntValue("mry", 0);
     
     AddParameter(ParameterType_InputImage,  "w",   "Image To Warp");
     SetParameterDescription( "w", "The image to warp after disparity estimation is complete" );
@@ -191,24 +191,24 @@ private:
     
     AddParameter(ParameterType_Float,  "cox",   "Coarse Offset X");
     SetParameterDescription( "cox", "Coarse offset along x (in physical space) between the two images" );
-    SetDefaultParameterFloat("cox",0.0);
+    SetDefaultParameterFloat("cox", 0.0);
     MandatoryOff("cox");
     
     AddParameter(ParameterType_Float,  "coy",   "Coarse Offset Y");
     SetParameterDescription( "coy", "Coarse offset along y (in physical space) between the two images" );
-    SetDefaultParameterFloat("coy",0.0);
+    SetDefaultParameterFloat("coy", 0.0);
     MandatoryOff("coy");
     
     AddParameter(ParameterType_Float,  "ssrx",   "Sub-Sampling Rate X");
     SetParameterDescription( "ssrx", "Generates a result at a coarser resolution with a given sub-sampling rate along X" );
-    SetDefaultParameterFloat("ssrx",1.0);
-    SetMinimumParameterFloatValue("ssrx",1.0);
+    SetDefaultParameterFloat("ssrx", 1.0);
+    SetMinimumParameterFloatValue("ssrx", 1.0);
     MandatoryOff("ssrx");
     
     AddParameter(ParameterType_Float,  "ssry",   "Sub-Sampling Rate Y");
     SetParameterDescription( "ssry", "Generates a result at a coarser resolution with a given sub-sampling rate along Y" );
-    SetDefaultParameterFloat("ssry",1.0);
-    SetMinimumParameterFloatValue("ssry",1.0);
+    SetDefaultParameterFloat("ssry", 1.0);
+    SetMinimumParameterFloatValue("ssry", 1.0);
     MandatoryOff("ssry");
     
     AddParameter(ParameterType_Float,  "rgsx",   "Reference Gaussian Smoothing X");
@@ -233,8 +233,8 @@ private:
     
     AddParameter(ParameterType_Float,  "spa",   "SubPixelAccuracy");
     SetParameterDescription( "spa", "Metric extrema location will be refined up to the given accuracy. Default is 0.01" );
-    SetDefaultParameterFloat("spa",0.01);
-    SetMinimumParameterFloatValue("spa",0.0);
+    SetDefaultParameterFloat("spa", 0.01);
+    SetMinimumParameterFloatValue("spa", 0.0);
     MandatoryOff("spa");
     
     AddParameter(ParameterType_Float,  "vmlt",   "Validity Mask Lower Threshold");
@@ -475,7 +475,7 @@ private:
       
       AddProcess(m_Warp,"Warp");
       
-      SetParameterOutputImage("wo",m_Warp->GetOutput());
+      SetParameterOutputImage("wo", m_Warp->GetOutput());
       
       }
     else
