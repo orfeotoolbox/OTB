@@ -147,7 +147,7 @@ private:
   double m_EpsilonBoundaryChecking;
   bool   m_ReportErrors;
   bool   m_IgnoreLineOrder;
-  const bool m_MaxArea;
+  const unsigned int m_MaxArea;
 
   void AddWhiteSpace(const std::string& strIn, std::string &strOut) const;
 };
