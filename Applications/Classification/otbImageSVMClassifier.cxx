@@ -63,11 +63,11 @@ private:
     
     // Documentation
     SetDocName("Image SVM Classification");
-    SetDocLongDescription("This application performs a SVM image classification based on a SVM model file (*.svm extension) produced by the TrainSVMImagesClassifier application. Pixels of the output image will contain the class label decided by the SVM classifier. The input pixels can be optionnaly centered and reduced according to the statistics file produced by the ComputeImagesStatistics application. An optional input mask can be provided, in which case only input image pixels whose corresponding mask value is greater than 0 will be classified. The remaining of pixels will be given the label 0 in the output image."
+    SetDocLongDescription("This application performs a SVM image classification based on a SVM model file (*.svm extension) produced by the TrainSVMImagesClassifier application. Pixels of the output image will contain the class label decided by the SVM classifier. The input pixels can be optionnaly centered and reduced according to the statistics file produced by the ComputeImagesStatistics application. An optional input mask can be provided, in which case only input image pixels whose corresponding mask value is greater than 0 will be classified. The remaining of pixels will be given the label 0 in the output image.");
 
     SetDocLimitations("The input image must have the same type, order and number of bands than the images used to produce the statistics file and the SVM model file. If a statistics file was used during training by the TrainSVMImagesClassifier, it is mandatory to use the same statistics file for classification. If an input mask is used, its size must match the input image size.");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("TrainSVMImagesClassifier, ValidateSVMImagesClassifier, EstimatesImagesStatistics");
+    SetDocSeeAlso("TrainSVMImagesClassifier, ValidateSVMImagesClassifier, ComputeImagesStatistics");
     SetDocCLExample("otbApplicationLauncherCommandLine ImageSVMClassifier ${OTB-BIN}/bin --in ${OTB-DATA}/Classification/QB_1_ortho.tif  --imstat ${OTB-DATA}/Baseline/OTB-Applications/Files/clImageStatisticsQB1.xml --svn ${OTB-DATA}/Baseline/OTB-Applications/Files/clsvmModelQB1.svm --out otbConcatenateImages.png uchar");
     AddDocTag(Tags::Learning);
   }
