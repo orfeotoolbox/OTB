@@ -59,21 +59,17 @@ private:
   ImageSVMClassifier()
   {
     SetName("ImageSVMClassifier");
-    SetDescription("Perform SVM classification based on a previous computed SVM model");
+    SetDescription("Performs a SVM classification of the input image according to a SVM model file.");
     
     // Documentation
-    SetDocName("Image SVM Classifier Application");
-    SetDocLongDescription("This application performs an image classification based on the SVM classifier."
-        "The image to classify and the SVM model are given in input, the application will generate the classified output image. "
-        " Optionally, the user can give an image statistics file (that contains min, max) to normalize the input image before the classification."
-        " Furthemore, the user can give a mask to define area of work (only pixels with values greater to 0 will be proceed), "
-        "these no classify pixels will appear in the output image with the value 0.");
-    SetDocLimitations("None");
+    SetDocName("Image SVM Classification");
+    SetDocLongDescription("This application performs a SVM image classification based on a SVM model file (*.svm extension) produced by the TrainSVMImagesClassifier application. Pixels of the output image will contain the class label decided by the SVM classifier. The input pixels can be optionnaly centered and reduced according to the statistics file produced by the ComputeImagesStatistics application. An optional input mask can be provided, in which case only input image pixels whose corresponding mask value is greater than 0 will be classified. The remaining of pixels will be given the label 0 in the output image."
+
+    SetDocLimitations("The input image must have the same type, order and number of bands than the images used to produce the statistics file and the SVM model file. If a statistics file was used during training by the TrainSVMImagesClassifier, it is mandatory to use the same statistics file for classification. If an input mask is used, its size must match the input image size.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("TrainSVMImagesClassifier, ValidateSVMImagesClassifier, EstimatesImagesStatistics");
     SetDocCLExample("otbApplicationLauncherCommandLine ImageSVMClassifier ${OTB-BIN}/bin --in ${OTB-DATA}/Classification/QB_1_ortho.tif  --imstat ${OTB-DATA}/Baseline/OTB-Applications/Files/clImageStatisticsQB1.xml --svn ${OTB-DATA}/Baseline/OTB-Applications/Files/clsvmModelQB1.svm --out otbConcatenateImages.png uchar");
     AddDocTag(Tags::Learning);
-
   }
 
   virtual ~ImageSVMClassifier()
@@ -82,22 +78,22 @@ private:
 
   void DoCreateParameters()
   {
-    AddParameter(ParameterType_InputImage, "in",  "Input Image to classify");
-    SetParameterDescription( "in", "Input Image to classify");
+    AddParameter(ParameterType_InputImage, "in",  "Input Image");
+    SetParameterDescription( "in", "The input Image to classify.");
 
-    AddParameter(ParameterType_InputImage,  "mask",   "Input Mask to classify");
-    SetParameterDescription( "mask", "A mask associated with the new image to classify");
+    AddParameter(ParameterType_InputImage,  "mask",   "Input Mask");
+    SetParameterDescription( "mask", "The mask allows to restrict classification of the input image to the area where mask pixel values are greater than 0.");
     MandatoryOff("mask");
 
-    AddParameter(ParameterType_Filename, "imstat", "Image statistics file.");
-    SetParameterDescription("imstat", "a XML file containing mean and standard deviation of input images used to train svm model");
-    MandatoryOff("imstat");
+    AddParameter(ParameterType_Filename, "svm", "SVM Model file");
+    SetParameterDescription("svm", "A SVM model file.");
 
-    AddParameter(ParameterType_Filename, "svm", "SVM Model.");
-    SetParameterDescription("svm", "An estimated SVM model previously computed");
+    AddParameter(ParameterType_Filename, "imstat", "Statistics file");
+    SetParameterDescription("imstat", "A XML file containing mean and standard deviation to center and reduce samples before classification.");
+    MandatoryOff("imstat");
     
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
-    SetParameterDescription( "out", "Output labeled image");
+    SetParameterDescription( "out", "Output image labeled with class labels");
     SetParameterOutputImagePixelType( "out", ImagePixelType_uint8);
 
     AddParameter(ParameterType_RAM, "ram", "Available RAM");
