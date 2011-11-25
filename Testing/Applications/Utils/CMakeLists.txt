@@ -249,3 +249,20 @@ OTB_TEST_APPLICATION(NAME apTvUtQuicklookROI1Channel
                              ${BASELINE}/apTvUtQuicklookROI1Channel.tif
                              ${TEMP}/apTvUtQuicklookROI1Channel.tif
                      )
+
+IF(OTB_DATA_USE_LARGEINPUT)
+OTB_TEST_APPLICATION(NAME apTvUtQuicklookSpot5
+                     APP Quicklook
+                     OPTIONS --in ${LARGEDATA}/SPOT5/TEHERAN/IMAGERY.TIF
+                             --out ${TEMP}/apTvUtQuicklookSpot5.tif
+                             --cl Channel1 Channel2 Channel3
+                             --rox 10
+                             --roy 10
+                             --rsx 100
+                             --rsy 200
+                             --sr 2
+                     VALID   --compare-image ${NOTOL}
+                             ${BASELINE}/apTvUtQuicklookSpot5.png
+                             ${TEMP}/apTvUtQuicklookSpot5.tif
+                     )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
