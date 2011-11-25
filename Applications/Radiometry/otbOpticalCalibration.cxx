@@ -82,7 +82,7 @@ private:
     SetDescription("Perform optical calibration TOA/TOC (Top Of Atmosphere/Top Of Canopy). Supported sensors: QuickBird, Ikonos, WorldView2, Formosat, Spot5");
     // Documentation
     SetDocName("Optical calibration application");
-    SetDocLongDescription("The application allows to convert pixel values from DN (for Digital Numbers) to physically interpretable and comparable values.Calibrated values are called surface reflectivity and its values lie in the range [0,1].\n The first level is called Top Of Atmosphere (TOA) reflectivity. It takes into account the sensor gain, sensor spectral response and the solar illumination.\nThe second level is called \emph{Top Of Canopy (TOC)} reflectivity. In addition to sensor gain and solar illumination, it takes into account the optical thickness of the atmosphere, the atmospheric pressure, the water vapor amount, the ozone amount, as well as the composition and amount of aerosol gasses.\n It is also possible to indicate an AERONET file which contains atmospheric parameters.");
+    SetDocLongDescription("The application allows to convert pixel values from DN (for Digital Numbers) to physically interpretable and comparable values.Calibrated values are called surface reflectivity and its values lie in the range [0,1].\nThe first level is called Top Of Atmosphere (TOA) reflectivity. It takes into account the sensor gain, sensor spectral response and the solar illumination.\nThe second level is called Top Of Canopy (TOC) reflectivity. In addition to sensor gain and solar illumination, it takes into account the optical thickness of the atmosphere, the atmospheric pressure, the water vapor amount, the ozone amount, as well as the composition and amount of aerosol gasses.\nIt is also possible to indicate an AERONET file which contains atmospheric parameters (version 1 and version 2 of Aeronet file are supported.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("The OTB CookBook");
@@ -124,16 +124,16 @@ private:
     AddParameter(ParameterType_Group,"atmo","Atmospheric parameters");
     SetParameterDescription("atmo","This group allows to set the atmospheric parameters.");
     AddParameter(ParameterType_Choice,   "atmo.aerosol", "Aerosol Model");
-    AddChoice("atmo.aerosol.noaersol",    "No Aerosol");
+    AddChoice("atmo.aerosol.noaersol",    "No Aerosol Model");
     AddChoice("atmo.aerosol.continental", "Continental");
     AddChoice("atmo.aerosol.maritime",    "Maritime");
     AddChoice("atmo.aerosol.urban",       "Urban");
     AddChoice("atmo.aerosol.desertic",    "Desertic");
 
-    AddParameter(ParameterType_Float, "atmo.oz",   "Amount of Ozone");
+    AddParameter(ParameterType_Float, "atmo.oz",   "Ozone Amount");
     AddParameter(ParameterType_Float, "atmo.wa",   "Water Vapor Amount");
     AddParameter(ParameterType_Float, "atmo.pressure", "Atmospheric Pressure");
-    AddParameter(ParameterType_Float, "atmo.opt",  "Aerosol Optical");
+    AddParameter(ParameterType_Float, "atmo.opt",  "Aerosol Optical Thickness");
 
     SetDefaultParameterFloat("atmo.oz", 0.);
     SetDefaultParameterFloat("atmo.wa",  2.5);
@@ -146,7 +146,7 @@ private:
     MandatoryOff("atmo.opt");
 
     AddParameter(ParameterType_Filename,   "atmo.aeronet", "Aeronet File");
-    SetParameterDescription("atmo.aeronet","Aeronet file to get atmospheric parameters");
+    SetParameterDescription("atmo.aeronet","Aeronet file containing atmospheric parameters");
     MandatoryOff("atmo.aeronet");
 
   }
