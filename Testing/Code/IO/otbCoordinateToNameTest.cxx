@@ -19,10 +19,10 @@
 
 #include <fstream>
 #include <cstdlib>
-#include <OpenThreads/Thread>
 
 #include "otbCoordinateToName.h"
 #include "otbCurlHelperStub.h"
+#include "otbThreads.h"
 
 int otbCoordinateToNameTest(int argc, char* argv[])
 {
@@ -49,7 +49,7 @@ int otbCoordinateToNameTest(int argc, char* argv[])
     {
     conv->MultithreadOn();
     conv->Evaluate();
-    OpenThreads::Thread::microSleep(10000000); //Make sure that the web request has the time to complete
+    otb::Threads::Sleep(10000000); //Make sure that the web request has the time to complete
     }
   else
     {
