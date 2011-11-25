@@ -3554,7 +3554,7 @@ otbIOTests13.cxx
 otbJPEG2000ImageIOTestCanRead.cxx
 otbJPEG2000ImageIOTestCanWrite.cxx
 otbVectorImageTest.cxx
-otbMultiReadingInfo.cxx
+otbMultiResolutionReadingInfo.cxx
 otbGenerateClassicalQLWithJPEG2000.cxx
 )
 ENDIF(OTB_COMPILE_JPEG2000)
@@ -3667,7 +3667,7 @@ IF(CHECK_GDAL_BUILDED_WITH_HDF)
 SET(BasicIO_SRCS22
 otbIOTests22.cxx
 otbVectorImageTest.cxx
-otbMultiReadingInfo.cxx
+otbMultiDatasetReadingInfo.cxx
 )
 ENDIF(CHECK_GDAL_BUILDED_WITH_HDF)
 
