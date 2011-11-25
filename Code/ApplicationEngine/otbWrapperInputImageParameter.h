@@ -124,7 +124,6 @@ protected:
   ImageBaseType::Pointer m_Image;
   std::string m_FileName;
 
-
   /** Readers typedefs */
 
   typedef otb::ImageFileReader<Int8ImageType> Int8ReaderType;
@@ -148,40 +147,16 @@ protected:
 
   typedef otb::ImageFileReader<UInt8RGBImageType>  UInt8RGBReaderType;
   typedef otb::ImageFileReader<UInt8RGBAImageType> UInt8RGBAReaderType;
-/*
-  Int8ReaderType::Pointer   m_Int8Reader;
-  UInt8ReaderType::Pointer  m_UInt8Reader;
-  Int16ReaderType::Pointer  m_Int16Reader;
-  UInt16ReaderType::Pointer m_UInt16Reader;
-  Int32ReaderType::Pointer  m_Int32Reader;
-  UInt32ReaderType::Pointer m_UInt32Reader;
-  FloatReaderType::Pointer  m_FloatReader;
-  DoubleReaderType::Pointer m_DoubleReader;
 
-  VectorInt8ReaderType::Pointer   m_VectorInt8Reader;
-  VectorUInt8ReaderType::Pointer  m_VectorUInt8Reader;
-  VectorInt16ReaderType::Pointer  m_VectorInt16Reader;
-  VectorUInt16ReaderType::Pointer m_VectorUInt16Reader;
-  VectorInt32ReaderType::Pointer  m_VectorInt32Reader;
-  VectorUInt32ReaderType::Pointer m_VectorUInt32Reader;
-  VectorFloatReaderType::Pointer  m_VectorFloatReader;
-  VectorDoubleReaderType::Pointer m_VectorDoubleReader;
-
-  RGBAInt8ReaderType::Pointer   m_RGBAInt8Reader;
-  RGBAUInt8ReaderType::Pointer  m_RGBAUInt8Reader;
-  RGBAInt16ReaderType::Pointer  m_RGBAInt16Reader;
-  RGBAUInt16ReaderType::Pointer m_RGBAUInt16Reader;
-  RGBAInt32ReaderType::Pointer  m_RGBAInt32Reader;
-  RGBAUInt32ReaderType::Pointer m_RGBAUInt32Reader;
-  RGBAFloatReaderType::Pointer  m_RGBAFloatReader;
-  RGBADoubleReaderType::Pointer m_RGBADoubleReader;
-*/
   itk::ProcessObject::Pointer m_Reader;
   itk::ProcessObject::Pointer m_Caster;
 
 private:
   InputImageParameter(const Parameter &); //purposely not implemented
   void operator =(const Parameter&); //purposely not implemented
+
+  /** Store the loaded image filename */
+  std::string m_PreviousFileName;
 
 }; // End class InputImage Parameter
 

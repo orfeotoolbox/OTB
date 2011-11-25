@@ -32,6 +32,7 @@ InputImageParameter::InputImageParameter()
   this->SetName("Input Image");
   this->SetKey("in");
   m_FileName="";
+  m_PreviousFileName="";
   this->ClearValue();
 }
 
@@ -110,113 +111,121 @@ template <class TOutputImage>
 TOutputImage *
 InputImageParameter::GetImage()
 {
-  // 2 cases : the user set a filename vs. the user set an image
-  //////////////////////// Filename case:
-  if (!m_FileName.empty())
+  // Used m_PreviousFileName because if not, when the user call twice GetImage,
+  // it without changing the filename, it returns 2 different
+  // image pointers
+  // TODO : how do we deal with 2 GetImage with 2 defferent template???
+  if( m_PreviousFileName!=m_FileName )
     {
-    typedef otb::ImageFileReader<TOutputImage> ReaderType;
-    typename ReaderType::Pointer reader = ReaderType::New();
-    reader->SetFileName(m_FileName);
-    try
+    //////////////////////// Filename case:
+    // 2 cases : the user set a filename vs. the user set an image
+    if ( !m_FileName.empty() )
       {
-      reader->UpdateOutputInformation();
-      }
-    catch (itk::ExceptionObject &)
-      {
-      this->ClearValue();
-      }
-
-    m_Image = reader->GetOutput();
-    m_Reader = reader;
-
-    // Pay attention, don't return m_Image because it is a ImageBase...
-    return reader->GetOutput();
-    }
-  //////////////////////// Image case:
-  else
-    {
-    if (m_Image.IsNull())
-      {
-      itkExceptionMacro("No input image or filename detected...");
-      }
-    else
-      {
-      if (dynamic_cast<Int8ImageType*> (m_Image.GetPointer()))
+      m_PreviousFileName = m_FileName;
+      typedef otb::ImageFileReader<TOutputImage> ReaderType;
+      typename ReaderType::Pointer reader = ReaderType::New();
+      reader->SetFileName(m_FileName);
+      try
         {
-        return CastImage<Int8ImageType, TOutputImage> ();
+        reader->UpdateOutputInformation();
         }
-      else if (dynamic_cast<UInt8ImageType*> (m_Image.GetPointer()))
+      catch (itk::ExceptionObject &)
         {
-        return CastImage<UInt8ImageType, TOutputImage> ();
-        }
-      else if (dynamic_cast<Int16ImageType*> (m_Image.GetPointer()))
-        {
-        return CastImage<Int16ImageType, TOutputImage> ();
-        }
-      else if (dynamic_cast<UInt16ImageType*> (m_Image.GetPointer()))
-        {
-        return CastImage<UInt16ImageType, TOutputImage> ();
-        }
-      else if (dynamic_cast<Int32ImageType*> (m_Image.GetPointer()))
-        {
-        return CastImage<Int32ImageType, TOutputImage> ();
-        }
-      else if (dynamic_cast<UInt32ImageType*> (m_Image.GetPointer()))
-        {
-        return CastImage<UInt32ImageType, TOutputImage> ();
-        }
-      else if (dynamic_cast<FloatImageType*> (m_Image.GetPointer()))
-        {
-        return CastImage<FloatImageType, TOutputImage> ();
-        }
-      else if (dynamic_cast<DoubleImageType*> (m_Image.GetPointer()))
-        {
-        return CastImage<DoubleImageType, TOutputImage> ();
-        }
-      else if (dynamic_cast<Int8VectorImageType*> (m_Image.GetPointer()))
-        {
-        return CastImage<Int8VectorImageType, TOutputImage> ();
-        }
-      else if (dynamic_cast<UInt8VectorImageType*> (m_Image.GetPointer()))
-        {
-        return CastImage<UInt8VectorImageType, TOutputImage> ();
-        }
-      else if (dynamic_cast<Int16VectorImageType*> (m_Image.GetPointer()))
-        {
-        return CastImage<Int16VectorImageType, TOutputImage> ();
-        }
-      else if (dynamic_cast<UInt16VectorImageType*> (m_Image.GetPointer()))
-        {
-        return CastImage<UInt16VectorImageType, TOutputImage> ();
-        }
-      else if (dynamic_cast<Int32VectorImageType*> (m_Image.GetPointer()))
-        {
-        return CastImage<Int32VectorImageType, TOutputImage> ();
-        }
-      else if (dynamic_cast<UInt32VectorImageType*> (m_Image.GetPointer()))
-        {
-        return CastImage<UInt32VectorImageType, TOutputImage> ();
-        }
-      else if (dynamic_cast<FloatVectorImageType*> (m_Image.GetPointer()))
-        {
-        return CastImage<FloatVectorImageType, TOutputImage> ();
-        }
-      else if (dynamic_cast<DoubleVectorImageType*> (m_Image.GetPointer()))
-        {
-        return CastImage<DoubleVectorImageType, TOutputImage> ();
+        this->ClearValue();
         }
       
-      else if (dynamic_cast<UInt8RGBAImageType*> (m_Image.GetPointer()))
+      m_Image = reader->GetOutput();
+      m_Reader = reader;
+      
+      // Pay attention, don't return m_Image because it is a ImageBase...
+      return reader->GetOutput();
+      }
+    //////////////////////// Image case:
+    else
+      {
+      if (m_Image.IsNull())
         {
-        return CastImage<UInt8RGBAImageType, TOutputImage> ();
-        }
-      else if (dynamic_cast<UInt8RGBImageType*> (m_Image.GetPointer()))
-        {
-        return CastImage<UInt8RGBImageType, TOutputImage> ();
+        itkExceptionMacro("No input image or filename detected...");
         }
       else
         {
-        itkExceptionMacro("Unknown image type");
+        if (dynamic_cast<Int8ImageType*> (m_Image.GetPointer()))
+          {
+          return CastImage<Int8ImageType, TOutputImage> ();
+          }
+        else if (dynamic_cast<UInt8ImageType*> (m_Image.GetPointer()))
+          {
+          return CastImage<UInt8ImageType, TOutputImage> ();
+          }
+        else if (dynamic_cast<Int16ImageType*> (m_Image.GetPointer()))
+          {
+          return CastImage<Int16ImageType, TOutputImage> ();
+          }
+        else if (dynamic_cast<UInt16ImageType*> (m_Image.GetPointer()))
+          {
+          return CastImage<UInt16ImageType, TOutputImage> ();
+          }
+        else if (dynamic_cast<Int32ImageType*> (m_Image.GetPointer()))
+          {
+          return CastImage<Int32ImageType, TOutputImage> ();
+          }
+        else if (dynamic_cast<UInt32ImageType*> (m_Image.GetPointer()))
+          {
+          return CastImage<UInt32ImageType, TOutputImage> ();
+          }
+        else if (dynamic_cast<FloatImageType*> (m_Image.GetPointer()))
+          {
+          return CastImage<FloatImageType, TOutputImage> ();
+          }
+        else if (dynamic_cast<DoubleImageType*> (m_Image.GetPointer()))
+          {
+          return CastImage<DoubleImageType, TOutputImage> ();
+          }
+        else if (dynamic_cast<Int8VectorImageType*> (m_Image.GetPointer()))
+          {
+          return CastImage<Int8VectorImageType, TOutputImage> ();
+          }
+        else if (dynamic_cast<UInt8VectorImageType*> (m_Image.GetPointer()))
+          {
+          return CastImage<UInt8VectorImageType, TOutputImage> ();
+          }
+        else if (dynamic_cast<Int16VectorImageType*> (m_Image.GetPointer()))
+          {
+          return CastImage<Int16VectorImageType, TOutputImage> ();
+          }
+        else if (dynamic_cast<UInt16VectorImageType*> (m_Image.GetPointer()))
+          {
+          return CastImage<UInt16VectorImageType, TOutputImage> ();
+          }
+        else if (dynamic_cast<Int32VectorImageType*> (m_Image.GetPointer()))
+          {
+          return CastImage<Int32VectorImageType, TOutputImage> ();
+          }
+        else if (dynamic_cast<UInt32VectorImageType*> (m_Image.GetPointer()))
+          {
+          return CastImage<UInt32VectorImageType, TOutputImage> ();
+          }
+        else if (dynamic_cast<FloatVectorImageType*> (m_Image.GetPointer()))
+          {
+          return CastImage<FloatVectorImageType, TOutputImage> ();
+          }
+        else if (dynamic_cast<DoubleVectorImageType*> (m_Image.GetPointer()))
+          {
+          return CastImage<DoubleVectorImageType, TOutputImage> ();
+          }
+      
+        else if (dynamic_cast<UInt8RGBAImageType*> (m_Image.GetPointer()))
+          {
+          return CastImage<UInt8RGBAImageType, TOutputImage> ();
+          }
+        else if (dynamic_cast<UInt8RGBImageType*> (m_Image.GetPointer()))
+          {
+          return CastImage<UInt8RGBImageType, TOutputImage> ();
+          }
+        else
+          {
+          itkExceptionMacro("Unknown image type");
+          }
         }
       }
     }
@@ -350,6 +359,7 @@ InputImageParameter::ClearValue()
  m_Reader = NULL;
  m_Caster = NULL;
  m_FileName = "";
+ m_PreviousFileName="";
 }
 
 
