@@ -24,13 +24,13 @@ namespace otb
 namespace Wrapper
 {
 
-  ParameterKey::ParameterKey() : m_Key("")
+ParameterKey::ParameterKey() : m_Key("")
 {
 }
 
 ParameterKey::ParameterKey( const char * val )
 {
-  this->SetKey(val);
+  this->SetKey(std::string(val));
 }
 
 ParameterKey::ParameterKey( const std::string & val )
