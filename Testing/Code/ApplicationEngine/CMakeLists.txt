@@ -170,6 +170,18 @@ add_test(NAME owTvApplicationHtmlDocGeneratorTest
                     ${TEMP}/owTvOReadImageInfoDoc.html )
 endif (BUILD_APPLICATIONS)
 
+# DocExampleStructure
+add_test(owTuDocExampleStructure ${OTB_WRAPPER_TESTS}
+    otbWrapperDocExampleStructure
+  )
+
+add_test(owTuDocExampleStructureTest ${OTB_WRAPPER_TESTS}
+    otbWrapperDocExampleStructureTest
+  )
+
+
+
+
 # ----------------Source files CXX -----------------------------------
 
 set(Wrapper_SRCS
@@ -192,6 +204,7 @@ otbWrapperStringParameterTest.cxx
 otbWrapperRAMParameterTest.cxx
 otbWrapperStringListParameterTest.cxx
 otbWrapperApplicationHtmlDocGeneratorTest.cxx
+otbWrapperDocExampleStructureTest.cxx
 )
 
 include_directories(${CMAKE_SOURCE_DIR}/Code/Core)
