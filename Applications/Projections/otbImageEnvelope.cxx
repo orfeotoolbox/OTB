@@ -15,63 +15,112 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#include "otbWrapperApplication.h"
+#include "otbWrapperApplicationFactory.h"
 
-#include "otbImage.h"
 #include "otbImageToEnvelopeVectorDataFilter.h"
-#include "otbVectorData.h"
-#include "otbImageFileReader.h"
-#include "otbVectorDataFileWriter.h"
 
-#include "otbCommandLineArgumentParser.h"
-
-typedef unsigned short                            PixelType;
-typedef otb::Image<PixelType, 2>                   ImageType;
-typedef otb::ImageFileReader<ImageType>           ReaderType;
-typedef otb::VectorData<>                         VectorDataType;
-typedef otb::VectorDataFileWriter<VectorDataType> WriterType;
-typedef otb::ImageToEnvelopeVectorDataFilter
-    <ImageType, VectorDataType>                    FilterType;
-
-int main(int argc, char* argv[])
+namespace otb
+{
+namespace Wrapper
 {
 
-  // Parse command line parameters
-  typedef otb::CommandLineArgumentParser ParserType;
-  ParserType::Pointer parser = ParserType::New();
+class ImageEnvelope : public Application
+{
+public:
+  /** Standard class typedefs. */
+  typedef ImageEnvelope                 Self;
+  typedef Application                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-  parser->SetProgramDescription("Write a vector file containing a polygon corresponding to the image envelope.");
-  parser->AddInputImage();
-  parser->AddOption("--OutputVectorData","Vector Data file containg the envelope","-out", 1, true);
+  /** Standard macro */
+  itkNewMacro(Self);
 
-  typedef otb::CommandLineArgumentParseResult ParserResultType;
-  ParserResultType::Pointer  parseResult = ParserResultType::New();
+  itkTypeMacro(ImageEnvelope, otb::Application);
 
-  try
+  /** Filters typedef */
+  typedef otb::ImageToEnvelopeVectorDataFilter
+      <FloatVectorImageType, VectorDataType>          EnvelopeFilterType;
+
+private:
+  ImageEnvelope()
   {
-    parser->ParseCommandLine(argc, argv, parseResult);
+    SetName("ImageEnvelope");
+    SetDescription("Extracts an image envelope.");
+
+    // Documentation
+    SetDocName("Image Envelope Application");
+    SetDocLongDescription("Build a vector data containing the polygon of the image envelope.");
+    SetDocLimitations("None");
+    SetDocAuthors("OTB-Team");
+    SetDocSeeAlso(" ");
+    SetDocCLExample("otbApplicationLauncherCommandLine ImageEnvelope ${OTB-BIN}/bin "
+      "--in ${OTB-Data}/Input/sensor_stereo_left.tif --out envelope.shp");
+    AddDocTag(Tags::Geometry);
   }
-  catch ( itk::ExceptionObject & err )
+
+  virtual ~ImageEnvelope()
   {
-    std::string descriptionException = err.GetDescription();
-    if (descriptionException.find("ParseCommandLine(): Help Parser") != std::string::npos)
-      {
-      return EXIT_SUCCESS;
-      }
-    if (descriptionException.find("ParseCommandLine(): Version Parser") != std::string::npos)
-      {
-      return EXIT_SUCCESS;
-      }
-    return EXIT_FAILURE;
   }
 
-  ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName(parseResult->GetInputImage());
-  FilterType::Pointer filter = FilterType::New();
-  filter->SetInput(reader->GetOutput());
-  WriterType::Pointer writer = WriterType::New();
-  writer->SetInput(filter->GetOutput());
-  writer->SetFileName(parseResult->GetParameterString("--OutputVectorData"));
-  writer->Update();
+  void DoCreateParameters()
+    {
+    AddParameter(ParameterType_InputImage,  "in",   "Input Image");
+    SetParameterDescription("in", "Input image.");
+    
+    AddParameter(ParameterType_OutputVectorData,  "out",   "Output Vector Data");
+    SetParameterDescription("out", "Vector data file containing the envelope");
+    
+    AddParameter(ParameterType_Float, "ae",  "AverageElevation");
+    SetParameterDescription("ae", "If no DEM is used, provide the height value (default is 0 meters)");
+    SetDefaultParameterFloat("ae", 0.0);
+    MandatoryOff("ae");
+    
+    AddParameter(ParameterType_String, "dem",  "DEMDirectory");
+    SetParameterDescription("dem", "Use DEM tiles to derive height values (AverageElevation option is ignored in this case)");
+    MandatoryOff("dem");
+    
+    AddParameter(ParameterType_String, "proj",  "Projection");
+    SetParameterDescription("proj", "Projection to be used to compute the envelope (default is WGS84)");
+    MandatoryOff("proj");
+    
+    }
 
-  return EXIT_SUCCESS;
+  void DoUpdateParameters()
+    {
+    // Nothing to be done
+    }
+
+  void DoExecute()
+    {
+    FloatVectorImageType::Pointer input = GetParameterImage("in");
+    
+    m_Envelope = EnvelopeFilterType::New();
+    m_Envelope->SetInput(input);
+    
+    if (HasValue("dem"))
+      {
+      m_Envelope->SetDEMDirectory(GetParameterString("dem"));
+      }
+    else
+      {
+      m_Envelope->SetAverageElevation(GetParameterFloat("ae"));
+      }
+    
+    if (HasValue("proj"))
+      {
+      m_Envelope->SetOutputProjectionRef(GetParameterString("proj"));
+      }
+    
+    SetParameterOutputVectorData("out",m_Envelope->GetOutput());
+    }
+
+  EnvelopeFilterType::Pointer m_Envelope;
+
+};
+
 }
+}
+
+OTB_APPLICATION_EXPORT(otb::Wrapper::ImageEnvelope)
