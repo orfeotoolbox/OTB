@@ -18,3 +18,7 @@ OTB_CREATE_APPLICATION(NAME           Superimpose
 OTB_CREATE_APPLICATION(NAME           ConvertCartoToGeoPoint
                        SOURCES        otbConvertCartoToGeoPoint.cxx
                        LINK_LIBRARIES OTBBasicFilters)
+
+OTB_CREATE_APPLICATION(NAME           ImageEnvelope
+                       SOURCES        otbImageEnvelope.cxx
+                       LINK_LIBRARIES OTBBasicFilters)

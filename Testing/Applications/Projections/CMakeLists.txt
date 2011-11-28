@@ -42,3 +42,8 @@ OTB_TEST_APPLICATION(NAME  apTvPrConvertCartoToGeoPoint
                      VALID   --compare-ascii ${EPSILON_7}
                              ${BASELINE_FILES}/apTvPrConvertCartoToGeoPoint.txt
                 	     ${TEMP}/apTvPrConvertCartoToGeoPoint.txt)
+
+OTB_TEST_APPLICATION(NAME apTvPrImageEnvelopeTest
+                     APP ImageEnvelope
+                     OPTIONS --in ${INPUTDATA}/sensor_stereo_left.tif
+                             --out ${TEMP}/apTvPrImageEnvelopeTest.shp)
