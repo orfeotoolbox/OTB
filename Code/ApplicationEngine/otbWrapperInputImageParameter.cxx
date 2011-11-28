@@ -139,7 +139,7 @@ InputImageParameter::GetImage()
     
     // Pay attention, don't return m_Image because it is a ImageBase...
     return reader->GetOutput();
-    } 
+    }
   else
     {
     //////////////////////// Image case:

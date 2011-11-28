@@ -113,7 +113,7 @@ private:
       m_Envelope->SetOutputProjectionRef(GetParameterString("proj"));
       }
     
-    SetParameterOutputVectorData("out",m_Envelope->GetOutput());
+    SetParameterOutputVectorData("out", m_Envelope->GetOutput());
     }
 
   EnvelopeFilterType::Pointer m_Envelope;
