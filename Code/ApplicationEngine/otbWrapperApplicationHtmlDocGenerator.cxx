@@ -122,7 +122,7 @@ ApplicationHtmlDocGenerator::GenerateDoc( const Application::Pointer app, std::s
   otbDocHtmlBodyMacro( app->GetDocSeeAlso() );
 
   otbDocHtmlTitle1Macro( "Command line example" );
-  otbDocHtmlBodyCodeMacro( app->GetDocCLExample() );
+  otbDocHtmlBodyCodeMacro( app->GetHtmlExample() );
 
   oss << "</body></html>";
 
