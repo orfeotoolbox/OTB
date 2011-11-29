@@ -69,7 +69,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
-    SetDocCLExample("otbApplicationLauncherCommandLine VertexComponentAnalysis ${OTB-BIN}/bin --in ${OTB_DATA_ROOT}/Input/Hyperspectral/synthetic/hsi_cube.tif --ne 5 --outendm ${TEMP}/apTvHyHyperspectralUnmixing_VCA.tif double");
+  
     AddDocTag(Tags::Hyperspectral);
     AddDocTag(Tags::DimensionReduction);
 
@@ -92,6 +92,11 @@ private:
     AddParameter(ParameterType_OutputImage, "outendm", "Output Endmembers");
     SetParameterDescription("outendm","The endmebers, stored in a one-line multi-spectral image, each pixel representing an endmember");
     MandatoryOn("outendm");
+
+    // Doc example parameter settings
+    SetDocExampleParameterValue("in", "hsi_cube.tif");
+    SetDocExampleParameterValue("ne", "5");
+    SetDocExampleParameterValue("outendm", "VertexComponentAnalysis.tif double");
   }
 
   void DoUpdateParameters()

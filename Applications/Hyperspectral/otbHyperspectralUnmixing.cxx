@@ -108,7 +108,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
-    SetDocCLExample("otbApplicationLauncherCommandLine VertexComponentAnalysis ${OTB-BIN}/bin --in ${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif --ie ${INPUTDATA}/Hyperspectral/synthetic/endmembers.tif --out ${TEMP}/apTvHyHyperspectralUnmixing_UCLS.tif double --ua ucls");
+   
     AddDocTag(Tags::Hyperspectral);
   }
 
@@ -144,6 +144,11 @@ private:
 
     SetParameterString("ua", "ucls");
 
+    // Doc example parameter settings
+    SetDocExampleParameterValue("in", "hsi_cube.tif");
+    SetDocExampleParameterValue("ie", "endmembers.tif");
+    SetDocExampleParameterValue("out", "HyperspectralUnmixing.tif double");
+    SetDocExampleParameterValue("ua", "ucls");
   }
 
   void DoUpdateParameters()
