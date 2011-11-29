@@ -64,7 +64,6 @@ public:
   /** Parameter list accessors : adding key and name */
   void AddParameter( const std::string key, const std::string name )
   {
-    std::cout<<"DocExampleStructure::AddParameter"<<std::endl;
     ThreeStringType mParam;
     mParam[0] = key;
     mParam[1] = name;
@@ -132,38 +131,17 @@ public:
   {
     return m_ApplicationName;
   }
-  /** Set the list of paths. */
-  void SetBinPath( const std::vector<std::string> bPath )
-  {
-    m_BinPath = bPath;
-  }
-    /** Add a path to the list. */
-  void AddBinPath( std::string myPath )
-  {
-    m_BinPath.push_back( myPath );
-  }
-  /** Get the list of paths. */
-  std::vector<std::string> GetBinPath()
-  {
-    return m_BinPath;
-  }
 
   /** Generation of the documentation for CommandLine. */
   std::string GenerateCLExample()
   {
-    if( m_ApplicationName.empty() || m_BinPath.size() == 0 ||  m_ParameterList.size() == 0 )
+    if( m_ApplicationName.empty() || m_ParameterList.size() == 0 )
       {
       return "";
       }
     
     itk::OStringStream oss;
-    oss << OTB_CONFIG << "/bin/otbApplicationLauncherCommandLine ";
-    oss << m_ApplicationName << " ";
-    
-    for (unsigned int i=0; i< m_BinPath.size(); i++)
-      {
-      oss << m_BinPath[i]<< " ";
-      }
+    oss << "otbcli_" << m_ApplicationName << " ";   
 
     for (unsigned int i=0; i< m_ParameterList.size(); i++)
       {
@@ -184,22 +162,29 @@ public:
   }
 
   /** Generation of teh documentation for Qt. */
-  std::string GenerateQtExample()
+  std::string GenerateHtmlExample()
   {
-    if( m_ApplicationName.empty() || m_BinPath.size() == 0 ||  m_ParameterList.size() == 0 )
+    if( m_ApplicationName.empty() || m_ParameterList.size() == 0 )
       {
       return "";
       }
 
     itk::OStringStream oss;
+    oss << "<ul>";
     for (unsigned int i=0; i< m_ParameterList.size(); i++)
       {
       if( this->GetParameterValue(i) != "" )
         {
-        oss << this->GetParameterName(i) << ": " << this->GetParameterValue(i) << "<br />";
+        oss << "<li>";
+        oss << "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">";
+        oss << this->GetParameterName(i) << ": ";
+        oss << this->GetParameterValue(i);
+        
+        oss << "</p>";
+        oss << "</li>";
         }
       }
-
+      oss << "</ul>";
 
     std::string res = oss.str();
 
@@ -210,12 +195,7 @@ public:
 
 protected:
   /** Constructor */
-  DocExampleStructure()
-  {
-    itk::OStringStream oss;
-    oss << OTB_CONFIG << "/bin";
-    m_BinPath.push_back( oss.str() );
-  }
+  DocExampleStructure(){}
 
   /** Destructor */
   virtual ~DocExampleStructure()
@@ -225,14 +205,12 @@ private:
   DocExampleStructure(const DocExampleStructure &); //purposely not implemented
   void operator =(const DocExampleStructure&); //purposely not implemented
 
-  /** List of the application parameters. List of key/value couples. */
+  /** List of the application parameters. List of key/name/value couples. */
   ParameterListType m_ParameterList;
   /** List of the application parameter names. List of key/name couples. */
-  ParameterListType m_ParameterNameList;
+  ParameterListType m_ParameterNameList; // ???
   /** application name */
   std::string m_ApplicationName;
-  /** paths where to the application. */
-  std::vector<std::string> m_BinPath;
 
 
 }; // End class Parameter

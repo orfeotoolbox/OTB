@@ -171,8 +171,8 @@ add_test(NAME owTvApplicationHtmlDocGeneratorTest
 endif (BUILD_APPLICATIONS)
 
 # DocExampleStructure
-add_test(owTuDocExampleStructure ${OTB_WRAPPER_TESTS}
-    otbWrapperDocExampleStructure
+add_test(owTuDocExampleStructureNew ${OTB_WRAPPER_TESTS}
+    otbWrapperDocExampleStructureNew
   )
 
 add_test(owTuDocExampleStructureTest ${OTB_WRAPPER_TESTS}

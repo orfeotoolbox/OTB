@@ -41,9 +41,6 @@ int otbWrapperDocExampleStructureTest(int argc, char* argv[])
   std::vector<std::string> bPath;
   bPath.push_back("binPath1");
 
-  docStruct->SetBinPath(bPath);
-  docStruct->AddBinPath("binPath2");
-  
   docStruct->AddParameter( "key1", "name1" );
   docStruct->AddParameter( "key2", "name2" );
 
@@ -52,21 +49,13 @@ int otbWrapperDocExampleStructureTest(int argc, char* argv[])
 
   std::string exp = docStruct->GenerateCLExample();
 
-  if( exp.find("otbApplicationLauncherCommandLine binPath1 binPath2 -key1 val1 -key2 val2") == std::string::npos )
+  if( exp.find("otbcli_TestApplication -key1 val1 -key2 val2") == std::string::npos )
     {
     std::cout<<"ERROR in expression: "<<exp<<std::endl;
     std::cout<<"The returned expression is not the waited one"<<std::endl;
     return EXIT_FAILURE;
     }
 
-  std::cout<<exp.substr( 0, exp.find_first_of(" ") ) <<std::endl;
-
-  if( !itksys::SystemTools::FileExists( exp.substr( 0, exp.find_first_of(" ") ).c_str() ) )
-    {
-    std::cout<<"ERROR in expression: "<<exp<<std::endl;
-    std::cout<<"The executable is not valid"<<std::endl;
-    return EXIT_FAILURE;
-    }
 
   return EXIT_SUCCESS;
 }
