@@ -33,6 +33,7 @@ InputImageParameter::InputImageParameter()
   this->SetKey("in");
   m_FileName="";
   m_PreviousFileName="";
+  m_UseFilename = true;
   this->ClearValue();
 }
 
@@ -64,6 +65,7 @@ InputImageParameter::SetFromFileName(const std::string& filename)
 
     // the specified filename is valid => store the value
     m_FileName = filename;
+    m_UseFilename = true;
     SetActive(true);
     return true;
     }
@@ -114,31 +116,54 @@ InputImageParameter::GetImage()
   // Used m_PreviousFileName because if not, when the user call twice GetImage,
   // it without changing the filename, it returns 2 different
   // image pointers
-  // TODO : how do we deal with 2 GetImage with 2 defferent template???
-  // Should be handled by the CastImage< > macro
+  // Only one image type can be used
   
   // 2 cases : the user set a filename vs. the user set an image
-  if( m_PreviousFileName!=m_FileName && !m_FileName.empty() )
+  if (m_UseFilename)
     {
-    //////////////////////// Filename case:
-    m_PreviousFileName = m_FileName;
-    typedef otb::ImageFileReader<TOutputImage> ReaderType;
-    typename ReaderType::Pointer reader = ReaderType::New();
-    reader->SetFileName(m_FileName);
-    try
+    if( m_PreviousFileName!=m_FileName && !m_FileName.empty() )
       {
-      reader->UpdateOutputInformation();
+      //////////////////////// Filename case:
+      // A new valid filename has been given : a reader is created
+      m_PreviousFileName = m_FileName;
+      typedef otb::ImageFileReader<TOutputImage> ReaderType;
+      typename ReaderType::Pointer reader = ReaderType::New();
+      reader->SetFileName(m_FileName);
+      try
+        {
+        reader->UpdateOutputInformation();
+        }
+      catch (itk::ExceptionObject &)
+        {
+        this->ClearValue();
+        }
+      
+      m_Image = reader->GetOutput();
+      m_Reader = reader;
+      
+      // Pay attention, don't return m_Image because it is a ImageBase...
+      return reader->GetOutput();
       }
-    catch (itk::ExceptionObject &)
+    else
       {
-      this->ClearValue();
+      // In this case, the reader and the image should already be there
+      if (m_Image.IsNull())
+        {
+        itkExceptionMacro("No input image or filename detected...");
+        }
+      else
+        {
+        // Check if the image type asked here is the same as the one used for the reader
+        if (dynamic_cast<TOutputImage*> (m_Image.GetPointer()))
+          {
+          return dynamic_cast<TOutputImage*> (m_Image.GetPointer());
+          }
+        else
+          {
+          itkExceptionMacro("Cannot ask a different image type");
+          }  
+        }
       }
-    
-    m_Image = reader->GetOutput();
-    m_Reader = reader;
-    
-    // Pay attention, don't return m_Image because it is a ImageBase...
-    return reader->GetOutput();
     }
   else
     {
@@ -331,6 +356,7 @@ otbGenericCastImageMacro(DoubleImageType, CastVectorImageFromImage, Vector)
 void
 InputImageParameter::SetImage(FloatVectorImageType* image)
 {
+  m_UseFilename = false;
   this->SetImage<FloatVectorImageType>( image );
 }
 
@@ -339,6 +365,7 @@ template <class TInputImage>
 void
 InputImageParameter::SetImage(TInputImage* image)
 {
+  m_UseFilename = false;
   m_Image = image;
 }
 
@@ -360,6 +387,7 @@ InputImageParameter::ClearValue()
  m_Caster = NULL;
  m_FileName = "";
  m_PreviousFileName="";
+ m_UseFilename = true;
 }
 
 

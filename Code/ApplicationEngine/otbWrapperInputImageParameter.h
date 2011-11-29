@@ -158,6 +158,9 @@ private:
   /** Store the loaded image filename */
   std::string m_PreviousFileName;
 
+  /** flag : are we using a filename or an image pointer as an input */
+  bool m_UseFilename;
+
 }; // End class InputImage Parameter
 
 } // End namespace Wrapper
