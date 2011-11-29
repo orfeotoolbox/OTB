@@ -161,7 +161,7 @@ InputImageParameter::GetImage()
         else
           {
           itkExceptionMacro("Cannot ask a different image type");
-          }  
+          }
         }
       }
     }

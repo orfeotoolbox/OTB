@@ -141,7 +141,7 @@ public:
       }
     
     itk::OStringStream oss;
-    oss << "otbcli_" << m_ApplicationName << " ";   
+    oss << "otbcli_" << m_ApplicationName << " ";
 
     for (unsigned int i=0; i< m_ParameterList.size(); i++)
       {
