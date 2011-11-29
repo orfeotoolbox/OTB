@@ -68,7 +68,7 @@ private:
     SetDocLimitations("The input image must have the same type, order and number of bands than the images used to produce the statistics file and the SVM model file. If a statistics file was used during training by the TrainSVMImagesClassifier, it is mandatory to use the same statistics file for classification. If an input mask is used, its size must match the input image size.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("TrainSVMImagesClassifier, ValidateSVMImagesClassifier, ComputeImagesStatistics");
-    SetDocCLExample("otbApplicationLauncherCommandLine ImageSVMClassifier ${OTB-BIN}/bin --in ${OTB-DATA}/Classification/QB_1_ortho.tif  --imstat ${OTB-DATA}/Baseline/OTB-Applications/Files/clImageStatisticsQB1.xml --svn ${OTB-DATA}/Baseline/OTB-Applications/Files/clsvmModelQB1.svm --out otbConcatenateImages.png uchar");
+ 
     AddDocTag(Tags::Learning);
   }
 
@@ -99,6 +99,12 @@ private:
     AddParameter(ParameterType_RAM, "ram", "Available RAM");
     SetDefaultParameterInt("ram", 256);
     MandatoryOff("ram");
+
+   // Doc example parameter settings
+    SetDocExampleParameterValue("in", "QB_1_ortho.tif");
+    SetDocExampleParameterValue("imstat", "clImageStatisticsQB1.xml");
+    SetDocExampleParameterValue("svn", "clsvmModelQB1.svm");
+    SetDocExampleParameterValue("out", "otbConcatenateImages.png uchar");
   }
 
   void DoUpdateParameters()

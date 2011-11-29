@@ -50,8 +50,7 @@ private:
     SetDocLimitations("The set of input images must have the same number of bands. Input images must be of the same number, type and order of bands.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Documentation of the TrainImagesSVMClassifier application.");
-    SetDocCLExample("otbApplicationLauncherCommandLine ComputeImagesStatistics ${OTB-BIN}/bin  --il ${OTB-Data}/Input/Classification/QB_1_ortho.tif ${OTB-Data}/Input/Classification/QB_2_ortho.tif ${OTB-Data}/Input/Classification/QB_3_ortho.tif --out EstimateImageStatisticsQB123.xml");
-
+ 
     AddDocTag(Tags::Learning);
     AddDocTag(Tags::Analysis);
   }
@@ -69,6 +68,10 @@ private:
     SetParameterDescription( "out", "XML filename where the statistics are saved for future reuse" );
     MandatoryOff("out");
     SetParameterRole("out", Role_Output);
+
+   // Doc example parameter settings
+   SetDocExampleParameterValue("il", "QB_1_ortho.tif QB_2_ortho.tif QB_3_ortho.tif");
+   SetDocExampleParameterValue("out", "EstimateImageStatisticsQB123.xml");
   }
 
   void DoUpdateParameters()

@@ -78,10 +78,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
-    SetDocCLExample("otbApplicationLauncherCommandLine KMeansClassification "
-      "--in ${OTB-Data}/Input/poupees_sub.png --vm ${OTB-Data}/Input/mask_KMeans.png "
-      "--ts 100 --tp 0.6 --nc 5 --cp 0.9 --sl 100 --out ClassificationFilterOuptut.tif ");
-
+  
     AddDocTag(Tags::Segmentation);
     AddDocTag(Tags::Learning);
   }
@@ -117,6 +114,20 @@ private:
     AddParameter(ParameterType_Int, "sl", "Number of lines for each streaming block");
     SetParameterDescription("sl","input image will be divided into sl lines.");
     SetDefaultParameterInt("sl", 1000);
+
+  SetDocCLExample("otbApplicationLauncherCommandLine KMeansClassification "
+      "--in ${OTB-Data}/Input/poupees_sub.png --vm ${OTB-Data}/Input/mask_KMeans.png "
+      "--ts 100 --tp 0.6 --nc 5 --cp 0.9 --sl 100 --out ClassificationFilterOuptut.tif");
+
+  // Doc example parameter settings
+    SetDocExampleParameterValue("in", "poupees_sub.png");
+    SetDocExampleParameterValue("vm", "mask_KMeans.png");
+    SetDocExampleParameterValue("ts", "100");
+    SetDocExampleParameterValue("tp", "0.5");
+    SetDocExampleParameterValue("nc", "5");
+    SetDocExampleParameterValue("cp", "0.9");
+    SetDocExampleParameterValue("sl", "100");
+    SetDocExampleParameterValue("out", "ClassificationFilterOuptut.tif");
   }
 
   void DoUpdateParameters()

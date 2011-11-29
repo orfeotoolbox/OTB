@@ -125,11 +125,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
-    SetDocCLExample("otbApplicationLauncherCommandLine ValidateSVMImagesClassifier ${OTB-BIN}/bin"
-      "--il ${OTB-Data}/Classification/QB_1_ortho.tif --vd  ${OTB-Data}/Classification/VectorData_QB1_bis.shp"
-      " --imstat ${OTB-Data}/Baseline/OTB-Applications/Files/clImageStatisticsQB123.xml "
-      " --svm  ${OTB-Data}/Baseline/OTB-Applications/Files/clsvmModelQB123.svm"
-      " --out PerformanceEstimationQB123.txt ");
+ 
     AddDocTag(Tags::Learning);
 
   }
@@ -157,6 +153,13 @@ private:
     AddParameter(ParameterType_Filename, "svm", "SVM validation filename");
     SetParameterDescription("svm",
                             "SVM model to validate (given by TrainSVMImagesClassification output for instance).");
+
+   // Doc example parameter settings
+   SetDocExampleParameterValue("il", "Classification/QB_1_ortho.tif");
+   SetDocExampleParameterValue("vd", "VectorData_QB1_bis.shp");
+   SetDocExampleParameterValue("imstat", "clImageStatisticsQB123.xml");
+   SetDocExampleParameterValue("svm", "clsvmModelQB123.svm");
+   SetDocExampleParameterValue("out", "PerformanceEstimationQB123.txt");
   }
 
   void DoUpdateParameters()

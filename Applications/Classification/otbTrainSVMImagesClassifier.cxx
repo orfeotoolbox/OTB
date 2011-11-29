@@ -135,11 +135,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
-    SetDocCLExample("otbApplicationLauncherCommandLine TrainSVMImagesClassifier ${OTB-BIN}/bin"
-      "--io.il ${OTB-DATA}/Classification/QB_1_ortho.tif "
-      "--io.vd ${OTB-DATA}/Classification/ectorData_QB1.shp"
-      "--io.imstat ${OTB-Data}/Baseline/OTB-Applications/Files/clImageStatisticsQB1.xml"
-      "--sample.mv 100 --sample.vtr 0.5 --svm.opt true --io.out svmModelQB1_allOpt.svm");
+ 
     AddDocTag(Tags::Learning);
 
   }
@@ -209,6 +205,15 @@ private:
     AddParameter(ParameterType_Empty, "svm.opt", "parameters optimization");
     MandatoryOff("svm.opt");
     SetParameterDescription("svm.opt", "SVM parameters optimization");
+
+    // Doc example parameter settings
+    SetDocExampleParameterValue("io.il", "QB_1_ortho.tif");
+    SetDocExampleParameterValue("io.vd", "VectorData_QB1.shp");
+    SetDocExampleParameterValue("io.imstat", "clImageStatisticsQB1.xml");
+    SetDocExampleParameterValue("sample.mv", "100");
+    SetDocExampleParameterValue("sample.vtr", "0.5");
+    SetDocExampleParameterValue("sample.opt", "true");
+    SetDocExampleParameterValue("io.out", "svmModelQB1_allOpt.svm");
   }
 
   void DoUpdateParameters()
