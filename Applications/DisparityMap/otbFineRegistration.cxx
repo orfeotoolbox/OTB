@@ -36,29 +36,6 @@
 #include "itkVectorIndexSelectionCastImageFilter.h"
 #include "itkFixedArray.h"
 
-//#include <iostream>
-//#include "otbCommandLineArgumentParser.h"
-
-// #include "otbImage.h"
-// #include "otbImageFileReader.h"
-// #include "otbStreamingImageFileWriter.h"
-//
-// #include "otbStandardWriterWatcher.h"
-// #include "otbVectorImage.h"
-// #include "otbImageList.h"
-//
-//
-// #include "itkTimeProbe.h"
-//
-//
-
-//
-//
-//
-//
-//
-//
-// #include "itkCastImageFilter.h"
 
 namespace otb
 {
@@ -144,9 +121,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
-    SetDocCLExample("otbApplicationLauncherCommandLine FineRegistration ${OTB-BIN}/bin"
-      " --ref ${OTB-DATA}/Examples/StereoFixed.png --sec ${OTB-DATA}/Examples/StereoMoving.png"
-      " --out result.tif --erx 2 --ery 2 --mrx 3 --mry 3");
+
     AddDocTag(Tags::Stereo);
     }
 
@@ -248,7 +223,15 @@ private:
     AddParameter(ParameterType_RAM, "ram", "Available RAM");
     SetDefaultParameterInt("ram", 256);
     MandatoryOff("ram");
-  
+
+    // Doc example parameter settings
+    SetDocExampleParameterValue("ref", "StereoFixed.png");
+    SetDocExampleParameterValue("sec", "StereoMoving.png");
+    SetDocExampleParameterValue("out", "FineRegistration.tif");
+    SetDocExampleParameterValue("erx", "2");
+    SetDocExampleParameterValue("ery", "2");
+    SetDocExampleParameterValue("mrx", "3");
+    SetDocExampleParameterValue("mry", "3");
     }
 
   void DoUpdateParameters()

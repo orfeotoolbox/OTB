@@ -72,10 +72,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
-    SetDocCLExample("otbApplicationLauncherCommandLine StereoSensorModelToElevationMap ${OTB-BIN}/bin "
-      "--ref ${OTB-Data}/Input/sensor_stereo_left.tif --sec ${OTB-Data}/Input/sensor_stereo_right.tif "
-      "--out result.tif "
-      "--dem ${OTB-Data}/Input/DEM --geoid ${OTB-Data}/Input/DEM/egm96.grd");
+ 
     AddDocTag(Tags::Manip);
     AddDocTag(Tags::Stereo);
   }
@@ -167,6 +164,13 @@ private:
     SetParameterDescription("s", "If activated, the elevation map will contain only the estimated height offset from the initial height (either average elevation or DEM)");
     MandatoryOff("s"); // Not necessary, already optional by default
     
+
+   // Doc example parameter settings
+   SetDocExampleParameterValue("ref", "sensor_stereo_left.tif");
+   SetDocExampleParameterValue("sec", "sensor_stereo_right.tif");
+   SetDocExampleParameterValue("out", "StereoSensorModelToElevationMap.tif");
+   SetDocExampleParameterValue("dem", "DEM");
+   SetDocExampleParameterValue("geoid", "egm96.grd");
   }
 
   void DoUpdateParameters()
