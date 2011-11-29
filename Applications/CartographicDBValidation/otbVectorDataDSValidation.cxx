@@ -70,11 +70,7 @@ private:
     SetDocLimitations("None.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
-    SetDocCLExample(
-                    "otbApplicationLauncherCommandLine VectorDataDSValidation  ${OTB-BIN}/bin  --in ${OTB-Data}/Baseline/OTB-Applications/Files/cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_gt.shp"
-                    " --belsup \"ROADSA\" --plasup \"NONDVI\" \"ROADSA\" \"NOBUIL\""
-                    " --descmod ${OTB-Data}/Input/Dempster-Shafer/DSFuzzyModel.xml"
-                    " --out VectorDataDSValidation.xml");
+   
     AddDocTag(Tags::FeatureExtraction);
   }
 
@@ -110,6 +106,12 @@ private:
     AddParameter(ParameterType_OutputVectorData, "out", "Output Vector Data");
     SetParameterDescription("out", "Output validated vector data");
 
+    // Doc example parameter settings
+    SetDocExampleParameterValue("in", "cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_gt.shp");
+    SetDocExampleParameterValue("belsup", "cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_gt.shp");
+    SetDocExampleParameterValue("descmod", "DSFuzzyModel.xml");
+    SetDocExampleParameterValue("out", "VectorDataDSValidation.xml");
+    
   }
 
   void DoUpdateParameters()

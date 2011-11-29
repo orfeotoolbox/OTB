@@ -84,11 +84,7 @@ private:
     SetDocLimitations("Since it do not rely on streaming process, take care of the size of input image before launching application.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
-    SetDocCLExample(
-                    "otbApplicationLauncherCommandLine  ComputePolylineFeatureFromImage ${OTB-BIN}/bin  --in ${OTB-LargeInput}/DEMPSTER-SHAFER/NDVI.TIF"
-                    " --vd  ${OTB-LargeInput}/DEMPSTER-SHAFER/roads_ground_truth.shp --expr (b1 > 0.4) --field NONDVI "
-                    "--out PolylineFeatureFromImage_LI_NONDVI_gt.shp");
-
+   
     AddDocTag(Tags::FeatureExtraction);
   }
 
@@ -117,6 +113,12 @@ private:
     AddParameter(ParameterType_OutputVectorData, "out", "Output Vector Data");
     SetParameterDescription("out", "The output vector data containing the features");
 
+    // Doc example parameter settings
+    SetDocExampleParameterValue("in", "NDVI.TIF");
+    SetDocExampleParameterValue("vd", "roads_ground_truth.shp");
+    SetDocExampleParameterValue("expr", "\"(b1 > 0.4)\"");
+    SetDocExampleParameterValue("field", "NONDVI");
+    SetDocExampleParameterValue("out", "PolylineFeatureFromImage_LI_NONDVI_gt.shp");
   }
 
   void DoUpdateParameters()

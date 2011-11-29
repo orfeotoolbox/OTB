@@ -127,12 +127,7 @@ private:
     SetDocLimitations("None.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
-    SetDocCLExample(
-                    "otbApplicationLauncherCommandLine DSFuzzyModelEstimation  ${OTB-BIN}/bin  --psin ${OTB-Data}/Baseline/OTB-Applications/Files/cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_gt.shp"
-                    " --nsin ${OTB-Data}/Baseline/OTB-Applications/Files/cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_wr.shp --belsup \"ROADSA\" --plasup \"NONDVI\" \"ROADSA\" \"NOBUIL\""
-                    " --initmod ${OTB-Data}/Input/Dempster-Shafer/DSFuzzyModel_Init.xml --maxnbit 4 --optobs true"
-                    "--out DSFuzzyModelEstimation.xml");
-
+  
     AddDocTag(Tags::FeatureExtraction);
   }
 
@@ -188,6 +183,15 @@ private:
     SetParameterDescription("out","Output model file name (xml file)");
     SetParameterRole("out", Role_Output);
 
+    // Doc example parameter settings
+    SetDocExampleParameterValue("psin", "cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_gt.shp");
+    SetDocExampleParameterValue("nsin", "cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_wr.shp");
+    SetDocExampleParameterValue("belsup", "\"ROADSA\"");
+    SetDocExampleParameterValue("plasup", "\"NONDVI\" \"ROADSA\" \"NOBUIL\"");
+    SetDocExampleParameterValue("initmod", "Dempster-Shafer/DSFuzzyModel_Init.xml");
+    SetDocExampleParameterValue("maxnbit", "4");
+    SetDocExampleParameterValue("optobs", "true");
+    SetDocExampleParameterValue("out", "DSFuzzyModelEstimation.xml");
   }
 
   void DoUpdateParameters()
