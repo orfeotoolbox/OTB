@@ -51,7 +51,7 @@ private:
     SetDocLimitations("Though the inverse transform can be computed, this filter only provides the forward transform for now.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
-    SetDocCLExample("otbApplicationLauncherCommandLine MaximumAutocorrelationFactor ${OTB-BIN}/bin  --in ${OTB-Data}/Input/cupriteSubHsi.tif--out MaximumAutocorrelationFactorImageFilterOutput.tif");
+   
     AddDocTag(Tags::DimensionReduction);
     AddDocTag(Tags::Filter);
 
@@ -65,6 +65,10 @@ private:
   {
     AddParameter(ParameterType_InputImage,  "in", "Input Image");
     AddParameter(ParameterType_OutputImage, "out", "Change Map");
+
+    // Doc example parameter settings
+    SetDocExampleParameterValue("in", "cupriteSubHsi.tif");
+    SetDocExampleParameterValue("out", "MaximumAutocorrelationFactorImageFilterOutput.tif");
   }
 
   void DoUpdateParameters()
