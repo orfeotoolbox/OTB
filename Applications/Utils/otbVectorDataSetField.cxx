@@ -62,8 +62,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
-    SetDocCLExample("otbApplicationLauncherCommandLine VectorDataSetField ${OTB-BIN}/bin "
-      "--in ${OTB-DATA}/Input/ToulousePoints-examples.shp --out dataOut.shp  --fn MyField --fv MyValue");
+
     AddDocTag(Tags::Vector);
   }
 
@@ -82,6 +81,12 @@ private:
     SetParameterDescription("fn", "Field name");
     AddParameter(ParameterType_String, "fv", "Value");
     SetParameterDescription("fv", "Field value");
+
+    // Doc example parameter settings
+    SetDocExampleParameterValue("in", "ToulousePoints-examples.shp");
+    SetDocExampleParameterValue("out", "dataOut.shp");
+    SetDocExampleParameterValue("fn", "myField");
+    SetDocExampleParameterValue("fv", "myValue");
   }
 
   void DoUpdateParameters()

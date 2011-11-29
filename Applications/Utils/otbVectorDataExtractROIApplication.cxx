@@ -72,8 +72,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
-    SetDocCLExample("otbApplicationLauncherCommandLine VectorDataExtractROI ${OTB-BIN}/bin"
-                    " --vd ${OTB-DATA}/Input/franceCoastline.shp --in ${OTB-DATA}/Input/ --out franceCoastline_extract.shp");
+
     AddDocTag(Tags::Vector);
   }
 
@@ -98,6 +97,11 @@ private:
     oss << "or any geotiff processed by the DEM import application";
     SetParameterDescription("elev.dem", oss.str());
     MandatoryOff("elev.dem");
+
+    // Doc example parameter settings
+    SetDocExampleParameterValue("io.in", "QB_Toulouse_Ortho_XS.tif");
+    SetDocExampleParameterValue("io.vd", "roads.shp");
+    SetDocExampleParameterValue("io.out", "apTvUtVectorDataExtractROIApplicationTest.shp");
   }
 
   void DoUpdateParameters()

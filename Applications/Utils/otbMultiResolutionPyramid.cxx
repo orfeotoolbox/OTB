@@ -68,9 +68,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
-    SetDocCLExample(
-                    "otbApplicationLauncherCommandLine MultiResolutionPyramid ${OTB-BIN}/bin "
-                      "--in ${OTB-Data}/Input/QB_Toulouse_Ortho_XS.tif  --out multiResolutionImage.tif --level 1 --sfactor 2 --vfactor 0.6 --fast false");
+
     AddDocTag("Conversion");
     AddDocTag(Tags::Manip);
     AddDocTag(Tags::Multi);
@@ -106,6 +104,14 @@ private:
         <<" subsampling previous level of pyramid instead of processing the full input.";
     SetParameterDescription("fast", desc.str());
     MandatoryOff("fast");
+
+    // Doc example parameter settings
+    SetDocExampleParameterValue("in", "QB_Toulouse_Ortho_XS.tif");
+    SetDocExampleParameterValue("out", "multiResolutionImage.tif");
+    SetDocExampleParameterValue("level", "1");
+    SetDocExampleParameterValue("sfactor", "2");
+    SetDocExampleParameterValue("vfactor", "0.6");
+    SetDocExampleParameterValue("fast", "false");
   }
 
   void DoUpdateParameters()

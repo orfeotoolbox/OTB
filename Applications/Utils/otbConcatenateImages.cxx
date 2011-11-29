@@ -64,7 +64,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Rescale application, Convert application");
-    SetDocCLExample("otbApplicationLauncherCommandLine ConcatenateImages ${OTB-BIN}/bin --in ${OTB-DATA/Input}/poupees_sub_c1.png ${OTB-DATA}/poupees_sub_c2.png ${OTB-DATA}/poupees_sub_c3.png --out otbConcatenateImages.png uchar");
+   
     AddDocTag(Tags::Manip);
     AddDocTag("Concatenation");
     AddDocTag("Multi channel");
@@ -89,6 +89,10 @@ private:
     AddParameter(ParameterType_RAM, "ram", "Available RAM");
     SetDefaultParameterInt("ram", 256);
     MandatoryOff("ram");
+    
+    // Doc example parameter settings
+    SetDocExampleParameterValue("in", "poupees_sub_c1.png poupees_sub_c2.png poupees_sub_c3.png");
+    SetDocExampleParameterValue("out", "otbConcatenateImages.png uchar");
   }
 
   void DoUpdateParameters()

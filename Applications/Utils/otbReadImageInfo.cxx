@@ -49,8 +49,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
-    SetDocCLExample("otbApplicationLauncherCommandLine ReadImageInfo ${OTB-BIN}/bin "
-                      "--in ${OTB-Data}/Input/QB_Toulouse_Ortho_XS.tif");
+
      AddDocTag("Util");
      AddDocTag(Tags::Meta);
   }
@@ -62,6 +61,9 @@ private:
   void DoCreateParameters()
   {
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
+
+    // Doc example parameter settings
+    SetDocExampleParameterValue("in", "QB_Toulouse_Ortho_XS.tif");
   }
 
   void DoUpdateParameters()

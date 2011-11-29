@@ -51,7 +51,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Conversion");
-    SetDocCLExample("otbApplicationLauncherCommandLine KmzExport ${OTB-BIN}/bin --in ${OTB-Data}/Input/qb_RoadExtract.img --out otbKmzExport.kmz --logo ${OTB-Data}/Input/cnes.png ${OTB-Data}/Input/otb_big.png");
+
     AddDocTag("KMZ");
     AddDocTag("Export");
   }
@@ -83,6 +83,12 @@ private:
     AddParameter(ParameterType_Directory, "dem",  "DEM directory");
     SetParameterDescription("dem", "Path to the directory that contains elevation information.");
     MandatoryOff("dem");
+
+    // Doc example parameter settings
+    SetDocExampleParameterValue("in", "qb_RoadExtract.img");
+    SetDocExampleParameterValue("out", "otbKmzExport.kmz");
+    SetDocExampleParameterValue("logo", "cnes.png");
+    SetDocExampleParameterValue("legend", "otb_big.png");
   }
 
 

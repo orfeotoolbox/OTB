@@ -60,8 +60,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
-    SetDocCLExample("otbApplicationLauncherCommandLine Quicklook ${OTB-BIN}/bin"
-      " --in ${OTB-DATA}/Input/anaglyphInput1.tif --out quicklookImage.tif ");
+
     AddDocTag(Tags::Manip);
   }
   
@@ -118,6 +117,9 @@ private:
     SetDefaultParameterInt("rsx", 0);
     SetDefaultParameterInt("rsy", 0);
      
+    // Doc example parameter settings
+    SetDocExampleParameterValue("in", "anaglyphInput1.tif");
+    SetDocExampleParameterValue("out", "quicklookImage.tif");
   }
   
   void DoUpdateParameters()

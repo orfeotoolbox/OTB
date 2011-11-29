@@ -55,8 +55,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
-    SetDocCLExample("otbApplicationLauncherCommandLine ConcatenateVectorData ${OTB-BIN}/bin"
-                    " --vd --out ConcatenatedVectorData.shp");
+
     AddDocTag(Tags::Vector);
   }
 
@@ -70,6 +69,11 @@ private:
     SetParameterDescription("vd", "VectorData files to be concatenated in an unique VectorData");
 
     AddParameter(ParameterType_OutputVectorData, "out", "Concatenated VectorData");
+
+    // Doc example parameter settings
+    SetDocExampleParameterValue("vd", "waterways.shp france_coastline.shp");
+    SetDocExampleParameterValue("out", "ConcatenatedVectorData.shp");
+ 
   }
 
 

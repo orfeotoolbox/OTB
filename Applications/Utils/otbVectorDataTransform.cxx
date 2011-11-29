@@ -61,9 +61,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
-    SetDocCLExample("otbApplicationLauncherCommandLine VectorDataTransform ${OTB-BIN}/bin"
-      " --in ${OTB-DATA}/ToulouseRoad-examples.shp --out transformVectorData.tif --transform.ro 15");
-
+  
     AddDocTag(Tags::Vector);
   }
 
@@ -100,6 +98,11 @@ private:
     AddParameter(ParameterType_Float, "transform.scale", "Scale");
     SetParameterDescription("transform.scale","The scale to apply");
     SetDefaultParameterFloat("transform.scale", 1.);
+
+    // Doc example parameter settings
+    SetDocExampleParameterValue("in", "ToulouseRoad-examples.shp");
+    SetDocExampleParameterValue("out", "transformVectorData.tif");
+    SetDocExampleParameterValue("transform.ro", "15");
   }
 
   void DoUpdateParameters()

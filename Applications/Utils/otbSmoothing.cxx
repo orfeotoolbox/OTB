@@ -64,8 +64,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
-    SetDocCLExample("otbApplicationLauncherCommandLine Smoothing ${OTB-BIN}/bin"
-      " --in ${OTB-DATA}/Input/poupees.tif --out smoothedImage.tif --type mean");
+
     AddDocTag(Tags::Filter);
   }
 
@@ -102,6 +101,11 @@ private:
     SetDefaultParameterInt("type.anidif.nbiter",     10);
 
     SetParameterString("type", "anidif");
+
+    // Doc example parameter settings
+    SetDocExampleParameterValue("in", "poupees.tif");
+    SetDocExampleParameterValue("out", "osmoothedImage.png uchar");
+    SetDocExampleParameterValue("type", "mean");
   }
 
   void DoUpdateParameters()

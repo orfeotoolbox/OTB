@@ -57,7 +57,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("BandMath application, ImageStatistics application");
-    SetDocCLExample("otbApplicationLauncherCommandLine CompareImages ${OTB-BIN}/bin --ref.in ${OTB-DATA/Input}/GomaApres.png --ref.channel 1 --meas.in ${OTB-DATA}/GomaAvant.png --meas.channel 2 --roi.startx 20 --roi.starty 30 --roi.sizex 150 --roi.sizey 200");
+  
     AddDocTag("Statistics");
   }
 
@@ -115,6 +115,16 @@ private:
     AddParameter(ParameterType_Float, "psnr",  "PSNR");
     SetParameterDescription("psnr", "Peak Signal to Noise Ratio value");
     SetParameterRole("psnr", Role_Output);
+
+    // Doc example parameter settings
+    SetDocExampleParameterValue("ref.in", "GomaApres.png");
+    SetDocExampleParameterValue("ref.channel", "1");
+    SetDocExampleParameterValue("meas.in", "GomaAvant.png");
+    SetDocExampleParameterValue("meas.channel", "2");
+    SetDocExampleParameterValue("roi.startx", "20");
+    SetDocExampleParameterValue("roi.starty", "30");
+    SetDocExampleParameterValue("roi.sizex", "150");
+    SetDocExampleParameterValue("roi.sizey", "200");
   }
 
   void DoUpdateParameters()

@@ -79,7 +79,6 @@ private:
     SetDocLimitations("The segmentation method does not support streaming, and thus large images.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("ImageSVMClassifier application");
-    SetDocCLExample("otbApplicationLauncherCommandLine ColorMapping  --in ${OTBAPP_BASELINE}/clLabeledImageQB123_1.tif --method custom --method.custom.lut ${OTB-Data}/Input/Classification/ColorTable.txt --out clLabeledFancyImageQB123_1.tif");
     AddDocTag(Tags::Learning);
 
     // Build lut map
@@ -165,7 +164,13 @@ private:
     SetParameterInt("method.segmentation.background", 0);
     SetMinimumParameterIntValue("method.segmentation.background", 0);
     SetMaximumParameterIntValue("method.segmentation.background", 255);
-  }
+
+    // Doc example parameter settings
+    SetDocExampleParameterValue("in", "clLabeledImageQB123_1.tif");
+    SetDocExampleParameterValue("method", "custom");
+    SetDocExampleParameterValue("method.custom.lut", "Classification/ColorTable.txt");
+    SetDocExampleParameterValue("out", "clLabeledFancyImageQB123_1.tif");
+ }
 
   void DoUpdateParameters()
   {

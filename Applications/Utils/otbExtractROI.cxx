@@ -58,8 +58,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
-    SetDocCLExample("otbApplicationLauncherCommandLine ExtractROI ${OTB-BIN}/bin "
-      "--in ${OTB-Data}/Input/couleurs_extrait.png --out ROIImage.tif --sizex 256");
+
     AddDocTag(Tags::Manip);
   }
 
@@ -95,6 +94,11 @@ private:
 
     // Channelist Parameters
     AddParameter(ParameterType_ListView,  "cl", "Output Image channels");
+
+    // Doc example parameter settings
+    SetDocExampleParameterValue("in", "couleurs_extrait.png");
+    SetDocExampleParameterValue("sizex", "256");
+    SetDocExampleParameterValue("out", "ROIImage.tif");
   }
 
   void DoUpdateParameters()

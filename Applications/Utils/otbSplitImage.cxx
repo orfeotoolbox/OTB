@@ -54,12 +54,11 @@ private:
     SetDescription("Split a N multiband image into N images");
 
     SetDocName("Split Image Application");
-    SetDocLongDescription("This application splits a N multiband image into N images.");
+    SetDocLongDescription("This application splits a N multiband image into N images. The output images filename will be generated from the output one. Thus if the input image has 2 channels, and the user has set ad output outimage.tif, the generated images will be outimage_0.tif and outimage_1.tif");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
-    SetDocCLExample("otbApplicationLauncherCommandLine SplitImage ${OTB-BIN}/bin"
-      " --in ${OTB-DATA}/Input/poupees_sub.png --out splittedImage.tif");
+
     AddDocTag(Tags::Manip);
   }
 
@@ -76,6 +75,10 @@ private:
     AddParameter(ParameterType_RAM, "ram", "Available RAM");
     SetDefaultParameterInt("ram", 256);
     MandatoryOff("ram");
+
+  // Doc example parameter settings
+    SetDocExampleParameterValue("in", "poupees_sub.png");
+    SetDocExampleParameterValue("out", "splittedImage.tif");
   }
 
   void DoUpdateParameters()

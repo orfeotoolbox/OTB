@@ -56,7 +56,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Convertion");
-    SetDocCLExample("otbApplicationLauncherCommandLine OSMDownloader ${OTB-BIN}/bin --in ${OTB-Data}/Input/qb_RoadExtract.img --out otbOSMDownloader --logo ${OTB-Data}/Input/cnes.png ${OTB-Data}/Input/otb_big.png");
+
     AddDocTag(Tags::Meta);
   }
 
@@ -90,7 +90,11 @@ private:
     oss << "\t\t\t\t  ** If not used : Note that the options OSMKey (-key) and Output (-out) become mandatory";
     SetParameterDescription("printclasses", oss.str().c_str());
     MandatoryOff("printclasses");
- 
+
+    // Doc example parameter settings
+    SetDocExampleParameterValue("support", "ROI_QB_TOULOUSE.TIF");
+    SetDocExampleParameterValue("key", "highway");
+    SetDocExampleParameterValue("out", "apTvUtOSMDownloader.shp");
   }
 
 

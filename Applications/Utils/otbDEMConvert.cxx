@@ -53,8 +53,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
-    SetDocCLExample("otbApplicationLauncherCommandLine DEMConvert ${OTB-BIN}/bin"
-      " --in ${OTB-DATA}/Input/QB_MUL_ROI_1000_100.tif --out ${TEMP}/outputDEM.any");
+
     AddDocTag("Image manipulation");
   }
 
@@ -73,6 +72,10 @@ void DoCreateParameters()
     oss << "The files - Output.geom, Output.omd and Output.ras - will be generated";
     SetParameterDescription("out", oss.str());
     SetParameterRole("out", Role_Output);
+
+    // Doc example parameter settings
+    SetDocExampleParameterValue("in", "QB_MUL_ROI_1000_100.tif");
+    SetDocExampleParameterValue("out", "outputDEM.any");
 }
 
   void DoUpdateParameters()

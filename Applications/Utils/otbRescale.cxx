@@ -57,8 +57,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
-    SetDocCLExample("otbApplicationLauncherCommandLine Rescale ${OTB-BIN}/bin"
-      " --in ${OTB-DATA}/Input/poupees.tif --out rescaledImage.tif --outmin 20 --outmax 150");
+
     AddDocTag(Tags::Manip);
   }
 
@@ -85,6 +84,12 @@ private:
 
     MandatoryOff("outmin");
     MandatoryOff("outmax");
+
+    // Doc example parameter settings
+    SetDocExampleParameterValue("in", "poupees.tif");
+    SetDocExampleParameterValue("out", "rescaledImage.tif");
+    SetDocExampleParameterValue("outmin", "20");
+    SetDocExampleParameterValue("outmax", "150");
   }
 
   void DoUpdateParameters()

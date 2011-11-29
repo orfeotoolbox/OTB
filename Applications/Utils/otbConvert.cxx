@@ -87,7 +87,6 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Rescale application");
-    SetDocCLExample("otbApplicationLauncherCommandLine Convert ${OTB-BIN}/bin --in ${OTB-Data}/Input/QB_Toulouse_Ortho_XS.tif --out otbConvertWithScalingOutput.png uchar --type linear");
     AddDocTag("Conversion");
     AddDocTag("Image Dynamic");
 
@@ -99,7 +98,7 @@ private:
   }
 
   void DoCreateParameters()
-  {
+  { 
     AddParameter(ParameterType_InputImage,  "in",   "Input image");
     SetParameterDescription("in", "Input image");
 
@@ -116,6 +115,11 @@ private:
     AddParameter(ParameterType_RAM, "ram", "Available RAM");
     SetDefaultParameterInt("ram", 256);
     MandatoryOff("ram");
+
+    // Doc example parameter settings
+    SetDocExampleParameterValue("in", "QB_Toulouse_Ortho_XS.tif");
+    SetDocExampleParameterValue("out", "otbConvertWithScalingOutput.png uchar");
+    SetDocExampleParameterValue("type", "linear");
   }
 
   void DoUpdateParameters()
