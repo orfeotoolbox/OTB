@@ -16,101 +16,162 @@
 
 =========================================================================*/
 
-#include "otbVectorDataDSValidation.h"
-
 #include "otbVectorDataToDSValidatedVectorDataFilter.h"
+#include "otbWrapperApplication.h"
+#include "otbWrapperApplicationFactory.h"
+#include "otbWrapperStringListParameter.h"
 
 #include "otbVectorData.h"
-#include "otbVectorDataFileReader.h"
-#include "otbVectorDataFileWriter.h"
 #include "otbFuzzyDescriptorsModelManager.h"
+
 
 namespace otb
 {
-int VectorDataDSValidation::Describe(ApplicationDescriptor* descriptor)
+namespace Wrapper
 {
-  descriptor->SetName("Vector data validation");
-  descriptor->SetDescription("Vector data validation based on the fusion of features in teh framework of Dempster-Shafer evidence theory.");
-  descriptor->AddOption("InputShapeFileName", "Input vector data for validation",
-                        "in", 1, true, ApplicationDescriptor::FileName);
-  descriptor->AddOption("OutputShapeFileName", "Output validated vector data",
-                        "out", 1, true, ApplicationDescriptor::FileName);
 
-  descriptor->AddOption("DescriptorsModelFileName", "Fuzzy descriptors model(xml file)",
-                        "descMod", 1, true, ApplicationDescriptor::FileName);
-  descriptor->AddOptionNParams("BeliefSupport", "Dempster Shafer study hypothesis to compute belief",
-                               "BelSup", true, ApplicationDescriptor::StringList);
-  descriptor->AddOptionNParams("PlausibilitySupport", "Dempster Shafer study hypothesis to compute plausibility",
-                               "PlaSup", true, ApplicationDescriptor::StringList);
-
-
-  descriptor->AddOption("CriterionFormula", "Criterion formula expression (default: ((belief + plausibility)/2) >= 0.5)",
-                        "Cri", 1, false, ApplicationDescriptor::String);
-  descriptor->AddOption("CriterionThreshold", "Criterion threshold (default 0.5)",
-                        "thd", 1, false, ApplicationDescriptor::Real);
-  return EXIT_SUCCESS;
-}
-
-
-int VectorDataDSValidation::Execute(otb::ApplicationOptionsResult* parseResult)
+class VectorDataDSValidation: public Application
 {
-  typedef float                           PrecisionType;
+
+
+public:
+   /** Standard class typedefs. */
+  typedef VectorDataDSValidation Self;
+  typedef Application Superclass;
+  typedef itk::SmartPointer<Self> Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
+
+
+  typedef double                          PrecisionType;
   typedef otb::VectorData<PrecisionType>  VectorDataType;
-  typedef otb::VectorDataFileReader<VectorDataType>
-                                          VectorDataReaderType;
-  typedef otb::VectorDataFileWriter<VectorDataType>
-                                          VectorDataWriterType;
-
   typedef otb::VectorDataToDSValidatedVectorDataFilter<VectorDataType, PrecisionType>
                                           VectorDataValidationFilterType;
   typedef VectorDataValidationFilterType::LabelSetType
                                           LabelSetType;
-  
   typedef FuzzyDescriptorsModelManager::DescriptorsModelType DescriptorsModelType;
- 
-  // Read the vector data
-  VectorDataReaderType::Pointer vdReader = VectorDataReaderType::New();
-  vdReader->SetFileName(parseResult->GetParameterString("InputShapeFileName"));
-  vdReader->Update();
- 
-  // Load the descriptors model
-  std::string descModFile = parseResult->GetParameterString("DescriptorsModelFileName");
-  DescriptorsModelType descMod = FuzzyDescriptorsModelManager::Read( descModFile.c_str() );
 
-  // Load the hypothesis
-  LabelSetType Bhyp, Phyp;
-  unsigned int nbSet = parseResult->GetNumberOfParameters("BeliefSupport");
-  for (unsigned int i = 0; i < nbSet; i++)
-    {
-    Bhyp.insert(parseResult->GetParameterString("BeliefSupport", i));
-    }
-  nbSet = parseResult->GetNumberOfParameters("PlausibilitySupport");
-  for (unsigned int i = 0; i < nbSet; i++)
-    {
-    Phyp.insert(parseResult->GetParameterString("PlausibilitySupport", i));
-    }
+  typedef otb::Wrapper::StringListParameter::StringListType    StringListType;
 
-  // Process
-  VectorDataValidationFilterType::Pointer filter = VectorDataValidationFilterType::New();
-  filter->SetInput(vdReader->GetOutput());
-  filter->SetDescriptorModels(descMod);
-  filter->SetBeliefHypothesis(Bhyp);
-  filter->SetPlausibilityHypothesis(Phyp);
-  if (parseResult->IsOptionPresent("CriterionFormula"))
-    {
-    filter->SetCriterionFormula(parseResult->GetParameterString("CriterionFormula"));
-    }
-  if (parseResult->IsOptionPresent("CriterionThreshold"))
-    {
-    filter->SetCriterionThreshold(parseResult->GetParameterDouble("CriterionThreshold"));
-    }
+  /** Standard macro */
+  itkNewMacro(Self);
 
-  // Write the output
-  VectorDataWriterType::Pointer vdWriter = VectorDataWriterType::New();
-  vdWriter->SetFileName(parseResult->GetParameterString("OutputShapeFileName"));
-  vdWriter->SetInput(filter->GetOutput());
-  vdWriter->Update();
- 
-  return EXIT_SUCCESS;
+  itkTypeMacro(VectorDataDSValidation, otb::Application);
+
+private:
+
+
+  VectorDataDSValidation()
+  {
+    SetName("VectorDataDSValidation");
+    SetDescription("Vector data validation based on the fusion of features using Dempster-Shafer evidence theory framework.");
+
+    SetDocName("Vector Data validation Application");
+    SetDocLongDescription("Vector data validation based on the fusion of features using Dempster-Shafer evidence theory framework.");
+    SetDocLimitations("None.");
+    SetDocAuthors("OTB-Team");
+    SetDocSeeAlso(" ");
+    SetDocCLExample(
+                    "otbApplicationLauncherCommandLine VectorDataDSValidation  ${OTB-BIN}/bin  --in ${OTB-Data}/Baseline/OTB-Applications/Files/cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_gt.shp"
+                    " --belsup \"ROADSA\" --plasup \"NONDVI\" \"ROADSA\" \"NOBUIL\""
+                    " --descmod ${OTB-Data}/Input/Dempster-Shafer/DSFuzzyModel.xml"
+                    " --out VectorDataDSValidation.xml");
+    AddDocTag(Tags::FeatureExtraction);
+  }
+
+
+  virtual ~VectorDataDSValidation()
+  {
+  }
+
+  void DoCreateParameters()
+  {
+    AddParameter(ParameterType_InputVectorData, "in", "Input Vector Data");
+    SetParameterDescription("in", "Input vector data for validation");
+
+    AddParameter(ParameterType_Filename, "descmod", "Descriptors model filename");
+    SetParameterDescription("descmod", "Fuzzy descriptors model (xml file)");
+
+    AddParameter(ParameterType_StringList, "belsup", "Belief Support");
+    SetParameterDescription("belsup", "Dempster Shafer study hypothesis to compute belief");
+
+    AddParameter(ParameterType_StringList, "plasup", "Plausibility Support");
+    SetParameterDescription("plasup", "Dempster Shafer study hypothesis to compute plausibility");
+
+    AddParameter(ParameterType_String, "cri", "Criterion");
+    SetParameterDescription("cri", "Dempster Shafer criterion (by default (belief+plausibility)/2)");
+    MandatoryOff("cri");
+    SetParameterString("cri", "((Belief + Plausibility)/2.)");
+
+    AddParameter(ParameterType_Float, "thd", "Criterion threshold");
+    SetParameterDescription("thd", "Criterion threshold (default 0.5)");
+    MandatoryOff("thd");
+    SetParameterFloat("thd", 0.5);
+
+    AddParameter(ParameterType_OutputVectorData, "out", "Output Vector Data");
+    SetParameterDescription("out", "Output validated vector data");
+
+  }
+
+  void DoUpdateParameters()
+  {
+    // Nothing to do here : all parameters are independent
+
+
+    // .. //
+
+
+  }
+
+  void DoExecute()
+  {
+
+    //Read the vector data
+    VectorDataType::Pointer inVectorData = GetParameterVectorData("in");
+    inVectorData->Update();
+
+    // Load the descriptors model
+    std::string descModFile = GetParameterString("descmod");
+    DescriptorsModelType descMod = FuzzyDescriptorsModelManager::Read(descModFile.c_str());
+
+    LabelSetType Bhyp, Phyp;
+    int nbSet;
+
+    StringListType stringList = GetParameterStringList("belsup");
+    nbSet = stringList.size();
+
+    for (int i = 0; i < nbSet; i++)
+      {
+      std::string str = stringList[i];
+      Bhyp.insert(str);
+      }
+    stringList = GetParameterStringList("plasup");
+    nbSet = stringList.size();
+    for (int i = 0; i < nbSet; i++)
+      {
+      std::string str = stringList[i];
+      Phyp.insert(str);
+      }
+
+    // Process
+    m_ValidationFilter = VectorDataValidationFilterType::New();
+    m_ValidationFilter->SetInput(inVectorData);
+    m_ValidationFilter->SetDescriptorModels(descMod);
+    m_ValidationFilter->SetBeliefHypothesis(Bhyp);
+    m_ValidationFilter->SetPlausibilityHypothesis(Phyp);
+
+    m_ValidationFilter->SetCriterionFormula(GetParameterString("cri"));
+    m_ValidationFilter->SetCriterionThreshold(GetParameterFloat("thd"));
+
+    // Set the output image
+    SetParameterOutputVectorData("out", m_ValidationFilter->GetOutput());
+
+  };
+
+  VectorDataValidationFilterType::Pointer m_ValidationFilter;
+
+
+};
 }
 }
+
+OTB_APPLICATION_EXPORT(otb::Wrapper::VectorDataDSValidation);
