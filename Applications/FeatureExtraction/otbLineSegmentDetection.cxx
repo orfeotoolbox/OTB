@@ -61,9 +61,8 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
-    SetDocCLExample("otbApplicationLauncherCommandLine BundleToPerfectSensor ${OTB-BIN}/bin "
-      "--in ${OTB-Data}/Input/QB_Suburb.png --out linesDetected.shp ");
-     AddDocTag(Tags::FeatureExtraction);
+
+    AddDocTag(Tags::FeatureExtraction);
   }
 
   virtual ~LineSegmentDetection()
@@ -82,6 +81,10 @@ private:
 
     AddParameter(ParameterType_Empty, "norescale", "No rescaling in [0, 255]");
     MandatoryOff("norescale");
+
+    // Doc example parameter settings
+    SetDocExampleParameterValue("in", "QB_Suburb.pn");
+    SetDocExampleParameterValue("out", "LineSegmentDetection.shp");
   }
 
   void DoUpdateParameters()
