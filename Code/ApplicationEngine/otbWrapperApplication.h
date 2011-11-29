@@ -34,6 +34,8 @@
 #include "otbWrapperComplexInputImageParameter.h"
 #include "otbWrapperComplexOutputImageParameter.h"
 
+#include "otbWrapperDocExampleStructure.h"
+
 namespace otb
 {
 namespace Wrapper
@@ -53,16 +55,19 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  /** Defining ::New() static method */
-  //itkNewMacro(Self);
-
   /** RTTI support */
   itkTypeMacro(Application, itk::Object);
 
   /** Set the parameter name */
-  itkSetStringMacro(Name);
+  //itkSetStringMacro(Name);
 
-  /** Get the parameter name */
+  virtual void SetName( const std::string & name )
+  {
+    m_Name = name;
+    m_DocExample->SetApplicationName(name);
+    this->Modified();
+  }
+
   itkGetStringMacro(Name);
 
   /** Set the parameter description */
@@ -514,6 +519,26 @@ public:
     this->Modified();
   }
 
+  DocExampleStructure::Pointer GetDocExample()
+  {
+    return m_DocExample;
+  }
+
+  void SetDocExampleParameterValue( const std::string key, const std::string value )
+  {
+    m_DocExample->SetParameterValue( key, value );
+    this->Modified();
+  }
+
+  std::string GetCLExample()
+  {
+    return m_DocExample->GenerateCLExample();
+  }
+  std::string GetQtExample()
+  {
+    return m_DocExample->GenerateQtExample();
+  }
+
   /** Return all parameters which role is Role_Output in a vector of paris that contains the
   * parameter key and its value.
   */
@@ -647,8 +672,10 @@ private:
   std::string m_DocName;
   /** Long and precise application description . */
   std::string                       m_DocLongDescription;
+  /** Doc example structure */
+  DocExampleStructure::Pointer m_DocExample;
   /** Commanline example. Use ${OTB-DATA} for OTB-Data directory
-* path and ${OTB-BIN} for the directory bin of the OTB binary directory. */
+   path and ${OTB-BIN} for the directory bin of the OTB binary directory. */
   std::string m_DocCLExample;
   /** Author List. Format : "John Doe, Winnie the Pooh".*/
   std::string m_DocAuthors;

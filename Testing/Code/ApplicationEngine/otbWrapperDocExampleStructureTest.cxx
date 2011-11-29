@@ -22,10 +22,10 @@
 #include "otbWrapperDocExampleStructure.h"
 #include "itksys/SystemTools.hxx"
 
-int otbWrapperDocExampleStructure(int argc, char* argv[])
+int otbWrapperDocExampleStructureNew(int argc, char* argv[])
 {
   typedef otb::Wrapper::DocExampleStructure DocExampleStructureType;
-  DocExampleStructureType docStruct;
+  DocExampleStructureType::Pointer docStruct = DocExampleStructureType::New();
 
   return EXIT_SUCCESS;
 }
@@ -34,24 +34,23 @@ int otbWrapperDocExampleStructure(int argc, char* argv[])
 int otbWrapperDocExampleStructureTest(int argc, char* argv[])
 {
   typedef otb::Wrapper::DocExampleStructure DocExampleStructureType;
-  DocExampleStructureType docStruct;
+  DocExampleStructureType::Pointer docStruct = DocExampleStructureType::New();
   
-  docStruct.SetApplicationName("TestApplication");
+  docStruct->SetApplicationName("TestApplication");
   
   std::vector<std::string> bPath;
   bPath.push_back("binPath1");
 
-  docStruct.SetBinPath(bPath);
-  docStruct.AddBinPath("binPath2");
+  docStruct->SetBinPath(bPath);
+  docStruct->AddBinPath("binPath2");
   
-  DocExampleStructureType::PairType mPair;
-  mPair.first = "key1";
-  mPair.second = "val1";
-  docStruct.AddParameter( mPair );
+  docStruct->AddParameter( "key1", "name1" );
+  docStruct->AddParameter( "key2", "name2" );
 
-  docStruct.AddParameter( "key2", "val2" );
+  docStruct->SetParameterValue( "key1", "val1" );
+  docStruct->SetParameterValue( "key2", "val2" );
 
-  std::string exp = docStruct.GenerateCLExample();
+  std::string exp = docStruct->GenerateCLExample();
 
   if( exp.find("otbApplicationLauncherCommandLine binPath1 binPath2 -key1 val1 -key2 val2") == std::string::npos )
     {

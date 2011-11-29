@@ -47,7 +47,16 @@ namespace Wrapper
 {
 
 Application::Application()
- : m_Logger(itk::Logger::New())
+  : m_Name(""), 
+    m_Description(""), 
+    m_Logger(itk::Logger::New()), 
+    m_ProgressSourceDescription(""), 
+    m_DocName(""), 
+    m_DocLongDescription(""), 
+    m_DocAuthors(""), 
+    m_DocLimitations(""), 
+    m_DocSeeAlso(""), 
+    m_DocTags()
 {
   // Don't call Init from the constructor, since it calls a virtual method !
 
@@ -55,7 +64,9 @@ Application::Application()
   m_Logger->SetPriorityLevel(itk::LoggerBase::DEBUG);
   m_Logger->SetLevelForFlushing(itk::LoggerBase::CRITICAL);
 
-}
+  m_ParameterList = ParameterGroup::New();
+  m_DocExample = DocExampleStructure::New();
+  }
 
 Application::~Application()
 {
@@ -1066,6 +1077,7 @@ void
 Application::AddChoice(std::string paramKey, std::string paramName)
 {
   GetParameterList()->AddChoice(paramKey, paramName);
+  m_DocExample->AddParameter(paramKey, paramName);
 }
 
 void
@@ -1084,6 +1096,7 @@ void
 Application::AddParameter(ParameterType type, std::string paramKey, std::string paramName)
 {
   GetParameterList()->AddParameter(type, paramKey, paramName);
+  m_DocExample->AddParameter(paramKey, paramName);
 }
 
 void Application::AddRAMParameter(std::string paramKey, std::string paramName, unsigned int defaultValue)

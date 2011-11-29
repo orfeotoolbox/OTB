@@ -18,11 +18,16 @@
 #ifndef __otbWrapperDocExampleStructure_h
 #define __otbWrapperDocExampleStructure_h
 
+#include "itkObject.h"
+#include "itkObjectFactory.h"
+
 #include <string>
 #include <iostream>
 #include <vector>
 #include "itkMacro.h"
 #include "otbConfigure.h"
+#include "itkFixedArray.h"
+
 
 namespace otb
 {
@@ -30,29 +35,69 @@ namespace Wrapper
 {
 
 /** \class DocExampleStructure
- *  \brief This class represent a string parameter for the wrapper framework
+ *  \brief This class is a structure that gathered the necessary
+ *  element to generate an example (for CommandLine, python, Java
+ *  ...).
+ * User has to set the application name, the binary path and a list of
+ *  key/value couple.
  */
-class DocExampleStructure
+class DocExampleStructure :
+  public itk::Object
 {
 public:
-  typedef std::pair<std::string, std::string> PairType;
-  typedef std::vector<PairType> ParameterListType;
+  /** Standard class typedefs */
+  typedef DocExampleStructure           Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
+  /** Standards macros */
+  itkNewMacro(Self);
 
-  void AddParameter( const std::string key, const std::string value )
+  /** Runtime information */
+  itkTypeMacro(DocExampleStructure, itk::Object);
+
+  typedef itk::FixedArray<std::string, 3> ThreeStringType;
+  typedef std::vector<ThreeStringType> ParameterListType;
+
+  /** Parameter list accessors. */
+  /** Parameter list accessors : adding key and name */
+  void AddParameter( const std::string key, const std::string name )
   {
-    PairType myPair;
-    myPair.first = key;
-    myPair.second = value;
-    this->AddParameter( myPair );
+    std::cout<<"DocExampleStructure::AddParameter"<<std::endl;
+    ThreeStringType mParam;
+    mParam[0] = key;
+    mParam[1] = name;
+    mParam[2] = "";
+    m_ParameterList.push_back( mParam );
   }
   
-  void AddParameter( const PairType myPair )
+ void SetParameterValue( const std::string key, const std::string value )
   {
-    m_ParameterList.push_back( myPair );
+    bool found = false;
+    unsigned int i=0;
+    while ( i<m_ParameterList.size() && !found )
+      {
+      if( this->GetParameterKey(i) == key )
+        {
+        m_ParameterList[i][2] = value;
+        found = true;
+        }
+      i++;
+      }
+
+    if( !found)
+      itkGenericExceptionMacro( "No parameter with key "<<key<<" found." );
   }
 
-  PairType GetParameter( unsigned int i )
+ /** Get the parameter list. */
+  ParameterListType GetParameterList()
+  {
+    return m_ParameterList;
+  }
+
+  /** Get a specific parameter couple.*/
+  ThreeStringType GetParameter( unsigned int i )
   {
     if( m_ParameterList.size() <= i )
       itkGenericExceptionMacro( "Index "<<i<<" out of range. (max index: "<<m_ParameterList.size()<<")." );
@@ -60,65 +105,60 @@ public:
     return m_ParameterList[i];
   }
 
-  ParameterListType GetParameterList()
-  {
-    return m_ParameterList;
-  }
-
+  /** Get a specific parameter couple key.*/
   std::string GetParameterKey( unsigned int i )
   {
-    return this->GetParameter(i).first;
+    return this->GetParameter(i)[0];
   }
 
-  int GetParameterValueAsInt( unsigned int i )
+ /** Get a specific parameter couple key.*/
+  std::string GetParameterName( unsigned int i )
   {
-    return atoi(this->GetParameter(i).second.c_str());
+    return this->GetParameter(i)[1];
   }
 
- float GetParameterValueAsFloat( unsigned int i )
+  /** Get a specific parameter couple value as string.*/
+  std::string GetParameterValue( unsigned int i )
   {
-    return  atoi(this->GetParameter(i).second.c_str());
+    return  this->GetParameter(i)[2];
   }
-
-  std::string GetParameterValueAsString( unsigned int i )
-  {
-    return  this->GetParameter(i).second;
-  }
-
+  /** Set Application name. */
   void SetApplicationName( const std::string name )
   {
     m_ApplicationName = name;
   }
-
+  /** Get Application name. */
   std::string GetApplicationName()
   {
     return m_ApplicationName;
   }
-
+  /** Set the list of paths. */
   void SetBinPath( const std::vector<std::string> bPath )
   {
     m_BinPath = bPath;
   }
-  
+    /** Add a path to the list. */
   void AddBinPath( std::string myPath )
   {
     m_BinPath.push_back( myPath );
   }
-
+  /** Get the list of paths. */
   std::vector<std::string> GetBinPath()
   {
     return m_BinPath;
   }
 
+  /** Generation of the documentation for CommandLine. */
   std::string GenerateCLExample()
   {
     if( m_ApplicationName.empty() || m_BinPath.size() == 0 ||  m_ParameterList.size() == 0 )
       {
-      itkGenericExceptionMacro( "Missing attributs to generate the example." );
+      return "";
       }
     
     itk::OStringStream oss;
     oss << OTB_CONFIG << "/bin/otbApplicationLauncherCommandLine ";
+    oss << m_ApplicationName << " ";
     
     for (unsigned int i=0; i< m_BinPath.size(); i++)
       {
@@ -127,7 +167,10 @@ public:
 
     for (unsigned int i=0; i< m_ParameterList.size(); i++)
       {
-      oss << "-" << m_ParameterList[i].first << " " << m_ParameterList[i].second <<" ";
+      if( this->GetParameterValue(i) != "" )
+        {
+        oss<< "-" << this->GetParameterKey(i) << " " << this->GetParameterValue(i) <<" ";
+        }
       }
 
 
@@ -140,23 +183,55 @@ public:
     
   }
 
+  /** Generation of teh documentation for Qt. */
+  std::string GenerateQtExample()
+  {
+    if( m_ApplicationName.empty() || m_BinPath.size() == 0 ||  m_ParameterList.size() == 0 )
+      {
+      return "";
+      }
+
+    itk::OStringStream oss;
+    for (unsigned int i=0; i< m_ParameterList.size(); i++)
+      {
+      if( this->GetParameterValue(i) != "" )
+        {
+        oss << this->GetParameterName(i) << ": " << this->GetParameterValue(i) << "<br />";
+        }
+      }
+
+
+    std::string res = oss.str();
+
+    return res;
+    
+  }
+
+
+protected:
   /** Constructor */
   DocExampleStructure()
-  {}
+  {
+    itk::OStringStream oss;
+    oss << OTB_CONFIG << "/bin";
+    m_BinPath.push_back( oss.str() );
+  }
 
   /** Destructor */
   virtual ~DocExampleStructure()
   {}
 
-protected:
-
-
 private:
   DocExampleStructure(const DocExampleStructure &); //purposely not implemented
   void operator =(const DocExampleStructure&); //purposely not implemented
 
+  /** List of the application parameters. List of key/value couples. */
   ParameterListType m_ParameterList;
+  /** List of the application parameter names. List of key/name couples. */
+  ParameterListType m_ParameterNameList;
+  /** application name */
   std::string m_ApplicationName;
+  /** paths where to the application. */
   std::vector<std::string> m_BinPath;
 
 
