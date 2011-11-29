@@ -51,9 +51,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
-    SetDocCLExample("otbApplicationLauncherCommandLine MultivariateAlterationDetector ${OTB-BIN}/bin "
-      "--in1 ${OTB-Data}/Input/Spot5-Gloucester-before.tif --in2 ${OTB-Data}/Input/Spot5-Gloucester-after.tif "
-      "--out detectedChangeImage.tif ");
+
     AddDocTag(Tags::FeatureExtraction);
   }
 
@@ -70,6 +68,11 @@ private:
     AddParameter(ParameterType_RAM, "ram", "Available RAM");
     SetDefaultParameterInt("ram", 256);
     MandatoryOff("ram");
+
+    // Doc example parameter settings
+    SetDocExampleParameterValue("in1", "Spot5-Gloucester-before.tif");
+    SetDocExampleParameterValue("in2", "Spot5-Gloucester-after.tif");
+    SetDocExampleParameterValue("out", "detectedChangeImage.tif");
   }
 
   void DoUpdateParameters()
