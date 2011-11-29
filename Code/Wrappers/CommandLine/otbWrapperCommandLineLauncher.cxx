@@ -174,6 +174,8 @@ bool CommandLineLauncher::BeforeExecute()
     return false;
     }
 
+  m_Application->Init();
+
   // Check if there's keys in the expression if the application takes
   // at least 1 mandatory parameter
   const std::vector<std::string> appKeyList = m_Application->GetParametersKeys(true);
@@ -567,9 +569,11 @@ void CommandLineLauncher::DisplayHelp()
   std::cerr << "====================== HELP CONTEXT ======================" << std::endl;
   std::cerr << "NAME: " << m_Application->GetName() << std::endl;
   std::cerr << "DESCRIPTION: " << m_Application->GetDescription() << std::endl;
-  std::cerr << "PARAMETERS: " << std::endl;
-
-  std::cerr << "====== Parameters: ======" << std::endl;
+  if( m_Application->GetCLExample() != "" )
+    {
+    std::cerr << "EXAMPLE OF USE: " << m_Application->GetCLExample() << std::endl;
+    }
+  std::cerr << "======================= PARAMETERS =======================" << std::endl;
   //// Module path parameter
   std::cerr << m_Parser->GetPathsAsString(m_Expression) << " (Executables paths)" << std::endl;
   std::cerr << "\t   Description: Paths to the executable library." << std::endl;
