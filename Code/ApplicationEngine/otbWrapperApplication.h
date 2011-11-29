@@ -534,9 +534,9 @@ public:
   {
     return m_DocExample->GenerateCLExample();
   }
-  std::string GetQtExample()
+  std::string GetHtmlExample()
   {
-    return m_DocExample->GenerateQtExample();
+    return m_DocExample->GenerateHtmlExample();
   }
 
   /** Return all parameters which role is Role_Output in a vector of paris that contains the
