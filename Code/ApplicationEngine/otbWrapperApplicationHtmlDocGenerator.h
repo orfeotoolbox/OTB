@@ -41,25 +41,39 @@ public:
   /** Destructor */
   virtual ~ApplicationHtmlDocGenerator();
 
-  static void GenerateDoc( const Application::Pointer app, const std::string & filename );
-
-  static void GenerateDoc( const Application::Pointer app, std::string & val);
+  /** Generate ans dave the documentation. */
+  /** Add the key is the description of the parameter if showKey is
+  * set at true. */
+  static void GenerateDoc( const Application::Pointer app, const std::string & filename, const bool showKey = false );
+  /** Generate the documentation as a string. */
+  /** Add the key is the description of the parameter if showKey is
+  * set at true. */
+  static void GenerateDoc( const Application::Pointer app, std::string & val, const bool showKey = false);
 
 protected:
 
-/** Get the parameter description of one parameter. */
-  static void GetDocParameters( const Application::Pointer app, std::string & val );
+  /** Get the parameter description of one parameter. */
+  /** Add the key is the description of the parameter if showKey is
+  * set at true. */
+  static void GetDocParameters( const Application::Pointer app, std::string & val, const bool showKey = false );
 
   /** generate the documentation associated to a group.*/
-  static void GetDocParameterGroup( const Application::Pointer app, std::string & val, const std::string & key );
+  /** Add the key is the description of the parameter if showKey is
+  * set at true. */
+  static void GetDocParameterGroup( const Application::Pointer app, std::string & val, const std::string & key, const bool showKey = false );
 
   /** generate the documentation associated to a choice.*/
-  static void GetDocParameterChoice( const Application::Pointer app, std::string & val, const std::string & key );
+  /** Add the key is the description of the parameter if showKey is
+  * set at true. */
+  static void GetDocParameterChoice( const Application::Pointer app, std::string & val, const std::string & key, const bool showKey = false );
 
 
 private:
   ApplicationHtmlDocGenerator(const ApplicationHtmlDocGenerator &); //purposely not implemented
   void operator =(const ApplicationHtmlDocGenerator&); //purposely not implemented
+
+  /** Add the key is the description of the parameter or not. */
+  bool m_ShowParamKeys;
 
 }; // End class InputImage Parameter
 

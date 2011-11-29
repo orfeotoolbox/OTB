@@ -167,7 +167,9 @@ add_test(NAME owTvApplicationHtmlDocGeneratorTest
                   otbWrapperApplicationHtmlDocGeneratorTest1
                     ReadImageInfo
                     $<TARGET_FILE_DIR:otbapp_ReadImageInfo>
-                    ${TEMP}/owTvOReadImageInfoDoc.html )
+                    ${TEMP}/owTvOReadImageInfoDoc.html
+                    0 # don't show key in the parameterdescription
+)
 endif (BUILD_APPLICATIONS)
 
 # DocExampleStructure

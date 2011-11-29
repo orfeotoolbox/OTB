@@ -52,10 +52,14 @@ namespace Wrapper
   oss << value;                                                         \
   oss << "</p>";
 
-#define otbDocHtmlParamMacro( type, param )                             \
+#define otbDocHtmlParamMacro( type, param, showKey )                             \
   oss << "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Courier New, courier'; font-weight:600;\"; >"; \
-  oss << "["<<type<<"] "<< param->GetName() <<": ";                     \
-  oss << "</span>";                                                     \
+  oss << "["<<type<<"] "<< param->GetName();                            \
+  if( showKey == true )                                                 \
+    {                                                                   \
+    oss << " (-"<< param->GetKey()<<")";                                \
+    }                                                                   \
+  oss << ": </span>";                                                   \
   if( std::string(param->GetDescription()).size()!=0 )                  \
     {                                                                   \
     oss << param->GetDescription();                                     \
@@ -63,7 +67,7 @@ namespace Wrapper
   oss << "</p>";
 
 
-ApplicationHtmlDocGenerator::ApplicationHtmlDocGenerator()
+ApplicationHtmlDocGenerator::ApplicationHtmlDocGenerator() : m_ShowParamKeys(false)
 {
 }
 
@@ -72,7 +76,7 @@ ApplicationHtmlDocGenerator::~ApplicationHtmlDocGenerator()
 }
 
 void
-ApplicationHtmlDocGenerator::GenerateDoc( const Application::Pointer app, std::string & val )
+ApplicationHtmlDocGenerator::GenerateDoc( const Application::Pointer app, std::string & val, const bool showKey )
 {
   itk::OStringStream oss;
   
@@ -108,7 +112,7 @@ ApplicationHtmlDocGenerator::GenerateDoc( const Application::Pointer app, std::s
   otbDocHtmlTitle1Macro("Parameters");
   oss << "<ul>";
   std::string paramDocs("");
-  ApplicationHtmlDocGenerator::GetDocParameters( app, paramDocs );
+  ApplicationHtmlDocGenerator::GetDocParameters( app, paramDocs, showKey );
   oss<<paramDocs;
   oss<<"</ul>";
 
@@ -121,7 +125,7 @@ ApplicationHtmlDocGenerator::GenerateDoc( const Application::Pointer app, std::s
   otbDocHtmlTitle1Macro( "See also" );
   otbDocHtmlBodyMacro( app->GetDocSeeAlso() );
 
-  otbDocHtmlTitle1Macro( "Command line example" );
+  otbDocHtmlTitle1Macro( "Example of use" );
   otbDocHtmlBodyCodeMacro( app->GetHtmlExample() );
 
   oss << "</body></html>";
@@ -130,11 +134,11 @@ ApplicationHtmlDocGenerator::GenerateDoc( const Application::Pointer app, std::s
 }
 
 void
-ApplicationHtmlDocGenerator::GenerateDoc(const Application::Pointer app, const std::string& filename)
+ApplicationHtmlDocGenerator::GenerateDoc(const Application::Pointer app, const std::string& filename, const bool showKey)
 {
   std::string doc;
   
-  ApplicationHtmlDocGenerator::GenerateDoc( app, doc );
+  ApplicationHtmlDocGenerator::GenerateDoc( app, doc, showKey );
 
   std::ofstream ofs(filename.c_str());
   if (!ofs.is_open())
@@ -146,7 +150,7 @@ ApplicationHtmlDocGenerator::GenerateDoc(const Application::Pointer app, const s
   ofs.close();
 }
 
-void ApplicationHtmlDocGenerator::GetDocParameters( const Application::Pointer app, std::string & val)
+void ApplicationHtmlDocGenerator::GetDocParameters( const Application::Pointer app, std::string & val, const bool showKey)
 {
   itk::OStringStream oss;
   const std::vector<std::string> appKeyList = app->GetParametersKeys( false );
@@ -166,25 +170,25 @@ void ApplicationHtmlDocGenerator::GetDocParameters( const Application::Pointer a
      if( app->GetParameterType(key) ==  ParameterType_Group)
        {
        oss << "<li>";
-       otbDocHtmlParamMacro( "group", param);
+       otbDocHtmlParamMacro( "group", param, showKey );
        std::string grDoc;
-       ApplicationHtmlDocGenerator::GetDocParameterGroup( app, grDoc, key );
+       ApplicationHtmlDocGenerator::GetDocParameterGroup( app, grDoc, key, showKey );
        oss<<grDoc;
        oss<<"</li><br />";
        }
      else if( app->GetParameterType(key) ==  ParameterType_Choice )
        {
        oss << "<li>";
-       otbDocHtmlParamMacro( "choice", param);
+       otbDocHtmlParamMacro( "choice", param, showKey );
        std::string grDoc;
-       ApplicationHtmlDocGenerator::GetDocParameterChoice(app, grDoc, key);
+       ApplicationHtmlDocGenerator::GetDocParameterChoice(app, grDoc, key, showKey);
        oss<<grDoc;
        oss<<"</li><br />";
        }
      else
        {
        oss << "<li>";
-       otbDocHtmlParamMacro("param", param);
+       otbDocHtmlParamMacro("param", param, showKey );
        oss << "</li>";
        }
      }
@@ -193,7 +197,7 @@ void ApplicationHtmlDocGenerator::GetDocParameters( const Application::Pointer a
    val = oss.str();
 }
 
-void ApplicationHtmlDocGenerator::GetDocParameterGroup( const Application::Pointer app, std::string & val, const std::string & key )
+void ApplicationHtmlDocGenerator::GetDocParameterGroup( const Application::Pointer app, std::string & val, const std::string & key, const bool showKey )
 {
   Parameter * paramGr  = app->GetParameterByKey( key );
   if( !dynamic_cast<ParameterGroup *>(paramGr))
@@ -214,25 +218,25 @@ void ApplicationHtmlDocGenerator::GetDocParameterGroup( const Application::Point
     if( app->GetParameterType(fullKey) ==  ParameterType_Group)
       {
       oss<<"<li>";
-       otbDocHtmlParamMacro( "group", param);
+       otbDocHtmlParamMacro( "group", param, showKey );
       std::string grDoc;
-      ApplicationHtmlDocGenerator::GetDocParameterGroup( app, grDoc, fullKey );
+      ApplicationHtmlDocGenerator::GetDocParameterGroup( app, grDoc, fullKey, showKey );
       oss<<grDoc;
       oss<<"</li>";
       }
     else if( app->GetParameterType(fullKey) ==  ParameterType_Choice )
       {
       oss<<"<li>";
-      otbDocHtmlParamMacro( "choice", param);
+      otbDocHtmlParamMacro( "choice", param, showKey );
       std::string grDoc;
-      ApplicationHtmlDocGenerator::GetDocParameterChoice(app, grDoc, fullKey );
+      ApplicationHtmlDocGenerator::GetDocParameterChoice(app, grDoc, fullKey, showKey );
       oss<<grDoc;
       oss<<"</li>";
       }
     else
       {
       oss << "<li>";
-      otbDocHtmlParamMacro( "param", param );
+      otbDocHtmlParamMacro( "param", param, showKey );
       oss <<"</li>";
       }
     }
@@ -241,7 +245,7 @@ void ApplicationHtmlDocGenerator::GetDocParameterGroup( const Application::Point
 }
 
 
-void ApplicationHtmlDocGenerator::GetDocParameterChoice( const Application::Pointer app, std::string & val, const std::string & key )
+void ApplicationHtmlDocGenerator::GetDocParameterChoice( const Application::Pointer app, std::string & val, const std::string & key, const bool showKey )
 {
   Parameter * paramCh  = app->GetParameterByKey( key );
   if( !dynamic_cast<ChoiceParameter *>(paramCh))
@@ -261,8 +265,8 @@ void ApplicationHtmlDocGenerator::GetDocParameterChoice( const Application::Poin
     std::string grDoc;
 
     oss << "<li>";
-    otbDocHtmlParamMacro( "group", group);
-    ApplicationHtmlDocGenerator::GetDocParameterGroup( app, grDoc, fullKey );
+    otbDocHtmlParamMacro( "group", group, showKey );
+    ApplicationHtmlDocGenerator::GetDocParameterGroup( app, grDoc, fullKey, showKey );
     oss<<grDoc;
     oss<<"</li>";
     }

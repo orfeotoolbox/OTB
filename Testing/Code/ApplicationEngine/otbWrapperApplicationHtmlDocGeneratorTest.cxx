@@ -33,9 +33,9 @@ int otbWrapperApplicationHtmlDocGeneratorNew(int argc, char* argv[])
 
 int otbWrapperApplicationHtmlDocGeneratorTest1(int argc, char* argv[])
 {
-  if (argc != 4)
+  if (argc != 5)
     {
-    std::cerr << "Usage : " << argv[0] << " module_name module_path outputfilename" << std::endl;
+    std::cerr << "Usage : " << argv[0] << " module_name module_path outputfilename show_parameter_key" << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -53,8 +53,9 @@ int otbWrapperApplicationHtmlDocGeneratorTest1(int argc, char* argv[])
     return EXIT_FAILURE;
     }
 
+  app->Init();
   // Create the documentation output file
-  DocGeneratorType::GenerateDoc( app, std::string(argv[3]) );
+  DocGeneratorType::GenerateDoc( app, std::string(argv[3]), static_cast<bool>(atoi(argv[4])) );
 
   return EXIT_SUCCESS;
 }
