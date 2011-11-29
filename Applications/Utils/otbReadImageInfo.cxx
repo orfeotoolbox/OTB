@@ -44,14 +44,14 @@ private:
     SetDescription("Get information about the image");
 
     // Documentation
-    SetDocName("read image information Application");
+    SetDocName("Read image information Application");
     SetDocLongDescription("Display informations about the image in the logger tab.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
-     AddDocTag("Util");
-     AddDocTag(Tags::Meta);
+    AddDocTag("Util");
+    AddDocTag(Tags::Meta);
   }
 
   virtual ~ReadImageInfo()
