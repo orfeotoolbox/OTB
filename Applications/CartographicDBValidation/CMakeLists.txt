@@ -6,3 +6,6 @@ OTB_CREATE_APPLICATION(NAME           DSFuzzyModelEstimation
                        SOURCES        otbDSFuzzyModelEstimation.cxx
                        LINK_LIBRARIES OTBIO OTBFeatureExtraction OTBFuzzy)
                        
+OTB_CREATE_APPLICATION(NAME           VectorDataDSValidation
+                       SOURCES        otbDataDSValidation.cxx
+                       LINK_LIBRARIES OTBIO OTBFeatureExtraction OTBFuzzy)
