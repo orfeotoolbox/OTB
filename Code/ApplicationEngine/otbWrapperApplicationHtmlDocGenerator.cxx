@@ -55,7 +55,7 @@ namespace Wrapper
 #define otbDocHtmlParamMacro( type, param, showKey )                             \
   oss << "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Courier New, courier'; font-weight:600;\"; >"; \
   oss << "["<<type<<"] "<< param->GetName();                            \
-  if( showKey == true )                                                 \
+  if( showKey == true &&  param->GetKey() != "")                        \
     {                                                                   \
     oss << " (-"<< param->GetKey()<<")";                                \
     }                                                                   \
@@ -67,7 +67,7 @@ namespace Wrapper
   oss << "</p>";
 
 
-ApplicationHtmlDocGenerator::ApplicationHtmlDocGenerator() : m_ShowParamKeys(false)
+ApplicationHtmlDocGenerator::ApplicationHtmlDocGenerator()
 {
 }
 
@@ -126,8 +126,9 @@ ApplicationHtmlDocGenerator::GenerateDoc( const Application::Pointer app, std::s
   otbDocHtmlBodyMacro( app->GetDocSeeAlso() );
 
   otbDocHtmlTitle1Macro( "Example of use" );
-  otbDocHtmlBodyCodeMacro( app->GetHtmlExample() );
-
+  otbDocHtmlBodyMacro( app->GetHtmlExample() );
+  if( showKey == true )
+     otbDocHtmlBodyCodeMacro( app->GetCLExample() );
   oss << "</body></html>";
 
   val = oss.str();

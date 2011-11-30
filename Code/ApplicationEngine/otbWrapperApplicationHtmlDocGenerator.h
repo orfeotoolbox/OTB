@@ -72,9 +72,6 @@ private:
   ApplicationHtmlDocGenerator(const ApplicationHtmlDocGenerator &); //purposely not implemented
   void operator =(const ApplicationHtmlDocGenerator&); //purposely not implemented
 
-  /** Add the key is the description of the parameter or not. */
-  bool m_ShowParamKeys;
-
 }; // End class InputImage Parameter
 
 } // End namespace Wrapper
