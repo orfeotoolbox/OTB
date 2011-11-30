@@ -1947,6 +1947,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 # New test suite:
 IF(OTB_DATA_USE_LARGEINPUT)
+# Decode an area inside one tile
   ADD_TEST(ioTvVectorImageFileReaderWriterJP22TIF_PLEIADES-PRE-R3C1 ${COMMON_TESTS2}
          --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_PLEIADES-PRE-R3C1.tif
                                        ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R3C1.tif
@@ -1958,6 +1959,7 @@ IF(OTB_DATA_USE_LARGEINPUT)
          -time
          )
          
+# Decode an area which need 4 tiles   
   ADD_TEST(ioTvVectorImageFileReaderWriterJP22TIF_PLEIADES-PRE-R3C1-4tiles ${COMMON_TESTS2}
          --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_PLEIADES-PRE-R3C1-4tiles.tif
                                        ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R3C1-4tiles.tif
@@ -1969,6 +1971,7 @@ IF(OTB_DATA_USE_LARGEINPUT)
          -time
          )
 
+# Decode an area inside one tile
   ADD_TEST(ioTvVectorImageFileReaderWriterJP22TIF_PLEIADES-PRE-R4C1 ${COMMON_TESTS2}
          --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1.tif
                                        ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1.tif
@@ -1979,7 +1982,7 @@ IF(OTB_DATA_USE_LARGEINPUT)
          -channels 1 2 3 4
          -time
          )
-         
+# Decode an area which need 4 tiles          
   ADD_TEST(ioTvVectorImageFileReaderWriterJP22TIF_PLEIADES-PRE-R4C1-4tiles ${COMMON_TESTS2}
          --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1-4tiles.tif
                                        ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-R4C1-4tiles.tif
@@ -2005,7 +2008,7 @@ IF(OTB_DATA_USE_LARGEINPUT)
          -time
          )
          
-  # Generate the QL used in monteverdi (take only first bands to put the image in the baseline) 
+  # Generate the QL used in monteverdi (take only first band to put the image in the baseline) 
   ADD_TEST(ioTvVectorImageFileReaderWriterJP22TIF_PLEIADES-PRE-R4C1-FullQL ${COMMON_TESTS2}
          --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_pleiades_ql.tif
                                         ${TEMP}/ioExtractROI_JPEG2K_2_TIF_pleiades_ql_OUT.tif
@@ -2015,6 +2018,41 @@ IF(OTB_DATA_USE_LARGEINPUT)
          -channels 1
          -time
          )
+         
+  # Decode an area inside one tile
+  ADD_TEST(ioTvVectorImageFileReaderWriterJP22TIF_PLEIADES-PRE-V3-R1C1 ${COMMON_TESTS2}
+         --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_PLEIADES-PRE-V3-R1C1.tif
+                                       ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-V3-R1C1_OUT.tif
+         otbMultiChannelExtractROI
+         -ushort ${LARGEDATA}/PLEIADES-PRE/FCGC600011783/IMG_PHR1Z_PMS_N_001/IMG_PHR1A_PMS-N_201006181052297_ORT_IPU_20111011_0619-001_R1C1.JP2
+         -ushort ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-V3-R1C1_OUT.tif
+         -startX 256 -startY 512 -sizeX 256 -sizeY 128
+         -channels 1 2 3
+         -time
+         )
+         
+  # Decode an area which need 4 tiles   
+  ADD_TEST(ioTvVectorImageFileReaderWriterJP22TIF_PLEIADES-PRE-V3-R1C1-4tiles ${COMMON_TESTS2}
+         --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_PLEIADES-PRE-V3-R1C1-4tiles.tif
+                                       ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-V3-R1C1-4tiles_OUT.tif
+         otbMultiChannelExtractROI
+         -ushort ${LARGEDATA}/PLEIADES-PRE/FCGC600011783/IMG_PHR1Z_PMS_N_001/IMG_PHR1A_PMS-N_201006181052297_ORT_IPU_20111011_0619-001_R1C1.JP2
+         -ushort ${TEMP}/ioTvJP22TIF_Extract_PLEIADES-PRE-V3-R1C1-4tiles_OUT.tif
+         -startX 2000 -startY 2000 -sizeX 256 -sizeY 128
+         -channels 1 2 3
+         -time
+         )
+         
+  # Generate the QL used in monteverdi (take only first band to put the image in the baseline) 
+  ADD_TEST(ioTvVectorImageFileReaderWriterJP22TIF_PLEIADES-PRE-V3-R1C1-FullQL ${COMMON_TESTS2}
+         --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_pleiades_V3_ql.tif
+                                        ${TEMP}/ioExtractROI_JPEG2K_2_TIF_pleiades_V3_ql_OUT.tif
+         otbMultiChannelExtractROI
+         -ushort ${LARGEDATA}/PLEIADES-PRE/ ${LARGEDATA}/PLEIADES-PRE/FCGC600011783/IMG_PHR1Z_PMS_N_001/IMG_PHR1A_PMS-N_201006181052297_ORT_IPU_20111011_0619-001_R1C1.JP2:5
+         -ushort ${TEMP}/ioExtractROI_JPEG2K_2_TIF_pleiades_V3_ql_OUT.tif
+         -channels 1
+         -time
+         )             
 
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
