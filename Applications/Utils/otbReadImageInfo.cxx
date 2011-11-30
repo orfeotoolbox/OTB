@@ -205,7 +205,7 @@ private:
       SetParameterString("time",osstime.str());
 
       itk::OStringStream osskeywordlist;
-      osskeywordlist<<metadataInterface->GetImageKeywordlist() << std::endl;    
+      osskeywordlist<<metadataInterface->GetImageKeywordlist() << std::endl;
       SetParameterString("keywordlist",osskeywordlist.str());
 
       double ullat = atof(metadataInterface->GetImageKeywordlist().GetMetadataByKey("ul_lat").c_str());
