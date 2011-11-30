@@ -228,10 +228,10 @@ private:
       std::vector<std::string> gcp_infos;
 
       for(int gcpIdx = 0; gcpIdx  < GetParameterInt("gcp.count"); ++ gcpIdx)
-      {
-      gcp_ids.push_back(metadataInterface->GetGCPId(gcpIdx));
-      gcp_infos.push_back(metadataInterface->GetGCPInfo(gcpIdx));
-      }
+	{
+	gcp_ids.push_back(metadataInterface->GetGCPId(gcpIdx));
+	gcp_infos.push_back(metadataInterface->GetGCPInfo(gcpIdx));
+	}
       
       SetParameterStringList("gcp.ids",gcp_ids);
       SetParameterStringList("gcp.info",gcp_infos);
@@ -261,16 +261,8 @@ private:
       {
       //Do nothing at all
       }
-   
-    //Print formated output parameters
-    std::ostringstream oss;
-    oss << std::setprecision(15);
-    // oss << GetParameterString("sensor");
-    // oss << GetParameterString("id");
-    // oss << GetParameterString("time");
-    oss << std::endl;
-    
-    this->GetLogger()->Info("" /*oss.str()*/ );
+    //FIXME Logger must output also parameter groups
+    this->GetLogger()->Info("");
   }
 
 };
