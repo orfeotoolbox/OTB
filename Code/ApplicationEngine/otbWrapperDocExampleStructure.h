@@ -34,40 +34,6 @@ namespace otb
 namespace Wrapper
 {
 
-/** \class ParamStructure
- *  \brief This class is a structure that gathered information on a parameter.
- *  It stores the parameter jey, name and a list of possible
- *  values. Each value is an element of a specific example.
- *  ...).
- */
-class ParamStructure
-{
-public :
-  ParamStructure() : m_Key(""), m_Name(""), m_Values()
-  {
-    m_Values.push_back("");
-  };
-  virtual ~ParamStructure(){};
-
-  std::string m_Key;
-  std::string m_Name;
-  std::vector< std::string > m_Values;
-
-  ParamStructure(const ParamStructure & param)
-  {
-    this->m_Key = param.m_Key;
-    this->m_Name = param.m_Name;
-    this->m_Values =  param.m_Values;
-  };
-
- void operator =(const ParamStructure & param)
-  {
-    this->m_Key = param.m_Key;
-    this->m_Name = param.m_Name;
-    this->m_Values =  param.m_Values;
-  }
-};
-
 /** \class DocExampleStructure
  *  \brief This class is a structure that gathered the necessary
  *  element to generate an example (for CommandLine, python, Java
@@ -91,27 +57,22 @@ public:
   /** Runtime information */
   itkTypeMacro(DocExampleStructure, itk::Object);
 
-  typedef std::vector<ParamStructure> ParameterListType;
+  typedef std::pair<std::string,std::string> ParameterType;
+  typedef std::vector<ParameterType> ParametersVectorType;
+  typedef std::vector<ParametersVectorType> ParametersVectorOfVectorType;
 
   /** Parameter list accessors. */
   /** Parameter list accessors : adding key and name */
-  void AddParameter( const std::string key, const std::string name );
-
-  /** et a value to a parameter. Only parmeters with value will be
-  * used in the example. */
-  void SetParameterValue( const std::string key, const std::string value, unsigned int exId=0 );
+  void AddParameter( const std::string key, const std::string name, unsigned int exId = 0);
 
   /** Get the parameter list. */
-  ParameterListType GetParameterList();
+  ParametersVectorOfVectorType GetParameterList();
 
-  /** Get a specific parameter couple.*/
-  ParamStructure GetParameter( unsigned int i );
-
-  /** Get a specific parameter couple key.*/
-  std::string GetParameterKey( unsigned int i );
+  /** Get number of parameters */
+  unsigned int GetNumberOfParameters(unsigned int exId = 0);
 
   /** Get a specific parameter couple key.*/
-  std::string GetParameterName( unsigned int i );
+  std::string GetParameterKey( unsigned int i, unsigned int exId = 0 );
 
   /** Get a specific parameter couple value as string.*/
   std::string GetParameterValue( unsigned int i, unsigned int exId=0 );
@@ -159,11 +120,14 @@ private:
   void operator =(const DocExampleStructure&); //purposely not implemented
 
   /** List of the application parameters. List of key/name/value couples. */
-  ParameterListType m_ParameterList;
+  ParametersVectorOfVectorType m_ParameterList;
+
   /** Application name */
   std::string m_ApplicationName;
+
   /** Example comments */
   std::vector<std::string> m_ExampleCommentList;
+
   /** Stores the number of example. */
   unsigned int m_NbOfExamples;
 

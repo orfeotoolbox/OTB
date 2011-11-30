@@ -26,9 +26,10 @@ namespace otb
 namespace Wrapper
 {
 
-DocExampleStructure::DocExampleStructure() : m_NbOfExamples(1), m_ExampleCommentList()
+DocExampleStructure::DocExampleStructure() : m_ParameterList(), m_ApplicationName(""), m_ExampleCommentList(), m_NbOfExamples(1)
 {
   m_ExampleCommentList.push_back("");
+  m_ParameterList.push_back(ParametersVectorType());
 }
 
 DocExampleStructure::~DocExampleStructure()
@@ -36,75 +37,31 @@ DocExampleStructure::~DocExampleStructure()
 }
 
 void
-DocExampleStructure::AddParameter( const std::string key, const std::string name )
+DocExampleStructure::AddParameter( const std::string key, const std::string value, unsigned int exId)
 {
-  ParamStructure mParam;
-  mParam.m_Key = key;
-  mParam.m_Name = name;
-  mParam.m_Values = std::vector< std::string >(m_NbOfExamples, "");
-  m_ParameterList.push_back( mParam );
-}
   
-void 
-DocExampleStructure::SetParameterValue( const std::string key, const std::string value, unsigned int exId )
-{
-  bool found = false;
-  unsigned int i=0;
-  while ( i<m_ParameterList.size() && !found )
-    {
-    if( this->GetParameterKey(i) == key )
-      {
-      ParamStructure mParam = m_ParameterList[i];
-      if( m_ParameterList[i].m_Values.size() < exId )
-        {
-        itkGenericExceptionMacro( "Only "<<m_ParameterList[i].m_Values.size()<<" values can be stored ("<<exId<<" asked).");
-        }
 
-      m_ParameterList[i].m_Values[exId] = value;
-      
-      found = true;
-      }
-    i++;
-    }
-
-  if( !found)
-    itkGenericExceptionMacro( "No parameter with key \""<<key<<"\" found." );
+  m_ParameterList.at(exId).push_back(std::make_pair(key,value));
 }
 
-DocExampleStructure::ParameterListType 
+DocExampleStructure::ParametersVectorOfVectorType 
 DocExampleStructure::GetParameterList()
 {
   return m_ParameterList;
 }
 
 /** Get a specific parameter couple.*/
-ParamStructure
-DocExampleStructure::GetParameter( unsigned int i )
+std::string
+DocExampleStructure::GetParameterKey( unsigned int i, unsigned int exId)
 {
-  if( m_ParameterList.size() < i )
-    itkGenericExceptionMacro( "Index "<<i<<" out of range. (max index: "<<m_ParameterList.size()-1<<")." );
-  
-  return m_ParameterList[i];
+  return m_ParameterList.at(exId).at(i).first;
 }
 
-
-
-std::string 
-DocExampleStructure::GetParameterKey( unsigned int i )
-{
-  return this->GetParameter(i).m_Key;
-}
-
-std::string 
-DocExampleStructure::GetParameterName( unsigned int i )
-{
-  return this->GetParameter(i).m_Name;
-}
 
 std::string 
 DocExampleStructure::GetParameterValue( unsigned int i, unsigned int exId )
 {
-  return this->GetParameter(i).m_Values[exId];
+  return m_ParameterList.at(exId).at(i).second;
 }
 
 void 
@@ -128,10 +85,7 @@ DocExampleStructure::GetExampleCommentList()
 std::string
 DocExampleStructure::GetExampleComment( unsigned int i)
 {
-  if( m_ExampleCommentList.size() < i )
-    itkGenericExceptionMacro( "Index "<<i<<" out of range. (max index: "<<m_ExampleCommentList.size()-1<<")." );
-  
-  return m_ExampleCommentList[i];
+  return m_ExampleCommentList.at(i);
 }
 
 void
@@ -149,9 +103,8 @@ DocExampleStructure::AddExample( const std::string & comm )
 {
   m_ExampleCommentList.push_back( comm );
   m_NbOfExamples++;
-  // Add a field for the values
-  for( unsigned int i=0; i<m_ParameterList.size(); i++)
-    m_ParameterList[i].m_Values.push_back("");
+
+  m_ParameterList.push_back(ParametersVectorType());
 
   return m_ExampleCommentList.size()-1;
 }
@@ -160,7 +113,7 @@ DocExampleStructure::AddExample( const std::string & comm )
 std::string 
 DocExampleStructure::GenerateCLExample( unsigned int exId )
 {
-  if( m_ApplicationName.empty() || m_ParameterList.size() == 0 )
+  if( m_ApplicationName.empty() || m_ParameterList.at(exId).empty() )
     {
     return "";
     }
@@ -168,11 +121,12 @@ DocExampleStructure::GenerateCLExample( unsigned int exId )
   itk::OStringStream oss;
   oss << "otbcli_" << m_ApplicationName << " ";
   
-  for (unsigned int i=0; i< m_ParameterList.size(); i++)
+  for (ParametersVectorType::const_iterator it = m_ParameterList.at(exId).begin();
+       it != m_ParameterList.at(exId).end(); ++it)
     {
-    if( this->GetParameterValue(i, exId) != "" )
+    if( it->second != "" )
       {
-      oss<< "-" << this->GetParameterKey(i) << " " << this->GetParameterValue(i, exId) <<" ";
+      oss<< "-" << it->first << " " << it->second <<" ";
       }
     }
   
@@ -211,13 +165,15 @@ DocExampleStructure::GenerateHtmlExample( unsigned int exId )
   
   itk::OStringStream oss;
   oss << "<ul>";
-  for (unsigned int i=0; i< m_ParameterList.size(); i++)
+
+  for (ParametersVectorType::const_iterator it = m_ParameterList.at(exId).begin();
+       it != m_ParameterList.at(exId).end(); ++it)
     {
-    if( this->GetParameterValue(i, exId) != "" )
+    if( it->second != "" )
       {
       oss << "<li>";
       oss << "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">";
-      oss << this->GetParameterName(i) << ": " << this->GetParameterValue(i, exId);
+      oss << it->first << ": " << it->second;
       oss << "</p>";
       oss << "</li>";
       }

@@ -173,7 +173,6 @@ public:
   void AddDocTag( const std::string & tag );
   std::vector<std::string> GetDocTags();
 
-  DocExampleStructure::Pointer GetDocExample();
   void SetDocExampleParameterValue( const std::string key, const std::string value, unsigned int exId=0 );
   void SetExampleComment( const std::string & comm, unsigned int i );
   unsigned int AddExample( const std::string & comm="" );

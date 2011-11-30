@@ -524,7 +524,7 @@ public:
 
   void SetDocExampleParameterValue( const std::string key, const std::string value, unsigned int exId=0 )
   {
-    m_DocExample->SetParameterValue( key, value, exId );
+    m_DocExample->AddParameter( key, value, exId );
     this->Modified();
   }
 
