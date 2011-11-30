@@ -55,7 +55,7 @@ namespace Wrapper
 {
 
 CommandLineLauncher::CommandLineLauncher() :
-  m_Expression(""), m_WatcherList(), m_ReportProgress(true)
+  m_Expression(""), m_WatcherList(), m_ReportProgress(true), m_MaxKeySize(0)
 {
   m_Application = NULL;
   m_Parser = CommandLineParser::New();
@@ -576,39 +576,18 @@ void CommandLineLauncher::DisplayHelp()
     std::cerr << m_Application->GetCLExample() << std::endl;
     }
   std::cerr << "======================= PARAMETERS =======================" << std::endl;
-  //// Module path parameter
-  std::cerr << m_Parser->GetPathsAsString(m_Expression) << " (Executables paths)" << std::endl;
-  std::cerr << "\t   Description: Paths to the executable library." << std::endl;
-  std::cerr << "\t          Type: List of string (list of path)" << std::endl;
-  if (m_Parser->GetPathsAsString(m_Expression).size() != 0)
-    {
-    const std::string envVal = itksys::SystemTools::GetEnv("ITK_AUTOLOAD_PATH");
-    if (envVal.size() != 0)
-      std::cerr << "\t       Status: ENVIRONEMENT PATH : " << envVal << std::endl;
-    else std::cerr << "\t       Status: NO VALUE " << std::endl;
-    }
-  else
-    if (m_Path == "")
-      {
-      std::cerr << "\t       Status: NO VALUE " << std::endl;
-      }
-    else std::cerr << "\t       Status: USER VALUE: " << m_Path << std::endl;
-
   //// progress report parameter
-  std::cerr << "--progress (Report progress)" << std::endl;
-  std::cerr << "\t   Description: Do report progress." << std::endl;
-  std::cerr << "\t          Type: Boolean" << std::endl;
-  std::cerr << "\t Default value: 1" << std::endl;
-  if (!m_Parser->IsAttributExists("--progress", m_Expression))
-    std::cerr << "\t        Status: DEFAULT VALUE" << std::endl;
-  else
-    if (m_Parser->GetAttribut("--progress", m_Expression).size() == 0)
-      std::cerr << "\t       Status: none" << m_Path << std::endl;
-    else std::cerr << "\t       Status: USER VALUE: " << m_Parser->GetAttribut("--progress", m_Expression)[0]
-                   << std::endl;
+  std::cerr << "        --progress (Report progress) <boolean>" << std::endl;
 
   const std::vector<std::string> appKeyList = m_Application->GetParametersKeys(true);
   const unsigned int nbOfParam = appKeyList.size();
+
+  m_MaxKeySize = 0;
+  for (unsigned int i = 0; i < nbOfParam; i++)
+    {
+    if( m_MaxKeySize < appKeyList[i].size() )
+      m_MaxKeySize = appKeyList[i].size();
+    }
 
   for (unsigned int i = 0; i < nbOfParam; i++)
     {
@@ -636,227 +615,84 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
     }
 
   std::ostringstream oss;
-  oss << "--" << paramKey << " (" << param->GetName() << ")" << std::endl;
 
-  // Display parameter description
-  if (std::string(param->GetDescription()).size() != 0)
-    {
-    oss << "\t   Description: " << param->GetDescription() << std::endl;
-    }
-  else
-    {
-    oss << "\t   Description: none" << std::endl;
-    }
-
-  // Display the type the parameter
-  if (type == ParameterType_Radius)
-    {
-    oss << "\t          Type: Int" << std::endl;
-    }
-  else
-    if (type == ParameterType_Empty)
-      {
-      oss << "\t          Type: Boolean" << std::endl;
-      }
-    else
-      if (type == ParameterType_Int)
-        {
-        oss << "\t          Type: Int" << std::endl;
-        }
-      else if( type == ParameterType_RAM )
-        {
-        oss<<"\t          Type: RAM"<<std::endl;
-        }
-      else
-        if (type == ParameterType_Float)
-          {
-          oss << "\t          Type: Float" << std::endl;
-          }
-        else
-          if (type == ParameterType_Filename)
-            {
-            oss << "\t          Type: String (file name)" << std::endl;
-            }
-          else
-            if (type == ParameterType_Directory)
-              {
-              oss << "\t          Type: String (Directory path)" << std::endl;
-              }
-            else
-              if (type == ParameterType_InputImage || type == ParameterType_ComplexInputImage)
-                {
-                oss << "\t          Type: String (input image file name)" << std::endl;
-                }
-              else
-                if (type == ParameterType_InputVectorData)
-                  {
-                  oss << "\t          Type: String (input vector data file name)" << std::endl;
-                  }
-                else
-                  if (type == ParameterType_OutputImage)
-                    {
-                    oss << "\t          Type: String (output image file name and optionally its pixel type)"
-                        << std::endl;
-                  oss
-                        << "\t          You can also add after the filename the output pixel type"
-                     << std::endl;
-                    oss
-                        << "\t          Possible pixel types:{int8, uint8, int16, uint16, int32, uint32, float, double}"
-                      << std::endl;
-                    }
-                  else
-                    if (type == ParameterType_OutputVectorData)
-                      {
-                      oss << "\t          Type: String (output vector data file name)" << std::endl;
-                      }
-                    else
-                      if (type == ParameterType_String)
-                        {
-                        oss << "\t          Type: String" << std::endl;
-                        }
-                      else
-                        if (type == ParameterType_Choice)
-                          {
-                          oss << "\t          Type: String: ";
-
-                          std::vector<std::string> keys = m_Application->GetChoiceKeys(paramKey);
-                          std::vector<std::string> names = m_Application->GetChoiceNames(paramKey);
-                          for (unsigned int j = 0; j < keys.size(); j++)
-                            {
-                            oss << keys[j] << " for " << names[j];
-                            if (j <= keys.size() - 1)
-                              {
-                              oss << ", ";
-                              }
-                            }
-                          oss << std::endl;
-                          }
-                        else
-                          if (type == ParameterType_ListView)
-                            {
-                            // We don't have access to the possible values...
-                            oss << "\t          Type: List of String" << std::endl;
-                            }
-                          else
-                            {
-                            oss << "\t          Type: Type not handle yet" << std::endl;
-                            }
-
-  // Display parameter values
-  if (m_Application->HasValue(paramKey))
-    {
-    // In the case choice, don't show the enum type.
-    if (type == ParameterType_Choice)
-      {
-      oss << "\t Default value: " << m_Application->GetChoiceKeys(paramKey)[m_Application->GetParameterInt(paramKey)]
-          << std::endl;
-      }
-    else
-      if (type == ParameterType_OutputImage)
-        {
-        oss << "\t Default value: filename: " << m_Application->GetParameterAsString(paramKey) << std::endl;
-        oss << "\t                pixel type: ";
-        ImagePixelType outPixType = m_Application->GetParameterOutputImagePixelType(paramKey);
-        if (outPixType == ImagePixelType_int8)
-          oss << "int8";
-        else
-          if (outPixType == ImagePixelType_uint8)
-            oss << "uint8";
-          else
-            if (outPixType == ImagePixelType_int16)
-              oss << "int16";
-            else
-              if (outPixType == ImagePixelType_uint16)
-                oss << "uint16";
-              else
-                if (outPixType == ImagePixelType_int32)
-                  oss << "int32";
-                else
-                  if (outPixType == ImagePixelType_uint32)
-                    oss << "uint32";
-                  else
-                    if (outPixType == ImagePixelType_float)
-                      oss << "float";
-                    else
-                      if (outPixType == ImagePixelType_double)
-                        oss << "double";
-                      else
-                        {
-                        itkExceptionMacro("Unknown output pixel type.");
-                        }
-        }
-      else
-        {
-        oss << "\t Default value: " << m_Application->GetParameterAsString(paramKey) << std::endl;
-        }
-    }
-  else
-    {
-    if (type == ParameterType_OutputImage)
-      {
-      oss << "\t Default value: filename: none" << std::endl;
-      oss << "\t                pixel type: ";
-      ImagePixelType outPixType = m_Application->GetParameterOutputImagePixelType(paramKey);
-      if (outPixType == ImagePixelType_int8)
-        oss << "int8" << std::endl;
-      else
-        if (outPixType == ImagePixelType_uint8)
-          oss << "uint8" << std::endl;
-        else
-          if (outPixType == ImagePixelType_int16)
-            oss << "int16" << std::endl;
-          else
-            if (outPixType == ImagePixelType_uint16)
-              oss << "uint16" << std::endl;
-            else
-              if (outPixType == ImagePixelType_int32)
-                oss << "int32" << std::endl;
-              else
-                if (outPixType == ImagePixelType_uint32)
-                  oss << "uint32" << std::endl;
-                else
-                  if (outPixType == ImagePixelType_float)
-                    oss << "float" << std::endl;
-                  else
-                    if (outPixType == ImagePixelType_double)
-                      oss << "double" << std::endl;
-                    else
-                      {
-                      itkExceptionMacro("Unknown output pixel type.");
-                      }
-      }
-    else oss << "\t Default value: none" << std::endl;
-    }
-
+  // Check if mandatory parameter are present and have value
+  // A param has to be set if it is mandatory and :
+  // is root OR its parent is active
+  // NB: a root parameter is not active
+  bool isMissing = false;
   if (!m_Parser->IsAttributExists(std::string("--").append(paramKey), m_Expression))
     {
     if (!m_Application->HasValue(paramKey))
-      oss << "\t        Status: MISSING" << std::endl;
-    else oss << "\t        Status: DEFAULT VALUE" << std::endl;
+      {
+      if( param->GetMandatory() && param->GetRole() != Role_Output )
+        {
+        if( param->GetRoot()->GetActive() || param->IsRoot() || param->GetRoot()->GetMandatory() )
+          {
+          if (type != ParameterType_Group)
+            {
+            isMissing = true;
+            }
+          }
+        }
+      }
+    }
+
+  if( isMissing )
+    {
+    oss << "MISSING ";
     }
   else
-    if (m_Parser->GetAttribut(std::string("--").append(paramKey), m_Expression).size() == 0)
-      {
-      oss << "\t        Status: NO VALUE ASSOCIATED" << std::endl;
-      }
-    else
-      {
-      if (type == ParameterType_OutputImage)
-        {
-        std::vector<std::string> values = m_Parser->GetAttribut(std::string("--").append(paramKey), m_Expression);
-        oss << "\t        Status: filename : USER VALUE (" << values[0] << ")" << std::endl;
-        if (values.size() == 2)
-          oss << "\t        Status: pixel type : USER VALUE (" << values[1] << ")" << std::endl;
-        else oss << "\t        Status: pixel type : DEFAULT VALUE" << std::endl;
-        }
-      else
-        {
-        oss << "\t        Status: USER VALUE (";
-        oss << m_Parser->GetAttributAsString(std::string("--").append(paramKey), m_Expression) << ")";
-        oss << std::endl;
-        }
-      }
+    {
+    oss << "        ";
+    }
 
+  std::string bigKey = paramKey;
+  for(unsigned int i=0; i<m_MaxKeySize-paramKey.size(); i++)
+    bigKey.append(" ");
+    
+  oss<< "--" << bigKey << " ";
+
+  // Display the type the parameter
+  if (type == ParameterType_Radius || type == ParameterType_Int || type == ParameterType_RAM)
+    {
+    oss << "<int32>         ";
+    }
+  else if (type == ParameterType_Empty )
+    {
+    oss << "<boolean>       ";
+    }
+  else if (type == ParameterType_Float)
+    {
+    oss << "<float>         ";
+    }
+  else if (type == ParameterType_Filename || type == ParameterType_Directory || type == ParameterType_InputImage ||
+           type == ParameterType_ComplexInputImage || type == ParameterType_InputVectorData || type == ParameterType_OutputVectorData ||
+           type == ParameterType_String || type == ParameterType_Choice )
+    {
+    oss << "<string>        ";
+    }
+  else if (type == ParameterType_OutputImage)
+    {
+    oss << "<string> [pixel]";
+    }
+  else if (type == ParameterType_Choice || type == ParameterType_ListView || ParameterType_InputImageList ||
+           type == ParameterType_InputVectorDataList || type == ParameterType_StringList )
+    {
+    oss << "<string list>       ";
+    }
+  else
+    itkExceptionMacro("Not handled parameter type.");
+  
+  
+  oss<< " (" << param->GetName() << ") ";
+  
+  if (type == ParameterType_OutputImage)
+    {
+    oss << "[pixel=uint8/int8/uint16/int16/uint32/int32/float/double]";
+    }
+
+  oss << std::endl;
   return oss.str();
 }
 

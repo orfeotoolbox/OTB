@@ -162,6 +162,7 @@ protected:
   /** Clear watcher list, deleting its pointers. */
   void DeleteWatcherList();
 
+
 private:
 
   CommandLineLauncher(const CommandLineLauncher &); //purposely not implemented
@@ -179,6 +180,8 @@ private:
 
   AddProcessCommandType::Pointer    m_AddProcessCommand;
   bool                              m_ReportProgress;
+
+  unsigned int m_MaxKeySize;
 }; //end class
 
 } // end namespace Wrapper
