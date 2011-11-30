@@ -41,10 +41,10 @@ DocExampleStructure::AddParameter( const std::string key, const std::string valu
 {
   
 
-  m_ParameterList.at(exId).push_back(std::make_pair(key,value));
+  m_ParameterList.at(exId).push_back(std::make_pair(key, value));
 }
 
-DocExampleStructure::ParametersVectorOfVectorType 
+DocExampleStructure::ParametersVectorOfVectorType
 DocExampleStructure::GetParameterList()
 {
   return m_ParameterList;
@@ -58,25 +58,25 @@ DocExampleStructure::GetParameterKey( unsigned int i, unsigned int exId)
 }
 
 
-std::string 
+std::string
 DocExampleStructure::GetParameterValue( unsigned int i, unsigned int exId )
 {
   return m_ParameterList.at(exId).at(i).second;
 }
 
-void 
+void
 DocExampleStructure::SetApplicationName( const std::string name )
 {
   m_ApplicationName = name;
 }
 
-std::string 
+std::string
 DocExampleStructure::GetApplicationName()
 {
   return m_ApplicationName;
 }
 
-std::vector<std::string>  
+std::vector<std::string>
 DocExampleStructure::GetExampleCommentList()
 {
   return m_ExampleCommentList;
@@ -98,7 +98,7 @@ DocExampleStructure::SetExampleComment( const std::string & comm, unsigned int i
 }
 
 
-unsigned int   
+unsigned int
 DocExampleStructure::AddExample( const std::string & comm )
 {
   m_ExampleCommentList.push_back( comm );
@@ -110,7 +110,7 @@ DocExampleStructure::AddExample( const std::string & comm )
 }
 
 
-std::string 
+std::string
 DocExampleStructure::GenerateCLExample( unsigned int exId )
 {
   if( m_ApplicationName.empty() || m_ParameterList.at(exId).empty() )
@@ -138,14 +138,14 @@ DocExampleStructure::GenerateCLExample( unsigned int exId )
   return res;
 }
 
-std::string 
+std::string
 DocExampleStructure::GenerateCLExample()
 {
   itk::OStringStream oss;
   for( unsigned int exId=0; exId<m_NbOfExamples; exId++)
     {
     if( !m_ExampleCommentList[exId].empty() )
-      oss << m_ExampleCommentList[exId]<< std::endl;  
+      oss << m_ExampleCommentList[exId]<< std::endl;
     oss << this->GenerateCLExample( exId );
     oss << std::endl;
     }
@@ -155,7 +155,7 @@ DocExampleStructure::GenerateCLExample()
 }
 
 
-std::string 
+std::string
 DocExampleStructure::GenerateHtmlExample( unsigned int exId )
 {
   if( m_ApplicationName.empty() || m_ParameterList.size() == 0 )
@@ -187,7 +187,7 @@ DocExampleStructure::GenerateHtmlExample( unsigned int exId )
 }
 
 
-std::string 
+std::string
 DocExampleStructure::GenerateHtmlExample()
 {
   itk::OStringStream oss;

@@ -132,7 +132,7 @@ private:
     SetDocExampleParameterValue("szx","1100");
     SetDocExampleParameterValue("szy","1100");
     
-    } 
+    }
 
   void DoUpdateParameters()
     {
@@ -159,7 +159,7 @@ private:
     // a reference image is given as input
     if (HasValue("im"))
       {
-      if (HasValue("szx") || HasValue("szy") || HasValue("orx") || HasValue("ory") 
+      if (HasValue("szx") || HasValue("szy") || HasValue("orx") || HasValue("ory")
           || HasValue("spx") || HasValue("spy") || HasValue("epsg"))
         {
         otbAppLogWARNING("A reference image has been given, other parameters "
@@ -267,7 +267,7 @@ private:
     
     AddProcess(m_VectorDataRendering,"Rasterization");
     
-    SetParameterOutputImage<UInt8ImageType>("out",outputImage);
+    SetParameterOutputImage<UInt8ImageType>("out", outputImage);
     
     }
   

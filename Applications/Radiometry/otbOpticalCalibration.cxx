@@ -151,7 +151,7 @@ private:
    // Doc example parameter settings
     SetDocExampleParameterValue("in", "WV2_MUL_ROI_1000_100.tif");
     SetDocExampleParameterValue("level", "toa");
-    SetDocExampleParameterValue("out", "OpticalCalibration.tif");  
+    SetDocExampleParameterValue("out", "OpticalCalibration.tif");
   }
 
   void DoUpdateParameters()

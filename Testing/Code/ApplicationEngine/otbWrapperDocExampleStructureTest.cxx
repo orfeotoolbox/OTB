@@ -56,7 +56,7 @@ int otbWrapperDocExampleStructureTest(int argc, char* argv[])
     return EXIT_FAILURE;
     }
   ofs << docStruct->GenerateCLExample();
-  ofs.close(); 
+  ofs.close();
 
   return EXIT_SUCCESS;
 }

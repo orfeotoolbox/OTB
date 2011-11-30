@@ -134,7 +134,7 @@ private:
     SetParameterDescription("rgb.b","Blue band Number");
     SetDefaultParameterInt("rgb.b", 3);
     
-    AddParameter(ParameterType_String,"projectionref","Projection Coordinate System");   
+    AddParameter(ParameterType_String,"projectionref","Projection Coordinate System");
     GetParameterByKey("projectionref")->SetRole(Role_Output);
     
     AddParameter(ParameterType_String,"keywordlist","Image Keywordlist");
@@ -164,7 +164,7 @@ private:
 
   void DoExecute()
   {
-    try 
+    try
       {
       FloatVectorImageType::Pointer inImage = GetParameterImage("in");
       // Read informations
@@ -172,19 +172,19 @@ private:
       ImageMetadataInterfaceType::Pointer metadataInterface = ImageMetadataInterfaceFactory::CreateIMI(inImage->GetMetaDataDictionary());
 
       //Get image size
-      SetParameterInt("sizex",inImage->GetLargestPossibleRegion().GetSize()[0]);
-      SetParameterInt("sizey",inImage->GetLargestPossibleRegion().GetSize()[1]);
+      SetParameterInt("sizex", inImage->GetLargestPossibleRegion().GetSize()[0]);
+      SetParameterInt("sizey", inImage->GetLargestPossibleRegion().GetSize()[1]);
 
       //Get image spacing
-      SetParameterInt("spacingx",inImage->GetSpacing()[0]);
-      SetParameterInt("spacingy",inImage->GetSpacing()[1]);
+      SetParameterInt("spacingx", inImage->GetSpacing()[0]);
+      SetParameterInt("spacingy", inImage->GetSpacing()[1]);
     
-      SetParameterInt("numberbands",inImage->GetNumberOfComponentsPerPixel());
+      SetParameterInt("numberbands", inImage->GetNumberOfComponentsPerPixel());
 
       //std::cout << "metadata " << metadataInterface << std::endl;
-      SetParameterString("sensor",metadataInterface->GetSensorID());
-      SetParameterString("id",metadataInterface->GetImageKeywordlist().GetMetadataByKey("image_id"));
-      SetParameterString("projectionref",metadataInterface->GetProjectionRef());
+      SetParameterString("sensor", metadataInterface->GetSensorID());
+      SetParameterString("id", metadataInterface->GetImageKeywordlist().GetMetadataByKey("image_id"));
+      SetParameterString("projectionref", metadataInterface->GetProjectionRef());
       
       // Format acquisition time
       itk::OStringStream osstime;
@@ -202,11 +202,11 @@ private:
         osstime<<"0";
       osstime<<metadataInterface->GetMinute();
       osstime<<":00";
-      SetParameterString("time",osstime.str());
+      SetParameterString("time", osstime.str());
 
       itk::OStringStream osskeywordlist;
       osskeywordlist<<metadataInterface->GetImageKeywordlist() << std::endl;
-      SetParameterString("keywordlist",osskeywordlist.str());
+      SetParameterString("keywordlist", osskeywordlist.str());
 
       double ullat = atof(metadataInterface->GetImageKeywordlist().GetMetadataByKey("ul_lat").c_str());
       double ullon = atof(metadataInterface->GetImageKeywordlist().GetMetadataByKey("ul_lon").c_str());
@@ -217,12 +217,12 @@ private:
       double lllat = atof(metadataInterface->GetImageKeywordlist().GetMetadataByKey("ll_lat").c_str());
       double lllon = atof(metadataInterface->GetImageKeywordlist().GetMetadataByKey("ll_lon").c_str());
       
-      SetParameterInt("rgb.r",metadataInterface->GetDefaultDisplay()[0]);
-      SetParameterInt("rgb.g",metadataInterface->GetDefaultDisplay()[1]);
-      SetParameterInt("rgb.b",metadataInterface->GetDefaultDisplay()[2]);
+      SetParameterInt("rgb.r", metadataInterface->GetDefaultDisplay()[0]);
+      SetParameterInt("rgb.g", metadataInterface->GetDefaultDisplay()[1]);
+      SetParameterInt("rgb.b", metadataInterface->GetDefaultDisplay()[2]);
  
-      SetParameterInt("gcp.count",metadataInterface->GetGCPCount());
-      SetParameterString("gcp.proj",metadataInterface->GetGCPProjection());
+      SetParameterInt("gcp.count", metadataInterface->GetGCPCount());
+      SetParameterString("gcp.proj", metadataInterface->GetGCPProjection());
       
       std::vector<std::string> gcp_ids;
       std::vector<std::string> gcp_infos;
@@ -233,18 +233,18 @@ private:
         gcp_infos.push_back(metadataInterface->GetGCPInfo(gcpIdx));
         }
       
-      SetParameterStringList("gcp.ids",gcp_ids);
-      SetParameterStringList("gcp.info",gcp_infos);
+      SetParameterStringList("gcp.ids", gcp_ids);
+      SetParameterStringList("gcp.info", gcp_infos);
       
       // Retrieve footprint
-      SetParameterFloat("ullat",ullat);
-      SetParameterFloat("ullon",ullon);
-      SetParameterFloat("urlat",urlat);
-      SetParameterFloat("urlon",urlon);
-      SetParameterFloat("lrlat",lrlat);
-      SetParameterFloat("lrlon",lrlon);
-      SetParameterFloat("lllat",lllat);
-      SetParameterFloat("lllon",lllon);
+      SetParameterFloat("ullat", ullat);
+      SetParameterFloat("ullon", ullon);
+      SetParameterFloat("urlat", urlat);
+      SetParameterFloat("urlon", urlon);
+      SetParameterFloat("lrlat", lrlat);
+      SetParameterFloat("lrlon", lrlon);
+      SetParameterFloat("lllat", lllat);
+      SetParameterFloat("lllon", lllon);
 
       double centerlat = 0.25*(ullat+urlat+lrlat+lllat);
       double centerlon = 0.25*(ullon+urlon+lrlon+lllon);
@@ -254,8 +254,8 @@ private:
       coord2name->SetLon(centerlon);
       coord2name->Evaluate();
 
-      SetParameterString("town",coord2name->GetPlaceName());
-      SetParameterString("country",coord2name->GetCountryName());
+      SetParameterString("town", coord2name->GetPlaceName());
+      SetParameterString("country", coord2name->GetCountryName());
       }
     catch ( itk::ExceptionObject & err )
       {

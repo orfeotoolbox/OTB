@@ -57,7 +57,7 @@ public:
   /** Runtime information */
   itkTypeMacro(DocExampleStructure, itk::Object);
 
-  typedef std::pair<std::string,std::string> ParameterType;
+  typedef std::pair<std::string, std::string> ParameterType;
   typedef std::vector<ParameterType> ParametersVectorType;
   typedef std::vector<ParametersVectorType> ParametersVectorOfVectorType;
 
