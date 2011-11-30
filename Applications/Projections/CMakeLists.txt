@@ -22,3 +22,7 @@ OTB_CREATE_APPLICATION(NAME           ConvertCartoToGeoPoint
 OTB_CREATE_APPLICATION(NAME           ImageEnvelope
                        SOURCES        otbImageEnvelope.cxx
                        LINK_LIBRARIES OTBBasicFilters)
+
+OTB_CREATE_APPLICATION(NAME           ObtainUTMZoneFromGeoPoint
+                       SOURCES        otbObtainUTMZoneFromGeoPoint.cxx
+                       LINK_LIBRARIES OTBBasicFilters)

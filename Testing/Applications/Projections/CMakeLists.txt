@@ -47,3 +47,12 @@ OTB_TEST_APPLICATION(NAME apTvPrImageEnvelopeTest
                      APP ImageEnvelope
                      OPTIONS --in ${INPUTDATA}/sensor_stereo_left.tif
                              --out ${TEMP}/apTvPrImageEnvelopeTest.shp)
+
+OTB_TEST_APPLICATION(NAME apTvPrObtainUTMZoneFromGeoPoint
+                     APP ObtainUTMZoneFromGeoPoint
+                     OPTIONS --lat 10.0
+                             --lon 124.0
+                     TESTENVOPTIONS ${TEMP}/apTvPrObtainUTMZoneFromGeoPoint.txt
+                     VALID  --compare-ascii ${EPSILON_7}
+                        ${BASELINE_FILES}/apTvPrObtainUTMZoneFromGeoPoint.txt
+                        ${TEMP}/apTvPrObtainUTMZoneFromGeoPoint.txt)
