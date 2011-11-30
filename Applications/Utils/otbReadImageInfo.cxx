@@ -45,12 +45,12 @@ private:
 
     // Documentation
     SetDocName("Read image information Application");
-    SetDocLongDescription("Display informations about the image in the logger tab.");
+    SetDocLongDescription("Display informations about the input image like: image size, metadata, projections...");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
-    AddDocTag("Util");
+    AddDocTag("Utilities");
     AddDocTag(Tags::Meta);
   }
 
