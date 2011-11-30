@@ -148,8 +148,6 @@ private:
     SetParameterDescription("lat", "Point latitude coordinates.");
     SetParameterRole("lat", Role_Output);
   
-    SetDocCLExample("otbApplicationLauncherCommandLine ConvertCartoToGeoPoint ${OTB-BIN}/bin --carto.x 367074.625 --carto.y 4835740 --mapproj utm --mapproj.utm.hemisphere true --mapproj.utm.zone 31");
-
     // Doc example parameter settings
     SetDocExampleParameterValue("carto.x", "367074.625");
     SetDocExampleParameterValue("carto.y", "4835740");

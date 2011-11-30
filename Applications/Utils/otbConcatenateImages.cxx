@@ -89,9 +89,9 @@ private:
     AddParameter(ParameterType_RAM, "ram", "Available RAM");
     SetDefaultParameterInt("ram", 256);
     MandatoryOff("ram");
-    
+ 
     // Doc example parameter settings
-    SetDocExampleParameterValue("in", "poupees_sub_c1.png poupees_sub_c2.png poupees_sub_c3.png");
+    SetDocExampleParameterValue("il", "poupees_sub_c1.png poupees_sub_c2.png poupees_sub_c3.png");
     SetDocExampleParameterValue("out", "otbConcatenateImages.png uchar");
   }
 

@@ -81,11 +81,7 @@ private:
     MandatoryOff("lms");
     MandatoryOff("dem");
     MandatoryOff("ram");
-
-    SetDocCLExample("otbApplicationLauncherCommandLine BundleToPerfectSensor ${OTB-BIN}/bin "
-                    "--inp ${OTB-Data}/Examples/QB_Toulouse_Ortho_PAN.tif --inxs ${OTB-Data}/Examples/QB_Toulouse_Ortho_XS.tif "
-                    "--out PanSharpenedImage.tif");
-    
+   
     // Doc example parameter settings
     SetDocExampleParameterValue("inp", "QB_Toulouse_Ortho_PAN.tif");
     SetDocExampleParameterValue("inxs", "QB_Toulouse_Ortho_XS.tif");

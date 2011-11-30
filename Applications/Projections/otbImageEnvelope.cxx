@@ -84,9 +84,6 @@ private:
     SetParameterDescription("proj", "Projection to be used to compute the envelope (default is WGS84)");
     MandatoryOff("proj");
     
-   SetDocCLExample("otbApplicationLauncherCommandLine ImageEnvelope ${OTB-BIN}/bin "
-      "--in ${OTB-Data}/Input/sensor_stereo_left.tif --out envelope.shp");
-
    // Doc example parameter settings
     SetDocExampleParameterValue("in", "sensor_stereo_left.tif");
     SetDocExampleParameterValue("out", "ImageEnvelope.shp");

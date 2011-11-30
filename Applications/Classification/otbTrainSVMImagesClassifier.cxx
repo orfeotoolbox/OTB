@@ -212,7 +212,7 @@ private:
     SetDocExampleParameterValue("io.imstat", "clImageStatisticsQB1.xml");
     SetDocExampleParameterValue("sample.mv", "100");
     SetDocExampleParameterValue("sample.vtr", "0.5");
-    SetDocExampleParameterValue("sample.opt", "true");
+    SetDocExampleParameterValue("svm.opt", "true");
     SetDocExampleParameterValue("io.out", "svmModelQB1_allOpt.svm");
   }
 

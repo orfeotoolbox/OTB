@@ -115,11 +115,7 @@ private:
     SetParameterDescription("sl","input image will be divided into sl lines.");
     SetDefaultParameterInt("sl", 1000);
 
-  SetDocCLExample("otbApplicationLauncherCommandLine KMeansClassification "
-      "--in ${OTB-Data}/Input/poupees_sub.png --vm ${OTB-Data}/Input/mask_KMeans.png "
-      "--ts 100 --tp 0.6 --nc 5 --cp 0.9 --sl 100 --out ClassificationFilterOuptut.tif");
-
-  // Doc example parameter settings
+    // Doc example parameter settings
     SetDocExampleParameterValue("in", "poupees_sub.png");
     SetDocExampleParameterValue("vm", "mask_KMeans.png");
     SetDocExampleParameterValue("ts", "100");

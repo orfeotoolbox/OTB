@@ -86,7 +86,7 @@ public:
       }
 
     if( !found)
-      itkGenericExceptionMacro( "No parameter with key "<<key<<" found." );
+      itkGenericExceptionMacro( "No parameter with key \""<<key<<"\" found." );
   }
 
  /** Get the parameter list. */

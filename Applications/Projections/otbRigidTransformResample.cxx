@@ -70,6 +70,12 @@ private:
     AddParameter(ParameterType_OutputImage,  "out",  "Output image");
     AddParameter(ParameterType_Float,        "tx",   "The X translation (in physical units)");
     AddParameter(ParameterType_Float,        "ty",   "The Y translation (in physical units)");
+
+    // Doc example parameter settings
+    SetDocExampleParameterValue("in", "poupees.tif");
+    SetDocExampleParameterValue("out", "rigitTransformImage.tif");
+    SetDocExampleParameterValue("tx", "5");
+    SetDocExampleParameterValue("ty", "5");
   }
   
   void DoUpdateParameters()
@@ -101,12 +107,6 @@ private:
     
     // Output Image
     SetParameterOutputImage("out", m_Resampler->GetOutput());
-
-    // Doc example parameter settings
-    SetDocExampleParameterValue("in", "poupees.tif");
-    SetDocExampleParameterValue("out", "rigitTransformImage.tif");
-    SetDocExampleParameterValue("tx", "5");
-    SetDocExampleParameterValue("ty", "5");
   }
 
   ResampleFilterType::Pointer m_Resampler;
