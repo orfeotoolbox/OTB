@@ -90,7 +90,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("otbVecgetationIndices class");
-    SetDocCLExample("otbApplicationLauncherCommandLine RadiometricVegetationIndices ${OTB-BIN}/bin --in ${OTB-DATA}/Input/qb_RoadExtract.img --index.ndvi 1 --index.rvi 1 --index.ipvi 1 --out otbRadiometricVegetationIndicesImages.tif");
+ 
     AddDocTag("Vegetation Indices");
     AddDocTag(Tags::FeatureExtraction);
   }
@@ -169,6 +169,13 @@ private:
     AddParameter(ParameterType_Empty, "index.laindviformo", "LAIFromNDVIFormo");
     MandatoryOff("index.laindviformo");
     SetParameterDescription("index.laindviformo", "Leaf Area Index from reflectance using using formula a*(exp(nir-red)/((red+nir)*b)-exp(c*b)), with a = 0.1519 b = 3.9443 c = 0.13. This formula is only valid for Formosat 2 reflectance TOCa linear relationship.");
+
+    // Doc example parameter settings
+    SetDocExampleParameterValue("in", "qb_RoadExtract.img");
+    SetDocExampleParameterValue("index.ndvi", "true");
+    SetDocExampleParameterValue("index.rvi", "true");
+    SetDocExampleParameterValue("index.ipvi", "true");
+    SetDocExampleParameterValue("out", "RadiometricVegetationIndicesImages.tif");
   }
 
   void DoUpdateParameters()
