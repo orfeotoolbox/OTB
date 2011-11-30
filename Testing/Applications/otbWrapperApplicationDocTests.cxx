@@ -21,7 +21,6 @@
 
 #include "otbWrapperApplicationRegistry.h"
 
-
 int otbWrapperApplicationDocTest(int argc, char* argv[])
 {
   if (argc < 2)
@@ -71,11 +70,6 @@ int otbWrapperApplicationDocTest(int argc, char* argv[])
     std::cout<<"DocLongDescription too small..."<<std::endl;
     isOK = false;
     }
-  if( std::string(app->GetDocCLExample()) == "" )
-    {
-    std::cout<<"Missing DocCLExample."<<std::endl;
-    isOK = false;
-    }
    if( std::string(app->GetDocAuthors()) == "" )
     {
     std::cout<<"Missing DocAuthors."<<std::endl;
@@ -96,6 +90,40 @@ int otbWrapperApplicationDocTest(int argc, char* argv[])
     std::cout<<"Missing DocTags."<<std::endl;
     isOK = false;
     }
+
+  // Check example data
+  app->Init();
+  otb::Wrapper::DocExampleStructure::Pointer doc = app->GetDocExample();
+  if( doc->GetApplicationName() == "" )
+    {
+    std::cout<<"Error in doc example: no aaplication name found."<<std::endl;
+    isOK = false;
+    }
+  if( doc->GetParameterList().size() == 0 )
+    {
+    std::cout<<"Error in doc example: the list of parameter is empty."<<std::endl;
+    isOK = false;
+    }
+  else
+    {
+    bool hasValue = false;
+    unsigned int count = 0;
+    while ( count<doc->GetParameterList().size() && !hasValue )
+      {
+      if( doc->GetParameterValue(count) != "" )
+        {
+        hasValue = true;
+        }
+      count++;
+      }
+    
+    if( !hasValue )
+      {
+      std::cout<<"Error in doc example: no value for the example found !!!"<<std::endl;
+      isOK = false;
+      }
+    }
+
 
  if( !isOK )
    return EXIT_FAILURE;

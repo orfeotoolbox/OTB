@@ -49,8 +49,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
-    SetDocCLExample("otbApplicationLauncherCommandLine TestApplication ${OTB-BIN}/bin"
-      " (input data depends on which type to test ...)");
+   
     AddDocTag("Test");
 
   }
@@ -78,9 +77,6 @@ private:
     AddChoice("choice.choice3", "Choice 3");
     AddParameter(ParameterType_Float,  "choice.choice1.floatchoice1", "Float of choice1");
     SetDefaultParameterFloat("choice.choice1.floatchoice1",   0.125);
-//  Test a choice without associated parameter
-//    AddParameter(ParameterType_Float,  "choice.choice2.floatchoice2", "Float of choice2");
-//    SetParameterFloat("choice.choice2.floatchoice2",   1.0);
     AddParameter(ParameterType_Float,  "choice.choice3.floatchoice3", "Float of choice3");
     SetDefaultParameterFloat("choice.choice3.floatchoice3",   5.0);
 
@@ -90,14 +86,9 @@ private:
     AddParameter(ParameterType_Float,  "ingroup.integer", "Integer of Group");
     AddParameter(ParameterType_Group, "ingroup.images", "Input Images Group");
     AddParameter(ParameterType_InputImage, "ingroup.images.inputimage", "Input Image");
-    //AddParameter(ParameterType_InputComplexImage, "ingroup.images.inputcompleximage", "Input Complex Image");
-    //AddParameter(ParameterType_InputVectorData, "ingroup.inputvectordata", "Input Vector Data");
 
     AddParameter(ParameterType_Group, "outgroup", "Output Group");
     AddParameter(ParameterType_OutputImage, "outgroup.outputimage", "Output Image");
-    //AddParameter(ParameterType_OutputVectorData, "outgroup.outputvectordata", "Output Vector Data");
-
-    //AddParameter(ParameterType_Radius, "radius", "Radius");
 
     AddParameter(ParameterType_InputImageList,  "il",   "Input image list");
     MandatoryOff("il");
@@ -109,6 +100,10 @@ private:
     
     AddParameter(ParameterType_ComplexInputImage,  "cin", "Input Complex Image");
     AddParameter(ParameterType_ComplexOutputImage,  "cout", "Output Complex Image");
+
+    // Doc example parameter settings
+    SetDocExampleParameterValue("boolean", "true");
+    SetDocExampleParameterValue("filename", "myFilename.foo");
   }
 
   void DoUpdateParameters()

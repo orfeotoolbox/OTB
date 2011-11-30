@@ -497,8 +497,6 @@ public:
   itkGetStringMacro(DocName);
   itkSetStringMacro(DocLongDescription);
   itkGetStringMacro(DocLongDescription);
-  itkSetStringMacro(DocCLExample);
-  itkGetStringMacro(DocCLExample);
   itkSetStringMacro(DocAuthors);
   itkGetStringMacro(DocAuthors);
   itkSetStringMacro(DocLimitations);
@@ -674,9 +672,6 @@ private:
   std::string                       m_DocLongDescription;
   /** Doc example structure */
   DocExampleStructure::Pointer m_DocExample;
-  /** Commanline example. Use ${OTB-DATA} for OTB-Data directory
-   path and ${OTB-BIN} for the directory bin of the OTB binary directory. */
-  std::string m_DocCLExample;
   /** Author List. Format : "John Doe, Winnie the Pooh".*/
   std::string m_DocAuthors;
   /** Known limitations (threading, unvalid pixel type ...) or bugs */
