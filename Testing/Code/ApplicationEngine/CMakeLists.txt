@@ -178,8 +178,12 @@ add_test(owTuDocExampleStructureNew ${OTB_WRAPPER_TESTS}
   )
 
 add_test(owTuDocExampleStructureTest ${OTB_WRAPPER_TESTS}
-    otbWrapperDocExampleStructureTest
-  )
+  --compare-ascii ${NOTOL}
+  ${BASELINE}/owTuDocExampleStructureTest.txt
+  ${TEMP}/owTuDocExampleStructureTest.txt
+  otbWrapperDocExampleStructureTest
+  ${TEMP}/owTuDocExampleStructureTest.txt
+ )
 
 
 

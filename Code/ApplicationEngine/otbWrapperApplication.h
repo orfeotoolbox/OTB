@@ -522,9 +522,27 @@ public:
     return m_DocExample;
   }
 
-  void SetDocExampleParameterValue( const std::string key, const std::string value )
+  void SetDocExampleParameterValue( const std::string key, const std::string value, unsigned int exId=0 )
   {
-    m_DocExample->SetParameterValue( key, value );
+    m_DocExample->SetParameterValue( key, value, exId );
+    this->Modified();
+  }
+
+  void SetExampleComment( const std::string & comm, unsigned int i )
+  {
+    m_DocExample->SetExampleComment( comm, i );
+    this->Modified();
+  }
+
+  void AddExample( const std::string & comm )
+  {
+    m_DocExample->AddExample( comm );
+    this->Modified();
+  }
+  
+  void AddExample()
+  {
+    m_DocExample->AddExample();
     this->Modified();
   }
 

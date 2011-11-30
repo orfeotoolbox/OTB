@@ -21,7 +21,6 @@
 #include "itkMeanImageFilter.h"
 #include "itkDiscreteGaussianImageFilter.h"
 #include "itkGradientAnisotropicDiffusionImageFilter.h"
-//#include "itkCurvatureAnisotropicDiffusionImageFilter.h"
 #include "otbPerBandVectorImageFilter.h"
 
 namespace otb
@@ -103,9 +102,17 @@ private:
     SetParameterString("type", "anidif");
 
     // Doc example parameter settings
+    SetExampleComment("Image smoothing using a mean filter.", 0);
     SetDocExampleParameterValue("in", "poupees.tif");
-    SetDocExampleParameterValue("out", "osmoothedImage.png uchar");
+    SetDocExampleParameterValue("out", "smoothedImage_mean.png uchar");
     SetDocExampleParameterValue("type", "mean");
+
+    AddExample( "Image smoothing using an anisotropic diffusion filter." );
+    SetDocExampleParameterValue("in", "poupees.tif", 1);
+    SetDocExampleParameterValue("out", "smoothedImage_ani.png uchar", 1);
+    SetDocExampleParameterValue("type", "anidif", 1);
+    SetDocExampleParameterValue("type.anidif.timestep", "0.1", 1);
+    SetDocExampleParameterValue("type.anidif.nbiter", "5", 1);
   }
 
   void DoUpdateParameters()

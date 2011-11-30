@@ -21,6 +21,7 @@
 
 #include "otbWrapperDocExampleStructure.h"
 #include "itksys/SystemTools.hxx"
+#include <fstream>
 
 int otbWrapperDocExampleStructureNew(int argc, char* argv[])
 {
@@ -38,24 +39,26 @@ int otbWrapperDocExampleStructureTest(int argc, char* argv[])
   
   docStruct->SetApplicationName("TestApplication");
   
-  std::vector<std::string> bPath;
-  bPath.push_back("binPath1");
-
+  docStruct->SetExampleComment("Exmaple1", 0);
   docStruct->AddParameter( "key1", "name1" );
   docStruct->AddParameter( "key2", "name2" );
 
-  docStruct->SetParameterValue( "key1", "val1" );
-  docStruct->SetParameterValue( "key2", "val2" );
+  docStruct->SetParameterValue( "key1", "val1_1" );
+  docStruct->SetParameterValue( "key2", "val1_2" );
 
-  std::string exp = docStruct->GenerateCLExample();
+  docStruct->AddExample("Example2");
+  docStruct->SetParameterValue( "key2", "val2_2", 1 );
+  docStruct->AddParameter( "key3", "name3" );
+  docStruct->SetParameterValue( "key3", "val2_3", 1 );
 
-  if( exp.find("otbcli_TestApplication -key1 val1 -key2 val2") == std::string::npos )
+  std::ofstream ofs( argv[1] );
+  if (!ofs.is_open())
     {
-    std::cout<<"ERROR in expression: "<<exp<<std::endl;
-    std::cout<<"The returned expression is not the waited one"<<std::endl;
+    fprintf(stderr, "Error, can't open file");
     return EXIT_FAILURE;
     }
-
+  ofs << docStruct->GenerateCLExample();
+  ofs.close(); 
 
   return EXIT_SUCCESS;
 }

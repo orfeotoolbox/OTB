@@ -569,9 +569,11 @@ void CommandLineLauncher::DisplayHelp()
   std::cerr << "====================== HELP CONTEXT ======================" << std::endl;
   std::cerr << "NAME: " << m_Application->GetName() << std::endl;
   std::cerr << "DESCRIPTION: " << m_Application->GetDescription() << std::endl;
-  if( m_Application->GetCLExample() != "" )
+  std::string cl = m_Application->GetCLExample();
+  if( cl != "" )
     {
-    std::cerr << "EXAMPLE OF USE: " << m_Application->GetCLExample() << std::endl;
+    std::cerr << "EXAMPLE OF USE: " << std::endl;
+    std::cerr << m_Application->GetCLExample() << std::endl;
     }
   std::cerr << "======================= PARAMETERS =======================" << std::endl;
   //// Module path parameter

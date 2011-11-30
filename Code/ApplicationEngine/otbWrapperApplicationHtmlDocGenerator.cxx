@@ -126,15 +126,19 @@ ApplicationHtmlDocGenerator::GenerateDoc( const Application::Pointer app, std::s
   otbDocHtmlBodyMacro( app->GetDocSeeAlso() );
 
   otbDocHtmlTitle1Macro( "Example of use" );
-  oss << "<ul>";
-  otbDocHtmlBodyMacro( "<li>Parameters to set value:</li>" );
+  if( showKey == true )
+    {
+    oss << "<ul>";
+    otbDocHtmlBodyMacro( "<li>Values for GUIs:</li>" );
+    }
   otbDocHtmlBodyMacro( app->GetHtmlExample() );
   if( showKey == true )
     {
     otbDocHtmlBodyMacro( "<li>Command line to execute:</li>" );
-     otbDocHtmlBodyCodeMacro( app->GetCLExample() );
+    otbDocHtmlBodyCodeMacro( app->GetCLExample() );
+    
+    oss << "</ul>";
     }
-  oss << "</ul>";
   oss << "</body></html>";
 
   val = oss.str();

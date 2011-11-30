@@ -34,6 +34,40 @@ namespace otb
 namespace Wrapper
 {
 
+/** \class ParamStructure
+ *  \brief This class is a structure that gathered information on a parameter.
+ *  It stores the parameter jey, name and a list of possible
+ *  values. Each value is an element of a specific example.
+ *  ...).
+ */
+class ParamStructure
+{
+public :
+  ParamStructure() : m_Key(""), m_Name(""), m_Values()
+  {
+    m_Values.push_back("");
+  };
+  virtual ~ParamStructure(){};
+
+  std::string m_Key;
+  std::string m_Name;
+  std::vector< std::string > m_Values;
+
+  ParamStructure(const ParamStructure & param)
+  {
+    this->m_Key = param.m_Key;
+    this->m_Name = param.m_Name;
+    this->m_Values =  param.m_Values;
+  };
+
+ void operator =(const ParamStructure & param)
+  {
+    this->m_Key = param.m_Key;
+    this->m_Name = param.m_Name;
+    this->m_Values =  param.m_Values;
+  }
+};
+
 /** \class DocExampleStructure
  *  \brief This class is a structure that gathered the necessary
  *  element to generate an example (for CommandLine, python, Java
@@ -57,149 +91,71 @@ public:
   /** Runtime information */
   itkTypeMacro(DocExampleStructure, itk::Object);
 
-  typedef itk::FixedArray<std::string, 3> ThreeStringType;
-  typedef std::vector<ThreeStringType> ParameterListType;
+  typedef std::vector<ParamStructure> ParameterListType;
 
   /** Parameter list accessors. */
   /** Parameter list accessors : adding key and name */
-  void AddParameter( const std::string key, const std::string name )
-  {
-    ThreeStringType mParam;
-    mParam[0] = key;
-    mParam[1] = name;
-    mParam[2] = "";
-    m_ParameterList.push_back( mParam );
-  }
-  
- void SetParameterValue( const std::string key, const std::string value )
-  {
-    bool found = false;
-    unsigned int i=0;
-    while ( i<m_ParameterList.size() && !found )
-      {
-      if( this->GetParameterKey(i) == key )
-        {
-        m_ParameterList[i][2] = value;
-        found = true;
-        }
-      i++;
-      }
+  void AddParameter( const std::string key, const std::string name );
 
-    if( !found)
-      itkGenericExceptionMacro( "No parameter with key \""<<key<<"\" found." );
-  }
+  /** et a value to a parameter. Only parmeters with value will be
+  * used in the example. */
+  void SetParameterValue( const std::string key, const std::string value, unsigned int exId=0 );
 
- /** Get the parameter list. */
-  ParameterListType GetParameterList()
-  {
-    return m_ParameterList;
-  }
+  /** Get the parameter list. */
+  ParameterListType GetParameterList();
 
   /** Get a specific parameter couple.*/
-  ThreeStringType GetParameter( unsigned int i )
-  {
-    if( m_ParameterList.size() <= i )
-      itkGenericExceptionMacro( "Index "<<i<<" out of range. (max index: "<<m_ParameterList.size()<<")." );
-
-    return m_ParameterList[i];
-  }
+  ParamStructure GetParameter( unsigned int i );
 
   /** Get a specific parameter couple key.*/
-  std::string GetParameterKey( unsigned int i )
-  {
-    return this->GetParameter(i)[0];
-  }
+  std::string GetParameterKey( unsigned int i );
 
- /** Get a specific parameter couple key.*/
-  std::string GetParameterName( unsigned int i )
-  {
-    return this->GetParameter(i)[1];
-  }
+  /** Get a specific parameter couple key.*/
+  std::string GetParameterName( unsigned int i );
 
   /** Get a specific parameter couple value as string.*/
-  std::string GetParameterValue( unsigned int i )
-  {
-    return  this->GetParameter(i)[2];
-  }
+  std::string GetParameterValue( unsigned int i, unsigned int exId=0 );
+
   /** Set Application name. */
-  void SetApplicationName( const std::string name )
-  {
-    m_ApplicationName = name;
-  }
+  void SetApplicationName( const std::string name );
+
   /** Get Application name. */
-  std::string GetApplicationName()
-  {
-    return m_ApplicationName;
-  }
+  std::string GetApplicationName();
 
-  /** Generation of the documentation for CommandLine. */
-  std::string GenerateCLExample()
-  {
-    if( m_ApplicationName.empty() || m_ParameterList.size() == 0 )
-      {
-      return "";
-      }
-    
-    itk::OStringStream oss;
-    oss << "otbcli_" << m_ApplicationName << " ";
+  /** Get the example comment list */
+  std::vector<std::string> GetExampleCommentList();
 
-    for (unsigned int i=0; i< m_ParameterList.size(); i++)
-      {
-      if( this->GetParameterValue(i) != "" )
-        {
-        oss<< "-" << this->GetParameterKey(i) << " " << this->GetParameterValue(i) <<" ";
-        }
-      }
+  /** Get one example comment */
+  std::string GetExampleComment( unsigned int i);
 
+  /** Set one example comment */
+  void SetExampleComment( const std::string & comm, unsigned int i);
 
-    std::string res = oss.str();
+  /** Add an example */
+  void AddExample();
 
-    // Supress last added space
-    res.erase( res.size()-1, 1);
+  /** Add an example using comment.*/
+  void AddExample( const std::string & comm);
 
-    return res;
-    
-  }
+  /** Generation of the documentation for CommandLine for one specific
+  * example. */
+  std::string GenerateCLExample( unsigned int exId );
+
+ /** Generation of the documentation for CommandLine. */
+  std::string GenerateCLExample();
+
+  /** Generation of teh documentation for Qt for one specific
+  * example. */
+  std::string GenerateHtmlExample( unsigned int exId );
 
   /** Generation of teh documentation for Qt. */
-  std::string GenerateHtmlExample()
-  {
-    if( m_ApplicationName.empty() || m_ParameterList.size() == 0 )
-      {
-      return "";
-      }
-
-    itk::OStringStream oss;
-    oss << "<ul>";
-    for (unsigned int i=0; i< m_ParameterList.size(); i++)
-      {
-      if( this->GetParameterValue(i) != "" )
-        {
-        oss << "<li>";
-        oss << "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">";
-        oss << this->GetParameterName(i) << ": ";
-        oss << this->GetParameterValue(i);
-        
-        oss << "</p>";
-        oss << "</li>";
-        }
-      }
-      oss << "</ul>";
-
-    std::string res = oss.str();
-
-    return res;
-    
-  }
-
+  std::string GenerateHtmlExample();
 
 protected:
   /** Constructor */
-  DocExampleStructure(){}
-
+  DocExampleStructure();
   /** Destructor */
-  virtual ~DocExampleStructure()
-  {}
+  virtual ~DocExampleStructure();
 
 private:
   DocExampleStructure(const DocExampleStructure &); //purposely not implemented
@@ -207,11 +163,12 @@ private:
 
   /** List of the application parameters. List of key/name/value couples. */
   ParameterListType m_ParameterList;
-  /** List of the application parameter names. List of key/name couples. */
-  ParameterListType m_ParameterNameList; // ???
-  /** application name */
+  /** Application name */
   std::string m_ApplicationName;
-
+  /** Example comments */
+  std::vector<std::string> m_ExampleCommentList;
+  /** Stores the number of example. */
+  unsigned int m_NbOfExamples;
 
 }; // End class Parameter
 
