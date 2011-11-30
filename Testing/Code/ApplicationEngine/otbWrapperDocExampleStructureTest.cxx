@@ -40,16 +40,14 @@ int otbWrapperDocExampleStructureTest(int argc, char* argv[])
   docStruct->SetApplicationName("TestApplication");
   
   docStruct->SetExampleComment("Exmaple1", 0);
-  docStruct->AddParameter( "key1", "name1" );
-  docStruct->AddParameter( "key2", "name2" );
 
-  docStruct->SetParameterValue( "key1", "val1_1" );
-  docStruct->SetParameterValue( "key2", "val1_2" );
+  docStruct->AddParameter( "key1", "val1_1" );
+  docStruct->AddParameter( "key2", "val1_2" );
 
   docStruct->AddExample("Example2");
-  docStruct->SetParameterValue( "key2", "val2_2", 1 );
+  docStruct->AddParameter( "key2", "val2_2", 1 );
   docStruct->AddParameter( "key3", "name3" );
-  docStruct->SetParameterValue( "key3", "val2_3", 1 );
+  docStruct->AddParameter( "key3", "val2_3", 1 );
 
   std::ofstream ofs( argv[1] );
   if (!ofs.is_open())
