@@ -190,22 +190,22 @@ private:
       itk::OStringStream osstime;
       osstime<<metadataInterface->GetYear()<<"-";
       if(metadataInterface->GetMonth()<10)
-	osstime<<"0";
+        osstime<<"0";
       osstime<<metadataInterface->GetMonth()<<"-";
       if(metadataInterface->GetDay()<10)
-	osstime<<"0";
+        osstime<<"0";
       osstime<<metadataInterface->GetDay()<<"T";
       if(metadataInterface->GetHour()<10)
-	osstime<<"0";
+        osstime<<"0";
       osstime<<metadataInterface->GetHour()<<":";
       if(metadataInterface->GetMinute()<10)
-	osstime<<"0";
+        osstime<<"0";
       osstime<<metadataInterface->GetMinute();
       osstime<<":00";
       SetParameterString("time",osstime.str());
 
       itk::OStringStream osskeywordlist;
-      osskeywordlist<<metadataInterface->GetImageKeywordlist() << std::endl;	
+      osskeywordlist<<metadataInterface->GetImageKeywordlist() << std::endl;    
       SetParameterString("keywordlist",osskeywordlist.str());
 
       double ullat = atof(metadataInterface->GetImageKeywordlist().GetMetadataByKey("ul_lat").c_str());
@@ -228,10 +228,10 @@ private:
       std::vector<std::string> gcp_infos;
 
       for(int gcpIdx = 0; gcpIdx  < GetParameterInt("gcp.count"); ++ gcpIdx)
-	{
-	gcp_ids.push_back(metadataInterface->GetGCPId(gcpIdx));
-	gcp_infos.push_back(metadataInterface->GetGCPInfo(gcpIdx));
-	}
+        {
+        gcp_ids.push_back(metadataInterface->GetGCPId(gcpIdx));
+        gcp_infos.push_back(metadataInterface->GetGCPInfo(gcpIdx));
+        }
       
       SetParameterStringList("gcp.ids",gcp_ids);
       SetParameterStringList("gcp.info",gcp_infos);
@@ -271,4 +271,3 @@ private:
 }
 
 OTB_APPLICATION_EXPORT(otb::Wrapper::ReadImageInfo)
-
