@@ -73,9 +73,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
-    SetDocCLExample("otbApplicationLauncherCommandLine ConnectedComponentSegmentation ${OTB-BIN}/bin "
-      "--in ${OTB-DATA}/Input/ROI_QB_MUL_4.tif --mask \"((b1>80)*intensity>95)\" --expr \"distance<10\" "
-      "--minsize 15 --obia \"SHAPE_Elongation>8\" --out ./result.shp");
+ 
     AddDocTag(Tags::Analysis);
     AddDocTag(Tags::Segmentation);
   }
@@ -116,6 +114,14 @@ private:
     SetParameterDescription("dem", "DEM directory (used to reproject output in WGS84 if input image is in sensor model geometry)");
     MandatoryOff("dem");
     DisableParameter("dem");
+
+   // Doc example parameter settings
+   SetDocExampleParameterValue("in", "ROI_QB_MUL_4.tif");
+   SetDocExampleParameterValue("mask", "\"((b1>80)*intensity>95)\"");
+   SetDocExampleParameterValue("expr", "\"distance<10\"");
+   SetDocExampleParameterValue("minsize", "15");
+   SetDocExampleParameterValue("obia", "\"SHAPE_Elongation>8\"");
+   SetDocExampleParameterValue("out", "ConnectedComponentSegmentation.shp");
   }
   
   void DoUpdateParameters()

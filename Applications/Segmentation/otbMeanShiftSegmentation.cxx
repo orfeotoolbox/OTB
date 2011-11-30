@@ -53,10 +53,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
-    SetDocCLExample("otbApplicationLauncherCommandLine MeanShiftClustering ${OTB-BIN}/bin "
-      "--in ${OTB-Data}/Input/qb_RoadExtract2sub200x200.tif --cout MeanShift_ClusteredOutput.tif"
-        "--fout MeanShift_FilterOutput.tif --lout MeanShift_LabeledClusteredOutput.tif"
-        "--cbout MeanShift_ClusterBoundariesOutput.tif ---spatialr 16 --ranger 16 --minsize 10 --scale 1.0 ");
+
     AddDocTag(Tags::Segmentation);
     }
 
@@ -88,6 +85,18 @@ private:
     SetDefaultParameterFloat("ranger",   15.0);
     SetDefaultParameterInt("minsize",    100);
     SetDefaultParameterFloat("scale",    100000.);
+
+    // Doc example parameter settings
+    SetDocExampleParameterValue("in", "qb_RoadExtract2sub200x200.tif");
+    SetDocExampleParameterValue("cout", "MeanShift_ClusteredOutput.tif");
+    SetDocExampleParameterValue("fout", "MeanShift_FilterOutput.tif");
+    SetDocExampleParameterValue("lout", "MeanShift_LabeledClusteredOutput.tif uint32");
+    SetDocExampleParameterValue("cbout", "MeanShift_ClusterBoundariesOutput.tif uint8");
+    SetDocExampleParameterValue("spatialr", "16");
+    SetDocExampleParameterValue("ranger", "16");
+    SetDocExampleParameterValue("minsize", "10");
+    SetDocExampleParameterValue("scale", "1.0");
+
   }
   
   void DoUpdateParameters()
