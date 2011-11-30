@@ -105,7 +105,7 @@ namespace Wrapper
 class Application: public itkObject
 {
 public:
-  itkSetStringMacro(Name);
+  virtual void SetName( const std::string & name );
   itkGetStringMacro(Name);
 
   itkSetStringMacro(Description);
@@ -163,8 +163,6 @@ public:
   itkGetStringMacro(DocName);
   itkSetStringMacro(DocLongDescription);
   itkGetStringMacro(DocLongDescription);
-  itkSetStringMacro(DocCLExample);
-  itkGetStringMacro(DocCLExample);
   itkSetStringMacro(DocAuthors);
   itkGetStringMacro(DocAuthors);
   itkSetStringMacro(DocLimitations);
@@ -173,6 +171,12 @@ public:
   itkGetStringMacro(DocSeeAlso);
   void SetDocTags( std::vector<std::string> val );
   void AddDocTag( const std::string & tag );
+
+  DocExampleStructure::Pointer GetDocExample();
+  void SetDocExampleParameterValue( const std::string key, const std::string value );
+  std::string GetCLExample();
+  std::string GetHtmlExample();
+  std::vector< std::pair<std::string, std::string> > GetOutputParametersSumUp();
 
 protected:
   Application();
