@@ -86,8 +86,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("The OTB CookBook");
-    SetDocCLExample("otbApplicationLauncherCommandLine OpticalCalibration ${OTB-BIN}/bin "
-      "--in --out --milli --level toa");
+ 
     AddDocTag(Tags::Calibration);
 
 }
@@ -149,6 +148,10 @@ private:
     SetParameterDescription("atmo.aeronet","Aeronet file containing atmospheric parameters");
     MandatoryOff("atmo.aeronet");
 
+   // Doc example parameter settings
+    SetDocExampleParameterValue("in", "WV2_MUL_ROI_1000_100.tif");
+    SetDocExampleParameterValue("level", "toa");
+    SetDocExampleParameterValue("out", "OpticalCalibration.tif");  
   }
 
   void DoUpdateParameters()

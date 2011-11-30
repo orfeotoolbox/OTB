@@ -54,8 +54,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
-    SetDocCLExample("otbApplicationLauncherCommandLine sarRadiometricCalibration ${OTB-BIN}/bin "
-      "--cin ${OTB-DATA}/Input/scene.png --out calibratedImage.tif");
+    
     AddDocTag(Tags::Calibration);
     AddDocTag(Tags::SAR);
   }
@@ -66,13 +65,17 @@ private:
 
   void DoCreateParameters()
   {
-    AddParameter(ParameterType_ComplexInputImage,  "cin", "Input Complex Image");
+    AddParameter(ParameterType_ComplexInputImage,  "in", "Input Complex Image");
     AddParameter(ParameterType_ComplexOutputImage,  "out", "Output Image");
     AddParameter(ParameterType_RAM, "ram", "Available RAM");
     SetDefaultParameterInt("ram", 256);
     MandatoryOff("ram");
     AddParameter(ParameterType_Empty, "noise", "Disable Noise");
     MandatoryOff("noise");
+
+    // Doc example parameter settings
+    SetDocExampleParameterValue("in", "scene.png");
+    SetDocExampleParameterValue("out", "SarRadiometricCalibration.tif" );
   }
 
   void DoUpdateParameters()
@@ -81,7 +84,7 @@ private:
   void DoExecute()
   {
     // Get the input complex image
-    ComplexFloatImageType*  floatComplexImage = GetParameterComplexFloatImage("cin");
+    ComplexFloatImageType*  floatComplexImage = GetParameterComplexFloatImage("in");
 
     // Set the filer input
     m_CalibrationFilter = CalibrationFilterType::New();
