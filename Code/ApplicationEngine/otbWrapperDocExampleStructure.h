@@ -131,11 +131,8 @@ public:
   /** Set one example comment */
   void SetExampleComment( const std::string & comm, unsigned int i);
 
-  /** Add an example */
-  void AddExample();
-
-  /** Add an example using comment.*/
-  void AddExample( const std::string & comm);
+  /** Add an example using comment. Retrun the index of the new example.*/
+  unsigned int  AddExample( const std::string & comm = "");
 
   /** Generation of the documentation for CommandLine for one specific
   * example. */

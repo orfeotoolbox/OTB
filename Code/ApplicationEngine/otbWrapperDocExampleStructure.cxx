@@ -144,13 +144,7 @@ DocExampleStructure::SetExampleComment( const std::string & comm, unsigned int i
 }
 
 
-void  
-DocExampleStructure:: AddExample()
-{
-  this->AddExample( "" );
-}
-
-void   
+unsigned int   
 DocExampleStructure::AddExample( const std::string & comm )
 {
   m_ExampleCommentList.push_back( comm );
@@ -158,6 +152,8 @@ DocExampleStructure::AddExample( const std::string & comm )
   // Add a field for the values
   for( unsigned int i=0; i<m_ParameterList.size(); i++)
     m_ParameterList[i].m_Values.push_back("");
+
+  return m_ExampleCommentList.size()-1;
 }
 
 

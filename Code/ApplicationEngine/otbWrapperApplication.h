@@ -534,18 +534,13 @@ public:
     this->Modified();
   }
 
-  void AddExample( const std::string & comm )
+  unsigned int AddExample( const std::string & comm="" )
   {
-    m_DocExample->AddExample( comm );
+    unsigned int id = m_DocExample->AddExample( comm );
     this->Modified();
+    return id;
   }
   
-  void AddExample()
-  {
-    m_DocExample->AddExample();
-    this->Modified();
-  }
-
   std::string GetCLExample()
   {
     return m_DocExample->GenerateCLExample();
