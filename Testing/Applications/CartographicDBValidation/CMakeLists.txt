@@ -120,4 +120,38 @@ OTB_TEST_APPLICATION(NAME cdbTuDSFuzzyModelEstimation_LI_autoInit
 
 
 
+OTB_TEST_APPLICATION(NAME cdbTvVectorDataDSValidationGroundTruth_LI
+                     APP  VectorDataDSValidation
+                     OPTIONS --in ${OTBAPP_BASELINE_FILES}/cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_gt.shp
+                		     --belsup "ROADSA" 
+                		     --plasup "NONDVI" "ROADSA" "NOBUIL" 
+                		     --descmod ${OTB_DATA_ROOT}/Input/Dempster-Shafer/DSFuzzyModel.xml 
+                		     --out ${TEMP}/cdbTvVectorDataDSValidationOutpout_LI_gt.shp
+					VALID	 --compare-ogr 0.0
+							 ${OTBAPP_BASELINE_FILES}/cdbTvVectorDataDSValidationOutpout_LI_gt.shp
+							 ${TEMP}/cdbTvVectorDataDSValidationOutpout_LI_gt.shp)
+							 
+
+OTB_TEST_APPLICATION(NAME cdbTvVectorDataDSValidationWrongRoads_LI
+                     APP  VectorDataDSValidation
+                     OPTIONS --in ${OTBAPP_BASELINE_FILES}/cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_wr.shp
+                		     --belsup "ROADSA" 
+                		     --plasup "NONDVI" "ROADSA" "NOBUIL" 
+                		     --descmod ${OTB_DATA_ROOT}/Input/Dempster-Shafer/DSFuzzyModel.xml 
+                		     --out ${TEMP}/cdbTvVectorDataDSValidationOutpout_LI_wr.shp
+					VALID	 --compare-ogr 0.0
+							 ${OTBAPP_BASELINE_FILES}/cdbTvVectorDataDSValidationOutpout_LI_wr.shp
+							 ${TEMP}/cdbTvVectorDataDSValidationOutpout_LI_wr.shp)
+							 
+
+OTB_TEST_APPLICATION(NAME cdbTuVectorDataDSValidationRoadExtractionApplication_LI
+                     APP  VectorDataDSValidation
+                     OPTIONS --in ${OTBAPP_BASELINE_FILES}/cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_RoadExtractionApplication.shp
+                		     --belsup "ROADSA" 
+                		     --plasup "NONDVI" "ROADSA" "NOBUIL" 
+                		     --descmod ${OTB_DATA_ROOT}/Input/Dempster-Shafer/DSFuzzyModel.xml 
+                		     --out ${TEMP}/cdbTuVectorDataDSValidationOutpout_LI_RoadExtractionApplication.shp)
+					
+					
+							
 
