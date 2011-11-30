@@ -171,6 +171,7 @@ public:
   itkGetStringMacro(DocSeeAlso);
   void SetDocTags( std::vector<std::string> val );
   void AddDocTag( const std::string & tag );
+  std::vector<std::string> GetDocTags();
 
   DocExampleStructure::Pointer GetDocExample();
   void SetDocExampleParameterValue( const std::string key, const std::string value );

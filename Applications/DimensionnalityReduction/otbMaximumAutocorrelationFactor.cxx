@@ -43,14 +43,12 @@ private:
   MaximumAutocorrelationFactor()
   {
     SetName("MaximumAutocorrelationFactor");
-    SetDescription("Performs Kernel maximum autocorrelation factor transformationMaximum autocorrelation factor filter.");
-    SetDocName("Maximum autocorrelation factor filter");
-    SetDocLongDescription("This application calculates the Maximum Autocorrelation Factor based on A. Nielsen works (\"Kernel maximum autocorrelation factor and minimum"
-                       " noise fraction transformations,\" IEEE Transactions on Image Processing, vol. 20, no. 3, pp. 612-624, (2011))."
-        "Maximum Autocorrelation Factor can be considered as a spatial extension of the PCA.");
-    SetDocLimitations("Though the inverse transform can be computed, this filter only provides the forward transform for now.");
+    SetDescription("Perform a Maximum Auto-correlation Factor (MAF) decomposition of the input image.");
+    SetDocName("Maximum Auto-correlation Factor Decomposition");
+    SetDocLongDescription("Maximum Autocorrelation Factor can be considered as a spatial extension of the PCA, in which new variates try to maximize auto-correlation between neighboring pixels instead of variance.");
+    SetDocLimitations("Though the inverse transform can be computed, this application only provides the forward transform for now.");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso(" ");
+    SetDocSeeAlso("\"Kernel maximum autocorrelation factor and minimum noise fraction transformations,\" IEEE Transactions on Image Processing, vol. 20, no. 3, pp. 612-624, (2011)");
    
     AddDocTag(Tags::DimensionReduction);
     AddDocTag(Tags::Filter);
@@ -64,7 +62,9 @@ private:
   void DoCreateParameters()
   {
     AddParameter(ParameterType_InputImage,  "in", "Input Image");
-    AddParameter(ParameterType_OutputImage, "out", "Change Map");
+    SetParameterDescription("in","The input image to apply MAF decomposition on.");
+    AddParameter(ParameterType_OutputImage, "out", "MAF output");
+    SetParameterDescription("out","MAF decomposition of the input image. Components are ordered by decreasing eigenvalues.");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "cupriteSubHsi.tif");
