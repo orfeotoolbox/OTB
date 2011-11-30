@@ -296,7 +296,7 @@ int main(int argc, char* argv[])
 
   // Software Guide : BeginLatex
   //
-  // The initial transform parameters can be set via the \code{SetIntialTransformParameters()} method.
+  // The initial transform parameters can be set via the \code{SetInitialTransformParameters()} method.
   // In our case, we simply fill the parameter array with null values.
   //
   // Software Guide : EndLatex
