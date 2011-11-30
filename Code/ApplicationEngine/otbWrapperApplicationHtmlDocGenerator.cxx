@@ -55,7 +55,7 @@ namespace Wrapper
 #define otbDocHtmlParamMacro( type, param, showKey )                             \
   oss << "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Courier New, courier'; font-weight:600;\"; >"; \
   oss << "["<<type<<"] "<< param->GetName();                            \
-  if( showKey == true &&  param->GetKey() != "")                        \
+  if( showKey == true &&  !std::string(param->GetKey()).empty() )       \
     {                                                                   \
     oss << " (-"<< param->GetKey()<<")";                                \
     }                                                                   \
@@ -126,13 +126,15 @@ ApplicationHtmlDocGenerator::GenerateDoc( const Application::Pointer app, std::s
   otbDocHtmlBodyMacro( app->GetDocSeeAlso() );
 
   otbDocHtmlTitle1Macro( "Example of use" );
-  otbDocHtmlBodyMacro( "Parameters to set value:" );
+  oss << "<ul>";
+  otbDocHtmlBodyMacro( "<li>Parameters to set value:</li>" );
   otbDocHtmlBodyMacro( app->GetHtmlExample() );
   if( showKey == true )
     {
-    otbDocHtmlBodyMacro( "Command line to execute:" );
+    otbDocHtmlBodyMacro( "<li>Command line to execute:</li>" );
      otbDocHtmlBodyCodeMacro( app->GetCLExample() );
     }
+  oss << "</ul>";
   oss << "</body></html>";
 
   val = oss.str();
