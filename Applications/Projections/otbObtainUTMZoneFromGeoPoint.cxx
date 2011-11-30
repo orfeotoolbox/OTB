@@ -15,95 +15,84 @@
      PURPOSE,  See the above copyright notices for more information.
 
 =========================================================================*/
+#include "otbWrapperApplication.h"
+#include "otbWrapperApplicationFactory.h"
 
-#include <iostream>
-#include <fstream>
-
-#include "otbCommandLineArgumentParser.h"
 #include "otbMapProjections.h"
-#include "otbImage.h"
-
-#include "itkExceptionObject.h"
-#include "itkMacro.h"
-
 #include "otbUtils.h"
 
-int main(int argc, char* argv[])
+namespace otb
 {
-  try
+namespace Wrapper
+{
+
+class ObtainUTMZoneFromGeoPoint : public Application
+{
+public:
+  /** Standard class typedefs. */
+  typedef ObtainUTMZoneFromGeoPoint     Self;
+  typedef Application                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
+
+  /** Standard macro */
+  itkNewMacro(Self);
+
+  itkTypeMacro(ObtainUTMZoneFromGeoPoint, otb::Application);
+  
+private:
+  ObtainUTMZoneFromGeoPoint()
   {
-    // Parse command line parameters
-    typedef otb::CommandLineArgumentParser ParserType;
-    ParserType::Pointer parser = ParserType::New();
+    SetName("ObtainUTMZoneFromGeoPoint");
+    SetDescription("UTM zone determination from a geographic point.");
 
-    parser->SetProgramDescription("UTM zone determination from a geographic point");
-    parser->AddOption("--Latitude","Latitude value of desired point","-lat");
-    parser->AddOption("--Longitude","Longitude value of desired point","-lon");
+    // Documentation
+    SetDocName("Obtain UTM Zone From Geo Point Application");
+    SetDocLongDescription("UTM zone determination from a geographic point.");
+    SetDocLimitations("None");
+    SetDocAuthors("OTB-Team");
+    SetDocSeeAlso(" ");
 
-    typedef otb::CommandLineArgumentParseResult ParserResultType;
-    ParserResultType::Pointer  parseResult = ParserResultType::New();
-
-    try
-    {
-      parser->ParseCommandLine(argc, argv, parseResult);
-    }
-    catch ( itk::ExceptionObject & err )
-    {
-      std::string descriptionException = err.GetDescription();
-      if (descriptionException.find("ParseCommandLine(): Help Parser") != std::string::npos)
-      {
-        std::cout << "WARNING : output file pixels are converted in 'unsigned char'" << std::endl;
-        return EXIT_SUCCESS;
-      }
-      if (descriptionException.find("ParseCommandLine(): Version Parser") != std::string::npos)
-      {
-        return EXIT_SUCCESS;
-      }
-      return EXIT_FAILURE;
-    }
-
-    // Code
-    double lon = parseResult->GetParameterDouble("--Longitude");
-    double lat =parseResult->GetParameterDouble("--Latitude");
-
-    int utmZone = otb::Utils::GetZoneFromGeoPoint(lon, lat);
-
-    if (!parseResult->IsOptionPresent("--OTBTesting"))
-    {
-      std::cout << "Geographic   Point (Lat, Lon) : (" << lat << "," << lon << ")" << std::endl;
-      std::cout << "UTM Corresponding Zone       : ==> " << utmZone << " <=="  << std::endl;
-    }
-    else
-    {
-      std::string outputTestFileName = parseResult->GetParameterString("--OTBTesting", 0);
-
-      std::ofstream outputTestFile;
-      outputTestFile.open(outputTestFileName.c_str());
-
-      outputTestFile << "Geographic   Point (Lat, Lon) : (" << lat << "," << lon << ")" << std::endl;
-      outputTestFile << "UTM Corresponding Zone       : ==> " << utmZone << " <=="  << std::endl;
-
-      outputTestFile.close();
-    }
-
-
+    AddDocTag(Tags::Coordinates);
   }
-  catch ( itk::ExceptionObject & err )
+
+  virtual ~ObtainUTMZoneFromGeoPoint()
   {
-    std::cout << "Exception itk::ExceptionObject raised !" << std::endl;
-    std::cout << err << std::endl;
-    return EXIT_FAILURE;
   }
-  catch ( std::bad_alloc & err )
-  {
-    std::cout << "Exception bad_alloc : "<<(char*)err.what()<< std::endl;
-    return EXIT_FAILURE;
-  }
-  catch ( ... )
-  {
-    std::cout << "Unknown exception raised !" << std::endl;
-    return EXIT_FAILURE;
-  }
-  return EXIT_SUCCESS;
+
+  void DoCreateParameters()
+    {
+    AddParameter(ParameterType_Float,  "lat", "Latitude");
+    SetParameterDescription("lat", "Latitude value of desired point.");
+    
+    AddParameter(ParameterType_Float,  "lon", "Longitude");
+    SetParameterDescription("lon", "Longitude value of desired point.");
+    
+    AddParameter(ParameterType_Int,"utm","UTMZone");
+    SetParameterDescription("utm","UTM Zone");
+    MandatoryOff("utm");
+    SetParameterRole("utm", Role_Output);
+    
+    SetExampleComment("Obtain a UTM Zone", 0);
+    SetDocExampleParameterValue("lat","10.0");
+    SetDocExampleParameterValue("lon","124.0");
+    }
+  
+  void DoUpdateParameters()
+    {
+    // Nothing to do
+    }
+  
+  void DoExecute()
+    {
+    int utmZone = otb::Utils::GetZoneFromGeoPoint(GetParameterFloat("lon"),
+                                                  GetParameterFloat("lat"));                                       
+    SetParameterInt("utm",utmZone);
+    }
+  
+};
+
+}
 }
 
+OTB_APPLICATION_EXPORT(otb::Wrapper::ObtainUTMZoneFromGeoPoint)
