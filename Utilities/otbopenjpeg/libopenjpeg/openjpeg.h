@@ -36,7 +36,6 @@
 #define OPENJPEG_H
 
 
-
 /* 
 ==========================================================
    Compiler directives
@@ -77,6 +76,7 @@ typedef int opj_bool; /*FIXME it should be to follow the name of others OPJ_TYPE
 #define OPJ_TRUE 1
 #define OPJ_FALSE 0
 
+// FIXME : should be better defined by configure/CMake test
 typedef unsigned int	OPJ_UINT32;
 typedef int				OPJ_INT32;
 typedef unsigned short	OPJ_UINT16;
@@ -87,7 +87,16 @@ typedef unsigned int	OPJ_SIZE_T;
 typedef double			OPJ_FLOAT64;
 typedef float			OPJ_FLOAT32;
 
-#include "openjpeg_mangle.h"
+#if (defined(WIN32) || defined(WIN64)) && !defined(__MINGW32__)
+typedef signed __int64     OPJ_INT64;
+typedef unsigned __int64   OPJ_UINT64;
+#else
+typedef long long          OPJ_INT64;
+typedef unsigned long long OPJ_UINT64;
+#endif
+
+/* 64-bit file and blob offset type */
+typedef OPJ_INT64 OPJ_OFF_T;
 
 // Avoid compile-time warning because parameter is not used
 #define OPJ_ARG_NOT_USED(x) (void)(x)
@@ -563,10 +572,10 @@ typedef struct opj_cio {
 /*
  * FIXME DOC
  */
-typedef OPJ_UINT32 (* opj_stream_read_fn) (void * p_buffer, OPJ_UINT32 p_nb_bytes, void * p_user_data) ;
-typedef OPJ_UINT32 (* opj_stream_write_fn) (void * p_buffer, OPJ_UINT32 p_nb_bytes, void * p_user_data) ;
-typedef OPJ_SIZE_T (* opj_stream_skip_fn) (OPJ_SIZE_T p_nb_bytes, void * p_user_data) ;
-typedef opj_bool (* opj_stream_seek_fn) (OPJ_SIZE_T p_nb_bytes, void * p_user_data) ;
+typedef OPJ_SIZE_T (* opj_stream_read_fn) (void * p_buffer, OPJ_SIZE_T p_nb_bytes, void * p_user_data) ;
+typedef OPJ_SIZE_T (* opj_stream_write_fn) (void * p_buffer, OPJ_SIZE_T p_nb_bytes, void * p_user_data) ;
+typedef OPJ_OFF_T (* opj_stream_skip_fn) (OPJ_OFF_T p_nb_bytes, void * p_user_data) ;
+typedef opj_bool (* opj_stream_seek_fn) (OPJ_OFF_T p_nb_bytes, void * p_user_data) ;
 
 /*
  * JPEG2000 Stream.
@@ -670,11 +679,11 @@ typedef struct opj_image_comptparm {
  * */
 typedef struct opj_packet_info {
 	/** packet start position (including SOP marker if it exists) */
-	int start_pos;
+	OPJ_OFF_T start_pos;
 	/** end of packet header position (including EPH marker if it exists)*/
-	int end_ph_pos;
+	OPJ_OFF_T end_ph_pos;
 	/** packet end position */
-	int end_pos;
+	OPJ_OFF_T end_pos;
 	/** packet distorsion */
 	double disto;
 } opj_packet_info_t;
@@ -688,7 +697,7 @@ typedef struct opj_marker_info_t {
 	/** marker type */
 	unsigned short int type;
 	/** position in codestream */
-	int pos;
+	OPJ_OFF_T pos;
 	/** length, marker val included */
 	int len;
 } opj_marker_info_t;
@@ -897,14 +906,11 @@ typedef struct opj_codestream_info_v2 {
  */
 typedef struct opj_tp_index {
 	/** start position */
-	OPJ_UINT32 start_pos;
+	OPJ_OFF_T start_pos;
 	/** end position of the header */
-	OPJ_UINT32 end_header;
+	OPJ_OFF_T end_header;
 	/** end position */
-	OPJ_UINT32 end_pos;
-
-
-
+	OPJ_OFF_T end_pos;
 
 } opj_tp_index_t;
 
@@ -945,12 +951,12 @@ typedef struct opj_tile_index {
  */
 typedef struct opj_codestream_index_ {
 	/** main header start position (SOC position) */
-	OPJ_UINT32 main_head_start;
+	OPJ_OFF_T main_head_start;
 	/** main header end position (first SOT position) */
-	OPJ_UINT32 main_head_end;
+	OPJ_OFF_T main_head_end;
 
 	/** codestream's size */
-	OPJ_UINT32 codestream_size;
+	OPJ_UINT64 codestream_size;
 
 /* UniPG>> */
 	/** number of markers */
@@ -1080,7 +1086,7 @@ OPJ_API void OPJ_CALLCONV cio_seek(opj_cio_t *cio, int pos);
  * @return	a stream object.
 */
 OPJ_API opj_stream_t* OPJ_CALLCONV opj_stream_default_create(opj_bool p_is_input);
-OPJ_API opj_stream_t* OPJ_CALLCONV opj_stream_create(OPJ_UINT32 p_size, opj_bool p_is_input);
+OPJ_API opj_stream_t* OPJ_CALLCONV opj_stream_create(OPJ_SIZE_T p_buffer_size, opj_bool p_is_input);
 
 /**
  * Destroys a stream created by opj_create_stream. This function does NOT close the abstract stream. If needed the user must
@@ -1131,7 +1137,7 @@ OPJ_API void OPJ_CALLCONV opj_stream_set_user_data (opj_stream_t* p_stream, void
  * @param		p_stream		the stream to modify
  * @param		data_length		length of the user_data.
 */
-OPJ_API void OPJ_CALLCONV opj_stream_set_user_data_length(opj_stream_t* p_stream, OPJ_UINT32 data_length);
+OPJ_API void OPJ_CALLCONV opj_stream_set_user_data_length(opj_stream_t* p_stream, OPJ_UINT64 data_length);
 
 
 /**
@@ -1509,9 +1515,8 @@ OPJ_API opj_jp2_metadata_t* OPJ_CALLCONV opj_get_jp2_metadata(opj_codec_t *p_cod
 OPJ_API opj_jp2_index_t* OPJ_CALLCONV opj_get_jp2_index(opj_codec_t *p_codec);
 
 
-OPJ_API opj_image_t* OPJ_CALLCONV opj_image_create0();
 
-OPJ_API void opj_copy_image_header(const opj_image_t* p_image_src, opj_image_t* p_image_dest);
+
 
 #ifdef __cplusplus
 }

@@ -34,26 +34,15 @@ SET(OPENJPEG_VERSION
   "${OPENJPEG_VERSION_MAJOR}.${OPENJPEG_VERSION_MINOR}.${OPENJPEG_VERSION_BUILD}")
 SET(PACKAGE_VERSION
   "${OPENJPEG_VERSION_MAJOR}.${OPENJPEG_VERSION_MINOR}.${OPENJPEG_VERSION_BUILD}")
-  
-# svn revision number of this openjpeg fork (used for .so versioning)
-SET(OPENJPEG_SVN_REVISION "1076")
-# patch number for OTB modifications applied on top of OPENJPEG_SVN_REVISION (used for .so versioning)
-SET(OPENJPEG_OTB_PATCH "1")
-
-#SET(OPENJPEG_LIBRARY_PROPERTIES
-#  VERSION   "${OPENJPEG_VERSION_MAJOR}.${OPENJPEG_VERSION_MINOR}.${OPENJPEG_VERSION_BUILD}"
-#  SOVERSION "${OPENJPEG_VERSION_MAJOR}"
-#)
-
 SET(OPENJPEG_LIBRARY_PROPERTIES
-  VERSION   "${OPENJPEG_SVN_REVISION}.${OPENJPEG_OTB_PATCH}.0"
-  SOVERSION "${OPENJPEG_SVN_REVISION}.${OPENJPEG_OTB_PATCH}"
+  VERSION   "${OPENJPEG_VERSION_MAJOR}.${OPENJPEG_VERSION_MINOR}.${OPENJPEG_VERSION_BUILD}"
+  SOVERSION "${OPENJPEG_VERSION_MAJOR}"
 )
 
 # --------------------------------------------------------------------------
 # Path to additional CMake modules
 SET(CMAKE_MODULE_PATH
-    ${OPENJPEG_SOURCE_DIR}/CMake
+    ${CMAKE_SOURCE_DIR}/CMake
     ${CMAKE_MODULE_PATH})
 
 # --------------------------------------------------------------------------
@@ -120,14 +109,17 @@ ENDIF(NOT OPENJPEG_INSTALL_PACKAGE_DIR)
 
 #-----------------------------------------------------------------------------
 # Test for some required system information.
-# For example this macro test the endianness (CMAKE_WORDS_BIGENDIAN)
 INCLUDE (${CMAKE_ROOT}/Modules/CMakeBackwardCompatibilityC.cmake)
+
+# Big endian test:
+INCLUDE (${CMAKE_ROOT}/Modules/TestBigEndian.cmake)
+TEST_BIG_ENDIAN(OPJ_BIG_ENDIAN)
 
 #-----------------------------------------------------------------------------
 # Setup file for setting custom ctest vars
 CONFIGURE_FILE(
-  ${OPENJPEG_SOURCE_DIR}/CMake/CTestCustom.cmake.in
-  ${OPENJPEG_BINARY_DIR}/CTestCustom.cmake
+  ${CMAKE_SOURCE_DIR}/CMake/CTestCustom.cmake.in
+  ${CMAKE_BINARY_DIR}/CTestCustom.cmake
   @ONLY
   )
 
@@ -141,28 +133,19 @@ MARK_AS_ADVANCED(LIBRARY_OUTPUT_PATH EXECUTABLE_OUTPUT_PATH)
 #-----------------------------------------------------------------------------
 # configure name mangling to allow multiple libraries to coexist
 # peacefully
-
-#SET(OPJ_MANGLE_PREFIX "" CACHE STRING "Prefix used to mangle all the symbols")
-IF(OPJ_MANGLE_PREFIX)
-  SET(OPJ_USE_MANGLE_PREFIX ON)
-ELSE(OPJ_MANGLE_PREFIX)
-  SET(OPJ_USE_MANGLE_PREFIX OFF)
-ENDIF(OPJ_MANGLE_PREFIX)
-
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/openjpeg_mangle.h.cmake.in
+IF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/openjpeg_mangle.h.in)
+SET(MANGLE_PREFIX ${OPENJPEG_LIBRARY_NAME})
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/openjpeg_mangle.h.in
                ${CMAKE_CURRENT_BINARY_DIR}/openjpeg_mangle.h
-               @ONLY IMMEDIATE)
-
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/openjpeg_mangle_private.h.cmake.in
-               ${CMAKE_CURRENT_BINARY_DIR}/openjpeg_mangle_private.h
-               @ONLY IMMEDIATE)
+               @ONLY)
+ENDIF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/openjpeg_mangle.h.in)
 
 #-----------------------------------------------------------------------------
 # pkgconfig support
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/libopenjpeg1.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/libopenjpeg1.pc @ONLY)
-#INSTALL( FILES  ${CMAKE_CURRENT_BINARY_DIR}/libopenjpeg1.pc DESTINATION ${OPENJPEG_INSTALL_LIB_DIR}/pkgconfig )
-#INSTALL( CODE
-#  "EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E create_symlink \"libopenjpeg1.pc\" \"\$ENV{DESTDIR}${OPENJPEG_INSTALL_LIB_DIR}/pkgconfig/libopenjpeg.pc\")")
+INSTALL( FILES  ${CMAKE_CURRENT_BINARY_DIR}/libopenjpeg1.pc DESTINATION ${OPENJPEG_INSTALL_LIB_DIR}/pkgconfig )
+INSTALL( CODE
+  "EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E create_symlink \"libopenjpeg1.pc\" \"\$ENV{DESTDIR}${OPENJPEG_INSTALL_LIB_DIR}/pkgconfig/libopenjpeg.pc\")")
 
 #-----------------------------------------------------------------------------
 # Compiler specific flags:
@@ -175,51 +158,19 @@ ENDIF(CMAKE_COMPILER_IS_GNUCC)
 
 #-----------------------------------------------------------------------------
 # opj_config.h generation (1/2)
-FIND_FILE(HAVE_STRINGS_H_FOUND strings.h)
-IF(NOT HAVE_STRINGS_H_FOUND STREQUAL "HAVE_STRINGS_H_FOUND-NOTFOUND")
-  FIND_FILE(HAVE_STRINGS_H strings.h)
-  SET(HAS_STRINGS_H 1)
-ENDIF()
-FIND_FILE(HAVE_INTTYPES_H_FOUND inttypes.h)
-IF(NOT HAVE_INTTYPES_H_FOUND STREQUAL "HAVE_INTTYPES_H_FOUND-NOTFOUND")
-  FIND_FILE(HAVE_INTTYPES_H inttypes.h)
-  SET(HAS_INTTYPES_H 1)
-ENDIF()
-FIND_FILE(HAVE_MEMORY_H_FOUND memory.h)
-IF(NOT HAVE_MEMORY_H_FOUND STREQUAL "HAVE_MEMORY_H_FOUND-NOTFOUND")
-  FIND_FILE(HAVE_MEMORY_H memory.h)
-  SET(HAS_MEMORY_H 1)
-ENDIF()
-FIND_FILE(HAVE_STDINT_H_FOUND stdint.h)
-IF(NOT HAVE_STDINT_H_FOUND STREQUAL "HAVE_STDINT_H_FOUND-NOTFOUND")
-  FIND_FILE(HAVE_STDINT_H stdint.h)
-  SET(HAS_STDINT_H 1)
-ENDIF()
-FIND_FILE(HAVE_STDLIB_H_FOUND stdlib.h)
-IF(NOT HAVE_STDLIB_H_FOUND STREQUAL "HAVE_STDLIB_H_FOUND-NOTFOUND")
-  FIND_FILE(HAVE_STDLIB_H stdlib.h)
-  SET(HAS_STDLIB_H 1)
-ENDIF()
-FIND_FILE(HAVE_STRING_H_FOUND string.h)
-IF(NOT HAVE_STRING_H_FOUND STREQUAL "HAVE_STRING_H_FOUND-NOTFOUND")
-  FIND_FILE(HAVE_STRING_H string.h)
-  SET(HAS_STRING_H 1)
-ENDIF()
-FIND_FILE(HAVE_SYS_STAT_H_FOUND sys/stat.h)
-IF(NOT HAVE_SYS_STAT_H_FOUND STREQUAL "HAVE_SYS_STAT_H_FOUND-NOTFOUND")
-  FIND_FILE(HAVE_SYS_STAT_H sys/stat.h)
-  SET(HAS_SYS_STAT_H 1)
-ENDIF()
-FIND_FILE(HAVE_SYS_TYPES_H_FOUND sys/types.h)
-IF(NOT HAVE_SYS_TYPES_H_FOUND STREQUAL "HAVE_SYS_TYPES_H_FOUND-NOTFOUND")
-  FIND_FILE(HAVE_SYS_TYPES_H sys/types.h)
-  SET(HAS_SYS_TYPES_H 1)
-ENDIF()
-FIND_FILE(HAVE_UNISTD_H_FOUND unistd.h)
-IF(NOT HAVE_UNISTD_H_FOUND STREQUAL "HAVE_UNISTD_H_FOUND-NOTFOUND")
-  FIND_FILE(HAVE_UNISTD_H unistd.h)
-  SET(HAS_UNISTD_H 1)
-ENDIF()
+CHECK_INCLUDE_FILE("strings.h"       HAVE_STRINGS_H)
+CHECK_INCLUDE_FILE("inttypes.h"       HAVE_INTTYPES_H)
+CHECK_INCLUDE_FILE("memory.h"       HAVE_MEMORY_H)
+CHECK_INCLUDE_FILE("stdint.h"       HAVE_STDINT_H)
+CHECK_INCLUDE_FILE("stdlib.h"       HAVE_STDLIB_H)
+CHECK_INCLUDE_FILE("string.h"       HAVE_STRING_H)
+CHECK_INCLUDE_FILE("sys/stat.h"       HAVE_SYS_STAT_H)
+CHECK_INCLUDE_FILE("sys/types.h"       HAVE_SYS_TYPES_H)
+CHECK_INCLUDE_FILE("unistd.h"       HAVE_UNISTD_H)
+
+# Enable Large file support
+INCLUDE(TestLargeFiles)
+OPJ_TEST_LARGE_FILES(OPJ_HAVE_LARGEFILES)
 
 #-----------------------------------------------------------------------------
 # Build Library
@@ -228,9 +179,9 @@ ADD_SUBDIRECTORY(libopenjpeg)
 
 #-----------------------------------------------------------------------------
 # Build Applications
-#OPTION(BUILD_CODEC "Build the CODEC executables" ON)
-#OPTION(BUILD_MJ2 "Build the MJ2 executables." OFF)
-#OPTION(BUILD_JPIP "Build the JPIP library and executables." OFF)
+OPTION(BUILD_CODEC "Build the CODEC executables" ON)
+OPTION(BUILD_MJ2 "Build the MJ2 executables." OFF)
+OPTION(BUILD_JPIP "Build the JPIP library and executables." OFF)
 
 IF(BUILD_CODEC OR BUILD_MJ2 OR BUILD_JPIP)
   OPTION(BUILD_THIRDPARTY "Build the thirdparty executables if it is needed" OFF)
@@ -247,18 +198,18 @@ CONFIGURE_FILE("${OPENJPEG_SOURCE_DIR}/opj_config.h.cmake.in"
 
 #-----------------------------------------------------------------------------
 # Build JPWL-flavoured library and executables
-#OPTION(BUILD_JPWL "Build the JPWL library and executables" OFF)
+OPTION(BUILD_JPWL "Build the JPWL library and executables" OFF)
 
 #-----------------------------------------------------------------------------
 # Build DOCUMENTATION (not in ALL target and only if Doxygen is found)
-#OPTION(BUILD_DOC "Build the HTML documentation (with doxygen if available)." OFF)
+OPTION(BUILD_DOC "Build the HTML documentation (with doxygen if available)." OFF)
 IF(BUILD_DOC)
     ADD_SUBDIRECTORY(doc)
 ENDIF(BUILD_DOC)
 
 #-----------------------------------------------------------------------------
 # Buld Testing
-#OPTION(BUILD_TESTING "Build the tests." OFF)
+OPTION(BUILD_TESTING "Build the tests." OFF)
 IF(BUILD_TESTING)
   IF(BUILD_CODEC)
     ENABLE_TESTING()
@@ -267,12 +218,20 @@ IF(BUILD_TESTING)
     # Search openjpeg data needed for the tests
     # They could be found via svn on the OpenJPEG google code project
     # svn checkout http://openjpeg.googlecode.com/svn/data (about 70 Mo) 
-    FIND_PATH(OPJ_DATA_ROOT README-OPJ-Data 
-              PATHS $ENV{OPJ_DATA_ROOT} ${CMAKE_SOURCE_DIR}/../data)
-  
-    # For encoding tests we need the path to the ref decoder exe/lib (kakadu)           
-    SET (REF_DECODER_BIN_PATH "NOTFOUND" CACHE PATH "Single directory where find the reference decoder binaries to enable encoding test suite.")
-    MARK_AS_ADVANCED(REF_DECODER_BIN_PATH)
+    FIND_PATH(OPJ_DATA_ROOT README-OPJ-Data
+      PATHS
+      $ENV{OPJ_DATA_ROOT}
+      ${CMAKE_SOURCE_DIR}/../data
+      )
+
+    # For encoding tests we need the path to the ref decoder exe/lib (kakadu)     
+    FIND_PROGRAM(REF_DECODER_BIN
+                 NAMES kdu_expand
+                 DOC "Kakadu kdu_expand program used in encoder non-regression testing")
+    IF(REF_DECODER_BIN)
+      GET_FILENAME_COMPONENT(REF_DECODER_BIN_PATH ${REF_DECODER_BIN} PATH CACHE)
+      MARK_AS_ADVANCED(REF_DECODER_BIN_PATH)
+    ENDIF(REF_DECODER_BIN)
     
     # Add repository where to find tests
     ADD_SUBDIRECTORY(tests)
@@ -284,18 +243,18 @@ ENDIF(BUILD_TESTING)
 
 #-----------------------------------------------------------------------------
 # install all targets referenced as OPENJPEGTargets
-#INSTALL(EXPORT OpenJPEGTargets DESTINATION ${OPENJPEG_INSTALL_PACKAGE_DIR})
-#CONFIGURE_FILE( ${OPENJPEG_SOURCE_DIR}/CMake/OpenJPEGConfig.cmake.in
-#  ${OPENJPEG_BINARY_DIR}/OpenJPEGConfig.cmake
-#  @ONLY
-#)
-#INSTALL( FILES ${OPENJPEG_BINARY_DIR}/OpenJPEGConfig.cmake
-#  DESTINATION ${OPENJPEG_INSTALL_PACKAGE_DIR}
-#)
+INSTALL(EXPORT OpenJPEGTargets DESTINATION ${OPENJPEG_INSTALL_PACKAGE_DIR})
+CONFIGURE_FILE( ${OPENJPEG_SOURCE_DIR}/CMake/OpenJPEGConfig.cmake.in
+  ${OPENJPEG_BINARY_DIR}/OpenJPEGConfig.cmake
+  @ONLY
+)
+INSTALL( FILES ${OPENJPEG_BINARY_DIR}/OpenJPEGConfig.cmake
+  DESTINATION ${OPENJPEG_INSTALL_PACKAGE_DIR}
+)
 
 #-----------------------------------------------------------------------------
 # install CHANGES and LICENSE
-#INSTALL(
-#  FILES       CHANGES 
-#              LICENSE
-#  DESTINATION ${OPENJPEG_INSTALL_DOC_DIR})
+INSTALL(
+  FILES       CHANGES 
+              LICENSE
+  DESTINATION ${OPENJPEG_INSTALL_DOC_DIR})

@@ -5,6 +5,33 @@ What's New for OpenJPEG
 ! : changed
 + : added
 
+November 30, 2011
+* [jmalik] implement Large File support in the library :
+           - fix portability layer for windows (need WIN32)
+           - include opj_config.h before any system header (index)
+           - change types related to buffer size to OPJ_SIZE_T, for anything sent to memcpy, fread, fwrite
+           - change types related to index in stream to OPJ_OFF_T, thus resolving to a 64 bit signed integer
+           - change types related to size of stream to OPJ_UINT64_T
+           - change calls to fseek/ftell to LFS-capable OPJ_SEEK/OPJ_TELL
+* [mickael] fix error about the way to detect the additional test suite
+* [mickael] fix bug during random access to tile (tile already decoded)
+
+November 29, 2011
+* [mickael] fix error with new way to detect kdu_expand
+
+November 27, 2011
+* [jmalik] clean up redundant includes already handled in opj_includes.h
+* [jmalik] reverted changeset 1091 (see issue #103)
+
+November 24, 2011
+* [jmalik] support seeking in files larger than 2 GB
+
+November 21, 2011
+* [mickael] WIP: fix bug with windows platform and j2k_dump
+
+November 18, 2011
+* [mickael] WIP: fix bug with windows platform and j2k_to_image
+
 November 17, 2011
 * [mickael] WIP: fix bug when decoding an area or a tile with special resolution
 + [mickael] WIP: enhance j2k_to_image with new get_decoded_tile functionality
