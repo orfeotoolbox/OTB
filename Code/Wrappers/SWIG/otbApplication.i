@@ -174,7 +174,10 @@ public:
   std::vector<std::string> GetDocTags();
 
   DocExampleStructure::Pointer GetDocExample();
-  void SetDocExampleParameterValue( const std::string key, const std::string value );
+  void SetDocExampleParameterValue( const std::string key, const std::string value, unsigned int exId=0 );
+  void SetExampleComment( const std::string & comm, unsigned int i );
+  unsigned int AddExample( const std::string & comm="" );
+
   std::string GetCLExample();
   std::string GetHtmlExample();
   std::vector< std::pair<std::string, std::string> > GetOutputParametersSumUp();
