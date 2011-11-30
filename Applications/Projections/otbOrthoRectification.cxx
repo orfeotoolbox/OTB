@@ -100,7 +100,7 @@ private:
     SetDocLimitations("Supported sensors are SPOT5 (TIF format), Ikonos, Quickbird, Worldview2, GeoEye.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Ortho-rectification chapter from the OTB Software Guide");
-    SetDocCLExample(" ");
+  
     AddDocTag(Tags::Manip);
     AddDocTag(Tags::Geometry);
   }
@@ -219,6 +219,9 @@ private:
     SetDefaultParameterFloat("opt.gridspacing", 4.);
     SetParameterDescription("opt.gridspacing", "Resampling is done according to a coordinate mapping grid, whose pixel size is set by this parameter. The closer to the output spacing this parameter is, the more precise will be the ortho-rectified image, but increasing this parameter allows to reduce processing time.");
     MandatoryOff("opt.gridspacing");
+
+    // TODO Doc example parameter settings
+    //SetDocExampleParameterValue("", "");
   }
 
   void DoUpdateParameters()

@@ -55,7 +55,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Translation application");
-    SetDocCLExample("otbApplicationLauncherCommandLine RigidTransformResample ${OTB-BIN}/bin --in ${OTB-Data}/Input/poupees.tif --out rigitTransformImage.tf --tx 5 --ty 5");
+  
     AddDocTag("Conversion");
     AddDocTag(Tags::Geometry);
   }
@@ -101,6 +101,12 @@ private:
     
     // Output Image
     SetParameterOutputImage("out", m_Resampler->GetOutput());
+
+    // Doc example parameter settings
+    SetDocExampleParameterValue("in", "poupees.tif");
+    SetDocExampleParameterValue("out", "rigitTransformImage.tif");
+    SetDocExampleParameterValue("tx", "5");
+    SetDocExampleParameterValue("ty", "5");
   }
 
   ResampleFilterType::Pointer m_Resampler;

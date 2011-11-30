@@ -68,7 +68,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
-    SetDocCLExample("otbApplicationLauncherCommandLine ConvertCartoToGeoPoint ${OTB-BIN}/bin --carto.x 367074.625 --carto.y 4835740 --mapproj utm --mapproj.utm.hemisphere true --mapproj.utm.zone 31");
+  
     AddDocTag(Tags::Coordinates);
     AddDocTag(Tags::Geometry);
   }
@@ -147,6 +147,15 @@ private:
     AddParameter(ParameterType_Float, "lat", "Output lat");
     SetParameterDescription("lat", "Point latitude coordinates.");
     SetParameterRole("lat", Role_Output);
+  
+    SetDocCLExample("otbApplicationLauncherCommandLine ConvertCartoToGeoPoint ${OTB-BIN}/bin --carto.x 367074.625 --carto.y 4835740 --mapproj utm --mapproj.utm.hemisphere true --mapproj.utm.zone 31");
+
+    // Doc example parameter settings
+    SetDocExampleParameterValue("carto.x", "367074.625");
+    SetDocExampleParameterValue("carto.y", "4835740");
+    SetDocExampleParameterValue("mapproj", "utm");
+    SetDocExampleParameterValue("mapproj.utm.hemisphere", "true");
+    SetDocExampleParameterValue("mapproj.utm.zone", "31");
   }
 
   void DoUpdateParameters()

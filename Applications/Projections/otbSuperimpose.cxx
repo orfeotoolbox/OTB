@@ -60,9 +60,7 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
-    SetDocCLExample("otbApplicationLauncherCommandLine Superimpose ${OTB-BIN}/bin "
-                    "--inr ${OTB-Data}/Examples/QB_Toulouse_Ortho_PAN.tif --inm ${OTB-Data}/Examples/QB_Toulouse_Ortho_XS.tif "
-                    "--out otbSuperimposedXS_to_PAN.tif");
+ 
     AddDocTag(Tags::Geometry);
     AddDocTag(Tags::Manip);
     AddDocTag("Superimposition");
@@ -88,6 +86,11 @@ private:
     MandatoryOff("dem");
     MandatoryOff("lms");
     MandatoryOff("ram");
+
+    // Doc example parameter settings
+    SetDocExampleParameterValue("inr", "QB_Toulouse_Ortho_PAN.tif");
+    SetDocExampleParameterValue("inm", "QB_Toulouse_Ortho_XS.tif");
+    SetDocExampleParameterValue("out", "SuperimposedXS_to_PAN.tif");
   }
 
   void DoUpdateParameters()
