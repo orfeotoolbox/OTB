@@ -57,10 +57,10 @@ private:
 
     // Documentation
     SetDocName("Line segment detection application");
-    SetDocLongDescription("This application detects line segments in raster. Detected lines are saved in a shape file.");
+    SetDocLongDescription("This application detects locally straight contours in a image. It is based on Burns, Hanson, and Riseman method and use an a contrario validation approach (Desolneux, Moisan, and Morel). The algorithm was published by Rafael Gromponevon Gioi, Jérémie Jakubowicz, Jean-Michel Morel and Gregory Randall. The given approach compute gradient and level lines of the image and detects aligned points in line support region. The application allows to export the detected lines in a vector data.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso(" ");
+    SetDocSeeAlso("On Line demonstration of the LSD algorithm is available here: http://www.ipol.im/pub/algo/gjmr_line_segment_detector/\n");
 
     AddDocTag(Tags::FeatureExtraction);
   }
