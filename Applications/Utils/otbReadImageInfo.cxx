@@ -275,7 +275,7 @@ private:
     typedef std::vector< std::pair<std::string, std::string> > ParametersListType;
     std::vector< std::pair<std::string, std::string> > appList = GetOutputParametersSumUp();
     
-    for (ParametersListType::const_iterator it = appList.begin();it != appList.end(); ++it)
+    for (ParametersListType::const_iterator it = appList.begin(); it != appList.end(); ++it)
       {
       otbAppLogINFO( << it->first << "   " << it->second);
       }

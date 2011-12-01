@@ -90,7 +90,6 @@ private:
   bool IsAValidKey( const std::string & foundKey );
 
 
-
 }; //end class
 
 } // end namespace Wrapper

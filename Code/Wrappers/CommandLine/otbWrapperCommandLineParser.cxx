@@ -295,7 +295,7 @@ CommandLineParser::GetKeyList( const std::string & exp  )
 }
 
 
-bool 
+bool
 CommandLineParser::IsAValidKey( const std::string & foundKey )
 {
   bool res = false;
@@ -313,6 +313,5 @@ CommandLineParser::IsAValidKey( const std::string & foundKey )
 
 }
 }
-
 
 
