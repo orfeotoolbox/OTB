@@ -80,11 +80,17 @@ protected:
 
   /** Destructor */
   virtual ~CommandLineParser();
- 
-private:
 
+private:
   CommandLineParser(const CommandLineParser &); //purposely not implemented
   void operator =(const CommandLineParser&); //purposely not implemented
+
+
+  /** Return true if the found key is valid : not a number */
+  bool IsAValidKey( const std::string & foundKey );
+
+
+
 }; //end class
 
 } // end namespace Wrapper

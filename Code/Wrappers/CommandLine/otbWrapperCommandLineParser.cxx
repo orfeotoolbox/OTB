@@ -43,22 +43,22 @@ std::string
 CommandLineParser::GetPathsAsString( const std::string & exp )
 {
   std::string res;
-  // The first element must be the module path, non "--" allowed.
+  // The first element must be the module path, non " -" allowed.
   // The module path list element are the strings between the first
-  // element and the next key (ie. "--" string).
+  // element and the next key (ie. " -" string).
   std::string tempModPath = exp;
-  if( exp.find("--") != std::string::npos)
-    {
-    tempModPath = exp.substr( 0, exp.find("--")-1);
-    }
 
+  if( exp.find(" -") != std::string::npos)
+    {
+    tempModPath = exp.substr( 0, exp.find(" -"));
+    }
 
   // Get everything after the module path
   if( tempModPath.find(" ") != std::string::npos)
     {
     res = tempModPath.substr( tempModPath.find(" ")+1, tempModPath.size());
     }
-    
+  
   // Suppress possible multi space at the beginning of the string
   while (res.size()>0 && res[0]==' ')
     {
@@ -80,15 +80,16 @@ CommandLineParser::GetPaths( std::vector<std::string> & paths, const std::string
 
   std::string tempModPath = pathsList;
   // remove other key in the string if there's any
-  if( pathsList.find("--") != std::string::npos)
+  if( pathsList.find(" -") != std::string::npos)
     {
-    tempModPath = pathsList.substr( 0, pathsList.find("--")-1);
+    tempModPath = pathsList.substr( 0, pathsList.find(" -"));
     }
 
   if( tempModPath.size() > 0 )
     {
     std::vector<itksys::String> pathAttribut = itksys::SystemTools::SplitString(tempModPath.substr(0, tempModPath.size()).c_str(), ' ', false);
       
+
     // Remove " " string element
     for(unsigned int i=0; i<pathAttribut.size(); i++)
       {
@@ -97,20 +98,12 @@ CommandLineParser::GetPaths( std::vector<std::string> & paths, const std::string
       {
       pathAttribut[i].erase(0, 1);
       }
-      
-      // case where the user set -key instead of --key
-      // Having __key is not not, we've splitted the expression to the
-      // first "--"
-      if(pathAttribut[i][0] == '-')
-        {
-        std::cerr<<"ERROR: Parameter keys have to set using \"--\", not \"-\""<<std::endl;
-        return INVALIDMODULEPATH;
-        }
+
       std::string fullPath = itksys::SystemTools::CollapseFullPath(pathAttribut[i].c_str());
 
       if( !itksys::SystemTools::FileIsDirectory(fullPath.c_str()) )
         {
-        std::cerr<<"module path Invalid module path: "<<fullPath<<std::endl;
+        std::cerr<<"Invalid module path: "<<fullPath<<std::endl;
         return INVALIDMODULEPATH;
         }
       paths.push_back(fullPath);
@@ -150,8 +143,8 @@ CommandLineParser::GetModuleName( std::string & modName, const std::string & exp
   
   itksys::RegularExpression reg;
   reg.compile("([^0-9a-zA-Z])");
-  // The first element must be the module path, non "--" allowed.
-  if( spaceSplittedExp[0].substr(0, 2) == "--" || spaceSplittedExp.size() == 0 )
+  // The first element must be the module path, non " -" allowed.
+  if( spaceSplittedExp[0].substr(0, 2) == " -" || spaceSplittedExp.size() == 0 )
     {
     return NOMODULENAME;
     }
@@ -192,9 +185,9 @@ CommandLineParser::GetAttribut( const std::string & key, const std::string & exp
  
   std::string tempModKey = expFromKey;
   // remove other key in the string if there's any
-  if( expFromKey.find("--") != std::string::npos)
+  if( expFromKey.find(" -") != std::string::npos)
     {
-    tempModKey = expFromKey.substr( 0, expFromKey.find("--")-1);
+    tempModKey = expFromKey.substr( 0, expFromKey.find(" -"));
     }
 
   // Only if the key has values associated
@@ -261,7 +254,7 @@ CommandLineParser::IsAttributExists( const std::string key, const std::string & 
 {
   std::string keySpaced = key;
   std::string expSpaced = exp;
-  // Add space to avoid troubles with key which starts by another one : --out and --outmax for example
+  // Add space to avoid troubles with key which starts by another one : -out and -outmax for example
   keySpaced.append(" ");
   expSpaced.append(" ");
   std::size_t found = expSpaced.find(keySpaced);
@@ -274,7 +267,7 @@ CommandLineParser::GetKeyList( const std::string & exp  )
 {
   std::vector<std::string> keyList;
   std::string cutExp(exp);
-  std::size_t found = exp.find("--");
+  std::size_t found = exp.find(" -");
 
   while( found != std::string::npos )
     {
@@ -282,23 +275,44 @@ CommandLineParser::GetKeyList( const std::string & exp  )
     cutExp = cutExp.substr(found+2, exp.size());
     // Search the end of the key (a space)
     std::size_t foundSpace = cutExp.find(" ");
+    std::string tmpKey = cutExp;
     if( foundSpace != std::string::npos )
       {
-      keyList.push_back( cutExp.substr(0, foundSpace) );
+      tmpKey = cutExp.substr(0, foundSpace);
       }
-    else
+ 
+    if( this->IsAValidKey(tmpKey) )
       {
-      keyList.push_back( cutExp );
+      keyList.push_back( tmpKey );
       }
+    
 
-    // Search the next key (ie. "--")
-    found = cutExp.find("--");
+    // Search the next key (ie. " -")
+    found = cutExp.find(" -");
     }
 
   return keyList;
 }
 
 
+bool 
+CommandLineParser::IsAValidKey( const std::string & foundKey )
+{
+  bool res = false;
+  // To be a key, the string can't contain a number
+  itksys::RegularExpression reg;
+  reg.compile("([^0-9])");
+  if( reg.find(foundKey) )
+    {
+    res = true;
+    }
+
+  return res;
+}
+
+
 }
 }
+
+
 

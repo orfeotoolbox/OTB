@@ -98,6 +98,8 @@ bool CommandLineLauncher::Load(const std::string & exp)
 
 bool CommandLineLauncher::Load()
 {
+  // Add a space to clarify output logs
+  std::cerr << std::endl;
   if (m_Expression == "")
     {
     itkExceptionMacro("No expression specified...");
@@ -105,7 +107,7 @@ bool CommandLineLauncher::Load()
 
   if (this->CheckParametersPrefix() == false)
     {
-    std::cerr << "ERROR: Parameter keys have to set using \"--\", not \"-\"" << std::endl;
+    std::cerr << "ERROR: Parameter keys have to set using \"-\", not \"--\"" << std::endl;
     return false;
     }
 
@@ -180,6 +182,7 @@ bool CommandLineLauncher::BeforeExecute()
   // at least 1 mandatory parameter
   const std::vector<std::string> appKeyList = m_Application->GetParametersKeys(true);
   std::vector<std::string> keyList = m_Parser->GetKeyList( m_Expression );
+
   if( appKeyList.size()!=0 && keyList.size()==0 )
     {
     std::cerr << "ERROR: Waiting for at least one parameter..." << std::endl;
@@ -188,14 +191,14 @@ bool CommandLineLauncher::BeforeExecute()
     }
 
   // if help is asked...
-  if (m_Parser->IsAttributExists("--help", m_Expression) == true)
+  if (m_Parser->IsAttributExists("-help", m_Expression) == true)
     {
     this->DisplayHelp();
     return false;
     }
 
   // if we want to load test environnement
-  if (m_Parser->IsAttributExists("--testenv", m_Expression) == true)
+  if (m_Parser->IsAttributExists("-testenv", m_Expression) == true)
     {
     this->LoadTestEnv();
     }
@@ -233,10 +236,10 @@ bool CommandLineLauncher::BeforeExecute()
     }
 
   // Check for the progress report
-  if (m_Parser->IsAttributExists("--progress", m_Expression) == true)
+  if (m_Parser->IsAttributExists("-progress", m_Expression) == true)
     {
     std::vector<std::string> val;
-    val = m_Parser->GetAttribut("--progress", m_Expression);
+    val = m_Parser->GetAttribut("-progress", m_Expression);
     if (val.size() != 1)
       {
       std::cerr << "ERROR: Invalid progress argument, must be unique value..." << std::endl;
@@ -342,14 +345,14 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
     Parameter::Pointer param = m_Application->GetParameterByKey(paramKey);
     ParameterType type = m_Application->GetParameterType(paramKey);
 
-    const bool paramExists(m_Parser->IsAttributExists(std::string("--").append(paramKey), m_Expression));
+    const bool paramExists(m_Parser->IsAttributExists(std::string("-").append(paramKey), m_Expression));
 
 
     // if param is a Group, dont do anything, ParamGroup dont have values
     if (type != ParameterType_Group)
       {
       // Get the attribute relative to this key as vector
-      values = m_Parser->GetAttribut(std::string("--").append(paramKey), m_Expression);
+      values = m_Parser->GetAttribut(std::string("-").append(paramKey), m_Expression);
     
 
       // If the param does not exists in the cli, dont try to set a
@@ -380,7 +383,7 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
             else
               if (type == ParameterType_String)
                 {
-                dynamic_cast<StringParameter *> (param.GetPointer())->SetValue( m_Parser->GetAttributAsString(std::string("--").append(paramKey), m_Expression) );
+                dynamic_cast<StringParameter *> (param.GetPointer())->SetValue( m_Parser->GetAttributAsString(std::string("-").append(paramKey), m_Expression) );
                 }
               else
                 if (type == ParameterType_OutputImage)
@@ -436,19 +439,6 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
                       {
                       std::cerr << "ERROR: Invalid number of value for: \"" << paramKey << "\", must have 1 value, not  "
                                 << values.size() << std::endl;
-                      // Try to find a "-" instead of "--"...
-                      itk::OStringStream oss;
-                      for (unsigned int i = 0; i < values.size(); i++)
-                        {
-                        if (values[i][0] == '-')
-                          {
-                          oss << std::string(values[i]).substr(1, std::string(values[i]).size() - 1) << ", ";
-                          }
-                        }
-                      if (oss.str().size() > 0) std::cerr << "ERROR: If values \""
-                                                          << oss.str().substr(0, oss.str().size() - 2)
-                                                          << "\" is/are keys, it should be prefix by \"--\"..." << std::endl;
-
                       return INVALIDNUMBEROFVALUE;
                       }
 
@@ -518,7 +508,7 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
         }
       else
         {
-        values = m_Parser->GetAttribut(std::string("--").append(paramKey), m_Expression);
+        values = m_Parser->GetAttribut(std::string("-").append(paramKey), m_Expression);
         if (values.size() == 0 && !m_Application->HasValue(paramKey))
           {
           std::cerr << "ERROR: Missing mandatory parameter: " << paramKey << std::endl;
@@ -532,7 +522,7 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
       {
       if( paramExists )
         {
-        values = m_Parser->GetAttribut(std::string("--").append(paramKey), m_Expression);
+        values = m_Parser->GetAttribut(std::string("-").append(paramKey), m_Expression);
         if (values.size() == 0)
           {
           std::cerr << "ERROR: Missing mandatory parameter: " << paramKey << std::endl;
@@ -621,7 +611,7 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
   // is root OR its parent is active
   // NB: a root parameter is not active
   bool isMissing = false;
-  if (!m_Parser->IsAttributExists(std::string("--").append(paramKey), m_Expression))
+  if (!m_Parser->IsAttributExists(std::string("-").append(paramKey), m_Expression))
     {
     if (!m_Application->HasValue(paramKey))
       {
@@ -651,7 +641,7 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
   for(unsigned int i=0; i<m_MaxKeySize-paramKey.size(); i++)
     bigKey.append(" ");
     
-  oss<< "--" << bigKey << " ";
+  oss<< "-" << bigKey << " ";
 
   // Display the type the parameter
   if (type == ParameterType_Radius || type == ParameterType_Int || type == ParameterType_RAM)
@@ -679,7 +669,7 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
   else if (type == ParameterType_Choice || type == ParameterType_ListView || ParameterType_InputImageList ||
            type == ParameterType_InputVectorDataList || type == ParameterType_StringList )
     {
-    oss << "<string list>       ";
+    oss << "<string list>   ";
     }
   else
     itkExceptionMacro("Not handled parameter type.");
@@ -726,26 +716,10 @@ bool CommandLineLauncher::CheckUnicity()
 bool CommandLineLauncher::CheckParametersPrefix()
 {
   bool res = true;
-  // Extract Expression elements
-  std::vector<itksys::String> spaceSplittedExp = itksys::SystemTools::SplitString(m_Expression.c_str(), ' ', false);
-  // if the chain is "  module", SplitString will return: [ ], [module]
-  for (unsigned int i = 0; i < spaceSplittedExp.size(); i++)
+  // Check if the chain "-" appears in the expression
+  if (m_Expression.find("--") != std::string::npos )
     {
-    if (spaceSplittedExp[i] == " ")
-      {
-      spaceSplittedExp.erase(spaceSplittedExp.begin() + i);
-      i--;
-      }
-    }
-
-  // If the expression contains parameters
-  if (spaceSplittedExp.size() > 2)
-    {
-    // Check if the chain "--" appears at least one time when "-" is present
-    if (m_Expression.find("--") == std::string::npos && m_Expression.find("-") != std::string::npos)
-      {
-      res = false;
-      }
+    res = false;
     }
 
   return res;
@@ -803,9 +777,9 @@ void CommandLineLauncher::DisplayOutputParameters()
     }
 
   
-  if ( m_Parser->IsAttributExists("--testenv", m_Expression) )
+  if ( m_Parser->IsAttributExists("-testenv", m_Expression) )
     {
-    std::vector<std::string> val = m_Parser->GetAttribut("--testenv", m_Expression);
+    std::vector<std::string> val = m_Parser->GetAttribut("-testenv", m_Expression);
     if( val.size() == 1 )
       {
       std::ofstream ofs(val[0].c_str());
