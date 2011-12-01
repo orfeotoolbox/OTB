@@ -2115,6 +2115,48 @@ ADD_TEST(ioTvMultiResolutionReadingInfo ${IO_TESTS13}
 #         -startX 0 -startY 0 -sizeX 2592 -sizeY 1944
 #         -channels 1 2 3 )
 
+
+# Read an area inside one tile at resolution 0 (jpeg2000 conformance file with
+# specific tile size at different resolution).
+ADD_TEST(ioTvMultiChannelROI_p1_06_JPEG2000_2_TIF_res0 ${COMMON_TESTS2}
+   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_p1_06.tif
+                                  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_p1_06_OUT.tif
+         otbMultiChannelExtractROI
+            ${INPUTDATA}/jpeg2000_conf_p1_06.j2k:0
+            ${TEMP}/ioExtractROI_JPEG2K_2_TIF_p1_06_OUT.tif
+            )
+
+# Read an area inside one tile at resolution 4 (jpeg2000 conformance file with
+# specific tile size at different resolution).
+ADD_TEST(ioTvMultiChannelROI_p1_06_JPEG2000_2_TIF_res4 ${COMMON_TESTS2}
+   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_p1_06_res4.tif
+                                  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_p1_06_res4_OUT.tif
+         otbMultiChannelExtractROI
+            ${INPUTDATA}/jpeg2000_conf_p1_06.j2k:4
+            ${TEMP}/ioExtractROI_JPEG2K_2_TIF_p1_06_res4_OUT.tif
+            )
+
+# Read an area inside one tile at resolution 0 (quite similar coding parameter with pleiade
+# except it a lossless image with no quatieation style).
+ADD_TEST(ioTvMultiChannelROI_lena_JPEG2000_2_TIF_res0 ${COMMON_TESTS2}
+   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_lena_150_75_100_50.tif
+                                  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_lena_150_75_100_50_OUT.tif
+         otbMultiChannelExtractROI
+            ${INPUTDATA}/lena512color.jp2:0
+            ${TEMP}/ioExtractROI_JPEG2K_2_TIF_lena_150_75_100_50_OUT.tif
+            -startX 150 -startY 75 -sizeX 100 -sizeY 50 )
+
+# Read an area inside one tile at resolution 5 (quite similar coding parameter with pleiade
+# except it a lossless image with no quatieation style).
+ADD_TEST(ioTvMultiChannelROI_lena_JPEG2000_2_TIF_res5 ${COMMON_TESTS2}
+   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_lena_res5.tif
+                                  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_lena_res5_OUT.tif
+         otbMultiChannelExtractROI
+            ${INPUTDATA}/lena512color.jp2:5
+            ${TEMP}/ioExtractROI_JPEG2K_2_TIF_lena_res5_OUT.tif
+            )
+
+
 # Read an area inside one tile at resolution 0
 ADD_TEST(ioTvMultiChannelROI_JPEG2000_2_TIF_res0_1 ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_bretagne_700_1000_50_40.tif
