@@ -81,7 +81,7 @@ macro(OTB_TEST_APPLICATION)
               ${TESTAPPLICATION_APP}
               $<TARGET_FILE_DIR:otbapp_${TESTAPPLICATION_APP}>
               ${TESTAPPLICATION_OPTIONS}
-              --testenv)
+              -testenv)
    else (NOT TESTAPPLICATION_TESTENVOPTIONS)
      add_test(NAME ${TESTAPPLICATION_NAME}
               COMMAND otbTestDriver
@@ -90,7 +90,7 @@ macro(OTB_TEST_APPLICATION)
               ${TESTAPPLICATION_APP}
               $<TARGET_FILE_DIR:otbapp_${TESTAPPLICATION_APP}>
               ${TESTAPPLICATION_OPTIONS}
-              --testenv ${TESTAPPLICATION_TESTENVOPTIONS})
+              -testenv ${TESTAPPLICATION_TESTENVOPTIONS})
    endif (NOT TESTAPPLICATION_TESTENVOPTIONS)
    
 endmacro(OTB_TEST_APPLICATION)
