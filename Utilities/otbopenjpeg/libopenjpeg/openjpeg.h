@@ -35,6 +35,7 @@
 #ifndef OPENJPEG_H
 #define OPENJPEG_H
 
+#include "openjpeg_mangle.h"
 
 /* 
 ==========================================================
@@ -1515,7 +1516,11 @@ OPJ_API opj_jp2_metadata_t* OPJ_CALLCONV opj_get_jp2_metadata(opj_codec_t *p_cod
 OPJ_API opj_jp2_index_t* OPJ_CALLCONV opj_get_jp2_index(opj_codec_t *p_codec);
 
 
-
+/* >>OTB */
+OPJ_API opj_image_t* OPJ_CALLCONV opj_image_create0();
+OPJ_API void opj_copy_image_header(const opj_image_t* p_image_src, opj_image_t* p_image_dest);
+/* <<OTB */
+ 
 
 
 #ifdef __cplusplus
