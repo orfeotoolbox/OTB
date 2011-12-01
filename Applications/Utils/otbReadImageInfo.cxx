@@ -125,15 +125,18 @@ private:
     AddParameter(ParameterType_Int, "rgb.r", "Red Band");
     SetParameterDescription("rgb.r","Red band Number");
     SetDefaultParameterInt("rgb.r", 1);
+    GetParameterByKey("rgb.r")->SetRole(Role_Output);
     
     AddParameter(ParameterType_Int, "rgb.g", "Green Band");
     SetParameterDescription("rgb.g","Green band Number");
     SetDefaultParameterInt("rgb.g", 2);
+    GetParameterByKey("rgb.g")->SetRole(Role_Output);
 
     AddParameter(ParameterType_Int, "rgb.b", "Blue Band");
     SetParameterDescription("rgb.b","Blue band Number");
     SetDefaultParameterInt("rgb.b", 3);
-    
+    GetParameterByKey("rgb.b")->SetRole(Role_Output);
+
     AddParameter(ParameterType_String,"projectionref","Projection Coordinate System");
     GetParameterByKey("projectionref")->SetRole(Role_Output);
     
@@ -147,11 +150,15 @@ private:
     AddParameter(ParameterType_Int, "gcp.count", "GCPs Number");
     SetParameterDescription("gcp.count","Number of GCPs");
     SetDefaultParameterInt("gcp.count", 0);
+    GetParameterByKey("gcp.count")->SetRole(Role_Output);
 
     AddParameter(ParameterType_String,"gcp.proj","GCP Projection System");
+    GetParameterByKey("gcp.proj")->SetRole(Role_Output);
 
     AddParameter(ParameterType_StringList,"gcp.ids","GCPs Id");
+    //GetParameterByKey("gcp.ids")->SetRole(Role_Output);
     AddParameter(ParameterType_StringList,"gcp.info","GCPs Info");
+    //GetParameterByKey("gcp.info")->SetRole(Role_Output);
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "QB_Toulouse_Ortho_XS.tif");
