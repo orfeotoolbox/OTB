@@ -261,8 +261,17 @@ private:
       {
       //Do nothing at all
       }
-    //FIXME Logger must output also parameter groups
-    this->GetLogger()->Info("");
+    // Show result
+    otbAppLogINFO( << "Image informations:" << std::endl);
+    //otbAppLogINFO( << "General: ");
+
+    typedef std::vector< std::pair<std::string, std::string> > ParametersListType;
+    std::vector< std::pair<std::string, std::string> > appList = GetOutputParametersSumUp();
+    
+    for (ParametersListType::const_iterator it = appList.begin();it != appList.end(); ++it)
+      {
+      otbAppLogINFO( << it->first << "   " << it->second);
+      }
   }
 
 };
