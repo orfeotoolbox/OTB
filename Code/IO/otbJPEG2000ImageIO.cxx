@@ -440,7 +440,10 @@ public:
     if (sizeInByte > 0 && m_IsReady)
       {
       m_CacheSizeInByte = sizeInByte;
-      m_CacheSizeInTiles = m_CacheSizeInByte / m_TileCacheSizeInByte;
+      if (m_TileCacheSizeInByte)
+        m_CacheSizeInTiles = m_CacheSizeInByte / m_TileCacheSizeInByte;
+      else
+        m_CacheSizeInTiles = 0;
       }
   };
 
@@ -477,6 +480,12 @@ void JPEG2000TileCache::EstimateTileCacheSize(unsigned int originalWidthTile, un
                               * nbComponent
                               * precision
                               / vcl_pow(2, 2*static_cast<double>(resolution) );
+
+  if (!this->m_TileCacheSizeInByte)
+    {
+    std::cout << "WARNING: m_TileCacheSizeInByte is estimated at " << m_TileCacheSizeInByte
+              << " bytes so we don't used the cache" << std::endl;
+    }
 
   otbMsgDevMacro( << "m_TileCacheSizeInByte = " << m_TileCacheSizeInByte );
 }

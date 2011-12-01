@@ -2137,7 +2137,7 @@ ADD_TEST(ioTvMultiChannelROI_p1_06_JPEG2000_2_TIF_res4 ${COMMON_TESTS2}
             )
 
 # Read an area inside one tile at resolution 0 (quite similar coding parameter with pleiade
-# except it a lossless image with no quatieation style).
+# except it a lossless image with no quatization style).
 ADD_TEST(ioTvMultiChannelROI_lena_JPEG2000_2_TIF_res0 ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_lena_150_75_100_50.tif
                                   ${TEMP}/ioExtractROI_JPEG2K_2_TIF_lena_150_75_100_50_OUT.tif
@@ -2147,7 +2147,7 @@ ADD_TEST(ioTvMultiChannelROI_lena_JPEG2000_2_TIF_res0 ${COMMON_TESTS2}
             -startX 150 -startY 75 -sizeX 100 -sizeY 50 )
 
 # Read an area inside one tile at resolution 5 (quite similar coding parameter with pleiade
-# except it a lossless image with no quatieation style).
+# except it a lossless image with no quatization style).
 ADD_TEST(ioTvMultiChannelROI_lena_JPEG2000_2_TIF_res5 ${COMMON_TESTS2}
    --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_lena_res5.tif
                                   ${TEMP}/ioExtractROI_JPEG2K_2_TIF_lena_res5_OUT.tif
