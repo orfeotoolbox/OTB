@@ -216,11 +216,11 @@ private:
       SetParameterString("time", osstime.str());
 
       if ( IsParameterEnabled("keywordlist") )
-	{
-	itk::OStringStream osskeywordlist;
-	osskeywordlist<<metadataInterface->GetImageKeywordlist() << std::endl;
-	SetParameterString("keyword", osskeywordlist.str());
-	}
+       {
+       itk::OStringStream osskeywordlist;
+       osskeywordlist<<metadataInterface->GetImageKeywordlist() << std::endl;
+       SetParameterString("keyword", osskeywordlist.str());
+       }
       double ullat = atof(metadataInterface->GetImageKeywordlist().GetMetadataByKey("ul_lat").c_str());
       double ullon = atof(metadataInterface->GetImageKeywordlist().GetMetadataByKey("ul_lon").c_str());
       double urlat = atof(metadataInterface->GetImageKeywordlist().GetMetadataByKey("ur_lat").c_str());

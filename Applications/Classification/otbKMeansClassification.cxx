@@ -39,7 +39,6 @@ namespace otb
 
 
 
-
 namespace Wrapper
 {
 
@@ -110,7 +109,6 @@ typedef LabeledImageType::PixelType LabelType;
 
 
 
-
 typedef FloatVectorImageType::PixelType                               SampleType;
 typedef itk::Statistics::ListSample<SampleType> ListSampleType;
 typedef itk::Statistics::WeightedCentroidKdTreeGenerator<ListSampleType> TreeGeneratorType;
@@ -130,7 +128,6 @@ typedef otb::StreamingShrinkImageFilter<LabeledImageType,
 typedef Functor::KMeansFunctor<SampleType, LabelType> KMeansFunctorType;
 typedef itk::UnaryFunctorImageFilter<FloatVectorImageType,
     LabeledImageType, KMeansFunctorType>     KMeansFilterType;
-
 
 
 class KMeansClassification: public Application
