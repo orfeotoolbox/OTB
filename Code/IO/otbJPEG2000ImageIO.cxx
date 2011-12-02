@@ -41,6 +41,10 @@ inline int int_ceildivpow2(int a, int b) {
   return (a + (1 << b) - 1) >> b;
 }
 
+inline unsigned int uint_ceildivpow2(unsigned int a, unsigned int b) {
+  return (a + (1 << b) - 1) >> b;
+}
+
 /**
    sample error debug callback expecting no client object
 */
@@ -1164,25 +1168,37 @@ std::vector<unsigned int> JPEG2000ImageIO::ComputeTileList()
   std::vector<unsigned int> tileVector;
 
   // Get nb. of lines and columns of the region to decode
-  int lNbLines     = this->GetIORegion().GetSize()[1];
-  int lNbColumns   = this->GetIORegion().GetSize()[0];
-  int lFirstLine   = this->GetIORegion().GetIndex()[1];
-  int lFirstColumn = this->GetIORegion().GetIndex()[0];
+  unsigned int startX = this->GetIORegion().GetIndex()[0];
+  unsigned int endX   = this->GetIORegion().GetIndex()[0] + this->GetIORegion().GetSize()[0];
+  unsigned int startY = this->GetIORegion().GetIndex()[1];
+  unsigned int endY   = this->GetIORegion().GetIndex()[1] + this->GetIORegion().GetSize()[1];
 
   // Compute index of tile recover by the decoded area
-  unsigned int tile_size_x = int_ceildivpow2(m_InternalReaders.front()->GetCstrInfo()->tdx, m_InternalReaders.front()->m_ResolutionFactor);
-  unsigned int tile_size_y = int_ceildivpow2(m_InternalReaders.front()->GetCstrInfo()->tdy, m_InternalReaders.front()->m_ResolutionFactor);
+  unsigned int tile_size_x = m_InternalReaders.front()->m_TileWidth;
+  unsigned int tile_size_y = m_InternalReaders.front()->m_TileHeight;
+  unsigned int width = m_Dimensions[0];
+  unsigned int height = m_Dimensions[1];
+  unsigned int nbOfTileX = m_InternalReaders.front()->GetCstrInfo()->tw;
+  unsigned int nbOfTileY = m_InternalReaders.front()->GetCstrInfo()->th;
 
-  unsigned int l_tile_x_start =  lFirstColumn / tile_size_x;
-  unsigned int l_tile_x_end =  (lFirstColumn + lNbColumns + tile_size_x - 1) / tile_size_x;
-  unsigned int l_tile_y_start =  lFirstLine / tile_size_y;
-  unsigned int l_tile_y_end =  (lFirstLine + lNbLines + tile_size_y - 1) / tile_size_y;
+  unsigned int tilePosX0, tilePosX1;
+  unsigned int tilePosY0, tilePosY1;
 
-  for (unsigned int itTileY = l_tile_y_start; itTileY < l_tile_y_end; itTileY++)
+  for (unsigned int itTileY = 0; itTileY < nbOfTileY; itTileY++)
     {
-    for (unsigned int itTileX = l_tile_x_start; itTileX < l_tile_x_end; itTileX++)
+    tilePosY0 = uint_ceildivpow2( itTileY*tile_size_y, m_ResolutionFactor );
+    tilePosY1 = std::min( uint_ceildivpow2( (itTileY+1)*tile_size_y, m_ResolutionFactor ), height );
+
+    for (unsigned int itTileX = 0; itTileX < nbOfTileX; itTileX++)
       {
-      tileVector.push_back(itTileX + itTileY * m_InternalReaders.front()->GetCstrInfo()->tw);
+      tilePosX0 = uint_ceildivpow2( itTileX*tile_size_x, m_ResolutionFactor );
+      tilePosX1 = std::min( uint_ceildivpow2( (itTileX+1)*tile_size_x, m_ResolutionFactor ), width);
+
+      if ( (tilePosX1 - tilePosX0) && (tilePosY1 - tilePosY0) &&
+           (tilePosX1 > startX) && (tilePosX0 < endX ) &&
+           (tilePosY1 > startY) && (tilePosY0 < endY ) )
+        tileVector.push_back(itTileX + itTileY * nbOfTileX);
+
       }
     }
 

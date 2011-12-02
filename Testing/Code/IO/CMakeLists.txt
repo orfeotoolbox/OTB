@@ -2048,7 +2048,7 @@ IF(OTB_DATA_USE_LARGEINPUT)
          --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_pleiades_V3_ql.tif
                                         ${TEMP}/ioExtractROI_JPEG2K_2_TIF_pleiades_V3_ql_OUT.tif
          otbMultiChannelExtractROI
-         -ushort ${LARGEDATA}/PLEIADES-PRE/ ${LARGEDATA}/PLEIADES-PRE/FCGC600011783/IMG_PHR1Z_PMS_N_001/IMG_PHR1A_PMS-N_201006181052297_ORT_IPU_20111011_0619-001_R1C1.JP2:5
+         -ushort ${LARGEDATA}/PLEIADES-PRE/FCGC600011783/IMG_PHR1Z_PMS_N_001/IMG_PHR1A_PMS-N_201006181052297_ORT_IPU_20111011_0619-001_R1C1.JP2:5
          -ushort ${TEMP}/ioExtractROI_JPEG2K_2_TIF_pleiades_V3_ql_OUT.tif
          -channels 1
          -time
