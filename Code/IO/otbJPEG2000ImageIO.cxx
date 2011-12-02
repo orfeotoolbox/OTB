@@ -33,6 +33,12 @@ extern "C"
 #include "openjpeg.h"
 }
 
+#include "gdal.h"
+#include "gdaljp2metadata.h"
+#include "cpl_string.h"
+#include "ogr_spatialref.h"
+#include "ogr_srs_api.h"
+
 /**
 Divide an integer by a power of 2 and round upwards
 @return Returns a divided by 2^b
@@ -75,7 +81,8 @@ void info_callback(const char *msg, void *client_data)
 
 namespace otb
 {
-/** Compute offsets needed to read the data from the tile decoded and offsets needed to write into the output buffer */
+/** Compute offsets needed to read the data from the tile decoded and
+ * offsets needed to write into the output buffer */
 void ComputeOffsets(opj_image_t * tile,
                     const itk::ImageIORegion & ioRegion,
                     unsigned int &l_width_src,
@@ -84,7 +91,80 @@ void ComputeOffsets(opj_image_t * tile,
                     unsigned int &l_start_offset_dest,
                     unsigned int &l_start_offset_src);
 
+/************************************************************************/
+/*     JPEG2000 metadata reader based on GDAL functionalities           */
+/************************************************************************/
+class JPEG2000MetadataReader
+{
+public:
+  JPEG2000MetadataReader(const char *filename )
+  {
+  m_MetadataIsRead = false;
 
+  if( m_JP2Metadata.ReadAndParse(filename) )
+    {
+    m_MetadataIsRead = true;
+    }
+
+  };
+
+  ~JPEG2000MetadataReader(){};
+
+  /** Get the geoTransform from file*/
+  std::vector<double> GetGeoTransform(){
+    std::vector<double> geoTransform;
+    for (unsigned int i = 0; i< 6; i++ )
+      geoTransform.push_back(m_JP2Metadata.adfGeoTransform[i]);
+    return geoTransform;
+  };
+
+  /** Check if image in the file have a geoTransform*/
+  bool HaveGeoTransform(){
+    return static_cast<bool>(m_JP2Metadata.bHaveGeoTransform);
+  };
+
+  /** Get the nb of GCP from file*/
+  int GetGCPCount(){
+    return m_JP2Metadata.nGCPCount;
+  };
+
+  /** Get the GCPs from file*/
+  std::vector<GDAL_GCP> GetGCPs(){
+    std::vector<GDAL_GCP> gcps;
+    int nbGCP = m_JP2Metadata.nGCPCount;
+    for (int i = 0; i< nbGCP; i++ )
+      gcps.push_back(m_JP2Metadata.pasGCPList[i]);
+    return gcps;
+  };
+
+  /** Get the projectionRef from file*/
+  const char* GetProjectionRef() {
+    if (m_JP2Metadata.pszProjection)
+      return m_JP2Metadata.pszProjection;
+    else
+      return NULL;
+  };
+
+  /** Get the GML box from file*/
+  char** GetGMLMetadata() {
+    if (m_JP2Metadata.papszGMLMetadata)
+      return m_JP2Metadata.papszGMLMetadata;
+    else
+      return NULL;
+  };
+
+  /** Check if the file has been correctly read*/
+  bool m_MetadataIsRead;
+
+private:
+  /** GDAL structure where store metadata read from JP2 file*/
+  GDALJP2Metadata m_JP2Metadata;
+
+};
+
+/************************************************************************/
+/*            JPEG2000 internal reader based on openjpeg                */
+/************************************************************************/
 class JPEG2000InternalReader
 {
 public:
@@ -391,7 +471,9 @@ int JPEG2000InternalReader::CanRead()
    else return 0;
  }
 
-
+/************************************************************************/
+/*            Class to manage JPEG2000 tile cache system                */
+/************************************************************************/
 class JPEG2000TileCache
 {
 public:
@@ -559,6 +641,9 @@ void JPEG2000TileCache::AddTile(unsigned int tileIndex, opj_image_t * tileData)
   m_Cache.push_back(CachedTileType(tileIndex, tileData));
 }
 
+/************************************************************************/
+/*                     JPEG2000ImageIO                                  */
+/************************************************************************/
 JPEG2000ImageIO::JPEG2000ImageIO()
 {
   // Initialize multi-threader
@@ -993,6 +1078,122 @@ void JPEG2000ImageIO::ReadImageInformation()
                                     MetaDataKey::CacheSizeInBytes,
                                     m_CacheSizeInByte);
 
+  // Now initialize the itk dictionary
+  itk::MetaDataDictionary& dict = this->GetMetaDataDictionary();
+
+  JPEG2000MetadataReader lJP2MetadataReader(m_FileName.c_str());
+
+  if (lJP2MetadataReader.m_MetadataIsRead)
+    {
+    otbMsgDevMacro(<< "JPEG2000 file has metadata available!");
+
+    /* GEOTRANSFORM */
+    if (lJP2MetadataReader.HaveGeoTransform())
+      {
+      otbMsgDevMacro(<< "JPEG2000 file has a geotransform!");
+      std::vector<double> geoTransform = lJP2MetadataReader.GetGeoTransform();
+
+      itk::EncapsulateMetaData<MetaDataKey::VectorType>(dict, MetaDataKey::GeoTransformKey, geoTransform);
+
+      // retrieve origin and spacing from the geo transform ????
+      /*m_Origin[0] = geoTransform[0];
+      m_Origin[1] = geoTransform[3];
+      m_Spacing[0] = geoTransform[1];
+      m_Spacing[1] = geoTransform[5];*/
+      }
+
+    /* GCPs */
+    if (lJP2MetadataReader.GetGCPCount() > 0)
+      {
+      // No GCPprojRef return by GDALJP2metadata
+      std::string gcpProjectionKey = static_cast<std::string>("UNKNOWN");
+      itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::GCPProjectionKey, gcpProjectionKey);
+
+      int nbGCPs = lJP2MetadataReader.GetGCPCount();
+      otbMsgDevMacro(<< "JPEG2000 file has "<< nbGCPs << " GCPs!");
+      itk::EncapsulateMetaData<int>(dict, MetaDataKey::GCPCountKey, nbGCPs);
+
+      std::vector<GDAL_GCP> gcps = lJP2MetadataReader.GetGCPs();
+
+      std::string key;
+      for (int cpt = 0; cpt < nbGCPs; ++cpt)
+        {
+        GDAL_GCP currentGCP = gcps[cpt];
+        OTB_GCP pOtbGCP;
+        pOtbGCP.m_Id = std::string(currentGCP.pszId);
+        pOtbGCP.m_Info = std::string(currentGCP.pszInfo);
+        pOtbGCP.m_GCPRow = currentGCP.dfGCPLine;
+        pOtbGCP.m_GCPCol = currentGCP.dfGCPPixel;
+        pOtbGCP.m_GCPX = currentGCP.dfGCPX;
+        pOtbGCP.m_GCPY = currentGCP.dfGCPY;
+        pOtbGCP.m_GCPZ = currentGCP.dfGCPZ;
+
+        // Complete the key with the GCP number : GCP_i
+        std::ostringstream lStream;
+        lStream << MetaDataKey::GCPParametersKey << cpt;
+        key = lStream.str();
+
+        itk::EncapsulateMetaData<OTB_GCP>(dict, key, pOtbGCP);
+        }
+      }
+
+    /* GMLMetadata*/
+    char** papszGMLMetadata;
+    papszGMLMetadata =  lJP2MetadataReader.GetGMLMetadata();
+    if (CSLCount(papszGMLMetadata) > 0)
+      {
+      otbMsgDevMacro(<< "JPEG2000 file has GMLMetadata!");
+      std::string key;
+
+      for (int cpt = 0; papszGMLMetadata[cpt] != NULL; ++cpt)
+        {
+        std::ostringstream lStream;
+        lStream << MetaDataKey::MetadataKey << cpt;
+        key = lStream.str();
+
+        itk::EncapsulateMetaData<std::string>(dict, key, static_cast<std::string> (papszGMLMetadata[cpt]));
+        }
+      }
+
+
+    /* ProjectionRef*/
+    if (lJP2MetadataReader.GetProjectionRef() && !std::string(lJP2MetadataReader.GetProjectionRef()).empty() )
+      {
+      OGRSpatialReferenceH pSR = OSRNewSpatialReference(NULL);
+
+      const char * pszProjection = NULL;
+      pszProjection =  lJP2MetadataReader.GetProjectionRef();
+
+      if (OSRImportFromWkt(pSR, (char **) (&pszProjection)) == OGRERR_NONE)
+        {
+        char * pszPrettyWkt = NULL;
+        OSRExportToPrettyWkt(pSR, &pszPrettyWkt, FALSE);
+
+        itk::EncapsulateMetaData<std::string> (dict, MetaDataKey::ProjectionRefKey,
+                                               static_cast<std::string>(pszPrettyWkt));
+
+        CPLFree(pszPrettyWkt);
+        }
+      else
+        {
+        itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey,
+                                              static_cast<std::string>(lJP2MetadataReader.GetProjectionRef()));
+        }
+
+      if (pSR != NULL)
+        {
+        OSRRelease(pSR);
+        pSR = NULL;
+        }
+
+      }
+
+    //dict.Print(std::cout);
+    }
+  else
+    {
+    otbMsgDevMacro( << "JPEG2000 file has NO metadata available!");
+    }
 
   // If the internal image was not open we open it.
   // This is usually done when the user sets the ImageIO manually
@@ -1320,12 +1521,6 @@ void ComputeOffsets( opj_image_t * currentTile,
       << ", l_width_dest= " << l_width_dest << ", l_height_dest= " << l_height_dest << std::endl;
   std::cout << "DEST start offset: " << l_start_offset_dest << std::endl;
   */
-}
-
-/** Get Info about all resolution in jpeg2000 file */
-bool GetResolutionInfo(std::vector<unsigned int>& res, std::vector<std::string>& desc)
-{
-  return true;
 }
 
 // Not yet implemented
