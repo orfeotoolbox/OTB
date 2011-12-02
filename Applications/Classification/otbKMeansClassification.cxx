@@ -22,36 +22,116 @@
 #include "otbVectorImage.h"
 #include "otbImage.h"
 #include "itkEuclideanDistance.h"
-#include "itkImageRegionSplitter.h"
 #include "otbStreamingTraits.h"
-#include "otbKMeansImageClassificationFilter.h"
 #include "itkImageRegionConstIterator.h"
 #include "itkListSample.h"
 #include "itkWeightedCentroidKdTreeGenerator.h"
 #include "itkKdTreeBasedKmeansEstimator.h"
-#include "itkMersenneTwisterRandomVariateGenerator.h"
+#include "otbStreamingShrinkImageFilter.h"
+#include "itkUnaryFunctorImageFilter.h"
+#include "otbChangeLabelImageFilter.h"
+#include "otbRAMDrivenTiledStreamingManager.h"
+#include "otbRAMDrivenStrippedStreamingManager.h"
+
 
 namespace otb
 {
+
+
+
+
 namespace Wrapper
 {
 
-typedef FloatImageType::PixelType PixelType;
+namespace Functor
+{
+template <class TSample, class TLabel> class KMeansFunctor
+{
+public:
+  /** operator */
+  TLabel operator ()(const TSample& sample) const
+  {
+    typename CentroidMapType::const_iterator it = m_CentroidsMap.begin();
 
-typedef itk::FixedArray<PixelType, 108> SampleType;
+    if (it == m_CentroidsMap.end())
+      {
+      return 0;
+      }
+
+    TLabel resp = it->first;
+    double minDist = m_Distance->Evaluate(sample, it->second);
+    ++it;
+
+    while (it != m_CentroidsMap.end())
+      {
+      double dist = m_Distance->Evaluate(sample, it->second);
+
+      if (dist < minDist)
+        {
+        resp = it->first;
+        minDist = dist;
+        }
+      ++it;
+      }
+    return resp;
+  }
+
+  /** Add a new centroid */
+  void AddCentroid(const TLabel& label, const TSample& centroid)
+  {
+    m_CentroidsMap[label] = centroid;
+  }
+
+  /** Constructor */
+  KMeansFunctor() : m_CentroidsMap(), m_Distance()
+  {
+    m_Distance = DistanceType::New();
+  }
+
+  bool operator !=(const KMeansFunctor& other) const
+  {
+    return m_CentroidsMap != other.m_CentroidsMap;
+  }
+
+private:
+  typedef std::map<TLabel, TSample>                   CentroidMapType;
+  typedef itk::Statistics::EuclideanDistance<TSample> DistanceType;
+
+  CentroidMapType m_CentroidsMap;
+  typename DistanceType::Pointer m_Distance;
+};
+}
+
+
+typedef FloatImageType::PixelType PixelType;
+typedef UInt8ImageType   LabeledImageType;
+
+typedef LabeledImageType::PixelType LabelType;
+
+
+
+
+typedef FloatVectorImageType::PixelType                               SampleType;
 typedef itk::Statistics::ListSample<SampleType> ListSampleType;
 typedef itk::Statistics::WeightedCentroidKdTreeGenerator<ListSampleType> TreeGeneratorType;
 typedef TreeGeneratorType::KdTreeType TreeType;
 typedef itk::Statistics::KdTreeBasedKmeansEstimator<TreeType> EstimatorType;
+typedef RAMDrivenStrippedStreamingManager<FloatVectorImageType> RAMDrivenStrippedStreamingManagerType;
 
-typedef otb::StreamingTraits<FloatVectorImageType> StreamingTraitsType;
-typedef itk::ImageRegionSplitter<2> SplitterType;
-typedef FloatImageType::RegionType RegionType;
 
 typedef itk::ImageRegionConstIterator<FloatVectorImageType> IteratorType;
-typedef itk::ImageRegionConstIterator<UInt8ImageType> LabeledIteratorType;
+typedef itk::ImageRegionConstIterator<LabeledImageType> LabeledIteratorType;
 
-typedef otb::KMeansImageClassificationFilter<FloatVectorImageType, UInt8ImageType, 108> ClassificationFilterType;
+typedef otb::StreamingShrinkImageFilter<FloatVectorImageType,
+     FloatVectorImageType>              ImageSamplingFilterType;
+
+typedef otb::StreamingShrinkImageFilter<LabeledImageType,
+    UInt8ImageType>              MaskSamplingFilterType;
+typedef Functor::KMeansFunctor<SampleType, LabelType> KMeansFunctorType;
+typedef itk::UnaryFunctorImageFilter<FloatVectorImageType,
+    LabeledImageType, KMeansFunctorType>     KMeansFilterType;
+
+
 
 class KMeansClassification: public Application
 {
@@ -102,60 +182,79 @@ private:
     AddParameter(ParameterType_Int, "ts", "Training set size");
     SetParameterDescription("ts", "Size of the training set.");
     SetDefaultParameterInt("ts", 100);
-    AddParameter(ParameterType_Float, "tp", "Training set sample selection probability");
-    SetParameterDescription("tp", "Probability for a sample to be selected in the training set.");
-    SetDefaultParameterFloat("tp", 0.5);
+    MandatoryOff("ts");
     AddParameter(ParameterType_Int, "nc", "Number of classes");
     SetParameterDescription("nc","number of modes, which will be used to generate class membership.");
     SetDefaultParameterInt("nc", 3);
-    AddParameter(ParameterType_Float, "cp", "Initial class centroid probability");
-    SetParameterDescription("cp", "Probability for a pixel to be selected as an initial class centroid");
-    SetDefaultParameterFloat("cp", 0.8);
-    AddParameter(ParameterType_Int, "sl", "Number of lines for each streaming block");
-    SetParameterDescription("sl","input image will be divided into sl lines.");
-    SetDefaultParameterInt("sl", 1000);
+    AddParameter(ParameterType_Int, "maxit", "Maximum number of iterations");
+    SetParameterDescription("maxit", "Maximum number of iterations.");
+    SetDefaultParameterFloat("maxit", 1000);
+    AddParameter(ParameterType_Float, "ct", "Convergence threshold");
+    SetParameterDescription("ct", "Convergence threshold for class centroid  (L2 distance, by default 0.01).");
+    SetDefaultParameterFloat("ct", 0.01);
 
     // Doc example parameter settings
-    SetDocExampleParameterValue("in", "poupees_sub.png");
-    SetDocExampleParameterValue("vm", "mask_KMeans.png");
-    SetDocExampleParameterValue("ts", "100");
-    SetDocExampleParameterValue("tp", "0.5");
+    SetDocExampleParameterValue("in", "qb_RoadExtract.img");
+    SetDocExampleParameterValue("vm", "qb_RoadExtract_mask.png");
+    SetDocExampleParameterValue("ts", "1000");
     SetDocExampleParameterValue("nc", "5");
-    SetDocExampleParameterValue("cp", "0.9");
-    SetDocExampleParameterValue("sl", "100");
+    SetDocExampleParameterValue("maxit", "1000");
+    SetDocExampleParameterValue("ct", "0.01");
     SetDocExampleParameterValue("out", "ClassificationFilterOuptut.tif");
   }
 
   void DoUpdateParameters()
   {
-    // Nothing to do here : all parameters are independent
+
+    // test of input image //
+    if (HasValue("in"))
+      {
+      // input image
+      FloatVectorImageType::Pointer inImage = GetParameterImage("in");
+
+      RAMDrivenStrippedStreamingManagerType::Pointer streamingManager = RAMDrivenStrippedStreamingManagerType::New();
+      int availableRAM = GetParameterInt("ram");
+      streamingManager->SetAvailableRAMInMB(availableRAM);
+      float bias = 1.5; // empric value;
+      streamingManager->SetBias(bias);
+      FloatVectorImageType::RegionType largestRegion = inImage->GetLargestPossibleRegion();
+      FloatVectorImageType::SizeType largestRegionSize = largestRegion.GetSize();
+      streamingManager->PrepareStreaming(inImage, largestRegion);
+
+      unsigned long nbDivisions = streamingManager->GetNumberOfSplits();
+      unsigned long largestPixNb = largestRegionSize[0] * largestRegionSize[1];
+
+      unsigned long maxPixNb = largestPixNb / nbDivisions;
+
+      if (GetParameterInt("ts") > static_cast<int> (maxPixNb))
+        {
+        otbAppLogWARNING(" available RAM is too small to process this sample size is.Sample size will be reduced to "<<maxPixNb<<std::endl);
+        this->SetParameterInt("ts", maxPixNb);
+        }
+
+      this->SetMaximumParameterIntValue("ts", maxPixNb);
+
+      }
+
   }
 
   void DoExecute()
   {
     GetLogger()->Debug("Entering DoExecute\n");
 
-    // initiating random number generation
-    itk::Statistics::MersenneTwisterRandomVariateGenerator::Pointer
-        randomGen = itk::Statistics::MersenneTwisterRandomVariateGenerator::New();
     m_InImage = GetParameterImage("in");
-    std::cout<<"mask in progress"<<std::endl;
+    m_InImage->UpdateOutputInformation();
 
     UInt8ImageType::Pointer maskImage = GetParameterUInt8Image("vm");
-
-    std::cout<<"mask in progress done"<<std::endl;
+    maskImage->UpdateOutputInformation();
     std::ostringstream message("");
 
-    const unsigned int nbsamples = GetParameterInt("ts");
-    const double trainingProb = GetParameterFloat("tp");
-    const double initProb = GetParameterFloat("cp");
-    const unsigned int nb_classes = GetParameterInt("nc");
-    const unsigned int nbLinesForStreaming = GetParameterInt("sl");
+    int nbsamples = GetParameterInt("ts");
+    const unsigned int nbClasses = GetParameterInt("nc");
 
     /*******************************************/
     /*           Sampling data                 */
-    /*******************************************/
-    GetLogger()->Info("-- SAMPLING DATA --");
+    /*******************************************/otbAppLogINFO("-- SAMPLING DATA --"<<std::endl);
 
     // Update input images information
     m_InImage->UpdateOutputInformation();
@@ -166,169 +265,164 @@ private:
       GetLogger()->Error("Mask image and input image have different sizes.");
       }
 
-    RegionType largestRegion = m_InImage->GetLargestPossibleRegion();
-
-    // Setting up local streaming capabilities
-    SplitterType::Pointer splitter = SplitterType::New();
-    unsigned int
-        numberOfStreamDivisions = StreamingTraitsType::CalculateNumberOfStreamDivisions(
-                                                                                        m_InImage,
-                                                                                        largestRegion,
-                                                                                        splitter,
-                                                                                        otb::SET_BUFFER_NUMBER_OF_LINES,
-                                                                                        0, 0, nbLinesForStreaming);
-
-    message.clear();
-    message << "The images will be streamed into " << numberOfStreamDivisions << " parts.";
-    GetLogger()->Info(message.str());
-
     // Training sample lists
     ListSampleType::Pointer sampleList = ListSampleType::New();
-    EstimatorType::ParametersType initialMeans(108 * nb_classes);
-    initialMeans.Fill(0);
+
     unsigned int init_means_index = 0;
 
     // Sample dimension and max dimension
-    unsigned int maxDimension = SampleType::Dimension;
-    unsigned int sampleSize = std::min(m_InImage->GetNumberOfComponentsPerPixel(), maxDimension);
+    const unsigned int nbComp = m_InImage->GetNumberOfComponentsPerPixel();
+    unsigned int sampleSize = nbComp;
     unsigned int totalSamples = 0;
 
-    message.clear();
-    message << "Sample max possible dimension: " << maxDimension << std::endl;
-    GetLogger()->Info(message.str());
-    message.clear();
-    message << "The following sample size will be used: " << sampleSize << std::endl;
-    GetLogger()->Info(message.str());
-    // local streaming variables
-    unsigned int piece = 0;
-    RegionType streamingRegion;
+    // sampleSize = std::min(nbComp, maxDim);
 
-    while ((totalSamples < nbsamples) && (init_means_index < 108 * nb_classes))
+    EstimatorType::ParametersType initialMeans(nbComp * nbClasses);
+    initialMeans.Fill(0);
+
+    // use image and mask shrink
+
+    ImageSamplingFilterType::Pointer imageSampler = ImageSamplingFilterType::New();
+    imageSampler->SetInput(m_InImage);
+    MaskSamplingFilterType::Pointer maskSampler = MaskSamplingFilterType::New();
+    maskSampler->SetInput(maskImage);
+
+    double theoricNBSamplesForKMeans = nbsamples;
+
+    const double upperThresholdNBSamplesForKMeans = 1000 * 1000;
+    const double actualNBSamplesForKMeans = std::min(theoricNBSamplesForKMeans, upperThresholdNBSamplesForKMeans);
+
+    otbAppLogINFO(<<actualNBSamplesForKMeans<<" is the maximum sample size that will be used."<<std::endl);
+
+    const double shrinkFactor = vcl_floor(
+                                          vcl_sqrt(
+                                                   m_InImage->GetLargestPossibleRegion().GetNumberOfPixels()
+                                                       / actualNBSamplesForKMeans));
+    imageSampler->SetShrinkFactor(shrinkFactor);
+    imageSampler->Update();
+    maskSampler->SetShrinkFactor(shrinkFactor);
+    maskSampler->Update();
+
+    // Then, build the sample list
+
+    IteratorType it(imageSampler->GetOutput(), imageSampler->GetOutput()->GetLargestPossibleRegion());
+    LabeledIteratorType m_MaskIt(maskSampler->GetOutput(), maskSampler->GetOutput()->GetLargestPossibleRegion());
+
+    it.GoToBegin();
+    m_MaskIt.GoToBegin();
+
+    SampleType min;
+    SampleType max;
+    SampleType sample;
+    //first sample
+    while (!it.IsAtEnd() && !m_MaskIt .IsAtEnd() && (m_MaskIt.Get() <= 0))
       {
-      double random = randomGen->GetVariateWithClosedRange();
-      piece = static_cast<unsigned int> (random * numberOfStreamDivisions);
-
-      streamingRegion = splitter->GetSplit(piece, numberOfStreamDivisions, largestRegion);
-
-      message.clear();
-      message << "Processing region: " << streamingRegion << std::endl;
-      GetLogger()->Info(message.str());
-
-      m_InImage->SetRequestedRegion(streamingRegion);
-      m_InImage->PropagateRequestedRegion();
-      m_InImage->UpdateOutputData();
-
-      maskImage->SetRequestedRegion(streamingRegion);
-      maskImage->PropagateRequestedRegion();
-      maskImage->UpdateOutputData();
-
-      IteratorType it(m_InImage, streamingRegion);
-      LabeledIteratorType m_MaskIt(maskImage, streamingRegion);
-
-      it.GoToBegin();
-      m_MaskIt.GoToBegin();
-
-      unsigned int localNbSamples = 0;
-
-      // Loop on the image
-      while (!it.IsAtEnd() && !m_MaskIt.IsAtEnd() && (totalSamples < nbsamples)
-          && (init_means_index < (108 * nb_classes)))
-        {
-        // If the current pixel is labeled
-        if (m_MaskIt.Get() > 0)
-          {
-          if ((rand() < trainingProb * RAND_MAX))
-            {
-            SampleType newSample;
-
-            // build the sample
-            newSample.Fill(0);
-            for (unsigned int i = 0; i < sampleSize; ++i)
-              {
-              newSample[i] = it.Get()[i];
-              }
-            // Update the the sample lists
-            sampleList->PushBack(newSample);
-            ++totalSamples;
-            ++localNbSamples;
-            }
-          else
-            if ((init_means_index < 108 * nb_classes) && (rand() < initProb * RAND_MAX))
-              {
-              for (unsigned int i = 0; i < sampleSize; ++i)
-                {
-                initialMeans[init_means_index + i] = it.Get()[i];
-                }
-              init_means_index += 108;
-              }
-          }
-        ++it;
-        ++m_MaskIt;
-        }
-
-      message.clear();
-      message << localNbSamples << " samples added to the training set." << std::endl;
-      GetLogger()->Info(message.str());
-
+      ++it;
+      ++m_MaskIt;
       }
 
-    message.clear();
-    message << "The final training set contains " << totalSamples << " samples." << std::endl;
-    GetLogger()->Info(message.str());
+    min = it.Get();
+    max = it.Get();
+    sample = it.Get();
 
-    message.clear();
-    message << "Data sampling completed." << std::endl;
-    GetLogger()->Info(message.str());
+    sampleList->PushBack(sample);
+
+    ++it;
+    ++m_MaskIt;
+
+    totalSamples = 1;
+    while (!it.IsAtEnd() && !m_MaskIt .IsAtEnd())
+      {
+      if (m_MaskIt.Get() > 0)
+        {
+        totalSamples++;
+
+        sample = it.Get();
+
+        sampleList->PushBack(sample);
+
+        for (unsigned int i = 0; i < nbComp; ++i)
+          {
+          if (min[i] > sample[i])
+            {
+            min[i] = sample[i];
+            }
+          if (max[i] < sample[i])
+            {
+            max[i] = sample[i];
+            }
+          }
+        }
+      ++it;
+      ++m_MaskIt;
+      }
+
+    // Next, initialize centroids
+
+    for (unsigned int classIndex = 0; classIndex < nbClasses; ++classIndex)
+      {
+      for (unsigned int compIndex = 0; compIndex < sampleSize; ++compIndex)
+        {
+        initialMeans[compIndex + classIndex * sampleSize] = min[compIndex] + (max[compIndex] - min[compIndex]) * rand()
+            / (RAND_MAX + 1.0);
+
+        }
+      }
+    otbAppLogINFO(<<totalSamples <<" samples will be used as estimator input."<<std::endl);
 
     /*******************************************/
     /*           Learning                      */
     /*******************************************/
+
+    otbAppLogINFO("-- LEARNING --" << std::endl);
+    otbAppLogINFO("Initial centroids are: " << std::endl);
+
     message.clear();
-    message << "-- LEARNING --" << std::endl;
-    message << "Initial centroids are: " << std::endl;
-    GetLogger()->Info(message.str());
-    message.clear();
-    for (unsigned int i = 0; i < nb_classes; ++i)
+    message << std::endl;
+    for (unsigned int i = 0; i < nbClasses; ++i)
       {
       message << "Class " << i << ": ";
       for (unsigned int j = 0; j < sampleSize; ++j)
         {
-        message << initialMeans[i * 108 + j] << "\t";
+        message << std::setw(8) << initialMeans[i * sampleSize + j] << "   ";
         }
       message << std::endl;
       }
     message << std::endl;
-
-    message.clear();
-    message << "Starting optimization." << std::endl;
-    message << std::endl;
     GetLogger()->Info(message.str());
-
+    message.clear();
+    otbAppLogINFO("Starting optimization." << std::endl);
     EstimatorType::Pointer estimator = EstimatorType::New();
 
     TreeGeneratorType::Pointer treeGenerator = TreeGeneratorType::New();
     treeGenerator->SetSample(sampleList);
-    treeGenerator->SetBucketSize(100);
+
+    treeGenerator->SetBucketSize(10000);
     treeGenerator->Update();
 
     estimator->SetParameters(initialMeans);
     estimator->SetKdTree(treeGenerator->GetOutput());
-    estimator->SetMaximumIteration(100000000);
-    estimator->SetCentroidPositionChangesThreshold(0.001);
+    int maxIt = GetParameterInt("maxit");
+    estimator->SetMaximumIteration(maxIt);
+    estimator->SetCentroidPositionChangesThreshold(GetParameterFloat("ct"));
     estimator->StartOptimization();
 
     EstimatorType::ParametersType estimatedMeans = estimator->GetParameters();
-    message.clear();
-    message << "Optimization completed." << std::endl;
-    message << std::endl;
-    message << "Estimated centroids are: " << std::endl;
 
-    for (unsigned int i = 0; i < nb_classes; ++i)
+    otbAppLogINFO("Optimization completed." );
+    if (estimator->GetCurrentIteration() == maxIt)
+      {
+      otbAppLogWARNING("estimator reached maximum iteration number."<<std::endl);
+      }
+    message.clear();
+    message << "Estimated centroids are: " << std::endl;
+    message << std::endl;
+    for (unsigned int i = 0; i < nbClasses; ++i)
       {
       message << "Class " << i << ": ";
       for (unsigned int j = 0; j < sampleSize; ++j)
         {
-        message << estimatedMeans[i * 108 + j] << "\t";
+        message << std::setw(8) << estimatedMeans[i * sampleSize + j] << "   ";
         }
       message << std::endl;
       }
@@ -341,25 +435,33 @@ private:
     /*******************************************/
     /*           Classification                */
     /*******************************************/
-    message.clear();
-    message << "-- CLASSIFICATION --" << std::endl;
-    message << std::endl;
-    GetLogger()->Info(message.str());
+    otbAppLogINFO("-- CLASSIFICATION --" << std::endl);
 
-    m_Classifier = ClassificationFilterType::New();
+    // Finally, update the KMeans filter
+    KMeansFunctorType functor;
 
-    m_Classifier->SetInput(m_InImage);
-    m_Classifier->SetInputMask(maskImage);
+    for (unsigned int classIndex = 0; classIndex < nbClasses; ++classIndex)
+      {
+      SampleType centroid(sampleSize);
 
-    m_Classifier->SetCentroids(estimator->GetParameters());
+      for (unsigned int compIndex = 0; compIndex < sampleSize; ++compIndex)
+        {
+        centroid[compIndex] = estimatedMeans[compIndex + classIndex * sampleSize];
+        }
+      functor.AddCentroid(classIndex, centroid);
+      }
 
-    SetParameterOutputImage<UInt8ImageType> ("out", m_Classifier->GetOutput());
+    m_KMeansFilter = KMeansFilterType::New();
+    m_KMeansFilter->SetFunctor(functor);
+    m_KMeansFilter->SetInput(m_InImage);
+
+    SetParameterOutputImage<LabeledImageType> ("out", m_KMeansFilter->GetOutput());
 
   }
 
-  ClassificationFilterType::Pointer m_Classifier;
+  // KMeans filter
+  KMeansFilterType::Pointer m_KMeansFilter;
   FloatVectorImageType::Pointer m_InImage;
-
 
 };
 
