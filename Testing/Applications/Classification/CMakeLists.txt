@@ -302,14 +302,13 @@ SET_TESTS_PROPERTIES(apTvClImageSVMClassifierQB456_1 PROPERTIES DEPENDS apTvClTr
 
 OTB_TEST_APPLICATION(NAME apTvClKMeansImageClassification
                      APP  KMeansClassification
-                     OPTIONS -in ${INPUTDATA}/poupees_sub.png
-                 			 -vm ${INPUTDATA}/mask_KMeans.png 
-                             -ts 100 
-                   			 -tp 0.6 
-                 			 -nc 5 
-                 			 -cp 0.9 
-                 			 -sl 100
-                 			 -out ${TEMP}/apTvClKMeansImageClassificationFilterOuptut.tif 
+                     OPTIONS -in ${INPUTDATA}/qb_RoadExtract.img
+                 	         -vm ${INPUTDATA}/qb_RoadExtract_mask.png
+                 	         -ts 30000 
+                             -nc 5  
+                             -maxit 10000 
+                             -ct 0.0000001
+                             -out ${TEMP}/apTvClKMeansImageClassificationFilterOuptut.tif 
                      VALID   --compare-image ${NOTOL}
                              ${OTBAPP_BASELINE}/apTvClKMeansImageClassificationFilterOuptut.tif
                              ${TEMP}/apTvClKMeansImageClassificationFilterOuptut.tif )
