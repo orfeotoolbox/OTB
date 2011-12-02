@@ -63,6 +63,10 @@ private:
   {
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
     
+    AddParameter(ParameterType_Empty, "keywordlist", "Display the OSSIM keywordlist");
+    SetParameterDescription("keywordlist", "Output the OSSIM keyword list.\n"                                      "It contains metadata informations (sensor model, geometry ). Informations are store in keyword list (pairs of key/value)");
+    DisableParameter("keywordlist");
+    MandatoryOff("keywordlist");
     //Create output parameters to store image informations
     AddParameter(ParameterType_Int,"sizex","Size X");
     GetParameterByKey("sizex")->SetRole(Role_Output);
@@ -140,8 +144,8 @@ private:
     AddParameter(ParameterType_String,"projectionref","Projection Coordinate System");
     GetParameterByKey("projectionref")->SetRole(Role_Output);
     
-    AddParameter(ParameterType_String,"keywordlist","Image Keywordlist");
-    GetParameterByKey("keywordlist")->SetRole(Role_Output);
+    AddParameter(ParameterType_String,"keyword","Image Keywordlist");
+    GetParameterByKey("keyword")->SetRole(Role_Output);
 
     AddParameter(ParameterType_Group, "gcp", "Ground Control Points informations");
     SetParameterDescription("gcp","This group of parameters allows to access to the GCPs informations.");
@@ -211,10 +215,12 @@ private:
       osstime<<":00";
       SetParameterString("time", osstime.str());
 
-      itk::OStringStream osskeywordlist;
-      osskeywordlist<<metadataInterface->GetImageKeywordlist() << std::endl;
-      SetParameterString("keywordlist", osskeywordlist.str());
-
+      if ( IsParameterEnabled("keywordlist") )
+	{
+	itk::OStringStream osskeywordlist;
+	osskeywordlist<<metadataInterface->GetImageKeywordlist() << std::endl;
+	SetParameterString("keyword", osskeywordlist.str());
+	}
       double ullat = atof(metadataInterface->GetImageKeywordlist().GetMetadataByKey("ul_lat").c_str());
       double ullon = atof(metadataInterface->GetImageKeywordlist().GetMetadataByKey("ul_lon").c_str());
       double urlat = atof(metadataInterface->GetImageKeywordlist().GetMetadataByKey("ur_lat").c_str());
