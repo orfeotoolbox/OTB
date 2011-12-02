@@ -1077,7 +1077,6 @@ void
 Application::AddChoice(std::string paramKey, std::string paramName)
 {
   GetParameterList()->AddChoice(paramKey, paramName);
-  m_DocExample->AddParameter(paramKey, paramName);
 }
 
 void
@@ -1096,7 +1095,6 @@ void
 Application::AddParameter(ParameterType type, std::string paramKey, std::string paramName)
 {
   GetParameterList()->AddParameter(type, paramKey, paramName);
-  m_DocExample->AddParameter(paramKey, paramName);
 }
 
 void Application::AddRAMParameter(std::string paramKey, std::string paramName, unsigned int defaultValue)
