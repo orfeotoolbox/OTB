@@ -46,7 +46,10 @@ OTB_TEST_APPLICATION(NAME  apTvPrConvertCartoToGeoPoint
 OTB_TEST_APPLICATION(NAME apTvPrImageEnvelopeTest
                      APP ImageEnvelope
                      OPTIONS -in ${INPUTDATA}/sensor_stereo_left.tif
-                             -out ${TEMP}/apTvPrImageEnvelopeTest.shp)
+                             -out ${TEMP}/apTvPrImageEnvelopeTest.shp
+                     VALID   --compare-ogr ${NOTOL}
+                        ${BASELINE_FILES}/apTvPrImageEnvelopeTest.shp
+                        ${TEMP}/apTvPrImageEnvelopeTest.shp)
 
 OTB_TEST_APPLICATION(NAME apTvPrObtainUTMZoneFromGeoPoint
                      APP ObtainUTMZoneFromGeoPoint
