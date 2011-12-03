@@ -38,7 +38,6 @@ namespace otb
 {
 
 
-
 namespace Wrapper
 {
 
@@ -106,7 +105,6 @@ typedef FloatImageType::PixelType PixelType;
 typedef UInt8ImageType   LabeledImageType;
 
 typedef LabeledImageType::PixelType LabelType;
-
 
 
 typedef FloatVectorImageType::PixelType                               SampleType;
