@@ -450,7 +450,8 @@ private:
     m_KMeansFilter->SetFunctor(functor);
     m_KMeansFilter->SetInput(m_InImage);
 
-    SetParameterOutputImage<LabeledImageType> ("out", m_KMeansFilter->GetOutput());
+
+    SetParameterOutputImage("out", m_KMeansFilter->GetOutput());
 
   }
 
