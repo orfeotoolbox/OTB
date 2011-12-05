@@ -156,15 +156,15 @@ private:
     // TODO : replace StreamingLines by RAM param ?
     
     // Default parameters
-    SetDefaultParameterFloat("tp",1.0);
+    SetDefaultParameterFloat("tp", 1.0);
     SetDefaultParameterInt("sx", 32);
     SetDefaultParameterInt("sy", 32);
     SetDefaultParameterInt("nx", 10);
     SetDefaultParameterInt("ny", 10);
     SetDefaultParameterInt("ni", 5);
-    SetDefaultParameterFloat("bi",1.0);
-    SetDefaultParameterFloat("bf",0.1);
-    SetDefaultParameterFloat("iv",0.0);
+    SetDefaultParameterFloat("bi", 1.0);
+    SetDefaultParameterFloat("bf", 0.1);
+    SetDefaultParameterFloat("iv", 0.0);
     
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "poupees_sub.png");
@@ -233,7 +233,7 @@ private:
                                           largestRegion,
                                           splitter,
                                           otb::SET_BUFFER_MEMORY_SIZE,
-                                          0, 1048576*GetParameterInt("ram"),0);
+                                          0, 1048576*GetParameterInt("ram"), 0);
     }
     
     otbAppLogINFO("The images will be streamed into "<<numberOfStreamDivisions<<" parts.");
@@ -372,13 +372,13 @@ private:
     estimator->SetBetaEnd(GetParameterFloat("bf"));
     estimator->SetMaxWeight(GetParameterFloat("iv"));
   
-    AddProcess(estimator,"Learning");  
+    AddProcess(estimator,"Learning");
     estimator->Update();
   
     m_SOMMap = estimator->GetOutput();
     if (HasValue("som"))
       {
-      SetParameterOutputImage<DoubleVectorImageType>("som",m_SOMMap);
+      SetParameterOutputImage<DoubleVectorImageType>("som", m_SOMMap);
       }
     
     /*******************************************/
@@ -393,7 +393,7 @@ private:
     
     AddProcess(m_Classifier,"Classification");
     
-    SetParameterOutputImage<LabeledImageType>("out",m_Classifier->GetOutput());
+    SetParameterOutputImage<LabeledImageType>("out", m_Classifier->GetOutput());
   }
 
   bool m_UseMask;

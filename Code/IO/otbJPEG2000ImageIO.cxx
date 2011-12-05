@@ -1099,7 +1099,7 @@ void JPEG2000ImageIO::ReadImageInformation()
       /*m_Origin[0] = geoTransform[0];
       m_Origin[1] = geoTransform[3];
       m_Spacing[0] = geoTransform[1];
-      m_Spacing[1] = geoTransform[5];*/
+      m_Spacing[1] = geoTransform[5]; */
       }
 
     /* GCPs */
