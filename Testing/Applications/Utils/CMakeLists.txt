@@ -1,10 +1,5 @@
 
-set(TEST_DRIVER otbTestDriver
-    --add-before-env ITK_AUTOLOAD_PATH $<TARGET_FILE_DIR:otbapp_ReadImageInfo> )
-
 #--- Rescale ---#
-
-
 OTB_TEST_APPLICATION(NAME  apTvUtRescaleTest
                      APP  Rescale
                      OPTIONS -in ${INPUTDATA}/poupees.tif

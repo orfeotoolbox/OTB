@@ -1,7 +1,3 @@
-set(TEST_DRIVER otbTestDriver
-    --add-before-env ITK_AUTOLOAD_PATH $<TARGET_FILE_DIR:otbapp_ReadImageInfo> )
-
-
 OTB_TEST_APPLICATION(NAME  apTvRIRadiometricVegetationIndices
                      APP  RadiometricVegetationIndices
                      OPTIONS -in ${INPUTDATA}/veryverySmallFSATSW.tif
