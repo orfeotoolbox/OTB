@@ -566,18 +566,23 @@ void CommandLineLauncher::DisplayHelp()
     std::cerr << m_Application->GetCLExample() << std::endl;
     }
   std::cerr << "======================= PARAMETERS =======================" << std::endl;
-  //// progress report parameter
-  std::cerr << "        --progress (Report progress) <boolean>" << std::endl;
 
   const std::vector<std::string> appKeyList = m_Application->GetParametersKeys(true);
   const unsigned int nbOfParam = appKeyList.size();
 
-  m_MaxKeySize = 0;
+  m_MaxKeySize = std::string("progress").size();
   for (unsigned int i = 0; i < nbOfParam; i++)
     {
     if( m_MaxKeySize < appKeyList[i].size() )
       m_MaxKeySize = appKeyList[i].size();
     }
+  
+  //// progress report parameter
+  std::string bigKey = "progress";
+  for(unsigned int i=0; i<m_MaxKeySize-std::string("progress").size(); i++)
+    bigKey.append(" ");
+    
+  std::cerr << "        -"<<bigKey<<" <boolean>       (Report progress) " << std::endl;
 
   for (unsigned int i = 0; i < nbOfParam; i++)
     {

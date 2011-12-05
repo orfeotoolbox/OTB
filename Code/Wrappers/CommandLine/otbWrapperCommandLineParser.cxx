@@ -175,8 +175,8 @@ CommandLineParser::GetAttribut( const std::string & key, const std::string & exp
     {
     return res;
     }
-  
-  std::string expFromKey = std::string(exp).substr(found+key.size(), std::string(exp).size());
+
+  std::string expFromKey = std::string(exp).substr(found+key.size()+1, std::string(exp).size());
   
   if( expFromKey.size() == 0 )
     {
@@ -185,15 +185,51 @@ CommandLineParser::GetAttribut( const std::string & key, const std::string & exp
  
   std::string tempModKey = expFromKey;
   // remove other key in the string if there's any
-  if( expFromKey.find(" -") != std::string::npos)
+  bool stop = false;
+  std::size_t curPos = expFromKey.find(" -");
+  std::size_t curPosOld = 0;
+
+  while ( !stop && curPos != std::string::npos )
     {
-    tempModKey = expFromKey.substr( 0, expFromKey.find(" -"));
+    std::string tmp = expFromKey.substr(curPosOld, curPos);
+
+    if( tmp.find(" ") != std::string::npos)
+      {
+      tmp = tmp.substr(0, tmp.find(" "));
+      }
+
+    if( this->IsAValidKey(tmp) )
+      {
+      tempModKey = expFromKey.substr(0, curPos);
+      stop = true;
+      }
+    else
+      {
+      if( curPosOld>1 )
+        {
+        if( expFromKey[curPos] != '-' )
+          {
+          tempModKey = expFromKey.substr(0, curPos);
+          stop = true;
+          }
+        }
+      else
+        {
+        tempModKey = expFromKey.substr(0, curPos);
+        stop = true;
+        }
+      }
+
+    curPosOld = curPos;
+    curPos = expFromKey.find(" -", curPos);
+    if(curPos!=std::string::npos)
+      curPos += 2;
     }
 
   // Only if the key has values associated
   if( tempModKey.size() > 0 )
     {
-    std::vector<itksys::String> spaceSplitted = itksys::SystemTools::SplitString(tempModKey.substr(1, tempModKey.size()).c_str(), ' ', false);
+    std::vector<itksys::String> spaceSplitted = itksys::SystemTools::SplitString(tempModKey.substr(0, tempModKey.size()).c_str(), ' ', false);
       
     // Remove " " string element
     for(unsigned int i=0; i<spaceSplitted.size(); i++)
@@ -204,14 +240,15 @@ CommandLineParser::GetAttribut( const std::string & key, const std::string & exp
         i--;
         }
       }
-    
+
     // Remove space at the beginning of the string and cast into std::vector<std::string>
     for(unsigned int i=0; i<spaceSplitted.size(); i++)
       {
       while( spaceSplitted[i].size()>0  && spaceSplitted[i][0] == ' ' )
         {
-        spaceSplitted[i] = spaceSplitted[i].substr(1, spaceSplitted[i].size());
+        spaceSplitted[i] = spaceSplitted[i].substr(0, spaceSplitted[i].size());
         }
+
       res.push_back(spaceSplitted[i]);
       }
     }
@@ -299,10 +336,15 @@ bool
 CommandLineParser::IsAValidKey( const std::string & foundKey )
 {
   bool res = false;
+  std::string tmp = foundKey;
+  if( tmp.find(".") != std::string::npos )
+    tmp.erase(tmp.find("."), tmp.find("."));
+
   // To be a key, the string can't contain a number
   itksys::RegularExpression reg;
   reg.compile("([^0-9])");
-  if( reg.find(foundKey) )
+
+  if( reg.find(tmp) )
     {
     res = true;
     }
