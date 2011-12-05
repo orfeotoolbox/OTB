@@ -219,6 +219,7 @@ bool CommandLineLauncher::BeforeExecute()
       std::cerr << "ERROR: Troubles loading parameter, please check your line argument..." << std::endl;
       // Force to reload the application, the LoadParameters can change wrong values
       this->LoadApplication();
+      m_Application->Init();
       this->DisplayHelp();
 
       return false;
@@ -230,6 +231,7 @@ bool CommandLineLauncher::BeforeExecute()
     std::cerr << err.GetDescription() << std::endl;
     // Force to reload the application, the LoadParameters can change wrong values
     this->LoadApplication();
+    m_Application->Init();
     this->DisplayHelp();
 
     return false;
