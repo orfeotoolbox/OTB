@@ -164,6 +164,7 @@ private:
         int radius = GetParameterInt("type.gaussian.radius");
         double variance = static_cast<double>(radius) * radius;
         perBand->GetFilter()->SetVariance(variance);
+        perBand->GetFilter()->SetUseImageSpacing(false);
         perBand->UpdateOutputInformation();
         m_FilterRef = perBand;
         SetParameterOutputImage("out", perBand->GetOutput());
