@@ -123,12 +123,14 @@ bool CommandLineLauncher::Load()
       {
       std::cerr << "ERROR: At least one specified path within \"" << m_Parser->GetPathsAsString(m_Expression)
                 << "\" is invalid or doesn't exist..." << std::endl;
+      return false;
       }
-    else
+/*
+   else
       {
       std::cerr << "ERROR: Trouble loading path, please check your command line..." << std::endl;
       }
-    return false;
+*/
     }
 
   this->LoadApplication();
@@ -304,7 +306,9 @@ void CommandLineLauncher::LoadApplication()
   if (m_Application.IsNull())
     {
     std::cerr << "ERROR: Could not find application \"" << moduleName << "\"" << std::endl;
-    std::cerr << "ERROR: Module search path: " << itksys::SystemTools::GetEnv("ITK_AUTOLOAD_PATH") << std::endl;
+
+    const char * ITK_AUTOLOAD_PATH = itksys::SystemTools::GetEnv("ITK_AUTOLOAD_PATH");
+    std::cerr << "ERROR: Module search path: " << (ITK_AUTOLOAD_PATH ? ITK_AUTOLOAD_PATH : "none (check ITK_AUTOLOAD_PATH)") << std::endl;
 
     std::vector<std::string> list = ApplicationRegistry::GetAvailableApplications();
     if (list.size() == 0)
@@ -318,16 +322,18 @@ void CommandLineLauncher::LoadApplication()
         {
         std::cerr << "\t" << *it << std::endl;
         }
-      return;
       }
     }
+  else
+    {
+    // Attach log output to the Application logger
+    m_Application->GetLogger()->SetTimeStampFormat(itk::LoggerBase::HUMANREADABLE);
+    m_Application->GetLogger()->AddLogOutput(m_LogOutput);
 
-  // Attach log output to the Application logger
-  m_Application->GetLogger()->SetTimeStampFormat(itk::LoggerBase::HUMANREADABLE);
-  m_Application->GetLogger()->AddLogOutput(m_LogOutput);
+    // Add an observer to the AddedProcess event
+    m_Application->AddObserver(AddProcessToWatchEvent(), m_AddProcessCommand.GetPointer());
 
-  // Add an observer to the AddedProcess event
-  m_Application->AddObserver(AddProcessToWatchEvent(), m_AddProcessCommand.GetPointer());
+    }
 }
 
 CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
