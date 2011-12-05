@@ -291,98 +291,107 @@ OutputImageParameter::GetWriter()
   // 1 : VectorImage
   // 2 : RGBAImage
   // 3 : RGBImage
-  
-  if ( dynamic_cast<Int8VectorImageType*>(  m_Image.GetPointer()) ||
-       dynamic_cast<UInt8VectorImageType*>( m_Image.GetPointer()) ||
-       dynamic_cast<Int16VectorImageType*>( m_Image.GetPointer()) ||
-       dynamic_cast<UInt16VectorImageType*>(m_Image.GetPointer()) ||
-       dynamic_cast<Int32VectorImageType*>( m_Image.GetPointer()) ||
-       dynamic_cast<UInt32VectorImageType*>(m_Image.GetPointer()) ||
-       dynamic_cast<FloatVectorImageType*>( m_Image.GetPointer()) ||
-       dynamic_cast<DoubleVectorImageType*>(m_Image.GetPointer())   )
+
+  if (dynamic_cast<Int8VectorImageType*> (m_Image.GetPointer())
+      || dynamic_cast<UInt8VectorImageType*> (m_Image.GetPointer())
+      || dynamic_cast<Int16VectorImageType*> (m_Image.GetPointer())
+      || dynamic_cast<UInt16VectorImageType*> (m_Image.GetPointer())
+      || dynamic_cast<Int32VectorImageType*> (m_Image.GetPointer())
+      || dynamic_cast<UInt32VectorImageType*> (m_Image.GetPointer())
+      || dynamic_cast<FloatVectorImageType*> (m_Image.GetPointer())
+      || dynamic_cast<DoubleVectorImageType*> (m_Image.GetPointer()))
     {
     type = 1;
     }
-  else if( dynamic_cast<UInt8RGBAImageType*>( m_Image.GetPointer()) )
-    {
-    type = 2;
-    }
-  else if( dynamic_cast<UInt8RGBImageType*>( m_Image.GetPointer()) )
-    {
-    type = 3;
-    }
-
+  else
+    if (dynamic_cast<UInt8RGBAImageType*> (m_Image.GetPointer()))
+      {
+      type = 2;
+      }
+    else
+      if (dynamic_cast<UInt8RGBImageType*> (m_Image.GetPointer()))
+        {
+        type = 3;
+        }
 
   itk::ProcessObject* writer = 0;
-  switch ( GetPixelType() )
+  switch (GetPixelType())
     {
     case ImagePixelType_int8:
-    {
-    if( type == 1 )
-      writer = m_VectorInt8Writer;
-    break;
-    }
+      {
+      if (type == 1)
+        writer = m_VectorInt8Writer;
+      else
+        if (type == 0) writer = m_Int8Writer;
+      break;
+      }
     case ImagePixelType_uint8:
-    {
-    if( type == 1 )
-      writer = m_VectorUInt8Writer;
-    else if(type == 0)
-      writer = m_UInt8Writer;
-    else if(type == 2)
-      writer = m_RGBAUInt8Writer;
-    else
-      writer = m_RGBUInt8Writer;
-    break;
-    }
+      {
+      if (type == 1)
+        writer = m_VectorUInt8Writer;
+      else
+        if (type == 0)
+          writer = m_UInt8Writer;
+        else
+          if (type == 2)
+            writer = m_RGBAUInt8Writer;
+          else writer = m_RGBUInt8Writer;
+      break;
+      }
     case ImagePixelType_int16:
-    {
-    if( type == 1 )
-      writer = m_VectorInt16Writer;
-    else if(type == 0)
-      writer = m_Int16Writer;
-    break;
-    }
+      {
+      if (type == 1)
+        writer = m_VectorInt16Writer;
+      else
+        if (type == 0) writer = m_Int16Writer;
+      break;
+      }
     case ImagePixelType_uint16:
-    {
-    if( type == 1 )
-      writer = m_VectorUInt16Writer;
-    else if(type == 0)
-      writer = m_UInt16Writer;
-    break;
-    }
+      {
+      if (type == 1)
+        writer = m_VectorUInt16Writer;
+      else
+        if (type == 0) writer = m_UInt16Writer;
+      break;
+      }
     case ImagePixelType_int32:
-    {
-    if( type == 1 )
-      writer = m_VectorInt32Writer;
-    else if(type == 0)
-      writer = m_Int32Writer;
-    break;
-    }
+      {
+      if (type == 1)
+        writer = m_VectorInt32Writer;
+      else
+        if (type == 0) writer = m_Int32Writer;
+      break;
+      }
     case ImagePixelType_uint32:
-    {
-    if( type == 1 )
-      writer = m_VectorUInt32Writer;
-    else if(type == 0)
-      writer = m_UInt32Writer;
-    break;
-    }
+      {
+      if (type == 1)
+        writer = m_VectorUInt32Writer;
+      else
+        if (type == 0) writer = m_UInt32Writer;
+      break;
+      }
     case ImagePixelType_float:
-    {
-    if( type == 1 )
-      writer = m_VectorFloatWriter;
-    else if(type == 0)
-      writer = m_FloatWriter;
-    break;
-    }
+      {
+      if (type == 1)
+        writer = m_VectorFloatWriter;
+      else
+        if (type == 0) writer = m_FloatWriter;
+      break;
+      }
     case ImagePixelType_double:
+      {
+      if (type == 1)
+        writer = m_VectorDoubleWriter;
+      else
+        if (type == 0) writer = m_DoubleWriter;
+      break;
+      }
+    }
+  if (0 == writer)
     {
-    if( type == 1 )
-      writer = m_VectorDoubleWriter;
-    else if(type == 0)
-      writer = m_DoubleWriter;
-    break;
+    itkExceptionMacro("Unknown Writer type.");
     }
-    }
+
   return writer;
 }
 
