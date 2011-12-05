@@ -194,6 +194,14 @@ ADD_TEST(000295-MeanShiftVectorImageFilterWithStreamingShrink ${CXX_TEST_PATH}/0
         20 50 500 10
         )
 
+# --- FA 0000428 : Pb with the otb::StreamingImageFileWriter when the buffered region is bigger than the requested region
+ADD_TEST(FA-0000428-CastImageFilterStreaming ${CXX_TEST_PATH}/otbTestDriver
+  --compare-image ${TOL} ${INPUTDATA}/poupees_sub_c1.png
+                        ${TEMP}/FA-0000428-pou.tif
+  Execute 0000428-CastImageFilterStreaming
+    ${INPUTDATA}/poupees_sub_c1.png
+    ${TEMP}/FA-0000428-pou.tif)
+
 # -------       End of fixed FAs -----------------------------------
 
 ADD_TEST(FA-00070-vi_Streaming_Stat ${CXX_TEST_PATH}/StreamingStat
@@ -256,15 +264,6 @@ ENDIF(USE_FFTWD OR USE_FFTWF)
 ADD_TEST(faTvWriteUnsignedLong ${CXX_TEST_PATH}/WriteUnsignedLong
 ${TEMP}/WriteUnsignedLong.tif
 )
-
-ADD_TEST(FA-0000428-CastImageFilterStreaming 
-#  ${COMMON_TESTS}
-#  --compare-image ${TOL} ${INPUTDATA}/poupees.jpg 
-#                        ${TEMP}/FA-0000428-pou.tif
-  ${CXX_TEST_PATH}/0000428-CastImageFilterStreaming
-    ${INPUTDATA}/poupees.jpg
-    ${TEMP}/FA-0000428-pou.tif
-  )
 
 # -------  Compare region propagation of ExtractROI filters  ------------------------------
 ADD_TEST(FA-000307-ExtractROIRegion ${CXX_TEST_PATH}/0000307-ExtractROICompareRegion)
