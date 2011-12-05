@@ -312,3 +312,35 @@ OTB_TEST_APPLICATION(NAME apTvClKMeansImageClassification
                      VALID   --compare-image ${NOTOL}
                              ${OTBAPP_BASELINE}/apTvClKMeansImageClassificationFilterOuptut.tif
                              ${TEMP}/apTvClKMeansImageClassificationFilterOuptut.tif )
+
+# --- SOMClassification ---
+OTB_TEST_APPLICATION(NAME   apTvClSOMClassificationSmall
+                     APP    SOMClassification
+                     OPTIONS -in ${INPUTDATA}/poupees_sub.png
+                             -out ${TEMP}/apTvClSOMClassificationSmall.tif uint16
+                     VALID   --compare-image ${NOTOL}
+                             ${BASELINE}/apTvClSOMClassificationSmall.tif
+                             ${TEMP}/apTvClSOMClassificationSmall.tif)
+
+OTB_TEST_APPLICATION(NAME   apTvClSOMClassificationFull
+                     APP    SOMClassification
+                     OPTIONS -in  ${INPUTDATA}/poupees_sub.png
+                             -out ${TEMP}/apTvClSOMClassificationFull.tif uint16
+                             -vm  ${INPUTDATA}/poupees_sub_c1.png
+                             -tp  0.8
+                             -ts  13000
+                             -sl  32
+                             -som ${TEMP}/apTvClSOMClassificationMap.hdr
+                             -sx  30
+                             -sy  30
+                             -nx  9
+                             -ny  9
+                             -ni  5
+                             -bi  1.0
+                             -bf  0.1
+                             -iv  0
+                     VALID   --compare-n-images ${NOTOL} 2
+                             ${BASELINE}/apTvClSOMClassificationFull.tif
+                             ${TEMP}/apTvClSOMClassificationFull.tif
+                             ${BASELINE}/apTvClSOMClassificationMap.hdr
+                             ${TEMP}/apTvClSOMClassificationMap.hdr)
