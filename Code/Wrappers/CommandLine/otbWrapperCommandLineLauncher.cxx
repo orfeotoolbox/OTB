@@ -582,7 +582,7 @@ void CommandLineLauncher::DisplayHelp()
   for(unsigned int i=0; i<m_MaxKeySize-std::string("progress").size(); i++)
     bigKey.append(" ");
     
-  std::cerr << "        -"<<bigKey<<" <boolean>       (Report progress) " << std::endl;
+  std::cerr << "        -"<<bigKey<<" <boolean>        (Report progress) " << std::endl;
 
   for (unsigned int i = 0; i < nbOfParam; i++)
     {
