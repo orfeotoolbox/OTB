@@ -2075,6 +2075,17 @@ ADD_TEST(ioTvMultiResolutionReading3 ${IO_TESTS13}
       ${TEMP}/ioTvMultiResolutionReading3.txt
       3
       )
+      
+IF(OTB_DATA_USE_LARGEINPUT)      
+ADD_TEST(ioTvMultiResolutionReadingPleiadesV3 ${IO_TESTS13}
+  --compare-ascii ${NOTOL}  ${BASELINE_FILES}/ioTvMultiResolutionReadingPleiadesV3.txt
+                             ${TEMP}/ioTvMultiResolutionReadingPleiadesV3_OUT.txt
+      otbVectorImageTest
+      ${LARGEDATA}/PLEIADES-PRE/FCGC600011783/IMG_PHR1Z_PMS_N_001/IMG_PHR1A_PMS-N_201006181052297_ORT_IPU_20111011_0619-001_R1C1.JP2
+      ${TEMP}/ioTvMultiResolutionReadingPleiadesV3_OUT.txt
+      0
+      )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 # Tests to check if we can open JPEG2000 files using a otb::VectorImage 
 # and filename:ResolutionFactor syntax.
