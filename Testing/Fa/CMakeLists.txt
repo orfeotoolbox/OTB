@@ -195,12 +195,12 @@ ADD_TEST(000295-MeanShiftVectorImageFilterWithStreamingShrink ${CXX_TEST_PATH}/0
         )
 
 # --- FA 0000428 : Pb with the otb::StreamingImageFileWriter when the buffered region is bigger than the requested region
-ADD_TEST(FA-0000428-CastImageFilterStreaming ${CXX_TEST_PATH}/otbTestDriver
-  --compare-image ${TOL} ${INPUTDATA}/poupees_sub_c1.png
-                        ${TEMP}/FA-0000428-pou.tif
-  Execute 0000428-CastImageFilterStreaming
-    ${INPUTDATA}/poupees_sub_c1.png
-    ${TEMP}/FA-0000428-pou.tif)
+ADD_TEST(FA-0000428-CastImageFilterStreaming ${CXX_TEST_PATH}/0000428-CastImageFilterStreaming
+#  --compare-image ${TOL} ${INPUTDATA}/scene_8.tif
+#                        ${TEMP}/FA-0000428-scene_8.tif
+#  Execute 0000428-CastImageFilterStreaming                
+    ${INPUTDATA}/scene_8.tif
+    ${TEMP}/FA-0000428-scene_8.tif)
 
 # -------       End of fixed FAs -----------------------------------
 
