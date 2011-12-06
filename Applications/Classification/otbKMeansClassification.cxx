@@ -33,6 +33,12 @@
 #include "otbRAMDrivenTiledStreamingManager.h"
 #include "otbRAMDrivenStrippedStreamingManager.h"
 
+#include "otbChangeLabelImageFilter.h"
+#include "itkLabelToRGBImageFilter.h"
+#include "otbReliefColormapFunctor.h"
+#include "itkScalarToRGBColormapImageFilter.h"
+#include "otbWrapperTypes.h"
+
 
 namespace otb
 {
@@ -104,6 +110,13 @@ private:
 typedef FloatImageType::PixelType PixelType;
 typedef UInt8ImageType   LabeledImageType;
 
+typedef UInt8VectorImageType        VectorImageType;
+typedef VectorImageType::PixelType  VectorPixelType;
+typedef UInt8RGBImageType           RGBImageType;
+typedef RGBImageType::PixelType     RGBPixelType;
+
+
+
 typedef LabeledImageType::PixelType LabelType;
 
 
@@ -126,6 +139,20 @@ typedef otb::StreamingShrinkImageFilter<LabeledImageType,
 typedef Functor::KMeansFunctor<SampleType, LabelType> KMeansFunctorType;
 typedef itk::UnaryFunctorImageFilter<FloatVectorImageType,
     LabeledImageType, KMeansFunctorType>     KMeansFilterType;
+
+
+// Manual label LUT
+ typedef otb::ChangeLabelImageFilter
+ <LabeledImageType, VectorImageType>    ChangeLabelFilterType;
+
+ // Continuous LUT mapping
+  typedef itk::ScalarToRGBColormapImageFilter<LabeledImageType, RGBImageType>      ColorMapFilterType;
+
+
+  typedef otb::Functor::ReliefColormapFunctor
+   <LabelType, RGBPixelType>           ReliefColorMapFunctorType;
+
+  typedef otb::ImageMetadataInterfaceBase ImageMetadataInterfaceType;
 
 
 class KMeansClassification: public Application
@@ -154,6 +181,25 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
   
+    // Build lut map
+
+      m_LutMap["Red"]=ColorMapFilterType::Red;
+      m_LutMap["Green"]=ColorMapFilterType::Green;
+      m_LutMap["Blue"]=ColorMapFilterType::Blue;
+      m_LutMap["Grey"]=ColorMapFilterType::Grey;
+      m_LutMap["Hot"]=ColorMapFilterType::Hot;
+      m_LutMap["Cool"]=ColorMapFilterType::Cool;
+      m_LutMap["Spring"]=ColorMapFilterType::Spring;
+      m_LutMap["Summer"]=ColorMapFilterType::Summer;
+      m_LutMap["Autumn"]=ColorMapFilterType::Autumn;
+      m_LutMap["Winter"]=ColorMapFilterType::Winter;
+      m_LutMap["Copper"]=ColorMapFilterType::Copper;
+      m_LutMap["Jet"]=ColorMapFilterType::Jet;
+      m_LutMap["HSV"]=ColorMapFilterType::HSV;
+      m_LutMap["OverUnder"]=ColorMapFilterType::OverUnder;
+
+
+
     AddDocTag(Tags::Segmentation);
     AddDocTag(Tags::Learning);
   }
@@ -166,27 +212,63 @@ private:
   {
 
     AddParameter(ParameterType_InputImage, "in", "Input Image");
-    SetParameterDescription("in","Input image filename.");
+    SetParameterDescription("in", "Input image filename.");
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
-    SetParameterDescription("out","Output image filename.");
+    SetParameterDescription("out", "Output image filename.");
     AddParameter(ParameterType_RAM, "ram", "Available RAM");
     SetDefaultParameterInt("ram", 256);
     MandatoryOff("ram");
     AddParameter(ParameterType_InputImage, "vm", "Validity Mask");
-    SetParameterDescription("vm","Validity mask. Only non-zero pixels will be used to estimate KMeans modes.");
+    SetParameterDescription("vm", "Validity mask. Only non-zero pixels will be used to estimate KMeans modes.");
     AddParameter(ParameterType_Int, "ts", "Training set size");
     SetParameterDescription("ts", "Size of the training set.");
     SetDefaultParameterInt("ts", 100);
     MandatoryOff("ts");
     AddParameter(ParameterType_Int, "nc", "Number of classes");
-    SetParameterDescription("nc","number of modes, which will be used to generate class membership.");
-    SetDefaultParameterInt("nc", 3);
+    SetParameterDescription("nc", "number of modes, which will be used to generate class membership.");
+    SetDefaultParameterInt("nc", 5);
     AddParameter(ParameterType_Int, "maxit", "Maximum number of iterations");
     SetParameterDescription("maxit", "Maximum number of iterations.");
-    SetDefaultParameterFloat("maxit", 1000);
+    SetDefaultParameterInt("maxit", 1000);
+    MandatoryOff("maxit");
     AddParameter(ParameterType_Float, "ct", "Convergence threshold");
     SetParameterDescription("ct", "Convergence threshold for class centroid  (L2 distance, by default 0.01).");
-    SetDefaultParameterFloat("ct", 0.01);
+    SetDefaultParameterFloat("ct", 0.0001);
+    MandatoryOff("ct");
+    AddParameter(ParameterType_Filename, "outmeans", "Centroid filename");
+    SetParameterDescription("outmeans", "save label centroid in txt file.");
+    MandatoryOff("outmeans");
+    SetParameterRole("outmeans", Role_Output);
+
+    AddParameter(ParameterType_Group, "mapping", "Color mapping");
+    SetParameterDescription("mapping", "Save colorized image and LUT in txt file.");
+    AddParameter(ParameterType_Filename, "mapping.labelout","Output Colorized Image");
+    SetParameterDescription("mapping.labelout", "Output colorized image filename.");
+    SetParameterRole("mapping.labelout", Role_Output);
+    AddParameter(ParameterType_Filename, "mapping.lutout", "Output LUT filename.");
+
+    AddParameter(ParameterType_Choice, "mapping.lut", "Look-up tables");
+    SetParameterDescription("mapping.lut", "Available look-up tables. RGBIntensity remap label with class centroids, which are reweighted into [0 255]");
+
+    AddChoice("mapping.lut.rgbintensity", "RGBIntensity");
+    AddChoice("mapping.lut.red", "Red");
+    AddChoice("mapping.lut.green", "Green");
+    AddChoice("mapping.lut.blue", "Blue");
+    AddChoice("mapping.lut.grey", "Grey");
+    AddChoice("mapping.lut.hot", "Hot");
+    AddChoice("mapping.lut.cool", "Cool");
+    AddChoice("mapping.lut.spring", "Spring");
+    AddChoice("mapping.lut.summer", "Summer");
+    AddChoice("mapping.lut.autumn", "Autumn");
+    AddChoice("mapping.lut.winter", "Winter");
+    AddChoice("mapping.lut.copper", "Copper");
+    AddChoice("mapping.lut.jet", "Jet");
+    AddChoice("mapping.lut.hsv", "HSV");
+    AddChoice("mapping.lut.overunder", "OverUnder");
+    AddChoice("mapping.lut.relief", "Relief");
+    SetParameterInt("mapping.lut", 0);
+
+    MandatoryOff("mapping");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "qb_RoadExtract.img");
@@ -194,7 +276,7 @@ private:
     SetDocExampleParameterValue("ts", "1000");
     SetDocExampleParameterValue("nc", "5");
     SetDocExampleParameterValue("maxit", "1000");
-    SetDocExampleParameterValue("ct", "0.01");
+    SetDocExampleParameterValue("ct", "0.0001");
     SetDocExampleParameterValue("out", "ClassificationFilterOuptut.tif");
   }
 
@@ -374,10 +456,10 @@ private:
 
     message.clear();
     message << std::endl;
-    for (unsigned int i = 0; i < nbClasses; ++i)
+    for (unsigned int i = 0; i < nbClasses; i++)
       {
       message << "Class " << i << ": ";
-      for (unsigned int j = 0; j < sampleSize; ++j)
+      for (unsigned int j = 0; j < sampleSize; j++)
         {
         message << std::setw(8) << initialMeans[i * sampleSize + j] << "   ";
         }
@@ -412,10 +494,10 @@ private:
     message.clear();
     message << "Estimated centroids are: " << std::endl;
     message << std::endl;
-    for (unsigned int i = 0; i < nbClasses; ++i)
+    for (unsigned int i = 0; i < nbClasses; i++)
       {
       message << "Class " << i << ": ";
-      for (unsigned int j = 0; j < sampleSize; ++j)
+      for (unsigned int j = 0; j < sampleSize; j++)
         {
         message << std::setw(8) << estimatedMeans[i * sampleSize + j] << "   ";
         }
@@ -429,8 +511,7 @@ private:
 
     /*******************************************/
     /*           Classification                */
-    /*******************************************/
-    otbAppLogINFO("-- CLASSIFICATION --" << std::endl);
+    /*******************************************/otbAppLogINFO("-- CLASSIFICATION --" << std::endl);
 
     // Finally, update the KMeans filter
     KMeansFunctorType functor;
@@ -450,16 +531,134 @@ private:
     m_KMeansFilter->SetFunctor(functor);
     m_KMeansFilter->SetInput(m_InImage);
 
+    // optional saving option -> lut
 
+    if (IsParameterEnabled("outmeans"))
+      {
+      std::ofstream file;
+      file.open(GetParameterString("outmeans").c_str());
+      for (unsigned int i = 0; i < nbClasses; i++)
+        {
+
+        for (unsigned int j = 0; j < sampleSize; j++)
+          {
+          file << std::setw(8) << estimatedMeans[i * sampleSize + j] << " ";
+          }
+        file << std::endl;
+        }
+
+      file.close();
+      }
+    // colormapping
+    if (IsParameterEnabled("mapping"))
+      {
+      m_ParamOut = OutputImageParameter::New();
+
+      m_ParamOut->SetPixelType(ImagePixelType_uint8);
+      m_ParamOut->SetFileName(GetParameterString("mapping.labelout"));
+
+      std::string lut = GetParameterString("mapping.lut");
+      if (lut == "RGBIntensity")
+        {
+        // find RGB
+        ImageMetadataInterfaceType::Pointer
+            metadataInterface = ImageMetadataInterfaceFactory::CreateIMI(m_InImage->GetMetaDataDictionary());
+
+        std::vector<unsigned int> RGBIndex = metadataInterface->GetDefaultDisplay();
+
+        otbAppLogINFO(" RGB index are "<<RGBIndex[0]<<" "<<RGBIndex[1]<<" "<<RGBIndex[2]<<std::endl);
+        // map intensity
+        m_CustomMapper = ChangeLabelFilterType::New();
+        m_CustomMapper->SetInput(m_KMeansFilter->GetOutput());
+        const unsigned int nbCompRGB = 3;
+        m_CustomMapper->SetNumberOfComponentsPerPixel(nbCompRGB);
+
+        EstimatorType::ParametersType weithedMeans = estimatedMeans;
+
+        std::vector<double> minVal(nbCompRGB);
+        std::vector<double> maxVal(nbCompRGB);
+
+        for (unsigned int i = 0; i < nbCompRGB; i++)
+          {
+          minVal[i] = estimatedMeans[i];
+          maxVal[i] = estimatedMeans[i];
+          for (unsigned int j = 0; j < nbClasses; j++)
+            {
+            double value = estimatedMeans[j * sampleSize + i];
+            std::cout << value << " " << std::endl;
+            if (value > maxVal[i]) maxVal[i] = value;
+            if (value < minVal[i]) minVal[i] = value;
+            }
+          }
+
+        for (unsigned int j = 0; j < nbClasses; j++)
+          {
+          VectorPixelType color(nbCompRGB);
+          color.Fill(0);
+
+          for (unsigned int i = 0; i < nbCompRGB; i++)
+            {
+            color[RGBIndex[i]] = static_cast<PixelType> (((estimatedMeans[j * sampleSize + i] - minVal[i]) / (maxVal[i]
+                - minVal[i])) * 255.0);
+            }
+          otbAppLogINFO("Adding color mapping " << j << " -> [" << (int) color[0] << " " << (int) color[1] << " "<< (int) color[2] << " ]" << std::endl);
+
+          m_CustomMapper->SetChange(j, color);
+          }
+
+        // Create an output parameter to write the current output image
+
+        m_ParamOut->SetValue(m_CustomMapper->GetOutput());
+        m_ParamOut->InitializeWriters();
+        AddProcess(m_ParamOut->GetWriter(), GetParameterString("mapping.labelout"));
+        m_ParamOut->Write();
+
+        }
+      else
+        {
+
+        m_ColorMapper = ColorMapFilterType::New();
+        m_ColorMapper->SetInput(m_KMeansFilter->GetOutput());
+
+        m_ColorMapper->UseInputImageExtremaForScalingOn();
+        if (lut == "Relief")
+          {
+          ReliefColorMapFunctorType::Pointer reliefFunctor = ReliefColorMapFunctorType::New();
+          m_ColorMapper->SetColormap(reliefFunctor);
+          }
+        else
+          {
+          m_ColorMapper->SetColormap((ColorMapFilterType::ColormapEnumType) m_LutMap[lut]);
+          }
+
+        // reweight label into [0 255]
+        m_ColorMapper->GetColormap()->SetMinimumInputValue(0.0);
+        m_ColorMapper->GetColormap()->SetMaximumInputValue(255.0);
+
+        m_ParamOut->SetValue(m_ColorMapper->GetOutput());
+
+        m_ParamOut->InitializeWriters();
+        AddProcess(m_ParamOut->GetWriter(), GetParameterString("mapping.labelout"));
+        m_ParamOut->Write();
+
+        }
+
+      }
     SetParameterOutputImage("out", m_KMeansFilter->GetOutput());
 
   }
 
   // KMeans filter
-  KMeansFilterType::Pointer m_KMeansFilter;
-  FloatVectorImageType::Pointer m_InImage;
+  OutputImageParameter::Pointer       m_ParamOut;
+  KMeansFilterType::Pointer           m_KMeansFilter;
+  FloatVectorImageType::Pointer       m_InImage;
+  ChangeLabelFilterType::Pointer      m_CustomMapper;
+  ColorMapFilterType::Pointer         m_ColorMapper;
+  std::map<std::string, unsigned int> m_LutMap;
 
 };
+
+
 
 }
 }
