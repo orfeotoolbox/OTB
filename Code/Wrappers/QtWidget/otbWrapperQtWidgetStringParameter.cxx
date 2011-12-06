@@ -36,6 +36,10 @@ QtWidgetStringParameter::~QtWidgetStringParameter()
 void QtWidgetStringParameter::DoUpdateGUI()
 {
   m_Input->setToolTip(m_StringParam->GetDescription());
+
+  // Update the lineEdit
+  QString text( QString::fromStdString(m_StringParam->GetValue() ));
+  m_Input->setText(text);
 }
 
 void QtWidgetStringParameter::DoCreateWidget()
