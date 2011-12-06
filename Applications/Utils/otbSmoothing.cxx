@@ -108,8 +108,8 @@ private:
     SetDocExampleParameterValue("type", "mean");
 
     unsigned int exId = AddExample( "Image smoothing using an anisotropic diffusion filter." );
-    SetDocExampleParameterValue("in", "poupees.tif", exId);
-    SetDocExampleParameterValue("out", "smoothedImage_ani.png uchar", exId);
+    SetDocExampleParameterValue("in", "qb_RoadExtract.img", exId);
+    SetDocExampleParameterValue("out", "smoothedImage_ani.png float", exId);
     SetDocExampleParameterValue("type", "anidif", exId);
     SetDocExampleParameterValue("type.anidif.timestep", "0.1", exId);
     SetDocExampleParameterValue("type.anidif.nbiter", "5", exId);

@@ -77,7 +77,7 @@ private:
     MandatoryOff("ram");
 
   // Doc example parameter settings
-    SetDocExampleParameterValue("in", "poupees_sub.png");
+    SetDocExampleParameterValue("in", "qb_coastal.tif");
     SetDocExampleParameterValue("out", "splittedImage.tif");
   }
 

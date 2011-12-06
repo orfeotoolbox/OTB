@@ -72,7 +72,7 @@ private:
     AddParameter(ParameterType_Float,        "ty",   "The Y translation (in physical units)");
 
     // Doc example parameter settings
-    SetDocExampleParameterValue("in", "poupees.tif");
+    SetDocExampleParameterValue("in", "QB_MUL_ROI_1000_100.tif");
     SetDocExampleParameterValue("out", "rigitTransformImage.tif");
     SetDocExampleParameterValue("tx", "5");
     SetDocExampleParameterValue("ty", "5");

@@ -86,10 +86,10 @@ private:
     MandatoryOff("outmax");
 
     // Doc example parameter settings
-    SetDocExampleParameterValue("in", "poupees.tif");
+    SetDocExampleParameterValue("in", "QB_MUL_ROI_1000_100.tif");
     SetDocExampleParameterValue("out", "rescaledImage.tif");
-    SetDocExampleParameterValue("outmin", "20");
-    SetDocExampleParameterValue("outmax", "150");
+    SetDocExampleParameterValue("outmin", "0");
+    SetDocExampleParameterValue("outmax", "255");
   }
 
   void DoUpdateParameters()

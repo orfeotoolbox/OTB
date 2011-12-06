@@ -91,8 +91,8 @@ private:
     MandatoryOff("ram");
  
     // Doc example parameter settings
-    SetDocExampleParameterValue("il", "poupees_sub_c1.png poupees_sub_c2.png poupees_sub_c3.png");
-    SetDocExampleParameterValue("out", "otbConcatenateImages.png uchar");
+    SetDocExampleParameterValue("il", "verySmallFSATSW_b.tif verySmallFSATSW_g.tif verySmallFSATSW_r.tif verySmallFSATSW_nir.tif");
+    SetDocExampleParameterValue("out", "otbConcatenateImages.tif");
   }
 
   void DoUpdateParameters()

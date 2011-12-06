@@ -25,9 +25,7 @@
 #include "itkImageRegionSplitter.h"
 #include "otbStreamingTraits.h"
 #include "itkImageRegionConstIterator.h"
-// #include "itkListSample.h"
 #include "itkImageRandomNonRepeatingConstIteratorWithIndex.h"
-//#include "itkMersenneTwisterRandomVariateGenerator.h"
 
 namespace otb
 {
@@ -167,13 +165,13 @@ private:
     SetDefaultParameterFloat("iv", 0.0);
     
     // Doc example parameter settings
-    SetDocExampleParameterValue("in", "poupees_sub.png");
-    SetDocExampleParameterValue("out","poupees_classif.tif");
-    SetDocExampleParameterValue("vm", "BASELINE/leSOMPoupeesClassified.hdr");
+    SetDocExampleParameterValue("in", "QB_6_extract.tif");
+    SetDocExampleParameterValue("out","SOMClassification.tif");
+    SetDocExampleParameterValue("vm", "QB_6_mask.tif");
     SetDocExampleParameterValue("tp", "1.0");
     SetDocExampleParameterValue("ts","16384");
     SetDocExampleParameterValue("sl", "32");
-    SetDocExampleParameterValue("som", "poupees_map.hdr");
+    SetDocExampleParameterValue("som", "SOMClassification_Map.tif");
     SetDocExampleParameterValue("sx", "32");
     SetDocExampleParameterValue("sy", "32");
     SetDocExampleParameterValue("nx", "10");
@@ -350,34 +348,36 @@ private:
     }
     
     otbAppLogINFO("The final training set contains "<<totalSamples<<" samples.");
-    
-    /*******************************************/
-    /*           Learning                      */
-    /*******************************************/
-    otbAppLogINFO("-- LEARNING --");
-    
-    EstimatorType::Pointer estimator = EstimatorType::New();
-  
-    estimator->SetListSample(sampleList);
-    EstimatorType::SizeType size;
-    size[0]=GetParameterInt("sx");
-    size[1]=GetParameterInt("sy");
-    estimator->SetMapSize(size);
-    EstimatorType::SizeType radius;
-    radius[0] = GetParameterInt("nx");
-    radius[1] = GetParameterInt("ny");
-    estimator->SetNeighborhoodSizeInit(radius);
-    estimator->SetNumberOfIterations(GetParameterInt("ni"));
-    estimator->SetBetaInit(GetParameterFloat("bi"));
-    estimator->SetBetaEnd(GetParameterFloat("bf"));
-    estimator->SetMaxWeight(GetParameterFloat("iv"));
-  
+ 
+
+      /*******************************************/
+      /*           Learning                      */
+      /*******************************************/
+      otbAppLogINFO("-- LEARNING --");
+      
+      EstimatorType::Pointer estimator = EstimatorType::New();
+      
+      estimator->SetListSample(sampleList);
+      EstimatorType::SizeType size;
+      size[0]=GetParameterInt("sx");
+      size[1]=GetParameterInt("sy");
+      estimator->SetMapSize(size);
+      EstimatorType::SizeType radius;
+      radius[0] = GetParameterInt("nx");
+      radius[1] = GetParameterInt("ny");
+      estimator->SetNeighborhoodSizeInit(radius);
+      estimator->SetNumberOfIterations(GetParameterInt("ni"));
+      estimator->SetBetaInit(GetParameterFloat("bi"));
+      estimator->SetBetaEnd(GetParameterFloat("bf"));
+      estimator->SetMaxWeight(GetParameterFloat("iv"));
+      
     AddProcess(estimator,"Learning");
     estimator->Update();
   
     m_SOMMap = estimator->GetOutput();
     if (HasValue("som"))
       {
+      otbAppLogINFO("-- Using Leaning image --");
       SetParameterOutputImage<DoubleVectorImageType>("som", m_SOMMap);
       }
     
