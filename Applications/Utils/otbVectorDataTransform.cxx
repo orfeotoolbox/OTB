@@ -100,9 +100,9 @@ private:
     SetDefaultParameterFloat("transform.scale", 1.);
 
     // Doc example parameter settings
-    SetDocExampleParameterValue("in", "ToulouseRoad-examples.shp");
-    SetDocExampleParameterValue("out", "transformVectorData.tif");
-    SetDocExampleParameterValue("transform.ro", "15");
+    SetDocExampleParameterValue("in", "qb_RoadExtract_easyClassification.shp");
+    SetDocExampleParameterValue("out", "VectorDataTransform.shp");
+    SetDocExampleParameterValue("transform.ro", "5");
   }
 
   void DoUpdateParameters()

@@ -166,9 +166,9 @@ private:
     SetMaximumParameterIntValue("method.segmentation.background", 255);
 
     // Doc example parameter settings
-    SetDocExampleParameterValue("in", "clLabeledImageQB123_1.tif");
+    SetDocExampleParameterValue("in", "ROI_QB_MUL_1_SVN_CLASS_MULTI.png");
     SetDocExampleParameterValue("method", "custom");
-    SetDocExampleParameterValue("method.custom.lut", "Classification/ColorTable.txt");
+    SetDocExampleParameterValue("method.custom.lut", "ColorTable.txt");
     SetDocExampleParameterValue("out", "clLabeledFancyImageQB123_1.tif");
  }
 

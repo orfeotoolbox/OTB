@@ -85,10 +85,9 @@ private:
     MandatoryOff("dem");
 
     // Doc example parameter settings
-    SetDocExampleParameterValue("in", "qb_RoadExtract.img");
+    SetDocExampleParameterValue("in", "qb_RoadExtract2.tif");
     SetDocExampleParameterValue("out", "otbKmzExport.kmz");
-    SetDocExampleParameterValue("logo", "cnes.png");
-    SetDocExampleParameterValue("legend", "otb_big.png");
+    SetDocExampleParameterValue("logo", "otb_big.png");
   }
 
 

@@ -77,7 +77,7 @@ private:
     MandatoryOff("ram");
 
   // Doc example parameter settings
-    SetDocExampleParameterValue("in", "qb_coastal.tif");
+    SetDocExampleParameterValue("in", "VegetationIndex.hd");
     SetDocExampleParameterValue("out", "splittedImage.tif");
   }
 

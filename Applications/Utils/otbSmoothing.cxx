@@ -103,12 +103,12 @@ private:
 
     // Doc example parameter settings
     SetExampleComment("Image smoothing using a mean filter.", 0);
-    SetDocExampleParameterValue("in", "poupees.tif");
+    SetDocExampleParameterValue("in", "Romania_Extract.tif");
     SetDocExampleParameterValue("out", "smoothedImage_mean.png uchar");
     SetDocExampleParameterValue("type", "mean");
 
     unsigned int exId = AddExample( "Image smoothing using an anisotropic diffusion filter." );
-    SetDocExampleParameterValue("in", "qb_RoadExtract.img", exId);
+    SetDocExampleParameterValue("in", "Romania_Extract.tif", exId);
     SetDocExampleParameterValue("out", "smoothedImage_ani.png float", exId);
     SetDocExampleParameterValue("type", "anidif", exId);
     SetDocExampleParameterValue("type.anidif.timestep", "0.1", exId);

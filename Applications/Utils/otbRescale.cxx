@@ -86,8 +86,8 @@ private:
     MandatoryOff("outmax");
 
     // Doc example parameter settings
-    SetDocExampleParameterValue("in", "QB_MUL_ROI_1000_100.tif");
-    SetDocExampleParameterValue("out", "rescaledImage.tif");
+    SetDocExampleParameterValue("in", "QB_Toulouse_Ortho_PAN.tif");
+    SetDocExampleParameterValue("out", "rescaledImage.png uchar");
     SetDocExampleParameterValue("outmin", "0");
     SetDocExampleParameterValue("outmax", "255");
   }

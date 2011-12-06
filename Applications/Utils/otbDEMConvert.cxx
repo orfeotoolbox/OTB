@@ -74,7 +74,7 @@ void DoCreateParameters()
     SetParameterRole("out", Role_Output);
 
     // Doc example parameter settings
-    SetDocExampleParameterValue("in", "QB_MUL_ROI_1000_100.tif");
+    SetDocExampleParameterValue("in", "QB_Toulouse_Ortho_Elev.tif");
     SetDocExampleParameterValue("out", "outputDEM.any");
 }
 

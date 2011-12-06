@@ -83,10 +83,10 @@ private:
     SetParameterDescription("fv", "Field value");
 
     // Doc example parameter settings
-    SetDocExampleParameterValue("in", "ToulousePoints-examples.shp");
-    SetDocExampleParameterValue("out", "dataOut.shp");
-    SetDocExampleParameterValue("fn", "myField");
-    SetDocExampleParameterValue("fv", "myValue");
+    SetDocExampleParameterValue("in", "qb_RoadExtract_classification.shp");
+    SetDocExampleParameterValue("out", "VectorDataSetField.shp");
+    SetDocExampleParameterValue("fn", "Info");
+    SetDocExampleParameterValue("fv", "Sample polygon");
   }
 
   void DoUpdateParameters()

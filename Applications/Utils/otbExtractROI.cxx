@@ -96,9 +96,12 @@ private:
     AddParameter(ParameterType_ListView,  "cl", "Output Image channels");
 
     // Doc example parameter settings
-    SetDocExampleParameterValue("in", "couleurs_extrait.png");
-    SetDocExampleParameterValue("sizex", "256");
-    SetDocExampleParameterValue("out", "ROIImage.tif");
+    SetDocExampleParameterValue("in", "VegetationIndex.hd");
+    SetDocExampleParameterValue("startx", "40");
+    SetDocExampleParameterValue("starty", "250");
+    SetDocExampleParameterValue("sizex", "150");
+    SetDocExampleParameterValue("sizey", "150");
+    SetDocExampleParameterValue("out", "ExtractROI.tif");
   }
 
   void DoUpdateParameters()

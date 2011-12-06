@@ -118,7 +118,7 @@ private:
     SetDefaultParameterInt("rsy", 0);
      
     // Doc example parameter settings
-    SetDocExampleParameterValue("in", "anaglyphInput1.tif");
+    SetDocExampleParameterValue("in", "qb_RoadExtract.tif");
     SetDocExampleParameterValue("out", "quicklookImage.tif");
   }
   
