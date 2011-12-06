@@ -59,3 +59,14 @@ OTB_TEST_APPLICATION(NAME apTvPrObtainUTMZoneFromGeoPoint
                      VALID  --compare-ascii ${EPSILON_7}
                         ${BASELINE_FILES}/apTvPrObtainUTMZoneFromGeoPoint.txt
                         ${TEMP}/apTvPrObtainUTMZoneFromGeoPoint.txt)
+
+
+OTB_TEST_APPLICATION(NAME apTvPrConvertSensorToGeoPoint
+                     APP ConvertSensorToGeoPoint
+                     OPTIONS -in  ${INPUTDATA}/QB_TOULOUSE_MUL_Extract_500_500.tif
+                             -input.idx 500
+                             -input.idy 500
+                     TESTENVOPTIONS ${TEMP}/apTvPrConvertSensorToGeoPoint.txt
+                     VALID  --compare-ascii ${EPSILON_7}
+                        ${BASELINE_FILES}/apTvPrConvertSensorToGeoPoint.txt
+                        ${TEMP}/apTvPrConvertSensorToGeoPoint.txt)
