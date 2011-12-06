@@ -539,12 +539,12 @@ public:
 
   std::string GetExampleParameterKey(unsigned int exId, unsigned int paramId)
   {
-    return m_DocExample->GetParameterKey(paramId,exId);
+    return m_DocExample->GetParameterKey(paramId, exId);
   }
 
   std::string GetExampleParameterValue(unsigned int exId, unsigned int paramId)
   {
-    return m_DocExample->GetParameterValue(paramId,exId);
+    return m_DocExample->GetParameterValue(paramId, exId);
   }
 
   void SetDocExampleParameterValue( const std::string key, const std::string value, unsigned int exId=0 )

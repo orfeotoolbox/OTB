@@ -116,7 +116,6 @@ typedef UInt8RGBImageType           RGBImageType;
 typedef RGBImageType::PixelType     RGBPixelType;
 
 
-
 typedef LabeledImageType::PixelType LabelType;
 
 
@@ -197,7 +196,6 @@ private:
       m_LutMap["Jet"]=ColorMapFilterType::Jet;
       m_LutMap["HSV"]=ColorMapFilterType::HSV;
       m_LutMap["OverUnder"]=ColorMapFilterType::OverUnder;
-
 
 
     AddDocTag(Tags::Segmentation);
@@ -663,7 +661,6 @@ private:
   std::map<std::string, unsigned int> m_LutMap;
 
 };
-
 
 
 }

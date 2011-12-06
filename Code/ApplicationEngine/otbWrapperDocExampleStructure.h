@@ -62,7 +62,7 @@ public:
   typedef std::vector<ParametersVectorType> ParametersVectorOfVectorType;
 
   /** Get the number of examples */
-  itkGetMacro(NbOfExamples,unsigned int);
+  itkGetMacro(NbOfExamples, unsigned int);
 
   /** Parameter list accessors. */
   /** Parameter list accessors : adding key and name */
