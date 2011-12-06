@@ -291,7 +291,7 @@ OutputImageParameter::GetWriter()
   // 1 : VectorImage
   // 2 : RGBAImage
   // 3 : RGBImage
-
+  itk::ProcessObject* writer = 0;
   if (dynamic_cast<Int8VectorImageType*> (m_Image.GetPointer())
       || dynamic_cast<UInt8VectorImageType*> (m_Image.GetPointer())
       || dynamic_cast<Int16VectorImageType*> (m_Image.GetPointer())
@@ -307,14 +307,20 @@ OutputImageParameter::GetWriter()
     if (dynamic_cast<UInt8RGBAImageType*> (m_Image.GetPointer()))
       {
       type = 2;
+      writer = m_RGBAUInt8Writer;
+      itkWarningMacro("UInt8RGBAImageType will be saved in UInt8 format.");
+      return writer;
       }
     else
       if (dynamic_cast<UInt8RGBImageType*> (m_Image.GetPointer()))
         {
         type = 3;
+        writer = m_RGBUInt8Writer;
+        itkWarningMacro("UInt8RGBImageType will be saved in UInt8 format.");
+        return writer;
         }
 
-  itk::ProcessObject* writer = 0;
+
   switch (GetPixelType())
     {
     case ImagePixelType_int8:
@@ -323,6 +329,7 @@ OutputImageParameter::GetWriter()
         writer = m_VectorInt8Writer;
       else
         if (type == 0) writer = m_Int8Writer;
+
       break;
       }
     case ImagePixelType_uint8:
