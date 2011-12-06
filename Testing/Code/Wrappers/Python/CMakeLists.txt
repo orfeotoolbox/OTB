@@ -39,6 +39,13 @@ add_test( NAME pyTvHyperspectralUnmixingFCLS
                   fcls
                   )
 
+add_test( NAME pyTvBug440
+          COMMAND ${TEST_DRIVER} Execute
+                  ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/Bug440.py
+                  ${OTB_DATA_ROOT}/Input/scene.png
+                  ${TEMP}/pyTvBug440Output.tif
+                  )
+
 IF(OTB_DATA_USE_LARGEINPUT)                 
 add_test( NAME pyTvOrthoRectification_UTM          
           COMMAND ${TEST_DRIVER} 
