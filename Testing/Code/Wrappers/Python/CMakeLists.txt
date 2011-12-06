@@ -46,6 +46,14 @@ add_test( NAME pyTvBug440
                   ${TEMP}/pyTvBug440Output.tif
                   )
 
+add_test( NAME pyTvBug441
+          COMMAND ${TEST_DRIVER} Execute
+                  ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/Bug441.py
+                  ${OTB_DATA_ROOT}/Input/stereo_wv2_left.tif
+                  ${OTB_DATA_ROOT}/Input/stereo_wv2_right.tif
+                  ${TEMP}/pyTvBug441Output.tif
+                  )
+
 IF(OTB_DATA_USE_LARGEINPUT)                 
 add_test( NAME pyTvOrthoRectification_UTM          
           COMMAND ${TEST_DRIVER} 
