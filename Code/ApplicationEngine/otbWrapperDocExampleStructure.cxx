@@ -50,6 +50,11 @@ DocExampleStructure::GetParameterList()
   return m_ParameterList;
 }
 
+unsigned int DocExampleStructure::GetNumberOfParameters(unsigned int exId)
+{
+  return m_ParameterList.at(exId).size();
+}
+
 /** Get a specific parameter couple.*/
 std::string
 DocExampleStructure::GetParameterKey( unsigned int i, unsigned int exId)

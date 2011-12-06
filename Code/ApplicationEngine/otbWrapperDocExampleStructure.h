@@ -61,6 +61,9 @@ public:
   typedef std::vector<ParameterType> ParametersVectorType;
   typedef std::vector<ParametersVectorType> ParametersVectorOfVectorType;
 
+  /** Get the number of examples */
+  itkGetMacro(NbOfExamples,unsigned int);
+
   /** Parameter list accessors. */
   /** Parameter list accessors : adding key and name */
   void AddParameter( const std::string key, const std::string name, unsigned int exId = 0);

@@ -522,6 +522,31 @@ public:
     return m_DocExample;
   }
 
+  unsigned int GetNumberOfExamples()
+  {
+    return m_DocExample->GetNbOfExamples();
+  }
+
+  std::string GetExampleComment(unsigned int id)
+  {
+    return m_DocExample->GetExampleComment(id);
+  }
+
+  unsigned int GetExampleNumberOfParameters(unsigned int id)
+  {
+    return m_DocExample->GetNumberOfParameters(id);
+  }
+
+  std::string GetExampleParameterKey(unsigned int exId, unsigned int paramId)
+  {
+    return m_DocExample->GetParameterKey(paramId,exId);
+  }
+
+  std::string GetExampleParameterValue(unsigned int exId, unsigned int paramId)
+  {
+    return m_DocExample->GetParameterValue(paramId,exId);
+  }
+
   void SetDocExampleParameterValue( const std::string key, const std::string value, unsigned int exId=0 )
   {
     m_DocExample->AddParameter( key, value, exId );
