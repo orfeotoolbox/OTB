@@ -58,7 +58,7 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("ConvertCartoToGeoPoint application, otbObtainUTMZoneFromGeoPoint application");
   
-    AddDocTag("Projections");
+    AddDocTag(Tags::Geometry);
   }
 
   virtual ~ConvertSensorToGeoPoint()
@@ -108,8 +108,8 @@ private:
 
     // Convert the desired point
     PointType point;
-    point[0] = GetParameterFloat("input.idx");
-    point[1] = GetParameterFloat("input.idy");
+    point[0] = GetParameterFloat("input.idx") + inImage->GetOrigin()[0];
+    point[1] = GetParameterFloat("input.idy") + inImage->GetOrigin()[1];
 
     ModelType::OutputPointType outputPoint;
     outputPoint = model->TransformPoint(point);
