@@ -201,8 +201,7 @@ private:
       // Set the lut
       std::string lut = GetParameterString("method.continuous.lut");
 
-      std::cout<<"LUT: "<<lut<<std::endl;
-
+      otbAppLogINFO("LUT: "<<lut<<std::endl);
       if(lut == "Relief")
         {
         ReliefColorMapFunctorType::Pointer reliefFunctor = ReliefColorMapFunctorType::New();
