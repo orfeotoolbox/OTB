@@ -70,20 +70,20 @@ private:
     //Create output parameters to store image informations
     AddParameter(ParameterType_Int,"sizex","Size X");
     SetParameterRole("sizex", Role_Output);
- MandatoryOff("sizex");
+    //MandatoryOff("sizex");
     AddParameter(ParameterType_Int,"sizey","Size Y");
     SetParameterRole("sizey", Role_Output);
-     MandatoryOff("sizey");
+    //MandatoryOff("sizey");
 
     AddParameter(ParameterType_Int,"spacingx","Pixel Size X");
     SetParameterRole("spacingx", Role_Output);
-     MandatoryOff("spacingx");
+     //MandatoryOff("spacingx");
     AddParameter(ParameterType_Int,"spacingy","Pixel Size Y");
     SetParameterRole("spacingy", Role_Output);
-     MandatoryOff("spacingy");
+    //MandatoryOff("spacingy");
     AddParameter(ParameterType_Int,"numberbands","Number Of Bands");
     SetParameterRole("numberbands", Role_Output);
-         MandatoryOff("numberbands");
+         //MandatoryOff("numberbands");
     
     AddParameter(ParameterType_String,"sensor","Sensor id");
     SetParameterRole("sensor", Role_Output);
@@ -91,105 +91,105 @@ private:
    
     AddParameter(ParameterType_String,"id","Id of the image");
     SetParameterRole("id", Role_Output);
-         MandatoryOff("id");
+         //MandatoryOff("id");
 
     AddParameter(ParameterType_String,"time","Acquisition time");
     SetParameterRole("time", Role_Output);
-         MandatoryOff("time");
+         //MandatoryOff("time");
 
     AddParameter(ParameterType_Float,"ullat","Upper left lattitude");
     SetParameterRole("ullat", Role_Output);
     SetDefaultParameterFloat("ullat", 0);
-     MandatoryOff("ullat");
+     //MandatoryOff("ullat");
     AddParameter(ParameterType_Float,"ullon","Upper left longitude");
     SetParameterRole("ullon", Role_Output);
     SetDefaultParameterFloat("ullon", 0);
-     MandatoryOff("ullon");
+     //MandatoryOff("ullon");
     AddParameter(ParameterType_Float,"urlat","Upper right lattitude");
     SetParameterRole("urlat", Role_Output);
     SetDefaultParameterFloat("urlat", 0);
-     MandatoryOff("urlat");
+     //MandatoryOff("urlat");
     AddParameter(ParameterType_Float,"urlon","Upper right longitude");
     SetParameterRole("urlon", Role_Output);
     SetDefaultParameterFloat("urlon", 0);
-     MandatoryOff("urlon");
+    // MandatoryOff("urlon");
     AddParameter(ParameterType_Float,"lrlat","Lower right lattitude");
     SetParameterRole("lrlat", Role_Output);
     SetDefaultParameterFloat("lrlat", 0);
-     MandatoryOff("lrlat");
+     //MandatoryOff("lrlat");
     AddParameter(ParameterType_Float,"lrlon","Lower right longitude");
     SetParameterRole("lrlon", Role_Output);
     SetDefaultParameterFloat("lrlon", 0);
-     MandatoryOff("lrlon");
+     //MandatoryOff("lrlon");
     AddParameter(ParameterType_Float,"lllat","Lower left lattitude");
     SetParameterRole("lllat", Role_Output);
     SetDefaultParameterFloat("lllat", 0);
-     MandatoryOff("lllat");
+     //MandatoryOff("lllat");
     AddParameter(ParameterType_Float,"lllon","Lower left longitude");
     SetParameterRole("lllon", Role_Output);
     SetDefaultParameterFloat("lllon", 0);
-         MandatoryOff("lllon");
+         //MandatoryOff("lllon");
 
     AddParameter(ParameterType_String,"town","Main town near center of image");
     SetParameterRole("town", Role_Output);
-         MandatoryOff("town");
+         //MandatoryOff("town");
 
     AddParameter(ParameterType_String,"country","Country of the image");
     SetParameterRole("country", Role_Output);
-     MandatoryOff("country");
+     //MandatoryOff("country");
 
     AddParameter(ParameterType_Group, "rgb", "Default RGB Display");
     SetParameterDescription("rgb","This group of parameters allows to access to the default rgb composition.");
-    SetParameterRole("rgb", Role_Output);
-         MandatoryOff("rgb");
+    //SetParameterRole("rgb", Role_Output);
+         //MandatoryOff("rgb");
 
     AddParameter(ParameterType_Int, "rgb.r", "Red Band");
     SetParameterDescription("rgb.r","Red band Number");
     SetDefaultParameterInt("rgb.r", 1);
     SetParameterRole("rgb.r", Role_Output);
-         MandatoryOff("rgb.r");
+         //MandatoryOff("rgb.r");
 
     AddParameter(ParameterType_Int, "rgb.g", "Green Band");
     SetParameterDescription("rgb.g","Green band Number");
     SetDefaultParameterInt("rgb.g", 2);
     SetParameterRole("rgb.g", Role_Output);
-     MandatoryOff("rgb.g");
+     //MandatoryOff("rgb.g");
 
     AddParameter(ParameterType_Int, "rgb.b", "Blue Band");
     SetParameterDescription("rgb.b","Blue band Number");
     SetDefaultParameterInt("rgb.b", 3);
     SetParameterRole("rgb.b", Role_Output);
-     MandatoryOff("rgb.b");
+     //MandatoryOff("rgb.b");
 
     AddParameter(ParameterType_String,"projectionref","Projection Coordinate System");
     SetParameterRole("projectionref", Role_Output);
-         MandatoryOff("projectionref");
+         //MandatoryOff("projectionref");
 
     AddParameter(ParameterType_String,"keyword","Image Keywordlist");
     SetParameterRole("keyword", Role_Output);
-     MandatoryOff("keyword");
+     //MandatoryOff("keyword");
 
     AddParameter(ParameterType_Group, "gcp", "Ground Control Points informations");
     SetParameterDescription("gcp","This group of parameters allows to access to the GCPs informations.");
     SetParameterRole("gcp", Role_Output);
-     MandatoryOff("gcp");
+     //MandatoryOff("gcp");
 
     AddParameter(ParameterType_Int, "gcp.count", "GCPs Number");
     SetParameterDescription("gcp.count","Number of GCPs");
     SetDefaultParameterInt("gcp.count", 0);
     SetParameterRole("gcp.count", Role_Output);
-     MandatoryOff("gcp.count");
+     //MandatoryOff("gcp.count");
 
     AddParameter(ParameterType_String,"gcp.proj","GCP Projection System");
     SetParameterRole("gcp.proj", Role_Output);
-     MandatoryOff("gcp.proj");
+     //MandatoryOff("gcp.proj");
 
     AddParameter(ParameterType_StringList,"gcp.ids","GCPs Id");
-    //SetParameterRole("gcp.ids", Role_Output);
-     MandatoryOff("gcp.ids");
+    SetParameterRole("gcp.ids", Role_Output);
+    //MandatoryOff("gcp.ids");
     AddParameter(ParameterType_StringList,"gcp.info","GCPs Info");
-    //SetParameterRole("gcp.info", Role_Output)
-    MandatoryOff("gcp.info");
+    SetParameterRole("gcp.info", Role_Output);
+    //MandatoryOff("gcp.info");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "QB_Toulouse_Ortho_XS.tif");
