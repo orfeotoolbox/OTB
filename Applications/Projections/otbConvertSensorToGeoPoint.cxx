@@ -103,7 +103,7 @@ private:
     model->SetImageGeometry(inImage->GetImageKeywordlist());
     if ( model->IsValidSensorModel() == false )
       {
-      std::cerr << "Unable to create a model" << std::endl;
+      itkGenericExceptionMacro(<< "Unable to create a model");
       }
 
     // Convert the desired point
