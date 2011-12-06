@@ -3,16 +3,16 @@
 // License:  See top level LICENSE.txt file.
 //
 //
-// Author:  Oscar Kramer (ossim port by D. Burken)
+// Author:  Mickael Savinaud
 //
 // Description:
 //
-// Contains declaration of class ossimSpotDimapSupportData.
+// Contains declaration of class ossimPleiadesDimapSupportData.
 //
 //*****************************************************************************
-// $Id: ossimSpotDimapSupportData.h 17814 2010-08-03 12:44:02Z dburken $
-#ifndef ossimSpotDimapSupportData_HEADER
-#define ossimSpotDimapSupportData_HEADER
+// FIXME $Id: ossimPleiadesDimapSupportData.h 17814 2010-08-03 12:44:02Z dburken $
+#ifndef ossimPleiadesDimapSupportData_HEADER
+#define ossimPleiadesDimapSupportData_HEADER
 
 #include <vector>
 #include <iostream>
@@ -33,7 +33,7 @@ class ossimKeywordlist;
 // class ossimRefPtr;
 class ossimXmlDocument;
 
-class ossimSpotDimapSupportData : public ossimObject,
+class ossimPleiadesDimapSupportData : public ossimObject,
                                   public ossimErrorStatusInterface
 {
 public:
@@ -41,17 +41,15 @@ public:
    /** metadata.dim format version */
    enum ossimSpotMetadataVersion
    {
-      OSSIM_SPOT_METADATA_VERSION_UNKNOWN = 0,
-      OSSIM_SPOT_METADATA_VERSION_1_0 = 1,
-      OSSIM_SPOT_METADATA_VERSION_1_1 = 2,
-      OSSIM_SPOT_METADATA_VERSION_2_0 = 3
+      OSSIM_PLEIADES_METADATA_VERSION_UNKNOWN = 0,
+      OSSIM_PLEIADES_METADATA_VERSION_2_0 = 1
    };
 
-   ossimSpotDimapSupportData();
+   ossimPleiadesDimapSupportData();
 
 
-   ossimSpotDimapSupportData(const ossimSpotDimapSupportData& rhs);
-   ossimSpotDimapSupportData(const ossimFilename& dimapFile,
+   ossimPleiadesDimapSupportData(const ossimPleiadesDimapSupportData& rhs);
+   ossimPleiadesDimapSupportData(const ossimFilename& dimapFile,
                              bool  processSwir=false);
 
    virtual ossimObject* dup()const;
@@ -156,7 +154,7 @@ public:
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix = 0);
 protected:
-   virtual ~ossimSpotDimapSupportData();
+   virtual ~ossimPleiadesDimapSupportData();
 
 private:
    void getLagrangeInterpolation(const ossim_float64& t,
@@ -319,4 +317,4 @@ private:
    bool parsePart4(ossimRefPtr<ossimXmlDocument> xmlDocument);
 };
 
-#endif /* #ifndef ossimSpotDimapSupportData_HEADER */
+#endif /* #ifndef ossimPleiadesDimapSupportData_HEADER */

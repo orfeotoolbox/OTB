@@ -41,10 +41,12 @@ static ossimTrace traceDebug = ossimTrace("ossimSensorModelFactory:debug");
 #include <ossim/projection/ossimQuickbirdRpcModel.h>
 #include <ossim/projection/ossimLandSatModel.h>
 #include <ossim/projection/ossimSpot5Model.h>
+#include <ossim/projection/ossimPleiadesModel.h>
 #include <ossim/projection/ossimBuckeyeSensor.h>
 #include <ossim/projection/ossimSarModel.h>
 #include <ossim/projection/ossimRS1SarModel.h>
 #include <ossim/support_data/ossimSpotDimapSupportData.h>
+#include <ossim/support_data/ossimPleiadesDimapSupportData.h>
 #include <ossim/projection/ossimNitfMapModel.h>
 #include <ossim/projection/ossimFcsiModel.h>
 #include <ossim/projection/ossimApplanixUtmModel.h>
@@ -65,6 +67,7 @@ static ossimTrace traceDebug = ossimTrace("ossimSensorModelFactory:debug");
 // const char* NITF_MAP_MODEL   = "ossimNitfMapModel";
 // const char* FCSI_MODEL       = "ossimFcsiModel";
 // const char* EMERGE_FCSI_MODEL= "ossimEmergeFcsiModel";
+// const char* PLEIADES_MODEL   = "ossimPleiadesModel";
 
 ossimSensorModelFactory* ossimSensorModelFactory::theInstance = 0;
 
@@ -192,6 +195,10 @@ ossimSensorModelFactory::createProjection(const ossimString &name) const
    {
       return new ossimSpot5Model;
    }
+   if(name == STATIC_TYPE_NAME(ossimPleiadesModel))
+   {
+      return new ossimPleiadesModel;
+   }
    if(name == STATIC_TYPE_NAME(ossimSarModel))
    {
       return new ossimSarModel;
@@ -247,6 +254,7 @@ ossimSensorModelFactory::getTypeNameList(std::vector<ossimString>& typeList)
    typeList.push_back(STATIC_TYPE_NAME(ossimNitfMapModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimFcsiModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimSpot5Model));
+   typeList.push_back(STATIC_TYPE_NAME(ossimPleiadesModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimSarModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimRS1SarModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimBuckeyeSensor));
