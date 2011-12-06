@@ -15,158 +15,121 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#include "otbWrapperApplication.h"
+#include "otbWrapperApplicationFactory.h"
 
-#include <iostream>
-#include <iomanip>
-
-#include "otbCommandLineArgumentParser.h"
-#include "otbVectorImage.h"
-#include "otbImageFileReader.h"
 #include "otbForwardSensorModel.h"
+#include "otbCoordinateToName.h"
 #include "otbMacro.h"
 
-#include "itkExceptionObject.h"
-
-int main(int argc, char* argv[])
+namespace otb
 {
-  try
+namespace Wrapper
+{
+
+class ConvertSensorToGeoPoint : public Application
+{
+public:
+  /** Standard class typedefs. */
+  typedef ConvertSensorToGeoPoint       Self;
+  typedef Application                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
+
+  /** Standard macro */
+  itkNewMacro(Self);
+
+  itkTypeMacro(ConvertSensorToGeoPoint, otb::Application);
+
+  /** Filters typedef */
+  typedef otb::ForwardSensorModel<double> ModelType;
+  typedef itk::Point<double, 2>           PointType;
+
+private:
+  ConvertSensorToGeoPoint()
   {
-    // Parse command line parameters
-    typedef otb::CommandLineArgumentParser ParserType;
-    ParserType::Pointer parser = ParserType::New();
+    SetName("ConvertSensorToGeoPoint");
+    SetDescription("Convert Sensor Point To Geographic Point using a Forward Sensor Model");
 
-    parser->SetProgramDescription("Sensor to geographic coordinates conversion. "
-        "If x, y are not provided, convert the four corners");
-    parser->AddOption("--data","sensor image","-in");
-    parser->AddOption("--sample","X value of desired point","-x", 1, false);
-    parser->AddOption("--line","Y value of desired point","-y", 1, false);
+    // Documentation
+    SetDocName("Convert Sensor Point To Geographic Point");
+    SetDocLongDescription("Sensor to geographic coordinates conversion");
+    SetDocLimitations("None");
+    SetDocAuthors("OTB-Team");
+    SetDocSeeAlso("ConvertCartoToGeoPoint application, otbObtainUTMZoneFromGeoPoint application");
+  
+    AddDocTag("Projections");
+  }
 
-    typedef otb::CommandLineArgumentParseResult ParserResultType;
-    ParserResultType::Pointer  parseResult = ParserResultType::New();
+  virtual ~ConvertSensorToGeoPoint()
+  {
+  }
 
-    try
-    {
-      parser->ParseCommandLine(argc, argv, parseResult);
-    }
-    catch ( itk::ExceptionObject & err )
-    {
-      std::string descriptionException = err.GetDescription();
-      if (descriptionException.find("ParseCommandLine(): Help Parser") != std::string::npos)
-      {
-        std::cout << "WARNING : output file pixels are converted in 'unsigned char'" << std::endl;
-        return EXIT_SUCCESS;
-      }
-      if (descriptionException.find("ParseCommandLine(): Version Parser") != std::string::npos)
-      {
-        return EXIT_SUCCESS;
-      }
-      return EXIT_FAILURE;
-    }
+  void DoCreateParameters()
+  {
+    AddParameter(ParameterType_InputImage,  "in",   "Sensor image");
 
-    // Code
+    AddParameter(ParameterType_Group, "input", "Point Coordinates");
+    AddParameter(ParameterType_Float, "input.idx","X value of desired point");
+    AddParameter(ParameterType_Float, "input.idy","Y value of desired point");
 
-    std::string filename = parseResult->GetParameterString("--data");
+    // Output with Output Role
+    AddParameter(ParameterType_Group, "output", "Geographic Coordinates");
+    AddParameter(ParameterType_Float, "output.idx","Output Point Longitude");
+    AddParameter(ParameterType_Float, "output.idy","Output Point Latitude");
+    
+    AddParameter(ParameterType_String,"output.town","Main town near the coordinates computed");
+    AddParameter(ParameterType_String,"output.country","Country of the image");
+    
+    // Set the parameter role for the output parameters
+    SetParameterRole("output.idx", Role_Output );
+    SetParameterRole("output.idy", Role_Output );
+    
+    SetParameterRole("output.town", Role_Output );
+    SetParameterRole("output.country", Role_Output );
+  }
 
-    typedef otb::VectorImage<double, 2> ImageType;
-    typedef otb::ImageFileReader<ImageType> ReaderType;
-    ReaderType::Pointer reader = ReaderType::New();
-    reader->SetFileName(filename);
-    reader->GenerateOutputInformation();
+  void DoUpdateParameters()
+  {
+  }
 
-    typedef otb::ForwardSensorModel<double> ModelType;
+  void DoExecute()
+  {
+    // Get input Image
+    FloatVectorImageType::Pointer inImage = GetParameterImage("in");
+
+    // Instanciate a ForwardSensor Model
     ModelType::Pointer model = ModelType::New();
-    model->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
+    model->SetImageGeometry(inImage->GetImageKeywordlist());
     if ( model->IsValidSensorModel() == false )
       {
-        std::cerr << "Unable to create a model" << std::endl;
-        return 1;
+      std::cerr << "Unable to create a model" << std::endl;
       }
 
-    ImageType::Pointer inputImage = reader->GetOutput();
+    // Convert the desired point
+    PointType point;
+    point[0] = GetParameterFloat("input.idx");
+    point[1] = GetParameterFloat("input.idy");
 
-    typedef itk::Point<double, 2> PointType;
-    std::vector<PointType> points;
-    if (parseResult->IsOptionPresent("--sample") && parseResult->IsOptionPresent("--line"))
-      {
-      PointType point;
-      point[0] = parseResult->GetParameterInt("--sample");
-      point[1] = parseResult->GetParameterInt("--line");
-      points.push_back(point);
-      }
-    else
-      {
-      // find the four corners
-      PointType point;
-      point[0] = reader->GetOutput()->GetLargestPossibleRegion().GetIndex()[0];
-      point[1] = reader->GetOutput()->GetLargestPossibleRegion().GetIndex()[1];
-      points.push_back(point);
+    ModelType::OutputPointType outputPoint;
+    outputPoint = model->TransformPoint(point);
 
-      point[0] = reader->GetOutput()->GetLargestPossibleRegion().GetIndex()[0]
-               + reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0]-1;
-      point[1] = reader->GetOutput()->GetLargestPossibleRegion().GetIndex()[1];
-      points.push_back(point);
+    // Set the value computed
+    SetParameterFloat("output.idx", outputPoint[0]);
+    SetParameterFloat("output.idy", outputPoint[1]);
 
-      point[0] = reader->GetOutput()->GetLargestPossibleRegion().GetIndex()[0];
-      point[1] = reader->GetOutput()->GetLargestPossibleRegion().GetIndex()[1]
-               + reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]-1;
-      points.push_back(point);
+    // Set the town and the neaerest city
+    CoordinateToName::Pointer coord2name = CoordinateToName::New();
+    coord2name->SetLon(outputPoint[0]);
+    coord2name->SetLat(outputPoint[1]);
+    coord2name->Evaluate();
 
-      point[0] = reader->GetOutput()->GetLargestPossibleRegion().GetIndex()[0]
-               + reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0]-1;
-      point[1] = reader->GetOutput()->GetLargestPossibleRegion().GetIndex()[1]
-               + reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]-1;
-      points.push_back(point);
-
-      }
-
-    for (unsigned int i = 0; i < points.size(); ++i)
-      {
-
-
-      ModelType::OutputPointType outputPoint;
-
-
-      outputPoint = model->TransformPoint(points[i]);
-
-      if (!parseResult->IsOptionPresent("--OTBTesting"))
-        {
-        std::cout << std::setprecision(10) << "Sensor Point  (x , y)  : (" << points[i][0] << ", " << points[i][1]
-            << ")\n";
-        std::cout << std::setprecision(10) << "Geographic Point (Lat, Lon) : (" << outputPoint[1] << ", "
-            << outputPoint[0] << ")\n\n";
-        }
-      else
-        {
-        std::string outputTestFileName = parseResult->GetParameterString("--OTBTesting", 0);
-
-        std::ofstream outputTestFile;
-        outputTestFile.open(outputTestFileName.c_str());
-
-        outputTestFile << std::setprecision(10) << "Sensor Point  (x , y)  : (" << points[i][0] << ", "
-            << points[i][1] << ")\n";
-        outputTestFile << std::setprecision(10) << "Geographic Point (Lat, Lon) : (" << outputPoint[1] << ", "
-            << outputPoint[0] << ")\n\n";
-        outputTestFile.close();
-        }
-      }
-
+    SetParameterString("output.town", coord2name->GetPlaceName());
+    SetParameterString("output.country", coord2name->GetCountryName());
   }
-  catch ( itk::ExceptionObject & err )
-  {
-    std::cout << "Exception itk::ExceptionObject raised !" << std::endl;
-    std::cout << err << std::endl;
-    return EXIT_FAILURE;
-  }
-  catch ( std::bad_alloc & err )
-  {
-    std::cout << "Exception bad_alloc : "<<(char*)err.what()<< std::endl;
-    return EXIT_FAILURE;
-  }
-  catch ( ... )
-  {
-    std::cout << "Unknown exception raised !" << std::endl;
-    return EXIT_FAILURE;
-  }
-  return EXIT_SUCCESS;
+
+};
+}
 }
 
+OTB_APPLICATION_EXPORT(otb::Wrapper::ConvertSensorToGeoPoint)
