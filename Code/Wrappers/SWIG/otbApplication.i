@@ -173,6 +173,13 @@ public:
   void AddDocTag( const std::string & tag );
   std::vector<std::string> GetDocTags();
 
+
+  unsigned int GetNumberOfExamples();
+  std::string GetExampleComment(unsigned int id);
+  unsigned int GetExampleNumberOfParameters(unsigned int id);
+  std::string GetExampleParameterKey(unsigned int exId, unsigned int paramId);
+  std::string GetExampleParameterValue(unsigned int exId, unsigned int paramId);
+  
   void SetDocExampleParameterValue( const std::string key, const std::string value, unsigned int exId=0 );
   void SetExampleComment( const std::string & comm, unsigned int i );
   unsigned int AddExample( const std::string & comm="" );
