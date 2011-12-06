@@ -245,7 +245,6 @@ private:
     AddParameter(ParameterType_Filename, "mapping.labelout","Output Colorized Image");
     SetParameterDescription("mapping.labelout", "Output colorized image filename.");
     SetParameterRole("mapping.labelout", Role_Output);
-    AddParameter(ParameterType_Filename, "mapping.lutout", "Output LUT filename.");
 
     AddParameter(ParameterType_Choice, "mapping.lut", "Look-up tables");
     SetParameterDescription("mapping.lut", "Available look-up tables. RGBIntensity remap label with class centroids, which are reweighted into [0 255]");
@@ -564,8 +563,16 @@ private:
         ImageMetadataInterfaceType::Pointer
             metadataInterface = ImageMetadataInterfaceFactory::CreateIMI(m_InImage->GetMetaDataDictionary());
 
-        std::vector<unsigned int> RGBIndex = metadataInterface->GetDefaultDisplay();
+        std::vector<unsigned int> RGBIndex;
 
+        if(m_InImage->GetNumberOfComponentsPerPixel()<3)
+          {
+          RGBIndex.push_back(0);
+          RGBIndex.push_back(0);
+          RGBIndex.push_back(0);
+          }
+        else
+          RGBIndex = metadataInterface->GetDefaultDisplay();
         otbAppLogINFO(" RGB index are "<<RGBIndex[0]<<" "<<RGBIndex[1]<<" "<<RGBIndex[2]<<std::endl);
         // map intensity
         m_CustomMapper = ChangeLabelFilterType::New();
@@ -580,12 +587,11 @@ private:
 
         for (unsigned int i = 0; i < nbCompRGB; i++)
           {
-          minVal[i] = estimatedMeans[i];
-          maxVal[i] = estimatedMeans[i];
+          minVal[i] = estimatedMeans[RGBIndex[i]];
+          maxVal[i] = estimatedMeans[RGBIndex[i]];
           for (unsigned int j = 0; j < nbClasses; j++)
             {
-            double value = estimatedMeans[j * sampleSize + i];
-            std::cout << value << " " << std::endl;
+            double value = estimatedMeans[j * sampleSize + RGBIndex[i]];
             if (value > maxVal[i]) maxVal[i] = value;
             if (value < minVal[i]) minVal[i] = value;
             }
@@ -598,7 +604,7 @@ private:
 
           for (unsigned int i = 0; i < nbCompRGB; i++)
             {
-            color[RGBIndex[i]] = static_cast<PixelType> (((estimatedMeans[j * sampleSize + i] - minVal[i]) / (maxVal[i]
+            color[i] = static_cast<PixelType> (((estimatedMeans[j * sampleSize + RGBIndex[i]] - minVal[i]) / (maxVal[i]
                 - minVal[i])) * 255.0);
             }
           otbAppLogINFO("Adding color mapping " << j << " -> [" << (int) color[0] << " " << (int) color[1] << " "<< (int) color[2] << " ]" << std::endl);
