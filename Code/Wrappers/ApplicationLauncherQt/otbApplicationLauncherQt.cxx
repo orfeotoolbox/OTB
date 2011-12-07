@@ -15,8 +15,7 @@
  PURPOSE.  See the above copyright notices for more information.
 
  =========================================================================*/
-#include <QApplication>
-#include <QObject>
+#include <QtGui>
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationRegistry.h"
 #include "otbWrapperQtWidgetView.h"
