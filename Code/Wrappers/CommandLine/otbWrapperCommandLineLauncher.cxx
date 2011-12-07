@@ -695,11 +695,28 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
     itkExceptionMacro("Not handled parameter type.");
   
   
-  oss<< " (" << param->GetName() << ") ";
+  oss<< " " << param->GetName() << " ";
   
   if (type == ParameterType_OutputImage)
     {
-    oss << "[pixel=uint8/int8/uint16/int16/uint32/int32/float/double]";
+    oss << " [pixel=uint8/int8/uint16/int16/uint32/int32/float/double]";
+    }
+
+
+  if (type == ParameterType_Choice)
+    {
+    std::vector<std::string> keys = dynamic_cast<ChoiceParameter*>(param.GetPointer())->GetChoiceKeys();
+    std::vector<std::string> names = dynamic_cast<ChoiceParameter*>(param.GetPointer())->GetChoiceNames();
+
+    oss << "[";
+    for(unsigned int i=0; i<keys.size(); i++)
+      {
+      oss<<keys[i];
+      if( i != keys.size()-1 )
+        oss << "/";
+      }
+    
+    oss << "]";
     }
 
   oss << std::endl;
