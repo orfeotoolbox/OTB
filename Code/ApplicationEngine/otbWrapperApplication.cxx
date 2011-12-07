@@ -1029,9 +1029,18 @@ std::string Application::GetParameterAsString(std::string paramKey)
       oss << this->GetParameterFloat( paramKey );
       ret = oss.str();
     }
+  else if( type == ParameterType_StringList )
+    {
+      std::ostringstream oss;
+      oss << std::setprecision(10);
+      const std::vector<std::string> strList = this->GetParameterStringList( paramKey );
+      for (unsigned int i=0; i<strList.size(); i++)
+        oss << strList[i] << std::endl;
+      ret = oss.str();
+    }
   else
     {
-      itkExceptionMacro(<<paramKey << "parameter can't be casted to string");
+      itkExceptionMacro(<<paramKey << " parameter can't be casted to string");
     }
    return ret;
 }
