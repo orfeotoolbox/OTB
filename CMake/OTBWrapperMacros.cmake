@@ -8,7 +8,7 @@ endif()
 macro(OTB_CREATE_APPLICATION)
   OTB_PARSE_ARGUMENTS(
       APPLICATION
-      "NAME;SOURCES;INCLUDE_DIRS;LINK_LIBRARIES;INSTALL_PATH"
+      "NAME;SOURCES;INCLUDE_DIRS;LINK_LIBRARIES;BUILD_PATH;INSTALL_PATH"
       ""
       ${ARGN})
 
@@ -33,33 +33,66 @@ macro(OTB_CREATE_APPLICATION)
    if (NOT APPLICATION_INSTALL_PATH AND OTB_INSTALL_APP_DIR_CM24)
      set(APPLICATION_INSTALL_PATH ${OTB_INSTALL_APP_DIR_CM24})
    endif()
-
-   # Install only if a path has been provided
+   
    if (APPLICATION_INSTALL_PATH)
      install(TARGETS ${APPLICATION_TARGET_NAME}
              LIBRARY DESTINATION ${APPLICATION_INSTALL_PATH})
-
-     if (NOT WIN32)
-       configure_file( ${CMAKE_SOURCE_DIR}/CMake/otbcli.sh.in
-                       ${CMAKE_CURRENT_BINARY_DIR}/otbcli_${APPLICATION_NAME}
-                       @ONLY )
-       install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/otbcli_${APPLICATION_NAME}
-               DESTINATION ${OTB_INSTALL_BIN_DIR_CM24})
-               
-       if (WRAP_QT)
-           configure_file( ${CMAKE_SOURCE_DIR}/CMake/otbgui.sh.in
-                           ${CMAKE_CURRENT_BINARY_DIR}/otbgui_${APPLICATION_NAME}
-                           @ONLY )
-           install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/otbgui_${APPLICATION_NAME}
-                   DESTINATION ${OTB_INSTALL_BIN_DIR_CM24})
-       endif(WRAP_QT)
-     endif(NOT WIN32)
    endif()
+   
+   # Generate a quickstart script in the build dir
+   if (NOT WIN32)
+
+      # What is the path to the applications
+      # a MODULE target is always treated as LIBRARY
+      get_target_property(APPLICATION_BINARY_PATH ${APPLICATION_TARGET_NAME} LIBRARY_OUTPUT_DIRECTORY)
+      
+      if (NOT APPLICATION_BINARY_PATH)
+        set(APPLICATION_BINARY_PATH ${CMAKE_CURRENT_BINARY_DIR})
+      endif()
+
+      set(SCRIPT_CLI_SOURCE ${OTB_SOURCE_DIR}/CMake/otbcli_app.sh.in)
+      if (EXISTS ${SCRIPT_CLI_SOURCE})
+          # Generate a script in the build dir, next to the cli launcher
+          configure_file( ${SCRIPT_CLI_SOURCE}
+                          ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/otbcli_${APPLICATION_NAME}
+                          @ONLY )
+          
+          # Copy it next to the application shared lib, and give executable rights
+          file(COPY ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/otbcli_${APPLICATION_NAME}
+               DESTINATION ${APPLICATION_BINARY_PATH}
+               FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)  
+    
+          if (APPLICATION_INSTALL_PATH)
+              # Install a version of this script
+              install(PROGRAMS ${APPLICATION_BINARY_PATH}/otbcli_${APPLICATION_NAME}
+                      DESTINATION ${APPLICATION_INSTALL_PATH})
+          endif()
+      endif()
+
+      set(SCRIPT_GUI_SOURCE ${OTB_SOURCE_DIR}/CMake/otbgui_app.sh.in)
+      if (EXISTS ${SCRIPT_GUI_SOURCE})
+          # Generate a script in the build dir, next to the cli launcher
+          configure_file( ${SCRIPT_GUI_SOURCE}
+                          ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/otbgui_${APPLICATION_NAME}
+                          @ONLY )
+          
+          # Copy it next to the application shared lib, and give executable rights
+          file(COPY ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/otbgui_${APPLICATION_NAME}
+               DESTINATION ${APPLICATION_BINARY_PATH}
+               FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)  
+    
+          if (APPLICATION_INSTALL_PATH)
+              # Install a version of this script
+              install(PROGRAMS ${APPLICATION_BINARY_PATH}/otbgui_${APPLICATION_NAME}
+                      DESTINATION ${APPLICATION_INSTALL_PATH})
+          endif()
+      endif()
+   endif(NOT WIN32)
    
    list(APPEND OTB_APPLICATIONS_NAME_LIST ${APPLICATION_NAME})
    set(OTB_APPLICATIONS_NAME_LIST ${OTB_APPLICATIONS_NAME_LIST}
        CACHE STRING "List of all applications" FORCE)
-   
+
 endmacro(OTB_CREATE_APPLICATION)
 
 

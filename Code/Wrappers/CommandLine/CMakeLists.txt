@@ -27,3 +27,22 @@ install(TARGETS otbApplicationLauncherCommandLine
         RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR_CM24}
         LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR_CM24}
         ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR_CM24})
+
+# Where we will install the script in the build tree
+get_target_property(CLI_OUPUT_DIR otbApplicationLauncherCommandLine RUNTIME_OUTPUT_DIRECTORY)
+
+# What is the path to the applications
+# a MODULE target is always treated as LIBRARY
+set(APPLICATION_BINARY_PATH ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
+
+# Generate a script in the build dir, next to the cli launcher
+# Need a two-step process since configure_file don't support permissions
+configure_file( ${CMAKE_SOURCE_DIR}/CMake/otbcli.sh.in
+                ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/otbcli
+                @ONLY )
+file(COPY ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/otbcli
+     DESTINATION ${CLI_OUPUT_DIR}
+     FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)  
+
+install(PROGRAMS ${CLI_OUPUT_DIR}/otbcli
+        DESTINATION ${OTB_INSTALL_BIN_DIR_CM24})
