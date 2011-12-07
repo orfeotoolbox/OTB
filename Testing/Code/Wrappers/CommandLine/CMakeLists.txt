@@ -18,34 +18,34 @@ add_test(NAME clTuWrapperCommandLineParserNew
          
 add_test(NAME clTvWrapperCommandLineParserTest_GetAtt
          COMMAND ${OTB_WRAPPER_COMMAND_LINE_TESTS} otbWrapperCommandLineParserTest1
-                 "--key"
-                 "this is a line test to extract --key name1 name2" )
+                 "-key"
+                 "this is a line test to extract -key name1 name2" )
 
 add_test(NAME clTvWrapperCommandLineParserTest_IsAttExists_Wrong
          COMMAND ${OTB_WRAPPER_COMMAND_LINE_TESTS} otbWrapperCommandLineParserTest3
-                    "--m"
-                    " TrainImagesClassifier test --il QB_1_ortho.tif --vd vd .shape " )
+                    "-m"
+                    " TrainImagesClassifier test -il QB_1_ortho.tif -vd vd .shape " )
   
   
 add_test(NAME clTvWrapperCommandLineParserTest_IsAttExists
          COMMAND ${OTB_WRAPPER_COMMAND_LINE_TESTS} otbWrapperCommandLineParserTest4
-                 "--m"
-                 " TrainImagesClassifier test --il QB_1_ortho.tif --vd vd .shape --m name")
+                 "-m"
+                 " TrainImagesClassifier test -il QB_1_ortho.tif -vd vd .shape -m name")
    
 add_test(NAME clTvWrapperCommandLineParserTest_IsAttExistsEnd
          COMMAND ${OTB_WRAPPER_COMMAND_LINE_TESTS} otbWrapperCommandLineParserTest4
-                 "--m"
-                 " TrainImagesClassifier test --il QB_1_ortho.tif --vd vd .shape --m name")
+                 "-m"
+                 " TrainImagesClassifier test -il QB_1_ortho.tif -vd vd .shape -m name")
     
 add_test(NAME clTvWrapperCommandLineParserTest_IsAttExistsEndNoParam
          COMMAND ${OTB_WRAPPER_COMMAND_LINE_TESTS} otbWrapperCommandLineParserTest4
-                 "--m"
-                 " TrainImagesClassifier test --il QB_1_ortho.tif --vd vd .shape test --m")
+                 "-m"
+                 " TrainImagesClassifier test -il QB_1_ortho.tif -vd vd .shape test -m")
    
 add_test(NAME clTvWrapperCommandLineParserTest_GetAttWithoutValue
          COMMAND ${OTB_WRAPPER_COMMAND_LINE_TESTS} otbWrapperCommandLineParserTest1
-                    "--key"
-                    "--key" )
+                    "-key"
+                    "-key" )
 SET_TESTS_PROPERTIES(clTvWrapperCommandLineParserTest_GetAttWithoutValue PROPERTIES WILL_FAIL true)
 
 add_test(NAME clTvWrapperCommandLineParserTest_NoModule
@@ -106,24 +106,24 @@ add_test(NAME clTuWrapperCommandLineLauncherNew
 add_test(NAME clTvWrapperCommandLineLauncherTest
          COMMAND ${OTB_WRAPPER_COMMAND_LINE_TESTS} otbWrapperCommandLineLauncherTest
                  "Rescale" $<TARGET_FILE_DIR:otbapp_Rescale>
-                 --in ${INPUTDATA}/poupees.tif
-                 --out ${TEMP}/clTvWrapperCommandLineLauncherTest.tif
-                 --outmin 15
-                 --outmax 200 )
+                 -in ${INPUTDATA}/poupees.tif
+                 -out ${TEMP}/clTvWrapperCommandLineLauncherTest.tif
+                 -outmin 15
+                 -outmax 200 )
 
 add_test(NAME clTvWrapperCommandLineLauncherTest_Help
          COMMAND ${OTB_WRAPPER_COMMAND_LINE_TESTS} otbWrapperCommandLineLauncherTest
-                 "Rescale" $<TARGET_FILE_DIR:otbapp_Rescale> "--help")
+                 "Rescale" $<TARGET_FILE_DIR:otbapp_Rescale> "-help")
 SET_TESTS_PROPERTIES(clTvWrapperCommandLineLauncherTest_Help PROPERTIES WILL_FAIL true)
 
 add_test(NAME clTvWrapperCommandLineLauncherTest_Help2
          COMMAND ${OTB_WRAPPER_COMMAND_LINE_TESTS} otbWrapperCommandLineLauncherTest
                  "Rescale" $<TARGET_FILE_DIR:otbapp_Rescale>
-                 --in ${INPUTDATA}/poupees.tif
-                 --out ${TEMP}/clTvWrapperCommandLineLauncherTest_Help2.tif
-                 --outmin 15
-                 --outmax 200
-                 --help)
+                 -in ${INPUTDATA}/poupees.tif
+                 -out ${TEMP}/clTvWrapperCommandLineLauncherTest_Help2.tif
+                 -outmin 15
+                 -outmax 200
+                 -help)
 SET_TESTS_PROPERTIES(clTvWrapperCommandLineLauncherTest_Help2 PROPERTIES WILL_FAIL true)
 
 add_test(NAME clTvWrapperCommandLineLauncherTest_MissingManParam
@@ -138,12 +138,12 @@ SET_TESTS_PROPERTIES(clTvWrapperCommandLineLauncherTest_MissingDash PROPERTIES W
 
 add_test(NAME clTvWrapperCommandLineLauncherTest_DoubleParam
          COMMAND ${OTB_WRAPPER_COMMAND_LINE_TESTS} otbWrapperCommandLineLauncherTest
-                 "Rescale" $<TARGET_FILE_DIR:otbapp_Rescale> --in image1 --in image2 )
+                 "Rescale" $<TARGET_FILE_DIR:otbapp_Rescale> -in image1 -in image2 )
 SET_TESTS_PROPERTIES(clTvWrapperCommandLineLauncherTest_DoubleParam PROPERTIES WILL_FAIL true)
 
 add_test(NAME clTvWrapperCommandLineLauncherTest_WrongParam
          COMMAND ${OTB_WRAPPER_COMMAND_LINE_TESTS} otbWrapperCommandLineLauncherTest
-                 "Rescale" $<TARGET_FILE_DIR:otbapp_Rescale> --inn image)
+                 "Rescale" $<TARGET_FILE_DIR:otbapp_Rescale> -inn image)
 SET_TESTS_PROPERTIES(clTvWrapperCommandLineLauncherTest_WrongParam PROPERTIES WILL_FAIL true)
 
 
