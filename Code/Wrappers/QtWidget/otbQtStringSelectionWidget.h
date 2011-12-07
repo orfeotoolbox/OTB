@@ -53,7 +53,7 @@ public:
     return m_Input->text().toStdString();
   }
 
-  void ClearStringname()
+  void ClearStringName()
   {
     m_Input->clear();
   }
@@ -62,9 +62,6 @@ public:
   {
     return m_Input;
   }
-
-//protected slots:
-//  void SelectString();
 
 private:
   QtStringSelectionWidget(const QtStringSelectionWidget&); //purposely not implemented
