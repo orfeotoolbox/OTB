@@ -44,7 +44,7 @@ void QtWidgetStringListParameter::DoUpdateGUI()
     QtStringSelectionWidget * stringSelection = new QtStringSelectionWidget();
     stringSelection->setFixedHeight( 30 );
     QString val(m_StringListParam->GetNthElement(i).c_str());
-    stringSelection->GetInput()->setText( m_StringListParam->GetNthElement(i).c_str() );//val );
+    stringSelection->GetInput()->setText( m_StringListParam->GetNthElement(i).c_str() ); //val );
     m_StringLayout->addWidget( stringSelection );
     m_LineEditList.push_back(stringSelection);
 
