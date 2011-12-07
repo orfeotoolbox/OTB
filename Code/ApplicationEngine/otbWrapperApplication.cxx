@@ -108,7 +108,7 @@ const Parameter* Application::GetParameterByKey(std::string name) const
 void Application::Init()
 {
   m_ParameterList = ParameterGroup::New();
-  this->DoCreateParameters();
+  this->DoInit();
 }
 
 void Application::UpdateParameters()

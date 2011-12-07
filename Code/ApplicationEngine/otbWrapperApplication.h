@@ -195,7 +195,7 @@ public:
   void SetParameterFloat(std::string parameter, float value);
 
   /* Set an default integer value, must used in the
-   * DoCreateParameters when setting a value by default
+   * DoInit when setting a value by default
    * for the parameter
    *
    * Can be called for types :
@@ -207,7 +207,7 @@ public:
   void SetDefaultParameterInt(std::string parameter, int value);
 
   /* Set a default floating value, must used in the
-   * DoCreateParameters when setting a value by default
+   * DoInit when setting a value by default
    * for the parameter
    *
    * Can be called for types :
@@ -216,7 +216,7 @@ public:
   void SetDefaultParameterFloat(std::string parameter, float value);
 
  /* Set a minimum int value, must used in the
-   * DoCreateParameters when setting a value by default
+   * DoInit when setting a value by default
    * for the parameter
    *
    * Can be called for types :
@@ -225,7 +225,7 @@ public:
   void SetMinimumParameterIntValue(std::string parameter, int value);
 
  /* Set a maximum int value, must used in the
-   * DoCreateParameters when setting a value by default
+   * DoInit when setting a value by default
    * for the parameter
    *
    * Can be called for types :
@@ -234,7 +234,7 @@ public:
   void SetMaximumParameterIntValue(std::string parameter, int value);
 
  /* Set a minimum int value, must used in the
-   * DoCreateParameters when setting a value by default
+   * DoInit when setting a value by default
    * for the parameter
    *
    * Can be called for types :
@@ -243,7 +243,7 @@ public:
   void SetMinimumParameterFloatValue(std::string parameter, float value);
 
  /* Set a maximum int value, must used in the
-   * DoCreateParameters when setting a value by default
+   * DoInit when setting a value by default
    * for the parameter
    *
    * Can be called for types :
@@ -684,7 +684,7 @@ protected:
 
 private:
   /* Implement this method to add parameters */
-  virtual void DoCreateParameters() = 0;
+  virtual void DoInit() = 0;
 
   /* Implement this method to update non valued parameters */
   virtual void DoUpdateParameters() = 0;

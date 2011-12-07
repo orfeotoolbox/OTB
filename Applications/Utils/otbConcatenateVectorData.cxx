@@ -63,7 +63,7 @@ private:
   {
   }
 
-  void DoCreateParameters()
+  void DoInit()
   {
     AddParameter(ParameterType_InputVectorDataList, "vd", "Input VectorDatas to concatenate");
     SetParameterDescription("vd", "VectorData files to be concatenated in an unique VectorData");

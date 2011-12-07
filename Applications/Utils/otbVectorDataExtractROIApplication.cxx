@@ -80,7 +80,7 @@ private:
   {
   }
 
-  void DoCreateParameters()
+  void DoInit()
   {
     AddParameter(ParameterType_Group,"io","Input and output data");
     AddParameter(ParameterType_InputVectorData, "io.vd", "Input Vector data");

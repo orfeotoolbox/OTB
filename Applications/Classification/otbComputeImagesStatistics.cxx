@@ -59,7 +59,7 @@ private:
   {
   }
 
-  void DoCreateParameters()
+  void DoInit()
   {
     AddParameter(ParameterType_InputImageList, "il", "Input images");
     SetParameterDescription( "il", "List of input images filenames." );

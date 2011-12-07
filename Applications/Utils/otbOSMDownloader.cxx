@@ -64,7 +64,7 @@ private:
   {
   }
   
-  void DoCreateParameters()
+  void DoInit()
   {
     AddParameter(ParameterType_OutputVectorData,  "out",   "Output vector data");
     SetParameterDescription("out", "Generated output vector data path");

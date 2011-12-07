@@ -58,9 +58,9 @@ private:
   {
   }
 
-  void DoCreateParameters()
+  void DoInit()
   {
-    std::cout << "TestApplication::DoCreateParameters" << std::endl;
+    std::cout << "TestApplication::DoInit" << std::endl;
     AddParameter(ParameterType_Empty, "boolean", "Boolean");
     AddParameter(ParameterType_Int, "int", "Integer");
     MandatoryOff("int");

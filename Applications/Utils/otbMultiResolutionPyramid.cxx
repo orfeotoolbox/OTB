@@ -75,7 +75,7 @@ private:
     AddDocTag("Util");
   }
 
-  void DoCreateParameters()
+  void DoInit()
   {
     AddParameter(ParameterType_InputImage, "in", "Input Image");
 

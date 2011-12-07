@@ -129,7 +129,7 @@ private:
   {
   }
 
-  void DoCreateParameters()
+  void DoInit()
     {
     AddParameter(ParameterType_InputImage,  "ref",   "Reference Image");
     SetParameterDescription( "ref", "The reference image." );

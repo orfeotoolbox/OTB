@@ -65,7 +65,7 @@ private:
     AddDocTag(Tags::Vector);
   }
 
-  void DoCreateParameters()
+  void DoInit()
   {
     AddParameter(ParameterType_InputVectorData, "vd", "Input Vector data");
     AddParameter(ParameterType_OutputVectorData,"out","Output Vector data");

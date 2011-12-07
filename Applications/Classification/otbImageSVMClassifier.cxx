@@ -76,7 +76,7 @@ private:
   {
   }
 
-  void DoCreateParameters()
+  void DoInit()
   {
     AddParameter(ParameterType_InputImage, "in",  "Input Image");
     SetParameterDescription( "in", "The input Image to classify.");

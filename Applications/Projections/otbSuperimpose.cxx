@@ -70,7 +70,7 @@ private:
   {
   }
 
-  void DoCreateParameters()
+  void DoInit()
   {
     AddParameter(ParameterType_InputImage,   "inr",   "Reference input");
     AddParameter(ParameterType_InputImage,   "inm",   "The image to reproject");

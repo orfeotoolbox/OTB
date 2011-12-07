@@ -88,7 +88,7 @@ private:
   {
   }
 
-  void DoCreateParameters()
+  void DoInit()
     {
     AddParameter(ParameterType_InputImage,  "in",   "InputImage");
     SetParameterDescription("in", "Input image.");

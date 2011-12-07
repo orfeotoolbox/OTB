@@ -60,7 +60,7 @@ private:
   {
   }
 
-  void DoCreateParameters()
+  void DoInit()
     {
     AddParameter(ParameterType_Float,  "lat", "Latitude");
     SetParameterDescription("lat", "Latitude value of desired point.");

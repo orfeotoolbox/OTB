@@ -144,7 +144,7 @@ private:
   {
   }
 
-  void DoCreateParameters()
+  void DoInit()
   {
     //Group IO
     AddParameter(ParameterType_Group,"io","Input and output data");

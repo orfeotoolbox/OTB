@@ -64,7 +64,7 @@ private:
   {
   }
 
-  void DoCreateParameters()
+  void DoInit()
   {
     AddParameter(ParameterType_InputImage,   "in",   "Input image");
     AddParameter(ParameterType_OutputImage,  "out",  "Output image");

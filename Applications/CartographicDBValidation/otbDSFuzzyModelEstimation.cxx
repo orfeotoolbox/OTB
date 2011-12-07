@@ -136,7 +136,7 @@ private:
   {
   }
 
-  void DoCreateParameters()
+  void DoInit()
   {
 
     AddParameter(ParameterType_InputVectorData, "psin", "Input Positive Vector Data");

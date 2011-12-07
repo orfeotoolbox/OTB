@@ -81,7 +81,7 @@ private:
   {
   }
 
-  void DoCreateParameters()
+  void DoInit()
   {
     // Mandatory parameters
     AddParameter(ParameterType_InputImage,  "ref",   "Reference");

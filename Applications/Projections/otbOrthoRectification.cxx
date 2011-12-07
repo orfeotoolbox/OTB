@@ -105,7 +105,7 @@ private:
     AddDocTag(Tags::Geometry);
   }
 
-  void DoCreateParameters()
+  void DoInit()
   {
     // Set the parameters
     AddParameter(ParameterType_Group,"io","Input and output data");

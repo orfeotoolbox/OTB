@@ -119,7 +119,7 @@ private:
   {
   }
 
-  void DoCreateParameters()
+  void DoInit()
   {
     AddParameter(ParameterType_InputImage,  "in",   "Input Image Filename");
     SetParameterDescription("in","The hyperspectral data cube to unmix");

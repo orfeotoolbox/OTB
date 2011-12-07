@@ -68,7 +68,7 @@ private:
   {
   }
 
-  void DoCreateParameters()
+  void DoInit()
   {
     AddParameter(ParameterType_InputImage,   "inp",   "Input PAN Image");
     AddParameter(ParameterType_InputImage,   "inxs",  "Input XS Image");

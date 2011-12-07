@@ -58,7 +58,7 @@ protected:
   {
   }
 
-  void DoCreateParameters()
+  void DoInit()
   {
   }
 

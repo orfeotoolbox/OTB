@@ -78,7 +78,7 @@ private:
   {
   }
 
-  void DoCreateParameters()
+  void DoInit()
   {
     AddParameter(ParameterType_InputImageList,  "il",   "Input image list");
     SetParameterDescription("il", "Image list to concatenate");

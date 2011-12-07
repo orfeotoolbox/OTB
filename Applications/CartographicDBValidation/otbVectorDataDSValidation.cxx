@@ -79,7 +79,7 @@ private:
   {
   }
 
-  void DoCreateParameters()
+  void DoInit()
   {
     AddParameter(ParameterType_InputVectorData, "in", "Input Vector Data");
     SetParameterDescription("in", "Input vector data for validation");

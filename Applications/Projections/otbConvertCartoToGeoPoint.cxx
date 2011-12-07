@@ -77,7 +77,7 @@ private:
   {
   }
 
-  void DoCreateParameters()
+  void DoInit()
   {
     AddParameter(ParameterType_Group, "carto", "Input cartographic coordinates");
     AddParameter(ParameterType_Float, "carto.x", "X cartographic coordinates");

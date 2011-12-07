@@ -83,7 +83,7 @@ private:
   {
   }
 
-  void DoCreateParameters()
+  void DoInit()
     {
     AddParameter(ParameterType_InputVectorData,  "in",   "InputVectorData");
     SetParameterDescription( "in", "The input vector data to be rasterized" );

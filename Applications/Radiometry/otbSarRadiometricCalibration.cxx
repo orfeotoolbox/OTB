@@ -63,7 +63,7 @@ private:
   {
   }
 
-  void DoCreateParameters()
+  void DoInit()
   {
     AddParameter(ParameterType_ComplexInputImage,  "in", "Input Complex Image");
     AddParameter(ParameterType_ComplexOutputImage,  "out", "Output Image");
