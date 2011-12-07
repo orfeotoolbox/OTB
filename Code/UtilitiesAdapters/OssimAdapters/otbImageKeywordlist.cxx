@@ -23,7 +23,7 @@
 
 #include "base/ossimKeywordlist.h"
 #include "base/ossimString.h"
-#include "ossimPluginProjectionFactory.h"
+#include "ossim/ossimPluginProjectionFactory.h"
 #include "imaging/ossimImageHandlerRegistry.h"
 #include "ossimTileMapModel.h"
 #include "projection/ossimProjectionFactoryRegistry.h"
