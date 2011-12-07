@@ -35,7 +35,28 @@ QtWidgetStringListParameter::~QtWidgetStringListParameter()
 
 void QtWidgetStringListParameter::DoUpdateGUI()
 {
+  m_LineEditList.clear();
 
+  m_StringLayout = new QVBoxLayout();
+
+  for(unsigned int i=0; i<m_StringListParam->GetValue().size(); i++)
+    {
+    QtStringSelectionWidget * stringSelection = new QtStringSelectionWidget();
+    stringSelection->setFixedHeight( 30 );
+    QString val(m_StringListParam->GetNthElement(i).c_str());
+    stringSelection->GetInput()->setText( m_StringListParam->GetNthElement(i).c_str() );//val );
+    m_StringLayout->addWidget( stringSelection );
+    m_LineEditList.push_back(stringSelection);
+
+    connect( stringSelection->GetInput(), SIGNAL(textChanged(const QString&)), this, SLOT(UpdateStringList()) );
+    connect( stringSelection->GetInput(), SIGNAL(textChanged(const QString&)), GetModel(), SLOT(NotifyUpdate()) );
+    }
+
+  QGroupBox *mainGroup = new QGroupBox();
+  mainGroup->setLayout(m_StringLayout);
+  m_Scroll->setWidget(mainGroup);
+
+  this->update();
 }
 
 void QtWidgetStringListParameter::DoCreateWidget()
@@ -49,71 +70,68 @@ void QtWidgetStringListParameter::DoCreateWidget()
   hLayout->setSpacing(sp);
   hLayout->setContentsMargins(sp, sp, sp, sp);
  
-  // Button layout
-  QVBoxLayout * buttonLayout = new QVBoxLayout;
-  buttonLayout->setSpacing(sp);
-  buttonLayout->setContentsMargins(sp, sp, sp, sp);
+  if( m_StringListParam->GetRole() != Role_Output )
+    {
+    // Button layout
+    QVBoxLayout * buttonLayout = new QVBoxLayout;
+    buttonLayout->setSpacing(sp);
+    buttonLayout->setContentsMargins(sp, sp, sp, sp);
 
-  QHBoxLayout * addSupLayout = new QHBoxLayout;
-  addSupLayout->setSpacing(sp);
-  addSupLayout->setContentsMargins(sp, sp, sp, sp);
+    QHBoxLayout * addSupLayout = new QHBoxLayout;
+    addSupLayout->setSpacing(sp);
+    addSupLayout->setContentsMargins(sp, sp, sp, sp);
 
-  QHBoxLayout * upDownLayout = new QHBoxLayout;
-  upDownLayout->setSpacing(sp);
-  upDownLayout->setContentsMargins(sp, sp, sp, sp);
+    QHBoxLayout * upDownLayout = new QHBoxLayout;
+    upDownLayout->setSpacing(sp);
+    upDownLayout->setContentsMargins(sp, sp, sp, sp);
 
-  // Add file button
-  QPushButton * addButton = new QPushButton;
-  addButton->setText("+");
-  addButton->setFixedWidth(buttonSize);
-  addButton->setToolTip("Add a string selector...");
-  connect( addButton, SIGNAL(clicked()), this, SLOT(AddString()) );
-  addSupLayout->addWidget(addButton);
+    // Add file button
+    QPushButton * addButton = new QPushButton;
+    addButton->setText("+");
+    addButton->setFixedWidth(buttonSize);
+    addButton->setToolTip("Add a string selector...");
+    connect( addButton, SIGNAL(clicked()), this, SLOT(AddString()) );
+    addSupLayout->addWidget(addButton);
 
-  // Supress file button
-  QPushButton * supButton = new QPushButton;
-  supButton->setText("-");
-  supButton->setFixedWidth(buttonSize);
-  supButton->setToolTip("Supress the selected string...");
-  connect( supButton, SIGNAL(clicked()), this, SLOT(SupressString()) );
-  addSupLayout->addWidget(supButton);
-  buttonLayout->addLayout(addSupLayout);
+    // Supress file button
+    QPushButton * supButton = new QPushButton;
+    supButton->setText("-");
+    supButton->setFixedWidth(buttonSize);
+    supButton->setToolTip("Supress the selected string...");
+    connect( supButton, SIGNAL(clicked()), this, SLOT(SupressString()) );
+    addSupLayout->addWidget(supButton);
+    buttonLayout->addLayout(addSupLayout);
 
-  // Up file edit
-  QPushButton * upButton = new QPushButton;
-  upButton->setText("Up");
-  upButton->setFixedWidth(buttonSize);
-  upButton->setToolTip("Up the selected string in the list...");
-  connect( upButton, SIGNAL(clicked()), this, SLOT(UpString()) );
-  upDownLayout->addWidget(upButton);
+    // Up file edit
+    QPushButton * upButton = new QPushButton;
+    upButton->setText("Up");
+    upButton->setFixedWidth(buttonSize);
+    upButton->setToolTip("Up the selected string in the list...");
+    connect( upButton, SIGNAL(clicked()), this, SLOT(UpString()) );
+    upDownLayout->addWidget(upButton);
 
-  // Down file edit
-  QPushButton * downButton = new QPushButton;
-  downButton->setText("Down");
-  downButton->setFixedWidth(buttonSize);
-  downButton->setToolTip("Down the selected string in the list...");
-  connect( downButton, SIGNAL(clicked()), this, SLOT(DownString()) );
-  upDownLayout->addWidget(downButton);
-  buttonLayout->addLayout(upDownLayout);
+    // Down file edit
+    QPushButton * downButton = new QPushButton;
+    downButton->setText("Down");
+    downButton->setFixedWidth(buttonSize);
+    downButton->setToolTip("Down the selected string in the list...");
+    connect( downButton, SIGNAL(clicked()), this, SLOT(DownString()) );
+    upDownLayout->addWidget(downButton);
+    buttonLayout->addLayout(upDownLayout);
 
-  // Erase file edit
-  QPushButton * eraseButton = new QPushButton;
-  eraseButton->setText("Erase");
-  eraseButton->setFixedWidth(2*(buttonSize+sp));
-  eraseButton->setToolTip("Erase the selected string of the list...");
-  connect( eraseButton, SIGNAL(clicked()), this, SLOT(EraseString()) );
-  buttonLayout->addWidget(eraseButton);
+    // Erase file edit
+    QPushButton * eraseButton = new QPushButton;
+    eraseButton->setText("Erase");
+    eraseButton->setFixedWidth(2*(buttonSize+sp));
+    eraseButton->setToolTip("Erase the selected string of the list...");
+    connect( eraseButton, SIGNAL(clicked()), this, SLOT(EraseString()) );
+    buttonLayout->addWidget(eraseButton);
+
+    hLayout->addLayout(buttonLayout);
+    }
 
   QVBoxLayout * fileLayout = new QVBoxLayout();
   fileLayout->setSpacing(0);
-
-  //QtFileSelectionWidget * fileSelection = new QtFileSelectionWidget();
-  /*fileSelection->setFixedHeight(30);
-  fileLayout->addWidget( fileSelection );
-  m_StringListParam->AddNullElement();
-  connect( fileSelection->GetInput(), SIGNAL(textChanged(const QString&)), this, SLOT(UpdateStringList()) );
-
-  m_LineEditList.push_back(fileSelection); */
 
   QGroupBox *mainGroup = new QGroupBox();
   mainGroup->setLayout(fileLayout);
@@ -124,7 +142,9 @@ void QtWidgetStringListParameter::DoCreateWidget()
   scroll->setWidgetResizable(true);
 
   hLayout->addWidget(scroll);
-  hLayout->addLayout(buttonLayout);
+
+
+  connect( GetModel(), SIGNAL(UpdateGui()), this, SLOT(UpdateGUI() ) );
 
   this->setLayout(hLayout);
 
@@ -356,16 +376,11 @@ void QtWidgetStringListParameter::RecreateStringList()
   // save value
   m_StringListParam->ClearValue();
 
-  if( m_LineEditList.size() == 0)
-    {
-     // this->AddString();
-    }
-  else
+  if( m_LineEditList.size() != 0)
     {
     for(unsigned int j=0; j<m_LineEditList.size(); j++ )
       {
       m_StringListParam->AddString(m_LineEditList[j]->GetStringName());
-      //connect( m_LineEditList[j]->GetInput(), SIGNAL(textChanged(const QString&)), this, SLOT(UpdateStringList()) );
       }
 
     emit Change();
