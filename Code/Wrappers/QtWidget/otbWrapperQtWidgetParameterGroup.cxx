@@ -100,14 +100,17 @@ void QtWidgetParameterGroup::DoCreateWidget()
             || dynamic_cast<RadiusParameter*>(param)
             /*|| dynamic_cast<RAMParameter*>(param)*/)
           {
-          QPushButton* resetButton = new QPushButton;
-          resetButton->setText("Reset");
-          resetButton->setToolTip("Reset the value of this parameter");
-          gridLayout->addWidget(resetButton, i, 3);
-          
-          // Slots to connect to the reset button
-          connect( resetButton, SIGNAL(clicked()), specificWidget, SLOT(Reset()) );
-          connect( resetButton, SIGNAL(clicked()), GetModel(), SLOT(NotifyUpdate()) );
+          if( param->GetRole() != Role_Output )
+            {
+            QPushButton* resetButton = new QPushButton;
+            resetButton->setText("Reset");
+            resetButton->setToolTip("Reset the value of this parameter");
+            gridLayout->addWidget(resetButton, i, 3);
+            
+            // Slots to connect to the reset button
+            connect( resetButton, SIGNAL(clicked()), specificWidget, SLOT(Reset()) );
+            connect( resetButton, SIGNAL(clicked()), GetModel(), SLOT(NotifyUpdate()) );
+            }
           }
 
         m_WidgetList.push_back(specificWidget);
