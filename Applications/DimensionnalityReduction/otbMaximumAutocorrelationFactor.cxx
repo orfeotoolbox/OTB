@@ -40,7 +40,7 @@ public:
   itkTypeMacro(MaximumAutocorrelationFactor, otb::Wrapper::Application);
 
 private:
-  MaximumAutocorrelationFactor()
+  void DoInit()
   {
     SetName("MaximumAutocorrelationFactor");
     SetDescription("Perform a Maximum Auto-correlation Factor (MAF) decomposition of the input image.");
@@ -53,14 +53,6 @@ private:
     AddDocTag(Tags::DimensionReduction);
     AddDocTag(Tags::Filter);
 
-  }
-
-  virtual ~MaximumAutocorrelationFactor()
-  {
-  }
-
-  void DoInit()
-  {
     AddParameter(ParameterType_InputImage,  "in", "Input Image");
     SetParameterDescription("in","The input image to apply MAF decomposition on.");
     AddParameter(ParameterType_OutputImage, "out", "MAF output");

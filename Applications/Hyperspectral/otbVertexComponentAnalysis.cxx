@@ -57,8 +57,7 @@ public:
   itkTypeMacro(VertexComponentAnalysis, otb::Application);
 
 private:
-
-  VertexComponentAnalysis()
+  void DoInit()
   {
     SetName("VertexComponentAnalysis");
     SetDescription("Find endmembers in hyperspectral images with Vertex Component Analysis");
@@ -73,14 +72,6 @@ private:
     AddDocTag(Tags::Hyperspectral);
     AddDocTag(Tags::DimensionReduction);
 
-  }
-
-  virtual ~VertexComponentAnalysis()
-  {
-  }
-
-  void DoInit()
-  {
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
     SetParameterDescription("in","Input hyperspectral data cube");
 

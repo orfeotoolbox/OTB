@@ -51,7 +51,7 @@ public:
   typedef itk::CenteredSimilarity2DTransform<double>       TransformType;
 
 private:
-  VectorDataTransform()
+  void DoInit()
   {
     SetName("VectorDataTransform");
     SetDescription("Apply a transform to each vertex of the input VectorData");
@@ -63,10 +63,7 @@ private:
     SetDocSeeAlso(" ");
   
     AddDocTag(Tags::Vector);
-  }
 
-  void DoInit()
-  {
     AddParameter(ParameterType_InputVectorData, "vd", "Input Vector data");
     AddParameter(ParameterType_OutputVectorData,"out","Output Vector data");
 

@@ -48,8 +48,7 @@ public:
                                             UInt16VectorImageType>  ResamplerType;
 
 private:
-
-  Superimpose()
+  void DoInit()
   {
     SetName("Superimpose");
     SetDescription("Using available image metadata, project one image onto another one");
@@ -64,14 +63,7 @@ private:
     AddDocTag(Tags::Geometry);
     AddDocTag(Tags::Manip);
     AddDocTag("Superimposition");
-  }
 
-  virtual ~Superimpose()
-  {
-  }
-
-  void DoInit()
-  {
     AddParameter(ParameterType_InputImage,   "inr",   "Reference input");
     AddParameter(ParameterType_InputImage,   "inm",   "The image to reproject");
     AddParameter(ParameterType_Directory,    "dem",   "DEM directory");

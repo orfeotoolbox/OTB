@@ -58,9 +58,7 @@ public:
   itkTypeMacro(VectorDataDSValidation, otb::Application);
 
 private:
-
-
-  VectorDataDSValidation()
+  void DoInit()
   {
     SetName("VectorDataDSValidation");
     SetDescription("Vector data validation based on the fusion of features using Dempster-Shafer evidence theory framework.");
@@ -72,15 +70,8 @@ private:
     SetDocSeeAlso(" ");
    
     AddDocTag(Tags::FeatureExtraction);
-  }
 
 
-  virtual ~VectorDataDSValidation()
-  {
-  }
-
-  void DoInit()
-  {
     AddParameter(ParameterType_InputVectorData, "in", "Input Vector Data");
     SetParameterDescription("in", "Input vector data for validation");
 

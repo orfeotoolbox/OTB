@@ -43,6 +43,14 @@ public:
 private:
   ObtainUTMZoneFromGeoPoint()
   {
+  }
+
+  virtual ~ObtainUTMZoneFromGeoPoint()
+  {
+  }
+
+  void DoInit()
+  {
     SetName("ObtainUTMZoneFromGeoPoint");
     SetDescription("UTM zone determination from a geographic point.");
 
@@ -54,14 +62,7 @@ private:
     SetDocSeeAlso(" ");
 
     AddDocTag(Tags::Coordinates);
-  }
 
-  virtual ~ObtainUTMZoneFromGeoPoint()
-  {
-  }
-
-  void DoInit()
-    {
     AddParameter(ParameterType_Float,  "lat", "Latitude");
     SetParameterDescription("lat", "Latitude value of desired point.");
     
@@ -76,19 +77,19 @@ private:
     SetExampleComment("Obtain a UTM Zone", 0);
     SetDocExampleParameterValue("lat","10.0");
     SetDocExampleParameterValue("lon","124.0");
-    }
+  }
   
   void DoUpdateParameters()
-    {
+  {
     // Nothing to do
-    }
+  }
   
   void DoExecute()
-    {
+  {
     int utmZone = otb::Utils::GetZoneFromGeoPoint(GetParameterFloat("lon"),
                                                   GetParameterFloat("lat"));
     SetParameterInt("utm", utmZone);
-    }
+  }
   
 };
 

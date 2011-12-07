@@ -41,8 +41,7 @@ public:
   itkTypeMacro(MeanShiftSegmentation, otb::Application);
 
 private:
-
-  MeanShiftSegmentation()
+  void DoInit()
   {
     SetName("MeanShiftSegmentation");
     SetDescription("Perform mean shift clustering");
@@ -55,14 +54,7 @@ private:
     SetDocSeeAlso(" ");
 
     AddDocTag(Tags::Segmentation);
-    }
 
-  virtual ~MeanShiftSegmentation()
-  {
-  }
-
-  void DoInit()
-  {
     AddParameter(ParameterType_InputImage,   "in",     "Input Image");
     AddParameter(ParameterType_OutputImage,  "fout",    "Filtered output");
     AddParameter(ParameterType_OutputImage,  "cout",    "Clustered output");

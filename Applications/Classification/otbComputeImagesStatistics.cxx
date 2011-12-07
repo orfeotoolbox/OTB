@@ -41,7 +41,7 @@ public:
   itkTypeMacro(ComputeImagesStatistics, otb::Application);
 
 private:
-  ComputeImagesStatistics()
+  void DoInit()
   {
     SetName("ComputeImagesStatistics");
     SetDescription("Computes global mean and standard deviation for each band from a set of images and optionally saves the results in an XML file.");
@@ -53,14 +53,7 @@ private:
  
     AddDocTag(Tags::Learning);
     AddDocTag(Tags::Analysis);
-  }
 
-  virtual ~ComputeImagesStatistics()
-  {
-  }
-
-  void DoInit()
-  {
     AddParameter(ParameterType_InputImageList, "il", "Input images");
     SetParameterDescription( "il", "List of input images filenames." );
 

@@ -69,7 +69,7 @@ public:
   <PixelType, RGBPixelType>           ReliefColorMapFunctorType;
 
 private:
-  ColorMapping()
+  void DoInit()
   {
     SetName("ColorMapping");
     SetDescription("Maps an input grayscale image into 8-bits RGB using look-up tables.");
@@ -97,14 +97,7 @@ private:
     m_LutMap["Jet"]=ColorMapFilterType::Jet;
     m_LutMap["HSV"]=ColorMapFilterType::HSV;
     m_LutMap["OverUnder"]=ColorMapFilterType::OverUnder;
-  }
 
-  virtual ~ColorMapping()
-  {
-  }
-
-  void DoInit()
-  {
     AddParameter(ParameterType_InputImage, "in", "Input Image");
     SetParameterDescription("in", "Input image filename");
     AddParameter(ParameterType_OutputImage, "out", "Output Image");

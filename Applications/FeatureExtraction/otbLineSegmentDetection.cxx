@@ -50,7 +50,7 @@ public:
   itkTypeMacro(LineSegmentDetection, otb::Wrapper::Application);
 
 private:
-  LineSegmentDetection()
+  void DoInit()
   {
     SetName("LineSegmentDetection");
     SetDescription("Detect line segments in raster");
@@ -63,16 +63,8 @@ private:
     SetDocSeeAlso("On Line demonstration of the LSD algorithm is available here: http://www.ipol.im/pub/algo/gjmr_line_segment_detector/\n");
 
     AddDocTag(Tags::FeatureExtraction);
-  }
 
-  virtual ~LineSegmentDetection()
-  {
-  }
-
-  void DoInit()
-  {
     AddParameter(ParameterType_InputImage, "in", "Input Image");
-
 
     AddParameter(ParameterType_OutputVectorData, "out", "Output Detected lines");
     SetParameterDescription("out"," Output detected line segments (vector data).");

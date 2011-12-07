@@ -56,7 +56,7 @@ public:
   typedef ModelType::Pointer                                                            ModelPointerType;
 
 private:
-  ImageSVMClassifier()
+  void DoInit()
   {
     SetName("ImageSVMClassifier");
     SetDescription("Performs a SVM classification of the input image according to a SVM model file.");
@@ -70,14 +70,7 @@ private:
     SetDocSeeAlso("TrainSVMImagesClassifier, ValidateSVMImagesClassifier, ComputeImagesStatistics");
  
     AddDocTag(Tags::Learning);
-  }
 
-  virtual ~ImageSVMClassifier()
-  {
-  }
-
-  void DoInit()
-  {
     AddParameter(ParameterType_InputImage, "in",  "Input Image");
     SetParameterDescription( "in", "The input Image to classify.");
 

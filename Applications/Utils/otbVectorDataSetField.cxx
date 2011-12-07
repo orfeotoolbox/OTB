@@ -18,12 +18,7 @@
 
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
-
-//#include <iostream>
-
 #include "otbVectorData.h"
-//#include "otbVectorDataFileWriter.h"
-//#include "otbVectorDataFileReader.h"
 
 namespace otb
 {
@@ -44,14 +39,8 @@ public:
 
   itkTypeMacro(VectorDataSetField, otb::Application);
 
-  /** Filters typedef */
-  //typedef otb::MultiChannelExtractROI<FloatVectorImageType::InternalPixelType,
-  //                                    FloatVectorImageType::InternalPixelType> ExtractROIFilterType;
-
-
 private:
-  
-  VectorDataSetField()
+  void DoInit()
   {
     SetName("VectorDataSetField");
     SetDescription("Set a field in vector data.");
@@ -64,14 +53,7 @@ private:
     SetDocSeeAlso(" ");
 
     AddDocTag(Tags::Vector);
-  }
 
-  virtual ~VectorDataSetField()
-  {
-  }
-  
-  void DoInit()
-  {
     AddParameter(ParameterType_InputVectorData, "in", "Input");
     SetParameterDescription("in", "Input Vector Data");
     AddParameter(ParameterType_OutputVectorData, "out", "Output");

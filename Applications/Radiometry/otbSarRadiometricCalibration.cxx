@@ -43,7 +43,7 @@ public:
                                                       ComplexFloatImageType>     CalibrationFilterType;
 
 private:
-  SarRadiometricCalibration()
+  void DoInit()
   {
     SetName("SarRadiometricCalibration");
     SetDescription("Perform SAR calibration on input complex images");
@@ -57,14 +57,7 @@ private:
     
     AddDocTag(Tags::Calibration);
     AddDocTag(Tags::SAR);
-  }
 
-  virtual ~SarRadiometricCalibration()
-  {
-  }
-
-  void DoInit()
-  {
     AddParameter(ParameterType_ComplexInputImage,  "in", "Input Complex Image");
     AddParameter(ParameterType_ComplexOutputImage,  "out", "Output Image");
     AddParameter(ParameterType_RAM, "ram", "Available RAM");

@@ -50,7 +50,7 @@ public:
 
 
 private:
-  BandMath()
+  void DoInit()
   {
     SetName("BandMath");
     SetDescription("Perform a mathematical operation on monoband images");
@@ -62,10 +62,7 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
     AddDocTag("Util");
-  }
 
-  void DoInit()
-  {
     AddParameter(ParameterType_InputImageList,  "il",   "Input image list");
     SetParameterDescription("il", "Image list to perform computation on.");
 

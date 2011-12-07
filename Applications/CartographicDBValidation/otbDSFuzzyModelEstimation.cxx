@@ -115,9 +115,7 @@ public:
   itkTypeMacro(DSFuzzyModelEstimation, otb::Application);
 
 private:
-
-
-  DSFuzzyModelEstimation()
+  void DoInit()
   {
     SetName("DSFuzzyModelEstimation");
     SetDescription("Estimate feature fuzzy model parameters using 2 vector data (ground truth samples and wrong samples).");
@@ -129,15 +127,6 @@ private:
     SetDocSeeAlso(" ");
   
     AddDocTag(Tags::FeatureExtraction);
-  }
-
-
-  virtual ~DSFuzzyModelEstimation()
-  {
-  }
-
-  void DoInit()
-  {
 
     AddParameter(ParameterType_InputVectorData, "psin", "Input Positive Vector Data");
     SetParameterDescription("psin", "Ground truth vector data for positive samples");

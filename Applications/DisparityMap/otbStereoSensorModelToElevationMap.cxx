@@ -61,7 +61,7 @@ public:
   
 
 private:
-  StereoSensorModelToElevationMap()
+  void DoInit()
   {
     SetName("StereoSensorModelToElevationMap");
     SetDescription("Convert a stereo sensor model to elevation map.");
@@ -75,14 +75,7 @@ private:
  
     AddDocTag(Tags::Manip);
     AddDocTag(Tags::Stereo);
-  }
 
-  virtual ~StereoSensorModelToElevationMap()
-  {
-  }
-
-  void DoInit()
-  {
     // Mandatory parameters
     AddParameter(ParameterType_InputImage,  "ref",   "Reference");
     SetParameterDescription("ref", "The reference image.");

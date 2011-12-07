@@ -169,7 +169,7 @@ public:
   itkTypeMacro(KMeansClassification, otb::Application);
 
 private:
-  KMeansClassification()
+  void DoInit()
   {
     SetName("KMeansClassification");
     SetDescription("Unsupervised KMeans image classification");
@@ -179,36 +179,25 @@ private:
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
-  
+
     // Build lut map
-
-      m_LutMap["Red"]=ColorMapFilterType::Red;
-      m_LutMap["Green"]=ColorMapFilterType::Green;
-      m_LutMap["Blue"]=ColorMapFilterType::Blue;
-      m_LutMap["Grey"]=ColorMapFilterType::Grey;
-      m_LutMap["Hot"]=ColorMapFilterType::Hot;
-      m_LutMap["Cool"]=ColorMapFilterType::Cool;
-      m_LutMap["Spring"]=ColorMapFilterType::Spring;
-      m_LutMap["Summer"]=ColorMapFilterType::Summer;
-      m_LutMap["Autumn"]=ColorMapFilterType::Autumn;
-      m_LutMap["Winter"]=ColorMapFilterType::Winter;
-      m_LutMap["Copper"]=ColorMapFilterType::Copper;
-      m_LutMap["Jet"]=ColorMapFilterType::Jet;
-      m_LutMap["HSV"]=ColorMapFilterType::HSV;
-      m_LutMap["OverUnder"]=ColorMapFilterType::OverUnder;
-
+    m_LutMap["Red"]       = ColorMapFilterType::Red;
+    m_LutMap["Green"]     = ColorMapFilterType::Green;
+    m_LutMap["Blue"]      = ColorMapFilterType::Blue;
+    m_LutMap["Grey"]      = ColorMapFilterType::Grey;
+    m_LutMap["Hot"]       = ColorMapFilterType::Hot;
+    m_LutMap["Cool"]      = ColorMapFilterType::Cool;
+    m_LutMap["Spring"]    = ColorMapFilterType::Spring;
+    m_LutMap["Summer"]    = ColorMapFilterType::Summer;
+    m_LutMap["Autumn"]    = ColorMapFilterType::Autumn;
+    m_LutMap["Winter"]    = ColorMapFilterType::Winter;
+    m_LutMap["Copper"]    = ColorMapFilterType::Copper;
+    m_LutMap["Jet"]       = ColorMapFilterType::Jet;
+    m_LutMap["HSV"]       = ColorMapFilterType::HSV;
+    m_LutMap["OverUnder"] = ColorMapFilterType::OverUnder;
 
     AddDocTag(Tags::Segmentation);
     AddDocTag(Tags::Learning);
-  }
-
-  virtual ~KMeansClassification()
-  {
-  }
-
-  void DoInit()
-  {
-
     AddParameter(ParameterType_InputImage, "in", "Input Image");
     SetParameterDescription("in", "Input image filename.");
     AddParameter(ParameterType_OutputImage, "out", "Output Image");

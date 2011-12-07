@@ -57,7 +57,7 @@ public:
                                  FloatVectorImageType>              ShrinkFilterType;
 
 private:
-  MultiResolutionPyramid()
+  void DoInit()
   {
     SetName("MultiResolutionPyramid");
     SetDescription("Build a multi-resolution pyramid of the image.");
@@ -73,10 +73,7 @@ private:
     AddDocTag(Tags::Manip);
     AddDocTag(Tags::Multi);
     AddDocTag("Util");
-  }
 
-  void DoInit()
-  {
     AddParameter(ParameterType_InputImage, "in", "Input Image");
 
     AddParameter(ParameterType_Filename, "out", "Output Image");

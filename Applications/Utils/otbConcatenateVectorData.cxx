@@ -44,7 +44,7 @@ public:
   typedef otb::ConcatenateVectorDataFilter<VectorDataType>  ConcatenateFilterType;
 
 private:
-  ConcatenateVectorData()
+  void DoInit()
   {
     SetName("ConcatenateVectorData");
     SetDescription("Concatenate VectorDatas");
@@ -57,14 +57,7 @@ private:
     SetDocSeeAlso(" ");
 
     AddDocTag(Tags::Vector);
-  }
 
-  virtual ~ConcatenateVectorData()
-  {
-  }
-
-  void DoInit()
-  {
     AddParameter(ParameterType_InputVectorDataList, "vd", "Input VectorDatas to concatenate");
     SetParameterDescription("vd", "VectorData files to be concatenated in an unique VectorData");
 

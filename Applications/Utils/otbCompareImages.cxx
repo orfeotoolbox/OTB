@@ -46,7 +46,7 @@ public:
   typedef otb::StreamingCompareImageFilter<FloatImageType> StreamingCompareImageFilterType;
 
 private:
-   CompareImages()
+  void DoInit()
   {
     SetName("CompareImages");
     SetDescription("Estimator between 2 images.");
@@ -59,14 +59,7 @@ private:
     SetDocSeeAlso("BandMath application, ImageStatistics application");
   
     AddDocTag("Statistics");
-  }
 
-  virtual ~CompareImages()
-  {
-  }
-
-  void DoInit()
-  {
     AddParameter(ParameterType_Group, "ref", "Reference image properties");
     AddParameter(ParameterType_InputImage,  "ref.in",   "Reference image");
     SetParameterDescription("ref.in", "Image used as reference in the comparaison");

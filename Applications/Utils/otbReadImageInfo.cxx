@@ -39,7 +39,7 @@ public:
   itkTypeMacro(ReadImageInfo, otb::Application);
 
 private:
-  ReadImageInfo()
+  void DoInit()
   {
     SetName("ReadImageInfo");
     SetDescription("Get information about the image");
@@ -53,14 +53,7 @@ private:
 
     AddDocTag("Utilities");
     AddDocTag(Tags::Meta);
-  }
 
-  virtual ~ReadImageInfo()
-  {
-  }
-
-  void DoInit()
-  {
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
     
     AddParameter(ParameterType_Empty, "keywordlist", "Display the OSSIM keywordlist");

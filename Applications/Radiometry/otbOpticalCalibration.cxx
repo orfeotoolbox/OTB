@@ -76,7 +76,7 @@ public:
   typedef AtmosphericCorrectionParametersType::AerosolModelType                     AerosolModelType;
 
 private:
-  OpticalCalibration()
+  void DoInit()
   {
     SetName("OpticalCalibration");
     SetDescription("Perform optical calibration TOA/TOC (Top Of Atmosphere/Top Of Canopy). Supported sensors: QuickBird, Ikonos, WorldView2, Formosat, Spot5");
@@ -89,10 +89,6 @@ private:
  
     AddDocTag(Tags::Calibration);
 
-}
-
-  void DoInit()
-  {
     AddParameter(ParameterType_InputImage,  "in",  "Input Image Filename");
 
     AddParameter(ParameterType_OutputImage, "out", "Output Image Filename");

@@ -76,7 +76,7 @@ public:
 
 
 private:
-   Convert()
+  void DoInit()
   {
     SetName("Convert");
     SetDescription("Convert an image to a different format, eventually rescaling the data"
@@ -90,15 +90,6 @@ private:
     AddDocTag("Conversion");
     AddDocTag("Image Dynamic");
 
-    itk::ProcessObject::Pointer m_FinalCaster;
-  }
-
-  virtual ~Convert()
-  {
-  }
-
-  void DoInit()
-  {
     AddParameter(ParameterType_InputImage,  "in",   "Input image");
     SetParameterDescription("in", "Input image");
 

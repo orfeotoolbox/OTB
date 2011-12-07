@@ -99,8 +99,7 @@ public:
   itkTypeMacro(HyperspectralUnmixing, otb::Application);
 
 private:
-
-  HyperspectralUnmixing()
+  void DoInit()
   {
     SetName("HyperspectralUnmixing");
     SetDescription("Estimate abundance maps from an hyperspectral image and a set of endmembers.");
@@ -113,14 +112,7 @@ private:
     SetDocSeeAlso("VertexComponentAnalysis");
 
     AddDocTag(Tags::Hyperspectral);
-  }
 
-  virtual ~HyperspectralUnmixing()
-  {
-  }
-
-  void DoInit()
-  {
     AddParameter(ParameterType_InputImage,  "in",   "Input Image Filename");
     SetParameterDescription("in","The hyperspectral data cube to unmix");
 

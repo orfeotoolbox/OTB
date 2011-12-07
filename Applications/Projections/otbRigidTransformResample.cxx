@@ -45,7 +45,7 @@ public:
 
 private:
 
-  RigidTransformResample()
+  void DoInit()
   {
     SetName("RigidTransformResample");
     SetDescription("Resample an image with a rigid transform");
@@ -58,14 +58,7 @@ private:
   
     AddDocTag("Conversion");
     AddDocTag(Tags::Geometry);
-  }
 
-  virtual ~RigidTransformResample()
-  {
-  }
-
-  void DoInit()
-  {
     AddParameter(ParameterType_InputImage,   "in",   "Input image");
     AddParameter(ParameterType_OutputImage,  "out",  "Output image");
     AddParameter(ParameterType_Float,        "tx",   "The X translation (in physical units)");

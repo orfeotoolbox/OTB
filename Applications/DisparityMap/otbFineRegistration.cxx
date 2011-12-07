@@ -111,8 +111,8 @@ public:
   typedef otb::ImageFileReader<VectorImageType>         InternalReaderType;
 
 private:
-  FineRegistration()
-    {
+  void DoInit()
+  {
     SetName("FineRegistration");
     SetDescription("Estimate disparity map between two images.");
 
@@ -123,14 +123,7 @@ private:
     SetDocSeeAlso(" ");
 
     AddDocTag(Tags::Stereo);
-    }
 
-  virtual ~FineRegistration()
-  {
-  }
-
-  void DoInit()
-    {
     AddParameter(ParameterType_InputImage,  "ref",   "Reference Image");
     SetParameterDescription( "ref", "The reference image." );
     
@@ -232,15 +225,15 @@ private:
     SetDocExampleParameterValue("ery", "2");
     SetDocExampleParameterValue("mrx", "3");
     SetDocExampleParameterValue("mry", "3");
-    }
+  }
 
   void DoUpdateParameters()
-    {
+  {
     // Nothing to do
-    }
+  }
 
   void DoExecute()
-    {
+  {
     FloatVectorImageType::Pointer refImage = GetParameterImage("ref"); // fixed
     FloatVectorImageType::Pointer secImage = GetParameterImage("sec"); // moved
     
@@ -466,7 +459,7 @@ private:
       otbAppLogINFO("Doing warping : OFF");
       }
     
-    }
+  }
 
   IntensityFilterType::Pointer m_IntensityRef;
   IntensityFilterType::Pointer m_IntensitySec;

@@ -48,7 +48,7 @@ public:
                                             FloatVectorImageType::InternalPixelType> FilterType;
 
 private:
-  SplitImage()
+  void DoInit()
   {
     SetName("SplitImage");
     SetDescription("Split a N multiband image into N images");
@@ -60,10 +60,7 @@ private:
     SetDocSeeAlso(" ");
 
     AddDocTag(Tags::Manip);
-  }
 
-  void DoInit()
-  {
     AddParameter(ParameterType_InputImage, "in", "Input Image");
     SetParameterDescription("in","Input image filename.");
 

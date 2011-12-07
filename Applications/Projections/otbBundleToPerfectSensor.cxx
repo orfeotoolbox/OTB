@@ -47,7 +47,7 @@ public:
 
 private:
 
-  BundleToPerfectSensor()
+  void DoInit()
   {
     SetName("BundleToPerfectSensor");
     SetDescription("Perform P+XS pansharpening");
@@ -62,14 +62,7 @@ private:
     AddDocTag(Tags::Geometry);
     AddDocTag(Tags::Manip);
     AddDocTag(Tags::Pansharpening);
-  }
 
-  virtual ~BundleToPerfectSensor()
-  {
-  }
-
-  void DoInit()
-  {
     AddParameter(ParameterType_InputImage,   "inp",   "Input PAN Image");
     AddParameter(ParameterType_InputImage,   "inxs",  "Input XS Image");
     AddParameter(ParameterType_Directory,    "dem",   "DEM directory");

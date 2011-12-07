@@ -44,7 +44,7 @@ public:
       <FloatVectorImageType, VectorDataType>          EnvelopeFilterType;
 
 private:
-  ImageEnvelope()
+  void DoInit()
   {
     SetName("ImageEnvelope");
     SetDescription("Extracts an image envelope.");
@@ -57,14 +57,7 @@ private:
     SetDocSeeAlso(" ");
  
     AddDocTag(Tags::Geometry);
-  }
 
-  virtual ~ImageEnvelope()
-  {
-  }
-
-  void DoInit()
-    {
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
     SetParameterDescription("in", "Input image.");
     
@@ -87,15 +80,15 @@ private:
    // Doc example parameter settings
     SetDocExampleParameterValue("in", "sensor_stereo_left.tif");
     SetDocExampleParameterValue("out", "ImageEnvelope.shp");
-    }
+  }
 
   void DoUpdateParameters()
-    {
+  {
     // Nothing to be done
-    }
+  }
 
   void DoExecute()
-    {
+  {
     FloatVectorImageType::Pointer input = GetParameterImage("in");
     
     m_Envelope = EnvelopeFilterType::New();
@@ -116,7 +109,7 @@ private:
       }
     
     SetParameterOutputVectorData("out", m_Envelope->GetOutput());
-    }
+  }
 
   EnvelopeFilterType::Pointer m_Envelope;
 

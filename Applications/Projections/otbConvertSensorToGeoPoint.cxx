@@ -46,7 +46,8 @@ public:
   typedef itk::Point<double, 2>           PointType;
 
 private:
-  ConvertSensorToGeoPoint()
+
+  void DoInit()
   {
     SetName("ConvertSensorToGeoPoint");
     SetDescription("Convert Sensor Point To Geographic Point using a Forward Sensor Model");
@@ -59,14 +60,7 @@ private:
     SetDocSeeAlso("ConvertCartoToGeoPoint application, otbObtainUTMZoneFromGeoPoint application");
   
     AddDocTag(Tags::Geometry);
-  }
 
-  virtual ~ConvertSensorToGeoPoint()
-  {
-  }
-
-  void DoInit()
-  {
     AddParameter(ParameterType_InputImage,  "in",   "Sensor image");
 
     AddParameter(ParameterType_Group, "input", "Point Coordinates");

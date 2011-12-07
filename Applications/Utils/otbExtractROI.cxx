@@ -47,7 +47,7 @@ public:
                                       FloatVectorImageType::InternalPixelType> ExtractROIFilterType;
   
 private:
-  ExtractROI()
+  void DoInit()
   {
     SetName("ExtractROI");
     SetDescription("Extract a ROI defined by the user.");
@@ -60,14 +60,7 @@ private:
     SetDocSeeAlso(" ");
 
     AddDocTag(Tags::Manip);
-  }
 
-  virtual ~ExtractROI()
-  {
-  }
-
-  void DoInit()
-  {
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
     SetParameterDescription("in", "Input image.");
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");

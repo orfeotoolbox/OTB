@@ -57,7 +57,7 @@ public:
   itkTypeMacro(ConvertCartoToGeoPoint, otb::Application);
   
 private:
-  ConvertCartoToGeoPoint()
+  void DoInit()
   {
     SetName("ConvertCartoToGeoPoint");
     SetDescription("Convert cartographic coordinates to geographic one.");
@@ -71,14 +71,7 @@ private:
   
     AddDocTag(Tags::Coordinates);
     AddDocTag(Tags::Geometry);
-  }
 
-  virtual ~ConvertCartoToGeoPoint()
-  {
-  }
-
-  void DoInit()
-  {
     AddParameter(ParameterType_Group, "carto", "Input cartographic coordinates");
     AddParameter(ParameterType_Float, "carto.x", "X cartographic coordinates");
     SetParameterDescription("carto.x", "X cartographic coordinates in the specified projection.");

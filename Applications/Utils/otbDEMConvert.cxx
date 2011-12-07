@@ -43,7 +43,7 @@ public:
   itkTypeMacro(DEMConvert, otb::Application);
 
 private:
-  DEMConvert()
+  void DoInit()
   {
     SetName("DEMConvert");
     SetDescription("Convert a DEM file into a general raster ");
@@ -55,14 +55,7 @@ private:
     SetDocSeeAlso(" ");
 
     AddDocTag("Image manipulation");
-  }
 
-  virtual ~DEMConvert()
-  {
-  }
-
-void DoInit()
-  {
     AddParameter(ParameterType_InputImage,  "in",  "Input Image");
     SetParameterDescription("in", "Input image to filter.");
 
@@ -78,11 +71,11 @@ void DoInit()
     SetDocExampleParameterValue("out", "outputDEM.any");
 }
 
-  void DoUpdateParameters()
-  {
-    // nothing to update
-  }
-  
+void DoUpdateParameters()
+{
+  // nothing to update
+}
+
 /* The main is simple : read image using OTB and write it as a tif.
 *  Read this tif using OSSIM and convert it as a general raster file
 *  (.ras, .geom and . omd)

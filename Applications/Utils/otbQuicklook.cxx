@@ -50,7 +50,7 @@ public:
         <ExtractROIFilterType::OutputImageType, ExtractROIFilterType::OutputImageType> ShrinkImageFilterType;
   
 private:
-  Quicklook()
+  void DoInit()
   {
     SetName("Quicklook");
     SetDescription("Generates a subsampled version of an image extract");
@@ -62,14 +62,7 @@ private:
     SetDocSeeAlso(" ");
 
     AddDocTag(Tags::Manip);
-  }
-  
-  virtual ~Quicklook()
-  {
-  }
-  
-  void DoInit()
-  {
+
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
     SetParameterDescription( "in", "The image to read" );
     

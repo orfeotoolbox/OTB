@@ -79,7 +79,7 @@ public:
   typedef MultiChannelRAndNIRIndexImageFilter<FloatVectorImageType, FloatImageType, LAIFromNDVIFormoFunctor> LAIFromNDVIFormoFilter;
 
 private:
-  RadiometricVegetationIndices()
+  void DoInit()
   {
     SetName("RadiometricVegetationIndices");
     SetDescription("Compute radiometric indices based on Red and NIT channels.");
@@ -93,14 +93,7 @@ private:
  
     AddDocTag("Vegetation Indices");
     AddDocTag(Tags::FeatureExtraction);
-  }
 
-  virtual ~RadiometricVegetationIndices()
-  {
-  }
-
-  void DoInit()
-  {
     AddParameter(ParameterType_InputImage, "in", "Input Image");
     SetParameterDescription("in", "Input image, with at least red and NIR channels");
 

@@ -65,7 +65,7 @@ public:
   typedef otb::PipelineMemoryPrintCalculator MemoryCalculatorType;
 
 private:
-   Rasterization()
+  void DoInit()
     {
     SetName("Rasterization");
     SetDescription("Reproject and Rasterize a Vector Data.");
@@ -77,14 +77,7 @@ private:
     SetDocSeeAlso(" ");
    
     AddDocTag(Tags::Vector);
-    }
 
-  virtual ~Rasterization()
-  {
-  }
-
-  void DoInit()
-    {
     AddParameter(ParameterType_InputVectorData,  "in",   "InputVectorData");
     SetParameterDescription( "in", "The input vector data to be rasterized" );
     

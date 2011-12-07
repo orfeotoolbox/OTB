@@ -115,7 +115,7 @@ public:
  typedef otb::VectorDataIntoImageProjectionFilter<VectorDataType, VectorImageType> VectorDataReprojectionType;
 
 private:
-  ValidateSVMImagesClassifier()
+  void DoInit()
   {
     SetName("ValidateSVMImagesClassifier");
     SetDescription("Estimate the performance of the SVM model with a new set of validation samples and another image.");
@@ -128,14 +128,6 @@ private:
  
     AddDocTag(Tags::Learning);
 
-  }
-
-  virtual ~ValidateSVMImagesClassifier()
-  {
-  }
-
-  void DoInit()
-  {
     AddParameter(ParameterType_InputImageList, "il", "Input Image List");
     SetParameterDescription("il", "Input image list filename.");
     AddParameter(ParameterType_InputVectorDataList, "vd", "Vector Data List");

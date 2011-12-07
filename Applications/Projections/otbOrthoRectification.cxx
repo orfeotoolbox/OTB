@@ -83,7 +83,7 @@ public:
   typedef otb::BCOInterpolateImageFunction<FloatVectorImageType>   BCOInterpolationType;
 
 private:
-  OrthoRectification()
+  void DoInit()
   {
     SetName("OrthoRectification");
     std::ostringstream oss;
@@ -103,10 +103,7 @@ private:
   
     AddDocTag(Tags::Manip);
     AddDocTag(Tags::Geometry);
-  }
 
-  void DoInit()
-  {
     // Set the parameters
     AddParameter(ParameterType_Group,"io","Input and output data");
     SetParameterDescription("io","This group of parameters allows to set the input and output images.");

@@ -40,7 +40,7 @@ public:
   itkTypeMacro(MultivariateAlterationDetector, otb::Wrapper::Application);
 
 private:
-  MultivariateAlterationDetector()
+  void DoInit()
   {
     SetName("MultivariateAlterationDetector");
     SetDescription("Multivariate Alteration Detector");
@@ -53,14 +53,7 @@ private:
     SetDocSeeAlso(" ");
 
     AddDocTag(Tags::FeatureExtraction);
-  }
 
-  virtual ~MultivariateAlterationDetector()
-  {
-  }
-
-  void DoInit()
-  {
     AddParameter(ParameterType_InputImage,  "in1", "Input Image 1");
     AddParameter(ParameterType_InputImage,  "in2", "Input Image 2");
     AddParameter(ParameterType_OutputImage, "out", "Change Map");

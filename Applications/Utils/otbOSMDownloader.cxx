@@ -46,7 +46,7 @@ public:
   typedef otb::OSMDataToVectorDataGenerator  VectorDataProviderType;
 
 private:
-   OSMDownloader()
+  void DoInit()
   {
     SetName("OSMDownloader");
     SetDescription("Generate a vector data from OSM on the input image extend");
@@ -58,14 +58,7 @@ private:
     SetDocSeeAlso("Convertion");
 
     AddDocTag(Tags::Meta);
-  }
 
-  virtual ~OSMDownloader()
-  {
-  }
-  
-  void DoInit()
-  {
     AddParameter(ParameterType_OutputVectorData,  "out",   "Output vector data");
     SetParameterDescription("out", "Generated output vector data path");
 

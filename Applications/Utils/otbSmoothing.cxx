@@ -52,7 +52,7 @@ public:
   itkTypeMacro(Smoothing, otb::Application);
 
 private:
-  Smoothing()
+  void DoInit()
   {
     SetName("Smoothing");
     SetDescription("Apply a smoothing filter to an image");
@@ -65,14 +65,7 @@ private:
     SetDocSeeAlso(" ");
 
     AddDocTag(Tags::Filter);
-  }
 
-  virtual ~Smoothing()
-  {
-  }
-
-  void DoInit()
-  {
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
     SetParameterDescription("in", "Input image to filter.");
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");

@@ -68,7 +68,7 @@ public:
 
   
 private:
-  SOMClassification()
+  void DoInit()
   {
     SetName("SOMClassification");
     SetDescription("SOM image classification.");
@@ -82,14 +82,7 @@ private:
 
     AddDocTag(Tags::Segmentation);
     AddDocTag(Tags::Learning);
-  }
 
-  virtual ~SOMClassification()
-  {
-  }
-
-  void DoInit()
-    {
     AddParameter(ParameterType_InputImage,  "in",   "InputImage");
     SetParameterDescription("in", "Input image.");
     
@@ -180,12 +173,12 @@ private:
     SetDocExampleParameterValue("bi", "1.0");
     SetDocExampleParameterValue("bf", "0.1");
     SetDocExampleParameterValue("iv", "0");
-    }
+  }
   
   void DoUpdateParameters()
-    {
+  {
     // Nothing to do
-    }
+  }
   
   void DoExecute()
   {

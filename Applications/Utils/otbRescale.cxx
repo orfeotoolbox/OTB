@@ -46,7 +46,7 @@ public:
   typedef otb::VectorRescaleIntensityImageFilter<FloatVectorImageType> RescaleImageFilterType;
 
 private:
-   Rescale()
+  void DoInit()
   {
     SetName("Rescale");
     SetDescription("Rescale the image between two given values.");
@@ -59,14 +59,7 @@ private:
     SetDocSeeAlso(" ");
 
     AddDocTag(Tags::Manip);
-  }
 
-  virtual ~Rescale()
-  {
-  }
-
-  void DoInit()
-  {
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
     SetParameterDescription( "in", "The image to scale." );
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");

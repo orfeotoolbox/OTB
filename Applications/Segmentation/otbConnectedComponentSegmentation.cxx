@@ -64,7 +64,7 @@ public:
         <VectorDataType, VectorDataType>                     VectorDataProjectionFilterType;
 
 private:
-  ConnectedComponentSegmentation()
+  void DoInit()
   {
     SetName("ConnectedComponentSegmentation");
     SetDescription("Connected component segmentation and object based image filtering of the input image according to user-defined criterions.");
@@ -76,14 +76,7 @@ private:
  
     AddDocTag(Tags::Analysis);
     AddDocTag(Tags::Segmentation);
-  }
 
-  virtual ~ConnectedComponentSegmentation()
-  {
-  }
-  
-  void DoInit()
-  {
     AddParameter(ParameterType_InputImage, "in", "Input Image");
     SetParameterDescription("in", "The image to segment.");
     

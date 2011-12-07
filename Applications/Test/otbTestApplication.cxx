@@ -38,7 +38,7 @@ public:
   itkTypeMacro(TestApplication, otb::Application);
 
 private:
-  TestApplication()
+  void DoInit()
   {
     SetName("TestApplication");
     SetDescription("This application helps developers to test parameters types");
@@ -52,14 +52,6 @@ private:
    
     AddDocTag("Test");
 
-  }
-
-  virtual ~TestApplication()
-  {
-  }
-
-  void DoInit()
-  {
     std::cout << "TestApplication::DoInit" << std::endl;
     AddParameter(ParameterType_Empty, "boolean", "Boolean");
     AddParameter(ParameterType_Int, "int", "Integer");

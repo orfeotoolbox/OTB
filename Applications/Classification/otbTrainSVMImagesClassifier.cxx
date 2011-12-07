@@ -124,7 +124,7 @@ public:
   typedef otb::VectorDataIntoImageProjectionFilter<VectorDataType, VectorImageType> VectorDataReprojectionType;
 
 private:
-  TrainSVMImagesClassifier()
+  void DoInit()
   {
     SetName("TrainSVMImagesClassifier");
     SetDescription("Train a SVM classifier from multiple pairs of images and training vector data.");
@@ -138,14 +138,6 @@ private:
  
     AddDocTag(Tags::Learning);
 
-  }
-
-  virtual ~TrainSVMImagesClassifier()
-  {
-  }
-
-  void DoInit()
-  {
     //Group IO
     AddParameter(ParameterType_Group,"io","Input and output data");
     SetParameterDescription("io","This group of parameters allows to set input and output data.");

@@ -53,7 +53,7 @@ public:
   typedef ObjectList<ExtractROIFilterType>                                      ExtractROIFilterListType;
 
 private:
-   ConcatenateImages()
+  void DoInit()
   {
     SetName("ConcatenateImages");
     SetDescription("Concatenate a list of images into a single multi channel one.");
@@ -72,14 +72,7 @@ private:
     m_Concatener = ListConcatenerFilterType::New();
     m_ExtractorList = ExtractROIFilterListType::New();
     m_ImageList = ImageListType::New();
-  }
 
-  virtual ~ConcatenateImages()
-  {
-  }
-
-  void DoInit()
-  {
     AddParameter(ParameterType_InputImageList,  "il",   "Input image list");
     SetParameterDescription("il", "Image list to concatenate");
 

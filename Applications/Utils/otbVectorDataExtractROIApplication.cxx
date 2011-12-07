@@ -62,7 +62,7 @@ public:
   typedef otb::RemoteSensingRegion<double>                RemoteSensingRegionType;
 
 private:
-  VectorDataExtractROIApplication()
+  void DoInit()
   {
     SetName("VectorDataExtractROIApplication");
     SetDescription("Perform an extract ROI on the input vector data according to the input image extent");
@@ -74,14 +74,7 @@ private:
     SetDocSeeAlso(" ");
 
     AddDocTag(Tags::Vector);
-  }
 
-  virtual ~VectorDataExtractROIApplication()
-  {
-  }
-
-  void DoInit()
-  {
     AddParameter(ParameterType_Group,"io","Input and output data");
     AddParameter(ParameterType_InputVectorData, "io.vd", "Input Vector data");
     AddParameter(ParameterType_InputImage,      "io.in", "Support image");

@@ -41,7 +41,7 @@ public:
   itkTypeMacro(KmzExport, otb::Application);
 
 private:
-   KmzExport()
+  void DoInit()
   {
     SetName("KmzExport");
     SetDescription("Export the input image in a KMZ product.");
@@ -54,14 +54,7 @@ private:
 
     AddDocTag("KMZ");
     AddDocTag("Export");
-  }
 
-  virtual ~KmzExport()
-  {
-  }
-  
-  void DoInit()
-  {
     AddParameter(ParameterType_InputImage,  "in",   "Input image");
     SetParameterDescription("in", "Input image");
     
