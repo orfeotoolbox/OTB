@@ -2717,6 +2717,13 @@ ADD_TEST(ioTvImageMetadataInterfaceBaseTest_SPOT ${IO_TESTS18}
         ${LARGEDATA}/SPOT5/TEHERAN/IMAGERY.TIF
         ${TEMP}/ioTvImageMetadataInterfaceBase_SPOT.txt
 )
+ADD_TEST(ioTvImageMetadataInterfaceBaseTest_PLEIADES ${IO_TESTS18}
+         --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_PLEIADES.txt
+                         ${TEMP}/ioTvImageMetadataInterfaceBase_PLEIADES.txt
+        otbImageMetadataInterfaceBaseTest
+        ${LARGEDATA}/PLEIADES-PRE/FCGC600011783/IMG_PHR1Z_PMS_N_001/IMG_PHR1A_PMS-N_201006181052297_ORT_IPU_20111011_0619-001_R1C1.JP2
+        ${TEMP}/ioTvImageMetadataInterfaceBase_PLEIADES.txt
+)
 ADD_TEST(ioTvImageMetadataInterfaceBaseTest_FORMOSAT2 ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_FORMOSAT2.txt
                          ${TEMP}/ioTvImageMetadataInterfaceBase_FORMOSAT2.txt

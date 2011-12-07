@@ -24,6 +24,7 @@
 // Optical sensors
 #include "otbIkonosImageMetadataInterfaceFactory.h"
 #include "otbSpotImageMetadataInterfaceFactory.h"
+#include "otbPleiadesImageMetadataInterfaceFactory.h"
 #include "otbFormosatImageMetadataInterfaceFactory.h"
 #include "otbQuickBirdImageMetadataInterfaceFactory.h"
 #include "otbWorldView2ImageMetadataInterfaceFactory.h"
@@ -72,6 +73,9 @@ ImageMetadataInterfaceFactory
                                << (*i)->GetNameOfClass());
       }
     }
+
+  std::cout << possibleIMI.size() << std::endl;
+
   for (std::list<ImageMetadataInterfaceBasePointerType>::iterator k = possibleIMI.begin();
        k != possibleIMI.end(); ++k)
     {
@@ -102,6 +106,7 @@ ImageMetadataInterfaceFactory
       {
       itk::ObjectFactoryBase::RegisterFactory(IkonosImageMetadataInterfaceFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(SpotImageMetadataInterfaceFactory::New());
+      itk::ObjectFactoryBase::RegisterFactory(PleiadesImageMetadataInterfaceFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(FormosatImageMetadataInterfaceFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(QuickBirdImageMetadataInterfaceFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(WorldView2ImageMetadataInterfaceFactory::New());
