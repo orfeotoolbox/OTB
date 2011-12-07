@@ -85,10 +85,10 @@ ApplicationRegistry::CreateApplication(const std::string& name)
   // Downcast and Sanity check
   for (std::list<LightObject::Pointer>::iterator i = allobjects.begin(); i != allobjects.end(); ++i)
     {
-    Application* io = dynamic_cast<Application*> (i->GetPointer());
-    if (io)
+    Application* app = dynamic_cast<Application*> (i->GetPointer());
+    if (app)
       {
-      possibleApp.push_back(io);
+      possibleApp.push_back(app);
       }
     else
       {
@@ -100,9 +100,10 @@ ApplicationRegistry::CreateApplication(const std::string& name)
   for(std::list<ApplicationPointer>::iterator k = possibleApp.begin();
       k != possibleApp.end(); ++k)
     {
+    (*k)->Init();
     if ( (*k)->GetName() == name )
       {
-      return *k;
+      appli = *k;
       }
     }
 
@@ -136,6 +137,7 @@ ApplicationRegistry::GetAvailableApplications()
   for(std::list<ApplicationPointer>::iterator k = possibleApp.begin();
       k != possibleApp.end(); ++k)
     {
+    (*k)->Init();
     availableApp.push_back((*k)->GetName());
     }
   // If the ITK_AUTOLOAD_PATH contains
