@@ -180,22 +180,6 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
-    // Build lut map
-    m_LutMap["Red"]       = ColorMapFilterType::Red;
-    m_LutMap["Green"]     = ColorMapFilterType::Green;
-    m_LutMap["Blue"]      = ColorMapFilterType::Blue;
-    m_LutMap["Grey"]      = ColorMapFilterType::Grey;
-    m_LutMap["Hot"]       = ColorMapFilterType::Hot;
-    m_LutMap["Cool"]      = ColorMapFilterType::Cool;
-    m_LutMap["Spring"]    = ColorMapFilterType::Spring;
-    m_LutMap["Summer"]    = ColorMapFilterType::Summer;
-    m_LutMap["Autumn"]    = ColorMapFilterType::Autumn;
-    m_LutMap["Winter"]    = ColorMapFilterType::Winter;
-    m_LutMap["Copper"]    = ColorMapFilterType::Copper;
-    m_LutMap["Jet"]       = ColorMapFilterType::Jet;
-    m_LutMap["HSV"]       = ColorMapFilterType::HSV;
-    m_LutMap["OverUnder"] = ColorMapFilterType::OverUnder;
-
     AddDocTag(Tags::Segmentation);
     AddDocTag(Tags::Learning);
     AddParameter(ParameterType_InputImage, "in", "Input Image");
@@ -207,6 +191,7 @@ private:
     MandatoryOff("ram");
     AddParameter(ParameterType_InputImage, "vm", "Validity Mask");
     SetParameterDescription("vm", "Validity mask. Only non-zero pixels will be used to estimate KMeans modes.");
+    MandatoryOff("vm");
     AddParameter(ParameterType_Int, "ts", "Training set size");
     SetParameterDescription("ts", "Size of the training set.");
     SetDefaultParameterInt("ts", 100);
@@ -227,34 +212,6 @@ private:
     MandatoryOff("outmeans");
     SetParameterRole("outmeans", Role_Output);
 
-    AddParameter(ParameterType_Group, "mapping", "Color mapping");
-    SetParameterDescription("mapping", "Save colorized image and LUT in txt file.");
-    AddParameter(ParameterType_Filename, "mapping.labelout","Output Colorized Image");
-    SetParameterDescription("mapping.labelout", "Output colorized image filename.");
-    SetParameterRole("mapping.labelout", Role_Output);
-
-    AddParameter(ParameterType_Choice, "mapping.lut", "Look-up tables");
-    SetParameterDescription("mapping.lut", "Available look-up tables. RGBIntensity remap label with class centroids, which are reweighted into [0 255]");
-
-    AddChoice("mapping.lut.rgbintensity", "RGBIntensity");
-    AddChoice("mapping.lut.red", "Red");
-    AddChoice("mapping.lut.green", "Green");
-    AddChoice("mapping.lut.blue", "Blue");
-    AddChoice("mapping.lut.grey", "Grey");
-    AddChoice("mapping.lut.hot", "Hot");
-    AddChoice("mapping.lut.cool", "Cool");
-    AddChoice("mapping.lut.spring", "Spring");
-    AddChoice("mapping.lut.summer", "Summer");
-    AddChoice("mapping.lut.autumn", "Autumn");
-    AddChoice("mapping.lut.winter", "Winter");
-    AddChoice("mapping.lut.copper", "Copper");
-    AddChoice("mapping.lut.jet", "Jet");
-    AddChoice("mapping.lut.hsv", "HSV");
-    AddChoice("mapping.lut.overunder", "OverUnder");
-    AddChoice("mapping.lut.relief", "Relief");
-    SetParameterInt("mapping.lut", 0);
-
-    MandatoryOff("mapping");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "qb_RoadExtract.img");
@@ -268,7 +225,6 @@ private:
 
   void DoUpdateParameters()
   {
-
     // test of input image //
     if (HasValue("in"))
       {
@@ -289,6 +245,7 @@ private:
 
       unsigned long maxPixNb = largestPixNb / nbDivisions;
 
+
       if (GetParameterInt("ts") > static_cast<int> (maxPixNb))
         {
         otbAppLogWARNING(" available RAM is too small to process this sample size is.Sample size will be reduced to "<<maxPixNb<<std::endl);
@@ -307,9 +264,8 @@ private:
 
     m_InImage = GetParameterImage("in");
     m_InImage->UpdateOutputInformation();
+    UInt8ImageType::Pointer maskImage;
 
-    UInt8ImageType::Pointer maskImage = GetParameterUInt8Image("vm");
-    maskImage->UpdateOutputInformation();
     std::ostringstream message("");
 
     int nbsamples = GetParameterInt("ts");
@@ -317,16 +273,27 @@ private:
 
     /*******************************************/
     /*           Sampling data                 */
-    /*******************************************/otbAppLogINFO("-- SAMPLING DATA --"<<std::endl);
+    /*******************************************/
+
+    otbAppLogINFO("-- SAMPLING DATA --"<<std::endl);
 
     // Update input images information
     m_InImage->UpdateOutputInformation();
-    maskImage->UpdateOutputInformation();
 
-    if (m_InImage->GetLargestPossibleRegion() != maskImage->GetLargestPossibleRegion())
-      {
-      GetLogger()->Error("Mask image and input image have different sizes.");
-      }
+
+    bool maskFlag=IsParameterEnabled("vm");
+    if(maskFlag)
+    {
+          otbAppLogINFO("sample choice using mask "<<std::endl);
+          maskImage = GetParameterUInt8Image("vm");
+          maskImage->UpdateOutputInformation();
+          if (m_InImage->GetLargestPossibleRegion() != maskImage->GetLargestPossibleRegion())
+             {
+             GetLogger()->Error("Mask image and input image have different sizes.");
+             }
+    }
+
+
 
     // Training sample lists
     ListSampleType::Pointer sampleList = ListSampleType::New();
@@ -347,8 +314,6 @@ private:
 
     ImageSamplingFilterType::Pointer imageSampler = ImageSamplingFilterType::New();
     imageSampler->SetInput(m_InImage);
-    MaskSamplingFilterType::Pointer maskSampler = MaskSamplingFilterType::New();
-    maskSampler->SetInput(maskImage);
 
     double theoricNBSamplesForKMeans = nbsamples;
 
@@ -363,25 +328,41 @@ private:
                                                        / actualNBSamplesForKMeans));
     imageSampler->SetShrinkFactor(shrinkFactor);
     imageSampler->Update();
-    maskSampler->SetShrinkFactor(shrinkFactor);
-    maskSampler->Update();
 
+    MaskSamplingFilterType::Pointer maskSampler;
+    LabeledIteratorType m_MaskIt;
+    if(maskFlag)
+      {
+      maskSampler = MaskSamplingFilterType::New();
+      maskSampler->SetInput(maskImage);
+      maskSampler->SetShrinkFactor(shrinkFactor);
+      maskSampler->Update();
+      m_MaskIt=LabeledIteratorType(maskSampler->GetOutput(), maskSampler->GetOutput()->GetLargestPossibleRegion());
+      m_MaskIt.GoToBegin();
+      }
     // Then, build the sample list
 
     IteratorType it(imageSampler->GetOutput(), imageSampler->GetOutput()->GetLargestPossibleRegion());
-    LabeledIteratorType m_MaskIt(maskSampler->GetOutput(), maskSampler->GetOutput()->GetLargestPossibleRegion());
+
+
 
     it.GoToBegin();
-    m_MaskIt.GoToBegin();
 
     SampleType min;
     SampleType max;
     SampleType sample;
     //first sample
+
+
+
+
+    if(maskFlag)
+      {
     while (!it.IsAtEnd() && !m_MaskIt .IsAtEnd() && (m_MaskIt.Get() <= 0))
       {
       ++it;
       ++m_MaskIt;
+      }
       }
 
     min = it.Get();
@@ -391,12 +372,26 @@ private:
     sampleList->PushBack(sample);
 
     ++it;
+
+    if(maskFlag)
+      {
     ++m_MaskIt;
+      }
+
 
     totalSamples = 1;
-    while (!it.IsAtEnd() && !m_MaskIt .IsAtEnd())
+    bool selectSample;
+    while (!it.IsAtEnd() )
       {
-      if (m_MaskIt.Get() > 0)
+      if(maskFlag)
+        {
+        selectSample=(m_MaskIt.Get() > 0);
+        ++m_MaskIt;
+        }
+      else
+        selectSample=true;
+
+      if (selectSample)
         {
         totalSamples++;
 
@@ -417,7 +412,6 @@ private:
           }
         }
       ++it;
-      ++m_MaskIt;
       }
 
     // Next, initialize centroids
@@ -535,119 +529,14 @@ private:
 
       file.close();
       }
-    // colormapping
-    if (IsParameterEnabled("mapping"))
-      {
-      m_ParamOut = OutputImageParameter::New();
 
-      m_ParamOut->SetPixelType(ImagePixelType_uint8);
-      m_ParamOut->SetFileName(GetParameterString("mapping.labelout"));
-
-      std::string lut = GetParameterString("mapping.lut");
-      if (lut == "RGBIntensity")
-        {
-        // find RGB
-        ImageMetadataInterfaceType::Pointer
-            metadataInterface = ImageMetadataInterfaceFactory::CreateIMI(m_InImage->GetMetaDataDictionary());
-
-        std::vector<unsigned int> RGBIndex;
-
-        if(m_InImage->GetNumberOfComponentsPerPixel()<3)
-          {
-          RGBIndex.push_back(0);
-          RGBIndex.push_back(0);
-          RGBIndex.push_back(0);
-          }
-        else
-          RGBIndex = metadataInterface->GetDefaultDisplay();
-        otbAppLogINFO(" RGB index are "<<RGBIndex[0]<<" "<<RGBIndex[1]<<" "<<RGBIndex[2]<<std::endl);
-        // map intensity
-        m_CustomMapper = ChangeLabelFilterType::New();
-        m_CustomMapper->SetInput(m_KMeansFilter->GetOutput());
-        const unsigned int nbCompRGB = 3;
-        m_CustomMapper->SetNumberOfComponentsPerPixel(nbCompRGB);
-
-        EstimatorType::ParametersType weithedMeans = estimatedMeans;
-
-        std::vector<double> minVal(nbCompRGB);
-        std::vector<double> maxVal(nbCompRGB);
-
-        for (unsigned int i = 0; i < nbCompRGB; i++)
-          {
-          minVal[i] = estimatedMeans[RGBIndex[i]];
-          maxVal[i] = estimatedMeans[RGBIndex[i]];
-          for (unsigned int j = 0; j < nbClasses; j++)
-            {
-            double value = estimatedMeans[j * sampleSize + RGBIndex[i]];
-            if (value > maxVal[i]) maxVal[i] = value;
-            if (value < minVal[i]) minVal[i] = value;
-            }
-          }
-
-        for (unsigned int j = 0; j < nbClasses; j++)
-          {
-          VectorPixelType color(nbCompRGB);
-          color.Fill(0);
-
-          for (unsigned int i = 0; i < nbCompRGB; i++)
-            {
-            color[i] = static_cast<PixelType> (((estimatedMeans[j * sampleSize + RGBIndex[i]] - minVal[i]) / (maxVal[i]
-                - minVal[i])) * 255.0);
-            }
-          otbAppLogINFO("Adding color mapping " << j << " -> [" << (int) color[0] << " " << (int) color[1] << " "<< (int) color[2] << " ]" << std::endl);
-
-          m_CustomMapper->SetChange(j, color);
-          }
-
-        // Create an output parameter to write the current output image
-
-        m_ParamOut->SetValue(m_CustomMapper->GetOutput());
-        m_ParamOut->InitializeWriters();
-        AddProcess(m_ParamOut->GetWriter(), GetParameterString("mapping.labelout"));
-        m_ParamOut->Write();
-
-        }
-      else
-        {
-
-        m_ColorMapper = ColorMapFilterType::New();
-        m_ColorMapper->SetInput(m_KMeansFilter->GetOutput());
-
-        m_ColorMapper->UseInputImageExtremaForScalingOn();
-        if (lut == "Relief")
-          {
-          ReliefColorMapFunctorType::Pointer reliefFunctor = ReliefColorMapFunctorType::New();
-          m_ColorMapper->SetColormap(reliefFunctor);
-          }
-        else
-          {
-          m_ColorMapper->SetColormap((ColorMapFilterType::ColormapEnumType) m_LutMap[lut]);
-          }
-
-        // reweight label into [0 255]
-        m_ColorMapper->GetColormap()->SetMinimumInputValue(0.0);
-        m_ColorMapper->GetColormap()->SetMaximumInputValue(255.0);
-
-        m_ParamOut->SetValue(m_ColorMapper->GetOutput());
-
-        m_ParamOut->InitializeWriters();
-        AddProcess(m_ParamOut->GetWriter(), GetParameterString("mapping.labelout"));
-        m_ParamOut->Write();
-
-        }
-
-      }
     SetParameterOutputImage("out", m_KMeansFilter->GetOutput());
 
   }
 
   // KMeans filter
-  OutputImageParameter::Pointer       m_ParamOut;
   KMeansFilterType::Pointer           m_KMeansFilter;
   FloatVectorImageType::Pointer       m_InImage;
-  ChangeLabelFilterType::Pointer      m_CustomMapper;
-  ColorMapFilterType::Pointer         m_ColorMapper;
-  std::map<std::string, unsigned int> m_LutMap;
 
 };
 
