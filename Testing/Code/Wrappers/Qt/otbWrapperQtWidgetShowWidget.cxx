@@ -16,9 +16,7 @@
 
 =========================================================================*/
 
-#include <QApplication>
-#include <QObject>
-#include <QTimer>
+#include <QtGui>
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationRegistry.h"
 #include "otbWrapperQtWidgetView.h"
