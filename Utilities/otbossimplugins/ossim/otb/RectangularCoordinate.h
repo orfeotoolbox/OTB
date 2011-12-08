@@ -12,6 +12,7 @@
 #ifndef RectangularCoordinate_h
 #define RectangularCoordinate_h
 
+#include <ossimPluginConstants.h>
 #include <otb/Coordinate.h>
 
 namespace ossimplugins
@@ -23,7 +24,7 @@ class GeodesicCoordinate;
  * @ingroup Date
  * @brief This class represents a coordinate in a rectangular reference
  */
- class RectangularCoordinate : public Coordinate
+ class OSSIM_PLUGINS_DLL RectangularCoordinate : public Coordinate
  {
  public:
   /**

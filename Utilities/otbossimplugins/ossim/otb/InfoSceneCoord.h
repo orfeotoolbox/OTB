@@ -14,6 +14,7 @@
 
 #include <vector>
 #include <ossim/base/ossimString.h>
+#include <ossimPluginConstants.h>
 
 class ossimKeywordlist;
 
@@ -25,7 +26,7 @@ namespace ossimplugins
  * @ingroup InfoSceneCoord
  * @brief This class represents an InfoSceneCoord
  */
-class InfoSceneCoord
+class OSSIM_PLUGINS_DLL InfoSceneCoord
 {
 public:
    /**

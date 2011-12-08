@@ -13,6 +13,7 @@
 #ifndef CivilDateTime_h
 #define CivilDateTime_h
 
+#include <ossimPluginConstants.h>
 #include <iosfwd>
 
 namespace ossimplugins
@@ -26,7 +27,7 @@ class GMSTDateTime;
 /**
  * @brief This class represents a date and time in the civil format
  */
-class CivilDateTime
+class OSSIM_PLUGINS_DLL CivilDateTime
 {
 public:
 

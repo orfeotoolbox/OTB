@@ -12,6 +12,8 @@
 #ifndef RefPoint_h
 #define RefPoint_h
 
+#include <ossimPluginConstants.h>
+
 class ossimKeywordlist;
 
 namespace ossimplugins
@@ -24,7 +26,7 @@ class Ephemeris;
 /**
  * @brief This class handles the referential point
  */
-class RefPoint
+class OSSIM_PLUGINS_DLL RefPoint
 {
 public:
    /**

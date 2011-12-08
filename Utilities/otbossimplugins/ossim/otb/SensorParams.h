@@ -12,6 +12,8 @@
 #ifndef SensorParams_h
 #define SensorParams_h
 
+#include <ossimPluginConstants.h>
+
 class ossimKeywordlist;
 
 namespace ossimplugins
@@ -24,7 +26,7 @@ namespace ossimplugins
  * @brief This class handles the sensor parameters
  */
 
-class SensorParams
+class OSSIM_PLUGINS_DLL SensorParams
 {
 public:
 

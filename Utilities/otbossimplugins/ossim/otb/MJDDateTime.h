@@ -12,6 +12,8 @@
 #ifndef MJDDateTime_h
 #define MJDDateTime_h
 
+#include <ossimPluginConstants.h>
+
 namespace ossimplugins
 {
 
@@ -20,7 +22,7 @@ class CivilDateTime;
 /**
  * @brief This class represents an MJD date (Modified Julian date)
  */
-class MJDDateTime
+class OSSIM_PLUGINS_DLL MJDDateTime
 {
 public:
   /**

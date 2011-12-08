@@ -15,6 +15,7 @@
 #include <otb/JSDDateTime.h>
 #include <otb/InfoSceneCoord.h>
 #include <ossim/base/ossimConstants.h>
+#include <ossimPluginConstants.h>
 
 class ossimKeywordlist;
 
@@ -25,7 +26,7 @@ namespace ossimplugins
  * @ingroup SceneCoord
  * @brief This class represents Scence coordinate
  */
-class SceneCoord
+class OSSIM_PLUGINS_DLL SceneCoord
 {
 public:
    /**

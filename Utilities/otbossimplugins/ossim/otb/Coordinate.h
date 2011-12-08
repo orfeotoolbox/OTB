@@ -12,6 +12,8 @@
 #ifndef Coordinate_h
 #define Coordinate_h
 
+#include <ossimPluginConstants.h>
+
 namespace ossimplugins
 {
 
@@ -20,7 +22,7 @@ namespace ossimplugins
  * @brief This class represents a coordinate
  */
 
-class Coordinate
+class OSSIM_PLUGINS_DLL Coordinate
 {
 public:
    /**

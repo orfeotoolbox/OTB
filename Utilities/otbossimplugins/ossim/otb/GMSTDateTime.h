@@ -11,6 +11,8 @@
 
 #ifndef GMSTDateTime_h
 #define GMSTDateTime_h
+
+#include <ossimPluginConstants.h>
 #include <otb/JulianDate.h>
 
 namespace ossimplugins
@@ -24,7 +26,7 @@ class JulianDate;
  * @ingroup Date
  * @brief This class represents a date
  */
-class GMSTDateTime
+class OSSIM_PLUGINS_DLL GMSTDateTime
 {
 public:
 

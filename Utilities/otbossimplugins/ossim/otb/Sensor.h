@@ -12,6 +12,7 @@
 #ifndef Services_h
 #define Services_h
 
+#include <ossimPluginConstants.h>
 #include <otb/JSDDateTime.h>
 
 namespace ossimplugins
@@ -26,7 +27,7 @@ class JSDDateTime;
  * @ingroup SARModel
  * @brief This class provides basic location services
  */
-class Sensor
+class OSSIM_PLUGINS_DLL Sensor
 {
 public:
   /**

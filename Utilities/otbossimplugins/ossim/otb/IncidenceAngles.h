@@ -12,9 +12,10 @@
 #ifndef IncidenceAngles_h
 #define IncidenceAngles_h
 
+#include <ossim/base/ossimConstants.h>
+#include <ossimPluginConstants.h>
 #include <otb/JSDDateTime.h>
 #include <otb/InfoIncidenceAngle.h>
-#include <ossim/base/ossimConstants.h>
 
 class ossimKeywordlist;
 
@@ -25,7 +26,7 @@ namespace ossimplugins
  * @ingroup IncidenceAngles
  * @brief This class represents Incidence Angles
  */
-class IncidenceAngles
+class OSSIM_PLUGINS_DLL IncidenceAngles
 {
 public:
    /**

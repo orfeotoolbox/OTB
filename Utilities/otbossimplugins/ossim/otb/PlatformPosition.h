@@ -12,6 +12,7 @@
 #ifndef PlatformPosition_h
 #define PlatformPosition_h
 
+#include <ossimPluginConstants.h>
 #include <otb/JSDDateTime.h>
 
 class ossimKeywordlist;
@@ -27,7 +28,7 @@ class Ephemeris;
  * @ingroup SARModel
  * @brief This class handles the platform position
  */
-class PlatformPosition
+class OSSIM_PLUGINS_DLL PlatformPosition
 {
 public:
    /**

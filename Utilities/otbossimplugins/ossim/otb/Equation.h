@@ -13,6 +13,7 @@
 #define Equation_h
 
 #include <complex>
+#include <ossimPluginConstants.h>
 
 namespace ossimplugins
 {
@@ -21,7 +22,7 @@ namespace ossimplugins
 /**
  * @brief This class manages and solves an equation of the fourth degree
  */
-class Equation
+class OSSIM_PLUGINS_DLL Equation
 {
 public:
    /**

@@ -12,9 +12,10 @@
 #ifndef RadarSat2NoiseLevel_h
 #define RadarSat2NoiseLevel_h
 
+#include <ossim/base/ossimConstants.h>
+#include <ossimPluginConstants.h>
 #include <otb/JSDDateTime.h>
 #include <otb/ImageNoise.h>
-#include <ossim/base/ossimConstants.h>
 
 class ossimKeywordlist;
 
@@ -25,7 +26,7 @@ namespace ossimplugins
  * @ingroup RadarSat2NoiseLevel
  * @brief This class represents an Noise
  */
-class RadarSat2NoiseLevel
+class OSSIM_PLUGINS_DLL RadarSat2NoiseLevel
 {
 public:
    /**

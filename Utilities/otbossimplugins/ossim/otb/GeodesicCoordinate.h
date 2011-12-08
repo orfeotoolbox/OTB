@@ -12,6 +12,7 @@
 #ifndef GeodesicCoordinate_h
 #define GeodesicCoordinate_h
 
+#include <ossimPluginConstants.h>
 #include <otb/Coordinate.h>
 
 namespace ossimplugins
@@ -22,7 +23,7 @@ namespace ossimplugins
  * @ingroup Date
  * @brief This class represents a coordinate in a geodesic reference
  */
- class GeodesicCoordinate : public Coordinate
+ class OSSIM_PLUGINS_DLL GeodesicCoordinate : public Coordinate
  {
  public:
   /**

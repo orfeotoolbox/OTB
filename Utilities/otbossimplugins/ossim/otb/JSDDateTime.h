@@ -11,6 +11,8 @@
 
 #ifndef JSDDateTime_h
 #define JSDDateTime_h
+
+#include <ossimPluginConstants.h>
 #include <otb/JulianDate.h>
 #include <otb/MJDDateTime.h>
 
@@ -25,7 +27,7 @@ class JulianDate;
 /**
  * @brief This class represents a date
  */
-class JSDDateTime
+class OSSIM_PLUGINS_DLL JSDDateTime
 {
 public:
    /**

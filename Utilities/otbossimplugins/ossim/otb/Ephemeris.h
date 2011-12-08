@@ -12,6 +12,7 @@
 #ifndef Ephemeride_h
 #define Ephemeride_h
 
+#include <ossimPluginConstants.h>
 #include <otb/JSDDateTime.h>
 
 class ossimKeywordlist;
@@ -24,7 +25,7 @@ namespace ossimplugins
  * @ingroup Ephemeris
  * @brief This class represents an ephemeris
  */
-class Ephemeris
+class OSSIM_PLUGINS_DLL Ephemeris
 {
 public:
    /**

@@ -14,6 +14,8 @@
 
 #include <vector>
 #include <ossim/base/ossimString.h>
+#include <ossimPluginConstants.h>
+
 
 class ossimKeywordlist;
 
@@ -25,7 +27,7 @@ namespace ossimplugins
  * @ingroup ImageNoise
  * @brief This class represents an ImageNoise
  */
-class ImageNoise
+class OSSIM_PLUGINS_DLL ImageNoise
 {
 public:
    /**

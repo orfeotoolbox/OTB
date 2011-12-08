@@ -12,6 +12,8 @@
 #ifndef JulianData_h
 #define JulianData_h
 
+#include <ossimPluginConstants.h>
+
 namespace ossimplugins
 {
 
@@ -22,7 +24,7 @@ class JSDDateTime;
 /**
  * @brief This class represents a date in the julian referential
  */
-class JulianDate
+class OSSIM_PLUGINS_DLL JulianDate
 {
 public:
   /**

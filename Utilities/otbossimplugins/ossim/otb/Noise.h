@@ -12,9 +12,9 @@
 #ifndef Noise_h
 #define Noise_h
 
+#include <ossim/base/ossimConstants.h>
 #include <otb/JSDDateTime.h>
 #include <otb/ImageNoise.h>
-#include <ossim/base/ossimConstants.h>
 
 class ossimKeywordlist;
 
@@ -25,7 +25,7 @@ namespace ossimplugins
  * @ingroup Noise
  * @brief This class represents an Noise
  */
-class Noise
+class OSSIM_PLUGINS_DLL Noise
 {
 public:
    /**

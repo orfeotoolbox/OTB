@@ -14,6 +14,7 @@
 
 #include <vector>
 #include <ossim/base/ossimString.h>
+#include <ossimPluginConstants.h>
 
 class ossimKeywordlist;
 
@@ -25,7 +26,7 @@ namespace ossimplugins
  * @ingroup InfoIncidenceAngle
  * @brief This class represents an InfoIncidenceAngle
  */
-class InfoIncidenceAngle
+class OSSIM_PLUGINS_DLL InfoIncidenceAngle
 {
 public:
    /**

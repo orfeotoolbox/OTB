@@ -12,6 +12,7 @@
 #ifndef GeographicEphemeride_h
 #define GeographicEphemeride_h
 
+#include <ossimPluginConstants.h>
 #include <otb/Ephemeris.h>
 
 namespace ossimplugins
@@ -23,7 +24,7 @@ class GalileanEphemeris;
  * @ingroup Ephemeris
  * @brief This class represent an ephemeris in Geographic coordinates system
  */
-class GeographicEphemeris : public Ephemeris
+class OSSIM_PLUGINS_DLL GeographicEphemeris : public Ephemeris
 {
 public:
   /**
