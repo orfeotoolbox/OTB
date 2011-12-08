@@ -30,7 +30,6 @@
 #include "otbStreamingShrinkImageFilter.h"
 #include "itkUnaryFunctorImageFilter.h"
 #include "otbChangeLabelImageFilter.h"
-#include "otbRAMDrivenTiledStreamingManager.h"
 #include "otbRAMDrivenStrippedStreamingManager.h"
 
 #include "otbChangeLabelImageFilter.h"
