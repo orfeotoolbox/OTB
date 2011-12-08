@@ -18,13 +18,16 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 #include "otbWrapperNumericalParameter.h"
-#include "otbGenericRSResampleImageFilter.h"
+
 #include "otbImageToGenericRSOutputParameters.h"
-#include "otbMapProjections.h"
+#include "otbGenericRSResampleImageFilter.h"
 
 #include "itkLinearInterpolateImageFunction.h"
 #include "otbBCOInterpolateImageFunction.h"
 #include "itkNearestNeighborInterpolateImageFunction.h"
+
+// MapProjection handler 
+#include "otbWrapperMapProjectionParametersHandler.h"
 
 #include "otbMacro.h"
 
@@ -33,12 +36,6 @@
 namespace otb
 {
 
-enum
-{
-  Map_Utm,
-  Map_Lambert2,
-  Map_Epsg
-};
 
 enum
 {
@@ -112,26 +109,8 @@ private:
     AddParameter(ParameterType_OutputImage, "io.out", "Output Image");
     SetParameterDescription("io.out","The ortho-rectified output image");
 
-    // Built the Output Map Projection
-    AddParameter(ParameterType_Choice, "map", "Output Map Projection");
-    SetParameterDescription("map","Parameters of the ouptut map projection.");
-    
-    AddChoice("map.utm",   "Universal Trans-Mercator (UTM)");
-    SetParameterDescription("map.utm","A system of transverse mercator projections dividing the surface of Earth between 80S and 84N latitude.");
-    AddParameter(ParameterType_Int, "map.utm.zone", "Zone number");
-    SetParameterDescription("map.utm.zone","The zone number ranges from 1 to 60 and allows to define the transverse mercator projection (along with the hemisphere)");
-    AddParameter(ParameterType_Empty, "map.utm.hem",  "Northern Hemisphere");
-    SetParameterDescription("map.utm.hem","The transverse mercator projections are defined by their zone number as well as the hemisphere. Activate this parameter if your image is in the northern hemisphere.");
-    AddChoice("map.lambert2",  "Lambert II Etendu");
-    SetParameterDescription("map.lambert2","This is a Lambert Conformal Conic projection mainly used in France.");
-
-    AddChoice("map.epsg","EPSG Code");
-    SetParameterDescription("map.epsg","This code is a generic way of identifying map projections, and allows to specify a large amount of them. See www.spatialreference.org to find which EPSG code is associated to your projection;");
-    AddParameter(ParameterType_Int, "map.epsg.code", "EPSG Code");
-    SetParameterDescription("map.epsg.code","See www.spatialreference.org to find which EPSG code is associated to your projection");
-    SetDefaultParameterInt("map.epsg.code", 32631);
-    SetParameterString("map", "epsg");
-
+    // Build the Output Map Projection
+    MapProjectionParametersHandler::AddMapProjectionParameters(this, "map");
     
     // Add the output paramters in a group
     AddParameter(ParameterType_Group, "outputs", "Output Image Grid");
@@ -229,9 +208,10 @@ private:
       FloatVectorImageType::Pointer inImage = GetParameterImage("io.in");
 
       // Update the UTM zone params
-      InitializeUTMParameters();
+      MapProjectionParametersHandler::InitializeUTMParameters(this, "io.in", "map");
+
       // Get the output projection Ref
-      this->UpdateOutputProjectionRef();
+      m_OutputProjectionRef = MapProjectionParametersHandler::GetProjectionRefFromChoice(this, "map");
 
       // Compute the output image spacing and size
       typedef otb::ImageToGenericRSOutputParameters<FloatVectorImageType> OutputParametersEstimatorType;
@@ -361,71 +341,6 @@ private:
         }
         break;
         }
-      }
-  }
-
-  void InitializeUTMParameters()
-  {
-    // Compute the zone and the hemisphere if not UserValue defined
-    if(!HasUserValue("map.utm.zone")
-       && HasValue("io.in")
-       && !HasAutomaticValue("map.utm.zone"))
-      {
-      // Compute the Origin lat/long coordinate
-      typedef otb::ImageToGenericRSOutputParameters<FloatVectorImageType> OutputParametersEstimatorType;
-      OutputParametersEstimatorType::Pointer genericRSEstimator = OutputParametersEstimatorType::New();
-      genericRSEstimator->SetInput(GetParameterImage("io.in"));
-      genericRSEstimator->SetOutputProjectionRef(otb::GeoInformationConversion::ToWKT(4326));
-      genericRSEstimator->Compute();
-
-      int zone = otb::Utils::GetZoneFromGeoPoint(genericRSEstimator->GetOutputOrigin()[0],
-                                                 genericRSEstimator->GetOutputOrigin()[1]);
-      // Update the UTM Gui fields
-      SetParameterInt("map.utm.zone", zone);
-      if(genericRSEstimator->GetOutputOrigin()[0] > 0.)
-        {
-        EnableParameter("map.utm.hem");
-        }
-
-      AutomaticValueOn("map.utm.zone");
-      AutomaticValueOn("map.utm.hem");
-      }
-  }
-
-  void UpdateOutputProjectionRef()
-  {
-    switch ( GetParameterInt("map") )
-      {
-      case Map_Utm:
-      {
-      typedef UtmInverseProjection  UtmProjectionType;
-      UtmProjectionType::Pointer    utmProjection = UtmProjectionType::New();
-
-      // Set the zone
-      utmProjection->SetZone(GetParameterInt("map.utm.zone"));
-
-      // Set the hem
-      std::string hem = "N";
-      if (!IsParameterEnabled("map.utm.hem"))
-        hem = "S";
-      utmProjection->SetHemisphere(hem[0]);
-        
-      // Get the projection ref
-      m_OutputProjectionRef = utmProjection->GetWkt();
-      }
-      break;
-      case Map_Lambert2:
-      {
-      typedef Lambert2EtenduForwardProjection Lambert2ProjectionType;
-      Lambert2ProjectionType::Pointer lambert2Projection = Lambert2ProjectionType::New();
-      m_OutputProjectionRef = lambert2Projection->GetWkt();
-      }
-      break;
-      case Map_Epsg:
-      {
-      m_OutputProjectionRef = otb::GeoInformationConversion::ToWKT(GetParameterInt("map.epsg.code"));
-      }
-      break;
       }
   }
 
