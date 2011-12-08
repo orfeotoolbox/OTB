@@ -280,20 +280,17 @@ private:
     // Update input images information
     m_InImage->UpdateOutputInformation();
 
-
-    bool maskFlag=IsParameterEnabled("vm");
-    if(maskFlag)
-    {
-          otbAppLogINFO("sample choice using mask "<<std::endl);
-          maskImage = GetParameterUInt8Image("vm");
-          maskImage->UpdateOutputInformation();
-          if (m_InImage->GetLargestPossibleRegion() != maskImage->GetLargestPossibleRegion())
-             {
-             GetLogger()->Error("Mask image and input image have different sizes.");
-             }
-    }
-
-
+    bool maskFlag = IsParameterEnabled("vm");
+    if (maskFlag)
+      {
+      otbAppLogINFO("sample choice using mask "<<std::endl);
+      maskImage = GetParameterUInt8Image("vm");
+      maskImage->UpdateOutputInformation();
+      if (m_InImage->GetLargestPossibleRegion() != maskImage->GetLargestPossibleRegion())
+        {
+        GetLogger()->Error("Mask image and input image have different sizes.");
+        }
+      }
 
     // Training sample lists
     ListSampleType::Pointer sampleList = ListSampleType::New();
@@ -331,20 +328,18 @@ private:
 
     MaskSamplingFilterType::Pointer maskSampler;
     LabeledIteratorType m_MaskIt;
-    if(maskFlag)
+    if (maskFlag)
       {
       maskSampler = MaskSamplingFilterType::New();
       maskSampler->SetInput(maskImage);
       maskSampler->SetShrinkFactor(shrinkFactor);
       maskSampler->Update();
-      m_MaskIt=LabeledIteratorType(maskSampler->GetOutput(), maskSampler->GetOutput()->GetLargestPossibleRegion());
+      m_MaskIt = LabeledIteratorType(maskSampler->GetOutput(), maskSampler->GetOutput()->GetLargestPossibleRegion());
       m_MaskIt.GoToBegin();
       }
     // Then, build the sample list
 
     IteratorType it(imageSampler->GetOutput(), imageSampler->GetOutput()->GetLargestPossibleRegion());
-
-
 
     it.GoToBegin();
 
@@ -354,15 +349,13 @@ private:
     //first sample
 
 
-
-
-    if(maskFlag)
+    if (maskFlag)
       {
-    while (!it.IsAtEnd() && !m_MaskIt .IsAtEnd() && (m_MaskIt.Get() <= 0))
-      {
-      ++it;
-      ++m_MaskIt;
-      }
+      while (!it.IsAtEnd() && !m_MaskIt .IsAtEnd() && (m_MaskIt.Get() <= 0))
+        {
+        ++it;
+        ++m_MaskIt;
+        }
       }
 
     min = it.Get();
@@ -373,23 +366,21 @@ private:
 
     ++it;
 
-    if(maskFlag)
+    if (maskFlag)
       {
-    ++m_MaskIt;
+      ++m_MaskIt;
       }
-
 
     totalSamples = 1;
     bool selectSample;
-    while (!it.IsAtEnd() )
+    while (!it.IsAtEnd())
       {
-      if(maskFlag)
+      if (maskFlag)
         {
-        selectSample=(m_MaskIt.Get() > 0);
+        selectSample = (m_MaskIt.Get() > 0);
         ++m_MaskIt;
         }
-      else
-        selectSample=true;
+      else selectSample = true;
 
       if (selectSample)
         {
