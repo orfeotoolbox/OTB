@@ -63,10 +63,7 @@ Application::Application()
   m_Logger->SetName("Application.logger");
   m_Logger->SetPriorityLevel(itk::LoggerBase::DEBUG);
   m_Logger->SetLevelForFlushing(itk::LoggerBase::CRITICAL);
-
-  m_ParameterList = ParameterGroup::New();
-  m_DocExample = DocExampleStructure::New();
-  }
+}
 
 Application::~Application()
 {
@@ -83,9 +80,14 @@ Application::GetParametersKeys(bool recursive)
   return GetParameterList()->GetParametersKeys(recursive);
 }
 
+bool Application::IsInitialized() const
+{
+  return m_ParameterList.IsNotNull() && m_DocExample.IsNotNull();
+}
+
 ParameterGroup* Application::GetParameterList()
 {
-  if (!m_ParameterList)
+  if (!IsInitialized())
     {
     Init();
     }
@@ -107,6 +109,7 @@ const Parameter* Application::GetParameterByKey(std::string name) const
 
 void Application::Init()
 {
+  m_DocExample    = DocExampleStructure::New();
   m_ParameterList = ParameterGroup::New();
   this->DoInit();
 }

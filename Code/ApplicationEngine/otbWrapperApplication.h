@@ -64,7 +64,7 @@ public:
   virtual void SetName( const std::string & name )
   {
     m_Name = name;
-    m_DocExample->SetApplicationName(name);
+    GetDocExample()->SetApplicationName(name);
     this->Modified();
   }
 
@@ -76,7 +76,7 @@ public:
   /** Get the parameter description */
   itkGetStringMacro(Description);
 
-  /** Initialize the application, instanciating the parameter list */
+  /** Initialize the application, instantiating the parameter list */
   void Init();
 
   /** Update the value of parameters for which no user value has been provided */
@@ -139,8 +139,8 @@ public:
   /* Return true if the specified parameter is mandatory */
   bool IsMandatory(std::string paramKey) const;
 
-  /* Return true if the specified parameter was set automtically in
-   * the applciation
+  /* Return true if the specified parameter was set automatically in
+   * the application
    */
   bool HasAutomaticValue(std::string paramKey) const;
 
@@ -519,60 +519,66 @@ public:
 
   DocExampleStructure::Pointer GetDocExample()
   {
+    if (! IsInitialized())
+      {
+      Init();
+      }
+
     return m_DocExample;
   }
 
   unsigned int GetNumberOfExamples()
   {
-    return m_DocExample->GetNbOfExamples();
+    return GetDocExample()->GetNbOfExamples();
   }
 
   std::string GetExampleComment(unsigned int id)
   {
-    return m_DocExample->GetExampleComment(id);
+    return GetDocExample()->GetExampleComment(id);
   }
 
   unsigned int GetExampleNumberOfParameters(unsigned int id)
   {
-    return m_DocExample->GetNumberOfParameters(id);
+    return GetDocExample()->GetNumberOfParameters(id);
   }
 
   std::string GetExampleParameterKey(unsigned int exId, unsigned int paramId)
   {
-    return m_DocExample->GetParameterKey(paramId, exId);
+    return GetDocExample()->GetParameterKey(paramId, exId);
   }
 
   std::string GetExampleParameterValue(unsigned int exId, unsigned int paramId)
   {
-    return m_DocExample->GetParameterValue(paramId, exId);
+    return GetDocExample()->GetParameterValue(paramId, exId);
   }
 
   void SetDocExampleParameterValue( const std::string key, const std::string value, unsigned int exId=0 )
   {
-    m_DocExample->AddParameter( key, value, exId );
+    GetDocExample()->AddParameter( key, value, exId );
     this->Modified();
   }
 
   void SetExampleComment( const std::string & comm, unsigned int i )
   {
-    m_DocExample->SetExampleComment( comm, i );
+    GetDocExample()->SetExampleComment( comm, i );
     this->Modified();
   }
 
   unsigned int AddExample( const std::string & comm="" )
   {
-    unsigned int id = m_DocExample->AddExample( comm );
+    unsigned int id = GetDocExample()->AddExample( comm );
     this->Modified();
     return id;
   }
   
   std::string GetCLExample()
   {
-    return m_DocExample->GenerateCLExample();
+    return GetDocExample()->GenerateCLExample();
   }
+
   std::string GetHtmlExample()
   {
-    return m_DocExample->GenerateHtmlExample();
+    return GetDocExample()->GenerateHtmlExample();
   }
 
   /** Return all parameters which role is Role_Output in a vector of pairs that contains the
@@ -586,6 +592,8 @@ protected:
 
   /** Destructor */
   virtual ~Application();
+
+  bool IsInitialized() const;
 
   /* Register a ProcessObject as a new progress source */
   void AddProcess(itk::ProcessObject* object, std::string description);
@@ -708,7 +716,7 @@ private:
   std::string m_DocName;
   /** Long and precise application description . */
   std::string                       m_DocLongDescription;
-  /** Doc example structure */
+  /** Doc example structure. Use GetDocExample() to access it */
   DocExampleStructure::Pointer m_DocExample;
   /** Author List. Format : "John Doe, Winnie the Pooh".*/
   std::string m_DocAuthors;
