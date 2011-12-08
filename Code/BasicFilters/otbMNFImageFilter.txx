@@ -331,11 +331,11 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
   InternalMatrixType An = m_NoiseCovarianceMatrix.GetVnlMatrix();
   InternalMatrixType W = An * Ax_inv;
 
-  vnl_svd< MatrixElementType > solver ( m_CovarianceMatrix.GetVnlMatrix() );
+  vnl_svd< MatrixElementType > solver ( W ); 
   InternalMatrixType transf = solver.U();
   InternalMatrixType valP = solver.W();
 
-  InternalMatrixType normMat //= transf.transpose() * An * transf;
+  InternalMatrixType normMat 
     = transf.transpose() * Ax_inv * transf;
 
   for ( unsigned int i = 0; i < transf.rows(); ++i )
