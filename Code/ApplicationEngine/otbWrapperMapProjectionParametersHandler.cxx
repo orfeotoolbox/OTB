@@ -38,14 +38,12 @@ void MapProjectionParametersHandler::AddMapProjectionParameters( Application::Po
   app->SetParameterDescription(oss.str(),"A system of transverse mercator projections dividing the surface of Earth between 80S and 84N latitude.");
 
   oss << ".zone";
-  std::cout <<"zone key "<< oss.str() << std::endl;
   app->AddParameter(ParameterType_Int, oss.str(), "Zone number");
   app->SetParameterDescription(oss.str(),"The zone number ranges from 1 to 60 and allows to define the transverse mercator projection (along with the hemisphere)");
   app->SetMinimumParameterIntValue(oss.str(), 1);
   
   oss.str("");
   oss <<key<<".utm" <<".hem";
-  std::cout <<"hem key "<< oss.str() << std::endl;
   app->AddParameter(ParameterType_Empty, oss.str(),  "Northern Hemisphere");
   app->SetParameterDescription(oss.str(),"The transverse mercator projections are defined by their zone number as well as the hemisphere. Activate this parameter if your image is in the northern hemisphere.");
 
@@ -92,13 +90,11 @@ void MapProjectionParametersHandler::AddMapProjectionParameters( Application::Po
   // epsg code
   oss.str("");
   oss<<key<<".epsg";
-  std::cout <<"epsg  key "<< oss.str() << std::endl;
   app->AddChoice(oss.str(),"EPSG Code");
   app->SetParameterDescription(oss.str(),
                                "This code is a generic way of identifying map projections, and allows to specify a large amount of them. See www.spatialreference.org to find which EPSG code is associated to your projection;");
 
   oss <<".code";
-  std::cout <<"code  key "<< oss.str() << std::endl;
   app->AddParameter(ParameterType_Int, oss.str(), "EPSG Code");
   app->SetParameterDescription(oss.str(),"See www.spatialreference.org to find which EPSG code is associated to your projection");
   app->SetDefaultParameterInt(oss.str(), 32631);
