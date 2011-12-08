@@ -26,7 +26,7 @@
 #include "otbBCOInterpolateImageFunction.h"
 #include "itkNearestNeighborInterpolateImageFunction.h"
 
-// MapProjection handler 
+// MapProjection handler
 #include "otbWrapperMapProjectionParametersHandler.h"
 
 #include "otbMacro.h"

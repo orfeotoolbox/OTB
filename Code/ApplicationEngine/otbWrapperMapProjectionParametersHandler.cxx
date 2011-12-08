@@ -102,12 +102,12 @@ void MapProjectionParametersHandler::AddMapProjectionParameters( Application::Po
   app->SetParameterString(key, "epsg");
 }
 
-/** 
+/**
     * Helper method : Compute the ProjectionRef knowing the map
     * projection picked up by the user
-    *  
+    *
     */
-const std::string MapProjectionParametersHandler::GetProjectionRefFromChoice(Application::Pointer app, 
+const std::string MapProjectionParametersHandler::GetProjectionRefFromChoice(Application::Pointer app,
                                                                    const std::string & key)
 {
   std::ostringstream zoneKey;
@@ -187,14 +187,14 @@ const std::string MapProjectionParametersHandler::GetProjectionRefFromChoice(App
     }
 }
 
-/** 
+/**
     * Helper method : Compute the UTM paramaters relative to an image Origin
     * Note: The key of the image must be set to be able to get the image.
     *       The key must be totally if the InputImageParameter belongs
-    *       to a ParamaterGroup, ie set io.in 
+    *       to a ParamaterGroup, ie set io.in
     */
-void MapProjectionParametersHandler::InitializeUTMParameters(Application::Pointer app, 
-                                                   const std::string & imageKey, 
+void MapProjectionParametersHandler::InitializeUTMParameters(Application::Pointer app,
+                                                   const std::string & imageKey,
                                                    const std::string & mapKey )
 {
   // Get the UTM params keys

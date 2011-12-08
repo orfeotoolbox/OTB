@@ -39,42 +39,42 @@ enum
 
 /** \class MapProjectionParametersHandler
  *  \brief This class represent a helper class.
- *  
+ *
  * This class allow creating a Group with several mapProjection
  * paramaters
  */
 class MapProjectionParametersHandler
 {
 public:
-  /** 
+  /**
     * Add a Group containing several choices for map projections
-    *  
+    *
     */
   static void AddMapProjectionParameters(Application::Pointer app, const std::string & key);
 
-  /** 
+  /**
     * Helper method : Compute the ProjectionRef knowing the map
     * projection picked up by the user
-    *  
+    *
     */
-  static const std::string GetProjectionRefFromChoice(Application::Pointer app, 
+  static const std::string GetProjectionRefFromChoice(Application::Pointer app,
                                                       const std::string & key);
     
 
-  /** 
+  /**
     * Helper method : Compute the UTM paramaters relative an image
     * Note: The key of the image must be set to be able to get the image.
     *       The key must be totally if the InputImageParameter belongs
-    *       to a ParamaterGroup, ie set io.in 
+    *       to a ParamaterGroup, ie set io.in
     */
-  static void InitializeUTMParameters(Application::Pointer app, 
-                                      const std::string & imageKey, 
+  static void InitializeUTMParameters(Application::Pointer app,
+                                      const std::string & imageKey,
                                       const std::string & mapKey );
 
 protected:
   MapProjectionParametersHandler(); // not implemented
   virtual ~MapProjectionParametersHandler(); // not implemented
-}; 
+};
 
 }
 }

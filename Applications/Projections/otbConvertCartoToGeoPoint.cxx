@@ -96,10 +96,10 @@ private:
 
   void DoExecute()
   {
-    // Get the projectionRef 
+    // Get the projectionRef
     std::string inputProjRef = MapProjectionParametersHandler::GetProjectionRefFromChoice(this, "mapproj");
 
-    // Instanciate a GenericRSTranform 
+    // Instanciate a GenericRSTranform
     // Input : coordiante system picked up by the user
     // Output : WGS84 correponding to epsg code 4326
     TransformType::Pointer  transform = TransformType::New();
