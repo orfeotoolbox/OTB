@@ -727,6 +727,13 @@ private:
   /** Tags that define the applcation (ex : segmentation, OBIA).*/
   std::vector<std::string> m_DocTags;
 
+  /**
+    * Declare the class Wrapper::MapProjectionParametersHandler as friend
+    * to be able to access to the protected method of
+    * Wrapper::Application class.
+    **/
+  friend class MapProjectionParametersHandler;
+
 }; //end class
 
 } // end namespace Wrapper
