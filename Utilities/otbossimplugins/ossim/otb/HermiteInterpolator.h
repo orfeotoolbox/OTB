@@ -12,6 +12,8 @@
 #ifndef HermiteInterpolator_h
 #define HermiteInterpolator_h
 
+#include <ossimPluginConstants.h>
+
 namespace ossimplugins
 {
 
@@ -21,7 +23,7 @@ namespace ossimplugins
  * @brief Abstract interpolator
  * @see Interpolate
  */
-class HermiteInterpolator
+class OSSIM_PLUGINS_DLL HermiteInterpolator
 {
 public:
    /**
