@@ -1179,10 +1179,44 @@ Application::IsApplicationReady()
       //  - The param is not root and belonging to a Mandatory Group
       //    wich is activated
       if ( !this->HasValue(*it)  && IsMandatory(*it) )
-        if( GetParameterByKey(*it)->IsRoot() || GetParameterByKey(*it)->GetRoot()->GetActive() )
+        {
+        if( GetParameterByKey(*it)->IsRoot() )
           {
+          otbDebugMacro("MISSING : "<< (*it).c_str() << " ( Is Root)");
           return false;
           }
+        else
+          {
+          // check if the parameter is linked to a root parameter with a chain of active parameters
+          Parameter* currentParam = GetParameterByKey(*it)->GetRoot();
+          if (currentParam->IsRoot())
+            {
+            otbDebugMacro("MISSING : "<< (*it).c_str() << " ( Is Level 1)");
+            return false;
+            }
+          
+          int level = 1;
+          
+          while (!currentParam->IsRoot())
+            {
+            if (!currentParam->GetActive())
+              {
+              // the missing parameter is not on an active branch : we can ignore it
+              break;
+              }
+            currentParam = currentParam->GetRoot();
+            
+            level++;
+            
+            if (currentParam->IsRoot())
+              {
+              // the missing parameter is on an active branch : we need it
+              otbDebugMacro("MISSING : "<< (*it).c_str() << " ( Is Level "<< level<<")");
+              return false;
+              } 
+            }
+          }
+        }
       }
     }
 

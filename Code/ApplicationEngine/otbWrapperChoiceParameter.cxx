@@ -40,7 +40,15 @@ ChoiceParameter::AddChoice( std::string choicekey, std::string choiceName )
   choice.m_Name = choiceName;
   choice.m_AssociatedParameter = ParameterGroup::New();
   choice.m_AssociatedParameter->SetName(choiceName);
+  choice.m_AssociatedParameter->SetRoot(this);
+  
   m_ChoiceList.push_back(choice);
+
+  // check if the new choice matches the m_CurrentChoice : if so the group should be active.
+  if (m_CurrentChoice == (m_ChoiceList.size() - 1))
+    {
+    m_ChoiceList[m_CurrentChoice].m_AssociatedParameter->SetActive(true);
+    }
 
   // Add the associated parameter as a child
   // in order to not have a gap in the children hierarchy
@@ -123,6 +131,28 @@ ChoiceParameter::SetValue(unsigned int v)
 {
   m_CurrentChoice = v;
   SetActive(true);
+  // update the active flag in sub parameters
+  for (unsigned int i=0; i< m_ChoiceList.size();i++)
+    {
+    if (m_ChoiceList[i].m_AssociatedParameter)
+      {
+      if (i==m_CurrentChoice)
+        {
+        if (!m_ChoiceList[i].m_AssociatedParameter->GetActive())
+          {
+          m_ChoiceList[i].m_AssociatedParameter->SetActive(true);
+          }
+        }
+      else
+        {      
+        if (m_ChoiceList[i].m_AssociatedParameter->GetActive())
+          {
+          m_ChoiceList[i].m_AssociatedParameter->SetActive(false);
+          }
+        }
+      }
+    }
+  
   // Call Modified();
   this->Modified();
 }
