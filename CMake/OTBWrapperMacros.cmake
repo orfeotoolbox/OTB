@@ -62,10 +62,10 @@ macro(OTB_CREATE_APPLICATION)
                DESTINATION ${APPLICATION_BINARY_PATH}
                FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)  
     
-          if (APPLICATION_INSTALL_PATH)
-              # Install a version of this script
+          if (OTB_INSTALL_BIN_DIR_CM24)
+              # Install a version of this script if we are inside the OTB build
               install(PROGRAMS ${APPLICATION_BINARY_PATH}/otbcli_${APPLICATION_NAME}
-                      DESTINATION ${APPLICATION_INSTALL_PATH})
+                      DESTINATION ${OTB_INSTALL_BIN_DIR_CM24})
           endif()
       endif()
 
@@ -80,11 +80,11 @@ macro(OTB_CREATE_APPLICATION)
           file(COPY ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/otbgui_${APPLICATION_NAME}
                DESTINATION ${APPLICATION_BINARY_PATH}
                FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)  
-    
-          if (APPLICATION_INSTALL_PATH)
-              # Install a version of this script
+
+          if (OTB_INSTALL_BIN_DIR_CM24)
+              # Install a version of this script if we are inside the OTB build
               install(PROGRAMS ${APPLICATION_BINARY_PATH}/otbgui_${APPLICATION_NAME}
-                      DESTINATION ${APPLICATION_INSTALL_PATH})
+                      DESTINATION ${OTB_INSTALL_BIN_DIR_CM24})
           endif()
       endif()
    endif(NOT WIN32)
