@@ -132,7 +132,7 @@ ChoiceParameter::SetValue(unsigned int v)
   m_CurrentChoice = v;
   SetActive(true);
   // update the active flag in sub parameters
-  for (unsigned int i=0; i< m_ChoiceList.size();i++)
+  for (unsigned int i=0; i< m_ChoiceList.size(); i++)
     {
     if (m_ChoiceList[i].m_AssociatedParameter)
       {
@@ -144,7 +144,7 @@ ChoiceParameter::SetValue(unsigned int v)
           }
         }
       else
-        {      
+        {
         if (m_ChoiceList[i].m_AssociatedParameter->GetActive())
           {
           m_ChoiceList[i].m_AssociatedParameter->SetActive(false);

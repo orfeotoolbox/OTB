@@ -1213,7 +1213,7 @@ Application::IsApplicationReady()
               // the missing parameter is on an active branch : we need it
               otbDebugMacro("MISSING : "<< (*it).c_str() << " ( Is Level "<< level<<")");
               return false;
-              } 
+              }
             }
           }
         }
