@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 # Import the otb applications package
 import otbApplication
 import sys
@@ -15,4 +13,4 @@ Convert.SetParameterString("out", sys.argv[2])
 Convert.SetParameterString("type","linear")
 
 # The following line execute the application
-Convert.ExecuteAndWriteOutput()
+sys.exit(Convert.ExecuteAndWriteOutput())
