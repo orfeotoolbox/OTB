@@ -52,7 +52,7 @@ private:
    
     AddDocTag("Test");
 
-    std::cout << "TestApplication::DoInit" << std::endl;
+    //std::cout << "TestApplication::DoInit" << std::endl;
     AddParameter(ParameterType_Empty, "boolean", "Boolean");
     AddParameter(ParameterType_Int, "int", "Integer");
     MandatoryOff("int");
@@ -100,12 +100,12 @@ private:
 
   void DoUpdateParameters()
   {
-    std::cout << "TestApplication::DoUpdateParameters" << std::endl;
+    //std::cout << "TestApplication::DoUpdateParameters" << std::endl;
   }
 
   void DoExecute()
   {
-    std::cout << "TestApplication::DoExecute" << std::endl;
+    //std::cout << "TestApplication::DoExecute" << std::endl;
   }
 };
 }
