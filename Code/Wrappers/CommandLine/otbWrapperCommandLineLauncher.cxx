@@ -178,8 +178,6 @@ bool CommandLineLauncher::BeforeExecute()
     return false;
     }
 
-  m_Application->Init();
-
   // Check if there's keys in the expression if the application takes
   // at least 1 mandatory parameter
   const std::vector<std::string> appKeyList = m_Application->GetParametersKeys(true);
@@ -491,13 +489,31 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
     bool mustBeSet = false;
     const bool hasValue = m_Application->HasValue(paramKey);
 
-    if( param->GetMandatory() == true && param->GetRole() != Role_Output )
+    if( param->GetMandatory() == true && param->GetRole() != Role_Output && type != ParameterType_Group)
       {
-      if( param->GetRoot()->GetActive() || param->IsRoot() )
+      // check if the parameter is linked to a root parameter with a chain of active parameters
+      if( param->IsRoot() || param->GetRoot()->IsRoot())
         {
-        if (type != ParameterType_Group)
+        // the parameter is a root or inside a group at root level
+        mustBeSet = true;
+        }
+      else
+        {
+        Parameter* currentParam = param->GetRoot();
+        while (!currentParam->IsRoot())
           {
-          mustBeSet = true;
+          if (!currentParam->GetActive())
+            {
+            // the missing parameter is not on an active branch : we can ignore it
+            break;
+            }
+          currentParam = currentParam->GetRoot();
+          
+          if (currentParam->IsRoot())
+            {
+            // the missing parameter is on an active branch : we need it
+            mustBeSet = true;
+            }
           }
         }
       }
