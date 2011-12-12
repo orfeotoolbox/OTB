@@ -667,13 +667,6 @@ ADD_TEST(coTuGenericInterpolateImageFunctionNew ${COMMON_TESTS7}
 otbGenericInterpolateImageFunctionNew
 )
 
-# -------------  otb::MirrorBoundaryCondition ----------------------------
-ADD_TEST(coTvMirrorBoundaryCondition ${COMMON_TESTS7}
-     otbMirrorBoundaryConditionTest
-     ${INPUTDATA}/qb_RoadExtract.img
-     10
-)
-
 # -------------  otb::StandardFilterWatcherNew ----------------------------
 ADD_TEST(coTuStandardFilterWatcherNew ${COMMON_TESTS7}
      otbStandardFilterWatcherNew
@@ -1193,7 +1186,6 @@ otbRectangle.cxx
 SET(BasicCommon_SRCS7
 otbCommonTests7.cxx
 otbGenericInterpolateImageFunctionNew.cxx
-otbMirrorBoundaryConditionTest.cxx
 otbStandardFilterWatcherNew.cxx
 otbStandardOneLineFilterWatcherTest.cxx
 otbDataNodeTest.cxx

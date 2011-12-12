@@ -25,7 +25,6 @@
 void RegisterTests()
 {
   REGISTER_TEST(otbGenericInterpolateImageFunctionNew);
-  REGISTER_TEST(otbMirrorBoundaryConditionTest);
   REGISTER_TEST(otbStandardFilterWatcherNew);
   REGISTER_TEST(otbStandardOneLineFilterWatcherTest);
   REGISTER_TEST(otbDataNodeTest);
