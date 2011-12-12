@@ -68,18 +68,21 @@ void MapProjectionParametersHandler::AddMapProjectionParameters( Application::Po
 
   std::ostringstream subParamKey;
   subParamKey<<oss.str()<<".falseeasting";
-  app->AddParameter(ParameterType_Float, subParamKey.str(), "False easting");
+  app->AddParameter(ParameterType_Float, subParamKey.str(), "False easting");  
   app->SetParameterDescription( subParamKey.str(), " Transmercator false easting value.");
+  app->SetDefaultParameterFloat(subParamKey.str(),0.);
 
   subParamKey.str("");
   subParamKey<<oss.str()<<".falsenorthing";
   app->AddParameter(ParameterType_Float, subParamKey.str(), "False northing");
   app->SetParameterDescription(subParamKey.str(), " Transmercator false northing value.");
-
+  app->SetDefaultParameterFloat(subParamKey.str(),0.);
+ 
   subParamKey.str("");
   subParamKey<<oss.str()<<".scale";
   app->AddParameter(ParameterType_Float, subParamKey.str(), "Scale factor");
   app->SetParameterDescription(subParamKey.str(), " Transmercator scale factor value.");
+  app->SetDefaultParameterFloat(subParamKey.str(),1.);
 
   // wgs84
   oss.str("");
