@@ -46,6 +46,7 @@ void ElevationParametersHandler::AddElevationParameters(Application::Pointer app
   oss << ".value";
   app->AddParameter(ParameterType_Float, oss.str(), "Average Elevation");
   app->SetParameterDescription(oss.str(),"This parameter allows to pick up an average elevation for all the points of the image.");
+  app->SetDefaultParameterFloat(oss.str(),0.);
 
 // // TODO : not implemented yet
 // //   // Tiff image
@@ -64,7 +65,7 @@ void ElevationParametersHandler::AddElevationParameters(Application::Pointer app
   app->SetParameterString(oss.str(), otb::ConfigurationFile::GetInstance()->GetGeoidFile());
 
   // Set the default value
-  app->SetParameterString(key, "dem");
+  app->SetParameterString(key, "average");
 }
 
 
