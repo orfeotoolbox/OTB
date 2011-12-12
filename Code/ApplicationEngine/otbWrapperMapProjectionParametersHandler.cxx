@@ -107,7 +107,7 @@ void MapProjectionParametersHandler::AddMapProjectionParameters( Application::Po
     * projection picked up by the user
     *
     */
-const std::string MapProjectionParametersHandler::GetProjectionRefFromChoice(Application::Pointer app,
+const std::string MapProjectionParametersHandler::GetProjectionRefFromChoice(const Application::Pointer app,
                                                                    const std::string & key)
 {
   std::ostringstream zoneKey;

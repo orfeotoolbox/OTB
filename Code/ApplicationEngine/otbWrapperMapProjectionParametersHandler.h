@@ -57,7 +57,7 @@ public:
     * projection picked up by the user
     *
     */
-  static const std::string GetProjectionRefFromChoice(Application::Pointer app,
+  static const std::string GetProjectionRefFromChoice(const Application::Pointer app,
                                                       const std::string & key);
     
 
