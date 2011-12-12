@@ -25,6 +25,9 @@
 #include "itkPixelBuilder.h"
 #include "itkFixedArray.h"
 
+// Elevation handler
+#include "otbWrapperElevationParametersHandler.h"
+
 namespace otb
 {
 namespace Wrapper
@@ -65,14 +68,15 @@ private:
 
     AddParameter(ParameterType_InputImage,   "inp",   "Input PAN Image");
     AddParameter(ParameterType_InputImage,   "inxs",  "Input XS Image");
-    AddParameter(ParameterType_Directory,    "dem",   "DEM directory");
+    // Elevation
+    ElevationParametersHandler::AddElevationParameters(this, "elev");
+
     AddParameter(ParameterType_Float,        "lms",   "Spacing of the deformation field");
     AddParameter(ParameterType_OutputImage,  "out",   "Output image");
     AddParameter(ParameterType_RAM, "ram", "Available RAM");
     SetDefaultParameterInt("ram", 256);
 
     MandatoryOff("lms");
-    MandatoryOff("dem");
     MandatoryOff("ram");
    
     // Doc example parameter settings
@@ -120,17 +124,29 @@ private:
     InterpolatorType::Pointer interpolator = InterpolatorType::New();
     resampler->SetInterpolator(interpolator);
     
-    // Configure DEM directory
-    if(IsParameterEnabled("dem") && HasValue("dem"))
+    // Elevation through the elevation handler
+    switch(ElevationParametersHandler::GetElevationType(this, "elev"))
       {
-      resampler->SetDEMDirectory( GetParameterString("dem") );
+      case Elevation_DEM:
+      {
+      resampler->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
       }
-    else
+      break;
+      case Elevation_Average:
       {
-      if ( otb::ConfigurationFile::GetInstance()->IsValid() )
-        {
-        resampler->SetDEMDirectory(otb::ConfigurationFile::GetInstance()->GetDEMDirectory());
-        }
+      resampler->SetAverageElevation(ElevationParametersHandler::GetAverageElevation(this, "elev"));
+      }
+      break;
+      //   Commented cause using a tiff file is not implemented yet
+      //  case Elevation_Tiff:
+      //  {
+      //  }
+      //  break;
+      case Elevation_Geoid:
+      {
+      resampler->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
+      }
+      break;
       }
 
     // Set up output image informations

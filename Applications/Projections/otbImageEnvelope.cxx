@@ -20,6 +20,9 @@
 
 #include "otbImageToEnvelopeVectorDataFilter.h"
 
+// Elevation handler
+#include "otbWrapperElevationParametersHandler.h"
+
 namespace otb
 {
 namespace Wrapper
@@ -63,15 +66,9 @@ private:
     
     AddParameter(ParameterType_OutputVectorData,  "out",   "Output Vector Data");
     SetParameterDescription("out", "Vector data file containing the envelope");
-    
-    AddParameter(ParameterType_Float, "ae",  "AverageElevation");
-    SetParameterDescription("ae", "If no DEM is used, provide the height value (default is 0 meters)");
-    SetDefaultParameterFloat("ae", 0.0);
-    MandatoryOff("ae");
-    
-    AddParameter(ParameterType_String, "dem",  "DEMDirectory");
-    SetParameterDescription("dem", "Use DEM tiles to derive height values (AverageElevation option is ignored in this case)");
-    MandatoryOff("dem");
+
+    // Elevation
+    ElevationParametersHandler::AddElevationParameters(this, "elev");
     
     AddParameter(ParameterType_String, "proj",  "Projection");
     SetParameterDescription("proj", "Projection to be used to compute the envelope (default is WGS84)");
@@ -94,13 +91,29 @@ private:
     m_Envelope = EnvelopeFilterType::New();
     m_Envelope->SetInput(input);
     
-    if (HasValue("dem"))
+    // Elevation through the elevation handler
+    switch(ElevationParametersHandler::GetElevationType(this, "elev"))
       {
-      m_Envelope->SetDEMDirectory(GetParameterString("dem"));
+      case Elevation_DEM:
+      {
+      m_Envelope->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
       }
-    else
+      break;
+      case Elevation_Average:
       {
-      m_Envelope->SetAverageElevation(GetParameterFloat("ae"));
+      m_Envelope->SetAverageElevation(ElevationParametersHandler::GetAverageElevation(this, "elev"));
+      }
+      break;
+      //   Commented cause using a tiff file is not implemented yet
+      //  case Elevation_Tiff:
+      //  {
+      //  }
+      //  break;
+      case Elevation_Geoid:
+      {
+      m_Envelope->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
+      }
+      break;
       }
     
     if (HasValue("proj"))

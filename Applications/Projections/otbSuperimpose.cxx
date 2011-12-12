@@ -21,6 +21,9 @@
 #include "otbGenericRSResampleImageFilter.h"
 #include "otbBCOInterpolateImageFunction.h"
 
+// Elevation handler
+#include "otbWrapperElevationParametersHandler.h"
+
 namespace otb
 {
 
@@ -66,7 +69,10 @@ private:
 
     AddParameter(ParameterType_InputImage,   "inr",   "Reference input");
     AddParameter(ParameterType_InputImage,   "inm",   "The image to reproject");
-    AddParameter(ParameterType_Directory,    "dem",   "DEM directory");
+
+    // Elevation
+    ElevationParametersHandler::AddElevationParameters(this, "elev");
+
     AddParameter(ParameterType_Float,        "lms",   "Spacing of the deformation field");
     SetParameterDescription("lms","Generate a coarser deformation field with the given spacing");
     SetDefaultParameterFloat("lms", 4.);
@@ -75,7 +81,6 @@ private:
     AddParameter(ParameterType_RAM,          "ram", "Available RAM");
     SetDefaultParameterInt("ram", 256);
 
-    MandatoryOff("dem");
     MandatoryOff("lms");
     MandatoryOff("ram");
 
@@ -102,17 +107,29 @@ private:
     m_Interpolator = InterpolatorType::New();
     m_Resampler->SetInterpolator(m_Interpolator);
     
-    // Configure DEM directory
-    if(IsParameterEnabled("dem"))
+    // Elevation through the elevation handler
+    switch(ElevationParametersHandler::GetElevationType(this, "elev"))
       {
-      m_Resampler->SetDEMDirectory(GetParameterString("dem"));
+      case Elevation_DEM:
+      {
+      m_Resampler->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
       }
-    else
+      break;
+      case Elevation_Average:
       {
-      if ( otb::ConfigurationFile::GetInstance()->IsValid() )
-        {
-        m_Resampler->SetDEMDirectory(otb::ConfigurationFile::GetInstance()->GetDEMDirectory());
-        }
+      m_Resampler->SetAverageElevation(ElevationParametersHandler::GetAverageElevation(this, "elev"));
+      }
+      break;
+      //   Commented cause using a tiff file is not implemented yet
+      //  case Elevation_Tiff:
+      //  {
+      //  }
+      //  break;
+      case Elevation_Geoid:
+      {
+      m_Resampler->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
+      }
+      break;
       }
     
     // Set up output image informations
