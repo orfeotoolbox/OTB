@@ -52,7 +52,7 @@ public:
     * projection picked up by the user
     *
     */
-  static const ElevationType GetElevationType(const Application::Pointer app, const std::string& key);
+  static ElevationType GetElevationType(const Application::Pointer app, const std::string& key);
 
   /** Method for getting the value of the elevation mode selected */
   static const std::string GetDEMDirectory(const Application::Pointer app, const std::string& key);

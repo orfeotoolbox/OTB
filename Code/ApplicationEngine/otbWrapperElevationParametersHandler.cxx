@@ -37,7 +37,7 @@ void ElevationParametersHandler::AddElevationParameters(Application::Pointer app
   app->AddParameter(ParameterType_Directory, oss.str(), "DEM directory");
   app->SetParameterDescription(oss.str(),
                                "This parameter allows to select a directory containing Digital Elevation Model tiles");
-  app->MandatoryOff(oss.str());
+  app->SetParameterString(oss.str(), otb::ConfigurationFile::GetInstance()->GetDEMDirectory());
 
   // Average elevation
   oss.str("");
@@ -61,6 +61,7 @@ void ElevationParametersHandler::AddElevationParameters(Application::Pointer app
   oss << ".value";
   app->AddParameter(ParameterType_Filename, oss.str(), "Geoid File");
   app->SetParameterDescription(oss.str(),"Use a geoid grid to get the height above the ellipsoid used");
+  app->SetParameterString(oss.str(), otb::ConfigurationFile::GetInstance()->GetGeoidFile());
 
   // Set the default value
   app->SetParameterString(key, "dem");
@@ -106,7 +107,7 @@ ElevationParametersHandler::GetGeoidFile(const Application::Pointer app, const s
  *
  * Get the Elevation mode choosen by the user
  */
-const ElevationType 
+ElevationType 
 ElevationParametersHandler::GetElevationType(const Application::Pointer app, const std::string& key)
 {
   switch(app->GetParameterInt(key))
