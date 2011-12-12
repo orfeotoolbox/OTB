@@ -392,14 +392,7 @@ private:
       {
       case Elevation_DEM:
       {
-      if(!ElevationParametersHandler::GetDEMDirectory(this, "elev").empty())
-        {
-        m_ResampleFilter->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
-        }
-      else
-        {
-        m_ResampleFilter->SetDEMDirectory(otb::ConfigurationFile::GetInstance()->GetDEMDirectory());
-        }
+      m_ResampleFilter->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
       }
       break;
       case Elevation_Average:
