@@ -34,7 +34,7 @@ namespace Wrapper
  * modes to be used, supported modes are DEM, Geoid file, average
  * elevation. The user can get the value relative to each mode
  * using one the following methods Get{AverageElevation, DEMDirectory, GeoidFile}.
- * 
+ *
  *
  */
 

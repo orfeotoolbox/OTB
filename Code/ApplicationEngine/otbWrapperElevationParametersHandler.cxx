@@ -22,7 +22,7 @@ namespace otb
 namespace Wrapper
 {
 
-void ElevationParametersHandler::AddElevationParameters(Application::Pointer app, 
+void ElevationParametersHandler::AddElevationParameters(Application::Pointer app,
                                                          const std::string & key)
 {
   app->AddParameter(ParameterType_Choice, key, "Elevation management");
@@ -46,7 +46,7 @@ void ElevationParametersHandler::AddElevationParameters(Application::Pointer app
   oss << ".value";
   app->AddParameter(ParameterType_Float, oss.str(), "Average Elevation");
   app->SetParameterDescription(oss.str(),"This parameter allows to pick up an average elevation for all the points of the image.");
-  app->SetDefaultParameterFloat(oss.str(),0.);
+  app->SetDefaultParameterFloat(oss.str(), 0.);
 
 // // TODO : not implemented yet
 // //   // Tiff image
@@ -108,7 +108,7 @@ ElevationParametersHandler::GetGeoidFile(const Application::Pointer app, const s
  *
  * Get the Elevation mode choosen by the user
  */
-ElevationType 
+ElevationType
 ElevationParametersHandler::GetElevationType(const Application::Pointer app, const std::string& key)
 {
   switch(app->GetParameterInt(key))
