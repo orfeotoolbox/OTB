@@ -28,7 +28,7 @@ namespace otb
  */
 template <class TInputVectorData, class TInputImage>
 VectorDataIntoImageProjectionFilter<TInputVectorData, TInputImage>
-::VectorDataIntoImageProjectionFilter() : m_DEMDirectory("")
+::VectorDataIntoImageProjectionFilter() : m_DEMDirectory(""), m_GeoidFile("")
 {
   m_OutputSpacing.Fill(1);
   m_OutputOrigin.Fill(0);
@@ -184,6 +184,11 @@ VectorDataIntoImageProjectionFilter<TInputVectorData, TInputImage>
     {
     m_VdExtractFilter->SetDEMDirectory(m_DEMDirectory);
     }
+  
+    if (!m_GeoidFile.empty())
+    {
+    m_VdExtractFilter->SetGeoidFile(m_GeoidFile);
+    }
 
   // Reproject VectorData in image projection
   m_VdProjFilter->SetInputProjectionRef(this->GetInput()->GetProjectionRef());
@@ -212,6 +217,11 @@ VectorDataIntoImageProjectionFilter<TInputVectorData, TInputImage>
   if (!m_DEMDirectory.empty())
     {
     m_VdProjFilter->SetDEMDirectory(m_DEMDirectory);
+    }
+
+  if (!m_GeoidFile.empty())
+    {
+    m_VdProjFilter->SetGeoidFile(m_GeoidFile);
     }
 
   m_VdProjFilter->Update();

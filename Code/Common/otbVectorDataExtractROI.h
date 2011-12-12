@@ -100,6 +100,9 @@ public:
   itkSetStringMacro(DEMDirectory);
   itkGetStringMacro(DEMDirectory);
 
+  itkSetStringMacro(GeoidFile);
+  itkGetStringMacro(GeoidFile);
+
 protected:
   VectorDataExtractROI();
   virtual ~VectorDataExtractROI() {}
@@ -139,6 +142,7 @@ private:
   RegionType  m_ROI;
   RegionType  m_GeoROI;
   std::string m_DEMDirectory;
+  std::string m_GeoidFile;
 
   unsigned int m_Kept;
 

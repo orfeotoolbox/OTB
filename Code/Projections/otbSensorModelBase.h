@@ -86,6 +86,9 @@ public:
 
   virtual void SetDEMDirectory(const std::string& directory);
 
+  virtual void SetGeoidFile(const std::string& geoidFile);
+
+
   /** Is sensor model valid method. return false if the sensor model is null */
   bool IsValidSensorModel()
   {

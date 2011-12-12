@@ -33,7 +33,7 @@ namespace otb
 template<class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
 ::GenericRSTransform() : Superclass(SpaceDimension, ParametersDimension),
-                         m_DEMDirectory(""),
+                         m_DEMDirectory(""), m_GeoidFile(""),
                          m_AverageElevation(-32768.0)
 {
   m_InputProjectionRef.clear();
@@ -157,6 +157,11 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
         {
         sensorModel->SetAverageElevation(m_AverageElevation);
         }
+
+      if (!m_GeoidFile.empty())
+        {
+        sensorModel->SetGeoidFile(m_GeoidFile);
+        }
       m_InputTransform = sensorModel.GetPointer();
       inputTransformIsSensor = true;
       otbMsgDevMacro(<< "Input projection set to sensor model.");
@@ -226,6 +231,12 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
         {
         sensorModel->SetAverageElevation(m_AverageElevation);
         }
+
+      if (!m_GeoidFile.empty())
+        {
+        sensorModel->SetGeoidFile(m_GeoidFile);
+        }
+
       m_OutputTransform = sensorModel.GetPointer();
       outputTransformIsSensor = true;
       otbMsgDevMacro(<< "Output projection set to sensor model");

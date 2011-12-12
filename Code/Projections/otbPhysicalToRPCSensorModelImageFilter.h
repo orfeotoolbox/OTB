@@ -96,6 +96,10 @@ public:
   itkSetStringMacro(DEMDirectory);
   itkGetStringMacro(DEMDirectory);
 
+  /** Set/Get the DEM directory*/
+  itkSetStringMacro(GeoidFile);
+  itkGetStringMacro(GeoidFile);
+
   /** Set/Get the AverageElevation*/
   itkSetMacro(AverageElevation, double);
   itkGetMacro(AverageElevation, double);
@@ -136,6 +140,7 @@ private:
   GCPsToSensorModelPointerType       m_GCPsToSensorModelFilter;
   
   std::string                        m_DEMDirectory;
+  std::string                        m_GeoidFile;
   double                             m_AverageElevation;
   SizeType                           m_GridSize;
   bool                               m_OutputInformationGenerated;

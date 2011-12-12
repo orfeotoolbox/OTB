@@ -86,6 +86,9 @@ public:
   itkSetStringMacro(DEMDirectory);
   itkGetStringMacro(DEMDirectory);
 
+  itkSetStringMacro(GeoidFile);
+  itkGetStringMacro(GeoidFile);
+
   itkSetMacro(AverageElevation, double);
   itkGetMacro(AverageElevation, double);
 
@@ -108,6 +111,7 @@ private:
   InternalTransformPointerType m_Transform;
   std::string                  m_OutputProjectionRef;
   std::string                  m_DEMDirectory;
+  std::string                  m_GeoidFile;
   double                       m_AverageElevation;
 };
 

@@ -31,7 +31,8 @@ namespace otb
  */
 template <class TInputVectorData, class TOutputVectorData>
 VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
-::VectorDataProjectionFilter() : m_DEMDirectory(""), m_AverageElevation(-32768.0)
+::VectorDataProjectionFilter() : m_DEMDirectory(""), m_GeoidFile(""),
+                                 m_AverageElevation(-32768.0)
 {
   m_InputProjectionRef.clear();
   m_OutputProjectionRef.clear();
@@ -299,6 +300,7 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
   m_Transform->SetInputKeywordList(m_InputKeywordList);
   m_Transform->SetOutputKeywordList(m_OutputKeywordList);
   m_Transform->SetDEMDirectory(m_DEMDirectory);
+  m_Transform->SetGeoidFile(m_GeoidFile);
   m_Transform->SetAverageElevation(m_AverageElevation);
   m_Transform->SetInputSpacing(m_InputSpacing);
   m_Transform->SetInputOrigin(m_InputOrigin);

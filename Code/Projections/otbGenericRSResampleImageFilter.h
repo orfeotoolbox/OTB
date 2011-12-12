@@ -204,6 +204,16 @@ public:
   }
   otbGetObjectMemberConstMacro(Transform, DEMDirectory, std::string);
 
+  /** Set/Get the GeoidFile*/
+  void SetGeoidFile(const std::string&  geoidFile)
+  {
+    m_Transform->SetGeoidFile(geoidFile);
+    m_InputRpcEstimator->SetGeoidFile(geoidFile);
+    m_OutputRpcEstimator->SetGeoidFile(geoidFile);
+    this->Modified();
+  }
+  otbGetObjectMemberConstMacro(Transform, GeoidFile, std::string);
+
   /** Method to Set the Average Elevation used */
   void SetAverageElevation(double elevation)
   {

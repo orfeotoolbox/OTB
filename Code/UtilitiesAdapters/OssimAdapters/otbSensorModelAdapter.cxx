@@ -75,8 +75,13 @@ bool SensorModelAdapter::IsValidSensorModel()
 
 void SensorModelAdapter::SetDEMDirectory(const std::string& directory)
 {
-      m_DEMHandler->OpenDEMDirectory(directory);
-      m_UseDEM = true;
+  m_DEMHandler->OpenDEMDirectory(directory);
+  m_UseDEM = true;
+}
+
+void SensorModelAdapter::SetGeoidFile(const std::string& geoidFile)
+{
+  m_DEMHandler->OpenGeoidFile(geoidFile);
 }
 
 void SensorModelAdapter::ForwardTransformPoint(double x, double y, double z,

@@ -126,6 +126,9 @@ public:
   itkSetStringMacro(DEMDirectory);
   itkGetStringMacro(DEMDirectory);
 
+  itkSetStringMacro(GeoidFile);
+  itkGetStringMacro(GeoidFile);
+
   itkSetMacro(AverageElevation, double);
   itkGetMacro(AverageElevation, double);
 
@@ -202,6 +205,7 @@ private:
   ImageKeywordlist             m_OutputKeywordList;
 
   std::string m_DEMDirectory;
+  std::string m_GeoidFile;
   double      m_AverageElevation;
 
   SpacingType m_InputSpacing;

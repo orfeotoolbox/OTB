@@ -63,6 +63,8 @@ public:
 
   void SetDEMDirectory(const std::string& directory);
 
+  void SetGeoidFile(const std::string& geoidFile);
+
   /** Create the projection ( m_Model). Called by the SetImageGeometry methods */
   void CreateProjection(const ImageKeywordlist& image_kwl);
   // FIXME check if it should be protected instead

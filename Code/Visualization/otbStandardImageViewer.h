@@ -165,6 +165,10 @@ public:
   itkSetStringMacro(DEMDirectory);
   itkGetStringMacro(DEMDirectory);
 
+  /** Set/Get the DEM directory */
+  itkSetStringMacro(GeoidFile);
+  itkGetStringMacro(GeoidFile);
+
   /** Set/Get the Label */
   itkSetStringMacro(Label);
   itkGetStringMacro(Label);
@@ -228,6 +232,9 @@ private:
 
   /** Path to the DEMDirectory (used if a VectorData is rendered */
   std::string m_DEMDirectory;
+
+  /** GeoidFile filename (used if a VectorData is rendered */
+  std::string m_GeoidFile;
 
   /** */
   WidgetManagerPointerType m_DisplayWindow;

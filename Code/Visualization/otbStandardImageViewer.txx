@@ -181,6 +181,7 @@ StandardImageViewer<TImage, TVectorData, TWidgetManager>
     // Set the cartographic region to the extract roi filter
     vdextract->SetRegion(rsRegion);
     vdextract->SetDEMDirectory(m_DEMDirectory);
+    vdextract->SetGeoidFile(m_GeoidFile);
 
     // Reproject VectorData in image projection
     vproj = VectorDataProjectionFilterType::New();
@@ -191,6 +192,7 @@ StandardImageViewer<TImage, TVectorData, TWidgetManager>
     vproj->SetOutputOrigin(m_Image->GetOrigin());
     vproj->SetOutputSpacing(m_Image->GetSpacing());
     vproj->SetDEMDirectory(m_DEMDirectory);
+    vproj->SetGeoidFile(m_GeoidFile);
     vproj->Update();
 
     // Create a VectorData gl component

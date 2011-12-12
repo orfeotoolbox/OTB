@@ -76,6 +76,16 @@ SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>
   m_Model->SetDEMDirectory(directory);
 }
 
+template <class TScalarType,
+    unsigned int NInputDimensions,
+    unsigned int NOutputDimensions>
+void
+SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>
+::SetGeoidFile(const std::string& geoidFile)
+{
+  m_Model->SetGeoidFile(geoidFile);
+}
+
 /**
  * PrintSelf method
  */

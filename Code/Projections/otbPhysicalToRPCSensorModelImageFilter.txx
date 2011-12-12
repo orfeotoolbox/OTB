@@ -87,6 +87,15 @@ PhysicalToRPCSensorModelImageFilter<TImage>
       m_GCPsToSensorModelFilter->SetDEMHandler(demHandler);
       }
 
+    if(!m_GeoidFile.empty())
+      {
+      // Set the DEM & Average Elevation to the Remote Sensing Transform
+      rsTransform->SetGeoidFile(m_GeoidFile);
+    
+      // Generate DEMHandler & set it to the GCP2sensorModel
+      m_GCPsToSensorModelFilter->GetDEMHandler()->OpenGeoidFile(m_GeoidFile);
+      }
+
     rsTransform->InstanciateTransform();
   
     // Compute the size of the grid

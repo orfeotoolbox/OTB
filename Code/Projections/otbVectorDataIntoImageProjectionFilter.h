@@ -73,6 +73,9 @@ public:
   itkSetStringMacro(DEMDirectory);
   itkGetStringMacro(DEMDirectory);
 
+  itkSetStringMacro(GeoidFile);
+  itkGetStringMacro(GeoidFile);
+
   void SetInputVectorData(InputVectorDataPointer input)
   {
     this->SetInput(input);
@@ -119,6 +122,7 @@ private:
   void operator =(const Self&); //purposely not implemented
 
   std::string m_DEMDirectory;
+  std::string m_GeoidFile;
 
   ImagePointerType m_InputImage;
 

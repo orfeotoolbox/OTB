@@ -43,6 +43,7 @@ VectorDataExtractROI<TVectorData>
   m_ROI(),
   m_GeoROI(),
   m_DEMDirectory(""),
+  m_GeoidFile(""),
   m_Kept(0)
 {
 }
@@ -459,7 +460,7 @@ VectorDataExtractROI<TVectorData>
   genericTransform->SetOutputOrigin(this->GetInput()->GetOrigin());
   genericTransform->SetOutputSpacing(this->GetInput()->GetSpacing());
   genericTransform->SetDEMDirectory(m_DEMDirectory);
-
+  genericTransform->SetGeoidFile(m_GeoidFile);
   genericTransform->InstanciateTransform();
 
   otbMsgDevMacro(<< genericTransform);
