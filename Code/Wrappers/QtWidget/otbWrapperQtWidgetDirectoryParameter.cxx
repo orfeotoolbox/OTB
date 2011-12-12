@@ -34,7 +34,9 @@ QtWidgetDirectoryParameter::~QtWidgetDirectoryParameter()
 
 void QtWidgetDirectoryParameter::DoUpdateGUI()
 {
-
+  // Update the lineEdit
+  QString text( QString::fromStdString(m_DirectoryParam->GetValue() ));
+  m_Input->setText(text);
 }
 
 void QtWidgetDirectoryParameter::DoCreateWidget()

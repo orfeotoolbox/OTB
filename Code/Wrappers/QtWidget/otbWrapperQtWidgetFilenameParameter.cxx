@@ -34,7 +34,9 @@ QtWidgetFilenameParameter::~QtWidgetFilenameParameter()
 
 void QtWidgetFilenameParameter::DoUpdateGUI()
 {
-
+  // Update the lineEdit
+  QString text( QString::fromStdString(m_FilenameParam->GetValue() ));
+  m_Input->setText(text);
 }
 
 void QtWidgetFilenameParameter::DoCreateWidget()
