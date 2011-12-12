@@ -23,7 +23,6 @@
 #include "itkConstNeighborhoodIterator.h"
 #include "itkNeighborhoodAlgorithm.h"
 #include "itkProgressReporter.h"
-#include "otbMirrorBoundaryCondition.h"
 #include "itkZeroFluxNeumannBoundaryCondition.h"
 #include "itkNeighborhoodAlgorithm.h"
 

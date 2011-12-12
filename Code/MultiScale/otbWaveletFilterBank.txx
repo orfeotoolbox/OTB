@@ -28,7 +28,6 @@
 
 #include "itkNeighborhoodAlgorithm.h"
 #include "itkPeriodicBoundaryCondition.h"
-#include "otbMirrorBoundaryCondition.h"
 #include "itkProgressReporter.h"
 
 // FIXME
@@ -430,7 +429,6 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD>
 
   NeighborhoodIteratorType itHighPass(highPassOperator.GetRadius(), input, inputRegionForThread);
   itk::PeriodicBoundaryCondition<InputImageType> boundaryCondition;
-  //otb::MirrorBoundaryCondition< InputImageType > boundaryCondition;
   itHighPass.OverrideBoundaryCondition(&boundaryCondition);
 
   IteratorType outHighPass(outputHighPass, subItHighPass.GenerateOutputInformation());
@@ -546,7 +544,6 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD>
 
   NeighborhoodIteratorType itHighPass(highPassOperator.GetRadius(), input, outputRegionForThread);
   itk::PeriodicBoundaryCondition<OutputImageType> boundaryCondition;
-  //otb::MirrorBoundaryCondition< OutputImageType > boundaryCondition;
   itHighPass.OverrideBoundaryCondition(&boundaryCondition);
 
   IteratorType outHighPass(outputHighPass, subItHighPass.GenerateOutputInformation());
@@ -1039,7 +1036,6 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE>
                                        overSampledLowPass->GetOutput(),
                                        overSampledLowPass->GetOutput()->GetRequestedRegion());
       itk::PeriodicBoundaryCondition<OutputImageType> boundaryCondition;
-      //otb::MirrorBoundaryCondition< OutputImageType > boundaryCondition;
       lowIter.OverrideBoundaryCondition(&boundaryCondition);
 
       NeighborhoodIteratorType highIter(highPassOperator.GetRadius(),
@@ -1083,7 +1079,6 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE>
 
       NeighborhoodIteratorType lowIter(lowPassOperator.GetRadius(), imgLowPass, imgLowPass->GetRequestedRegion());
         itk::PeriodicBoundaryCondition<OutputImageType> boundaryCondition;
-        //otb::MirrorBoundaryCondition< OutputImageType > boundaryCondition;
         lowIter.OverrideBoundaryCondition(&boundaryCondition);
 
         NeighborhoodIteratorType highIter(highPassOperator.GetRadius(), imgHighPass, imgLowPass->GetRequestedRegion());
@@ -1220,7 +1215,6 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE>
                                        overSampledLowPass->GetOutput(),
                                        overSampledLowPass->GetOutput()->GetRequestedRegion());
       itk::PeriodicBoundaryCondition<OutputImageType> boundaryCondition;
-      //otb::MirrorBoundaryCondition< OutputImageType > boundaryCondition;
       lowIter.OverrideBoundaryCondition(&boundaryCondition);
 
       NeighborhoodIteratorType highIter(highPassOperator.GetRadius(),
@@ -1264,7 +1258,6 @@ WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE>
 
       NeighborhoodIteratorType lowIter(lowPassOperator.GetRadius(), imgLowPass, imgLowPass->GetRequestedRegion());
         itk::PeriodicBoundaryCondition<OutputImageType> boundaryCondition;
-        //otb::MirrorBoundaryCondition< OutputImageType > boundaryCondition;
         lowIter.OverrideBoundaryCondition(&boundaryCondition);
 
         NeighborhoodIteratorType highIter(highPassOperator.GetRadius(), imgHighPass, imgLowPass->GetRequestedRegion());

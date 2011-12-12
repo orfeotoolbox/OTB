@@ -20,9 +20,7 @@
 
 #include "otbBinaryImageToDensityImageFilter.h"
 #include "itkImageRegionIterator.h"
-//#include "itkImageRegionConstIterator.h"
 #include "itkProgressReporter.h"
-#include "otbMirrorBoundaryCondition.h"
 #include "itkZeroFluxNeumannBoundaryCondition.h"
 #include "itkNeighborhoodAlgorithm.h"
 
