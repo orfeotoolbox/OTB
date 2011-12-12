@@ -728,11 +728,14 @@ private:
   std::vector<std::string> m_DocTags;
 
   /**
-    * Declare the class Wrapper::MapProjectionParametersHandler as friend
-    * to be able to access to the protected method of
+    * Declare the class
+    * - Wrapper::MapProjectionParametersHandler
+    * - Wrapper::ElevationParametersHandler
+    * as friend to be able to access to the protected method of
     * Wrapper::Application class.
     **/
   friend class MapProjectionParametersHandler;
+  friend class ElevationParametersHandler;
 
 }; //end class
 
