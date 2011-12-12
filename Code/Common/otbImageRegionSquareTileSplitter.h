@@ -124,7 +124,7 @@ public:
   itkGetMacro(TileDimension, unsigned int);
 
 protected:
-  ImageRegionSquareTileSplitter() : m_SplitsPerDimension(0U), m_TileDimension(0), m_TileSizeAlignment(16) {}
+  ImageRegionSquareTileSplitter() : m_SplitsPerDimension(0U), m_TileDimension(0), m_TileSizeAlignment(0), m_TileHint(2048) {}
   virtual ~ImageRegionSquareTileSplitter() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
@@ -135,6 +135,7 @@ private:
   itk::FixedArray<unsigned int, VImageDimension> m_SplitsPerDimension;
   unsigned int m_TileDimension;
   unsigned int m_TileSizeAlignment;
+  unsigned int m_TileHint;
 };
 
 } // end namespace otb

@@ -1381,11 +1381,15 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
       const unsigned int ReferenceTileSizeInBytes = 256 * 256 * 4 * 2;
 
       unsigned int nbPixelPerTile = ReferenceTileSizeInBytes / m_BytePerPixel / m_NbBands;
-      unsigned int tileDimension = static_cast<unsigned int>( vcl_sqrt(static_cast<float>(nbPixelPerTile)) );
-
-      // align the tile dimension to the next multiple of 16 (needed by TIFF spec)
-      tileDimension = ( tileDimension + 15 ) / 16 * 16;
-
+      unsigned int idealTileDimension = static_cast<unsigned int>( vcl_sqrt(static_cast<float>(nbPixelPerTile)) );
+      
+      // Set tileDimension to the nearest power of two and aligned to
+      // 16 pixels (needed by tiff spec)
+      unsigned int tileDimension = 16;
+      while(2*tileDimension < idealTileDimension)
+        {
+        tileDimension*=2;
+        }
       otbMsgDevMacro(<< "Tile dimension : " << tileDimension << " * " << tileDimension)
 
       std::ostringstream oss;
