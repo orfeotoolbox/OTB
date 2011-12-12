@@ -84,6 +84,15 @@ typedef enum
   Role_Output
 } Role;
 
+// enum used for the map projection choices
+typedef enum
+{
+  Elevation_DEM,
+  Elevation_Average,
+  //Elevation_Tiff,
+  Elevation_Geoid
+} ElevationType;
+
 
 typedef otb::Image<char>                       Int8ImageType;
 typedef otb::Image<unsigned char>              UInt8ImageType;
