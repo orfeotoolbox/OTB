@@ -29,6 +29,9 @@
 // MapProjection handler
 #include "otbWrapperMapProjectionParametersHandler.h"
 
+// Elevation handler
+#include "otbWrapperElevationParametersHandler.h"
+
 #include "otbMacro.h"
 
 #include "otbWrapperRAMParameter.h"
@@ -154,13 +157,8 @@ private:
     SetParameterDescription("outputs.isotropic", isotropOss.str());
     EnableParameter("outputs.isotropic");
     
-    AddParameter(ParameterType_Group,"elev","Elevation management");
-    SetParameterDescription("elev","This group of parameters allows to manage elevation values in the ortho-rectification process.");
-
-    // DEM
-    AddParameter(ParameterType_Directory, "elev.dem",   "DEM directory");
-    SetParameterDescription("elev.dem","This parameter allows to select a directory containing Digital Elevation Model tiles. Supported formats are SRTM, DTED or any geotiff processed by the DEM import application");
-    MandatoryOff("elev.dem");
+    // Elevation
+    ElevationParametersHandler::AddElevationParameters(this, "elev");
 
     // Interpolators
     AddParameter(ParameterType_Choice,   "interpolator", "Interpolation");
@@ -389,23 +387,41 @@ private:
       break;
       }
 
-    // DEM
-    if (IsParameterEnabled("elev.dem") && HasValue("elev.dem"))
+    // Elevation through the elevation handler
+    switch(ElevationParametersHandler::GetElevationType(this, "elev"))
       {
-      m_ResampleFilter->SetDEMDirectory(GetParameterString("elev.dem"));
-      }
-    else
+      case Elevation_DEM:
       {
-      if ( otb::ConfigurationFile::GetInstance()->IsValid() )
+      if(!ElevationParametersHandler::GetDEMDirectory(this, "elev").empty())
+        {
+        m_ResampleFilter->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
+        }
+      else
         {
         m_ResampleFilter->SetDEMDirectory(otb::ConfigurationFile::GetInstance()->GetDEMDirectory());
         }
+      }
+      break;
+      case Elevation_Average:
+      {
+      m_ResampleFilter->SetAverageElevation(ElevationParametersHandler::GetAverageElevation(this, "elev"));
+      }
+      break;
+      //   Commented cause using a tiff file is not implemented yet
+      //  case Elevation_Tiff:
+      //  {
+      //  }
+      //  break;
+      case Elevation_Geoid:
+      {
+      m_ResampleFilter->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
+      }
+      break;
       }
 
     // If activated, generate RPC model
     if(IsParameterEnabled("opt.rpc"))
       {
-      //std::cout <<"Estimating the rpc Model " <<std::endl;
       m_ResampleFilter->EstimateInputRpcModelOn();
       m_ResampleFilter->SetInputRpcGridSize( GetParameterInt("opt.rpc"));
       }
