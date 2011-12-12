@@ -14,32 +14,44 @@
 #ifndef ossimPleiadesModel_HEADER
 #define ossimPleiadesModel_HEADER
 
-#include <iostream>
-using namespace std;
+
+//using namespace std;
+#include <ossimPluginConstants.h>
 
 #include <ossim/projection/ossimSensorModel.h>
+#include <ossim/projection/ossimMapProjection.h>
 #include <ossim/base/ossimIpt.h>
 #include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimGpt.h>
 #include <ossim/base/ossimDpt.h>
-#include <ossim/base/ossimEcefRay.h>
-#include <ossim/base/ossimEcefPoint.h>
-#include <ossim/base/ossimMatrix3x3.h>
 
+#include <iostream>
+
+/*#include <ossim/base/ossimEcefRay.h>
+#include <ossim/base/ossimEcefPoint.h>
+#include <ossim/base/ossimMatrix3x3.h>*/
+
+class ossimFilename;
+class ossimString;
+class ossimXmlDocument;
+
+namespace ossimplugins
+{
 class ossimPleiadesDimapSupportData;
 
-class OSSIMDLLEXPORT ossimPleiadesModel : public ossimSensorModel
+class /*OSSIMDLLEXPORT*/ OSSIM_PLUGINS_DLL ossimPleiadesModel : public ossimSensorModel
 {
 public:
    /*!
     * CONSTRUCTORS:
     */
+    /** @brief default constructor */
     ossimPleiadesModel();
-    ossimPleiadesModel(ossimPleiadesDimapSupportData* sd);
-    ossimPleiadesModel(const ossimFilename& init_file);
-    ossimPleiadesModel(const ossimKeywordlist& geom_kwl);
+
+    /** @brief copy constructor */
     ossimPleiadesModel(const ossimPleiadesModel& rhs);
 
+    /** @brief Destructor */
    virtual ~ossimPleiadesModel();
 
    enum AdjustParamIndex
@@ -53,6 +65,8 @@ public:
       FOCAL_LEN_OFFSET,
       NUM_ADJUSTABLE_PARAMS // not an index
    };
+
+   bool open(const ossimFilename& file);
 
    /*!
     * Returns pointer to a new instance, copy of this.
@@ -111,6 +125,9 @@ public:
    bool initFromMetadata(ossimPleiadesDimapSupportData* sd);
 protected:
 
+   ossimFilename _imageFilename;
+   ossimFilename _productXmlFile;
+
    /*!
     * Sets adjustables to default values.
     */
@@ -157,5 +174,5 @@ protected:
 
 TYPE_DATA
 };
-
+}
 #endif /* #ifndef ossimPleiadesModel_HEADER */

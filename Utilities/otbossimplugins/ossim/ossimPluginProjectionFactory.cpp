@@ -21,6 +21,7 @@
 #include "ossimRadarSat2Model.h"
 #include "ossimErsSarModel.h"
 #include "ossimAlosPalsarModel.h"
+#include "ossimPleiadesModel.h"
 #include <ossim/base/ossimNotifyContext.h>
 #include "ossimTileMapModel.h"
 
@@ -52,6 +53,7 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
 {
    static const char MODULE[] = "ossimPluginProjectionFactory::createProjection(ossimFilename& filename)";
    ossimRefPtr<ossimProjection> projection = 0;
+   traceDebug.setTraceFlag(true);
 
    if(traceDebug())
    {
@@ -77,6 +79,29 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
       }
    }
    
+   if(traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+             << MODULE << " DEBUG: testing ossimPleiadesModel" << std::endl;
+   }
+
+   // Pleiades
+   if ( !projection )
+   {
+      ossimRefPtr<ossimPleiadesModel> model = new ossimPleiadesModel();
+      if ( model->open(filename) )
+      {
+         // ok
+        std::cout << "OK" <<std::endl;
+        std::cout << "Projection is valid -> " << projection.valid() << std::endl;
+        projection = model.get();
+      }
+      else
+      {
+         model = 0;
+      }
+   }
+
    if(traceDebug())
    	{
     	ossimNotify(ossimNotifyLevel_DEBUG)

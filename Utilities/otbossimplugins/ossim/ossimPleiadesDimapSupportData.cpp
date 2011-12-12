@@ -11,7 +11,7 @@
 //*****************************************************************************
 // FIXME $Id: ossimPleiadesDimapSupportData 19682 2011-05-31 14:21:20Z dburken $
 
-#include <ossim/support_data/ossimPleiadesDimapSupportData.h>
+#include <ossimPleiadesDimapSupportData.h>
 #include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimXmlDocument.h>
 #include <ossim/base/ossimXmlAttribute.h>
@@ -27,11 +27,14 @@
 #include <iterator>
 #include <sstream>
 
+
 // Define Trace flags for use within this file:
 static ossimTrace traceDebug ("ossimPleiadesDimapSupportData:debug");
 
 static const ossim_uint32  LAGRANGE_FILTER_SIZE = 8; // num samples considered
 
+namespace ossimplugins
+{
 ossimPleiadesDimapSupportData::ossimPleiadesDimapSupportData ()
    :
    ossimErrorStatusInterface(),
@@ -41,10 +44,12 @@ ossimPleiadesDimapSupportData::ossimPleiadesDimapSupportData ()
    theProductionDate(),
    theInstrument(),
    theInstrumentIndex(0),
-   theSunAzimuth(0.0),
-   theSunElevation(0.0),
-   theIncidenceAngle(0.0),
-   theViewingAngle(0.0),
+
+   theSunAzimuth(),
+   theSunElevation(),
+   theIncidenceAngle(),
+   theViewingAngle(),
+
    theSceneOrientation(0.0),
    theImageSize(0.0, 0.0),
    theRefGroundPoint(0.0, 0.0, 0.0),
@@ -62,7 +67,7 @@ ossimPleiadesDimapSupportData::ossimPleiadesDimapSupportData ()
    theVelEcfSamples(),
    theEphSampTimes(),
    theStarTrackerUsed(false),
-   theSwirDataFlag(false),
+   theMultiDataFile(),
    theNumBands(0),
    theAcquisitionDate(),
    theStepCount(0),
@@ -83,7 +88,7 @@ ossimPleiadesDimapSupportData::ossimPleiadesDimapSupportData(const ossimPleiades
     theInstrument(rhs.theInstrument),
     theInstrumentIndex(rhs.theInstrumentIndex),
     theSunAzimuth(rhs.theSunAzimuth),
-    theSunElevation(rhs.theSunElevation),  
+    theSunElevation(rhs.theSunElevation),
     theIncidenceAngle(rhs.theIncidenceAngle),
     theViewingAngle(rhs.theViewingAngle),
     theSceneOrientation(rhs.theSceneOrientation),
@@ -103,7 +108,7 @@ ossimPleiadesDimapSupportData::ossimPleiadesDimapSupportData(const ossimPleiades
     theVelEcfSamples(rhs.theVelEcfSamples),
     theEphSampTimes(rhs.theEphSampTimes),
     theStarTrackerUsed(rhs.theStarTrackerUsed),
-    theSwirDataFlag (rhs.theSwirDataFlag),
+    theMultiDataFile(rhs.theMultiDataFile),
     theNumBands(rhs.theNumBands),
     theAcquisitionDate(rhs.theAcquisitionDate),
     theStepCount(rhs.theStepCount),
@@ -116,7 +121,7 @@ ossimPleiadesDimapSupportData::ossimPleiadesDimapSupportData(const ossimPleiades
 {
 }
 
-ossimPleiadesDimapSupportData::ossimPleiadesDimapSupportData (const ossimFilename& dimapFile, bool  processSwir)
+ossimPleiadesDimapSupportData::ossimPleiadesDimapSupportData (const ossimFilename& dimapFile)
    :
    ossimErrorStatusInterface(),
    theMetadataVersion(OSSIM_PLEIADES_METADATA_VERSION_UNKNOWN),
@@ -125,10 +130,10 @@ ossimPleiadesDimapSupportData::ossimPleiadesDimapSupportData (const ossimFilenam
    theProductionDate(),
    theInstrument(),
    theInstrumentIndex(0),
-   theSunAzimuth(0.0),
-   theSunElevation(0.0),
-   theIncidenceAngle(0.0),
-   theViewingAngle(0.0),
+   theSunAzimuth(),
+   theSunElevation(),
+   theIncidenceAngle(),
+   theViewingAngle(),
    theSceneOrientation(0.0),
    theImageSize(0.0, 0.0),
    theRefGroundPoint(0.0, 0.0, 0.0),
@@ -146,7 +151,7 @@ ossimPleiadesDimapSupportData::ossimPleiadesDimapSupportData (const ossimFilenam
    theVelEcfSamples(),
    theEphSampTimes(),
    theStarTrackerUsed(false),
-   theSwirDataFlag (processSwir),
+   theMultiDataFile(),
    theNumBands(0),
    theAcquisitionDate(),
    theStepCount(0),
@@ -164,7 +169,7 @@ ossimPleiadesDimapSupportData::ossimPleiadesDimapSupportData (const ossimFilenam
          << std::endl;
    }
 
-   loadXmlFile(dimapFile, processSwir);
+   loadXmlFile(dimapFile);
 
    // Finished successful parse:
    if (traceDebug())
@@ -194,10 +199,10 @@ void ossimPleiadesDimapSupportData::clearFields()
    theProductionDate = "";
    theInstrument = "";
    theInstrumentIndex = 0;
-   theSunAzimuth = 0.0;
-   theSunElevation = 0.0;
-   theIncidenceAngle = 0.0;
-   theViewingAngle = 0.0;
+   theSunAzimuth.clear();
+   theSunElevation.clear();
+   theIncidenceAngle.clear();
+   theViewingAngle.clear();
    theSceneOrientation = 0.0;
    theImageSize.makeNan();
    theRefGroundPoint.makeNan();
@@ -215,7 +220,8 @@ void ossimPleiadesDimapSupportData::clearFields()
    theVelEcfSamples.clear();
    theEphSampTimes.clear();
    theStarTrackerUsed = false;
-   theSwirDataFlag = false;
+   ossimString msg = "";
+   theMultiDataFile.setBooleanValue(false,msg);
    theNumBands = 0;
    theAcquisitionDate = "";
    theStepCount = 0;
@@ -236,10 +242,10 @@ void ossimPleiadesDimapSupportData::clearFields()
 
 }
 
-bool ossimPleiadesDimapSupportData::loadXmlFile(const ossimFilename& file,
-                                            bool processSwir)
+bool ossimPleiadesDimapSupportData::loadXmlFile(const ossimFilename& file)
 {
    static const char MODULE[] = "ossimPleiadesDimapSupportData::loadXmlFile";
+   traceDebug.setTraceFlag(true);
 
    if(traceDebug())
    {
@@ -248,10 +254,9 @@ bool ossimPleiadesDimapSupportData::loadXmlFile(const ossimFilename& file,
          << "\nFile: " << file << std::endl;
    }
    clearFields();
-   theSwirDataFlag = processSwir;
    theMetadataFile = file;
 
-   ossim_int64 fileSize = file.fileSize();
+  /* ossim_int64 fileSize = file.fileSize();
    std::ifstream in(file.c_str(), std::ios::binary|std::ios::in);
    std::vector<char> fullBuffer;
    ossimString bufferedIo;
@@ -291,7 +296,6 @@ bool ossimPleiadesDimapSupportData::loadXmlFile(const ossimFilename& file,
    }
    else
    {
-
       xmlDocument = new ossimXmlDocument;
       std::istringstream inStringStream(bufferedIo.string());
       if(!xmlDocument->read(inStringStream))
@@ -317,7 +321,7 @@ bool ossimPleiadesDimapSupportData::loadXmlFile(const ossimFilename& file,
    //---
    vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
    xml_nodes.clear();
-   ossimString xpath = "/Dimap_Document/Dataset_Sources/Source_Identification/Strip_Source/MISSION";
+   ossimString xpath = "/DIMAP_Document/Dataset_Sources/Source_Identification/Strip_Source/MISSION";
    xmlDocument->findNodes(xpath, xml_nodes);
    if (xml_nodes.size() == 0)
    {
@@ -325,7 +329,7 @@ bool ossimPleiadesDimapSupportData::loadXmlFile(const ossimFilename& file,
       if(traceDebug())
       {
 	 ossimNotify(ossimNotifyLevel_DEBUG)
-            << "DEBUG:\n Not a PLEIADES DIMAP file format."<< std::endl;
+            << "DEBUG:\n Not a PLEIADES DIMAP file format -> Key not found!"<< std::endl;
       }
       return false;
    }
@@ -334,7 +338,7 @@ bool ossimPleiadesDimapSupportData::loadXmlFile(const ossimFilename& file,
       if(traceDebug())
       {
          ossimNotify(ossimNotifyLevel_DEBUG)
-            << "DEBUG:\n Not a PLEIADES DIMAP file format."<< std::endl;
+            << "DEBUG:\n Not a PLEIADES DIMAP file format -> Key value incorrect!"<< std::endl;
       }
       return false;
    }
@@ -355,7 +359,23 @@ bool ossimPleiadesDimapSupportData::loadXmlFile(const ossimFilename& file,
             << std::endl;
       }
       return false;
-   }
+   }*/
+
+   ossimRefPtr<ossimXmlDocument> xmlDocument = InitXmlDocumentParser(file, OSSIM_PLEIADES_METADATA_TYPE_PRODUCT);
+   if (!xmlDocument)
+     {
+     if(traceDebug())
+     {
+        ossimNotify(ossimNotifyLevel_FATAL)
+           << MODULE << " DEBUG:"
+           << "ossimPleiadesDimapSupportData::loadXmlFile:"
+           << "\nInitXmlDocumentParser failed.  Returning false"
+           << std::endl;
+     }
+     return false;
+
+     }
+
 
    // Get the image id.
    if (initImageId(xmlDocument) == false)
@@ -393,45 +413,44 @@ bool ossimPleiadesDimapSupportData::loadXmlFile(const ossimFilename& file,
       return false;
    }
 
-   if (parsePart1(xmlDocument) == false)
+   if (parseCommonMetadata(xmlDocument) == false)
    {
       ossimNotify(ossimNotifyLevel_FATAL)
          << MODULE << " DEBUG:"
          << "ossimPleiadesDimapSupportData::loadXmlFile:"
-         << "\nPart 1 initialization failed.  Returning false"
+         << "\nparseCommonMetadata initialization failed.  Returning false"
          << std::endl;
       return false;
    }
 
-   if (parsePart2(xmlDocument) == false)
+   if (parseRadiometricMetadata(xmlDocument) == false)
    {
       ossimNotify(ossimNotifyLevel_FATAL)
          << MODULE << " DEBUG:"
          << "ossimPleiadesDimapSupportData::loadXmlFile:"
-         << "\nPart 2 initialization failed.  Returning false"
+         << "\nparseRadiometricMetadata initialization failed.  Returning false"
          << std::endl;
       return false;
    }
 
-   if (parsePart3(xmlDocument) == false)
-   {
-      ossimNotify(ossimNotifyLevel_FATAL)
-         << MODULE << " DEBUG:"
-         << "ossimPleiadesDimapSupportData::loadXmlFile:"
-         << "\nPart 3 initialization failed.  Returning false"
-         << std::endl;
-      return false;
-   }
+   if (theProcessingLevelString == "SENSOR")
+     {
+     if (parseSensorMetadata(xmlDocument) == false)
+       {
+       ossimNotify(ossimNotifyLevel_FATAL)
+          << MODULE << " DEBUG:"
+          << "ossimPleiadesDimapSupportData::loadXmlFile:"
+          << "\nparseSensorMetadata initialization failed.  Returning false"
+          << std::endl;
+       return false;
+       }
+     }
 
-   if (parsePart4(xmlDocument) == false)
-   {
-      ossimNotify(ossimNotifyLevel_FATAL)
-         << MODULE << " DEBUG:"
-         << "ossimPleiadesDimapSupportData::loadXmlFile:"
-         << "\nPart 4 initialization failed.  Returning false"
-         << std::endl;
-      return false;
-   }
+   this->printInfo(std::cout);
+
+
+
+
 
    if (traceDebug())
    {
@@ -929,12 +948,24 @@ void ossimPleiadesDimapSupportData::printInfo(ostream& os) const
       << "\n  Geo Center Point:     " << theRefGroundPoint
       << "\n  Detector count:       " << theDetectorCount
       << "\n  Image Size:           " << theImageSize
-      << "\n  Incidence Angle:      " << theIncidenceAngle
-      << "\n  Viewing Angle:        " << theViewingAngle      
+      << "\n  Incidence Angle (TopCenter):   " << theIncidenceAngle[0]
+      << "\n  Incidence Angle (Center):      " << theIncidenceAngle[1]
+      << "\n  Incidence Angle (BottomCenter):" << theIncidenceAngle[2]
+
+      << "\n  Viewing Angle (TopCenter):     " << theViewingAngle[0]
+      << "\n  Viewing Angle (Center):        " << theViewingAngle[1]
+      << "\n  Viewing Angle (BottomCenter):  " << theViewingAngle[2]
+
       << "\n  Scene Orientation:    " << theSceneOrientation 
       << "\n  Corrected Attitude:   " << corr_att
-      << "\n  Sun Azimuth:          " << theSunAzimuth
-      << "\n  Sun Elevation:        " << theSunElevation
+      << "\n  Sun Azimuth (TopCenter):       " << theSunAzimuth[0]
+      << "\n  Sun Azimuth (Center):          " << theSunAzimuth[1]
+      << "\n  Sun Azimuth (BottomCenter):    " << theSunAzimuth[2]
+
+      << "\n  Sun Elevation (TopCenter):     " << theSunElevation[0]
+      << "\n  Sun Elevation (Center):        " << theSunElevation[1]
+      << "\n  Sun Elevation (BottomCenter):  " << theSunElevation[2]
+
       << "\n  Sub image offset:     " << theSubImageOffset
       << "\n  Step Count:           " << theStepCount
       << "\n  PixelLookAngleX size: " << thePixelLookAngleX.size()
@@ -956,13 +987,9 @@ ossimString ossimPleiadesDimapSupportData::getSensorID() const
 
 ossimString   ossimPleiadesDimapSupportData::getMetadataVersionString() const
 {
-   if (theMetadataVersion == OSSIM_SPOT_METADATA_VERSION_1_1)
+   if (theMetadataVersion == OSSIM_PLEIADES_METADATA_VERSION_2_0)
    {
-      return ossimString("1.1");
-   }
-   else if (theMetadataVersion == OSSIM_SPOT_METADATA_VERSION_1_0)
-   {
-      return ossimString("1.0");
+      return ossimString("2.0");
    }
    return ossimString("unknown");
 }
@@ -997,12 +1024,12 @@ ossim_uint32 ossimPleiadesDimapSupportData::getInstrumentIndex() const
    return theInstrumentIndex;
 }
 
-void ossimPleiadesDimapSupportData::getSunAzimuth(ossim_float64& az) const
+void ossimPleiadesDimapSupportData::getSunAzimuth(std::vector<ossim_float64>& az) const
 {
    az = theSunAzimuth;
 }
 
-void ossimPleiadesDimapSupportData::getSunElevation(ossim_float64& el) const
+void ossimPleiadesDimapSupportData::getSunElevation(std::vector<ossim_float64>& el) const
 {
    el = theSunElevation;
 }
@@ -1022,11 +1049,6 @@ bool ossimPleiadesDimapSupportData::isStarTrackerUsed() const
    return theStarTrackerUsed;
 }
 
-bool ossimPleiadesDimapSupportData::isSwirDataUsed() const
-{
-   return theSwirDataFlag;
-}
-
 ossim_uint32 ossimPleiadesDimapSupportData::getNumberOfBands() const
 {
    return theNumBands;
@@ -1037,12 +1059,12 @@ ossim_uint32 ossimPleiadesDimapSupportData::getStepCount() const
    return theStepCount;
 }
 
-void ossimPleiadesDimapSupportData::getIncidenceAngle(ossim_float64& ia) const
+void ossimPleiadesDimapSupportData::getIncidenceAngle(std::vector<ossim_float64>& ia) const
 {
    ia = theIncidenceAngle;
 }
 
-void ossimPleiadesDimapSupportData::getViewingAngle(ossim_float64& va) const
+void ossimPleiadesDimapSupportData::getViewingAngle(std::vector<ossim_float64>& va) const
 {
    va = theViewingAngle;
 }
@@ -1120,6 +1142,9 @@ void ossimPleiadesDimapSupportData::getSubImageOffset(ossimDpt& offset) const
 bool ossimPleiadesDimapSupportData::saveState(ossimKeywordlist& kwl,
                                           const char* prefix)const
 {
+  ossimString tempString;
+  ossim_uint32 idx = 0;
+
    kwl.add(prefix,
            ossimKeywordNames::TYPE_KW,
            "ossimPleiadesDimapSupportData",
@@ -1130,14 +1155,36 @@ bool ossimPleiadesDimapSupportData::saveState(ossimKeywordlist& kwl,
            theMetadataFile,
            true);
 
+   tempString = "";
+   for(idx = 0; idx < theSunAzimuth.size(); ++idx)
+   {
+      tempString += (ossimString::toString(theSunAzimuth[idx]) + " ");
+   }
+
    kwl.add(prefix,
            ossimKeywordNames::AZIMUTH_ANGLE_KW,
-           theSunAzimuth,
+           tempString,
            true);
 
    kwl.add(prefix,
+           "number_of_azimuth_angles",
+           static_cast<ossim_uint32>(theSunAzimuth.size()),
+           true);
+
+   tempString = "";
+   for(idx = 0; idx <  theSunElevation.size(); ++idx)
+   {
+      tempString += (ossimString::toString(theSunElevation[idx]) + " ");
+   }
+
+   kwl.add(prefix,
            ossimKeywordNames::ELEVATION_ANGLE_KW,
-           theSunElevation,
+           tempString,
+           true);
+
+   kwl.add(prefix,
+           "number_of_elevation_angles",
+           static_cast<ossim_uint32>(theSunElevation.size()),
            true);
 
    //---
@@ -1190,8 +1237,7 @@ bool ossimPleiadesDimapSupportData::saveState(ossimKeywordlist& kwl,
            theLineSamplingPeriod,
            true);
 
-   ossimString tempString;
-   ossim_uint32 idx = 0;
+
 
    tempString = "";
    for(idx = 0; idx < thePixelLookAngleX.size(); ++idx)
@@ -1307,11 +1353,6 @@ bool ossimPleiadesDimapSupportData::saveState(ossimKeywordlist& kwl,
            true);
 
    kwl.add(prefix,
-           "swir_data_flag",
-           static_cast<ossim_uint32>(theSwirDataFlag),
-           true);
-
-   kwl.add(prefix,
            ossimKeywordNames::NUMBER_BANDS_KW,
            theNumBands,
            true);
@@ -1341,14 +1382,36 @@ bool ossimPleiadesDimapSupportData::saveState(ossimKeywordlist& kwl,
            theProductionDate,
            true);
 
+   tempString = "";
+   for(idx = 0; idx <  theIncidenceAngle.size(); ++idx)
+   {
+      tempString += (ossimString::toString(theIncidenceAngle[idx]) + " ");
+   }
+
    kwl.add(prefix,
            "incident_angle",
-           theIncidenceAngle,
+           tempString,
            true);
 
    kwl.add(prefix,
+           "number_of_incident_angles",
+           static_cast<ossim_uint32>(theIncidenceAngle.size()),
+           true);
+
+   tempString = "";
+   for(idx = 0; idx <  theViewingAngle.size(); ++idx)
+   {
+      tempString += (ossimString::toString(theViewingAngle[idx]) + " ");
+   }
+
+   kwl.add(prefix,
            "viewing_angle",
-           theViewingAngle,
+           tempString,
+           true);
+
+   kwl.add(prefix,
+           "number_of_viewing_angle",
+           static_cast<ossim_uint32>(theViewingAngle.size()),
            true);
 
    kwl.add(prefix,
@@ -1436,7 +1499,12 @@ bool ossimPleiadesDimapSupportData::saveState(ossimKeywordlist& kwl,
 bool ossimPleiadesDimapSupportData::loadState(const ossimKeywordlist& kwl,
                                           const char* prefix)
 {
+   ossim_uint32 idx = 0;
+   ossim_uint32 total;
+   ossimString tempString;
+
    clearFields();
+
 
    ossimString type = kwl.find(prefix, ossimKeywordNames::TYPE_KW);
 
@@ -1446,8 +1514,33 @@ bool ossimPleiadesDimapSupportData::loadState(const ossimKeywordlist& kwl,
    }
    theMetadataFile = kwl.find(prefix, "metadata_file");
 
-   theSunAzimuth   = ossimString(kwl.find(prefix, ossimKeywordNames::AZIMUTH_ANGLE_KW)).toDouble();
-   theSunElevation = ossimString(kwl.find(prefix, ossimKeywordNames::ELEVATION_ANGLE_KW)).toDouble();
+   total =  ossimString(kwl.find(prefix,"number_of_azimuth_angle")).toUInt32();
+   theSunAzimuth.resize(total);
+   tempString = kwl.find(prefix,ossimKeywordNames::AZIMUTH_ANGLE_KW);
+   if(tempString != "")
+   {
+      std::istringstream in(tempString.string());
+      ossimString tempValue;
+      for(idx = 0; idx < theSunAzimuth.size();++idx)
+      {
+         in >> tempValue.string();
+         theSunAzimuth[idx] = tempValue.toDouble();
+      }
+   }
+
+   total =  ossimString(kwl.find(prefix,"number_of_elevation_angle")).toUInt32();
+   theSunElevation.resize(total);
+   tempString = kwl.find(prefix,ossimKeywordNames::ELEVATION_ANGLE_KW);
+   if(tempString != "")
+   {
+      std::istringstream in(tempString.string());
+      ossimString tempValue;
+      for(idx = 0; idx < theSunElevation.size();++idx)
+      {
+         in >> tempValue.string();
+         theSunElevation[idx] = tempValue.toDouble();
+      }
+   }
 
    const char* lookup = kwl.find(prefix, "detector_count");
    if (lookup)
@@ -1471,10 +1564,7 @@ bool ossimPleiadesDimapSupportData::loadState(const ossimKeywordlist& kwl,
    theLineSamplingPeriod = ossimString(kwl.find(prefix, "line_sampling_period")).toDouble();
 
 
-   ossim_uint32 idx = 0;
-   ossim_uint32 total =  ossimString(kwl.find(prefix,"number_of_pixel_lookat_angle_x")).toUInt32();
-   ossimString tempString;
-
+   total =  ossimString(kwl.find(prefix,"number_of_pixel_lookat_angle_x")).toUInt32();
    thePixelLookAngleX.resize(total);
    tempString = kwl.find(prefix,"pixel_lookat_angle_x");
    if(tempString != "")
@@ -1580,7 +1670,6 @@ bool ossimPleiadesDimapSupportData::loadState(const ossimKeywordlist& kwl,
    }
 
    theStarTrackerUsed = ossimString(kwl.find(prefix, "star_tracker_used_flag")).toBool();
-   theSwirDataFlag    = ossimString(kwl.find(prefix, "swir_data_flag")).toBool();
    theNumBands        = ossimString(kwl.find(prefix, ossimKeywordNames::NUMBER_BANDS_KW)).toUInt32();
    theAcquisitionDate = kwl.find(prefix, ossimKeywordNames::IMAGE_DATE_KW);
    theProductionDate  = kwl.find(prefix, "production_date");
@@ -1589,8 +1678,34 @@ bool ossimPleiadesDimapSupportData::loadState(const ossimKeywordlist& kwl,
    theInstrumentIndex = ossimString(kwl.find(prefix, "instrument_index")).toUInt32();
    theStepCount       = ossimString(kwl.find(prefix, "step_count")).toInt32();
    
-   theIncidenceAngle  = ossimString(kwl.find(prefix, "incident_angle")).toDouble();
-   theViewingAngle    = ossimString(kwl.find(prefix, "viewing_angle")).toDouble();
+   total =  ossimString(kwl.find(prefix,"number_of_incident_angle")).toUInt32();
+   theIncidenceAngle.resize(total);
+   tempString = kwl.find(prefix,"incident_angle");
+   if(tempString != "")
+   {
+      std::istringstream in(tempString.string());
+      ossimString tempValue;
+      for(idx = 0; idx < theIncidenceAngle.size();++idx)
+      {
+         in >> tempValue.string();
+         theIncidenceAngle[idx] = tempValue.toDouble();
+      }
+   }
+
+   total =  ossimString(kwl.find(prefix,"number_of_viewing_angle")).toUInt32();
+   theViewingAngle.resize(total);
+   tempString = kwl.find(prefix,"viewing_angle");
+   if(tempString != "")
+   {
+      std::istringstream in(tempString.string());
+      ossimString tempValue;
+      for(idx = 0; idx < theViewingAngle.size();++idx)
+      {
+         in >> tempValue.string();
+         theViewingAngle[idx] = tempValue.toDouble();
+      }
+   }
+
    theSceneOrientation= ossimString(kwl.find(prefix, "scene_orientation")).toDouble();
    
    theUlCorner =createGround( kwl.find(prefix, "ul_ground_point"));
@@ -1715,12 +1830,6 @@ bool ossimPleiadesDimapSupportData::parsePart1(
    }
    theImageSize.line = xml_nodes[0]->getText().toDouble();
 
-   if (theSwirDataFlag)
-   {
-      theImageSize.line /= 2.0;
-      theImageSize.samp /= 2.0;
-   }
-
    //---
    // We will make the RefImagePoint the zero base center of the image.  This
    // is used by the ossimSensorModel::worldToLineSample iterative loop as
@@ -1774,12 +1883,6 @@ bool ossimPleiadesDimapSupportData::parsePart1(
       theSubImageOffset.line = xml_nodes[0]->getText().toDouble() - 1.0;
    }
 
-
-   if (theSwirDataFlag)
-   {
-      theRefImagePoint.line /= 2.0;
-      theRefImagePoint.samp /= 2.0;
-   }
 
    //---
    // Fetch the RefLineTime:
@@ -1897,10 +2000,6 @@ bool ossimPleiadesDimapSupportData::parsePart2(
    }
    theLineSamplingPeriod = xml_nodes[0]->getText().toDouble();
 
-   if (theSwirDataFlag)
-   {
-      theLineSamplingPeriod *= 2.0;
-   }
 
    //---
    // Fetch number of bands
@@ -1933,18 +2032,7 @@ bool ossimPleiadesDimapSupportData::parsePart2(
 
    if (theNumBands == 1)
    {
-      if (theSwirDataFlag)
-      {
-         setErrorStatus();
-         if(traceDebug())
-         {
-            ossimNotify(ossimNotifyLevel_DEBUG)
-               << MODULE << " DEBUG:"
-               << "\nSWIR band error..."
-               << std::endl;
-         }
-         return false;
-      }
+
       band_index = 0;
    }
    else if (theNumBands == 3)
@@ -1953,14 +2041,7 @@ bool ossimPleiadesDimapSupportData::parsePart2(
    }
    else if (theNumBands == 4)
    {
-      if (theSwirDataFlag)
-      {
-         band_index = 3;
-      }
-      else
-      {
          band_index = 1; // using green band for PSI angles
-      }
    }
    else
    {
@@ -2010,7 +2091,7 @@ bool ossimPleiadesDimapSupportData::parsePart2(
 
    theDetectorCount = (ossim_uint32)sub_nodes.size();
 
-   if (theMetadataVersion == OSSIM_SPOT_METADATA_VERSION_1_1)
+   if (theMetadataVersion == OSSIM_PLEIADES_METADATA_VERSION_2_0)
    {
       for (ossim_uint32 i=0; i<theDetectorCount; ++i)
       {
@@ -2070,7 +2151,7 @@ bool ossimPleiadesDimapSupportData::parsePart2(
    sub_nodes.clear();
    xml_nodes[band_index]->findChildNodes(xpath, sub_nodes);
 
-   if (theMetadataVersion == OSSIM_SPOT_METADATA_VERSION_1_1)
+   if (theMetadataVersion == OSSIM_PLEIADES_METADATA_VERSION_2_0)
    {
       for (ossim_uint32 i=0; i<theDetectorCount; ++i)
       {
@@ -2403,107 +2484,7 @@ bool ossimPleiadesDimapSupportData::parsePart3(
 
    return true;
 }
-bool ossimPleiadesDimapSupportData::parsePart4(
-                                           ossimRefPtr<ossimXmlDocument> xmlDocument)
-{
-  ossimString xpath;
-  std::vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
-  std::vector<ossimRefPtr<ossimXmlNode> > sub_nodes;
-  std::vector<ossimRefPtr<ossimXmlNode> >::iterator node;
 
-  //---
-  // Fetch the gain and bias for each spectral band:
-  //---
-
-  thePhysicalGain.assign(theNumBands, 1.000);
-  thePhysicalBias.assign(theNumBands, 0.000);
-
-  xml_nodes.clear();
-  xpath = "/Dimap_Document/Image_Interpretation/Spectral_Band_Info";
-  xmlDocument->findNodes(xpath, xml_nodes);
-  node = xml_nodes.begin();
-  while (node != xml_nodes.end())
-  {
-    sub_nodes.clear();
-    xpath = "BAND_INDEX";
-    (*node)->findChildNodes(xpath, sub_nodes);
-    if (sub_nodes.size() == 0)
-    {
-      setErrorStatus();
-      return false;
-    }
-
-    ossim_int32 bandIndex = sub_nodes[0]->getText().toInt32() - 1;
-
-    if( (bandIndex >= static_cast<int>(theNumBands) ) || (bandIndex<0) )
-    {
-       ossimNotify(ossimNotifyLevel_WARN) << "ossimPleiadesDimapSupportData::parsePart4 ERROR: Band index outside of range\n";
-       return false;
-    }
-
-    sub_nodes.clear();
-    xpath = "PHYSICAL_BIAS";
-    (*node)->findChildNodes(xpath, sub_nodes);
-    if (sub_nodes.size() == 0)
-    {
-      setErrorStatus();
-      return false;
-    }
-    thePhysicalBias[bandIndex] = sub_nodes[0]->getText().toDouble();
-
-    sub_nodes.clear();
-    xpath = "PHYSICAL_GAIN";
-    (*node)->findChildNodes(xpath, sub_nodes);
-    if (sub_nodes.size() == 0)
-    {
-      setErrorStatus();
-      return false;
-    }
-    thePhysicalGain[bandIndex] = sub_nodes[0]->getText().toDouble();
-
-    ++node;
-  }
-
-  theSolarIrradiance.assign(theNumBands, 0.000);
-  xml_nodes.clear();
-  xpath = "/Dimap_Document/Data_Strip/Sensor_Calibration/Solar_Irradiance/Band_Solar_Irradiance";
-  xmlDocument->findNodes(xpath, xml_nodes);
-  node = xml_nodes.begin();
-  while (node != xml_nodes.end())
-  {
-    sub_nodes.clear();
-    xpath = "BAND_INDEX";
-    (*node)->findChildNodes(xpath, sub_nodes);
-    if (sub_nodes.size() == 0)
-    {
-      setErrorStatus();
-      return false;
-    }
-
-    ossim_int32 bandIndex = sub_nodes[0]->getText().toInt32() - 1;
-    
-    if((bandIndex >= static_cast<ossim_int32>(theNumBands) ) || (bandIndex<0))
-    {
-       ossimNotify(ossimNotifyLevel_WARN) << "ossimPleiadesDimapSupportData::parsePart4 ERROR: Band index outside of range\n";
-       return false;
-    }
-    
-    sub_nodes.clear();
-    xpath = "SOLAR_IRRADIANCE_VALUE";
-    (*node)->findChildNodes(xpath, sub_nodes);
-    if (sub_nodes.size() == 0)
-    {
-      setErrorStatus();
-      return false;
-    }
-    theSolarIrradiance[bandIndex] = sub_nodes[0]->getText().toDouble();
-
-    ++node;
-  }
-
-
-  return true;
-}
 
 bool ossimPleiadesDimapSupportData::initMetadataVersion(ossimRefPtr<ossimXmlDocument> xmlDocument)
 {
@@ -2513,7 +2494,7 @@ bool ossimPleiadesDimapSupportData::initMetadataVersion(ossimRefPtr<ossimXmlDocu
    //---
    // Get the version string which can be used as a key for parsing.
    //---
-   xpath = "/Dimap_Document/Metadata_Identification/METADATA_FORMAT";
+   xpath = "/DIMAP_Document/Metadata_Identification/METADATA_FORMAT";
    xmlDocument->findNodes(xpath, xml_nodes);
    if (xml_nodes.size() == 0)
    {
@@ -2558,7 +2539,7 @@ bool ossimPleiadesDimapSupportData::initImageId(
    //---
    // Fetch the Image ID:
    //---
-   xpath = "/Dimap_Document/Product_Information/Delivery_Identification/JOB_ID";
+   xpath = "/DIMAP_Document/Product_Information/Delivery_Identification/JOB_ID";
    xmlDocument->findNodes(xpath, xml_nodes);
    if (xml_nodes.size() == 0)
    {
@@ -2586,7 +2567,7 @@ bool ossimPleiadesDimapSupportData::initSceneSource(
   // and generate theSensorID
   //---
    xml_nodes.clear();
-   xpath = "/Dimap_Document/Dataset_Sources/Source_Identification/Strip_Source/MISSION_INDEX";
+   xpath = "/DIMAP_Document/Dataset_Sources/Source_Identification/Strip_Source/MISSION_INDEX";
    xmlDocument->findNodes(xpath, xml_nodes);
    if (xml_nodes.size() == 0)
    {
@@ -2604,105 +2585,101 @@ bool ossimPleiadesDimapSupportData::initSceneSource(
    if (xml_nodes[0]->getText() == "1B")
      theSensorID = "PHR 1B";
 
-#ifdef NEED_PHR_DOC
-   // Need doc because there are many values in the file
-
-   //---
-   // Fetch the Sun Azimuth:
-   //---
-   xml_nodes.clear();
-   xpath = "/Dimap_Document/Dataset_Sources/Source_Information/Scene_Source/SUN_AZIMUTH";
-   xmlDocument->findNodes(xpath, xml_nodes);
-   if (xml_nodes.size() == 0)
-   {
-      setErrorStatus();
-      if(traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << "DEBUG:\nCould not find: " << xpath
-            << std::endl;
-      }
-      return false;
-   }
-   theSunAzimuth = xml_nodes[0]->getText().toDouble();
-
-   //---
-   // Fetch the Sun Elevation:
-   //---
-   xml_nodes.clear();
-   xpath = "/Dimap_Document/Dataset_Sources/Source_Information/Scene_Source/SUN_ELEVATION";
-   xmlDocument->findNodes(xpath, xml_nodes);
-   if (xml_nodes.size() == 0)
-   {
-      setErrorStatus();
-      if(traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << "DEBUG:\nCould not find: " << xpath
-            << std::endl;
-      }
-      return false;
-   }
-   theSunElevation = xml_nodes[0]->getText().toDouble();
-
-   //---
-   // Fetch incidence angle:
-   //---
-   xml_nodes.clear();
-   xpath = "/Dimap_Document/Dataset_Sources/Source_Information/Scene_Source/INCIDENCE_ANGLE";
-   xmlDocument->findNodes(xpath, xml_nodes);
-   if (xml_nodes.size() == 0)
-   {
-      setErrorStatus();
-      if(traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << "DEBUG:\nCould not find: " << xpath
-            << std::endl;
-      }
-      return false;
-   }
-   theIncidenceAngle = xml_nodes[0]->getText().toDouble();
-
-   //---
-   // Fetch viewing angle:
-   //---
 
    xml_nodes.clear();
-   xpath = "/Dimap_Document/Dataset_Sources/Source_Information/Scene_Source/VIEWING_ANGLE";
+   xpath = "/DIMAP_Document/Geometric_Data/Use_Area/Located_Geometric_Values";
    xmlDocument->findNodes(xpath, xml_nodes);
-   if (xml_nodes.size() == 0)
-   {
-      setErrorStatus();
-      if(traceDebug())
+   if (xml_nodes.size() != 3 )
       {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << "DEBUG:\nCould not find: " << xpath
-            << std::endl;
+         setErrorStatus();
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << "DEBUG:\nCould not find: " << xpath
+               << std::endl;
+         }
+         return false;
       }
-      return false;
-   }
-   theViewingAngle = xml_nodes[0]->getText().toDouble();
 
-#endif // NEED_PHR_DOC
-   //---
-   // Fetch Step Count: YET NOT FOUND IN PHR METADATA
-   //---
-   /*xml_nodes.clear();
-   xpath = "/Dimap_Document/Data_Strip/Sensor_Configuration/Mirror_Position/STEP_COUNT";
-   xmlDocument->findNodes(xpath, xml_nodes);
-   if (xml_nodes.size() == 0)
-   {
-      setErrorStatus();
-      if(traceDebug())
-      {
+   std::vector<ossimRefPtr<ossimXmlNode> >::iterator node = xml_nodes.begin();
+   while (node != xml_nodes.end())
+     {
+     std::vector<ossimRefPtr<ossimXmlNode> > sub_nodes;
+
+     //---
+     // Fetch the Sun Azimuth:
+     //---
+     xpath = "Solar_Incidences/SUN_AZIMUTH";
+     (*node)->findChildNodes(xpath, sub_nodes);
+     if (sub_nodes.size() == 0)
+     {
+        setErrorStatus();
+        if(traceDebug())
+        {
+           ossimNotify(ossimNotifyLevel_DEBUG)
+              << "DEBUG:\nCould not find: " << xpath
+              << std::endl;
+        }
+        return false;
+     }
+     theSunAzimuth.push_back(sub_nodes[0]->getText().toDouble());
+
+     //---
+     // Fetch the Sun Elevation:
+     //---
+     sub_nodes.clear();
+     xpath = "Solar_Incidences/SUN_ELEVATION";
+     (*node)->findChildNodes(xpath, sub_nodes);
+     if (sub_nodes.size() == 0)
+     {
+        setErrorStatus();
+        if(traceDebug())
+        {
+           ossimNotify(ossimNotifyLevel_DEBUG)
+              << "DEBUG:\nCould not find: " << xpath
+              << std::endl;
+        }
+        return false;
+     }
+     theSunElevation.push_back(sub_nodes[0]->getText().toDouble());
+
+     //---
+     // Fetch incidence angle:
+     //---
+     sub_nodes.clear();
+     xpath = "Acquisition_Angles/INCIDENCE_ANGLE";
+     (*node)->findChildNodes(xpath, sub_nodes);
+     if (sub_nodes.size() == 0)
+       {
+       setErrorStatus();
+       if(traceDebug())
+         {
          ossimNotify(ossimNotifyLevel_DEBUG)
             << "DEBUG:\nCould not find: " << xpath
             << std::endl;
-      }
-      return false;
-   }
-   theStepCount = xml_nodes[0]->getText().toInt();*/
+         }
+       return false;
+       }
+     theIncidenceAngle.push_back(sub_nodes[0]->getText().toDouble());
+
+     sub_nodes.clear();
+     xpath = "Acquisition_Angles/VIEWING_ANGLE";
+     (*node)->findChildNodes(xpath, sub_nodes);
+     if (sub_nodes.size() == 0)
+       {
+       setErrorStatus();
+       if(traceDebug())
+         {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+              << "DEBUG:\nCould not find: " << xpath
+              << std::endl;
+         }
+         return false;
+       }
+     theViewingAngle.push_back(sub_nodes[0]->getText().toDouble());
+
+     ++node;
+     }
    
    return true;
 }
@@ -2717,7 +2694,7 @@ bool ossimPleiadesDimapSupportData::initFramePoints(
    // Corner points:
    //---
    xml_nodes.clear();
-   xpath = "/Dimap_Document/Dataset_Frame/Vertex";
+   xpath = "/DIMAP_Document/Dataset_Content/Dataset_Extent/Vertex";
    xmlDocument->findNodes(xpath, xml_nodes);
    if (xml_nodes.size() != 4)
    {
@@ -2731,7 +2708,7 @@ bool ossimPleiadesDimapSupportData::initFramePoints(
       ossimDpt ipt;
 
       std::vector<ossimRefPtr<ossimXmlNode> > sub_nodes;
-      xpath = "FRAME_LAT";
+      xpath = "LAT";
       (*node)->findChildNodes(xpath, sub_nodes);
       if (sub_nodes.size() == 0)
       {
@@ -2741,7 +2718,7 @@ bool ossimPleiadesDimapSupportData::initFramePoints(
       gpt.lat = sub_nodes[0]->getText().toDouble();
 
       sub_nodes.clear();
-      xpath = "FRAME_LON";
+      xpath = "LON";
       (*node)->findChildNodes(xpath, sub_nodes);
       if (sub_nodes.size() == 0)
       {
@@ -2752,7 +2729,7 @@ bool ossimPleiadesDimapSupportData::initFramePoints(
       gpt.hgt = 0.0; // assumed
 
       sub_nodes.clear();
-      xpath = "FRAME_ROW";
+      xpath = "ROW";
       (*node)->findChildNodes(xpath, sub_nodes);
       if (sub_nodes.size() == 0)
       {
@@ -2762,7 +2739,7 @@ bool ossimPleiadesDimapSupportData::initFramePoints(
       ipt.line = sub_nodes[0]->getText().toDouble() - 1.0;
 
       sub_nodes.clear();
-      xpath = "FRAME_COL";
+      xpath = "COL";
       (*node)->findChildNodes(xpath, sub_nodes);
       if (sub_nodes.size() == 0)
       {
@@ -2791,7 +2768,7 @@ bool ossimPleiadesDimapSupportData::initFramePoints(
    theRefGroundPoint.hgt = 0.0; // needs to be looked up
 
    xml_nodes.clear();
-   xpath = "/Dimap_Document/Dataset_Frame/Scene_Center/FRAME_LON";
+   xpath = "/DIMAP_Document/Dataset_Content/Dataset_Extent/Center/LON";
    xmlDocument->findNodes(xpath, xml_nodes);
    if (xml_nodes.size() != 1)
    {
@@ -2801,7 +2778,7 @@ bool ossimPleiadesDimapSupportData::initFramePoints(
    theRefGroundPoint.lon = xml_nodes[0]->getText().toDouble();
 
    xml_nodes.clear();
-   xpath = "/Dimap_Document/Dataset_Frame/Scene_Center/FRAME_LAT";
+   xpath = "/DIMAP_Document/Dataset_Content/Dataset_Extent/Center/LAT";
    xmlDocument->findNodes(xpath, xml_nodes);
    if (xml_nodes.size() != 1)
    {
@@ -2814,7 +2791,7 @@ bool ossimPleiadesDimapSupportData::initFramePoints(
    //---
    // Fetch scene orientation:
    //---
-   xml_nodes.clear();
+/*   xml_nodes.clear();
    xpath = "/Dimap_Document/Dataset_Frame/SCENE_ORIENTATION";
    xmlDocument->findNodes(xpath, xml_nodes);
    if (xml_nodes.size() == 0)
@@ -2828,55 +2805,799 @@ bool ossimPleiadesDimapSupportData::initFramePoints(
       }
       return false;
    }
-   theSceneOrientation = xml_nodes[0]->getText().toDouble();  
+   theSceneOrientation = xml_nodes[0]->getText().toDouble();  */
 
-   //---
-   // Fetch viewing angle:
-   /*
-    * From the SPOT Dimap documentation (Dimap Generic 1.0), VIEWING_ANGLE
-    * (the scene instrumental viewing angle) is ONLY available for SPOT5 data.
-    * WORKAROUND: if SPOT1 or SPOT4 data, then set VIEWING_ANGLE to -1.0
-    * */
-   //---
-   if(this->theSensorID == "Spot 5") {
-   xml_nodes.clear();
-   xpath = "/Dimap_Document/Dataset_Sources/Source_Information/Scene_Source/VIEWING_ANGLE";
-   xmlDocument->findNodes(xpath, xml_nodes);
-   if (xml_nodes.size() == 0)
-   {
-      setErrorStatus();
-      if(traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << "DEBUG:\nCould not find: " << xpath
-            << std::endl;
-      }
-      return false;
-   }
-   theViewingAngle = xml_nodes[0]->getText().toDouble();
-   } else {
-       theViewingAngle = -1.0;
-   }
 
-   //---
-   // Fetch Step Count:
-   //---
-   xml_nodes.clear();
-   xpath = "/Dimap_Document/Data_Strip/Sensor_Configuration/Mirror_Position/STEP_COUNT";
-   xmlDocument->findNodes(xpath, xml_nodes);
-   if (xml_nodes.size() == 0)
-   {
-      setErrorStatus();
-      if(traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << "DEBUG:\nCould not find: " << xpath
-            << std::endl;
-      }
-      return false;
-   }
-   theStepCount = xml_nodes[0]->getText().toInt();
-   
    return true;
 }
 
+
+bool ossimPleiadesDimapSupportData::parseCommonMetadata(
+   ossimRefPtr<ossimXmlDocument> xmlDocument)
+{
+   static const char MODULE[] = "ossimPleiadesDimapSupportData::parseXMLDocument";
+
+   ossimString xpath;
+   vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
+
+   //---
+   // Fetch if the DIMAP is linked to one or many JP2 files:
+   //---
+   xml_nodes.clear();
+   xpath = "/DIMAP_Document/Raster_Data/Data_Access/DATA_FILE_TILES";
+   xmlDocument->findNodes(xpath, xml_nodes);
+   if (xml_nodes.size() == 0)
+   {
+      setErrorStatus();
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << MODULE << " DEBUG:"
+            << "\nCould not find: " << xpath
+            << std::endl;
+      }
+      return false;
+   }
+   theMultiDataFile.setValue(xml_nodes[0]->getText());
+
+
+   //---
+   // Fetch the MegaImageSize:
+   //---
+   xml_nodes.clear();
+   xpath = "/DIMAP_Document/Raster_Data/Raster_Dimensions/NCOLS";
+   xmlDocument->findNodes(xpath, xml_nodes);
+   if (xml_nodes.size() == 0)
+   {
+      setErrorStatus();
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << MODULE << " DEBUG:"
+            << "\nCould not find: " << xpath
+            << std::endl;
+      }
+      return false;
+   }
+   theImageSize.samp = xml_nodes[0]->getText().toDouble();
+
+   xml_nodes.clear();
+   xpath = "/DIMAP_Document/Raster_Data/Raster_Dimensions/NROWS";
+   xmlDocument->findNodes(xpath, xml_nodes);
+   if (xml_nodes.size() == 0)
+   {
+      setErrorStatus();
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << MODULE << " DEBUG:"
+            << "\nCould not find: " << xpath
+            << std::endl;
+      }
+      return false;
+   }
+   theImageSize.line = xml_nodes[0]->getText().toDouble();
+
+
+   if (theMultiDataFile.getBoolean())
+    {
+    //---
+    // Fetch the Number of MegaTiles:
+    //---
+    xml_nodes.clear();
+    xpath = "/DIMAP_Document/Raster_Data/Raster_Dimensions/Tile_Set/NTILES";
+    xmlDocument->findNodes(xpath, xml_nodes);
+    if (xml_nodes.size() == 0)
+      {
+      setErrorStatus();
+      if (traceDebug())
+        {
+        ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " DEBUG:" << "\nCould not find: " << xpath << std::endl;
+        }
+      return false;
+      }
+    theNumberOfMegaTiles = xml_nodes[0]->getText().toUInt32();
+
+    //---
+    // Fetch the Number of MegaTiles in X and Y:
+    //---
+    xml_nodes.clear();
+    xpath = "/DIMAP_Document/Raster_Data/Raster_Dimensions/Tile_Set/Regular_Tiling/NTILES_COUNT";
+    xmlDocument->findNodes(xpath, xml_nodes);
+    if (xml_nodes.size() == 0)
+      {
+      setErrorStatus();
+      if (traceDebug())
+        {
+        ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " DEBUG:" << "\nCould not find: " << xpath << std::endl;
+        }
+      return false;
+      }
+
+    ossimString attribute = "ntiles_x";
+    ossimString value;
+    xml_nodes[0]->getAttributeValue(value, attribute);
+    theNumberOfMegaTilesInRow = value.toUInt32();
+
+    attribute = "ntiles_y";
+    xml_nodes[0]->getAttributeValue(value, attribute);
+    theNumberOfMegaTilesInCol = value.toUInt32();
+
+    if (theNumberOfMegaTilesInRow * theNumberOfMegaTilesInCol != theNumberOfMegaTiles)
+      {
+      setErrorStatus();
+      if (traceDebug())
+        {
+        ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " DEBUG:" << "\nCould not find: " << xpath << std::endl;
+        }
+      return false;
+      }
+
+    //---
+    // Fetch the size of MegaTiles:
+    //---
+    xml_nodes.clear();
+    xpath = "/DIMAP_Document/Raster_Data/Raster_Dimensions/Tile_Set/Regular_Tiling/NTILES_SIZE";
+    xmlDocument->findNodes(xpath, xml_nodes);
+    if (xml_nodes.size() == 0)
+      {
+      setErrorStatus();
+      if (traceDebug())
+        {
+        ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " DEBUG:" << "\nCould not find: " << xpath << std::endl;
+        }
+      return false;
+      }
+
+    attribute = "nrows";
+    xml_nodes[0]->getAttributeValue(value, attribute);
+    theTileSize.line = value.toUInt32();
+
+    attribute = "ncols";
+    xml_nodes[0]->getAttributeValue(value, attribute);
+    theTileSize.samp = value.toUInt32();
+
+    }
+
+   //--- TODO_MSD
+   // We will make the RefImagePoint the zero base center of the image.  This
+   // is used by the ossimSensorModel::worldToLineSample iterative loop as
+   // the starting point.  Since the ossimSensorModel does not know of the
+   // sub image we make it zero base.
+   //---
+   theRefImagePoint.line = theImageSize.line / 2.0;
+   theRefImagePoint.samp = theImageSize.samp / 2.0;
+
+
+
+   //---
+   // Fetch the ProductionDate:
+   //---
+   xml_nodes.clear();
+   xpath = "/DIMAP_Document/Product_Information/Delivery_Identification/PRODUCTION_DATE";
+   xmlDocument->findNodes(xpath, xml_nodes);
+   if (xml_nodes.size() == 0)
+   {
+      setErrorStatus();
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << MODULE << " DEBUG:"
+            << "\nCould not find: " << xpath
+            << std::endl;
+      }
+      return false;
+   }
+   theProductionDate = xml_nodes[0]->getText();
+
+   //---
+   // Fetch the Instrument:
+   //---
+   xml_nodes.clear();
+   xpath = "/DIMAP_Document/Dataset_Sources/Source_Identification/Strip_Source/INSTRUMENT";
+   xmlDocument->findNodes(xpath, xml_nodes);
+   if (xml_nodes.size() == 0)
+   {
+      setErrorStatus();
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << MODULE << " DEBUG:"
+            << "\nCould not find: " << xpath
+            << std::endl;
+      }
+      return false;
+   }
+   theInstrument = xml_nodes[0]->getText();
+
+   //---
+   // Fetch the Instrument Index:
+   //---
+   xml_nodes.clear();
+   xpath = "/DIMAP_Document/Dataset_Sources/Source_Identification/Strip_Source/INSTRUMENT_INDEX";
+   xmlDocument->findNodes(xpath, xml_nodes);
+   if (xml_nodes.size() == 0)
+   {
+      setErrorStatus();
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << MODULE << " DEBUG:"
+            << "\nCould not find: " << xpath
+            << std::endl;
+      }
+      return false;
+   }
+   theInstrumentIndex = xml_nodes[0]->getText().toUInt32();
+
+  //---
+  // Fetch number of bands
+  //---
+  xml_nodes.clear();
+  xpath = "/DIMAP_Document/Raster_Data/Raster_Dimensions/NBANDS";
+  xmlDocument->findNodes(xpath, xml_nodes);
+  if (xml_nodes.size() == 0)
+    {
+    setErrorStatus();
+    if (traceDebug())
+      {
+      ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " DEBUG:" << "\nCould not find: " << xpath << std::endl;
+      }
+    return false;
+    }
+  theNumBands = atoi(xml_nodes[0]->getText());
+
+  if (traceDebug())
+    {
+    ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " DEBUG:" << "\nNumber of bands: " << theNumBands << std::endl;
+    }
+
+  if (traceDebug())
+    {
+    ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " DEBUG:" << "\nNumber of bands: " << theNumBands << std::endl;
+    }
+
+  //---
+  // Fetch Band Dispaly Order
+  //---
+  xml_nodes.clear();
+  xpath = "/DIMAP_Document/Raster_Data/Raster_Display/Band_Display_Order/RED_CHANNEL";
+  xmlDocument->findNodes(xpath, xml_nodes);
+  if (xml_nodes.size() == 0)
+    {
+    setErrorStatus();
+    if (traceDebug())
+      {
+      ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " DEBUG:" << "\nCould not find: " << xpath << std::endl;
+      }
+    return false;
+    }
+  theBandOrder.push_back(xml_nodes[0]->getText());
+
+  if (theNumBands > 1)
+    {
+  xml_nodes.clear();
+  xpath = "/DIMAP_Document/Raster_Data/Raster_Display/Band_Display_Order/GREEN_CHANNEL";
+  xmlDocument->findNodes(xpath, xml_nodes);
+  if (xml_nodes.size() == 0)
+    {
+    setErrorStatus();
+    if (traceDebug())
+      {
+      ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " DEBUG:" << "\nCould not find: " << xpath << std::endl;
+      }
+    return false;
+    }
+  theBandOrder.push_back(xml_nodes[0]->getText());
+
+  xml_nodes.clear();
+  xpath = "/DIMAP_Document/Raster_Data/Raster_Display/Band_Display_Order/BLUE_CHANNEL";
+  xmlDocument->findNodes(xpath, xml_nodes);
+  if (xml_nodes.size() == 0)
+    {
+    setErrorStatus();
+    if (traceDebug())
+      {
+      ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " DEBUG:" << "\nCould not find: " << xpath << std::endl;
+      }
+    return false;
+    }
+  theBandOrder.push_back(xml_nodes[0]->getText());
+
+  if (theNumBands > 3)
+    {
+    xml_nodes.clear();
+    xpath = "/DIMAP_Document/Raster_Data/Raster_Display/Band_Display_Order/ALPHA_CHANNEL";
+    xmlDocument->findNodes(xpath, xml_nodes);
+    if (xml_nodes.size() == 0)
+      {
+      setErrorStatus();
+      if (traceDebug())
+        {
+        ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " DEBUG:" << "\nCould not find: " << xpath << std::endl;
+        }
+      return false;
+      }
+    theBandOrder.push_back(xml_nodes[0]->getText());
+    }
+
+    }
+
+  //---
+  // Fetch the Processing Level:
+  //---
+  xml_nodes.clear();
+  xpath = "/DIMAP_Document/Processing_Information/Product_Settings/PROCESSING_LEVEL";
+  xmlDocument->findNodes(xpath, xml_nodes);
+  if (xml_nodes.size() == 0)
+  {
+     setErrorStatus();
+     if(traceDebug())
+     {
+        ossimNotify(ossimNotifyLevel_DEBUG)
+           << MODULE << " DEBUG:"
+           << "\nCould not find: " << xpath
+           << std::endl;
+     }
+     return false;
+  }
+  theProcessingLevelString = xml_nodes[0]->getText();
+
+  //---
+  // Fetch the Spectral Processing:
+  //---
+  xml_nodes.clear();
+  xpath = "/DIMAP_Document/Processing_Information/Product_Settings/SPECTRAL_PROCESSING";
+  xmlDocument->findNodes(xpath, xml_nodes);
+  if (xml_nodes.size() == 0)
+  {
+     setErrorStatus();
+     if(traceDebug())
+     {
+        ossimNotify(ossimNotifyLevel_DEBUG)
+           << MODULE << " DEBUG:"
+           << "\nCould not find: " << xpath
+           << std::endl;
+     }
+     return false;
+  }
+  theSpectralProcessingString = xml_nodes[0]->getText();
+
+  //---
+  // Fetch the Imaging Date:
+  //---
+  xml_nodes.clear();
+  xpath = "/DIMAP_Document/Dataset_Sources/Source_Identification/Strip_Source/IMAGING_DATE";
+  xmlDocument->findNodes(xpath, xml_nodes);
+  if (xml_nodes.size() == 0)
+  {
+     setErrorStatus();
+     if(traceDebug())
+     {
+        ossimNotify(ossimNotifyLevel_DEBUG)
+           << MODULE << " DEBUG:"
+           << "\nCould not find: " << xpath
+           << std::endl;
+     }
+     return false;
+  }
+   theFirstLineImagingDate= xml_nodes[0]->getText();
+
+   //---
+   // Fetch the Imaging Time:
+   //---
+   xml_nodes.clear();
+   xpath = "/DIMAP_Document/Dataset_Sources/Source_Identification/Strip_Source/IMAGING_TIME";
+   xmlDocument->findNodes(xpath, xml_nodes);
+   if (xml_nodes.size() == 0)
+   {
+      setErrorStatus();
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << MODULE << " DEBUG:"
+            << "\nCould not find: " << xpath
+            << std::endl;
+      }
+      return false;
+   }
+   theFirstLineImagingTime= xml_nodes[0]->getText();
+
+   theAcquisitionDate = theFirstLineImagingDate + "T" + theFirstLineImagingTime;
+
+   return true;
+}
+
+bool ossimPleiadesDimapSupportData::parseRadiometricMetadata(
+   ossimRefPtr<ossimXmlDocument> xmlDocument)
+{
+  ossimString xpath;
+  std::vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
+  std::vector<ossimRefPtr<ossimXmlNode> > sub_nodes;
+  std::vector<ossimRefPtr<ossimXmlNode> >::iterator node;
+
+  //---
+  // Fetch the gain and bias for each spectral band:
+  //---
+  thePhysicalGain.assign(theNumBands, 1.000);
+  thePhysicalBias.assign(theNumBands, 0.000);
+
+  xml_nodes.clear();
+  xpath = "/DIMAP_Document/Radiometric_Data/Radiometric_Calibration/Instrument_Calibration/Band_Measurement_List/Band_Radiance";
+  xmlDocument->findNodes(xpath, xml_nodes);
+  node = xml_nodes.begin();
+  while (node != xml_nodes.end())
+    {
+    sub_nodes.clear();
+    xpath = "BAND_ID";
+    (*node)->findChildNodes(xpath, sub_nodes);
+    if (sub_nodes.size() == 0)
+      {
+      setErrorStatus();
+      return false;
+      }
+
+    ossimString bandName = sub_nodes[0]->getText();
+    ossim_uint32 bandIndex;
+    if (bandName == "B0")
+      bandIndex = 0;
+    else
+      if (bandName == "B1")
+        bandIndex = 1;
+      else
+        if (bandName == "B2")
+          bandIndex = 2;
+        else
+          if (bandName == "B3")
+            bandIndex = 3;
+          else
+            if (bandName == "P") bandIndex = 0;
+            else
+              {
+              ossimNotify(ossimNotifyLevel_WARN)
+                        << "ossimPleiadesDimapSupportData::parseRadiometricMetadata ERROR: Band ID is incorrect\n";
+              }
+
+    if ((bandIndex >= theNumBands ) )
+      {
+      ossimNotify(ossimNotifyLevel_WARN)
+          << "ossimPleiadesDimapSupportData::parseRadiometricMetadata ERROR: Band index outside of range\n";
+      return false;
+      }
+
+    sub_nodes.clear();
+    xpath = "BIAS";
+    (*node)->findChildNodes(xpath, sub_nodes);
+    if (sub_nodes.size() == 0)
+      {
+      setErrorStatus();
+      return false;
+      }
+    thePhysicalBias[bandIndex] = sub_nodes[0]->getText().toDouble();
+
+    sub_nodes.clear();
+    xpath = "GAIN";
+    (*node)->findChildNodes(xpath, sub_nodes);
+    if (sub_nodes.size() == 0)
+      {
+      setErrorStatus();
+      return false;
+      }
+    thePhysicalGain[bandIndex] = sub_nodes[0]->getText().toDouble();
+
+    ++node;
+    }
+
+  theSolarIrradiance.assign(theNumBands, 0.000);
+  xml_nodes.clear();
+  xpath = "/DIMAP_Document/Radiometric_Data/Radiometric_Calibration/Instrument_Calibration/Band_Measurement_List/Band_Solar_Irradiance";
+  xmlDocument->findNodes(xpath, xml_nodes);
+  node = xml_nodes.begin();
+  while (node != xml_nodes.end())
+    {
+    sub_nodes.clear();
+    xpath = "BAND_ID";
+    (*node)->findChildNodes(xpath, sub_nodes);
+    if (sub_nodes.size() == 0)
+      {
+      setErrorStatus();
+      return false;
+      }
+
+    ossimString bandName = sub_nodes[0]->getText();
+    ossim_uint32 bandIndex;
+    if (bandName == "B0")
+      bandIndex = 0;
+    else
+      if (bandName == "B1")
+        bandIndex = 1;
+      else
+        if (bandName == "B2")
+          bandIndex = 2;
+        else
+          if (bandName == "B3")
+            bandIndex = 3;
+          else
+            if (bandName == "P")
+              bandIndex = 0;
+            else
+              {
+              ossimNotify(ossimNotifyLevel_WARN)
+                  << "ossimPleiadesDimapSupportData::parseRadiometricMetadata ERROR: Band ID is incorrect\n";
+              }
+
+    if ((bandIndex >= theNumBands))
+      {
+      ossimNotify(ossimNotifyLevel_WARN)
+          << "ossimPleiadesDimapSupportData::parseRadiometricMetadata ERROR: Band index outside of range\n";
+      return false;
+      }
+
+    sub_nodes.clear();
+    xpath = "VALUE";
+    (*node)->findChildNodes(xpath, sub_nodes);
+    if (sub_nodes.size() == 0)
+      {
+      setErrorStatus();
+      return false;
+      }
+    theSolarIrradiance[bandIndex] = sub_nodes[0]->getText().toDouble();
+
+    ++node;
+    }
+
+  return true;
+}
+
+
+bool ossimPleiadesDimapSupportData::parseSensorMetadata(
+   ossimRefPtr<ossimXmlDocument> xmlDocument)
+{
+  static const char MODULE[] = "ossimPleiadesDimapSupportData::parseSensorMetadata";
+
+  ossimString xpath;
+  vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
+
+  //---
+  // Fetch the RPC file:
+  //---
+  xml_nodes.clear();
+  xpath = "/DIMAP_Document/Geoposition/Geoposition_Models/Rational_Function_Model/Component/COMPONENT_PATH";
+  xmlDocument->findNodes(xpath, xml_nodes);
+  if (xml_nodes.size() == 0)
+  {
+     setErrorStatus();
+     if(traceDebug())
+     {
+        ossimNotify(ossimNotifyLevel_DEBUG)
+           << MODULE << " DEBUG:"
+           << "\nCould not find: " << xpath
+           << std::endl;
+     }
+     return false;
+  }
+
+  ossimString attribute = "href";
+  xml_nodes[0]->getAttributeValue(theRPCModelFile, attribute);
+
+  ossimRefPtr<ossimXmlDocument> xmlDocumentRPC = InitXmlDocumentParser(theRPCModelFile, OSSIM_PLEIADES_METADATA_TYPE_RPC);
+  if (!xmlDocumentRPC)
+    {
+    if(traceDebug())
+    {
+       ossimNotify(ossimNotifyLevel_FATAL)
+          << MODULE << " DEBUG:"
+          << "ossimPleiadesDimapSupportData::parseSensorMetadata:"
+          << "\nInitXmlDocumentParser failed.  Returning false"
+          << std::endl;
+    }
+    return false;
+
+    }
+
+  //---
+  // Fetch the Global RFM - Direct Model:
+  //---
+  xml_nodes.clear();
+  xpath = "/DIMAP_Document/Rational_Function_Model/Global_RFM/Direct_Model";
+  xmlDocumentRPC->findNodes(xpath, xml_nodes);
+  if (xml_nodes.size() == 0)
+  {
+     setErrorStatus();
+     return false;
+  }
+
+
+
+
+
+  return true;
+}
+
+ossimRefPtr<ossimXmlDocument> ossimPleiadesDimapSupportData::InitXmlDocumentParser(const ossimFilename& file,
+                                                                                   ossimPleiadesMetadataFileType type)
+{
+  static const char MODULE[] = "ossimPleiadesDimapSupportData::InitXmlDocumentParser";
+  traceDebug.setTraceFlag(true);
+
+  //---
+  // Instantiate the file reading:
+  //---
+  ossim_int64 fileSize = file.fileSize();
+  std::ifstream in(file.c_str(), std::ios::binary|std::ios::in);
+  std::vector<char> fullBuffer;
+  ossimString bufferedIo;
+  if(in.good()&&(fileSize > 0))
+  {
+     char buf[100];
+     fullBuffer.resize(fileSize);
+     in.read(buf, ossim::min((ossim_int64)100, fileSize));
+     if(!in.fail())
+     {
+        ossimString testString = ossimString(buf,
+                                             buf + in.gcount());
+        if(testString.contains("xml"))
+        {
+           in.seekg(0);
+           in.read(&fullBuffer.front(), (std::streamsize)fullBuffer.size());
+           if(!in.fail())
+           {
+              bufferedIo = ossimString(fullBuffer.begin(),
+                                       fullBuffer.begin()+in.gcount());
+           }
+        }
+     }
+  }
+  else
+  {
+     return NULL;
+  }
+
+  //---
+  // Instantiate the XML parser:
+  //---
+  ossimRefPtr<ossimXmlDocument> xmlDocument;
+
+  if(bufferedIo.empty())
+  {
+     xmlDocument = new ossimXmlDocument(file);
+  }
+  else
+  {
+     xmlDocument = new ossimXmlDocument;
+     std::istringstream inStringStream(bufferedIo.string());
+     if(!xmlDocument->read(inStringStream))
+     {
+        return NULL;
+     }
+  }
+  if (xmlDocument->getErrorStatus())
+  {
+     if(traceDebug())
+     {
+        ossimNotify(ossimNotifyLevel_FATAL)
+           << MODULE << " DEBUG:"
+           << "ossimPleiadesDimapSupportData::InitXmlDocumentParser:"
+           << "\nUnable to parse xml file" << std::endl;
+     }
+     setErrorStatus();
+     return NULL;
+  }
+
+  vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
+  ossimString xpath;
+
+   //---
+   // Get the version string which can be used as a key for parsing.
+   //---
+   xml_nodes.clear();
+   xpath = "/DIMAP_Document/Metadata_Identification/METADATA_FORMAT";
+   xmlDocument->findNodes(xpath, xml_nodes);
+   if (xml_nodes.size() == 0)
+   {
+      setErrorStatus();
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "DEBUG:\nCould not find: " << xpath
+            << endl;
+      }
+      return NULL;
+   }
+
+   ossimString attribute = "version";
+   ossimString value;
+   ossimPleiadesMetadataVersion metadataVersion;
+   xml_nodes[0]->getAttributeValue(value, attribute);
+   if (value == "2.0")
+   {
+     metadataVersion = OSSIM_PLEIADES_METADATA_VERSION_2_0;
+   }
+
+   if (metadataVersion == OSSIM_PLEIADES_METADATA_VERSION_UNKNOWN)
+   {
+      setErrorStatus();
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_WARN)
+            << "WARNING:  DIMAP metadata version not found!"
+            << std::endl;
+      }
+      return NULL;
+   }
+
+   if (type == OSSIM_PLEIADES_METADATA_TYPE_PRODUCT)
+     theMetadataVersion = metadataVersion;
+
+  //---
+  // Check that it is a valid PHR DIMAP file format
+  //---
+  xml_nodes.clear();
+  xpath = "/DIMAP_Document/Metadata_Identification/METADATA_PROFILE";
+  xmlDocument->findNodes(xpath, xml_nodes);
+  if (xml_nodes.size() == 0)
+  {
+     setErrorStatus();
+     if(traceDebug())
+     {
+  ossimNotify(ossimNotifyLevel_DEBUG)
+           << "DEBUG:\n Not a PLEIADES DIMAPv2 file -> Key not found!"<< std::endl;
+     }
+     return NULL;
+  }
+  std::cout << xml_nodes[0]->getText() << std::endl;
+  if ( (xml_nodes[0]->getText() != "PHR_SENSOR")
+     && (xml_nodes[0]->getText() != "PHR_ORTHO")
+     && (xml_nodes[0]->getText() != "PHR_MOSAIC")
+     )
+  {
+     if(traceDebug())
+     {
+        ossimNotify(ossimNotifyLevel_DEBUG)
+           << "DEBUG:\n Not a PLEIADES DIMAPv2 file -> Key value incorrect!"<< std::endl;
+     }
+     return NULL;
+  }
+  if ( (type==OSSIM_PLEIADES_METADATA_TYPE_RPC) && (xml_nodes[0]->getText() != "PHR_SENSOR") )
+    {
+    if (traceDebug())
+      {
+      ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG:\n Not a RPC PLEIADES DIMAPv2 file -> Key value incorrect!"
+          << std::endl;
+      }
+    return NULL;
+    }
+
+  //---
+  // Check if the type is correct ?
+  //---
+  xml_nodes.clear();
+  xpath = "/DIMAP_Document/Metadata_Identification/METADATA_SUBPROFILE";;
+  xmlDocument->findNodes(xpath, xml_nodes);
+  if (xml_nodes.size() == 0)
+  {
+     setErrorStatus();
+     if(traceDebug())
+     {
+  ossimNotify(ossimNotifyLevel_DEBUG)
+           << "DEBUG:\n Not a PLEIADES DIMAP file -> Key not found!"<< std::endl;
+     }
+     return NULL;
+  }
+  if (  ((type!=OSSIM_PLEIADES_METADATA_TYPE_RPC) || (xml_nodes[0]->getText() != "RPC"))
+     && ((type!=OSSIM_PLEIADES_METADATA_TYPE_PRODUCT) || (xml_nodes[0]->getText() != "PRODUCT"))
+     )
+  {
+     if(traceDebug())
+     {
+        ossimNotify(ossimNotifyLevel_DEBUG)
+           << "DEBUG:\n Not a PLEIADES DIMAP file format -> Key value not coherent with input type !"<< std::endl;
+     }
+     return NULL;
+  }
+
+  return xmlDocument;
+}
+
+
+}

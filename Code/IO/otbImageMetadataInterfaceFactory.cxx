@@ -74,8 +74,6 @@ ImageMetadataInterfaceFactory
       }
     }
 
-  std::cout << possibleIMI.size() << std::endl;
-
   for (std::list<ImageMetadataInterfaceBasePointerType>::iterator k = possibleIMI.begin();
        k != possibleIMI.end(); ++k)
     {

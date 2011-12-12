@@ -28,10 +28,14 @@
 #include <ossim/base/ossimDrect.h>
 #include <ossim/base/ossimGpt.h>
 #include <ossim/base/ossimEcefPoint.h>
+#include <ossim/base/ossimBooleanProperty.h>
 
 class ossimKeywordlist;
 // class ossimRefPtr;
 class ossimXmlDocument;
+
+namespace ossimplugins
+{
 
 class ossimPleiadesDimapSupportData : public ossimObject,
                                   public ossimErrorStatusInterface
@@ -39,24 +43,30 @@ class ossimPleiadesDimapSupportData : public ossimObject,
 public:
 
    /** metadata.dim format version */
-   enum ossimSpotMetadataVersion
+   enum ossimPleiadesMetadataVersion
    {
       OSSIM_PLEIADES_METADATA_VERSION_UNKNOWN = 0,
       OSSIM_PLEIADES_METADATA_VERSION_2_0 = 1
    };
 
+   /** metadata file type */
+   enum ossimPleiadesMetadataFileType
+   {
+      OSSIM_PLEIADES_METADATA_TYPE_PRODUCT = 0,
+      OSSIM_PLEIADES_METADATA_TYPE_RPC = 1
+   };
+
+
    ossimPleiadesDimapSupportData();
 
 
    ossimPleiadesDimapSupportData(const ossimPleiadesDimapSupportData& rhs);
-   ossimPleiadesDimapSupportData(const ossimFilename& dimapFile,
-                             bool  processSwir=false);
+   ossimPleiadesDimapSupportData(const ossimFilename& dimapFile);
 
    virtual ossimObject* dup()const;
 
    void clearFields();
-   bool loadXmlFile(const ossimFilename& file,
-                    bool processSwir=false);
+   bool loadXmlFile(const ossimFilename& file);
 
    ossimString   getSensorID()                            const;
    ossimString   getMetadataVersionString()               const;
@@ -66,17 +76,16 @@ public:
    ossimString   getInstrument()                          const;
    ossim_uint32  getInstrumentIndex()                     const;
    ossimFilename getMetadataFile()                        const;
-   void          getSunAzimuth(ossim_float64& az)         const;
-   void          getSunElevation(ossim_float64& el)       const;
+   void          getSunAzimuth(std::vector<ossim_float64>& az)         const;
+   void          getSunElevation(std::vector<ossim_float64>& el)       const;
    void          getImageSize(ossimDpt& sz)               const;
    void          getLineSamplingPeriod(ossim_float64& pe) const;
-   void          getIncidenceAngle(ossim_float64& ia)     const;
-   void          getViewingAngle(ossim_float64& va)       const;
+   void          getIncidenceAngle(std::vector<ossim_float64>& ia)     const;
+   void          getViewingAngle(std::vector<ossim_float64>& va)       const;
    void          getSceneOrientation(ossim_float64& so)   const;
    ossim_uint32  getNumberOfBands()                       const;
    ossim_uint32  getStepCount()                           const;
    bool          isStarTrackerUsed()                      const;
-   bool          isSwirDataUsed()                         const;
 
    //---
    // Image center point:
@@ -153,7 +162,7 @@ public:
                           const char* prefix = 0)const;
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix = 0);
-protected:
+//protected:
    virtual ~ossimPleiadesDimapSupportData();
 
 private:
@@ -225,9 +234,10 @@ private:
 
 
    ossimString                 theSensorID;
-   ossimSpotMetadataVersion    theMetadataVersion;
+   ossimPleiadesMetadataVersion    theMetadataVersion;
    ossimString                 theImageID;
    ossimFilename               theMetadataFile;
+   ossimFilename               theRPCModelFile;
    ossimString                 theProductionDate;
    ossimString                 theInstrument;
    ossim_uint32                theInstrumentIndex;
@@ -237,13 +247,23 @@ private:
     * /Dimap_Document/Dataset_Sources/Source_Information/
     * Scene_Source
     */
-   ossim_float64               theSunAzimuth;
-   ossim_float64               theSunElevation;
-   ossim_float64               theIncidenceAngle;
-   ossim_float64               theViewingAngle;
+   std::vector<ossim_float64>  theSunAzimuth;
+   std::vector<ossim_float64>  theSunElevation;
+
+   std::vector<ossim_float64>  theIncidenceAngle;
+
+   std::vector<ossim_float64>  theViewingAngle;
+
    ossim_float64               theSceneOrientation;   
    
    ossimDpt                    theImageSize;
+
+   ossimDpt                    theTileSize;
+
+   ossim_uint32                theNumberOfMegaTilesInRow;
+   ossim_uint32                theNumberOfMegaTilesInCol;
+   ossim_uint32                theNumberOfMegaTiles;
+   ossimBooleanProperty        theMultiDataFile;
 
    /** Center of frame on ground, if sub image it's the center of that. */
    ossimGpt                    theRefGroundPoint;
@@ -271,11 +291,17 @@ private:
    std::vector<ossimDpt3d>     theVelEcfSamples;
    std::vector<ossim_float64>  theEphSampTimes;
    bool                        theStarTrackerUsed;
-   bool                        theSwirDataFlag;
    ossim_uint32                theNumBands;
+   std::vector<ossimString>    theBandOrder;
    ossimString                 theAcquisitionDate;
    ossim_uint32                theStepCount;
    
+   ossimString theProcessingLevelString;
+   ossimString theSpectralProcessingString;
+   ossimString theFirstLineImagingTime;
+   ossimString theFirstLineImagingDate;
+
+
 
    //---
    // Corner points:
@@ -294,7 +320,7 @@ private:
    ossimGpt createGround(const ossimString& s)const;
    ossimDpt createDpt(const ossimString& s)const;
 
-   /** callibration information for radiometric corrections*/
+   /** Calibration information for radiometric corrections*/
 
    std::vector<ossim_float64> thePhysicalBias;
    std::vector<ossim_float64> thePhysicalGain;
@@ -315,6 +341,16 @@ private:
    bool parsePart2(ossimRefPtr<ossimXmlDocument> xmlDocument);
    bool parsePart3(ossimRefPtr<ossimXmlDocument> xmlDocument);
    bool parsePart4(ossimRefPtr<ossimXmlDocument> xmlDocument);
-};
 
+   bool parseCommonMetadata(ossimRefPtr<ossimXmlDocument> xmlDocument);
+
+   bool parseRadiometricMetadata(ossimRefPtr<ossimXmlDocument> xmlDocument);
+
+   bool parseSensorMetadata(ossimRefPtr<ossimXmlDocument> xmlDocument);
+
+   ossimRefPtr<ossimXmlDocument> InitXmlDocumentParser(const ossimFilename& file,
+                                                       ossimPleiadesMetadataFileType type);
+
+};
+}
 #endif /* #ifndef ossimPleiadesDimapSupportData_HEADER */

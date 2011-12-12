@@ -11,15 +11,29 @@
 //*****************************************************************************
 // FIXME $Id: ossimSpot5Model.cpp 19658 2011-05-26 13:16:06Z gpotts $
 
-#include <iostream>
-#include <iomanip>
-#include <fstream>
-using namespace std;
+#include "ossimPleiadesModel.h"
 
-#include <ossim/projection/ossimPleiadesModel.h>
+#include <cmath>
+#include <cstdio>
+//using namespace std;
+
+#include <ossimPleiadesModel.h>
+#include <ossimPleiadesDimapSupportData.h>
+
+#include <ossimPluginCommon.h>
+
+#include <ossim/base/ossimCommon.h>
+#include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimKeywordNames.h>
-#include <ossim/base/ossimKeywordlist.h>
-#include <ossim/support_data/ossimPleiadesDimapSupportData.h>
+#include <ossim/base/ossimNotify.h>
+#include <ossim/base/ossimRefPtr.h>
+#include <ossim/base/ossimString.h>
+#include <ossim/base/ossimTrace.h>
+#include <ossim/base/ossimXmlDocument.h>
+#include <ossim/base/ossimXmlNode.h>
+#include <ossim/support_data/ossimSupportFilesList.h>
+
+/*#include <ossim/base/ossimKeywordlist.h>
 #include <ossim/projection/ossimMapProjection.h>
 #include <ossim/base/ossimLsrPoint.h>
 #include <ossim/base/ossimEcefRay.h>
@@ -27,18 +41,10 @@ using namespace std;
 #include <ossim/base/ossimLsrSpace.h>
 #include <ossim/base/ossimDpt3d.h>
 #include <ossim/base/ossimColumnVector3d.h>
-#include <ossim/base/ossimNotifyContext.h>
+#include <ossim/base/ossimNotifyContext.h>*/
 
-RTTI_DEF1(ossimPleiadesModel, "ossimPleiadesModel", ossimSensorModel);
-
-
-//---
-// Define Trace flags for use within this file:
-//---
-#include <ossim/base/ossimTrace.h>
-static ossimTrace traceExec  ("ossimPleiadesModel:exec");
-static ossimTrace traceDebug ("ossimPleiadesModel:debug");
-
+namespace ossimplugins
+{
 static const ossim_int32 MODEL_VERSION_NUMBER = 1;
 
 static const char* PARAM_NAMES[] = { "roll_offset",
@@ -65,6 +71,13 @@ static const ossim_float64 SIGMA[] = { 0.0001,   // degrees
                                        0.00005,  // delta degrees
                                        0.0001 }; // percent
 
+// Define Trace flags for use within this file:
+static ossimTrace traceExec  ("ossimPleiadesModel:exec");
+static ossimTrace traceDebug ("ossimPleiadesModel:debug");
+
+
+RTTI_DEF1(ossimPleiadesModel, "ossimPleiadesModel", ossimSensorModel);
+
 ossimPleiadesModel::ossimPleiadesModel()
    :
    ossimSensorModel      (),
@@ -89,47 +102,7 @@ ossimPleiadesModel::ossimPleiadesModel()
    initAdjustableParameters();
 }
 
-ossimPleiadesModel::ossimPleiadesModel(ossimPleiadesDimapSupportData* sd)
-   :
-   ossimSensorModel      (),
-   theSupportData        (sd),
-   theMetaDataFile       ("NOT ASSIGNED"),
-   theIllumAzimuth       (0.0),
-   theIllumElevation     (0.0),
-   thePositionError      (0.0),
-   theRefImagingTime     (0.0),
-   theRefImagingTimeLine (0.0),
-   theLineSamplingPeriod (0.0),
-//   theSatToOrbRotation   (3, 3),
-//   theOrbToEcfRotation   (3, 3),
-   theRollOffset         (0.0),
-   thePitchOffset        (0.0),
-   theYawOffset          (0.0),
-   theRollRate           (0.0),
-   thePitchRate          (0.0),
-   theYawRate            (0.0),
-   theFocalLenOffset     (0.0)
-{
-   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimPleiadesModel(dimap_file) Constructor: entering..." << std::endl;
 
-   //---
-   // Instantiate the support data classes after establishing the filenames:
-   //---
-   loadSupportData();
-   if (getErrorStatus() != ossimErrorCodes::OSSIM_OK)
-   {
-      if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimPleiadesModel(dimap_file) Constructor: returning with error..." << std::endl;
-      return;
-   }
-
-   //---
-   // initialize remaining data members:
-   //---
-   initAdjustableParameters();
-   updateModel();
-
-   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimPleiadesModel(dimap_file) Constructor: returning..." << std::endl;
-}
 
 //*****************************************************************************
 //  DESTRUCTOR: ~ossimPleiadesModel()
@@ -367,8 +340,8 @@ void ossimPleiadesModel::loadSupportData()
    // Center of frame, sub image if we have one.
    theSupportData->getRefGroundPoint(theRefGndPt);
 
-   theSupportData->getSunAzimuth(theIllumAzimuth);
-   theSupportData->getSunElevation(theIllumElevation);
+   // TODO MSD theSupportData->getSunAzimuth(theIllumAzimuth);
+   // TODO MSD theSupportData->getSunElevation(theIllumElevation);
    ossimDpt sz;
    theSupportData->getImageSize(sz);
    theImageSize = sz;
@@ -485,11 +458,13 @@ bool ossimPleiadesModel::saveState(ossimKeywordlist& kwl,
 {
   if(theSupportData.valid())
   {
+    std::cout << "the supportData is valid" << std::endl;
      ossimString supportPrefix = ossimString(prefix) + "support_data.";
      theSupportData->saveState(kwl, supportPrefix);
   }
   else
   {
+    std::cout << "the supportData is not valid" << std::endl;
      return false;
   }
 
@@ -784,4 +759,112 @@ ossimPleiadesModel::initFromMetadata(ossimPleiadesDimapSupportData* sd)
    initAdjustableParameters();
    updateModel();
    return true;
+}
+
+bool
+ossimPleiadesModel::open(const ossimFilename& file)
+{
+  static const char MODULE[] = "ossimPleiadesModel::open";
+  traceDebug.setTraceFlag(true);
+
+     if (traceDebug())
+     {
+        ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " entered...\n";
+     }
+
+     bool result = false;
+
+     // Get the xml file.
+     ossimFilename xmlFile;
+     _imageFilename = file.expand();
+
+     if (file.ext().downcase() == "xml")
+     {
+        xmlFile = file;
+     }
+     else if (file.isFile())
+     {
+       //std::cout << "File: " << file << std::endl;
+
+       xmlFile = file.path();
+       //std::cout << "xmlFile: " << xmlFile << std::endl;
+
+       ossimFilename xmlFileTmp = file.file();
+
+       xmlFileTmp = xmlFileTmp.file().replaceStrThatMatch("^IMG_", "DIM_");
+
+       xmlFileTmp = xmlFileTmp.replaceStrThatMatch("_R.C.\\.JP2$",".XML");
+       // std::cout << "xmlFileTmp4: "<< xmlFileTmp << std::endl;
+
+       xmlFile = xmlFile.dirCat(xmlFileTmp);
+     }
+
+     if (traceDebug())
+     {
+        ossimNotify(ossimNotifyLevel_DEBUG)
+           << "metadata xml file: " << xmlFile << "\n";
+     }
+
+     if ( xmlFile.exists() )
+     {
+       ossimPleiadesDimapSupportData plMetadata;
+       if (!plMetadata.loadXmlFile(xmlFile)) {
+         std::cout << "Loading failed!" << std::endl;
+       }
+       else{
+         std::cout << "XML file loaded" << std::endl;
+         result = true;
+       }
+
+     }
+
+     if (result)
+     {
+        _productXmlFile = xmlFile;
+        ossimSupportFilesList::instance()->add(_productXmlFile);
+     }
+     else
+     {
+        _productXmlFile = ossimFilename::NIL;
+     }
+
+#ifdef TODO_MSD
+    if (result)
+     {
+        // Assign the ossimSensorModel::theBoundGndPolygon
+        ossimGpt ul;
+        ossimGpt ur;
+        ossimGpt lr;
+        ossimGpt ll;
+        lineSampleToWorld(theImageClipRect.ul(), ul);
+        lineSampleToWorld(theImageClipRect.ur(), ur);
+        lineSampleToWorld(theImageClipRect.lr(), lr);
+        lineSampleToWorld(theImageClipRect.ll(), ll);
+
+        if (traceDebug())
+        {
+           ossimNotify(ossimNotifyLevel_DEBUG)
+              << "theImageClipRect : " << theImageClipRect
+              << "ul, ur, lr, ll " << ul << ", " << ur
+              << ", " << lr << " , " << ll << endl;
+        }
+
+        setGroundRect(ul, ur, lr, ll);  // ossimSensorModel method.
+
+        // OSSIM preferences specifies whether a coarse grid needs to be generated:
+        /* TODO MSD: if (!createReplacementOCG())
+           result = false;*/
+     }
+#endif //TODO_MSD
+
+     if (traceDebug())
+     {
+        ossimNotify(ossimNotifyLevel_DEBUG)
+           << MODULE << " exit status = " << (result?"true":"false\n")
+           << std::endl;
+     }
+
+     return result;
+}
+
 }
