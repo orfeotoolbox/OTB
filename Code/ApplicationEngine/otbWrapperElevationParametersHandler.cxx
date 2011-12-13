@@ -138,7 +138,7 @@ bool
 ElevationParametersHandler::IsGeoidUsed(const Application::Pointer app, const std::string& key)
 {
   std::ostringstream geoidKey;
-  geoidKey<< key<<"dem.geoid";
+  geoidKey<< key<<".dem.geoid";
   
   return app->IsParameterEnabled(geoidKey.str()) && app->HasValue(geoidKey.str());
 }
