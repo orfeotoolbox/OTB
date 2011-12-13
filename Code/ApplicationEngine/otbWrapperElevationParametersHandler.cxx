@@ -28,6 +28,7 @@ void ElevationParametersHandler::AddElevationParameters(Application::Pointer app
   app->AddParameter(ParameterType_Choice, key, "Elevation management");
   app->SetParameterDescription(key,
                                "This group of parameters allows to manage elevation values. Supported formats are SRTM, DTED or any geotiff processed by the DEM import application");
+  app->MandatoryOff(key);
 
   // DEM directory
   std::ostringstream oss;
@@ -141,6 +142,12 @@ ElevationParametersHandler::IsGeoidUsed(const Application::Pointer app, const st
   geoidKey<< key<<".dem.geoid";
   
   return app->IsParameterEnabled(geoidKey.str()) && app->HasValue(geoidKey.str());
+}
+
+bool 
+ElevationParametersHandler::IsElevationEnabled(const Application::Pointer app, const std::string & key)
+{
+  return app->IsParameterEnabled(key);
 }
 
 }// End namespace Wrapper
