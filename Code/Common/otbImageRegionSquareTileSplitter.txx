@@ -99,8 +99,16 @@ ImageRegionSquareTileSplitter<VImageDimension>
 
   if(tilesPerMegaTilesPerDim == 0)
     {
-    tilesPerMegaTilesPerDim =1;
+    tilesPerMegaTilesPerDim = 1;
     }
+
+  // Can't use more tiles than the number of splits per dim
+  if (tilesPerMegaTilesPerDim > m_SplitsPerDimension[0])
+    tilesPerMegaTilesPerDim = m_SplitsPerDimension[0];
+
+  if (tilesPerMegaTilesPerDim > m_SplitsPerDimension[1])
+    tilesPerMegaTilesPerDim = m_SplitsPerDimension[1];
+
 
   unsigned int tilesPerMegaTiles = tilesPerMegaTilesPerDim*tilesPerMegaTilesPerDim;
 
