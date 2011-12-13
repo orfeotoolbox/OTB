@@ -461,6 +461,7 @@ VectorDataExtractROI<TVectorData>
   genericTransform->SetOutputSpacing(this->GetInput()->GetSpacing());
   genericTransform->SetDEMDirectory(m_DEMDirectory);
   genericTransform->SetGeoidFile(m_GeoidFile);
+  genericTransform->SetAverageElevation(m_AverageElevation);
   genericTransform->InstanciateTransform();
 
   otbMsgDevMacro(<< genericTransform);

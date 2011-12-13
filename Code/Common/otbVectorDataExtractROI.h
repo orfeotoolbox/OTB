@@ -103,6 +103,9 @@ public:
   itkSetStringMacro(GeoidFile);
   itkGetStringMacro(GeoidFile);
 
+  itkSetMacro(AverageElevation, double);
+  itkGetMacro(AverageElevation, double);
+
 protected:
   VectorDataExtractROI();
   virtual ~VectorDataExtractROI() {}
@@ -143,6 +146,8 @@ private:
   RegionType  m_GeoROI;
   std::string m_DEMDirectory;
   std::string m_GeoidFile;
+
+  double m_AverageElevation;
 
   unsigned int m_Kept;
 
