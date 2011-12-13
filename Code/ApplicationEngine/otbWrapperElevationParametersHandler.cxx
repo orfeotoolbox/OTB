@@ -33,11 +33,19 @@ void ElevationParametersHandler::AddElevationParameters(Application::Pointer app
   std::ostringstream oss;
   oss << key<<".dem";
   app->AddChoice(oss.str(),"DEM directory");
-  oss << ".value";
+  oss << ".path";
   app->AddParameter(ParameterType_Directory, oss.str(), "DEM directory");
   app->SetParameterDescription(oss.str(),
                                "This parameter allows to select a directory containing Digital Elevation Model tiles");
   app->SetParameterString(oss.str(), otb::ConfigurationFile::GetInstance()->GetDEMDirectory());
+
+   // Geoid file
+  oss.str("");
+  oss << key<<".dem.geoid";
+  app->AddParameter(ParameterType_Filename, oss.str(), "Geoid File");
+  app->SetParameterDescription(oss.str(),"Use a geoid grid to get the height above the ellipsoid used");
+  app->SetParameterString(oss.str(), otb::ConfigurationFile::GetInstance()->GetGeoidFile());
+  app->MandatoryOff(oss.str());
 
   // Average elevation
   oss.str("");
@@ -48,21 +56,12 @@ void ElevationParametersHandler::AddElevationParameters(Application::Pointer app
   app->SetParameterDescription(oss.str(),"This parameter allows to pick up an average elevation for all the points of the image.");
   app->SetDefaultParameterFloat(oss.str(), 0.);
 
-// // TODO : not implemented yet
-// //   // Tiff image
-// //   oss << ".tiff";
-// //   app->AddChoice(oss.str(), "Tiff file");
-// //   app->AddParameter(ParameterType_InputImage, oss.str(), "Tiff file");
-// //   app->SetParameterDescription(oss.str(),"Tiff file used to get elevation for each location in the image");
-   
-   // Geoid file
-  oss.str("");
-  oss << key<<".geoid";
-  app->AddChoice(oss.str(),   "Geoid file");
-  oss << ".value";
-  app->AddParameter(ParameterType_Filename, oss.str(), "Geoid File");
-  app->SetParameterDescription(oss.str(),"Use a geoid grid to get the height above the ellipsoid used");
-  app->SetParameterString(oss.str(), otb::ConfigurationFile::GetInstance()->GetGeoidFile());
+ // TODO : not implemented yet
+ //   // Tiff image
+ //   oss << ".tiff";
+ //   app->AddChoice(oss.str(), "Tiff file");
+ //   app->AddParameter(ParameterType_InputImage, oss.str(), "Tiff file");
+ //   app->SetParameterDescription(oss.str(),"Tiff file used to get elevation for each location in the image");
 
   // Set the default value
   app->SetParameterString(key, "average");
@@ -77,7 +76,7 @@ const std::string
 ElevationParametersHandler::GetDEMDirectory(const Application::Pointer app, const std::string& key)
 {
   std::ostringstream oss;
-  oss << key <<".dem.value";
+  oss << key <<".dem.path";
   return app->GetParameterString(oss.str());
 }
 
@@ -100,8 +99,13 @@ const std::string
 ElevationParametersHandler::GetGeoidFile(const Application::Pointer app, const std::string& key)
 {
   std::ostringstream oss;
-  oss << key <<".geoid.value";
-  return app->GetParameterString(oss.str());
+  oss << key <<".dem.geoid";
+  if (IsGeoidUsed(app, key))
+    {
+    return app->GetParameterString(oss.str());
+    }
+  
+  return "";
 }
 
 /**
@@ -122,10 +126,21 @@ ElevationParametersHandler::GetElevationType(const Application::Pointer app, con
      //  case Elevation_Tiff:
      //   return Eleavation_Tiff;
      //   break;
-    case Elevation_Geoid:
-      return Elevation_Geoid;
-      break;
     }
+}
+
+
+/**
+ *
+ * Is Geoid used
+ */
+bool
+ElevationParametersHandler::IsGeoidUsed(const Application::Pointer app, const std::string& key)
+{
+  std::ostringstream geoidKey;
+  geoidKey<< key<<"dem.geoid";
+  
+  return app->IsParameterEnabled(geoidKey.str()) && app->HasValue(geoidKey.str());
 }
 
 }// End namespace Wrapper

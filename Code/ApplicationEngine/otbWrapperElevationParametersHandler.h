@@ -58,6 +58,7 @@ public:
   static const std::string GetDEMDirectory(const Application::Pointer app, const std::string& key);
   static float GetAverageElevation(const Application::Pointer app, const std::string& key);
   static const std::string GetGeoidFile(const Application::Pointer app, const std::string& key);
+  static bool IsGeoidUsed(const Application::Pointer app, const std::string& key);
 
 protected:
   ElevationParametersHandler(); // not implemented
