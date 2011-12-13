@@ -13,7 +13,8 @@ OTB_TEST_APPLICATION(NAME  apTvDmStereoSensorModelToElevationMapTest
                              -minh -20.0
                              -maxh 20.0
                              -step 1.0
-                             -dem ${INPUTDATA}/DEM/srtm_directory/
+                             -elev dem
+                             -elev.dem.path ${INPUTDATA}/DEM/srtm_directory/
                              -geoid ${INPUTDATA}/DEM/egm96.grd
                      VALID   --compare-image ${EPSILON_10}
                              ${BASELINE}/apTvDmStereoSensorModelToElevationMapTest.tif
@@ -30,7 +31,8 @@ OTB_TEST_APPLICATION(NAME  apTvDmStereoSensorModelToElevationMapWithSmoothing
                              -minh -20.0
                              -maxh 20.0
                              -step 1.0
-                             -dem ${INPUTDATA}/DEM/srtm_directory/
+                             -elev dem
+                             -elev.dem.path ${INPUTDATA}/DEM/srtm_directory/
                              -geoid ${INPUTDATA}/DEM/egm96.grd
                              -rgs 2.0
                              -sgs 2.0
