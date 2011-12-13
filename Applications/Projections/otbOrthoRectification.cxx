@@ -393,6 +393,7 @@ private:
       case Elevation_DEM:
       {
       m_ResampleFilter->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
+      m_ResampleFilter->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
       }
       break;
       case Elevation_Average:
@@ -405,11 +406,6 @@ private:
       //  {
       //  }
       //  break;
-      case Elevation_Geoid:
-      {
-      m_ResampleFilter->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
-      }
-      break;
       }
 
     // If activated, generate RPC model

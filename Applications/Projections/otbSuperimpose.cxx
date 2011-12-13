@@ -113,6 +113,7 @@ private:
       case Elevation_DEM:
       {
       m_Resampler->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
+      m_Resampler->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
       }
       break;
       case Elevation_Average:
@@ -125,11 +126,6 @@ private:
       //  {
       //  }
       //  break;
-      case Elevation_Geoid:
-      {
-      m_Resampler->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
-      }
-      break;
       }
     
     // Set up output image informations

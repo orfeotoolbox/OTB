@@ -97,6 +97,7 @@ private:
       case Elevation_DEM:
       {
       m_Envelope->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
+      m_Envelope->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
       }
       break;
       case Elevation_Average:
@@ -109,11 +110,6 @@ private:
       //  {
       //  }
       //  break;
-      case Elevation_Geoid:
-      {
-      m_Envelope->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
-      }
-      break;
       }
     
     if (HasValue("proj"))
