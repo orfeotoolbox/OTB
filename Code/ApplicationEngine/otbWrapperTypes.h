@@ -88,9 +88,8 @@ typedef enum
 typedef enum
 {
   Elevation_DEM,
-  Elevation_Average,
+  Elevation_Average
   //Elevation_Tiff,
-  Elevation_Geoid
 } ElevationType;
 
 
