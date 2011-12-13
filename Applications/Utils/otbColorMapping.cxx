@@ -55,7 +55,6 @@ namespace Functor
 {
 
 
-
 template <class TLabel, class TValue> class RGBFromImageValueFunctor
 {
 public:
@@ -143,7 +142,7 @@ public:
   {
     MeanValueMapType MeanMap;
 
-    for(unsigned int i=0;i<m_WeigthingMap.size();i++)
+    for(unsigned int i=0; i<m_WeigthingMap.size(); i++)
       {
       TValue value = m_LabelToImageIntensityMap[i];
       for (unsigned int index = 0; index < value.Size(); index++)
@@ -184,7 +183,6 @@ private:
 }
 
 
-
 class ColorMapping: public Application
 {
 public:
@@ -214,7 +212,6 @@ public:
 
   typedef itk::ImageRegionConstIterator<FloatVectorImageType> IteratorType;
   typedef itk::ImageRegionConstIterator<UInt16ImageType> LabelIteratorType;
-
 
 
   // Manual label LUT
@@ -251,8 +248,8 @@ public:
 
   typedef otb::ImageMetadataInterfaceBase ImageMetadataInterfaceType;
 
-  typedef Functor::RGBFromImageValueFunctor<LabelType,FloatVectorImageType::PixelType> RGBFromImageValueFunctorType;
-  typedef itk::BinaryFunctorImageFilter<LabelImageType,FloatVectorImageType,LabelImageType,
+  typedef Functor::RGBFromImageValueFunctor<LabelType, FloatVectorImageType::PixelType> RGBFromImageValueFunctorType;
+  typedef itk::BinaryFunctorImageFilter<LabelImageType, FloatVectorImageType, LabelImageType,
       RGBFromImageValueFunctorType>     RGBFromImageValueFilterType;
 
 private:
@@ -511,9 +508,9 @@ private:
 
             // Generate
             histogramFilter->Update();
-            HistogramListType::Pointer histogramList = histogramFilter->GetOutput();//
+            HistogramListType::Pointer histogramList = histogramFilter->GetOutput(); //
             // HistogramPointerType histoBand=histogramList->GetNelements(0);
-            //  std::cout<<histoBand->GetFrequency(0,0)<<std::endl;
+            //  std::cout<<histoBand->GetFrequency(0, 0)<<std::endl;
 
 
             ImageMetadataInterfaceType::Pointer
@@ -537,8 +534,8 @@ private:
 
             for (unsigned int index = 0; index < supportImage->GetNumberOfComponentsPerPixel(); index++)
               {
-              minVal.SetElement(index,static_cast<FloatVectorImageType::PixelType::ValueType> (histogramList->GetNthElement(index)->Quantile(0,static_cast<float> (this->GetParameterInt("method.image.low"))/ 100.0)));
-              maxVal.SetElement(index,static_cast<FloatVectorImageType::PixelType::ValueType> (histogramList->GetNthElement(index)->Quantile(0,(100.0- static_cast<float> (this->GetParameterInt("method.image.up")))/ 100.0)));
+              minVal.SetElement(index, static_cast<FloatVectorImageType::PixelType::ValueType> (histogramList->GetNthElement(index)->Quantile(0, static_cast<float> (this->GetParameterInt("method.image.low"))/ 100.0)));
+              maxVal.SetElement(index, static_cast<FloatVectorImageType::PixelType::ValueType> (histogramList->GetNthElement(index)->Quantile(0, (100.0- static_cast<float> (this->GetParameterInt("method.image.up")))/ 100.0)));
               }
 
             // create functor
@@ -591,7 +588,6 @@ private:
 
               ++mapIt;
               }
-
 
 
             SetParameterOutputImage("out", m_RBGFromImageMapper->GetOutput());

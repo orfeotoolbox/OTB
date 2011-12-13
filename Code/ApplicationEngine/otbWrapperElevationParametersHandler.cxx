@@ -144,7 +144,7 @@ ElevationParametersHandler::IsGeoidUsed(const Application::Pointer app, const st
   return app->IsParameterEnabled(geoidKey.str()) && app->HasValue(geoidKey.str());
 }
 
-bool 
+bool
 ElevationParametersHandler::IsElevationEnabled(const Application::Pointer app, const std::string & key)
 {
   return app->IsParameterEnabled(key);
