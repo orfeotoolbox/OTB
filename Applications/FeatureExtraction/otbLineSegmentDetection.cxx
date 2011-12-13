@@ -29,6 +29,8 @@
 #include "otbVectorDataTransformFilter.h"
 #include "itkAffineTransform.h"
 
+// Elevation handler
+#include "otbWrapperElevationParametersHandler.h"
 
 namespace otb
 {
@@ -68,8 +70,9 @@ private:
 
     AddParameter(ParameterType_OutputVectorData, "out", "Output Detected lines");
     SetParameterDescription("out"," Output detected line segments (vector data).");
-    AddParameter(ParameterType_Directory, "dem", "Digital Elevation Model directory");
-    MandatoryOff("dem");
+
+    // Elevation
+    ElevationParametersHandler::AddElevationParameters(this, "elev");
 
     AddParameter(ParameterType_Empty, "norescale", "No rescaling in [0, 255]");
     MandatoryOff("norescale");
@@ -163,18 +166,26 @@ private:
       vproj->SetInputOrigin(GetParameterImage("in")->GetOrigin());
       vproj->SetInputSpacing(GetParameterImage("in")->GetSpacing());
 
-      // Configure DEM directory
-      if(IsParameterEnabled("dem"))
-        {
-        vproj->SetDEMDirectory( GetParameterString("dem") );
-        }
-      else
-        {
-        if ( otb::ConfigurationFile::GetInstance()->IsValid() )
-          {
-          vproj->SetDEMDirectory(otb::ConfigurationFile::GetInstance()->GetDEMDirectory());
-          }
-        }
+    // Elevation through the elevation handler
+    switch(ElevationParametersHandler::GetElevationType(this, "elev"))
+      {
+      case Elevation_DEM:
+      {
+      vproj->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
+      vproj->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
+      }
+      break;
+      case Elevation_Average:
+      {
+      vproj->SetAverageElevation(ElevationParametersHandler::GetAverageElevation(this, "elev"));
+      }
+      break;
+      //   Commented cause using a tiff file is not implemented yet
+      //  case Elevation_Tiff:
+      //  {
+      //  }
+      //  break;
+      }
 
       AddProcess(vproj, "Reprojecting output vector data");
       vproj->Update();

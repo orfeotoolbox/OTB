@@ -25,6 +25,9 @@
 
 #include "otbVectorDataProjectionFilter.h"
 
+// Elevation handler
+#include "otbWrapperElevationParametersHandler.h"
+
 namespace otb
 {
 namespace Wrapper
@@ -103,10 +106,8 @@ private:
     MandatoryOff("obia");
     DisableParameter("obia");
     
-    AddParameter(ParameterType_Directory, "dem", "DEM Directory");
-    SetParameterDescription("dem", "DEM directory (used to reproject output in WGS84 if input image is in sensor model geometry)");
-    MandatoryOff("dem");
-    DisableParameter("dem");
+    // Elevation
+    ElevationParametersHandler::AddElevationParameters(this, "elev");
 
    // Doc example parameter settings
    SetDocExampleParameterValue("in", "ROI_QB_MUL_4.tif");
@@ -166,18 +167,26 @@ private:
       m_Vproj->SetInputKeywordList(inputImage->GetImageKeywordlist());
       m_Vproj->SetInputOrigin(inputImage->GetOrigin());
       m_Vproj->SetInputSpacing(inputImage->GetSpacing());
-      
-      // Configure DEM directory
-      if(IsParameterEnabled("dem") && HasValue("dem"))
+
+      // Elevation through the elevation handler
+      switch(ElevationParametersHandler::GetElevationType(this, "elev"))
         {
-        m_Vproj->SetDEMDirectory(GetParameterString("dem"));
+        case Elevation_DEM:
+        {
+        m_Vproj->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
+        m_Vproj->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
         }
-      else
+        break;
+        case Elevation_Average:
         {
-        if ( otb::ConfigurationFile::GetInstance()->IsValid() )
-          {
-          m_Vproj->SetDEMDirectory(otb::ConfigurationFile::GetInstance()->GetDEMDirectory());
-          }
+        m_Vproj->SetAverageElevation(ElevationParametersHandler::GetAverageElevation(this, "elev"));
+        }
+        break;
+        //   Commented cause using a tiff file is not implemented yet
+        //  case Elevation_Tiff:
+        //  {
+        //  }
+        //  break;
         }
       
       m_Vproj->Update();

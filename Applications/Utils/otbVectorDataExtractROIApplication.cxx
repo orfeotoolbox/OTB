@@ -25,6 +25,9 @@
 //Misc
 #include "otbRemoteSensingRegion.h"
 
+// Elevation handler
+#include "otbWrapperElevationParametersHandler.h"
+
 #include <iostream>
 
 namespace otb
@@ -79,17 +82,9 @@ private:
     AddParameter(ParameterType_InputVectorData, "io.vd", "Input Vector data");
     AddParameter(ParameterType_InputImage,      "io.in", "Support image");
     AddParameter(ParameterType_OutputVectorData,"io.out","Output Vector data");
-    
-    AddParameter(ParameterType_Group,"elev","Elevation management");
-    SetParameterDescription("elev","This group of parameters allows to manage elevation values in the VectorData projection process");
 
-    AddParameter(ParameterType_Directory, "elev.dem",   "DEM directory");
-    std::ostringstream oss;
-    oss << "This parameter allows to select a directory containing ";
-    oss << "Digital Elevation Model tiles. Supported formats are SRTM, DTED ";
-    oss << "or any geotiff processed by the DEM import application";
-    SetParameterDescription("elev.dem", oss.str());
-    MandatoryOff("elev.dem");
+    // Elevation
+    ElevationParametersHandler::AddElevationParameters(this, "elev");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("io.in", "QB_Toulouse_Ortho_XS.tif");
@@ -157,19 +152,29 @@ private:
     m_VdProj->SetOutputOrigin(inImage->GetOrigin());
     m_VdProj->SetOutputSpacing(inImage->GetSpacing());
 
-    // Set the DEM directory if used
-    if (IsParameterEnabled("elev.dem") && HasValue("elev.dem"))
+     // Elevation through the elevation handler
+    switch(ElevationParametersHandler::GetElevationType(this, "elev"))
       {
-      m_VdExtract->SetDEMDirectory(GetParameterString("elev.dem"));
-      m_VdProj->SetDEMDirectory(GetParameterString("elev.dem"));
+      case Elevation_DEM:
+      {
+      m_VdExtract->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
+      m_VdExtract->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
+
+      m_VdProj->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
+      m_VdProj->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
       }
-    else
+      break;
+      case Elevation_Average:
       {
-      if ( otb::ConfigurationFile::GetInstance()->IsValid() )
-        {
-        m_VdExtract->SetDEMDirectory(otb::ConfigurationFile::GetInstance()->GetDEMDirectory());
-        m_VdProj->SetDEMDirectory(otb::ConfigurationFile::GetInstance()->GetDEMDirectory());
-        }
+      m_VdExtract->SetAverageElevation(ElevationParametersHandler::GetAverageElevation(this, "elev"));
+      m_VdProj->SetAverageElevation(ElevationParametersHandler::GetAverageElevation(this, "elev"));
+      }
+      break;
+      //   Commented cause using a tiff file is not implemented yet
+      //  case Elevation_Tiff:
+      //  {
+      //  }
+      //  break;
       }
     
     // Set the output vectorData

@@ -68,6 +68,7 @@ private:
 
     AddParameter(ParameterType_InputImage,   "inp",   "Input PAN Image");
     AddParameter(ParameterType_InputImage,   "inxs",  "Input XS Image");
+
     // Elevation
     ElevationParametersHandler::AddElevationParameters(this, "elev");
 
