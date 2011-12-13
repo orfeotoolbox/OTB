@@ -188,6 +188,8 @@ const std::string MapProjectionParametersHandler::GetProjectionRefFromChoice(con
     }
     break;
     }
+
+  return "";
 }
 
 /**
