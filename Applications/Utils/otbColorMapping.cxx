@@ -563,7 +563,7 @@ private:
 
             std::map<LabelType, FloatVectorImageType::PixelType>::const_iterator
                 mapIt = labelToMeanIntensityMap.begin();
-            FloatVectorImageType::PixelType meanValue = labelToMeanIntensityMap.at(0);
+            FloatVectorImageType::PixelType meanValue;
 
             otbAppLogINFO("The map contains :"<<labelToMeanIntensityMap.size()<<" labels."<<std::endl);
             VectorPixelType color(3);
