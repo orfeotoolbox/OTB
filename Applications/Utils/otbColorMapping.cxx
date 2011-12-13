@@ -20,17 +20,170 @@
 
 
 #include <fstream>
-
+#include <map>
 // Include differents method for color mapping
 #include "otbChangeLabelImageFilter.h"
 #include "itkLabelToRGBImageFilter.h"
 #include "itkScalarToRGBColormapImageFilter.h"
 #include "otbReliefColormapFunctor.h"
 
+#include "otbRAMDrivenStrippedStreamingManager.h"
+#include "otbStreamingShrinkImageFilter.h"
+#include "itkListSample.h"
+#include "otbListSampleToHistogramListGenerator.h"
+
+#include "itkDenseFrequencyContainer.h"
+#include "itkVariableLengthVector.h"
+#include "itkHistogram.h"
+#include "otbObjectList.h"
+#include "otbVisualizationPixelTraits.h"
+
+#include "itkImageRegionConstIterator.h"
+#include "otbVisualizationPixelTraits.h"
+#include "otbObjectList.h"
+
+#include "itkImageRegionConstIterator.h"
+#include "itkBinaryFunctorImageFilter.h"
+
 namespace otb
 {
+
+
 namespace Wrapper
 {
+namespace Functor
+{
+
+
+
+template <class TLabel, class TValue> class RGBFromImageValueFunctor
+{
+public:
+  typedef std::map<TLabel, TValue> MeanValueMapType;
+
+  void SetMaxVal(const TValue maxVal)
+  {
+    m_MaxVal.SetSize(maxVal.Size());
+    for (unsigned int index = 0; index < maxVal.Size(); index++)
+      {
+      m_MaxVal.SetElement(index, maxVal.GetElement(index));
+      }
+  }
+
+  void SetMinVal(const TValue minVal)
+  {
+    m_MinVal.SetSize(minVal.Size());
+    for (unsigned int index = 0; index < minVal.Size(); index++)
+      {
+      m_MinVal.SetElement(index, minVal.GetElement(index));
+      }
+  }
+
+  TValue GetMaxVal()
+  {
+    return m_MaxVal;
+  }
+
+  TValue GetMinVal()
+  {
+    return m_MinVal;
+  }
+
+  void AddNewLabel(TLabel label, TValue value)
+  {
+    TValue newValue;
+    newValue.SetSize(value.Size());
+    for (unsigned int index = 0; index < value.Size(); index++)
+      {
+      if (value[index] < m_MinVal[index])
+        newValue[index] = m_MinVal[index];
+      else
+        if (value[index] > m_MaxVal[index])
+          newValue[index] = m_MaxVal[index];
+        else newValue[index] = value[index];
+      }
+    m_LabelToImageIntensityMap[label] = newValue;
+    m_WeigthingMap[label] = 1;
+  }
+
+  void AddValue(const TLabel& label, const TValue& value)
+  {
+    TValue currentValue = m_LabelToImageIntensityMap[label];
+    m_WeigthingMap[label] = m_WeigthingMap[label] + 1;
+    for (unsigned int index = 0; index < value.Size(); index++)
+      {
+      if (value[index] < m_MinVal[index])
+        currentValue[index] += m_MinVal[index];
+      else
+        if (value[index] > m_MaxVal[index])
+          currentValue[index] += m_MaxVal[index];
+        else currentValue[index] += value[index];
+
+        }
+
+    m_LabelToImageIntensityMap[label] = currentValue;
+  }
+
+  /** operator */
+  TLabel operator ()(const TLabel& label, const TValue& value)
+  {
+    if (m_LabelToImageIntensityMap.count(label)<=0)
+      {
+      AddNewLabel(label, value);
+        }
+      else
+        {
+        AddValue(label, value);
+        }
+
+    return label;
+  }
+
+  MeanValueMapType GetMeanIntensity()
+  {
+    MeanValueMapType MeanMap;
+
+    for(unsigned int i=0;i<m_WeigthingMap.size();i++)
+      {
+      TValue value = m_LabelToImageIntensityMap[i];
+      for (unsigned int index = 0; index < value.Size(); index++)
+           {
+            value[index]=value[index]/static_cast<float>(m_WeigthingMap.at(i));
+           }
+      MeanMap[i]=value;
+      }
+
+
+    return MeanMap;
+  }
+
+  std::map<TLabel, unsigned int> GetLabelArea()
+  {
+    return m_WeigthingMap;
+  }
+
+  /** Constructor */
+  RGBFromImageValueFunctor()
+  {
+  }
+
+  bool operator !=(const RGBFromImageValueFunctor& other) const
+  {
+
+    return ((&m_LabelToImageIntensityMap) != &(other.m_LabelToImageIntensityMap));
+  }
+private:
+
+  std::map<TLabel, unsigned int> m_WeigthingMap; //counter
+  MeanValueMapType m_LabelToImageIntensityMap;
+  TValue m_MinVal;
+  TValue m_MaxVal;
+
+};
+
+}
+
+
 
 class ColorMapping: public Application
 {
@@ -54,6 +207,16 @@ public:
   typedef UInt8RGBImageType           RGBImageType;
   typedef RGBImageType::PixelType     RGBPixelType;
 
+  typedef itk::NumericTraits<FloatVectorImageType::PixelType>::ValueType ScalarType;
+  typedef itk::VariableLengthVector<ScalarType>   SampleType;
+  typedef itk::Statistics::ListSample<SampleType> ListSampleType;
+
+
+  typedef itk::ImageRegionConstIterator<FloatVectorImageType> IteratorType;
+  typedef itk::ImageRegionConstIterator<UInt16ImageType> LabelIteratorType;
+
+
+
   // Manual label LUT
   typedef otb::ChangeLabelImageFilter
   <LabelImageType, VectorImageType>    ChangeLabelFilterType;
@@ -67,6 +230,30 @@ public:
   <FloatImageType, RGBImageType>      ColorMapFilterType;
   typedef otb::Functor::ReliefColormapFunctor
   <PixelType, RGBPixelType>           ReliefColorMapFunctorType;
+
+  typedef RAMDrivenStrippedStreamingManager<FloatVectorImageType> RAMDrivenStrippedStreamingManagerType;
+
+  typedef otb::StreamingShrinkImageFilter<FloatVectorImageType,
+       FloatVectorImageType>              ImageSamplingFilterType;
+
+  typedef itk::Statistics::DenseFrequencyContainer DFContainerType;
+
+  typedef itk::NumericTraits<PixelType>::RealType RealScalarType;
+  typedef itk::VariableLengthVector<RealScalarType>         InternalPixelType;
+
+  typedef otb::ListSampleToHistogramListGenerator
+  <ListSampleType, ScalarType, DFContainerType>           HistogramFilterType;
+  typedef itk::Statistics::Histogram<
+       RealScalarType, 1, DFContainerType>         HistogramType;
+  typedef ObjectList<HistogramType>           HistogramListType;
+
+  typedef  HistogramType::Pointer     HistogramPointerType;
+
+  typedef otb::ImageMetadataInterfaceBase ImageMetadataInterfaceType;
+
+  typedef Functor::RGBFromImageValueFunctor<LabelType,FloatVectorImageType::PixelType> RGBFromImageValueFunctorType;
+  typedef itk::BinaryFunctorImageFilter<LabelImageType,FloatVectorImageType,LabelImageType,
+      RGBFromImageValueFunctorType>     RGBFromImageValueFilterType;
 
 private:
   void DoInit()
@@ -158,6 +345,25 @@ private:
     SetMinimumParameterIntValue("method.segmentation.background", 0);
     SetMaximumParameterIntValue("method.segmentation.background", 255);
 
+    // Support image LUT
+    AddChoice("method.image","Color mapping with look-up table calculated on support image");
+    AddParameter(ParameterType_InputImage, "method.image.in", "Support Image");
+    SetParameterDescription("method.image.in", "Support image filename. LUT is calculated using the mean af pixel value on the area. First of all image is normalized with extrema rejection");
+    AddParameter(ParameterType_Int, "method.image.low", "lower quantile");
+    SetParameterDescription("method.image.low","lower quantile for image normalisation");
+    MandatoryOff("method.image.low");
+    SetParameterInt("method.image.low", 2);
+    SetMinimumParameterIntValue("method.image.low", 0);
+    SetMaximumParameterIntValue("method.image.low", 100);
+    AddParameter(ParameterType_Int, "method.image.up", "upper quantile");
+    SetParameterDescription("method.image.up","upper quantile for image normalisation");
+    SetParameterInt("method.segmentation.background", 0);
+    MandatoryOff("method.image.up");
+    SetParameterInt("method.image.up", 2);
+    SetMinimumParameterIntValue("method.image.up", 0);
+    SetMaximumParameterIntValue("method.image.up", 100);
+
+
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "ROI_QB_MUL_1_SVN_CLASS_MULTI.png");
     SetDocExampleParameterValue("method", "custom");
@@ -167,56 +373,231 @@ private:
 
   void DoUpdateParameters()
   {
-    // Nothing to do here : all parameters are independent
+    // Nothing to do here : FloatVectorImageTypeall parameters are independent
   }
 
   void DoExecute()
   {
-    if(GetParameterInt("method")==0)
+    if (GetParameterInt("method") == 0)
       {
       m_CustomMapper = ChangeLabelFilterType::New();
       m_CustomMapper->SetInput(GetParameterUInt16Image("in"));
       m_CustomMapper->SetNumberOfComponentsPerPixel(3);
-      
+
       ReadLutFromFile();
-      
+
       SetParameterOutputImage("out", m_CustomMapper->GetOutput());
       }
-    else if(GetParameterInt("method")==1)
-      {
-      m_ContinuousColorMapper = ColorMapFilterType::New();
-
-      m_ContinuousColorMapper->SetInput(GetParameterFloatImage("in"));
-
-      // Disable automatic scaling
-      m_ContinuousColorMapper->UseInputImageExtremaForScalingOff();
-
-      // Set the lut
-      std::string lut = GetParameterString("method.continuous.lut");
-
-      otbAppLogINFO("LUT: "<<lut<<std::endl);
-      if(lut == "Relief")
+    else
+      if (GetParameterInt("method") == 1)
         {
-        ReliefColorMapFunctorType::Pointer reliefFunctor = ReliefColorMapFunctorType::New();
-        m_ContinuousColorMapper->SetColormap(reliefFunctor);
+        m_ContinuousColorMapper = ColorMapFilterType::New();
+
+        m_ContinuousColorMapper->SetInput(GetParameterFloatImage("in"));
+
+        // Disable automatic scaling
+        m_ContinuousColorMapper->UseInputImageExtremaForScalingOff();
+
+        // Set the lut
+        std::string lut = GetParameterString("method.continuous.lut");
+
+        otbAppLogINFO("LUT: "<<lut<<std::endl);
+        if (lut == "Relief")
+          {
+          ReliefColorMapFunctorType::Pointer reliefFunctor = ReliefColorMapFunctorType::New();
+          m_ContinuousColorMapper->SetColormap(reliefFunctor);
+          }
+        else
+          {
+          m_ContinuousColorMapper->SetColormap((ColorMapFilterType::ColormapEnumType) m_LutMap[lut]);
+          }
+
+        m_ContinuousColorMapper->GetColormap()->SetMinimumInputValue(GetParameterFloat("method.continuous.min"));
+        m_ContinuousColorMapper->GetColormap()->SetMaximumInputValue(GetParameterFloat("method.continuous.max"));
+
+        SetParameterOutputImage("out", m_ContinuousColorMapper->GetOutput());
         }
       else
-        {
-        m_ContinuousColorMapper->SetColormap((ColorMapFilterType::ColormapEnumType)m_LutMap[lut]);
-        }
+        if (GetParameterInt("method") == 2)
+          {
+          m_SegmentationColorMapper = LabelToRGBFilterType::New();
+          m_SegmentationColorMapper->SetInput(GetParameterUInt16Image("in"));
+          m_SegmentationColorMapper->SetBackgroundValue(GetParameterInt("method.segmentation.background"));
+          SetParameterOutputImage("out", m_SegmentationColorMapper->GetOutput());
+          }
+        else
+          if (GetParameterInt("method") == 3)
+            {
+            otbAppLogINFO(" look-up table calculated on support image ");
 
-      m_ContinuousColorMapper->GetColormap()->SetMinimumInputValue(GetParameterFloat("method.continuous.min"));
-      m_ContinuousColorMapper->GetColormap()->SetMaximumInputValue(GetParameterFloat("method.continuous.max"));
+            // image normalisation of the sampling //
+            FloatVectorImageType::Pointer supportImage = this->GetParameterImage("method.image.in");
+            supportImage->UpdateOutputInformation();
 
-      SetParameterOutputImage("out", m_ContinuousColorMapper->GetOutput());
-      }
-    else if(GetParameterInt("method")==2)
-      {
-      m_SegmentationColorMapper = LabelToRGBFilterType::New();
-      m_SegmentationColorMapper->SetInput(GetParameterUInt16Image("in"));
-      m_SegmentationColorMapper->SetBackgroundValue(GetParameterInt("method.segmentation.background"));
-      SetParameterOutputImage("out", m_SegmentationColorMapper->GetOutput());
-      }
+            //normalisation
+            //first of all resampling
+
+            //calculate split number
+            RAMDrivenStrippedStreamingManagerType::Pointer
+                streamingManager = RAMDrivenStrippedStreamingManagerType::New();
+            int availableRAM = GetParameterInt("ram");
+            streamingManager->SetAvailableRAMInMB(availableRAM);
+            float bias = 2.0; // empiric value;
+            streamingManager->SetBias(bias);
+            FloatVectorImageType::RegionType largestRegion = supportImage->GetLargestPossibleRegion();
+            FloatVectorImageType::SizeType largestRegionSize = largestRegion.GetSize();
+            streamingManager->PrepareStreaming(supportImage, largestRegion);
+
+            unsigned long nbDivisions = streamingManager->GetNumberOfSplits();
+            unsigned long largestPixNb = largestRegionSize[0] * largestRegionSize[1];
+
+            unsigned long maxPixNb = largestPixNb / nbDivisions;
+
+            ImageSamplingFilterType::Pointer imageSampler = ImageSamplingFilterType::New();
+            imageSampler->SetInput(supportImage);
+
+            double theoricNBSamplesForKMeans = maxPixNb;
+
+            const double upperThresholdNBSamplesForKMeans = 1000 * 1000;
+            const double actualNBSamplesForKMeans = std::min(theoricNBSamplesForKMeans,
+                                                             upperThresholdNBSamplesForKMeans);
+
+            const double shrinkFactor = vcl_floor(
+                                                  vcl_sqrt(
+                                                           supportImage->GetLargestPossibleRegion().GetNumberOfPixels()
+                                                               / actualNBSamplesForKMeans));
+            imageSampler->SetShrinkFactor(shrinkFactor);
+            imageSampler->Update();
+
+            otbAppLogINFO(<<imageSampler->GetOutput()->GetLargestPossibleRegion().GetNumberOfPixels()<<""
+                " sample will be used to estimate extrema value for outliers rejection."<<std::endl);
+
+            // use histogram to compute quantile value
+
+
+            FloatVectorImageType::Pointer histogramSource;
+            histogramSource = imageSampler->GetOutput();
+            histogramSource->SetRequestedRegion(imageSampler->GetOutput()->GetLargestPossibleRegion());
+
+            // Iterate on the image
+            itk::ImageRegionConstIterator<FloatVectorImageType> it(histogramSource,
+                                                                   histogramSource->GetBufferedRegion());
+
+            // declare a list to store the samples
+            ListSampleType::Pointer listSample = ListSampleType::New();
+            listSample->Clear();
+
+            unsigned int sampleSize = VisualizationPixelTraits::PixelSize(it.Get());
+            listSample->SetMeasurementVectorSize(sampleSize);
+
+            // Fill the samples list
+            it.GoToBegin();
+            while (!it.IsAtEnd())
+              {
+              SampleType sample(sampleSize);
+              VisualizationPixelTraits::Convert(it.Get(), sample);
+              listSample->PushBack(sample);
+              ++it;
+              }
+
+            // assign listSample
+
+            HistogramFilterType::Pointer histogramFilter = HistogramFilterType::New();
+            //histogramFilter->SetListSample(pixelRepresentationListSample);
+            histogramFilter->SetListSample(listSample);
+
+            histogramFilter->SetNumberOfBins(256);
+            histogramFilter->NoDataFlagOn();
+
+            // Generate
+            histogramFilter->Update();
+            HistogramListType::Pointer histogramList = histogramFilter->GetOutput();//
+            // HistogramPointerType histoBand=histogramList->GetNelements(0);
+            //  std::cout<<histoBand->GetFrequency(0,0)<<std::endl;
+
+
+            ImageMetadataInterfaceType::Pointer
+                metadataInterface = ImageMetadataInterfaceFactory::CreateIMI(supportImage->GetMetaDataDictionary());
+
+            std::vector<unsigned int> RGBIndex;
+
+            if (supportImage->GetNumberOfComponentsPerPixel() < 3)
+              {
+              RGBIndex.push_back(0);
+              RGBIndex.push_back(0);
+              RGBIndex.push_back(0);
+              }
+            else RGBIndex = metadataInterface->GetDefaultDisplay();
+            otbAppLogINFO(" RGB index are "<<RGBIndex[0]<<" "<<RGBIndex[1]<<" "<<RGBIndex[2]<<std::endl);
+
+            FloatVectorImageType::PixelType minVal;
+            FloatVectorImageType::PixelType maxVal;
+            minVal.SetSize(supportImage->GetNumberOfComponentsPerPixel());
+            maxVal.SetSize(supportImage->GetNumberOfComponentsPerPixel());
+
+            for (unsigned int index = 0; index < supportImage->GetNumberOfComponentsPerPixel(); index++)
+              {
+              minVal.SetElement(index,static_cast<FloatVectorImageType::PixelType::ValueType> (histogramList->GetNthElement(index)->Quantile(0,static_cast<float> (this->GetParameterInt("method.image.low"))/ 100.0)));
+              maxVal.SetElement(index,static_cast<FloatVectorImageType::PixelType::ValueType> (histogramList->GetNthElement(index)->Quantile(0,(100.0- static_cast<float> (this->GetParameterInt("method.image.up")))/ 100.0)));
+              }
+
+            // create functor
+            RGBFromImageValueFunctorType functor;
+            functor.SetMinVal(minVal);
+            functor.SetMaxVal(maxVal);
+
+            m_RGBFromImageValueFilter = RGBFromImageValueFilterType::New();
+            m_RGBFromImageValueFilter->SetInput1(GetParameterUInt16Image("in"));
+            m_RGBFromImageValueFilter->SetInput2(this->GetParameterImage("method.image.in"));
+            m_RGBFromImageValueFilter->SetFunctor(functor);
+            m_RGBFromImageValueFilter->SetNumberOfThreads(1);
+
+            m_RGBFromImageValueFilter->Update();
+
+            std::map<LabelType, FloatVectorImageType::PixelType>
+                labelToMeanIntensityMap = m_RGBFromImageValueFilter->GetFunctor().GetMeanIntensity();
+
+            m_RBGFromImageMapper = ChangeLabelFilterType::New();
+            m_RBGFromImageMapper->SetInput(m_RGBFromImageValueFilter->GetOutput());
+            m_RBGFromImageMapper->SetNumberOfComponentsPerPixel(3);
+
+            std::map<LabelType, FloatVectorImageType::PixelType>::const_iterator
+                mapIt = labelToMeanIntensityMap.begin();
+            FloatVectorImageType::PixelType meanValue = labelToMeanIntensityMap.at(0);
+
+            otbAppLogINFO("The map contains :"<<labelToMeanIntensityMap.size()<<" labels."<<std::endl);
+            VectorPixelType color(3);
+            while (mapIt != labelToMeanIntensityMap.end())
+              {
+
+              LabelType clabel = mapIt->first;
+              if (clabel == 0)
+                {
+                color.Fill(0.0);
+                }
+              else
+                {
+
+                meanValue = mapIt->second;
+                for (int RGB = 0; RGB < 3; RGB++)
+                  {
+                  unsigned int dispIndex = RGBIndex[RGB];
+                  color[RGB] = ((meanValue.GetElement(dispIndex) - minVal.GetElement(dispIndex)) / (
+                      maxVal.GetElement(dispIndex) - minVal.GetElement(dispIndex))) * 255.0;
+                  }
+                }
+              otbAppLogINFO("Adding color mapping " << clabel << " -> [" << (int) color[0] << " " << (int) color[1] << " "<< (int) color[2] << " ]" << std::endl);
+              m_RBGFromImageMapper->SetChange(clabel, color);
+
+              ++mapIt;
+              }
+
+
+
+            SetParameterOutputImage("out", m_RBGFromImageMapper->GetOutput());
+
+
+            }
   }
 
   void ReadLutFromFile()
@@ -264,10 +645,15 @@ private:
     ifs.close();
   }
 
+
   ChangeLabelFilterType::Pointer m_CustomMapper;
   ColorMapFilterType::Pointer    m_ContinuousColorMapper;
   LabelToRGBFilterType::Pointer  m_SegmentationColorMapper;
   std::map<std::string, unsigned int> m_LutMap;
+  ChangeLabelFilterType::Pointer m_RBGFromImageMapper;
+  RGBFromImageValueFilterType::Pointer    m_RGBFromImageValueFilter;
+
+
 };
 }
 }
