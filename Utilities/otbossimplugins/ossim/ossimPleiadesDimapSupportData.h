@@ -301,7 +301,8 @@ private:
    ossimString theFirstLineImagingTime;
    ossimString theFirstLineImagingDate;
 
-
+   ossim_float64 theRPCErrorBiasX;
+   ossim_float64 theRPCErrorBiasY;
 
    //---
    // Corner points:
