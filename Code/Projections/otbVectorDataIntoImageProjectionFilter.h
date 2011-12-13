@@ -76,6 +76,9 @@ public:
   itkSetStringMacro(GeoidFile);
   itkGetStringMacro(GeoidFile);
 
+  itkSetMacro(AverageElevation, double);
+  itkGetMacro(AverageElevation, double);
+
   void SetInputVectorData(InputVectorDataPointer input)
   {
     this->SetInput(input);
@@ -123,6 +126,7 @@ private:
 
   std::string m_DEMDirectory;
   std::string m_GeoidFile;
+  double      m_AverageElevation;
 
   ImagePointerType m_InputImage;
 

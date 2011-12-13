@@ -152,16 +152,18 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
       if (!m_DEMDirectory.empty())
         {
         sensorModel->SetDEMDirectory(m_DEMDirectory);
+
+        // Set Geoid file only if used is used
+        if (!m_GeoidFile.empty())
+          {
+          sensorModel->SetGeoidFile(m_GeoidFile);
+          }
         }
       else if (m_AverageElevation != -32768.0)
         {
         sensorModel->SetAverageElevation(m_AverageElevation);
         }
 
-      if (!m_GeoidFile.empty())
-        {
-        sensorModel->SetGeoidFile(m_GeoidFile);
-        }
       m_InputTransform = sensorModel.GetPointer();
       inputTransformIsSensor = true;
       otbMsgDevMacro(<< "Input projection set to sensor model.");
@@ -226,15 +228,15 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
       if (!m_DEMDirectory.empty())
         {
         sensorModel->SetDEMDirectory(m_DEMDirectory);
+        // set the geoid file if any only when dem is used
+        if (!m_GeoidFile.empty())
+          {
+          sensorModel->SetGeoidFile(m_GeoidFile);
+          }
         }
       else if (m_AverageElevation != -32768.0)
         {
         sensorModel->SetAverageElevation(m_AverageElevation);
-        }
-
-      if (!m_GeoidFile.empty())
-        {
-        sensorModel->SetGeoidFile(m_GeoidFile);
         }
 
       m_OutputTransform = sensorModel.GetPointer();

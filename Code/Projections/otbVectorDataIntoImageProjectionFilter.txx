@@ -183,12 +183,14 @@ VectorDataIntoImageProjectionFilter<TInputVectorData, TInputImage>
   if (!m_DEMDirectory.empty())
     {
     m_VdExtractFilter->SetDEMDirectory(m_DEMDirectory);
+
+    // Set the geoid file if dem is available
+    if (!m_GeoidFile.empty())
+      {
+      m_VdExtractFilter->SetGeoidFile(m_GeoidFile);
+      }
     }
   
-    if (!m_GeoidFile.empty())
-    {
-    m_VdExtractFilter->SetGeoidFile(m_GeoidFile);
-    }
 
   // Reproject VectorData in image projection
   m_VdProjFilter->SetInputProjectionRef(this->GetInput()->GetProjectionRef());
