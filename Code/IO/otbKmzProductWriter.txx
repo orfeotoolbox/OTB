@@ -32,7 +32,8 @@ template <class TInputImage>
 KmzProductWriter<TInputImage>
 ::KmzProductWriter():
   m_UseExtendMode(true),
-  m_TileSize(512)
+  m_TileSize(512),
+  m_AverageElevation(-32768.0)
 {
   // Modify superclass default values, can be overridden by subclasses
   this->SetNumberOfRequiredInputs(1);
@@ -435,7 +436,14 @@ KmzProductWriter<TInputImage>
         m_Transform->SetInputProjectionRef(m_VectorImage->GetProjectionRef());
         m_Transform->SetOutputProjectionRef(wgsRef);
         if (!m_DEMDirectory.empty())
+          {
           m_Transform->SetDEMDirectory(m_DEMDirectory);
+          m_Transform->SetGeoidFile(m_GeoidFile);
+          }
+        else
+          {
+          m_Transform->SetAverageElevation(m_AverageElevation);
+          }
         m_Transform->InstanciateTransform();
 
         InputPointType  inputPoint;

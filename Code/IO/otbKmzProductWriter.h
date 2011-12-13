@@ -161,6 +161,12 @@ public:
   /** Set the DEM Direcotory */
   itkSetStringMacro(DEMDirectory);
 
+  /** Set the geoid file if any */
+  itkSetStringMacro(GeoidFile);
+
+  /** Set the geoid file if any */
+  itkSetMacro(AverageElevation, double);
+
 protected:
   KmzProductWriter();
   virtual ~KmzProductWriter();
@@ -314,6 +320,8 @@ private:
 
   // DEM directory
   std::string            m_DEMDirectory;
+  std::string            m_GeoidFile;
+  double                 m_AverageElevation;
 };
 
 } // end namespace otb
