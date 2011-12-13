@@ -22,6 +22,8 @@
 #include "otbVectorDataProperties.h"
 #include "otbOSMDataToVectorDataGenerator.h"
 
+// Elevation handler
+#include "otbWrapperElevationParametersHandler.h"
 
 namespace otb
 {
@@ -73,9 +75,8 @@ private:
     SetParameterDescription("key", "OSM tag value to extract (motorway, footway...)");
     MandatoryOff("value");
 
-    AddParameter(ParameterType_Directory, "dem",  "DEM directory");
-    SetParameterDescription("dem", "Path to the directory that contains elevation information.");
-    MandatoryOff("dem");
+    // Elevation
+    ElevationParametersHandler::AddElevationParameters(this, "elev");
 
     AddParameter(ParameterType_Empty, "printclasses", "option to display available key/value classes");
     std::ostringstream oss;
@@ -119,13 +120,33 @@ private:
   VectorDataPropertiesType::Pointer vdProperties = VectorDataPropertiesType::New();
   m_VdOSMGenerator = VectorDataProviderType::New();
 
-
-  //Generate the envelope
+  // Get the support image
   envelopeFilter->SetInput( this->GetParameterImage("support") ); //->Output in WGS84
-  if ( this->HasValue("dem"))
+  
+  //Generate the envelope : Elevation through the elevation handler
+  if (ElevationParametersHandler::IsElevationEnabled(this, "elev"))
     {
-    envelopeFilter->SetDEMDirectory(this->GetParameterString("dem"));
+    switch(ElevationParametersHandler::GetElevationType(this, "elev"))
+      {
+      case Elevation_DEM:
+      {
+      envelopeFilter->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
+      envelopeFilter->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
+      }
+      break;
+      case Elevation_Average:
+      {
+      envelopeFilter->SetAverageElevation(ElevationParametersHandler::GetAverageElevation(this, "elev"));
+      }
+      break;
+      //   Commented cause using a tiff file is not implemented yet
+      //  case Elevation_Tiff:
+      //  {
+      //  }
+      //  break;
+      }
     }
+
   envelopeFilter->Update();
 
   vdProperties->SetVectorDataObject(envelopeFilter->GetOutput());

@@ -223,25 +223,28 @@ private:
       }
   
     // Elevation through the elevation handler
-    switch(ElevationParametersHandler::GetElevationType(this, "elev"))
+    if (ElevationParametersHandler::IsElevationEnabled(this, "elev"))
       {
-      case Elevation_DEM:
-      {
-      m_StereoFilter->SetUseDEM(true);
-      m_StereoFilter->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
-      m_StereoFilter->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
-      }
-      break;
-      case Elevation_Average:
-      {
-      m_StereoFilter->SetAverageElevation(ElevationParametersHandler::GetAverageElevation(this, "elev"));
-      }
-      break;
-      //   Commented cause using a tiff file is not implemented yet
-      //  case Elevation_Tiff:
-      //  {
-      //  }
-      //  break;
+      switch(ElevationParametersHandler::GetElevationType(this, "elev"))
+        {
+        case Elevation_DEM:
+        {
+        m_StereoFilter->SetUseDEM(true);
+        m_StereoFilter->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
+        m_StereoFilter->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
+        }
+        break;
+        case Elevation_Average:
+        {
+        m_StereoFilter->SetAverageElevation(ElevationParametersHandler::GetAverageElevation(this, "elev"));
+        }
+        break;
+        //   Commented cause using a tiff file is not implemented yet
+        //  case Elevation_Tiff:
+        //  {
+        //  }
+        //  break;
+        }
       }
 
     m_StereoFilter->SetSubtractInitialElevation(subtractInitialHeight);

@@ -20,6 +20,8 @@
 
 #include "otbKmzProductWriter.h"
 
+// Elevation handler
+#include "otbWrapperElevationParametersHandler.h"
 
 namespace otb
 {
@@ -73,9 +75,8 @@ private:
     SetParameterDescription("legend", "Path to the image legend to add to the KMZ product.");
     MandatoryOff("legend");
 
-    AddParameter(ParameterType_Directory, "dem",  "DEM directory");
-    SetParameterDescription("dem", "Path to the directory that contains elevation information.");
-    MandatoryOff("dem");
+    // Elevation
+    ElevationParametersHandler::AddElevationParameters(this, "elev");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "qb_RoadExtract2.tif");
@@ -98,12 +99,29 @@ private:
     kmzWriter->SetInput( this->GetParameterImage("in") );
     kmzWriter->SetPath( this->GetParameterString("out") );
 
-    // Use DEM if any
-    if( this->HasValue("dem") )
+    // Elevation through the elevation handler
+    if (ElevationParametersHandler::IsElevationEnabled(this, "elev"))
       {
-      kmzWriter->SetDEMDirectory(this->GetParameterString("dem"));
+      switch(ElevationParametersHandler::GetElevationType(this, "elev"))
+        {
+        case Elevation_DEM:
+        {
+        kmzWriter->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
+        kmzWriter->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
+        }
+        break;
+        case Elevation_Average:
+        {
+        kmzWriter->SetAverageElevation(ElevationParametersHandler::GetAverageElevation(this, "elev"));
+        }
+        break;
+        //   Commented cause using a tiff file is not implemented yet
+        //  case Elevation_Tiff:
+        //  {
+        //  }
+        //  break;
+        }
       }
-
 
     // If the tile size is set
     if( this->HasValue("tilesize") )

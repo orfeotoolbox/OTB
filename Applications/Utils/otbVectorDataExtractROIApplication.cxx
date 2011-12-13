@@ -152,31 +152,34 @@ private:
     m_VdProj->SetOutputOrigin(inImage->GetOrigin());
     m_VdProj->SetOutputSpacing(inImage->GetSpacing());
 
-     // Elevation through the elevation handler
-    switch(ElevationParametersHandler::GetElevationType(this, "elev"))
+    // Elevation through the elevation handler
+    if (ElevationParametersHandler::IsElevationEnabled(this, "elev"))
       {
-      case Elevation_DEM:
-      {
-      m_VdExtract->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
-      m_VdExtract->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
+      switch(ElevationParametersHandler::GetElevationType(this, "elev"))
+        {
+        case Elevation_DEM:
+        {
+        m_VdExtract->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
+        m_VdExtract->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
 
-      m_VdProj->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
-      m_VdProj->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
+        m_VdProj->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
+        m_VdProj->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
+        }
+        break;
+        case Elevation_Average:
+        {
+        m_VdExtract->SetAverageElevation(ElevationParametersHandler::GetAverageElevation(this, "elev"));
+        m_VdProj->SetAverageElevation(ElevationParametersHandler::GetAverageElevation(this, "elev"));
+        }
+        break;
+        //   Commented cause using a tiff file is not implemented yet
+        //  case Elevation_Tiff:
+        //  {
+        //  }
+        //  break;
+        }
       }
-      break;
-      case Elevation_Average:
-      {
-      m_VdExtract->SetAverageElevation(ElevationParametersHandler::GetAverageElevation(this, "elev"));
-      m_VdProj->SetAverageElevation(ElevationParametersHandler::GetAverageElevation(this, "elev"));
-      }
-      break;
-      //   Commented cause using a tiff file is not implemented yet
-      //  case Elevation_Tiff:
-      //  {
-      //  }
-      //  break;
-      }
-    
+
     // Set the output vectorData
     SetParameterOutputVectorData("io.out", m_VdProj->GetOutput());
   }

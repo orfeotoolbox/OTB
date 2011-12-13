@@ -92,24 +92,27 @@ private:
     m_Envelope->SetInput(input);
     
     // Elevation through the elevation handler
-    switch(ElevationParametersHandler::GetElevationType(this, "elev"))
+    if (ElevationParametersHandler::IsElevationEnabled(this, "elev"))
       {
-      case Elevation_DEM:
-      {
-      m_Envelope->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
-      m_Envelope->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
-      }
-      break;
-      case Elevation_Average:
-      {
-      m_Envelope->SetAverageElevation(ElevationParametersHandler::GetAverageElevation(this, "elev"));
-      }
-      break;
-      //   Commented cause using a tiff file is not implemented yet
-      //  case Elevation_Tiff:
-      //  {
-      //  }
-      //  break;
+      switch(ElevationParametersHandler::GetElevationType(this, "elev"))
+        {
+        case Elevation_DEM:
+        {
+        m_Envelope->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
+        m_Envelope->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
+        }
+        break;
+        case Elevation_Average:
+        {
+        m_Envelope->SetAverageElevation(ElevationParametersHandler::GetAverageElevation(this, "elev"));
+        }
+        break;
+        //   Commented cause using a tiff file is not implemented yet
+        //  case Elevation_Tiff:
+        //  {
+        //  }
+        //  break;
+        }
       }
     
     if (HasValue("proj"))

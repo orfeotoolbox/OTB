@@ -147,24 +147,27 @@ private:
     vprojIm->SetInputImage(inImage);
 
     // Elevation through the elevation handler
-    switch(ElevationParametersHandler::GetElevationType(this, "elev"))
+    if (ElevationParametersHandler::IsElevationEnabled(this, "elev"))
       {
-      case Elevation_DEM:
-      {
-      vprojIm->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
-      vprojIm->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
-      }
-      break;
-      case Elevation_Average:
-      {
-      vprojIm->SetAverageElevation(ElevationParametersHandler::GetAverageElevation(this, "elev"));
-      }
-      break;
-      //   Commented cause using a tiff file is not implemented yet
-      //  case Elevation_Tiff:
-      //  {
-      //  }
-      //  break;
+      switch(ElevationParametersHandler::GetElevationType(this, "elev"))
+        {
+        case Elevation_DEM:
+        {
+        vprojIm->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
+        vprojIm->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
+        }
+        break;
+        case Elevation_Average:
+        {
+        vprojIm->SetAverageElevation(ElevationParametersHandler::GetAverageElevation(this, "elev"));
+        }
+        break;
+        //   Commented cause using a tiff file is not implemented yet
+        //  case Elevation_Tiff:
+        //  {
+        //  }
+        //  break;
+        }
       }
 
     vprojIm->SetUseOutputSpacingAndOriginFromImage(true); // we want index as input;

@@ -206,24 +206,27 @@ private:
       vdreproj->SetUseOutputSpacingAndOriginFromImage(false);
 
       // Elevation through the elevation handler
-      switch(ElevationParametersHandler::GetElevationType(this, "elev"))
+      if (ElevationParametersHandler::IsElevationEnabled(this, "elev"))
         {
-        case Elevation_DEM:
-        {
-        vdreproj->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
-        vdreproj->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
-        }
-        break;
-        case Elevation_Average:
-        {
-        vdreproj->SetAverageElevation(ElevationParametersHandler::GetAverageElevation(this, "elev"));
-        }
-        break;
-        //   Commented cause using a tiff file is not implemented yet
-        //  case Elevation_Tiff:
-        //  {
-        //  }
-        //  break;
+        switch(ElevationParametersHandler::GetElevationType(this, "elev"))
+          {
+          case Elevation_DEM:
+          {
+          vdreproj->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
+          vdreproj->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
+          }
+          break;
+          case Elevation_Average:
+          {
+          vdreproj->SetAverageElevation(ElevationParametersHandler::GetAverageElevation(this, "elev"));
+          }
+          break;
+          //   Commented cause using a tiff file is not implemented yet
+          //  case Elevation_Tiff:
+          //  {
+          //  }
+          //  break;
+          }
         }
 
       vdreproj->Update();

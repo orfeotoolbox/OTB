@@ -126,24 +126,27 @@ private:
     resampler->SetInterpolator(interpolator);
     
     // Elevation through the elevation handler
-    switch(ElevationParametersHandler::GetElevationType(this, "elev"))
+    if (ElevationParametersHandler::IsElevationEnabled(this, "elev"))
       {
-      case Elevation_DEM:
-      {
-      resampler->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
-      resampler->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
-      }
-      break;
-      case Elevation_Average:
-      {
-      resampler->SetAverageElevation(ElevationParametersHandler::GetAverageElevation(this, "elev"));
-      }
-      break;
-      //   Commented cause using a tiff file is not implemented yet
-      //  case Elevation_Tiff:
-      //  {
-      //  }
-      //  break;
+      switch(ElevationParametersHandler::GetElevationType(this, "elev"))
+        {
+        case Elevation_DEM:
+        {
+        resampler->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
+        resampler->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
+        }
+        break;
+        case Elevation_Average:
+        {
+        resampler->SetAverageElevation(ElevationParametersHandler::GetAverageElevation(this, "elev"));
+        }
+        break;
+        //   Commented cause using a tiff file is not implemented yet
+        //  case Elevation_Tiff:
+        //  {
+        //  }
+        //  break;
+        }
       }
 
     // Set up output image informations
