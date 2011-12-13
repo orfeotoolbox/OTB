@@ -51,6 +51,9 @@
 // Extract a ROI of the vectordata
 #include "otbVectorDataIntoImageProjectionFilter.h"
 
+// Elevation handler
+#include "otbWrapperElevationParametersHandler.h"
+
 namespace otb
 {
 namespace Wrapper
@@ -132,12 +135,13 @@ private:
     SetParameterDescription("il", "Input image list filename.");
     AddParameter(ParameterType_InputVectorDataList, "vd", "Vector Data List");
     SetParameterDescription("vd", "Vector Data of samples used to validate the estimator.");
-    AddParameter(ParameterType_Filename, "dem", "DEM repository");
-    SetParameterDescription("dem", "Path to DEM repository.");
-    MandatoryOff("dem");
     AddParameter(ParameterType_Filename, "imstat", "XML image statistics file");
     MandatoryOff("imstat");
     SetParameterDescription("imstat", "Filename of an XML file containing mean and standard deviation of input images.");
+
+    // Elevation
+    ElevationParametersHandler::AddElevationParameters(this, "elev");
+    
     AddParameter(ParameterType_Filename, "out", "Output filename");
     SetParameterDescription("out", "Filename, which contains the performances of the SVM model.");
     MandatoryOff("out");
@@ -201,17 +205,25 @@ private:
       vdreproj->SetInput(vectorData);
       vdreproj->SetUseOutputSpacingAndOriginFromImage(false);
 
-      // Configure DEM directory
-      if (IsParameterEnabled("dem"))
+      // Elevation through the elevation handler
+      switch(ElevationParametersHandler::GetElevationType(this, "elev"))
         {
-        vdreproj->SetDEMDirectory(GetParameterString("dem"));
+        case Elevation_DEM:
+        {
+        vdreproj->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
+        vdreproj->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
         }
-      else
+        break;
+        case Elevation_Average:
         {
-        if (otb::ConfigurationFile::GetInstance()->IsValid())
-          {
-          vdreproj->SetDEMDirectory(otb::ConfigurationFile::GetInstance()->GetDEMDirectory());
-          }
+        vdreproj->SetAverageElevation(ElevationParametersHandler::GetAverageElevation(this, "elev"));
+        }
+        break;
+        //   Commented cause using a tiff file is not implemented yet
+        //  case Elevation_Tiff:
+        //  {
+        //  }
+        //  break;
         }
 
       vdreproj->Update();

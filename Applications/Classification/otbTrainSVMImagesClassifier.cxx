@@ -61,6 +61,9 @@
 // Extract a ROI of the vectordata
 #include "otbVectorDataIntoImageProjectionFilter.h"
 
+// Elevation handler
+#include "otbWrapperElevationParametersHandler.h"
+
 namespace otb
 {
 namespace Wrapper
@@ -145,15 +148,15 @@ private:
     SetParameterDescription("io.il", "A list of input images.");
     AddParameter(ParameterType_InputVectorDataList, "io.vd", "Vector Data List");
     SetParameterDescription("io.vd", "A list of vector data sample used to train the estimator.");
-    AddParameter(ParameterType_Filename, "io.dem", "DEM repository");
-    MandatoryOff("io.dem");
-    SetParameterDescription("io.dem", "Path to SRTM repository");
     AddParameter(ParameterType_Filename, "io.imstat", "XML image statistics file");
     MandatoryOff("io.imstat");
     SetParameterDescription("io.imstat", "Filename of an XML file containing mean and standard deviation of input images.");
     AddParameter(ParameterType_Filename, "io.out", "Output SVM model");
     SetParameterDescription("io.out", "Output SVM model");
     SetParameterRole("io.out", Role_Output);
+
+    // Elevation
+    ElevationParametersHandler::AddElevationParameters(this, "elev");
 
     //Group Sample list
     AddParameter(ParameterType_Group,"sample","Training and validation samples parameters");
@@ -255,17 +258,25 @@ private:
       vdreproj->SetInput(vectorData);
       vdreproj->SetUseOutputSpacingAndOriginFromImage(false);
 
-      // Configure DEM directory
-      if (IsParameterEnabled("io.dem"))
+      // Elevation through the elevation handler
+      switch(ElevationParametersHandler::GetElevationType(this, "elev"))
         {
-        vdreproj->SetDEMDirectory(GetParameterString("io.dem"));
+        case Elevation_DEM:
+        {
+        vdreproj->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
+        vdreproj->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
         }
-      else
+        break;
+        case Elevation_Average:
         {
-        if (otb::ConfigurationFile::GetInstance()->IsValid())
-          {
-          vdreproj->SetDEMDirectory(otb::ConfigurationFile::GetInstance()->GetDEMDirectory());
-          }
+        vdreproj->SetAverageElevation(ElevationParametersHandler::GetAverageElevation(this, "elev"));
+        }
+        break;
+        //   Commented cause using a tiff file is not implemented yet
+        //  case Elevation_Tiff:
+        //  {
+        //  }
+        //  break;
         }
 
       vdreproj->Update();

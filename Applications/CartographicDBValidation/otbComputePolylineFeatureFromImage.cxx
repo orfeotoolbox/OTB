@@ -36,6 +36,9 @@
 #include "otbParserConditionDataNodeFeatureFunction.h"
 #include "otbNDVIDataNodeFeatureFunction.h"
 
+// Elevation handler
+#include "otbWrapperElevationParametersHandler.h"
+
 namespace otb
 {
 namespace Wrapper
@@ -91,9 +94,8 @@ private:
     AddParameter(ParameterType_InputVectorData, "vd", "Vector Data");
     SetParameterDescription("vd", "Vector data containing the polylines onto which the feature will be computed.");
 
-    AddParameter(ParameterType_Filename, "dem", "DEM repository");
-    MandatoryOff("dem");
-    SetParameterDescription("dem", "path to SRTM repository");
+    // Elevation
+    ElevationParametersHandler::AddElevationParameters(this, "elev");
 
     AddParameter(ParameterType_String, "expr", "Feature expression");
     SetParameterDescription("expr", "The feature formula (b1 > 0.3)");
@@ -144,17 +146,25 @@ private:
     vprojIm->SetInputVectorData(inVectorData);
     vprojIm->SetInputImage(inImage);
 
-    // Configure DEM directory
-    if (IsParameterEnabled("dem"))
+    // Elevation through the elevation handler
+    switch(ElevationParametersHandler::GetElevationType(this, "elev"))
       {
-      vprojIm->SetDEMDirectory(GetParameterString("dem"));
+      case Elevation_DEM:
+      {
+      vprojIm->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
+      vprojIm->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
       }
-    else
+      break;
+      case Elevation_Average:
       {
-      if (otb::ConfigurationFile::GetInstance()->IsValid())
-        {
-        vprojIm->SetDEMDirectory(otb::ConfigurationFile::GetInstance()->GetDEMDirectory());
-        }
+      vprojIm->SetAverageElevation(ElevationParametersHandler::GetAverageElevation(this, "elev"));
+      }
+      break;
+      //   Commented cause using a tiff file is not implemented yet
+      //  case Elevation_Tiff:
+      //  {
+      //  }
+      //  break;
       }
 
     vprojIm->SetUseOutputSpacingAndOriginFromImage(true); // we want index as input;
@@ -258,17 +268,25 @@ private:
         vproj->SetOutputOrigin(inImage->GetOrigin());
         vproj->SetOutputSpacing(inImage->GetSpacing());
 
-        // Configure DEM directory
-        if (IsParameterEnabled("dem"))
+        // Elevation through the elevation handler
+        switch(ElevationParametersHandler::GetElevationType(this, "elev"))
           {
-          vproj->SetDEMDirectory(GetParameterString("dem"));
+          case Elevation_DEM:
+          {
+          vproj->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
+          vproj->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
           }
-        else
+          break;
+          case Elevation_Average:
           {
-          if (otb::ConfigurationFile::GetInstance()->IsValid())
-            {
-            vproj->SetDEMDirectory(otb::ConfigurationFile::GetInstance()->GetDEMDirectory());
-            }
+          vproj->SetAverageElevation(ElevationParametersHandler::GetAverageElevation(this, "elev"));
+          }
+          break;
+          //   Commented cause using a tiff file is not implemented yet
+          //  case Elevation_Tiff:
+          //  {
+          //  }
+          //  break;
           }
 
         vproj->Update();

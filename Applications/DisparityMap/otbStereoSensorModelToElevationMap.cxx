@@ -27,6 +27,9 @@
 
 #include "itkDiscreteGaussianImageFilter.h"
 
+// Elevation handler
+#include "otbWrapperElevationParametersHandler.h"
+
 namespace otb
 {
 namespace Wrapper
@@ -129,15 +132,8 @@ private:
     SetDefaultParameterFloat("ae", 0.0);
     MandatoryOff("ae");
     
-    AddParameter(ParameterType_String, "dem",  "DEMDirectory");
-    SetParameterDescription("dem", "Use DEM tiles to derive initial height values (AverageElevation option is ignored in this case)");
-    MandatoryOff("dem");
-    DisableParameter("dem");
-    
-    AddParameter(ParameterType_String, "geoid",  "GeoidFile");
-    SetParameterDescription("geoid", "Use a geoid file along with the DEM tiles");
-    MandatoryOff("geoid");
-    DisableParameter("geoid");
+    // Elevation
+    ElevationParametersHandler::AddElevationParameters(this, "elev");
     
     AddParameter(ParameterType_Float, "rgs",  "ReferenceGaussianSmoothing");
     SetParameterDescription("rgs", "(optional) Perform a gaussian smoothing of the reference image. Parameter is gaussian sigma (in pixels). Default is no smoothing.");
@@ -180,10 +176,6 @@ private:
     bool referenceSmoothing = IsParameterEnabled("rgs");
     
     bool secondarySmoothing = IsParameterEnabled("sgs");
-    
-    bool useDEM = IsParameterEnabled("dem") && HasValue("dem");
-    
-    bool useGeoid = IsParameterEnabled("geoid") && HasValue("geoid");
     
     bool subtractInitialHeight = IsParameterEnabled("s");
      
@@ -229,21 +221,28 @@ private:
       m_StereoFilter->SetSlaveInput(m_Intensity2->GetOutput());
       }
   
-    m_StereoFilter->SetUseDEM(useDEM);
-    if(useDEM)
+    // Elevation through the elevation handler
+    switch(ElevationParametersHandler::GetElevationType(this, "elev"))
       {
-      m_StereoFilter->SetDEMDirectory(GetParameterString("dem"));
-    
-      if(useGeoid)
-        {
-        m_StereoFilter->SetGeoidFile(GetParameterString("geoid"));
-        }
-      }
-    else
+      case Elevation_DEM:
       {
-      m_StereoFilter->SetAverageElevation(GetParameterFloat("ae"));
+      m_StereoFilter->SetUseDEM(true);
+      m_StereoFilter->SetDEMDirectory(ElevationParametersHandler::GetDEMDirectory(this, "elev"));
+      m_StereoFilter->SetGeoidFile(ElevationParametersHandler::GetGeoidFile(this, "elev"));
       }
-    
+      break;
+      case Elevation_Average:
+      {
+      m_StereoFilter->SetAverageElevation(ElevationParametersHandler::GetAverageElevation(this, "elev"));
+      }
+      break;
+      //   Commented cause using a tiff file is not implemented yet
+      //  case Elevation_Tiff:
+      //  {
+      //  }
+      //  break;
+      }
+
     m_StereoFilter->SetSubtractInitialElevation(subtractInitialHeight);
   
     m_StereoFilter->SetLowerElevation(GetParameterFloat("minh"));
