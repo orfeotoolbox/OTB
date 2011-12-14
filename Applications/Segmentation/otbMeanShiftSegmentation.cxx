@@ -102,26 +102,26 @@ private:
   {
     FloatVectorImageType* input = GetParameterImage("in");
 
-   m_filter = MSFilterType::New();
+   m_Filter = MSFilterType::New();
 
-    m_filter->SetInput(input);
-    m_filter->SetSpatialRadius( GetParameterInt("spatialr") );
-    m_filter->SetRangeRadius( GetParameterFloat("ranger") );
-    m_filter->SetMinimumRegionSize( GetParameterInt("minsize") );
-    m_filter->SetScale( GetParameterFloat("scale") );
+    m_Filter->SetInput(input);
+    m_Filter->SetSpatialRadius( GetParameterInt("spatialr") );
+    m_Filter->SetRangeRadius( GetParameterFloat("ranger") );
+    m_Filter->SetMinimumRegionSize( GetParameterInt("minsize") );
+    m_Filter->SetScale( GetParameterFloat("scale") );
 
 
     if (IsParameterEnabled("fout") && HasValue("fout"))
-      SetParameterOutputImage("fout", m_filter->GetOutput());
+      SetParameterOutputImage("fout", m_Filter->GetOutput());
     if (IsParameterEnabled("cout") && HasValue("cout"))
-      SetParameterOutputImage("cout", m_filter->GetClusteredOutput());
+      SetParameterOutputImage("cout", m_Filter->GetClusteredOutput());
     if (IsParameterEnabled("lout") && HasValue("lout"))
-      SetParameterOutputImage<UInt16ImageType>("lout", m_filter->GetLabeledClusteredOutput());
+      SetParameterOutputImage<UInt16ImageType>("lout", m_Filter->GetLabeledClusteredOutput());
     if (IsParameterEnabled("cbout") && HasValue("cbout"))
-      SetParameterOutputImage<UInt16ImageType>("cbout", m_filter->GetClusterBoundariesOutput());
+      SetParameterOutputImage<UInt16ImageType>("cbout", m_Filter->GetClusterBoundariesOutput());
   }
 
-  MSFilterType::Pointer m_filter;
+  MSFilterType::Pointer m_Filter;
 
 };
 
