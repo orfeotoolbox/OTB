@@ -113,13 +113,13 @@ bool ossimPleiadesModel::saveState(ossimKeywordlist& kwl,
 {
   if(theSupportData.valid())
   {
-    std::cout << "the supportData is valid" << std::endl;
      ossimString supportPrefix = ossimString(prefix) + "support_data.";
      theSupportData->saveState(kwl, supportPrefix);
+     std::cout << "ossimPleiadesModel::saveState: " << std::endl;
+     kwl.print(std::cout);
   }
   else
   {
-    std::cout << "the supportData is not valid" << std::endl;
      return false;
   }
 

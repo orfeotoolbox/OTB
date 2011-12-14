@@ -97,7 +97,7 @@ public:
   std::string GetInstrument() const;
 
   /** Get Instrument Index */
-  unsigned int GetInstrumentIndex() const;
+  std::string GetInstrumentIndex() const;
 
   /** This method is to handle the permutation of the spectral band by some image provider
    * in most cases, this method won't change the value, but for SPOT data, the bands are set up as

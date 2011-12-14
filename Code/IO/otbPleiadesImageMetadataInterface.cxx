@@ -22,9 +22,13 @@
 #include "otbMacro.h"
 #include "itkMetaDataObject.h"
 #include "otbImageKeywordlist.h"
+#include <boost/lexical_cast.hpp>
+
 
 namespace otb
 {
+using boost::lexical_cast;
+using boost::bad_lexical_cast;
 
 PleiadesImageMetadataInterface
 ::PleiadesImageMetadataInterface()
@@ -64,7 +68,7 @@ PleiadesImageMetadataInterface::GetInstrument() const
   return "";
 }
 
-unsigned int
+std::string
 PleiadesImageMetadataInterface::GetInstrumentIndex() const
 {
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
@@ -82,11 +86,10 @@ PleiadesImageMetadataInterface::GetInstrumentIndex() const
   if (imageKeywordlist.HasKey("support_data.instrument_index"))
     {
     std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.instrument_index");
-    unsigned int value = atoi(valueString.c_str());
-    return value;
+    return valueString;
     }
 
-  return -1; // Invalid value
+  return ""; // Invalid value
 }
 
 PleiadesImageMetadataInterface::VariableLengthVectorType
@@ -121,23 +124,28 @@ PleiadesImageMetadataInterface::GetSolarIrradiance() const
   VariableLengthVectorType outputValuesVariableLengthVector;
   outputValuesVariableLengthVector.SetSize(outputValues.size());
   outputValuesVariableLengthVector.Fill(0);
-  //In the case of SPOT, the bands are in a different order:
-  // XS3, XS2. XS1, SWIR in the tif file.
+
   if (outputValues.size() == 1)
     {
     //this is a PAN image
     outputValuesVariableLengthVector[0] = outputValues[0];
     }
+  else if (outputValues.size() == 3)
+    {
+    outputValuesVariableLengthVector[0] = outputValues[0];
+    outputValuesVariableLengthVector[1] = outputValues[1];
+    outputValuesVariableLengthVector[2] = outputValues[2];
+    }
   else if (outputValues.size() == 4)
     {
-    outputValuesVariableLengthVector[0] = outputValues[2];
+    outputValuesVariableLengthVector[0] = outputValues[0];
     outputValuesVariableLengthVector[1] = outputValues[1];
-    outputValuesVariableLengthVector[2] = outputValues[0];
+    outputValuesVariableLengthVector[2] = outputValues[2];
     outputValuesVariableLengthVector[3] = outputValues[3];
     }
   else
     {
-    itkExceptionMacro("Invalid Physical Irradiance");
+    itkExceptionMacro("Invalid Solar Irradiance");
     }
 
   return outputValuesVariableLengthVector;
@@ -167,11 +175,18 @@ PleiadesImageMetadataInterface::GetDay() const
   std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.image_date");
   std::vector<std::string> outputValues;
 
-  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
+  boost::split(outputValues, valueString, boost::is_any_of(" T:-."));
 
-  if (outputValues.size() <= 2) itkExceptionMacro(<< "Invalid Day");
+  int value;
+  try
+    {
+    value = lexical_cast<int> (outputValues[2]);
+    }
+  catch (bad_lexical_cast &)
+    {
+    itkExceptionMacro(<< "Invalid Day");
+    }
 
-  int value = atoi(outputValues[2].c_str());
   return value;
 }
 
@@ -198,11 +213,17 @@ PleiadesImageMetadataInterface::GetMonth() const
 
   std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.image_date");
   std::vector<std::string> outputValues;
-  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
+  boost::split(outputValues, valueString, boost::is_any_of(" T:-."));
 
-  if (outputValues.size() <= 2) itkExceptionMacro(<< "Invalid Month");
-
-  int value = atoi(outputValues[1].c_str());
+  int value;
+  try
+    {
+    value = lexical_cast<int> (outputValues[1]);
+    }
+  catch (bad_lexical_cast &)
+    {
+    itkExceptionMacro(<< "Invalid Month");
+    }
   return value;
 }
 
@@ -229,11 +250,17 @@ PleiadesImageMetadataInterface::GetYear() const
 
   std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.image_date");
   std::vector<std::string> outputValues;
-  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
+  boost::split(outputValues, valueString, boost::is_any_of(" T:-."));
 
-  if (outputValues.size() <= 2) itkExceptionMacro(<< "Invalid Year");
-
-  int value = atoi(outputValues[0].c_str());
+  int value;
+  try
+    {
+    value = lexical_cast<int> (outputValues[0]);
+    }
+  catch (bad_lexical_cast &)
+    {
+    itkExceptionMacro(<< "Invalid Year");
+    }
   return value;
 }
 
@@ -260,11 +287,17 @@ PleiadesImageMetadataInterface::GetHour() const
 
   std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.image_date");
   std::vector<std::string> outputValues;
-  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
+  boost::split(outputValues, valueString, boost::is_any_of(" T:-."));
 
-  if (outputValues.size() < 4) itkExceptionMacro(<< "Invalid Hour");
-
-  int value = atoi(outputValues[3].c_str());
+  int value;
+  try
+    {
+    value = lexical_cast<int> (outputValues[3]);
+    }
+  catch (bad_lexical_cast &)
+    {
+    itkExceptionMacro(<< "Invalid Hour");
+    }
   return value;
 }
 
@@ -291,11 +324,17 @@ PleiadesImageMetadataInterface::GetMinute() const
 
   std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.image_date");
   std::vector<std::string> outputValues;
-  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
+  boost::split(outputValues, valueString, boost::is_any_of(" T:-."));
 
-  if (outputValues.size() < 5) itkExceptionMacro(<< "Invalid Minute");
-
-  int value = atoi(outputValues[4].c_str());
+  int value;
+  try
+    {
+    value = lexical_cast<int> (outputValues[4]);
+    }
+  catch (bad_lexical_cast &)
+    {
+    itkExceptionMacro(<< "Invalid Minute");
+    }
   return value;
 }
 
@@ -324,9 +363,15 @@ PleiadesImageMetadataInterface::GetProductionDay() const
   std::vector<std::string> outputValues;
   boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
 
-  if (outputValues.size() <= 2) itkExceptionMacro(<< "Invalid Day");
-
-  int value = atoi(outputValues[2].c_str());
+  int value;
+  try
+    {
+    value = lexical_cast<int> (outputValues[2]);
+    }
+  catch (bad_lexical_cast &)
+    {
+    itkExceptionMacro(<< "Invalid Day");
+    }
   return value;
 }
 
@@ -355,9 +400,15 @@ PleiadesImageMetadataInterface::GetProductionMonth() const
   std::vector<std::string> outputValues;
   boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
 
-  if (outputValues.size() <= 2) itkExceptionMacro(<< "Invalid Month");
-
-  int value = atoi(outputValues[1].c_str());
+  int value;
+  try
+    {
+    value = lexical_cast<int> (outputValues[1]);
+    }
+  catch (bad_lexical_cast &)
+    {
+    itkExceptionMacro(<< "Invalid Month");
+    }
   return value;
 }
 
@@ -388,7 +439,15 @@ PleiadesImageMetadataInterface::GetProductionYear() const
 
   if (outputValues.size() <= 2) itkExceptionMacro(<< "Invalid Year");
 
-  int value = atoi(outputValues[0].c_str());
+  int value;
+  try
+    {
+    value = lexical_cast<int> (outputValues[0]);
+    }
+  catch (bad_lexical_cast &)
+    {
+    itkExceptionMacro(<< "Invalid Year");
+    }
   return value;
 }
 
@@ -425,24 +484,27 @@ PleiadesImageMetadataInterface
   VariableLengthVectorType outputValuesVariableLengthVector;
   outputValuesVariableLengthVector.SetSize(outputValues.size());
   outputValuesVariableLengthVector.Fill(0);
-  //In the case of SPOT, the bands are in a different order:
-  // XS3, XS2. XS1, SWIR in the tif file.
-
   if (outputValues.size() == 1)
     {
     //this is a PAN image
     outputValuesVariableLengthVector[0] = outputValues[0];
     }
+  else if (outputValues.size() == 3)
+    {
+    outputValuesVariableLengthVector[0] = outputValues[0];
+    outputValuesVariableLengthVector[1] = outputValues[1];
+    outputValuesVariableLengthVector[2] = outputValues[2];
+    }
   else if (outputValues.size() == 4)
     {
-    outputValuesVariableLengthVector[0] = outputValues[2];
+    outputValuesVariableLengthVector[0] = outputValues[0];
     outputValuesVariableLengthVector[1] = outputValues[1];
-    outputValuesVariableLengthVector[2] = outputValues[0];
+    outputValuesVariableLengthVector[2] = outputValues[2];
     outputValuesVariableLengthVector[3] = outputValues[3];
     }
   else
     {
-    itkExceptionMacro("Invalid Physical Gain");
+    itkExceptionMacro("Invalid Physical Bias");
     }
 
   return outputValuesVariableLengthVector;
@@ -481,19 +543,22 @@ PleiadesImageMetadataInterface
   VariableLengthVectorType outputValuesVariableLengthVector;
   outputValuesVariableLengthVector.SetSize(outputValues.size());
   outputValuesVariableLengthVector.Fill(0);
-  //In the case of SPOT, the bands are in a different order:
-  // XS3, XS2. XS1, SWIR in the tif file.
-
   if (outputValues.size() == 1)
     {
     //this is a PAN image
     outputValuesVariableLengthVector[0] = outputValues[0];
     }
+  else if (outputValues.size() == 3)
+    {
+    outputValuesVariableLengthVector[0] = outputValues[0];
+    outputValuesVariableLengthVector[1] = outputValues[1];
+    outputValuesVariableLengthVector[2] = outputValues[2];
+    }
   else if (outputValues.size() == 4)
     {
-    outputValuesVariableLengthVector[0] = outputValues[2];
+    outputValuesVariableLengthVector[0] = outputValues[0];
     outputValuesVariableLengthVector[1] = outputValues[1];
-    outputValuesVariableLengthVector[2] = outputValues[0];
+    outputValuesVariableLengthVector[2] = outputValues[2];
     outputValuesVariableLengthVector[3] = outputValues[3];
     }
   else
@@ -526,7 +591,7 @@ PleiadesImageMetadataInterface::GetSatElevation() const
     }
 
   std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.incident_angle");
-  double value = 90 - atof(valueString.c_str());
+  double value = 90 - atof(valueString.c_str()); // TODO MSD ????
   return value;
 }
 
@@ -557,6 +622,7 @@ PleiadesImageMetadataInterface::GetSatAzimuth() const
   valueString = imageKeywordlist.GetMetadataByKey("support_data.scene_orientation");
   double satAz = atof(valueString.c_str());
 
+  // TODO MSD ????
   if ((step - 48) < 0)
     {
     satAz += 90.;
@@ -593,18 +659,15 @@ PleiadesImageMetadataInterface
   if (nbBands == 1)
     {
     wavel.SetSize(1);
-    if (sensorId == "SPOT4") wavel.Fill(0.610);
-    else if (sensorId == "SPOT5") wavel.Fill(0.480);
-    else itkExceptionMacro(<< "Invalid Pleiades Sensor ID");
+    wavel.Fill(-500.0); // TODO MSD Fill this value !!!
     }
   else if (nbBands > 1 && nbBands < 5)
     {
     wavel.SetSize(4);
-    //FIXME is that supposed to correspond to the bands in the files?
-    wavel[0] = 0.500;
-    wavel[1] = 0.610;
-    wavel[2] = 0.780;
-    wavel[3] = 1.580;
+    wavel[0] = 0.440;
+    wavel[1] = 0.500;
+    wavel[2] = 0.610;
+    wavel[3] = 0.770;
     }
   else itkExceptionMacro(<< "Invalid number of bands...");
 
@@ -638,18 +701,16 @@ PleiadesImageMetadataInterface
   if (nbBands == 1)
     {
     wavel.SetSize(1);
-    if (sensorId == "SPOT4") wavel.Fill(0.680);
-    else if (sensorId == "SPOT5") wavel.Fill(0.710);
-    else itkExceptionMacro(<< "Invalid Pleiades Sensor ID");
+    wavel.Fill(-500.0); // TODO MSD Fill this value !!!
     }
   else if (nbBands > 1 && nbBands < 5)
     {
     //FIXME is that supposed to correspond to the bands in the files?
     wavel.SetSize(4);
-    wavel[0] = 0.590;
-    wavel[1] = 0.680;
-    wavel[2] = 0.890;
-    wavel[3] = 1.750;
+    wavel[0] = 0.540;
+    wavel[1] = 0.600;
+    wavel[2] = 0.710;
+    wavel[3] = 0.910;
     }
   else itkExceptionMacro(<< "Invalid number of bands...");
 
@@ -703,15 +764,11 @@ PleiadesImageMetadataInterface
   // Panchromatic case
   if (nbBands == 1)
     {
-    if (sensorId == "SPOT4")
+    if (sensorId == "PHR 1A")
       {
 
       }
-    else if (sensorId == "SPOT5")
-      {
-
-      }
-    else
+      else
       {
       itkExceptionMacro(<< "Invalid Pleiades Sensor ID");
       }
