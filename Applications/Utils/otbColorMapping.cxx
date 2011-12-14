@@ -147,7 +147,7 @@ public:
       TValue value = m_LabelToImageIntensityMap[i];
       for (unsigned int index = 0; index < value.Size(); index++)
            {
-            value[index]=value[index]/static_cast<float>(m_WeigthingMap.at(i));
+            value[index]=value[index]/static_cast<float>(m_WeigthingMap[i]);
            }
       MeanMap[i]=value;
       }
