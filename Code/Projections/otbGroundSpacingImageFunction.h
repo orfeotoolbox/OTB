@@ -40,7 +40,7 @@ namespace otb
  */
 template <class TInputImage, class TCoordRep = float>
 class ITK_EXPORT GroundSpacingImageFunction :
-    public itk::ImageFunction<TInputImage, std::pair<float,float>,
+    public itk::ImageFunction<TInputImage, std::pair<float, float>,
       TCoordRep>
 {
 public:

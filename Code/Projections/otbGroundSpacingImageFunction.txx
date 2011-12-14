@@ -63,7 +63,7 @@ GroundSpacingImageFunction<TInputImage, TCoordRep>
 {
   if (!this->GetInputImage())
     {
-    return (std::make_pair(itk::NumericTraits<ValueType>::min(),itk::NumericTraits<ValueType>::min()));
+    return (std::make_pair(itk::NumericTraits<ValueType>::min(), itk::NumericTraits<ValueType>::min()));
     }
 
   PointType point = this->GetPixelLocation(index);

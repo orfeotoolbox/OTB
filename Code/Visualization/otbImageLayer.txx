@@ -69,7 +69,7 @@ ImageLayer<TImage, TOutputImage>
   m_CountryName = "";
 
   m_GroundSpacing = GroundSpacingImageType::New();
-  m_ApproxGroundSpacing = std::make_pair(itk::NumericTraits<ValueType>::min(),itk::NumericTraits<ValueType>::min());
+  m_ApproxGroundSpacing = std::make_pair(itk::NumericTraits<ValueType>::min(), itk::NumericTraits<ValueType>::min());
 }
 
 template <class TImage, class TOutputImage>

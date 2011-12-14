@@ -347,7 +347,7 @@ public:
   typedef RAMDrivenStrippedStreamingManager
     <FloatVectorImageType>                            RAMDrivenStrippedStreamingManagerType;
   typedef otb::StreamingShrinkImageFilter
-    <FloatVectorImageType,FloatVectorImageType>       ImageSamplingFilterType;
+    <FloatVectorImageType, FloatVectorImageType>       ImageSamplingFilterType;
   typedef itk::Statistics::DenseFrequencyContainer    DFContainerType;
   typedef itk::NumericTraits<PixelType>::RealType     RealScalarType;
   typedef itk::VariableLengthVector<RealScalarType>   InternalPixelType;
@@ -361,7 +361,7 @@ public:
   typedef Functor::RGBFromImageValueFunctor
     <LabelType, FloatVectorImageType::PixelType>      RGBFromImageValueFunctorType;
   typedef itk::BinaryFunctorImageFilter
-    <LabelImageType, FloatVectorImageType, 
+    <LabelImageType, FloatVectorImageType,
     LabelImageType, RGBFromImageValueFunctorType>     RGBFromImageValueFilterType;
 
   // Inverse mapper for color->label operation
@@ -378,7 +378,7 @@ public:
   
   // Caster to convert a FloatImageType to LabelImageType
   typedef itk::CastImageFilter
-    <FloatImageType,LabelImageType>                   CasterToLabelImageType;
+    <FloatImageType, LabelImageType>                   CasterToLabelImageType;
 
 private:
   void DoInit()
@@ -387,7 +387,7 @@ private:
     SetDescription("Maps an input label image to 8-bits RGB using look-up tables.");
 
     SetDocName("Color Mapping");
-    SetDocLongDescription("This application allows to map a label image to a 8-bits RGB image (in both ways) using different methods.\n" 
+    SetDocLongDescription("This application allows to map a label image to a 8-bits RGB image (in both ways) using different methods.\n"
                           "-The custom method allows to use a custom look-up table. The look-up table is loaded "
                           "from a text file where each line describes an entry. The typical use of this method is to colorise a "
                           "classification map.\n-The continuous method allows to map a range of values in a scalar input image "
@@ -437,7 +437,7 @@ private:
     AddChoice("op.colortolabel","Color to label");
     AddParameter(ParameterType_Int, "op.colortolabel.notfound","Not Found Label");
     SetParameterDescription("op.colortolabel.notfound","Label to use for unknown colors.");
-    SetDefaultParameterInt("op.colortolabel.notfound",404);
+    SetDefaultParameterInt("op.colortolabel.notfound", 404);
     MandatoryOff("op.colortolabel.notfound");
 
     // --- MAPPING METHOD ---
@@ -529,7 +529,7 @@ private:
       if (GetParameterInt("method")==1 || GetParameterInt("method")==3)
         {
         otbAppLogWARNING("Override method : use optimal");
-        SetParameterInt("method",2);
+        SetParameterInt("method", 2);
         }
       }
   }
@@ -825,7 +825,7 @@ private:
       
       // iteration over stream divisions
       RegionType streamingRegion;
-      for (unsigned int index = 0;index<numberOfStreamDivisions;index++)
+      for (unsigned int index = 0; index<numberOfStreamDivisions; index++)
         {
         streamingRegion = splitter->GetSplit(index, numberOfStreamDivisions, largestRegion);
         input->SetRequestedRegion(streamingRegion);
