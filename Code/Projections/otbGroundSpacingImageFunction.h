@@ -86,6 +86,7 @@ public:
     this->ConvertPointToNearestIndex(point, index);
     return this->EvaluateAtIndex(index);
   }
+
   virtual FloatType EvaluateAtContinuousIndex(
     const ContinuousIndexType& cindex) const
   {
@@ -94,11 +95,8 @@ public:
     return this->EvaluateAtIndex(index);
   }
 
-  /** Get/Set the transformation definition of the input image **/
-  itkSetObjectMacro(Transform, TransformType);
-  itkGetObjectMacro(Transform, TransformType);
-
   PointType GetPixelLocation(const IndexType& index) const;
+
 protected:
   GroundSpacingImageFunction();
   virtual ~GroundSpacingImageFunction(){}
@@ -108,7 +106,6 @@ private:
   GroundSpacingImageFunction(const Self &);  //purposely not implemented
   void operator =(const Self&);  //purposely not implemented
 
-  TransformType::Pointer m_Transform;
   ValueType              m_R;
   ValueType              m_deg2radCoef;
 };

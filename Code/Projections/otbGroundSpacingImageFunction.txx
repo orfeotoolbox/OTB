@@ -39,7 +39,6 @@ GroundSpacingImageFunction<TInputImage, TCoordRep>
 {
   m_R = 6371000;
   m_deg2radCoef = CONST_PI / 180;
-  m_Transform = TransformType::New();
 }
 
 /**
@@ -120,6 +119,7 @@ GroundSpacingImageFunction<TInputImage, TCoordRep>
   PointType inputPoint;
   inputPoint[0] = index[0];
   inputPoint[1] = index[1];
+
   if (!this->GetInputImage())
     {
     itkExceptionMacro(<< "No input image!");

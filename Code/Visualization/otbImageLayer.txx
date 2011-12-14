@@ -284,7 +284,7 @@ ImageLayer<TImage, TOutputImage>
     {
     if (m_Transform->GetTransformAccuracy() != Projection::UNKNOWN)
       {
-      PointType point = m_GroundSpacing->GetPixelLocation (index);
+      PointType point = this->GetPixelLocation (index);
 
       oss << setiosflags(std::ios::fixed) << std::setprecision(2) << "Ground spacing(in m): " << m_ApproxGroundSpacing.first << " " << m_ApproxGroundSpacing.second <<
       std::endl;
@@ -343,8 +343,6 @@ ImageLayer<TImage, TOutputImage>
 
   //Set parameters of the ground spacing image calculators
   m_GroundSpacing->SetInputImage(m_Image);
-  m_GroundSpacing->SetTransform(m_Transform);
-
 }
 
 template <class TImage, class TOutputImage>
