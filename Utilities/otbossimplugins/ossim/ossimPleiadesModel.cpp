@@ -118,10 +118,6 @@ bool ossimPleiadesModel::saveState(ossimKeywordlist& kwl,
      std::cout << "ossimPleiadesModel::saveState: " << std::endl;
      kwl.print(std::cout);
   }
-  else
-  {
-     return false;
-  }
 
    return ossimRpcModel::saveState(kwl, prefix);
 }

@@ -142,6 +142,7 @@ private:
    ossimPleiadesMetadataSubProfile theMetadataSubProfile;
    bool theProductIsOk;
    bool TheRpcIsOk;
+   ossimString theXmlDocumentRoot;
 
    ossimString                 theSensorID;
    ossimString                 theImageID;
