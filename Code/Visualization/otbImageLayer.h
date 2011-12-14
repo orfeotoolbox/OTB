@@ -77,6 +77,7 @@ public:
   typedef otb::GenericRSTransform<double>            TransformType;
   typedef otb::GroundSpacingImageFunction<ImageType> GroundSpacingImageType;
   typedef typename GroundSpacingImageType::FloatType FloatType;
+  typedef typename GroundSpacingImageType::ValueType ValueType;
   /** Output image typedef */
   typedef TOutputImage                        OutputImageType;
   typedef typename OutputImageType::PixelType OutputPixelType;

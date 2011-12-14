@@ -64,7 +64,7 @@ GroundSpacingImageFunction<TInputImage, TCoordRep>
 {
   if (!this->GetInputImage())
     {
-    return (itk::NumericTraits<FloatType>::min());
+    return (std::make_pair(itk::NumericTraits<ValueType>::min(),itk::NumericTraits<ValueType>::min()));
     }
 
   PointType point = this->GetPixelLocation(index);
@@ -104,9 +104,9 @@ GroundSpacingImageFunction<TInputImage, TCoordRep>
   ValueType cY = Two * vcl_atan2(vcl_sqrt(aY), vcl_sqrt(One - aY));
   ValueType dY = m_R * cY;
 
-  FloatType var(dX / (vcl_fabs(static_cast<ValueType>(indexSrcX[0] - index[0]))), dY / (vcl_fabs(static_cast<ValueType>(
-                                                                                                   indexSrcY[1] -
-                                                                                                   index[1]))));
+  FloatType var;
+  var.first = dX / (vcl_fabs(static_cast<ValueType>(indexSrcX[0] - index[0])));
+  var.second = dY / (vcl_fabs(static_cast<ValueType>(indexSrcY[1] - index[1])));
 
   return var;
 }
@@ -120,7 +120,19 @@ GroundSpacingImageFunction<TInputImage, TCoordRep>
   PointType inputPoint;
   inputPoint[0] = index[0];
   inputPoint[1] = index[1];
-  return m_Transform->TransformPoint(inputPoint);
+  if (!this->GetInputImage())
+    {
+    itkExceptionMacro(<< "No input image!");
+    }
+  
+  TransformType::Pointer transform = TransformType::New();
+  const itk::MetaDataDictionary& inputDict = this->GetInputImage()->GetMetaDataDictionary();
+  transform->SetInputDictionary(inputDict);
+  transform->SetInputOrigin(this->GetInputImage()->GetOrigin());
+  transform->SetInputSpacing(this->GetInputImage()->GetSpacing());
+  
+  transform->InstanciateTransform();
+  return transform->TransformPoint(inputPoint);
 }
 
 } // end namespace otb

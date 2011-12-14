@@ -40,13 +40,19 @@ namespace otb
  */
 template <class TInputImage, class TCoordRep = float>
 class ITK_EXPORT GroundSpacingImageFunction :
-  public itk::ImageFunction<TInputImage, typename itk::NumericTraits<std::complex<float> >::FloatType,
+    public itk::ImageFunction<TInputImage, std::pair<float,float>,
       TCoordRep>
 {
 public:
   /** Standard class typedefs. */
   typedef GroundSpacingImageFunction Self;
-  typedef itk::ImageFunction<TInputImage, typename itk::NumericTraits<std::complex<float> >::FloatType,
+  
+  /** Datatype used for the density */
+  typedef float ValueType;
+  typedef std::pair<ValueType, ValueType> FloatType;
+  
+
+  typedef itk::ImageFunction<TInputImage, FloatType ,
       TCoordRep>                                          Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -66,14 +72,9 @@ public:
 
   typedef otb::GenericRSTransform<double> TransformType;
 
-  itkStaticConstMacro(ImageDimension, unsigned int, InputImageType::ImageDimension);
-
-  /** Datatype used for the density */
-  typedef  typename itk::NumericTraits<std::complex<float> >::FloatType
-  FloatType;
-  typedef  typename itk::NumericTraits<std::complex<float> >::ValueType
-  ValueType;
   typedef typename IndexType::IndexValueType IndexValueType;
+
+  itkStaticConstMacro(ImageDimension, unsigned int, InputImageType::ImageDimension);
 
   /** Evalulate the function at specified index */
   virtual FloatType EvaluateAtIndex(const IndexType& index) const;
