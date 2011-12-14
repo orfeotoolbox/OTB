@@ -74,6 +74,7 @@ int otbImageMetadataInterfaceBaseTest(int argc, char* argv[])
 
   file.close();
 
+  std::cout << "-----------\nTest output: " << std::endl;
   std::cout << lImageMetadata << std::endl;
 
   return EXIT_SUCCESS;

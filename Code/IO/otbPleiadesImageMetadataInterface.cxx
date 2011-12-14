@@ -35,7 +35,6 @@ bool
 PleiadesImageMetadataInterface::CanRead() const
 {
   std::string sensorID = GetSensorID();
-  std::cout << "Sensor ID= " << sensorID << std::endl;
   if (sensorID.find("PHR") != std::string::npos) return true;
   else return false;
 }

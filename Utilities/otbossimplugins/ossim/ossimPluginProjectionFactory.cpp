@@ -91,10 +91,7 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
       ossimRefPtr<ossimPleiadesModel> model = new ossimPleiadesModel();
       if ( model->open(filename) )
       {
-         // ok
-        std::cout << "OK" <<std::endl;
-        std::cout << "Projection is valid -> " << projection.valid() << std::endl;
-        projection = model.get();
+         projection = model.get();
       }
       else
       {
@@ -255,8 +252,6 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
      }
    }
 
-
-
    return projection.release();
 }
 
@@ -306,6 +301,10 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
    else if (name == STATIC_TYPE_NAME(ossimTileMapModel))
    {
      return new ossimTileMapModel;
+   }
+   else if (name == STATIC_TYPE_NAME(ossimPleiadesModel))
+   {
+     return new ossimPleiadesModel;
    }
 
    if(traceDebug())
@@ -398,6 +397,14 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
             result = 0;
          }
       }
+      else if (type == "ossimPleiadesModel")
+      {
+         result = new ossimPleiadesModel();
+         if ( !result->loadState(kwl, prefix) )
+         {
+            result = 0;
+         }
+      }
 
    }
 
@@ -434,6 +441,7 @@ void ossimPluginProjectionFactory::getTypeNameList(std::vector<ossimString>& typ
    typeList.push_back(STATIC_TYPE_NAME(ossimAlosPalsarModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimFormosatModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimTileMapModel));
+   typeList.push_back(STATIC_TYPE_NAME(ossimPleiadesModel));
 }
 
 bool ossimPluginProjectionFactory::isTileMap(const ossimFilename& filename)const
