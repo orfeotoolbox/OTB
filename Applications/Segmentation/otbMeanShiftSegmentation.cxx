@@ -35,6 +35,8 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
+  typedef otb::MeanShiftVectorImageFilter<FloatVectorImageType, FloatVectorImageType> MSFilterType;
+
   /** Standard macro */
   itkNewMacro(Self);
 
@@ -100,28 +102,26 @@ private:
   {
     FloatVectorImageType* input = GetParameterImage("in");
 
-    typedef otb::MeanShiftVectorImageFilter<FloatVectorImageType, FloatVectorImageType> MSFilterType;
-    MSFilterType::Pointer filter = MSFilterType::New();
+   m_filter = MSFilterType::New();
 
-    filter->SetInput(input);
-    filter->SetSpatialRadius( GetParameterInt("spatialr") );
-    filter->SetRangeRadius( GetParameterFloat("ranger") );
-    filter->SetMinimumRegionSize( GetParameterInt("minsize") );
-    filter->SetScale( GetParameterFloat("scale") );
+    m_filter->SetInput(input);
+    m_filter->SetSpatialRadius( GetParameterInt("spatialr") );
+    m_filter->SetRangeRadius( GetParameterFloat("ranger") );
+    m_filter->SetMinimumRegionSize( GetParameterInt("minsize") );
+    m_filter->SetScale( GetParameterFloat("scale") );
 
-    m_Ref = filter;
 
     if (IsParameterEnabled("fout") && HasValue("fout"))
-      SetParameterOutputImage("fout", filter->GetOutput());
+      SetParameterOutputImage("fout", m_filter->GetOutput());
     if (IsParameterEnabled("cout") && HasValue("cout"))
-      SetParameterOutputImage("cout", filter->GetClusteredOutput());
+      SetParameterOutputImage("cout", m_filter->GetClusteredOutput());
     if (IsParameterEnabled("lout") && HasValue("lout"))
-      SetParameterOutputImage("lout", filter->GetLabeledClusteredOutput());
+      SetParameterOutputImage<UInt16ImageType>("lout", m_filter->GetLabeledClusteredOutput());
     if (IsParameterEnabled("cbout") && HasValue("cbout"))
-      SetParameterOutputImage("cbout", filter->GetClusterBoundariesOutput());
+      SetParameterOutputImage<UInt16ImageType>("cbout", m_filter->GetClusterBoundariesOutput());
   }
 
-  itk::LightObject::Pointer m_Ref;
+  MSFilterType::Pointer m_filter;
 
 };
 
