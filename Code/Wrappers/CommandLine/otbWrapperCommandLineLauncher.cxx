@@ -92,6 +92,12 @@ void CommandLineLauncher::DeleteWatcherList()
 bool CommandLineLauncher::Load(const std::string & exp)
 {
   m_Expression = exp;
+  //std::cout<<m_Expression<<std::endl;
+
+  while(m_Expression.find("  ") != std::string::npos)
+    m_Expression.erase(m_Expression.find("  "), 1);
+
+  //std::cout<<m_Expression<<std::endl;
 
   return this->Load();
 }
