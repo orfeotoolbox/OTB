@@ -30,7 +30,7 @@ MACRO(CHECK_CXX_SOURCE_RUNS_ARGS SOURCE_FILE ARGUMENT VAR)
       "${CHECK_CXX_SOURCE_COMPILES_ADD_LIBRARIES}"
       "${CHECK_CXX_SOURCE_COMPILES_ADD_INCLUDES}"
       COMPILE_OUTPUT_VARIABLE OUTPUT
-      ARGS ${ARGUMENT})
+      ARGS "\"${ARGUMENT}\"")
 
     # if it did not compile make the return value fail code of 1
     IF(NOT ${VAR}_COMPILED)
@@ -44,6 +44,7 @@ MACRO(CHECK_CXX_SOURCE_RUNS_ARGS SOURCE_FILE ARGUMENT VAR)
         "Performing C++ SOURCE FILE Test ${VAR} succeded with the following output:\n"
         "${OUTPUT}\n" 
         "Return value: ${${VAR}}\n"
+        "Argument: ${ARGUMENT}\n"
         "Source file was: ${SOURCE_FILE}\n\n")
     ELSE("${${VAR}_EXITCODE}" EQUAL 0)
       IF(CMAKE_CROSSCOMPILING AND "${${VAR}_EXITCODE}" MATCHES  "FAILED_TO_RUN")
@@ -57,6 +58,7 @@ MACRO(CHECK_CXX_SOURCE_RUNS_ARGS SOURCE_FILE ARGUMENT VAR)
         "Performing C++ SOURCE FILE Test ${VAR} failed with the following output:\n"
         "${OUTPUT}\n"  
         "Return value: ${${VAR}_EXITCODE}\n"
+        "Argument: ${ARGUMENT}\n"
         "Source file was: ${SOURCE_FILE}\n\n")
     ENDIF("${${VAR}_EXITCODE}" EQUAL 0)
   ENDIF("${VAR}" MATCHES "^${VAR}$")
