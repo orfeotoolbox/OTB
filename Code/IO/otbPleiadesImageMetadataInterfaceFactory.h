@@ -48,8 +48,8 @@ public:
   /** Register one factory of this type  */
   static void RegisterOneFactory(void)
   {
-    PleiadesImageMetadataInterfaceFactory::Pointer spotIMIFactory = PleiadesImageMetadataInterfaceFactory::New();
-    itk::ObjectFactoryBase::RegisterFactory(spotIMIFactory);
+    PleiadesImageMetadataInterfaceFactory::Pointer pleiadesIMIFactory = PleiadesImageMetadataInterfaceFactory::New();
+    itk::ObjectFactoryBase::RegisterFactory(pleiadesIMIFactory);
   }
 
 protected:

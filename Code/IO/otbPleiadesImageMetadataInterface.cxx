@@ -611,23 +611,13 @@ PleiadesImageMetadataInterface::GetSatAzimuth() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
     }
 
-  if (!imageKeywordlist.HasKey("support_data.step_count") ||
-      !imageKeywordlist.HasKey("support_data.scene_orientation"))
+  if (!imageKeywordlist.HasKey("support_data.scene_orientation"))
     {
     return 0;
     }
 
-  std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.step_count");
-  int step = atoi(valueString.c_str());
-  valueString = imageKeywordlist.GetMetadataByKey("support_data.scene_orientation");
-  double satAz = atof(valueString.c_str());
-
-  // TODO MSD ????
-  if ((step - 48) < 0)
-    {
-    satAz += 90.;
-    }
-  else satAz = satAz - 90.;
+  std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.scene_orientation");
+  double satAz = 90-  atof(valueString.c_str());
 
   return satAz;
 }

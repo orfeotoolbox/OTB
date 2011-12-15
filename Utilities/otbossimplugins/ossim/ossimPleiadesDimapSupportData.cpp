@@ -799,6 +799,22 @@ bool ossimPleiadesDimapSupportData::saveState(ossimKeywordlist& kwl,
            static_cast<ossim_uint32>(theViewingAngle.size()),
            true);
 
+   tempString = "";
+   for(idx = 0; idx <  theAzimuthAngle.size(); ++idx)
+   {
+      tempString += (ossimString::toString(theAzimuthAngle[idx]) + " ");
+   }
+
+   kwl.add(prefix,
+           "scene_orientation",
+           tempString,
+           true);
+
+   kwl.add(prefix,
+           "number_of_scene_orientation",
+           static_cast<ossim_uint32>(theAzimuthAngle.size()),
+           true);
+
    kwl.add(prefix,
            "ul_ground_point",
            ossimString::toString(theUlCorner.latd()) + " " +
@@ -957,6 +973,20 @@ bool ossimPleiadesDimapSupportData::loadState(const ossimKeywordlist& kwl,
       }
    }
 
+   total =  ossimString(kwl.find(prefix,"number_of_scene_orientation")).toUInt32();
+   theAzimuthAngle.resize(total);
+   tempString = kwl.find(prefix,"scene_orientation");
+   if(tempString != "")
+   {
+      std::istringstream in(tempString.string());
+      ossimString tempValue;
+      for(idx = 0; idx < theAzimuthAngle.size();++idx)
+      {
+         in >> tempValue.string();
+         theAzimuthAngle[idx] = tempValue.toDouble();
+      }
+   }
+
 
    theUlCorner =createGround( kwl.find(prefix, "ul_ground_point"));
    theUrCorner =createGround( kwl.find(prefix, "ur_ground_point"));
@@ -1057,35 +1087,20 @@ bool ossimPleiadesDimapSupportData::parseProductInformation(
    //---
    xpath = "/Product_Information/Delivery_Identification/JOB_ID";
    xpath = theXmlDocumentRoot + xpath;
-   xmlDocument->findNodes(xpath, xml_nodes);
-   if (xml_nodes.size() == 0)
-   {
-      setErrorStatus();
-      if(traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)<< "DEBUG:\nCould not find: " << xpath << std::endl;
-      }
-      return false;
-   }
-   theImageID = xml_nodes[0]->getText();
+   if (!readOneXmlNode(xmlDocument, xpath, theImageID))
+     {
+     return false;
+     }
 
    //---
    // Fetch the ProductionDate:
    //---
-   xml_nodes.clear();
    xpath = "/Product_Information/Delivery_Identification/PRODUCTION_DATE";
    xpath = theXmlDocumentRoot + xpath;
-   xmlDocument->findNodes(xpath, xml_nodes);
-   if (xml_nodes.size() == 0)
-   {
-      setErrorStatus();
-      if(traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)<< "DEBUG:\nCould not find: " << xpath << std::endl;
-      }
-      return false;
-   }
-   theProductionDate = xml_nodes[0]->getText();
+   if (!readOneXmlNode(xmlDocument, xpath, theProductionDate))
+     {
+     return false;
+     }
 
    return true;
 }
@@ -1093,7 +1108,7 @@ bool ossimPleiadesDimapSupportData::parseProductInformation(
 bool ossimPleiadesDimapSupportData::parseDatasetContent(
    ossimRefPtr<ossimXmlDocument> xmlDocument)
 {
-   ossimString xpath;
+   ossimString xpath, nodeValue;
    vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
 
    //---
@@ -1102,8 +1117,6 @@ bool ossimPleiadesDimapSupportData::parseDatasetContent(
    xml_nodes.clear();
    xpath = "/Dataset_Content/Dataset_Extent/Vertex";
    xpath = theXmlDocumentRoot + xpath;
-
-   std::cout << "xpath= " << xpath << std::endl;
 
    xmlDocument->findNodes(xpath, xml_nodes);
    if (xml_nodes.size() != 4)
@@ -1175,29 +1188,23 @@ bool ossimPleiadesDimapSupportData::parseDatasetContent(
    //---
    // Center of frame.
    //---
-   theRefGroundPoint.hgt = 0.0; // needs to be looked up
+   theRefGroundPoint.hgt = 0.0; // TODO needs to be looked up
 
-   xml_nodes.clear();
    xpath = "/Dataset_Content/Dataset_Extent/Center/LON";
    xpath = theXmlDocumentRoot + xpath;
-   xmlDocument->findNodes(xpath, xml_nodes);
-   if (xml_nodes.size() != 1)
-   {
-      setErrorStatus();
-      return false;
-   }
-   theRefGroundPoint.lon = xml_nodes[0]->getText().toDouble();
+   if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
+     {
+     return false;
+     }
+   theRefGroundPoint.lon = nodeValue.toDouble();
 
-   xml_nodes.clear();
    xpath = "/Dataset_Content/Dataset_Extent/Center/LAT";
    xpath = theXmlDocumentRoot + xpath;
-   xmlDocument->findNodes(xpath, xml_nodes);
-   if (xml_nodes.size() != 1)
-   {
-      setErrorStatus();
-      return false;
-   }
-   theRefGroundPoint.lat = xml_nodes[0]->getText().toDouble();
+   if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
+     {
+     return false;
+     }
+   theRefGroundPoint.lat = nodeValue.toDouble();
 
    return true;
 }
@@ -1360,9 +1367,8 @@ bool ossimPleiadesDimapSupportData::parseRPCMetadata(
 {
   static const char MODULE[] = "ossimPleiadesDimapSupportData::parseSensorMetadata";
 
-  ossimString xpath;
+  ossimString xpath, nodeValue;
   vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
-  ossimString nodeValue;
 
   //---
   // Fetch the Global RFM - Direct Model - Bias:
@@ -1517,7 +1523,6 @@ bool ossimPleiadesDimapSupportData::parseRPCMetadata(
     }
   theLatOffset = nodeValue.toDouble();
 
-
   xpath = "/Rational_Function_Model/Global_RFM/RFM_Validity/HEIGHT_SCALE";
   xpath = theXmlDocumentRoot + xpath;
   if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
@@ -1575,7 +1580,7 @@ bool ossimPleiadesDimapSupportData::parseMetadataIdentification(ossimRefPtr<ossi
   traceDebug.setTraceFlag(true);
 
   vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
-  ossimString xpath;
+  ossimString xpath, nodeValue;
   theXmlDocumentRoot = "/DIMAP_Document";
 
   //---
@@ -1625,24 +1630,17 @@ bool ossimPleiadesDimapSupportData::parseMetadataIdentification(ossimRefPtr<ossi
   //---
   // Check that it is a valid PHR DIMAPv2 file
   //---
-  xml_nodes.clear();
   xpath = "/Metadata_Identification/METADATA_PROFILE";
   xpath = theXmlDocumentRoot + xpath;
-  xmlDocument->findNodes(xpath, xml_nodes);
-  if (xml_nodes.size() == 0)
+  if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
     {
-    setErrorStatus();
-    if (traceDebug())
-      {
-       ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG:\nCould not find: " << xpath << endl;
-      }
     return false;
     }
 
   ossimString metadataProfile;
-  if (  (xml_nodes[0]->getText() != "PHR_SENSOR")
-     && (xml_nodes[0]->getText() != "PHR_ORTHO")
-     && (xml_nodes[0]->getText()!= "PHR_MOSAIC") )
+  if (  (nodeValue != "PHR_SENSOR")
+     && (nodeValue != "PHR_ORTHO")
+     && (nodeValue != "PHR_MOSAIC") )
     {
     if (traceDebug())
       {
@@ -1652,28 +1650,21 @@ bool ossimPleiadesDimapSupportData::parseMetadataIdentification(ossimRefPtr<ossi
     return false;
     }
   else
-    metadataProfile = xml_nodes[0]->getText();
+    metadataProfile = nodeValue;
 
   //---
   // Get the subprofile
   //---
-  xml_nodes.clear();
   xpath = "/Metadata_Identification/METADATA_SUBPROFILE";
   xpath = theXmlDocumentRoot + xpath;
-  xmlDocument->findNodes(xpath, xml_nodes);
-  if (xml_nodes.size() == 0)
+  if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
     {
-    setErrorStatus();
-    if (traceDebug())
-      {
-      ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG:\nCould not find: " << xpath << endl;
-      }
     return false;
     }
 
-  if ((xml_nodes[0]->getText() == "PRODUCT"))
+  if ((nodeValue == "PRODUCT"))
     theMetadataSubProfile = OSSIM_PLEIADES_METADATA_SUBPROFILE_PRODUCT;
-  else if ( (xml_nodes[0]->getText() == "RPC") && (metadataProfile == "PHR_SENSOR") )
+  else if ( (nodeValue == "RPC") && (metadataProfile == "PHR_SENSOR") )
     theMetadataSubProfile = OSSIM_PLEIADES_METADATA_SUBPROFILE_RPC;
   else
     {
@@ -1740,78 +1731,50 @@ bool  ossimPleiadesDimapSupportData::parseRasterData(ossimRefPtr<ossimXmlDocumen
   static const char MODULE[] = "ossimPleiadesDimapSupportData::parseRasterData";
   traceDebug.setTraceFlag(true);
   vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
-  ossimString xpath;
+  ossimString xpath, nodeValue;
 
   //---
   // Fetch if the product file is linked to one or many JP2 files:
   //---
-  xml_nodes.clear();
   xpath = "/Raster_Data/Data_Access/DATA_FILE_TILES";
   xpath = theXmlDocumentRoot + xpath;
-  xmlDocument->findNodes(xpath, xml_nodes);
-  if (xml_nodes.size() == 0)
+  if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
     {
-    setErrorStatus();
-    if (traceDebug())
-      {
-      ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " DEBUG:" << "\nCould not find: " << xpath << std::endl;
-      }
     return false;
     }
-  theMultiDataFile.setValue(xml_nodes[0]->getText());
+  theMultiDataFile.setValue(nodeValue);
 
   //---
   // Fetch the MegaImageSize:
   //---
-  xml_nodes.clear();
   xpath = "/Raster_Data/Raster_Dimensions/NCOLS";
   xpath = theXmlDocumentRoot + xpath;
-  xmlDocument->findNodes(xpath, xml_nodes);
-  if (xml_nodes.size() == 0)
-  {
-     setErrorStatus();
-     if(traceDebug())
-     {
-        ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " DEBUG:" << "\nCould not find: " << xpath << std::endl;
-     }
-     return false;
-  }
-  theImageSize.samp = xml_nodes[0]->getText().toInt();
+  if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
+    {
+    return false;
+    }
+  theImageSize.samp = nodeValue.toInt();
 
-  xml_nodes.clear();
   xpath = "/Raster_Data/Raster_Dimensions/NROWS";
   xpath = theXmlDocumentRoot + xpath;
-  xmlDocument->findNodes(xpath, xml_nodes);
-  if (xml_nodes.size() == 0)
-  {
-     setErrorStatus();
-     if(traceDebug())
-     {
-        ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " DEBUG:" << "\nCould not find: " << xpath << std::endl;
-     }
-     return false;
-  }
-  theImageSize.line = xml_nodes[0]->getText().toInt();
+  if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
+    {
+    return false;
+    }
+  theImageSize.line = nodeValue.toInt();
 
   if (theMultiDataFile.getBoolean())
    {
    //---
    // Fetch the Number of MegaTiles:
    //---
-   xml_nodes.clear();
-   xpath = "/Raster_Data/Raster_Dimensions/Tile_Set/NTILES";
-   xpath = theXmlDocumentRoot + xpath;
-   xmlDocument->findNodes(xpath, xml_nodes);
-   if (xml_nodes.size() == 0)
-     {
-     setErrorStatus();
-     if (traceDebug())
-       {
-       ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " DEBUG:" << "\nCould not find: " << xpath << std::endl;
-       }
-     return false;
-     }
-   theNumberOfMegaTiles = xml_nodes[0]->getText().toUInt32();
+    xpath = "/Raster_Data/Raster_Dimensions/Tile_Set/NTILES";
+    xpath = theXmlDocumentRoot + xpath;
+    if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
+      {
+      return false;
+      }
+    theNumberOfMegaTiles = nodeValue.toUInt32();
 
    //---
    // Fetch the Number of MegaTiles in X and Y:
@@ -1876,11 +1839,11 @@ bool  ossimPleiadesDimapSupportData::parseRasterData(ossimRefPtr<ossimXmlDocumen
 
    }
 
-  //--- TODO_MSD
+  //--- TODO_MSD is it useful in the case of RPC model ???
   // We will make the RefImagePoint the zero base center of the image.  This
   // is used by the ossimSensorModel::worldToLineSample iterative loop as
   // the starting point.  Since the ossimSensorModel does not know of the
-  // sub image we make it zero base.
+  // sub image we make it zero base. (comments from spot)
   //---
   theRefImagePoint.line = theImageSize.line / 2.0;
   theRefImagePoint.samp = theImageSize.samp / 2.0;
@@ -1888,20 +1851,13 @@ bool  ossimPleiadesDimapSupportData::parseRasterData(ossimRefPtr<ossimXmlDocumen
   //---
   // Fetch number of bands
   //---
-  xml_nodes.clear();
   xpath = "/Raster_Data/Raster_Dimensions/NBANDS";
   xpath = theXmlDocumentRoot + xpath;
-  xmlDocument->findNodes(xpath, xml_nodes);
-  if (xml_nodes.size() == 0)
+  if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
     {
-    setErrorStatus();
-    if (traceDebug())
-      {
-      ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " DEBUG:" << "\nCould not find: " << xpath << std::endl;
-      }
     return false;
     }
-  theNumBands = xml_nodes[0]->getText().toUInt32();
+  theNumBands = nodeValue.toUInt32();
 
   if (traceDebug())
     {
@@ -2102,27 +2058,21 @@ bool ossimPleiadesDimapSupportData::parseQualityAssessment(ossimRefPtr<ossimXmlD
 bool ossimPleiadesDimapSupportData::parseDatasetSources(ossimRefPtr<ossimXmlDocument> xmlDocument)
 {
   static const char MODULE[] = "ossimPleiadesDimapSupportData::parseDatasetSources";
-  ossimString xpath;
+  ossimString xpath, nodeValue;
   vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
 
   //---
   // Fetch the mission index (1A ou 1B) ?
   // and generate theSensorID
   //---
-  xml_nodes.clear();
   xpath = "/Dataset_Sources/Source_Identification/Strip_Source/MISSION";
   xpath = theXmlDocumentRoot + xpath;
-  xmlDocument->findNodes(xpath, xml_nodes);
-  if (xml_nodes.size() == 0)
+  if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
     {
-    setErrorStatus();
-    if (traceDebug())
-      {
-      ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG:\nCould not find: " << xpath << std::endl;
-      }
     return false;
     }
-  if (xml_nodes[0]->getText() != "PHR")
+
+  if (nodeValue != "PHR")
     {
     setErrorStatus();
     if (traceDebug())
@@ -2136,22 +2086,16 @@ bool ossimPleiadesDimapSupportData::parseDatasetSources(ossimRefPtr<ossimXmlDocu
   // Fetch the mission index (1A ou 1B) ?
   // and generate theSensorID
   //---
-  xml_nodes.clear();
   xpath = "/Dataset_Sources/Source_Identification/Strip_Source/MISSION_INDEX";
   xpath = theXmlDocumentRoot + xpath;
-  xmlDocument->findNodes(xpath, xml_nodes);
-  if (xml_nodes.size() == 0)
+  if (!readOneXmlNode(xmlDocument, xpath, nodeValue))
     {
-    setErrorStatus();
-    if (traceDebug())
-      {
-      ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG:\nCould not find: " << xpath << std::endl;
-      }
     return false;
     }
-  if (xml_nodes[0]->getText() == "1A")
+
+  if (nodeValue == "1A")
     theSensorID = "PHR 1A";
-  else if (xml_nodes[0]->getText() == "1B")
+  else if (nodeValue == "1B")
     theSensorID = "PHR 1B";
   else
     {
@@ -2166,74 +2110,42 @@ bool ossimPleiadesDimapSupportData::parseDatasetSources(ossimRefPtr<ossimXmlDocu
   //---
   // Fetch the Instrument:
   //---
-  xml_nodes.clear();
   xpath = "/Dataset_Sources/Source_Identification/Strip_Source/INSTRUMENT";
   xpath = theXmlDocumentRoot + xpath;
-  xmlDocument->findNodes(xpath, xml_nodes);
-  if (xml_nodes.size() == 0)
+  if (!readOneXmlNode(xmlDocument, xpath, theInstrument))
     {
-    setErrorStatus();
-    if (traceDebug())
-      {
-      ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " DEBUG:" << "\nCould not find: " << xpath << std::endl;
-      }
     return false;
     }
-  theInstrument = xml_nodes[0]->getText();
 
   //---
   // Fetch the Instrument Index:
   //---
-  xml_nodes.clear();
   xpath = "/Dataset_Sources/Source_Identification/Strip_Source/INSTRUMENT_INDEX";
   xpath = theXmlDocumentRoot + xpath;
-  xmlDocument->findNodes(xpath, xml_nodes);
-  if (xml_nodes.size() == 0)
+  if (!readOneXmlNode(xmlDocument, xpath, theInstrumentIndex))
     {
-    setErrorStatus();
-    if (traceDebug())
-      {
-      ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " DEBUG:" << "\nCould not find: " << xpath << std::endl;
-      }
     return false;
     }
-  theInstrumentIndex = xml_nodes[0]->getText();
 
   //---
   // Fetch the Imaging Date:
   //---
-  xml_nodes.clear();
   xpath = "/Dataset_Sources/Source_Identification/Strip_Source/IMAGING_DATE";
   xpath = theXmlDocumentRoot + xpath;
-  xmlDocument->findNodes(xpath, xml_nodes);
-  if (xml_nodes.size() == 0)
+  if (!readOneXmlNode(xmlDocument, xpath, theFirstLineImagingDate))
     {
-    setErrorStatus();
-    if (traceDebug())
-      {
-      ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " DEBUG:" << "\nCould not find: " << xpath << std::endl;
-      }
     return false;
     }
-  theFirstLineImagingDate = xml_nodes[0]->getText();
 
    //---
    // Fetch the Imaging Time:
    //---
-   xml_nodes.clear();
   xpath = "/Dataset_Sources/Source_Identification/Strip_Source/IMAGING_TIME";
   xpath = theXmlDocumentRoot + xpath;
-  xmlDocument->findNodes(xpath, xml_nodes);
-  if (xml_nodes.size() == 0)
+  if (!readOneXmlNode(xmlDocument, xpath, theFirstLineImagingTime))
     {
-    setErrorStatus();
-    if (traceDebug())
-      {
-      ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " DEBUG:" << "\nCould not find: " << xpath << std::endl;
-      }
     return false;
     }
-  theFirstLineImagingTime = xml_nodes[0]->getText();
 
   theAcquisitionDate = theFirstLineImagingDate + "T" + theFirstLineImagingTime;
 
