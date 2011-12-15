@@ -431,8 +431,6 @@ bool ossimPleiadesDimapSupportData::parseXmlFile(const ossimFilename& file)
       return false;
       }
 
-    std::cout << theXmlDocumentRoot << std::endl;
-
     if (!parseDatasetContent(xmlDocument))
      {
      ossimNotify(ossimNotifyLevel_FATAL)
@@ -557,7 +555,10 @@ bool ossimPleiadesDimapSupportData::parseXmlFile(const ossimFilename& file)
       TheRpcIsOk = true;
     }
 
-  if (traceDebug())
+  if (theProcessingLevelString != "SENSOR")
+    TheRpcIsOk = true;
+
+  if (traceDebug() && allMetadataRead())
     {
     printInfo(ossimNotify(ossimNotifyLevel_DEBUG));
 
