@@ -241,9 +241,10 @@ typename SpectralResponse<TPrecision, TValuePrecision>::FilterFunctionValuesPoin
 
   //Assume that the SR is sorted
   typename FilterFunctionValuesType::ValuesVectorType valuesVector;
+  const Self& responseCalculator = *this;
   for (double i = m_Response.front()->first; i <= m_Response.back()->first; i += step)
     {
-    valuesVector.push_back = (*this)(i);
+    valuesVector.push_back( responseCalculator(i) );
     }
   FilterFunctionValuesPointerType functionValues = FilterFunctionValuesType::New();
 
