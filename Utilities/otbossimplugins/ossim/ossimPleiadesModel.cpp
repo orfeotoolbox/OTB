@@ -164,7 +164,8 @@ ossimPleiadesModel::open(const ossimFilename& file)
   // Generate metadata and rpc filename
   if (file.ext().downcase() != "jp2")
     {
-    //PB
+    //not a jpeg2000 file
+    return false;
     }
   else
     {

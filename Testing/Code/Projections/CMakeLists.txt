@@ -125,6 +125,17 @@ ADD_TEST(prTvSensorModelQuickbird ${PROJECTIONS_TESTS1}
          ${TEMP}/prTvSensorModelQuickbird.txt
 )
 
+#TODO MSD remove this before pushing
+ADD_TEST(prTvSensorModelPleiades ${PROJECTIONS_TESTS1}
+  --ignore-order --compare-ascii ${NOTOL}
+         ${BASELINE_FILES}/prTvSensorModelPleiades.txt
+         ${TEMP}/prTvSensorModelPleiades.txt
+         --ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
+    otbSensorModel
+         /media/otbnas/public/Data/Pleiade_sample_spot/TLSE_PRIMARY_BUNDLE__12_bits_Lossy_DIMAP_V2/FCGC300009788/IMG_PHR1A_P_001/IMG_PHR1A_P_201006181052297_SEN_IPU_20110401_0896-002_R1C1.JP2
+         ${TEMP}/prTvSensorModelPleiades.txt
+)
+
 ADD_TEST(prTvSensorModelIkonos ${PROJECTIONS_TESTS1}
   --ignore-order --compare-ascii ${NOTOL}
          ${BASELINE_FILES}/prTvSensorModelIkonos.txt
@@ -910,11 +921,24 @@ otbGenericRSTransformImageAndMNTToWGS84ConversionChecking
 ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
 ${INPUTDATA}/DEM/srtm_directory/
 ${INPUTDATA}/DEM/egm96.grd
-16271 15647 # IGN reference point in front of st sernin church pointed in image
+16271 15647 # IGN reference point based inside CNES (site 31555A point c)
 1.48353 43.55968 # IGN reference point lon/lat
 192.205 # IGN reference point elevation (prec < 10 cm)
 24 # Tolerance in pixels according to DigitalGlobe specification
 23 # Tolerance in meters according to DigitalGlobe specification
+)
+
+# TODO MSD need to update the tolerance values and used a real pleiades file 
+ADD_TEST(prTvGenericRSTransformPleiadesToulouseGeodesicPointChecking ${PROJECTIONS_TESTS3}
+otbGenericRSTransformImageAndMNTToWGS84ConversionChecking
+/media/otbnas/public/Data/Pleiade_sample_spot/TLSE_PRIMARY_BUNDLE__12_bits_Lossy_DIMAP_V2/FCGC300009788/IMG_PHR1A_P_001/IMG_PHR1A_P_201006181052297_SEN_IPU_20110401_0896-002_R1C1.JP2
+${INPUTDATA}/DEM/srtm_directory/
+${INPUTDATA}/DEM/egm96.grd
+27760 27230 # IGN reference point based inside CNES (site 31555A point c)
+1.48353 43.55968 # IGN reference point lon/lat
+192.205 # IGN reference point elevation (prec < 10 cm)
+1 # Tolerance in pixels according to values found in RPC-DIMAPv2 file (ERR_BIAS_ROW and ERR_BIAS_COL)
+1 # Tolerance in meters according to values found in RPC-DIMAPv2 file (ERR_BIAS_X and ERR_BIAS_Y)
 )
 
 # Generic Testing
