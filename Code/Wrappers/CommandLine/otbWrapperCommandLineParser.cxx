@@ -175,14 +175,12 @@ CommandLineParser::GetAttribut( const std::string & key, const std::string & exp
     {
     return res;
     }
-
   std::string expFromKey = std::string(exp).substr(found+key.size()+1, std::string(exp).size());
   
   if( expFromKey.size() == 0 )
     {
     return res;
     }
- 
   std::string tempModKey = expFromKey;
   // remove other key in the string if there's any
   bool stop = false;
@@ -246,7 +244,7 @@ CommandLineParser::GetAttribut( const std::string & key, const std::string & exp
       {
       while( spaceSplitted[i].size()>0  && spaceSplitted[i][0] == ' ' )
         {
-        spaceSplitted[i] = spaceSplitted[i].substr(0, spaceSplitted[i].size());
+        spaceSplitted[i] = spaceSplitted[i].substr(1, spaceSplitted[i].size());
         }
 
       res.push_back(spaceSplitted[i]);

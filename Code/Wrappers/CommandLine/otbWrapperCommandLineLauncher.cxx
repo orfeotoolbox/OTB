@@ -92,12 +92,6 @@ void CommandLineLauncher::DeleteWatcherList()
 bool CommandLineLauncher::Load(const std::string & exp)
 {
   m_Expression = exp;
-  //std::cout<<m_Expression<<std::endl;
-
-  while(m_Expression.find("  ") != std::string::npos)
-    m_Expression.erase(m_Expression.find("  "), 1);
-
-  //std::cout<<m_Expression<<std::endl;
 
   return this->Load();
 }
@@ -131,12 +125,6 @@ bool CommandLineLauncher::Load()
                 << "\" is invalid or doesn't exist..." << std::endl;
       return false;
       }
-/*
-   else
-      {
-      std::cerr << "ERROR: Trouble loading path, please check your command line..." << std::endl;
-      }
-*/
     }
 
   this->LoadApplication();
@@ -209,7 +197,6 @@ bool CommandLineLauncher::BeforeExecute()
     this->LoadTestEnv();
     }
 
-
   // Check the key validity (ie. exist in the application parameters)
   if (this->CheckKeyValidity() == false)
     {
@@ -217,7 +204,6 @@ bool CommandLineLauncher::BeforeExecute()
     this->DisplayHelp();
     return false;
     }
-
   try
     {
     if (this->LoadParameters() != OKPARAM)
@@ -268,6 +254,7 @@ bool CommandLineLauncher::BeforeExecute()
         // Force to reload the application, the LoadParameters can change wrong values
         this->LoadApplication();
         this->DisplayHelp();
+
         return false;
         }
     }
@@ -348,7 +335,6 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
     }
 
   const std::vector<std::string> appKeyList = m_Application->GetParametersKeys(true);
-
   // Loop over each parameter key declared in the application
   for (unsigned int i = 0; i < appKeyList.size(); i++)
     {
@@ -359,13 +345,11 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
 
     const bool paramExists(m_Parser->IsAttributExists(std::string("-").append(paramKey), m_Expression));
 
-
     // if param is a Group, dont do anything, ParamGroup dont have values
     if (type != ParameterType_Group)
       {
       // Get the attribute relative to this key as vector
       values = m_Parser->GetAttribut(std::string("-").append(paramKey), m_Expression);
-    
 
       // If the param does not exists in the cli, dont try to set a
       // value on it, an exception will be thrown later in this function
@@ -487,7 +471,7 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
         m_Application->UpdateParameters();
         }
       }
-    
+
     // Check if mandatory parameter are present and have value
     // A param has to be set if it is mandatory and :
     // is root OR its parent is active
@@ -562,7 +546,6 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
 
       }
     }
-
   return OKPARAM;
 }
 
