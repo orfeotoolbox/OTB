@@ -28,8 +28,8 @@ namespace otb
 template<class TInputSampleList,
     class TTrainingSampleList, class TMeasurementFunctor>
 SVMSampleListModelEstimator<TInputSampleList, TTrainingSampleList, TMeasurementFunctor>
-::SVMSampleListModelEstimator(void) :  SVMModelEstimator<ITK_TYPENAME TInputSampleList::MeasurementType,
-      ITK_TYPENAME TTrainingSampleList::MeasurementType>()
+::SVMSampleListModelEstimator(void) :  SVMModelEstimator<typename TInputSampleList::MeasurementType,
+      typename TTrainingSampleList::MeasurementType>()
 {}
 
 template<class TInputSampleList,

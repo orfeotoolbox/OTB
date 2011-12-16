@@ -129,7 +129,7 @@ private:
  template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter :
    public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage, Functor::ReciprocalLinearCovarianceToReciprocalCircularCovarianceFunctor<
-    ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
+    typename TInputImage::PixelType, typename TOutputImage::PixelType> >
 {
 public:
    /** Standard class typedefs. */

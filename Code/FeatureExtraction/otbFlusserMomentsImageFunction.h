@@ -65,7 +65,7 @@ template <class TInputImage, class TCoordRep = double >
 class ITK_EXPORT FlusserMomentsImageFunction :
   public itk::ImageFunction< TInputImage,
     itk::FixedArray<
-    ITK_TYPENAME itk::NumericTraits<typename TInputImage::PixelType>::RealType,
+    typename itk::NumericTraits<typename TInputImage::PixelType>::RealType,
     11 >,
     TCoordRep >
 {
@@ -74,7 +74,7 @@ public:
   typedef FlusserMomentsImageFunction                                     Self;
   typedef itk::ImageFunction< TInputImage,
                    itk::FixedArray<
-                   ITK_TYPENAME itk::NumericTraits<
+                   typename itk::NumericTraits<
                    typename TInputImage::PixelType>::RealType,
                    11 >,
                    TCoordRep >                                            Superclass;

@@ -116,12 +116,12 @@ RegionImageToRectangularPathListFilter<TInputImage, TOutputPath>
   markerImage->SetBufferedRegion(markerRegion);
   markerImage->SetRequestedRegion(markerRegion);
   markerImage->Allocate();
-  unsigned char maxValue = itk::NumericTraits<ITK_TYPENAME MarkerImageType::PixelType>::max();
+  unsigned char maxValue = itk::NumericTraits<typename MarkerImageType::PixelType>::max();
   markerImage->FillBuffer(maxValue);
-  unsigned char zeroValue = itk::NumericTraits<ITK_TYPENAME MarkerImageType::PixelType>::Zero;
+  unsigned char zeroValue = itk::NumericTraits<typename MarkerImageType::PixelType>::Zero;
   unsigned char regionValue;
   int           neighbor;
-  //markerImage->FillBuffer(itk::NumericTraits<ITK_TYPENAME MarkerImageType::PixelType>::max());
+  //markerImage->FillBuffer(itk::NumericTraits<typename MarkerImageType::PixelType>::max());
 
   //typedef itk::ImageRegionIterator<MarkerImageType> MarkerIteratorType;
   typedef itk::ImageRegionIteratorWithIndex<MarkerImageType> MarkerIteratorType;

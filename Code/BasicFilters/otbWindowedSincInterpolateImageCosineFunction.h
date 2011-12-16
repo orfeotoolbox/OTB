@@ -83,7 +83,7 @@ template<class TInputImage, class TBoundaryCondition = itk::ConstantBoundaryCond
       double, class TInputInterpolator = double, class TOutputInterpolator = double>
 class ITK_EXPORT WindowedSincInterpolateImageCosineFunction :
   public WindowedSincInterpolateImageFunctionBase<TInputImage,
-      ITK_TYPENAME Function::CosineWindowFunction<TInputInterpolator,
+      typename Function::CosineWindowFunction<TInputInterpolator,
           TOutputInterpolator>,
       TBoundaryCondition,
       TCoordRep>
@@ -92,7 +92,7 @@ public:
   /** Standard class typedefs. */
   typedef WindowedSincInterpolateImageCosineFunction Self;
   typedef WindowedSincInterpolateImageFunctionBase<TInputImage,
-      ITK_TYPENAME Function::CosineWindowFunction<TInputInterpolator,
+      typename Function::CosineWindowFunction<TInputInterpolator,
           TOutputInterpolator>,
       TBoundaryCondition,
       TCoordRep>

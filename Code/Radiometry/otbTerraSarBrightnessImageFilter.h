@@ -67,9 +67,9 @@ class ITK_EXPORT TerraSarBrightnessImageFilter :
   public itk::UnaryFunctorImageFilter<
       TInputImage,
       TOutputImage,
-      ITK_TYPENAME Functor::TerraSarBrightnessFunctor<
-          ITK_TYPENAME itk::NumericTraits<ITK_TYPENAME TInputImage::InternalPixelType>::ValueType,
-          ITK_TYPENAME itk::NumericTraits<ITK_TYPENAME TOutputImage::InternalPixelType>::ValueType> >
+      typename Functor::TerraSarBrightnessFunctor<
+          typename itk::NumericTraits<typename TInputImage::InternalPixelType>::ValueType,
+          typename itk::NumericTraits<typename TOutputImage::InternalPixelType>::ValueType> >
 {
 public:
   /** Extract input and output images dimensions.*/

@@ -197,10 +197,10 @@ class ITK_EXPORT BayesianFusionFilter
       TInputMultiSpectralInterpImage,
       TInputPanchroImage,
       TOutputImage,
-      Functor::BayesianFunctor<ITK_TYPENAME TInputMultiSpectralImage::PixelType,
-          ITK_TYPENAME TInputMultiSpectralInterpImage::PixelType,
-          ITK_TYPENAME TInputPanchroImage::PixelType,
-          ITK_TYPENAME TOutputImage::PixelType> >
+      Functor::BayesianFunctor<typename TInputMultiSpectralImage::PixelType,
+          typename TInputMultiSpectralInterpImage::PixelType,
+          typename TInputPanchroImage::PixelType,
+          typename TOutputImage::PixelType> >
 {
 public:
   /**   Extract input and output images dimensions.*/
@@ -219,10 +219,10 @@ public:
       InputMultiSpectralInterpImageType,
       InputPanchroImageType,
       OutputImageType,
-      Functor::BayesianFunctor<ITK_TYPENAME InputMultiSpectralImageType::PixelType,
-          ITK_TYPENAME InputMultiSpectralInterpImageType::PixelType,
-          ITK_TYPENAME InputPanchroImageType::PixelType,
-          ITK_TYPENAME OutputImageType::PixelType> > Superclass;
+      Functor::BayesianFunctor<typename InputMultiSpectralImageType::PixelType,
+          typename InputMultiSpectralInterpImageType::PixelType,
+          typename InputPanchroImageType::PixelType,
+          typename OutputImageType::PixelType> > Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 

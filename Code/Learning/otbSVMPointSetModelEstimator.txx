@@ -27,8 +27,8 @@ namespace otb
 template<class TInputPointSet,
     class TTrainingPointSet>
 SVMPointSetModelEstimator<TInputPointSet, TTrainingPointSet>
-::SVMPointSetModelEstimator(void) :  SVMModelEstimator<ITK_TYPENAME TInputPointSet::PixelType::value_type,
-      ITK_TYPENAME TTrainingPointSet::PixelType>()
+::SVMPointSetModelEstimator(void) :  SVMModelEstimator<typename TInputPointSet::PixelType::value_type,
+      typename TTrainingPointSet::PixelType>()
 {
   this->SetNumberOfRequiredInputs(2);
 }

@@ -61,7 +61,7 @@ template <class TInputImage, class TCoordRep = double>
 class ITK_EXPORT HuMomentsImageFunction :
 public itk::ImageFunction< TInputImage,
     itk::FixedArray<
-    ITK_TYPENAME itk::NumericTraits<typename TInputImage::PixelType>::RealType,
+    typename itk::NumericTraits<typename TInputImage::PixelType>::RealType,
     7 >,
     TCoordRep >
 {
@@ -70,7 +70,7 @@ public:
   typedef HuMomentsImageFunction                                          Self;
   typedef itk::ImageFunction< TInputImage,
                    itk::FixedArray<
-                   ITK_TYPENAME itk::NumericTraits<
+                   typename itk::NumericTraits<
                    typename TInputImage::PixelType>::RealType,
                    7 >,
                    TCoordRep >                                            Superclass;

@@ -108,10 +108,10 @@ template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ImageToLuminanceImageFilter :
   public UnaryImageFunctorWithVectorImageFilter<TInputImage,
       TOutputImage,
-      ITK_TYPENAME Functor::ImageToLuminanceImageFunctor<ITK_TYPENAME
+      typename Functor::ImageToLuminanceImageFunctor<typename
           TInputImage::
           InternalPixelType,
-          ITK_TYPENAME
+          typename
           TOutputImage::
           InternalPixelType> >
 {
@@ -123,8 +123,8 @@ public:
   /** "typedef" to simplify the variables definition and the declaration. */
   typedef TInputImage  InputImageType;
   typedef TOutputImage OutputImageType;
-  typedef typename Functor::ImageToLuminanceImageFunctor<ITK_TYPENAME InputImageType::InternalPixelType,
-      ITK_TYPENAME OutputImageType::InternalPixelType> FunctorType;
+  typedef typename Functor::ImageToLuminanceImageFunctor<typename InputImageType::InternalPixelType,
+      typename OutputImageType::InternalPixelType> FunctorType;
 
   /** "typedef" for standard classes. */
   typedef ImageToLuminanceImageFilter                                                          Self;

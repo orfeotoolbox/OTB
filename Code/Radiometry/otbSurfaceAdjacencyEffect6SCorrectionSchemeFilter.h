@@ -151,17 +151,17 @@ template <class TInputImage, class TOutputImage>
 class ITK_EXPORT SurfaceAdjacencyEffect6SCorrectionSchemeFilter :
   public UnaryFunctorNeighborhoodImageFilter<TInputImage,
       TOutputImage,
-      ITK_TYPENAME Functor::ComputeNeighborhoodContributionFunctor<itk::
+      typename Functor::ComputeNeighborhoodContributionFunctor<itk::
           ConstNeighborhoodIterator
           <TInputImage>,
-          ITK_TYPENAME
+          typename
           TOutputImage
           ::PixelType> >
 {
 public:
   /** "typedef" to simplify the variables definition and the declaration. */
   typedef Functor::ComputeNeighborhoodContributionFunctor<itk::ConstNeighborhoodIterator<TInputImage>,
-      ITK_TYPENAME TOutputImage::PixelType> FunctorType;
+      typename TOutputImage::PixelType> FunctorType;
 
   /** "typedef" for standard classes. */
   typedef SurfaceAdjacencyEffect6SCorrectionSchemeFilter                              Self;

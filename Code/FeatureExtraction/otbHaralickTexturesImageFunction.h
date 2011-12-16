@@ -69,7 +69,7 @@ template <class TInputImage, class TCoordRep = double >
 class ITK_EXPORT HaralickTexturesImageFunction :
   public itk::ImageFunction< TInputImage,
     itk::FixedArray<
-    ITK_TYPENAME itk::NumericTraits<typename TInputImage::PixelType>::RealType,
+    typename itk::NumericTraits<typename TInputImage::PixelType>::RealType,
     8 >,
     TCoordRep >
 {
@@ -78,7 +78,7 @@ public:
   typedef HaralickTexturesImageFunction                                   Self;
   typedef itk::ImageFunction< TInputImage,
                    itk::FixedArray<
-                   ITK_TYPENAME itk::NumericTraits<
+                   typename itk::NumericTraits<
                    typename TInputImage::PixelType>::RealType,
                    8 >,
                    TCoordRep >                                            Superclass;

@@ -54,9 +54,9 @@ class ITK_EXPORT LHMIChangeDetector :
   public BinaryFunctorNeighborhoodImageFilter<
       TInputImage1, TInputImage2, TOutputImage,
       Functor::LHMI<
-          ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage1>,
-          ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage2>,
-          ITK_TYPENAME TOutputImage::PixelType> >
+          typename itk::ConstNeighborhoodIterator<TInputImage1>,
+          typename itk::ConstNeighborhoodIterator<TInputImage2>,
+          typename TOutputImage::PixelType> >
 {
 public:
   /** Standard class typedefs. */
@@ -64,9 +64,9 @@ public:
   typedef BinaryFunctorNeighborhoodImageFilter<
       TInputImage1, TInputImage2, TOutputImage,
       Functor::LHMI<
-          ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage1>,
-          ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage2>,
-          ITK_TYPENAME TOutputImage::PixelType>
+          typename itk::ConstNeighborhoodIterator<TInputImage1>,
+          typename itk::ConstNeighborhoodIterator<TInputImage2>,
+          typename TOutputImage::PixelType>
       >  Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;

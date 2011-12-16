@@ -94,7 +94,7 @@ template<class TInputImage, class TBoundaryCondition = itk::ConstantBoundaryCond
       double, class TInputInterpolator = double, class TOutputInterpolator = double>
 class ITK_EXPORT WindowedSincInterpolateImageLanczosFunction :
   public WindowedSincInterpolateImageFunctionBase<TInputImage,
-      ITK_TYPENAME Function::LanczosWindowFunction<TInputInterpolator,
+      typename Function::LanczosWindowFunction<TInputInterpolator,
           TOutputInterpolator>,
       TBoundaryCondition,
       TCoordRep>
@@ -103,7 +103,7 @@ public:
   /** Standard class typedefs. */
   typedef WindowedSincInterpolateImageLanczosFunction Self;
   typedef WindowedSincInterpolateImageFunctionBase<TInputImage,
-      ITK_TYPENAME Function::LanczosWindowFunction<TInputInterpolator,
+      typename Function::LanczosWindowFunction<TInputInterpolator,
           TOutputInterpolator>,
       TBoundaryCondition,
       TCoordRep>

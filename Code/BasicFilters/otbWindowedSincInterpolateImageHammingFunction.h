@@ -84,7 +84,7 @@ template<class TInputImage, class TBoundaryCondition = itk::ConstantBoundaryCond
       double, class TInputInterpolator = double, class TOutputInterpolator = double>
 class ITK_EXPORT WindowedSincInterpolateImageHammingFunction :
   public WindowedSincInterpolateImageFunctionBase<TInputImage,
-      ITK_TYPENAME Function::HammingWindowFunction<TInputInterpolator,
+      typename Function::HammingWindowFunction<TInputInterpolator,
           TOutputInterpolator>,
       TBoundaryCondition,
       TCoordRep>
@@ -93,7 +93,7 @@ public:
   /** Standard class typedefs. */
   typedef WindowedSincInterpolateImageHammingFunction Self;
   typedef WindowedSincInterpolateImageFunctionBase<TInputImage,
-      ITK_TYPENAME Function::HammingWindowFunction<TInputInterpolator,
+      typename Function::HammingWindowFunction<TInputInterpolator,
           TOutputInterpolator>,
       TBoundaryCondition,
       TCoordRep>

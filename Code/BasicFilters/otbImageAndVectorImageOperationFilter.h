@@ -120,10 +120,10 @@ class ITK_EXPORT ImageAndVectorImageOperationFilter :
   public itk::BinaryFunctorImageFilter<TInputImage,
       TVectorInputImage,
       TOutputImage,
-      Functor::ImageAndVectorImageOperationFunctor<ITK_TYPENAME TInputImage::PixelType,
-          ITK_TYPENAME TVectorInputImage::
+      Functor::ImageAndVectorImageOperationFunctor<typename TInputImage::PixelType,
+          typename TVectorInputImage::
           PixelType,
-          ITK_TYPENAME TOutputImage::
+          typename TOutputImage::
           PixelType> >
 //ImageToImageFilter< TVectorInputImage, TOutputImage >
 {
@@ -132,9 +132,9 @@ public:
   /** Standard class typedefs. */
   typedef ImageAndVectorImageOperationFilter Self;
   //typedef itk::ImageToImageFilter<TVectorInputImage, TOutputImage> Superclass;
-  typedef Functor::ImageAndVectorImageOperationFunctor<ITK_TYPENAME TInputImage::PixelType,
-      ITK_TYPENAME TVectorInputImage::PixelType,
-      ITK_TYPENAME TOutputImage::PixelType> FunctorType;
+  typedef Functor::ImageAndVectorImageOperationFunctor<typename TInputImage::PixelType,
+      typename TVectorInputImage::PixelType,
+      typename TOutputImage::PixelType> FunctorType;
   typedef itk::BinaryFunctorImageFilter<TInputImage, TVectorInputImage, TOutputImage, FunctorType> Superclass;
   typedef itk::SmartPointer<Self>                                                                  Pointer;
   typedef itk::SmartPointer<const Self>                                                            ConstPointer;

@@ -57,7 +57,7 @@ template <class TInputImage, class TCoordRep = double>
 class ITK_EXPORT FourierMellinDescriptorsImageFunction :
     public itk::ImageFunction <TInputImage,
                                std::vector< std::vector<
-                               ITK_TYPENAME itk::NumericTraits<
+                               typename itk::NumericTraits<
                                typename TInputImage::PixelType>::RealType > >,
                                TCoordRep>
 {
@@ -66,7 +66,7 @@ public:
   typedef FourierMellinDescriptorsImageFunction                                Self;
   typedef itk::ImageFunction<TInputImage,
                              std::vector< std::vector<
-                             ITK_TYPENAME itk::NumericTraits<
+                             typename itk::NumericTraits<
                              typename TInputImage::PixelType>::RealType > >,
                              TCoordRep>                                        Superclass;
   typedef itk::SmartPointer<Self>                                              Pointer;

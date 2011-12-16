@@ -120,7 +120,7 @@ private:
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ReciprocalCovarianceToCoherencyDegreeImageFilter :
    public UnaryFunctorImageFilter<TInputImage, TOutputImage, Functor::ReciprocalCovarianceToCoherencyDegreeFunctor<
-    ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
+    typename TInputImage::PixelType, typename TOutputImage::PixelType> >
 {
 public:
    /** Standard class typedefs. */

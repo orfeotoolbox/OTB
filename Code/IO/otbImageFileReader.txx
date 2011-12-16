@@ -145,11 +145,11 @@ ImageFileReader<TOutputImage>
 
   this->m_ImageIO->SetIORegion(ioRegion);
 
-  typedef itk::DefaultConvertPixelTraits<ITK_TYPENAME TOutputImage::IOPixelType> ConvertIOPixelTraits;
-  typedef itk::DefaultConvertPixelTraits<ITK_TYPENAME TOutputImage::PixelType> ConvertPixelTraits;
+  typedef itk::DefaultConvertPixelTraits<typename TOutputImage::IOPixelType> ConvertIOPixelTraits;
+  typedef itk::DefaultConvertPixelTraits<typename TOutputImage::PixelType> ConvertPixelTraits;
 
   if (this->m_ImageIO->GetComponentTypeInfo()
-      == typeid(ITK_TYPENAME ConvertPixelTraits::ComponentType)
+      == typeid(typename ConvertPixelTraits::ComponentType)
       && (this->m_ImageIO->GetNumberOfComponents()
           == ConvertIOPixelTraits::GetNumberOfComponents()))
     {

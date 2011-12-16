@@ -45,13 +45,13 @@ namespace otb
  */
 template <class TInputImage, class TTrainingImage>
 class ITK_EXPORT SVMImageModelEstimator :
-  public SVMModelEstimator<ITK_TYPENAME TInputImage::InternalPixelType, ITK_TYPENAME TTrainingImage::PixelType>
+  public SVMModelEstimator<typename TInputImage::InternalPixelType, typename TTrainingImage::PixelType>
 {
 public:
   /** Standard class typedefs. */
   typedef SVMImageModelEstimator Self;
-  typedef SVMModelEstimator<ITK_TYPENAME TInputImage::PixelType::ComponentType,
-      ITK_TYPENAME TTrainingImage::PixelType>
+  typedef SVMModelEstimator<typename TInputImage::PixelType::ComponentType,
+      typename TTrainingImage::PixelType>
   Superclass;
 
   typedef itk::SmartPointer<Self>       Pointer;

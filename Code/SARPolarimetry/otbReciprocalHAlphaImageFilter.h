@@ -214,7 +214,7 @@ private:
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ReciprocalHAlphaImageFilter :
    public otb::UnaryFunctorImageFilter<TInputImage, TOutputImage, Functor::ReciprocalHAlphaFunctor<
-    ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
+    typename TInputImage::PixelType, typename TOutputImage::PixelType> >
 {
 public:
    /** Standard class typedefs. */

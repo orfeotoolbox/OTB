@@ -38,13 +38,13 @@ namespace otb
  */
 template <class TInputImage, class TFunctor, class TCoordRep = float>
 class ITK_EXPORT TextureImageFunction :
-  public itk::ImageFunction<TInputImage, ITK_TYPENAME itk::NumericTraits<typename TInputImage::PixelType>::RealType,
+  public itk::ImageFunction<TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::RealType,
       TCoordRep>
 {
 public:
   /** Standard class typedefs. */
   typedef TextureImageFunction Self;
-  typedef itk::ImageFunction<TInputImage, ITK_TYPENAME itk::NumericTraits<typename TInputImage::PixelType>::RealType,
+  typedef itk::ImageFunction<TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::RealType,
       TCoordRep> Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;

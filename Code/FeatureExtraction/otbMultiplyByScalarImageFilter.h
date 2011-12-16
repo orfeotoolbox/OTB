@@ -67,8 +67,8 @@ class ITK_EXPORT MultiplyByScalarImageFilter :
   public itk::UnaryFunctorImageFilter<
       TInputImage, TOutputImage,
       Functor::MultiplyByScalar<
-          ITK_TYPENAME TInputImage::PixelType,
-          ITK_TYPENAME TOutputImage::PixelType> >
+          typename TInputImage::PixelType,
+          typename TOutputImage::PixelType> >
 {
 public:
   /** Standard class typedefs. */
@@ -77,8 +77,8 @@ public:
       TInputImage,
       TOutputImage,
       Functor::MultiplyByScalar<
-          ITK_TYPENAME TInputImage::PixelType,
-          ITK_TYPENAME TOutputImage::PixelType> > Superclass;
+          typename TInputImage::PixelType,
+          typename TOutputImage::PixelType> > Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 

@@ -146,14 +146,14 @@ private:
 template <class TInputImage, class TOutputImage = TInputImage>
 class ITK_EXPORT ShiftScaleVectorImageFilter :
     public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
-                  Functor::VectorShiftScale<ITK_TYPENAME TInputImage::PixelType,
-                                            ITK_TYPENAME TOutputImage::PixelType> >
+                  Functor::VectorShiftScale<typename TInputImage::PixelType,
+                                            typename TOutputImage::PixelType> >
 {
 public:
   /** Standard class typedefs. */
   typedef ShiftScaleVectorImageFilter                                        Self;
-  typedef Functor::VectorShiftScale< ITK_TYPENAME TInputImage::PixelType,
-                                      ITK_TYPENAME TOutputImage::PixelType>
+  typedef Functor::VectorShiftScale< typename TInputImage::PixelType,
+                                      typename TOutputImage::PixelType>
                                                                              FunctorType;
   typedef itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
                                        FunctorType >                         Superclass;

@@ -125,9 +125,9 @@ template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ReflectanceToSurfaceReflectanceImageFilter :
   public UnaryImageFunctorWithVectorImageFilter<TInputImage,
       TOutputImage,
-      ITK_TYPENAME Functor::ReflectanceToSurfaceReflectanceImageFunctor<
-          ITK_TYPENAME TInputImage::InternalPixelType,
-          ITK_TYPENAME
+      typename Functor::ReflectanceToSurfaceReflectanceImageFunctor<
+          typename TInputImage::InternalPixelType,
+          typename
           TOutputImage::InternalPixelType> >
 {
 public:
@@ -139,8 +139,8 @@ public:
   typedef TInputImage  InputImageType;
   typedef TOutputImage OutputImageType;
 
-  typedef typename Functor::ReflectanceToSurfaceReflectanceImageFunctor<ITK_TYPENAME InputImageType::InternalPixelType,
-      ITK_TYPENAME OutputImageType::InternalPixelType>
+  typedef typename Functor::ReflectanceToSurfaceReflectanceImageFunctor<typename InputImageType::InternalPixelType,
+      typename OutputImageType::InternalPixelType>
   FunctorType;
   /** "typedef" for standard classes. */
   typedef ReflectanceToSurfaceReflectanceImageFilter                                           Self;

@@ -160,8 +160,8 @@ template <class TInputImage, class TOutputImage >
 class ITK_EXPORT SurfaceReflectanceToReflectanceFilter :
       public UnaryImageFunctorWithVectorImageFilter< TInputImage,
       TOutputImage,
-      ITK_TYPENAME Functor::ReflectanceToSurfaceReflectanceImageFunctor< ITK_TYPENAME TInputImage::InternalPixelType,
-      ITK_TYPENAME TOutputImage::InternalPixelType > >
+      typename Functor::ReflectanceToSurfaceReflectanceImageFunctor< typename TInputImage::InternalPixelType,
+      typename TOutputImage::InternalPixelType > >
 {
 public:
   /** Extract input and output images dimensions.*/
@@ -171,8 +171,8 @@ public:
   /** "typedef" to simplify the variables definition and the declaration. */
   typedef TInputImage         InputImageType;
   typedef TOutputImage        OutputImageType;
-  typedef typename Functor::ReflectanceToSurfaceReflectanceImageFunctor<ITK_TYPENAME InputImageType::InternalPixelType,
-  ITK_TYPENAME OutputImageType::InternalPixelType> FunctorType;
+  typedef typename Functor::ReflectanceToSurfaceReflectanceImageFunctor<typename InputImageType::InternalPixelType,
+  typename OutputImageType::InternalPixelType> FunctorType;
   /** "typedef" for standard classes. */
   typedef SurfaceReflectanceToReflectanceFilter                                                     Self;
   typedef UnaryImageFunctorWithVectorImageFilter< InputImageType, OutputImageType, FunctorType >    Superclass;
