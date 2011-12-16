@@ -39,8 +39,10 @@ bool
 PleiadesImageMetadataInterface::CanRead() const
 {
   std::string sensorID = GetSensorID();
-  if (sensorID.find("PHR") != std::string::npos) return true;
-  else return false;
+  if (sensorID.find("PHR") != std::string::npos)
+      return true;
+  else
+      return false;
 }
 
 std::string
@@ -125,28 +127,12 @@ PleiadesImageMetadataInterface::GetSolarIrradiance() const
   outputValuesVariableLengthVector.SetSize(outputValues.size());
   outputValuesVariableLengthVector.Fill(0);
 
-  if (outputValues.size() == 1)
+  // TODO MSD check with a real product the correct order of the value
+  for (unsigned int i = 0; i < outputValues.size(); ++i)
     {
-    //this is a PAN image
-    outputValuesVariableLengthVector[0] = outputValues[0];
+    outputValuesVariableLengthVector[i] = outputValues[i];
     }
-  else if (outputValues.size() == 3)
-    {
-    outputValuesVariableLengthVector[0] = outputValues[0];
-    outputValuesVariableLengthVector[1] = outputValues[1];
-    outputValuesVariableLengthVector[2] = outputValues[2];
-    }
-  else if (outputValues.size() == 4)
-    {
-    outputValuesVariableLengthVector[0] = outputValues[0];
-    outputValuesVariableLengthVector[1] = outputValues[1];
-    outputValuesVariableLengthVector[2] = outputValues[2];
-    outputValuesVariableLengthVector[3] = outputValues[3];
-    }
-  else
-    {
-    itkExceptionMacro("Invalid Solar Irradiance");
-    }
+
 
   return outputValuesVariableLengthVector;
 }
@@ -484,28 +470,13 @@ PleiadesImageMetadataInterface
   VariableLengthVectorType outputValuesVariableLengthVector;
   outputValuesVariableLengthVector.SetSize(outputValues.size());
   outputValuesVariableLengthVector.Fill(0);
-  if (outputValues.size() == 1)
+
+  // TODO MSD check with a real product the correct order of the value
+  for (unsigned int i = 0; i < outputValues.size(); ++i)
     {
-    //this is a PAN image
-    outputValuesVariableLengthVector[0] = outputValues[0];
+    outputValuesVariableLengthVector[i] = outputValues[i];
     }
-  else if (outputValues.size() == 3)
-    {
-    outputValuesVariableLengthVector[0] = outputValues[0];
-    outputValuesVariableLengthVector[1] = outputValues[1];
-    outputValuesVariableLengthVector[2] = outputValues[2];
-    }
-  else if (outputValues.size() == 4)
-    {
-    outputValuesVariableLengthVector[0] = outputValues[0];
-    outputValuesVariableLengthVector[1] = outputValues[1];
-    outputValuesVariableLengthVector[2] = outputValues[2];
-    outputValuesVariableLengthVector[3] = outputValues[3];
-    }
-  else
-    {
-    itkExceptionMacro("Invalid Physical Bias");
-    }
+
 
   return outputValuesVariableLengthVector;
 }
@@ -543,27 +514,11 @@ PleiadesImageMetadataInterface
   VariableLengthVectorType outputValuesVariableLengthVector;
   outputValuesVariableLengthVector.SetSize(outputValues.size());
   outputValuesVariableLengthVector.Fill(0);
-  if (outputValues.size() == 1)
+
+  // TODO MSD check with a real product the correct order of the value
+  for (unsigned int i = 0; i < outputValues.size(); ++i)
     {
-    //this is a PAN image
-    outputValuesVariableLengthVector[0] = outputValues[0];
-    }
-  else if (outputValues.size() == 3)
-    {
-    outputValuesVariableLengthVector[0] = outputValues[0];
-    outputValuesVariableLengthVector[1] = outputValues[1];
-    outputValuesVariableLengthVector[2] = outputValues[2];
-    }
-  else if (outputValues.size() == 4)
-    {
-    outputValuesVariableLengthVector[0] = outputValues[0];
-    outputValuesVariableLengthVector[1] = outputValues[1];
-    outputValuesVariableLengthVector[2] = outputValues[2];
-    outputValuesVariableLengthVector[3] = outputValues[3];
-    }
-  else
-    {
-    itkExceptionMacro("Invalid Physical Gain");
+    outputValuesVariableLengthVector[i] = outputValues[i];
     }
 
   return outputValuesVariableLengthVector;
@@ -590,8 +545,9 @@ PleiadesImageMetadataInterface::GetSatElevation() const
     return 0;
     }
 
+  // MSD: for the moment take only topCenter value
   std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.incident_angle");
-  double value = 90 - atof(valueString.c_str()); // TODO MSD ????
+  double value = atof(valueString.c_str());
   return value;
 }
 
@@ -616,8 +572,9 @@ PleiadesImageMetadataInterface::GetSatAzimuth() const
     return 0;
     }
 
+  // MSD: for the moment take only topCenter value
   std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.scene_orientation");
-  double satAz = 90-  atof(valueString.c_str());
+  double satAz = atof(valueString.c_str());
 
   return satAz;
 }
@@ -649,7 +606,7 @@ PleiadesImageMetadataInterface
   if (nbBands == 1)
     {
     wavel.SetSize(1);
-    wavel.Fill(-500.0); // TODO MSD Fill this value !!!
+    wavel.Fill(-500.0); // TODO MSD Fill this value when we know it!!!
     }
   else if (nbBands > 1 && nbBands < 5)
     {
@@ -685,17 +642,15 @@ PleiadesImageMetadataInterface
   wavel.Fill(0.);
 
   int nbBands = this->GetNumberOfBands();
-  std::string sensorId = this->GetSensorID();
 
   // Panchromatic case
   if (nbBands == 1)
     {
     wavel.SetSize(1);
-    wavel.Fill(-500.0); // TODO MSD Fill this value !!!
+    wavel.Fill(-500.0); // TODO MSD Fill this value when we know it!!!
     }
   else if (nbBands > 1 && nbBands < 5)
     {
-    //FIXME is that supposed to correspond to the bands in the files?
     wavel.SetSize(4);
     wavel[0] = 0.540;
     wavel[1] = 0.600;
@@ -707,6 +662,7 @@ PleiadesImageMetadataInterface
   return wavel;
 }
 
+// TODO MSD need to update this function
 unsigned int
 PleiadesImageMetadataInterface
 ::BandIndexToWavelengthPosition(unsigned int i) const
@@ -721,10 +677,58 @@ std::vector<unsigned int>
 PleiadesImageMetadataInterface
 ::GetDefaultDisplay() const
 {
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
+    {
+    itkExceptionMacro(<< "Invalid Metadata, no Pleiades Image");
+    }
+
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+    {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+    }
+
+  int nbBands = this->GetNumberOfBands();
+
+  std::string key = "support_data.band_name_list";
   std::vector<unsigned int> rgb(3);
-  rgb[0] = 0;
-  rgb[1] = 1;
-  rgb[2] = 2;
+
+  // TODO MSD remove this limitation when we get a real pleiades image
+  bool realProduct = false;
+  if (realProduct)
+    {
+    if (imageKeywordlist.HasKey(key) && (nbBands > 1))
+      {
+      std::string keywordStringBandNameList = imageKeywordlist.GetMetadataByKey(key);
+      std::vector<std::string> bandNameList;
+      boost::trim(keywordStringBandNameList);
+      boost::split(bandNameList, keywordStringBandNameList, boost::is_any_of(" "));
+
+      for (unsigned int i = 0; i < nbBands && i < 3; i++)
+        {
+        size_t found;
+        found = bandNameList[i].find_first_not_of("B");
+        rgb[i] = lexical_cast<int> (bandNameList[i].at(found));
+        }
+      }
+    else
+      {
+      // Default values
+      rgb[0] = 2;
+      rgb[1] = 1;
+      rgb[2] = 0;
+      }
+    }
+  else
+    {
+    // Default values for simulation product
+    rgb[0] = 0;
+    rgb[1] = 1;
+    rgb[2] = 2;
+    }
+
   return rgb;
 }
 
@@ -732,6 +736,7 @@ PleiadesImageMetadataInterface::WavelengthSpectralBandVectorType
 PleiadesImageMetadataInterface
 ::GetSpectralSensitivity()  const
 {
+  // TODO MSD what must do this function ???
   //TODO tabulate spectral responses
   WavelengthSpectralBandVectorType wavelengthSpectralBand = InternalWavelengthSpectralBandVectorType::New();
 

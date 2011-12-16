@@ -329,13 +329,11 @@ void ossimPleiadesDimapSupportData::printInfo(ostream& os) const
 bool ossimPleiadesDimapSupportData::parseXmlFile(const ossimFilename& file)
 {
    static const char MODULE[] = "ossimPleiadesDimapSupportData::parseXmlFile";
-   traceDebug.setTraceFlag(true);
+   //traceDebug.setTraceFlag(true);
 
    if(traceDebug())
    {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << MODULE << " DEBUG:"
-         << "\nFile: " << file << std::endl;
+      ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " DEBUG:" << "\nFile: " << file << std::endl;
    }
 
    if (allMetadataRead())
@@ -743,6 +741,17 @@ bool ossimPleiadesDimapSupportData::saveState(ossimKeywordlist& kwl,
            theNumBands,
            true);
 
+   tempString = "";
+   for(idx = 0; idx <  theBandOrder.size(); ++idx)
+   {
+      tempString += (theBandOrder[idx] + " ");
+   }
+
+   kwl.add(prefix,
+           "band_name_list",
+           tempString,
+           true);
+
    kwl.add(prefix,
            "image_id",
            theImageID,
@@ -940,6 +949,20 @@ bool ossimPleiadesDimapSupportData::loadState(const ossimKeywordlist& kwl,
    theRefImagePoint  = createDpt(kwl.find(prefix, "reference_image_point"));
 
    theNumBands        = ossimString(kwl.find(prefix, ossimKeywordNames::NUMBER_BANDS_KW)).toUInt32();
+
+   theBandOrder.resize(theNumBands);
+   tempString = kwl.find(prefix,"band_name_list");
+   if(tempString != "")
+   {
+      std::istringstream in(tempString.string());
+      ossimString tempValue;
+      for(idx = 0; idx < theBandOrder.size();++idx)
+      {
+         in >> tempValue.string();
+         theBandOrder[idx] = tempValue.toDouble();
+      }
+   }
+
    theAcquisitionDate = kwl.find(prefix, ossimKeywordNames::IMAGE_DATE_KW);
    theProductionDate  = kwl.find(prefix, "production_date");
    theImageID         = kwl.find(prefix, "image_id");
@@ -1578,7 +1601,6 @@ bool ossimPleiadesDimapSupportData::parseRPCMetadata(
 bool ossimPleiadesDimapSupportData::parseMetadataIdentification(ossimRefPtr<ossimXmlDocument> xmlDocument)
 {
   static const char MODULE[] = "ossimPleiadesDimapSupportData::parseMetadataIdentification";
-  traceDebug.setTraceFlag(true);
 
   vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
   ossimString xpath, nodeValue;
@@ -1597,7 +1619,10 @@ bool ossimPleiadesDimapSupportData::parseMetadataIdentification(ossimRefPtr<ossi
     // with the last specification. Should be remove when first data will be available and sample
     // replaced.
     theXmlDocumentRoot = "/PHR_DIMAP_Document";
-    ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG:\nTry to use the old root: " << theXmlDocumentRoot << endl;
+    if (traceDebug())
+    {
+      ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG:\nTry to use the old root: " << theXmlDocumentRoot << endl;
+    }
 
     xml_nodes.clear();
     xpath = "/Metadata_Identification/METADATA_FORMAT";
@@ -1699,7 +1724,6 @@ bool ossimPleiadesDimapSupportData::parseGeoposition(ossimRefPtr<ossimXmlDocumen
 bool ossimPleiadesDimapSupportData::parseProcessingInformation(ossimRefPtr<ossimXmlDocument> xmlDocument)
 {
   static const char MODULE[] = "ossimPleiadesDimapSupportData::parseProcessingInformation";
-  traceDebug.setTraceFlag(true);
 
   vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
   ossimString xpath, nodeValue;
@@ -1730,7 +1754,6 @@ bool ossimPleiadesDimapSupportData::parseProcessingInformation(ossimRefPtr<ossim
 bool  ossimPleiadesDimapSupportData::parseRasterData(ossimRefPtr<ossimXmlDocument> xmlDocument)
 {
   static const char MODULE[] = "ossimPleiadesDimapSupportData::parseRasterData";
-  traceDebug.setTraceFlag(true);
   vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
   ossimString xpath, nodeValue;
 

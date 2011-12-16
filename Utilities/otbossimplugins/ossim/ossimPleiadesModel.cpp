@@ -51,6 +51,13 @@ ossimPleiadesModel::ossimPleiadesModel()
    :ossimRpcModel      (),
     theSupportData        (0)
 {
+  for (unsigned int i = 0; i < 20; i++)
+    {
+    theLineDenCoef[i] = 0.0;
+    theLineNumCoef[i] = 0.0;
+    theSampNumCoef[i] = 0.0;
+    theSampDenCoef[i] = 0.0;
+    }
 }
 
 //*************************************************************************************************
@@ -145,7 +152,7 @@ bool
 ossimPleiadesModel::open(const ossimFilename& file)
 {
   static const char MODULE[] = "ossimPleiadesModel::open";
-  traceDebug.setTraceFlag(true);
+  //traceDebug.setTraceFlag(true);
 
   if (traceDebug())
     {
@@ -214,6 +221,8 @@ ossimPleiadesModel::open(const ossimFilename& file)
     // Get the processing level (ORTHO or SENSOR or perhaps MOSAIC ?)
     processingLevel = theSupportData->getProcessingLevel();
     }
+  else
+    return false;
 
   // Parse the RPC xml file if necessary
   if (RPCxmlFile.exists() && (processingLevel == "SENSOR"))
