@@ -43,7 +43,7 @@ void QtLogOutput::Flush()
 /** Write to a buffer */
 void QtLogOutput::Write(double timestamp)
 {
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss<<timestamp;
   emit NewContentLog( QString(oss.str().c_str()) );
 }
@@ -59,7 +59,7 @@ void QtLogOutput::Write(std::string const &content)
 /** Write to a buffer */
 void QtLogOutput::Write(std::string const &content, double timestamp)
 {
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss<<timestamp << "  :  " << content;
   emit NewContentLog( QString(oss.str().c_str()) );
 }

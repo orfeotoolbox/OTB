@@ -74,7 +74,7 @@ void QtWidgetInputVectorDataParameter::SelectFile()
       m_Input->setText(fileDialog.selectedFiles().at(0));
     else
       {
-      itk::OStringStream oss;
+      std::ostringstream oss;
       oss << "The given file " << fileDialog.selectedFiles().at(0).toStdString() << " is not valid.";
       this->GetModel()->SendLogWARNING( oss.str() );
       }

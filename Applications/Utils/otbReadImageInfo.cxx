@@ -199,7 +199,7 @@ private:
       SetParameterString("projectionref", metadataInterface->GetProjectionRef());
       
       // Format acquisition time
-      itk::OStringStream osstime;
+      std::ostringstream osstime;
       osstime<<metadataInterface->GetYear()<<"-";
       if(metadataInterface->GetMonth()<10)
         osstime<<"0";
@@ -218,7 +218,7 @@ private:
 
       if ( IsParameterEnabled("keywordlist") )
        {
-       itk::OStringStream osskeywordlist;
+       std::ostringstream osskeywordlist;
        osskeywordlist<<metadataInterface->GetImageKeywordlist() << std::endl;
        SetParameterString("keyword", osskeywordlist.str());
        }
@@ -247,7 +247,7 @@ private:
         {
         gcp_ids.push_back(metadataInterface->GetGCPId(gcpIdx));
         gcp_infos.push_back(metadataInterface->GetGCPInfo(gcpIdx));
-        itk::OStringStream oss;
+        std::ostringstream oss;
         oss << "[" << metadataInterface->GetGCPCol(gcpIdx) << ", " << metadataInterface->GetGCPRow(gcpIdx) << "]";
         gcp_imcoord.push_back(oss.str());
         oss.str("");

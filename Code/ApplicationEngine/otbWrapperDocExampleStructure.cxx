@@ -123,7 +123,7 @@ DocExampleStructure::GenerateCLExample( unsigned int exId )
     return "";
     }
   
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss << "otbcli_" << m_ApplicationName << " ";
   
   for (ParametersVectorType::const_iterator it = m_ParameterList.at(exId).begin();
@@ -146,7 +146,7 @@ DocExampleStructure::GenerateCLExample( unsigned int exId )
 std::string
 DocExampleStructure::GenerateCLExample()
 {
-  itk::OStringStream oss;
+  std::ostringstream oss;
   for( unsigned int exId=0; exId<m_NbOfExamples; exId++)
     {
     if( !m_ExampleCommentList[exId].empty() )
@@ -168,7 +168,7 @@ DocExampleStructure::GenerateHtmlExample( unsigned int exId )
     return "";
     }
   
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss << "<ul>";
 
   for (ParametersVectorType::const_iterator it = m_ParameterList.at(exId).begin();
@@ -195,7 +195,7 @@ DocExampleStructure::GenerateHtmlExample( unsigned int exId )
 std::string
 DocExampleStructure::GenerateHtmlExample()
 {
-  itk::OStringStream oss;
+  std::ostringstream oss;
   if( m_NbOfExamples>1 )
     oss << "<ul>";
   

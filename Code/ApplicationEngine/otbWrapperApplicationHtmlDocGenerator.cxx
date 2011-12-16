@@ -78,7 +78,7 @@ ApplicationHtmlDocGenerator::~ApplicationHtmlDocGenerator()
 void
 ApplicationHtmlDocGenerator::GenerateDoc( const Application::Pointer app, std::string & val, const bool showKey )
 {
-  itk::OStringStream oss;
+  std::ostringstream oss;
   
   oss << "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd\">";
   oss << "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">";
@@ -163,7 +163,7 @@ ApplicationHtmlDocGenerator::GenerateDoc(const Application::Pointer app, const s
 
 void ApplicationHtmlDocGenerator::GetDocParameters( const Application::Pointer app, std::string & val, const bool showKey)
 {
-  itk::OStringStream oss;
+  std::ostringstream oss;
   const std::vector<std::string> appKeyList = app->GetParametersKeys( false );
   const unsigned int nbOfParam = appKeyList.size();
   
@@ -219,7 +219,7 @@ void ApplicationHtmlDocGenerator::GetDocParameterGroup( const Application::Point
   ParameterGroup * group = dynamic_cast<ParameterGroup *>(paramGr);
   const std::vector<std::string> appKeyList = group->GetParametersKeys( false );
   unsigned int nbOfParam = appKeyList.size();
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss<<"<ul>";
 
   for( unsigned int i=0; i<nbOfParam; i++ )
@@ -266,7 +266,7 @@ void ApplicationHtmlDocGenerator::GetDocParameterChoice( const Application::Poin
   ChoiceParameter * choice = dynamic_cast<ChoiceParameter *>(paramCh);
   const std::vector<std::string> appKeyList = choice->GetChoiceKeys();
   unsigned int nbOfParam = choice->GetNbChoices();
-  itk::OStringStream oss;
+  std::ostringstream oss;
   oss<<"<ul>";
   
   for( unsigned int i=0; i<nbOfParam; i++ )

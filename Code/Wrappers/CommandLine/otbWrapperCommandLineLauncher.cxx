@@ -815,7 +815,7 @@ void CommandLineLauncher::DisplayOutputParameters()
   if( paramList.size() == 0 )
     return;
 
-  itk::OStringStream oss;
+  std::ostringstream oss;
   for( unsigned int i=0; i<paramList.size(); i++)
     {
     oss << paramList[i].first;

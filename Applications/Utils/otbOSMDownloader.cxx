@@ -188,7 +188,7 @@ private:
     while(it != keymap.end())
       {
       otbAppLogINFO(" Key : "<< (*it).first<< " value : ");
-      itk::OStringStream oss;
+      std::ostringstream oss;
       for(unsigned int i = 0; i < (*it).second.size(); i++)
         {
         oss.str();
