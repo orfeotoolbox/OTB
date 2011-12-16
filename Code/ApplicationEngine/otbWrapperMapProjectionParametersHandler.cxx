@@ -43,7 +43,7 @@ void MapProjectionParametersHandler::AddMapProjectionParameters( Application::Po
   app->SetMinimumParameterIntValue(oss.str(), 1);
   
   oss.str("");
-  oss <<key<<".utm" <<".hem";
+  oss <<key<<".utm" <<".northhem";
   app->AddParameter(ParameterType_Empty, oss.str(),  "Northern Hemisphere");
   app->SetParameterDescription(oss.str(),"The transverse mercator projections are defined by their zone number as well as the hemisphere. Activate this parameter if your image is in the northern hemisphere.");
 
@@ -117,7 +117,7 @@ const std::string MapProjectionParametersHandler::GetProjectionRefFromChoice(con
   zoneKey << key<<".utm.zone";
 
   std::ostringstream hemKey;
-  hemKey << key<<".utm.hem";
+  hemKey << key<<".utm.northhem";
   
   std::ostringstream  epsgKey;
   epsgKey << key <<".epsg.code";
@@ -134,10 +134,10 @@ const std::string MapProjectionParametersHandler::GetProjectionRefFromChoice(con
     utmProjection->SetZone(app->GetParameterInt(zoneKey.str()));
 
     // Set the hem
-    std::string hem = "N";
+    char hem = 'N';
     if (!app->IsParameterEnabled(hemKey.str()))
-      hem = "S";
-    utmProjection->SetHemisphere(hem[0]);
+      hem = 'S';
+    utmProjection->SetHemisphere(hem);
         
     // Get the projection ref
     return utmProjection->GetWkt();
@@ -207,7 +207,7 @@ void MapProjectionParametersHandler::InitializeUTMParameters(Application::Pointe
   zoneKey << mapKey<<".utm.zone";
 
   std::ostringstream hemKey;
-  hemKey << mapKey<<".utm.hem";
+  hemKey << mapKey<<".utm.northhem";
   
   // Compute the zone and the hemisphere if not UserValue defined
   if(!app->HasUserValue(zoneKey.str())

@@ -86,7 +86,7 @@ private:
     SetDocExampleParameterValue("carto.x", "367074.625");
     SetDocExampleParameterValue("carto.y", "4835740");
     SetDocExampleParameterValue("mapproj", "utm");
-    SetDocExampleParameterValue("mapproj.utm.hemisphere", "true");
+    SetDocExampleParameterValue("mapproj.utm.northhem", "true");
     SetDocExampleParameterValue("mapproj.utm.zone", "31");
   }
 
