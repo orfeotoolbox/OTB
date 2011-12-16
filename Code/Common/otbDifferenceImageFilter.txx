@@ -1,7 +1,7 @@
 #ifndef __otbDifferenceImageFilter_txx
 #define __otbDifferenceImageFilter_txx
 
-#include "itkDifferenceImageFilter.h"
+#include "otbDifferenceImageFilter.h"
 
 #include "itkConstNeighborhoodIterator.h"
 #include "itkImageRegionConstIterator.h"
