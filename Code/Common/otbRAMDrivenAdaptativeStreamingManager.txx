@@ -45,6 +45,19 @@ RAMDrivenAdaptativeStreamingManager<TImage>::PrepareStreaming( itk::DataObject *
       this->EstimateOptimalNumberOfDivisions(input, region, m_AvailableRAMInMB, m_Bias);
 
   this->m_Splitter = otb::ImageRegionAdaptativeSplitter<itkGetStaticConstMacro(ImageDimension)>::New();
+
+  typename otb::ImageRegionAdaptativeSplitter<itkGetStaticConstMacro(ImageDimension)>::SizeType tileHint;
+
+  itk::ExposeMetaData<unsigned int>(input->GetMetaDataDictionary(),
+                                    MetaDataKey::TileHintX,
+                                    tileHint[0]);
+
+  itk::ExposeMetaData<unsigned int>(input->GetMetaDataDictionary(),
+                                    MetaDataKey::TileHintY,
+                                    tileHint[1]);
+
+  this->m_Splitter->SetTileHint(tileHint);
+
   this->m_ComputedNumberOfSplits = this->m_Splitter->GetNumberOfSplits(region, nbDivisions);
   otbMsgDevMacro(<< "Number of split : " << this->m_ComputedNumberOfSplits)
   this->m_Region = region;
