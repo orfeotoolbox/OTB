@@ -69,7 +69,137 @@ void
 ImageRegionAdaptativeSplitter<VImageDimension>
 ::EstimateSplitMap()
 {
+  // Clear previous split map
+  m_StreamVector.clear();
 
+  // Handle trivial case
+  if(m_RequestedNumberOfSplits == 1)
+    {
+    m_StreamVector.push_back(m_ImageRegion);
+    m_IsUpToDate = true;
+    return;
+    }
+  // Handle the empty hint case
+  else if(m_TileHint[0] == 0 || m_TileHint[1] == 0)
+    {
+    // TODO: Fallback in standard case
+    return;
+    }
+ 
+  SizeType tilesPerDim,splitsPerDim;
+
+  tilesPerDim[0] = (m_ImageRegion.GetSize()[0] + m_TileHint[0] -1) / m_TileHint[0];
+  tilesPerDim[1] = (m_ImageRegion.GetSize()[1] + m_TileHint[1] -1) / m_TileHint[1];
+
+  unsigned int totalTiles = tilesPerDim[0] * tilesPerDim[1];
+
+  // In this case, we have to group input tiles
+  if(totalTiles >= m_RequestedNumberOfSplits)
+    {
+    // Try to group splits
+    SizeType groupTiles;
+    groupTiles.Fill(1);
+    
+    unsigned int i=0;
+
+    // TODO: this should not fall in infinite loop, but add more
+    // security just in case.
+    while(totalTiles / (groupTiles[0] * groupTiles[1]) > m_RequestedNumberOfSplits)
+      {
+      if(groupTiles[i] < tilesPerDim[i])
+        {
+        groupTiles[i]++;
+        }
+      // TODO: We can be more generic here
+      i = (i+1)%2;
+      }
+
+    splitsPerDim[0] = tilesPerDim[0] / groupTiles[0];
+
+    // Handle the last small tile if any
+    if(tilesPerDim[0] % groupTiles[0] > 0)
+      splitsPerDim[0]++;
+
+    splitsPerDim[1] = tilesPerDim[1] / groupTiles[1];
+    if(tilesPerDim[1] % groupTiles[1] > 0)
+      splitsPerDim[1]++;
+
+    // Fill the tiling scheme
+    for(unsigned int splity = 0; splity < splitsPerDim[1]; ++splity)
+      {
+      for(unsigned int splitx = 0; splitx < splitsPerDim[0]; ++splitx)
+        {
+        // Build the split
+        RegionType newSplit;
+        SizeType newSplitSize;
+        IndexType newSplitIndex;
+
+        newSplitSize[0] = groupTiles[0] * m_TileHint[0];
+        newSplitSize[1] = groupTiles[1] * m_TileHint[1];
+
+        newSplitIndex[0] = splitx * newSplitSize[0];
+        newSplitIndex[1] = splity * newSplitSize[1];
+
+        newSplit.SetIndex(newSplitIndex);
+        newSplit.SetSize(newSplitSize);
+
+        newSplit.Crop(m_ImageRegion);
+
+        m_StreamVector.push_back(newSplit);
+        }
+      } 
+    }
+  // In this case, we must divide each tile 
+  else
+    {
+    SizeType divideTiles;
+    divideTiles.Fill(1);
+    
+    unsigned int i = 1;
+
+    while(totalTiles * (divideTiles[0] * divideTiles[1]) < m_RequestedNumberOfSplits)
+      {
+      if(divideTiles[i] < m_TileHint[i])
+        {
+        divideTiles[i]++;
+        }
+      // TODO: We can be more generic here
+      i = (i+1)%2;
+      }
+
+    SizeType splitSize;
+    splitSize[0] = (m_TileHint[0] + divideTiles[0] - 1)/ divideTiles[0];
+    splitSize[1] = (m_TileHint[1] + divideTiles[1] - 1)/ divideTiles[1];
+
+    // Fill the tiling scheme
+    for(unsigned int tiley = 0; tiley < tilesPerDim[1]; ++tiley)
+      {
+      for(unsigned int tilex = 0; tilex < tilesPerDim[0]; ++tilex)
+        {
+        for(unsigned int divy = 0; divy < divideTiles[1]; ++divy)
+          {
+          for(unsigned int divx = 0; divx < divideTiles[0]; ++divx)
+            {
+            // Build the split
+            RegionType newSplit;
+            IndexType newSplitIndex;
+            
+            newSplitIndex[0] = tilex * m_TileHint[0] + divx * splitSize[0];
+            newSplitIndex[1] = tiley * m_TileHint[1] + divy * splitSize[1];
+            
+            newSplit.SetIndex(newSplitIndex);
+            newSplit.SetSize(splitSize);
+            
+            newSplit.Crop(m_ImageRegion);
+            
+            m_StreamVector.push_back(newSplit);
+            }
+          }
+        }
+      }
+    }
+  // Finally toggle the up-to-date flag
+  m_IsUpToDate = true;
 }
 
 /**
@@ -83,9 +213,9 @@ ImageRegionAdaptativeSplitter<VImageDimension>
   Superclass::PrintSelf(os, indent);
   os<<indent<<"IsUpToDate: "<<(m_IsUpToDate ? "true" : "false")<<std::endl;
   os<<indent<<"ImageRegion: "<<m_ImageRegion<<std::endl;
-  os<<indent<<"TileHint: "<<m_TileHint<<std::endl;
-  os<<indent<<"RequestedNumberOfSpits: "<<m_RequestedNumberOfSplits<<std::endl;
-  os<<indent<<"StreamVector size: "<<m_StreamVector.size()<<std::endl;
+  os<<indent<<"Tile hint: "<<m_TileHint<<std::endl;
+  os<<indent<<"Requested number of splits: "<<m_RequestedNumberOfSplits<<std::endl;
+  os<<indent<<"Acutal number of splits: "<<m_StreamVector.size()<<std::endl;
 }
 
 } // end namespace itk
