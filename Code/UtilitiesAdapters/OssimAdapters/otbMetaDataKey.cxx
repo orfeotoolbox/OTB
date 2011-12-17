@@ -56,6 +56,9 @@ const std::string MetaDataKey::VectorDataKeywordlistDelimiterKey = "VectorDataKe
 const std::string MetaDataKey::ResolutionFactor = "ResolutionFactor";
 const std::string MetaDataKey::CacheSizeInBytes = "CacheSizeInBytes";
 
+const std::string MetaDataKey::TileHintX = "TileHintX";
+const std::string MetaDataKey::TileHintY = "TileHintY";
+
 MetaDataKey::MetaDataKey() {}
 MetaDataKey::~MetaDataKey() {}
 

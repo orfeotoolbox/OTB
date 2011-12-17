@@ -73,6 +73,10 @@ public:
   static const std::string ResolutionFactor;
   static const std::string CacheSizeInBytes;
 
+  static const std::string TileHintX;
+  static const std::string TileHintY;
+
+
   enum  KeyType
     {
     TSTRING,
