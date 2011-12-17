@@ -127,6 +127,9 @@ ElevationParametersHandler::GetElevationType(const Application::Pointer app, con
      //  case Elevation_Tiff:
      //   return Eleavation_Tiff;
      //   break;
+    default:
+      // We should never be here
+      itkGenericExceptionMacro(<< "Unknown Elevation type");
     }
 }
 
