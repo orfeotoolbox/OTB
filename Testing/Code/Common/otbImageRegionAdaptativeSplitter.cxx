@@ -55,6 +55,8 @@ int otbImageRegionAdaptativeSplitter(int argc, char * argv[])
   region.SetIndex(regionIndex);
 
   SplitterType::Pointer splitter = SplitterType::New();
+  splitter->SetTileHint(tileHint);
+
 
   unsigned int nbSplits = splitter->GetNumberOfSplits(region,requestedNbSplits);
 

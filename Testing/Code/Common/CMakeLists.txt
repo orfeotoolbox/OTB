@@ -1100,7 +1100,33 @@ ADD_TEST(coTvRAMDrivenTiledStreamingManager ${COMMON_TESTS13}
 )
 
 ADD_TEST(coTuImageRegionAdaptativeSplitterNew ${COMMON_TESTS13}
-         otbImageRegionNonUniformMultidimensionalSplitterNew)
+         otbImageRegionAdaptativeSplitterNew)
+
+ADD_TEST(coTvImageRegionAdaptativeSplitterSquaredTileLargeStream ${COMMON_TESTS13}
+         otbImageRegionAdaptativeSplitter
+         0 0 8192 8192 2048 2048 8
+         ${TEMP}/coTvImageRegionAdaptativeSplitterSquaredTileLargeStreamOutput.txt
+)
+
+ADD_TEST(coTvImageRegionAdaptativeSplitterStripLargeStream ${COMMON_TESTS13}
+         otbImageRegionAdaptativeSplitter
+         0 0 8000 8003 8000 16 8
+         ${TEMP}/coTvImageRegionAdaptativeSplitterStripLargeStreamOutput.txt
+)
+
+ADD_TEST(coTvImageRegionAdaptativeSplitterSquaredTileSmallStream ${COMMON_TESTS13}
+         otbImageRegionAdaptativeSplitter
+         0 0 8192 8192 2048 2048 32
+         ${TEMP}/coTvImageRegionAdaptativeSplitterSquaredTileSmallStreamOutput.txt
+)
+
+ADD_TEST(coTvImageRegionAdaptativeSplitterStripSmallStream ${COMMON_TESTS13}
+         otbImageRegionAdaptativeSplitter
+         0 0 8000 8003 8000 1000 20
+         ${TEMP}/coTvImageRegionAdaptativeSplitterStripSmallStreamOutput.txt
+)
+
+
   
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS1
