@@ -1099,7 +1099,9 @@ ADD_TEST(coTvRAMDrivenTiledStreamingManager ${COMMON_TESTS13}
     ${TEMP}/coTvRAMDrivenTiledStreamingManager.txt
 )
 
-
+ADD_TEST(coTuImageRegionAdaptativeSplitterNew ${COMMON_TESTS13}
+         otbImageRegionNonUniformMultidimensionalSplitterNew)
+  
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS1
 otbCommonTests1.cxx
@@ -1263,6 +1265,7 @@ SET(BasicCommon_SRCS13
 otbCommonTests13.cxx
 otbPipelineMemoryPrintCalculatorTest.cxx
 otbStreamingManager.cxx
+otbImageRegionAdaptativeSplitter.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbCommonTests1 "${BasicCommon_SRCS1}" "OTBIO;OTBTesting")
