@@ -1187,7 +1187,6 @@ void JPEG2000ImageIO::ReadImageInformation()
         }
 
       }
-
     //dict.Print(std::cout);
     }
   else
@@ -1252,6 +1251,13 @@ void JPEG2000ImageIO::ReadImageInformation()
       return;
       }
     }
+
+  // Encapsulate tile hints for streaming
+  unsigned int tileHintX = m_InternalReaders.front()->m_TileWidth / static_cast<unsigned int>(vcl_pow(2.0,m_ResolutionFactor));
+  unsigned int tileHintY = m_InternalReaders.front()->m_TileHeight / static_cast<unsigned int>(vcl_pow(2.0,m_ResolutionFactor));
+  
+  itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::TileHintX, tileHintX);
+  itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::TileHintY, tileHintY);
 
   m_Spacing[0] = 1.0 / vcl_pow(2.0, static_cast<double>(m_ResolutionFactor));
   m_Spacing[1] = 1.0 / vcl_pow(2.0, static_cast<double>(m_ResolutionFactor));
