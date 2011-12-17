@@ -56,6 +56,8 @@ public:
 
   bool IsValid() const;
 
+  bool HasKey(const std::string& key) const;
+
   /** Get parameter*/
   template<typename T> T GetParameter(const std::string& key) const
   {

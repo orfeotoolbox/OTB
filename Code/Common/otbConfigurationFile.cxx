@@ -89,28 +89,49 @@ ConfigurationFile
   return m_OTBConfig != NULL;
 }
 
+bool
+ConfigurationFile
+::HasKey(const std::string& key) const
+{
+  return m_OTBConfig != NULL && m_OTBConfig->keyExists(key);
+}
+
 std::string
 ConfigurationFile
 ::GetDEMDirectory() const
 {
   std::string ret;
-  try
-  {
-    std::string fromConfigFile = GetParameter<std::string>("OTB_DEM_DIRECTORY");
 
-    if ( itksys::SystemTools::FileExists(fromConfigFile.c_str())
-         && itksys::SystemTools::FileIsDirectory(fromConfigFile.c_str()) )
+  if (HasKey("OTB_DEM_DIRECTORY"))
+    {
+    std::string fromConfigFile;
+    try
+      {
+      fromConfigFile = GetParameter<std::string> ("OTB_DEM_DIRECTORY");
+      }
+    catch (itk::ExceptionObject& ex)
+      {
+      std::stringstream oss;
+      oss << "Error caught when accessing OTB_DEM_DIRECTORY in the config file.";
+      oss << "The error was " << ex;
+      otbMsgDevMacro( << oss.str() );
+      }
+
+    if ( !itksys::SystemTools::FileExists(fromConfigFile.c_str()) )
+      {
+      otbMsgDevMacro( << "Error caught when accessing OTB_DEM_DIRECTORY in the config file: "
+                      << fromConfigFile << " does not exist on the file system" );
+      }
+    else if ( !itksys::SystemTools::FileIsDirectory(fromConfigFile.c_str()) )
+      {
+      otbMsgDevMacro( << "Error caught when accessing OTB_DEM_DIRECTORY in the config file: "
+                      << fromConfigFile << " is not a directory" );
+      }
+    else
       {
       ret = fromConfigFile;
       }
-  }
-  catch (itk::ExceptionObject& ex)
-  {
-    std::stringstream oss;
-    oss << "Error caught when accessing OTB_DEM_DIRECTORY in the config file.";
-    oss << "The error was " << ex;
-    otbMsgDevMacro( << oss.str() );
-  }
+    }
   return ret;
 }
 
@@ -119,23 +140,37 @@ ConfigurationFile
 ::GetGeoidFile() const
 {
   std::string ret;
-  try
-  {
-    std::string fromConfigFile = GetParameter<std::string>("OTB_GEOID_FILE");
 
-    if ( itksys::SystemTools::FileExists(fromConfigFile.c_str())
-         && !itksys::SystemTools::FileIsDirectory(fromConfigFile.c_str()) )
+  if (HasKey("OTB_GEOID_FILE"))
+    {
+    std::string fromConfigFile;
+    try
       {
-      ret = fromConfigFile;
+      fromConfigFile = GetParameter<std::string> ("OTB_GEOID_FILE");
       }
-  }
-  catch (itk::ExceptionObject& ex)
-  {
+    catch (itk::ExceptionObject& ex)
+      {
       std::stringstream oss;
       oss << "Error caught when accessing OTB_GEOID_FILE in the config file.";
       oss << "The error was " << ex;
       otbMsgDevMacro( << oss.str() );
-  }
+      }
+
+    if ( !itksys::SystemTools::FileExists(fromConfigFile.c_str()) )
+      {
+      otbMsgDevMacro( << "Error caught when accessing OTB_GEOID_FILE in the config file: "
+                      << fromConfigFile << " does not exist on the file system" );
+      }
+    else if ( itksys::SystemTools::FileIsDirectory(fromConfigFile.c_str()) )
+      {
+      otbMsgDevMacro( << "Error caught when accessing OTB_GEOID_FILE in the config file: "
+                      << fromConfigFile << " is a directory" );
+      }
+    else
+      {
+      ret = fromConfigFile;
+      }
+    }
   return ret;
 }
 
