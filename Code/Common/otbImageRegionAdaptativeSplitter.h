@@ -32,9 +32,27 @@ namespace otb
 
 /** \class ImageRegionSquareTileSplitter
    * \brief Divide a region into several pieces.
+   * 
+   * This region splitter tries to adapt to the tiling scheme of the
+   * input image using the TileHint parameter. It aims at
+   * synchronizing the streaming with the tiling scheme so as to avoid
+   * reading the same tile multiple times in the standard pixel-based
+   * processing scheme.
+   * 
+   * If the requested number of splits is lower than the number of
+   * tiles in the image region, then the splitter will derive splits
+   * that combine several tiles in one split. If the requested number
+   * of splits is greater than the number of tiles in the image
+   * region, the splitter will derive splits that divide exactly one
+   * tile. All splits from one input tiles will be spawned before
+   * changing to a new tile, ensuring the former tile will be only
+   * read once.
    *
+   * If the TileHing is empty, or is VImageDimension is not 2, the
+   * splitter falls back to the behaviour of
+   * otb::ImageRegionSquareTileSplitter.
    *
-   * \sa ImageRegionMultidimensionalSplitter
+   * \sa ImageRegionSquareTileSplitter
    *
    * \ingroup ITKSystemObjects
    * \ingroup DataProcessing
@@ -78,30 +96,39 @@ public:
 
   typedef std::vector<RegionType> StreamVectorType;
 
+  /** Set the TileHint parameter */
   itkSetMacro(TileHint,SizeType);
+
+  /** Get the TileHint parameter */
   itkGetConstReferenceMacro(TileHint,SizeType);
   
+  /** Set the ImageRegion parameter */
   itkSetMacro(ImageRegion,RegionType);
+
+  /** Get the ImageRegion parameter */
   itkGetConstReferenceMacro(ImageRegion,RegionType);
 
+  /** Set the requested number of splits parameter */
   itkSetMacro(RequestedNumberOfSplits,unsigned int);
+
+  /** Get the requested number of splits parameter */
   itkGetConstReferenceMacro(RequestedNumberOfSplits,unsigned int);
 
-
-  /** How many pieces can the specified region be split? A given region
-   *  cannot always be divided into the requested number of pieces.  For
-   *  instance, if the numberOfPieces exceeds the number of pixels along
-   *  a certain dimensions, then some splits will not be possible.
+  /** 
+   * Calling this method will set the image region and the requested
+   * number of splits, and call the EstimateSplitMap() method if
+   * necessary.
    */
   virtual unsigned int GetNumberOfSplits(const RegionType& region,
                                          unsigned int requestedNumber);
 
-  /** Get a region definition that represents the ith piece a specified region.
-   * The "numberOfPieces" specified should be less than or equal to what
-   * GetNumberOfSplits() returns. */
+  /** Calling this method will set the image region and the requested
+   * number of splits, and call the EstimateSplitMap() method if
+   * necessary. */
   virtual RegionType GetSplit(unsigned int i, unsigned int numberOfPieces,
                               const RegionType& region);
 
+  /** Make the Modified() method update the IsUpToDate flag */
   virtual void Modified()
   {
     // Call superclass implementation
@@ -123,7 +150,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  // Trigger split map estimation
+  /** This methods actually estimate the split map and stores it in a
+  vector */
   void EstimateSplitMap();
 
   ImageRegionAdaptativeSplitter(const ImageRegionAdaptativeSplitter &); //purposely not implemented
