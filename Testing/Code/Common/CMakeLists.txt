@@ -1099,6 +1099,14 @@ ADD_TEST(coTvRAMDrivenTiledStreamingManager ${COMMON_TESTS13}
     ${TEMP}/coTvRAMDrivenTiledStreamingManager.txt
 )
 
+ADD_TEST(coTvRAMDrivenAdaptativeStreamingManager ${COMMON_TESTS13}
+#  --compare-ascii ${NOTOL}
+#    ${BASELINE_FILES}/coTvRAMDrivenTiledStreamingManager.txt
+#    ${TEMP}/coTvRAMDrivenTiledStreamingManager.txt
+    otbRAMDrivenAdaptativeStreamingManager
+    ${TEMP}/coTvRAMDrivenAdptativeStreamingManager.txt
+)
+
 ADD_TEST(coTuImageRegionAdaptativeSplitterNew ${COMMON_TESTS13}
          otbImageRegionAdaptativeSplitterNew)
 
