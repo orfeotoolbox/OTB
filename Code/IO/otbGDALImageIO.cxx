@@ -801,6 +801,22 @@ void GDALImageIO::InternalReadImageInformation()
   // Now initialize the itk dictionary
   itk::MetaDataDictionary& dict = this->GetMetaDataDictionary();
 
+  // Report the typical block size if possible
+  if (dataset->GetRasterCount() > 0)
+  {
+    int blockSizeX = 0;
+    int blockSizeY = 0;
+
+    dataset->GetRasterBand(1)->GetBlockSize(&blockSizeX,&blockSizeY);
+    
+    if(blockSizeX > 0 && blockSizeY > 0)
+      {
+      itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::TileHintX, blockSizeX);
+      itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::TileHintY, blockSizeY);
+      }
+  }
+
+
   /* -------------------------------------------------------------------- */
   /*  Get Spacing                */
   /* -------------------------------------------------------------------- */
