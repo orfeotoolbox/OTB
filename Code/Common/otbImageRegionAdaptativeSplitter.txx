@@ -67,10 +67,9 @@ ImageRegionAdaptativeSplitter<VImageDimension>
   return m_StreamVector.at(i);
 }
 
-// Here we only handle VDimension = 2
-template <>
+template <unsigned int VImageDimension>
 void
-ImageRegionAdaptativeSplitter<2>
+ImageRegionAdaptativeSplitter<VImageDimension>
 ::EstimateSplitMap()
 {
   // Clear previous split map
@@ -83,8 +82,8 @@ ImageRegionAdaptativeSplitter<2>
     m_IsUpToDate = true;
     return;
     }
-  // Handle the empty hint case
-  if(m_TileHint[0] == 0 || m_TileHint[1] == 0)
+  // Handle the empty hint case and the case where VImageDimension != 2
+  if(m_TileHint[0] == 0 || m_TileHint[1] == 0 || VImageDimension != 2)
     {
     // In this case we fallback to the classical tile splitter
     typename otb::ImageRegionSquareTileSplitter<2>::Pointer
@@ -220,26 +219,6 @@ ImageRegionAdaptativeSplitter<2>
   return;
 }
 
-// When VImageDimension is not 2, we fall back to classical tile splitter
-template <unsigned int VImageDimension>
-void
-ImageRegionAdaptativeSplitter<VImageDimension>
-::EstimateSplitMap()
-{
-  // In this case we fallback to the classical tile splitter
-  typename otb::ImageRegionSquareTileSplitter<VImageDimension>::Pointer
-    splitter = otb::ImageRegionSquareTileSplitter<VImageDimension>::New();
-  
-  // Retrieve nb splits
-  unsigned int nbSplits = splitter->GetNumberOfSplits(m_ImageRegion,m_RequestedNumberOfSplits);
-  
-  for(unsigned int i = 0; i<nbSplits;++i)
-    {
-    m_StreamVector->push_back(splitter->GetSplit(i,m_RequestedNumberOfSplits,m_ImageRegion));
-    }
-  m_IsUpToDate = true;
-  return;
-}
 /**
  *
  */

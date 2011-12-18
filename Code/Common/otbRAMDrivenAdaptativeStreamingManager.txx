@@ -21,6 +21,7 @@
 #include "otbRAMDrivenAdaptativeStreamingManager.h"
 #include "otbMacro.h"
 #include "otbImageRegionAdaptativeSplitter.h"
+#include "itkMetaDataObject.h"
 
 namespace otb
 {
@@ -44,20 +45,27 @@ RAMDrivenAdaptativeStreamingManager<TImage>::PrepareStreaming( itk::DataObject *
   unsigned long nbDivisions =
       this->EstimateOptimalNumberOfDivisions(input, region, m_AvailableRAMInMB, m_Bias);
 
-  this->m_Splitter = otb::ImageRegionAdaptativeSplitter<itkGetStaticConstMacro(ImageDimension)>::New();
-
   typename otb::ImageRegionAdaptativeSplitter<itkGetStaticConstMacro(ImageDimension)>::SizeType tileHint;
+
+  unsigned int tileHintX, tileHintY;
 
   itk::ExposeMetaData<unsigned int>(input->GetMetaDataDictionary(),
                                     MetaDataKey::TileHintX,
-                                    tileHint[0]);
+                                    tileHintX);
 
   itk::ExposeMetaData<unsigned int>(input->GetMetaDataDictionary(),
                                     MetaDataKey::TileHintY,
-                                    tileHint[1]);
+                                    tileHintY);
 
-  this->m_Splitter->SetTileHint(tileHint);
+  tileHint[0] = tileHintX;
+  tileHint[1] = tileHintY;
 
+  typename otb::ImageRegionAdaptativeSplitter<itkGetStaticConstMacro(ImageDimension)>::Pointer splitter = otb::ImageRegionAdaptativeSplitter<itkGetStaticConstMacro(ImageDimension)>::New();
+
+  splitter->SetTileHint(tileHint);
+
+  this->m_Splitter = splitter;
+  
   this->m_ComputedNumberOfSplits = this->m_Splitter->GetNumberOfSplits(region, nbDivisions);
   otbMsgDevMacro(<< "Number of split : " << this->m_ComputedNumberOfSplits)
   this->m_Region = region;
