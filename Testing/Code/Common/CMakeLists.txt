@@ -1100,38 +1100,50 @@ ADD_TEST(coTvRAMDrivenTiledStreamingManager ${COMMON_TESTS13}
 )
 
 ADD_TEST(coTvRAMDrivenAdaptativeStreamingManager ${COMMON_TESTS13}
-#  --compare-ascii ${NOTOL}
-#    ${BASELINE_FILES}/coTvRAMDrivenTiledStreamingManager.txt
-#    ${TEMP}/coTvRAMDrivenTiledStreamingManager.txt
+  --compare-ascii ${NOTOL}
+    ${BASELINE_FILES}/coTvRAMDrivenAdaptativeStreamingManager.txt
+    ${TEMP}/coTvRAMDrivenAdaptativeStreamingManager.txt
     otbRAMDrivenAdaptativeStreamingManager
-    ${TEMP}/coTvRAMDrivenAdptativeStreamingManager.txt
+    ${TEMP}/coTvRAMDrivenAdaptativeStreamingManager.txt
 )
 
 ADD_TEST(coTuImageRegionAdaptativeSplitterNew ${COMMON_TESTS13}
          otbImageRegionAdaptativeSplitterNew)
 
 ADD_TEST(coTvImageRegionAdaptativeSplitterSquaredTileLargeStream ${COMMON_TESTS13}
-         otbImageRegionAdaptativeSplitter
-         0 0 8192 8192 2048 2048 8
-         ${TEMP}/coTvImageRegionAdaptativeSplitterSquaredTileLargeStreamOutput.txt
+  --compare-ascii ${NOTOL}
+  ${BASELINE_FILES}/coTvImageRegionAdaptativeSplitterSquaredTileLargeStreamOutput.txt
+  ${TEMP}/coTvImageRegionAdaptativeSplitterSquaredTileLargeStreamOutput.txt
+  otbImageRegionAdaptativeSplitter
+  0 0 8192 8192 2048 2048 8
+  ${TEMP}/coTvImageRegionAdaptativeSplitterSquaredTileLargeStreamOutput.txt
 )
 
 ADD_TEST(coTvImageRegionAdaptativeSplitterStripLargeStream ${COMMON_TESTS13}
-         otbImageRegionAdaptativeSplitter
-         0 0 8000 8003 8000 16 8
-         ${TEMP}/coTvImageRegionAdaptativeSplitterStripLargeStreamOutput.txt
+  --compare-ascii ${NOTOL}
+  ${BASELINE_FILES}/coTvImageRegionAdaptativeSplitterStripLargeStreamOutput.txt
+  ${TEMP}/coTvImageRegionAdaptativeSplitterStripLargeStreamOutput.txt
+  otbImageRegionAdaptativeSplitter
+  0 0 8000 8003 8000 16 8
+  ${TEMP}/coTvImageRegionAdaptativeSplitterStripLargeStreamOutput.txt
 )
 
 ADD_TEST(coTvImageRegionAdaptativeSplitterSquaredTileSmallStream ${COMMON_TESTS13}
-         otbImageRegionAdaptativeSplitter
-         0 0 8192 8192 2048 2048 32
-         ${TEMP}/coTvImageRegionAdaptativeSplitterSquaredTileSmallStreamOutput.txt
+  --compare-ascii ${NOTOL}
+  ${BASELINE_FILES}/coTvImageRegionAdaptativeSplitterSquaredTileSmallStreamOutput.txt
+  ${TEMP}/coTvImageRegionAdaptativeSplitterSquaredTileSmallStreamOutput.txt
+  otbImageRegionAdaptativeSplitter
+  0 0 8192 8192 2048 2048 32
+  ${TEMP}/coTvImageRegionAdaptativeSplitterSquaredTileSmallStreamOutput.txt
 )
 
 ADD_TEST(coTvImageRegionAdaptativeSplitterStripSmallStream ${COMMON_TESTS13}
-         otbImageRegionAdaptativeSplitter
-         0 0 8000 8003 8000 1000 20
-         ${TEMP}/coTvImageRegionAdaptativeSplitterStripSmallStreamOutput.txt
+  --compare-ascii ${NOTOL}
+  ${BASELINE_FILES}/coTvImageRegionAdaptativeSplitterStripSmallStreamOutput.txt
+  ${TEMP}/coTvImageRegionAdaptativeSplitterStripSmallStreamOutput.txt
+  otbImageRegionAdaptativeSplitter
+  0 0 8000 8003 8000 1000 20
+  ${TEMP}/coTvImageRegionAdaptativeSplitterStripSmallStreamOutput.txt
 )
 
 
