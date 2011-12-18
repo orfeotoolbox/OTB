@@ -136,6 +136,9 @@ public:
    *   composite filters for example */
   void SetAutomaticTiledStreaming(unsigned int availableRAM = 0, double bias = 1.0);
 
+  /** TODO */
+  void SetAutomaticAdaptativeStreaming(unsigned int availableRAM = 0, double bias = 1.0);
+
   /**  Set buffer memory size (in bytes) use to calculate the number of stream divisions */
   itkLegacyMacro( void SetBufferMemorySize(unsigned long) );
 
