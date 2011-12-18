@@ -24,8 +24,19 @@ namespace otb
 {
 
 /** \class RAMDrivenAdaptativeStreamingManager
- *  \brief 
+ *  \brief This class computes the divisions needed to stream an image
+ *  according to the input image tiling scheme and a user-defined
+ *  available RAM.
  *
+ * This streaming manager uses the TileHint from the
+ * MetaDataDictionnary to find out the tiling sheme of the input file
+ * if available.
+ *
+ * You can use SetAvailableRAMInMB to set the available RAM. An
+ * estimation of the pipeline memory print will be done, and the
+ * number of divisions will then be computed to fit the available RAM.
+ *
+ * \sa ImageRegionAdaptativeSplitter
  * \sa StreamingImageFileWriter
  * \sa StreamingImageVirtualFileWriter
  */
