@@ -53,7 +53,7 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
 {
    static const char MODULE[] = "ossimPluginProjectionFactory::createProjection(ossimFilename& filename)";
    ossimRefPtr<ossimProjection> projection = 0;
-   traceDebug.setTraceFlag(true);
+   //traceDebug.setTraceFlag(true);
 
    if(traceDebug())
    {

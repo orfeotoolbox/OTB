@@ -122,8 +122,8 @@ bool ossimPleiadesModel::saveState(ossimKeywordlist& kwl,
   {
      ossimString supportPrefix = ossimString(prefix) + "support_data.";
      theSupportData->saveState(kwl, supportPrefix);
-     std::cout << "ossimPleiadesModel::saveState: " << std::endl;
-     kwl.print(std::cout);
+     //std::cout << "ossimPleiadesModel::saveState: " << std::endl;
+     //kwl.print(std::cout);
   }
 
    return ossimRpcModel::saveState(kwl, prefix);
@@ -276,7 +276,7 @@ ossimPleiadesModel::open(const ossimFilename& file)
     ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " exit status = " << (result ? "true" : "false\n") << std::endl;
     }
 
-  print(std::cout);
+  //print(std::cout);
   return result;
 }
 
