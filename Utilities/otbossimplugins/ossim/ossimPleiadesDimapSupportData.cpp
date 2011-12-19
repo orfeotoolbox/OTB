@@ -691,7 +691,7 @@ bool ossimPleiadesDimapSupportData::saveState(ossimKeywordlist& kwl,
            true);
 
    kwl.add(prefix,
-           "number_of_azimuth_angles",
+           "number_of_azimuth_angle",
            static_cast<ossim_uint32>(theSunAzimuth.size()),
            true);
 
@@ -707,7 +707,7 @@ bool ossimPleiadesDimapSupportData::saveState(ossimKeywordlist& kwl,
            true);
 
    kwl.add(prefix,
-           "number_of_elevation_angles",
+           "number_of_elevation_angle",
            static_cast<ossim_uint32>(theSunElevation.size()),
            true);
 
@@ -789,7 +789,7 @@ bool ossimPleiadesDimapSupportData::saveState(ossimKeywordlist& kwl,
            true);
 
    kwl.add(prefix,
-           "number_of_incident_angles",
+           "number_of_incident_angle",
            static_cast<ossim_uint32>(theIncidenceAngle.size()),
            true);
 
@@ -959,7 +959,7 @@ bool ossimPleiadesDimapSupportData::loadState(const ossimKeywordlist& kwl,
       for(idx = 0; idx < theBandOrder.size();++idx)
       {
          in >> tempValue.string();
-         theBandOrder[idx] = tempValue.toDouble();
+         theBandOrder[idx] = tempValue;
       }
    }
 
@@ -967,7 +967,7 @@ bool ossimPleiadesDimapSupportData::loadState(const ossimKeywordlist& kwl,
    theProductionDate  = kwl.find(prefix, "production_date");
    theImageID         = kwl.find(prefix, "image_id");
    theInstrument      = kwl.find(prefix, "instrument");
-   theInstrumentIndex = ossimString(kwl.find(prefix, "instrument_index")).toUInt32();
+   theInstrumentIndex = kwl.find(prefix, "instrument_index");
    
    total =  ossimString(kwl.find(prefix,"number_of_incident_angle")).toUInt32();
    theIncidenceAngle.resize(total);

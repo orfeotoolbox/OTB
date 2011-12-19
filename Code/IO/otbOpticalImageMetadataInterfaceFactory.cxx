@@ -26,6 +26,7 @@
 #include "otbFormosatImageMetadataInterfaceFactory.h"
 #include "otbQuickBirdImageMetadataInterfaceFactory.h"
 #include "otbWorldView2ImageMetadataInterfaceFactory.h"
+#include "otbPleiadesImageMetadataInterfaceFactory.h"
 
 
 #include "itkObjectFactoryBase.h"
@@ -89,6 +90,7 @@ OpticalImageMetadataInterfaceFactory
       itk::ObjectFactoryBase::RegisterFactory(FormosatImageMetadataInterfaceFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(QuickBirdImageMetadataInterfaceFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(WorldView2ImageMetadataInterfaceFactory::New());
+      itk::ObjectFactoryBase::RegisterFactory(PleiadesImageMetadataInterfaceFactory::New());
       firstTime = false;
       }
     }

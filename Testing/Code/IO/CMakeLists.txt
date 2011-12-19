@@ -610,6 +610,19 @@ ADD_TEST(ioTvImageKeywordlistQuickbird ${IO_TESTS4}
          ${TEMP}/ioTvImageKeywordlistQuickbird_saveState_loadState.txt
 )
 
+ADD_TEST(ioTvImageKeywordlistPleiades ${IO_TESTS4}
+  --ignore-order --compare-n-ascii ${NOTOL} 2
+         ${BASELINE_FILES}/ioTvImageKeywordlistPleiades.txt
+         ${TEMP}/ioTvImageKeywordlistPleiades.txt
+         ${BASELINE_FILES}/ioTvImageKeywordlistPleiades.txt
+         ${TEMP}/ioTvImageKeywordlistPleiades_saveState_loadState.txt
+         --ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
+    otbImageKeywordlist
+         ${LARGEDATA}/PLEIADES-PRE/TLSE_PRIMARY_BUNDLE__12_bits_Lossy_DIMAP_V2/FCGC300009788/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201006181052297_SEN_IPU_20110401_0896-004_R1C1.JP2
+         ${TEMP}/ioTvImageKeywordlistPleiades.txt
+         ${TEMP}/ioTvImageKeywordlistPleiades_saveState_loadState.txt
+)
+
 ADD_TEST(ioTvImageKeywordlistIkonos ${IO_TESTS4}
   --ignore-order --compare-n-ascii ${NOTOL} 2
          ${BASELINE_FILES}/ioTvImageKeywordlistIkonos.txt
@@ -2724,30 +2737,20 @@ ADD_TEST(ioTvImageMetadataInterfaceBaseTest_PLEIADES ${IO_TESTS18}
         ${LARGEDATA}/PLEIADES-PRE/FCGC600011783/IMG_PHR1Z_PMS_N_001/IMG_PHR1A_PMS-N_201006181052297_ORT_IPU_20111011_0619-001_R1C1.JP2
         ${TEMP}/ioTvImageMetadataInterfaceBase_PLEIADES_OUT.txt
 )
-# TODO MSD : remove this test before push
+
 ADD_TEST(ioTvImageMetadataInterfaceBaseTest_PLEIADES_sensorP_spotsample ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_PLEIADES_SEN_P_spot.txt
                          ${TEMP}/ioTvImageMetadataInterfaceBase_PLEIADES_OUT.txt
         otbImageMetadataInterfaceBaseTest
-        /media/otbnas/public/Data/Pleiade_sample_spot/TLSE_PRIMARY_BUNDLE__12_bits_Lossy_DIMAP_V2/FCGC300009788/IMG_PHR1A_P_001/IMG_PHR1A_P_201006181052297_SEN_IPU_20110401_0896-002_R1C1.JP2
+        ${LARGEDATA}/PLEIADES-PRE/TLSE_PRIMARY_BUNDLE__12_bits_Lossy_DIMAP_V2/FCGC300009788/IMG_PHR1A_P_001/IMG_PHR1A_P_201006181052297_SEN_IPU_20110401_0896-002_R1C1.JP2
         ${TEMP}/ioTvImageMetadataInterfaceBase_PLEIADES_OUT.txt
 )
 
-# TODO MSD : remove this test before push
 ADD_TEST(ioTvImageMetadataInterfaceBaseTest_PLEIADES_sensorMS_spotsample ${IO_TESTS18}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_PLEIADES_SEN_MS_spot.txt
                          ${TEMP}/ioTvImageMetadataInterfaceBase_PLEIADES_OUT.txt
         otbImageMetadataInterfaceBaseTest
-        /media/otbnas/public/Data/Pleiade_sample_spot/TLSE_PRIMARY_BUNDLE__12_bits_Lossy_DIMAP_V2/FCGC300009788/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201006181052297_SEN_IPU_20110401_0896-004_R1C1.JP2
-        ${TEMP}/ioTvImageMetadataInterfaceBase_PLEIADES_OUT.txt
-)
-
-# TODO MSD : remove this test before push
-ADD_TEST(ioTvImageMetadataInterfaceBaseTest_PLEIADES_PMS_spotsample ${IO_TESTS18}
-         --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_PLEIADES_PMS_spot.txt
-                         ${TEMP}/ioTvImageMetadataInterfaceBase_PLEIADES_OUT.txt
-        otbImageMetadataInterfaceBaseTest
-        /media/otbnas/public/Data/Pleiade_sample_spot/TLSE_ORTHO_PMS_8_bits_Lossy_DIMAP_V2/FCGC300009824/IMG_PHR1A_PMS_001/IMG_PHR1A_PMS_201006181052297_ORT_IPU_20110406_1277-003_R1C1.JP2
+        ${LARGEDATA}/PLEIADES-PRE/TLSE_PRIMARY_BUNDLE__12_bits_Lossy_DIMAP_V2/FCGC300009788/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201006181052297_SEN_IPU_20110401_0896-004_R1C1.JP2
         ${TEMP}/ioTvImageMetadataInterfaceBase_PLEIADES_OUT.txt
 )
 

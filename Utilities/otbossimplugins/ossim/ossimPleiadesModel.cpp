@@ -258,11 +258,11 @@ ossimPleiadesModel::open(const ossimFilename& file)
 
     }
 
-  // TODO MSD Check this part
+  // TODO MSD Check if this part is necessary
   _productXmlFile = DIMxmlFile;
   ossimSupportFilesList::instance()->add(_productXmlFile);
 
-  // TODO MSD WARNING File with multi tiles
+  // TODO MSD WARNING File with multi tiles are not well managed
   theSupportData->getImageRect(theImageClipRect);
   theSupportData->getImageSize(theImageSize);
 
