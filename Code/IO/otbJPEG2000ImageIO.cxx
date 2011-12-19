@@ -1253,8 +1253,8 @@ void JPEG2000ImageIO::ReadImageInformation()
     }
 
   // Encapsulate tile hints for streaming
-  unsigned int tileHintX = m_InternalReaders.front()->m_TileWidth / static_cast<unsigned int>(vcl_pow(2.0,m_ResolutionFactor));
-  unsigned int tileHintY = m_InternalReaders.front()->m_TileHeight / static_cast<unsigned int>(vcl_pow(2.0,m_ResolutionFactor));
+  unsigned int tileHintX = m_InternalReaders.front()->m_TileWidth / static_cast<unsigned int>(vcl_pow(2.0,(int) m_ResolutionFactor));
+  unsigned int tileHintY = m_InternalReaders.front()->m_TileHeight / static_cast<unsigned int>(vcl_pow(2.0,(int) m_ResolutionFactor));
   
   itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::TileHintX, tileHintX);
   itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::TileHintY, tileHintY);
