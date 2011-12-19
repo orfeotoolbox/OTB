@@ -19,7 +19,7 @@
 #include "otbMetaDataKey.h"
 #include "gdal.h"
 
-#define NBKEYS  21
+#define NBKEYS  23
 
 namespace otb
 {
@@ -84,7 +84,9 @@ const MetaDataKey::KeyTypeDef Types[] =
   MetaDataKey::KeyTypeDef(MetaDataKey::VectorDataKeywordlistKey,          MetaDataKey::TVECTORDATAKEYWORDLIST),
   MetaDataKey::KeyTypeDef(MetaDataKey::VectorDataKeywordlistDelimiterKey, MetaDataKey::TSTRING),
   MetaDataKey::KeyTypeDef(MetaDataKey::ResolutionFactor,                  MetaDataKey::TENTIER),
-  MetaDataKey::KeyTypeDef(MetaDataKey::CacheSizeInBytes,                  MetaDataKey::TENTIER)
+  MetaDataKey::KeyTypeDef(MetaDataKey::CacheSizeInBytes,                  MetaDataKey::TENTIER),
+  MetaDataKey::KeyTypeDef(MetaDataKey::TileHintX,                         MetaDataKey::TENTIER),
+  MetaDataKey::KeyTypeDef(MetaDataKey::TileHintY,                         MetaDataKey::TENTIER)
   };
 
 MetaDataKey::KeyType MetaDataKey::GetKeyType(const std::string& name)
