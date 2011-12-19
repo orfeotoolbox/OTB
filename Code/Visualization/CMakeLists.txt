@@ -2,7 +2,7 @@
 
 FILE(GLOB OTBVisualization_SRCS "*.cxx" )
 
-FLTK_WRAP_UI(OTBVisualization otbImageWidgetPackedManager.fl otbImageWidgetSplittedManager.fl)
+FLTK_WRAP_UI(OTBVisualization otbImageWidgetPackedManager.fl otbImageWidgetSplittedManager.fl otbMsgReporterGUI.fl)
 
 ADD_LIBRARY(OTBVisualization ${OTBVisualization_SRCS} ${OTBVisualization_FLTK_UI_SRCS})
 TARGET_LINK_LIBRARIES (OTBVisualization OTBGui OTBCommon OTBIO ${OTB_VISU_GUI_LIBRARIES})
