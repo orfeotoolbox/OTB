@@ -70,7 +70,7 @@ void OutputImageParameter::InitializeWriters()
     writer->SetFileName( this->GetFileName() );                                   \
     writer->SetInput(caster->GetOutput());                                        \
     writer->WriteGeomFileOn();                                                    \
-    writer->SetAutomaticAdaptativeStreaming(m_RAMValue);                          \
+    writer->SetAutomaticTiledStreaming(m_RAMValue);                               \
     writer->Update();                                                             \
   }
 
