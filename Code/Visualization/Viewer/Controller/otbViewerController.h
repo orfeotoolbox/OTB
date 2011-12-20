@@ -15,11 +15,11 @@ See OTBCopyright.txt for details.
      PURPOSE,  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageViewerManagerController_h
-#define __otbImageViewerManagerController_h
+#ifndef __otbViewerController_h
+#define __otbViewerController_h
 
-#include "otbImageViewerManagerControllerInterface.h"
-#include "otbImageViewerManagerViewGUI.h"
+#include "otbViewerControllerInterface.h"
+#include "otbViewerViewGUI.h"
 
 /** NewVisu */
 // #include "otbImageWidgetController.h"
@@ -32,17 +32,17 @@ See OTBCopyright.txt for details.
 
 namespace otb
 {
-class ITK_EXPORT ImageViewerManagerController
-      : public ImageViewerManagerControllerInterface
+class ITK_EXPORT ViewerController
+      : public ViewerControllerInterface
 {
 public:
   /** Standard class typedefs */
-  typedef ImageViewerManagerController                   Self;
-  typedef ImageViewerManagerControllerInterface          Superclass;
+  typedef ViewerController                   Self;
+  typedef ViewerControllerInterface          Superclass;
   typedef itk::SmartPointer<Self>                        Pointer;
   typedef itk::SmartPointer<const Self>                  ConstPointer;
 
-  typedef ImageViewerManagerViewGUI                      ViewType;
+  typedef ViewerViewGUI                      ViewType;
   typedef ViewType::Pointer                              ViewPointerType;
   typedef ViewType::VisuViewType                         VisuViewType;
   typedef ViewType::VisuViewPointerType                  VisuViewPointerType;
@@ -67,7 +67,7 @@ public:
   typedef AutoScaleHandlerType::Pointer                                 AutoScaleHandlerPointerType;
   
   /** Standard type macros */
-  itkTypeMacro(ImageViewerManagerController, Superclass);
+  itkTypeMacro(ViewerController, Superclass);
   itkNewMacro(Self);
 
   /** NewVisu */
@@ -110,12 +110,12 @@ public:
 
 protected:
   /** Constructor */
-  ImageViewerManagerController();
+  ViewerController();
   /** Destructor */
-  virtual ~ImageViewerManagerController();
+  virtual ~ViewerController();
 
 private:
-  ImageViewerManagerController(const Self&); //purposely not implemented
+  ViewerController(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   /** Pointer to the view */

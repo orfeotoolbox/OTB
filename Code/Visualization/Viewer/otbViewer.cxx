@@ -15,9 +15,9 @@ See OTBCopyright.txt for details.
      PURPOSE,  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbImageViewerManagerViewGUI.h"
-#include "otbImageViewerManagerModel.h"
-#include "otbImageViewerManagerController.h"
+#include "otbViewerViewGUI.h"
+#include "otbViewerModel.h"
+#include "otbViewerController.h"
 
 #include "otbMsgReporter.h"
 
@@ -28,13 +28,13 @@ int main(int argc, char* argv[])
 
   otbI18nMacro();
   
-  typedef otb::ImageViewerManagerController ControllerType;
-  typedef otb::ImageViewerManagerViewGUI ViewType;
+  typedef otb::ViewerController ControllerType;
+  typedef otb::ViewerViewGUI ViewType;
 
   ControllerType::Pointer controller = ControllerType::New();
   ViewType::Pointer view = ViewType::New();
   controller->SetView(view);
-  view->SetImageViewerManagerController(controller);
+  view->SetViewerController(controller);
 
   view->Show();
   for (int i = 1; i<argc; ++i)

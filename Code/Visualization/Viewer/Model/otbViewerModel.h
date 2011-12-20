@@ -15,8 +15,8 @@ See OTBCopyright.txt for details.
      PURPOSE,  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageViewerManagerModel_h
-#define __otbImageViewerManagerModel_h
+#ifndef __otbViewerModel_h
+#define __otbViewerModel_h
 
 #include "otbMVCModel.h"
 #include "otbListenerBase.h"
@@ -51,25 +51,25 @@ See OTBCopyright.txt for details.
 
 namespace otb
 {
-/** \class ImageViewerManagerModel
+/** \class ViewerModel
  *
  *
  *
  */
 
-class ITK_EXPORT ImageViewerManagerModel
+class ITK_EXPORT ViewerModel
       : public MVCModel<ListenerBase>, public itk::Object
 {
 
 public:
   /** Standard class typedefs */
-  typedef ImageViewerManagerModel       Self;
+  typedef ViewerModel       Self;
   typedef MVCModel<ListenerBase>        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Standard type macro */
-  itkTypeMacro(ImageViewerManagerModel, MVCModel);
+  itkTypeMacro(ViewerModel, MVCModel);
 
   /** Images typedefs */
   typedef double PixelType;
@@ -187,17 +187,17 @@ protected:
   itkNewMacro(Self);
 
   /** Constructor */
-  ImageViewerManagerModel();
+  ViewerModel();
 
   /** Destructor */
-  virtual ~ImageViewerManagerModel();
+  virtual ~ViewerModel();
 
   /** Built Visu & Controller*/
   virtual VisuViewPointerType BuiltVisu(VisuModelPointerType pRendering);
   virtual WidgetControllerPointerType BuiltController(VisuModelPointerType modelRenderingLayer, VisuViewPointerType visuView , PixelDescriptionModelType::Pointer pixelModel);
 
 private:
-  ImageViewerManagerModel(const Self&); //purposely not implemented
+  ViewerModel(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   /** Notify a given listener of changes */

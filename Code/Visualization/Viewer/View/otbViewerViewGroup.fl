@@ -5,12 +5,12 @@ i18n_include "otbI18n.h"
 i18n_function otbGetTextMacro 
 header_name {.h} 
 code_name {.cxx}
-class ImageViewerManagerViewGroup {open
+class ViewerViewGroup {open
 } {
   Function {CreateGUI()} {open return_type void
   } {
     Fl_Window guiMainWindow {
-      label otbImageViewerManagerView
+      label otbViewerView
       callback {this->Quit()} open
       xywh {366 65 610 460} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 resizable visible
     } {
@@ -259,8 +259,8 @@ OpenJpeg2000Image();}
       }
     }
   }
-  Function {ImageViewerManagerViewGroup()} {} {}
-  Function {~ImageViewerManagerViewGroup()} {open return_type virtual
+  Function {ViewerViewGroup()} {} {}
+  Function {~ViewerViewGroup()} {open return_type virtual
   } {}
   Function {OpenImage()} {open return_type {virtual void}
   } {}
