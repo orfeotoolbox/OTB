@@ -15,6 +15,7 @@ StereoSensorModelToElevationMap.SetParameterString("elev.dem.path",  "dem_wrong_
 StereoSensorModelToElevationMap.SetParameterString("elev.dem.geoid", "geoid_wrong_file")
 
 # This bug verifies that no exception is raised during ExecuteAndWriteOutput
+# It does **NOT** check that the execution of the application succeeds
 try:
   StereoSensorModelToElevationMap.ExecuteAndWriteOutput()
 except:
