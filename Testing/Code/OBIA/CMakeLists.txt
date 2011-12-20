@@ -189,6 +189,9 @@ ADD_TEST(obTvHooverConfusionMatrix ${OBIA_TESTS1}
     ${TEMP}/obTvHooverConfusionMatrix.txt
     )
 
+ADD_TEST(obTuHooverInstancesNew ${OBIA_TESTS1}
+    otbHooverInstancesNew)
+
 # OBIATests2 (need PQXX)
 IF(OTB_USE_PQXX)
 ADD_TEST(obTuLabelMapToGISTableFilterNew ${OBIA_TESTS2}
@@ -244,6 +247,7 @@ otbVectorDataToLabelMapFilterNew.cxx
 otbStreamingConnectedComponentOBIATest.cxx
 otbHooverConfusionMatrixNew.cxx
 otbHooverConfusionMatrix.cxx
+otbHooverInstancesNew.cxx
 )
 
 IF(OTB_USE_PQXX)

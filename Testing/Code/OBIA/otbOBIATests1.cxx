@@ -55,4 +55,5 @@ REGISTER_TEST(otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilterNe
 REGISTER_TEST(otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter);
 REGISTER_TEST(otbHooverConfusionMatrixNew);
 REGISTER_TEST(otbHooverConfusionMatrix);
+REGISTER_TEST(otbHooverInstancesNew);
 }
