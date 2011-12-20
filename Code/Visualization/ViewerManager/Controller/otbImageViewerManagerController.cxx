@@ -41,13 +41,13 @@ ImageViewerManagerController
 
 unsigned int
 ImageViewerManagerController
-::OpenInputImage(const char * filename)
+::OpenInputImage(const char * filename, const unsigned int & id)
 {
   unsigned int numberOfOpenedImages = 0;
   try
   {
     std::string strFilename = filename;
-    numberOfOpenedImages = m_Model->OpenImage( strFilename );
+    numberOfOpenedImages = m_Model->OpenImage( strFilename, id );
   }
   catch ( ... )
   {
@@ -168,6 +168,29 @@ ImageViewerManagerController
     }
 }
 
+bool 
+ImageViewerManagerController
+::IsJPEG2000File(const std::string & filepath)
+{
+  return m_Model->IsJPEG2000File(filepath);
+}
+
+std::vector<unsigned int>
+ImageViewerManagerController
+::GetJPEG2000Resolution(const std::string & filepath)
+{
+  std::vector<unsigned int> res;
+  if( !this->IsJPEG2000File(filepath) )
+    {
+    MsgReporter::GetInstance()->SendError("Can't get file resolution, not JPEG2000 format...");
+    }
+  else
+    {
+    res = m_Model->GetJPEG2000Resolution(filepath);
+    }
+
+  return res; 
+}
 
 } // end namespace otb
 
