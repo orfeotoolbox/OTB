@@ -129,16 +129,17 @@ public:
    */
   struct _ObjectsTracked
   {
-    ReaderPointerType                      pReader;
-    LayerPointerType                       pLayer;
-    VisuModelPointerType                   pRendering;
-    WidgetControllerPointerType            pWidgetController;
-    VisuViewPointerType                    pVisuView;
-    RenderingFunctionType::Pointer         pRenderFunction;
-    PixelDescriptionViewType::Pointer      pPixelView;
-    PixelDescriptionModelPointerType       pPixelModel;
-    CurvesWidgetType::Pointer              pCurveWidget;
-    std::string                            fileName;
+    ReaderPointerType                 pReader;
+    ImagePointerType                  pQuicklook;
+    LayerPointerType                  pLayer;
+    VisuModelPointerType              pRendering;
+    WidgetControllerPointerType       pWidgetController;
+    VisuViewPointerType               pVisuView;
+    RenderingFunctionType::Pointer    pRenderFunction;
+    PixelDescriptionViewType::Pointer pPixelView;
+    PixelDescriptionModelPointerType  pPixelModel;
+    CurvesWidgetType::Pointer         pCurveWidget;
+    std::string                       pFileName;
   };
 
   typedef struct _ObjectsTracked                                          ObjectsTracked;
@@ -173,11 +174,13 @@ public:
    itkGetMacro(HasChangedChannelOrder, bool);
 
  // Test a filename and returns true if the file is JPEG2000
-  virtual bool IsJPEG2000File(const std::string & filepath);
+  bool IsJPEG2000File(const std::string & filepath);
   // If the file is JPEG2000, the function will find the available
   // resolutions.
-  virtual std::vector<unsigned int> GetJPEG2000Resolution(const std::string & filepath);
-  
+  std::vector<unsigned int> GetJPEG2000Resolution(const std::string & filepath);
+  // If the file is JPEG2000, the function will find the available
+  // resolutions and informations
+  void GetJPEG2000ResolutionAndInformations(const std::string & filepath, std::vector<unsigned int>& res, std::vector<std::string> & desc);
 
 protected:
   /** This is protected for the singleton. Use GetInstance() instead. */

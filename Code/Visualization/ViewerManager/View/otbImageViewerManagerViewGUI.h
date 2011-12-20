@@ -47,7 +47,6 @@ See OTBCopyright.txt for details.
 #include "otbSplittedWidgetManager.h"
 
 #include "otbObjectList.h"
-#include "otbFixedSizeFullImageWidget.h"
 #include <FL/Fl_File_Chooser.H>
 
 namespace otb
@@ -186,7 +185,7 @@ protected:
   virtual void LinkSetupRemove();
   virtual void InitializeImageController(unsigned int selectedItem );
 
-  virtual void LoadSelectedJpeg2000Resolution();
+  virtual void OpenJpeg2000Image();
 
   /** Constructor */
   ImageViewerManagerViewGUI();
