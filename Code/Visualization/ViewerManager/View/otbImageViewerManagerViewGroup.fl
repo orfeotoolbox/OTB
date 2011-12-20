@@ -235,55 +235,56 @@ class ImageViewerManagerViewGroup {open
       }
     }
   }
-  Function {ImageViewerManagerViewGroup()} {} {}
+  Function {ImageViewerManagerViewGroup()} {
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {~ImageViewerManagerViewGroup()} {open return_type virtual
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {OpenImage()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {CloseImage()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {ViewerSetup()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {ViewerSetupOk()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {LinkSetup()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {LinkSetupRemove()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {LinkSetupClear()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {LinkSetupOk()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {LinkSetupSave()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {Quit()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {SelectAction()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {ShowHide()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {GrayScaleSet()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {RGBSet()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {ViewerSetupCancel()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {ZoomSmallImagesHook()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {DiaporamaPrevious()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {DiaporamaNext()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {DiaporamaQuit()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {Diaporama()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {HideAll()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {ComplexSet()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {SplittedViewMode()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {PackedViewMode()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
 } 
