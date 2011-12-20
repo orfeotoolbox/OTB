@@ -34,12 +34,15 @@ IF(OTB_USE_VISU_GUI)
         MARK_AS_ADVANCED(OTB_USE_EXTERNAL_FLTK)
 
         IF(OTB_USE_EXTERNAL_FLTK)
+          
           FIND_PACKAGE(FLTK)
           IF(NOT FLTK_FOUND)
             MESSAGE(FATAL_ERROR
                   "Cannot build OTB project without FLTK. Please set FLTK_DIR or set OTB_USE_EXTERNAL_FLTK OFF to use INTERNAL FLTK.")
           ENDIF(NOT FLTK_FOUND)
+          
         ELSE(OTB_USE_EXTERNAL_FLTK)
+          
           # Same Set as ITK
           SET(FLTK_SOURCE_DIR ${OTB_SOURCE_DIR}/Utilities/FLTK)
           SET(FLTK_BINARY_DIR ${OTB_BINARY_DIR}/Utilities/FLTK)
@@ -48,11 +51,19 @@ IF(OTB_USE_VISU_GUI)
           SET(FLUID_COMMAND fluid)
           # FLTK CMake needs a variable called JPEG_INCLUDE_DIR
           SET(JPEG_INCLUDE_DIR ${JPEG_INCLUDE_DIRS})
+          
+          # NEEDED for version 1.1.10
+          SET(FLTK_FLUID_EXECUTABLE ${FLUID_COMMAND})
 		  
         ENDIF(OTB_USE_EXTERNAL_FLTK)
 
+        MESSAGE(STATUS "FLTK_LIBRARIES = ${FLTK_LIBRARIES}")
+        MESSAGE(STATUS "OPENGL_LIBRARIES = ${OPENGL_LIBRARIES}")
+
         SET(OTB_VISU_GUI_LIBRARIES "${FLTK_LIBRARIES};${OPENGL_LIBRARIES}")
-        SET(FLTK_FLUID_EXECUTABLE ${FLUID_COMMAND})
+        
+        MESSAGE(STATUS "FLTK_FLUID_EXECUTABLE = ${FLTK_FLUID_EXECUTABLE}")
+        
            
         SET(OTB_VISU_GUI_LIBRARIES "${FLTK_LIBRARIES};${OPENGL_LIBRARIES};${FLTK_PLATFORM_DEPENDENT_LIBS}")
         IF(APPLE)
@@ -60,7 +71,7 @@ IF(OTB_USE_VISU_GUI)
         ENDIF(APPLE)
                
         IF(OTB_USE_EXTERNAL_FLTK)
-          MESSAGE(STATUS "  Using FLTK external version")
+          MESSAGE(STATUS "  Using FLTK external version ${FLTK_EXTERNAL_VERSION}")
           MESSAGE(STATUS "  FLTK includes : ${FLTK_INCLUDE_DIR}")
           MESSAGE(STATUS "  FLTK libraries: ${OTB_VISU_GUI_LIBRARIES}")
         ELSE(OTB_USE_EXTERNAL_FLTK)
