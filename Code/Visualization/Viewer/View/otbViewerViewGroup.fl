@@ -312,6 +312,5 @@ OpenJpeg2000Image();}
   Function {PackedViewMode()} {open return_type {virtual void}
   } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {OpenJpeg2000Image()} {open selected return_type {virtual void}
-  Function {OpenJpeg2000Image()} {open selected return_type {virtual void}
   } {comment {for fluid 1.3} {in_source not_in_header}}       
 } 
