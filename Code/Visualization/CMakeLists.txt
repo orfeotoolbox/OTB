@@ -2,7 +2,10 @@
 
 FILE(GLOB OTBVisualization_SRCS "*.cxx" )
 
-FLTK_WRAP_UI(OTBVisualization otbImageWidgetPackedManager.fl otbImageWidgetSplittedManager.fl otbMsgReporterGUI.fl)
+FLTK_WRAP_UI(OTBVisualization
+               otbImageWidgetPackedManager.fl
+               otbImageWidgetSplittedManager.fl
+               otbMsgReporterGUI.fl)
 
 ADD_LIBRARY(OTBVisualization ${OTBVisualization_SRCS} ${OTBVisualization_FLTK_UI_SRCS})
 TARGET_LINK_LIBRARIES (OTBVisualization OTBGui OTBCommon OTBIO ${OTB_VISU_GUI_LIBRARIES})
@@ -24,6 +27,7 @@ IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
   INSTALL(FILES ${__files1} ${__files2}  ${__files3}
     ${CMAKE_CURRENT_BINARY_DIR}/otbImageWidgetPackedManager.h
     ${CMAKE_CURRENT_BINARY_DIR}/otbImageWidgetSplittedManager.h
+    ${CMAKE_CURRENT_BINARY_DIR}/otbMsgReporterGUI.h
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Visualization
     COMPONENT Development)
 ENDIF(NOT OTB_INSTALL_NO_DEVELOPMENT)
