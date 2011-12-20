@@ -28,9 +28,9 @@ namespace otb
  *
  * \brief This class computes the confusion matrix from two LabelMapObject
  *
- * The confusion matrix stores the number of pixel inside the intersection between 
- * couples of region. These couples are made from a ground truth segmentation and 
- * a machine segmentation. The line number gives the index of the ground truth region. The 
+ * The confusion matrix stores the number of pixel inside the intersection between
+ * couples of region. These couples are made from a ground truth segmentation and
+ * a machine segmentation. The line number gives the index of the ground truth region. The
  * column number gives the index of the machine segmentation region.
  */
 
@@ -87,12 +87,12 @@ protected:
   ~HooverConfusionMatrix() {};
   
   /** BeforeThreadedGenerateData
-   *  Resize the matrix 
+   *  Resize the matrix
    */
   virtual void BeforeThreadedGenerateData();
 
-  /** Real action of the filter : fill the line of the confusion matrix corresponding to 
-   * the given label object 
+  /** Real action of the filter : fill the line of the confusion matrix corresponding to
+   * the given label object
    */
   virtual void ThreadedProcessLabelObject( LabelObjectType * labelObject );
 

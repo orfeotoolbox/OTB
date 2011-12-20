@@ -23,7 +23,7 @@
 
 int otbHooverInstancesNew(int argc, char* argv[])
 {
-  typedef otb::AttributesMapLabelObject<unsigned int,2,float> LabelObjectType;
+  typedef otb::AttributesMapLabelObject<unsigned int, 2, float> LabelObjectType;
   typedef itk::LabelMap<LabelObjectType>                      LabelMapType;
   typedef otb::HooverInstances<LabelMapType>      HooverInstancesType;
 

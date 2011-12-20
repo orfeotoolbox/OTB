@@ -71,7 +71,7 @@ public:
   bool GetResolutionInfo(std::vector<unsigned int>& res, std::vector<std::string>& desc);
 
   /** Get all resolutions in jpeg2000 file */
-  bool GetAvailableResolutions(std::vector<unsigned int>& res);  
+  bool GetAvailableResolutions(std::vector<unsigned int>& res);
 
   /** Reads the data from disk into the memory buffer provided. */
   virtual void Read(void* buffer);

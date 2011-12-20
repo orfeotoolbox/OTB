@@ -170,7 +170,6 @@ ViewerViewGUI
 }
 
 
-
 void
 ViewerViewGUI
 ::OpenJpeg2000Image()
@@ -534,7 +533,7 @@ ViewerViewGUI
    //Get the pixelView
    PixelDescriptionViewType::Pointer pixelView = m_ViewerModel->GetObjectList().at(selectedItem-1).pPixelView;
 
-   //   //Edit the Widget 
+   //   //Edit the Widget
    //   m_WidgetManagerList->GetNthElement(selectedItem-1)->UnRegisterAll();
    //   m_WidgetManagerList->GetNthElement(selectedItem-1)->RegisterFullWidget(currentVisuView->GetFullWidget());
    //   m_WidgetManagerList->GetNthElement(selectedItem-1)->RegisterScrollWidget(currentVisuView->GetScrollWidget());
@@ -1128,7 +1127,7 @@ ViewerViewGUI
   //Get the pixelView
   PixelDescriptionViewType::Pointer pixelView = m_ViewerModel->GetObjectList().at(m_DiaporamaCurrentIndex).pPixelView;
 
-  //Edit the Widget 
+  //Edit the Widget
   m_Widget->UnRegisterAll();
   m_Widget->RegisterFullWidget(currentVisuView->GetFullWidget());
   m_Widget->RegisterScrollWidget(currentVisuView->GetScrollWidget());
@@ -1352,7 +1351,6 @@ ViewerViewGUI
 
   m_LinkedImageList.clear();
 }
-
 
 
 /**

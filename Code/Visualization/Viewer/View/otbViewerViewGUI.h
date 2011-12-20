@@ -213,11 +213,11 @@ private:
   std::string                                    m_DisplayedLabel;
   std::string                                    m_UndisplayedLabel;
 
-  //Widget 
+  //Widget
   WidgetManagerList::Pointer                     m_WidgetManagerList;
   WidgetManagerList::Pointer                     m_LinkWidgetManagerList;
 
-  //SlideShow widget 
+  //SlideShow widget
   PackedWidgetManagerPointer               m_Widget;
 
   VisuViewPointerType                            m_VisuView;

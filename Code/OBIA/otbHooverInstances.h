@@ -83,11 +83,11 @@ public:
   LabelMapType* GetOutputGroundTruthLabelMap();
   LabelMapType* GetOutputMachineSegmentationLabelMap();
   
-  itkSetMacro(Matrix,MatrixType);
-  itkGetMacro(Matrix,MatrixType);
+  itkSetMacro(Matrix, MatrixType);
+  itkGetMacro(Matrix, MatrixType);
   
-  itkSetMacro(Threshold,double);
-  itkGetMacro(Threshold,double);
+  itkSetMacro(Threshold, double);
+  itkGetMacro(Threshold, double);
 
   /** Attribute name for correct detection */
   static const std::string attributeCD;
@@ -126,7 +126,7 @@ protected:
   /** Re implement the release input method to handle the second input correctly */
   virtual void ReleaseInputs();
   
-  /** ThreadedProcessLabelObject : 
+  /** ThreadedProcessLabelObject :
    *    - Fill cardinalities of GT regions
    */
   virtual void ThreadedProcessLabelObject( LabelObjectType * labelObject );

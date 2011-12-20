@@ -61,7 +61,7 @@ HooverInstances<TLabelMap>
   typename LabelMapType::Pointer secondOutput = LabelMapType::New();
   this->AddOutput(secondOutput);
   
-  m_Matrix.SetSize(0,0);
+  m_Matrix.SetSize(0, 0);
   m_CardRegGT.SetSize(0);
   m_CardRegMS.SetSize(0);
   m_LabelsGT.resize(0);
@@ -72,7 +72,7 @@ template <class TLabelMap>
 void HooverInstances<TLabelMap>
 ::SetGroundTruthLabelMap(const LabelMapType *gt)
 {
-  this->SetInput(0,gt);
+  this->SetInput(0, gt);
 }
 
 /** Set the machine segmentation label map */
@@ -80,7 +80,7 @@ template <class TLabelMap>
 void HooverInstances<TLabelMap>
 ::SetMachineSegmentationLabelMap(const LabelMapType *ms)
 {
-  this->SetInput(1,ms);
+  this->SetInput(1, ms);
 }
 
 /** Get the input ground truth label map */
@@ -214,7 +214,7 @@ void HooverInstances<TLabelMap>
   LabelObjectContainerTypeConstIterator iter;
   typename LabelObjectType::Pointer blankRegion;
   
-  for (iter = containerMS.begin() ; iter != containerMS.end() ; iter++)
+  for (iter = containerMS.begin(); iter != containerMS.end(); iter++)
     {
     LabelObjectType *regionMS = iter->second;
     m_CardRegMS[i] = regionMS->Size();
@@ -226,7 +226,7 @@ void HooverInstances<TLabelMap>
     blankRegion = LabelObjectType::New();
     blankRegion->SetLabel(regionMS->GetLabel());
     std::vector< std::string > attKeys = regionMS->GetAvailableAttributes();
-    for (int k=0 ; k<attKeys.size() ; k++)
+    for (int k=0; k<attKeys.size(); k++)
       {
       if (attKeys[k].find("HooverInstance_") == 0)
         {
@@ -251,7 +251,7 @@ void HooverInstances<TLabelMap>
   // Find the index corresponding to the current label object in GT
   unsigned long currentRegionGT = 0;
   LabelType currentLabelGT = labelObject->GetLabel();
-  for (unsigned long k=0;k<m_NumberOfRegionsGT;k++)
+  for (unsigned long k=0; k<m_NumberOfRegionsGT; k++)
     {
     if (currentLabelGT == m_LabelsGT[k])
       {
@@ -271,7 +271,7 @@ void HooverInstances<TLabelMap>
   blankRegion = LabelObjectType::New();
   blankRegion->SetLabel(labelObject->GetLabel());
   std::vector< std::string > attKeys = labelObject->GetAvailableAttributes();
-  for (int k=0 ; k<attKeys.size() ; k++)
+  for (int k=0; k<attKeys.size(); k++)
     {
     if (attKeys[k].find("HooverInstance_") == 0)
       {
@@ -307,7 +307,7 @@ void HooverInstances<TLabelMap>
   bool IsColEmpty;
   
   // first pass : loop on GT regions first
-  for(unsigned int row=0 ; row<m_NumberOfRegionsGT ; row++, iterGT++)
+  for(unsigned int row=0; row<m_NumberOfRegionsGT; row++, iterGT++)
     {
     double sumOS = 0.0; // sum of coefT for potential over-segmented regions
     double sumScoreRF = 0.0; // temporary sum  of (Tij x (Tij - 1)) terms for the RF score
@@ -317,10 +317,10 @@ void HooverInstances<TLabelMap>
     double tGT = static_cast<double>(m_CardRegGT[row]) * m_Threshold; // card Ri x t
     IsRowEmpty = true;
     iterMS = containerMS.begin();
-    for(unsigned int col=0 ; col<m_NumberOfRegionsMS ; col++, iterMS++)
+    for(unsigned int col=0; col<m_NumberOfRegionsMS; col++, iterMS++)
       {
       // Tij
-      double coefT = static_cast<double>(m_Matrix(row,col));
+      double coefT = static_cast<double>(m_Matrix(row, col));
       if(coefT < 0.5)
         {
         // the regions Ri and ^Rj have an empty intersection : we can jump to the next matrix cell
@@ -362,15 +362,15 @@ void HooverInstances<TLabelMap>
           otbDebugMacro(<< "2 coef[" << row << "," << col << "]=" << coefT << " #tGT=" << tGT << " #tMS=" << tMS << " -> OSmaybe");
           }
         objectsOfMS.push_back(iterMS->second); // candidate region for over-segmentation
-        regionsOfMS.insert(col); 
+        regionsOfMS.insert(col);
         sumOS += coefT;
         sumScoreRF += coefT*(coefT-1.0);
         }
-      } // end of column loop 
+      } // end of column loop
     
-    otbDebugMacro(<< "end of line " << row << " ; sumOS=" << sumOS << " " << regionsOfMS.size() << " of MS region");
-    if(sumOS>=tGT and sumOS>0) 
-      {      
+    otbDebugMacro(<< "end of line " << row << "; sumOS=" << sumOS << " " << regionsOfMS.size() << " of MS region");
+    if(sumOS>=tGT and sumOS>0)
+      {
       // CD
       if(regionsOfMS.size()==1)
         {
@@ -388,8 +388,8 @@ void HooverInstances<TLabelMap>
         regionGT->SetAttribute(attributeT.c_str(), static_cast<AttributesValueType>(m_Threshold));
         regionGT->SetAttribute(attributeRF.c_str(), static_cast<AttributesValueType>(scoreRF));
         
-        unsigned int indexOS=1; 
-        for(typename ObjectVectorType::iterator it=objectsOfMS.begin() ; it!=objectsOfMS.end() ; ++it)
+        unsigned int indexOS=1;
+        for(typename ObjectVectorType::iterator it=objectsOfMS.begin(); it!=objectsOfMS.end(); ++it)
           {
           LabelObjectType *regionMS = *it;
           std::ostringstream attribute;
@@ -404,9 +404,9 @@ void HooverInstances<TLabelMap>
           }
         
         GTindices.insert(row);
-        for(RegionSetType::iterator it=regionsOfMS.begin() ; it!=regionsOfMS.end() ; ++it)
+        for(RegionSetType::iterator it=regionsOfMS.begin(); it!=regionsOfMS.end(); ++it)
           {
-          MSindices.insert(*it); 
+          MSindices.insert(*it);
           otbDebugMacro(<< *it << " ");
           }
         }
@@ -424,7 +424,7 @@ void HooverInstances<TLabelMap>
 
   // second pass : loop on MS regions first
   iterMS = containerMS.begin();
-  for(unsigned int col=0 ; col<m_NumberOfRegionsMS ; col++, iterMS++)
+  for(unsigned int col=0; col<m_NumberOfRegionsMS; col++, iterMS++)
     {
     double sumUS = 0.0; // sum of coefT for potential under-segmented regions
     double sumScoreUS = 0.0; // temporary sum of the (Tij x (Tij - 1)) for RA score
@@ -435,9 +435,9 @@ void HooverInstances<TLabelMap>
     double tMS = static_cast<double>(m_CardRegMS[col]) * m_Threshold;
     IsColEmpty = true;
     iterGT = containerGT.begin();
-    for(unsigned int row=0 ; row<m_NumberOfRegionsGT ; row++, iterGT++)
+    for(unsigned int row=0; row<m_NumberOfRegionsGT; row++, iterGT++)
       {
-      double coefT = static_cast<double>(m_Matrix(row,col));
+      double coefT = static_cast<double>(m_Matrix(row, col));
       if(coefT < 0.5)
         {
         // the regions Ri and ^Rj have an empty intersection : we can jump to the next matrix cell
@@ -461,8 +461,8 @@ void HooverInstances<TLabelMap>
       } // end of line loop
     
     // US
-    if(sumUS>=tMS) 
-      { 
+    if(sumUS>=tMS)
+      {
       if(regionsOfGT.size()==1)
         {
         otbDebugMacro(<< "CD already registered");
@@ -477,7 +477,7 @@ void HooverInstances<TLabelMap>
         regionMS->SetAttribute(attributeRA.c_str(), static_cast<AttributesValueType>(scoreRA));
         
         unsigned int indexUS=1;
-        for(typename ObjectVectorType::iterator it=objectsOfGT.begin() ; it!=objectsOfGT.end() ; ++it)
+        for(typename ObjectVectorType::iterator it=objectsOfGT.begin(); it!=objectsOfGT.end(); ++it)
           {
           LabelObjectType *regionGT = *it;
           std::ostringstream attribute;
@@ -492,7 +492,7 @@ void HooverInstances<TLabelMap>
           }
         
         MSindices.insert(col);
-        for(RegionSetType::iterator it=regionsOfGT.begin() ; it!=regionsOfGT.end() ; ++it)
+        for(RegionSetType::iterator it=regionsOfGT.begin(); it!=regionsOfGT.end(); ++it)
           {
           GTindices.insert(*it);
           otbDebugMacro(<< *it << " ");
@@ -504,7 +504,7 @@ void HooverInstances<TLabelMap>
         otbDebugMacro(<< "No GT region present in potential US instance.");
         }
       }
-    // check for empty columns (MS region that doesn't intersect any GT region) 
+    // check for empty columns (MS region that doesn't intersect any GT region)
     if (IsColEmpty)
       {
       MSindices.insert(col);
@@ -513,7 +513,7 @@ void HooverInstances<TLabelMap>
 
   // check for Missed regions (unregistered regions in GT)
   iterGT = containerGT.begin();
-  for(unsigned int i=0 ; i<m_NumberOfRegionsGT ; ++i , ++iterGT)
+  for(unsigned int i=0; i<m_NumberOfRegionsGT; ++i , ++iterGT)
     {
     if(GTindices.count(i)==0)
       {
@@ -526,7 +526,7 @@ void HooverInstances<TLabelMap>
 
   // check for Noise regions (unregistered regions in MS)
   iterMS = containerMS.begin();
-  for(unsigned int i=0 ; i<m_NumberOfRegionsMS ; ++i , ++iterMS)
+  for(unsigned int i=0; i<m_NumberOfRegionsMS; ++i , ++iterMS)
     {
     if(MSindices.count(i)==0)
       {

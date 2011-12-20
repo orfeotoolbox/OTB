@@ -26,7 +26,7 @@
 
 int otbHooverConfusionMatrix(int argc, char* argv[])
 {
-  typedef itk::LabelObject<unsigned int,2>          LabelObjectType;
+  typedef itk::LabelObject<unsigned int, 2>          LabelObjectType;
   typedef itk::LabelMap<LabelObjectType>            LabelMapType;
   typedef otb::HooverConfusionMatrix<LabelMapType>  HooverConfusionMatrixType;
   typedef otb::Image<unsigned int, 2>               ImageType;
@@ -67,11 +67,11 @@ int otbHooverConfusionMatrix(int argc, char* argv[])
   
   MatrixType &mat = hooverFilter->GetHooverConfusionMatrix();
   unsigned int n = mat.Rows(), p = mat.Cols();
-  for (unsigned int i=0;i<n;i++)
+  for (unsigned int i=0; i<n; i++)
     {
-    for (unsigned int j=0;j<p;j++)
+    for (unsigned int j=0; j<p; j++)
       {
-      outputFile << mat(i,j);
+      outputFile << mat(i, j);
       if ((j+1) == p)
         {
         outputFile << "\n";

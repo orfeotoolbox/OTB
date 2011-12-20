@@ -65,7 +65,7 @@ ViewerModel
 }
 
 
-bool 
+bool
 ViewerModel
 ::IsJPEG2000File(const std::string & filepath)
 {
@@ -125,7 +125,7 @@ ViewerModel
     readerJPEG2000->SetFileName(filepath);
     readerJPEG2000->ReadImageInformation();
     readerJPEG2000->GetResolutionInfo(res, desc);
-    }  
+    }
 }
 
 unsigned int
@@ -138,7 +138,7 @@ ViewerModel
 
   // If jpeg2000, add the selected resolution at the end of the file name
   if( isJPEG2000 )
-    { 
+    {
     unsigned int resolution = 0;
     otbFilepath += ":";
     std::ostringstream ossRes;
@@ -169,7 +169,7 @@ ViewerModel
     quicklook->DisconnectPipeline();
     shrinkFactor = (1 << (resSize - 1));
     }
-  //// If not jpeg2000 or trouble in jpeg2000 quicloock, use a streaming shrink image filter 
+  //// If not jpeg2000 or trouble in jpeg2000 quicloock, use a streaming shrink image filter
   if (quicklook.IsNull())
     {
     typedef otb::StreamingShrinkImageFilter<ImageType> StreamingShrinkImageFilterType;

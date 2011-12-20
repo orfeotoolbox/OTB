@@ -23,7 +23,7 @@
 
 int otbHooverConfusionMatrixNew(int argc, char* argv[])
 {
-  typedef itk::LabelObject<unsigned int,2>          LabelObjectType;
+  typedef itk::LabelObject<unsigned int, 2>          LabelObjectType;
   typedef itk::LabelMap<LabelObjectType>            LabelMapType;
   typedef otb::HooverConfusionMatrix<LabelMapType>  HooverConfusionMatrixType;
 
