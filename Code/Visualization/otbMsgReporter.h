@@ -69,7 +69,7 @@ public:
 protected:
   // Constructor and destructor
   MsgReporter();
-  ~MsgReporter() {};
+  virtual ~MsgReporter() {}
 
 private:
   MsgReporter(const Self&); //purposely not implemented
