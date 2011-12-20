@@ -176,7 +176,19 @@ ADD_TEST(obTvLabelImageToLabelMapWithAdjacencyFilter ${OBIA_TESTS3}
   ${TEMP}/obTvLabelImageToLabelMapWithAdjacencyFilterOutput.txt
 )
 
-      
+ADD_TEST(obTuHooverConfusionMatrixNew ${OBIA_TESTS1}
+    otbHooverConfusionMatrixNew)
+
+ADD_TEST(obTvHooverConfusionMatrix ${OBIA_TESTS1}
+    --compare-ascii ${NOTOL}
+    ${BASELINE_FILES}/obTvHooverConfusionMatrix.txt
+    ${TEMP}/obTvHooverConfusionMatrix.txt
+    otbHooverConfusionMatrix
+    ${INPUTDATA}/Seg1InputForRCC8Graph.tif
+    ${INPUTDATA}/Seg2InputForRCC8Graph.tif
+    ${TEMP}/obTvHooverConfusionMatrix.txt
+    )
+
 # OBIATests2 (need PQXX)
 IF(OTB_USE_PQXX)
 ADD_TEST(obTuLabelMapToGISTableFilterNew ${OBIA_TESTS2}
@@ -230,6 +242,8 @@ otbStatisticsAttributesLabelMapFilterNew.cxx
 otbVectorDataToLabelMapFilter.cxx
 otbVectorDataToLabelMapFilterNew.cxx
 otbStreamingConnectedComponentOBIATest.cxx
+otbHooverConfusionMatrixNew.cxx
+otbHooverConfusionMatrix.cxx
 )
 
 IF(OTB_USE_PQXX)
