@@ -25,7 +25,7 @@ INCLUDE_DIRECTORIES(
 # Take the list of GUI files, generate .cxx and .h from them and add
 # them to the build process of the target
 
-FLTK_WRAP_UI(otbMVCImageViewerManager ${VIEW_FL_SRCS})
+FLTK_WRAP_UI(otbImageViewerManager ${VIEW_FL_SRCS})
 
 # Suppress warning Fl_RGB_Image deferencing pointeur
 IF(CMAKE_COMPILER_IS_GNUCXX)
@@ -33,23 +33,19 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
             ${MODEL_SRCS} 
             ${CONTROLLER_SRCS} 
             ${VIEW_SRCS} 
-            ${otbMVCImageViewerManager_FLTK_UI_SRCS}
+            ${otbImageViewerManager_FLTK_UI_SRCS}
             otbImageViewerManager.cxx
 	    PROPERTIES COMPILE_FLAGS -fno-strict-aliasing)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
-
-ADD_LIBRARY(otbMVCImageViewerManager ${VIEW_SRCS} ${CONTROLLER_SRCS} ${MODEL_SRCS} ${otbMVCImageViewerManager_FLTK_UI_SRCS} ) 
-TARGET_LINK_LIBRARIES(otbMVCImageViewerManager OTBIO OTBCommon OTBVisualization)
-IF(OTB_LIBRARY_PROPERTIES)
-  SET_TARGET_PROPERTIES(otbMVCImageViewerManager PROPERTIES ${OTB_LIBRARY_PROPERTIES})
-ENDIF(OTB_LIBRARY_PROPERTIES)
-
-ADD_EXECUTABLE(otbImageViewerManager otbImageViewerManager.cxx )
-TARGET_LINK_LIBRARIES(otbImageViewerManager otbMVCImageViewerManager)
+ADD_EXECUTABLE(otbImageViewerManager 
+                   otbImageViewerManager.cxx
+                   ${VIEW_SRCS} ${CONTROLLER_SRCS} ${MODEL_SRCS}
+                   ${otbImageViewerManager_FLTK_UI_SRCS})
+TARGET_LINK_LIBRARIES(otbImageViewerManager OTBIO OTBCommon OTBVisualization)
 
 IF(NOT OTB_INSTALL_NO_LIBRARIES)
-  INSTALL(TARGETS otbImageViewerManager otbMVCImageViewerManager
+  INSTALL(TARGETS otbImageViewerManager
     RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR_CM24} COMPONENT RuntimeLibraries
     LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR_CM24} COMPONENT RuntimeLibraries
     ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR_CM24} COMPONENT Development)
