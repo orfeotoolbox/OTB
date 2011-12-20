@@ -67,15 +67,10 @@ IF(APPLE)
   SET( FLTK_PLATFORM_DEPENDENT_LIBS  "-framework Carbon -framework Cocoa -framework ApplicationServices -lz")
 ENDIF(APPLE)
 
-# If FLTK_INCLUDE_DIR is already defined we assigne its value to FLTK_DIR
-MESSAGE(STATUS "FLTK_INCLUDE_DIR= ${FLTK_INCLUDE_DIR}")
-IF(FLTK_INCLUDE_DIR)
-  SET(FLTK_DIR ${FLTK_INCLUDE_DIR})
-ENDIF(FLTK_INCLUDE_DIR)
-MESSAGE(STATUS "FLTK_DIR= ${FLTK_DIR}")
 
-# If FLTK has been built using CMake we try to find everything directly
-SET(FLTK_DIR_STRING "directory containing FLTKConfig.cmake.  This is either the root of the build tree, or PREFIX/lib/fltk for an installation.")
+# If FLTK has been built using CMake we try to find everything directly (we support only case where
+# FLTK is install)
+SET(FLTK_DIR_STRING "directory containing FLTKConfig.cmake: FLTK_INSTALL_DIR/lib/fltk .")
 
 # Search only if the location is not already known.
 IF(NOT FLTK_DIR)
@@ -131,180 +126,186 @@ IF(NOT FLTK_DIR)
     )
 ENDIF(NOT FLTK_DIR)
 
-  # Check if FLTK was built using CMake
-  IF(EXISTS ${FLTK_DIR}/FLTKConfig.cmake)
-    SET(FLTK_BUILT_WITH_CMAKE 1)
-  ENDIF(EXISTS ${FLTK_DIR}/FLTKConfig.cmake)
+# Check if FLTK was built using CMake
+IF(EXISTS ${FLTK_DIR}/FLTKConfig.cmake)
+  SET(FLTK_BUILT_WITH_CMAKE 1)
+ENDIF(EXISTS ${FLTK_DIR}/FLTKConfig.cmake)
   
-  MESSAGE(STATUS "FLTK_BUILT_WITH_CMAKE= ${FLTK_BUILT_WITH_CMAKE}")
+#MESSAGE(STATUS "FLTK_BUILT_WITH_CMAKE= ${FLTK_BUILT_WITH_CMAKE}")
 
-  IF(FLTK_BUILT_WITH_CMAKE)
+IF(FLTK_BUILT_WITH_CMAKE) # FLTK was build using CMak
+
+  # Use the config mode of find package
+  FIND_PACKAGE(FLTK NO_MODULE)
+
+  IF (FLUID_COMMAND)
+    # If fluid command is available we try to use the 1.1.x version to get elements 
   
-    # Use the config mode of find package
-    FIND_PACKAGE(FLTK NO_MODULE)
-    
-    # If fluid command is available we try to use the 1.1 version 
-    IF (${FLUID_COMMAND})
-  
-      SET(FLTK_FOUND 1)
-      #INCLUDE(${FLTK_DIR}/FLTKConfig.cmake)
-      SET(FLTK_EXTERNAL_VERSION 
-          "${FLTK_VERSION_MAJOR}.${FLTK_VERSION_MINOR}.${FLTK_VERSION_PATCH}" 
-          CACHE STRING "FLTK external version used")
+    SET(FLTK_FOUND 1)
+     
+    # Create the version string
+    SET(FLTK_EXTERNAL_VERSION 
+        "${FLTK_VERSION_MAJOR}.${FLTK_VERSION_MINOR}.${FLTK_VERSION_PATCH}" 
+        CACHE STRING "FLTK external version used")
+          
+    # Fluid executable
+    SET(FLTK_FLUID_EXECUTABLE ${FLUID_COMMAND} CACHE FILEPATH "Fluid executable")
 
-      # Fluid
-      SET(FLTK_FLUID_EXECUTABLE ${FLUID_COMMAND} CACHE FILEPATH "Fluid executable")
+    SET(FLTK_INCLUDE_DIR ${FLTK_DIR}) ## ???
+    LINK_DIRECTORIES(${FLTK_LIBRARY_DIRS})
+    
+    SET(FLTK_BASE_LIBRARY fltk)
+    SET(FLTK_GL_LIBRARY fltk_gl)
+    SET(FLTK_FORMS_LIBRARY fltk_forms)
+    SET(FLTK_IMAGES_LIBRARY fltk_images)
+    
+    # Add the extra libraries
+    LOAD_CACHE(${FLTK_DIR}
+               READ_WITH_PREFIX
+               FL FLTK_USE_SYSTEM_JPEG
+               FL FLTK_USE_SYSTEM_PNG
+               FL FLTK_USE_SYSTEM_ZLIB
+               )
+        
+  ELSE (FLUID_COMMAND)  
+    # If fluid command is not available we try to use the 1.3.0 version  
+     
+    # Create the version string
+    SET(FLTK_EXTERNAL_VERSION "${FLTK_VERSION}")
+      
+    # Fluid executable
+    SET(FLTK_FLUID_EXECUTABLE ${FLTK_FLUID_EXECUTABLE} CACHE FILEPATH "Fluid executable")
+         
+    SET(FLTK_BASE_LIBRARY ${FLTK_LIB_DIR}/libfltk.so)
+    SET(FLTK_GL_LIBRARY ${FLTK_LIB_DIR}/libfltk_gl.so)
+    SET(FLTK_FORMS_LIBRARY ${FLTK_LIB_DIR}/libfltk_forms.so)
+    SET(FLTK_IMAGES_LIBRARY ${FLTK_LIB_DIR}/libfltk_images.so)
 
-      SET(FLTK_INCLUDE_DIR ${FLTK_DIR})
-      LINK_DIRECTORIES(${FLTK_LIBRARY_DIRS})
+  ENDIF (FLUID_COMMAND)
     
-      SET(FLTK_BASE_LIBRARY fltk)
-      SET(FLTK_GL_LIBRARY fltk_gl)
-      SET(FLTK_FORMS_LIBRARY fltk_forms)
-      SET(FLTK_IMAGES_LIBRARY fltk_images)
-    
-      # Add the extra libraries
-      LOAD_CACHE(${FLTK_DIR}
-        READ_WITH_PREFIX
-        FL FLTK_USE_SYSTEM_JPEG
-        FL FLTK_USE_SYSTEM_PNG
-        FL FLTK_USE_SYSTEM_ZLIB
-        )
-    ELSE (${FLUID_COMMAND})  
-        # If fluid command is not available we try to use the 1.3 version  
-        SET(FLTK_EXTERNAL_VERSION "${FLTK_VERSION}" CACHE STRING "FLTK external version used")
-        SET(FLTK_FLUID_EXECUTABLE ${FLTK_FLUID_EXECUTABLE} CACHE FILEPATH "Fluid executable")
-        SET(FLTK_BASE_LIBRARY ${FLTK_LIB_DIR}/libfltk.so)
-        SET(FLTK_GL_LIBRARY ${FLTK_LIB_DIR}/libfltk_gl.so)
-        SET(FLTK_FORMS_LIBRARY ${FLTK_LIB_DIR}/libfltk_forms.so)
-        SET(FLTK_IMAGES_LIBRARY ${FLTK_LIB_DIR}/libfltk_images.so)
-    ENDIF (${FLUID_COMMAND})
-    
-    
-    
-    SET(FLTK_IMAGES_LIBS "")
-    IF(FLFLTK_USE_SYSTEM_JPEG)
-      SET(FLTK_IMAGES_LIBS ${FLTK_IMAGES_LIBS} fltk_jpeg)
-    ENDIF(FLFLTK_USE_SYSTEM_JPEG)
-    IF(FLFLTK_USE_SYSTEM_PNG)
-      SET(FLTK_IMAGES_LIBS ${FLTK_IMAGES_LIBS} fltk_png)
-    ENDIF(FLFLTK_USE_SYSTEM_PNG)
-    IF(FLFLTK_USE_SYSTEM_ZLIB)
-      SET(FLTK_IMAGES_LIBS ${FLTK_IMAGES_LIBS} fltk_zlib)
-    ENDIF(FLFLTK_USE_SYSTEM_ZLIB)
-    SET(FLTK_IMAGES_LIBS "${FLTK_IMAGES_LIBS}" CACHE INTERNAL
+  SET(FLTK_IMAGES_LIBS "")
+  IF(FLFLTK_USE_SYSTEM_JPEG)
+    SET(FLTK_IMAGES_LIBS ${FLTK_IMAGES_LIBS} fltk_jpeg)
+  ENDIF(FLFLTK_USE_SYSTEM_JPEG)
+  IF(FLFLTK_USE_SYSTEM_PNG)
+    SET(FLTK_IMAGES_LIBS ${FLTK_IMAGES_LIBS} fltk_png)
+  ENDIF(FLFLTK_USE_SYSTEM_PNG)
+  IF(FLFLTK_USE_SYSTEM_ZLIB)
+    SET(FLTK_IMAGES_LIBS ${FLTK_IMAGES_LIBS} fltk_zlib)
+  ENDIF(FLFLTK_USE_SYSTEM_ZLIB)
+  SET(FLTK_IMAGES_LIBS "${FLTK_IMAGES_LIBS}" CACHE INTERNAL
       "Extra libraries for fltk_images library.")
 
-  ELSE(FLTK_BUILT_WITH_CMAKE)
+ELSE(FLTK_BUILT_WITH_CMAKE) # FLTK was not build using CMake
 
-    # if FLTK was not built using CMake
-    # Find fluid executable.
-    FIND_PROGRAM(FLTK_FLUID_EXECUTABLE fluid ${FLTK_INCLUDE_DIR}/fluid)
+  # Find fluid executable.
+  FIND_PROGRAM(FLTK_FLUID_EXECUTABLE fluid ${FLTK_INCLUDE_DIR}/fluid)
 
-    # Use location of fluid to help find everything else.
-    SET(FLTK_INCLUDE_SEARCH_PATH "")
-    SET(FLTK_LIBRARY_SEARCH_PATH "")
-    IF(FLTK_FLUID_EXECUTABLE)
-      GET_FILENAME_COMPONENT(FLTK_BIN_DIR "${FLTK_FLUID_EXECUTABLE}" PATH)
-      SET(FLTK_INCLUDE_SEARCH_PATH ${FLTK_INCLUDE_SEARCH_PATH}
+  # Use location of fluid to help find everything else.
+  SET(FLTK_INCLUDE_SEARCH_PATH "")
+  SET(FLTK_LIBRARY_SEARCH_PATH "")
+  IF(FLTK_FLUID_EXECUTABLE)
+    GET_FILENAME_COMPONENT(FLTK_BIN_DIR "${FLTK_FLUID_EXECUTABLE}" PATH)
+    SET(FLTK_INCLUDE_SEARCH_PATH ${FLTK_INCLUDE_SEARCH_PATH}
         ${FLTK_BIN_DIR}/../include ${FLTK_BIN_DIR}/..)
-      SET(FLTK_LIBRARY_SEARCH_PATH ${FLTK_LIBRARY_SEARCH_PATH}
+    SET(FLTK_LIBRARY_SEARCH_PATH ${FLTK_LIBRARY_SEARCH_PATH}
         ${FLTK_BIN_DIR}/../lib)
-      SET(FLTK_WRAP_UI 1)
-    ENDIF(FLTK_FLUID_EXECUTABLE)
+    SET(FLTK_WRAP_UI 1)
+  ENDIF(FLTK_FLUID_EXECUTABLE)
 
-    #
-    # Try to find FLTK include dir using fltk-config
-    #
-    IF(UNIX)
-      # Use fltk-config to generate a list of possible include directories
-      FIND_PROGRAM(FLTK_CONFIG_SCRIPT fltk-config PATHS ${FLTK_BIN_DIR})
-      IF(FLTK_CONFIG_SCRIPT)
-        IF(NOT FLTK_INCLUDE_DIR)
-          EXEC_PROGRAM(${FLTK_CONFIG_SCRIPT} ARGS --cxxflags OUTPUT_VARIABLE FLTK_CXXFLAGS)
-          IF(FLTK_CXXFLAGS)
-            STRING(REGEX MATCHALL "-I[^ ]*" _fltk_temp_dirs ${FLTK_CXXFLAGS})
-            STRING(REPLACE "-I" "" _fltk_temp_dirs "${_fltk_temp_dirs}")
-            FOREACH(_dir ${_fltk_temp_dirs})
-              STRING(STRIP ${_dir} _output)
-              LIST(APPEND _FLTK_POSSIBLE_INCLUDE_DIRS ${_output})
-            ENDFOREACH()
-          ENDIF(FLTK_CXXFLAGS)
-        ENDIF()
+  #
+  # Try to find FLTK include dir using fltk-config
+  #
+  IF(UNIX)
+    # Use fltk-config to generate a list of possible include directories
+    FIND_PROGRAM(FLTK_CONFIG_SCRIPT fltk-config PATHS ${FLTK_BIN_DIR})
+    IF(FLTK_CONFIG_SCRIPT)
+      IF(NOT FLTK_INCLUDE_DIR)
+        EXEC_PROGRAM(${FLTK_CONFIG_SCRIPT} ARGS --cxxflags OUTPUT_VARIABLE FLTK_CXXFLAGS)
+        IF(FLTK_CXXFLAGS)
+          STRING(REGEX MATCHALL "-I[^ ]*" _fltk_temp_dirs ${FLTK_CXXFLAGS})
+          STRING(REPLACE "-I" "" _fltk_temp_dirs "${_fltk_temp_dirs}")
+          FOREACH(_dir ${_fltk_temp_dirs})
+            STRING(STRIP ${_dir} _output)
+            LIST(APPEND _FLTK_POSSIBLE_INCLUDE_DIRS ${_output})
+          ENDFOREACH()
+        ENDIF(FLTK_CXXFLAGS)
       ENDIF()
     ENDIF()
+  ENDIF()
 
-    SET(FLTK_INCLUDE_SEARCH_PATH ${FLTK_INCLUDE_SEARCH_PATH}
+  SET(FLTK_INCLUDE_SEARCH_PATH ${FLTK_INCLUDE_SEARCH_PATH}
       /usr/local/fltk
       /usr/X11R6/include
       ${_FLTK_POSSIBLE_INCLUDE_DIRS}
-      )
+     )
 
-    FIND_PATH(FLTK_INCLUDE_DIR 
-        NAMES FL/Fl.h FL/Fl.H    # fltk 1.1.9 has Fl.H (#8376)
-        PATHS ${FLTK_INCLUDE_SEARCH_PATH})
+  FIND_PATH(FLTK_INCLUDE_DIR 
+            NAMES FL/Fl.h FL/Fl.H    # fltk 1.1.9 has Fl.H (#8376)
+            PATHS ${FLTK_INCLUDE_SEARCH_PATH}
+            )
     
-    #
-    # Try to find FLTK library
-    IF(UNIX)
-      IF(FLTK_CONFIG_SCRIPT)
-        EXEC_PROGRAM(${FLTK_CONFIG_SCRIPT} ARGS --libs OUTPUT_VARIABLE _FLTK_POSSIBLE_LIBS)
-        IF(_FLTK_POSSIBLE_LIBS)
-          GET_FILENAME_COMPONENT(_FLTK_POSSIBLE_LIBRARY_DIR ${_FLTK_POSSIBLE_LIBS} PATH)
-        ENDIF()
+  #
+  # Try to find FLTK library
+  IF(UNIX)
+    IF(FLTK_CONFIG_SCRIPT)
+      EXEC_PROGRAM(${FLTK_CONFIG_SCRIPT} ARGS --libs OUTPUT_VARIABLE _FLTK_POSSIBLE_LIBS)
+      IF(_FLTK_POSSIBLE_LIBS)
+        GET_FILENAME_COMPONENT(_FLTK_POSSIBLE_LIBRARY_DIR ${_FLTK_POSSIBLE_LIBS} PATH)
       ENDIF()
     ENDIF()
+  ENDIF()
 
-    SET(FLTK_LIBRARY_SEARCH_PATH ${FLTK_LIBRARY_SEARCH_PATH}
+  SET(FLTK_LIBRARY_SEARCH_PATH ${FLTK_LIBRARY_SEARCH_PATH}
       /usr/local/fltk/lib
       /usr/X11R6/lib
       ${FLTK_INCLUDE_DIR}/lib
       ${_FLTK_POSSIBLE_LIBRARY_DIR}
       )
 
-    FIND_LIBRARY(FLTK_BASE_LIBRARY NAMES fltk fltkd
-      PATHS ${FLTK_LIBRARY_SEARCH_PATH})
-    FIND_LIBRARY(FLTK_GL_LIBRARY NAMES fltkgl fltkgld fltk_gl
-      PATHS ${FLTK_LIBRARY_SEARCH_PATH})
-    FIND_LIBRARY(FLTK_FORMS_LIBRARY NAMES fltkforms fltkformsd fltk_forms
-      PATHS ${FLTK_LIBRARY_SEARCH_PATH})
-    FIND_LIBRARY(FLTK_IMAGES_LIBRARY NAMES fltkimages fltkimagesd fltk_images
-      PATHS ${FLTK_LIBRARY_SEARCH_PATH})
+  FIND_LIBRARY(FLTK_BASE_LIBRARY NAMES fltk fltkd
+               PATHS ${FLTK_LIBRARY_SEARCH_PATH})
+  FIND_LIBRARY(FLTK_GL_LIBRARY NAMES fltkgl fltkgld fltk_gl
+               PATHS ${FLTK_LIBRARY_SEARCH_PATH})
+  FIND_LIBRARY(FLTK_FORMS_LIBRARY NAMES fltkforms fltkformsd fltk_forms
+               PATHS ${FLTK_LIBRARY_SEARCH_PATH})
+  FIND_LIBRARY(FLTK_IMAGES_LIBRARY NAMES fltkimages fltkimagesd fltk_images
+               PATHS ${FLTK_LIBRARY_SEARCH_PATH})
 
-    # Find the extra libraries needed for the fltk_images library.
-    IF(UNIX)
-      IF(FLTK_CONFIG_SCRIPT)
-        EXEC_PROGRAM(${FLTK_CONFIG_SCRIPT} ARGS --use-images --ldflags
-          OUTPUT_VARIABLE FLTK_IMAGES_LDFLAGS)
-        SET(FLTK_LIBS_EXTRACT_REGEX ".*-lfltk_images (.*) -lfltk.*")
-        IF("${FLTK_IMAGES_LDFLAGS}" MATCHES "${FLTK_LIBS_EXTRACT_REGEX}")
-          STRING(REGEX REPLACE "${FLTK_LIBS_EXTRACT_REGEX}" "\\1"
-            FLTK_IMAGES_LIBS "${FLTK_IMAGES_LDFLAGS}")
-          STRING(REGEX REPLACE " +" ";" FLTK_IMAGES_LIBS "${FLTK_IMAGES_LIBS}")
-          # The EXEC_PROGRAM will not be inherited into subdirectories from
-          # the file that originally included this module.  Save the answer.
-          SET(FLTK_IMAGES_LIBS "${FLTK_IMAGES_LIBS}" CACHE INTERNAL
+  # Find the extra libraries needed for the fltk_images library.
+  IF(UNIX)
+    IF(FLTK_CONFIG_SCRIPT)
+      EXEC_PROGRAM(${FLTK_CONFIG_SCRIPT} ARGS --use-images --ldflags
+                   OUTPUT_VARIABLE FLTK_IMAGES_LDFLAGS)
+      SET(FLTK_LIBS_EXTRACT_REGEX ".*-lfltk_images (.*) -lfltk.*")
+      IF("${FLTK_IMAGES_LDFLAGS}" MATCHES "${FLTK_LIBS_EXTRACT_REGEX}")
+        STRING(REGEX REPLACE "${FLTK_LIBS_EXTRACT_REGEX}" "\\1"
+               FLTK_IMAGES_LIBS "${FLTK_IMAGES_LDFLAGS}")
+        STRING(REGEX REPLACE " +" ";" FLTK_IMAGES_LIBS "${FLTK_IMAGES_LIBS}")
+        # The EXEC_PROGRAM will not be inherited into subdirectories from
+        # the file that originally included this module.  Save the answer.
+        SET(FLTK_IMAGES_LIBS "${FLTK_IMAGES_LIBS}" CACHE INTERNAL
             "Extra libraries for fltk_images library.")
-        ENDIF("${FLTK_IMAGES_LDFLAGS}" MATCHES "${FLTK_LIBS_EXTRACT_REGEX}")
-      ENDIF(FLTK_CONFIG_SCRIPT)
-    ENDIF(UNIX)
+      ENDIF("${FLTK_IMAGES_LDFLAGS}" MATCHES "${FLTK_LIBS_EXTRACT_REGEX}")
+    ENDIF(FLTK_CONFIG_SCRIPT)
+  ENDIF(UNIX)
 
-  ENDIF(FLTK_BUILT_WITH_CMAKE)
+ENDIF(FLTK_BUILT_WITH_CMAKE)
 
-  # Append all of the required libraries together (by default, everything)
-  SET(FLTK_LIBRARIES)
-  IF(NOT FLTK_SKIP_IMAGES)
-    LIST(APPEND FLTK_LIBRARIES ${FLTK_IMAGES_LIBRARY})
-  ENDIF()
-  IF(NOT FLTK_SKIP_FORMS)
-    LIST(APPEND FLTK_LIBRARIES ${FLTK_FORMS_LIBRARY})
-  ENDIF()
-  IF(NOT FLTK_SKIP_OPENGL)
-    LIST(APPEND FLTK_LIBRARIES ${FLTK_GL_LIBRARY} ${OPENGL_gl_LIBRARY})
-    LIST(APPEND FLTK_INCLUDE_DIR ${OPENGL_INCLUDE_DIR})
-    LIST(REMOVE_DUPLICATES FLTK_INCLUDE_DIR)
-  ENDIF()
-  LIST(APPEND FLTK_LIBRARIES ${FLTK_BASE_LIBRARY})
+# Append all of the required libraries together (by default, everything)
+SET(FLTK_LIBRARIES)
+LIST(APPEND FLTK_LIBRARIES ${FLTK_BASE_LIBRARY})
+IF(NOT FLTK_SKIP_IMAGES)
+  LIST(APPEND FLTK_LIBRARIES ${FLTK_IMAGES_LIBRARY})
+ENDIF()
+IF(NOT FLTK_SKIP_FORMS)
+  LIST(APPEND FLTK_LIBRARIES ${FLTK_FORMS_LIBRARY})
+ENDIF()
+IF(NOT FLTK_SKIP_OPENGL)
+  LIST(APPEND FLTK_LIBRARIES ${FLTK_GL_LIBRARY} ${OPENGL_gl_LIBRARY})
+  LIST(APPEND FLTK_INCLUDE_DIR ${OPENGL_INCLUDE_DIR})
+  LIST(REMOVE_DUPLICATES FLTK_INCLUDE_DIR)
+ENDIF()
 
 INCLUDE(${CMAKE_ROOT}/Modules/FindPackageHandleStandardArgs.cmake)
 IF(FLTK_SKIP_FLUID)
@@ -314,8 +315,6 @@ ELSE()
 ENDIF()
 
 IF(FLTK_FOUND)
-  MESSAGE(STATUS "in FindFLTK FLTK_PLATFORM_DEPENDENT_LIBS = ${FLTK_PLATFORM_DEPENDENT_LIBS}")
-  MESSAGE(STATUS "in FindFLTK FLTK_LIBRARIES = ${FLTK_LIBRARIES}")
   
   IF(APPLE)
     SET(FLTK_LIBRARIES ${FLTK_PLATFORM_DEPENDENT_LIBS} ${FLTK_LIBRARIES})
@@ -330,5 +329,7 @@ IF(FLTK_FOUND)
   SET (FLTK_LIBRARY ${FLTK_LIBRARIES})
 ENDIF(FLTK_FOUND)
 
-MESSAGE(STATUS "AT END FLTK_INCLUDE_DIR IS SET TO ${FLTK_INCLUDE_DIR}")
-
+MESSAGE(STATUS "In (otb)FindFLTK.cmake FLTK_INCLUDE_DIR = ${FLTK_INCLUDE_DIR}")
+MESSAGE(STATUS "In (otb)FindFLTK.cmake FLTK_LIBRARIES = ${FLTK_LIBRARIES}")
+MESSAGE(STATUS "In (otb)FindFLTK.cmake FLTK_FLUID_EXECUTABLE = ${FLTK_FLUID_EXECUTABLE}")
+MESSAGE(STATUS "In (otb)FindFLTK.cmake FLTK_WRAP_UI = ${FLTK_WRAP_UI}")
