@@ -143,7 +143,7 @@ public:
 
 protected:
   virtual void   OpenImage();
-  virtual void   Initialize(const char * cfname);
+  virtual void   Initialize(const unsigned int & numberOfOpenedImages);//const char * cfname);
   virtual void   CloseImage();
   virtual void   ViewerSetup();
   virtual void   ViewerSetupOk();
@@ -186,6 +186,7 @@ protected:
   virtual void InitializeImageController(unsigned int selectedItem );
 
   virtual void OpenJpeg2000Image();
+ 
 
   /** Constructor */
   ImageViewerManagerViewGUI();
