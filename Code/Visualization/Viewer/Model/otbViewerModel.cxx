@@ -15,7 +15,7 @@ See OTBCopyright.txt for details.
      PURPOSE,  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbImageViewerManagerModel.h"
+#include "otbViewerModel.h"
 #include "otbFltkFilterWatcher.h"
 #include <FL/fl_ask.H>
 #include "itkExceptionObject.h"
@@ -33,32 +33,32 @@ namespace otb
 {
 
 /** Initialize the singleton */
-ImageViewerManagerModel::Pointer ImageViewerManagerModel::Instance = NULL;
+ViewerModel::Pointer ViewerModel::Instance = NULL;
 
-ImageViewerManagerModel::ImageViewerManagerModel()
+ViewerModel::ViewerModel()
 {
   //Set all the boolean to false
   m_HasChangedChannelOrder = false;
   m_HasImageOpened = false;
 }
 
-ImageViewerManagerModel
-::~ImageViewerManagerModel(){}
+ViewerModel
+::~ViewerModel(){}
 
 
 /** Manage the singleton */
-ImageViewerManagerModel::Pointer
-ImageViewerManagerModel::GetInstance()
+ViewerModel::Pointer
+ViewerModel::GetInstance()
 {
   if (!Instance)
   {
-    Instance = ImageViewerManagerModel::New();
+    Instance = ViewerModel::New();
   }
   return Instance;
 }
 
 void
-ImageViewerManagerModel
+ViewerModel
 ::NotifyListener(ListenerBase * listener)
 {
   listener->Notify();
@@ -66,7 +66,7 @@ ImageViewerManagerModel
 
 
 bool 
-ImageViewerManagerModel
+ViewerModel
 ::IsJPEG2000File(const std::string & filepath)
 {
 #if defined(OTB_USE_JPEG2000)
@@ -91,7 +91,7 @@ ImageViewerManagerModel
 
 
 std::vector<unsigned int>
-ImageViewerManagerModel
+ViewerModel
 ::GetJPEG2000Resolution(const std::string & filepath)
 {
   std::vector<unsigned int> res;
@@ -112,7 +112,7 @@ ImageViewerManagerModel
 }
 
 void
-ImageViewerManagerModel
+ViewerModel
 ::GetJPEG2000ResolutionAndInformations(const std::string & filepath, std::vector<unsigned int>& res, std::vector<std::string> & desc)
 {
   if( !this->IsJPEG2000File(filepath) )
@@ -129,7 +129,7 @@ ImageViewerManagerModel
 }
 
 unsigned int
-ImageViewerManagerModel
+ViewerModel
 ::OpenImage(std::string filename, const unsigned int id)
 {
   std::string otbFilepath = filename;
@@ -257,7 +257,7 @@ ImageViewerManagerModel
  * the ImageSeriesFileReader
  */
 unsigned int
-ImageViewerManagerModel
+ViewerModel
 ::OpenImageList(std::string filename)
 {
   /** Reader*/
@@ -338,9 +338,9 @@ ImageViewerManagerModel
 /**
  * Built a part of the visu, create a pointer and add a model to the visu
  */
-ImageViewerManagerModel
+ViewerModel
 ::VisuViewPointerType
-ImageViewerManagerModel
+ViewerModel
 ::BuiltVisu(VisuModelPointerType pRendering)
 {
   VisuViewPointerType visuView = VisuViewType::New();
@@ -352,9 +352,9 @@ ImageViewerManagerModel
 /**
  * Add Controller
  */
-ImageViewerManagerModel
+ViewerModel
 ::WidgetControllerPointerType
-ImageViewerManagerModel
+ViewerModel
 ::BuiltController(VisuModelPointerType modelRenderingLayer, VisuViewPointerType visuView, PixelDescriptionModelPointerType pixelModel)
 {
   WidgetControllerPointerType controller = WidgetControllerType::New();
@@ -399,14 +399,14 @@ ImageViewerManagerModel
 }
 
 void
-ImageViewerManagerModel
+ViewerModel
 ::CloseImage(unsigned int selectedItem)
 {
   m_ObjectTrackedList.erase(m_ObjectTrackedList.begin()+selectedItem-1);
 }
 
 void
-ImageViewerManagerModel
+ViewerModel
 ::UpdateRGBChannelOrder(int redChoice , int greenChoice, int blueChoice, unsigned int selectedItem)
 {
 
@@ -436,7 +436,7 @@ ImageViewerManagerModel
 }
 
 void
-ImageViewerManagerModel
+ViewerModel
 ::UpdateGrayScaleChannelOrder(int choice, unsigned int selectedItem)
 {
   StandardRenderingFunctionType::ChannelListType channels;
@@ -464,7 +464,7 @@ ImageViewerManagerModel
 }
 
 void
-ImageViewerManagerModel
+ViewerModel
 ::UpdateAmplitudeChannelOrder(int realChoice , int imChoice, unsigned int selectedItem )
 {
   AmplitudeRenderingFunction::PixelRepresentationFunctionType::ChannelListType channels;
@@ -492,7 +492,7 @@ ImageViewerManagerModel
 
 
 void
-ImageViewerManagerModel
+ViewerModel
 ::UpdatePhaseChannelOrder(int realChoice , int imChoice, unsigned int selectedItem )
 {
   PhaseRenderingFunction::PixelRepresentationFunctionType::ChannelListType channels;
@@ -522,7 +522,7 @@ ImageViewerManagerModel
  *
  */
 void
-ImageViewerManagerModel
+ViewerModel
 ::Link(unsigned int leftChoice, unsigned int rightChoice, OffsetType offset)
 {
 
@@ -618,7 +618,7 @@ ImageViewerManagerModel
  *
  */
 void
-ImageViewerManagerModel
+ViewerModel
 ::InitializeImageViewController(unsigned int selectedItem)
 {
   VisuModelPointerType  render = m_ObjectTrackedList.at(selectedItem-1).pRendering;

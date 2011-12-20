@@ -1,4 +1,3 @@
-
 /*=========================================================================
 
   Program:   ORFEO Toolbox
@@ -16,10 +15,10 @@ See OTBCopyright.txt for details.
      PURPOSE,  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageViewerManagerControllerInterface_h
-#define __otbImageViewerManagerControllerInterface_h
+#ifndef __otbViewerControllerInterface_h
+#define __otbViewerControllerInterface_h
 
-#include "otbImageViewerManagerModel.h"
+#include "otbViewerModel.h"
 #include "itkProcessObject.h"
 #include "otbImageWidgetController.h"
 #include "otbImageWidget.h"
@@ -28,18 +27,18 @@ See OTBCopyright.txt for details.
 
 namespace otb
 {
-class ITK_EXPORT  ImageViewerManagerControllerInterface
+class ITK_EXPORT  ViewerControllerInterface
       : public itk::ProcessObject
 {
 public:
   /** Standard class typedefs */
-  typedef ImageViewerManagerControllerInterface Self;
+  typedef ViewerControllerInterface Self;
   typedef itk::ProcessObject                    Superclass;
   typedef itk::SmartPointer<Self>               Pointer;
   typedef itk::SmartPointer<const Self>         ConstPointer;
   
 
-  typedef ImageViewerManagerModel              ModelType;
+  typedef ViewerModel              ModelType;
   typedef ModelType::VisuModelType             VisuModelType;
   typedef ModelType::VisuModelPointerType      VisuModelPointerType;
   typedef ModelType::ImageType                 ImageType;
@@ -61,7 +60,7 @@ public:
   typedef WidgetType::Pointer                  VisuWidgetPointerType;
 
   /** Standard type macros */
-  itkTypeMacro(ImageViewerManagerControllerInterface, Superclass);
+  itkTypeMacro(ViewerControllerInterface, Superclass);
 
   /** Users actions */
   virtual unsigned int OpenInputImage(const char * filename, const unsigned int & id=0) =0;
@@ -78,18 +77,18 @@ public:
 
 protected:
   /** Constructor */
-  ImageViewerManagerControllerInterface()
+  ViewerControllerInterface()
   {
     m_Model = ModelType::GetInstance();
   }
   /** Destructor */
-  ~ImageViewerManagerControllerInterface() {};
+  ~ViewerControllerInterface() {};
 
   /** The instance of the model (for commodity) */
   ModelType * m_Model;
 
 private:
-  ImageViewerManagerControllerInterface(const Self&); //purposely not implemented
+  ViewerControllerInterface(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 };
 } // end namespace otb

@@ -16,7 +16,7 @@ See OTBCopyright.txt for details.
      PURPOSE,  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbImageViewerManagerController.h"
+#include "otbViewerController.h"
 #include "otbMsgReporter.h"
 
 #include "otbSystem.h"
@@ -24,8 +24,8 @@ See OTBCopyright.txt for details.
 namespace otb
 {
 
-ImageViewerManagerController
-::ImageViewerManagerController()
+ViewerController
+::ViewerController()
 {
 
 /** NewVisu */
@@ -34,15 +34,15 @@ ImageViewerManagerController
   m_PreviewVisuController = VisuControllerType::New();
 }
 
-ImageViewerManagerController
-::~ImageViewerManagerController()
+ViewerController
+::~ViewerController()
 {
   MsgReporter::GetInstance()->Hide();
 }
 
 
 unsigned int
-ImageViewerManagerController
+ViewerController
 ::OpenInputImage(const char * filename, const unsigned int & id)
 {
   unsigned int numberOfOpenedImages = 0;
@@ -93,7 +93,7 @@ ImageViewerManagerController
 *
 */
 void
-ImageViewerManagerController
+ViewerController
 ::CloseImage(unsigned int selectedItem)
 {
   try
@@ -107,7 +107,7 @@ ImageViewerManagerController
 }
 
 void
-ImageViewerManagerController
+ViewerController
 ::UpdateRGBChannelOrder(int redChoice , int greenChoice, int BlueChoice, unsigned int selectedItem)
 {
   try
@@ -122,7 +122,7 @@ ImageViewerManagerController
 }
 
 void
-ImageViewerManagerController
+ViewerController
 ::UpdateGrayScaleChannelOrder(int choice, unsigned int selectedItem)
 {
   try
@@ -137,7 +137,7 @@ ImageViewerManagerController
 }
 
 void
-ImageViewerManagerController
+ViewerController
 ::UpdateAmplitudeChannelOrder(int realChoice, int imChoice, unsigned int selectedItem)
 {
   try
@@ -151,7 +151,7 @@ ImageViewerManagerController
 }
 
 void
-ImageViewerManagerController
+ViewerController
 ::UpdatePhaseChannelOrder(int realChoice, int imChoice, unsigned int selectedItem)
 {
   try
@@ -165,7 +165,7 @@ ImageViewerManagerController
 }
 
 void
-ImageViewerManagerController
+ViewerController
 ::Link(unsigned int leftChoice, unsigned int rightChoice, OffsetType offset)
 {
   try
@@ -179,7 +179,7 @@ ImageViewerManagerController
 }
 
 void
-ImageViewerManagerController
+ViewerController
 ::UpdateImageViewController(unsigned int selectedItem)
 {
   try
