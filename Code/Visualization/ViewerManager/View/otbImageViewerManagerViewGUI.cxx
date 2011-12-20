@@ -97,18 +97,19 @@ ImageViewerManagerViewGUI
   Fl::check();
   guiMainWindow->redraw();
 
-  if( m_ImageViewerManagerController->IsJPEG2000File( cfname ) )
+  if( m_ImageViewerManagerModel->IsJPEG2000File( cfname ) )
     {
     guiJpeg2000Res->clear();
     itk::OStringStream oss;
-    std::vector<unsigned int> res = m_ImageViewerManagerController->GetJPEG2000Resolution( cfname );
+    std::vector<unsigned int> res;
+    std::vector<std::string> desc;
+    m_ImageViewerManagerModel->GetJPEG2000ResolutionAndInformations( cfname, res, desc );
+
     for( unsigned int j=0; j<res.size(); j++ )
       {
-      oss.str("");
-      oss << res[j];
-      guiJpeg2000Res->add( oss.str().c_str() );
+      guiJpeg2000Res->add( desc[j].c_str() );
       }
-
+    guiJpeg2000Res->value(0);
     guiJpeg2000Filename->value( cfname );
 
     guiJpeg2000ResSelection->redraw();
@@ -170,10 +171,35 @@ ImageViewerManagerViewGUI
 
 void
 ImageViewerManagerViewGUI
-::LoadSelectedJpeg2000Resolution()
+::OpenJpeg2000Image()
 {
-  unsigned int res = atoi(guiJpeg2000Res->value());
-  unsigned int numberOfOpenedImages = m_ImageViewerManagerController->OpenInputImage(guiJpeg2000Filename->value(), res);
+  const std::string descRes = guiJpeg2000Res->value();
+  const char * cfname =  guiJpeg2000Filename->value();
+
+  // Find the resolution id from the selected description
+  std::vector<unsigned int> res;
+  std::vector<std::string> desc;
+  m_ImageViewerManagerModel->GetJPEG2000ResolutionAndInformations( cfname, res, desc );
+  unsigned int resVal;
+  bool found = false;
+  unsigned int id = 0;
+  while ( id<desc.size() && !found)
+    {
+    if( desc[id] == descRes )
+      {
+      resVal = res[id];
+      found = true;
+      }
+    id++;
+    }
+
+  if (!found)
+    {
+    itkExceptionMacro( "Unable to find the resolution associated to the description "<<descRes);
+    }
+
+  unsigned int numberOfOpenedImages = m_ImageViewerManagerController->OpenInputImage(cfname, resVal);
+
   for ( unsigned int i = 0; i < numberOfOpenedImages; i++ )
   {
     //Initialise the boolean pair
@@ -369,7 +395,7 @@ ImageViewerManagerViewGUI
  {
    //Update the Image List widget
    unsigned int len     = m_ImageViewerManagerModel->GetObjectList().size();
-   std::string fileName = m_ImageViewerManagerModel->GetObjectList().at(len-1).fileName;
+   std::string fileName = m_ImageViewerManagerModel->GetObjectList().at(len-1).pFileName;
    int slashIndex       = fileName.find_last_of("/", fileName.size());
 
    itk::OStringStream oss;
@@ -662,7 +688,7 @@ ImageViewerManagerViewGUI
  ::UpdateImageListShowed(unsigned int selectedItem, std::string status)
  {
    /* Update the ImageList using the status label "+" or "-" */
-   std::string fileName = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).fileName;
+   std::string fileName = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pFileName;
    int slashIndex = fileName.find_last_of("/", fileName.size());
 
    itk::OStringStream oss;
@@ -778,7 +804,7 @@ ImageViewerManagerViewGUI
  {
    itk::OStringStream oss;
    oss.str("");
-   std::string selectedImageName = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).fileName;
+   std::string selectedImageName = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pFileName;
    // Clear the info buffer
    guiViewerInformation->buffer()->remove(0, guiViewerInformation->buffer()->length());
    oss<<"Filename: "<<selectedImageName<<std::endl;
@@ -1082,7 +1108,7 @@ ImageViewerManagerViewGUI
  ImageViewerManagerViewGUI
  ::CutFileName(unsigned int selectedItem)
  {
-   std::string fileName     = m_ImageViewerManagerModel->GetObjectList().at(selectedItem).fileName;
+   std::string fileName     = m_ImageViewerManagerModel->GetObjectList().at(selectedItem).pFileName;
    int slashIndex           =  fileName.find_last_of("/", fileName.size());
    std::string  fileNameCut = fileName.substr(slashIndex+1, fileName.size());
 

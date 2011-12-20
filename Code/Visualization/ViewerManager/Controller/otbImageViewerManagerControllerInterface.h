@@ -75,8 +75,6 @@ public:
   /** NewVisu */
   virtual VisuControllerPointerType GetVisuController()=0;
   virtual VisuControllerPointerType GetPreviewVisuController() = 0;
-  virtual bool IsJPEG2000File(const std::string & filepath) = 0;
-  virtual std::vector<unsigned int> GetJPEG2000Resolution(const std::string & filepath) = 0;
 
 protected:
   /** Constructor */

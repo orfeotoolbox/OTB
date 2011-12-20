@@ -89,6 +89,7 @@ ImageViewerManagerModel
 #endif
 }
 
+
 std::vector<unsigned int>
 ImageViewerManagerModel
 ::GetJPEG2000Resolution(const std::string & filepath)
@@ -102,6 +103,7 @@ ImageViewerManagerModel
     {
     JPEG2000ImageIO::Pointer readerJPEG2000 = otb::JPEG2000ImageIO::New();
     readerJPEG2000->SetFileName(filepath);
+    readerJPEG2000->ReadImageInformation();
     readerJPEG2000->GetAvailableResolutions(res);
     }
 
@@ -109,6 +111,22 @@ ImageViewerManagerModel
   
 }
 
+void
+ImageViewerManagerModel
+::GetJPEG2000ResolutionAndInformations(const std::string & filepath, std::vector<unsigned int>& res, std::vector<std::string> & desc)
+{
+  if( !this->IsJPEG2000File(filepath) )
+    {
+    itkExceptionMacro( "Image "<<filepath<< " is not a JPEG2000." );
+    }
+  else
+    {
+    JPEG2000ImageIO::Pointer readerJPEG2000 = otb::JPEG2000ImageIO::New();
+    readerJPEG2000->SetFileName(filepath);
+    readerJPEG2000->ReadImageInformation();
+    readerJPEG2000->GetResolutionInfo(res, desc);
+    }  
+}
 
 unsigned int
 ImageViewerManagerModel
@@ -120,7 +138,9 @@ ImageViewerManagerModel
 
   // If jpeg2000, add the selected resolution at the end of the file name
   if( isJPEG2000 )
-    {
+    { 
+    std::cout<<"ImageViewerManagerModel::OpenImage is JPEG2000"<<std::endl;
+
     unsigned int resolution = 0;
     otbFilepath += ":";
     std::ostringstream ossRes;
@@ -133,16 +153,17 @@ ImageViewerManagerModel
   reader->SetFileName(otbFilepath);
   reader->GenerateOutputInformation();
 
-
+  std::cout<<"ImageViewerManagerModel::OpenImage go for QL"<<std::endl;
   // Quick look generation
-  ImagePointerType quicklook = ImageType::New();
+  ImagePointerType quicklook = NULL;
   unsigned int shrinkFactor = 1;
   //// if jpeg2000, try to load the less resolution image as quicklook
   if( isJPEG2000 )
     {
     ReaderPointerType jpeg2000QLReader = ReaderType::New();
-    jpeg2000QLReader->SetFileName(otbFilepath);
-    unsigned int resSize = this->GetJPEG2000Resolution( otbFilepath ).size();
+    jpeg2000QLReader->SetFileName(filename);
+    unsigned int resSize = this->GetJPEG2000Resolution( filename ).size();
+
     if( resSize > 0 )
       jpeg2000QLReader->SetAdditionalNumber( resSize-1 );
     
@@ -151,10 +172,10 @@ ImageViewerManagerModel
     quicklook->DisconnectPipeline();
     shrinkFactor = (1 << (resSize - 1));
     }
-
-  //// If not jpeg2000or trouble in jpeg2000 quicloock, use a streaming shrink image filter 
+  //// If not jpeg2000 or trouble in jpeg2000 quicloock, use a streaming shrink image filter 
   if (quicklook.IsNull())
     {
+ std::cout<<"ImageViewerManagerModel::OpenImage quicklook.IsNull()"<<std::endl;
     typedef otb::StreamingShrinkImageFilter<ImageType> StreamingShrinkImageFilterType;
     StreamingShrinkImageFilterType::Pointer shrinker = StreamingShrinkImageFilterType::New();
     shrinker->SetInput(reader->GetOutput());
@@ -167,7 +188,7 @@ ImageViewerManagerModel
     quicklook->DisconnectPipeline();
     }
 
-
+ std::cout<<"ImageViewerManagerModel::OpenImage go for layer"<<std::endl;
   /** Generate the layer*/
   LayerGeneratorPointerType visuGenerator = LayerGeneratorType::New();
   visuGenerator->SetImage(reader->GetOutput());
@@ -180,7 +201,6 @@ ImageViewerManagerModel
   /** Rendering image*/
   VisuModelPointerType rendering = VisuModelType::New();
   rendering->AddLayer(visuGenerator->GetLayer());
-
   rendering->Update();
 
   /** View*/
@@ -204,9 +224,10 @@ ImageViewerManagerModel
   /** Store all the information in the structure*/
   ObjectsTracked currentComponent;
 
-  currentComponent.fileName   = otbFilepath;
+  currentComponent.pFileName   = otbFilepath;
   currentComponent.pLayer     = visuGenerator->GetLayer();
   currentComponent.pReader    = reader;
+  currentComponent.pQuicklook = quicklook;
   currentComponent.pRendering = rendering;
   currentComponent.pVisuView  = visuView;
   currentComponent.pWidgetController = controller;
@@ -217,6 +238,7 @@ ImageViewerManagerModel
 
   assert(currentComponent.pLayer);
   assert(currentComponent.pReader);
+  assert(currentComponent.pQuicklook);
   assert(currentComponent.pRendering);
   assert(currentComponent.pVisuView);
   assert(currentComponent.pWidgetController);
@@ -285,7 +307,7 @@ ImageViewerManagerModel
     /** Store all the information in the structure*/
     ObjectsTracked currentComponent;
 
-    currentComponent.fileName   = reader->GetFileName(i);
+    currentComponent.pFileName   = reader->GetFileName(i);
     currentComponent.pLayer     = visuGenerator->GetLayer();
     currentComponent.pReader    = reader->GetImageFileReader(i);
     currentComponent.pRendering = rendering;
