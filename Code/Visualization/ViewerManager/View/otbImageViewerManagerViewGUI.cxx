@@ -97,8 +97,28 @@ ImageViewerManagerViewGUI
   Fl::check();
   guiMainWindow->redraw();
 
-  //Initialize
-  this->Initialize(cfname);
+  if( m_ImageViewerManagerController->IsJPEG2000File( cfname ) )
+    {
+    guiJpeg2000Res->clear();
+    itk::OStringStream oss;
+    std::vector<unsigned int> res = m_ImageViewerManagerController->GetJPEG2000Resolution( cfname );
+    for( unsigned int j=0; j<res.size(); j++ )
+      {
+      oss.str("");
+      oss << res[j];
+      guiJpeg2000Res->add( oss.str().c_str() );
+      }
+
+    guiJpeg2000Filename->value( cfname );
+
+    guiJpeg2000ResSelection->redraw();
+    guiJpeg2000ResSelection->show();
+    }
+  else
+    {
+    //Initialize
+    this->Initialize(cfname);
+    }
 }
 
 
@@ -110,6 +130,50 @@ ImageViewerManagerViewGUI
 ::Initialize(const char * cfname)
 {
   unsigned int numberOfOpenedImages = m_ImageViewerManagerController->OpenInputImage(cfname);
+  for ( unsigned int i = 0; i < numberOfOpenedImages; i++ )
+  {
+    //Initialise the boolean pair
+    PairType      pair(false, false); //(Not displayed , Packed View)
+
+    //Put a new WidgetManager in the list
+    if(bSplitted->value() && !bPacked->value())
+      {
+        SplittedWidgetManagerType::Pointer widgetManager      =  SplittedWidgetManagerType::New();
+        SplittedWidgetManagerType::Pointer linkwidgetManager  =  SplittedWidgetManagerType::New();
+
+        m_WidgetManagerList->PushBack(widgetManager);
+        m_LinkWidgetManagerList->PushBack(linkwidgetManager);
+        pair.second = true;
+      }
+    else
+      {
+        PackedWidgetManagerType::Pointer widgetManager         =   PackedWidgetManagerType::New();
+        PackedWidgetManagerType::Pointer linkwidgetManager     =   PackedWidgetManagerType::New();
+        m_WidgetManagerList->PushBack(widgetManager);
+        m_LinkWidgetManagerList->PushBack(linkwidgetManager);
+      }
+
+    //Put the status of the last added image
+    m_DisplayStatusList.push_back(pair);
+    m_LinkedDisplayStatusList.push_back(false);
+
+    // Call the Controller
+    //m_ImageViewerManagerController->OpenInputImage(cfname);
+
+    //Update the Progress Bar
+    this->UpdateDiaporamaProgressBar();
+
+    //Update the Link Setup
+    this->UpdateLinkSetupWindow();
+  }
+}
+
+void
+ImageViewerManagerViewGUI
+::LoadSelectedJpeg2000Resolution()
+{
+  unsigned int res = atoi(guiJpeg2000Res->value());
+  unsigned int numberOfOpenedImages = m_ImageViewerManagerController->OpenInputImage(guiJpeg2000Filename->value(), res);
   for ( unsigned int i = 0; i < numberOfOpenedImages; i++ )
   {
     //Initialise the boolean pair
@@ -1296,6 +1360,7 @@ ImageViewerManagerViewGUI
 
   m_LinkedImageList.clear();
 }
+
 
 
 /**

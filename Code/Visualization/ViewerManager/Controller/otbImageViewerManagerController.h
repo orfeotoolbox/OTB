@@ -99,7 +99,7 @@ public:
   
   //virtual void AddController(VisuModelPointerType  modelRenderingLayer  , VisuViewPointerType visuView);
 
-  virtual unsigned int OpenInputImage(const char * filename);
+  virtual unsigned int OpenInputImage(const char * filename, const unsigned int & id=0);
   virtual void CloseImage(unsigned int selectedItem);
   virtual void UpdateRGBChannelOrder(int redChoice , int greenChoice, int BlueChoice, unsigned int selectedItem);
   virtual void UpdateGrayScaleChannelOrder(int choice, unsigned int selectedItem );
@@ -107,7 +107,11 @@ public:
   virtual void UpdatePhaseChannelOrder(int realChoice , int imChoice, unsigned int selectedItem);
   virtual void Link(unsigned int leftChoice, unsigned int rightChoice , OffsetType offset);
   virtual void UpdateImageViewController(unsigned int selectedItem);
-
+  // Test a filename and returns true if the file is JPEG2000
+  virtual bool IsJPEG2000File(const std::string & filepath);
+  // If the file is JPEG2000, the function will find the available
+  // resolutions.
+  virtual std::vector<unsigned int> GetJPEG2000Resolution(const std::string & filepath);
 
 protected:
   /** Constructor */

@@ -186,6 +186,8 @@ protected:
   virtual void LinkSetupRemove();
   virtual void InitializeImageController(unsigned int selectedItem );
 
+  virtual void LoadSelectedJpeg2000Resolution();
+
   /** Constructor */
   ImageViewerManagerViewGUI();
   /** Destructor */

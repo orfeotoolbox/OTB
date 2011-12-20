@@ -25,6 +25,9 @@ See OTBCopyright.txt for details.
 #include "otbImageSeriesFileReader.h"
 #include "otbFltkFilterWatcher.h"
 
+#if defined(OTB_USE_JPEG2000)
+# include "otbJPEG2000ImageIO.h"
+#endif
 
 namespace otb
 {
@@ -61,19 +64,116 @@ ImageViewerManagerModel
   listener->Notify();
 }
 
+
+bool 
+ImageViewerManagerModel
+::IsJPEG2000File(const std::string & filepath)
+{
+#if defined(OTB_USE_JPEG2000)
+  bool isJpeg20000 = false;
+  JPEG2000ImageIO::Pointer readerJPEG2000 = otb::JPEG2000ImageIO::New();
+
+  readerJPEG2000->SetFileName(filepath);
+  if (readerJPEG2000->CanReadFile(filepath.c_str()))
+    {
+    std::vector<unsigned int> res;
+    if (readerJPEG2000->GetAvailableResolutions(res))
+      {
+      isJpeg20000 = true;
+      }
+    }
+
+  return isJpeg20000;
+#else
+  return false;
+#endif
+}
+
+std::vector<unsigned int>
+ImageViewerManagerModel
+::GetJPEG2000Resolution(const std::string & filepath)
+{
+  std::vector<unsigned int> res;
+  if( !this->IsJPEG2000File(filepath) )
+    {
+    itkExceptionMacro( "Image "<<filepath<< " is not a JPEG2000." );
+    }
+  else
+    {
+    JPEG2000ImageIO::Pointer readerJPEG2000 = otb::JPEG2000ImageIO::New();
+    readerJPEG2000->SetFileName(filepath);
+    readerJPEG2000->GetAvailableResolutions(res);
+    }
+
+  return res;
+  
+}
+
+
 unsigned int
 ImageViewerManagerModel
-::OpenImage(std::string filename)
+::OpenImage(std::string filename, const unsigned int id)
 {
+  std::string otbFilepath = filename;
+
+  bool isJPEG2000 = this->IsJPEG2000File(filename);
+
+  // If jpeg2000, add the selected resolution at the end of the file name
+  if( isJPEG2000 )
+    {
+    unsigned int resolution = 0;
+    otbFilepath += ":";
+    std::ostringstream ossRes;
+    ossRes << id;
+    otbFilepath += ossRes.str();
+    }
+
   /** Reader*/
   ReaderPointerType  reader = ReaderType::New();
-  reader->SetFileName(filename);
+  reader->SetFileName(otbFilepath);
   reader->GenerateOutputInformation();
+
+
+  // Quick look generation
+  ImagePointerType quicklook = ImageType::New();
+  unsigned int shrinkFactor = 1;
+  //// if jpeg2000, try to load the less resolution image as quicklook
+  if( isJPEG2000 )
+    {
+    ReaderPointerType jpeg2000QLReader = ReaderType::New();
+    jpeg2000QLReader->SetFileName(otbFilepath);
+    unsigned int resSize = this->GetJPEG2000Resolution( otbFilepath ).size();
+    if( resSize > 0 )
+      jpeg2000QLReader->SetAdditionalNumber( resSize-1 );
+    
+    jpeg2000QLReader->Update();
+    quicklook= jpeg2000QLReader->GetOutput();
+    quicklook->DisconnectPipeline();
+    shrinkFactor = (1 << (resSize - 1));
+    }
+
+  //// If not jpeg2000or trouble in jpeg2000 quicloock, use a streaming shrink image filter 
+  if (quicklook.IsNull())
+    {
+    typedef otb::StreamingShrinkImageFilter<ImageType> StreamingShrinkImageFilterType;
+    StreamingShrinkImageFilterType::Pointer shrinker = StreamingShrinkImageFilterType::New();
+    shrinker->SetInput(reader->GetOutput());
+    FltkFilterWatcher qlwatcher(shrinker->GetStreamer(), 0, 0, 200, 20,
+                                otbGetTextMacro("Generating QuickLook ..."));
+    shrinker->Update();
+    shrinkFactor = shrinker->GetShrinkFactor();
+
+    quicklook = shrinker->GetOutput();
+    quicklook->DisconnectPipeline();
+    }
+
 
   /** Generate the layer*/
   LayerGeneratorPointerType visuGenerator = LayerGeneratorType::New();
   visuGenerator->SetImage(reader->GetOutput());
-  FltkFilterWatcher qlwatcher(visuGenerator->GetProgressSource(), 0, 0, 200, 20,"Generating QuickLook ...");
+  visuGenerator->GenerateQuicklookOff();
+  visuGenerator->SetQuicklook(quicklook);
+  visuGenerator->SetSubsamplingRate(shrinkFactor);
   visuGenerator->GenerateLayer();
   RenderingFunctionType::Pointer  rendrerFunction  = visuGenerator->GetRenderingFunction();
 
@@ -104,7 +204,7 @@ ImageViewerManagerModel
   /** Store all the information in the structure*/
   ObjectsTracked currentComponent;
 
-  currentComponent.fileName   = filename;
+  currentComponent.fileName   = otbFilepath;
   currentComponent.pLayer     = visuGenerator->GetLayer();
   currentComponent.pReader    = reader;
   currentComponent.pRendering = rendering;

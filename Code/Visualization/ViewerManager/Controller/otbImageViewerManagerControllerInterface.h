@@ -19,11 +19,8 @@ See OTBCopyright.txt for details.
 #ifndef __otbImageViewerManagerControllerInterface_h
 #define __otbImageViewerManagerControllerInterface_h
 
-#include "otbImageViewerFullResolutionEventsInterface.h"
 #include "otbImageViewerManagerModel.h"
-
-
-/** NewVisu */
+#include "itkProcessObject.h"
 #include "otbImageWidgetController.h"
 #include "otbImageWidget.h"
 
@@ -32,42 +29,42 @@ See OTBCopyright.txt for details.
 namespace otb
 {
 class ITK_EXPORT  ImageViewerManagerControllerInterface
-      : public ImageViewerFullResolutionEventsInterface
+      : public itk::ProcessObject
 {
 public:
   /** Standard class typedefs */
-  typedef ImageViewerManagerControllerInterface     Self;
-  typedef ImageViewerFullResolutionEventsInterface  Superclass;
-  typedef itk::SmartPointer<Self>                   Pointer;
-  typedef itk::SmartPointer<const Self>             ConstPointer;
+  typedef ImageViewerManagerControllerInterface Self;
+  typedef itk::ProcessObject                    Superclass;
+  typedef itk::SmartPointer<Self>               Pointer;
+  typedef itk::SmartPointer<const Self>         ConstPointer;
   
 
-  typedef ImageViewerManagerModel                   ModelType;
-  typedef ModelType::VisuModelType                  VisuModelType;        //RenderingImageLayer
-  typedef ModelType::VisuModelPointerType           VisuModelPointerType;
-  typedef ModelType::ImageType                      ImageType;
-  typedef ModelType::ImagePointerType               ImagePointerType;
-  typedef ModelType::OffsetType                     OffsetType;
+  typedef ImageViewerManagerModel              ModelType;
+  typedef ModelType::VisuModelType             VisuModelType;
+  typedef ModelType::VisuModelPointerType      VisuModelPointerType;
+  typedef ModelType::ImageType                 ImageType;
+  typedef ModelType::ImagePointerType          ImagePointerType;
+  typedef ModelType::OffsetType                OffsetType;
 
 
 /** NewVisu */
-  typedef ImageWidgetController                     VisuControllerType;
-  typedef VisuControllerType::Pointer               VisuControllerPointerType;
+  typedef ImageWidgetController                VisuControllerType;
+  typedef VisuControllerType::Pointer          VisuControllerPointerType;
   
-  typedef ObjectList<VisuControllerType>            VisuControllerListType;
-  typedef VisuControllerListType::Pointer           VisuControllerListPointerType;
+  typedef ObjectList<VisuControllerType>       VisuControllerListType;
+  typedef VisuControllerListType::Pointer      VisuControllerListPointerType;
   
-  typedef ImageWidgetController                     WidgetControllerType;
-  typedef WidgetControllerType::Pointer             WidgetControllerPointerType;
+  typedef ImageWidgetController                WidgetControllerType;
+  typedef WidgetControllerType::Pointer        WidgetControllerPointerType;
   
-  typedef ImageWidget<>                             WidgetType;
-  typedef WidgetType::Pointer                       VisuWidgetPointerType;
+  typedef ImageWidget<>                        WidgetType;
+  typedef WidgetType::Pointer                  VisuWidgetPointerType;
 
   /** Standard type macros */
   itkTypeMacro(ImageViewerManagerControllerInterface, Superclass);
 
   /** Users actions */
-  virtual unsigned int OpenInputImage(const char * filename) =0;
+  virtual unsigned int OpenInputImage(const char * filename, const unsigned int & id=0) =0;
   virtual void CloseImage(unsigned int selectedItem) = 0;
   virtual void UpdateRGBChannelOrder(int redChoice , int greenChoice, int BlueChoice, unsigned int selectedItem) = 0;
   virtual void UpdateGrayScaleChannelOrder(int choice, unsigned int selectedItem) = 0;
@@ -78,8 +75,8 @@ public:
   /** NewVisu */
   virtual VisuControllerPointerType GetVisuController()=0;
   virtual VisuControllerPointerType GetPreviewVisuController() = 0;
-
-  
+  virtual bool IsJPEG2000File(const std::string & filepath) = 0;
+  virtual std::vector<unsigned int> GetJPEG2000Resolution(const std::string & filepath) = 0;
 
 protected:
   /** Constructor */
