@@ -14,7 +14,6 @@
 #ifndef ossimPleiadesModel_HEADER
 #define ossimPleiadesModel_HEADER
 
-using namespace std;
 #include <ossimPluginConstants.h>
 
 #include <ossim/projection/ossimRpcModel.h>

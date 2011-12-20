@@ -15,7 +15,6 @@
 
 #include <cmath>
 #include <cstdio>
-//using namespace std;
 
 #include <ossimPleiadesModel.h>
 #include <ossimPleiadesDimapSupportData.h>

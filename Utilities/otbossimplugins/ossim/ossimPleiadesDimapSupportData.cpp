@@ -11,8 +11,6 @@
 //*****************************************************************************
 // FIXME $Id: ossimPleiadesDimapSupportData 19682 2011-05-31 14:21:20Z dburken $
 
-//using namespace std;
-
 #include <ossimPleiadesDimapSupportData.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimNotify.h>
@@ -350,7 +348,7 @@ bool ossimPleiadesDimapSupportData::parseXmlFile(const ossimFilename& file)
    {
       char buf[100];
       fullBuffer.resize(fileSize);
-      in.read(buf, /*ossim::*/min((ossim_int64)100, fileSize)); // TODO MSD why ossim::min is not know here?
+      in.read(buf, std::min((ossim_int64)100, fileSize));
       if(!in.fail())
       {
          ossimString testString = ossimString(buf,
