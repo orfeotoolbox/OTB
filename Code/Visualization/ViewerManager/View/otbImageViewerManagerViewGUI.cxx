@@ -101,7 +101,7 @@ ImageViewerManagerViewGUI
   if( m_ImageViewerManagerModel->IsJPEG2000File( cfname ) )
     {
     guiJpeg2000Res->clear();
-    itk::OStringStream oss;
+  
     std::vector<unsigned int> res;
     std::vector<std::string> desc;
     m_ImageViewerManagerModel->GetJPEG2000ResolutionAndInformations( cfname, res, desc );
@@ -201,7 +201,7 @@ ImageViewerManagerViewGUI
     }
 
   unsigned int numberOfOpenedImages = m_ImageViewerManagerController->OpenInputImage(cfname, resVal);
- this->Initialize(numberOfOpenedImages);
+  this->Initialize(numberOfOpenedImages);
 }
 
 /**

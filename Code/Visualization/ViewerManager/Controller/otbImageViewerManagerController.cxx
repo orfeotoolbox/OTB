@@ -19,6 +19,8 @@ See OTBCopyright.txt for details.
 #include "otbImageViewerManagerController.h"
 #include "otbMsgReporter.h"
 
+#include "otbSystem.h"
+
 namespace otb
 {
 
@@ -44,6 +46,28 @@ ImageViewerManagerController
 ::OpenInputImage(const char * filename, const unsigned int & id)
 {
   unsigned int numberOfOpenedImages = 0;
+  
+  // Try to distinguish a jpeg2000 file whith the resoltion: filename:resId
+  std::string realFile(filename);
+  unsigned int addNum(0);
+  System::ParseFileNameForAdditonalInfo( filename, realFile, addNum );
+  
+  if( filename != realFile )
+    {
+    if( m_Model->IsJPEG2000File( realFile ) )
+      {
+      try
+        {
+        numberOfOpenedImages = m_Model->OpenImage( realFile, addNum );
+        return numberOfOpenedImages;
+        }
+      catch (itk::ExceptionObject & err)
+        {
+        MsgReporter::GetInstance()->SendError(err.GetDescription());
+        }
+      }
+    }
+
   try
   {
     std::string strFilename = filename;

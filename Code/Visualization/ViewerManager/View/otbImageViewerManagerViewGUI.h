@@ -140,10 +140,10 @@ public:
 
   //
   virtual void OpenImage(const char * inputFileName);
+  virtual void   Initialize(const unsigned int & numberOfOpenedImages);
 
 protected:
   virtual void   OpenImage();
-  virtual void   Initialize(const unsigned int & numberOfOpenedImages);//const char * cfname);
   virtual void   CloseImage();
   virtual void   ViewerSetup();
   virtual void   ViewerSetupOk();

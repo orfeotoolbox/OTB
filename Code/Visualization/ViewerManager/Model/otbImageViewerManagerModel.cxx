@@ -139,8 +139,6 @@ ImageViewerManagerModel
   // If jpeg2000, add the selected resolution at the end of the file name
   if( isJPEG2000 )
     { 
-    std::cout<<"ImageViewerManagerModel::OpenImage is JPEG2000"<<std::endl;
-
     unsigned int resolution = 0;
     otbFilepath += ":";
     std::ostringstream ossRes;
@@ -153,7 +151,6 @@ ImageViewerManagerModel
   reader->SetFileName(otbFilepath);
   reader->GenerateOutputInformation();
 
-  std::cout<<"ImageViewerManagerModel::OpenImage go for QL"<<std::endl;
   // Quick look generation
   ImagePointerType quicklook = NULL;
   unsigned int shrinkFactor = 1;
@@ -175,7 +172,6 @@ ImageViewerManagerModel
   //// If not jpeg2000 or trouble in jpeg2000 quicloock, use a streaming shrink image filter 
   if (quicklook.IsNull())
     {
- std::cout<<"ImageViewerManagerModel::OpenImage quicklook.IsNull()"<<std::endl;
     typedef otb::StreamingShrinkImageFilter<ImageType> StreamingShrinkImageFilterType;
     StreamingShrinkImageFilterType::Pointer shrinker = StreamingShrinkImageFilterType::New();
     shrinker->SetInput(reader->GetOutput());
@@ -188,7 +184,6 @@ ImageViewerManagerModel
     quicklook->DisconnectPipeline();
     }
 
- std::cout<<"ImageViewerManagerModel::OpenImage go for layer"<<std::endl;
   /** Generate the layer*/
   LayerGeneratorPointerType visuGenerator = LayerGeneratorType::New();
   visuGenerator->SetImage(reader->GetOutput());
