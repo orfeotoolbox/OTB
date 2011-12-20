@@ -67,12 +67,12 @@ int otbHooverConfusionMatrix(int argc, char* argv[])
   
   MatrixType &mat = hooverFilter->GetHooverConfusionMatrix();
   unsigned int n = mat.Rows(), p = mat.Cols();
-  for (int i=0;i<n;i++)
+  for (unsigned int i=0;i<n;i++)
     {
-    for (int j=0;j<p;j++)
+    for (unsigned int j=0;j<p;j++)
       {
       outputFile << mat(i,j);
-      if (j == (p-1))
+      if ((j+1) == p)
         {
         outputFile << "\n";
         }
