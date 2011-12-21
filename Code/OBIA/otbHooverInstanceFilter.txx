@@ -15,53 +15,50 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbHooverInstances_txx
-#define __otbHooverInstances_txx
+#ifndef __otbHooverInstanceFilter_txx
+#define __otbHooverInstanceFilter_txx
 
-#include "otbHooverInstances.h"
+#include "otbHooverInstanceFilter.h"
 #include "otbMacro.h"
 
 namespace otb
 {
 /** Hoover Attribute names */
 template <class TLabelMap>
-const std::string HooverInstances<TLabelMap>::attributeCD="HooverInstance_CD";
+const std::string HooverInstanceFilter<TLabelMap>::ATTRIBUTE_CD="HooverInstance_CD";
 
 template <class TLabelMap>
-const std::string HooverInstances<TLabelMap>::attributeOS="HooverInstance_OS";
+const std::string HooverInstanceFilter<TLabelMap>::ATTRIBUTE_OS="HooverInstance_OS";
 
 template <class TLabelMap>
-const std::string HooverInstances<TLabelMap>::attributeUS="HooverInstance_US";
+const std::string HooverInstanceFilter<TLabelMap>::ATTRIBUTE_US="HooverInstance_US";
 
 template <class TLabelMap>
-const std::string HooverInstances<TLabelMap>::attributeM="HooverInstance_M";
+const std::string HooverInstanceFilter<TLabelMap>::ATTRIBUTE_M="HooverInstance_M";
 
 template <class TLabelMap>
-const std::string HooverInstances<TLabelMap>::attributeN="HooverInstance_N";
+const std::string HooverInstanceFilter<TLabelMap>::ATTRIBUTE_N="HooverInstance_N";
 
 template <class TLabelMap>
-const std::string HooverInstances<TLabelMap>::attributeRC="HooverInstance_RC";
+const std::string HooverInstanceFilter<TLabelMap>::ATTRIBUTE_RC="HooverInstance_RC";
 
 template <class TLabelMap>
-const std::string HooverInstances<TLabelMap>::attributeRF="HooverInstance_RF";
+const std::string HooverInstanceFilter<TLabelMap>::ATTRIBUTE_RF="HooverInstance_RF";
 
 template <class TLabelMap>
-const std::string HooverInstances<TLabelMap>::attributeRA="HooverInstance_RA";
-
-template <class TLabelMap>
-const std::string HooverInstances<TLabelMap>::attributeT="HooverInstance_T";
+const std::string HooverInstanceFilter<TLabelMap>::ATTRIBUTE_RA="HooverInstance_RA";
 
 /** Constructor */
 template <class TLabelMap>
-HooverInstances<TLabelMap>
-::HooverInstances() : m_NumberOfRegionsGT(0), m_NumberOfRegionsMS(0), m_Threshold(0.8)
+HooverInstanceFilter<TLabelMap>
+::HooverInstanceFilter() : m_NumberOfRegionsGT(0), m_NumberOfRegionsMS(0), m_Threshold(0.8)
 {
   this->SetNumberOfRequiredInputs(2);
   this->SetNumberOfRequiredOutputs(2);
   typename LabelMapType::Pointer secondOutput = LabelMapType::New();
   this->AddOutput(secondOutput);
   
-  m_Matrix.SetSize(0, 0);
+  m_HooverMatrix.SetSize(0, 0);
   m_CardRegGT.SetSize(0);
   m_CardRegMS.SetSize(0);
   m_LabelsGT.resize(0);
@@ -69,7 +66,7 @@ HooverInstances<TLabelMap>
 
 /** Set the ground truth label map */
 template <class TLabelMap>
-void HooverInstances<TLabelMap>
+void HooverInstanceFilter<TLabelMap>
 ::SetGroundTruthLabelMap(const LabelMapType *gt)
 {
   this->SetInput(0, gt);
@@ -77,7 +74,7 @@ void HooverInstances<TLabelMap>
 
 /** Set the machine segmentation label map */
 template <class TLabelMap>
-void HooverInstances<TLabelMap>
+void HooverInstanceFilter<TLabelMap>
 ::SetMachineSegmentationLabelMap(const LabelMapType *ms)
 {
   this->SetInput(1, ms);
@@ -85,7 +82,7 @@ void HooverInstances<TLabelMap>
 
 /** Get the input ground truth label map */
 template <class TLabelMap>
-const TLabelMap* HooverInstances<TLabelMap>
+const TLabelMap* HooverInstanceFilter<TLabelMap>
 ::GetGroundTruthLabelMap()
 {
   return this->GetInput(0);
@@ -93,7 +90,7 @@ const TLabelMap* HooverInstances<TLabelMap>
 
 /** Get the input machine segmentation label map */
 template <class TLabelMap>
-const TLabelMap* HooverInstances<TLabelMap>
+const TLabelMap* HooverInstanceFilter<TLabelMap>
 ::GetMachineSegmentationLabelMap()
 {
   return this->GetInput(1);
@@ -101,7 +98,7 @@ const TLabelMap* HooverInstances<TLabelMap>
 
 /** Get the output ground truth label map */
 template <class TLabelMap>
-TLabelMap* HooverInstances<TLabelMap>
+TLabelMap* HooverInstanceFilter<TLabelMap>
 ::GetOutputGroundTruthLabelMap()
 {
   return this->GetOutput(0);
@@ -109,14 +106,14 @@ TLabelMap* HooverInstances<TLabelMap>
 
 /** Get the output machine segmentation label map */
 template <class TLabelMap>
-TLabelMap* HooverInstances<TLabelMap>
+TLabelMap* HooverInstanceFilter<TLabelMap>
 ::GetOutputMachineSegmentationLabelMap()
 {
   return this->GetOutput(1);
 }
 
 template <class TLabelMap>
-void HooverInstances<TLabelMap>
+void HooverInstanceFilter<TLabelMap>
 ::AllocateOutputs()
 {
   Superclass::AllocateOutputs();
@@ -163,7 +160,7 @@ void HooverInstances<TLabelMap>
 }
 
 template <class TLabelMap>
-void HooverInstances<TLabelMap>
+void HooverInstanceFilter<TLabelMap>
 ::ReleaseInputs()
 {
   Superclass::ReleaseInputs();
@@ -180,7 +177,7 @@ void HooverInstances<TLabelMap>
 }
 
 template <class TLabelMap>
-void HooverInstances<TLabelMap>
+void HooverInstanceFilter<TLabelMap>
 ::BeforeThreadedGenerateData()
 {
   // first : call superclass method
@@ -195,9 +192,9 @@ void HooverInstances<TLabelMap>
     }
   
   //Check the matrix size
-  if (m_NumberOfRegionsGT != m_Matrix.Rows() || m_NumberOfRegionsMS != m_Matrix.Cols())
+  if (m_NumberOfRegionsGT != m_HooverMatrix.Rows() || m_NumberOfRegionsMS != m_HooverMatrix.Cols())
     {
-    itkExceptionMacro("The given Hoover confusion matrix ("<<m_Matrix.Rows()<<" x "<<m_Matrix.Cols() <<
+    itkExceptionMacro("The given Hoover confusion matrix ("<<m_HooverMatrix.Rows()<<" x "<<m_HooverMatrix.Cols() <<
                       ") doesn't match with the input label maps ("<<m_NumberOfRegionsGT<<" x "<<m_NumberOfRegionsMS<<")");
     }
   
@@ -245,7 +242,7 @@ void HooverInstances<TLabelMap>
 }
 
 template <class TLabelMap>
-void HooverInstances<TLabelMap>
+void HooverInstanceFilter<TLabelMap>
 ::ThreadedProcessLabelObject( LabelObjectType * labelObject )
 {
   // Find the index corresponding to the current label object in GT
@@ -286,7 +283,7 @@ void HooverInstances<TLabelMap>
 }
 
 template <class TLabelMap>
-void HooverInstances<TLabelMap>
+void HooverInstanceFilter<TLabelMap>
 ::AfterThreadedGenerateData()
 {
   LabelMapType* outGT = this->GetOutput(0);
@@ -320,7 +317,7 @@ void HooverInstances<TLabelMap>
     for(unsigned int col=0; col<m_NumberOfRegionsMS; col++, iterMS++)
       {
       // Tij
-      double coefT = static_cast<double>(m_Matrix(row, col));
+      double coefT = static_cast<double>(m_HooverMatrix(row, col));
       if(coefT < 0.5)
         {
         // the regions Ri and ^Rj have an empty intersection : we can jump to the next matrix cell
@@ -346,13 +343,11 @@ void HooverInstances<TLabelMap>
           LabelObjectType *regionMS = iterMS->second;
           double scoreRC = m_Threshold * (std::min(coefT / tGT, coefT / tMS));
           
-          regionGT->SetAttribute(attributeCD.c_str(), static_cast<AttributesValueType>(regionMS->GetLabel()));
-          regionGT->SetAttribute(attributeT.c_str(), static_cast<AttributesValueType>(m_Threshold));
-          regionGT->SetAttribute(attributeRC.c_str(), static_cast<AttributesValueType>(scoreRC));
+          regionGT->SetAttribute(ATTRIBUTE_CD.c_str(), static_cast<AttributesValueType>(regionMS->GetLabel()));
+          regionGT->SetAttribute(ATTRIBUTE_RC.c_str(), static_cast<AttributesValueType>(scoreRC));
           
-          regionMS->SetAttribute(attributeCD.c_str(), static_cast<AttributesValueType>(regionGT->GetLabel()));
-          regionMS->SetAttribute(attributeT.c_str(), static_cast<AttributesValueType>(m_Threshold));
-          regionMS->SetAttribute(attributeRC.c_str(), static_cast<AttributesValueType>(scoreRC));
+          regionMS->SetAttribute(ATTRIBUTE_CD.c_str(), static_cast<AttributesValueType>(regionGT->GetLabel()));
+          regionMS->SetAttribute(ATTRIBUTE_RC.c_str(), static_cast<AttributesValueType>(scoreRC));
           
           GTindices.insert(row);
           MSindices.insert(col);
@@ -385,21 +380,19 @@ void HooverInstances<TLabelMap>
         double cardRegGT = static_cast<double>(m_CardRegGT[row]);
         double scoreRF = 1.0 - sumScoreRF / (cardRegGT * (cardRegGT - 1.0));
         
-        regionGT->SetAttribute(attributeT.c_str(), static_cast<AttributesValueType>(m_Threshold));
-        regionGT->SetAttribute(attributeRF.c_str(), static_cast<AttributesValueType>(scoreRF));
+        regionGT->SetAttribute(ATTRIBUTE_RF.c_str(), static_cast<AttributesValueType>(scoreRF));
         
         unsigned int indexOS=1;
         for(typename ObjectVectorType::iterator it=objectsOfMS.begin(); it!=objectsOfMS.end(); ++it)
           {
           LabelObjectType *regionMS = *it;
           std::ostringstream attribute;
-          attribute << attributeOS << "_" << indexOS;
+          attribute << ATTRIBUTE_OS << "_" << indexOS;
           
           regionGT->SetAttribute(attribute.str().c_str(), static_cast<AttributesValueType>(regionMS->GetLabel()));
           
-          regionMS->SetAttribute(attributeOS.c_str(), static_cast<AttributesValueType>(regionGT->GetLabel()));
-          regionMS->SetAttribute(attributeT.c_str(), static_cast<AttributesValueType>(m_Threshold));
-          regionMS->SetAttribute(attributeRF.c_str(), static_cast<AttributesValueType>(scoreRF));
+          regionMS->SetAttribute(ATTRIBUTE_OS.c_str(), static_cast<AttributesValueType>(regionGT->GetLabel()));
+          regionMS->SetAttribute(ATTRIBUTE_RF.c_str(), static_cast<AttributesValueType>(scoreRF));
           indexOS++;
           }
         
@@ -437,7 +430,7 @@ void HooverInstances<TLabelMap>
     iterGT = containerGT.begin();
     for(unsigned int row=0; row<m_NumberOfRegionsGT; row++, iterGT++)
       {
-      double coefT = static_cast<double>(m_Matrix(row, col));
+      double coefT = static_cast<double>(m_HooverMatrix(row, col));
       if(coefT < 0.5)
         {
         // the regions Ri and ^Rj have an empty intersection : we can jump to the next matrix cell
@@ -473,21 +466,19 @@ void HooverInstances<TLabelMap>
         double cardTotalUS = sumUS / m_Threshold;
         double scoreRA = 1.0 - sumScoreUS / (cardTotalUS * (cardTotalUS - 1.0));
         
-        regionMS->SetAttribute(attributeT.c_str(), static_cast<AttributesValueType>(m_Threshold));
-        regionMS->SetAttribute(attributeRA.c_str(), static_cast<AttributesValueType>(scoreRA));
+        regionMS->SetAttribute(ATTRIBUTE_RA.c_str(), static_cast<AttributesValueType>(scoreRA));
         
         unsigned int indexUS=1;
         for(typename ObjectVectorType::iterator it=objectsOfGT.begin(); it!=objectsOfGT.end(); ++it)
           {
           LabelObjectType *regionGT = *it;
           std::ostringstream attribute;
-          attribute << attributeUS << "_" << indexUS;
+          attribute << ATTRIBUTE_US << "_" << indexUS;
           
           regionMS->SetAttribute(attribute.str().c_str(), static_cast<AttributesValueType>(regionGT->GetLabel()));
           
-          regionGT->SetAttribute(attributeUS.c_str(), static_cast<AttributesValueType>(regionMS->GetLabel()));
-          regionGT->SetAttribute(attributeT.c_str(), static_cast<AttributesValueType>(m_Threshold));
-          regionGT->SetAttribute(attributeRA.c_str(), static_cast<AttributesValueType>(scoreRA));
+          regionGT->SetAttribute(ATTRIBUTE_US.c_str(), static_cast<AttributesValueType>(regionMS->GetLabel()));
+          regionGT->SetAttribute(ATTRIBUTE_RA.c_str(), static_cast<AttributesValueType>(scoreRA));
           indexUS++;
           }
         
@@ -519,8 +510,7 @@ void HooverInstances<TLabelMap>
       {
       otbDebugMacro(<< "M " << i);
       LabelObjectType *regionGT = iterGT->second;
-      regionGT->SetAttribute(attributeM.c_str(), static_cast<AttributesValueType>(regionGT->GetLabel()));
-      regionGT->SetAttribute(attributeT.c_str(), static_cast<AttributesValueType>(m_Threshold));
+      regionGT->SetAttribute(ATTRIBUTE_M.c_str(), static_cast<AttributesValueType>(regionGT->GetLabel()));
       }
     }
 
@@ -531,8 +521,7 @@ void HooverInstances<TLabelMap>
     if(MSindices.count(i)==0)
       {
       LabelObjectType *regionMS = iterMS->second;
-      regionMS->SetAttribute(attributeN.c_str(), static_cast<AttributesValueType>(regionMS->GetLabel()));
-      regionMS->SetAttribute(attributeT.c_str(), static_cast<AttributesValueType>(m_Threshold));
+      regionMS->SetAttribute(ATTRIBUTE_N.c_str(), static_cast<AttributesValueType>(regionMS->GetLabel()));
       }
     }
 }

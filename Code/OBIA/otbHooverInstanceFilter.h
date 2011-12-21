@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbHooverInstances_h
-#define __otbHooverInstances_h
+#ifndef __otbHooverInstanceFilter_h
+#define __otbHooverInstanceFilter_h
 
 #include "itkInPlaceLabelMapFilter.h"
 #include "itkVariableSizeMatrix.h"
@@ -26,7 +26,7 @@
 
 namespace otb
 {
-/** \class HooverInstances
+/** \class HooverInstanceFilter
  *
  * \brief This class computes the Hoover instances.
  *
@@ -34,16 +34,16 @@ namespace otb
  * AttributesMapLabelObject, where the instances will be stored.
  * The different instances are : correct detection, under segmentation, over segmentation, missed and noise.
  * (see Hoover et al., "An experimental comparison of range image segmentation algorithms", IEEE PAMI vol. 18, no. 7, July 1996)
- * \sa HooverConfusionMatrix
+ * \sa HooverMatrixFilter
  */
 
 template< class TLabelMap >
-class ITK_EXPORT HooverInstances :
+class ITK_EXPORT HooverInstanceFilter :
     public itk::InPlaceLabelMapFilter< TLabelMap >
 {
 public:
   /** Standard class typedefs. */
-  typedef HooverInstances   Self;
+  typedef HooverInstanceFilter   Self;
   typedef itk::InPlaceLabelMapFilter< TLabelMap >      Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -51,7 +51,7 @@ public:
   /** Standard New method. */
   itkNewMacro(Self);
   /** Run-time type information (and related methods). */
-  itkTypeMacro(HooverInstances, LabelMapFilter);
+  itkTypeMacro(HooverInstanceFilter, InPlaceLabelMapFilter);
 
   /** Some convenient typedefs. */
   typedef TLabelMap                                     LabelMapType;
@@ -83,42 +83,39 @@ public:
   LabelMapType* GetOutputGroundTruthLabelMap();
   LabelMapType* GetOutputMachineSegmentationLabelMap();
   
-  itkSetMacro(Matrix, MatrixType);
-  itkGetMacro(Matrix, MatrixType);
+  itkSetMacro(HooverMatrix, MatrixType);
+  itkGetMacro(HooverMatrix, MatrixType);
   
   itkSetMacro(Threshold, double);
   itkGetMacro(Threshold, double);
 
   /** Attribute name for correct detection */
-  static const std::string attributeCD;
+  static const std::string ATTRIBUTE_CD;
   
   /** Attribute name for over segmentation */
-  static const std::string attributeOS;
+  static const std::string ATTRIBUTE_OS;
   
   /** Attribute name for under segmentation */
-  static const std::string attributeUS;
+  static const std::string ATTRIBUTE_US;
   
   /** Attribute name for missing region */
-  static const std::string attributeM;
+  static const std::string ATTRIBUTE_M;
   
   /** Attribute name for noise region */
-  static const std::string attributeN;
+  static const std::string ATTRIBUTE_N;
   
   /** Attribute name for correct detection score */
-  static const std::string attributeRC;
+  static const std::string ATTRIBUTE_RC;
   
   /** Attribute name for fragmentation score (over segmentation) */
-  static const std::string attributeRF;
+  static const std::string ATTRIBUTE_RF;
   
   /** Attribute name for aggregation score (under segmentation) */
-  static const std::string attributeRA;
-  
-  /** Attribute name for the threshold */
-  static const std::string attributeT;
+  static const std::string ATTRIBUTE_RA;
 
 protected:
-  HooverInstances();
-  ~HooverInstances() {};
+  HooverInstanceFilter();
+  ~HooverInstanceFilter() {};
   
   /** Re implement the allocate output method to handle the second output correctly */
   virtual void AllocateOutputs();
@@ -149,7 +146,7 @@ private:
   unsigned long     m_NumberOfRegionsGT;  // GT = Ground Truth
   unsigned long     m_NumberOfRegionsMS;  // MS = Machine Segmentation
   LabelVectorType   m_LabelsGT;
-  MatrixType        m_Matrix;
+  MatrixType        m_HooverMatrix;
   CardinalVector    m_CardRegGT;  // cardinal of GT regions
   CardinalVector    m_CardRegMS;  // cardinal of MS regions
   double            m_Threshold;
@@ -158,7 +155,7 @@ private:
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbHooverInstances.txx"
+#include "otbHooverInstanceFilter.txx"
 #endif
 
 #endif

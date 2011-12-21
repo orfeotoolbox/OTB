@@ -16,15 +16,15 @@
 
 =========================================================================*/
 
-#ifndef __otbHooverConfusionMatrix_h
-#define __otbHooverConfusionMatrix_h
+#ifndef __otbHooverMatrixFilter_h
+#define __otbHooverMatrixFilter_h
 
 #include "itkLabelMapFilter.h"
 #include "itkVariableSizeMatrix.h"
 
 namespace otb
 {
-/** \class HooverConfusionMatrix
+/** \class HooverMatrixFilter
  *
  * \brief This class computes the confusion matrix from two LabelMapObject
  *
@@ -35,12 +35,12 @@ namespace otb
  */
 
 template< class TLabelMap >
-class ITK_EXPORT HooverConfusionMatrix :
+class ITK_EXPORT HooverMatrixFilter :
     public itk::LabelMapFilter< TLabelMap, TLabelMap >
 {
 public:
   /** Standard class typedefs. */
-  typedef HooverConfusionMatrix   Self;
+  typedef HooverMatrixFilter   Self;
   typedef itk::LabelMapFilter< TLabelMap, TLabelMap >      Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -48,12 +48,12 @@ public:
   /** Standard New method. */
   itkNewMacro(Self);
   /** Run-time type information (and related methods). */
-  itkTypeMacro(HooverConfusionMatrix, LabelMapFilter);
+  itkTypeMacro(HooverMatrixFilter, LabelMapFilter);
 
   /** Some convenient typedefs. */
-  typedef TLabelMap                                     InputLabelMapType;
-  typedef typename InputLabelMapType::LabelObjectType   LabelObjectType;
-  typedef typename InputLabelMapType::LabelVectorType   LabelVectorType;
+  typedef TLabelMap                                LabelMapType;
+  typedef typename LabelMapType::LabelObjectType   LabelObjectType;
+  typedef typename LabelMapType::LabelVectorType   LabelVectorType;
 
   typedef typename LabelObjectType::LineContainerType   LineContainerType;
   typedef typename LabelObjectType::IndexType           IndexType;
@@ -63,16 +63,16 @@ public:
   typedef itk::VariableSizeMatrix<CoefficientType>      MatrixType;
   
   /** Set the ground truth label map */
-  void SetGroundTruthLabelMap(const InputLabelMapType *gt);
+  void SetGroundTruthLabelMap(const LabelMapType *gt);
   
   /** Set the machine segmentation label map */
-  void SetMachineSegmentationLabelMap(const InputLabelMapType *ms);
+  void SetMachineSegmentationLabelMap(const LabelMapType *ms);
   
   /** Get the ground truth label map */
-  const InputLabelMapType* GetGroundTruthLabelMap();
+  const LabelMapType* GetGroundTruthLabelMap();
   
   /** Get the machine segmentation label map */
-  const InputLabelMapType* GetMachineSegmentationLabelMap();
+  const LabelMapType* GetMachineSegmentationLabelMap();
 
   /** Get the output Hoover confusion matrix */
   MatrixType & GetHooverConfusionMatrix()
@@ -82,9 +82,9 @@ public:
 
 protected:
   /** Constructor */
-  HooverConfusionMatrix();
+  HooverMatrixFilter();
   
-  ~HooverConfusionMatrix() {};
+  ~HooverMatrixFilter() {};
   
   /** BeforeThreadedGenerateData
    *  Resize the matrix
@@ -115,7 +115,7 @@ private:
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbHooverConfusionMatrix.txx"
+#include "otbHooverMatrixFilter.txx"
 #endif
 
 #endif

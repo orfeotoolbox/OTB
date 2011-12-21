@@ -16,19 +16,19 @@
 
 =========================================================================*/
 
-#include "otbHooverConfusionMatrix.h"
+#include "otbHooverMatrixFilter.h"
 
 #include "itkLabelMap.h"
 #include "itkLabelObject.h"
 
-int otbHooverConfusionMatrixNew(int argc, char* argv[])
+int otbHooverMatrixFilterNew(int argc, char* argv[])
 {
   typedef itk::LabelObject<unsigned int, 2>          LabelObjectType;
   typedef itk::LabelMap<LabelObjectType>            LabelMapType;
-  typedef otb::HooverConfusionMatrix<LabelMapType>  HooverConfusionMatrixType;
+  typedef otb::HooverMatrixFilter<LabelMapType>  HooverMatrixFilterType;
 
   // instantiation
-  HooverConfusionMatrixType::Pointer object = HooverConfusionMatrixType::New();
+  HooverMatrixFilterType::Pointer object = HooverMatrixFilterType::New();
 
   std::cout << object << std::endl;
 

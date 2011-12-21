@@ -15,18 +15,18 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbHooverConfusionMatrix_txx
-#define __otbHooverConfusionMatrix_txx
+#ifndef __otbHooverMatrixFilter_txx
+#define __otbHooverMatrixFilter_txx
 
-#include "otbHooverConfusionMatrix.h"
+#include "otbHooverMatrixFilter.h"
 
 namespace otb
 {
 
 /** Constructor */
 template <class TLabelMap>
-HooverConfusionMatrix<TLabelMap>
-::HooverConfusionMatrix() : m_NumberOfRegionsGT(0), m_NumberOfRegionsMS(0)
+HooverMatrixFilter<TLabelMap>
+::HooverMatrixFilter() : m_NumberOfRegionsGT(0), m_NumberOfRegionsMS(0)
 {
   this->SetNumberOfRequiredInputs(2);
   m_Matrix.SetSize(0, 0);
@@ -34,23 +34,23 @@ HooverConfusionMatrix<TLabelMap>
 
 /** Set the ground truth label map */
 template <class TLabelMap>
-void HooverConfusionMatrix<TLabelMap>
-::SetGroundTruthLabelMap(const InputLabelMapType *gt)
+void HooverMatrixFilter<TLabelMap>
+::SetGroundTruthLabelMap(const LabelMapType *gt)
 {
   this->SetInput(0, gt);
 }
 
 /** Set the machine segmentation label map */
 template <class TLabelMap>
-void HooverConfusionMatrix<TLabelMap>
-::SetMachineSegmentationLabelMap(const InputLabelMapType *ms)
+void HooverMatrixFilter<TLabelMap>
+::SetMachineSegmentationLabelMap(const LabelMapType *ms)
 {
   this->SetInput(1, ms);
 }
 
 /** Get the ground truth label map */
 template <class TLabelMap>
-const TLabelMap* HooverConfusionMatrix<TLabelMap>
+const TLabelMap* HooverMatrixFilter<TLabelMap>
 ::GetGroundTruthLabelMap()
 {
   return this->GetInput(0);
@@ -58,14 +58,14 @@ const TLabelMap* HooverConfusionMatrix<TLabelMap>
 
 /** Get the machine segmentation label map */
 template <class TLabelMap>
-const TLabelMap* HooverConfusionMatrix<TLabelMap>
+const TLabelMap* HooverMatrixFilter<TLabelMap>
 ::GetMachineSegmentationLabelMap()
 {
   return this->GetInput(1);
 }
 
 template <class TLabelMap>
-void HooverConfusionMatrix<TLabelMap>
+void HooverMatrixFilter<TLabelMap>
 ::BeforeThreadedGenerateData()
 {
   // first : call superclass method
@@ -80,7 +80,7 @@ void HooverConfusionMatrix<TLabelMap>
 }
 
 template <class TLabelMap>
-void HooverConfusionMatrix<TLabelMap>
+void HooverMatrixFilter<TLabelMap>
 ::ThreadedProcessLabelObject( LabelObjectType * labelObject )
 {
   typename LineContainerType::const_iterator lit;

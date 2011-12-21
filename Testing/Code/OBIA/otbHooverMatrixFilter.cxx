@@ -16,7 +16,7 @@
 
 =========================================================================*/
 
-#include "otbHooverConfusionMatrix.h"
+#include "otbHooverMatrixFilter.h"
 
 #include "otbImage.h"
 #include "otbImageFileReader.h"
@@ -24,16 +24,16 @@
 #include "itkLabelObject.h"
 #include "itkLabelImageToLabelMapFilter.h"
 
-int otbHooverConfusionMatrix(int argc, char* argv[])
+int otbHooverMatrixFilter(int argc, char* argv[])
 {
   typedef itk::LabelObject<unsigned int, 2>          LabelObjectType;
   typedef itk::LabelMap<LabelObjectType>            LabelMapType;
-  typedef otb::HooverConfusionMatrix<LabelMapType>  HooverConfusionMatrixType;
+  typedef otb::HooverMatrixFilter<LabelMapType>  HooverMatrixFilterType;
   typedef otb::Image<unsigned int, 2>               ImageType;
   typedef itk::LabelImageToLabelMapFilter
     <ImageType, LabelMapType>                       ImageToLabelMapFilterType;
   typedef otb::ImageFileReader<ImageType>           ImageReaderType;
-  typedef HooverConfusionMatrixType::MatrixType     MatrixType;
+  typedef HooverMatrixFilterType::MatrixType     MatrixType;
   
   if(argc != 4)
     {
@@ -56,7 +56,7 @@ int otbHooverConfusionMatrix(int argc, char* argv[])
   ms_filter->SetInput(ms_reader->GetOutput());
   ms_filter->SetBackgroundValue(0);
   
-  HooverConfusionMatrixType::Pointer hooverFilter = HooverConfusionMatrixType::New();
+  HooverMatrixFilterType::Pointer hooverFilter = HooverMatrixFilterType::New();
   hooverFilter->SetGroundTruthLabelMap(gt_filter->GetOutput());
   hooverFilter->SetMachineSegmentationLabelMap(ms_filter->GetOutput());
   

@@ -16,19 +16,19 @@
 
 =========================================================================*/
 
-#include "otbHooverInstances.h"
+#include "otbHooverInstanceFilter.h"
 
 #include "itkLabelMap.h"
 #include "otbAttributesMapLabelObject.h"
 
-int otbHooverInstancesNew(int argc, char* argv[])
+int otbHooverInstanceFilterNew(int argc, char* argv[])
 {
   typedef otb::AttributesMapLabelObject<unsigned int, 2, float> LabelObjectType;
   typedef itk::LabelMap<LabelObjectType>                      LabelMapType;
-  typedef otb::HooverInstances<LabelMapType>      HooverInstancesType;
+  typedef otb::HooverInstanceFilter<LabelMapType>      HooverInstanceFilterType;
 
   // instantiation
-  HooverInstancesType::Pointer object = HooverInstancesType::New();
+  HooverInstanceFilterType::Pointer object = HooverInstanceFilterType::New();
 
   std::cout << object << std::endl;
 
