@@ -1,5 +1,3 @@
-IF( NOT OTB-Applications_DISABLE_CXX_TESTING )
-
 SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
 
 #Tolerance sur diff pixel image
@@ -33,6 +31,13 @@ ADD_TEST(ivmTvViewTest_JPEG2000Id ${Viewer_TESTS}
 	${INPUTDATA}/bretagne.j2k:3
 )
 
+# We need to regenerate the UI sources, even though FLTK_WRAP_UI is called 
+# in Code/Visualization/Viewer/CMakeLists.txt
+# This is because the file is generated at build time,
+# so we cannot include it in Viewer_SRCS
+FLTK_WRAP_UI(otbViewerTests
+             ../../../../Code/Visualization/Viewer/View/otbViewerViewGroup.fl )
+
 SET(Viewer_SRCS
 otbViewerTests.cxx
 otbViewerModelTest.cxx
@@ -40,7 +45,7 @@ otbViewerViewTest.cxx
 ${OTB_SOURCE_DIR}/Code/Visualization/Viewer/Model/otbViewerModel.cxx
 ${OTB_SOURCE_DIR}/Code/Visualization/Viewer/Controller/otbViewerController.cxx
 ${OTB_SOURCE_DIR}/Code/Visualization/Viewer/View/otbViewerViewGUI.cxx
-${OTB_BINARY_DIR}/Code/Visualization/Viewer/otbViewerViewGroup.cxx
+${otbViewerTests_FLTK_UI_SRCS}
 )
 
 INCLUDE_DIRECTORIES(
@@ -50,7 +55,6 @@ INCLUDE_DIRECTORIES(
   ${OTB_BINARY_DIR}/Code/Visualization/Viewer
 )
 
-OTB_ADD_EXECUTABLE(otbViewerTests "${Viewer_SRCS}" "OTBVisualization;OTBTesting")
-
-ENDIF( NOT OTB-Applications_DISABLE_CXX_TESTING )
+ADD_EXECUTABLE(otbViewerTests ${Viewer_SRCS})
+TARGET_LINK_LIBRARIES(otbViewerTests OTBVisualization OTBTesting)
 
