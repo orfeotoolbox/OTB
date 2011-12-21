@@ -18,16 +18,15 @@
 #include "itkMacro.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
 #include "otbImageFileWriter.h"
 #include "otbMeanShiftImageFilter.h"
 
 int otbMeanShiftImageFilter(int argc, char * argv[])
 {
-  if (argc != 12)
+  if (argc != 10)
     {
     std::cerr << "Usage: " << argv[0] <<
-    " infname filteredfname clusteredfname labeledclusteredfname clusterboundariesfname spatialRadius rangeRadius minregionsize scale streamed threaded"
+    " infname filteredfname clusteredfname labeledclusteredfname clusterboundariesfname spatialRadius rangeRadius minregionsize scale"
               << std::endl;
     return EXIT_FAILURE;
     }
@@ -40,19 +39,15 @@ int otbMeanShiftImageFilter(int argc, char * argv[])
   const unsigned int spatialRadius          = atoi(argv[6]);
   const double       rangeRadius            = atof(argv[7]);
   const unsigned int minRegionSize          = atoi(argv[8]);
-  const double       scale                  = atoi(argv[9]);
-  const int          streamNumber               = atoi(argv[10]);
-  const int          threadNumber               = atoi(argv[11]);
+  const double       scale                  = atof(argv[9]);
 
   const unsigned int Dimension = 2;
   typedef float                                           PixelType;
   typedef otb::Image<PixelType, Dimension>                ImageType;
   typedef otb::ImageFileReader<ImageType>                 ReaderType;
-  typedef otb::StreamingImageFileWriter<ImageType>        StreamingWriterType;
   typedef otb::ImageFileWriter<ImageType>                 WriterType;
   typedef otb::MeanShiftImageFilter<ImageType, ImageType> FilterType;
   typedef FilterType::LabeledOutputType                   LabeledImageType;
-  typedef otb::StreamingImageFileWriter<LabeledImageType> LabeledStreamingWriterType;
   typedef otb::ImageFileWriter<LabeledImageType>          LabeledWriterType;
 
   // Instantiating object
@@ -66,35 +61,18 @@ int otbMeanShiftImageFilter(int argc, char * argv[])
   filter->SetMinimumRegionSize(minRegionSize);
   filter->SetScale(scale);
 
-  if (threadNumber > 0)
-    {
-    filter->SetNumberOfThreads(threadNumber);
-    }
-
   filter->SetInput(reader->GetOutput());
 
-  StreamingWriterType::Pointer writer1 = StreamingWriterType::New();
-  StreamingWriterType::Pointer writer2 = StreamingWriterType::New();
-  LabeledStreamingWriterType::Pointer writer3 = LabeledStreamingWriterType::New();
-  LabeledStreamingWriterType::Pointer writer4 = LabeledStreamingWriterType::New();
+  WriterType::Pointer writer1 = WriterType::New();
+  WriterType::Pointer writer2 = WriterType::New();
+  LabeledWriterType::Pointer writer3 = LabeledWriterType::New();
+  LabeledWriterType::Pointer writer4 = LabeledWriterType::New();
+
   writer1->SetFileName(filteredfname);
   writer2->SetFileName(clusteredfname);
   writer3->SetFileName(labeledclusteredfname);
   writer4->SetFileName(clusterboundariesfname);
-  if (streamNumber > 0)
-    {
-    writer1->SetNumberOfDivisionsStrippedStreaming(streamNumber);
-    writer2->SetNumberOfDivisionsStrippedStreaming(streamNumber);
-    writer3->SetNumberOfDivisionsStrippedStreaming(streamNumber);
-    writer4->SetNumberOfDivisionsStrippedStreaming(streamNumber);
-    }
-  else
-    {
-    writer1->SetNumberOfDivisionsStrippedStreaming(1);
-    writer2->SetNumberOfDivisionsStrippedStreaming(1);
-    writer3->SetNumberOfDivisionsStrippedStreaming(1);
-    writer4->SetNumberOfDivisionsStrippedStreaming(1);
-    }
+
   writer1->SetInput(filter->GetOutput());
   writer2->SetInput(filter->GetClusteredOutput());
   writer3->SetInput(filter->GetLabeledClusteredOutput());
