@@ -223,7 +223,7 @@ void HooverInstanceFilter<TLabelMap>
     blankRegion = LabelObjectType::New();
     blankRegion->SetLabel(regionMS->GetLabel());
     std::vector< std::string > attKeys = regionMS->GetAvailableAttributes();
-    for (int k=0; k<attKeys.size(); k++)
+    for (unsigned int k=0; k<attKeys.size(); k++)
       {
       if (attKeys[k].find("HooverInstance_") == 0)
         {
@@ -268,7 +268,7 @@ void HooverInstanceFilter<TLabelMap>
   blankRegion = LabelObjectType::New();
   blankRegion->SetLabel(labelObject->GetLabel());
   std::vector< std::string > attKeys = labelObject->GetAvailableAttributes();
-  for (int k=0; k<attKeys.size(); k++)
+  for (unsigned int k=0; k<attKeys.size(); k++)
     {
     if (attKeys[k].find("HooverInstance_") == 0)
       {
