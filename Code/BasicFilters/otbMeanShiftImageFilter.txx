@@ -141,7 +141,6 @@ MeanShiftImageFilter<TInputImage, TOutputImage, TLabeledOutput, TBufferConverter
 }
 
 
-
 template <class TInputImage, class TOutputImage, class TLabeledOutput, class TBufferConverter>
 void
 MeanShiftImageFilter<TInputImage, TOutputImage, TLabeledOutput, TBufferConverter>::EnlargeOutputRequestedRegion( itk::DataObject *output )
@@ -172,7 +171,7 @@ MeanShiftImageFilter<TInputImage, TOutputImage, TLabeledOutput, TBufferConverter
 
   double invScale = 1 / m_Scale;
 
-  RegionType inputRequestedRegion =inputPtr->GetRequestedRegion() ;
+  RegionType inputRequestedRegion =inputPtr->GetRequestedRegion();
   RegionType outputRequestedRegion = inputPtr->GetRequestedRegion();
 
   inputRequestedRegion.PadByRadius(m_SpatialRadius);
@@ -368,7 +367,6 @@ MeanShiftImageFilter<TInputImage, TOutputImage, TLabeledOutput, TBufferConverter
    delete[] modesPointsCount;
    delete[] data;
 }
-
 
 
 
