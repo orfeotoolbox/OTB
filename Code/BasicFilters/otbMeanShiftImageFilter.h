@@ -74,15 +74,6 @@ public:
  *
  * The MinimumRegionSize parameter allows you to prune small clustered regions.
  *
- * Please note that the filtering part is multi-threaded, while the clustering one is not (this is
- * not really noticeable, because the clustering step is really faster
- * than the filtering one).
- *
- * Please also note that if both parts are streamable, only the filtering part will ensure you to get the same
- * results than without streaming. In the clustering results, you
- * might find region split due to tiling. Morover, the labeled output will not give consistent results when
- * streamed. The cluster boundaries might work though.
- *
  * This filter uses the Edison mean shift algorithm implementation. Please note that data whose precision
  * is more than float are casted to float before processing.
  *
@@ -101,8 +92,6 @@ public:
  * \sa MeanShiftVectorImageFilter
  *
  * \ingroup ImageEnhancement
- * \ingroup Streamed
- * \ingroup Threaded
  */
 
 template <class TInputImage, class TOutputImage,
@@ -173,13 +162,10 @@ public:
   }
 
 protected:
-  /** This filters use a neighborhood around the pixel, so it needs to redfine the
-   * input requested region */
-  virtual void GenerateInputRequestedRegion();
-  /** Threaded generate data (handle the filtering part) */
-  virtual void ThreadedGenerateData(const RegionType& outputRegionForThread, int threadId);
-  /** After threaded generate data (handle the clustering part) */
-  virtual void AfterThreadedGenerateData();
+   virtual void EnlargeOutputRequestedRegion( itk::DataObject *output );
+
+  virtual void GenerateData();
+
   /** Allocate the outputs (need to be reimplemented since outputs have differents type) */
   virtual void AllocateOutputs();
   /** If modified, we have to reset the list of modes */
