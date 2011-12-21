@@ -169,11 +169,24 @@ ViewerModel
     quicklook->DisconnectPipeline();
     shrinkFactor = (1 << (resSize - 1));
     }
-  //// If not jpeg2000 or trouble in jpeg2000 quicloock, use a streaming shrink image filter
+  //// If not jpeg2000 or trouble in jpeg2000 quicloock, use a
+  //// streaming shrink image filter
+  unsigned int maxSize = std::max( reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0],
+                                   reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1] );
   if (quicklook.IsNull())
     {
     typedef otb::StreamingShrinkImageFilter<ImageType> StreamingShrinkImageFilterType;
     StreamingShrinkImageFilterType::Pointer shrinker = StreamingShrinkImageFilterType::New();
+
+    // Default shrink factor is 10. Adapt it for small images
+    unsigned int maxSize = std::max( reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0],
+                                    reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1] );
+    if( maxSize > 512 )
+      {
+      shrinkFactor = static_cast<unsigned int>( vcl_floor( static_cast<double>(maxSize)/static_cast<double>(256) + 0.5) );
+      }
+   
+    shrinker->SetShrinkFactor(shrinkFactor);
     shrinker->SetInput(reader->GetOutput());
     FltkFilterWatcher qlwatcher(shrinker->GetStreamer(), 0, 0, 200, 20,
                                 otbGetTextMacro("Generating QuickLook ..."));
