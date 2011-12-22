@@ -54,7 +54,7 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
-    AddDocTag("Image manipulation");
+    AddDocTag(Tags::Manip);
 
     AddParameter(ParameterType_InputImage,  "in",  "Input geo-referenced DEM");
     SetParameterDescription("in", "Input geo-referenced DEM to convert to general raster format.");

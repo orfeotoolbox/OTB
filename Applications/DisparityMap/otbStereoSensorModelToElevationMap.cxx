@@ -76,7 +76,6 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
  
-    AddDocTag(Tags::Manip);
     AddDocTag(Tags::Stereo);
 
     // Mandatory parameters

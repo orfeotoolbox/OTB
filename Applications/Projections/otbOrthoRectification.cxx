@@ -101,7 +101,6 @@ private:
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Ortho-rectification chapter from the OTB Software Guide");
   
-    AddDocTag(Tags::Manip);
     AddDocTag(Tags::Geometry);
 
     // Set the parameters

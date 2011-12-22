@@ -64,7 +64,6 @@ private:
     SetDocSeeAlso(" ");
  
     AddDocTag(Tags::Geometry);
-    AddDocTag(Tags::Manip);
     AddDocTag("Superimposition");
 
     AddParameter(ParameterType_InputImage,   "inr",   "Reference input");

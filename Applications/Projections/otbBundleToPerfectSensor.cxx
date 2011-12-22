@@ -63,7 +63,6 @@ private:
     SetDocSeeAlso(" ");
    
     AddDocTag(Tags::Geometry);
-    AddDocTag(Tags::Manip);
     AddDocTag(Tags::Pansharpening);
 
     AddParameter(ParameterType_InputImage,   "inp",   "Input PAN Image");
