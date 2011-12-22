@@ -56,4 +56,5 @@ REGISTER_TEST(otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter);
 REGISTER_TEST(otbHooverMatrixFilterNew);
 REGISTER_TEST(otbHooverMatrixFilter);
 REGISTER_TEST(otbHooverInstanceFilterNew);
+REGISTER_TEST(otbLabelMapToAttributeImageFilterNew);
 }

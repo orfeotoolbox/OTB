@@ -192,6 +192,9 @@ ADD_TEST(obTvHooverMatrixFilter ${OBIA_TESTS1}
 ADD_TEST(obTuHooverInstanceFilterNew ${OBIA_TESTS1}
     otbHooverInstanceFilterNew)
 
+ADD_TEST(obTuLabelMapToAttributeImageFilterNew ${OBIA_TESTS1}
+    otbLabelMapToAttributeImageFilterNew)
+
 # OBIATests2 (need PQXX)
 IF(OTB_USE_PQXX)
 ADD_TEST(obTuLabelMapToGISTableFilterNew ${OBIA_TESTS2}
@@ -248,6 +251,7 @@ otbStreamingConnectedComponentOBIATest.cxx
 otbHooverMatrixFilterNew.cxx
 otbHooverMatrixFilter.cxx
 otbHooverInstanceFilterNew.cxx
+otbLabelMapToAttributeImageFilterNew.cxx
 )
 
 IF(OTB_USE_PQXX)
