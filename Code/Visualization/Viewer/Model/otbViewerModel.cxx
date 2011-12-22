@@ -25,7 +25,7 @@ See OTBCopyright.txt for details.
 #include "otbImageSeriesFileReader.h"
 #include "otbFltkFilterWatcher.h"
 
-#if defined(OTB_USE_JPEG2000)
+#ifdef OTB_USE_JPEG2000
 # include "otbJPEG2000ImageIO.h"
 #endif
 
@@ -69,7 +69,7 @@ bool
 ViewerModel
 ::IsJPEG2000File(const std::string & filepath)
 {
-#if defined(OTB_USE_JPEG2000)
+#ifdef OTB_USE_JPEG2000
   bool isJpeg20000 = false;
   JPEG2000ImageIO::Pointer readerJPEG2000 = otb::JPEG2000ImageIO::New();
 
