@@ -89,6 +89,7 @@ private:
     SetDocSeeAlso("Rescale application");
     AddDocTag("Conversion");
     AddDocTag("Image Dynamic");
+    AddDocTag(Tags::Manip);
 
     AddParameter(ParameterType_InputImage,  "in",   "Input image");
     SetParameterDescription("in", "Input image");

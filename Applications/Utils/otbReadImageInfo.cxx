@@ -58,6 +58,7 @@ private:
     SetDocSeeAlso(" ");
 
     AddDocTag("Utilities");
+    AddDocTag(Tags::Manip);
     AddDocTag(Tags::Meta);
 
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
