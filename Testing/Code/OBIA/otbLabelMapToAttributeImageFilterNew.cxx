@@ -27,7 +27,7 @@ int otbLabelMapToAttributeImageFilterNew(int argc, char* argv[])
   typedef itk::LabelMap<LabelObjectType>                        LabelMapType;
   typedef otb::VectorImage<float, 2>                            VectorImageType;
   typedef otb::LabelMapToAttributeImageFilter
-      <LabelMapType,VectorImageType>          LabelMapToAttributeImageFilterType;
+      <LabelMapType, VectorImageType>          LabelMapToAttributeImageFilterType;
 
   // instantiation
   LabelMapToAttributeImageFilterType::Pointer object = LabelMapToAttributeImageFilterType::New();

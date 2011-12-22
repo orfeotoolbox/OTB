@@ -27,28 +27,28 @@ namespace otb
 
 /** Constructor */
 template <class TInputImage, class TOutputImage , class TAttributeAccessor>
-LabelMapToAttributeImageFilter<TInputImage,TOutputImage,TAttributeAccessor>
+LabelMapToAttributeImageFilter<TInputImage, TOutputImage, TAttributeAccessor>
 ::LabelMapToAttributeImageFilter()
 {
 m_ChosenAttributes.resize(0);
 }
 
 template <class TInputImage, class TOutputImage , class TAttributeAccessor>
-void LabelMapToAttributeImageFilter<TInputImage,TOutputImage,TAttributeAccessor>
+void LabelMapToAttributeImageFilter<TInputImage, TOutputImage, TAttributeAccessor>
 ::SetChosenAttributes(AttributeListType & newAttributes)
 {
   m_ChosenAttributes = newAttributes;
 }
 
 template <class TInputImage, class TOutputImage , class TAttributeAccessor>
-unsigned int LabelMapToAttributeImageFilter<TInputImage,TOutputImage,TAttributeAccessor>
+unsigned int LabelMapToAttributeImageFilter<TInputImage, TOutputImage, TAttributeAccessor>
 ::GetNumberOfComponentsPerPixel()
 {
   return m_ChosenAttributes.size();
 }
 
 template <class TInputImage, class TOutputImage , class TAttributeAccessor>
-bool LabelMapToAttributeImageFilter<TInputImage,TOutputImage,TAttributeAccessor>
+bool LabelMapToAttributeImageFilter<TInputImage, TOutputImage, TAttributeAccessor>
 ::SetAttributeForNthChannel(unsigned int channel, const char *attribute)
 {
   std::string strAttribute(attribute);
@@ -74,7 +74,7 @@ bool LabelMapToAttributeImageFilter<TInputImage,TOutputImage,TAttributeAccessor>
 }
 
 template <class TInputImage, class TOutputImage , class TAttributeAccessor>
-void LabelMapToAttributeImageFilter<TInputImage,TOutputImage,TAttributeAccessor>
+void LabelMapToAttributeImageFilter<TInputImage, TOutputImage, TAttributeAccessor>
 ::GenerateOutputInformation()
 {
   if (this->GetOutput() && this->GetInput())
@@ -85,7 +85,7 @@ void LabelMapToAttributeImageFilter<TInputImage,TOutputImage,TAttributeAccessor>
 }
 
 template <class TInputImage, class TOutputImage , class TAttributeAccessor>
-void LabelMapToAttributeImageFilter<TInputImage,TOutputImage,TAttributeAccessor>
+void LabelMapToAttributeImageFilter<TInputImage, TOutputImage, TAttributeAccessor>
 ::BeforeThreadedGenerateData()
 {
   //first call superclass method to initialize label object container and progress
@@ -100,7 +100,7 @@ void LabelMapToAttributeImageFilter<TInputImage,TOutputImage,TAttributeAccessor>
   OutputImageType *output = this->GetOutput();
   OutputPixelType backgroundPixel;
   backgroundPixel.SetSize(nbChannels);
-  for (unsigned int k=0 ; k<nbChannels ; k++)
+  for (unsigned int k=0; k<nbChannels; k++)
     {
     backgroundPixel[k] = m_BackgroundValue;
     }
@@ -108,7 +108,7 @@ void LabelMapToAttributeImageFilter<TInputImage,TOutputImage,TAttributeAccessor>
 }
 
 template <class TInputImage, class TOutputImage , class TAttributeAccessor>
-void LabelMapToAttributeImageFilter<TInputImage,TOutputImage,TAttributeAccessor>
+void LabelMapToAttributeImageFilter<TInputImage, TOutputImage, TAttributeAccessor>
 ::ThreadedProcessLabelObject( LabelObjectType * labelObject )
 {
   unsigned int nbChannels = GetNumberOfComponentsPerPixel();
@@ -116,7 +116,7 @@ void LabelMapToAttributeImageFilter<TInputImage,TOutputImage,TAttributeAccessor>
   AttributeAccessorType accessor;
   OutputPixelType outPixel;
   outPixel.SetSize(nbChannels);
-  for (unsigned int k=0 ; k<nbChannels ; k++)
+  for (unsigned int k=0; k<nbChannels; k++)
     {
     accessor.SetAttributeName(m_ChosenAttributes[k].c_str());
     const AttributeValueType & attribute = accessor( labelObject );

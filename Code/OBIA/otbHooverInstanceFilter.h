@@ -30,7 +30,7 @@ namespace otb
  *
  * \brief This class computes the Hoover instances.
  *
- * The Hoover instances are computed from two segmentations : ground truth (GT) and machine segmentation (MS); and 
+ * The Hoover instances are computed from two segmentations : ground truth (GT) and machine segmentation (MS); and
  * a Hoover confusion matrix. It is intended to work with AttributesMapLabelObject, where the Hoover scores will be stored.
  * The different instances are :
  *    - correct detection (a GT region paired with a MS region)
@@ -45,15 +45,15 @@ namespace otb
  *    - RM : for missed regions (only for GT)
  *    - RN : for noise regions (only for MS)
  * These Hoover scores that are stored in the label maps are computed between 0 (if the region doesn't belong to this kind of instance) and 1.
- * 
+ *
  * If the user wants to which region labels have been paired, he can set the flag UseExtendedAttributes. The extended attributes contain the
  * labels that have been paired in Hoover instances:
  *    - ATTRIBUTE_CD (correct detection) : label of the corresponding region in the other segmentation
- *    - ATTRIBUTE_OS[_x] (over segmentation) : label of the opposite over segmented region in GT / labels of the corresponding regions of MS 
+ *    - ATTRIBUTE_OS[_x] (over segmentation) : label of the opposite over segmented region in GT / labels of the corresponding regions of MS
  *    - ATTRIBUTE_US[_x] (under segmentation) : labels of the corresponding regions of GT / label of the under segmentated region of MS
  *    - ATTRIBUTE_M (missed) : missed region own label (in GT)
  *    - ATTRIBUTE_N (noise) : noise region own label (in MS)
- * These attributes are handled in a different way than the Hoover scores. The simple presence of an extended attribute in a given region has a 
+ * These attributes are handled in a different way than the Hoover scores. The simple presence of an extended attribute in a given region has a
  * meaning, regardless of its value. It is assumed that its value always corresponds to an existing region label. This is why these extended
  * attributes are not reseted but removed before computing Hoover instances.
  * (see Hoover et al., "An experimental comparison of range image segmentation algorithms", IEEE PAMI vol. 18, no. 7, July 1996)

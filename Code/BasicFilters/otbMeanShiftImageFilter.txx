@@ -369,7 +369,6 @@ MeanShiftImageFilter<TInputImage, TOutputImage, TLabeledOutput, TBufferConverter
 }
 
 
-
 template <class TInputImage, class TOutputImage, class TLabeledOutput, class TBufferConverter>
 void
 MeanShiftImageFilter<TInputImage, TOutputImage, TLabeledOutput, TBufferConverter>
