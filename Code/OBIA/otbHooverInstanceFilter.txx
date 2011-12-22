@@ -364,7 +364,7 @@ void HooverInstanceFilter<TLabelMap>
       } // end of column loop
     
     otbDebugMacro(<< "end of line " << row << "; sumOS=" << sumOS << " " << regionsOfMS.size() << " of MS region");
-    if(sumOS>=tGT and sumOS>0)
+    if(sumOS>=tGT && sumOS>0)
       {
       // CD
       if(regionsOfMS.size()==1)
