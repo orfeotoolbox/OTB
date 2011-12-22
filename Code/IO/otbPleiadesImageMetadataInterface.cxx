@@ -706,7 +706,7 @@ PleiadesImageMetadataInterface
       boost::trim(keywordStringBandNameList);
       boost::split(bandNameList, keywordStringBandNameList, boost::is_any_of(" "));
 
-      for (unsigned int i = 0; i < nbBands && i < 3; i++)
+      for (int i = 0; i < nbBands && i < 3; i++)
         {
         size_t found;
         found = bandNameList[i].find_first_not_of("B");
