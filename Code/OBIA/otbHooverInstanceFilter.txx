@@ -68,6 +68,12 @@ HooverInstanceFilter<TLabelMap>
   m_CardRegGT.SetSize(0);
   m_CardRegMS.SetSize(0);
   m_LabelsGT.resize(0);
+  
+  m_MeanRC = static_cast<AttributesValueType>(0);
+  m_MeanRF = static_cast<AttributesValueType>(0);
+  m_MeanRA = static_cast<AttributesValueType>(0);
+  m_MeanRM = static_cast<AttributesValueType>(0);
+  m_MeanRN = static_cast<AttributesValueType>(0);
 }
 
 /** Set the ground truth label map */
@@ -325,6 +331,15 @@ void HooverInstanceFilter<TLabelMap>
   bool IsRowEmpty;
   bool IsColEmpty;
   
+  // temporary buffers to compute average scores
+  double bufferRC = 0.0;
+  double bufferRF = 0.0;
+  double bufferRA = 0.0;
+  double bufferRM = 0.0;
+  double bufferRN = 0.0;
+  double areaGT = 0.0;
+  double areaMS = 0.0;
+  
   // first pass : loop on GT regions first
   for(unsigned int row=0; row<m_NumberOfRegionsGT; row++, iterGT++)
     {
@@ -364,6 +379,7 @@ void HooverInstanceFilter<TLabelMap>
           LabelObjectType *regionGT = iterGT->second;
           LabelObjectType *regionMS = iterMS->second;
           double scoreRC = m_Threshold * (std::min(coefT / tGT, coefT / tMS));
+          bufferRC += scoreRC * static_cast<double>(m_CardRegGT[row]);
           
           regionGT->SetAttribute(ATTRIBUTE_RC.c_str(), static_cast<AttributesValueType>(scoreRC));
           regionMS->SetAttribute(ATTRIBUTE_RC.c_str(), static_cast<AttributesValueType>(scoreRC));
@@ -404,6 +420,7 @@ void HooverInstanceFilter<TLabelMap>
         
         double cardRegGT = static_cast<double>(m_CardRegGT[row]);
         double scoreRF = 1.0 - sumScoreRF / (cardRegGT * (cardRegGT - 1.0));
+        bufferRF += scoreRF * cardRegGT;
         
         regionGT->SetAttribute(ATTRIBUTE_RF.c_str(), static_cast<AttributesValueType>(scoreRF));
         
@@ -442,6 +459,10 @@ void HooverInstanceFilter<TLabelMap>
       {
       GTindices.insert(row);
       }
+    else
+      {
+      areaGT += static_cast<double>(m_CardRegGT[row]);
+      }
     } // end of line loop
 
   // second pass : loop on MS regions first
@@ -450,6 +471,7 @@ void HooverInstanceFilter<TLabelMap>
     {
     double sumUS = 0.0; // sum of coefT for potential under-segmented regions
     double sumScoreUS = 0.0; // temporary sum of the (Tij x (Tij - 1)) for RA score
+    double sumCardUS = 0.0; // temporary sum of under segmented region sizes
     
     RegionSetType regionsOfGT;     // stores region indexes
     ObjectVectorType  objectsOfGT; // stores region pointers
@@ -479,6 +501,7 @@ void HooverInstanceFilter<TLabelMap>
         objectsOfGT.push_back(iterGT->second);
         sumUS += coefT;
         sumScoreUS += coefT * (coefT - 1.0);
+        sumCardUS += static_cast<double>(m_CardRegGT[row]);
         }
       } // end of line loop
     
@@ -492,8 +515,8 @@ void HooverInstanceFilter<TLabelMap>
       else if(regionsOfGT.size()>1) // Under Segmentation
         {
         LabelObjectType *regionMS = iterMS->second;
-        double cardTotalUS = sumUS / m_Threshold;
-        double scoreRA = 1.0 - sumScoreUS / (cardTotalUS * (cardTotalUS - 1.0));
+        double scoreRA = 1.0 - sumScoreUS / (sumCardUS * (sumCardUS - 1.0));
+        bufferRA += scoreRA * sumCardUS;
         
         regionMS->SetAttribute(ATTRIBUTE_RA.c_str(), static_cast<AttributesValueType>(scoreRA));
         
@@ -533,6 +556,10 @@ void HooverInstanceFilter<TLabelMap>
       {
       MSindices.insert(col);
       }
+    else
+      {
+      areaMS += static_cast<double>(m_CardRegMS[col]);
+      }
     } // end of column loop
 
   // check for Missed regions (unregistered regions in GT)
@@ -543,6 +570,8 @@ void HooverInstanceFilter<TLabelMap>
       {
       otbDebugMacro(<< "M " << i);
       LabelObjectType *regionGT = iterGT->second;
+      
+      bufferRM += static_cast<double>(m_CardRegGT[i]);
       
       regionGT->SetAttribute(ATTRIBUTE_RM.c_str(), 1.0);
       
@@ -562,6 +591,8 @@ void HooverInstanceFilter<TLabelMap>
       {
       LabelObjectType *regionMS = iterMS->second;
       
+      bufferRN += static_cast<double>(m_CardRegMS[i]);
+      
       regionMS->SetAttribute(ATTRIBUTE_RN.c_str(), 1.0);
       
       if (m_UseExtendedAttributes)
@@ -571,6 +602,13 @@ void HooverInstanceFilter<TLabelMap>
       
       }
     }
+    
+  // Compute average scores
+  m_MeanRC = static_cast<AttributesValueType>(bufferRC / areaGT);
+  m_MeanRF = static_cast<AttributesValueType>(bufferRF / areaGT);
+  m_MeanRA = static_cast<AttributesValueType>(bufferRA / areaGT);
+  m_MeanRM = static_cast<AttributesValueType>(bufferRM / areaGT);
+  m_MeanRN = static_cast<AttributesValueType>(bufferRN / areaMS);
 }
 
 

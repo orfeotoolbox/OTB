@@ -95,5 +95,11 @@ int otbHooverInstanceFilterToAttributeImage(int argc, char* argv[])
   
   writer->Update();
   
+  std::cout << "Mean RC ="<< instances->GetMeanRC() << std::endl;
+  std::cout << "Mean RF ="<< instances->GetMeanRF() << std::endl;
+  std::cout << "Mean RA ="<< instances->GetMeanRA() << std::endl;
+  std::cout << "Mean RM ="<< instances->GetMeanRM() << std::endl;
+  std::cout << "Mean RN ="<< instances->GetMeanRN() << std::endl;
+  
   return EXIT_SUCCESS;
 }

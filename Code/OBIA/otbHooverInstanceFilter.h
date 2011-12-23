@@ -114,6 +114,13 @@ public:
 
   itkSetMacro(UseExtendedAttributes, bool);
   itkGetMacro(UseExtendedAttributes, bool);
+  
+  /** Get the average scores (after filter update) */
+  itkGetMacro(MeanRC, AttributesValueType);
+  itkGetMacro(MeanRF, AttributesValueType);
+  itkGetMacro(MeanRA, AttributesValueType);
+  itkGetMacro(MeanRM, AttributesValueType);
+  itkGetMacro(MeanRN, AttributesValueType);
 
   /** Attribute name for correct detection */
   static const std::string ATTRIBUTE_CD;
@@ -197,6 +204,13 @@ private:
   
   /** Flag to output additional information in label maps */
   bool m_UseExtendedAttributes;
+  
+  /** Average scores for the whole segmentation */
+  AttributesValueType m_MeanRC;
+  AttributesValueType m_MeanRF;
+  AttributesValueType m_MeanRA;
+  AttributesValueType m_MeanRM;
+  AttributesValueType m_MeanRN;
   
 };
 
