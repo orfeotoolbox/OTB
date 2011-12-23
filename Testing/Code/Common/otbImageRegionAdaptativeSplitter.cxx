@@ -35,7 +35,7 @@ int otbImageRegionAdaptativeSplitterNew(int argc, char * argv[])
 
 int otbImageRegionAdaptativeSplitter(int argc, char * argv[])
 {
-  SizeType regionSize,tileHint;
+  SizeType regionSize, tileHint;
   IndexType regionIndex;
   RegionType region;
   unsigned int requestedNbSplits;
@@ -58,14 +58,14 @@ int otbImageRegionAdaptativeSplitter(int argc, char * argv[])
   splitter->SetTileHint(tileHint);
 
 
-  unsigned int nbSplits = splitter->GetNumberOfSplits(region,requestedNbSplits);
+  unsigned int nbSplits = splitter->GetNumberOfSplits(region, requestedNbSplits);
 
   outfile<<splitter<<std::endl;
   outfile<<"Split map: "<<std::endl;
 
-  for(unsigned int i = 0; i < nbSplits;++i)
+  for(unsigned int i = 0; i < nbSplits; ++i)
     {
-    outfile<<"Split "<<i<<": "<<splitter->GetSplit(i,requestedNbSplits,region);
+    outfile<<"Split "<<i<<": "<<splitter->GetSplit(i, requestedNbSplits, region);
     }
 
   outfile.close();

@@ -176,7 +176,35 @@ ADD_TEST(obTvLabelImageToLabelMapWithAdjacencyFilter ${OBIA_TESTS3}
   ${TEMP}/obTvLabelImageToLabelMapWithAdjacencyFilterOutput.txt
 )
 
-      
+ADD_TEST(obTuHooverMatrixFilterNew ${OBIA_TESTS1}
+    otbHooverMatrixFilterNew)
+
+ADD_TEST(obTvHooverMatrixFilter ${OBIA_TESTS1}
+    --compare-ascii ${NOTOL}
+    ${BASELINE_FILES}/obTvHooverMatrixFilter.txt
+    ${TEMP}/obTvHooverMatrixFilter.txt
+    otbHooverMatrixFilter
+    ${INPUTDATA}/Seg1InputForRCC8Graph.tif
+    ${INPUTDATA}/Seg2InputForRCC8Graph.tif
+    ${TEMP}/obTvHooverMatrixFilter.txt
+    )
+
+ADD_TEST(obTuHooverInstanceFilterNew ${OBIA_TESTS1}
+    otbHooverInstanceFilterNew)
+
+ADD_TEST(obTuLabelMapToAttributeImageFilterNew ${OBIA_TESTS1}
+    otbLabelMapToAttributeImageFilterNew)
+
+ADD_TEST(obTvHooverInstanceFilterToAttributeImage ${OBIA_TESTS1}
+    --compare-image ${EPSILON_9}
+    ${BASELINE}/obTvHooverInstanceFilterToAttributeImage.tif
+    ${TEMP}/obTvHooverInstanceFilterToAttributeImage.tif
+    otbHooverInstanceFilterToAttributeImage
+    ${INPUTDATA}/maur_GT.tif
+    ${INPUTDATA}/maur_labelled.tif
+    ${TEMP}/obTvHooverInstanceFilterToAttributeImage.tif
+    )
+
 # OBIATests2 (need PQXX)
 IF(OTB_USE_PQXX)
 ADD_TEST(obTuLabelMapToGISTableFilterNew ${OBIA_TESTS2}
@@ -230,6 +258,11 @@ otbStatisticsAttributesLabelMapFilterNew.cxx
 otbVectorDataToLabelMapFilter.cxx
 otbVectorDataToLabelMapFilterNew.cxx
 otbStreamingConnectedComponentOBIATest.cxx
+otbHooverMatrixFilterNew.cxx
+otbHooverMatrixFilter.cxx
+otbHooverInstanceFilterNew.cxx
+otbLabelMapToAttributeImageFilterNew.cxx
+otbHooverInstanceFilterToAttributeImage.cxx
 )
 
 IF(OTB_USE_PQXX)

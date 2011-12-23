@@ -5,12 +5,12 @@ i18n_include "otbI18n.h"
 i18n_function otbGetTextMacro 
 header_name {.h} 
 code_name {.cxx}
-class ImageViewerManagerViewGroup {open
+class ViewerViewGroup {open
 } {
   Function {CreateGUI()} {open return_type void
   } {
     Fl_Window guiMainWindow {
-      label otbImageViewerManagerView
+      label otbViewerView
       callback {this->Quit()} open
       xywh {366 65 610 460} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 resizable visible
     } {
@@ -170,8 +170,8 @@ class ImageViewerManagerViewGroup {open
       }
     }
     Fl_Window guiLinkSetupWindow {
-      label {Link Images} open
-      xywh {397 582 560 220} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 resizable visible
+      label {Link Images}
+      xywh {855 634 560 220} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 resizable visible
     } {
       Fl_Input guiLinkXOffset {
         label {X offset}
@@ -234,56 +234,83 @@ class ImageViewerManagerViewGroup {open
         tooltip {Leave diaporama mode} xywh {262 55 105 25} box ROUND_UP_BOX down_box ROUND_DOWN_BOX shortcut 0xff1b color 23 selection_color 23 labelcolor 186
       }
     }
+    Fl_Window guiJpeg2000ResSelection {
+      label {Jpeg2000 resolution selection} open
+      xywh {316 565 460 145} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 visible
+    } {
+      Fl_Button {} {
+        label Cancel
+        callback {guiJpeg2000ResSelection->hide();}
+        tooltip {Next image in diaporama} xywh {220 110 105 25} box ROUND_UP_BOX down_box ROUND_DOWN_BOX shortcut 0xff56 color 23 selection_color 23 labelcolor 186
+      }
+      Fl_Return_Button {} {
+        label Ok
+        callback {guiJpeg2000ResSelection->hide();
+OpenJpeg2000Image();}
+        tooltip {Leave diaporama mode} xywh {342 110 105 25} box ROUND_UP_BOX down_box ROUND_DOWN_BOX shortcut 0xff0d color 23 selection_color 23 labelcolor 186
+      }
+      Fl_Input_Choice guiJpeg2000Res {
+        label {Select resolution} open
+        xywh {80 59 300 24} box EMBOSSED_BOX labelcolor 187 align 1
+      } {}
+      Fl_Output guiJpeg2000Filename {
+        label Filename
+        xywh {70 8 370 23} box EMBOSSED_BOX labelcolor 187
+      }
+    }
   }
-  Function {ImageViewerManagerViewGroup()} {} {}
-  Function {~ImageViewerManagerViewGroup()} {open return_type virtual
-  } {}
+  Function {ViewerViewGroup()} {
+  } {comment {for fluid 1.3} {in_source not_in_header}}
+  Function {~ViewerViewGroup()} {open return_type virtual
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {OpenImage()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {CloseImage()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {ViewerSetup()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {ViewerSetupOk()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {LinkSetup()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {LinkSetupRemove()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {LinkSetupClear()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {LinkSetupOk()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {LinkSetupSave()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {Quit()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {SelectAction()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {ShowHide()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {GrayScaleSet()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {RGBSet()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {ViewerSetupCancel()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {ZoomSmallImagesHook()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {DiaporamaPrevious()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {DiaporamaNext()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {DiaporamaQuit()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {Diaporama()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {HideAll()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {ComplexSet()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {SplittedViewMode()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
   Function {PackedViewMode()} {open return_type {virtual void}
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
+  Function {OpenJpeg2000Image()} {open selected return_type {virtual void}
+  } {comment {for fluid 1.3} {in_source not_in_header}}       
 } 

@@ -148,7 +148,7 @@ PipelineMemoryPrintCalculator
   // Now, evaluate the current object print
   for(unsigned int i = 0; i < process->GetNumberOfOutputs(); ++i)
     {
-      MemoryPrintType localPrint = this->EvaluateDataObjectPrint(outputs[0]);
+      MemoryPrintType localPrint = this->EvaluateDataObjectPrint(outputs[i]);
       print += localPrint;
     }
 

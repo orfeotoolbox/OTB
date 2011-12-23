@@ -171,8 +171,6 @@ ListSampleGenerator<TImage, TVectorData>
   m_ClassesSamplesNumberTraining.clear();
   m_ClassesSamplesNumberValidation.clear();
 
-  //m_RandomGenerator->SetSeed(1234); //FIXME switch to member
-
   TreeIteratorType itVector(vectorData->GetDataTree());
   itVector.GoToBegin();
   while (!itVector.IsAtEnd())

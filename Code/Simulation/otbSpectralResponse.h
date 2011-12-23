@@ -139,7 +139,7 @@ public:
   void SetFromImage(ImagePointerType image);
 
   /** Transform the SR in a Filter Function (6S parameters)*/
-  FilterFunctionValuesPointerType GetFilterFunctionValues(double step = 0.0025) const;
+  FilterFunctionValuesPointerType GetFilterFunctionValues(double step = 0.0025);
 
   /** Get the wavelength of the first and last not null reflectance  */
   IntervalType GetInterval()

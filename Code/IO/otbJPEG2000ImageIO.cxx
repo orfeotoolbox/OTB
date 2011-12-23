@@ -177,7 +177,7 @@ public:
   
   opj_image_t * DecodeTile(unsigned int tileIndex);
 
-  std::vector<unsigned int> GetResolutionsAvailable(){return this->m_ResolutionAvailable; };
+  std::vector<unsigned int> GetAvailableResolutions(){return this->m_AvailableResolutions; };
 
   void Clean();
 
@@ -203,7 +203,7 @@ public:
   unsigned int         m_XNbOfTile;
   unsigned int         m_YNbOfTile;
   
-  std::vector<unsigned int> m_ResolutionAvailable;
+  std::vector<unsigned int> m_AvailableResolutions;
 
   unsigned int m_ResolutionFactor;
 
@@ -432,7 +432,7 @@ int JPEG2000InternalReader::Initialize()
   unsigned int numResAvailable = this->m_CstrInfo->m_default_tile_info.tccp_info[0].numresolutions;
   for (unsigned int itRes = 0; itRes < numResAvailable; itRes++)
     {
-    m_ResolutionAvailable.push_back(itRes);
+    m_AvailableResolutions.push_back(itRes);
     }
 
   return 1;
@@ -746,7 +746,7 @@ struct ThreadStruct
 /** Get Info about all resolution in jpeg2000 file */
 bool JPEG2000ImageIO::GetResolutionInfo(std::vector<unsigned int>& res, std::vector<std::string>& desc)
 {
-  res = this->m_InternalReaders[0]->GetResolutionsAvailable();
+  res = this->m_InternalReaders[0]->GetAvailableResolutions();
 
   if (res.empty())
     return false;
@@ -773,6 +773,18 @@ bool JPEG2000ImageIO::GetResolutionInfo(std::vector<unsigned int>& res, std::vec
 
   return true;
 }
+
+/** Get all resolution in jpeg2000 file */
+bool JPEG2000ImageIO::GetAvailableResolutions(std::vector<unsigned int>& res)
+{
+  res = this->m_InternalReaders[0]->GetAvailableResolutions();
+
+  if (res.empty())
+    return false;
+
+  return true;
+}
+
 
 // Read image
 void JPEG2000ImageIO::Read(void* buffer)
@@ -805,7 +817,7 @@ void JPEG2000ImageIO::Read(void* buffer)
       }
     }
 
-  if (m_ResolutionFactor >= this->m_InternalReaders[0]->m_ResolutionAvailable.size())
+  if (m_ResolutionFactor >= this->m_InternalReaders[0]->m_AvailableResolutions.size())
     {
     itkExceptionMacro(<< "Resolution not available in the file!");
     return;
@@ -1253,8 +1265,8 @@ void JPEG2000ImageIO::ReadImageInformation()
     }
 
   // Encapsulate tile hints for streaming
-  unsigned int tileHintX = m_InternalReaders.front()->m_TileWidth / static_cast<unsigned int>(vcl_pow(2.0,(int) m_ResolutionFactor));
-  unsigned int tileHintY = m_InternalReaders.front()->m_TileHeight / static_cast<unsigned int>(vcl_pow(2.0,(int) m_ResolutionFactor));
+  unsigned int tileHintX = m_InternalReaders.front()->m_TileWidth / static_cast<unsigned int>(vcl_pow(2.0, static_cast<int>(m_ResolutionFactor) ));
+  unsigned int tileHintY = m_InternalReaders.front()->m_TileHeight / static_cast<unsigned int>(vcl_pow(2.0, static_cast<int>(m_ResolutionFactor) ));
   
   itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::TileHintX, tileHintX);
   itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::TileHintY, tileHintY);

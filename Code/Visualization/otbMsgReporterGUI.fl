@@ -23,5 +23,5 @@ class MsgReporterGUI {open
     }
   }
   Function {~MsgReporterGUI()} {open selected return_type virtual
-  } {}
+  } {comment {for fluid 1.3} {in_source not_in_header}}
 }

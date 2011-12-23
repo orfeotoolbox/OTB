@@ -61,13 +61,15 @@ public:
   virtual void SetTitle(const std::string & title);
   /** Send a new message in the edit area */
   virtual void SendMsg(const std::string & msg);
+  /** Send an warning message in the edit area */
+  virtual void SendWarning(const std::string& msg);
   /** Send an error message in the edit area */
   virtual void SendError(const std::string & msg);
 
 protected:
   // Constructor and destructor
   MsgReporter();
-  ~MsgReporter() {};
+  virtual ~MsgReporter() {};
 
 private:
   MsgReporter(const Self&); //purposely not implemented

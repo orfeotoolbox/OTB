@@ -15,11 +15,11 @@ See OTBCopyright.txt for details.
      PURPOSE,  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageViewerManagerController_h
-#define __otbImageViewerManagerController_h
+#ifndef __otbViewerController_h
+#define __otbViewerController_h
 
-#include "otbImageViewerManagerControllerInterface.h"
-#include "otbImageViewerManagerViewGUI.h"
+#include "otbViewerControllerInterface.h"
+#include "otbViewerViewGUI.h"
 
 /** NewVisu */
 // #include "otbImageWidgetController.h"
@@ -32,17 +32,17 @@ See OTBCopyright.txt for details.
 
 namespace otb
 {
-class ITK_EXPORT ImageViewerManagerController
-      : public ImageViewerManagerControllerInterface
+class ITK_EXPORT ViewerController
+      : public ViewerControllerInterface
 {
 public:
   /** Standard class typedefs */
-  typedef ImageViewerManagerController                   Self;
-  typedef ImageViewerManagerControllerInterface          Superclass;
+  typedef ViewerController                   Self;
+  typedef ViewerControllerInterface          Superclass;
   typedef itk::SmartPointer<Self>                        Pointer;
   typedef itk::SmartPointer<const Self>                  ConstPointer;
 
-  typedef ImageViewerManagerViewGUI                      ViewType;
+  typedef ViewerViewGUI                      ViewType;
   typedef ViewType::Pointer                              ViewPointerType;
   typedef ViewType::VisuViewType                         VisuViewType;
   typedef ViewType::VisuViewPointerType                  VisuViewPointerType;
@@ -67,7 +67,7 @@ public:
   typedef AutoScaleHandlerType::Pointer                                 AutoScaleHandlerPointerType;
   
   /** Standard type macros */
-  itkTypeMacro(ImageViewerManagerController, Superclass);
+  itkTypeMacro(ViewerController, Superclass);
   itkNewMacro(Self);
 
   /** NewVisu */
@@ -99,7 +99,7 @@ public:
   
   //virtual void AddController(VisuModelPointerType  modelRenderingLayer  , VisuViewPointerType visuView);
 
-  virtual unsigned int OpenInputImage(const char * filename);
+  virtual unsigned int OpenInputImage(const char * filename, const unsigned int & id=0);
   virtual void CloseImage(unsigned int selectedItem);
   virtual void UpdateRGBChannelOrder(int redChoice , int greenChoice, int BlueChoice, unsigned int selectedItem);
   virtual void UpdateGrayScaleChannelOrder(int choice, unsigned int selectedItem );
@@ -108,15 +108,14 @@ public:
   virtual void Link(unsigned int leftChoice, unsigned int rightChoice , OffsetType offset);
   virtual void UpdateImageViewController(unsigned int selectedItem);
 
-
 protected:
   /** Constructor */
-  ImageViewerManagerController();
+  ViewerController();
   /** Destructor */
-  virtual ~ImageViewerManagerController();
+  virtual ~ViewerController();
 
 private:
-  ImageViewerManagerController(const Self&); //purposely not implemented
+  ViewerController(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   /** Pointer to the view */

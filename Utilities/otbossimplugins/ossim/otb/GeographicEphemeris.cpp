@@ -28,7 +28,7 @@ GeographicEphemeris::~GeographicEphemeris()
 {
 }
 
-GeographicEphemeris::GeographicEphemeris(JSDDateTime date, double pos[3], double vitesse[3]) : Ephemeris(date, pos, vitesse)
+GeographicEphemeris::GeographicEphemeris(JSDDateTime date, double pos[3], double speed[3]) : Ephemeris(date, pos, speed)
 {
 }
 
@@ -57,18 +57,18 @@ void GeographicEphemeris::ToGalilean(GalileanEphemeris* vGal)
   vGal->set_date(_date);
 
   double pos[3];
-  double vitesse[3];
+  double speed[3];
 
     pos[0] = _position[0] * c - _position[1] * s ;
     pos[1] = _position[0] * s + _position[1] * c ;
     pos[2] = _position[2] ;
 
-    vitesse[0]  =  _vitesse[0]  * c -  _vitesse[1] * s - OMEGATERRE * (_position[0] * s + _position[1] * c) ;
-    vitesse[1]  =  _vitesse[0]  * s +  _vitesse[1] * c + OMEGATERRE * (_position[0] * c - _position[1] * s) ;
-    vitesse[2]  = _vitesse[2] ;
+    speed[0]  =  _speed[0]  * c -  _speed[1] * s - OMEGATERRE * (_position[0] * s + _position[1] * c) ;
+    speed[1]  =  _speed[0]  * s +  _speed[1] * c + OMEGATERRE * (_position[0] * c - _position[1] * s) ;
+    speed[2]  = _speed[2] ;
 
   vGal->set_position(pos);
-    vGal->set_vitesse(vitesse);
+    vGal->set_speed(speed);
 }
 
 GeographicEphemeris::operator GalileanEphemeris()

@@ -115,9 +115,9 @@ int SarSensor::localisationSAR ( GeographicEphemeris PosVit , double lambda ,
   posX  = PosVit.get_position()[0] * MEGA ;
   posY  = PosVit.get_position()[1] * MEGA ;
   posZ  = PosVit.get_position()[2] * MEGA ;
-  vitX = - PosVit.get_vitesse()[0] * KILO ;
-  vitY = - PosVit.get_vitesse()[1] * KILO ;
-  vitZ = - PosVit.get_vitesse()[2] * KILO ;
+  vitX = - PosVit.get_speed()[0] * KILO ;
+  vitY = - PosVit.get_speed()[1] * KILO ;
+  vitZ = - PosVit.get_speed()[2] * KILO ;
 
 
   /* Coefficients computation and equation solving */

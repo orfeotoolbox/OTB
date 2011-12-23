@@ -295,7 +295,10 @@ ADD_TEST(FA-0000436-WrapperInputImage_GetImage ${CXX_TEST_PATH}/0000436-WrapperI
   ${INPUTDATA}/scene_8.tif
 )
 ENDIF(BUILD_APPLICATIONS)
-
+# ------- FA 0000437-WriteImageCentOS -------------------------
+ADD_TEST(FA-0000437-WriteImageCentOS ${CXX_TEST_PATH}/0000437-WriteImageCentOS
+  ${BASELINE}/FA-0000437-WriteImageCentOSInput.tif
+  ${TEMP}/FA-0000437-WriteImageCentOSOutput.tif)
 
 # -------       Vectorization issue   -----------------------------------
 # FIXME Desactivated until http://bugs.orfeo-toolbox.org/view.php?id=94
@@ -357,5 +360,8 @@ IF(BUILD_APPLICATIONS)
   ADD_EXECUTABLE(0000436-WrapperInputImage_GetImage 0000436-WrapperInputImage_GetImage.cxx)
   TARGET_LINK_LIBRARIES(0000436-WrapperInputImage_GetImage OTBApplicationEngine)
 ENDIF(BUILD_APPLICATIONS)
+
+ADD_EXECUTABLE(0000437-WriteImageCentOS 0000437-WriteImageCentOS.cxx)
+TARGET_LINK_LIBRARIES(0000437-WriteImageCentOS OTBIO OTBCommon)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

@@ -39,7 +39,7 @@ public:
   /**
    * @brief Constructor with initialisations
    */
-  GeographicEphemeris(JSDDateTime date, double pos[3], double vitesse[3]);
+  GeographicEphemeris(JSDDateTime date, double pos[3], double speed[3]);
   /**
    * @brief Copy constructor
    */

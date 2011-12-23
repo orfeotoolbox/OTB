@@ -41,7 +41,7 @@ public:
    /**
     * @brief Constructor with initialisations
     */
-   Ephemeris(JSDDateTime date, double pos[3], double vitesse[3]);
+   Ephemeris(JSDDateTime date, double pos[3], double speed[3]);
    /**
     * @brief Copy constructor
     */
@@ -75,14 +75,14 @@ public:
       return _position;
    }
 
-   double* get_vitesse()
+   double* get_speed()
    {
-      return _vitesse;
+      return _speed;
    }
 
-   const double* get_vitesse() const
+   const double* get_speed() const
    {
-      return _vitesse;
+      return _speed;
    }
 
    void set_date(JSDDateTime date)
@@ -97,11 +97,11 @@ public:
       _position[2] = position[2];
    }
 
-   void set_vitesse(double vitesse[3])
+   void set_speed(double speed[3])
    {
-      _vitesse[0] = vitesse[0];
-      _vitesse[1] = vitesse[1];
-      _vitesse[2] = vitesse[2];
+      _speed[0] = speed[0];
+      _speed[1] = speed[1];
+      _speed[2] = speed[2];
    }
 
    /**
@@ -123,7 +123,7 @@ protected:
 
    JSDDateTime _date;
    double _position[3];
-   double _vitesse[3];
+   double _speed[3];
 private:
 };
 }

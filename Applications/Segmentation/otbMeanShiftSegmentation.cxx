@@ -67,9 +67,9 @@ private:
     MandatoryOff("lout");
     MandatoryOff("cbout");
 
-    AddParameter(ParameterType_RAM, "ram", "Available RAM");
-    SetDefaultParameterInt("ram", 256);
-    MandatoryOff("ram");
+   // AddParameter(ParameterType_RAM, "ram", "Available RAM");
+   //  SetDefaultParameterInt("ram", 256);
+   //   MandatoryOff("ram");
 
     AddParameter(ParameterType_Int,          "spatialr",   "Spatial radius");
     AddParameter(ParameterType_Float,        "ranger",   "Range radius");
@@ -102,23 +102,18 @@ private:
   {
     FloatVectorImageType* input = GetParameterImage("in");
 
-   m_Filter = MSFilterType::New();
+    m_Filter = MSFilterType::New();
 
     m_Filter->SetInput(input);
-    m_Filter->SetSpatialRadius( GetParameterInt("spatialr") );
-    m_Filter->SetRangeRadius( GetParameterFloat("ranger") );
-    m_Filter->SetMinimumRegionSize( GetParameterInt("minsize") );
-    m_Filter->SetScale( GetParameterFloat("scale") );
+    m_Filter->SetSpatialRadius(GetParameterInt("spatialr"));
+    m_Filter->SetRangeRadius(GetParameterFloat("ranger"));
+    m_Filter->SetMinimumRegionSize(GetParameterInt("minsize"));
+    m_Filter->SetScale(GetParameterFloat("scale"));
 
-
-    if (IsParameterEnabled("fout") && HasValue("fout"))
-      SetParameterOutputImage("fout", m_Filter->GetOutput());
-    if (IsParameterEnabled("cout") && HasValue("cout"))
-      SetParameterOutputImage("cout", m_Filter->GetClusteredOutput());
-    if (IsParameterEnabled("lout") && HasValue("lout"))
-      SetParameterOutputImage<UInt16ImageType>("lout", m_Filter->GetLabeledClusteredOutput());
-    if (IsParameterEnabled("cbout") && HasValue("cbout"))
-      SetParameterOutputImage<UInt16ImageType>("cbout", m_Filter->GetClusterBoundariesOutput());
+    if (IsParameterEnabled("fout") && HasValue("fout")) SetParameterOutputImage("fout", m_Filter->GetOutput());
+    if (IsParameterEnabled("cout") && HasValue("cout")) SetParameterOutputImage("cout", m_Filter->GetClusteredOutput());
+    if (IsParameterEnabled("lout") && HasValue("lout")) SetParameterOutputImage<UInt16ImageType> ("lout", m_Filter->GetLabeledClusteredOutput());
+    if (IsParameterEnabled("cbout") && HasValue("cbout")) SetParameterOutputImage<UInt16ImageType> ("cbout", m_Filter->GetClusterBoundariesOutput());
   }
 
   MSFilterType::Pointer m_Filter;

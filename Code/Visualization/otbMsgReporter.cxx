@@ -76,6 +76,19 @@ MsgReporter
 {
   this->textArea->insert(msg.c_str());
   this->textArea->show_insert_position();
+  this->Show();
+  Fl::check();
+}
+
+//Send Error
+void
+MsgReporter
+::SendWarning(const std::string & msg)
+{
+  this->textArea->insert("WARNING: ");
+  this->textArea->insert(msg.c_str());
+  this->textArea->show_insert_position();
+  this->Show();
   Fl::check();
 }
 

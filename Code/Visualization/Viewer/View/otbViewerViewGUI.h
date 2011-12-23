@@ -15,8 +15,8 @@ See OTBCopyright.txt for details.
      PURPOSE,  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbImageViewerManagerViewGUI_h
-#define __otbImageViewerManagerViewGUI_h
+#ifndef __otbViewerViewGUI_h
+#define __otbViewerViewGUI_h
 
 #include "otbListenerBase.h"
 
@@ -25,15 +25,15 @@ See OTBCopyright.txt for details.
 #pragma warning(push)
 #pragma warning(disable:4996)
 #endif
-#include "otbImageViewerManagerViewGroup.h"
-//#include "otbImageWidgetPackedManager.h"
+#include "otbViewerViewGroup.h"
+
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
 
 #include <FL/Fl_Group.H>
-#include "otbImageViewerManagerModel.h"
-#include "otbImageViewerManagerControllerInterface.h"
+#include "otbViewerModel.h"
+#include "otbViewerControllerInterface.h"
 
 #include "otbImageView.h"
 #include "otbImageWidget.h"
@@ -47,20 +47,19 @@ See OTBCopyright.txt for details.
 #include "otbSplittedWidgetManager.h"
 
 #include "otbObjectList.h"
-#include "otbFixedSizeFullImageWidget.h"
 #include <FL/Fl_File_Chooser.H>
 
 namespace otb
 {
-/** \class ImageViewerManagerViewGUI
+/** \class ViewerViewGUI
  *
  */
-  class ITK_EXPORT ImageViewerManagerViewGUI
-    : public ListenerBase, public ImageViewerManagerViewGroup, public itk::Object
+  class ITK_EXPORT ViewerViewGUI
+    : public ListenerBase, public ViewerViewGroup, public itk::Object
 {
 public:
   /** Standard typedefs */
-  typedef ImageViewerManagerViewGUI                  Self;
+  typedef ViewerViewGUI                  Self;
   typedef itk::Object          Superclass;
   typedef itk::SmartPointer<Self>                    Pointer;
   typedef itk::SmartPointer<const Self>              ConstPointer;
@@ -69,29 +68,29 @@ public:
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(ImageViewerManagerViewGUI, Object);
+  itkTypeMacro(ViewerViewGUI, Object);
 
   /** Controller */
-  typedef ImageViewerManagerControllerInterface::Pointer  ImageViewerManagerControllerInterfacePointerType;
+  typedef ViewerControllerInterface::Pointer  ViewerControllerInterfacePointerType;
 
   /** Model*/
-  typedef ImageViewerManagerModel                                 ImageViewerManagerModelType;
-  typedef ImageViewerManagerModelType::VisuModelType              VisuModelType;  //rendreing Image
-  typedef ImageViewerManagerModelType::VisuModelPointerType       VisuModelPointerType;  //rendreing Image
-  typedef ImageViewerManagerModelType::PixelDescriptionModelType  PixelDescriptionModelType;  //rendreing Image
-  typedef ImageViewerManagerModelType::LayerType::HistogramType   HistogramType;
-  typedef ImageViewerManagerModelType::OffsetType                 OffsetType;
-  typedef ImageViewerManagerModelType::RenderingFunctionType      RenderingFunctionType;
-  typedef ImageViewerManagerModelType::StandardRenderingFunctionType StandardRenderingFunctionType;
+  typedef ViewerModel                                 ViewerModelType;
+  typedef ViewerModelType::VisuModelType              VisuModelType;  //rendreing Image
+  typedef ViewerModelType::VisuModelPointerType       VisuModelPointerType;  //rendreing Image
+  typedef ViewerModelType::PixelDescriptionModelType  PixelDescriptionModelType;  //rendreing Image
+  typedef ViewerModelType::LayerType::HistogramType   HistogramType;
+  typedef ViewerModelType::OffsetType                 OffsetType;
+  typedef ViewerModelType::RenderingFunctionType      RenderingFunctionType;
+  typedef ViewerModelType::StandardRenderingFunctionType StandardRenderingFunctionType;
   typedef StandardRenderingFunctionType::ChannelListType          ChannelListType;
   typedef ImageView<VisuModelType>                                VisuViewType;
   typedef VisuViewType::Pointer                                   VisuViewPointerType;
 
   /* Method to display the Widget : Packed or Splitted */
   typedef PackedWidgetManager                                     PackedWidgetManagerType;
-  typedef PackedWidgetManagerType::Pointer                        PackedWidgetManagerPointerType;
+  typedef PackedWidgetManagerType::Pointer                        PackedWidgetManagerPointer;
   typedef SplittedWidgetManager                                   SplittedWidgetManagerType;
-  typedef SplittedWidgetManagerType::Pointer                      SplittedWidgetManagerPointerType;
+  typedef SplittedWidgetManagerType::Pointer                      SplittedWidgetManagerPointer;
 
   /** Widget for the preview*/
   typedef ImageWidget<>                                           ImageWidgetType;
@@ -115,18 +114,18 @@ public:
   typedef std::vector<UIntPairType>                               UIntPairVector;
 
   /** list in order to store the diplay manager*/
-  typedef WidgetManager                                           WidgetManagerType;
+  typedef WidgetManager                                         WidgetManagerType;
   typedef ObjectList<WidgetManagerType>                           WidgetManagerList;
 
 
   /** Method to set the controller*/
-  itkGetObjectMacro(ImageViewerManagerController, ImageViewerManagerControllerInterface);
+  itkGetObjectMacro(ViewerController, ViewerControllerInterface);
 
-  void SetImageViewerManagerController(ImageViewerManagerControllerInterface *pController)
+  void SetViewerController(ViewerControllerInterface *pController)
   {
-    m_ImageViewerManagerController = pController;
-    m_VisuView->SetController(m_ImageViewerManagerController->GetVisuController());
-    m_PreviewWidget->SetController(m_ImageViewerManagerController->GetPreviewVisuController());
+    m_ViewerController = pController;
+    m_VisuView->SetController(m_ViewerController->GetVisuController());
+    m_PreviewWidget->SetController(m_ViewerController->GetPreviewVisuController());
   }
 
   // Visu
@@ -141,10 +140,10 @@ public:
 
   //
   virtual void OpenImage(const char * inputFileName);
+  virtual void   Initialize(const unsigned int & numberOfOpenedImages);
 
 protected:
   virtual void   OpenImage();
-  virtual void   Initialize(const char * cfname);
   virtual void   CloseImage();
   virtual void   ViewerSetup();
   virtual void   ViewerSetupOk();
@@ -186,22 +185,25 @@ protected:
   virtual void LinkSetupRemove();
   virtual void InitializeImageController(unsigned int selectedItem );
 
+  virtual void OpenJpeg2000Image();
+ 
+
   /** Constructor */
-  ImageViewerManagerViewGUI();
+  ViewerViewGUI();
   /** Destructor */
-  virtual ~ImageViewerManagerViewGUI(){};
+  virtual ~ViewerViewGUI(){};
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  ImageViewerManagerViewGUI(const Self&); //purposely not implemented
+  ViewerViewGUI(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   /** Pointer to the model */
-  ImageViewerManagerModel::Pointer               m_ImageViewerManagerModel;
+  ViewerModel::Pointer               m_ViewerModel;
 
   /** Pointer to the controller */
-  ImageViewerManagerControllerInterface::Pointer m_ImageViewerManagerController;
+  ViewerControllerInterface::Pointer m_ViewerController;
 
   //
   BoolVector                                     m_DisplayStatusList;
@@ -211,12 +213,12 @@ private:
   std::string                                    m_DisplayedLabel;
   std::string                                    m_UndisplayedLabel;
 
-  //Widget Manager
+  //Widget
   WidgetManagerList::Pointer                     m_WidgetManagerList;
   WidgetManagerList::Pointer                     m_LinkWidgetManagerList;
 
-  //SlideShow widget Manager
-  PackedWidgetManagerType::Pointer               m_WidgetManager;
+  //SlideShow widget
+  PackedWidgetManagerPointer               m_Widget;
 
   VisuViewPointerType                            m_VisuView;
 

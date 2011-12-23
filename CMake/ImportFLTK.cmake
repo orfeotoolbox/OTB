@@ -34,12 +34,20 @@ IF(OTB_USE_VISU_GUI)
         MARK_AS_ADVANCED(OTB_USE_EXTERNAL_FLTK)
 
         IF(OTB_USE_EXTERNAL_FLTK)
+          
           FIND_PACKAGE(FLTK)
           IF(NOT FLTK_FOUND)
             MESSAGE(FATAL_ERROR
                   "Cannot build OTB project without FLTK. Please set FLTK_DIR or set OTB_USE_EXTERNAL_FLTK OFF to use INTERNAL FLTK.")
           ENDIF(NOT FLTK_FOUND)
+          
+          # Only if we used a FLTK 1.3.0 because in FLTK 1.1.>=9 is already done
+          IF(FLTK_USE_FILE)
+            INCLUDE(${FLTK_USE_FILE})
+          ENDIF(FLTK_USE_FILE)
+          
         ELSE(OTB_USE_EXTERNAL_FLTK)
+          
           # Same Set as ITK
           SET(FLTK_SOURCE_DIR ${OTB_SOURCE_DIR}/Utilities/FLTK)
           SET(FLTK_BINARY_DIR ${OTB_BINARY_DIR}/Utilities/FLTK)
@@ -48,21 +56,23 @@ IF(OTB_USE_VISU_GUI)
           SET(FLUID_COMMAND fluid)
           # FLTK CMake needs a variable called JPEG_INCLUDE_DIR
           SET(JPEG_INCLUDE_DIR ${JPEG_INCLUDE_DIRS})
+          
+          # Needed for version 1.1.>=9
+          SET(FLTK_FLUID_EXECUTABLE ${FLUID_COMMAND})
 		  
         ENDIF(OTB_USE_EXTERNAL_FLTK)
 
-        SET(OTB_VISU_GUI_LIBRARIES "${FLTK_LIBRARIES};${OPENGL_LIBRARIES}")
-        SET(FLTK_FLUID_EXECUTABLE ${FLUID_COMMAND})
-           
         SET(OTB_VISU_GUI_LIBRARIES "${FLTK_LIBRARIES};${OPENGL_LIBRARIES};${FLTK_PLATFORM_DEPENDENT_LIBS}")
+        
         IF(APPLE)
-            SET(OTB_VISU_GUI_LIBRARIES "${OTB_VISU_GUI_LIBRARIES};-Wl,-dylib_file,/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib:/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib")
+          SET(OTB_VISU_GUI_LIBRARIES "${OTB_VISU_GUI_LIBRARIES};-Wl,-dylib_file,/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib:/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib")
         ENDIF(APPLE)
                
         IF(OTB_USE_EXTERNAL_FLTK)
-          MESSAGE(STATUS "  Using FLTK external version")
+          MESSAGE(STATUS "  Using FLTK external version ${FLTK_EXTERNAL_VERSION}")
           MESSAGE(STATUS "  FLTK includes : ${FLTK_INCLUDE_DIR}")
-          MESSAGE(STATUS "  FLTK libraries: ${OTB_VISU_GUI_LIBRARIES}")
+          MESSAGE(STATUS "  FLTK libraries: ${FLTK_LIBRARIES}")
+          MESSAGE(STATUS "  FLUID executable = ${FLTK_FLUID_EXECUTABLE}")
         ELSE(OTB_USE_EXTERNAL_FLTK)
           MESSAGE(STATUS "  Using FLTK internal version")
         ENDIF(OTB_USE_EXTERNAL_FLTK)

@@ -140,71 +140,45 @@ MeanShiftImageFilter<TInputImage, TOutputImage, TLabeledOutput, TBufferConverter
   clusterBoundariesOutputPtr->Allocate();
 }
 
+
 template <class TInputImage, class TOutputImage, class TLabeledOutput, class TBufferConverter>
 void
-MeanShiftImageFilter<TInputImage, TOutputImage, TLabeledOutput, TBufferConverter>
-::GenerateInputRequestedRegion()
+MeanShiftImageFilter<TInputImage, TOutputImage, TLabeledOutput, TBufferConverter>::EnlargeOutputRequestedRegion( itk::DataObject *output )
 {
-  // call the superclass' implementation of this method
-  Superclass::GenerateInputRequestedRegion();
 
-  // get pointers to the input and output
-  typename Superclass::InputImagePointer inputPtr =
-    const_cast<TInputImage *>(this->GetInput());
-  typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
-
-  if (!inputPtr || !outputPtr)
+  // This filter requires all of the output images in the buffer.
+  for ( unsigned int j = 0; j < this->GetNumberOfOutputs(); j++ )
     {
-    return;
-    }
-
-  // get a copy of the input requested region (should equal the output
-  // requested region)
-  typename TInputImage::RegionType inputRequestedRegion;
-  inputRequestedRegion = inputPtr->GetRequestedRegion();
-
-  // pad the input requested region by the operator radius
-  inputRequestedRegion.PadByRadius(static_cast<unsigned int>(m_SpatialRadius));
-
-  // crop the input requested region at the input's largest possible region
-  if (inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()))
-    {
-    inputPtr->SetRequestedRegion(inputRequestedRegion);
-    return;
-    }
-  else
-    {
-    // Couldn't crop the region (requested region is outside the largest
-    // possible region).  Throw an exception.
-
-    // store what we tried to request (prior to trying to crop)
-    inputPtr->SetRequestedRegion(inputRequestedRegion);
-
-    // build an exception
-    itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
-    e.SetLocation(ITK_LOCATION);
-    e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
-    e.SetDataObject(inputPtr);
-    throw e;
+    if ( this->itk::ProcessObject::GetOutput(j) )
+      {
+      this->itk::ProcessObject::GetOutput(j)->SetRequestedRegionToLargestPossibleRegion();
+      }
     }
 }
 
 template <class TInputImage, class TOutputImage, class TLabeledOutput, class TBufferConverter>
 void
 MeanShiftImageFilter<TInputImage, TOutputImage, TLabeledOutput, TBufferConverter>
-::ThreadedGenerateData(const RegionType& outputRegionForThread, int itkNotUsed(threadId))
+::GenerateData()
 {
+  // Allocate the output image
+  this->AllocateOutputs();
+
   // Input and output pointers
   typename InputImageType::ConstPointer inputPtr  = this->GetInput();
   typename OutputImageType::Pointer     outputPtr = this->GetOutput();
 
+
   double invScale = 1 / m_Scale;
 
-  RegionType inputRequestedRegion = outputRegionForThread;
-  RegionType outputRequestedRegion = outputRegionForThread;
+  RegionType inputRequestedRegion =inputPtr->GetRequestedRegion();
+  RegionType outputRequestedRegion = inputPtr->GetRequestedRegion();
 
   inputRequestedRegion.PadByRadius(m_SpatialRadius);
-  inputRequestedRegion.Crop(inputPtr->GetRequestedRegion());
+  if (!inputRequestedRegion.Crop(inputPtr->GetRequestedRegion()))
+    {
+    itkExceptionMacro(<< "error in requested region cropping");
+    }
 
   // Iterators
   itk::ImageRegionConstIteratorWithIndex<InputImageType> inputIt(inputPtr, inputRequestedRegion);
@@ -276,142 +250,124 @@ MeanShiftImageFilter<TInputImage, TOutputImage, TLabeledOutput, TBufferConverter
     ++outputIt;
     }
 
-  delete[] data;
+
+ // typename OutputImageType::Pointer   outputPtr = this->GetOutput();
+   typename OutputImageType::Pointer   clusteredOutputPtr = this->GetClusteredOutput();
+   typename LabeledOutputType::Pointer labeledClusteredOutputPtr = this->GetLabeledClusteredOutput();
+   typename LabeledOutputType::Pointer clusterBoudariesOutputPtr = this->GetClusterBoundariesOutput();
+   itk::ImageRegionIterator<OutputImageType> clusteredOutputIt(clusteredOutputPtr, outputRequestedRegion);
+
+    index = 0;
+
+   for (outputIt.GoToBegin(); !outputIt.IsAtEnd(); ++outputIt)
+     {
+     TBufferConverter::PixelToFloatArray(data, index, outputIt.Get(), m_Scale);
+     index += outputPtr->GetNumberOfComponentsPerPixel();
+     }
+
+   edisonProcessor.DefineLInput(data,
+                                outputRequestedRegion.GetSize()[1],
+                                outputRequestedRegion.GetSize()[0],
+                                outputPtr->GetNumberOfComponentsPerPixel());
+
+   // define default kernel paramerters...
+   //kernelType k[2] = {Uniform, Uniform};
+   //int        P[2] = {2, outputPtr->GetNumberOfComponentsPerPixel()};
+   //float      tempH[2] = {1.0, 1.0};
+
+   edisonProcessor.DefineKernel(k, tempH, P, 2);
+
+   edisonProcessor.FuseRegions(m_RangeRadius * m_Scale, m_MinimumRegionSize);
+
+   if (edisonProcessor.ErrorStatus)
+     {
+     itkExceptionMacro(<< "Error while running edison!");
+     }
+
+   edisonProcessor.GetRawData(data);
+
+   if (edisonProcessor.ErrorStatus)
+     {
+     itkExceptionMacro(<< "Error while running edison!");
+     }
+
+   index = 0;
+   for (clusteredOutputIt.GoToBegin(); !clusteredOutputIt.IsAtEnd(); ++clusteredOutputIt)
+     {
+     OutputPixelType pixel;
+     TBufferConverter::FloatArrayToPixel(data, index, pixel,
+                                         clusteredOutputPtr->GetNumberOfComponentsPerPixel(), invScale);
+     clusteredOutputIt.Set(pixel);
+     index += clusteredOutputPtr->GetNumberOfComponentsPerPixel();
+     }
+
+   int *   labels = NULL;
+   float * modes = NULL;
+   int *   modesPointsCount = NULL;
+
+   edisonProcessor.GetRegions(&labels, &modes, &modesPointsCount);
+
+   if (edisonProcessor.ErrorStatus)
+     {
+     itkExceptionMacro(<< "Error while running edison!");
+     }
+
+   itk::ImageRegionIteratorWithIndex<LabeledOutputType> lcIt(labeledClusteredOutputPtr,
+                                                             labeledClusteredOutputPtr->GetRequestedRegion());
+
+   index = 0;
+
+   labeledClusteredOutputPtr->FillBuffer(0);
+
+   for (lcIt.GoToBegin(); !lcIt.IsAtEnd(); ++lcIt)
+     {
+     lcIt.Set(static_cast<LabelType>(labels[index]));
+     ++index;
+     }
+
+   clusterBoudariesOutputPtr->FillBuffer(0);
+
+   //define the boundaries
+   RegionList * regionList        = edisonProcessor.GetBoundaries();
+   int *        regionIndeces;
+   unsigned int numRegions = regionList->GetNumRegions();
+
+   typename LabeledOutputType::IndexType boundIndex;
+
+   for (LabelType label = 0; label < static_cast<LabelType>(numRegions); ++label)
+     {
+     OutputPixelType pixel;
+     TBufferConverter::FloatArrayToPixel(modes,
+                                         static_cast<unsigned int>(label *
+                                                                   clusteredOutputPtr->GetNumberOfComponentsPerPixel()),
+                                         pixel, clusteredOutputPtr->GetNumberOfComponentsPerPixel(), invScale);
+     // Filling the modes map
+     m_Modes[label] = pixel;
+     regionIndeces = regionList->GetRegionIndeces(static_cast<int>(label));
+     for (int i = 0; i < regionList->GetRegionCount(static_cast<int>(label)); ++i)
+       {
+       boundIndex[0] =
+         (regionIndeces[i] %
+          clusterBoudariesOutputPtr->GetRequestedRegion().GetSize()[0]) +
+         clusterBoudariesOutputPtr->GetRequestedRegion().GetIndex()[0];
+       boundIndex[1] =
+         (regionIndeces[i] /
+          clusterBoudariesOutputPtr->GetRequestedRegion().GetSize()[0]) +
+         clusterBoudariesOutputPtr->GetRequestedRegion().GetIndex()[1];
+       if (clusterBoudariesOutputPtr->GetBufferedRegion().IsInside(boundIndex))
+         {
+         clusterBoudariesOutputPtr->SetPixel(boundIndex, 1);
+         }
+       }
+     }
+
+   // Free memory
+   delete[] labels;
+   delete[] modes;
+   delete[] modesPointsCount;
+   delete[] data;
 }
 
-template <class TInputImage, class TOutputImage, class TLabeledOutput, class TBufferConverter>
-void
-MeanShiftImageFilter<TInputImage, TOutputImage, TLabeledOutput, TBufferConverter>
-::AfterThreadedGenerateData()
-{
-  double invScale = 1 / m_Scale;
-
-  typename OutputImageType::Pointer   outputPtr = this->GetOutput();
-  typename OutputImageType::Pointer   clusteredOutputPtr = this->GetClusteredOutput();
-  typename LabeledOutputType::Pointer labeledClusteredOutputPtr = this->GetLabeledClusteredOutput();
-  typename LabeledOutputType::Pointer clusterBoudariesOutputPtr = this->GetClusterBoundariesOutput();
-
-  RegionType outputRequestedRegion = outputPtr->GetRequestedRegion();
-
-  itk::ImageRegionIterator<OutputImageType> outputIt(outputPtr, outputRequestedRegion);
-  itk::ImageRegionIterator<OutputImageType> clusteredOutputIt(clusteredOutputPtr, outputRequestedRegion);
-
-  //create image processing object
-  msImageProcessor edisonProcessor;
-
-  float * data = new float[outputRequestedRegion.GetNumberOfPixels() * outputPtr->GetNumberOfComponentsPerPixel()];
-
-  unsigned int index = 0;
-
-  for (outputIt.GoToBegin(); !outputIt.IsAtEnd(); ++outputIt)
-    {
-    TBufferConverter::PixelToFloatArray(data, index, outputIt.Get(), m_Scale);
-    index += outputPtr->GetNumberOfComponentsPerPixel();
-    }
-
-  edisonProcessor.DefineLInput(data,
-                               outputRequestedRegion.GetSize()[1],
-                               outputRequestedRegion.GetSize()[0],
-                               outputPtr->GetNumberOfComponentsPerPixel());
-
-  // define default kernel paramerters...
-  kernelType k[2] = {Uniform, Uniform};
-  int        P[2] = {2, outputPtr->GetNumberOfComponentsPerPixel()};
-  float      tempH[2] = {1.0, 1.0};
-
-  edisonProcessor.DefineKernel(k, tempH, P, 2);
-
-  edisonProcessor.FuseRegions(m_RangeRadius * m_Scale, m_MinimumRegionSize);
-
-  if (edisonProcessor.ErrorStatus)
-    {
-    itkExceptionMacro(<< "Error while running edison!");
-    }
-
-  edisonProcessor.GetRawData(data);
-
-  if (edisonProcessor.ErrorStatus)
-    {
-    itkExceptionMacro(<< "Error while running edison!");
-    }
-
-  index = 0;
-  for (clusteredOutputIt.GoToBegin(); !clusteredOutputIt.IsAtEnd(); ++clusteredOutputIt)
-    {
-    OutputPixelType pixel;
-    TBufferConverter::FloatArrayToPixel(data, index, pixel,
-                                        clusteredOutputPtr->GetNumberOfComponentsPerPixel(), invScale);
-    clusteredOutputIt.Set(pixel);
-    index += clusteredOutputPtr->GetNumberOfComponentsPerPixel();
-    }
-
-  delete[] data;
-
-  int *   labels = NULL;
-  float * modes = NULL;
-  int *   modesPointsCount = NULL;
-
-  edisonProcessor.GetRegions(&labels, &modes, &modesPointsCount);
-
-  if (edisonProcessor.ErrorStatus)
-    {
-    itkExceptionMacro(<< "Error while running edison!");
-    }
-
-  itk::ImageRegionIteratorWithIndex<LabeledOutputType> lcIt(labeledClusteredOutputPtr,
-                                                            labeledClusteredOutputPtr->GetRequestedRegion());
-
-  index = 0;
-
-  labeledClusteredOutputPtr->FillBuffer(0);
-
-  for (lcIt.GoToBegin(); !lcIt.IsAtEnd(); ++lcIt)
-    {
-    lcIt.Set(static_cast<LabelType>(labels[index]));
-    ++index;
-    }
-
-  clusterBoudariesOutputPtr->FillBuffer(0);
-
-  //define the boundaries
-  RegionList * regionList        = edisonProcessor.GetBoundaries();
-  int *        regionIndeces;
-  unsigned int numRegions = regionList->GetNumRegions();
-
-  typename LabeledOutputType::IndexType boundIndex;
-
-  for (LabelType label = 0; label < static_cast<LabelType>(numRegions); ++label)
-    {
-    OutputPixelType pixel;
-    TBufferConverter::FloatArrayToPixel(modes,
-                                        static_cast<unsigned int>(label *
-                                                                  clusteredOutputPtr->GetNumberOfComponentsPerPixel()),
-                                        pixel, clusteredOutputPtr->GetNumberOfComponentsPerPixel(), invScale);
-    // Filling the modes map
-    m_Modes[label] = pixel;
-    regionIndeces = regionList->GetRegionIndeces(static_cast<int>(label));
-    for (int i = 0; i < regionList->GetRegionCount(static_cast<int>(label)); ++i)
-      {
-      boundIndex[0] =
-        (regionIndeces[i] %
-         clusterBoudariesOutputPtr->GetRequestedRegion().GetSize()[0]) +
-        clusterBoudariesOutputPtr->GetRequestedRegion().GetIndex()[0];
-      boundIndex[1] =
-        (regionIndeces[i] /
-         clusterBoudariesOutputPtr->GetRequestedRegion().GetSize()[0]) +
-        clusterBoudariesOutputPtr->GetRequestedRegion().GetIndex()[1];
-      if (clusterBoudariesOutputPtr->GetBufferedRegion().IsInside(boundIndex))
-        {
-        clusterBoudariesOutputPtr->SetPixel(boundIndex, 1);
-        }
-      }
-    }
-
-  // Free memory
-  delete[] labels;
-  delete[] modes;
-  delete[] modesPointsCount;
-}
 
 template <class TInputImage, class TOutputImage, class TLabeledOutput, class TBufferConverter>
 void

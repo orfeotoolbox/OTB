@@ -90,11 +90,11 @@ ImageRegionAdaptativeSplitter<VImageDimension>
       splitter = otb::ImageRegionSquareTileSplitter<2>::New();
 
     // Retrieve nb splits
-    unsigned int nbSplits = splitter->GetNumberOfSplits(m_ImageRegion,m_RequestedNumberOfSplits);
+    unsigned int nbSplits = splitter->GetNumberOfSplits(m_ImageRegion, m_RequestedNumberOfSplits);
 
-    for(unsigned int i = 0; i<nbSplits;++i)
+    for(unsigned int i = 0; i<nbSplits; ++i)
       {
-      m_StreamVector.push_back(splitter->GetSplit(i,m_RequestedNumberOfSplits,m_ImageRegion));
+      m_StreamVector.push_back(splitter->GetSplit(i, m_RequestedNumberOfSplits, m_ImageRegion));
       }
     m_IsUpToDate = true;
     return;
@@ -102,7 +102,7 @@ ImageRegionAdaptativeSplitter<VImageDimension>
  
   // Now we can handle the case where we have a tile hint and a
   // non-trivial requested number of splits
-  SizeType tilesPerDim,splitsPerDim;
+  SizeType tilesPerDim, splitsPerDim;
 
   tilesPerDim[0] = (m_ImageRegion.GetSize()[0] + m_TileHint[0] -1) / m_TileHint[0];
   tilesPerDim[1] = (m_ImageRegion.GetSize()[1] + m_TileHint[1] -1) / m_TileHint[1];
@@ -163,9 +163,9 @@ ImageRegionAdaptativeSplitter<VImageDimension>
 
         m_StreamVector.push_back(newSplit);
         }
-      } 
+      }
     }
-  // In this case, we must divide each tile 
+  // In this case, we must divide each tile
   else
     {
     SizeType divideTiles;

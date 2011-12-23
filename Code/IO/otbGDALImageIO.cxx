@@ -807,7 +807,7 @@ void GDALImageIO::InternalReadImageInformation()
     int blockSizeX = 0;
     int blockSizeY = 0;
 
-    dataset->GetRasterBand(1)->GetBlockSize(&blockSizeX,&blockSizeY);
+    dataset->GetRasterBand(1)->GetBlockSize(&blockSizeX, &blockSizeY);
     
     if(blockSizeX > 0 && blockSizeY > 0)
       {

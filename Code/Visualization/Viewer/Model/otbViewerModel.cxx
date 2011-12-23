@@ -15,7 +15,7 @@ See OTBCopyright.txt for details.
      PURPOSE,  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbImageViewerManagerModel.h"
+#include "otbViewerModel.h"
 #include "otbFltkFilterWatcher.h"
 #include <FL/fl_ask.H>
 #include "itkExceptionObject.h"
@@ -25,62 +25,190 @@ See OTBCopyright.txt for details.
 #include "otbImageSeriesFileReader.h"
 #include "otbFltkFilterWatcher.h"
 
+#ifdef OTB_USE_JPEG2000
+# include "otbJPEG2000ImageIO.h"
+#endif
 
 namespace otb
 {
 
 /** Initialize the singleton */
-ImageViewerManagerModel::Pointer ImageViewerManagerModel::Instance = NULL;
+ViewerModel::Pointer ViewerModel::Instance = NULL;
 
-ImageViewerManagerModel::ImageViewerManagerModel()
+ViewerModel::ViewerModel()
 {
   //Set all the boolean to false
   m_HasChangedChannelOrder = false;
   m_HasImageOpened = false;
 }
 
-ImageViewerManagerModel
-::~ImageViewerManagerModel(){}
+ViewerModel
+::~ViewerModel(){}
 
 
 /** Manage the singleton */
-ImageViewerManagerModel::Pointer
-ImageViewerManagerModel::GetInstance()
+ViewerModel::Pointer
+ViewerModel::GetInstance()
 {
   if (!Instance)
   {
-    Instance = ImageViewerManagerModel::New();
+    Instance = ViewerModel::New();
   }
   return Instance;
 }
 
 void
-ImageViewerManagerModel
+ViewerModel
 ::NotifyListener(ListenerBase * listener)
 {
   listener->Notify();
 }
 
-unsigned int
-ImageViewerManagerModel
-::OpenImage(std::string filename)
+
+bool
+ViewerModel
+::IsJPEG2000File(const std::string & filepath)
 {
+#ifdef OTB_USE_JPEG2000
+  bool isJpeg20000 = false;
+  JPEG2000ImageIO::Pointer readerJPEG2000 = otb::JPEG2000ImageIO::New();
+
+  readerJPEG2000->SetFileName(filepath);
+  if (readerJPEG2000->CanReadFile(filepath.c_str()))
+    {
+    std::vector<unsigned int> res;
+    if (readerJPEG2000->GetAvailableResolutions(res))
+      {
+      isJpeg20000 = true;
+      }
+    }
+
+  return isJpeg20000;
+#else
+  return false;
+#endif
+}
+
+
+std::vector<unsigned int>
+ViewerModel
+::GetJPEG2000Resolution(const std::string & filepath)
+{
+  std::vector<unsigned int> res;
+  if( !this->IsJPEG2000File(filepath) )
+    {
+    itkExceptionMacro( "Image "<<filepath<< " is not a JPEG2000." );
+    }
+  else
+    {
+    JPEG2000ImageIO::Pointer readerJPEG2000 = otb::JPEG2000ImageIO::New();
+    readerJPEG2000->SetFileName(filepath);
+    readerJPEG2000->ReadImageInformation();
+    readerJPEG2000->GetAvailableResolutions(res);
+    }
+
+  return res;
+  
+}
+
+void
+ViewerModel
+::GetJPEG2000ResolutionAndInformations(const std::string & filepath, std::vector<unsigned int>& res, std::vector<std::string> & desc)
+{
+  if( !this->IsJPEG2000File(filepath) )
+    {
+    itkExceptionMacro( "Image "<<filepath<< " is not a JPEG2000." );
+    }
+  else
+    {
+    JPEG2000ImageIO::Pointer readerJPEG2000 = otb::JPEG2000ImageIO::New();
+    readerJPEG2000->SetFileName(filepath);
+    readerJPEG2000->ReadImageInformation();
+    readerJPEG2000->GetResolutionInfo(res, desc);
+    }
+}
+
+unsigned int
+ViewerModel
+::OpenImage(std::string filename, const unsigned int id)
+{
+  std::string otbFilepath = filename;
+
+  bool isJPEG2000 = this->IsJPEG2000File(filename);
+
+  // If jpeg2000, add the selected resolution at the end of the file name
+  if( isJPEG2000 )
+    {
+    unsigned int resolution = 0;
+    otbFilepath += ":";
+    std::ostringstream ossRes;
+    ossRes << id;
+    otbFilepath += ossRes.str();
+    }
+
   /** Reader*/
   ReaderPointerType  reader = ReaderType::New();
-  reader->SetFileName(filename);
+  reader->SetFileName(otbFilepath);
   reader->GenerateOutputInformation();
+
+  // Quick look generation
+  ImagePointerType quicklook = NULL;
+  unsigned int shrinkFactor = 1;
+  //// if jpeg2000, try to load the less resolution image as quicklook
+  if( isJPEG2000 )
+    {
+    ReaderPointerType jpeg2000QLReader = ReaderType::New();
+    jpeg2000QLReader->SetFileName(filename);
+    unsigned int resSize = this->GetJPEG2000Resolution( filename ).size();
+
+    if( resSize > 0 )
+      jpeg2000QLReader->SetAdditionalNumber( resSize-1 );
+    
+    jpeg2000QLReader->Update();
+    quicklook= jpeg2000QLReader->GetOutput();
+    quicklook->DisconnectPipeline();
+    shrinkFactor = (1 << (resSize - 1));
+    }
+  //// If not jpeg2000 or trouble in jpeg2000 quicloock, use a
+  //// streaming shrink image filter
+  unsigned int maxSize = std::max( reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0],
+                                   reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1] );
+  if (quicklook.IsNull())
+    {
+    typedef otb::StreamingShrinkImageFilter<ImageType> StreamingShrinkImageFilterType;
+    StreamingShrinkImageFilterType::Pointer shrinker = StreamingShrinkImageFilterType::New();
+
+    // Default shrink factor is 10. Adapt it for small images
+    unsigned int maxSize = std::max( reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0],
+                                    reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1] );
+    if( maxSize > 512 )
+      {
+      shrinkFactor = static_cast<unsigned int>( vcl_floor( static_cast<double>(maxSize)/static_cast<double>(256) + 0.5) );
+      }
+   
+    shrinker->SetShrinkFactor(shrinkFactor);
+    shrinker->SetInput(reader->GetOutput());
+    FltkFilterWatcher qlwatcher(shrinker->GetStreamer(), 0, 0, 200, 20,
+                                otbGetTextMacro("Generating QuickLook ..."));
+    shrinker->Update();
+    shrinkFactor = shrinker->GetShrinkFactor();
+
+    quicklook = shrinker->GetOutput();
+    quicklook->DisconnectPipeline();
+    }
 
   /** Generate the layer*/
   LayerGeneratorPointerType visuGenerator = LayerGeneratorType::New();
   visuGenerator->SetImage(reader->GetOutput());
-  FltkFilterWatcher qlwatcher(visuGenerator->GetProgressSource(), 0, 0, 200, 20,"Generating QuickLook ...");
+  visuGenerator->GenerateQuicklookOff();
+  visuGenerator->SetQuicklook(quicklook);
+  visuGenerator->SetSubsamplingRate(shrinkFactor);
   visuGenerator->GenerateLayer();
   RenderingFunctionType::Pointer  rendrerFunction  = visuGenerator->GetRenderingFunction();
 
   /** Rendering image*/
   VisuModelPointerType rendering = VisuModelType::New();
   rendering->AddLayer(visuGenerator->GetLayer());
-
   rendering->Update();
 
   /** View*/
@@ -104,9 +232,10 @@ ImageViewerManagerModel
   /** Store all the information in the structure*/
   ObjectsTracked currentComponent;
 
-  currentComponent.fileName   = filename;
+  currentComponent.pFileName   = otbFilepath;
   currentComponent.pLayer     = visuGenerator->GetLayer();
   currentComponent.pReader    = reader;
+  currentComponent.pQuicklook = quicklook;
   currentComponent.pRendering = rendering;
   currentComponent.pVisuView  = visuView;
   currentComponent.pWidgetController = controller;
@@ -117,6 +246,7 @@ ImageViewerManagerModel
 
   assert(currentComponent.pLayer);
   assert(currentComponent.pReader);
+  assert(currentComponent.pQuicklook);
   assert(currentComponent.pRendering);
   assert(currentComponent.pVisuView);
   assert(currentComponent.pWidgetController);
@@ -140,7 +270,7 @@ ImageViewerManagerModel
  * the ImageSeriesFileReader
  */
 unsigned int
-ImageViewerManagerModel
+ViewerModel
 ::OpenImageList(std::string filename)
 {
   /** Reader*/
@@ -185,7 +315,7 @@ ImageViewerManagerModel
     /** Store all the information in the structure*/
     ObjectsTracked currentComponent;
 
-    currentComponent.fileName   = reader->GetFileName(i);
+    currentComponent.pFileName   = reader->GetFileName(i);
     currentComponent.pLayer     = visuGenerator->GetLayer();
     currentComponent.pReader    = reader->GetImageFileReader(i);
     currentComponent.pRendering = rendering;
@@ -221,9 +351,9 @@ ImageViewerManagerModel
 /**
  * Built a part of the visu, create a pointer and add a model to the visu
  */
-ImageViewerManagerModel
+ViewerModel
 ::VisuViewPointerType
-ImageViewerManagerModel
+ViewerModel
 ::BuiltVisu(VisuModelPointerType pRendering)
 {
   VisuViewPointerType visuView = VisuViewType::New();
@@ -235,9 +365,9 @@ ImageViewerManagerModel
 /**
  * Add Controller
  */
-ImageViewerManagerModel
+ViewerModel
 ::WidgetControllerPointerType
-ImageViewerManagerModel
+ViewerModel
 ::BuiltController(VisuModelPointerType modelRenderingLayer, VisuViewPointerType visuView, PixelDescriptionModelPointerType pixelModel)
 {
   WidgetControllerPointerType controller = WidgetControllerType::New();
@@ -282,14 +412,14 @@ ImageViewerManagerModel
 }
 
 void
-ImageViewerManagerModel
+ViewerModel
 ::CloseImage(unsigned int selectedItem)
 {
   m_ObjectTrackedList.erase(m_ObjectTrackedList.begin()+selectedItem-1);
 }
 
 void
-ImageViewerManagerModel
+ViewerModel
 ::UpdateRGBChannelOrder(int redChoice , int greenChoice, int blueChoice, unsigned int selectedItem)
 {
 
@@ -319,7 +449,7 @@ ImageViewerManagerModel
 }
 
 void
-ImageViewerManagerModel
+ViewerModel
 ::UpdateGrayScaleChannelOrder(int choice, unsigned int selectedItem)
 {
   StandardRenderingFunctionType::ChannelListType channels;
@@ -347,7 +477,7 @@ ImageViewerManagerModel
 }
 
 void
-ImageViewerManagerModel
+ViewerModel
 ::UpdateAmplitudeChannelOrder(int realChoice , int imChoice, unsigned int selectedItem )
 {
   AmplitudeRenderingFunction::PixelRepresentationFunctionType::ChannelListType channels;
@@ -375,7 +505,7 @@ ImageViewerManagerModel
 
 
 void
-ImageViewerManagerModel
+ViewerModel
 ::UpdatePhaseChannelOrder(int realChoice , int imChoice, unsigned int selectedItem )
 {
   PhaseRenderingFunction::PixelRepresentationFunctionType::ChannelListType channels;
@@ -405,7 +535,7 @@ ImageViewerManagerModel
  *
  */
 void
-ImageViewerManagerModel
+ViewerModel
 ::Link(unsigned int leftChoice, unsigned int rightChoice, OffsetType offset)
 {
 
@@ -501,7 +631,7 @@ ImageViewerManagerModel
  *
  */
 void
-ImageViewerManagerModel
+ViewerModel
 ::InitializeImageViewController(unsigned int selectedItem)
 {
   VisuModelPointerType  render = m_ObjectTrackedList.at(selectedItem-1).pRendering;

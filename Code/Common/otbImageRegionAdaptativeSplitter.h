@@ -32,13 +32,13 @@ namespace otb
 
 /** \class ImageRegionSquareTileSplitter
    * \brief Divide a region into several pieces.
-   * 
+   *
    * This region splitter tries to adapt to the tiling scheme of the
    * input image using the TileHint parameter. It aims at
    * synchronizing the streaming with the tiling scheme so as to avoid
    * reading the same tile multiple times in the standard pixel-based
    * processing scheme.
-   * 
+   *
    * If the requested number of splits is lower than the number of
    * tiles in the image region, then the splitter will derive splits
    * that combine several tiles in one split. If the requested number
@@ -97,24 +97,24 @@ public:
   typedef std::vector<RegionType> StreamVectorType;
 
   /** Set the TileHint parameter */
-  itkSetMacro(TileHint,SizeType);
+  itkSetMacro(TileHint, SizeType);
 
   /** Get the TileHint parameter */
-  itkGetConstReferenceMacro(TileHint,SizeType);
+  itkGetConstReferenceMacro(TileHint, SizeType);
   
   /** Set the ImageRegion parameter */
-  itkSetMacro(ImageRegion,RegionType);
+  itkSetMacro(ImageRegion, RegionType);
 
   /** Get the ImageRegion parameter */
-  itkGetConstReferenceMacro(ImageRegion,RegionType);
+  itkGetConstReferenceMacro(ImageRegion, RegionType);
 
   /** Set the requested number of splits parameter */
-  itkSetMacro(RequestedNumberOfSplits,unsigned int);
+  itkSetMacro(RequestedNumberOfSplits, unsigned int);
 
   /** Get the requested number of splits parameter */
-  itkGetConstReferenceMacro(RequestedNumberOfSplits,unsigned int);
+  itkGetConstReferenceMacro(RequestedNumberOfSplits, unsigned int);
 
-  /** 
+  /**
    * Calling this method will set the image region and the requested
    * number of splits, and call the EstimateSplitMap() method if
    * necessary.
@@ -139,11 +139,11 @@ public:
   }
 
 protected:
-  ImageRegionAdaptativeSplitter() : m_TileHint(), 
-                                    m_ImageRegion(), 
-                                    m_RequestedNumberOfSplits(0), 
+  ImageRegionAdaptativeSplitter() : m_TileHint(),
+                                    m_ImageRegion(),
+                                    m_RequestedNumberOfSplits(0),
                                     m_StreamVector(),
-                                    m_IsUpToDate(false)    
+                                    m_IsUpToDate(false)
                                       {}
 
   virtual ~ImageRegionAdaptativeSplitter() {}
