@@ -89,7 +89,7 @@ public:
     * keyword list. Return true if ok or false on error.
     * @return true if load OK, false on error
     */
-   bool loadState (const ossimKeywordlist &kwl, const char *prefix=0);
+   bool loadState(const ossimKeywordlist &kwl, const char *prefix=0);
 
 protected:
 

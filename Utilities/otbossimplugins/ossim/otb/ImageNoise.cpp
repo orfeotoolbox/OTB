@@ -265,9 +265,9 @@ bool ImageNoise::loadState(const ossimKeywordlist& kwl, const char* prefix)
       ossimDpt3d pt;
       pt.toPoint(ps);
 
-      _vitesse[0] = pt.x;
-      _vitesse[1] = pt.y;
-      _vitesse[2] = pt.z;
+      _speed[0] = pt.x;
+      _speed[1] = pt.y;
+      _speed[2] = pt.z;
    }
    else
    {

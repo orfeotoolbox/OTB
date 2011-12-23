@@ -40,7 +40,7 @@ public:
   /**
    * @brief Constructor with initialisations
    */
-  GalileanEphemeris(JSDDateTime date, double pos[3], double vitesse[3]);
+  GalileanEphemeris(JSDDateTime date, double pos[3], double speed[3]);
 
   /**
    * @brief Copy constructor

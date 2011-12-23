@@ -9,15 +9,14 @@
 //----------------------------------------------------------------------------
 // $Id$
 
+#include <iostream>
+#include <string>
+#include <cmath>
 
 #include <otb/PlatformPosition.h>
 #include <otb/Ephemeris.h>
 #include <otb/HermiteInterpolator.h>
 #include <ossim/base/ossimKeywordlist.h>
-
-#include <iostream>
-#include <string>
-#include <cmath>
 
 namespace ossimplugins
 {
@@ -133,13 +132,13 @@ Ephemeris* PlatformPosition::Interpolate(JSDDateTime date)
             for (int i = 0 ; i < _nbrData ; i++)
             {
                y[i] = _data[i]->get_position()[j] ;
-               yd[i] = _data[i]->get_vitesse()[j] ;
+               yd[i] = _data[i]->get_speed()[j] ;
             }
             HermiteInterpolator interpolator(_nbrData,x,y,yd);
             interpolator.Interpolate(dt, pos[j], vit[j]);
          }
          ephem->set_position(pos);
-         ephem->set_vitesse(vit);
+         ephem->set_speed(vit);
 
       }
 

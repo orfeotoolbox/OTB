@@ -30,7 +30,7 @@ GalileanEphemeris::~GalileanEphemeris()
 
 }
 
-GalileanEphemeris::GalileanEphemeris(JSDDateTime date, double pos[3], double vitesse[3]) : Ephemeris(date, pos, vitesse)
+GalileanEphemeris::GalileanEphemeris(JSDDateTime date, double pos[3], double speed[3]) : Ephemeris(date, pos, speed)
 {
 
 }
@@ -54,7 +54,7 @@ void GalileanEphemeris::ToGeographic(GeographicEphemeris* vGeo)
   double s,c;
 
   double pos[3];
-  double vitesse[3];
+  double speed[3];
 
   _date.AsGMSTDateTime(&h) ;
     c = cos (h.get_tms()) ;
@@ -64,12 +64,12 @@ void GalileanEphemeris::ToGeographic(GeographicEphemeris* vGeo)
     pos[0] = _position[0]   * c + _position[1] * s ;
     pos[1] = - _position[0] * s + _position[1] * c ;
     pos[2] = _position[2] ;
-    vitesse[0]  =   _vitesse[0]  * c +  _vitesse[1] * s - OMEGATERRE * (_position[0] * s - _position[1] * c) ;
-    vitesse[1]  = - _vitesse[0]  * s +  _vitesse[1] * c - OMEGATERRE * (_position[0] * c + _position[1] * s) ;
-    vitesse[2]  = _vitesse[2] ;
+    speed[0]  =   _speed[0]  * c +  _speed[1] * s - OMEGATERRE * (_position[0] * s - _position[1] * c) ;
+    speed[1]  = - _speed[0]  * s +  _speed[1] * c - OMEGATERRE * (_position[0] * c + _position[1] * s) ;
+    speed[2]  = _speed[2] ;
 
     vGeo->set_position(pos);
-    vGeo->set_vitesse(vitesse);
+    vGeo->set_speed(speed);
 }
 
 void GalileanEphemeris::ToGeographic(double greenwich,GeographicEphemeris* vGeo)
@@ -89,7 +89,7 @@ void GalileanEphemeris::ToGeographic(double greenwich,GeographicEphemeris* vGeo)
     ierr = p2nutt( 2, greenwich, day, p, pd ) ;
 
   double position[3];
-  double vitesse[3];
+  double speed[3];
 
     position[0] = _position[0]*p[1] + _position[1]*p[4] + _position[2]*p[7] ;
 
@@ -97,14 +97,14 @@ void GalileanEphemeris::ToGeographic(double greenwich,GeographicEphemeris* vGeo)
 
     position[2] = _position[0]*p[3] + _position[1]*p[6] + _position[2]*p[9] ;
 
-    vitesse[0] = _vitesse[0]*p[1] +_vitesse[1]*p[4] + _vitesse[2]*p[7] + OMEGATERRE * (_position[0]*pd[1] + _position[1]*pd[4] + _position[2]*pd[7] );
+    speed[0] = _speed[0]*p[1] +_speed[1]*p[4] + _speed[2]*p[7] + OMEGATERRE * (_position[0]*pd[1] + _position[1]*pd[4] + _position[2]*pd[7] );
 
-    vitesse[1] = _vitesse[0]*p[2] + _vitesse[1]*p[5] + _vitesse[2] *p[8] + OMEGATERRE * (_position[0]*pd[2] + _position[1]*pd[5] + _position[2]*pd[8] );
+    speed[1] = _speed[0]*p[2] + _speed[1]*p[5] + _speed[2] *p[8] + OMEGATERRE * (_position[0]*pd[2] + _position[1]*pd[5] + _position[2]*pd[8] );
 
-    vitesse[2] = _vitesse[0]*p[3] + _vitesse[1]*p[6] + _vitesse[2]*p[9] + OMEGATERRE * (_position[0]*pd[3] + _position[1]*pd[6] + _position[2]*pd[9] );
+    speed[2] = _speed[0]*p[3] + _speed[1]*p[6] + _speed[2]*p[9] + OMEGATERRE * (_position[0]*pd[3] + _position[1]*pd[6] + _position[2]*pd[9] );
 
   vGeo->set_position(position);
-  vGeo->set_vitesse(vitesse);
+  vGeo->set_speed(speed);
 }
 
 GalileanEphemeris::operator GeographicEphemeris()
