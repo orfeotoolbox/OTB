@@ -94,6 +94,11 @@ public:
 protected:
 
    /**
+    * @brief Internal method to initialize data structures
+    */
+   void InitData(Ephemeris** data, int nbrData);
+
+   /**
     * @brief Number of platform positions
     * @see _data
     */

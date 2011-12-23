@@ -51,30 +51,24 @@ void PlatformPosition::Clear()
 
 PlatformPosition::PlatformPosition(const PlatformPosition& rhs)
 {
-   _data = new Ephemeris*[rhs._nbrData];
-   _nbrData = rhs._nbrData;
-   for (int i=0;i<rhs._nbrData;i++)
-   {
-      _data[i] = rhs._data[i]->Clone();
-   }
+   InitData(rhs._data, rhs._nbrData);
 }
 
 PlatformPosition& PlatformPosition::operator=(const PlatformPosition& rhs)
 {
    Clear();
-   _data = new Ephemeris*[rhs._nbrData];
-   _nbrData = rhs._nbrData;
-   for (int i=0;i<rhs._nbrData;i++)
-   {
-      _data[i] = rhs._data[i]->Clone();
-   }
-
+   InitData(rhs._data, rhs._nbrData);
    return *this;
 }
 
-PlatformPosition::PlatformPosition(Ephemeris** data, int nbrData):
-   _nbrData(nbrData)
+PlatformPosition::PlatformPosition(Ephemeris** data, int nbrData)
 {
+   InitData(data, nbrData);
+}
+
+void PlatformPosition::InitData(Ephemeris** data, int nbrData)
+{
+   _nbrData = nbrData;
    _data = new Ephemeris*[_nbrData];
    for (int i=0;i<_nbrData;i++)
    {
@@ -89,64 +83,61 @@ Ephemeris* PlatformPosition::Interpolate(JSDDateTime date) const
    if (_nbrData<=1)
    {
       std::cout << "a..." << std::endl;
-      ephem = NULL;
+      return NULL;
    }
-   else
+   /*
+    * The first element of the list is cloned to ensure that the output ephemeris is expressed in the same coordinate system as input ones
+    */
+   ephem = _data[0]->Clone();
+
+   /* NORMAL CASE */
+   /*------------*/
+   double * x = new double[_nbrData];
+   double * y = new double[_nbrData];
+   double * yd = new double[_nbrData];
+   double dt = 0.0;
+   //double d;
+
+   x[0] = 0.0 ;
+   for (int i = 1 ; i < _nbrData ; i++)
    {
-      /*
-       * The first element of the list is cloned to ensure that the output ephemeris is expressed in the same coordinate system as input ones
-       */
-      ephem = _data[0]->Clone();
+     x[i] =   (_data[i]->get_date().get_day0hTU().get_julianDate() - _data[0]->get_date().get_day0hTU().get_julianDate())
+         * JOURCIVIL_LENGTH
+         + _data[i]->get_date().get_second()   - _data[0]->get_date().get_second()
+         + _data[i]->get_date().get_decimal()     - _data[0]->get_date().get_decimal();
+   }
 
-      /* NORMAL CASE */
-      /*------------*/
-      double * x = new double[_nbrData];
-      double * y = new double[_nbrData];
-      double * yd = new double[_nbrData];
-      double dt = 0.0;
-      //double d;
+   if (ephem != NULL)
+   {
+     ephem->set_date(date);
 
-      x[0] = 0.0 ;
-      for (int i = 1 ; i < _nbrData ; i++)
-      {
-         x[i] =   (_data[i]->get_date().get_day0hTU().get_julianDate() - _data[0]->get_date().get_day0hTU().get_julianDate())
-            * JOURCIVIL_LENGTH
-            + _data[i]->get_date().get_second()   - _data[0]->get_date().get_second()
-            + _data[i]->get_date().get_decimal()     - _data[0]->get_date().get_decimal();
-      }
+     dt =  (date.get_day0hTU().get_julianDate() - _data[0]->get_date().get_day0hTU().get_julianDate()) * JOURCIVIL_LENGTH
+         + date.get_second()   - _data[0]->get_date().get_second()
+         + date.get_decimal()     - _data[0]->get_date().get_decimal();
 
-      if (ephem != NULL)
-      {
-         ephem->set_date(date);
-
-         dt =  (date.get_day0hTU().get_julianDate() - _data[0]->get_date().get_day0hTU().get_julianDate()) * JOURCIVIL_LENGTH
-            + date.get_second()   - _data[0]->get_date().get_second()
-            + date.get_decimal()     - _data[0]->get_date().get_decimal();
-
-         /* Computation by Everett  */
-         /*---------------------*/
-         double pos[3];
-         double vit[3];
-         for (int j = 0 ; j < 3 ; j++)
-         {
-            for (int i = 0 ; i < _nbrData ; i++)
-            {
-               y[i] = _data[i]->get_position()[j] ;
-               yd[i] = _data[i]->get_speed()[j] ;
-            }
-            HermiteInterpolator interpolator(_nbrData,x,y,yd);
-            interpolator.Interpolate(dt, pos[j], vit[j]);
-         }
-         ephem->set_position(pos);
-         ephem->set_speed(vit);
-
-      }
-
-      delete[] x;
-      delete[] y;
-      delete[] yd;
+     /* Computation by Everett  */
+     /*---------------------*/
+     double pos[3];
+     double vit[3];
+     for (int j = 0 ; j < 3 ; j++)
+     {
+       for (int i = 0 ; i < _nbrData ; i++)
+       {
+         y[i] = _data[i]->get_position()[j] ;
+         yd[i] = _data[i]->get_speed()[j] ;
+       }
+       HermiteInterpolator interpolator(_nbrData,x,y,yd);
+       interpolator.Interpolate(dt, pos[j], vit[j]);
+     }
+     ephem->set_position(pos);
+     ephem->set_speed(vit);
 
    }
+
+   delete[] x;
+   delete[] y;
+   delete[] yd;
+
    return ephem;
 }
 
