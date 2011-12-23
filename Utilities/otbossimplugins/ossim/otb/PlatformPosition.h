@@ -97,6 +97,7 @@ protected:
     * @brief Internal method to initialize data structures
     */
    void InitData(Ephemeris** data, int nbrData);
+   void InitAuxiliaryData();
 
    /**
     * @brief Number of platform positions
@@ -113,7 +114,12 @@ protected:
     * @brief This function deletes all the contents of the class
     */
    void Clear();
+
 private:
+   double * _t;
+   double ** _p;
+   double ** _dp;
+
 };
 }
 
