@@ -82,7 +82,7 @@ PlatformPosition::PlatformPosition(Ephemeris** data, int nbrData):
    }
 }
 
-Ephemeris* PlatformPosition::Interpolate(JSDDateTime date)
+Ephemeris* PlatformPosition::Interpolate(JSDDateTime date) const
 {
    const double JOURCIVIL_LENGTH = 86400.0 ;
    Ephemeris* ephem = NULL;

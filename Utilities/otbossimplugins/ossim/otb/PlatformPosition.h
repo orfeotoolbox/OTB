@@ -64,9 +64,9 @@ public:
     * @param date Date and time at wich the interpolation have to be done
     * @return The ephemeris at the given date, or NULL if an error occurs
     */
-   Ephemeris* Interpolate(JSDDateTime date);
+   Ephemeris* Interpolate(JSDDateTime date) const;
 
-   PlatformPosition* Clone()
+   PlatformPosition* Clone() const
    {
       return new PlatformPosition(*this);
    };
