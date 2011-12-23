@@ -195,6 +195,16 @@ ADD_TEST(obTuHooverInstanceFilterNew ${OBIA_TESTS1}
 ADD_TEST(obTuLabelMapToAttributeImageFilterNew ${OBIA_TESTS1}
     otbLabelMapToAttributeImageFilterNew)
 
+ADD_TEST(obTvHooverInstanceFilterToAttributeImage ${OBIA_TESTS1}
+    --compare-image ${EPSILON_9}
+    ${BASELINE}/obTvHooverInstanceFilterToAttributeImage.tif
+    ${TEMP}/obTvHooverInstanceFilterToAttributeImage.tif
+    otbHooverInstanceFilterToAttributeImage
+    ${INPUTDATA}/maur_GT.tif
+    ${INPUTDATA}/maur_labelled.tif
+    ${TEMP}/obTvHooverInstanceFilterToAttributeImage.tif
+    )
+
 # OBIATests2 (need PQXX)
 IF(OTB_USE_PQXX)
 ADD_TEST(obTuLabelMapToGISTableFilterNew ${OBIA_TESTS2}
@@ -252,6 +262,7 @@ otbHooverMatrixFilterNew.cxx
 otbHooverMatrixFilter.cxx
 otbHooverInstanceFilterNew.cxx
 otbLabelMapToAttributeImageFilterNew.cxx
+otbHooverInstanceFilterToAttributeImage.cxx
 )
 
 IF(OTB_USE_PQXX)
