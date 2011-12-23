@@ -99,13 +99,13 @@ int ossimpluginsHermiteInterpolationPlateformPositionTest(int argc, char * argv[
     {
       ossimplugins::Ephemeris * ephemeris = platform_position.getData(i);
       double * position = ephemeris->get_position();
-      double * velocity = ephemeris->get_vitesse();
+      double * velocity = ephemeris->get_speed();
       ossimplugins::JSDDateTime date = ephemeris->get_date();
 
       ossimplugins::Ephemeris * interpolateEphemeris = platform_position.Interpolate(date);
 
       double * interpolatePosition = interpolateEphemeris->get_position();
-      double * interpolateVelocity = interpolateEphemeris->get_vitesse();
+      double * interpolateVelocity = interpolateEphemeris->get_speed();
       ossimplugins::JSDDateTime interpolateDate = interpolateEphemeris->get_date();
 
       double diffPosition = 0.0;
