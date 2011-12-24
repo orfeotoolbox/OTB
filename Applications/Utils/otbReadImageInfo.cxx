@@ -36,8 +36,8 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   typedef otb::GroundSpacingImageFunction<FloatVectorImageType> GroundSpacingImageType;
-  typedef typename GroundSpacingImageType::FloatType            FloatType;
-  typedef typename GroundSpacingImageType::ValueType            ValueType;
+  typedef GroundSpacingImageType::FloatType                     FloatType;
+  typedef GroundSpacingImageType::ValueType                     ValueType;
 
   /** Standard macro */
   itkNewMacro(Self);
