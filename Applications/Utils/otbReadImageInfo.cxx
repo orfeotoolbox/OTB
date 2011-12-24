@@ -205,7 +205,7 @@ private:
     SetParameterInt("sizex", inImage->GetLargestPossibleRegion().GetSize()[0]);
     SetParameterInt("sizey", inImage->GetLargestPossibleRegion().GetSize()[1]);
 
-    ossOutput << "\tSize :  [" << GetParameterInt("sizex") << "," << GetParameterInt("sizey") << "]" << std::endl; 
+    ossOutput << "\tSize :  [" << GetParameterInt("sizex") << "," << GetParameterInt("sizey") << "]" << std::endl;
     //Get image spacing
     SetParameterInt("spacingx", inImage->GetSpacing()[0]);
     SetParameterInt("spacingy", inImage->GetSpacing()[1]);
@@ -235,8 +235,8 @@ private:
       
     SetParameterString("sensor", metadataInterface->GetSensorID());
     ossOutput << "\tSensor : ";
-    if (!GetParameterString("sensor").empty()) 
-      ossOutput <<  GetParameterString("sensor"); 
+    if (!GetParameterString("sensor").empty())
+      ossOutput <<  GetParameterString("sensor");
       
     ossOutput << std::endl;
 
@@ -244,7 +244,7 @@ private:
     if (metadataInterface->GetImageKeywordlist().HasKey("image_id"))
       {
       SetParameterString("id", metadataInterface->GetImageKeywordlist().GetMetadataByKey("image_id"));
-      ossOutput << GetParameterString("id"); 
+      ossOutput << GetParameterString("id");
       }
     ossOutput << std::endl;
     SetParameterString("projectionref", metadataInterface->GetProjectionRef());
@@ -255,7 +255,7 @@ private:
     //Test if this information is available and silently catch
     //associated exception
     try
-      { 
+      {
       std::ostringstream osstime;
       osstime<<metadataInterface->GetYear()<<"-";
       if(metadataInterface->GetMonth()<10)
@@ -325,10 +325,10 @@ private:
       SetParameterFloat("lllon", lllon);
 
       ossOutput << std::endl << "Image footprint coordinates:" << std::endl;
-      ossOutput << "\tUpper left corner (latitude,longitude) = [" << GetParameterFloat("ullat") << "," << GetParameterFloat("ullon") << "]" << std::endl;
-      ossOutput << "\tUpper right corner (latitude,longitude) = [" << GetParameterFloat("urlat") << "," << GetParameterFloat("urlon") << "]" << std::endl;
-      ossOutput << "\tLower left corner (latitude,longitude) = [" << GetParameterFloat("lllat") << "," << GetParameterFloat("lllon") << "]" << std::endl;
-      ossOutput << "\tLower right corner (latitude,longitude) = [" << GetParameterFloat("lrlat") << "," << GetParameterFloat("lrlon") << "]" << std::endl;
+      ossOutput << "\tUpper left corner (latitude, longitude) = [" << GetParameterFloat("ullat") << "," << GetParameterFloat("ullon") << "]" << std::endl;
+      ossOutput << "\tUpper right corner (latitude, longitude) = [" << GetParameterFloat("urlat") << "," << GetParameterFloat("urlon") << "]" << std::endl;
+      ossOutput << "\tLower left corner (latitude, longitude) = [" << GetParameterFloat("lllat") << "," << GetParameterFloat("lllon") << "]" << std::endl;
+      ossOutput << "\tLower right corner (latitude, longitude) = [" << GetParameterFloat("lrlat") << "," << GetParameterFloat("lrlon") << "]" << std::endl;
       }
     catch ( itk::ExceptionObject & err )
       {
@@ -339,7 +339,7 @@ private:
     SetParameterInt("rgb.b", metadataInterface->GetDefaultDisplay()[2]);
  
     ossOutput << std::endl << "Image default RGB composition:" << std::endl;
-    ossOutput << "\t[R,G,B] = [" << GetParameterInt("rgb.r") << "," << GetParameterInt("rgb.g") << "," << GetParameterInt("rgb.b") << "]" << std::endl;
+    ossOutput << "\t[R, G, B] = [" << GetParameterInt("rgb.r") << "," << GetParameterInt("rgb.g") << "," << GetParameterInt("rgb.b") << "]" << std::endl;
 
     SetParameterInt("gcp.count", metadataInterface->GetGCPCount());
     SetParameterString("gcp.proj", metadataInterface->GetGCPProjection());
@@ -353,8 +353,8 @@ private:
     std::vector<std::string> gcp_infos;
       
     for(int gcpIdx = 0; gcpIdx  < GetParameterInt("gcp.count"); ++ gcpIdx)
-      { 
-      if (gcpIdx == 0) 
+      {
+      if (gcpIdx == 0)
         ossOutput << "\tGCP individual informations:" << std::endl;
         
       gcp_ids.push_back(metadataInterface->GetGCPId(gcpIdx));
@@ -365,7 +365,7 @@ private:
       oss.str("");
       oss << "[" << metadataInterface->GetGCPX(gcpIdx) << ", " << metadataInterface->GetGCPY(gcpIdx) <<", " << metadataInterface->GetGCPZ(gcpIdx) << "]";
       gcp_geocoord.push_back(oss.str());
-      ossOutput << "\t\tID =" << gcp_ids.back() << std::endl; 
+      ossOutput << "\t\tID =" << gcp_ids.back() << std::endl;
       ossOutput << "\t\tInfo =" << gcp_infos.back() << std::endl;
       ossOutput << "\t\tImage coordinates =" << gcp_imcoord.back() << std::endl;
       ossOutput << "\t\tGround  coordinates =" << gcp_geocoord.back() << std::endl;
