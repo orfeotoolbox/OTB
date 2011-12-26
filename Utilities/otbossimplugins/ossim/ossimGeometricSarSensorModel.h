@@ -25,6 +25,7 @@
 #include <iostream>
 #include <list>
 #include <cstdlib>
+#include <vector>
 #include <ossim/projection/ossimCoarseGridModel.h>
 #include <otb/CivilDateTime.h>
 #include <ossim/elevation/ossimElevManager.h>
@@ -72,6 +73,14 @@ public:
     * @param line Line coordinate of the image point
     */
    virtual JSDDateTime getTime(double line) const;
+ 
+   /**
+    * @brief This function associates an image line number to a platform position and speed
+    * @param line Line coordinate of the image point
+    * @param position Position of the sensor at line line
+    * @param speed Speed of the sensor at line line
+    */
+  virtual bool getPlatformPositionAtLine(double line, vector<double>& position, vector<double>& speed);
 
    /**
     * @brief This function is able to convert image coordinates into world
