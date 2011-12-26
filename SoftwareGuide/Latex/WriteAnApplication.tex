@@ -1,0 +1,131 @@
+\chapter{How to write an application}
+\label{sec:writeAnApplication}
+
+This chapter presents the different steps to write your own application.
+It also contains a description of the framework surrounding the applications.
+
+\section{Application design}
+\label{sec:appDesign}
+The first logical step is to define the role of your application:
+\begin{itemize}
+  \item What is the function of your application ? Try to draw a box diagram to 
+  describe the design of your application. Note that you don't have to worry 
+  about opening and saving image (or vector data) files, this is handled by the 
+  framework.
+  \item What variables (or data objects) must be exposed outside the application ?
+  Try to make a list of the inputs, outputs and parameters of your application
+\end{itemize}
+Then you should have a good vision of your application pipeline. Depending on the 
+different filters used, the application can be streamed and threaded. The threading
+capabilities can be different between the filters so there is no overall threading 
+parameter (by default, each filter has its own threading settings). 
+
+It is a different story for streaming. Since the image writers are handled within 
+the framework and outside the reach of the developer, the default behaviour is to 
+use streaming. If one of the filters doesn't support streaming, it will enlarge 
+the requested output region to the largest possible region and the entire image 
+will be processed at once. As a result, the developer doesn't have to handle  
+streaming nor threading. However, there is a way to choose the number of streaming 
+divisions (see section \ref{sec:appParam}).
+
+\section{Architecture of the class}
+\label{sec:appArchitecture}
+Every application derive from the class \doxygen{otb}{Wrapper::Application}. An 
+application can't be templated. It must contain the standard class typedefs and
+a call to the \code{OTB_APPLICATION_EXPORT} macro (EXAMPLE).
+
+There are also three methods to implement in a new application:
+\begin{itemize}
+  \item \code{DoInit()}
+  \item \code{DoUpdateParameters()}
+  \item \code{DoExecute()}
+\end{itemize}
+
+\subsection{DoInit()}
+\label{sec:appDoInit}
+This method is called once, when the application is instanciated. It should 
+contain the following instructions:
+\begin{itemize}
+  \item Set the name, description of the application
+  \item Fill the documentation
+  \item Declare all the parameters
+\end{itemize}
+
+
+\subsection{DoUpdateParameters()}
+\label{sec:appDoUpdateParameters}
+This method is called after every modification of a parameter value. It is used 
+to maintain consistency between parameters (e.g. in ExtractROI: when changing the input image, maybe 
+the ROI size has to be updated).
+
+\subsection{DoExecute()}
+\label{sec:appDoExecute}
+This method contains the real action of the application. This is where the pipeline 
+must be set up. The application framework provides different methods to get a value 
+or an object associated to a parameter:
+\begin{itemize}
+  \item \code{GetParameterInt(key)} : get the integer value of a parameter
+  \item \code{GetParameterFloat(key)} : get the float value of a parameter
+  \item \code{GetParameterString(key)} : get the string value of a parameter
+  \item \code{GetParameterImage(key)} : get a pointer to an image object, read from the
+  file name given in input
+  \item ...
+\end{itemize}
+
+Similar methods exist for binding a data object to an output parameter:
+\begin{itemize}
+  \item \code{SetParameterOutputImage(key,data)} : link the image object to the given output parameter
+  \item \code{SetParameterOutputVectorData(key,data)} : link the vector data object to the given
+  output parameter
+\end{itemize}
+
+If possible, no filter update should be called inside this function. The update will be 
+called afterwards, on the writer.
+
+\subsection{Parameters selection}
+\label{sec:appParam}
+In the new application framework, every input, output or parameter derive from 
+\doxygen{otb}{Wrapper::Parameter}. The application engine supplies the following 
+types of parameters:
+\begin{itemize}
+  \item \code{ParameterType_Empty} : parameter without value (can be used to represent 
+  a flag)
+  \item \code{ParameterType_Int} : parameter storing an integer.
+  \item \code{ParameterType_Radius} : parameter storing a radius.
+  \item \code{ParameterType_Float} : parameter storing a float.
+  \item \code{ParameterType_String} : parameter storing character string.
+  \item \code{ParameterType_StringList} : parameter storing a list of character string.
+  \item \code{ParameterType_Filename} : parameter storing a file name.
+  \item \code{ParameterType_Directory} : parameter storing a folder name.
+  \item \code{ParameterType_Group} : parameter storing children parameters.
+  \item \code{ParameterType_Choice} : parameter storing a list of choices (doesn't support
+  multi-choice). It also allows to create specific sub-parameters for each available choice.
+  \item \code{ParameterType_ListView} : parameter storing a list of choices (support 
+  multi-choice).
+  \item \code{ParameterType_InputImage} : parameter storing an input image.
+  \item \code{ParameterType_InputImageList} : parameter storing a list of input image.
+  \item \code{ParameterType_ComplexInputImage} : parameter storing a complex input image.
+  \item \code{ParameterType_InputVectorData} : parameter storing input vector data.
+  \item \code{ParameterType_InputVectorDataList} : parameter storing a list of input vector data.
+  \item \code{ParameterType_OutputImage} : parameter storing an output image.
+  \item \code{ParameterType_ComplexOutputImage} : parameter storing a complex output image.
+  \item \code{ParameterType_OutputVectorData} : parameter storing an output vector data.
+  \item \code{ParameterType_RAM} : parameter storing the maximum amount of RAM to be used.
+\end{itemize}
+
+Each created parameter has a unique key and several boolean flags to represent their state.
+
+By default, the numeric parameters are treated as inputs. If your application outputs a number,
+you can use a numeric parameter and change its role by calling \code{SetParameterRole(key,Role_Output)}.
+
+The input types \code{InputImage}, \code{InputImageList}, \code{ComplexInputImage}, \code{InputVectorData}
+and \code{InputVectorDataList} store the name of the files to load, but they also encapsulate the 
+readers needed to produce the input data.
+
+The output types \code{OutputImage}, \code{ComplexOutputImage} and \code{OutputVectorData} store the 
+name of the files to write, but they also encapsulate the corresponding writers.
+
+
+
+\section{Testing your application}
+\label{sec:appTesting}
