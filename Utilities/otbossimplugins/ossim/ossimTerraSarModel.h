@@ -33,9 +33,6 @@ class ossimXmlDocument;
 namespace ossimplugins
 {
    // Forward class declarations inside of namespace ossimplugins.
-   class PlatformPosition;
-   class SensorParams;
-   class RefPoint;
    class ossimTerraSarProductDoc;
    
    /**
