@@ -45,6 +45,7 @@ ossimGeometricSarSensorModel::ossimGeometricSarSensorModel()
    ossimSensorModel(),
    _platformPosition(0),
    _sensor(0),
+   _sarSensor(0),
    _refPoint(0),
    _isProductGeoreferenced(false),
    _optimizationFactorX(0.0),
@@ -69,6 +70,7 @@ ossimGeometricSarSensorModel::ossimGeometricSarSensorModel(
    _imageFilename(rhs._imageFilename),
    _productXmlFile(rhs._productXmlFile)
 {
+   _sarSensor = new SarSensor(_sensor,_platformPosition);
 }
 
 ossimGeometricSarSensorModel::~ossimGeometricSarSensorModel()
@@ -83,6 +85,12 @@ ossimGeometricSarSensorModel::~ossimGeometricSarSensorModel()
    {
       delete _sensor;
       _sensor = 0;
+   }
+
+   if (_sarSensor != 0)
+   {
+     delete _sarSensor;
+     _sarSensor = 0;
    }
 
    if(_refPoint != 0)
@@ -134,7 +142,12 @@ void ossimGeometricSarSensorModel::lineSampleHeightToWorld(
    const double&   heightEllipsoid,
    ossimGpt&       worldPoint) const
 {
-   SarSensor sensor(_sensor,_platformPosition);
+
+  if (!_sarSensor)
+  {
+    // bad design consequence, should be fixed.
+    _sarSensor = new SarSensor(_sensor, _platformPosition);
+  }
    double lon, lat;
    // const double CLUM        = 2.99792458e+8 ;
    
@@ -155,7 +168,7 @@ void ossimGeometricSarSensorModel::lineSampleHeightToWorld(
       slantRange = getSlantRange(col) ;
    }
    
-   int etatLoc = sensor.ImageToWorld(slantRange, azimuthTime, heightEllipsoid, lon, lat);
+   int etatLoc = _sarSensor->ImageToWorld(slantRange, azimuthTime, heightEllipsoid, lon, lat);
 
    if(traceDebug())
    {
@@ -401,6 +414,8 @@ bool ossimGeometricSarSensorModel::loadState(const ossimKeywordlist &kwl,
       }
       result = false;
    }
+
+   _sarSensor = new SarSensor(_sensor, _platformPosition);
 
    // Load the ref point.
    if ( !_refPoint)

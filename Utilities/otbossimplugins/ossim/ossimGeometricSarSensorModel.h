@@ -36,6 +36,7 @@ namespace ossimplugins
 class PlatformPosition;
 class SensorParams;
 class RefPoint;
+class SarSensor;
 
 /**
  * @brief This class allows for direct localisation and indirect localisation
@@ -189,6 +190,11 @@ protected:
    PlatformPosition *_platformPosition;
    SensorParams * _sensor;
    RefPoint * _refPoint;
+   // Note that this is only mutable because of bad design of the
+   // classes, with a bunch of classes initializing the variables of
+   // the base class directly, the 3 variable above must be made
+   // private.
+   mutable SarSensor* _sarSensor;
 
    /**
     * @brief True iff the product is ground range
@@ -209,7 +215,7 @@ protected:
    double _optimizationBiasX ;
    double _optimizationBiasY ;
 
-   ossimFilename _imageFilename; 
+   ossimFilename _imageFilename;
    ossimFilename _productXmlFile;
 
    ossimRefPtr<ossimCoarseGridModel> _replacementOcgModel;

@@ -34,7 +34,7 @@ SarSensor::~SarSensor()
 {
 }
 
-int SarSensor::ImageToWorld(double distance, JSDDateTime time, double height, double& lon, double& lat)
+int SarSensor::ImageToWorld(double distance, JSDDateTime time, double height, double& lon, double& lat) const
 {
   const double TWOPI      = 6.28318530717958647693 ;
 
@@ -75,7 +75,7 @@ int SarSensor::ImageToWorld(double distance, JSDDateTime time, double height, do
 int SarSensor::localisationSAR ( GeographicEphemeris PosVit , double lambda ,
                         double dist , double fDop , int sensVisee ,
                         double rayonEqu , double rayonPol ,
-                        double h , RectangularCoordinate* cart )
+                        double h , RectangularCoordinate* cart ) const
 {
   double coordCart[3];
         coordCart[0]=0.0;
