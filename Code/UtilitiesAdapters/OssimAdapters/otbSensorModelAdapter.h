@@ -75,8 +75,6 @@ public:
   void InverseTransformPoint(double lon, double lat, double h,
                              double& x, double& y, double& z) const;
 
-  ossimProjection* GetOssimModel(); // FIXME temporary only
-
   /** Is sensor model valid method. return false if the m_SensorModel is null*/
   bool IsValidSensorModel();
 
