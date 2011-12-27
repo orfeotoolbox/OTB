@@ -4,7 +4,7 @@ IF( OTB_DATA_USE_LARGEINPUT )
 
 OTB_TEST_APPLICATION(NAME apTvRsRasterizationLines
                      APP  Rasterization
-                     OPTIONS -in   ${LARGEDATA}/VECTOR/MidiPyrenees/Roads.shp
+                     OPTIONS -in   ${LARGEDATA}/VECTOR/MidiPyrenees/roads.shp
                              -im   ${BASELINE}/apTvRsRasterizationLines.tif
                  			 -out  ${TEMP}/apTvRsRasterizationLines.tif uint8
                      VALID   --compare-image ${NOTOL}
@@ -13,7 +13,7 @@ OTB_TEST_APPLICATION(NAME apTvRsRasterizationLines
 
 OTB_TEST_APPLICATION(NAME apTvRsRasterizationLinesStreaming
                      APP  Rasterization
-                     OPTIONS -in   ${LARGEDATA}/VECTOR/MidiPyrenees/Roads.shp
+                     OPTIONS -in   ${LARGEDATA}/VECTOR/MidiPyrenees/roads.shp
                              -im   ${BASELINE}/apTvRsRasterizationLines.tif
                  			 -out  ${TEMP}/apTvRsRasterizationLinesStreaming.tif uint8
                  			 -ram 1
