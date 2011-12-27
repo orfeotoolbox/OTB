@@ -22,6 +22,7 @@ namespace ossimplugins
 
 
 class Ephemeris;
+class HermiteInterpolator;
 
 
 /**
@@ -119,7 +120,7 @@ private:
    double * _t;
    double ** _p;
    double ** _dp;
-
+   HermiteInterpolator ** _interpolator;
 };
 }
 

@@ -12,6 +12,7 @@
 #include <iostream>
 #include <string>
 #include <cmath>
+#include <iomanip>
 
 #include <otb/PlatformPosition.h>
 #include <otb/Ephemeris.h>
@@ -21,7 +22,6 @@
 namespace ossimplugins
 {
 
-
 static const char NUMBER_PLATFORM_POSITIONS_KW[] = "platform_positions_count";
 
 PlatformPosition::PlatformPosition():
@@ -29,7 +29,8 @@ PlatformPosition::PlatformPosition():
    _data(NULL),
    _t(NULL),
    _p(NULL),
-   _dp(NULL)
+   _dp(NULL),
+   _interpolator(NULL)
 {
 }
 
@@ -56,10 +57,13 @@ void PlatformPosition::Clear()
      for (int j=0; j<3; ++j) {
        delete[] _p[j];
        delete[] _dp[j];
+       delete _interpolator[j];
      }
    }
    delete[] _p;
    delete[] _dp;
+
+   delete[] _interpolator;
 }
 
 PlatformPosition::PlatformPosition(const PlatformPosition& rhs)
@@ -96,6 +100,7 @@ void PlatformPosition::InitAuxiliaryData()
    _t = new double[_nbrData];
    _p = new double*[3];
    _dp = new double*[3];
+   _interpolator = new HermiteInterpolator*[3];
    for (int j=0; j<3; ++j) {
      _p[j] = new double[_nbrData];
      _dp[j] = new double[_nbrData];
@@ -106,8 +111,8 @@ void PlatformPosition::InitAuxiliaryData()
    {
      _t[i] =   (_data[i]->get_date().get_day0hTU().get_julianDate() - _data[0]->get_date().get_day0hTU().get_julianDate())
          * JOURCIVIL_LENGTH
-         + _data[i]->get_date().get_second()   - _data[0]->get_date().get_second()
-         + _data[i]->get_date().get_decimal()     - _data[0]->get_date().get_decimal();
+         + _data[i]->get_date().get_second() - _data[0]->get_date().get_second()
+         + _data[i]->get_date().get_decimal() - _data[0]->get_date().get_decimal();
    }
 
    for (int j = 0; j < 3; j++)
@@ -117,7 +122,9 @@ void PlatformPosition::InitAuxiliaryData()
        _p[j][i] = _data[i]->get_position()[j];
        _dp[j][i] = _data[i]->get_speed()[j];
      }
+     _interpolator[j] = new HermiteInterpolator(_nbrData, _t, _p[j], _dp[j]);
    }
+
 }
 
 Ephemeris* PlatformPosition::Interpolate(JSDDateTime date) const
@@ -155,8 +162,7 @@ Ephemeris* PlatformPosition::Interpolate(JSDDateTime date) const
      double speed[3];
      for (int j = 0; j < 3; j++)
      {
-       HermiteInterpolator interpolator(_nbrData, _t, _p[j], _dp[j]);
-       interpolator.Interpolate(dt, pos[j], speed[j]);
+       _interpolator[j]->Interpolate(dt, pos[j], speed[j]);
      }
      ephem->set_position(pos);
      ephem->set_speed(speed);
