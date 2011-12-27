@@ -32,7 +32,7 @@ divisions (see section \ref{sec:appParam}).
 \label{sec:appArchitecture}
 Every application derive from the class \doxygen{otb}{Wrapper::Application}. An 
 application can't be templated. It must contain the standard class typedefs and
-a call to the \code{OTB_APPLICATION_EXPORT} macro (EXAMPLE).
+a call to the \code{OTB_APPLICATION_EXPORT} macro.
 
 There are also three methods to implement in a new application:
 \begin{itemize}
@@ -44,19 +44,21 @@ There are also three methods to implement in a new application:
 \subsection{DoInit()}
 \label{sec:appDoInit}
 This method is called once, when the application is instanciated. It should 
-contain the following instructions:
+contain the following actions:
 \begin{itemize}
   \item Set the name, description of the application
-  \item Fill the documentation
+  \item Fill the documentation and give an example
   \item Declare all the parameters
 \end{itemize}
 
 
 \subsection{DoUpdateParameters()}
 \label{sec:appDoUpdateParameters}
-This method is called after every modification of a parameter value. It is used 
-to maintain consistency between parameters (e.g. in ExtractROI: when changing the input image, maybe 
-the ROI size has to be updated).
+This method is called after every modification of a parameter value. With the command 
+line launcher, it is called each time a parameter is loaded. With the Qt launcher, it
+is called each time a parameter field is modified. It can be used to maintain consistency 
+between parameters (e.g. in ExtractROI: when changing the input image, maybe the ROI size 
+has to be updated).
 
 \subsection{DoExecute()}
 \label{sec:appDoExecute}
@@ -80,7 +82,8 @@ Similar methods exist for binding a data object to an output parameter:
 \end{itemize}
 
 If possible, no filter update should be called inside this function. The update will be 
-called afterwards, on the writer.
+automatically called afterwards : for every image or vector data output, a writer is 
+created and updated.
 
 \subsection{Parameters selection}
 \label{sec:appParam}
@@ -113,10 +116,17 @@ types of parameters:
   \item \code{ParameterType_RAM} : parameter storing the maximum amount of RAM to be used.
 \end{itemize}
 
-Each created parameter has a unique key and several boolean flags to represent their state.
+Each created parameter has a unique key and several boolean flags to represent their state. These flags
+can be used to set a parameter optional or test if the user has modified the parameter value. The parameters
+are created in the \code{DoInit()} method, then the framework will set their value (either by parsing the 
+command line or reading the graphical user interface). The \code{DoExecute()} method is called when all 
+mandatory parameters have been given a value, which can be obtained with "Get" methods defined in 
+\doxygen{otb}{Wrapper::Application}.
 
-By default, the numeric parameters are treated as inputs. If your application outputs a number,
-you can use a numeric parameter and change its role by calling \code{SetParameterRole(key,Role_Output)}.
+Some functions are specific to numeric parameters, such as \code{SetMinimumParameterIntValue(key,value)}
+or \code{SetMaximumParameterFloatValue(key,value)}. By default, numeric parameters are treated as inputs.
+If your application outputs a number, you can use a numeric parameter and change its role by calling 
+\code{SetParameterRole(key,Role_Output)}.
 
 The input types \code{InputImage}, \code{InputImageList}, \code{ComplexInputImage}, \code{InputVectorData}
 and \code{InputVectorDataList} store the name of the files to load, but they also encapsulate the 
@@ -125,7 +135,7 @@ readers needed to produce the input data.
 The output types \code{OutputImage}, \code{ComplexOutputImage} and \code{OutputVectorData} store the 
 name of the files to write, but they also encapsulate the corresponding writers.
 
-
-
 \section{Testing your application}
 \label{sec:appTesting}
+It is possible to write application tests. They are quite similar to filters tests.
+The macro \code{OTB_TEST_APPLICATION} makes it easy to define a new test.
