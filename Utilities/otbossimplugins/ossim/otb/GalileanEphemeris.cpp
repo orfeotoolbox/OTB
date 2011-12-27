@@ -123,7 +123,7 @@ int GalileanEphemeris::p2nutt(int newcmb, double greenwich, double day,
             double p[], double pd[] )
 {
   const double PI          = 3.14159265358979323846 ;
-  const double DEUXPI      = 6.28318530717958647693 ;
+  const double TWOPI      = 6.28318530717958647693 ;
   // const double MU          = 3.9860047e+14 ;
   // const double JOURCIVIL_LENGTH   = 86400.0 ;
   // const double JOURSIDERAL = 86164.09054 ;
@@ -194,20 +194,20 @@ int GalileanEphemeris::p2nutt(int newcmb, double greenwich, double day,
   t = day-2451540. - 0.5 ;
 
   /*  L = MEAN ANOMALY OF THE MOON */
-  arg[6] = fmod( 0.2355548394e+01 + t*( 0.2280271437e+00 + t* 0.1137830e-12 ),DEUXPI);
+  arg[6] = fmod( 0.2355548394e+01 + t*( 0.2280271437e+00 + t* 0.1137830e-12 ),TWOPI);
 
   /*C  L-PRIME = MEAN ANOMALY OF THE SUN (EARTH) */
-  arg[5] = fmod( 0.6240035939e+01 + t*( 0.1720197005e-01 - t* 0.2096864e-14 ),DEUXPI);
+  arg[5] = fmod( 0.6240035939e+01 + t*( 0.1720197005e-01 - t* 0.2096864e-14 ),TWOPI);
 
   /*  F = L - OMEGA (SEE ABOVE AND BELOW) */
-  ff = fmod( 0.1627901934e+01 + t*( 0.2308957196e+00 - t* 0.4817699e-13 ),DEUXPI);
+  ff = fmod( 0.1627901934e+01 + t*( 0.2308957196e+00 - t* 0.4817699e-13 ),TWOPI);
 
   /*  D = MEAN ELONGATION OF THE MOON FROM THE SUN */
-  dd = fmod( 0.5198469514e+01 + t*( 0.2127687104e+00 - t* 0.2504244e-13 ),DEUXPI);
+  dd = fmod( 0.5198469514e+01 + t*( 0.2127687104e+00 - t* 0.2504244e-13 ),TWOPI);
 
   /*  OMEGA = LONGITUDE OF MOON'S ASCENDING NODE FROM MEAN EQUINOX OF DATE */
   arg[0]=0.e0;
-  arg[1] = fmod( 0.2182438624e+01 - t*( 0.9242175478e-03 - t* 0.2709206e-13 ),DEUXPI);
+  arg[1] = fmod( 0.2182438624e+01 - t*( 0.9242175478e-03 - t* 0.2709206e-13 ),TWOPI);
 
     arg[3] = 2.e0*(ff + arg[1]);
     arg[2] = arg[3] - 2.e0*dd ;
@@ -248,12 +248,12 @@ int GalileanEphemeris::p2nutt(int newcmb, double greenwich, double day,
   else if ( newcmb == 1 )
   {
     /*  SIDEREAL ANGLE, FROM 'COOT20' WITH NEWCOMB'S FORMULA:*/
-    /*srang = fmod(STD20R+(OMT20R+OMQ20R*day)*day,DEUXPI);*/
+    /*srang = fmod(STD20R+(OMT20R+OMQ20R*day)*day,TWOPI);*/
   }
   else if ( newcmb == 2 )
   {
     /*  SIDEREAL ANGLE, FROM INPUT */
-    srang = fmod(greenwich*PI/180.e0,DEUXPI) ;
+    srang = fmod(greenwich*PI/180.e0,TWOPI) ;
     /*printf("srang dans p2nutt %g",greenwich);*/
   }
   else

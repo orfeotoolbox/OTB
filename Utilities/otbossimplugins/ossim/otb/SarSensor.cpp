@@ -36,7 +36,7 @@ SarSensor::~SarSensor()
 
 int SarSensor::ImageToWorld(double distance, JSDDateTime time, double height, double& lon, double& lat)
 {
-  const double DEUXPI      = 6.28318530717958647693 ;
+  const double TWOPI      = 6.28318530717958647693 ;
 
   double semiMajorAxis = _params->get_semiMajorAxis() ;  // default : WGS84
   double semiMinorAxis = _params->get_semiMinorAxis() ; // default : WGS84
@@ -64,8 +64,8 @@ int SarSensor::ImageToWorld(double distance, JSDDateTime time, double height, do
 
   GeodesicCoordinate geo;
   cart.AsGeodesicCoordinates(semiMajorAxis , semiMinorAxis, &geo);
-  lon = (geo.get_x())*360.0/DEUXPI;
-  lat = (geo.get_y())*360.0/DEUXPI;
+  lon = (geo.get_x())*360.0/TWOPI;
+  lat = (geo.get_y())*360.0/TWOPI;
 
   delete satPosition;
 
