@@ -95,6 +95,7 @@ ViewerModel
 ::GetJPEG2000Resolution(const std::string & filepath)
 {
   std::vector<unsigned int> res;
+#ifdef OTB_USE_JPEG2000
   if( !this->IsJPEG2000File(filepath) )
     {
     itkExceptionMacro( "Image "<<filepath<< " is not a JPEG2000." );
@@ -106,7 +107,7 @@ ViewerModel
     readerJPEG2000->ReadImageInformation();
     readerJPEG2000->GetAvailableResolutions(res);
     }
-
+#endif
   return res;
   
 }
@@ -115,6 +116,7 @@ void
 ViewerModel
 ::GetJPEG2000ResolutionAndInformations(const std::string & filepath, std::vector<unsigned int>& res, std::vector<std::string> & desc)
 {
+#ifdef OTB_USE_JPEG2000
   if( !this->IsJPEG2000File(filepath) )
     {
     itkExceptionMacro( "Image "<<filepath<< " is not a JPEG2000." );
@@ -126,6 +128,7 @@ ViewerModel
     readerJPEG2000->ReadImageInformation();
     readerJPEG2000->GetResolutionInfo(res, desc);
     }
+#endif
 }
 
 unsigned int
