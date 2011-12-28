@@ -13,6 +13,7 @@
 #define Equation_h
 
 #include <complex>
+#include <vector>
 #include <ossimPluginConstants.h>
 
 namespace ossimplugins
@@ -44,17 +45,17 @@ public:
 
    void Solve();
 
-   int get_nbrSol()
+   int get_nbrSol() const
    {
       return _nbrSol;
    };
 
-   std::complex<double>* get_solutions()
+   const std::complex<double>* get_solutions() const
    {
       return _solutions;
    };
 
-   int * get_order()
+   std::vector<int> get_order() const
    {
       return _order;
    };
@@ -77,7 +78,7 @@ protected:
    static const double Epsilon;
 
    int _nbrSol;
-   int * _order;
+   std::vector<int> _order;
    std::complex<double>* _solutions;
 private:
 

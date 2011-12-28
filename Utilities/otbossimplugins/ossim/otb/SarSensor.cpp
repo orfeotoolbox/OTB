@@ -142,7 +142,7 @@ int SarSensor::localisationSAR ( GeographicEphemeris posSpeed , double lambda ,
   eq.Solve();
 
   int n = eq.get_nbrSol();
-  std::complex<double> *root = eq.get_solutions();
+  const std::complex<double> *root = eq.get_solutions();
 
   int nRoot = 0 ;
   for (int i = 0 ; i < n ; i++)               /* Real root selection */
