@@ -72,27 +72,20 @@ int SarSensor::ImageToWorld(double distance, JSDDateTime time, double height, do
   return etatLoc ;
 }
 
-int SarSensor::localisationSAR ( GeographicEphemeris PosVit , double lambda ,
+int SarSensor::localisationSAR ( GeographicEphemeris posSpeed , double lambda ,
                         double dist , double fDop , int sensVisee ,
-                        double rayonEqu , double rayonPol ,
+                        double equRadius , double polRadius ,
                         double h , RectangularCoordinate* cart ) const
 {
   double coordCart[3];
-        coordCart[0]=0.0;
-        coordCart[1]=0.0;
-        coordCart[2]=0.0;
+  coordCart[0]=0.0;
+  coordCart[1]=0.0;
+  coordCart[2]=0.0;
 
 
-  int* ordre;
-  int etat , fin , n , i , i1 , i2 , nRac , indice[4] ;
-  double posX , posY , posZ , vitX , vitY , vitZ ;
-  double dist1 , fDop1 , he , hp ;
   double rho2 , k , a , b , c , d , u , v , w ;
   double x[4] , y[4] , z[4] , r[4] ;
-  std::complex<double> aa[5];
-  std::complex<double> *racine;
-  GeographicEphemeris PosVitGeo ;
-
+  bool isEnd;
 
 
   /* Initialization of characteristical values                */
@@ -100,88 +93,88 @@ int SarSensor::localisationSAR ( GeographicEphemeris PosVit , double lambda ,
   /*           - ranges are processed in mm                  */
   /*           - velocities are processed in  km/s           */
   /*           - frequencies are processed in kHz             */
-    const double KILO = 1.0e-3 ;
+  const double KILO = 1.0e-3 ;
   const double MEGA = 1.0e-6 ;
   const double EPSILON = 1.0e-12 ;
 
-  etat  = 0 ;
 
-  dist1 = dist * MEGA ;
-  fDop1 = fDop * KILO ;
+  double dist1 = dist * MEGA ;
+  double fDop1 = fDop * KILO ;
 
-  he    = (rayonEqu + h) * MEGA ;       /* Equatorial radius + h */
-  hp    = (rayonPol + h) * MEGA ;       /* Polar radius + h    */
+  double he    = (equRadius + h) * MEGA ;       /* Equatorial radius + h */
+  double hp    = (polRadius + h) * MEGA ;       /* Polar radius + h    */
 
-  posX  = PosVit.get_position()[0] * MEGA ;
-  posY  = PosVit.get_position()[1] * MEGA ;
-  posZ  = PosVit.get_position()[2] * MEGA ;
-  vitX = - PosVit.get_speed()[0] * KILO ;
-  vitY = - PosVit.get_speed()[1] * KILO ;
-  vitZ = - PosVit.get_speed()[2] * KILO ;
+  double posX  = posSpeed.get_position()[0] * MEGA ;
+  double posY  = posSpeed.get_position()[1] * MEGA ;
+  double posZ  = posSpeed.get_position()[2] * MEGA ;
+  double speedX = - posSpeed.get_speed()[0] * KILO ;
+  double speedY = - posSpeed.get_speed()[1] * KILO ;
+  double speedZ = - posSpeed.get_speed()[2] * KILO ;
 
 
   /* Coefficients computation and equation solving */
-  if (etat == 0)
+  int state  = 0;
+  u = speedX * posY - speedY * posX ;
+  a = (speedX / u) * (1.0 - (he / hp) * (he / hp)) / 2.0 ;
+  b = (speedX * posZ - speedZ * posX) / u ;
+  rho2 = posX * posX + posY * posY + posZ * posZ ;
+  k    = posX * speedX + posY * speedY + posZ * speedZ -
+         lambda * dist1 * fDop1 / 2.0 ;
+  c = (speedX * (he * he + rho2 - dist1 * dist1) - 2.0 * k * posX) / (2.0 * u);
+
+  u     = speedZ - b * speedY ;
+  v     = c * speedY - k ;
+  w     = v * v - (speedX * speedX) * (he * he - c * c) ;
+
+  std::complex<double> aa[5];
+  aa[0] = std::complex<double>(w,0.0);            /* Constant coefficient     */
+  w     = 2.0 * (u * v - (b * c) * (speedX * speedX)) ;
+  aa[1] = std::complex<double>(w,0.0) ;                     /* First order coefficient  */
+  w     = u * u + 2.0 * a * v * speedY +
+          (speedX * speedX) * ((he / hp) * (he / hp) + b * b + 2.0 * a * c) ;
+  aa[2] = std::complex<double>(w,0.0) ;                     /* Second order coefficient */
+  w     = 2.0 * a * (u * speedY - b * speedX * speedX) ;
+  aa[3] = std::complex<double>(w,0.0) ;                     /* Third order coefficient  */
+  w     = (speedX * speedX + speedY * speedY) * a * a ;
+  aa[4] = std::complex<double>(w,0.0) ;                     /* Fourth order coefficient */
+
+  Equation eq(4,aa);    /* Equation solving */
+  eq.Solve();
+
+  int n = eq.get_nbrSol();
+  std::complex<double> *root = eq.get_solutions();
+
+  int nRoot = 0 ;
+  for (int i = 0 ; i < n ; i++)               /* Real root selection */
   {
-
-    u = vitX * posY - vitY * posX ;
-    a = (vitX / u) * (1.0 - (he / hp) * (he / hp)) / 2.0 ;
-    b = (vitX * posZ - vitZ * posX) / u ;
-    rho2 = posX * posX + posY * posY + posZ * posZ ;
-    k    = posX * vitX + posY * vitY + posZ * vitZ -
-           lambda * dist1 * fDop1 / 2.0 ;
-    c = (vitX * (he * he + rho2 - dist1 * dist1) - 2.0 * k * posX) / (2.0 * u);
-
-    u     = vitZ - b * vitY ;
-    v     = c * vitY - k ;
-    w     = v * v - (vitX * vitX) * (he * he - c * c) ;
-    aa[0] = std::complex<double>(w,0.0);            /* Constant coefficient     */
-    w     = 2.0 * (u * v - (b * c) * (vitX * vitX)) ;
-    aa[1] = std::complex<double>(w,0.0) ;                     /* First order coefficient  */
-    w     = u * u + 2.0 * a * v * vitY +
-            (vitX * vitX) * ((he / hp) * (he / hp) + b * b + 2.0 * a * c) ;
-    aa[2] = std::complex<double>(w,0.0) ;                     /* Second order coefficient */
-    w     = 2.0 * a * (u * vitY - b * vitX * vitX) ;
-    aa[3] = std::complex<double>(w,0.0) ;                     /* Third order coefficient  */
-    w     = (vitX * vitX + vitY * vitY) * a * a ;
-    aa[4] = std::complex<double>(w,0.0) ;                     /* Fourth order coefficient */
-
-    Equation eq(4,aa);    /* Equation solving */
-    eq.Solve();
-
-    n = eq.get_nbrSol();
-    racine = eq.get_solutions();
-    ordre = eq.get_order();
-
-    nRac = 0 ;
-    for (i = 0 ; i < n ; i++)               /* Real root selection */
+    d = fabs(root[i].imag()) ;
+    if (d < EPSILON)
     {
-      d = fabs(racine[i].imag()) ;
-      if (d < EPSILON)
-      {
-        z[nRac] = racine[i].real();
-        y[nRac] = (a * z[nRac] - b) * z[nRac] + c ;
-        x[nRac] = (k - (vitY * y[nRac] + vitZ * z[nRac])) / vitX ;
-        nRac    = nRac + 1 ;
-      }
+      z[nRoot] = root[i].real();
+      y[nRoot] = (a * z[nRoot] - b) * z[nRoot] + c ;
+      x[nRoot] = (k - (speedY * y[nRoot] + speedZ * z[nRoot])) / speedX ;
+      nRoot    = nRoot + 1 ;
     }
-    if (nRac == 0)
-      etat = 2 ;  /* No root */
   }
+  if (nRoot == 0)
+    state = 2 ;  /* No root */
+
 
   /* Computed roots sort */
-  if (etat == 0)
+
+  if (state == 0)
   {
-    for (i = 0 ; i < nRac ; i++)
+    int  indice[4] ;
+    for (int i = 0 ; i < nRoot ; i++)
     {
       /* Computation of the "distance" between roots images and equation values */
       u = x[i] - posX ;
       v = y[i] - posY ;
       w = z[i] - posZ ;
       r[i] = fabs ((u * u + v * v + w * w) / (dist1 * dist1) - 1.0 ) ;
-      u = u * vitX ;
-      v = v * vitY ;
-      w = w * vitZ ;
+      u = u * speedX ;
+      v = v * speedY ;
+      w = w * speedZ ;
       if (fabs (fDop) > EPSILON)
         r[i] = r[i] + fabs (1.0 + 2.0 * (u + v + w) / (lambda * dist1 * fDop1));
       else
@@ -194,32 +187,32 @@ int SarSensor::localisationSAR ( GeographicEphemeris PosVit , double lambda ,
     }
 
     /* Roots sort by increasing differences */
-    fin = 0 ;
-    while (fin == 0)
+    isEnd = false ;
+    while (!isEnd)
     {
-      fin = 1 ;
-      for (i = 0 ; i < (nRac - 1) ; i++)
+      isEnd = true;
+      for (int i = 0 ; i < (nRoot - 1) ; i++)
       {
-        i1 = indice[i] ;
-        i2 = indice[i+1] ;
+        int i1 = indice[i] ;
+        int i2 = indice[i+1] ;
         if (r[i2] < r[i1])
         {
           indice[i] = i2 ;
           indice[i+1] = i1 ;
-          fin = 0 ;
+          isEnd = false ;
         }
       }
     }
 
     /* Selection of the correct root (corresponding to the imaging direction) */
-    fin = 0 ;
-    i = 0 ;
-    while ((fin == 0) && (i < nRac))
+    isEnd = false ;
+    int i = 0 ;
+    while (!isEnd && (i < nRoot))
     {
-      i1 = indice[i] ;
-      u  = posY * vitZ - posZ * vitY ;
-      v  = posZ * vitX - posX * vitZ ;
-      w  = posX * vitY - posY * vitX ;
+      int i1 = indice[i] ;
+      u  = posY * speedZ - posZ * speedY ;
+      v  = posZ * speedX - posX * speedZ ;
+      w  = posX * speedY - posY * speedX ;
       a  = x[i1] - posX ;
       b  = y[i1] - posY ;
       c  = z[i1] - posZ ;
@@ -229,15 +222,15 @@ int SarSensor::localisationSAR ( GeographicEphemeris PosVit , double lambda ,
         coordCart[0] = x[i1] / MEGA ;   /* Coordinates in the      */
         coordCart[1] = y[i1] / MEGA ;   /* geographic referential,  */
         coordCart[2] = z[i1] / MEGA ;   /* in legal units (m)      */
-        fin = 1 ;
+        isEnd = true;
       }
       i++ ;
     }
-    if (fin == 0)
-      etat = 1 ;  /* No root in the imaging direction */
+    if (!isEnd)
+      state = 1 ;  /* No root in the imaging direction */
   }
 
   cart->set_coordinates(coordCart[0], coordCart[1], coordCart[2]);
-  return etat ;
+  return state ;
 }
 }
