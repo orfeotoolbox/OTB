@@ -64,7 +64,7 @@ private:
     AddParameter(ParameterType_OutputVectorData, "out", "Concatenated VectorData");
 
     // Doc example parameter settings
-    SetDocExampleParameterValue("vd", "waterways.shp france_coastline.shp");
+    SetDocExampleParameterValue("vd", "ToulousePoints-examples.shp ToulouseRoad-examples.shp");
     SetDocExampleParameterValue("out", "ConcatenatedVectorData.shp");
  
   }

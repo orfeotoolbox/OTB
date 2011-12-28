@@ -87,8 +87,8 @@ private:
     ElevationParametersHandler::AddElevationParameters(this, "elev");
 
     // Doc example parameter settings
-    SetDocExampleParameterValue("io.in", "QB_Toulouse_Ortho_XS.tif");
-    SetDocExampleParameterValue("io.vd", "roads.shp");
+    SetDocExampleParameterValue("io.in", "qb_RoadExtract.tif");
+    SetDocExampleParameterValue("io.vd", "qb_RoadExtract_classification.shp");
     SetDocExampleParameterValue("io.out", "apTvUtVectorDataExtractROIApplicationTest.shp");
   }
 

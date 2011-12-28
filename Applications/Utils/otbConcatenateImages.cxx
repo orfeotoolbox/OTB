@@ -84,7 +84,7 @@ private:
     MandatoryOff("ram");
  
     // Doc example parameter settings
-    SetDocExampleParameterValue("il", "verySmallFSATSW_b.tif verySmallFSATSW_g.tif verySmallFSATSW_r.tif verySmallFSATSW_nir.tif");
+    SetDocExampleParameterValue("il", "GomaAvant.png GomaApres.png");
     SetDocExampleParameterValue("out", "otbConcatenateImages.tif");
   }
 
