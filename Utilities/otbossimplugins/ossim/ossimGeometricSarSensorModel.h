@@ -12,23 +12,11 @@
 #ifndef ossimGeometricSarSensorModel_H
 #define ossimGeometricSarSensorModel_H
 
-#include <ossim/projection/ossimSensorModel.h>
-#include <ossim/projection/ossimMapProjection.h>
-#include <ossim/base/ossimIpt.h>
-#include <ossim/base/ossimFilename.h>
-#include <ossim/base/ossimGpt.h>
-#include <ossim/base/ossimDpt.h>
-#include <ossim/base/ossimEcefRay.h>
-#include <ossim/base/ossimEcefPoint.h>
-#include <ossim/base/ossimMatrix3x3.h>
-#include <ossim/base/ossimRtti.h>
-#include <iostream>
 #include <list>
-#include <cstdlib>
 #include <vector>
+
+#include <ossim/projection/ossimSensorModel.h>
 #include <ossim/projection/ossimCoarseGridModel.h>
-#include <otb/CivilDateTime.h>
-#include <ossim/elevation/ossimElevManager.h>
 
 namespace ossimplugins
 {
@@ -37,6 +25,7 @@ class PlatformPosition;
 class SensorParams;
 class RefPoint;
 class SarSensor;
+class JSDDateTime;
 
 /**
  * @brief This class allows for direct localisation and indirect localisation

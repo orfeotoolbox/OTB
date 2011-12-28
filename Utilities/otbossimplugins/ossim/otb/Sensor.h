@@ -13,7 +13,6 @@
 #define Services_h
 
 #include <ossimPluginConstants.h>
-#include <otb/JSDDateTime.h>
 
 namespace ossimplugins
 {

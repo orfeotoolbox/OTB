@@ -11,9 +11,7 @@
 
 #include <ossimGeometricSarSensorModel.h>
 
-#include <otb/GalileanEphemeris.h>
-#include <otb/GeographicEphemeris.h>
-#include <otb/GMSTDateTime.h>
+#include <otb/Ephemeris.h>
 #include <otb/PlatformPosition.h>
 #include <otb/SensorParams.h>
 #include <otb/RefPoint.h>
@@ -21,6 +19,7 @@
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimPreferences.h>
 #include <ossim/projection/ossimCoarseGridModel.h>
+#include <ossim/elevation/ossimElevManager.h>
 #include <cmath>
 #include <string>
 
