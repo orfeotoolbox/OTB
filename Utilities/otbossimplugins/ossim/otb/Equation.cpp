@@ -101,16 +101,15 @@ void Equation::Normalisation()
   double r;
 
   /*
-   * Normalisation par a power of 10
+   * Normalisation by a power of 10
    */
   for (int i = 0 ; i < _trueDegree ; i++)
   {
-    r = abs(_coefficients[i]) ;
-    if (r >= Epsilon)
+    float rr = abs(_coefficients[i]) ;
+    if (rr >= Epsilon)
     {
-      r = log (r) ;
-      r = r / log (10.0) ;
-      e = ((int)r) / ((int)(_trueDegree - i)) ;
+      rr = log10(rr) ;
+      e = ((int)rr) / ((int)(_trueDegree - i)) ;
       if (e > eMax)
         eMax = e ;
       if (e < eMin)
@@ -125,7 +124,7 @@ void Equation::Normalisation()
   {
     /* Normalisation of the unknown for big values */
     _normalisationType = GreatValues;
-    _normalisationCoefficient = pow (10.0, (double)eMax) ;
+    _normalisationCoefficient = pow (10.0, (float)eMax) ;
     r    = 1.0 ;
     for (int i = _trueDegree-1 ; i >= 0 ; i--)
     {
@@ -137,7 +136,7 @@ void Equation::Normalisation()
   {
     /* Normalisation of the unknown for small */
     _normalisationType = SmallValues;
-    _normalisationCoefficient = pow(10.0,(double)(-eMin)) ;
+    _normalisationCoefficient = pow(10.0,(float)(-eMin)) ;
     r    = 1.0 ;
     for (int i = _trueDegree-1 ; i >= 0 ; i--)
     {
