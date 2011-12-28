@@ -24,8 +24,6 @@
 #include <iostream>
 
 
-class ossimFilename;
-
 namespace ossimplugins
 {
 class ossimPleiadesDimapSupportData;
