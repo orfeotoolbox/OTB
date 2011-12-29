@@ -158,13 +158,11 @@ private:
     SetDefaultParameterFloat("iv", 0.0);
     
     // Doc example parameter settings
-    SetDocExampleParameterValue("in", "QB_6_extract.tif");
+    SetDocExampleParameterValue("in", "QB_1_ortho.tif");
     SetDocExampleParameterValue("out","SOMClassification.tif");
-    SetDocExampleParameterValue("vm", "QB_6_mask.tif");
     SetDocExampleParameterValue("tp", "1.0");
     SetDocExampleParameterValue("ts","16384");
     SetDocExampleParameterValue("sl", "32");
-    SetDocExampleParameterValue("som", "SOMClassification_Map.tif");
     SetDocExampleParameterValue("sx", "32");
     SetDocExampleParameterValue("sy", "32");
     SetDocExampleParameterValue("nx", "10");

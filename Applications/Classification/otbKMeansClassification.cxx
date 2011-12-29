@@ -213,8 +213,7 @@ private:
 
 
     // Doc example parameter settings
-    SetDocExampleParameterValue("in", "qb_RoadExtract.img");
-    SetDocExampleParameterValue("vm", "qb_RoadExtract_mask.png");
+    SetDocExampleParameterValue("in", "QB_1_ortho.tif");
     SetDocExampleParameterValue("ts", "1000");
     SetDocExampleParameterValue("nc", "5");
     SetDocExampleParameterValue("maxit", "1000");

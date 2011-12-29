@@ -204,11 +204,12 @@ private:
     // Doc example parameter settings
     SetDocExampleParameterValue("io.il", "QB_1_ortho.tif");
     SetDocExampleParameterValue("io.vd", "VectorData_QB1.shp");
-    SetDocExampleParameterValue("io.imstat", "clImageStatisticsQB1.xml");
+    SetDocExampleParameterValue("io.imstat", "EstimateImageStatisticsQB1.xml");
     SetDocExampleParameterValue("sample.mv", "100");
+    SetDocExampleParameterValue("sample.mt", "100");
     SetDocExampleParameterValue("sample.vtr", "0.5");
     SetDocExampleParameterValue("svm.opt", "true");
-    SetDocExampleParameterValue("io.out", "svmModelQB1_allOpt.svm");
+    SetDocExampleParameterValue("io.out", "svmModelQB1.svm");
   }
 
   void DoUpdateParameters()

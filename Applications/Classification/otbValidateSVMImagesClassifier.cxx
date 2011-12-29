@@ -151,11 +151,11 @@ private:
                             "SVM model to validate (given by TrainSVMImagesClassification output for instance).");
 
    // Doc example parameter settings
-   SetDocExampleParameterValue("il", "Classification/QB_1_ortho.tif");
-   SetDocExampleParameterValue("vd", "VectorData_QB1_bis.shp");
-   SetDocExampleParameterValue("imstat", "clImageStatisticsQB123.xml");
-   SetDocExampleParameterValue("svm", "clsvmModelQB123.svm");
-   SetDocExampleParameterValue("out", "PerformanceEstimationQB123.txt");
+   SetDocExampleParameterValue("il", "QB_1_ortho.tif");
+   SetDocExampleParameterValue("vd", "VectorData_QB1.shp");
+   SetDocExampleParameterValue("imstat", "EstimateImageStatisticsQB1.xml");
+   SetDocExampleParameterValue("svm", "clsvmModelQB1.svm");
+   SetDocExampleParameterValue("out", "PerformanceEstimationQB1.txt");
   }
 
   void DoUpdateParameters()

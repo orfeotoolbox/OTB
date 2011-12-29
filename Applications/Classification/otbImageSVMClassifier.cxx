@@ -95,9 +95,9 @@ private:
 
    // Doc example parameter settings
     SetDocExampleParameterValue("in", "QB_1_ortho.tif");
-    SetDocExampleParameterValue("imstat", "clImageStatisticsQB1.xml");
+    SetDocExampleParameterValue("imstat", "EstimateImageStatisticsQB1.xml");
     SetDocExampleParameterValue("svm", "clsvmModelQB1.svm");
-    SetDocExampleParameterValue("out", "otbConcatenateImages.png uchar");
+    SetDocExampleParameterValue("out", "clLabeledImageQB1.tif");
   }
 
   void DoUpdateParameters()

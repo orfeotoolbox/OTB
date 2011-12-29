@@ -63,8 +63,8 @@ private:
     SetParameterRole("out", Role_Output);
 
    // Doc example parameter settings
-   SetDocExampleParameterValue("il", "QB_1_ortho.tif QB_2_ortho.tif QB_3_ortho.tif");
-   SetDocExampleParameterValue("out", "EstimateImageStatisticsQB123.xml");
+   SetDocExampleParameterValue("il", "QB_1_ortho.tif");
+   SetDocExampleParameterValue("out", "EstimateImageStatisticsQB1.xml");
   }
 
   void DoUpdateParameters()
