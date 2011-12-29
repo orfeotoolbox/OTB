@@ -31,6 +31,7 @@ LabelMapToAttributeImageFilter<TInputImage, TOutputImage, TAttributeAccessor>
 ::LabelMapToAttributeImageFilter()
 {
 m_ChosenAttributes.resize(0);
+m_BackgroundValue = static_cast<OutputInternalPixelType>(0);
 }
 
 template <class TInputImage, class TOutputImage , class TAttributeAccessor>

@@ -104,9 +104,6 @@ private:
   /** Background pixel value */
   OutputInternalPixelType m_BackgroundValue;
   
-  /** Flag for vector image types */
-  bool m_IsVectorImage;
-  
   /** List of chosen attributes */
   AttributeListType m_ChosenAttributes;
 };
