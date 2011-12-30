@@ -124,7 +124,7 @@ void Equation::Normalisation()
   {
     /* Normalisation of the unknown for big values */
     _normalisationType = GreatValues;
-    _normalisationCoefficient = pow (10.0, (float)eMax) ;
+    _normalisationCoefficient = pow (10.0, (double)eMax) ;
     r    = 1.0 ;
     for (int i = _trueDegree-1 ; i >= 0 ; i--)
     {
@@ -136,7 +136,7 @@ void Equation::Normalisation()
   {
     /* Normalisation of the unknown for small */
     _normalisationType = SmallValues;
-    _normalisationCoefficient = pow(10.0,(float)(-eMin)) ;
+    _normalisationCoefficient = pow(10.0,(double)(-eMin)) ;
     r    = 1.0 ;
     for (int i = _trueDegree-1 ; i >= 0 ; i--)
     {
