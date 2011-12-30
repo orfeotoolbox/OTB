@@ -145,7 +145,7 @@ private:
     MandatoryOff("atmo.aeronet");
 
    // Doc example parameter settings
-    SetDocExampleParameterValue("in", "WV2_MUL_ROI_1000_100.tif");
+    SetDocExampleParameterValue("in", "QB_1_ortho.tif");
     SetDocExampleParameterValue("level", "toa");
     SetDocExampleParameterValue("out", "OpticalCalibration.tif");
   }

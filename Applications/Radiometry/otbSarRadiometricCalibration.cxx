@@ -67,7 +67,7 @@ private:
     MandatoryOff("noise");
 
     // Doc example parameter settings
-    SetDocExampleParameterValue("in", "scene.png");
+    SetDocExampleParameterValue("in", "RSAT_imagery_HH.tif");
     SetDocExampleParameterValue("out", "SarRadiometricCalibration.tif" );
   }
 

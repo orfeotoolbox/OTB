@@ -81,7 +81,7 @@ private:
     SetDefaultParameterFloat("scale",    100000.);
 
     // Doc example parameter settings
-    SetDocExampleParameterValue("in", "qb_RoadExtract2sub200x200.tif");
+    SetDocExampleParameterValue("in", "maur_rgb.png");
     SetDocExampleParameterValue("cout", "MeanShift_ClusteredOutput.tif");
     SetDocExampleParameterValue("fout", "MeanShift_FilterOutput.tif");
     SetDocExampleParameterValue("lout", "MeanShift_LabeledClusteredOutput.tif uint32");

@@ -120,7 +120,7 @@ private:
     SetDefaultParameterInt("ram", 256);
     MandatoryOff("ram");
     
-    SetDocExampleParameterValue("in","Rasterization/polgons.shp");
+    SetDocExampleParameterValue("in","qb_RoadExtract_classification.shp");
     SetDocExampleParameterValue("out", "rasterImage.tif");
     SetDocExampleParameterValue("szx","1100");
     SetDocExampleParameterValue("szy","1100");
