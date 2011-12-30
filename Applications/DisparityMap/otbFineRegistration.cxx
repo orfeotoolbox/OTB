@@ -209,7 +209,7 @@ private:
     SetParameterDescription( "vmlt", "Lower threshold to obtain a validity mask." );
     MandatoryOff("vmlt");
     
-    AddParameter(ParameterType_Float,  "vmut",   "Validity Mask Upper Than");
+    AddParameter(ParameterType_Float,  "vmut",   "Validity Mask Upper Threshold");
     SetParameterDescription( "vmut", "Upper threshold to obtain a validity mask." );
     MandatoryOff("vmut");
     
