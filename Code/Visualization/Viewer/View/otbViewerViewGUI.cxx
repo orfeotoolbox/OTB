@@ -1111,7 +1111,7 @@ ViewerViewGUI
     itkExceptionMacro("No bands detected in asked m_ViewerModel->GetObjectList() (index "<<m_DiaporamaCurrentIndex<<")");
     }
    
-  if(  nbBands >= 1 )  
+  if(  nbBands >= 1 )
     {
     rhistogram->SetHistogram(m_ViewerModel->GetObjectList().at(m_DiaporamaCurrentIndex).pLayer->GetHistogramList()->GetNthElement(0));
     curveWidget->AddCurve(rhistogram);
@@ -1144,7 +1144,7 @@ ViewerViewGUI
   m_Widget->RegisterHistogramWidget(curveWidget);
   m_Widget->SetLabel(this->CutFileName(m_DiaporamaCurrentIndex));
   m_Widget->Refresh();
-  m_Widget->Show(); 
+  m_Widget->Show();
 }
 
 void
