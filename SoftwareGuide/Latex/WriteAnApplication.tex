@@ -46,7 +46,7 @@ There are also three methods to implement in a new application:
 This method is called once, when the application is instanciated. It should 
 contain the following actions:
 \begin{itemize}
-  \item Set the name, description of the application
+  \item Set the name and the description of the application
   \item Fill the documentation and give an example
   \item Declare all the parameters
 \end{itemize}
@@ -74,11 +74,12 @@ or an object associated to a parameter:
   \item \dots
 \end{itemize}
 
-where \code{key} refers to parameter name, defined using \code{AddParameter()} method in \code{DoInit()} method.
+where \code{key} refers to parameter key, defined using \code{AddParameter()} method in \code{DoInit()} method.
 
 Similar methods exist for binding a data object to an output parameter:
 \begin{itemize}
   \item \code{SetParameterOutputImage(key,data)} : link the image object to the given output parameter
+  \item \code{SetParameterComplexOutputImage(key,data)} : link the complex image object to the given output parameter
   \item \code{SetParameterOutputVectorData(key,data)} : link the vector data object to the given
   output parameter
 \end{itemize}
@@ -125,7 +126,7 @@ can be used to set a parameter optional or test if the user has modified the par
 are created in the \code{DoInit()} method, then the framework will set their value (either by parsing the 
 command line or reading the graphical user interface). The \code{DoExecute()} method is called when all 
 mandatory parameters have been given a value, which can be obtained with "Get" methods defined in 
-\doxygen{otb}{Wrapper::Application}. Parameters are set mandatory (or not) in \code{DoInit()} using \code{MandatoryOn(key)} method (\code{MandatoryOff(key)}).
+\doxygen{otb}{Wrapper::Application}. Parameters are set mandatory (or not) using \code{MandatoryOn(key)} method (\code{MandatoryOff(key)}).
 
 Some functions are specific to numeric parameters, such as \code{SetMinimumParameterIntValue(key,value)}
 or \code{SetMaximumParameterFloatValue(key,value)}. By default, numeric parameters are treated as inputs.
@@ -141,7 +142,8 @@ name of the files to write, but they also encapsulate the corresponding writers.
 
 \section{Compile your application}
 
-In order to compile your application you must call the macro \code{OTB\_CREATE\_APPLICATION} in the \emph{CMakelist.txt} file. This macro generates the lib \emph{otbapp\_XXX.so}, in (OTB\_BINARY\_DIR), which \emph{XXX} refers to the class name.
+In order to compile your application you must call the macro \code{OTB\_CREATE\_APPLICATION} in the \emph{CMakelists.txt} file. 
+This macro generates the lib \emph{otbapp\_XXX.so}, in (OTB\_BINARY\_DIR), where \emph{XXX} refers to the class name.
 
 \section{Execute your application}
 
