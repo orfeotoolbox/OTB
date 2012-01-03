@@ -142,7 +142,6 @@ ViewerModel
   // If jpeg2000, add the selected resolution at the end of the file name
   if( isJPEG2000 )
     {
-//     unsigned int resolution = 0;
     otbFilepath += ":";
     std::ostringstream ossRes;
     ossRes << id;
@@ -171,11 +170,11 @@ ViewerModel
     quicklook= jpeg2000QLReader->GetOutput();
     quicklook->DisconnectPipeline();
     shrinkFactor = (1 << (resSize - 1));
+
+    // Adapt the shrinkFactor to the asked resolution (here it is id)
+    shrinkFactor = shrinkFactor/(1<<id);
     }
-  //// If not jpeg2000 or trouble in jpeg2000 quicloock, use a
-  //// streaming shrink image filter
-//   unsigned int maxSize = std::max( reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0],
-//                                    reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1] );
+
   if (quicklook.IsNull())
     {
     typedef otb::StreamingShrinkImageFilter<ImageType> StreamingShrinkImageFilterType;
@@ -205,6 +204,7 @@ ViewerModel
   visuGenerator->SetImage(reader->GetOutput());
   visuGenerator->GenerateQuicklookOff();
   visuGenerator->SetQuicklook(quicklook);
+
   visuGenerator->SetSubsamplingRate(shrinkFactor);
   visuGenerator->GenerateLayer();
   RenderingFunctionType::Pointer  rendrerFunction  = visuGenerator->GetRenderingFunction();
