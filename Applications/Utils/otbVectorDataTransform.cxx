@@ -72,7 +72,6 @@ private:
   
     // Transform Group
     AddParameter(ParameterType_Group, "transform", "Transform parameters");
-    MandatoryOff("transform");
 
     AddParameter(ParameterType_Float, "transform.tx", "Translation X");
     SetParameterDescription("transform.tx","Translation in the X direction");
