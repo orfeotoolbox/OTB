@@ -533,17 +533,6 @@ ViewerViewGUI
    //Get the pixelView
    PixelDescriptionViewType::Pointer pixelView = m_ViewerModel->GetObjectList().at(selectedItem-1).pPixelView;
 
-   //   //Edit the Widget
-   //   m_WidgetManagerList->GetNthElement(selectedItem-1)->UnRegisterAll();
-   //   m_WidgetManagerList->GetNthElement(selectedItem-1)->RegisterFullWidget(currentVisuView->GetFullWidget());
-   //   m_WidgetManagerList->GetNthElement(selectedItem-1)->RegisterScrollWidget(currentVisuView->GetScrollWidget());
-   //   m_WidgetManagerList->GetNthElement(selectedItem-1)->RegisterZoomWidget(currentVisuView->GetZoomWidget());
-   //   m_WidgetManagerList->GetNthElement(selectedItem-1)->RegisterPixelDescriptionWidget(pixelView->GetPixelDescriptionWidget());
-   //   m_WidgetManagerList->GetNthElement(selectedItem-1)->RegisterHistogramWidget(curveWidget);
-   //   m_WidgetManagerList->GetNthElement(selectedItem-1)->SetLabel(this->CutFileName(selectedItem-1));
-   //   m_WidgetManagerList->GetNthElement(selectedItem-1)->Show();
-
-   //widgetList->GetNthElement(selectedItem-1)->UnRegisterAll();
    widgetList->GetNthElement(selectedItem-1)->RegisterFullWidget(currentVisuView->GetFullWidget());
    widgetList->GetNthElement(selectedItem-1)->RegisterScrollWidget(currentVisuView->GetScrollWidget());
    widgetList->GetNthElement(selectedItem-1)->RegisterZoomWidget(currentVisuView->GetZoomWidget());
@@ -1041,29 +1030,29 @@ ViewerViewGUI
  }
 
 
- void
- ViewerViewGUI
- ::Diaporama()
- {
-   if (guiImageList->size()  == 0 || guiDiaporama->shown())
-   {
-     // no image selected, return
-     return;
-   }
+void
+ViewerViewGUI
+::Diaporama()
+{
+  if (guiImageList->size()  == 0 || guiDiaporama->shown())
+    {
+    // no image selected, return
+    return;
+    }
 
-   if(guiLinkSetupWindow->shown() == 0)
-     {
-       guiDiaporama->show();
+  if(guiLinkSetupWindow->shown() == 0)
+    {
+    guiDiaporama->show();
 
+    //Close the showed image without clearing the ShowedList
+    this->CloseAllDisplayedImages(false);
 
-       //Close the showed image without clearing the ShowedList
-       this->CloseAllDisplayedImages(false);
+    //Show the diaporama widget
+    this->DisplayDiaporama();
 
-       //Show the diaporama widget
-       this->DisplayDiaporama();
-       UpdateDiaporamaProgressBar();
-     }
- }
+    UpdateDiaporamaProgressBar();
+    }
+}
 
 
  /**
@@ -1080,21 +1069,21 @@ ViewerViewGUI
    return fileNameCut.c_str();
  }
 
- void
- ViewerViewGUI
- ::DisplayDiaporama()
- {
-   //Get the view stored in the model
+void
+ViewerViewGUI
+::DisplayDiaporama()
+{
+  //Get the view stored in the model
   CurvesWidgetType::Pointer         curveWidget         =  m_ViewerModel->GetObjectList().at(m_DiaporamaCurrentIndex).pCurveWidget;
   VisuViewPointerType               currentVisuView     =  m_ViewerModel->GetObjectList().at(m_DiaporamaCurrentIndex).pVisuView;
-
+   
   //First get the histogram list
   RenderingFunctionType::Pointer pRenderingFunction = m_ViewerModel->GetObjectList().at(m_DiaporamaCurrentIndex).pRenderFunction;
-
+   
   HistogramCurveType::Pointer rhistogram = HistogramCurveType::New();
   HistogramCurveType::Pointer ghistogram = HistogramCurveType::New();
   HistogramCurveType::Pointer bhistogram = HistogramCurveType::New();
-
+   
   //Color Definition
   HistogramCurveType::ColorType                 Red;
   HistogramCurveType::ColorType                 Green;
@@ -1105,28 +1094,47 @@ ViewerViewGUI
   Red[0]  = 1.;   Red[3]   = 0.5;
   Green[1]= 1.;   Green[3] = 0.5;
   Blue[2] = 1.;   Blue[3]  = 0.5;
-
+   
   ghistogram->SetHistogramColor(Green);
   ghistogram->SetLabelColor(Green);
   bhistogram->SetHistogramColor(Blue);
   bhistogram->SetLabelColor(Blue);
   rhistogram->SetHistogramColor(Red);
   rhistogram->SetLabelColor(Red);
-
-  rhistogram->SetHistogram(m_ViewerModel->GetObjectList().at(m_DiaporamaCurrentIndex).pLayer->GetHistogramList()->GetNthElement(0));
-  ghistogram->SetHistogram(m_ViewerModel->GetObjectList().at(m_DiaporamaCurrentIndex).pLayer->GetHistogramList()->GetNthElement(1));
-  bhistogram->SetHistogram(m_ViewerModel->GetObjectList().at(m_DiaporamaCurrentIndex).pLayer->GetHistogramList()->GetNthElement(2));
-
+   
+  const unsigned int nbBands = m_ViewerModel->GetObjectList().at(m_DiaporamaCurrentIndex).pLayer->GetHistogramList()->Size();
+   
   curveWidget->ClearAllCurves();
-  curveWidget->AddCurve(bhistogram);
-  curveWidget->AddCurve(ghistogram);
-  curveWidget->AddCurve(rhistogram);
+   
+  if(  nbBands == 0 )
+    {
+    itkExceptionMacro("No bands detected in asked m_ViewerModel->GetObjectList() (index "<<m_DiaporamaCurrentIndex<<")");
+    }
+   
+  if(  nbBands >= 1 )  
+    {
+    rhistogram->SetHistogram(m_ViewerModel->GetObjectList().at(m_DiaporamaCurrentIndex).pLayer->GetHistogramList()->GetNthElement(0));
+    curveWidget->AddCurve(rhistogram);
+    }
+   
+  if( nbBands >= 2 )
+    {
+    ghistogram->SetHistogram(m_ViewerModel->GetObjectList().at(m_DiaporamaCurrentIndex).pLayer->GetHistogramList()->GetNthElement(1));
+    curveWidget->AddCurve(ghistogram);
+    }
+   
+  if( nbBands >= 3 )
+    {
+    bhistogram->SetHistogram(m_ViewerModel->GetObjectList().at(m_DiaporamaCurrentIndex).pLayer->GetHistogramList()->GetNthElement(2));
+    curveWidget->AddCurve(bhistogram);
+    }
+   
   curveWidget->SetXAxisLabel("Pixels");
   curveWidget->SetYAxisLabel("Frequency");
-
+   
   //Get the pixelView
   PixelDescriptionViewType::Pointer pixelView = m_ViewerModel->GetObjectList().at(m_DiaporamaCurrentIndex).pPixelView;
-
+   
   //Edit the Widget
   m_Widget->UnRegisterAll();
   m_Widget->RegisterFullWidget(currentVisuView->GetFullWidget());
@@ -1136,9 +1144,9 @@ ViewerViewGUI
   m_Widget->RegisterHistogramWidget(curveWidget);
   m_Widget->SetLabel(this->CutFileName(m_DiaporamaCurrentIndex));
   m_Widget->Refresh();
-  m_Widget->Show();
-
+  m_Widget->Show(); 
 }
+
 void
 ViewerViewGUI
 ::DiaporamaNext()
