@@ -235,8 +235,8 @@ ListSampleGenerator<TImage, TVectorData>
   m_ClassesSize.clear();
 
   //Compute pixel area:
-  typename ImageType::Pointer image = const_cast<ImageType*>(this->GetInput());
-  double                      pixelArea = vcl_abs(image->GetSpacing()[0] * image->GetSpacing()[1]);
+  typename ImageType::Pointer image = const_cast<ImageType*> (this->GetInput());
+  double pixelArea = vcl_abs(image->GetSpacing()[0] * image->GetSpacing()[1]);
 
   typename VectorDataType::ConstPointer vectorData = this->GetInputVectorData();
   TreeIteratorType itVector(vectorData->GetDataTree());
@@ -245,26 +245,34 @@ ListSampleGenerator<TImage, TVectorData>
     {
     if (itVector.Get()->IsPolygonFeature())
       {
-      m_ClassesSize[itVector.Get()->GetFieldAsInt(m_ClassKey)] +=
-        itVector.Get()->GetPolygonExteriorRing()->GetArea() / pixelArea; // in pixel
+      m_ClassesSize[itVector.Get()->GetFieldAsInt(m_ClassKey)] += itVector.Get()->GetPolygonExteriorRing()->GetArea()
+          / pixelArea; // in pixel
       }
     ++itVector;
     }
 
-  std::map<ClassLabelType, double>::const_iterator itmap = m_ClassesSize.begin();
-  double                                           minSize = itmap->second;
-  ++itmap;
-  while (itmap != m_ClassesSize.end())
+  if (!m_ClassesSize.empty())
     {
-    if (minSize > itmap->second)
-      {
-      minSize = itmap->second;
-      }
+    std::map<ClassLabelType, double>::const_iterator itmap = m_ClassesSize.begin();
+    double minSize = itmap->second;
     ++itmap;
-    }
+    while (itmap != m_ClassesSize.end())
+      {
+      if (minSize > itmap->second)
+        {
+        minSize = itmap->second;
+        }
+      ++itmap;
+      }
 
-  m_ClassMinSize = minSize;
-  m_NumberOfClasses = m_ClassesSize.size();
+    m_ClassMinSize = minSize;
+    m_NumberOfClasses = m_ClassesSize.size();
+    }
+  else
+    {
+    m_ClassMinSize = 0;
+    m_NumberOfClasses = 0;
+    }
 }
 
 template <class TImage, class TVectorData>
