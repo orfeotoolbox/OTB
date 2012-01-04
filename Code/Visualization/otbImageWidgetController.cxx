@@ -35,6 +35,12 @@ void ImageWidgetController::AddActionHandler(ActionHandlerType * handler)
   m_ActionHandlersList->PushBack(handler);
 }
 
+void ImageWidgetController::InsertActionHandler(const unsigned int id, ActionHandlerType * handler)
+{
+  // Insert the handler to the specified index in the list
+  m_ActionHandlersList->Insert(m_ActionHandlersList->Begin()+id, handler);
+}
+
 void ImageWidgetController::RemoveActionHandler(unsigned int index)
 {
   // Remove the given handler

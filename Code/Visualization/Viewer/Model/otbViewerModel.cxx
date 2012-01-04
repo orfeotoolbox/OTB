@@ -555,12 +555,58 @@ ViewerModel
   VisuModelPointerType leftRenderModel        = m_ObjectTrackedList.at(leftChoice-1).pRendering;
 
   //Get the views related to the choosen images
-  VisuViewPointerType  pRightVisuView         = m_ObjectTrackedList.at(rightChoice-1).pVisuView; ;
+  VisuViewPointerType  pRightVisuView         = m_ObjectTrackedList.at(rightChoice-1).pVisuView;
   VisuViewPointerType  pLeftVisuView          = m_ObjectTrackedList.at(leftChoice-1).pVisuView;
 
   //Pixel View
   PixelDescriptionModelPointerType rightPixelModel = m_ObjectTrackedList.at(rightChoice-1).pPixelModel;
   PixelDescriptionModelPointerType leftPixelModel  = m_ObjectTrackedList.at(leftChoice-1).pPixelModel;
+
+/*
+  pLeftVisuView->GetScrollWidget()->SetIdentifier("Scroll_l");
+  pLeftVisuView->GetFullWidget()->SetIdentifier("Full_l");
+  pLeftVisuView->GetZoomWidget()->SetIdentifier("Zoom_l");
+
+  pRightVisuView->GetScrollWidget()->SetIdentifier("Scroll_r");
+  pRightVisuView->GetFullWidget()->SetIdentifier("Full_r");
+  pRightVisuView->GetZoomWidget()->SetIdentifier("Zoom_r");
+
+
+  leftController->RemoveActionHandler(3);
+  rightController->RemoveActionHandler(3);
+
+  // Add the change scaled handler
+  ChangeScaleHandlerType::Pointer rightChangeScaleHandler =ChangeScaleHandlerType::New();
+  rightChangeScaleHandler->SetModel(rightRenderModel );
+  rightChangeScaleHandler->SetView(pLeftVisuView);
+  rightChangeScaleHandler->SetView2(pRightVisuView);
+
+  ChangeScaleHandlerType::Pointer leftChangeScaleHandler =ChangeScaleHandlerType::New();
+  leftChangeScaleHandler->SetModel(leftRenderModel );
+  leftChangeScaleHandler->SetView(pRightVisuView);
+  leftChangeScaleHandler->SetView2(pLeftVisuView);
+
+  rightController->AddActionHandler( leftChangeScaleHandler);
+  leftController->AddActionHandler(rightChangeScaleHandler);
+
+  // Add the change scaled handler
+  ChangeScaleHandlerType::Pointer rChangeScaleHandler =ChangeScaleHandlerType::New();
+  rChangeScaleHandler->SetModel(leftRenderModel );
+  rChangeScaleHandler->SetView(pLeftVisuView);
+
+  ChangeScaleHandlerType::Pointer lChangeScaleHandler =ChangeScaleHandlerType::New();
+  lChangeScaleHandler->SetModel(rightRenderModel );
+  lChangeScaleHandler->SetView(pRightVisuView);
+
+  rightController->AddActionHandler( lChangeScaleHandler);
+  leftController->AddActionHandler(rChangeScaleHandler);
+
+*/
+
+
+
+
+
 
   // Add the resizing handler
   ResizingHandlerType::Pointer rightResizingHandler = ResizingHandlerType::New();
@@ -602,17 +648,22 @@ ViewerModel
   rightController->AddActionHandler( leftChangeHandler);
   leftController->AddActionHandler(rightChangeHandler);
 
+
   // Add the change scaled handler
   ChangeScaleHandlerType::Pointer rightChangeScaleHandler =ChangeScaleHandlerType::New();
   rightChangeScaleHandler->SetModel(rightRenderModel );
   rightChangeScaleHandler->SetView(pLeftVisuView);
+  rightChangeScaleHandler->SetViewToUpdate(pRightVisuView);
 
   ChangeScaleHandlerType::Pointer leftChangeScaleHandler =ChangeScaleHandlerType::New();
   leftChangeScaleHandler->SetModel(leftRenderModel );
   leftChangeScaleHandler->SetView(pRightVisuView);
+  leftChangeScaleHandler->SetViewToUpdate(pLeftVisuView);
 
-  rightController->AddActionHandler( leftChangeScaleHandler);
-  leftController->AddActionHandler(rightChangeScaleHandler);
+  // This handler has to be set before the classical zoom handler of
+  // the ImageView to avoid confusion
+  rightController->InsertActionHandler(0, leftChangeScaleHandler);
+  leftController->InsertActionHandler(0, rightChangeScaleHandler);
 
  //Pixel Description Handling--
   PixelDescriptionActionHandlerType::Pointer rightPixelActionHandler = PixelDescriptionActionHandlerType::New();
@@ -625,8 +676,8 @@ ViewerModel
   leftPixelActionHandler->SetModel(leftPixelModel);
   leftPixelActionHandler->SetOffset(offset);
 
-  rightController->AddActionHandler(leftPixelActionHandler );
-  leftController->AddActionHandler(rightPixelActionHandler);
+  //rightController->AddActionHandler(leftPixelActionHandler );
+  //leftController->AddActionHandler(rightPixelActionHandler);
 
 }
 
