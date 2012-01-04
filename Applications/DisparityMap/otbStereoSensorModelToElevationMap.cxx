@@ -158,8 +158,8 @@ private:
    SetDocExampleParameterValue("sec", "sensor_stereo_right.tif");
    SetDocExampleParameterValue("out", "StereoSensorModelToElevationMap.tif");
    SetDocExampleParameterValue("elev", "dem");
-   SetDocExampleParameterValue("elev.dem.path", "dem");
-   SetDocExampleParameterValue("elev.dem.geoid", "egm96.grd");
+   SetDocExampleParameterValue("elev.dem.path", "DEM_srtm");
+   SetDocExampleParameterValue("elev.dem.geoid", "DEM_srtm/egm96.grd");
   }
 
   void DoUpdateParameters()
