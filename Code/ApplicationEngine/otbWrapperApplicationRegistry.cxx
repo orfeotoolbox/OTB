@@ -17,6 +17,7 @@
  =========================================================================*/
 #include "otbWrapperApplicationRegistry.h"
 #include "itksys/SystemTools.hxx"
+#include <iterator>
 
 namespace otb
 {
