@@ -193,4 +193,3 @@ ViewerController
 }
 
 } // end namespace otb
-

@@ -35,10 +35,10 @@ class AutoScaleActionHandler
 {
 public:
   /** Standard class typedefs */
-  typedef AutoScaleActionHandler       Self;
-  typedef ImageWidgetActionHandler          Superclass;
-  typedef itk::SmartPointer<Self>           Pointer;
-  typedef itk::SmartPointer<const Self>     ConstPointer;
+  typedef AutoScaleActionHandler        Self;
+  typedef ImageWidgetActionHandler      Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
   
   /** Method for creation through the object factory */
   itkNewMacro(Self);
@@ -47,8 +47,8 @@ public:
   itkTypeMacro(AutoScaleActionHandler, ImageWidgetActionHandler);
 
   /** Preview Typedef typedefs */
-  typedef TWidgetType                         WidgetType;
-  typedef typename WidgetType::Pointer        WidgetPointerType;
+  typedef TWidgetType                  WidgetType;
+  typedef typename WidgetType::Pointer WidgetPointerType;
 
    /** Handle widget resizing
    * \param widgetId The id of the resized widget
@@ -99,5 +99,3 @@ private:
 }; // end class
 } // end namespace otb
 #endif
-
-

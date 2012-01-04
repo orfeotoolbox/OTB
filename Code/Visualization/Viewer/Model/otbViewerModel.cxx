@@ -114,7 +114,9 @@ ViewerModel
 
 void
 ViewerModel
-::GetJPEG2000ResolutionAndInformations(const std::string & filepath, std::vector<unsigned int>& res, std::vector<std::string> & desc)
+::GetJPEG2000ResolutionAndInformations(const std::string & filepath, 
+                                       std::vector<unsigned int>& res, 
+                                       std::vector<std::string> & desc)
 {
 #ifdef OTB_USE_JPEG2000
   if( !this->IsJPEG2000File(filepath) )
@@ -185,7 +187,7 @@ ViewerModel
                                     reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1] );
     if( maxSize > 512 )
       {
-      shrinkFactor = static_cast<unsigned int>( vcl_floor( static_cast<double>(maxSize)/static_cast<double>(256) + 0.5) );
+      shrinkFactor = static_cast<unsigned int>( vcl_floor( static_cast<double>(maxSize)/256. + 0.5) );
       }
    
     shrinker->SetShrinkFactor(shrinkFactor);
@@ -371,7 +373,9 @@ ViewerModel
 ViewerModel
 ::WidgetControllerPointerType
 ViewerModel
-::BuiltController(VisuModelPointerType modelRenderingLayer, VisuViewPointerType visuView, PixelDescriptionModelPointerType pixelModel)
+::BuiltController(VisuModelPointerType modelRenderingLayer, 
+                  VisuViewPointerType visuView, 
+                  PixelDescriptionModelPointerType pixelModel)
 {
   WidgetControllerPointerType controller = WidgetControllerType::New();
 
@@ -384,7 +388,7 @@ ViewerModel
     // Add the change scaled region handler
   ChangeScaledRegionHandlerType::Pointer changeScaledHandler =ChangeScaledRegionHandlerType::New();
   changeScaledHandler->SetModel(modelRenderingLayer);
-  changeScaledHandler->SetView(visuView);
+ changeScaledHandler->SetView(visuView);
   controller->AddActionHandler(changeScaledHandler);
 
   // Add the change extract region handler
@@ -562,52 +566,6 @@ ViewerModel
   PixelDescriptionModelPointerType rightPixelModel = m_ObjectTrackedList.at(rightChoice-1).pPixelModel;
   PixelDescriptionModelPointerType leftPixelModel  = m_ObjectTrackedList.at(leftChoice-1).pPixelModel;
 
-/*
-  pLeftVisuView->GetScrollWidget()->SetIdentifier("Scroll_l");
-  pLeftVisuView->GetFullWidget()->SetIdentifier("Full_l");
-  pLeftVisuView->GetZoomWidget()->SetIdentifier("Zoom_l");
-
-  pRightVisuView->GetScrollWidget()->SetIdentifier("Scroll_r");
-  pRightVisuView->GetFullWidget()->SetIdentifier("Full_r");
-  pRightVisuView->GetZoomWidget()->SetIdentifier("Zoom_r");
-
-
-  leftController->RemoveActionHandler(3);
-  rightController->RemoveActionHandler(3);
-
-  // Add the change scaled handler
-  ChangeScaleHandlerType::Pointer rightChangeScaleHandler =ChangeScaleHandlerType::New();
-  rightChangeScaleHandler->SetModel(rightRenderModel );
-  rightChangeScaleHandler->SetView(pLeftVisuView);
-  rightChangeScaleHandler->SetView2(pRightVisuView);
-
-  ChangeScaleHandlerType::Pointer leftChangeScaleHandler =ChangeScaleHandlerType::New();
-  leftChangeScaleHandler->SetModel(leftRenderModel );
-  leftChangeScaleHandler->SetView(pRightVisuView);
-  leftChangeScaleHandler->SetView2(pLeftVisuView);
-
-  rightController->AddActionHandler( leftChangeScaleHandler);
-  leftController->AddActionHandler(rightChangeScaleHandler);
-
-  // Add the change scaled handler
-  ChangeScaleHandlerType::Pointer rChangeScaleHandler =ChangeScaleHandlerType::New();
-  rChangeScaleHandler->SetModel(leftRenderModel );
-  rChangeScaleHandler->SetView(pLeftVisuView);
-
-  ChangeScaleHandlerType::Pointer lChangeScaleHandler =ChangeScaleHandlerType::New();
-  lChangeScaleHandler->SetModel(rightRenderModel );
-  lChangeScaleHandler->SetView(pRightVisuView);
-
-  rightController->AddActionHandler( lChangeScaleHandler);
-  leftController->AddActionHandler(rChangeScaleHandler);
-
-*/
-
-
-
-
-
-
   // Add the resizing handler
   ResizingHandlerType::Pointer rightResizingHandler = ResizingHandlerType::New();
   rightResizingHandler->SetModel(rightRenderModel);
@@ -676,9 +634,8 @@ ViewerModel
   leftPixelActionHandler->SetModel(leftPixelModel);
   leftPixelActionHandler->SetOffset(offset);
 
-  //rightController->AddActionHandler(leftPixelActionHandler );
-  //leftController->AddActionHandler(rightPixelActionHandler);
-
+  rightController->AddActionHandler(leftPixelActionHandler );
+  leftController->AddActionHandler(rightPixelActionHandler);
 }
 
 /**
@@ -688,14 +645,13 @@ void
 ViewerModel
 ::InitializeImageViewController(unsigned int selectedItem)
 {
-  VisuModelPointerType  render = m_ObjectTrackedList.at(selectedItem-1).pRendering;
-  VisuViewPointerType   view   = m_ObjectTrackedList.at(selectedItem-1).pVisuView;
-  PixelDescriptionModelPointerType pixelModel = m_ObjectTrackedList.at(selectedItem-1).pPixelModel;
+  _ObjectsTracked & objTracked = m_ObjectTrackedList.at(selectedItem-1);
+  VisuModelPointerType             render     = objTracked.pRendering;
+  VisuViewPointerType              view       = objTracked.pVisuView;
+  PixelDescriptionModelPointerType pixelModel = objTracked.pPixelModel;
 
-  m_ObjectTrackedList.at(selectedItem-1).pWidgetController = this->BuiltController(render, view, pixelModel);
-  m_ObjectTrackedList.at(selectedItem-1).pVisuView->SetController(m_ObjectTrackedList.at(selectedItem-1).pWidgetController);
+  objTracked.pWidgetController = this->BuiltController(render, view, pixelModel);
+  view->SetController(m_ObjectTrackedList.at(selectedItem-1).pWidgetController);
 }
 
 }
-
-

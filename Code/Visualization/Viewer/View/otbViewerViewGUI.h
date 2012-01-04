@@ -59,10 +59,10 @@ namespace otb
 {
 public:
   /** Standard typedefs */
-  typedef ViewerViewGUI                  Self;
-  typedef itk::Object          Superclass;
-  typedef itk::SmartPointer<Self>                    Pointer;
-  typedef itk::SmartPointer<const Self>              ConstPointer;
+  typedef ViewerViewGUI                 Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -74,48 +74,49 @@ public:
   typedef ViewerControllerInterface::Pointer  ViewerControllerInterfacePointerType;
 
   /** Model*/
-  typedef ViewerModel                                 ViewerModelType;
-  typedef ViewerModelType::VisuModelType              VisuModelType;  //rendreing Image
-  typedef ViewerModelType::VisuModelPointerType       VisuModelPointerType;  //rendreing Image
-  typedef ViewerModelType::PixelDescriptionModelType  PixelDescriptionModelType;  //rendreing Image
-  typedef ViewerModelType::LayerType::HistogramType   HistogramType;
-  typedef ViewerModelType::OffsetType                 OffsetType;
-  typedef ViewerModelType::RenderingFunctionType      RenderingFunctionType;
+  typedef ViewerModel                                    ViewerModelType;
+  typedef ViewerModelType::VisuModelType                 VisuModelType;
+  typedef ViewerModelType::VisuModelPointerType          VisuModelPointerType;
+  typedef ViewerModelType::PixelDescriptionModelType     PixelDescriptionModelType;
+  typedef ViewerModelType::LayerType::HistogramType      HistogramType;
+  typedef ViewerModelType::OffsetType                    OffsetType;
+  typedef ViewerModelType::RenderingFunctionType         RenderingFunctionType;
   typedef ViewerModelType::StandardRenderingFunctionType StandardRenderingFunctionType;
-  typedef StandardRenderingFunctionType::ChannelListType          ChannelListType;
-  typedef ImageView<VisuModelType>                                VisuViewType;
-  typedef VisuViewType::Pointer                                   VisuViewPointerType;
+  typedef StandardRenderingFunctionType::ChannelListType ChannelListType;
+  typedef ImageView<VisuModelType>                       VisuViewType;
+  typedef VisuViewType::Pointer                          VisuViewPointerType;
+  typedef ViewerModelType::_ObjectsTracked               ObjectsTrackedType;
 
   /* Method to display the Widget : Packed or Splitted */
-  typedef PackedWidgetManager                                     PackedWidgetManagerType;
-  typedef PackedWidgetManagerType::Pointer                        PackedWidgetManagerPointer;
-  typedef SplittedWidgetManager                                   SplittedWidgetManagerType;
-  typedef SplittedWidgetManagerType::Pointer                      SplittedWidgetManagerPointer;
+  typedef PackedWidgetManager                PackedWidgetManagerType;
+  typedef PackedWidgetManagerType::Pointer   PackedWidgetManagerPointer;
+  typedef SplittedWidgetManager              SplittedWidgetManagerType;
+  typedef SplittedWidgetManagerType::Pointer SplittedWidgetManagerPointer;
 
   /** Widget for the preview*/
-  typedef ImageWidget<>                                           ImageWidgetType;
-  typedef ImageWidgetType::SizeType                               SizeType;
-  typedef ImageWidgetType::Pointer                                ImageWidgetPointerType;
+  typedef ImageWidget<>             ImageWidgetType;
+  typedef ImageWidgetType::SizeType SizeType;
+  typedef ImageWidgetType::Pointer  ImageWidgetPointerType;
 
   /** Curves 2D widget */
-  typedef Curves2DWidget                                           CurvesWidgetType;
-  typedef CurvesWidgetType::Pointer                                CurvesWidgetPointerType;
-  typedef HistogramCurve<HistogramType>                            HistogramCurveType;
-  typedef HistogramCurveType::Pointer                              HistogramCurvePointerType;
+  typedef Curves2DWidget                CurvesWidgetType;
+  typedef CurvesWidgetType::Pointer     CurvesWidgetPointerType;
+  typedef HistogramCurve<HistogramType> HistogramCurveType;
+  typedef HistogramCurveType::Pointer   HistogramCurvePointerType;
 
   /** Pixel Description View*/
-  typedef PixelDescriptionView<PixelDescriptionModelType>         PixelDescriptionViewType;
+  typedef PixelDescriptionView<PixelDescriptionModelType> PixelDescriptionViewType;
 
   /** vector to store the status of images : diplayed or not displayed*/
   //---> Note : if the packed view is selected : 2nd boolean false, Splitted view : 2nd boolean true
-  typedef std::pair<bool, bool>                                   PairType;
-  typedef std::pair<unsigned int , unsigned int>                   UIntPairType;
-  typedef std::vector<PairType>                                   BoolVector;
-  typedef std::vector<UIntPairType>                               UIntPairVector;
+  typedef std::pair<bool, bool>                  PairType;
+  typedef std::pair<unsigned int , unsigned int> UIntPairType;
+  typedef std::vector<PairType>                  BoolVector;
+  typedef std::vector<UIntPairType>              UIntPairVector;
 
   /** list in order to store the diplay manager*/
-  typedef WidgetManager                                         WidgetManagerType;
-  typedef ObjectList<WidgetManagerType>                           WidgetManagerList;
+  typedef WidgetManager                 WidgetManagerType;
+  typedef ObjectList<WidgetManagerType> WidgetManagerList;
 
 
   /** Method to set the controller*/
@@ -200,44 +201,41 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   /** Pointer to the model */
-  ViewerModel::Pointer               m_ViewerModel;
+  ViewerModel::Pointer m_ViewerModel;
 
   /** Pointer to the controller */
   ViewerControllerInterface::Pointer m_ViewerController;
 
   //
-  BoolVector                                     m_DisplayStatusList;
-  std::vector<bool>                              m_LinkedDisplayStatusList;
-  UIntPairVector                                 m_LinkedImageList;
-  std::string                                    m_TemplateViewerName;
-  std::string                                    m_DisplayedLabel;
-  std::string                                    m_UndisplayedLabel;
+  BoolVector        m_DisplayStatusList;
+  std::vector<bool> m_LinkedDisplayStatusList;
+  UIntPairVector    m_LinkedImageList;
+  std::string       m_TemplateViewerName;
+  std::string       m_DisplayedLabel;
+  std::string       m_UndisplayedLabel;
 
   //Widget
-  WidgetManagerList::Pointer                     m_WidgetManagerList;
-  WidgetManagerList::Pointer                     m_LinkWidgetManagerList;
+  WidgetManagerList::Pointer m_WidgetManagerList;
+  WidgetManagerList::Pointer m_LinkWidgetManagerList;
 
   //SlideShow widget
-  PackedWidgetManagerPointer               m_Widget;
-
-  VisuViewPointerType                            m_VisuView;
+  PackedWidgetManagerPointer m_Widget;
+  VisuViewPointerType        m_VisuView;
 
   /**ImageWidget for my preview*/
-  ImageWidgetPointerType                         m_PreviewWidget;
+  ImageWidgetPointerType m_PreviewWidget;
 
 
   /** Histogram */
-  StandardRenderingFunctionType::Pointer        m_pRenderingFunction;
   HistogramCurveType::ColorType                 m_Red;
   HistogramCurveType::ColorType                 m_Green;
   HistogramCurveType::ColorType                 m_Blue;
   HistogramCurveType::ColorType                 m_Grey;
 
   /** Store the component number of a pixel*/
-  unsigned int                                  m_DiaporamaCurrentIndex;
+  unsigned int m_DiaporamaCurrentIndex;
 
 };
 }// End namespace otb
 
 #endif
-

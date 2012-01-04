@@ -82,9 +82,9 @@ public:
 
   /** typedef support for layers */
   typedef ImageLayer<ImageType, ViewerImageType> LayerType;
-  typedef LayerType::Pointer                          LayerPointerType;
+  typedef LayerType::Pointer                      LayerPointerType;
 
-  typedef ImageLayerGenerator<LayerType>                                     LayerGeneratorType;
+  typedef ImageLayerGenerator<LayerType>                                          LayerGeneratorType;
   typedef LayerGeneratorType::Pointer                                             LayerGeneratorPointerType;
   typedef LayerGeneratorType::RenderingFunctionType                               RenderingFunctionType;
   typedef Function::StandardRenderingFunction<ImageType::PixelType, RGBPixelType> StandardRenderingFunctionType;
@@ -142,13 +142,13 @@ public:
     std::string                       pFileName;
   };
 
-  typedef struct _ObjectsTracked                                          ObjectsTracked;
+  typedef struct _ObjectsTracked ObjectsTracked;
 
   /**
    * List of objectTracked, we cannot use ObjectList
    * for struct cause don't implenement Register method
    */
-  typedef std::vector<ObjectsTracked>                                    ObjectTrackedList;
+  typedef std::vector<ObjectsTracked> ObjectTrackedList;
 
   /** Get the unique instanc1e of the model */
   static Pointer GetInstance();
@@ -164,10 +164,11 @@ public:
   virtual void InitializeImageViewController(unsigned int selectedItem);
 
   /** Method needed to Get the list of componenets stored*/
-   ObjectTrackedList GetObjectList()
+   const ObjectTrackedList & GetObjectList() const
     {
       return m_ObjectTrackedList;
     }
+
 
    /** Boolean Flags */
    itkGetMacro(HasImageOpened, bool);
@@ -180,7 +181,9 @@ public:
   std::vector<unsigned int> GetJPEG2000Resolution(const std::string & filepath);
   // If the file is JPEG2000, the function will find the available
   // resolutions and informations
-  void GetJPEG2000ResolutionAndInformations(const std::string & filepath, std::vector<unsigned int>& res, std::vector<std::string> & desc);
+  void GetJPEG2000ResolutionAndInformations(const std::string & filepath, 
+                                            std::vector<unsigned int>& res, 
+                                            std::vector<std::string> & desc);
 
 protected:
   /** This is protected for the singleton. Use GetInstance() instead. */
@@ -194,7 +197,9 @@ protected:
 
   /** Built Visu & Controller*/
   virtual VisuViewPointerType BuiltVisu(VisuModelPointerType pRendering);
-  virtual WidgetControllerPointerType BuiltController(VisuModelPointerType modelRenderingLayer, VisuViewPointerType visuView , PixelDescriptionModelType::Pointer pixelModel);
+  virtual WidgetControllerPointerType BuiltController(VisuModelPointerType modelRenderingLayer, 
+                                                      VisuViewPointerType visuView , 
+                                                      PixelDescriptionModelType::Pointer pixelModel);
 
 private:
   ViewerModel(const Self&); //purposely not implemented
@@ -217,4 +222,3 @@ private:
 
 }
 #endif
-

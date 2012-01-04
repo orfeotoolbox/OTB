@@ -32,32 +32,32 @@ class ITK_EXPORT  ViewerControllerInterface
 {
 public:
   /** Standard class typedefs */
-  typedef ViewerControllerInterface Self;
-  typedef itk::ProcessObject                    Superclass;
-  typedef itk::SmartPointer<Self>               Pointer;
-  typedef itk::SmartPointer<const Self>         ConstPointer;
+  typedef ViewerControllerInterface     Self;
+  typedef itk::ProcessObject            Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
   
 
-  typedef ViewerModel              ModelType;
-  typedef ModelType::VisuModelType             VisuModelType;
-  typedef ModelType::VisuModelPointerType      VisuModelPointerType;
-  typedef ModelType::ImageType                 ImageType;
-  typedef ModelType::ImagePointerType          ImagePointerType;
-  typedef ModelType::OffsetType                OffsetType;
+  typedef ViewerModel                     ModelType;
+  typedef ModelType::VisuModelType        VisuModelType;
+  typedef ModelType::VisuModelPointerType VisuModelPointerType;
+  typedef ModelType::ImageType            ImageType;
+  typedef ModelType::ImagePointerType     ImagePointerType;
+  typedef ModelType::OffsetType           OffsetType;
 
 
 /** NewVisu */
-  typedef ImageWidgetController                VisuControllerType;
-  typedef VisuControllerType::Pointer          VisuControllerPointerType;
+  typedef ImageWidgetController           VisuControllerType;
+  typedef VisuControllerType::Pointer     VisuControllerPointerType;
   
-  typedef ObjectList<VisuControllerType>       VisuControllerListType;
-  typedef VisuControllerListType::Pointer      VisuControllerListPointerType;
+  typedef ObjectList<VisuControllerType>  VisuControllerListType;
+  typedef VisuControllerListType::Pointer VisuControllerListPointerType;
   
-  typedef ImageWidgetController                WidgetControllerType;
-  typedef WidgetControllerType::Pointer        WidgetControllerPointerType;
+  typedef ImageWidgetController           WidgetControllerType;
+  typedef WidgetControllerType::Pointer   WidgetControllerPointerType;
   
-  typedef ImageWidget<>                        WidgetType;
-  typedef WidgetType::Pointer                  VisuWidgetPointerType;
+  typedef ImageWidget<>                   WidgetType;
+  typedef WidgetType::Pointer             VisuWidgetPointerType;
 
   /** Standard type macros */
   itkTypeMacro(ViewerControllerInterface, Superclass);
