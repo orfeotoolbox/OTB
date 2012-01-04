@@ -20,8 +20,7 @@ set( SRCS
 add_executable(otbApplicationLauncherCommandLine ${SRCS})
 target_link_libraries(otbApplicationLauncherCommandLine
                        OTBWrapperCommandLine
-                       OTBApplicationEngine
-                       ${QT_LIBRARIES})
+                       OTBApplicationEngine)
 
 install(TARGETS otbApplicationLauncherCommandLine
         RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR_CM24}
