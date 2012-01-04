@@ -35,9 +35,9 @@ namespace otb
    *
    * This region splitter tries to adapt to the tiling scheme of the
    * input image using the TileHint parameter. It aims at
-   * synchronizing the streaming with the tiling scheme so as to avoid
-   * reading the same tile multiple times in the standard pixel-based
-   * processing scheme.
+   * synchronizing the streaming with the tiling scheme (in a JPEG
+   * 2000 situation for example) so as to avoid reading the same tile
+   * multiple times in the standard pixel-based processing scheme.
    *
    * If the requested number of splits is lower than the number of
    * tiles in the image region, then the splitter will derive splits
@@ -48,7 +48,7 @@ namespace otb
    * changing to a new tile, ensuring the former tile will be only
    * read once.
    *
-   * If the TileHing is empty, or is VImageDimension is not 2, the
+   * If the TileHint is empty, or is VImageDimension is not 2, the
    * splitter falls back to the behaviour of
    * otb::ImageRegionSquareTileSplitter.
    *
@@ -63,7 +63,7 @@ class ITK_EXPORT ImageRegionAdaptativeSplitter : public itk::ImageRegionSplitter
 {
 public:
   /** Standard class typedefs. */
-  typedef ImageRegionAdaptativeSplitter                Self;
+  typedef ImageRegionAdaptativeSplitter             Self;
   typedef itk::ImageRegionSplitter<VImageDimension> Superclass;
   typedef itk::SmartPointer<Self>                   Pointer;
   typedef itk::SmartPointer<const Self>             ConstPointer;
@@ -82,7 +82,7 @@ public:
   {
     return VImageDimension;
   }
-  
+
   /** Index typedef support. An index is used to access pixel values. */
   typedef itk::Index<VImageDimension>        IndexType;
   typedef typename IndexType::IndexValueType IndexValueType;
@@ -101,7 +101,7 @@ public:
 
   /** Get the TileHint parameter */
   itkGetConstReferenceMacro(TileHint, SizeType);
-  
+
   /** Set the ImageRegion parameter */
   itkSetMacro(ImageRegion, RegionType);
 

@@ -14,7 +14,7 @@
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
-   =========================================================================*/
+=========================================================================*/
 #ifndef __otbRAMDrivenAdaptativeStreamingManager_txx
 #define __otbRAMDrivenAdaptativeStreamingManager_txx
 
@@ -60,12 +60,13 @@ RAMDrivenAdaptativeStreamingManager<TImage>::PrepareStreaming( itk::DataObject *
   tileHint[0] = tileHintX;
   tileHint[1] = tileHintY;
 
-  typename otb::ImageRegionAdaptativeSplitter<itkGetStaticConstMacro(ImageDimension)>::Pointer splitter = otb::ImageRegionAdaptativeSplitter<itkGetStaticConstMacro(ImageDimension)>::New();
+  typename otb::ImageRegionAdaptativeSplitter<itkGetStaticConstMacro(ImageDimension)>::Pointer splitter =
+      otb::ImageRegionAdaptativeSplitter<itkGetStaticConstMacro(ImageDimension)>::New();
 
   splitter->SetTileHint(tileHint);
 
   this->m_Splitter = splitter;
-  
+
   this->m_ComputedNumberOfSplits = this->m_Splitter->GetNumberOfSplits(region, nbDivisions);
   otbMsgDevMacro(<< "Number of split : " << this->m_ComputedNumberOfSplits)
   this->m_Region = region;
@@ -74,4 +75,3 @@ RAMDrivenAdaptativeStreamingManager<TImage>::PrepareStreaming( itk::DataObject *
 } // End namespace otb
 
 #endif
-
