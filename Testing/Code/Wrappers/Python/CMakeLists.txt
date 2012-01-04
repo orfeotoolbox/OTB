@@ -53,25 +53,3 @@ add_test( NAME pyTvBug441
                   ${OTB_DATA_ROOT}/Input/stereo_wv2_right.tif
                   ${TEMP}/pyTvBug441Output.tif
                   )
-
-IF(OTB_DATA_USE_LARGEINPUT)                 
-add_test( NAME pyTvOrthoRectification_UTM          
-          COMMAND ${TEST_DRIVER} 
-                  --compare-image 0.0
-                  ${BASELINE}/owTvOrthorectifTest_UTM.tif
-                  ${TEMP}/pyTvOrthorectifTest_UTM.tif
-                  Execute
-                  ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonOrthoRectification.py
-                  ${OTB_DATA_LARGEINPUT_ROOT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
-                  ${TEMP}/pyTvOrthorectifTest_UTM.tif
-                  374100.8
-                  4829184.8
-                  500
-                  500
-                  0.5
-                  -0.5
-                  utm
-                  4
-                  ${INPUTDATA}/DEM/srtm_directory/
-                  )
-ENDIF(OTB_DATA_USE_LARGEINPUT)
