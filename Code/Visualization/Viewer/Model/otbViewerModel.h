@@ -181,8 +181,8 @@ public:
   std::vector<unsigned int> GetJPEG2000Resolution(const std::string & filepath);
   // If the file is JPEG2000, the function will find the available
   // resolutions and informations
-  void GetJPEG2000ResolutionAndInformations(const std::string & filepath, 
-                                            std::vector<unsigned int>& res, 
+  void GetJPEG2000ResolutionAndInformations(const std::string & filepath,
+                                            std::vector<unsigned int>& res,
                                             std::vector<std::string> & desc);
 
 protected:
@@ -197,8 +197,8 @@ protected:
 
   /** Built Visu & Controller*/
   virtual VisuViewPointerType BuiltVisu(VisuModelPointerType pRendering);
-  virtual WidgetControllerPointerType BuiltController(VisuModelPointerType modelRenderingLayer, 
-                                                      VisuViewPointerType visuView , 
+  virtual WidgetControllerPointerType BuiltController(VisuModelPointerType modelRenderingLayer,
+                                                      VisuViewPointerType visuView ,
                                                       PixelDescriptionModelType::Pointer pixelModel);
 
 private:

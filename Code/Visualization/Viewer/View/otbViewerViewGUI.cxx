@@ -1359,7 +1359,7 @@ ViewerViewGUI
   for(unsigned int p = 0; p < tempElementToRemove.size(); p ++ )
     {
     // counter because the size of the list is decreasing after each iteration
-    m_LinkedImageList.erase(m_LinkedImageList.begin()+tempElementToRemove[p] - counter); 
+    m_LinkedImageList.erase(m_LinkedImageList.begin()+tempElementToRemove[p] - counter);
     counter++;
     }
 

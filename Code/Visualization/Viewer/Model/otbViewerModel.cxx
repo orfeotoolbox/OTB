@@ -114,8 +114,8 @@ ViewerModel
 
 void
 ViewerModel
-::GetJPEG2000ResolutionAndInformations(const std::string & filepath, 
-                                       std::vector<unsigned int>& res, 
+::GetJPEG2000ResolutionAndInformations(const std::string & filepath,
+                                       std::vector<unsigned int>& res,
                                        std::vector<std::string> & desc)
 {
 #ifdef OTB_USE_JPEG2000
@@ -373,8 +373,8 @@ ViewerModel
 ViewerModel
 ::WidgetControllerPointerType
 ViewerModel
-::BuiltController(VisuModelPointerType modelRenderingLayer, 
-                  VisuViewPointerType visuView, 
+::BuiltController(VisuModelPointerType modelRenderingLayer,
+                  VisuViewPointerType visuView,
                   PixelDescriptionModelPointerType pixelModel)
 {
   WidgetControllerPointerType controller = WidgetControllerType::New();
