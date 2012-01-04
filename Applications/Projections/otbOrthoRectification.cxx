@@ -193,8 +193,9 @@ private:
     SetParameterDescription("opt.gridspacing", "Resampling is done according to a coordinate mapping grid, whose pixel size is set by this parameter. The closer to the output spacing this parameter is, the more precise will be the ortho-rectified image, but increasing this parameter allows to reduce processing time.");
     MandatoryOff("opt.gridspacing");
 
-    // TODO Doc example parameter settings
-    //SetDocExampleParameterValue("", "");
+    // Doc example parameter settings
+    SetDocExampleParameterValue("io.in", "QB_TOULOUSE_MUL_Extract_500_500.tif");
+    SetDocExampleParameterValue("io.out","QB_Toulouse_ortho.tif");
   }
 
   void DoUpdateParameters()

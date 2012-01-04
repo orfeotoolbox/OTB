@@ -75,7 +75,7 @@ private:
     MandatoryOff("proj");
     
    // Doc example parameter settings
-    SetDocExampleParameterValue("in", "sensor_stereo_left.tif");
+    SetDocExampleParameterValue("in", "QB_TOULOUSE_MUL_Extract_500_500.tif");
     SetDocExampleParameterValue("out", "ImageEnvelope.shp");
   }
 

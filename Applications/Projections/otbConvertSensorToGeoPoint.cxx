@@ -81,6 +81,11 @@ private:
     
     SetParameterRole("output.town", Role_Output );
     SetParameterRole("output.country", Role_Output );
+    
+    // Doc example parameter settings
+    SetDocExampleParameterValue("in","QB_TOULOUSE_MUL_Extract_500_500.tif");
+    SetDocExampleParameterValue("input.idx","200");
+    SetDocExampleParameterValue("input.idy","200");
   }
 
   void DoUpdateParameters()

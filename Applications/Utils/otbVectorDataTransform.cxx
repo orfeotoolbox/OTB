@@ -96,7 +96,8 @@ private:
     SetDefaultParameterFloat("transform.scale", 1.);
 
     // Doc example parameter settings
-    SetDocExampleParameterValue("in", "qb_RoadExtract_easyClassification.shp");
+    SetDocExampleParameterValue("vd", "qb_RoadExtract_easyClassification.shp");
+    SetDocExampleParameterValue("in", "qb_RoadExtract.tif");
     SetDocExampleParameterValue("out", "VectorDataTransform.shp");
     SetDocExampleParameterValue("transform.ro", "5");
   }

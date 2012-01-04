@@ -141,8 +141,8 @@ private:
     SetParameterDescription("ua.mdmdnmf", "Minimum Dispertion Constrained Non Negative Matrix Factorization");
     SetParameterString("ua", "ucls");
     // Doc example parameter settings
-    SetDocExampleParameterValue("in", "hsi_cube.tif");
-    SetDocExampleParameterValue("ie", "endmembers.tif");
+    SetDocExampleParameterValue("in", "cupriteSubHsi.tif");
+    SetDocExampleParameterValue("ie", "cupriteEndmembers.tif");
     SetDocExampleParameterValue("out", "HyperspectralUnmixing.tif double");
     SetDocExampleParameterValue("ua", "ucls");
   }
