@@ -38,12 +38,14 @@ namespace otb
  *    - over segmentation (a GT region paired with a set of MS regions)
  *    - missed (a GT region that doesn't belong to any of the previous instances)
  *    - noise (a MS region that doesn't belong to any of the previous instances)
+ *
  * The corresponding scores are :
  *    - RC : for correct detection
  *    - RF : for over segmentation
  *    - RA : for under segmentation
  *    - RM : for missed regions (only for GT)
  *    - RN : for noise regions (only for MS)
+ *
  * These Hoover scores that are stored in the label maps are computed between 0 (if the region doesn't belong to this kind of instance) and 1.
  *
  * If the user wants to which region labels have been paired, he can set the flag UseExtendedAttributes. The extended attributes contain the
@@ -53,10 +55,12 @@ namespace otb
  *    - ATTRIBUTE_US[_x] (under segmentation) : labels of the corresponding regions of GT / label of the under segmentated region of MS
  *    - ATTRIBUTE_M (missed) : missed region own label (in GT)
  *    - ATTRIBUTE_N (noise) : noise region own label (in MS)
+ *
  * These attributes are handled in a different way than the Hoover scores. The simple presence of an extended attribute in a given region has a
  * meaning, regardless of its value. It is assumed that its value always corresponds to an existing region label. This is why these extended
  * attributes are not reseted but removed before computing Hoover instances.
  * (see Hoover et al., "An experimental comparison of range image segmentation algorithms", IEEE PAMI vol. 18, no. 7, July 1996)
+ * 
  * \sa HooverMatrixFilter
  */
 
@@ -162,19 +166,19 @@ protected:
   /** Re implement the release input method to handle the second input correctly */
   virtual void ReleaseInputs();
   
-  /** ThreadedProcessLabelObject :
+  /** Actions :
    *    - Fill cardinalities of GT regions
    */
   virtual void ThreadedProcessLabelObject( LabelObjectType * labelObject );
   
-  /** BeforeThreadedGenerateData:
+  /** Actions:
    *    - Check matrix size
    *    - Init cardinalities lists
    *    - Fill cardinalities list for MS (GT is done by ThreadedProcessLabelObject)
    */
   virtual void BeforeThreadedGenerateData();
   
-  /** AfterThreadedGenerateData :
+  /** Actions :
    *    - Compute Hoover instances
    */
   virtual void AfterThreadedGenerateData();
@@ -205,11 +209,19 @@ private:
   /** Flag to output additional information in label maps */
   bool m_UseExtendedAttributes;
   
-  /** Average scores for the whole segmentation */
+  /** Average score for correct detection on the whole segmentation */
   AttributesValueType m_MeanRC;
+  
+  /** Average score for over segmentation on the whole segmentation */
   AttributesValueType m_MeanRF;
+  
+  /** Average score for under segmentation on the whole segmentation */
   AttributesValueType m_MeanRA;
+  
+  /** Average score for missed detection on the whole segmentation */
   AttributesValueType m_MeanRM;
+  
+  /** Average score for noise on the whole segmentation */
   AttributesValueType m_MeanRN;
   
 };

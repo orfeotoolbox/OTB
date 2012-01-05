@@ -30,7 +30,7 @@ namespace otb
  * \brief This class produces an image from attributes in a label map
  *
  * This filter is intended to work on AttributesMapLabelObject. The user chooses
- * the attribute to display for each channel. The output image is expected to be
+ * the attributes to display for each channel. The output image is expected to be
  * a vector image.
  */
 
@@ -71,8 +71,10 @@ public:
   typedef TAttributeAccessor          AttributeAccessorType;
   typedef typename AttributeAccessorType::AttributeValueType AttributeValueType;
   
-  /** Get/Set Macro for background value */
+  /** Get macro for background value */
   itkGetConstMacro(BackgroundValue, OutputInternalPixelType);
+  
+  /** Set macro for background value */
   itkSetMacro(BackgroundValue, OutputInternalPixelType);
   
   /** Get the current chosen attributes */
