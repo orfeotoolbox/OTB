@@ -397,7 +397,7 @@ private:
                           " adjacent segmented regions is maximised. When processing an unknown color image (color to label), all "
                           "the present colors are mapped to a continuous label list.\n - The support image method uses a color support "
                           "image to associate an average color to each region.");
-    SetDocLimitations("The segmentation optimal method does not support streaming, and thus large images. The operation color->label "
+    SetDocLimitations("The segmentation optimal method does not support streaming, and thus large images. The operation color to label "
                       "is not implemented for the methods continuous LUT and support image LUT.\n ColorMapping uisng support image is not threaded.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("ImageSVMClassifier");
@@ -485,9 +485,9 @@ private:
 
     // Optimal LUT
     AddChoice("method.optimal","Compute an optimised look-up table");
-    SetParameterDescription("method.optimal","[label->color] Compute an optimal look-up table such that neighbouring labels"
+    SetParameterDescription("method.optimal","[label to color] Compute an optimal look-up table such that neighbouring labels"
                             " in a segmentation are mapped to highly contrasted colors.\n"
-                            "[color->label] Searching all the colors present in the image to compute a continuous label list");
+                            "[color to label] Searching all the colors present in the image to compute a continuous label list");
     AddParameter(ParameterType_Int,"method.optimal.background", "Background label");
     SetParameterDescription("method.optimal.background","Value of the background label");
     SetParameterInt("method.optimal.background", 0);
