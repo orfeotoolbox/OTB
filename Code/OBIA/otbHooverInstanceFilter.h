@@ -60,7 +60,7 @@ namespace otb
  * meaning, regardless of its value. It is assumed that its value always corresponds to an existing region label. This is why these extended
  * attributes are not reseted but removed before computing Hoover instances.
  * (see Hoover et al., "An experimental comparison of range image segmentation algorithms", IEEE PAMI vol. 18, no. 7, July 1996)
- * 
+ *
  * \sa HooverMatrixFilter
  */
 

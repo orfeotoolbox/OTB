@@ -40,7 +40,6 @@
 #include "otbWrapperTypes.h"
 
 
-
 namespace otb
 {
 
