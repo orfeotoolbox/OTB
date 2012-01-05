@@ -24,6 +24,8 @@
 #include "otbRemoteSensingRegion.h"
 #include "otbVectorDataProjectionFilter.h"
 
+#include "otbMacro.h"
+
 namespace otb
 {
 
@@ -270,6 +272,7 @@ ListSampleGenerator<TImage, TVectorData>
     }
   else
     {
+    otbWarningMacro("no polygon found");
     m_ClassMinSize = 0;
     m_NumberOfClasses = 0;
     }
