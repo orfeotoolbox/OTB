@@ -778,15 +778,20 @@ ViewerViewGUI
    oss.str("");
 
    //update band information
-   if(objTracked.pReader->GetOutput()->GetNumberOfComponentsPerPixel()>=3)
+   // Select the current rendering function
+   RenderingFunctionType::Pointer renderer = objTracked.pRenderFunction;
+   
+   ChannelListType channels = renderer->GetChannelList();
+   
+   if( channels.size() == 2 )
      {
-       //FIXME why this is not using the Describe method of the rendering function?
-     // oss<<"RGB Composition: ";
-     // oss<<" Band 1: "<<m_ViewerModel->GetObjectList().at(selectedItem-1).pRenderFunction->GetRedChannelIndex();
-     // oss<<" Band 2: "<<m_ViewerModel->GetObjectList().at(selectedItem-1).pRenderFunction->GetGreenChannelIndex();
-     // oss<<" Band 3: "<<m_ViewerModel->GetObjectList().at(selectedItem-1).pRenderFunction->GetBlueChannelIndex()<<std::endl;
+     oss<<"Displayed channels : R=" << channels[0]+1 << ", G=" << channels[1]+1 << ", B=" << channels[2]+1 << "." << std::endl;
      }
-
+   else if ( channels.size() >= 2 )
+     {
+     oss<<"Displayed channels : R=" << channels[0]+1 << ", G=" << channels[1]+1 << ", B=" << channels[2]+1 << "." << std::endl;
+     }
+   
    guiViewerInformation->insert(oss.str().c_str());
    oss.str("");
  }
@@ -1024,6 +1029,8 @@ ViewerViewGUI
             m_ViewerController->UpdatePhaseChannelOrder(realChoice, imagChoice, selectedItem);
             }
      }
+   // Update image info, to update the colored composition
+   this->UpdateInformation( selectedItem );
  }
 
  void
