@@ -19,6 +19,7 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
+#include "itkMersenneTwisterRandomVariateGenerator.h"
 #include "otbVectorImage.h"
 #include "otbImage.h"
 #include "itkEuclideanDistance.h"
@@ -37,6 +38,7 @@
 #include "otbReliefColormapFunctor.h"
 #include "itkScalarToRGBColormapImageFilter.h"
 #include "otbWrapperTypes.h"
+
 
 
 namespace otb
@@ -346,7 +348,7 @@ private:
     SampleType sample;
     //first sample
 
-
+    itk::Statistics::MersenneTwisterRandomVariateGenerator::Pointer randGen=itk::Statistics::MersenneTwisterRandomVariateGenerator::GetInstance();
     if (maskFlag)
       {
       while (!it.IsAtEnd() && !m_MaskIt .IsAtEnd() && (m_MaskIt.Get() <= 0))
@@ -409,9 +411,7 @@ private:
       {
       for (unsigned int compIndex = 0; compIndex < sampleSize; ++compIndex)
         {
-        initialMeans[compIndex + classIndex * sampleSize] = min[compIndex] + (max[compIndex] - min[compIndex]) * rand()
-            / (RAND_MAX + 1.0);
-
+        initialMeans[compIndex + classIndex * sampleSize] = min[compIndex] + (max[compIndex] - min[compIndex]) * randGen->GetUniformVariate(0.0, 1.0);
         }
       }
     otbAppLogINFO(<<totalSamples <<" samples will be used as estimator input."<<std::endl);
