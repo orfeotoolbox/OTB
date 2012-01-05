@@ -64,8 +64,7 @@ private:
     oss << "will be used to get the prefix (name withtout extensions) of the files to write. ";
     oss << "Three files - prefix.geom, prefix.omd and prefix.ras - will be generated.";
     SetParameterDescription("out", oss.str());
-    SetParameterRole("out", Role_Output);
-    MandatoryOn("out");
+    //MandatoryOn("out");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "QB_Toulouse_Ortho_Elev.tif");
