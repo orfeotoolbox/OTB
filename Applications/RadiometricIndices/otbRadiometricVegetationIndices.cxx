@@ -85,7 +85,7 @@ private:
     SetDescription("Compute radiometric indices based on Red and NIT channels.");
 
     // Documentation
-    SetDocName("Radiometric Vegetation Application");
+    SetDocName("Radiometric Vegetation");
     SetDocLongDescription("This application computes radiometric indices that uses red and NIR channels of the input image. The output image is a multi channel one which each channel is one of the selected index. The channel order is the one of the selected indices.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");

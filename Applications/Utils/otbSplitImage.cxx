@@ -53,7 +53,7 @@ private:
     SetName("SplitImage");
     SetDescription("Split a N multiband image into N images");
 
-    SetDocName("Split Image Application");
+    SetDocName("Split Image");
     SetDocLongDescription("This application splits a N multiband image into N images. The output images filename will be generated from the output one. Thus if the input image has 2 channels, and the user has set ad output outimage.tif, the generated images will be outimage_0.tif and outimage_1.tif");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");

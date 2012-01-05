@@ -63,7 +63,7 @@ private:
     SetDescription("Build a multi-resolution pyramid of the image.");
 
     // Documentation
-    SetDocName("Multi Resolution Pyramid Application");
+    SetDocName("Multi Resolution Pyramid");
     SetDocLongDescription("This application builds a multi-resolution pyramid of the input image.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");

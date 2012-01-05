@@ -116,7 +116,7 @@ private:
     SetName("FineRegistration");
     SetDescription("Estimate disparity map between two images.");
 
-    SetDocName("Fine Registration Application");
+    SetDocName("Fine Registration");
     SetDocLongDescription("Estimate disparity map between two images. Output image contain x offset, y offset and metric value.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");

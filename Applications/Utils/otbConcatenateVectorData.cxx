@@ -49,7 +49,7 @@ private:
     SetName("ConcatenateVectorData");
     SetDescription("Concatenate VectorDatas");
 
-    SetDocName("Concatenate Application");
+    SetDocName("Concatenate");
     SetDocLongDescription("This application concatenate a list of VectorData to produce a unique VectorData as output"
                           "Note that the VectorDatas must be of the same type (Storing polygons only, lines only, or points only)");
     SetDocLimitations("None");

@@ -54,7 +54,7 @@ private:
   {
     SetName("Quicklook");
     SetDescription("Generates a subsampled version of an image extract");
-    SetDocName("Quick Look Application");
+    SetDocName("Quick Look");
     SetDocLongDescription("Generates a subsampled version of an extract of an image defined by ROIStart and ROISize.\n "
                           "This extract is subsampled using the ration OR the output image Size");
     SetDocLimitations("None");

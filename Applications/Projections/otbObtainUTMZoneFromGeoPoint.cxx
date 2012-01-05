@@ -55,7 +55,7 @@ private:
     SetDescription("UTM zone determination from a geographic point.");
 
     // Documentation
-    SetDocName("Obtain UTM Zone From Geo Point Application");
+    SetDocName("Obtain UTM Zone From Geo Point");
     SetDocLongDescription("UTM zone determination from a geographic point.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");

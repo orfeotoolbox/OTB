@@ -59,7 +59,7 @@ private:
     SetDescription("Concatenate a list of images into a single multi channel one.");
 
     // Documentation
-    SetDocName("Images Concatenation Application");
+    SetDocName("Images Concatenation");
     SetDocLongDescription("This application performs images concatenation. It will take the input image list (mono or multi channel) and generate a single multi channel image. The channel order is the one of the list.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");

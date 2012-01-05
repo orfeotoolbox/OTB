@@ -46,7 +46,7 @@ private:
     SetDescription("Set a field in vector data.");
 
     // Documentation
-    SetDocName("Vector data set field Application");
+    SetDocName("Vector data set field");
     SetDocLongDescription("Set a specified field to a specified value on all features of a vector data (Note: doesn't work with KML files yet)");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");

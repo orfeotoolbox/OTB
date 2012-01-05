@@ -70,7 +70,7 @@ private:
     SetDescription("Convert a stereo sensor model to elevation map.");
 
     // Documentation
-    SetDocName("Stereo sensor model to elevation map Application");
+    SetDocName("Stereo sensor model to elevation map");
     SetDocLongDescription("Produce an elevation map from a pair of stereo images along-track by implicit exploration of their epipolar lines.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");

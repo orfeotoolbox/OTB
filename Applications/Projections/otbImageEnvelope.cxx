@@ -53,7 +53,7 @@ private:
     SetDescription("Extracts an image envelope.");
 
     // Documentation
-    SetDocName("Image Envelope Application");
+    SetDocName("Image Envelope");
     SetDocLongDescription("Build a vector data containing the polygon of the image envelope.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");

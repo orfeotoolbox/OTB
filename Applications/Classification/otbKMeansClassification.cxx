@@ -173,7 +173,7 @@ private:
     SetName("KMeansClassification");
     SetDescription("Unsupervised KMeans image classification");
 
-    SetDocName("Unsupervised KMeans image classification Application");
+    SetDocName("Unsupervised KMeans image classification");
     SetDocLongDescription("Performs Unsupervised KMeans image classification.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");

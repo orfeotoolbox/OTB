@@ -70,7 +70,7 @@ private:
     SetName("Rasterization");
     SetDescription("Reproject and Rasterize a Vector Data.");
 
-    SetDocName("Rasterization Application");
+    SetDocName("Rasterization");
     SetDocLongDescription("Reproject and Rasterize a Vector Data.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");

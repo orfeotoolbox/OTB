@@ -63,7 +63,7 @@ private:
     SetName("VectorDataDSValidation");
     SetDescription("Vector data validation based on the fusion of features using Dempster-Shafer evidence theory framework.");
 
-    SetDocName("Vector Data validation Application");
+    SetDocName("Vector Data validation");
     SetDocLongDescription("Vector data validation based on the fusion of features using Dempster-Shafer evidence theory framework.");
     SetDocLimitations("None.");
     SetDocAuthors("OTB-Team");
