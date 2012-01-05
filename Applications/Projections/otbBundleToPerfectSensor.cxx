@@ -56,7 +56,7 @@ private:
     SetDescription("Perform P+XS pansharpening");
 
     // Documentation
-    SetDocName("Bundle to perfect sensor application");
+    SetDocName("Bundle to perfect sensor");
     SetDocLongDescription("This application performs P+XS pansharpening.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");

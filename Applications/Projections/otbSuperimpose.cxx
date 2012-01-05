@@ -57,7 +57,7 @@ private:
     SetDescription("Using available image metadata, project one image onto another one");
 
     // Documentation
-    SetDocName("Superimpose sensor application");
+    SetDocName("Superimpose sensor");
     SetDocLongDescription("This application performs /....");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");

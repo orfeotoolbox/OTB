@@ -57,7 +57,7 @@ private:
     SetDocLongDescription("Sensor to geographic coordinates conversion");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("ConvertCartoToGeoPoint application, otbObtainUTMZoneFromGeoPoint application");
+    SetDocSeeAlso("ConvertCartoToGeoPoint application, otbObtainUTMZoneFromGeoPoint");
   
     AddDocTag(Tags::Geometry);
 

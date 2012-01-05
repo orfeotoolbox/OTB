@@ -49,7 +49,7 @@ private:
     SetDescription("Perform SAR calibration on input complex images");
 
     // Documentation
-    SetDocName("SAR Radiometric calibration application");
+    SetDocName("SAR Radiometric calibration");
     SetDocLongDescription("This application performs SAR calibration on input complex images.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");

@@ -54,7 +54,7 @@ private:
     SetDocLongDescription("This application performs an translation on the input image.\n Parameters of the translation can be set with tx and ty options.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("Translation application");
+    SetDocSeeAlso("Translation");
   
     AddDocTag("Conversion");
     AddDocTag(Tags::Geometry);

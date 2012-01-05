@@ -90,7 +90,7 @@ private:
     oss << "This application allows to ortho-rectify optical images from supported sensors." << std::endl;
     SetDescription(oss.str());
     // Documentation
-    SetDocName("Ortho-rectification application");
+    SetDocName("Ortho-rectification");
     oss.str("");
     oss<<"An inverse sensor model is built from the input image metadata to convert geographical to raw geometry coordinates. ";
     oss<<"This inverse sensor model is then combined with the chosen map projection to build a global coordinate mapping grid. Last, this grid is used to resample using the chosen interpolation algorithm. ";

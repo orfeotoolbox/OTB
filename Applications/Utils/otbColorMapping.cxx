@@ -400,7 +400,7 @@ private:
     SetDocLimitations("The segmentation optimal method does not support streaming, and thus large images. The operation color->label "
                       "is not implemented for the methods continuous LUT and support image LUT.\n ColorMapping uisng support image is not threaded.");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("ImageSVMClassifier application");
+    SetDocSeeAlso("ImageSVMClassifier");
     AddDocTag(Tags::Learning);
 
     // Build lut map

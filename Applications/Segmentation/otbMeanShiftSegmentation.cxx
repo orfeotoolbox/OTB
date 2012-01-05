@@ -49,7 +49,7 @@ private:
     SetDescription("Perform mean shift clustering");
 
     // Documentation
-    SetDocName("Mean Shift segmentation application");
+    SetDocName("Mean Shift segmentation");
     SetDocLongDescription("This application performs mean shift clustering.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");

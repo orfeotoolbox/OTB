@@ -63,7 +63,7 @@ private:
     SetDocLongDescription("This application performs images concatenation. It will take the input image list (mono or multi channel) and generate a single multi channel image. The channel order is the one of the list.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("Rescale application, Convert application");
+    SetDocSeeAlso("Rescale application, Convert");
    
     AddDocTag(Tags::Manip);
     AddDocTag("Concatenation");
