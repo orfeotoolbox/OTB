@@ -75,6 +75,10 @@ ViewerViewGUI
   unsigned int numberOfOpenedImages = m_ViewerController->OpenInputImage(inputFileName);
  //Initialize
   this->Initialize(numberOfOpenedImages);
+
+  // Select the last opened image
+  guiImageList->value( guiImageList->size() );
+  this->SelectAction();
 }
 
 /**
