@@ -145,7 +145,6 @@ private:
     AddParameter(ParameterType_Filename, "out", "Output filename");
     SetParameterDescription("out", "Filename, which contains the performances of the SVM model.");
     MandatoryOff("out");
-    SetParameterRole("out", Role_Output);
     AddParameter(ParameterType_Filename, "svm", "SVM validation filename");
     SetParameterDescription("svm",
                             "SVM model to validate (given by TrainSVMImagesClassification output for instance).");

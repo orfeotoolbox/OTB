@@ -210,7 +210,6 @@ private:
     AddParameter(ParameterType_Filename, "outmeans", "Centroid filename");
     SetParameterDescription("outmeans", "save label centroid in txt file.");
     MandatoryOff("outmeans");
-    SetParameterRole("outmeans", Role_Output);
 
 
     // Doc example parameter settings

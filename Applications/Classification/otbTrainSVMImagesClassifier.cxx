@@ -153,7 +153,6 @@ private:
     SetParameterDescription("io.imstat", "Filename of an XML file containing mean and standard deviation of input images.");
     AddParameter(ParameterType_Filename, "io.out", "Output SVM model");
     SetParameterDescription("io.out", "Output SVM model");
-    SetParameterRole("io.out", Role_Output);
 
     // Elevation
     ElevationParametersHandler::AddElevationParameters(this, "elev");
