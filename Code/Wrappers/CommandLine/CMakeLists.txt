@@ -31,17 +31,21 @@ install(TARGETS otbApplicationLauncherCommandLine
 get_target_property(CLI_OUPUT_DIR otbApplicationLauncherCommandLine RUNTIME_OUTPUT_DIRECTORY)
 
 # What is the path to the applications
-# a MODULE target is always treated as LIBRARY
 set(APPLICATION_BINARY_PATH ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 
 # Generate a script in the build dir, next to the cli launcher
 # Need a two-step process since configure_file don't support permissions
-configure_file( ${CMAKE_SOURCE_DIR}/CMake/otbcli.sh.in
-                ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/otbcli
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts/buildtree)
+configure_file( ${CMAKE_SOURCE_DIR}/CMake/otbcli.sh.buildtree.in
+                ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts/buildtree/otbcli
                 @ONLY )
-file(COPY ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/otbcli
+file(COPY ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts/buildtree/otbcli
      DESTINATION ${CLI_OUPUT_DIR}
      FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)  
 
-install(PROGRAMS ${CLI_OUPUT_DIR}/otbcli
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts/installtree)
+configure_file( ${CMAKE_SOURCE_DIR}/CMake/otbcli.sh.installtree.in
+                ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts/installtree/otbcli
+                @ONLY )
+install(PROGRAMS ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts/installtree/otbcli
         DESTINATION ${OTB_INSTALL_BIN_DIR_CM24})

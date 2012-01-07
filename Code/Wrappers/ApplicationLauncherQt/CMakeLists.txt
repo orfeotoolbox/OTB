@@ -25,12 +25,17 @@ set(APPLICATION_BINARY_PATH ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 
 # Generate a script in the build dir, next to the cli launcher
 # Need a two-step process since configure_file don't support permissions
-configure_file( ${CMAKE_SOURCE_DIR}/CMake/otbgui.sh.in
-                ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/otbgui
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts/buildtree)
+configure_file( ${CMAKE_SOURCE_DIR}/CMake/otbgui.sh.buildtree.in
+                ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts/buildtree/otbgui
                 @ONLY )
 file(COPY ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/otbgui
      DESTINATION ${CLI_OUPUT_DIR}
      FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)  
 
-install(PROGRAMS ${CLI_OUPUT_DIR}/otbgui
+file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts/installtree)
+configure_file( ${CMAKE_SOURCE_DIR}/CMake/otbgui.sh.installtree.in
+                ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts/installtree/otbgui
+                @ONLY )
+install(PROGRAMS ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts/installtree/otbgui
         DESTINATION ${OTB_INSTALL_BIN_DIR_CM24})

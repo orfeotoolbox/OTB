@@ -22,12 +22,6 @@ then
   ITK_AUTOLOAD_PATH=@APPLICATION_BINARY_PATH@:$ITK_AUTOLOAD_PATH
 fi
 
-# works for install tree
-if [ -d $CURRENT_SCRIPT_DIR/../@OTB_INSTALL_APP_DIR_CM24@ ]
-then
-  ITK_AUTOLOAD_PATH=$CURRENT_SCRIPT_DIR/../@OTB_INSTALL_APP_DIR_CM24@:$ITK_AUTOLOAD_PATH
-fi
-
 # export it to make it available to otbApplicationLauncherCommandLine environment
 export ITK_AUTOLOAD_PATH
 
