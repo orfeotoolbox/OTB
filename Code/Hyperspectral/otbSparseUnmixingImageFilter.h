@@ -144,6 +144,9 @@ public:
     return m_NumberOfComponentsRequired;
   }
   itkSetMacro(NumberOfComponentsRequired, unsigned int);
+  
+  itkSetMacro(NumberOfHistogramBins, unsigned int);
+  itkGetMacro(NumberOfHistogramBins, unsigned int);
 
   itkGetConstMacro(AngleList,AngleListType*);
   itkGetConstMacro(WvltFilterList, WvltFilterListType*);
@@ -162,6 +165,7 @@ private:
   void operator=(const Self &); //purposely not implemented
 
   unsigned int         m_NumberOfComponentsRequired;
+  unsigned int         m_NumberOfHistogramBins;
   AngleListPointerType m_AngleList;
 
   WvltFilterListPointerType  m_WvltFilterList;

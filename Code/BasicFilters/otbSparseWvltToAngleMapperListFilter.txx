@@ -53,7 +53,7 @@ const TInputImageList *
 SparseWvltToAngleMapperListFilter< TInputImageList, TOutputSampleList, VNbInputImages >
 ::GetInput ( unsigned int i ) const
 {
-  if ( i < this->GetNumberOfInputs() )
+  if ( i >= this->GetNumberOfInputs() )
   {
     return 0;
   }
@@ -150,6 +150,7 @@ SparseWvltToAngleMapperListFilter< TInputImageList, TOutputSampleList, VNbInputI
       if ( it[i] != this->GetInput(i)->End() )
         iteratorsNotAtEnd = false;
     }
+
     progress.CompletedPixel();
   }
 }
@@ -197,28 +198,48 @@ SparseWvltToAngleMapperListFilter< TInputImageList, TOutputSampleList, VNbInputI
 
   OutputMeasurementVectorType angle;
   angle.Fill( static_cast< OutputValueType >( 0. ) );
-  for ( unsigned int k = 0; k < angle.Size()-1; ++k )
-  {
-    double phase = vcl_acos( it[k].Get() / modulus );
-    angle[k] = phase;
-    modulus *= vcl_sin( phase );
 
-    // FIXME test also if not finite
-    if ( modulus < 1e-5 )
+  if ( NumberOfInputImages == 2 )
+  {
+    if ( it[1].Get() < 0 )
     {
-      while ( ++k < angle.Size() )
-        angle[k] = 0.;
-      return angle;
+      angle[0] = vcl_acos( it[0].Get() / modulus );
     }
-  }
-
-  if ( it[ NumberOfInputImages-1 ].Get() >= 0 )
-  {
-    angle[ angle.Size()-1 ] = vcl_acos( it[ NumberOfInputImages-2 ].Get() / modulus );
+    else
+    {
+      angle[0] = - vcl_acos( it[0].Get() / modulus );
+    }
   }
   else
   {
-    angle[ angle.Size()-1 ] = - vcl_acos( it[ NumberOfInputImages-2 ].Get() / modulus );
+    for ( unsigned int k = 0; k < angle.Size()-1; ++k )
+    {
+      double phase = vcl_acos( it[k].Get() / modulus );
+      angle[k] = phase;
+      modulus *= vcl_sin( phase );
+
+      // FIXME test also if not finite
+      if ( modulus < 1e-5 )
+      {
+        while ( ++k < angle.Size() )
+          angle[k] = 0.;
+        return angle;
+      }
+    }
+
+    /*
+     * With this sign modification, we can put the same
+     * images for all the components and recover the good direction
+     */
+    double sign = NumberOfInputImages == 3 ? -1. : 1. ;
+    if ( it[ NumberOfInputImages-1 ].Get() < 0 )
+    {
+      angle[ angle.Size()-1 ] = sign * vcl_acos( it[ NumberOfInputImages-2 ].Get() / modulus );
+    }
+    else
+    {
+      angle[ angle.Size()-1 ] = - sign * vcl_acos( it[ NumberOfInputImages-2 ].Get() / modulus );
+    }
   }
 
   return angle;

@@ -52,7 +52,7 @@ const TInputImage *
 AngularProjectionSetImageFilter< TInputImage, TOutputImage, TAngleList, TPrecision >
 ::GetInput ( unsigned int i ) const
 {
-  if ( i < this->GetNumberOfInputs() )
+  if ( i >= this->GetNumberOfInputs() )
   {
     return 0;
   }

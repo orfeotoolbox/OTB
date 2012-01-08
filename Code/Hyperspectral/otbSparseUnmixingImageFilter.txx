@@ -36,12 +36,14 @@ SparseUnmixingImageFilter< TInputImage, TOutputImage, VNbInputImage, TPrecision,
   this->SetNthOutput(0, OutputImageListType::New());
 
   m_NumberOfComponentsRequired = 0;
+  m_NumberOfHistogramBins = 100;
   m_AngleList = AngleListType::New();
 
   m_WvltFilterList = WvltFilterListType::New();
   m_WvltFilterList->Resize( NumberOfInputImages );
   for ( unsigned int i = 0; i < NumberOfInputImages; ++i )
   {
+    m_WvltFilterList->SetNthElement(i,WvltFilterType::New());
     m_WvltFilterList->GetNthElement(i)->SetNumberOfDecompositions(2);
     m_WvltFilterList->GetNthElement(i)->SetSubsampleImageFactor(1);
   }
@@ -49,18 +51,7 @@ SparseUnmixingImageFilter< TInputImage, TOutputImage, VNbInputImage, TPrecision,
   m_AngleListFilter = AngleListFilterType::New();
   m_AngleListFilter->SetThresholdValue( 10. );
 
-  /**
-   * The histogram is dedicated to angular value in [-PI, PI]
-   * The histogram is smoothed with 100 bins
-   */
-  m_Histogram = HistogramType::New();
-  HistogramSizeType size;
-  size.Fill(100);
-  MeasurementVectorType theMin (0.);
-  theMin[NumberOfInputImages-2] = -M_PI;
-  MeasurementVectorType theMax (M_PI);
-  m_Histogram->Initialize( size, theMin, theMax );
-
+    m_Histogram = HistogramType::New();
   m_Transformer = TransformFilterType::New();
 }
 
@@ -82,7 +73,7 @@ const TInputImage *
 SparseUnmixingImageFilter< TInputImage, TOutputImage, VNbInputImage, TPrecision, TMotherWaveletOperator >
 ::GetInput ( unsigned int i ) const
 {
-  if ( i < this->GetNumberOfInputs() )
+  if ( i >= this->GetNumberOfInputs() )
   {
     return 0;
   }
@@ -135,8 +126,29 @@ void
 SparseUnmixingImageFilter< TInputImage, TOutputImage, VNbInputImage, TPrecision, TMotherWaveletOperator >
 ::GenerateNumberOfComponentsRequired ()
 {
+  /**
+   * The histogram is dedicated to angular value in [-PI, PI]
+   * The histogram is smoothed with 100 bins (def. value)
+   */
+
+  HistogramSizeType size;
+  size.Fill( m_NumberOfHistogramBins );
+  MeasurementVectorType theMin (0.);
+  theMin[NumberOfInputImages-2] = -M_PI;
+  MeasurementVectorType theMax (M_PI);
+  m_Histogram->Initialize( size, theMin, theMax );
+
   typename InternalSampleListType::Iterator angleIter 
     = m_AngleListFilter->GetOutputSampleList()->Begin();
+
+  if ( m_AngleListFilter->GetOutputSampleList()->Begin() 
+      == m_AngleListFilter->GetOutputSampleList()->End() )
+  {
+    throw itk::ExceptionObject( __FILE__, __LINE__,
+      "The value of threshold is too high so that there is no angle value to consider for unmixing",
+      ITK_LOCATION);
+  }
+
   while ( angleIter != m_AngleListFilter->GetOutputSampleList()->End() )
   {
     if ( !m_Histogram->IncreaseFrequency( angleIter.GetMeasurementVector(), 1 ) )
@@ -144,7 +156,7 @@ SparseUnmixingImageFilter< TInputImage, TOutputImage, VNbInputImage, TPrecision,
 
     ++angleIter;
   }
-
+  
 #if 0
   for ( unsigned int index = 0; index < m_Histogram->GetSize()[0]; ++index )
     std::cerr << index << "\t" << m_Histogram->GetMeasurementVector( index )[0]
@@ -164,17 +176,21 @@ SparseUnmixingImageFilter< TInputImage, TOutputImage, VNbInputImage, TPrecision,
       HistogramIndexType prevIdx = curIdx;
       if ( prevIdx[k] == 0 )
         prevIdx[k] = m_Histogram->GetSize(k)-1;
+      else
+        prevIdx[k] = curIdx[k]-1;
 
 
       HistogramIndexType nextIdx = curIdx;
       if ( static_cast<int>( nextIdx[k] ) == m_Histogram->GetSize(k)-1 )
         nextIdx[k] = 0;
+      else
+        nextIdx[k] = curIdx[k]+1;
 
       double freq_prev = m_Histogram->GetFrequency( prevIdx );
       double freq_cur  = m_Histogram->GetFrequency( curIdx );
       double freq_next = m_Histogram->GetFrequency( nextIdx );
 
-      if ( freq_prev > freq_cur || freq_cur < freq_next )
+      if ( !( freq_prev < freq_cur && freq_cur > freq_next ) )
       {
         isLocalMax = false;
         break;
