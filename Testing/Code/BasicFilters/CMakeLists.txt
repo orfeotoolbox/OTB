@@ -2182,6 +2182,43 @@ ADD_TEST(bfTvFastICAImageFilter
           -inv ${TEMP}/hyTvFastICAImageFilterInv.tif
           -out ${TEMP}/hyTvFastICAImageFilter.tif)
 
+### SparceUnmixing related class
+
+ADD_TEST(bfTuAngularProjectionImageFilterNew
+	${BASICFILTERS_TESTS13}
+	otbAngularProjectionImageFilterNewTest)
+
+#ADD_TEST(bfTvAngularProjectionImageFilter
+#	${BASICFILTERS_TESTS13}
+#		--compare-image ${EPSILON_7}
+#		${INPUTDATA}/xx
+#		${TEMP}/yy
+#		otbAngularProjectionImageFilterTest
+#		-in ${INPUTDATA}/xx ${INPUTDATA}/yy
+#		-out ${TEMP}/zz)
+
+ADD_TEST(bfTuAngularProjectionSetImageFilterNew
+	${BASICFILTERS_TESTS13}
+	otbAngularProjectionSetImageFilterNewTest)
+
+#ADD_TEST(bfTvAngularProjectionSetImageFilter
+#	${BASICFILTERS_TESTS13}
+#		--compare-image ${EPSILON_7} 
+#		${INPUTDATA}/xx
+#		${TEMP}/yy
+#		otbAngularProjectionSetImageFilterTest
+#		-in ${INPUTDATA}/xx ${INPUTDATA}/yy ${INPUTDATA}/zz ${INPUTDATA}/zzz
+#		-out ${TEMP}/zz)
+
+ADD_TEST(bfTuSparseWvltToAngleMapperListFilterNew
+	${BASICFILTERS_TESTS13}
+	otbSparseWvltToAngleMapperListFilterNewTest)
+
+#ADD_TEST(bfTvSparseWvltToAngleMapperListFilter
+#	${BASICFILTERS_TESTS13}
+#	otbSparseWvltToAngleMapperListFilterTest
+#	-in ${INPUTDATA}/xx ${INPUTDATA}/yy 
+#	-th 10)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests14 ~~~~~~~~~~~~~~~~~~~~~~~~~

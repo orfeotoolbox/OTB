@@ -66,4 +66,11 @@ void RegisterTests()
   REGISTER_TEST(otbProjectiveProjectionTestHighSNR);
   REGISTER_TEST(otbConcatenateScalarValueImageFilterNew);
   REGISTER_TEST(otbConcatenateScalarValueImageFilterTest);
+  REGISTER_TEST(otbAngularProjectionImageFilterNew);
+//  REGISTER_TEST(otbAngularProjectionImageFilterTest);
+  REGISTER_TEST(otbAngularProjectionSetImageFilterNew);
+//  REGISTER_TEST(otbAngularProjectionSetImageFilterTest);
+  REGISTER_TEST(otbSparseWvltToAngleMapperListFilterNew);
+//  REGISTER_TEST(otbSparseWvltToAngleMapperListFilterTest);
+
 }

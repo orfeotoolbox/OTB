@@ -152,7 +152,6 @@ public:
     m_UseNormalization = true;
     m_UseVarianceForNormalization = true;
     m_GivenStdDevValues = true;
-    m_UseVarianceForNormalization = true;
     m_StdDevValues = vec;
     this->Modified();
   }

@@ -23,6 +23,7 @@
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_matrix_inverse.h>
+#include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vnl/algo/vnl_generalized_eigensystem.h>
 
 namespace otb
@@ -39,9 +40,30 @@ NAPCAImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTran
   InternalMatrixType Fn;
   vnl_vector<double> vectValPn;
   vnl_symmetric_eigensystem_compute( An, Fn, vectValPn );
-  Fn.inplace_transpose();
+  
+  /* We used normalized PCA */
+  InternalMatrixType valPn ( vectValPn.size(), vectValPn.size(), vnl_matrix_null );
+  for ( unsigned int i = 0; i < valPn.rows(); ++i )
+  {
+    if (  vectValPn[i] > 0. )
+    {
+      valPn(i, i) = 1. / vcl_sqrt( vectValPn[i] );
+    }
+    else if ( vectValPn[i] < 0. )
+    {
+      otbMsgDebugMacro( << "ValPn(" << i << ") neg : " << vectValPn[i] << " taking abs value" );
+      valPn(i, i) = 1. / vcl_sqrt( vcl_abs( vectValPn[i] ) );
+    }
+    else
+    {
+      throw itk::ExceptionObject( __FILE__, __LINE__,
+            "Null Eigen value !!", ITK_LOCATION );
+    }
+  }
+  Fn = Fn * valPn;
 
-  InternalMatrixType Ax = this->GetCovarianceMatrix().GetVnlMatrix();
+  InternalMatrixType Ax 
+    = vnl_matrix_inverse< MatrixElementType > ( this->GetCovarianceMatrix().GetVnlMatrix() );
   InternalMatrixType Aadj = Fn.transpose() * Ax * Fn;
 
   InternalMatrixType Fadj;
@@ -49,7 +71,6 @@ NAPCAImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTran
   vnl_symmetric_eigensystem_compute( Aadj, Fadj, vectValPadj );
 
   InternalMatrixType transf = Fn * Fadj;
-  transf.fliplr();
   transf.inplace_transpose();
 
   if ( this->GetNumberOfPrincipalComponentsRequired()

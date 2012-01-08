@@ -22,6 +22,7 @@
 #include "itkMacro.h"
 
 #include <vnl/vnl_matrix.h>
+#include <vnl/algo/vnl_cholesky.h>
 #include <vnl/algo/vnl_matrix_inverse.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vnl/algo/vnl_generalized_eigensystem.h>
@@ -148,6 +149,7 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
 
   if ( m_UseNormalization )
   {
+    m_Normalizer->SetUseStdDev( true );
     if ( m_GivenStdDevValues )
       m_Normalizer->SetStdDev( this->GetStdDevValues() );
   }
@@ -246,7 +248,7 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
     m_IsTransformationMatrixForward = false;
     if ( m_TransformationMatrix.Rows() == m_TransformationMatrix.Cols() )
       m_TransformationMatrix = vnl_matrix_inverse< MatrixElementType >
-                                ( m_TransformationMatrix.GetTranspose() );
+                                ( m_TransformationMatrix.GetVnlMatrix() );
     else
     {
       vnl_svd< MatrixElementType > invertor ( m_TransformationMatrix.GetVnlMatrix() );
@@ -327,16 +329,57 @@ void
 MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransformation >
 ::GenerateTransformationMatrix ()
 {
-  InternalMatrixType Ax_inv = vnl_matrix_inverse< MatrixElementType > ( m_CovarianceMatrix.GetVnlMatrix() );
+  vnl_cholesky choleskySolver ( m_NoiseCovarianceMatrix.GetVnlMatrix(), 
+                                  vnl_cholesky::estimate_condition );
+  InternalMatrixType Rn = choleskySolver.lower_triangle();
+  InternalMatrixType Rn_inv = vnl_matrix_inverse< MatrixElementType > ( Rn.transpose() );
+  InternalMatrixType C = Rn_inv.transpose() * m_CovarianceMatrix.GetVnlMatrix() * Rn_inv;
+
+  vnl_svd< MatrixElementType > solver ( C );
+  InternalMatrixType U = solver.U();
+  InternalMatrixType valP = solver.W();
+
+  InternalMatrixType transf = Rn_inv * U;
+
+#if 0
+  InternalMatrixType Ax = m_CovarianceMatrix.GetVnlMatrix();
+  InternalMatrixType Ax_inv = vnl_matrix_inverse< MatrixElementType > ( Ax );
   InternalMatrixType An = m_NoiseCovarianceMatrix.GetVnlMatrix();
   InternalMatrixType W = An * Ax_inv;
+#endif
 
+#if 0
+  InternalMatrixType transf;
+  vnl_vector< MatrixElementType > vectValP;
+  vnl_symmetric_eigensystem_compute( W, transf, vectValP );
+
+  InternalMatrixType valP ( vectValP.size(), vectValP.size(), vnl_matrix_null );
+  for ( unsigned int i = 0; i < vectValP.size(); ++i )
+    valP(i, i) = vectValP[i];
+#endif
+
+#if 0
   vnl_svd< MatrixElementType > solver ( W );
   InternalMatrixType transf = solver.U();
   InternalMatrixType valP = solver.W();
+#endif
 
-  InternalMatrixType normMat
-    = transf.transpose() * Ax_inv * transf;
+#if 0
+  MatrixType Id ( m_CovarianceMatrix );
+  Id.SetIdentity();
+
+  vnl_generalized_eigensystem solver ( W, Id.GetVnlMatrix() );
+
+  InternalMatrixType transf = solver.V;
+  transf.fliplr();
+
+  InternalMatrixType valP = solver.D;
+  valP.fliplr();
+  valP.flipud();
+#endif
+
+/*
+  InternalMatrixType normMat = transf.transpose() * Ax * transf;
 
   for ( unsigned int i = 0; i < transf.rows(); ++i )
   {
@@ -344,6 +387,7 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
     for ( unsigned int j = 0; j < transf.cols(); ++j )
       transf.put( j, i, transf.get(j, i) * norm );
   }
+*/
 
   transf.inplace_transpose();
 
@@ -355,7 +399,7 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
 
   m_EigenValues.SetSize( m_NumberOfPrincipalComponentsRequired );
   for ( unsigned int i = 0; i < m_NumberOfPrincipalComponentsRequired; ++i )
-    m_EigenValues[i] = static_cast< RealType >( valP(i, i) );
+    m_EigenValues[i] = static_cast< RealType >( valP(i,i) );
 }
 
 template <class TInputImage, class TOutputImage,

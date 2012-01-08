@@ -26,192 +26,180 @@
 namespace otb {
 
 template < class TInputImage, class TOutputImage,
-            class TPrecision, Wavelet::Wavelet TMotherWaveletOperator >
-SparseUnmixingImageFilter< TInputImage, TOutputImage, TPrecision, TMotherWaveletOperator >
+            unsigned int VNbInputImage, class TPrecision, 
+            Wavelet::Wavelet TMotherWaveletOperator >
+SparseUnmixingImageFilter< TInputImage, TOutputImage, VNbInputImage, TPrecision, TMotherWaveletOperator >
 ::SparseUnmixingImageFilter ()
 {
-  this->SetNumberOfRequiredInputs(2);
+  this->SetNumberOfRequiredInputs( NumberOfInputImages );
+  this->SetNumberOfOutputs(1);
+  this->SetNthOutput(0, OutputImageListType::New());
 
   m_NumberOfComponentsRequired = 0;
+  m_AngleList = AngleListType::New();
 
-  m_WvltFilter1 = WvltFilterType::New();
-  m_WvltFilter1->SetNumberOfDecompositions(2);
-  m_WvltFilter1->SetSubsampleImageFactor( 1 );
+  m_WvltFilterList = WvltFilterListType::New();
+  m_WvltFilterList->Resize( NumberOfInputImages );
+  for ( unsigned int i = 0; i < NumberOfInputImages; ++i )
+  {
+    m_WvltFilterList->GetNthElement(i)->SetNumberOfDecompositions(2);
+    m_WvltFilterList->GetNthElement(i)->SetSubsampleImageFactor(1);
+  }
 
-  m_WvltFilter2 = WvltFilterType::New();
-  m_WvltFilter2->SetNumberOfDecompositions( m_WvltFilter1->GetNumberOfDecompositions() );
-  m_WvltFilter2->SetSubsampleImageFactor( m_WvltFilter1->GetSubsampleImageFactor() );
-
-  m_ListFilter = ListFilterType::New();
-  m_ListFilter->GetFunctor().SetLowerThreshold(10.);
+  m_AngleListFilter = AngleListFilterType::New();
+  m_AngleListFilter->SetThresholdValue( 10. );
 
   /**
    * The histogram is dedicated to angular value in [-PI, PI]
    * The histogram is smoothed with 100 bins
    */
   m_Histogram = HistogramType::New();
-  typename HistogramType::SizeType size;
+  HistogramSizeType size;
   size.Fill(100);
-  m_Histogram->Initialize( size );
+  MeasurementVectorType theMin (0.);
+  theMin[NumberOfInputImages-2] = -M_PI;
+  MeasurementVectorType theMax (M_PI);
+  m_Histogram->Initialize( size, theMin, theMax );
 
   m_Transformer = TransformFilterType::New();
 }
 
 template < class TInputImage, class TOutputImage,
-            class TPrecision, Wavelet::Wavelet TMotherWaveletOperator >
+            unsigned int VNbInputImage, class TPrecision, 
+            Wavelet::Wavelet TMotherWaveletOperator >
 void
-SparseUnmixingImageFilter< TInputImage, TOutputImage, TPrecision, TMotherWaveletOperator >
-::SetInput1 ( const InputImageType * inputPtr )
+SparseUnmixingImageFilter< TInputImage, TOutputImage, VNbInputImage, TPrecision, TMotherWaveletOperator >
+::SetInput ( unsigned int i, const InputImageType * img )
 {
-  this->itk::ProcessObject::SetNthInput(0,
-    const_cast< InputImageType * >( inputPtr ) );
+  this->itk::ProcessObject::SetNthInput(i,
+    const_cast< InputImageType * >( img ) );
 }
 
 template < class TInputImage, class TOutputImage,
-            class TPrecision, Wavelet::Wavelet TMotherWaveletOperator >
-void
-SparseUnmixingImageFilter< TInputImage, TOutputImage, TPrecision, TMotherWaveletOperator >
-::SetInput2 ( const InputImageType * inputPtr )
-{
-  this->itk::ProcessObject::SetNthInput(1,
-    const_cast< InputImageType * >( inputPtr ) );
-}
-
-template < class TInputImage, class TOutputImage,
-            class TPrecision, Wavelet::Wavelet TMotherWaveletOperator >
+            unsigned int VNbInputImage, class TPrecision, 
+            Wavelet::Wavelet TMotherWaveletOperator >
 const TInputImage *
-SparseUnmixingImageFilter< TInputImage, TOutputImage, TPrecision, TMotherWaveletOperator >
-::GetInput1() const
+SparseUnmixingImageFilter< TInputImage, TOutputImage, VNbInputImage, TPrecision, TMotherWaveletOperator >
+::GetInput ( unsigned int i ) const
 {
-  if ( this->GetNumberOfInputs() < 1 )
+  if ( i < this->GetNumberOfInputs() )
   {
     return 0;
   }
 
   return static_cast<const InputImageType * >
-    (this->itk::ProcessObject::GetInput(0) );
+    (this->itk::ProcessObject::GetInput(i) );
 }
 
 template < class TInputImage, class TOutputImage,
-            class TPrecision, Wavelet::Wavelet TMotherWaveletOperator >
-const TInputImage *
-SparseUnmixingImageFilter< TInputImage, TOutputImage, TPrecision, TMotherWaveletOperator >
-::GetInput2() const
-{
-  if ( this->GetNumberOfInputs() < 2 )
-  {
-    return 0;
-  }
-
-  return static_cast<const InputImageType * >
-    (this->itk::ProcessObject::GetInput(1) );
-}
-
-
-template < class TInputImage, class TOutputImage,
-            class TPrecision, Wavelet::Wavelet TMotherWaveletOperator >
+            unsigned int VNbInputImage, class TPrecision, 
+            Wavelet::Wavelet TMotherWaveletOperator >
 void
-SparseUnmixingImageFilter< TInputImage, TOutputImage, TPrecision, TMotherWaveletOperator >
+SparseUnmixingImageFilter< TInputImage, TOutputImage, VNbInputImage, TPrecision, TMotherWaveletOperator >
 ::GenerateData()
 {
   itk::ProgressAccumulator::Pointer progress = itk::ProgressAccumulator::New();
   progress->SetMiniPipelineFilter(this);
 
-
-  m_WvltFilter1->SetInput( this->GetInput1() );
-  progress->RegisterInternalFilter(m_WvltFilter1, 0.25f);
-  m_WvltFilter1->Update();
-
-  m_WvltFilter2->SetInput( this->GetInput2() );
-  progress->RegisterInternalFilter(m_WvltFilter2, 0.25f);
-  m_WvltFilter2->Update();
-
-  m_ListFilter->SetInput1( m_WvltFilter1->GetOutput() );
-  m_ListFilter->SetInput2( m_WvltFilter2->GetOutput() );
-  progress->RegisterInternalFilter(m_ListFilter, 0.25f);
-  m_ListFilter->Update();
-
-  typename InternalSampleListType::Iterator angleIter = m_ListFilter->GetOutputSampleList()->Begin();
-  while ( angleIter != m_ListFilter->GetOutputSampleList()->End() )
+  for ( unsigned int i = 0; i < NumberOfInputImages; ++i )
   {
-    m_Histogram->IncreaseFrequency( angleIter.GetMeasurementVector()[0], 1 );
-    ++angleIter;
+    m_WvltFilterList->GetNthElement(i)->SetInput( this->GetInput(i) );
+    progress->RegisterInternalFilter( m_WvltFilterList->GetNthElement(i), 
+                                      0.5f/static_cast<float>(NumberOfInputImages) );
+    m_WvltFilterList->GetNthElement(i)->Update();
+
+    m_AngleListFilter->SetInput( i, m_WvltFilterList->GetNthElement(i)->GetOutput() );
   }
+
+  progress->RegisterInternalFilter(m_AngleListFilter, 0.25f);
+  m_AngleListFilter->Update();
 
   GenerateNumberOfComponentsRequired();
   otbMsgDebugMacro( << m_NumberOfComponentsRequired << " sources found\n" );
 
-  m_Transformer->SetInput1( this->GetInput1() );
-  m_Transformer->SetInput2( this->GetInput2() );
-  m_Transformer->SetAngleSet( m_AngleValue );
+  for ( unsigned int i = 0; i < NumberOfInputImages; ++i )
+    m_Transformer->SetInput( i, this->GetInput(i) ); 
+  m_Transformer->SetAngleList( m_AngleList );
   progress->RegisterInternalFilter(m_Transformer, 0.25f);
-  
-  this->SetNumberOfOutputs( m_Transformer->GetNumberOfOutputs() );
-  for ( unsigned int i = 0; i < this->GetNumberOfOutputs(); ++i )
-  {
-    this->SetNthOutput(i, OutputImageType::New());
-    m_Transformer->GraftNthOutput( i, this->GetOutput(i) );
-  }
-
   m_Transformer->Update();
 
-  for ( unsigned int i = 0; i < this->GetNumberOfOutputs(); ++i )
-  {
-    this->GraftNthOutput( i, m_Transformer->GetOutput(i) );
-  }
+  this->GetOutput()->Resize( m_Transformer->GetOutput()->Size() );
+  for ( unsigned int i = 0; i < this->GetOutput()->Size(); ++i )
+    this->GetOutput()->SetNthElement( i, m_Transformer->GetOutput()->GetNthElement(i) );
 }
 
 template < class TInputImage, class TOutputImage,
-            class TPrecision, Wavelet::Wavelet TMotherWaveletOperator >
+            unsigned int VNbInputImage, class TPrecision, 
+            Wavelet::Wavelet TMotherWaveletOperator >
 void
-SparseUnmixingImageFilter< TInputImage, TOutputImage, TPrecision, TMotherWaveletOperator >
+SparseUnmixingImageFilter< TInputImage, TOutputImage, VNbInputImage, TPrecision, TMotherWaveletOperator >
 ::GenerateNumberOfComponentsRequired ()
 {
-  std::vector<PrecisionType> angles;
-
-  typename HistogramType::Iterator prevHist = m_Histogram->Begin();
-  typename HistogramType::Iterator curHist = m_Histogram->Begin();
-  /** Since operator-- does not exists in itk::Histgram, we have
-   * to reach the end step by step
-   */
-  ++curHist;
-  while ( curHist != m_Histogram->End() )
+  typename InternalSampleListType::Iterator angleIter 
+    = m_AngleListFilter->GetOutputSampleList()->Begin();
+  while ( angleIter != m_AngleListFilter->GetOutputSampleList()->End() )
   {
-    ++curHist;
-    ++prevHist;
-  }
-  curHist = m_Histogram->Begin();
-  typename HistogramType::Iterator nextHist = m_Histogram->Begin();
-  ++nextHist;
+    if ( !m_Histogram->IncreaseFrequency( angleIter.GetMeasurementVector(), 1 ) )
+      std::cerr << "Data out of bounds\n";
 
-  if ( prevHist.GetFrequency() < curHist.GetFrequency()
-      && curHist.GetFrequency() > nextHist.GetFrequency() )
-  {
-    angles.push_back( curHist.GetMeasurementVector()[0] );
+    ++angleIter;
   }
 
-  prevHist = m_Histogram->Begin();
-  ++curHist;
-  ++nextHist;
+#if 0
+  for ( unsigned int index = 0; index < m_Histogram->GetSize()[0]; ++index )
+    std::cerr << index << "\t" << m_Histogram->GetMeasurementVector( index )[0]
+      << "\t" << m_Histogram->GetFrequency(index) << "\n";
+#endif
 
-  while ( curHist != m_Histogram->End() )
+  AngleListPointerType angles = AngleListType::New();
+
+  for ( unsigned int id = 0; id < m_Histogram->Size(); ++id )
   {
-    if ( nextHist == m_Histogram->End() )
-      nextHist = m_Histogram->Begin();
+    HistogramIndexType curIdx = m_Histogram->GetIndex(id);
 
-    if ( prevHist.GetFrequency() < curHist.GetFrequency()
-        && curHist.GetFrequency() > nextHist.GetFrequency() )
+    // Is this curIdx a local max ?
+    bool isLocalMax = true;
+    for ( unsigned int k = 0; k < m_Histogram->GetSize().GetSizeDimension(); ++k )
     {
-      angles.push_back( curHist.GetMeasurementVector()[0] );
+      HistogramIndexType prevIdx = curIdx;
+      if ( prevIdx[k] == 0 )
+        prevIdx[k] = m_Histogram->GetSize(k)-1;
+
+
+      HistogramIndexType nextIdx = curIdx;
+      if ( static_cast<int>( nextIdx[k] ) == m_Histogram->GetSize(k)-1 )
+        nextIdx[k] = 0;
+
+      double freq_prev = m_Histogram->GetFrequency( prevIdx );
+      double freq_cur  = m_Histogram->GetFrequency( curIdx );
+      double freq_next = m_Histogram->GetFrequency( nextIdx );
+
+      if ( freq_prev > freq_cur || freq_cur < freq_next )
+      {
+        isLocalMax = false;
+        break;
+      }
     }
 
-    ++prevHist;
-    ++curHist;
-    ++nextHist;
+    if ( isLocalMax )
+    {
+      angles->PushBack( m_Histogram->GetMeasurementVector( curIdx ) );
+    }
   }
-  
-  m_NumberOfComponentsRequired = angles.size();
-  m_AngleValue = angles;
+
+  m_NumberOfComponentsRequired = angles->Size();
+  m_AngleList = angles;
+
+#if 1
+  std::cout <<  m_NumberOfComponentsRequired << " sources found\n";
+  for ( unsigned int i = 0; i < angles->Size(); i++ )
+  {
+    std::cerr << "Source " << i << ":";
+    for ( unsigned int j = 0; j < m_Histogram->GetSize().GetSizeDimension(); ++j )
+      std::cout << "\t" << angles->GetMeasurementVector(i)[j];
+    std::cout << "\n";
+  }
+#endif
 }
 
 } // end of namespace otb
