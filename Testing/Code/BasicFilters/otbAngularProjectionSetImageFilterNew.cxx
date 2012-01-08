@@ -27,7 +27,7 @@
 
 #include "otbAngularProjectionSetImageFilter.h"
 
-int otbAngularProjectionSetImageFilterNewTest ( int argc, char * argv[] )
+int otbAngularProjectionSetImageFilterNew ( int argc, char * argv[] )
 {
   const unsigned int Dimension = 2;
   const unsigned int SpaceDimension = 3;

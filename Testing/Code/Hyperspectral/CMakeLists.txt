@@ -65,7 +65,7 @@ ADD_TEST(hyTvVCAImageFilterTest1
 
 ADD_TEST(hyTuSparseUnmixingImageFilterNew
 		${Hyperspectral_TESTS1}
-		otbSparseUnmixingImageFilterNewTest)
+		otbSparseUnmixingImageFilterNew)
 
 # TODO
 #ADD_TEST(hyTvSparseUnmixingImageFilterTest
@@ -168,6 +168,7 @@ otbUnConstrainedLeastSquareImageFilter.cxx
 otbFCLSUnmixingImageFilter.cxx
 otbISRAUnmixingImageFilter.cxx
 otbNCLSUnmixingImageFilter.cxx
+otbSparseUnmixingImageFilterNew.cxx
 otbSparseUnmixingImageFilter.cxx
 otbVCAImageFilter.cxx
 otbVirtualDimensionality.cxx

@@ -2186,7 +2186,7 @@ ADD_TEST(bfTvFastICAImageFilter
 
 ADD_TEST(bfTuAngularProjectionImageFilterNew
 	${BASICFILTERS_TESTS13}
-	otbAngularProjectionImageFilterNewTest)
+	otbAngularProjectionImageFilterNew)
 
 #ADD_TEST(bfTvAngularProjectionImageFilter
 #	${BASICFILTERS_TESTS13}
@@ -2199,7 +2199,7 @@ ADD_TEST(bfTuAngularProjectionImageFilterNew
 
 ADD_TEST(bfTuAngularProjectionSetImageFilterNew
 	${BASICFILTERS_TESTS13}
-	otbAngularProjectionSetImageFilterNewTest)
+	otbAngularProjectionSetImageFilterNew)
 
 #ADD_TEST(bfTvAngularProjectionSetImageFilter
 #	${BASICFILTERS_TESTS13}
@@ -2212,7 +2212,7 @@ ADD_TEST(bfTuAngularProjectionSetImageFilterNew
 
 ADD_TEST(bfTuSparseWvltToAngleMapperListFilterNew
 	${BASICFILTERS_TESTS13}
-	otbSparseWvltToAngleMapperListFilterNewTest)
+	otbSparseWvltToAngleMapperListFilterNew)
 
 #ADD_TEST(bfTvSparseWvltToAngleMapperListFilter
 #	${BASICFILTERS_TESTS13}
@@ -2709,6 +2709,12 @@ otbNAPCAImageFilter.cxx
 otbFastICAImageFilter.cxx
 otbVectorImageToMatrixImageFilter.cxx
 otbConcatenateScalarValueImageFilterTest.cxx
+otbAngularProjectionImageFilterNew.cxx
+otbAngularProjectionImageFilter.cxx
+otbAngularProjectionSetImageFilterNew.cxx
+otbAngularProjectionSetImageFilter.cxx
+otbSparseWvltToAngleMapperListFilterNew.cxx
+otbSparseWvltToAngleMapperListFilter.cxx
 )
 
 SET(BasicFilters_SRCS14

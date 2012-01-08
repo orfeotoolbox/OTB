@@ -24,7 +24,7 @@
 
 #include "otbSparseUnmixingImageFilter.h"
 
-int otbSparseUnmixingImageFilterNewText ( int argc, char * argv[] )
+int otbSparseUnmixingImageFilterNew ( int argc, char * argv[] )
 {
   // number of images to consider
   const unsigned int nbInputImages = 2;
