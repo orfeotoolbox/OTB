@@ -105,7 +105,7 @@ private:
 
     AddParameter(ParameterType_Empty, "milli", "Convert to milli reflectance");
     SetParameterDescription("milli", "Output milli-reflectance instead of reflectance.\n"
-                                     "This allows to put save the image in integer pixel type (in the range [0, 1000]  instead of floating point in the range [0, 1].");
+                                     "This allows to put save the image in integer pixel type (in the range [0, 1000]  instead of floating point in the range [0, 1]. In order to do that, use this option and set the output pixel type (-out filename uint16 for example)");
     DisableParameter("milli");
     MandatoryOff("milli");
 
