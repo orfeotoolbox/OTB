@@ -17,6 +17,9 @@
 =========================================================================*/
 #include "otbJPEG2000ImageIO.h"
 
+#include <iomanip>
+#include <iostream>
+#include <fstream>
 
 #include "otbMacro.h"
 #include "otbSystem.h"
@@ -1108,10 +1111,10 @@ void JPEG2000ImageIO::ReadImageInformation()
       itk::EncapsulateMetaData<MetaDataKey::VectorType>(dict, MetaDataKey::GeoTransformKey, geoTransform);
 
       // retrieve origin and spacing from the geo transform ????
-      /*m_Origin[0] = geoTransform[0];
+      m_Origin[0] = geoTransform[0];
       m_Origin[1] = geoTransform[3];
-      m_Spacing[0] = geoTransform[1];
-      m_Spacing[1] = geoTransform[5]; */
+      m_Spacing[0] = geoTransform[2];
+      m_Spacing[1] = geoTransform[4]; 
       }
 
     /* GCPs */
@@ -1162,7 +1165,7 @@ void JPEG2000ImageIO::ReadImageInformation()
         std::ostringstream lStream;
         lStream << MetaDataKey::MetadataKey << cpt;
         key = lStream.str();
-
+        
         itk::EncapsulateMetaData<std::string>(dict, key, static_cast<std::string> (papszGMLMetadata[cpt]));
         }
       }
@@ -1271,19 +1274,17 @@ void JPEG2000ImageIO::ReadImageInformation()
   itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::TileHintX, tileHintX);
   itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::TileHintY, tileHintY);
 
-  m_Spacing[0] = 1.0 / vcl_pow(2.0, static_cast<double>(m_ResolutionFactor));
-  m_Spacing[1] = 1.0 / vcl_pow(2.0, static_cast<double>(m_ResolutionFactor));
+  m_Spacing[0] *=  vcl_pow(2.0, static_cast<double>(m_ResolutionFactor));
+  m_Spacing[1] *=  vcl_pow(2.0, static_cast<double>(m_ResolutionFactor));
 
   // If we have some spacing information we use it
-  if ( (m_InternalReaders.front()->m_XResolution.front() > 0) && (m_InternalReaders.front()->m_YResolution.front() > 0) )
-    {
-      // We check previously that the X and Y resolution is equal between the components
-      m_Spacing[0] = m_InternalReaders.front()->m_XResolution[0];
-      m_Spacing[1] = m_InternalReaders.front()->m_YResolution[0];
-    }
-
-  m_Origin[0] = 0.0;
-  m_Origin[1] = 0.0;
+  // could be needed for other j2k image but not for pleiades 
+  // if ( (m_InternalReaders.front()->m_XResolution.front() > 0) && (m_InternalReaders.front()->m_YResolution.front() > 0) )
+  //   {
+  //     // We check previously that the X and Y resolution is equal between the components
+  //     m_Spacing[0] *= m_InternalReaders.front()->m_XResolution[0];
+  //     m_Spacing[1] *= m_InternalReaders.front()->m_YResolution[0];
+  //   }
 
   m_Dimensions[0] = m_InternalReaders.front()->m_Width;
   m_Dimensions[1] = m_InternalReaders.front()->m_Height;
