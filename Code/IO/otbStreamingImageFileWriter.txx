@@ -64,7 +64,7 @@ StreamingImageFileWriter<TInputImage>
 {
   // By default, we use tiled streaming, with automatic tile size
   // We don't set any parameter, so the memory size is retrieved from the OTB configuration options
-  this->SetAutomaticTiledStreaming();
+  this->SetAutomaticAdaptativeStreaming();
 }
 
 /**
