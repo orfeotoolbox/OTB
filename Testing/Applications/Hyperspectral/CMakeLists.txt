@@ -52,7 +52,7 @@ OTB_TEST_APPLICATION(NAME  apTvHyVertexComponentAnalysis
                              -ne 5
                  	     -outendm ${TEMP}/apTvHyVertexComponentAnalysis.tif double
                              VALID   --compare-image ${EPSILON_9}
-                                     ${BASELINE}/apTvHyVertexComponentAnalysis.tif
+                                     ${BASELINE}/TvHyVertexComponentAnalysisImage.tif
                   	             ${TEMP}/apTvHyVertexComponentAnalysis.tif
 )
 
