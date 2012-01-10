@@ -181,7 +181,7 @@ SparseUnmixingImageFilter< TInputImage, TOutputImage, VNbInputImage, TPrecision,
 
 
       HistogramIndexType nextIdx = curIdx;
-      if ( static_cast<int>( nextIdx[k] ) == m_Histogram->GetSize(k)-1 )
+      if ( static_cast<PrecisionType>( nextIdx[k] ) == m_Histogram->GetSize(k)-1 )
         nextIdx[k] = 0;
       else
         nextIdx[k] = curIdx[k]+1;
