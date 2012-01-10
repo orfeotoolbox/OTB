@@ -134,8 +134,8 @@ SparseUnmixingImageFilter< TInputImage, TOutputImage, VNbInputImage, TPrecision,
   HistogramSizeType size;
   size.Fill( m_NumberOfHistogramBins );
   MeasurementVectorType theMin (0.);
-  theMin[NumberOfInputImages-2] = -M_PI;
-  MeasurementVectorType theMax (M_PI);
+  theMin[NumberOfInputImages-2] = -otb::CONST_PI;
+  MeasurementVectorType theMax (otb::CONST_PI);
   m_Histogram->Initialize( size, theMin, theMax );
 
   typename InternalSampleListType::Iterator angleIter
