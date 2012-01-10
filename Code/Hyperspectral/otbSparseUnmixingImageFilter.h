@@ -47,7 +47,7 @@ namespace otb {
  *
  */
 template < class TInputImage, class TOutputImage,
-            unsigned int VNbInputImage, 
+            unsigned int VNbInputImage,
             class TPrecision = double,
             Wavelet::Wavelet TMotherWaveletOperator = Wavelet::SYMLET8 >
 class ITK_EXPORT SparseUnmixingImageFilter
@@ -148,7 +148,7 @@ public:
   itkSetMacro(NumberOfHistogramBins, unsigned int);
   itkGetMacro(NumberOfHistogramBins, unsigned int);
 
-  itkGetConstMacro(AngleList,AngleListType*);
+  itkGetConstMacro(AngleList, AngleListType*);
   itkGetConstMacro(WvltFilterList, WvltFilterListType*);
   itkGetConstMacro(AngleListFilter, AngleListFilterType*);
   itkGetConstMacro(Histogram, HistogramType*);

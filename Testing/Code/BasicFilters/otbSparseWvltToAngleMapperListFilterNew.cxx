@@ -44,7 +44,7 @@ int otbSparseWvltToAngleMapperListFilterNew ( int argc, char * argv[] )
 
   typedef otb::Image< PixelType, Dimension >  ImageType;
   typedef otb::ImageList< ImageType >         ImageListType;
-  typedef otb::SparseWvltToAngleMapperListFilter< 
+  typedef otb::SparseWvltToAngleMapperListFilter<
     ImageListType, AngleListType, SpaceDimension+1 > AngleListFilterType;
 
   AngleListFilterType::Pointer filter = AngleListFilterType::New();

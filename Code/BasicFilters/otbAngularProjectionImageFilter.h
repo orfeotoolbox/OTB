@@ -25,7 +25,7 @@ namespace otb {
 /** \class AngularProjectionImageFilter
  * \brief Performs spherical transformation in ND space
  *
- * This class performs the projections of the N input images according 
+ * This class performs the projections of the N input images according
  * to angular value through the generalized spherical projection.
  *
  * The angle value are considered to come from a itk::FixedArray...
@@ -75,12 +75,11 @@ public:
   typedef std::vector< ImageRegionConstIteratorType >   ImageRegionConstIteratorVectorType;
 
   /** Set/Get Angle set */
-  itkGetMacro(AngleArray,AngleArrayType);
-  itkSetMacro(AngleArray,AngleArrayType);
+  itkGetMacro(AngleArray, AngleArrayType);
+  itkSetMacro(AngleArray, AngleArrayType);
 
   void SetInput ( unsigned int i, const InputImageType * );
   const InputImageType * GetInput( unsigned int i ) const;
-
 
 
 protected:

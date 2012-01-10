@@ -79,7 +79,7 @@ int otbAngularProjectionImageFilterTest ( int argc, char * argv[] )
   angle[0] = otb::CONST_PI_2;
 
   // Filtering
-  typedef otb::AngularProjectionImageFilter< 
+  typedef otb::AngularProjectionImageFilter<
     ImageType, ImageType, AngleType, PrecisionType > FilterType;
 
   FilterType::Pointer filter = FilterType::New();

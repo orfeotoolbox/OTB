@@ -182,14 +182,14 @@ template < class TInputImageList, class TOutputSampleList, unsigned int VNbInput
 typename SparseWvltToAngleMapperListFilter< TInputImageList, TOutputSampleList, VNbInputImages >
 ::OutputMeasurementVectorType
 SparseWvltToAngleMapperListFilter< TInputImageList, TOutputSampleList, VNbInputImages >
-::FromEuclideanToSphericalSpace 
+::FromEuclideanToSphericalSpace
 ( const ImageConstIteratorVectorType & it ) const
 {
   // First, get the modulus of the vector
   double modulus = 0;
   for ( unsigned int i = 0; i < NumberOfInputImages; ++i )
   {
-    modulus += vcl_pow( static_cast<double>( it[i].Get() ), 2. ); 
+    modulus += vcl_pow( static_cast<double>( it[i].Get() ), 2. );
   }
   // The modulus cannot be nul since it is over the threshold...
   modulus = vcl_sqrt( modulus );
@@ -231,7 +231,7 @@ SparseWvltToAngleMapperListFilter< TInputImageList, TOutputSampleList, VNbInputI
      * With this sign modification, we can put the same
      * images for all the components and recover the good direction
      */
-    double sign = NumberOfInputImages == 3 ? -1. : 1. ;
+    double sign = NumberOfInputImages == 3 ? -1. : 1.;
     if ( it[ NumberOfInputImages-1 ].Get() < 0 )
     {
       angle[ angle.Size()-1 ] = sign * vcl_acos( it[ NumberOfInputImages-2 ].Get() / modulus );

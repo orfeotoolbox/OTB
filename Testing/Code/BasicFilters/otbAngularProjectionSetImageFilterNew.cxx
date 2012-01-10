@@ -38,7 +38,7 @@ int otbAngularProjectionSetImageFilterNew ( int argc, char * argv[] )
   typedef itk::Statistics::ListSample< AngleType >         AngleListType;
   typedef otb::Image< PixelType, Dimension >               ImageType;
 
-  typedef otb::AngularProjectionSetImageFilter< 
+  typedef otb::AngularProjectionSetImageFilter<
     ImageType, ImageType, AngleListType, PrecisionType > FilterType;
 
   FilterType::Pointer filter = FilterType::New();

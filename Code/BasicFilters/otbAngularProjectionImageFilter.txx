@@ -111,7 +111,7 @@ AngularProjectionImageFilter< TInputImage, TOutputImage, TAngleArray, TPrecision
   if ( NumberOfInputImages == 2 )
   {
     PrecisionType alpha = static_cast<PrecisionType>( m_AngleArray[0] );
-    output = static_cast<PrecisionType>( it[0].Get() ) * vcl_cos( alpha ) 
+    output = static_cast<PrecisionType>( it[0].Get() ) * vcl_cos( alpha )
               - static_cast<PrecisionType>( it[1].Get() ) * vcl_sin( alpha );
   }
   else if ( NumberOfInputImages == 3 )

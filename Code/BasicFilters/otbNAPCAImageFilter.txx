@@ -62,7 +62,7 @@ NAPCAImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTran
   }
   Fn = Fn * valPn;
 
-  InternalMatrixType Ax 
+  InternalMatrixType Ax
     = vnl_matrix_inverse< MatrixElementType > ( this->GetCovarianceMatrix().GetVnlMatrix() );
   InternalMatrixType Aadj = Fn.transpose() * Ax * Fn;
 

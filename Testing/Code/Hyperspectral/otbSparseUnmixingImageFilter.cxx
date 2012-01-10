@@ -36,11 +36,11 @@ int otbSparseUnmixingImageFilterTest ( int argc, char * argv[] )
   parser->AddOption( "--OutputImages", "Generic name for output Images (_#.hdr will be added)", "-out", 1, true );
   parser->AddOption( "--Threshold", "Lower threshold for accounting the waBinaryFunctorImageListToSampleListFiltervelet coeffs (def. 10)", "-th", 1, false );
 
-  typedef otb::CommandLineArgumentParseResult ParserResultType;  
+  typedef otb::CommandLineArgumentParseResult ParserResultType;
   ParserResultType::Pointer  parseResult = ParserResultType::New();
     
   try
-  {  
+  {
     parser->ParseCommandLine( argc, argv, parseResult );
   }
   catch( itk::ExceptionObject & err )
@@ -58,7 +58,7 @@ int otbSparseUnmixingImageFilterTest ( int argc, char * argv[] )
 
   std::string inputImageName [ nbInputImages ];
   for ( unsigned int i = 0; i < nbInputImages; i++ )
-    inputImageName[i] = parseResult->GetParameterString("--InputImages",i);
+    inputImageName[i] = parseResult->GetParameterString("--InputImages", i);
   const char * outputImageName = parseResult->GetParameterString("--OutputImages").c_str();
   const double threshold = parseResult->IsOptionPresent("--Threshold") ?
     parseResult->GetParameterDouble("--Threshold") : 10.;
@@ -75,7 +75,7 @@ int otbSparseUnmixingImageFilterTest ( int argc, char * argv[] )
   reader->Resize( nbInputImages );
   for ( unsigned int i = 0; i < nbInputImages; i++ )
   {
-    reader->SetNthElement(i,ReaderType::New());
+    reader->SetNthElement(i, ReaderType::New());
     reader->GetNthElement(i)->SetFileName( inputImageName[i].c_str() );
     reader->GetNthElement(i)->Update();
   }
@@ -103,7 +103,7 @@ int otbSparseUnmixingImageFilterTest ( int argc, char * argv[] )
     itk::OStringStream title;
     title << outputImageName << "_" << i << ".hdr";
 
-    writers->SetNthElement(i,WriterType::New());
+    writers->SetNthElement(i, WriterType::New());
     WriterType::Pointer writer = writers->GetNthElement(i);
     writer->SetFileName( title.str().c_str() );
     writer->SetInput( filter->GetOutput()->GetNthElement(i) );

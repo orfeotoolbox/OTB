@@ -34,7 +34,7 @@ namespace otb {
  * \brief This class select N-uple join-wvlt coeff for sparse unmixing
  *
  * This class performs a kind of scatter plot of wavelet coeff of N images and yields
- * the angle values (through a generalized spherical coordinate representation)) of 
+ * the angle values (through a generalized spherical coordinate representation)) of
  * the most significant coeff (up to a threashold).
  *
  * \ingroup Threaded
@@ -97,8 +97,8 @@ public:
   OutputSampleListObjectType * GetOutput();
 
   /** Get/Set the threshold value */
-  itkGetMacro(ThresholdValue,ValueType);
-  itkSetMacro(ThresholdValue,ValueType);
+  itkGetMacro(ThresholdValue, ValueType);
+  itkSetMacro(ThresholdValue, ValueType);
 
 protected:
   SparseWvltToAngleMapperListFilter();

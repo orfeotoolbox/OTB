@@ -27,10 +27,10 @@ namespace otb {
  * \brief Performs spherical transformation in ND space from a set of angle values
  *
  * This class performs the projections of the set input images to a set of N
- * output images according to N angular values. 
+ * output images according to N angular values.
  *
  * The list of angular values is given in template. It is supposed to be a list of FixedArray
- * of dimension N-1 (since in speherical coordinate system, there are N-1 angle value in a 
+ * of dimension N-1 (since in speherical coordinate system, there are N-1 angle value in a
  * ND space).
  *
  * Each projection is performed by the AngularProjectionImageFilter class and the

@@ -78,7 +78,7 @@ int otbAngularProjectionSetImageFilterTest ( int argc, char * argv[] )
   reader->Resize( nbInputImages );
   for ( unsigned int i = 0; i < nbInputImages; i++ )
   {
-    reader->SetNthElement(i,ReaderType::New());
+    reader->SetNthElement(i, ReaderType::New());
     reader->GetNthElement(i)->SetFileName( inputImageName[i].c_str() );
     reader->GetNthElement(i)->Update();
   }
@@ -94,7 +94,7 @@ int otbAngularProjectionSetImageFilterTest ( int argc, char * argv[] )
   angleList->PushBack( angle );
 
   // Filter
-  typedef otb::AngularProjectionSetImageFilter< 
+  typedef otb::AngularProjectionSetImageFilter<
     ImageType, ImageType, AngleListType, PrecisionType > FilterType;
   FilterType::Pointer filter = FilterType::New();
   for ( unsigned int i = 0; i < nbInputImages; i++ )
@@ -114,7 +114,7 @@ int otbAngularProjectionSetImageFilterTest ( int argc, char * argv[] )
     itk::OStringStream title;
     title << outputImageName << "_" << i << ".hdr";
 
-    writers->SetNthElement(i,WriterType::New());
+    writers->SetNthElement(i, WriterType::New());
     WriterType::Pointer writer = writers->GetNthElement(i);
     writer->SetFileName( title.str().c_str() );
     writer->SetInput( filter->GetOutput()->GetNthElement(i) );

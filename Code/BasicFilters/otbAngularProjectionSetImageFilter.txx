@@ -62,7 +62,6 @@ AngularProjectionSetImageFilter< TInputImage, TOutputImage, TAngleList, TPrecisi
 }
 
 
-
 template < class TInputImage, class TOutputImage, class TAngleList, class TPrecision >
 void
 AngularProjectionSetImageFilter< TInputImage, TOutputImage, TAngleList, TPrecision >
@@ -83,7 +82,7 @@ AngularProjectionSetImageFilter< TInputImage, TOutputImage, TAngleList, TPrecisi
       filter->SetInput( i, this->GetInput(i) );
     filter->SetAngleArray( GetAngleList()->GetMeasurementVector(idx) );
 
-    progress->RegisterInternalFilter(filter,1.f/static_cast<float>( GetAngleList()->Size() ) );
+    progress->RegisterInternalFilter(filter, 1.f/static_cast<float>( GetAngleList()->Size() ) );
 
     filter->Update();
 

@@ -44,16 +44,16 @@ int otbSparseWvltToAngleMapperListFilterNewTest ( int argc, char * argv[] )
   //parser->AddOption( "--OutputImages", "Generic name for output Images (_#.hdr will be added)", "-out", 1, true );
   parser->AddOption( "--Threshold", "Lower threshold for accounting the waBinaryFunctorImageListToSampleListFiltervelet coeffs (def. 10)", "-th", 1, false );
 
-  typedef otb::CommandLineArgumentParseResult ParserResultType;  
+  typedef otb::CommandLineArgumentParseResult ParserResultType;
   ParserResultType::Pointer  parseResult = ParserResultType::New();
     
   try
-  {  
+  {
     parser->ParseCommandLine( argc, argv, parseResult );
   }
   catch( itk::ExceptionObject & err )
   {
-    std::cerr << argv[0] << " performs otbSparseWvltToAngleMapperListFilterNewTest on " << nbInputImages << " images\n"; 
+    std::cerr << argv[0] << " performs otbSparseWvltToAngleMapperListFilterNewTest on " << nbInputImages << " images\n";
     std::string descriptionException = err.GetDescription();
     if ( descriptionException.find("ParseCommandLine(): Help Parser")
         != std::string::npos )
@@ -66,7 +66,7 @@ int otbSparseWvltToAngleMapperListFilterNewTest ( int argc, char * argv[] )
 
   std::string inputImageName [ nbInputImages ];
   for ( unsigned int i = 0; i < nbInputImages; i++ )
-    inputImageName[i] = parseResult->GetParameterString("--InputImages",i);
+    inputImageName[i] = parseResult->GetParameterString("--InputImages", i);
   //const char * outputImageName = parseResult->GetParameterString("--OutputImages").c_str();
   // Parameter (to be changed if necessary)
   const double threshold = parseResult->IsOptionPresent("--Threshold") ?
@@ -94,7 +94,7 @@ int otbSparseWvltToAngleMapperListFilterNewTest ( int argc, char * argv[] )
 
   for ( unsigned int i = 0; i < nbInputImages; i++ )
   {
-    reader->SetNthElement(i,ReaderType::New());
+    reader->SetNthElement(i, ReaderType::New());
     reader->GetNthElement(i)->SetFileName( inputImageName[i].c_str() );
     reader->GetNthElement(i)->Update();
 
@@ -105,7 +105,7 @@ int otbSparseWvltToAngleMapperListFilterNewTest ( int argc, char * argv[] )
   }
 
   // Filter
-  typedef otb::SparseWvltToAngleMapperListFilter< 
+  typedef otb::SparseWvltToAngleMapperListFilter<
     ImageListType, AngleListType, nbInputImages > AngleListFilterType;
 
   AngleListFilterType::Pointer filter = AngleListFilterType::New();

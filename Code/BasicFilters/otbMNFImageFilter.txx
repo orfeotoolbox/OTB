@@ -329,7 +329,7 @@ void
 MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransformation >
 ::GenerateTransformationMatrix ()
 {
-  vnl_cholesky choleskySolver ( m_NoiseCovarianceMatrix.GetVnlMatrix(), 
+  vnl_cholesky choleskySolver ( m_NoiseCovarianceMatrix.GetVnlMatrix(),
                                   vnl_cholesky::estimate_condition );
   InternalMatrixType Rn = choleskySolver.lower_triangle();
   InternalMatrixType Rn_inv = vnl_matrix_inverse< MatrixElementType > ( Rn.transpose() );
@@ -399,7 +399,7 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
 
   m_EigenValues.SetSize( m_NumberOfPrincipalComponentsRequired );
   for ( unsigned int i = 0; i < m_NumberOfPrincipalComponentsRequired; ++i )
-    m_EigenValues[i] = static_cast< RealType >( valP(i,i) );
+    m_EigenValues[i] = static_cast< RealType >( valP(i, i) );
 }
 
 template <class TInputImage, class TOutputImage,

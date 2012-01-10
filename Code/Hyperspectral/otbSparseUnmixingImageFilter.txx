@@ -26,7 +26,7 @@
 namespace otb {
 
 template < class TInputImage, class TOutputImage,
-            unsigned int VNbInputImage, class TPrecision, 
+            unsigned int VNbInputImage, class TPrecision,
             Wavelet::Wavelet TMotherWaveletOperator >
 SparseUnmixingImageFilter< TInputImage, TOutputImage, VNbInputImage, TPrecision, TMotherWaveletOperator >
 ::SparseUnmixingImageFilter ()
@@ -43,7 +43,7 @@ SparseUnmixingImageFilter< TInputImage, TOutputImage, VNbInputImage, TPrecision,
   m_WvltFilterList->Resize( NumberOfInputImages );
   for ( unsigned int i = 0; i < NumberOfInputImages; ++i )
   {
-    m_WvltFilterList->SetNthElement(i,WvltFilterType::New());
+    m_WvltFilterList->SetNthElement(i, WvltFilterType::New());
     m_WvltFilterList->GetNthElement(i)->SetNumberOfDecompositions(2);
     m_WvltFilterList->GetNthElement(i)->SetSubsampleImageFactor(1);
   }
@@ -56,7 +56,7 @@ SparseUnmixingImageFilter< TInputImage, TOutputImage, VNbInputImage, TPrecision,
 }
 
 template < class TInputImage, class TOutputImage,
-            unsigned int VNbInputImage, class TPrecision, 
+            unsigned int VNbInputImage, class TPrecision,
             Wavelet::Wavelet TMotherWaveletOperator >
 void
 SparseUnmixingImageFilter< TInputImage, TOutputImage, VNbInputImage, TPrecision, TMotherWaveletOperator >
@@ -67,7 +67,7 @@ SparseUnmixingImageFilter< TInputImage, TOutputImage, VNbInputImage, TPrecision,
 }
 
 template < class TInputImage, class TOutputImage,
-            unsigned int VNbInputImage, class TPrecision, 
+            unsigned int VNbInputImage, class TPrecision,
             Wavelet::Wavelet TMotherWaveletOperator >
 const TInputImage *
 SparseUnmixingImageFilter< TInputImage, TOutputImage, VNbInputImage, TPrecision, TMotherWaveletOperator >
@@ -83,7 +83,7 @@ SparseUnmixingImageFilter< TInputImage, TOutputImage, VNbInputImage, TPrecision,
 }
 
 template < class TInputImage, class TOutputImage,
-            unsigned int VNbInputImage, class TPrecision, 
+            unsigned int VNbInputImage, class TPrecision,
             Wavelet::Wavelet TMotherWaveletOperator >
 void
 SparseUnmixingImageFilter< TInputImage, TOutputImage, VNbInputImage, TPrecision, TMotherWaveletOperator >
@@ -95,7 +95,7 @@ SparseUnmixingImageFilter< TInputImage, TOutputImage, VNbInputImage, TPrecision,
   for ( unsigned int i = 0; i < NumberOfInputImages; ++i )
   {
     m_WvltFilterList->GetNthElement(i)->SetInput( this->GetInput(i) );
-    progress->RegisterInternalFilter( m_WvltFilterList->GetNthElement(i), 
+    progress->RegisterInternalFilter( m_WvltFilterList->GetNthElement(i),
                                       0.5f/static_cast<float>(NumberOfInputImages) );
     m_WvltFilterList->GetNthElement(i)->Update();
 
@@ -109,7 +109,7 @@ SparseUnmixingImageFilter< TInputImage, TOutputImage, VNbInputImage, TPrecision,
   otbMsgDebugMacro( << m_NumberOfComponentsRequired << " sources found\n" );
 
   for ( unsigned int i = 0; i < NumberOfInputImages; ++i )
-    m_Transformer->SetInput( i, this->GetInput(i) ); 
+    m_Transformer->SetInput( i, this->GetInput(i) );
   m_Transformer->SetAngleList( m_AngleList );
   progress->RegisterInternalFilter(m_Transformer, 0.25f);
   m_Transformer->Update();
@@ -120,7 +120,7 @@ SparseUnmixingImageFilter< TInputImage, TOutputImage, VNbInputImage, TPrecision,
 }
 
 template < class TInputImage, class TOutputImage,
-            unsigned int VNbInputImage, class TPrecision, 
+            unsigned int VNbInputImage, class TPrecision,
             Wavelet::Wavelet TMotherWaveletOperator >
 void
 SparseUnmixingImageFilter< TInputImage, TOutputImage, VNbInputImage, TPrecision, TMotherWaveletOperator >
@@ -138,10 +138,10 @@ SparseUnmixingImageFilter< TInputImage, TOutputImage, VNbInputImage, TPrecision,
   MeasurementVectorType theMax (M_PI);
   m_Histogram->Initialize( size, theMin, theMax );
 
-  typename InternalSampleListType::Iterator angleIter 
+  typename InternalSampleListType::Iterator angleIter
     = m_AngleListFilter->GetOutputSampleList()->Begin();
 
-  if ( m_AngleListFilter->GetOutputSampleList()->Begin() 
+  if ( m_AngleListFilter->GetOutputSampleList()->Begin()
       == m_AngleListFilter->GetOutputSampleList()->End() )
   {
     throw itk::ExceptionObject( __FILE__, __LINE__,
