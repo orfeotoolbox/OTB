@@ -82,13 +82,14 @@ private:
     SetDescription("Convert an image to a different format, eventually rescaling the data"
                    " and/or changing the pixel type.");
     // Documentation
-    SetDocName("Image Conversion Application");
+    SetDocName("Image Conversion");
     SetDocLongDescription("This application performs an image pixel type conversion (short, ushort, char, uchar, int, uint, float and double types are handled). The output image is written in the specified format (ie. that corresponds to the given extension).\n The convertion can include a rescale usiong the image 2% minimum and maximum values. The rescale can be linear or log2.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("Rescale application");
+    SetDocSeeAlso("Rescale");
     AddDocTag("Conversion");
     AddDocTag("Image Dynamic");
+    AddDocTag(Tags::Manip);
 
     AddParameter(ParameterType_InputImage,  "in",   "Input image");
     SetParameterDescription("in", "Input image");

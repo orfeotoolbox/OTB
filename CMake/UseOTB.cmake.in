@@ -75,6 +75,14 @@ FIND_PROGRAM(OTB_TEST_DRIVER otbTestDriver PATHS
              ${OTB_BINARY_DIRS}/RelWithDebInfo
              ${OTB_BINARY_DIRS}/Debug
              NO_SYSTEM_PATH)
+
+FIND_PROGRAM(OTB_APPLICATION_LAUNCHER otbApplicationLauncherCommandLine PATHS 
+             ${OTB_BINARY_DIRS}
+             ${OTB_BINARY_DIRS}/Release
+             ${OTB_BINARY_DIRS}/MinSizeRel
+             ${OTB_BINARY_DIRS}/RelWithDebInfo
+             ${OTB_BINARY_DIRS}/Debug
+             NO_SYSTEM_PATH)
 			 
 #WHERE TO FIND ITK
 IF(OTB_USE_EXTERNAL_ITK)

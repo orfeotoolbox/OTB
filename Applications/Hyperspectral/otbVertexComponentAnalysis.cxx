@@ -85,7 +85,7 @@ private:
     MandatoryOn("outendm");
 
     // Doc example parameter settings
-    SetDocExampleParameterValue("in", "hsi_cube.tif");
+    SetDocExampleParameterValue("in", "cupriteSubHsi.tif");
     SetDocExampleParameterValue("ne", "5");
     SetDocExampleParameterValue("outendm", "VertexComponentAnalysis.tif double");
   }

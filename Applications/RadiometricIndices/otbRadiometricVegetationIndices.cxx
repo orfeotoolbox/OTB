@@ -85,7 +85,7 @@ private:
     SetDescription("Compute radiometric indices based on Red and NIT channels.");
 
     // Documentation
-    SetDocName("Radiometric Vegetation Application");
+    SetDocName("Radiometric Vegetation");
     SetDocLongDescription("This application computes radiometric indices that uses red and NIR channels of the input image. The output image is a multi channel one which each channel is one of the selected index. The channel order is the one of the selected indices.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
@@ -164,7 +164,7 @@ private:
     SetParameterDescription("index.laindviformo", "Leaf Area Index from reflectance using using formula a*(exp(nir-red)/((red+nir)*b)-exp(c*b)), with a = 0.1519 b = 3.9443 c = 0.13. This formula is only valid for Formosat 2 reflectance TOCa linear relationship.");
 
     // Doc example parameter settings
-    SetDocExampleParameterValue("in", "qb_RoadExtract.img");
+    SetDocExampleParameterValue("in", "qb_RoadExtract.tif");
     SetDocExampleParameterValue("index.ndvi", "true");
     SetDocExampleParameterValue("index.rvi", "true");
     SetDocExampleParameterValue("index.ipvi", "true");

@@ -56,35 +56,35 @@ private:
   void DoInit()
   {
     SetName("ConcatenateImages");
-    SetDescription("Concatenate a list of images into a single multi channel one.");
+    SetDescription("Concatenate a list of images of the same size into a single multi-channel one.");
 
     // Documentation
-    SetDocName("Images Concatenation Application");
-    SetDocLongDescription("This application performs images concatenation. It will take the input image list (mono or multi channel) and generate a single multi channel image. The channel order is the one of the list.");
-    SetDocLimitations("None");
+    SetDocName("Images Concatenation");
+    SetDocLongDescription("This application performs images channels concatenation. It will walk the input image list (single or multi-channel) and generate a single multi-channel image. The channel order is the one of the list.");
+    SetDocLimitations("All input images must have the same size.");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("Rescale application, Convert application");
+    SetDocSeeAlso("Rescale application, Convert");
    
     AddDocTag(Tags::Manip);
     AddDocTag("Concatenation");
-    AddDocTag("Multi channel");
+    AddDocTag("Multi-channel");
 
     m_Concatener = ListConcatenerFilterType::New();
     m_ExtractorList = ExtractROIFilterListType::New();
     m_ImageList = ImageListType::New();
 
-    AddParameter(ParameterType_InputImageList,  "il",   "Input image list");
-    SetParameterDescription("il", "Image list to concatenate");
+    AddParameter(ParameterType_InputImageList,  "il",   "Input images list");
+    SetParameterDescription("il", "The list of images to concatenate");
 
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
-    SetParameterDescription("out", "Output multiband image");
+    SetParameterDescription("out", "The concatenated output image");
     
     AddParameter(ParameterType_RAM, "ram", "Available RAM");
     SetDefaultParameterInt("ram", 256);
     MandatoryOff("ram");
  
     // Doc example parameter settings
-    SetDocExampleParameterValue("il", "verySmallFSATSW_b.tif verySmallFSATSW_g.tif verySmallFSATSW_r.tif verySmallFSATSW_nir.tif");
+    SetDocExampleParameterValue("il", "GomaAvant.png GomaApres.png");
     SetDocExampleParameterValue("out", "otbConcatenateImages.tif");
   }
 

@@ -56,7 +56,7 @@ ADD_TEST(hyTuVCAImageFilterNew
 ADD_TEST(hyTvVCAImageFilterTest1
          ${Hyperspectral_TESTS1}
            --compare-image ${EPSILON_9}
-           ${BASELINE_FILES}/hyTvVCAImageFilterTest.tif
+           ${BASELINE}/TvHyVertexComponentAnalysisImage.tif
            ${TEMP}/hyTvVCAImageFilterTest.tif
          otbVCAImageFilterTestHighSNR
          ${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif

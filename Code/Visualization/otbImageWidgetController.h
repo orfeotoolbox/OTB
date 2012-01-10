@@ -60,6 +60,12 @@ public:
    **/
   virtual void AddActionHandler(ActionHandlerType * handler);
 
+  /** Insert an action handler to a specified index
+   *  \param handler The action handler.
+   **/
+  virtual void InsertActionHandler(const unsigned int id, ActionHandlerType * handler);
+
+
   /** Remove an action handler if it exists
    *  \param index The index of the action handler.
    **/

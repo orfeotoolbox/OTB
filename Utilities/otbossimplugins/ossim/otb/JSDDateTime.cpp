@@ -104,7 +104,7 @@ int JSDDateTime::AsJulianDate(JulianDate* julian)
 
 int JSDDateTime::AsGMSTDateTime(GMSTDateTime* GMST)
 {
-  const double DEUXPI      = 6.28318530717958647693 ;
+  const double TWOPI      = 6.28318530717958647693 ;
   const double OMEGATERRE  = 6.28318530717958647693 / 86164.09054 ;
 
   int etat ;
@@ -127,7 +127,7 @@ int JSDDateTime::AsGMSTDateTime(GMSTDateTime* GMST)
     {
       t       = (jourJulien.get_julianDate() - 2415020.0) / 36525.0 ;
       tsm0hTU = 23925.836 + t * (8640184.542 + t * 0.0929) ;
-      tsm0hTU = tsm0hTU * DEUXPI / CivilDateTime::JOURCIVIL_LENGTH ;
+      tsm0hTU = tsm0hTU * TWOPI / CivilDateTime::JOURCIVIL_LENGTH ;
     }
     else if (GMST->get_origine() == GMSTDateTime::AN1950)
     {
@@ -139,13 +139,13 @@ int JSDDateTime::AsGMSTDateTime(GMSTDateTime* GMST)
       t       = (jourJulien.get_julianDate() - 2451545.0) / 36525.0 ;
       tsm0hTU =   24110.54841 + t * (8640184.812866
                 + t * (0.093103 - t * 6.210e-6)) ;
-      tsm0hTU = tsm0hTU * DEUXPI / CivilDateTime::JOURCIVIL_LENGTH ;
+      tsm0hTU = tsm0hTU * TWOPI / CivilDateTime::JOURCIVIL_LENGTH ;
     }
     t = tsm0hTU + (_second + _decimal) * OMEGATERRE ;
-    tsm = fmod (t,DEUXPI) ;
+    tsm = fmod (t,TWOPI) ;
     if (tsm < 0.0)
     {
-      tsm = tsm + DEUXPI ;
+      tsm = tsm + TWOPI ;
     }
 
     GMST->set_tms(tsm);

@@ -71,7 +71,9 @@ void QtWidgetFilenameParameter::SelectFile()
     {
     case Role_Input:
     {
-    fileDialog.setFileMode(QFileDialog::ExistingFile);
+    //fileDialog.setFileMode(QFileDialog::ExistingFile);
+    // FIXME: parameter's role is not suitable to separate "input file" names from "output file" names
+    fileDialog.setFileMode(QFileDialog::AnyFile);
     }
     break;
     case Role_Output:

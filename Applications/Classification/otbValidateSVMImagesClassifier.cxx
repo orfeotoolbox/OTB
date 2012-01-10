@@ -123,7 +123,7 @@ private:
     SetName("ValidateSVMImagesClassifier");
     SetDescription("Estimate the performance of the SVM model with a new set of validation samples and another image.");
 
-    SetDocName("Validate SVM Images Classifier Application");
+    SetDocName("Validate SVM Images Classifier");
     SetDocLongDescription("Estimate the performance of the SVM model obtained by the ImagesSVMClassifier with a new set of validation samples and another image.\n The application asks for images statisctics as input (XML file generated with the ComputeImagesStatistics application) and a SVM model (text file) generated with the ImagesSVMClassifier application.\n It will compute the global confusion matrix and kappa index and also the precision, recall and F-score of each class.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
@@ -145,17 +145,16 @@ private:
     AddParameter(ParameterType_Filename, "out", "Output filename");
     SetParameterDescription("out", "Filename, which contains the performances of the SVM model.");
     MandatoryOff("out");
-    SetParameterRole("out", Role_Output);
     AddParameter(ParameterType_Filename, "svm", "SVM validation filename");
     SetParameterDescription("svm",
                             "SVM model to validate (given by TrainSVMImagesClassification output for instance).");
 
    // Doc example parameter settings
-   SetDocExampleParameterValue("il", "Classification/QB_1_ortho.tif");
-   SetDocExampleParameterValue("vd", "VectorData_QB1_bis.shp");
-   SetDocExampleParameterValue("imstat", "clImageStatisticsQB123.xml");
-   SetDocExampleParameterValue("svm", "clsvmModelQB123.svm");
-   SetDocExampleParameterValue("out", "PerformanceEstimationQB123.txt");
+   SetDocExampleParameterValue("il", "QB_1_ortho.tif");
+   SetDocExampleParameterValue("vd", "VectorData_QB1.shp");
+   SetDocExampleParameterValue("imstat", "EstimateImageStatisticsQB1.xml");
+   SetDocExampleParameterValue("svm", "clsvmModelQB1.svm");
+   SetDocExampleParameterValue("out", "PerformanceEstimationQB1.txt");
   }
 
   void DoUpdateParameters()

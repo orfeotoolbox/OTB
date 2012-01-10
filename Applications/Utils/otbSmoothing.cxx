@@ -57,7 +57,7 @@ private:
     SetName("Smoothing");
     SetDescription("Apply a smoothing filter to an image");
 
-    SetDocName("Smoothing Application");
+    SetDocName("Smoothing");
     SetDocLongDescription("This application applies smoothing filter to an image."
       " Either gaussian, mean, or anisotropic diffusion are available.");
     SetDocLimitations("None");

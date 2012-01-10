@@ -55,9 +55,9 @@ private:
     SetName("BandMath");
     SetDescription("Perform a mathematical operation on monoband images");
 
-    SetDocName("Band Math Application");
+    SetDocName("Band Math");
     SetDocLongDescription("This application performs a mathematical operation on monoband images."
-      " Mathematical formula interpretation is done via MuPasrer libraries http://muparser.sourceforge.net/");
+      " Mathematical formula interpretation is done via MuParser libraries http://muparser.sourceforge.net/");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");

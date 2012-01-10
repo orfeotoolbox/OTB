@@ -99,7 +99,7 @@ ImageRegionAdaptativeSplitter<VImageDimension>
     m_IsUpToDate = true;
     return;
     }
- 
+
   // Now we can handle the case where we have a tile hint and a
   // non-trivial requested number of splits
   SizeType tilesPerDim, splitsPerDim;
@@ -115,7 +115,7 @@ ImageRegionAdaptativeSplitter<VImageDimension>
     // Try to group splits
     SizeType groupTiles;
     groupTiles.Fill(1);
-    
+
     unsigned int i=0;
 
     // TODO: this should not fall in infinite loop, but add more
@@ -170,7 +170,7 @@ ImageRegionAdaptativeSplitter<VImageDimension>
     {
     SizeType divideTiles;
     divideTiles.Fill(1);
-    
+
     unsigned int i = 1;
 
     while(totalTiles * (divideTiles[0] * divideTiles[1]) < m_RequestedNumberOfSplits)
@@ -199,15 +199,15 @@ ImageRegionAdaptativeSplitter<VImageDimension>
             // Build the split
             RegionType newSplit;
             IndexType newSplitIndex;
-            
+
             newSplitIndex[0] = tilex * m_TileHint[0] + divx * splitSize[0];
             newSplitIndex[1] = tiley * m_TileHint[1] + divy * splitSize[1];
-            
+
             newSplit.SetIndex(newSplitIndex);
             newSplit.SetSize(splitSize);
-            
+
             newSplit.Crop(m_ImageRegion);
-            
+
             m_StreamVector.push_back(newSplit);
             }
           }

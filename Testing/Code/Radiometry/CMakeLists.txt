@@ -27,6 +27,7 @@ SET(RADIOMETRY_TESTS7 ${CXX_TEST_PATH}/otbRadiometryTests7)
 SET(RADIOMETRY_TESTS8 ${CXX_TEST_PATH}/otbRadiometryTests8)
 SET(RADIOMETRY_TESTS9 ${CXX_TEST_PATH}/otbRadiometryTests9)
 SET(RADIOMETRY_TESTS10 ${CXX_TEST_PATH}/otbRadiometryTests10)
+SET(SPECTRUM_DB ${OTB_DATA_ROOT}/Input/BD-CNES)
 
 
 ADD_TEST(raTvLAIFromNDVIFormosat2_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}
@@ -395,14 +396,26 @@ ADD_TEST(raTuAtmosphericCorrectionParametersNew ${RADIOMETRY_TESTS3}
 
 ##########           otb::FilterFunctionValues -------------------
 # in otbAtmosphericCorrectionParameters.h/.cxx
-ADD_TEST(raTvFilterFunctionValuesTest ${RADIOMETRY_TESTS3}
+ADD_TEST(raTuFilterFunctionValuesTest ${RADIOMETRY_TESTS3}
         otbFilterFunctionValuesTest
-        ${TEMP}/raTvFilterFunctionValuesTest.txt
+        ${TEMP}/raTuFilterFunctionValuesTest.txt
         0.5             # lambda min
         0.7             # lambda max
         0.05            # user step
         0.2 0.5 0.3 0.9 0.8 # vector
 )
+
+##########           otb::FilterFunctionValuesSpectralResponse -------------------
+# test the FilterFunctionValuesFilter created by Spectral Responde class
+ADD_TEST(raTvFilterFunctionValuesSpectralResponseTest ${RADIOMETRY_TESTS3}
+    --compare-ascii ${EPSILON_6} ${BASELINE_FILES}/raTvFilterFunctionValuesSpectralResponseTest.txt
+        ${TEMP}/raTvFilterFunctionValuesSpectralResponseTest.txt
+        otbFilterFunctionValuesSpectralResponseTest
+        ${SPECTRUM_DB}/JHU/becknic/manmade/txt/0092uuu.txt
+        ${TEMP}/raTvFilterFunctionValuesSpectralResponseTest.txt
+        0.0025     
+)
+
 
 ##########           otb::FilterFunctionValues DigitalGlobe sensitivity files -------------------
 #ADD_TEST(raTvFilterFunctionValuesDigitalGlobeQBTest ${RADIOMETRY_TESTS3}

@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
   otbI18nMacro();
   
   typedef otb::ViewerController ControllerType;
-  typedef otb::ViewerViewGUI ViewType;
+  typedef otb::ViewerViewGUI    ViewType;
 
   ControllerType::Pointer controller = ControllerType::New();
   ViewType::Pointer view = ViewType::New();

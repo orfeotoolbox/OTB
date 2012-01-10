@@ -46,29 +46,29 @@ private:
   void DoInit()
   {
     SetName("DEMConvert");
-    SetDescription("Convert a DEM file into a general raster ");
+    SetDescription("Converts a geo-referenced DEM image into a general raster file compatible with OTB DEM handling.");
 
-    SetDocName("DEM Convert Application");
-    SetDocLongDescription("This application convert a DEM file into a general raster (.ras, .geom and .omd). To be used, those files have to be in a stand alone directory");
+    SetDocName("DEM Conversion");
+    SetDocLongDescription("In order to be understood by the Orfeo ToolBox and the underlying OSSIM library, a geo-referenced Digital Elevation Model image can be converted into a general raster image, which consists in 3 files with the following extensions: .ras, .geom and .omd. Once converted, you have to place these files in a separate directory, and you can then use this directory to set the \"DEM Directory\" parameter of a DEM based OTB application or filter.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
-    AddDocTag("Image manipulation");
+    AddDocTag(Tags::Manip);
 
-    AddParameter(ParameterType_InputImage,  "in",  "Input Image");
-    SetParameterDescription("in", "Input image to filter.");
+    AddParameter(ParameterType_InputImage,  "in",  "Input geo-referenced DEM");
+    SetParameterDescription("in", "Input geo-referenced DEM to convert to general raster format.");
 
-    AddParameter(ParameterType_Filename,    "out", "Output prefix");
+    AddParameter(ParameterType_Filename,    "out", "Prefix of the output files");
     std::ostringstream oss;
-    oss << "will be used to get the prefix of the images to write. ";
-    oss << "The files - Output.geom, Output.omd and Output.ras - will be generated";
+    oss << "will be used to get the prefix (name withtout extensions) of the files to write. ";
+    oss << "Three files - prefix.geom, prefix.omd and prefix.ras - will be generated.";
     SetParameterDescription("out", oss.str());
-    SetParameterRole("out", Role_Output);
+    //MandatoryOn("out");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "QB_Toulouse_Ortho_Elev.tif");
-    SetDocExampleParameterValue("out", "outputDEM.any");
+    SetDocExampleParameterValue("out", "outputDEM");
 }
 
 void DoUpdateParameters()

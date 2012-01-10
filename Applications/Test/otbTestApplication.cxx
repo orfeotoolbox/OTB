@@ -44,7 +44,7 @@ private:
     SetDescription("This application helps developers to test parameters types");
 
 
-    SetDocName("Test Application");
+    SetDocName("Test");
     SetDocLongDescription("The purpose of this application is to test parameters types.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");

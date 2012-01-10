@@ -53,7 +53,7 @@ private:
     SetDescription("Extracts an image envelope.");
 
     // Documentation
-    SetDocName("Image Envelope Application");
+    SetDocName("Image Envelope");
     SetDocLongDescription("Build a vector data containing the polygon of the image envelope.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
@@ -75,7 +75,7 @@ private:
     MandatoryOff("proj");
     
    // Doc example parameter settings
-    SetDocExampleParameterValue("in", "sensor_stereo_left.tif");
+    SetDocExampleParameterValue("in", "QB_TOULOUSE_MUL_Extract_500_500.tif");
     SetDocExampleParameterValue("out", "ImageEnvelope.shp");
   }
 

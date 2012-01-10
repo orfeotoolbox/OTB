@@ -13,7 +13,6 @@
 #define Services_h
 
 #include <ossimPluginConstants.h>
-#include <otb/JSDDateTime.h>
 
 namespace ossimplugins
 {
@@ -50,7 +49,7 @@ public:
    * @retval lon :    Longitude of the world point
    * @retval lat :    Latitude of the world point
    */
-  virtual int ImageToWorld(double distance, JSDDateTime time, double height, double& lon, double& lat) = 0;
+  virtual int ImageToWorld(double distance, JSDDateTime time, double height, double& lon, double& lat) const = 0;
 protected:
   SensorParams * _params;
   PlatformPosition* _position;

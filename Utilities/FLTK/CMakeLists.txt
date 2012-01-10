@@ -334,7 +334,7 @@ UTILITY_SOURCE(FLUID_COMMAND fluid fluid fluid.cxx)
 SET(FLUID_COMMAND "${FLUID_COMMAND}" CACHE INTERNAL "" FORCE)
 
 # Include header files in fltk binary tree
-INCLUDE_DIRECTORIES(${FLTK_BINARY_DIR})
+INCLUDE_DIRECTORIES(BEFORE ${FLTK_BINARY_DIR})
 
 # Do the build of fltk libraries and fluid
 SUBDIRS(src)

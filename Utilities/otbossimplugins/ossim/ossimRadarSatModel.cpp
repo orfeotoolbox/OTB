@@ -1036,11 +1036,11 @@ bool ossimRadarSatModel::InitRefPoint(const ossimKeywordlist &kwl, const char *p
   _refPoint->set_distance(distance);
 
 
-//// essai : line spacing et vitesse satellite
+//// essai : line spacing et speed satellite
 //  const char* line_spacing_str = kwl.find(prefix,"line_spacing");
 //  double line_spacing = atof(line_spacing_str);
 //  Ephemeris * ephemeris = _refPoint->get_ephemeris() ;
-//  double velSat = sqrt(pow(ephemeris->get_vitesse()[0], 2)+ pow(ephemeris->get_vitesse()[1], 2)+ pow(ephemeris->get_vitesse()[2], 2));
+//  double velSat = sqrt(pow(ephemeris->get_speed()[0], 2)+ pow(ephemeris->get_speed()[1], 2)+ pow(ephemeris->get_speed()[2], 2));
 //  double prfeq = velSat / line_spacing ;
 //  _sensor->set_prf(prfeq);
 //  _sensor->set_nAzimuthLook(1.0);

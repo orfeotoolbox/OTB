@@ -54,7 +54,7 @@ private:
     SetDocLongDescription("This application performs an translation on the input image.\n Parameters of the translation can be set with tx and ty options.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("Translation application");
+    SetDocSeeAlso("Translation");
   
     AddDocTag("Conversion");
     AddDocTag(Tags::Geometry);
@@ -65,7 +65,7 @@ private:
     AddParameter(ParameterType_Float,        "ty",   "The Y translation (in physical units)");
 
     // Doc example parameter settings
-    SetDocExampleParameterValue("in", "QB_MUL_ROI_1000_100.tif");
+    SetDocExampleParameterValue("in", "qb_toulouse_sub.tif");
     SetDocExampleParameterValue("out", "rigitTransformImage.tif");
     SetDocExampleParameterValue("tx", "5");
     SetDocExampleParameterValue("ty", "5");

@@ -19,6 +19,7 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
+#include "itkMersenneTwisterRandomVariateGenerator.h"
 #include "otbVectorImage.h"
 #include "otbImage.h"
 #include "itkEuclideanDistance.h"
@@ -173,7 +174,7 @@ private:
     SetName("KMeansClassification");
     SetDescription("Unsupervised KMeans image classification");
 
-    SetDocName("Unsupervised KMeans image classification Application");
+    SetDocName("Unsupervised KMeans image classification");
     SetDocLongDescription("Performs Unsupervised KMeans image classification.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
@@ -209,12 +210,10 @@ private:
     AddParameter(ParameterType_Filename, "outmeans", "Centroid filename");
     SetParameterDescription("outmeans", "save label centroid in txt file.");
     MandatoryOff("outmeans");
-    SetParameterRole("outmeans", Role_Output);
 
 
     // Doc example parameter settings
-    SetDocExampleParameterValue("in", "qb_RoadExtract.img");
-    SetDocExampleParameterValue("vm", "qb_RoadExtract_mask.png");
+    SetDocExampleParameterValue("in", "QB_1_ortho.tif");
     SetDocExampleParameterValue("ts", "1000");
     SetDocExampleParameterValue("nc", "5");
     SetDocExampleParameterValue("maxit", "1000");
@@ -347,7 +346,7 @@ private:
     SampleType sample;
     //first sample
 
-
+    itk::Statistics::MersenneTwisterRandomVariateGenerator::Pointer randGen=itk::Statistics::MersenneTwisterRandomVariateGenerator::GetInstance();
     if (maskFlag)
       {
       while (!it.IsAtEnd() && !m_MaskIt .IsAtEnd() && (m_MaskIt.Get() <= 0))
@@ -410,9 +409,7 @@ private:
       {
       for (unsigned int compIndex = 0; compIndex < sampleSize; ++compIndex)
         {
-        initialMeans[compIndex + classIndex * sampleSize] = min[compIndex] + (max[compIndex] - min[compIndex]) * rand()
-            / (RAND_MAX + 1.0);
-
+        initialMeans[compIndex + classIndex * sampleSize] = min[compIndex] + (max[compIndex] - min[compIndex]) * randGen->GetUniformVariate(0.0, 1.0);
         }
       }
     otbAppLogINFO(<<totalSamples <<" samples will be used as estimator input."<<std::endl);

@@ -32,6 +32,8 @@ HermiteInterpolator::HermiteInterpolator():
 
 HermiteInterpolator::HermiteInterpolator(int nbrPoints, double* x, double* y, double* dy):
   theNPointsAvailable(nbrPoints),
+  prodC(NULL),
+  sumC(NULL),
   isComputed(false)
 {
   if(x != NULL)
@@ -95,6 +97,8 @@ HermiteInterpolator::~HermiteInterpolator()
 
 HermiteInterpolator::HermiteInterpolator(const HermiteInterpolator& rhs):
   theNPointsAvailable(rhs.theNPointsAvailable),
+  prodC(NULL),
+  sumC(NULL),
   isComputed(false)
 {
   if(rhs.theXValues != NULL)
@@ -180,6 +184,8 @@ HermiteInterpolator& HermiteInterpolator::operator =(const HermiteInterpolator& 
   {
     thedYValues = NULL;
   }
+  prodC = NULL;
+  sumC = NULL;
 
   return *this;
 }

@@ -30,7 +30,7 @@ GalileanEphemeris::~GalileanEphemeris()
 
 }
 
-GalileanEphemeris::GalileanEphemeris(JSDDateTime date, double pos[3], double vitesse[3]) : Ephemeris(date, pos, vitesse)
+GalileanEphemeris::GalileanEphemeris(JSDDateTime date, double pos[3], double speed[3]) : Ephemeris(date, pos, speed)
 {
 
 }
@@ -54,7 +54,7 @@ void GalileanEphemeris::ToGeographic(GeographicEphemeris* vGeo)
   double s,c;
 
   double pos[3];
-  double vitesse[3];
+  double speed[3];
 
   _date.AsGMSTDateTime(&h) ;
     c = cos (h.get_tms()) ;
@@ -64,12 +64,12 @@ void GalileanEphemeris::ToGeographic(GeographicEphemeris* vGeo)
     pos[0] = _position[0]   * c + _position[1] * s ;
     pos[1] = - _position[0] * s + _position[1] * c ;
     pos[2] = _position[2] ;
-    vitesse[0]  =   _vitesse[0]  * c +  _vitesse[1] * s - OMEGATERRE * (_position[0] * s - _position[1] * c) ;
-    vitesse[1]  = - _vitesse[0]  * s +  _vitesse[1] * c - OMEGATERRE * (_position[0] * c + _position[1] * s) ;
-    vitesse[2]  = _vitesse[2] ;
+    speed[0]  =   _speed[0]  * c +  _speed[1] * s - OMEGATERRE * (_position[0] * s - _position[1] * c) ;
+    speed[1]  = - _speed[0]  * s +  _speed[1] * c - OMEGATERRE * (_position[0] * c + _position[1] * s) ;
+    speed[2]  = _speed[2] ;
 
     vGeo->set_position(pos);
-    vGeo->set_vitesse(vitesse);
+    vGeo->set_speed(speed);
 }
 
 void GalileanEphemeris::ToGeographic(double greenwich,GeographicEphemeris* vGeo)
@@ -89,7 +89,7 @@ void GalileanEphemeris::ToGeographic(double greenwich,GeographicEphemeris* vGeo)
     ierr = p2nutt( 2, greenwich, day, p, pd ) ;
 
   double position[3];
-  double vitesse[3];
+  double speed[3];
 
     position[0] = _position[0]*p[1] + _position[1]*p[4] + _position[2]*p[7] ;
 
@@ -97,14 +97,14 @@ void GalileanEphemeris::ToGeographic(double greenwich,GeographicEphemeris* vGeo)
 
     position[2] = _position[0]*p[3] + _position[1]*p[6] + _position[2]*p[9] ;
 
-    vitesse[0] = _vitesse[0]*p[1] +_vitesse[1]*p[4] + _vitesse[2]*p[7] + OMEGATERRE * (_position[0]*pd[1] + _position[1]*pd[4] + _position[2]*pd[7] );
+    speed[0] = _speed[0]*p[1] +_speed[1]*p[4] + _speed[2]*p[7] + OMEGATERRE * (_position[0]*pd[1] + _position[1]*pd[4] + _position[2]*pd[7] );
 
-    vitesse[1] = _vitesse[0]*p[2] + _vitesse[1]*p[5] + _vitesse[2] *p[8] + OMEGATERRE * (_position[0]*pd[2] + _position[1]*pd[5] + _position[2]*pd[8] );
+    speed[1] = _speed[0]*p[2] + _speed[1]*p[5] + _speed[2] *p[8] + OMEGATERRE * (_position[0]*pd[2] + _position[1]*pd[5] + _position[2]*pd[8] );
 
-    vitesse[2] = _vitesse[0]*p[3] + _vitesse[1]*p[6] + _vitesse[2]*p[9] + OMEGATERRE * (_position[0]*pd[3] + _position[1]*pd[6] + _position[2]*pd[9] );
+    speed[2] = _speed[0]*p[3] + _speed[1]*p[6] + _speed[2]*p[9] + OMEGATERRE * (_position[0]*pd[3] + _position[1]*pd[6] + _position[2]*pd[9] );
 
   vGeo->set_position(position);
-  vGeo->set_vitesse(vitesse);
+  vGeo->set_speed(speed);
 }
 
 GalileanEphemeris::operator GeographicEphemeris()
@@ -123,7 +123,7 @@ int GalileanEphemeris::p2nutt(int newcmb, double greenwich, double day,
             double p[], double pd[] )
 {
   const double PI          = 3.14159265358979323846 ;
-  const double DEUXPI      = 6.28318530717958647693 ;
+  const double TWOPI      = 6.28318530717958647693 ;
   // const double MU          = 3.9860047e+14 ;
   // const double JOURCIVIL_LENGTH   = 86400.0 ;
   // const double JOURSIDERAL = 86164.09054 ;
@@ -194,20 +194,20 @@ int GalileanEphemeris::p2nutt(int newcmb, double greenwich, double day,
   t = day-2451540. - 0.5 ;
 
   /*  L = MEAN ANOMALY OF THE MOON */
-  arg[6] = fmod( 0.2355548394e+01 + t*( 0.2280271437e+00 + t* 0.1137830e-12 ),DEUXPI);
+  arg[6] = fmod( 0.2355548394e+01 + t*( 0.2280271437e+00 + t* 0.1137830e-12 ),TWOPI);
 
   /*C  L-PRIME = MEAN ANOMALY OF THE SUN (EARTH) */
-  arg[5] = fmod( 0.6240035939e+01 + t*( 0.1720197005e-01 - t* 0.2096864e-14 ),DEUXPI);
+  arg[5] = fmod( 0.6240035939e+01 + t*( 0.1720197005e-01 - t* 0.2096864e-14 ),TWOPI);
 
   /*  F = L - OMEGA (SEE ABOVE AND BELOW) */
-  ff = fmod( 0.1627901934e+01 + t*( 0.2308957196e+00 - t* 0.4817699e-13 ),DEUXPI);
+  ff = fmod( 0.1627901934e+01 + t*( 0.2308957196e+00 - t* 0.4817699e-13 ),TWOPI);
 
   /*  D = MEAN ELONGATION OF THE MOON FROM THE SUN */
-  dd = fmod( 0.5198469514e+01 + t*( 0.2127687104e+00 - t* 0.2504244e-13 ),DEUXPI);
+  dd = fmod( 0.5198469514e+01 + t*( 0.2127687104e+00 - t* 0.2504244e-13 ),TWOPI);
 
   /*  OMEGA = LONGITUDE OF MOON'S ASCENDING NODE FROM MEAN EQUINOX OF DATE */
   arg[0]=0.e0;
-  arg[1] = fmod( 0.2182438624e+01 - t*( 0.9242175478e-03 - t* 0.2709206e-13 ),DEUXPI);
+  arg[1] = fmod( 0.2182438624e+01 - t*( 0.9242175478e-03 - t* 0.2709206e-13 ),TWOPI);
 
     arg[3] = 2.e0*(ff + arg[1]);
     arg[2] = arg[3] - 2.e0*dd ;
@@ -248,12 +248,12 @@ int GalileanEphemeris::p2nutt(int newcmb, double greenwich, double day,
   else if ( newcmb == 1 )
   {
     /*  SIDEREAL ANGLE, FROM 'COOT20' WITH NEWCOMB'S FORMULA:*/
-    /*srang = fmod(STD20R+(OMT20R+OMQ20R*day)*day,DEUXPI);*/
+    /*srang = fmod(STD20R+(OMT20R+OMQ20R*day)*day,TWOPI);*/
   }
   else if ( newcmb == 2 )
   {
     /*  SIDEREAL ANGLE, FROM INPUT */
-    srang = fmod(greenwich*PI/180.e0,DEUXPI) ;
+    srang = fmod(greenwich*PI/180.e0,TWOPI) ;
     /*printf("srang dans p2nutt %g",greenwich);*/
   }
   else

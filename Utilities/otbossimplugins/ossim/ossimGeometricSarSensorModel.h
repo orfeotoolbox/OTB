@@ -12,22 +12,11 @@
 #ifndef ossimGeometricSarSensorModel_H
 #define ossimGeometricSarSensorModel_H
 
-#include <ossim/projection/ossimSensorModel.h>
-#include <ossim/projection/ossimMapProjection.h>
-#include <ossim/base/ossimIpt.h>
-#include <ossim/base/ossimFilename.h>
-#include <ossim/base/ossimGpt.h>
-#include <ossim/base/ossimDpt.h>
-#include <ossim/base/ossimEcefRay.h>
-#include <ossim/base/ossimEcefPoint.h>
-#include <ossim/base/ossimMatrix3x3.h>
-#include <ossim/base/ossimRtti.h>
-#include <iostream>
 #include <list>
-#include <cstdlib>
+#include <vector>
+
+#include <ossim/projection/ossimSensorModel.h>
 #include <ossim/projection/ossimCoarseGridModel.h>
-#include <otb/CivilDateTime.h>
-#include <ossim/elevation/ossimElevManager.h>
 
 namespace ossimplugins
 {
@@ -35,6 +24,8 @@ namespace ossimplugins
 class PlatformPosition;
 class SensorParams;
 class RefPoint;
+class SarSensor;
+class JSDDateTime;
 
 /**
  * @brief This class allows for direct localisation and indirect localisation
@@ -72,6 +63,14 @@ public:
     * @param line Line coordinate of the image point
     */
    virtual JSDDateTime getTime(double line) const;
+ 
+   /**
+    * @brief This function associates an image line number to a platform position and speed
+    * @param line Line coordinate of the image point
+    * @param position Position of the sensor at line line
+    * @param speed Speed of the sensor at line line
+    */
+  virtual bool getPlatformPositionAtLine(double line, vector<double>& position, vector<double>& speed);
 
    /**
     * @brief This function is able to convert image coordinates into world
@@ -180,6 +179,11 @@ protected:
    PlatformPosition *_platformPosition;
    SensorParams * _sensor;
    RefPoint * _refPoint;
+   // Note that this is only mutable because of bad design of the
+   // classes, with a bunch of classes initializing the variables of
+   // the base class directly, the 3 variable above must be made
+   // private.
+   mutable SarSensor* _sarSensor;
 
    /**
     * @brief True iff the product is ground range
@@ -200,7 +204,7 @@ protected:
    double _optimizationBiasX ;
    double _optimizationBiasY ;
 
-   ossimFilename _imageFilename; 
+   ossimFilename _imageFilename;
    ossimFilename _productXmlFile;
 
    ossimRefPtr<ossimCoarseGridModel> _replacementOcgModel;

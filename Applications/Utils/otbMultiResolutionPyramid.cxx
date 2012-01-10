@@ -63,7 +63,7 @@ private:
     SetDescription("Build a multi-resolution pyramid of the image.");
 
     // Documentation
-    SetDocName("Multi Resolution Pyramid Application");
+    SetDocName("Multi Resolution Pyramid");
     SetDocLongDescription("This application builds a multi-resolution pyramid of the input image.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
@@ -78,7 +78,6 @@ private:
 
     AddParameter(ParameterType_Filename, "out", "Output Image");
     SetParameterDescription("out","will be used to get the prefix and the extension of the images to write");
-    SetParameterRole("out", Role_Output);
 
     AddParameter(ParameterType_RAM, "ram", "Available RAM");
     SetDefaultParameterInt("ram", 256);

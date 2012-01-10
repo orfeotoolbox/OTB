@@ -37,34 +37,34 @@ class ITK_EXPORT ViewerController
 {
 public:
   /** Standard class typedefs */
-  typedef ViewerController                   Self;
-  typedef ViewerControllerInterface          Superclass;
-  typedef itk::SmartPointer<Self>                        Pointer;
-  typedef itk::SmartPointer<const Self>                  ConstPointer;
+  typedef ViewerController              Self;
+  typedef ViewerControllerInterface     Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef ViewerViewGUI                      ViewType;
-  typedef ViewType::Pointer                              ViewPointerType;
-  typedef ViewType::VisuViewType                         VisuViewType;
-  typedef ViewType::VisuViewPointerType                  VisuViewPointerType;
-  typedef ViewType::ImageWidgetPointerType               VisuWidgetPointerType;
+  typedef ViewerViewGUI                    ViewType;
+  typedef ViewType::Pointer                ViewPointerType;
+  typedef ViewType::VisuViewType           VisuViewType;
+  typedef ViewType::VisuViewPointerType    VisuViewPointerType;
+  typedef ViewType::ImageWidgetPointerType VisuWidgetPointerType;
   
-  typedef Superclass::ImageType                          InputImageType;
-  typedef Superclass::ImagePointerType                   InputImagePointerType;
+  typedef Superclass::ImageType            InputImageType;
+  typedef Superclass::ImagePointerType     InputImagePointerType;
 
   /** NewVisu */
-  typedef ModelType::VisuModelType                                      VisuModelType;        //RenderingImageLayer
-  typedef ModelType::VisuModelPointerType                               VisuModelPointerType; //RenderingImageLayer
+  typedef ModelType::VisuModelType        VisuModelType;
+  typedef ModelType::VisuModelPointerType VisuModelPointerType;
   
-  typedef ObjectList<VisuControllerType>                                VisuControllerListType;
+  typedef ObjectList<VisuControllerType> VisuControllerListType;
   
-  typedef WidgetResizingActionHandler<VisuModelType, VisuViewType>       ResizingHandlerType;
-  typedef ResizingHandlerType::Pointer                                  ResizingHandlerPointerType;
+  typedef WidgetResizingActionHandler<VisuModelType, VisuViewType> ResizingHandlerType;
+  typedef ResizingHandlerType::Pointer                             ResizingHandlerPointerType;
 
-  typedef ChangeExtractRegionActionHandler<VisuModelType, VisuViewType>  ChangeExtractRegionHandlerType;
+  typedef ChangeExtractRegionActionHandler<VisuModelType, VisuViewType> ChangeExtractRegionHandlerType;
   typedef ChangeExtractRegionHandlerType::Pointer                       ChangeExtractRegionHandlerPointerType;
   
-  typedef AutoScaleActionHandler<ViewType::ImageWidgetType>             AutoScaleHandlerType;
-  typedef AutoScaleHandlerType::Pointer                                 AutoScaleHandlerPointerType;
+  typedef AutoScaleActionHandler<ViewType::ImageWidgetType> AutoScaleHandlerType;
+  typedef AutoScaleHandlerType::Pointer                     AutoScaleHandlerPointerType;
   
   /** Standard type macros */
   itkTypeMacro(ViewerController, Superclass);
@@ -135,4 +135,3 @@ private:
 } //end namespace otb
 
 #endif
-

@@ -44,7 +44,7 @@ static const std::string Raster="Raster";
 static const std::string SAR="SAR";
 static const std::string Stereo="Stereo";
 static const std::string Segmentation="Segmentation";
-static const std::string Vector="Vector data Manipulation";
+static const std::string Vector="Vector Data Manipulation";
 
 } // end namespace Wrappers
 } // end namespace Tags

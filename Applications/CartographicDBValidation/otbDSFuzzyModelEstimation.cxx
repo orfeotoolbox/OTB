@@ -120,7 +120,7 @@ private:
     SetName("DSFuzzyModelEstimation");
     SetDescription("Estimate feature fuzzy model parameters using 2 vector data (ground truth samples and wrong samples).");
 
-    SetDocName("Fuzzy Model estimation Application");
+    SetDocName("Fuzzy Model estimation");
     SetDocLongDescription("Estimate feature fuzzy model parameters using 2 vector data (ground truth samples and wrong samples).");
     SetDocLimitations("None.");
     SetDocAuthors("OTB-Team");
@@ -170,7 +170,6 @@ private:
 
     AddParameter(ParameterType_Filename,"out","Output filename");
     SetParameterDescription("out","Output model file name (xml file)");
-    SetParameterRole("out", Role_Output);
 
     // Doc example parameter settings
     SetDocExampleParameterValue("psin", "cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_gt.shp");

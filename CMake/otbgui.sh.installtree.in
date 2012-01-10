@@ -16,13 +16,7 @@ else
   OTB_GUI_LAUNCHER=otbApplicationLauncherQt
 fi
 
-# works for build dir
-if [ -d @APPLICATION_BINARY_PATH@ ]
-then
-  ITK_AUTOLOAD_PATH=@APPLICATION_BINARY_PATH@:$ITK_AUTOLOAD_PATH
-fi
-
-# works for install tree
+# use the default install tree path for applications
 if [ -d $CURRENT_SCRIPT_DIR/../@OTB_INSTALL_APP_DIR_CM24@ ]
 then
   ITK_AUTOLOAD_PATH=$CURRENT_SCRIPT_DIR/../@OTB_INSTALL_APP_DIR_CM24@:$ITK_AUTOLOAD_PATH

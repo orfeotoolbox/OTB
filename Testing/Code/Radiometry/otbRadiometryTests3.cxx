@@ -28,6 +28,7 @@ void RegisterTests()
   REGISTER_TEST(otbDEMCaracteristicsExtractor);
   REGISTER_TEST(otbAtmosphericCorrectionParametersNew);
   REGISTER_TEST(otbFilterFunctionValuesTest);
+  REGISTER_TEST(otbFilterFunctionValuesSpectralResponseTest);
   REGISTER_TEST(otbFilterFunctionValuesDigitalGlobeTest);
   REGISTER_TEST(otbSIXSTraitsTest);
   REGISTER_TEST(otbSIXSTraitsComputeAtmosphericParametersTest);

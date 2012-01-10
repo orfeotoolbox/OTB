@@ -25,12 +25,17 @@ namespace otb
 /** \class ChangeScaleActionHandler
 *   \brief Implements basic Scroll, Full and Zoom  widgets resizing.
 *
+*   The m_ViewToUpdate attribut is use in the case of the view and the
+*   model doesn't belong to the same ImageView (typically, Link function
+*   in otbView). If a m_ViewToUpdate is set, the IsotropicZoom of its
+*   ZoomWidget will be update too (at the same time of the one of m_View).
+*
 *   \sa ImageWidgetController
 *   \sa ImageWidgetActionHandler
 *  \ingroup Visualization
  */
 
-template <class TModel, class TView>
+template <class TModel, class TView, class TViewToUpdate=TView>
 class ChangeScaleActionHandler
   : public ImageWidgetActionHandler
 {
@@ -55,6 +60,9 @@ public:
   /** View typedefs */
   typedef TView                      ViewType;
   typedef typename ViewType::Pointer ViewPointerType;
+ 
+  typedef TViewToUpdate                      ViewToUpdateType;
+  typedef typename ViewToUpdateType::Pointer ViewToUpdatePointerType;
 
   /** Handle widget event
    * \param widgetId The id of the moved widget
@@ -78,6 +86,13 @@ public:
         if (newScale >= 1.0)
           {
           m_View->GetZoomWidget()->SetIsotropicZoom(newScale);
+
+          // If set, update the IsotropicZoom of the second view
+          if(m_ViewToUpdate.IsNotNull())
+            {
+            m_ViewToUpdate->GetZoomWidget()->SetIsotropicZoom(newScale);
+            }
+
           RegionType region = m_Model->GetScaledExtractRegion();
 
           typename RegionType::IndexType index = region.GetIndex();
@@ -102,6 +117,9 @@ public:
   itkSetObjectMacro(View, ViewType);
   itkGetObjectMacro(View, ViewType);
 
+  itkSetObjectMacro(ViewToUpdate, ViewToUpdateType);
+  itkGetObjectMacro(ViewToUpdate, ViewToUpdateType);
+
   /** Set/Get the pointer to the model */
   itkSetObjectMacro(Model, ModelType);
   itkGetObjectMacro(Model, ModelType);
@@ -113,7 +131,9 @@ public:
 protected:
   /** Constructor */
   ChangeScaleActionHandler() : m_View(), m_Model(), m_ScaleRatio(1.25)
-  {}
+  {
+    m_ViewToUpdate = NULL;
+  }
 
   /** Destructor */
   virtual ~ChangeScaleActionHandler(){}
@@ -129,6 +149,7 @@ private:
 
   // Pointer to the view
   ViewPointerType m_View;
+  ViewToUpdatePointerType m_ViewToUpdate;
 
   // Pointer to the model
   ModelPointerType m_Model;

@@ -186,9 +186,4 @@ void SensorModelAdapter::InverseTransformPoint(double lon, double lat, double h,
   z = ossimGPoint.height();
 }
 
-ossimProjection* SensorModelAdapter::GetOssimModel() //FIXME temporary only
-{
-  return m_SensorModel;
-}
-
-}
+} // namespace otb

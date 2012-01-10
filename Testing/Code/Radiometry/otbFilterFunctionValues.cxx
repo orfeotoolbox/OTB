@@ -24,6 +24,53 @@
 #include <cstdlib>
 #include "otbObjectList.h"
 #include "itksys/SystemTools.hxx"
+#include "otbSpectralResponse.h"
+
+
+
+int otbFilterFunctionValuesSpectralResponseTest(int argc, char * argv[])
+{
+
+  if ( argc!=4)
+   {
+     std::cout << argv[0] << std::endl << "\t" << "<Spectrum_filename>"  << "\t" << "<Output_filename>"<<  "\t" << "<Lambda>"<<std::endl;
+     return EXIT_FAILURE;
+   }
+
+  const std::string inFile(argv[1]);
+  char *       outname   = argv[2];
+  double step = atof(argv[3]);
+
+  typedef otb::SpectralResponse< double, double>  ResponseType;
+  typedef ResponseType::Pointer  ResponsePointerType;
+  typedef otb::FilterFunctionValues FilterFunctionValuesType;
+   //Instantiation
+   ResponsePointerType  myResponse=ResponseType::New();
+   //Load file into vector
+   myResponse->Load(inFile, 100.0);
+   //itk::Indent ind;
+
+  typedef otb::FilterFunctionValues FilterFunctionValuesType;
+  // Instantiating object
+  FilterFunctionValuesType::Pointer          filterFunctionValues=myResponse->GetFilterFunctionValues(step);
+  FilterFunctionValuesType::ValuesVectorType object= filterFunctionValues->GetFilterFunctionValues();
+  // Writing output file
+  std::ofstream file;
+  file.open(outname);
+
+  file << "Output vector :" << std::endl;
+  for (unsigned int i = 0; i < object.size(); ++i)
+    {
+    file << object[i] << std::endl;
+    }
+  file << std::endl;
+  file << "L_min :" << filterFunctionValues->GetMinSpectralValue() << std::endl;
+  file << "L_max :" << filterFunctionValues->GetMaxSpectralValue() << std::endl;
+
+  file.close();
+
+  return EXIT_SUCCESS;
+}
 
 
 

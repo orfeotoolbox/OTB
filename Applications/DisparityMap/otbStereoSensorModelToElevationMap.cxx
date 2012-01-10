@@ -70,13 +70,12 @@ private:
     SetDescription("Convert a stereo sensor model to elevation map.");
 
     // Documentation
-    SetDocName("Stereo sensor model to elevation map Application");
+    SetDocName("Stereo sensor model to elevation map");
     SetDocLongDescription("Produce an elevation map from a pair of stereo images along-track by implicit exploration of their epipolar lines.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
  
-    AddDocTag(Tags::Manip);
     AddDocTag(Tags::Stereo);
 
     // Mandatory parameters
@@ -159,8 +158,8 @@ private:
    SetDocExampleParameterValue("sec", "sensor_stereo_right.tif");
    SetDocExampleParameterValue("out", "StereoSensorModelToElevationMap.tif");
    SetDocExampleParameterValue("elev", "dem");
-   SetDocExampleParameterValue("elev.dem.path", "dem");
-   SetDocExampleParameterValue("elev.dem.geoid", "egm96.grd");
+   SetDocExampleParameterValue("elev.dem.path", "DEM_srtm");
+   SetDocExampleParameterValue("elev.dem.geoid", "DEM_srtm/egm96.grd");
   }
 
   void DoUpdateParameters()

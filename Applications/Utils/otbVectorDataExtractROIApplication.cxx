@@ -70,7 +70,7 @@ private:
     SetName("VectorDataExtractROIApplication");
     SetDescription("Perform an extract ROI on the input vector data according to the input image extent");
 
-    SetDocName("VectorData Extract ROI Application");
+    SetDocName("VectorData Extract ROI");
     SetDocLongDescription("This application extract the VectorData features belonging to a region specified by the support image envelope");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
@@ -87,8 +87,8 @@ private:
     ElevationParametersHandler::AddElevationParameters(this, "elev");
 
     // Doc example parameter settings
-    SetDocExampleParameterValue("io.in", "QB_Toulouse_Ortho_XS.tif");
-    SetDocExampleParameterValue("io.vd", "roads.shp");
+    SetDocExampleParameterValue("io.in", "qb_RoadExtract.tif");
+    SetDocExampleParameterValue("io.vd", "qb_RoadExtract_classification.shp");
     SetDocExampleParameterValue("io.out", "apTvUtVectorDataExtractROIApplicationTest.shp");
   }
 

@@ -11,9 +11,7 @@
 
 #include <ossimGeometricSarSensorModel.h>
 
-#include <otb/GalileanEphemeris.h>
-#include <otb/GeographicEphemeris.h>
-#include <otb/GMSTDateTime.h>
+#include <otb/Ephemeris.h>
 #include <otb/PlatformPosition.h>
 #include <otb/SensorParams.h>
 #include <otb/RefPoint.h>
@@ -21,6 +19,7 @@
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimPreferences.h>
 #include <ossim/projection/ossimCoarseGridModel.h>
+#include <ossim/elevation/ossimElevManager.h>
 #include <cmath>
 #include <string>
 
@@ -46,6 +45,7 @@ ossimGeometricSarSensorModel::ossimGeometricSarSensorModel()
    _platformPosition(0),
    _sensor(0),
    _refPoint(0),
+   _sarSensor(0),
    _isProductGeoreferenced(false),
    _optimizationFactorX(0.0),
    _optimizationFactorY(0.0),
@@ -69,6 +69,7 @@ ossimGeometricSarSensorModel::ossimGeometricSarSensorModel(
    _imageFilename(rhs._imageFilename),
    _productXmlFile(rhs._productXmlFile)
 {
+   _sarSensor = new SarSensor(_sensor,_platformPosition);
 }
 
 ossimGeometricSarSensorModel::~ossimGeometricSarSensorModel()
@@ -83,6 +84,12 @@ ossimGeometricSarSensorModel::~ossimGeometricSarSensorModel()
    {
       delete _sensor;
       _sensor = 0;
+   }
+
+   if (_sarSensor != 0)
+   {
+     delete _sarSensor;
+     _sarSensor = 0;
    }
 
    if(_refPoint != 0)
@@ -112,12 +119,34 @@ JSDDateTime ossimGeometricSarSensorModel::getTime(double line) const
    return time;
 }
 
+bool ossimGeometricSarSensorModel::getPlatformPositionAtLine(double line, vector<double>& position, vector<double>& speed)
+{
+  JSDDateTime time = getTime(line);
+  Ephemeris* ephemeris = _platformPosition->Interpolate(time);
+  double* position_ptr = ephemeris->get_position();
+  double* speed_ptr = ephemeris->get_speed();
+  if (position.size() != 3) position.resize(3);
+  if (speed.size() != 3) speed.resize(3);
+  position[0] = position_ptr[0];
+  position[1] = position_ptr[1];
+  position[2] = position_ptr[2];
+  speed[0] = speed_ptr[0];
+  speed[1] = speed_ptr[1];
+  speed[2] = speed_ptr[2];
+  return true;
+}
+
 void ossimGeometricSarSensorModel::lineSampleHeightToWorld(
    const ossimDpt& image_point,
    const double&   heightEllipsoid,
    ossimGpt&       worldPoint) const
 {
-   SarSensor sensor(_sensor,_platformPosition);
+
+  if (!_sarSensor)
+  {
+    // bad design consequence, should be fixed.
+    _sarSensor = new SarSensor(_sensor, _platformPosition);
+  }
    double lon, lat;
    // const double CLUM        = 2.99792458e+8 ;
    
@@ -138,7 +167,7 @@ void ossimGeometricSarSensorModel::lineSampleHeightToWorld(
       slantRange = getSlantRange(col) ;
    }
    
-   int etatLoc = sensor.ImageToWorld(slantRange, azimuthTime, heightEllipsoid, lon, lat);
+   int etatLoc = _sarSensor->ImageToWorld(slantRange, azimuthTime, heightEllipsoid, lon, lat);
 
    if(traceDebug())
    {
@@ -384,6 +413,8 @@ bool ossimGeometricSarSensorModel::loadState(const ossimKeywordlist &kwl,
       }
       result = false;
    }
+
+   _sarSensor = new SarSensor(_sensor, _platformPosition);
 
    // Load the ref point.
    if ( !_refPoint)

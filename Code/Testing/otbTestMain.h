@@ -57,7 +57,7 @@ void LoadTestEnv()
 {
   //Set seed for rand and itk mersenne twister
   srand(1);
-  itk::Statistics::MersenneTwisterRandomVariateGenerator::GetInstance()->SetSeed(1234);
+  itk::Statistics::MersenneTwisterRandomVariateGenerator::GetInstance()->SetSeed(121212);
 }
 
 int main(int ac, char* av[])

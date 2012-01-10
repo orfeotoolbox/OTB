@@ -27,14 +27,13 @@ namespace otb
 
 ViewerViewGUI
 ::ViewerViewGUI():m_TemplateViewerName(""), m_DisplayedLabel("+ "),
-                           m_UndisplayedLabel("- "), m_DiaporamaCurrentIndex(0)
+                  m_UndisplayedLabel("- "), m_DiaporamaCurrentIndex(0)
 {
 
-  m_VisuView               =  VisuViewType::New();
-  m_PreviewWidget          =  ImageWidgetType::New();
-  m_pRenderingFunction      =  StandardRenderingFunctionType::New();
-  m_WidgetManagerList      =  WidgetManagerList::New();
-  m_LinkWidgetManagerList  =  WidgetManagerList::New();
+  m_VisuView              =  VisuViewType::New();
+  m_PreviewWidget         =  ImageWidgetType::New();
+  m_WidgetManagerList     =  WidgetManagerList::New();
+  m_LinkWidgetManagerList =  WidgetManagerList::New();
 
   //Get an instance of the model
   m_ViewerModel = ViewerModel::GetInstance();
@@ -76,6 +75,10 @@ ViewerViewGUI
   unsigned int numberOfOpenedImages = m_ViewerController->OpenInputImage(inputFileName);
  //Initialize
   this->Initialize(numberOfOpenedImages);
+
+  // Select the last opened image
+  guiImageList->value( guiImageList->size() );
+  this->SelectAction();
 }
 
 /**
@@ -274,9 +277,9 @@ ViewerViewGUI
 
   //Link when all images are closed
   if(guiLinkSetupWindow->shown() != 0)
-      if(guiImageList->size()  == 0)
-       this->LinkSetupOk();
-
+    if(guiImageList->size() == 0)
+      this->LinkSetupOk();
+  
   //Erase from the lists
   m_DisplayStatusList.erase( m_DisplayStatusList.begin()+(selectedItem-1));
   m_LinkedDisplayStatusList.erase( m_LinkedDisplayStatusList.begin()+(selectedItem-1));
@@ -301,16 +304,19 @@ ViewerViewGUI
               {
                 //if the closed image is the first one : show the next one
                 this->UpdateDiaporamaProgressBar();
-                ++m_DiaporamaCurrentIndex;            //Increment to show the next image
+                //Increment to show the next image
+                ++m_DiaporamaCurrentIndex;
                 this->DisplayDiaporama();
-                --m_DiaporamaCurrentIndex;            //Decrement because we remove the first image, so the current display become the first
+                //Decrement because we remove the first image, so the current display become the first
+                --m_DiaporamaCurrentIndex;
               }
            }
          else
            {
              if(selectedItem < m_DiaporamaCurrentIndex+1)
               {
-                --m_DiaporamaCurrentIndex;         //Increment the current index because an image before the one displayed is removed
+              //Increment the current index because an image before the one displayed is removed
+                --m_DiaporamaCurrentIndex;
               }
              this->UpdateDiaporamaProgressBar();
            }
@@ -323,7 +329,8 @@ ViewerViewGUI
       if(m_DisplayStatusList.size() == 0)
        {
          m_DiaporamaCurrentIndex=0;
-         this->DiaporamaQuit();          //If no image to display anymore : quit the diaporamaGUI
+         //If no image to display anymore : quit the diaporamaGUI
+         this->DiaporamaQuit();
        }
     }
 
@@ -484,12 +491,13 @@ ViewerViewGUI
  ViewerViewGUI
  ::Display(WidgetManagerList::Pointer  widgetList, unsigned int selectedItem)
  {
+   const ObjectsTrackedType & objTracked = m_ViewerModel->GetObjectList().at(selectedItem-1);
    //Get the view stored in the model
-   CurvesWidgetType::Pointer curveWidget =  m_ViewerModel->GetObjectList().at(selectedItem-1).pCurveWidget;
-   VisuViewPointerType currentVisuView =  m_ViewerModel->GetObjectList().at(selectedItem-1).pVisuView;
+   CurvesWidgetType::Pointer curveWidget =  objTracked.pCurveWidget;
+   VisuViewPointerType currentVisuView =  objTracked.pVisuView;
 
    //First get the histogram list
-   RenderingFunctionType::Pointer pRenderingFunction = m_ViewerModel->GetObjectList().at(selectedItem-1).pRenderFunction;
+   RenderingFunctionType::Pointer pRenderingFunction = objTracked.pRenderFunction;
 
 
    curveWidget->ClearAllCurves();
@@ -499,7 +507,7 @@ ViewerViewGUI
      HistogramCurveType::Pointer bhistogram = HistogramCurveType::New();
      bhistogram->SetHistogramColor(m_Blue);
      bhistogram->SetLabelColor(m_Blue);
-     bhistogram->SetHistogram(m_ViewerModel->GetObjectList().at(selectedItem-1).pLayer->GetHistogramList()->GetNthElement(2));
+     bhistogram->SetHistogram(objTracked.pLayer->GetHistogramList()->GetNthElement(2));
      curveWidget->AddCurve(bhistogram);
    }
 
@@ -508,7 +516,7 @@ ViewerViewGUI
      HistogramCurveType::Pointer ghistogram = HistogramCurveType::New();
      ghistogram->SetHistogramColor(m_Green);
      ghistogram->SetLabelColor(m_Green);
-     ghistogram->SetHistogram(m_ViewerModel->GetObjectList().at(selectedItem-1).pLayer->GetHistogramList()->GetNthElement(1));
+     ghistogram->SetHistogram(objTracked.pLayer->GetHistogramList()->GetNthElement(1));
      curveWidget->AddCurve(ghistogram);
    }
 
@@ -523,27 +531,15 @@ ViewerViewGUI
      rhistogram->SetHistogramColor(m_Red);
      rhistogram->SetLabelColor(m_Red);
    }
-   rhistogram->SetHistogram(m_ViewerModel->GetObjectList().at(selectedItem-1).pLayer->GetHistogramList()->GetNthElement(0));
+   rhistogram->SetHistogram(objTracked.pLayer->GetHistogramList()->GetNthElement(0));
    curveWidget->AddCurve(rhistogram);
-
 
    curveWidget->SetXAxisLabel("Pixels");
    curveWidget->SetYAxisLabel("Frequency");
 
    //Get the pixelView
-   PixelDescriptionViewType::Pointer pixelView = m_ViewerModel->GetObjectList().at(selectedItem-1).pPixelView;
+   PixelDescriptionViewType::Pointer pixelView = objTracked.pPixelView;
 
-   //   //Edit the Widget
-   //   m_WidgetManagerList->GetNthElement(selectedItem-1)->UnRegisterAll();
-   //   m_WidgetManagerList->GetNthElement(selectedItem-1)->RegisterFullWidget(currentVisuView->GetFullWidget());
-   //   m_WidgetManagerList->GetNthElement(selectedItem-1)->RegisterScrollWidget(currentVisuView->GetScrollWidget());
-   //   m_WidgetManagerList->GetNthElement(selectedItem-1)->RegisterZoomWidget(currentVisuView->GetZoomWidget());
-   //   m_WidgetManagerList->GetNthElement(selectedItem-1)->RegisterPixelDescriptionWidget(pixelView->GetPixelDescriptionWidget());
-   //   m_WidgetManagerList->GetNthElement(selectedItem-1)->RegisterHistogramWidget(curveWidget);
-   //   m_WidgetManagerList->GetNthElement(selectedItem-1)->SetLabel(this->CutFileName(selectedItem-1));
-   //   m_WidgetManagerList->GetNthElement(selectedItem-1)->Show();
-
-   //widgetList->GetNthElement(selectedItem-1)->UnRegisterAll();
    widgetList->GetNthElement(selectedItem-1)->RegisterFullWidget(currentVisuView->GetFullWidget());
    widgetList->GetNthElement(selectedItem-1)->RegisterScrollWidget(currentVisuView->GetScrollWidget());
    widgetList->GetNthElement(selectedItem-1)->RegisterZoomWidget(currentVisuView->GetZoomWidget());
@@ -769,7 +765,8 @@ ViewerViewGUI
  {
    itk::OStringStream oss;
    oss.str("");
-   std::string selectedImageName = m_ViewerModel->GetObjectList().at(selectedItem-1).pFileName;
+   const ObjectsTrackedType & objTracked = m_ViewerModel->GetObjectList().at(selectedItem-1);
+   std::string selectedImageName = objTracked.pFileName;
    // Clear the info buffer
    guiViewerInformation->buffer()->remove(0, guiViewerInformation->buffer()->length());
    oss<<"Filename: "<<selectedImageName<<std::endl;
@@ -778,22 +775,27 @@ ViewerViewGUI
    oss<<"Image information:"<<std::endl;
    guiViewerInformation->insert(oss.str().c_str());
    oss.str("");
-   oss<<"Number of bands: "<<m_ViewerModel->GetObjectList().at(selectedItem-1).pReader->GetOutput()->GetNumberOfComponentsPerPixel();
-   oss<<" - Size: "<<m_ViewerModel->GetObjectList().at(selectedItem-1).pReader->GetOutput()->GetLargestPossibleRegion().GetSize()<<std::endl;
+   oss<<"Number of bands: "<<objTracked.pReader->GetOutput()->GetNumberOfComponentsPerPixel();
+   oss<<" - Size: "<<objTracked.pReader->GetOutput()->GetLargestPossibleRegion().GetSize()<<std::endl;
 
    guiViewerInformation->insert(oss.str().c_str());
    oss.str("");
 
    //update band information
-   if(m_ViewerModel->GetObjectList().at(selectedItem-1).pReader->GetOutput()->GetNumberOfComponentsPerPixel()>=3)
+   // Select the current rendering function
+   RenderingFunctionType::Pointer renderer = objTracked.pRenderFunction;
+   
+   ChannelListType channels = renderer->GetChannelList();
+   
+   if( channels.size() == 2 )
      {
-       //FIXME why this is not using the Describe method of the rendering function?
-//        oss<<"RGB Composition: ";
-//        oss<<" Band 1: "<<m_ViewerModel->GetObjectList().at(selectedItem-1).pRenderFunction->GetRedChannelIndex();
-//        oss<<" Band 2: "<<m_ViewerModel->GetObjectList().at(selectedItem-1).pRenderFunction->GetGreenChannelIndex();
-//        oss<<" Band 3: "<<m_ViewerModel->GetObjectList().at(selectedItem-1).pRenderFunction->GetBlueChannelIndex()<<std::endl;
+     oss<<"Displayed channels : R=" << channels[0]+1 << ", G=" << channels[1]+1 << ", B=" << channels[2]+1 << "." << std::endl;
      }
-
+   else if ( channels.size() >= 2 )
+     {
+     oss<<"Displayed channels : R=" << channels[0]+1 << ", G=" << channels[1]+1 << ", B=" << channels[2]+1 << "." << std::endl;
+     }
+   
    guiViewerInformation->insert(oss.str().c_str());
    oss.str("");
  }
@@ -1031,6 +1033,8 @@ ViewerViewGUI
             m_ViewerController->UpdatePhaseChannelOrder(realChoice, imagChoice, selectedItem);
             }
      }
+   // Update image info, to update the colored composition
+   this->UpdateInformation( selectedItem );
  }
 
  void
@@ -1041,29 +1045,29 @@ ViewerViewGUI
  }
 
 
- void
- ViewerViewGUI
- ::Diaporama()
- {
-   if (guiImageList->size()  == 0 || guiDiaporama->shown())
-   {
-     // no image selected, return
-     return;
-   }
+void
+ViewerViewGUI
+::Diaporama()
+{
+  if (guiImageList->size() == 0 || guiDiaporama->shown())
+    {
+    // no image selected, return
+    return;
+    }
 
-   if(guiLinkSetupWindow->shown() == 0)
-     {
-       guiDiaporama->show();
+  if(guiLinkSetupWindow->shown() == 0)
+    {
+    guiDiaporama->show();
 
+    //Close the showed image without clearing the ShowedList
+    this->CloseAllDisplayedImages(false);
 
-       //Close the showed image without clearing the ShowedList
-       this->CloseAllDisplayedImages(false);
+    //Show the diaporama widget
+    this->DisplayDiaporama();
 
-       //Show the diaporama widget
-       this->DisplayDiaporama();
-       UpdateDiaporamaProgressBar();
-     }
- }
+    UpdateDiaporamaProgressBar();
+    }
+}
 
 
  /**
@@ -1074,59 +1078,79 @@ ViewerViewGUI
  ::CutFileName(unsigned int selectedItem)
  {
    std::string fileName     = m_ViewerModel->GetObjectList().at(selectedItem).pFileName;
-   int slashIndex           =  fileName.find_last_of("/", fileName.size());
+   int slashIndex           = fileName.find_last_of("/", fileName.size());
    std::string  fileNameCut = fileName.substr(slashIndex+1, fileName.size());
 
    return fileNameCut.c_str();
  }
 
- void
- ViewerViewGUI
- ::DisplayDiaporama()
- {
-   //Get the view stored in the model
-  CurvesWidgetType::Pointer         curveWidget         =  m_ViewerModel->GetObjectList().at(m_DiaporamaCurrentIndex).pCurveWidget;
-  VisuViewPointerType               currentVisuView     =  m_ViewerModel->GetObjectList().at(m_DiaporamaCurrentIndex).pVisuView;
-
+void
+ViewerViewGUI
+::DisplayDiaporama()
+{
+  const ObjectsTrackedType & objTracked = m_ViewerModel->GetObjectList().at(m_DiaporamaCurrentIndex);
+  //Get the view stored in the model
+  CurvesWidgetType::Pointer curveWidget     = objTracked.pCurveWidget;
+  VisuViewPointerType       currentVisuView = objTracked.pVisuView;
+   
   //First get the histogram list
-  RenderingFunctionType::Pointer pRenderingFunction = m_ViewerModel->GetObjectList().at(m_DiaporamaCurrentIndex).pRenderFunction;
-
+  RenderingFunctionType::Pointer pRenderingFunction = objTracked.pRenderFunction;
+   
   HistogramCurveType::Pointer rhistogram = HistogramCurveType::New();
   HistogramCurveType::Pointer ghistogram = HistogramCurveType::New();
   HistogramCurveType::Pointer bhistogram = HistogramCurveType::New();
-
+   
   //Color Definition
-  HistogramCurveType::ColorType                 Red;
-  HistogramCurveType::ColorType                 Green;
-  HistogramCurveType::ColorType                 Blue;
+  HistogramCurveType::ColorType Red;
+  HistogramCurveType::ColorType Green;
+  HistogramCurveType::ColorType Blue;
   Red.Fill(0);
   Green.Fill(0);
   Blue.Fill(0);
   Red[0]  = 1.;   Red[3]   = 0.5;
   Green[1]= 1.;   Green[3] = 0.5;
   Blue[2] = 1.;   Blue[3]  = 0.5;
-
+   
   ghistogram->SetHistogramColor(Green);
   ghistogram->SetLabelColor(Green);
   bhistogram->SetHistogramColor(Blue);
   bhistogram->SetLabelColor(Blue);
   rhistogram->SetHistogramColor(Red);
   rhistogram->SetLabelColor(Red);
-
-  rhistogram->SetHistogram(m_ViewerModel->GetObjectList().at(m_DiaporamaCurrentIndex).pLayer->GetHistogramList()->GetNthElement(0));
-  ghistogram->SetHistogram(m_ViewerModel->GetObjectList().at(m_DiaporamaCurrentIndex).pLayer->GetHistogramList()->GetNthElement(1));
-  bhistogram->SetHistogram(m_ViewerModel->GetObjectList().at(m_DiaporamaCurrentIndex).pLayer->GetHistogramList()->GetNthElement(2));
-
+   
+  const unsigned int nbBands = objTracked.pLayer->GetHistogramList()->Size();
+   
   curveWidget->ClearAllCurves();
-  curveWidget->AddCurve(bhistogram);
-  curveWidget->AddCurve(ghistogram);
-  curveWidget->AddCurve(rhistogram);
+   
+  if(  nbBands == 0 )
+    {
+    itkExceptionMacro("No bands detected in asked m_ViewerModel->GetObjectList() (index "<<m_DiaporamaCurrentIndex<<")");
+    }
+   
+  if(  nbBands >= 1 )
+    {
+    rhistogram->SetHistogram(objTracked.pLayer->GetHistogramList()->GetNthElement(0));
+    curveWidget->AddCurve(rhistogram);
+    }
+   
+  if( nbBands >= 2 )
+    {
+    ghistogram->SetHistogram(objTracked.pLayer->GetHistogramList()->GetNthElement(1));
+    curveWidget->AddCurve(ghistogram);
+    }
+   
+  if( nbBands >= 3 )
+    {
+    bhistogram->SetHistogram(objTracked.pLayer->GetHistogramList()->GetNthElement(2));
+    curveWidget->AddCurve(bhistogram);
+    }
+   
   curveWidget->SetXAxisLabel("Pixels");
   curveWidget->SetYAxisLabel("Frequency");
-
+   
   //Get the pixelView
-  PixelDescriptionViewType::Pointer pixelView = m_ViewerModel->GetObjectList().at(m_DiaporamaCurrentIndex).pPixelView;
-
+  PixelDescriptionViewType::Pointer pixelView = objTracked.pPixelView;
+   
   //Edit the Widget
   m_Widget->UnRegisterAll();
   m_Widget->RegisterFullWidget(currentVisuView->GetFullWidget());
@@ -1137,8 +1161,8 @@ ViewerViewGUI
   m_Widget->SetLabel(this->CutFileName(m_DiaporamaCurrentIndex));
   m_Widget->Refresh();
   m_Widget->Show();
-
 }
+
 void
 ViewerViewGUI
 ::DiaporamaNext()
@@ -1345,8 +1369,9 @@ ViewerViewGUI
   unsigned counter = 0;
   for(unsigned int p = 0; p < tempElementToRemove.size(); p ++ )
     {
-      m_LinkedImageList.erase(m_LinkedImageList.begin()+tempElementToRemove[p] - counter); // counter because the size of the list is decreasing after each iteration
-      counter++;
+    // counter because the size of the list is decreasing after each iteration
+    m_LinkedImageList.erase(m_LinkedImageList.begin()+tempElementToRemove[p] - counter);
+    counter++;
     }
 
   m_LinkedImageList.clear();
@@ -1363,4 +1388,3 @@ ViewerViewGUI
   Superclass::PrintSelf(os, indent);
 }
 } // End namespace otb
-

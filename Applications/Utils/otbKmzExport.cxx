@@ -48,7 +48,7 @@ private:
     SetName("KmzExport");
     SetDescription("Export the input image in a KMZ product.");
     // Documentation
-    SetDocName("Image to KMZ Export Application");
+    SetDocName("Image to KMZ Export");
     SetDocLongDescription("This application exports the input image in a kmz product that can be display in the Google Earth software. The user can set the size of the product size, a logo and a legend to the product. Furthemore, to obtain a product that fits the relief, a DEM can be used.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");

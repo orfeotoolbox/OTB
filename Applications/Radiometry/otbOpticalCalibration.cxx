@@ -81,7 +81,7 @@ private:
     SetName("OpticalCalibration");
     SetDescription("Perform optical calibration TOA/TOC (Top Of Atmosphere/Top Of Canopy). Supported sensors: QuickBird, Ikonos, WorldView2, Formosat, Spot5");
     // Documentation
-    SetDocName("Optical calibration application");
+    SetDocName("Optical calibration");
     SetDocLongDescription("The application allows to convert pixel values from DN (for Digital Numbers) to physically interpretable and comparable values.Calibrated values are called surface reflectivity and its values lie in the range [0, 1].\nThe first level is called Top Of Atmosphere (TOA) reflectivity. It takes into account the sensor gain, sensor spectral response and the solar illumination.\nThe second level is called Top Of Canopy (TOC) reflectivity. In addition to sensor gain and solar illumination, it takes into account the optical thickness of the atmosphere, the atmospheric pressure, the water vapor amount, the ozone amount, as well as the composition and amount of aerosol gasses.\nIt is also possible to indicate an AERONET file which contains atmospheric parameters (version 1 and version 2 of Aeronet file are supported.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
@@ -105,7 +105,7 @@ private:
 
     AddParameter(ParameterType_Empty, "milli", "Convert to milli reflectance");
     SetParameterDescription("milli", "Output milli-reflectance instead of reflectance.\n"
-                                     "This allows to put save the image in integer pixel type (in the range [0, 1000]  instead of floating point in the range [0, 1].");
+                                     "This allows to put save the image in integer pixel type (in the range [0, 1000]  instead of floating point in the range [0, 1]. In order to do that, use this option and set the output pixel type (-out filename uint16 for example)");
     DisableParameter("milli");
     MandatoryOff("milli");
 
@@ -145,7 +145,7 @@ private:
     MandatoryOff("atmo.aeronet");
 
    // Doc example parameter settings
-    SetDocExampleParameterValue("in", "WV2_MUL_ROI_1000_100.tif");
+    SetDocExampleParameterValue("in", "QB_1_ortho.tif");
     SetDocExampleParameterValue("level", "toa");
     SetDocExampleParameterValue("out", "OpticalCalibration.tif");
   }

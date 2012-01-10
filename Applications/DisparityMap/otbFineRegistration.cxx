@@ -116,7 +116,7 @@ private:
     SetName("FineRegistration");
     SetDescription("Estimate disparity map between two images.");
 
-    SetDocName("Fine Registration Application");
+    SetDocName("Fine Registration");
     SetDocLongDescription("Estimate disparity map between two images. Output image contain x offset, y offset and metric value.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
@@ -209,7 +209,7 @@ private:
     SetParameterDescription( "vmlt", "Lower threshold to obtain a validity mask." );
     MandatoryOff("vmlt");
     
-    AddParameter(ParameterType_Float,  "vmut",   "Validity Mask Upper Than");
+    AddParameter(ParameterType_Float,  "vmut",   "Validity Mask Upper Threshold");
     SetParameterDescription( "vmut", "Upper threshold to obtain a validity mask." );
     MandatoryOff("vmut");
     

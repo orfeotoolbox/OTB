@@ -37,7 +37,7 @@ OTB_TEST_APPLICATION(NAME  apTvPrConvertCartoToGeoPoint
                      OPTIONS -carto.x 374100.828
                              -carto.y 4829184.806
                  	     -mapproj utm
-                 	     -mapproj.utm.hem true
+                 	     -mapproj.utm.northhem true
                  	     -mapproj.utm.zone 31
                      TESTENVOPTIONS ${TEMP}/apTvPrConvertCartoToGeoPoint.txt
                      VALID   --compare-ascii ${EPSILON_7}

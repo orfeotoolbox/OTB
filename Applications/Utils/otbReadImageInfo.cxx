@@ -18,6 +18,8 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 #include "otbCoordinateToName.h"
+#include "otbGroundSpacingImageFunction.h"
+#include "vnl/vnl_random.h"
 
 namespace otb
 {
@@ -33,6 +35,10 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
+  typedef otb::GroundSpacingImageFunction<FloatVectorImageType> GroundSpacingImageType;
+  typedef GroundSpacingImageType::FloatType                     FloatType;
+  typedef GroundSpacingImageType::ValueType                     ValueType;
+
   /** Standard macro */
   itkNewMacro(Self);
 
@@ -45,13 +51,14 @@ private:
     SetDescription("Get information about the image");
 
     // Documentation
-    SetDocName("Read image information Application");
+    SetDocName("Read image information");
     SetDocLongDescription("Display informations about the input image like: image size, metadata, projections...");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
     AddDocTag("Utilities");
+    AddDocTag(Tags::Manip);
     AddDocTag(Tags::Meta);
 
     AddParameter(ParameterType_InputImage,  "in",   "Input Image");
@@ -70,6 +77,12 @@ private:
     SetParameterRole("spacingx", Role_Output);
     AddParameter(ParameterType_Int,"spacingy","Pixel Size Y");
     SetParameterRole("spacingy", Role_Output);
+
+    AddParameter(ParameterType_Float,"estimatedgroundspacingx","Estimated ground spacing X (in meters)");
+    SetParameterRole("estimatedgroundspacingx", Role_Output);
+    AddParameter(ParameterType_Float,"estimatedgroundspacingy","Estimated ground spacing Y (in meters)");
+    SetParameterRole("estimatedgroundspacingy", Role_Output);
+
     AddParameter(ParameterType_Int,"numberbands","Number Of Bands");
     SetParameterRole("numberbands", Role_Output);
     
@@ -177,28 +190,73 @@ private:
 
   void DoExecute()
   {
+    std::ostringstream ossOutput;
+    FloatVectorImageType::Pointer inImage = GetParameterImage("in");
+      
+    ossOutput << std::endl << "Image general informations:" << std::endl;
+    // Read informations
+    typedef otb::ImageMetadataInterfaceBase ImageMetadataInterfaceType;
+    ImageMetadataInterfaceType::Pointer metadataInterface = ImageMetadataInterfaceFactory::CreateIMI(inImage->GetMetaDataDictionary());
+
+    //Get number of bands
+    SetParameterInt("numberbands", inImage->GetNumberOfComponentsPerPixel());
+    ossOutput << "\tNumber of bands : " << GetParameterInt("numberbands") << std::endl;
+
+    //Get image size
+    SetParameterInt("sizex", inImage->GetLargestPossibleRegion().GetSize()[0]);
+    SetParameterInt("sizey", inImage->GetLargestPossibleRegion().GetSize()[1]);
+
+    ossOutput << "\tSize :  [" << GetParameterInt("sizex") << "," << GetParameterInt("sizey") << "]" << std::endl;
+    //Get image spacing
+    SetParameterInt("spacingx", inImage->GetSpacing()[0]);
+    SetParameterInt("spacingy", inImage->GetSpacing()[1]);
+    ossOutput << "\tSpacing :  [" << GetParameterInt("spacingx") << "," << GetParameterInt("spacingy") << "]" << std::endl;
+      
+    //Estimate ground spacing
+    GroundSpacingImageType::Pointer groundSpacing = GroundSpacingImageType::New();
+    groundSpacing->SetInputImage(inImage);
+      
+    FloatType approxGroundSpacing = std::make_pair(itk::NumericTraits<ValueType>::Zero, itk::NumericTraits<ValueType>::min());
+
+    FloatVectorImageType::IndexType  index;
+    vnl_random rand;
+
+    index[0] = static_cast<FloatVectorImageType::IndexType::IndexValueType>(rand.lrand32(0, inImage->GetLargestPossibleRegion().GetSize()[0]));
+    index[1] = static_cast<FloatVectorImageType::IndexType::IndexValueType>(rand.lrand32(0, inImage->GetLargestPossibleRegion().GetSize()[1]));
+      
+    approxGroundSpacing = groundSpacing->EvaluateAtIndex(index);
+
+    //Get image estimated ground spacing (in m)
+    SetParameterFloat("estimatedgroundspacingx", approxGroundSpacing.first);
+    SetParameterFloat("estimatedgroundspacingy", approxGroundSpacing.second);
+
+    ossOutput << "\tEstimated ground spacing (in meters): [" << GetParameterFloat("estimatedgroundspacingx") << "," << GetParameterFloat("estimatedgroundspacingy") << "]" << std::endl;
+
+    ossOutput << std::endl << "Image acquisition informations:" << std::endl;
+      
+    SetParameterString("sensor", metadataInterface->GetSensorID());
+    ossOutput << "\tSensor : ";
+    if (!GetParameterString("sensor").empty())
+      ossOutput <<  GetParameterString("sensor");
+      
+    ossOutput << std::endl;
+
+    ossOutput << "\tImage identification number: ";
+    if (metadataInterface->GetImageKeywordlist().HasKey("image_id"))
+      {
+      SetParameterString("id", metadataInterface->GetImageKeywordlist().GetMetadataByKey("image_id"));
+      ossOutput << GetParameterString("id");
+      }
+    ossOutput << std::endl;
+    SetParameterString("projectionref", metadataInterface->GetProjectionRef());
+    if (!GetParameterString("projectionref").empty())
+      ossOutput << "\tImage projection : " << GetParameterString("projectionref") << std::endl;
+      
+    // Format acquisition time
+    //Test if this information is available and silently catch
+    //associated exception
     try
       {
-      FloatVectorImageType::Pointer inImage = GetParameterImage("in");
-      // Read informations
-      typedef otb::ImageMetadataInterfaceBase ImageMetadataInterfaceType;
-      ImageMetadataInterfaceType::Pointer metadataInterface = ImageMetadataInterfaceFactory::CreateIMI(inImage->GetMetaDataDictionary());
-
-      //Get image size
-      SetParameterInt("sizex", inImage->GetLargestPossibleRegion().GetSize()[0]);
-      SetParameterInt("sizey", inImage->GetLargestPossibleRegion().GetSize()[1]);
-
-      //Get image spacing
-      SetParameterInt("spacingx", inImage->GetSpacing()[0]);
-      SetParameterInt("spacingy", inImage->GetSpacing()[1]);
-    
-      SetParameterInt("numberbands", inImage->GetNumberOfComponentsPerPixel());
-
-      SetParameterString("sensor", metadataInterface->GetSensorID());
-      SetParameterString("id", metadataInterface->GetImageKeywordlist().GetMetadataByKey("image_id"));
-      SetParameterString("projectionref", metadataInterface->GetProjectionRef());
-      
-      // Format acquisition time
       std::ostringstream osstime;
       osstime<<metadataInterface->GetYear()<<"-";
       if(metadataInterface->GetMonth()<10)
@@ -215,13 +273,15 @@ private:
       osstime<<metadataInterface->GetMinute();
       osstime<<":00";
       SetParameterString("time", osstime.str());
+      
+      ossOutput << "\tAcquisition time : " << GetParameterString("time") << std::endl;
+      }
+    catch ( itk::ExceptionObject & err )
+      {
+      }
 
-      if ( IsParameterEnabled("keywordlist") )
-       {
-       std::ostringstream osskeywordlist;
-       osskeywordlist<<metadataInterface->GetImageKeywordlist() << std::endl;
-       SetParameterString("keyword", osskeywordlist.str());
-       }
+    try
+      {
       double ullat = atof(metadataInterface->GetImageKeywordlist().GetMetadataByKey("ul_lat").c_str());
       double ullon = atof(metadataInterface->GetImageKeywordlist().GetMetadataByKey("ul_lon").c_str());
       double urlat = atof(metadataInterface->GetImageKeywordlist().GetMetadataByKey("ur_lat").c_str());
@@ -231,35 +291,30 @@ private:
       double lllat = atof(metadataInterface->GetImageKeywordlist().GetMetadataByKey("ll_lat").c_str());
       double lllon = atof(metadataInterface->GetImageKeywordlist().GetMetadataByKey("ll_lon").c_str());
       
-      SetParameterInt("rgb.r", metadataInterface->GetDefaultDisplay()[0]);
-      SetParameterInt("rgb.g", metadataInterface->GetDefaultDisplay()[1]);
-      SetParameterInt("rgb.b", metadataInterface->GetDefaultDisplay()[2]);
- 
-      SetParameterInt("gcp.count", metadataInterface->GetGCPCount());
-      SetParameterString("gcp.proj", metadataInterface->GetGCPProjection());
-      
-      std::vector<std::string> gcp_ids;
-      std::vector<std::string> gcp_imcoord;
-      std::vector<std::string> gcp_geocoord;
-      std::vector<std::string> gcp_infos;
+      double centerlat = 0.25*(ullat+urlat+lrlat+lllat);
+      double centerlon = 0.25*(ullon+urlon+lrlon+lllon);
 
-      for(int gcpIdx = 0; gcpIdx  < GetParameterInt("gcp.count"); ++ gcpIdx)
+      CoordinateToName::Pointer coord2name = CoordinateToName::New();
+      coord2name->SetLat(centerlat);
+      coord2name->SetLon(centerlon);
+      coord2name->Evaluate();
+
+      if( !coord2name->GetCountryName().empty() )
         {
-        gcp_ids.push_back(metadataInterface->GetGCPId(gcpIdx));
-        gcp_infos.push_back(metadataInterface->GetGCPInfo(gcpIdx));
-        std::ostringstream oss;
-        oss << "[" << metadataInterface->GetGCPCol(gcpIdx) << ", " << metadataInterface->GetGCPRow(gcpIdx) << "]";
-        gcp_imcoord.push_back(oss.str());
-        oss.str("");
-        oss << "[" << metadataInterface->GetGCPX(gcpIdx) << ", " << metadataInterface->GetGCPY(gcpIdx) <<", " << metadataInterface->GetGCPZ(gcpIdx) << "]";
-        gcp_geocoord.push_back(oss.str());
+        SetParameterString("country", coord2name->GetCountryName());
+        ossOutput << "\tCountry : " << GetParameterString("country") << std::endl;
         }
-      
-      SetParameterStringList("gcp.ids", gcp_ids);
-      SetParameterStringList("gcp.imcoord", gcp_imcoord);
-      SetParameterStringList("gcp.geocoord", gcp_geocoord);
-      SetParameterStringList("gcp.info", gcp_infos);
-      
+      else
+        SetParameterString("country", "Not available");
+
+      if( !coord2name->GetPlaceName().empty() )
+        {
+        SetParameterString("town", coord2name->GetPlaceName());
+        ossOutput << "\tTown : " << GetParameterString("town") << std::endl;
+        }
+      else
+        SetParameterString("town", "Not available");
+
       // Retrieve footprint
       SetParameterFloat("ullat", ullat);
       SetParameterFloat("ullon", ullon);
@@ -270,39 +325,70 @@ private:
       SetParameterFloat("lllat", lllat);
       SetParameterFloat("lllon", lllon);
 
-      double centerlat = 0.25*(ullat+urlat+lrlat+lllat);
-      double centerlon = 0.25*(ullon+urlon+lrlon+lllon);
-
-      CoordinateToName::Pointer coord2name = CoordinateToName::New();
-      coord2name->SetLat(centerlat);
-      coord2name->SetLon(centerlon);
-      coord2name->Evaluate();
-
-      if( !coord2name->GetPlaceName().empty() )
-        SetParameterString("town", coord2name->GetPlaceName());
-      else
-        SetParameterString("town", "Not available");
-
-      if( !coord2name->GetCountryName().empty() )
-        SetParameterString("country", coord2name->GetCountryName());
-      else
-        SetParameterString("country", "Not available");
+      ossOutput << std::endl << "Image footprint coordinates:" << std::endl;
+      ossOutput << "\tUpper left corner (latitude, longitude) = [" << GetParameterFloat("ullat") << "," << GetParameterFloat("ullon") << "]" << std::endl;
+      ossOutput << "\tUpper right corner (latitude, longitude) = [" << GetParameterFloat("urlat") << "," << GetParameterFloat("urlon") << "]" << std::endl;
+      ossOutput << "\tLower left corner (latitude, longitude) = [" << GetParameterFloat("lllat") << "," << GetParameterFloat("lllon") << "]" << std::endl;
+      ossOutput << "\tLower right corner (latitude, longitude) = [" << GetParameterFloat("lrlat") << "," << GetParameterFloat("lrlon") << "]" << std::endl;
       }
     catch ( itk::ExceptionObject & err )
       {
-      //Do nothing at all
       }
-    // Show result
-    otbAppLogINFO( << "Image informations:" << std::endl);
-    //otbAppLogINFO( << "General: ");
+      
+    SetParameterInt("rgb.r", metadataInterface->GetDefaultDisplay()[0]);
+    SetParameterInt("rgb.g", metadataInterface->GetDefaultDisplay()[1]);
+    SetParameterInt("rgb.b", metadataInterface->GetDefaultDisplay()[2]);
+ 
+    ossOutput << std::endl << "Image default RGB composition:" << std::endl;
+    ossOutput << "\t[R, G, B] = [" << GetParameterInt("rgb.r") << "," << GetParameterInt("rgb.g") << "," << GetParameterInt("rgb.b") << "]" << std::endl;
 
-    typedef std::vector< std::pair<std::string, std::string> > ParametersListType;
-    std::vector< std::pair<std::string, std::string> > appList = GetOutputParametersSumUp();
-    
-    for (ParametersListType::const_iterator it = appList.begin(); it != appList.end(); ++it)
+    SetParameterInt("gcp.count", metadataInterface->GetGCPCount());
+    SetParameterString("gcp.proj", metadataInterface->GetGCPProjection());
+      
+    ossOutput << std::endl << "Ground control points information:" << std::endl;
+    ossOutput << "\tNumber of GCPs = " << GetParameterInt("gcp.count") << std::endl;
+    ossOutput << "\tGCPs projection = " << GetParameterString("gcp.proj") << std::endl;
+    std::vector<std::string> gcp_ids;
+    std::vector<std::string> gcp_imcoord;
+    std::vector<std::string> gcp_geocoord;
+    std::vector<std::string> gcp_infos;
+      
+    for(int gcpIdx = 0; gcpIdx  < GetParameterInt("gcp.count"); ++ gcpIdx)
       {
-      otbAppLogINFO( << it->first << "   " << it->second);
+      if (gcpIdx == 0)
+        ossOutput << "\tGCP individual informations:" << std::endl;
+        
+      gcp_ids.push_back(metadataInterface->GetGCPId(gcpIdx));
+      gcp_infos.push_back(metadataInterface->GetGCPInfo(gcpIdx));
+      std::ostringstream oss;
+      oss << "[" << metadataInterface->GetGCPCol(gcpIdx) << ", " << metadataInterface->GetGCPRow(gcpIdx) << "]";
+      gcp_imcoord.push_back(oss.str());
+      oss.str("");
+      oss << "[" << metadataInterface->GetGCPX(gcpIdx) << ", " << metadataInterface->GetGCPY(gcpIdx) <<", " << metadataInterface->GetGCPZ(gcpIdx) << "]";
+      gcp_geocoord.push_back(oss.str());
+      ossOutput << "\t\tID =" << gcp_ids.back() << std::endl;
+      ossOutput << "\t\tInfo =" << gcp_infos.back() << std::endl;
+      ossOutput << "\t\tImage coordinates =" << gcp_imcoord.back() << std::endl;
+      ossOutput << "\t\tGround  coordinates =" << gcp_geocoord.back() << std::endl;
       }
+      
+    SetParameterStringList("gcp.ids", gcp_ids);
+    SetParameterStringList("gcp.imcoord", gcp_imcoord);
+    SetParameterStringList("gcp.geocoord", gcp_geocoord);
+    SetParameterStringList("gcp.info", gcp_infos);
+
+    if ( IsParameterEnabled("keywordlist") )
+      {
+      std::ostringstream osskeywordlist;
+      osskeywordlist<<metadataInterface->GetImageKeywordlist() << std::endl;
+      SetParameterString("keyword", osskeywordlist.str());
+        
+      ossOutput << std::endl << "Image OSSIM keywordlist (optional):" << std::endl;
+      ossOutput << "\t" << GetParameterString("keyword") << std::endl;
+      }
+
+    //Display image informations in the dedicated logger
+    otbAppLogINFO( << ossOutput.str() );
   }
 
 };

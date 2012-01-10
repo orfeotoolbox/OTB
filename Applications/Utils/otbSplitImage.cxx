@@ -53,7 +53,7 @@ private:
     SetName("SplitImage");
     SetDescription("Split a N multiband image into N images");
 
-    SetDocName("Split Image Application");
+    SetDocName("Split Image");
     SetDocLongDescription("This application splits a N multiband image into N images. The output images filename will be generated from the output one. Thus if the input image has 2 channels, and the user has set ad output outimage.tif, the generated images will be outimage_0.tif and outimage_1.tif");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
@@ -67,7 +67,6 @@ private:
     AddParameter(ParameterType_Filename, "out", "Output Image");
     SetParameterDescription("out",
                             "Will be used to get the prefix and the extension of the output images to write");
-    SetParameterRole("out", Role_Output);
 
     AddParameter(ParameterType_RAM, "ram", "Available RAM");
     SetDefaultParameterInt("ram", 256);

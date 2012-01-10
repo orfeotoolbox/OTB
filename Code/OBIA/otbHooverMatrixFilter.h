@@ -86,22 +86,21 @@ protected:
   
   ~HooverMatrixFilter() {};
   
-  /** BeforeThreadedGenerateData
-   *  Resize the matrix
+  /** Action :  Resize the matrix
    */
   virtual void BeforeThreadedGenerateData();
 
-  /** Real action of the filter : fill the line of the confusion matrix corresponding to
+  /** Action : fill the line of the confusion matrix corresponding to
    * the given label object
    */
   virtual void ThreadedProcessLabelObject( LabelObjectType * labelObject );
 
 private:
   
-  /** number of label objects found in the ground truth (GT) label maps */
+  /** Number of label objects found in the ground truth (GT) label maps */
   unsigned long     m_NumberOfRegionsGT;
   
-  /** number of label objects found in the machine segmentation (MS) label maps */
+  /** Number of label objects found in the machine segmentation (MS) label maps */
   unsigned long     m_NumberOfRegionsMS;
   
   /** List of labels in GT label map */

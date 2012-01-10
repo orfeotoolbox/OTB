@@ -70,7 +70,7 @@ private:
     SetName("Rasterization");
     SetDescription("Reproject and Rasterize a Vector Data.");
 
-    SetDocName("Rasterization Application");
+    SetDocName("Rasterization");
     SetDocLongDescription("Reproject and Rasterize a Vector Data.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
@@ -120,7 +120,7 @@ private:
     SetDefaultParameterInt("ram", 256);
     MandatoryOff("ram");
     
-    SetDocExampleParameterValue("in","Rasterization/polgons.shp");
+    SetDocExampleParameterValue("in","qb_RoadExtract_classification.shp");
     SetDocExampleParameterValue("out", "rasterImage.tif");
     SetDocExampleParameterValue("szx","1100");
     SetDocExampleParameterValue("szy","1100");

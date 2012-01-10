@@ -86,7 +86,7 @@ private:
     MandatoryOff("printclasses");
 
     // Doc example parameter settings
-    SetDocExampleParameterValue("support", "ROI_QB_TOULOUSE.TIF");
+    SetDocExampleParameterValue("support", "qb_RoadExtract.tif");
     SetDocExampleParameterValue("key", "highway");
     SetDocExampleParameterValue("out", "apTvUtOSMDownloader.shp");
   }

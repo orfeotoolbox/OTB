@@ -22,6 +22,7 @@ namespace ossimplugins
 
 
 class Ephemeris;
+class HermiteInterpolator;
 
 
 /**
@@ -64,9 +65,9 @@ public:
     * @param date Date and time at wich the interpolation have to be done
     * @return The ephemeris at the given date, or NULL if an error occurs
     */
-   Ephemeris* Interpolate(JSDDateTime date);
+   Ephemeris* Interpolate(JSDDateTime date) const;
 
-   PlatformPosition* Clone()
+   PlatformPosition* Clone() const
    {
       return new PlatformPosition(*this);
    };
@@ -89,9 +90,15 @@ public:
     * keyword list. Return true if ok or false on error.
     * @return true if load OK, false on error
     */
-   bool loadState (const ossimKeywordlist &kwl, const char *prefix=0);
+   bool loadState(const ossimKeywordlist &kwl, const char *prefix=0);
 
 protected:
+
+   /**
+    * @brief Internal method to initialize data structures
+    */
+   void InitData(Ephemeris** data, int nbrData);
+   void InitAuxiliaryData();
 
    /**
     * @brief Number of platform positions
@@ -108,7 +115,12 @@ protected:
     * @brief This function deletes all the contents of the class
     */
    void Clear();
+
 private:
+   double * _t;
+   double ** _p;
+   double ** _dp;
+   HermiteInterpolator ** _interpolator;
 };
 }
 

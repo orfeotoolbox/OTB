@@ -53,16 +53,16 @@ public:
    *
    * @remark : the doppler frequency is set to zero in this implementation
    */
-  virtual int ImageToWorld(double distance, JSDDateTime time, double height, double& lon, double& lat);
+  virtual int ImageToWorld(double distance, JSDDateTime time, double height, double& lon, double& lat) const;
 protected:
 
   /**
    * @brief This function is able to convert image coordinates into rectangular world coordinates
    */
-  int localisationSAR ( GeographicEphemeris PosVit , double lambda ,
+  int localisationSAR ( GeographicEphemeris posSpeed , double lambda ,
                         double dist , double fDop , int sensVisee ,
-                        double rayonEqu , double rayonPol ,
-                        double h , RectangularCoordinate* cart );
+                        double equRadius , double polRadius ,
+                        double h , RectangularCoordinate* cart ) const;
 private:
 };
 

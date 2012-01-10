@@ -53,7 +53,7 @@ private:
     SetDescription("Extract a ROI defined by the user.");
 
     // Documentation
-    SetDocName("Extract ROI Application");
+    SetDocName("Extract ROI");
     SetDocLongDescription("This application extracts a Region Of Interest with user defined size.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");

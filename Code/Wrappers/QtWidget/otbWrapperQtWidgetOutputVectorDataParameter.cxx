@@ -65,7 +65,7 @@ void QtWidgetOutputVectorDataParameter::SelectFile()
   QFileDialog fileDialog;
   fileDialog.setConfirmOverwrite(true);
   fileDialog.setFileMode(QFileDialog::AnyFile);
-  fileDialog.setNameFilter("Raster files (*)");
+  fileDialog.setNameFilter("Vector data files (*)");
 
   if (fileDialog.exec())
     {

@@ -56,7 +56,7 @@ private:
     SetName("VectorDataTransform");
     SetDescription("Apply a transform to each vertex of the input VectorData");
     
-    SetDocName("Vector Data Transformation Application");
+    SetDocName("Vector Data Transformation");
     SetDocLongDescription("This application performs a transformation to an input vector data transforming each vertex that composed the vector data. The applied transformation manages translation, rotation and scale, and be be centered or not.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
@@ -72,7 +72,6 @@ private:
   
     // Transform Group
     AddParameter(ParameterType_Group, "transform", "Transform parameters");
-    MandatoryOff("transform");
 
     AddParameter(ParameterType_Float, "transform.tx", "Translation X");
     SetParameterDescription("transform.tx","Translation in the X direction");
@@ -97,7 +96,8 @@ private:
     SetDefaultParameterFloat("transform.scale", 1.);
 
     // Doc example parameter settings
-    SetDocExampleParameterValue("in", "qb_RoadExtract_easyClassification.shp");
+    SetDocExampleParameterValue("vd", "qb_RoadExtract_easyClassification.shp");
+    SetDocExampleParameterValue("in", "qb_RoadExtract.tif");
     SetDocExampleParameterValue("out", "VectorDataTransform.shp");
     SetDocExampleParameterValue("transform.ro", "5");
   }

@@ -236,15 +236,15 @@ void SpectralResponse<TPrecision, TValuePrecision>::SetFromImage(ImagePointerTyp
 
 template<class TPrecision, class TValuePrecision>
 typename SpectralResponse<TPrecision, TValuePrecision>::FilterFunctionValuesPointerType SpectralResponse<TPrecision,
-    TValuePrecision>::GetFilterFunctionValues(double step) const
+    TValuePrecision>::GetFilterFunctionValues(double step)
 {
 
   //Assume that the SR is sorted
   typename FilterFunctionValuesType::ValuesVectorType valuesVector;
-  const Self& responseCalculator = *this;
-  for (double i = m_Response.front()->first; i <= m_Response.back()->first; i += step)
+  Self& responseCalculator = *this;
+  for (double i = m_Response.front().first; i <= m_Response.back().first; i += step)
     {
-    valuesVector.push_back( responseCalculator(i) );
+    valuesVector.push_back(responseCalculator(i));
     }
   FilterFunctionValuesPointerType functionValues = FilterFunctionValuesType::New();
 

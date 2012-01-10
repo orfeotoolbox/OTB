@@ -31,24 +31,24 @@ Ephemeris::Ephemeris()
   _position[0] = 0.0;
   _position[1] = 0.0;
   _position[2] = 0.0;
-  _vitesse[0] = 0.0;
-  _vitesse[1] = 0.0;
-  _vitesse[2] = 0.0;
+  _speed[0] = 0.0;
+  _speed[1] = 0.0;
+  _speed[2] = 0.0;
 }
 
 Ephemeris::~Ephemeris()
 {
 }
 
-Ephemeris::Ephemeris(JSDDateTime date, double pos[3], double vitesse[3]):
+Ephemeris::Ephemeris(JSDDateTime date, double pos[3], double speed[3]):
   _date(date)
 {
   _position[0] = pos[0];
   _position[1] = pos[1];
   _position[2] = pos[2];
-  _vitesse[0] = vitesse[0];
-  _vitesse[1] = vitesse[1];
-  _vitesse[2] = vitesse[2];
+  _speed[0] = speed[0];
+  _speed[1] = speed[1];
+  _speed[2] = speed[2];
 }
 
 Ephemeris::Ephemeris(const Ephemeris& rhs):
@@ -57,9 +57,9 @@ Ephemeris::Ephemeris(const Ephemeris& rhs):
   _position[0] = rhs._position[0];
   _position[1] = rhs._position[1];
   _position[2] = rhs._position[2];
-  _vitesse[0] = rhs._vitesse[0];
-  _vitesse[1] = rhs._vitesse[1];
-  _vitesse[2] = rhs._vitesse[2];
+  _speed[0] = rhs._speed[0];
+  _speed[1] = rhs._speed[1];
+  _speed[2] = rhs._speed[2];
 }
 
 Ephemeris& Ephemeris::operator=(const Ephemeris& rhs)
@@ -67,9 +67,9 @@ Ephemeris& Ephemeris::operator=(const Ephemeris& rhs)
   _position[0] = rhs._position[0];
   _position[1] = rhs._position[1];
   _position[2] = rhs._position[2];
-  _vitesse[0] = rhs._vitesse[0];
-  _vitesse[1] = rhs._vitesse[1];
-  _vitesse[2] = rhs._vitesse[2];
+  _speed[0] = rhs._speed[0];
+  _speed[1] = rhs._speed[1];
+  _speed[2] = rhs._speed[2];
   _date = rhs._date;
 
   return *this;
@@ -85,7 +85,7 @@ bool Ephemeris::saveState(ossimKeywordlist& kwl, const char* prefix) const
    pfx += PREFIX;
 
    ossimDpt3d pos(_position[0], _position[1], _position[2]);
-   ossimDpt3d vit(_vitesse[0], _vitesse[1], _vitesse[2]);
+   ossimDpt3d vit(_speed[0], _speed[1], _speed[2]);
    JulianDate jd = _date.get_day0hTU();
 
    kwl.add(pfx.c_str(), DATE_JULIAN_KW,  jd.get_julianDate());
@@ -185,9 +185,9 @@ bool Ephemeris::loadState(const ossimKeywordlist& kwl, const char* prefix)
       ossimDpt3d pt;
       pt.toPoint(ps);
 
-      _vitesse[0] = pt.x;
-      _vitesse[1] = pt.y;
-      _vitesse[2] = pt.z;
+      _speed[0] = pt.x;
+      _speed[1] = pt.y;
+      _speed[2] = pt.z;
    }
    else
    {

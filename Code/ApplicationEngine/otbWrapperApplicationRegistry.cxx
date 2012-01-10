@@ -17,6 +17,7 @@
  =========================================================================*/
 #include "otbWrapperApplicationRegistry.h"
 #include "itksys/SystemTools.hxx"
+#include <iterator>
 
 namespace otb
 {
@@ -132,22 +133,20 @@ ApplicationRegistry::GetAvailableApplications()
       }
     }
 
-  // Return the app list
-  std::vector<std::string> availableApp;
+  // Get all the app names
+  // If ITK_AUTOLOAD_PATH contains several times the same path, then the same app appear several times
+  // Use a temporary std::set to fix this
+  std::set<std::string> appSet;
   for(std::list<ApplicationPointer>::iterator k = possibleApp.begin();
       k != possibleApp.end(); ++k)
     {
     (*k)->Init();
-    availableApp.push_back((*k)->GetName());
+    appSet.insert((*k)->GetName());
     }
-  // If the ITK_AUTOLOAD_PATH contains
-  // several times the same path, application will appears several
-  // times in the list.To be cleaner, we erase multiple
-  std::vector<std::string>::iterator it;
-  it = std::unique(availableApp.begin(), availableApp.end());
-  availableApp.resize( it - availableApp.begin() );
 
-  return availableApp;
+  std::vector<std::string> appVec;
+  std::copy(appSet.begin(), appSet.end(), std::back_inserter(appVec));
+  return appVec;
 }
 
 

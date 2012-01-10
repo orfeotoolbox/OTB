@@ -95,6 +95,7 @@ ViewerModel
 ::GetJPEG2000Resolution(const std::string & filepath)
 {
   std::vector<unsigned int> res;
+#ifdef OTB_USE_JPEG2000
   if( !this->IsJPEG2000File(filepath) )
     {
     itkExceptionMacro( "Image "<<filepath<< " is not a JPEG2000." );
@@ -106,15 +107,18 @@ ViewerModel
     readerJPEG2000->ReadImageInformation();
     readerJPEG2000->GetAvailableResolutions(res);
     }
-
+#endif
   return res;
   
 }
 
 void
 ViewerModel
-::GetJPEG2000ResolutionAndInformations(const std::string & filepath, std::vector<unsigned int>& res, std::vector<std::string> & desc)
+::GetJPEG2000ResolutionAndInformations(const std::string & filepath,
+                                       std::vector<unsigned int>& res,
+                                       std::vector<std::string> & desc)
 {
+#ifdef OTB_USE_JPEG2000
   if( !this->IsJPEG2000File(filepath) )
     {
     itkExceptionMacro( "Image "<<filepath<< " is not a JPEG2000." );
@@ -126,6 +130,7 @@ ViewerModel
     readerJPEG2000->ReadImageInformation();
     readerJPEG2000->GetResolutionInfo(res, desc);
     }
+#endif
 }
 
 unsigned int
@@ -139,7 +144,6 @@ ViewerModel
   // If jpeg2000, add the selected resolution at the end of the file name
   if( isJPEG2000 )
     {
-    unsigned int resolution = 0;
     otbFilepath += ":";
     std::ostringstream ossRes;
     ossRes << id;
@@ -168,11 +172,11 @@ ViewerModel
     quicklook= jpeg2000QLReader->GetOutput();
     quicklook->DisconnectPipeline();
     shrinkFactor = (1 << (resSize - 1));
+
+    // Adapt the shrinkFactor to the asked resolution (here it is id)
+    shrinkFactor = shrinkFactor/(1<<id);
     }
-  //// If not jpeg2000 or trouble in jpeg2000 quicloock, use a
-  //// streaming shrink image filter
-  unsigned int maxSize = std::max( reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0],
-                                   reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1] );
+
   if (quicklook.IsNull())
     {
     typedef otb::StreamingShrinkImageFilter<ImageType> StreamingShrinkImageFilterType;
@@ -183,7 +187,7 @@ ViewerModel
                                     reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1] );
     if( maxSize > 512 )
       {
-      shrinkFactor = static_cast<unsigned int>( vcl_floor( static_cast<double>(maxSize)/static_cast<double>(256) + 0.5) );
+      shrinkFactor = static_cast<unsigned int>( vcl_floor( static_cast<double>(maxSize)/256. + 0.5) );
       }
    
     shrinker->SetShrinkFactor(shrinkFactor);
@@ -202,6 +206,7 @@ ViewerModel
   visuGenerator->SetImage(reader->GetOutput());
   visuGenerator->GenerateQuicklookOff();
   visuGenerator->SetQuicklook(quicklook);
+
   visuGenerator->SetSubsamplingRate(shrinkFactor);
   visuGenerator->GenerateLayer();
   RenderingFunctionType::Pointer  rendrerFunction  = visuGenerator->GetRenderingFunction();
@@ -368,7 +373,9 @@ ViewerModel
 ViewerModel
 ::WidgetControllerPointerType
 ViewerModel
-::BuiltController(VisuModelPointerType modelRenderingLayer, VisuViewPointerType visuView, PixelDescriptionModelPointerType pixelModel)
+::BuiltController(VisuModelPointerType modelRenderingLayer,
+                  VisuViewPointerType visuView,
+                  PixelDescriptionModelPointerType pixelModel)
 {
   WidgetControllerPointerType controller = WidgetControllerType::New();
 
@@ -381,7 +388,7 @@ ViewerModel
     // Add the change scaled region handler
   ChangeScaledRegionHandlerType::Pointer changeScaledHandler =ChangeScaledRegionHandlerType::New();
   changeScaledHandler->SetModel(modelRenderingLayer);
-  changeScaledHandler->SetView(visuView);
+ changeScaledHandler->SetView(visuView);
   controller->AddActionHandler(changeScaledHandler);
 
   // Add the change extract region handler
@@ -552,7 +559,7 @@ ViewerModel
   VisuModelPointerType leftRenderModel        = m_ObjectTrackedList.at(leftChoice-1).pRendering;
 
   //Get the views related to the choosen images
-  VisuViewPointerType  pRightVisuView         = m_ObjectTrackedList.at(rightChoice-1).pVisuView; ;
+  VisuViewPointerType  pRightVisuView         = m_ObjectTrackedList.at(rightChoice-1).pVisuView;
   VisuViewPointerType  pLeftVisuView          = m_ObjectTrackedList.at(leftChoice-1).pVisuView;
 
   //Pixel View
@@ -599,17 +606,22 @@ ViewerModel
   rightController->AddActionHandler( leftChangeHandler);
   leftController->AddActionHandler(rightChangeHandler);
 
+
   // Add the change scaled handler
   ChangeScaleHandlerType::Pointer rightChangeScaleHandler =ChangeScaleHandlerType::New();
   rightChangeScaleHandler->SetModel(rightRenderModel );
   rightChangeScaleHandler->SetView(pLeftVisuView);
+  rightChangeScaleHandler->SetViewToUpdate(pRightVisuView);
 
   ChangeScaleHandlerType::Pointer leftChangeScaleHandler =ChangeScaleHandlerType::New();
   leftChangeScaleHandler->SetModel(leftRenderModel );
   leftChangeScaleHandler->SetView(pRightVisuView);
+  leftChangeScaleHandler->SetViewToUpdate(pLeftVisuView);
 
-  rightController->AddActionHandler( leftChangeScaleHandler);
-  leftController->AddActionHandler(rightChangeScaleHandler);
+  // This handler has to be set before the classical zoom handler of
+  // the ImageView to avoid confusion
+  rightController->InsertActionHandler(0, leftChangeScaleHandler);
+  leftController->InsertActionHandler(0, rightChangeScaleHandler);
 
  //Pixel Description Handling--
   PixelDescriptionActionHandlerType::Pointer rightPixelActionHandler = PixelDescriptionActionHandlerType::New();
@@ -624,7 +636,6 @@ ViewerModel
 
   rightController->AddActionHandler(leftPixelActionHandler );
   leftController->AddActionHandler(rightPixelActionHandler);
-
 }
 
 /**
@@ -634,14 +645,13 @@ void
 ViewerModel
 ::InitializeImageViewController(unsigned int selectedItem)
 {
-  VisuModelPointerType  render = m_ObjectTrackedList.at(selectedItem-1).pRendering;
-  VisuViewPointerType   view   = m_ObjectTrackedList.at(selectedItem-1).pVisuView;
-  PixelDescriptionModelPointerType pixelModel = m_ObjectTrackedList.at(selectedItem-1).pPixelModel;
+  _ObjectsTracked & objTracked = m_ObjectTrackedList.at(selectedItem-1);
+  VisuModelPointerType             render     = objTracked.pRendering;
+  VisuViewPointerType              view       = objTracked.pVisuView;
+  PixelDescriptionModelPointerType pixelModel = objTracked.pPixelModel;
 
-  m_ObjectTrackedList.at(selectedItem-1).pWidgetController = this->BuiltController(render, view, pixelModel);
-  m_ObjectTrackedList.at(selectedItem-1).pVisuView->SetController(m_ObjectTrackedList.at(selectedItem-1).pWidgetController);
+  objTracked.pWidgetController = this->BuiltController(render, view, pixelModel);
+  view->SetController(m_ObjectTrackedList.at(selectedItem-1).pWidgetController);
 }
 
 }
-
-

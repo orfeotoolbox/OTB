@@ -21,17 +21,15 @@ Equation::Equation():
    _coefficients(NULL),
    _degree(0),
    _nbrSol(0),
-   _order(NULL),
    _solutions(NULL)
 {
+  _order.clear();
 }
 
 Equation::~Equation()
 {
   if (_coefficients != NULL)
     delete [] _coefficients;
-  if(_order != NULL)
-    delete [] _order;
   if(_solutions != NULL)
     delete [] _solutions;
 }
@@ -40,9 +38,9 @@ Equation::Equation(int degree, std::complex<double>* coefficients):
    _coefficients(NULL),
    _degree(0),
    _nbrSol(0),
-   _order(NULL),
    _solutions(NULL)
 {
+  _order.clear();
   CreateEquation(degree, coefficients);
 }
 
@@ -53,8 +51,8 @@ void Equation::CreateEquation(int degree, std::complex<double>* coefficients)
     delete [] _coefficients;
   }
 
-  if(_order != NULL)
-    delete [] _order;
+  if(_order.size() != 0)
+    _order.clear();
   if(_solutions != NULL)
     delete [] _solutions;
 
@@ -91,9 +89,7 @@ void Equation::ComputeTrueDegree()
 
 void Equation::Normalisation()
 {
-  int i;
-
-  for (i=0;i<_trueDegree;i++)
+  for (int i=0;i<_trueDegree;i++)
   {
     _coefficients[i] = _coefficients[i] / _coefficients[_trueDegree];
   }
@@ -105,16 +101,15 @@ void Equation::Normalisation()
   double r;
 
   /*
-   * Normalisation par a power of 10
+   * Normalisation by a power of 10
    */
-  for (i = 0 ; i < _trueDegree ; i++)
+  for (int i = 0 ; i < _trueDegree ; i++)
   {
-    r = abs(_coefficients[i]) ;
-    if (r >= Epsilon)
+    float rr = abs(_coefficients[i]) ;
+    if (rr >= Epsilon)
     {
-      r = log (r) ;
-      r = r / log (10.0) ;
-      e = ((int)r) / ((int)(_trueDegree - i)) ;
+      rr = log10(rr) ;
+      e = ((int)rr) / ((int)(_trueDegree - i)) ;
       if (e > eMax)
         eMax = e ;
       if (e < eMin)
@@ -131,7 +126,7 @@ void Equation::Normalisation()
     _normalisationType = GreatValues;
     _normalisationCoefficient = pow (10.0, (double)eMax) ;
     r    = 1.0 ;
-    for (i = _trueDegree-1 ; i >= 0 ; i--)
+    for (int i = _trueDegree-1 ; i >= 0 ; i--)
     {
       r    = r * _normalisationCoefficient ;
       _coefficients[i] = _coefficients[i] /  std::complex<double>(r,0.0);
@@ -143,7 +138,7 @@ void Equation::Normalisation()
     _normalisationType = SmallValues;
     _normalisationCoefficient = pow(10.0,(double)(-eMin)) ;
     r    = 1.0 ;
-    for (i = _trueDegree-1 ; i >= 0 ; i--)
+    for (int i = _trueDegree-1 ; i >= 0 ; i--)
     {
       r    = r * _normalisationCoefficient ;
       _coefficients[i] = _coefficients[i] *  std::complex<double>(r,0.0);
@@ -224,11 +219,11 @@ void Equation::Solve()
 void Equation::Solve1()
 {
   _nbrSol = 1;
-  if(_order != NULL)
-    delete [] _order;
 
-  _order = new int[1];
-  _order[0] = 1;
+  if(_order.size() != 0)
+    _order.clear();
+
+  _order.push_back(1);
 
   if(_solutions != NULL)
     delete [] _solutions;
@@ -272,15 +267,13 @@ void Equation::Solve2()
       delete [] _solutions;
     _solutions = new std::complex<double>[1];
 
-    if(_order != NULL)
-      delete [] _order;
-    _order = new int[1];
-
+    if(_order.size() != 0)
+      _order.clear();
 
     _nbrSol    = 1 ;
     z         = aa[1]/std::complex<double>(-2.0, 0.0);
     _solutions[0] = Proche (z, Epsilon) ;
-    _order[0]  = 2 ;
+    _order.push_back(2);
   }
   else
   {
@@ -290,10 +283,8 @@ void Equation::Solve2()
       delete [] _solutions;
     _solutions = new std::complex<double>[2];
 
-    if(_order != NULL)
-      delete [] _order;
-    _order = new int[2];
-
+    if(_order.size() != 0)
+      _order.clear();
 
     _nbrSol   = 2 ;
     d         = sqrt(d) ;
@@ -301,14 +292,13 @@ void Equation::Solve2()
     _solutions[0] = Proche (z, Epsilon) ;
     z         = (d+aa[1])/std::complex<double>(-2.0, 0.0);
     _solutions[1] = Proche (z, Epsilon) ;
-    _order[0]  = 1 ;
-    _order[1]  = 1 ;
+    _order.push_back(1);
+    _order.push_back(1);
   }
 }
 
 void Equation::Solve3(int d4)
 {
-  int i1, i2, i3 ;
   int d3_1r3 , d3_1r2_1r1 ;
   double r1, r2, ra[3] ;
   // double epsilon = 1.e-12 ;
@@ -321,7 +311,7 @@ void Equation::Solve3(int d4)
   j2 = std::complex<double>(-0.5, -sqrt (3.0) / 2.0) ;
 
   /* Normalisation of coefficients */
-  for (i1 = 0; i1 < 3; i1++)
+  for (int i1 = 0; i1 < 3; i1++)
     aa[i1] = _coefficients[i1]/_coefficients[3];
 
   if ( d4 == 0 )
@@ -346,13 +336,12 @@ void Equation::Solve3(int d4)
       delete [] _solutions;
     _solutions = new std::complex<double>[1];
 
-    if(_order != NULL)
-      delete [] _order;
-    _order = new int[1];
+    if(_order.size() != 0)
+      _order.clear();
 
     _nbrSol    = 1 ;
     _solutions[0] = Proche (aa[2]/std::complex<double>(-3.0, 0.0) , Epsilon) ;
-    _order[0]  = 3 ;
+    _order.push_back(3);
   }
   else if (d3_1r2_1r1 == 1)
   {
@@ -362,9 +351,8 @@ void Equation::Solve3(int d4)
       delete [] _solutions;
     _solutions = new std::complex<double>[2];
 
-    if(_order != NULL)
-      delete [] _order;
-    _order = new int[2];
+    if(_order.size() != 0)
+      _order.clear();
 
     u = (aa[1]* aa[2])/ std::complex<double>(6.0, 0.0) ;
     v = aa[0]/ std::complex<double> (2.0, 0.0);
@@ -378,33 +366,33 @@ void Equation::Solve3(int d4)
     zProv[1][1] = u * (j2* std::complex<double>(2.0, 0.0));
     zProv[2][0] = u * (j2+ std::complex<double>(1.0, 0.0));
     zProv[2][1] = u * (j * std::complex<double>(2.0, 0.0));
-    for (i1 = 0; i1 <= 2; i1++)
+    for (int i1 = 0; i1 <= 2; i1++)
     {
       zProv[i1][0] = zProv[i1][0]- w;
       zProv[i1][1] = zProv[i1][1]- w;
     }
-    for (i2 = 0; i2 < 3; i2++)
+    for (int i2 = 0; i2 < 3; i2++)
     {
       u = std::complex<double>(1.0, 0.0) ;
 
-      for (i1 = 2; i1 >= 0; i1--)
+      for (int i1 = 2; i1 >= 0; i1--)
         u = u*zProv[i2][0]+aa[i1] ;
 
       r1  = abs (u) ;
       u   = std::complex<double>(1.0, 0.0) ;
 
-      for (i1 = 2; i1 >= 0; i1--)
+      for (int i1 = 2; i1 >= 0; i1--)
         u = u*zProv[i2][1]+ aa[i1] ;
 
       r2  = abs (u) ;
       ra[i2] = r1 * r1 + r2 * r2 ;
     }
-    i3        = IndiceMin(3, ra) ;
+    int i3        = IndiceMin(3, ra) ;
     _solutions[0] = Proche ( zProv[i3][0] , Epsilon ) ;
     _solutions[1] = Proche ( zProv[i3][1] , Epsilon ) ;
     _nbrSol   = 2 ;
-    _order[0]  = 2 ;
-    _order[1]  = 1 ;
+    _order.push_back(2);
+    _order.push_back(1);
   }
   else
   {
@@ -414,11 +402,11 @@ void Equation::Solve3(int d4)
     q = u- v ;
     u = (aa[1]* aa[2]) / std::complex<double>(6.0, 0.0) ;
     v = aa[0]/ std::complex<double>(2.0, 0.0) ;
-    w = pow (aa[2], 3.0) / std::complex<double>(27.0, 0.0);
+    w = pow(aa[2], 3.0) / std::complex<double>(27.0, 0.0);
     r = (u-v) - w ;
-    d = sqrt(pow (q, 3.0) + pow (r, 2.0)) ;
-    s = pow ((r+ d) , 1.0 / 3.0) ;
-    t = pow ((r- d) , 1.0 / 3.0) ;
+    d = sqrt(pow(q, 3.0) + pow(r, 2.0)) ;
+    s = pow ((r + d) , 1.0 / 3.0) ;
+    t = pow ((r - d) , 1.0 / 3.0) ;
     w = aa[2]/ std::complex<double>(3.0, 0.0);
 
     zProv[0][0] = s+ t;
@@ -430,47 +418,45 @@ void Equation::Solve3(int d4)
     zProv[2][0] = s + (j2* t) ;
     zProv[2][1] = j * (s+ t);
     zProv[2][2] = (j2* s) + t;
-    for (i1 = 0; i1 < 3; i1++)
+    for (int i1 = 0; i1 < 3; i1++)
     {
-      for (i2 = 0; i2 < 3; i2++)
+      for (int i2 = 0; i2 < 3; i2++)
         zProv[i1][i2] = zProv[i1][i2]- w;
     }
-    for (i3 = 0; i3 < 3; i3++)
+    for (int i3 = 0; i3 < 3; i3++)
     {
       ra[i3] = 0.0 ;
-      for (i2 = 0; i2 < 3; i2++)
+      for (int i2 = 0; i2 < 3; i2++)
       {
         u = std::complex<double>(1.0, 0.0) ;
-        for (i1 = 2; i1 >= 0; i1--)
+        for (int i1 = 2; i1 >= 0; i1--)
           u = (u* zProv[i3][i2]) + aa[i1] ;
 
         r1     = abs (u) ;
         ra[i3] = ra[i3] + r1 * r1 ;
       }
     }
-    i1 = IndiceMin(3, ra) ;
+    int i1 = IndiceMin(3, ra) ;
 
 
     if(_solutions != NULL)
       delete [] _solutions;
     _solutions = new std::complex<double>[3];
 
-    if(_order != NULL)
-      delete [] _order;
-    _order = new int[3];
+    if(_order.size() != 0)
+      _order.clear();
 
     _nbrSol   = 3 ;
-    for (i3 = 0; i3 < 3; i3++)
+    for (int i3 = 0; i3 < 3; i3++)
       _solutions[i3] = Proche (zProv[i1][i3] , Epsilon) ;
-    _order[0] = 1 ;
-    _order[1] = 1 ;
-    _order[2] = 1 ;
+    _order.push_back(1);
+    _order.push_back(1);
+    _order.push_back(1);
   }
 }
 
 void Equation::Solve4()
 {
-  int i1, i2 ;
   int d4_1r4, d4_2r2, d4_1r3_1r1, d4_1r2_2r1 ;
   int d4 = 1 ;
   double epsilon = 1.e-12 ;
@@ -480,7 +466,7 @@ void Equation::Solve4()
 
 
   /* Normalisation of coefficients */
-  for (i1 = 0; i1 < 4; i1++)
+  for (int i1 = 0; i1 < 4; i1++)
     aa[i1] = _coefficients[i1]/ _coefficients[4];
 
   /* Equation reduction :  on the form            */
@@ -550,13 +536,13 @@ void Equation::Solve4()
       delete [] _solutions;
     _solutions = new std::complex<double>[1];
 
-    if(_order != NULL)
-      delete [] _order;
-    _order = new int[1];
+
+    if(_order.size() != 0)
+      _order.clear();
 
     _nbrSol    = 1 ;
     _solutions[0] = Proche (k[0], Epsilon) ;
-    _order[0]  = 4 ;
+    _order.push_back(4);
   }
   else if (d4_2r2 == 1)
   {
@@ -566,16 +552,15 @@ void Equation::Solve4()
       delete [] _solutions;
     _solutions = new std::complex<double>[2];
 
-    if(_order != NULL)
-      delete [] _order;
-    _order = new int[2];
+    if(_order.size() != 0)
+      _order.clear();
 
     u         = sqrt (k[1]/ std::complex<double>(-2.0, 0.0)) ;
     _solutions[0] = Proche ((k[0]+ u) , Epsilon) ;
     _solutions[1] = Proche ((k[0]- u) , Epsilon) ;
     _nbrSol    = 2 ;
-    _order[0]  = 2 ;
-    _order[1]  = 2 ;
+    _order.push_back(2);
+    _order.push_back(2);
   }
   else if (d4_1r3_1r1 == 1)
   {
@@ -585,17 +570,16 @@ void Equation::Solve4()
       delete [] _solutions;
     _solutions = new std::complex<double>[2];
 
-    if(_order != NULL)
-      delete [] _order;
-    _order = new int[2];
+    if(_order.size() != 0)
+      _order.clear();
 
     u         = (k[2]* std::complex<double>(-3.0, 0.0)) / (k[1]* std::complex<double>(4.0, 0.0)) ;
     v         = u * std::complex<double>(-3.0, 0.0);
     _solutions[0] = Proche ((k[0]+ u) , Epsilon) ;
     _solutions[1] = Proche ((k[0]+ v) , Epsilon) ;
     _nbrSol    = 2 ;
-    _order[0]  = 3 ;
-    _order[1]  = 1 ;
+    _order.push_back(3);
+    _order.push_back(1);
   }
   else if (d4_1r2_2r1 == 1)
   {
@@ -605,9 +589,8 @@ void Equation::Solve4()
       delete [] _solutions;
     _solutions = new std::complex<double>[3];
 
-    if(_order != NULL)
-      delete [] _order;
-    _order = new int[3];
+    if(_order.size() != 0)
+      _order.clear();
 
     if (abs (k[1]) <= Epsilon)
     {
@@ -638,28 +621,28 @@ void Equation::Solve4()
       zProv[1][2] = (k[0] - (y+ v)) ;
       h[0] = 0.0 ;
       h[1] = 0.0 ;
-      for (i1 = 0; i1 < 3; i1++)
+      for (int i1 = 0; i1 < 3; i1++)
       {
         u = std::complex<double>(1.0, 0.0) ;
-        for (i2 = 3; i2 >= 0; i2--)
+        for (int i2 = 3; i2 >= 0; i2--)
           u = ((u* zProv[0][i1])+ aa[i2]) ;
 
         r    = abs (u) ;
         h[0] = h[0] + r * r ;
         u    = std::complex<double>(1.0, 0.0) ;
-        for (i2 = 3; i2 >= 0; i2--)
+        for (int i2 = 3; i2 >= 0; i2--)
           u = ((u* zProv[1][i1])+ aa[i2]) ;
         r    = abs (u) ;
         h[1] = h[1] + r * r ;
       }
-      i1 = IndiceMin (2, h) ;
-      for (i2 = 0; i2 < 3; i2++)
+      int i1 = IndiceMin (2, h) ;
+      for (int i2 = 0; i2 < 3; i2++)
         _solutions[i2] = Proche (zProv[i1][i2] , Epsilon) ;
     }
     _nbrSol   = 3 ;
-    _order[0] = 2 ;
-    _order[1] = 1 ;
-    _order[2] = 1 ;
+    _order.push_back(2);
+    _order.push_back(1);
+    _order.push_back(1);
   }
   else
   {
@@ -680,7 +663,7 @@ void Equation::Solve4()
     h[0] = abs ((eq.get_solutions()[1]- eq.get_solutions()[2])) ; /* the root the most distant to    */
     h[1] = abs ((eq.get_solutions()[0]- eq.get_solutions()[2])) ; /* the 2 others is selected       */
     h[2] = abs ((eq.get_solutions()[0]- eq.get_solutions()[1])) ;
-    i1   = IndiceMin (3, h) ;
+    int i1   = IndiceMin (3, h) ;
     u    = eq.get_solutions()[i1] ;
     v    = ((aa[2]- u) * std::complex<double>(4.0, 0.0)) ;
     v    = sqrt(((aa[3]* aa[3]) - v)) ;
@@ -711,18 +694,18 @@ void Equation::Solve4()
 
     h[0] = 0.0 ;
     h[1] = 0.0 ;
-    for (i1 = 0; i1 < 4; i1++)
+    for (int i1 = 0; i1 < 4; i1++)
     {
       u = std::complex<double>(1.0, 0.0) ;
 
-      for (i2 = 3; i2 >= 0; i2--)
+      for (int i2 = 3; i2 >= 0; i2--)
         u = ((u* zProv[0][i1])+ aa[i2]) ;
 
       r    = abs (u) ;
       h[0] = h[0] + r * r ;
       u    = std::complex<double>(1.0, 0.0) ;
 
-      for (i2 = 3; i2 >= 0; i2--)
+      for (int i2 = 3; i2 >= 0; i2--)
         u = ((u* zProv[1][i1])+ aa[i2]) ;
 
       r    = abs(u) ;
@@ -734,14 +717,13 @@ void Equation::Solve4()
       delete [] _solutions;
     _solutions = new std::complex<double>[4];
 
-    if(_order != NULL)
-      delete [] _order;
-    _order = new int[4];
+    if(_order.size() != 0)
+      _order.clear();
 
-    for (i2 = 0; i2 < 4; i2++)
+    for (int i2 = 0; i2 < 4; i2++)
     {
       _solutions[i2] = Proche (zProv[i1][i2] , Epsilon) ;
-      _order[i2]  = 1 ;
+      _order.push_back(1);
     }
     _nbrSol = 4 ;
   }
@@ -775,7 +757,6 @@ int Equation::TestDegree3Triple(std::complex<double>* a, double epsilon)
 
 int Equation::TestDegree3SimpleDouble(std::complex<double>* a, double epsilon)
 {
-  int i ;
   double d, k, r[5] ;
   std::complex<double> u, t[5] ;
 
@@ -787,12 +768,12 @@ int Equation::TestDegree3SimpleDouble(std::complex<double>* a, double epsilon)
   t[3] = -(u* u) ;
   t[4] = std::complex<double>(-18.0, 0.0)* a[0] * u;
 
-  for (i = 0 ; i < 5 ; i++)
+  for (int i = 0 ; i < 5 ; i++)
     r[i] = abs (t[i]) ;
 
   k = r[IndiceMax(5, r)] ;
 
-  for (i = 1 ; i < 5 ; i++)
+  for (int i = 1 ; i < 5 ; i++)
     t[0] = t[0]+t[i];
 
   d = (k > epsilon) ? abs (t[0]/std::complex<double>(k,0.0))
@@ -803,12 +784,12 @@ int Equation::TestDegree3SimpleDouble(std::complex<double>* a, double epsilon)
 
 int Equation::IndiceMin ( int n , double *list )
 {
-  int i, iMin ;
+  int iMin ;
   double xMin ;
 
   iMin = 0 ;
   xMin = list[0] ;
-  for (i = 1; i < n; i++)
+  for (int i = 1; i < n; i++)
   {
     if ( list[i] < xMin )
     {
@@ -822,12 +803,12 @@ int Equation::IndiceMin ( int n , double *list )
 
 int Equation::IndiceMax ( int n , double *list)
 {
-  int i, iMax ;
+  int iMax ;
   double xMax ;
 
   iMax = 0 ;
   xMax = list[0] ;
-  for (i = 1; i < n; i++)
+  for (int i = 1; i < n; i++)
   {
     if ( list[i] > xMax )
     {
@@ -851,7 +832,6 @@ int Equation::TestDegree4Quad ( std::complex<double> *a , double epsilon )
 
 int Equation::TestDegree4DoubleDouble ( std::complex<double> *a , std::complex<double> *k , double epsilon )
 {
-  int i ;
   int d4 ;
   double r0, r1, r2, h[5] ;
   std::complex<double> u, t[5] ;
@@ -863,7 +843,7 @@ int Equation::TestDegree4DoubleDouble ( std::complex<double> *a , std::complex<d
   t[2] = a[3] * a[1];
   t[3] = u *    a[2];
   t[4] = a[2] * a[2];
-  for (i = 0 ; i < 5 ; i++)
+  for (int i = 0 ; i < 5 ; i++)
     h[i] = abs (t[i]) ;
 
   r1 = h[IndiceMax(5, h)] ;
@@ -884,7 +864,6 @@ int Equation::TestDegree4DoubleDouble ( std::complex<double> *a , std::complex<d
 
 int Equation::TestDegree4SimpleTriple ( std::complex<double> *a , std::complex<double> *k , double epsilon )
 {
-  int i ;
   int d4 ;
   double r, r0, r1, r2, h[4] ;
   std::complex<double> u, t[4] ;
@@ -893,7 +872,7 @@ int Equation::TestDegree4SimpleTriple ( std::complex<double> *a , std::complex<d
   t[0] = a[2] * a[2] ;
   t[1] = a[0] * std::complex<double>(12.0, 0.0);
   t[2] = (a[1]* a[3]) * std::complex<double>(3.0, 0.0) ;
-  for (i = 0 ; i < 3 ; i++)
+  for (int i = 0 ; i < 3 ; i++)
     h[i] = abs (t[i]) ;
 
   r  = h[IndiceMax(3, h)] ;
@@ -905,7 +884,7 @@ int Equation::TestDegree4SimpleTriple ( std::complex<double> *a , std::complex<d
   u    = a[3]* std::complex<double>(3.0, 0.0) ;
   t[2] = (u* u) * (a[0]* std::complex<double>(3.0, 0.0)) ;
   t[3] = (a[2]* a[2]) * a[2] ;
-  for (i = 0 ; i < 4 ; i++)
+  for (int i = 0 ; i < 4 ; i++)
     h[i] = abs (t[i]) ;
   r  = h[IndiceMax(4, h)] ;
   u  = ((t[0]- t[1])* std::complex<double>(27.0, 0.0))+ (t[2]- t[3]) ;
