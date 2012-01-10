@@ -221,5 +221,3 @@ SparseUnmixingImageFilter< TInputImage, TOutputImage, VNbInputImage, TPrecision,
 } // end of namespace otb
 
 #endif
-
-
