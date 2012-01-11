@@ -712,7 +712,7 @@ private:
   itk::ProcessObject::Pointer       m_ProgressSource;
   std::string                       m_ProgressSourceDescription;
 
-  /** Long name of the application (thatcan be displayed...) */
+  /** Long name of the application (that can be displayed...) */
   std::string m_DocName;
   /** Long and precise application description . */
   std::string                       m_DocLongDescription;
@@ -720,11 +720,11 @@ private:
   DocExampleStructure::Pointer m_DocExample;
   /** Author List. Format : "John Doe, Winnie the Pooh".*/
   std::string m_DocAuthors;
-  /** Known limitations (threading, unvalid pixel type ...) or bugs */
+  /** Known limitations (threading, invalid pixel type ...) or bugs */
   std::string m_DocLimitations;
   /** Related applications */
   std::string m_DocSeeAlso;
-  /** Tags that define the applcation (ex : segmentation, OBIA).*/
+  /** Tags that define the application (ex : segmentation, OBIA).*/
   std::vector<std::string> m_DocTags;
 
   /**
