@@ -73,9 +73,9 @@ private:
     AddParameter(ParameterType_Int,"sizey","Size Y");
     SetParameterRole("sizey", Role_Output);
 
-    AddParameter(ParameterType_Int,"spacingx","Pixel Size X");
+    AddParameter(ParameterType_Float,"spacingx","Pixel Size X");
     SetParameterRole("spacingx", Role_Output);
-    AddParameter(ParameterType_Int,"spacingy","Pixel Size Y");
+    AddParameter(ParameterType_Float,"spacingy","Pixel Size Y");
     SetParameterRole("spacingy", Role_Output);
 
     AddParameter(ParameterType_Float,"estimatedgroundspacingx","Estimated ground spacing X (in meters)");
@@ -194,6 +194,7 @@ private:
     FloatVectorImageType::Pointer inImage = GetParameterImage("in");
       
     ossOutput << std::endl << "Image general informations:" << std::endl;
+
     // Read informations
     typedef otb::ImageMetadataInterfaceBase ImageMetadataInterfaceType;
     ImageMetadataInterfaceType::Pointer metadataInterface = ImageMetadataInterfaceFactory::CreateIMI(inImage->GetMetaDataDictionary());
@@ -208,9 +209,9 @@ private:
 
     ossOutput << "\tSize :  [" << GetParameterInt("sizex") << "," << GetParameterInt("sizey") << "]" << std::endl;
     //Get image spacing
-    SetParameterInt("spacingx", inImage->GetSpacing()[0]);
-    SetParameterInt("spacingy", inImage->GetSpacing()[1]);
-    ossOutput << "\tSpacing :  [" << GetParameterInt("spacingx") << "," << GetParameterInt("spacingy") << "]" << std::endl;
+    SetParameterFloat("spacingx", inImage->GetSpacing()[0]);
+    SetParameterFloat("spacingy", inImage->GetSpacing()[1]);
+    ossOutput << "\tSpacing :  [" << GetParameterFloat("spacingx") << "," << GetParameterFloat("spacingy") << "]" << std::endl;
       
     //Estimate ground spacing
     GroundSpacingImageType::Pointer groundSpacing = GroundSpacingImageType::New();
