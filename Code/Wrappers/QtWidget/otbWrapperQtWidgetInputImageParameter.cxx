@@ -65,7 +65,6 @@ void QtWidgetInputImageParameter::SelectFile()
 {
   QFileDialog fileDialog;
   fileDialog.setConfirmOverwrite(true);
-  fileDialog.setFileMode(QFileDialog::ExistingFile);
   fileDialog.setNameFilter("Raster files (*)");
 
   if (fileDialog.exec())

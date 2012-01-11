@@ -47,10 +47,11 @@ InputImageParameter::SetFromFileName(const std::string& filename)
   // First clear previous file choosen
   this->ClearValue();
 
-  // TODO : when the logger will be available, redirect the exception
-  // in the logger (like what is done in MsgReporter)
-  if (!filename.empty()
-      && itksys::SystemTools::FileExists(filename.c_str()))
+  // No file existence is done here :
+  //  - Done in the reader
+  //  - allow appending additional information to the filename
+  // myfile.tif:2 for example, or myfile.tif:nocarto
+  if (!filename.empty())
     {
     FloatVectorReaderType::Pointer reader = FloatVectorReaderType::New();
     reader->SetFileName(filename);
