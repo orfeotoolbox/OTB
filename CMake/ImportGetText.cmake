@@ -44,7 +44,7 @@ IF(OTB_USE_GETTEXT)
 	SET(CMAKE_REQUIRED_DEFINITIONS ${QT_DEFINITIONS})
 	CHECK_CXX_SOURCE_RUNS_ARGS(
             ${CMAKE_CURRENT_SOURCE_DIR}/CMake/TestQtGettextConflict.cxx
-	    0
+	    0 #This parameter is not used in this case
             CHECK_QT_GETTEXT_CONFLICT
             )
 	IF(NOT CHECK_QT_GETTEXT_CONFLICT)
