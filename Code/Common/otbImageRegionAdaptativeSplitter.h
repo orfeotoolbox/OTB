@@ -26,6 +26,7 @@
 #include "itkObjectFactory.h"
 #include "itkIndex.h"
 #include "itkSize.h"
+#include "itkFastMutexLock.h"
 
 namespace otb
 {
@@ -171,6 +172,9 @@ private:
 
   // Is the splitter up-to-date ?
   bool m_IsUpToDate;
+
+  // Lock to ensure thread-safety
+  itk::SimpleFastMutexLock m_Lock;
 };
 
 } // end namespace otb

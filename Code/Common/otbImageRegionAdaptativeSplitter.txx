@@ -38,11 +38,13 @@ ImageRegionAdaptativeSplitter<VImageDimension>
   this->SetRequestedNumberOfSplits(requestedNumber);
 
   // Check if we need to compute split map agagin
+  m_Lock.Lock();
   if(!m_IsUpToDate)
     {
     // Do so if we need to
     this->EstimateSplitMap();
     }
+  m_Lock.Unlock();
 
   // Return the size of the split map
   return m_StreamVector.size();
@@ -57,11 +59,13 @@ ImageRegionAdaptativeSplitter<VImageDimension>
   this->SetImageRegion(region);
 
   // Check if we need to compute split map agagin
+  m_Lock.Lock();
   if(!m_IsUpToDate)
     {
     // Do so if we need to
     this->EstimateSplitMap();
     }
+  m_Lock.Unlock();
 
   // Return the requested split
   return m_StreamVector.at(i);
