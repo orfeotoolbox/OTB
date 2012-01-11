@@ -211,6 +211,7 @@ ADD_CUSTOM_TARGET(SoftwareGuideExamples  ALL echo)
 
 
 SET( OTB_EXAMPLES_SRCS
+  ${OTB_SOURCE_DIR}/Examples/Application/ApplicationExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Installation/HelloWorld.cxx
   ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/Image1.cxx
   ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/Image2.cxx
