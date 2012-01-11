@@ -25,5 +25,8 @@ fi
 # export it to make it available to otbApplicationLauncherCommandLine environment
 export ITK_AUTOLOAD_PATH
 
+# avoid numerical issues caused by locale
+export LC_NUMERIC=C
+
 # start the application
 $OTB_GUI_LAUNCHER "$@"
