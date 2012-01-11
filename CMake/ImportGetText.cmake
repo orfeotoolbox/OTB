@@ -1,6 +1,6 @@
 MESSAGE(STATUS "Importing GetText...")
 
-OPTION(OTB_USE_GETTEXT "Get Text Library." ON)
+OPTION(OTB_USE_GETTEXT "Get Text Library." OFF)
 
 IF(OTB_USE_GETTEXT)
     
@@ -38,6 +38,21 @@ IF(OTB_USE_GETTEXT)
         MESSAGE(STATUS "  GetText intl library  : ${GETTEXT_INTL_LIBRARY}")
       ENDIF(APPLE OR WIN32)
     
+      IF(BUILD_APPLICATIONS AND WRAP_QT)
+	SET(CMAKE_REQUIRED_INCLUDES ${QT_USE_FILE})
+	SET(CMAKE_REQUIRED_LIBRARIES "${QT_LIBRARIES};${GETTEXT_LIBRARY}")
+	SET(CMAKE_REQUIRED_DEFINITIONS ${QT_DEFINITIONS})
+	CHECK_CXX_SOURCE_RUNS_ARGS(
+            ${CMAKE_CURRENT_SOURCE_DIR}/CMake/TestQtGettextConflict.cxx
+	    0
+            CHECK_QT_GETTEXT_CONFLICT
+            )
+	IF(NOT CHECK_QT_GETTEXT_CONFLICT)
+	  MESSAGE(WARNING "CHECK_QT_GETTEXT_CONFLICT test failed : your platform exhibits a QT/Gettext conflict.\n"
+	      "Opening OTB-applications auto generated in QT may generate a crash.\n"
+	      "You might consider deactivating the support of Gettext in OTB with the OTB_USE_GETTEXT cmake option.\n")
+	ENDIF(NOT CHECK_QT_GETTEXT_CONFLICT)
+      ENDIF(BUILD_APPLICATIONS AND WRAP_QT)
     ELSE(GETTEXT_FOUND)
       SET(OTB_I18N 0)
       MESSAGE(STATUS
