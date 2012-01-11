@@ -55,6 +55,7 @@ INCLUDE (${CMAKE_ROOT}/Modules/CMakeBackwardCompatibilityCXX.cmake)
 OPTION(BUILD_TESTING  "Build testing." OFF)
 OPTION(BUILD_EXAMPLES "Build the Examples directory." OFF)
 OPTION(BUILD_APPLICATIONS "Build applications" OFF)
+OPTION(BUILD_BUG_TRACKER_TESTS "Build failing tests showing bugs" OFF)
 
 INCLUDE(${CMAKE_ROOT}/Modules/Dart.cmake)
 CONFIGURE_FILE(CMake/CTestCustom.cmake.in CTestCustom.cmake)
