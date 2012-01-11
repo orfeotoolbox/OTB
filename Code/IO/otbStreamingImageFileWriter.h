@@ -136,7 +136,12 @@ public:
    *   composite filters for example */
   void SetAutomaticTiledStreaming(unsigned int availableRAM = 0, double bias = 1.0);
 
-  /** TODO */
+  /**  Set the streaming mode to 'adaptative' and configure the number of MB
+   *   available. The actual number of divisions is computed automatically
+   *   by estimating the memory consumption of the pipeline.
+   *   Tiles will try to match the input file tile scheme.
+   *   Setting the availableRAM parameter to 0 means that the available RAM
+   *   is set from the CMake configuration option */
   void SetAutomaticAdaptativeStreaming(unsigned int availableRAM = 0, double bias = 1.0);
 
   /**  Set buffer memory size (in bytes) use to calculate the number of stream divisions */
