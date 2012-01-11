@@ -22,6 +22,7 @@
 #include "otbMacro.h"
 #include "otbImageRegionAdaptativeSplitter.h"
 #include "itkMetaDataObject.h"
+#include "otbMetaDataKey.h"
 
 namespace otb
 {
