@@ -29,6 +29,7 @@
 #include "otbRAMDrivenStrippedStreamingManager.h"
 #include "otbTileDimensionTiledStreamingManager.h"
 #include "otbRAMDrivenTiledStreamingManager.h"
+#include "otbRAMDrivenAdaptativeStreamingManager.h"
 
 namespace otb
 {
@@ -42,7 +43,7 @@ StreamingImageVirtualWriter<TInputImage>
 {
   // By default, we use tiled streaming, with automatic tile size
   // We don't set any parameter, so the memory size is retrieved from the OTB configuration options
-  this->SetAutomaticTiledStreaming();
+  this->SetAutomaticAdaptativeStreaming();
 }
 
 template <class TInputImage>
@@ -130,6 +131,19 @@ StreamingImageVirtualWriter<TInputImage>
   streamingManager->SetBias(bias);
   m_StreamingManager = streamingManager;
 }
+
+template <class TInputImage>
+void
+StreamingImageVirtualWriter<TInputImage>
+::SetAutomaticAdaptativeStreaming(unsigned int availableRAM, double bias)
+{
+  typedef RAMDrivenAdaptativeStreamingManager<TInputImage> RAMDrivenAdaptativeStreamingManagerType;
+  typename RAMDrivenAdaptativeStreamingManagerType::Pointer streamingManager = RAMDrivenAdaptativeStreamingManagerType::New();
+  streamingManager->SetAvailableRAMInMB(availableRAM);
+  streamingManager->SetBias(bias);
+  m_StreamingManager = streamingManager;
+}
+
 
 template <class TInputImage>
 void
