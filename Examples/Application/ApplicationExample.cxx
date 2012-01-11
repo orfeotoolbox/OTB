@@ -79,10 +79,10 @@ public:
 
   //  Software Guide : BeginCodeSnippet
   itkNewMacro(Self)
-  ;
+ ;
 
   itkTypeMacro(ExampleApplication, otb::Application)
-  ;
+ ;
   //  Software Guide : EndCodeSnippet
 
 
@@ -262,8 +262,6 @@ private:
 //  Software Guide :BeginCodeSnippet
 OTB_APPLICATION_EXPORT(otb::Wrapper::ExampleApplication)
 //  Software Guide :EndCodeSnippet
-
-
 
 
 
