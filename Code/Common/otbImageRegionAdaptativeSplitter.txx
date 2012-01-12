@@ -90,8 +90,8 @@ ImageRegionAdaptativeSplitter<VImageDimension>
   if(m_TileHint[0] == 0 || m_TileHint[1] == 0 || VImageDimension != 2)
     {
     // In this case we fallback to the classical tile splitter
-    typename otb::ImageRegionSquareTileSplitter<2>::Pointer
-      splitter = otb::ImageRegionSquareTileSplitter<2>::New();
+    typename otb::ImageRegionSquareTileSplitter<VImageDimension>::Pointer
+      splitter = otb::ImageRegionSquareTileSplitter<VImageDimension>::New();
 
     // Retrieve nb splits
     unsigned int nbSplits = splitter->GetNumberOfSplits(m_ImageRegion, m_RequestedNumberOfSplits);
