@@ -37,4 +37,6 @@ void RegisterTests()
   REGISTER_TEST(otbDBOverlapDataNodeFeatureFunction);
   REGISTER_TEST(otbMaximumAutocorrelationFactorImageFilterNew);
   REGISTER_TEST(otbMaximumAutocorrelationFactorImageFilter);
+  REGISTER_TEST(otbThresholdVectorImageFilterNew);
+  REGISTER_TEST(otbThresholdVectorImageFilterTest);
 }

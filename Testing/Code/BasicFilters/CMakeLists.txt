@@ -2448,6 +2448,19 @@ ADD_TEST(bfTvMaximumAutocorrelationFactorImageFilter ${BASICFILTERS_TESTS15}
    ${TEMP}/bfTvMaximumAutocorrelationFactorImageFilterOutput.tif
 )
 
+# ---------------------    otbThresholdVectorImageFilter---------------------
+ADD_TEST(bfTuThresholdVectorImageFilterNew ${BASICFILTERS_TESTS15}
+  otbThresholdVectorImageFilterNew
+)
+
+ADD_TEST(bfTvThresholdVectorImageFilterTest ${BASICFILTERS_TESTS15}
+   --compare-image 0.0001
+   ${BASELINE}/bfTvThresholdVectorImageFilterTest_Output.tif
+   ${TEMP}/bfTvThresholdVectorImageFilterTest_Output.tif
+   otbThresholdVectorImageFilterTest
+   ${INPUTDATA}/QB_TOULOUSE_MUL_Extract_500_500.tif
+   ${TEMP}/bfTvThresholdVectorImageFilterTest_Output.tif
+)
 
 # A enrichir
 SET(BasicFilters_SRCS1
@@ -2733,6 +2746,7 @@ otbDBOverlapDataNodeFeatureFunction.cxx
 otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction.cxx
 otbParserConditionDataNodeFeatureFunction.cxx
 otbMaximumAutocorrelationFactorImageFilter.cxx
+otbThresholdVectorImageFilter.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbBasicFiltersTests1 "${BasicFilters_SRCS1}" "OTBBasicFilters;OTBIO;OTBTesting")
