@@ -133,7 +133,7 @@ PersistentShrinkImageFilter<TInputImage, TOutputImage>
   for (unsigned int i = 0; i < OutputImageType::ImageDimension; ++i)
     {
     shrinkedOutputSpacing[i] = inputSpacing[i] * static_cast<double>(m_ShrinkFactor);
-    shrinkedOutputSize[i] = inputSize[i] / m_ShrinkFactor;
+    shrinkedOutputSize[i] = inputSize[i] > m_ShrinkFactor ? inputSize[i] / m_ShrinkFactor : 1;
 
     // TODO : don't know what to do here.
     // dividing the input index by the shrink factor does not make a lot of sense...

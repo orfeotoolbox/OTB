@@ -42,6 +42,9 @@ StreamingShrinkImageRegionSplitter
   m_SplitsPerDimension[0] = (regionSize[0] + m_TileDimension - 1) / m_TileDimension;
   m_SplitsPerDimension[1] = regionSize[1] / m_TileSizeAlignment;
 
+  if (m_SplitsPerDimension[1] == 0)
+    m_SplitsPerDimension[1] = 1;
+
   unsigned int numPieces = 1;
   for (unsigned int j = 0; j < ImageDimension; ++j)
     {
