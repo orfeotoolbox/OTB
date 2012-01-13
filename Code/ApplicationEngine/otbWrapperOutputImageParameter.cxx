@@ -16,8 +16,8 @@
 
 =========================================================================*/
 #include "otbWrapperOutputImageParameter.h"
-#include "itkCastImageFilter.h"
-#include "itkVectorCastImageFilter.h"
+#include "otbClampImageFilter.h"
+#include "otbClampVectorImageFilter.h"
 
 namespace otb
 {
@@ -61,17 +61,28 @@ void OutputImageParameter::InitializeWriters()
 }
 
 
-#define otbCastAndWriteImageMacro(InputImageType, OutputImageType, writer)        \
-  {                                                                               \
-    typedef itk::CastImageFilter<InputImageType, OutputImageType> CastFilterType; \
-    typename CastFilterType::Pointer caster = CastFilterType::New();              \
-    caster->SetInput( dynamic_cast<InputImageType*>(m_Image.GetPointer()) );      \
-    caster->InPlaceOn();                                                          \
-    writer->SetFileName( this->GetFileName() );                                   \
-    writer->SetInput(caster->GetOutput());                                        \
-    writer->WriteGeomFileOn();                                                    \
-    writer->SetAutomaticTiledStreaming(m_RAMValue);                               \
-    writer->Update();                                                             \
+#define otbClampAndWriteImageMacro(InputImageType, OutputImageType, writer)         \
+  {                                                                                 \
+    typedef otb::ClampImageFilter<InputImageType, OutputImageType> ClampFilterType; \
+    typename ClampFilterType::Pointer clampFilter = ClampFilterType::New();          \
+    clampFilter->SetInput( dynamic_cast<InputImageType*>(m_Image.GetPointer()) );   \
+    writer->SetFileName( this->GetFileName() );                                     \
+    writer->SetInput(clampFilter->GetOutput());                                     \
+    writer->WriteGeomFileOn();                                                      \
+    writer->SetAutomaticTiledStreaming(m_RAMValue);                                 \
+    writer->Update();                                                               \
+  }
+
+#define otbClampAndWriteVectorImageMacro(InputImageType, OutputImageType, writer)         \
+  {                                                                                       \
+    typedef otb::ClampVectorImageFilter<InputImageType, OutputImageType> ClampFilterType; \
+    typename ClampFilterType::Pointer clampFilter = ClampFilterType::New();               \
+    clampFilter->SetInput( dynamic_cast<InputImageType*>(m_Image.GetPointer()) );         \
+    writer->SetFileName(this->GetFileName() );                                            \
+    writer->SetInput(clampFilter->GetOutput());                                           \
+    writer->WriteGeomFileOn();                                                            \
+    writer->SetAutomaticTiledStreaming(m_RAMValue);                                       \
+    writer->Update();                                                                     \
   }
 
 
@@ -83,42 +94,42 @@ OutputImageParameter::SwitchImageWrite()
     {
     case ImagePixelType_int8:
     {
-    otbCastAndWriteImageMacro(TInputImageType, Int8ImageType, m_Int8Writer);
+    otbClampAndWriteImageMacro(TInputImageType, Int8ImageType, m_Int8Writer);
     break;
     }
     case ImagePixelType_uint8:
     {
-    otbCastAndWriteImageMacro(TInputImageType, UInt8ImageType, m_UInt8Writer);
+    otbClampAndWriteImageMacro(TInputImageType, UInt8ImageType, m_UInt8Writer);
     break;
     }
     case ImagePixelType_int16:
     {
-    otbCastAndWriteImageMacro(TInputImageType, Int16ImageType, m_Int16Writer);
+    otbClampAndWriteImageMacro(TInputImageType, Int16ImageType, m_Int16Writer);
     break;
     }
     case ImagePixelType_uint16:
     {
-    otbCastAndWriteImageMacro(TInputImageType, UInt16ImageType, m_UInt16Writer);
+    otbClampAndWriteImageMacro(TInputImageType, UInt16ImageType, m_UInt16Writer);
     break;
     }
     case ImagePixelType_int32:
     {
-    otbCastAndWriteImageMacro(TInputImageType, Int32ImageType, m_Int32Writer);
+    otbClampAndWriteImageMacro(TInputImageType, Int32ImageType, m_Int32Writer);
     break;
     }
     case ImagePixelType_uint32:
     {
-    otbCastAndWriteImageMacro(TInputImageType, UInt32ImageType, m_UInt32Writer);
+    otbClampAndWriteImageMacro(TInputImageType, UInt32ImageType, m_UInt32Writer);
     break;
     }
     case ImagePixelType_float:
     {
-    otbCastAndWriteImageMacro(TInputImageType, FloatImageType, m_FloatWriter);
+    otbClampAndWriteImageMacro(TInputImageType, FloatImageType, m_FloatWriter);
     break;
     }
     case ImagePixelType_double:
     {
-    otbCastAndWriteImageMacro(TInputImageType, DoubleImageType, m_DoubleWriter);
+    otbClampAndWriteImageMacro(TInputImageType, DoubleImageType, m_DoubleWriter);
     break;
     }
     }
@@ -133,42 +144,42 @@ OutputImageParameter::SwitchVectorImageWrite()
     {
     case ImagePixelType_int8:
     {
-    otbCastAndWriteImageMacro(TInputVectorImageType, Int8VectorImageType, m_VectorInt8Writer);
+    otbClampAndWriteVectorImageMacro(TInputVectorImageType, Int8VectorImageType, m_VectorInt8Writer);
     break;
     }
     case ImagePixelType_uint8:
     {
-    otbCastAndWriteImageMacro(TInputVectorImageType, UInt8VectorImageType, m_VectorUInt8Writer);
+    otbClampAndWriteVectorImageMacro(TInputVectorImageType, UInt8VectorImageType, m_VectorUInt8Writer);
     break;
     }
     case ImagePixelType_int16:
     {
-    otbCastAndWriteImageMacro(TInputVectorImageType, Int16VectorImageType, m_VectorInt16Writer);
+    otbClampAndWriteVectorImageMacro(TInputVectorImageType, Int16VectorImageType, m_VectorInt16Writer);
     break;
     }
     case ImagePixelType_uint16:
     {
-    otbCastAndWriteImageMacro(TInputVectorImageType, UInt16VectorImageType, m_VectorUInt16Writer);
+    otbClampAndWriteVectorImageMacro(TInputVectorImageType, UInt16VectorImageType, m_VectorUInt16Writer);
     break;
     }
     case ImagePixelType_int32:
     {
-    otbCastAndWriteImageMacro(TInputVectorImageType, Int32VectorImageType, m_VectorInt32Writer);
+    otbClampAndWriteVectorImageMacro(TInputVectorImageType, Int32VectorImageType, m_VectorInt32Writer);
     break;
     }
     case ImagePixelType_uint32:
     {
-    otbCastAndWriteImageMacro(TInputVectorImageType, UInt32VectorImageType, m_VectorUInt32Writer);
+    otbClampAndWriteVectorImageMacro(TInputVectorImageType, UInt32VectorImageType, m_VectorUInt32Writer);
     break;
     }
     case ImagePixelType_float:
     {
-    otbCastAndWriteImageMacro(TInputVectorImageType, FloatVectorImageType, m_VectorFloatWriter);
+    otbClampAndWriteVectorImageMacro(TInputVectorImageType, FloatVectorImageType, m_VectorFloatWriter);
     break;
     }
     case ImagePixelType_double:
     {
-    otbCastAndWriteImageMacro(TInputVectorImageType, DoubleVectorImageType, m_VectorDoubleWriter);
+    otbClampAndWriteVectorImageMacro(TInputVectorImageType, DoubleVectorImageType, m_VectorDoubleWriter);
     break;
     }
     }
@@ -181,7 +192,11 @@ OutputImageParameter::SwitchRGBAImageWrite()
   {
   if( m_PixelType == ImagePixelType_uint8 )
     {
-    otbCastAndWriteImageMacro(TInputRGBAImageType, UInt8RGBAImageType, m_RGBAUInt8Writer);
+    m_RGBAUInt8Writer->SetFileName( this->GetFileName() );
+    m_RGBAUInt8Writer->SetInput(dynamic_cast<UInt8RGBAImageType*>(m_Image.GetPointer()) );
+    m_RGBAUInt8Writer->WriteGeomFileOn();
+    m_RGBAUInt8Writer->SetAutomaticTiledStreaming(m_RAMValue);
+    m_RGBAUInt8Writer->Update();
     }
    else
      itkExceptionMacro("Unknown PixelType for RGBA Image.");
@@ -193,7 +208,11 @@ OutputImageParameter::SwitchRGBImageWrite()
   {
    if( m_PixelType == ImagePixelType_uint8 )
     {
-    otbCastAndWriteImageMacro(TInputRGBImageType, UInt8RGBImageType, m_RGBUInt8Writer);
+    m_RGBUInt8Writer->SetFileName( this->GetFileName() );
+    m_RGBUInt8Writer->SetInput(dynamic_cast<UInt8RGBImageType*>(m_Image.GetPointer()) );
+    m_RGBUInt8Writer->WriteGeomFileOn();
+    m_RGBUInt8Writer->SetAutomaticTiledStreaming(m_RAMValue);
+    m_RGBUInt8Writer->Update();
     }
    else
      itkExceptionMacro("Unknown PixelType for RGB Image.");
