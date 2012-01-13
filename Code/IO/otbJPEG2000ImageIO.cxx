@@ -180,7 +180,7 @@ public:
   
   opj_image_t * DecodeTile(unsigned int tileIndex);
 
-  std::vector<unsigned int> GetAvailableResolutions(){return this->m_AvailableResolutions; };
+  const std::vector<unsigned int> & GetAvailableResolutions(){return this->m_AvailableResolutions; };
 
   void Clean();
 
