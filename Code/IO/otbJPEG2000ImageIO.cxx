@@ -309,6 +309,7 @@ void JPEG2000InternalReader::Clean()
   this->m_YResolution.clear();
   this->m_Precision.clear();
   this->m_Signed.clear();
+  m_AvailableResolutions.clear();
 
   this->m_Width = 0;
   this->m_Height = 0;
