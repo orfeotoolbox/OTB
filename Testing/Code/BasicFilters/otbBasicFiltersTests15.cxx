@@ -39,4 +39,8 @@ void RegisterTests()
   REGISTER_TEST(otbMaximumAutocorrelationFactorImageFilter);
   REGISTER_TEST(otbThresholdVectorImageFilterNew);
   REGISTER_TEST(otbThresholdVectorImageFilterTest);
+  REGISTER_TEST(otbClampVectorImageFilterNew);
+  REGISTER_TEST(otbClampVectorImageFilterTest);
+  REGISTER_TEST(otbClampImageFilterNew);
+  REGISTER_TEST(otbClampImageFilterTest);
 }

@@ -2462,6 +2462,34 @@ ADD_TEST(bfTvThresholdVectorImageFilterTest ${BASICFILTERS_TESTS15}
    ${TEMP}/bfTvThresholdVectorImageFilterTest_Output.tif
 )
 
+# ---------------------    otbClampVectorImageFilter---------------------
+ADD_TEST(bfTuClampVectorImageFilterNew ${BASICFILTERS_TESTS15}
+  otbClampVectorImageFilterNew
+)
+
+ADD_TEST(bfTvClampVectorImageFilterTest ${BASICFILTERS_TESTS15}
+   --compare-image 0.0001
+   ${BASELINE}/bfTvClampVectorImageFilterTest_Output.tif
+   ${TEMP}/bfTvClampVectorImageFilterTest_Output.tif
+   otbClampVectorImageFilterTest
+   ${INPUTDATA}/QB_TOULOUSE_MUL_Extract_500_500.tif
+   ${TEMP}/bfTvClampVectorImageFilterTest_Output.tif
+)
+
+# ---------------------    otbClampImageFilter---------------------
+ADD_TEST(bfTuClampImageFilterNew ${BASICFILTERS_TESTS15}
+  otbClampImageFilterNew
+)
+
+ADD_TEST(bfTvClampImageFilterTest ${BASICFILTERS_TESTS15}
+   --compare-image 0.0001
+   ${BASELINE}/bfTvClampImageFilterTest_Output.tif
+   ${TEMP}/bfTvClampImageFilterTest_Output.tif
+   otbClampImageFilterTest
+   ${INPUTDATA}/QB_TOULOUSE_MUL_Extract_500_500.tif
+   ${TEMP}/bfTvClampImageFilterTest_Output.tif
+)
+
 # A enrichir
 SET(BasicFilters_SRCS1
 otbBasicFiltersTests1.cxx
@@ -2747,6 +2775,8 @@ otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction.cxx
 otbParserConditionDataNodeFeatureFunction.cxx
 otbMaximumAutocorrelationFactorImageFilter.cxx
 otbThresholdVectorImageFilter.cxx
+otbClampVectorImageFilter.cxx
+otbClampImageFilter.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbBasicFiltersTests1 "${BasicFilters_SRCS1}" "OTBBasicFilters;OTBIO;OTBTesting")
