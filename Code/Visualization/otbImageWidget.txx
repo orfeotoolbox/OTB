@@ -236,6 +236,7 @@ ImageWidget<TInputImage>
     glTexCoord2f (0.0, 0.0);
     glVertex3f (m_Extent.GetIndex()[0], m_Extent.GetIndex()[1] + m_Extent.GetSize()[1], 0.0);
     glEnd ();
+    glDeleteTextures(1,&texture);
     glDisable(GL_TEXTURE_2D);
     }
 
