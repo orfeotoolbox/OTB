@@ -265,4 +265,3 @@ OTB_APPLICATION_EXPORT(otb::Wrapper::ExampleApplication)
 
 
 
-

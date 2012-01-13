@@ -30,10 +30,10 @@ typedef unsigned int                                OutputPixelType;
 
 /** Image typedefs */
 const unsigned int                            Dimension = 2;
-typedef otb::Image<InputPixelType,Dimension>  InputImageType;
-typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
+typedef otb::Image<InputPixelType, Dimension>  InputImageType;
+typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
-typedef otb::ClampImageFilter<InputImageType,OutputImageType>    FilterType;
+typedef otb::ClampImageFilter<InputImageType, OutputImageType>    FilterType;
 
 int otbClampImageFilterNew(int argc, char* argv[])
 {
@@ -51,7 +51,7 @@ int otbClampImageFilterTest(int argc, char* argv[])
   /** instantiating the filter */
   FilterType::Pointer filter = FilterType::New();
   ReaderType::Pointer reader = ReaderType::New();
-  WriterType::Pointer writer = WriterType::New();   
+  WriterType::Pointer writer = WriterType::New();
 
   reader->SetFileName( argv[1] );
   filter->SetInput( reader->GetOutput() );

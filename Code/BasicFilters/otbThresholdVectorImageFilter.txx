@@ -48,11 +48,11 @@ ThresholdVectorImageFilter<TInputImage, TOutputImage>
  *
  */
 template <class TInputImage, class TOutputImage>
-void 
+void
 ThresholdVectorImageFilter<TInputImage, TOutputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 
   os << indent << "OutsideValue: "
      << static_cast<typename itk::NumericTraits<InputImageInternalPixelType>::PrintType>(m_OutsideValue)
@@ -69,7 +69,7 @@ ThresholdVectorImageFilter<TInputImage, TOutputImage>
  * The values greater than or equal to the value are set to OutsideValue
  */
 template <class TInputImage, class TOutputImage>
-void 
+void
 ThresholdVectorImageFilter<TInputImage, TOutputImage>
 ::ThresholdAbove(const InputImageInternalPixelType &thresh)
 {
@@ -86,7 +86,7 @@ ThresholdVectorImageFilter<TInputImage, TOutputImage>
  * The values less than or equal to the value are set to OutsideValue
  */
 template <class TInputImage, class TOutputImage>
-void 
+void
 ThresholdVectorImageFilter<TInputImage, TOutputImage>
 ::ThresholdBelow(const InputImageInternalPixelType &thresh)
 {
@@ -103,7 +103,7 @@ ThresholdVectorImageFilter<TInputImage, TOutputImage>
  * The values outside the range are set to OutsideValue
  */
 template <class TInputImage, class TOutputImage>
-void 
+void
 ThresholdVectorImageFilter<TInputImage, TOutputImage>
 ::ThresholdOutside(const InputImageInternalPixelType &lower, const InputImageInternalPixelType &upper)
 {
@@ -126,7 +126,7 @@ ThresholdVectorImageFilter<TInputImage, TOutputImage>
  *
  */
 template <class TInputImage, class TOutputImage>
-void 
+void
 ThresholdVectorImageFilter<TInputImage, TOutputImage>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
                        int threadId)

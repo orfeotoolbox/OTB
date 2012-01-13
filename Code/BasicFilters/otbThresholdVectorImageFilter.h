@@ -26,29 +26,29 @@ namespace otb
 {
 
 /** \class ThresholdVectorImageFilter
- * \brief Set image values to a user-specified value if they are below, 
+ * \brief Set image values to a user-specified value if they are below,
  * above, or between simple threshold values.
  *
  * ThresholdVectorImageFilter sets image values to a user-specified "outside"
  * value (by default, "black") if the image values are below, above, or
- * between simple threshold values. 
+ * between simple threshold values.
  *
  * The pixels must support the operators >= and <=.
- * 
+ *
  * \ingroup IntensityImageFilters Multithreaded
  */
   template <class TInputImage, class TOutputImage=TInputImage>
-  class ITK_EXPORT ThresholdVectorImageFilter : public itk::ImageToImageFilter<TInputImage,TOutputImage>
+  class ITK_EXPORT ThresholdVectorImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
   typedef ThresholdVectorImageFilter               Self;
-  typedef itk::ImageToImageFilter<TInputImage,TOutputImage>  Superclass;
+  typedef itk::ImageToImageFilter<TInputImage, TOutputImage>  Superclass;
   typedef itk::SmartPointer<Self>                 Pointer;
   typedef itk::SmartPointer<const Self>           ConstPointer;
 
   /** Method for creation through the object factory. */
-  itkNewMacro(Self);  
+  itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(ThresholdVectorImageFilter, itk::ImageToImageFilter);
@@ -68,12 +68,12 @@ public:
   typedef typename OutputImageType::PixelType   OutputImagePixelType;
   typedef typename OutputImageType::InternalPixelType   OutputImageInternalPixelType;
 
-  /** Set the "outside" pixel value. The default value 
+  /** Set the "outside" pixel value. The default value
    * NumericTraits<PixelType>::Zero. */
-  itkSetMacro(OutsideValue,OutputImageInternalPixelType);
+  itkSetMacro(OutsideValue, OutputImageInternalPixelType);
   
   /** Get the "outside" pixel value. */
-  itkGetConstMacro(OutsideValue,OutputImageInternalPixelType);
+  itkGetConstMacro(OutsideValue, OutputImageInternalPixelType);
                  
   /** The values greater than or equal to the value are set to OutsideValue. */
   void ThresholdAbove(const InputImageInternalPixelType &thresh);

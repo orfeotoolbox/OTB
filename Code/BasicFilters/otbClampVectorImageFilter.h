@@ -23,33 +23,33 @@ namespace otb
 {
 
 /** \class ClampVectorImageFilter
- * \brief Set image values to a user-specified value if they are below, 
+ * \brief Set image values to a user-specified value if they are below,
  * above, or between simple threshold values.
  *
  * ClampVectorImageFilter  clamp image values to be between an upper
  * and lower value. Values lower than m_Lower values are set to lower,
  * and values greater than upper threshold are set to upper threshold
- * value. 
- * 
+ * value.
+ *
  * By default lower and upper thresholds are set to the maximum and
  * minimum bounds of the image pixel type.
  *
  * The pixels must support the operators >= and <=.
- * 
+ *
  * \ingroup IntensityImageFilters Multithreaded
  */
   template <class TInputImage, class TOutputImage=TInputImage>
-  class ITK_EXPORT ClampVectorImageFilter : public itk::ImageToImageFilter<TInputImage,TOutputImage>
+  class ITK_EXPORT ClampVectorImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
   typedef ClampVectorImageFilter               Self;
-  typedef itk::ImageToImageFilter<TInputImage,TOutputImage>  Superclass;
+  typedef itk::ImageToImageFilter<TInputImage, TOutputImage>  Superclass;
   typedef itk::SmartPointer<Self>                 Pointer;
   typedef itk::SmartPointer<const Self>           ConstPointer;
 
   /** Method for creation through the object factory. */
-  itkNewMacro(Self);  
+  itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(ClampVectorImageFilter, itk::ImageToImageFilter);

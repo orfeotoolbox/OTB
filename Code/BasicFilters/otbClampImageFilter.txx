@@ -47,11 +47,11 @@ ClampImageFilter<TInputImage, TOutputImage>
  *
  */
 template <class TInputImage, class TOutputImage>
-void 
+void
 ClampImageFilter<TInputImage, TOutputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 
   os << indent << "Lower: "
      << static_cast<typename itk::NumericTraits<OutputImagePixelType>::PrintType>(m_Lower)
@@ -65,7 +65,7 @@ ClampImageFilter<TInputImage, TOutputImage>
  * The values greater than or equal to the value are set to UpperValue
  */
 template <class TInputImage, class TOutputImage>
-void 
+void
 ClampImageFilter<TInputImage, TOutputImage>
 ::ClampAbove(const OutputImagePixelType &thresh)
 {
@@ -83,7 +83,7 @@ ClampImageFilter<TInputImage, TOutputImage>
  * The values less than or equal to the value are set to OutsideValue
  */
 template <class TInputImage, class TOutputImage>
-void 
+void
 ClampImageFilter<TInputImage, TOutputImage>
 ::ClampBelow(const OutputImagePixelType &thresh)
 {
@@ -101,7 +101,7 @@ ClampImageFilter<TInputImage, TOutputImage>
  * The values outside the range are set to OutsideValue
  */
 template <class TInputImage, class TOutputImage>
-void 
+void
 ClampImageFilter<TInputImage, TOutputImage>
 ::ClampOutside(const OutputImagePixelType &lower, const OutputImagePixelType &upper)
 {
@@ -126,7 +126,7 @@ ClampImageFilter<TInputImage, TOutputImage>
  *
  */
 template <class TInputImage, class TOutputImage>
-void 
+void
 ClampImageFilter<TInputImage, TOutputImage>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
                        int threadId)
@@ -166,7 +166,7 @@ ClampImageFilter<TInputImage, TOutputImage>
       {
       outPix = m_Lower;
       }
-    else if ( value > m_DUpper) 
+    else if ( value > m_DUpper)
       {
       outPix = m_Upper;
       }
