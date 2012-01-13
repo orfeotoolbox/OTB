@@ -1013,9 +1013,10 @@ std::map<std::string, int> TestHelper::RegressionTestBaselines(char *baselineFil
   std::string originalBaseline(baselineFilename);
 
   int                    x = 0;
-  std::string::size_type suffixPos = originalBaseline.rfind(".");
+  std::string::size_type suffixPos = originalBaseline.find_last_of(".");
+  std::string::size_type maxPathPos = originalBaseline.find_last_of("/");
   std::string            suffix;
-  if (suffixPos != std::string::npos)
+  if ((suffixPos != std::string::npos) && ((suffixPos>maxPathPos) || (maxPathPos==std::string::npos)))
     {
     suffix = originalBaseline.substr(suffixPos, originalBaseline.length());
     originalBaseline.erase(suffixPos, originalBaseline.length());
