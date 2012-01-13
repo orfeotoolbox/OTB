@@ -304,6 +304,7 @@ void JPEG2000InternalReader::Clean()
     {
     otbopenjpeg_opj_destroy_cstr_info_v2(&(this->m_CstrInfo));
     }
+  this->m_CstrInfo = NULL;
 
   this->m_XResolution.clear();
   this->m_YResolution.clear();
