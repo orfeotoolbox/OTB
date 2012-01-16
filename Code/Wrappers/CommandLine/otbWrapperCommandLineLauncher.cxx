@@ -150,18 +150,34 @@ bool CommandLineLauncher::Execute()
 
 bool CommandLineLauncher::ExecuteAndWriteOutput()
 {
-  if (this->BeforeExecute() == false)
+  try
     {
+    if (this->BeforeExecute() == false)
+      {
+      return false;
+      }
+  
+    if( m_Application->ExecuteAndWriteOutput() == 0 )
+      {
+      this->DisplayOutputParameters();
+      }
+    else
+      return false;
+    }
+  catch(std::exception& err)
+    {
+    std::ostringstream message;
+    message << "The following error occurred during application execution : " << err.what() << std::endl;
+    m_Application->GetLogger()->Write( itk::LoggerBase::FATAL, message.str() ); 
     return false;
     }
-
-  if( m_Application->ExecuteAndWriteOutput() == 0 )
+  catch(...)
     {
-    this->DisplayOutputParameters();
-    return true;
-    }
-  else
+    m_Application->GetLogger()->Write( itk::LoggerBase::FATAL, "An unknown exception has been raised during application execution" );
     return false;
+    }
+    
+  return true;  
 }
 
 bool CommandLineLauncher::BeforeExecute()

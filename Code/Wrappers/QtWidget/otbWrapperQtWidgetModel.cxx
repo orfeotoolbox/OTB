@@ -50,18 +50,31 @@ void QtWidgetModel::NotifyUpdate()
 
 void QtWidgetModel::ExecuteAndWriteOutputSlot()
 {
-  // Deactivate the Execute button while processing
-  emit SetApplicationReady(false);
-
-  // launch the output image writing
-  AppliThread * taskAppli = new AppliThread( m_Application );
-  connect(taskAppli, SIGNAL(ApplicationExecutionDone()), this, SLOT(NotifyUpdate()));
-  connect(taskAppli, SIGNAL(ApplicationExecutionDone()), this, SLOT(ActivateExecuteButton()));
-
-  taskAppli->Execute();
-
-  // Tell the Progress Reporter to begin
-  emit SetProgressReportBegin();
+  try
+    {
+    // Deactivate the Execute button while processing
+    emit SetApplicationReady(false);
+  
+    // launch the output image writing
+    AppliThread * taskAppli = new AppliThread( m_Application );
+    connect(taskAppli, SIGNAL(ApplicationExecutionDone()), this, SLOT(NotifyUpdate()));
+    connect(taskAppli, SIGNAL(ApplicationExecutionDone()), this, SLOT(ActivateExecuteButton()));
+  
+    taskAppli->Execute();
+  
+    // Tell the Progress Reporter to begin
+    emit SetProgressReportBegin();
+    }
+  catch(std::exception& err)
+    {
+    std::ostringstream message;
+    message << "The following error occurred during application execution : " << err.what() << std::endl;
+    m_Application->GetLogger()->Write( itk::LoggerBase::FATAL, message.str() ); 
+    }
+  catch(...)
+    {
+    m_Application->GetLogger()->Write( itk::LoggerBase::FATAL, "An unknown exception has been raised during application execution" );
+    } 
 }
 
 void QtWidgetModel::ActivateExecuteButton()
