@@ -277,7 +277,7 @@ private:
       
       ossOutput << "\tAcquisition time : " << GetParameterString("time") << std::endl;
       }
-    catch ( itk::ExceptionObject & err )
+    catch ( itk::ExceptionObject & /*err*/ )
       {
       }
 
@@ -332,7 +332,7 @@ private:
       ossOutput << "\tLower left corner (latitude, longitude) = [" << GetParameterFloat("lllat") << "," << GetParameterFloat("lllon") << "]" << std::endl;
       ossOutput << "\tLower right corner (latitude, longitude) = [" << GetParameterFloat("lrlat") << "," << GetParameterFloat("lrlon") << "]" << std::endl;
       }
-    catch ( itk::ExceptionObject & err )
+    catch ( itk::ExceptionObject & /*err*/ )
       {
       }
       
