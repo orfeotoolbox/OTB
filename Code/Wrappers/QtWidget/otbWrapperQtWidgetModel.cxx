@@ -69,12 +69,12 @@ void QtWidgetModel::ExecuteAndWriteOutputSlot()
     {
     std::ostringstream message;
     message << "The following error occurred during application execution : " << err.what() << std::endl;
-    m_Application->GetLogger()->Write( itk::LoggerBase::FATAL, message.str() ); 
+    m_Application->GetLogger()->Write( itk::LoggerBase::FATAL, message.str() );
     }
   catch(...)
     {
     m_Application->GetLogger()->Write( itk::LoggerBase::FATAL, "An unknown exception has been raised during application execution" );
-    } 
+    }
 }
 
 void QtWidgetModel::ActivateExecuteButton()

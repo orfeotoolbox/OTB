@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-  This software is distributed WITHOUT ANY WARRANTY; without even 
-  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+  This software is distributed WITHOUT ANY WARRANTY; without even
+  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
   typedef char PixelType;
   
   const char * out = argv[1];
-  const PixelType value = static_cast<PixelType>(atof(argv[2] )); 
+  const PixelType value = static_cast<PixelType>(atof(argv[2] ));
 
   typedef otb::Image<PixelType, 2>              ImageType;
   typedef otb::ImageFileWriter<ImageType>       WriterType;
@@ -44,7 +44,7 @@ int main(int argc, char* argv[])
   size.Fill(10);
 
   region.SetSize( size );
-  region.SetIndex( id ); 
+  region.SetIndex( id );
 
   ImageType::Pointer image = ImageType::New();
   ImageType::PixelType pix;
