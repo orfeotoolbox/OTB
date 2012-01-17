@@ -55,13 +55,13 @@ bool PlaceNameToLonLat::Evaluate()
     std::ostringstream urlStream;
     urlStream << "http://maps.google.com/maps?q=";
     urlStream << m_PlaceName;
-    urlStream << "&sll=38.9594,-95.2655&sspn=119.526,360&output=kml&ie=utf-8&v=2.2&cv=4.2.0180.1134&hl=en";
+    urlStream << "&sll=38.9594, -95.2655&sspn=119.526, 360&output=kml&ie=utf-8&v=2.2&cv=4.2.0180.1134&hl=en";
     RetrieveXML(urlStream);
     if ( m_RequestSucceed )
       ParseXMLGoogle();
     }
 
-  // Yahoo new PlaceFinder API need an application ID to be able 
+  // Yahoo new PlaceFinder API need an application ID to be able
   // to use it
   // if ((m_Lat == -1000.0) && (m_Lon == -1000.0))
   //   {
