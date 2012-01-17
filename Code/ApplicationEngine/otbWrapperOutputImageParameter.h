@@ -112,7 +112,6 @@ protected:
   std::string            m_FileName;
   ImagePixelType         m_PixelType;
 
-  typedef otb::StreamingImageFileWriter<Int8ImageType>   Int8WriterType;
   typedef otb::StreamingImageFileWriter<UInt8ImageType>  UInt8WriterType;
   typedef otb::StreamingImageFileWriter<Int16ImageType>  Int16WriterType;
   typedef otb::StreamingImageFileWriter<UInt16ImageType> UInt16WriterType;
@@ -121,7 +120,6 @@ protected:
   typedef otb::StreamingImageFileWriter<FloatImageType>  FloatWriterType;
   typedef otb::StreamingImageFileWriter<DoubleImageType> DoubleWriterType;
 
-  typedef otb::StreamingImageFileWriter<Int8VectorImageType>   VectorInt8WriterType;
   typedef otb::StreamingImageFileWriter<UInt8VectorImageType>  VectorUInt8WriterType;
   typedef otb::StreamingImageFileWriter<Int16VectorImageType>  VectorInt16WriterType;
   typedef otb::StreamingImageFileWriter<UInt16VectorImageType> VectorUInt16WriterType;
@@ -133,7 +131,6 @@ protected:
   typedef otb::StreamingImageFileWriter<UInt8RGBAImageType>  RGBAUInt8WriterType;
   typedef otb::StreamingImageFileWriter<UInt8RGBImageType>   RGBUInt8WriterType;
 
-  Int8WriterType::Pointer   m_Int8Writer;
   UInt8WriterType::Pointer  m_UInt8Writer;
   Int16WriterType::Pointer  m_Int16Writer;
   UInt16WriterType::Pointer m_UInt16Writer;
@@ -142,7 +139,6 @@ protected:
   FloatWriterType::Pointer  m_FloatWriter;
   DoubleWriterType::Pointer m_DoubleWriter;
 
-  VectorInt8WriterType::Pointer   m_VectorInt8Writer;
   VectorUInt8WriterType::Pointer  m_VectorUInt8Writer;
   VectorInt16WriterType::Pointer  m_VectorInt16Writer;
   VectorUInt16WriterType::Pointer m_VectorUInt16Writer;

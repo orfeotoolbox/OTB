@@ -77,7 +77,6 @@ namespace Wrapper
   
   typedef enum
   {
-    ImagePixelType_int8,
     ImagePixelType_uint8,
     ImagePixelType_int16,
     ImagePixelType_uint16,

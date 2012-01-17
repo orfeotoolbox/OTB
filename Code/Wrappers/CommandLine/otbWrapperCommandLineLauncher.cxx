@@ -405,33 +405,24 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
                   if (values.size() == 2)
                     {
                     ImagePixelType outPixType = ImagePixelType_float;
-                    if (values[1] == "int8")
-                      outPixType = ImagePixelType_int8;
+                    if (values[1] == "uint8")
+                      outPixType = ImagePixelType_uint8;
+                    else if (values[1] == "int16")
+                      outPixType = ImagePixelType_int16;
+                    else if (values[1] == "uint16")
+                      outPixType = ImagePixelType_uint16;
+                    else if (values[1] == "int32")
+                      outPixType = ImagePixelType_int32;
+                    else if (values[1] == "uint32")
+                      outPixType = ImagePixelType_uint32;
+                    else if (values[1] == "float")
+                      outPixType = ImagePixelType_float;
+                    else if (values[1] == "double")
+                      outPixType = ImagePixelType_double;
                     else
-                      if (values[1] == "uint8")
-                        outPixType = ImagePixelType_uint8;
-                      else
-                        if (values[1] == "int16")
-                          outPixType = ImagePixelType_int16;
-                        else
-                          if (values[1] == "uint16")
-                            outPixType = ImagePixelType_uint16;
-                          else
-                            if (values[1] == "int32")
-                              outPixType = ImagePixelType_int32;
-                            else
-                              if (values[1] == "uint32")
-                                outPixType = ImagePixelType_uint32;
-                              else
-                                if (values[1] == "float")
-                                  outPixType = ImagePixelType_float;
-                                else
-                                  if (values[1] == "double")
-                                    outPixType = ImagePixelType_double;
-                                  else
-                                    {
-                                    return WRONGPARAMETERVALUE;
-                                    }
+                      {
+                      return WRONGPARAMETERVALUE;
+                      }
                     dynamic_cast<OutputImageParameter *> (param.GetPointer())->SetPixelType(outPixType);
                     }
                   else
@@ -726,7 +717,7 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
   
   if (type == ParameterType_OutputImage)
     {
-    oss << " [pixel=uint8/int8/uint16/int16/uint32/int32/float/double]";
+    oss << " [pixel=uint8/uint16/int16/uint32/int32/float/double]";
     }
 
 

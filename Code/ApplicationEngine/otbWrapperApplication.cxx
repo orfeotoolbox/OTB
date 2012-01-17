@@ -1025,7 +1025,7 @@ std::string Application::GetParameterAsString(std::string paramKey)
 ImagePixelType Application::GetParameterOutputImagePixelType(std::string parameter)
 {
   Parameter* param = GetParameterByKey(parameter);
-  ImagePixelType ret=ImagePixelType_int8; //by default to avoid warning
+  ImagePixelType ret=ImagePixelType_uint8; //by default to avoid warning
 
   if (dynamic_cast<OutputImageParameter*>(param))
     {

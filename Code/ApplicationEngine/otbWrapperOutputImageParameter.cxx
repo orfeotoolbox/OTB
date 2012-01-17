@@ -38,7 +38,6 @@ OutputImageParameter::~OutputImageParameter()
 
 void OutputImageParameter::InitializeWriters()
 {
-  m_Int8Writer = Int8WriterType::New();
   m_UInt8Writer = UInt8WriterType::New();
   m_Int16Writer = Int16WriterType::New();
   m_UInt16Writer = UInt16WriterType::New();
@@ -47,7 +46,6 @@ void OutputImageParameter::InitializeWriters()
   m_FloatWriter = FloatWriterType::New();
   m_DoubleWriter = DoubleWriterType::New();
 
-  m_VectorInt8Writer = VectorInt8WriterType::New();
   m_VectorUInt8Writer = VectorUInt8WriterType::New();
   m_VectorInt16Writer = VectorInt16WriterType::New();
   m_VectorUInt16Writer = VectorUInt16WriterType::New();
@@ -92,11 +90,6 @@ OutputImageParameter::SwitchImageWrite()
 {
   switch(m_PixelType )
     {
-    case ImagePixelType_int8:
-    {
-    otbClampAndWriteImageMacro(TInputImageType, Int8ImageType, m_Int8Writer);
-    break;
-    }
     case ImagePixelType_uint8:
     {
     otbClampAndWriteImageMacro(TInputImageType, UInt8ImageType, m_UInt8Writer);
@@ -142,11 +135,6 @@ OutputImageParameter::SwitchVectorImageWrite()
   {
   switch(m_PixelType )
     {
-    case ImagePixelType_int8:
-    {
-    otbClampAndWriteVectorImageMacro(TInputVectorImageType, Int8VectorImageType, m_VectorInt8Writer);
-    break;
-    }
     case ImagePixelType_uint8:
     {
     otbClampAndWriteVectorImageMacro(TInputVectorImageType, UInt8VectorImageType, m_VectorUInt8Writer);
@@ -223,11 +211,7 @@ OutputImageParameter::Write()
 {
   m_Image->UpdateOutputInformation();
 
-  if (dynamic_cast<Int8ImageType*>(m_Image.GetPointer()))
-    {
-    SwitchImageWrite<Int8ImageType>();
-    }
-  else if (dynamic_cast<UInt8ImageType*>(m_Image.GetPointer()))
+  if (dynamic_cast<UInt8ImageType*>(m_Image.GetPointer()))
     {
     SwitchImageWrite<UInt8ImageType>();
     }
@@ -254,10 +238,6 @@ OutputImageParameter::Write()
   else if (dynamic_cast<DoubleImageType*>(m_Image.GetPointer()))
     {
     SwitchImageWrite<DoubleImageType>();
-    }
-  else if (dynamic_cast<Int8VectorImageType*>(m_Image.GetPointer()))
-    {
-    SwitchVectorImageWrite<Int8VectorImageType>();
     }
   else if (dynamic_cast<UInt8VectorImageType*>(m_Image.GetPointer()))
     {
@@ -311,8 +291,7 @@ OutputImageParameter::GetWriter()
   // 2 : RGBAImage
   // 3 : RGBImage
   itk::ProcessObject* writer = 0;
-  if (dynamic_cast<Int8VectorImageType*> (m_Image.GetPointer())
-      || dynamic_cast<UInt8VectorImageType*> (m_Image.GetPointer())
+  if (dynamic_cast<UInt8VectorImageType*> (m_Image.GetPointer())
       || dynamic_cast<Int16VectorImageType*> (m_Image.GetPointer())
       || dynamic_cast<UInt16VectorImageType*> (m_Image.GetPointer())
       || dynamic_cast<Int32VectorImageType*> (m_Image.GetPointer())
@@ -342,15 +321,6 @@ OutputImageParameter::GetWriter()
 
   switch (GetPixelType())
     {
-    case ImagePixelType_int8:
-      {
-      if (type == 1)
-        writer = m_VectorInt8Writer;
-      else
-        if (type == 0) writer = m_Int8Writer;
-
-      break;
-      }
     case ImagePixelType_uint8:
       {
       if (type == 1)

@@ -373,7 +373,6 @@ public:
     }
    
   otbGetParameterImageMacro(UInt8Image);
-  otbGetParameterImageMacro(Int8Image);
   otbGetParameterImageMacro(UInt16Image);
   otbGetParameterImageMacro(Int16Image);
   otbGetParameterImageMacro(UInt32Image);
@@ -382,7 +381,6 @@ public:
   otbGetParameterImageMacro(DoubleImage);
 
   otbGetParameterImageMacro(UInt8VectorImage);
-  otbGetParameterImageMacro(Int8VectorImage);
   otbGetParameterImageMacro(UInt16VectorImage);
   otbGetParameterImageMacro(Int16VectorImage);
   otbGetParameterImageMacro(UInt32VectorImage);
@@ -446,7 +444,7 @@ public:
 
      * \li ParameterType_InputVectorDatalist
      */
-    VectorDataListType* GetParameterVectorDataList(std::string parameter);
+  VectorDataListType* GetParameterVectorDataList(std::string parameter);
 
 
  /* Get the parameter as a std::string

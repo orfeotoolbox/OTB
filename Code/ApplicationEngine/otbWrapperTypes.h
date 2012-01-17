@@ -62,7 +62,7 @@ typedef enum
 
 typedef enum
 {
-  ImagePixelType_int8,
+  // Not int8 because not handle by Gdal
   ImagePixelType_uint8,
   ImagePixelType_int16,
   ImagePixelType_uint16,
@@ -93,7 +93,6 @@ typedef enum
 } ElevationType;
 
 
-typedef otb::Image<char>                       Int8ImageType;
 typedef otb::Image<unsigned char>              UInt8ImageType;
 typedef otb::Image<short>                      Int16ImageType;
 typedef otb::Image<unsigned short>             UInt16ImageType;
@@ -102,7 +101,6 @@ typedef otb::Image<unsigned int>               UInt32ImageType;
 typedef otb::Image<float>                      FloatImageType;
 typedef otb::Image<double>                     DoubleImageType;
 
-typedef otb::VectorImage<char>           Int8VectorImageType;
 typedef otb::VectorImage<unsigned char>  UInt8VectorImageType;
 typedef otb::VectorImage<short>          Int16VectorImageType;
 typedef otb::VectorImage<unsigned short> UInt16VectorImageType;
@@ -112,17 +110,17 @@ typedef otb::VectorImage<float>          FloatVectorImageType;
 typedef otb::VectorImage<double>         DoubleVectorImageType;
 
 typedef otb::Image< itk::RGBPixel<unsigned char> >  UInt8RGBImageType;
-typedef otb::Image< itk::RGBAPixel<unsigned char> >  UInt8RGBAImageType;
+typedef otb::Image< itk::RGBAPixel<unsigned char> > UInt8RGBAImageType;
 
-typedef std::complex<float>                   FloatComplexPixelType;
-typedef std::complex<double>                  DoubleComplexPixelType;
+typedef std::complex<float>  FloatComplexPixelType;
+typedef std::complex<double> DoubleComplexPixelType;
 
 // Complex Image Type (first : double and float)
-typedef otb::Image< FloatComplexPixelType, 2 >          ComplexFloatImageType;
-typedef otb::Image< DoubleComplexPixelType, 2 >         ComplexDoubleImageType;
+typedef otb::Image< FloatComplexPixelType, 2 >  ComplexFloatImageType;
+typedef otb::Image< DoubleComplexPixelType, 2 > ComplexDoubleImageType;
 
-typedef otb::VectorImage<FloatComplexPixelType, 2 >    ComplexFloatVectorImageType;
-typedef otb::VectorImage< DoubleComplexPixelType, 2 >   ComplexDoubleVectorImageType;
+typedef otb::VectorImage<FloatComplexPixelType, 2 >   ComplexFloatVectorImageType;
+typedef otb::VectorImage< DoubleComplexPixelType, 2 > ComplexDoubleVectorImageType;
 
 
 typedef double VectorDataCoordinatePrecisionType;

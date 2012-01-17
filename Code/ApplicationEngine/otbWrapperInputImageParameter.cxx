@@ -89,7 +89,6 @@ InputImageParameter::GetImage()
   }
 
 otbGetImageMacro(UInt8Image)
-otbGetImageMacro(Int8Image);
 otbGetImageMacro(UInt16Image);
 otbGetImageMacro(Int16Image);
 otbGetImageMacro(UInt32Image);
@@ -98,7 +97,6 @@ otbGetImageMacro(FloatImage);
 otbGetImageMacro(DoubleImage);
 
 otbGetImageMacro(UInt8VectorImage);
-otbGetImageMacro(Int8VectorImage);
 otbGetImageMacro(UInt16VectorImage);
 otbGetImageMacro(Int16VectorImage);
 otbGetImageMacro(UInt32VectorImage);
@@ -175,11 +173,7 @@ InputImageParameter::GetImage()
       }
     else
       {
-      if (dynamic_cast<Int8ImageType*> (m_Image.GetPointer()))
-        {
-        return CastImage<Int8ImageType, TOutputImage> ();
-        }
-      else if (dynamic_cast<UInt8ImageType*> (m_Image.GetPointer()))
+      if (dynamic_cast<UInt8ImageType*> (m_Image.GetPointer()))
         {
         return CastImage<UInt8ImageType, TOutputImage> ();
         }
@@ -206,10 +200,6 @@ InputImageParameter::GetImage()
       else if (dynamic_cast<DoubleImageType*> (m_Image.GetPointer()))
         {
         return CastImage<DoubleImageType, TOutputImage> ();
-        }
-      else if (dynamic_cast<Int8VectorImageType*> (m_Image.GetPointer()))
-        {
-        return CastImage<Int8VectorImageType, TOutputImage> ();
         }
       else if (dynamic_cast<UInt8VectorImageType*> (m_Image.GetPointer()))
         {
@@ -305,7 +295,6 @@ InputImageParameter::CastVectorImageFromImage()
 
 #define otbGenericCastImageMacro(InputImageType, theMethod, prefix)     \
   otbCastImageMacro(InputImageType, UInt8##prefix##ImageType, theMethod) \
-  otbCastImageMacro(InputImageType, Int8##prefix##ImageType, theMethod) \
   otbCastImageMacro(InputImageType, UInt16##prefix##ImageType, theMethod) \
   otbCastImageMacro(InputImageType, Int16##prefix##ImageType, theMethod) \
   otbCastImageMacro(InputImageType, UInt32##prefix##ImageType, theMethod) \
@@ -317,8 +306,6 @@ InputImageParameter::CastVectorImageFromImage()
 /*********************************************************************
 ********************** Image -> Image
 **********************************************************************/
-otbCastImageMacro(Int8ImageType, Int8ImageType, SimpleCastImage )
-
 otbGenericCastImageMacro(UInt8ImageType, SimpleCastImage, )
 otbGenericCastImageMacro(Int16ImageType, SimpleCastImage, )
 otbGenericCastImageMacro(UInt16ImageType, SimpleCastImage, )
@@ -331,7 +318,6 @@ otbGenericCastImageMacro(DoubleImageType, SimpleCastImage, )
 /*********************************************************************
 ********************** VectorImage -> VectorImage
 **********************************************************************/
-otbGenericCastImageMacro(Int8VectorImageType, SimpleCastImage, Vector)
 otbGenericCastImageMacro(UInt8VectorImageType, SimpleCastImage, Vector)
 otbGenericCastImageMacro(Int16VectorImageType, SimpleCastImage, Vector)
 otbGenericCastImageMacro(UInt16VectorImageType, SimpleCastImage, Vector)
@@ -344,7 +330,6 @@ otbGenericCastImageMacro(DoubleVectorImageType, SimpleCastImage, Vector)
 /*********************************************************************
 ********************** Image -> VectorImage
 **********************************************************************/
-otbGenericCastImageMacro(Int8ImageType, CastVectorImageFromImage, Vector)
 otbGenericCastImageMacro(UInt8ImageType, CastVectorImageFromImage, Vector)
 otbGenericCastImageMacro(Int16ImageType, CastVectorImageFromImage, Vector)
 otbGenericCastImageMacro(UInt16ImageType, CastVectorImageFromImage, Vector)

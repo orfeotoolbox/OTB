@@ -98,7 +98,7 @@ private:
     ElevationParametersHandler::AddElevationParameters(this, "elev");
 
     AddParameter(ParameterType_String, "expr", "Feature expression");
-    SetParameterDescription("expr", "The feature formula (b1 > 0.3)");
+    SetParameterDescription("expr", "The feature formula (b1 \le 0.3)");
 
     AddParameter(ParameterType_String, "field", "Feature name");
     SetParameterDescription("field", "The feature name (NONDVI, ROADSA...)");

@@ -243,9 +243,6 @@ private:
   {
     switch ( this->GetParameterOutputImagePixelType("out") )
       {
-      case ImagePixelType_int8:
-        GenericDoExecute<Int8VectorImageType>();
-        break;
       case ImagePixelType_uint8:
         GenericDoExecute<UInt8VectorImageType>();
         break;

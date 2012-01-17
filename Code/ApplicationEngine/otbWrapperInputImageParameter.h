@@ -57,7 +57,6 @@ public:
 
   /** Get the input image as XXXImageType */
   UInt8ImageType* GetUInt8Image();
-  Int8ImageType* GetInt8Image();
   UInt16ImageType* GetUInt16Image();
   Int16ImageType* GetInt16Image();
   UInt32ImageType* GetUInt32Image();
@@ -66,7 +65,6 @@ public:
   DoubleImageType* GetDoubleImage();
 
   UInt8VectorImageType* GetUInt8VectorImage();
-  Int8VectorImageType* GetInt8VectorImage();
   UInt16VectorImageType* GetUInt16VectorImage();
   Int16VectorImageType* GetInt16VectorImage();
   UInt32VectorImageType* GetUInt32VectorImage();
@@ -126,7 +124,6 @@ protected:
 
   /** Readers typedefs */
 
-  typedef otb::ImageFileReader<Int8ImageType> Int8ReaderType;
   typedef otb::ImageFileReader<UInt8ImageType> UInt8ReaderType;
   typedef otb::ImageFileReader<Int16ImageType> Int16ReaderType;
   typedef otb::ImageFileReader<UInt16ImageType> UInt16ReaderType;
@@ -135,7 +132,6 @@ protected:
   typedef otb::ImageFileReader<FloatImageType> FloatReaderType;
   typedef otb::ImageFileReader<DoubleImageType> DoubleReaderType;
 
-  typedef otb::ImageFileReader<Int8VectorImageType> Int8VectorReaderType;
   typedef otb::ImageFileReader<UInt8VectorImageType> UInt8VectorReaderType;
   typedef otb::ImageFileReader<Int16VectorImageType> Int16VectorReaderType;
   typedef otb::ImageFileReader<UInt16VectorImageType> UInt16VectorReaderType;

@@ -112,10 +112,6 @@ void DoExecute()
     {
     paramOut->SetPixelType(ImagePixelType_uint8);
     }
-  else if( componentTypeInfo == typeid(char).name())
-    {
-    paramOut->SetPixelType(ImagePixelType_int8);
-    }
   else if( componentTypeInfo == typeid(unsigned short).name())
     {
     paramOut->SetPixelType(ImagePixelType_uint16);
