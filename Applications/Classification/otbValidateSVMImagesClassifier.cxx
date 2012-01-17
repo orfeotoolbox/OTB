@@ -124,7 +124,7 @@ private:
     SetDescription("Estimate the performance of the SVM model with a new set of validation samples and another image.");
 
     SetDocName("Validate SVM Images Classifier");
-    SetDocLongDescription("Estimate the performance of the SVM model obtained by the ImagesSVMClassifier with a new set of validation samples and another image.\n The application asks for images statisctics as input (XML file generated with the ComputeImagesStatistics application) and a SVM model (text file) generated with the ImagesSVMClassifier application.\n It will compute the global confusion matrix and kappa index and also the precision, recall and F-score of each class.");
+    SetDocLongDescription("Estimate the performance of the SVM model obtained by the ImagesSVMClassifier with a new set of validation samples and another image.\n The application asks for images statisctics as input (XML file generated with the ComputeImagesStatistics application) and a SVM model (text file) generated with the ImagesSVMClassifier application.\n It will compute the global confusion matrix, kappa index and also the precision, recall and F-score of each class.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");

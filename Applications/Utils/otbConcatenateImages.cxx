@@ -60,7 +60,7 @@ private:
 
     // Documentation
     SetDocName("Images Concatenation");
-    SetDocLongDescription("This application performs images channels concatenation. It will walk the input image list (single or multi-channel) and generate a single multi-channel image. The channel order is the one of the list.");
+    SetDocLongDescription("This application performs images channels concatenation. It will walk the input image list (single or multi-channel) and generates a single multi-channel image. The channel order is the one of the list.");
     SetDocLimitations("All input images must have the same size.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Rescale application, Convert");

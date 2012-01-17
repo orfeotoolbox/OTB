@@ -53,7 +53,7 @@ private:
 
     // Documentation
     SetDocName("Images comparaison");
-    SetDocLongDescription("This application computes MSE (Mean Squared Error), MAE (Mean Absolute Error) and PSNR(Peak Signal to Noise Ratio) between the channel of two images (reference and measurement). The user has to set the used channel and can specified an ROI.");
+    SetDocLongDescription("This application computes MSE (Mean Squared Error), MAE (Mean Absolute Error) and PSNR (Peak Signal to Noise Ratio) between the channel of two images (reference and measurement). The user has to set the used channel and can specified an ROI.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("BandMath application, ImageStatistics");

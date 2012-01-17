@@ -150,7 +150,7 @@ private:
     SetMinimumParameterIntValue("mry", 0);
     
     AddParameter(ParameterType_InputImage,  "w",   "Image To Warp");
-    SetParameterDescription( "w", "The image to warp after disparity estimation is complete" );
+    SetParameterDescription( "w", "The image to warp after disparity estimation is completed" );
     MandatoryOff("w");
     
     AddParameter(ParameterType_OutputImage,  "wo",   "Output Warped Image");

@@ -82,7 +82,7 @@ private:
   void DoInit()
   {
     SetName("RadiometricVegetationIndices");
-    SetDescription("Compute radiometric indices based on Red and NIT channels.");
+    SetDescription("Compute radiometric indices based on Red and NIR channels.");
 
     // Documentation
     SetDocName("Radiometric Vegetation");

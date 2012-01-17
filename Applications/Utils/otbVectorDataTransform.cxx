@@ -57,7 +57,7 @@ private:
     SetDescription("Apply a transform to each vertex of the input VectorData");
     
     SetDocName("Vector Data Transformation");
-    SetDocLongDescription("This application performs a transformation to an input vector data transforming each vertex that composed the vector data. The applied transformation manages translation, rotation and scale, and be be centered or not.");
+    SetDocLongDescription("This application performs a transformation of an input vector data transforming each vertex that composed the vector data. The applied transformation manages translation, rotation and scale, and can be centered or not.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");

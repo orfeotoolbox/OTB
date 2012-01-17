@@ -91,7 +91,7 @@ protected:
   RAMParameter()
   {
     this->SetName("RAM");
-    this->SetDescription("Available RAM");
+    this->SetDescription("Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default).");
     this->SetKey("ram");
 
     // Initialize the unsigned int NumericalParam

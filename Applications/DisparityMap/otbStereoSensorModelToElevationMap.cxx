@@ -88,7 +88,6 @@ private:
     
     // Optional parameters
     AddParameter(ParameterType_RAM, "ram", "Available RAM");
-    SetParameterDescription("ram","Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default)");
     SetDefaultParameterInt("ram", 256);
     MandatoryOff("ram");
     

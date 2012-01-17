@@ -115,9 +115,9 @@ private:
 
     //  Software Guide : BeginCodeSnippet
     SetName("Example");
-    SetDescription("This application opens in image and save it. "
-      "(it includes Latex snippets in order to generate "
-      "software guide documentation)");
+    SetDescription("This application opens an image and save it. "
+      "Pay attention, it includes Latex snippets in order to generate "
+      "software guide documentation");
 
     SetDocName("Example");
     SetDocLongDescription("The purpose of this application is "

@@ -52,7 +52,7 @@ private:
     SetDescription("Rescale the image between two given values.");
 
     SetDocName("Rescale Image");
-    SetDocLongDescription("This application scale the given image pixel intensity between two given values. "
+    SetDocLongDescription("This application scales the given image pixel intensity between two given values. "
       "By default min (resp. max) value is set to 0 (resp. 255).");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");

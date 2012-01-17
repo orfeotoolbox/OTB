@@ -71,7 +71,7 @@ private:
     SetDescription("Perform an extract ROI on the input vector data according to the input image extent");
 
     SetDocName("VectorData Extract ROI");
-    SetDocLongDescription("This application extract the VectorData features belonging to a region specified by the support image envelope");
+    SetDocLongDescription("This application extracts the VectorData features belonging to a region specified by the support image envelope");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");

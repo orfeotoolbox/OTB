@@ -56,7 +56,7 @@ private:
     SetDescription("Generates a subsampled version of an image extract");
     SetDocName("Quick Look");
     SetDocLongDescription("Generates a subsampled version of an extract of an image defined by ROIStart and ROISize.\n "
-                          "This extract is subsampled using the ration OR the output image Size");
+                          "This extract is subsampled using the ratio OR the output image Size");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
@@ -67,7 +67,7 @@ private:
     SetParameterDescription( "in", "The image to read" );
     
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
-    SetParameterDescription( "out" , "The subsampled image." );
+    SetParameterDescription( "out" , "The subsampled image" );
     
     AddParameter(ParameterType_ListView, "cl", "Channel List");
     SetParameterDescription( "cl" , "Selected channels" );

@@ -58,7 +58,7 @@ private:
 
     // Documentation
     SetDocName("Superimpose sensor");
-    SetDocLongDescription("This application performs /....");
+    SetDocLongDescription("This application performs the projection of an image into the geometry of another one.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");

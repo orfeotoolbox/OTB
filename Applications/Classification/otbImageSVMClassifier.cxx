@@ -72,7 +72,7 @@ private:
     AddDocTag(Tags::Learning);
 
     AddParameter(ParameterType_InputImage, "in",  "Input Image");
-    SetParameterDescription( "in", "The input Image to classify.");
+    SetParameterDescription( "in", "The input image to classify.");
 
     AddParameter(ParameterType_InputImage,  "mask",   "Input Mask");
     SetParameterDescription( "mask", "The mask allows to restrict classification of the input image to the area where mask pixel values are greater than 0.");
