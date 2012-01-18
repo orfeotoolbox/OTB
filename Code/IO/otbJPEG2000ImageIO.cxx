@@ -180,7 +180,7 @@ public:
   
   opj_image_t * DecodeTile(unsigned int tileIndex);
 
-  std::vector<unsigned int> GetAvailableResolutions(){return this->m_AvailableResolutions; };
+  const std::vector<unsigned int> & GetAvailableResolutions(){return this->m_AvailableResolutions; };
 
   void Clean();
 
@@ -304,11 +304,13 @@ void JPEG2000InternalReader::Clean()
     {
     otbopenjpeg_opj_destroy_cstr_info_v2(&(this->m_CstrInfo));
     }
+  this->m_CstrInfo = NULL;
 
   this->m_XResolution.clear();
   this->m_YResolution.clear();
   this->m_Precision.clear();
   this->m_Signed.clear();
+  m_AvailableResolutions.clear();
 
   this->m_Width = 0;
   this->m_Height = 0;
@@ -350,6 +352,7 @@ JPEG2000InternalReader::JPEG2000InternalReader()
   this->m_CstrInfo = NULL;
 
   // Set default event mgr
+  memset(&m_EventManager, 0, sizeof(opj_event_mgr_t));
   m_EventManager.info_handler = info_callback;
   m_EventManager.warning_handler = warning_callback;
   m_EventManager.error_handler = error_callback;
@@ -493,6 +496,9 @@ public:
   /** Register a new tile in cache */
   void AddTile(unsigned int tileIndex, opj_image_t * tileData);
 
+  /** Remove the front tile */
+  void RemoveOneTile();
+
   /** Clear the cache */
   void Clear();
 
@@ -616,6 +622,23 @@ opj_image_t * JPEG2000TileCache::GetTile(unsigned int tileIndex)
   return NULL;
 }
 
+void JPEG2000TileCache::RemoveOneTile()
+{
+  if(!m_Cache.empty())
+    {
+    CachedTileType erasedTile = *m_Cache.begin();
+  
+    // Destroy the image
+    if (erasedTile.second)
+      {
+      otbopenjpeg_opj_image_destroy(erasedTile.second);
+      }
+    erasedTile.second = NULL;
+    
+    m_Cache.pop_front();
+    }
+}
+
 void JPEG2000TileCache::AddTile(unsigned int tileIndex, opj_image_t * tileData)
 {
   for(TileCacheType::const_iterator it = m_Cache.begin();
@@ -629,16 +652,7 @@ void JPEG2000TileCache::AddTile(unsigned int tileIndex, opj_image_t * tileData)
 
   if(m_Cache.size() >= m_CacheSizeInTiles)
     {
-    CachedTileType erasedTile = *m_Cache.begin();
-    
-    // Destroy the image
-    if (erasedTile.second)
-      {
-      otbopenjpeg_opj_image_destroy(erasedTile.second);
-      }
-    erasedTile.second = NULL;
-
-    m_Cache.pop_front();
+    this->RemoveOneTile();
     }
 
   m_Cache.push_back(CachedTileType(tileIndex, tileData));
@@ -841,7 +855,6 @@ void JPEG2000ImageIO::Read(void* buffer)
   // Here we sort between tiles from cache and tiles to read
   std::vector<JPEG2000TileCache::CachedTileType> cachedTiles;
   std::vector<JPEG2000TileCache::CachedTileType> toReadTiles;
-  std::vector<JPEG2000TileCache::CachedTileType> allNeededTiles;
 
   for (std::vector<unsigned int>::iterator itTile = tileList.begin(); itTile < tileList.end(); ++itTile)
     {
@@ -857,6 +870,18 @@ void JPEG2000ImageIO::Read(void* buffer)
       {
       cachedTiles.push_back(currentTile);
       }
+    }
+
+  // First, load tiles from cache
+  for (std::vector<JPEG2000TileCache::CachedTileType>::iterator itTile = cachedTiles.begin(); itTile < cachedTiles.end(); ++itTile)
+    {
+    this->LoadTileData(buffer, itTile->second);
+    }
+
+  // Remove from cache as many tiles that will be read in this step
+   for (std::vector<JPEG2000TileCache::CachedTileType>::iterator itTile = toReadTiles.begin(); itTile < toReadTiles.end(); ++itTile)
+    {
+    m_TileCache->RemoveOneTile();
     }
 
   // Decode all tiles not in cache in parallel
@@ -881,12 +906,8 @@ void JPEG2000ImageIO::Read(void* buffer)
     this->GetMultiThreader()->SingleMethodExecute();
     }
 
-  // Build the list of all tiles
-  allNeededTiles = cachedTiles;
-  allNeededTiles.insert(allNeededTiles.end(), toReadTiles.begin(), toReadTiles.end());
-
-  
-  for (std::vector<JPEG2000TileCache::CachedTileType>::iterator itTile = allNeededTiles.begin(); itTile < allNeededTiles.end(); ++itTile)
+  // Load tiles that have been read 
+  for (std::vector<JPEG2000TileCache::CachedTileType>::iterator itTile = toReadTiles.begin(); itTile < toReadTiles.end(); ++itTile)
     {
     this->LoadTileData(buffer, itTile->second);
     }
