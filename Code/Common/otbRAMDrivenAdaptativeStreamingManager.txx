@@ -48,7 +48,7 @@ RAMDrivenAdaptativeStreamingManager<TImage>::PrepareStreaming( itk::DataObject *
 
   typename otb::ImageRegionAdaptativeSplitter<itkGetStaticConstMacro(ImageDimension)>::SizeType tileHint;
 
-  unsigned int tileHintX, tileHintY;
+  unsigned int tileHintX(0), tileHintY(0);
 
   itk::ExposeMetaData<unsigned int>(input->GetMetaDataDictionary(),
                                     MetaDataKey::TileHintX,
