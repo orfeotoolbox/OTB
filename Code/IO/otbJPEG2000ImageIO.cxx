@@ -906,7 +906,7 @@ void JPEG2000ImageIO::Read(void* buffer)
     this->GetMultiThreader()->SingleMethodExecute();
     }
 
-  // Load tiles that have been read 
+  // Load tiles that have been read
   for (std::vector<JPEG2000TileCache::CachedTileType>::iterator itTile = toReadTiles.begin(); itTile < toReadTiles.end(); ++itTile)
     {
     this->LoadTileData(buffer, itTile->second);
