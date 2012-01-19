@@ -150,6 +150,7 @@ private:
     ImageKeywordlist kwl = GetParameterImage("in")->GetImageKeywordlist();
 
     VectorDataType::Pointer vd = lsd->GetFilter()->GetOutputVectorData();
+
     VectorDataType::Pointer projectedVD = vd;
 
     if ( projRef.empty() && kwl.GetSize() > 0 )
@@ -163,8 +164,8 @@ private:
       VectorDataProjectionFilterType::Pointer vproj = VectorDataProjectionFilterType::New();
       vproj->SetInput(vd);
       vproj->SetInputKeywordList(GetParameterImage("in")->GetImageKeywordlist());
-      vproj->SetInputOrigin(GetParameterImage("in")->GetOrigin());
-      vproj->SetInputSpacing(GetParameterImage("in")->GetSpacing());
+      //vproj->SetInputOrigin(GetParameterImage("in")->GetOrigin());
+      //vproj->SetInputSpacing(GetParameterImage("in")->GetSpacing());
 
       // Elevation through the elevation handler
       if (ElevationParametersHandler::IsElevationEnabled(this, "elev"))
