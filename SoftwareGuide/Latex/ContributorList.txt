@@ -39,7 +39,7 @@ Julien Malik (CS)
 Amit Kulkarni
 Angelos Tzotsos
 Edouard Barthelet (Telecom Bretagne and Thales Communications)
-Guillaume Pasero (CNES Intern)
+Guillaume Pasero (CNES Intern, then CS)
 Jonathan Guinet (CS)
 Mickael Savinaud (CS)
 Alexis Huck (Magellium)
