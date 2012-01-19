@@ -63,7 +63,7 @@ public:
 
   /** Actually computes the stream divisions, according to the specified streaming mode,
    * eventually using the input parameter to estimate memory consumption */
-  virtual void PrepareStreaming(itk::DataObject * input, const RegionType &region);
+  virtual void PrepareStreaming(itk::DataObject * /*input*/, const RegionType &region);
 
 protected:
   NumberOfLinesStrippedStreamingManager();

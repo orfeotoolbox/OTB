@@ -62,7 +62,7 @@ public:
   itkGetMacro(NumberOfDivisions, unsigned int);
 
   /** Actually computes the stream divisions given a DataObject and its region to write */
-  virtual void PrepareStreaming(itk::DataObject * input, const RegionType &region);
+  virtual void PrepareStreaming(itk::DataObject * /*input*/, const RegionType &region);
 
 protected:
   NumberOfDivisionsStrippedStreamingManager();

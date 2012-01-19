@@ -37,7 +37,7 @@ NumberOfLinesStrippedStreamingManager<TImage>::~NumberOfLinesStrippedStreamingMa
 
 template <class TImage>
 void
-NumberOfLinesStrippedStreamingManager<TImage>::PrepareStreaming( itk::DataObject * input, const RegionType &region )
+NumberOfLinesStrippedStreamingManager<TImage>::PrepareStreaming( itk::DataObject * /*input*/, const RegionType &region )
 {
   otbMsgDevMacro(<< "Activating STRIPPED_SET_NUMBEROFLINES streaming mode")
   if (m_NumberOfLinesPerStrip < 1)

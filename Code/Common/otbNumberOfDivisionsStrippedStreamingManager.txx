@@ -37,7 +37,7 @@ NumberOfDivisionsStrippedStreamingManager<TImage>::~NumberOfDivisionsStrippedStr
 
 template <class TImage>
 void
-NumberOfDivisionsStrippedStreamingManager<TImage>::PrepareStreaming( itk::DataObject * input, const RegionType &region )
+NumberOfDivisionsStrippedStreamingManager<TImage>::PrepareStreaming( itk::DataObject * /*input*/, const RegionType &region )
 {
   otbMsgDevMacro(<< "Activating NumberOfDivisionsStrippedStreamingManager streaming mode")
   if (m_NumberOfDivisions < 1)
