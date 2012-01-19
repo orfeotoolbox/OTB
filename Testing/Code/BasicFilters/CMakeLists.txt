@@ -2486,7 +2486,7 @@ ADD_TEST(bfTvClampImageFilterTest ${BASICFILTERS_TESTS15}
    ${BASELINE}/bfTvClampImageFilterTest_Output.tif
    ${TEMP}/bfTvClampImageFilterTest_Output.tif
    otbClampImageFilterTest
-   ${INPUTDATA}/QB_TOULOUSE_MUL_Extract_500_500.tif
+   ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
    ${TEMP}/bfTvClampImageFilterTest_Output.tif
 )
 
