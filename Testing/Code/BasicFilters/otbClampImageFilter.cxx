@@ -55,8 +55,8 @@ int otbClampImageFilterTest(int argc, char* argv[])
 
   reader->SetFileName( argv[1] );
   filter->SetInput( reader->GetOutput() );
-  filter->SetLower( 500 );
-  filter->SetUpper( 2000 );
+  filter->SetLower( 100 );
+  filter->SetUpper( 400 );
 
   writer->SetInput( filter->GetOutput() );
   writer->SetFileName( argv[2] );

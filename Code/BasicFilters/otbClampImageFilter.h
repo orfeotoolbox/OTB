@@ -78,11 +78,21 @@ public:
   void ClampOutside(const OutputImagePixelType &lower, const OutputImagePixelType &upper);
   
   /** Set/Get methods to set the lower threshold */
-  itkSetMacro(Lower, OutputImagePixelType);
+  void SetLower(OutputImagePixelType val)
+  {
+    m_Lower = val;
+    m_DLower = static_cast<double>(val);
+    this->Modified();
+  }
   itkGetConstMacro(Lower, OutputImagePixelType);
 
   /** Set/Get methods to set the upper threshold */
-  itkSetMacro(Upper, OutputImagePixelType);
+  void SetUpper(OutputImagePixelType val)
+  {
+    m_Upper = val;
+    m_DUpper = static_cast<double>(val);
+    this->Modified();
+  }
   itkGetConstMacro(Upper, OutputImagePixelType);
 
 
