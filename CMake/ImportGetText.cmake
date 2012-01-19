@@ -39,16 +39,17 @@ IF(OTB_USE_GETTEXT)
       ENDIF(APPLE OR WIN32)
     
       IF(BUILD_APPLICATIONS AND WRAP_QT)
-            SET(CMAKE_REQUIRED_INCLUDES ${QT_USE_FILE})
+      			# Check bug 419 : conflict between gettext and Qt on some Ubuntu systems
+            SET(CMAKE_REQUIRED_INCLUDES "${QT_INCLUDES}")
             SET(CMAKE_REQUIRED_LIBRARIES "${QT_LIBRARIES};${GETTEXT_LIBRARY}")
-            SET(CMAKE_REQUIRED_DEFINITIONS ${QT_DEFINITIONS})
-            CHECK_CXX_SOURCE_RUNS_ARGS(
-             ${CMAKE_CURRENT_SOURCE_DIR}/CMake/TestQtGettextConflict.cxx
-             0 #This parameter is not used in this case
+            SET(CMAKE_REQUIRED_DEFINITIONS "${QT_DEFINITIONS}")
+            FILE(READ ${CMAKE_CURRENT_SOURCE_DIR}/CMake/TestQtGettextConflict.cxx TestQtGettextConflict_SOURCES)
+            CHECK_CXX_SOURCE_RUNS(
+             "${TestQtGettextConflict_SOURCES}"
              CHECK_QT_GETTEXT_CONFLICT
              )
              IF(NOT CHECK_QT_GETTEXT_CONFLICT)
-                  MESSAGE(WARNING "CHECK_QT_GETTEXT_CONFLICT test failed : your platform exhibits a QT/Gettext conflict.\n"
+                  MESSAGE(FATAL_ERROR "CHECK_QT_GETTEXT_CONFLICT test failed : your platform exhibits a QT/Gettext conflict.\n"
                   "Opening OTB-applications auto generated in QT may generate a crash.\n"
                   "You might consider deactivating the support of Gettext in OTB with the OTB_USE_GETTEXT cmake option.\n")
             ENDIF(NOT CHECK_QT_GETTEXT_CONFLICT)

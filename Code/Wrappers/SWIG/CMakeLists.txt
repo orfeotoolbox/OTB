@@ -10,18 +10,6 @@ macro(check_PIC_flag Language)
   endif()
 endmacro()
 
-
-#
-# Setup the option for each laguage
-#
-option ( WRAP_PYTHON "Wrap Python" OFF )
-option ( WRAP_JAVA   "Wrap Java"   OFF )
-#option ( WRAP_LUA    "Wrap Lua"    OFF )
-#option ( WRAP_RUBY   "Wrap Ruby"   OFF )
-#option ( WRAP_TCL    "Wrap Tcl"    OFF )
-#option ( WRAP_CSHARP "Wrap CSharp" OFF )
-#option ( WRAP_R      "Wrap R"      OFF )
-
 #
 # General SWIG configuration
 #

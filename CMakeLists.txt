@@ -93,6 +93,22 @@ MARK_AS_ADVANCED(OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING)
 OPTION(OTB_USE_PATENTED "Build patented examples. ITK must be generated whith patented option (ITK_USE_PATENTED = ON)." OFF)
 MARK_AS_ADVANCED(OTB_USE_PATENTED)
 
+#
+# Setup the option for each laguage
+#
+OPTION ( WRAP_PYTHON "Wrap Python" OFF )
+OPTION ( WRAP_JAVA   "Wrap Java"   OFF )
+#OPTION ( WRAP_LUA    "Wrap Lua"    OFF )
+#OPTION ( WRAP_RUBY   "Wrap Ruby"   OFF )
+#OPTION ( WRAP_TCL    "Wrap Tcl"    OFF )
+#OPTION ( WRAP_CSHARP "Wrap CSharp" OFF )
+#OPTION ( WRAP_R      "Wrap R"      OFF )
+
+# Generate Qt based GUI
+OPTION ( WRAP_QT "Enable Qt wrappers" OFF )
+OPTION ( WRAP_PYQT "Enable PyQt wrappers" OFF )
+
+
 #-----------------------------------------------------------------------------
 # Advanced option to avoid recompiling utilities at each cmake reconfiguration
 OPTION(OTB_DISABLE_UTILITIES_COMPILATION "Disable utilities compilation (developpers only - use at you own risk)" OFF)
@@ -190,7 +206,7 @@ STRING(REGEX REPLACE "^/" "" OTB_INSTALL_PACKAGE_DIR_CM24 "${OTB_INSTALL_PACKAGE
 STRING(REGEX REPLACE "^/" "" OTB_INSTALL_PYTHON_DIR_CM24 "${OTB_INSTALL_PYTHON_DIR}")
 
 INCLUDE(PreventInstallOnBuildTree)
-
+INCLUDE(CheckCXXSourceRuns)
 
 #-----------------------------------------------------------------------------
 # External libraries
@@ -207,10 +223,10 @@ INCLUDE(ImportCurl)
 INCLUDE(ImportPqxx)
 INCLUDE(ImportBoost)
 INCLUDE(ImportMapnik) # depends on ImportBoost
-INCLUDE(ImportGetText)
 INCLUDE(ImportOpenThreads)
 INCLUDE(ImportOssim)
-
+INCLUDE(ImportQt4)
+INCLUDE(ImportGetText)
 
 
 INCLUDE_DIRECTORIES (
