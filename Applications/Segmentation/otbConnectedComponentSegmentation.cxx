@@ -165,8 +165,8 @@ private:
       m_Vproj = VectorDataProjectionFilterType::New();
       m_Vproj->SetInput(m_Connected->GetFilter()->GetOutputVectorData());
       m_Vproj->SetInputKeywordList(inputImage->GetImageKeywordlist());
-      m_Vproj->SetInputOrigin(inputImage->GetOrigin());
-      m_Vproj->SetInputSpacing(inputImage->GetSpacing());
+      //m_Vproj->SetInputOrigin(inputImage->GetOrigin());
+      //m_Vproj->SetInputSpacing(inputImage->GetSpacing());
 
       // Elevation through the elevation handler
       if (ElevationParametersHandler::IsElevationEnabled(this, "elev"))
