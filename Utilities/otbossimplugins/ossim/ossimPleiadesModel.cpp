@@ -125,7 +125,10 @@ bool ossimPleiadesModel::saveState(ossimKeywordlist& kwl,
      //kwl.print(std::cout);
   }
 
+  if (theSupportData->getProcessingLevel() == "SENSOR")
    return ossimRpcModel::saveState(kwl, prefix);
+  else
+   return true;
 }
 
 //*************************************************************************************************
@@ -264,7 +267,6 @@ ossimPleiadesModel::open(const ossimFilename& file)
   // TODO MSD WARNING File with multi tiles are not well managed
   theSupportData->getImageRect(theImageClipRect);
   theSupportData->getImageSize(theImageSize);
-
 
   finishConstruction();
   clearErrorStatus();
