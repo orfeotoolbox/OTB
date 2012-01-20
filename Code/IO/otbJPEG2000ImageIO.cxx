@@ -1244,7 +1244,6 @@ void JPEG2000ImageIO::ReadImageInformation()
     }
 
 
-
   // If the internal image was not open we open it.
   // This is usually done when the user sets the ImageIO manually
   if ( !m_InternalReaders.front()->m_IsOpen )
