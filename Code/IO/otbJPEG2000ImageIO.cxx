@@ -1121,7 +1121,7 @@ void JPEG2000ImageIO::ReadImageInformation()
 
   if (lJP2MetadataReader.m_MetadataIsRead)
     {
-    otbMsgDevMacro(<< "JPEG2000 file has metadata available!");
+    std::cout << /*otbMsgDevMacro(<<*/ "JPEG2000 file has metadata available!" << std::endl/*)*/;
 
     /* GEOTRANSFORM */
     if (lJP2MetadataReader.HaveGeoTransform())
@@ -1136,6 +1136,15 @@ void JPEG2000ImageIO::ReadImageInformation()
       m_Origin[1] = geoTransform[3];
       m_Spacing[0] = geoTransform[2];
       m_Spacing[1] = geoTransform[4];
+
+      if ( m_Spacing[0]== 0 || m_Spacing[1] == 0)
+        {
+        //otbMsgDevMacro(<< "JPEG2000 file has a geotransform but with weird elements !!!");
+        otbWarningMacro(<< "JPEG2000 file has an incorrect geotransform  (spacing = 0)!");
+        m_Spacing[0] = 1;
+        m_Spacing[1] = 1;
+        }
+
       }
 
     /* GCPs */
@@ -1228,7 +1237,13 @@ void JPEG2000ImageIO::ReadImageInformation()
   else
     {
     otbMsgDevMacro( << "JPEG2000 file has NO metadata available!");
+    m_Origin[0] = 0;
+    m_Origin[1] = 0;
+    m_Spacing[0] = 1;
+    m_Spacing[1] = 1;
     }
+
+
 
   // If the internal image was not open we open it.
   // This is usually done when the user sets the ImageIO manually
@@ -1295,8 +1310,8 @@ void JPEG2000ImageIO::ReadImageInformation()
   itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::TileHintX, tileHintX);
   itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::TileHintY, tileHintY);
 
-  m_Spacing[0] *=  vcl_pow(2.0, static_cast<double>(m_ResolutionFactor));
-  m_Spacing[1] *=  vcl_pow(2.0, static_cast<double>(m_ResolutionFactor));
+  m_Spacing[0] *= vcl_pow(2.0, static_cast<double>(m_ResolutionFactor));
+  m_Spacing[1] *= vcl_pow(2.0, static_cast<double>(m_ResolutionFactor));
 
   // If we have some spacing information we use it
   // could be needed for other j2k image but not for pleiades
