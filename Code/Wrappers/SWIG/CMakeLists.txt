@@ -17,27 +17,17 @@ if ( WRAP_LUA OR WRAP_PYTHON OR WRAP_JAVA OR WRAP_CSHARP OR WRAP_TCL OR WRAP_R O
   find_package ( SWIG REQUIRED )
   include ( UseSWIGLocal )
   set_source_files_properties ( otbApplication.i PROPERTIES CPLUSPLUS ON )
-  file ( GLOB SWIG_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/*/*.h)
 
-  set ( SWIG_HEADERS ${SWIG_HEADERS}
-    ${CMAKE_CURRENT_SOURCE_DIR}/itkBase.i
-    ${CMAKE_CURRENT_SOURCE_DIR}/itkMacro.i
-    ${CMAKE_CURRENT_SOURCE_DIR}/PyCommand.i
-
-    ${CMAKE_CURRENT_SOURCE_DIR}/Python.i
-    ${CMAKE_CURRENT_SOURCE_DIR}/Java.i
-#    ${CMAKE_CURRENT_SOURCE_DIR}/CSharp.i
-#    ${CMAKE_CURRENT_SOURCE_DIR}/CSharpTypemapHelper.i
-#    ${CMAKE_CURRENT_SOURCE_DIR}/Lua.i
-#    ${CMAKE_CURRENT_SOURCE_DIR}/Tcl.i
-#    ${CMAKE_CURRENT_SOURCE_DIR}/Ruby.i
-    )
-
-  set ( SWIG_MODULE_otbApplication_EXTRA_DEPS ${SWIG_HEADERS} )
+  list(APPEND SWIG_EXTRA_DEPS
+       otbWrapperSWIGIncludes.h
+       itkBase.includes
+       ${CMAKE_CURRENT_SOURCE_DIR}/itkBase.i
+       ${CMAKE_CURRENT_SOURCE_DIR}/itkMacro.i
+       )
 
   include_directories ( ${CMAKE_CURRENT_SOURCE_DIR} )
-
 endif()
+
 
 #
 # Python SWIG configuration
@@ -53,7 +43,11 @@ if ( WRAP_PYTHON )
   # Run swig
   set(CMAKE_SWIG_FLAGS ${CMAKE_SWIG_GLOBAL_FLAGS})
   set(CMAKE_SWIG_OUTDIR ${CMAKE_CURRENT_BINARY_DIR})
-  set(SWIG_MODULE_otbApplication_EXTRA_DEPS OTBApplicationEngine ${SWIG_HEADERS})
+  set(SWIG_MODULE_otbApplication_EXTRA_DEPS
+       ${CMAKE_CURRENT_SOURCE_DIR}/Python.i
+       ${CMAKE_CURRENT_SOURCE_DIR}/PyCommand.i
+       itkPyCommand.h
+       OTBApplicationEngine)
   SWIG_add_module ( otbApplication python otbApplication.i otbApplicationPYTHON_wrap.cxx itkPyCommand.cxx )
   SWIG_link_libraries ( otbApplication ${PYTHON_LIBRARIES} OTBApplicationEngine)
   set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/otbApplicationPYTHON_wrap.cxx COMPILE_FLAGS "-w")
@@ -76,6 +70,9 @@ if ( WRAP_PYTHON )
 
 endif()
 
+
+
+
 #
 # JAVA SWIG configuration
 #
@@ -94,7 +91,9 @@ if ( WRAP_JAVA )
   # Nicely write the bridge code in org/itk/simple
   set(CMAKE_SWIG_OUTDIR ${JAVA_SOURCE_DIRECTORY})
   set(CMAKE_SWIG_FLAGS -package "org.otb.application" ${CMAKE_SWIG_GLOBAL_FLAGS})
-  set(SWIG_MODULE_otbApplicationJava_EXTRA_DEPS OTBApplicationEngine  ${SWIG_HEADERS})
+  set(SWIG_MODULE_otbApplicationJava_EXTRA_DEPS
+       ${CMAKE_CURRENT_SOURCE_DIR}/Java.i
+       OTBApplicationEngine)
   SWIG_add_module ( otbApplicationJava java otbApplication.i otbApplicationJAVA_wrap.cxx)
   SWIG_link_libraries(otbApplicationJava OTBApplicationEngine )
   set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/otbApplicationJAVA_wrap.cxx COMPILE_FLAGS "-w")
@@ -120,8 +119,10 @@ if ( WRAP_JAVA )
 
 endif()
 
+
+
 #
-# lua SWIG configuration
+# lua SWIG configuration - EXPERIMENTAL !!!
 #
 if ( WRAP_LUA )
 #  option ( USE_SYSTEM_LUA "Use a system provided lua" OFF )
@@ -159,7 +160,7 @@ if ( WRAP_LUA )
 endif()
 
 #
-# ruby SWIG configuration
+# ruby SWIG configuration - EXPERIMENTAL !!!
 #
 if ( WRAP_RUBY )
   check_PIC_flag ( Ruby )
